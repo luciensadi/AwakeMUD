@@ -699,8 +699,9 @@ ACMD(do_build) {
               act("$n continues to draw the hermetic circle.", FALSE, ch, 0, 0, TO_ROOM);
           } else
               send_to_char(ch, "There's nothing about %s that strikes you as buildable.\r\n", GET_OBJ_NAME(obj));
-      } else
-          send_to_char(ch, "There's nothing about %s that strikes you as buildable.\r\n", GET_OBJ_NAME(obj));
+      } else {
+        send_to_char(ch, "You'll need to pick %s up before you can do anything else with it.\r\n", GET_OBJ_NAME(obj));
+      }
       return;
 
     } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
@@ -798,7 +799,8 @@ ACMD(do_build) {
             }
         if (GET_OBJ_VAL(obj, 4) > 0) {
             send_to_char(ch, "You continue work on building %s.\r\n", GET_OBJ_NAME(obj));
-            obj->contains = deck;
+            obj->cyberdeck_part_pointer = deck;
+            SET_BIT(GET_CYBERDECK_FLAGS(deck), DECK_FLAG_HAS_PART_POINTING_TO_IT);
             ch->char_specials.programming = obj;
             AFF_FLAGS(ch).SetBit(AFF_PART_BUILD);
         } else {
@@ -991,7 +993,8 @@ ACMD(do_build) {
             }
             send_to_char(ch, "You start building %s.\r\n", GET_OBJ_NAME(obj));
             ch->char_specials.programming = obj;
-            obj->contains = deck;
+            obj->cyberdeck_part_pointer = deck;
+            SET_BIT(GET_CYBERDECK_FLAGS(deck), DECK_FLAG_HAS_PART_POINTING_TO_IT);
             AFF_FLAGS(ch).SetBit(AFF_PART_BUILD);
             if (!GET_CYBERDECK_MPCP(deck))
                 GET_CYBERDECK_MPCP(deck) = GET_PART_TARGET_MPCP(obj);

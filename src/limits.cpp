@@ -42,6 +42,7 @@
 #include "config.hpp"
 #include "transport.hpp"
 #include "memory.hpp"
+#include "newhouse.hpp"
 
 extern class objList ObjList;
 extern int modify_target(struct char_data *ch);
@@ -49,7 +50,6 @@ extern void end_quest(struct char_data *ch);
 extern char *cleanup(char *dest, const char *src);
 extern void damage_equip(struct char_data *ch, struct char_data *victim, int power, int type);
 extern bool check_adrenaline(struct char_data *, int);
-extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 extern int get_paydata_market_maximum(int host_color);
 extern int get_paydata_market_minimum(int host_color);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
@@ -103,8 +103,8 @@ void mental_gain(struct char_data * ch)
   else if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
     gain *= 1.5;
 
-  if (GET_TRADITION(ch) == TRAD_ADEPT)
-    gain *= GET_POWER(ch, ADEPT_HEALING) + 1;
+  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
   if (GET_BIOOVER(ch) > 0)
     gain /= GET_BIOOVER(ch);
 
@@ -156,6 +156,8 @@ void physical_gain(struct char_data * ch)
 
   if (char_is_in_social_room(ch))
     gain *= 2;
+  else if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+    gain *= 1.8;
 
   if (IS_NPC(ch))
     gain *= 2;
@@ -181,8 +183,8 @@ void physical_gain(struct char_data * ch)
 
     gain *= get_drug_heal_multiplier(ch);
   }
-  if (GET_TRADITION(ch) == TRAD_ADEPT)
-    gain *= GET_POWER(ch, ADEPT_HEALING) + 1;
+  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
   if (GET_BIOOVER(ch) > 0)
     gain /= GET_BIOOVER(ch);
   GET_PHYSICAL(ch) = MIN(GET_MAX_PHYSICAL(ch), GET_PHYSICAL(ch) + gain);
@@ -232,6 +234,11 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
   // Non-NPC level 0? Not sure how that's a thing. Also, staff get no karma.
   if (!IS_NPC(ch) && ((GET_LEVEL(ch) < 1 || IS_SENATOR(ch))))
     return 0;
+
+  if (ch->char_specials.timer >= IDLE_TIMER_PAYOUT_THRESHOLD) {
+    send_to_char("Your karma gain was suppressed due to you being idle.\r\n", ch);
+    return 0;
+  }
 
   // NPCs have a standard gain formula, no frills. No multiplier either.
   if (IS_NPC(ch)) {
@@ -498,6 +505,7 @@ void check_idling(void)
         char_to_room(ch, &world[1]);
       }
 #endif
+
         /* Disabled-- I get protecting them by moving them to the void, but why DC them?
         else if (ch->char_specials.timer > 30) {
           if (ch->in_room)
@@ -515,15 +523,20 @@ void check_idling(void)
         }
         */
 
-      else if (!ch->desc && !PLR_FLAGGED(ch, PLR_PROJECT) && ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION) {
+      if (!ch->desc && !PLR_FLAGGED(ch, PLR_PROJECT) && (ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION || PLR_FLAGGED(ch, PLR_IN_CHARGEN))) {
         snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
         extract_char(ch);
-      } else if (IS_SENATOR(ch) && ch->char_specials.timer > 15 &&
-                 GET_INVIS_LEV(ch) < 2 &&
-                 access_level(ch, LVL_EXECUTIVE) &&
-                 PRF_FLAGGED(ch, PRF_AUTOINVIS))
+        return;
+      }
+
+      // Auto-invis idle staff.
+      if (access_level(ch, LVL_EXECUTIVE) && ch->char_specials.timer > 15 &&
+          GET_INVIS_LEV(ch) < 2 &&
+          PRF_FLAGGED(ch, PRF_AUTOINVIS))
+      {
         perform_immort_invis(ch, 2);
+      }
     }
   }
 }
@@ -732,8 +745,14 @@ void process_regeneration(int half_hour)
   for (ch = character_list; ch; ch = next_char) {
     next_char = ch->next;
     if (GET_TEMP_QUI_LOSS(ch) > 0) {
+      int old_qui = GET_QUI(ch);
+
       GET_TEMP_QUI_LOSS(ch)--;
       affect_total(ch);
+
+      if (old_qui <= 0 && GET_QUI(ch) > 0) {
+        send_to_char("Your muscles unlock, and you find you can move again.\r\n", ch);
+      }
     }
     if (GET_POS(ch) >= POS_STUNNED) {
       // Apply healing.
@@ -750,12 +769,16 @@ void process_regeneration(int half_hour)
 
         physical_gain(ch);
         if (!has_pedit && old_phys != GET_MAX_PHYSICAL(ch) && GET_PHYSICAL(ch) == GET_MAX_PHYSICAL(ch)) {
-          send_to_char(ch, "The last of your injuries has healed.\r\n");
+          send_to_char("The last of your injuries has healed.\r\n", ch);
         }
 
         mental_gain(ch);
-        if (!has_pedit && old_ment != GET_MAX_MENTAL(ch) && GET_MENTAL(ch) == GET_MAX_MENTAL(ch)) {
-          send_to_char(ch, "You feel fully alert again.\r\n");
+        if (!has_pedit && old_ment != GET_MAX_MENTAL(ch)) {
+          if (GET_MENTAL(ch) == GET_MAX_MENTAL(ch)) {
+            send_to_char("You feel fully alert again.\r\n", ch);
+          } else if (old_ment < 100 && GET_MENTAL(ch) >= 100){
+            send_to_char("You regain consciousness.\r\n", ch);
+          }
         }
       }
 
@@ -1137,9 +1160,7 @@ void save_vehicles(bool fromCopyover)
       }
 
       // Otherwise, derive the garage from its location.
-      else if (!fromCopyover
-               && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE)
-                   || (ROOM_FLAGGED(temp_room, ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, temp_room->number))))
+      else if (!fromCopyover && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE) || !IDNUM_CAN_ENTER_APARTMENT(temp_room, veh->owner)))
       {
        /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
                    GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));

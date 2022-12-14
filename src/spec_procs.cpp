@@ -3586,7 +3586,7 @@ SPECIAL(bank)
     else if (!*buf1)
       send_to_char("Who do you want to wire funds to?\r\n", ch);
     else {
-      vnum_t isfile = -1;
+      idnum_t isfile = -1;
       if ((isfile = get_player_id(buf1)) == -1) {
         send_to_char("It won't let you transfer to that account.\r\n", ch);
         return TRUE;
@@ -6315,11 +6315,18 @@ SPECIAL(mageskill_trainer)
     skip_spaces(&argument);
     if (!*argument || !str_str(argument, "training"))
       return FALSE;
+
     for (i = 0; i < NUM_WEARS && !chain; i++)
-      if (GET_EQ(ch, i) && GET_OBJ_VNUM(GET_EQ(ch, i)) == OBJ_MAGEBLING)
+      if (GET_EQ(ch, i) && GET_OBJ_VNUM(GET_EQ(ch, i)) == OBJ_MAGEBLING) {
         chain = GET_EQ(ch, i);
+        break;
+      }
+
     if (!chain)
       return FALSE;
+
+    do_say(ch, argument, 0, 0);
+
     if (GET_OBJ_VAL(chain, 0) != GET_IDNUM(ch)) {
       snprintf(arg, sizeof(arg), "%s What are you doing with this!? This is not yours!", GET_CHAR_NAME(ch));
       do_say(mage, arg, 0, SCMD_SAYTO);
@@ -6338,6 +6345,7 @@ SPECIAL(mageskill_trainer)
       if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
         look_at_room(ch, 0, 0);
     }
+    return TRUE;
   }
   return FALSE;
 }
@@ -6984,7 +6992,7 @@ SPECIAL(medical_workshop) {
   } /* End diagnose command. */
 
   // Parse out the dotmode.
-  int dotmode = find_all_dots(argument, sizeof(argument));
+  int dotmode = find_all_dots(argument, strlen(argument));
 
   // Can't operate with more than one thing at once.
   if ((dotmode == FIND_ALL) || dotmode == FIND_ALLDOT) {

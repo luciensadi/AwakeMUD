@@ -20,7 +20,6 @@
 #include <unordered_map>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-#define popen(x,y) _popen(x,y)
 #else
 #include <sys/time.h>
 #endif
@@ -49,6 +48,7 @@
 #include "newmail.hpp"
 #include "transport.hpp"
 #include "vision_overhaul.hpp"
+#include "newhouse.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -61,7 +61,8 @@ extern FILE *player_fl;
 extern int restrict_mud;
 
 /* for rooms */
-extern void House_save_all();
+extern void save_all_apartments_and_storage_rooms();
+
 /* for chars */
 
 extern struct time_info_data time_info;
@@ -71,6 +72,7 @@ extern vnum_t newbie_start_room;
 extern int frozen_start_room;
 extern int last;
 extern int max_ability(int i);
+extern int count_objects(struct obj_data *obj);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
@@ -222,9 +224,10 @@ ACMD(do_copyover)
       continue;
 
     if (GET_QUEST(och)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s",
-               num_questors > 0 ? "^n, ^c" : "^c",
-               GET_CHAR_NAME(och));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^c%s%s^n (idle: %d)",
+               num_questors > 0 ? ", " : "",
+               GET_CHAR_NAME(och),
+               och->char_specials.timer);
       num_questors += 1;
     }
     // Count PCs in cabs.
@@ -341,7 +344,7 @@ ACMD(do_copyover)
   fclose (fp);
 
   log("Saving houses.");
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   /* Close reserve and other always-open files and release other resources */
 
   // Save vehicles.
@@ -364,7 +367,7 @@ ACMD(do_copyover)
 
   chdir ("..");
 
-  execl (EXE_FILE, "awake", buf2, buf, (char *) NULL);
+  execl (EXE_FILE, "awake", buf2, buf, (char *) NULL); // Flawfinder: ignore
 
   /* Failed - sucessful exec will not return */
 
@@ -628,7 +631,6 @@ ACMD(do_gecho)
       send_to_char(OK, ch);
     else
       act(argument, FALSE, ch, 0, 0, TO_CHAR);
-    argument[50] = '\0';
     snprintf(buf, sizeof(buf), "%s gecho'd '%s'", GET_CHAR_NAME(ch), argument);
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
   }
@@ -1049,16 +1051,26 @@ void do_stat_room(struct char_data * ch)
   else
     send_to_char("  None.\r\n", ch);
 
+  if (GET_APARTMENT(rm)) {
+    send_to_char(ch, "Complex: %s, Apartment: %s, Subroom: %s\r\n",
+                 GET_APARTMENT(rm)->get_complex() ? GET_APARTMENT(rm)->get_complex()->get_name() : "^RN^n",
+                 GET_APARTMENT(rm)->get_name(),
+                 GET_APARTMENT_SUBROOM(rm) ? "Y" : "^RN^n");
+  }
+  if (GET_APARTMENT_DECORATION(rm)) {
+    send_to_char(ch, "Decoration:\r\n%s", GET_APARTMENT_DECORATION(rm));
+  }
+
   if (rm->ex_description)
   {
-    strcpy(buf, "Extra descs:^c");
+    strlcpy(buf, "Extra descs:^c", sizeof(buf));
     for (desc = rm->ex_description; desc; desc = desc->next) {
       strlcat(buf, " ", sizeof(buf));
       strlcat(buf, desc->keyword, sizeof(buf));
     }
     send_to_char(ch, "%s^n\r\n", buf);
   }
-  strcpy(buf, "Chars present:^y");
+  strlcpy(buf, "Chars present:^y", sizeof(buf));
   for (found = 0, k = rm->people; k; k = k->next_in_room)
   {
     if (!CAN_SEE(ch, k))
@@ -1083,7 +1095,7 @@ void do_stat_room(struct char_data * ch)
 
   if (rm->contents)
   {
-    strcpy(buf, "Contents:^g");
+    strlcpy(buf, "Contents:^g", sizeof(buf));
     for (found = 0, j = rm->contents; j; j = j->next_content) {
       if (!CAN_SEE_OBJ(ch, j))
         continue;
@@ -1123,7 +1135,7 @@ void do_stat_room(struct char_data * ch)
   {
     if (rm->dir_option[i]) {
       if (!rm->dir_option[i]->to_room)
-        strcpy(buf1, " ^cNONE^n");
+        strlcpy(buf1, " ^cNONE^n", sizeof(buf1));
       else
         snprintf(buf1, sizeof(buf1), "^c%8ld^n", rm->dir_option[i]->to_room->number);
       sprintbit(rm->dir_option[i]->exit_info, exit_bits, buf2, sizeof(buf2));
@@ -1132,9 +1144,9 @@ void do_stat_room(struct char_data * ch)
               rm->dir_option[i]->keyword ? rm->dir_option[i]->keyword : "None", buf2);
       send_to_char(buf, ch);
       if (rm->dir_option[i]->general_description)
-        strcpy(buf, rm->dir_option[i]->general_description);
+        strlcpy(buf, rm->dir_option[i]->general_description, sizeof(buf));
       else
-        strcpy(buf, "  No exit description.\r\n");
+        strlcpy(buf, "  No exit description.\r\n", sizeof(buf));
       send_to_char(buf, ch);
     }
   }
@@ -1220,11 +1232,11 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
   if (GET_OBJ_RNUM(j) >= 0)
   {
     if (GET_OBJ_TYPE(j) == ITEM_WEAPON)
-      strcpy(buf2, (obj_index[GET_OBJ_RNUM(j)].wfunc ? "^cExists^n" : "None"));
+      strlcpy(buf2, (obj_index[GET_OBJ_RNUM(j)].wfunc ? "^cExists^n" : "None"), sizeof(buf2));
     else
-      strcpy(buf2, (obj_index[GET_OBJ_RNUM(j)].func ? "^cExists^n" : "None"));
+      strlcpy(buf2, (obj_index[GET_OBJ_RNUM(j)].func ? "^cExists^n" : "None"), sizeof(buf2));
   } else
-    strcpy(buf2, "None");
+    strlcpy(buf2, "None", sizeof(buf2));
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "VNum: [^g%8ld^n], RNum: [%5ld], Type: %s, SpecProc: %s\r\n",
           virt, GET_OBJ_RNUM(j), buf1, buf2);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "L-Des: %s\r\n",
@@ -1402,6 +1414,14 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
           strlcat(buf, ",\r\n", sizeof(buf));
     }
   }
+  if (j->cyberdeck_part_pointer) {
+    if (GET_OBJ_TYPE(j) == ITEM_PART) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^n\r\nCyberdeck Part Pointer: ^c%s^n", GET_OBJ_NAME(j->cyberdeck_part_pointer));
+    } else {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Non-part %s (%ld) has a cyberdeck part pointer set!! Clearing it.", GET_OBJ_NAME(j), GET_OBJ_VNUM(j));
+      j->cyberdeck_part_pointer = NULL;
+    }
+  }
   strlcat(buf, "^n\r\n", sizeof(buf));
   found = 0;
   strlcat(buf, "Affections:", sizeof(buf));
@@ -1441,16 +1461,16 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   switch (GET_SEX(k))
   {
   case SEX_NEUTRAL:
-    strcpy(buf, "NEUTRAL-SEX");
+    strlcpy(buf, "NEUTRAL-SEX", sizeof(buf));
     break;
   case SEX_MALE:
-    strcpy(buf, "MALE");
+    strlcpy(buf, "MALE", sizeof(buf));
     break;
   case SEX_FEMALE:
-    strcpy(buf, "FEMALE");
+    strlcpy(buf, "FEMALE", sizeof(buf));
     break;
   default:
-    strcpy(buf, "ILLEGAL-SEX!!");
+    strlcpy(buf, "ILLEGAL-SEX!!", sizeof(buf));
     break;
   }
 
@@ -1508,8 +1528,8 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
              GET_TKE(k),
              GET_SYSTEM_POINTS(k));
 
-  strcpy(buf1, (const char *) asctime(localtime(&(k->player.time.birth))));
-  strcpy(buf2, (const char *) asctime(localtime(&(k->player.time.lastdisc))));
+  strlcpy(buf1, (const char *) asctime(localtime(&(k->player.time.birth))), sizeof(buf1));
+  strlcpy(buf2, (const char *) asctime(localtime(&(k->player.time.lastdisc))), sizeof(buf2));
   buf1[10] = buf2[10] = '\0';
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Created: [%s], Last Online: [%s], Played [%dh %dm]\r\n",
@@ -1631,16 +1651,16 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   switch (GET_SEX(k))
   {
   case SEX_NEUTRAL:
-    strcpy(buf, "NEUTRAL-SEX");
+    strlcpy(buf, "NEUTRAL-SEX", sizeof(buf));
     break;
   case SEX_MALE:
-    strcpy(buf, "MALE");
+    strlcpy(buf, "MALE", sizeof(buf));
     break;
   case SEX_FEMALE:
-    strcpy(buf, "FEMALE");
+    strlcpy(buf, "FEMALE", sizeof(buf));
     break;
   default:
-    strcpy(buf, "ILLEGAL-SEX!!");
+    strlcpy(buf, "ILLEGAL-SEX!!", sizeof(buf));
     break;
   }
   send_to_char(ch, "^c%s^n ", pc_race_types[(int)GET_RACE(k)]);
@@ -1807,7 +1827,7 @@ ACMD(do_stat)
       if ((idnum = atoi(buf2)) > 0) {
         const char *char_name = get_player_name(idnum);
         if (char_name) {
-          strcpy(buf2, char_name);
+          strlcpy(buf2, char_name, sizeof(buf2));
           delete [] char_name;
         } else {
           send_to_char(ch, "Idnum %d does not correspond to any existing PC.\r\n", idnum);
@@ -1883,7 +1903,7 @@ ACMD(do_shutdown)
   } else
     send_to_char("Unknown shutdown option.\r\n", ch);
 
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
 }
 
 void stop_snooping(struct char_data * ch)
@@ -2805,197 +2825,211 @@ ACMD(do_charge) {
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 }
 
+void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct char_data *vict, int karma_times_100, const char *reason, bool add_karma) {
+  float karma = ((float) karma_times_100) / 100;
+  int old_karma = GET_KARMA(vict);
+
+  if (add_karma) {
+    if (GET_KARMA(vict) + karma_times_100 > MYSQL_UNSIGNED_MEDIUMINT_MAX) {
+      send_to_char(ch, "That would put %s over the absolute karma maximum. You may award up to %d points of karma. Otherwise, tell %s to spend what %s has, or compensate %s some other way.\r\n",
+                   GET_CHAR_NAME(vict),
+                   MYSQL_UNSIGNED_MEDIUMINT_MAX - GET_KARMA(vict),
+                   HMHR(vict),
+                   HSSH(vict),
+                   HMHR(vict));
+      return;
+    }
+
+    // Add to karma.
+    GET_KARMA(vict) += karma_times_100;
+
+    // Add to rep.
+    GET_REP(vict) += karma;
+
+    // Add to TKE.
+    GET_TKE(vict) += karma;
+  } else {
+    if (GET_KARMA(vict) - karma_times_100 < 0) {
+      send_to_char(ch, "That would put %s under zero karma. You may deduct up to %d points of karma.\r\n",
+                   GET_CHAR_NAME(vict),
+                   GET_KARMA(vict));
+      return;
+    }
+
+    // Add to karma.
+    GET_KARMA(vict) -= karma_times_100;
+
+    // Make no changes to rep or TKE.
+  }
+
+  // Notify the victim.
+  send_to_char(vict, "You have been %s %0.2f karma for %s%s^n\r\n",
+               add_karma ? "awarded" : "deducted",
+               karma,
+               reason,
+               ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+  // Notify the ch.
+  send_to_char(ch, "You %s %s %0.2f karma for %s%s^n\r\n",
+               add_karma ? "awarded" : "deducted",
+               GET_CHAR_NAME(vict),
+               karma,
+               reason,
+               ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+  // Log it.
+  snprintf(buf2, sizeof(buf2), "%s %s %0.2f karma to %s for %s^g (%d to %d).",
+           GET_CHAR_NAME(ch),
+           add_karma ? "awarded" : "deducted",
+           karma,
+           GET_CHAR_NAME(vict),
+           reason,
+           old_karma,
+           GET_KARMA(vict));
+  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+
+  // Persist results.
+  playerDB.SaveChar(vict);
+}
+
+void staff_induced_karma_alteration_for_offline_char(struct char_data *ch, const char *name, int karma_times_100, const char *reason, bool add_karma) {
+  float karma = ((float) karma_times_100) / 100;
+
+  char query_buf[MAX_INPUT_LENGTH + 1000], tmp[MAX_INPUT_LENGTH];
+
+  snprintf(query_buf, sizeof(query_buf), "SELECT idnum, karma FROM pfiles WHERE name='%s';",
+           prepare_quotes(tmp, name, sizeof(buf2) / sizeof(tmp[0])));
+
+  FAILURE_CASE(mysql_wrapper(mysql, query_buf), "An unexpected error occurred (query failed).");
+
+  MYSQL_RES *res = mysql_use_result(mysql);
+
+  FAILURE_CASE(!res, "An unexpected error occurred (use_result failed).");
+
+  MYSQL_ROW row = mysql_fetch_row(res);
+
+  if (!row && mysql_field_count(mysql)) {
+    mysql_free_result(res);
+    send_to_char(ch, "Could not find a PC named %s^n.\r\n", name);
+    return;
+  }
+
+  long idnum = atol(row[0]);
+  int old_karma = atoi(row[1]);
+  mysql_free_result(res);
+
+  if (add_karma) {
+    if (old_karma + karma_times_100 > MYSQL_UNSIGNED_MEDIUMINT_MAX) {
+      send_to_char(ch, "That would put them over the absolute karma maximum. You may award up to %d points of karma.\r\n",
+                   MYSQL_UNSIGNED_MEDIUMINT_MAX - old_karma);
+      return;
+    }
+
+    snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET Karma = Karma + %d, Rep = Rep + %d, TKE = TKE + %d WHERE idnum='%ld';",
+             karma_times_100,
+             (int) karma,
+             (int) karma,
+             idnum);
+  } else {
+    if (old_karma - karma_times_100 < 0) {
+      send_to_char(ch, "That would put them at negative karma. You may deduct up to %d points of karma.\r\n",
+                   old_karma);
+      return;
+    }
+
+    snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET Karma = Karma - %d WHERE idnum='%ld';",
+             karma_times_100,
+             idnum);
+  }
+
+  FAILURE_CASE(mysql_wrapper(mysql, query_buf), "An unexpected error occurred on update (query failed).");
+
+  // Mail the victim.
+  snprintf(buf, sizeof(buf), "You have been %s %0.2f karma for %s%s^n\r\n",
+           add_karma ? "awarded" : "deducted",
+           karma,
+           reason,
+           ispunct(get_final_character_from_string(reason)) ? "" : ".");
+  store_mail(idnum, ch, buf);
+
+  // Notify the actor.
+  send_to_char(ch, "You %s %s %0.2f karma for %s%s^n\r\n",
+               add_karma ? "award" : "deduct",
+               capitalize(arg),
+               karma,
+               reason,
+               ispunct(get_final_character_from_string(reason)) ? "" : ".");
+
+  // Log it.
+  snprintf(buf, sizeof(buf), "%s %s %s %0.2f karma for %s^g (%d to %d).",
+           GET_CHAR_NAME(ch),
+           add_karma ? "awarded" : "deducted",
+           capitalize(arg),
+           karma,
+           reason,
+           old_karma,
+           add_karma ? old_karma + karma_times_100 : old_karma - karma_times_100);
+  mudlog(buf, ch, LOG_WIZLOG, TRUE);
+}
+
 ACMD(do_award)
 {
-  MYSQL_RES *res;
-  MYSQL_ROW row;
-
   struct char_data *vict;
   char amt[MAX_STRING_LENGTH];
   char reason[MAX_STRING_LENGTH];
-  int k;
 
   half_chop(argument, arg, buf);
   half_chop(buf, amt, reason);
 
-  k = atoi(amt);
+  int karma_times_100 = atoi(amt);
 
-  if (!*arg || !*amt || !*reason || k <= 0 ) {
+  if (!*arg || !*amt || !*reason || karma_times_100 <= 0 ) {
     send_to_char("Syntax: award <player> <karma x 100> <Reason for award>\r\n", ch);
     return;
   }
 
   if (!(vict = get_char_vis(ch, arg))) {
-    snprintf(buf, sizeof(buf), "SELECT idnum, karma FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])));
-    if (mysql_wrapper(mysql, buf)) {
-      send_to_char("An unexpected error occurred (query failed).\r\n", ch);
-      return;
-    }
-    if (!(res = mysql_use_result(mysql))) {
-      send_to_char("An unexpected error occurred (use_result failed).\r\n", ch);
-      return;
-    }
-    row = mysql_fetch_row(res);
-    if (!row && mysql_field_count(mysql)) {
-      mysql_free_result(res);
-      send_to_char(ch, "Could not find a PC named %s.\r\n", arg);
-      return;
-    }
-    long idnum = atol(row[0]);
-    int old_karma = atoi(row[1]);
-    mysql_free_result(res);
-
-    // Now that we've confirmed the player exists, update them.
-    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Karma = Karma + %d WHERE idnum='%ld';", k, idnum);
-    if (mysql_wrapper(mysql, buf)) {
-      send_to_char("An unexpected error occurred on update (query failed).\r\n", ch);
-      return;
-    }
-
-    // Mail the victim.
-    snprintf(buf, sizeof(buf), "You have been awarded %0.2f karma for %s%s^n\r\n",
-            (float)k*0.01,
-            reason,
-            ispunct(get_final_character_from_string(reason)) ? "" : ".");
-    store_mail(idnum, ch, buf);
-
-    // Notify the actor.
-    send_to_char(ch, "You award %0.2f karma to %s for %s%s^n\r\n",
-                (float)k*0.01,
-                capitalize(arg),
-                reason,
-                ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-    // Log it.
-    snprintf(buf, sizeof(buf), "%s awarded %0.2f karma to %s for %s^g (%d to %d).",
-            GET_CHAR_NAME(ch),
-            (float)k*0.01,
-            arg,
-            reason,
-            old_karma,
-            old_karma + k);
-    mudlog(buf, ch, LOG_WIZLOG, TRUE);
-    return;
-  }
-
-  if (IS_SENATOR(vict)) {
-    send_to_char(ch, "Staff can't receive karma this way. Use the SET command.\r\n", ch);
-    return;
-  }
-
-  if (GET_KARMA(vict) + k > MYSQL_UNSIGNED_MEDIUMINT_MAX) {
-    send_to_char(ch, "That would put %s over the absolute karma maximum. You may award up to %d points of karma. Otherwise, tell %s to spend what %s has, or compensate %s some other way.\r\n",
-                 GET_CHAR_NAME(vict), MYSQL_UNSIGNED_MEDIUMINT_MAX - GET_KARMA(vict), HMHR(vict), HSSH(vict), HMHR(vict));
+    staff_induced_karma_alteration_for_offline_char(ch, arg, karma_times_100, reason, TRUE);
     return;
   }
 
   if (vict->desc && vict->desc->original)
-    gain_karma(vict->desc->original, k, TRUE, FALSE, FALSE);
-  else
-    gain_karma(vict, k, TRUE, FALSE, FALSE);
+    vict = vict->desc->original;
 
-  // Since we added rep for this, we need to remove it.
-  GET_REP(vict) -= (int) (k / 100);
+  FAILURE_CASE(IS_SENATOR(vict), "Staff can't receive karma this way. Use the SET command");
+  FAILURE_CASE(IS_NPC(vict), "Not on NPCs.");
 
-  send_to_char(vict, "You have been awarded %0.2f karma for %s%s^n\r\n", (float)k*0.01, reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-  send_to_char(ch, "You awarded %0.2f karma to %s for %s%s^n\r\n", (float)k*0.01, GET_CHAR_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-  snprintf(buf2, sizeof(buf2), "%s awarded %0.2f karma to %s for %s^g (%d to %d).",
-          GET_CHAR_NAME(ch), (float)k*0.01,
-          GET_CHAR_NAME(vict), reason, GET_KARMA(vict) - k, GET_KARMA(vict));
-  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+  staff_induced_karma_alteration_for_online_char(ch, vict, karma_times_100, reason, TRUE);
 }
 
 ACMD(do_deduct)
 {
-  MYSQL_ROW row;
-  MYSQL_RES *res;
-
   struct char_data *vict;
   char amt[MAX_STRING_LENGTH];
   char reason[MAX_STRING_LENGTH];
-  int k;
+  int karma_times_100;
 
   half_chop(argument, arg, buf);
   half_chop(buf, amt, reason);
 
-  k = atoi(amt);
+  karma_times_100 = atoi(amt);
 
-  if (!*arg || !*amt || !*reason || k <= 0 ) {
+  if (!*arg || !*amt || !*reason || karma_times_100 <= 0 ) {
     send_to_char("Syntax: deduct <player> <karma x 100> <Reason for penalty>\r\n", ch);
     return;
   }
   if (!(vict = get_char_vis(ch, arg))) {
-    snprintf(buf, sizeof(buf), "SELECT idnum, karma FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])));
-    if (mysql_wrapper(mysql, buf)) {
-      send_to_char("An unexpected error occurred (query failed).\r\n", ch);
-      return;
-    }
-    if (!(res = mysql_use_result(mysql))) {
-      send_to_char("An unexpected error occurred (use_result failed).\r\n", ch);
-      return;
-    }
-    row = mysql_fetch_row(res);
-    if (!row && mysql_field_count(mysql)) {
-      mysql_free_result(res);
-      send_to_char(ch, "Could not find a PC named %s.\r\n", arg);
-      return;
-    }
-    long idnum = atol(row[0]);
-    int old_karma = atoi(row[1]);
-    mysql_free_result(res);
-
-    // Now that we've confirmed the player exists, update them.
-    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Karma = Karma - %d WHERE idnum='%ld';", k, idnum);
-    if (mysql_wrapper(mysql, buf)) {
-      send_to_char("An unexpected error occurred on update (query failed).\r\n", ch);
-      return;
-    }
-
-    // Mail the victim.
-    snprintf(buf, sizeof(buf), "You have been deducted %0.2f karma for %s%s^n\r\n",
-            (float)k*0.01,
-            reason,
-            ispunct(get_final_character_from_string(reason)) ? "" : ".");
-    store_mail(idnum, ch, buf);
-
-    // Notify the actor.
-    send_to_char(ch, "You deduct %0.2f karma from %s for %s%s^n\r\n",
-                (float)k*0.01,
-                capitalize(arg),
-                reason,
-                ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-    // Log it.
-    snprintf(buf, sizeof(buf), "%s deduct %0.2f karma from %s for %s^g (%d to %d).",
-            GET_CHAR_NAME(ch),
-            (float)k*0.01,
-            arg,
-            reason,
-            old_karma,
-            old_karma - k);
-    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    staff_induced_karma_alteration_for_offline_char(ch, arg, karma_times_100, reason, FALSE);
     return;
   }
 
   if (vict->desc && vict->desc->original)
-    gain_karma(vict->desc->original, k * -1, TRUE, FALSE, FALSE);
-  else
-    gain_karma(vict, k * -1, TRUE, FALSE, FALSE);
+    vict = vict->desc->original;
 
-  // Since we subtracted rep for this, we need to re-add it.
-  GET_REP(vict) += (int) (k / 100);
+  FAILURE_CASE(IS_SENATOR(vict), "Staff can't lose karma this way. Use the SET command");
+  FAILURE_CASE(IS_NPC(vict), "Not on NPCs.");
 
-  send_to_char(vict, "You have been deducted %0.2f karma for %s%s^n\r\n", (float)k*0.01, reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-  send_to_char(ch, "You deduct %0.2f karma from %s for %s%s^n\r\n", (float)k*0.01,
-          GET_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
-
-  snprintf(buf2, sizeof(buf2), "%s deducted %0.2f karma from %s for %s^g (%d to %d).",
-          GET_CHAR_NAME(ch), (float)k*0.01,
-          GET_CHAR_NAME(vict), reason, GET_KARMA(vict) + k, GET_KARMA(vict));
-  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+  staff_induced_karma_alteration_for_online_char(ch, vict, karma_times_100, reason, FALSE);
 }
 
 // Restores a character to peak physical condition.
@@ -3121,8 +3155,12 @@ ACMD(do_restore)
 
   // Restore-single-target mode.
   restore_character(vict, TRUE);
+
+  // Single target also strips all drug info (fully remove edge, addiction etc)
+  clear_all_drug_data_for_char(vict);
+
   act("You have been fully healed by $N!", FALSE, vict, 0, ch, TO_CHAR);
-  snprintf(buf, sizeof(buf), "%s restored %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+  snprintf(buf, sizeof(buf), "%s fully restored %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
   send_to_char(OK, ch);
   return;
@@ -3995,16 +4033,17 @@ ACMD(do_show)
                { "storage",        LVL_BUILDER },
                { "anomalies",      LVL_BUILDER },
                { "roomflag",       LVL_BUILDER },
-               { "markets",        LVL_VICEPRES},
-               { "weight",         LVL_PRESIDENT},
-               { "ignore",         LVL_FIXER},
+               { "markets",        LVL_VICEPRES },
+               { "weight",         LVL_PRESIDENT },
+               { "ignore",         LVL_FIXER },
+               { "vehicles",       LVL_ADMIN },
                { "\n", 0 }
              };
 
   skip_spaces(&argument);
 
   if (!*argument) {
-    strcpy(buf, "Show options:\r\n");
+    strlcpy(buf, "Show options:\r\n", sizeof(buf));
     for (j = 0, i = 1; fields[i].level; i++)
       if (access_level(ch, fields[i].level))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-15s%s", fields[i].cmd, (!(++j % 5) ? "\r\n" : ""));
@@ -4013,7 +4052,7 @@ ACMD(do_show)
     return;
   }
 
-  strcpy(arg, two_arguments(argument, field, value));
+  strlcpy(arg, two_arguments(argument, field, value), sizeof(arg));
 
   for (l = 0; *(fields[l].cmd) != '\n'; l++)
     if (!strncmp(field, fields[l].cmd, strlen(field)))
@@ -4077,7 +4116,7 @@ ACMD(do_show)
               genders[(int) GET_SEX(vict)], GET_LEVEL(vict));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Y: %-8ld  Bal: %-8ld  Karma: %-8d\r\n",
               GET_NUYEN(vict), GET_BANK(vict), GET_KARMA(vict));
-      strcpy(birth, ctime(&vict->player.time.birth));
+      strlcpy(birth, ctime(&vict->player.time.birth), sizeof(birth));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Started: %-20.16s  Last: %-20.16s  Played: %3dh %2dm\r\n",
               birth, ctime(&vict->player.time.lastdisc),
               (int) (vict->player.time.played / 3600),
@@ -4130,7 +4169,7 @@ ACMD(do_show)
     send_to_char(buf, ch);
     break;
   case 5:
-    strcpy(buf, "Errant Rooms\r\n------------\r\n");
+    strlcpy(buf, "Errant Rooms\r\n------------\r\n", sizeof(buf));
     for (i = 0, k = 0; i <= top_of_world; i++)
       for (j = 0; j < NUM_OF_DIRS; j++)
         if (world[i].dir_option[j] && !world[i].dir_option[j]->to_room && i != last) {
@@ -4140,7 +4179,7 @@ ACMD(do_show)
     send_to_char(buf, ch);
     break;
   case 6:
-    strcpy(buf, "Death Traps\r\n-----------\r\n");
+    strlcpy(buf, "Death Traps\r\n-----------\r\n", sizeof(buf));
     for (i = 0, j = 0; i <= top_of_world; i++)
       if (ROOM_FLAGGED(&world[i], ROOM_DEATH))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s %s\r\n", ++j,
@@ -4152,7 +4191,7 @@ ACMD(do_show)
   case 7:
 #define GOD_ROOMS_ZONE 0
 
-    strcpy(buf, "Godrooms\r\n--------------------------\r\n");
+    strlcpy(buf, "Godrooms\r\n--------------------------\r\n", sizeof(buf));
     for (i = 0, j = 0; i <= zone_table[real_zone(GOD_ROOMS_ZONE)].top; i++)
       if (world[i].zone == GOD_ROOMS_ZONE && i > 1 && !(i >= 8 && i <= 12))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s %s\r\n", j++, world[i].number,
@@ -4231,7 +4270,7 @@ ACMD(do_show)
     break;
   case 13:
     {
-      strcpy(buf, "Jackpoints\r\n---------\r\n");
+      strlcpy(buf, "Jackpoints\r\n---------\r\n", sizeof(buf));
 
       char io_color[3];
       for (i = 0, j = 0; i <= top_of_world; i++) {
@@ -4268,34 +4307,9 @@ ACMD(do_show)
       send_to_char(ch, "You can't see anyone named '%s'.\r\n", value);
       return;
     }
-    send_to_char(ch, "%s's abilities:", GET_NAME(vict));
-    j = 0;
-    snprintf(buf, sizeof(buf), "\r\n");
-    for (i = 1; i < ADEPT_NUMPOWER; i++) {
-      if (GET_POWER_TOTAL(vict, i) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-20s", adept_powers[i]);
-        if (max_ability(i) > 1)
-          switch (i) {
-          case ADEPT_KILLING_HANDS:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " %-8s", GET_WOUND_NAME(GET_POWER_TOTAL(vict, i)));
-            if (GET_POWER_ACT(vict, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%-8s)^n", GET_WOUND_NAME(GET_POWER_ACT(vict, i)));
-            strlcat(buf2, "\r\n", sizeof(buf2));
-            break;
-          default:
-            snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " +%d", GET_POWER_TOTAL(vict, i));
-            if (GET_POWER_ACT(vict, i))
-              snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^Y(%d)^n", GET_POWER_ACT(vict, i));
-            strlcat(buf2, "\r\n", sizeof(buf2));
-            break;
-          }
-        else
-          strlcat(buf2, "\r\n", sizeof(buf2));
-        strlcat(buf, buf2, sizeof(buf));
-      }
-    }
-    send_to_char(buf, ch);
-    send_to_char("\r\n", ch);
+
+    send_to_char(ch, "%s's abilities:\r\n", GET_CHAR_NAME(vict));
+    render_targets_abilities_to_viewer(ch, vict);
     break;
   case 15:
     if (!*value) {
@@ -4342,11 +4356,11 @@ ACMD(do_show)
     send_to_char("\r\n", ch);
     break;
   case 17:
-    strcpy(buf, "Exitless Rooms\r\n-----------\r\n");
+    strlcpy(buf, "Exitless Rooms\r\n-----------\r\n", sizeof(buf));
     for (i = 0, j = 0; i <= top_of_world; i++) {
       // Don't need to hear about the imm zones.
       if (!room_has_any_exits(&world[i])) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s\r\n", ++j,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s^n\r\n", ++j,
                 world[i].number,
                 vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                 world[i].name);
@@ -4355,13 +4369,13 @@ ACMD(do_show)
     send_to_char(buf, ch);
     break;
   case 18:
-    strcpy(buf, "Trap Rooms\r\n-----------\r\n");
+    strlcpy(buf, "Trap Rooms\r\n-----------\r\n", sizeof(buf));
     int dir;
     for (i = 0, j = 0; i <= top_of_world; i++) {
       for (dir = 0; dir <= DOWN; dir++) {
         if (world[i].dir_option[dir] && world[i].dir_option[dir]->to_room) {
           if (!room_has_any_exits(world[i].dir_option[dir]->to_room)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s: %s\r\n", ++j,
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s^n: %s^n\r\n", ++j,
                     world[i].number,
                     vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                     world[i].name,
@@ -4387,10 +4401,10 @@ ACMD(do_show)
     display_pockets_to_char(ch, vict);
     break;
   case 20:
-    strcpy(buf, "Storage Rooms\r\n-----------\r\n");
+    strlcpy(buf, "Storage Rooms\r\n-----------\r\n", sizeof(buf));
     for (i = 0, j = 0; i <= top_of_world; i++)
       if (ROOM_FLAGGED(&world[i], ROOM_STORAGE))
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%8ld] %s %s\r\n", ++j,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%8ld] %s %s^n\r\n", ++j,
                 world[i].number,
                 vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
                 world[i].name);
@@ -4466,6 +4480,13 @@ ACMD(do_show)
         printed = TRUE;
       }
 
+      if ((GET_RACE(&mob_proto[i]) != RACE_SPIRIT && keyword_appears_in_char("spirit", &mob_proto[i]))
+          || (GET_RACE(&mob_proto[i]) != RACE_ELEMENTAL && keyword_appears_in_char("elemental", &mob_proto[i])))
+      {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s spirit or elemental keyword with mismatched race", printed ? ";" : " has");
+        printed = TRUE;
+      }
+
       if (printed)
         send_to_char(ch, "%s\r\n", buf);
     }
@@ -4486,7 +4507,7 @@ ACMD(do_show)
       for (i = 0; i < ROOM_MAX; i++) {
         if (str_str(room_bits[i], value)) {
           send_to_char(ch, "Rooms with flag %s set:\r\n", room_bits[i]);
-          strcpy(buf, "Exitless Rooms\r\n-----------\r\n");
+          strlcpy(buf, "Exitless Rooms\r\n-----------\r\n", sizeof(buf));
           for (k = 0, j = 0; k <= top_of_world; k++)
             if (ROOM_FLAGGED(&world[k], i))
               send_to_char(ch, "%4d: [%8ld] %s %s\r\n", ++j,
@@ -4529,6 +4550,44 @@ ACMD(do_show)
       return;
     }
     display_characters_ignore_entries(ch, vict);
+    return;
+  case 26:
+    {
+      idnum_t idnum;
+      if (!*value) {
+        idnum = -1;
+        send_to_char("All player-owned vehicles in game:\r\n", ch);
+      } else {
+        if ((idnum = get_player_id(value)) <= 0) {
+          send_to_char(ch, "'%s' is not a character name.\r\n", value);
+          return;
+        } else {
+          send_to_char(ch, "Vehicles owned by %s:\r\n", value);
+        }
+      }
+
+      int total_crap = 0;
+      for (struct veh_data *tmp = veh_list; tmp; tmp = tmp->next) {
+        if (tmp->owner == idnum || (tmp->owner > 0 && idnum == -1)) {
+          // Count crap.
+          int crap_count = tmp->contents ? count_objects(tmp->contents) : 0;
+          total_crap += crap_count;
+
+          // Display.
+          struct room_data *in_room = get_veh_in_room(tmp);
+          const char *owner_name = get_player_name(tmp->owner);
+          send_to_char(ch, "%-30.30s^n  ", get_string_after_color_code_removal(GET_VEH_NAME(tmp), NULL));
+          send_to_char(ch, "%30.30s^n (%6ld)  %3d item%s, owned by %s^n\r\n",
+                       in_room ? get_string_after_color_code_removal(GET_ROOM_NAME(in_room), NULL) : "towed?",
+                       in_room ? GET_ROOM_VNUM(in_room) : -1,
+                       crap_count,
+                       crap_count == 1 ? "" : "s",
+                       owner_name);
+          delete [] owner_name;
+        }
+      }
+      send_to_char(ch, "Total crap: %d\r\n", total_crap);
+    }
     return;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
@@ -4730,7 +4789,7 @@ ACMD(do_set)
     strlcpy(buf, one_argument(buf, name), sizeof(buf));
   }
   half_chop(buf, field, buf2);
-  strcpy(val_arg, buf2);
+  strlcpy(val_arg, buf2, sizeof(val_arg));
 
   if (!*name || !*field) {
     send_to_char("Usage: set <victim> <field> <value>\r\n", ch);
@@ -4818,7 +4877,7 @@ ACMD(do_set)
   if (l != 86)
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
 
-  strcpy(buf, "Okay.");  /* can't use OK macro here 'cause of \r\n */
+  strlcpy(buf, "Okay.", sizeof(buf));  /* can't use OK macro here 'cause of \r\n */
   switch (l) {
   case 0:
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_CONNLOG);
@@ -5074,7 +5133,7 @@ ACMD(do_set)
       } else
         snprintf(buf, sizeof(buf), "That room does not exist!");
     } else
-      strcpy(buf, "Must be 'off' or a room's virtual number.\r\n");
+      strlcpy(buf, "Must be 'off' or a room's virtual number.\r\n", sizeof(buf));
     break;
   case 38:
     if (GET_IDNUM(ch) != 1 || !IS_NPC(vict)) {
@@ -5401,7 +5460,7 @@ ACMD(do_logwatch)
   */
 
   if (!*buf) {
-    snprintf(buf, sizeof(buf), "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+    snprintf(buf, sizeof(buf), "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
             (PRF_FLAGGED(ch, PRF_CONNLOG) ? "  ConnLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_DEATHLOG) ? "  DeathLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_MISCLOG) ? "  MiscLog\r\n" : ""),
@@ -5418,7 +5477,8 @@ ACMD(do_logwatch)
             (PRF_FLAGGED(ch, PRF_FUCKUPLOG) ? "  FuckupLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_ECONLOG) ? "  EconLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_RADLOG) ? "  RadLog\r\n" : ""),
-            (PRF_FLAGGED(ch, PRF_IGNORELOG) ? "  IgnoreLog\r\n" : "")
+            (PRF_FLAGGED(ch, PRF_IGNORELOG) ? "  IgnoreLog\r\n" : ""),
+            (PRF_FLAGGED(ch, PRF_MAILLOG) ? "  MailLog\r\n" : "")
           );
 
     send_to_char(buf, ch);
@@ -5587,6 +5647,16 @@ ACMD(do_logwatch)
     } else {
       send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
+  } else if (is_abbrev(buf, "maillog")) {
+    if (PRF_FLAGGED(ch, PRF_MAILLOG)) {
+      send_to_char("You no longer watch the IgnoreLog.\r\n", ch);
+      PRF_FLAGS(ch).RemoveBit(PRF_MAILLOG);
+    } else if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You will now see the MailLog.\r\n", ch);
+      PRF_FLAGS(ch).SetBit(PRF_MAILLOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
+    }
   } else if (is_abbrev(buf, "all")) {
     if (!PRF_FLAGGED(ch, PRF_CONNLOG))
       PRF_FLAGS(ch).SetBit(PRF_CONNLOG);
@@ -5622,12 +5692,14 @@ ACMD(do_logwatch)
       PRF_FLAGS(ch).SetBit(PRF_RADLOG);
     if (!PRF_FLAGGED(ch, PRF_IGNORELOG) && access_level(ch, LVL_ADMIN))
       PRF_FLAGS(ch).SetBit(PRF_IGNORELOG);
+    if (!PRF_FLAGGED(ch, PRF_MAILLOG) && access_level(ch, LVL_ADMIN))
+      PRF_FLAGS(ch).SetBit(PRF_MAILLOG);
     send_to_char("All available logs have been activated.\r\n", ch);
   } else if (is_abbrev(buf, "none")) {
     PRF_FLAGS(ch).RemoveBits(PRF_CONNLOG, PRF_DEATHLOG, PRF_MISCLOG, PRF_WIZLOG,
                              PRF_SYSLOG, PRF_ZONELOG, PRF_CHEATLOG, PRF_BANLOG, PRF_GRIDLOG,
                              PRF_WRECKLOG, PRF_PGROUPLOG, PRF_HELPLOG, PRF_PURGELOG,
-                             PRF_FUCKUPLOG, PRF_ECONLOG, PRF_RADLOG, PRF_IGNORELOG, ENDBIT);
+                             PRF_FUCKUPLOG, PRF_ECONLOG, PRF_RADLOG, PRF_IGNORELOG, PRF_MAILLOG, ENDBIT);
     send_to_char("All logs have been disabled.\r\n", ch);
   } else
     send_to_char("Watch what log?\r\n", ch);
@@ -5654,14 +5726,17 @@ ACMD(do_zlist)
 
   if (!*buf && !*buf1) {
     zonenum = real_zone(ch->player_specials->saved.zonenum);
+    FAILURE_CASE(zonenum < 0, "You need to ZSWITCH to a valid zone first.");
     first = 0;
     last = zone_table[zonenum].num_cmds;
   } else if (*buf && !*buf1) {     // if there is not a second argument, then the
     zonenum = real_zone(atoi(buf));  // is considered the zone number
+    FAILURE_CASE(zonenum < 0, "You need to ZSWITCH to a valid zone first.");
     first = 0;
     last = zone_table[zonenum].num_cmds;
   } else {
     zonenum = real_zone(ch->player_specials->saved.zonenum);
+    FAILURE_CASE(zonenum < 0, "You need to ZSWITCH to a valid zone first.");
     first = MAX(0, MIN(atoi(buf), zone_table[zonenum].num_cmds));
     last = MIN(atoi(buf1), zone_table[zonenum].num_cmds);
   }
@@ -6238,53 +6313,6 @@ ACMD(do_settime)
   return;
 }
 
-ACMD(do_tail)
-{
-  char arg[MAX_STRING_LENGTH];
-  FILE *out = NULL;
-  int lines = 20;
-
-  //out = new FILE;
-  char buf[MAX_STRING_LENGTH];
-
-  two_arguments(argument, arg, buf);
-
-  if ( !*arg ) {
-    send_to_char( "Syntax note: tail <lines into history to read> <logfile>\r\n", ch );
-    send_to_char( "The following logs are available:\r\n", ch );
-    snprintf(buf, sizeof(buf), "ls -C ../log" );
-  } else {
-    if ( atoi( arg ) != 0 ) {
-      lines = atoi( arg );
-      if ( lines < 0 )
-        lines = 0 - lines;
-      // strcpy( arg, buf );
-    }
-
-    // Only allow letters, periods, numbers, and dashes.
-    int index = 0;
-    for (char *ptr = buf; *ptr && index < MAX_STRING_LENGTH; ptr++) {
-      if (!isalnum(*ptr) && *ptr != '.' && *ptr != '-')
-        continue;
-      else
-        arg[index++] = *ptr;
-    }
-    arg[index] = '\0';
-
-    send_to_char(ch, "tail -%d ../log/%s\r\n", lines, arg );
-  }
-  snprintf(arg, sizeof(arg), "%s", buf );
-
-  out=popen( arg, "r");
-
-  while (fgets(buf, MAX_STRING_LENGTH-5, out) != NULL) {
-    strlcat(buf,"\r", sizeof(buf));
-    send_to_char( buf, ch );
-  }
-  fclose( out );
-  return;
-}
-
 // Disabled due to potential for abuse: photos etc have system-generated restrings.
 // This can be re-enabled when we have a tracker for who wrote the restring.
 ACMD(do_destring)
@@ -6351,6 +6379,9 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     send_to_char("Sorry, vehicle containers can't be restrung.\r\n", ch);
     return FALSE;
   }
+
+  // TODO: Wrap this in an ifcheck so we don't double up on neutrals.
+  strlcat(buf, "^n", sizeof(buf));
 
   int length_with_no_color = get_string_length_after_color_code_removal(buf, ch);
 
@@ -6614,18 +6645,22 @@ ACMD(do_shopfind)
       continue;
     }
 
+    // Get their location.
+    location = -1;
+    for (struct char_data *i = character_list; i; i = i->next)
+      if (GET_MOB_VNUM(i) == shop_table[shop_nr].keeper && i->in_room) {
+        location = GET_ROOM_VNUM(i->in_room);
+        break;
+      }
+
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next) {
       int real_obj = real_object(sell->vnum);
-      if (real_obj < 0)
+      if (real_obj < 0) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "Warning: Shop %ld has invalid item %ld for sale!", shop_table[shop_nr].vnum, sell->vnum);
         continue;
-
-      location = -1;
+      }
 
       if (number) {
-        for (struct char_data *i = character_list; i; i = i->next)
-          if (GET_MOB_VNUM(i) == shop_table[shop_nr].keeper && i->in_room)
-            location = GET_ROOM_VNUM(i->in_room);
-
         if (sell->vnum == number) {
           send_to_char(ch, "%3d)  Shop %8ld (%s @ %ld)\r\n",
                        ++index,
@@ -6633,11 +6668,7 @@ ACMD(do_shopfind)
                        mob_proto[real_mob].player.physical_text.name,
                        location);
         }
-      } else if (isname(buf2, obj_proto[real_obj].text.name) || isname(buf2, obj_proto[real_obj].text.keywords)) {
-        for (struct char_data *i = character_list; i; i = i->next)
-          if (GET_MOB_VNUM(i) == shop_table[shop_nr].keeper && i->in_room)
-            location = GET_ROOM_VNUM(i->in_room);
-
+      } else if (keyword_appears_in_obj(buf2, &obj_proto[real_obj])) {
         send_to_char(ch, "%3d)  Shop %8ld (%s @ %ld) sells %s (%ld)\r\n",
                      ++index,
                      shop_table[shop_nr].vnum,
@@ -6835,7 +6866,7 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
     }
 
-    if (!strcmp(GET_ROOM_DESC(room), STRING_ROOM_DESC_UNFINISHED)) {
+    if (!strcmp(room->description, STRING_ROOM_DESC_UNFINISHED)) {
       strlcat(buf, "  - Default room desc used.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
@@ -6888,7 +6919,7 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
     }
 
-    if (ROOM_FLAGS(room).AreAnySet(ROOM_HOUSE_CRASH, ROOM_BFS_MARK, ROOM_OLC, ROOM_ASTRAL, ENDBIT)) {
+    if (ROOM_FLAGS(room).AreAnySet(ROOM_BFS_MARK, ROOM_OLC, ROOM_ASTRAL, ENDBIT)) {
       strlcat(buf, "  - System-controlled or unimplemented flags are set.\r\n", sizeof(buf));
       issues++;
       printed = TRUE;
@@ -7086,6 +7117,14 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     // Flag mobs with no weight or height.
     if (GET_HEIGHT(mob) == 0 || GET_WEIGHT(mob) == 0.0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing vital statistics (weight %d, height %d)^n.\r\n", GET_HEIGHT(mob), GET_WEIGHT(mob));
+      printed = TRUE;
+      issues++;
+    }
+
+    if ((GET_RACE(mob) != RACE_SPIRIT && keyword_appears_in_char("spirit", mob))
+        || (GET_RACE(mob) != RACE_ELEMENTAL && keyword_appears_in_char("elemental", mob)))
+    {
+      strlcat(buf, "  - spirit or elemental keyword with mismatched race.\r\n", sizeof(buf));
       printed = TRUE;
       issues++;
     }
@@ -7299,17 +7338,35 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     }
 
     // Flag objects with zero weight
-    if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_WEIGHT(obj) <= 0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no or negative weight^n.\r\n");
-      printed = TRUE;
-      issues++;
-    }
-
-    // Flag objects with high weight-- except fountains, which are often given high weights.
-    if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN && GET_OBJ_WEIGHT(obj) >= 100.0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f^n.\r\n", GET_OBJ_WEIGHT(obj));
-      printed = TRUE;
-      issues++;
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_DESTROYABLE:
+      case ITEM_FOUNTAIN:
+      case ITEM_GRAFFITI:
+      case ITEM_LOADED_DECORATION:
+        // Never complain about item types that usually just live in rooms.
+        break;
+      case ITEM_KEY:
+        // Keys should be light.
+        if (GET_OBJ_WEIGHT(obj) >= 0.4) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high key weight ^c%0.2f kgs^n.\r\n", GET_OBJ_WEIGHT(obj));
+          printed = TRUE;
+          issues++;
+        }
+        // Fall through
+      default:
+        // Weightless?
+        if (GET_OBJ_WEIGHT(obj) <= 0) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no or negative weight^n.\r\n");
+          printed = TRUE;
+          issues++;
+        }
+        // Extremely heavy?
+        if (GET_OBJ_WEIGHT(obj) >= 100.0) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f kgs^n.\r\n", GET_OBJ_WEIGHT(obj));
+          printed = TRUE;
+          issues++;
+        }
+        break;
     }
 
     // Flag objects that can't be picked up, other than the ones that we generally expect to be non-gettable.

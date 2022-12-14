@@ -93,10 +93,14 @@ bool can_edit_zone(struct char_data *ch, rnum_t real_zone) {
     return FALSE;
   }
 
+  if (access_level(ch, LVL_ADMIN))
+    return TRUE;
+
   for (int i = 0; i < NUM_ZONE_EDITOR_IDS; i++)
     if (zone_table[real_zone].editor_ids[i] == GET_IDNUM(ch))
       return TRUE;
-  return access_level(ch, LVL_ADMIN);
+
+  return FALSE;
 }
 
 void write_index_file(const char *suffix)

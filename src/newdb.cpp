@@ -432,6 +432,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
   // Unset the cyberdoc flag on load.
   PRF_FLAGS(ch).RemoveBit(PRF_TOUCH_ME_DADDY);
 
+  // Warn if we have the chargen flag, then unset it (this is an error case)
+  if (PLR_FLAGGED(ch, PLR_IN_CHARGEN)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s still had the chargen bit on load! Removing it.", GET_CHAR_NAME(ch));
+    PLR_FLAGS(ch).RemoveBit(PLR_IN_CHARGEN);
+  }
+
   ch->player.physical_text.room_desc = str_dup(get_string_after_color_code_removal(row[9], ch));
   ch->player.background = str_dup(row[10]);
   ch->player.physical_text.keywords = str_dup(row[11]);
@@ -1480,6 +1486,7 @@ bool PCIndex::Save()
   if (!tab) {
     if (entry_cnt > 0)
       log("--Error: no table when there should be?!  That's fucked up, man.");
+    fclose(index);
     return false;
   }
 
@@ -1611,6 +1618,7 @@ char_data *CreateChar(char_data *ch)
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
     PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
+    PLR_FLAGS(ch).RemoveBit(PLR_IN_CHARGEN);
     GET_IDNUM(ch) = MAX(playerDB.find_open_id(), highest_idnum_in_use + 1);
   }
 
@@ -1898,7 +1906,7 @@ bool does_player_exist(long id)
   return TRUE;
 }
 
-vnum_t get_player_id(char *name)
+idnum_t get_player_id(const char *name)
 {
   if (!name || !*name || !str_cmp(name, CHARACTER_DELETED_NAME_FOR_SQL))
     return -1;
@@ -1946,6 +1954,37 @@ char *get_player_name(vnum_t id)
   char *x = str_dup(row[0]);
   mysql_free_result(res);
   return x;
+}
+
+bool player_is_dead_hardcore(long id) {
+  char query_buf[500];
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
+  // Compose and execute our query.
+  snprintf(query_buf, sizeof(query_buf), "SELECT * FROM pfiles WHERE idnum=%ld AND name != '%s';",
+           id, CHARACTER_DELETED_NAME_FOR_SQL);
+  mysql_wrapper(mysql, query_buf);
+
+  // If the character doesn't exist or we encounter another error, bail out.
+  if (!(res = mysql_use_result(mysql))) {
+    return FALSE;
+  }
+  if (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
+    mysql_free_result(res);
+    return FALSE;
+  }
+
+  // Extract the PLR and PRF flags from the entry.
+  Bitfield plr_flags, prf_flags;
+  plr_flags.FromString(row[7]);
+  prf_flags.FromString(row[8]);
+
+  // Free the result before we go any further.
+  mysql_free_result(res);
+
+  // Check if they're a dead hardcore char.
+  return plr_flags.IsSet(PLR_JUST_DIED) && prf_flags.IsSet(PRF_HARDCORE);
 }
 
 bool _get_flag_is_set_by_idnum(int flag, vnum_t id, int mode) {

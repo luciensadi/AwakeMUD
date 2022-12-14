@@ -272,7 +272,7 @@ void Board_write_message(int board_type, struct obj_data *terminal,
     msg_storage_taken[NEW_MSG_INDEX(board_type).slot_num] = 0;
     return;
   }
-  strcpy(NEW_MSG_INDEX(board_type).heading, buf);
+  strlcpy(NEW_MSG_INDEX(board_type).heading, buf, len);
   NEW_MSG_INDEX(board_type).heading[len - 1] = '\0';
   NEW_MSG_INDEX(board_type).level = GET_LEVEL(ch);
 
@@ -402,7 +402,7 @@ int Board_reply_message(int board_type, struct obj_data *terminal,
     msg_storage_taken[NEW_MSG_INDEX(board_type).slot_num] = 0;
     return 1;
   }
-  strcpy(NEW_MSG_INDEX(board_type).heading, buf);
+  strlcpy(NEW_MSG_INDEX(board_type).heading, buf, len);
   NEW_MSG_INDEX(board_type).heading[len - 1] = '\0';
   NEW_MSG_INDEX(board_type).level = GET_LEVEL(ch);
 
@@ -779,6 +779,7 @@ void Board_load_board(int board_type)
   fread(&(num_of_msgs[board_type]), sizeof(int), 1, fl);
   if (num_of_msgs[board_type] < 1 || num_of_msgs[board_type] > MAX_BOARD_MESSAGES) {
     log("SYSERR: Board file corrupt.  Resetting.");
+    fclose(fl);
     Board_reset_board(board_type);
     return;
   }
@@ -786,12 +787,15 @@ void Board_load_board(int board_type)
     fread(&(msg_index[board_type][i]), sizeof(struct board_msginfo), 1, fl);
     if (!(len1 = msg_index[board_type][i].heading_len)) {
       log("SYSERR: Board file corrupt!  Resetting.");
+      fclose(fl);
       Board_reset_board(board_type);
       return;
     }
     if (!(tmp1 = new char[len1])) {
       log("SYSERR: Error - new failed for board header");
+      fclose(fl);
       shutdown();
+      return;
     }
     fread(tmp1, sizeof(char), len1, fl);
     MSG_HEADING(board_type, i) = tmp1;
@@ -799,6 +803,7 @@ void Board_load_board(int board_type)
     if ((len2 = msg_index[board_type][i].message_len)) {
       if ((MSG_SLOTNUM(board_type, i) = find_slot()) == -1) {
         log("SYSERR: Out of slots booting board!  Resetting...");
+        fclose(fl);
         Board_reset_board(board_type);
         return;
       }

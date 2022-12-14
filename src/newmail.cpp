@@ -68,7 +68,7 @@ void raw_store_mail(long to, long from_id, const char *from_name, const char *me
   // Log it.
   if (from_id > 0) {
     snprintf(mail_query_buf, sizeof(mail_query_buf), "MAIL: '%s' (%ld) wrote to %ld: '^n%s^g'", from_name, from_id, to, message_pointer);
-    mudlog(mail_query_buf, NULL, LOG_MISCLOG, TRUE);
+    mudlog(mail_query_buf, NULL, LOG_MAILLOG, TRUE);
   }
 
   // Notify pocket secretaries of online characters.
@@ -215,7 +215,7 @@ SPECIAL(postmaster)
 }
 
 void postmaster_send_mail(struct char_data * ch, struct char_data *mailman, int cmd, char *arg) {
-  long recipient;
+  idnum_t recipient;
   char buf[256];
 
   /* Require that the user be of the right level to use the mail system. */

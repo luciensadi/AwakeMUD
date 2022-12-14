@@ -130,7 +130,7 @@ bool spawn_ic(struct matrix_icon *target, vnum_t ic_vnum, int triggerstep) {
   }
 
   if (ic_rnum < 0) {
-    vnum_t ic_to_spawn;
+    vnum_t ic_to_spawn = -1;
 
     // Find a new one by seeking down the trigger list for this host until we encounter one.
     // Remember that trigger lists are ordered largest / highest first.
@@ -1258,18 +1258,16 @@ ACMD(do_locate)
       send_to_icon(PERSONA, "You fumble your attempt to locate files.\r\n");
     else {
       if (PERSONA) {
-        for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj && success > 0; obj = obj->next_content)
-          if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-            if (isname(arg, get_string_after_color_code_removal(GET_OBJ_NAME(obj), NULL))
-                || isname(arg, GET_OBJ_KEYWORDS(obj)))
-            {
-              if (GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == 0 || GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum) {
-                GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = PERSONA->idnum;
-                success--;
-                i++;
-              }
-            }
+        for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj && success > 0; obj = obj->next_content) {
+          if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_PROGRAM)
+              && (GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == 0 || GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum)
+              && keyword_appears_in_obj(arg, obj))
+          {
+            GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = PERSONA->idnum;
+            success--;
+            i++;
           }
+        }
         if (!i)
           send_to_icon(PERSONA, "You fail to return any data on that search.\r\n");
         else
@@ -2077,7 +2075,7 @@ ACMD(do_load)
   if (subcmd == SCMD_UNLOAD) {
     struct obj_data *temp = NULL;
     for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
-      if (isname(argument, soft->text.keywords) || isname(argument, GET_OBJ_NAME(soft))) {
+      if (keyword_appears_in_obj(argument, soft)) {
         send_to_icon(PERSONA, "You erase %s from active memory.\r\n", GET_OBJ_NAME(soft));
         if (temp)
           temp->next_content = soft->next_content;
@@ -2094,7 +2092,7 @@ ACMD(do_load)
     // What is with the absolute fascination with non-bracketed if/for/else/etc statements in this codebase? This was enormously hard to read. - LS
     for (struct obj_data *soft = DECKER->deck->contains; soft; soft = soft->next_content) {
       // Look for a name match.
-      if (!isname(argument, soft->text.keywords) && !isname(argument, soft->restring) && !isname(argument, soft->text.name))
+      if (!keyword_appears_in_obj(argument, soft))
         continue;
 
       if (GET_OBJ_TYPE(soft) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
@@ -2270,7 +2268,7 @@ ACMD(do_run)
   struct matrix_icon *temp;
   two_arguments(argument, buf, arg);
   for (soft = DECKER->software; soft; soft = soft->next_content)
-    if (isname(buf, soft->text.keywords) || isname(buf, soft->restring))
+    if (keyword_appears_in_obj(buf, soft))
       break;
   if (soft) {
     WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
@@ -3436,8 +3434,7 @@ ACMD(do_default)
   }
 
   for (soft = cyberdeck->contains; soft; soft = soft->next_content)
-    if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && GET_OBJ_VAL(soft, 0) > SOFT_SENSOR && (isname(argument, soft->text.keywords)
-        || isname(argument, GET_OBJ_NAME(soft))))
+    if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && GET_OBJ_VAL(soft, 0) > SOFT_SENSOR && (keyword_appears_in_obj(argument, soft)))
       break;
   if (!soft) {
     send_to_char(ch, "You don't have that program installed.\r\n");

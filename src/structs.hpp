@@ -19,6 +19,10 @@
 #include "vision_overhaul.hpp"
 #include "drugs.hpp"
 
+class ApartmentComplex;
+class Apartment;
+class ApartmentRoom;
+
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)
 #define WSPEC(name) \
@@ -136,6 +140,8 @@ struct obj_data
   struct obj_data *next_content;  /* For 'contains' lists             */
   struct host_data *in_host;      /* For tracking if the object is in a Matrix host. */
 
+  struct obj_data *cyberdeck_part_pointer;
+
   struct char_data *targ;	  /* Data for mounts */
   struct veh_data *tveh;
 
@@ -146,7 +152,7 @@ struct obj_data
       item_number(0), in_room(NULL), in_veh(NULL), vfront(FALSE), ex_description(NULL),
       restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
       worn_by(NULL), worn_on(0), in_obj(NULL), contains(NULL), next_content(NULL),
-      in_host(NULL), targ(NULL), tveh(NULL)
+      in_host(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL)
   {
     #ifdef USE_DEBUG_CANARIES
       canary = CANARY_VALUE;
@@ -265,6 +271,10 @@ struct room_data
 
   struct obj_data *best_workshop[NUM_WORKSHOP_TYPES];
 
+  // Apartment/housing information.
+  class Apartment *apartment;
+  class ApartmentRoom *apartment_room;
+
 #ifdef USE_DEBUG_CANARIES
   int canary;
 #endif
@@ -275,7 +285,7 @@ struct room_data
       address(NULL), blood(0), debris(0), spec(0), rating(0), cover(0), crowd(0),
       type(0), x(0), y(0), z(0), peaceful(0), func(NULL), dirty_bit(FALSE),
       staff_level_lock(0), elevator_number(0), contents(NULL), people(NULL),
-      vehicles(NULL), watching(NULL)
+      vehicles(NULL), watching(NULL), apartment(NULL), apartment_room(NULL)
   {
     ZERO_OUT_ARRAY(dir_option, NUM_OF_DIRS);
     ZERO_OUT_ARRAY(temporary_stored_exit, NUM_OF_DIRS);
@@ -515,7 +525,7 @@ struct char_point_data
   {
     ZERO_OUT_ARRAY(ballistic, 3);
     ZERO_OUT_ARRAY(impact, 3);
-    ZERO_OUT_ARRAY(sustained, 3);
+    ZERO_OUT_ARRAY(sustained, 2);
     ZERO_OUT_ARRAY(track, 2);
     ZERO_OUT_ARRAY(fire, 3);
     ZERO_OUT_ARRAY(reach, 2);
@@ -910,6 +920,10 @@ struct char_data
   std::unordered_map<idnum_t, bool> *pc_invis_resistance_test_results;
   std::unordered_map<idnum_t, bool> *mob_invis_resistance_test_results;
 
+  // Another unordered map to track who we've sent docwagon alerts to.
+  std::unordered_map<idnum_t, bool> sent_docwagon_messages_to = {};
+  std::unordered_map<idnum_t, bool> received_docwagon_ack_from = {};
+
   bool alias_dirty_bit;
 
   /* Named after 'magic bullet pants', the 'technology' in FPS games that allows you to never have to worry about which mag has how much ammo in it. */
@@ -926,7 +940,7 @@ struct char_data
       bioware(NULL), next_in_room(NULL), next(NULL), next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL),
       next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
       pgroup_invitations(NULL), congregation_bonus_pool(0), last_violence_loop(0), pc_invis_resistance_test_results(NULL),
-       mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE)
+      mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE)
   {
     ZERO_OUT_ARRAY(equipment, NUM_WEARS);
 
@@ -982,7 +996,7 @@ struct descriptor_data
   u_short peer_port;            /* port of peer                         */
   char host[HOST_LENGTH+1];       /* hostname                           */
   byte bad_pws;                   /* number of bad pw attemps this login        */
-  byte idle_tics;               /* tics idle at password prompt         */
+  byte idle_ticks;               /* tics idle at password prompt         */
   byte invalid_name;              /* number of invalid name attempts    */
   int connected;                          /* mode of 'connectedness'            */
   int wait;                               /* wait for how many loops            */
@@ -1040,6 +1054,12 @@ struct descriptor_data
   struct host_data *edit_host;  /* hedit */
   struct matrix_icon *edit_icon; /* icedit */
   struct help_data *edit_helpfile;
+  ApartmentComplex *edit_complex;
+  ApartmentComplex *edit_complex_original;
+  Apartment *edit_apartment;
+  Apartment *edit_apartment_original;
+  ApartmentRoom *edit_apartment_room;
+  ApartmentRoom *edit_apartment_room_original;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   Playergroup *edit_pgroup; /* playergroups */
@@ -1057,7 +1077,9 @@ struct descriptor_data
       invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
-      edit_helpfile(NULL), edit_pgroup(NULL), canary(CANARY_VALUE), pProtocol(NULL)
+      edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
+      edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
+      edit_apartment_room_original(NULL), edit_pgroup(NULL), canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
@@ -1273,84 +1295,6 @@ struct ammo_data
   unsigned char cost;
   float street_index;
 };
-
-/* Combat data. */
-#ifdef USE_OLD_HIT
-struct combat_data
-{
-  // Generic combat data.
-  int modifiers[NUM_COMBAT_MODIFIERS];
-  bool too_tall;
-  int skill;
-  int tn;
-  int dice;
-  int successes;
-
-  // Weapon / unarmed damage data.
-  int dam_type;
-  bool is_physical;
-  int power;
-  int damage_level; // Light/Med/etc
-
-  // Gun data.
-  bool weapon_is_gun;
-  bool weapon_has_bayonet;
-  int burst_count;
-  int recoil_comp;
-  int weapon_skill;
-
-  // Cyberware data.
-  int climbingclaws;
-  int fins;
-  int handblades;
-  int handrazors;
-  int improved_handrazors;
-  int handspurs;
-  int footanchors;
-  int bone_lacing_power;
-  int num_cyberweapons;
-
-  // Pointers.
-  struct char_data *ch;
-  struct veh_data *veh;
-  struct obj_data *weapon;
-  struct obj_data *magazine;
-  struct obj_data *gyro;
-
-  combat_data(struct char_data *character, struct obj_data *weap) :
-    too_tall(FALSE), skill(0), tn(0), dice(0), successes(0), dam_type(0), is_physical(FALSE), power(0), damage_level(0),
-    weapon_is_gun(FALSE), weapon_has_bayonet(FALSE), burst_count(0), recoil_comp(0), climbingclaws(0), fins(0),
-    handblades(0), handrazors(0), improved_handrazors(0), handspurs(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0),
-    ch(NULL), veh(NULL), weapon(NULL), magazine(NULL), gyro(NULL)
-  {
-    for (int i = 0; i < NUM_COMBAT_MODIFIERS; i++)
-      modifiers[i] = 0;
-
-    ch = character;
-    weapon = weap;
-
-    weapon_is_gun = WEAPON_IS_GUN(weapon);
-
-    if (weapon_is_gun) {
-      /* if (PLR_FLAGGED(att->ch, PLR_REMOTE) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_MANNING))
-        magazine = get_mount_ammo(get_mount_manned_by_ch(att->ch));
-
-        // TODO asdf this needs to be fixed, it has no way to handle a rigged veh with multiple mounts in it
-        */
-
-      if (!magazine)
-        magazine = weapon->contains;
-    }
-
-    if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
-      weapon_skill = SKILL_GUNNERY;
-    else if (weapon)
-      weapon_skill = GET_WEAPON_SKILL(weapon);
-    else
-      weapon_skill = SKILL_UNARMED_COMBAT;
-  }
-};
-#endif
 
 struct help_data {
   // title: varchar 128

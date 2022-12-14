@@ -26,6 +26,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // What karma / nuyen multipliers do you want your game to have? This effects grind length, higher is faster.
 #define KARMA_GAIN_MULTIPLIER                                  2.0
 #define NUYEN_GAIN_MULTIPLIER                                  2.0
+#define GROUP_QUEST_REWARD_MULTIPLIER                          1.5
 
 // How well should markets regenerate over time? (currently every 2 mins)
 #define MAX_PAYDATA_MARKET_INCREASE_PER_TICK                   250
@@ -143,6 +144,11 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define IDLE_NUYEN_MINUTES_BETWEEN_AWARDS                      60
 
 #define NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION                 5
+
+// After how many minutes with no commands will you stop triggering aggro and blocking zone resets?
+#define IDLE_TIMER_AGGRO_THRESHOLD                             5
+#define IDLE_TIMER_PAYOUT_THRESHOLD                            10
+#define IDLE_TIMER_ZONE_RESET_THRESHOLD                        20
 
 // What is the multiplier at which a cyberdoc will buy 'ware from you?
 #define CYBERDOC_MAXIMUM_SELL_TO_SHOPKEEP_MULTIPLIER           0.30

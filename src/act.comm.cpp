@@ -46,7 +46,7 @@ ACMD_DECLARE(do_say);
 
 ACMD_CONST(do_say) {
   static char not_const[MAX_STRING_LENGTH];
-  strcpy(not_const, argument);
+  strlcpy(not_const, argument, sizeof(not_const));
   do_say(ch, not_const, cmd, subcmd);
 }
 
@@ -65,20 +65,23 @@ ACMD(do_say)
 
   FAILURE_CASE(AFF_FLAGGED(ch, AFF_RIG), "You have no mouth.");
 
+  char arg_known_size[MAX_INPUT_LENGTH + 1];
+  strlcpy(arg_known_size, argument, sizeof(arg_known_size));
+
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
-    if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, argument, language))
+    if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, arg_known_size, language))
       return;
 
     // We specifically do not use color highlights in the Matrix. Some people want their mtx persona distinct from their normal one.
 
     if (ch->persona) {
       // Send the self-referencing message to the decker and store it in their history.
-      snprintf(buf, sizeof(buf), "You say, \"%s^n\"\r\n", capitalize(argument));
+      snprintf(buf, sizeof(buf), "You say, \"%s^n\"\r\n", capitalize(arg_known_size));
       send_to_icon(ch->persona, buf);
       store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
 
       // Send the message to the rest of the host. Store it to the recipients' says history.
-      snprintf(buf, sizeof(buf), "%s^n says, \"%s^n\"\r\n", ch->persona->name, capitalize(argument));
+      snprintf(buf, sizeof(buf), "%s^n says, \"%s^n\"\r\n", ch->persona->name, capitalize(arg_known_size));
       // send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
       for (struct matrix_icon *i = matrix[ch->persona->in_host].icons; i; i = i->next_in_host) {
         if (ch->persona != i && i->decker && has_spotted(i, ch->persona)) {
@@ -95,12 +98,12 @@ ACMD(do_say)
       for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room)
         if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX) && !IS_IGNORING(targ, is_blocking_ic_interaction_from, ch)) {
           // Send and store.
-          snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", capitalize(argument));
+          snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", capitalize(arg_known_size));
           send_to_char(buf, targ);
           store_message_to_history(targ->desc, COMM_CHANNEL_SAYS, buf);
         }
       // Send and store.
-      snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", capitalize(argument));
+      snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", capitalize(arg_known_size));
       send_to_char(buf, ch);
       store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
     }
@@ -108,8 +111,8 @@ ACMD(do_say)
   }
 
   if (subcmd == SCMD_SAYTO) {
-    half_chop(argument, buf, buf2);
-    strcpy(argument, buf2);
+    half_chop(arg_known_size, buf, buf2);
+    strlcpy(arg_known_size, buf2, sizeof(arg_known_size));
 
     if (ch->in_veh)
       to = get_char_veh(ch, buf, ch->in_veh);
@@ -123,12 +126,12 @@ ACMD(do_say)
   }
 
   // This is down here to handle speech after sayto. Note that matrix has no sayto, so we did it there as well.
-  if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, argument, language))
+  if (subcmd != SCMD_OSAY && !has_required_language_ability_for_sentence(ch, arg_known_size, language))
     return;
 
   if (subcmd == SCMD_OSAY) {
     // No color highlights for osay.
-    snprintf(buf, sizeof(buf), "$n^n says ^mOOCly^n, \"%s%s^n\"", capitalize(argument), get_final_character_from_string(argument) == '^' ? "^" : "");
+    snprintf(buf, sizeof(buf), "$n^n says ^mOOCly^n, \"%s%s^n\"", capitalize(arg_known_size), get_final_character_from_string(arg_known_size) == '^' ? "^" : "");
     for (tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? tmp->next_in_room : tmp->next_in_veh) {
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && !IS_IGNORING(tmp, is_blocking_osays_from, ch)) {
@@ -165,8 +168,8 @@ ACMD(do_say)
               (to ? buf2 : ""),
               (IS_NPC(tmp) || GET_SKILL(tmp, language) > 0) ? skills[language].name : "an unknown language",
               (PRF_FLAGGED(tmp, PRF_NOHIGHLIGHT) || PRF_FLAGGED(tmp, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
-              capitalize(replace_too_long_words(tmp, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
-              ispunct(get_final_character_from_string(argument)) ? "" : "."
+              capitalize(replace_too_long_words(tmp, ch, arg_known_size, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+              ispunct(get_final_character_from_string(arg_known_size)) ? "" : "."
             );
 
       // Note: includes act()
@@ -188,8 +191,8 @@ ACMD(do_say)
                 (to ? buf2 : ""),
                 (IS_NPC(veh->rigger) || GET_SKILL(veh->rigger, language) > 0) ? skills[language].name : "an unknown language",
                 (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
-                capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
-                ispunct(get_final_character_from_string(argument)) ? "" : "."
+                capitalize(replace_too_long_words(veh->rigger, ch, arg_known_size, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
+                ispunct(get_final_character_from_string(arg_known_size)) ? "" : "."
               );
         store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger, FALSE));
       }
@@ -201,9 +204,9 @@ ACMD(do_say)
     send_to_char(OK, ch);
 
   else {
-    delete_doubledollar(argument);
+    delete_doubledollar(arg_known_size);
     if(subcmd == SCMD_OSAY) {
-      snprintf(buf, sizeof(buf), "You say ^mOOCly^n, \"%s^n\"\r\n", capitalize(argument));
+      snprintf(buf, sizeof(buf), "You say ^mOOCly^n, \"%s^n\"\r\n", capitalize(arg_known_size));
       send_to_char(buf, ch);
       store_message_to_history(ch->desc, COMM_CHANNEL_OSAYS, buf);
     }
@@ -216,8 +219,8 @@ ACMD(do_say)
                (to ? buf2 : ""),
                skills[language].name,
                (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
-               capitalize(argument),
-               ispunct(get_final_character_from_string(argument)) ? "" : ".");
+               capitalize(arg_known_size),
+               ispunct(get_final_character_from_string(arg_known_size)) ? "" : ".");
       send_to_char(buf, ch);
       store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
     }
@@ -772,7 +775,7 @@ ACMD(do_radio)
       send_to_char(ch, "Your radio is currently centered at %d MHz. You can change the mode with ^WRADIO SCAN^n, or turn it off with ^WRADIO OFF^n.\r\n",
                    GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))));
   } else
-    send_to_char("That's not a valid option.\r\n", ch);
+    send_to_char("Valid commands are ^WRADIO OFF^n, ^WRADIO SCAN^n, ^WRADIO CENTER <frequency>^n, ^WRADIO CRYPT <level>^n, and ^WRADIO MODE^n. See ^WHELP RADIO^n for more.\r\n", ch);
 }
 
 struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_vehicular, bool must_be_on=FALSE) {
@@ -827,7 +830,7 @@ ACMD(do_broadcast)
 
   struct obj_data *radio = NULL;
   struct descriptor_data *d;
-  int i, j, frequency, crypt, decrypt;
+  int i, j, frequency, crypt_lvl, decrypt;
   char voice[16] = "$v";
   bool cyberware = FALSE, vehicle = FALSE;
 
@@ -891,21 +894,21 @@ ACMD(do_broadcast)
     return;
 
   if (radio && GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))))
-    crypt = GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3)));
+    crypt_lvl = GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3)));
   else
-    crypt = 0;
+    crypt_lvl = 0;
 
   char untouched_message[MAX_STRING_LENGTH], capitalized_and_punctuated[MAX_STRING_LENGTH], color_stripped_arg[MAX_STRING_LENGTH];
   strlcpy(color_stripped_arg, get_string_after_color_code_removal(argument, ch), sizeof(color_stripped_arg));
   snprintf(capitalized_and_punctuated, sizeof(capitalized_and_punctuated), "%s%s", capitalize(color_stripped_arg), ispunct(get_final_character_from_string(argument)) ? "" : ".");
   if (frequency > 0) {
-    if (crypt)
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[language].name, crypt, capitalized_and_punctuated);
+    if (crypt_lvl)
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[language].name, crypt_lvl, capitalized_and_punctuated);
     else
       snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s]: %s^N", voice, frequency, skills[language].name, capitalized_and_punctuated);
   } else {
-    if (crypt)
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[language].name, crypt, capitalized_and_punctuated);
+    if (crypt_lvl)
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[language].name, crypt_lvl, capitalized_and_punctuated);
     else
       snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s]: %s^N", voice, skills[language].name, capitalized_and_punctuated);
   }
@@ -919,7 +922,7 @@ ACMD(do_broadcast)
   snprintf(radlog_string, sizeof(radlog_string), "%s (%d MHz, crypt %d, in %s): %s^N",
            GET_CHAR_NAME(ch),
            frequency,
-           crypt,
+           crypt_lvl,
            skills[language].name,
            capitalized_and_punctuated
           );
@@ -959,11 +962,11 @@ ACMD(do_broadcast)
           char radio_string[1000];
 
           // If char's decrypt is insufficient, just give them the static.
-          if (decrypt < crypt) {
+          if (decrypt < crypt_lvl) {
             if (frequency <= 0) {
-              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[All Frequencies, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", crypt);
+              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[All Frequencies, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", crypt_lvl);
             } else {
-              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[%d MHz, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", frequency, crypt);
+              snprintf(message, sizeof(message), "^y\\Garbled Static^y/[%d MHz, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***", frequency, crypt_lvl);
             }
             store_message_to_history(d, COMM_CHANNEL_RADIO, act(message, FALSE, ch, 0, d->character, TO_VICT));
             continue;
@@ -1011,8 +1014,8 @@ ACMD(do_broadcast)
           }
 
           // Append crypt info to radio string (if any).
-          if (crypt) {
-            snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "(CRYPTO-%d)", crypt);
+          if (crypt_lvl) {
+            snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "(CRYPTO-%d)", crypt_lvl);
           }
 
           // If we have bad reception, add the static modifier.

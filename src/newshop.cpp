@@ -27,6 +27,7 @@ extern struct obj_data *get_first_credstick(struct char_data *ch, const char *ar
 extern void reduce_abilities(struct char_data *vict);
 extern void do_probe_object(struct char_data * ch, struct obj_data * j);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
+extern void weight_change_object(struct obj_data * obj, float weight);
 extern char *short_object(int virt, int where);
 ACMD_DECLARE(do_say);
 ACMD_DECLARE(do_new_echo);
@@ -236,21 +237,33 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
   char buf[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
 
   if (remover == victim) {
-    send_to_char(remover, "You can't operate on yourself!\r\n");
-    mudlog("SYSERR: remover = victim in uninstall_ware_from_target_character(). That's not supposed to happen!", remover, LOG_SYSLOG, TRUE);
-    return FALSE;
+    if (!access_level(remover, LVL_ADMIN)) {
+      send_to_char(remover, "You can't operate on yourself!\r\n");
+      mudlog("SYSERR: remover = victim in uninstall_ware_from_target_character(). That's not supposed to happen!", remover, LOG_SYSLOG, TRUE);
+      return FALSE;
+    } else {
+      act("Allowing self-operation for $n: Staff", FALSE, remover, 0, 0, TO_ROLLS);
+    }
   }
 
   if (GET_OBJ_TYPE(obj) != ITEM_BIOWARE && GET_OBJ_TYPE(obj) != ITEM_CYBERWARE) {
     snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to uninstall_ware_from_target_character()!", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     mudlog(buf3, remover, LOG_SYSLOG, TRUE);
-    send_to_char(remover, "An unexpected error occurred when trying to uninstall %s.\r\n", GET_OBJ_NAME(obj));
-    return FALSE;
+    if (!access_level(remover, LVL_ADMIN)) {
+      send_to_char(remover, "An unexpected error occurred when trying to uninstall %s.\r\n", GET_OBJ_NAME(obj));
+      return FALSE;
+    } else {
+      act("Allowing uninstallation of non-ware for $n from $N: Staff", FALSE, remover, 0, victim, TO_ROLLS);
+    }
   }
 
   if (GET_OBJ_COST(obj) == 0 && !IS_NPC(remover)) {
-    send_to_char(remover, "%s is Chargen 'ware, so it can't be removed by player cyberdocs. Have your patient sell it to an NPC doc.\r\n", capitalize(GET_OBJ_NAME(obj)));
-    return FALSE;
+    if (!access_level(remover, LVL_ADMIN)) {
+      send_to_char(remover, "%s is Chargen 'ware, so it can't be removed by player cyberdocs. Have your patient sell it to an NPC doc.\r\n", capitalize(GET_OBJ_NAME(obj)));
+      return FALSE;
+    } else {
+      act("Allowing uninstallation of chargen 'ware for $n from $N: Staff", FALSE, remover, 0, victim, TO_ROLLS);
+    }
   }
 
   if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
@@ -264,9 +277,8 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
 
   if (!IS_NPC(remover)) {
     const char *representation = generate_new_loggable_representation(obj);
-    snprintf(buf, sizeof(buf), "Player Cyberdoc: %s uninstalled %s from %s.", GET_CHAR_NAME(remover), representation, GET_CHAR_NAME(victim));
+    mudlog_vfprintf(remover, LOG_GRIDLOG, "Player Cyberdoc: %s uninstalled %s from %s.", GET_CHAR_NAME(remover), representation, GET_CHAR_NAME(victim));
     delete [] representation;
-    mudlog(buf, remover, LOG_GRIDLOG, TRUE);
   }
 
   act("$n takes out a sharpened scalpel and lies $N down on the operating table.",
@@ -302,9 +314,13 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   char buf[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
 
   if (installer == recipient) {
-    send_to_char(installer, "You can't operate on yourself!\r\n");
-    mudlog("SYSERR: installer = recipient in install_ware_in_target_character(). That's not supposed to happen!", installer, LOG_SYSLOG, TRUE);
-    return FALSE;
+    if (!access_level(installer, LVL_ADMIN)) {
+      send_to_char(installer, "You can't operate on yourself!\r\n");
+      mudlog("SYSERR: installer = recipient in install_ware_in_target_character(). That's not supposed to happen!", installer, LOG_SYSLOG, TRUE);
+      return FALSE;
+    } else {
+      act("Allowing self-operation for $n: Staff", FALSE, installer, 0, 0, TO_ROLLS);
+    }
   }
 
   strlcpy(buf, GET_CHAR_NAME(recipient), sizeof(buf));
@@ -327,7 +343,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     default:
       snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to install_ware_in_target_character()!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
       mudlog(buf3, installer, LOG_SYSLOG, TRUE);
-      send_to_char(installer, "An unexpected error occurred when trying to install %s (code 1.\r\n", GET_OBJ_NAME(ware));
+      send_to_char(installer, "An unexpected error occurred when trying to install %s (code 1).\r\n", GET_OBJ_NAME(ware));
       send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 1).\r\n", GET_OBJ_NAME(ware));
       return FALSE;
   }
@@ -359,7 +375,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
       esscost *= 2;
 
     // Check to see if the operation is even possible with their current essence / hole.
-    if (GET_REAL_ESS(recipient) + GET_ESSHOLE(recipient) < esscost) {
+    if (GET_REAL_ESS(recipient) + GET_ESSHOLE(recipient) <= esscost) {
       if (IS_NPC(installer)) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
         do_say(installer, buf, cmd_say, SCMD_SAYTO);
@@ -557,9 +573,16 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     obj_to_bioware(ware, recipient);
   }
 
+  // Sanity check.
+  else {
+    mudlog_vfprintf(installer, LOG_SYSLOG, "CRITICAL SYSERR: Not only is %s (%ld) not cyberware or bioware, our prior check to ensure safety failed!!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+    return FALSE;
+  }
+
   if (!IS_NPC(installer)) {
-    snprintf(buf, sizeof(buf), "Player Cyberdoc: %s installed %s in %s.", GET_CHAR_NAME(installer), GET_OBJ_NAME(ware), GET_CHAR_NAME(recipient));
-    mudlog(buf, installer, LOG_GRIDLOG, TRUE);
+    const char *representation = generate_new_loggable_representation(ware);
+    mudlog_vfprintf(installer, LOG_GRIDLOG, "Player Cyberdoc: %s installed %s in %s.", GET_CHAR_NAME(installer), GET_OBJ_NAME(ware), GET_CHAR_NAME(recipient));
+    delete [] representation;
   }
 
   // Send installation messages.
@@ -673,9 +696,11 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     }
 
     // Special handling for stackable things. TODO: Review this to make sure sell struct etc is updated appropriately.
-    if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS)
-        || (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING)
-        || (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO))
+    if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PARTS)
+        || (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_MAGIC_TOOL_TYPE(obj) == TYPE_SUMMONING)
+        || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO
+        || GET_OBJ_TYPE(obj) == ITEM_DRUG
+        || GET_OBJ_VNUM(obj) == OBJ_ANTI_DRUG_CHEMS)
     {
       bought = 0;
       float current_obj_weight = 0;
@@ -764,7 +789,98 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
 
           obj_to_char(obj, ch);
         }
-        // TODO: Handle decrementing shop amounts here (->stock). Currently, shop items are not decremented on sale for these item types.
+      }
+
+      // Give them the item (it's drugs)
+      else if (GET_OBJ_TYPE(obj) == ITEM_DRUG) {
+        print_multiples_at_end = FALSE;
+
+        // Update its quantity and weight to match the increased dose count. Cost already done above.
+        GET_OBJ_DRUG_DOSES(obj) *= bought;
+        GET_OBJ_WEIGHT(obj) *= bought;
+
+        // In theory this is dead code now after the 'you can only carry x' code change above. Will see.
+        if (GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
+          send_to_char("You start gathering up the doses you paid for, but realize you can't carry it all! The shopkeeper scowls at you, then refunds you in cash.\r\n", ch);
+          // In this specific instance, we not only assign raw nuyen, we also decrement the purchase nuyen counter. It's a refund, after all.
+          long refund_amount = price * bought;
+          GET_NUYEN_RAW(ch) += refund_amount;
+          GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_SHOP_PURCHASES) -= refund_amount;
+          extract_obj(obj);
+          return FALSE;
+        }
+
+        struct obj_data *orig = ch->carrying;
+        for (; orig; orig = orig->next_content) {
+          if (GET_OBJ_TYPE(orig) == ITEM_DRUG && GET_OBJ_DRUG_TYPE(orig) == GET_OBJ_DRUG_TYPE(obj))
+            break;
+        }
+        if (orig) {
+          // They were carrying one already. Combine them.
+          snprintf(buf2, sizeof(buf2), "You add the purchased %d doses", GET_OBJ_DRUG_DOSES(obj));
+          combine_drugs(ch, obj, orig, FALSE);
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " into %s.", GET_OBJ_NAME(orig));
+        } else {
+          // Just give the purchased thing to them directly. Handle restring if needed.
+          if (bought > 1) {
+            char new_name_buf[500];
+
+            // Compose the new name.
+            snprintf(new_name_buf, sizeof(new_name_buf), "a box of %s %ss",
+              drug_types[GET_OBJ_DRUG_TYPE(obj)].name,
+              drug_types[GET_OBJ_DRUG_TYPE(obj)].delivery_method
+            );
+
+            // Commit the change.
+            obj->restring = str_dup(new_name_buf);
+
+            snprintf(buf2, sizeof(buf2), "You now have %s (contains %d doses).", GET_OBJ_NAME(obj), GET_OBJ_DRUG_DOSES(obj));
+          } else {
+            snprintf(buf2, sizeof(buf2), "You now have %s.", GET_OBJ_NAME(obj));
+          }
+          // buf2 is sent to the character with a newline appended at the end of the function.
+
+          obj_to_char(obj, ch);
+        }
+      }
+
+      // Give them the item (it's chems)
+      else if (GET_OBJ_VNUM(obj) == OBJ_ANTI_DRUG_CHEMS) {
+        print_multiples_at_end = FALSE;
+
+        // Update its quantity and weight to match the increased dose count. Cost already done above.
+        GET_CHEMS_QTY(obj) *= bought;
+        GET_OBJ_WEIGHT(obj) *= bought;
+
+        // In theory this is dead code now after the 'you can only carry x' code change above. Will see.
+        if (GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
+          send_to_char("You start gathering up the doses you paid for, but realize you can't carry it all! The shopkeeper scowls at you, then refunds you in cash.\r\n", ch);
+          // In this specific instance, we not only assign raw nuyen, we also decrement the purchase nuyen counter. It's a refund, after all.
+          long refund_amount = price * bought;
+          GET_NUYEN_RAW(ch) += refund_amount;
+          GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_SHOP_PURCHASES) -= refund_amount;
+          extract_obj(obj);
+          return FALSE;
+        }
+
+        struct obj_data *orig = ch->carrying;
+        for (; orig; orig = orig->next_content) {
+          if (GET_OBJ_VNUM(orig) == OBJ_ANTI_DRUG_CHEMS)
+            break;
+        }
+        if (orig) {
+          // They were carrying one already. Combine them.
+          snprintf(buf2, sizeof(buf2), "You add the purchased %d doses", GET_CHEMS_QTY(obj));
+          GET_CHEMS_QTY(orig) += GET_CHEMS_QTY(obj);
+          weight_change_object(orig, GET_OBJ_WEIGHT(obj));
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " into %s.", GET_OBJ_NAME(orig));
+        } else {
+          // Just give the purchased thing to them directly. Handle restring if needed.
+          snprintf(buf2, sizeof(buf2), "You now have %s (contains %d doses).", GET_OBJ_NAME(obj), GET_CHEMS_QTY(obj));
+          // buf2 is sent to the character with a newline appended at the end of the function.
+
+          obj_to_char(obj, ch);
+        }
       }
 
       // Give them the item (it's parts or conjuring materials)
@@ -783,6 +899,16 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           obj_to_char(obj, ch);
         }
         send_to_char("[OOC: Your purchase has been bundled up into one unit with the appropriate value.]\r\n", ch);
+      }
+
+      if (sell) {
+        if (sell->type == SELL_BOUGHT && (sell->stock -= bought) <= 0) {
+          struct shop_sell_data *temp;
+          REMOVE_FROM_LIST(sell, shop_table[shop_nr].selling, next);
+          delete sell;
+          sell = NULL;
+        } else if (sell->type == SELL_STOCK)
+          sell->stock = MAX(0, sell->stock - bought);
       }
     }
 
@@ -2249,7 +2375,7 @@ SPECIAL(shop_keeper)
 
   skip_spaces(&argument);
   if (CMD_IS("buy"))
-    shop_buy(argument, sizeof(argument), ch, keeper, shop_nr);
+    shop_buy(argument, strlen(argument), ch, keeper, shop_nr);
   else if (CMD_IS("sell"))
     shop_sell(argument, ch, keeper, shop_nr);
   else if (CMD_IS("list"))
@@ -2958,7 +3084,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
 
 bool shop_can_sell_object(struct obj_data *obj, struct char_data *keeper, int shop_nr) {
   if (!obj) {
-    snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Hiding nonexistant item from sale.", shop_table[shop_nr].vnum, GET_NAME(keeper));
+    snprintf(buf2, sizeof(buf2), "Shop %ld ('%s'): Hiding nonexistant item from sale.", shop_table[shop_nr].vnum, keeper ? GET_NAME(keeper) : "NO_KEEPER");
     mudlog(buf2, keeper, LOG_SYSLOG, TRUE);
     return FALSE;
   }

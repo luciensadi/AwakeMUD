@@ -17,6 +17,7 @@
 #include "invis_resistance_tests.hpp"
 #include "newdb.hpp"
 #include "playerdoc.hpp"
+#include "newhouse.hpp"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -1159,12 +1160,10 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
     return FALSE;
   }
 
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
   if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     return FALSE;
   }
-#endif
 
   bool ch_is_astral = IS_ASTRAL(ch);
   bool vict_is_astral = IS_ASTRAL(vict);
@@ -1563,6 +1562,11 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         vict->char_specials.mindlink = ch;
         ch->char_specials.mindlink = vict;
+
+        send_to_char(vict, "(OOC notice: ^c%s^n has cast the Mindlink spell on you, allowing for telepathic communication "
+                     "via the ^WTHINK^n command. If you wish to terminate this, you can ##^WBREAK MINDLINK^n, "
+                     "or ##^WBLOCK %s^W MINDLINKS^n to prevent new ones from being made.)\r\n",
+                     GET_CHAR_NAME(ch), GET_CHAR_NAME(ch));
       } else send_to_char(FAILED_CAST, ch);
       spell_drain(ch, spell, force, 0, direct_sustain);
       break;
@@ -1652,37 +1656,45 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
   bool cyber = TRUE;
   switch (spell) {
     case SPELL_DETOX:
-      if (AFF_FLAGGED(vict, AFF_DETOX)) {
-        send_to_char(ch, "They're already undergoing detox.\r\n");
-        return;
-      }
-
-      base_target = 0;
-      for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
-        if (GET_DRUG_STAGE(vict, i) != DRUG_STAGE_UNAFFECTED) {
-          base_target = MAX(base_target, drug_types[i].power);
+      {
+        if (AFF_FLAGGED(vict, AFF_DETOX)) {
+          send_to_char(ch, "They're already undergoing detox.\r\n");
+          return;
         }
-      }
 
-      if (!base_target) {
-        send_to_char("They aren't affected by any drugs.\r\n", ch);
-        return;
+        base_target = 0;
+        bool drugged = FALSE;
+        for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
+          if (GET_DRUG_STAGE(vict, i) != DRUG_STAGE_UNAFFECTED) {
+            base_target = MAX(base_target, drug_types[i].power);
+            drugged = TRUE;
+          }
+        }
+
+        if (!drugged) {
+          send_to_char("They aren't affected by any drugs.\r\n", ch);
+          return;
+        }
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+        success = success_test(skill, base_target + target_modifiers);
+        snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0) {
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
+          send_to_char("You notice the effects of the drugs suddenly wear off.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
       }
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, base_target + target_modifiers);
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (success > 0) {
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
-        send_to_char("You notice the effects of the drugs suddenly wear off.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_STABILIZE:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 4 + ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR) + target_modifiers);
+      {
+        // Removing wound age modifier because time() can be seconds OR milliseconds depending on platform.
+        // int wound_age_modifier = ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR);
+        success = success_test(skill, 4 /* + wound_age_modifier */ + target_modifiers);
+      }
       snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
       act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0 && force >= (GET_PHYSICAL(vict) <= 0 ? -(GET_PHYSICAL(vict) / 100) : 50)) {
@@ -1734,7 +1746,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       // fall through
     case SPELL_HEAL:
       if (AFF_FLAGGED(vict, AFF_HEALED)) {
-        send_to_char(ch, "%s has been healed to recently for this spell.\r\n", GET_NAME(vict));
+        send_to_char(ch, "%s has been healed too recently for this spell.\r\n", GET_NAME(vict));
         return;
       }
 
@@ -3811,10 +3823,11 @@ ACMD(do_cast)
 
   // Restrictions for the houseruled ritual spell system.
   if (subcmd == SCMD_RITUAL_CAST) {
+    FAILURE_CASE(!in_room, "You can't quite figure out where to put things...\r\n");
     FAILURE_CASE(IS_WORKING(ch), "You're too busy to cast a ritual spell.\r\n");
     FAILURE_CASE(CH_IN_COMBAT(ch), "Ritual cast while fighting?? You ARE mad!\r\n");
     FAILURE_CASE(IS_PROJECT(ch), "You can't manipulate physical objects in this form, so setting up a ritual space will be hard.\r\n");
-    FAILURE_CASE(!ROOM_FLAGGED(in_room, ROOM_HOUSE), "Ritual casting requires an undisturbed place with room to move around-- you'll need to be in an apartment.\r\n");
+    FAILURE_CASE(!GET_APARTMENT(in_room), "Ritual casting requires an undisturbed place with room to move around-- you'll need to be in an apartment.\r\n");
     FAILURE_CASE(ch->in_veh, "Ritual casting requires more space to move around-- you'll need to leave your vehicle.\r\n");
     FAILURE_CASE(!spell_is_valid_ritual_spell(spell->type), "That spell isn't eligible for ritual casting. You can only ritual-cast buffs.\r\n");
 
@@ -5963,6 +5976,8 @@ ACMD(do_initiate)
     return;
   }
 
+  skip_spaces(&argument);
+
   if (subcmd == SCMD_INITIATE && init_cost(ch, FALSE)) {
     // Enforce grade restrictions. We can't do this init_cost since it's used elsewhere.
     if ((GET_GRADE(ch) + 1) > INITIATION_CAP) {
@@ -5986,15 +6001,14 @@ ACMD(do_initiate)
       return;
     }
 
-    if (GET_KARMA(ch) < 2000) {
-      send_to_char("You do not have enough karma to purchase a powerpoint. It costs 20 karma.\r\n", ch);
-      return;
-    }
+    FAILURE_CASE(GET_KARMA(ch) < 2000, "You do not have enough karma to purchase a powerpoint. It costs 20 karma.\r\n");
 
     if (ch->points.extrapp > (int)(GET_TKE(ch) / 50)) {
       send_to_char(ch, "You haven't earned enough TKE to purchase %s powerpoint yet. You need at least %d.\r\n", ch->points.extrapp ? "another" : "a", 50 * ch->points.extrapp);
       return;
     }
+
+    FAILURE_CASE(!*argument || str_cmp(argument, "confirm") != 0, "If you're sure you want to spend 20 karma to purchase a powerpoint, type ^WADDPOINT CONFIRM^n.\r\n");
 
     GET_KARMA(ch) -= 2000;
     GET_PP(ch) += 100;
@@ -6277,15 +6291,42 @@ ACMD(do_think)
   for (spell = GET_SUSTAINED(ch); spell; spell = spell->next)
     if (spell->spell == SPELL_MINDLINK)
       break;
-  if (!spell || !*argument) {
-    send_to_char("You think about life, the universe and everything.\r\n", ch);
+
+  if (!*argument) {
+    send_to_char(ch, "Syntax: ^WTHINK <message>^n\r\n");
     return;
   }
+
   skip_spaces(&argument);
-  snprintf(buf, sizeof(buf), "^rYou hear $v in your mind say, \"%s\"", argument);
+
+  char formatted_think_string[MAX_INPUT_LENGTH + 5];
+  snprintf(formatted_think_string, sizeof(formatted_think_string), "%s%s", CAP(argument), ispunct(get_final_character_from_string(argument)) ? "" : ".");
+
+  if (!spell) {
+    // RP form: Thinking to yourself. Printed to privileged people in the room to allow for RP adjustment in scenes.
+    send_to_char(ch, "You think to yourself, \"%s^n\"\r\n", formatted_think_string);
+    for (struct char_data *viewer = ch->in_room ? ch->in_room->people : ch->in_veh->people;
+         viewer;
+         viewer = (ch->in_room ? viewer->next_in_room : viewer->next_in_veh))
+    {
+      if (viewer == ch || !AWAKE(viewer))
+        continue;
+
+      if (access_level(viewer, LVL_FIXER) || (PRF_FLAGGED(viewer, PRF_QUEST) && PRF_FLAGGED(ch, PRF_QUESTOR))) {
+        send_to_char(viewer, "^LOOC: %s thinks to %s, \"%s^n\"^n\r\n",
+                     GET_CHAR_NAME(ch),
+                     GET_SEX(ch) == SEX_NEUTRAL ? "themselves" : (GET_SEX(ch) == SEX_MALE ? "himself" : "herself"),
+                     formatted_think_string);
+      }
+    }
+    return;
+  }
+
+  // We don't show communication mindlinks to privileged folks.
+  snprintf(buf, sizeof(buf), "^rYou hear $v^r in your mind say, \"%s^r\"^n", formatted_think_string);
   if (!IS_IGNORING(ch->char_specials.mindlink, is_blocking_mindlinks_from, ch))
     act(buf, FALSE, ch, 0, ch->char_specials.mindlink, TO_VICT);
-  send_to_char(ch, "You think, \"%s\"\r\n", argument);
+  send_to_char(ch, "You think across your mindlink^n, \"%s^n\"\r\n", formatted_think_string);
 }
 
 int get_spell_affected_successes(struct char_data * ch, int type)

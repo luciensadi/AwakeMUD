@@ -38,6 +38,7 @@
 #include "helpedit.hpp"
 #include "archetypes.hpp"
 #include "ignore_system.hpp"
+#include "newhouse.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -76,6 +77,8 @@ void dbuild_parse(struct descriptor_data *d, const char *arg);
 void pbuild_parse(struct descriptor_data *d, const char *arg);
 void spedit_parse(struct descriptor_data *d, const char *arg);
 void aedit_parse(struct descriptor_data *d, const char *arg);
+void houseedit_apartment_parse(struct descriptor_data *d, const char *arg);
+void houseedit_complex_parse(struct descriptor_data *d, const char *arg);
 void free_shop(struct shop_data *shop);
 void free_quest(struct quest_data *quest);
 void init_parse(struct descriptor_data *d, char *arg);
@@ -101,6 +104,9 @@ extern void mag_menu_system(struct descriptor_data * d, char *arg);
 extern void ccr_pronoun_menu(struct descriptor_data *d);
 extern void disable_xterm_256(descriptor_t *apDescriptor);
 extern void enable_xterm_256(descriptor_t *apDescriptor);
+
+// Some commands are not supported but are common in other games. We handle those with these SCMDs.
+#define SCMD_INTRODUCE 0
 
 /* prototypes for all do_x functions. */
 ACMD_DECLARE(do_olcon);
@@ -175,6 +181,8 @@ ACMD_DECLARE(do_drag);
 ACMD_DECLARE(do_drink);
 ACMD_DECLARE(do_drive);
 ACMD_DECLARE(do_drop);
+ACMD_DECLARE(do_drugs);
+ACMD_DECLARE(do_docwagon);
 ACMD_DECLARE(do_eat);
 ACMD_DECLARE(do_echo);
 ACMD_DECLARE(do_new_echo);
@@ -214,6 +222,7 @@ ACMD_DECLARE(do_hide);
 ACMD_DECLARE(do_hit);
 ACMD_DECLARE(do_highlight);
 ACMD_DECLARE(do_house);
+ACMD_DECLARE(do_houseedit);
 ACMD_DECLARE(do_hp);
 ACMD_DECLARE(do_iclist);
 ACMD_DECLARE(do_ignore);
@@ -345,7 +354,6 @@ ACMD_DECLARE(do_survey);
 ACMD_DECLARE(do_switch);
 ACMD_DECLARE(do_switched_message_history);
 ACMD_DECLARE(do_syspoints);
-ACMD_DECLARE(do_tail);
 ACMD_DECLARE(do_teleport);
 ACMD_DECLARE(do_tell);
 ACMD_DECLARE(do_think);
@@ -367,6 +375,7 @@ ACMD_DECLARE(do_unban);
 ACMD_DECLARE(do_unbond);
 ACMD_DECLARE(do_ungroup);
 ACMD_DECLARE(do_unpack);
+ACMD_DECLARE(do_unsupported_command);
 ACMD_DECLARE(do_upgrade);
 ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_users);
@@ -572,6 +581,7 @@ struct command_info cmd_info[] =
     { "dispell"    , POS_SITTING , do_dispell  , 0, 0, FALSE },
     { "display"    , POS_DEAD    , do_display  , 0, 0, TRUE },
     { "discord"    , POS_DEAD    , do_discord  , 0, 0, TRUE },
+    { "docwagon"   , POS_LYING   , do_docwagon , 0, 0, FALSE },
     { "domain"     , POS_LYING   , do_domain   , 0, 0, FALSE },
     { "donate"     , POS_RESTING , do_drop     , 0, SCMD_DONATE, FALSE },
     { "drag"       , POS_STANDING, do_drag     , 0, 0, FALSE },
@@ -580,6 +590,7 @@ struct command_info cmd_info[] =
     { "drop"       , POS_LYING   , do_drop     , 0, SCMD_DROP, FALSE },
     { "draw"       , POS_RESTING , do_draw     , 0, 0, FALSE },
     { "driveby"    , POS_SITTING , do_driveby  , 0, 0, FALSE },
+    { "drugs"      , POS_MORTALLYW, do_drugs   , 0, 0, FALSE },
 
     { "eat"        , POS_RESTING , do_eat      , 0, SCMD_EAT, FALSE },
     { "echo"       , POS_SLEEPING, do_new_echo , 0, SCMD_ECHO, FALSE },
@@ -634,6 +645,7 @@ struct command_info cmd_info[] =
     { "hold"       , POS_RESTING , do_grab     , 1, 0, FALSE },
     { "holster"    , POS_RESTING , do_holster  , 0, 0, FALSE },
     { "house"      , POS_LYING   , do_house    , 0, 0, FALSE },
+    { "houseedit"  , POS_SLEEPING, do_houseedit, LVL_BUILDER, 0, FALSE },
     { "ht"         , POS_DEAD    , do_gen_comm , 0, SCMD_HIREDTALK, FALSE },
     { "hts"        , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_HIRED, TRUE },
     { "hp"         , POS_DEAD    , do_hp       , 0, 0, TRUE },
@@ -659,6 +671,7 @@ struct command_info cmd_info[] =
     { "insult"     , POS_LYING   , do_insult   , 0, 0, FALSE },
     { "invis"      , POS_DEAD    , do_invis    , LVL_BUILDER, 0, FALSE },
     { "invitations", POS_LYING   , do_invitations, 0, 0, FALSE },
+    { "introduce"  , POS_DEAD    , do_unsupported_command, 0, SCMD_INTRODUCE, FALSE },
     { "items"      , POS_LYING   , do_items    , 0, 0, FALSE },
 
     { "jack"       , POS_SITTING , do_jack     , 0, 0, FALSE },
@@ -869,7 +882,6 @@ struct command_info cmd_info[] =
     { "take"       , POS_RESTING , do_get      , 0, SCMD_TAKE, FALSE },
     { "target"     , POS_SITTING , do_target   , 0, 0, FALSE },
     { "taste"      , POS_RESTING , do_eat      , 0, SCMD_TASTE, FALSE },
-    { "tail"       , POS_DEAD    , do_tail     , LVL_DEVELOPER, 0, FALSE },
     { "teleport"   , POS_DEAD    , do_teleport , LVL_CONSPIRATOR, 0, FALSE },
     { "think"      , POS_LYING   , do_think    , 0, 0, FALSE },
     { "throw"      , POS_FIGHTING, do_throw    , 0, 0, FALSE },
@@ -2518,7 +2530,6 @@ void nanny(struct descriptor_data * d, char *arg)
   extern vnum_t frozen_start_room;
   extern vnum_t newbie_start_room;
   extern int max_bad_pws;
-  extern bool House_can_enter(struct char_data *ch, vnum_t vnum);
   vnum_t load_room_vnum;
   rnum_t load_room_rnum;
   bool dirty_password = FALSE;
@@ -2598,8 +2609,14 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_HELPEDIT:
     helpedit_parse(d, arg);
     break;
+  case CON_HOUSEEDIT_COMPLEX:
+    houseedit_complex_parse(d, arg);
+    break;
+  case CON_HOUSEEDIT_APARTMENT:
+    houseedit_apartment_parse(d, arg);
+    break;
   case CON_GET_NAME:            /* wait for input of name */
-    d->idle_tics = 0;
+    d->idle_ticks = 0;
 
     if (!*arg) {
       d->invalid_name++;
@@ -2626,12 +2643,6 @@ void nanny(struct descriptor_data * d, char *arg)
       if (does_player_exist(tmp_name)) {
         d->character = playerDB.LoadChar(tmp_name, TRUE);
         d->character->desc = d;
-
-        if (PRF_FLAGGED(d->character, PRF_HARDCORE) && PLR_FLAGGED(d->character, PLR_JUST_DIED)) {
-          SEND_TO_Q("The Reaper has claimed this one...\r\n", d);
-          STATE(d) = CON_CLOSE;
-          return;
-        }
 
         snprintf(buf, sizeof(buf), "Welcome back. Enter your password. Not %s? Enter 'abort' to try a different name. ", CAP(tmp_name));
         SEND_TO_Q(buf, d);
@@ -2713,7 +2724,7 @@ void nanny(struct descriptor_data * d, char *arg)
      */
 
     // Clear their idle counter so they don't get dropped mysteriously.
-    d->idle_tics = 0;
+    d->idle_ticks = 0;
 
     if (!*arg) {
       close_socket(d);
@@ -2876,6 +2887,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
     if (STATE(d) == CON_CNFPASSWD) {
       STATE(d) = CON_CCREATE;
+      PLR_FLAGS(d->character).SetBit(PLR_IN_CHARGEN);
       init_create_vars(d);
       ccr_pronoun_menu(d);
     } else {
@@ -2956,7 +2968,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
         d->character = playerDB.LoadChar(char_name, false);
         d->character->desc = d;
-        PLR_FLAGS(d->character).RemoveBit(PLR_JUST_DIED);
+        PLR_FLAGS(d->character).RemoveBits(PLR_JUST_DIED, PLR_DOCWAGON_READY, ENDBIT);
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
           GET_PHYSICAL(d->character) = GET_MAX_PHYSICAL(d->character);
           GET_MENTAL(d->character) = GET_MAX_MENTAL(d->character);
@@ -3062,7 +3074,7 @@ void nanny(struct descriptor_data * d, char *arg)
       }
 
       // Post-processing: Characters who are trying to load into a house get rejected if they're not allowed in there.
-      if (ROOM_FLAGGED(&world[load_room_rnum], ROOM_HOUSE) && !House_can_enter(d->character, world[load_room_rnum].number)) {
+      if (world[load_room_rnum].apartment && !world[load_room_rnum].apartment->can_enter(d->character)) {
         load_room_vnum = mortal_start_room;
         load_room_rnum = real_room(mortal_start_room);
       }
@@ -3353,6 +3365,18 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
   log(cmd_buf);
 }
 #endif
+
+ACMD(do_unsupported_command) {
+  switch (subcmd) {
+    case SCMD_INTRODUCE:
+      send_to_char("(Sorry, that command isn't supported here. Instead, you can introduce yourself with the ^WSAY^n or ^WEMOTE^n commands, and the listeners can ^WREMEMBER^n you.)\r\n", ch);
+      return;
+    default:
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unsupported SCMD to do_unsupported_command(): %d", subcmd);
+      send_to_char("Sorry, that command isn't supported here.\r\n", ch);
+      return;
+  }
+}
 
 // Attempts to map common typos to their actual commands.
 #define COMMAND_ALIAS(typo, corrected)   if (strncmp(arg, (typo), strlen(arg)) == 0) { return find_command_in_x((corrected), cmd_info); }

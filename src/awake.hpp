@@ -296,7 +296,7 @@ enum {
 #define PLR_DELETED                         11 /* Player deleted - space reusable        */
 #define PLR_NODELETE                        12 /* Player shouldn't be deleted            */
 #define PLR_NOSTAT                          14 /* Player cannot be statted, etc          */
-#define PLR_LOADROOM                        15 /* Player uses nonstandard loadroom       */
+#define PLR_IN_CHARGEN                      15 /* Player is currently in chargen         */
 #define PLR_INVSTART                        16 /* Player should enter game wizinvis      */
 #define PLR_OLC                             19 /* Player has access to olc commands      */
 #define PLR_MATRIX                          20 /* Player is in the Matrix                */
@@ -330,7 +330,8 @@ enum {
 #define PLR_ENABLED_DRUGS                   48
 #define PLR_SENT_DOCWAGON_PLAYER_ALERT      49
 #define PLR_PAID_FOR_VNUMS                  50
-#define PLR_MAX                             51
+#define PLR_DOCWAGON_READY                  51 /* Flags if a player has rolled successfully for DocWagon. */
+#define PLR_MAX                             52
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 
@@ -447,7 +448,8 @@ enum {
 #define PRF_DISABLE_XTERM                      65
 #define PRF_COERCE_ANSI                        66
 #define PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT  67
-#define PRF_MAX                                68
+#define PRF_MAILLOG                            68
+#define PRF_MAX                                69
 
 /* log watch */
 
@@ -469,10 +471,14 @@ enum {
 #define LOG_ECONLOG        15
 #define LOG_RADLOG         16
 #define LOG_IGNORELOG      17
-#define NUM_LOGS           18
-// If you add to this list, add your bit to act.other.cpp's 'skip log bits' section.
-// If you add to this list, also add the name of your new log type to constants.cpp's log_types[].
-// Finally, add to utils.cpp's mudlog() switch.
+#define LOG_MAILLOG        18
+#define NUM_LOGS           19
+// If you add to this list:
+//  - add your bit to act.other.cpp's 'skip log bits' section.
+//  - add the name of your new log type to constants.cpp's log_types[].
+//  - add it to utils.cpp's mudlog() switch.
+//  - add it to act.wizard.cpp's do_logwatch().
+//  - Make sure there's a corresponding PRF for it.
 
 /* player conditions */
 
@@ -594,8 +600,8 @@ enum {
 #define ROOM_ARENA                      9   /* Can't teleport in         */
 #define ROOM_STREETLIGHTS               10  /* Room has a streetlight    */
 #define ROOM_HOUSE                      11  /* (R) Room is a house       */
-#define ROOM_HOUSE_CRASH                12  /* (R) House needs saving    */
-#define ROOM_ATRIUM                     13  /* (R) The door to a house   */
+// UNUSED SLOT                          12
+// UNUSED SLOT                          13
 #define ROOM_OLC                        14  /* (R) Modifyable/!compress  */
 #define ROOM_BFS_MARK                   15  /* (R) breath-first srch mrk */
 #define ROOM_LOW_LIGHT                  16  /* Room viewable with ll-eyes */
@@ -1113,7 +1119,7 @@ enum {
 #define BAN_SELECT      2
 #define BAN_ALL         3
 
-#define BANNED_SITE_LENGTH    50
+#define BANNED_SITE_LENGTH    50 // if you change this, update fscanf in ban.cpp
 
 /* weapon attack types */
 
@@ -2125,63 +2131,66 @@ enum {
 
 /* END SUBCOMMANDS SECTION */
 
-#define FREE    0
-#define SIMPLE    1
-#define COMPLEX    2
-#define EXCLUSIVE  3
-#define NOCOMBAT  4
+#define ACTION_FREE       0
+#define ACTION_SIMPLE     1
+#define ACTION_COMPLEX    2
+#define ACTION_EXCLUSIVE  3
+#define ACTION_NOCOMBAT   4
 
 /* modes of connectedness: used by descriptor_data.state */
 
-#define CON_PLAYING      0              /* Playing - Nominal state      */
-#define CON_CLOSE        1              /* Disconnecting                */
-#define CON_GET_NAME     2              /* By what name ..?             */
-#define CON_NAME_CNFRM   3              /* Did I get that right, x?     */
-#define CON_PASSWORD     4              /* Password:                    */
-#define CON_NEWPASSWD    5              /* Give me a password for x     */
-#define CON_CNFPASSWD    6              /* Please retype password:      */
-#define CON_CCREATE      7
-#define CON_RMOTD        8              /* PRESS RETURN after MOTD      */
-#define CON_MENU         9              /* Your choice: (main menu)     */
-#define CON_PART_CREATE  10
-#define CON_CHPWD_GETOLD 11             /* Changing passwd: get old     */
-#define CON_CHPWD_GETNEW 12             /* Changing passwd: get new     */
-#define CON_CHPWD_VRFY   13             /* Verify new password          */
-#define CON_DELCNF1      14             /* Delete confirmation 1        */
-#define CON_DELCNF2      15             /* Delete confirmation 2        */
-#define CON_QMENU        16             /* quit menu                    */
-#define CON_QGETOLDPW    17
-#define CON_QGETNEWPW    18
-#define CON_QVERIFYPW    19
-#define CON_QDELCONF1    20
-#define CON_QDELCONF2    21
-#define CON_SPELL_CREATE 22             /* Spell creation menus         */
-#define CON_PCUSTOMIZE   23             /* customize persona description menu */
-#define CON_ACUSTOMIZE   24             /* customize reflection description menu */
-#define CON_FCUSTOMIZE   25
-#define CON_VEDIT        26
-#define CON_IEDIT        27  /* olc edit mode */
-#define CON_REDIT        28  /* olc edit mode */
-#define CON_MEDIT        29
-#define CON_QEDIT        30
-#define CON_SHEDIT       31
-#define CON_ZEDIT        32
-#define CON_HEDIT        33
-#define CON_ICEDIT       34
-#define CON_PRO_CREATE   35
-#define CON_DECK_CREATE  36
-#define CON_SPE_CREATE   37
-#define CON_INITIATE     38
-#define CON_DECORATE     39
-#define CON_POCKETSEC    40
-#define CON_VEHCUST      41
-#define CON_BCUSTOMIZE   42
-#define CON_TRIDEO       43
-#define CON_AMMO_CREATE  44
-#define CON_ASKNAME      45            /* Ask user for name            */
-#define CON_PGEDIT       46
-#define CON_HELPEDIT     47
+#define CON_PLAYING             0              /* Playing - Nominal state      */
+#define CON_CLOSE               1              /* Disconnecting                */
+#define CON_GET_NAME            2              /* By what name ..?             */
+#define CON_NAME_CNFRM          3              /* Did I get that right, x?     */
+#define CON_PASSWORD            4              /* Password:                    */
+#define CON_NEWPASSWD           5              /* Give me a password for x     */
+#define CON_CNFPASSWD           6              /* Please retype password:      */
+#define CON_CCREATE             7
+#define CON_RMOTD               8              /* PRESS RETURN after MOTD      */
+#define CON_MENU                9              /* Your choice: (main menu)     */
+#define CON_PART_CREATE         10
+#define CON_CHPWD_GETOLD        11             /* Changing passwd: get old     */
+#define CON_CHPWD_GETNEW        12             /* Changing passwd: get new     */
+#define CON_CHPWD_VRFY          13             /* Verify new password          */
+#define CON_DELCNF1             14             /* Delete confirmation 1        */
+#define CON_DELCNF2             15             /* Delete confirmation 2        */
+#define CON_QMENU               16             /* quit menu                    */
+#define CON_QGETOLDPW           17
+#define CON_QGETNEWPW           18
+#define CON_QVERIFYPW           19
+#define CON_QDELCONF1           20
+#define CON_QDELCONF2           21
+#define CON_SPELL_CREATE        22             /* Spell creation menus         */
+#define CON_PCUSTOMIZE          23             /* customize persona description menu */
+#define CON_ACUSTOMIZE          24             /* customize reflection description menu */
+#define CON_FCUSTOMIZE          25
+#define CON_VEDIT               26
+#define CON_IEDIT               27  /* olc edit mode */
+#define CON_REDIT               28  /* olc edit mode */
+#define CON_MEDIT               29
+#define CON_QEDIT               30
+#define CON_SHEDIT              31
+#define CON_ZEDIT               32
+#define CON_HEDIT               33
+#define CON_ICEDIT              34
+#define CON_PRO_CREATE          35
+#define CON_DECK_CREATE         36
+#define CON_SPE_CREATE          37
+#define CON_INITIATE            38
+#define CON_DECORATE            39
+#define CON_POCKETSEC           40
+#define CON_VEHCUST             41
+#define CON_BCUSTOMIZE          42
+#define CON_TRIDEO              43
+#define CON_AMMO_CREATE         44
+#define CON_ASKNAME             45            /* Ask user for name            */
+#define CON_PGEDIT              46
+#define CON_HELPEDIT            47
+#define CON_HOUSEEDIT_COMPLEX   48
+#define CON_HOUSEEDIT_APARTMENT 49
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
+// Also add it to constants's connected_types.
 
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD     0
@@ -2319,7 +2328,7 @@ enum {
 #define MAX_INPUT_LENGTH          2048     /* Max length per *line* of input */
 #define MAX_RAW_INPUT_LENGTH      4096     /* Max size of *raw* input */
 #define MAX_MESSAGES              100
-#define MAX_NAME_LENGTH           20  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define MAX_NAME_LENGTH           20  /* Used in char_file_u *DO*NOT*CHANGE* */ // if you change this, update the fscanf in ban.cpp and comm.cpp
 #define MAX_RESTRING_LENGTH       256
 
 #define MAX_PWD_LENGTH            30  /* Relic of the past, do not change. Dictates max length of crypt() hashes. */
@@ -2393,6 +2402,7 @@ enum {
 #define RM_PORTLAND_DOCWAGON         RM_ENTRANCE_TO_DANTES
 #define RM_CARIB_DOCWAGON            RM_ENTRANCE_TO_DANTES
 #define RM_OCEAN_DOCWAGON            RM_ENTRANCE_TO_DANTES
+// Adding a new DocWagon room? Add it to do_die's exclusion list!
 #define RM_NERPCORPOLIS_RECEPTIONIST RM_ENTRANCE_TO_DANTES
 #define RM_NERPCORPOLIS_LOBBY        RM_ENTRANCE_TO_DANTES
 #define RM_PORTLAND_PARKING_GARAGE   RM_DANTES_GARAGE
@@ -2884,7 +2894,7 @@ enum {
 #define SMARTLINK_II_MODIFIER 3
 #define SMARTLINK_I_MODIFIER  2
 
-#endif
+#define DECK_FLAG_HAS_PART_POINTING_TO_IT (1 << 0)
 
 // Don't actually change this value unless you're rewriting regeneration etc.
 #define TEMP_QUI_LOSS_DIVISOR                 4
@@ -2916,3 +2926,5 @@ enum {
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens
 #define UNUSED(expr) (void)(expr)
+
+#endif // _awake_h_

@@ -59,6 +59,7 @@
 #include "transport.hpp"
 #include "bullet_pants.hpp"
 #include "lexicons.hpp"
+#include "newhouse.hpp"
 
 ACMD_DECLARE(do_reload);
 
@@ -73,15 +74,14 @@ extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *);
 extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
-extern void weight_change_object(struct obj_data * obj, float weight);
 extern void generate_archetypes();
 extern void populate_mobact_aggression_octets();
 extern void write_world_to_disk(int vnum);
 extern void handle_weapon_attachments(struct obj_data *obj);
 extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon);
 extern void reset_host_paydata(rnum_t rnum);
-
-extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
+extern bool player_is_dead_hardcore(long id);
+extern void load_apartment_complexes();
 
 extern void auto_repair_obj(struct obj_data *obj);
 
@@ -201,7 +201,7 @@ void assign_johnsons(void);
 void randomize_shop_prices(void);
 int zone_is_empty(int zone_nr);
 void reset_zone(int zone, int reboot);
-int file_to_string(const char *name, char *buf);
+int file_to_string(const char *name, char *buf, size_t buf_size);
 int file_to_string_alloc(const char *name, char **buf);
 void check_start_rooms(void);
 void renum_world(void);
@@ -682,7 +682,8 @@ void DBInit()
   purge_unowned_vehs();
 
   log("Booting houses.");
-  House_boot();
+  load_apartment_complexes();
+  warn_about_apartment_deletion();
   boot_time = time(0);
 
   log("Loading shop orders.");
@@ -826,7 +827,7 @@ void index_boot(int mode)
     exit(ERROR_OPENING_INDEX_FILE);
   }
   /* first, count the number of records in the file so we can calloc */
-  fscanf(index, "%s\n", buf1);
+  fscanf(index, "%32767s\n", buf1);
   while (*buf1 != '$') {
     snprintf(buf2, sizeof(buf2), "%s/%s", prefix, buf1);
     if (!(db_file = fopen(buf2, "r"))) {
@@ -840,7 +841,7 @@ void index_boot(int mode)
       fclose(db_file);
     }
 
-    fscanf(index, "%s\n", buf1);
+    fscanf(index, "%32767s\n", buf1);
   }
   if (!rec_count) {
     log("SYSERR: boot error - 0 records counted");
@@ -946,7 +947,7 @@ void index_boot(int mode)
   }
 
   rewind(index);
-  fscanf(index, "%s\n", buf1);
+  fscanf(index, "%32767s\n", buf1);
   while (*buf1 != '$') {
     snprintf(buf2, sizeof(buf2), "%s/%s", prefix, buf1);
     File in_file(buf2, "r");
@@ -972,7 +973,7 @@ void index_boot(int mode)
       }
       in_file.Close();
     }
-    fscanf(index, "%s\n", buf1);
+    fscanf(index, "%32767s\n", buf1);
   }
   // Always important to clean up after yourself.
   fclose(index);
@@ -2169,10 +2170,9 @@ void parse_object(File &fl, long nr)
         DELETE_ARRAY_IF_EXTANT(obj->text.room_desc);
         obj->text.room_desc = str_dup(buf);
 
-        strcpy(buf, "A hefty box of ammunition, banded in metal and secured with flip-down hasps for transportation and storage.");
         // log_vfprintf("Changing %s to %s for %ld.", obj->text.look_desc, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.look_desc);
-        obj->text.look_desc = str_dup(buf);
+        obj->text.look_desc = str_dup("A hefty box of ammunition, banded in metal and secured with flip-down hasps for transportation and storage.");
         break;
       case ITEM_WEAPON:
         // Attempt to automatically rectify broken weapons.
@@ -3168,17 +3168,25 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
   for (nr = 0; nr <= top_of_objt; nr++) {
     if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WORN)
       continue;
-    if (GET_OBJ_VAL(&obj_proto[nr],0) + GET_OBJ_VAL(&obj_proto[nr],1) <= 20)
+
+    float bal = GET_WORN_BALLISTIC(&obj_proto[nr]);
+    float imp = GET_WORN_IMPACT(&obj_proto[nr]);
+    if (GET_WORN_MATCHED_SET(&obj_proto[nr])) {
+      bal /= 100;
+      imp /= 100;
+    }
+
+    if (bal + imp <= 20)
       continue;
 
     sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf));
 
     ++found;
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%3db %3di^n %s^n^y%s^n%s\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%0.2fb %0.2fi^n %s^n^y%s^n%s\r\n",
             OBJ_VNUM_RNUM(nr),
             ObjList.CountObj(nr),
-            GET_WORN_MATCHED_SET(&obj_proto[nr]) ? GET_WORN_BALLISTIC(&obj_proto[nr]) / 100 : GET_WORN_BALLISTIC(&obj_proto[nr]),
-            GET_WORN_MATCHED_SET(&obj_proto[nr]) ? GET_WORN_IMPACT(&obj_proto[nr]) / 100 : GET_WORN_IMPACT(&obj_proto[nr]),
+            bal,
+            imp,
             obj_proto[nr].text.name,
             xbuf,
             obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
@@ -3189,17 +3197,25 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
     for (nr = 0; nr <= top_of_objt; nr++) {
       if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WORN)
         continue;
-      if (GET_OBJ_VAL(&obj_proto[nr],0) + GET_OBJ_VAL(&obj_proto[nr],1) != total)
+
+      float bal = GET_WORN_BALLISTIC(&obj_proto[nr]);
+      float imp = GET_WORN_IMPACT(&obj_proto[nr]);
+      if (GET_WORN_MATCHED_SET(&obj_proto[nr])) {
+        bal /= 100;
+        imp /= 100;
+      }
+
+      if (bal + imp != total)
         continue;
 
       sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf) );
 
       ++found;
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%3db %3di^n %s^n^y%s^n%s\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%0.2fb %0.2fi^n %s^n^y%s^n%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              GET_WORN_BALLISTIC(&obj_proto[nr]),
-              GET_WORN_IMPACT(&obj_proto[nr]),
+              bal,
+              imp,
               obj_proto[nr].text.name,
               xbuf,
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
@@ -4507,14 +4523,14 @@ void reset_zone(int zone, int reboot)
 
 }
 
-/* for use in reset_zone; return TRUE if zone 'nr' is Free of PC's  */
+/* for use in reset_zone; return TRUE if zone 'nr' is Free of non-idle PC's  */
 int zone_is_empty(int zone_nr)
 {
   struct descriptor_data *i;
 
   for (i = descriptor_list; i; i = i->next)
-    if (!i->connected && i->character->in_room)
-      if (i->character->in_room->zone == zone_nr)
+    if (!i->connected && i->character && i->character->char_specials.timer < IDLE_TIMER_ZONE_RESET_THRESHOLD)
+      if (i->character->in_room && i->character->in_room->zone == zone_nr)
         return 0;
 
   return 1;
@@ -4637,9 +4653,10 @@ char *fread_string(FILE * fl, char *error)
 
   /* allocate space for the new string and copy it */
   if (strlen(buf) > 0) {
-    rslt = new char[length + 1];
-    memset(rslt, 0, sizeof(char) * (length + 1));
-    strcpy(rslt, buf);
+    size_t rslt_size = length + 1;
+    rslt = new char[rslt_size];
+    memset(rslt, 0, sizeof(char) * (rslt_size));
+    strlcpy(rslt, buf, rslt_size);
   } else
     rslt = NULL;
 
@@ -4973,8 +4990,10 @@ int file_to_string_alloc(const char *name, char **buf)
 {
   char temp[MAX_STRING_LENGTH];
 
-  if (file_to_string(name, temp) < 0)
+  if (file_to_string(name, temp, sizeof(temp)) < 0)
     return -1;
+
+  // log_vfprintf("file_to_string_alloc: File '%s' read out as '%s'.", name, temp);
 
   DELETE_ARRAY_IF_EXTANT(*buf);
 
@@ -4984,11 +5003,11 @@ int file_to_string_alloc(const char *name, char **buf)
 }
 
 /* read contents of a text file, and place in buf */
-int file_to_string(const char *name, char *buf)
+int file_to_string(const char *name, char *buf, size_t buf_size)
 {
   FILE *fl;
   // Made it hella long. It's 2020, let clients word wrap their own shit.
-  char tmp[2000];
+  char tmp[MAX_STRING_LENGTH];
   memset(tmp, 0, sizeof(tmp));
 
   *buf = '\0';
@@ -5001,7 +5020,7 @@ int file_to_string(const char *name, char *buf)
   do {
     fgets(tmp, sizeof(tmp) - 1, fl);
     tmp[MAX(0, (int)(strlen(tmp)) - 1)] = '\0';/* take off the trailing \n */
-    strcat(tmp, "\r\n");
+    strlcat(tmp, "\r\n", sizeof(tmp));
 
     if (!feof(fl)) {
       if (strlen(buf) + strlen(tmp) + 1 > MAX_STRING_LENGTH) {
@@ -5009,7 +5028,7 @@ int file_to_string(const char *name, char *buf)
         *buf = '\0';
         return (-1);
       }
-      strcat(buf, tmp);
+      strlcat(buf, tmp, buf_size);
     }
   } while (!feof(fl));
 
@@ -5109,8 +5128,11 @@ void clear_icon(struct matrix_icon *icon)
 }
 
 /* returns the real number of the room with given virtual number */
-long real_room(long virt)
+rnum_t real_room(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   long bot, top, mid;
 
   bot = 0;
@@ -5136,8 +5158,11 @@ long real_room(long virt)
 }
 
 /* returns the real number of the monster with given virtual number */
-long real_mobile(long virt)
+rnum_t real_mobile(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5158,8 +5183,11 @@ long real_mobile(long virt)
   }
 }
 
-long real_quest(long virt)
+rnum_t real_quest(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5179,8 +5207,11 @@ long real_quest(long virt)
   }
 }
 
-long real_shop(long virt)
+rnum_t real_shop(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5200,8 +5231,11 @@ long real_shop(long virt)
   }
 }
 
-long real_zone(long virt)
+rnum_t real_zone(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5222,8 +5256,11 @@ long real_zone(long virt)
   }
 }
 
-long real_vehicle(long virt)
+rnum_t real_vehicle(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
   bot = 0;
   top = top_of_veht;
@@ -5241,8 +5278,11 @@ long real_vehicle(long virt)
   }
 }
 
-long real_host(long virt)
+rnum_t real_host(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
   bot = 0;
   top = top_of_matrix;
@@ -5260,8 +5300,11 @@ long real_host(long virt)
   }
 }
 
-long real_ic(long virt)
+rnum_t real_ic(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
   bot = 0;
   top = top_of_ic;
@@ -5280,8 +5323,11 @@ long real_ic(long virt)
 }
 
 /* returns the real number of the object with given virtual number */
-long real_object(long virt)
+rnum_t real_object(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+    
   long bot, top, mid;
 
   bot = 0;
@@ -5398,7 +5444,7 @@ void purge_unowned_vehs() {
     }
 
     // This vehicle is owned by a valid player: Do not delete.
-    if (does_player_exist(veh->owner)) {
+    if (does_player_exist(veh->owner) && !player_is_dead_hardcore(veh->owner)) {
       //snprintf(buf, sizeof(buf), "Skipping vehicle '%s' (%ld) since its owner is a valid player.", veh->short_description, veh->idnum);
       //log(buf);
 
@@ -5524,7 +5570,7 @@ void load_saved_veh()
 
     // Can't get there? Pull your veh out.
     rnum_t veh_room_rnum = real_room(veh_room_vnum);
-    if (veh_room_rnum < 0 || (veh->owner > 0 && ROOM_FLAGGED(&world[veh_room_rnum], ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, veh_room_vnum))) {
+    if (veh_room_rnum < 0 || (veh->owner > 0 && world[veh_room_rnum].apartment && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) {
       veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
     }
 
@@ -5800,7 +5846,7 @@ void load_saved_veh()
       }
       if (!veh->in_veh) {
         rnum_t veh_room_rnum = real_room(veh_room_vnum);
-        if (veh_room_rnum < 0 || (veh->owner > 0 && ROOM_FLAGGED(&world[veh_room_rnum], ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, veh_room_vnum))) {
+        if (veh_room_rnum < 0 || (veh->owner > 0 && world[veh_room_rnum].apartment && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) {
           veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
           snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no valid room was found! Dumping to Seattle Garage (%ld).\r\n",
                    veh->name, veh->veh_number, veh_room_vnum);

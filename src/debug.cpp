@@ -28,6 +28,7 @@
 extern Playergroup *loaded_playergroups;
 
 extern void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_guided);
+extern bool player_is_dead_hardcore(long id);
 
 extern void write_objs_to_disk(vnum_t zonenum);
 extern void write_mobs_to_disk(vnum_t zonenum);
@@ -114,8 +115,49 @@ ACMD(do_debug) {
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
 
+  if (is_abbrev(arg1, "hardcorecheck")) {
+    if (player_is_dead_hardcore(57)) {
+      send_to_char(ch, "Success!\r\n");
+    } else {
+      send_to_char(ch, "Failure :(\r\n");
+    }
+  }
+
+  if (is_abbrev(arg1, "dirtybit")) {
+    int clean = 0, dirty = 0;
+    int clean_storage = 0, dirty_storage = 0;
+    for (rnum_t x = 0; x <= top_of_world; x++) {
+      if (world[x].dirty_bit) {
+        if (ROOM_FLAGGED(&world[x], ROOM_STORAGE))
+          dirty_storage++;
+        else
+          dirty++;
+      } else {
+        if (ROOM_FLAGGED(&world[x], ROOM_STORAGE))
+          clean_storage++;
+        else
+          clean++;
+      }
+    }
+    send_to_char(ch, "%d of %d rooms are dirty.\r\n", dirty, dirty + clean);
+    send_to_char(ch, "%d of %d storage rooms are dirty.\r\n", dirty_storage, dirty_storage + clean_storage);
+    return;
+  }
+
   if (strn_cmp(arg1, "pgroups", strlen(arg1)) == 0) {
     do_pgroup_debug(ch, rest_of_argument);
+    return;
+  }
+
+  if (is_abbrev(arg1, "withdraw")) {
+    send_to_char(ch, "OK, processing withdrawal.\r\n");
+
+    for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
+      // Calculate time since last fix.
+      GET_DRUG_LAST_FIX(ch, drug_id) -= SECS_PER_MUD_DAY;
+    }
+
+    process_withdrawal(ch);
     return;
   }
 

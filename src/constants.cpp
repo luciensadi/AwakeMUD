@@ -479,7 +479,7 @@ const char *player_bits[] =
     "!DELETE",
     "PACKING",
     "!STAT",
-    "LOADRM",
+    "IN-CHARGEN",
     "INVST",
     "!USED",
     "!USED",
@@ -515,6 +515,7 @@ const char *player_bits[] =
     "ENABLED_DRUGS",
     "SENT_DOCWAGON",
     "PAID_FOR_VNUMS",
+    "DOCWAGON_READY",
     "\n"
   };
 
@@ -635,6 +636,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No XTERM-256 Color"   , FALSE, TRUE  },
   { "Client-Configurable Color", FALSE, TRUE  },
   { "Don't Alert Doctors on Mort", FALSE, TRUE  },
+  { "MailLog"              , TRUE , TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -709,6 +711,7 @@ const char *preference_bits[] =
     "!XTERM256",
     "COERCE_ANSI",
     "ALERT_DOCTORS_ON_MORT",
+    "MAILLOG",
     MAX_FLAG_MARKER
   };
 
@@ -778,11 +781,11 @@ const char *connected_types[] =
   {
     "Playing",                                    // 0
     "Disconnecting",
-    "Get name",
-    "Confirm name",
-    "Get password",
-    "Get new PW",                                 // 5
-    "Confirm new PW",
+    "Get Name",
+    "Confirm Name",
+    "Get Password",
+    "Get New PW",                                 // 5
+    "Confirm New PW",
     "CharGen",
     "Reading MOTD",
     "Main Menu",
@@ -792,7 +795,7 @@ const char *connected_types[] =
     "Changing PW 3",
     "Self-Delete 1",
     "Self-Delete 2",                              // 15
-    "Quit menu",
+    "Quit Menu",
     "Changing PW Q1",
     "Changing PW Q2",
     "Changing PW Q3",
@@ -821,9 +824,11 @@ const char *connected_types[] =
     "Background Customizing",
     "Trideo Message Adding",
     "Creating Ammo",
-    "Asking name",
-    "Playergroup editing",
-    "Helpfile editing",
+    "Asking Name",
+    "Playergroup Editing",
+    "Helpfile Editing",
+    "Apartment Complex Editing",
+    "Apartment Editing",
     "\n"
   };
 
@@ -878,15 +883,15 @@ const char *where[] =
 
 const char *hands[] =
   {
-    "<right hand>         ",
-    "<left hand>          ",
+    "<hand>               ",
+    "<off hand>           ",
     "<both hands>         ",
   };
 
 const char *wielding_hands[] =
   {
-    "<right hand (w)>     ",
-    "<left hand (w)>      ",
+    "<wielded>            ",
+    "<wielded (offhand)>  ",
     "<both hands>         ",
   };
 
@@ -1238,6 +1243,7 @@ const char *log_types[] =
     "ECONLOG",
     "RADLOG",
     "IGNORELOG",
+    "MAILLOG",
     "\n"
   };
 

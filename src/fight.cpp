@@ -25,6 +25,9 @@
 #include "invis_resistance_tests.hpp"
 #include "playerdoc.hpp"
 #include "sound_propagation.hpp"
+#include "newhouse.hpp"
+
+int initiative_until_global_reroll = 0;
 
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */
@@ -66,12 +69,12 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
 bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message);
+void docwagon_retrieve(struct char_data *ch);
 
 SPECIAL(weapon_dominator);
 SPECIAL(pocket_sec);
 WSPEC(monowhip);
 
-extern int success_test(int number, int target);
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
                          int tar_for_vict);
 extern int modify_target(struct char_data *ch);
@@ -95,10 +98,8 @@ extern char *get_player_name(vnum_t id);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 
 // Corpse saving externs.
-extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
 extern void write_world_to_disk(int vnum);
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
-extern bool House_get_filename(vnum_t vnum, char *filename, int filename_size);
 
 extern bool item_should_be_treated_as_melee_weapon(struct obj_data *obj);
 extern bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj);
@@ -109,6 +110,8 @@ extern bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_
 
 extern void mobact_change_firemode(struct char_data *ch);
 extern bool dumpshock(struct matrix_icon *icon);
+
+extern void Storage_save(const char *file_name, struct room_data *room);
 
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
@@ -232,7 +235,8 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
       if (was_morted && !PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
         alert_player_doctors_of_contract_withdrawal(victim, FALSE);
       }
-      PLR_FLAGS(victim).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
+      victim->sent_docwagon_messages_to.clear();
+      victim->received_docwagon_ack_from.clear();
     }
 
     // Pain editor prevents stunned condition.
@@ -254,7 +258,8 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
       if (was_morted && !PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
         alert_player_doctors_of_contract_withdrawal(victim, FALSE);
       }
-      PLR_FLAGS(victim).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
+      victim->sent_docwagon_messages_to.clear();
+      victim->received_docwagon_ack_from.clear();
     }
 
     GET_POS(victim) = POS_STANDING;
@@ -359,7 +364,8 @@ void check_killer(struct char_data * ch, struct char_data * vict)
 void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 {
   struct follow_type *k;
-  if (ch == vict)
+
+  if (!ch || !vict || ch == vict)
     return;
 
   if (IS_NPC(ch)) {
@@ -371,7 +377,6 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (CH_IN_COMBAT(ch))
     return;
 
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
   char warnbuf[5000];
   if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
     snprintf(warnbuf, sizeof(warnbuf), "WARNING: Entered set_fighting with vict %s ignoring attacker %s!", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
@@ -384,7 +389,6 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     mudlog(warnbuf, ch, LOG_SYSLOG, TRUE);
     return;
   }
-#endif
 
   // Check to see if they're already in the combat list.
   bool already_there = FALSE;
@@ -405,6 +409,16 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 
   roll_individual_initiative(ch);
   order_list(TRUE);
+
+  // First combatant added to list, so we set initiative until next global re-roll
+  if (!combat_list->next_fighting) {
+    initiative_until_global_reroll = GET_INIT_ROLL(ch);
+    // Edge case: first combatant rolled too low to act (low roll + wound penalties)
+    // This allows their opponent to act though they haven't been added to the list yet
+    if (initiative_until_global_reroll <= 0) {
+      initiative_until_global_reroll = 1;
+    }
+  }
 
   if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
   {
@@ -447,16 +461,40 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
 {
   struct follow_type *k;
 
+  if (!ch || !vict)
+    return;
+
   if (CH_IN_COMBAT(ch))
     return;
 
-  ch->next_fighting = combat_list;
-  combat_list = ch;
-  roll_individual_initiative(ch);
-  order_list(TRUE);
+  // Check to see if they're already in the combat list.
+  bool already_there = FALSE;
+  for (struct char_data *tmp = combat_list; tmp; tmp = tmp->next_fighting) {
+    if (tmp == ch) {
+      mudlog("SYSERR: Attempted to re-add character to combat list!", ch, LOG_SYSLOG, TRUE);
+      already_there = TRUE;
+    }
+  }
+  if (!already_there) {
+    ch->next_fighting = combat_list;
+    combat_list = ch;
+  }
 
   FIGHTING_VEH(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
+
+  roll_individual_initiative(ch);
+  order_list(TRUE);
+
+  // First combatant added to list, so we set initiative until next global re-roll
+  if (!combat_list->next_fighting) {
+    initiative_until_global_reroll = GET_INIT_ROLL(ch);
+    // Edge case: first combatant rolled too low to act (low roll + wound penalties)
+    // This allows their opponent to act though they haven't been added to the list yet
+    if (initiative_until_global_reroll <= 0) {
+      initiative_until_global_reroll = 1;
+    }
+  }
 
   if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
     find_and_draw_weapon(ch);
@@ -714,7 +752,7 @@ void make_corpse(struct char_data * ch)
       char filename[500];
       filename[0] = 0;
 
-      if (!ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
+      if (!ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !GET_APARTMENT(ch->in_room)) {
         snprintf(buf, sizeof(buf), "Setting storage flag for %s (%ld) due to player corpse being in it.",
                  GET_ROOM_NAME(ch->in_room),
                  GET_ROOM_VNUM(ch->in_room));
@@ -734,25 +772,23 @@ void make_corpse(struct char_data * ch)
         }
       }
 
-      if (ROOM_FLAGGED(ch->in_room, ROOM_STORAGE)) {
-        if (!Storage_get_filename(GET_ROOM_VNUM(ch->in_room), filename, sizeof(filename))) {
-          mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
-          send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
-          return;
-        }
-      } else if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
-        if (!House_get_filename(GET_ROOM_VNUM(ch->in_room), filename, sizeof(filename))) {
-          mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
-          send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
-          return;
-        }
-      } else {
-        mudlog("WARNING: Failed to make room into a save room for corpse - flag not set!!", ch, LOG_SYSLOG, TRUE);
-        send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
+      if (GET_APARTMENT_SUBROOM(ch->in_room)) {
+        GET_APARTMENT_SUBROOM(ch->in_room)->save_storage();
         return;
       }
 
-      House_save(NULL, filename, real_room(GET_ROOM_VNUM(ch->in_room)));
+      if (ROOM_FLAGGED(ch->in_room, ROOM_STORAGE)) {
+        if (!Storage_get_filename(GET_ROOM_VNUM(ch->in_room), filename, sizeof(filename))) {
+          mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
+          send_to_char("^RWARNING:^W Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!^n\r\n", ch);
+          return;
+        }
+        Storage_save(filename, ch->in_room);
+      } else {
+        mudlog("WARNING: Failed to make room into a save room for corpse - flag not set!!", ch, LOG_SYSLOG, TRUE);
+        send_to_char("^RWARNING:^W Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!^n\r\n", ch);
+        return;
+      }
     }
   }
 }
@@ -924,6 +960,7 @@ void raw_kill(struct char_data * ch)
       char_from_room(ch);
       char_to_room(ch, &world[i]);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
+      PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
     }
   }
 
@@ -978,6 +1015,12 @@ void death_penalty(struct char_data *ch)
 
 void die(struct char_data * ch)
 {
+  // If they're ready for docwagon retrieval, save them.
+  if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    docwagon_retrieve(ch);
+    return;
+  }
+
   struct room_data *temp_room = get_ch_in_room(ch);
 
   if (!(MOB_FLAGGED(ch, MOB_INANIMATE) || IS_PROJECT(ch) || IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch))) {
@@ -1013,21 +1056,41 @@ void die(struct char_data * ch)
 ACMD(do_die)
 {
   char buf[100];
+  struct room_data *in_room = get_ch_in_room(ch);
 
   /* If they're still okay... */
-  if ( GET_PHYSICAL(ch) >= 100 && GET_MENTAL(ch) >= 100 ) {
-    send_to_char("Your mother would be so sad.. :(\n\r",ch);
+  FAILURE_CASE(GET_PHYSICAL(ch) >= 100 && GET_MENTAL(ch) >= 100, "Your mother would be so sad... :(");
+
+  // Refuse to do it if they're in a DocWagon recovery room.
+  switch (GET_ROOM_VNUM(in_room)) {
+#ifdef USE_PRIVATE_CE_WORLD
+    // Guarded with def because these are identical in non-CE and would cause compilation errors.
+    case RM_PORTLAND_DOCWAGON:
+    case RM_CARIB_DOCWAGON:
+    case RM_OCEAN_DOCWAGON:
+#endif
+    case RM_SEATTLE_DOCWAGON:
+      // Sanity check / edge case: If mortally wounded, fix it.
+      GET_PHYSICAL(ch) = MAX(GET_PHYSICAL(ch), 100);
+      // Then error out.
+      send_to_char(ch, "You're already in a DocWagon recovery room! You'll heal up soon enough.\r\n");
+      return;
+  }
+
+  // If they're ready to be docwagon'd out, save them.
+  if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    docwagon_retrieve(ch);
     return;
   }
 
-  send_to_char("You give up the will to live..\n\r",ch);
+  send_to_char("You give up the will to live...\n\r",ch);
 
   /* log it */
   snprintf(buf, sizeof(buf),"%s gave up the will to live. {%s%s (%ld)}",
           GET_CHAR_NAME(ch),
           ch->in_veh ? "in veh at " : "",
-          GET_ROOM_NAME(get_ch_in_room(ch)),
-          GET_ROOM_VNUM(get_ch_in_room(ch)));
+          GET_ROOM_NAME(in_room),
+          GET_ROOM_VNUM(in_room));
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 
   /* Now we just kill them, MuHahAhAhahhaAHhaAHaA!!...or something */
@@ -1866,12 +1929,16 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
     return;
   }
 
-  if (IS_SET(type, DAMOBJ_MANIPULATION))
-  {
-    rating = room->dir_option[dir]->barrier;
+  if (IS_SET(type, DAMOBJ_MANIPULATION)) {
     REMOVE_BIT(type, DAMOBJ_MANIPULATION);
-  } else
+    rating = room->dir_option[dir]->barrier;
+  /*
+  } else if (type == DAMOBJ_CRUSH) {
+    rating = room->dir_option[dir]->barrier;
+  */
+  } else {
     rating = room->dir_option[dir]->barrier * 2;
+  }
 
   switch (room->dir_option[dir]->material) {
     // Model weak materials.
@@ -2205,9 +2272,140 @@ void docwagon_message(struct char_data *ch)
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 }
 
+void docwagon_retrieve(struct char_data *ch) {
+  struct room_data *room = get_ch_in_room(ch);
+
+  if (!PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    mudlog("SYSERR: Got someone in docwagon_retrieve() who was not DOCWAGON_READY.", ch, LOG_SYSLOG, TRUE);
+  }
+  PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
+
+  if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
+    stop_fighting(FIGHTING(ch));
+  if (CH_IN_COMBAT(ch))
+    stop_fighting(ch);
+
+  // Stop all their sustained spells as if they died.
+  if (GET_SUSTAINED(ch)) {
+    struct sustain_data *next;
+    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
+      next = sust->next;
+      if (next && sust->idnum == next->idnum)
+        next = next->next;
+      end_sustained_spell(ch, sust);
+    }
+  }
+
+  // Remove them from the Matrix.
+  if (ch->persona) {
+    snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", CAP(ch->persona->name));
+    send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
+    extract_icon(ch->persona);
+    ch->persona = NULL;
+    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+  } else if (PLR_FLAGGED(ch, PLR_MATRIX))
+    for (struct char_data *temp = room->people; temp; temp = temp->next_in_room)
+      if (PLR_FLAGGED(temp, PLR_MATRIX))
+        temp->persona->decker->hitcher = NULL;
+  docwagon_message(ch);
+  // death_penalty(ch);  /* Penalty for deadly wounds */
+
+  // They just got patched up: heal them slightly, make them stunned.
+  GET_PHYSICAL(ch) = 400;
+  GET_MENTAL(ch) = 0;
+  GET_POS(ch) = POS_STUNNED;
+
+  // Restore their salvation ticks.
+  GET_PC_SALVATION_TICKS(ch) = 5;
+
+  // Disable bioware etc that resets on death.
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+    switch (GET_BIOWARE_TYPE(bio)) {
+      case BIO_ADRENALPUMP:
+        if (GET_OBJ_VAL(bio, 5) > 0) {
+          for (int i = 0; i < MAX_OBJ_AFFECT; i++)
+            affect_modify(ch,
+                          bio->affected[i].location,
+                          bio->affected[i].modifier,
+                          bio->obj_flags.bitvector, FALSE);
+          GET_OBJ_VAL(bio, 5) = 0;
+        }
+        break;
+      case BIO_PAINEDITOR:
+        GET_BIOWARE_IS_ACTIVATED(bio) = 0;
+        break;
+    }
+  }
+
+  // Extinguish their fire, if any.
+  ch->points.fire[0] = 0;
+
+  send_to_char("\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n", ch);
+  {
+    rnum_t recovery_room = 0;
+
+    switch (GET_JURISDICTION(room)) {
+      case ZONE_SEATTLE:
+        recovery_room = real_room(RM_SEATTLE_DOCWAGON);
+        break;
+      case ZONE_PORTLAND:
+        recovery_room = real_room(RM_PORTLAND_DOCWAGON);
+        break;
+      case ZONE_CARIB:
+        recovery_room = real_room(RM_CARIB_DOCWAGON);
+        break;
+      case ZONE_OCEAN:
+        recovery_room = real_room(RM_OCEAN_DOCWAGON);
+        break;
+      default:
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown jurisdiction %d encountered in docwagon_retrieve()! %s being sent to Dante's.", GET_JURISDICTION(room), GET_CHAR_NAME(ch));
+        recovery_room = real_room(RM_ENTRANCE_TO_DANTES);
+        break;
+    }
+
+    if (recovery_room < 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid docwagon room specified for jurisdiction %d! %s being sent to A Bright Light.", GET_JURISDICTION(room), GET_CHAR_NAME(ch));
+      recovery_room = 0;
+    }
+
+    char_from_room(ch);
+    char_to_room(ch, &world[recovery_room]);
+  }
+
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
+    send_to_char("Your DocWagon rescue is free due to your newbie status, and you've been restored to full health.\r\n", ch);
+    GET_PHYSICAL(ch) = 1000;
+    GET_MENTAL(ch) = 1000;
+    GET_POS(ch) = POS_STANDING;
+  } else {
+    struct obj_data *docwagon = find_best_active_docwagon_modulator(ch);
+
+    // Compensate for edge case: Their modulator was destroyed since they were flagged.
+    if (docwagon) {
+      int dw_random_cost = number(8, 12) * 500 / GET_DOCWAGON_CONTRACT_GRADE(docwagon);
+      int creds = MAX(dw_random_cost, (int)(GET_NUYEN(ch) / 10));
+
+      send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
+
+      if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
+        send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
+        extract_obj(docwagon);
+      }
+      else if (GET_BANK(ch) < creds) {
+        lose_nuyen(ch, creds - GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
+        lose_bank(ch, GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
+      }
+      else {
+        lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
+      }
+    }
+  }
+
+  alert_player_doctors_of_contract_withdrawal(ch, FALSE);
+}
+
 bool docwagon(struct char_data *ch)
 {
-  int i, creds;
   struct obj_data *docwagon = NULL;
   char rollbuf[500];
 
@@ -2223,123 +2421,40 @@ bool docwagon(struct char_data *ch)
   if (!room)
     return FALSE;
 
-  int docwagon_tn = MAX(GET_SECURITY_LEVEL(room), 4);
-  int docwagon_dice = GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1;
-  int successes = success_test(docwagon_dice, docwagon_tn);
+  if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    send_to_char(ch, "%s^n buzzes contentedly: the automated DocWagon trauma team remains en route.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+    send_to_char(ch, "^L[OOC: You can choose to wait for player assistance to arrive, or you can get picked up immediately by entering ^wDIE^L. See ^wHELP DOCWAGON^L for more details.]\r\n");
+  } else {
+    int docwagon_tn = MAX(GET_SECURITY_LEVEL(room), 4);
+    int docwagon_dice = GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1;
+    int successes = success_test(docwagon_dice, docwagon_tn);
 
-  snprintf(rollbuf, sizeof(rollbuf), "$n: DocWagon rescue roll: %d dice vs TN %d netted %d hit(s).", docwagon_dice, docwagon_tn, successes);
-  act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
+    snprintf(rollbuf, sizeof(rollbuf), "$n: DocWagon rescue roll: %d dice vs TN %d netted %d hit(s).", docwagon_dice, docwagon_tn, successes);
+    act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
 
-  if (successes <= 0 && access_level(ch, LVL_BUILDER) && PRF_FLAGGED(ch, PRF_PACIFY)) {
-    act("$n: Overriding failed DocWagon roll due to pacified staff level.", TRUE, ch, 0, 0, TO_ROLLS);
-    successes = 1;
+    if (successes <= 0 && access_level(ch, LVL_BUILDER) && PRF_FLAGGED(ch, PRF_PACIFY)) {
+      act("$n: Overriding failed DocWagon roll due to pacified staff level.", TRUE, ch, 0, 0, TO_ROLLS);
+      successes = 1;
+    }
+
+    // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
+    if (successes > 0)
+    {
+      send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
+      send_to_char(ch, "^L[OOC: You can choose to wait for player assistance to arrive, or you can get picked up immediately by entering ^wDIE^L. See ^wHELP DOCWAGON^L for more details.]\r\n");
+      PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
+    } else {
+      send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+    }
   }
 
-  // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
-  if (successes > 0)
-  {
-    if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
-      stop_fighting(FIGHTING(ch));
-    if (CH_IN_COMBAT(ch))
-      stop_fighting(ch);
-    if (GET_SUSTAINED(ch)) {
-      struct sustain_data *next;
-      for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
-        next = sust->next;
-        if (next && sust->idnum == next->idnum)
-          next = next->next;
-        end_sustained_spell(ch, sust);
-      }
-    }
-    if (ch->persona) {
-      snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", CAP(ch->persona->name));
-      send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
-      extract_icon(ch->persona);
-      ch->persona = NULL;
-      PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-    } else if (PLR_FLAGGED(ch, PLR_MATRIX))
-      for (struct char_data *temp = room->people; temp; temp = temp->next_in_room)
-        if (PLR_FLAGGED(temp, PLR_MATRIX))
-          temp->persona->decker->hitcher = NULL;
-    docwagon_message(ch);
-    // death_penalty(ch);  /* Penalty for deadly wounds */
-    GET_PHYSICAL(ch) = 400;
-    GET_MENTAL(ch) = 0;
-    GET_POS(ch) = POS_STUNNED;
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      switch (GET_BIOWARE_TYPE(bio)) {
-        case BIO_ADRENALPUMP:
-          if (GET_OBJ_VAL(bio, 5) > 0) {
-            for (i = 0; i < MAX_OBJ_AFFECT; i++)
-              affect_modify(ch,
-                            bio->affected[i].location,
-                            bio->affected[i].modifier,
-                            bio->obj_flags.bitvector, FALSE);
-            GET_OBJ_VAL(bio, 5) = 0;
-          }
-          break;
-        case BIO_PAINEDITOR:
-          GET_BIOWARE_IS_ACTIVATED(bio) = 0;
-          break;
-      }
-    }
-
-    ch->points.fire[0] = 0;
-    send_to_char("\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n", ch);
-    switch (GET_JURISDICTION(room)) {
-      case ZONE_SEATTLE:
-        i = real_room(RM_SEATTLE_DOCWAGON);
-        break;
-      case ZONE_PORTLAND:
-        i = real_room(RM_PORTLAND_DOCWAGON);
-        break;
-      case ZONE_CARIB:
-        i = real_room(RM_CARIB_DOCWAGON);
-        break;
-      case ZONE_OCEAN:
-        i = real_room(RM_OCEAN_DOCWAGON);
-        break;
-    }
-    char_from_room(ch);
-    char_to_room(ch, &world[i]);
-
-    if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD) {
-      int dw_random_cost = number(8, 12) * 500 / GET_DOCWAGON_CONTRACT_GRADE(docwagon);
-      creds = MAX(dw_random_cost, (int)(GET_NUYEN(ch) / 10));
-      send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
-      if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
-        send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
-        extract_obj(docwagon);
-      } else if (GET_BANK(ch) < creds) {
-        lose_nuyen(ch, creds - GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
-        lose_bank(ch, GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
-      } else {
-        lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
-      }
-    } else {
-      send_to_char("Your DocWagon rescue is free due to your newbie status, and you've been restored to full health.\r\n", ch);
-      GET_PHYSICAL(ch) = 1000;
-      GET_MENTAL(ch) = 1000;
-      GET_POS(ch) = POS_STANDING;
-    }
-
-    if (PLR_FLAGGED(ch, PLR_SENT_DOCWAGON_PLAYER_ALERT)) {
-      alert_player_doctors_of_contract_withdrawal(ch, FALSE);
-      PLR_FLAGS(ch).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
-    }
-
-    return TRUE;
-  } else {
-    send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
-
-    if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
-      int num_responders = alert_player_doctors_of_mort(ch, docwagon);
-      if (num_responders > 0) {
-        send_to_char(ch, "^L[OOC: There %s %d player%s online who may be able to respond to your DocWagon call.]^n\r\n",
-                     num_responders == 1 ? "is" : "are",
-                     num_responders,
-                     num_responders == 1 ? "" : "s");
-      }
+  if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
+    int num_responders = alert_player_doctors_of_mort(ch, docwagon);
+    if (num_responders > 0) {
+      send_to_char(ch, "^L[OOC: There %s ^w%d^L player%s online who may be able to respond to your DocWagon call.]^n\r\n",
+                   num_responders == 1 ? "is" : "are",
+                   num_responders,
+                   num_responders == 1 ? "" : "s");
     }
   }
 
@@ -2742,13 +2857,11 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
       return false;
 
   } else {
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
-  if (IS_IGNORING(victim, is_blocking_ic_interaction_from, ch))
-    return FALSE;
+    if (IS_IGNORING(victim, is_blocking_ic_interaction_from, ch))
+      return FALSE;
 
-  if (IS_IGNORING(ch, is_blocking_ic_interaction_from, victim))
-    return FALSE;
-#endif
+    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, victim))
+      return FALSE;
 
     // Known ignored edge case: if the player is not a killer but would become a killer because of this action.
     if (ch != victim && would_become_killer(ch, victim))
@@ -2828,7 +2941,6 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
 
   if (victim != ch)
   {
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
     if (ch != victim && IS_IGNORING(victim, is_blocking_ic_interaction_from, ch)) {
       char oopsbuf[5000];
       snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the victim ignoring the attacker! "
@@ -2848,7 +2960,6 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
       return 0;
     }
-#endif
 
     if (GET_POS(ch) > POS_STUNNED && attacktype < TYPE_SUFFERING) {
       if (!FIGHTING(ch) && !ch->in_veh)
@@ -2979,7 +3090,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     trauma = FALSE;
   }
 
-  if (GET_PHYSICAL(victim) > 0)
+  if (GET_PHYSICAL(victim) <= 0)
     awake = FALSE;
 
   if (dam > 0) {
@@ -3047,7 +3158,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     }
   }
   if (!awake && GET_PHYSICAL(victim) <= 0)
-    victim->points.lastdamage = time(0);
+    GET_LAST_DAMAGETIME(victim) = time(0);
 
   if (update_pos(victim)) {
     // They died from dumpshock.
@@ -3217,8 +3328,16 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         send_to_char("You are mortally wounded, and will die soon, if not "
                      "aided.\r\n", victim);
       }
-      if (!IS_NPC(victim))
+      if (!IS_NPC(victim)) {
+        // All NPCs (should) stop hitting PCs when they're mortally wounded.
+        for (struct char_data *fighter = combat_list, *next_fighter; fighter; fighter = next_fighter) {
+          next_fighter = fighter->next_fighting;
+          if (IS_NPC(fighter) && FIGHTING(fighter) == victim)
+            stop_fighting(fighter);
+        }
+
         did_docwagon = docwagon(victim);
+      }
       break;
     case POS_STUNNED:
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
@@ -3241,8 +3360,14 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
           act("$n is dead!  R.I.P.", FALSE, victim, 0, 0, TO_ROOM);
         }
 
-      } else
-        act("$n slumps in a pile. You hear sirens as a DocWagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
+      } else {
+        if (PLR_FLAGGED(victim, PLR_DOCWAGON_READY)) {
+          docwagon_retrieve(victim);
+          return TRUE;
+        } else {
+          act("$n slumps in a pile. You hear sirens as a DocWagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
+        }
+      }
 
       for (int i = 0; i < NUM_WEARS; i++) {
         if (GET_EQ(victim, i) && GET_OBJ_TYPE(GET_EQ(victim, i)) == ITEM_DOCWAGON) {
@@ -4632,8 +4757,8 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   if (!vict
       || ch->in_room == vict->in_room
       || GET_POS(vict) <= POS_STUNNED
-      || (!ch->in_room || ch->in_room->peaceful)
-      || (!vict->in_room || vict->in_room->peaceful)
+      || (!ch->in_room || ROOM_IS_PEACEFUL(ch->in_room))
+      || (!vict->in_room || ROOM_IS_PEACEFUL(vict->in_room))
       || CH_IN_COMBAT(vict))
   {
     return FALSE;
@@ -4758,7 +4883,7 @@ void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, st
 
   extract_obj(weapon);
 
-  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || ROOM_FLAGGED(room, ROOM_HOUSE)) {
+  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || GET_APARTMENT(room)) {
     mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got an explosive grenade into an invalid room!", GET_CHAR_NAME(ch));
     return;
   }
@@ -4838,7 +4963,7 @@ void explode_flashbang_grenade(struct char_data *ch, struct obj_data *weapon, st
 
   extract_obj(weapon);
 
-  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || ROOM_FLAGGED(room, ROOM_HOUSE)) {
+  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || GET_APARTMENT(room)) {
     mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got a flashbang grenade into an invalid room!", GET_CHAR_NAME(ch));
     return;
   }
@@ -5049,7 +5174,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
   struct room_data *in_room = ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room;
 
-  if (in_room->peaceful || ROOM_FLAGGED(in_room, ROOM_HOUSE))
+  if (ROOM_IS_PEACEFUL(in_room))
   {
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
     return;
@@ -5068,7 +5193,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       send_to_char("There seems to be something in the way...\r\n", ch);
       return;
     }
-    if (nextroom->peaceful || ROOM_FLAGGED(nextroom, ROOM_HOUSE)) {
+    if (ROOM_IS_PEACEFUL(nextroom)) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     }
@@ -5197,7 +5322,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       return;
     }
 
-    if (get_ch_in_room(vict)->peaceful) {
+    if (!vict->in_room || ROOM_IS_PEACEFUL(vict->in_room)) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     }
@@ -5213,7 +5338,6 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         return;
       }
 
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
       if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
         send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
         log_attempt_to_bypass_ic_ignore(ch, vict, "range_combat");
@@ -5224,7 +5348,6 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         send_to_char("You can't attack someone you're ignoring.\r\n", ch);
         return;
       }
-#endif
     }
     else if (npc_is_protected_by_spec(vict)) {
       send_to_char("You can't attack protected NPCs like that.\r\n", ch);
@@ -5377,7 +5500,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     } else if (!IS_SET(EXIT2(nextroom, dir)->exit_info, EX_CLOSED) && isname(target, EXIT2(nextroom, dir)->keyword) ) {
       send_to_char("You can only damage closed doors!\r\n", ch);
       return;
-    } else if (nextroom->peaceful) {
+    } else if (ROOM_IS_PEACEFUL(nextroom)) {
       send_to_char("Nah - leave it in peace.\r\n", ch);
       return;
     } else if (distance > range) {
@@ -5556,6 +5679,7 @@ bool next_combat_list_is_valid(struct char_data *ncl) {
 }
 
 /* control the fights going on.  Called every 2 seconds from comm.c. */
+// aka combat_loop
 unsigned long violence_loop_counter = 0;
 void perform_violence(void)
 {
@@ -5571,10 +5695,13 @@ void perform_violence(void)
   // Increment our violence loop counter.
   violence_loop_counter++;
 
-  if (GET_INIT_ROLL(combat_list) <= 0) {
+  if (initiative_until_global_reroll <= 0) {
     roll_initiative();
     order_list(TRUE);
+    initiative_until_global_reroll = GET_INIT_ROLL(combat_list);
   }
+
+  initiative_until_global_reroll -= 10;
 
   // This while-loop replaces the combat list for-loop so we can do better edge case checking.
   ch = NULL;
@@ -5628,8 +5755,10 @@ void perform_violence(void)
     }
 
     // You get no action if you're out of init.
-    if (GET_INIT_ROLL(ch) <= 0 && !IS_JACKED_IN(ch) && PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
-      send_to_char("^L(OOC: You're out of initiative! Waiting for combat round reset.)^n\r\n", ch);
+    if (GET_INIT_ROLL(ch) <= 0 && !IS_JACKED_IN(ch)) {
+      if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+        send_to_char("^L(OOC: You're out of initiative! Waiting for combat round reset.)^n\r\n", ch);
+      }
       continue;
     }
 
@@ -5639,6 +5768,22 @@ void perform_violence(void)
     // NPCs stand up if so desired. We just use mobact_change_firemode here since it's baked in.
     if (IS_NPC(ch)) {
       mobact_change_firemode(ch);
+    }
+
+    // On fire and panicking, or engulfed? Lose your action.
+    if ((ch->points.fire[0] > 0 && success_test(GET_WIL(ch), 6, ch, "process_violence fire test") < 0) || engulfed)
+    {
+      send_to_char("^RThe flames engulfing you cause you to panic!^n\r\n", ch);
+      act("$n panics and flails ineffectually.", TRUE, ch, 0, 0, TO_ROOM);
+      continue;
+    }
+
+    // Skip people who are surprised, but only if they're in combat with someone who is attacking them.
+    if (AFF_FLAGGED(ch, AFF_SURPRISE)) {
+      if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch) {
+        act("Skipping $n's action: Surprised.", FALSE, ch, 0, 0, TO_ROLLS);
+        continue;
+      }
     }
 
     // Process spirit attacks.
@@ -5688,13 +5833,6 @@ void perform_violence(void)
         engulfed = TRUE;
         break;
       }
-    }
-
-    // On fire and panicking, or engulfed? Lose your action.
-    if ((ch->points.fire[0] > 0 && success_test(GET_WIL(ch), 6) < 0)
-        || engulfed)
-    {
-      continue;
     }
 
     // Process banishment actions.

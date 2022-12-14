@@ -69,6 +69,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "dblist.hpp"
+#include "newhouse.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -115,7 +116,7 @@ int port;
 int ViolencePulse = PULSE_VIOLENCE;
 
 /* functions in this file */
-int get_from_q(struct txt_q * queue, char *dest, int *aliased);
+int get_from_q(struct txt_q * queue, char *dest, size_t dest_size, int *aliased);
 void init_game(int port);
 void signal_setup(void);
 void game_loop(int mother_desc);
@@ -178,6 +179,8 @@ extern void warn_about_apartment_deletion();
 void process_wheres_my_car();
 extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
 void set_descriptor_canaries(struct descriptor_data *newd);
+
+extern void save_all_apartments_and_storage_rooms();
 
 extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
 
@@ -277,7 +280,7 @@ void copyover_recover()
   char host[1024];
   char copyover_get[1024];
   bool fOld;
-  char name[MAX_INPUT_LENGTH];
+  char name[MAX_NAME_LENGTH + 1];
   int desc;
 
   log ("Copyover recovery initiated");
@@ -296,7 +299,7 @@ void copyover_recover()
 
   for (;;) {
     fOld = TRUE;
-    fscanf (fp, "%d %s %s %s\n", &desc, name, host, copyover_get);
+    fscanf (fp, "%d %20s %1023s %1023s\n", &desc, name, host, copyover_get);
     if (desc == -1)
       break;
 
@@ -311,7 +314,7 @@ void copyover_recover()
     memset ((char *) d, 0, sizeof (struct descriptor_data));
     init_descriptor (d,desc); /* set up various stuff */
 
-    strcpy(d->host, host);
+    strlcpy(d->host, host, sizeof(d->host));
     d->next = descriptor_list;
     descriptor_list = d;
 
@@ -436,8 +439,8 @@ void init_game(int port)
   log("Entering game loop.");
   game_loop(mother_desc);
 
-  log("Saving all players.");
-  House_save_all();
+  log("Saving all apartments and storage rooms.");
+  save_all_apartments_and_storage_rooms();
 
   log("Closing all sockets.");
   while (descriptor_list)
@@ -789,7 +792,7 @@ void game_loop(int mother_desc)
       for (d = descriptor_list; d; d = next_d) {
         next_d = d->next;
 
-        if ((--(d->wait) <= 0) && get_from_q(&d->input, comm, &aliased)) {
+        if ((--(d->wait) <= 0) && get_from_q(&d->input, comm, sizeof(comm), &aliased)) {
           if (d->character) {
             d->character->char_specials.last_timer = d->character->char_specials.timer;
             d->character->char_specials.timer = 0;
@@ -823,7 +826,7 @@ void game_loop(int mother_desc)
               d->prompt_mode = 0;
             else {
               if (perform_alias(d, comm)) /* run it through aliasing system */
-                get_from_q(&d->input, comm, &aliased);
+                get_from_q(&d->input, comm, sizeof(comm), &aliased);
             }
             command_interpreter(d->character, comm, GET_CHAR_NAME(d->character)); /* send it to interpreter */
           }
@@ -991,7 +994,7 @@ void game_loop(int mother_desc)
 
     // Every 70 MUD minutes
     if (!(pulse % (70 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC)))
-      House_save_all();
+      save_all_apartments_and_storage_rooms();
 
     // Every MUD day
     if (!(pulse % (24 * SECS_PER_MUD_HOUR * PASSES_PER_SEC)))
@@ -1471,13 +1474,13 @@ int make_prompt(struct descriptor_data * d)
               if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER)
                 snprintf(str, sizeof(str), "%d", d->character->player_specials->saved.zonenum);
               else
-                strcpy(str, "@z");
+                strlcpy(str, "@z", sizeof(str));
               break;
             case '@':
-              strcpy(str, "@");
+              strlcpy(str, "@", sizeof(str));
               break;
             case '!':
-              strcpy(str, "\r\n");
+              strlcpy(str, "\r\n", sizeof(str));
               break;
             default:
               snprintf(str, sizeof(str), "@%c", *prompt);
@@ -1511,8 +1514,9 @@ int make_prompt(struct descriptor_data * d)
 void write_to_q(const char *txt, struct txt_q * queue, int aliased)
 {
   struct txt_block *temp = new txt_block;
-  temp->text = new char[strlen(txt) + 1];
-  strcpy(temp->text, txt);
+  size_t text_size = strlen(txt) + 1;
+  temp->text = new char[text_size];
+  strlcpy(temp->text, txt, text_size);
   temp->aliased = aliased;
 
   /* queue empty? */
@@ -1528,7 +1532,7 @@ void write_to_q(const char *txt, struct txt_q * queue, int aliased)
   }
 }
 
-int get_from_q(struct txt_q * queue, char *dest, int *aliased)
+int get_from_q(struct txt_q * queue, char *dest, size_t dest_size, int *aliased)
 {
   struct txt_block *tmp;
 
@@ -1537,7 +1541,7 @@ int get_from_q(struct txt_q * queue, char *dest, int *aliased)
     return 0;
 
   tmp = queue->head;
-  strcpy(dest, queue->head->text);
+  strlcpy(dest, queue->head->text, dest_size);
   *aliased = queue->head->aliased;
   queue->head = queue->head->next;
 
@@ -1559,7 +1563,7 @@ void flush_queues(struct descriptor_data * d)
     d->large_outbuf->next = bufpool;
     bufpool = d->large_outbuf;
   }
-  while (get_from_q(&d->input, buf2, &dummy))
+  while (get_from_q(&d->input, buf2, sizeof(buf2), &dummy))
     ;
 }
 
@@ -1685,7 +1689,7 @@ void init_descriptor (struct descriptor_data *newd, int desc)
 
   newd->descriptor = desc;
   newd->connected = CON_GET_NAME;
-  newd->idle_tics = 0;
+  newd->idle_ticks = 0;
   newd->wait = 1;
   newd->output = newd->small_outbuf;
   newd->bufspace = SMALL_BUFSIZE - 1;
@@ -2084,10 +2088,7 @@ int process_input(struct descriptor_data *t) {
     failed_subst = 0;
 
     if (*tmp == '!' && t->connected != CON_CNFPASSWD )
-      strcpy(tmp, t->last_input);
-/*    else if (*tmp == '|' && t->connected != CON_CNFPASSWD ) {
-      if (!(failed_subst = perform_subst(t, t->last_input, tmp)))
-        strcpy(t->last_input, tmp); */  // I don't know what the hell this was intended to do, but it comes out mangled when I use it. Disabling. -- LS.
+      strlcpy(tmp, t->last_input, sizeof(tmp));
     else
       strlcpy(t->last_input, tmp, MAX_INPUT_LENGTH);
     assert(t->last_input_canary == 31337);
@@ -2122,7 +2123,7 @@ int process_input(struct descriptor_data *t) {
  * orig is the orig string (i.e. the one being modified.
  * subst contains the substition string, i.e. "^telm^tell"
  */
-int perform_subst(struct descriptor_data *t, char *orig, char *subst)
+int perform_subst(struct descriptor_data *t, char *orig, char *subst, size_t subst_size)
 {
   char New[MAX_INPUT_LENGTH + 5];
 
@@ -2168,7 +2169,7 @@ int perform_subst(struct descriptor_data *t, char *orig, char *subst)
 
   /* terminate the string in case of an overflow from strncat  -- useless code now -LS */
   New[MAX_INPUT_LENGTH-1] = '\0';
-  strcpy(subst, New);
+  strlcpy(subst, New, subst_size);
 
   return 0;
 }
@@ -2223,10 +2224,13 @@ void free_editing_structs(descriptor_data *d, int state)
     Mem->DeleteIcon(d->edit_icon);
     d->edit_icon = NULL;
   }
-  if (d->edit_pgroup) {
-    delete d->edit_pgroup;
-    d->edit_pgroup = NULL;
-  }
+
+#define DELETE_EDITING_INFO(field) { if ((field)) { delete (field); (field) = NULL; }}
+  DELETE_EDITING_INFO(d->edit_pgroup);
+  DELETE_EDITING_INFO(d->edit_complex);
+  DELETE_EDITING_INFO(d->edit_apartment);
+  DELETE_EDITING_INFO(d->edit_apartment_room);
+#undef DELETE_EDITING_INFO
 }
 
 void close_socket(struct descriptor_data *d)
@@ -2321,7 +2325,7 @@ void close_socket(struct descriptor_data *d)
     /* added to Free up temporary editing constructs */
     if (d->connected == CON_PLAYING
         || d->connected == CON_PART_CREATE
-        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_HELPEDIT && d->connected != CON_ASKNAME))
+        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_HOUSEEDIT_APARTMENT && d->connected != CON_ASKNAME))
     {
       if (d->connected == CON_VEHCUST)
         d->edit_veh = NULL;
@@ -2393,7 +2397,7 @@ void check_idle_passwords(void)
     if (STATE(d) != CON_PASSWORD && STATE(d) != CON_GET_NAME)
       continue;
 
-    if (++d->idle_tics >= 12 ) {
+    if (++d->idle_ticks >= 12 ) {
       /* 120 seconds RL, or 2 minutes */
       if (STATE(d) == CON_PASSWORD)
         echo_on(d);
@@ -2478,7 +2482,7 @@ void free_up_memory(int Empty)
     delete ch;
   }
   // Write houses.
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   // Die.
   exit(ERROR_UNABLE_TO_FREE_MEMORY_IN_CLEARSTACKS);
 }
@@ -2486,21 +2490,21 @@ void free_up_memory(int Empty)
 void hupsig(int Empty)
 {
   mudlog("Received SIGHUP.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 void intsig(int Empty)
 {
   mudlog("Received SIGINT.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 void termsig(int Empty)
 {
   mudlog("Received SIGTERM.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
@@ -2592,166 +2596,8 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
   //const char *color;
 
   // KaVir's protocol snippet handles this, so...
-  strcpy(buffer, str);
+  strlcpy(buffer, str, sizeof(buffer));
   return &buffer[0];
-  /*
-
-  if (!str || !*str) {
-    // Declare our own error buf so we don't clobber anyone's strings.
-    char colorize_error_buf[200];
-    snprintf(colorize_error_buf, sizeof(colorize_error_buf), "SYSERR: Received empty string to colorize() for descriptor %d (orig %s, char %s).",
-            d->descriptor, d->original ? GET_NAME(d->original) : "(null)", d->character ? GET_CHAR_NAME(d->character) : "(null)");
-    mudlog(colorize_error_buf, NULL, LOG_SYSLOG, TRUE);
-    strcpy(buffer, "(null)");
-    return buffer;
-  }
-
-  if (!D_PRF_FLAGGED(d, PRF_NOCOLOR) && (skip_check || d->character)) // ok but why do we care if they have a character?
-  {
-    while(*str) {
-      if (*str == '^') {
-        // first, advance the pointer, then point color to the color
-        switch (*++str) {
-          case 'l':
-            color = KBLK;
-            break; // black
-          case 'r':
-            color = KRED;
-            break; // red
-          case 'g':
-            color = KGRN;
-            break; // green
-          case 'y':
-            color = KYEL;
-            break; // yellow
-          case 'b':
-            color = KBLU;
-            break; // blue
-          case 'm':
-            color = KMAG;
-            break; // magenta
-          case 'n':
-            color = KNRM;
-            break; // normal
-          case 'c':
-            color = KCYN;
-            break; // cyan
-          case 'w':
-            color = KWHT;
-            break; // white
-          case 'L':
-            color = B_BLK;
-            break; // bold black
-          case 'R':
-            color = B_RED;
-            break; // bold red
-          case 'G':
-            color = B_GREEN;
-            break; // bold green
-          case 'Y':
-            color = B_YELLOW;
-            break; // bold yellow
-          case 'B':
-            color = B_BLUE;
-            break; // bold blue
-          case 'M':
-            color = B_MAGENTA;
-            break; // bold magenta
-          case 'N':
-            color = CGLOB;
-            break;
-          case 'C':
-            color = B_CYAN;
-            break; // bold cyan
-          case 'W':
-            color = B_WHITE;
-            break; // bold white
-          case '^':
-            color = "^";
-            break;
-          default:
-            color = NULL;
-            break;
-        }
-        // somehow I get the feeling there is a better way to do this
-        if (color) {
-          while (*color)
-            *temp++ = *color++;
-          ++str;
-        } else {
-          *temp++ = '^';
-          *temp++ = *str++;
-        }
-      } else
-        *temp++ = *str++;
-      // in the case where it is nothing, we just copy and advance
-    }
-    // now cap it off with the off-color set of ansi-escape sequences
-    // as a preventive measure
-    color = KNRM;
-    while (*color)
-      *temp++ = *color++;
-  } else
-  {
-    while(*str) {
-      if (*str == '^') {
-        // first, advance the pointer, then point color to the color
-        switch (*++str) {
-          case 'l':
-          case 'r':
-          case 'g':
-          case 'y':
-          case 'b':
-          case 'm':
-          case 'n':
-          case 'c':
-          case 'w':
-          case 'L':
-          case 'R':
-          case 'G':
-          case 'Y':
-          case 'B':
-          case 'N':
-          case 'M':
-          case 'C':
-          case 'W':
-            color = "";
-            break;
-          case '^':
-            color = "^";
-            break;
-          default:
-            color = NULL;
-            break;
-        }
-        // first we check to see if it was nothing, ie none of the sequences
-        if (!color) {
-          // and if it is not, we copy ^ first, then the value of *str
-          // and advance again
-          *temp++ = '^';
-          *temp++ = *str++;
-        } else if (*color == '\0')
-          // we check to see if this is a case of a color sequence
-          str++;
-        // and if it is, we advance the pointer to eat it up
-        // and the last case is if it is a ^, in which case we just copy one
-        // ^ into it, as we do here
-        else if(*color != '\0') {
-          str++;
-          while (*color)
-            *temp++ = *color++;
-        } else
-          *temp++ = *str++;
-      } else {
-        *temp++ = *str++;
-      }
-    }
-  }
-  // and terminate it with NULL properly
-  *temp = '\0';
-
-  return &buffer[0];
-  */
 }
 
 void send_to_char(struct char_data * ch, const char * const messg, ...)
@@ -2764,7 +2610,7 @@ void send_to_char(struct char_data * ch, const char * const messg, ...)
 
   va_list argptr;
   va_start(argptr, messg);
-  vsnprintf(internal_buffer, sizeof(internal_buffer), messg, argptr);
+  vsnprintf(internal_buffer, sizeof(internal_buffer), messg, argptr); // Flawfinder: ignore
   va_end(argptr);
   SEND_TO_Q(internal_buffer, ch->desc);
 }
@@ -2788,7 +2634,7 @@ void send_to_icon(struct matrix_icon * icon, const char * const messg, ...)
 
   va_list argptr;
   va_start(argptr, messg);
-  vsnprintf(internal_buffer, sizeof(internal_buffer), messg, argptr);
+  vsnprintf(internal_buffer, sizeof(internal_buffer), messg, argptr); // Flawfinder: ignore
   va_end(argptr);
   SEND_TO_Q(internal_buffer, icon->decker->ch->desc);
   if (icon->decker->hitcher && icon->decker->hitcher->desc)

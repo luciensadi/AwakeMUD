@@ -25,6 +25,8 @@
 #include "newdb.hpp"
 #include "limits.hpp"
 #include "ignore_system.hpp"
+#include "newmagic.hpp"
+#include "newhouse.hpp"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -40,7 +42,6 @@ extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
 extern int calculate_vehicle_weight(struct veh_data *veh);
-extern bool House_can_enter(struct char_data *ch, vnum_t house);
 
 // Corpse saving externs.
 extern void write_world_to_disk(int vnum);
@@ -1828,9 +1829,23 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       act("You can't donate $p: It was given to you by staff.", FALSE, ch, obj, 0, TO_CHAR);
       return 0;
     }
+
     if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
       act("You can't donate $p: It's flagged !SELL or !RENT.", FALSE, ch, obj, 0, TO_CHAR);
       return 0;
+    }
+
+    // Check contents too.
+    for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
+      if (IS_OBJ_STAT(contained, ITEM_EXTRA_WIZLOAD)) {
+        act("You can't donate contained item $p: It was given to you by staff.", FALSE, ch, contained, 0, TO_CHAR);
+        return 0;
+      }
+
+      if (IS_OBJ_STAT(contained, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
+        act("You can't donate contained item $p: It's flagged !SELL or !RENT.", FALSE, ch, contained, 0, TO_CHAR);
+        return 0;
+      }
     }
   }
 
@@ -1849,7 +1864,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     // It'd be great if we could allow drones and bikes to be dropped anywhere not flagged !BIKE, but this
     // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
     // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
-    if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) || House_can_enter(ch, GET_ROOM_VNUM(ch->in_room)))) {
+    if (!ROOM_FLAGGED(ch->in_room, ROOM_ROAD) && !ROOM_FLAGGED(ch->in_room, ROOM_GARAGE)) {
       send_to_char("You can only drop vehicles on roads or in garages.\r\n", ch);
       return 0;
     }
@@ -1903,6 +1918,10 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return 0;
   }
+
+  // A portion of all donated items are extracted instead.
+  if (mode == SCMD_DONATE && !number(0, 6))
+    mode = SCMD_JUNK;
 
   if (mode == SCMD_DONATE || mode == SCMD_JUNK) {
     if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD && GET_OBJ_VAL(obj, 1) > 0) {
@@ -2068,21 +2087,15 @@ ACMD(do_drop)
   case SCMD_DONATE:
     sname = "donate";
     mode = SCMD_DONATE;
-    switch (number(0, 6)) {
+    switch (number(0, 2)) {
     case 0:
-      mode = SCMD_JUNK;
-      break;
-    case 6:
-    case 1:
       random_donation_room = &world[real_room(donation_room_1)];
       break;
-    case 5:
+    case 1:
+      random_donation_room = &world[real_room(donation_room_3)];
+      break;
     case 2:
       random_donation_room = &world[real_room(donation_room_2)];
-      break;
-    case 4:
-    case 3:
-      random_donation_room = &world[real_room(donation_room_3)];
       break;
     }
     if (!random_donation_room && mode != SCMD_JUNK) {
@@ -2238,11 +2251,9 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
 
   if (!IS_NPC(ch) && IS_NPC(vict)) {
     // Group quest reward.
-    if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master)) {
-      if (check_quest_delivery(ch->master, vict, obj)) {
-        act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
-        extract_obj(obj);
-      }
+    if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master) && check_quest_delivery(ch->master, vict, obj)) {
+      act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
+      extract_obj(obj);
     }
     // Individual quest reward.
     else if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj)) {
@@ -2277,25 +2288,33 @@ struct char_data *give_find_vict(struct char_data * ch, char *arg)
   SPECIAL(fixer);
   struct char_data *vict;
 
-  if (!*arg)
-  {
+  if (!*arg) {
     send_to_char("To who?\r\n", ch);
     return NULL;
-  } else if (!(vict = get_char_room_vis(ch, arg)))
-  {
+  }
+
+  if (!(vict = get_char_room_vis(ch, arg))) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
     return NULL;
-  } else if (vict == ch)
-  {
+  }
+
+  if (vict == ch) {
     send_to_char("What's the point of giving it to yourself?\r\n", ch);
     return NULL;
-  } else if (IS_NPC(vict) && GET_MOB_SPEC(vict) && GET_MOB_SPEC(vict) == fixer)
-  {
-    act("Do you really want to give $M stuff for free?! (Use the 'repair' command here.)",
-        FALSE, ch, 0, vict, TO_CHAR);
-    return NULL;
-  } else
-    return vict;
+  }
+
+  if (IS_NPC(vict)) {
+    if (MOB_HAS_SPEC(vict, fixer)) {
+      act("Do you really want to give $M stuff for free?! (Use the 'repair' command here.)", FALSE, ch, 0, vict, TO_CHAR);
+      return NULL;
+    }
+    if (MOB_HAS_SPEC(vict, fence)) {
+      act("Do you really want to give $M stuff for free?! (Use the 'sell' command here.)", FALSE, ch, 0, vict, TO_CHAR);
+      return NULL;
+    }
+  }
+
+  return vict;
 }
 
 void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)
@@ -2479,8 +2498,8 @@ void name_from_drinkcon(struct obj_data *obj)
   int i = 0;
   while (*token && strcasecmp(token, drinks[GET_OBJ_VAL(obj, 2)]))
   {
-    strcat(buf2, token);
-    strcat(buf2, " ");
+    strlcat(buf2, token, sizeof(buf2));
+    strlcat(buf2, " ", sizeof(buf2));
     temp = get_token(temp, token);
     ++i;
   }
@@ -2492,7 +2511,7 @@ void name_from_drinkcon(struct obj_data *obj)
 
   // now, we copy the remaining string onto the end of buf2
   if (temp)
-    strcat(buf2, temp);
+    strlcat(buf2, temp, sizeof(buf2));
 
   buf2[strlen(buf2)] = '\0'; // remove the trailing space
 
@@ -4357,30 +4376,56 @@ ACMD(do_draw)
 
 ACMD(do_break)
 {
-  struct obj_data *obj = ch->cyberware, *contents = NULL;
-  for (; obj; obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_TOOTHCOMPARTMENT && GET_OBJ_VAL(obj, 3))
-      break;
+  skip_spaces(&argument);
 
-  if (!obj)
-    send_to_char("You don't have a breakable tooth compartment.\r\n", ch);
-  else if (!(contents = obj->contains))
-    send_to_char("Your tooth compartment is empty, so breaking it now would be a waste.\r\n", ch);
-  else {
-    if (GET_OBJ_TYPE(contents) != ITEM_DRUG) {
-      send_to_char(ch, "Your tooth compartment contains something that isn't drugs! Aborting.\r\n");
-      snprintf(buf, sizeof(buf), "%s's tooth compartment contains non-drug item %s!", GET_CHAR_NAME(ch), GET_OBJ_NAME(contents));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      return;
+  // Mindlink.
+  if (is_abbrev(argument, "mindlink")) {
+    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
+      if (sust->spell == SPELL_MINDLINK) {
+        send_to_char("You dissolve your mindlink.\r\n", ch);
+        end_sustained_spell(ch, sust);
+        return;
+      }
     }
+    send_to_char("You are not currently under a mindlink.\r\n", ch);
+    return;
+  }
 
-    send_to_char("You bite down hard on the tooth compartment, breaking it open.\r\n", ch);
-    obj_from_cyberware(obj);
-    GET_ESSHOLE(ch) += GET_CYBERWARE_ESSENCE_COST(obj);
-    obj_from_obj(contents);
-    extract_obj(obj);
-    if (do_drug_take(ch, contents))
-      return;
+  // Tooth compartment.
+  if (is_abbrev(argument, "tooth compartment") || is_abbrev(argument, "compartment")) {
+    struct obj_data *obj = ch->cyberware, *contents = NULL;
+    for (; obj; obj = obj->next_content)
+      if (GET_OBJ_VAL(obj, 0) == CYB_TOOTHCOMPARTMENT && GET_OBJ_VAL(obj, 3))
+        break;
+
+    if (!obj)
+      send_to_char("You don't have a breakable tooth compartment.\r\n", ch);
+    else if (!(contents = obj->contains))
+      send_to_char("Your tooth compartment is empty, so breaking it now would be a waste.\r\n", ch);
+    else {
+      if (GET_OBJ_TYPE(contents) != ITEM_DRUG) {
+        send_to_char(ch, "Your tooth compartment contains something that isn't drugs! Aborting.\r\n");
+        snprintf(buf, sizeof(buf), "%s's tooth compartment contains non-drug item %s!", GET_CHAR_NAME(ch), GET_OBJ_NAME(contents));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        return;
+      }
+
+      send_to_char("You bite down hard on the tooth compartment, breaking it open.\r\n", ch);
+      obj_from_cyberware(obj);
+      GET_ESSHOLE(ch) += GET_CYBERWARE_ESSENCE_COST(obj);
+      obj_from_obj(contents);
+      extract_obj(obj);
+      if (do_drug_take(ch, contents))
+        return;
+    }
+    return;
+  }
+
+  // No matches found.
+  if (*argument) {
+    send_to_char("You can only break mindlinks and tooth compartments. Are you looking for the ^WDESTROY^n or ^WJUNK^n commands?\r\n", ch);
+  } else {
+    send_to_char("Syntax: ^WBREAK TOOTH^n or ^WBREAK MINDLINK^n.\r\n", ch);
   }
 }
 

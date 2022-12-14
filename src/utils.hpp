@@ -49,7 +49,7 @@ int     get_line(FILE *fl, char *buf);
 struct  time_info_data age(struct char_data *ch);
 int     convert_damage(int damage);
 int     srdice(void);
-int     success_test(int number, int target);
+int     success_test(int number, int target, struct char_data *ch=NULL, const char *note_for_rolls=NULL, struct char_data *other=NULL);
 int     resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict);
 int     open_test(int num_dice);
 int     stage(int successes, int wound);
@@ -124,7 +124,7 @@ void    set_new_mobile_unique_id(struct char_data *ch);
 int     return_general(int skill_num);
 bool    perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_to_avoid_knockback=0);
 int     get_zone_index_number_from_vnum(vnum_t vnum);
-bool    room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch);
+bool    room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch, bool send_message);
 bool    veh_can_traverse_land(struct veh_data *veh);
 bool    veh_can_traverse_water(struct veh_data *veh);
 bool    veh_can_traverse_air(struct veh_data *veh);
@@ -138,6 +138,15 @@ bool    force_perception(struct char_data *ch);
 int     get_focus_bond_cost(struct obj_data *obj);
 bool    char_is_in_social_room(struct char_data *ch);
 bool    is_custom_ware(struct obj_data *ware);
+void    render_targets_abilities_to_viewer(struct char_data *viewer, struct char_data *vict);
+void    mob_say(struct char_data *mob, const char *msg);
+const char *get_room_desc(struct room_data *room);
+bool    string_is_valid_for_paths(const char *str);
+
+
+bool    keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords=1, bool search_name=1, bool search_desc=0);
+bool    keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords=1, bool search_name=1, bool search_desc=0);
+bool    keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name=1, bool search_desc=0);
 
 struct obj_data *find_best_active_docwagon_modulator(struct char_data *ch);
 
@@ -200,10 +209,8 @@ void    look_at_room(struct char_data *ch, int mode, int is_quicklook);
 void    peek_into_adjacent(struct char_data * ch, int dir);
 
 /* in act.movmement.c */
-int     do_simple_move(struct char_data *ch, int dir, int extra, struct
-                       char_data *vict);
-int perform_move(struct char_data *ch, int dir, int extra, struct char_data
-                 *vict);
+int     do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *vict);
+int     perform_move(struct char_data *ch, int dir, int extra, struct char_data *vict, struct veh_data *vict_veh=NULL);
 
 // Currently not used anywhere.
 void    reverse_obj_list(struct obj_data **obj);
@@ -364,7 +371,6 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define IS_LOW(room)	(light_level((room)) == LIGHT_MINLIGHT || light_level((room)) == LIGHT_PARTLIGHT)
 
 #define GET_ROOM_NAME(room) ((room) ? (room)->name : "(null room name)")
-#define GET_ROOM_DESC(room) ((room) ? ((room)->night_desc && weather_info.sunlight == SUN_DARK ? (room)->night_desc : (room)->description) : "(null room desc)")
 
 #define VALID_ROOM_RNUM(rnum) ((rnum) != NOWHERE && (rnum) <= top_of_world)
 
@@ -378,6 +384,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_BACKGROUND_AURA(room)  ((room) ? (room)->background[1] : 0)
 #define GET_SETTABLE_BACKGROUND_COUNT(room) ((room)->background[0])
 #define GET_SETTABLE_BACKGROUND_AURA(room)  ((room)->background[1])
+
+#define ROOM_IS_PEACEFUL(room) ((room)->peaceful || GET_APARTMENT((room)))
 
 /* zone utils ************************************************************/
 
@@ -1047,6 +1055,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERDECK_USED_STORAGE(deck)          (GET_OBJ_VAL((deck), 5))
 #define GET_CYBERDECK_RESPONSE_INCREASE(deck)     (GET_OBJ_VAL((deck), 6))
 #define GET_CYBERDECK_IS_INCOMPLETE(deck)         (GET_OBJ_VAL((deck), 9))
+#define GET_CYBERDECK_FLAGS(deck)                 (GET_OBJ_VAL((deck), 10))
 #define GET_CYBERDECK_FREE_STORAGE(deck)          (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
 
 // ITEM_PROGRAM convenience defines, aka GET_SOFTWARE
@@ -1192,6 +1201,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
  * Much of this is from Merc 2.2, used with permission.
  */
 
+/* Commenting out some uncommon OSes to reduce cppcheck load. --LS
 #if defined(_AIX)
 char    *crypt(const char *key, const char *salt);
 #endif
@@ -1206,14 +1216,6 @@ char    *crypt( const char *key, const char *salt);
 char    *crypt(char *key, const char *salt);
 #endif
 
-#if defined(linux)
-extern "C" char *crypt(const char *key, const char *setting) throw ();
-#endif
-
-#if defined(freebsd)
-extern "C" char *crypt(const char *key, const char *setting);
-#endif
-
 #if defined(MIPS_OS)
 char    *crypt(const char *key, const char *salt);
 #endif
@@ -1222,6 +1224,15 @@ char    *crypt(const char *key, const char *salt);
 char    *crypt(const char *key, const char *salt);
 int     unlink(const char *path);
 int     getpid(void);
+#endif
+*/
+
+#if defined(linux)
+extern "C" char *crypt(const char *key, const char *setting) throw ();
+#endif
+
+#if defined(freebsd)
+extern "C" char *crypt(const char *key, const char *setting);
 #endif
 
 #if defined(WIN32)
@@ -1243,6 +1254,7 @@ extern "C" char    *crypt(const char *key, const char *salt);
  * -reni
  */
 
+/* Commenting out more rare OS / configs. -LS
 #if defined(sequent)
 char    *crypt(const char *key, const char *salt);
 int     fclose(FILE *stream);
@@ -1276,18 +1288,19 @@ int     system(const char *string);
 char    *crypt(const char *key, const char *salt);
 #endif
 
-#if defined(DGUX_TARGET) || (defined(WIN32) && !defined(__CYGWIN__))
-#ifndef NOCRYPT
-#include <crypt.h>
-#endif
-#define bzero(a, b) memset((a), 0, (b))
-#endif
-
 #if defined(sgi)
 #include <bstring.h>
 #ifndef NOCRYPT
 #include <crypt.h>
 #endif
+#endif
+*/
+
+#if defined(DGUX_TARGET) || (defined(WIN32) && !defined(__CYGWIN__))
+#ifndef NOCRYPT
+#include <crypt.h>
+#endif
+#define bzero(a, b) memset((a), 0, (b))
 #endif
 
 /*

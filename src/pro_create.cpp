@@ -13,6 +13,8 @@
 #include "newmagic.hpp"
 #include "config.hpp"
 #include "bullet_pants.hpp"
+#include "dblist.hpp"
+#include "memory.hpp"
 
 #define CH d->character
 #define PEDIT_MENU 0
@@ -261,9 +263,15 @@ ACMD(do_design)
   }
   if (!(comp = can_program(ch)))
     return;
-  for (prog = comp->contains; prog; prog = prog->next_content)
-    if ((isname(argument, prog->text.keywords) || isname(argument, prog->restring)) && GET_OBJ_TYPE(prog) == ITEM_DESIGN)
+
+  for (prog = comp->contains; prog; prog = prog->next_content) {
+    if (GET_OBJ_TYPE(prog) != ITEM_DESIGN)
+      continue;
+
+    if (isname(argument, prog->text.keywords) || isname(argument, get_string_after_color_code_removal(prog->restring, ch)))
       break;
+  }
+
   if (!prog) {
     send_to_char(ch, "The program design isn't on that computer.\r\n");
     return;
@@ -380,7 +388,7 @@ ACMD(do_program)
     return;
   skip_spaces(&argument);
   for (prog = comp->contains; prog; prog = prog->next_content)
-    if ((isname(argument, prog->text.keywords) || isname(argument, prog->restring)) && GET_OBJ_TYPE(prog) == ITEM_DESIGN)
+    if ((isname(argument, prog->text.keywords) || isname(argument, get_string_after_color_code_removal(prog->restring, ch))) && GET_OBJ_TYPE(prog) == ITEM_DESIGN)
       break;
   if (!prog) {
     send_to_char(ch, "The program design isn't on that computer.\r\n");
@@ -443,9 +451,14 @@ ACMD(do_copy)
 
   skip_spaces(&argument);
 
-  for (prog = comp->contains; prog; prog = prog->next_content)
-    if ((isname(argument, prog->text.keywords) || isname(argument, prog->restring)) && GET_OBJ_TYPE(prog) == ITEM_PROGRAM)
+  for (prog = comp->contains; prog; prog = prog->next_content) {
+    if (GET_OBJ_TYPE(prog) != ITEM_PROGRAM)
+      continue;
+
+    if (isname(argument, prog->text.keywords) || isname(argument, get_string_after_color_code_removal(prog->restring, ch)))
       break;
+  }
+
 
   FAILURE_CASE(!prog, "The program isn't on that computer.");
   FAILURE_CASE(GET_OBJ_TIMER(prog), "You can't copy from an optical chip.");
@@ -479,12 +492,17 @@ void update_buildrepair(void)
             send_to_char(desc->character, "You realise you have botched installing %s.\r\n", GET_OBJ_NAME(PROG));
             extract_obj(PROG);
           } else {
-            send_to_char(desc->character, "You finish installing %s into %s.\r\n", GET_OBJ_NAME(PROG), GET_OBJ_NAME(PROG->contains));
+            send_to_char(desc->character, "You finish installing %s into %s.\r\n", GET_OBJ_NAME(PROG), GET_OBJ_NAME(PROG->cyberdeck_part_pointer));
             CH->char_specials.timer = 0;
             obj_from_char(PROG);
-            obj_to_obj(PROG, PROG->contains);
+            obj_to_obj(PROG, PROG->cyberdeck_part_pointer);
             GET_PART_BUILDER_IDNUM(PROG) = 0; // Wipe out the builder's idnum so it can be worked on by someone else.
-            PROG->contains = NULL;
+
+            // Clear tracking data. This also stops all other in-progress parts on the same deck-- but that shouldn't be a big issue.
+            REMOVE_BIT(GET_CYBERDECK_FLAGS(PROG->cyberdeck_part_pointer), DECK_FLAG_HAS_PART_POINTING_TO_IT);
+            ObjList.DisassociateCyberdeckPartsFromDeck(PROG->cyberdeck_part_pointer);
+            PROG->cyberdeck_part_pointer = NULL;
+
             GET_OBJ_VAL(PROG, 4) = -2;
             if (!GET_OBJ_VAL(PROG->in_obj, 0))
               GET_OBJ_VAL(PROG->in_obj, 0) = GET_OBJ_VAL(PROG, 2);

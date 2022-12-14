@@ -33,6 +33,10 @@ AttackType:	Blast
 	Impact:	50
 [SKILLS]
 	Rifles:	50
+[EQUIPMENT]
+	[EQ 0]
+		Vnum:	668
+		Wearloc:	18
 BREAK
 #10001
 Keywords:	responsive target dummy

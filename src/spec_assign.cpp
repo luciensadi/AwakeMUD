@@ -1124,8 +1124,10 @@ void assign_rooms(void)
   // Nerpcorpolis
   ASSIGNROOM(RM_NERPCORPOLIS_LOBBY, nerpcorpolis_lobby);
 
-  // Wither's troll_barrier
+  // Wither's troll_barrier and others
   ASSIGNROOM(15600, troll_barrier);
+  ASSIGNROOM(8901, car_dealer);
+  ASSIGNROOM(8903, car_dealer);
 
   // Cairo's room
   ASSIGNROOM(RM_CAIROS_APARTMENT, floor_has_glass_shards);

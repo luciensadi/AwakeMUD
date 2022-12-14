@@ -2,3 +2,5 @@ veh/*
 !veh/.gitkeep
 storage/*
 !storage/.gitkeep
+deleted-housing/*
+!deleted-housing/.gitkeep

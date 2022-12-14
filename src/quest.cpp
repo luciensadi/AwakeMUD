@@ -114,6 +114,7 @@ const char *sol[] =
     "equip on target",
     "install in target",
     "load at location",
+    "load in host",
     "\n"
   };
 
@@ -133,6 +134,8 @@ const char *soo[] =
     "deliver to location",
     "destroy one",
     "destroy many",
+    "return paydata",
+    "upload to host",
     "\n"
   };
 
@@ -142,7 +145,7 @@ const char *smo[] =
     "escort",
     "kill one",
     "kill many",
-    "hunt",
+    "hunt escortee",
     "\n"
   };
 
@@ -472,18 +475,22 @@ void check_quest_delivery(struct char_data *ch, struct obj_data *obj)
   if (!ch || IS_NPC(ch) || !GET_QUEST(ch))
     return;
 
-  int i;
-  if (ch->in_room) {
-    for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
-      if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_LOCATION &&
-          GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
-          ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data)
-      {
-        ch->player_specials->obj_complete[i] = 1;
-        return;
-      }
+  if (!ch->in_room) {
+    // You can't complete a quest objective from a vehicle.
+    return;
+  }
+
+  int i = 0;
+  for (; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
+    if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_LOCATION &&
+        GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
+        ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data)
+    {
+      ch->player_specials->obj_complete[i] = 1;
+      return;
     }
   }
+
   if (ch->persona && ch->persona->in_host && quest_table[GET_QUEST(ch)].obj[i].objective == QOO_UPLOAD &&
       GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
       matrix[ch->persona->in_host].vnum == quest_table[GET_QUEST(ch)].obj[i].o_data)
@@ -635,6 +642,47 @@ bool would_be_rewarded_for_turnin(struct char_data *ch) {
   return nuyen > 0 || karma > 0;
 }
 
+bool follower_can_receive_reward(struct char_data *follower, struct char_data *leader, bool send_message) {
+  // NPCs of various flavors.
+  if (!follower || IS_NPC(follower) || IS_PC_CONJURED_ELEMENTAL(follower) || IS_SPIRIT(follower))
+    return FALSE;
+
+  // Non-grouped PCs.
+  if (!AFF_FLAGGED(follower, AFF_GROUP)) {
+    if (send_message) {
+      send_to_char(leader, "^y(OOC note: %s wasn't grouped, so didn't get a cut of the pay.)^n\r\n", GET_CHAR_NAME(follower), HSSH(follower));
+      send_to_char(follower, "^y(OOC note: You aren't part of %s's group, so you didn't get a cut of the pay.)^n\r\n", GET_CHAR_NAME(leader));
+    }
+    return FALSE;
+  }
+
+  /*  Removed -- this doesn't feel great for the players and isn't well telegraphed beforehand. -LS
+  if (rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch))) {
+    send_to_char(ch, "^y(OOC note: %s didn't meet the qualifications for this run, so %s didn't get a cut of the pay.)^n\r\n", GET_CHAR_NAME(f->follower), HSSH(f->follower));
+    send_to_char("^y(OOC note: You didn't meet the qualifications for this run, so you didn't get a cut of the pay.)^n\r\n", f->follower);
+    continue;
+  }
+  */
+
+  if (follower->in_room != leader->in_room) {
+    if (send_message) {
+      send_to_char(leader, "^y(OOC note: %s wasn't in the room, so didn't get a cut of the pay.)^n\r\n", GET_CHAR_NAME(follower), HSSH(follower));
+      send_to_char(follower, "^y(OOC note: You aren't in the Johnson's room, so you didn't get a cut of %s's pay.)^n\r\n", GET_CHAR_NAME(leader));
+    }
+    return FALSE;
+  }
+
+  if (follower->char_specials.timer >= IDLE_TIMER_PAYOUT_THRESHOLD || PRF_FLAGGED(follower, PRF_AFK)) {
+    if (send_message) {
+      send_to_char(leader, "^y(OOC note: %s is idle/AFK, so didn't get a cut of the pay.)^n\r\n", GET_CHAR_NAME(follower), HSSH(follower));
+      send_to_char(follower, "^y(OOC note: You are idle/AFK, so you didn't get a cut of %s's pay.)^n\r\n", GET_CHAR_NAME(leader));
+    }
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
 void reward(struct char_data *ch, struct char_data *johnson)
 {
   if (vnum_from_non_connected_zone(quest_table[GET_QUEST(ch)].vnum)) {
@@ -643,7 +691,6 @@ void reward(struct char_data *ch, struct char_data *johnson)
     return;
   }
 
-  struct follow_type *f;
   struct obj_data *obj;
   bool completed_all_objectives = TRUE;
   int nuyen = 0, karma = 0, multiplier;
@@ -699,38 +746,21 @@ void reward(struct char_data *ch, struct char_data *johnson)
   // If you're grouped, distribute the karma and nuyen equally.
   if (AFF_FLAGGED(ch, AFF_GROUP)) {
     int num_chars_to_give_award_to = 1;
-    for (f = ch->followers; f; f = f->next) {
-      if (!IS_NPC(f->follower)
-          && AFF_FLAGGED(f->follower, AFF_GROUP)
-          && !(IS_PC_CONJURED_ELEMENTAL(f->follower) || IS_SPIRIT(f->follower)))
-      {
+    for (struct follow_type *f = ch->followers; f; f = f->next) {
+      if (follower_can_receive_reward(f->follower, ch, FALSE)) {
         num_chars_to_give_award_to++;
       }
     }
 
-    nuyen = (int)(nuyen / num_chars_to_give_award_to);
-    karma = (int)(karma / num_chars_to_give_award_to);
+    if (num_chars_to_give_award_to > 1) {
+      nuyen = (int)(nuyen / num_chars_to_give_award_to) * GROUP_QUEST_REWARD_MULTIPLIER;
+      karma = (int)(karma / num_chars_to_give_award_to) * GROUP_QUEST_REWARD_MULTIPLIER;
 
-    for (f = ch->followers; f; f = f->next) {
-      if (IS_NPC(f->follower) || IS_PC_CONJURED_ELEMENTAL(f->follower) || IS_SPIRIT(f->follower))
-        continue;
+      for (struct follow_type *f = ch->followers; f; f = f->next) {
+        // Skip invalid folks while telling them why.
+        if (follower_can_receive_reward(f->follower, ch, TRUE))
+          continue;
 
-      /*  Removed -- this doesn't feel great for the players and isn't well telegraphed beforehand. -LS
-      if (rep_too_low(f->follower, GET_QUEST(ch)) || rep_too_high(f->follower, GET_QUEST(ch))) {
-        send_to_char(ch, "^y(OOC note: %s didn't meet the qualifications for this run, so %s didn't get a cut of the pay.)^n\r\n", GET_CHAR_NAME(f->follower), HSSH(f->follower));
-        send_to_char("^y(OOC note: You didn't meet the qualifications for this run, so you didn't get a cut of the pay.)^n\r\n", f->follower);
-        continue;
-      }
-      */
-
-      if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
-        send_to_char(ch, "^y(OOC note: %s wasn't grouped, so didn't get a cut of the pay.)^n\r\n",
-                     GET_CHAR_NAME(f->follower), HSSH(f->follower));
-        send_to_char(f->follower, "^y(OOC note: You aren't part of %s's group, so you didn't get a cut of the pay.)^n\r\n", GET_CHAR_NAME(ch));
-        continue;
-      }
-
-      if (f->follower->in_room == ch->in_room) {
         gain_nuyen(f->follower, nuyen, NUYEN_INCOME_AUTORUNS);
         int gained = gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
         send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));

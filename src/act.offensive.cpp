@@ -78,7 +78,6 @@ ACMD(do_assist)
     else if (!CAN_SEE(ch, opponent))
       act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
     else {
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
       if (IS_IGNORING(opponent, is_blocking_ic_interaction_from, ch)) {
         act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
         log_attempt_to_bypass_ic_ignore(ch, opponent, "do_assist");
@@ -89,7 +88,7 @@ ACMD(do_assist)
         send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
         return;
       }
-#endif
+
       send_to_char("You join the fight!\r\n", ch);
       act("$N assists you!", FALSE, helpee, 0, ch, TO_CHAR);
       act("$n assists $N.", FALSE, ch, 0, helpee, TO_NOTVICT);
@@ -290,7 +289,28 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         snprintf(buf, sizeof(buf), "$n attacks the door to %s.", thedirs[dir]);
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
       }
-      damage_door(ch, ch->in_room, dir, (int)(GET_STR(ch) / 2), DAMOBJ_CRUSH);
+
+      int power = GET_STR(ch);
+
+      for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+        if (GET_CYBERWARE_TYPE(cyber) == CYB_BONELACING) {
+          switch (GET_CYBERWARE_LACING_TYPE(cyber)) {
+            case BONE_PLASTIC:
+              power += 2;
+              break;
+            case BONE_ALUMINIUM:
+            case BONE_CERAMIC:
+              power += 3;
+              break;
+            case BONE_TITANIUM:
+              power += 4;
+              break;
+          }
+          break;
+        }
+      }
+
+      damage_door(ch, ch->in_room, dir, (int)(power / 2), DAMOBJ_CRUSH);
     }
     return TRUE;
   }
@@ -366,7 +386,6 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       return TRUE;
     }
 
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
     if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
       send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
       log_attempt_to_bypass_ic_ignore(ch, vict, "perform_hit");
@@ -377,7 +396,6 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
       return TRUE;
     }
-#endif
 
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       find_and_draw_weapon(ch);
@@ -414,7 +432,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       }
     } else if ((FIGHTING(ch) && vict != FIGHTING(ch)) || FIGHTING_VEH(ch)) {
       char name[200];
-      strcpy(name, FIGHTING(ch) ? GET_NAME(FIGHTING(ch)) : GET_VEH_NAME(FIGHTING_VEH(ch)));
+      strlcpy(name, FIGHTING(ch) ? GET_NAME(FIGHTING(ch)) : GET_VEH_NAME(FIGHTING_VEH(ch)), sizeof(name));
       stop_fighting(ch);
       set_fighting(ch, vict);
       if (!CH_IN_COMBAT(vict) && AWAKE(vict))
@@ -688,8 +706,8 @@ bool _sort_pairs_by_weight(std::pair<int, int> a, std::pair<int, int> b) {
 
 ACMD(do_flee)
 {
-  if (AFF_FLAGGED(ch, AFF_PRONE)) {
-    send_to_char("It's a struggle to flee while prone!\r\n", ch);
+  if (AFF_FLAGGED(ch, AFF_PRONE) || GET_POS(ch) <= POS_SITTING) {
+    send_to_char("It's a struggle to flee while not on your feet!\r\n", ch);
     return;
   }
 
@@ -744,6 +762,11 @@ ACMD(do_kick)
 {
   struct char_data *vict;
   int dir;
+
+  if (AFF_FLAGGED(ch, AFF_PRONE)) {
+    send_to_char(ch, "You flail ineffectually-- it's hard to get leverage while prone.\r\n");
+    return;
+  }
 
   two_arguments(argument, arg, buf2);
 

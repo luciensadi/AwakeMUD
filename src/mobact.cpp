@@ -75,12 +75,12 @@ bool mob_is_aggressive_towards_race(struct char_data *ch, int race);
 int AGGRESSION_OCTETS[NUM_AGGRO_OCTETS];
 
 char bitbuffer[100];
-const char *print_bits(int bits)
+const char *print_bits(unsigned int bits)
 {
   char *buf_ptr = bitbuffer;
 
   for (int i = BITFIELD_BITS_PER_VAR-1; i >= 0; i--)
-    if (bits & (1 << i))
+    if (bits & ((unsigned int) 1 << i))
       *(buf_ptr++) = '1';
     else
       *(buf_ptr++) = '0';
@@ -122,7 +122,7 @@ bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression) {
   snprintf(buf2, sizeof(buf2), "According to old logic, $n should be %s.",
            MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_ORK, MOB_AGGR_TROLL, MOB_AGGR_HUMAN, ENDBIT) ? "aggro" : "calm");
 
-  act(buf2, FALSE, ch, NULL, NULL, TO_ROOM);
+  act(buf2, FALSE, ch, NULL, NULL, TO_ROLLS);
 #endif
 
   // Escortees can never be aggressive.
@@ -138,7 +138,7 @@ bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression) {
     if (MOB_FLAGS(ch).IsSetPrecomputed(i, AGGRESSION_OCTETS[i])) {
 #ifdef MOBACT_DEBUG
       snprintf(buf2, sizeof(buf2), "Found match in octet %d.", i);
-      act(buf2, FALSE, ch, NULL, NULL, TO_ROOM);
+      act(buf2, FALSE, ch, NULL, NULL, TO_ROLLS);
 #endif
       return TRUE;
     }
@@ -175,6 +175,15 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
   // Missing var? Failure.
   if (!ch || !vict || ch == vict)
     return FALSE;
+
+  // Idle PC? Failure.
+  if (!vict->desc || vict->char_specials.timer >= IDLE_TIMER_AGGRO_THRESHOLD) {
+#ifdef MOBACT_DEBUG
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping %s - Idle / linkdead PC.", GET_CHAR_NAME(vict));
+    do_say(ch, buf3, 0, 0);
+#endif
+    return FALSE;
+  }
 
   // Can't see? Failure.
   if (!CAN_SEE_ROOM_SPECIFIED(ch, vict, get_ch_in_room(ch))) {
@@ -390,7 +399,7 @@ void mobact_change_firemode(struct char_data *ch) {
     // Melee fighters never want to be prone, so they'll stand up from that.
     if (AFF_FLAGGED(ch, AFF_PRONE)) {
 #ifdef MOBACT_DEBUG
-      act("$n is prone with a non-gun weapon; standing.", FALSE, ch, NULL, NULL, TO_ROOM);
+      act("$n is prone with a non-gun weapon; standing.", FALSE, ch, NULL, NULL, TO_ROLLS);
 #endif
       strncpy(buf3, "", sizeof(buf3));
       do_prone(ch, buf3, 0, 0);
@@ -1422,7 +1431,7 @@ bool mobact_process_movement(struct char_data *ch) {
         && number(0, ELEVATOR_BUTTON_PRESS_CHANCE) == 0)
     {
       char argument[500];
-      strlcpy(argument, "button", sizeof(argument));
+      strlcpy(argument, "button", 10);
       ch->in_room->func(ch, ch->in_room, find_command("push"), argument);
       return TRUE;
     }
@@ -1511,6 +1520,7 @@ void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapo
   GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
 }
 
+ACMD_DECLARE(do_get);
 void mobile_activity(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -1519,8 +1529,6 @@ void mobile_activity(void)
   struct room_data *current_room = NULL;
 
   extern int no_specials;
-
-  ACMD_DECLARE(do_get);
 
   // Iterate through all characters in the game.
   for (ch = character_list; ch; ch = next_ch) {
@@ -1538,7 +1546,7 @@ void mobile_activity(void)
     }
 
     if (ch->nr == 0) {
-      mudlog("SYSERR: Encountered zeroed char in mobile_activity().", NULL, LOG_SYSLOG, TRUE);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Encountered zeroed char %s (%ld) in mobile_activity().", GET_CHAR_NAME(ch), GET_MOB_VNUM(ch));
       continue;
     }
 

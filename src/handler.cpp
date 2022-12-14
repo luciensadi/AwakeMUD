@@ -843,9 +843,6 @@ void affect_total(struct char_data * ch)
     if (GET_POWER(ch, ADEPT_THERMO)) {
       set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
     }
-    if (GET_POWER(ch, ADEPT_FLARE)) {
-      set_vision_bit(ch, EYE_FLARECOMP, VISION_BIT_IS_ADEPT_POWER);
-    }
     if (GET_POWER(ch, ADEPT_IMAGE_MAG)) {
       AFF_FLAGS(ch).SetBit(AFF_VISION_MAG_2);
     }
@@ -1673,16 +1670,12 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
   struct obj_data *obj;
 
   if (pos < 0 || pos >= NUM_WEARS) {
-    char errbuf[1000];
-    snprintf(errbuf, sizeof(errbuf), "SYSERR: pos < 0 || pos >= NUM_WEARS, %s - %d", GET_NAME(ch), pos);
-    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: pos < 0 || pos >= NUM_WEARS: %s - %d", GET_CHAR_NAME(ch), pos);
     return NULL;
   }
 
   if (!GET_EQ(ch, pos)) {
-    char errbuf[1000];
-    snprintf(errbuf, sizeof(errbuf), "SYSERR: Trying to remove non-existent item from %s at %d", GET_NAME(ch), pos);
-    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Trying to remove non-existent item from %s at %d", GET_CHAR_NAME(ch), pos);
     return NULL;
   }
 
@@ -2307,9 +2300,8 @@ void extract_obj(struct obj_data * obj)
 
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT)) {
     const char *representation = generate_new_loggable_representation(obj);
-    snprintf(buf, sizeof(buf), "extract_obj: Destroying KEPT item: %s", representation);
+    mudlog_vfprintf(NULL, LOG_PURGELOG, "extract_obj: Destroying KEPT item: %s", representation);
     delete [] representation;
-    mudlog(buf, NULL, LOG_PURGELOG, TRUE);
   }
 
   if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER && (GET_VEHCONTAINER_VEH_VNUM(obj) || GET_VEHCONTAINER_VEH_IDNUM(obj) || GET_VEHCONTAINER_VEH_OWNER(obj))) {
@@ -2324,6 +2316,16 @@ void extract_obj(struct obj_data * obj)
     DELETE_ARRAY_IF_EXTANT(owner);
     mudlog(buf, NULL, LOG_CHEATLOG, TRUE);
     mudlog(buf, NULL, LOG_PURGELOG, TRUE);
+  }
+
+  // Iterate through all cyberdeck parts and designs in the game, making sure none point to this.
+  if ((GET_OBJ_TYPE(obj) == ITEM_CYBERDECK || GET_OBJ_TYPE(obj) == ITEM_CUSTOM_DECK)) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "DBL contains %d items.", ObjList.NumItems());
+    // TODO: It's very likely that you will need to create a whole new list just for cyberdeck parts to avoid iterating over the whole game.
+    if (IS_SET(GET_CYBERDECK_FLAGS(obj), DECK_FLAG_HAS_PART_POINTING_TO_IT)) {
+      ObjList.DisassociateCyberdeckPartsFromDeck(obj);
+      REMOVE_BIT(GET_CYBERDECK_FLAGS(obj), DECK_FLAG_HAS_PART_POINTING_TO_IT);
+    }
   }
 
   if (obj->in_room)
@@ -2431,6 +2433,12 @@ void extract_char(struct char_data * ch)
     stop_chase(veh);
     if (!veh->dest)
       veh->cspeed = SPEED_OFF;
+  }
+
+  if (GET_WATCH(ch)) {
+    // char_data *temp already exists.
+    REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
+    GET_WATCH(ch) = NULL;
   }
 
   if (!IS_NPC(ch)) {

@@ -72,7 +72,7 @@ void populate_lexicon_size_table() {
 
 const char *get_random_word_from_lexicon(int language_skill) {
   int lexicon_number = get_lexicon_number_for_language(language_skill);
-  int random_number;
+  int random_number = 0;
 
   bool break_condition = FALSE;
   for (int limiter = 10; limiter && !break_condition; limiter--) {

@@ -48,7 +48,7 @@ void load_banned(void)
     perror("Unable to open banfile");
     return;
   }
-  while (fscanf(fl, " %s %s %d %s ", ban_type, site_name, &date, name) == 4) {
+  while (fscanf(fl, " %99s %50s %d %20s ", ban_type, site_name, &date, name) == 4) {
     next_node = new ban_list_element;
     strncpy(next_node->site, site_name, BANNED_SITE_LENGTH);
     next_node->site[BANNED_SITE_LENGTH] = '\0';
@@ -112,8 +112,8 @@ void write_ban_list(void)
 
 ACMD(do_ban)
 {
-  char flag[MAX_INPUT_LENGTH], site[MAX_INPUT_LENGTH],
-  format[MAX_INPUT_LENGTH], *nextchar, *timestr;
+  char flag[MAX_INPUT_LENGTH], site[MAX_INPUT_LENGTH];
+  char *nextchar, *timestr;
   int i;
   struct ban_list_element *ban_node;
 
@@ -124,14 +124,14 @@ ACMD(do_ban)
       send_to_char("No sites are banned.\r\n", ch);
       return;
     }
-    strcpy(format, "%-25.25s  %-8.8s  %-10.10s  %-16.16s\r\n");
-    snprintf(buf, sizeof(buf), format,
+#define FORMAT_STR "%-25.25s  %-8.8s  %-10.10s  %-16.16s\r\n"
+    snprintf(buf, sizeof(buf), FORMAT_STR, // Flawfinder: ignore
             "Banned Site Name",
             "Ban Type",
             "Banned On",
             "Banned By");
     send_to_char(buf, ch);
-    snprintf(buf, sizeof(buf), format,
+    snprintf(buf, sizeof(buf), FORMAT_STR, // Flawfinder: ignore
             "---------------------------------",
             "---------------------------------",
             "---------------------------------",
@@ -142,14 +142,15 @@ ACMD(do_ban)
       if (ban_node->date) {
         timestr = asctime(localtime(&(ban_node->date)));
         *(timestr + 10) = 0;
-        strcpy(site, timestr);
+        strlcpy(site, timestr, sizeof(site));
       } else
-        strcpy(site, "Unknown");
-      snprintf(buf, sizeof(buf), format, ban_node->site, ban_types[ban_node->type], site,
-              ban_node->name);
+        strlcpy(site, "Unknown", sizeof(site));
+      snprintf(buf, sizeof(buf), FORMAT_STR, // Flawfinder: ignore
+               ban_node->site, ban_types[ban_node->type], site, ban_node->name);
       send_to_char(buf, ch);
     }
     return;
+#undef FORMAT_STR
   }
   two_arguments(argument, flag, site);
   if (!*site || !*flag) {

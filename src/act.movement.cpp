@@ -25,6 +25,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
+#include "newhouse.hpp"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -110,12 +111,10 @@ int can_move(struct char_data *ch, int dir, int extra)
     }
   }
 
-  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_HOUSE))
-    if (!House_can_enter(ch, EXIT(ch, dir)->to_room->number))
-    {
-      send_to_char("That's private property -- no trespassing!\r\n", ch);
-      return 0;
-    }
+  if (!CH_CAN_ENTER_APARTMENT(EXIT(ch, dir)->to_room, ch)) {
+    send_to_char("That's private property -- no trespassing!\r\n", ch);
+    return 0;
+  }
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch)) {
     int num_occupants = 0;
     for (struct char_data *in_room_ptr = EXIT(ch, dir)->to_room->people; in_room_ptr && num_occupants < 2; in_room_ptr = in_room_ptr->next_in_room) {
@@ -296,7 +295,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     act(buf1, FALSE, ch, 0, vict, TO_CHAR);
   }
   else if (ch->in_room->dir_option[dir]->go_into_thirdperson)
-    strcpy(buf2, ch->in_room->dir_option[dir]->go_into_thirdperson);
+    strlcpy(buf2, ch->in_room->dir_option[dir]->go_into_thirdperson, sizeof(buf2));
   else if (IS_WATER(ch->in_room)) {
     if (!IS_WATER(EXIT(ch, dir)->to_room))
       snprintf(buf2, sizeof(buf2), "$n climbs out of the water to the %s.", fulldirs[dir]);
@@ -362,7 +361,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
       if (weather_info.sunlight == SUN_DARK && weather_info.sky == SKY_CLOUDLESS)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You see the %s moon in the cloudless sky.\r\n", moon[weather_info.moonphase]);
       else
-        strcat(buf, weather_line[weather_info.sky]);
+        strlcat(buf, weather_line[weather_info.sky], sizeof(buf));
     }
     send_to_char(buf, ch);
   }
@@ -378,7 +377,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   else if (vict)
     snprintf(buf2, sizeof(buf2), "$n drags %s in from %s.", GET_NAME(vict), thedirs[rev_dir[dir]]);
   else if (ch->in_room->dir_option[rev_dir[dir]] && ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson)
-    strcpy(buf2, ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson);
+    strlcpy(buf2, ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson, sizeof(buf2));
   else if (IS_WATER(was_in)) {
     if (!IS_WATER(ch->in_room))
       snprintf(buf2, sizeof(buf2), "$n climbs out of the water from %s.", thedirs[rev_dir[dir]]);
@@ -464,6 +463,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
         GET_OBJ_VAL(bio, 5) = 0;
       }
     PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
+    PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
     if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
     log_death_trap(ch);
@@ -676,16 +676,16 @@ bool perform_fall(struct char_data *ch)
 
     if (character_died) {
       // RIP, they died!
-      strcpy(impact_noise, "sickeningly wet ");
+      strlcpy(impact_noise, "sickeningly wet ", sizeof(impact_noise));
     } else {
       if (dam < 2) {
-        strcpy(impact_noise, "muted ");
+        strlcpy(impact_noise, "muted ", sizeof(impact_noise));
       } else if (dam < 5) {
-        strcpy(impact_noise, "");
+        strlcpy(impact_noise, "", sizeof(impact_noise));
       } else if (dam < 8) {
-        strcpy(impact_noise, "loud ");
+        strlcpy(impact_noise, "loud ", sizeof(impact_noise));
       } else {
-        strcpy(impact_noise, "crunching ");
+        strlcpy(impact_noise, "crunching ", sizeof(impact_noise));
       }
     }
 
@@ -741,90 +741,36 @@ void move_vehicle(struct char_data *ch, int dir)
       return;
   }
 
+  struct room_data *room = EXIT(veh, dir)->to_room;
+
   if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
-      if ((ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) // It only checks house, not garage, so drones can enter/leave apts.
-             && House_can_enter(ch, EXIT(veh, dir)->to_room->number)
-             && has_key(ch, (EXIT(veh, dir)->key)))
-          || (ROOM_FLAGGED(veh->in_room, ROOM_HOUSE)))
-      {
-          send_to_char("The remote on your key beeps, allowing the door to swing open briefly enough to slide through.\r\n", ch);
-          snprintf(buf, sizeof(buf), "A door beeps before swinging open electronically to allow %s through in that brief moment.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-          send_to_room(buf, get_veh_in_room(veh), veh);
-      } else {
-          send_to_char(CANNOT_GO_THAT_WAY, ch);
-          return;
+    if (GET_APARTMENT(EXIT(veh, dir)->to_room) || GET_APARTMENT(veh->in_room)) {
+      if (IS_SET(EXIT(veh, dir)->exit_info, EX_LOCKED) && !has_key(ch, (EXIT(veh, dir)->key))) {
+        send_to_char("You need the key in your inventory to use the garage door opener.\r\n", ch);
+        return;
       }
-  }
 
-#ifdef DEATH_FLAGS
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)) {
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
-  }
-#endif
+      if (!CH_CAN_ENTER_APARTMENT(EXIT(veh, dir)->to_room, ch)) {
+        send_to_char("That's private property-- no trespassing.\r\n", ch);
+        return;
+      }
 
-  // Flying vehicles can traverse any terrain.
-  if (!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
-    // Non-flying vehicles can't pass fall rooms.
-    if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL)) {
-      send_to_char(ch, "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+      send_to_char("The remote on your key beeps, and the door swings open just enough to let you through.\r\n", ch);
+      snprintf(buf, sizeof(buf), "A door beeps before briefly opening just enough to allow %s through.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+      send_to_room(buf, get_veh_in_room(veh), veh);
+    } else {
+      send_to_char(CANNOT_GO_THAT_WAY, ch);
       return;
     }
-
-    // Check to see if your vehicle can handle the terrain type you're giving it.
-    if (IS_WATER(EXIT(veh, dir)->to_room)) {
-      if (!veh_can_traverse_water(veh)) {
-        send_to_char(ch, "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-        return;
-      }
-    } else {
-      if (!veh_can_traverse_land(veh)) {
-        send_to_char(ch, "You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(veh));
-        return;
-      }
-    }
   }
 
+  // Error messages presumably sent in-function.
   if (special(ch, convert_dir[dir], &empty_argument))
     return;
 
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && !House_can_enter(ch, EXIT(veh, dir)->to_room->number)) {
-    send_to_char("You can't use other people's garages without permission.\r\n", ch);
+  // Error messages sent in-function.
+  if (!room_accessible_to_vehicle_piloted_by_ch(room, veh, ch, TRUE))
     return;
-  }
-
-  if ((!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD) && !ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE))
-      && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
-  {
-    send_to_char("That's not an easy path-- only drones and bikes have a chance of making it through.\r\n", ch);
-    return;
-  }
-
-  if (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE)) {
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
-  }
-
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
-    send_to_char("Your vehicle is too big to fit in there, but a small drone might make it in.\r\n", ch);
-    return;
-  }
-
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_STAFF_ONLY)) {
-    for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
-      if (!IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
-        send_to_char("Everyone in the vehicle must be a member of the game's administration to go there.\r\n", ch);
-        return;
-      }
-    }
-  }
-
-  // Sanity check: Did you update the impassibility code without updating this?
-  if (!room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, dir)->to_room, veh, ch)) {
-    mudlog("SYSERR: room_accessible_to_vehicle() does not match move_vehicle() constraints!", ch, LOG_SYSLOG, TRUE);
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
-  }
 
   // Clear their position string, if any.
   DELETE_AND_NULL_ARRAY(GET_VEH_DEFPOS(veh));
@@ -937,7 +883,7 @@ void move_vehicle(struct char_data *ch, int dir)
   }
 }
 
-int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vict)
+int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vict, struct veh_data *vict_veh)
 {
   struct room_data *was_in = NULL;
   struct follow_type *k, *next;
@@ -1020,7 +966,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     } else if (GET_REAL_LEVEL(ch) == 1) {
       send_to_char("Sorry, that area is for game administration only.\r\n", ch);
     } else {
-      send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.\r\n", EXIT(ch, dir)->to_room->staff_level_lock);
+      send_to_char(ch, "Sorry, you need to be a level-%d staff member to go there.\r\n", EXIT(ch, dir)->to_room->staff_level_lock);
     }
     return 0;
   }
@@ -1058,6 +1004,32 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     send_to_char("You are wearing too much armor to move!\r\n", ch);
     return 0;
   }
+
+  // Flying vehicles can traverse any terrain.
+  if (vict_veh && !ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(vict_veh)) {
+    // Non-flying vehicles can't pass fall rooms.
+    if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FALL)) {
+      send_to_char(ch, "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
+      return 0;
+    }
+
+    // Check to see if your vehicle can handle the terrain type you're giving it.
+    if (IS_WATER(EXIT(ch, dir)->to_room)) {
+      if (!veh_can_traverse_water(vict_veh)) {
+        send_to_char(ch, "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
+        return 0;
+      }
+    } else {
+      if (!veh_can_traverse_land(vict_veh)) {
+        // Do nothing-- you can put boats on wheels for the purpose of dragging them.
+        /*
+        send_to_char(ch, "You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(vict_veh));
+        return 0;
+        */
+      }
+    }
+  }
+
   if (AFF_FLAGGED(ch, AFF_BINDING)) {
     if (success_test(GET_STR(ch), ch->points.binding) > 0) {
       act("$n breaks the bindings at $s feet!", TRUE, ch, 0, 0, TO_ROOM);
@@ -1069,6 +1041,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       return 0;
     }
   }
+
   if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)) {
     if (EXIT(ch, dir)->keyword)
       send_to_char(ch, "You pass through the closed %s.\r\n", fname(EXIT(ch, dir)->keyword));
@@ -1263,10 +1236,10 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
       LOCK_DOOR(other_room, obj, rev_dir[door]);
     if (DOOR_IS_UNLOCKED(ch, obj, door)) {
       send_to_char("The lights on the maglock switch from red to green.\r\n", ch);
-      strcpy(buf, "The lights on the maglock switch from red to green as $n bypasses ");
+      strlcpy(buf, "The lights on the maglock switch from red to green as $n bypasses ", sizeof(buf));
     } else {
       send_to_char("The lights on the maglock switch from green to red.\r\n", ch);
-      strcpy(buf, "The lights on the maglock switch from green to red as $n bypasses ");
+      strlcpy(buf, "The lights on the maglock switch from green to red as $n bypasses ", sizeof(buf));
     }
     break;
   case SCMD_KNOCK:
@@ -1343,7 +1316,7 @@ int ok_pick(struct char_data *ch, int keynum, int pickproof, int scmd, int lock_
 
 ACMD_CONST(do_gen_door) {
   char not_const[MAX_STRING_LENGTH];
-  strcpy(not_const, argument);
+  strlcpy(not_const, argument, sizeof(not_const));
   ACMD_DECLARE(do_gen_door);
   do_gen_door(ch, not_const, cmd, subcmd);
 }
@@ -1629,7 +1602,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     else if (found_veh->load - found_veh->usedload < calculate_vehicle_entry_load(inveh))
       send_to_char("There is not enough room in there for that.\r\n", ch);
     else {
-      strcpy(buf3, GET_VEH_NAME(inveh));
+      strlcpy(buf3, GET_VEH_NAME(inveh), sizeof(buf3));
       snprintf(buf, sizeof(buf), "%s drives into the back of %s.", buf3, GET_VEH_NAME(found_veh));
       snprintf(buf2, sizeof(buf2), "You drive into the back of %s. (Use the PUSH or LEAVE command to get the vehicle out later.)\r\n", GET_VEH_NAME(found_veh));
       if (inveh->in_room->people)
@@ -1684,9 +1657,9 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     if ((door && door == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
       act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
       if (!found_veh->seating[front]) {
-        strcpy(buf3, "rear");
+        strlcpy(buf3, "rear", sizeof(buf3));
       } else {
-        strcpy(buf3, argument);
+        strlcpy(buf3, argument, sizeof(buf3));
       }
       enter_veh(k->follower, found_veh, buf3, FALSE);
     }
@@ -1812,7 +1785,7 @@ ACMD(do_drag)
       }
     } else {
       struct room_data *in_room = ch->in_room;
-      perform_move(ch, dir, 0, NULL);
+      perform_move(ch, dir, 0, NULL, veh);
       // Message only if we succeeded.
       if (in_room != ch->in_room) {
         send_to_char(ch, "Heaving and straining, you drag %s along with you.\r\n", drag_veh_name);
@@ -1953,7 +1926,7 @@ void leave_veh(struct char_data *ch)
     snprintf(buf2, sizeof(buf2), "%s drives out of the back.", GET_VEH_NAME(veh));
     send_to_veh(buf, veh, NULL, TRUE);
     send_to_veh(buf2, veh->in_veh, NULL, FALSE);
-    strcpy(buf3, GET_VEH_NAME(veh));
+    strlcpy(buf3, GET_VEH_NAME(veh), sizeof(buf3));
     snprintf(buf, sizeof(buf), "%s drives out of the back of %s.", buf3, GET_VEH_NAME(veh->in_veh));
     // get_veh_in_room not needed here since the if-check guarantees that veh->in_veh->in_room is valid.
     struct room_data *room = veh->in_veh->in_room;
@@ -2037,53 +2010,47 @@ ACMD(do_leave)
   }
 
   // If you're in an apartment, you're able to leave to the atriun no matter what. Prevents lockin.
-  if (ROOM_FLAGGED(in_room, ROOM_HOUSE)) {
-    for (door = 0; door < NUM_OF_DIRS; door++) {
-      if (EXIT(ch, door) && EXIT(ch, door)->to_room && ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_ATRIUM)) {
-        send_to_char(ch, "You make your way out of the residence through the door to %s, leaving it locked behind you.\r\n", thedirs[door]);
-        act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
+  if (GET_APARTMENT(in_room)) {
+    rnum_t atrium_rnum = real_room(GET_APARTMENT(in_room)->get_atrium_vnum());
 
-        // Transfer the char.
-        struct room_data *target_room = EXIT(ch, door)->to_room;
-        char_from_room(ch);
-        char_to_room(ch, target_room);
-
-        // Message the room.
-        snprintf(buf, sizeof(buf), "$n enters from %s.", thedirs[rev_dir[door]]);
-        act(buf, TRUE, ch, 0, 0, TO_ROOM);
-
-        // If not screenreader, look.
-        if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-          look_at_room(ch, 0, 0);
-        return;
-      }
+    if (atrium_rnum < 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Atrium for %s was inaccessible! Using A Bright Light.", GET_APARTMENT(in_room)->get_full_name());
+      atrium_rnum = 0; // A Bright Light
     }
-    // If we got here, there was no valid exit. Error condition.
-    snprintf(buf, sizeof(buf), "WARNING: %s attempted to leave apartment, but there was no valid exit! Rescuing to Dante's.",
-             GET_CHAR_NAME(ch));
 
-    struct room_data *room = &world[real_room(RM_DANTES_GARAGE)];
-    if (room) {
-      act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
-      char_from_room(ch);
-      char_to_room(ch, room);
-      act("$n steps out of the shadows, looking slightly confused.", TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char("(System message: Something went wrong with getting you out of the apartment. Staff has been notified, and you have been relocated to Dante's Inferno.)\r\n", ch);
-      return;
-    } else {
-      snprintf(buf, sizeof(buf), "^RERROR:^g %s attempted to leave apartment, but there was no valid exit, and Dante's was unreachable! They're FUCKED.",
-               GET_CHAR_NAME(ch));
-    }
-    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    act("You leave the residence.", TRUE, ch, 0, 0, TO_CHAR);
+    act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
+
+    // Transfer the char.
+    struct room_data *target_room = &world[atrium_rnum];
+    char_from_room(ch);
+    char_to_room(ch, target_room);
+
+    act("$n arrives.", TRUE, ch, 0, 0, TO_ROOM);
+
+    // If not screenreader, look.
+    if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+      look_at_room(ch, 0, 0);
+    return;
   }
 
   // If you're in a PGHQ, you teleport to the first room of the PGHQ's zone.
   if (in_room->zone >= 0 && zone_table[in_room->zone].is_pghq) {
     rnum_t entrance_rnum = real_room(zone_table[in_room->zone].number * 100);
-    if (entrance_rnum) {
-      send_to_char("You glance around to get your bearings, then head for the entrance.\r\n\r\n", ch);
+    if (entrance_rnum >= 0) {
+      struct room_data *entrance = &world[entrance_rnum];
+
+      // Attempt to find the exit to a non-HQ room from there.
+      for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+        if (EXIT2(entrance, dir) && EXIT2(entrance, dir)->to_room && EXIT2(entrance, dir)->to_room->zone != in_room->zone) {
+          entrance = EXIT2(entrance, dir)->to_room;
+          break;
+        }
+      }
+
+      send_to_char("You glance around to get your bearings, then head for the exit.\r\n\r\n", ch);
       char_from_room(ch);
-      char_to_room(ch, &world[entrance_rnum]);
+      char_to_room(ch, entrance);
     } else {
       mudlog("SYSERR: Could not get player to PGHQ entrance, does it not exist?", ch, LOG_SYSLOG, TRUE);
       send_to_char("The walls feel like they're closing in on you, and you panic! A few minutes of breathless flight later, you find yourself somewhere else...\r\n\r\n", ch);
