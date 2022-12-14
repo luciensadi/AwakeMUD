@@ -2218,6 +2218,7 @@ enum {
 #define TO_VICT_FORCE          12
 #define TO_SLEEP               (1 << 5)     /* to char, even if sleeping */
 #define TO_REMOTE              (1 << 6)
+#define SKIP_YOU_STANZAS       (1 << 7)
 
 /* Boards */
 

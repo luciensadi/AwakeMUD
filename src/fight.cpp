@@ -1425,11 +1425,11 @@ void dam_message(int dam, struct char_data * ch, struct char_data * victim, int 
                        attack_hit_text[w_type].different);
   for (witness = get_ch_in_room(victim)->people; witness; witness = witness->next_in_room)
     if (witness != ch && witness != victim && !PRF_FLAGGED(witness, PRF_FIGHTGAG) && SENDOK(witness))
-      perform_act(buf, ch, NULL, victim, witness);
+      perform_act(buf, ch, NULL, victim, witness, FALSE);
   if (ch->in_room != victim->in_room && !PLR_FLAGGED(ch, PLR_REMOTE))
     for (witness = get_ch_in_room(ch)->people; witness; witness = witness->next_in_room)
       if (witness != ch && witness != victim && !PRF_FLAGGED(witness, PRF_FIGHTGAG) && SENDOK(witness))
-        perform_act(buf, ch, NULL, victim, witness);
+        perform_act(buf, ch, NULL, victim, witness, FALSE);
 
 
   /* damage message to damager */
@@ -1439,7 +1439,7 @@ void dam_message(int dam, struct char_data * ch, struct char_data * victim, int 
                        attack_hit_text[w_type].different);
   strcat(buf1, buf);
   if (SENDOK(ch))
-    perform_act(buf1, ch, NULL, victim, ch);
+    perform_act(buf1, ch, NULL, victim, ch, FALSE);
 
   /* damage message to damagee */
   strcpy(buf1, "^r");

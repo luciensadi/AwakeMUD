@@ -27,6 +27,7 @@
 #include "config.hpp"
 #include "bullet_pants.hpp"
 #include "ignore_system.hpp"
+#include "lifestyles.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -1129,6 +1130,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
     GET_COND(ch, COND_THIRST) = -1;
     GET_COND(ch, COND_DRUNK) = -1;
   }
+
+  // Load their lifestyle info.
+  determine_lifestyle(ch);
 
   return true;
 }
