@@ -46,11 +46,14 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
-// TODO: if you're standing in a complex and do 'houseedit apartment show X', it should search for shortnames / fullnames in the complex you're standing in before it does a full MUD search
-
 // TODO: Add back crap counts and formatting to hcontrol command
 
-// TODO: Verify through testing that an apartment owned by non-buildport player id X is not permanently borked when loaded on the buildport and then transferred back to main
+// TODOs for lifestyle:
+// - Add houseedit apartment lifestyle selection
+// - Add accessor / mutator for lifestyle w/ bounds checking
+// - Add bounds checking to rent setting based on lifestyle
+// - Force rent to conform to range when changing lifestyle
+// - Add ability for complexes / apartments to have custom lifestyle strings unique to them
 
 // EVENTUALTODO: Sanity checks for things like reused vnums, etc.
 
@@ -62,12 +65,6 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 // - if IS_BUILDPORT, find_pgroup must always return a group instance with the requested idnum, even if it doesn't exist
 // - Add logic for mailing pgroup officers with apartment deletion warnings.
 // - Verify that an apartment owned by non-buildport pgroup X is not permanently borked when loaded on the buildport and then transferred back to main
-
-// EVENTUALTODOs for lifestyle:
-// - Add houseedit apartment lifestyle selection
-// - Add accessor / mutator for lifestyle w/ bounds checking
-// - Add bounds checking to rent setting based on lifestyle
-// - Force rent to conform to range when changing lifestyle
 
 ACMD(do_decorate) {
   extern void write_world_to_disk(int vnum);
@@ -1623,8 +1620,49 @@ ApartmentComplex *get_complex_headed_by_landlord(vnum_t vnum) {
 Apartment *find_apartment(const char *full_name, struct char_data *ch) {
   std::vector<Apartment *> found_apartments = {};
 
-  if (!*full_name && ch && ch->in_room && GET_APARTMENT(ch->in_room))
-    return GET_APARTMENT(ch->in_room);
+  if (!*full_name) {
+    if (ch && ch->in_room && GET_APARTMENT(ch->in_room)) {
+      return GET_APARTMENT(ch->in_room);
+    }
+    send_to_char("You must supply an apartment name to look for.\r\n", ch);
+    return NULL;
+  }
+
+  // Attempt to search for a shortname match in the complex we're standing in.
+  if (ch->in_room) {
+    ApartmentComplex *complex = NULL;
+
+    if (GET_APARTMENT(ch->in_room)) {
+      complex = GET_APARTMENT(ch->in_room)->get_complex();
+    } else {
+      for (struct char_data *tmp = ch->in_room->people; tmp; tmp = tmp->next_in_room) {
+        if (IS_NPC(tmp) && MOB_HAS_SPEC(tmp, landlord_spec)) {
+          complex = get_complex_headed_by_landlord(GET_MOB_VNUM(tmp));
+          break;
+        }
+      }
+    }
+
+    // We're actually standing in one-- search it.
+    if (complex) {
+      for (auto &apartment : complex->get_apartments()) {
+        // Exact match.
+        if (!str_cmp(full_name, apartment->get_short_name()) || !str_cmp(full_name, apartment->get_name()))
+          return apartment;
+
+        // Imprecise match.
+        if (is_abbrev(full_name, apartment->get_short_name()) || is_abbrev(full_name, apartment->get_name()))
+          found_apartments.push_back(apartment);
+      }
+
+      if (found_apartments.size() == 1)
+        return found_apartments.front();
+
+      found_apartments.clear();
+
+      send_to_char(ch, "Didn't find an apartment matching '%s' in %s. Trying globally...\r\n", full_name, complex->get_name());
+    }
+  }
 
   for (auto &complex : global_apartment_complexes) {
     for (auto &apartment : complex->get_apartments()) {
@@ -1633,7 +1671,7 @@ Apartment *find_apartment(const char *full_name, struct char_data *ch) {
         return apartment;
 
       // Imprecise match.
-      if (is_abbrev(full_name, apartment->get_full_name()))
+      if (is_abbrev(full_name, apartment->get_full_name()) || is_abbrev(full_name, apartment->get_short_name()) || is_abbrev(full_name, apartment->get_name()))
         found_apartments.push_back(apartment);
     }
   }
@@ -1848,7 +1886,8 @@ SPECIAL(landlord_spec)
             snprintf(say_string, sizeof(say_string), "%s's rent has expired.", CAP(apartment->get_name()));
             mob_say(recep, say_string);
           } else {
-            snprintf(buf2, sizeof(buf2), "%s is paid up for another %d days.", CAP(apartment->get_name()), (int)((apartment->get_paid_until() - time(0)) / 86400));
+            int days = (int)((apartment->get_paid_until() - time(0)) / 86400);
+            snprintf(buf2, sizeof(buf2), "%s is paid up for another %d day%s.", CAP(apartment->get_name()), days, days == 1 ? "" : "s");
             mob_say(recep, buf2);
             strlcpy(buf2, "Note: Those are real-world days.", sizeof(buf2));
             do_say(recep, buf2, 0, SCMD_OSAY);
