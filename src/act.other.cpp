@@ -70,6 +70,7 @@ extern void turn_hardcore_on_for_character(struct char_data *ch);
 extern void disable_xterm_256(descriptor_t *apDescriptor);
 extern void enable_xterm_256(descriptor_t *apDescriptor);
 extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
+extern int get_docwagon_faux_id(struct char_data *ch);
 
 extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
 
@@ -89,11 +90,21 @@ ACMD(do_quit)
   if (ch->in_veh)
     ch->in_room = get_ch_in_room(ch);
 
-  if (GET_POS(ch) == POS_FIGHTING)
-    send_to_char("No way!  You're fighting for your life!\r\n", ch);
-  else if (ROOM_FLAGGED(ch->in_room, ROOM_NOQUIT))
-    send_to_char("You can't quit here!\r\n", ch);
-  else if (GET_POS(ch) <= POS_STUNNED) {
+  FAILURE_CASE(GET_POS(ch) == POS_FIGHTING, "No way!  You're fighting for your life!");
+  FAILURE_CASE(ROOM_FLAGGED(ch->in_room, ROOM_NOQUIT), "You can't quit here!");
+
+  // Notify rescuees that they're not coming.
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    if (d != ch->desc && d->character && GET_POS(d->character) == POS_MORTALLYW) {
+      if (d->character->received_docwagon_ack_from.find(GET_IDNUM(ch)) != d->character->received_docwagon_ack_from.end()) {
+        send_to_char(d->character, "Your DocWagon modulator buzzes-- someone with the DocWagon ID %5d is no longer able to respond to your contract.\r\n", get_docwagon_faux_id(ch));
+        d->character->received_docwagon_ack_from.erase(d->character->received_docwagon_ack_from.find(GET_IDNUM(ch)));
+        mudlog_vfprintf(ch, LOG_GRIDLOG, "%s has dropped %s's DocWagon contract (quit).", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      }
+    }
+  }
+
+  if (GET_POS(ch) <= POS_STUNNED) {
     send_to_char("You die before your time...\r\n", ch);
     act("$n gives up the struggle to live...", TRUE, ch, 0, 0, TO_ROOM);
     die(ch);

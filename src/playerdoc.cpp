@@ -17,6 +17,11 @@ const char *get_char_representation_for_docwagon(struct char_data *ch, struct ch
 
 #define IS_VALID_POTENTIAL_RESCUER(plr) (GET_LEVEL(plr) == LVL_MORTAL && plr->char_specials.timer < 5 && !PRF_FLAGGED(plr, PRF_AFK) && !PRF_FLAGGED(plr, PRF_QUEST))
 
+// Returns a 5-digit faux ID to help tell characters apart in anonymous messages.
+int get_docwagon_faux_id(struct char_data *ch) {
+  return (((GET_IDNUM(ch) * 217) + 29783) / 3) % 99999;
+}
+
 int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon) {
   char location_info[500], speech_buf[500];
   int potential_rescuer_count = 0;
@@ -133,7 +138,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
 
     // If they're not staff, AFK, idle, or participating in a PRUN, add them to the potential rescuer count that will be sent to the downed player.
     if (IS_VALID_POTENTIAL_RESCUER(plr)) {
-      send_to_char("^c(Please send a ^WTELL^c or announce on ^WOOC^c if you're on your way!)^n\r\n", plr);
+      send_to_char(plr, "^c(Please announce on ^WOOC^c if you're on your way! Alternatively, use ^WDOCWAGON ACCEPT %s^c for anonymous response.)^n\r\n", GET_CHAR_NAME(ch));
       potential_rescuer_count++;
     }
 
@@ -157,35 +162,35 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
     return;
   }
 
-  for (struct char_data *plr = character_list; plr; plr = plr->next) {
-    if (IS_NPC(plr) || !plr->desc || plr == ch)
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    if (!d->character || d->character == ch || GET_POS(d->character) != POS_MORTALLYW)
       continue;
 
-    if (IS_IGNORING(plr, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, plr))
+    if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character))
       continue;
 
     // We didn't message this person.
-    if (ch->sent_docwagon_messages_to.find(GET_IDNUM(plr)) == ch->sent_docwagon_messages_to.end()) {
+    if (ch->sent_docwagon_messages_to.find(GET_IDNUM(d->character)) == ch->sent_docwagon_messages_to.end()) {
       continue;
     }
 
-    if (AFF_FLAGGED(plr, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER)) {
-      const char *display_string = get_string_after_color_code_removal(CAP(get_char_representation_for_docwagon(ch, plr)), NULL);
+    if (AFF_FLAGGED(d->character, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER)) {
+      const char *display_string = get_string_after_color_code_removal(CAP(get_char_representation_for_docwagon(ch, d->character)), NULL);
 
       if (withdrawn_because_of_death) {
         snprintf(speech_buf, sizeof(speech_buf), "Contract withdrawal notice: %s no longer has viable vital signs.", display_string);
 
-        send_to_char(plr,
+        send_to_char(d->character,
                      "Your DocWagon receiver emits a sad beep and displays: \"^r%s^n\"\r\n",
-                     capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^r")));
+                     capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, "^r")));
 
-        if (plr->in_room) {
-         act("$n's DocWagon receiver emits a sad beep.", TRUE, plr, 0, 0, TO_ROOM);
-        } else if (plr->in_veh) {
-         act("$n's DocWagon receiver emits a sad beep.", TRUE, plr, 0, 0, TO_VEH);
+        if (d->character->in_room) {
+         act("$n's DocWagon receiver emits a sad beep.", TRUE, d->character, 0, 0, TO_ROOM);
+        } else if (d->character->in_veh) {
+         act("$n's DocWagon receiver emits a sad beep.", TRUE, d->character, 0, 0, TO_VEH);
         }
       } else {
-        bool in_same_room = get_ch_in_room(plr) == get_ch_in_room(ch);
+        bool in_same_room = get_ch_in_room(d->character) == get_ch_in_room(ch);
 
         snprintf(speech_buf, sizeof(speech_buf),
                  "Contract %s notice: %s is no longer incapacitated.%s",
@@ -193,22 +198,23 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
                  display_string,
                  in_same_room ? " Well done!" : "");
 
-        send_to_char(plr,
+        send_to_char(d->character,
                      "Your DocWagon receiver emits a cheery beep and displays: \"%s%s^n\"\r\n",
                      in_same_room ? "^c" : "^o",
-                     capitalize(replace_too_long_words(plr, NULL, speech_buf, SKILL_ENGLISH, "^c")));
+                     capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, "^c")));
 
-        if (plr->in_room) {
-         act("$n's DocWagon receiver emits a cheery beep.", TRUE, plr, 0, 0, TO_ROOM);
-        } else if (plr->in_veh) {
-         act("$n's DocWagon receiver emits a cheery beep.", TRUE, plr, 0, 0, TO_VEH);
+        if (d->character->in_room) {
+         act("$n's DocWagon receiver emits a cheery beep.", TRUE, d->character, 0, 0, TO_ROOM);
+        } else if (d->character->in_veh) {
+         act("$n's DocWagon receiver emits a cheery beep.", TRUE, d->character, 0, 0, TO_VEH);
         }
       }
     }
   }
 
-  // Purge their Docwagon list.
+  // Purge their Docwagon lists.
   ch->sent_docwagon_messages_to.clear();
+  ch->received_docwagon_ack_from.clear();
 }
 
 bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
@@ -218,19 +224,20 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
   if (!AFF_FLAGGED(ch, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER) || !AWAKE(ch))
     return FALSE;
 
-  for (struct char_data *vict = character_list; vict; vict = vict->next) {
-    if (IS_NPC(vict) || !vict->desc || GET_POS(vict) != POS_MORTALLYW)
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    // Invalid person?
+    if (!d->character || d->character == ch || GET_POS(d->character) != POS_MORTALLYW)
       continue;
 
-    if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, vict))
+    if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character))
       continue;
 
-    if (isname(argument, get_char_representation_for_docwagon(vict, ch))) {
+    if (isname(argument, get_char_representation_for_docwagon(d->character, ch))) {
       send_to_char("You squint at the tiny screen on your DocWagon receiver to try and get a better idea of where your client is...\r\n", ch);
 
       // Show them the room name, room description, and exits.
       struct room_data *was_in_room = ch->in_room;
-      ch->in_room = get_ch_in_room(vict);
+      ch->in_room = get_ch_in_room(d->character);
 
       // Room name.
       display_room_name(ch);
@@ -267,58 +274,78 @@ const char *get_char_representation_for_docwagon(struct char_data *ch, struct ch
   return display_string;
 }
 
+#define MODE_ACCEPT 1
+#define MODE_DECLINE 2
+
 ACMD(do_docwagon) {
-  send_to_char(ch, "Command not yet implemented.\r\n");
-/*
   int mode = 0;
+  char mode_switch[MAX_INPUT_LENGTH] = { 0 };
 
-  skip_spaces(&arg);
+  // This only works for people with receivers.
+  FAILURE_CASE(!AFF_FLAGGED(ch, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER), "You need to be wearing a DocWagon receiver to use this command-- modulators don't work here.");
 
-  if (!*arg) {
+  skip_spaces(&argument);
+  const char *name = one_argument(argument, mode_switch);
+
+  if (!*arg || !*mode_switch || !*name) {
+    send_to_char(ch, "'%s' '%s' '%s'\r\n", argument, mode_switch, name);
     send_to_char("Syntax: DOCWAGON (ACCEPT|WITHDRAW) <name>\r\n", ch);
     return;
   }
 
-  if (is_abbrev(arg, "accept") || is_abbrev(arg, "acknowledge") || is_abbrev(arg, "take")) {
-    mode = 1;
+  if (is_abbrev(mode_switch, "accept") || is_abbrev(mode_switch, "acknowledge") || is_abbrev(mode_switch, "take")) {
+    mode = MODE_ACCEPT;
   }
-  else if (is_abbrev(arg, "decline") || is_abbrev(arg, "withdraw") || is_abbrev(arg, "reject") || is_abbrev(arg, "drop")) {
-    mode = 2;
+  else if (is_abbrev(mode_switch, "decline") || is_abbrev(mode_switch, "withdraw") || is_abbrev(mode_switch, "reject") || is_abbrev(mode_switch, "drop")) {
+    mode = MODE_DECLINE;
   }
   else {
     send_to_char("Syntax: DOCWAGON (ACCEPT|WITHDRAW) <name>\r\n", ch);
     return;
   }
 
-  const char *remainder = any_one_arg(arg, buf);
-
   // Find the downed person.
-  for (struct char_data *tmp = character_list; tmp; tmp = tmp->next) {
-    if (!keyword_appears_in_char(buf, tmp, TRUE, TRUE, FALSE))
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    // Invalid person?
+    if (!d->character || d->character == ch || GET_POS(d->character) != POS_MORTALLYW)
       continue;
 
-    if (PRF_FLAGGED(tmp, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT))
+    // Couldn't have alerted in the first place?
+    if (PRF_FLAGGED(d->character, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT))
       continue;
 
-    if (IS_NPC(tmp) || !tmp->desc || tmp == ch)
+    // Being ignored?
+    if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character))
       continue;
 
-    if (IS_IGNORING(tmp, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, tmp))
+    // Wrong person?
+    if (!keyword_appears_in_char(name, d->character, TRUE, TRUE, FALSE))
       continue;
 
-    // TODO: must have sent us a message
-
-    // TODO: if we've already ack'd, don't ack again-- if already refused, don't refuse again
-
-    // TODO: log it
-
-    if (mode == 1) {
-      send_to_char(tmp, "Your DocWagon modulator buzzes-- someone has acknowledged your request for assistance and is on their way!\r\n");
-    } else {
-      send_to_char(tmp, "Your DocWagon modulator buzzes-- someone who was on their way has dropped the contract.\r\n");
+    // They have not yet received a message from us. ACCEPT is valid, WITHDRAW is not.
+    if (d->character->received_docwagon_ack_from.find(GET_IDNUM(ch)) == d->character->received_docwagon_ack_from.end()) {
+      if (mode == MODE_DECLINE) {
+        send_to_char(ch, "You haven't messaged %s yet. Use DOCWAGON ACCEPT instead.\r\n", GET_CHAR_NAME(d->character));
+        return;
+      }
+      send_to_char("You anonymously notify them that you're on the way.", ch);
+      send_to_char(d->character, "Your DocWagon modulator buzzes-- someone with the DocWagon ID %5d has acknowledged your request for assistance and is on their way!\r\n", get_docwagon_faux_id(ch));
+      d->character->received_docwagon_ack_from.insert(std::make_pair(GET_IDNUM(ch), TRUE));
+      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s has accepted %s's DocWagon contract.", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      return;
     }
-    send_to_char(ch, "You anonymously notify them that you're %son the way.", mode != 1 ? "no longer " : "");
-    return;
+    // They have already received a message. WITHDRAW is valid, ACCEPT is not.
+    else {
+      if (mode == MODE_ACCEPT) {
+        send_to_char(ch, "You've already messaged %s.\r\n", GET_CHAR_NAME(d->character));
+        return;
+      }
+      send_to_char("You anonymously notify them that you're no longer on the way.", ch);
+      send_to_char(d->character, "Your DocWagon modulator buzzes-- someone with the DocWagon ID %5d is no longer able to respond to your contract.\r\n", get_docwagon_faux_id(ch));
+      d->character->received_docwagon_ack_from.erase(d->character->received_docwagon_ack_from.find(GET_IDNUM(ch)));
+      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s has dropped %s's DocWagon contract (command).", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      return;
+    }
   }
-*/
+  send_to_char(ch, "Your DocWagon receiver can't find anyone in need of assistance named '%s^n'.\r\n", name);
 }

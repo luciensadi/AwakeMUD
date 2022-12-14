@@ -233,6 +233,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
         alert_player_doctors_of_contract_withdrawal(victim, FALSE);
       }
       victim->sent_docwagon_messages_to.clear();
+      victim->received_docwagon_ack_from.clear();
     }
 
     // Pain editor prevents stunned condition.
@@ -255,6 +256,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
         alert_player_doctors_of_contract_withdrawal(victim, FALSE);
       }
       victim->sent_docwagon_messages_to.clear();
+      victim->received_docwagon_ack_from.clear();
     }
 
     GET_POS(victim) = POS_STANDING;
