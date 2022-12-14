@@ -447,7 +447,6 @@ ACMD(do_ram)
       return;
     }
 
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
     if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
       send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
       log_attempt_to_bypass_ic_ignore(ch, vict, "do_ram");
@@ -458,7 +457,6 @@ ACMD(do_ram)
       send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
       return;
     }
-#endif
 
     if (IS_ASTRAL(vict)) {
       send_to_char("Your car's not nearly cool enough to be able to ram astral beings.\r\n", ch);
@@ -1614,7 +1612,6 @@ ACMD(do_target)
       return;
     }
   }
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
   else {
     if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
       send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
@@ -1627,7 +1624,6 @@ ACMD(do_target)
       return;
     }
   }
-#endif
 
   do_raw_target(ch, veh, tveh, vict, modeall, obj);
 }

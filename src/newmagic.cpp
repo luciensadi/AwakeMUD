@@ -1160,12 +1160,10 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
     return FALSE;
   }
 
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
   if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     return FALSE;
   }
-#endif
 
   bool ch_is_astral = IS_ASTRAL(ch);
   bool vict_is_astral = IS_ASTRAL(vict);
