@@ -54,7 +54,22 @@ void houseedit_show_apartment(struct char_data *ch, char *arg) {
   if (apartment->get_paid_until() > 0) {
     const char *owner_name = apartment->get_owner_name__returns_new();
     send_to_char(ch, "Leased To:      %s^n (%ld)\r\n", owner_name, apartment->get_owner_id());
-    send_to_char(ch, "For the next:   %ld seconds\r\n", apartment->get_paid_until() - time(0));
+
+    int seconds = apartment->get_paid_until() - time(0);
+    int minutes = seconds / 60;
+    int hours = minutes / 60;
+    int days = hours / 24;
+
+    if (days > 0) {
+      send_to_char(ch, "For the next:   %ld day%s\r\n", days, days == 1 ? "" : "s");
+    } else if (hours > 0) {
+      send_to_char(ch, "For the next:   %ld hour%s\r\n", hours, hours == 1 ? "" : "s");
+    } else if (minutes > 0) {
+      send_to_char(ch, "For the next:   %ld minute%s\r\n", minutes, minutes == 1 ? "" : "s");
+    } else {
+      send_to_char(ch, "For the next:   %ld second%s\r\n", seconds, seconds == 1 ? "" : "s");
+    }
+
     delete [] owner_name;
     send_to_char(ch, "\r\n");
   }
