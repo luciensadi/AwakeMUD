@@ -1734,6 +1734,7 @@ SPECIAL(landlord_spec)
           snprintf(say_string, sizeof(say_string), "You're not the owner of %s.", apartment->get_name());
           mob_say(recep, say_string);
         } else {
+          mudlog_vfprintf(NULL, LOG_GRIDLOG, "%s collected a key for %s.", GET_CHAR_NAME(ch), apartment->get_full_name());
           mob_say(recep, "Here you go...");
           apartment->issue_key(ch);
         }
@@ -1761,6 +1762,7 @@ SPECIAL(landlord_spec)
           mob_say(recep, "Sorry, we only allow people to lease one room at a time here.");
         } else {
           if (apartment->create_or_extend_lease(ch)) {
+            mudlog_vfprintf(NULL, LOG_GRIDLOG, "%s leased %s.", GET_CHAR_NAME(ch), apartment->get_full_name());
             mob_say(recep, "Thank you, here is your key.");
             apartment->issue_key(ch);
           }
@@ -1785,6 +1787,7 @@ SPECIAL(landlord_spec)
           snprintf(say_string, sizeof(say_string), "I would get fired if I let you break the lease on %s.", apartment->get_name());
           mob_say(recep, say_string);
         } else {
+          mudlog_vfprintf(NULL, LOG_GRIDLOG, "%s broke their lease on %s.", GET_CHAR_NAME(ch), apartment->get_full_name());
           apartment->break_lease();
           mob_say(recep, "I hope you enjoyed your time here.");
         }
@@ -1809,6 +1812,7 @@ SPECIAL(landlord_spec)
           mob_say(recep, say_string);
         } else {
           if (apartment->create_or_extend_lease(ch)) {
+            mudlog_vfprintf(NULL, LOG_GRIDLOG, "%s paid another month on %s. New expiry: %ld.", GET_CHAR_NAME(ch), apartment->get_full_name(), apartment->get_paid_until());
             mob_say(recep, "You are paid up for the next period.");
           }
         }
