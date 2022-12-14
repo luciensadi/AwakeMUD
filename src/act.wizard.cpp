@@ -2815,6 +2815,7 @@ ACMD(do_charge) {
 
 void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct char_data *vict, int karma_times_100, const char *reason, bool add_karma) {
   float karma = ((float) karma_times_100) / 100;
+  int old_karma = GET_KARMA(vict);
 
   if (add_karma) {
     if (GET_KARMA(vict) + karma_times_100 > MYSQL_UNSIGNED_MEDIUMINT_MAX) {
@@ -2871,7 +2872,7 @@ void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct
            karma,
            GET_CHAR_NAME(vict),
            reason,
-           GET_KARMA(vict) - karma_times_100,
+           old_karma,
            GET_KARMA(vict));
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 
@@ -2955,7 +2956,7 @@ void staff_induced_karma_alteration_for_offline_char(struct char_data *ch, const
            karma,
            reason,
            old_karma,
-           old_karma + karma_times_100);
+           add_karma ? old_karma + karma_times_100 : old_karma - karma_times_100);
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 }
 
