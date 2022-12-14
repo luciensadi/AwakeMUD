@@ -714,6 +714,11 @@ bool Apartment::can_houseedit_apartment(struct char_data *ch) {
 }
 
 bool Apartment::owner_is_valid() {
+#ifdef IS_BUILDPORT
+  // All owners are valid on the buildport.
+  return TRUE;
+#endif
+
   if (owned_by_pgroup)
     return !owned_by_pgroup->is_disabled();
 
