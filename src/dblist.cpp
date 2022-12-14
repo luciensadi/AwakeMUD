@@ -46,8 +46,7 @@ int objList::PrintList(struct char_data *ch, const char *arg, bool override_vis_
 
 void objList::Traverse(void (*func)(struct obj_data *))
 {
-  for (nodeStruct<struct obj_data *> *temp = head; temp; temp = temp->
-       next)
+  for (nodeStruct<struct obj_data *> *temp = head; temp; temp = temp->next)
     func(temp->data);
 }
 

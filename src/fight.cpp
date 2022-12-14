@@ -27,6 +27,8 @@
 #include "sound_propagation.hpp"
 #include "newhouse.hpp"
 
+int initiative_until_global_reroll = 0;
+
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */
 struct char_data *next_combat_list = NULL;
@@ -233,7 +235,8 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
       if (was_morted && !PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
         alert_player_doctors_of_contract_withdrawal(victim, FALSE);
       }
-      PLR_FLAGS(victim).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
+      victim->sent_docwagon_messages_to.clear();
+      victim->received_docwagon_ack_from.clear();
     }
 
     // Pain editor prevents stunned condition.
@@ -255,7 +258,8 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
       if (was_morted && !PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
         alert_player_doctors_of_contract_withdrawal(victim, FALSE);
       }
-      PLR_FLAGS(victim).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
+      victim->sent_docwagon_messages_to.clear();
+      victim->received_docwagon_ack_from.clear();
     }
 
     GET_POS(victim) = POS_STANDING;
@@ -360,7 +364,6 @@ void check_killer(struct char_data * ch, struct char_data * vict)
 void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 {
   struct follow_type *k;
-  struct char_data * combat_list_head = NULL;
 
   if (!ch || !vict || ch == vict)
     return;
@@ -398,16 +401,8 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     }
   }
   if (!already_there) {
-    if (!combat_list) {
-      combat_list = ch;
-    } else {
-      // Global re-roll happens when the head of the list reaches 0 init. In order to prevent new
-      // combantants from arbitrarily delaying the next global re-roll, we want to hang on to the
-      // original head.
-      combat_list_head = combat_list;
-      ch->next_fighting = combat_list->next_fighting;
-      combat_list = ch;
-    }
+    ch->next_fighting = combat_list;
+    combat_list = ch;
   }
 
   // We set fighting before we call roll_individual_initiative() because we need the fighting target there.
@@ -417,10 +412,14 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   roll_individual_initiative(ch);
   order_list(TRUE);
 
-  // Put back the original combat list head.
-  if (combat_list_head) {
-    combat_list_head->next_fighting = combat_list;
-    combat_list = combat_list_head;
+  // First combatant added to list, so we set initiative until next global re-roll
+  if (!combat_list->next_fighting) {
+    initiative_until_global_reroll = GET_INIT_ROLL(ch);
+    // Edge case: first combatant rolled too low to act (low roll + wound penalties)
+    // This allows their opponent to act though they haven't been added to the list yet
+    if (initiative_until_global_reroll <= 0) {
+      initiative_until_global_reroll = 1;
+    }
   }
 
   if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
@@ -463,7 +462,6 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 void set_fighting(struct char_data * ch, struct veh_data * vict)
 {
   struct follow_type *k;
-  struct char_data * combat_list_head = NULL;
 
   if (!ch || !vict)
     return;
@@ -480,16 +478,8 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
     }
   }
   if (!already_there) {
-    if (!combat_list) {
-      combat_list = ch;
-    } else {
-      // Global re-roll happens when the head of the list reaches 0 init. In order to prevent new
-      // combantants from arbitrarily delaying the next global re-roll, we want to hang on to the
-      // original head.
-      combat_list_head = combat_list;
-      ch->next_fighting = combat_list->next_fighting;
-      combat_list = ch;
-    }
+    ch->next_fighting = combat_list;
+    combat_list = ch;
   }
 
   FIGHTING_VEH(ch) = vict;
@@ -498,10 +488,14 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
   roll_individual_initiative(ch);
   order_list(TRUE);
 
-  // Put back the original combat list head.
-  if (combat_list_head) {
-    combat_list_head->next_fighting = combat_list;
-    combat_list = combat_list_head;
+  // First combatant added to list, so we set initiative until next global re-roll
+  if (!combat_list->next_fighting) {
+    initiative_until_global_reroll = GET_INIT_ROLL(ch);
+    // Edge case: first combatant rolled too low to act (low roll + wound penalties)
+    // This allows their opponent to act though they haven't been added to the list yet
+    if (initiative_until_global_reroll <= 0) {
+      initiative_until_global_reroll = 1;
+    }
   }
 
   if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
@@ -1064,11 +1058,25 @@ void die(struct char_data * ch)
 ACMD(do_die)
 {
   char buf[100];
+  struct room_data *in_room = get_ch_in_room(ch);
 
   /* If they're still okay... */
-  if ( GET_PHYSICAL(ch) >= 100 && GET_MENTAL(ch) >= 100 ) {
-    send_to_char("Your mother would be so sad... :(\n\r",ch);
-    return;
+  FAILURE_CASE(GET_PHYSICAL(ch) >= 100 && GET_MENTAL(ch) >= 100, "Your mother would be so sad... :(");
+
+  // Refuse to do it if they're in a DocWagon recovery room.
+  switch (GET_ROOM_VNUM(in_room)) {
+#ifdef USE_PRIVATE_CE_WORLD
+    // Guarded with def because these are identical in non-CE and would cause compilation errors.
+    case RM_PORTLAND_DOCWAGON:
+    case RM_CARIB_DOCWAGON:
+    case RM_OCEAN_DOCWAGON:
+#endif
+    case RM_SEATTLE_DOCWAGON:
+      // Sanity check / edge case: If mortally wounded, fix it.
+      GET_PHYSICAL(ch) = MAX(GET_PHYSICAL(ch), 100);
+      // Then error out.
+      send_to_char(ch, "You're already in a DocWagon recovery room! You'll heal up soon enough.\r\n");
+      return;
   }
 
   // If they're ready to be docwagon'd out, save them.
@@ -1083,8 +1091,8 @@ ACMD(do_die)
   snprintf(buf, sizeof(buf),"%s gave up the will to live. {%s%s (%ld)}",
           GET_CHAR_NAME(ch),
           ch->in_veh ? "in veh at " : "",
-          GET_ROOM_NAME(get_ch_in_room(ch)),
-          GET_ROOM_VNUM(get_ch_in_room(ch)));
+          GET_ROOM_NAME(in_room),
+          GET_ROOM_VNUM(in_room));
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 
   /* Now we just kill them, MuHahAhAhahhaAHhaAHaA!!...or something */
@@ -2395,10 +2403,7 @@ void docwagon_retrieve(struct char_data *ch) {
     }
   }
 
-  if (PLR_FLAGGED(ch, PLR_SENT_DOCWAGON_PLAYER_ALERT)) {
-    alert_player_doctors_of_contract_withdrawal(ch, FALSE);
-    PLR_FLAGS(ch).RemoveBit(PLR_SENT_DOCWAGON_PLAYER_ALERT);
-  }
+  alert_player_doctors_of_contract_withdrawal(ch, FALSE);
 }
 
 bool docwagon(struct char_data *ch)
@@ -2418,26 +2423,31 @@ bool docwagon(struct char_data *ch)
   if (!room)
     return FALSE;
 
-  int docwagon_tn = MAX(GET_SECURITY_LEVEL(room), 4);
-  int docwagon_dice = GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1;
-  int successes = success_test(docwagon_dice, docwagon_tn);
-
-  snprintf(rollbuf, sizeof(rollbuf), "$n: DocWagon rescue roll: %d dice vs TN %d netted %d hit(s).", docwagon_dice, docwagon_tn, successes);
-  act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
-
-  if (successes <= 0 && access_level(ch, LVL_BUILDER) && PRF_FLAGGED(ch, PRF_PACIFY)) {
-    act("$n: Overriding failed DocWagon roll due to pacified staff level.", TRUE, ch, 0, 0, TO_ROLLS);
-    successes = 1;
-  }
-
-  // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
-  if (successes > 0)
-  {
-    send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
+  if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    send_to_char(ch, "%s^n buzzes contentedly: the automated DocWagon trauma team remains en route.\r\n", CAP(GET_OBJ_NAME(docwagon)));
     send_to_char(ch, "^L[OOC: You can choose to wait for player assistance to arrive, or you can get picked up immediately by entering ^wDIE^L. See ^wHELP DOCWAGON^L for more details.]\r\n");
-    PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
   } else {
-    send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+    int docwagon_tn = MAX(GET_SECURITY_LEVEL(room), 4);
+    int docwagon_dice = GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1;
+    int successes = success_test(docwagon_dice, docwagon_tn);
+
+    snprintf(rollbuf, sizeof(rollbuf), "$n: DocWagon rescue roll: %d dice vs TN %d netted %d hit(s).", docwagon_dice, docwagon_tn, successes);
+    act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
+
+    if (successes <= 0 && access_level(ch, LVL_BUILDER) && PRF_FLAGGED(ch, PRF_PACIFY)) {
+      act("$n: Overriding failed DocWagon roll due to pacified staff level.", TRUE, ch, 0, 0, TO_ROLLS);
+      successes = 1;
+    }
+
+    // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
+    if (successes > 0)
+    {
+      send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
+      send_to_char(ch, "^L[OOC: You can choose to wait for player assistance to arrive, or you can get picked up immediately by entering ^wDIE^L. See ^wHELP DOCWAGON^L for more details.]\r\n");
+      PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
+    } else {
+      send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+    }
   }
 
   if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
@@ -3324,8 +3334,16 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         send_to_char("You are mortally wounded, and will die soon, if not "
                      "aided.\r\n", victim);
       }
-      if (!IS_NPC(victim))
+      if (!IS_NPC(victim)) {
+        // All NPCs (should) stop hitting PCs when they're mortally wounded.
+        for (struct char_data *fighter = combat_list, *next_fighter; fighter; fighter = next_fighter) {
+          next_fighter = fighter->next_fighting;
+          if (IS_NPC(fighter) && FIGHTING(fighter) == victim)
+            stop_fighting(fighter);
+        }
+
         did_docwagon = docwagon(victim);
+      }
       break;
     case POS_STUNNED:
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
@@ -5685,10 +5703,13 @@ void perform_violence(void)
   // Increment our violence loop counter.
   violence_loop_counter++;
 
-  if (GET_INIT_ROLL(combat_list) <= 0) {
+  if (initiative_until_global_reroll <= 0) {
     roll_initiative();
     order_list(TRUE);
+    initiative_until_global_reroll = GET_INIT_ROLL(combat_list);
   }
+
+  initiative_until_global_reroll -= 10;
 
   // This while-loop replaces the combat list for-loop so we can do better edge case checking.
   ch = NULL;

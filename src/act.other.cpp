@@ -71,6 +71,7 @@ extern void turn_hardcore_on_for_character(struct char_data *ch);
 extern void disable_xterm_256(descriptor_t *apDescriptor);
 extern void enable_xterm_256(descriptor_t *apDescriptor);
 extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
+extern int get_docwagon_faux_id(struct char_data *ch);
 
 extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
 
@@ -90,11 +91,21 @@ ACMD(do_quit)
   if (ch->in_veh)
     ch->in_room = get_ch_in_room(ch);
 
-  if (GET_POS(ch) == POS_FIGHTING)
-    send_to_char("No way!  You're fighting for your life!\r\n", ch);
-  else if (ROOM_FLAGGED(ch->in_room, ROOM_NOQUIT))
-    send_to_char("You can't quit here!\r\n", ch);
-  else if (GET_POS(ch) <= POS_STUNNED) {
+  FAILURE_CASE(GET_POS(ch) == POS_FIGHTING, "No way!  You're fighting for your life!");
+  FAILURE_CASE(ROOM_FLAGGED(ch->in_room, ROOM_NOQUIT), "You can't quit here!");
+
+  // Notify rescuees that they're not coming.
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    if (d != ch->desc && d->character && GET_POS(d->character) == POS_MORTALLYW) {
+      if (d->character->received_docwagon_ack_from.find(GET_IDNUM(ch)) != d->character->received_docwagon_ack_from.end()) {
+        send_to_char(d->character, "Your DocWagon modulator buzzes-- someone with the DocWagon ID %5d is no longer able to respond to your contract.\r\n", get_docwagon_faux_id(ch));
+        d->character->received_docwagon_ack_from.erase(d->character->received_docwagon_ack_from.find(GET_IDNUM(ch)));
+        mudlog_vfprintf(ch, LOG_GRIDLOG, "%s has dropped %s's DocWagon contract (quit).", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      }
+    }
+  }
+
+  if (GET_POS(ch) <= POS_STUNNED) {
     send_to_char("You die before your time...\r\n", ch);
     act("$n gives up the struggle to live...", TRUE, ch, 0, 0, TO_ROOM);
     die(ch);
@@ -2043,38 +2054,31 @@ ACMD(do_treat)
   if (subcmd && (!IS_NPC(ch) || !(GET_MOB_SPEC(ch) || GET_MOB_SPEC2(ch))))
     return;
 
-  if (IS_ASTRAL(ch)) {
-    send_to_char("You can't physically treat someone while projecting.\r\n", ch);
-    return;
-  }
-  if (CH_IN_COMBAT(ch)) {
-    send_to_char("Administer first aid while fighting?!?\r\n", ch);
-    return;
-  }
-
-  if (!*argument) {
-    send_to_char("Treat who?!\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(IS_ASTRAL(ch), "You can't physically treat someone while projecting.");
+  FAILURE_CASE(CH_IN_COMBAT(ch), "Administer first aid while fighting?!?");
+  FAILURE_CASE(!*argument, "Syntax: TREAT <target>");
 
   any_one_arg(argument, arg);
+
   if (!(vict = get_char_room_vis(ch, arg))) {
     send_to_char(ch, "You can't seem to find a '%s' here.\r\n", arg);
     return;
   }
 
-  if (CH_IN_COMBAT(vict)) {
-    act("Not while $E's fighting!", FALSE, ch, 0, vict, TO_CHAR);
-    return;
-  } else if (LAST_HEAL(vict) != 0
-             || (!IS_NPC(vict)
-                 && !IS_SENATOR(vict)
-                 && IS_SENATOR(ch)
-                 && !access_level(ch, LVL_ADMIN))) {
+  FAILURE_CASE(IS_SENATOR(ch) && !access_level(ch, LVL_ADMIN) && !IS_NPC(vict) && !IS_SENATOR(vict), "Staff can't treat players this way. Use the RESTORE command if you have it.");
+  FAILURE_CASE(CH_IN_COMBAT(vict), "You can't treat someone who's in combat!");
+
+  // There's a LAST_HEAL cap, unless the person is morted-- then you can attempt regardless.
+  // Since mages and adepts have additional healing tools (heal spell, empathic), max-cap chars (aka mundanes) get more attempts.
+  // Max-skill mages and adepts: 3 total treat attempts. Max-skill mundane: 5 total treat attempts.
+  int biotech_cap = MAX(0, GET_SKILL(ch, SKILL_BIOTECH) / 4) + (GET_SKILL(ch, SKILL_BIOTECH) >= LEARNED_LEVEL ? 1 : 0);
+  if (LAST_HEAL(vict) > biotech_cap && GET_PHYSICAL(vict) > 0) {
+    snprintf(buf, sizeof(buf), "LAST_HEAL($n for $N): %d > 1/3rd biotech (%d), so can't treat.", LAST_HEAL(vict), biotech_cap);
+    act(buf, FALSE, ch, 0, vict, TO_ROLLS);
     if (ch == vict) {
-      send_to_char(ch, "You're not able to treat your wounds right now.\r\n");
+      send_to_char(ch, "You've been healed too recently for that.\r\n");
     } else {
-      act("Treating $N will not do $M any good.", FALSE, ch, 0, vict, TO_CHAR);
+      act("$N has been treated too recently for you to try again.", FALSE, ch, 0, vict, TO_CHAR);
     }
     return;
   }
@@ -2085,7 +2089,7 @@ ACMD(do_treat)
     target = 8;
   else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 7/10))
     target = 6;
-  else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 9/10))
+  else if (GET_PHYSICAL(vict) <= GET_MAX_PHYSICAL(vict))
     target = 4;
   else {
     if (ch == vict) {
@@ -2101,8 +2105,18 @@ ACMD(do_treat)
     }
     return;
   }
-  if (vict->in_room && ROOM_FLAGGED(vict->in_room, ROOM_STERILE))
+
+  FAILURE_CASE(GET_NUYEN(ch) < 150, "You'll need 150 nuyen on hand to cover the cost of supplies.");
+  lose_nuyen(ch, 150, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
+
+  char rbuf[1000];
+  snprintf(rbuf, sizeof(rbuf), "Treat TN: Base %d", target);
+
+  if (vict->in_room && ROOM_FLAGGED(vict->in_room, ROOM_STERILE)) {
     target -= 2;
+    strlcat(rbuf, ", -2 for sterile room", sizeof(rbuf));
+  }
+
   skill = get_skill(ch, SKILL_BIOTECH, target);
 
   if (find_workshop(ch, TYPE_MEDICAL))
@@ -2110,27 +2124,55 @@ ACMD(do_treat)
 
   kit = has_kit(ch, TYPE_MEDICAL);
 
-  if (!kit && !subcmd && !shop)
+  if (!kit && !subcmd && !shop) {
+    strlcat(rbuf, ", +4 for no tools", sizeof(rbuf));
     target += 4;
-
-  if (!shop)
+  }
+  else if (!shop) {
+    strlcat(rbuf, ", +1 for kit only", sizeof(rbuf));
     target++;
-  if (GET_REAL_BOD(vict) >= 10)
-    target -= 3;
-  else if (GET_REAL_BOD(vict) >= 7)
-    target -= 2;
-  else if (GET_REAL_BOD(vict) >= 4)
-    target--;
+  }
 
-  if (GET_REAL_MAG(vict) > 0)
+  if (GET_REAL_BOD(vict) >= 10) {
+    strlcat(rbuf, ", -3 for great vict bod", sizeof(rbuf));
+    target -= 3;
+  } else if (GET_REAL_BOD(vict) >= 7) {
+    strlcat(rbuf, ", -2 for good vict bod", sizeof(rbuf));
+    target -= 2;
+  } else if (GET_REAL_BOD(vict) >= 4) {
+    strlcat(rbuf, ", -1 for okay vict bod", sizeof(rbuf));
+    target--;
+  }
+
+  if (GET_REAL_MAG(vict) > 0) {
+    strlcat(rbuf, ", +2 for treating magically-active", sizeof(rbuf));
     target += 2;
+  }
+
+  // House rule: If you've been treated recently, the TN goes up, but you can still try it.
+  if (LAST_HEAL(vict) > 0) {
+    int tn_increase = MIN(LAST_HEAL(vict) * 3/2, 8);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", +%d for recent heal attempt", tn_increase);
+    target += tn_increase;
+  }
+
+  // Cap the TN.
+  if (target > 12) {
+    strlcat(rbuf, ". TN capped to 12", sizeof(rbuf));
+    target = 12;
+  }
 
   if (ch == vict) {
     act("$n begins to treat $mself.", TRUE, ch, 0, vict, TO_NOTVICT);
   } else {
     act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
   }
-  if (success_test(skill, target) > 0) {
+
+  int successes = success_test(skill, target);
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Rolled %d dice VS TN %d and got %d success%s.", skill, target, successes, successes == 1 ? "" : "es");
+  act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+
+  if (successes > 0) {
     act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
     if (ch == vict) {
       send_to_char(ch, "The pain seems significantly better.\r\n");
@@ -2138,20 +2180,25 @@ ACMD(do_treat)
       act("The pain seems significantly less after $n's treatment.",
           FALSE, ch, 0, vict, TO_VICT);
     }
-    if (GET_PHYSICAL(vict) < 100) {
-      GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), 100);
-      GET_MENTAL(vict) = 0;
-      LAST_HEAL(vict) = MAX(1, (int)(GET_MAX_PHYSICAL(vict) / 100));
-    } else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 2/5)) {
-      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) * 3/1000);
-      LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) * 3/1000);
-    } else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 7/10)) {
-      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) / 500);
-      LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) / 500);
-    } else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 9/10)) {
-      GET_PHYSICAL(vict) += (int)(GET_MAX_PHYSICAL(vict) / 1000);
-      LAST_HEAL(vict) = (int)(GET_MAX_PHYSICAL(vict) / 1000);
+
+    // Rectify negative mental.
+    if (GET_MENTAL(vict) < 0) {
+      GET_MENTAL(vict) = MAX(GET_MENTAL(vict), 0);
     }
+
+    // Add a box of health. They get a second box if they're still mortally wounded.
+    GET_PHYSICAL(vict) += MIN(GET_MAX_PHYSICAL(vict), 100);
+    if (GET_PHYSICAL(vict) <= 0)
+      GET_PHYSICAL(vict) += MIN(GET_MAX_PHYSICAL(vict), 100);
+
+    // Tack on additional boxes for good rolls.
+    int extra_heal = successes / 3;
+    if (extra_heal > 0) {
+      send_to_char("Your treatment was highly successful!\r\n", ch);
+      act("$n's treatment was highly successful!", TRUE, ch, 0, 0, TO_ROOM);
+      GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), GET_PHYSICAL(vict) + extra_heal * 100);
+    }
+
     update_pos(vict);
   } else {
     if (ch == vict) {
@@ -2160,8 +2207,13 @@ ACMD(do_treat)
       act("Your treatment does nothing for $N.", FALSE, ch, 0, vict, TO_CHAR);
       act("$n's treatment doesn't help your wounds.", FALSE, ch, 0, vict, TO_VICT);
     }
-    LAST_HEAL(vict) = 3;
   }
+
+  // Regardless of success or failure, increment last_heal to discourage spam. Cap increment to avoid being locked out of treat forever.
+  LAST_HEAL(vict) = MIN(8, LAST_HEAL(vict) + 1);
+
+  // Treater gets a wait state.
+  WAIT_STATE(ch, 2 RL_SEC);
 }
 
 ACMD(do_astral)
@@ -4506,9 +4558,24 @@ ACMD(do_spray)
 
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content)
     if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == spraypaint) {
-      if (get_string_length_after_color_code_removal(argument, ch) >= LINE_LENGTH) {
+      int length = get_string_length_after_color_code_removal(argument, ch);
+
+      if (length >= LINE_LENGTH) {
         send_to_char("There isn't that much paint in there.\r\n", ch);
         return;
+      }
+
+      // If it's too short, check to make sure there's at least one space in it.
+      if (length < 10) {
+        const char *ptr = argument;
+        for (; *ptr; ptr++) {
+          if (*ptr == ' ')
+            break;
+        }
+        if (!*ptr) {
+          send_to_char(ch, "Please write out something to spray, like 'spray A coiling dragon mural'.\r\n");
+          return;
+        }
       }
 
       {

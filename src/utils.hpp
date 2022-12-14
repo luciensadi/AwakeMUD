@@ -124,7 +124,7 @@ void    set_new_mobile_unique_id(struct char_data *ch);
 int     return_general(int skill_num);
 bool    perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_to_avoid_knockback=0);
 int     get_zone_index_number_from_vnum(vnum_t vnum);
-bool    room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch);
+bool    room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch, bool send_message);
 bool    veh_can_traverse_land(struct veh_data *veh);
 bool    veh_can_traverse_water(struct veh_data *veh);
 bool    veh_can_traverse_air(struct veh_data *veh);
@@ -209,10 +209,8 @@ void    look_at_room(struct char_data *ch, int mode, int is_quicklook);
 void    peek_into_adjacent(struct char_data * ch, int dir);
 
 /* in act.movmement.c */
-int     do_simple_move(struct char_data *ch, int dir, int extra, struct
-                       char_data *vict);
-int perform_move(struct char_data *ch, int dir, int extra, struct char_data
-                 *vict);
+int     do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *vict);
+int     perform_move(struct char_data *ch, int dir, int extra, struct char_data *vict, struct veh_data *vict_veh=NULL);
 
 // Currently not used anywhere.
 void    reverse_obj_list(struct obj_data **obj);

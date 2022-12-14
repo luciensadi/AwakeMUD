@@ -2251,11 +2251,9 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
 
   if (!IS_NPC(ch) && IS_NPC(vict)) {
     // Group quest reward.
-    if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master)) {
-      if (check_quest_delivery(ch->master, vict, obj)) {
-        act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
-        extract_obj(obj);
-      }
+    if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master) && check_quest_delivery(ch->master, vict, obj)) {
+      act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
+      extract_obj(obj);
     }
     // Individual quest reward.
     else if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj)) {
@@ -2290,25 +2288,33 @@ struct char_data *give_find_vict(struct char_data * ch, char *arg)
   SPECIAL(fixer);
   struct char_data *vict;
 
-  if (!*arg)
-  {
+  if (!*arg) {
     send_to_char("To who?\r\n", ch);
     return NULL;
-  } else if (!(vict = get_char_room_vis(ch, arg)))
-  {
+  }
+
+  if (!(vict = get_char_room_vis(ch, arg))) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
     return NULL;
-  } else if (vict == ch)
-  {
+  }
+
+  if (vict == ch) {
     send_to_char("What's the point of giving it to yourself?\r\n", ch);
     return NULL;
-  } else if (IS_NPC(vict) && GET_MOB_SPEC(vict) && GET_MOB_SPEC(vict) == fixer)
-  {
-    act("Do you really want to give $M stuff for free?! (Use the 'repair' command here.)",
-        FALSE, ch, 0, vict, TO_CHAR);
-    return NULL;
-  } else
-    return vict;
+  }
+
+  if (IS_NPC(vict)) {
+    if (MOB_HAS_SPEC(vict, fixer)) {
+      act("Do you really want to give $M stuff for free?! (Use the 'repair' command here.)", FALSE, ch, 0, vict, TO_CHAR);
+      return NULL;
+    }
+    if (MOB_HAS_SPEC(vict, fence)) {
+      act("Do you really want to give $M stuff for free?! (Use the 'sell' command here.)", FALSE, ch, 0, vict, TO_CHAR);
+      return NULL;
+    }
+  }
+
+  return vict;
 }
 
 void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)

@@ -4634,7 +4634,7 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, str
   {
     if (ch) {
       char susbuf[1000];
-      snprintf(susbuf, sizeof(susbuf), "%s attempted to grid to room #%ld (%s), but it's not a legal gridguide destination.",
+      snprintf(susbuf, sizeof(susbuf), "%s attempted to calculate gridguide coords for room #%ld (%s), but it's not a legal gridguide destination.",
                GET_CHAR_NAME(ch),
                candidate_vnum,
                GET_ROOM_NAME(&world[candidate_rnum])
@@ -4648,7 +4648,7 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, str
   }
 
   // -4: Vehicle not compatible with room.
-  if (veh && !room_accessible_to_vehicle_piloted_by_ch(&world[candidate_rnum], veh, ch)) {
+  if (veh && !room_accessible_to_vehicle_piloted_by_ch(&world[candidate_rnum], veh, ch, FALSE)) {
     return -4;
   }
 
@@ -4684,21 +4684,28 @@ int get_zone_index_number_from_vnum(vnum_t vnum) {
   return -1;
 }
 
-bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch) {
-  if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE))
+#define SEND_MESSAGE(...) { if (send_message) { send_to_char(ch, __VA_ARGS__); } }
+bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch, bool send_message) {
+  if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE)) {
+    SEND_MESSAGE(CANNOT_GO_THAT_WAY);
     return FALSE;
+  }
 
-  if (!ROOM_FLAGGED(room, ROOM_ROAD) && !ROOM_FLAGGED(room, ROOM_GARAGE)) {
-    if (veh->type != VEH_BIKE && veh->type != VEH_DRONE)
+  if (!IS_WATER(room) && !ROOM_FLAGGED(room, ROOM_ROAD) && !ROOM_FLAGGED(room, ROOM_GARAGE)) {
+    if (veh->type != VEH_BIKE && veh->type != VEH_DRONE) {
+      SEND_MESSAGE("That's not an easy path-- only drones and bikes have a chance of making it through.\r\n");
       return FALSE;
+    }
   }
 
   if (!CH_CAN_ENTER_APARTMENT(room, ch)) {
+    SEND_MESSAGE("You can't use other people's garages without permission.\r\n");
     return FALSE;
   }
 
   #ifdef DEATH_FLAGS
     if (ROOM_FLAGGED(room, ROOM_DEATH)) {
+      SEND_MESSAGE(CANNOT_GO_THAT_WAY);
       return FALSE;
     }
   #endif
@@ -4707,37 +4714,50 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
   if (!ROOM_FLAGGED(room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
     // Non-flying vehicles can't pass fall rooms.
     if (ROOM_FLAGGED(room, ROOM_FALL)) {
+      SEND_MESSAGE("%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
       return FALSE;
     }
 
     // Check to see if your vehicle can handle the terrain type you're giving it.
     if (IS_WATER(room)) {
       if (!veh_can_traverse_water(veh)) {
+        SEND_MESSAGE("%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
         return FALSE;
       }
     } else {
       if (!veh_can_traverse_land(veh)) {
+        SEND_MESSAGE("You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(veh));
         return FALSE;
       }
     }
   }
 
-  if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
-    return FALSE;
+  if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS)) {
+    if (veh->type != VEH_DRONE) {
+      SEND_MESSAGE("Your vehicle is too big to fit in there, but a small drone might make it in.\r\n");
+      return FALSE;
+    }
+    if (veh->body > 1) {
+      SEND_MESSAGE("Your drone is too big to fit in there. You'll need a tiny one (1 BOD or less).\r\n");
+      return FALSE;
+    }
   }
 
   for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
     if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY) && !IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
+      SEND_MESSAGE("Everyone in the vehicle must be a member of the game's administration to go there.\r\n");
       return FALSE;
     }
 
     if (!CH_CAN_ENTER_APARTMENT(room, tch)) {
+      SEND_MESSAGE("Everyone in the vehicle must be a guest of the apartment to go there.\r\n");
       return FALSE;
     }
   }
 
   return TRUE;
 }
+#undef SEND_MESSAGE
 
 bool veh_can_traverse_land(struct veh_data *veh) {
   if (veh_can_traverse_air(veh) || veh->flags.IsSet(VFLAG_AMPHIB)) {

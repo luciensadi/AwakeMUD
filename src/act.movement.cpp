@@ -741,6 +741,8 @@ void move_vehicle(struct char_data *ch, int dir)
       return;
   }
 
+  struct room_data *room = EXIT(veh, dir)->to_room;
+
   if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
     if (GET_APARTMENT(EXIT(veh, dir)->to_room) || GET_APARTMENT(veh->in_room)) {
       if (IS_SET(EXIT(veh, dir)->exit_info, EX_LOCKED) && !has_key(ch, (EXIT(veh, dir)->key))) {
@@ -762,75 +764,13 @@ void move_vehicle(struct char_data *ch, int dir)
     }
   }
 
-#ifdef DEATH_FLAGS
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)) {
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
-  }
-#endif
-
-  // Flying vehicles can traverse any terrain.
-  if (!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
-    // Non-flying vehicles can't pass fall rooms.
-    if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL)) {
-      send_to_char(ch, "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-      return;
-    }
-
-    // Check to see if your vehicle can handle the terrain type you're giving it.
-    if (IS_WATER(EXIT(veh, dir)->to_room)) {
-      if (!veh_can_traverse_water(veh)) {
-        send_to_char(ch, "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-        return;
-      }
-    } else {
-      if (!veh_can_traverse_land(veh)) {
-        send_to_char(ch, "You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(veh));
-        return;
-      }
-    }
-  }
-
+  // Error messages presumably sent in-function.
   if (special(ch, convert_dir[dir], &empty_argument))
     return;
 
-  if (!CH_CAN_ENTER_APARTMENT(EXIT(veh, dir)->to_room, ch)) {
-    send_to_char("You can't use other people's garages without permission.\r\n", ch);
+  // Error messages sent in-function.
+  if (!room_accessible_to_vehicle_piloted_by_ch(room, veh, ch, TRUE))
     return;
-  }
-
-  if ((!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD) && !ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE))
-      && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
-  {
-    send_to_char("That's not an easy path-- only drones and bikes have a chance of making it through.\r\n", ch);
-    return;
-  }
-
-  if (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE)) {
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
-  }
-
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
-    send_to_char("Your vehicle is too big to fit in there, but a small drone might make it in.\r\n", ch);
-    return;
-  }
-
-  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_STAFF_ONLY)) {
-    for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
-      if (!IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
-        send_to_char("Everyone in the vehicle must be a member of the game's administration to go there.\r\n", ch);
-        return;
-      }
-    }
-  }
-
-  // Sanity check: Did you update the impassibility code without updating this?
-  if (!room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, dir)->to_room, veh, ch)) {
-    mudlog("SYSERR: room_accessible_to_vehicle() does not match move_vehicle() constraints!", ch, LOG_SYSLOG, TRUE);
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
-  }
 
   // Clear their position string, if any.
   DELETE_AND_NULL_ARRAY(GET_VEH_DEFPOS(veh));
@@ -943,7 +883,7 @@ void move_vehicle(struct char_data *ch, int dir)
   }
 }
 
-int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vict)
+int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vict, struct veh_data *vict_veh)
 {
   struct room_data *was_in = NULL;
   struct follow_type *k, *next;
@@ -1026,7 +966,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     } else if (GET_REAL_LEVEL(ch) == 1) {
       send_to_char("Sorry, that area is for game administration only.\r\n", ch);
     } else {
-      send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.\r\n", EXIT(ch, dir)->to_room->staff_level_lock);
+      send_to_char(ch, "Sorry, you need to be a level-%d staff member to go there.\r\n", EXIT(ch, dir)->to_room->staff_level_lock);
     }
     return 0;
   }
@@ -1064,6 +1004,32 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     send_to_char("You are wearing too much armor to move!\r\n", ch);
     return 0;
   }
+
+  // Flying vehicles can traverse any terrain.
+  if (vict_veh && !ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(vict_veh)) {
+    // Non-flying vehicles can't pass fall rooms.
+    if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FALL)) {
+      send_to_char(ch, "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
+      return 0;
+    }
+
+    // Check to see if your vehicle can handle the terrain type you're giving it.
+    if (IS_WATER(EXIT(ch, dir)->to_room)) {
+      if (!veh_can_traverse_water(vict_veh)) {
+        send_to_char(ch, "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
+        return 0;
+      }
+    } else {
+      if (!veh_can_traverse_land(vict_veh)) {
+        // Do nothing-- you can put boats on wheels for the purpose of dragging them.
+        /*
+        send_to_char(ch, "You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(vict_veh));
+        return 0;
+        */
+      }
+    }
+  }
+
   if (AFF_FLAGGED(ch, AFF_BINDING)) {
     if (success_test(GET_STR(ch), ch->points.binding) > 0) {
       act("$n breaks the bindings at $s feet!", TRUE, ch, 0, 0, TO_ROOM);
@@ -1075,6 +1041,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       return 0;
     }
   }
+
   if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)) {
     if (EXIT(ch, dir)->keyword)
       send_to_char(ch, "You pass through the closed %s.\r\n", fname(EXIT(ch, dir)->keyword));
@@ -1818,7 +1785,7 @@ ACMD(do_drag)
       }
     } else {
       struct room_data *in_room = ch->in_room;
-      perform_move(ch, dir, 0, NULL);
+      perform_move(ch, dir, 0, NULL, veh);
       // Message only if we succeeded.
       if (in_room != ch->in_room) {
         send_to_char(ch, "Heaving and straining, you drag %s along with you.\r\n", drag_veh_name);
@@ -2070,10 +2037,20 @@ ACMD(do_leave)
   // If you're in a PGHQ, you teleport to the first room of the PGHQ's zone.
   if (in_room->zone >= 0 && zone_table[in_room->zone].is_pghq) {
     rnum_t entrance_rnum = real_room(zone_table[in_room->zone].number * 100);
-    if (entrance_rnum) {
-      send_to_char("You glance around to get your bearings, then head for the entrance.\r\n\r\n", ch);
+    if (entrance_rnum >= 0) {
+      struct room_data *entrance = &world[entrance_rnum];
+
+      // Attempt to find the exit to a non-HQ room from there.
+      for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+        if (EXIT2(entrance, dir) && EXIT2(entrance, dir)->to_room && EXIT2(entrance, dir)->to_room->zone != in_room->zone) {
+          entrance = EXIT2(entrance, dir)->to_room;
+          break;
+        }
+      }
+
+      send_to_char("You glance around to get your bearings, then head for the exit.\r\n\r\n", ch);
       char_from_room(ch);
-      char_to_room(ch, &world[entrance_rnum]);
+      char_to_room(ch, entrance);
     } else {
       mudlog("SYSERR: Could not get player to PGHQ entrance, does it not exist?", ch, LOG_SYSLOG, TRUE);
       send_to_char("The walls feel like they're closing in on you, and you panic! A few minutes of breathless flight later, you find yourself somewhere else...\r\n\r\n", ch);

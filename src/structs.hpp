@@ -908,6 +908,10 @@ struct char_data
   std::unordered_map<idnum_t, bool> *pc_invis_resistance_test_results;
   std::unordered_map<idnum_t, bool> *mob_invis_resistance_test_results;
 
+  // Another unordered map to track who we've sent docwagon alerts to.
+  std::unordered_map<idnum_t, bool> sent_docwagon_messages_to = {};
+  std::unordered_map<idnum_t, bool> received_docwagon_ack_from = {};
+
   bool alias_dirty_bit;
 
   /* Named after 'magic bullet pants', the 'technology' in FPS games that allows you to never have to worry about which mag has how much ammo in it. */
@@ -924,7 +928,7 @@ struct char_data
       bioware(NULL), next_in_room(NULL), next(NULL), next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL),
       next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
       pgroup_invitations(NULL), congregation_bonus_pool(0), last_violence_loop(0), pc_invis_resistance_test_results(NULL),
-       mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE)
+      mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE)
   {
     ZERO_OUT_ARRAY(equipment, NUM_WEARS);
 

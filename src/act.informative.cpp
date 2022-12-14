@@ -1542,7 +1542,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
                  EXIT(ch, door)->to_room->number,
                  EXIT(ch, door)->to_room->name,
                  (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) ? " (closed)" : ""),
-                 (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch)) ? " (impassible)" : ""
+                 (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch, FALSE)) ? " (impassible)" : ""
                 );
         if (autom)
           strlcat(buf, "^c", sizeof(buf));

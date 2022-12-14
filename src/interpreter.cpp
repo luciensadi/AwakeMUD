@@ -182,6 +182,7 @@ ACMD_DECLARE(do_drink);
 ACMD_DECLARE(do_drive);
 ACMD_DECLARE(do_drop);
 ACMD_DECLARE(do_drugs);
+ACMD_DECLARE(do_docwagon);
 ACMD_DECLARE(do_eat);
 ACMD_DECLARE(do_echo);
 ACMD_DECLARE(do_new_echo);
@@ -580,6 +581,7 @@ struct command_info cmd_info[] =
     { "dispell"    , POS_SITTING , do_dispell  , 0, 0, FALSE },
     { "display"    , POS_DEAD    , do_display  , 0, 0, TRUE },
     { "discord"    , POS_DEAD    , do_discord  , 0, 0, TRUE },
+    { "docwagon"   , POS_LYING   , do_docwagon , 0, 0, FALSE },
     { "domain"     , POS_LYING   , do_domain   , 0, 0, FALSE },
     { "donate"     , POS_RESTING , do_drop     , 0, SCMD_DONATE, FALSE },
     { "drag"       , POS_STANDING, do_drag     , 0, 0, FALSE },
