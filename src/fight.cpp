@@ -1067,11 +1067,25 @@ void die(struct char_data * ch)
 ACMD(do_die)
 {
   char buf[100];
+  struct room_data *in_room = get_ch_in_room(ch);
 
   /* If they're still okay... */
-  if ( GET_PHYSICAL(ch) >= 100 && GET_MENTAL(ch) >= 100 ) {
-    send_to_char("Your mother would be so sad... :(\n\r",ch);
-    return;
+  FAILURE_CASE(GET_PHYSICAL(ch) >= 100 && GET_MENTAL(ch) >= 100, "Your mother would be so sad... :(");
+
+  // Refuse to do it if they're in a DocWagon recovery room.
+  switch (GET_ROOM_VNUM(in_room)) {
+#ifdef USE_PRIVATE_CE_WORLD
+    // Guarded with def because these are identical in non-CE and would cause compilation errors.
+    case RM_PORTLAND_DOCWAGON:
+    case RM_CARIB_DOCWAGON:
+    case RM_OCEAN_DOCWAGON:
+#endif
+    case RM_SEATTLE_DOCWAGON:
+      // Sanity check / edge case: If mortally wounded, fix it.
+      GET_PHYSICAL(ch) = MAX(GET_PHYSICAL(ch), 100);
+      // Then error out.
+      send_to_char(ch, "You're already in a DocWagon recovery room! You'll heal up soon enough.\r\n");
+      return;
   }
 
   // If they're ready to be docwagon'd out, save them.
@@ -1086,8 +1100,8 @@ ACMD(do_die)
   snprintf(buf, sizeof(buf),"%s gave up the will to live. {%s%s (%ld)}",
           GET_CHAR_NAME(ch),
           ch->in_veh ? "in veh at " : "",
-          GET_ROOM_NAME(get_ch_in_room(ch)),
-          GET_ROOM_VNUM(get_ch_in_room(ch)));
+          GET_ROOM_NAME(in_room),
+          GET_ROOM_VNUM(in_room));
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 
   /* Now we just kill them, MuHahAhAhahhaAHhaAHaA!!...or something */
