@@ -1,3 +1,6 @@
+#ifndef __LIFESTYLES_HPP__
+#define __LIFESTYLES_HPP__
+
 #define LIFESTYLE_STREETS         0
 #define LIFESTYLE_SQUATTER        1
 #define LIFESTYLE_LOW             2
@@ -48,3 +51,5 @@ extern struct lifestyle_data lifestyles[NUM_LIFESTYLES];
 // Function prototypes:
 extern const char *get_lifestyle_string(struct char_data *ch);
 extern void determine_lifestyle(struct char_data *ch);
+
+#endif // __LIFESTYLES_HPP__

@@ -13,6 +13,7 @@ namespace bf = boost::filesystem;
 #include "utils.hpp"
 #include "comm.hpp"
 #include "playergroup_classes.hpp"
+#include "lifestyles.hpp"
 
 class ApartmentRoom;
 class Apartment;
@@ -56,6 +57,9 @@ class ApartmentComplex {
     // The vnum of the landlord
     vnum_t landlord_vnum = -1;
 
+    // The lifestyle this complex conveys. Can be overridden at the apartment level.
+    int lifestyle = LIFESTYLE_SQUATTER;
+
     std::vector<Apartment*> apartments = {};
     std::vector<idnum_t> editors = {};
 
@@ -72,6 +76,7 @@ class ApartmentComplex {
     std::vector<Apartment*> get_apartments() { return apartments; }
     std::vector<idnum_t> get_editors() { return editors; }
     bf::path get_base_directory() { return base_directory; }
+    int get_lifestyle() { return lifestyle; }
 
     // Mutators.
     bool set_landlord_vnum(vnum_t vnum, bool perform_landlord_overlap_test);
@@ -109,7 +114,7 @@ class Apartment {
     const char *shortname = NULL; // 309
     const char *name = NULL; // Unit 309
     const char *full_name = NULL; // Evergreen Multiplex's Unit 309 (derived)
-    int lifestyle = 0;
+    int lifestyle = -1;
     long nuyen_per_month = 0;
     bf::path base_directory;
 
@@ -119,7 +124,7 @@ class Apartment {
 
     // Info about rooms this apartment has. First one is the entrance and attaches to atrium.
     std::vector<ApartmentRoom*> rooms = {};
-    int garages = 0;
+    unsigned long garages = 0;
 
     // Info about the owner and lease.
     idnum_t owned_by_player = 0;
@@ -148,6 +153,8 @@ class Apartment {
     std::vector<long> get_guests() { return guests; }
     ApartmentComplex *get_complex() { return complex; }
     bf::path get_base_directory() { return base_directory; }
+    unsigned long get_garage_count() { return garages; }
+    int get_lifestyle() { return lifestyle >= LIFESTYLE_STREETS ? lifestyle : complex->get_lifestyle(); }
 
     // Mutators
     void set_owner(idnum_t);

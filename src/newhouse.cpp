@@ -522,7 +522,7 @@ const char *ApartmentComplex::list_apartments__returns_new() {
   }
 
   for (auto &apartment: apartments) {
-    snprintf(ENDOF(result), sizeof(result) + strlen(result), "  - ^C%s^n @ ^c%ld^n (lifestyle ^c%s^n, ^c%ld^n room%s, of which ^c%d^n %s): ^c%ld^n nuyen.\r\n",
+    snprintf(ENDOF(result), sizeof(result) + strlen(result), "  - ^C%s^n @ ^c%ld^n (lifestyle ^c%s^n, ^c%ld^n room%s, of which ^c%ld^n %s): ^c%ld^n nuyen.\r\n",
              apartment->name,
              apartment->rooms.empty() ? -1 : apartment->rooms.front()->get_vnum(),
              apartment->get_lifestyle_string(), // lifestyles[apartment->lifestyle].name,

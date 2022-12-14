@@ -5,8 +5,34 @@
 #include "db.hpp"
 #include "interpreter.hpp"
 #include "comm.hpp"
+#include "newhouse.hpp"
 
-extern struct landlord *landlords;
+/* System design:
+
+- Lifestyles exist: Streets, Squatter, Low, Middle, High, Luxury. See SR3 p62.
+- Lifestyle strings exist: These describe the 'air' of a character living that lifestyle.
+- Garage strings exist: Similar to lifestyle strings, but describe a character living in a garage regardless of lifestyle.
+
+- Apartment complexes have associated lifestyles, which may be overridden by individual apartments.
+- Apartment complexes and apartments MAY have additional lifestyle strings available to them. These are separated between Garage and Non-Garage.
+
+- PCs have a maximum lifestyle, which is derived from the highest-class apartment they are currently renting.
+- PCs always display a lifestyle string when looked at. This string is chosen from the set composed of:
+  - All default lifestyle strings from all lifestyles at or below their current maximum, plus
+  - All default garage strings, plus
+  - All lifestyle strings for all complexes and apartments they currently rent at, plus
+  - All garage strings for all complexes and apartments they currently rent at.
+  - CAVEAT: If the most expensive of the PC's apartments is more than half garage rooms, the above set is discarded and replaced with only garage strings.
+
+- Lifestyle strings can be swapped out amidst available ones at any time with CUSTOMIZE LIFESTYLE.
+  - The selected lifestyle string is saved to the DB in full.
+
+- When a character loads, compare their lifestyle string to their available ones: If it's not in the list, give them a random default from their highest lifestyle and notify them.
+
+STRETCH:
+- Lifestyle strings can be edited in-game, tridlog style.
+
+*/
 
 struct lifestyle_data lifestyles[NUM_LIFESTYLES] =
 { // Name      Cost/mo
@@ -25,7 +51,7 @@ struct lifestyle_data lifestyles[NUM_LIFESTYLES] =
      {"$s wrinkled clothes suggest $e lives out of $s car.", "Their wrinkled clothes suggest they live out of their car."},
      {"$e isn't emaciated, but still looks like $e's had to skip a meal or three.", "They aren't emaciated, but still look like they've had to skip a meal or three."},
      {"The distinct scent of public transportation clings to $m.", "The distinct scent of public transportation clings to them."},
-     {"$e's got a smell about him-- eau de Coffin Motel?", "They've got a smell about them-- eau de Coffin Motel?"},
+     {"$e's got a smell about him-- eau de Coffin Motel?", "They've got a smell about them-- eau de Coffin Motel?"}}
   },
   {"Low"     , 1000,
     {{"$e looks like he's fallen on hard times.", "They look like they've fallen on hard times."},
@@ -42,18 +68,12 @@ struct lifestyle_data lifestyles[NUM_LIFESTYLES] =
      {"$e probably showers regularly, as $e smells lightly of cheap soap.", "They probably shower regularly, as they smell lightly of cheap soap."},
      {"$e smells like soap, shampoo, and some sort of cologne or perfume.", "They smell like soap, shampoo, and some sort of cologne or perfume."},
      {"", ""}}
-     Her outfit is clean and tailored to fit her, and even features a prominent brand.
-
-She smells like soap, shampoo and some sort of cologne or perfume. Her hygiene is impeccable.
-
-She looks like she's never missed a meal in her life, and has the healthy glow of someone that eats real food.
-
   },
   {"High"    , 10000,
     {{"$e seems pretty well-off.", "They seem pretty well-off."},
      {"$e looks like he's living the high life.", "They look like they're living the high life."},
      {"$e's doing well for himself.", "They're doing well for themselves."},
-     {"", ""},
+     {"$e looks like $e's never missed a meal in $s life, and has the healthy glow of someone that eats real food.", "They look like they've never missed a meal in their life, and have the healthy glow of someone that eats real food."},
      {"", ""},
      {"", ""}}
   },
@@ -64,7 +84,7 @@ She looks like she's never missed a meal in her life, and has the healthy glow o
      {"", ""},
      {"", ""},
      {"", ""}}
-  },
+  }
 };
 
 const char *lifestyle_garage_strings[NUM_GARAGE_STRINGS] = {
@@ -82,21 +102,21 @@ int house_to_lifestyle_map[NUM_LIFESTYLES] = {
 
 // Return a string that describes their lifestyle.
 const char *get_lifestyle_string(struct char_data *ch) {
-  static char compiled_string[500];
+  static char compiled_string[500] = { '\0' };
 
   if (!ch || IS_NPC(ch)) {
     mudlog("SYSERR: Received invalid char to get_lifestyle_string().", ch, LOG_SYSLOG, TRUE);
-    return "";
+    return compiled_string;
   }
 
   if (GET_LIFESTYLE_SELECTION(ch) < 0 || GET_LIFESTYLE_SELECTION(ch) >= NUM_LIFESTYLES) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Lifestyle %d is out of range in get_lifestyle_string().", GET_LIFESTYLE_SELECTION(ch));
-    return "";
+    return compiled_string;
   }
 
   if (GET_LIFESTYLE_STRING_SELECTION(ch) < 0 || GET_LIFESTYLE_STRING_SELECTION(ch) >= NUM_STRINGS_PER_LIFESTYLE) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Lifestyle string selection %d is out of range in get_lifestyle_string().", GET_LIFESTYLE_STRING_SELECTION(ch));
-    return "";
+    return compiled_string;
   }
 
   strlcpy(compiled_string, lifestyles[GET_LIFESTYLE_SELECTION(ch)].strings[GET_LIFESTYLE_STRING_SELECTION(ch)][GET_SEX(ch) == SEX_NEUTRAL ? 1 : 0], sizeof(compiled_string));
@@ -114,32 +134,26 @@ const char *get_lifestyle_string(struct char_data *ch) {
 // Iterate through all houses and assign the best owned one to the character.
 void determine_lifestyle(struct char_data *ch) {
   int best_lifestyle_found = -1;
-  bool lifestyle_is_garage = FALSE;
-  vnum_t best_room = -1;
+  bool best_lifestyle_is_garage = FALSE;
+  Apartment *best_apartment = NULL;
 
   if (!ch || IS_NPC(ch)) {
     mudlog("SYSERR: Received invalid char to determine_lifestyle()!", ch, LOG_SYSLOG, TRUE);
     return;
   }
 
-  for (struct landlord *llord = landlords; llord; llord = llord->next) {
-    for (struct house_control_rec *house = llord->rooms; house; house = house->next) {
-      if (house->owner && house->owner == GET_IDNUM(ch)) {
-        int found_lifestyle = house_to_lifestyle_map[house->mode];
-        if (found_lifestyle >= best_lifestyle_found) {
-          struct room_data *room = &world[real_room(house->vnum)];
+  for (auto &complex : global_apartment_complexes) {
+    for (auto &apartment : complex->get_apartments()) {
+      if (apartment->has_owner_privs(ch)) {
+        int found_lifestyle = apartment->get_lifestyle();
 
-          if (best_lifestyle_found > found_lifestyle) {
-            // If this is a step up, we force-set the garage flag.
-            lifestyle_is_garage = ROOM_FLAGGED(room, ROOM_GARAGE);
-          } else if (!ROOM_FLAGGED(room, ROOM_GARAGE)) {
-            // Otherwise, we remove the is-garage flag if this room isn't a garage.
-            lifestyle_is_garage = FALSE;
-          }
+        // An apartment is a lifestyle garage if more than half of the rooms are garages.
+        bool found_lifestyle_is_garage = apartment->get_garage_count() > (apartment->get_rooms().size() / 2);
 
-          // Finally, assign the best lifestyle.
+        if (found_lifestyle > best_lifestyle_found || (found_lifestyle == best_lifestyle_found && !best_lifestyle_is_garage)) {
           best_lifestyle_found = found_lifestyle;
-          best_room = house->vnum;
+          best_lifestyle_is_garage = found_lifestyle_is_garage;
+          best_apartment = apartment;
         }
       }
     }
@@ -147,25 +161,24 @@ void determine_lifestyle(struct char_data *ch) {
 
   if (best_lifestyle_found == -1) {
     best_lifestyle_found = LIFESTYLE_SQUATTER;
-    lifestyle_is_garage = FALSE;
+    best_lifestyle_is_garage = FALSE;
+    log_vfprintf("Assigned %s the squatter lifestyle.", GET_CHAR_NAME(ch));
+    return;
   }
 
   GET_SETTABLE_LIFESTYLE(ch) = GET_SETTABLE_ORIGINAL_LIFESTYLE(ch) = best_lifestyle_found;
-  GET_SETTABLE_LIFESTYLE_IS_GARAGE(ch) = GET_SETTABLE_ORIGINAL_LIFESTYLE_IS_GARAGE(ch) = lifestyle_is_garage;
+  GET_SETTABLE_LIFESTYLE_IS_GARAGE(ch) = GET_SETTABLE_ORIGINAL_LIFESTYLE_IS_GARAGE(ch) = best_lifestyle_is_garage;
 
-  log_vfprintf("Assigned %s lifestyle: %d (%s), room %ld is%s garage.",
+  log_vfprintf("Assigned %s lifestyle: %d (%s), %s is%s garage.",
                GET_CHAR_NAME(ch),
                GET_LIFESTYLE_SELECTION(ch),
                lifestyles[GET_LIFESTYLE_SELECTION(ch)].name,
-               best_room,
+               best_apartment ? best_apartment->get_full_name() : "(null)",
                GET_LIFESTYLE_IS_GARAGE_SELECTION(ch) ? "" : " NOT");
 }
 
 // TODO: Add this to point_update(?) and fill out.
 void lifestyle_tick(struct char_data *ch) {}
-
-// TODO: Add lifestyle string selection to customize physical.
-// TODO: Rework so that lifestyle string selection is per tier (ex: squatter=1, low=3, etc)
 
 // TODO: Replace this with CUSTOMIZE LIFESTYLE.
 ACMD(do_lifestyle) {
