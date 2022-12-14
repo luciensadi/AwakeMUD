@@ -26,6 +26,8 @@
 #include "playerdoc.hpp"
 #include "sound_propagation.hpp"
 
+int initiative_until_global_reroll = 0;
+
 /* Structures */
 struct char_data *combat_list = NULL;   /* head of l-list of fighting chars */
 struct char_data *next_combat_list = NULL;
@@ -399,16 +401,8 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     }
   }
   if (!already_there) {
-    if (!combat_list) {
-      combat_list = ch;
-    } else {
-      // Global re-roll happens when the head of the list reaches 0 init. In order to prevent new
-      // combantants from arbitrarily delaying the next global re-roll, we want to hang on to the
-      // original head.
-      combat_list_head = combat_list;
-      ch->next_fighting = combat_list->next_fighting;
-      combat_list = ch;
-    }
+    ch->next_fighting = combat_list;
+    combat_list = ch;
   }
 
   // We set fighting before we call roll_individual_initiative() because we need the fighting target there.
@@ -417,11 +411,15 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 
   roll_individual_initiative(ch);
   order_list(TRUE);
-
-  // Put back the original combat list head.
-  if (combat_list_head) {
-    combat_list_head->next_fighting = combat_list;
-    combat_list = combat_list_head;
+  
+  // First combatant added to list, so we set initiative until next global re-roll
+  if (!combat_list->next_fighting) {
+    initiative_until_global_reroll = GET_INIT_ROLL(ch);
+    // Edge case: first combatant rolled too low to act (low roll + wound penalties)
+    // This allows their opponent to act though they haven't been added to the list yet
+    if (initiative_until_global_reroll <= 0) {
+      initiative_until_global_reroll = 1;
+    }
   }
 
   if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
@@ -481,16 +479,8 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
     }
   }
   if (!already_there) {
-    if (!combat_list) {
-      combat_list = ch;
-    } else {
-      // Global re-roll happens when the head of the list reaches 0 init. In order to prevent new
-      // combantants from arbitrarily delaying the next global re-roll, we want to hang on to the
-      // original head.
-      combat_list_head = combat_list;
-      ch->next_fighting = combat_list->next_fighting;
-      combat_list = ch;
-    }
+    ch->next_fighting = combat_list;
+    combat_list = ch;
   }
 
   FIGHTING_VEH(ch) = vict;
@@ -499,10 +489,14 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
   roll_individual_initiative(ch);
   order_list(TRUE);
 
-  // Put back the original combat list head.
-  if (combat_list_head) {
-    combat_list_head->next_fighting = combat_list;
-    combat_list = combat_list_head;
+  // First combatant added to list, so we set initiative until next global re-roll
+  if (!combat_list->next_fighting) {
+    initiative_until_global_reroll = GET_INIT_ROLL(ch);
+    // Edge case: first combatant rolled too low to act (low roll + wound penalties)
+    // This allows their opponent to act though they haven't been added to the list yet
+    if (initiative_until_global_reroll <= 0) {
+      initiative_until_global_reroll = 1;
+    }
   }
 
   if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
@@ -5712,10 +5706,13 @@ void perform_violence(void)
   // Increment our violence loop counter.
   violence_loop_counter++;
 
-  if (GET_INIT_ROLL(combat_list) <= 0) {
+  if (initiative_until_global_reroll <= 0) {
     roll_initiative();
     order_list(TRUE);
+    initiative_until_global_reroll = GET_INIT_ROLL(combat_list);
   }
+
+  initiative_until_global_reroll -= 10;
 
   // This while-loop replaces the combat list for-loop so we can do better edge case checking.
   ch = NULL;
