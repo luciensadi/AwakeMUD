@@ -363,7 +363,6 @@ void check_killer(struct char_data * ch, struct char_data * vict)
 void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 {
   struct follow_type *k;
-  struct char_data * combat_list_head = NULL;
 
   if (!ch || !vict || ch == vict)
     return;
@@ -411,7 +410,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 
   roll_individual_initiative(ch);
   order_list(TRUE);
-  
+
   // First combatant added to list, so we set initiative until next global re-roll
   if (!combat_list->next_fighting) {
     initiative_until_global_reroll = GET_INIT_ROLL(ch);
@@ -462,7 +461,6 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 void set_fighting(struct char_data * ch, struct veh_data * vict)
 {
   struct follow_type *k;
-  struct char_data * combat_list_head = NULL;
 
   if (!ch || !vict)
     return;
