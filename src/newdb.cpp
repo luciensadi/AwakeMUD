@@ -168,6 +168,7 @@ static void init_char(struct char_data * ch)
 
 static void init_char_strings(char_data *ch)
 {
+  char temp[256];
   DELETE_ARRAY_IF_EXTANT(ch->player.physical_text.keywords);
 
   size_t len = strlen(GET_CHAR_NAME(ch)) + 1; // + strlen(race) + 2;
@@ -176,100 +177,35 @@ static void init_char_strings(char_data *ch)
   strcpy(ch->player.physical_text.keywords, GET_CHAR_NAME(ch));
   *(ch->player.physical_text.keywords) = LOWER(*ch->player.physical_text.keywords);
 
-  if (ch->player.physical_text.name)
-    delete [] ch->player.physical_text.name;
+  delete [] ch->player.physical_text.name;
+  snprintf(temp, sizeof(temp), "an average %s %s", genders_decap[(int)GET_SEX(ch)], pc_race_types_decap[(int)GET_RACE(ch)]);
+  ch->player.physical_text.name = str_dup(temp);
 
-  if (ch->player.physical_text.room_desc)
-    delete [] ch->player.physical_text.room_desc;
+  delete [] ch->player.physical_text.room_desc;
+  snprintf(temp, sizeof(temp), "A %s %s voice", genders_decap[(int)GET_SEX(ch)], pc_race_types_decap[(int)GET_RACE(ch)]);
+  ch->player.physical_text.room_desc = str_dup(temp);
 
-  if (ch->player.background)
-    delete [] ch->player.background;
+  delete [] ch->player.physical_text.look_desc;
+  ch->player.physical_text.look_desc = str_dup("A fairly nondescript person.\n");
 
-  if (ch->player.physical_text.look_desc)
-    delete [] ch->player.physical_text.look_desc;
+  delete [] ch->player.background;
+  ch->player.background = str_dup("(no background provided yet)\n");
 
-  {
-    char temp[256];
+  delete [] ch->char_specials.arrive;
+  ch->char_specials.arrive = str_dup("arrives from");
 
-    snprintf(temp, sizeof(temp), "A %s %s", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
-    ch->player.physical_text.name = str_dup(temp);
-
-    snprintf(temp, sizeof(temp), "A %s %s voice", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
-    ch->player.physical_text.room_desc = str_dup(temp);
-
-    ch->player.physical_text.look_desc = str_dup("A fairly nondescript thing.\n");
-    ch->player.background = str_dup("A boring character.\n");
-  }
+  delete [] ch->char_specials.leave;
+  ch->char_specials.leave = str_dup("leaves");
 
   set_title(ch, "^y(Newbie)^n");
   set_pretitle(ch, NULL);
-  set_whotitle(ch, " New ");
 
-  switch(GET_RACE(ch)) {
-  case RACE_HUMAN:
-    set_whotitle(ch, "Human");
-    break;
-  case RACE_DWARF:
-    set_whotitle(ch, "Dwarf");
-    break;
-  case RACE_ELF:
-    set_whotitle(ch, "Elf");
-    break;
-  case RACE_ORK:
-    set_whotitle(ch, "Ork");
-    break;
-  case RACE_TROLL:
-    set_whotitle(ch, "Troll");
-    break;
-  case RACE_CYCLOPS:
-    set_whotitle(ch, "Cyclops");
-    break;
-  case RACE_KOBOROKURU:
-    set_whotitle(ch, "Koborokuru");
-    break;
-  case RACE_FOMORI:
-    set_whotitle(ch, "Fomori");
-    break;
-  case RACE_MENEHUNE:
-    set_whotitle(ch, "Menehune");
-    break;
-  case RACE_HOBGOBLIN:
-    set_whotitle(ch, "Hobgoblin");
-    break;
-  case RACE_GIANT:
-    set_whotitle(ch, "Giant");
-    break;
-  case RACE_GNOME:
-    set_whotitle(ch, "Gnome");
-    break;
-  case RACE_ONI:
-    set_whotitle(ch, "Oni");
-    break;
-  case RACE_WAKYAMBI:
-    set_whotitle(ch, "Wakyambi");
-    break;
-  case RACE_OGRE:
-    set_whotitle(ch, "Ogre");
-    break;
-  case RACE_MINOTAUR:
-    set_whotitle(ch, " Minotaur");
-    break;
-  case RACE_SATYR:
-    set_whotitle(ch, "Satyr");
-    break;
-  case RACE_NIGHTONE:
-    set_whotitle(ch, "Night-One");
-    break;
-  case RACE_DRYAD:
-    set_whotitle(ch, "Dryad");
-    break;
-  case RACE_DRAGON:
-    set_whotitle(ch, "Dragon");
-    break;
-  default:
-    mudlog("No race found at set_whotitle in class.cc", NULL, LOG_SYSLOG, TRUE);
-    set_whotitle(ch, "CHKLG"); /* Will set incase the players */
-  }        /* race is undeterminable      */
+  if (GET_RACE(ch) >= MINIMUM_VALID_PLAYER_RACE && GET_RACE(ch) <= MAXIMUM_VALID_PLAYER_RACE) {
+    set_whotitle(ch, pc_race_types[(int)GET_RACE(ch)]);
+  } else {
+    mudlog("No valid race found at set_whotitle in class.cc", NULL, LOG_SYSLOG, TRUE);
+    set_whotitle(ch, "New");
+  }
 
   DELETE_ARRAY_IF_EXTANT(GET_PROMPT(ch));
   GET_PROMPT(ch) = str_dup("< @pP @mM > ");
