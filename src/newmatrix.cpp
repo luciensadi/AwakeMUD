@@ -2720,26 +2720,26 @@ void reset_host_paydata(rnum_t rnum) {
   int rand_result;
   switch (host.color) {
     case HOST_COLOR_BLUE:
-      rand_result = number(1, 6) - 1;
+      rand_result = number(1, 6) - 1; // Between 0-5, avg 2.5
       host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_BLUE);
       host.ic_bound_paydata = 1;
       break;
     case HOST_COLOR_GREEN:
-      rand_result = number(1, 6) + number(1, 6) - 2;
+      rand_result = number(1, 6) + number(1, 6) - 2; // Between 0-10, avg 5
       host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_GREEN);
-      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(2, host.undiscovered_paydata / 6));
+      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(2, host.undiscovered_paydata * 1/5));
       host.undiscovered_paydata -= host.ic_bound_paydata;
       break;
     case HOST_COLOR_ORANGE:
-      rand_result = number(1, 6) + number(1, 6);
+      rand_result = number(1, 6) + number(1, 6); // Between 2-12, avg 7
       host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_ORANGE);
-      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(3, host.undiscovered_paydata / 4));
+      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(4, host.undiscovered_paydata * 1/3));
       host.undiscovered_paydata -= host.ic_bound_paydata;
       break;
     case HOST_COLOR_RED:
-      rand_result = number(1, 6) + number(1, 6) + 2;
+      rand_result = number(1, 6) + number(1, 6) + 2; // Between 4-14, avg 9
       host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_RED_BLACK);
-      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(4, host.undiscovered_paydata / 2));
+      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(6, host.undiscovered_paydata * 2/3));
       host.undiscovered_paydata -= host.ic_bound_paydata;
       break;
     case HOST_COLOR_BLACK:
