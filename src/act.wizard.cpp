@@ -4065,7 +4065,7 @@ ACMD(do_show)
     }
 
     else if (*value && is_number(value)) {
-      for (j = atoi(value), i = 0; zone_table[i].number != j && i <= top_of_zone_table; i++)
+      for (j = atoi(value), i = 0; i <= top_of_zone_table && zone_table[i].number != j; i++)
         ;
       if (i <= top_of_zone_table) {
         if (access_level(ch, LVL_ADMIN))
