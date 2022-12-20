@@ -750,6 +750,42 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
   }
 
   send_to_char(buf, ch);
+
+  // Diagnose mortally-wounded PCs.
+  if (!IS_NPC(i) && phys <= 0) {
+    bool has_metabolic_arrester = FALSE;
+
+    if (AFF_FLAGS(i).IsSet(AFF_STABILIZE)) {
+      send_to_char(ch, "%s'%s stabilized for the moment.\r\n", HSSH(i), !HSSH_SHOULD_PLURAL(i) ? "re" : "s");
+      return;
+    }
+
+    // Find metabolic arrestor, if they have one.
+    for (struct obj_data *obj = i->bioware; obj; obj = obj->next_content) {
+      if (GET_BIOWARE_TYPE(obj) == BIO_METABOLICARRESTER) {
+        has_metabolic_arrester = TRUE;
+        break;
+      }
+    }
+
+    int min_body = -GET_BOD(i) + (GET_BIOOVER(i) > 0 ? GET_BIOOVER(i) : 0);
+    int boxes_left = (int)(GET_PHYSICAL(i) / 100) - min_body - 1;
+
+    // Print info. Time is a best guess on my part, it seems to tick down every MUD hour?
+    if (boxes_left <= 0) {
+      send_to_char(ch, "%s %s near death! You estimate %s %s only %d minutes left to live.\r\n",
+                   CAP(HSSH(i)),
+                   !HSSH_SHOULD_PLURAL(i) ? "are" : "is",
+                   HSSH(i),
+                   !HSSH_SHOULD_PLURAL(i) ? "have" : "has",
+                   2 * GET_PC_SALVATION_TICKS(i) * (has_metabolic_arrester ? 5 : 1));
+    } else {
+      send_to_char(ch, "You estimate %s %s %d minutes left to live.\r\n",
+                   HSSH(i),
+                   !HSSH_SHOULD_PLURAL(i) ? "have" : "has",
+                   2 * (boxes_left + GET_PC_SALVATION_TICKS(i)) * (has_metabolic_arrester ? 5 : 1));
+    }
+  }
 }
 
 #define RENDER_PRIVILEGED TRUE
@@ -7119,7 +7155,7 @@ const char *get_command_hints_for_obj(struct obj_data *obj) {
       strlcat(hint_string, "\r\nYou can use the ^WPHOTO^n command while holding it.\r\n", sizeof(hint_string));
       break;
     case ITEM_PART:
-      strlcat(hint_string, "\r\nIt's part of a deck. See ^WHELP DECKBUILDING^n for details.\r\n", sizeof(hint_string)); //asdf write this file
+      strlcat(hint_string, "\r\nIt's part of a deck. See ^WHELP CYBERDECK^n for details.\r\n", sizeof(hint_string)); //asdf write this file
       break;
     case ITEM_WEAPON:
       if (WEAPON_IS_GUN(obj)) {

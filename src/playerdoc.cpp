@@ -288,7 +288,6 @@ ACMD(do_docwagon) {
   const char *name = one_argument(argument, mode_switch);
 
   if (!*arg || !*mode_switch || !*name) {
-    send_to_char(ch, "'%s' '%s' '%s'\r\n", argument, mode_switch, name);
     send_to_char("Syntax: DOCWAGON (ACCEPT|WITHDRAW) <name>\r\n", ch);
     return;
   }

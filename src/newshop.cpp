@@ -1671,7 +1671,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (IS_OBJ_STAT(obj, ITEM_EXTRA_NERPS)) {
         //Format string for reference: "^Y(N)^n %-44s^n %6d\r\n"
         //We apply padding for color codes here.
-        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 67 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+        snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 71 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
         snprintf(formatstr, sizeof(formatstr), "%s%s%s", "^Y(N)^n %-", paddingnumberstr, "s^n %7d\r\n");
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
       } else {

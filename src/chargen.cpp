@@ -176,9 +176,10 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
           case ARCHETYPE_DECKER:
             strlcpy(helpbuf, " deckers", sizeof(helpbuf));
             break;
+          default:
+            strlcpy(helpbuf, line, sizeof(helpbuf));
+            break;
         }
-      } else {
-        strlcpy(helpbuf, line, sizeof(helpbuf));
       }
 
       do_help(d->character, helpbuf, 0, 0);

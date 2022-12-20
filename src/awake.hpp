@@ -215,6 +215,9 @@
 #define RACE_PC_CONJURED_ELEMENTAL 24
 #define NUM_RACES                  24  /* This must be the NUMBER of races */
 
+#define MINIMUM_VALID_PLAYER_RACE  2
+#define MAXIMUM_VALID_PLAYER_RACE  19
+
 /* level definitions */
 
 enum {

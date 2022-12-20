@@ -321,6 +321,14 @@ const char *genders[] =
     MAX_FLAG_MARKER
   };
 
+const char *genders_decap[] =
+  {
+    "neutral",
+    "male",
+    "female",
+    MAX_FLAG_MARKER
+  };
+
 const char *thrdgenders[] =
   {
     "it",
@@ -2908,6 +2916,36 @@ const char *pc_race_types[] =
     "Elemental",
     "Spirit",
     "Conjured Elemental",
+    "\n"
+  };
+
+const char *pc_race_types_decap[] =
+  {
+    "undef",
+    "undefined",
+    "human",
+    "dwarf",
+    "elf",
+    "ork",
+    "troll",
+    "cyclops",
+    "koborokuru",
+    "fomori",
+    "menehune",
+    "hobgoblin",
+    "giant",
+    "gnome",
+    "oni",
+    "wakyambi",
+    "ogre",
+    "minotaur",
+    "satyr",
+    "night-One",
+    "dryad",
+    "dragon",
+    "elemental",
+    "spirit",
+    "conjured elemental",
     "\n"
   };
 
