@@ -1752,24 +1752,32 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       }
 
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target_modifiers + (int)(GET_INDEX(ch) / 200)));
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (GET_PHYSICAL(vict) <= 0)
-        drain = DEADLY;
-      else if (GET_PHYSICAL(vict) <= 300)
-        drain = SERIOUS;
-      else if (GET_PHYSICAL(vict) <= 700)
-        drain = MODERATE;
-      if (success < 1 || GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
-        send_to_char(FAILED_CAST, ch);
+
+      if (GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
+        act("The spell fizzles-- $N is already at full health.", FALSE, ch, 0, vict, TO_CHAR);
       } else {
-        AFF_FLAGS(vict).SetBit(AFF_HEALED);
-        send_to_char("A warm feeling floods your body.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, drain);
-        update_pos(vict);
+        success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target_modifiers + (int)(GET_INDEX(ch) / 200)));
+        snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
+        if (GET_PHYSICAL(vict) <= 0)
+          drain = DEADLY;
+        else if (GET_PHYSICAL(vict) <= 300)
+          drain = SERIOUS;
+        else if (GET_PHYSICAL(vict) <= 700)
+          drain = MODERATE;
+
+        if (success < 1) {
+          send_to_char(FAILED_CAST, ch);
+        } else {
+          AFF_FLAGS(vict).SetBit(AFF_HEALED);
+          send_to_char("A warm feeling floods your body.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, drain);
+          update_pos(vict);
+        }
       }
+
       spell_drain(ch, spell, force, drain, direct_sustain);
       break;
     case SPELL_INCREF1:

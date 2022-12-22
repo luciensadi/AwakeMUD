@@ -1018,7 +1018,7 @@ SPECIAL(johnson)
     // They really are talking to us.
   }
 
-  if (CMD_IS("say") || CMD_IS("") || is_sayto) {
+  if (CMD_IS("say") || CMD_IS("'") || is_sayto) {
     if (str_str(argument, "quit"))
       comm = CMD_JOB_QUIT;
     else if (str_str(argument, "collect") || str_str(argument, "complete") || str_str(argument, "done") || str_str(argument, "finish") || str_str(argument, "pay"))
