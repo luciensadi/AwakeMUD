@@ -1,3 +1,13 @@
+#include <fstream>
+#include <iostream>
+
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
+namespace bf = boost::filesystem;
+
+#include "nlohmann/json.hpp"
+using nlohmann::json;
+
 #include "structs.hpp"
 #include "utils.hpp"
 #include "lifestyles.hpp"
@@ -11,28 +21,71 @@
 
 - Lifestyles exist: Streets, Squatter, Low, Middle, High, Luxury. See SR3 p62.
 - Lifestyle strings exist: These describe the 'air' of a character living that lifestyle.
+- Lifestyle rent bands exist: These state the minimum and maximum range for a rent in that lifestyle.
 - Garage strings exist: Similar to lifestyle strings, but describe a character living in a garage regardless of lifestyle.
 
-- Apartment complexes have associated lifestyles, which may be overridden by individual apartments.
+- √ Lifestyle information is saved in a JSON file and loaded into memory on boot. This allows for editing without recompiling the codebase, and also makes them mutable.
+
+- Apartment complexes have associated lifestyles, which may be overridden by individual apartments (only higher, never lower- no Squatter rooms in a Luxury building)
+- Individual apartments are Garages if the number of garage rooms in the apartment exceeds the number of non-garage rooms.
+  - 1 garage, 0 non: garage.
+  - 1 garage, 1 non: not garage.
 - Apartment complexes and apartments MAY have additional lifestyle strings available to them. These are separated between Garage and Non-Garage.
+- Apartment rents are constrained to their lifestyle bands.
 
 - PCs have a maximum lifestyle, which is derived from the highest-class apartment they are currently renting.
 - PCs always display a lifestyle string when looked at. This string is chosen from the set composed of:
-  - All default lifestyle strings from all lifestyles at or below their current maximum, plus
-  - All default garage strings, plus
-  - All lifestyle strings for all complexes and apartments they currently rent at, plus
-  - All garage strings for all complexes and apartments they currently rent at.
-  - CAVEAT: If the most expensive of the PC's apartments is more than half garage rooms, the above set is discarded and replaced with only garage strings.
+  - All default lifestyle strings from all lifestyles at or below their current maximum
+  - All custom lifestyle strings for all complexes and apartments they currently rent at
+  - IF THEY OWN AT LEAST ONE GARAGE: All default garage strings
+  - IF THEY OWN AT LEAST ONE GARAGE: All complex/apartment garage strings for all garages they currently rent at
 
-- Lifestyle strings can be swapped out amidst available ones at any time with CUSTOMIZE LIFESTYLE.
+- Lifestyle strings can be swapped out with available ones at any time with CUSTOMIZE LIFESTYLE.
   - The selected lifestyle string is saved to the DB in full.
-
-- When a character loads, compare their lifestyle string to their available ones: If it's not in the list, give them a random default from their highest lifestyle and notify them.
+  - To avoid inconsistencies with editing / changes to the lifestyle string list, when a character loads, compare their lifestyle string to their available ones: If it's not in the list, give them a random default from their highest lifestyle and notify them.
 
 STRETCH:
-- Lifestyle strings can be edited in-game, tridlog style.
+- Lifestyle strings can be edited in-game by staff, tridlog style.
+- PCs can submit lifestyle strings for approval / inclusion in the lists.
 
 */
+
+extern void _json_parse_from_file(bf::path path, json &target);
+
+const bf::path global_lifestyles_file = bf::system_complete("lib") / "etc" / "lifestyles.json";
+
+
+///// Saving / Loading /////
+
+// Read lifestyles from JSON and store them globally.
+void boot_lifestyles() {
+  json lifestyle_info;
+  _json_parse_from_file(global_lifestyles_file, lifestyle_info);
+
+  // Iterate through our known lifestyles, loading the strings for each.
+  for (int lifestyle_idx = LIFESTYLE_STREETS; lifestyle_idx < NUM_LIFESTYLES; lifestyle_idx++) {
+    lifestyles[lifestyle_idx].monthly_cost_min = lifestyle_info["monthly_cost_min"];
+    lifestyles[lifestyle_idx].monthly_cost_max = lifestyle_info["monthly_cost_max"];
+    lifestyles[lifestyle_idx].default_strings
+    lifestyles[lifestyle_idx].garage_strings
+  }
+}
+
+// Save lifestyles in memory to file.
+void save_lifestyles_file() {
+  json lifestyle_info;
+
+  // TODO: Write lifestyle_info JSON data structure
+
+  bf::ofstream o(global_lifestyles_file);
+  o << std::setw(4) << lifestyle_info << std::endl;
+  o.close();
+}
+
+
+///////////////////////////////// old file / logic below ////////////////////////////
+
+#ifdef use_old_code_from_lifestyles_file
 
 struct lifestyle_data lifestyles[NUM_LIFESTYLES] =
 { // Name      Cost/mo
@@ -195,3 +248,4 @@ ACMD(do_lifestyle) {
     return;
   }
 }
+#endif
