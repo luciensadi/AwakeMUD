@@ -2071,7 +2071,7 @@ ACMD(do_treat)
   // Since mages and adepts have additional healing tools (heal spell, empathic), max-cap chars (aka mundanes) get more attempts.
   // Max-skill mages and adepts: 3 total treat attempts. Max-skill mundane: 5 total treat attempts.
   int biotech_cap = MAX(0, GET_SKILL(ch, SKILL_BIOTECH) / 4) + (GET_SKILL(ch, SKILL_BIOTECH) >= LEARNED_LEVEL ? 1 : 0);
-  if (LAST_HEAL(vict) > biotech_cap && GET_PHYSICAL(vict) > 0) {
+  if (LAST_HEAL(vict) > biotech_cap && GET_PHYSICAL(vict) >= 100) {
     snprintf(buf, sizeof(buf), "LAST_HEAL($n for $N): %d > 1/3rd biotech (%d), so can't treat.", LAST_HEAL(vict), biotech_cap);
     act(buf, FALSE, ch, 0, vict, TO_ROLLS);
     if (ch == vict) {
@@ -2172,14 +2172,6 @@ ACMD(do_treat)
   act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   if (successes > 0) {
-    act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
-    if (ch == vict) {
-      send_to_char(ch, "The pain seems significantly better.\r\n");
-    } else {
-      act("The pain seems significantly less after $n's treatment.",
-          FALSE, ch, 0, vict, TO_VICT);
-    }
-
     // Rectify negative mental.
     if (GET_MENTAL(vict) < 0) {
       GET_MENTAL(vict) = MAX(GET_MENTAL(vict), 0);
@@ -2198,7 +2190,17 @@ ACMD(do_treat)
       GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), GET_PHYSICAL(vict) + extra_heal * 100);
     }
 
+    // Update position to bring them up from downed.
     update_pos(vict);
+
+    // Send a message.
+    act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
+    if (ch == vict) {
+      send_to_char(ch, "The pain seems significantly better.\r\n");
+    } else {
+      act("The pain seems significantly less after $n's treatment.",
+          FALSE, ch, 0, vict, TO_VICT);
+    }
   } else {
     if (ch == vict) {
       send_to_char(ch, "Your treatment does nothing for your wounds.\r\n");

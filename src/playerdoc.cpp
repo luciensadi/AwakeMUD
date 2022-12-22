@@ -136,9 +136,12 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
         break;
     }
 
+    if (!IS_SENATOR(plr)) {
+      send_to_char(plr, "^c(Please announce on ^WOOC^c if you're on your way! Alternatively, use ^WDOCWAGON ACCEPT %s^c for anonymous response.)^n\r\n", GET_CHAR_NAME(ch));
+    }
+
     // If they're not staff, AFK, idle, or participating in a PRUN, add them to the potential rescuer count that will be sent to the downed player.
     if (IS_VALID_POTENTIAL_RESCUER(plr)) {
-      send_to_char(plr, "^c(Please announce on ^WOOC^c if you're on your way! Alternatively, use ^WDOCWAGON ACCEPT %s^c for anonymous response.)^n\r\n", GET_CHAR_NAME(ch));
       potential_rescuer_count++;
     }
 
