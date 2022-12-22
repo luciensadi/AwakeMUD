@@ -667,6 +667,9 @@ ACMD(do_patch)
             set_fighting(ch, vict);
           }
         }
+      } else {
+        act("You slap $p on $N.", FALSE, ch, patch, vict, TO_CHAR);
+        act("$n slaps $p on $N.", FALSE, ch, patch, vict, TO_NOTVICT);
       }
       obj_from_char(patch);
       GET_EQ(vict, WEAR_PATCH) = patch;
