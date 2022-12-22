@@ -3933,7 +3933,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   }
 
   // Our hands are full.
-  if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) {
+  if (GET_EQ(ch, WEAR_WIELD) && (GET_EQ(ch, WEAR_HOLD) || GET_EQ(ch, WEAR_SHIELD))) {
     act("Draw check: Skipping $p, hands are full.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
   }
@@ -3951,7 +3951,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   }
 
   // We're holding something and drawing a 2H item.
-  if ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(contents, ITEM_EXTRA_TWOHANDS)) {
+  if ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD) || GET_EQ(ch, WEAR_SHIELD)) && IS_OBJ_STAT(contents, ITEM_EXTRA_TWOHANDS)) {
     act("Draw check: Skipping $p, have something in hand and drawing 2H item.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
   }
