@@ -1517,34 +1517,43 @@ ACMD(do_analyze)
           }
           found[current] = 1;
         }
+
+        // Color
         if (found[0])
           snprintf(buf, sizeof(buf), "%s-", host_color[matrix[PERSONA->in_host].color]);
         else
           snprintf(buf, sizeof(buf), "?-");
+        // Security
         if (found[1])
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d ", matrix[PERSONA->in_host].security);
         else
           strcat(buf, "? ");
+        // Access
         if (found[2])
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
+        // Control
         if (found[3])
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
+        // Index
         if (found[4])
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
+        // Files
         if (found[5])
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[FILES][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
+        // Slave
         if (found[6])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_RATING]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld", matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_RATING]);
         else
           strcat(buf, "0");
+
         strcat(buf, "\r\n");
       } else
         snprintf(buf, sizeof(buf), "%s-%d %ld/%ld/%ld/%ld/%ld\r\n", host_color[matrix[PERSONA->in_host].color],
