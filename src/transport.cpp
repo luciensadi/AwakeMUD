@@ -1672,7 +1672,7 @@ int process_elevator(struct room_data *room,
         snprintf(buf, sizeof(buf), "$n ragdolls in from %s, propelled by the bulk of the moving elevator.", elevator[num].dir == DOWN ? "above" : "below");
         act(buf, FALSE, vict, 0, 0, TO_ROOM);
 
-        power = MIN(4, 15 - (GET_IMPACT(vict) / 2)); // Base power 15 (getting pinned and dragged by an elevator HURTS). Impact armor helps.
+        power = MAX(4, 15 - (GET_IMPACT(vict) / 2)); // Base power 15 (getting pinned and dragged by an elevator HURTS). Impact armor helps.
         success = success_test(GET_BOD(vict), MAX(2, power) + modify_target(vict));
         dam = convert_damage(stage(-success, power));
 
@@ -1731,7 +1731,7 @@ int process_elevator(struct room_data *room,
         act("^R$n is crushed by the bulk of the elevator!^n", FALSE, vict, 0, 0, TO_ROOM);
         send_to_char("^RThe elevator grinds you against the hoistway wall with crushing force!^n\r\n", vict);
 
-        power = MIN(4, 15 - (GET_IMPACT(vict) / 2)); // Base power 15 (getting pinned and dragged by an elevator HURTS). Impact armor helps.
+        power = MAX(4, 15 - (GET_IMPACT(vict) / 2)); // Base power 15 (getting pinned and dragged by an elevator HURTS). Impact armor helps.
         success = success_test(GET_BOD(vict), MAX(2, power) + modify_target(vict));
         dam = convert_damage(stage(-success, power));
 
@@ -2269,7 +2269,7 @@ void process_hellhound_bus(void)
 
   switch (where) {
   case 0:
-    send_to_room("The bus pulls into the garage, and slowly moves to the platform.\r\n", &world[stop]);
+    send_to_room("The bus pulls into the Seattle garage, and slowly moves to the platform.\r\n", &world[stop]);
     break;
   case 1:
     open_busdoor(bus, hellhound[ind].to, stop, hellhound[ind].from);
@@ -2281,7 +2281,7 @@ void process_hellhound_bus(void)
     send_to_room("The driver shouts from the front, \"Next stop: Portland.\"\r\n", &world[bus]);
     break;
   case 28:
-    send_to_room("The bus pulls into the garage, and slowly moves to the platform.\r\n", &world[stop]);
+    send_to_room("The bus pulls into the Portland garage, and slowly moves to the platform.\r\n", &world[stop]);
     break;
   case 30:
     open_busdoor(bus, hellhound[ind].to, stop, hellhound[ind].from);
