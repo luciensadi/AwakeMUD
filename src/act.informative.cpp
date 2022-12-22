@@ -1840,6 +1840,7 @@ void look_in_veh(struct char_data * ch)
                    ROOM_FLAGGED(veh->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
                    ROOM_FLAGGED(veh->in_room, ROOM_STERILE) ? " (Sterile)" : "",
                    ROOM_FLAGGED(veh->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
+                   IS_WATER(veh->in_room) ? " ^B(Flooded)^n" : "",
                    veh->in_room->matrix && real_host(veh->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
                    ROOM_FLAGGED(veh->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
 
@@ -7266,6 +7267,7 @@ void display_room_name(struct char_data *ch) {
                  ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_STERILE) ? " (Sterile)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
+                 IS_WATER(ch->in_room) ? " ^B(Flooded)^n" : "",
                  ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
                  ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
   }
