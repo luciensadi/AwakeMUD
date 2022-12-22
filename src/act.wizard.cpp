@@ -7590,36 +7590,72 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no intro string^n.\r\n");
       printed = TRUE;
       issues++;
+    } else {
+      if (!ispunct(get_final_character_from_string(quest->intro))) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - intro string does not end in punctuation^n.\r\n");
+        printed = TRUE;
+        issues++;
+      }
     }
 
     if (!quest->decline || !*quest->decline) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no decline string^n.\r\n");
       printed = TRUE;
       issues++;
+    } else {
+      if (!ispunct(get_final_character_from_string(quest->decline))) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - decline string does not end in punctuation^n.\r\n");
+        printed = TRUE;
+        issues++;
+      }
     }
 
     if (!quest->finish || !*quest->finish) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no finish string^n.\r\n");
       printed = TRUE;
       issues++;
+    } else {
+      if (!ispunct(get_final_character_from_string(quest->finish))) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - finish string does not end in punctuation^n.\r\n");
+        printed = TRUE;
+        issues++;
+      }
     }
 
     if (!quest->info || !*quest->info) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no info string^n.\r\n");
       printed = TRUE;
       issues++;
+    } else {
+      if (!ispunct(get_final_character_from_string(quest->info))) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - info string does not end in punctuation^n.\r\n");
+        printed = TRUE;
+        issues++;
+      }
     }
 
     if (!quest->quit || !*quest->quit) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no quit string^n.\r\n");
       printed = TRUE;
       issues++;
+    } else {
+      if (!ispunct(get_final_character_from_string(quest->quit))) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - quit string does not end in punctuation^n.\r\n");
+        printed = TRUE;
+        issues++;
+      }
     }
 
     if (!quest->done || !*quest->done) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no done string^n.\r\n");
       printed = TRUE;
       issues++;
+    } else {
+      if (!ispunct(get_final_character_from_string(quest->done))) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - done string does not end in punctuation^n.\r\n");
+        printed = TRUE;
+        issues++;
+      }
     }
 
 #ifdef USE_QUEST_LOCATION_CODE
@@ -7627,6 +7663,12 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no location string^n.\r\n");
       printed = TRUE;
       issues++;
+    } else {
+      if (ispunct(get_final_character_from_string(quest->location))) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - location string ends in punctuation^n.\r\n");
+        printed = TRUE;
+        issues++;
+      }
     }
 #endif
 
