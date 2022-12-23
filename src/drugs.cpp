@@ -172,13 +172,13 @@ bool process_drug_point_update_tick(struct char_data *ch) {
       int bod_for_success_test = GET_REAL_BOD(ch) - (GET_BIOOVER(ch) / 2);
       switch (drug_id) {
         case DRUG_JAZZ:
-          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * dice(1,6);
           if (damage(ch, ch, convert_damage(stage(-success_test(bod_for_success_test, 8 - toxin_extractor_rating, ch, "jazz damage resist"), LIGHT)), TYPE_BIOWARE, 0)) {
             return TRUE;
           }
           break;
         case DRUG_KAMIKAZE:
-          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * dice(1,6);
           {
             // Canonically, this should not hurt this much-- but we don't have a concept of cyberware/bioware system damage here,
             // so instead of applying permanent subsystem damage, we just deal CHONKY damage that increases based on the number of doses you took.
@@ -315,11 +315,11 @@ bool process_drug_point_update_tick(struct char_data *ch) {
           break;
         case DRUG_JAZZ:
           snprintf(buf, sizeof(buf), "The world slows down around you.\r\n");
-          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * dice(1,6);
           break;
         case DRUG_KAMIKAZE:
           snprintf(buf, sizeof(buf), "Your body feels alive with energy and the desire to fight.\r\n");
-          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * dice(1,6);
           break;
         case DRUG_PSYCHE:
           snprintf(buf, sizeof(buf), "Your feel your mind racing.\r\n");
@@ -341,7 +341,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
           break;
         case DRUG_NITRO:
           snprintf(buf, sizeof(buf), "You lose sense of yourself as your entire body comes alive with energy.\r\n");
-          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * dice(1,6);
           break;
         case DRUG_NOVACOKE:
           snprintf(buf, sizeof(buf), "You feel euphoric and alert.\r\n");
@@ -349,7 +349,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
           break;
         case DRUG_ZEN:
           snprintf(buf, sizeof(buf), "You start to lose your sense of reality as your sight fills with hallucinations.\r\n");
-          GET_DRUG_DURATION(ch, drug_id) = 100 * srdice();
+          GET_DRUG_DURATION(ch, drug_id) = 100 * dice(1,6);
           break;
         default:
           snprintf(buf, sizeof(buf), "SYSERR: Unknown drug type %d when printing drug-start message!", drug_id);
