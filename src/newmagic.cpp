@@ -5519,7 +5519,7 @@ ACMD(do_destroy)
     send_to_char(ch, "You gather up the wasted ritual components and trash them.\r\n");
     act("$n gathers up the ritual components and trashes them.", TRUE, ch, 0, 0, TO_ROOM);
   } else if (GET_OBJ_TYPE(obj) == ITEM_DESTROYABLE) {
-    if (obj->obj_flags.quest_id && obj->obj_flags.quest_id != GET_IDNUM(ch)) {
+    if (ch_is_blocked_by_quest_protections(ch, obj)) {
       send_to_char(ch, "%s isn't yours-- better leave it be.\r\n", GET_OBJ_NAME(obj));
       return;
     }

@@ -435,78 +435,134 @@ bool hunting_escortee(struct char_data *ch, struct char_data *vict)
   return FALSE;
 }
 
-bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj)
-{
-  if (!ch || IS_NPC(ch) || !IS_NPC(mob) || !GET_QUEST(ch))
+bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj) {
+  if (!GET_QUEST(ch))
     return FALSE;
-  int vnum = GET_OBJ_VNUM(obj);
-  int i;
 
-  for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
+  int vnum = GET_OBJ_VNUM(obj);
+
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
     if (quest_table[GET_QUEST(ch)].obj[i].vnum == vnum) {
-      switch (quest_table[GET_QUEST(ch)].obj[i].objective)
-      {
-      case QOO_JOHNSON:
-        if (GET_MOB_SPEC(mob) && (GET_MOB_SPEC(mob) == johnson || GET_MOB_SPEC2(mob) == johnson) && memory(mob, ch)) {
-          ch->player_specials->obj_complete[i] = 1;
-          return TRUE;
-        }
-        break;
-      case QOO_TAR_MOB:
-        if (quest_table[GET_QUEST(ch)].obj[i].o_data == GET_MOB_VNUM(mob)) {
-          ch->player_specials->obj_complete[i] = 1;
-          return TRUE;
-        }
-        break;
-      case QOO_RETURN_PAY:
-        if (GET_MOB_SPEC(mob) && (GET_MOB_SPEC(mob) == johnson || GET_MOB_SPEC2(mob) == johnson) && memory(mob, ch)) {
-          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].o_data) {
+      switch (quest_table[GET_QUEST(ch)].obj[i].objective) {
+        case QOO_JOHNSON:
+          if (GET_MOB_SPEC(mob) && (GET_MOB_SPEC(mob) == johnson || GET_MOB_SPEC2(mob) == johnson) && memory(mob, ch)) {
             ch->player_specials->obj_complete[i] = 1;
             return TRUE;
           }
-        }
+          break;
+        case QOO_TAR_MOB:
+          if (quest_table[GET_QUEST(ch)].obj[i].o_data == GET_MOB_VNUM(mob)) {
+            ch->player_specials->obj_complete[i] = 1;
+            return TRUE;
+          }
+          break;
+        case QOO_RETURN_PAY:
+          if (GET_MOB_SPEC(mob) && (GET_MOB_SPEC(mob) == johnson || GET_MOB_SPEC2(mob) == johnson) && memory(mob, ch)) {
+            if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].o_data) {
+              ch->player_specials->obj_complete[i] = 1;
+              return TRUE;
+            }
+          }
+          break;
       }
     }
+  }
+
   return FALSE;
 }
 
-void check_quest_delivery(struct char_data *ch, struct obj_data *obj)
+bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj)
 {
-  if (!ch || IS_NPC(ch) || !GET_QUEST(ch))
-    return;
+  if (!ch || IS_NPC(ch) || !IS_NPC(mob))
+    return FALSE;
 
-  if (!ch->in_room) {
-    // You can't complete a quest objective from a vehicle.
-    return;
+  if (_raw_check_quest_delivery(ch, mob, obj))
+    return TRUE;
+
+  if (AFF_FLAGGED(ch, AFF_GROUP)) {
+    // Followers
+    for (struct follow_type *f = ch->followers; f; f = f->next) {
+      if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
+        continue;
+
+      if (_raw_check_quest_delivery(f->follower, mob, obj)) {
+        return TRUE;
+      }
+    }
+
+    // Master
+    if (ch->master && !IS_NPC(ch->master) && _raw_check_quest_delivery(ch->master, mob, obj)) {
+      return TRUE;
+    }
   }
 
-  int i = 0;
-  for (; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
+  return FALSE;
+}
+
+bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj) {
+  if (!GET_QUEST(ch))
+    return FALSE;
+
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
     if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_LOCATION &&
         GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
         ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data)
     {
       ch->player_specials->obj_complete[i] = 1;
-      return;
+      return TRUE;
+    }
+
+    if (ch->persona && ch->persona->in_host && quest_table[GET_QUEST(ch)].obj[i].objective == QOO_UPLOAD &&
+        GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
+        matrix[ch->persona->in_host].vnum == quest_table[GET_QUEST(ch)].obj[i].o_data)
+    {
+      ch->player_specials->obj_complete[i] = 1;
+      return TRUE;
     }
   }
 
-  if (ch->persona && ch->persona->in_host && quest_table[GET_QUEST(ch)].obj[i].objective == QOO_UPLOAD &&
-      GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
-      matrix[ch->persona->in_host].vnum == quest_table[GET_QUEST(ch)].obj[i].o_data)
-  {
-    ch->player_specials->obj_complete[i] = 1;
-    return;
-  }
+  return FALSE;
 }
 
-void check_quest_destination(struct char_data *ch, struct char_data *mob)
+bool check_quest_delivery(struct char_data *ch, struct obj_data *obj)
 {
-  if (!ch || IS_NPC(ch) || !IS_NPC(mob) || !GET_QUEST(ch))
-    return;
+  if (!ch || IS_NPC(ch))
+    return FALSE;
+
+  if (!ch->in_room) {
+    // You can't complete a quest objective from a vehicle.
+    return FALSE;
+  }
+
+  if (_raw_check_quest_delivery(ch, obj))
+    return TRUE;
+
+  if (AFF_FLAGGED(ch, AFF_GROUP)) {
+    // Followers
+    for (struct follow_type *f = ch->followers; f; f = f->next) {
+      if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
+        continue;
+
+      if (_raw_check_quest_delivery(f->follower, obj)) {
+        return TRUE;
+      }
+    }
+
+    // Master
+    if (ch->master && !IS_NPC(ch->master) && _raw_check_quest_delivery(ch->master, obj)) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+bool _raw_check_quest_destination(struct char_data *ch, struct char_data *mob) {
+  if (!GET_QUEST(ch))
+    return FALSE;
 
   if (mob->mob_specials.quest_id != GET_IDNUM(ch))
-    return;
+    return FALSE;
 
   for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
     if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_LOCATION
@@ -516,15 +572,43 @@ void check_quest_destination(struct char_data *ch, struct char_data *mob)
       ch->player_specials->mob_complete[i] = 1;
       stop_follower(mob);
       do_say(mob, "Thanks for the escort.", 0, 0);
-      return;
+      return TRUE;
     }
   }
+
+  return FALSE;
 }
 
-void check_quest_destroy(struct char_data *ch, struct obj_data *obj)
-{
-  if (!ch || IS_NPC(ch) || !GET_QUEST(ch))
-    return;
+bool check_quest_destination(struct char_data *ch, struct char_data *mob) {
+  if (!ch || IS_NPC(ch) || !IS_NPC(mob))
+    return FALSE;
+
+  if (_raw_check_quest_destination(ch, mob))
+    return TRUE;
+
+  if (AFF_FLAGGED(ch, AFF_GROUP)) {
+    // Followers
+    for (struct follow_type *f = ch->followers; f; f = f->next) {
+      if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
+        continue;
+
+      if (_raw_check_quest_destination(f->follower, mob)) {
+        return TRUE;
+      }
+    }
+
+    // Master
+    if (ch->master && !IS_NPC(ch->master) && _raw_check_quest_destination(ch->master, mob)) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+bool _raw_check_quest_destroy(struct char_data *ch, struct obj_data *obj) {
+  if (!GET_QUEST(ch))
+    return FALSE;
 
   for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
     if (GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum) {
@@ -535,7 +619,7 @@ void check_quest_destroy(struct char_data *ch, struct obj_data *obj)
           if (access_level(ch, LVL_BUILDER)) {
             send_to_char(ch, "[check_quest_destroy for %s: +1 completion for a total of %d.]\r\n", GET_OBJ_NAME(obj), ch->player_specials->obj_complete[i]);
           }
-          return;
+          return TRUE;
       }
     }
   }
@@ -543,26 +627,85 @@ void check_quest_destroy(struct char_data *ch, struct obj_data *obj)
   if (access_level(ch, LVL_BUILDER)) {
     send_to_char(ch, "[check_quest_destroy for %s: did not count]\r\n", GET_OBJ_NAME(obj));
   }
+
+  return FALSE;
 }
 
-void check_quest_kill(struct char_data *ch, struct char_data *victim)
-{
-  if (!ch || IS_NPC(ch) || !GET_QUEST(ch) || !IS_NPC(victim))
-    return;
+bool check_quest_destroy(struct char_data *ch, struct obj_data *obj) {
+  if (!ch || IS_NPC(ch))
+    return FALSE;
 
-  int i;
+  if (_raw_check_quest_destroy(ch, obj))
+    return TRUE;
 
-  for (i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++)
-    if (GET_MOB_VNUM(victim) == quest_table[GET_QUEST(ch)].mob[i].vnum)
+  if (AFF_FLAGGED(ch, AFF_GROUP)) {
+    // Followers
+    for (struct follow_type *f = ch->followers; f; f = f->next) {
+      if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
+        continue;
+
+      if (_raw_check_quest_destroy(f->follower, obj)) {
+        return TRUE;
+      }
+    }
+
+    // Master
+    if (ch->master && !IS_NPC(ch->master) && _raw_check_quest_destroy(ch->master, obj)) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
+  if (!GET_QUEST(ch))
+    return FALSE;
+
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
+    if (GET_MOB_VNUM(victim) == quest_table[GET_QUEST(ch)].mob[i].vnum) {
       switch (quest_table[GET_QUEST(ch)].mob[i].objective)
       {
       case QMO_KILL_ONE:
       case QMO_KILL_MANY:
-        // send_to_char("check_quest_kill: +1\r\n", ch);
+        if (IS_SENATOR(ch)) {
+          send_to_char("check_quest_kill: +1\r\n", ch);
+        }
         ch->player_specials->mob_complete[i]++;
+        return TRUE;
+      }
+    }
+  }
+  if (IS_SENATOR(ch)) {
+    send_to_char("check_quest_kill: didn't count\r\n", ch);
+  }
+  return FALSE;
+}
+
+void check_quest_kill(struct char_data *ch, struct char_data *victim)
+{
+  if (!ch || IS_NPC(ch) || !IS_NPC(victim))
+    return;
+
+  if (_raw_check_quest_kill(ch, victim))
+    return;
+
+  if (AFF_FLAGGED(ch, AFF_GROUP)) {
+    // Followers
+    for (struct follow_type *f = ch->followers; f; f = f->next) {
+      if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
+        continue;
+
+      if (_raw_check_quest_kill(f->follower, victim)) {
         return;
       }
-  // send_to_char("check_quest_kill: didn't count\r\n", ch);
+    }
+
+    // Master
+    if (ch->master && !IS_NPC(ch->master) && _raw_check_quest_kill(ch->master, victim)) {
+      return;
+    }
+  }
 }
 
 void end_quest(struct char_data *ch)

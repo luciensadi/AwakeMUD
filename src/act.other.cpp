@@ -4644,7 +4644,7 @@ ACMD(do_cleanup)
     return;
   }
 
-  if (target_obj->obj_flags.quest_id && target_obj->obj_flags.quest_id != GET_IDNUM(ch)) {
+  if (ch_is_blocked_by_quest_protections(ch, target_obj)) {
     send_to_char(ch, "%s isn't yours-- better leave it be.\r\n", capitalize(GET_OBJ_NAME(target_obj)));
     return;
   }

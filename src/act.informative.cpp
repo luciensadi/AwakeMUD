@@ -388,6 +388,8 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (object->obj_flags.quest_id) {
       if (object->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
         strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
+      else if (!ch_is_blocked_by_quest_protections(ch, object))
+        strlcat(buf, " ^Y(Group Quest)^n", sizeof(buf));
       else
         strlcat(buf, " ^m(Protected)^n", sizeof(buf));
     }
@@ -1138,6 +1140,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     if (GET_MOB_QUEST_CHAR_ID(i)) {
       if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
         strlcat(buf, "^Y(Quest)^n ", sizeof(buf));
+      } else if (!ch_is_blocked_by_quest_protections(ch, i)) {
+        strlcat(buf, " ^Y(Group Quest)^n", sizeof(buf));
       } else {
         strlcat(buf, "^m(Protected)^n ", sizeof(buf));
       }
@@ -1328,6 +1332,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   if (GET_MOB_QUEST_CHAR_ID(i)) {
     if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
       strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
+    } else if (!ch_is_blocked_by_quest_protections(ch, i)) {
+      strlcat(buf, " ^Y(Group Quest)^n", sizeof(buf));
     } else {
       strlcat(buf, " ^m(Protected)^n", sizeof(buf));
     }
@@ -6310,6 +6316,8 @@ ACMD(do_scan)
               if (GET_MOB_QUEST_CHAR_ID(list)) {
                 if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
                   strlcat(desc_line, "(quest) ", sizeof(desc_line));
+                } else if (!ch_is_blocked_by_quest_protections(ch, list)) {
+                  strlcat(buf, " (group quest)", sizeof(buf));
                 } else {
                   strlcat(desc_line, "(protected) ", sizeof(desc_line));
                 }
@@ -6409,6 +6417,8 @@ ACMD(do_scan)
               if (GET_MOB_QUEST_CHAR_ID(list)) {
                 if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
                   strlcat(desc_line, "(quest) ", sizeof(desc_line));
+                } else if (!ch_is_blocked_by_quest_protections(ch, list)) {
+                  strlcat(buf, " (group quest)", sizeof(buf));
                 } else {
                   strlcat(desc_line, "(protected) ", sizeof(desc_line));
                 }
