@@ -56,6 +56,7 @@ extern void calc_weight(struct char_data *ch);
 extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
+extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 
 extern SPECIAL(johnson);
 extern SPECIAL(landlord_spec);
@@ -5444,6 +5445,84 @@ bool keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool sear
   }
 
   return FALSE;
+}
+
+bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj) {
+  // Not quest-protected.
+  if (!obj->obj_flags.quest_id)
+    return FALSE;
+
+  // NPCs can never pick up quest objects.
+  if (!ch->desc)
+    return TRUE;
+
+  // Character is the questor.
+  if (obj->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
+    return FALSE;
+
+  // Are you grouped with the questor?
+  if (AFF_FLAGGED(ch, AFF_GROUP)) {
+    // Followers
+    for (struct follow_type *f = ch->followers; f; f = f->next) {
+      if (!IS_NPC(f->follower)
+          && AFF_FLAGGED(f->follower, AFF_GROUP)
+          && GET_IDNUM(f->follower) == obj->obj_flags.quest_id)
+      {
+        return FALSE;
+      }
+    }
+
+    // Master
+    if (ch->master && !IS_NPC(ch->master) && obj->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch->master)) {
+      return FALSE;
+    }
+  }
+
+  // Staff bypass.
+  if (access_level(ch, LVL_PRESIDENT)) {
+    act("You bypass the quest flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim) {
+  // Not quest-protected.
+  if (!victim->mob_specials.quest_id)
+    return FALSE;
+
+  // You're the questor.
+  if (victim->mob_specials.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
+    return FALSE;
+
+  // Aggro mobs don't get quest protection.
+  if (mob_is_aggressive(victim, TRUE))
+    return FALSE;
+
+  // NPCs can't fight quest-protected things.
+  if (!ch->desc)
+    return TRUE;
+
+  // Check to see if you are grouped with someone who can fight it.
+  if (AFF_FLAGGED(ch, AFF_GROUP)) {
+    // Followers
+    for (struct follow_type *f = ch->followers; f; f = f->next) {
+      if (!IS_NPC(f->follower)
+          && AFF_FLAGGED(f->follower, AFF_GROUP)
+          && GET_IDNUM(f->follower) == victim->mob_specials.quest_id)
+      {
+        return FALSE;
+      }
+    }
+
+    // Master
+    if (ch->master && !IS_NPC(ch->master) && victim->mob_specials.quest_id == GET_IDNUM(ch->master)) {
+      return FALSE;
+    }
+  }
+
+  return TRUE;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

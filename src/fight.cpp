@@ -2806,32 +2806,13 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
 
   if (IS_NPC(victim)) {
     // Nokill protection.
-    if (MOB_FLAGGED(victim, MOB_NOKILL))
-      return false;
+    if (MOB_FLAGGED(victim, MOB_NOKILL)) {
+      return FALSE;
+    }
 
     // Quest target protection.
-    if (!IS_NPC(ch) && victim->mob_specials.quest_id && victim->mob_specials.quest_id != GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
-      // Aggro mobs don't get this protection.
-      if (!mob_is_aggressive(victim, TRUE)) {
-        // If grouped, check to see if anyone in the group is the mob's owner.
-        if (AFF_FLAGGED(ch, AFF_GROUP)) {
-          bool found_group_member = FALSE;
-          for (struct follow_type *f = ch->followers; f && found_group_member; f = f->next)
-            if (!IS_NPC(f->follower)
-                && AFF_FLAGGED(f->follower, AFF_GROUP)
-                && GET_IDNUM(f->follower) == victim->mob_specials.quest_id)
-              found_group_member = TRUE;
-
-          // How about the group master?
-          if (!found_group_member && ch->master && !IS_NPC(ch->master)) {
-            found_group_member = victim->mob_specials.quest_id == GET_IDNUM(ch->master);
-          }
-
-          if (!found_group_member)
-            return false;
-        } else
-          return false;
-      }
+    if (ch_is_blocked_by_quest_protections(ch, victim)) {
+      return FALSE;
     }
 
     // Special NPC protection.

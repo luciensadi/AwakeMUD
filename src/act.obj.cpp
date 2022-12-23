@@ -737,13 +737,10 @@ bool can_take_obj(struct char_data * ch, struct obj_data * obj)
     }
   }
 
-  if (obj->obj_flags.quest_id && obj->obj_flags.quest_id != GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
-    if (access_level(ch, LVL_PRESIDENT)) {
-      act("You bypass the quest flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
-    } else {
-      act("$p is someone else's quest item.", FALSE, ch, obj, 0, TO_CHAR);
-      return 0;
-    }
+  // If it's quest-protected and you're not the questor...
+  if (ch_is_blocked_by_quest_protections(ch, obj)) {
+    act("$p is someone else's quest item.", FALSE, ch, obj, 0, TO_CHAR);
+    return 0;
   }
 
   return 1;
