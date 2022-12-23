@@ -586,7 +586,10 @@ ACMD(do_patch)
   }
 
   if (GET_EQ(vict, WEAR_PATCH)) {
-    act("$N already has a patch applied.", FALSE, ch, 0, vict, TO_CHAR);
+    if (vict == ch)
+      send_to_char("You already have a patch applied.\r\n", ch);
+    else
+      act("$N already has a patch applied.", FALSE, ch, 0, vict, TO_CHAR);
     return;
   }
   if (IS_NPC(vict) && (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper
