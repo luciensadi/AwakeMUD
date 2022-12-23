@@ -2299,6 +2299,10 @@ void docwagon_retrieve(struct char_data *ch) {
     }
   }
 
+  // Banish shamanistic spirits (they would not survive the transition through domains)
+  if (GET_TRADITION(ch) == TRAD_SHAMANIC)
+    end_spirit_existance(ch, TRUE);
+
   // Remove them from the Matrix.
   if (ch->persona) {
     snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", CAP(ch->persona->name));
