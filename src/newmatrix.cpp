@@ -2787,10 +2787,16 @@ void matrix_update()
       if (host.type == HOST_DATASTORE && host.undiscovered_paydata <= 0 && !host.payreset) {
         reset_host_paydata(rnum);
       } else {
-        // See if there are any deckers in here.
-        for (struct matrix_icon *icon = host.icons; icon; icon = icon->next_in_host) {
-          if (!ICON_IS_IC(icon)) {
-            decker = TRUE;
+        // See if there are any deckers here or in surrounding hosts.
+        // We need to check surrounding hosts to prevent SANs from re-encrypting.
+        for (struct exit_data *exit = host.exit; exit; exit = exit->next) {
+          for (struct matrix_icon *icon = real_host(exit->host).icons; icon; icon = icon->next_in_host) {
+            if (!ICON_IS_IC(icon)) {
+              decker = TRUE;
+              break;
+            }
+          }
+          if (decker) {
             break;
           }
         }
