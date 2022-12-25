@@ -2796,6 +2796,7 @@ void matrix_update()
             decker = TRUE;
             break;
           }        
+        }
         // We also need to check surrounding hosts to prevent SANs from re-encrypting.
         for (struct exit_data *exit = host.exit; exit && !decker; exit = exit->next) {
           for (struct matrix_icon *icon = real_host(exit->host).icons; icon; icon = icon->next_in_host) {
