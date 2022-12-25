@@ -3561,7 +3561,7 @@ ACMD(do_matrix_max)
     send_to_char("You can't use hacking pool while running a cold ASIST.\r\n", ch);
   else {
     int i = atoi(argument);
-    int cap = MIN(GET_HACKING(ch), GET_SKILL(ch, SKILL_SORCERY));
+    int cap = MIN(GET_HACKING(ch), GET_SKILL(ch, SKILL_COMPUTER));
     if (i > cap || i < 0)
       send_to_char(ch, "You must set your max hacking pool to between 0 and %d.\r\n", cap);
     else {
