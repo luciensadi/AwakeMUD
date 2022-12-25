@@ -411,7 +411,11 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
     DECKER->tally++;
   if (DECKER->tally >= 80)
   {
+    // House rule: we don't shut down the host per Matrix pg112,
+    // Instead we just kill the problematic connection.
+    send_to_icon(PERSONA, "The sirens and lights seem to turn towards you!\r\n");
     dumpshock(PERSONA);
+    send_to_char(ch, "^y(OOC note: Your security tally hit 80+, so the host disconnected you.)^n\r\n");
     return -1;
   }
   check_trigger(host, ch);
