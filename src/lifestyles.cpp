@@ -62,12 +62,19 @@ void boot_lifestyles() {
   json lifestyle_info;
   _json_parse_from_file(global_lifestyles_file, lifestyle_info);
 
-  // Iterate through our known lifestyles, loading the strings for each.
+  // Iterate through our known lifestyles, loading the values and strings for each.
   for (int lifestyle_idx = LIFESTYLE_STREETS; lifestyle_idx < NUM_LIFESTYLES; lifestyle_idx++) {
-    lifestyles[lifestyle_idx].monthly_cost_min = lifestyle_info["monthly_cost_min"];
-    lifestyles[lifestyle_idx].monthly_cost_max = lifestyle_info["monthly_cost_max"];
-    lifestyles[lifestyle_idx].default_strings
-    lifestyles[lifestyle_idx].garage_strings
+    // TODO: Break down to invidual lifestyles (lifestyle_info[x][""]?)
+    lifestyles[lifestyle_idx].monthly_cost_min = lifestyle_info["monthly_cost_min"].get<long>();
+    lifestyles[lifestyle_idx].monthly_cost_max = lifestyle_info["monthly_cost_max"].get<long>();
+
+    for (auto it : lifestyle_info["default_strings"]) {
+      lifestyles[lifestyle_idx].default_strings.push_back(str_dup(it.get<std::string>().c_str()));
+    }
+
+    for (auto it : lifestyle_info["garage_strings"]) {
+      lifestyles[lifestyle_idx].garage_strings.push_back(str_dup(it.get<std::string>().c_str()));
+    }
   }
 }
 
