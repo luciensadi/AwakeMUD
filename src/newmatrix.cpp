@@ -411,7 +411,11 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
     DECKER->tally++;
   if (DECKER->tally >= 80)
   {
+    // House rule: we don't shut down the host per Matrix pg112,
+    // Instead we just kill the problematic connection.
+    send_to_icon(PERSONA, "The sirens and lights seem to turn towards you!\r\n");
     dumpshock(PERSONA);
+    send_to_char(ch, "^y(OOC note: Your security tally hit 80+, so the host disconnected you.)^n\r\n");
     return -1;
   }
   check_trigger(host, ch);
@@ -1469,10 +1473,9 @@ ACMD(do_matrix_look)
     if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_PROGRAM) && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum)
     {
       if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) {
+        int percent_complete = (int) (100 * ((float) GET_DECK_ACCESSORY_FILE_REMAINING(obj) - GET_DECK_ACCESSORY_FILE_SIZE(obj)) / MAX(1, GET_DECK_ACCESSORY_FILE_SIZE(obj)));
         send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n",
-                     GET_OBJ_NAME(obj),
-                     (int) (GET_DECK_ACCESSORY_FILE_REMAINING(obj) - GET_DECK_ACCESSORY_FILE_SIZE(obj)) / MAX(1, GET_DECK_ACCESSORY_FILE_SIZE(obj))
-                   );
+                     GET_OBJ_NAME(obj), percent_complete);
       } else {
         send_to_icon(PERSONA, "^yA file named %s floats here.^n\r\n", GET_OBJ_NAME(obj));
       }
@@ -2792,9 +2795,17 @@ void matrix_update()
           if (!ICON_IS_IC(icon)) {
             decker = TRUE;
             break;
+          }        
+        }
+        // We also need to check surrounding hosts to prevent SANs from re-encrypting.
+        for (struct exit_data *exit = host.exit; exit && !decker; exit = exit->next) {
+          for (struct matrix_icon *icon = real_host(exit->host).icons; icon; icon = icon->next_in_host) {
+            if (!ICON_IS_IC(icon)) {
+              decker = TRUE;
+              break;
+            }
           }
         }
-
         // We only reset subsystem encryption ratings if there are no deckers.
         if (!decker) {
           for (int x = 0; x < 5; x++) {
@@ -3552,8 +3563,9 @@ ACMD(do_matrix_max)
     send_to_char("You can't use hacking pool while running a cold ASIST.\r\n", ch);
   else {
     int i = atoi(argument);
-    if (i > GET_HACKING(ch) || i < 0)
-      send_to_char(ch, "You must set your max hacking pool to between 0 and %d.\r\n", GET_HACKING(ch));
+    int cap = MIN(GET_HACKING(ch), GET_SKILL(ch, SKILL_COMPUTER));
+    if (i > cap || i < 0)
+      send_to_char(ch, "You must set your max hacking pool to between 0 and %d.\r\n", cap);
     else {
       GET_MAX_HACKING(ch) = i;
       send_to_char(ch, "You will now use a maximum of %d hacking pool per action.\r\n", GET_MAX_HACKING(ch));
