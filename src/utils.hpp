@@ -1108,30 +1108,31 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_QUIVER convenience defines
 
 // ITEM_DECK_ACCESSORY convenience defines
-#define GET_DECK_ACCESSORY_TYPE(accessory)                  (GET_OBJ_VAL((accessory), 0))
+#define GET_DECK_ACCESSORY_TYPE(accessory)                   (GET_OBJ_VAL((accessory), 0))
 
 // ITEM_DECK_ACCESSORY TYPE_PARTS convenience defines
-#define GET_DECK_ACCESSORY_IS_CHIPS(accessory)              (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_IS_CHIPS(accessory)               (GET_OBJ_VAL((accessory), 1))
 
 // ITEM_DECK_ACCESSORY TYPE_FILE convenience defines
-#define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory)    (GET_OBJ_VAL((accessory), 1))
-#define GET_DECK_ACCESSORY_FILE_SIZE(accessory)             (GET_OBJ_VAL((accessory), 2))
-#define GET_DECK_ACCESSORY_FILE_HOST_VNUM(accessory)        (GET_OBJ_VAL((accessory), 3))
-#define GET_DECK_ACCESSORY_FILE_HOST_COLOR(accessory)       (GET_OBJ_VAL((accessory), 4))
-#define GET_DECK_ACCESSORY_FILE_PROTECTION(accessory)       (GET_OBJ_VAL((accessory), 5))
-#define GET_DECK_ACCESSORY_FILE_RATING(accessory)           (GET_OBJ_VAL((accessory), 6))
-#define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)         (GET_OBJ_VAL((accessory), 7))
-#define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)     (GET_OBJ_VAL((accessory), 8))
-#define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)        (GET_OBJ_VAL((accessory), 9))
+#define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory)     (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_FILE_SIZE(accessory)              (GET_OBJ_VAL((accessory), 2))
+#define GET_DECK_ACCESSORY_FILE_HOST_VNUM(accessory)         (GET_OBJ_VAL((accessory), 3))
+#define GET_DECK_ACCESSORY_FILE_HOST_COLOR(accessory)        (GET_OBJ_VAL((accessory), 4))
+#define GET_DECK_ACCESSORY_FILE_PROTECTION(accessory)        (GET_OBJ_VAL((accessory), 5))
+#define GET_DECK_ACCESSORY_FILE_RATING(accessory)            (GET_OBJ_VAL((accessory), 6))
+#define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)          (GET_OBJ_VAL((accessory), 7))
+#define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)      (GET_OBJ_VAL((accessory), 8))
+#define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)         (GET_OBJ_VAL((accessory), 9))
 
 // ITEM_DECK_ACCESSORY TYPE_COOKER convenience defines
-#define GET_DECK_ACCESSORY_COOKER_RATING(accessory)         (GET_OBJ_VAL((accessory), 1))
-#define GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(accessory)  (GET_OBJ_VAL((accessory), 8))
-#define GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(accessory) (GET_OBJ_VAL((accessory), 9))
+#define GET_DECK_ACCESSORY_COOKER_RATING(accessory)          (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(accessory)   (GET_OBJ_VAL((accessory), 8))
+#define GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(accessory)  (GET_OBJ_VAL((accessory), 9))
 
 // ITEM_DECK_ACCESSORY TYPE_COMPUTER convenience defines
-#define GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(accessory)   (GET_OBJ_VAL((accessory), 2))
-#define GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(accessory)  (GET_OBJ_VAL((accessory), 3))
+#define GET_DECK_ACCESSORY_COMPUTER_ACTIVE_MEMORY(accessory) (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(accessory)    (GET_OBJ_VAL((accessory), 2))
+#define GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(accessory)   (GET_OBJ_VAL((accessory), 3))
 
 // ITEM_RCDECK convenience defines
 
@@ -1160,7 +1161,15 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_DESIGN_PROGRAM(prog)                            (GET_OBJ_VAL((prog), 0))
 #define GET_DESIGN_RATING(prog)                             (GET_OBJ_VAL((prog), 1))
 #define GET_DESIGN_PROGRAM_WOUND_LEVEL(prog)                (GET_OBJ_VAL((prog), 2))
+// free slot GET_DESIGN_ORIGINAL_SUCCESSES(prog)                 (GET_OBJ_VAL((prog), 3))
+#define GET_DESIGN_DESIGNING_TICKS_LEFT(prog)               (GET_OBJ_VAL((prog), 4))
+#define GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog)             (GET_OBJ_VAL((prog), 5))
 #define GET_DESIGN_SIZE(prog)                               (GET_OBJ_VAL((prog), 6))
+#define GET_DESIGN_PROGRAMMING_FAILED(prog)                 (GET_OBJ_VAL((prog), 7))
+#define GET_DESIGN_SUCCESSES(prog)                          (GET_OBJ_VAL((prog), 8))
+#define GET_DESIGN_CREATOR_IDNUM(prog)                      (GET_OBJ_VAL((prog), 9))
+#define GET_DESIGN_COMPLETED(prog)                          (GET_OBJ_VAL((prog), 10))
+#define GET_DESIGN_ORIGINAL_TICKS_LEFT(prog)                (GET_OBJ_TIMER((prog)))
 
 // ITEM_GUN_AMMO convenience defines
 #define GET_AMMOBOX_QUANTITY(box)                           (GET_OBJ_VAL((box), 0))
