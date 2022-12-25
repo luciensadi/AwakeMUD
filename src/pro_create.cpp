@@ -109,15 +109,17 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
       send_to_char(CH, "Design saved!\r\n");
-      if (GET_PROGRAM_TYPE(d->edit_obj) == SOFT_ATTACK)
-        GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * attack_multiplier[GET_OBJ_VAL(d->edit_obj, 2)];
-      else if (GET_PROGRAM_TYPE(d->edit_obj) == SOFT_RESPONSE)
-        GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1));
-      else GET_OBJ_VAL(d->edit_obj, 4) = GET_OBJ_VAL(d->edit_obj, 1) * programs[GET_OBJ_VAL(d->edit_obj, 0)].multiplier;
-      GET_OBJ_VAL(d->edit_obj, 6) = GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 4);
-      GET_OBJ_VAL(d->edit_obj, 4)  *= 20;
-      GET_OBJ_TIMER(d->edit_obj) = GET_OBJ_VAL(d->edit_obj, 4);
-      GET_OBJ_VAL(d->edit_obj, 9) = GET_IDNUM(CH);
+      if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
+        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)];
+      } else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_RESPONSE) {
+        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * (GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_RATING(d->edit_obj));
+      } else {
+        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * programs[GET_DESIGN_PROGRAM(d->edit_obj)].multiplier;
+      }
+      GET_DESIGN_SIZE(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj);
+      GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj)  *= 20;
+      GET_DESIGN_ORIGINAL_TICKS_LEFT(d->edit_obj) = GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj);
+      GET_DESIGN_CREATOR_IDNUM(d->edit_obj) = GET_IDNUM(CH);
       obj_to_char(d->edit_obj, CH);
       STATE(d) = CON_PLAYING;
       d->edit_obj = NULL;
@@ -128,19 +130,19 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case PEDIT_RATING:
-    if (GET_OBJ_VAL(d->edit_obj, 0) <= SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER) * 1.5)
+    if (GET_DESIGN_PROGRAM(d->edit_obj) <= SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER) * 1.5)
       send_to_char(CH, "You can't create a persona program of a higher rating than your computer skill times one and a half.\r\n"
                    "Enter Rating: ");
-    else if (GET_OBJ_VAL(d->edit_obj, 0) == SOFT_EVALUATE && number > GET_SKILL(CH, SKILL_DATA_BROKERAGE))
+    else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_EVALUATE && number > GET_SKILL(CH, SKILL_DATA_BROKERAGE))
       send_to_char(CH, "You can't create an evaluate program of a higher rating than your data brokerage skill.\r\n"
                    "Enter Rating: ");
-    else if (GET_OBJ_VAL(d->edit_obj, 0) > SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER))
+    else if (GET_DESIGN_PROGRAM(d->edit_obj) > SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER))
       send_to_char(CH, "You can't create a program of a higher rating than your computer skill.\r\n"
                    "Enter Rating: ");
-    else if (GET_OBJ_VAL(d->edit_obj, 0) == SOFT_RESPONSE && number > 3)
+    else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_RESPONSE && number > 3)
       send_to_char("You can't create a response increase of a rating higher than 3.\r\nEnter Rating: ", CH);
     else {
-      GET_OBJ_VAL(d->edit_obj, 1) = number;
+      GET_DESIGN_RATING(d->edit_obj) = number;
       pedit_disp_menu(d);
     }
     break;
@@ -174,7 +176,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 1 || number > 4)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      GET_OBJ_VAL(d->edit_obj, 2) = number;
+      GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = number;
       pedit_disp_menu(d);
     }
     break;
@@ -182,8 +184,8 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 1 || number >= NUM_PROGRAMS)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      GET_OBJ_VAL(d->edit_obj, 0) = number;
-      GET_OBJ_VAL(d->edit_obj, 1) = 0;
+      GET_DESIGN_PROGRAM(d->edit_obj) = number;
+      GET_DESIGN_RATING(d->edit_obj) = 1;
       pedit_disp_menu(d);
     }
     break;
@@ -215,7 +217,7 @@ struct obj_data *can_program(struct char_data *ch)
         return NULL;
       }
     FOR_ITEMS_AROUND_CH(ch, comp)
-      if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == 2)
+      if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(comp) == TYPE_COMPUTER)
         break;
     if (ch->in_veh && comp && comp->vfront)
       comp = NULL;
@@ -273,24 +275,24 @@ ACMD(do_design)
   }
 
   if (!prog) {
-    send_to_char(ch, "The program design isn't on that computer.\r\n");
+    send_to_char(ch, "The program design isn't on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(comp)));
     return;
   }
-  if (GET_OBJ_VAL(prog, 3) || GET_OBJ_VAL(prog, 5)) {
+  if (GET_DESIGN_COMPLETED(prog) || GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog)) {
     send_to_char(ch, "There's no more design work to be done on %s, so you decide to try programming it instead.\r\n", GET_OBJ_NAME(prog));
     do_program(ch, argument, 0, 0);
     return;
   }
-  if (GET_OBJ_VAL(prog, 9) && GET_OBJ_VAL(prog, 9) != GET_IDNUM(ch)) {
-    send_to_char(ch, "Someone else has already started on this program.\r\n");
+  if (GET_DESIGN_CREATOR_IDNUM(prog) && GET_DESIGN_CREATOR_IDNUM(prog) != GET_IDNUM(ch)) {
+    send_to_char(ch, "Someone else has already started on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(prog)));
     return;
   }
   int skill = 0, target = 4;
-  if (GET_OBJ_VAL(prog, 1) < 5)
+  if (GET_DESIGN_RATING(prog) < 5)
     target--;
-  else if (GET_OBJ_VAL(prog, 1) > 9)
+  else if (GET_DESIGN_RATING(prog) > 9)
     target++;
-  switch (GET_OBJ_VAL(prog,0)) {
+  switch (GET_DESIGN_PROGRAM(prog)) {
   case SOFT_BOD:
   case SOFT_EVASION:
   case SOFT_MASKING:
@@ -339,24 +341,28 @@ ACMD(do_design)
   case SOFT_COMMLINK:
     skill = get_skill(ch, SKILL_PROGRAM_OPERATIONAL, target);
     break;
+  default:
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown SOFT_X %d to do_design's switch statement!", GET_DESIGN_PROGRAM(prog));
+    skill = 0;
+    break;
   }
   if (!skill) {
     send_to_char(ch, "You have no idea how to go about creating a program design for that.\r\n");
     return;
   }
-  if (GET_OBJ_TIMER(prog) == GET_OBJ_VAL(prog, 4)) {
+  if (GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) == GET_DESIGN_DESIGNING_TICKS_LEFT(prog)) {
     if (get_and_deduct_one_deckbuilding_token_from_char(ch)) {
       send_to_char("A deckbuilding token fuzzes into digital static, greatly accelerating the design time.\r\n", ch);
-      GET_OBJ_VAL(prog, 8) = 10;
-      GET_OBJ_VAL(prog, 4) = 1;
+      GET_DESIGN_SUCCESSES(prog) = 10;
+      GET_DESIGN_DESIGNING_TICKS_LEFT(prog) = 1;
     }
     else if (access_level(ch, LVL_ADMIN)) {
       send_to_char(ch, "You use your admin powers to greatly accelerate the design time of %s.\r\n", prog->restring);
-      GET_OBJ_VAL(prog, 8) = 10;
-      GET_OBJ_VAL(prog, 4) = 1;
+      GET_DESIGN_SUCCESSES(prog) = 10;
+      GET_DESIGN_DESIGNING_TICKS_LEFT(prog) = 1;
     } else {
       send_to_char(ch, "You begin designing %s.\r\n", prog->restring);
-      GET_OBJ_VAL(prog, 8) = success_test(skill, target);
+      GET_DESIGN_SUCCESSES(prog) = success_test(skill, target);
     }
   } else
     send_to_char(ch, "You continue to design %s.\r\n", prog->restring);
@@ -394,44 +400,49 @@ ACMD(do_program)
     send_to_char(ch, "The program design isn't on that computer.\r\n");
     return;
   }
-  if (GET_OBJ_VAL(prog, 9) && GET_OBJ_VAL(prog, 9) != GET_IDNUM(ch)) {
+  if (GET_DESIGN_CREATOR_IDNUM(prog) && GET_DESIGN_CREATOR_IDNUM(prog) != GET_IDNUM(ch)) {
     send_to_char(ch, "Someone else has already started on this program.\r\n");
     return;
   }
-  if (!GET_OBJ_VAL(prog, 5)) {
+  if (!GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog)) {
     if (get_and_deduct_one_deckbuilding_token_from_char(ch)) {
       send_to_char("A deckbuilding token fuzzes into digital static, greatly accelerating the development time.\r\n", ch);
-      GET_OBJ_VAL(prog, 5) = 1;
-      GET_OBJ_TIMER(prog) = GET_OBJ_VAL(prog, 5);
+      GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 1;
+      GET_OBJ_TIMER(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
     }
     else if (access_level(ch, LVL_ADMIN)) {
       send_to_char(ch, "You use your admin powers to greatly accelerate the development time for %s.\r\n", prog->restring);
-      GET_OBJ_VAL(prog, 5) = 1;
-      GET_OBJ_TIMER(prog) = GET_OBJ_VAL(prog, 5);
+      GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 1;
+      GET_OBJ_TIMER(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
     } else {
       send_to_char(ch, "You begin to program %s.\r\n", prog->restring);
-      int target = GET_OBJ_VAL(prog, 1);
-      if (GET_OBJ_VAL(comp, 1) >= GET_OBJ_VAL(prog, 6) * 2)
+      int target = GET_DESIGN_RATING(prog);
+      if (GET_DECK_ACCESSORY_COMPUTER_ACTIVE_MEMORY(comp) >= GET_DESIGN_SIZE(prog) * 2) {
+        send_to_char(ch, "The abundance of active memory on %s makes the work easier.\r\n", decapitalize_a_an(GET_OBJ_NAME(comp)));
         target -= 2;
-      if (GET_OBJ_VAL(prog, 8) != -1)
+      }
+
+      if (!GET_DESIGN_COMPLETED(prog)) {
+        send_to_char("You haven't taken the time to design this program, so it's a little harder to conceptualize.\r\n", ch);
         target += 2;
+      }
       else
-        target -= GET_OBJ_VAL(prog, 3);
+        target -= GET_DESIGN_SUCCESSES(prog);
+
       int skill = get_skill(ch, SKILL_COMPUTER, target);
       int success = success_test(skill, target);
       for (struct obj_data *suite = comp->contains; suite; suite = suite->next_content)
-        if (GET_OBJ_TYPE(suite) == ITEM_PROGRAM && GET_OBJ_VAL(suite, 0) == SOFT_SUITE) {
-          success += (int)(success_test(MIN(GET_SKILL(ch, SKILL_COMPUTER), GET_OBJ_VAL(suite, 1)), target) / 2);
+        if (GET_OBJ_TYPE(suite) == ITEM_PROGRAM && GET_PROGRAM_TYPE(suite) == SOFT_SUITE) {
+          success += (int)(success_test(MIN(GET_SKILL(ch, SKILL_COMPUTER), GET_PROGRAM_RATING(suite)), target) / 2);
           break;
         }
-      if (success) {
-        GET_OBJ_VAL(prog, 5) = GET_OBJ_VAL(prog, 6) / success;
-        GET_OBJ_VAL(prog, 5) *= 60;
-        GET_OBJ_TIMER(prog) = GET_OBJ_VAL(prog, 5);
+      if (success > 0) {
+        GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 60 * (GET_DESIGN_SIZE(prog) / success);
+        GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
       } else {
-        GET_OBJ_VAL(prog, 5) = number(1, 6) + number(1, 6);
-        GET_OBJ_TIMER(prog) = (GET_OBJ_VAL(prog, 6) * 60) / number(1, 3);
-        GET_OBJ_VAL(prog, 7) = 1;
+        GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = number(1, 6) + number(1, 6);
+        GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) = (GET_DESIGN_SIZE(prog) * 60) / number(1, 3);
+        GET_DESIGN_PROGRAMMING_FAILED(prog) = 1;
       }
     }
   } else
@@ -550,16 +561,15 @@ void update_buildrepair(void)
         CH->char_specials.timer = 0;
         STOP_WORKING(CH);
       } else if (AFF_FLAGGED(desc->character, AFF_DESIGN)) {
-        if (--GET_OBJ_VAL(PROG, 4) < 1) {
+        if (--GET_DESIGN_DESIGNING_TICKS_LEFT(PROG) < 1) {
           send_to_char(desc->character, "You complete the design plan for %s.\r\n", GET_OBJ_NAME(PROG));
-          GET_OBJ_VAL(PROG, 3) = GET_OBJ_VAL(PROG, 8);
-          GET_OBJ_VAL(PROG, 8) = -1;
+          GET_DESIGN_COMPLETED(PROG) = 1;
           PROG = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_DESIGN);
         }
       } else if (AFF_FLAGGED(desc->character, AFF_PROGRAM)) {
-        if (--GET_OBJ_VAL(PROG, 5) < 1) {
-          if (GET_OBJ_VAL(PROG, 7)){
+        if (--GET_DESIGN_PROGRAMMING_TICKS_LEFT(PROG) < 1) {
+          if (GET_DESIGN_PROGRAMMING_FAILED(PROG)){
             switch(number(1,10)) {
               case 1:
                 send_to_char(desc->character, "It was about that time that you noticed you had typed up all of your code on the microwave keypad. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
@@ -596,14 +606,14 @@ void update_buildrepair(void)
             send_to_char(desc->character, "You complete programming %s.\r\n", GET_OBJ_NAME(PROG));
             struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
             newp->restring = str_dup(GET_OBJ_NAME(PROG));
-            GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(PROG, 0);
-            GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(PROG, 1);
-            GET_OBJ_VAL(newp, 2) = GET_OBJ_VAL(PROG, 6);
-            GET_OBJ_VAL(newp, 3) = GET_OBJ_VAL(PROG, 2);
+            GET_PROGRAM_TYPE(newp) = GET_DESIGN_PROGRAM(PROG);
+            GET_PROGRAM_RATING(newp) = GET_DESIGN_RATING(PROG);
+            GET_PROGRAM_SIZE(newp) = GET_DESIGN_SIZE(PROG);
+            GET_PROGRAM_ATTACK_DAMAGE(newp) = GET_DESIGN_PROGRAM_WOUND_LEVEL(PROG);
             obj_to_obj(newp, PROG->in_obj);
-            GET_OBJ_VAL(PROG->in_obj, 3) += GET_OBJ_VAL(newp, 2);
+            GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(PROG->in_obj) += GET_PROGRAM_SIZE(newp);
           }
-          GET_OBJ_VAL(PROG->in_obj, 3) -= GET_OBJ_VAL(PROG, 6) + (GET_OBJ_VAL(PROG, 6) / 10);
+          GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(PROG->in_obj) -= GET_DESIGN_SIZE(PROG) + (GET_DESIGN_SIZE(PROG) / 10);
           extract_obj(PROG);
           PROG = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);

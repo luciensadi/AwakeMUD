@@ -4369,22 +4369,54 @@ SPECIAL(terell_davis)
 SPECIAL(desktop)
 {
   struct obj_data *obj = (struct obj_data *) me;
+  float completion_percentage;
+  bool found_suite = FALSE;
+
   if (!CMD_IS("list") || (!obj->in_veh && !obj->in_room))
     return FALSE;
-  send_to_char(ch, "%s (%d/%d)", obj->text.name, GET_OBJ_VAL(obj, 2) - GET_OBJ_VAL(obj, 3), GET_OBJ_VAL(obj, 2));
+
+  send_to_char(ch, "%s (^g%d^n/^r%d^n)", GET_OBJ_NAME(obj),
+               GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(obj) - GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(obj),
+               GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(obj));
   if (obj->contains) {
     send_to_char(ch, " contains:\r\n");
     for (struct obj_data *soft = obj->contains; soft; soft = soft->next_content) {
+      char paddingnumberstr[10], formatstr[512];
+
+      snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 40 + count_color_codes_in_string(GET_OBJ_NAME(soft)));
+      snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s %dMp ");
+      send_to_char(ch, formatstr,
+                   GET_OBJ_NAME(soft),
+                   GET_OBJ_TYPE(soft) == ITEM_DESIGN ? GET_DESIGN_SIZE(soft) : GET_PROGRAM_SIZE(soft));
+
       if (GET_OBJ_TYPE(soft) == ITEM_DESIGN) {
-        char *step = (GET_OBJ_VAL(soft, 3) || GET_OBJ_VAL(soft, 5)) ? "Programming" : "Design";
-        send_to_char(ch, "%-40s %dMp (%dMp taken) (%s) %2.2f%% Complete\r\n", soft->restring, GET_OBJ_VAL(soft, 6),
-                     GET_OBJ_VAL(soft, 6) + (GET_OBJ_VAL(soft, 6) / 10), step,
-                     GET_OBJ_TIMER(soft) ? (GET_OBJ_VAL(soft, 5) ?
-                                            ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 5)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100 :
-                                            ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 4)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100) : 0);
+        send_to_char(ch, "(^c%dMp^n taken) ", GET_DESIGN_SIZE(soft) + GET_DESIGN_SIZE(soft) / 10);
+
+        if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(soft)) {
+          completion_percentage = (float) GET_DESIGN_PROGRAMMING_TICKS_LEFT(soft) / MAX(1, GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) * 100;
+          send_to_char(ch, "(^CProgramming, ^c%2.2f%%^n complete)", completion_percentage);
+        } else if (GET_DESIGN_COMPLETED(soft)) {
+          send_to_char("(^cProgrammable^n)", ch);
+        } else if (GET_DESIGN_DESIGNING_TICKS_LEFT(soft) == GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) {
+          send_to_char("(^gDesignable^n)", ch);
+        } else {
+          completion_percentage = (float) GET_DESIGN_DESIGNING_TICKS_LEFT(soft) / MAX(1, GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) * 100;
+          send_to_char(ch, "(^GDesigning, ^c%2.2f%%^n complete)", completion_percentage);
+        }
+        send_to_char(ch, " Rating ^c%d^n\r\n", GET_DESIGN_RATING(soft));
       } else {
-        send_to_char(ch, "%-40s %dMp (%dMp taken) (Completed) Rating %d\r\n", soft->restring ? soft->restring :
-                     soft->text.name, GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 1));
+        send_to_char(ch, "(^c%dMp^n taken) (^BCompleted^n) Rating ^c%d^n",
+                     GET_PROGRAM_SIZE(soft),
+                     GET_PROGRAM_RATING(soft));
+
+        if (GET_PROGRAM_TYPE(soft) == SOFT_SUITE) {
+          if (found_suite) {
+            send_to_char(" [^roverridden by above suite^n]", ch);
+          }
+          found_suite = TRUE;
+        }
+
+        send_to_char("\r\n", ch);
       }
     }
   } else
