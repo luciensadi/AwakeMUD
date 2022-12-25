@@ -143,6 +143,8 @@ void    mob_say(struct char_data *mob, const char *msg);
 const char *get_room_desc(struct room_data *room);
 bool    string_is_valid_for_paths(const char *str);
 
+bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj);
+bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);
 
 bool    keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords=1, bool search_name=1, bool search_desc=0);
 bool    keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords=1, bool search_name=1, bool search_desc=0);

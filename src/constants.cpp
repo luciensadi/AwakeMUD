@@ -1029,7 +1029,7 @@ const char *wear_bits[] =
     "ANKLE",
     "SOCK",
     "BELLY",
-    "ARM",
+    "UNDERARM",
     "FACE",
     "THIGH",
     "PATCH",
