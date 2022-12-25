@@ -1473,10 +1473,9 @@ ACMD(do_matrix_look)
     if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_PROGRAM) && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum)
     {
       if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) {
+        int percent_complete = (int) (100 * ((float) GET_DECK_ACCESSORY_FILE_REMAINING(obj) - GET_DECK_ACCESSORY_FILE_SIZE(obj)) / MAX(1, GET_DECK_ACCESSORY_FILE_SIZE(obj)));
         send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n",
-                     GET_OBJ_NAME(obj),
-                     (int) (GET_DECK_ACCESSORY_FILE_REMAINING(obj) - GET_DECK_ACCESSORY_FILE_SIZE(obj)) / MAX(1, GET_DECK_ACCESSORY_FILE_SIZE(obj))
-                   );
+                     GET_OBJ_NAME(obj), percent_complete);
       } else {
         send_to_icon(PERSONA, "^yA file named %s floats here.^n\r\n", GET_OBJ_NAME(obj));
       }
