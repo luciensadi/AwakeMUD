@@ -4375,15 +4375,17 @@ SPECIAL(desktop)
   if (obj->contains) {
     send_to_char(ch, " contains:\r\n");
     for (struct obj_data *soft = obj->contains; soft; soft = soft->next_content) {
-      if (GET_OBJ_TYPE(soft) == ITEM_DESIGN)
-        send_to_char(ch, "%-40s %dMp (%dMp taken) (Design) %2.2f%% Complete\r\n", soft->restring, GET_OBJ_VAL(soft, 6),
-                     GET_OBJ_VAL(soft, 6) + (GET_OBJ_VAL(soft, 6) / 10),
+      if (GET_OBJ_TYPE(soft) == ITEM_DESIGN) {
+        char *step = (GET_OBJ_VAL(soft, 3) || GET_OBJ_VAL(soft, 5)) ? "Programming" : "Design";
+        send_to_char(ch, "%-40s %dMp (%dMp taken) (%s) %2.2f%% Complete\r\n", soft->restring, GET_OBJ_VAL(soft, 6),
+                     GET_OBJ_VAL(soft, 6) + (GET_OBJ_VAL(soft, 6) / 10), step,
                      GET_OBJ_TIMER(soft) ? (GET_OBJ_VAL(soft, 5) ?
                                             ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 5)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100 :
                                             ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 4)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100) : 0);
-      else
+      } else {
         send_to_char(ch, "%-40s %dMp (%dMp taken) (Completed) Rating %d\r\n", soft->restring ? soft->restring :
                      soft->text.name, GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 1));
+      }
     }
   } else
     send_to_char(ch, " is empty.\r\n");
