@@ -3411,7 +3411,7 @@ void save_shop_orders() {
           snprintf(shop_message, sizeof(shop_message), "%s has arrived at %s and is ready for pickup for a total cost of %d nuyen. It will be held for you for %d days.\r\n",
                    real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
                    shop_table[shop_nr].shopname,
-                   order->price,
+                   (order->price - order->paid) * order->number,
                    PREORDERS_ARE_GOOD_FOR_X_DAYS
                   );
           int real_mob = real_mobile(shop_table[shop_nr].keeper);
