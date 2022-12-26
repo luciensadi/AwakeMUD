@@ -1124,12 +1124,14 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   int bprice = price / 10;
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && can_negotiate_for_item(obj))
     price = negotiate(ch, keeper, 0, price, 0, TRUE);
-  if (sell->type == SELL_AVAIL && GET_AVAIL_OFFSET(ch))
-    price += bprice * GET_AVAIL_OFFSET(ch);
 
   // Attempt to order the item.
   if (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) > 0)
   {
+    if (GET_AVAIL_OFFSET(ch) > 0) {
+      price += bprice * GET_AVAIL_OFFSET(ch);
+    }
+
     // Don't let people re-try repeatedly.
     for (int q = 0; q < SHOP_LAST_IDNUM_LIST_SIZE; q++) {
       if (sell->lastidnum[q] == GET_IDNUM(ch)) {
