@@ -578,11 +578,13 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             break;
           case AMMO_HARMLESS:
             att->ranged->power = 0;
-            // fall through
+            att->ranged->is_physical = FALSE;
+            break;
           case AMMO_GEL:
-            // Errata: Add the following after the third line: "Impact armor, not Ballistic, applies."
+            // Errata: 'Add the following after the third line: "Impact armor, not Ballistic, applies."'
             att->ranged->power = att->ranged->power_before_armor - GET_IMPACT(def->ch) + 2;
-            att->ranged->is_gel = TRUE;
+            att->ranged->is_gel = TRUE; // Affects knockdown tests
+            att->ranged->is_physical = FALSE;
             break;
           default:
             att->ranged->power = att->ranged->power_before_armor - GET_BALLISTIC(def->ch);
