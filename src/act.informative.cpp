@@ -99,6 +99,7 @@ extern float get_bulletpants_weight(struct char_data *ch);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern const char *get_level_wholist_color(int level);
 extern bool cyber_is_retractable(struct obj_data *cyber);
+extern bool precipitation_is_snow();
 
 #ifdef USE_PRIVATE_CE_WORLD
   extern void display_secret_info_about_object(struct char_data *ch, struct obj_data *obj);
@@ -1773,11 +1774,11 @@ void update_blood(void)
       if (!ROOM_FLAGGED(&world[i], ROOM_INDOORS)) {
         if (weather_info.sky == SKY_RAINING) {
           world[i].blood--;
-          snprintf(buf, sizeof(buf), "%s the blood staining this area washes away in the rain.", world[i].blood > 3 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
+          snprintf(buf, sizeof(buf), "%s the blood staining this area washes away with the precipitation.", world[i].blood > 3 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
           send_to_room(buf, &world[i]);
         } else if (weather_info.sky == SKY_LIGHTNING) {
           world[i].blood -= 2;
-          snprintf(buf, sizeof(buf), "%s the blood staining this area washes away in the pounding rain.", world[i].blood > 4 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
+          snprintf(buf, sizeof(buf), "%s the blood staining this area washes away with the heavy precipitation.", world[i].blood > 4 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
           send_to_room(buf, &world[i]);
         }
       }
@@ -2043,41 +2044,82 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     }
 
     if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-    // Display weather info in the room.
-    if (IS_WATER(ch->in_room)) {
-      if (weather_info.sky == SKY_RAINING) {
-        send_to_char(ch, "^cThe rain gets in your eyes as you swim.^n\r\n");
-      } else if (weather_info.sky == SKY_LIGHTNING) {
-        send_to_char(ch, "^cThe water is made treacherous by the pounding rain.^n\r\n");
-      }
-    } else {
-      if (weather_info.sky == SKY_RAINING) {
-        if (ch->in_veh) {
-          if (ch->in_veh->type == VEH_BIKE) {
-            send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
+      bool should_be_snowy = precipitation_is_snow();
+
+      // Display weather info in the room.
+      if (IS_WATER(ch->in_room)) {
+        if (weather_info.sky == SKY_RAINING) {
+          if (should_be_snowy) {
+            send_to_char(ch, "^WThe snow swirls about you as you swim.^n\r\n");
           } else {
-            send_to_char(ch, "^cRain glides down your windows, wipers brushing it clear with patient motion.^n\r\n");
+            send_to_char(ch, "^cThe rain gets in your eyes as you swim.^n\r\n");
           }
-        } else {
-          send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
-        }
-      }
-      else if (weather_info.sky == SKY_LIGHTNING) {
-        if (ch->in_veh) {
-          if (ch->in_veh->type == VEH_BIKE) {
-            send_to_char(ch, "^cHeavy rain pounds down around you, running in rivulets off of your bike.^n\r\n");
+        } else if (weather_info.sky == SKY_LIGHTNING) {
+          if (should_be_snowy) {
+            send_to_char(ch, "^WHeavy snowfall makes the water treacherous.^n\r\n");
           } else {
-            send_to_char(ch, "^cHeavy rain pounds against your windows, making it hard to see.^n\r\n");
+            send_to_char(ch, "^cThe water is made treacherous by the pounding rain.^n\r\n");
           }
-        } else {
-          send_to_char(ch, "^cYou struggle to see through the heavy rain that pounds down from the sky.^n\r\n");
         }
-      }
-      else if (weather_info.lastrain < 5) {
-        send_to_char(ch, "^cThe ground is wet, it must have rained recently.^n\r\n");
+      } else {
+        if (weather_info.sky == SKY_RAINING) {
+          if (ch->in_veh) {
+            if (ch->in_veh->type == VEH_BIKE) {
+              if (should_be_snowy) {
+                send_to_char(ch, "^WSnowflakes tumble and fall about you bike.^n\r\n");
+              } else {
+                send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
+              }
+            } else {
+              if (should_be_snowy) {
+                send_to_char(ch, "^WSnowflakes linger briefly on your windows.^n\r\n");
+              } else {
+                send_to_char(ch, "^cRain glides down your windows, wipers brushing them clear with patient motion.^n\r\n");
+              }
+            }
+          } else {
+            if (should_be_snowy) {
+              send_to_char(ch, "^WSnow drifts from the sky.^n\r\n");
+            } else {
+              send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
+            }
+          }
+        }
+        else if (weather_info.sky == SKY_LIGHTNING) {
+          if (ch->in_veh) {
+            if (ch->in_veh->type == VEH_BIKE) {
+              if (should_be_snowy) {
+                send_to_char(ch, "^WHeavy snow whips roughly around you, clinging to your bike.^n\r\n");
+              } else {
+                send_to_char(ch, "^cHeavy rain pounds down around you, running in rivulets off of your bike.^n\r\n");
+              }
+            } else {
+              if (should_be_snowy) {
+                send_to_char(ch, "^WHeavy snow flurries against your windows, making it hard to see.^n\r\n");
+              } else {
+                send_to_char(ch, "^cHeavy rain pounds against your windows, making it hard to see.^n\r\n");
+              }
+            }
+          } else {
+            if (should_be_snowy) {
+              send_to_char(ch, "^WYou struggle to see through the heavy snowfall.^n\r\n");
+            } else {
+              send_to_char(ch, "^cYou struggle to see through the heavy rain that pounds down from the sky.^n\r\n");
+            }
+          }
+        }
+        else if (weather_info.lastrain < 5) {
+          if (should_be_snowy) {
+            send_to_char(ch, "^WSnow has accumulated in small drifts here and there.^n\r\n");
+          } else {
+            send_to_char(ch, "^cThe ground is wet, it must have rained recently.^n\r\n");
+          }
+        }
+        else if (weather_info.lastrain < 10 && should_be_snowy) {
+          send_to_char(ch, "^WSlushy snow clings stubbornly in the shadows.^n\r\n");
+        }
       }
     }
-  }
   }
 
   if (ch->in_room->poltergeist[0] > 0)

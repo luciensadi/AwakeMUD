@@ -44,6 +44,7 @@ extern int calculate_swim_successes(struct char_data *ch);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict);
 extern struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *ch);
+extern bool precipitation_is_snow();
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -344,6 +345,8 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   if (ROOM_FLAGGED(was_in, ROOM_INDOORS) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))
   {
+    bool should_be_snowy = precipitation_is_snow();
+
     extern const char *moon[];
     const char *time_of_day[] = {
                                   "night air",
@@ -357,12 +360,24 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
                                    "Rain falls around you.\r\n",
                                    "Lightning flickers as the rain falls.\r\n"
                                  };
-    snprintf(buf, sizeof(buf), "You step out into the %s. ", time_of_day[weather_info.sunlight]);
+    const char *snow_line[] = {
+                                "The sky is clear.\r\n",
+                                "Clouds fill the sky.\r\n",
+                                "Snow drifts down around you.\r\n",
+                                "Heavy snow falls about you.\r\n"
+                              };
+    snprintf(buf, sizeof(buf), "You step out into the %s%s. ", should_be_snowy ? "cool " : "", time_of_day[weather_info.sunlight]);
+
     if (!PRF_FLAGGED(ch, PRF_NO_WEATHER)) {
       if (weather_info.sunlight == SUN_DARK && weather_info.sky == SKY_CLOUDLESS)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You see the %s moon in the cloudless sky.\r\n", moon[weather_info.moonphase]);
-      else
-        strlcat(buf, weather_line[weather_info.sky], sizeof(buf));
+      else {
+        if (should_be_snowy) {
+          strlcat(buf, snow_line[weather_info.sky], sizeof(buf));
+        } else {
+          strlcat(buf, weather_line[weather_info.sky], sizeof(buf));
+        }
+      }
     }
     send_to_char(buf, ch);
   }

@@ -31,6 +31,7 @@ extern void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_g
 
 extern void write_objs_to_disk(vnum_t zonenum);
 extern void write_mobs_to_disk(vnum_t zonenum);
+extern void weather_change();
 
 // We're looking to verify that everything is kosher. Validate canaries, etc.
 void verify_data(struct char_data *ch, const char *line, int cmd, int subcmd, const char *section) {
@@ -128,6 +129,26 @@ ACMD(do_debug) {
     }
 
     process_withdrawal(ch);
+    return;
+  }
+
+  if (is_abbrev(arg1, "weather")) {
+    rest_of_argument = any_one_arg(rest_of_argument, arg2);
+
+    if (is_abbrev(arg2, "change")) {
+      int old_change = weather_info.change;
+      int old_pressure = weather_info.pressure;
+      int old_sky = weather_info.sky;
+      weather_change();
+      send_to_char(ch, "Weather: %d -> %d, pressure: %d -> %d, sky: %d -> %d.\r\n",
+                   old_change, weather_info.change,
+                   old_pressure, weather_info.pressure,
+                   old_sky, weather_info.sky);
+    }
+    else {
+      send_to_char(ch, "Valid option: WEATHER CHANGE, not '%s'.\r\n", arg2);
+    }
+
     return;
   }
 
