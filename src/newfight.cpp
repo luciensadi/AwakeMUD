@@ -49,6 +49,8 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
 (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
 (IS_GUN(GET_OBJ_VAL(eq, 3)))))
 
+#define HAS_IMMUNITY_TO_NORMAL_WEAPONS(ch) (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch))
+
 SPECIAL(weapon_dominator);
 
 bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier)
@@ -375,6 +377,38 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       }
     }
 
+    // Handle spirits and elementals being divas, AKA having Immunity to Normal Weapons (SR3 p188, 264).
+    // Namely: We require that the attack's base power is greater than double the spirit's force, otherwise it takes no damage.
+    // If the attack's power is greater, subtract double the level from it.
+    // There's no checking for weapon foci here since there are no ranged weapon foci.
+    // Also, note that we explicitly want weapon power before burst, ammo, etc: https://www.shadowruntabletop.com/game-resources/shadowrun-third-edition-faq/
+    if (HAS_IMMUNITY_TO_NORMAL_WEAPONS(def->ch)) {
+      int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
+      if (GET_WEAPON_POWER(att->weapon) < minimum_power_to_damage_opponent) {
+        bool target_died = 0;
+
+        combat_message(att->ch, def->ch, att->weapon, 0, att->ranged->burst_count, att->ranged->modifiers[COMBAT_MOD_VISIBILITY]);
+        send_to_char(att->ch, "^o(OOC: %s is immune to normal weapons! You need at least ^O%d^o base weapon power to damage %s, and you only have %d.)^n\r\n",
+                     decapitalize_a_an(GET_CHAR_NAME(def->ch)),
+                     minimum_power_to_damage_opponent,
+                     HMHR(def->ch),
+                     att->ranged->power_before_armor
+                    );
+        target_died = damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
+
+        //Handle suprise attack/alertness here -- spirits ranged.
+        if (!target_died && IS_NPC(def->ch)) {
+          if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
+            AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
+
+          GET_MOBALERT(def->ch) = MALERT_ALARM;
+          GET_MOBALERTTIME(def->ch) = 30;
+        }
+        return target_died;
+      }
+      // The reduction in weapon power that was previously here has been moved to after the magazine/ammo code.
+    }
+
     // Calculate and display pre-success-test information.
     snprintf(rbuf, sizeof(rbuf), "^j%s's burst/compensation info (excluding gyros) is ^c%d^n/^c%d^n. Additional modifiers: ",
              GET_CHAR_NAME( att->ch ),
@@ -570,41 +604,14 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     snprintf(rbuf, sizeof(rbuf), "^bAfter armor and ammo, attack code is ^c%d %s^b.^n", att->ranged->power, GET_WOUND_NAME(att->ranged->damage_level));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
-    // Handle spirits and elementals being divas, AKA having Immunity to Normal Weapons (SR3 p188, 264).
-    // Namely: We require that the attack's power is greater than double the spirit's force, otherwise it takes no damage.
-    // If the attack's power is greater, subtract double the level from it.
-    // There's no checking for weapon foci here since there are no ranged weapon foci.
-    if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
-      int minimum_power_to_damage_opponent = (GET_LEVEL(def->ch) * 2) + 1;
-      if (att->ranged->power_before_armor < minimum_power_to_damage_opponent) {
-        bool target_died = 0;
+    // Handle the second part of the diva (aka immunity to normal weapons) code: Subtract twice their level from the power.
+    if (HAS_IMMUNITY_TO_NORMAL_WEAPONS(def->ch)) {
+      // SR3 p264: Grant armor equal to twice its essence rating.
+      // Specifically -= because this has already been set previously.
+      att->ranged->power -= GET_LEVEL(def->ch) * 2;
 
-        combat_message(att->ch, def->ch, att->weapon, 0, att->ranged->burst_count, att->ranged->modifiers[COMBAT_MOD_VISIBILITY]);
-        send_to_char(att->ch, "^o(OOC: %s is immune to normal weapons! You need at least ^O%d^o pre-armor weapon power to damage %s, and you only have %d.)^n\r\n",
-                     decapitalize_a_an(GET_CHAR_NAME(def->ch)),
-                     minimum_power_to_damage_opponent,
-                     HMHR(def->ch),
-                     att->ranged->power_before_armor
-                    );
-        target_died = damage(att->ch, def->ch, 0, att->ranged->dam_type, att->ranged->is_physical);
-
-        //Handle suprise attack/alertness here -- spirits ranged.
-        if (!target_died && IS_NPC(def->ch)) {
-          if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
-            AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
-
-          GET_MOBALERT(def->ch) = MALERT_ALARM;
-          GET_MOBALERTTIME(def->ch) = 30;
-        }
-        return target_died;
-      } else {
-        // SR3 p264: Grant armor equal to twice its essence rating.
-        // Specifically -= because this has already been set previously.
-        att->ranged->power -= GET_LEVEL(def->ch) * 2;
-
-        snprintf(rbuf, sizeof(rbuf), "^bAfter spirit level decrease, attack code is ^c%d %s^b (min 2).^n", att->ranged->power, GET_WOUND_NAME(att->ranged->damage_level));
-        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-      }
+      snprintf(rbuf, sizeof(rbuf), "^bAfter spirit level decrease, attack code is ^c%d %s^b (min 2).^n", att->ranged->power, GET_WOUND_NAME(att->ranged->damage_level));
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
 
     // Core p113.
