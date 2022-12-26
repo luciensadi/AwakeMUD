@@ -768,7 +768,7 @@ float get_drug_heal_multiplier(struct char_data *ch) {
   }
 
   // Returns a value in range 0.1 ≤ X ≤ 1.0.
-  return MIN(1.0, MAX(0.1, 2 / divisor));
+  return MIN(1.0, MAX(0.1, 2.0 / divisor));
 }
 
 // ----------------- Helpers
