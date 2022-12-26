@@ -1041,6 +1041,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   struct shop_sell_data *sell;
   int price, buynum;
   bool cash = FALSE;
+  char rollbuf[500];
 
   // Prevent negative transactions.
   if ((buynum = transaction_amt(arg, arg_len)) < 0)
@@ -1198,12 +1199,17 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
       if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEROMONES) {
         pheromones = TRUE;
-        skill += GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
+        int delta = GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
+        skill += delta;
+        snprintf(rollbuf, sizeof(rollbuf), "Pheromone skill buff: %d.", delta);
+        act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
         break;
       }
 
     // Roll up the success test.
     int success = success_test(skill, target);
+    snprintf(rollbuf, sizeof(rollbuf), "Rolled %d success%s.", success, success == 1 ? "" : "s");
+    act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
 
     // Failure case.
     if (success < 1) {
