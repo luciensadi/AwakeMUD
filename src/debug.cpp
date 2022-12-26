@@ -32,6 +32,9 @@ extern void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_g
 extern void write_objs_to_disk(vnum_t zonenum);
 extern void write_mobs_to_disk(vnum_t zonenum);
 
+extern void send_async_weather_request();
+extern void read_async_weather_request();
+
 // We're looking to verify that everything is kosher. Validate canaries, etc.
 void verify_data(struct char_data *ch, const char *line, int cmd, int subcmd, const char *section) {
   // Called by a character doing something.
@@ -116,6 +119,25 @@ ACMD(do_debug) {
 
   if (strn_cmp(arg1, "pgroups", strlen(arg1)) == 0) {
     do_pgroup_debug(ch, rest_of_argument);
+    return;
+  }
+
+  if (is_abbrev(arg1, "weather")) {
+    rest_of_argument = any_one_arg(rest_of_argument, arg2);
+    
+    if (is_abbrev(arg2, "send")) {
+      send_to_char("OK, sending weather request.\r\n", ch);
+      send_async_weather_request();
+      send_to_char("Sending request complete.\r\n", ch);
+    }
+    else if (is_abbrev(arg2, "read")) {
+      send_to_char("OK, attempting to read weather request results.\r\n", ch);
+      read_async_weather_request();
+      send_to_char("Read attempt complete.\r\n", ch);
+    }
+    else {
+      send_to_char(ch, "Must be SEND or READ, not '%s'.\r\n", arg2);
+    }
     return;
   }
 
