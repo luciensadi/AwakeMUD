@@ -1347,7 +1347,20 @@ ACMD(do_locate)
           send_to_icon(PERSONA, "There's no free-floating paydata left to find, but you're able to locate a suspicious-looking IC.\r\n");
           return;
         }
-        // Fall through.
+
+        // We've failed to spawn an IC-- character hit the end of the sheaf. Log it.
+        mudlog_vfprintf(ch, LOG_GRIDLOG, "BUILD ERROR: %s hit end of sheaf with paydata remaining in host %s (%ld).", GET_CHAR_NAME(ch), matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].vnum);
+
+        // Log spam defense: Have a chance of dumping them.
+        send_to_icon(PERSONA, "The node fuzzes around you as it tries to load further defenses-- something's gone wrong, and it's destabilizing! Your connection closes abruptly.\r\n");
+        snprintf(buf, sizeof(buf), "%s abruptly shatters into digital static.\r\n", PERSONA->name);
+        send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
+
+        // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
+        extract_icon(PERSONA);
+        PERSONA = NULL;
+        PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+        return;
       }
 
       // No IC-bound paydata exists, OR we were not able to locate or spawn an IC to carry it.
