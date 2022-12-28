@@ -738,7 +738,7 @@ bool can_take_obj(struct char_data * ch, struct obj_data * obj)
   }
 
   // If it's quest-protected and you're not the questor...
-  if (ch_is_blocked_by_quest_protections(ch, obj)) {
+  if (ch_is_blocked_by_quest_protections(ch, obj, FALSE)) {
     act("$p is someone else's quest item.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }

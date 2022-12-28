@@ -140,7 +140,7 @@ bool    char_is_in_social_room(struct char_data *ch);
 bool    is_custom_ware(struct obj_data *ware);
 void    render_targets_abilities_to_viewer(struct char_data *viewer, struct char_data *vict);
 
-bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj);
+bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);
 
 bool    keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords=1, bool search_name=1, bool search_desc=0);

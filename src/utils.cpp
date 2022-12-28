@@ -5447,7 +5447,7 @@ bool keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool sear
   return FALSE;
 }
 
-bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj) {
+bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor) {
   // Not quest-protected.
   if (!obj->obj_flags.quest_id)
     return FALSE;
@@ -5468,12 +5468,20 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *o
           && AFF_FLAGGED(f->follower, AFF_GROUP)
           && GET_IDNUM(f->follower) == obj->obj_flags.quest_id)
       {
+        if (requires_ch_to_be_in_same_room_as_questor && ch->in_room != f->follower->in_room) {
+          send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(f->follower));
+          return TRUE;
+        }
         return FALSE;
       }
     }
 
     // Master
     if (ch->master && !IS_NPC(ch->master) && obj->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch->master)) {
+      if (requires_ch_to_be_in_same_room_as_questor && ch->in_room != ch->master->in_room) {
+        send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(ch->master));
+        return TRUE;
+      }
       return FALSE;
     }
   }

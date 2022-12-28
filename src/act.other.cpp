@@ -2184,9 +2184,9 @@ ACMD(do_treat)
     }
 
     // Add a box of health. They get a second box if they're still mortally wounded.
-    GET_PHYSICAL(vict) += MIN(GET_MAX_PHYSICAL(vict), 100);
+    GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), GET_PHYSICAL(vict) + 100);
     if (GET_PHYSICAL(vict) <= 0)
-      GET_PHYSICAL(vict) += MIN(GET_MAX_PHYSICAL(vict), 100);
+      GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), GET_PHYSICAL(vict) + 100);
 
     // Tack on additional boxes for good rolls.
     int extra_heal = successes / 3;
@@ -4647,7 +4647,7 @@ ACMD(do_cleanup)
     return;
   }
 
-  if (ch_is_blocked_by_quest_protections(ch, target_obj)) {
+  if (ch_is_blocked_by_quest_protections(ch, target_obj, TRUE)) {
     send_to_char(ch, "%s isn't yours-- better leave it be.\r\n", capitalize(GET_OBJ_NAME(target_obj)));
     return;
   }

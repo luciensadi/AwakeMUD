@@ -435,7 +435,7 @@ bool hunting_escortee(struct char_data *ch, struct char_data *vict)
   return FALSE;
 }
 
-bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj) {
+bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj, bool commit_changes=TRUE) {
   if (!GET_QUEST(ch))
     return FALSE;
 
@@ -446,20 +446,23 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, stru
       switch (quest_table[GET_QUEST(ch)].obj[i].objective) {
         case QOO_JOHNSON:
           if (GET_MOB_SPEC(mob) && (GET_MOB_SPEC(mob) == johnson || GET_MOB_SPEC2(mob) == johnson) && memory(mob, ch)) {
-            ch->player_specials->obj_complete[i] = 1;
+            if (commit_changes)
+              ch->player_specials->obj_complete[i] = 1;
             return TRUE;
           }
           break;
         case QOO_TAR_MOB:
           if (quest_table[GET_QUEST(ch)].obj[i].o_data == GET_MOB_VNUM(mob)) {
-            ch->player_specials->obj_complete[i] = 1;
+            if (commit_changes)
+              ch->player_specials->obj_complete[i] = 1;
             return TRUE;
           }
           break;
         case QOO_RETURN_PAY:
           if (GET_MOB_SPEC(mob) && (GET_MOB_SPEC(mob) == johnson || GET_MOB_SPEC2(mob) == johnson) && memory(mob, ch)) {
             if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].o_data) {
-              ch->player_specials->obj_complete[i] = 1;
+              if (commit_changes)
+                ch->player_specials->obj_complete[i] = 1;
               return TRUE;
             }
           }
@@ -469,6 +472,10 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, stru
   }
 
   return FALSE;
+}
+
+bool _could_quest_deliver(struct char_data *ch, struct char_data *mob, struct obj_data *obj) {
+  return _raw_check_quest_delivery(ch, mob, obj, FALSE);
 }
 
 bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj)
@@ -485,6 +492,16 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
       if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
         continue;
 
+      // If they're not going to benefit from a quest delivery, skip.
+      if (!_could_quest_deliver(f->follower, mob, obj))
+        continue;
+
+      if (f->follower->in_room != ch->in_room) {
+        send_to_char(ch, "%s must be present for this delivery.\r\n", GET_CHAR_NAME(f->follower));
+        return FALSE;
+      }
+
+      // This is technically a sanity check, in that we *expect* this to work.
       if (_raw_check_quest_delivery(f->follower, mob, obj)) {
         return TRUE;
       }
@@ -499,7 +516,7 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
   return FALSE;
 }
 
-bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj) {
+bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj, bool commit_changes=FALSE) {
   if (!GET_QUEST(ch))
     return FALSE;
 
@@ -508,7 +525,8 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj) {
         GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
         ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data)
     {
-      ch->player_specials->obj_complete[i] = 1;
+      if (commit_changes)
+        ch->player_specials->obj_complete[i] = 1;
       return TRUE;
     }
 
@@ -516,12 +534,17 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj) {
         GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
         matrix[ch->persona->in_host].vnum == quest_table[GET_QUEST(ch)].obj[i].o_data)
     {
-      ch->player_specials->obj_complete[i] = 1;
+      if (commit_changes)
+        ch->player_specials->obj_complete[i] = 1;
       return TRUE;
     }
   }
 
   return FALSE;
+}
+
+bool _could_quest_deliver(struct char_data *ch, struct obj_data *obj) {
+  return _raw_check_quest_delivery(ch, obj, FALSE);
 }
 
 bool check_quest_delivery(struct char_data *ch, struct obj_data *obj)
@@ -542,6 +565,15 @@ bool check_quest_delivery(struct char_data *ch, struct obj_data *obj)
     for (struct follow_type *f = ch->followers; f; f = f->next) {
       if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
         continue;
+
+      // If they're not going to benefit from a quest delivery, skip.
+      if (!_could_quest_deliver(f->follower, obj))
+        continue;
+
+      if (f->follower->in_room != ch->in_room) {
+        send_to_char(ch, "%s must be present for this delivery.\r\n", GET_CHAR_NAME(f->follower));
+        return FALSE;
+      }
 
       if (_raw_check_quest_delivery(f->follower, obj)) {
         return TRUE;
@@ -1929,9 +1961,7 @@ void reboot_quest(int rnum, struct quest_data *quest)
 #endif
 }
 
-int write_quests_to_disk(int zone)
-{
-  // asdf todo: write save/load for quest emotes
+int write_quests_to_disk(int zone) {
   long i, j, found = 0, counter;
   FILE *fp;
   zone = real_zone(zone);
