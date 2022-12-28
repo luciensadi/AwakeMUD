@@ -269,7 +269,7 @@ bool dumpshock(struct matrix_icon *icon)
   if (icon->decker && icon->decker->ch)
   {
     send_to_char(icon->decker->ch, "You are dumped from the matrix!\r\n");
-    snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", icon->name);
+    snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", CAP(icon->name));
     send_to_host(icon->in_host, buf, icon, FALSE);
 
     // Clean up their uploads.
@@ -1753,7 +1753,7 @@ ACMD(do_logoff)
     send_to_icon(PERSONA, "You gracefully log off from the matrix and return to the real world.\r\n");
     WAIT_STATE(ch, (int) (0.5 RL_SEC));
   }
-  snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", PERSONA->name);
+  snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", CAP(PERSONA->name));
   send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
 
   // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
