@@ -2094,7 +2094,7 @@ ACMD(do_treat)
     target = 8;
   else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 7/10))
     target = 6;
-  else if (GET_PHYSICAL(vict) <= GET_MAX_PHYSICAL(vict))
+  else if (GET_PHYSICAL(vict) < GET_MAX_PHYSICAL(vict))
     target = 4;
   else {
     if (ch == vict) {
@@ -2168,8 +2168,10 @@ ACMD(do_treat)
   }
 
   if (ch == vict) {
+    send_to_char(ch, "You begin to treat yourself.\r\n");
     act("$n begins to treat $mself.", TRUE, ch, 0, vict, TO_NOTVICT);
   } else {
+    act("You begin to treat $N.", TRUE, ch, 0, vict, TO_CHAR);
     act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
   }
 
@@ -2200,10 +2202,12 @@ ACMD(do_treat)
     update_pos(vict);
 
     // Send a message.
-    act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
+    act("$N appears better.", FALSE, ch, 0, vict, TO_NOTVICT);
+
     if (ch == vict) {
       send_to_char(ch, "The pain seems significantly better.\r\n");
     } else {
+      act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
       act("The pain seems significantly less after $n's treatment.",
           FALSE, ch, 0, vict, TO_VICT);
     }
