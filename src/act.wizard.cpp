@@ -8220,9 +8220,13 @@ ACMD(do_makenerps) {
   }
 
   // Parse out our float.
-  double essence_cost = atof(buf2);
+  float essence_cost = atof(buf2);
   if (essence_cost < 0) {
     send_to_char(ch, "%f is not a valid essence cost. Please reference the book value.\r\n%s", essence_cost, NERPS_WARE_USAGE_STRING);
+    return;
+  }
+  if (((int) (essence_cost * 1000)) % 10 != 0) {
+    send_to_char("The code does not support essence values with more than two digits of precision (ex: 0.05 OK, 0.045 not OK). Please round appropriately and try again.\r\n", ch);
     return;
   }
 
@@ -8234,7 +8238,7 @@ ACMD(do_makenerps) {
 
   if (is_abbrev(vis_buf, "visible") || is_abbrev(vis_buf, "external")) {
     is_visible = TRUE;
-  } else if (is_abbrev(vis_buf, "internal")) {
+  } else if (is_abbrev(vis_buf, "invisible") || is_abbrev(vis_buf, "internal")) {
     is_visible = FALSE;
   } else {
     send_to_char(ch, "You must choose either VISIBLE or INTERNAL, not '%s'.\r\n%s", buf, NERPS_WARE_USAGE_STRING);
