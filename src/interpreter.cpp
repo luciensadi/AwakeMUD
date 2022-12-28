@@ -673,10 +673,10 @@ struct command_info cmd_info[] =
     { "jobs"       , POS_DEAD    , do_recap    , 0, 0, FALSE },
     { "junk"       , POS_RESTING , do_drop     , 0, SCMD_JUNK, FALSE },
 
+    // { "kil"        , POS_FIGHTING, do_kil      , 0, 0, FALSE },
+    { "kill"       , POS_FIGHTING, do_kill     , 0, SCMD_KILL, FALSE },
     { "keep"       , POS_LYING   , do_keep     , 0, 0, FALSE },
     { "keepalive"  , POS_DEAD    , do_keepalive, 0, 0, FALSE },
-    { "kil"        , POS_FIGHTING, do_kil      , 0, 0, FALSE },
-    { "kill"       , POS_FIGHTING, do_kill     , 0, SCMD_KILL, FALSE },
     { "kick"       , POS_STANDING, do_kick     , 0, 0, FALSE },
     { "knock"      , POS_STANDING, do_gen_door , 0, SCMD_KNOCK, FALSE },
 
