@@ -1530,7 +1530,10 @@ ACMD(do_get)
             }
         }
         if (!cont) {
-          send_to_char(ch, "There doesn't seem to be a %s installed on %s.\r\n", arg1, GET_VEH_NAME(veh));
+          send_to_char(ch, "There doesn't seem to be %s %s installed on %s.\r\n",
+                       (is_abbrev(arg1, "autonav") || is_abbrev(arg1, "gridguide")) ? "an aftermarket" : AN(arg1),
+                       arg1,
+                       GET_VEH_NAME(veh));
           return;
         } else {
           if (!IS_NPC(ch)) {

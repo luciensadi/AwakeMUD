@@ -577,7 +577,7 @@ ACMD(do_patch)
     return;
   }
   if (!(vict = get_char_room_vis(ch, buf)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
-    send_to_char(ch, "There doesn't seem to be a '%s' here.\r\n", buf);
+    send_to_char(ch, "There doesn't seem to be %s '%s' here.\r\n", AN(buf), buf);
     return;
   }
   if (IS_ASTRAL(vict)) {
