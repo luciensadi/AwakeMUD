@@ -2395,10 +2395,35 @@ ACMD(do_run)
     send_to_icon(PERSONA, "You don't seem to have that program loaded.\r\n");
 }
 
+void _decrypt_host_access(struct char_data *ch, rnum_t host_rnum) {
+  int inhost = PERSONA->in_host;
+
+  icon_from_host(PERSONA);
+  icon_to_host(PERSONA, host_rnum);
+
+  int success = system_test(PERSONA->in_host, ch, TEST_ACCESS, SOFT_DECRYPT, 0);
+
+  if (success > 0) {
+    if (matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED]) {
+      send_to_icon(PERSONA, "You successfully decrypt that SAN.\r\n");
+      matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED] = 0;
+    } else {
+      send_to_icon(PERSONA, "It doesn't appear to be encrypted.\r\n");
+    }
+  } else {
+    send_to_icon(PERSONA, "You fail to decrypt that SAN.\r\n");
+  }
+
+  if (PERSONA) {
+    icon_from_host(PERSONA);
+    icon_to_host(PERSONA, inhost);
+  }
+}
+
 ACMD(do_decrypt)
 {
   if (!PERSONA) {
-    send_to_char(ch, "You can't do that while hitching.\r\n");
+    send_to_char("You can't do that while hitching.\r\n", ch);
     return;
   }
   skip_spaces(&argument);
@@ -2478,25 +2503,29 @@ ACMD(do_decrypt)
     }
     return;
   }
-  int host_rnum = 0;
-  for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next)
-    if ((host_rnum = real_host(exit->host)) > 0 && isname(argument, exit->addresses)) {
-      int inhost = PERSONA->in_host;
-      icon_from_host(PERSONA);
-      icon_to_host(PERSONA, host_rnum);
-      int success = system_test(PERSONA->in_host, ch, TEST_ACCESS, SOFT_DECRYPT, 0);
-      if (success > 0 && matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED]) {
-        send_to_icon(PERSONA, "You successfully decrypt that SAN.\r\n");
-        matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED] = 0;
-      } else
-        send_to_icon(PERSONA, "You fail to decrypt that SAN.\r\n");
-      if (PERSONA) {
-        icon_from_host(PERSONA);
-        icon_to_host(PERSONA, inhost);
-      }
+
+  if (is_abbrev(argument, "LTG")) {
+    rnum_t parent_rnum = real_host(matrix[PERSONA->in_host].parent);
+    if (parent_rnum < 0 || !(matrix[parent_rnum].type == HOST_LTG || matrix[parent_rnum].type == HOST_PLTG)) {
+      send_to_char("This host isn't connected to an LTG.\r\n", ch);
+    } else {
+      _decrypt_host_access(ch, parent_rnum);
+    }
+    return;
+  }
+
+  for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next) {
+    rnum_t host_rnum = real_host(exit->host);
+
+    if (host_rnum < 0)
+      continue;
+
+    if (isname(argument, exit->addresses)) {
+      _decrypt_host_access(ch, host_rnum);
       return;
     }
-  send_to_icon(PERSONA, "You can't seem to locate that file.\r\n");
+  }
+  send_to_icon(PERSONA, "You can't seem to locate a file, connection, or subsystem named '%s'.\r\n", argument);
 }
 
 void send_active_program_list(struct char_data *ch) {
