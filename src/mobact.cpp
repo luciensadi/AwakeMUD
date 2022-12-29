@@ -70,8 +70,6 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 bool mob_cannot_be_aggressive(struct char_data *ch);
 bool mob_is_aggressive_towards_race(struct char_data *ch, int race);
 
-#define MOBACT_DEBUG
-
 // This takes up a significant amount of processing time, so let's precompute it.
 #define NUM_AGGRO_OCTETS 3
 int AGGRESSION_OCTETS[NUM_AGGRO_OCTETS];
