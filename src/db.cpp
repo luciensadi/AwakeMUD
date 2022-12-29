@@ -2946,6 +2946,47 @@ int vnum_ic(char *searchname, struct char_data * ch)
   return (found);
 }
 
+#define SEARCH_STRING(string_name)                                                                           \
+  if (quest_table[nr].string_name && *quest_table[nr].string_name && isname(searchname, get_string_after_color_code_removal(quest_table[nr].string_name, NULL))) {          \
+    snprintf(ENDOF(found_in), sizeof(found_in) - strlen(found_in), "%s" #string_name, *found_in ? ", " : ""); \
+  }
+
+int vnum_quest(char *searchname, struct char_data * ch)
+{
+  int nr, found = 0;
+  for (nr = 0; nr <= top_of_questt; nr++) {
+    char found_in[10000] = { 0 };
+    rnum_t johnson_rnum = real_mobile(quest_table[nr].johnson);
+    snprintf(buf, sizeof(buf), "%3d. [%5ld] %s ", ++found, quest_table[nr].vnum, johnson_rnum >= 0 ? GET_CHAR_NAME(&mob_proto[johnson_rnum]) : "<n/a>");
+
+    SEARCH_STRING(intro);
+    SEARCH_STRING(intro_emote);
+    SEARCH_STRING(decline);
+    SEARCH_STRING(decline_emote);
+    SEARCH_STRING(quit);
+    SEARCH_STRING(quit_emote);
+    SEARCH_STRING(finish);
+    SEARCH_STRING(finish_emote);
+    SEARCH_STRING(info);
+    SEARCH_STRING(done);
+
+    if (quest_table[nr].info_emotes) {
+      for (auto *it : *(quest_table[nr].info_emotes)) {
+        if (it && *it && isname(searchname, get_string_after_color_code_removal(it, NULL))) {
+          snprintf(ENDOF(found_in), sizeof(found_in) - strlen(found_in), "%sinfo emotes", *found_in ? ", " : "");
+          break;
+        }
+      }
+    }
+
+    if (*found_in) {
+      send_to_char(ch, "%s\r\n", buf);
+    }
+  }
+
+  return (found);
+}
+
 int vnum_mobile(char *searchname, struct char_data * ch)
 {
   int nr, found = 0;

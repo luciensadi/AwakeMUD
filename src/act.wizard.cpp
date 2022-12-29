@@ -987,7 +987,7 @@ ACMD(do_teleport)
   }                                                                    \
 }
 
-#define VNUM_USAGE_STRING "Usage: vnum { obj | mob | veh | room | host | ic } <name>\r\n"
+#define VNUM_USAGE_STRING "Usage: vnum { obj | mob | veh | room | host | ic | quest } <name>\r\n"
 ACMD(do_vnum)
 {
   two_arguments(argument, buf, buf2);
@@ -1003,6 +1003,7 @@ ACMD(do_vnum)
   VNUM_LOOKUP(room);
   VNUM_LOOKUP(host);
   VNUM_LOOKUP(ic);
+  VNUM_LOOKUP(quest);
 
   send_to_char(VNUM_USAGE_STRING, ch);
 }
