@@ -1570,7 +1570,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       extract_obj(obj);
       obj = NULL;
     }
-    strlcat(buf, "\r\nYou can use the PROBE or INFO commands for more details.\r\n", sizeof(buf));
+    strlcat(buf, "\r\nYou can use PROBE #1 or INFO #1 for more details.\r\n", sizeof(buf));
     page_string(ch->desc, buf, 1);
     return;
   }
@@ -1766,8 +1766,11 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
 bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr) {
   if (!is_open(keeper, shop_nr))
     return FALSE;
+
+  /*   We allow anyone to view the list, on the presumption that you're just browsing the shelves or whatnot.
   // if (!is_ok_char(keeper, ch, shop_nr))
   //  return FALSE;
+  */
 
   struct obj_data *obj = NULL;
   skip_spaces(&arg);
@@ -1776,6 +1779,10 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
     // No error message, let do_probe() handle it.
     return FALSE;
   }
+
+  // By popular request, all shop item scans must start with # now.
+  if (*arg != '#')
+    return FALSE;
 
   struct shop_sell_data *sell = find_obj_shop(arg, shop_nr, &obj);
   if (!sell && atoi(arg) > 0) {
@@ -1789,7 +1796,7 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
     return FALSE;
   }
 
-  send_to_char(ch, "^yProbing shopkeeper's ^n%s^y...^n\r\n", GET_OBJ_NAME(obj));
+  send_to_char(ch, "^yProbing ^Yshopkeeper's^y ^n%s^y...^n\r\n", GET_OBJ_NAME(obj));
   do_probe_object(ch, obj);
   return TRUE;
 }
