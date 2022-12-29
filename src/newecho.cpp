@@ -26,6 +26,9 @@ char storage_string[MAX_STRING_LENGTH];
 // #define PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, ...)
 
+struct char_data *find_target_character_for_emote(struct char_data *actor, const char *tag_check_string, bool require_exact_match, struct room_data *in_room, struct veh_data *in_veh);
+struct veh_data *find_target_vehicle_for_emote(struct char_data *actor, const char *tag_check_string, struct room_data *in_room, struct veh_data *in_veh);
+
 const char *allowed_abbreviations[] = {
   "Mr", "Ms", "Mrs", "Mz"
   , "\n"
@@ -224,7 +227,6 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   int tag_index, i;
   char scratch_space[500];
   struct char_data *target_ch = NULL;
-  struct remem *mem_record = NULL;
 
   // Sanity check.
   if (!actor || !viewer) {
@@ -370,189 +372,14 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       unpiloted_vehicle = NULL;
 
       // Short-circuit check: @self.
-      NEW_EMOTE_DEBUG(actor, "Evaluating tag check string '^c%s^n' (at_mode=%s).\r\n", tag_check_string, at_mode ? "Y":"N");
+      NEW_EMOTE_DEBUG(actor, "\r\nEvaluating tag check string '^c%s^n' (at_mode=%s, require_exact_match=%s).\r\n", tag_check_string, at_mode ? "Y":"N", require_exact_match ? "Y":"N");
       bool self_mode = at_mode && (!str_cmp("self", tag_check_string) || !str_cmp("me", tag_check_string) || !str_cmp("myself", tag_check_string));
       if (self_mode) {
         target_ch = actor;
       } else {
-        // Compare it to bystanders' memorized names. Try for exact matches first.
-        if (!target_ch) {
-          for (target_ch = in_room ? in_room->people : in_veh->people;
-               target_ch;
-               target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
-          {
-            // No such thing as remembering an NPC, and you can't target someone you can't see.
-            if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
-              continue;
-
-            // Check for exact match with memory.
-            if (!IS_NPC(actor) && (mem_record = safe_found_mem(actor, target_ch)) && !str_cmp(mem_record->mem, tag_check_string))
-              break;
-          }
-          if (target_ch) {
-            NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by memory (exact).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
-          }
-        }
-
-        // Compare it to bystanders' memorized names. Now that exact matches mode is out of the way, go for imprecise.
-        if (!target_ch && !require_exact_match) {
-          for (target_ch = in_room ? in_room->people : in_veh->people;
-               target_ch;
-               target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
-          {
-            // No such thing as remembering an NPC, and you can't target someone you can't see.
-            if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
-              continue;
-
-            // Check for imprecise match with memory.
-            if (!IS_NPC(actor) && (mem_record = safe_found_mem(actor, target_ch)) && !strn_cmp(mem_record->mem, tag_check_string, strlen(tag_check_string)))
-              break;
-          }
-          if (target_ch) {
-            NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by memory (approximate).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
-          }
-        }
-
-        // Didn't find anyone by that memorized name? Check PC names, trying for exact match first.
-        if (!target_ch) {
-          for (target_ch = in_room ? in_room->people : in_veh->people;
-               target_ch;
-               target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
-          {
-            // NPCs don't have player data to check, and you can't target someone you can't see.
-            if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
-              continue;
-
-            if (!str_cmp(target_ch->player.char_name, tag_check_string))
-              break;
-          }
-          if (target_ch) {
-            NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by name (exact).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
-          }
-        }
-
-        if (!target_ch && !require_exact_match) {
-          for (target_ch = in_room ? in_room->people : in_veh->people;
-               target_ch;
-               target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
-          {
-            // NPCs don't have player data to check, and you can't target someone you can't see.
-            if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
-              continue;
-
-            if (!strn_cmp(target_ch->player.char_name, tag_check_string, strlen(tag_check_string)))
-              break;
-          }
-          if (target_ch) {
-            NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by name (approximate).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
-          }
-        }
-
-        // Didn't find anyone by their PC name? Check keywords (only if not in exact-match mode).
-        if (!target_ch && !require_exact_match) {
-          for (target_ch = in_room ? in_room->people : in_veh->people;
-               target_ch;
-               target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
-          {
-            // Can't target someone you can't see.
-            if (!CAN_SEE(actor, target_ch))
-              continue;
-
-            if (str_str(GET_KEYWORDS(target_ch), tag_check_string)) {
-              // Found someone, stop looking.
-              break;
-            }
-          }
-          if (target_ch) {
-            NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by alias.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
-          }
-        }
-
-        // Didn't find anyone by their keywords? Check in short description (only if not in exact-match mode).
-        if (!target_ch && !require_exact_match) {
-          for (target_ch = in_room ? in_room->people : in_veh->people;
-               target_ch;
-               target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
-          {
-            // Can't target someone you can't see.
-            if (!CAN_SEE(actor, target_ch))
-              continue;
-
-            if (str_str(GET_NAME(target_ch), tag_check_string)) {
-              // Found someone, stop looking.
-              break;
-            }
-          }
-          if (target_ch) {
-            NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by alias.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
-          }
-        }
-
-        // Still nobody? Alright, check vehicles for keywords.
-        if (!target_ch && !require_exact_match) {
-          for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
-               tveh;
-               tveh = tveh->next_veh)
-          {
-            if (is_abbrev(GET_VEH_NAME(tveh), tag_check_string)) {
-              // Found a valid vehicle, stop looking.
-              target_ch = get_driver(tveh);
-
-              if (target_ch) {
-                // TODO: This means you can only target a vehicle that is actively controlled by someone. Empty and non-controlled vehicles are skipped.
-                NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by vehicle name.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
-                break;
-              }
-            }
-          }
-
-          // Didn't find a piloted vehicle by name? Look by room desc.
-          if (!target_ch) {
-            for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
-                 tveh;
-                 tveh = tveh->next_veh)
-            {
-              if (is_abbrev(GET_VEH_ROOM_DESC(tveh), tag_check_string)) {
-                // Found a valid vehicle, stop looking.
-                target_ch = get_driver(tveh);
-
-                if (target_ch) {
-                  // TODO: This means you can only target a vehicle that is actively controlled by someone. Empty and non-controlled vehicles are skipped.
-                  NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by vehicle room desc.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
-                  break;
-                }
-              }
-            }
-          }
-
-          // Didn't find a piloted vehicle by room desc? Look for unpiloted by name.
-          if (!target_ch) {
-            for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
-                 tveh;
-                 tveh = tveh->next_veh)
-            {
-              if (str_str(GET_VEH_NAME(tveh), tag_check_string)) {
-                unpiloted_vehicle = tveh;
-                NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found unpiloted %s by vehicle name.\r\n", tag_check_string, GET_VEH_NAME(tveh));
-                break;
-              }
-            }
-          }
-
-          // Didn't find unpiloted by name? Unpiloted by room desc.
-          if (!unpiloted_vehicle) {
-            for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
-                 tveh;
-                 tveh = tveh->next_veh)
-            {
-              if (str_str(GET_VEH_ROOM_DESC(tveh), tag_check_string)) {
-                unpiloted_vehicle = tveh;
-                NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found unpiloted %s by vehicle room desc.\r\n", tag_check_string, GET_VEH_NAME(tveh));
-                break;
-              }
-            }
-          }
-        }
+        target_ch = find_target_character_for_emote(actor, tag_check_string, require_exact_match, in_room, in_veh);
+        if (!target_ch)
+          unpiloted_vehicle = find_target_vehicle_for_emote(actor, tag_check_string, in_room, in_veh);
       }
 
       // Found someone.
@@ -564,7 +391,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
 
         if (target_ch) {
           // If the viewer is the actor, and it's not @self, just stop-- we don't self-highlight.
-          if (viewer == target_ch && viewer == actor && !self_mode)
+          if (viewer == target_ch && viewer == actor && !self_mode && !at_mode)
             continue;
 
           // In quote mode, we only do viewer highlights. @-targets are considered invalid in quotes.
@@ -620,7 +447,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       start_of_new_sentence = FALSE;
   }
 
-  NEW_EMOTE_DEBUG(actor, "\r\nTagging pass of emote done. Now doing speech pass. Combine these later...");
+  NEW_EMOTE_DEBUG(actor, "\r\nTagging pass of emote done. Now doing speech pass. Combine these later...\r\n");
 
   // Next pass: Convert speech.
   int language_in_use = -1;
@@ -771,7 +598,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
     i++;
   }
 
-  NEW_EMOTE_DEBUG_SPEECH(actor, "Finished evaluation of emote projection for %s.\r\n\r\n", GET_CHAR_NAME(viewer));
+  NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nFinished evaluation of emote projection for %s.\r\n\r\n", GET_CHAR_NAME(viewer));
 
   // Add a newline.
   strlcat(mutable_echo_string, "\r\n", sizeof(mutable_echo_string));
@@ -822,7 +649,7 @@ ACMD(do_new_echo) {
   }
 
   // Reject lines that would overflow the buffer.
-  FAILURE_CASE((pct_writer - storage_buf) >= (int) sizeof(storage_buf), "Sorry, your emote was too long. Please shorten it.\r\n");
+  FAILURE_CASE((pct_writer - storage_buf) >= (int) sizeof(storage_buf) - 1, "Sorry, your emote was too long. Please shorten it.\r\n");
 
   // Null-terminate the buffer.
   *pct_writer = '\0';
@@ -940,8 +767,34 @@ ACMD(do_new_echo) {
     }
   }
 
-  // Only questors and staff can echo without their names.
+  // Only questors and staff can echo without their names. This isn't a precondition check, but rather a boolean flag for if more logic is applied later on.
   bool must_echo_with_name = !(!(ch->desc) || access_level(ch, LVL_BUILDER) || PRF_FLAGGED(ch, PRF_QUESTOR));
+
+  // All @-strings must resolve to a valid target.
+  for (const char *at_reader = storage_buf; *at_reader && (unsigned long) (at_reader - storage_buf) < sizeof(storage_buf) - 1; at_reader++) {
+    if (*at_reader != '@')
+      continue;
+
+    // Make sure we're not at the end of the block.
+    if (!*(++at_reader)) {
+      send_to_char("Emotes can't end with the @ symbol.\r\n", ch);
+      return;
+    }
+
+    char at_tag[sizeof(storage_buf) + 1];
+    char *at_writer = at_tag;
+    while (isalpha(*at_reader)) {
+      *(at_writer++) = *(at_reader++);
+    }
+    *at_writer = '\0';
+
+    // We know that exact mode must be false here since this is an @-tag.
+    if (!find_target_character_for_emote(ch, at_tag, FALSE, in_room, in_veh)
+        && !find_target_vehicle_for_emote(ch, at_tag, in_room, in_veh)) {
+      send_to_char(ch, "No valid target was found for tag '%s', please revise your emote.\r\n", at_tag);
+      return;
+    }
+  }
 
   // All checks done, we're clear to emote. We know that storage_buf gets reused later, so let's save our emote from that fate.
   char emote_buf[strlen(storage_buf) + 1];
@@ -1242,4 +1095,170 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
   }
 
   return replaced_message;
+}
+
+struct char_data *find_target_character_for_emote(struct char_data *actor, const char *tag_check_string, bool require_exact_match, struct room_data *in_room, struct veh_data *in_veh) {
+  struct remem *mem_record = NULL;
+
+  if (is_abbrev(tag_check_string, "self") || is_abbrev(tag_check_string, "me") || is_abbrev(tag_check_string, "myself"))
+    return actor;
+
+  // Compare it to bystanders' memorized names. Try for exact matches first.
+  for (struct char_data *target_ch = in_room ? in_room->people : in_veh->people;
+       target_ch;
+       target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+  {
+    // No such thing as remembering an NPC, and you can't target someone you can't see.
+    if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
+      continue;
+
+    // Check for exact match with memory.
+    if (!IS_NPC(actor) && (mem_record = safe_found_mem(actor, target_ch)) && !str_cmp(mem_record->mem, tag_check_string)) {
+      NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by memory (exact).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+      return target_ch;
+    }
+  }
+
+  // Compare it to bystanders' memorized names. Now that exact matches mode is out of the way, go for imprecise.
+  if (!require_exact_match) {
+    for (struct char_data *target_ch = in_room ? in_room->people : in_veh->people;
+         target_ch;
+         target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+    {
+      // No such thing as remembering an NPC, and you can't target someone you can't see.
+      if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
+        continue;
+
+      // Check for imprecise match with memory.
+      if (!IS_NPC(actor) && (mem_record = safe_found_mem(actor, target_ch)) && !strn_cmp(mem_record->mem, tag_check_string, strlen(tag_check_string))) {
+        NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by memory (approximate).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        return target_ch;
+      }
+    }
+  }
+
+  // Didn't find anyone by that memorized name? Check PC names, trying for exact match first.
+  for (struct char_data *target_ch = in_room ? in_room->people : in_veh->people;
+       target_ch;
+       target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+  {
+    // NPCs don't have player data to check, and you can't target someone you can't see.
+    if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
+      continue;
+
+    if (!str_cmp(target_ch->player.char_name, tag_check_string)) {
+      NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by name (exact).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+      return target_ch;
+    }
+  }
+
+  if (!require_exact_match) {
+    for (struct char_data *target_ch = in_room ? in_room->people : in_veh->people;
+         target_ch;
+         target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+    {
+      // NPCs don't have player data to check, and you can't target someone you can't see.
+      if (IS_NPC(target_ch) || !CAN_SEE(actor, target_ch))
+        continue;
+
+      if (!strn_cmp(target_ch->player.char_name, tag_check_string, strlen(tag_check_string))) {
+        NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by name (approximate).\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        return target_ch;
+      }
+    }
+  }
+
+  // Didn't find anyone by their PC name? Check keywords (only if not in exact-match mode).
+  if (!require_exact_match) {
+    for (struct char_data *target_ch = in_room ? in_room->people : in_veh->people;
+         target_ch;
+         target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+    {
+      // Can't target someone you can't see.
+      if (!CAN_SEE(actor, target_ch))
+        continue;
+
+      if (str_str(GET_KEYWORDS(target_ch), tag_check_string)) {
+        NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by alias.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        return target_ch;
+      }
+    }
+  }
+
+  // Didn't find anyone by their keywords? Check in short description (only if not in exact-match mode).
+  if (!require_exact_match) {
+    for (struct char_data *target_ch = in_room ? in_room->people : in_veh->people;
+         target_ch;
+         target_ch = in_room ? target_ch->next_in_room : target_ch->next_in_veh)
+    {
+      // Can't target someone you can't see.
+      if (!CAN_SEE(actor, target_ch))
+        continue;
+
+      if (str_str(GET_NAME(target_ch), tag_check_string)) {
+        NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by alias.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+        return target_ch;
+      }
+    }
+  }
+
+  // Still nobody? Alright, check vehicles for keywords.
+  if (!require_exact_match) {
+    for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
+         tveh;
+         tveh = tveh->next_veh)
+    {
+      if (is_abbrev(GET_VEH_NAME(tveh), tag_check_string)) {
+        // Found a valid vehicle, stop looking.
+        struct char_data *target_ch = get_driver(tveh);
+
+        if (target_ch) {
+          NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by vehicle name.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+          return target_ch;
+        }
+      }
+    }
+
+    // Didn't find a piloted vehicle by name? Look by room desc.
+    for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
+         tveh;
+         tveh = tveh->next_veh)
+    {
+      if (is_abbrev(GET_VEH_ROOM_DESC(tveh), tag_check_string)) {
+        // Found a valid vehicle, stop looking.
+        struct char_data *target_ch = get_driver(tveh);
+
+        if (target_ch) {
+          NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found %s by vehicle room desc.\r\n", tag_check_string, GET_CHAR_NAME(target_ch));
+          return target_ch;
+        }
+      }
+    }
+  }
+  return NULL;
+}
+
+struct veh_data *find_target_vehicle_for_emote(struct char_data *actor, const char *tag_check_string, struct room_data *in_room, struct veh_data *in_veh) {
+  // Didn't find a piloted vehicle by room desc? Look for unpiloted by name.
+  for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
+       tveh;
+       tveh = tveh->next_veh)
+  {
+    if (str_str(GET_VEH_NAME(tveh), tag_check_string)) {
+      NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found unpiloted %s by vehicle name.\r\n", tag_check_string, GET_VEH_NAME(tveh));
+      return tveh;
+    }
+  }
+
+  // Didn't find unpiloted by name? Unpiloted by room desc.
+  for (struct veh_data *tveh = in_room ? in_room->vehicles : in_veh->carriedvehs;
+       tveh;
+       tveh = tveh->next_veh)
+  {
+    if (str_str(GET_VEH_ROOM_DESC(tveh), tag_check_string)) {
+      NEW_EMOTE_DEBUG(actor, "\r\nWith target string '%s', found unpiloted %s by vehicle room desc.\r\n", tag_check_string, GET_VEH_NAME(tveh));
+      return tveh;
+    }
+  }
+  return NULL;
 }
