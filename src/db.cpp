@@ -4027,6 +4027,7 @@ void reset_zone(int zone, int reboot)
         }
 
         mob = read_mobile(ZCMD.arg1, REAL);
+        mob->mob_loaded_in_room = GET_ROOM_VNUM(&world[ZCMD.arg3]);
         char_to_room(mob, &world[ZCMD.arg3]);
         act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
         last_cmd = 1;

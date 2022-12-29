@@ -1589,6 +1589,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
 
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "AFF: ^y%s^n\r\n", buf2);
+
   if (GET_BUILDING(k)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Currently working on: ^c%s^n (%ld)\r\n", GET_OBJ_NAME(GET_BUILDING(k)), GET_OBJ_VNUM(GET_BUILDING(k)));
   }
@@ -1762,6 +1763,9 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   /* Showing the bitvector */
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
   send_to_char(ch, "%sAFF: ^y%s\r\n", buf, buf2);
+  if (k->mob_loaded_in_room) {
+    send_to_char(ch, "Loaded in room: ^c%ld^n\r\n", k->mob_loaded_in_room);
+  }
   strlcpy(buf2, write_vision_string_for_display(k, VISION_STRING_MODE_STAFF), sizeof(buf2));
   send_to_char(ch, "%s\r\n", buf2);
 

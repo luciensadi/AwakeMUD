@@ -95,6 +95,7 @@ extern bool mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
 extern char *get_player_name(vnum_t id);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
+extern bool check_sentinel_snap_back(struct char_data *ch);
 
 // Corpse saving externs.
 extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
@@ -4786,7 +4787,10 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
     return FALSE;
   }
 
-  bool vict_will_not_move = !IS_NPC(vict) || MOB_FLAGGED(vict, MOB_SENTINEL) || MOB_FLAGGED(vict, MOB_EMPLACED) || AFF_FLAGGED(vict, AFF_PRONE);
+  bool vict_will_not_move = !IS_NPC(vict) || MOB_FLAGGED(vict, MOB_EMPLACED) || AFF_FLAGGED(vict, AFF_PRONE);
+
+  // Sentinels won't ever move if they have a spec assigned.
+  vict_will_not_move |= (MOB_FLAGGED(vict, MOB_SENTINEL) && (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)));
 
   // If we're wielding a ranged weapon, try to shoot.
   if (RANGE_OK(vict)) {
@@ -4809,11 +4813,11 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
       }
 
       for (distance = 1; !is_responding && (nextroom && (distance <= 4)); distance++) {
-        // Players and sentinels never charge, so we stop processing when we're getting attacked from beyond our weapon or sight range.
+        // Players and stationary mobs never charge, so we stop processing when we're getting attacked from beyond our weapon or sight range.
         if (vict_will_not_move && (distance > range || distance > sight)) {
           if (IS_NPC(vict)) {
             char buf[100];
-            snprintf(buf, sizeof(buf), "Sentinel/prone/emplaced $n not ranged-responding: $N is out of range (weap %d, sight %d).", range, sight);
+            snprintf(buf, sizeof(buf), "Prone/emplaced $n not ranged-responding: $N is out of range (weap %d, sight %d).", range, sight);
             act(buf, FALSE, vict, 0, ch, TO_ROLLS);
           }
           return FALSE;
@@ -4825,6 +4829,10 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
           if (temp == ch) {
             // If we're over our weapon's max range:
             if (distance > range && IS_NPC(vict)) {
+              // Prevent endless sentinel baiting.
+              if (check_sentinel_snap_back(vict))
+                return TRUE;
+
               act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
               act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
               char_from_room(vict);
@@ -4870,6 +4878,9 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   else if (!vict_will_not_move) {
     for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
       if (CAN_GO(vict, dir) && EXIT2(vict->in_room, dir)->to_room == ch->in_room) {
+        if (check_sentinel_snap_back(vict))
+          return TRUE;
+
         act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
         act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
         char_from_room(vict);
