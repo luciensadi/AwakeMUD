@@ -4495,6 +4495,12 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   bool vict_is_imp_invis = IS_AFFECTED(victim, AFF_IMP_INVIS);
   bool vict_is_just_invis = IS_AFFECTED(victim, AFF_INVISIBLE);
 
+  /* This is not currently used-- it technically should induce a +4 modifier on everyone, only +2 vs thermo/ultrasound/radar(vehicles).
+     However, it's been +0 vs ultrasound for a while now, so implementing that would be a balance change, and would require additional thought--
+     for instance, how do we penalize people for always being invis (mages face resistance tests, which don't exist for ruthenium),
+     and how do we make sure people don't cheese it by removing / wearing ruthenium on an alias or trigger right before/after combat? */
+  // bool vict_is_ruthenium = vict_is_just_invis;
+
   if ((access_level(ch, LVL_PRESIDENT) || access_level(victim, LVL_PRESIDENT)) && (PRF_FLAGGED(ch, PRF_ROLLS) || PRF_FLAGGED(victim, PRF_ROLLS))) {
     snprintf(rbuf, sizeof(rbuf), "^b[c_v_p for $n: UL=%d, TH=%d, AS=%d; for $N: IMP(aff)=%d, STD(aff)=%d]",
              ch_has_ultrasound, ch_has_thermographic, ch_sees_astral, vict_is_imp_invis, vict_is_just_invis);
