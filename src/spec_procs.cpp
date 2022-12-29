@@ -65,6 +65,7 @@ extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
 extern const char *get_plaintext_score_essence(struct char_data *ch);
 extern void diag_char_to_char(struct char_data * i, struct char_data * ch);
 extern bool deactivate_power(struct char_data *ch, int power);
+extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
 
 
 extern struct command_info cmd_info[];
@@ -3611,16 +3612,26 @@ SPECIAL(toggled_invis)
   if (CMD_IS("deactivate")) {
     skip_spaces(&argument);
     if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
-      if (obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
-        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_INVISIBLE);
-        obj->obj_flags.bitvector.RemoveBit(AFF_INVISIBLE);
+      if (obj->obj_flags.bitvector.IsSet(AFF_RUTHENIUM)) {
+        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_RUTHENIUM);
+        obj->obj_flags.bitvector.RemoveBit(AFF_RUTHENIUM);
         send_to_char(ch, "You feel the static fade as the ruthenium polymers in %s power down.\r\n", GET_OBJ_NAME(obj));
         act("The air shimmers briefly as $n fades into view.", FALSE, ch, 0, 0, TO_ROOM);
-        return TRUE;
+        WAIT_STATE(ch, 0.5 RL_SEC);
+
+        // NPCs around you become alert/alarmed depending on disposition.
+        for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people;
+             viewer;
+             viewer = ch->in_veh ? viewer->next_in_veh : viewer->next_in_room)
+        {
+          if (IS_NPC(viewer)) {
+            process_spotted_invis(viewer, ch);
+          }
+        }
       } else {
         send_to_char(ch, "%s is already deactivated.\r\n", capitalize(GET_OBJ_NAME(obj)));
-        return TRUE;
       }
+      return TRUE;
     }
     return FALSE;
   }
@@ -3628,16 +3639,27 @@ SPECIAL(toggled_invis)
   if (CMD_IS("activate")) {
     skip_spaces(&argument);
     if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
-      if (!obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
-        AFF_FLAGS(obj->worn_by).SetBit(AFF_INVISIBLE);
-        obj->obj_flags.bitvector.SetBit(AFF_INVISIBLE);
+      if (!obj->obj_flags.bitvector.IsSet(AFF_RUTHENIUM)) {
         send_to_char(ch, "You feel a tiny static charge as the ruthenium polymers in %s power up.\r\n", GET_OBJ_NAME(obj));
         act("The world bends around $n as $e vanishes from sight.", FALSE, ch, 0, 0, TO_ROOM);
-        return TRUE;
+        WAIT_STATE(ch, 0.5 RL_SEC);
+
+        // NPCs around you become alert/alarmed depending on disposition.
+        for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people;
+             viewer;
+             viewer = ch->in_veh ? viewer->next_in_veh : viewer->next_in_room)
+        {
+          if (IS_NPC(viewer)) {
+            process_spotted_invis(viewer, ch);
+          }
+        }
+
+        AFF_FLAGS(obj->worn_by).SetBit(AFF_RUTHENIUM);
+        obj->obj_flags.bitvector.SetBit(AFF_RUTHENIUM);
       } else {
         send_to_char(ch, "%s is already activated.\r\n", capitalize(GET_OBJ_NAME(obj)));
-        return TRUE;
       }
+      return TRUE;
     }
     return FALSE;
   }

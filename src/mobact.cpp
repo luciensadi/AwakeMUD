@@ -70,6 +70,8 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 bool mob_cannot_be_aggressive(struct char_data *ch);
 bool mob_is_aggressive_towards_race(struct char_data *ch, int race);
 
+#define MOBACT_DEBUG
+
 // This takes up a significant amount of processing time, so let's precompute it.
 #define NUM_AGGRO_OCTETS 3
 int AGGRESSION_OCTETS[NUM_AGGRO_OCTETS];
@@ -177,7 +179,7 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
     return FALSE;
 
   // Idle PC? Failure.
-  if (!vict->desc || vict->char_specials.timer >= IDLE_TIMER_AGGRO_THRESHOLD) {
+  if (!IS_NPC(vict) && (!vict->desc || vict->char_specials.timer >= IDLE_TIMER_AGGRO_THRESHOLD)) {
 #ifdef MOBACT_DEBUG
     snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping %s - Idle / linkdead PC.", GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);

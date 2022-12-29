@@ -557,7 +557,7 @@ void affect_total(struct char_data * ch)
   }
 
   // remove the effects of spells
-  AFF_FLAGS(ch).RemoveBit(AFF_INVISIBLE);
+  AFF_FLAGS(ch).RemoveBit(AFF_RUTHENIUM);
   for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
     if (!sust->caster)
       spell_modify(ch, sust, FALSE);
@@ -741,7 +741,7 @@ void affect_total(struct char_data * ch)
       case CYB_DERMALPLATING:
         // Ruthenium sheathing.
         if (GET_CYBERWARE_TYPE(cyber) == CYB_DERMALSHEATHING && GET_OBJ_VAL(cyber, 3) == 1 && !wearing)
-          AFF_FLAGS(ch).SetBit(AFF_INVISIBLE);
+          AFF_FLAGS(ch).SetBit(AFF_RUTHENIUM);
         // todo
         break;
       case CYB_EYES:
@@ -998,19 +998,19 @@ void affect_total(struct char_data * ch)
   }
 
   // Strip invisibility from ruthenium etc if you're wearing about or body items that aren't also ruthenium.
-  if (AFF_FLAGGED(ch, AFF_INVISIBLE) || AFF_FLAGGED(ch, AFF_IMP_INVIS))
+  if (AFF_FLAGGED(ch, AFF_RUTHENIUM) || AFF_FLAGGED(ch, AFF_IMP_INVIS))
   {
     if (GET_EQ(ch, WEAR_ABOUT)) {
-      if (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_INVISIBLE)
+      if (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_RUTHENIUM)
             || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_ABOUT)).IsSet(AFF_IMP_INVIS))) {
-        AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);
+        AFF_FLAGS(ch).RemoveBits(AFF_RUTHENIUM, AFF_IMP_INVIS, ENDBIT);
       }
     }
     else if (GET_EQ(ch, WEAR_BODY)
-             && (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_INVISIBLE)
+             && (!(GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_RUTHENIUM)
                    || GET_OBJ_AFFECT(GET_EQ(ch, WEAR_BODY)).IsSet(AFF_IMP_INVIS))))
     {
-      AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);
+      AFF_FLAGS(ch).RemoveBits(AFF_RUTHENIUM, AFF_IMP_INVIS, ENDBIT);
     }
   }
 

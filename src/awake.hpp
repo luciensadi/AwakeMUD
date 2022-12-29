@@ -503,7 +503,7 @@ enum {
 /* affect bits: used in char_data.char_specials.saved.affected_by */
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
 
-#define AFF_INVISIBLE                           1  /* Char is invisible        */
+#define AFF_RUTHENIUM                           1  /* Char is invisible        */
 #define AFF_BANISH                              2
 #define AFF_ULTRASOUND                          3  /* Char can see invis chars    */
 #define AFF_PRONE                               4

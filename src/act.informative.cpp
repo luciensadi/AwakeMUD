@@ -1153,7 +1153,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     }
 
     // Make sure they always display flags that are relevant to the player.
-    if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
+    if (IS_AFFECTED(i, AFF_RUTHENIUM) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
       strlcat(buf, "(invisible) ", sizeof(buf));
 
     if (MOB_FLAGGED(i, MOB_FLAMEAURA) || affected_by_spell(i, SPELL_FLAME_AURA))
@@ -1348,7 +1348,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " (AFK)", sizeof(buf));
   if (PLR_FLAGGED(i, PLR_SWITCHED))
     strlcat(buf, " (switched)", sizeof(buf));
-  if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
+  if (IS_AFFECTED(i, AFF_RUTHENIUM) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
     strlcat(buf, " (invisible)", sizeof(buf));
   if (!IS_NPC(i)) {
     // Always display the Staff identifier.
@@ -4283,7 +4283,7 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
 
   strlcat(buf2, get_vision_string(ch), sizeof(buf2));
 
-  if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
+  if (IS_AFFECTED(ch, AFF_RUTHENIUM) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
     strlcat(buf2, "You are invisible.\r\n", sizeof(buf2));
 
 #ifdef ENABLE_HUNGER
@@ -4569,7 +4569,7 @@ ACMD(do_score)
     }
 
     static char invisibility_string[50];
-    if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
+    if (IS_AFFECTED(ch, AFF_RUTHENIUM) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
       strlcpy(invisibility_string, "You are invisible.", sizeof(invisibility_string));
     else
       strlcpy(invisibility_string, "", sizeof(invisibility_string));
@@ -6365,7 +6365,7 @@ ACMD(do_scan)
                 }
               }
 
-              if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
+              if (IS_AFFECTED(list, AFF_RUTHENIUM) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
                 strlcat(desc_line, "(invisible) ", sizeof(desc_line));
               }
 
@@ -6470,7 +6470,7 @@ ACMD(do_scan)
                 strlcat(desc_line, "^r(alarmed)^n ", sizeof(desc_line));
               }
 
-              if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
+              if (IS_AFFECTED(list, AFF_RUTHENIUM) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
                 strlcat(desc_line, "(invisible) ", sizeof(desc_line));
               }
 
@@ -6614,6 +6614,7 @@ ACMD(do_status)
 
   if (!IS_NPC(targ) && GET_POS(targ) == POS_MORTALLYW) {
     send_to_char(ch, "  ^RBleeding Out ^r(^R%d^r ticks left until death)^n\r\n", GET_PC_SALVATION_TICKS(targ));
+    printed = TRUE;
   }
 
   if (targ->real_abils.esshole) {
@@ -6644,12 +6645,15 @@ ACMD(do_status)
   }
   if (GET_TEMP_QUI_LOSS(targ)) {
     send_to_char(ch, "  Temporary Quickness Loss: %d\r\n", GET_TEMP_QUI_LOSS(targ));
+    printed = TRUE;
   }
   if (GET_TEMP_MAGIC_LOSS(targ)) {
     send_to_char(ch, "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(targ));
+    printed = TRUE;
   }
   if (GET_TEMP_ESSLOSS(targ)) {
     send_to_char(ch, "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(targ));
+    printed = TRUE;
   }
   if (GET_REACH(targ) && !(AFF_FLAGGED(targ, AFF_CLOSECOMBAT))) {
     send_to_char(ch, "  Extra Reach (%dm)\r\n", GET_REACH(targ));
@@ -6659,14 +6663,20 @@ ACMD(do_status)
     send_to_char(ch, "  Close Combat\r\n");
     printed = TRUE;
   }
+  if (AFF_FLAGGED(targ, AFF_RUTHENIUM)) {
+    send_to_char(ch, "  Ruthenium\r\n");
+    printed = TRUE;
+  }
   if (IS_PERCEIVING(targ)) {
     send_to_char("  Astral Perception (^yincreased TNs^n)\r\n", ch);
+    printed = TRUE;
   }
 
   {
     int conceal_rating = affected_by_power(targ, CONCEAL);
     if (conceal_rating) {
       send_to_char(ch, "  Spirit Concealment (%d)\r\n", conceal_rating);
+      printed = TRUE;
     }
   }
 

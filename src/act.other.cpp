@@ -341,7 +341,7 @@ ACMD(do_visible)
 
   bool has_become_visible = FALSE;
 
-  if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS)) {
+  if (affected_by_spell(ch, SPELL_INVIS) || affected_by_spell(ch, SPELL_IMP_INVIS)) {
     appear(ch);
     send_to_char("You break the spell of invisibility.\r\n", ch);
     has_become_visible = TRUE;

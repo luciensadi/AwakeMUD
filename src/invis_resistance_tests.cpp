@@ -57,20 +57,31 @@ void purge_invis_invis_resistance_records(struct char_data *ch) {
 
 // Returns TRUE if we're alarmed, FALSE otherwise.
 bool process_spotted_invis(struct char_data *ch, struct char_data *vict) {
-  // We don't get alarmed by invis NPCs.
-  if (IS_NPC(vict))
+  // PCs don't get alarmed.
+  if (!IS_NPC(ch))
     return FALSE;
 
-  // Refresh alert time to 20 since we're seeing someone being shady.
+  // NPCs don't get alarmed by other NPCs.
+  if (IS_NPC(vict) && !vict->desc)
+    return FALSE;
+
+  // Refresh alert time to 20 since we're seeing a PC being shady.
   GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 20);
 
   if (GET_MOBALERT(ch) != MALERT_ALARM) {
     // The more secure an area is, the twitchier the guards are. This evaluates TRUE if a given guard is twitchy.
-    bool alert_state_should_be_alarm = number(0, MAX_ZONE_SECURITY_RATING * 4) * 5 <= GET_SECURITY_LEVEL(get_ch_in_room(ch)) * 5;
+    int alert_threshold = GET_SECURITY_LEVEL(get_ch_in_room(ch)) * 5;
+    if (MOB_FLAGS(ch).AreAnySet(MOB_GUARD, MOB_AGGRESSIVE, MOB_AGGR_ELF, MOB_AGGR_ORK, MOB_AGGR_DWARF, MOB_AGGR_HUMAN, MOB_AGGR_TROLL, ENDBIT)) {
+      alert_threshold += 10;
+    } else if (MOB_FLAGGED(ch, MOB_HELPER)) {
+      alert_threshold += 5;
+    }
+    bool alert_state_should_be_alarm = number(0, MAX_ZONE_SECURITY_RATING * 4) * 5 <= alert_threshold;
 
     // Seeing someone walking around invis alarms you, or alerts you if you're not twitchy.
     if (alert_state_should_be_alarm) {
       GET_MOBALERT(ch) = MALERT_ALARM;
+      send_npc_newly_alarmed_message(ch, vict);
       if (access_level(vict, LVL_PRESIDENT) && PRF_FLAGGED(vict, PRF_ROLLS)) {
         send_to_char(vict, "^L[%s#%ld has become ^ralarmed^L due to seeing you while you're invis.]\r\n", GET_CHAR_NAME(ch), GET_MOB_UNIQUE_ID(ch));
       }

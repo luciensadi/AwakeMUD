@@ -151,11 +151,15 @@ struct attack_hit_type attack_hit_text[] =
 
 void appear(struct char_data * ch)
 {
-  AFF_FLAGS(ch).RemoveBits(AFF_IMP_INVIS,
-                           AFF_INVISIBLE,
-                           AFF_HIDE, ENDBIT);
+  AFF_FLAGS(ch).RemoveBit(AFF_HIDE);
 
-  // TODO: Go through all sustained spells in the game and remove those that are causing this character to be invisible.
+  // Remove any spells that are causing this character to be invisible.
+  for (struct sustain_data *hjp = GET_SUSTAINED(ch), *next_spell; hjp; hjp = next_spell) {
+    next_spell = hjp->next;
+    if ((hjp->spell == SPELL_IMP_INVIS || hjp->spell == SPELL_INVIS) && (hjp->caster == FALSE)) {
+      end_sustained_spell(ch, hjp);
+    }
+  }
 
   if (!IS_SENATOR(ch))
     act("$n slowly fades into existence.", FALSE, ch, 0, 0, TO_ROOM);
@@ -4431,6 +4435,7 @@ bool vehicle_has_ultrasound_sensors(struct veh_data *veh) {
 #define INVIS_CODE_TOTALINVIS  123
 #define BLIND_FIGHTING_MAX     (MAX_VISIBILITY_PENALTY / 2)
 #define BLIND_FIRE_PENALTY     MAX_VISIBILITY_PENALTY
+#define RUTHENIUM_PENALTY      4
 int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   int modifier = 0;
   char rbuf[2048];
@@ -4493,13 +4498,8 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
   // Next, vict invis info.
   bool vict_is_imp_invis = IS_AFFECTED(victim, AFF_IMP_INVIS);
-  bool vict_is_just_invis = IS_AFFECTED(victim, AFF_INVISIBLE);
-
-  /* This is not currently used-- it technically should induce a +4 modifier on everyone, only +2 vs thermo/ultrasound/radar(vehicles).
-     However, it's been +0 vs ultrasound for a while now, so implementing that would be a balance change, and would require additional thought--
-     for instance, how do we penalize people for always being invis (mages face resistance tests, which don't exist for ruthenium),
-     and how do we make sure people don't cheese it by removing / wearing ruthenium on an alias or trigger right before/after combat? */
-  // bool vict_is_ruthenium = vict_is_just_invis;
+  bool vict_is_ruthenium = IS_AFFECTED(victim, AFF_RUTHENIUM);
+  bool vict_is_just_invis = vict_is_ruthenium;
 
   if ((access_level(ch, LVL_PRESIDENT) || access_level(victim, LVL_PRESIDENT)) && (PRF_FLAGGED(ch, PRF_ROLLS) || PRF_FLAGGED(victim, PRF_ROLLS))) {
     snprintf(rbuf, sizeof(rbuf), "^b[c_v_p for $n: UL=%d, TH=%d, AS=%d; for $N: IMP(aff)=%d, STD(aff)=%d]",
@@ -4560,14 +4560,20 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   // That's handled in modify_target_rbuf_raw().
 
   // Ultrasound reduces all vision penalties by half (some restrictions apply, see store for details; SR3 p282)
+  int ultrasound_modifier = BLIND_FIRE_PENALTY;
   if (ch_has_ultrasound) {
     // Improved invisibility works against tech sensors. Regular invis does not, so we don't account for it here.
     if (vict_is_imp_invis) {
       // Invisibility penalty, we're at the full +8 from not being able to see them. This overwrites weather effects etc.
       // We don't apply the Adept blind fighting max here, as that's calculated later on.
-      modifier = BLIND_FIRE_PENALTY;
+      ultrasound_modifier = BLIND_FIRE_PENALTY;
       snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting improved invis: TN %d", GET_CHAR_NAME(ch), modifier);
+    } else if (vict_is_ruthenium) {
+      // Note that this will be divided by 2 later.
+      ultrasound_modifier = RUTHENIUM_PENALTY;
+      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting ruthenium: TN %d", GET_CHAR_NAME(ch), modifier);
     } else {
+      ultrasound_modifier = 0;
       snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character", GET_CHAR_NAME(ch));
     }
 
@@ -4579,13 +4585,13 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     // SR3 p196: Silence spell increases hearing perception test TN up to the lower of its successes or the spell's rating.
     // We don't have that test, so it seems reasonable to just shoehorn the TN increase in here.
     if (silence_level > 0) {
-      modifier += silence_level;
+      ultrasound_modifier += silence_level;
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", silence/stealth level adds %d", silence_level);
     }
 
     // Finally, apply ultrasound division. We add one since the system expects us to round up and we're using truncating integer math.
     if (modifier > 0) {
-      modifier = (modifier + 1) / 2;
+      ultrasound_modifier = (modifier + 1) / 2;
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "; /2 (round up) = %d", modifier);
 
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
@@ -4595,39 +4601,46 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // No ultrasound. Check for thermographic vision.
-  else if (ch_has_thermographic) {
-    // Improved invis? You can't see them.
+  int thermographic_modifier = BLIND_FIRE_PENALTY;
+  if (ch_has_thermographic) {
     if (vict_is_imp_invis) {
-      modifier = BLIND_FIRE_PENALTY;
+      // Improved invis? You can't see them.
+      thermographic_modifier = BLIND_FIRE_PENALTY;
       snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting improved invis: %d", GET_CHAR_NAME(ch), modifier);
     }
-
-    // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
-    // This deviates from canon, where thermographic can see through standard invis.
-    else if (vict_is_just_invis) {
-      modifier = 2;
+    else if (vict_is_just_invis || vict_is_ruthenium) {
+      // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
+      // This deviates from canon, where thermographic can see through standard invis.
+      thermographic_modifier = RUTHENIUM_PENALTY / 2;
       snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting invis (second stanza): %d", GET_CHAR_NAME(ch), modifier);
     }
+    else {
+      thermographic_modifier = 0;
+    }
 
-    if (modifier > 0) {
+    if (thermographic_modifier > 0) {
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
         act(rbuf, 0, victim, 0, 0, TO_ROLLS);
     }
   }
 
-  // Low-light and normal vision aren't any help here.
-  else {
-    if (vict_is_imp_invis || vict_is_just_invis) {
-      modifier = BLIND_FIRE_PENALTY;
+  int low_light_modifier = 0;
+  int normal_modifier = 0;
+  if (vict_is_imp_invis || vict_is_just_invis) {
+    low_light_modifier = BLIND_FIRE_PENALTY;
+    normal_modifier = BLIND_FIRE_PENALTY;
 
-      snprintf(rbuf, sizeof(rbuf), "%s: Low-light or standard vision fighting invis: %d", GET_CHAR_NAME(ch), modifier);
+    snprintf(rbuf, sizeof(rbuf), "%s: Low-light or standard vision fighting invis: %d", GET_CHAR_NAME(ch), modifier);
 
-      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
-      if (ch->in_room != victim->in_room)
-        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
-    }
+    act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+    if (ch->in_room != victim->in_room)
+      act(rbuf, 0, victim, 0, 0, TO_ROLLS);
   }
+
+  // Select the best modifier.
+  modifier = MIN(MIN(MIN(ultrasound_modifier, thermographic_modifier), low_light_modifier), normal_modifier);
+  snprintf(rbuf, sizeof(rbuf), "%s: Selected lowest vision modifier %d.", GET_CHAR_NAME(ch), modifier);
 
   // MitS p148: Penalty is capped to +4 with Blind Fighting. We also cap it to +8 without, since that's Blind Fire.
   if (GET_POWER(ch, ADEPT_BLIND_FIGHTING)) {
@@ -4654,10 +4667,11 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
   // With the recent bugfix that enabled the invis penalties that were supposed to be there, there's been a lot
   // of concern about mundanes getting the short end of the stick-- they do not have the ability to perceive to
-  // get around invis penalties like awakened characters do. Thus, this decidedly non-canon hack:
-  if (IS_NPC(victim) && GET_TRADITION(ch) == TRAD_MUNDANE) {
+  // get around invis penalties like awakened characters do. Thus, this decidedly non-canon hack, which reduces
+  // invis modifiers to 2 (the perception penalty) for mundanes:
+  if (IS_NPC(victim) && GET_TRADITION(ch) == TRAD_MUNDANE && modifier > 2) {
     snprintf(rbuf, sizeof(rbuf), "%s: Negating invis penalty due to mundane PC vs NPC.", GET_CHAR_NAME(ch));
-    modifier = 0;
+    modifier = MIN(modifier, 2);
   }
 
   snprintf(rbuf, sizeof(rbuf), "%s: Final char-to-char visibility TN: ^c%d^n", GET_CHAR_NAME(ch), modifier);

@@ -57,6 +57,7 @@ extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
+extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
 
 extern SPECIAL(johnson);
 extern SPECIAL(landlord_spec);
@@ -2441,17 +2442,33 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
 #endif
   }
 
+  bool vict_is_ruthenium = AFF_FLAGGED(vict, AFF_RUTHENIUM);
+
   // Astral perception sees most things-- unless said thing is an inanimate mob with no spells on it.
-  if (has_astral && !(MOB_FLAGGED(vict, MOB_INANIMATE) && !GET_SUSTAINED(vict)))
+  if (has_astral && !(MOB_FLAGGED(vict, MOB_INANIMATE) && !GET_SUSTAINED(vict))) {
+    // Set alarm status for ruthenium.
+    if (IS_NPC(ch) && vict_is_ruthenium && (has_ultrasound || has_thermographic || is_vehicle))
+      process_spotted_invis(ch, vict);
     return TRUE;
+  }
 
   // Ultrasound pierces all invis as long as it's in the same room and not blocked by silence or stealth.
-  if (has_ultrasound && !affected_by_spell(vict, SPELL_STEALTH) && vict_room->silence[ROOM_NUM_SPELLS_OF_TYPE] <= 0)
+  if (has_ultrasound && !affected_by_spell(vict, SPELL_STEALTH) && vict_room->silence[ROOM_NUM_SPELLS_OF_TYPE] <= 0) {
+    // Set alarm status for ruthenium.
+    if (IS_NPC(ch) && vict_is_ruthenium && (has_ultrasound || has_thermographic || is_vehicle))
+      process_spotted_invis(ch, vict);
     return TRUE;
+  }
 
   // Allow resist test VS improved invis-- but only if you're not seeing the world through sensors.
   if (IS_AFFECTED(vict, AFF_SPELLIMPINVIS)) {
-    return !is_vehicle && can_see_through_invis(ch, vict);
+    if (!is_vehicle && can_see_through_invis(ch, vict)) {
+      // Set alarm status for ruthenium.
+      if (IS_NPC(ch) && vict_is_ruthenium && (has_ultrasound || has_thermographic || is_vehicle))
+        process_spotted_invis(ch, vict);
+      return TRUE;
+    }
+    return FALSE;
   }
 
   // Thermoptic camouflage, a houseruled thing that doesn't actually show up in the game yet. This can only be broken by ultrasound.
@@ -2460,8 +2477,14 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   }
 
   // Ruthenium is pierced by thermographic vision, which is default on vehicles.
-  if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
-    return has_thermographic;
+  if (vict_is_ruthenium) {
+    if (has_thermographic) {
+      // Set alarm status for ruthenium.
+      if (IS_NPC(ch) && vict_is_ruthenium && (has_ultrasound || has_thermographic || is_vehicle))
+        process_spotted_invis(ch, vict);
+      return TRUE;
+    }
+    return FALSE;
   }
 
   // Allow resistance test VS invis spell.

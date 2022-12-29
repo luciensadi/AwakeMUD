@@ -26,6 +26,7 @@
 #include "limits.hpp"
 #include "ignore_system.hpp"
 #include "newmagic.hpp"
+#include "invis_resistance_tests.hpp"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -3040,38 +3041,38 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
                               "You're already using a light.\r\n",
                               "You're already wearing something on your head.\r\n",
                               "You're already wearing something on your eyes.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#1).  PLEASE REPORT.\r\n",
                               "You can't wear anything else in your ears.\r\n",
                               "There is already something covering your face.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#2).  PLEASE REPORT.\r\n",
                               "You can't wear anything else around your neck.\r\n",
                               "You already have something slung over your back.\r\n",
                               "You're already wearing something about your body.\r\n",
                               "You're already wearing something on your body.\r\n",
                               "You're already wearing something under your clothes.\r\n",
                               "You're already wearing something on your arms.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#3).  PLEASE REPORT.\r\n",
                               "You have something under both of your arms.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#4).  PLEASE REPORT.\r\n",
                               "You're already wearing something around both of your wrists.\r\n",
                               "You're already wearing something on your hands.\r\n",
                               "You're already wielding a weapon.\r\n",
                               "You're already holding something.\r\n",
                               "You're already using a shield.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
-                              "Who do you think you are? Mr. T?.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#4).  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#5).  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#6).  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#7).  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#8).  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#9).  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#10).  PLEASE REPORT.\r\n",
+                              "Who do you think you are? Mr. T?\r\n",
                               "You already have something in your belly button.\r\n",
                               "You already have something around your waist.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#11).  PLEASE REPORT.\r\n",
                               "You are already wearing something around both or your thighs.\r\n",
                               "You're already wearing something on your legs.\r\n",
-                              "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#12).  PLEASE REPORT.\r\n",
                               "You already have something on each of your ankles.\r\n",
                               "You are already wearing something on your feet.\r\n",
                               "You're already wearing something on your feet.\r\n",
@@ -3237,6 +3238,28 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
       if (print_messages)
         send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
       return;
+    }
+  }
+
+  // House rule: Swapping in and out of ruthenium takes time. This addresses potential cheese.
+  {
+    SPECIAL(toggled_invis);
+    if (GET_OBJ_SPEC(obj) == toggled_invis || obj->obj_flags.bitvector.IsSet(AFF_RUTHENIUM)) {
+      send_to_char("You carefully shrug into the high-tech garment.\r\n", ch);
+      WAIT_STATE(ch, 3 RL_SEC);
+
+      // If the invis is already on, they spot you as invis.
+      if (obj->obj_flags.bitvector.IsSet(AFF_RUTHENIUM)) {
+        // NPCs around you become alert/alarmed depending on disposition.
+        for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people;
+             viewer;
+             viewer = ch->in_veh ? viewer->next_in_veh : viewer->next_in_room)
+        {
+          if (IS_NPC(viewer) && CAN_SEE(viewer, ch)) {
+            process_spotted_invis(viewer, ch);
+          }
+        }
+      }
     }
   }
 
@@ -3516,6 +3539,29 @@ void perform_remove(struct char_data * ch, int pos)
   int previous_armor_penalty = get_armor_penalty_grade(ch);
 
   obj_to_char(unequip_char(ch, pos, TRUE), ch);
+
+  // House rule: Swapping in and out of ruthenium takes time. This addresses potential cheese.
+  {
+    SPECIAL(toggled_invis);
+    if (GET_OBJ_SPEC(obj) == toggled_invis || obj->obj_flags.bitvector.IsSet(AFF_RUTHENIUM)) {
+      send_to_char("You carefully remove the high-tech garment.\r\n", ch);
+      WAIT_STATE(ch, 3 RL_SEC);
+
+      // If the invis is already on, they spot you as someone who has just revealed themselves as previously invis.
+      if (obj->obj_flags.bitvector.IsSet(AFF_RUTHENIUM)) {
+        // NPCs around you become alert/alarmed depending on disposition.
+        for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people;
+             viewer;
+             viewer = ch->in_veh ? viewer->next_in_veh : viewer->next_in_room)
+        {
+          if (IS_NPC(viewer) && CAN_SEE(viewer, ch)) {
+            process_spotted_invis(viewer, ch);
+          }
+        }
+      }
+    }
+  }
+
   act("You stop using $p.", FALSE, ch, obj, 0, TO_CHAR);
   act("$n stops using $p.", TRUE, ch, obj, 0, TO_ROOM);
 

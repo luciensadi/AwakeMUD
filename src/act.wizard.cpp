@@ -3160,7 +3160,7 @@ void perform_immort_vis(struct char_data *ch)
   void appear(struct char_data *ch);
 
   if (GET_INVIS_LEV(ch) == 0 && !IS_AFFECTED(ch, AFF_HIDE) &&
-      !IS_AFFECTED(ch, AFF_INVISIBLE))
+      !IS_AFFECTED(ch, AFF_RUTHENIUM))
   {
     send_to_char("You are already fully visible.\r\n", ch);
     return;

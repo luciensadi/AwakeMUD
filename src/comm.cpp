@@ -3304,7 +3304,7 @@ bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
   // And to anyone reading the code and thinking "Oh, it'd be a great prank to make my rival invis while they RP so they don't get the bonus!" -- no, that's abusing the system and will be punished.
   if (IS_AFFECTED(ch, AFF_IMP_INVIS)
        || IS_AFFECTED(ch, AFF_SPELLIMPINVIS)
-       || IS_AFFECTED(ch, AFF_INVISIBLE)
+       || IS_AFFECTED(ch, AFF_RUTHENIUM)
        || IS_AFFECTED(ch, AFF_SPELLINVIS))
     return FALSE;
 
