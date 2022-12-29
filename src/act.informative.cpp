@@ -4016,7 +4016,7 @@ const char *get_position_string(struct char_data *ch) {
       strlcpy(position_string, "DEAD!", sizeof(position_string));
       break;
     case POS_MORTALLYW:
-      snprintf(position_string, sizeof(position_string), "^rbleeding out! (^R%d^r ticks to death)^n", GET_PC_SALVATION_TICKS(ch));
+      snprintf(position_string, sizeof(position_string), "^rbleeding out^n! (^R%d^r ticks to death^n)^n ", GET_PC_SALVATION_TICKS(ch));
       break;
     case POS_STUNNED:
       strlcpy(position_string, "stunned!  You can't move!", sizeof(position_string));

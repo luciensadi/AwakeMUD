@@ -132,6 +132,27 @@ ACMD(do_debug) {
     return;
   }
 
+  if (is_abbrev(arg1, "generic_find")) {
+    const char *find_x_index_names[] = {
+      "FIND_CHAR_ROOM    ",
+      "FIND_CHAR_WORLD   ",
+      "FIND_OBJ_INV      ",
+      "FIND_OBJ_ROOM     ",
+      "FIND_OBJ_WORLD    ",
+      "FIND_OBJ_EQUIP    ",
+      "FIND_OBJ_VEH_ROOM ",
+      "FIND_CHAR_VEH_ROOM"
+    };
+
+    for (int i = 0; i < NUM_FIND_X_BITS; i++) {
+      struct obj_data *tmp_object = NULL;
+      struct char_data *tmp_char = NULL;
+
+      generic_find(rest_of_argument, 1 << i, ch, &tmp_char, &tmp_object);
+      send_to_char(ch, "%s: %s, %s\r\n", find_x_index_names[i], GET_CHAR_NAME(tmp_char), GET_OBJ_NAME(tmp_object));
+    }
+  }
+
   if (is_abbrev(arg1, "weather")) {
     rest_of_argument = any_one_arg(rest_of_argument, arg2);
 

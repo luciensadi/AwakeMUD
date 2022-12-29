@@ -1506,7 +1506,7 @@ void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode)
  */
 ACMD_DECLARE(quit_the_matrix_first);
 ACMD_DECLARE(stop_rigging_first);
-void command_interpreter(struct char_data * ch, char *argument, char *tcname)
+void command_interpreter(struct char_data * ch, char *argument, const char *tcname)
 {
   int cmd, length;
   extern int no_specials;

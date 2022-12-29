@@ -402,13 +402,15 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_VEH_DESTRUCTION_TIMER(veh) ((veh)->veh_destruction_timer)
 #define GET_VEH_ROOM_DESC(veh) ((veh)->description)
 #define GET_VEH_DEFPOS(veh) ((veh)->defined_position)
-#define GET_OBJ_NAME(obj) ((obj)->restring ? (obj)->restring : (obj)->text.name)
+#define GET_OBJ_NAME(obj) (!(obj) ? "<null>" : (obj)->restring ? (obj)->restring : (obj)->text.name)
 #define GET_OBJ_DESC(obj) ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
 #define GET_KEYWORDS(ch)  ((ch)->player.physical_text.keywords)
 #define GET_NAME(ch)      ((ch)->player.physical_text.name)
 #define GET_CHAR_NAME(ch) \
-  (((ch)->desc && (ch)->desc->original) ? \
-   (ch)->desc->original->player.char_name : ((ch)->player.char_name ? (ch)->player.char_name : GET_NAME((ch))))
+  (!(ch) ? "<null>" : \
+           ((ch)->desc && (ch)->desc->original) ? (ch)->desc->original->player.char_name : \
+                                                  ((ch)->player.char_name ? (ch)->player.char_name : \
+                                                                            GET_NAME((ch))))
 #define GET_TITLE(ch)   ((ch)->player.title)
 #define GET_PRETITLE(ch) ((ch)->player.pretitle)
 #define GET_WHOTITLE(ch) ((ch)->player.whotitle)

@@ -2697,6 +2697,9 @@ struct char_data *get_player_vis(struct char_data * ch, char *name, int inroom)
 {
   std::vector<struct char_data *> pcs = {};
 
+  if (!name || !*name)
+    return NULL;
+
   // Compile a list of PCs, checking for exact name matches as we go.
   for (struct char_data *i = character_list; i; i = i->next) {
     if (IS_NPC(i) || (inroom && i->in_room != ch->in_room) || GET_LEVEL(ch) < GET_INCOG_LEV(i))
@@ -2742,7 +2745,6 @@ struct char_data *get_char_veh(struct char_data * ch, char *name, struct veh_dat
 
 struct char_data *get_char_room_vis(struct char_data * ch, char *name)
 {
-  struct char_data *i;
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
@@ -2756,15 +2758,17 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
   if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 1);
 
-  if (ch->in_veh)
-    if ((i = get_char_veh(ch, name, ch->in_veh)))
+  if (ch->in_veh) {
+    struct char_data *i = get_char_veh(ch, name, ch->in_veh);
+    if (i)
       return i;
+  }
 
-  for (i = ch->in_veh ? ch->in_veh->people : ch->in_room->people; i && j <= number; i = ch->in_veh ? i->next_in_veh : i->next_in_room) {
-    if ((isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL))
-          || isname(tmp, get_string_after_color_code_removal(GET_NAME(i), NULL))
-          || recog(ch, i, name))
-        && CAN_SEE(ch, i))
+  for (struct char_data *i = ch->in_room->people; i && j <= number; i = i->next_in_room) {
+    if (CAN_SEE(ch, i)
+        && (   isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL))
+            || isname(tmp, get_string_after_color_code_removal(GET_NAME(i), NULL))
+            || recog(ch, i, name)))
     {
       if (++j == number)
         return i;
@@ -2813,11 +2817,13 @@ struct char_data *get_char_vis(struct char_data * ch, char *name)
     return ch;
 
   /* check the room first */
-  if (ch->in_veh)
+  if (ch->in_veh) {
     if ((i = get_char_veh(ch, name, ch->in_veh)))
       return i;
-  if ((i = get_char_room_vis(ch, name)) != NULL)
-    return i;
+  } else {
+    if ((i = get_char_room_vis(ch, name)) != NULL)
+      return i;
+  }
 
   strlcpy(tmp, name, sizeof(tmpname));
   if (!(number = get_number(&tmp, sizeof(tmpname))))
@@ -3145,27 +3151,30 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
         return (FIND_CHAR_ROOM);
     }
   }
-  if (IS_SET(bitvector, FIND_CHAR_VEH_ROOM)) {
-    struct char_data *i;
+  if (IS_SET(bitvector, FIND_CHAR_VEH_ROOM) && ch->in_veh) {
     int j = 0, number;
     char tmpname[MAX_INPUT_LENGTH];
     char *tmp = tmpname;
 
     /* 0.<name> means PC with name-- except here we're overriding that because I cannot be bothered right now. TODO. --LS */
-    strlcpy(tmp, name, sizeof(tmpname));
-    number = MAX(1, get_number(&tmp, sizeof(tmpname)));
+    strlcpy(tmpname, name, sizeof(tmpname));
+    number = get_number(&tmp, sizeof(tmpname));
 
-    for (i = get_ch_in_room(ch)->people; i && j <= number; i = i->next_in_room)
+    for (struct char_data *i = get_ch_in_room(ch)->people; i && j <= number; i = i->next_in_room) {
+      if (number == 0 && IS_NPC(i))
+        continue;
+
       if ((isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL))
            || isname(tmp, get_string_after_color_code_removal(GET_NAME(i), NULL))
            || recog(ch, i, name))
           && CAN_SEE(ch, i))
       {
-        if (++j == number) {
+        if (++j >= number) {
           *tar_ch = i;
           return (FIND_CHAR_VEH_ROOM);
         }
       }
+    }
   }
   if (IS_SET(bitvector, FIND_CHAR_WORLD))
   {
