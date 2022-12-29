@@ -2507,11 +2507,34 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
   int newlevel, i;
   void do_start(struct char_data *ch, bool wipe_skills);
   extern void check_autowiz(struct char_data * ch);
+  bool is_file = FALSE;
 
-  two_arguments(argument, name, level);
+  char *remainder = two_arguments(argument, name, level);
 
   if (*name) {
-    if (!(victim = get_char_vis(ch, name))) {
+    if (!str_cmp(name, "file")) {
+      name = level;
+      level = remainder;
+
+      for (struct descriptor_data *td = descriptor_list; td; td = td->next) {
+        if (td->character && !str_cmp(name, GET_CHAR_NAME(td->character))) {
+          send_to_char(ch, "%s is already loaded.\r\n", name);
+          return;
+        }
+        if (td->original && !str_cmp(name, GET_CHAR_NAME(td->original))) {
+          send_to_char(ch, "%s is already loaded.\r\n", name);
+          return;
+        }
+      }
+
+      if (!does_player_exist(name)) {
+        send_to_char("There is no such player.\r\n", ch);
+        return;
+      }
+
+      is_file = TRUE;
+      victim = playerDB.LoadChar(name, false);
+    } else if (!(victim = get_char_vis(ch, name))) {
       send_to_char("That player is not here.\r\n", ch);
       return;
     }
@@ -2520,21 +2543,24 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
     return;
   }
 
-  if (GET_LEVEL(ch) <= GET_LEVEL(victim)
-      && ch != victim) {
+  if (GET_LEVEL(ch) <= GET_LEVEL(victim) && ch != victim) {
     send_to_char("You need to be a higher level than your victim to do that.\r\n", ch);
+    if (is_file) { extract_char(victim); }
     return;
   }
   if (IS_NPC(victim)) {
     send_to_char("NO!  Not on NPC's.\r\n", ch);
+    if (is_file) { extract_char(victim); }
     return;
   }
   if (!*level || (newlevel = atoi(level)) <= 0) {
     send_to_char("That's not a level!\r\n", ch);
+    if (is_file) { extract_char(victim); }
     return;
   }
   if (newlevel > LVL_MAX) {
     send_to_char(ch, "%d is the highest possible level.\r\n", LVL_MAX);
+    if (is_file) { extract_char(victim); }
     return;
   }
   if (can_self_advance) {
@@ -2542,11 +2568,13 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
     int max_ch_can_advance_to = GET_LEVEL(ch) < LVL_MAX ? LVL_MAX - 1 : LVL_MAX;
     if (newlevel > max_ch_can_advance_to) {
       send_to_char(ch, "%d is the highest possible level you can advance someone to.\r\n", max_ch_can_advance_to);
+      if (is_file) { extract_char(victim); }
       return;
     }
   } else {
     if (!access_level(ch, newlevel) ) {
       send_to_char("Yeah, right.\r\n", ch);
+      if (is_file) { extract_char(victim); }
       return;
     }
 
@@ -2581,8 +2609,8 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
         "You feel slightly different.", FALSE, ch, 0, victim, TO_VICT);
      */
     send_to_char(victim, "%s has promoted you from %s to %s. Note that this has reset your skills, stats, chargen data, etc.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
-    snprintf(buf3, sizeof(buf3), "%s has advanced %s from %s to %s.",
-            GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
+    snprintf(buf3, sizeof(buf3), "%s has advanced %s%s from %s to %s.",
+            GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), is_file ? " [file]" : "", status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
     mudlog(buf3, ch, LOG_WIZLOG, TRUE);
     GET_LEVEL(victim) = newlevel;
 
@@ -2607,6 +2635,12 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
   // We use INSERT IGNORE to cause it to not error out when updating someone who already had immort data.
   snprintf(buf, sizeof(buf), "INSERT IGNORE INTO pfiles_immortdata (idnum) VALUES (%ld);", GET_IDNUM(victim));
   mysql_wrapper(mysql, buf);
+
+  if (is_file) {
+    extract_char(victim);
+  } else {
+    playerDB.SaveChar(victim);
+  }
 }
 
 ACMD(do_self_advance) {
@@ -4797,6 +4831,22 @@ ACMD(do_set)
       }
     }
   } else if (is_file) {
+    for (struct descriptor_data *td = descriptor_list; td; td = td->next) {
+      if (td->character && !str_cmp(name, GET_CHAR_NAME(td->character))) {
+        send_to_char(ch, "%s is already loaded.\r\n", name);
+        return;
+      }
+      if (td->original && !str_cmp(name, GET_CHAR_NAME(td->original))) {
+        send_to_char(ch, "%s is already loaded.\r\n", name);
+        return;
+      }
+    }
+
+    if (!does_player_exist(name)) {
+      send_to_char("There is no such player.\r\n", ch);
+      return;
+    }
+    
     vict = playerDB.LoadChar(name, false);
 
     if (vict) {

@@ -324,7 +324,7 @@ void advance_level(struct char_data * ch)
   playerDB.SaveChar(ch);
 
   snprintf(buf, sizeof(buf), "%s [%s] advanced to %s.",
-          GET_CHAR_NAME(ch), ch->desc->host, status_ratings[(int)GET_LEVEL(ch)]);
+          GET_CHAR_NAME(ch), ch->desc && *ch->desc->host ? ch->desc->host : "<no host>", status_ratings[(int)GET_LEVEL(ch)]);
   mudlog(buf, ch, LOG_MISCLOG, TRUE);
 }
 
