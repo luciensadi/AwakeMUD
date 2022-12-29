@@ -4265,6 +4265,7 @@ ACMD(do_ready)
   struct char_data *tmp_char;
   int num = 0;
 
+  skip_spaces(&argument);
   one_argument(argument, buf);
 
   if (!*buf) {
