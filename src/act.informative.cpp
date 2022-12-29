@@ -6352,8 +6352,7 @@ ACMD(do_scan)
 
               }
 
-              char desc_line[200];
-              strlcpy(desc_line, "", sizeof(desc_line));
+              char desc_line[200] = { '\0' };
 
               if (GET_MOB_QUEST_CHAR_ID(list)) {
                 if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
@@ -6373,9 +6372,19 @@ ACMD(do_scan)
                   strlcat(desc_line, "(astral) ", sizeof(desc_line));
               }
 
+              char their_name[500];
+              strlcpy(their_name, GET_NAME(list), sizeof(their_name));
+              if (!IS_NPC(list)) {
+                struct remem *mem = safe_found_mem(ch, list);
+                if (mem)
+                  strlcpy(their_name, CAP(mem->mem), sizeof(their_name));
+                else
+                  strlcpy(their_name, GET_CHAR_NAME(list), sizeof(their_name));
+              }
+
               snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n",
                        desc_line,
-                       GET_NAME(list),
+                       their_name,
                        FIGHTING(list) == ch ? " ^R(fighting you!)^n" : (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD)) ? " ^r(alarmed)^n" : ""));
 
               onethere = TRUE;
@@ -6478,7 +6487,17 @@ ACMD(do_scan)
                   strlcat(desc_line, "(astral) ", sizeof(desc_line));
               }
 
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n", desc_line, GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
+              char their_name[500];
+              strlcpy(their_name, GET_NAME(list), sizeof(their_name));
+              if (!IS_NPC(list)) {
+                struct remem *mem = safe_found_mem(ch, list);
+                if (mem)
+                  strlcpy(their_name, CAP(mem->mem), sizeof(their_name));
+                else
+                  strlcpy(their_name, GET_CHAR_NAME(list), sizeof(their_name));
+              }
+
+              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n", desc_line, their_name, FIGHTING(list) == ch ? " (fighting you!)" : "");
               onethere = TRUE;
               anythere = TRUE;
             }
