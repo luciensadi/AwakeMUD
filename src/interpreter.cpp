@@ -1574,7 +1574,8 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
   {
     for (length = strlen(arg), cmd = 0; *mtx_info[cmd].command != '\n'; cmd++)
       if (!strncmp(mtx_info[cmd].command, arg, length))
-        break;
+        if ((mtx_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, mtx_info[cmd].minimum_level))
+          break;
 
     // If they have failed to enter a valid Matrix command, and we were unable to fix a typo in their command:
     if (*mtx_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, mtx_info)) == -1) {
@@ -1597,6 +1598,13 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
       quit_the_matrix_first(ch, line, 0, 0);
     }
     else {
+      // Sanity check: Level restriction.
+      if ((mtx_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, mtx_info[cmd].minimum_level)) {
+        send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only matrix command %s!", GET_CHAR_NAME(ch), mtx_info[cmd].command);
+        return;
+      }
+
       if (ch->persona->decker->hitcher) {
         send_to_char(ch->persona->decker->hitcher, "^y<OUTGOING> %s^n\r\n", argument);
       }
@@ -1615,7 +1623,8 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
   {
     for (length = strlen(arg), cmd = 0; *rig_info[cmd].command != '\n'; cmd++)
       if (!strncmp(rig_info[cmd].command, arg, length))
-        break;
+        if ((rig_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, rig_info[cmd].minimum_level))
+          break;
 
     // If they have failed to enter a valid Rigging command, and we were unable to fix a typo in their command:
     if (*rig_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, rig_info)) == -1) {
@@ -1637,6 +1646,13 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
       // Their command was valid in external context. Inform them.
       stop_rigging_first(ch, line, 0, 0);
     } else {
+      // Sanity check: Level restriction.
+      if ((rig_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, rig_info[cmd].minimum_level)) {
+        send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only rigging command %s!", GET_CHAR_NAME(ch), rig_info[cmd].command);
+        return;
+      }
+
       if (ch->desc)
         ch->desc->invalid_command_counter = 0;
 
@@ -1737,6 +1753,13 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
         send_to_char("No way!  You're fighting for your life!\r\n", ch);
         break;
       }
+      return;
+    }
+
+    // Sanity check: Level restriction.
+    if ((cmd_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, cmd_info[cmd].minimum_level)) {
+      send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only command %s!", GET_CHAR_NAME(ch), cmd_info[cmd].command);
       return;
     }
 
