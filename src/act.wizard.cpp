@@ -4804,12 +4804,18 @@ ACMD(do_set)
   half_chop(argument, name, buf);
   if (!strcmp(name, "file")) {
     is_file = 1;
-    strlcpy(buf, one_argument(buf, name), sizeof(buf));
+    char remainder[MAX_INPUT_LENGTH];
+    strlcpy(remainder, one_argument(buf, name), sizeof(remainder));
+    strlcpy(buf, remainder, sizeof(buf));
   } else if (!str_cmp(name, "player")) {
     is_player = 1;
-    strlcpy(buf, one_argument(buf, name), sizeof(buf));
+    char remainder[MAX_INPUT_LENGTH];
+    strlcpy(remainder, one_argument(buf, name), sizeof(remainder));
+    strlcpy(buf, remainder, sizeof(buf));
   } else if (!str_cmp(name, "mob")) {
-    strlcpy(buf, one_argument(buf, name), sizeof(buf));
+    char remainder[MAX_INPUT_LENGTH];
+    strlcpy(remainder, one_argument(buf, name), sizeof(remainder));
+    strlcpy(buf, remainder, sizeof(buf));
   }
   half_chop(buf, field, buf2);
   strlcpy(val_arg, buf2, sizeof(val_arg));
@@ -4846,7 +4852,7 @@ ACMD(do_set)
       send_to_char("There is no such player.\r\n", ch);
       return;
     }
-    
+
     vict = playerDB.LoadChar(name, false);
 
     if (vict) {
