@@ -375,7 +375,7 @@ ACMD(do_rclone)
     room->description = str_dup (world[num1].description);
   if (world[num1].address)
     room->address = str_dup (world[num1].address);
-  room->zone = world[num1].zone;
+  room->zone = zone2;
   /* exits - alloc only if necessary */
   for (counter = 0; counter < NUM_OF_DIRS; counter++) {
     if (world[num1].dir_option[counter]) {
