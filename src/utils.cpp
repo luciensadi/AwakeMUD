@@ -2284,6 +2284,16 @@ void store_message_to_history(struct descriptor_data *d, int channel, const char
 
     d->message_history[channel].RemoveItem(d->message_history[channel].Tail());
   }
+
+  // Populate meta-history channels as well.
+  switch (channel) {
+    case COMM_CHANNEL_SAYS:
+    case COMM_CHANNEL_EMOTES:
+    case COMM_CHANNEL_OSAYS:
+    case COMM_CHANNEL_SHOUTS:
+      store_message_to_history(d, COMM_CHANNEL_LOCAL, message);
+      break;
+  }
 }
 
 void delete_message_history(struct descriptor_data *d) {
