@@ -197,6 +197,12 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
     snprintf(result_string, sizeof(result_string), "%s^n", display_string);
   }
 
+  // Now, we replace all double-quotes with bell characters so they can be swapped back after colorization.
+  for (char *ptr = result_string; *ptr; ptr++) {
+    if (*ptr == '"')
+      *ptr = '\7';
+  }
+
   return result_string;
 }
 
@@ -596,6 +602,12 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
     }
 
     i++;
+  }
+
+  // Next pass: Replace bells with quotes.
+  for (char *ptr = mutable_echo_string; *ptr; ptr++) {
+    if (*ptr == '\7')
+      *ptr = '"';
   }
 
   NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nFinished evaluation of emote projection for %s.\r\n\r\n", GET_CHAR_NAME(viewer));
