@@ -27,6 +27,7 @@
 #include "ignore_system.hpp"
 #include "newmagic.hpp"
 #include "invis_resistance_tests.hpp"
+#include "quest.hpp"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -2022,11 +2023,8 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       obj->vfront = ch->vfront;
     } else
       obj_to_room(obj, ch->in_room);
-    if (!IS_NPC(ch) && GET_QUEST(ch))
+    if (COULD_BE_ON_QUEST(ch))
       check_quest_delivery(ch, obj);
-    else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
-             !IS_NPC(ch->master) && GET_QUEST(ch->master))
-      check_quest_delivery(ch->master, obj);
     return 0;
   case SCMD_DONATE:
     obj_to_room(obj, random_donation_room);
@@ -2035,11 +2033,8 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     return 0;
   case SCMD_JUNK:
     value = MAX(1, MIN(200, GET_OBJ_COST(obj) >> 4));
-    if (!IS_NPC(ch) && GET_QUEST(ch))
+    if (COULD_BE_ON_QUEST(ch))
       check_quest_destroy(ch, obj);
-    else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
-             !IS_NPC(ch->master) && GET_QUEST(ch->master))
-      check_quest_destroy(ch->master, obj);
     extract_obj(obj);
     return value;
   default:
@@ -2251,13 +2246,8 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   }
 
   if (!IS_NPC(ch) && IS_NPC(vict)) {
-    // Group quest reward.
-    if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && IS_NPC(vict) && GET_QUEST(ch->master) && check_quest_delivery(ch->master, vict, obj)) {
-      act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
-      extract_obj(obj);
-    }
-    // Individual quest reward.
-    else if (GET_QUEST(ch) && check_quest_delivery(ch, vict, obj)) {
+    // Quest reward.
+    if (COULD_BE_ON_QUEST(ch) && check_quest_delivery(ch, vict, obj)) {
       act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
       extract_obj(obj);
     }

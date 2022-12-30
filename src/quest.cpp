@@ -482,7 +482,15 @@ bool _could_quest_deliver(struct char_data *ch, struct char_data *mob, struct ob
 
 bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj)
 {
-  if (!ch || IS_NPC(ch) || !IS_NPC(mob))
+  if (!ch || !mob || !obj) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received (%s, %s, %s) to non-nullable check_quest_delivery()!",
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    mob ? GET_CHAR_NAME(mob) : "NULL",
+                    obj ? GET_OBJ_NAME(obj) : "NULL");
+    return FALSE;
+  }
+
+  if (IS_NPC(ch) || !IS_NPC(mob))
     return FALSE;
 
   if (_raw_check_quest_delivery(ch, mob, obj))
@@ -498,6 +506,7 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
       if (!_could_quest_deliver(f->follower, mob, obj))
         continue;
 
+      // If they would have benefited from this delivery, but aren't in room, then we bail completely.
       if (f->follower->in_room != ch->in_room) {
         send_to_char(ch, "%s must be present for this delivery.\r\n", GET_CHAR_NAME(f->follower));
         return FALSE;
@@ -506,6 +515,8 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
       // This is technically a sanity check, in that we *expect* this to work.
       if (_raw_check_quest_delivery(f->follower, mob, obj)) {
         return TRUE;
+      } else {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Sanity check failed in check_quest_delivery(%s, %s, %s)!", GET_CHAR_NAME(ch), GET_CHAR_NAME(mob), GET_OBJ_NAME(obj));
       }
     }
 
@@ -551,7 +562,14 @@ bool _could_quest_deliver(struct char_data *ch, struct obj_data *obj) {
 
 bool check_quest_delivery(struct char_data *ch, struct obj_data *obj)
 {
-  if (!ch || IS_NPC(ch))
+  if (!ch || !obj) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received (%s, %s) to non-nullable check_quest_delivery()!",
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    obj ? GET_OBJ_NAME(obj) : "NULL");
+    return FALSE;
+  }
+
+  if (IS_NPC(ch))
     return FALSE;
 
   if (!ch->in_room) {
@@ -579,6 +597,8 @@ bool check_quest_delivery(struct char_data *ch, struct obj_data *obj)
 
       if (_raw_check_quest_delivery(f->follower, obj)) {
         return TRUE;
+      } else {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Sanity check failed in check_quest_delivery(%s, %s)!", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
       }
     }
 
@@ -614,12 +634,21 @@ bool _raw_check_quest_destination(struct char_data *ch, struct char_data *mob) {
 }
 
 bool check_quest_destination(struct char_data *ch, struct char_data *mob) {
-  if (!ch || IS_NPC(ch) || !IS_NPC(mob))
+  if (!ch || !mob) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received (%s, %s) to non-nullable check_quest_destination()!",
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    mob ? GET_CHAR_NAME(mob) : "NULL");
+    return FALSE;
+  }
+
+  if (IS_NPC(ch) || !IS_NPC(mob))
     return FALSE;
 
   if (_raw_check_quest_destination(ch, mob))
     return TRUE;
 
+  // Technically, none of the code below will ever return TRUE-- this function only triggers when a mob follows you into a room,
+  // and the quest target would only be following the original questor. Included it anyways for completeness's sake.
   if (AFF_FLAGGED(ch, AFF_GROUP)) {
     // Followers
     for (struct follow_type *f = ch->followers; f; f = f->next) {
@@ -666,7 +695,14 @@ bool _raw_check_quest_destroy(struct char_data *ch, struct obj_data *obj) {
 }
 
 bool check_quest_destroy(struct char_data *ch, struct obj_data *obj) {
-  if (!ch || IS_NPC(ch))
+  if (!ch || !obj) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received (%s, %s) to non-nullable check_quest_destroy()!",
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    obj ? GET_OBJ_NAME(obj) : "NULL");
+    return FALSE;
+  }
+
+  if (IS_NPC(ch))
     return FALSE;
 
   if (_raw_check_quest_destroy(ch, obj))
@@ -716,13 +752,20 @@ bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
   return FALSE;
 }
 
-void check_quest_kill(struct char_data *ch, struct char_data *victim)
+bool check_quest_kill(struct char_data *ch, struct char_data *victim)
 {
-  if (!ch || IS_NPC(ch) || !IS_NPC(victim))
-    return;
+  if (!ch || !victim) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received (%s, %s) to non-nullable check_quest_kill()!",
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    victim ? GET_CHAR_NAME(victim) : "NULL");
+    return FALSE;
+  }
+
+  if (IS_NPC(ch) || !IS_NPC(victim))
+    return FALSE;
 
   if (_raw_check_quest_kill(ch, victim))
-    return;
+    return TRUE;
 
   if (AFF_FLAGGED(ch, AFF_GROUP)) {
     // Followers
@@ -731,15 +774,17 @@ void check_quest_kill(struct char_data *ch, struct char_data *victim)
         continue;
 
       if (_raw_check_quest_kill(f->follower, victim)) {
-        return;
+        return TRUE;
       }
     }
 
     // Master
     if (ch->master && !IS_NPC(ch->master) && _raw_check_quest_kill(ch->master, victim)) {
-      return;
+      return TRUE;
     }
   }
+
+  return FALSE;
 }
 
 void end_quest(struct char_data *ch)
@@ -929,9 +974,14 @@ void reward(struct char_data *ch, struct char_data *johnson)
       }
     }
 
+    if (ch->master && follower_can_receive_reward(ch->master, ch, FALSE))
+      num_chars_to_give_award_to++;
+
     if (num_chars_to_give_award_to > 1) {
       nuyen = (int)(nuyen / num_chars_to_give_award_to) * GROUP_QUEST_REWARD_MULTIPLIER;
       karma = (int)(karma / num_chars_to_give_award_to) * GROUP_QUEST_REWARD_MULTIPLIER;
+
+      send_to_char("You divide the payout amongst your group.\r\n", ch);
 
       for (struct follow_type *f = ch->followers; f; f = f->next) {
         // Skip invalid folks while telling them why.
@@ -941,6 +991,12 @@ void reward(struct char_data *ch, struct char_data *johnson)
         gain_nuyen(f->follower, nuyen, NUYEN_INCOME_AUTORUNS);
         int gained = gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
         send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
+      }
+
+      if (ch->master && follower_can_receive_reward(ch->master, ch, FALSE)) {
+        gain_nuyen(ch->master, nuyen, NUYEN_INCOME_AUTORUNS);
+        int gained = gain_karma(ch->master, karma, TRUE, FALSE, TRUE);
+        send_to_char(ch->master, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
       }
     }
   }

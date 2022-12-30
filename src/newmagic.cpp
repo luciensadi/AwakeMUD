@@ -17,6 +17,7 @@
 #include "invis_resistance_tests.hpp"
 #include "newdb.hpp"
 #include "playerdoc.hpp"
+#include "quest.hpp"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -5534,10 +5535,8 @@ ACMD(do_destroy)
 
   // If we've gotten here, we've sent a message and are ready to destroy the item.
   // Check quest completion.
-  if (!IS_NPC(ch) && GET_QUEST(ch))
+  if (COULD_BE_ON_QUEST(ch))
     check_quest_destroy(ch, obj);
-  else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master))
-    check_quest_destroy(ch->master, obj);
 
   // Destroy it.
   extract_obj(obj);

@@ -50,7 +50,7 @@ extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern void reset_zone(int zone, int reboot);
 extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern int find_sight(struct char_data *ch);
-extern void check_quest_kill(struct char_data *ch, struct char_data *victim);
+extern bool check_quest_kill(struct char_data *ch, struct char_data *victim);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t idnum);
 extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);

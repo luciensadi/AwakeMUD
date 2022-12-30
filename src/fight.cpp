@@ -25,6 +25,7 @@
 #include "invis_resistance_tests.hpp"
 #include "playerdoc.hpp"
 #include "sound_propagation.hpp"
+#include "quest.hpp"
 
 int initiative_until_global_reroll = 0;
 
@@ -82,7 +83,7 @@ extern bool attempt_reload(struct char_data *mob, int pos);
 extern void switch_weapons(struct char_data *mob, int pos);
 extern void hunt_victim(struct char_data * ch);
 extern void matrix_fight(struct char_data *ch, struct char_data *victim);
-extern void check_quest_kill(struct char_data *ch, struct char_data *victim);
+extern bool check_quest_kill(struct char_data *ch, struct char_data *victim);
 extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern int return_general(int);
 extern struct zone_data *zone_table;
@@ -2200,12 +2201,8 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
                    GET_OBJ_NAME(obj));
     }
 
-    if (ch && !IS_NPC(ch) && GET_QUEST(ch)) {
+    if (COULD_BE_ON_QUEST(ch)) {
       check_quest_destroy(ch, obj);
-    }
-    else if (ch && AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
-             !IS_NPC(ch->master) && GET_QUEST(ch->master)) {
-      check_quest_destroy(ch->master, obj);
     }
 
     // Log destruction.
@@ -3436,10 +3433,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         }
     }
     if (ch != victim) {
-      if (!IS_NPC(ch) && GET_QUEST(ch) && IS_NPC(victim))
+      if (COULD_BE_ON_QUEST(ch) && IS_NPC(victim))
         check_quest_kill(ch, victim);
-      else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master) && IS_NPC(victim))
-        check_quest_kill(ch->master, victim);
     }
 
     if ((IS_NPC(victim) || victim->desc) && ch != victim &&

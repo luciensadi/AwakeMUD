@@ -25,6 +25,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
+#include "quest.hpp"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -499,9 +500,8 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     return 1;
   }
 
-  if (IS_NPC(ch) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master) && ch->in_room == ch->master->in_room) {
+  if (IS_NPC(ch) && ch->master && ch->in_room == ch->master->in_room && COULD_BE_ON_QUEST(ch->master)) {
     check_quest_destination(ch->master, ch);
-    return 1;
   }
 
   return 1;

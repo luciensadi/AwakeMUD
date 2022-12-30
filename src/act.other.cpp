@@ -35,6 +35,7 @@
 #include "config.hpp"
 #include "newmail.hpp"
 #include "ignore_system.hpp"
+#include "quest.hpp"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -4686,10 +4687,8 @@ ACMD(do_cleanup)
     mudlog(buf, ch, LOG_MISCLOG, TRUE);
   }
 
-  if (!IS_NPC(ch) && GET_QUEST(ch))
+  if (COULD_BE_ON_QUEST(ch))
     check_quest_destroy(ch, target_obj);
-  else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master))
-    check_quest_destroy(ch->master, target_obj);
 
   extract_obj(target_obj);
 }
