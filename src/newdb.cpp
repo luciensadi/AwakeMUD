@@ -197,7 +197,7 @@ static void init_char_strings(char_data *ch)
   delete [] ch->char_specials.leave;
   ch->char_specials.leave = str_dup("leaves");
 
-  set_title(ch, "^y(Newbie)^n");
+  set_title(ch, "");
   set_pretitle(ch, NULL);
 
   if (GET_RACE(ch) >= MINIMUM_VALID_PLAYER_RACE && GET_RACE(ch) <= MAXIMUM_VALID_PLAYER_RACE) {

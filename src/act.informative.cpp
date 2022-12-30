@@ -5362,6 +5362,10 @@ ACMD(do_who)
         strlcat(buf1, buf2, sizeof(buf1));
       }
 
+      if (GET_TKE(tch) <= NEWBIE_KARMA_THRESHOLD) {
+        strlcat(buf1, " ^y(Newbie)^n", sizeof(buf1));
+      }
+
       if (AFF_FLAGS(tch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT))
         strlcat(buf1, " (B/R)", sizeof(buf1));
       if (PRF_FLAGGED(tch, PRF_AFK))
