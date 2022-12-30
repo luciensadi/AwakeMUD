@@ -4782,6 +4782,7 @@ SPECIAL(painter)
   if (!*argument) {
     snprintf(buf, sizeof(buf), "I'll paint any vehicle for %d nuyen upfront.", PAINTER_COST);
     do_say(painter, buf, 0, 0);
+    send_to_char("(Syntax: ^WPAINT <target>^n)\r\n", ch);
     return TRUE;
   }
   if (world[real_room(painter->in_room->number + 1)].vehicles) {
@@ -4789,9 +4790,9 @@ SPECIAL(painter)
     return TRUE;
   }
   if (!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)))
-    do_say(painter, "What do you want me to paint?", 0, 0);
+    do_say(painter, "I don't see anything like that here.", 0, 0);
   else if (veh->owner != GET_IDNUM(ch))
-    do_say(painter, "Bring me your own ride and I'll paint it.", 0, 0);
+    do_say(painter, "Bring me your OWN ride and I'll paint it.", 0, 0);
   else if (GET_NUYEN(ch) < PAINTER_COST)
     do_say(painter, "You don't have the nuyen for that.", 0, 0);
   else {
