@@ -3139,6 +3139,7 @@ struct char_data *create_elemental(struct char_data *ch, int type, int force, in
     mob = read_mobile(elements[type].vnum, VIRTUAL);
   else
     mob = read_mobile(spirits[type].vnum, VIRTUAL);
+  mob->mob_loaded_in_room = 0;
   GET_REAL_BOD(mob) = force;
   GET_REAL_QUI(mob) = force;
   GET_REAL_STR(mob) = force;

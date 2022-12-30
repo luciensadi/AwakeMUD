@@ -2212,6 +2212,7 @@ ACMD(do_wizload)
       return;
     }
     mob = read_mobile(r_num, REAL);
+    mob->mob_loaded_in_room = GET_ROOM_VNUM(get_ch_in_room(ch));
     char_to_room(mob, get_ch_in_room(ch));
 
     // Reset questgivers so they talk to you faster.
@@ -2324,6 +2325,7 @@ ACMD(do_vstat)
       return;
     }
     mob = read_mobile(r_num, REAL);
+    mob->mob_loaded_in_room = GET_ROOM_VNUM(&world[0]);
     char_to_room(mob, &world[0]);
     do_stat_mobile(ch, mob);
     extract_char(mob);

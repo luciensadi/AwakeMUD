@@ -418,6 +418,7 @@ int load_mob(struct char_data *ch, int vnum, int number, char *message)
     if ((mob = read_mobile(rnum, REAL)))
     {
       total++;
+      mob->mob_loaded_in_room = GET_ROOM_VNUM(ch->in_room);
       char_to_room(mob, ch->in_room);
       act(message, TRUE, mob, 0, 0, TO_ROOM);
       if (!MOB_FLAGGED(mob, MOB_AGGRESSIVE))

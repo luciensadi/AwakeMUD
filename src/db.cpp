@@ -4046,7 +4046,7 @@ void reset_zone(int zone, int reboot)
       if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
         mob = read_mobile(ZCMD.arg1, REAL);
-
+        mob->mob_loaded_in_room = 0;
         bool is_driver = !(veh->people);
 
         char_to_veh(veh, mob);
