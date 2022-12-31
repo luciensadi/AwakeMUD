@@ -4697,7 +4697,7 @@ int find_sight(struct char_data *ch)
     sight += get_vision_mag(ch);
 
     /* add more weather conditions here to affect scan */
-    if (SECT(get_ch_in_room(ch)) != SPIRIT_HEARTH) {
+    if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS)) {
       switch (weather_info.sky) {
         case SKY_RAINING:
           sight -= 1;

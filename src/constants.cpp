@@ -38,7 +38,13 @@ const char *dist_name[] =
     "close by",
     "not far off",
     "in the distance",
-    "almost out of sight"
+    "almost out of sight",
+    "staff-5",
+    "staff-6",
+    "staff-7",
+    "staff-8",
+    "staff-9",
+    "staff-10"
   };
 
 const char *wound_arr[] =

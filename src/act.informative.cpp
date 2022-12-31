@@ -296,7 +296,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
           else if (GET_WORKSHOP_UNPACK_TICKS(object))
             strlcat(buf, "^n(Half-Packed) ^g", sizeof(buf));
         }
-        char replaced_colors[sizeof(object->text.room_desc) * 2];
+        char replaced_colors[strlen(object->text.room_desc) * 2];
         replace_substring(object->text.room_desc, replaced_colors, "^n", "^g");
         strlcat(buf, replaced_colors, sizeof(buf));
       }
@@ -6306,13 +6306,116 @@ ACMD(do_commands)
 
 // TODO: rscan, which is like scan but just shows room names
 
+bool char_passed_moving_vehicle_perception_test(struct char_data *ch, struct veh_data *in_veh) {
+  if (!in_veh || in_veh->cspeed <= SPEED_IDLE)
+    return TRUE;
+
+  if (get_speed(in_veh) >= 200) {
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1);
+  }
+  else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1);
+  }
+  else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1);
+  }
+
+  return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1);
+}
+
+const char *render_room_for_scan(struct char_data *ch, struct room_data *room, struct veh_data *in_veh) {
+  static char results[1000];
+  results[0] = '\0';
+
+  // If you can't see into the room, skip.
+  if (!LIGHT_OK_ROOM_SPECIFIED(ch, room)) {
+    return NULL;
+  }
+
+  // TODO: Add logic to hide ultrasound-visible-only characters in adjacent silent rooms. Not a big urgency unless/until PvP becomes more of a thing.
+
+  bool ch_only_sees_with_astral = !LIGHT_OK_ROOM_SPECIFIED(ch, room, FALSE);
+
+  // First, people.
+  for (struct char_data *list = room->people; list; list = list->next_in_room) {
+    // Always skip invisible people.
+    if (!CAN_SEE(ch, list))
+      continue;
+
+    // Skip inanimates if you only see with astral.
+    if (ch_only_sees_with_astral && MOB_FLAGGED(list, MOB_INANIMATE))
+      continue;
+
+    // Moving vehicles have a chance to cause you to miss things on scan.
+    if (!char_passed_moving_vehicle_perception_test(ch, in_veh))
+      continue;
+
+    // You see the person-- render them.
+    {
+      // First, fill out the prepended flags.
+      char flag_line[256] = { '\0' };
+
+      if (GET_MOB_QUEST_CHAR_ID(list)) {
+        if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
+          strlcat(flag_line, "(quest) ", sizeof(flag_line));
+        } else if (!ch_is_blocked_by_quest_protections(ch, list)) {
+          strlcat(buf, "(group quest) ", sizeof(buf));
+        } else {
+          strlcat(flag_line, "(protected) ", sizeof(flag_line));
+        }
+      }
+
+      if (IS_AFFECTED(list, AFF_RUTHENIUM) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
+        strlcat(flag_line, "(invisible) ", sizeof(flag_line));
+      }
+
+      if (SEES_ASTRAL(ch) && IS_ASTRAL(list)) {
+          strlcat(flag_line, "(astral) ", sizeof(flag_line));
+      }
+
+      // Next, render their name, replacing it with their memorized name if you have that.
+      char their_name[500];
+      strlcpy(their_name, GET_NAME(list), sizeof(their_name));
+      if (!IS_NPC(list)) {
+        struct remem *mem = safe_found_mem(ch, list);
+        if (mem)
+          strlcpy(their_name, CAP(mem->mem), sizeof(their_name));
+        else if (IS_SENATOR(ch))
+          strlcpy(their_name, GET_CHAR_NAME(list), sizeof(their_name));
+      }
+
+      // Finally, append it to the output buf.
+      snprintf(ENDOF(results), sizeof(results) - strlen(buf1), "  %s%s^n%s\r\n",
+               flag_line,
+               their_name,
+               FIGHTING(list) == ch ? " ^R(fighting you!)^n" : (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD)) ? " ^r(alarmed)^n" : ""));
+    }
+  }
+
+  // Next, vehicles.
+  for (struct veh_data *veh = room->vehicles; veh; veh = veh->next_veh) {
+    if (!char_passed_moving_vehicle_perception_test(ch, in_veh))
+      continue;
+
+    snprintf(ENDOF(results), sizeof(results) - strlen(results), "  %s^n (%s)\r\n", GET_VEH_NAME(veh), (get_speed(veh) ? "Moving" : "Stationary"));
+  }
+
+  // Player belongings.
+  for (struct obj_data *obj = room->contents; obj; obj = obj->next_content) {
+    if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "  %s^n\r\n", GET_OBJ_NAME(obj));
+    }
+  }
+
+  return results;
+}
+
 ACMD(do_scan)
 {
-  struct char_data *list;
-  struct veh_data *veh, *in_veh = NULL;
-  bool specific = FALSE, infra, lowlight, onethere, anythere = FALSE, done = FALSE;
-  int i = 0, j, dist = 3;
-  struct room_data *was_in = NULL, *x = NULL;
+  struct veh_data *in_veh = NULL;
+  bool specific = FALSE;
+  int i = 0;
+  struct room_data *x = NULL;
 
   argument = any_one_arg(argument, buf);
 
@@ -6320,12 +6423,14 @@ ACMD(do_scan)
     if (is_abbrev(buf, "south")) {
       i = SCMD_SOUTH;
       specific = TRUE;
-    } else
-      for (;!specific && (i < NUM_OF_DIRS); ++i) {
+    } else {
+      for (; !specific && (i < NUM_OF_DIRS); ++i) {
         if (is_abbrev(buf, dirs[i]))
           specific = TRUE;
       }
+    }
   }
+
   if (ch->in_veh || ch->char_specials.rigging) {
     RIG_VEH(ch, in_veh);
     if (ch->in_room)
@@ -6333,117 +6438,28 @@ ACMD(do_scan)
     ch->in_room = in_veh->in_room;
   }
 
-  infra = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_THERMOGRAPHIC);
-  lowlight = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_LOWLIGHT);
-
-  if (!infra && SEES_ASTRAL(ch))
-    infra = TRUE;
+  // Scanning all rooms:
   if (!specific) {
+    bool anythere = FALSE;
     struct room_data *in_room = get_ch_in_room(ch);
+
     for (i = 0; i < NUM_OF_DIRS; ++i) {
-      if (CAN_GO(ch, i) && !IS_SET(EXIT(ch, i)->exit_info, EX_HIDDEN)) {
-        if (EXIT(ch, i)->to_room == in_room) {
-          send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
-          continue;
-        }
+      if (!CAN_GO(ch, i) || IS_SET(EXIT(ch, i)->exit_info, EX_HIDDEN))
+        continue;
 
-        onethere = FALSE;
-        if (!((!infra && light_level(EXIT(ch, i)->to_room) == LIGHT_FULLDARK) ||
-              ((!infra || !lowlight) && (light_level(EXIT(ch, i)->to_room) == LIGHT_MINLIGHT || light_level(EXIT(ch, i)->to_room) == LIGHT_PARTLIGHT)))) {
-          strlcpy(buf1, "", sizeof(buf1));
-          for (list = EXIT(ch, i)->to_room->people; list; list = list->next_in_room)
-            if (CAN_SEE(ch, list)) {
-              if (in_veh) {
-                if (in_veh->cspeed > SPEED_IDLE) {
-                  if (get_speed(in_veh) >= 200) {
-                    if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1)
-                      continue;
-                    else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
-                      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1)
-                        continue;
-                      else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
-                        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1)
-                          continue;
-                        else
-                          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1)
-                            continue;
-                      }
-                    }
-                  }
-                }
+      if (EXIT(ch, i)->to_room == in_room) {
+        send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
+        continue;
+      }
 
-              }
+      const char *result = render_room_for_scan(ch, EXIT(ch, i)->to_room, in_veh);
 
-              char desc_line[200] = { '\0' };
-
-              if (GET_MOB_QUEST_CHAR_ID(list)) {
-                if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
-                  strlcat(desc_line, "(quest) ", sizeof(desc_line));
-                } else if (!ch_is_blocked_by_quest_protections(ch, list)) {
-                  strlcat(buf, "(group quest) ", sizeof(buf));
-                } else {
-                  strlcat(desc_line, "(protected) ", sizeof(desc_line));
-                }
-              }
-
-              if (IS_AFFECTED(list, AFF_RUTHENIUM) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
-                strlcat(desc_line, "(invisible) ", sizeof(desc_line));
-              }
-
-              if (SEES_ASTRAL(ch) && IS_ASTRAL(list)) {
-                  strlcat(desc_line, "(astral) ", sizeof(desc_line));
-              }
-
-              char their_name[500];
-              strlcpy(their_name, GET_NAME(list), sizeof(their_name));
-              if (!IS_NPC(list)) {
-                struct remem *mem = safe_found_mem(ch, list);
-                if (mem)
-                  strlcpy(their_name, CAP(mem->mem), sizeof(their_name));
-                else
-                  strlcpy(their_name, GET_CHAR_NAME(list), sizeof(their_name));
-              }
-
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n",
-                       desc_line,
-                       their_name,
-                       FIGHTING(list) == ch ? " ^R(fighting you!)^n" : (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD)) ? " ^r(alarmed)^n" : ""));
-
-              onethere = TRUE;
-              anythere = TRUE;
-            }
-          for (veh = EXIT(ch, i)->to_room->vehicles; veh; veh = veh->next_veh) {
-            if (in_veh) {
-              if (in_veh->cspeed > SPEED_IDLE) {
-                if (get_speed(in_veh) >= 200) {
-                  if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1)
-                    continue;
-                  else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
-                    if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1)
-                      continue;
-                    else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
-                      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1)
-                        continue;
-                      else
-                        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1)
-                          continue;
-                    }
-                  }
-                }
-              }
-            }
-            snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s (%s)\r\n", GET_VEH_NAME(veh), (get_speed(veh) ? "Moving" : "Stationary"));
-            onethere = TRUE;
-            anythere = TRUE;
-          }
-        }
-        if (onethere) {
-          snprintf(buf2, sizeof(buf2), "%s %s:\r\n%s\r\n", dirs[i], dist_name[0], buf1);
-          CAP(buf2);
-          send_to_char(buf2, ch);
-        }
+      if (result && *result) {
+        anythere = TRUE;
+        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[i]), dist_name[0], result);
       }
     }
+
     if (!anythere) {
       send_to_char("You don't seem to see anyone in the surrounding areas.\r\n", ch);
       if (in_veh) {
@@ -6451,131 +6467,43 @@ ACMD(do_scan)
       }
       return;
     }
-  } else {
+  }
+  else {
     --i;
 
-    dist = find_sight(ch);
+    bool anythere = FALSE;
 
-    if (CAN_GO(ch, i)) {
-      was_in = ch->in_room;
-      anythere = FALSE;
-      for (j = 0;!done && (j < dist); ++j) {
-        onethere = FALSE;
-        if (CAN_GO(ch, i)) {
-          strlcpy(buf1, "", sizeof(buf1));
-          for (list = EXIT(ch, i)->to_room->people; list; list = list->next_in_room)
-            if (CAN_SEE(ch, list)) {
-              if (in_veh) {
-                if (in_veh->cspeed > SPEED_IDLE) {
-                  if (get_speed(in_veh) >= 200) {
-                    if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1)
-                      continue;
-                    else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
-                      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1)
-                        continue;
-                      else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
-                        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1)
-                          continue;
-                        else
-                          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1)
-                            continue;
-                      }
-                    }
-                  }
-                }
-              }
-              char desc_line[200];
-              strlcpy(desc_line, "", sizeof(desc_line));
+    // We move them as part of this, so store their current room so we can snap them back.
+    struct room_data *was_in_room = ch->in_room;
 
-              if (GET_MOB_QUEST_CHAR_ID(list)) {
-                if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
-                  strlcat(desc_line, "(quest) ", sizeof(desc_line));
-                } else if (!ch_is_blocked_by_quest_protections(ch, list)) {
-                  strlcat(buf, "(group quest) ", sizeof(buf));
-                } else {
-                  strlcat(desc_line, "(protected) ", sizeof(desc_line));
-                }
-              }
-
-              if (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD))) {
-                strlcat(desc_line, "^r(alarmed)^n ", sizeof(desc_line));
-              }
-
-              if (IS_AFFECTED(list, AFF_RUTHENIUM) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
-                strlcat(desc_line, "(invisible) ", sizeof(desc_line));
-              }
-
-              if (SEES_ASTRAL(ch) && IS_ASTRAL(list)) {
-                  strlcat(desc_line, "(astral) ", sizeof(desc_line));
-              }
-
-              char their_name[500];
-              strlcpy(their_name, GET_NAME(list), sizeof(their_name));
-              if (!IS_NPC(list)) {
-                struct remem *mem = safe_found_mem(ch, list);
-                if (mem)
-                  strlcpy(their_name, CAP(mem->mem), sizeof(their_name));
-                else
-                  strlcpy(their_name, GET_CHAR_NAME(list), sizeof(their_name));
-              }
-
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n", desc_line, their_name, FIGHTING(list) == ch ? " (fighting you!)" : "");
-              onethere = TRUE;
-              anythere = TRUE;
-            }
-
-          for (veh = EXIT(ch, i)->to_room->vehicles; veh; veh = veh->next_veh) {
-            if (in_veh) {
-              if (in_veh->cspeed > SPEED_IDLE) {
-                if (get_speed(in_veh) >= 200) {
-                  if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1)
-                    continue;
-                  else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
-                    if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1)
-                      continue;
-                    else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
-                      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1)
-                        continue;
-                      else
-                        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1)
-                          continue;
-                    }
-                  }
-                }
-              }
-            }
-            snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s (%s)\r\n", GET_VEH_NAME(veh), (get_speed(veh) ? "Moving" : "Stationary"));
-            onethere = TRUE;
-            anythere = TRUE;
-          }
-
-          ch->in_room = EXIT(ch, i)->to_room;
-
-          if (onethere) {
-            snprintf(buf2, sizeof(buf2), "%s %s:\r\n%s\r\n", dirs[i], dist_name[j], buf1);
-            CAP(buf2);
-            send_to_char(buf2, ch);
-          }
-        } else
-          done = TRUE;
-      }
-
-      ch->in_room = was_in;
-
-      if (!anythere) {
+    for (int dist = 1; dist <= find_sight(ch); dist++) {
+      if (!CAN_GO(ch, i) || IS_SET(EXIT(ch, i)->exit_info, EX_HIDDEN)) {
         if (in_veh) {
           ch->in_room = x;
+        } else {
+          ch->in_room = was_in_room;
         }
-        send_to_char("You don't seem to see anyone in that direction.\r\n", ch);
+        if (dist == 1)
+          send_to_char("There is no exit in that direction.\r\n", ch);
         return;
       }
-    } else {
-      if (in_veh) {
-        ch->in_room = x;
+
+      ch->in_room = EXIT(ch, i)->to_room;
+
+      const char *result = render_room_for_scan(ch, ch->in_room, in_veh);
+
+      if (result && *result) {
+        anythere = TRUE;
+        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[i]), dist_name[dist - 1], result);
       }
-      send_to_char("There is no exit in that direction.\r\n", ch);
-      return;
     }
+
+    if (!anythere) {
+      send_to_char("You don't seem to see anyone in that direction.\r\n", ch);
+    }
+
+    // Perform PC snap back.
+    ch->in_room = was_in_room;
   }
   if (in_veh) {
     ch->in_room = x;

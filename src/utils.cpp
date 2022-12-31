@@ -3835,7 +3835,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
   return TRUE;
 }
 
-bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_room) {
+bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_room, bool allow_astral_sight) {
   // #define DEBUG_LIGHT_OK(msg) {act(msg, 0, sub, 0, 0, TO_ROLLS);}
   #define DEBUG_LIGHT_OK(msg)
 

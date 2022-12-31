@@ -764,7 +764,7 @@ float get_proto_weight(struct obj_data *obj);
 #define HOLYLIGHT_OK(sub)      (GET_REAL_LEVEL(sub) >= LVL_BUILDER && \
    PRF_FLAGGED((sub), PRF_HOLYLIGHT))
 
-bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *room);
+bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *room, bool allow_astral_sight=1);
 #define LIGHT_OK(sub)          LIGHT_OK_ROOM_SPECIFIED((sub), get_ch_in_room((sub)))
 #define SELF(sub, obj)         ((sub) == (obj))
 
