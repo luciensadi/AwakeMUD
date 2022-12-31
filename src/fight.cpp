@@ -4689,7 +4689,7 @@ int find_sight(struct char_data *ch)
   int sight = 1;
 
   // High-level staff see forever.
-  if (!access_level(ch, LVL_VICEPRES)) {
+  if (access_level(ch, LVL_VICEPRES)) {
     sight = 4;
   }
   // Lower-level staff, morts, and NPCs are limited by sight and weather.
