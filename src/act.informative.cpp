@@ -296,7 +296,9 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
           else if (GET_WORKSHOP_UNPACK_TICKS(object))
             strlcat(buf, "^n(Half-Packed) ^g", sizeof(buf));
         }
-        strlcat(buf, object->text.room_desc, sizeof(buf));
+        char replaced_colors[sizeof(object->text.room_desc) * 2];
+        replace_substring(object->text.room_desc, replaced_colors, "^n", "^g");
+        strlcat(buf, replaced_colors, sizeof(buf));
       }
     }
   }

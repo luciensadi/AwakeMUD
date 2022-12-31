@@ -3533,7 +3533,7 @@ void purgelog(struct veh_data *veh) {
 
 // Copy Source into Dest, replacing the target substring in Source with the specified replacement.
 // Requirement: dest's max size must be greater than source's current size plus all the replacements being done in it.
-char *replace_substring(char *source, char *dest, const char *replace_target, const char *replacement) {
+char *replace_substring(const char *source, char *dest, const char *replace_target, const char *replacement) {
   const char *replace_target_ptr = replace_target;
   char *dest_ptr = dest;
 
