@@ -2157,6 +2157,7 @@ ACMD(do_treat)
 
   // House rule: If you've been treated recently, the TN goes up, but you can still try it.
   if (LAST_HEAL(vict) > 0) {
+    // If you change this formula, remember to change the displayed TN in do_diagnose.
     int tn_increase = MIN(LAST_HEAL(vict) * 3/2, 8);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", +%d for recent heal attempt", tn_increase);
     target += tn_increase;

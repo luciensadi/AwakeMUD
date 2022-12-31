@@ -755,43 +755,50 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
   send_to_char(buf, ch);
 
   // Diagnose mortally-wounded PCs.
-  if (!IS_NPC(i) && phys <= 0) {
-    bool has_metabolic_arrester = FALSE;
+  if (!IS_NPC(i)) {
+    if (phys <= 0) {
+      bool has_metabolic_arrester = FALSE;
 
-    if (AFF_FLAGS(i).IsSet(AFF_STABILIZE)) {
-      send_to_char(ch, "%s'%s stabilized for the moment.\r\n", HSSH(i), !HSSH_SHOULD_PLURAL(i) ? "re" : "s");
-      return;
-    }
+      if (AFF_FLAGS(i).IsSet(AFF_STABILIZE)) {
+        send_to_char(ch, "%s'%s stabilized for the moment.\r\n", HSSH(i), !HSSH_SHOULD_PLURAL(i) ? "re" : "s");
+        return;
+      }
 
-    // Find metabolic arrestor, if they have one.
-    for (struct obj_data *obj = i->bioware; obj; obj = obj->next_content) {
-      if (GET_BIOWARE_TYPE(obj) == BIO_METABOLICARRESTER) {
-        has_metabolic_arrester = TRUE;
-        break;
+      // Find metabolic arrestor, if they have one.
+      for (struct obj_data *obj = i->bioware; obj; obj = obj->next_content) {
+        if (GET_BIOWARE_TYPE(obj) == BIO_METABOLICARRESTER) {
+          has_metabolic_arrester = TRUE;
+          break;
+        }
+      }
+
+      int min_body = -GET_BOD(i) + (GET_BIOOVER(i) > 0 ? GET_BIOOVER(i) : 0);
+      int boxes_left = (int)(GET_PHYSICAL(i) / 100) - min_body - 1;
+
+      // Print info. Time is a best guess on my part, it seems to tick down every MUD hour?
+      if (boxes_left <= 0) {
+        send_to_char(ch, "%s %s near death! You estimate %s %s only %d minutes left to live.\r\n",
+                     CAP(HSSH(i)),
+                     !HSSH_SHOULD_PLURAL(i) ? "are" : "is",
+                     HSSH(i),
+                     !HSSH_SHOULD_PLURAL(i) ? "have" : "has",
+                     2 * GET_PC_SALVATION_TICKS(i) * (has_metabolic_arrester ? 5 : 1));
+      } else {
+        send_to_char(ch, "You estimate %s %s %d minutes left to live.\r\n",
+                     HSSH(i),
+                     !HSSH_SHOULD_PLURAL(i) ? "have" : "has",
+                     2 * (boxes_left + GET_PC_SALVATION_TICKS(i)) * (has_metabolic_arrester ? 5 : 1));
       }
     }
-
-    int min_body = -GET_BOD(i) + (GET_BIOOVER(i) > 0 ? GET_BIOOVER(i) : 0);
-    int boxes_left = (int)(GET_PHYSICAL(i) / 100) - min_body - 1;
-
-    // Print info. Time is a best guess on my part, it seems to tick down every MUD hour?
-    if (boxes_left <= 0) {
-      send_to_char(ch, "%s %s near death! You estimate %s %s only %d minutes left to live.\r\n",
-                   CAP(HSSH(i)),
-                   !HSSH_SHOULD_PLURAL(i) ? "are" : "is",
-                   HSSH(i),
-                   !HSSH_SHOULD_PLURAL(i) ? "have" : "has",
-                   2 * GET_PC_SALVATION_TICKS(i) * (has_metabolic_arrester ? 5 : 1));
-    } else {
-      send_to_char(ch, "You estimate %s %s %d minutes left to live.\r\n",
-                   HSSH(i),
-                   !HSSH_SHOULD_PLURAL(i) ? "have" : "has",
-                   2 * (boxes_left + GET_PC_SALVATION_TICKS(i)) * (has_metabolic_arrester ? 5 : 1));
+    if (LAST_HEAL(i) > 0) {
+      send_to_char(ch, "%s%s received recent treatment, so further treatments will be more difficult (TN +%d).",
+                       HSSH(i),
+                       !HSSH_SHOULD_PLURAL(i) ? "'ve'" : "'s",
+                       MIN(LAST_HEAL(i) * 3/2, 8));
     }
   }
 }
 
-#define RENDER_PRIVILEGED TRUE
 const char *render_ware_for_viewer(struct obj_data *ware, bool privileged, bool force_full_name) {
   static char render_buf[1000];
 
