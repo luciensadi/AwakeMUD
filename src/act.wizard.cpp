@@ -1473,9 +1473,16 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
             pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(k)->privileges, FALSE));
   }
 
-  if (!IS_NPC(k) && access_level(ch, LVL_ADMIN)) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n  Multiplier: ^c%.2f^n\r\n", GET_EMAIL(k), (float) GET_CHAR_MULTIPLIER(k) / 100);
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "ShotsFired: ^c%d^n, ShotsTriggered: ^c%d^n\r\n", SHOTS_FIRED(k), SHOTS_TRIGGERED(k));
+  if (!IS_NPC(k)) {
+    if (access_level(ch, LVL_PRESIDENT) && GET_CHAR_MULTIPLIER(k) != 100) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Multiplier: ^c%.2f^n\r\n", (float) GET_CHAR_MULTIPLIER(k) / 100);
+    }
+    if (access_level(ch, LVL_VICEPRES)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n\r\n", GET_EMAIL(k));
+    }
+    if (access_level(ch, LVL_FIXER)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "ShotsFired: ^c%d^n, ShotsTriggered: ^c%d^n\r\n", SHOTS_FIRED(k), SHOTS_TRIGGERED(k));
+    }
   }
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Title: %s\r\n", (k->player.title ? k->player.title : "<None>"));
