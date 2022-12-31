@@ -135,7 +135,7 @@ const char* blood_messages[] = {
 
 ACMD_DECLARE(do_examine);
 
-void display_room_name(struct char_data *ch);
+void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_veh);
 void display_room_desc(struct char_data *ch);
 
 /* end blood stuff */
@@ -1851,15 +1851,7 @@ void look_in_veh(struct char_data * ch)
       CCHAR = "^y";
       list_veh_to_char(veh->in_veh->carriedvehs, ch);
     } else {
-      send_to_char(ch, "\r\n^CAround you is %s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(veh->in_room),
-                   ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) ? " (Garage)" : "",
-                   ROOM_FLAGGED(veh->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(veh->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
-                   ROOM_FLAGGED(veh->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
-                   ROOM_FLAGGED(veh->in_room, ROOM_STERILE) ? " (Sterile)" : "",
-                   ROOM_FLAGGED(veh->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
-                   IS_WATER(veh->in_room) ? " ^B(Flooded)^n" : "",
-                   veh->in_room->matrix && real_host(veh->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
-                   ROOM_FLAGGED(veh->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
+      display_room_name(ch, veh->in_room, TRUE);
 
       if (get_speed(veh) <= 200) {
         if (veh->in_room->night_desc && weather_info.sunlight == SUN_DARK)
@@ -1915,7 +1907,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   }
 
   // Room title.
-  display_room_name(ch);
+  display_room_name(ch, ch->in_room, FALSE);
 
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
   if (!(ch->in_veh && get_speed(ch->in_veh) > 200)) {
@@ -7296,25 +7288,32 @@ const char *get_command_hints_for_obj(struct obj_data *obj) {
   return hint_string;
 }
 
-void display_room_name(struct char_data *ch) {
-  if (!ch || !ch->in_room) {
+void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_veh) {
+  if (!ch || !in_room) {
     mudlog("SYSERR: Received invalid character to display_room_name()!", ch, LOG_SYSLOG, TRUE);
     return;
   }
 
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
-    ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-    send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
+    ROOM_FLAGS(in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
+    send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(in_room), GET_ROOM_NAME(in_room), buf);
   } else {
-    send_to_char(ch, "^C%s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
-                 ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_HOUSE) ? " (Apartment)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_STERILE) ? " (Sterile)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
-                 IS_WATER(ch->in_room) ? " ^B(Flooded)^n" : "",
-                 ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
+    #define APPEND_ROOM_FLAG(check, flagname) { if ((check)) {strlcat(room_title_buf, flagname, sizeof(room_title_buf));} }
+    char room_title_buf[1000];
+    snprintf(room_title_buf, sizeof(room_title_buf), "^C%s^n", in_veh ? "Around you is " : "", GET_ROOM_NAME(in_room));
+
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_GARAGE), " (Garage)");
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STORAGE) && !ROOM_FLAGGED(in_room, ROOM_CORPSE_SAVE_HACK), " (Storage)");
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_HOUSE), " (Apartment)");
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ARENA), " ^y(Arena)^n");
+    APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
+    APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ENCOURAGE_CONGREGATION), " ^W(Socialization Bonus)^n");
+    strlcat(room_title_buf, "\r\n", sizeof(room_title_buf));
+
+    send_to_char(room_title_buf, ch);
+    #undef APPEND_ROOM_FLAG
   }
 }
 

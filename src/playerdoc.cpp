@@ -8,7 +8,7 @@
 #include "interpreter.hpp"
 
 extern struct remem *safe_found_mem(struct char_data *rememberer, struct char_data *ch);
-extern void display_room_name(struct char_data *ch);
+extern void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_veh);
 extern void display_room_desc(struct char_data *ch);
 extern void disp_long_exits(struct char_data *ch, bool autom);
 extern int isname(const char *str, const char *namelist);
@@ -243,7 +243,7 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
       ch->in_room = get_ch_in_room(d->character);
 
       // Room name.
-      display_room_name(ch);
+      display_room_name(ch, ch->in_room, FALSE);
 
       // Room desc.
       display_room_desc(ch);
