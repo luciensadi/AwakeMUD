@@ -4938,21 +4938,34 @@ ACMD(do_time)
 
 ACMD(do_weather)
 {
-  static const char *sky_look[] =
-  {
-    "cloudless",
-    "cloudy",
-    "rainy",
-    "lit by flashes of lightning"
-  };
+  FAILURE_CASE(!OUTSIDE(ch), "You're pretty sure the ceiling won't start raining anytime soon.\r\n");
 
-  if (OUTSIDE(ch)) {
-    snprintf(buf, sizeof(buf), "The sky is %s and %s.\r\n", sky_look[weather_info.sky],
-            (weather_info.change >= 0 ? "you feel a warm wind from south" :
-             "your foot tells you bad weather is due"));
-    send_to_char(buf, ch);
-  } else
-    send_to_char("You have no feeling about the weather at all.\r\n", ch);
+  if (precipitation_is_snow()) {
+    static const char *sky_look[] =
+    {
+      "cloudless",
+      "cloudy",
+      "snowy",
+      "obscured by heavy snow"
+    };
+
+    send_to_char(ch, "The sky is %s and %s.\r\n",
+                 sky_look[weather_info.sky],
+                 (weather_info.change >= 0 ? "you feel a cool breeze from north" : "the cold seeps into your bones"));
+  }
+  else {
+    static const char *sky_look[] =
+    {
+      "cloudless",
+      "cloudy",
+      "rainy",
+      "lit by flashes of lightning"
+    };
+
+    send_to_char(ch, "The sky is %s and %s.\r\n",
+                 sky_look[weather_info.sky],
+                 (weather_info.change >= 0 ? "you feel a warm wind from south" : "your foot tells you bad weather is due"));
+  }
 }
 
 
