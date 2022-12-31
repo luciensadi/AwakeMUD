@@ -297,7 +297,8 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
             strlcat(buf, "^n(Half-Packed) ^g", sizeof(buf));
         }
         char replaced_colors[strlen(object->text.room_desc) * 2];
-        replace_substring(object->text.room_desc, replaced_colors, "^n", "^g");
+        replace_substring(object->text.room_desc, buf2, "^n", "^g");
+        replace_substring(buf2, replaced_colors, "^N", "^g");
         strlcat(buf, replaced_colors, sizeof(buf));
       }
     }
