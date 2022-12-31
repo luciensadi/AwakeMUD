@@ -793,7 +793,7 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
     }
     if (LAST_HEAL(i) > 0) {
       send_to_char(ch, "%s%s received recent treatment, so further treatments will be more difficult (TN +%d).",
-                       HSSH(i),
+                       CAP(HSSH(i)),
                        !HSSH_SHOULD_PLURAL(i) ? "'ve'" : "'s",
                        MIN(LAST_HEAL(i) * 3/2, 8));
     }
