@@ -166,7 +166,7 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
   }
 
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-    if (!d->character || d->character == ch || GET_POS(d->character) != POS_MORTALLYW)
+    if (!d->character || d->character == ch)
       continue;
 
     if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character))
