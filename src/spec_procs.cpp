@@ -4416,14 +4416,14 @@ SPECIAL(desktop)
         send_to_char(ch, "(^c%dMp^n taken) ", GET_DESIGN_SIZE(soft) + GET_DESIGN_SIZE(soft) / 10);
 
         if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(soft)) {
-          completion_percentage = ((float) (GET_DESIGN_ORIGINAL_TICKS_LEFT(soft) - GET_DESIGN_PROGRAMMING_TICKS_LEFT(soft)) / MAX(1, GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) * 100;
+          completion_percentage = (float) (GET_DESIGN_ORIGINAL_TICKS_LEFT(soft) - GET_DESIGN_PROGRAMMING_TICKS_LEFT(soft)) / MAX(1, GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) * 100;
           send_to_char(ch, "(^CProgramming, ^c%2.2f%%^n complete)", completion_percentage);
         } else if (GET_DESIGN_COMPLETED(soft)) {
           send_to_char("(^cProgrammable^n)", ch);
         } else if (GET_DESIGN_DESIGNING_TICKS_LEFT(soft) == GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) {
           send_to_char("(^gDesignable^n)", ch);
         } else {
-          completion_percentage = ((float) GET_DESIGN_ORIGINAL_TICKS_LEFT(soft) - GET_DESIGN_DESIGNING_TICKS_LEFT(soft)) / MAX(1, GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) * 100;
+          completion_percentage = (float) (GET_DESIGN_ORIGINAL_TICKS_LEFT(soft) - GET_DESIGN_DESIGNING_TICKS_LEFT(soft)) / MAX(1, GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) * 100;
           send_to_char(ch, "(^GDesigning, ^c%2.2f%%^n complete)", completion_percentage);
         }
         send_to_char(ch, " Rating ^c%d^n\r\n", GET_DESIGN_RATING(soft));
