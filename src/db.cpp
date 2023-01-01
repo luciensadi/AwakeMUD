@@ -103,6 +103,9 @@ long mud_boot_time = 0;
 struct room_data *world = NULL; /* array of rooms   */
 rnum_t top_of_world = 0; /* ref to top element of world  */
 
+// A random number that changes once on each boot. Used for non-sensitive purposes.
+int global_non_secure_random_number = dice(1, 100000);
+
 struct host_data *matrix = NULL;
 rnum_t top_of_matrix = 0;
 struct matrix_icon *ic_proto;

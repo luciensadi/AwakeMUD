@@ -7,6 +7,8 @@
 #include "db.hpp"
 #include "interpreter.hpp"
 
+extern int global_non_secure_random_number;
+
 extern struct remem *safe_found_mem(struct char_data *rememberer, struct char_data *ch);
 extern void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_veh);
 extern void display_room_desc(struct char_data *ch);
@@ -19,7 +21,7 @@ const char *get_char_representation_for_docwagon(struct char_data *ch, struct ch
 
 // Returns a 5-digit faux ID to help tell characters apart in anonymous messages.
 int get_docwagon_faux_id(struct char_data *ch) {
-  return (((GET_IDNUM(ch) * 217) + 29783) / 3) % 99999;
+  return (((GET_IDNUM(ch) * 217 + global_non_secure_random_number) + 29783) / 3) % 99999;
 }
 
 int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon) {
