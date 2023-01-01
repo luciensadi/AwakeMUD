@@ -4433,12 +4433,11 @@ bool vehicle_has_ultrasound_sensors(struct veh_data *veh) {
 #define BLIND_FIRE_PENALTY     MAX_VISIBILITY_PENALTY
 #define RUTHENIUM_PENALTY      4
 int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
-  int modifier = 0;
   char rbuf[2048];
 
   // If we can't see due to light levels, bail out.
   if (!LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(ch)) || (ch->in_room != victim->in_room && !LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(victim)))) {
-    modifier = MAX_VISIBILITY_PENALTY;
+    int modifier = MAX_VISIBILITY_PENALTY;
 
     if (GET_POWER(ch, ADEPT_BLIND_FIGHTING) && modifier > BLIND_FIGHTING_MAX) {
       modifier = BLIND_FIGHTING_MAX;
@@ -4517,19 +4516,23 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
   if (ch_sees_astral) {
     if (!vict_is_inanimate) {
+      int modifier = 0;
+
       // If you're astrally perceiving, you see anything living with no vision penalty.
       // (You get penalties from perceiving, that's handled elsewhere.)
       snprintf(rbuf, sizeof(rbuf), "$n: %s vs living target, so final char-to-char visibility TN is ^c%d^n.",
                MOB_FLAGGED(ch, MOB_DUAL_NATURE) ? "Dual-natured" : "Perceiving",
                modifier);
       act(rbuf, 0, ch, 0, victim, TO_ROLLS);
-      return 0;
+      return modifier;
     } else {
       act("$n: Astral sight ignored-- inanimate, non-spelled target.", 0, ch, 0, victim, TO_ROLLS);
     }
     // Otherwise, fall through.
   }
   else if (IS_ASTRAL(victim) && !AFF_FLAGGED(victim, AFF_MANIFEST)) {
+    int modifier = BLIND_FIRE_PENALTY;
+
     // This shouldn't have happened in the first place.
     mudlog("SYSERR: Received non-perceiving ch and purely-astral vict to calculate_vision_penalty()!", ch, LOG_SYSLOG, TRUE);
 
@@ -4538,7 +4541,6 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       modifier = BLIND_FIGHTING_MAX;
       snprintf(rbuf, sizeof(rbuf), "%s: Non-perceiving character fighting non-manifested astral: %d after Blind Fighting", GET_CHAR_NAME(ch), modifier);
     } else {
-      modifier = BLIND_FIRE_PENALTY;
       snprintf(rbuf, sizeof(rbuf), "%s: Non-perceiving character fighting non-manifested astral: %d", GET_CHAR_NAME(ch), modifier);
     }
 
@@ -4563,11 +4565,11 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       // Invisibility penalty, we're at the full +8 from not being able to see them. This overwrites weather effects etc.
       // We don't apply the Adept blind fighting max here, as that's calculated later on.
       ultrasound_modifier = BLIND_FIRE_PENALTY;
-      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting improved invis: TN %d", GET_CHAR_NAME(ch), modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting improved invis: TN %d", GET_CHAR_NAME(ch), ultrasound_modifier);
     } else if (vict_is_ruthenium) {
       // Note that this will be divided by 2 later.
       ultrasound_modifier = RUTHENIUM_PENALTY;
-      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting ruthenium: TN %d", GET_CHAR_NAME(ch), modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting ruthenium: TN %d", GET_CHAR_NAME(ch), ultrasound_modifier);
     } else {
       ultrasound_modifier = 0;
       snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character", GET_CHAR_NAME(ch));
@@ -4586,9 +4588,9 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     }
 
     // Finally, apply ultrasound division. We add one since the system expects us to round up and we're using truncating integer math.
-    if (modifier > 0) {
-      ultrasound_modifier = (modifier + 1) / 2;
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "; /2 (round up) = %d", modifier);
+    if (ultrasound_modifier > 0) {
+      ultrasound_modifier = (ultrasound_modifier + 1) / 2;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "; /2 (round up) = %d", ultrasound_modifier);
 
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
@@ -4602,13 +4604,13 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     if (vict_is_imp_invis) {
       // Improved invis? You can't see them.
       thermographic_modifier = BLIND_FIRE_PENALTY;
-      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting improved invis: %d", GET_CHAR_NAME(ch), modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting improved invis: %d", GET_CHAR_NAME(ch), thermographic_modifier);
     }
     else if (vict_is_just_invis || vict_is_ruthenium) {
       // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
       // This deviates from canon, where thermographic can see through standard invis.
       thermographic_modifier = RUTHENIUM_PENALTY / 2;
-      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting invis (second stanza): %d", GET_CHAR_NAME(ch), modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting invis (second stanza): %d", GET_CHAR_NAME(ch), thermographic_modifier);
     }
     else {
       thermographic_modifier = 0;
@@ -4627,7 +4629,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     low_light_modifier = BLIND_FIRE_PENALTY;
     normal_modifier = BLIND_FIRE_PENALTY;
 
-    snprintf(rbuf, sizeof(rbuf), "%s: Low-light or standard vision fighting invis: %d", GET_CHAR_NAME(ch), modifier);
+    snprintf(rbuf, sizeof(rbuf), "%s: Low-light or standard vision fighting invis: %d", GET_CHAR_NAME(ch), MIN(low_light_modifier, normal_modifier));
 
     act(rbuf, 0, ch, 0, 0, TO_ROLLS);
     if (ch->in_room != victim->in_room)
@@ -4635,25 +4637,25 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // Select the best modifier.
-  modifier = MIN(MIN(MIN(ultrasound_modifier, thermographic_modifier), low_light_modifier), normal_modifier);
-  snprintf(rbuf, sizeof(rbuf), "%s: Selected lowest vision modifier %d.", GET_CHAR_NAME(ch), modifier);
+  int best_modifier = MIN(MIN(MIN(ultrasound_modifier, thermographic_modifier), low_light_modifier), normal_modifier);
+  snprintf(rbuf, sizeof(rbuf), "%s: Selected lowest vision modifier %d.", GET_CHAR_NAME(ch), best_modifier);
 
   // MitS p148: Penalty is capped to +4 with Blind Fighting. We also cap it to +8 without, since that's Blind Fire.
   if (GET_POWER(ch, ADEPT_BLIND_FIGHTING)) {
-    if (modifier > BLIND_FIGHTING_MAX) {
-      modifier = BLIND_FIGHTING_MAX;
+    if (best_modifier > BLIND_FIGHTING_MAX) {
+      best_modifier = BLIND_FIGHTING_MAX;
 
-      snprintf(rbuf, sizeof(rbuf), "%s: Vision penalty capped to %d by Blind Fighting", GET_CHAR_NAME(ch), modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Vision penalty capped to %d by Blind Fighting", GET_CHAR_NAME(ch), best_modifier);
 
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
         act(rbuf, 0, victim, 0, 0, TO_ROLLS);
     }
   } else {
-    if (modifier > BLIND_FIRE_PENALTY) {
-      modifier = BLIND_FIRE_PENALTY;
+    if (best_modifier > BLIND_FIRE_PENALTY) {
+      best_modifier = BLIND_FIRE_PENALTY;
 
-      snprintf(rbuf, sizeof(rbuf), "%s: Capped to %d", GET_CHAR_NAME(ch), modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Capped to %d", GET_CHAR_NAME(ch), best_modifier);
 
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
@@ -4664,19 +4666,19 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   // With the recent bugfix that enabled the invis penalties that were supposed to be there, there's been a lot
   // of concern about mundanes getting the short end of the stick-- they do not have the ability to perceive to
   // get around invis penalties like awakened characters do. Thus, this decidedly non-canon hack, which reduces
-  // invis modifiers to 2 (the perception penalty) for mundanes:
-  if (IS_NPC(victim) && GET_TRADITION(ch) == TRAD_MUNDANE && modifier > 2) {
+  // invis modifiers to 2 (the astral perception penalty) for mundanes:
+  if (IS_NPC(victim) && GET_TRADITION(ch) == TRAD_MUNDANE && best_modifier > 2) {
     snprintf(rbuf, sizeof(rbuf), "%s: Negating invis penalty due to mundane PC vs NPC.", GET_CHAR_NAME(ch));
-    modifier = MIN(modifier, 2);
+    best_modifier = MIN(best_modifier, 2);
   }
 
-  snprintf(rbuf, sizeof(rbuf), "%s: Final char-to-char visibility TN: ^c%d^n", GET_CHAR_NAME(ch), modifier);
+  snprintf(rbuf, sizeof(rbuf), "%s: Final char-to-char visibility TN: ^c%d^n", GET_CHAR_NAME(ch), best_modifier);
 
   act(rbuf, 0, ch, 0, 0, TO_ROLLS);
   if (ch->in_room != victim->in_room)
     act(rbuf, 0, victim, 0, 0, TO_ROLLS);
 
-  return modifier;
+  return best_modifier;
 }
 #undef INVIS_CODE_STAFF
 #undef INVIS_CODE_TOTALINVIS
