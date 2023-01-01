@@ -409,7 +409,7 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   DECKER->tally += tally;
   if (DECKER->located)
     DECKER->tally++;
-  if (DECKER->tally >= 80)
+  if (DECKER->tally >= 90)
   {
     // House rule: we don't shut down the host per Matrix pg112,
     // Instead we just kill the problematic connection.
