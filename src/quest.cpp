@@ -529,7 +529,7 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
   return FALSE;
 }
 
-bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj, bool commit_changes=FALSE) {
+bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj, bool commit_changes=TRUE) {
   if (!GET_QUEST(ch))
     return FALSE;
 
