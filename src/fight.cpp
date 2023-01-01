@@ -5351,7 +5351,12 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     }
 
     if (!IS_NPC(vict)) {
-      if (!IS_NPC(ch) && !(PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER))) {
+      struct room_data *ch_in_room = get_ch_in_room(ch), *vict_in_room = get_ch_in_room(vict);
+      // PC vs PC: Both must be PK, AND/OR both must be standing in an arena.
+      if (!IS_NPC(ch)
+          && !(PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER))
+          && !(ROOM_FLAGGED(ch_in_room, ROOM_ARENA) && ROOM_FLAGGED(vict_in_room, ROOM_ARENA)))
+      {
         send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
         return;
       }
