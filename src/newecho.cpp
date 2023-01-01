@@ -384,7 +384,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
         target_ch = actor;
       } else {
         target_ch = find_target_character_for_emote(actor, tag_check_string, require_exact_match, in_room, in_veh);
-        if (!target_ch)
+        if (!target_ch && !require_exact_match)
           unpiloted_vehicle = find_target_vehicle_for_emote(actor, tag_check_string, in_room, in_veh);
       }
 
@@ -424,7 +424,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
           }
         }
 
-        else if (unpiloted_vehicle) {
+        else if (unpiloted_vehicle && !quote_mode) {
           display_string = GET_VEH_NAME(unpiloted_vehicle);
         }
 
