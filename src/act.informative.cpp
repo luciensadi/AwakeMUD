@@ -2318,20 +2318,22 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
                    get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj)));
       return;
     } else if (GET_OBJ_TYPE(obj) == ITEM_WORN || GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
+      send_to_char(GET_OBJ_NAME(obj), ch);
+      switch (bits) {
+        case FIND_OBJ_INV:
+          send_to_char(" (carried): \r\n", ch);
+          break;
+        case FIND_OBJ_ROOM:
+          send_to_char(" (here): \r\n", ch);
+          break;
+        case FIND_OBJ_EQUIP:
+          send_to_char(" (used): \r\n", ch);
+          break;
+      }
       if (obj->contains) {
-        send_to_char(GET_OBJ_NAME(obj), ch);
-        switch (bits) {
-          case FIND_OBJ_INV:
-            send_to_char(" (carried): \r\n", ch);
-            break;
-          case FIND_OBJ_ROOM:
-            send_to_char(" (here): \r\n", ch);
-            break;
-          case FIND_OBJ_EQUIP:
-            send_to_char(" (used): \r\n", ch);
-            break;
-        }
         list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
+      } else {
+        send_to_char("  Nothing.\r\n", ch);
       }
     } else if (GET_OBJ_TYPE(obj) == ITEM_CONTAINER || GET_OBJ_TYPE(obj) == ITEM_HOLSTER ||
                GET_OBJ_TYPE(obj) == ITEM_QUIVER || GET_OBJ_TYPE(obj) == ITEM_KEYRING) {
@@ -7300,7 +7302,7 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
   } else {
     #define APPEND_ROOM_FLAG(check, flagname) { if ((check)) {strlcat(room_title_buf, flagname, sizeof(room_title_buf));} }
     char room_title_buf[1000];
-    snprintf(room_title_buf, sizeof(room_title_buf), "^C%s^n", in_veh ? "Around you is " : "", GET_ROOM_NAME(in_room));
+    snprintf(room_title_buf, sizeof(room_title_buf), "^C%s%s^n", in_veh ? "Around you is " : "", GET_ROOM_NAME(in_room));
 
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_GARAGE), " (Garage)");
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STORAGE) && !ROOM_FLAGGED(in_room, ROOM_CORPSE_SAVE_HACK), " (Storage)");
