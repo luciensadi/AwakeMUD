@@ -539,6 +539,7 @@ struct command_info cmd_info[] =
     { "contest"    , POS_SITTING , do_contest  , 0, 0, FALSE },
     { "control"    , POS_SITTING , do_control  , 0, 0, FALSE },
     { "combine"    , POS_RESTING , do_put      , 0, 0, FALSE },
+    { "comegetme"  , POS_DEAD    , do_die      , 0, 0, FALSE },
     { "complete"   , POS_LYING   , do_recap    , 0, 0, FALSE },
     { "copy"       , POS_SITTING , do_copy     , 0, 0, FALSE },
     { "copyover"   , POS_DEAD    , do_copyover , LVL_ADMIN, 0, FALSE },
