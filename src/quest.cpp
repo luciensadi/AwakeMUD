@@ -985,7 +985,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
 
       for (struct follow_type *f = ch->followers; f; f = f->next) {
         // Skip invalid folks while telling them why.
-        if (follower_can_receive_reward(f->follower, ch, TRUE))
+        if (!follower_can_receive_reward(f->follower, ch, TRUE))
           continue;
 
         gain_nuyen(f->follower, nuyen, NUYEN_INCOME_AUTORUNS);
