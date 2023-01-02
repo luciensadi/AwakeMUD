@@ -194,7 +194,7 @@ bool ammo_test(struct char_data *ch, struct obj_data *obj)
   if (csuccess == success)
     csuccess--;
   snprintf(buf, sizeof(buf), "AmmoTest: Skill %d, Target %d, Success %d(c%d/t%d)", skill, target, success, csuccess, success - csuccess);
-  act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
+  act(buf, FALSE, ch, NULL, NULL, TO_STAFF_ROLLS);
   if (success > 0) {
     GET_AMMOBOX_TIME_TO_COMPLETION(obj) = (int)((ammo_type[GET_AMMOBOX_TYPE(obj)].time / MAX(success - csuccess, 1)) * 60);
     if (IS_SENATOR(ch)) {

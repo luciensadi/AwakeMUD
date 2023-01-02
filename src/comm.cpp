@@ -3061,11 +3061,11 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
          struct obj_data * obj, void *vict_obj, int type)
 {
   struct char_data *to, *next, *tch;
-  int sleep;
+  int sleep, staff_only;
   bool remote;
   struct veh_data *rigger_check;
 
-#define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
+#define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && (!staff_only || IS_SENATOR(ch))  && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
 
   if (!str || !*str)
     return NULL;
@@ -3085,6 +3085,9 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
 
   if ((remote = (type & TO_REMOTE)))
     type &= ~TO_REMOTE;
+
+  if ((staff_only = (type & TO_STAFF_ONLY)))
+    type &= ~TO_STAFF_ONLY;
 
   if ( type == TO_ROLLS )
     sleep = 1;
@@ -3169,8 +3172,13 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
       if (IS_NPC(to) || !PRF_FLAGGED(to, PRF_ROLLS))
         continue;
 
-      if (!IS_SENATOR(to) && !_OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ && !PLR_FLAGGED(to, PLR_PAID_FOR_ROLLS))
-        continue;
+      if (!IS_SENATOR(to)) {
+        if (!_OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ && !PLR_FLAGGED(to, PLR_PAID_FOR_ROLLS))
+          continue;
+
+        if (staff_only)
+          continue;
+      }
 
       if (SENDOK(to)
           && !(hide_invisible

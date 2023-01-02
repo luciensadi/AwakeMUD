@@ -2210,7 +2210,7 @@ enum {
 #define TO_CHAR                4
 #define TO_ROLLS               5
 #define TO_VEH                 6
-#define TO_DECK                 7
+#define TO_DECK                7
 #define TO_VEH_ROOM            8
 #define TO_CHAR_INCLUDE_RIGGER 9
 #define TO_CHAR_FORCE          10
@@ -2218,6 +2218,9 @@ enum {
 #define TO_VICT_FORCE          12
 #define TO_SLEEP               (1 << 5)     /* to char, even if sleeping */
 #define TO_REMOTE              (1 << 6)
+#define TO_STAFF_ONLY          (1 << 7)
+
+#define TO_STAFF_ROLLS         TO_ROLLS | TO_STAFF_ONLY
 
 /* Boards */
 

@@ -250,7 +250,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     int perception_result = success_test(GET_INT(tch) + GET_POWER(tch, ADEPT_IMPROVED_PERCEPT), test_tn);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Result: %d hits.", perception_result);
     if (GET_INVIS_LEV(tch) <= GET_LEVEL(ch))
-      act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+      act(rbuf, FALSE, tch, 0, 0, TO_STAFF_ROLLS);
 
     bool spotted_movement = perception_result > 0;
 
