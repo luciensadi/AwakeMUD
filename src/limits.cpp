@@ -235,7 +235,8 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
   if (!IS_NPC(ch) && ((GET_LEVEL(ch) < 1 || IS_SENATOR(ch))))
     return 0;
 
-  if (ch->char_specials.timer >= IDLE_TIMER_PAYOUT_THRESHOLD) {
+  // We only suppress idle payouts for people who are able to move.
+  if (ch->char_specials.timer >= IDLE_TIMER_PAYOUT_THRESHOLD && GET_POS(ch) > POS_STUNNED) {
     send_to_char("Your karma gain was suppressed due to you being idle.\r\n", ch);
     return 0;
   }
