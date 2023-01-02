@@ -2301,10 +2301,6 @@ void docwagon_retrieve(struct char_data *ch) {
     }
   }
 
-  // Banish shamanistic spirits (they would not survive the transition through domains)
-  if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-    end_spirit_existance(ch, TRUE);
-
   // Remove them from the Matrix.
   if (ch->persona) {
     snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", CAP(ch->persona->name));
@@ -2312,17 +2308,13 @@ void docwagon_retrieve(struct char_data *ch) {
     extract_icon(ch->persona);
     ch->persona = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-  } else if (PLR_FLAGGED(ch, PLR_MATRIX))
+  } else if (PLR_FLAGGED(ch, PLR_MATRIX)) {
     for (struct char_data *temp = room->people; temp; temp = temp->next_in_room)
       if (PLR_FLAGGED(temp, PLR_MATRIX))
         temp->persona->decker->hitcher = NULL;
+  }
   docwagon_message(ch);
   // death_penalty(ch);  /* Penalty for deadly wounds */
-
-  // They just got patched up: heal them slightly, make them stunned.
-  GET_PHYSICAL(ch) = 400;
-  GET_MENTAL(ch) = 0;
-  GET_POS(ch) = POS_STUNNED;
 
   // Restore their salvation ticks.
   GET_PC_SALVATION_TICKS(ch) = 5;
@@ -2411,6 +2403,11 @@ void docwagon_retrieve(struct char_data *ch) {
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Could not find modulator after DW rescue of %s.", GET_CHAR_NAME(ch));
     }
   }
+
+  // They just got patched up: heal them slightly, make them stunned.
+  GET_PHYSICAL(ch) = 400;
+  GET_MENTAL(ch) = 0;
+  GET_POS(ch) = POS_STUNNED;
 
   alert_player_doctors_of_contract_withdrawal(ch, FALSE);
 }

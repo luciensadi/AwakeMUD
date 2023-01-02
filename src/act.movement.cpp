@@ -667,9 +667,11 @@ bool perform_fall(struct char_data *ch)
       act(fall_str, FALSE, ch, 0, 0, TO_ROOM);
       return FALSE;
     }
+    
     int power = (int)(meters / 2); // then divide by two to find power of damage
     power -= GET_IMPACT(ch) / 2; // subtract 1/2 impact armor
-    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
+
+    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
       if (GET_OBJ_VAL(cyber, 0) == CYB_BALANCETAIL)
         power -= 2;
       else if (GET_OBJ_VAL(cyber, 0) == CYB_HYDRAULICJACK) {
@@ -681,6 +683,8 @@ bool perform_fall(struct char_data *ch)
           power -= GET_OBJ_VAL(cyber, 1);
         }
       }
+    }
+
     if (GET_SKILL(ch, SKILL_ATHLETICS))
       power -= success_test(GET_SKILL(ch, SKILL_ATHLETICS), (int)meters);
 

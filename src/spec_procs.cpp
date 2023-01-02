@@ -4630,7 +4630,7 @@ SPECIAL(quest_debug_scanner)
   }
 
   // WHERE debugger.
-  if (FALSE && CMD_IS("where")) {
+  if (CMD_IS("where")) {
     send_to_char("^RUsing extended WHERE due to you holding a diagnostic scanner.^n\r\n", ch);
 
     struct room_data *room;

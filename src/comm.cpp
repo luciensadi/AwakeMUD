@@ -3546,12 +3546,20 @@ void verify_vehicle_validity(struct veh_data *veh, bool go_deep) {
     verify_room_validity(veh->lastin[i]);
 
   verify_character_validity(veh->followch);
-  verify_character_validity(veh->people);
+
+  for (struct char_data *ch = veh->people; ch; ch = ch->next_in_veh) {
+    verify_character_validity(ch);
+    assert(ch->in_veh == veh);
+  }
   verify_character_validity(veh->rigger);
   verify_character_validity(veh->fighting);
 
   verify_obj_validity(veh->mount);
-  verify_obj_validity(veh->contents);
+
+  for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content) {
+    verify_obj_validity(obj);
+    assert(obj->in_veh == veh);
+  }
 
   for (int i = 0; i < NUM_MODS; i++)
     verify_obj_validity(veh->mod[i]);
@@ -3584,12 +3592,21 @@ void verify_room_validity(struct room_data *room, bool go_deep) {
     }
   }
 
-  verify_obj_validity(room->contents);
-
-  verify_character_validity(room->people);
-  verify_character_validity(room->watching);
-
-  verify_vehicle_validity(room->vehicles);
+  for (struct obj_data *obj = room->contents; obj; obj = obj->next_content) {
+    verify_obj_validity(obj);
+    assert(obj->in_room == room);
+  }
+  for (struct char_data *ch = room->people; ch; ch = ch->next_in_room) {
+    verify_character_validity(ch);
+    assert(ch->in_room == room);
+  }
+  for (struct char_data *ch = room->watching; ch; ch = ch->next_watching) {
+    verify_character_validity(ch);
+  }
+  for (struct veh_data *veh = room->vehicles; veh; veh = veh->next_veh) {
+    verify_vehicle_validity(veh);
+    assert(veh->in_room == room);
+  }
 
   for (int i = 0; i < NUM_WORKSHOP_TYPES; i++)
     verify_obj_validity(room->best_workshop[i]);
