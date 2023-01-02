@@ -808,9 +808,7 @@ struct command_info cmd_info[] =
     { "restring"   , POS_DEAD    , do_restring , 0, 0, FALSE },
     { "retract"    , POS_SITTING , do_retract  , 0, 0, FALSE },
     { "return"     , POS_DEAD    , do_return   , 0, 0, FALSE },
-#if defined(IS_BUILDPORT) || defined(IS_LOCALPORT)
     { "ritualcast" , POS_SITTING , do_cast     , 1, SCMD_RITUAL_CAST, FALSE },
-#endif
     { "rlist"      , POS_DEAD    , do_rlist    , LVL_BUILDER, 0, FALSE },
     { "room"       , POS_DEAD    , do_room     , LVL_BUILDER, 0, FALSE },
     { "roll"       , POS_DEAD    , do_dice     , 0, 0, FALSE },
