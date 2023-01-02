@@ -1058,6 +1058,17 @@ void die(struct char_data * ch)
   raw_kill(ch);
 }
 
+ACMD(do_dw_retrieve)
+{
+  // If they're ready to be docwagon'd out, save them.
+  if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    docwagon_retrieve(ch);
+  } else {
+    send_to_char(ch, "You have not received a DocWagon trauma team confirmation! You can either wait for help, or give up by typing ^WDIE^n.\r\n");
+  }
+  return;
+}
+  
 /*
  * Lets the player give up and die if they're at 0 or less
  * physical points.
