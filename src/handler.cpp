@@ -2759,9 +2759,7 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
     return get_player_vis(ch, tmp, 1);
 
   if (ch->in_veh) {
-    struct char_data *i = get_char_veh(ch, name, ch->in_veh);
-    if (i)
-      return i;
+    return get_char_veh(ch, name, ch->in_veh);
   }
 
   for (struct char_data *i = ch->in_room->people; i && j <= number; i = i->next_in_room) {
