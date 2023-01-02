@@ -2407,6 +2407,8 @@ void docwagon_retrieve(struct char_data *ch) {
       else {
         lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
       }
+    } else {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Could not find modulator after DW rescue of %s.", GET_CHAR_NAME(ch));
     }
   }
 
