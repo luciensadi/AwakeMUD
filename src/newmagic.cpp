@@ -3788,11 +3788,13 @@ ACMD(do_cast)
 
   int force = 0;
   char spell_name[120], tokens[MAX_STRING_LENGTH], *s;
-  struct spell_data *spell = GET_SPELLS(ch);
+  struct spell_data *spell;
+
   if (!*argument) {
     send_to_char("Cast what spell?\r\n", ch);
     return;
   }
+
   strcpy(tokens, argument);
   if ((strtok(tokens, "\"") && (s = strtok(NULL, "\"")))
       || (strtok(tokens, "'") && (s = strtok(NULL, "'")))) {
@@ -3814,13 +3816,16 @@ ACMD(do_cast)
       strlcpy(spell_name, buf2, sizeof(spell_name));
     }
   }
-  for (;spell; spell = spell->next)
+
+  for (spell = GET_SPELLS(ch); spell; spell = spell->next)
     if (is_abbrev(spell_name, spell->name) && !(!str_cmp(spell_name, "heal") && spell->type == SPELL_HEALTHYGLOW))
       break;
+
   if (!spell) {
     send_to_char(ch, "You don't know a spell called '%s'.\r\n", spell_name);
     return;
   }
+  
   if (!force)
     force = spell->force;
   else if (force > spell->force) {
