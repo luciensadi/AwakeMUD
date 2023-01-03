@@ -650,7 +650,7 @@ void update_buildrepair(void)
                              GET_RITUAL_COMPONENT_SPELL(PROG),
                              GET_RITUAL_COMPONENT_FORCE(PROG),
                              GET_RITUAL_COMPONENT_SUBTYPE(PROG),
-                             get_max_usable_spell_successes(GET_RITUAL_COMPONENT_SPELL(PROG), GET_RITUAL_COMPONENT_FORCE(PROG)) * RITUAL_SPELL_MAX_SUCCESS_MULTIPLIER,
+                             MAX(1, get_max_usable_spell_successes(GET_RITUAL_COMPONENT_SPELL(PROG), GET_RITUAL_COMPONENT_FORCE(PROG)) * RITUAL_SPELL_MAX_SUCCESS_MULTIPLIER),
                              2);
           }
 
