@@ -501,6 +501,10 @@ ACMD(do_ungroup)
     snprintf(buf2, sizeof(buf2), "%s has disbanded the group.\r\n", GET_NAME(ch));
     for (f = ch->followers; f; f = next_fol) {
       next_fol = f->next;
+
+      if (IS_SPIRIT(f->follower) && GET_ACTIVE(f->follower) == GET_IDNUM(ch))
+        continue;
+
       if (IS_AFFECTED(f->follower, AFF_GROUP)) {
         AFF_FLAGS(f->follower).RemoveBit(AFF_GROUP);
         send_to_char(buf2, f->follower);

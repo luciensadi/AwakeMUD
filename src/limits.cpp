@@ -1514,7 +1514,7 @@ void misc_update(void)
           continue;
         }
         if (GET_ACTIVE(ch)) {
-          if (!ch->master || ch->master->in_room ? ch->master->in_room != ch->in_room : ch->master->in_veh != ch->in_veh) {
+          if (!ch->master || (ch->master->in_room ? (ch->master->in_room != ch->in_room) : (ch->master->in_veh != ch->in_veh))) {
             act("Being away from its master, $n suddenly ceases to exist.", TRUE, ch, 0, 0, TO_ROOM);
             end_spirit_existance(ch, FALSE);
             continue;
