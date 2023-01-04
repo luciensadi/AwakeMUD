@@ -989,7 +989,7 @@ ACMD(do_teleport)
   }                                                                    \
 }
 
-#define VNUM_USAGE_STRING "Usage: vnum { obj | mob | veh | room | host | ic } <name>\r\n"
+#define VNUM_USAGE_STRING "Usage: vnum { obj | mob | veh | room | host | ic | quest } <name>\r\n"
 ACMD(do_vnum)
 {
   two_arguments(argument, buf, buf2);
@@ -1005,6 +1005,7 @@ ACMD(do_vnum)
   VNUM_LOOKUP(room);
   VNUM_LOOKUP(host);
   VNUM_LOOKUP(ic);
+  VNUM_LOOKUP(quest);
 
   send_to_char(VNUM_USAGE_STRING, ch);
 }
@@ -1484,9 +1485,16 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
             pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(k)->privileges, FALSE));
   }
 
-  if (!IS_NPC(k) && access_level(ch, LVL_ADMIN)) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n  Multiplier: ^c%.2f^n\r\n", GET_EMAIL(k), (float) GET_CHAR_MULTIPLIER(k) / 100);
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "ShotsFired: ^c%d^n, ShotsTriggered: ^c%d^n\r\n", SHOTS_FIRED(k), SHOTS_TRIGGERED(k));
+  if (!IS_NPC(k)) {
+    if (access_level(ch, LVL_PRESIDENT) && GET_CHAR_MULTIPLIER(k) != 100) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Multiplier: ^c%.2f^n\r\n", (float) GET_CHAR_MULTIPLIER(k) / 100);
+    }
+    if (access_level(ch, LVL_VICEPRES)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n\r\n", GET_EMAIL(k));
+    }
+    if (access_level(ch, LVL_FIXER)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "ShotsFired: ^c%d^n, ShotsTriggered: ^c%d^n\r\n", SHOTS_FIRED(k), SHOTS_TRIGGERED(k));
+    }
   }
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Title: %s\r\n", (k->player.title ? k->player.title : "<None>"));
@@ -1600,6 +1608,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
 
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "AFF: ^y%s^n\r\n", buf2);
+
   if (GET_BUILDING(k)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Currently working on: ^c%s^n (%ld)\r\n", GET_OBJ_NAME(GET_BUILDING(k)), GET_OBJ_VNUM(GET_BUILDING(k)));
   }
@@ -1773,6 +1782,9 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   /* Showing the bitvector */
   AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
   send_to_char(ch, "%sAFF: ^y%s\r\n", buf, buf2);
+  if (k->mob_loaded_in_room) {
+    send_to_char(ch, "Loaded in room: ^c%ld^n\r\n", k->mob_loaded_in_room);
+  }
   strlcpy(buf2, write_vision_string_for_display(k, VISION_STRING_MODE_STAFF), sizeof(buf2));
   send_to_char(ch, "%s\r\n", buf2);
 
@@ -1801,6 +1813,20 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
         }
         send_to_char(ch, " - %s %s (^c%ld^n) (%d nuyen)\r\n", where[wearloc], GET_OBJ_NAME(worn_item), GET_OBJ_VNUM(worn_item), GET_OBJ_COST(worn_item));
       }
+    }
+  }
+
+  {
+    char skill_buf[1000] = { '\0' };
+    for (int skill_idx = 0; skill_idx <= 8; skill_idx += 2) {
+      if (k->mob_specials.mob_skills[skill_idx + 1]) {
+        snprintf(ENDOF(skill_buf), sizeof(skill_buf) - strlen(skill_buf), "  %s: %d\r\n",
+                 skills[k->mob_specials.mob_skills[skill_idx]].name,
+                 k->mob_specials.mob_skills[skill_idx + 1]);
+      }
+    }
+    if (*skill_buf) {
+      send_to_char(ch, "Skills:\r\n%s", skill_buf);
     }
   }
 }
@@ -2219,6 +2245,7 @@ ACMD(do_wizload)
       return;
     }
     mob = read_mobile(r_num, REAL);
+    mob->mob_loaded_in_room = GET_ROOM_VNUM(get_ch_in_room(ch));
     char_to_room(mob, get_ch_in_room(ch));
 
     // Reset questgivers so they talk to you faster.
@@ -2331,6 +2358,7 @@ ACMD(do_vstat)
       return;
     }
     mob = read_mobile(r_num, REAL);
+    mob->mob_loaded_in_room = GET_ROOM_VNUM(&world[0]);
     char_to_room(mob, &world[0]);
     do_stat_mobile(ch, mob);
     extract_char(mob);
@@ -2518,11 +2546,34 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
   int newlevel, i;
   void do_start(struct char_data *ch, bool wipe_skills);
   extern void check_autowiz(struct char_data * ch);
+  bool is_file = FALSE;
 
-  two_arguments(argument, name, level);
+  char *remainder = two_arguments(argument, name, level);
 
   if (*name) {
-    if (!(victim = get_char_vis(ch, name))) {
+    if (!str_cmp(name, "file")) {
+      name = level;
+      level = remainder;
+
+      for (struct descriptor_data *td = descriptor_list; td; td = td->next) {
+        if (td->character && !str_cmp(name, GET_CHAR_NAME(td->character))) {
+          send_to_char(ch, "%s is already loaded.\r\n", name);
+          return;
+        }
+        if (td->original && !str_cmp(name, GET_CHAR_NAME(td->original))) {
+          send_to_char(ch, "%s is already loaded.\r\n", name);
+          return;
+        }
+      }
+
+      if (!does_player_exist(name)) {
+        send_to_char("There is no such player.\r\n", ch);
+        return;
+      }
+
+      is_file = TRUE;
+      victim = playerDB.LoadChar(name, false);
+    } else if (!(victim = get_char_vis(ch, name))) {
       send_to_char("That player is not here.\r\n", ch);
       return;
     }
@@ -2531,21 +2582,24 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
     return;
   }
 
-  if (GET_LEVEL(ch) <= GET_LEVEL(victim)
-      && ch != victim) {
+  if (GET_LEVEL(ch) <= GET_LEVEL(victim) && ch != victim) {
     send_to_char("You need to be a higher level than your victim to do that.\r\n", ch);
+    if (is_file) { extract_char(victim); }
     return;
   }
   if (IS_NPC(victim)) {
     send_to_char("NO!  Not on NPC's.\r\n", ch);
+    if (is_file) { extract_char(victim); }
     return;
   }
   if (!*level || (newlevel = atoi(level)) <= 0) {
     send_to_char("That's not a level!\r\n", ch);
+    if (is_file) { extract_char(victim); }
     return;
   }
   if (newlevel > LVL_MAX) {
     send_to_char(ch, "%d is the highest possible level.\r\n", LVL_MAX);
+    if (is_file) { extract_char(victim); }
     return;
   }
   if (can_self_advance) {
@@ -2553,11 +2607,13 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
     int max_ch_can_advance_to = GET_LEVEL(ch) < LVL_MAX ? LVL_MAX - 1 : LVL_MAX;
     if (newlevel > max_ch_can_advance_to) {
       send_to_char(ch, "%d is the highest possible level you can advance someone to.\r\n", max_ch_can_advance_to);
+      if (is_file) { extract_char(victim); }
       return;
     }
   } else {
     if (!access_level(ch, newlevel) ) {
       send_to_char("Yeah, right.\r\n", ch);
+      if (is_file) { extract_char(victim); }
       return;
     }
 
@@ -2592,8 +2648,8 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
         "You feel slightly different.", FALSE, ch, 0, victim, TO_VICT);
      */
     send_to_char(victim, "%s has promoted you from %s to %s. Note that this has reset your skills, stats, chargen data, etc.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
-    snprintf(buf3, sizeof(buf3), "%s has advanced %s from %s to %s.",
-            GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
+    snprintf(buf3, sizeof(buf3), "%s has advanced %s%s from %s to %s.",
+            GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), is_file ? " [file]" : "", status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
     mudlog(buf3, ch, LOG_WIZLOG, TRUE);
     GET_LEVEL(victim) = newlevel;
 
@@ -2618,6 +2674,12 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
   // We use INSERT IGNORE to cause it to not error out when updating someone who already had immort data.
   snprintf(buf, sizeof(buf), "INSERT IGNORE INTO pfiles_immortdata (idnum) VALUES (%ld);", GET_IDNUM(victim));
   mysql_wrapper(mysql, buf);
+
+  if (is_file) {
+    extract_char(victim);
+  } else {
+    playerDB.SaveChar(victim);
+  }
 }
 
 ACMD(do_self_advance) {
@@ -3171,7 +3233,7 @@ void perform_immort_vis(struct char_data *ch)
   void appear(struct char_data *ch);
 
   if (GET_INVIS_LEV(ch) == 0 && !IS_AFFECTED(ch, AFF_HIDE) &&
-      !IS_AFFECTED(ch, AFF_INVISIBLE))
+      !IS_AFFECTED(ch, AFF_RUTHENIUM))
   {
     send_to_char("You are already fully visible.\r\n", ch);
     return;
@@ -4781,12 +4843,18 @@ ACMD(do_set)
   half_chop(argument, name, buf);
   if (!strcmp(name, "file")) {
     is_file = 1;
-    strlcpy(buf, one_argument(buf, name), sizeof(buf));
+    char remainder[MAX_INPUT_LENGTH];
+    strlcpy(remainder, one_argument(buf, name), sizeof(remainder));
+    strlcpy(buf, remainder, sizeof(buf));
   } else if (!str_cmp(name, "player")) {
     is_player = 1;
-    strlcpy(buf, one_argument(buf, name), sizeof(buf));
+    char remainder[MAX_INPUT_LENGTH];
+    strlcpy(remainder, one_argument(buf, name), sizeof(remainder));
+    strlcpy(buf, remainder, sizeof(buf));
   } else if (!str_cmp(name, "mob")) {
-    strlcpy(buf, one_argument(buf, name), sizeof(buf));
+    char remainder[MAX_INPUT_LENGTH];
+    strlcpy(remainder, one_argument(buf, name), sizeof(remainder));
+    strlcpy(buf, remainder, sizeof(buf));
   }
   half_chop(buf, field, buf2);
   strlcpy(val_arg, buf2, sizeof(val_arg));
@@ -4808,6 +4876,22 @@ ACMD(do_set)
       }
     }
   } else if (is_file) {
+    for (struct descriptor_data *td = descriptor_list; td; td = td->next) {
+      if (td->character && !str_cmp(name, GET_CHAR_NAME(td->character))) {
+        send_to_char(ch, "%s is already loaded.\r\n", name);
+        return;
+      }
+      if (td->original && !str_cmp(name, GET_CHAR_NAME(td->original))) {
+        send_to_char(ch, "%s is already loaded.\r\n", name);
+        return;
+      }
+    }
+
+    if (!does_player_exist(name)) {
+      send_to_char("There is no such player.\r\n", ch);
+      return;
+    }
+
     vict = playerDB.LoadChar(name, false);
 
     if (vict) {
@@ -8232,9 +8316,13 @@ ACMD(do_makenerps) {
   }
 
   // Parse out our float.
-  double essence_cost = atof(buf2);
+  float essence_cost = atof(buf2);
   if (essence_cost < 0) {
     send_to_char(ch, "%f is not a valid essence cost. Please reference the book value.\r\n%s", essence_cost, NERPS_WARE_USAGE_STRING);
+    return;
+  }
+  if (((int) (essence_cost * 1000)) % 10 != 0) {
+    send_to_char("The code does not support essence values with more than two digits of precision (ex: 0.05 OK, 0.045 not OK). Please round appropriately and try again.\r\n", ch);
     return;
   }
 
@@ -8246,7 +8334,7 @@ ACMD(do_makenerps) {
 
   if (is_abbrev(vis_buf, "visible") || is_abbrev(vis_buf, "external")) {
     is_visible = TRUE;
-  } else if (is_abbrev(vis_buf, "internal")) {
+  } else if (is_abbrev(vis_buf, "invisible") || is_abbrev(vis_buf, "internal")) {
     is_visible = FALSE;
   } else {
     send_to_char(ch, "You must choose either VISIBLE or INTERNAL, not '%s'.\r\n%s", buf, NERPS_WARE_USAGE_STRING);

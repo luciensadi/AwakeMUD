@@ -678,10 +678,10 @@ struct command_info cmd_info[] =
     { "jobs"       , POS_DEAD    , do_recap    , 0, 0, FALSE },
     { "junk"       , POS_RESTING , do_drop     , 0, SCMD_JUNK, FALSE },
 
+    // { "kil"        , POS_FIGHTING, do_kil      , 0, 0, FALSE },
+    { "kill"       , POS_FIGHTING, do_kill     , 0, SCMD_KILL, FALSE },
     { "keep"       , POS_LYING   , do_keep     , 0, 0, FALSE },
     { "keepalive"  , POS_DEAD    , do_keepalive, 0, 0, FALSE },
-    { "kil"        , POS_FIGHTING, do_kil      , 0, 0, FALSE },
-    { "kill"       , POS_FIGHTING, do_kill     , 0, SCMD_KILL, FALSE },
     { "kick"       , POS_STANDING, do_kick     , 0, 0, FALSE },
     { "knock"      , POS_STANDING, do_gen_door , 0, SCMD_KNOCK, FALSE },
 
@@ -813,9 +813,7 @@ struct command_info cmd_info[] =
     { "restring"   , POS_DEAD    , do_restring , 0, 0, FALSE },
     { "retract"    , POS_SITTING , do_retract  , 0, 0, FALSE },
     { "return"     , POS_DEAD    , do_return   , 0, 0, FALSE },
-#if defined(IS_BUILDPORT) || defined(IS_LOCALPORT)
     { "ritualcast" , POS_SITTING , do_cast     , 1, SCMD_RITUAL_CAST, FALSE },
-#endif
     { "rlist"      , POS_DEAD    , do_rlist    , LVL_BUILDER, 0, FALSE },
     { "room"       , POS_DEAD    , do_room     , LVL_BUILDER, 0, FALSE },
     { "roll"       , POS_DEAD    , do_dice     , 0, 0, FALSE },
@@ -891,7 +889,7 @@ struct command_info cmd_info[] =
     { "tke"        , POS_DEAD    , do_karma    , 0, 0, TRUE },
     { "toggle"     , POS_DEAD    , do_toggle   , 0, 0, FALSE },
     { "tow"        , POS_SITTING , do_tow      , 0, 0, FALSE },
-    { "track"      , POS_STANDING, do_track    , 0, 0, FALSE },
+    { "track"      , POS_SITTING, do_track    , 0, 0, FALSE },
     { "tracker"    , POS_RESTING , do_not_here , 0, 0, FALSE },
     { "treat"      , POS_SITTING , do_treat    , 0, 0, FALSE },
     { "trade"      , POS_DEAD    , do_trade    , 0, 0, FALSE },
@@ -963,9 +961,6 @@ struct command_info cmd_info[] =
     { "vedit"      , POS_DEAD    , do_vedit    , LVL_BUILDER, 0, FALSE },
     { "vteleport"  , POS_DEAD   , do_vteleport, LVL_CONSPIRATOR, 0, FALSE },
 
-    // The mysterious back door command! (protip: it does nothing)
-//  { "xyz"        , POS_STANDING, do_action   , LVL_PRESIDENT, 0, FALSE },
-
     { "yell"       , POS_LYING   , do_gen_comm , 0, SCMD_SHOUT, FALSE },
 
     { "zdelete"    , POS_DEAD    , do_zdelete  , LVL_PRESIDENT, 0, FALSE },
@@ -1018,14 +1013,12 @@ struct command_info cmd_info[] =
     { "bounce"   , POS_STANDING, do_action   , 0, 0, FALSE },
     { "bat"      , POS_RESTING , do_action   , 0, 0, FALSE },
     { "beam"     , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "bearhug"  , POS_STANDING, do_action   , 0, 0, FALSE },
     { "beg"      , POS_RESTING , do_action   , 0, 0, FALSE },
     { "bite"     , POS_RESTING , do_action   , 0, 0, FALSE },
     { "blink"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "bleed"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "blush"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "boggle"   , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "bonk"     , POS_STANDING, do_action   , 0, 0, FALSE },
     { "bow"      , POS_STANDING, do_action   , 0, 0, FALSE },
     { "brb"      , POS_LYING   , do_action   , 0, 0, FALSE },
     { "brick"    , POS_STANDING, do_action   , 0, 0, FALSE },
@@ -1038,7 +1031,6 @@ struct command_info cmd_info[] =
     { "clap"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "cockeye"  , POS_RESTING , do_action   , 0, 0, FALSE },
     { "collapse" , POS_STANDING, do_action   , 0, 0, FALSE },
-    { "comb"     , POS_RESTING , do_action   , 0, 0, FALSE },
     { "comfort"  , POS_RESTING , do_action   , 0, 0, FALSE },
     { "confused" , POS_LYING   , do_action   , 0, 0, FALSE },
     { "congrat"  , POS_LYING   , do_action   , 0, 0, FALSE },
@@ -1046,22 +1038,16 @@ struct command_info cmd_info[] =
     { "cough"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "cringe"   , POS_LYING   , do_action   , 0, 0, FALSE },
     { "cry"      , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "cuddle"   , POS_LYING   , do_action   , 0, 0, FALSE },
     { "curse"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "curtsey"  , POS_STANDING, do_action   , 0, 0, FALSE },
     // Socials D
     { "dance"    , POS_STANDING, do_action   , 0, 0, FALSE },
     { "daydream" , POS_SLEEPING, do_action   , 0, 0, FALSE },
-    { "dis"      , POS_LYING   , do_action   , 0, 0, FALSE },
     { "disagree" , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "disco"    , POS_RESTING , do_action   , 0, 0, FALSE },
     { "disregard", POS_LYING   , do_action   , 0, 0, FALSE },
     { "doh"      , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "dribble"  , POS_LYING   , do_action   , 0, 0, FALSE },
     { "drool"    , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "dunce"    , POS_LYING   , do_action   , 0, 0, FALSE },
     // Socials E
-    { "embrace"  , POS_LYING   , do_action   , 0, 0, FALSE },
     { "envy"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "eyebrow"  , POS_LYING   , do_action   , 0, 0, FALSE },
     // Socials F
@@ -1070,8 +1056,6 @@ struct command_info cmd_info[] =
     { "fart"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "flex"     , POS_STANDING, do_action   , 0, 0, FALSE },
     { "flirt"    , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "fondle"   , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "french"   , POS_LYING   , do_action   , 0, 0, FALSE },
     { "frown"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "fume"     , POS_LYING   , do_action   , 0, 0, FALSE },
     // Socials G
@@ -1082,37 +1066,28 @@ struct command_info cmd_info[] =
     { "grin"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "grimace"  , POS_LYING   , do_action   , 0, 0, FALSE },
     { "groan"    , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "grope"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "grovel"   , POS_LYING   , do_action   , 0, 0, FALSE },
     { "growl"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "grumble"  , POS_LYING   , do_action   , 0, 0, FALSE },
     { "grunt"    , POS_LYING   , do_action   , 0, 0, FALSE },
     // Socials H
-    { "hair"     , POS_RESTING , do_action   , 0, 0, FALSE },
     { "happy"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "hand"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "hate"     , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "hhold"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "hiccup"   , POS_LYING   , do_action   , 0, 0, FALSE },
     { "hifive"   , POS_STANDING, do_action   , 0, 0, FALSE },
     { "hoi"      , POS_LYING   , do_action   , 0, 0, FALSE },
     { "hop"      , POS_LYING   , do_action   , 0, 0, FALSE },
     { "howl"     , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "hkiss"    , POS_STANDING, do_action   , 0, 0, FALSE },
     { "hug"      , POS_RESTING , do_action   , 0, 0, FALSE },
     // Socials I
     { "innocent" , POS_LYING   , do_action   , 0, 0, FALSE },
     // Socials J
     { "jig"      , POS_STANDING, do_action   , 0, 0, FALSE },
-    { "jeer"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "jump"     , POS_RESTING , do_action   , 0, 0, FALSE },
-    // Socials K
-    { "kiss"     , POS_LYING   , do_action   , 0, 0, FALSE },
     // Socials L
-    { "lap"      , POS_STANDING, do_action   , 0, 0, FALSE },
     { "laugh"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "listen"   , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "lick"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "lol"      , POS_LYING   , do_action   , 0, 0, FALSE },
     { "love"     , POS_LYING   , do_action   , 0, 0, FALSE },
     // Socials M
@@ -1120,19 +1095,13 @@ struct command_info cmd_info[] =
     { "moan"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "mosh"     , POS_STANDING, do_action   , 0, 0, FALSE },
     { "moon"     , POS_STANDING, do_action   , 0, 0, FALSE },
-    { "massage"  , POS_RESTING , do_action   , 0, 0, FALSE },
-    { "muthafucka",POS_RESTING , do_action   , 0, 0, FALSE },
     // Socials N
-    { "nibble"   , POS_RESTING , do_action   , 0, 0, FALSE },
     { "nod"      , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "noogie"   , POS_STANDING, do_action   , 0, 0, FALSE },
     { "nudge"    , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "nuzzle"   , POS_LYING   , do_action   , 0, 0, FALSE },
     // Socials O
     // Socials P
     { "pant"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "pat"      , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "peck"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "peer"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "point"    , POS_RESTING , do_action   , 0, 0, FALSE },
     { "poke"     , POS_RESTING , do_action   , 0, 0, FALSE },
@@ -1140,9 +1109,7 @@ struct command_info cmd_info[] =
     { "pout"     , POS_RESTING , do_action   , 0, 0, FALSE },
     { "prance"   , POS_STANDING, do_action   , 0, 0, FALSE },
     { "pray"     , POS_SITTING , do_action   , 0, 0, FALSE },
-    { "propose"  , POS_STANDING, do_action   , 0, 0, FALSE },
     { "psychoanalyze", POS_RESTING, do_action, 0, 0, FALSE },
-    { "pucker"   , POS_RESTING , do_action   , 0, 0, FALSE },
     { "puke"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "punch"    , POS_RESTING , do_action   , 0, 0, FALSE },
     { "puppy"    , POS_LYING   , do_action   , 0, 0, FALSE },
@@ -1150,12 +1117,10 @@ struct command_info cmd_info[] =
     // Socials Q
     // Socials R
     { "raspberry", POS_SITTING , do_action   , 0, 0, FALSE },
-    { "rtfm"     , POS_STANDING, do_action   , 0, 0, FALSE },
     { "roar"     , POS_RESTING , do_action   , 0, 0, FALSE },
     { "rofl"     , POS_RESTING , do_action   , 0, 0, FALSE },
     { "rose"     , POS_STANDING, do_action   , 0, 0, FALSE },
     { "rub"      , POS_RESTING , do_action   , 0, 0, FALSE },
-    { "ruffle"   , POS_STANDING, do_action   , 0, 0, FALSE },
     // Socials S
     { "sage"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "scratch"  , POS_LYING   , do_action   , 0, 0, FALSE },
@@ -1166,9 +1131,6 @@ struct command_info cmd_info[] =
     { "sigh"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "signal"   , POS_LYING   , do_action   , 0, 0, FALSE },
     { "sing"     , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "slap"     , POS_RESTING , do_action   , 0, 0, FALSE },
-    { "slobber"  , POS_RESTING , do_action   , 0, 0, FALSE },
-    { "slurp"    , POS_STANDING, do_action   , 0, 0, FALSE },
     { "smile"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "smirk"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "snicker"  , POS_LYING   , do_action   , 0, 0, FALSE },
@@ -1183,30 +1145,19 @@ struct command_info cmd_info[] =
     { "sob"      , POS_LYING   , do_action   , 0, 0, FALSE },
     { "spank"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "spit"     , POS_STANDING, do_action   , 0, 0, FALSE },
-    { "squeeze"  , POS_LYING   , do_action   , 0, 0, FALSE },
     { "stare"    , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "stamp"    , POS_RESTING , do_action   , 0, 0, FALSE },
     { "steam"    , POS_RESTING , do_action   , 0, 0, FALSE },
-    { "striptease", POS_STANDING , do_action  , 0, 0, FALSE },
-    { "stroke"   , POS_RESTING , do_action   , 0, 0, FALSE },
     { "strut"    , POS_STANDING, do_action   , 0, 0, FALSE },
     { "strangle" , POS_STANDING, do_action   , 0, 0, FALSE },
     { "sulk"     , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "swat"     , POS_RESTING , do_action   , 0, 0, FALSE },
     { "swear"    , POS_LYING   , do_action   , 0, 0, FALSE },
     // Socials T
-    { "tackle"   , POS_RESTING , do_action   , 0, 0, FALSE },
-    { "tango"    , POS_STANDING, do_action   , 0, 0, FALSE },
     { "tap"      , POS_LYING   , do_action   , 0, 0, FALSE },
     { "taunt"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "thank"    , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "thwap"    , POS_SITTING , do_action   , 0, 0, FALSE },
-    { "tickle"   , POS_RESTING , do_action   , 0, 0, FALSE },
     { "tiptoe"   , POS_RESTING , do_action   , 0, 0, FALSE },
     { "tongue"   , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "torture"  , POS_RESTING , do_action   , 0, 0, FALSE },
     { "touch"    , POS_STANDING, do_action   , 0, 0, FALSE },
-    { "toss"     , POS_STANDING, do_action   , 0, 0, FALSE },
     { "trip"     , POS_STANDING, do_action   , 0, 0, FALSE },
     { "twitch"   , POS_LYING   , do_action   , 0, 0, FALSE },
     { "twiddle"  , POS_LYING   , do_action   , 0, 0, FALSE },
@@ -1219,14 +1170,12 @@ struct command_info cmd_info[] =
     { "whimper"  , POS_LYING   , do_action   , 0, 0, FALSE },
     { "whine"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "whistle"  , POS_LYING   , do_action   , 0, 0, FALSE },
-    { "whiz"     , POS_SITTING , do_action   , 0, 0, FALSE },
     { "wibble"   , POS_STANDING, do_action   , 0, 0, FALSE },
     { "wiggle"   , POS_STANDING, do_action   , 0, 0, FALSE },
     { "wince"    , POS_LYING   , do_action   , 0, 0, FALSE },
     { "wink"     , POS_LYING   , do_action   , 0, 0, FALSE },
     { "wooha"    , POS_SITTING , do_action   , 0, 0, FALSE },
     { "worship"  , POS_RESTING , do_action   , 0, 0, FALSE },
-    { "wrestle"  , POS_STANDING, do_action   , 0, 0, FALSE },
     // Socials X
     // Socials Y
     { "yawn"     , POS_LYING   , do_action   , 0, 0, FALSE },
@@ -1511,7 +1460,7 @@ void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode)
  */
 ACMD_DECLARE(quit_the_matrix_first);
 ACMD_DECLARE(stop_rigging_first);
-void command_interpreter(struct char_data * ch, char *argument, char *tcname)
+void command_interpreter(struct char_data * ch, char *argument, const char *tcname)
 {
   int cmd, length;
   extern int no_specials;
@@ -1579,7 +1528,8 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
   {
     for (length = strlen(arg), cmd = 0; *mtx_info[cmd].command != '\n'; cmd++)
       if (!strncmp(mtx_info[cmd].command, arg, length))
-        break;
+        if ((mtx_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, mtx_info[cmd].minimum_level))
+          break;
 
     // If they have failed to enter a valid Matrix command, and we were unable to fix a typo in their command:
     if (*mtx_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, mtx_info)) == -1) {
@@ -1602,6 +1552,13 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       quit_the_matrix_first(ch, line, 0, 0);
     }
     else {
+      // Sanity check: Level restriction.
+      if ((mtx_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, mtx_info[cmd].minimum_level)) {
+        send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only matrix command %s!", GET_CHAR_NAME(ch), mtx_info[cmd].command);
+        return;
+      }
+
       if (ch->persona->decker->hitcher) {
         send_to_char(ch->persona->decker->hitcher, "^y<OUTGOING> %s^n\r\n", argument);
       }
@@ -1620,7 +1577,8 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
   {
     for (length = strlen(arg), cmd = 0; *rig_info[cmd].command != '\n'; cmd++)
       if (!strncmp(rig_info[cmd].command, arg, length))
-        break;
+        if ((rig_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, rig_info[cmd].minimum_level))
+          break;
 
     // If they have failed to enter a valid Rigging command, and we were unable to fix a typo in their command:
     if (*rig_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, rig_info)) == -1) {
@@ -1642,6 +1600,13 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       // Their command was valid in external context. Inform them.
       stop_rigging_first(ch, line, 0, 0);
     } else {
+      // Sanity check: Level restriction.
+      if ((rig_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, rig_info[cmd].minimum_level)) {
+        send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only rigging command %s!", GET_CHAR_NAME(ch), rig_info[cmd].command);
+        return;
+      }
+
       if (ch->desc)
         ch->desc->invalid_command_counter = 0;
 
@@ -1742,6 +1707,13 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
         send_to_char("No way!  You're fighting for your life!\r\n", ch);
         break;
       }
+      return;
+    }
+
+    // Sanity check: Level restriction.
+    if ((cmd_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, cmd_info[cmd].minimum_level)) {
+      send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only command %s!", GET_CHAR_NAME(ch), cmd_info[cmd].command);
       return;
     }
 

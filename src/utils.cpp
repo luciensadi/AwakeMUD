@@ -59,6 +59,7 @@ extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
+extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
 
 extern SPECIAL(johnson);
 extern SPECIAL(landlord_spec);
@@ -1151,6 +1152,10 @@ void add_follower(struct char_data * ch, struct char_data * leader)
     if (get_ch_in_room(leader) == get_ch_in_room(ch) && leader->in_veh == ch->in_veh && CAN_SEE(leader, ch)) {
       act("$n starts following you.", TRUE, ch, 0, leader, TO_VICT);
       act("$n starts to follow $N.", TRUE, ch, 0, leader, TO_NOTVICT);
+
+      if (!IS_NPC(ch) && !IS_NPC(leader) && PRF_FLAGGED(leader, PRF_SEE_TIPS)) {
+        act("^c(Tip: If you want $n to participate in jobs with you, make sure you ^WGROUP^c $m!)^n", TRUE, ch, 0, leader, TO_VICT);
+      }
     }
   }
 }
@@ -2287,6 +2292,16 @@ void store_message_to_history(struct descriptor_data *d, int channel, const char
 
     d->message_history[channel].RemoveItem(d->message_history[channel].Tail());
   }
+
+  // Populate meta-history channels as well.
+  switch (channel) {
+    case COMM_CHANNEL_SAYS:
+    case COMM_CHANNEL_EMOTES:
+    case COMM_CHANNEL_OSAYS:
+    case COMM_CHANNEL_SHOUTS:
+      store_message_to_history(d, COMM_CHANNEL_LOCAL, message);
+      break;
+  }
 }
 
 void delete_message_history(struct descriptor_data *d) {
@@ -2445,17 +2460,33 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
 #endif
   }
 
+  bool vict_is_ruthenium = AFF_FLAGGED(vict, AFF_RUTHENIUM);
+
   // Astral perception sees most things-- unless said thing is an inanimate mob with no spells on it.
-  if (has_astral && !(MOB_FLAGGED(vict, MOB_INANIMATE) && !GET_SUSTAINED(vict)))
+  if (has_astral && !(MOB_FLAGGED(vict, MOB_INANIMATE) && !GET_SUSTAINED(vict))) {
+    // Set alarm status for ruthenium.
+    if (IS_NPC(ch) && vict_is_ruthenium && (has_ultrasound || has_thermographic || is_vehicle))
+      process_spotted_invis(ch, vict);
     return TRUE;
+  }
 
   // Ultrasound pierces all invis as long as it's in the same room and not blocked by silence or stealth.
-  if (has_ultrasound && !affected_by_spell(vict, SPELL_STEALTH) && vict_room->silence[ROOM_NUM_SPELLS_OF_TYPE] <= 0)
+  if (has_ultrasound && !affected_by_spell(vict, SPELL_STEALTH) && vict_room->silence[ROOM_NUM_SPELLS_OF_TYPE] <= 0) {
+    // Set alarm status for ruthenium.
+    if (IS_NPC(ch) && vict_is_ruthenium && (has_ultrasound || has_thermographic || is_vehicle))
+      process_spotted_invis(ch, vict);
     return TRUE;
+  }
 
   // Allow resist test VS improved invis-- but only if you're not seeing the world through sensors.
   if (IS_AFFECTED(vict, AFF_SPELLIMPINVIS)) {
-    return !is_vehicle && can_see_through_invis(ch, vict);
+    if (!is_vehicle && can_see_through_invis(ch, vict)) {
+      // Set alarm status for ruthenium.
+      if (IS_NPC(ch) && vict_is_ruthenium && (has_ultrasound || has_thermographic || is_vehicle))
+        process_spotted_invis(ch, vict);
+      return TRUE;
+    }
+    return FALSE;
   }
 
   // Thermoptic camouflage, a houseruled thing that doesn't actually show up in the game yet. This can only be broken by ultrasound.
@@ -2464,8 +2495,14 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   }
 
   // Ruthenium is pierced by thermographic vision, which is default on vehicles.
-  if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
-    return has_thermographic;
+  if (vict_is_ruthenium) {
+    if (has_thermographic) {
+      // Set alarm status for ruthenium.
+      if (IS_NPC(ch) && vict_is_ruthenium && (has_ultrasound || has_thermographic || is_vehicle))
+        process_spotted_invis(ch, vict);
+      return TRUE;
+    }
+    return FALSE;
   }
 
   // Allow resistance test VS invis spell.
@@ -3500,7 +3537,7 @@ void purgelog(struct veh_data *veh) {
 
 // Copy Source into Dest, replacing the target substring in Source with the specified replacement.
 // Requirement: dest's max size must be greater than source's current size plus all the replacements being done in it.
-char *replace_substring(char *source, char *dest, const char *replace_target, const char *replacement) {
+char *replace_substring(const char *source, char *dest, const char *replace_target, const char *replacement) {
   const char *replace_target_ptr = replace_target;
   char *dest_ptr = dest;
 
@@ -3802,7 +3839,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
   return TRUE;
 }
 
-bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_room) {
+bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_room, bool allow_astral_sight) {
   // #define DEBUG_LIGHT_OK(msg) {act(msg, 0, sub, 0, 0, TO_ROLLS);}
   #define DEBUG_LIGHT_OK(msg)
 
@@ -5509,7 +5546,7 @@ bool string_is_valid_for_paths(const char *str) {
   return TRUE;
 }
 
-bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj) {
+bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor) {
   // Not quest-protected.
   if (!obj->obj_flags.quest_id)
     return FALSE;
@@ -5530,12 +5567,20 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *o
           && AFF_FLAGGED(f->follower, AFF_GROUP)
           && GET_IDNUM(f->follower) == obj->obj_flags.quest_id)
       {
+        if (requires_ch_to_be_in_same_room_as_questor && ch->in_room != f->follower->in_room) {
+          send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(f->follower));
+          return TRUE;
+        }
         return FALSE;
       }
     }
 
     // Master
     if (ch->master && !IS_NPC(ch->master) && obj->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch->master)) {
+      if (requires_ch_to_be_in_same_room_as_questor && ch->in_room != ch->master->in_room) {
+        send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(ch->master));
+        return TRUE;
+      }
       return FALSE;
     }
   }

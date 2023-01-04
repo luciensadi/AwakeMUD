@@ -26,6 +26,7 @@
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
 #include "newhouse.hpp"
+#include "quest.hpp"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -45,6 +46,7 @@ extern int calculate_swim_successes(struct char_data *ch);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict);
 extern struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *ch);
+extern bool precipitation_is_snow();
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -247,7 +249,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     int perception_result = success_test(GET_INT(tch) + GET_POWER(tch, ADEPT_IMPROVED_PERCEPT), test_tn);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Result: %d hits.", perception_result);
     if (GET_INVIS_LEV(tch) <= GET_LEVEL(ch))
-      act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+      act(rbuf, FALSE, tch, 0, 0, TO_STAFF_ROLLS);
 
     bool spotted_movement = perception_result > 0;
 
@@ -343,6 +345,8 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   if (ROOM_FLAGGED(was_in, ROOM_INDOORS) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))
   {
+    bool should_be_snowy = precipitation_is_snow();
+
     extern const char *moon[];
     const char *time_of_day[] = {
                                   "night air",
@@ -356,12 +360,24 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
                                    "Rain falls around you.\r\n",
                                    "Lightning flickers as the rain falls.\r\n"
                                  };
-    snprintf(buf, sizeof(buf), "You step out into the %s. ", time_of_day[weather_info.sunlight]);
+    const char *snow_line[] = {
+                                "The sky is clear.\r\n",
+                                "Clouds fill the sky.\r\n",
+                                "Snow drifts down around you.\r\n",
+                                "Heavy snow falls about you.\r\n"
+                              };
+    snprintf(buf, sizeof(buf), "You step out into the %s%s. ", should_be_snowy ? "cool " : "", time_of_day[weather_info.sunlight]);
+
     if (!PRF_FLAGGED(ch, PRF_NO_WEATHER)) {
       if (weather_info.sunlight == SUN_DARK && weather_info.sky == SKY_CLOUDLESS)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You see the %s moon in the cloudless sky.\r\n", moon[weather_info.moonphase]);
-      else
-        strlcat(buf, weather_line[weather_info.sky], sizeof(buf));
+      else {
+        if (should_be_snowy) {
+          strlcat(buf, snow_line[weather_info.sky], sizeof(buf));
+        } else {
+          strlcat(buf, weather_line[weather_info.sky], sizeof(buf));
+        }
+      }
     }
     send_to_char(buf, ch);
   }
@@ -483,9 +499,8 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     return 1;
   }
 
-  if (IS_NPC(ch) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master) && ch->in_room == ch->master->in_room) {
+  if (IS_NPC(ch) && ch->master && ch->in_room == ch->master->in_room && COULD_BE_ON_QUEST(ch->master)) {
     check_quest_destination(ch->master, ch);
-    return 1;
   }
 
   return 1;
@@ -651,9 +666,11 @@ bool perform_fall(struct char_data *ch)
       act(fall_str, FALSE, ch, 0, 0, TO_ROOM);
       return FALSE;
     }
+
     int power = (int)(meters / 2); // then divide by two to find power of damage
     power -= GET_IMPACT(ch) / 2; // subtract 1/2 impact armor
-    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
+
+    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
       if (GET_OBJ_VAL(cyber, 0) == CYB_BALANCETAIL)
         power -= 2;
       else if (GET_OBJ_VAL(cyber, 0) == CYB_HYDRAULICJACK) {
@@ -665,6 +682,8 @@ bool perform_fall(struct char_data *ch)
           power -= GET_OBJ_VAL(cyber, 1);
         }
       }
+    }
+
     if (GET_SKILL(ch, SKILL_ATHLETICS))
       power -= success_test(GET_SKILL(ch, SKILL_ATHLETICS), (int)meters);
 

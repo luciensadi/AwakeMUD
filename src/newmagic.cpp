@@ -18,6 +18,7 @@
 #include "newdb.hpp"
 #include "playerdoc.hpp"
 #include "newhouse.hpp"
+#include "quest.hpp"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -3138,6 +3139,7 @@ struct char_data *create_elemental(struct char_data *ch, int type, int force, in
     mob = read_mobile(elements[type].vnum, VIRTUAL);
   else
     mob = read_mobile(spirits[type].vnum, VIRTUAL);
+  mob->mob_loaded_in_room = 0;
   GET_REAL_BOD(mob) = force;
   GET_REAL_QUI(mob) = force;
   GET_REAL_STR(mob) = force;
@@ -3785,11 +3787,13 @@ ACMD(do_cast)
 
   int force = 0;
   char spell_name[120], tokens[MAX_STRING_LENGTH], *s;
-  struct spell_data *spell = GET_SPELLS(ch);
+  struct spell_data *spell;
+
   if (!*argument) {
     send_to_char("Cast what spell?\r\n", ch);
     return;
   }
+
   strcpy(tokens, argument);
   if ((strtok(tokens, "\"") && (s = strtok(NULL, "\"")))
       || (strtok(tokens, "'") && (s = strtok(NULL, "'")))) {
@@ -3811,13 +3815,16 @@ ACMD(do_cast)
       strlcpy(spell_name, buf2, sizeof(spell_name));
     }
   }
-  for (;spell; spell = spell->next)
+
+  for (spell = GET_SPELLS(ch); spell; spell = spell->next)
     if (is_abbrev(spell_name, spell->name) && !(!str_cmp(spell_name, "heal") && spell->type == SPELL_HEALTHYGLOW))
       break;
+
   if (!spell) {
     send_to_char(ch, "You don't know a spell called '%s'.\r\n", spell_name);
     return;
   }
+
   if (!force)
     force = spell->force;
   else if (force > spell->force) {
@@ -3855,8 +3862,8 @@ ACMD(do_cast)
     FAILURE_CASE(IS_NPC(vict), "You can only cast ritual spells on player characters.\r\n");
 
     // Charge them.
-    int cost = RITUAL_SPELL_COMPONENT_COST * spell->force * spells[spell->type].drainpower;
-    int time_in_ticks = (RITUAL_SPELL_BASE_TIME * spell->force * spells[spell->type].drainpower) / (GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)));
+    int cost = RITUAL_SPELL_COMPONENT_COST * spell->force * MAX(1, spells[spell->type].drainpower);
+    int time_in_ticks = (RITUAL_SPELL_BASE_TIME * spell->force * MAX(1, spells[spell->type].drainpower)) / (GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)));
 
     if (GET_NUYEN(ch) < cost) {
       send_to_char(ch, "You need at least %d nuyen on hand to pay for the ritual components.\r\n", cost);
@@ -5519,7 +5526,7 @@ ACMD(do_destroy)
     send_to_char(ch, "You gather up the wasted ritual components and trash them.\r\n");
     act("$n gathers up the ritual components and trashes them.", TRUE, ch, 0, 0, TO_ROOM);
   } else if (GET_OBJ_TYPE(obj) == ITEM_DESTROYABLE) {
-    if (ch_is_blocked_by_quest_protections(ch, obj)) {
+    if (ch_is_blocked_by_quest_protections(ch, obj, TRUE)) {
       send_to_char(ch, "%s isn't yours-- better leave it be.\r\n", GET_OBJ_NAME(obj));
       return;
     }
@@ -5533,10 +5540,8 @@ ACMD(do_destroy)
 
   // If we've gotten here, we've sent a message and are ready to destroy the item.
   // Check quest completion.
-  if (!IS_NPC(ch) && GET_QUEST(ch))
+  if (COULD_BE_ON_QUEST(ch))
     check_quest_destroy(ch, obj);
-  else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master))
-    check_quest_destroy(ch->master, obj);
 
   // Destroy it.
   extract_obj(obj);

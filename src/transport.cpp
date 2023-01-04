@@ -681,7 +681,7 @@ ACMD(do_hail)
       }
     }
 
-    if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_INVISIBLE, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT)
+    if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_RUTHENIUM, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT)
         || GET_INVIS_LEV(ch) > 0)  {
       send_to_char("A cab almost stops, but guns it at the last second, splashing you... hailing taxis while invisible is hard!\r\n",ch);
       return;

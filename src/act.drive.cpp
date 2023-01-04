@@ -2258,7 +2258,8 @@ void vehcust_parse(struct descriptor_data *d, char *arg)
       }
       break;
     case VEHCUST_NAME:
-      if (strlen(arg) >= LINE_LENGTH) {
+      if (get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH) {
+        send_to_char(CH, "That name is too long. Please limit it to %d characters (ignoring color codes).\r\n", LINE_LENGTH - 1);
         vehcust_menu(d);
         return;
       }

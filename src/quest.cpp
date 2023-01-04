@@ -211,6 +211,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
     {
       mob = read_mobile(rnum, REAL);
       mob->mob_specials.quest_id = GET_IDNUM(ch);
+      mob->mob_loaded_in_room = GET_ROOM_VNUM(&world[room]);
       char_to_room(mob, &world[room]);
       act("$n has arrived.", FALSE, mob, 0, 0, TO_ROOM);
       if(quest_table[num].mob[i].objective == QMO_LOCATION)
@@ -294,6 +295,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
     {
       mob = read_mobile(rnum, REAL);
       mob->mob_specials.quest_id = GET_IDNUM(ch);
+      mob->mob_loaded_in_room = GET_ROOM_VNUM(ch->in_room);
       char_to_room(mob, ch->in_room);
       act("$n has arrived.", FALSE, mob, 0, 0, TO_ROOM);
       for (j = 0; j < quest_table[num].num_objs; j++)
@@ -435,7 +437,7 @@ bool hunting_escortee(struct char_data *ch, struct char_data *vict)
   return FALSE;
 }
 
-bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj) {
+bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj, bool commit_changes=TRUE) {
   if (!GET_QUEST(ch))
     return FALSE;
 
@@ -446,20 +448,23 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, stru
       switch (quest_table[GET_QUEST(ch)].obj[i].objective) {
         case QOO_JOHNSON:
           if (GET_MOB_SPEC(mob) && (GET_MOB_SPEC(mob) == johnson || GET_MOB_SPEC2(mob) == johnson) && memory(mob, ch)) {
-            ch->player_specials->obj_complete[i] = 1;
+            if (commit_changes)
+              ch->player_specials->obj_complete[i] = 1;
             return TRUE;
           }
           break;
         case QOO_TAR_MOB:
           if (quest_table[GET_QUEST(ch)].obj[i].o_data == GET_MOB_VNUM(mob)) {
-            ch->player_specials->obj_complete[i] = 1;
+            if (commit_changes)
+              ch->player_specials->obj_complete[i] = 1;
             return TRUE;
           }
           break;
         case QOO_RETURN_PAY:
           if (GET_MOB_SPEC(mob) && (GET_MOB_SPEC(mob) == johnson || GET_MOB_SPEC2(mob) == johnson) && memory(mob, ch)) {
             if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].o_data) {
-              ch->player_specials->obj_complete[i] = 1;
+              if (commit_changes)
+                ch->player_specials->obj_complete[i] = 1;
               return TRUE;
             }
           }
@@ -471,9 +476,21 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, stru
   return FALSE;
 }
 
+bool _could_quest_deliver(struct char_data *ch, struct char_data *mob, struct obj_data *obj) {
+  return _raw_check_quest_delivery(ch, mob, obj, FALSE);
+}
+
 bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj)
 {
-  if (!ch || IS_NPC(ch) || !IS_NPC(mob))
+  if (!ch || !mob || !obj) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received (%s, %s, %s) to non-nullable check_quest_delivery()!",
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    mob ? GET_CHAR_NAME(mob) : "NULL",
+                    obj ? GET_OBJ_NAME(obj) : "NULL");
+    return FALSE;
+  }
+
+  if (IS_NPC(ch) || !IS_NPC(mob))
     return FALSE;
 
   if (_raw_check_quest_delivery(ch, mob, obj))
@@ -485,8 +502,21 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
       if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
         continue;
 
+      // If they're not going to benefit from a quest delivery, skip.
+      if (!_could_quest_deliver(f->follower, mob, obj))
+        continue;
+
+      // If they would have benefited from this delivery, but aren't in room, then we bail completely.
+      if (f->follower->in_room != ch->in_room) {
+        send_to_char(ch, "%s must be present for this delivery.\r\n", GET_CHAR_NAME(f->follower));
+        return FALSE;
+      }
+
+      // This is technically a sanity check, in that we *expect* this to work.
       if (_raw_check_quest_delivery(f->follower, mob, obj)) {
         return TRUE;
+      } else {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Sanity check failed in check_quest_delivery(%s, %s, %s)!", GET_CHAR_NAME(ch), GET_CHAR_NAME(mob), GET_OBJ_NAME(obj));
       }
     }
 
@@ -499,7 +529,7 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
   return FALSE;
 }
 
-bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj) {
+bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj, bool commit_changes=TRUE) {
   if (!GET_QUEST(ch))
     return FALSE;
 
@@ -508,7 +538,8 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj) {
         GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
         ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data)
     {
-      ch->player_specials->obj_complete[i] = 1;
+      if (commit_changes)
+        ch->player_specials->obj_complete[i] = 1;
       return TRUE;
     }
 
@@ -516,7 +547,8 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj) {
         GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
         matrix[ch->persona->in_host].vnum == quest_table[GET_QUEST(ch)].obj[i].o_data)
     {
-      ch->player_specials->obj_complete[i] = 1;
+      if (commit_changes)
+        ch->player_specials->obj_complete[i] = 1;
       return TRUE;
     }
   }
@@ -524,9 +556,20 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj) {
   return FALSE;
 }
 
+bool _could_quest_deliver(struct char_data *ch, struct obj_data *obj) {
+  return _raw_check_quest_delivery(ch, obj, FALSE);
+}
+
 bool check_quest_delivery(struct char_data *ch, struct obj_data *obj)
 {
-  if (!ch || IS_NPC(ch))
+  if (!ch || !obj) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received (%s, %s) to non-nullable check_quest_delivery()!",
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    obj ? GET_OBJ_NAME(obj) : "NULL");
+    return FALSE;
+  }
+
+  if (IS_NPC(ch))
     return FALSE;
 
   if (!ch->in_room) {
@@ -543,8 +586,19 @@ bool check_quest_delivery(struct char_data *ch, struct obj_data *obj)
       if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
         continue;
 
+      // If they're not going to benefit from a quest delivery, skip.
+      if (!_could_quest_deliver(f->follower, obj))
+        continue;
+
+      if (f->follower->in_room != ch->in_room) {
+        send_to_char(ch, "%s must be present for this delivery.\r\n", GET_CHAR_NAME(f->follower));
+        return FALSE;
+      }
+
       if (_raw_check_quest_delivery(f->follower, obj)) {
         return TRUE;
+      } else {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Sanity check failed in check_quest_delivery(%s, %s)!", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
       }
     }
 
@@ -580,12 +634,21 @@ bool _raw_check_quest_destination(struct char_data *ch, struct char_data *mob) {
 }
 
 bool check_quest_destination(struct char_data *ch, struct char_data *mob) {
-  if (!ch || IS_NPC(ch) || !IS_NPC(mob))
+  if (!ch || !mob) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received (%s, %s) to non-nullable check_quest_destination()!",
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    mob ? GET_CHAR_NAME(mob) : "NULL");
+    return FALSE;
+  }
+
+  if (IS_NPC(ch) || !IS_NPC(mob))
     return FALSE;
 
   if (_raw_check_quest_destination(ch, mob))
     return TRUE;
 
+  // Technically, none of the code below will ever return TRUE-- this function only triggers when a mob follows you into a room,
+  // and the quest target would only be following the original questor. Included it anyways for completeness's sake.
   if (AFF_FLAGGED(ch, AFF_GROUP)) {
     // Followers
     for (struct follow_type *f = ch->followers; f; f = f->next) {
@@ -632,7 +695,14 @@ bool _raw_check_quest_destroy(struct char_data *ch, struct obj_data *obj) {
 }
 
 bool check_quest_destroy(struct char_data *ch, struct obj_data *obj) {
-  if (!ch || IS_NPC(ch))
+  if (!ch || !obj) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received (%s, %s) to non-nullable check_quest_destroy()!",
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    obj ? GET_OBJ_NAME(obj) : "NULL");
+    return FALSE;
+  }
+
+  if (IS_NPC(ch))
     return FALSE;
 
   if (_raw_check_quest_destroy(ch, obj))
@@ -682,13 +752,20 @@ bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
   return FALSE;
 }
 
-void check_quest_kill(struct char_data *ch, struct char_data *victim)
+bool check_quest_kill(struct char_data *ch, struct char_data *victim)
 {
-  if (!ch || IS_NPC(ch) || !IS_NPC(victim))
-    return;
+  if (!ch || !victim) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received (%s, %s) to non-nullable check_quest_kill()!",
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    victim ? GET_CHAR_NAME(victim) : "NULL");
+    return FALSE;
+  }
+
+  if (IS_NPC(ch) || !IS_NPC(victim))
+    return FALSE;
 
   if (_raw_check_quest_kill(ch, victim))
-    return;
+    return TRUE;
 
   if (AFF_FLAGGED(ch, AFF_GROUP)) {
     // Followers
@@ -697,15 +774,17 @@ void check_quest_kill(struct char_data *ch, struct char_data *victim)
         continue;
 
       if (_raw_check_quest_kill(f->follower, victim)) {
-        return;
+        return TRUE;
       }
     }
 
     // Master
     if (ch->master && !IS_NPC(ch->master) && _raw_check_quest_kill(ch->master, victim)) {
-      return;
+      return TRUE;
     }
   }
+
+  return FALSE;
 }
 
 void end_quest(struct char_data *ch)
@@ -895,18 +974,29 @@ void reward(struct char_data *ch, struct char_data *johnson)
       }
     }
 
+    if (ch->master && follower_can_receive_reward(ch->master, ch, FALSE))
+      num_chars_to_give_award_to++;
+
     if (num_chars_to_give_award_to > 1) {
       nuyen = (int)(nuyen / num_chars_to_give_award_to) * GROUP_QUEST_REWARD_MULTIPLIER;
       karma = (int)(karma / num_chars_to_give_award_to) * GROUP_QUEST_REWARD_MULTIPLIER;
 
+      send_to_char("You divide the payout amongst your group.\r\n", ch);
+
       for (struct follow_type *f = ch->followers; f; f = f->next) {
         // Skip invalid folks while telling them why.
-        if (follower_can_receive_reward(f->follower, ch, TRUE))
+        if (!follower_can_receive_reward(f->follower, ch, TRUE))
           continue;
 
         gain_nuyen(f->follower, nuyen, NUYEN_INCOME_AUTORUNS);
         int gained = gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
         send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
+      }
+
+      if (ch->master && follower_can_receive_reward(ch->master, ch, FALSE)) {
+        gain_nuyen(ch->master, nuyen, NUYEN_INCOME_AUTORUNS);
+        int gained = gain_karma(ch->master, karma, TRUE, FALSE, TRUE);
+        send_to_char(ch->master, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
       }
     }
   }
@@ -1595,6 +1685,7 @@ void johnson_update(void)
         strcpy( buf, quest_table[i].s_string );
       johnson = read_mobile( quest_table[i].johnson, REAL );
       MOB_FLAGS(johnson).SetBit(MOB_ISNPC);
+      johnson->mob_loaded_in_room = GET_ROOM_VNUM(&world[quest_table[i].s_room]);
       char_to_room( johnson, &world[quest_table[i].s_room] );
     }
     /* Needs to head off */
@@ -1929,9 +2020,7 @@ void reboot_quest(int rnum, struct quest_data *quest)
 #endif
 }
 
-int write_quests_to_disk(int zone)
-{
-  // asdf todo: write save/load for quest emotes
+int write_quests_to_disk(int zone) {
   long i, j, found = 0, counter;
   FILE *fp;
   zone = real_zone(zone);

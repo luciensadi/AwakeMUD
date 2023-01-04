@@ -103,6 +103,9 @@ long mud_boot_time = 0;
 struct room_data *world = NULL; /* array of rooms   */
 rnum_t top_of_world = 0; /* ref to top element of world  */
 
+// A random number that changes once on each boot. Used for non-sensitive purposes.
+int global_non_secure_random_number = dice(1, 100000);
+
 struct host_data *matrix = NULL;
 rnum_t top_of_matrix = 0;
 struct matrix_icon *ic_proto;
@@ -2947,6 +2950,47 @@ int vnum_ic(char *searchname, struct char_data * ch)
   return (found);
 }
 
+#define SEARCH_STRING(string_name)                                                                           \
+  if (quest_table[nr].string_name && *quest_table[nr].string_name && isname(searchname, get_string_after_color_code_removal(quest_table[nr].string_name, NULL))) {          \
+    snprintf(ENDOF(found_in), sizeof(found_in) - strlen(found_in), "%s" #string_name, *found_in ? ", " : ""); \
+  }
+
+int vnum_quest(char *searchname, struct char_data * ch)
+{
+  int nr, found = 0;
+  for (nr = 0; nr <= top_of_questt; nr++) {
+    char found_in[10000] = { 0 };
+    rnum_t johnson_rnum = real_mobile(quest_table[nr].johnson);
+    snprintf(buf, sizeof(buf), "%3d. [%5ld] %s ", ++found, quest_table[nr].vnum, johnson_rnum >= 0 ? GET_CHAR_NAME(&mob_proto[johnson_rnum]) : "<n/a>");
+
+    SEARCH_STRING(intro);
+    SEARCH_STRING(intro_emote);
+    SEARCH_STRING(decline);
+    SEARCH_STRING(decline_emote);
+    SEARCH_STRING(quit);
+    SEARCH_STRING(quit_emote);
+    SEARCH_STRING(finish);
+    SEARCH_STRING(finish_emote);
+    SEARCH_STRING(info);
+    SEARCH_STRING(done);
+
+    if (quest_table[nr].info_emotes) {
+      for (auto *it : *(quest_table[nr].info_emotes)) {
+        if (it && *it && isname(searchname, get_string_after_color_code_removal(it, NULL))) {
+          snprintf(ENDOF(found_in), sizeof(found_in) - strlen(found_in), "%sinfo emotes", *found_in ? ", " : "");
+          break;
+        }
+      }
+    }
+
+    if (*found_in) {
+      send_to_char(ch, "%s\r\n", buf);
+    }
+  }
+
+  return (found);
+}
+
 int vnum_mobile(char *searchname, struct char_data * ch)
 {
   int nr, found = 0;
@@ -3987,6 +4031,7 @@ void reset_zone(int zone, int reboot)
         }
 
         mob = read_mobile(ZCMD.arg1, REAL);
+        mob->mob_loaded_in_room = GET_ROOM_VNUM(&world[ZCMD.arg3]);
         char_to_room(mob, &world[ZCMD.arg3]);
         act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
         last_cmd = 1;
@@ -4005,7 +4050,7 @@ void reset_zone(int zone, int reboot)
       if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
         mob = read_mobile(ZCMD.arg1, REAL);
-
+        mob->mob_loaded_in_room = 0;
         bool is_driver = !(veh->people);
 
         char_to_veh(veh, mob);

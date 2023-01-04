@@ -26,6 +26,7 @@
 #include "playerdoc.hpp"
 #include "sound_propagation.hpp"
 #include "newhouse.hpp"
+#include "quest.hpp"
 
 int initiative_until_global_reroll = 0;
 
@@ -83,7 +84,7 @@ extern bool attempt_reload(struct char_data *mob, int pos);
 extern void switch_weapons(struct char_data *mob, int pos);
 extern void hunt_victim(struct char_data * ch);
 extern void matrix_fight(struct char_data *ch, struct char_data *victim);
-extern void check_quest_kill(struct char_data *ch, struct char_data *victim);
+extern bool check_quest_kill(struct char_data *ch, struct char_data *victim);
 extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern int return_general(int);
 extern struct zone_data *zone_table;
@@ -96,6 +97,7 @@ extern bool mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
 extern char *get_player_name(vnum_t id);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
+extern bool check_sentinel_snap_back(struct char_data *ch);
 
 // Corpse saving externs.
 extern void write_world_to_disk(int vnum);
@@ -152,11 +154,15 @@ struct attack_hit_type attack_hit_text[] =
 
 void appear(struct char_data * ch)
 {
-  AFF_FLAGS(ch).RemoveBits(AFF_IMP_INVIS,
-                           AFF_INVISIBLE,
-                           AFF_HIDE, ENDBIT);
+  AFF_FLAGS(ch).RemoveBit(AFF_HIDE);
 
-  // TODO: Go through all sustained spells in the game and remove those that are causing this character to be invisible.
+  // Remove any spells that are causing this character to be invisible.
+  for (struct sustain_data *hjp = GET_SUSTAINED(ch), *next_spell; hjp; hjp = next_spell) {
+    next_spell = hjp->next;
+    if ((hjp->spell == SPELL_IMP_INVIS || hjp->spell == SPELL_INVIS) && (hjp->caster == FALSE)) {
+      end_sustained_spell(ch, hjp);
+    }
+  }
 
   if (!IS_SENATOR(ch))
     act("$n slowly fades into existence.", FALSE, ch, 0, 0, TO_ROOM);
@@ -2192,12 +2198,8 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
                    GET_OBJ_NAME(obj));
     }
 
-    if (ch && !IS_NPC(ch) && GET_QUEST(ch)) {
+    if (COULD_BE_ON_QUEST(ch)) {
       check_quest_destroy(ch, obj);
-    }
-    else if (ch && AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
-             !IS_NPC(ch->master) && GET_QUEST(ch->master)) {
-      check_quest_destroy(ch->master, obj);
     }
 
     // Log destruction.
@@ -2296,10 +2298,6 @@ void docwagon_retrieve(struct char_data *ch) {
     }
   }
 
-  // Banish shamanistic spirits (they would not survive the transition through domains)
-  if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-    end_spirit_existance(ch, TRUE);
-
   // Remove them from the Matrix.
   if (ch->persona) {
     snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", CAP(ch->persona->name));
@@ -2307,17 +2305,13 @@ void docwagon_retrieve(struct char_data *ch) {
     extract_icon(ch->persona);
     ch->persona = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-  } else if (PLR_FLAGGED(ch, PLR_MATRIX))
+  } else if (PLR_FLAGGED(ch, PLR_MATRIX)) {
     for (struct char_data *temp = room->people; temp; temp = temp->next_in_room)
       if (PLR_FLAGGED(temp, PLR_MATRIX))
         temp->persona->decker->hitcher = NULL;
+  }
   docwagon_message(ch);
   // death_penalty(ch);  /* Penalty for deadly wounds */
-
-  // They just got patched up: heal them slightly, make them stunned.
-  GET_PHYSICAL(ch) = 400;
-  GET_MENTAL(ch) = 0;
-  GET_POS(ch) = POS_STUNNED;
 
   // Restore their salvation ticks.
   GET_PC_SALVATION_TICKS(ch) = 5;
@@ -2402,8 +2396,15 @@ void docwagon_retrieve(struct char_data *ch) {
       else {
         lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
       }
+    } else {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Could not find modulator after DW rescue of %s.", GET_CHAR_NAME(ch));
     }
   }
+
+  // They just got patched up: heal them slightly, make them stunned.
+  GET_PHYSICAL(ch) = 400;
+  GET_MENTAL(ch) = 0;
+  GET_POS(ch) = POS_STUNNED;
 
   alert_player_doctors_of_contract_withdrawal(ch, FALSE);
 }
@@ -2484,7 +2485,7 @@ bool check_adrenaline(struct char_data *ch, int mode)
     // We want to increase the pump duration without increasing the TN test so we're doing the duration roll in the
     // TN value directly and multiply that. Previous possible duration was 2-12 seconds per pump level and there was
     // a bug decreasing it twice too. Multiplying the roll x10 and we'll see how that pans out.
-    GET_BIOWARE_PUMP_TEST_TN(pump) = GET_BIOWARE_RATING(pump) == 2 ? srdice() + srdice() : srdice();
+    GET_BIOWARE_PUMP_TEST_TN(pump) = GET_BIOWARE_RATING(pump) == 2 ? dice(2,6) : dice(1,6);
     GET_BIOWARE_PUMP_ADRENALINE(pump)  = GET_BIOWARE_PUMP_TEST_TN(pump) * 10;
     // Reactivation before the adrenaline sack is completely full?
     if (early_activation)
@@ -3424,10 +3425,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         }
     }
     if (ch != victim) {
-      if (!IS_NPC(ch) && GET_QUEST(ch) && IS_NPC(victim))
+      if (COULD_BE_ON_QUEST(ch) && IS_NPC(victim))
         check_quest_kill(ch, victim);
-      else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master) && IS_NPC(victim))
-        check_quest_kill(ch->master, victim);
     }
 
     if ((IS_NPC(victim) || victim->desc) && ch != victim &&
@@ -4424,13 +4423,13 @@ bool vehicle_has_ultrasound_sensors(struct veh_data *veh) {
 #define INVIS_CODE_TOTALINVIS  123
 #define BLIND_FIGHTING_MAX     (MAX_VISIBILITY_PENALTY / 2)
 #define BLIND_FIRE_PENALTY     MAX_VISIBILITY_PENALTY
+#define RUTHENIUM_PENALTY      4
 int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
-  int modifier = 0;
   char rbuf[2048];
 
   // If we can't see due to light levels, bail out.
   if (!LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(ch)) || (ch->in_room != victim->in_room && !LIGHT_OK_ROOM_SPECIFIED(ch, get_ch_in_room(victim)))) {
-    modifier = MAX_VISIBILITY_PENALTY;
+    int modifier = MAX_VISIBILITY_PENALTY;
 
     if (GET_POWER(ch, ADEPT_BLIND_FIGHTING) && modifier > BLIND_FIGHTING_MAX) {
       modifier = BLIND_FIGHTING_MAX;
@@ -4486,7 +4485,8 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
   // Next, vict invis info.
   bool vict_is_imp_invis = IS_AFFECTED(victim, AFF_IMP_INVIS);
-  bool vict_is_just_invis = IS_AFFECTED(victim, AFF_INVISIBLE);
+  bool vict_is_ruthenium = IS_AFFECTED(victim, AFF_RUTHENIUM);
+  bool vict_is_just_invis = vict_is_ruthenium;
 
   if ((access_level(ch, LVL_PRESIDENT) || access_level(victim, LVL_PRESIDENT)) && (PRF_FLAGGED(ch, PRF_ROLLS) || PRF_FLAGGED(victim, PRF_ROLLS))) {
     snprintf(rbuf, sizeof(rbuf), "^b[c_v_p for $n: UL=%d, TH=%d, AS=%d; for $N: IMP(aff)=%d, STD(aff)=%d]",
@@ -4508,19 +4508,23 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
   if (ch_sees_astral) {
     if (!vict_is_inanimate) {
+      int modifier = 0;
+
       // If you're astrally perceiving, you see anything living with no vision penalty.
       // (You get penalties from perceiving, that's handled elsewhere.)
       snprintf(rbuf, sizeof(rbuf), "$n: %s vs living target, so final char-to-char visibility TN is ^c%d^n.",
                MOB_FLAGGED(ch, MOB_DUAL_NATURE) ? "Dual-natured" : "Perceiving",
                modifier);
       act(rbuf, 0, ch, 0, victim, TO_ROLLS);
-      return 0;
+      return modifier;
     } else {
       act("$n: Astral sight ignored-- inanimate, non-spelled target.", 0, ch, 0, victim, TO_ROLLS);
     }
     // Otherwise, fall through.
   }
   else if (IS_ASTRAL(victim) && !AFF_FLAGGED(victim, AFF_MANIFEST)) {
+    int modifier = BLIND_FIRE_PENALTY;
+
     // This shouldn't have happened in the first place.
     mudlog("SYSERR: Received non-perceiving ch and purely-astral vict to calculate_vision_penalty()!", ch, LOG_SYSLOG, TRUE);
 
@@ -4529,7 +4533,6 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       modifier = BLIND_FIGHTING_MAX;
       snprintf(rbuf, sizeof(rbuf), "%s: Non-perceiving character fighting non-manifested astral: %d after Blind Fighting", GET_CHAR_NAME(ch), modifier);
     } else {
-      modifier = BLIND_FIRE_PENALTY;
       snprintf(rbuf, sizeof(rbuf), "%s: Non-perceiving character fighting non-manifested astral: %d", GET_CHAR_NAME(ch), modifier);
     }
 
@@ -4547,14 +4550,20 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   // That's handled in modify_target_rbuf_raw().
 
   // Ultrasound reduces all vision penalties by half (some restrictions apply, see store for details; SR3 p282)
+  int ultrasound_modifier = BLIND_FIRE_PENALTY;
   if (ch_has_ultrasound) {
     // Improved invisibility works against tech sensors. Regular invis does not, so we don't account for it here.
     if (vict_is_imp_invis) {
       // Invisibility penalty, we're at the full +8 from not being able to see them. This overwrites weather effects etc.
       // We don't apply the Adept blind fighting max here, as that's calculated later on.
-      modifier = BLIND_FIRE_PENALTY;
-      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting improved invis: TN %d", GET_CHAR_NAME(ch), modifier);
+      ultrasound_modifier = BLIND_FIRE_PENALTY;
+      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting improved invis: TN %d", GET_CHAR_NAME(ch), ultrasound_modifier);
+    } else if (vict_is_ruthenium) {
+      // Note that this will be divided by 2 later.
+      ultrasound_modifier = RUTHENIUM_PENALTY;
+      snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character fighting ruthenium: TN %d", GET_CHAR_NAME(ch), ultrasound_modifier);
     } else {
+      ultrasound_modifier = 0;
       snprintf(rbuf, sizeof(rbuf), "%s: Ultrasound-using character", GET_CHAR_NAME(ch));
     }
 
@@ -4566,14 +4575,14 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     // SR3 p196: Silence spell increases hearing perception test TN up to the lower of its successes or the spell's rating.
     // We don't have that test, so it seems reasonable to just shoehorn the TN increase in here.
     if (silence_level > 0) {
-      modifier += silence_level;
+      ultrasound_modifier += silence_level;
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", silence/stealth level adds %d", silence_level);
     }
 
     // Finally, apply ultrasound division. We add one since the system expects us to round up and we're using truncating integer math.
-    if (modifier > 0) {
-      modifier = (modifier + 1) / 2;
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "; /2 (round up) = %d", modifier);
+    if (ultrasound_modifier > 0) {
+      ultrasound_modifier = (ultrasound_modifier + 1) / 2;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "; /2 (round up) = %d", ultrasound_modifier);
 
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
@@ -4582,56 +4591,63 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
 
   // No ultrasound. Check for thermographic vision.
-  else if (ch_has_thermographic) {
-    // Improved invis? You can't see them.
+  int thermographic_modifier = BLIND_FIRE_PENALTY;
+  if (ch_has_thermographic) {
     if (vict_is_imp_invis) {
-      modifier = BLIND_FIRE_PENALTY;
-      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting improved invis: %d", GET_CHAR_NAME(ch), modifier);
+      // Improved invis? You can't see them.
+      thermographic_modifier = BLIND_FIRE_PENALTY;
+      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting improved invis: %d", GET_CHAR_NAME(ch), thermographic_modifier);
+    }
+    else if (vict_is_just_invis || vict_is_ruthenium) {
+      // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
+      // This deviates from canon, where thermographic can see through standard invis.
+      thermographic_modifier = RUTHENIUM_PENALTY / 2;
+      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting invis (second stanza): %d", GET_CHAR_NAME(ch), thermographic_modifier);
+    }
+    else {
+      thermographic_modifier = 0;
     }
 
-    // House rule: Since everyone and their dog has thermographic, now standard invis is actually a tiny bit useful.
-    // This deviates from canon, where thermographic can see through standard invis.
-    else if (vict_is_just_invis) {
-      modifier = 2;
-      snprintf(rbuf, sizeof(rbuf), "%s: Thermographic-using character fighting invis (second stanza): %d", GET_CHAR_NAME(ch), modifier);
-    }
-
-    if (modifier > 0) {
+    if (thermographic_modifier > 0) {
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
         act(rbuf, 0, victim, 0, 0, TO_ROLLS);
     }
   }
 
-  // Low-light and normal vision aren't any help here.
-  else {
-    if (vict_is_imp_invis || vict_is_just_invis) {
-      modifier = BLIND_FIRE_PENALTY;
+  int low_light_modifier = 0;
+  int normal_modifier = 0;
+  if (vict_is_imp_invis || vict_is_just_invis) {
+    low_light_modifier = BLIND_FIRE_PENALTY;
+    normal_modifier = BLIND_FIRE_PENALTY;
 
-      snprintf(rbuf, sizeof(rbuf), "%s: Low-light or standard vision fighting invis: %d", GET_CHAR_NAME(ch), modifier);
+    snprintf(rbuf, sizeof(rbuf), "%s: Low-light or standard vision fighting invis: %d", GET_CHAR_NAME(ch), MIN(low_light_modifier, normal_modifier));
 
-      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
-      if (ch->in_room != victim->in_room)
-        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
-    }
+    act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+    if (ch->in_room != victim->in_room)
+      act(rbuf, 0, victim, 0, 0, TO_ROLLS);
   }
+
+  // Select the best modifier.
+  int best_modifier = MIN(MIN(MIN(ultrasound_modifier, thermographic_modifier), low_light_modifier), normal_modifier);
+  snprintf(rbuf, sizeof(rbuf), "%s: Selected lowest vision modifier %d.", GET_CHAR_NAME(ch), best_modifier);
 
   // MitS p148: Penalty is capped to +4 with Blind Fighting. We also cap it to +8 without, since that's Blind Fire.
   if (GET_POWER(ch, ADEPT_BLIND_FIGHTING)) {
-    if (modifier > BLIND_FIGHTING_MAX) {
-      modifier = BLIND_FIGHTING_MAX;
+    if (best_modifier > BLIND_FIGHTING_MAX) {
+      best_modifier = BLIND_FIGHTING_MAX;
 
-      snprintf(rbuf, sizeof(rbuf), "%s: Vision penalty capped to %d by Blind Fighting", GET_CHAR_NAME(ch), modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Vision penalty capped to %d by Blind Fighting", GET_CHAR_NAME(ch), best_modifier);
 
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
         act(rbuf, 0, victim, 0, 0, TO_ROLLS);
     }
   } else {
-    if (modifier > BLIND_FIRE_PENALTY) {
-      modifier = BLIND_FIRE_PENALTY;
+    if (best_modifier > BLIND_FIRE_PENALTY) {
+      best_modifier = BLIND_FIRE_PENALTY;
 
-      snprintf(rbuf, sizeof(rbuf), "%s: Capped to %d", GET_CHAR_NAME(ch), modifier);
+      snprintf(rbuf, sizeof(rbuf), "%s: Capped to %d", GET_CHAR_NAME(ch), best_modifier);
 
       act(rbuf, 0, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
@@ -4641,19 +4657,20 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
   // With the recent bugfix that enabled the invis penalties that were supposed to be there, there's been a lot
   // of concern about mundanes getting the short end of the stick-- they do not have the ability to perceive to
-  // get around invis penalties like awakened characters do. Thus, this decidedly non-canon hack:
-  if (IS_NPC(victim) && GET_TRADITION(ch) == TRAD_MUNDANE) {
+  // get around invis penalties like awakened characters do. Thus, this decidedly non-canon hack, which reduces
+  // invis modifiers to 2 (the astral perception penalty) for mundanes:
+  if (IS_NPC(victim) && GET_TRADITION(ch) == TRAD_MUNDANE && best_modifier > 2) {
     snprintf(rbuf, sizeof(rbuf), "%s: Negating invis penalty due to mundane PC vs NPC.", GET_CHAR_NAME(ch));
-    modifier = 0;
+    best_modifier = MIN(best_modifier, 2);
   }
 
-  snprintf(rbuf, sizeof(rbuf), "%s: Final char-to-char visibility TN: ^c%d^n", GET_CHAR_NAME(ch), modifier);
+  snprintf(rbuf, sizeof(rbuf), "%s: Final char-to-char visibility TN: ^c%d^n", GET_CHAR_NAME(ch), best_modifier);
 
   act(rbuf, 0, ch, 0, 0, TO_ROLLS);
   if (ch->in_room != victim->in_room)
     act(rbuf, 0, victim, 0, 0, TO_ROLLS);
 
-  return modifier;
+  return best_modifier;
 }
 #undef INVIS_CODE_STAFF
 #undef INVIS_CODE_TOTALINVIS
@@ -4666,7 +4683,7 @@ int find_sight(struct char_data *ch)
   int sight = 1;
 
   // High-level staff see forever.
-  if (!access_level(ch, LVL_VICEPRES)) {
+  if (access_level(ch, LVL_VICEPRES)) {
     sight = 4;
   }
   // Lower-level staff, morts, and NPCs are limited by sight and weather.
@@ -4674,7 +4691,7 @@ int find_sight(struct char_data *ch)
     sight += get_vision_mag(ch);
 
     /* add more weather conditions here to affect scan */
-    if (SECT(get_ch_in_room(ch)) != SPIRIT_HEARTH) {
+    if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS)) {
       switch (weather_info.sky) {
         case SKY_RAINING:
           sight -= 1;
@@ -4759,7 +4776,10 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
     return FALSE;
   }
 
-  bool vict_will_not_move = !IS_NPC(vict) || MOB_FLAGGED(vict, MOB_SENTINEL) || MOB_FLAGGED(vict, MOB_EMPLACED) || AFF_FLAGGED(vict, AFF_PRONE);
+  bool vict_will_not_move = !IS_NPC(vict) || MOB_FLAGGED(vict, MOB_EMPLACED) || AFF_FLAGGED(vict, AFF_PRONE);
+
+  // Sentinels won't ever move if they have a spec assigned.
+  vict_will_not_move |= (MOB_FLAGGED(vict, MOB_SENTINEL) && (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)));
 
   // If we're wielding a ranged weapon, try to shoot.
   if (RANGE_OK(vict)) {
@@ -4782,11 +4802,11 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
       }
 
       for (distance = 1; !is_responding && (nextroom && (distance <= 4)); distance++) {
-        // Players and sentinels never charge, so we stop processing when we're getting attacked from beyond our weapon or sight range.
+        // Players and stationary mobs never charge, so we stop processing when we're getting attacked from beyond our weapon or sight range.
         if (vict_will_not_move && (distance > range || distance > sight)) {
           if (IS_NPC(vict)) {
             char buf[100];
-            snprintf(buf, sizeof(buf), "Sentinel/prone/emplaced $n not ranged-responding: $N is out of range (weap %d, sight %d).", range, sight);
+            snprintf(buf, sizeof(buf), "Prone/emplaced $n not ranged-responding: $N is out of range (weap %d, sight %d).", range, sight);
             act(buf, FALSE, vict, 0, ch, TO_ROLLS);
           }
           return FALSE;
@@ -4798,6 +4818,10 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
           if (temp == ch) {
             // If we're over our weapon's max range:
             if (distance > range && IS_NPC(vict)) {
+              // Prevent endless sentinel baiting.
+              if (check_sentinel_snap_back(vict))
+                return TRUE;
+
               act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
               act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
               char_from_room(vict);
@@ -4843,6 +4867,9 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   else if (!vict_will_not_move) {
     for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
       if (CAN_GO(vict, dir) && EXIT2(vict->in_room, dir)->to_room == ch->in_room) {
+        if (check_sentinel_snap_back(vict))
+          return TRUE;
+
         act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
         act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
         char_from_room(vict);
@@ -5318,7 +5345,12 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     }
 
     if (!IS_NPC(vict)) {
-      if (!IS_NPC(ch) && !(PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER))) {
+      struct room_data *ch_in_room = get_ch_in_room(ch), *vict_in_room = get_ch_in_room(vict);
+      // PC vs PC: Both must be PK, AND/OR both must be standing in an arena.
+      if (!IS_NPC(ch)
+          && !(PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER))
+          && !(ROOM_FLAGGED(ch_in_room, ROOM_ARENA) && ROOM_FLAGGED(vict_in_room, ROOM_ARENA)))
+      {
         send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
         return;
       }

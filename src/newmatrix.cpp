@@ -269,7 +269,7 @@ bool dumpshock(struct matrix_icon *icon)
   if (icon->decker && icon->decker->ch)
   {
     send_to_char(icon->decker->ch, "You are dumped from the matrix!\r\n");
-    snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", icon->name);
+    snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", CAP(icon->name));
     send_to_host(icon->in_host, buf, icon, FALSE);
 
     // Clean up their uploads.
@@ -409,9 +409,13 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   DECKER->tally += tally;
   if (DECKER->located)
     DECKER->tally++;
-  if (DECKER->tally >= 80)
+  if (DECKER->tally >= 90)
   {
+    // House rule: we don't shut down the host per Matrix pg112,
+    // Instead we just kill the problematic connection.
+    send_to_icon(PERSONA, "The sirens and lights seem to turn towards you!\r\n");
     dumpshock(PERSONA);
+    send_to_char(ch, "^y(OOC note: Your security tally hit 80+, so the host disconnected you.)^n\r\n");
     return -1;
   }
   check_trigger(host, ch);
@@ -1343,7 +1347,20 @@ ACMD(do_locate)
           send_to_icon(PERSONA, "There's no free-floating paydata left to find, but you're able to locate a suspicious-looking IC.\r\n");
           return;
         }
-        // Fall through.
+
+        // We've failed to spawn an IC-- character hit the end of the sheaf. Log it.
+        mudlog_vfprintf(ch, LOG_GRIDLOG, "BUILD ERROR: %s hit end of sheaf with paydata remaining in host %s (%ld).", GET_CHAR_NAME(ch), matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].vnum);
+
+        // Log spam defense: Have a chance of dumping them.
+        send_to_icon(PERSONA, "The node fuzzes around you as it tries to load further defenses-- something's gone wrong, and it's destabilizing! Your connection closes abruptly.\r\n");
+        snprintf(buf, sizeof(buf), "%s abruptly shatters into digital static.\r\n", PERSONA->name);
+        send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
+
+        // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
+        extract_icon(PERSONA);
+        PERSONA = NULL;
+        PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+        return;
       }
 
       // No IC-bound paydata exists, OR we were not able to locate or spawn an IC to carry it.
@@ -1469,10 +1486,9 @@ ACMD(do_matrix_look)
     if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_PROGRAM) && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum)
     {
       if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) {
+        int percent_complete = (int) (100 * ((float) GET_DECK_ACCESSORY_FILE_SIZE(obj) - GET_DECK_ACCESSORY_FILE_REMAINING(obj)) / MAX(1, GET_DECK_ACCESSORY_FILE_SIZE(obj)));
         send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n",
-                     GET_OBJ_NAME(obj),
-                     (int) (GET_DECK_ACCESSORY_FILE_REMAINING(obj) - GET_DECK_ACCESSORY_FILE_SIZE(obj)) / MAX(1, GET_DECK_ACCESSORY_FILE_SIZE(obj))
-                   );
+                     GET_OBJ_NAME(obj), percent_complete);
       } else {
         send_to_icon(PERSONA, "^yA file named %s floats here.^n\r\n", GET_OBJ_NAME(obj));
       }
@@ -1737,7 +1753,7 @@ ACMD(do_logoff)
     send_to_icon(PERSONA, "You gracefully log off from the matrix and return to the real world.\r\n");
     WAIT_STATE(ch, (int) (0.5 RL_SEC));
   }
-  snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", PERSONA->name);
+  snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", CAP(PERSONA->name));
   send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
 
   // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
@@ -2379,10 +2395,35 @@ ACMD(do_run)
     send_to_icon(PERSONA, "You don't seem to have that program loaded.\r\n");
 }
 
+void _decrypt_host_access(struct char_data *ch, rnum_t host_rnum) {
+  int inhost = PERSONA->in_host;
+
+  icon_from_host(PERSONA);
+  icon_to_host(PERSONA, host_rnum);
+
+  int success = system_test(PERSONA->in_host, ch, TEST_ACCESS, SOFT_DECRYPT, 0);
+
+  if (success > 0) {
+    if (matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED]) {
+      send_to_icon(PERSONA, "You successfully decrypt that SAN.\r\n");
+      matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED] = 0;
+    } else {
+      send_to_icon(PERSONA, "It doesn't appear to be encrypted.\r\n");
+    }
+  } else {
+    send_to_icon(PERSONA, "You fail to decrypt that SAN.\r\n");
+  }
+
+  if (PERSONA) {
+    icon_from_host(PERSONA);
+    icon_to_host(PERSONA, inhost);
+  }
+}
+
 ACMD(do_decrypt)
 {
   if (!PERSONA) {
-    send_to_char(ch, "You can't do that while hitching.\r\n");
+    send_to_char("You can't do that while hitching.\r\n", ch);
     return;
   }
   skip_spaces(&argument);
@@ -2462,25 +2503,29 @@ ACMD(do_decrypt)
     }
     return;
   }
-  int host_rnum = 0;
-  for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next)
-    if ((host_rnum = real_host(exit->host)) > 0 && isname(argument, exit->addresses)) {
-      int inhost = PERSONA->in_host;
-      icon_from_host(PERSONA);
-      icon_to_host(PERSONA, host_rnum);
-      int success = system_test(PERSONA->in_host, ch, TEST_ACCESS, SOFT_DECRYPT, 0);
-      if (success > 0 && matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED]) {
-        send_to_icon(PERSONA, "You successfully decrypt that SAN.\r\n");
-        matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED] = 0;
-      } else
-        send_to_icon(PERSONA, "You fail to decrypt that SAN.\r\n");
-      if (PERSONA) {
-        icon_from_host(PERSONA);
-        icon_to_host(PERSONA, inhost);
-      }
+
+  if (is_abbrev(argument, "LTG")) {
+    rnum_t parent_rnum = real_host(matrix[PERSONA->in_host].parent);
+    if (parent_rnum < 0 || !(matrix[parent_rnum].type == HOST_LTG || matrix[parent_rnum].type == HOST_PLTG)) {
+      send_to_char("This host isn't connected to an LTG.\r\n", ch);
+    } else {
+      _decrypt_host_access(ch, parent_rnum);
+    }
+    return;
+  }
+
+  for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next) {
+    rnum_t host_rnum = real_host(exit->host);
+
+    if (host_rnum < 0)
+      continue;
+
+    if (isname(argument, exit->addresses)) {
+      _decrypt_host_access(ch, host_rnum);
       return;
     }
-  send_to_icon(PERSONA, "You can't seem to locate that file.\r\n");
+  }
+  send_to_icon(PERSONA, "You can't seem to locate a file, connection, or subsystem named '%s'.\r\n", argument);
 }
 
 void send_active_program_list(struct char_data *ch) {
@@ -2724,47 +2769,47 @@ struct matrix_icon *find_icon_by_id(vnum_t idnum)
   return NULL;
 }
 
-#define host matrix[rnum]
+#define HOST matrix[rnum]
 void reset_host_paydata(rnum_t rnum) {
   int rand_result;
-  switch (host.color) {
+  switch (HOST.color) {
     case HOST_COLOR_BLUE:
       rand_result = number(1, 6) - 1; // Between 0-5, avg 2.5
-      host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_BLUE);
-      host.ic_bound_paydata = 1;
+      HOST.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_BLUE);
+      HOST.ic_bound_paydata = 1;
       break;
     case HOST_COLOR_GREEN:
       rand_result = number(1, 6) + number(1, 6) - 2; // Between 0-10, avg 5
-      host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_GREEN);
-      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(2, host.undiscovered_paydata * 1/5));
-      host.undiscovered_paydata -= host.ic_bound_paydata;
+      HOST.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_GREEN);
+      HOST.ic_bound_paydata = MIN(HOST.undiscovered_paydata, MAX(2, HOST.undiscovered_paydata * 1/5));
+      HOST.undiscovered_paydata -= HOST.ic_bound_paydata;
       break;
     case HOST_COLOR_ORANGE:
       rand_result = number(1, 6) + number(1, 6); // Between 2-12, avg 7
-      host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_ORANGE);
-      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(4, host.undiscovered_paydata * 1/3));
-      host.undiscovered_paydata -= host.ic_bound_paydata;
+      HOST.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_ORANGE);
+      HOST.ic_bound_paydata = MIN(HOST.undiscovered_paydata, MAX(4, HOST.undiscovered_paydata * 1/3));
+      HOST.undiscovered_paydata -= HOST.ic_bound_paydata;
       break;
     case HOST_COLOR_RED:
       rand_result = number(1, 6) + number(1, 6) + 2; // Between 4-14, avg 9
-      host.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_RED_BLACK);
-      host.ic_bound_paydata = MIN(host.undiscovered_paydata, MAX(6, host.undiscovered_paydata * 2/3));
-      host.undiscovered_paydata -= host.ic_bound_paydata;
+      HOST.undiscovered_paydata = MIN(rand_result, MAX_PAYDATA_QTY_RED_BLACK);
+      HOST.ic_bound_paydata = MIN(HOST.undiscovered_paydata, MAX(6, HOST.undiscovered_paydata * 2/3));
+      HOST.undiscovered_paydata -= HOST.ic_bound_paydata;
       break;
     case HOST_COLOR_BLACK:
       rand_result = number(1, 6) + number(1, 6) + 2;
-      host.undiscovered_paydata = 1;
-      host.ic_bound_paydata = rand_result - host.undiscovered_paydata;
+      HOST.undiscovered_paydata = 1;
+      HOST.ic_bound_paydata = rand_result - HOST.undiscovered_paydata;
       break;
     default:
       char oopsbuf[500];
-      snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown host color %d for host %ld- can't generate paydata.", host.color, host.vnum);
+      snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown host color %d for host %ld- can't generate paydata.", HOST.color, HOST.vnum);
       mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
-      host.undiscovered_paydata = 0;
-      host.ic_bound_paydata = 0;
+      HOST.undiscovered_paydata = 0;
+      HOST.ic_bound_paydata = 0;
   }
   // mudlog_vfprintf(NULL, LOG_SYSLOG, "PD:%ld-%s: %d UD, %d IC-B", host.vnum, host_color[host.color], host.undiscovered_paydata, host.ic_bound_paydata);
-  host.payreset = TRUE;
+  HOST.payreset = TRUE;
 }
 
 void matrix_update()
@@ -2775,79 +2820,90 @@ void matrix_update()
   for (;rnum <= top_of_matrix; rnum++) {
     bool decker = FALSE;
     struct matrix_icon *nexticon;
-    if (host.reset) {
-      if (!--host.reset)
-        host.alert = 0;
+    if (HOST.reset) {
+      if (!--HOST.reset)
+        HOST.alert = 0;
       else
         continue;
     }
-    if (time_info.hours == 2 && host.payreset)
-      host.payreset = FALSE;
+    if (time_info.hours == 2 && HOST.payreset)
+      HOST.payreset = FALSE;
     if (time_info.hours == 0) {
-      if (host.type == HOST_DATASTORE && host.undiscovered_paydata <= 0 && !host.payreset) {
+      if (HOST.type == HOST_DATASTORE && HOST.undiscovered_paydata <= 0 && !HOST.payreset) {
         reset_host_paydata(rnum);
       } else {
         // See if there are any deckers in here.
-        for (struct matrix_icon *icon = host.icons; icon; icon = icon->next_in_host) {
+        for (struct matrix_icon *icon = HOST.icons; icon; icon = icon->next_in_host) {
           if (!ICON_IS_IC(icon)) {
             decker = TRUE;
             break;
           }
         }
-
+        // We also need to check surrounding hosts to prevent SANs from re-encrypting.
+        for (struct exit_data *exit = HOST.exit; exit && !decker; exit = exit->next) {
+          rnum_t host_rnum = real_host(exit->host);
+          if (host_rnum >= 0) {
+            for (struct matrix_icon *icon = matrix[host_rnum].icons; icon; icon = icon->next_in_host) {
+              if (!ICON_IS_IC(icon)) {
+                decker = TRUE;
+                break;
+              }
+            }
+          }
+        }
         // We only reset subsystem encryption ratings if there are no deckers.
         if (!decker) {
           for (int x = 0; x < 5; x++) {
-            if (host.stats[x][MTX_STAT_ENCRYPTED] != 0 && host.stats[x][MTX_STAT_ENCRYPTED] != 1) {
+            if (HOST.stats[x][MTX_STAT_ENCRYPTED] != 0 && HOST.stats[x][MTX_STAT_ENCRYPTED] != 1) {
               char warnbuf[1000];
               snprintf(warnbuf, sizeof(warnbuf), "WARNING: %s mtx_stat_encrypted on %ld is %ld (must be 1 or 0)!",
                        acifs_strings[x],
-                       host.vnum,
-                       host.stats[x][MTX_STAT_ENCRYPTED]);
+                       HOST.vnum,
+                       HOST.stats[x][MTX_STAT_ENCRYPTED]);
               mudlog(warnbuf, NULL, LOG_SYSLOG, TRUE);
-              host.stats[x][MTX_STAT_ENCRYPTED] = 0;
+              HOST.stats[x][MTX_STAT_ENCRYPTED] = 0;
             }
 
-            if (host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && host.stats[x][MTX_STAT_ENCRYPTED] == 0) {
-              mudlog_vfprintf(NULL, LOG_GRIDLOG, "Host %ld's %s-subsystem has scramble-%ld and is not encrypted: re-encrypting.", host.vnum, mtx_subsystem_names[x], host.stats[x][MTX_STAT_SCRAMBLE_IC_RATING]);
-              host.stats[x][MTX_STAT_ENCRYPTED] = 1;
+            if (HOST.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && HOST.stats[x][MTX_STAT_ENCRYPTED] == 0) {
+              mudlog_vfprintf(NULL, LOG_GRIDLOG, "Host %ld's %s-subsystem has scramble-%ld and is not encrypted: re-encrypting.", HOST.vnum, mtx_subsystem_names[x], HOST.stats[x][MTX_STAT_SCRAMBLE_IC_RATING]);
+              HOST.stats[x][MTX_STAT_ENCRYPTED] = 1;
             }
           }
         }
       }
     }
-    if (host.shutdown) {
-      if (success_test(host.security, host.shutdown_mpcp) > 0) {
-        send_to_host(host.rnum, host.shutdown_stop, NULL, FALSE);
-        host.shutdown = 0;
-        host.shutdown_mpcp = 0;
-        host.shutdown_success = 0;
-      } else if (!--host.shutdown) {
+    if (HOST.shutdown) {
+      if (success_test(HOST.security, HOST.shutdown_mpcp) > 0) {
+        send_to_host(HOST.rnum, HOST.shutdown_stop, NULL, FALSE);
+        HOST.shutdown = 0;
+        HOST.shutdown_mpcp = 0;
+        HOST.shutdown_success = 0;
+      } else if (!--HOST.shutdown) {
         struct obj_data *nextfile = NULL;
-        host.shutdown_mpcp = 0;
-        host.shutdown_success = 0;
-        host.alert = 3;
-        while (host.icons)
-          dumpshock(host.icons);
-        if (host.file)
-          for (struct obj_data *obj = host.file; nextfile; obj = nextfile) {
+        HOST.shutdown_mpcp = 0;
+        HOST.shutdown_success = 0;
+        HOST.alert = 3;
+        while (HOST.icons)
+          dumpshock(HOST.icons);
+        if (HOST.file)
+          for (struct obj_data *obj = HOST.file; nextfile; obj = nextfile) {
             nextfile = obj->next_content;
             extract_obj(obj);
           }
-        host.reset = srdice() + srdice();
+        HOST.reset = srdice() + srdice();
         continue;
       }
     }
-    for (struct matrix_icon *icon = host.icons; icon; icon = nexticon) {
+    for (struct matrix_icon *icon = HOST.icons; icon; icon = nexticon) {
       nexticon = icon->next_in_host;
       if (!ICON_IS_IC(icon)) {
         process_upload(icon);
         decker = TRUE;
-        if (!host.pass)
+        if (!HOST.pass)
           GET_REM_HACKING(icon->decker->ch) = GET_HACKING(icon->decker->ch);
       } else {
         struct matrix_icon *icon2;
-        for (icon2 = host.icons; icon2; icon2 = icon2->next_in_host)
+        for (icon2 = HOST.icons; icon2; icon2 = icon2->next_in_host)
           if (icon->ic.target == icon2->idnum)
             break;
         if (!icon2)
@@ -2856,9 +2912,9 @@ void matrix_update()
       }
     }
     if (decker) {
-      for (struct matrix_icon *icon = host.icons; icon; icon = icon->next_in_host)
+      for (struct matrix_icon *icon = HOST.icons; icon; icon = icon->next_in_host)
         if (ICON_IS_IC(icon) && IS_PROACTIVE(icon) && !icon->fighting)
-          for (struct matrix_icon *icon2 = host.icons; icon2; icon2 = icon2->next_in_host)
+          for (struct matrix_icon *icon2 = HOST.icons; icon2; icon2 = icon2->next_in_host)
             if (icon->ic.target == icon2->idnum && icon2->decker) {
               if (icon->ic.type == IC_TRACE && icon->ic.subtype > 0) {
                 if (!--icon->ic.subtype) {
@@ -2869,14 +2925,14 @@ void matrix_update()
                 }
               } else if (icon->ic.type != IC_TRACE || (icon->ic.type == IC_TRACE && !icon2->decker->located)) {
                 icon->fighting = icon2;
-                icon->next_fighting = host.fighting;
-                host.fighting = icon;
+                icon->next_fighting = HOST.fighting;
+                HOST.fighting = icon;
                 roll_matrix_init(icon);
               }
               break;
             }
       struct obj_data *next;
-      for (struct obj_data *file = host.file; file; file = next) {
+      for (struct obj_data *file = HOST.file; file; file = next) {
         next = file->next_content;
         if (next == file) {
           mudlog("SYSERR: Infinite loop detected in Matrix file handling! Attempting to break out.\r\n", NULL, LOG_SYSLOG, TRUE);
@@ -2891,8 +2947,8 @@ void matrix_update()
           snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content for host %ld (%s)! Striking that link, object will be orphaned if not located elsewhere.",
                    GET_OBJ_NAME(file->next_content),
                    GET_OBJ_VNUM(file->next_content),
-                   host.vnum,
-                   host.name
+                   HOST.vnum,
+                   HOST.name
                  );
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           file->next_content = next = NULL;
@@ -2935,21 +2991,21 @@ void matrix_violence()
   struct matrix_icon *temp, *icon;
   rnum_t rnum = 1;
   for (;rnum <= top_of_matrix; rnum++)
-    if (host.fighting) {
-      host.pass++;
-      order_list(host.fighting);
-      if (host.fighting->initiative <= 0) {
-        host.pass = 0;
-        for (icon = host.fighting; icon; icon = icon->next_fighting)
+    if (HOST.fighting) {
+      HOST.pass++;
+      order_list(HOST.fighting);
+      if (HOST.fighting->initiative <= 0) {
+        HOST.pass = 0;
+        for (icon = HOST.fighting; icon; icon = icon->next_fighting)
           roll_matrix_init(icon);
-        order_list(host.fighting);
+        order_list(HOST.fighting);
       }
-      for (icon = host.fighting; icon; icon = icon->next_fighting) {
+      for (icon = HOST.fighting; icon; icon = icon->next_fighting) {
         if (icon->initiative > 0) {
           icon->initiative -= 10;
           if (icon->fighting) {
             if (icon->decker) {
-              if (icon->evasion && !host.pass)
+              if (icon->evasion && !HOST.pass)
                 icon->evasion--;
               if (!icon->fighting->evasion)
                 matrix_fight(icon, icon->fighting);
@@ -2968,11 +3024,11 @@ void matrix_violence()
                 break;
               }
               if (icon->ic.targ_evasion) {
-                if (!host.pass)
+                if (!HOST.pass)
                   icon->ic.targ_evasion--;
               } else if (!icon->evasion)
                 matrix_fight(icon, icon->fighting);
-              else if (!host.pass)
+              else if (!HOST.pass)
                 icon->evasion--;
             }
           } else
@@ -2980,7 +3036,7 @@ void matrix_violence()
         }
       }
     } else {
-      host.pass = 0;
+      HOST.pass = 0;
     }
 }
 
@@ -3552,8 +3608,9 @@ ACMD(do_matrix_max)
     send_to_char("You can't use hacking pool while running a cold ASIST.\r\n", ch);
   else {
     int i = atoi(argument);
-    if (i > GET_HACKING(ch) || i < 0)
-      send_to_char(ch, "You must set your max hacking pool to between 0 and %d.\r\n", GET_HACKING(ch));
+    int cap = MIN(GET_HACKING(ch), GET_SKILL(ch, SKILL_COMPUTER));
+    if (i > cap || i < 0)
+      send_to_char(ch, "You must set your max hacking pool to between 0 and %d.\r\n", cap);
     else {
       GET_MAX_HACKING(ch) = i;
       send_to_char(ch, "You will now use a maximum of %d hacking pool per action.\r\n", GET_MAX_HACKING(ch));

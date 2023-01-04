@@ -503,7 +503,7 @@ enum {
 /* affect bits: used in char_data.char_specials.saved.affected_by */
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
 
-#define AFF_INVISIBLE                           1  /* Char is invisible        */
+#define AFF_RUTHENIUM                           1  /* Char is invisible        */
 #define AFF_BANISH                              2
 #define AFF_ULTRASOUND                          3  /* Char can see invis chars    */
 #define AFF_PRONE                               4
@@ -2213,7 +2213,7 @@ enum {
 #define TO_CHAR                4
 #define TO_ROLLS               5
 #define TO_VEH                 6
-#define TO_DECK                 7
+#define TO_DECK                7
 #define TO_VEH_ROOM            8
 #define TO_CHAR_INCLUDE_RIGGER 9
 #define TO_CHAR_FORCE          10
@@ -2222,6 +2222,9 @@ enum {
 #define TO_SLEEP               (1 << 5)     /* to char, even if sleeping */
 #define TO_REMOTE              (1 << 6)
 #define SKIP_YOU_STANZAS       (1 << 7)
+#define TO_STAFF_ONLY          (1 << 8)
+
+#define TO_STAFF_ROLLS         TO_ROLLS | TO_STAFF_ONLY
 
 /* Boards */
 
@@ -2671,7 +2674,7 @@ enum {
    - Add a string for it in message_history_channels[] in constants.cpp.
  */
 
-#define NUM_MESSAGES_TO_RETAIN     50
+#define NUM_MESSAGES_TO_RETAIN     100
 
 #define COMM_CHANNEL_HIRED         0
 #define COMM_CHANNEL_NEWBIE        1
@@ -2686,8 +2689,9 @@ enum {
 #define COMM_CHANNEL_TELLS         10
 #define COMM_CHANNEL_WTELLS        11
 #define COMM_CHANNEL_EMOTES        12
+#define COMM_CHANNEL_LOCAL         13
 
-#define NUM_COMMUNICATION_CHANNELS 13
+#define NUM_COMMUNICATION_CHANNELS 14
 
 
 /* Exit / error codes. */

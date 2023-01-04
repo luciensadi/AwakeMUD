@@ -1041,6 +1041,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   struct shop_sell_data *sell;
   int price, buynum;
   bool cash = FALSE;
+  char rollbuf[500];
 
   // Prevent negative transactions.
   if ((buynum = transaction_amt(arg, arg_len)) < 0)
@@ -1124,12 +1125,14 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   int bprice = price / 10;
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && can_negotiate_for_item(obj))
     price = negotiate(ch, keeper, 0, price, 0, TRUE);
-  if (sell->type == SELL_AVAIL && GET_AVAIL_OFFSET(ch))
-    price += bprice * GET_AVAIL_OFFSET(ch);
 
   // Attempt to order the item.
   if (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) > 0)
   {
+    if (GET_AVAIL_OFFSET(ch) > 0) {
+      price += bprice * GET_AVAIL_OFFSET(ch);
+    }
+
     // Don't let people re-try repeatedly.
     for (int q = 0; q < SHOP_LAST_IDNUM_LIST_SIZE; q++) {
       if (sell->lastidnum[q] == GET_IDNUM(ch)) {
@@ -1196,12 +1199,17 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
       if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEROMONES) {
         pheromones = TRUE;
-        skill += GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
+        int delta = GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
+        skill += delta;
+        snprintf(rollbuf, sizeof(rollbuf), "Pheromone skill buff: %d.", delta);
+        act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
         break;
       }
 
     // Roll up the success test.
     int success = success_test(skill, target);
+    snprintf(rollbuf, sizeof(rollbuf), "Rolled %d success%s.", success, success == 1 ? "" : "s");
+    act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
 
     // Failure case.
     if (success < 1) {
@@ -1562,7 +1570,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       extract_obj(obj);
       obj = NULL;
     }
-    strlcat(buf, "\r\nYou can use the PROBE or INFO commands for more details.\r\n", sizeof(buf));
+    strlcat(buf, "\r\nYou can use PROBE #1 or INFO #1 for more details.\r\n", sizeof(buf));
     page_string(ch->desc, buf, 1);
     return;
   }
@@ -1758,8 +1766,11 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
 bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr) {
   if (!is_open(keeper, shop_nr))
     return FALSE;
+
+  /*   We allow anyone to view the list, on the presumption that you're just browsing the shelves or whatnot.
   // if (!is_ok_char(keeper, ch, shop_nr))
   //  return FALSE;
+  */
 
   struct obj_data *obj = NULL;
   skip_spaces(&arg);
@@ -1768,6 +1779,10 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
     // No error message, let do_probe() handle it.
     return FALSE;
   }
+
+  // By popular request, all shop item scans must start with # now.
+  if (*arg != '#')
+    return FALSE;
 
   struct shop_sell_data *sell = find_obj_shop(arg, shop_nr, &obj);
   if (!sell && atoi(arg) > 0) {
@@ -1781,7 +1796,7 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
     return FALSE;
   }
 
-  send_to_char(ch, "^yProbing shopkeeper's ^n%s^y...^n\r\n", GET_OBJ_NAME(obj));
+  send_to_char(ch, "^yProbing ^Yshopkeeper's^y ^n%s^y...^n\r\n", GET_OBJ_NAME(obj));
   do_probe_object(ch, obj);
   return TRUE;
 }
@@ -3403,7 +3418,7 @@ void save_shop_orders() {
           snprintf(shop_message, sizeof(shop_message), "%s has arrived at %s and is ready for pickup for a total cost of %d nuyen. It will be held for you for %d days.\r\n",
                    real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
                    shop_table[shop_nr].shopname,
-                   order->price,
+                   (order->price - order->paid) * order->number,
                    PREORDERS_ARE_GOOD_FOR_X_DAYS
                   );
           int real_mob = real_mobile(shop_table[shop_nr].keeper);

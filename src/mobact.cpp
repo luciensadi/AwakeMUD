@@ -177,7 +177,7 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
     return FALSE;
 
   // Idle PC? Failure.
-  if (!vict->desc || vict->char_specials.timer >= IDLE_TIMER_AGGRO_THRESHOLD) {
+  if (!IS_NPC(vict) && (!vict->desc || vict->char_specials.timer >= IDLE_TIMER_AGGRO_THRESHOLD)) {
 #ifdef MOBACT_DEBUG
     snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping %s - Idle / linkdead PC.", GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);
@@ -1373,6 +1373,28 @@ int get_push_command_index() {
   return global_push_command_index;
 }
 
+bool check_sentinel_snap_back(struct char_data *ch) {
+  if (MOB_FLAGGED(ch, MOB_SENTINEL) && ch->mob_loaded_in_room && (!ch->in_room || GET_ROOM_VNUM(ch->in_room) != ch->mob_loaded_in_room)) {
+    rnum_t room_rnum = real_room(ch->mob_loaded_in_room);
+
+    if (room_rnum < 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Mob snapback room %ld is invalid!", ch->mob_loaded_in_room);
+      ch->mob_loaded_in_room = 0;
+      return FALSE;
+    }
+
+    // If you're a sentinel and aren't in your loaded room, snap back to it.
+    send_to_char("You return to your post.\r\n", ch);
+    act("$n returns to $s post.", TRUE, ch, 0, 0, TO_ROOM);
+    char_from_room(ch);
+
+    char_to_room(ch, &world[room_rnum]);
+    act("$n returns to $s post.", TRUE, ch, 0, 0, TO_ROOM);
+    return TRUE;
+  }
+  return FALSE;
+}
+
 bool mobact_process_movement(struct char_data *ch) {
   int door;
 
@@ -1380,12 +1402,16 @@ bool mobact_process_movement(struct char_data *ch) {
     return FALSE;
 
   // If you can't move for a variety of reasons, bail out.
-  if (MOB_FLAGGED(ch, MOB_SENTINEL) || CH_IN_COMBAT(ch) || AFF_FLAGGED(ch, AFF_PRONE))
+  if (CH_IN_COMBAT(ch) || AFF_FLAGGED(ch, AFF_PRONE))
     return FALSE;
 
   // The only way you can move while not standing is if you're driving a vehicle.
   if (GET_POS(ch) != POS_STANDING && !AFF_FLAGGED(ch, AFF_PILOT))
     return FALSE;
+
+  // If you're a sentinel and have a snapback room, snap back to it; otherwise, don't move.
+  if (MOB_FLAGGED(ch, MOB_SENTINEL))
+    return check_sentinel_snap_back(ch);
 
   // Slow down movement.
   if (number(0, 3) == 0)

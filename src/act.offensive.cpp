@@ -679,9 +679,9 @@ struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *
       continue;
     }
 
-    // Make a test to see if they can stop you. It's made harder by being invisible.
+    // Make a test to see if they can stop you. It's made easier for you if they can't see you, harder if you can't see them.
     int dice = GET_QUI(ch) * 1.25;
-    int tn = (GET_REA(combatant) + racial_flee_modifier) + calculate_vision_penalty(combatant, ch);
+    int tn = MIN(11, (GET_REA(combatant) + racial_flee_modifier) + calculate_vision_penalty(ch, combatant) - calculate_vision_penalty(combatant, ch));
     int successes = success_test(dice, tn);
 
     char rbuf[500];

@@ -33,6 +33,14 @@ const char *moon[] =
     "\n"
   };
 
+bool precipitation_is_snow() {
+  time_t s = time(NULL);
+  struct tm* current_time = localtime(&s);
+
+  // Our version of Seattle snows in December and January.
+  return (current_time->tm_mon + 1) == 12 || (current_time->tm_mon + 1) == 1;
+}
+
 void another_hour(void)
 {
   bool new_month = FALSE;
@@ -246,7 +254,11 @@ void weather_change(void)
     weather_info.sky = SKY_CLOUDY;
     break;
   case 2:
-    send_to_outdoor("^BIt starts to rain.^n\r\n", TRUE);
+    if (precipitation_is_snow()) {
+      send_to_outdoor("^WIt starts to snow.^n\r\n", TRUE);
+    } else {
+      send_to_outdoor("^BIt starts to rain.^n\r\n", TRUE);
+    }
     weather_info.sky = SKY_RAINING;
     break;
   case 3:
@@ -254,16 +266,28 @@ void weather_change(void)
     weather_info.sky = SKY_CLOUDLESS;
     break;
   case 4:
-    send_to_outdoor("^WLightning^L starts to show in the sky.^n\r\n", TRUE);
+    if (precipitation_is_snow()) {
+      send_to_outdoor("^WThe snow intensifies.^n\r\n", TRUE);
+    } else {
+      send_to_outdoor("^WLightning^L starts to show in the sky.^n\r\n", TRUE);
+    }
     weather_info.sky = SKY_LIGHTNING;
     break;
   case 5:
-    send_to_outdoor("^cThe rain stops.^n\r\n", TRUE);
+    if (precipitation_is_snow()) {
+      send_to_outdoor("^cThe snow stops.^n\r\n", TRUE);
+    } else {
+      send_to_outdoor("^cThe rain stops.^n\r\n", TRUE);
+    }
     weather_info.sky = SKY_CLOUDY;
     weather_info.lastrain = 0;
     break;
   case 6:
-    send_to_outdoor("^cThe ^Wlightning^c stops.^n\r\n", TRUE);
+    if (precipitation_is_snow()) {
+      send_to_outdoor("^WThe heavy snow slackens to light flurries now and then.^n\r\n", TRUE);
+    } else {
+      send_to_outdoor("^cThe ^Wlightning^c stops.^n\r\n", TRUE);
+    }
     weather_info.sky = SKY_RAINING;
     break;
   default:

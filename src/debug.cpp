@@ -32,6 +32,15 @@ extern bool player_is_dead_hardcore(long id);
 
 extern void write_objs_to_disk(vnum_t zonenum);
 extern void write_mobs_to_disk(vnum_t zonenum);
+extern void weather_change();
+extern bool ranged_response(struct char_data *combatant, struct char_data *ch);
+extern void docwagon_retrieve(struct char_data *ch);
+
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+extern void verify_every_pointer_we_can_think_of();
+#else
+void verify_every_pointer_we_can_think_of() {}
+#endif
 
 // We're looking to verify that everything is kosher. Validate canaries, etc.
 void verify_data(struct char_data *ch, const char *line, int cmd, int subcmd, const char *section) {
@@ -158,6 +167,109 @@ ACMD(do_debug) {
     }
 
     process_withdrawal(ch);
+    return;
+  }
+
+  if (is_abbrev(arg1, "generic_find")) {
+    const char *find_x_index_names[] = {
+      "FIND_CHAR_ROOM    ",
+      "FIND_CHAR_WORLD   ",
+      "FIND_OBJ_INV      ",
+      "FIND_OBJ_ROOM     ",
+      "FIND_OBJ_WORLD    ",
+      "FIND_OBJ_EQUIP    ",
+      "FIND_OBJ_VEH_ROOM ",
+      "FIND_CHAR_VEH_ROOM"
+    };
+
+    for (int i = 0; i < NUM_FIND_X_BITS; i++) {
+      struct obj_data *tmp_object = NULL;
+      struct char_data *tmp_char = NULL;
+
+      generic_find(rest_of_argument, 1 << i, ch, &tmp_char, &tmp_object);
+      send_to_char(ch, "%s: %s, %s\r\n", find_x_index_names[i], GET_CHAR_NAME(tmp_char), GET_OBJ_NAME(tmp_object));
+    }
+  }
+
+  if (is_abbrev(arg1, "weather")) {
+    rest_of_argument = any_one_arg(rest_of_argument, arg2);
+
+    if (is_abbrev(arg2, "change")) {
+      int old_change = weather_info.change;
+      int old_pressure = weather_info.pressure;
+      int old_sky = weather_info.sky;
+      weather_change();
+      send_to_char(ch, "Weather: %d -> %d, pressure: %d -> %d, sky: %d -> %d.\r\n",
+                   old_change, weather_info.change,
+                   old_pressure, weather_info.pressure,
+                   old_sky, weather_info.sky);
+    }
+    else {
+      send_to_char(ch, "Valid option: WEATHER CHANGE, not '%s'.\r\n", arg2);
+    }
+
+    return;
+  }
+
+  if (is_abbrev(arg1, "docwagon")) {
+    PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
+    docwagon_retrieve(ch);
+    return;
+  }
+
+  if (is_abbrev(arg1, "snapback")) {
+    rest_of_argument = any_one_arg(rest_of_argument, arg2);
+
+    // Scenario 1: Respond aggressively to someone who was docwagon'd.
+    if (is_abbrev(arg2, "1")) {
+      // Mitsuhama Elite guard, in the elite's room.
+      struct char_data *combatant = read_mobile(17114, VIRTUAL);
+      char_to_room(combatant, &world[real_room(17172)]);
+      combatant->mob_loaded_in_room = 17172;
+
+      // Disarm them so they're forced to close the distance.
+      if (GET_EQ(combatant, WEAR_WIELD))
+        extract_obj(unequip_char(combatant, WEAR_WIELD, FALSE));
+
+      act("$n: Loaded.", FALSE, combatant, 0, 0, TO_ROLLS);
+
+      // Move us to the room SW of that.
+      char_from_room(ch);
+      char_to_room(ch, &world[real_room(17126)]);
+
+      verify_every_pointer_we_can_think_of();
+      act("$n: Present 1.", FALSE, combatant, 0, 0, TO_ROLLS);
+
+      // Force them to ranged_response us.
+      ranged_response(combatant, ch);
+
+      verify_every_pointer_we_can_think_of();
+      act("$n: Present 2.", FALSE, combatant, 0, 0, TO_ROLLS);
+
+      // Docwagon us out.
+      PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
+      docwagon_retrieve(ch);
+
+      verify_every_pointer_we_can_think_of();
+      act("$n: Present 3.", FALSE, combatant, 0, 0, TO_ROLLS);
+
+      // Make them respond again, which should snap them back.
+      ranged_response(combatant, ch);
+
+      verify_every_pointer_we_can_think_of();
+      act("$n: Present 4.", FALSE, combatant, 0, 0, TO_ROLLS);
+
+      // Force them to respond again, which should not make them go anywhere.
+      ranged_response(combatant, ch);
+
+      verify_every_pointer_we_can_think_of();
+      act("$n: Present 5.", FALSE, combatant, 0, 0, TO_ROLLS);
+
+      // Remove our combatant.
+      extract_char(combatant);
+
+      verify_every_pointer_we_can_think_of();
+    }
     return;
   }
 

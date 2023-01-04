@@ -198,7 +198,7 @@ static void init_char_strings(char_data *ch)
   delete [] ch->char_specials.leave;
   ch->char_specials.leave = str_dup("leaves");
 
-  set_title(ch, "^y(Newbie)^n");
+  set_title(ch, "");
   set_pretitle(ch, NULL);
 
   if (GET_RACE(ch) >= MINIMUM_VALID_PLAYER_RACE && GET_RACE(ch) <= MAXIMUM_VALID_PLAYER_RACE) {
@@ -325,7 +325,7 @@ void advance_level(struct char_data * ch)
   playerDB.SaveChar(ch);
 
   snprintf(buf, sizeof(buf), "%s [%s] advanced to %s.",
-          GET_CHAR_NAME(ch), ch->desc->host, status_ratings[(int)GET_LEVEL(ch)]);
+          GET_CHAR_NAME(ch), ch->desc && *ch->desc->host ? ch->desc->host : "<no host>", status_ratings[(int)GET_LEVEL(ch)]);
   mudlog(buf, ch, LOG_MISCLOG, TRUE);
 }
 

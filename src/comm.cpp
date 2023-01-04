@@ -3067,10 +3067,11 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
          struct obj_data * obj, void *vict_obj, int type)
 {
   struct char_data *to, *next, *tch;
-  bool sleep, remote, skip_you_stanzas;
+  int sleep, staff_only, skip_you_stanzas;
+  bool remote;
   struct veh_data *rigger_check;
 
-#define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
+#define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && (!staff_only || IS_SENATOR(ch))  && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
 
   if (!str || !*str)
     return NULL;
@@ -3093,6 +3094,9 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
 
   if ((skip_you_stanzas = (type & SKIP_YOU_STANZAS)))
     type &= ~SKIP_YOU_STANZAS;
+    
+  if ((staff_only = (type & TO_STAFF_ONLY)))
+    type &= ~TO_STAFF_ONLY;
 
   if ( type == TO_ROLLS )
     sleep = 1;
@@ -3177,8 +3181,13 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
       if (IS_NPC(to) || !PRF_FLAGGED(to, PRF_ROLLS))
         continue;
 
-      if (!IS_SENATOR(to) && !_OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ && !PLR_FLAGGED(to, PLR_PAID_FOR_ROLLS))
-        continue;
+      if (!IS_SENATOR(to)) {
+        if (!_OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ && !PLR_FLAGGED(to, PLR_PAID_FOR_ROLLS))
+          continue;
+
+        if (staff_only)
+          continue;
+      }
 
       if (SENDOK(to)
           && !(hide_invisible
@@ -3312,7 +3321,7 @@ bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
   // And to anyone reading the code and thinking "Oh, it'd be a great prank to make my rival invis while they RP so they don't get the bonus!" -- no, that's abusing the system and will be punished.
   if (IS_AFFECTED(ch, AFF_IMP_INVIS)
        || IS_AFFECTED(ch, AFF_SPELLIMPINVIS)
-       || IS_AFFECTED(ch, AFF_INVISIBLE)
+       || IS_AFFECTED(ch, AFF_RUTHENIUM)
        || IS_AFFECTED(ch, AFF_SPELLINVIS))
     return FALSE;
 
@@ -3546,12 +3555,20 @@ void verify_vehicle_validity(struct veh_data *veh, bool go_deep) {
     verify_room_validity(veh->lastin[i]);
 
   verify_character_validity(veh->followch);
-  verify_character_validity(veh->people);
+
+  for (struct char_data *ch = veh->people; ch; ch = ch->next_in_veh) {
+    verify_character_validity(ch);
+    assert(ch->in_veh == veh);
+  }
   verify_character_validity(veh->rigger);
   verify_character_validity(veh->fighting);
 
   verify_obj_validity(veh->mount);
-  verify_obj_validity(veh->contents);
+
+  for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content) {
+    verify_obj_validity(obj);
+    assert(obj->in_veh == veh);
+  }
 
   for (int i = 0; i < NUM_MODS; i++)
     verify_obj_validity(veh->mod[i]);
@@ -3584,12 +3601,21 @@ void verify_room_validity(struct room_data *room, bool go_deep) {
     }
   }
 
-  verify_obj_validity(room->contents);
-
-  verify_character_validity(room->people);
-  verify_character_validity(room->watching);
-
-  verify_vehicle_validity(room->vehicles);
+  for (struct obj_data *obj = room->contents; obj; obj = obj->next_content) {
+    verify_obj_validity(obj);
+    assert(obj->in_room == room);
+  }
+  for (struct char_data *ch = room->people; ch; ch = ch->next_in_room) {
+    verify_character_validity(ch);
+    assert(ch->in_room == room);
+  }
+  for (struct char_data *ch = room->watching; ch; ch = ch->next_watching) {
+    verify_character_validity(ch);
+  }
+  for (struct veh_data *veh = room->vehicles; veh; veh = veh->next_veh) {
+    verify_vehicle_validity(veh);
+    assert(veh->in_room == room);
+  }
 
   for (int i = 0; i < NUM_WORKSHOP_TYPES; i++)
     verify_obj_validity(room->best_workshop[i]);

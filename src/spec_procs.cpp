@@ -50,7 +50,7 @@ extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern void reset_zone(int zone, int reboot);
 extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern int find_sight(struct char_data *ch);
-extern void check_quest_kill(struct char_data *ch, struct char_data *victim);
+extern bool check_quest_kill(struct char_data *ch, struct char_data *victim);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t idnum);
 extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);
@@ -65,6 +65,7 @@ extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
 extern const char *get_plaintext_score_essence(struct char_data *ch);
 extern void diag_char_to_char(struct char_data * i, struct char_data * ch);
 extern bool deactivate_power(struct char_data *ch, int power);
+extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
 
 
 extern struct command_info cmd_info[];
@@ -417,6 +418,7 @@ int load_mob(struct char_data *ch, int vnum, int number, char *message)
     if ((mob = read_mobile(rnum, REAL)))
     {
       total++;
+      mob->mob_loaded_in_room = GET_ROOM_VNUM(ch->in_room);
       char_to_room(mob, ch->in_room);
       act(message, TRUE, mob, 0, 0, TO_ROOM);
       if (!MOB_FLAGGED(mob, MOB_AGGRESSIVE))
@@ -3611,16 +3613,26 @@ SPECIAL(toggled_invis)
   if (CMD_IS("deactivate")) {
     skip_spaces(&argument);
     if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
-      if (obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
-        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_INVISIBLE);
-        obj->obj_flags.bitvector.RemoveBit(AFF_INVISIBLE);
+      if (obj->obj_flags.bitvector.IsSet(AFF_RUTHENIUM)) {
+        AFF_FLAGS(obj->worn_by).RemoveBit(AFF_RUTHENIUM);
+        obj->obj_flags.bitvector.RemoveBit(AFF_RUTHENIUM);
         send_to_char(ch, "You feel the static fade as the ruthenium polymers in %s power down.\r\n", GET_OBJ_NAME(obj));
         act("The air shimmers briefly as $n fades into view.", FALSE, ch, 0, 0, TO_ROOM);
-        return TRUE;
+        WAIT_STATE(ch, 0.5 RL_SEC);
+
+        // NPCs around you become alert/alarmed depending on disposition.
+        for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people;
+             viewer;
+             viewer = ch->in_veh ? viewer->next_in_veh : viewer->next_in_room)
+        {
+          if (IS_NPC(viewer)) {
+            process_spotted_invis(viewer, ch);
+          }
+        }
       } else {
         send_to_char(ch, "%s is already deactivated.\r\n", capitalize(GET_OBJ_NAME(obj)));
-        return TRUE;
       }
+      return TRUE;
     }
     return FALSE;
   }
@@ -3628,16 +3640,27 @@ SPECIAL(toggled_invis)
   if (CMD_IS("activate")) {
     skip_spaces(&argument);
     if (!str_cmp(argument, "invis") || isname(argument, GET_OBJ_KEYWORDS(obj))) {
-      if (!obj->obj_flags.bitvector.IsSet(AFF_INVISIBLE)) {
-        AFF_FLAGS(obj->worn_by).SetBit(AFF_INVISIBLE);
-        obj->obj_flags.bitvector.SetBit(AFF_INVISIBLE);
+      if (!obj->obj_flags.bitvector.IsSet(AFF_RUTHENIUM)) {
         send_to_char(ch, "You feel a tiny static charge as the ruthenium polymers in %s power up.\r\n", GET_OBJ_NAME(obj));
         act("The world bends around $n as $e vanishes from sight.", FALSE, ch, 0, 0, TO_ROOM);
-        return TRUE;
+        WAIT_STATE(ch, 0.5 RL_SEC);
+
+        // NPCs around you become alert/alarmed depending on disposition.
+        for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people;
+             viewer;
+             viewer = ch->in_veh ? viewer->next_in_veh : viewer->next_in_room)
+        {
+          if (IS_NPC(viewer)) {
+            process_spotted_invis(viewer, ch);
+          }
+        }
+
+        AFF_FLAGS(obj->worn_by).SetBit(AFF_RUTHENIUM);
+        obj->obj_flags.bitvector.SetBit(AFF_RUTHENIUM);
       } else {
         send_to_char(ch, "%s is already activated.\r\n", capitalize(GET_OBJ_NAME(obj)));
-        return TRUE;
       }
+      return TRUE;
     }
     return FALSE;
   }
@@ -4369,21 +4392,55 @@ SPECIAL(terell_davis)
 SPECIAL(desktop)
 {
   struct obj_data *obj = (struct obj_data *) me;
+  float completion_percentage;
+  bool found_suite = FALSE;
+
   if (!CMD_IS("list") || (!obj->in_veh && !obj->in_room))
     return FALSE;
-  send_to_char(ch, "%s (%d/%d)", obj->text.name, GET_OBJ_VAL(obj, 2) - GET_OBJ_VAL(obj, 3), GET_OBJ_VAL(obj, 2));
+
+  send_to_char(ch, "%s (^g%d^n/^r%d^n)", GET_OBJ_NAME(obj),
+               GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(obj) - GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(obj),
+               GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(obj));
   if (obj->contains) {
     send_to_char(ch, " contains:\r\n");
     for (struct obj_data *soft = obj->contains; soft; soft = soft->next_content) {
-      if (GET_OBJ_TYPE(soft) == ITEM_DESIGN)
-        send_to_char(ch, "%-40s %dMp (%dMp taken) (Design) %2.2f%% Complete\r\n", soft->restring, GET_OBJ_VAL(soft, 6),
-                     GET_OBJ_VAL(soft, 6) + (GET_OBJ_VAL(soft, 6) / 10),
-                     GET_OBJ_TIMER(soft) ? (GET_OBJ_VAL(soft, 5) ?
-                                            ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 5)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100 :
-                                            ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 4)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100) : 0);
-      else
-        send_to_char(ch, "%-40s %dMp (%dMp taken) (Completed) Rating %d\r\n", soft->restring ? soft->restring :
-                     soft->text.name, GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 1));
+      char paddingnumberstr[10], formatstr[512];
+
+      snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 40 + count_color_codes_in_string(GET_OBJ_NAME(soft)));
+      snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s %dMp ");
+      send_to_char(ch, formatstr,
+                   GET_OBJ_NAME(soft),
+                   GET_OBJ_TYPE(soft) == ITEM_DESIGN ? GET_DESIGN_SIZE(soft) : GET_PROGRAM_SIZE(soft));
+
+      if (GET_OBJ_TYPE(soft) == ITEM_DESIGN) {
+        send_to_char(ch, "(^c%dMp^n taken) ", GET_DESIGN_SIZE(soft) + GET_DESIGN_SIZE(soft) / 10);
+
+        if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(soft)) {
+          completion_percentage = (float) (GET_DESIGN_ORIGINAL_TICKS_LEFT(soft) - GET_DESIGN_PROGRAMMING_TICKS_LEFT(soft)) / MAX(1, GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) * 100;
+          send_to_char(ch, "(^CProgramming, ^c%2.2f%%^n complete)", completion_percentage);
+        } else if (GET_DESIGN_COMPLETED(soft)) {
+          send_to_char("(^cProgrammable^n)", ch);
+        } else if (GET_DESIGN_DESIGNING_TICKS_LEFT(soft) == GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) {
+          send_to_char("(^gDesignable^n)", ch);
+        } else {
+          completion_percentage = (float) (GET_DESIGN_ORIGINAL_TICKS_LEFT(soft) - GET_DESIGN_DESIGNING_TICKS_LEFT(soft)) / MAX(1, GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) * 100;
+          send_to_char(ch, "(^GDesigning, ^c%2.2f%%^n complete)", completion_percentage);
+        }
+        send_to_char(ch, " Rating ^c%d^n\r\n", GET_DESIGN_RATING(soft));
+      } else {
+        send_to_char(ch, "(^c%dMp^n taken) (^BCompleted^n) Rating ^c%d^n",
+                     GET_PROGRAM_SIZE(soft),
+                     GET_PROGRAM_RATING(soft));
+
+        if (GET_PROGRAM_TYPE(soft) == SOFT_SUITE) {
+          if (found_suite) {
+            send_to_char(" [^roverridden by above suite^n]", ch);
+          }
+          found_suite = TRUE;
+        }
+
+        send_to_char("\r\n", ch);
+      }
     }
   } else
     send_to_char(ch, " is empty.\r\n");
@@ -4725,6 +4782,7 @@ SPECIAL(painter)
   if (!*argument) {
     snprintf(buf, sizeof(buf), "I'll paint any vehicle for %d nuyen upfront.", PAINTER_COST);
     do_say(painter, buf, 0, 0);
+    send_to_char("(Syntax: ^WPAINT <target>^n)\r\n", ch);
     return TRUE;
   }
   if (world[real_room(painter->in_room->number + 1)].vehicles) {
@@ -4732,9 +4790,9 @@ SPECIAL(painter)
     return TRUE;
   }
   if (!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)))
-    do_say(painter, "What do you want me to paint?", 0, 0);
+    do_say(painter, "I don't see anything like that here.", 0, 0);
   else if (veh->owner != GET_IDNUM(ch))
-    do_say(painter, "Bring me your own ride and I'll paint it.", 0, 0);
+    do_say(painter, "Bring me your OWN ride and I'll paint it.", 0, 0);
   else if (GET_NUYEN(ch) < PAINTER_COST)
     do_say(painter, "You don't have the nuyen for that.", 0, 0);
   else {
@@ -5987,7 +6045,14 @@ SPECIAL(Janis_Meet)
     return FALSE;
   if ((CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto")) && !IS_ASTRAL(ch) && *argument) {
     skip_spaces(&argument);
-    if (!str_cmp(argument, "Blue-eyes sent me")) {
+
+    if (CMD_IS("sayto")) {
+      char sayto_target[MAX_INPUT_LENGTH];
+      one_argument(argument, sayto_target);
+      // Eventually we should verify the sayto target, but for now, we skip it. This block just serves to allow the next to identify the blue-eyes string.
+    }
+
+    if (!str_cmp(argument, "Blue-eyes sent me") || !str_cmp(argument, "blue-eyes sent me")) {
       if (GET_RACE(ch) != RACE_HUMAN || GET_SEX(ch) != SEX_MALE || !(GET_EQ(ch, WEAR_BODY) && GET_OBJ_VNUM(GET_EQ(ch, WEAR_BODY)) == 5032))  {
         do_say(mob, "Who the frag are you!? Oh wait, I fraggin' get it! This is a bust!", 0, 0);
         act("$n turns and starts running towards the road, quickly vanishing into the crowd.", FALSE, mob, 0, 0, TO_ROOM);

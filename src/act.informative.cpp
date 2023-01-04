@@ -101,6 +101,7 @@ extern float get_bulletpants_weight(struct char_data *ch);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern const char *get_level_wholist_color(int level);
 extern bool cyber_is_retractable(struct obj_data *cyber);
+extern bool precipitation_is_snow();
 
 #ifdef USE_PRIVATE_CE_WORLD
   extern void display_secret_info_about_object(struct char_data *ch, struct obj_data *obj);
@@ -136,7 +137,7 @@ const char* blood_messages[] = {
 
 ACMD_DECLARE(do_examine);
 
-void display_room_name(struct char_data *ch);
+void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_veh);
 void display_room_desc(struct char_data *ch);
 
 /* end blood stuff */
@@ -297,7 +298,10 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
           else if (GET_WORKSHOP_UNPACK_TICKS(object))
             strlcat(buf, "^n(Half-Packed) ^g", sizeof(buf));
         }
-        strlcat(buf, object->text.room_desc, sizeof(buf));
+        char replaced_colors[strlen(object->text.room_desc) * 2];
+        replace_substring(object->text.room_desc, buf2, "^n", "^g");
+        replace_substring(buf2, replaced_colors, "^N", "^g");
+        strlcat(buf, replaced_colors, sizeof(buf));
       }
     }
   }
@@ -390,7 +394,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (object->obj_flags.quest_id) {
       if (object->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
         strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
-      else if (!ch_is_blocked_by_quest_protections(ch, object))
+      else if (!ch_is_blocked_by_quest_protections(ch, object, FALSE))
         strlcat(buf, " ^Y(Group Quest)^n", sizeof(buf));
       else
         strlcat(buf, " ^m(Protected)^n", sizeof(buf));
@@ -754,43 +758,50 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
   send_to_char(buf, ch);
 
   // Diagnose mortally-wounded PCs.
-  if (!IS_NPC(i) && phys <= 0) {
-    bool has_metabolic_arrester = FALSE;
+  if (!IS_NPC(i)) {
+    if (phys <= 0) {
+      bool has_metabolic_arrester = FALSE;
 
-    if (AFF_FLAGS(i).IsSet(AFF_STABILIZE)) {
-      send_to_char(ch, "%s'%s stabilized for the moment.\r\n", HSSH(i), !HSSH_SHOULD_PLURAL(i) ? "re" : "s");
-      return;
-    }
+      if (AFF_FLAGS(i).IsSet(AFF_STABILIZE)) {
+        send_to_char(ch, "%s'%s stabilized for the moment.\r\n", HSSH(i), !HSSH_SHOULD_PLURAL(i) ? "re" : "s");
+        return;
+      }
 
-    // Find metabolic arrestor, if they have one.
-    for (struct obj_data *obj = i->bioware; obj; obj = obj->next_content) {
-      if (GET_BIOWARE_TYPE(obj) == BIO_METABOLICARRESTER) {
-        has_metabolic_arrester = TRUE;
-        break;
+      // Find metabolic arrestor, if they have one.
+      for (struct obj_data *obj = i->bioware; obj; obj = obj->next_content) {
+        if (GET_BIOWARE_TYPE(obj) == BIO_METABOLICARRESTER) {
+          has_metabolic_arrester = TRUE;
+          break;
+        }
+      }
+
+      int min_body = -GET_BOD(i) + (GET_BIOOVER(i) > 0 ? GET_BIOOVER(i) : 0);
+      int boxes_left = (int)(GET_PHYSICAL(i) / 100) - min_body - 1;
+
+      // Print info. Time is a best guess on my part, it seems to tick down every MUD hour?
+      if (boxes_left <= 0) {
+        send_to_char(ch, "%s %s near death! You estimate %s %s only %d minutes left to live.\r\n",
+                     CAP(HSSH(i)),
+                     !HSSH_SHOULD_PLURAL(i) ? "are" : "is",
+                     HSSH(i),
+                     !HSSH_SHOULD_PLURAL(i) ? "have" : "has",
+                     2 * GET_PC_SALVATION_TICKS(i) * (has_metabolic_arrester ? 5 : 1));
+      } else {
+        send_to_char(ch, "You estimate %s %s %d minutes left to live.\r\n",
+                     HSSH(i),
+                     !HSSH_SHOULD_PLURAL(i) ? "have" : "has",
+                     2 * (boxes_left + GET_PC_SALVATION_TICKS(i)) * (has_metabolic_arrester ? 5 : 1));
       }
     }
-
-    int min_body = -GET_BOD(i) + (GET_BIOOVER(i) > 0 ? GET_BIOOVER(i) : 0);
-    int boxes_left = (int)(GET_PHYSICAL(i) / 100) - min_body - 1;
-
-    // Print info. Time is a best guess on my part, it seems to tick down every MUD hour?
-    if (boxes_left <= 0) {
-      send_to_char(ch, "%s %s near death! You estimate %s %s only %d minutes left to live.\r\n",
-                   CAP(HSSH(i)),
-                   !HSSH_SHOULD_PLURAL(i) ? "are" : "is",
-                   HSSH(i),
-                   !HSSH_SHOULD_PLURAL(i) ? "have" : "has",
-                   2 * GET_PC_SALVATION_TICKS(i) * (has_metabolic_arrester ? 5 : 1));
-    } else {
-      send_to_char(ch, "You estimate %s %s %d minutes left to live.\r\n",
-                   HSSH(i),
-                   !HSSH_SHOULD_PLURAL(i) ? "have" : "has",
-                   2 * (boxes_left + GET_PC_SALVATION_TICKS(i)) * (has_metabolic_arrester ? 5 : 1));
+    if (LAST_HEAL(i) > 0) {
+      send_to_char(ch, "%s%s received recent treatment, so further treatments will be more difficult (TN +%d).",
+                       CAP(HSSH(i)),
+                       !HSSH_SHOULD_PLURAL(i) ? "'ve'" : "'s",
+                       MIN(LAST_HEAL(i) * 3/2, 8));
     }
   }
 }
 
-#define RENDER_PRIVILEGED TRUE
 const char *render_ware_for_viewer(struct obj_data *ware, bool privileged, bool force_full_name) {
   static char render_buf[1000];
 
@@ -1147,7 +1158,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
         strlcat(buf, "^Y(Quest)^n ", sizeof(buf));
       } else if (!ch_is_blocked_by_quest_protections(ch, i)) {
-        strlcat(buf, " ^Y(Group Quest)^n", sizeof(buf));
+        strlcat(buf, "^Y(Group Quest)^n ", sizeof(buf));
       } else {
         strlcat(buf, "^m(Protected)^n ", sizeof(buf));
       }
@@ -1158,7 +1169,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     }
 
     // Make sure they always display flags that are relevant to the player.
-    if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
+    if (IS_AFFECTED(i, AFF_RUTHENIUM) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
       strlcat(buf, "(invisible) ", sizeof(buf));
 
     if (MOB_FLAGGED(i, MOB_FLAMEAURA) || affected_by_spell(i, SPELL_FLAME_AURA))
@@ -1353,7 +1364,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " (AFK)", sizeof(buf));
   if (PLR_FLAGGED(i, PLR_SWITCHED))
     strlcat(buf, " (switched)", sizeof(buf));
-  if (IS_AFFECTED(i, AFF_INVISIBLE) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
+  if (IS_AFFECTED(i, AFF_RUTHENIUM) || IS_AFFECTED(i, AFF_IMP_INVIS) || IS_AFFECTED(i, AFF_SPELLINVIS) || IS_AFFECTED(i, AFF_SPELLIMPINVIS))
     strlcat(buf, " (invisible)", sizeof(buf));
   if (!IS_NPC(i)) {
     // Always display the Staff identifier.
@@ -1779,11 +1790,11 @@ void update_blood(void)
       if (!ROOM_FLAGGED(&world[i], ROOM_INDOORS)) {
         if (weather_info.sky == SKY_RAINING) {
           world[i].blood--;
-          snprintf(buf, sizeof(buf), "%s the blood staining this area washes away in the rain.", world[i].blood > 3 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
+          snprintf(buf, sizeof(buf), "%s the blood staining this area washes away with the precipitation.", world[i].blood > 3 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
           send_to_room(buf, &world[i]);
         } else if (weather_info.sky == SKY_LIGHTNING) {
           world[i].blood -= 2;
-          snprintf(buf, sizeof(buf), "%s the blood staining this area washes away in the pounding rain.", world[i].blood > 4 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
+          snprintf(buf, sizeof(buf), "%s the blood staining this area washes away with the heavy precipitation.", world[i].blood > 4 ? "Some of" : (world[i].blood > 1 ? "Most of" : "The last of"));
           send_to_room(buf, &world[i]);
         }
       }
@@ -1846,15 +1857,7 @@ void look_in_veh(struct char_data * ch)
       CCHAR = "^y";
       list_veh_to_char(veh->in_veh->carriedvehs, ch);
     } else {
-      send_to_char(ch, "\r\n^CAround you is %s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(veh->in_room),
-                   ROOM_FLAGGED(veh->in_room, ROOM_GARAGE) ? " (Garage)" : "",
-                   ROOM_FLAGGED(veh->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(veh->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
-                   GET_APARTMENT(veh->in_room) ? " (Apartment)" : "",
-                   ROOM_FLAGGED(veh->in_room, ROOM_STERILE) ? " (Sterile)" : "",
-                   ROOM_FLAGGED(veh->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
-                   IS_WATER(veh->in_room) ? " ^B(Flooded)^n" : "",
-                   veh->in_room->matrix && real_host(veh->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
-                   ROOM_FLAGGED(veh->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
+      display_room_name(ch, veh->in_room, TRUE);
 
       if (get_speed(veh) <= 200) {
         send_to_char(get_room_desc(veh->in_room), ch);
@@ -1907,7 +1910,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   }
 
   // Room title.
-  display_room_name(ch);
+  display_room_name(ch, ch->in_room, FALSE);
 
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
   if (!(ch->in_veh && get_speed(ch->in_veh) > 200)) {
@@ -2046,41 +2049,82 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     }
 
     if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-    // Display weather info in the room.
-    if (IS_WATER(ch->in_room)) {
-      if (weather_info.sky == SKY_RAINING) {
-        send_to_char(ch, "^cThe rain gets in your eyes as you swim.^n\r\n");
-      } else if (weather_info.sky == SKY_LIGHTNING) {
-        send_to_char(ch, "^cThe water is made treacherous by the pounding rain.^n\r\n");
-      }
-    } else {
-      if (weather_info.sky == SKY_RAINING) {
-        if (ch->in_veh) {
-          if (ch->in_veh->type == VEH_BIKE) {
-            send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
+      bool should_be_snowy = precipitation_is_snow();
+
+      // Display weather info in the room.
+      if (IS_WATER(ch->in_room)) {
+        if (weather_info.sky == SKY_RAINING) {
+          if (should_be_snowy) {
+            send_to_char(ch, "^WThe snow swirls about you as you swim.^n\r\n");
           } else {
-            send_to_char(ch, "^cRain glides down your windows, wipers brushing it clear with patient motion.^n\r\n");
+            send_to_char(ch, "^cThe rain gets in your eyes as you swim.^n\r\n");
           }
-        } else {
-          send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
-        }
-      }
-      else if (weather_info.sky == SKY_LIGHTNING) {
-        if (ch->in_veh) {
-          if (ch->in_veh->type == VEH_BIKE) {
-            send_to_char(ch, "^cHeavy rain pounds down around you, running in rivulets off of your bike.^n\r\n");
+        } else if (weather_info.sky == SKY_LIGHTNING) {
+          if (should_be_snowy) {
+            send_to_char(ch, "^WHeavy snowfall makes the water treacherous.^n\r\n");
           } else {
-            send_to_char(ch, "^cHeavy rain pounds against your windows, making it hard to see.^n\r\n");
+            send_to_char(ch, "^cThe water is made treacherous by the pounding rain.^n\r\n");
           }
-        } else {
-          send_to_char(ch, "^cYou struggle to see through the heavy rain that pounds down from the sky.^n\r\n");
         }
-      }
-      else if (weather_info.lastrain < 5) {
-        send_to_char(ch, "^cThe ground is wet, it must have rained recently.^n\r\n");
+      } else {
+        if (weather_info.sky == SKY_RAINING) {
+          if (ch->in_veh) {
+            if (ch->in_veh->type == VEH_BIKE) {
+              if (should_be_snowy) {
+                send_to_char(ch, "^WSnowflakes tumble and fall about you bike.^n\r\n");
+              } else {
+                send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
+              }
+            } else {
+              if (should_be_snowy) {
+                send_to_char(ch, "^WSnowflakes linger briefly on your windows.^n\r\n");
+              } else {
+                send_to_char(ch, "^cRain glides down your windows, wipers brushing them clear with patient motion.^n\r\n");
+              }
+            }
+          } else {
+            if (should_be_snowy) {
+              send_to_char(ch, "^WSnow drifts from the sky.^n\r\n");
+            } else {
+              send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
+            }
+          }
+        }
+        else if (weather_info.sky == SKY_LIGHTNING) {
+          if (ch->in_veh) {
+            if (ch->in_veh->type == VEH_BIKE) {
+              if (should_be_snowy) {
+                send_to_char(ch, "^WHeavy snow whips roughly around you, clinging to your bike.^n\r\n");
+              } else {
+                send_to_char(ch, "^cHeavy rain pounds down around you, running in rivulets off of your bike.^n\r\n");
+              }
+            } else {
+              if (should_be_snowy) {
+                send_to_char(ch, "^WHeavy snow flurries against your windows, making it hard to see.^n\r\n");
+              } else {
+                send_to_char(ch, "^cHeavy rain pounds against your windows, making it hard to see.^n\r\n");
+              }
+            }
+          } else {
+            if (should_be_snowy) {
+              send_to_char(ch, "^WYou struggle to see through the heavy snowfall.^n\r\n");
+            } else {
+              send_to_char(ch, "^cYou struggle to see through the heavy rain that pounds down from the sky.^n\r\n");
+            }
+          }
+        }
+        else if (weather_info.lastrain < 5) {
+          if (should_be_snowy) {
+            send_to_char(ch, "^WSnow has accumulated in small drifts here and there.^n\r\n");
+          } else {
+            send_to_char(ch, "^cThe ground is wet, it must have rained recently.^n\r\n");
+          }
+        }
+        else if (weather_info.lastrain < 10 && should_be_snowy) {
+          send_to_char(ch, "^WSlushy snow clings stubbornly in the shadows.^n\r\n");
+        }
       }
     }
-  }
   }
 
   if (ch->in_room->poltergeist[0] > 0)
@@ -2277,20 +2321,22 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
                    get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj)));
       return;
     } else if (GET_OBJ_TYPE(obj) == ITEM_WORN || GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
+      send_to_char(GET_OBJ_NAME(obj), ch);
+      switch (bits) {
+        case FIND_OBJ_INV:
+          send_to_char(" (carried): \r\n", ch);
+          break;
+        case FIND_OBJ_ROOM:
+          send_to_char(" (here): \r\n", ch);
+          break;
+        case FIND_OBJ_EQUIP:
+          send_to_char(" (used): \r\n", ch);
+          break;
+      }
       if (obj->contains) {
-        send_to_char(GET_OBJ_NAME(obj), ch);
-        switch (bits) {
-          case FIND_OBJ_INV:
-            send_to_char(" (carried): \r\n", ch);
-            break;
-          case FIND_OBJ_ROOM:
-            send_to_char(" (here): \r\n", ch);
-            break;
-          case FIND_OBJ_EQUIP:
-            send_to_char(" (used): \r\n", ch);
-            break;
-        }
         list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
+      } else {
+        send_to_char("  Nothing.\r\n", ch);
       }
     } else if (GET_OBJ_TYPE(obj) == ITEM_CONTAINER || GET_OBJ_TYPE(obj) == ITEM_HOLSTER ||
                GET_OBJ_TYPE(obj) == ITEM_QUIVER || GET_OBJ_TYPE(obj) == ITEM_KEYRING) {
@@ -3683,6 +3729,15 @@ ACMD(do_examine)
       do_probe_object(ch, tmp_object);
     } else {
       send_to_char("You're not wearing or carrying any such object, and there are no vehicles like that here.\r\n", ch);
+
+      if (ch->in_room) {
+        for (struct char_data *tmp_ch = ch->in_room->people; tmp_ch; tmp_ch = tmp_ch->next_in_room) {
+          if (IS_NPC(tmp_ch) && MOB_HAS_SPEC(tmp_ch, shop_keeper)) {
+            send_to_char("(To probe a shop's item, use the item's list index, like ^WPROBE #1^n.)\r\n", ch);
+            break;
+          }
+        }
+      }
     }
     return;
   } else {
@@ -3977,7 +4032,7 @@ const char *get_position_string(struct char_data *ch) {
       strlcpy(position_string, "DEAD!", sizeof(position_string));
       break;
     case POS_MORTALLYW:
-      snprintf(position_string, sizeof(position_string), "^rbleeding out! (^R%d^r ticks to death)^n", GET_PC_SALVATION_TICKS(ch));
+      snprintf(position_string, sizeof(position_string), "^rbleeding out^n! (^R%d^r ticks to death^n)^n ", GET_PC_SALVATION_TICKS(ch));
       break;
     case POS_STUNNED:
       strlcpy(position_string, "stunned!  You can't move!", sizeof(position_string));
@@ -4244,7 +4299,7 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
 
   strlcat(buf2, get_vision_string(ch), sizeof(buf2));
 
-  if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
+  if (IS_AFFECTED(ch, AFF_RUTHENIUM) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
     strlcat(buf2, "You are invisible.\r\n", sizeof(buf2));
 
 #ifdef ENABLE_HUNGER
@@ -4530,7 +4585,7 @@ ACMD(do_score)
     }
 
     static char invisibility_string[50];
-    if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
+    if (IS_AFFECTED(ch, AFF_RUTHENIUM) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
       strlcpy(invisibility_string, "You are invisible.", sizeof(invisibility_string));
     else
       strlcpy(invisibility_string, "", sizeof(invisibility_string));
@@ -4881,21 +4936,34 @@ ACMD(do_time)
 
 ACMD(do_weather)
 {
-  static const char *sky_look[] =
-  {
-    "cloudless",
-    "cloudy",
-    "rainy",
-    "lit by flashes of lightning"
-  };
+  FAILURE_CASE(!OUTSIDE(ch), "You're pretty sure the ceiling won't start raining anytime soon.\r\n");
 
-  if (OUTSIDE(ch)) {
-    snprintf(buf, sizeof(buf), "The sky is %s and %s.\r\n", sky_look[weather_info.sky],
-            (weather_info.change >= 0 ? "you feel a warm wind from south" :
-             "your foot tells you bad weather is due"));
-    send_to_char(buf, ch);
-  } else
-    send_to_char("You have no feeling about the weather at all.\r\n", ch);
+  if (precipitation_is_snow()) {
+    static const char *sky_look[] =
+    {
+      "cloudless",
+      "cloudy",
+      "snowy",
+      "obscured by heavy snow"
+    };
+
+    send_to_char(ch, "The sky is %s and %s.\r\n",
+                 sky_look[weather_info.sky],
+                 (weather_info.change >= 0 ? "you feel a cool breeze from north" : "the cold seeps into your bones"));
+  }
+  else {
+    static const char *sky_look[] =
+    {
+      "cloudless",
+      "cloudy",
+      "rainy",
+      "lit by flashes of lightning"
+    };
+
+    send_to_char(ch, "The sky is %s and %s.\r\n",
+                 sky_look[weather_info.sky],
+                 (weather_info.change >= 0 ? "you feel a warm wind from south" : "your foot tells you bad weather is due"));
+  }
 }
 
 
@@ -5312,6 +5380,10 @@ ACMD(do_who)
       {
         snprintf(buf2, sizeof(buf2), " ^G(^g%s^G)^n", GET_PGROUP(tch)->get_alias());
         strlcat(buf1, buf2, sizeof(buf1));
+      }
+
+      if (GET_TKE(tch) <= NEWBIE_KARMA_THRESHOLD && !IS_SENATOR(tch)) {
+        strlcat(buf1, " ^y(Newbie)^n", sizeof(buf1));
       }
 
       if (AFF_FLAGS(tch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT))
@@ -6245,13 +6317,116 @@ ACMD(do_commands)
 
 // TODO: rscan, which is like scan but just shows room names
 
+bool char_passed_moving_vehicle_perception_test(struct char_data *ch, struct veh_data *in_veh) {
+  if (!in_veh || in_veh->cspeed <= SPEED_IDLE)
+    return TRUE;
+
+  if (get_speed(in_veh) >= 200) {
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1);
+  }
+  else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1);
+  }
+  else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1);
+  }
+
+  return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1);
+}
+
+const char *render_room_for_scan(struct char_data *ch, struct room_data *room, struct veh_data *in_veh) {
+  static char results[1000];
+  results[0] = '\0';
+
+  // If you can't see into the room, skip.
+  if (!LIGHT_OK_ROOM_SPECIFIED(ch, room)) {
+    return NULL;
+  }
+
+  // TODO: Add logic to hide ultrasound-visible-only characters in adjacent silent rooms. Not a big urgency unless/until PvP becomes more of a thing.
+
+  bool ch_only_sees_with_astral = !LIGHT_OK_ROOM_SPECIFIED(ch, room, FALSE);
+
+  // First, people.
+  for (struct char_data *list = room->people; list; list = list->next_in_room) {
+    // Always skip invisible people.
+    if (!CAN_SEE(ch, list))
+      continue;
+
+    // Skip inanimates if you only see with astral.
+    if (ch_only_sees_with_astral && MOB_FLAGGED(list, MOB_INANIMATE))
+      continue;
+
+    // Moving vehicles have a chance to cause you to miss things on scan.
+    if (!char_passed_moving_vehicle_perception_test(ch, in_veh))
+      continue;
+
+    // You see the person-- render them.
+    {
+      // First, fill out the prepended flags.
+      char flag_line[256] = { '\0' };
+
+      if (GET_MOB_QUEST_CHAR_ID(list)) {
+        if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
+          strlcat(flag_line, "(quest) ", sizeof(flag_line));
+        } else if (!ch_is_blocked_by_quest_protections(ch, list)) {
+          strlcat(buf, "(group quest) ", sizeof(buf));
+        } else {
+          strlcat(flag_line, "(protected) ", sizeof(flag_line));
+        }
+      }
+
+      if (IS_AFFECTED(list, AFF_RUTHENIUM) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
+        strlcat(flag_line, "(invisible) ", sizeof(flag_line));
+      }
+
+      if (SEES_ASTRAL(ch) && IS_ASTRAL(list)) {
+          strlcat(flag_line, "(astral) ", sizeof(flag_line));
+      }
+
+      // Next, render their name, replacing it with their memorized name if you have that.
+      char their_name[500];
+      strlcpy(their_name, GET_NAME(list), sizeof(their_name));
+      if (!IS_NPC(list)) {
+        struct remem *mem = safe_found_mem(ch, list);
+        if (mem)
+          strlcpy(their_name, CAP(mem->mem), sizeof(their_name));
+        else if (IS_SENATOR(ch))
+          strlcpy(their_name, GET_CHAR_NAME(list), sizeof(their_name));
+      }
+
+      // Finally, append it to the output buf.
+      snprintf(ENDOF(results), sizeof(results) - strlen(buf1), "  %s%s^n%s\r\n",
+               flag_line,
+               their_name,
+               FIGHTING(list) == ch ? " ^R(fighting you!)^n" : (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD)) ? " ^r(alarmed)^n" : ""));
+    }
+  }
+
+  // Next, vehicles.
+  for (struct veh_data *veh = room->vehicles; veh; veh = veh->next_veh) {
+    if (!char_passed_moving_vehicle_perception_test(ch, in_veh))
+      continue;
+
+    snprintf(ENDOF(results), sizeof(results) - strlen(results), "  %s^n (%s)\r\n", GET_VEH_NAME(veh), (get_speed(veh) ? "Moving" : "Stationary"));
+  }
+
+  // Player belongings.
+  for (struct obj_data *obj = room->contents; obj; obj = obj->next_content) {
+    if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "  %s^n\r\n", GET_OBJ_NAME(obj));
+    }
+  }
+
+  return results;
+}
+
 ACMD(do_scan)
 {
-  struct char_data *list;
-  struct veh_data *veh, *in_veh = NULL;
-  bool specific = FALSE, infra, lowlight, onethere, anythere = FALSE, done = FALSE;
-  int i = 0, j, dist = 3;
-  struct room_data *was_in = NULL, *x = NULL;
+  struct veh_data *in_veh = NULL;
+  bool specific = FALSE;
+  int i = 0;
+  struct room_data *x = NULL;
 
   argument = any_one_arg(argument, buf);
 
@@ -6259,12 +6434,14 @@ ACMD(do_scan)
     if (is_abbrev(buf, "south")) {
       i = SCMD_SOUTH;
       specific = TRUE;
-    } else
-      for (;!specific && (i < NUM_OF_DIRS); ++i) {
+    } else {
+      for (; !specific && (i < NUM_OF_DIRS); ++i) {
         if (is_abbrev(buf, dirs[i]))
           specific = TRUE;
       }
+    }
   }
+
   if (ch->in_veh || ch->char_specials.rigging) {
     RIG_VEH(ch, in_veh);
     if (ch->in_room)
@@ -6272,108 +6449,28 @@ ACMD(do_scan)
     ch->in_room = in_veh->in_room;
   }
 
-  infra = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_THERMOGRAPHIC);
-  lowlight = PRF_FLAGGED(ch, PRF_HOLYLIGHT) || has_vision(ch, VISION_LOWLIGHT);
-
-  if (!infra && SEES_ASTRAL(ch))
-    infra = TRUE;
+  // Scanning all rooms:
   if (!specific) {
+    bool anythere = FALSE;
     struct room_data *in_room = get_ch_in_room(ch);
+
     for (i = 0; i < NUM_OF_DIRS; ++i) {
-      if (CAN_GO(ch, i) && !IS_SET(EXIT(ch, i)->exit_info, EX_HIDDEN)) {
-        if (EXIT(ch, i)->to_room == in_room) {
-          send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
-          continue;
-        }
+      if (!CAN_GO(ch, i) || IS_SET(EXIT(ch, i)->exit_info, EX_HIDDEN))
+        continue;
 
-        onethere = FALSE;
-        if (!((!infra && light_level(EXIT(ch, i)->to_room) == LIGHT_FULLDARK) ||
-              ((!infra || !lowlight) && (light_level(EXIT(ch, i)->to_room) == LIGHT_MINLIGHT || light_level(EXIT(ch, i)->to_room) == LIGHT_PARTLIGHT)))) {
-          strlcpy(buf1, "", sizeof(buf1));
-          for (list = EXIT(ch, i)->to_room->people; list; list = list->next_in_room)
-            if (CAN_SEE(ch, list)) {
-              if (in_veh) {
-                if (in_veh->cspeed > SPEED_IDLE) {
-                  if (get_speed(in_veh) >= 200) {
-                    if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1)
-                      continue;
-                    else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
-                      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1)
-                        continue;
-                      else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
-                        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1)
-                          continue;
-                        else
-                          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1)
-                            continue;
-                      }
-                    }
-                  }
-                }
+      if (EXIT(ch, i)->to_room == in_room) {
+        send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
+        continue;
+      }
 
-              }
+      const char *result = render_room_for_scan(ch, EXIT(ch, i)->to_room, in_veh);
 
-              char desc_line[200];
-              strlcpy(desc_line, "", sizeof(desc_line));
-
-              if (GET_MOB_QUEST_CHAR_ID(list)) {
-                if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
-                  strlcat(desc_line, "(quest) ", sizeof(desc_line));
-                } else if (!ch_is_blocked_by_quest_protections(ch, list)) {
-                  strlcat(buf, " (group quest)", sizeof(buf));
-                } else {
-                  strlcat(desc_line, "(protected) ", sizeof(desc_line));
-                }
-              }
-
-              if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
-                strlcat(desc_line, "(invisible) ", sizeof(desc_line));
-              }
-
-              if (SEES_ASTRAL(ch) && IS_ASTRAL(list)) {
-                  strlcat(desc_line, "(astral) ", sizeof(desc_line));
-              }
-
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n",
-                       desc_line,
-                       GET_NAME(list),
-                       FIGHTING(list) == ch ? " ^R(fighting you!)^n" : (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD)) ? " ^r(alarmed)^n" : ""));
-
-              onethere = TRUE;
-              anythere = TRUE;
-            }
-          for (veh = EXIT(ch, i)->to_room->vehicles; veh; veh = veh->next_veh) {
-            if (in_veh) {
-              if (in_veh->cspeed > SPEED_IDLE) {
-                if (get_speed(in_veh) >= 200) {
-                  if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1)
-                    continue;
-                  else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
-                    if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1)
-                      continue;
-                    else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
-                      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1)
-                        continue;
-                      else
-                        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1)
-                          continue;
-                    }
-                  }
-                }
-              }
-            }
-            snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s (%s)\r\n", GET_VEH_NAME(veh), (get_speed(veh) ? "Moving" : "Stationary"));
-            onethere = TRUE;
-            anythere = TRUE;
-          }
-        }
-        if (onethere) {
-          snprintf(buf2, sizeof(buf2), "%s %s:\r\n%s\r\n", dirs[i], dist_name[0], buf1);
-          CAP(buf2);
-          send_to_char(buf2, ch);
-        }
+      if (result && *result) {
+        anythere = TRUE;
+        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[i]), dist_name[0], result);
       }
     }
+
     if (!anythere) {
       send_to_char("You don't seem to see anyone in the surrounding areas.\r\n", ch);
       if (in_veh) {
@@ -6381,121 +6478,43 @@ ACMD(do_scan)
       }
       return;
     }
-  } else {
+  }
+  else {
     --i;
 
-    dist = find_sight(ch);
+    bool anythere = FALSE;
 
-    if (CAN_GO(ch, i)) {
-      was_in = ch->in_room;
-      anythere = FALSE;
-      for (j = 0;!done && (j < dist); ++j) {
-        onethere = FALSE;
-        if (CAN_GO(ch, i)) {
-          strlcpy(buf1, "", sizeof(buf1));
-          for (list = EXIT(ch, i)->to_room->people; list; list = list->next_in_room)
-            if (CAN_SEE(ch, list)) {
-              if (in_veh) {
-                if (in_veh->cspeed > SPEED_IDLE) {
-                  if (get_speed(in_veh) >= 200) {
-                    if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1)
-                      continue;
-                    else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
-                      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1)
-                        continue;
-                      else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
-                        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1)
-                          continue;
-                        else
-                          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1)
-                            continue;
-                      }
-                    }
-                  }
-                }
-              }
-              char desc_line[200];
-              strlcpy(desc_line, "", sizeof(desc_line));
+    // We move them as part of this, so store their current room so we can snap them back.
+    struct room_data *was_in_room = ch->in_room;
 
-              if (GET_MOB_QUEST_CHAR_ID(list)) {
-                if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
-                  strlcat(desc_line, "(quest) ", sizeof(desc_line));
-                } else if (!ch_is_blocked_by_quest_protections(ch, list)) {
-                  strlcat(buf, " (group quest)", sizeof(buf));
-                } else {
-                  strlcat(desc_line, "(protected) ", sizeof(desc_line));
-                }
-              }
-
-              if (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD))) {
-                strlcat(desc_line, "^r(alarmed)^n ", sizeof(desc_line));
-              }
-
-              if (IS_AFFECTED(list, AFF_INVISIBLE) || IS_AFFECTED(list, AFF_IMP_INVIS) || IS_AFFECTED(list, AFF_SPELLINVIS) || IS_AFFECTED(list, AFF_SPELLIMPINVIS)) {
-                strlcat(desc_line, "(invisible) ", sizeof(desc_line));
-              }
-
-              if (SEES_ASTRAL(ch) && IS_ASTRAL(list)) {
-                  strlcat(desc_line, "(astral) ", sizeof(desc_line));
-              }
-
-              snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s%s%s\r\n", desc_line, GET_NAME(list), FIGHTING(list) == ch ? " (fighting you!)" : "");
-              onethere = TRUE;
-              anythere = TRUE;
-            }
-
-          for (veh = EXIT(ch, i)->to_room->vehicles; veh; veh = veh->next_veh) {
-            if (in_veh) {
-              if (in_veh->cspeed > SPEED_IDLE) {
-                if (get_speed(in_veh) >= 200) {
-                  if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1)
-                    continue;
-                  else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
-                    if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1)
-                      continue;
-                    else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
-                      if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1)
-                        continue;
-                      else
-                        if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1)
-                          continue;
-                    }
-                  }
-                }
-              }
-            }
-            snprintf(ENDOF(buf1), sizeof(buf1) - strlen(buf1), "  %s (%s)\r\n", GET_VEH_NAME(veh), (get_speed(veh) ? "Moving" : "Stationary"));
-            onethere = TRUE;
-            anythere = TRUE;
-          }
-
-          ch->in_room = EXIT(ch, i)->to_room;
-
-          if (onethere) {
-            snprintf(buf2, sizeof(buf2), "%s %s:\r\n%s\r\n", dirs[i], dist_name[j], buf1);
-            CAP(buf2);
-            send_to_char(buf2, ch);
-          }
-        } else
-          done = TRUE;
-      }
-
-      ch->in_room = was_in;
-
-      if (!anythere) {
+    for (int dist = 1; dist <= find_sight(ch); dist++) {
+      if (!CAN_GO(ch, i) || IS_SET(EXIT(ch, i)->exit_info, EX_HIDDEN)) {
         if (in_veh) {
           ch->in_room = x;
+        } else {
+          ch->in_room = was_in_room;
         }
-        send_to_char("You don't seem to see anyone in that direction.\r\n", ch);
+        if (dist == 1)
+          send_to_char("There is no exit in that direction.\r\n", ch);
         return;
       }
-    } else {
-      if (in_veh) {
-        ch->in_room = x;
+
+      ch->in_room = EXIT(ch, i)->to_room;
+
+      const char *result = render_room_for_scan(ch, ch->in_room, in_veh);
+
+      if (result && *result) {
+        anythere = TRUE;
+        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[i]), dist_name[dist - 1], result);
       }
-      send_to_char("There is no exit in that direction.\r\n", ch);
-      return;
     }
+
+    if (!anythere) {
+      send_to_char("You don't seem to see anyone in that direction.\r\n", ch);
+    }
+
+    // Perform PC snap back.
+    ch->in_room = was_in_room;
   }
   if (in_veh) {
     ch->in_room = x;
@@ -6575,6 +6594,7 @@ ACMD(do_status)
 
   if (!IS_NPC(targ) && GET_POS(targ) == POS_MORTALLYW) {
     send_to_char(ch, "  ^RBleeding Out ^r(^R%d^r ticks left until death)^n\r\n", GET_PC_SALVATION_TICKS(targ));
+    printed = TRUE;
   }
 
   if (targ->real_abils.esshole) {
@@ -6605,12 +6625,15 @@ ACMD(do_status)
   }
   if (GET_TEMP_QUI_LOSS(targ)) {
     send_to_char(ch, "  Temporary Quickness Loss: %d\r\n", GET_TEMP_QUI_LOSS(targ));
+    printed = TRUE;
   }
   if (GET_TEMP_MAGIC_LOSS(targ)) {
     send_to_char(ch, "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(targ));
+    printed = TRUE;
   }
   if (GET_TEMP_ESSLOSS(targ)) {
     send_to_char(ch, "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(targ));
+    printed = TRUE;
   }
   if (GET_REACH(targ) && !(AFF_FLAGGED(targ, AFF_CLOSECOMBAT))) {
     send_to_char(ch, "  Extra Reach (%dm)\r\n", GET_REACH(targ));
@@ -6620,14 +6643,20 @@ ACMD(do_status)
     send_to_char(ch, "  Close Combat\r\n");
     printed = TRUE;
   }
+  if (AFF_FLAGGED(targ, AFF_RUTHENIUM)) {
+    send_to_char(ch, "  Ruthenium\r\n");
+    printed = TRUE;
+  }
   if (IS_PERCEIVING(targ)) {
     send_to_char("  Astral Perception (^yincreased TNs^n)\r\n", ch);
+    printed = TRUE;
   }
 
   {
     int conceal_rating = affected_by_power(targ, CONCEAL);
     if (conceal_rating) {
       send_to_char(ch, "  Spirit Concealment (%d)\r\n", conceal_rating);
+      printed = TRUE;
     }
   }
 
@@ -7264,32 +7293,41 @@ const char *get_command_hints_for_obj(struct obj_data *obj) {
   return hint_string;
 }
 
-void display_room_name(struct char_data *ch) {
-  if (!ch || !ch->in_room) {
+void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_veh) {
+  if (!ch || !in_room) {
     mudlog("SYSERR: Received invalid character to display_room_name()!", ch, LOG_SYSLOG, TRUE);
     return;
   }
 
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-    send_to_char(ch, "^C[%5ld] %s [ %s ]", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
+    send_to_char(ch, "^C[%5ld] %s^n [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
     if (GET_APARTMENT(ch->in_room)) {
       send_to_char(ch, " ^c(%sApartment - %s^c%s)",
                    GET_APARTMENT(ch->in_room)->get_paid_until() > 0 ? "Leased " : "",
                    GET_APARTMENT(ch->in_room)->get_full_name(),
                    GET_APARTMENT_DECORATION(ch->in_room) ? " [decorated]" : "");
     }
-    send_to_char("^n\r\n", ch);
   } else {
-    send_to_char(ch, "^C%s^n%s%s%s%s%s%s%s\r\n", GET_ROOM_NAME(ch->in_room),
-                 ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) ? " (Garage)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_CORPSE_SAVE_HACK) ? " (Storage)" : "",
-                 GET_APARTMENT(ch->in_room) ? " (Apartment)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_STERILE) ? " (Sterile)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_ARENA) ? " ^y(Arena)^n" : "",
-                 IS_WATER(ch->in_room) ? " ^B(Flooded)^n" : "",
-                 ch->in_room->matrix && real_host(ch->in_room->matrix) >= 1 ? " (Jackpoint)" : "",
-                 ROOM_FLAGGED(ch->in_room, ROOM_ENCOURAGE_CONGREGATION) ? " ^W(Socialization Bonus)^n" : "");
+    #define APPEND_ROOM_FLAG(check, flagname) { if ((check)) {strlcat(room_title_buf, flagname, sizeof(room_title_buf));} }
+    char room_title_buf[1000];
+    snprintf(room_title_buf, sizeof(room_title_buf), "^C%s%s^n", in_veh ? "Around you is " : "", GET_ROOM_NAME(in_room));
+
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_GARAGE), " (Garage)");
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STORAGE) && !ROOM_FLAGGED(in_room, ROOM_CORPSE_SAVE_HACK), " (Storage)");
+    if (GET_APARTMENT(in_room)) {
+      snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s-Class Apartment)",
+               lifestyles[GET_APARTMENT(in_room)->get_lifestyle()].name);
+    }
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ARENA), " ^y(Arena)^n");
+    APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
+    APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ENCOURAGE_CONGREGATION), " ^W(Socialization Bonus)^n");
+    strlcat(room_title_buf, "\r\n", sizeof(room_title_buf));
+
+    send_to_char(room_title_buf, ch);
+    #undef APPEND_ROOM_FLAG
   }
 }
 

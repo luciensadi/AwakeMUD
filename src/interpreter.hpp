@@ -38,7 +38,7 @@ const int RETURN_HELP = 127;
 #define IS_MOVE(cmdnum) (cmdnum >= 1 && cmdnum <= 6)
 
 
-void    command_interpreter(struct char_data *ch, char *argument, char *tchname);
+void    command_interpreter(struct char_data *ch, char *argument, const char *tchname);
 int     search_block(const char *arg, const char **list, bool exact);
 char    lower( char c );
 char    *one_argument(char *argument, char *first_arg, bool preserve_case=0);

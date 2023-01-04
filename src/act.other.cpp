@@ -36,6 +36,7 @@
 #include "newmail.hpp"
 #include "ignore_system.hpp"
 #include "newhouse.hpp"
+#include "quest.hpp"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -342,7 +343,7 @@ ACMD(do_visible)
 
   bool has_become_visible = FALSE;
 
-  if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS)) {
+  if (affected_by_spell(ch, SPELL_INVIS) || affected_by_spell(ch, SPELL_IMP_INVIS)) {
     appear(ch);
     send_to_char("You break the spell of invisibility.\r\n", ch);
     has_become_visible = TRUE;
@@ -501,6 +502,10 @@ ACMD(do_ungroup)
     snprintf(buf2, sizeof(buf2), "%s has disbanded the group.\r\n", GET_NAME(ch));
     for (f = ch->followers; f; f = next_fol) {
       next_fol = f->next;
+
+      if (IS_SPIRIT(f->follower) && GET_ACTIVE(f->follower) == GET_IDNUM(ch))
+        continue;
+
       if (IS_AFFECTED(f->follower, AFF_GROUP)) {
         AFF_FLAGS(f->follower).RemoveBit(AFF_GROUP);
         send_to_char(buf2, f->follower);
@@ -578,7 +583,7 @@ ACMD(do_patch)
     return;
   }
   if (!(vict = get_char_room_vis(ch, buf)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
-    send_to_char(ch, "There doesn't seem to be a '%s' here.\r\n", buf);
+    send_to_char(ch, "There doesn't seem to be %s '%s' here.\r\n", AN(buf), buf);
     return;
   }
   if (IS_ASTRAL(vict)) {
@@ -2095,7 +2100,7 @@ ACMD(do_treat)
     target = 8;
   else if (GET_PHYSICAL(vict) <= (GET_MAX_PHYSICAL(vict) * 7/10))
     target = 6;
-  else if (GET_PHYSICAL(vict) <= GET_MAX_PHYSICAL(vict))
+  else if (GET_PHYSICAL(vict) < GET_MAX_PHYSICAL(vict))
     target = 4;
   else {
     if (ch == vict) {
@@ -2157,6 +2162,7 @@ ACMD(do_treat)
 
   // House rule: If you've been treated recently, the TN goes up, but you can still try it.
   if (LAST_HEAL(vict) > 0) {
+    // If you change this formula, remember to change the displayed TN in do_diagnose.
     int tn_increase = MIN(LAST_HEAL(vict) * 3/2, 8);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", +%d for recent heal attempt", tn_increase);
     target += tn_increase;
@@ -2169,8 +2175,10 @@ ACMD(do_treat)
   }
 
   if (ch == vict) {
+    send_to_char(ch, "You begin to treat yourself.\r\n");
     act("$n begins to treat $mself.", TRUE, ch, 0, vict, TO_NOTVICT);
   } else {
+    act("You begin to treat $N.", TRUE, ch, 0, vict, TO_CHAR);
     act("$n begins to treat $N.", TRUE, ch, 0, vict, TO_NOTVICT);
   }
 
@@ -2185,9 +2193,9 @@ ACMD(do_treat)
     }
 
     // Add a box of health. They get a second box if they're still mortally wounded.
-    GET_PHYSICAL(vict) += MIN(GET_MAX_PHYSICAL(vict), 100);
+    GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), GET_PHYSICAL(vict) + 100);
     if (GET_PHYSICAL(vict) <= 0)
-      GET_PHYSICAL(vict) += MIN(GET_MAX_PHYSICAL(vict), 100);
+      GET_PHYSICAL(vict) = MIN(GET_MAX_PHYSICAL(vict), GET_PHYSICAL(vict) + 100);
 
     // Tack on additional boxes for good rolls.
     int extra_heal = successes / 3;
@@ -2201,10 +2209,12 @@ ACMD(do_treat)
     update_pos(vict);
 
     // Send a message.
-    act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
+    act("$N appears better.", FALSE, ch, 0, vict, TO_NOTVICT);
+
     if (ch == vict) {
       send_to_char(ch, "The pain seems significantly better.\r\n");
     } else {
+      act("$N appears better.", FALSE, ch, 0, vict, TO_CHAR);
       act("The pain seems significantly less after $n's treatment.",
           FALSE, ch, 0, vict, TO_VICT);
     }
@@ -4648,7 +4658,7 @@ ACMD(do_cleanup)
     return;
   }
 
-  if (ch_is_blocked_by_quest_protections(ch, target_obj)) {
+  if (ch_is_blocked_by_quest_protections(ch, target_obj, TRUE)) {
     send_to_char(ch, "%s isn't yours-- better leave it be.\r\n", capitalize(GET_OBJ_NAME(target_obj)));
     return;
   }
@@ -4683,10 +4693,8 @@ ACMD(do_cleanup)
     mudlog(buf, ch, LOG_MISCLOG, TRUE);
   }
 
-  if (!IS_NPC(ch) && GET_QUEST(ch))
+  if (COULD_BE_ON_QUEST(ch))
     check_quest_destroy(ch, target_obj);
-  else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master))
-    check_quest_destroy(ch->master, target_obj);
 
   extract_obj(target_obj);
 }
