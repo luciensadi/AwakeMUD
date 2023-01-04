@@ -1109,9 +1109,9 @@ void display_emotes_for_quest(struct char_data *johnson, emote_vector_t *vec, st
   // Get our current position in the emote chain.
   int pos = GET_SPARE1(johnson);
 
-  if (pos >= vec->size()) {
+  if (pos >= (int) vec->size()) {
     mudlog_vfprintf(target, LOG_SYSLOG, "SYSERR: Received invalid pos %d which is greater than johnson emote vec size %d!", pos, vec->size());
-    send_to_char("(Whoops, something went wrong! Please see RECAP for your quest details.)\r\n", target);
+    send_to_char("(Whoops, something went wrong! Please see ^WRECAP^n for your quest details.)\r\n", target);
     return;
   }
 
