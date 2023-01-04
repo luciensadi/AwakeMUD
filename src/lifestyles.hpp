@@ -40,11 +40,10 @@
 
 // The lifestyle data structure itself.
 struct lifestyle_data {
-  const char *name = str_dup("Unnamed");
-  long monthly_cost_min = 0;
-  long monthly_cost_max = 0;
-  std::vector<const char *> default_strings = {};
-  std::vector<const char *> garage_strings = {};
+  const char *name;
+  std::vector<const char *> default_strings;
+  std::vector<const char *> garage_strings;
+  long monthly_cost_min;
 };
 
 // Variables:

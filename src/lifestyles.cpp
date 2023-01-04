@@ -19,9 +19,9 @@ using nlohmann::json;
 
 /* System design:
 
-- Lifestyles exist: Streets, Squatter, Low, Middle, High, Luxury. See SR3 p62.
+- √ Lifestyles exist: Streets, Squatter, Low, Middle, High, Luxury. See SR3 p62.
 - Lifestyle strings exist: These describe the 'air' of a character living that lifestyle.
-- Lifestyle rent bands exist: These state the minimum and maximum range for a rent in that lifestyle.
+- Lifestyle rent bands exist: These state the minimum for a rent in that lifestyle. Max is implicitly determined by next lifestyle's min - 1.
 - Garage strings exist: Similar to lifestyle strings, but describe a character living in a garage regardless of lifestyle.
 
 - √ Lifestyle information is saved in a JSON file and loaded into memory on boot. This allows for editing without recompiling the codebase, and also makes them mutable.
@@ -54,6 +54,17 @@ extern void _json_parse_from_file(bf::path path, json &target);
 
 const bf::path global_lifestyles_file = bf::system_complete("lib") / "etc" / "lifestyles.json";
 
+// Note that the min costs here are houseruled higher than the book values due to MUD inflation.
+// For reference: UBI is currently 1000¥/hr * 24 hr/day * 30 day/mo = 720,000¥/mo
+struct lifestyle_data lifestyles[NUM_LIFESTYLES] =
+{  // Name    lifestyle_strs  garage_strs  min_cost
+  {"Streets" ,           {},          {},  0       },
+  {"Squatter",           {},          {},  500     }, // xinf
+  {"Low"     ,           {},          {},  5000    }, // x10
+  {"Middle"  ,           {},          {},  30000   }, // x6
+  {"High"    ,           {},          {},  120000  }, // x4                        Min  Hour  Day
+  {"Luxury"  ,           {},          {},  MAX(750000, IDLE_NUYEN_REWARD_AMOUNT * ((60 * 24 * 30) / IDLE_NUYEN_MINUTES_BETWEEN_AWARDS) + 30000)}
+};
 
 ///// Saving / Loading /////
 
@@ -64,25 +75,30 @@ void boot_lifestyles() {
 
   // Iterate through our known lifestyles, loading the values and strings for each.
   for (int lifestyle_idx = LIFESTYLE_STREETS; lifestyle_idx < NUM_LIFESTYLES; lifestyle_idx++) {
-    // TODO: Break down to invidual lifestyles (lifestyle_info[x][""]?)
-    lifestyles[lifestyle_idx].monthly_cost_min = lifestyle_info["monthly_cost_min"].get<long>();
-    lifestyles[lifestyle_idx].monthly_cost_max = lifestyle_info["monthly_cost_max"].get<long>();
+    lifestyles[lifestyle_idx].monthly_cost_min = lifestyle_info[lifestyle_idx]["monthly_cost_min"].get<long>();
 
-    for (auto it : lifestyle_info["default_strings"]) {
-      lifestyles[lifestyle_idx].default_strings.push_back(str_dup(it.get<std::string>().c_str()));
+    for (auto it : lifestyle_info[lifestyle_idx]["default_strings"].get<std::vector<std::string>>()) {
+      lifestyles[lifestyle_idx].default_strings.push_back(str_dup(it.c_str()));
     }
 
-    for (auto it : lifestyle_info["garage_strings"]) {
-      lifestyles[lifestyle_idx].garage_strings.push_back(str_dup(it.get<std::string>().c_str()));
+    for (auto it : lifestyle_info[lifestyle_idx]["garage_strings"].get<std::vector<std::string>>()) {
+      lifestyles[lifestyle_idx].garage_strings.push_back(str_dup(it.c_str()));
     }
   }
 }
 
 // Save lifestyles in memory to file.
 void save_lifestyles_file() {
-  json lifestyle_info;
+  json lifestyle_info = {};
 
-  // TODO: Write lifestyle_info JSON data structure
+  // Iterate through our known lifestyles, composing the dicts for each.
+  for (int lifestyle_idx = LIFESTYLE_STREETS; lifestyle_idx < NUM_LIFESTYLES; lifestyle_idx++) {
+    lifestyle_info[lifestyle_idx] = {
+      {"monthly_cost_min", lifestyles[lifestyle_idx].monthly_cost_min},
+      {"default_strings", lifestyles[lifestyle_idx].default_strings},
+      {"garage_strings", lifestyles[lifestyle_idx].garage_strings}
+    };
+  }
 
   bf::ofstream o(global_lifestyles_file);
   o << std::setw(4) << lifestyle_info << std::endl;
