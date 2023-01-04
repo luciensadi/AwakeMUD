@@ -1184,6 +1184,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_AMMOBOX_INTENDED_QUANTITY(box)                  (GET_OBJ_VAL((box), 3))
 #define GET_AMMOBOX_TIME_TO_COMPLETION(box)                 (GET_OBJ_VAL((box), 4))
 #define GET_AMMOBOX_CREATOR(box)                            (GET_OBJ_VAL((box), 9))
+#define GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(box)        (GET_OBJ_VAL((box), 10))
 
 // ITEM_KEYRING convenience defines
 

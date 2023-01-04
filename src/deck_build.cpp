@@ -1100,9 +1100,11 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_AMMOBUILD)) {
-    send_to_char(ch, "You are about %d%% of the way through making a batch of ammo for %s.\r\n",
-           (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 10) - GET_OBJ_VAL(GET_BUILDING(ch), 4)) /
-           GET_OBJ_VAL(GET_BUILDING(ch), 10)) * 100), GET_OBJ_NAME(GET_BUILDING(ch)));
+    float current = GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(GET_BUILDING(ch)) - GET_AMMOBOX_TIME_TO_COMPLETION(GET_BUILDING(ch));
+    float target = GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(GET_BUILDING(ch));
+    float percentage = (current / target) * 100;
+
+    send_to_char(ch, "You are about %d%% of the way through making a batch of ammo for %s.\r\n", (int) percentage);
     return;
   } else
     send_to_char("You are not working on anything at this time.\r\n", ch);

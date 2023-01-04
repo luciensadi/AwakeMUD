@@ -204,7 +204,7 @@ bool ammo_test(struct char_data *ch, struct obj_data *obj)
   } else
     GET_AMMOBOX_TIME_TO_COMPLETION(obj) = -1;
   lose_nuyen(ch, (int)((get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj)) * AMMOBUILD_BATCH_SIZE) * (1 - (csuccess * .05))), NUYEN_OUTFLOW_AMMO_BUILDING);
-  GET_OBJ_VAL(obj, 10) = GET_AMMOBOX_TIME_TO_COMPLETION(obj);
+  GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(obj) = GET_AMMOBOX_TIME_TO_COMPLETION(obj);
   return TRUE;
 }
 
