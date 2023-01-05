@@ -1807,7 +1807,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   {
     char skill_buf[1000] = { '\0' };
     for (int skill_idx = 0; skill_idx <= 8; skill_idx += 2) {
-      if (k->mob_specials.mob_skills[skill_idx + 1]) {
+      if (k->mob_specials.mob_skills[skill_idx + 1] && (k->mob_specials.mob_skills[skill_idx] > 0 && k->mob_specials.mob_skills[skill_idx] < MAX_SKILLS)) {
         snprintf(ENDOF(skill_buf), sizeof(skill_buf) - strlen(skill_buf), "  %s: %d\r\n",
                  skills[k->mob_specials.mob_skills[skill_idx]].name,
                  k->mob_specials.mob_skills[skill_idx + 1]);
