@@ -45,7 +45,14 @@ void houseedit_show_apartment(struct char_data *ch, char *arg) {
   send_to_char(ch, "Display name:   %s^n\r\n", apartment->get_name());
   send_to_char(ch, "Escape To:      %s^n (^c%ld^n)\r\n", atrium_rnum >= 0 ? GET_ROOM_NAME(&world[atrium_rnum]) : "^y(none)^n", atrium_vnum);
   send_to_char(ch, "\r\n");
-  send_to_char(ch, "Lifestyle:      %s^n\r\n", apartment->get_lifestyle_string());
+  send_to_char(ch, "Lifestyle:      %s^n%s\r\n",
+               lifestyles[apartment->get_lifestyle()].name,
+               apartment->is_garage_lifestyle() ? (apartment->get_garage_override() ? " [forced garage]" : " [garage]") : "");
+  /* TODO
+  if (apartment->get_lifestyle_strings()) {
+    send_to_char(ch, " - String:      ^c%s^n\r\n", apartment->get_lifestyle_strings());
+  } */
+  send_to_char(ch, "\r\n");
   send_to_char(ch, "Cost per month: ^c%ld^n nuyen^n\r\n", apartment->get_rent_cost());
   send_to_char(ch, "Key:            %s^n (^c%ld^n)^n\r\n", key_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[key_rnum]) : "^y(none)^n", key_vnum);
   send_to_char(ch, "\r\n");
@@ -158,7 +165,13 @@ void houseedit_display_apartment_edit_menu(struct descriptor_data *d) {
   send_to_char(CH, "2) Display name:   %s^n\r\n", APT->get_name());
   send_to_char(CH, "3) Escape To:      %s^n (^c%ld^n)\r\n", atrium_rnum >= 0 ? GET_ROOM_NAME(&world[atrium_rnum]) : "^y(none)^n", atrium_vnum);
   send_to_char(CH, "\r\n");
-  send_to_char(CH, "4) Lifestyle:      %s^n\r\n", APT->get_lifestyle_string());
+  send_to_char(CH, "4) Lifestyle:      %s^n%s\r\n", lifestyles[APT->get_lifestyle()].name, APT->is_garage_lifestyle() ? (APT->get_garage_override() ? " [forced garage]" : " [garage]") : "");
+  /* TODO
+  if (APT->get_lifestyle_strings()) {
+    send_to_char(CH, "                   ^c%s^n\r\n", APT->get_lifestyle_strings());
+  }
+  */
+
   send_to_char(CH, "5) Cost per month: ^c%ld^n nuyen^n\r\n", APT->get_rent_cost());
   send_to_char(CH, "6) Key:            %s^n (^c%ld^n)^n\r\n", key_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[key_rnum]) : "^y(none)^n", key_vnum);
   send_to_char(CH, "\r\n");

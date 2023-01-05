@@ -117,6 +117,7 @@ class Apartment {
     int lifestyle = -1;
     long nuyen_per_month = 0;
     bf::path base_directory;
+    bool garage_override = FALSE;
 
     // Location and world data for the primary / entrance room.
     vnum_t atrium = NOWHERE;
@@ -155,6 +156,8 @@ class Apartment {
     bf::path get_base_directory() { return base_directory; }
     unsigned long get_garage_count() { return garages; }
     int get_lifestyle() { return lifestyle >= LIFESTYLE_STREETS ? lifestyle : complex->get_lifestyle(); }
+    bool get_garage_override() { return garage_override; }
+    const char *get_lifestyle_strings();
 
     // Mutators
     void set_owner(idnum_t);
@@ -196,10 +199,10 @@ class Apartment {
     bool owner_is_valid();
     void list_guests_to_char(struct char_data *ch);
     const char *list_rooms__returns_new(bool indent);
-    const char *get_lifestyle_string();
     bool can_houseedit_apartment(struct char_data *ch);
     void mark_as_deleted();
     void recalculate_garages();
+    bool is_garage_lifestyle();
     void apply_rooms();
 
     bool delete_guest(idnum_t idnum);

@@ -1067,9 +1067,6 @@ bool load_char(const char *name, char_data *ch, bool logon)
     GET_COND(ch, COND_DRUNK) = -1;
   }
 
-  // Load their lifestyle info.
-  determine_lifestyle(ch);
-
   return true;
 }
 
@@ -1181,24 +1178,54 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
                "Inveh=%ld, `rank`=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
-               "multiplier=%d WHERE idnum=%ld;",
-               AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(),
-               PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
-               GET_REAL_STR(player), GET_REAL_CHA(player), GET_REAL_INT(player), GET_REAL_WIL(player),
-               GET_REAL_ESS(player), player->real_abils.esshole, GET_INDEX(player),
-               player->real_abils.highestindex, GET_MAX_HACKING(player), GET_BODY(player),
-               GET_DEFENSE(player), GET_NUYEN(player), GET_BANK(player), GET_KARMA(player),
-               MAX(0, GET_REP(player)), MAX(0, GET_NOT(player)), MAX(0, GET_TKE(player)),
-               PLR_FLAGGED(player, PLR_JUST_DIED), MAX(0, GET_PHYSICAL(player)), GET_PHYSICAL_LOSS(player),
-               MAX(0, GET_MENTAL(player)), GET_MENTAL_LOSS(player), 0, GET_WIMP_LEV(player),
-               GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, COND_FULL),
-               GET_COND(player, COND_THIRST), GET_COND(player, COND_DRUNK),
-               SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player), pgroup_num,
-               inveh, GET_LEVEL(player), GET_SEX(player), GET_SYSTEM_POINTS(player),
+               "multiplier=%d, lifestyle_string='%s' WHERE idnum=%ld;",
+               AFF_FLAGS(player).ToString(),
+               PLR_FLAGS(player).ToString(),
+               PRF_FLAGS(player).ToString(),
+               GET_REAL_BOD(player),
+               GET_REAL_QUI(player),
+               GET_REAL_STR(player),
+               GET_REAL_CHA(player),
+               GET_REAL_INT(player),
+               GET_REAL_WIL(player),
+               GET_REAL_ESS(player),
+               player->real_abils.esshole,
+               GET_INDEX(player),
+               player->real_abils.highestindex,
+               GET_MAX_HACKING(player),
+               GET_BODY(player),
+               GET_DEFENSE(player),
+               GET_NUYEN(player),
+               GET_BANK(player),
+               GET_KARMA(player),
+               MAX(0, GET_REP(player)),
+               MAX(0, GET_NOT(player)),
+               MAX(0, GET_TKE(player)),
+               PLR_FLAGGED(player, PLR_JUST_DIED),
+               MAX(0, GET_PHYSICAL(player)),
+               GET_PHYSICAL_LOSS(player),
+               MAX(0, GET_MENTAL(player)),
+               GET_MENTAL_LOSS(player), 0, GET_WIMP_LEV(player),
+               GET_LOADROOM(player),
+               GET_LAST_IN(player),
+               time(0),
+               GET_COND(player, COND_FULL),
+               GET_COND(player, COND_THIRST),
+               GET_COND(player, COND_DRUNK),
+               SHOTS_FIRED(player),
+               SHOTS_TRIGGERED(player),
+               GET_TRADITION(player),
+               pgroup_num,
+               inveh,
+               GET_LEVEL(player),
+               GET_SEX(player),
+               GET_SYSTEM_POINTS(player),
                MIN(GET_CONGREGATION_BONUS(player), MAX_CONGREGATION_BONUS),
                prepare_quotes(buf1, GET_EMAIL(player), sizeof(buf1) / sizeof(char)),
                prepare_quotes(buf2, GET_CHAR_COLOR_HIGHLIGHT(player), sizeof(buf2) / sizeof(char)),
-               GET_CHAR_MULTIPLIER(player), GET_IDNUM(player));
+               GET_CHAR_MULTIPLIER(player),
+               prepare_quotes(buf3, get_lifestyle_string(player), sizeof(buf3) / sizeof(char)),
+               GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
 
   /* Re-equip cyberware and bioware. */

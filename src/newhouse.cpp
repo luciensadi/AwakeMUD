@@ -413,7 +413,7 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
     if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
       send_to_char(ch, "%s (lifestyle %s, %ld room%s, of which %d %s): %ld nuyen.\r\n",
                    apartment->name,
-                   apartment->get_lifestyle_string(), // lifestyles[apartment->lifestyle].name,
+                   lifestyles[apartment->get_lifestyle()].name,
                    apartment->rooms.size(),
                    apartment->rooms.size() == 1 ? "" : "s",
                    apartment->garages,
@@ -424,7 +424,7 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
                    color_toggle ? "^W" : "^w",
                    apartment->name,
                    color_toggle ? "^W" : "^w",
-                   apartment->get_lifestyle_string(), // lifestyles[apartment->lifestyle].name,
+                   lifestyles[apartment->get_lifestyle()].name,
                    non_garage,
                    apartment->garages,
                    apartment->get_rent_cost());
@@ -525,7 +525,7 @@ const char *ApartmentComplex::list_apartments__returns_new() {
     snprintf(ENDOF(result), sizeof(result) + strlen(result), "  - ^C%s^n @ ^c%ld^n (lifestyle ^c%s^n, ^c%ld^n room%s, of which ^c%ld^n %s): ^c%ld^n nuyen.\r\n",
              apartment->name,
              apartment->rooms.empty() ? -1 : apartment->rooms.front()->get_vnum(),
-             apartment->get_lifestyle_string(), // lifestyles[apartment->lifestyle].name,
+             lifestyles[apartment->get_lifestyle()].name,
              apartment->rooms.size(),
              apartment->rooms.size() == 1 ? "" : "s",
              apartment->garages,
@@ -678,6 +678,7 @@ void Apartment::clone_from(Apartment *source) {
   REPLACE(lifestyle);
   REPLACE(nuyen_per_month);
   REPLACE(base_directory);
+  REPLACE(garage_override);
 
   REPLACE(atrium);
   REPLACE(key_vnum);
@@ -727,6 +728,10 @@ idnum_t Apartment::get_owner_id() {
     return -1 * owned_by_pgroup->get_idnum();
   }
   return owned_by_player;
+}
+
+bool Apartment::is_garage_lifestyle() {
+  return garage_override || garages > (rooms.size() + 1) / 2;
 }
 
 void Apartment::save_base_info() {
@@ -1084,7 +1089,8 @@ const char *Apartment::list_rooms__returns_new(bool indent) {
   return str_dup(result);
 }
 
-const char *Apartment::get_lifestyle_string() {
+// TODO: This should return both our own lifestyle strings as well as the complex's lifestyle strings.
+const char *Apartment::get_lifestyle_strings() {
   return "n/a";
 }
 

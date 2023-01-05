@@ -4792,6 +4792,7 @@ void free_char(struct char_data * ch)
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.leave);
     DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
     DELETE_ARRAY_IF_EXTANT(ch->player.email);
+    DELETE_ARRAY_IF_EXTANT(GET_SETTABLE_LIFESTYLE_STRING(ch));
 
     if(!IS_NPC(ch))
       DELETE_ARRAY_IF_EXTANT(ch->player.host);
@@ -5372,7 +5373,7 @@ rnum_t real_object(vnum_t virt)
 {
   if (virt < 0)
     return -1;
-    
+
   long bot, top, mid;
 
   bot = 0;

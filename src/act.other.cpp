@@ -37,6 +37,7 @@
 #include "ignore_system.hpp"
 #include "newhouse.hpp"
 #include "quest.hpp"
+#include "lifestyles.hpp"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -2466,6 +2467,8 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
 
       send_to_char(CH, "7) Change Height: ^c%dcm^n\r\n", GET_HEIGHT(CH));
       send_to_char(CH, "8) Change Weight: ^c%dkg^n\r\n", GET_WEIGHT(CH));
+
+      send_to_char(CH, "\r\n9) Change Lifestyle: ^c%s^n\r\n", GET_LIFESTYLE_STRING(CH));
     }
   }
   if (mode)
@@ -2501,6 +2504,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
           str_dup(CH->player.physical_text.look_desc);
         d->edit_mob->char_specials.arrive = str_dup(CH->char_specials.arrive);
         d->edit_mob->char_specials.leave = str_dup(CH->char_specials.leave);
+        GET_SETTABLE_LIFESTYLE_STRING(d->edit_mob) = str_dup(GET_LIFESTYLE_STRING(CH));
       } else if (STATE(d) == CON_PCUSTOMIZE) {
         d->edit_mob->player.physical_text.keywords =
           str_dup(CH->player.matrix_text.keywords);
@@ -2584,6 +2588,10 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         CH->char_specials.leave = str_dup(d->edit_mob->char_specials.leave);
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", LeaveMsg='%s', Height=%d, Weight=%d", prepare_quotes(buf3, CH->char_specials.leave, sizeof(buf3) / sizeof(buf3[0])),
                 GET_HEIGHT(CH), GET_WEIGHT(CH));
+
+        DELETE_ARRAY_IF_EXTANT(GET_SETTABLE_LIFESTYLE_STRING(CH));
+        GET_SETTABLE_LIFESTYLE_STRING(CH) = str_dup(GET_LIFESTYLE_STRING(d->edit_mob));
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", lifestyle_string='%s'", prepare_quotes(buf3, GET_LIFESTYLE_STRING(CH), sizeof(buf3) / sizeof(buf3[0])));
       } else if (STATE(d) == CON_PCUSTOMIZE) {
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.keywords);
         CH->player.matrix_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
@@ -2787,6 +2795,9 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     DELETE_ARRAY_IF_EXTANT(d->edit_mob->char_specials.leave);
     d->edit_mob->char_specials.leave = str_dup(arg);
     cedit_disp_menu(d, 0);
+    break;
+  case CEDIT_LIFESTYLE:
+    cedit_lifestyle_parse(d, arg);
     break;
   case CEDIT_SHORT_DESC:
     if (strlen(arg) >= MAX_SHORTDESC_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {

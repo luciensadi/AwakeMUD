@@ -20,20 +20,20 @@ using nlohmann::json;
 /* System design:
 
 - √ Lifestyles exist: Streets, Squatter, Low, Middle, High, Luxury. See SR3 p62.
-- Lifestyle strings exist: These describe the 'air' of a character living that lifestyle.
-- Lifestyle rent bands exist: These state the minimum for a rent in that lifestyle. Max is implicitly determined by next lifestyle's min - 1.
-- Garage strings exist: Similar to lifestyle strings, but describe a character living in a garage regardless of lifestyle.
+- √ Lifestyle strings exist: These describe the 'air' of a character living that lifestyle.
+- √ Lifestyle rent bands exist: These state the minimum for a rent in that lifestyle. Max is implicitly determined by next lifestyle's min - 1.
+- √ Garage strings exist: Similar to lifestyle strings, but describe a character living in a garage regardless of lifestyle.
 
 - √ Lifestyle information is saved in a JSON file and loaded into memory on boot. This allows for editing without recompiling the codebase, and also makes them mutable.
 
-- Apartment complexes have associated lifestyles, which may be overridden by individual apartments (only higher, never lower- no Squatter rooms in a Luxury building)
-- Individual apartments are Garages if the number of garage rooms in the apartment exceeds the number of non-garage rooms.
+- √ Apartment complexes have associated lifestyles, which may be overridden by individual apartments (only higher, never lower- no Squatter rooms in a Luxury building)
+- √ Individual apartments are Garages if the number of garage rooms in the apartment exceeds the number of non-garage rooms.
   - 1 garage, 0 non: garage.
   - 1 garage, 1 non: not garage.
 - Apartment complexes and apartments MAY have additional lifestyle strings available to them. These are separated between Garage and Non-Garage.
 - Apartment rents are constrained to their lifestyle bands.
 
-- PCs have a maximum lifestyle, which is derived from the highest-class apartment they are currently renting.
+- PCs have a maximum available lifestyle, which is derived from the highest-class apartment they are currently renting.
 - PCs always display a lifestyle string when looked at. This string is chosen from the set composed of:
   - All default lifestyle strings from all lifestyles at or below their current maximum
   - All custom lifestyle strings for all complexes and apartments they currently rent at
@@ -49,6 +49,21 @@ STRETCH:
 - PCs can submit lifestyle strings for approval / inclusion in the lists.
 
 */
+
+// TODO: Set newbie lifestyle on creation.
+// TODO: Default lifestyle on loading for chars that have none (can put this in the SQL statement to create the field)
+// TODO: Make sure lifestyle strings are handled in all places arrive strings are set/deleted
+// TODO: Create JSON file
+// TODO: Populate JSON with pre-defined strings for apartments and garages
+// TODO: Add code to apartment / complex editing to allow specification of lifestyles (complex: any, apt: higher than complex, or "parent")
+// TODO: Add code to apartment / complex editing to allow specification of garage override status
+// TODO: Add code to apartment / complex editing to allow specification of custom lifestyle string(s)
+// TODO: Add code to apartment / complex editing to require complex lifestyle is set before rent
+// TODO: Add code to apartment / complex editing to clear rent on lifestyle change
+// TODO: Add code to apartment / complex editing to require rent is in band permitted by lifestyle
+// TODO: Add code to apartment / complex editing to not allow saving of an apartment with invalid rent
+// TODO: Add code to apartments to allow retrieving of all custom strings available at that apartment / complex
+// TODO: Add cedit parsing code to let players select from all available lifestyles
 
 extern void _json_parse_from_file(bf::path path, json &target);
 
@@ -66,7 +81,23 @@ struct lifestyle_data lifestyles[NUM_LIFESTYLES] =
   {"Luxury"  ,           {},          {},  MAX(750000, IDLE_NUYEN_REWARD_AMOUNT * ((60 * 24 * 30) / IDLE_NUYEN_MINUTES_BETWEEN_AWARDS) + 30000)}
 };
 
-///// Saving / Loading /////
+void cedit_lifestyle_parse(struct descriptor_data *d, char *arg) {
+  // todo fill out
+}
+
+///// Display /////
+
+const char *get_lifestyle_string(struct char_data *ch) {
+  if (!ch || IS_NPC(ch)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received %s character to get_lifestyle_string()!", ch ? "NPC" : "NULL");
+    return "";
+  }
+
+  // TODO: Implement
+  return "<not yet implemented>";
+}
+
+///// Saving / Loading - Lifestyles /////
 
 // Read lifestyles from JSON and store them globally.
 void boot_lifestyles() {
@@ -105,6 +136,7 @@ void save_lifestyles_file() {
   o.close();
 }
 
+///// Util /////
 
 ///////////////////////////////// old file / logic below ////////////////////////////
 

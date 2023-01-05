@@ -345,11 +345,12 @@ extern void write_index_file(const char *suffix);
 #define CEDIT_SHORT_DESC          4
 #define CEDIT_DESC                5
 #define CEDIT_LONG_DESC           6
-#define CEDIT_VOICE    7
-#define CEDIT_HEIGHT		  8
-#define CEDIT_WEIGHT		  9
-#define CEDIT_ARRIVE		10
-#define CEDIT_LEAVE		11
+#define CEDIT_VOICE               7
+#define CEDIT_HEIGHT              8
+#define CEDIT_WEIGHT              9
+#define CEDIT_ARRIVE              10
+#define CEDIT_LEAVE               11
+#define CEDIT_LIFESTYLE           12
 
 #define SHEDIT_CONFIRM_EDIT	0
 #define SHEDIT_MAIN_MENU	1
