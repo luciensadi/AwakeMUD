@@ -840,33 +840,71 @@ bool conjuring_drain(struct char_data *ch, int force)
 
 void magic_perception(struct char_data *ch, int force, int spell)
 {
-  int base = 4 + (int)(GET_MAG(ch) / 100) - force, target = 0, skill = 0, starg = 0;
+  int base = 4 + (int)(GET_MAG(ch) / 100) - force;
+  int skill = 0;
+  int starg = 0;
+
   totem_bonus(ch, SPELLCASTING, spell, starg, skill);
+
   if (skill > 0)
     base--;
+
   for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room) {
-    if (ch == vict)
+    // You and your charmies don't see / get alarmed by your casts.
+    if (ch == vict || (IS_NPC(vict) && vict->master == ch)) {
       continue;
-    target = base;
+    }
+
+    // Those who can't see you are not alarmed.
+    if (!CAN_SEE(vict, ch)) {
+      continue;
+    }
+
+    int target = base;
+
     if (GET_MAG(vict) > 0)
       target -= 2;
     if (SEES_ASTRAL(vict))
       target -= 2;
-    if (success_test(GET_INT(ch) + (GET_TRADITION(ch) == TRAD_ADEPT ? GET_POWER(ch, ADEPT_IMPROVED_PERCEPT) : 0), target)) {
+
+    if (success_test(GET_INT(vict) + (GET_TRADITION(vict) == TRAD_ADEPT ? GET_POWER(vict, ADEPT_IMPROVED_PERCEPT) : 0), target)) {
       if (SEES_ASTRAL(vict))
         act("You notice $n manipulating the astral plane.", FALSE, ch, 0, vict, TO_VICT);
       else act("You notice $n performing magic.", TRUE, ch, 0, vict, TO_VICT);
 
+      if (IS_NPC(vict) && !IS_NPC(ch)) {
+        int alert_threshold = GET_SECURITY_LEVEL(get_ch_in_room(vict)) * 5;
+
+        if (mob_is_aggressive(vict, TRUE) || MOB_FLAGGED(vict, MOB_GUARD)) {
+          alert_threshold += 10;
+        }
+        else if (MOB_FLAGGED(vict, MOB_HELPER)) {
+          alert_threshold += 5;
+        }
+
+        bool alert_state_should_be_alarm = number(0, MAX_ZONE_SECURITY_RATING * 4) * 5 <= alert_threshold;
+
+        // Alert/alarm NPCs when they see casting around them.
+        if (alert_state_should_be_alarm) {
+          GET_MOBALERT(vict) = MAX(MALERT_ALARM, GET_MOBALERT(vict));
+          GET_MOBALERTTIME(vict) = MAX(GET_MOBALERTTIME(vict), 20);
+        } else {
+          GET_MOBALERT(vict) = MAX(MALERT_ALERT, GET_MOBALERT(vict));
+          GET_MOBALERTTIME(vict) = MAX(GET_MOBALERTTIME(vict), 10);
+        }
+
 #ifdef GUARDS_ATTACK_MAGES
-      // Guards and fighters don't like people casting magic around them.
-      if (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_GUARD)
-                           || mob_is_aggressive(vict, TRUE)
-                           || GET_MOBALERT(vict) == MALERT_ALARM))
-      {
-        send_mob_aggression_warnings(ch, vict);
-        set_fighting(vict, ch);
-      }
+        // Never initiate combat between non-killables/wimpys and PCs.
+        if (!can_hurt(vict, ch) || !MOB_FLAGGED(vict, MOB_WIMPY))
+          continue;
+
+        // Guards and fighters don't like people casting magic around them.
+        if (GET_MOBALERT(vict) == MALERT_ALARM || MOB_FLAGGED(vict, MOB_GUARD) || mob_is_aggressive(vict, TRUE)) {
+          send_mob_aggression_warnings(ch, vict);
+          set_fighting(vict, ch);
+        }
 #endif
+      }
     }
   }
 }
@@ -3825,7 +3863,7 @@ ACMD(do_cast)
     send_to_char(ch, "You don't know a spell called '%s'.\r\n", spell_name);
     return;
   }
-  
+
   if (!force)
     force = spell->force;
   else if (force > spell->force) {
