@@ -3742,12 +3742,8 @@ ACMD(do_unpack)
 {
   struct obj_data *shop = NULL;
   if (ch->in_veh) {
-    if (!ch->in_veh->flags.IsSet(VFLAG_WORKSHOP)) {
-      send_to_char("This vehicle isn't large enough to set up a workshop in.\r\n", ch);
-      return;
-    } else if (ch->vfront) {
-      send_to_char("You can't set up a workshop in the front seat.\r\n", ch);
-    }
+    FAILURE_CASE(!ch->in_veh->flags.IsSet(VFLAG_WORKSHOP), "This vehicle isn't large enough to set up a workshop in.");
+    FAILURE_CASE(ch->vfront, "You can't set up a workshop in the front seat.");
   }
 
   // Only one unpacked workshop per room.
@@ -3766,10 +3762,7 @@ ACMD(do_unpack)
   int dotmode = find_all_dots(arg, sizeof(arg));
 
   /* Targeted unpack. */
-  if (dotmode == FIND_ALL || dotmode == FIND_ALLDOT) {
-    send_to_char("You'd have to be some kind of superhero to work with multiple workshops at once.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(dotmode == FIND_ALL || dotmode == FIND_ALLDOT, "You'd have to be some kind of superhero to work with multiple workshops at once.");
 
   if (*arg) {
     if (ch->in_room) {
@@ -3796,10 +3789,7 @@ ACMD(do_unpack)
         break;
     }
 
-    if (!shop) {
-      send_to_char(ch, "There is no workshop here to set up.\r\n");
-      return;
-    }
+    FAILURE_CASE(!shop, "There is no workshop here to set up.");
   }
 
   if (GET_OBJ_TYPE(shop) != ITEM_WORKSHOP || GET_WORKSHOP_GRADE(shop) != TYPE_WORKSHOP) {
@@ -3817,10 +3807,8 @@ ACMD(do_unpack)
     return;
   }
 
-  if (!ch->in_veh && GET_OBJ_VAL(shop, 0) == TYPE_VEHICLE && !ROOM_FLAGGED(ch->in_room, ROOM_GARAGE)) {
-    send_to_char("Vehicle workshops can only be deployed in trucks and garage-flagged rooms.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(GET_WORKSHOP_TYPE(shop) == TYPE_VEHICLE && !ch->in_veh && !ROOM_FLAGGED(ch->in_room, ROOM_GARAGE), "Vehicle workshops can only be deployed in trucks and garage-flagged rooms.");
+
   send_to_char(ch, "You begin to set up %s here.\r\n", GET_OBJ_NAME(shop));
   act("$n begins to set up $P.", FALSE, ch, 0, shop, TO_ROOM);
   if (access_level(ch, LVL_BUILDER)) {
