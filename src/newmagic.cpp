@@ -3746,6 +3746,8 @@ ACMD(do_release)
 bool spell_is_valid_ritual_spell(int spell) {
   switch (spell) {
     case SPELL_COMBATSENSE:
+    case SPELL_DECATTR:
+    case SPELL_DECCYATTR:
     case SPELL_DETOX:
     case SPELL_HEAL:
     case SPELL_TREAT:
