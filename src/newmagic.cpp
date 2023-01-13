@@ -3902,8 +3902,8 @@ ACMD(do_cast)
     FAILURE_CASE(IS_NPC(vict), "You can only cast ritual spells on player characters.\r\n");
 
     // Charge them.
-    int cost = RITUAL_SPELL_COMPONENT_COST * spell->force * MAX(1, spells[spell->type].drainpower);
-    int time_in_ticks = (RITUAL_SPELL_BASE_TIME * spell->force * MAX(1, spells[spell->type].drainpower)) / (GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)));
+    int cost = RITUAL_SPELL_COMPONENT_COST * force * MAX(1, spells[spell->type].drainpower);
+    int time_in_ticks = (RITUAL_SPELL_BASE_TIME * force * MAX(1, spells[spell->type].drainpower)) / (GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)));
 
     if (GET_NUYEN(ch) < cost) {
       send_to_char(ch, "You need at least %d nuyen on hand to pay for the ritual components.\r\n", cost);
@@ -3918,7 +3918,7 @@ ACMD(do_cast)
     GET_RITUAL_COMPONENT_CASTER(components) = GET_IDNUM(ch);
     GET_RITUAL_COMPONENT_SPELL(components) = spell->type;
     GET_RITUAL_COMPONENT_SUBTYPE(components) = spell->subtype;
-    GET_RITUAL_COMPONENT_FORCE(components) = spell->force;
+    GET_RITUAL_COMPONENT_FORCE(components) = force;
     GET_RITUAL_COMPONENT_TARGET(components) = GET_IDNUM(vict);
     GET_RITUAL_TICKS_AT_START(components) = GET_RITUAL_TICKS_LEFT(components) = time_in_ticks;
 
