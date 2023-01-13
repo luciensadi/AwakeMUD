@@ -3511,6 +3511,13 @@ void process_wheres_my_car() {
       // Credit it back.
       GET_NUYEN_RAW(d->character) += reward_amount;
       GET_NUYEN_INCOME_THIS_PLAY_SESSION(d->character, NUYEN_OUTFLOW_WHERESMYCAR) -= reward_amount;
+
+      // Tell them if they don't own a car.
+      if (total_vehicles <= 0) {
+        send_to_char("[OOC: You don't actually own any vehicles!]\r\n", d->character);
+      } else {
+        send_to_char(d->character, "[OOC: Your %s too far away or are otherwise inaccessible to you at the moment.]\r\n", total_vehicles == 1 ? "vehicle is": "vehicles are");
+      }
     }
     assert(idnum_canary == GET_IDNUM(d->character));
 
