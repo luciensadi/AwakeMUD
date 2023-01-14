@@ -1060,6 +1060,13 @@ void die(struct char_data * ch)
 
 ACMD(do_dw_retrieve)
 {
+  // Not mortally wounded
+  FAILURE_CASE(GET_POS(ch) != POS_MORTALLYW, "A DocWagon recon drone states, \"^YNon-critical vitals detected, moving to next...^n (fades into the distance)\"");
+  
+  // No modulator
+  struct obj_data *docwagon = find_best_active_docwagon_modulator(ch);
+  FAILURE_CASE(!docwagon, "A DocWagon recon drone states, \"^RNo modulator detected, cannot confirm contract status...^n (fades into the distance)\"");
+  
   // If they're ready to be docwagon'd out, save them.
   if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
     docwagon_retrieve(ch);
