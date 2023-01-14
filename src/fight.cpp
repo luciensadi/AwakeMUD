@@ -1058,6 +1058,24 @@ void die(struct char_data * ch)
   raw_kill(ch);
 }
 
+ACMD(do_dw_retrieve)
+{
+  // Not mortally wounded
+  FAILURE_CASE(GET_POS(ch) != POS_MORTALLYW, "A DocWagon triage drone states, \"^YVital signs non-critical. Moving to next...^L(fades into the distance)^n\"");
+  
+  // No modulator
+  struct obj_data *docwagon = find_best_active_docwagon_modulator(ch);
+  FAILURE_CASE(!docwagon, "A DocWagon triage drone states, \"^RNo modulator detected. Cannot confirm contract...^L(fades into the distance)^n\"");
+  
+  // If they're ready to be docwagon'd out, save them.
+  if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    docwagon_retrieve(ch);
+  } else {
+    send_to_char(ch, "You have not received a DocWagon trauma team confirmation! You can either wait for help, or give up by typing ^WDIE^n.\r\n");
+  }
+  return;
+}
+  
 /*
  * Lets the player give up and die if they're at 0 or less
  * physical points.
@@ -2431,7 +2449,7 @@ bool docwagon(struct char_data *ch)
 
   if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
     send_to_char(ch, "%s^n buzzes contentedly: the automated DocWagon trauma team remains en route.\r\n", CAP(GET_OBJ_NAME(docwagon)));
-    send_to_char(ch, "^L[OOC: You can choose to wait for player assistance to arrive, or you can get picked up immediately by entering ^wDIE^L. See ^wHELP DOCWAGON^L for more details.]\r\n");
+    send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
   } else {
     int docwagon_tn = MAX(GET_SECURITY_LEVEL(room), 4);
     int docwagon_dice = GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1;
@@ -2449,7 +2467,7 @@ bool docwagon(struct char_data *ch)
     if (successes > 0)
     {
       send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
-      send_to_char(ch, "^L[OOC: You can choose to wait for player assistance to arrive, or you can get picked up immediately by entering ^wDIE^L. See ^wHELP DOCWAGON^L for more details.]\r\n");
+      send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
       PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
     } else {
       send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));

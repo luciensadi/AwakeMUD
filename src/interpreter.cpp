@@ -180,6 +180,7 @@ ACMD_DECLARE(do_drive);
 ACMD_DECLARE(do_drop);
 ACMD_DECLARE(do_drugs);
 ACMD_DECLARE(do_docwagon);
+ACMD_DECLARE(do_dw_retrieve);
 ACMD_DECLARE(do_eat);
 ACMD_DECLARE(do_echo);
 ACMD_DECLARE(do_new_echo);
@@ -539,6 +540,7 @@ struct command_info cmd_info[] =
     { "contest"    , POS_SITTING , do_contest  , 0, 0, FALSE },
     { "control"    , POS_SITTING , do_control  , 0, 0, FALSE },
     { "combine"    , POS_RESTING , do_put      , 0, 0, FALSE },
+    { "comegetme"  , POS_DEAD  , do_dw_retrieve, 0, 0, FALSE },
     { "complete"   , POS_LYING   , do_recap    , 0, 0, FALSE },
     { "copy"       , POS_SITTING , do_copy     , 0, 0, FALSE },
     { "copyover"   , POS_DEAD    , do_copyover , LVL_ADMIN, 0, FALSE },
@@ -1684,9 +1686,15 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
         break;
       case POS_MORTALLYW:
         send_to_char("You are in a pretty bad shape! You can either wait for help, or give up by typing ^WDIE^n.\r\n", ch);
+        if (PLR_FLAGGED(ch, PLR_NEWBIE)) {
+          send_to_char("^L[OOC: While your TKE is less than 50, your only penalty for dying is losing your current job. See ^wHELP NEWBIE^L for more details.]\r\n", ch);
+        }
         break;
       case POS_STUNNED:
         send_to_char("All you can do right now is think about the stars! You can either wait to recover, or give up by typing ^WDIE^n.\r\n", ch);
+        if (PLR_FLAGGED(ch, PLR_NEWBIE)) {
+          send_to_char("^L[OOC: While your TKE is less than 50, your only penalty for dying is losing your current job. See ^wHELP NEWBIE^L for more details.]\r\n", ch);
+        }
         break;
       case POS_SLEEPING:
         send_to_char("In your dreams, or what?\r\n", ch);
