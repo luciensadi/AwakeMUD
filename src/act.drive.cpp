@@ -2330,23 +2330,21 @@ ACMD(do_push)
         mult = 500;
         break;
     }
-    if (found_veh == veh)
-      send_to_char("You can't push it into itself.\r\n", ch);
-    else if (found_veh->load - found_veh->usedload < veh->body * mult)
-      send_to_char("There is not enough room in there for that.\r\n", ch);
-    else if (found_veh->locked)
-      send_to_char("You can't push it into a locked vehicle.\r\n", ch);
-    else if (veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED)
-      send_to_char("The wheels seem to be locked.\r\n", ch);
-    else {
-      strlcpy(buf2, GET_VEH_NAME(veh), sizeof(buf2));
-      snprintf(buf, sizeof(buf), "$n pushes %s into the back of %s.", buf2, GET_VEH_NAME(found_veh));
-      send_to_char(ch, "You push %s into the back of %s.\r\n", buf2, GET_VEH_NAME(found_veh));
-      act(buf, 0, ch, 0, 0, TO_ROOM);
-      snprintf(buf2, sizeof(buf2), "You are pushed into %s.\r\n", GET_VEH_NAME(found_veh));
-      send_to_veh(buf2, veh, NULL, TRUE);
-      veh_to_veh(veh, found_veh);
-    }
+
+    FAILURE_CASE(found_veh == veh, "You can't push it into itself.");
+    FAILURE_CASE(!found_veh->seating[0] && !(repair_vehicle_seating(found_veh) && found_veh->seating[0]), "There's nowhere to push it into.");
+    FAILURE_CASE(found_veh->load - found_veh->usedload < veh->body * mult, "There is not enough room in there for that.");
+    FAILURE_CASE(found_veh->locked, "You can't push it into a locked vehicle.");
+    FAILURE_CASE(veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED, "The wheels seem to be locked.");
+    FAILURE_CASE(found_veh->damage >= VEH_DAM_THRESHOLD_DESTROYED, "You can't push anything into a destroyed vehicle.");
+
+    strlcpy(buf2, GET_VEH_NAME(veh), sizeof(buf2));
+    snprintf(buf, sizeof(buf), "$n pushes %s into the back of %s.", buf2, GET_VEH_NAME(found_veh));
+    send_to_char(ch, "You push %s into the back of %s.\r\n", buf2, GET_VEH_NAME(found_veh));
+    act(buf, 0, ch, 0, 0, TO_ROOM);
+    snprintf(buf2, sizeof(buf2), "You are pushed into %s.\r\n", GET_VEH_NAME(found_veh));
+    send_to_veh(buf2, veh, NULL, TRUE);
+    veh_to_veh(veh, found_veh);
   }
 }
 
