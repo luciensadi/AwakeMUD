@@ -5402,8 +5402,10 @@ ACMD(do_who)
       if (PLR_FLAGGED(tch, PLR_CYBERDOC) && GET_LEVEL(tch) <= LVL_MORTAL)
         strlcat(buf1, " ^c(Cyberdoc)^n", sizeof(buf1));
 
+      /*
       if (PRF_FLAGGED(tch, PRF_NEWBIEHELPER) && (level > LVL_MORTAL || PRF_FLAGGED(ch, PRF_NEWBIEHELPER)))
         strlcat(buf1, " ^G(Newbie Helper)^n", sizeof(buf1));
+      */
 
       if (level > LVL_MORTAL) {
         if (GET_INVIS_LEV(tch) && level >= GET_INVIS_LEV(tch))
