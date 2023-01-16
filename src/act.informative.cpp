@@ -561,9 +561,19 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
   found = FALSE;
   found_graffiti = FALSE;
 
+  struct veh_data * in_veh = ch->in_veh;
+  bool vfront = ch->vfront;
+
+  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+    in_veh = veh->in_veh;
+    vfront = FALSE;
+  }
+
   for (struct obj_data *i = list; i; i = i->next_content)
   {
-    if ((i->in_veh && ch->in_veh) && i->vfront != ch->vfront)
+    if ((i->in_veh && in_veh) && i->vfront != vfront)
       continue;
 
     if (ch->char_specials.rigging) {
@@ -585,15 +595,15 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
           continue;
         }
       }
-    } else if (ch->in_veh && i->in_room && i->in_room == ch->in_veh->in_room) {
-      if (ch->in_veh->cspeed > SPEED_IDLE) {
+    } else if (in_veh && i->in_room && i->in_room == in_veh->in_room) {
+      if (in_veh->cspeed > SPEED_IDLE) {
         int success_test_tn;
 
-        if (get_speed(ch->in_veh) >= 200) {
+        if (get_speed(in_veh) >= 200) {
           success_test_tn = 7;
-        } else if (get_speed(ch->in_veh) >= 120) {
+        } else if (get_speed(in_veh) >= 120) {
           success_test_tn = 6;
-        } else if (get_speed(ch->in_veh) >= 60) {
+        } else if (get_speed(in_veh) >= 60) {
           success_test_tn = 5;
         } else {
           success_test_tn = 4;
@@ -606,7 +616,7 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
       }
     }
 
-    while (i->next_content) {
+    while (i->next_content && (!(i->in_veh && in_veh) || (i->next_content->vfront == vfront))) {
       if (!items_are_visually_similar(i, i->next_content))
         break;
 
@@ -639,7 +649,7 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
             send_to_char(ch, "(%d) ", num);
           }
           show_obj_to_char(i, ch, mode);
-        } else if (mode || ch->char_specials.rigging || ch->in_veh) {
+        } else if (mode || ch->char_specials.rigging || in_veh) {
           if (num > 1) {
             send_to_char(ch, "(%d) ", num);
           }
@@ -1746,7 +1756,7 @@ ACMD(do_items) {
     if (CAN_SEE_OBJ(ch, obj) && (!in_veh || obj->vfront == vfront)) {
       int num = 1;
 
-      while (obj->next_content) {
+      while (obj->next_content && (!in_veh || obj->next_content->vfront == vfront)) {
         if (!items_are_visually_similar(obj, obj->next_content))
           break;
 
