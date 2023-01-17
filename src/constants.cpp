@@ -398,6 +398,15 @@ const char *spirit_powers[] =
     "project"
   };
 
+const char *spirit_powers_from_bit[] =
+  {
+    "Confusion",
+    "Concealment",
+    "Engulfment",
+    "Movement Increase",
+    "Movement Decrease"
+  };
+
 /* POS_x */
 const char *position_types[] =
   {

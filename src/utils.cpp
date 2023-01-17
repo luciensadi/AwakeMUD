@@ -480,20 +480,21 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     base_target += 4;
     buf_mod(rbuf, rbuf_len, "OnFire", 4);
   }
-  for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-  {
+  for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
     if (sust->caster == FALSE && (sust->spell == SPELL_CONFUSION || sust->spell == SPELL_CHAOS)) {
       base_target += MIN(sust->force, sust->success);
       buf_mod(rbuf, rbuf_len, "Confused", MIN(sust->force, sust->success));
     }
   }
-  if (!(IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)))
-    for (struct spirit_sustained *sust = SPIRIT_SUST(ch); sust; sust = sust->next)
-      if (sust == CONFUSION)
-      {
+  if (!(IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch))) {
+    for (struct spirit_sustained *sust = SPIRIT_SUST(ch); sust; sust = sust->next) {
+      if (sust == CONFUSION) {
         base_target += GET_LEVEL(sust->target);
         buf_mod(rbuf, rbuf_len, "SConfused", GET_LEVEL(sust->target));
+        break;
       }
+    }
+  }
 #ifdef USE_SLOUCH_RULES
   if (temp_room && ROOM_FLAGGED(temp_room, ROOM_INDOORS)) {
     float heightdif = GET_HEIGHT(ch) / ((temp_room->z != 0 ? temp_room->z : 1)*100);

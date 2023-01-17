@@ -4854,7 +4854,7 @@ POWER(spirit_confusion)
     if (ignoring)
       log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
   } else {
-    act("$n winces and clutches at $s head.", FALSE, spirit, 0, ch, TO_VICT);
+    act("$N winces and clutches at $S head.", FALSE, spirit, 0, ch, TO_VICT);
     send_to_char("The world shifts and warps unnaturally around you.\r\n", tch);
     make_spirit_power(spirit, tch, CONFUSION);
     spiritdata->services--;

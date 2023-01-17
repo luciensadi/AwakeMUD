@@ -57,6 +57,8 @@ extern class helpList Help;
 extern class helpList WizHelp;
 extern struct time_info_data time_info;
 
+extern const char *spirit_powers_from_bit[];
+
 extern char *short_object(int virt, int where);
 extern const char *dist_name[];
 
@@ -6586,7 +6588,6 @@ ACMD(do_position)
 ACMD(do_status)
 {
   struct char_data *targ = ch;
-  bool printed = FALSE;
 
   if (GET_LEVEL(ch) >= LVL_BUILDER && *argument) {
     skip_spaces(&argument);
@@ -6597,189 +6598,175 @@ ACMD(do_status)
       targ = ch;
   }
 
+  char aff_buf[1000] = { '\0' };
+
   if (ch == targ)
     send_to_char("You are affected by:\r\n", ch);
   else send_to_char(ch, "%s is affected by:\r\n", GET_CHAR_NAME(targ));
 
   if (!IS_NPC(targ) && GET_POS(targ) == POS_MORTALLYW) {
-    send_to_char(ch, "  ^RBleeding Out ^r(^R%d^r ticks left until death)^n\r\n", GET_PC_SALVATION_TICKS(targ));
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^RBleeding Out ^r(^R%d^r ticks left until death)^n\r\n", GET_PC_SALVATION_TICKS(targ));
   }
 
   if (targ->real_abils.esshole) {
-    send_to_char(ch, "  Essence Hole (%.2f)\r\n", (float)targ->real_abils.esshole / 100);
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Essence Hole (%.2f)\r\n", (float)targ->real_abils.esshole / 100);
   }
   if (GET_MAG(targ) && targ->real_abils.highestindex > GET_INDEX(targ)) {
-    send_to_char(ch, "  Bioware Hole (%.2f)\r\n", (float)(targ->real_abils.highestindex - GET_INDEX(targ)) / 100);
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Bioware Hole (%.2f)\r\n", (float)(targ->real_abils.highestindex - GET_INDEX(targ)) / 100);
   }
   switch (get_armor_penalty_grade(targ)) {
     case ARMOR_PENALTY_TOTAL:
-      send_to_char("  Bulky Armor (Insane)\r\n", ch);
-      printed = TRUE;
+      strlcat(aff_buf, "  Bulky Armor (Insane)\r\n", sizeof(aff_buf));
       break;
     case ARMOR_PENALTY_HEAVY:
-      send_to_char("  Bulky Armor (Serious)\r\n", ch);
-      printed = TRUE;
+      strlcat(aff_buf, "  Bulky Armor (Serious)\r\n", sizeof(aff_buf));
       break;
     case ARMOR_PENALTY_MEDIUM:
-      send_to_char("  Bulky Armor (Moderate)\r\n", ch);
-      printed = TRUE;
+      strlcat(aff_buf, "  Bulky Armor (Moderate)\r\n", sizeof(aff_buf));
       break;
     case ARMOR_PENALTY_LIGHT:
-      send_to_char("  Bulky Armor (Light)\r\n", ch);
-      printed = TRUE;
+      strlcat(aff_buf, "  Bulky Armor (Light)\r\n", sizeof(aff_buf));
       break;
   }
   if (GET_TEMP_QUI_LOSS(targ)) {
-    send_to_char(ch, "  Temporary Quickness Loss: %d\r\n", GET_TEMP_QUI_LOSS(targ));
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Quickness Loss: %d\r\n", GET_TEMP_QUI_LOSS(targ));
   }
   if (GET_TEMP_MAGIC_LOSS(targ)) {
-    send_to_char(ch, "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(targ));
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(targ));
   }
   if (GET_TEMP_ESSLOSS(targ)) {
-    send_to_char(ch, "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(targ));
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(targ));
   }
   if (GET_REACH(targ) && !(AFF_FLAGGED(targ, AFF_CLOSECOMBAT))) {
-    send_to_char(ch, "  Extra Reach (%dm)\r\n", GET_REACH(targ));
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Extra Reach (%dm)\r\n", GET_REACH(targ));
   }
   if (AFF_FLAGGED(targ, AFF_CLOSECOMBAT)) {
-    send_to_char(ch, "  Close Combat\r\n");
-    printed = TRUE;
+    strlcat(aff_buf, "  Close Combat\r\n", sizeof(aff_buf));
   }
   if (AFF_FLAGGED(targ, AFF_RUTHENIUM)) {
-    send_to_char(ch, "  Ruthenium\r\n");
-    printed = TRUE;
+    strlcat(aff_buf, "  Ruthenium\r\n", sizeof(aff_buf));
   }
   if (IS_PERCEIVING(targ)) {
-    send_to_char("  Astral Perception (^yincreased TNs^n)\r\n", ch);
-    printed = TRUE;
+    strlcat(aff_buf, "  Astral Perception (^yincreased TNs^n)\r\n", sizeof(aff_buf));
   }
 
-  {
-    int conceal_rating = affected_by_power(targ, CONCEAL);
-    if (conceal_rating) {
-      send_to_char(ch, "  Spirit Concealment (%d)\r\n", conceal_rating);
-      printed = TRUE;
+  for (int bit_idx = 0; bit_idx < NUM_SPIRIT_POWER_BITS; bit_idx++) {
+    int rating = affected_by_power(targ, bit_idx);
+    if (rating) {
+      snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Spirit %s (%d)\r\n", spirit_powers_from_bit[bit_idx], rating);
     }
   }
 
   for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
     if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET || GET_DRUG_STAGE(targ, i) == DRUG_STAGE_COMEDOWN) {
-      send_to_char(ch, "  %s (%s): %ds",
+      snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  %s (%s): %ds",
                    drug_types[i].name,
                    GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET ? "Onset" : "Comedown",
                    GET_DRUG_DURATION(targ, i)*2);
       switch (i) {
         case DRUG_ACTH:
           // Has no long-lasting effects. Nothing to display here.
-          send_to_char("\r\n", ch);
+          strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           break;
         case DRUG_HYPER:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+4 spellcasting TNs, +1 other TNs, take 50% bonus damage)\r\n", ch);
+            strlcat(aff_buf, " (+4 spellcasting TNs, +1 other TNs, take 50% bonus damage)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_JAZZ:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+2 qui, +1d6 initiative)\r\n", ch);
+            strlcat(aff_buf, " (+2 qui, +1d6 initiative)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char(" (+1 spellcasting TNs, -1 qui)\r\n", ch);
+            strlcat(aff_buf, " (+1 spellcasting TNs, -1 qui)\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_KAMIKAZE:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+2 str, +1 bod/qui/wil, +1d6 initiative)\r\n", ch);
+            strlcat(aff_buf, " (+2 str, +1 bod/qui/wil, +1d6 initiative)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char(" (-1 qui/wil)\r\n", ch);
+            strlcat(aff_buf, " (-1 qui/wil)\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_PSYCHE:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+1 int)\r\n", ch);
+            strlcat(aff_buf, " (+1 int)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_BLISS:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (-1 rea, +1 TNs, 3 levels of pain resistance)\r\n", ch);
+            strlcat(aff_buf, " (-1 rea, +1 TNs, 3 levels of pain resistance)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_BURN:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (intoxicated)\r\n", ch);
+            strlcat(aff_buf, " (intoxicated)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char(" (hung over)\r\n", ch);
+            strlcat(aff_buf, " (hung over)\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_CRAM:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+1 rea, +1d6 initiative)\r\n", ch);
+            strlcat(aff_buf, " (+1 rea, +1d6 initiative)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_NITRO:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+2 str/wil, 6 levels of pain resistance, +2 to perception tests)\r\n", ch);
+            strlcat(aff_buf, " (+2 str/wil, 6 levels of pain resistance, +2 to perception tests)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_NOVACOKE:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+1 rea/cha, 1 level of pain resistance)\r\n", ch);
+            strlcat(aff_buf, " (+1 rea/cha, 1 level of pain resistance)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char(" (crashed cha, halved wil)\r\n", ch);
+            strlcat(aff_buf, " (crashed cha, halved wil)\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_ZEN:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (-2 rea, +1 TNs, +1 wil)\r\n", ch);
+            strlcat(aff_buf, " (-2 rea, +1 TNs, +1 wil)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         default:
           snprintf(buf, sizeof(buf), "SYSERR: Unknown drug type %d in aff!", i);
-          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+          mudlog(buf, targ, LOG_SYSLOG, TRUE);
           break;
       }
-      printed = TRUE;
     }
     else if (GET_DRUG_ADDICT(targ, i) > 0) {
       if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_GUIDED_WITHDRAWAL) {
-        send_to_char(ch, "  ^y%s Withdrawal (Guided, Edge %d): %s remaining^n\r\n",
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^y%s Withdrawal (Guided, Edge %d): %s remaining^n\r\n",
                      drug_types[i].name,
                      GET_DRUG_ADDICTION_EDGE(targ, i),
                      get_time_until_withdrawal_ends(targ, i));
       } else if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-        send_to_char(ch, "  ^Y%s Withdrawal (Forced, Edge %d): %s remaining^n\r\n",
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^Y%s Withdrawal (Forced, Edge %d): %s remaining^n\r\n",
                      drug_types[i].name,
                      GET_DRUG_ADDICTION_EDGE(targ, i),
                      get_time_until_withdrawal_ends(targ, i));
       } else {
-        send_to_char(ch, "  Addicted to %s (Edge: %d)\r\n", drug_types[i].name, GET_DRUG_ADDICTION_EDGE(targ, i));
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Addicted to %s (Edge: %d)\r\n",
+                     drug_types[i].name,
+                     GET_DRUG_ADDICTION_EDGE(targ, i));
       }
-      printed = TRUE;
     }
   }
 
 
   for (struct obj_data *bio = targ->bioware; bio; bio = bio->next_content) {
     if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
-      send_to_char("  An activated pain editor (+1 wil, -1 int)\r\n", ch);
-      printed = TRUE;
+      strlcat(aff_buf, "  An activated pain editor (+1 wil, -1 int)\r\n", sizeof(aff_buf));
       break;
     }
   }
@@ -6797,37 +6784,37 @@ ACMD(do_status)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
       }
       if ((IS_SENATOR(ch) || sust->spell == SPELL_MINDLINK) && sust->other && sust->other != targ)
-        send_to_char(ch, "%s (cast by ^c%s^n)\r\n", buf, GET_CHAR_NAME(sust->other));
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%s (cast by ^c%s^n)\r\n", buf, GET_CHAR_NAME(sust->other));
       else
-        send_to_char(ch, "%s\r\n", buf);
-      printed = TRUE;
+        strlcat(aff_buf, "%s\r\n", sizeof(aff_buf));
     }
   }
 
   if (GET_SUSTAINED_NUM(targ)) {
-    send_to_char(ch, "%s %s sustaining:\r\n", ch == targ ? "You" : GET_CHAR_NAME(targ), ch == targ ? "are" : "is");
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%s %s sustaining:\r\n", ch == targ ? "You" : GET_CHAR_NAME(targ), ch == targ ? "are" : "is");
     int i = 1;
     for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
       if (sust->caster || sust->spirit == targ) {
-        send_to_char(ch, "%d) %s (force %d, %d successes%s)", i, get_spell_name(sust->spell, sust->subtype), sust->force, sust->success, warn_if_spell_under_potential(sust));
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%d) %s (force %d, %d successes%s)", i, get_spell_name(sust->spell, sust->subtype), sust->force, sust->success, warn_if_spell_under_potential(sust));
         if ((IS_SENATOR(ch) || sust->spell == SPELL_MINDLINK)) {
-          send_to_char(ch, " (Cast on ^c%s^n)", GET_CHAR_NAME(sust->other));
+          snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), " (Cast on ^c%s^n)", GET_CHAR_NAME(sust->other));
         }
         if (sust->focus) {
-          send_to_char(ch, " (Sustained by %s)", GET_OBJ_NAME(sust->focus));
+          snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), " (Sustained by %s)", GET_OBJ_NAME(sust->focus));
         }
         if (sust->spirit && sust->spirit != ch) {
-          send_to_char(ch, " (Sustained by %s [id %d])", GET_NAME(sust->spirit), GET_GRADE(sust->spirit));
+          snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), " (Sustained by %s [id %d])", GET_NAME(sust->spirit), GET_GRADE(sust->spirit));
         }
-        send_to_char("\r\n", ch);
+        strlcat(aff_buf, "\r\n", sizeof(aff_buf));
         i++;
       }
     }
   }
 
-  if (!printed) {
-    send_to_char(ch, "Nothing.\r\n");
+  if (!*aff_buf) {
+    send_to_char("Nothing.\r\n", ch);
+  } else {
+    send_to_char(aff_buf, ch);
   }
 
   send_to_char(ch, "\r\n%s %s the following vision types:\r\n  %s\r\n",
