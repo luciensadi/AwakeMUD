@@ -2080,7 +2080,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
           if (ch->in_veh) {
             if (ch->in_veh->type == VEH_BIKE) {
               if (should_be_snowy) {
-                send_to_char(ch, "^WSnowflakes tumble and fall about you bike.^n\r\n");
+                send_to_char(ch, "^WSnowflakes tumble and fall about your bike.^n\r\n");
               } else {
                 send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
               }
