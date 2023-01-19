@@ -1062,11 +1062,11 @@ ACMD(do_dw_retrieve)
 {
   // Not mortally wounded
   FAILURE_CASE(GET_POS(ch) != POS_MORTALLYW, "A DocWagon triage drone states, \"^YVital signs non-critical. Moving to next...^L(fades into the distance)^n\"");
-  
+
   // No modulator
   struct obj_data *docwagon = find_best_active_docwagon_modulator(ch);
   FAILURE_CASE(!docwagon, "A DocWagon triage drone states, \"^RNo modulator detected. Cannot confirm contract...^L(fades into the distance)^n\"");
-  
+
   // If they're ready to be docwagon'd out, save them.
   if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
     docwagon_retrieve(ch);
@@ -1075,7 +1075,7 @@ ACMD(do_dw_retrieve)
   }
   return;
 }
-  
+
 /*
  * Lets the player give up and die if they're at 0 or less
  * physical points.
@@ -6116,6 +6116,10 @@ void perform_violence(void)
           }
         }
 #endif
+
+        // Add spirit movement powers.
+        target -= affected_by_power(ch, MOVEMENTUP) - affected_by_power(ch, MOVEMENTDOWN);
+        target += affected_by_power(FIGHTING(ch), MOVEMENTUP) - affected_by_power(FIGHTING(ch), MOVEMENTDOWN);
 
         // Set the target from the defender's attribute.
         target += defender_attribute;
