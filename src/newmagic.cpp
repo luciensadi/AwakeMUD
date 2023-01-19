@@ -4583,18 +4583,22 @@ bool spirit_can_perform(int type, int order, int tradition)
 
 void make_spirit_power(struct char_data *spirit, struct char_data *tch, int type)
 {
+  int force = GET_LEVEL(spirit);
+  if (type == CONFUSION)
+    force /= 3;
+
   struct spirit_sustained *ssust = new spirit_sustained;
   ssust->type = type;
   ssust->caster = TRUE;
   ssust->target = tch;
-  ssust->force = GET_LEVEL(spirit);
+  ssust->force = force;
   ssust->next = SPIRIT_SUST(spirit);
   SPIRIT_SUST(spirit) = ssust;
   ssust = new spirit_sustained;
   ssust->type = type;
   ssust->caster = FALSE;
   ssust->target = spirit;
-  ssust->force = GET_LEVEL(spirit);
+  ssust->force = force;
   ssust->next = SPIRIT_SUST(tch);
   SPIRIT_SUST(tch) = ssust;
 }
@@ -4836,29 +4840,41 @@ POWER(spirit_conceal)
 
 POWER(spirit_confusion)
 {
-  bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (affected_by_power(spirit, CONFUSION)) {
     act("$N stops providing that service.", FALSE, ch, 0, spirit, TO_CHAR);
     stop_spirit_power(spirit, CONFUSION);
     return;
   }
-  if (!tch)
-    send_to_char("Use confusion against which target?\r\n", ch);
-  else if (tch == spirit || tch == ch || affected_by_power(tch, CONFUSION))
+
+  FAILURE_CASE(GET_LEVEL(spirit) < 3, "Only spirits of force 3 and higher can use this power.");
+  FAILURE_CASE(!tch, "Use confusion against which target?");
+  FAILURE_CASE(tch == spirit, "It refuses to harm itself.");
+  FAILURE_CASE(tch == ch, "It refuses to harm you.");
+  FAILURE_CASE(affected_by_power(tch, CONFUSION), "They're already affected by that power.");
+  FAILURE_CASE(get_ch_in_room(spirit)->peaceful, "It's too peaceful here...");
+  FAILURE_CASE(!can_hurt(ch, tch, TYPE_HIT, TRUE) || would_become_killer(ch, tch), "You can't harm them.");
+  FAILURE_CASE(MOB_FLAGGED(tch, MOB_INANIMATE), "Confusion doesn't work on machines.");
+
+  if (IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else if (get_ch_in_room(spirit)->peaceful)
-    send_to_char("It's too peaceful here...\r\n", ch);
-  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
-    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-    if (ignoring)
-      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
-  } else {
-    act("$N winces and clutches at $S head.", FALSE, spirit, 0, ch, TO_VICT);
-    send_to_char("The world shifts and warps unnaturally around you.\r\n", tch);
-    make_spirit_power(spirit, tch, CONFUSION);
-    spiritdata->services--;
+    log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+    return;
   }
+
+  act("You murmur and gesture towards $N, who winces and clutches at $S head.", FALSE, ch, 0, tch, TO_CHAR);
+  act("$n murmurs something and gestures towards you. Almost immediately, the world shifts and warps unnaturally around you.", FALSE, ch, 0, tch, TO_VICT);
+  act("$n murmurs something and gestures towards $N, who winces and clutches at $S head.", FALSE, ch, 0, tch, TO_NOTVICT);
+
+  make_spirit_power(spirit, tch, CONFUSION);
+  spiritdata->services--;
+
+  if (CAN_SEE(tch, ch)) {
+    set_fighting(tch, ch);
+    set_fighting(ch, tch);
+  }
+
+  WAIT_STATE(ch, 2 RL_SEC);
 }
 
 POWER(spirit_engulf)

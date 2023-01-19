@@ -488,7 +488,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
   }
   if (!(IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch))) {
     for (struct spirit_sustained *sust = SPIRIT_SUST(ch); sust; sust = sust->next) {
-      if (sust == CONFUSION) {
+      if (sust->type == CONFUSION) {
         base_target += GET_LEVEL(sust->target);
         buf_mod(rbuf, rbuf_len, "SConfused", GET_LEVEL(sust->target));
         break;
