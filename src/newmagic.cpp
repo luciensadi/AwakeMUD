@@ -4657,6 +4657,12 @@ POWER(spirit_appear)
 
 POWER(spirit_sorcery)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_sorcery!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   if (!MOB_FLAGS(spirit).IsSet(MOB_AIDSORCERY)) {
     spiritdata->services--;
     MOB_FLAGS(spirit).SetBit(MOB_AIDSORCERY);
@@ -4668,6 +4674,12 @@ POWER(spirit_sorcery)
 
 POWER(spirit_study)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_study!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   if (!MOB_FLAGS(spirit).IsSet(MOB_STUDY)) {
     spiritdata->services--;
     MOB_FLAGS(spirit).SetBit(MOB_STUDY);
@@ -4678,6 +4690,12 @@ POWER(spirit_study)
 
 POWER(spirit_sustain)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_sustain!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   struct sustain_data *sust;
   if (GET_SUSTAINED_NUM(spirit))
     send_to_char(ch, "That %s is already sustaining a spell.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
@@ -4756,6 +4774,12 @@ POWER(spirit_sustain)
 
 POWER(spirit_accident)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_accident!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   struct char_data *tch = get_char_room_vis(spirit, arg);
   bool ignoring = FALSE;
 
@@ -4791,6 +4815,12 @@ POWER(spirit_accident)
 
 POWER(spirit_binding)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_binding!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
 
@@ -4815,6 +4845,12 @@ POWER(spirit_binding)
 
 POWER(spirit_conceal)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_conceal!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (affected_by_power(spirit, CONCEAL)) {
@@ -4840,6 +4876,12 @@ POWER(spirit_conceal)
 
 POWER(spirit_confusion)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_confusion!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (affected_by_power(spirit, CONFUSION)) {
     act("$N stops providing that service.", FALSE, ch, 0, spirit, TO_CHAR);
@@ -4879,6 +4921,12 @@ POWER(spirit_confusion)
 
 POWER(spirit_engulf)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_engulf!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (affected_by_power(spirit, ENGULF)) {
@@ -4935,6 +4983,12 @@ POWER(spirit_engulf)
 
 POWER(spirit_fear)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_fear!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
@@ -4970,6 +5024,12 @@ POWER(spirit_fear)
 
 POWER(spirit_flameaura)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_flameaura!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   if (!MOB_FLAGGED(spirit, MOB_FLAMEAURA))
     act("$n's body erupts in flames.", TRUE, spirit, 0, 0, TO_ROOM);
   else
@@ -4980,6 +5040,12 @@ POWER(spirit_flameaura)
 
 POWER(spirit_flamethrower)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_flamethrower!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
@@ -5003,6 +5069,12 @@ POWER(spirit_flamethrower)
 
 POWER(spirit_guard)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_guard!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   if (!MOB_FLAGGED(spirit, MOB_SPIRITGUARD))
     act("$n begins to guard the area from accidents.", FALSE, spirit, 0, ch, TO_VICT);
   else
@@ -5013,14 +5085,24 @@ POWER(spirit_guard)
 
 POWER(spirit_leave)
 {
-  act("$n vanishes back into the metaplanes.", TRUE, spirit, 0, ch, TO_NOTVICT);
-  send_to_char(ch, "%s returns to the metaplanes to await further orders.\r\n", CAP(GET_NAME(spirit)));
+  if (spirit) {
+    act("$n vanishes back into the metaplanes.", TRUE, spirit, 0, ch, TO_NOTVICT);
+    send_to_char(ch, "%s returns to the metaplanes to await further orders.\r\n", CAP(GET_NAME(spirit)));
+    extract_char(spirit);
+  } else {
+    mudlog("SYSERR: Received NULL spirit to spirit_leave!", ch, LOG_SYSLOG, TRUE);
+  }
   spiritdata->called = FALSE;
-  extract_char(spirit);
 }
 
 POWER(spirit_dematerialize)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_dematerialize!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   act("$n fades from the physical realm.\r\n", TRUE, spirit, 0, ch, TO_ROOM);
   MOB_FLAGS(spirit).RemoveBits(MOB_DUAL_NATURE, MOB_FLAMEAURA, ENDBIT);
   MOB_FLAGS(spirit).SetBit(MOB_ASTRAL);
@@ -5029,6 +5111,12 @@ POWER(spirit_dematerialize)
 
 POWER(spirit_materialize)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_materialize!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   if (IS_DUAL(spirit)) {
     send_to_char(ch, "%s is already materialized.\r\n", CAP(GET_NAME(spirit)));
     return;
@@ -5041,6 +5129,12 @@ POWER(spirit_materialize)
 
 POWER(spirit_movement)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_movement!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   int increase = 0;
   if (affected_by_power(spirit, MOVEMENTUP)) {
@@ -5093,6 +5187,12 @@ POWER(spirit_movement)
 
 POWER(spirit_breath)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_breath!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
@@ -5126,6 +5226,12 @@ POWER(spirit_breath)
 
 POWER(spirit_attack)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_attack!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
