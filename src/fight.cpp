@@ -97,6 +97,7 @@ extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char
 extern char *get_player_name(vnum_t id);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool check_sentinel_snap_back(struct char_data *ch);
+extern void end_quest(struct char_data *ch);
 
 // Corpse saving externs.
 extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
@@ -970,6 +971,10 @@ void raw_kill(struct char_data * ch)
       char_to_room(ch, &world[i]);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
       PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
+
+      if (GET_QUEST(ch)) {
+        end_quest(ch);
+      }
     }
   }
 
