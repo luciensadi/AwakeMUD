@@ -633,7 +633,7 @@ struct command_info cmd_info[] =
     { "hangup"     , POS_LYING   , do_phone    , 0, SCMD_HANGUP, FALSE },
     { "handbook"   , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_HANDBOOK, FALSE },
     { "hcontrol"   , POS_DEAD    , do_hcontrol , LVL_EXECUTIVE, 0, FALSE },
-    { "heal"       , POS_STANDING, do_heal     , 0, 0, FALSE },
+    { "heal"       , POS_SITTING , do_heal     , 0, 0, FALSE },
     { "hedit"      , POS_DEAD    , do_hedit    , LVL_BUILDER, 0, FALSE },
     { "helpedit"   , POS_DEAD    , do_helpedit , LVL_FIXER, 0, FALSE },
     { "helpexport" , POS_DEAD    , do_helpexport, LVL_PRESIDENT, 0, FALSE },
