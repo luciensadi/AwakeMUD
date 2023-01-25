@@ -2877,8 +2877,9 @@ enum {
 #define NUYEN_OUTFLOW_RITUAL_CASTING        28
 #define NUYEN_INCOME_STAFF_PAYOUT           29
 #define NUYEN_OUTFLOW_STAFF_CHARGE          30
+#define NUYEN_OUTFLOW_SYSPOINT_PURCHASE     31
 
-#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 31
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 32
 // Make sure you update constants.cpp's nuyen_faucets_and_sinks[] too!
 
 #define NI_IS_SINK   0

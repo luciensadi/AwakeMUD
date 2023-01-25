@@ -4876,6 +4876,22 @@ ACMD(do_syspoints) {
       return;
     }
 
+    if (is_abbrev(arg, "purchase")) {
+      // Can they afford it?
+      FAILURE_CASE_PRINTF(GET_NUYEN(ch) < SYSP_NUYEN_PURCHASE_COST, "That costs %d nuyen, and you only have %d on hand.", SYSP_NUYEN_PURCHASE_COST, GET_NUYEN(ch));
+
+      // Have they entered the confirmation command?
+      FAILURE_CASE_PRINTF(!is_abbrev(buf, "confirm"), "You can spend %d nuyen to purchase a syspoint. To do so, type SYSPOINT PURCHASE CONFIRM.", SYSP_NUYEN_PURCHASE_COST);
+
+      // Do it.
+      lose_nuyen(ch, SYSP_NUYEN_PURCHASE_COST, NUYEN_OUTFLOW_SYSPOINT_PURCHASE);
+      GET_SYSTEM_POINTS(ch)++;
+      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s traded %d nuyen for one syspoint (now has %d)", GET_CHAR_NAME(ch), SYSP_NUYEN_PURCHASE_COST, GET_SYSTEM_POINTS(ch));
+      playerDB.SaveChar(ch);
+
+      return;
+    }
+
     send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
     return;
   }
