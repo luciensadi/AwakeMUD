@@ -734,7 +734,11 @@ bool can_take_obj(struct char_data * ch, struct obj_data * obj)
     if (access_level(ch, LVL_PRESIDENT)) {
       act("You bypass the !TAKE flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
     } else {
-      act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
+      if (GET_OBJ_TYPE(obj) == ITEM_DESTROYABLE) {
+        act("You can't pick $p up, but you're pretty sure you could ##^WDESTROY^n it.", FALSE, ch, obj, 0, TO_CHAR);
+      } else {
+        act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
+      }
       return 0;
     }
   }
