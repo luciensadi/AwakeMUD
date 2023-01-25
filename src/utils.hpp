@@ -662,7 +662,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define CAN_CARRY_W(ch)       ((GET_STR(ch) * 10) + 30)
 #define CAN_CARRY_N(ch)       (8 + GET_QUI(ch) + (GET_REAL_LEVEL(ch)>=LVL_BUILDER?50:0))
 #define AWAKE(ch)             (GET_POS(ch) > POS_SLEEPING && GET_QUI(ch) > 0)
-#define IS_JACKED_IN(ch)      (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE) || PLR_FLAGGED(ch, PLR_MATRIX))
+#define IS_RIGGING(ch)        (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
+#define IS_JACKED_IN(ch)      (IS_RIGGING(ch) || PLR_FLAGGED(ch, PLR_MATRIX))
 #define CAN_SEE_IN_DARK(ch)   (SEES_ASTRAL(ch) || CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT))
 #define GET_BUILDING(ch)	((ch)->char_specials.programming)
 #define IS_WORKING(ch)        ((AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, AFF_PILOT, AFF_RIG, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT)))
@@ -1346,5 +1347,7 @@ void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick,
 
 #define GET_WOUND_NAME(damage_level) (wound_name[MIN(DEADLY, MAX(0, damage_level))])
 #define GET_SHORT_WOUND_NAME(damage_level) (wound_arr[MIN(DEADLY, MAX(0, damage_level))])
+
+#define DEBUG_TO_STAFF(ch, ...) if (access_level((ch), LVL_BUILDER)) { send_to_char((ch), __VA_ARGS__); }
 
 #endif

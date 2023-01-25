@@ -1254,8 +1254,8 @@ ACMD(do_driveby)
     return;
   }
 
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    send_to_char("You don't have a pistol to point at anyone...\r\n", ch);
+  if (IS_RIGGING(ch)) {
+    send_to_char("You're jacked into the vehicle itself, so you can't perform a driveby.\r\n", ch);
     return;
   }
 
@@ -1434,7 +1434,7 @@ ACMD(do_speed)
       send_to_char("You bring the vehicle to a halt.\r\n", ch);
       send_to_veh("The vehicle slows to a stop.\r\n", veh, ch, FALSE);
     } else {
-      if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG)) {
+      if (!IS_RIGGING(ch)) {
         send_to_char("You put your foot on the brake.\r\n", ch);
         send_to_veh("You slow down.", veh, ch, TRUE);
       } else {
@@ -1442,7 +1442,7 @@ ACMD(do_speed)
       }
     }
   } else if (i > veh->cspeed) {
-    if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG)) {
+    if (!IS_RIGGING(ch)) {
       send_to_char("You put your foot on the accelerator.\r\n", ch);
       send_to_veh("You speed up.", veh, ch, TRUE);
     } else {
@@ -1546,7 +1546,7 @@ ACMD(do_target)
   }
 
   if (*arg && *buf2) {
-    if (!(AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))) {
+    if (!IS_RIGGING(ch)) {
       send_to_char("But you aren't piloting this vehicle.\r\n", ch);
       return;
     }
@@ -1567,7 +1567,7 @@ ACMD(do_target)
     }
     strlcpy(arg, buf2, sizeof(arg));
   } else {
-    if (!(AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_MANNING))) {
+    if (!IS_RIGGING(ch) && !AFF_FLAGGED(ch, AFF_MANNING)) {
       send_to_char("You don't have control over any mounts.\r\n", ch);
       return;
     }
@@ -1927,7 +1927,7 @@ ACMD(do_gridguide)
       DELETE_ARRAY_IF_EXTANT(grid->name);
       DELETE_AND_NULL(grid);
       send_to_char("You remove the destination from the system.\r\n", ch);
-      if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+      if (IS_RIGGING(ch)) {
         send_to_veh("The autonav flashes as a destination is deleted.\r\n", veh, NULL, FALSE);
       } else {
         act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);
@@ -1972,7 +1972,7 @@ ACMD(do_gridguide)
     grid->next = veh->grid;
     veh->grid = grid;
     send_to_char("You add the destination into the system.\r\n", ch);
-    if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+    if (IS_RIGGING(ch)) {
       send_to_veh("The autonav flashes as a destination is added.\r\n", veh, NULL, FALSE);
     } else {
       act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);

@@ -309,7 +309,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
     char cmd_buf[100];
     *cmd_buf = '\0';
 
-    if (PLR_FLAGGED(victim, PLR_REMOTE) || AFF_FLAGGED(victim, AFF_RIG)) {
+    if (IS_RIGGING(victim)) {
       ACMD_DECLARE(do_return);
       do_return(victim, cmd_buf, 0, 0);
     }
@@ -427,7 +427,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     }
   }
 
-  if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
+  if (!(AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch)))
   {
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       find_and_draw_weapon(ch);
@@ -3564,7 +3564,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
   if (GET_OBJ_TYPE(wielded) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded)))
   {
     // First, check if they're manning a turret-- if they are, special handling is required.
-    if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))  {
+    if (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch))  {
       // NPCs don't care about ammo in their mounts. No deduction needed here.
       if (IS_NPC(ch))
         return TRUE;
@@ -3696,7 +3696,7 @@ int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyrom
   int rnum, comp = 0;
 
   // Can't use bipods/tripods if you're controlling a vehicle weapon.
-  bool can_use_bipods_and_tripods = !is_using_gyromount && !PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG) && !AFF_FLAGGED(ch, AFF_MANNING);
+  bool can_use_bipods_and_tripods = !is_using_gyromount && !IS_RIGGING(ch) && !AFF_FLAGGED(ch, AFF_MANNING);
 
   if (!gun || GET_OBJ_TYPE(gun) != ITEM_WEAPON)
     return 0;
@@ -4244,7 +4244,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   }
 
   // Now that we've sent the messages, change to the vehicle's room (if we're in a vehicle).
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (IS_RIGGING(ch)) {
     RIG_VEH(ch, veh);
     ch_room = get_veh_in_room(veh);
   }
@@ -4497,7 +4497,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 #endif
 
   // EXCEPT: If you're rigging (not manning), things change.
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (IS_RIGGING(ch)) {
     struct veh_data *veh = get_veh_controlled_by_char(ch);
     ch_has_ultrasound = vehicle_has_ultrasound_sensors(veh); // Eventually, we'll have ultrasonic sensors on vehicles too.
     ch_has_thermographic = TRUE;
@@ -5595,7 +5595,7 @@ void roll_individual_initiative(struct char_data *ch)
   if (AWAKE(ch))
   {
     // While rigging, riggers receive only the modifications given them by the vehicle control rig (see Vehicles and Drones, p. 130) they are using.
-    if (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    if (IS_RIGGING(ch)) {
       // Note: Dice don't explode in initiative rolls. This is your base value.
       GET_INIT_ROLL(ch) = GET_REAL_REA(ch) + dice(1, 6);
 
@@ -6145,7 +6145,7 @@ void perform_violence(void)
     }
 
     // Manning weaponry.
-    if (AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+    if (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch)) {
       struct veh_data *veh = NULL;
       RIG_VEH(ch, veh);
 
@@ -6792,7 +6792,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
     modtarget++;
 
-  if (AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE))
+  if (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch))
   {
     skill_total = get_skill(ch, SKILL_GUNNERY, base_target);
   } else if (wielded && GET_SKILL(ch, GET_OBJ_VAL(wielded, 4)) < 1)

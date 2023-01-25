@@ -566,7 +566,7 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
   struct veh_data * in_veh = ch->in_veh;
   bool vfront = ch->vfront;
 
-  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (IS_RIGGING(ch)) {
     struct veh_data *veh;
     RIG_VEH(ch, veh);
     in_veh = veh->in_veh;
@@ -1706,7 +1706,7 @@ ACMD(do_mobs) {
   struct room_data *room = get_ch_in_room(ch);
   const char *location_string = ch->in_veh ? "around your vehicle" : "around you";
 
-  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (IS_RIGGING(ch)) {
     struct veh_data *veh;
     RIG_VEH(ch, veh);
     room = get_veh_in_room(veh);
@@ -1715,7 +1715,7 @@ ACMD(do_mobs) {
 
   if (!room) {
     send_to_char("You can't see anything!!\r\n", ch);
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s%s has no room in do_mobs!", GET_CHAR_NAME(ch), PLR_FLAGGED(ch, PLR_REMOTE) ? " (rigging)" : "");
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s%s has no room in do_mobs!", GET_CHAR_NAME(ch), IS_RIGGING(ch) ? " (rigging)" : "");
     return;
   }
 
@@ -1739,7 +1739,7 @@ ACMD(do_items) {
   bool vfront = ch->vfront;
   struct room_data *in_room = ch->in_room;
 
-  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (IS_RIGGING(ch)) {
     struct veh_data *veh;
     RIG_VEH(ch, veh);
     in_veh = veh->in_veh;
@@ -1749,7 +1749,7 @@ ACMD(do_items) {
 
   if (!in_room && !in_veh) {
     send_to_char("You can't see anything!!\r\n", ch);
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s%s has no room OR veh in do_items!", GET_CHAR_NAME(ch), PLR_FLAGGED(ch, PLR_REMOTE) ? " (rigging)" : "");
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s%s has no room OR veh in do_items!", GET_CHAR_NAME(ch), IS_RIGGING(ch) ? " (rigging)" : "");
     return;
   }
 
@@ -1811,7 +1811,7 @@ void update_blood(void)
 void look_in_veh(struct char_data * ch)
 {
   struct room_data *was_in = NULL;
-  if (!(AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)))
+  if (!IS_RIGGING(ch))
   {
     if (!ch->in_veh->in_room && !ch->in_veh->in_veh) {
       snprintf(buf, sizeof(buf), "SYSERR: Character %s is not in a room or vehicle.", GET_CHAR_NAME(ch));
@@ -4391,7 +4391,7 @@ ACMD(do_score)
   if ( IS_NPC(ch) && ch->desc == NULL )
     return;
 
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (IS_RIGGING(ch)) {
     struct veh_data *veh;
     RIG_VEH(ch, veh);
     if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
@@ -6274,7 +6274,7 @@ ACMD(do_commands)
               break;
           }
     }
-  } else if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+  } else if (IS_RIGGING(ch)) {
     for (no = 1, cmd_num = 1; *rig_info[cmd_num].command != '\n';cmd_num++) {
       // Skip any commands that don't match the prefix provided.
       if (!mode_all && *arg && !is_abbrev(arg, rig_info[cmd_num].command))
@@ -6333,16 +6333,16 @@ bool char_passed_moving_vehicle_perception_test(struct char_data *ch, struct veh
     return TRUE;
 
   if (get_speed(in_veh) >= 200) {
-    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1);
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) >= 1);
   }
   else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
-    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1);
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) >= 1);
   }
   else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
-    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1);
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) >= 1);
   }
 
-  return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1);
+  return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) >= 1);
 }
 
 const char *render_room_for_scan(struct char_data *ch, struct room_data *room, struct veh_data *in_veh) {
@@ -6351,6 +6351,7 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
 
   // If you can't see into the room, skip.
   if (!LIGHT_OK_ROOM_SPECIFIED(ch, room)) {
+    DEBUG_TO_STAFF(ch, "bad light\r\n");
     return NULL;
   }
 
@@ -6361,16 +6362,22 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
   // First, people.
   for (struct char_data *list = room->people; list; list = list->next_in_room) {
     // Always skip invisible people.
-    if (!CAN_SEE(ch, list))
+    if (!CAN_SEE(ch, list)) {
+      DEBUG_TO_STAFF(ch, "%s: can't see\r\n", GET_CHAR_NAME(list));
       continue;
+    }
 
     // Skip inanimates if you only see with astral.
-    if (ch_only_sees_with_astral && MOB_FLAGGED(list, MOB_INANIMATE))
+    if (ch_only_sees_with_astral && MOB_FLAGGED(list, MOB_INANIMATE)) {
+      DEBUG_TO_STAFF(ch, "%s: astral-only vs inanimate\r\n", GET_CHAR_NAME(list));
       continue;
+    }
 
     // Moving vehicles have a chance to cause you to miss things on scan.
-    if (!char_passed_moving_vehicle_perception_test(ch, in_veh))
+    if (!char_passed_moving_vehicle_perception_test(ch, in_veh)) {
+      DEBUG_TO_STAFF(ch, "%s: failed moving vehicle perception test\r\n", GET_CHAR_NAME(list));
       continue;
+    }
 
     // You see the person-- render them.
     {
@@ -6434,101 +6441,83 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
 
 ACMD(do_scan)
 {
-  struct veh_data *in_veh = NULL;
   bool specific = FALSE;
-  int i = 0;
-  struct room_data *x = NULL;
+  int dir = 0;
+  struct room_data *in_room = get_ch_in_room(ch);
+  struct veh_data *in_veh = NULL;
 
   argument = any_one_arg(argument, buf);
 
   if (*buf) {
     if (is_abbrev(buf, "south")) {
-      i = SCMD_SOUTH;
+      dir = SCMD_SOUTH; // why SCMD specifically? That's incremented by 1 compared to the raw directions
       specific = TRUE;
     } else {
-      for (; !specific && (i < NUM_OF_DIRS); ++i) {
-        if (is_abbrev(buf, dirs[i]))
+      for (; !specific && (dir < NUM_OF_DIRS); ++dir) {
+        if (is_abbrev(buf, dirs[dir]))
           specific = TRUE;
       }
     }
   }
 
-  if (ch->in_veh || ch->char_specials.rigging) {
-    RIG_VEH(ch, in_veh);
-    if (ch->in_room)
-      x = ch->in_room;
-    ch->in_room = in_veh->in_room;
-  }
+  RIG_VEH(ch, in_veh);
+  if (in_veh)
+    in_room = in_veh->in_room;
 
   // Scanning all rooms:
   if (!specific) {
     bool anythere = FALSE;
-    struct room_data *in_room = get_ch_in_room(ch);
 
-    for (i = 0; i < NUM_OF_DIRS; ++i) {
-      if (!CAN_GO(ch, i) || IS_SET(EXIT(ch, i)->exit_info, EX_HIDDEN))
+    for (int dir = 0; dir < NUM_OF_DIRS; ++dir) {
+      if (!CAN_GO2(in_room, dir) || IS_SET(in_room->dir_option[dir]->exit_info, EX_HIDDEN))
         continue;
 
-      if (EXIT(ch, i)->to_room == in_room) {
-        send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
+      if (in_room->dir_option[dir]->to_room == in_room) {
+        send_to_char(ch, "%s: More of the same.\r\n", dirs[dir]);
         continue;
       }
 
-      const char *result = render_room_for_scan(ch, EXIT(ch, i)->to_room, in_veh);
+      const char *result = render_room_for_scan(ch, in_room->dir_option[dir]->to_room, in_veh);
 
       if (result && *result) {
         anythere = TRUE;
-        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[i]), dist_name[0], result);
+        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[dir]), dist_name[0], result);
       }
     }
 
     if (!anythere) {
       send_to_char("You don't seem to see anyone in the surrounding areas.\r\n", ch);
-      if (in_veh) {
-        ch->in_room = x;
-      }
       return;
     }
   }
   else {
-    --i;
+    --dir;
 
     bool anythere = FALSE;
 
-    // We move them as part of this, so store their current room so we can snap them back.
-    struct room_data *was_in_room = ch->in_room;
-
     for (int dist = 1; dist <= find_sight(ch); dist++) {
-      if (!CAN_GO(ch, i) || IS_SET(EXIT(ch, i)->exit_info, EX_HIDDEN)) {
-        if (in_veh) {
-          ch->in_room = x;
-        } else {
-          ch->in_room = was_in_room;
-        }
+      if (!CAN_GO2(in_room, dir) || IS_SET(in_room->dir_option[dir]->exit_info, EX_HIDDEN)) {
         if (dist == 1)
           send_to_char("There is no exit in that direction.\r\n", ch);
+        if (!anythere) {
+          send_to_char("You don't seem to see anyone in that direction.\r\n", ch);
+        }
         return;
       }
 
-      ch->in_room = EXIT(ch, i)->to_room;
+      in_room = in_room->dir_option[dir]->to_room;
 
-      const char *result = render_room_for_scan(ch, ch->in_room, in_veh);
+      const char *result = render_room_for_scan(ch, in_room, in_veh);
 
       if (result && *result) {
         anythere = TRUE;
-        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[i]), dist_name[dist - 1], result);
+        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[dir]), dist_name[dist - 1], result);
       }
     }
 
     if (!anythere) {
       send_to_char("You don't seem to see anyone in that direction.\r\n", ch);
     }
-
-    // Perform PC snap back.
-    ch->in_room = was_in_room;
-  }
-  if (in_veh) {
-    ch->in_room = x;
   }
 }
 

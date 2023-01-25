@@ -63,7 +63,7 @@ ACMD(do_say)
   FAILURE_CASE(subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && !IS_NPC(ch) && !char_can_make_noise(ch),
                "You can't seem to make any noise.");
 
-  FAILURE_CASE(AFF_FLAGGED(ch, AFF_RIG), "You have no mouth.");
+  FAILURE_CASE(IS_RIGGING(ch), "You have no mouth.");
 
   char arg_known_size[MAX_INPUT_LENGTH + 1];
   strlcpy(arg_known_size, argument, sizeof(arg_known_size));
