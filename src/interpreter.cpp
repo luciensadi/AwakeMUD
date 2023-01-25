@@ -292,6 +292,7 @@ ACMD_DECLARE(do_ram);
 ACMD_DECLARE(do_recap);
 ACMD_DECLARE(do_ready);
 ACMD_DECLARE(do_reboot);
+ACMD_DECLARE(do_redesc);
 ACMD_DECLARE(do_reflex);
 ACMD_DECLARE(do_register);
 ACMD_DECLARE(do_release);
@@ -799,6 +800,7 @@ struct command_info cmd_info[] =
     { "ready"      , POS_LYING   , do_ready    , 0, 0, FALSE },
     { "reboot"     , POS_DEAD    , do_reboot   , LVL_DEVELOPER, 0, FALSE },
     { "recap"      , POS_DEAD    , do_recap    , 0, 0, TRUE },
+    { "redesc"     , POS_DEAD    , do_redesc   , LVL_FIXER, 0, FALSE },
     { "reload"     , POS_RESTING , do_reload   , 0, 0, FALSE },
     { "release"    , POS_LYING   , do_release  , 0, 0, FALSE },
     { "relieve"    , POS_STANDING, do_relieve  , 0, 0, FALSE },

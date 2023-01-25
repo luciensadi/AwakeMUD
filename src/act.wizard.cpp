@@ -6418,7 +6418,7 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   half_chop(argument, arg, buf);
 
   if (!*arg) {
-    send_to_char("You have to restring something!\r\n", ch);
+    send_to_char("Syntax: RESTRING <item> <new short description>\r\n", ch);
     return FALSE;
   }
 
@@ -6530,6 +6530,30 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
 
 ACMD(do_restring) {
   restring_with_args(ch, argument, FALSE);
+}
+
+ACMD(do_redesc) {
+  struct obj_data *obj;
+  half_chop(argument, arg, buf);
+
+  FAILURE_CASE(!*arg, "Syntax: REDESC <item> <new full description>");
+  FAILURE_CASE(!*buf, "You need to provide a short desc.");
+  FAILURE_CASE(!(obj = get_obj_in_list_vis(ch, arg, ch->carrying)), "You're not carrying that item.");
+  FAILURE_CASE(GET_OBJ_TYPE(obj) != ITEM_CUSTOM_DECK, "You can only redesc custom decks.");
+
+  // TODO: Wrap this in an ifcheck so we don't double up on neutrals.
+  strlcat(buf, "^n", sizeof(buf));
+
+  // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+  if (get_string_length_after_color_code_removal(buf, ch) == -1)
+    return;
+
+  snprintf(buf2, sizeof(buf2), "%s redesced '%s' (%ld) (see command invocation for details)", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+
+  DELETE_ARRAY_IF_EXTANT(obj->photo);
+  obj->photo = str_dup(buf);
+  send_to_char(ch, "%s successfully redesced.\r\n", GET_OBJ_NAME(obj));
 }
 
 ACMD(do_incognito)
