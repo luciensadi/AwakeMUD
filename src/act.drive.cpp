@@ -977,6 +977,12 @@ ACMD(do_control)
     send_to_char("Your subscriber list isn't that big.\r\n", ch);
     return;
   }
+
+  if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+    send_to_char("It doesn't respond.\r\n", ch);
+    return;
+  }
+
   if (!veh->in_room && !veh->in_veh) {
     send_to_char("You can't seem to make contact with it.\r\n", ch);
     snprintf(buf, sizeof(buf), "SYSERR: Vehicle %s is not located in a valid room or vehicle!\r\n", GET_VEH_NAME(veh));
