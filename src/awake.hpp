@@ -2365,7 +2365,8 @@ enum {
 #define COMBAT_MOD_OPPONENT_BURST_COUNT  12
 #define COMBAT_MOD_FOOTANCHORS           13
 #define COMBAT_MOD_VEHICLE_HANDLING      14
-#define NUM_COMBAT_MODIFIERS             15
+#define COMBAT_MOD_WIELDING_A_NON_WEAPON 15
+#define NUM_COMBAT_MODIFIERS             16
 // End new combat modifiers.
 
 #define JURISDICTION_SEATTLE   0

@@ -2706,6 +2706,7 @@ const char *combat_modifiers[] =
   "Opponent Burst",
   "Foot Anchors",
   "Vehicle Handling",
+  "Non-Weapon",
   "ERROR"
 };
 

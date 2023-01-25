@@ -205,7 +205,7 @@ struct melee_combat_data {
     dam_type = TYPE_HIT;
     damage_level = MODERATE;
 
-    if (weapon) {
+    if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
       if (ranged_combat_mode) {
         switch (GET_WEAPON_SKILL(weapon)) {
           case SKILL_PISTOLS:
@@ -374,10 +374,11 @@ struct combat_data
     too_tall = is_char_too_tall(ch);
 
     weapon = weap;
-    ranged_combat_mode = weapon
-                    && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
-                    && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS
-                        && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON);
+
+    ranged_combat_mode = (weap
+                          && GET_OBJ_TYPE(weap) == ITEM_WEAPON
+                          && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
+                          && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON));
 
     cyber = new struct cyberware_data(ch);
     ranged = new struct ranged_combat_data(ch, weapon, ranged_combat_mode);
