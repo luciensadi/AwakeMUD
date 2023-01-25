@@ -326,7 +326,7 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define IS_ASTRAL(ch) (MOB_FLAGGED(ch, MOB_ASTRAL) || IS_PROJECT(ch))
 #define IS_DUAL(ch)   (MOB_FLAGGED(ch, MOB_DUAL_NATURE) || access_level(ch, LVL_ADMIN))
 #define IS_PERCEIVING(ch) (MOB_FLAGGED(ch, MOB_PERCEIVING) || PLR_FLAGGED(ch, PLR_PERCEIVE))
-#define SEES_ASTRAL(ch) (IS_ASTRAL(ch) || IS_DUAL(ch) || IS_PERCEIVING(ch))
+#define SEES_ASTRAL(ch) (!IS_RIGGING(ch) && (IS_ASTRAL(ch) || IS_DUAL(ch) || IS_PERCEIVING(ch)))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
 
 // ONLY for use on non-Bitfield bitvectors:

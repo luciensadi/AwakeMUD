@@ -417,8 +417,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     return 100;
   }
 
-  bool is_rigging = (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
-  if (is_rigging) {
+  if (IS_RIGGING(ch)) {
     struct veh_data *veh;
     RIG_VEH(ch, veh);
     temp_room = get_veh_in_room(veh);
@@ -431,8 +430,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
   }
 
   // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here.
-  if (!is_rigging && SEES_ASTRAL(ch))
-  {
+  if (SEES_ASTRAL(ch)) {
     if (!skill_is_magic && IS_PERCEIVING(ch)) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
@@ -1472,7 +1470,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
 
   // If you ever implement the Adept power Improved Ability, it would go here. See Core p169 for details.
 
-  bool should_gain_physical_boosts = !PLR_FLAGGED(ch, PLR_MATRIX) && !PLR_FLAGGED(ch, PLR_REMOTE);
+  bool should_gain_physical_boosts = !IS_JACKED_IN(ch);
   int mbw = 0, enhan = 0, synth = 0;
 
   // Calculate our starting skill dice.
@@ -1555,7 +1553,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
         strlcat(gskbuf, "Reflex Recorder skill increase: 1. ", sizeof(gskbuf));
         skill_dice++;
       } else if (GET_BIOWARE_TYPE(bio) == BIO_ENHANCEDARTIC)
-        enhan = TRUE;
+        enhan = should_gain_physical_boosts;
       else if (GET_BIOWARE_TYPE(bio) == BIO_SYNTHACARDIUM)
         synth = GET_BIOWARE_RATING(bio);
     }
@@ -1652,11 +1650,8 @@ int get_skill(struct char_data *ch, int skill, int &target)
       case SKILL_PILOT_BIKE:
       case SKILL_PILOT_CAR:
       case SKILL_PILOT_TRUCK:
-        // Enhanced articulation only matters if you're actually using your body for the thing.
-        if (!AFF_FLAGGED(ch, AFF_RIG) && !PLR_FLAGGED(ch, PLR_REMOTE)) {
-          strlcat(gskbuf, "Enhanced Articulation skill increase: +1 ", sizeof(gskbuf));
-          skill_dice++;
-        }
+        strlcat(gskbuf, "Enhanced Articulation skill increase: +1 ", sizeof(gskbuf));
+        skill_dice++;
         break;
       default:
         break;
@@ -2402,33 +2397,31 @@ struct room_data *get_obj_in_room(struct obj_data *obj) {
 }
 
 bool invis_ok(struct char_data *ch, struct char_data *vict) {
-  struct room_data *ch_room = NULL, *vict_room = NULL;
-  // No room at all? Nope.
-  if (!ch || !(ch_room = get_ch_in_room(ch))) {
-    mudlog("invis_ok() received char with NO room!", ch, LOG_SYSLOG, TRUE);
+  if (!ch || !vict) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "invis_ok() received NULL %s!", !ch ? "ch" : "vict");
     return FALSE;
   }
 
-  if (!vict || !(vict_room = get_ch_in_room(vict))) {
-    mudlog("invis_ok() received vict with NO room!", ch, LOG_SYSLOG, TRUE);
-    return FALSE;
+  // Short circuits:
+  {
+    // If they're in an invis staffer above your level, no.
+    if (!IS_NPC(vict) && GET_INVIS_LEV(vict) > 0 && (IS_NPC(ch) || !access_level(ch, GET_INVIS_LEV(vict))))
+      return FALSE;
+
+    // Staff members see almost everything.
+    if (IS_SENATOR(ch))
+      return TRUE;
+
+    // Totalinvis blocks mort sight.
+    if (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_TOTALINVIS))
+      return FALSE;
   }
 
-  // If they're in an invis staffer above your level, no.
-  if (!IS_NPC(vict) && GET_INVIS_LEV(vict) > 0 && (IS_NPC(ch) || !access_level(ch, GET_INVIS_LEV(vict))))
-    return FALSE;
-
-  // Staff members see almost everything.
-  if (IS_SENATOR(ch))
-    return TRUE;
-
-  // Totalinvis blocks mort sight.
-  if (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_TOTALINVIS))
-    return FALSE;
+  struct room_data *ch_room, *vict_room = get_ch_in_room(vict);
 
   // Figure out if we're using vehicle sensors. If we are, we need to be judicious about the sight we give.
-  bool has_thermographic, has_ultrasound, has_astral, is_vehicle;
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+  bool has_thermographic, has_ultrasound, is_vehicle;
+  if (IS_RIGGING(ch)) {
     // We are. Set based on vehicle sensors.
     struct veh_data *veh;
     RIG_VEH(ch, veh);
@@ -2439,28 +2432,30 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
     }
 
     is_vehicle = TRUE;
-    has_astral = FALSE;
     has_ultrasound = veh->flags.IsSet(VFLAG_ULTRASOUND);
     has_thermographic = TRUE;
-
-#ifdef ULTRASOUND_REQUIRES_SAME_ROOM
-    has_ultrasound &= vict_room == veh->in_room;
-#endif
+    ch_room = get_veh_in_room(veh);
   } else {
     is_vehicle = FALSE;
-    has_astral = SEES_ASTRAL(ch);
     has_ultrasound = has_vision(ch, VISION_ULTRASONIC) && !affected_by_spell(ch, SPELL_STEALTH);
     has_thermographic = has_vision(ch, VISION_THERMOGRAPHIC);
+    ch_room = get_ch_in_room(ch);
+  }
+
+  // No room at all? Nope.
+  if (!ch_room || !vict_room) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "invis_ok() received %s with NO room!", !ch_room ? "ch" : "vict");
+    return FALSE;
+  }
 
 #ifdef ULTRASOUND_REQUIRES_SAME_ROOM
-    has_ultrasound &= vict_room == ch_room;
+  has_ultrasound &= vict_room == ch_room;
 #endif
-  }
 
   bool vict_is_ruthenium = AFF_FLAGGED(vict, AFF_RUTHENIUM);
 
   // Astral perception sees most things-- unless said thing is an inanimate mob with no spells on it.
-  if (has_astral && !(MOB_FLAGGED(vict, MOB_INANIMATE) && !GET_SUSTAINED(vict))) {
+  if (SEES_ASTRAL(ch) && !(MOB_FLAGGED(vict, MOB_INANIMATE) && !GET_SUSTAINED(vict))) {
     // Set alarm status for ruthenium.
     if (IS_NPC(ch) && vict_is_ruthenium && (has_ultrasound || has_thermographic || is_vehicle))
       process_spotted_invis(ch, vict);
@@ -3804,6 +3799,12 @@ bool CAN_SEE(struct char_data *subj, struct char_data *obj) {
   struct room_data *subj_in_room = get_ch_in_room(subj);
   struct room_data *obj_in_room = get_ch_in_room(obj);
 
+  if (IS_RIGGING(subj)) {
+    struct veh_data *veh = NULL;
+    RIG_VEH(subj, veh);
+    subj_in_room = get_veh_in_room(veh);
+  }
+
   if (!subj_in_room || !obj_in_room)
     return FALSE;
 
@@ -3845,7 +3846,7 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
     return FALSE;
 
   // If you can see on the astral plane, light means nothing to you.
-  if (SEES_ASTRAL(sub)) {
+  if (allow_astral_sight && SEES_ASTRAL(sub)) {
     DEBUG_LIGHT_OK("- L_O_R_S: $n is astral or dual.");
     return TRUE;
   }
@@ -5250,7 +5251,7 @@ struct veh_data *get_veh_controlled_by_char(struct char_data *ch) {
   }
 
   // You must be flagged as controlling a vehicle to continue.
-  if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG) && !AFF_FLAGGED(ch, AFF_PILOT))
+  if (!IS_RIGGING(ch) && !AFF_FLAGGED(ch, AFF_PILOT))
     return NULL;
 
   if (ch->char_specials.rigging)
