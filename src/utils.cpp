@@ -5543,9 +5543,11 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *
   if (victim->mob_specials.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
     return FALSE;
 
+/*
   // Aggro mobs don't get quest protection.
   if (mob_is_aggressive(victim, TRUE))
     return FALSE;
+*/
 
   // NPCs can't fight quest-protected things.
   if (!ch->desc)
