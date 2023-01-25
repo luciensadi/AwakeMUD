@@ -2420,12 +2420,12 @@ void docwagon_retrieve(struct char_data *ch) {
     } else {
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Could not find modulator after DW rescue of %s.", GET_CHAR_NAME(ch));
     }
-  }
 
-  // They just got patched up: heal them slightly, make them stunned.
-  GET_PHYSICAL(ch) = 400;
-  GET_MENTAL(ch) = 0;
-  GET_POS(ch) = POS_STUNNED;
+    // They just got patched up: heal them slightly, make them stunned.
+    GET_PHYSICAL(ch) = 400;
+    GET_MENTAL(ch) = 0;
+    GET_POS(ch) = POS_STUNNED;
+  }
 
   alert_player_doctors_of_contract_withdrawal(ch, FALSE);
 }
