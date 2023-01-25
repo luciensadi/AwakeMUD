@@ -1766,6 +1766,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         break;
       case 'a':
         GET_TRADITION(d->character) = TRAD_ADEPT;
+        GET_PP(CH) = 600;
         start_game(d);
         break;
       default:
