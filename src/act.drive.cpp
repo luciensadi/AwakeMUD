@@ -2279,9 +2279,11 @@ ACMD(do_push)
 {
   skip_spaces(&argument);
   struct veh_data *veh = NULL, *found_veh = NULL;
-  if (!*argument)
-    send_to_char("Push what?\r\n", ch);
-  else if (ch->in_veh) {
+
+  FAILURE_CASE(!*argument, "You need to specify something to push.");
+  FAILURE_CASE(IS_ASTRAL(ch), "You can't affect the material plane.");
+
+  if (ch->in_veh) {
     if (ch->vfront)
       send_to_char("You can't push a vehicle out from here.\r\n", ch);
     else if (ch->in_veh->cspeed > SPEED_IDLE)
