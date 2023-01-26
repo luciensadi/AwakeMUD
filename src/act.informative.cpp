@@ -5991,7 +5991,6 @@ ACMD(do_where)
 ACMD(do_consider)
 {
   struct char_data *victim;
-  int diff;
 
   one_argument(argument, buf);
 
@@ -6006,13 +6005,16 @@ ACMD(do_consider)
 
   if (IS_NPC(victim)) {
     if (!can_hurt(ch, victim, 0, TRUE)) {
-      send_to_char("You can't damage this character.\r\n", ch);
+      act("You can't damage $N.", FALSE, ch, 0, victim, TO_CHAR);
       return;
     }
 
+    snprintf(buf3, sizeof(buf3), "You look $N over. %s %s:", CAP(HSSH(victim)), HSSH_SHOULD_PLURAL(victim) ? "is" : "are");
+    act(buf3, FALSE, ch, 0, victim, TO_CHAR);
+
     // Pick out the victim's cyberware, if any. TODO: Player cyberware.
-    bool use_cyber_implants = FALSE;
-    int unarmed_dangerliciousness_boost = 0;
+    bool victim_uses_cyber_implants = FALSE, ch_uses_cyber_implants = FALSE;
+    int vict_unarmed_dangerliciousness_boost = 0, ch_unarmed_dangerliciousness_boost;
     for (struct obj_data *obj = victim->cyberware; obj; obj = obj->next_content) {
       if (!GET_CYBERWARE_IS_DISABLED(obj)) {
         switch (GET_CYBERWARE_TYPE(obj)) {
@@ -6022,110 +6024,301 @@ ACMD(do_consider)
           case CYB_HANDRAZOR:
           case CYB_HANDSPUR:
           case CYB_FOOTANCHOR:
-            use_cyber_implants = TRUE;
+            victim_uses_cyber_implants = TRUE;
             break;
         }
       } else if (GET_CYBERWARE_TYPE(obj) == CYB_BONELACING) {
         switch (GET_CYBERWARE_LACING_TYPE(obj)) {
           case BONE_PLASTIC:
-            unarmed_dangerliciousness_boost = MAX(unarmed_dangerliciousness_boost, 2);
+            vict_unarmed_dangerliciousness_boost = MAX(vict_unarmed_dangerliciousness_boost, 2);
             break;
           case BONE_ALUMINIUM:
           case BONE_CERAMIC:
-            unarmed_dangerliciousness_boost = MAX(unarmed_dangerliciousness_boost, 3);
+            vict_unarmed_dangerliciousness_boost = MAX(vict_unarmed_dangerliciousness_boost, 3);
             break;
           case BONE_TITANIUM:
-            unarmed_dangerliciousness_boost = MAX(unarmed_dangerliciousness_boost, 4);
+            vict_unarmed_dangerliciousness_boost = MAX(vict_unarmed_dangerliciousness_boost, 4);
+            break;
+        }
+      }
+    }
+    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+      if (!GET_CYBERWARE_IS_DISABLED(obj)) {
+        switch (GET_CYBERWARE_TYPE(obj)) {
+          case CYB_CLIMBINGCLAWS:
+          case CYB_FIN:
+          case CYB_HANDBLADE:
+          case CYB_HANDRAZOR:
+          case CYB_HANDSPUR:
+          case CYB_FOOTANCHOR:
+            ch_uses_cyber_implants = TRUE;
+            break;
+        }
+      } else if (GET_CYBERWARE_TYPE(obj) == CYB_BONELACING) {
+        switch (GET_CYBERWARE_LACING_TYPE(obj)) {
+          case BONE_PLASTIC:
+            ch_unarmed_dangerliciousness_boost = MAX(ch_unarmed_dangerliciousness_boost, 2);
+            break;
+          case BONE_ALUMINIUM:
+          case BONE_CERAMIC:
+            ch_unarmed_dangerliciousness_boost = MAX(ch_unarmed_dangerliciousness_boost, 3);
+            break;
+          case BONE_TITANIUM:
+            ch_unarmed_dangerliciousness_boost = MAX(ch_unarmed_dangerliciousness_boost, 4);
             break;
         }
       }
     }
 
     // Armor comparisons.
-    diff = (GET_BALLISTIC(victim) - GET_BALLISTIC(ch));
-    diff += (GET_IMPACT(victim) - GET_IMPACT(ch));
-
-    // Stat comparisons.
-    diff += (GET_BOD(victim) - GET_BOD(ch));
-    diff += (GET_QUI(victim) - GET_QUI(ch));
-    diff += (GET_STR(victim) - GET_STR(ch));
-
-    // Extra init passes are king, so account for that.
-    diff += 3 * (GET_REA(victim) - GET_REA(ch));
-    diff += 6 * (GET_INIT_DICE(victim) - GET_INIT_DICE(ch));
-
-    if (GET_MAG(victim) >= 100) {
-      diff += (int)((GET_MAG(victim) - GET_MAG(ch)) / 100);
-      diff += GET_SKILL(victim, SKILL_SORCERY);
+    int armor_diff = (GET_BALLISTIC(victim) - GET_BALLISTIC(ch)) + (GET_IMPACT(victim) - GET_IMPACT(ch));
+    if (armor_diff < -8) {
+      act("-  much less protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < -6) {
+      act("- less protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < -4) {
+      act("- somewhat less protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < -2) {
+      act("- a tiny bit less protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < 2) {
+      act("- about as protected as you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < 4) {
+      act("- a tiny bit more protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < 6) {
+      act("- somewhat more protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < 8) {
+      act("- more protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("- much more protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
     }
 
-    // Pool comparisons.
-    diff += 3 * (GET_COMBAT(victim) - GET_COMBAT(ch));
+    int expected_power;
+    struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+    if (!weapon || GET_OBJ_TYPE(weapon) != ITEM_WEAPON)
+      weapon = GET_EQ(ch, WEAR_HOLD);
+    if (!weapon || GET_OBJ_TYPE(weapon) != ITEM_WEAPON)
+      weapon = NULL;
+    if (weapon) {
+      if (WEAPON_IS_GUN(weapon)) {
+        expected_power = GET_WEAPON_POWER(weapon);
 
-    // Skill comparisons.
-    if (GET_MAG(ch) >= 100 && (IS_NPC(ch) || (GET_TRADITION(ch) == TRAD_HERMETIC ||
-                                              GET_TRADITION(ch) == TRAD_SHAMANIC)))
-      diff -= GET_SKILL(ch, SKILL_SORCERY);
+        if (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_TASER) {
+          expected_power -= (int)(GET_IMPACT(victim) / 2);
+        } else if (weapon->contains) {
+          switch (GET_MAGAZINE_AMMO_TYPE(weapon->contains)) {
+            case AMMO_APDS:
+              expected_power -= (int)(GET_BALLISTIC(victim) / 2);
+              break;
+            case AMMO_EX:
+              expected_power++;
+              // fall through
+            case AMMO_EXPLOSIVE:
+              expected_power += 1 - GET_BALLISTIC(victim);
+              break;
+            case AMMO_FLECHETTE:
+              expected_power += 1 - MAX(GET_BALLISTIC(victim), GET_IMPACT(victim) * 2);
+              break;
+            case AMMO_HARMLESS:
+              expected_power = 0;
+              break;
+            case AMMO_GEL:
+              expected_power -= GET_IMPACT(victim) - 2;
+              break;
+            default:
+              expected_power = GET_WEAPON_POWER(weapon) - GET_BALLISTIC(victim);
+              break;
+          }
+        } else {
+          expected_power = GET_WEAPON_POWER(weapon) - GET_BALLISTIC(victim);
+        }
+      }
+      else {
+        expected_power = GET_WEAPON_STR_BONUS(weapon) + GET_STR(ch) - GET_IMPACT(victim);
+      }
+    } else {
+      // should probably account for cyber implant weapons here... eventual todo
+      expected_power = GET_STR(ch) + ch_unarmed_dangerliciousness_boost - GET_IMPACT(victim);
+    }
+
+    if (IS_SPIRIT(victim) || IS_ANY_ELEMENTAL(victim)) {
+      bool has_magic_weapon;
+
+      if (weapon) {
+        has_magic_weapon = GET_WEAPON_FOCUS_RATING(weapon) > 0 && WEAPON_FOCUS_USABLE_BY(weapon, ch);
+      } else {
+        has_magic_weapon = GET_POWER(ch, ADEPT_KILLING_HANDS);
+      }
+
+      // If you're not using a magic weapon, the spirit uses its Immunity to Normal Weapons power.
+      if (!has_magic_weapon) {
+        // Extremely hacky version of spirit resists.
+        expected_power -= (GET_LEVEL(victim) * 2) + 1;
+        act("- a magical being, so dealing any damage will be difficult.", FALSE, ch, 0, victim, TO_CHAR);
+      }
+    }
+
+    int vict_expected_power;
+    struct obj_data *vict_weapon = GET_EQ(ch, WEAR_WIELD);
+    if (!vict_weapon || GET_OBJ_TYPE(vict_weapon) != ITEM_WEAPON)
+      vict_weapon = GET_EQ(ch, WEAR_HOLD);
+    if (!vict_weapon || GET_OBJ_TYPE(vict_weapon) != ITEM_WEAPON)
+      vict_weapon = NULL;
+    if (vict_weapon) {
+      if (WEAPON_IS_GUN(vict_weapon)) {
+        vict_expected_power = GET_WEAPON_POWER(vict_weapon);
+
+        if (GET_WEAPON_ATTACK_TYPE(vict_weapon) == WEAP_TASER) {
+          vict_expected_power -= (int)(GET_IMPACT(ch) / 2);
+        } else if (vict_weapon->contains) {
+          switch (GET_MAGAZINE_AMMO_TYPE(vict_weapon->contains)) {
+            case AMMO_APDS:
+              vict_expected_power -= (int)(GET_BALLISTIC(ch) / 2);
+              break;
+            case AMMO_EX:
+              vict_expected_power++;
+              // fall through
+            case AMMO_EXPLOSIVE:
+              vict_expected_power += 1 - GET_BALLISTIC(ch);
+              break;
+            case AMMO_FLECHETTE:
+              vict_expected_power += 1 - MAX(GET_BALLISTIC(ch), GET_IMPACT(ch) * 2);
+              break;
+            case AMMO_HARMLESS:
+              vict_expected_power = 0;
+              break;
+            case AMMO_GEL:
+              vict_expected_power -= GET_IMPACT(ch) - 2;
+              break;
+            default:
+              vict_expected_power -= GET_BALLISTIC(ch);
+              break;
+          }
+        } else {
+          vict_expected_power = GET_WEAPON_POWER(vict_weapon) - GET_BALLISTIC(ch);
+        }
+      }
+      else {
+        vict_expected_power = GET_WEAPON_STR_BONUS(vict_weapon) + GET_STR(victim) - GET_IMPACT(ch);
+      }
+    } else {
+      // should probably account for cyber implant weapons here... eventual todo
+      vict_expected_power = GET_STR(victim) + vict_unarmed_dangerliciousness_boost - GET_IMPACT(ch);
+    }
+
+    // Stat comparisons.
+    int phys_stat_diff = (GET_BOD(victim) - GET_BOD(ch)) + (GET_QUI(victim) - GET_QUI(ch)) + (GET_STR(victim) - GET_STR(ch));
+    if (phys_stat_diff < -12) {
+      act("- much less physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < -9) {
+      act("- less physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < -6) {
+      act("- somewhat less physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < -3) {
+      act("- a tiny bit less physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < 3) {
+      act("- about as physically developed as you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < 6) {
+      act("- a tiny bit more physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < 9) {
+      act("- somewhat more physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < 12) {
+      act("- more physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("- much more physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    }
+
+    // Extra init passes are king, so account for that.
+    int speed_diff = (GET_REA(victim) - GET_REA(ch)) + (4.2 * (GET_INIT_DICE(victim) - GET_INIT_DICE(ch)));
+    if (speed_diff < -20) {
+      act("- much slower than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < -15) {
+      act("- slower than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < -10) {
+      act("- somewhat slower than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < -5) {
+      act("- a tiny bit slower than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < 5) {
+      act("- about as fast as you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < 10) {
+      act("- a tiny bit faster than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < 15) {
+      act("- somewhat faster than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < 20) {
+      act("- faster than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("- much faster than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    }
+
+    // Skill / Pool comparisons.
+    int combat_skill_diff = (GET_COMBAT(victim) - GET_COMBAT(ch));
 
     if (GET_EQ(victim, WEAR_WIELD)) {
-      // Account for NPC's skill.
-      diff += MAX(GET_SKILL(victim, GET_WEAPON_SKILL(GET_EQ(victim, WEAR_WIELD))), GET_SKILL(victim, SKILL_ARMED_COMBAT));
-
-      // Account for PC's dice pool setting failures.
-      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(victim, WEAR_WIELD))))
-        diff += 3 * GET_DEFENSE(ch);
-    } else if (use_cyber_implants)
-      diff += MAX(GET_SKILL(victim, SKILL_CYBER_IMPLANTS), GET_SKILL(victim, SKILL_ARMED_COMBAT));
-    else
-      diff += GET_SKILL(victim, SKILL_UNARMED_COMBAT) + unarmed_dangerliciousness_boost;
+      combat_skill_diff += MAX(GET_SKILL(victim, GET_WEAPON_SKILL(GET_EQ(victim, WEAR_WIELD))), GET_SKILL(victim, SKILL_ARMED_COMBAT));
+    } else if (victim_uses_cyber_implants) {
+      combat_skill_diff += MAX(GET_SKILL(victim, SKILL_CYBER_IMPLANTS), GET_SKILL(victim, SKILL_ARMED_COMBAT));
+    } else {
+      combat_skill_diff += GET_SKILL(victim, SKILL_UNARMED_COMBAT) + vict_unarmed_dangerliciousness_boost;
+    }
 
     if (GET_EQ(ch, WEAR_WIELD)) {
-      // Account for PC's skill.
-      diff -= GET_SKILL(ch, GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD)));
+      combat_skill_diff -= GET_SKILL(ch, GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD)));
+    } else if (ch_uses_cyber_implants) {
+      combat_skill_diff += GET_SKILL(ch, SKILL_CYBER_IMPLANTS);
+    } else {
+      combat_skill_diff -= GET_SKILL(ch, SKILL_UNARMED_COMBAT) + ch_unarmed_dangerliciousness_boost;
+    }
 
-      // Account for NPC's dice pool setting failures.
-      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))))
-        diff -= 3 * GET_DEFENSE(victim);
-    } else
-      diff -= GET_SKILL(ch, SKILL_UNARMED_COMBAT);
+    if (combat_skill_diff < -10) {
+      act("- much less skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < -7) {
+      act("- less skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < -4) {
+      act("- somewhat less skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < -1) {
+      act("- a tiny bit less skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < 1) {
+      act("- about as skilled as you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < 4) {
+      act("- a tiny bit more skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < 7) {
+      act("- somewhat more skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < 10) {
+      act("- more skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("- much more skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    }
 
-    // Finally, throw in a multiplier for all the things we haven't accounted for yet.
-    diff += (int) (abs(diff) * 0.5);
+    if (expected_power <= 0) {
+      act("You'd need a lot of luck for your weapon to even scratch $M...", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (expected_power <= 3) {
+      act("You feel like your weapon might be able to put a scratch on $M...", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (expected_power <= 6) {
+      act("You feel like your weapon would be able to annoy $M at least.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("You feel like your weapon should be able to do some damage to $M.", FALSE, ch, 0, victim, TO_CHAR);
+    }
 
-    if (diff <= -25)
-      send_to_char("Now where did that chicken go?\r\n", ch);
-    else if (diff <= -15)
-      send_to_char("You could kill it with a needle!\r\n", ch);
-    else if (diff <= -8)
-      send_to_char("Easy.\r\n", ch);
-    else if (diff <= -4)
-      send_to_char("Fairly easy.\r\n", ch);
-    else if (diff == 0)
-      send_to_char("The perfect match!\r\n", ch);
-    else if (diff <= 3)
-      send_to_char("You would need some luck!\r\n", ch);
-    else if (diff <= 6)
-      send_to_char("You would need a lot of luck!\r\n", ch);
-    else if (diff <= 12)
-      send_to_char("You would need a lot of luck and great equipment!\r\n", ch);
-    else if (diff <= 18)
-      send_to_char("Do you feel lucky, punk?\r\n", ch);
-    else if (diff <= 30)
-      send_to_char("Are you mad!?\r\n", ch);
-    else
-      send_to_char("You ARE mad!\r\n", ch);
+    if (vict_expected_power <= 0) {
+      act("You don't sense much danger from $M.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (vict_expected_power <= 3) {
+      act("$E could probably scratch you...", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (vict_expected_power <= 6) {
+      act("$E would be annoying to fight.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("You're pretty sure $E could hurt you.", FALSE, ch, 0, victim, TO_CHAR);
+    }
   } else {
     if (GET_REP(victim) < NEWBIE_KARMA_THRESHOLD)
       send_to_char("Total greenhorn.\r\n", ch);
     else if (GET_REP(victim) < 100)
       send_to_char("Still finding their feet.\r\n", ch);
-    else if (GET_REP(victim) < 200)
+    else if (GET_REP(victim) < 300)
       send_to_char("Innocence has been lost.\r\n", ch);
-    else if (GET_REP(victim) < 400)
+    else if (GET_REP(victim) < 700)
       send_to_char("They can handle themselves.\r\n", ch);
-    else if (GET_REP(victim) < 800)
+    else if (GET_REP(victim) < 1500)
       send_to_char("An accomplished runner.\r\n", ch);
-    else if (GET_REP(victim) < 1200)
+    else if (GET_REP(victim) < 3000)
       send_to_char("Definite lifer.\r\n", ch);
     else
       send_to_char("A legend of the Sprawl.\r\n", ch);

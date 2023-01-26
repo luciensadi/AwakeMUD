@@ -703,6 +703,7 @@ void game_loop(int mother_desc)
         double usage_pcnt = 100 * ((double)total_usec / OPT_USEC);
         PERF_log_pulse(usage_pcnt);
 
+/*      Silenced this because it was spammy and didn't provide much value.
         if (usage_pcnt >= 100)
         {
           char buf[MAX_STRING_LENGTH];
@@ -711,6 +712,7 @@ void game_loop(int mother_desc)
           PERF_prof_repr_pulse(buf, sizeof(buf));
           log(buf);
         }
+*/
       }
 
       /* just in case, re-calculate after PERF logging to figure out for how long we have to sleep */

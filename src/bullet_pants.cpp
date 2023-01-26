@@ -735,7 +735,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
   // Update weapons debris, but only if in combat. Presumably they chuck it out the window if they're in a car.
   if (CH_IN_COMBAT(ch)) {
     increase_debris(get_ch_in_room(ch));
-    WAIT_STATE(ch, 0.5 RL_SEC);
+    WAIT_STATE(ch, 1 RL_SEC);
 
     // Inserting a magazine costs a simple action.
     GET_INIT_ROLL(ch) -= 5;
