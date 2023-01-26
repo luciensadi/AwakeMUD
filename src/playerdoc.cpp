@@ -24,11 +24,29 @@ int get_docwagon_faux_id(struct char_data *ch) {
   return (((GET_IDNUM(ch) * 217 + global_non_secure_random_number) + 29783) / 3) % 99999;
 }
 
+const char *get_location_string_for_room(struct room_data *in_room) {
+  static char location_info[1000] = { 0 };
+  const char *gridguide_coords = get_gridguide_coordinates_for_room(in_room);
+
+  if (!in_room) {
+    mudlog("SYSERR: Received invalid in_room to get_location_string_for_room()!", NULL, LOG_SYSLOG, TRUE);
+    return "";
+  }
+
+  if (gridguide_coords) {
+    snprintf(location_info, sizeof(location_info), "GridGuide coordinates [%s], AKA '%s' (%ld)", gridguide_coords, decapitalize_a_an(GET_ROOM_NAME(in_room)), GET_ROOM_VNUM(in_room));
+  } else {
+    snprintf(location_info, sizeof(location_info), "'%s' (%ld)", decapitalize_a_an(GET_ROOM_NAME(in_room)), GET_ROOM_VNUM(in_room));
+  }
+
+  return location_info;
+}
+
 int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon) {
-  char location_info[500], speech_buf[500];
+  char speech_buf[500];
   int potential_rescuer_count = 0;
   struct room_data *in_room;
-  const char *gridguide_coords;
+  const char *location_info;
 
   if (!ch || !(in_room = get_ch_in_room(ch))) {
     mudlog("SYSERR: NULL or missing char to alert_player_doctors_of_mort()!", ch, LOG_SYSLOG, TRUE);
@@ -43,11 +61,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
   if (PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT))
     return 0;
 
-  if ((gridguide_coords = get_gridguide_coordinates_for_room(in_room))) {
-    snprintf(location_info, sizeof(location_info), "GridGuide coordinates [%s], AKA '%s' (%ld)", gridguide_coords, decapitalize_a_an(GET_ROOM_NAME(in_room)), GET_ROOM_VNUM(in_room));
-  } else {
-    snprintf(location_info, sizeof(location_info), "'%s' (%ld)", decapitalize_a_an(GET_ROOM_NAME(in_room)), GET_ROOM_VNUM(in_room));
-  }
+  location_info = get_location_string_for_room(in_room);
 
   for (struct char_data *plr = character_list; plr; plr = plr->next) {
     if (IS_NPC(plr) || !plr->desc || plr == ch)
@@ -279,29 +293,41 @@ const char *get_char_representation_for_docwagon(struct char_data *ch, struct ch
   return display_string;
 }
 
-#define MODE_ACCEPT 1
+#define MODE_ACCEPT  1
 #define MODE_DECLINE 2
+#define MODE_LIST    3
 
 ACMD(do_docwagon) {
   int mode = 0;
   char mode_switch[MAX_INPUT_LENGTH] = { 0 };
+  char output[MAX_STRING_LENGTH] = { 0 };
 
   // This only works for people with receivers.
   FAILURE_CASE(!AFF_FLAGGED(ch, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER), "You need to be wearing a DocWagon receiver to use this command-- modulators don't work here.");
 
   skip_spaces(&argument);
-  const char *name = one_argument(argument, mode_switch);
+  char *name = one_argument(argument, mode_switch);
 
-  if (!*arg || !*mode_switch || !*name) {
-    send_to_char("Syntax: DOCWAGON (ACCEPT|WITHDRAW) <name>\r\n", ch);
+  if (!*arg || !*mode_switch) {
+    send_to_char("Syntax: ^WDOCWAGON ACCEPT <name>^n, ^WDOCWAGON WITHDRAW <name>^n, ^WDOCWAGON LIST^n, or ^WDOCWAGON LOCATE <name>^n.\r\n", ch);
     return;
   }
 
   if (is_abbrev(mode_switch, "accept") || is_abbrev(mode_switch, "acknowledge") || is_abbrev(mode_switch, "take")) {
-    mode = MODE_ACCEPT;
+    FAILURE_CASE(!*name, "Syntax: DOCWAGON ACCEPT <name>");
+      mode = MODE_ACCEPT;
   }
   else if (is_abbrev(mode_switch, "decline") || is_abbrev(mode_switch, "withdraw") || is_abbrev(mode_switch, "reject") || is_abbrev(mode_switch, "drop")) {
+    FAILURE_CASE(!*name, "Syntax: DOCWAGON DECLINE <name>");
     mode = MODE_DECLINE;
+  }
+  else if (is_abbrev(mode_switch, "list")) {
+    mode = MODE_LIST;
+  }
+  else if (is_abbrev(mode_switch, "show") || is_abbrev(mode_switch, "locate") || is_abbrev(mode_switch, "track")) {
+    FAILURE_CASE(!*name, "Syntax: DOCWAGON LOCATE <name>");
+    handle_player_docwagon_track(ch, name);
+    return;
   }
   else {
     send_to_char("Syntax: DOCWAGON (ACCEPT|WITHDRAW) <name>\r\n", ch);
@@ -322,7 +348,15 @@ ACMD(do_docwagon) {
     if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character))
       continue;
 
-    // Wrong person?
+    // Short circuit: LIST has no further logic to evaluate, so just print.
+    if (mode == MODE_LIST) {
+      snprintf(ENDOF(output), sizeof(output) - strlen(output), " - %s: %s\r\n",
+               get_char_representation_for_docwagon(ch, d->character),
+               get_location_string_for_room(get_ch_in_room(d->character)));
+      continue;
+    }
+
+    // Wrong person? (does not apply to DOCWAGON LIST)
     if (!keyword_appears_in_char(name, d->character, TRUE, TRUE, FALSE))
       continue;
 
@@ -351,5 +385,15 @@ ACMD(do_docwagon) {
       return;
     }
   }
+
+  if (mode == MODE_LIST) {
+    if (*output) {
+      send_to_char(ch, "Patients in need of assistance:\r\n%s\r\n", output);
+    } else {
+      send_to_char("Your receiver isn't picking up any distress signals.\r\n", ch);
+    }
+    return;
+  }
+
   send_to_char(ch, "Your DocWagon receiver can't find anyone in need of assistance named '%s^n'.\r\n", name);
 }
