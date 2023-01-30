@@ -4548,6 +4548,8 @@ ACMD(do_spray)
     return;
   }
 
+  FAILURE_CASE(!ch->in_room, "You can't do that in a vehicle.");
+
   {
     int existing_graffiti_count = 0;
     struct obj_data *obj;
@@ -4561,7 +4563,7 @@ ACMD(do_spray)
     }
   }
 
-  for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content)
+  for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
     if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == spraypaint) {
       int length = get_string_length_after_color_code_removal(argument, ch);
 
@@ -4603,6 +4605,7 @@ ACMD(do_spray)
       paint->restring = str_dup(buf);
       snprintf(buf, sizeof(buf), "   ^n%s^n", argument);
       paint->graffiti = str_dup(buf);
+      GET_GRAFFITI_SPRAYED_BY(paint) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
       obj_to_room(paint, ch->in_room);
 
       send_to_char("You tag the area with your spray.\r\n", ch);
@@ -4617,7 +4620,7 @@ ACMD(do_spray)
       }
       return;
     }
-
+  }
 
   send_to_char("You don't have anything to spray with.\r\n", ch);
 }

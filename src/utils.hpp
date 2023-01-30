@@ -1189,7 +1189,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_VEHCONTAINER convenience defines
 
 // ITEM_GRAFFITI convenience defines
-#define OBJ_IS_GRAFFITI(obj)       (GET_OBJ_TYPE((obj)) == ITEM_GRAFFITI || GET_OBJ_VNUM((obj)) == OBJ_DYNAMIC_GRAFFITI)
+#define OBJ_IS_GRAFFITI(obj)                                (GET_OBJ_TYPE((obj)) == ITEM_GRAFFITI || GET_OBJ_VNUM((obj)) == OBJ_DYNAMIC_GRAFFITI)
+#define GET_GRAFFITI_SPRAYED_BY(obj)                        (GET_OBJ_VAL((obj), 0))
 
 
 /* Misc utils ************************************************************/

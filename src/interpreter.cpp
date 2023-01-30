@@ -127,6 +127,7 @@ ACMD_DECLARE(do_audit);
 ACMD_DECLARE(do_backstab);
 ACMD_DECLARE(do_ban);
 ACMD_DECLARE(do_banish);
+ACMD_DECLARE(do_banvpn);
 ACMD_DECLARE(do_bash);
 ACMD_DECLARE(do_bioware);
 ACMD_DECLARE(do_bond);
@@ -513,6 +514,7 @@ struct command_info cmd_info[] =
     { "bond"       , POS_RESTING , do_bond     , 0, 0, FALSE },
     { "ban"        , POS_DEAD    , do_ban      , LVL_EXECUTIVE, 0, FALSE },
     { "banish"     , POS_STANDING, do_banish   , 0, 0, FALSE },
+    { "banvpn"     , POS_DEAD    , do_banvpn   , LVL_EXECUTIVE, 0, FALSE },
     { "balance"    , POS_LYING   , do_gold     , 0, 0, TRUE },
     { "bioware"    , POS_DEAD    , do_bioware  , 0, 0, TRUE },
     { "block"      , POS_DEAD    , do_ignore   , 0, 0, TRUE },

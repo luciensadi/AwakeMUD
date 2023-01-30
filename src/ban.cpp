@@ -223,3 +223,10 @@ ACMD(do_unban)
   DELETE_AND_NULL(ban_node);
   write_ban_list();
 }
+
+extern bool _GLOBALLY_BAN_OPENVPN_CONNETIONS_;
+
+ACMD(do_banvpn) {
+  _GLOBALLY_BAN_OPENVPN_CONNETIONS_ = !_GLOBALLY_BAN_OPENVPN_CONNETIONS_;
+  mudlog_vfprintf(ch, LOG_SYSLOG, "Game-wide OpenVPN origin port ban set to %s by %s.", _GLOBALLY_BAN_OPENVPN_CONNETIONS_ ? "ON" : "OFF", GET_CHAR_NAME(ch));
+}
