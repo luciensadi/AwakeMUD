@@ -3872,40 +3872,28 @@ ACMD(do_wizutil)
         break;
 
       case SCMD_FREEZE:
-        if (ch == vict) {
-          send_to_char("Oh, yeah, THAT'S real smart...\r\n", ch);
-          return;
-        }
-        if (PLR_FLAGGED(vict, PLR_FROZEN)) {
-          send_to_char("Your victim is already pretty cold. Did you mean to THAW them?\r\n", ch);
-          return;
-        }
+        FAILURE_CASE(ch == vict, "Oh, yeah, THAT'S real smart...");
+        FAILURE_CASE(PLR_FLAGGED(vict, PLR_FROZEN), "Your victim is already pretty cold. Did you mean to ##^WTHAW^n them?");
+
         PLR_FLAGS(vict).SetBit(PLR_FROZEN);
         GET_FREEZE_LEV(vict) = GET_LEVEL(ch);
+
         send_to_char("A bitter wind suddenly rises and drains every erg of heat from your body!\r\nYou feel frozen!\r\n", vict);
-        send_to_char("Frozen.\r\n", ch);
         act("A sudden cold wind conjured from nowhere freezes $n!", TRUE, vict, 0, 0, TO_ROOM);
-        snprintf(buf, sizeof(buf), "%s frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
-        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        mudlog_vfprintf(ch, LOG_WIZLOG, "%s frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        send_to_char("Done. Note that freezing means that the target cannot execute ANY commands, including osay/tell and even quit! ##^WTHAW^n them if you're still talking, otherwise disconnect them with ##^WDC^n when you're done.\r\n", ch);
         break;
       case SCMD_THAW:
-        if (!PLR_FLAGGED(vict, PLR_FROZEN)) {
-          send_to_char("Sorry, your victim is not morbidly encased in ice at the moment.\r\n", ch);
-          return;
-        }
-        if (!access_level(ch, GET_FREEZE_LEV(vict))) {
-          snprintf(buf, sizeof(buf), "Sorry, a level %d God froze %s... you can't unfreeze %s.\r\n",
-                  GET_FREEZE_LEV(vict), GET_CHAR_NAME(vict), HMHR(vict));
-          send_to_char(buf, ch);
-          return;
-        }
-        snprintf(buf, sizeof(buf), "%s un-frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
-        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        FAILURE_CASE(!PLR_FLAGGED(vict, PLR_FROZEN), "Sorry, your victim is not morbidly encased in ice at the moment.");
+        FAILURE_CASE_PRINTF(!access_level(ch, GET_FREEZE_LEV(vict)), "Sorry, a level %d staffer froze %s... you can't unfreeze %s.", GET_FREEZE_LEV(vict), GET_CHAR_NAME(vict), HMHR(vict));
+
         PLR_FLAGS(vict).RemoveBit(PLR_FROZEN);
-        send_to_char("A fireball suddenly explodes in front of you, melting the ice!\r\nYou feel thawed.\r\n", vict);
-        send_to_char("Thawed.\r\n", ch);
         GET_FREEZE_LEV(vict) = 0;
+
+        send_to_char("A fireball suddenly explodes in front of you, melting the ice!\r\nYou feel thawed.\r\n", vict);
         act("A sudden fireball conjured from nowhere thaws $n!", TRUE, vict, 0, 0, TO_ROOM);
+        mudlog_vfprintf(ch, LOG_WIZLOG, "%s un-frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        send_to_char("Thawed.\r\n", ch);
         break;
       case SCMD_MUTE_NEWBIE:
         result = PLR_TOG_CHK(vict, PLR_NEWBIE_MUTED);
