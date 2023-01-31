@@ -557,10 +557,8 @@ ACMD(do_shoot)
     return;
   }
 
-  if (!CAN_GO(ch, dir)) {
-    send_to_char("There seems to be something in the way...\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!CAN_GO(ch, dir), "There seems to be something in the way...");
+  FAILURE_CASE(IS_SET(EXIT(ch, dir)->exit_info, EX_CANT_SHOOT_THROUGH), "You can't shoot through that exit.");
 
   range_combat(ch, target, weapon, range, dir);
 }
@@ -623,10 +621,9 @@ ACMD(do_throw)
     return;
   }
 
-  if (!CAN_GO(ch, dir)) {
-    send_to_char("There seems to be something in the way...\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!CAN_GO(ch, dir), "There seems to be something in the way...");
+  FAILURE_CASE(IS_SET(EXIT(ch, dir)->exit_info, EX_CANT_SHOOT_THROUGH), "You can't shoot through that exit.");
+
   if (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GRENADE)
     range_combat(ch, NULL, weapon, 1, dir);
   else

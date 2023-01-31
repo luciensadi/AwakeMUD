@@ -7118,6 +7118,13 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
               issues++;
               printed = TRUE;
             }
+
+            // Check for can't-shoot.
+            if (IS_SET(inbound, EX_CANT_SHOOT_THROUGH)) {
+              strlcat(buf, "  - Exit is NoShoot.\r\n", sizeof(buf));
+              issues++;
+              printed = TRUE;
+            }
           }
         }
       }

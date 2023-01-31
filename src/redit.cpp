@@ -139,6 +139,8 @@ const char *render_door_type_string(struct room_direction_data *door) {
     snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sWindowed", bits_printed++ ? ", " : "");
   if (IS_SET(door->exit_info, EX_BARRED_WINDOW))
     snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sBarred", bits_printed++ ? ", " : "");
+  if (IS_SET(door->exit_info, EX_CANT_SHOOT_THROUGH))
+    snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sNoShoot", bits_printed++ ? ", " : "");
 
   if (bits_printed <= 0) {
     return "Regular door";
@@ -208,11 +210,13 @@ void redit_disp_exit_flag_menu(struct descriptor_data * d)
                    "3) Warded (%s)\r\n"
                    "4) Glass Window (%s)\r\n"
                    "5) Barred Window (%s)\r\n"
+                   "6) No Shooting Through (%s)\r\n"
                    "Enter choice:",
                    DOOR->exit_info & EX_PICKPROOF ? "^con^n" : "off",
                    DOOR->exit_info & EX_ASTRALLY_WARDED ? "^con^n" : "off",
                    DOOR->exit_info & EX_WINDOWED ? "^con^n" : "off",
-                   DOOR->exit_info & EX_BARRED_WINDOW ? "^con^n" : "off"
+                   DOOR->exit_info & EX_BARRED_WINDOW ? "^con^n" : "off",
+                   DOOR->exit_info & EX_CANT_SHOOT_THROUGH ? "^con^n" : "off"
                  );
 }
 
@@ -1212,7 +1216,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 
   case REDIT_EXIT_DOORFLAGS:
     number = atoi(arg);
-    if ((number < 0) || (number > 5)) {
+    if ((number < 0) || (number > 6)) {
       send_to_char("That's not a valid choice!\r\n", d->character);
       redit_disp_exit_flag_menu(d);
     } else {
@@ -1242,6 +1246,11 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           // Toggle bar, unset window.
           DOOR->exit_info ^= EX_BARRED_WINDOW;
           DOOR->exit_info &= ~EX_WINDOWED;
+        } else if (number == 6) {
+          // Toggle noshoot.
+          DOOR->exit_info ^= EX_CANT_SHOOT_THROUGH;
+        } else {
+          send_to_char("That's not an option.\r\n", CH);
         }
       }
       /* jump out to menu */
@@ -1453,6 +1462,10 @@ void write_world_to_disk(int vnum)
               temp_door_flag = 1;
             } else if (IS_SET(ptr->exit_info, EX_BARRED_WINDOW)) {
               temp_door_flag = 2;
+            }
+
+            if (IS_SET(ptr->exit_info, EX_CANT_SHOOT_THROUGH)) {
+              temp_door_flag += 4;
             }
           }
 

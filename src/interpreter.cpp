@@ -802,7 +802,6 @@ struct command_info cmd_info[] =
     { "ready"      , POS_LYING   , do_ready    , 0, 0, FALSE },
     { "reboot"     , POS_DEAD    , do_reboot   , LVL_DEVELOPER, 0, FALSE },
     { "recap"      , POS_DEAD    , do_recap    , 0, 0, TRUE },
-    { "redesc"     , POS_DEAD    , do_redesc   , LVL_FIXER, 0, FALSE },
     { "reload"     , POS_RESTING , do_reload   , 0, 0, FALSE },
     { "release"    , POS_LYING   , do_release  , 0, 0, FALSE },
     { "relieve"    , POS_STANDING, do_relieve  , 0, 0, FALSE },
@@ -821,6 +820,7 @@ struct command_info cmd_info[] =
     { "rpe"        , POS_DEAD    , do_wizutil  , LVL_ADMIN, SCMD_RPE, FALSE },
     { "rpetalk"    , POS_DEAD    , do_gen_comm , 0, SCMD_RPETALK, FALSE },
     { "redit"      , POS_DEAD    , do_redit    , LVL_BUILDER, 0, FALSE },
+    { "redesc"     , POS_DEAD    , do_redesc   , LVL_FIXER, 0, FALSE },
     { "rewrite_worl",  POS_DEAD, do_rewrite_world, LVL_PRESIDENT, 0, FALSE },
     { "rewrite_world", POS_DEAD, do_rewrite_world, LVL_PRESIDENT, 1, FALSE },
 

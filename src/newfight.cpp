@@ -311,7 +311,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         weapon_range = MIN(find_sight(att->ch), find_weapon_range(att->ch, att->weapon));
         for (int dir = 0; dir < NUM_OF_DIRS && !vict_found; dir++) {
           room = att->ch->in_room;
-          if (CAN_GO2(room, dir))
+          if (CAN_GO2(room, dir) && !IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH))
             nextroom = EXIT2(room, dir)->to_room;
           else
             nextroom = NULL;
@@ -324,7 +324,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
               }
             }
             room = nextroom;
-            if (CAN_GO2(room, dir))
+            if (CAN_GO2(room, dir) && !IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH))
               nextroom = EXIT2(room, dir)->to_room;
             else
               nextroom = NULL;

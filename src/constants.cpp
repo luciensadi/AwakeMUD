@@ -314,6 +314,7 @@ const char *exit_bits[] =
     "TEMPORARY",
     "WINDOW",
     "BARRED_WINDOW",
+    "CANT_SHOOT_THROUGH",
     MAX_FLAG_MARKER
   };
 

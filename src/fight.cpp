@@ -4014,7 +4014,7 @@ void combat_message_process_single_ranged_response(struct char_data *ch, struct 
             struct room_data *curr_room = tch->in_room;
 
             // If there's no exit in this direction, stop immediately.
-            if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED))
+            if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED) || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CANT_SHOOT_THROUGH))
               continue;
 
             // Otherwise, scan down that exit up to weapon range.
@@ -4030,7 +4030,7 @@ void combat_message_process_single_ranged_response(struct char_data *ch, struct 
               }
 
               // Stop further iteration if there are no further exits.
-              if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED))
+              if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED) || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CANT_SHOOT_THROUGH))
                 break;
             }
           }
@@ -4825,7 +4825,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
         break;
       }
 
-      if (CAN_GO2(room, dir)) {
+      if (CAN_GO2(room, dir) && !IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH)) {
         nextroom = EXIT2(room, dir)->to_room;
       } else {
         nextroom = NULL;
@@ -4882,7 +4882,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
 
         // Prep for our next iteration.
         room = nextroom;
-        if (CAN_GO2(room, dir))
+        if (CAN_GO2(room, dir) && !IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH))
           nextroom = EXIT2(room, dir)->to_room;
         else
           nextroom = NULL;
@@ -4896,7 +4896,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   // Mobile NPC with a melee weapon. They only charge one room away for some reason.
   else if (!vict_will_not_move) {
     for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
-      if (CAN_GO(vict, dir) && EXIT2(vict->in_room, dir)->to_room == ch->in_room) {
+      if (CAN_GO(vict, dir) && !IS_SET(EXIT2(vict->in_room, dir)->exit_info, EX_CANT_SHOOT_THROUGH) && EXIT2(vict->in_room, dir)->to_room == ch->in_room) {
         if (check_sentinel_snap_back(vict))
           return TRUE;
 
@@ -5210,6 +5210,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
   struct room_data *scatter[4];
   struct room_data *room = NULL, *nextroom = NULL;
   struct char_data *vict = NULL;
+  bool hit_noshoot_door = FALSE;
 
   for (int i = 0; i < 4; i++)
     scatter[i] = NULL;
@@ -5224,10 +5225,17 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
   sight = find_sight(ch);
 
-  if (CAN_GO2(in_room, dir))
-    nextroom = EXIT2(in_room, dir)->to_room;
-  else
+  if (CAN_GO2(in_room, dir)) {
+    if (IS_SET(EXIT2(in_room, dir)->exit_info, EX_CANT_SHOOT_THROUGH)) {
+      hit_noshoot_door = TRUE;
+      nextroom = NULL;
+    } else {
+      nextroom = EXIT2(in_room, dir)->to_room;
+    }
+  }
+  else {
     nextroom = NULL;
+  }
 
   if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GRENADE)
   {
@@ -5351,10 +5359,16 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       break;
     vict = NULL;
     room = nextroom;
-    if (CAN_GO2(room, dir))
-      nextroom = EXIT2(room, dir)->to_room;
-    else
+    if (CAN_GO2(room, dir)) {
+      if (IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH)) {
+        hit_noshoot_door = TRUE;
+        nextroom = NULL;
+      } else {
+        nextroom = EXIT2(room, dir)->to_room;
+      }
+    } else {
       nextroom = NULL;
+    }
   }
 
   if (vict)
@@ -5478,9 +5492,9 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
         // Initialize scatter array.
         scatter[0] = ch->in_room;
-        scatter[1] = left >= 0 && CAN_GO(ch, left) ? EXIT(ch, left)->to_room : NULL;
-        scatter[2] = right >= 0 && CAN_GO(ch, right) ? EXIT(ch, right)->to_room : NULL;
-        scatter[3] = CAN_GO2(nextroom, dir) ? EXIT2(nextroom, dir)->to_room : NULL;
+        scatter[1] = left >= 0 && CAN_GO(ch, left) && !IS_SET(EXIT(ch, left)->exit_info, EX_CANT_SHOOT_THROUGH) ? EXIT(ch, left)->to_room : NULL;
+        scatter[2] = right >= 0 && CAN_GO(ch, right) && !IS_SET(EXIT(ch, right)->exit_info, EX_CANT_SHOOT_THROUGH) ? EXIT(ch, right)->to_room : NULL;
+        scatter[3] = CAN_GO2(nextroom, dir) && !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_CANT_SHOOT_THROUGH) ? EXIT2(nextroom, dir)->to_room : NULL;
 
         for (temp = 0, temp2 = 0; temp2 < 4; temp2++)
           if (scatter[temp2])
@@ -5500,7 +5514,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
             target_explode(ch, weapon, scatter[temp2], 0);
             if (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET)
               for (temp = 0; temp < NUM_OF_DIRS; temp++)
-                if (CAN_GO2(scatter[temp2], temp))
+                if (CAN_GO2(scatter[temp2], temp) && !IS_SET(EXIT2(scatter[temp2], temp)->exit_info, EX_CANT_SHOOT_THROUGH))
                   target_explode(ch, weapon, EXIT2(scatter[temp2], temp)->to_room, 1);
             return;
           }
@@ -5508,17 +5522,23 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       target_explode(ch, weapon, vict->in_room, 0);
       if (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET)
         for (temp = 0; temp < NUM_OF_DIRS; temp++)
-          if (CAN_GO2(vict->in_room, temp))
+          if (CAN_GO2(vict->in_room, temp) && !IS_SET(EXIT2(vict->in_room, temp)->exit_info, EX_CANT_SHOOT_THROUGH))
             target_explode(ch, weapon, EXIT2(vict->in_room, temp)->to_room, 1);
     }
     return;
   }
   bool found = FALSE;
 
-  if (CAN_GO2(ch->in_room, dir))
-    nextroom = EXIT2(ch->in_room, dir)->to_room;
-  else
+  if (CAN_GO2(ch->in_room, dir)) {
+    if (IS_SET(EXIT2(ch->in_room, dir)->exit_info, EX_CANT_SHOOT_THROUGH)) {
+      hit_noshoot_door = TRUE;
+      nextroom = NULL;
+    } else {
+      nextroom = EXIT2(ch->in_room, dir)->to_room;
+    }
+  } else {
     nextroom = NULL;
+  }
 
   // now we search for a door by the given name
   for (distance = 1; nextroom && distance <= sight; distance++)
@@ -5535,10 +5555,16 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
            break;
          }
     room = nextroom;
-    if (CAN_GO2(room, dir))
-      nextroom = EXIT2(room, dir)->to_room;
-    else
+    if (CAN_GO2(room, dir)) {
+      if (IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH)) {
+        hit_noshoot_door = TRUE;
+        nextroom = NULL;
+      } else {
+        nextroom = EXIT2(room, dir)->to_room;
+      }
+    } else {
       nextroom = NULL;
+    }
   }
 
   if (found)
@@ -5580,7 +5606,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       case WEAP_MISS_LAUNCHER:
         target_explode(ch, weapon, nextroom, 0);
         for (temp = 0; temp < NUM_OF_DIRS; temp++)
-          if (CAN_GO2(nextroom, temp))
+          if (CAN_GO2(nextroom, temp) && !IS_SET(EXIT2(nextroom, temp)->exit_info, EX_CANT_SHOOT_THROUGH))
             target_explode(ch, weapon, EXIT2(nextroom, temp)->to_room, 1);
         break;
       default:
@@ -5591,7 +5617,11 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     return;
   }
 
-  send_to_char(ch, "You can't see any %s there.\r\n", target);
+  if (hit_noshoot_door) {
+    send_to_char(ch, "You can't see any %s before the bullet threshold.\r\n", target);
+  } else {
+    send_to_char(ch, "You can't see any %s there.\r\n", target);
+  }
   return;
 }
 
