@@ -1495,7 +1495,7 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
   if (!isalpha(*argument))
   {
     // Strip out the PennMUSH bullshit.
-    if (*argument == '@' || *argument == '+' || *argument == '/') {
+    if (*argument == '@' || *argument == '+' || *argument == '/' || *argument == '#') {
       argument[0] = ' ';
       skip_spaces(&argument);
       if (!*argument)

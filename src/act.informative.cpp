@@ -5462,15 +5462,16 @@ ACMD(do_who)
     snprintf(buf2, sizeof(buf2), "%s\r\nNo-one at all!\r\n", buf);
   } else if (num_can_see == 1) {
     if (num_in_socialization_rooms > 0) {
-      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed and listed in ^WWHERE^n.\r\n", buf);
+      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed and listed in ##^WWHERE^n.\r\n", buf);
     } else {
       snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed.\r\n", buf);
     }
   } else {
     if (num_in_socialization_rooms > 0) {
-      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed, of which %d %s listed in ^WWHERE^n.\r\n",
+      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed%s, of which %d %s listed in ##^WWHERE^n.\r\n",
                buf,
                num_can_see,
+               num_can_see == 69 ? " (nice)" : "",
                num_in_socialization_rooms,
                num_in_socialization_rooms == 1 ? "is" : "are");
     } else {
