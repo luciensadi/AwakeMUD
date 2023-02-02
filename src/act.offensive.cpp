@@ -195,6 +195,9 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
     } else if (!IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)) {
       send_to_char("You can only damage closed doors!\r\n", ch);
       return TRUE;
+    } else if (IS_ASTRAL(ch)) {
+      send_to_char("Astral beings can't damage doors!\r\n", ch);
+      return TRUE;
     }
 
     if (IS_AFFECTED(ch, AFF_CHARM) && IS_SPIRIT(ch) && ch->master &&
@@ -765,10 +768,8 @@ ACMD(do_kick)
   struct char_data *vict;
   int dir;
 
-  if (AFF_FLAGGED(ch, AFF_PRONE)) {
-    send_to_char(ch, "You flail ineffectually-- it's hard to get leverage while prone.\r\n");
-    return;
-  }
+  FAILURE_CASE(IS_ASTRAL(ch), "Your foot passes right through!");
+  FAILURE_CASE(AFF_FLAGGED(ch, AFF_PRONE), "You flail ineffectually-- it's hard to get leverage while prone.");
 
   two_arguments(argument, arg, buf2);
 
