@@ -6969,7 +6969,7 @@ ACMD(do_status)
       if ((IS_SENATOR(ch) || sust->spell == SPELL_MINDLINK) && sust->other && sust->other != targ)
         snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%s (cast by ^c%s^n)\r\n", buf, GET_CHAR_NAME(sust->other));
       else
-        strlcat(aff_buf, "%s\r\n", sizeof(aff_buf));
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%s\r\n", buf);
     }
   }
 
