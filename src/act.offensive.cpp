@@ -163,8 +163,8 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
   // If you're wielding a non-weapon, give an error message and bail.
   struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD);
   if (weapon && ((GET_OBJ_TYPE(weapon) != ITEM_WEAPON && GET_OBJ_TYPE(weapon) != ITEM_FIREWEAPON) || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GRENADE)) {
-    send_to_char(ch, "You can't figure out how to attack while using %s as a weapon.\r\n", decapitalize_a_an(GET_OBJ_NAME(weapon)));
-    return TRUE;
+    send_to_char(ch, "You're hampered by having %s in your hands.\r\n", decapitalize_a_an(GET_OBJ_NAME(weapon)));
+    weapon = NULL;
   }
 
   if (!*arg) {
@@ -193,6 +193,9 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       return FALSE;
     } else if (!IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)) {
       send_to_char("You can only damage closed doors!\r\n", ch);
+      return TRUE;
+    } else if (IS_ASTRAL(ch)) {
+      send_to_char("Astral beings can't damage doors!\r\n", ch);
       return TRUE;
     }
 
@@ -554,10 +557,8 @@ ACMD(do_shoot)
     return;
   }
 
-  if (!CAN_GO(ch, dir)) {
-    send_to_char("There seems to be something in the way...\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!CAN_GO(ch, dir), "There seems to be something in the way...");
+  FAILURE_CASE(IS_SET(EXIT(ch, dir)->exit_info, EX_CANT_SHOOT_THROUGH), "You can't shoot through that exit.");
 
   range_combat(ch, target, weapon, range, dir);
 }
@@ -620,10 +621,9 @@ ACMD(do_throw)
     return;
   }
 
-  if (!CAN_GO(ch, dir)) {
-    send_to_char("There seems to be something in the way...\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!CAN_GO(ch, dir), "There seems to be something in the way...");
+  FAILURE_CASE(IS_SET(EXIT(ch, dir)->exit_info, EX_CANT_SHOOT_THROUGH), "You can't shoot through that exit.");
+
   if (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GRENADE)
     range_combat(ch, NULL, weapon, 1, dir);
   else
@@ -682,6 +682,8 @@ struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *
     // Make a test to see if they can stop you. It's made easier for you if they can't see you, harder if you can't see them.
     int dice = GET_QUI(ch) * 1.25;
     int tn = MIN(11, (GET_REA(combatant) + racial_flee_modifier) + calculate_vision_penalty(ch, combatant) - calculate_vision_penalty(combatant, ch));
+    tn -= affected_by_power(ch, MOVEMENTUP) - affected_by_power(ch, MOVEMENTDOWN);
+    tn += affected_by_power(combatant, MOVEMENTUP) - affected_by_power(combatant, MOVEMENTDOWN);
     int successes = success_test(dice, tn);
 
     char rbuf[500];
@@ -763,10 +765,8 @@ ACMD(do_kick)
   struct char_data *vict;
   int dir;
 
-  if (AFF_FLAGGED(ch, AFF_PRONE)) {
-    send_to_char(ch, "You flail ineffectually-- it's hard to get leverage while prone.\r\n");
-    return;
-  }
+  FAILURE_CASE(IS_ASTRAL(ch), "Your foot passes right through!");
+  FAILURE_CASE(AFF_FLAGGED(ch, AFF_PRONE), "You flail ineffectually-- it's hard to get leverage while prone.");
 
   two_arguments(argument, arg, buf2);
 

@@ -145,9 +145,31 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     return FALSE;
   }
 
-  // Precondition: If you're wielding a non-weapon, back out.
+  // (ATT) Precondition: If you're wielding a non-weapon, take a penalty.
   if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON || GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_GRENADE)) {
-    send_to_char(att->ch, "You struggle to figure out how to attack while using %s as a weapon!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
+    send_to_char(att->ch, "You struggle to figure out how to attack while holding %s!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
+    att->weapon = NULL;
+    att->ranged_combat_mode = FALSE;
+    // Your fists / claws / etc are less effective when you're holding something.
+    att->melee->modifiers[COMBAT_MOD_WIELDING_A_NON_WEAPON] = 2;
+  }
+  // (DEF) Precondition: If you're wielding a non-weapon, take a penalty.
+  if (def->weapon && (GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON || GET_WEAPON_ATTACK_TYPE(def->weapon) == WEAP_GRENADE)) {
+    send_to_char(def->ch, "You struggle to figure out how to defend yourself while holding %s!\r\n", decapitalize_a_an(GET_OBJ_NAME(def->weapon)));
+    def->weapon = NULL;
+    def->ranged_combat_mode = FALSE;
+    // Your fists / claws / etc are less effective when you're holding something.
+    def->melee->modifiers[COMBAT_MOD_WIELDING_A_NON_WEAPON] = 2;
+  }
+
+  // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent closes immediately.
+  if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0) {
+    AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
+    AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
+
+    if (AWAKE(att->ch)) {
+      send_to_char("You can't react-- you're paralyzed!\r\n", att->ch);
+    }
     return FALSE;
   }
 
@@ -289,7 +311,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         weapon_range = MIN(find_sight(att->ch), find_weapon_range(att->ch, att->weapon));
         for (int dir = 0; dir < NUM_OF_DIRS && !vict_found; dir++) {
           room = att->ch->in_room;
-          if (CAN_GO2(room, dir))
+          if (CAN_GO2(room, dir) && !IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH))
             nextroom = EXIT2(room, dir)->to_room;
           else
             nextroom = NULL;
@@ -302,7 +324,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
               }
             }
             room = nextroom;
-            if (CAN_GO2(room, dir))
+            if (CAN_GO2(room, dir) && !IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH))
               nextroom = EXIT2(room, dir)->to_room;
             else
               nextroom = NULL;

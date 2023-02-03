@@ -36,11 +36,12 @@ extern const char *get_spell_name(int spell, int subtype);
 #define DAMOBJ_PIERCE           12
 #define DAMOBJ_MANIPULATION     32
 
-#define CONFUSION	0
-#define ENGULF		1
-#define CONCEAL		2
-#define MOVEMENTUP	3
-#define MOVEMENTDOWN	4
+#define CONFUSION	            0
+#define ENGULF		            1
+#define CONCEAL		            2
+#define MOVEMENTUP	          3
+#define MOVEMENTDOWN	        4
+#define NUM_SPIRIT_POWER_BITS 5
 
 #define INIT_MAIN	             0
 #define INIT_META	             1

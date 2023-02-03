@@ -89,6 +89,8 @@ extern char help[];
 extern void do_secret_ticks(int pulse);
 #endif
 
+bool _GLOBALLY_BAN_OPENVPN_CONNETIONS_ = FALSE;
+
 /* local globals */
 int connection_rapidity_tracker_for_dos = 0;
 struct descriptor_data *descriptor_list = NULL; /* master desc list */
@@ -706,6 +708,7 @@ void game_loop(int mother_desc)
         double usage_pcnt = 100 * ((double)total_usec / OPT_USEC);
         PERF_log_pulse(usage_pcnt);
 
+/*      Silenced this because it was spammy and didn't provide much value.
         if (usage_pcnt >= 100)
         {
           char buf[MAX_STRING_LENGTH];
@@ -714,6 +717,7 @@ void game_loop(int mother_desc)
           PERF_prof_repr_pulse(buf, sizeof(buf));
           log(buf);
         }
+*/
       }
 
       /* just in case, re-calculate after PERF logging to figure out for how long we have to sleep */
@@ -1795,29 +1799,42 @@ int new_descriptor(int s)
   }
 
   /* determine if the site is banned */
-  if (isbanned(newd->host) == BAN_ALL)
-  {
+  if (isbanned(newd->host) == BAN_ALL) {
     close(desc);
     snprintf(buf2, sizeof(buf2), "Connection attempt denied from banned site [%s]", newd->host);
     mudlog(buf2, NULL, LOG_BANLOG, TRUE);
     DELETE_AND_NULL(newd);
     return 0;
-  } else {
-    if (nameserver_is_slow)
-      log_vfprintf("DOSLOG: Connection from [%03u.%03u.%03u.%03u] (slow nameserver mode).",
-                   (int) ((addr & 0xFF000000) >> 24),
-                   (int) ((addr & 0x00FF0000) >> 16),
-                   (int) ((addr & 0x0000FF00) >> 8),
-                   (int) ((addr & 0x000000FF))
-                  );
-    else
-      log_vfprintf("DOSLOG: Connection from [%s (%03u.%03u.%03u.%03u)].",
-                   newd->host,
-                   (int) ((addr & 0xFF000000) >> 24),
-                   (int) ((addr & 0x00FF0000) >> 16),
-                   (int) ((addr & 0x0000FF00) >> 8),
-                   (int) ((addr & 0x000000FF))
-                  );
+  }
+
+  if (peer.sin_port == 1194 && _GLOBALLY_BAN_OPENVPN_CONNETIONS_) {
+    close(desc);
+    snprintf(buf2, sizeof(buf2), "Connection attempt denied from NON-BANNED site [%s] using VPN origin port 1194", newd->host);
+    mudlog(buf2, NULL, LOG_BANLOG, TRUE);
+    DELETE_AND_NULL(newd);
+    return 0;
+  }
+
+  if (nameserver_is_slow) {
+    log_vfprintf("DOSLOG: Connection from [%03u.%03u.%03u.%03u port %d%s] (slow nameserver mode).",
+                 (int) ((addr & 0xFF000000) >> 24),
+                 (int) ((addr & 0x00FF0000) >> 16),
+                 (int) ((addr & 0x0000FF00) >> 8),
+                 (int) ((addr & 0x000000FF)),
+                 peer.sin_port,
+                 peer.sin_port == 1194 ? "(OpenVPN?)" : ""
+                );
+  }
+  else {
+    log_vfprintf("DOSLOG: Connection from [%s (%03u.%03u.%03u.%03u) port %d%s].",
+                 newd->host,
+                 (int) ((addr & 0xFF000000) >> 24),
+                 (int) ((addr & 0x00FF0000) >> 16),
+                 (int) ((addr & 0x0000FF00) >> 8),
+                 (int) ((addr & 0x000000FF)),
+                 peer.sin_port,
+                 peer.sin_port == 1194 ? "(OpenVPN?)" : ""
+                );
   }
 
   init_descriptor(newd, desc);
@@ -3520,6 +3537,13 @@ void process_wheres_my_car() {
       // Credit it back.
       GET_NUYEN_RAW(d->character) += reward_amount;
       GET_NUYEN_INCOME_THIS_PLAY_SESSION(d->character, NUYEN_OUTFLOW_WHERESMYCAR) -= reward_amount;
+
+      // Tell them if they don't own a car.
+      if (total_vehicles <= 0) {
+        send_to_char("[OOC: You don't actually own any vehicles!]\r\n", d->character);
+      } else {
+        send_to_char(d->character, "[OOC: Your %s too far away or are otherwise inaccessible to you at the moment.]\r\n", total_vehicles == 1 ? "vehicle is": "vehicles are");
+      }
     }
     assert(idnum_canary == GET_IDNUM(d->character));
 

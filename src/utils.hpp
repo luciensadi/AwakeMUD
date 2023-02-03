@@ -329,7 +329,7 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define IS_ASTRAL(ch) (MOB_FLAGGED(ch, MOB_ASTRAL) || IS_PROJECT(ch))
 #define IS_DUAL(ch)   (MOB_FLAGGED(ch, MOB_DUAL_NATURE) || access_level(ch, LVL_ADMIN))
 #define IS_PERCEIVING(ch) (MOB_FLAGGED(ch, MOB_PERCEIVING) || PLR_FLAGGED(ch, PLR_PERCEIVE))
-#define SEES_ASTRAL(ch) (IS_ASTRAL(ch) || IS_DUAL(ch) || IS_PERCEIVING(ch))
+#define SEES_ASTRAL(ch) (!IS_RIGGING(ch) && (IS_ASTRAL(ch) || IS_DUAL(ch) || IS_PERCEIVING(ch)))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
 
 // ONLY for use on non-Bitfield bitvectors:
@@ -666,7 +666,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define CAN_CARRY_W(ch)       ((GET_STR(ch) * 10) + 30)
 #define CAN_CARRY_N(ch)       (8 + GET_QUI(ch) + (GET_REAL_LEVEL(ch)>=LVL_BUILDER?50:0))
 #define AWAKE(ch)             (GET_POS(ch) > POS_SLEEPING && GET_QUI(ch) > 0)
-#define IS_JACKED_IN(ch)      (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE) || PLR_FLAGGED(ch, PLR_MATRIX))
+#define IS_RIGGING(ch)        (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
+#define IS_JACKED_IN(ch)      (IS_RIGGING(ch) || PLR_FLAGGED(ch, PLR_MATRIX))
 #define CAN_SEE_IN_DARK(ch)   (SEES_ASTRAL(ch) || CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT))
 #define GET_BUILDING(ch)	((ch)->char_specials.programming)
 #define IS_WORKING(ch)        ((AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, AFF_PILOT, AFF_RIG, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT)))
@@ -1193,7 +1194,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_VEHCONTAINER convenience defines
 
 // ITEM_GRAFFITI convenience defines
-#define OBJ_IS_GRAFFITI(obj)       (GET_OBJ_TYPE((obj)) == ITEM_GRAFFITI || GET_OBJ_VNUM((obj)) == OBJ_DYNAMIC_GRAFFITI)
+#define OBJ_IS_GRAFFITI(obj)                                (GET_OBJ_TYPE((obj)) == ITEM_GRAFFITI || GET_OBJ_VNUM((obj)) == OBJ_DYNAMIC_GRAFFITI)
+#define GET_GRAFFITI_SPRAYED_BY(obj)                        (GET_OBJ_VAL((obj), 0))
 
 
 /* Misc utils ************************************************************/
@@ -1337,6 +1339,13 @@ char    *crypt(const char *key, const char *salt);
   }                                        \
 }                                          \
 
+#define FAILURE_CASE_PRINTF(condition, ...) { \
+  if ((condition)) {                          \
+    send_to_char(ch, __VA_ARGS__);            \
+    return;                                   \
+  }                                           \
+}                                             \
+
 #define FOR_ITEMS_AROUND_CH(ch, item_ptr) for ((item_ptr) = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; (item_ptr); (item_ptr) = (item_ptr)->next_content)
 
 #define CHARS_IN_SAME_LOCATION(first, second) ((first)->in_room ? (first)->in_room == (second)->in_room : (first)->in_veh == (second)->in_veh)
@@ -1351,5 +1360,7 @@ void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick,
 
 #define GET_WOUND_NAME(damage_level) (wound_name[MIN(DEADLY, MAX(0, damage_level))])
 #define GET_SHORT_WOUND_NAME(damage_level) (wound_arr[MIN(DEADLY, MAX(0, damage_level))])
+
+#define DEBUG_TO_STAFF(ch, ...) if (access_level((ch), LVL_BUILDER)) { send_to_char((ch), __VA_ARGS__); }
 
 #endif

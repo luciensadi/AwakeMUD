@@ -72,6 +72,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define SYSP_ROLLS_COST                                        25
 #define SYSP_VNUMS_COST                                        5
 
+#define SYSP_NUYEN_PURCHASE_COST                               100000
+
 // How long should the MUD wait for recovery before killing itself? Note that it
 // considers itself to be stuck during copyover too, so if you have a large world,
 // you should increase this value.

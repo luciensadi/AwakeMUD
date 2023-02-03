@@ -975,6 +975,12 @@ ACMD(do_control)
     send_to_char("Your subscriber list isn't that big.\r\n", ch);
     return;
   }
+
+  if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+    send_to_char("It doesn't respond.\r\n", ch);
+    return;
+  }
+
   if (!veh->in_room && !veh->in_veh) {
     send_to_char("You can't seem to make contact with it.\r\n", ch);
     snprintf(buf, sizeof(buf), "SYSERR: Vehicle %s is not located in a valid room or vehicle!\r\n", GET_VEH_NAME(veh));
@@ -1252,8 +1258,8 @@ ACMD(do_driveby)
     return;
   }
 
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    send_to_char("You don't have a pistol to point at anyone...\r\n", ch);
+  if (IS_RIGGING(ch)) {
+    send_to_char("You're jacked into the vehicle itself, so you can't perform a driveby.\r\n", ch);
     return;
   }
 
@@ -1432,7 +1438,7 @@ ACMD(do_speed)
       send_to_char("You bring the vehicle to a halt.\r\n", ch);
       send_to_veh("The vehicle slows to a stop.\r\n", veh, ch, FALSE);
     } else {
-      if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG)) {
+      if (!IS_RIGGING(ch)) {
         send_to_char("You put your foot on the brake.\r\n", ch);
         send_to_veh("You slow down.", veh, ch, TRUE);
       } else {
@@ -1440,7 +1446,7 @@ ACMD(do_speed)
       }
     }
   } else if (i > veh->cspeed) {
-    if (!PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG)) {
+    if (!IS_RIGGING(ch)) {
       send_to_char("You put your foot on the accelerator.\r\n", ch);
       send_to_veh("You speed up.", veh, ch, TRUE);
     } else {
@@ -1544,7 +1550,7 @@ ACMD(do_target)
   }
 
   if (*arg && *buf2) {
-    if (!(AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))) {
+    if (!IS_RIGGING(ch)) {
       send_to_char("But you aren't piloting this vehicle.\r\n", ch);
       return;
     }
@@ -1565,7 +1571,7 @@ ACMD(do_target)
     }
     strlcpy(arg, buf2, sizeof(arg));
   } else {
-    if (!(AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_MANNING))) {
+    if (!IS_RIGGING(ch) && !AFF_FLAGGED(ch, AFF_MANNING)) {
       send_to_char("You don't have control over any mounts.\r\n", ch);
       return;
     }
@@ -1923,7 +1929,7 @@ ACMD(do_gridguide)
       DELETE_ARRAY_IF_EXTANT(grid->name);
       DELETE_AND_NULL(grid);
       send_to_char("You remove the destination from the system.\r\n", ch);
-      if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+      if (IS_RIGGING(ch)) {
         send_to_veh("The autonav flashes as a destination is deleted.\r\n", veh, NULL, FALSE);
       } else {
         act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);
@@ -1968,7 +1974,7 @@ ACMD(do_gridguide)
     grid->next = veh->grid;
     veh->grid = grid;
     send_to_char("You add the destination into the system.\r\n", ch);
-    if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+    if (IS_RIGGING(ch)) {
       send_to_veh("The autonav flashes as a destination is added.\r\n", veh, NULL, FALSE);
     } else {
       act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);
@@ -2275,9 +2281,11 @@ ACMD(do_push)
 {
   skip_spaces(&argument);
   struct veh_data *veh = NULL, *found_veh = NULL;
-  if (!*argument)
-    send_to_char("Push what?\r\n", ch);
-  else if (ch->in_veh) {
+
+  FAILURE_CASE(!*argument, "You need to specify something to push.");
+  FAILURE_CASE(IS_ASTRAL(ch), "You can't affect the material plane.");
+
+  if (ch->in_veh) {
     if (ch->vfront)
       send_to_char("You can't push a vehicle out from here.\r\n", ch);
     else if (ch->in_veh->cspeed > SPEED_IDLE)
@@ -2326,23 +2334,21 @@ ACMD(do_push)
         mult = 500;
         break;
     }
-    if (found_veh == veh)
-      send_to_char("You can't push it into itself.\r\n", ch);
-    else if (found_veh->load - found_veh->usedload < veh->body * mult)
-      send_to_char("There is not enough room in there for that.\r\n", ch);
-    else if (found_veh->locked)
-      send_to_char("You can't push it into a locked vehicle.\r\n", ch);
-    else if (veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED)
-      send_to_char("The wheels seem to be locked.\r\n", ch);
-    else {
-      strlcpy(buf2, GET_VEH_NAME(veh), sizeof(buf2));
-      snprintf(buf, sizeof(buf), "$n pushes %s into the back of %s.", buf2, GET_VEH_NAME(found_veh));
-      send_to_char(ch, "You push %s into the back of %s.\r\n", buf2, GET_VEH_NAME(found_veh));
-      act(buf, 0, ch, 0, 0, TO_ROOM);
-      snprintf(buf2, sizeof(buf2), "You are pushed into %s.\r\n", GET_VEH_NAME(found_veh));
-      send_to_veh(buf2, veh, NULL, TRUE);
-      veh_to_veh(veh, found_veh);
-    }
+
+    FAILURE_CASE(found_veh == veh, "You can't push it into itself.");
+    FAILURE_CASE(!found_veh->seating[0] && !(repair_vehicle_seating(found_veh) && found_veh->seating[0]), "There's nowhere to push it into.");
+    FAILURE_CASE(found_veh->load - found_veh->usedload < veh->body * mult, "There is not enough room in there for that.");
+    FAILURE_CASE(found_veh->locked, "You can't push it into a locked vehicle.");
+    FAILURE_CASE(veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED, "The wheels seem to be locked.");
+    FAILURE_CASE(found_veh->damage >= VEH_DAM_THRESHOLD_DESTROYED, "You can't push anything into a destroyed vehicle.");
+
+    strlcpy(buf2, GET_VEH_NAME(veh), sizeof(buf2));
+    snprintf(buf, sizeof(buf), "$n pushes %s into the back of %s.", buf2, GET_VEH_NAME(found_veh));
+    send_to_char(ch, "You push %s into the back of %s.\r\n", buf2, GET_VEH_NAME(found_veh));
+    act(buf, 0, ch, 0, 0, TO_ROOM);
+    snprintf(buf2, sizeof(buf2), "You are pushed into %s.\r\n", GET_VEH_NAME(found_veh));
+    send_to_veh(buf2, veh, NULL, TRUE);
+    veh_to_veh(veh, found_veh);
   }
 }
 

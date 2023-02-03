@@ -3754,12 +3754,8 @@ ACMD(do_unpack)
 {
   struct obj_data *shop = NULL;
   if (ch->in_veh) {
-    if (!ch->in_veh->flags.IsSet(VFLAG_WORKSHOP)) {
-      send_to_char("This vehicle isn't large enough to set up a workshop in.\r\n", ch);
-      return;
-    } else if (ch->vfront) {
-      send_to_char("You can't set up a workshop in the front seat.\r\n", ch);
-    }
+    FAILURE_CASE(!ch->in_veh->flags.IsSet(VFLAG_WORKSHOP), "This vehicle isn't large enough to set up a workshop in.");
+    FAILURE_CASE(ch->vfront, "You can't set up a workshop in the front seat.");
   }
 
   // Only one unpacked workshop per room.
@@ -3778,10 +3774,7 @@ ACMD(do_unpack)
   int dotmode = find_all_dots(arg, sizeof(arg));
 
   /* Targeted unpack. */
-  if (dotmode == FIND_ALL || dotmode == FIND_ALLDOT) {
-    send_to_char("You'd have to be some kind of superhero to work with multiple workshops at once.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(dotmode == FIND_ALL || dotmode == FIND_ALLDOT, "You'd have to be some kind of superhero to work with multiple workshops at once.");
 
   if (*arg) {
     if (ch->in_room) {
@@ -3808,10 +3801,7 @@ ACMD(do_unpack)
         break;
     }
 
-    if (!shop) {
-      send_to_char(ch, "There is no workshop here to set up.\r\n");
-      return;
-    }
+    FAILURE_CASE(!shop, "There is no workshop here to set up.");
   }
 
   if (GET_OBJ_TYPE(shop) != ITEM_WORKSHOP || GET_WORKSHOP_GRADE(shop) != TYPE_WORKSHOP) {
@@ -3829,10 +3819,8 @@ ACMD(do_unpack)
     return;
   }
 
-  if (!ch->in_veh && GET_OBJ_VAL(shop, 0) == TYPE_VEHICLE && !ROOM_FLAGGED(ch->in_room, ROOM_GARAGE)) {
-    send_to_char("Vehicle workshops can only be deployed in trucks and garage-flagged rooms.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(GET_WORKSHOP_TYPE(shop) == TYPE_VEHICLE && !ch->in_veh && !ROOM_FLAGGED(ch->in_room, ROOM_GARAGE), "Vehicle workshops can only be deployed in trucks and garage-flagged rooms.");
+
   send_to_char(ch, "You begin to set up %s here.\r\n", GET_OBJ_NAME(shop));
   act("$n begins to set up $P.", FALSE, ch, 0, shop, TO_ROOM);
   if (access_level(ch, LVL_BUILDER)) {
@@ -4572,6 +4560,8 @@ ACMD(do_spray)
     return;
   }
 
+  FAILURE_CASE(!ch->in_room, "You can't do that in a vehicle.");
+
   {
     int existing_graffiti_count = 0;
     struct obj_data *obj;
@@ -4585,7 +4575,7 @@ ACMD(do_spray)
     }
   }
 
-  for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content)
+  for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
     if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == spraypaint) {
       int length = get_string_length_after_color_code_removal(argument, ch);
 
@@ -4627,6 +4617,7 @@ ACMD(do_spray)
       paint->restring = str_dup(buf);
       snprintf(buf, sizeof(buf), "   ^n%s^n", argument);
       paint->graffiti = str_dup(buf);
+      GET_GRAFFITI_SPRAYED_BY(paint) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
       obj_to_room(paint, ch->in_room);
 
       send_to_char("You tag the area with your spray.\r\n", ch);
@@ -4641,7 +4632,7 @@ ACMD(do_spray)
       }
       return;
     }
-
+  }
 
   send_to_char("You don't have anything to spray with.\r\n", ch);
 }
@@ -4897,6 +4888,22 @@ ACMD(do_syspoints) {
 
       // Too broke.
       send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_VNUMS_COST, GET_SYSTEM_POINTS(ch));
+      return;
+    }
+
+    if (is_abbrev(arg, "purchase")) {
+      // Can they afford it?
+      FAILURE_CASE_PRINTF(GET_NUYEN(ch) < SYSP_NUYEN_PURCHASE_COST, "That costs %d nuyen, and you only have %d on hand.", SYSP_NUYEN_PURCHASE_COST, GET_NUYEN(ch));
+
+      // Have they entered the confirmation command?
+      FAILURE_CASE_PRINTF(!is_abbrev(buf, "confirm"), "You can spend %d nuyen to purchase a syspoint. To do so, type SYSPOINT PURCHASE CONFIRM.", SYSP_NUYEN_PURCHASE_COST);
+
+      // Do it.
+      lose_nuyen(ch, SYSP_NUYEN_PURCHASE_COST, NUYEN_OUTFLOW_SYSPOINT_PURCHASE);
+      GET_SYSTEM_POINTS(ch)++;
+      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s traded %d nuyen for one syspoint (now has %d)", GET_CHAR_NAME(ch), SYSP_NUYEN_PURCHASE_COST, GET_SYSTEM_POINTS(ch));
+      playerDB.SaveChar(ch);
+
       return;
     }
 

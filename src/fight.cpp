@@ -98,6 +98,7 @@ extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char
 extern char *get_player_name(vnum_t id);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool check_sentinel_snap_back(struct char_data *ch);
+extern void end_quest(struct char_data *ch);
 
 // Corpse saving externs.
 extern void write_world_to_disk(int vnum);
@@ -310,7 +311,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
     char cmd_buf[100];
     *cmd_buf = '\0';
 
-    if (PLR_FLAGGED(victim, PLR_REMOTE) || AFF_FLAGGED(victim, AFF_RIG)) {
+    if (IS_RIGGING(victim)) {
       ACMD_DECLARE(do_return);
       do_return(victim, cmd_buf, 0, 0);
     }
@@ -426,7 +427,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     }
   }
 
-  if (!(AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)))
+  if (!(AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch)))
   {
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       find_and_draw_weapon(ch);
@@ -967,6 +968,10 @@ void raw_kill(struct char_data * ch)
       char_to_room(ch, &world[i]);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
       PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
+
+      if (GET_QUEST(ch)) {
+        end_quest(ch);
+      }
     }
   }
 
@@ -1053,6 +1058,24 @@ void die(struct char_data * ch)
   AFF_FLAGS(ch).RemoveBit(AFF_HEALED);
 
   raw_kill(ch);
+}
+
+ACMD(do_dw_retrieve)
+{
+  // Not mortally wounded
+  FAILURE_CASE(GET_POS(ch) != POS_MORTALLYW, "A DocWagon triage drone states, \"^YVital signs non-critical. Moving to next...^L(fades into the distance)^n\"");
+
+  // No modulator
+  struct obj_data *docwagon = find_best_active_docwagon_modulator(ch);
+  FAILURE_CASE(!docwagon, "A DocWagon triage drone states, \"^RNo modulator detected. Cannot confirm contract...^L(fades into the distance)^n\"");
+
+  // If they're ready to be docwagon'd out, save them.
+  if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
+    docwagon_retrieve(ch);
+  } else {
+    send_to_char(ch, "You have not received a DocWagon trauma team confirmation! You can either wait for help, or give up by typing ^WDIE^n.\r\n");
+  }
+  return;
 }
 
 /*
@@ -2399,12 +2422,12 @@ void docwagon_retrieve(struct char_data *ch) {
     } else {
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Could not find modulator after DW rescue of %s.", GET_CHAR_NAME(ch));
     }
-  }
 
-  // They just got patched up: heal them slightly, make them stunned.
-  GET_PHYSICAL(ch) = 400;
-  GET_MENTAL(ch) = 0;
-  GET_POS(ch) = POS_STUNNED;
+    // They just got patched up: heal them slightly, make them stunned.
+    GET_PHYSICAL(ch) = 400;
+    GET_MENTAL(ch) = 0;
+    GET_POS(ch) = POS_STUNNED;
+  }
 
   alert_player_doctors_of_contract_withdrawal(ch, FALSE);
 }
@@ -2428,7 +2451,7 @@ bool docwagon(struct char_data *ch)
 
   if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
     send_to_char(ch, "%s^n buzzes contentedly: the automated DocWagon trauma team remains en route.\r\n", CAP(GET_OBJ_NAME(docwagon)));
-    send_to_char(ch, "^L[OOC: You can choose to wait for player assistance to arrive, or you can get picked up immediately by entering ^wDIE^L. See ^wHELP DOCWAGON^L for more details.]\r\n");
+    send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
   } else {
     int docwagon_tn = MAX(GET_SECURITY_LEVEL(room), 4);
     int docwagon_dice = GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1;
@@ -2446,7 +2469,7 @@ bool docwagon(struct char_data *ch)
     if (successes > 0)
     {
       send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
-      send_to_char(ch, "^L[OOC: You can choose to wait for player assistance to arrive, or you can get picked up immediately by entering ^wDIE^L. See ^wHELP DOCWAGON^L for more details.]\r\n");
+      send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
       PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
     } else {
       send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
@@ -3539,7 +3562,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
   if (GET_OBJ_TYPE(wielded) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded)))
   {
     // First, check if they're manning a turret-- if they are, special handling is required.
-    if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))  {
+    if (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch))  {
       // NPCs don't care about ammo in their mounts. No deduction needed here.
       if (IS_NPC(ch))
         return TRUE;
@@ -3671,7 +3694,7 @@ int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyrom
   int rnum, comp = 0;
 
   // Can't use bipods/tripods if you're controlling a vehicle weapon.
-  bool can_use_bipods_and_tripods = !is_using_gyromount && !PLR_FLAGGED(ch, PLR_REMOTE) && !AFF_FLAGGED(ch, AFF_RIG) && !AFF_FLAGGED(ch, AFF_MANNING);
+  bool can_use_bipods_and_tripods = !is_using_gyromount && !IS_RIGGING(ch) && !AFF_FLAGGED(ch, AFF_MANNING);
 
   if (!gun || GET_OBJ_TYPE(gun) != ITEM_WEAPON)
     return 0;
@@ -3984,7 +4007,7 @@ void combat_message_process_single_ranged_response(struct char_data *ch, struct 
             struct room_data *curr_room = tch->in_room;
 
             // If there's no exit in this direction, stop immediately.
-            if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED))
+            if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED) || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CANT_SHOOT_THROUGH))
               continue;
 
             // Otherwise, scan down that exit up to weapon range.
@@ -4000,7 +4023,7 @@ void combat_message_process_single_ranged_response(struct char_data *ch, struct 
               }
 
               // Stop further iteration if there are no further exits.
-              if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED))
+              if (!curr_room->dir_option[dir] || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CLOSED) || IS_SET(curr_room->dir_option[dir]->exit_info, EX_CANT_SHOOT_THROUGH))
                 break;
             }
           }
@@ -4219,7 +4242,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   }
 
   // Now that we've sent the messages, change to the vehicle's room (if we're in a vehicle).
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (IS_RIGGING(ch)) {
     RIG_VEH(ch, veh);
     ch_room = get_veh_in_room(veh);
   }
@@ -4472,7 +4495,7 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 #endif
 
   // EXCEPT: If you're rigging (not manning), things change.
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (IS_RIGGING(ch)) {
     struct veh_data *veh = get_veh_controlled_by_char(ch);
     ch_has_ultrasound = vehicle_has_ultrasound_sensors(veh); // Eventually, we'll have ultrasonic sensors on vehicles too.
     ch_has_thermographic = TRUE;
@@ -4795,7 +4818,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
         break;
       }
 
-      if (CAN_GO2(room, dir)) {
+      if (CAN_GO2(room, dir) && !IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH)) {
         nextroom = EXIT2(room, dir)->to_room;
       } else {
         nextroom = NULL;
@@ -4852,7 +4875,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
 
         // Prep for our next iteration.
         room = nextroom;
-        if (CAN_GO2(room, dir))
+        if (CAN_GO2(room, dir) && !IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH))
           nextroom = EXIT2(room, dir)->to_room;
         else
           nextroom = NULL;
@@ -4866,7 +4889,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   // Mobile NPC with a melee weapon. They only charge one room away for some reason.
   else if (!vict_will_not_move) {
     for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
-      if (CAN_GO(vict, dir) && EXIT2(vict->in_room, dir)->to_room == ch->in_room) {
+      if (CAN_GO(vict, dir) && !IS_SET(EXIT2(vict->in_room, dir)->exit_info, EX_CANT_SHOOT_THROUGH) && EXIT2(vict->in_room, dir)->to_room == ch->in_room) {
         if (check_sentinel_snap_back(vict))
           return TRUE;
 
@@ -5180,6 +5203,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
   struct room_data *scatter[4];
   struct room_data *room = NULL, *nextroom = NULL;
   struct char_data *vict = NULL;
+  bool hit_noshoot_door = FALSE;
 
   for (int i = 0; i < 4; i++)
     scatter[i] = NULL;
@@ -5194,10 +5218,17 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
   sight = find_sight(ch);
 
-  if (CAN_GO2(in_room, dir))
-    nextroom = EXIT2(in_room, dir)->to_room;
-  else
+  if (CAN_GO2(in_room, dir)) {
+    if (IS_SET(EXIT2(in_room, dir)->exit_info, EX_CANT_SHOOT_THROUGH)) {
+      hit_noshoot_door = TRUE;
+      nextroom = NULL;
+    } else {
+      nextroom = EXIT2(in_room, dir)->to_room;
+    }
+  }
+  else {
     nextroom = NULL;
+  }
 
   if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GRENADE)
   {
@@ -5321,10 +5352,16 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       break;
     vict = NULL;
     room = nextroom;
-    if (CAN_GO2(room, dir))
-      nextroom = EXIT2(room, dir)->to_room;
-    else
+    if (CAN_GO2(room, dir)) {
+      if (IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH)) {
+        hit_noshoot_door = TRUE;
+        nextroom = NULL;
+      } else {
+        nextroom = EXIT2(room, dir)->to_room;
+      }
+    } else {
       nextroom = NULL;
+    }
   }
 
   if (vict)
@@ -5446,9 +5483,9 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
         // Initialize scatter array.
         scatter[0] = ch->in_room;
-        scatter[1] = left >= 0 && CAN_GO(ch, left) ? EXIT(ch, left)->to_room : NULL;
-        scatter[2] = right >= 0 && CAN_GO(ch, right) ? EXIT(ch, right)->to_room : NULL;
-        scatter[3] = CAN_GO2(nextroom, dir) ? EXIT2(nextroom, dir)->to_room : NULL;
+        scatter[1] = left >= 0 && CAN_GO(ch, left) && !IS_SET(EXIT(ch, left)->exit_info, EX_CANT_SHOOT_THROUGH) ? EXIT(ch, left)->to_room : NULL;
+        scatter[2] = right >= 0 && CAN_GO(ch, right) && !IS_SET(EXIT(ch, right)->exit_info, EX_CANT_SHOOT_THROUGH) ? EXIT(ch, right)->to_room : NULL;
+        scatter[3] = CAN_GO2(nextroom, dir) && !IS_SET(EXIT2(nextroom, dir)->exit_info, EX_CANT_SHOOT_THROUGH) ? EXIT2(nextroom, dir)->to_room : NULL;
 
         for (temp = 0, temp2 = 0; temp2 < 4; temp2++)
           if (scatter[temp2])
@@ -5468,7 +5505,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
             target_explode(ch, weapon, scatter[temp2], 0);
             if (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET)
               for (temp = 0; temp < NUM_OF_DIRS; temp++)
-                if (CAN_GO2(scatter[temp2], temp))
+                if (CAN_GO2(scatter[temp2], temp) && !IS_SET(EXIT2(scatter[temp2], temp)->exit_info, EX_CANT_SHOOT_THROUGH))
                   target_explode(ch, weapon, EXIT2(scatter[temp2], temp)->to_room, 1);
             return;
           }
@@ -5476,17 +5513,23 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       target_explode(ch, weapon, vict->in_room, 0);
       if (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET)
         for (temp = 0; temp < NUM_OF_DIRS; temp++)
-          if (CAN_GO2(vict->in_room, temp))
+          if (CAN_GO2(vict->in_room, temp) && !IS_SET(EXIT2(vict->in_room, temp)->exit_info, EX_CANT_SHOOT_THROUGH))
             target_explode(ch, weapon, EXIT2(vict->in_room, temp)->to_room, 1);
     }
     return;
   }
   bool found = FALSE;
 
-  if (CAN_GO2(ch->in_room, dir))
-    nextroom = EXIT2(ch->in_room, dir)->to_room;
-  else
+  if (CAN_GO2(ch->in_room, dir)) {
+    if (IS_SET(EXIT2(ch->in_room, dir)->exit_info, EX_CANT_SHOOT_THROUGH)) {
+      hit_noshoot_door = TRUE;
+      nextroom = NULL;
+    } else {
+      nextroom = EXIT2(ch->in_room, dir)->to_room;
+    }
+  } else {
     nextroom = NULL;
+  }
 
   // now we search for a door by the given name
   for (distance = 1; nextroom && distance <= sight; distance++)
@@ -5503,10 +5546,16 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
            break;
          }
     room = nextroom;
-    if (CAN_GO2(room, dir))
-      nextroom = EXIT2(room, dir)->to_room;
-    else
+    if (CAN_GO2(room, dir)) {
+      if (IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH)) {
+        hit_noshoot_door = TRUE;
+        nextroom = NULL;
+      } else {
+        nextroom = EXIT2(room, dir)->to_room;
+      }
+    } else {
       nextroom = NULL;
+    }
   }
 
   if (found)
@@ -5548,7 +5597,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       case WEAP_MISS_LAUNCHER:
         target_explode(ch, weapon, nextroom, 0);
         for (temp = 0; temp < NUM_OF_DIRS; temp++)
-          if (CAN_GO2(nextroom, temp))
+          if (CAN_GO2(nextroom, temp) && !IS_SET(EXIT2(nextroom, temp)->exit_info, EX_CANT_SHOOT_THROUGH))
             target_explode(ch, weapon, EXIT2(nextroom, temp)->to_room, 1);
         break;
       default:
@@ -5559,7 +5608,11 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     return;
   }
 
-  send_to_char(ch, "You can't see any %s there.\r\n", target);
+  if (hit_noshoot_door) {
+    send_to_char(ch, "You can't see any %s before the bullet threshold.\r\n", target);
+  } else {
+    send_to_char(ch, "You can't see any %s there.\r\n", target);
+  }
   return;
 }
 
@@ -5568,7 +5621,7 @@ void roll_individual_initiative(struct char_data *ch)
   if (AWAKE(ch))
   {
     // While rigging, riggers receive only the modifications given them by the vehicle control rig (see Vehicles and Drones, p. 130) they are using.
-    if (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    if (IS_RIGGING(ch)) {
       // Note: Dice don't explode in initiative rolls. This is your base value.
       GET_INIT_ROLL(ch) = GET_REAL_REA(ch) + dice(1, 6);
 
@@ -6090,6 +6143,10 @@ void perform_violence(void)
         }
 #endif
 
+        // Add spirit movement powers.
+        target -= affected_by_power(ch, MOVEMENTUP) - affected_by_power(ch, MOVEMENTDOWN);
+        target += affected_by_power(FIGHTING(ch), MOVEMENTUP) - affected_by_power(FIGHTING(ch), MOVEMENTDOWN);
+
         // Set the target from the defender's attribute.
         target += defender_attribute;
         // Lock the target to a range. Nobody enjoys rolling TN 14 to close with high-level invis mages.
@@ -6114,7 +6171,7 @@ void perform_violence(void)
     }
 
     // Manning weaponry.
-    if (AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+    if (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch)) {
       struct veh_data *veh = NULL;
       RIG_VEH(ch, veh);
 
@@ -6761,7 +6818,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
     modtarget++;
 
-  if (AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE))
+  if (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch))
   {
     skill_total = get_skill(ch, SKILL_GUNNERY, base_target);
   } else if (wielded && GET_SKILL(ch, GET_OBJ_VAL(wielded, 4)) < 1)

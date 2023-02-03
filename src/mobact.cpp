@@ -176,13 +176,24 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
   if (!ch || !vict || ch == vict)
     return FALSE;
 
-  // Idle PC? Failure.
-  if (!IS_NPC(vict) && (!vict->desc || vict->char_specials.timer >= IDLE_TIMER_AGGRO_THRESHOLD)) {
+  if (!IS_NPC(vict)) {
+    // Idle PC? Failure.
+    if (!vict->desc || vict->char_specials.timer >= IDLE_TIMER_AGGRO_THRESHOLD) {
 #ifdef MOBACT_DEBUG
-    snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping %s - Idle / linkdead PC.", GET_CHAR_NAME(vict));
-    do_say(ch, buf3, 0, 0);
+      snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping %s - Idle / linkdead PC.", GET_CHAR_NAME(vict));
+      do_say(ch, buf3, 0, 0);
 #endif
-    return FALSE;
+      return FALSE;
+    }
+
+    // We're a quest target and they're not valid vs us? Fail.
+    if (ch_is_blocked_by_quest_protections(vict, ch)) {
+#ifdef MOBACT_DEBUG
+      snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping %s - PC not valid quest target.", GET_CHAR_NAME(vict));
+      do_say(ch, buf3, 0, 0);
+#endif
+      return FALSE;
+    }
   }
 
   // Can't see? Failure.
@@ -365,9 +376,13 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
 /* 15 */ "%s If you think %s is going to make a difference here, you've got another think coming.",
          "%s I'm gonna feed you %s!",
          "%s I'm gonna break %s off in your hoop!",
-         "%s Frag off, and take %s with you!"
+         "%s Frag off, and take %s with you!",
+         "%s I'm gonna take %s off your corpse!",
+/* 20 */ "%s %s, really? You don't like breathing, do you?",
+         "%s Look at you, bein' all brave. Is %s your safety blanket?"
   };
-  #define NUM_GUARD_MESSAGES 19
+  // We're zero-indexed, so this is the max string index above plus one.
+  #define NUM_GUARD_MESSAGES 22
 
   if (!vict_is_valid_target(ch, vict))
     return FALSE;

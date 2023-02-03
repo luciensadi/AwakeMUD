@@ -1819,7 +1819,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   {
     char skill_buf[1000] = { '\0' };
     for (int skill_idx = 0; skill_idx <= 8; skill_idx += 2) {
-      if (k->mob_specials.mob_skills[skill_idx + 1]) {
+      if (k->mob_specials.mob_skills[skill_idx + 1] && (k->mob_specials.mob_skills[skill_idx] > 0 && k->mob_specials.mob_skills[skill_idx] < MAX_SKILLS)) {
         snprintf(ENDOF(skill_buf), sizeof(skill_buf) - strlen(skill_buf), "  %s: %d\r\n",
                  skills[k->mob_specials.mob_skills[skill_idx]].name,
                  k->mob_specials.mob_skills[skill_idx + 1]);
@@ -3884,40 +3884,28 @@ ACMD(do_wizutil)
         break;
 
       case SCMD_FREEZE:
-        if (ch == vict) {
-          send_to_char("Oh, yeah, THAT'S real smart...\r\n", ch);
-          return;
-        }
-        if (PLR_FLAGGED(vict, PLR_FROZEN)) {
-          send_to_char("Your victim is already pretty cold. Did you mean to THAW them?\r\n", ch);
-          return;
-        }
+        FAILURE_CASE(ch == vict, "Oh, yeah, THAT'S real smart...");
+        FAILURE_CASE(PLR_FLAGGED(vict, PLR_FROZEN), "Your victim is already pretty cold. Did you mean to ##^WTHAW^n them?");
+
         PLR_FLAGS(vict).SetBit(PLR_FROZEN);
         GET_FREEZE_LEV(vict) = GET_LEVEL(ch);
+
         send_to_char("A bitter wind suddenly rises and drains every erg of heat from your body!\r\nYou feel frozen!\r\n", vict);
-        send_to_char("Frozen.\r\n", ch);
         act("A sudden cold wind conjured from nowhere freezes $n!", TRUE, vict, 0, 0, TO_ROOM);
-        snprintf(buf, sizeof(buf), "%s frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
-        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        mudlog_vfprintf(ch, LOG_WIZLOG, "%s frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        send_to_char("Done. Note that freezing means that the target cannot execute ANY commands, including osay/tell and even quit! ##^WTHAW^n them if you're still talking, otherwise disconnect them with ##^WDC^n when you're done.\r\n", ch);
         break;
       case SCMD_THAW:
-        if (!PLR_FLAGGED(vict, PLR_FROZEN)) {
-          send_to_char("Sorry, your victim is not morbidly encased in ice at the moment.\r\n", ch);
-          return;
-        }
-        if (!access_level(ch, GET_FREEZE_LEV(vict))) {
-          snprintf(buf, sizeof(buf), "Sorry, a level %d God froze %s... you can't unfreeze %s.\r\n",
-                  GET_FREEZE_LEV(vict), GET_CHAR_NAME(vict), HMHR(vict));
-          send_to_char(buf, ch);
-          return;
-        }
-        snprintf(buf, sizeof(buf), "%s un-frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
-        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        FAILURE_CASE(!PLR_FLAGGED(vict, PLR_FROZEN), "Sorry, your victim is not morbidly encased in ice at the moment.");
+        FAILURE_CASE_PRINTF(!access_level(ch, GET_FREEZE_LEV(vict)), "Sorry, a level %d staffer froze %s... you can't unfreeze %s.", GET_FREEZE_LEV(vict), GET_CHAR_NAME(vict), HMHR(vict));
+
         PLR_FLAGS(vict).RemoveBit(PLR_FROZEN);
-        send_to_char("A fireball suddenly explodes in front of you, melting the ice!\r\nYou feel thawed.\r\n", vict);
-        send_to_char("Thawed.\r\n", ch);
         GET_FREEZE_LEV(vict) = 0;
+
+        send_to_char("A fireball suddenly explodes in front of you, melting the ice!\r\nYou feel thawed.\r\n", vict);
         act("A sudden fireball conjured from nowhere thaws $n!", TRUE, vict, 0, 0, TO_ROOM);
+        mudlog_vfprintf(ch, LOG_WIZLOG, "%s un-frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        send_to_char("Thawed.\r\n", ch);
         break;
       case SCMD_MUTE_NEWBIE:
         result = PLR_TOG_CHK(vict, PLR_NEWBIE_MUTED);
@@ -6430,7 +6418,7 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   half_chop(argument, arg, buf);
 
   if (!*arg) {
-    send_to_char("You have to restring something!\r\n", ch);
+    send_to_char("Syntax: RESTRING <item> <new short description>\r\n", ch);
     return FALSE;
   }
 
@@ -6542,6 +6530,30 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
 
 ACMD(do_restring) {
   restring_with_args(ch, argument, FALSE);
+}
+
+ACMD(do_redesc) {
+  struct obj_data *obj;
+  half_chop(argument, arg, buf);
+
+  FAILURE_CASE(!*arg, "Syntax: REDESC <item> <new full description>");
+  FAILURE_CASE(!*buf, "You need to provide a short desc.");
+  FAILURE_CASE(!(obj = get_obj_in_list_vis(ch, arg, ch->carrying)), "You're not carrying that item.");
+  FAILURE_CASE(GET_OBJ_TYPE(obj) != ITEM_CUSTOM_DECK, "You can only redesc custom decks.");
+
+  // TODO: Wrap this in an ifcheck so we don't double up on neutrals.
+  strlcat(buf, "^n", sizeof(buf));
+
+  // Silent failure: We already sent the error message in get_string_length_after_color_code_removal().
+  if (get_string_length_after_color_code_removal(buf, ch) == -1)
+    return;
+
+  snprintf(buf2, sizeof(buf2), "%s redesced '%s' (%ld) (see command invocation for details)", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+
+  DELETE_ARRAY_IF_EXTANT(obj->photo);
+  obj->photo = str_dup(buf);
+  send_to_char(ch, "%s successfully redesced.\r\n", GET_OBJ_NAME(obj));
 }
 
 ACMD(do_incognito)
@@ -7115,6 +7127,13 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
                       GET_ROOM_VNUM(room->dir_option[k]->to_room),
                       render_door_type_string(room->dir_option[k]->to_room->dir_option[rev_dir[k]])
                     );
+              issues++;
+              printed = TRUE;
+            }
+
+            // Check for can't-shoot.
+            if (IS_SET(inbound, EX_CANT_SHOOT_THROUGH)) {
+              strlcat(buf, "  - Exit is NoShoot.\r\n", sizeof(buf));
               issues++;
               printed = TRUE;
             }

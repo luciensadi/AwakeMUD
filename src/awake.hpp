@@ -658,7 +658,8 @@ enum {
 #define EX_IS_TEMPORARY         (1 << 7)   /* Created temporarily by code */
 #define EX_WINDOWED             (1 << 8)   /* Exit has a window.        */
 #define EX_BARRED_WINDOW        (1 << 9)   /* Exit has a barred window. */
-#define NUM_EXFLAGS             11
+#define EX_CANT_SHOOT_THROUGH   (1 << 10)  /* Exit can't be fired through. */
+#define NUM_EXFLAGS             12
 
 /* spirit powers */
 
@@ -2369,7 +2370,8 @@ enum {
 #define COMBAT_MOD_OPPONENT_BURST_COUNT  12
 #define COMBAT_MOD_FOOTANCHORS           13
 #define COMBAT_MOD_VEHICLE_HANDLING      14
-#define NUM_COMBAT_MODIFIERS             15
+#define COMBAT_MOD_WIELDING_A_NON_WEAPON 15
+#define NUM_COMBAT_MODIFIERS             16
 // End new combat modifiers.
 
 #define JURISDICTION_SEATTLE   0
@@ -2880,8 +2882,9 @@ enum {
 #define NUYEN_OUTFLOW_RITUAL_CASTING        28
 #define NUYEN_INCOME_STAFF_PAYOUT           29
 #define NUYEN_OUTFLOW_STAFF_CHARGE          30
+#define NUYEN_OUTFLOW_SYSPOINT_PURCHASE     31
 
-#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 31
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 32
 // Make sure you update constants.cpp's nuyen_faucets_and_sinks[] too!
 
 #define NI_IS_SINK   0

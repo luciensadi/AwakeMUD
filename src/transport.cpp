@@ -924,8 +924,7 @@ SPECIAL(taxi)
                 act("A taxi pulls to a stop, its door sliding open.",
                     FALSE, world[dest].people, 0, 0, TO_CHAR);
               }
-              snprintf(buf, sizeof(buf), "The door, rather noisily, slides open to the %s.",
-                      fulldirs[rev_dir[j]]);
+              snprintf(buf, sizeof(buf), "The door, rather noisily, slides open to the %s.", fulldirs[rev_dir[j]]);
               act(buf, FALSE, driver, 0, 0, TO_ROOM);
               act(buf, FALSE, driver, 0, 0, TO_CHAR);
               break;
@@ -977,6 +976,18 @@ SPECIAL(taxi)
           strncpy(buf2, " punches a few buttons on the meter, calculating the fare.", sizeof(buf2));
           do_echo(driver, buf2, 0, SCMD_EMOTE);
           forget(driver, ch);
+
+          for (struct char_data *vict = driver->in_room->people; vict; vict = vict->next_in_room) {
+            struct obj_data *weap = GET_EQ(vict, WEAR_WIELD);
+            if (!weap || (GET_OBJ_TYPE(weap) != ITEM_WEAPON && GET_OBJ_TYPE(weap) != ITEM_FIREWEAPON))
+              weap = GET_EQ(vict, WEAR_HOLD);
+            if (!weap || (GET_OBJ_TYPE(weap) != ITEM_WEAPON && GET_OBJ_TYPE(weap) != ITEM_FIREWEAPON))
+              continue;
+
+            act("As $e works, $n silently reaches up and taps on a sign that reads, \"^WDRAWN WEAPONS PROHIBITED^n\"", FALSE, driver, 0, 0, TO_ROOM);
+            act("As you work, you silently reach up and tap on a sign that reads, \"^WDRAWN WEAPONS PROHIBITED\"", FALSE, driver, 0, 0, TO_CHAR);
+            break;
+          }
           break;
         }
 
@@ -1499,7 +1510,10 @@ SPECIAL(call_elevator)
     if (!*argument || !(!strcasecmp("elevator", argument) ||
                         !strcasecmp("button", argument)   ||
                         !strcasecmp("call", argument)))
-      send_to_char("Press what?\r\n", ch);
+    {
+      // Don't consume the command.
+      return FALSE;
+    }
     else {
       if (ch->in_veh)
         return FALSE;

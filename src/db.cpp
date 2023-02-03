@@ -1379,6 +1379,11 @@ void parse_room(File &fl, long nr)
       snprintf(field, sizeof(field), "%s/MoreFlags", sect);
       int moreflags = data.GetInt(field, 0);
 
+      if (moreflags >= 4) {
+        moreflags -= 4;
+        dir->exit_info |= EX_CANT_SHOOT_THROUGH;
+      }
+
       if (moreflags == 1)
         dir->exit_info |= EX_WINDOWED;
       else if (moreflags == 2)

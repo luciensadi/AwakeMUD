@@ -59,6 +59,8 @@ extern class helpList Help;
 extern class helpList WizHelp;
 extern struct time_info_data time_info;
 
+extern const char *spirit_powers_from_bit[];
+
 extern char *short_object(int virt, int where);
 extern const char *dist_name[];
 
@@ -563,9 +565,19 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
   found = FALSE;
   found_graffiti = FALSE;
 
+  struct veh_data * in_veh = ch->in_veh;
+  bool vfront = ch->vfront;
+
+  if (IS_RIGGING(ch)) {
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+    in_veh = veh->in_veh;
+    vfront = FALSE;
+  }
+
   for (struct obj_data *i = list; i; i = i->next_content)
   {
-    if ((i->in_veh && ch->in_veh) && i->vfront != ch->vfront)
+    if ((i->in_veh && in_veh) && i->vfront != vfront)
       continue;
 
     if (ch->char_specials.rigging) {
@@ -587,15 +599,15 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
           continue;
         }
       }
-    } else if (ch->in_veh && i->in_room && i->in_room == ch->in_veh->in_room) {
-      if (ch->in_veh->cspeed > SPEED_IDLE) {
+    } else if (in_veh && i->in_room && i->in_room == in_veh->in_room) {
+      if (in_veh->cspeed > SPEED_IDLE) {
         int success_test_tn;
 
-        if (get_speed(ch->in_veh) >= 200) {
+        if (get_speed(in_veh) >= 200) {
           success_test_tn = 7;
-        } else if (get_speed(ch->in_veh) >= 120) {
+        } else if (get_speed(in_veh) >= 120) {
           success_test_tn = 6;
-        } else if (get_speed(ch->in_veh) >= 60) {
+        } else if (get_speed(in_veh) >= 60) {
           success_test_tn = 5;
         } else {
           success_test_tn = 4;
@@ -608,7 +620,7 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
       }
     }
 
-    while (i->next_content) {
+    while (i->next_content && (!(i->in_veh && in_veh) || (i->next_content->vfront == vfront))) {
       if (!items_are_visually_similar(i, i->next_content))
         break;
 
@@ -641,7 +653,7 @@ void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
             send_to_char(ch, "(%d) ", num);
           }
           show_obj_to_char(i, ch, mode);
-        } else if (mode || ch->char_specials.rigging || ch->in_veh) {
+        } else if (mode || ch->char_specials.rigging || in_veh) {
           if (num > 1) {
             send_to_char(ch, "(%d) ", num);
           }
@@ -1700,7 +1712,7 @@ ACMD(do_mobs) {
   struct room_data *room = get_ch_in_room(ch);
   const char *location_string = ch->in_veh ? "around your vehicle" : "around you";
 
-  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (IS_RIGGING(ch)) {
     struct veh_data *veh;
     RIG_VEH(ch, veh);
     room = get_veh_in_room(veh);
@@ -1709,7 +1721,7 @@ ACMD(do_mobs) {
 
   if (!room) {
     send_to_char("You can't see anything!!\r\n", ch);
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s%s has no room in do_mobs!", GET_CHAR_NAME(ch), PLR_FLAGGED(ch, PLR_REMOTE) ? " (rigging)" : "");
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s%s has no room in do_mobs!", GET_CHAR_NAME(ch), IS_RIGGING(ch) ? " (rigging)" : "");
     return;
   }
 
@@ -1733,7 +1745,7 @@ ACMD(do_items) {
   bool vfront = ch->vfront;
   struct room_data *in_room = ch->in_room;
 
-  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (IS_RIGGING(ch)) {
     struct veh_data *veh;
     RIG_VEH(ch, veh);
     in_veh = veh->in_veh;
@@ -1743,7 +1755,7 @@ ACMD(do_items) {
 
   if (!in_room && !in_veh) {
     send_to_char("You can't see anything!!\r\n", ch);
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s%s has no room OR veh in do_items!", GET_CHAR_NAME(ch), PLR_FLAGGED(ch, PLR_REMOTE) ? " (rigging)" : "");
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s%s has no room OR veh in do_items!", GET_CHAR_NAME(ch), IS_RIGGING(ch) ? " (rigging)" : "");
     return;
   }
 
@@ -1752,7 +1764,7 @@ ACMD(do_items) {
     if (CAN_SEE_OBJ(ch, obj) && (!in_veh || obj->vfront == vfront)) {
       int num = 1;
 
-      while (obj->next_content) {
+      while (obj->next_content && (!in_veh || obj->next_content->vfront == vfront)) {
         if (!items_are_visually_similar(obj, obj->next_content))
           break;
 
@@ -1805,7 +1817,7 @@ void update_blood(void)
 void look_in_veh(struct char_data * ch)
 {
   struct room_data *was_in = NULL;
-  if (!(AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)))
+  if (!IS_RIGGING(ch))
   {
     if (!ch->in_veh->in_room && !ch->in_veh->in_veh) {
       snprintf(buf, sizeof(buf), "SYSERR: Character %s is not in a room or vehicle.", GET_CHAR_NAME(ch));
@@ -2071,7 +2083,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
           if (ch->in_veh) {
             if (ch->in_veh->type == VEH_BIKE) {
               if (should_be_snowy) {
-                send_to_char(ch, "^WSnowflakes tumble and fall about you bike.^n\r\n");
+                send_to_char(ch, "^WSnowflakes tumble and fall about your bike.^n\r\n");
               } else {
                 send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
               }
@@ -4382,7 +4394,7 @@ ACMD(do_score)
   if ( IS_NPC(ch) && ch->desc == NULL )
     return;
 
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (IS_RIGGING(ch)) {
     struct veh_data *veh;
     RIG_VEH(ch, veh);
     if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
@@ -5395,8 +5407,10 @@ ACMD(do_who)
       if (PLR_FLAGGED(tch, PLR_CYBERDOC) && GET_LEVEL(tch) <= LVL_MORTAL)
         strlcat(buf1, " ^c(Cyberdoc)^n", sizeof(buf1));
 
+      /*
       if (PRF_FLAGGED(tch, PRF_NEWBIEHELPER) && (level > LVL_MORTAL || PRF_FLAGGED(ch, PRF_NEWBIEHELPER)))
         strlcat(buf1, " ^G(Newbie Helper)^n", sizeof(buf1));
+      */
 
       if (level > LVL_MORTAL) {
         if (GET_INVIS_LEV(tch) && level >= GET_INVIS_LEV(tch))
@@ -5451,15 +5465,16 @@ ACMD(do_who)
     snprintf(buf2, sizeof(buf2), "%s\r\nNo-one at all!\r\n", buf);
   } else if (num_can_see == 1) {
     if (num_in_socialization_rooms > 0) {
-      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed and listed in ^WWHERE^n.\r\n", buf);
+      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed and listed in ##^WWHERE^n.\r\n", buf);
     } else {
       snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed.\r\n", buf);
     }
   } else {
     if (num_in_socialization_rooms > 0) {
-      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed, of which %d %s listed in ^WWHERE^n.\r\n",
+      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed%s, of which %d %s listed in ##^WWHERE^n.\r\n",
                buf,
                num_can_see,
+               num_can_see == 69 ? " (nice)" : "",
                num_in_socialization_rooms,
                num_in_socialization_rooms == 1 ? "is" : "are");
     } else {
@@ -5980,7 +5995,6 @@ ACMD(do_where)
 ACMD(do_consider)
 {
   struct char_data *victim;
-  int diff;
 
   one_argument(argument, buf);
 
@@ -5995,13 +6009,16 @@ ACMD(do_consider)
 
   if (IS_NPC(victim)) {
     if (!can_hurt(ch, victim, 0, TRUE)) {
-      send_to_char("You can't damage this character.\r\n", ch);
+      act("You can't damage $N.", FALSE, ch, 0, victim, TO_CHAR);
       return;
     }
 
+    snprintf(buf3, sizeof(buf3), "You look $N over. %s %s:", CAP(HSSH(victim)), HSSH_SHOULD_PLURAL(victim) ? "is" : "are");
+    act(buf3, FALSE, ch, 0, victim, TO_CHAR);
+
     // Pick out the victim's cyberware, if any. TODO: Player cyberware.
-    bool use_cyber_implants = FALSE;
-    int unarmed_dangerliciousness_boost = 0;
+    bool victim_uses_cyber_implants = FALSE, ch_uses_cyber_implants = FALSE;
+    int vict_unarmed_dangerliciousness_boost = 0, ch_unarmed_dangerliciousness_boost;
     for (struct obj_data *obj = victim->cyberware; obj; obj = obj->next_content) {
       if (!GET_CYBERWARE_IS_DISABLED(obj)) {
         switch (GET_CYBERWARE_TYPE(obj)) {
@@ -6011,110 +6028,301 @@ ACMD(do_consider)
           case CYB_HANDRAZOR:
           case CYB_HANDSPUR:
           case CYB_FOOTANCHOR:
-            use_cyber_implants = TRUE;
+            victim_uses_cyber_implants = TRUE;
             break;
         }
       } else if (GET_CYBERWARE_TYPE(obj) == CYB_BONELACING) {
         switch (GET_CYBERWARE_LACING_TYPE(obj)) {
           case BONE_PLASTIC:
-            unarmed_dangerliciousness_boost = MAX(unarmed_dangerliciousness_boost, 2);
+            vict_unarmed_dangerliciousness_boost = MAX(vict_unarmed_dangerliciousness_boost, 2);
             break;
           case BONE_ALUMINIUM:
           case BONE_CERAMIC:
-            unarmed_dangerliciousness_boost = MAX(unarmed_dangerliciousness_boost, 3);
+            vict_unarmed_dangerliciousness_boost = MAX(vict_unarmed_dangerliciousness_boost, 3);
             break;
           case BONE_TITANIUM:
-            unarmed_dangerliciousness_boost = MAX(unarmed_dangerliciousness_boost, 4);
+            vict_unarmed_dangerliciousness_boost = MAX(vict_unarmed_dangerliciousness_boost, 4);
+            break;
+        }
+      }
+    }
+    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+      if (!GET_CYBERWARE_IS_DISABLED(obj)) {
+        switch (GET_CYBERWARE_TYPE(obj)) {
+          case CYB_CLIMBINGCLAWS:
+          case CYB_FIN:
+          case CYB_HANDBLADE:
+          case CYB_HANDRAZOR:
+          case CYB_HANDSPUR:
+          case CYB_FOOTANCHOR:
+            ch_uses_cyber_implants = TRUE;
+            break;
+        }
+      } else if (GET_CYBERWARE_TYPE(obj) == CYB_BONELACING) {
+        switch (GET_CYBERWARE_LACING_TYPE(obj)) {
+          case BONE_PLASTIC:
+            ch_unarmed_dangerliciousness_boost = MAX(ch_unarmed_dangerliciousness_boost, 2);
+            break;
+          case BONE_ALUMINIUM:
+          case BONE_CERAMIC:
+            ch_unarmed_dangerliciousness_boost = MAX(ch_unarmed_dangerliciousness_boost, 3);
+            break;
+          case BONE_TITANIUM:
+            ch_unarmed_dangerliciousness_boost = MAX(ch_unarmed_dangerliciousness_boost, 4);
             break;
         }
       }
     }
 
     // Armor comparisons.
-    diff = (GET_BALLISTIC(victim) - GET_BALLISTIC(ch));
-    diff += (GET_IMPACT(victim) - GET_IMPACT(ch));
-
-    // Stat comparisons.
-    diff += (GET_BOD(victim) - GET_BOD(ch));
-    diff += (GET_QUI(victim) - GET_QUI(ch));
-    diff += (GET_STR(victim) - GET_STR(ch));
-
-    // Extra init passes are king, so account for that.
-    diff += 3 * (GET_REA(victim) - GET_REA(ch));
-    diff += 6 * (GET_INIT_DICE(victim) - GET_INIT_DICE(ch));
-
-    if (GET_MAG(victim) >= 100) {
-      diff += (int)((GET_MAG(victim) - GET_MAG(ch)) / 100);
-      diff += GET_SKILL(victim, SKILL_SORCERY);
+    int armor_diff = (GET_BALLISTIC(victim) - GET_BALLISTIC(ch)) + (GET_IMPACT(victim) - GET_IMPACT(ch));
+    if (armor_diff < -8) {
+      act("-  much less protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < -6) {
+      act("- less protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < -4) {
+      act("- somewhat less protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < -2) {
+      act("- a tiny bit less protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < 2) {
+      act("- about as protected as you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < 4) {
+      act("- a tiny bit more protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < 6) {
+      act("- somewhat more protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (armor_diff < 8) {
+      act("- more protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("- much more protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
     }
 
-    // Pool comparisons.
-    diff += 3 * (GET_COMBAT(victim) - GET_COMBAT(ch));
+    int expected_power;
+    struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+    if (!weapon || GET_OBJ_TYPE(weapon) != ITEM_WEAPON)
+      weapon = GET_EQ(ch, WEAR_HOLD);
+    if (!weapon || GET_OBJ_TYPE(weapon) != ITEM_WEAPON)
+      weapon = NULL;
+    if (weapon) {
+      if (WEAPON_IS_GUN(weapon)) {
+        expected_power = GET_WEAPON_POWER(weapon);
 
-    // Skill comparisons.
-    if (GET_MAG(ch) >= 100 && (IS_NPC(ch) || (GET_TRADITION(ch) == TRAD_HERMETIC ||
-                                              GET_TRADITION(ch) == TRAD_SHAMANIC)))
-      diff -= GET_SKILL(ch, SKILL_SORCERY);
+        if (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_TASER) {
+          expected_power -= (int)(GET_IMPACT(victim) / 2);
+        } else if (weapon->contains) {
+          switch (GET_MAGAZINE_AMMO_TYPE(weapon->contains)) {
+            case AMMO_APDS:
+              expected_power -= (int)(GET_BALLISTIC(victim) / 2);
+              break;
+            case AMMO_EX:
+              expected_power++;
+              // fall through
+            case AMMO_EXPLOSIVE:
+              expected_power += 1 - GET_BALLISTIC(victim);
+              break;
+            case AMMO_FLECHETTE:
+              expected_power += 1 - MAX(GET_BALLISTIC(victim), GET_IMPACT(victim) * 2);
+              break;
+            case AMMO_HARMLESS:
+              expected_power = 0;
+              break;
+            case AMMO_GEL:
+              expected_power -= GET_IMPACT(victim) - 2;
+              break;
+            default:
+              expected_power = GET_WEAPON_POWER(weapon) - GET_BALLISTIC(victim);
+              break;
+          }
+        } else {
+          expected_power = GET_WEAPON_POWER(weapon) - GET_BALLISTIC(victim);
+        }
+      }
+      else {
+        expected_power = GET_WEAPON_STR_BONUS(weapon) + GET_STR(ch) - GET_IMPACT(victim);
+      }
+    } else {
+      // should probably account for cyber implant weapons here... eventual todo
+      expected_power = GET_STR(ch) + ch_unarmed_dangerliciousness_boost - GET_IMPACT(victim);
+    }
+
+    if (IS_SPIRIT(victim) || IS_ANY_ELEMENTAL(victim)) {
+      bool has_magic_weapon;
+
+      if (weapon) {
+        has_magic_weapon = GET_WEAPON_FOCUS_RATING(weapon) > 0 && WEAPON_FOCUS_USABLE_BY(weapon, ch);
+      } else {
+        has_magic_weapon = GET_POWER(ch, ADEPT_KILLING_HANDS);
+      }
+
+      // If you're not using a magic weapon, the spirit uses its Immunity to Normal Weapons power.
+      if (!has_magic_weapon) {
+        // Extremely hacky version of spirit resists.
+        expected_power -= (GET_LEVEL(victim) * 2) + 1;
+        act("- a magical being, so dealing any damage will be difficult.", FALSE, ch, 0, victim, TO_CHAR);
+      }
+    }
+
+    int vict_expected_power;
+    struct obj_data *vict_weapon = GET_EQ(ch, WEAR_WIELD);
+    if (!vict_weapon || GET_OBJ_TYPE(vict_weapon) != ITEM_WEAPON)
+      vict_weapon = GET_EQ(ch, WEAR_HOLD);
+    if (!vict_weapon || GET_OBJ_TYPE(vict_weapon) != ITEM_WEAPON)
+      vict_weapon = NULL;
+    if (vict_weapon) {
+      if (WEAPON_IS_GUN(vict_weapon)) {
+        vict_expected_power = GET_WEAPON_POWER(vict_weapon);
+
+        if (GET_WEAPON_ATTACK_TYPE(vict_weapon) == WEAP_TASER) {
+          vict_expected_power -= (int)(GET_IMPACT(ch) / 2);
+        } else if (vict_weapon->contains) {
+          switch (GET_MAGAZINE_AMMO_TYPE(vict_weapon->contains)) {
+            case AMMO_APDS:
+              vict_expected_power -= (int)(GET_BALLISTIC(ch) / 2);
+              break;
+            case AMMO_EX:
+              vict_expected_power++;
+              // fall through
+            case AMMO_EXPLOSIVE:
+              vict_expected_power += 1 - GET_BALLISTIC(ch);
+              break;
+            case AMMO_FLECHETTE:
+              vict_expected_power += 1 - MAX(GET_BALLISTIC(ch), GET_IMPACT(ch) * 2);
+              break;
+            case AMMO_HARMLESS:
+              vict_expected_power = 0;
+              break;
+            case AMMO_GEL:
+              vict_expected_power -= GET_IMPACT(ch) - 2;
+              break;
+            default:
+              vict_expected_power -= GET_BALLISTIC(ch);
+              break;
+          }
+        } else {
+          vict_expected_power = GET_WEAPON_POWER(vict_weapon) - GET_BALLISTIC(ch);
+        }
+      }
+      else {
+        vict_expected_power = GET_WEAPON_STR_BONUS(vict_weapon) + GET_STR(victim) - GET_IMPACT(ch);
+      }
+    } else {
+      // should probably account for cyber implant weapons here... eventual todo
+      vict_expected_power = GET_STR(victim) + vict_unarmed_dangerliciousness_boost - GET_IMPACT(ch);
+    }
+
+    // Stat comparisons.
+    int phys_stat_diff = (GET_BOD(victim) - GET_BOD(ch)) + (GET_QUI(victim) - GET_QUI(ch)) + (GET_STR(victim) - GET_STR(ch));
+    if (phys_stat_diff < -12) {
+      act("- much less physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < -9) {
+      act("- less physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < -6) {
+      act("- somewhat less physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < -3) {
+      act("- a tiny bit less physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < 3) {
+      act("- about as physically developed as you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < 6) {
+      act("- a tiny bit more physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < 9) {
+      act("- somewhat more physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (phys_stat_diff < 12) {
+      act("- more physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("- much more physically developed than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    }
+
+    // Extra init passes are king, so account for that.
+    int speed_diff = (GET_REA(victim) - GET_REA(ch)) + (4.2 * (GET_INIT_DICE(victim) - GET_INIT_DICE(ch)));
+    if (speed_diff < -20) {
+      act("- much slower than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < -15) {
+      act("- slower than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < -10) {
+      act("- somewhat slower than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < -5) {
+      act("- a tiny bit slower than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < 5) {
+      act("- about as fast as you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < 10) {
+      act("- a tiny bit faster than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < 15) {
+      act("- somewhat faster than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (speed_diff < 20) {
+      act("- faster than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("- much faster than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    }
+
+    // Skill / Pool comparisons.
+    int combat_skill_diff = (GET_COMBAT(victim) - GET_COMBAT(ch));
 
     if (GET_EQ(victim, WEAR_WIELD)) {
-      // Account for NPC's skill.
-      diff += MAX(GET_SKILL(victim, GET_WEAPON_SKILL(GET_EQ(victim, WEAR_WIELD))), GET_SKILL(victim, SKILL_ARMED_COMBAT));
-
-      // Account for PC's dice pool setting failures.
-      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(victim, WEAR_WIELD))))
-        diff += 3 * GET_DEFENSE(ch);
-    } else if (use_cyber_implants)
-      diff += MAX(GET_SKILL(victim, SKILL_CYBER_IMPLANTS), GET_SKILL(victim, SKILL_ARMED_COMBAT));
-    else
-      diff += GET_SKILL(victim, SKILL_UNARMED_COMBAT) + unarmed_dangerliciousness_boost;
+      combat_skill_diff += MAX(GET_SKILL(victim, GET_WEAPON_SKILL(GET_EQ(victim, WEAR_WIELD))), GET_SKILL(victim, SKILL_ARMED_COMBAT));
+    } else if (victim_uses_cyber_implants) {
+      combat_skill_diff += MAX(GET_SKILL(victim, SKILL_CYBER_IMPLANTS), GET_SKILL(victim, SKILL_ARMED_COMBAT));
+    } else {
+      combat_skill_diff += GET_SKILL(victim, SKILL_UNARMED_COMBAT) + vict_unarmed_dangerliciousness_boost;
+    }
 
     if (GET_EQ(ch, WEAR_WIELD)) {
-      // Account for PC's skill.
-      diff -= GET_SKILL(ch, GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD)));
+      combat_skill_diff -= GET_SKILL(ch, GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD)));
+    } else if (ch_uses_cyber_implants) {
+      combat_skill_diff += GET_SKILL(ch, SKILL_CYBER_IMPLANTS);
+    } else {
+      combat_skill_diff -= GET_SKILL(ch, SKILL_UNARMED_COMBAT) + ch_unarmed_dangerliciousness_boost;
+    }
 
-      // Account for NPC's dice pool setting failures.
-      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))))
-        diff -= 3 * GET_DEFENSE(victim);
-    } else
-      diff -= GET_SKILL(ch, SKILL_UNARMED_COMBAT);
+    if (combat_skill_diff < -10) {
+      act("- much less skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < -7) {
+      act("- less skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < -4) {
+      act("- somewhat less skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < -1) {
+      act("- a tiny bit less skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < 1) {
+      act("- about as skilled as you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < 4) {
+      act("- a tiny bit more skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < 7) {
+      act("- somewhat more skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (combat_skill_diff < 10) {
+      act("- more skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("- much more skilled than you are.", FALSE, ch, 0, victim, TO_CHAR);
+    }
 
-    // Finally, throw in a multiplier for all the things we haven't accounted for yet.
-    diff += (int) (abs(diff) * 0.5);
+    if (expected_power <= 0) {
+      act("You'd need a lot of luck for your weapon to even scratch $M...", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (expected_power <= 3) {
+      act("You feel like your weapon might be able to put a scratch on $M...", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (expected_power <= 6) {
+      act("You feel like your weapon would be able to annoy $M at least.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("You feel like your weapon should be able to do some damage to $M.", FALSE, ch, 0, victim, TO_CHAR);
+    }
 
-    if (diff <= -25)
-      send_to_char("Now where did that chicken go?\r\n", ch);
-    else if (diff <= -15)
-      send_to_char("You could kill it with a needle!\r\n", ch);
-    else if (diff <= -8)
-      send_to_char("Easy.\r\n", ch);
-    else if (diff <= -4)
-      send_to_char("Fairly easy.\r\n", ch);
-    else if (diff == 0)
-      send_to_char("The perfect match!\r\n", ch);
-    else if (diff <= 3)
-      send_to_char("You would need some luck!\r\n", ch);
-    else if (diff <= 6)
-      send_to_char("You would need a lot of luck!\r\n", ch);
-    else if (diff <= 12)
-      send_to_char("You would need a lot of luck and great equipment!\r\n", ch);
-    else if (diff <= 18)
-      send_to_char("Do you feel lucky, punk?\r\n", ch);
-    else if (diff <= 30)
-      send_to_char("Are you mad!?\r\n", ch);
-    else
-      send_to_char("You ARE mad!\r\n", ch);
+    if (vict_expected_power <= 0) {
+      act("You don't sense much danger from $M.", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (vict_expected_power <= 3) {
+      act("$E could probably scratch you...", FALSE, ch, 0, victim, TO_CHAR);
+    } else if (vict_expected_power <= 6) {
+      act("$E would be annoying to fight.", FALSE, ch, 0, victim, TO_CHAR);
+    } else {
+      act("You're pretty sure $E could hurt you.", FALSE, ch, 0, victim, TO_CHAR);
+    }
   } else {
     if (GET_REP(victim) < NEWBIE_KARMA_THRESHOLD)
       send_to_char("Total greenhorn.\r\n", ch);
     else if (GET_REP(victim) < 100)
       send_to_char("Still finding their feet.\r\n", ch);
-    else if (GET_REP(victim) < 200)
+    else if (GET_REP(victim) < 300)
       send_to_char("Innocence has been lost.\r\n", ch);
-    else if (GET_REP(victim) < 400)
+    else if (GET_REP(victim) < 700)
       send_to_char("They can handle themselves.\r\n", ch);
-    else if (GET_REP(victim) < 800)
+    else if (GET_REP(victim) < 1500)
       send_to_char("An accomplished runner.\r\n", ch);
-    else if (GET_REP(victim) < 1200)
+    else if (GET_REP(victim) < 3000)
       send_to_char("Definite lifer.\r\n", ch);
     else
       send_to_char("A legend of the Sprawl.\r\n", ch);
@@ -6263,7 +6471,7 @@ ACMD(do_commands)
               break;
           }
     }
-  } else if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+  } else if (IS_RIGGING(ch)) {
     for (no = 1, cmd_num = 1; *rig_info[cmd_num].command != '\n';cmd_num++) {
       // Skip any commands that don't match the prefix provided.
       if (!mode_all && *arg && !is_abbrev(arg, rig_info[cmd_num].command))
@@ -6322,16 +6530,16 @@ bool char_passed_moving_vehicle_perception_test(struct char_data *ch, struct veh
     return TRUE;
 
   if (get_speed(in_veh) >= 200) {
-    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) < 1);
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7) >= 1);
   }
   else if (get_speed(in_veh) < 200 && get_speed(in_veh) >= 120) {
-    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) < 1);
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6) >= 1);
   }
   else if (get_speed(in_veh) < 120 && get_speed(in_veh) >= 60) {
-    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) < 1);
+    return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5) >= 1);
   }
 
-  return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) < 1);
+  return (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4) >= 1);
 }
 
 const char *render_room_for_scan(struct char_data *ch, struct room_data *room, struct veh_data *in_veh) {
@@ -6340,6 +6548,7 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
 
   // If you can't see into the room, skip.
   if (!LIGHT_OK_ROOM_SPECIFIED(ch, room)) {
+    DEBUG_TO_STAFF(ch, "bad light\r\n");
     return NULL;
   }
 
@@ -6350,16 +6559,22 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
   // First, people.
   for (struct char_data *list = room->people; list; list = list->next_in_room) {
     // Always skip invisible people.
-    if (!CAN_SEE(ch, list))
+    if (!CAN_SEE(ch, list)) {
+      DEBUG_TO_STAFF(ch, "%s: can't see\r\n", GET_CHAR_NAME(list));
       continue;
+    }
 
     // Skip inanimates if you only see with astral.
-    if (ch_only_sees_with_astral && MOB_FLAGGED(list, MOB_INANIMATE))
+    if (ch_only_sees_with_astral && MOB_FLAGGED(list, MOB_INANIMATE)) {
+      DEBUG_TO_STAFF(ch, "%s: astral-only vs inanimate\r\n", GET_CHAR_NAME(list));
       continue;
+    }
 
     // Moving vehicles have a chance to cause you to miss things on scan.
-    if (!char_passed_moving_vehicle_perception_test(ch, in_veh))
+    if (!char_passed_moving_vehicle_perception_test(ch, in_veh)) {
+      DEBUG_TO_STAFF(ch, "%s: failed moving vehicle perception test\r\n", GET_CHAR_NAME(list));
       continue;
+    }
 
     // You see the person-- render them.
     {
@@ -6423,101 +6638,83 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
 
 ACMD(do_scan)
 {
-  struct veh_data *in_veh = NULL;
   bool specific = FALSE;
-  int i = 0;
-  struct room_data *x = NULL;
+  int dir = 0;
+  struct room_data *in_room = get_ch_in_room(ch);
+  struct veh_data *in_veh = NULL;
 
   argument = any_one_arg(argument, buf);
 
   if (*buf) {
     if (is_abbrev(buf, "south")) {
-      i = SCMD_SOUTH;
+      dir = SCMD_SOUTH; // why SCMD specifically? That's incremented by 1 compared to the raw directions
       specific = TRUE;
     } else {
-      for (; !specific && (i < NUM_OF_DIRS); ++i) {
-        if (is_abbrev(buf, dirs[i]))
+      for (; !specific && (dir < NUM_OF_DIRS); ++dir) {
+        if (is_abbrev(buf, dirs[dir]))
           specific = TRUE;
       }
     }
   }
 
-  if (ch->in_veh || ch->char_specials.rigging) {
-    RIG_VEH(ch, in_veh);
-    if (ch->in_room)
-      x = ch->in_room;
-    ch->in_room = in_veh->in_room;
-  }
+  RIG_VEH(ch, in_veh);
+  if (in_veh)
+    in_room = in_veh->in_room;
 
   // Scanning all rooms:
   if (!specific) {
     bool anythere = FALSE;
-    struct room_data *in_room = get_ch_in_room(ch);
 
-    for (i = 0; i < NUM_OF_DIRS; ++i) {
-      if (!CAN_GO(ch, i) || IS_SET(EXIT(ch, i)->exit_info, EX_HIDDEN))
+    for (int dir = 0; dir < NUM_OF_DIRS; ++dir) {
+      if (!CAN_GO2(in_room, dir) || IS_SET(in_room->dir_option[dir]->exit_info, EX_HIDDEN))
         continue;
 
-      if (EXIT(ch, i)->to_room == in_room) {
-        send_to_char(ch, "%s: More of the same.\r\n", dirs[i]);
+      if (in_room->dir_option[dir]->to_room == in_room) {
+        send_to_char(ch, "%s: More of the same.\r\n", dirs[dir]);
         continue;
       }
 
-      const char *result = render_room_for_scan(ch, EXIT(ch, i)->to_room, in_veh);
+      const char *result = render_room_for_scan(ch, in_room->dir_option[dir]->to_room, in_veh);
 
       if (result && *result) {
         anythere = TRUE;
-        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[i]), dist_name[0], result);
+        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[dir]), dist_name[0], result);
       }
     }
 
     if (!anythere) {
       send_to_char("You don't seem to see anyone in the surrounding areas.\r\n", ch);
-      if (in_veh) {
-        ch->in_room = x;
-      }
       return;
     }
   }
   else {
-    --i;
+    --dir;
 
     bool anythere = FALSE;
 
-    // We move them as part of this, so store their current room so we can snap them back.
-    struct room_data *was_in_room = ch->in_room;
-
     for (int dist = 1; dist <= find_sight(ch); dist++) {
-      if (!CAN_GO(ch, i) || IS_SET(EXIT(ch, i)->exit_info, EX_HIDDEN)) {
-        if (in_veh) {
-          ch->in_room = x;
-        } else {
-          ch->in_room = was_in_room;
-        }
+      if (!CAN_GO2(in_room, dir) || IS_SET(in_room->dir_option[dir]->exit_info, EX_HIDDEN)) {
         if (dist == 1)
           send_to_char("There is no exit in that direction.\r\n", ch);
+        if (!anythere) {
+          send_to_char("You don't seem to see anyone in that direction.\r\n", ch);
+        }
         return;
       }
 
-      ch->in_room = EXIT(ch, i)->to_room;
+      in_room = in_room->dir_option[dir]->to_room;
 
-      const char *result = render_room_for_scan(ch, ch->in_room, in_veh);
+      const char *result = render_room_for_scan(ch, in_room, in_veh);
 
       if (result && *result) {
         anythere = TRUE;
-        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[i]), dist_name[dist - 1], result);
+        send_to_char(ch, "%s %s:\r\n%s\r\n", CAP(dirs[dir]), dist_name[dist - 1], result);
       }
     }
 
     if (!anythere) {
       send_to_char("You don't seem to see anyone in that direction.\r\n", ch);
     }
-
-    // Perform PC snap back.
-    ch->in_room = was_in_room;
-  }
-  if (in_veh) {
-    ch->in_room = x;
   }
 }
 
@@ -6577,7 +6774,6 @@ ACMD(do_position)
 ACMD(do_status)
 {
   struct char_data *targ = ch;
-  bool printed = FALSE;
 
   if (GET_LEVEL(ch) >= LVL_BUILDER && *argument) {
     skip_spaces(&argument);
@@ -6588,189 +6784,175 @@ ACMD(do_status)
       targ = ch;
   }
 
+  char aff_buf[1000] = { '\0' };
+
   if (ch == targ)
     send_to_char("You are affected by:\r\n", ch);
   else send_to_char(ch, "%s is affected by:\r\n", GET_CHAR_NAME(targ));
 
   if (!IS_NPC(targ) && GET_POS(targ) == POS_MORTALLYW) {
-    send_to_char(ch, "  ^RBleeding Out ^r(^R%d^r ticks left until death)^n\r\n", GET_PC_SALVATION_TICKS(targ));
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^RBleeding Out ^r(^R%d^r ticks left until death)^n\r\n", GET_PC_SALVATION_TICKS(targ));
   }
 
   if (targ->real_abils.esshole) {
-    send_to_char(ch, "  Essence Hole (%.2f)\r\n", (float)targ->real_abils.esshole / 100);
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Essence Hole (%.2f)\r\n", (float)targ->real_abils.esshole / 100);
   }
   if (GET_MAG(targ) && targ->real_abils.highestindex > GET_INDEX(targ)) {
-    send_to_char(ch, "  Bioware Hole (%.2f)\r\n", (float)(targ->real_abils.highestindex - GET_INDEX(targ)) / 100);
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Bioware Hole (%.2f)\r\n", (float)(targ->real_abils.highestindex - GET_INDEX(targ)) / 100);
   }
   switch (get_armor_penalty_grade(targ)) {
     case ARMOR_PENALTY_TOTAL:
-      send_to_char("  Bulky Armor (Insane)\r\n", ch);
-      printed = TRUE;
+      strlcat(aff_buf, "  Bulky Armor (Insane)\r\n", sizeof(aff_buf));
       break;
     case ARMOR_PENALTY_HEAVY:
-      send_to_char("  Bulky Armor (Serious)\r\n", ch);
-      printed = TRUE;
+      strlcat(aff_buf, "  Bulky Armor (Serious)\r\n", sizeof(aff_buf));
       break;
     case ARMOR_PENALTY_MEDIUM:
-      send_to_char("  Bulky Armor (Moderate)\r\n", ch);
-      printed = TRUE;
+      strlcat(aff_buf, "  Bulky Armor (Moderate)\r\n", sizeof(aff_buf));
       break;
     case ARMOR_PENALTY_LIGHT:
-      send_to_char("  Bulky Armor (Light)\r\n", ch);
-      printed = TRUE;
+      strlcat(aff_buf, "  Bulky Armor (Light)\r\n", sizeof(aff_buf));
       break;
   }
   if (GET_TEMP_QUI_LOSS(targ)) {
-    send_to_char(ch, "  Temporary Quickness Loss: %d\r\n", GET_TEMP_QUI_LOSS(targ));
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Quickness Loss: %d\r\n", GET_TEMP_QUI_LOSS(targ));
   }
   if (GET_TEMP_MAGIC_LOSS(targ)) {
-    send_to_char(ch, "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(targ));
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(targ));
   }
   if (GET_TEMP_ESSLOSS(targ)) {
-    send_to_char(ch, "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(targ));
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(targ));
   }
   if (GET_REACH(targ) && !(AFF_FLAGGED(targ, AFF_CLOSECOMBAT))) {
-    send_to_char(ch, "  Extra Reach (%dm)\r\n", GET_REACH(targ));
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Extra Reach (%dm)\r\n", GET_REACH(targ));
   }
   if (AFF_FLAGGED(targ, AFF_CLOSECOMBAT)) {
-    send_to_char(ch, "  Close Combat\r\n");
-    printed = TRUE;
+    strlcat(aff_buf, "  Close Combat\r\n", sizeof(aff_buf));
   }
   if (AFF_FLAGGED(targ, AFF_RUTHENIUM)) {
-    send_to_char(ch, "  Ruthenium\r\n");
-    printed = TRUE;
+    strlcat(aff_buf, "  Ruthenium\r\n", sizeof(aff_buf));
   }
   if (IS_PERCEIVING(targ)) {
-    send_to_char("  Astral Perception (^yincreased TNs^n)\r\n", ch);
-    printed = TRUE;
+    strlcat(aff_buf, "  Astral Perception (^yincreased TNs^n)\r\n", sizeof(aff_buf));
   }
 
-  {
-    int conceal_rating = affected_by_power(targ, CONCEAL);
-    if (conceal_rating) {
-      send_to_char(ch, "  Spirit Concealment (%d)\r\n", conceal_rating);
-      printed = TRUE;
+  for (int bit_idx = 0; bit_idx < NUM_SPIRIT_POWER_BITS; bit_idx++) {
+    int rating = affected_by_power(targ, bit_idx);
+    if (rating) {
+      snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Spirit %s (%d)\r\n", spirit_powers_from_bit[bit_idx], rating);
     }
   }
 
   for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
     if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET || GET_DRUG_STAGE(targ, i) == DRUG_STAGE_COMEDOWN) {
-      send_to_char(ch, "  %s (%s): %ds",
+      snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  %s (%s): %ds",
                    drug_types[i].name,
                    GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET ? "Onset" : "Comedown",
                    GET_DRUG_DURATION(targ, i)*2);
       switch (i) {
         case DRUG_ACTH:
           // Has no long-lasting effects. Nothing to display here.
-          send_to_char("\r\n", ch);
+          strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           break;
         case DRUG_HYPER:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+4 spellcasting TNs, +1 other TNs, take 50% bonus damage)\r\n", ch);
+            strlcat(aff_buf, " (+4 spellcasting TNs, +1 other TNs, take 50% bonus damage)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_JAZZ:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+2 qui, +1d6 initiative)\r\n", ch);
+            strlcat(aff_buf, " (+2 qui, +1d6 initiative)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char(" (+1 spellcasting TNs, -1 qui)\r\n", ch);
+            strlcat(aff_buf, " (+1 spellcasting TNs, -1 qui)\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_KAMIKAZE:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+2 str, +1 bod/qui/wil, +1d6 initiative)\r\n", ch);
+            strlcat(aff_buf, " (+2 str, +1 bod/qui/wil, +1d6 initiative)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char(" (-1 qui/wil)\r\n", ch);
+            strlcat(aff_buf, " (-1 qui/wil)\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_PSYCHE:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+1 int)\r\n", ch);
+            strlcat(aff_buf, " (+1 int)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_BLISS:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (-1 rea, +1 TNs, 3 levels of pain resistance)\r\n", ch);
+            strlcat(aff_buf, " (-1 rea, +1 TNs, 3 levels of pain resistance)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_BURN:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (intoxicated)\r\n", ch);
+            strlcat(aff_buf, " (intoxicated)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char(" (hung over)\r\n", ch);
+            strlcat(aff_buf, " (hung over)\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_CRAM:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+1 rea, +1d6 initiative)\r\n", ch);
+            strlcat(aff_buf, " (+1 rea, +1d6 initiative)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_NITRO:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+2 str/wil, 6 levels of pain resistance, +2 to perception tests)\r\n", ch);
+            strlcat(aff_buf, " (+2 str/wil, 6 levels of pain resistance, +2 to perception tests)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_NOVACOKE:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (+1 rea/cha, 1 level of pain resistance)\r\n", ch);
+            strlcat(aff_buf, " (+1 rea/cha, 1 level of pain resistance)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char(" (crashed cha, halved wil)\r\n", ch);
+            strlcat(aff_buf, " (crashed cha, halved wil)\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_ZEN:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            send_to_char(" (-2 rea, +1 TNs, +1 wil)\r\n", ch);
+            strlcat(aff_buf, " (-2 rea, +1 TNs, +1 wil)\r\n", sizeof(aff_buf));
           } else {
-            send_to_char("\r\n", ch);
+            strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
           break;
         default:
           snprintf(buf, sizeof(buf), "SYSERR: Unknown drug type %d in aff!", i);
-          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+          mudlog(buf, targ, LOG_SYSLOG, TRUE);
           break;
       }
-      printed = TRUE;
     }
     else if (GET_DRUG_ADDICT(targ, i) > 0) {
       if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_GUIDED_WITHDRAWAL) {
-        send_to_char(ch, "  ^y%s Withdrawal (Guided, Edge %d): %s remaining^n\r\n",
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^y%s Withdrawal (Guided, Edge %d): %s remaining^n\r\n",
                      drug_types[i].name,
                      GET_DRUG_ADDICTION_EDGE(targ, i),
                      get_time_until_withdrawal_ends(targ, i));
       } else if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-        send_to_char(ch, "  ^Y%s Withdrawal (Forced, Edge %d): %s remaining^n\r\n",
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^Y%s Withdrawal (Forced, Edge %d): %s remaining^n\r\n",
                      drug_types[i].name,
                      GET_DRUG_ADDICTION_EDGE(targ, i),
                      get_time_until_withdrawal_ends(targ, i));
       } else {
-        send_to_char(ch, "  Addicted to %s (Edge: %d)\r\n", drug_types[i].name, GET_DRUG_ADDICTION_EDGE(targ, i));
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Addicted to %s (Edge: %d)\r\n",
+                     drug_types[i].name,
+                     GET_DRUG_ADDICTION_EDGE(targ, i));
       }
-      printed = TRUE;
     }
   }
 
 
   for (struct obj_data *bio = targ->bioware; bio; bio = bio->next_content) {
     if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
-      send_to_char("  An activated pain editor (+1 wil, -1 int)\r\n", ch);
-      printed = TRUE;
+      strlcat(aff_buf, "  An activated pain editor (+1 wil, -1 int)\r\n", sizeof(aff_buf));
       break;
     }
   }
@@ -6788,37 +6970,37 @@ ACMD(do_status)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
       }
       if ((IS_SENATOR(ch) || sust->spell == SPELL_MINDLINK) && sust->other && sust->other != targ)
-        send_to_char(ch, "%s (cast by ^c%s^n)\r\n", buf, GET_CHAR_NAME(sust->other));
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%s (cast by ^c%s^n)\r\n", buf, GET_CHAR_NAME(sust->other));
       else
-        send_to_char(ch, "%s\r\n", buf);
-      printed = TRUE;
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%s\r\n", buf);
     }
   }
 
   if (GET_SUSTAINED_NUM(targ)) {
-    send_to_char(ch, "%s %s sustaining:\r\n", ch == targ ? "You" : GET_CHAR_NAME(targ), ch == targ ? "are" : "is");
-    printed = TRUE;
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%s %s sustaining:\r\n", ch == targ ? "You" : GET_CHAR_NAME(targ), ch == targ ? "are" : "is");
     int i = 1;
     for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
       if (sust->caster || sust->spirit == targ) {
-        send_to_char(ch, "%d) %s (force %d, %d successes%s)", i, get_spell_name(sust->spell, sust->subtype), sust->force, sust->success, warn_if_spell_under_potential(sust));
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%d) %s (force %d, %d successes%s)", i, get_spell_name(sust->spell, sust->subtype), sust->force, sust->success, warn_if_spell_under_potential(sust));
         if ((IS_SENATOR(ch) || sust->spell == SPELL_MINDLINK)) {
-          send_to_char(ch, " (Cast on ^c%s^n)", GET_CHAR_NAME(sust->other));
+          snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), " (Cast on ^c%s^n)", GET_CHAR_NAME(sust->other));
         }
         if (sust->focus) {
-          send_to_char(ch, " (Sustained by %s)", GET_OBJ_NAME(sust->focus));
+          snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), " (Sustained by %s)", GET_OBJ_NAME(sust->focus));
         }
         if (sust->spirit && sust->spirit != ch) {
-          send_to_char(ch, " (Sustained by %s [id %d])", GET_NAME(sust->spirit), GET_GRADE(sust->spirit));
+          snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), " (Sustained by %s [id %d])", GET_NAME(sust->spirit), GET_GRADE(sust->spirit));
         }
-        send_to_char("\r\n", ch);
+        strlcat(aff_buf, "\r\n", sizeof(aff_buf));
         i++;
       }
     }
   }
 
-  if (!printed) {
-    send_to_char(ch, "Nothing.\r\n");
+  if (!*aff_buf) {
+    send_to_char("Nothing.\r\n", ch);
+  } else {
+    send_to_char(aff_buf, ch);
   }
 
   send_to_char(ch, "\r\n%s %s the following vision types:\r\n  %s\r\n",

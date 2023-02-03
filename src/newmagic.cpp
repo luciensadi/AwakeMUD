@@ -841,33 +841,71 @@ bool conjuring_drain(struct char_data *ch, int force)
 
 void magic_perception(struct char_data *ch, int force, int spell)
 {
-  int base = 4 + (int)(GET_MAG(ch) / 100) - force, target = 0, skill = 0, starg = 0;
+  int base = 4 + (int)(GET_MAG(ch) / 100) - force;
+  int skill = 0;
+  int starg = 0;
+
   totem_bonus(ch, SPELLCASTING, spell, starg, skill);
+
   if (skill > 0)
     base--;
+
   for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room) {
-    if (ch == vict)
+    // You and your charmies don't see / get alarmed by your casts.
+    if (ch == vict || (IS_NPC(vict) && vict->master == ch)) {
       continue;
-    target = base;
+    }
+
+    // Those who can't see you are not alarmed.
+    if (!CAN_SEE(vict, ch)) {
+      continue;
+    }
+
+    int target = base;
+
     if (GET_MAG(vict) > 0)
       target -= 2;
     if (SEES_ASTRAL(vict))
       target -= 2;
-    if (success_test(GET_INT(ch) + (GET_TRADITION(ch) == TRAD_ADEPT ? GET_POWER(ch, ADEPT_IMPROVED_PERCEPT) : 0), target)) {
+
+    if (success_test(GET_INT(vict) + (GET_TRADITION(vict) == TRAD_ADEPT ? GET_POWER(vict, ADEPT_IMPROVED_PERCEPT) : 0), target)) {
       if (SEES_ASTRAL(vict))
         act("You notice $n manipulating the astral plane.", FALSE, ch, 0, vict, TO_VICT);
       else act("You notice $n performing magic.", TRUE, ch, 0, vict, TO_VICT);
 
+      if (IS_NPC(vict) && !IS_NPC(ch)) {
+        int alert_threshold = GET_SECURITY_LEVEL(get_ch_in_room(vict)) * 5;
+
+        if (mob_is_aggressive(vict, TRUE) || MOB_FLAGGED(vict, MOB_GUARD)) {
+          alert_threshold += 10;
+        }
+        else if (MOB_FLAGGED(vict, MOB_HELPER)) {
+          alert_threshold += 5;
+        }
+
+        bool alert_state_should_be_alarm = number(0, MAX_ZONE_SECURITY_RATING * 4) * 5 <= alert_threshold;
+
+        // Alert/alarm NPCs when they see casting around them.
+        if (alert_state_should_be_alarm) {
+          GET_MOBALERT(vict) = MAX(MALERT_ALARM, GET_MOBALERT(vict));
+          GET_MOBALERTTIME(vict) = MAX(GET_MOBALERTTIME(vict), 20);
+        } else {
+          GET_MOBALERT(vict) = MAX(MALERT_ALERT, GET_MOBALERT(vict));
+          GET_MOBALERTTIME(vict) = MAX(GET_MOBALERTTIME(vict), 10);
+        }
+
 #ifdef GUARDS_ATTACK_MAGES
-      // Guards and fighters don't like people casting magic around them.
-      if (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_GUARD)
-                           || mob_is_aggressive(vict, TRUE)
-                           || GET_MOBALERT(vict) == MALERT_ALARM))
-      {
-        send_mob_aggression_warnings(ch, vict);
-        set_fighting(vict, ch);
-      }
+        // Never initiate combat between non-killables/wimpys and PCs.
+        if (!can_hurt(vict, ch) || !MOB_FLAGGED(vict, MOB_WIMPY))
+          continue;
+
+        // Guards and fighters don't like people casting magic around them.
+        if (GET_MOBALERT(vict) == MALERT_ALARM || MOB_FLAGGED(vict, MOB_GUARD) || mob_is_aggressive(vict, TRUE)) {
+          send_mob_aggression_warnings(ch, vict);
+          set_fighting(vict, ch);
+        }
 #endif
+      }
     }
   }
 }
@@ -3707,6 +3745,8 @@ ACMD(do_release)
 bool spell_is_valid_ritual_spell(int spell) {
   switch (spell) {
     case SPELL_COMBATSENSE:
+    case SPELL_DECATTR:
+    case SPELL_DECCYATTR:
     case SPELL_DETOX:
     case SPELL_HEAL:
     case SPELL_TREAT:
@@ -3862,8 +3902,8 @@ ACMD(do_cast)
     FAILURE_CASE(IS_NPC(vict), "You can only cast ritual spells on player characters.\r\n");
 
     // Charge them.
-    int cost = RITUAL_SPELL_COMPONENT_COST * spell->force * MAX(1, spells[spell->type].drainpower);
-    int time_in_ticks = (RITUAL_SPELL_BASE_TIME * spell->force * MAX(1, spells[spell->type].drainpower)) / (GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)));
+    int cost = RITUAL_SPELL_COMPONENT_COST * force * MAX(1, spells[spell->type].drainpower);
+    int time_in_ticks = (RITUAL_SPELL_BASE_TIME * force * MAX(1, spells[spell->type].drainpower)) / (GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)));
 
     if (GET_NUYEN(ch) < cost) {
       send_to_char(ch, "You need at least %d nuyen on hand to pay for the ritual components.\r\n", cost);
@@ -3878,7 +3918,7 @@ ACMD(do_cast)
     GET_RITUAL_COMPONENT_CASTER(components) = GET_IDNUM(ch);
     GET_RITUAL_COMPONENT_SPELL(components) = spell->type;
     GET_RITUAL_COMPONENT_SUBTYPE(components) = spell->subtype;
-    GET_RITUAL_COMPONENT_FORCE(components) = spell->force;
+    GET_RITUAL_COMPONENT_FORCE(components) = force;
     GET_RITUAL_COMPONENT_TARGET(components) = GET_IDNUM(vict);
     GET_RITUAL_TICKS_AT_START(components) = GET_RITUAL_TICKS_LEFT(components) = time_in_ticks;
 
@@ -4543,18 +4583,22 @@ bool spirit_can_perform(int type, int order, int tradition)
 
 void make_spirit_power(struct char_data *spirit, struct char_data *tch, int type)
 {
+  int force = GET_LEVEL(spirit);
+  if (type == CONFUSION)
+    force /= 3;
+
   struct spirit_sustained *ssust = new spirit_sustained;
   ssust->type = type;
   ssust->caster = TRUE;
   ssust->target = tch;
-  ssust->force = GET_LEVEL(spirit);
+  ssust->force = force;
   ssust->next = SPIRIT_SUST(spirit);
   SPIRIT_SUST(spirit) = ssust;
   ssust = new spirit_sustained;
   ssust->type = type;
   ssust->caster = FALSE;
   ssust->target = spirit;
-  ssust->force = GET_LEVEL(spirit);
+  ssust->force = force;
   ssust->next = SPIRIT_SUST(tch);
   SPIRIT_SUST(tch) = ssust;
 }
@@ -4613,6 +4657,12 @@ POWER(spirit_appear)
 
 POWER(spirit_sorcery)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_sorcery!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   if (!MOB_FLAGS(spirit).IsSet(MOB_AIDSORCERY)) {
     spiritdata->services--;
     MOB_FLAGS(spirit).SetBit(MOB_AIDSORCERY);
@@ -4624,6 +4674,12 @@ POWER(spirit_sorcery)
 
 POWER(spirit_study)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_study!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   if (!MOB_FLAGS(spirit).IsSet(MOB_STUDY)) {
     spiritdata->services--;
     MOB_FLAGS(spirit).SetBit(MOB_STUDY);
@@ -4634,6 +4690,12 @@ POWER(spirit_study)
 
 POWER(spirit_sustain)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_sustain!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   struct sustain_data *sust;
   if (GET_SUSTAINED_NUM(spirit))
     send_to_char(ch, "That %s is already sustaining a spell.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
@@ -4712,6 +4774,12 @@ POWER(spirit_sustain)
 
 POWER(spirit_accident)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_accident!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   struct char_data *tch = get_char_room_vis(spirit, arg);
   bool ignoring = FALSE;
 
@@ -4747,6 +4815,12 @@ POWER(spirit_accident)
 
 POWER(spirit_binding)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_binding!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
 
@@ -4771,6 +4845,12 @@ POWER(spirit_binding)
 
 POWER(spirit_conceal)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_conceal!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (affected_by_power(spirit, CONCEAL)) {
@@ -4796,33 +4876,57 @@ POWER(spirit_conceal)
 
 POWER(spirit_confusion)
 {
-  bool ignoring = FALSE;
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_confusion!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (affected_by_power(spirit, CONFUSION)) {
     act("$N stops providing that service.", FALSE, ch, 0, spirit, TO_CHAR);
     stop_spirit_power(spirit, CONFUSION);
     return;
   }
-  if (!tch)
-    send_to_char("Use confusion against which target?\r\n", ch);
-  else if (tch == spirit || tch == ch || affected_by_power(tch, CONFUSION))
+
+  FAILURE_CASE(GET_LEVEL(spirit) < 3, "Only spirits of force 3 and higher can use this power.");
+  FAILURE_CASE(!tch, "Use confusion against which target?");
+  FAILURE_CASE(tch == spirit, "It refuses to harm itself.");
+  FAILURE_CASE(tch == ch, "It refuses to harm you.");
+  FAILURE_CASE(affected_by_power(tch, CONFUSION), "They're already affected by that power.");
+  FAILURE_CASE(get_ch_in_room(spirit)->peaceful, "It's too peaceful here...");
+  FAILURE_CASE(!can_hurt(ch, tch, TYPE_HIT, TRUE) || would_become_killer(ch, tch), "You can't harm them.");
+  FAILURE_CASE(MOB_FLAGGED(tch, MOB_INANIMATE), "Confusion doesn't work on machines.");
+
+  if (IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else if (get_ch_in_room(spirit)->peaceful)
-    send_to_char("It's too peaceful here...\r\n", ch);
-  else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
-    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-    if (ignoring)
-      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
-  } else {
-    act("$n winces and clutches at $s head.", FALSE, spirit, 0, ch, TO_VICT);
-    send_to_char("The world shifts and warps unnaturally around you.\r\n", tch);
-    make_spirit_power(spirit, tch, CONFUSION);
-    spiritdata->services--;
+    log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+    return;
   }
+
+  act("You murmur and gesture towards $N, who winces and clutches at $S head.", FALSE, ch, 0, tch, TO_CHAR);
+  act("$n murmurs something and gestures towards you. Almost immediately, the world shifts and warps unnaturally around you.", FALSE, ch, 0, tch, TO_VICT);
+  act("$n murmurs something and gestures towards $N, who winces and clutches at $S head.", FALSE, ch, 0, tch, TO_NOTVICT);
+
+  make_spirit_power(spirit, tch, CONFUSION);
+  spiritdata->services--;
+
+  if (CAN_SEE(tch, ch)) {
+    set_fighting(tch, ch);
+    set_fighting(ch, tch);
+  }
+
+  WAIT_STATE(ch, 2 RL_SEC);
 }
 
 POWER(spirit_engulf)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_engulf!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (affected_by_power(spirit, ENGULF)) {
@@ -4879,6 +4983,12 @@ POWER(spirit_engulf)
 
 POWER(spirit_fear)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_fear!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
@@ -4914,6 +5024,12 @@ POWER(spirit_fear)
 
 POWER(spirit_flameaura)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_flameaura!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   if (!MOB_FLAGGED(spirit, MOB_FLAMEAURA))
     act("$n's body erupts in flames.", TRUE, spirit, 0, 0, TO_ROOM);
   else
@@ -4924,6 +5040,12 @@ POWER(spirit_flameaura)
 
 POWER(spirit_flamethrower)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_flamethrower!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
@@ -4947,6 +5069,12 @@ POWER(spirit_flamethrower)
 
 POWER(spirit_guard)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_guard!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   if (!MOB_FLAGGED(spirit, MOB_SPIRITGUARD))
     act("$n begins to guard the area from accidents.", FALSE, spirit, 0, ch, TO_VICT);
   else
@@ -4957,14 +5085,24 @@ POWER(spirit_guard)
 
 POWER(spirit_leave)
 {
-  act("$n vanishes back into the metaplanes.", TRUE, spirit, 0, ch, TO_NOTVICT);
-  send_to_char(ch, "%s returns to the metaplanes to await further orders.\r\n", CAP(GET_NAME(spirit)));
+  if (spirit) {
+    act("$n vanishes back into the metaplanes.", TRUE, spirit, 0, ch, TO_NOTVICT);
+    send_to_char(ch, "%s returns to the metaplanes to await further orders.\r\n", CAP(GET_NAME(spirit)));
+    extract_char(spirit);
+  } else {
+    mudlog("SYSERR: Received NULL spirit to spirit_leave!", ch, LOG_SYSLOG, TRUE);
+  }
   spiritdata->called = FALSE;
-  extract_char(spirit);
 }
 
 POWER(spirit_dematerialize)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_dematerialize!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   act("$n fades from the physical realm.\r\n", TRUE, spirit, 0, ch, TO_ROOM);
   MOB_FLAGS(spirit).RemoveBits(MOB_DUAL_NATURE, MOB_FLAMEAURA, ENDBIT);
   MOB_FLAGS(spirit).SetBit(MOB_ASTRAL);
@@ -4973,6 +5111,12 @@ POWER(spirit_dematerialize)
 
 POWER(spirit_materialize)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_materialize!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   if (IS_DUAL(spirit)) {
     send_to_char(ch, "%s is already materialized.\r\n", CAP(GET_NAME(spirit)));
     return;
@@ -4985,6 +5129,12 @@ POWER(spirit_materialize)
 
 POWER(spirit_movement)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_movement!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   int increase = 0;
   if (affected_by_power(spirit, MOVEMENTUP)) {
@@ -5037,6 +5187,12 @@ POWER(spirit_movement)
 
 POWER(spirit_breath)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_breath!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
@@ -5070,6 +5226,12 @@ POWER(spirit_breath)
 
 POWER(spirit_attack)
 {
+  if (!spirit) {
+    mudlog("SYSERR: Received NULL spirit to spirit_attack!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Sorry, something went wrong. This spirit is likely unusable.\r\n", ch);
+    return;
+  }
+
   bool ignoring = FALSE;
   struct char_data *tch = get_char_room_vis(spirit, arg);
   if (!tch)
