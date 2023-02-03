@@ -5474,7 +5474,7 @@ bool keyword_appears_in_char(const char *keyword, struct char_data *ch, bool sea
     // Since this is not a common use case, we use full keyword matching here to prevent mixups like 'hu' from 'hunter' matching 'human'
     if (!str_cmp(keyword, pc_race_types[(int) GET_RACE(ch)]))
       return TRUE;
-    if (!str_cmp(keyword, genders[(int) GET_SEX(ch)]))
+    if (!str_cmp(keyword, genders[(int) GET_PRONOUNS(ch)]))
       return TRUE;
   }
 

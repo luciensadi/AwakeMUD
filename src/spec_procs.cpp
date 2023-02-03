@@ -5950,7 +5950,7 @@ SPECIAL(Janis_Amer_Girl) {
           break;
       if (!tch)
         GET_SPARE1(mob) = 0;
-      else if (GET_RACE(tch) != RACE_HUMAN || GET_SEX(tch) != SEX_MALE)
+      else if (GET_RACE(tch) != RACE_HUMAN || GET_PRONOUNS(tch) != PRONOUNS_MASCULINE)
         do_say(mob, "And for frags sake, try and get someone who looks something like this guy to make the collection.", 0, 0);
       else
         do_say(mob, "Make sure you don't do anything weird, this guy won't hand it over if you're acting suspicious.", 0, 0);
@@ -6053,7 +6053,7 @@ SPECIAL(Janis_Meet)
     }
 
     if (!str_cmp(argument, "Blue-eyes sent me") || !str_cmp(argument, "blue-eyes sent me")) {
-      if (GET_RACE(ch) != RACE_HUMAN || GET_SEX(ch) != SEX_MALE || !(GET_EQ(ch, WEAR_BODY) && GET_OBJ_VNUM(GET_EQ(ch, WEAR_BODY)) == 5032))  {
+      if (GET_RACE(ch) != RACE_HUMAN || GET_PRONOUNS(ch) != PRONOUNS_MASCULINE || !(GET_EQ(ch, WEAR_BODY) && GET_OBJ_VNUM(GET_EQ(ch, WEAR_BODY)) == 5032))  {
         do_say(mob, "Who the frag are you!? Oh wait, I fraggin' get it! This is a bust!", 0, 0);
         act("$n turns and starts running towards the road, quickly vanishing into the crowd.", FALSE, mob, 0, 0, TO_ROOM);
       } else {
@@ -6399,7 +6399,7 @@ SPECIAL(mageskill_trainer)
       act("$n reaches out and snatches the chain from around $N's neck.", FALSE, mage, 0, ch, TO_NOTVICT);
       extract_obj(unequip_char(ch, i, TRUE));
     } else {
-      snprintf(arg, sizeof(arg), "%s Welcome %s, the Master awaits.", GET_CHAR_NAME(ch), GET_SEX(ch) == SEX_FEMALE ? "Sister" : "Brother");
+      snprintf(arg, sizeof(arg), "%s Welcome %s, the Master awaits.", GET_CHAR_NAME(ch), GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL ? "Sibling" : (GET_PRONOUNS(ch) == PRONOUNS_FEMININE ? "Sister" : "Brother"));
       do_say(mage, arg, 0, SCMD_SAYTO);
       send_to_char(ch, "%s beckons you to pass through the field to the north, and you do.\r\n", GET_NAME(mage));
       act("$n passes through the field to the north.", TRUE, ch, 0, 0, TO_ROOM);

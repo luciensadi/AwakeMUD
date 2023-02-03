@@ -57,11 +57,16 @@ class ApartmentComplex {
     // The vnum of the landlord
     vnum_t landlord_vnum = -1;
 
-    // The lifestyle this complex conveys. Can be overridden at the apartment level.
-    int lifestyle = LIFESTYLE_SQUATTER;
-
     std::vector<Apartment*> apartments = {};
     std::vector<idnum_t> editors = {};
+
+    // The lifestyle this complex conveys. Can be overridden at the apartment level.
+    int lifestyle = LIFESTYLE_SQUATTER;
+    // Lifestyle string options provided by this complex.
+    std::vector<const char *> default_strings_neutral = {};
+    std::vector<const char *> default_strings_gendered = {};
+    std::vector<const char *> garage_strings_neutral = {};
+    std::vector<const char *> garage_strings_gendered = {};
 
   public:
     // Given a filename to read from, instantiate an apartment complex.
@@ -114,7 +119,6 @@ class Apartment {
     const char *shortname = NULL; // 309
     const char *name = NULL; // Unit 309
     const char *full_name = NULL; // Evergreen Multiplex's Unit 309 (derived)
-    int lifestyle = -1;
     long nuyen_per_month = 0;
     bf::path base_directory;
     bool garage_override = FALSE;
@@ -135,6 +139,14 @@ class Apartment {
 
     // Backlink information.
     ApartmentComplex *complex = NULL;
+
+    // The lifestyle override of this apartment. -1 if it's not set.
+    int lifestyle = -1;
+    // Lifestyle string options provided by this apartment.
+    std::vector<const char *> default_strings_neutral = {};
+    std::vector<const char *> default_strings_gendered = {};
+    std::vector<const char *> garage_strings_neutral = {};
+    std::vector<const char *> garage_strings_gendered = {};
 
   public:
     // Given a filename to read from, instantiate an individual apartment.
@@ -157,7 +169,7 @@ class Apartment {
     unsigned long get_garage_count() { return garages; }
     int get_lifestyle() { return lifestyle >= LIFESTYLE_STREETS ? lifestyle : complex->get_lifestyle(); }
     bool get_garage_override() { return garage_override; }
-    const char *get_lifestyle_strings();
+    std::vector<const char *> *get_lifestyle_strings(struct char_data *ch);
 
     // Mutators
     void set_owner(idnum_t);

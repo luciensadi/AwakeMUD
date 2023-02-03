@@ -2664,8 +2664,8 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
       switch (number(0, 4)) {
         case 0:
           snprintf(buf2, sizeof(buf2), "%s just hasn't been taking %s medication.  Oops. "
-                  "{%s (%ld)}", GET_CHAR_NAME(vict), GET_SEX(vict) == SEX_MALE ?
-                  "his" : (GET_SEX(vict) == SEX_FEMALE ? "her" : "its"),
+                  "{%s (%ld)}", GET_CHAR_NAME(vict), GET_PRONOUNS(vict) == PRONOUNS_MASCULINE ?
+                  "his" : (GET_PRONOUNS(vict) == PRONOUNS_FEMININE ? "her" : "its"),
                   vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh),
                   GET_ROOM_VNUM(get_ch_in_room(vict)));
           break;

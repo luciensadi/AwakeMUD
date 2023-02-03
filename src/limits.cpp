@@ -1560,7 +1560,7 @@ void misc_update(void)
   }
 }
 
-float gen_size(int race, bool height, int size, int sex)
+float gen_size(int race, bool height, int size, int pronouns)
 {
   float mod;
   switch (size) {
@@ -1584,7 +1584,7 @@ float gen_size(int race, bool height, int size, int sex)
   }
   switch (race) {
     case RACE_HUMAN:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(160, 187) * mod;
         else
@@ -1597,7 +1597,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_DWARF:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(115, 133) * mod;
         else
@@ -1610,7 +1610,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_ELF:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(180, 205) * mod;
         else
@@ -1623,7 +1623,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_ORK:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(185, 210) * mod;
         else
@@ -1636,7 +1636,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_TROLL:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(270, 295) * mod;
         else
@@ -1650,7 +1650,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_CYCLOPS:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(290, 340) * mod;
         else
@@ -1663,7 +1663,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_KOBOROKURU:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(115, 133) * mod;
         else
@@ -1676,7 +1676,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_FOMORI:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(270, 295) * mod;
         else
@@ -1689,7 +1689,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_MENEHUNE:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(115, 133) * mod;
         else
@@ -1702,7 +1702,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_HOBGOBLIN:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(185, 210) * mod;
         else
@@ -1715,7 +1715,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_GIANT:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(300, 450) * mod;
         else
@@ -1728,7 +1728,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_GNOME:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(85, 137) * mod;
         else
@@ -1741,7 +1741,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_ONI:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(185, 215) * mod;
         else
@@ -1754,7 +1754,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_WAKYAMBI:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(180, 205) * mod;
         else
@@ -1767,7 +1767,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_OGRE:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(185, 235) * mod;
         else
@@ -1780,7 +1780,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_MINOTAUR:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(200, 255) * mod;
         else
@@ -1793,7 +1793,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_SATYR:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(180, 217) * mod;
         else
@@ -1806,7 +1806,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_NIGHTONE:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(185, 227) * mod;
         else
@@ -1819,7 +1819,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_DRAGON:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(300, 400) * mod;
         else
@@ -1832,7 +1832,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     default:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(160, 187) * mod;
         else

@@ -358,7 +358,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
     } else {
       send_to_char(ch, "You prepare to take a swing at %s!\r\n", GET_VEH_NAME(veh));
       if (get_speed(veh) > 10)
-        snprintf(buf, sizeof(buf), "%s throws %sself out in front of you!\r\n", GET_NAME(ch), thrdgenders[(int)GET_SEX(ch)]);
+        snprintf(buf, sizeof(buf), "%s throws %sself out in front of you!\r\n", GET_NAME(ch), thrdgenders[(int)GET_PRONOUNS(ch)]);
       else
         snprintf(buf, sizeof(buf), "%s winds up to take a swing at your ride!\r\n", GET_NAME(ch));
       send_to_veh(buf, veh, NULL, TRUE);

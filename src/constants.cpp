@@ -319,7 +319,7 @@ const char *exit_bits[] =
   };
 
 
-/* SEX_x */
+/* PRONOUNS_x -- for appearance, rather than the pronouns themselves */
 const char *genders[] =
   {
     "Neutral",

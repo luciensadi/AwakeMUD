@@ -54,7 +54,7 @@ CUSTOM:
 - standard AW chargen tree
 */
 
-// Invoked from interpreter, this menu puts the character in a state to select their sex.
+// Invoked from interpreter, this menu puts the character in a state to select their pronouns.
 void ccr_pronoun_menu(struct descriptor_data *d) {
   SEND_TO_Q("What pronouns will your character use? (M)ale, (F)emale, (N)eutral: ", d);
   d->ccr.mode = CCR_PRONOUNS;
@@ -490,13 +490,13 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 void parse_pronouns(struct descriptor_data *d, const char *arg) {
   switch (tolower(*arg)) {
     case 'm':
-      d->character->player.sex = SEX_MALE;
+      d->character->player.pronouns = PRONOUNS_MASCULINE;
       break;
     case 'f':
-      d->character->player.sex = SEX_FEMALE;
+      d->character->player.pronouns = PRONOUNS_FEMININE;
       break;
     case 'n':
-      d->character->player.sex = SEX_NEUTRAL;
+      d->character->player.pronouns = PRONOUNS_NEUTRAL;
       break;
     default:
       SEND_TO_Q("That is not a valid pronoun set.\r\nEnter M for male, F for female, or N for neutral. ", d);
@@ -850,7 +850,7 @@ void init_char_sql(struct char_data *ch)
                "Physical_Keywords, Physical_Name, Whotitle, Height, Weight, Host,"\
                "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc, LastD, multiplier) VALUES ('%ld', '%s', '%s', %d, '%d',"\
                "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s', %ld, 100);", GET_IDNUM(ch),
-               GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_SEX(ch), MAX(1, GET_LEVEL(ch)),
+               GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_PRONOUNS(ch), MAX(1, GET_LEVEL(ch)),
                prepare_quotes(buf2, ch->player.physical_text.room_desc, sizeof(buf2) / sizeof(buf2[0])), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
                GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), ch->player.time.birth, "A blank slate.",
                "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));

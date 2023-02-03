@@ -53,8 +53,6 @@ STRETCH:
 // TODO: Set newbie lifestyle on creation.
 // TODO: Default lifestyle on loading for chars that have none (can put this in the SQL statement to create the field)
 // TODO: Make sure lifestyle strings are handled in all places arrive strings are set/deleted
-// TODO: Create JSON file
-// TODO: Populate JSON with pre-defined strings for apartments and garages
 // TODO: Add code to apartment / complex editing to allow specification of lifestyles (complex: any, apt: higher than complex, or "parent")
 // TODO: Add code to apartment / complex editing to allow specification of garage override status
 // TODO: Add code to apartment / complex editing to allow specification of custom lifestyle string(s)
@@ -64,22 +62,13 @@ STRETCH:
 // TODO: Add code to apartment / complex editing to not allow saving of an apartment with invalid rent
 // TODO: Add code to apartments to allow retrieving of all custom strings available at that apartment / complex
 // TODO: Add cedit parsing code to let players select from all available lifestyles
+// TODO: Fill out garage strings for Low, High, Luxury lifestyles in json file.
 
 extern void _json_parse_from_file(bf::path path, json &target);
 
 const bf::path global_lifestyles_file = bf::system_complete("lib") / "etc" / "lifestyles.json";
 
-// Note that the min costs here are houseruled higher than the book values due to MUD inflation.
-// For reference: UBI is currently 1000¥/hr * 24 hr/day * 30 day/mo = 720,000¥/mo
-struct lifestyle_data lifestyles[NUM_LIFESTYLES] =
-{  // Name    lifestyle_strs  garage_strs  min_cost
-  {"Streets" ,           {},          {},  0       },
-  {"Squatter",           {},          {},  500     }, // xinf
-  {"Low"     ,           {},          {},  5000    }, // x10
-  {"Middle"  ,           {},          {},  30000   }, // x6
-  {"High"    ,           {},          {},  120000  }, // x4                        Min  Hour  Day
-  {"Luxury"  ,           {},          {},  MAX(750000, IDLE_NUYEN_REWARD_AMOUNT * ((60 * 24 * 30) / IDLE_NUYEN_MINUTES_BETWEEN_AWARDS) + 30000)}
-};
+struct lifestyle_data lifestyles[NUM_LIFESTYLES];
 
 void cedit_lifestyle_parse(struct descriptor_data *d, char *arg) {
   // todo fill out
@@ -100,23 +89,39 @@ const char *get_lifestyle_string(struct char_data *ch) {
 ///// Saving / Loading - Lifestyles /////
 
 // Read lifestyles from JSON and store them globally.
+#define JSON_TO_STRING_VECTOR(field_name) { \
+  lifestyles[lifestyle_idx].field_name.clear(); \
+  for (auto it : specific_lifestyle_info[#field_name].get<std::vector<std::string>>()) { \
+    lifestyles[lifestyle_idx].field_name.push_back(str_dup(it.c_str())); \
+  } \
+}
+
 void boot_lifestyles() {
   json lifestyle_info;
   _json_parse_from_file(global_lifestyles_file, lifestyle_info);
 
   // Iterate through our known lifestyles, loading the values and strings for each.
   for (int lifestyle_idx = LIFESTYLE_STREETS; lifestyle_idx < NUM_LIFESTYLES; lifestyle_idx++) {
-    lifestyles[lifestyle_idx].monthly_cost_min = lifestyle_info[lifestyle_idx]["monthly_cost_min"].get<long>();
+    json specific_lifestyle_info = lifestyle_info[lifestyles[lifestyle_idx].name];
 
-    for (auto it : lifestyle_info[lifestyle_idx]["default_strings"].get<std::vector<std::string>>()) {
-      lifestyles[lifestyle_idx].default_strings.push_back(str_dup(it.c_str()));
-    }
+    lifestyles[lifestyle_idx].monthly_cost_min = specific_lifestyle_info["monthly_cost_min"].get<long>();
 
-    for (auto it : lifestyle_info[lifestyle_idx]["garage_strings"].get<std::vector<std::string>>()) {
-      lifestyles[lifestyle_idx].garage_strings.push_back(str_dup(it.c_str()));
-    }
+    JSON_TO_STRING_VECTOR(default_strings_neutral);
+    JSON_TO_STRING_VECTOR(default_strings_gendered);
+    JSON_TO_STRING_VECTOR(garage_strings_neutral);
+    JSON_TO_STRING_VECTOR(garage_strings_gendered);
+  }
+
+  // Note that the min costs here are houseruled higher than the book values due to MUD inflation.
+  // For reference: UBI is currently 1000¥/hr * 24 hr/day * 30 day/mo = 720,000¥/mo
+  long min_luxury_cost = IDLE_NUYEN_REWARD_AMOUNT * (MINS_PER_REAL_MONTH / IDLE_NUYEN_MINUTES_BETWEEN_AWARDS) + 30000;
+  if (lifestyles[LIFESTYLE_LUXURY].monthly_cost_min < min_luxury_cost) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Luxury lifestyle cost is below idle nuyen amount + 30k: Raising to %ld.", min_luxury_cost);
+    lifestyles[LIFESTYLE_LUXURY].monthly_cost_min = min_luxury_cost;
   }
 }
+
+#undef JSON_TO_STRING_VECTOR
 
 // Save lifestyles in memory to file.
 void save_lifestyles_file() {
@@ -124,10 +129,12 @@ void save_lifestyles_file() {
 
   // Iterate through our known lifestyles, composing the dicts for each.
   for (int lifestyle_idx = LIFESTYLE_STREETS; lifestyle_idx < NUM_LIFESTYLES; lifestyle_idx++) {
-    lifestyle_info[lifestyle_idx] = {
+    lifestyle_info[lifestyles[lifestyle_idx].name] = {
       {"monthly_cost_min", lifestyles[lifestyle_idx].monthly_cost_min},
-      {"default_strings", lifestyles[lifestyle_idx].default_strings},
-      {"garage_strings", lifestyles[lifestyle_idx].garage_strings}
+      {"default_strings_neutral", lifestyles[lifestyle_idx].default_strings_neutral},
+      {"default_strings_gendered", lifestyles[lifestyle_idx].default_strings_gendered},
+      {"garage_strings_neutral", lifestyles[lifestyle_idx].garage_strings_neutral},
+      {"garage_strings_gendered", lifestyles[lifestyle_idx].garage_strings_gendered}
     };
   }
 
@@ -142,63 +149,8 @@ void save_lifestyles_file() {
 
 #ifdef use_old_code_from_lifestyles_file
 
-struct lifestyle_data lifestyles[NUM_LIFESTYLES] =
-{ // Name      Cost/mo
-  {"Streets" , 0,
-     // The strings the player can select from to represent this lifestyle. First is he/she, second is they.
-    {{"Judging by the smell, you're pretty sure $e's homeless.", "Judging by the smell, you're pretty sure they're homeless."},
-     {"$s clothes are ragged and hole-filled.", "Their clothes are ragged and hole-filled."},
-     {"$e doesn't seem well-acquainted with hygiene.", "They don't seem well-acquainted with hygiene."},
-     {"", ""},
-     {"", ""},
-     {"", ""}}
-  },
-  {"Squatter", 100,
-    {{"You figure $e might have a roof over $s head, but not much of one.", "You figure $e might have a roof over their head, but not much of one."},
-     {"The scent of burnt fry oil hangs about $m.", "The scent of burnt fry oil hangs about them."}, // Squatting behind a fast-food place.
-     {"$s wrinkled clothes suggest $e lives out of $s car.", "Their wrinkled clothes suggest they live out of their car."},
-     {"$e isn't emaciated, but still looks like $e's had to skip a meal or three.", "They aren't emaciated, but still look like they've had to skip a meal or three."},
-     {"The distinct scent of public transportation clings to $m.", "The distinct scent of public transportation clings to them."},
-     {"$e's got a smell about him-- eau de Coffin Motel?", "They've got a smell about them-- eau de Coffin Motel?"}}
-  },
-  {"Low"     , 1000,
-    {{"$e looks like he's fallen on hard times.", "They look like they've fallen on hard times."},
-     {"You get the feeling that $e leads a low-class lifestyle.", "You get the feeling that they lead a low-class lifestyle."},
-     {"$e probably has a few nuyen to rub together-- but only a few.", "They probably have a few nuyen to rub together-- but only a few."},
-     {"$s clothing looks like a cheap knock-off, but it mostly fits and isn't falling apart.", "Their clothing looks like a cheap knock-off, but it mostly fits and isn't falling apart."},
-     {"$e doesn't look like he's had to miss any meals recently.", "They don't look like they've had to miss any meals recently."},
-     {"", ""}}
-  },
-  {"Middle"  , 5000,
-    {{"$e seems like $e's been able to take care of $mself.", "They seem like they've been able to take care of themselves."},
-     {"$e looks like $e probably leads a middle-class life.", "They look like they probably lead a middle-class life."},
-     {"$e's not doing badly at all for a shadowrunner.", "They're not doing badly at all for a shadowrunner."},
-     {"$e probably showers regularly, as $e smells lightly of cheap soap.", "They probably shower regularly, as they smell lightly of cheap soap."},
-     {"$e smells like soap, shampoo, and some sort of cologne or perfume.", "They smell like soap, shampoo, and some sort of cologne or perfume."},
-     {"", ""}}
-  },
-  {"High"    , 10000,
-    {{"$e seems pretty well-off.", "They seem pretty well-off."},
-     {"$e looks like he's living the high life.", "They look like they're living the high life."},
-     {"$e's doing well for himself.", "They're doing well for themselves."},
-     {"$e looks like $e's never missed a meal in $s life, and has the healthy glow of someone that eats real food.", "They look like they've never missed a meal in their life, and have the healthy glow of someone that eats real food."},
-     {"", ""},
-     {"", ""}}
-  },
-  {"Luxury"  , 100000,
-    {{"You feel like $e probably rubs shoulders with the social elite.", "You feel like they probably rub shoulders with the social elite."},
-     {"Sharply groomed and tailored, $e knows how take care of $mself.", "Sharply groomed and tailored, they know how take care of themselves."},
-     {"There's a sense of privileged wealth about $m.", "There's a sense of privileged wealth about them."},
-     {"", ""},
-     {"", ""},
-     {"", ""}}
-  }
-};
-
 const char *lifestyle_garage_strings[NUM_GARAGE_STRINGS] = {
-  "The stink of old motor oil hangs about $m.",
-  "Bits of automotive rust speckle $s outfit.",
-  "You catch a whiff of stale exhaust from $m."
+
 };
 
 int house_to_lifestyle_map[NUM_LIFESTYLES] = {
@@ -227,7 +179,7 @@ const char *get_lifestyle_string(struct char_data *ch) {
     return compiled_string;
   }
 
-  strlcpy(compiled_string, lifestyles[GET_LIFESTYLE_SELECTION(ch)].strings[GET_LIFESTYLE_STRING_SELECTION(ch)][GET_SEX(ch) == SEX_NEUTRAL ? 1 : 0], sizeof(compiled_string));
+  strlcpy(compiled_string, lifestyles[GET_LIFESTYLE_SELECTION(ch)].strings[GET_LIFESTYLE_STRING_SELECTION(ch)][GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL ? 1 : 0], sizeof(compiled_string));
 
   if (GET_LIFESTYLE_IS_GARAGE_SELECTION(ch)) {
     snprintf(ENDOF(compiled_string),

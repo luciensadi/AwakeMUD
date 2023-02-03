@@ -68,7 +68,7 @@ char *  string_to_uppercase(const char *source);
 char *  string_to_lowercase(const char *source);
 int     get_speed(struct veh_data *veh);
 int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy, bool include_metavariant_penalty=1);
-float   gen_size(int race, bool height, int size, int sex);
+float   gen_size(int race, bool height, int size, int pronouns);
 int     get_skill(struct char_data *ch, int skill, int &target);
 void    add_follower(struct char_data *ch, struct char_data *leader);
 int     light_level(struct room_data *room);
@@ -254,6 +254,10 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define SECS_PER_REAL_HOUR      (60*SECS_PER_REAL_MIN)
 #define SECS_PER_REAL_DAY       (24*SECS_PER_REAL_HOUR)
 #define SECS_PER_REAL_YEAR      (365*SECS_PER_REAL_DAY)
+
+#define MINS_PER_REAL_HOUR      60
+#define MINS_PER_REAL_DAY       (24*MINS_PER_REAL_HOUR)
+#define MINS_PER_REAL_MONTH     (30*MINS_PER_REAL_DAY)
 
 /* string utils **********************************************************/
 
@@ -445,7 +449,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_LASTROOM(ch)          ((ch)->player.last_room)
 #define GET_HEIGHT(ch)        ((ch)->player.height)
 #define GET_WEIGHT(ch)        ((ch)->player.weight)
-#define GET_SEX(ch)           ((ch)->player.sex)
+#define GET_PRONOUNS(ch)           ((ch)->player.pronouns)
 
 #define GET_ATT(ch, i)        ((ch)->aff_abils.attributes[(i)])
 #define GET_REAL_ATT(ch, i)   ((ch)->real_abils.attributes[(i)])
@@ -754,12 +758,12 @@ float get_proto_weight(struct obj_data *obj);
 
 /* compound utilities and other macros **********************************/
 
-#define HSHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "his":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "its": "their"))
-#define HSSH(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "he" :"she") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "they" ))
-#define HMHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "him":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "them" ))
-#define HASHAVE(ch) (GET_SEX(ch) != SEX_NEUTRAL ?              "has"     : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "has": "have" ))
-#define ISARE(ch)   (GET_SEX(ch) != SEX_NEUTRAL ?              "is"      : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "is" : "are"  ))
-#define HSSH_SHOULD_PLURAL(ch) (GET_SEX(ch) || (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)))
+#define HSHR(ch)    (GET_PRONOUNS(ch) ? (GET_PRONOUNS(ch)==PRONOUNS_MASCULINE ? "his":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "its": "their"))
+#define HSSH(ch)    (GET_PRONOUNS(ch) ? (GET_PRONOUNS(ch)==PRONOUNS_MASCULINE ? "he" :"she") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "they" ))
+#define HMHR(ch)    (GET_PRONOUNS(ch) ? (GET_PRONOUNS(ch)==PRONOUNS_MASCULINE ? "him":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "them" ))
+#define HASHAVE(ch) (GET_PRONOUNS(ch) != PRONOUNS_NEUTRAL ?              "has"     : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "has": "have" ))
+#define ISARE(ch)   (GET_PRONOUNS(ch) != PRONOUNS_NEUTRAL ?              "is"      : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "is" : "are"  ))
+#define HSSH_SHOULD_PLURAL(ch) (GET_PRONOUNS(ch) || (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)))
 
 #define ANA(obj) (strchr((const char *)"aeiouyAEIOUY", *(obj)->text.keywords) ? "An" : "A")
 #define SANA(obj) (strchr((const char *)"aeiouyAEIOUY", *(obj)->text.keywords) ? "an" : "a")

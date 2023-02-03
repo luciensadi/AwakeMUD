@@ -6490,7 +6490,7 @@ ACMD(do_think)
       if (access_level(viewer, LVL_FIXER) || (PRF_FLAGGED(viewer, PRF_QUEST) && PRF_FLAGGED(ch, PRF_QUESTOR))) {
         send_to_char(viewer, "^LOOC: %s thinks to %s, \"%s^n\"^n\r\n",
                      GET_CHAR_NAME(ch),
-                     GET_SEX(ch) == SEX_NEUTRAL ? "themselves" : (GET_SEX(ch) == SEX_MALE ? "himself" : "herself"),
+                     GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL ? "themselves" : (GET_PRONOUNS(ch) == PRONOUNS_MASCULINE ? "himself" : "herself"),
                      formatted_think_string);
       }
     }

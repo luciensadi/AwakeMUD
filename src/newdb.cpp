@@ -129,8 +129,8 @@ static void init_char(struct char_data * ch)
   ch->player.time.played = 0;
   ch->player.time.lastdisc = time(0);
 
-  ch->player.weight = (int)gen_size(GET_RACE(ch), 0, 3, GET_SEX(ch));
-  ch->player.height = (int)gen_size(GET_RACE(ch), 1, 3, GET_SEX(ch));
+  ch->player.weight = (int)gen_size(GET_RACE(ch), 0, 3, GET_PRONOUNS(ch));
+  ch->player.height = (int)gen_size(GET_RACE(ch), 1, 3, GET_PRONOUNS(ch));
 
   ch->points.max_mental = 1000;
   ch->points.max_physical = 1000;
@@ -179,11 +179,11 @@ static void init_char_strings(char_data *ch)
   *(ch->player.physical_text.keywords) = LOWER(*ch->player.physical_text.keywords);
 
   delete [] ch->player.physical_text.name;
-  snprintf(temp, sizeof(temp), "an average %s %s", genders_decap[(int)GET_SEX(ch)], pc_race_types_decap[(int)GET_RACE(ch)]);
+  snprintf(temp, sizeof(temp), "an average %s %s", genders_decap[(int)GET_PRONOUNS(ch)], pc_race_types_decap[(int)GET_RACE(ch)]);
   ch->player.physical_text.name = str_dup(temp);
 
   delete [] ch->player.physical_text.room_desc;
-  snprintf(temp, sizeof(temp), "A %s %s voice", genders_decap[(int)GET_SEX(ch)], pc_race_types_decap[(int)GET_RACE(ch)]);
+  snprintf(temp, sizeof(temp), "A %s %s voice", genders_decap[(int)GET_PRONOUNS(ch)], pc_race_types_decap[(int)GET_RACE(ch)]);
   ch->player.physical_text.room_desc = str_dup(temp);
 
   delete [] ch->player.physical_text.look_desc;
@@ -359,7 +359,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   ch->player.char_name = str_dup(row[1]);
   strcpy(GET_PASSWD(ch), row[2]);
   GET_RACE(ch) = atoi(row[3]);
-  GET_SEX(ch) = atoi(row[4]);
+  GET_PRONOUNS(ch) = atoi(row[4]);
   GET_LEVEL(ch) = atoi(row[5]);
   AFF_FLAGS(ch).FromString(row[6]);
   PLR_FLAGS(ch).FromString(row[7]);
@@ -1218,7 +1218,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                pgroup_num,
                inveh,
                GET_LEVEL(player),
-               GET_SEX(player),
+               GET_PRONOUNS(player),
                GET_SYSTEM_POINTS(player),
                MIN(GET_CONGREGATION_BONUS(player), MAX_CONGREGATION_BONUS),
                prepare_quotes(buf1, GET_EMAIL(player), sizeof(buf1) / sizeof(char)),

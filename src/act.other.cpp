@@ -2748,11 +2748,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     break;
   case CEDIT_HEIGHT:
-    GET_HEIGHT(CH) = (int)gen_size(GET_RACE(CH), 1, atoi(arg), GET_SEX(CH));
+    GET_HEIGHT(CH) = (int)gen_size(GET_RACE(CH), 1, atoi(arg), GET_PRONOUNS(CH));
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_WEIGHT:
-    GET_WEIGHT(CH) = (int)gen_size(GET_RACE(CH), 0, atoi(arg), GET_SEX(CH));
+    GET_WEIGHT(CH) = (int)gen_size(GET_RACE(CH), 0, atoi(arg), GET_PRONOUNS(CH));
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_ALIAS:
@@ -3389,7 +3389,7 @@ ACMD(do_assense)
       strlcpy(buf, make_desc(ch, vict, buf2, 2, FALSE, sizeof(buf2)), sizeof(buf));
       if (success < 3) {
         if (vict->cyberware) {
-          if (GET_SEX(vict) != SEX_NEUTRAL || (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE)))
+          if (GET_PRONOUNS(vict) != PRONOUNS_NEUTRAL || (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE)))
             strlcat(buf, " has cyberware present and", sizeof(buf));
           else
             strlcat(buf, " have cyberware present and", sizeof(buf));

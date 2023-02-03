@@ -1459,19 +1459,19 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     return;
   }
 
-  switch (GET_SEX(k))
+  switch (GET_PRONOUNS(k))
   {
-  case SEX_NEUTRAL:
-    strlcpy(buf, "NEUTRAL-SEX", sizeof(buf));
+  case PRONOUNS_NEUTRAL:
+    strlcpy(buf, "NEUTRAL-PRONOUNS", sizeof(buf));
     break;
-  case SEX_MALE:
+  case PRONOUNS_MASCULINE:
     strlcpy(buf, "MALE", sizeof(buf));
     break;
-  case SEX_FEMALE:
+  case PRONOUNS_FEMININE:
     strlcpy(buf, "FEMALE", sizeof(buf));
     break;
   default:
-    strlcpy(buf, "ILLEGAL-SEX!!", sizeof(buf));
+    strlcpy(buf, "ILLEGAL-PRONOUNS!!", sizeof(buf));
     break;
   }
 
@@ -1657,19 +1657,19 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   extern struct attack_hit_type attack_hit_text[];
   extern int calc_karma(struct char_data *ch, struct char_data *vict);
 
-  switch (GET_SEX(k))
+  switch (GET_PRONOUNS(k))
   {
-  case SEX_NEUTRAL:
-    strlcpy(buf, "NEUTRAL-SEX", sizeof(buf));
+  case PRONOUNS_NEUTRAL:
+    strlcpy(buf, "NEUTRAL-PRONOUNS", sizeof(buf));
     break;
-  case SEX_MALE:
+  case PRONOUNS_MASCULINE:
     strlcpy(buf, "MALE", sizeof(buf));
     break;
-  case SEX_FEMALE:
+  case PRONOUNS_FEMININE:
     strlcpy(buf, "FEMALE", sizeof(buf));
     break;
   default:
-    strlcpy(buf, "ILLEGAL-SEX!!", sizeof(buf));
+    strlcpy(buf, "ILLEGAL-PRONOUNS!!", sizeof(buf));
     break;
   }
   send_to_char(ch, "^c%s^n ", pc_race_types[(int)GET_RACE(k)]);
@@ -4163,7 +4163,7 @@ ACMD(do_show)
       }
 
       snprintf(buf, sizeof(buf), "Player: %-12s (%s) [%2d]\r\n", GET_NAME(vict),
-              genders[(int) GET_SEX(vict)], GET_LEVEL(vict));
+              genders[(int) GET_PRONOUNS(vict)], GET_LEVEL(vict));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Y: %-8ld  Bal: %-8ld  Karma: %-8d\r\n",
               GET_NUYEN(vict), GET_BANK(vict), GET_KARMA(vict));
       strlcpy(birth, ctime(&vict->player.time.birth), sizeof(birth));
@@ -5047,11 +5047,11 @@ ACMD(do_set)
     break;
   case 15:
     if (!str_cmp(val_arg, "male"))
-      vict->player.sex = SEX_MALE;
+      vict->player.pronouns = PRONOUNS_MASCULINE;
     else if (!str_cmp(val_arg, "female"))
-      vict->player.sex = SEX_FEMALE;
+      vict->player.pronouns = PRONOUNS_FEMININE;
     else if (!str_cmp(val_arg, "neutral"))
-      vict->player.sex = SEX_NEUTRAL;
+      vict->player.pronouns = PRONOUNS_NEUTRAL;
     else {
       send_to_char("Must be 'male', 'female', or 'neutral'.\r\n", ch);
 
@@ -7234,13 +7234,13 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
 
     // Flag mobs with inappropriate genders.
     if (GET_RACE(mob) == RACE_ELEMENTAL || GET_RACE(mob) == RACE_SPIRIT || MOB_FLAGGED(mob, MOB_INANIMATE)) {
-      if (GET_SEX(mob) != SEX_NEUTRAL) {
+      if (GET_PRONOUNS(mob) != PRONOUNS_NEUTRAL) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is a spirit/elemental/machine with a gender (is this intentional?).\r\n");
         printed = TRUE;
         issues++;
       }
     } else {
-      if (GET_SEX(mob) == SEX_NEUTRAL) {
+      if (GET_PRONOUNS(mob) == PRONOUNS_NEUTRAL) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - neutral (default) gender (is this intentional?).\r\n");
         printed = TRUE;
         issues++;

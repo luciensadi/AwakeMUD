@@ -1402,7 +1402,7 @@ ACMD(do_medit)
     GET_ESS(MOB) = 600;
     MOB->real_abils.ess = 600;
     GET_POS(MOB) = POS_STANDING;
-    GET_SEX(MOB) = SEX_NEUTRAL;
+    GET_PRONOUNS(MOB) = PRONOUNS_NEUTRAL;
     MOB->mob_specials.attack_type = 300;
     d->edit_mode = MEDIT_CONFIRM_EDIT;
     set_new_mobile_unique_id(d->edit_mob);

@@ -99,8 +99,8 @@ void medit_disp_menu(struct descriptor_data *d)
                */
 
   send_to_char(CH, "h) Ammunition\r\n");
-  sprinttype(GET_SEX(MOB), genders, buf1, sizeof(buf1));
-  //  strcpy(buf1, genders[GET_SEX(d->edit_mob)]);
+  sprinttype(GET_PRONOUNS(MOB), genders, buf1, sizeof(buf1));
+  //  strcpy(buf1, genders[GET_PRONOUNS(d->edit_mob)]);
   send_to_char(CH, "i) Gender: %s%s%s, ", CCCYN(CH, C_CMP), buf1,
                CCNRM(CH, C_CMP));
   send_to_char(CH, "j) Weight: %s%d%s, ", CCCYN(CH, C_CMP), GET_WEIGHT(MOB),
@@ -1672,7 +1672,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       medit_disp_gender_menu(d);
     } else
       if (number != 0) // 0 = quit
-        GET_SEX(MOB) = (number - 1);
+        GET_PRONOUNS(MOB) = (number - 1);
     medit_disp_menu(d);
     break;
 
@@ -1747,7 +1747,7 @@ void write_mobs_to_disk(vnum_t zone_num)
               MOB_FLAGS(mob).ToString(),
               AFF_FLAGS(mob).ToString(),
               pc_race_types[(int)mob->player.race],
-              genders[(int)mob->player.sex]);
+              genders[(int)mob->player.pronouns]);
 
       if (mob->char_specials.position != POS_STANDING)
         fprintf(fp, "Position:\t%s\n",

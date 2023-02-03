@@ -1719,7 +1719,7 @@ void parse_mobile(File &in, long nr)
   AFF_FLAGS(mob).FromString(data.GetString("AffFlags", "0"));
 
   GET_RACE(mob) = data.LookupInt("Race", pc_race_types, RACE_HUMAN);
-  GET_SEX(mob) = data.LookupInt("Gender", genders, SEX_NEUTRAL);
+  GET_PRONOUNS(mob) = data.LookupInt("Gender", genders, PRONOUNS_NEUTRAL);
 
   GET_POS(mob) = data.LookupInt("Position", position_types, POS_STANDING);
   GET_DEFAULT_POS(mob) =

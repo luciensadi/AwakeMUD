@@ -176,9 +176,9 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
         strlcat(buf, " huge", buf_size);
     }
 
-    // Sex.
+    // Gender seeming.
     if (perception_successes > 2)
-      snprintf(ENDOF(buf), buf_size - strlen(buf), " %s", genders[(int)GET_SEX(i)]);
+      snprintf(ENDOF(buf), buf_size - strlen(buf), " %s", genders[(int)GET_PRONOUNS(i)]);
 
     // Race.
     if (perception_successes > 3)

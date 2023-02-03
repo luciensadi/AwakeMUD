@@ -563,7 +563,7 @@ Apartment::Apartment() :
 }
 
 Apartment::Apartment(ApartmentComplex *complex, const char *new_name, vnum_t key_vnum, vnum_t new_atrium, int new_lifestyle, idnum_t owner, time_t paid_until) :
-  lifestyle(new_lifestyle), atrium(new_atrium), key_vnum(key_vnum), owned_by_player(owner), paid_until(paid_until), complex(complex)
+  atrium(new_atrium), key_vnum(key_vnum), owned_by_player(owner), paid_until(paid_until), complex(complex), lifestyle(new_lifestyle)
 {
   char tmp[1000];
 
@@ -1089,10 +1089,32 @@ const char *Apartment::list_rooms__returns_new(bool indent) {
   return str_dup(result);
 }
 
-// TODO: This should return both our own lifestyle strings as well as the complex's lifestyle strings.
-const char *Apartment::get_lifestyle_strings() {
-  return "n/a";
+#define COPY_SOURCE_TO_RESULTS(source) { for (auto it : source) { results.push_back(str_dup(it)); } }
+std::vector<const char *> *Apartment::get_lifestyle_strings(struct char_data *ch) {
+  static std::vector<const char *> results = {};
+
+  // If we're a garage, we only return garage strings.
+  if (is_garage_lifestyle()) {
+    if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
+      COPY_SOURCE_TO_RESULTS(garage_strings_neutral);
+      COPY_SOURCE_TO_RESULTS(complex->garage_strings_neutral);
+    } else {
+      COPY_SOURCE_TO_RESULTS(garage_strings_gendered);
+      COPY_SOURCE_TO_RESULTS(complex->garage_strings_gendered);
+    }
+  } else {
+    if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
+      COPY_SOURCE_TO_RESULTS(garage_strings_neutral);
+      COPY_SOURCE_TO_RESULTS(complex->default_strings_neutral);
+    } else {
+      COPY_SOURCE_TO_RESULTS(default_strings_gendered);
+      COPY_SOURCE_TO_RESULTS(complex->default_strings_gendered);
+    }
+  }
+
+  return &results;
 }
+#undef COPY_SOURCE_TO_RESULTS
 
 void Apartment::mark_as_deleted() {
   bf::path deleted_apartments = complex->base_directory / DELETED_APARTMENTS_DIR_NAME;

@@ -34,9 +34,9 @@
 
 /* gender */
 
-#define SEX_NEUTRAL   0
-#define SEX_MALE      1
-#define SEX_FEMALE    2
+#define PRONOUNS_NEUTRAL    0
+#define PRONOUNS_MASCULINE  1
+#define PRONOUNS_FEMININE   2
 
 /* positions */
 
