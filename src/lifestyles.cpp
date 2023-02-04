@@ -51,9 +51,6 @@ STRETCH:
 
 */
 
-// TODO: Set newbie lifestyle on creation.
-// TODO: Default lifestyle on loading for chars that have none (can put this in the SQL statement to create the field)
-// TODO: Make sure lifestyle strings are handled in all places arrive strings are set/deleted
 // TODO: Add code to apartment / complex editing to allow specification of lifestyles (complex: any, apt: higher than complex, or "parent")
 // TODO: Add code to apartment / complex editing to allow specification of garage override status
 // TODO: Add code to apartment / complex editing to allow specification of custom lifestyle string(s)
@@ -61,7 +58,6 @@ STRETCH:
 // TODO: Add code to apartment / complex editing to clear rent on lifestyle change
 // TODO: Add code to apartment / complex editing to require rent is in band permitted by lifestyle
 // TODO: Add code to apartment / complex editing to not allow saving of an apartment with invalid rent
-// TODO: Add code to apartments to allow retrieving of all custom strings available at that apartment / complex
 // TODO: Add cedit parsing code to let players select from all available lifestyles
 // TODO: Fill out garage strings for Low, High, Luxury lifestyles in json file.
 

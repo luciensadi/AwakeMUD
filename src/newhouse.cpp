@@ -1089,14 +1089,19 @@ const char *Apartment::list_rooms__returns_new(bool indent) {
   return str_dup(result);
 }
 
+// Note that all the strings in the vector returned here are str_dup'd-- destroy them after use!
 #define COPY_SOURCE_TO_RESULTS(source) { for (auto it : source) { results.push_back(str_dup(it)); } }
-std::vector<const char *> *Apartment::get_lifestyle_strings(struct char_data *ch) {
+std::vector<const char *> *Apartment::get_custom_lifestyle_strings(struct char_data *ch) {
   static std::vector<const char *> results = {};
+
+  results.clear();
 
   // If we're a garage, we only return garage strings.
   if (is_garage_lifestyle()) {
     if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
+      // Copy in our apartment-level custom strings for this lifestyle.
       COPY_SOURCE_TO_RESULTS(garage_strings_neutral);
+      // And our complex-level custom ones.
       COPY_SOURCE_TO_RESULTS(complex->garage_strings_neutral);
     } else {
       COPY_SOURCE_TO_RESULTS(garage_strings_gendered);
@@ -1104,7 +1109,7 @@ std::vector<const char *> *Apartment::get_lifestyle_strings(struct char_data *ch
     }
   } else {
     if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
-      COPY_SOURCE_TO_RESULTS(garage_strings_neutral);
+      COPY_SOURCE_TO_RESULTS(default_strings_neutral);
       COPY_SOURCE_TO_RESULTS(complex->default_strings_neutral);
     } else {
       COPY_SOURCE_TO_RESULTS(default_strings_gendered);
