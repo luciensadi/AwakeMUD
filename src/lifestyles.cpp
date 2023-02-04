@@ -16,6 +16,7 @@ using nlohmann::json;
 #include "interpreter.hpp"
 #include "comm.hpp"
 #include "newhouse.hpp"
+#include "newdb.hpp"
 
 /* System design:
 
@@ -74,16 +75,60 @@ void cedit_lifestyle_parse(struct descriptor_data *d, char *arg) {
   // todo fill out
 }
 
-///// Display /////
+///// Setting / Getting /////
 
-const char *get_lifestyle_string(struct char_data *ch) {
-  if (!ch || IS_NPC(ch)) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received %s character to get_lifestyle_string()!", ch ? "NPC" : "NULL");
-    return "";
+void set_lifestyle_string(struct char_data *ch, const char *str) {
+  if (!ch) {
+    mudlog("SYSERR: Received NULL ch to set_lifestyle_string!", ch, LOG_SYSLOG, TRUE);
+    return;
   }
 
-  // TODO: Implement
-  return "<not yet implemented>";
+  if (!ch->player_specials) {
+    mudlog("SYSERR: Received to set_lifestyle_string a character that doesn't have player_specials!!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  ch->player_specials->saved.lifestyle_string = str_dup(str);
+
+  playerDB.SaveChar(ch);
+}
+
+const char *get_lifestyle_string(struct char_data *ch) {
+  if (!ch) {
+    mudlog("SYSERR: Received NULL ch to get_lifestyle_string!", ch, LOG_SYSLOG, TRUE);
+    return "<error gls-1>";
+  }
+
+  if (!ch->player_specials) {
+    mudlog("SYSERR: Received to get_lifestyle_string a character that doesn't have player_specials!!", ch, LOG_SYSLOG, TRUE);
+    return "<error gls-2>";
+  }
+
+  // If they don't have a string set at all, attempt to set it from the best apartment they have.
+  if (!ch->player_specials->saved.lifestyle_string) {
+    // TODO: Iterate over all apartments, finding the best one that belongs to them. "Best" is first by highest lifestyle, then by not-garage as a tiebreaker.
+    Apartment *best_apartment = NULL;
+
+    // Set their lifestyle string to a random one from their best apartment's set.
+    if (best_apartment) {
+      // TODO: Implement.
+    } else {
+      // If that failed, and they're new, give them the newbie / default one.
+      if (GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
+        return "The metallic scent of the Neophyte Guild clings to $m.";
+      }
+
+      // They have no house and are not a newbie. Assume they're renting at a coffin motel.
+      if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
+        return "They've got a smell about them-- eau de Coffin Motel?";
+      } else {
+        return "$e's got a smell about him-- eau de Coffin Motel?";
+      }
+    }
+  }
+
+  // Return their lifestyle string.
+  return ch->player_specials->saved.lifestyle_string;
 }
 
 ///// Saving / Loading - Lifestyles /////

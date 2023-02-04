@@ -4777,6 +4777,8 @@ void free_char(struct char_data * ch)
     DELETE_ARRAY_IF_EXTANT(ch->player_specials->obj_complete);
     DELETE_ARRAY_IF_EXTANT(ch->player_specials->mob_complete);
 
+    delete [] ch->player_specials->saved.lifestyle_string;
+
     DELETE_IF_EXTANT(ch->player_specials);
 
     if (IS_NPC(ch))
@@ -4797,7 +4799,7 @@ void free_char(struct char_data * ch)
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.leave);
     DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
     DELETE_ARRAY_IF_EXTANT(ch->player.email);
-    DELETE_ARRAY_IF_EXTANT(GET_SETTABLE_LIFESTYLE_STRING(ch));
+
 
     if(!IS_NPC(ch))
       DELETE_ARRAY_IF_EXTANT(ch->player.host);

@@ -479,8 +479,8 @@ $n growls.
 #
 
 grunt 0 0
-You squat down and let out a loud grunt.
-$n squats down, turns red, and grunts.
+You grunt.
+$n grunts.
 #
 
 hiccup 0 0
@@ -551,9 +551,9 @@ $n nudges $mself. Either $e has an itch or is completely insane.
 pat 0 5
 Pat who??
 #
-You pat $N on $S head.
-$n pats $N on $S head.
-$n pats you on your head.
+You reach out to pat $N on $S head.
+$n reaches out to pat $N on $S head.
+$n reaches out to pat you on your head.
 Let's try making an ounce of sense.
 You pat yourself on your head, very reassuring.
 $n pats $mself on the head.
