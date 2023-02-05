@@ -4711,6 +4711,7 @@ ACMD(do_score)
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//"
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
             "^b//^L^L//^b//^L//^b//^L//^b//^L//^b/\r\n", sizeof(buf));
+    strlcat(buf, "(See HELP SCORE for switches)\r\n", sizeof(buf));
 
     // Compose the remainder of the screenreader score.
 
