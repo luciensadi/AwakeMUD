@@ -372,6 +372,7 @@ ACMD_DECLARE(do_type);
 ACMD_DECLARE(do_unattach);
 ACMD_DECLARE(do_unban);
 ACMD_DECLARE(do_unbond);
+ACMD_DECLARE(do_unfollow);
 ACMD_DECLARE(do_ungroup);
 ACMD_DECLARE(do_unpack);
 ACMD_DECLARE(do_unsupported_command);
@@ -617,7 +618,7 @@ struct command_info cmd_info[] =
     { "flee"       , POS_FIGHTING, do_flee     , 0, 0, FALSE },
     { "flip"       , POS_SITTING , do_flip     , 0, 0, FALSE },
     { "focus"      , POS_RESTING , do_focus    , 0, 0, FALSE },
-    { "follow"     , POS_RESTING , do_follow   , 0, 0, FALSE },
+    { "follow"     , POS_LYING   , do_follow   , 0, 0, FALSE },
     { "freeze"     , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_FREEZE, FALSE },
     { "fuckups"    , POS_DEAD    , do_fuckups  , LVL_ADMIN, 0, FALSE },
 
@@ -918,6 +919,7 @@ struct command_info cmd_info[] =
     { "unsubscribe",POS_RESTING, do_subscribe, 0, SCMD_UNSUB, FALSE },
     { "untrain"    , POS_RESTING , do_train    , 1, SCMD_UNTRAIN, FALSE },
     { "unlearn"    , POS_DEAD    , do_forget   , 0, 0, FALSE },
+    { "unfollow"   , POS_LYING   , do_unfollow , 0, 0, FALSE },
     { "upgrade"    , POS_SITTING , do_upgrade  , 0 , 0, FALSE },
     { "uptime"     , POS_DEAD    , do_date     , 0, SCMD_UPTIME, TRUE },
     { "use"        , POS_SITTING , do_use      , 1, SCMD_USE, FALSE },
@@ -3369,6 +3371,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("ssw", "southwest");
   COMMAND_ALIAS("norht", "north"); // this one happened 18 times
   COMMAND_ALIAS("esat", "east"); // this one only 8
+  COMMAND_ALIAS("leve", "leave");
+  COMMAND_ALIAS("mw", "northwest");
 
   // Common typos and fuckups.
   COMMAND_ALIAS("receieve", "receive");
@@ -3383,25 +3387,40 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("leve", "leave");
   COMMAND_ALIAS("lisy", "list");
   COMMAND_ALIAS("swith", "switch");
+  COMMAND_ALIAS("swtich", "switch");
   COMMAND_ALIAS("drie", "drive");
   COMMAND_ALIAS("cyberwear", "cyberware");
   COMMAND_ALIAS("biowear", "bioware");
   COMMAND_ALIAS("lsit", "list");
   COMMAND_ALIAS("ist", "list");
+  COMMAND_ALIAS("lisr", "list");
+  COMMAND_ALIAS("lost", "list");
   COMMAND_ALIAS("ivn", "inventory");
+  COMMAND_ALIAS("inc", "inventory");
   COMMAND_ALIAS("hoslter", "holster");
   COMMAND_ALIAS("stnad", "stand");
   COMMAND_ALIAS("saerch", "search");
   COMMAND_ALIAS("serach", "search");
   COMMAND_ALIAS("searcg", "search");
+  COMMAND_ALIAS("searhc", "search");
+  COMMAND_ALIAS("searcch", "search");
   COMMAND_ALIAS("shot", "shoot");
   COMMAND_ALIAS("trian", "train");
   COMMAND_ALIAS("recpa", "recap");
   COMMAND_ALIAS("scoe", "score");
+  COMMAND_ALIAS("scire", "score");
+  COMMAND_ALIAS("scoer", "score");
+  COMMAND_ALIAS("sore", "score");
   COMMAND_ALIAS("hial", "hail");
   COMMAND_ALIAS("haul", "hail");
   COMMAND_ALIAS("clsoe", "close");
   COMMAND_ALIAS("swithc", "switch");
+  COMMAND_ALIAS("wl", "quicklook");
+  COMMAND_ALIAS("skils", "skills");
+  COMMAND_ALIAS("bind", "bond");
+  COMMAND_ALIAS("doante", "donate");
+  COMMAND_ALIAS("gird", "gridguide");
+  COMMAND_ALIAS("percieve", "perceive");
 
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
@@ -3487,6 +3506,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("make", "create");
   COMMAND_ALIAS("speak", "language");
   COMMAND_ALIAS("pose", "emote");
+  COMMAND_ALIAS("craft", "create");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
@@ -3512,6 +3532,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("scna", "scan");
   COMMAND_ALIAS("scab", "scan");
   COMMAND_ALIAS("sacn", "scan");
+  COMMAND_ALIAS("sscan", "scan");
+  COMMAND_ALIAS("csan", "scan");
 
   COMMAND_ALIAS("sya", "say");
 
