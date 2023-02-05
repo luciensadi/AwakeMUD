@@ -48,6 +48,7 @@ extern void find_and_draw_weapon(struct char_data *);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
+extern int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount);
 
 
 ACMD(do_assist)
@@ -1020,13 +1021,25 @@ ACMD(do_mode)
       return;
     }
 
-    if (*buf1)
-      GET_WEAPON_FULL_AUTO_COUNT(weapon) = MIN(10, MAX(3, atoi(buf1)));
-    else {
-      GET_WEAPON_FULL_AUTO_COUNT(weapon) = 10;
-      send_to_char("Using default FA value of 10. You can change this with 'mode FA X' where X is the number of bullets to fire.\r\n", ch);
-    }
     GET_WEAPON_FIREMODE(weapon) = MODE_FA;
+
+    if (!*buf1) {
+      // Set to standing recoil comp.
+      int calculated_value = check_recoil(ch, weapon, FALSE);
+      GET_WEAPON_FULL_AUTO_COUNT(weapon) = MIN(10, MAX(3, calculated_value));
+    } else {
+      int parsed_value = atoi(buf1);
+
+      if (parsed_value < 3) {
+        send_to_char("The minimum FA value is 3, so we'll use that. For a higher value, use ^WMODE FA <amount>^n.\r\n", ch);
+        parsed_value = 3;
+      } else if (parsed_value > 10) {
+        send_to_char("The maximum FA value is 10, so we'll use that.\r\n", ch);
+        parsed_value = 10;
+      }
+
+      GET_WEAPON_FULL_AUTO_COUNT(weapon) = parsed_value;
+    }
   }
   else {
     send_to_char("That's not a recognized mode.\r\n", ch);
