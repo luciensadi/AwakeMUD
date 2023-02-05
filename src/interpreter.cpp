@@ -135,6 +135,7 @@ ACMD_DECLARE(do_boost);
 ACMD_DECLARE(do_break);
 ACMD_DECLARE(do_broadcast);
 ACMD_DECLARE(do_build);
+ACMD_DECLARE(do_brief);
 ACMD_DECLARE(do_cast);
 ACMD_DECLARE(do_charge);
 ACMD_DECLARE(do_chipload);
@@ -525,6 +526,7 @@ struct command_info cmd_info[] =
     { "broadcast"  , POS_LYING   , do_broadcast, 0, 0, TRUE },
     { ","          , POS_LYING   , do_broadcast, 0, 0, TRUE },
     { "build"      , POS_RESTING , do_build    , 0, 0, FALSE },
+    { "brief"      , POS_RESTING , do_brief    , 0, 0, FALSE },
     { "bug"        , POS_DEAD    , do_gen_write, 0, SCMD_BUG, TRUE },
     { "bypass"     , POS_STANDING, do_gen_door , 0, SCMD_PICK, FALSE },
 
@@ -3381,8 +3383,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("recieve", "receive");
   COMMAND_ALIAS("dorp", "drop");
   COMMAND_ALIAS("weild", "wield");
-  COMMAND_ALIAS("unsheathe", "draw");
   COMMAND_ALIAS("prove", "probe");
+  COMMAND_ALIAS("prbe", "probe");
   COMMAND_ALIAS("chekc", "check");
   COMMAND_ALIAS("opend", "open");
   COMMAND_ALIAS("leaev", "leave");
@@ -3406,6 +3408,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("searcg", "search");
   COMMAND_ALIAS("searhc", "search");
   COMMAND_ALIAS("searcch", "search");
+  COMMAND_ALIAS("sarch", "search");
   COMMAND_ALIAS("shot", "shoot");
   COMMAND_ALIAS("trian", "train");
   COMMAND_ALIAS("recpa", "recap");
@@ -3423,6 +3426,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("doante", "donate");
   COMMAND_ALIAS("gird", "gridguide");
   COMMAND_ALIAS("percieve", "perceive");
+  COMMAND_ALIAS("sheaht", "sheathe");
 
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
@@ -3510,6 +3514,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("pose", "emote");
   COMMAND_ALIAS("craft", "create");
   COMMAND_ALIAS("description", "describe");
+  COMMAND_ALIAS("ride", "enter"); // for motorcycles
+  COMMAND_ALIAS("unsheathe", "draw");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
@@ -3537,12 +3543,15 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("sacn", "scan");
   COMMAND_ALIAS("sscan", "scan");
   COMMAND_ALIAS("csan", "scan");
+  COMMAND_ALIAS("scam", "scan");
 
   COMMAND_ALIAS("sya", "say");
 
   COMMAND_ALIAS("proeb", "probe");
 
   COMMAND_ALIAS("hep", "help");
+  COMMAND_ALIAS("hlep", "help");
+  COMMAND_ALIAS("hepl", "help");
 
   COMMAND_ALIAS("psuh", "push");
 

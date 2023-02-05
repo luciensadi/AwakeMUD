@@ -1148,7 +1148,7 @@ const char *tog_messages[][2] = {
                              "You will no longer autokill NPCs, and will instead stop when they're downed.\r\n"},
                             {"You will now see names auto-appended to voices.\r\n",
                              "You will no longer see names auto-appended to voices.\r\n"},
-                            {"You will see room descriptions whem moving.\r\n",
+                            {"You will see room descriptions when moving.\r\n",
                              "You will no longer see room descriptions when moving.\r\n"},
                             {"You will now see text highlights from characters.\r\n",
                              "You will no longer see text highlights from characters.\r\n"},
@@ -1462,6 +1462,11 @@ ACMD(do_toggle)
   }
 
   playerDB.SaveChar(ch);
+}
+
+ACMD(do_brief) {
+  char scratch[] = { "brief" };
+  do_toggle(ch, scratch, 0, 0);
 }
 
 ACMD(do_slowns)
