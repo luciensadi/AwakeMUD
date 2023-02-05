@@ -165,6 +165,7 @@ ACMD_DECLARE(do_decline);
 ACMD_DECLARE(do_decorate);
 ACMD_DECLARE(do_default);
 ACMD_DECLARE(do_delete);
+ACMD_DECLARE(do_describe);
 ACMD_DECLARE(do_destroy);
 ACMD_DECLARE(do_destring);
 ACMD_DECLARE(do_dice);
@@ -572,6 +573,7 @@ struct command_info cmd_info[] =
     { "deduct"     , POS_DEAD    , do_deduct   , LVL_FIXER, 0, FALSE },
     { "delete"     , POS_SLEEPING, do_delete   , 0, 0, FALSE },
     { "default"    , POS_RESTING , do_default  , 0, 0, FALSE },
+    { "describe"   , POS_LYING   , do_describe , 0, 0, FALSE },
 //  { "dennis"     , POS_SITTING, do_move     , 0, SCMD_DOWN, FALSE },
     { "design"     , POS_RESTING , do_design   , 0, 0, FALSE },
     { "destroy"    , POS_STANDING, do_destroy  , 0, 0, FALSE },
@@ -3507,6 +3509,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("speak", "language");
   COMMAND_ALIAS("pose", "emote");
   COMMAND_ALIAS("craft", "create");
+  COMMAND_ALIAS("description", "describe");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");

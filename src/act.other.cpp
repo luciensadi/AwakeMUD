@@ -2801,6 +2801,10 @@ void cedit_parse(struct descriptor_data *d, char *arg)
   }
 }
 
+ACMD(do_describe) {
+  send_to_char("That command doesn't exist here. If you're trying to change the appearance of an object, see ##^WHELP RESTRING^n. If you want to change your own appearance, see ^WHELP CUSTOMIZE^n, or just type ^WCUSTOMIZE PHYSICAL^n to get started.\r\n", ch);
+}
+
 ACMD(do_remember)
 {
   struct char_data *vict = NULL;
