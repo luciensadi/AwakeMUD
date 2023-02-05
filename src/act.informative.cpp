@@ -4744,11 +4744,21 @@ ACMD(do_inventory)
   send_to_char("You are carrying:\r\n", ch);
   list_obj_to_char(ch->carrying, ch, SHOW_MODE_IN_INVENTORY, TRUE, FALSE);
 
+  int worn_total = 0;
+  for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+    if (GET_EQ(ch, wear_idx))
+      worn_total++;
+  }
+  if (worn_total > 0)
+    send_to_char(ch, "\r\nYou're using %d piece%s of ##^Wequipment^n.\r\n", worn_total, worn_total == 1 ? "" : "s");
+  else
+    send_to_char("\r\nYou're not using any ##^Wequipment^n.\r\n", ch);
+
   float ammo_weight = get_bulletpants_weight(ch);
   if (ammo_weight > 0)
-    send_to_char(ch, "\r\nAdditionally, you have %.2f kilos of ammo in your pockets.\r\n", ammo_weight);
+    send_to_char(ch, "\r\nAdditionally, you have %.2f kilos of ammo in your ##^Wpockets^n.\r\n", ammo_weight);
   else
-    send_to_char("\r\nYou have no ammo in your pockets.\r\n", ch);
+    send_to_char("\r\nYou have no ammo in your ##^Wpockets^n.\r\n", ch);
 }
 
 ACMD(do_cyberware)
@@ -5766,7 +5776,8 @@ ACMD(do_gen_ps)
       page_string(ch->desc, news, 0);
       break;
     case SCMD_INFO:
-      page_string(ch->desc, info, 0);
+      // page_string(ch->desc, info, 0);
+      do_help(ch, argument, 0, 0);
       break;
     case SCMD_IMMLIST:
       send_to_char(immlist, ch);
