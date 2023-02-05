@@ -286,9 +286,9 @@ const char *get_char_representation_for_docwagon(struct char_data *ch, struct ch
   strlcpy(display_string, decapitalize_a_an(GET_NAME(ch)), sizeof(display_string));
 
   if ((mem_record = safe_found_mem(plr, ch)))
-    snprintf(ENDOF(display_string), sizeof(display_string) - strlen(display_string), "^n (%s)", CAP(mem_record->mem));
+    snprintf(ENDOF(display_string), sizeof(display_string) - strlen(display_string), "^n ( %s )", CAP(mem_record->mem));
   else if (IS_SENATOR(plr))
-    snprintf(ENDOF(display_string), sizeof(display_string) - strlen(display_string), "^n (%s)", GET_CHAR_NAME(ch));
+    snprintf(ENDOF(display_string), sizeof(display_string) - strlen(display_string), "^n ( %s )", GET_CHAR_NAME(ch));
 
   return display_string;
 }

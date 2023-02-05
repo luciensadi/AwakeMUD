@@ -1161,6 +1161,11 @@ bool Apartment::set_rent(long amount, struct char_data *ch) {
 }
 
 bool Apartment::set_lifestyle(int new_lifestyle, struct char_data *ch) {
+  if (new_lifestyle < -1 || new_lifestyle >= NUM_LIFESTYLES) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received invalid lifestyle %d to apartment.set_lifestyle!", new_lifestyle);
+    return FALSE;
+  }
+
   lifestyle = new_lifestyle;
 
   return TRUE;

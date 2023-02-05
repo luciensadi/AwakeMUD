@@ -61,7 +61,7 @@ class ApartmentComplex {
     std::vector<idnum_t> editors = {};
 
     // The lifestyle this complex conveys. Can be overridden at the apartment level.
-    int lifestyle = LIFESTYLE_SQUATTER;
+    int lifestyle = LIFESTYLE_LOW;
     // Lifestyle string options provided by this complex.
     std::vector<const char *> default_strings_neutral = {};
     std::vector<const char *> default_strings_gendered = {};
@@ -183,6 +183,7 @@ class Apartment {
     bool set_rent(long amount, struct char_data *ch=NULL);
     bool set_lifestyle(int new_lifestyle, struct char_data *ch=NULL);
     void set_base_directory(bf::path path) { base_directory = path; }
+    void set_garage_override(bool value) { garage_override = value; }
 
 
     std::vector<ApartmentRoom*> get_rooms() { return rooms; }

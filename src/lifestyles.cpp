@@ -17,6 +17,7 @@ using nlohmann::json;
 #include "comm.hpp"
 #include "newhouse.hpp"
 #include "newdb.hpp"
+#include "olc.hpp"
 
 /* System design:
 
@@ -41,25 +42,23 @@ using nlohmann::json;
   - IF THEY OWN AT LEAST ONE GARAGE: All default garage strings
   - IF THEY OWN AT LEAST ONE GARAGE: All complex/apartment garage strings for all garages they currently rent at
 
-- Lifestyle strings can be swapped out with available ones at any time with CUSTOMIZE LIFESTYLE.
+- Lifestyle strings can be swapped out with available ones at any time with CUSTOMIZE PHYSICAL.
   - The selected lifestyle string is saved to the DB in full.
   - To avoid inconsistencies with editing / changes to the lifestyle string list, when a character loads, compare their lifestyle string to their available ones: If it's not in the list, give them a random default from their highest lifestyle and notify them.
 
 STRETCH:
 - Lifestyle strings can be edited in-game by staff, tridlog style.
 - PCs can submit lifestyle strings for approval / inclusion in the lists.
+- Builders can set custom lifestyles on individual complexes / apartments.
 
 */
 
-// TODO: Add code to apartment / complex editing to allow specification of lifestyles (complex: any, apt: higher than complex, or "parent")
-// TODO: Add code to apartment / complex editing to allow specification of garage override status
-// TODO: Add code to apartment / complex editing to allow specification of custom lifestyle string(s)
-// TODO: Add code to apartment / complex editing to require complex lifestyle is set before rent
-// TODO: Add code to apartment / complex editing to clear rent on lifestyle change
-// TODO: Add code to apartment / complex editing to require rent is in band permitted by lifestyle
-// TODO: Add code to apartment / complex editing to not allow saving of an apartment with invalid rent
-// TODO: Add cedit parsing code to let players select from all available lifestyles
 // TODO: Fill out garage strings for Low, High, Luxury lifestyles in json file.
+// TODO: Poll playerbase to collect more lifestyle strings.
+
+// TODO: Add audit command to check for complexes / apartments with rents out of lifestyle bounds
+
+// TODO: Add cedit parsing code to let players select from all available lifestyles
 
 extern void _json_parse_from_file(bf::path path, json &target);
 
@@ -67,8 +66,83 @@ const bf::path global_lifestyles_file = bf::system_complete("lib") / "etc" / "li
 
 struct lifestyle_data lifestyles[NUM_LIFESTYLES];
 
+// Returns your best lifestyle. Changes to negative if it's a garage lifestyle.
+int _get_best_lifestyle(struct char_data *ch) {
+  int best_lifestyle_found = LIFESTYLE_SQUATTER;
+  bool best_lifestyle_is_garage = FALSE;
+  Apartment *best_apartment = NULL;
+
+  for (auto &complex : global_apartment_complexes) {
+    for (auto &apartment : complex->get_apartments()) {
+      if (apartment->has_owner_privs(ch)) {
+        int found_lifestyle = apartment->get_lifestyle();
+
+        // An apartment is a lifestyle garage if more than half of the rooms are garages.
+        bool found_lifestyle_is_garage = apartment->is_garage_lifestyle();
+
+        if (found_lifestyle > best_lifestyle_found || (found_lifestyle == best_lifestyle_found && !best_lifestyle_is_garage)) {
+          best_lifestyle_found = found_lifestyle;
+          best_lifestyle_is_garage = found_lifestyle_is_garage;
+          best_apartment = apartment;
+        }
+      }
+    }
+  }
+
+  if (best_apartment) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Using %s (%s / %s) as best apartment for %s.",
+                    best_apartment->get_full_name(),
+                    lifestyles[best_apartment->get_lifestyle()].name,
+                    best_apartment->is_garage_lifestyle() ? "garage" : "standard",
+                    GET_CHAR_NAME(ch));
+
+    if (best_lifestyle_is_garage)
+      best_lifestyle_found *= -1;
+
+    return best_lifestyle_found;
+  } else {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "No apartment found for %s. Using Squatter lifestyle.", GET_CHAR_NAME(ch));
+    return LIFESTYLE_SQUATTER;
+  }
+}
+
+std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
+  int best_lifestyle = _get_best_lifestyle(ch);
+  bool is_garage = FALSE;
+
+  if (best_lifestyle < 0) {
+    best_lifestyle *= -1;
+    is_garage = TRUE;
+  }
+
+  if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
+    if (is_garage) {
+      return &lifestyles[best_lifestyle].garage_strings_neutral;
+    } else {
+      return &lifestyles[best_lifestyle].default_strings_neutral;
+    }
+  } else {
+    if (is_garage) {
+      return &lifestyles[best_lifestyle].garage_strings_gendered;
+    } else {
+      return &lifestyles[best_lifestyle].default_strings_gendered;
+    }
+  }
+
+  mudlog("SYSERR: Reached end of _get_lifestyle_vector()!", ch, LOG_SYSLOG, TRUE);
+  return NULL;
+}
+
 void cedit_lifestyle_parse(struct descriptor_data *d, char *arg) {
-  // todo fill out
+  todo if this is a parse method then you're fucking up, this info should be display
+  struct char_data *ch = d->original ? d->original : d->character;
+
+  for (auto it : *_get_lifestyle_vector(ch)) {
+    send_to_char(CH, "%2d) %s\r\n", it);
+  }
+  send_to_char("\r\nMake a selection: ", CH);
+
+  d->edit_mode = CEDIT_LIFESTYLE_SELECT;
 }
 
 ///// Setting / Getting /////

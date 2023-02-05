@@ -48,10 +48,6 @@ void houseedit_show_apartment(struct char_data *ch, char *arg) {
   send_to_char(ch, "Lifestyle:      %s^n%s\r\n",
                lifestyles[apartment->get_lifestyle()].name,
                apartment->is_garage_lifestyle() ? (apartment->get_garage_override() ? " [forced garage]" : " [garage]") : "");
-  /* TODO
-  if (apartment->get_lifestyle_strings()) {
-    send_to_char(ch, " - String:      ^c%s^n\r\n", apartment->get_lifestyle_strings());
-  } */
   send_to_char(ch, "\r\n");
   send_to_char(ch, "Cost per month: ^c%ld^n nuyen^n\r\n", apartment->get_rent_cost());
   send_to_char(ch, "Key:            %s^n (^c%ld^n)^n\r\n", key_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[key_rnum]) : "^y(none)^n", key_vnum);
@@ -166,12 +162,6 @@ void houseedit_display_apartment_edit_menu(struct descriptor_data *d) {
   send_to_char(CH, "3) Escape To:      %s^n (^c%ld^n)\r\n", atrium_rnum >= 0 ? GET_ROOM_NAME(&world[atrium_rnum]) : "^y(none)^n", atrium_vnum);
   send_to_char(CH, "\r\n");
   send_to_char(CH, "4) Lifestyle:      %s^n%s\r\n", lifestyles[APT->get_lifestyle()].name, APT->is_garage_lifestyle() ? (APT->get_garage_override() ? " [forced garage]" : " [garage]") : "");
-  /* TODO
-  if (APT->get_lifestyle_strings()) {
-    send_to_char(CH, "                   ^c%s^n\r\n", APT->get_lifestyle_strings());
-  }
-  */
-
   send_to_char(CH, "5) Cost per month: ^c%ld^n nuyen^n\r\n", APT->get_rent_cost());
   send_to_char(CH, "6) Key:            %s^n (^c%ld^n)^n\r\n", key_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[key_rnum]) : "^y(none)^n", key_vnum);
   send_to_char(CH, "\r\n");
@@ -217,13 +207,13 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           d->edit_mode = HOUSEEDIT_APARTMENT_ATRIUM;
           break;
         case '4': // lifestyle
-          // EVENTUALTODO - present list of lifestyles, select from among them
-          // d->edit_mode = HOUSEEDIT_APARTMENT_LIFESTYLE;
-          send_to_char("Lifestyles not yet implemented.\r\n", CH);
-          houseedit_display_apartment_edit_menu(d);
+          for (int lifestyle_idx = 0; lifestyle_idx < NUM_LIFESTYLES; lifestyle_idx++)
+            send_to_char(CH, "%d) %s\r\n", lifestyle_idx, lifestyles[lifestyle_idx].name);
+          send_to_char("\r\nEnter the new lifestyle rating: ", CH);
+          d->edit_mode = HOUSEEDIT_APARTMENT_LIFESTYLE;
           break;
         case '5': // rent
-          send_to_char("Enter the new rent amount per month: ", CH);
+          send_to_char(CH, "Enter the new rent amount per month (%d minimum): ", lifestyles[APT->get_lifestyle()].monthly_cost_min);
           d->edit_mode = HOUSEEDIT_APARTMENT_RENT;
           break;
         case '6': // key vnum
@@ -246,6 +236,10 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
             }
 
             send_to_char("OK, saving changes.\r\n", CH);
+
+            if (APT->get_rent_cost() < lifestyles[APT->get_lifestyle()].monthly_cost_min) {
+              send_to_char(CH, "Rent is too low, so raising it to %ld.\r\n", lifestyles[APT->get_lifestyle()].monthly_cost_min);
+            }
 
             // It already existed: Overwrite.
             if (d->edit_apartment_original) {
@@ -437,16 +431,41 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
       houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_LIFESTYLE:
-      // We push all the error checking into the lifestyle setting function.
+      if (parsed_int != -1 && (parsed_int < COMPLEX->get_lifestyle() || parsed_int >= NUM_LIFESTYLES)) {
+        send_to_char(CH, "That's not a valid lifestyle. Enter a lifestyle number between %d and %d, or -1 to use the complex's lifestyle: ", COMPLEX->get_lifestyle(), NUM_LIFESTYLES - 1);
+        return;
+      }
+
       APT->set_lifestyle(parsed_int, CH);
+
+      send_to_char("Is this apartment primarily a garage? Y/N: ", CH);
+      d->edit_mode = HOUSEEDIT_APARTMENT_GARAGE_OVERRIDE;
+      break;
+    case HOUSEEDIT_APARTMENT_GARAGE_OVERRIDE:
+      if (*arg == 'y' || *arg == 'Y') {
+        APT->set_garage_override(TRUE);
+      } else if (*arg == 'n' || *arg == 'N') {
+        APT->set_garage_override(FALSE);
+      } else {
+        send_to_char("That's not a choice. Select Y or N: ", CH);
+        return;
+      }
       houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_RENT:
       // Don't allow changes to leased apartment rents.
-      if (APT->get_paid_until() > 0 && !access_level(CH, LVL_ADMIN)) {
-        send_to_char("You can't edit the rent amount for a leased apartment at your level.\r\n", CH);
-        houseedit_display_apartment_edit_menu(d);
-        return;
+      if (APT->get_paid_until() > 0) {
+        if (!access_level(CH, LVL_ADMIN)) {
+          send_to_char("You can't edit the rent amount for a leased apartment at your level.\r\n", CH);
+          houseedit_display_apartment_edit_menu(d);
+          return;
+        } else {
+          send_to_char("WARNING: Edited rent value for an apartment that's already in use! Player will not receive a refund or deduction.\r\n", CH);
+        }
+      }
+
+      if (parsed_long < lifestyles[APT->get_lifestyle()].monthly_cost_min) {
+        send_to_char(CH, "That's too low. Automatically raised to the minimum %s rent of %ld.", lifestyles[APT->get_lifestyle()].name, lifestyles[APT->get_lifestyle()].monthly_cost_min);
       }
 
       // We push all the remaining error checking into the rent setting function.
