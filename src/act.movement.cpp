@@ -2376,6 +2376,23 @@ ACMD(do_wake)
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
+void perform_unfollow(struct char_data *ch) {
+  if (IS_AFFECTED(ch, AFF_CHARM) && ch->master) {
+    act("You can't help but follow $n.", FALSE, ch->master, 0, ch, TO_VICT);
+    return;
+  }
+  if (ch->master) {
+    stop_follower(ch);
+    AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
+  } else {
+    send_to_char("You are already following yourself.\r\n", ch);
+  }
+}
+
+ACMD(do_unfollow) {
+  perform_unfollow(ch);
+}
+
 ACMD(do_follow)
 {
   struct char_data *leader;
@@ -2386,16 +2403,7 @@ ACMD(do_follow)
   one_argument(argument, buf);
 
   if (!*buf ) {
-    if (IS_AFFECTED(ch, AFF_CHARM) && ch->master) {
-      act("You can't help but follow $n.", FALSE, ch->master, 0, ch, TO_VICT);
-      return;
-    }
-    if (ch->master) {
-      stop_follower(ch);
-      AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
-    } else
-      send_to_char("You are already following yourself.\r\n", ch);
-    return;
+    perform_unfollow(ch);
   }
 
   if (*buf) {

@@ -2815,7 +2815,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                         && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE)
                     {
                       // Goggles limit you to 1/2 of the SL-1 rating.
-                      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s ^yis limited by your use of goggles^n and only provides ^c-1^n to target numbers (lower is better).",
+                      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s ^yis limited by your use of goggles^n and only provides ^c-1^n to attack difficulty (aka TN; lower is better).",
                                GET_ACCESSORY_RATING(accessory) == 2 ? "-II" : "",
                                gun_accessory_locations[mount_location]);
                     }
@@ -2829,12 +2829,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                   else if (cyberware_rating == 1) {
                     if (GET_ACCESSORY_RATING(accessory) == 1) {
                       // SL-1 and cyberware-1? Just fine.
-                      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink attached to the %s provides ^c%d^n to target numbers (lower is better).",
+                      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink attached to the %s provides ^c%d^n to attack difficulty (aka TN; lower is better).",
                                gun_accessory_locations[mount_location],
                                -SMARTLINK_I_MODIFIER);
                     } else {
                       // SL-2 and cyberware-1? Limited.
-                      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink-II attached to the %s ^yis limited by your cyberware^n and only provides ^c%d^n to target numbers (lower is better).",
+                      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink-II attached to the %s ^yis limited by your cyberware^n and only provides ^c%d^n to attack difficulty (aka TN; lower is better).",
                                gun_accessory_locations[mount_location],
                                -SMARTLINK_I_MODIFIER);
                     }
@@ -2842,7 +2842,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
 
                   // cyberware-2+
                   else {
-                    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s provides ^c%d^n to target numbers (lower is better).",
+                    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s provides ^c%d^n to attack difficulty (aka TN; lower is better).",
                             GET_ACCESSORY_RATING(accessory) < 2 ? "" : "-II", gun_accessory_locations[mount_location],
                             (GET_ACCESSORY_RATING(accessory) == 1 || GET_ACCESSORY_RATING(accessory) < 2) ? -SMARTLINK_I_MODIFIER : -SMARTLINK_II_MODIFIER);
                   }
@@ -2854,7 +2854,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                   if (has_laser_sight_already) {
                     strlcat(buf, "^Y\r\nIt has multiple laser sights attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
                   } else {
-                    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe laser sight attached to the %s provides ^c-1^n to target numbers (lower is better).",
+                    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe laser sight attached to the %s provides ^c-1^n to attack difficulty (aka TN; lower is better).",
                             gun_accessory_locations[mount_location]);
                   }
                   has_laser_sight_already = TRUE;
@@ -3366,7 +3366,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           strlcat(buf, "grants +1 Intelligence for a long time.", sizeof(buf));
           break;
         case DRUG_BLISS:
-          strlcat(buf, "is a tranquilizing narcotic that reduces Reaction by 1, adds +1 to all target numbers (lower is better), and grants pain resistance.", sizeof(buf));
+          strlcat(buf, "is a tranquilizing narcotic that reduces Reaction by 1, adds +1 to all roll difficulties (aka TN; lower is better), and grants pain resistance.", sizeof(buf));
           break;
         case DRUG_BURN:
           strlcat(buf, "is a synthahol intoxicant beverage.", sizeof(buf));
@@ -3381,7 +3381,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           strlcat(buf, "a highly-addictive coca-derived stimulant. It grants +1 Reaction and Charisma and minor pain resistance.", sizeof(buf));
           break;
         case DRUG_ZEN:
-          strlcat(buf, "a psychedelic hallucinogen. It causes -2 Reaction and +1 physical TNs, but also grants +1 Willpower.", sizeof(buf));
+          strlcat(buf, "a psychedelic hallucinogen. It causes -2 Reaction and +1 physical roll difficulties (aka TN; lower is better), but also grants +1 Willpower.", sizeof(buf));
           break;
         default:
           snprintf(buf, sizeof(buf), "SYSERR: Unknown drug type %d in probe!", GET_OBJ_DRUG_TYPE(j));
@@ -4714,6 +4714,7 @@ ACMD(do_score)
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//"
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
             "^b//^L^L//^b//^L//^b//^L//^b//^L//^b/\r\n", sizeof(buf));
+    strlcat(buf, "(See HELP SCORE for switches)\r\n", sizeof(buf));
 
     // Compose the remainder of the screenreader score.
 
@@ -4746,11 +4747,21 @@ ACMD(do_inventory)
   send_to_char("You are carrying:\r\n", ch);
   list_obj_to_char(ch->carrying, ch, SHOW_MODE_IN_INVENTORY, TRUE, FALSE);
 
+  int worn_total = 0;
+  for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+    if (GET_EQ(ch, wear_idx))
+      worn_total++;
+  }
+  if (worn_total > 0)
+    send_to_char(ch, "\r\nYou're using %d piece%s of ##^Wequipment^n.\r\n", worn_total, worn_total == 1 ? "" : "s");
+  else
+    send_to_char("\r\nYou're not using any ##^Wequipment^n.\r\n", ch);
+
   float ammo_weight = get_bulletpants_weight(ch);
   if (ammo_weight > 0)
-    send_to_char(ch, "\r\nAdditionally, you have %.2f kilos of ammo in your pockets.\r\n", ammo_weight);
+    send_to_char(ch, "\r\nAdditionally, you have %.2f kilos of ammo in your ##^Wpockets^n.\r\n", ammo_weight);
   else
-    send_to_char("\r\nYou have no ammo in your pockets.\r\n", ch);
+    send_to_char("\r\nYou have no ammo in your ##^Wpockets^n.\r\n", ch);
 }
 
 ACMD(do_cyberware)
@@ -5768,7 +5779,8 @@ ACMD(do_gen_ps)
       page_string(ch->desc, news, 0);
       break;
     case SCMD_INFO:
-      page_string(ch->desc, info, 0);
+      // page_string(ch->desc, info, 0);
+      do_help(ch, argument, 0, 0);
       break;
     case SCMD_IMMLIST:
       send_to_char(immlist, ch);
@@ -6833,7 +6845,7 @@ ACMD(do_status)
     strlcat(aff_buf, "  Ruthenium\r\n", sizeof(aff_buf));
   }
   if (IS_PERCEIVING(targ)) {
-    strlcat(aff_buf, "  Astral Perception (^yincreased TNs^n)\r\n", sizeof(aff_buf));
+    strlcat(aff_buf, "  Astral Perception (^yincreased roll difficulties^n)\r\n", sizeof(aff_buf));
   }
 
   for (int bit_idx = 0; bit_idx < NUM_SPIRIT_POWER_BITS; bit_idx++) {
@@ -6856,7 +6868,7 @@ ACMD(do_status)
           break;
         case DRUG_HYPER:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            strlcat(aff_buf, " (+4 spellcasting TNs, +1 other TNs, take 50% bonus damage)\r\n", sizeof(aff_buf));
+            strlcat(aff_buf, " (+4 spellcasting roll difficulty, +1 other roll difficulties, take 50% bonus damage)\r\n", sizeof(aff_buf));
           } else {
             strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
@@ -6865,7 +6877,7 @@ ACMD(do_status)
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
             strlcat(aff_buf, " (+2 qui, +1d6 initiative)\r\n", sizeof(aff_buf));
           } else {
-            strlcat(aff_buf, " (+1 spellcasting TNs, -1 qui)\r\n", sizeof(aff_buf));
+            strlcat(aff_buf, " (+1 spellcasting roll difficulty, -1 qui)\r\n", sizeof(aff_buf));
           }
           break;
         case DRUG_KAMIKAZE:
@@ -6884,7 +6896,7 @@ ACMD(do_status)
           break;
         case DRUG_BLISS:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            strlcat(aff_buf, " (-1 rea, +1 TNs, 3 levels of pain resistance)\r\n", sizeof(aff_buf));
+            strlcat(aff_buf, " (-1 rea, +1 roll difficulty, 3 levels of pain resistance)\r\n", sizeof(aff_buf));
           } else {
             strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }
@@ -6919,7 +6931,7 @@ ACMD(do_status)
           break;
         case DRUG_ZEN:
           if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_ONSET) {
-            strlcat(aff_buf, " (-2 rea, +1 TNs, +1 wil)\r\n", sizeof(aff_buf));
+            strlcat(aff_buf, " (-2 rea, +1 roll difficulty, +1 wil)\r\n", sizeof(aff_buf));
           } else {
             strlcat(aff_buf, "\r\n", sizeof(aff_buf));
           }

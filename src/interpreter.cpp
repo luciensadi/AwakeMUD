@@ -138,6 +138,7 @@ ACMD_DECLARE(do_boost);
 ACMD_DECLARE(do_break);
 ACMD_DECLARE(do_broadcast);
 ACMD_DECLARE(do_build);
+ACMD_DECLARE(do_brief);
 ACMD_DECLARE(do_cast);
 ACMD_DECLARE(do_charge);
 ACMD_DECLARE(do_chipload);
@@ -168,6 +169,7 @@ ACMD_DECLARE(do_decline);
 ACMD_DECLARE(do_decorate);
 ACMD_DECLARE(do_default);
 ACMD_DECLARE(do_delete);
+ACMD_DECLARE(do_describe);
 ACMD_DECLARE(do_destroy);
 ACMD_DECLARE(do_destring);
 ACMD_DECLARE(do_dice);
@@ -376,6 +378,7 @@ ACMD_DECLARE(do_type);
 ACMD_DECLARE(do_unattach);
 ACMD_DECLARE(do_unban);
 ACMD_DECLARE(do_unbond);
+ACMD_DECLARE(do_unfollow);
 ACMD_DECLARE(do_ungroup);
 ACMD_DECLARE(do_unpack);
 ACMD_DECLARE(do_unsupported_command);
@@ -527,6 +530,7 @@ struct command_info cmd_info[] =
     { "broadcast"  , POS_LYING   , do_broadcast, 0, 0, TRUE },
     { ","          , POS_LYING   , do_broadcast, 0, 0, TRUE },
     { "build"      , POS_RESTING , do_build    , 0, 0, FALSE },
+    { "brief"      , POS_RESTING , do_brief    , 0, 0, FALSE },
     { "bug"        , POS_DEAD    , do_gen_write, 0, SCMD_BUG, TRUE },
     { "bypass"     , POS_STANDING, do_gen_door , 0, SCMD_PICK, FALSE },
 
@@ -575,6 +579,7 @@ struct command_info cmd_info[] =
     { "deduct"     , POS_DEAD    , do_deduct   , LVL_FIXER, 0, FALSE },
     { "delete"     , POS_SLEEPING, do_delete   , 0, 0, FALSE },
     { "default"    , POS_RESTING , do_default  , 0, 0, FALSE },
+    { "describe"   , POS_LYING   , do_describe , 0, 0, FALSE },
 //  { "dennis"     , POS_SITTING, do_move     , 0, SCMD_DOWN, FALSE },
     { "design"     , POS_RESTING , do_design   , 0, 0, FALSE },
     { "destroy"    , POS_STANDING, do_destroy  , 0, 0, FALSE },
@@ -621,7 +626,7 @@ struct command_info cmd_info[] =
     { "flee"       , POS_FIGHTING, do_flee     , 0, 0, FALSE },
     { "flip"       , POS_SITTING , do_flip     , 0, 0, FALSE },
     { "focus"      , POS_RESTING , do_focus    , 0, 0, FALSE },
-    { "follow"     , POS_RESTING , do_follow   , 0, 0, FALSE },
+    { "follow"     , POS_LYING   , do_follow   , 0, 0, FALSE },
     { "freeze"     , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_FREEZE, FALSE },
     { "fuckups"    , POS_DEAD    , do_fuckups  , LVL_ADMIN, 0, FALSE },
 
@@ -923,6 +928,7 @@ struct command_info cmd_info[] =
     { "unsubscribe",POS_RESTING, do_subscribe, 0, SCMD_UNSUB, FALSE },
     { "untrain"    , POS_RESTING , do_train    , 1, SCMD_UNTRAIN, FALSE },
     { "unlearn"    , POS_DEAD    , do_forget   , 0, 0, FALSE },
+    { "unfollow"   , POS_LYING   , do_unfollow , 0, 0, FALSE },
     { "upgrade"    , POS_SITTING , do_upgrade  , 0 , 0, FALSE },
     { "uptime"     , POS_DEAD    , do_date     , 0, SCMD_UPTIME, TRUE },
     { "use"        , POS_SITTING , do_use      , 1, SCMD_USE, FALSE },
@@ -3379,39 +3385,58 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("ssw", "southwest");
   COMMAND_ALIAS("norht", "north"); // this one happened 18 times
   COMMAND_ALIAS("esat", "east"); // this one only 8
+  COMMAND_ALIAS("leve", "leave");
+  COMMAND_ALIAS("mw", "northwest");
 
   // Common typos and fuckups.
   COMMAND_ALIAS("receieve", "receive");
   COMMAND_ALIAS("recieve", "receive");
   COMMAND_ALIAS("dorp", "drop");
   COMMAND_ALIAS("weild", "wield");
-  COMMAND_ALIAS("unsheathe", "draw");
   COMMAND_ALIAS("prove", "probe");
+  COMMAND_ALIAS("prbe", "probe");
   COMMAND_ALIAS("chekc", "check");
   COMMAND_ALIAS("opend", "open");
   COMMAND_ALIAS("leaev", "leave");
   COMMAND_ALIAS("leve", "leave");
   COMMAND_ALIAS("lisy", "list");
   COMMAND_ALIAS("swith", "switch");
+  COMMAND_ALIAS("swtich", "switch");
   COMMAND_ALIAS("drie", "drive");
   COMMAND_ALIAS("cyberwear", "cyberware");
   COMMAND_ALIAS("biowear", "bioware");
   COMMAND_ALIAS("lsit", "list");
   COMMAND_ALIAS("ist", "list");
+  COMMAND_ALIAS("lisr", "list");
+  COMMAND_ALIAS("lost", "list");
   COMMAND_ALIAS("ivn", "inventory");
+  COMMAND_ALIAS("inc", "inventory");
   COMMAND_ALIAS("hoslter", "holster");
   COMMAND_ALIAS("stnad", "stand");
   COMMAND_ALIAS("saerch", "search");
   COMMAND_ALIAS("serach", "search");
   COMMAND_ALIAS("searcg", "search");
+  COMMAND_ALIAS("searhc", "search");
+  COMMAND_ALIAS("searcch", "search");
+  COMMAND_ALIAS("sarch", "search");
   COMMAND_ALIAS("shot", "shoot");
   COMMAND_ALIAS("trian", "train");
   COMMAND_ALIAS("recpa", "recap");
   COMMAND_ALIAS("scoe", "score");
+  COMMAND_ALIAS("scire", "score");
+  COMMAND_ALIAS("scoer", "score");
+  COMMAND_ALIAS("sore", "score");
   COMMAND_ALIAS("hial", "hail");
   COMMAND_ALIAS("haul", "hail");
   COMMAND_ALIAS("clsoe", "close");
   COMMAND_ALIAS("swithc", "switch");
+  COMMAND_ALIAS("wl", "quicklook");
+  COMMAND_ALIAS("skils", "skills");
+  COMMAND_ALIAS("bind", "bond");
+  COMMAND_ALIAS("doante", "donate");
+  COMMAND_ALIAS("gird", "gridguide");
+  COMMAND_ALIAS("percieve", "perceive");
+  COMMAND_ALIAS("sheaht", "sheathe");
 
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
@@ -3497,6 +3522,10 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("make", "create");
   COMMAND_ALIAS("speak", "language");
   COMMAND_ALIAS("pose", "emote");
+  COMMAND_ALIAS("craft", "create");
+  COMMAND_ALIAS("description", "describe");
+  COMMAND_ALIAS("ride", "enter"); // for motorcycles
+  COMMAND_ALIAS("unsheathe", "draw");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
@@ -3522,12 +3551,17 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("scna", "scan");
   COMMAND_ALIAS("scab", "scan");
   COMMAND_ALIAS("sacn", "scan");
+  COMMAND_ALIAS("sscan", "scan");
+  COMMAND_ALIAS("csan", "scan");
+  COMMAND_ALIAS("scam", "scan");
 
   COMMAND_ALIAS("sya", "say");
 
   COMMAND_ALIAS("proeb", "probe");
 
   COMMAND_ALIAS("hep", "help");
+  COMMAND_ALIAS("hlep", "help");
+  COMMAND_ALIAS("hepl", "help");
 
   COMMAND_ALIAS("psuh", "push");
 

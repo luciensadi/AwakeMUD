@@ -583,8 +583,8 @@ ACMD(do_spec_comm)
     }
 
     snprintf(buf, sizeof(buf), "You lean into %s^n and say in %s, \"%s%s%s\"",
-             skills[language].name,
              GET_VEH_NAME(veh),
+             skills[language].name,
              (PRF_FLAGGED(ch, PRF_NOHIGHLIGHT) || PRF_FLAGGED(ch, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
              capitalize(buf2),
              ispunct(get_final_character_from_string(buf2)) ? "" : ".");
