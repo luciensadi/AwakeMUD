@@ -53,10 +53,14 @@ STRETCH:
 
 */
 
+// TODO: Add DB entry for lifestyle string, ensure it's loaded / saved properly.
+
 // TODO: Fill out garage strings for Low, High, Luxury lifestyles in json file.
 // TODO: Poll playerbase to collect more lifestyle strings.
 
 // TODO: Add audit command to check for complexes / apartments with rents out of lifestyle bounds
+
+// TODO: Give a health regen bonus based on your lifestyle (better food, living conditions, etc)
 
 // TODO: Add cedit parsing code to let players select from all available lifestyles
 
@@ -64,7 +68,15 @@ extern void _json_parse_from_file(bf::path path, json &target);
 
 const bf::path global_lifestyles_file = bf::system_complete("lib") / "etc" / "lifestyles.json";
 
-struct lifestyle_data lifestyles[NUM_LIFESTYLES];
+// Set name and default rent values that are overridden on load.
+struct lifestyle_data lifestyles[] = {
+  {"Streets", {}, {}, {}, {}, 0},
+  {"Squatter", {}, {}, {}, {}, 500},
+  {"Low", {}, {}, {}, {}, 5000},
+  {"Middle", {}, {}, {}, {}, 30000},
+  {"High", {}, {}, {}, {}, 120000},
+  {"Luxury", {}, {}, {}, {}, 750000}
+};
 
 // Returns your best lifestyle. Changes to negative if it's a garage lifestyle.
 int _get_best_lifestyle(struct char_data *ch) {
@@ -106,7 +118,11 @@ int _get_best_lifestyle(struct char_data *ch) {
   }
 }
 
+#define APPEND_VECTOR_TO_RESULTS(vecname) { results.insert(results.end(), vecname.begin(), vecname.end() ); }
 std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
+  static std::vector<const char *> results = {};
+  results.clear();
+
   int best_lifestyle = _get_best_lifestyle(ch);
   bool is_garage = FALSE;
 
@@ -115,26 +131,29 @@ std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
     is_garage = TRUE;
   }
 
-  if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
-    if (is_garage) {
-      return &lifestyles[best_lifestyle].garage_strings_neutral;
+  mudlog_vfprintf(ch, LOG_SYSLOG, "Best lifestyle for %s is %s, which %s a garage.", GET_CHAR_NAME(ch), lifestyles[best_lifestyle].name, is_garage ? "is" : "is NOT");
+
+  for (int lifestyle_idx = best_lifestyle; lifestyle_idx >= LIFESTYLE_STREETS; lifestyle_idx--) {
+    if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
+      if (is_garage) {
+        APPEND_VECTOR_TO_RESULTS(lifestyles[best_lifestyle].garage_strings_neutral);
+      } else {
+        APPEND_VECTOR_TO_RESULTS(lifestyles[best_lifestyle].default_strings_neutral);
+      }
     } else {
-      return &lifestyles[best_lifestyle].default_strings_neutral;
-    }
-  } else {
-    if (is_garage) {
-      return &lifestyles[best_lifestyle].garage_strings_gendered;
-    } else {
-      return &lifestyles[best_lifestyle].default_strings_gendered;
+      if (is_garage) {
+        APPEND_VECTOR_TO_RESULTS(lifestyles[best_lifestyle].garage_strings_gendered);
+      } else {
+        APPEND_VECTOR_TO_RESULTS(lifestyles[best_lifestyle].default_strings_gendered);
+      }
     }
   }
 
-  mudlog("SYSERR: Reached end of _get_lifestyle_vector()!", ch, LOG_SYSLOG, TRUE);
-  return NULL;
+  return &results;
 }
+#undef APPEND_VECTOR_TO_RESULTS
 
-void cedit_lifestyle_parse(struct descriptor_data *d, char *arg) {
-  todo if this is a parse method then you're fucking up, this info should be display
+void cedit_lifestyle_menu(struct descriptor_data *d) {
   struct char_data *ch = d->original ? d->original : d->character;
 
   for (auto it : *_get_lifestyle_vector(ch)) {
@@ -142,7 +161,11 @@ void cedit_lifestyle_parse(struct descriptor_data *d, char *arg) {
   }
   send_to_char("\r\nMake a selection: ", CH);
 
-  d->edit_mode = CEDIT_LIFESTYLE_SELECT;
+  d->edit_mode = CEDIT_LIFESTYLE;
+}
+
+void cedit_lifestyle_parse(struct descriptor_data *d, char *arg) {
+  // TODO: Parse this out.
 }
 
 ///// Setting / Getting /////
@@ -211,7 +234,7 @@ const char *get_lifestyle_string(struct char_data *ch) {
   } \
 }
 
-void boot_lifestyles() {
+void load_lifestyles() {
   json lifestyle_info;
   _json_parse_from_file(global_lifestyles_file, lifestyle_info);
 

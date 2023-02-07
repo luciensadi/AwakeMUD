@@ -2745,6 +2745,9 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         d->edit_mode = CEDIT_WEIGHT;
       }
       break;
+    case '9':
+      cedit_lifestyle_menu(d);
+      break;
     default:
       cedit_disp_menu(d, 0);
       break;

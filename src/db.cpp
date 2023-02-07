@@ -626,6 +626,9 @@ void DBInit()
   log("Loading fight messages.");
   load_messages();
 
+  log("Loading lifestyles.");
+  load_lifestyles();
+
   log("Booting world.");
   boot_world();
 

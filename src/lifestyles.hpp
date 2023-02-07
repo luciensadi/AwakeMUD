@@ -11,12 +11,12 @@
 
 // The lifestyle data structure itself.
 struct lifestyle_data {
-  const char *name = NULL;
-  std::vector<const char *> default_strings_neutral = {};
-  std::vector<const char *> default_strings_gendered = {};
-  std::vector<const char *> garage_strings_neutral = {};
-  std::vector<const char *> garage_strings_gendered = {};
-  long monthly_cost_min = 0;
+  const char *name;
+  std::vector<const char *> default_strings_neutral;
+  std::vector<const char *> default_strings_gendered;
+  std::vector<const char *> garage_strings_neutral;
+  std::vector<const char *> garage_strings_gendered;
+  long monthly_cost_min;
 };
 
 // Variables:
@@ -27,5 +27,7 @@ extern const char *get_lifestyle_string(struct char_data *ch);
 extern void set_lifestyle_string(struct char_data *ch, const char *str);
 extern void determine_lifestyle(struct char_data *ch);
 extern void cedit_lifestyle_parse(struct descriptor_data *d, char *arg);
+extern void cedit_lifestyle_menu(struct descriptor_data *d);
+extern void load_lifestyles();
 
 #endif // __LIFESTYLES_HPP__
