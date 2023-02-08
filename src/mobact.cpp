@@ -373,7 +373,7 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
          "%s Who told you you could have %s here??",
          "%s I'm keeping %s for myself, just watch.",
          "%s %s?? What is that, your safety blanket? Shadows too scary for you?",
-/* 15 */ "%s If you think %s is going to make a difference here, you've got another think coming.",
+/* 15 */ "%s If you think %s is going to make a difference here, you've got another thin' coming.",
          "%s I'm gonna feed you %s!",
          "%s I'm gonna break %s off in your hoop!",
          "%s Frag off, and take %s with you!",
