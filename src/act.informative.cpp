@@ -4319,8 +4319,13 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
     strlcat(buf2, "You are thirsty.\r\n", sizeof(buf2));
 #endif
 
-  if (GET_COND(ch, COND_DRUNK) > 10)
-    strlcat(buf2, "You are intoxicated.\r\n", sizeof(buf2));
+  if (GET_COND(ch, COND_DRUNK) > 10) {
+    if (affected_by_spell(ch, SPELL_DETOX)) {
+      strlcat(buf2, "Your intoxication is suppressed by a detox spell.\r\n", sizeof(buf2));
+    } else {
+      strlcat(buf2, "You are intoxicated.\r\n", sizeof(buf2));
+    }
+  }
 
   if (AFF_FLAGGED(ch, AFF_SNEAK))
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are sneaking.\r\n");
@@ -4698,7 +4703,7 @@ ACMD(do_score)
                           (((float)GET_ESS(ch) / 100) + 3), "");
 #endif
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nMagic         ^w%2d (^W%2d^w)    ^g%-20s                     ^L/^b/\r\n",
-                          MAX(0, ((int)ch->real_abils.mag / 100)), ((int)GET_MAG(ch) / 100), GET_COND(ch, COND_DRUNK) > 10 ? "You are intoxicated." : "");
+                          MAX(0, ((int)ch->real_abils.mag / 100)), ((int)GET_MAG(ch) / 100), GET_COND(ch, COND_DRUNK) > 10 && !affected_by_spell(ch, SPELL_DETOX) ? "You are intoxicated." : "");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nReaction      ^w%2d (^W%2d^w)    ^c%-41s^b/^L/\r\n",
                           GET_REAL_REA(ch), GET_REA(ch), out_of_body_string);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nInitiative^w   [^W%2d^w+^W%d^rd6^n]    %-41s^L/^b/\r\n",

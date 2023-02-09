@@ -348,7 +348,7 @@ void gain_condition(struct char_data * ch, int condition, int value)
   if (GET_COND(ch, condition) == -1)    /* No change */
     return;
 
-  intoxicated = (GET_COND(ch, COND_DRUNK) > MIN_DRUNK);
+  intoxicated = (GET_COND(ch, COND_DRUNK) > MIN_DRUNK) && !affected_by_spell(ch, SPELL_DETOX);
 
   if (value == -1) {
     for (bio = ch->bioware; bio; bio = bio->next_content) {

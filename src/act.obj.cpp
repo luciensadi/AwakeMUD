@@ -2568,7 +2568,7 @@ ACMD(do_drink)
     send_to_char(ch, "You have to be holding %s to drink from it.\r\n", GET_OBJ_NAME(temp));
     return;
   }
-  if ((GET_COND(ch, COND_DRUNK) > MAX_DRUNK)) {
+  if (GET_COND(ch, COND_DRUNK) > MAX_DRUNK && !affected_by_spell(ch, SPELL_DETOX)) {
     send_to_char("You can't seem to get close enough to your mouth.\r\n", ch);
     act("$n tries to drink but misses $s mouth!", TRUE, ch, 0, 0, TO_ROOM);
     return;
@@ -2612,7 +2612,7 @@ ACMD(do_drink)
                  (int) ((int) drink_aff[GET_DRINKCON_LIQ_TYPE(temp)][COND_THIRST] * amount) / 4);
 #endif
 
-  if (GET_COND(ch, COND_DRUNK) > MAX_DRUNK)
+  if (GET_COND(ch, COND_DRUNK) > MAX_DRUNK && !affected_by_spell(ch, SPELL_DETOX))
     send_to_char("You feel drunk.\r\n", ch);
 
 #ifdef ENABLE_HUNGER
