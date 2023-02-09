@@ -2969,6 +2969,12 @@ bool mob_magic(struct char_data *ch)
   // Elementals don't get to cast: it breaks the game.
   if (!FIGHTING(ch) || IS_PC_CONJURED_ELEMENTAL(ch))
     return FALSE;
+
+  // If you're an NPC and your target is already down, chill out.
+  if (IS_NPC(ch) && GET_POS(FIGHTING(ch)) <= POS_MORTALLYW) {
+    return FALSE;
+  }
+
   char buf[MAX_STRING_LENGTH], rbuf[5000];
   int spell = 0, sub = 0, force, magic = GET_MAG(ch) / 100;
   if (GET_WIL(ch) <= 2)
