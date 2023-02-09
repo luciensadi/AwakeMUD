@@ -55,4 +55,6 @@ void House_save_all(void);
 void House_crashsave(vnum_t vnum);
 void House_list_guests(struct char_data *ch, struct house_control_rec *i, int quiet);
 
+extern struct house_control_rec *find_house(vnum_t vnum);
+
 #endif

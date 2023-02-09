@@ -42,6 +42,7 @@
 #include "config.hpp"
 #include "transport.hpp"
 #include "memory.hpp"
+#include "house.hpp"
 
 extern class objList ObjList;
 extern int modify_target(struct char_data *ch);
@@ -525,6 +526,16 @@ void check_idling(void)
         */
 
       if (!ch->desc && !PLR_FLAGGED(ch, PLR_PROJECT) && (ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION || PLR_FLAGGED(ch, PLR_IN_CHARGEN))) {
+        // If they're a PC in an apartment that they own, set their loadroom there.
+        if (!IS_NPC(ch)) {
+          struct room_data *in_room = get_ch_in_room(ch);
+          if (in_room && ROOM_FLAGGED(in_room, ROOM_HOUSE)) {
+            struct house_control_rec *house_record = find_house(GET_ROOM_VNUM(in_room));
+
+            if (house_record && house_record->owner == GET_IDNUM(ch))
+              GET_LOADROOM(ch) = GET_ROOM_VNUM(in_room);
+          }
+        }
         snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
         extract_char(ch);
