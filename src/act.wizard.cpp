@@ -3945,8 +3945,9 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed)
             zone_table[zone].name);
     for (i = 0; i < color; i++)
       strlcat(bufptr, " ", buf_size);
-    snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%sAge: %3d; Res: %3d (%1d); Top: %5d; Sec: %2d\r\n",
+    snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s (%20s) Age: %3d; Res: %3d (%1d); Top: %5d; Sec: %2d\r\n",
             zone_table[zone].connected ? "* " : "  ",
+            jurisdictions[zone_table[zone].jurisdiction],
             zone_table[zone].age, zone_table[zone].lifespan,
             zone_table[zone].reset_mode, zone_table[zone].top,
             zone_table[zone].security);
@@ -3977,7 +3978,7 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed)
             zone_table[zone].lifespan, zone_table[zone].reset_mode,
             zone_table[zone].top, rooms, mobs, objs, shops, vehs,
             zone_table[zone].security,
-            zone_table[zone].connected ? "Connected" : "In Progress", jurid[zone_table[zone].jurisdiction]);
+            zone_table[zone].connected ? "Connected" : "In Progress", jurisdictions[zone_table[zone].jurisdiction]);
 /* FIXCHE   for (i = 0; i < NUM_ZONE_EDITOR_IDS; i++) {
       const char *name = playerDB.GetNameV(zone_table[zone].editor_ids[i]);
 

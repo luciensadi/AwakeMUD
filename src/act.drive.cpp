@@ -1822,7 +1822,7 @@ ACMD(do_gridguide)
   struct veh_data *veh;
   struct grid_data *grid = NULL;
   long x = 0, y = 0;
-  vnum_t grid_vnum;
+  vnum_t grid_vnum, target_room = -1;
 
   RIG_VEH(ch, veh);
 
@@ -1889,12 +1889,51 @@ ACMD(do_gridguide)
       if (is_abbrev(arg, grid->name))
         break;
 
-    if (!grid) {
-      send_to_char("That destination doesn't seem to be in the system.\r\n", ch);
-      return;
+    if (grid) {
+      target_room = grid->room;
+    } else {
+      // Attempt to find the destination in the taxi registry for your room.
+      struct dest_data *destination_list = NULL;
+      const char *location_string = "";
+
+      switch (GET_JURISDICTION(veh->in_room)) {
+        case ZONE_SEATTLE:
+          destination_list = seattle_taxi_destinations;
+          location_string = " or the Seattle gridguide system";
+          break;
+        case ZONE_CARIB:
+          destination_list = caribbean_taxi_destinations;
+          location_string = " or the Caribbean gridguide system";
+          break;
+        case ZONE_PORTLAND:
+          destination_list = portland_taxi_destinations;
+          location_string = " or the Portland gridguide system";
+          break;
+        default:
+          destination_list = NULL;
+          break;
+      }
+
+      if (destination_list) {
+        for (int dest_idx = 0; *(destination_list[dest_idx].keyword) != '\n'; dest_idx++) {
+          // Skip invalid destinations.
+          if (!DEST_IS_VALID(dest_idx, destination_list))
+            continue;
+
+          if (str_str(arg, destination_list[dest_idx].keyword) || (*(destination_list[dest_idx].subkeyword) && str_str(arg, destination_list[dest_idx].subkeyword))) {
+            target_room = destination_list[dest_idx].vnum;
+            break;
+          }
+        }
+      }
+
+      if (target_room <= 0) {
+        send_to_char(ch, "'%s' doesn't seem to be in your favorites%s.\r\n", arg, location_string);
+        return;
+      }
     }
 
-    if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room), FALSE) < 0) {
+    if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(target_room), FALSE) < 0) {
       send_to_char("That destination is currently unavailable.\r\n", ch);
       return;
     }
@@ -1903,7 +1942,7 @@ ACMD(do_gridguide)
       load_vehicle_brain(veh);
     }
 
-    veh->dest = &world[real_room(grid->room)];
+    veh->dest = &world[real_room(target_room)];
     veh->cspeed = SPEED_CRUISING;
 
     if (AFF_FLAGGED(ch, AFF_PILOT))

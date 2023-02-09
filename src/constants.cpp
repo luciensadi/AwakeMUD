@@ -1886,7 +1886,7 @@ const char *veh_flag[] =
     "Ultrasound"
   };
 
-const char *jurid[] =
+const char *jurisdictions[] =
   {
     "Seattle",
     "Portland",

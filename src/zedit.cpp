@@ -206,7 +206,7 @@ void zedit_disp_data_menu(struct descriptor_data *d)
   send_to_char(CH, "^G3^Y) ^WLifespan: ^c%d^n\r\n", ZON->lifespan );
   send_to_char(CH, "^G4^Y) ^WReset mode: ^c%s^n\r\n", reset_mode[ZON->reset_mode] );
   send_to_char(CH, "^G5^Y) ^WSecurity level (1-%d): ^c%d^n\r\n", MAX_ZONE_SECURITY_RATING, ZON->security );
-  send_to_char(CH, "^G6^Y) ^WJurisdiction: ^c%s^n\r\n", jurid[ZON->jurisdiction]);
+  send_to_char(CH, "^G6^Y) ^WJurisdiction: ^c%s^n\r\n", jurisdictions[ZON->jurisdiction]);
   if (access_level(CH, LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS)) {
     send_to_char("^G7^Y) ^WEditors: ", CH);
     bool printed_something = FALSE;
@@ -731,7 +731,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
                    "2) Caribbean\r\n"
                    "3) Ocean\r\n"
                    "Enter jurisdiction: ", CH);
-      d->edit_mode = ZEDIT_JURID;
+      d->edit_mode = ZEDIT_JURISDICTIONS;
       break;
     case '7':
       if (!access_level(CH, LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS)) {
@@ -1236,7 +1236,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
         ZON->reset_mode = number - 1;
     zedit_disp_data_menu(d);
     break;
-  case ZEDIT_JURID:
+  case ZEDIT_JURISDICTIONS:
     number = atoi(arg);
     if (number < 0 || number > 3) {
       send_to_char("Invalid choice.  Please enter from 0 to 1.\r\n", CH);

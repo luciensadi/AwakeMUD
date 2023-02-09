@@ -2374,6 +2374,7 @@ enum {
 #define JURISDICTION_PORTLAND  1
 #define JURISDICTION_CARIBBEAN 2
 #define JURISDICTION_OCEAN     3
+#define NUM_JURISDICTIONS      4
 
 // Locations, to remove the magic numbers from the code.
 #define RM_CHARGEN_START_ROOM        60500
