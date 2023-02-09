@@ -1491,10 +1491,10 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         x--;
       REMOVE_FROM_LIST(sell, shop_table[shop_nr].selling, next);
     }
-
-
-  } else if (sell->type == SELL_STOCK || sell->type == SELL_BOUGHT)
+  } 
+  else if ((sell->type == SELL_STOCK || sell->type == SELL_BOUGHT) && sell->stock <= 10) {
     sell->stock++;
+  }
 
  extract_obj(obj);
  obj = NULL;
