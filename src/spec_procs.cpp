@@ -6312,33 +6312,63 @@ SPECIAL(mageskill_nightwing)
   if (time_info.hours == 9 && GET_SPARE1(mage))
     GET_SPARE1(mage) = 0;
   if (!cmd && time_info.hours == 8 && !GET_SPARE1(mage)) {
+    const char *location_string = NULL;
+
     int toroom = NOWHERE;
     // TODO: Make it so that she can't go to the room she's already in.
-    switch (number(0, 5)) {
-      case 0:
-        toroom = real_room(2496);
-        break;
-      case 1:
-        toroom = real_room(5405);
-        break;
-      case 2:
-        toroom = real_room(2347);
-        break;
-      case 3:
-        toroom = real_room(14379);
-        break;
-      case 4:
-        toroom = real_room(2590);
-        break;
-      case 5:
-        toroom = real_room(12502);
-        break;
+    int limiter = 10;
+    while ((limiter-- > 0) && (toroom <= 0 || &world[toroom] == mage->in_room)) {
+      switch (number(0, 5)) {
+        case 0:
+          toroom = real_room(2496);
+          location_string = "somewhere in Puyallup";
+          break;
+        case 1:
+          toroom = real_room(5405);
+          location_string = "somewhere in J'Valdi";
+          break;
+        case 2:
+          toroom = real_room(2347);
+          location_string = "somewhere in Puyallup";
+          break;
+        case 3:
+          toroom = real_room(14379);
+          location_string = "somewhere in Redmond";
+          break;
+        case 4:
+          toroom = real_room(2590);
+          location_string = "somewhere in Tacoma";
+          break;
+        case 5:
+          toroom = real_room(12502);
+          location_string = "somewhere in Seattle";
+          break;
+      }
     }
+    if (limiter <= 0)
+      mudlog("SYSERR: Could not find a new room for Fleeting Nightwing after 10 tries!", mage, LOG_SYSLOG, TRUE);
+
     act("$n suddenly dashes towards the nearest entrance.", FALSE, mage, 0, 0, TO_ROOM);
     char_from_room(mage);
     char_to_room(mage, &world[toroom]);
     act("$n dashes into the room, searching for the darkest corner.", FALSE, mage, 0, 0, TO_ROOM);
     GET_SPARE1(mage) = 1;
+
+    for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+      if (d->character 
+          && (GET_TRADITION(d->character) == TRAD_SHAMANIC || GET_TRADITION(d->character) == TRAD_HERMETIC) 
+          && GET_SKILL(d->character, SKILL_SORCERY) == 8
+          && SEES_ASTRAL(d->character)) {
+        for (struct obj_data *tmp_obj = d->character->carrying; tmp_obj; tmp_obj = tmp_obj->next_content) {
+          if (GET_OBJ_VNUM(tmp_obj) == OBJ_MAGE_LETTER) {
+            if (GET_OBJ_VAL(tmp_obj, 4) < 2) {
+              send_to_char(d->character, "Your astral senses tingle as an almost-ultrasonic cry emanates from %s.", location_string);
+            }
+            break;
+          }
+        }
+      }
+    }
     return TRUE;
   }
   if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
