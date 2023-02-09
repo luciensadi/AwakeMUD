@@ -2165,7 +2165,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     strcat(buf, " engines.");
     break;
   default:
-    snprintf(buf, sizeof(buf), "%s I don't know anything about that.", GET_CHAR_NAME(ch));
+    strcat(buf, " for sale.");
   }
   strcat(buf, " It weighs about ");
   if (GET_OBJ_WEIGHT(obj) < 1) {
