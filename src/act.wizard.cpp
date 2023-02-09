@@ -4076,6 +4076,7 @@ ACMD(do_show)
                { "weight",         LVL_PRESIDENT },
                { "ignore",         LVL_FIXER },
                { "vehicles",       LVL_ADMIN },
+               { "dirtyelves",     LVL_BUILDER },
                { "\n", 0 }
              };
 
@@ -4628,6 +4629,16 @@ ACMD(do_show)
       send_to_char(ch, "Total crap: %d\r\n", total_crap);
     }
     return;
+  case 27:
+    send_to_char("The following mobs have 'elven' in their name or keywords w/o 'elf' as well:\r\n", ch);
+    for (int idx = 0; idx <= top_of_mobt; idx++) {
+      if (str_str(GET_KEYWORDS(&mob_proto[idx]), "elven") || str_str(GET_NAME(&mob_proto[idx]), "elven")) {
+        if (!str_str(GET_KEYWORDS(&mob_proto[idx]), " elf") && !is_abbrev("elf", GET_KEYWORDS(&mob_proto[idx]))) {
+          send_to_char(ch, "  [%6ld] %s\r\n", GET_MOB_VNUM(&mob_proto[idx]), GET_NAME(&mob_proto[idx]));
+        }
+      }
+    }
+    break;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
     break;
