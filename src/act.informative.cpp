@@ -6176,9 +6176,9 @@ ACMD(do_consider)
     }
 
     int vict_expected_power;
-    struct obj_data *vict_weapon = GET_EQ(ch, WEAR_WIELD);
+    struct obj_data *vict_weapon = GET_EQ(victim, WEAR_WIELD);
     if (!vict_weapon || GET_OBJ_TYPE(vict_weapon) != ITEM_WEAPON)
-      vict_weapon = GET_EQ(ch, WEAR_HOLD);
+      vict_weapon = GET_EQ(victim, WEAR_HOLD);
     if (!vict_weapon || GET_OBJ_TYPE(vict_weapon) != ITEM_WEAPON)
       vict_weapon = NULL;
     if (vict_weapon) {
