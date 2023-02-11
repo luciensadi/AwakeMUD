@@ -972,6 +972,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_RITUAL_TICKS_LEFT(components)         (GET_OBJ_VAL((components), 5))
 #define GET_RITUAL_TICKS_AT_START(components)     (GET_OBJ_VAL((components), 6))
 
+#define GET_POCKET_SECRETARY_LOCKED_BY(obj)       (GET_OBJ_VAL((obj), 1))
+
 // ITEM_MAGIC_TOOL convenience defines
 #define GET_MAGIC_TOOL_TYPE(tool)                 (GET_OBJ_VAL((tool), 0))
 #define GET_MAGIC_TOOL_RATING(tool)               (GET_OBJ_VAL((tool), 1))

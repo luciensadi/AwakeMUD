@@ -4896,22 +4896,37 @@ SPECIAL(pocket_sec)
 {
   struct obj_data *sec = (struct obj_data *) me;
   extern void pocketsec_menu(struct descriptor_data *ch);
+
   if (*argument && cmd && CMD_IS("use")) {
+    if (!(sec->carried_by == ch || sec->worn_by == ch))
+      return FALSE;
+
     skip_spaces(&argument);
-    if ((isname(argument, sec->text.keywords) || isname(argument, sec->text.name) ||
-         (sec->restring && isname(argument, sec->restring))) && (sec->carried_by == ch || sec->worn_by == ch)) {
-      if (FIGHTING(ch))
+
+    if ((isname(argument, sec->text.keywords) || isname(argument, sec->text.name) || (sec->restring && isname(argument, sec->restring)))) {
+      if (FIGHTING(ch)) {
         send_to_char("You're too busy to do that.\r\n", ch);
-      else if (AFF_FLAGGED(ch, AFF_PILOT))
-        send_to_char("You are too scared of The Star adding demerit points to your license.\r\n", ch);
-      else if (GET_OBJ_VAL(sec, 1) > 0 && GET_OBJ_VAL(sec, 1) != GET_IDNUM(ch))
-        send_to_char("You don't know the password.\r\n", ch);
-      else {
-        act("$n starts looking at $p.", TRUE, ch, sec, 0, TO_ROOM);
-        STATE(ch->desc) = CON_POCKETSEC;
-        ch->desc->edit_obj = sec;
-        pocketsec_menu(ch->desc);
+        return FALSE;
       }
+      
+      if (AFF_FLAGGED(ch, AFF_PILOT)) {
+        send_to_char("You are too scared of The Star adding demerit points to your license.\r\n", ch);
+        return FALSE;
+      }
+      
+      if (GET_POCKET_SECRETARY_LOCKED_BY(sec) > 0 && GET_POCKET_SECRETARY_LOCKED_BY(sec) != GET_IDNUM(ch)) {
+        if (access_level(ch, LVL_ADMIN)) {
+          send_to_char("You use your staff powers to bypass the lock on it.\r\n", ch);
+        } else {
+          send_to_char("You don't know the password.\r\n", ch);
+          return FALSE;
+        } 
+      }
+      
+      act("$n starts looking at $p.", TRUE, ch, sec, 0, TO_ROOM);
+      STATE(ch->desc) = CON_POCKETSEC;
+      ch->desc->edit_obj = sec;
+      pocketsec_menu(ch->desc);
       return TRUE;
     }
   }
@@ -7419,6 +7434,106 @@ SPECIAL(graffiti_cleaner) {
   }
 
   return TRUE;
+}
+
+SPECIAL(pocsec_unlocker) {
+  struct char_data *fixer = (struct char_data *) me;
+  struct obj_data *obj, *credstick = NULL;
+  int cost = 0;
+
+  if (cmd && !CMD_IS("repair") && !CMD_IS("list") && !CMD_IS("receive"))
+    return FALSE;
+
+  if (cmd && (!AWAKE(fixer) || IS_NPC(ch)))
+    return FALSE;
+  if (cmd && !CAN_SEE(fixer, ch)) {
+    do_say(fixer, "I don't deal with someone I can't see!", 0, 0);
+    return TRUE;
+  }
+
+  if (CMD_IS("unlock")) {
+    skip_spaces(&argument);
+
+    if (!*argument) {
+      send_to_char("Syntax: UNLOCK [cash|credstick] <item>\r\n", ch);
+      return TRUE;
+    }
+
+    // Pick the first argument, but don't re-index *argument yet.
+    any_one_arg(argument, buf);
+
+    bool force_cash = !str_cmp(buf, "cash");
+    bool force_credstick = !str_cmp(buf, "credstick");
+
+    if (force_cash || force_credstick) {
+      // Actually re-index *argument now.
+      argument = any_one_arg(argument, buf);
+      skip_spaces(&argument);
+
+      // Yes, we need this twice, because we stripped out an argument item in cash/credstick checking.
+      if (!*argument) {
+        send_to_char("Syntax: REPAIR [cash|credstick] <item>\r\n", ch);
+        return TRUE;
+      }
+    }
+
+    // We default to cash-- only look for a credstick if they used the credstick command.
+    if (force_credstick && !(credstick = get_first_credstick(ch, "credstick"))) {
+      send_to_char("You don't have an activated credstick.\r\n", ch);
+      return TRUE;
+    }
+
+    if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
+      send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
+      return TRUE;
+    }
+    
+    if (GET_OBJ_SPEC(obj) != pocket_sec) {
+      snprintf(arg, sizeof(arg), "%s I can only unlock pocket secretaries.", GET_CHAR_NAME(ch));
+      do_say(fixer, arg, 0, SCMD_SAYTO);
+      return TRUE;
+    }
+
+    if (!GET_POCKET_SECRETARY_LOCKED_BY(obj)) {
+      snprintf(arg, sizeof(arg), "%s %s isn't locked...", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
+      do_say(fixer, arg, 0, SCMD_SAYTO);
+      return TRUE;
+    }
+
+    cost = 2000;
+
+    if ((credstick ? GET_ITEM_MONEY_VALUE(credstick) : GET_NUYEN(ch)) < cost) {
+      snprintf(arg, sizeof(arg), "%s You can't afford to unlock that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);
+      do_say(fixer, arg, 0, SCMD_SAYTO);
+      return TRUE;
+    }
+
+    if (credstick)
+      lose_nuyen_from_credstick(ch, credstick, cost, NUYEN_OUTFLOW_REPAIRS);
+    else
+      lose_nuyen(ch, cost, NUYEN_OUTFLOW_REPAIRS);
+
+    // Perform the unlock.
+    act("$n plugs $p into a machine and taps a few keys. After a long moment, $e unplugs it and hands it back to $N. \"^cAll set. Thanks for stopping by The Shack!^n\"",
+        FALSE, fixer, obj, ch, TO_ROOM);
+    act("You plug $p into a machine and tap a few keys. After a long moment, you unplug it and hand it back to $N. \"^cAll set. Thanks for stopping by The Shack!^n\"",
+        FALSE, fixer, obj, ch, TO_CHAR);
+
+    if (GET_POCKET_SECRETARY_LOCKED_BY(obj) != GET_IDNUM(ch) 
+        && does_player_exist(GET_POCKET_SECRETARY_LOCKED_BY(obj))
+        && !(GET_OBJ_VNUM(obj) == 39865 && GET_POCKET_SECRETARY_LOCKED_BY(obj) == TYPE_KIT))  /* Don't logspam re: bug where blue crystal screens got locked */
+    {
+      const char *owner_name = get_player_name(GET_POCKET_SECRETARY_LOCKED_BY(obj));
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s unlocked stolen(?) pocket secretary belonging to %s (%ld).", GET_CHAR_NAME(ch), owner_name, GET_POCKET_SECRETARY_LOCKED_BY(obj));
+      delete [] owner_name;
+    }
+
+    GET_POCKET_SECRETARY_LOCKED_BY(obj) = 0;
+
+    return TRUE;
+  }
+  
+  return FALSE;
 }
 
 /*
