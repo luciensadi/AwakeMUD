@@ -2472,14 +2472,18 @@ bool docwagon(struct char_data *ch)
     if (successes > 0)
     {
       send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
-      send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
+      if (GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
+        send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L at any time for pickup.]\r\n");
+      } else {
+        send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
+      }
       PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
     } else {
       send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
     }
   }
 
-  if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
+  if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT) && GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD) {
     int num_responders = alert_player_doctors_of_mort(ch, docwagon);
     if (num_responders > 0) {
       send_to_char(ch, "^L[OOC: There %s ^w%d^L player%s online who may be able to respond to your DocWagon call.]^n\r\n",
