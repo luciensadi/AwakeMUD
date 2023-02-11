@@ -980,7 +980,7 @@ ACMD(do_teleport)
 #define VNUM_LOOKUP(name) {                                            \
   if (is_abbrev(buf, #name)) {                                         \
     extern int vnum_ ## name(char *searchname, struct char_data * ch); \
-    if (!vnum_ ## name(buf2, ch)) {                                    \
+    if (!vnum_ ## name(remainder, ch)) {                               \
       send_to_char("No " #name "s by that name.\r\n", ch);             \
     }                                                                  \
     return;                                                            \
@@ -990,7 +990,7 @@ ACMD(do_teleport)
 #define VNUM_USAGE_STRING "Usage: vnum { obj | mob | veh | room | host | ic | quest } <name>\r\n"
 ACMD(do_vnum)
 {
-  two_arguments(argument, buf, buf2);
+  char *remainder = one_argument(argument, buf);
 
   if (!*buf || !*buf2) {
     send_to_char(VNUM_USAGE_STRING, ch);

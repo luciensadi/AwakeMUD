@@ -4681,8 +4681,8 @@ ACMD(do_cleanup)
     }
   }
 
-  send_to_char(ch, "You spend a few moments scrubbing away %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
-  act("$n spends a few moments scrubbing away $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
+  send_to_char(ch, "You spend a few moments scrubbing away at %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
+  act("$n spends a few moments scrubbing away at $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
 
   WAIT_STATE(ch, 3 RL_SEC);
 
