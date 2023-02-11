@@ -251,7 +251,7 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
     if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character))
       continue;
 
-    if (isname(argument, get_char_representation_for_docwagon(d->character, ch))) {
+    if (isname(argument, get_char_representation_for_docwagon(ch, d->character))) {
       send_to_char("You squint at the tiny screen on your DocWagon receiver to try and get a better idea of where your client is...\r\n", ch);
 
       // Show them the room name, room description, and exits.
