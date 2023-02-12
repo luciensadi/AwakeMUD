@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <vector>
+#include <algorithm>
 
 #include "structs.hpp"
 #include "awake.hpp"
