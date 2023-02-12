@@ -102,6 +102,7 @@ extern void turn_hardcore_off_for_character(struct char_data *ch);
 extern void DBFinalize();
 
 extern void display_characters_ignore_entries(struct char_data *viewer, struct char_data *target);
+extern int count_objects(struct obj_data *obj);
 
 ACMD_DECLARE(do_goto);
 
@@ -2259,22 +2260,53 @@ ACMD(do_wizload)
 
 ACMD(do_vfind) {
   struct room_data *room;
-  idnum_t idnum;
+  idnum_t idnum = 0;
   int idx = 1;
 
   skip_spaces(&argument);
 
-  if ((idnum = get_player_id(argument)) <= 0) {
-    send_to_char(ch, "Didn't find anyone named '%s'. Syntax: vfind <character name>\r\n", argument);
+  if (!str_cmp(argument, "all")) {
+    send_to_char("OK, listing ALL player-owned vehicles.\r\n", ch);
+  } else if ((idnum = get_player_id(argument)) <= 0) {
+    send_to_char(ch, "Didn't find anyone named '%s'. Syntax: ^WVFIND <character name>^n, or ^WVFIND ALL^n\r\n", argument);
     return;
   }
 
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     room = get_veh_in_room(veh);
 
-    if (veh->owner == idnum) {
-      send_to_char(ch, "%2d) %s^n (%ld): %s^n (%ld)",
-                   idx++,
+    if (veh->owner && (!idnum || veh->owner == idnum)) {
+      int count = 0;
+      char color_char = 'c';
+
+      for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content) {
+        count += count_objects(obj);
+      }
+
+      if (count < 25)
+        color_char = 'c';
+      else if (count < 50)
+        color_char = 'y';
+      else if (count < 75)
+        color_char = 'Y';
+      else if (count < 100)
+        color_char = 'o';
+      else if (count < 150)
+        color_char = 'O';
+      else if (count < 200)
+        color_char = 'r';
+      else
+        color_char = 'R';
+
+      send_to_char(ch, "%2d) ^%c%3d^n items", idx++, color_char, count);
+
+      if (!idnum) {
+        const char *plr_name = get_player_name(veh->owner);
+        send_to_char(ch, ", owned by ^c%s^n", plr_name);
+        delete [] plr_name;
+      }
+
+      send_to_char(ch, ": ^W%s^n (%ld) ^cin^n %s^n (%ld)",
                    GET_VEH_NAME(veh),
                    GET_VEH_VNUM(veh),
                    GET_ROOM_NAME(room),
@@ -2282,7 +2314,7 @@ ACMD(do_vfind) {
                   );
 
       if (veh->in_veh) {
-        send_to_char(ch, " inside %s^n (%ld)",
+        send_to_char(ch, " ^cinside^n %s^n (%ld)",
                      GET_VEH_NAME(veh->in_veh),
                      GET_VEH_VNUM(veh->in_veh)
                     );
