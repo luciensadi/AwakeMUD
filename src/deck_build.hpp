@@ -1,6 +1,8 @@
 #ifndef __deck_build_hpp__
 #define __deck_build_hpp__
 
+#include <vector>
+
 extern std::vector<struct obj_data *> global_in_progress_deck_parts;
 
 extern void set_cyberdeck_part_pointer(struct obj_data *part, struct obj_data *deck);
