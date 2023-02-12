@@ -282,7 +282,7 @@ void copyover_recover()
   char name[MAX_NAME_LENGTH + 1];
   int desc;
 
-  log ("Copyover recovery initiated");
+  log ("COPYOVERLOG: Copyover recovery initiated.");
 
   fp = fopen (COPYOVER_FILE, "r");
 
@@ -302,8 +302,11 @@ void copyover_recover()
     if (desc == -1)
       break;
 
+    log_vfprintf("COPYOVERLOG: Restoring %s (%s)...", name, host);
+
     /* Write something, and check if it goes error-free */
     if (write_to_descriptor (desc, "\n\rJust kidding. Restoring from copyover...\n\r") < 0) {
+       log_vfprintf("COPYOVERLOG:  - Failed to write to %s (%s), closing their descriptor.", name, host);
       close (desc); /* nope */
       continue;
     }
@@ -337,6 +340,7 @@ void copyover_recover()
     if (!fOld) /* Player file not found?! */
     {
       write_to_descriptor (desc, "\n\rSomehow, your character was lost in the copyover. Sorry.\n\r");
+      log_vfprintf("COPYOVERLOG:  - Playerfile for %s (%s) was not found??", name, host);
       close_socket (d);
     } else /* ok! */
     {
@@ -378,14 +382,15 @@ void copyover_recover()
   fclose (fp);
 
   // Regenerate everyone's subscriber lists.
+  log("COPYOVERLOG: Regenerating subscriber lists.");
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
-    if (!veh->sub)
+    if (!veh->sub || !veh->owner)
       continue;
 
     for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
       struct char_data *operative_character = (d->original && GET_IDNUM(d->original) == veh->owner ? d->original : d->character);
       
-      if (GET_IDNUM(operative_character) != veh->owner)
+      if (operative_character && GET_IDNUM(operative_character) != veh->owner)
         continue;
 
       struct veh_data *f = NULL;
@@ -408,12 +413,13 @@ void copyover_recover()
   }
 
   // Force all player characters to look now that everyone's properly loaded.
-  struct char_data *plr = character_list;
-  while (plr) {
-    if (!IS_NPC(plr) && !PRF_FLAGGED(plr, PRF_SCREENREADER))
-      look_at_room(plr, 0, 0);
-    plr = plr->next;
+  log("COPYOVERLOG: Forcing look.");
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    if (d->character && !PRF_FLAGGED(d->character, PRF_SCREENREADER))
+      look_at_room(d->character, 0, 0);
   }
+
+  log("COPYOVERLOG: Copyover complete. Have a nice day!");
 }
 
 

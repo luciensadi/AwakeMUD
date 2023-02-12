@@ -307,7 +307,7 @@ ACMD(do_copyover)
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
 
-  log("Disconnecting players.");
+  log("COPYOVERLOG: Disconnecting players.");
   /* For each playing descriptor, save its state */
   for (d = descriptor_list; d ; d = d_next) {
     och = d->character;
@@ -343,22 +343,22 @@ ACMD(do_copyover)
   fprintf (fp, "-1\n");
   fclose (fp);
 
-  log("Saving houses.");
+  log("COPYOVERLOG: Saving houses.");
   House_save_all();
   /* Close reserve and other always-open files and release other resources */
 
   // Save vehicles.
-  log("Saving vehicles.");
+  log("COPYOVERLOG: Saving vehicles.");
   save_vehicles(TRUE);
 
   // Save shop orders.
-  log("Saving shop orders.");
+  log("COPYOVERLOG: Saving shop orders.");
   save_shop_orders();
 
-  log("Closing database connection.");
+  log("COPYOVERLOG: Closing database connection.");
   DBFinalize();
 
-  log("Clearing alarm handler.");
+  log("COPYOVERLOG: Clearing alarm handler.");
   signal(SIGALRM, SIG_IGN);
 
   snprintf(buf, sizeof(buf), "%d", port);
