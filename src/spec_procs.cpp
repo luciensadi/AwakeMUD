@@ -7441,7 +7441,7 @@ SPECIAL(pocsec_unlocker) {
   struct obj_data *obj, *credstick = NULL;
   int cost = 0;
 
-  if (cmd && !CMD_IS("repair") && !CMD_IS("list") && !CMD_IS("receive"))
+  if (cmd && !CMD_IS("unlock"))
     return FALSE;
 
   if (cmd && (!AWAKE(fixer) || IS_NPC(ch)))
