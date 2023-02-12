@@ -93,6 +93,7 @@ extern SPECIAL(marksmanship_second);
 extern SPECIAL(marksmanship_third);
 extern SPECIAL(marksmanship_fourth);
 extern SPECIAL(marksmanship_master);
+extern SPECIAL(pocsec_unlocker);
 extern SPECIAL(bank);
 extern WSPEC(monowhip);
 
@@ -1278,6 +1279,13 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    already_printed ? " also" : "",
                    HASHAVE(i),
                    SHOULD_SEE_TIPS(ch) ? " Use the ^YLIST^y command to see them." : "");
+          already_printed = TRUE;
+        }
+        if (MOB_HAS_SPEC(i, pocsec_unlocker)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can unlock pocket secretaries.%s^n\r\n",
+                   HSSH(i),
+                   already_printed ? " also" : "",
+                   SHOULD_SEE_TIPS(ch) ? " Use the ^YUNLOCK^y command to begin." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, landlord_spec)) {
