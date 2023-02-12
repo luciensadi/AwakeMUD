@@ -947,6 +947,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           switch(GET_OBJ_VAL(obj, 0)) {
           case PART_MPCP:
               GET_PART_RATING(obj) = GET_CYBERDECK_MPCP(cont);
+              GET_PART_TARGET_MPCP(obj) = GET_CYBERDECK_MPCP(cont);
               // fall through
           case PART_ACTIVE:
           case PART_BOD:
@@ -1049,19 +1050,25 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
     perform_get_from_container(ch, obj, cont, mode);
     return;
   }
-  if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cont, 0) == TYPE_COOKER)
-  {
-    if (GET_OBJ_VAL(cont, 9))
-      send_to_char(ch, "You cannot remove a chip while it is being encoded.\r\n");
-    else {
-      obj = cont->contains;
-      if (!obj)
-        send_to_char(ch, "There's no chip in there to take out.\r\n");
-      else
-        perform_get_from_container(ch, obj, cont, mode);
+
+  if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cont) == TYPE_COOKER) {
+    struct obj_data *chip = cont->contains;
+
+    FAILURE_CASE(!chip, "There's no chip in there to take out.");
+
+    if (GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cont)) {
+      FAILURE_CASE(!access_level(ch, LVL_ADMIN), "You cannot remove a chip while it is being encoded.");
+
+      // Staff override.
+      send_to_char("You use your staff powers to forcibly complete the encoding process.\r\n", ch);
+      GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cont) = 0;
+      GET_OBJ_TIMER(chip) = 1;
     }
+
+    perform_get_from_container(ch, chip, cont, mode);
     return;
   }
+
   if ( IS_OBJ_STAT(cont, ITEM_EXTRA_CORPSE) )
   {
     if (GET_OBJ_VAL(cont, 4) == 1 && GET_OBJ_VAL(cont, 5) != GET_IDNUM(ch)

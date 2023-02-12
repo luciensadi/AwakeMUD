@@ -48,6 +48,7 @@
 #include "newmail.hpp"
 #include "transport.hpp"
 #include "vision_overhaul.hpp"
+#include "deck_build.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -1408,7 +1409,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^n\r\nCyberdeck Part Pointer: ^c%s^n", GET_OBJ_NAME(j->cyberdeck_part_pointer));
     } else {
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Non-part %s (%ld) has a cyberdeck part pointer set!! Clearing it.", GET_OBJ_NAME(j), GET_OBJ_VNUM(j));
-      j->cyberdeck_part_pointer = NULL;
+      clear_cyberdeck_part_pointer(j);
     }
   }
   strlcat(buf, "^n\r\n", sizeof(buf));

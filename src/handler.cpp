@@ -29,6 +29,7 @@
 #include "newmagic.hpp"
 #include "playergroups.hpp"
 #include "config.hpp"
+#include "deck_build.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
@@ -2320,12 +2321,10 @@ void extract_obj(struct obj_data * obj)
 
   // Iterate through all cyberdeck parts and designs in the game, making sure none point to this.
   if ((GET_OBJ_TYPE(obj) == ITEM_CYBERDECK || GET_OBJ_TYPE(obj) == ITEM_CUSTOM_DECK)) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "DBL contains %d items.", ObjList.NumItems());
-    // TODO: It's very likely that you will need to create a whole new list just for cyberdeck parts to avoid iterating over the whole game.
-    if (IS_SET(GET_CYBERDECK_FLAGS(obj), DECK_FLAG_HAS_PART_POINTING_TO_IT)) {
-      ObjList.DisassociateCyberdeckPartsFromDeck(obj);
-      REMOVE_BIT(GET_CYBERDECK_FLAGS(obj), DECK_FLAG_HAS_PART_POINTING_TO_IT);
-    }
+    clear_all_cyberdeck_part_pointers_pointing_to_deck(obj);
+  } else if (GET_OBJ_TYPE(obj) == ITEM_PART) {
+    // We're a part, make sure we're not pointing to a deck.
+    clear_cyberdeck_part_pointer(obj);
   }
 
   if (obj->in_room)

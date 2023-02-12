@@ -15,6 +15,7 @@
 #include "bullet_pants.hpp"
 #include "dblist.hpp"
 #include "memory.hpp"
+#include "deck_build.hpp"
 
 #define CH d->character
 #define PEDIT_MENU 0
@@ -490,6 +491,17 @@ ACMD(do_copy)
 #undef CH
 #define CH desc->character
 #define PROG GET_BUILDING(CH)
+
+void clear_cyberdeck_part_build_data(struct obj_data *part) {
+  GET_PART_BUILDER_IDNUM(part) = 0;
+  GET_PART_BUILD_SUCCESSES_ROLLED(part) = 0;
+  GET_PART_BUILD_TICKS_REMAINING(part) = 0;
+  GET_PART_INITIAL_BUILD_TICKS(part) = 0;
+
+  if (part->cyberdeck_part_pointer)
+    clear_cyberdeck_part_pointer(part);
+}
+
 void update_buildrepair(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -500,55 +512,79 @@ void update_buildrepair(void)
       if (AFF_FLAGGED(desc->character, AFF_PART_BUILD)) {
         if (--GET_PART_BUILD_TICKS_REMAINING(PROG) < 1) {
           if (GET_PART_BUILD_SUCCESSES_ROLLED(PROG) < 0) {
-            send_to_char(desc->character, "You realise you have botched installing %s.\r\n", GET_OBJ_NAME(PROG));
+            send_to_char(desc->character, "A crucial component snaps in your hands-- you botched the installation and accidentally destroyed %s!\r\n", GET_OBJ_NAME(PROG));
+            clear_cyberdeck_part_build_data(PROG);
             extract_obj(PROG);
+          } else if (GET_PART_BUILD_SUCCESSES_ROLLED(PROG) == 0) {
+            send_to_char(CH, "You realize you messed up somewhere in the process of installing %s, but at least it's salvagable.\r\n", GET_OBJ_NAME(PROG));
+            clear_cyberdeck_part_build_data(PROG);
           } else {
+            // Sanity checks.
+            if (!PROG->cyberdeck_part_pointer) {
+              send_to_char("Something went wrong-- your part has no deck to install into! Aborting.\r\n", CH);
+              mudlog("SYSERR: Cyberdeck part has nothing to install into!!", CH, LOG_SYSLOG, TRUE);
+              clear_cyberdeck_part_build_data(PROG);
+              STOP_WORKING(desc->character);
+              continue;
+            }
+            if (!part_is_compatible_with_deck(PROG, PROG->cyberdeck_part_pointer, CH)) {
+              send_to_char("With that realization, you stop working on %s.\r\n", CH);
+              mudlog_vfprintf(CH, LOG_CHEATLOG, "SYSERR: Hit incompatible part in deckbuilding process in final sanity check. Look into this for potential exploiting. (%s failed to install %s-%d '%s^n' (target MPCP %d) into MPCP-%d '%s^n')",
+                              GET_CHAR_NAME(CH), 
+                              parts[GET_PART_TYPE(PROG)].name, 
+                              GET_PART_RATING(PROG), 
+                              GET_OBJ_NAME(PROG),
+                              GET_PART_TARGET_MPCP(PROG),
+                              GET_CYBERDECK_MPCP(PROG->cyberdeck_part_pointer),
+                              GET_OBJ_NAME(PROG->cyberdeck_part_pointer));
+              clear_cyberdeck_part_pointer(PROG);
+              GET_PART_BUILDER_IDNUM(PROG) = 0; // Wipe out the builder's idnum so it can be worked on by someone else.
+              STOP_WORKING(CH);
+              continue;
+            }
             send_to_char(desc->character, "You finish installing %s into %s.\r\n", GET_OBJ_NAME(PROG), GET_OBJ_NAME(PROG->cyberdeck_part_pointer));
             CH->char_specials.timer = 0;
             obj_from_char(PROG);
             obj_to_obj(PROG, PROG->cyberdeck_part_pointer);
-            GET_PART_BUILDER_IDNUM(PROG) = 0; // Wipe out the builder's idnum so it can be worked on by someone else.
+            clear_cyberdeck_part_build_data(PROG);
 
-            // Clear tracking data. This also stops all other in-progress parts on the same deck-- but that shouldn't be a big issue.
-            REMOVE_BIT(GET_CYBERDECK_FLAGS(PROG->cyberdeck_part_pointer), DECK_FLAG_HAS_PART_POINTING_TO_IT);
-            ObjList.DisassociateCyberdeckPartsFromDeck(PROG->cyberdeck_part_pointer);
-            PROG->cyberdeck_part_pointer = NULL;
+            GET_PART_BUILD_TICKS_REMAINING(PROG) = -2;
+            if (!GET_CYBERDECK_MPCP(PROG->in_obj))
+              GET_CYBERDECK_MPCP(PROG->in_obj) = GET_PART_TARGET_MPCP(PROG);
 
-            GET_OBJ_VAL(PROG, 4) = -2;
-            if (!GET_OBJ_VAL(PROG->in_obj, 0))
-              GET_OBJ_VAL(PROG->in_obj, 0) = GET_OBJ_VAL(PROG, 2);
-            switch(GET_OBJ_VAL(PROG, 0)) {
-            case PART_MPCP:
-              GET_OBJ_VAL(PROG->in_obj, 0) = GET_OBJ_VAL(PROG, 2);
-              break;
-            case PART_RESPONSE:
-              GET_OBJ_VAL(PROG->in_obj, 6) = GET_OBJ_VAL(PROG, 1);
-              break;
-            case PART_IO:
-              GET_OBJ_VAL(PROG->in_obj, 4) = GET_OBJ_VAL(PROG, 1);
-              break;
-            case PART_STORAGE:
-              GET_OBJ_VAL(PROG->in_obj, 3) = GET_OBJ_VAL(PROG, 1);
-              break;
-            case PART_HARDENING:
-              GET_OBJ_VAL(PROG->in_obj, 1) = GET_OBJ_VAL(PROG, 1);
-              break;
-            case PART_ACTIVE:
-              GET_OBJ_VAL(PROG->in_obj, 2) = GET_OBJ_VAL(PROG, 1);
-              break;
+            switch(GET_PART_TYPE(PROG)) {
+              case PART_MPCP:
+                GET_CYBERDECK_MPCP(PROG->in_obj) = GET_PART_RATING(PROG);
+                break;
+              case PART_RESPONSE:
+                GET_CYBERDECK_RESPONSE_INCREASE(PROG->in_obj) = GET_PART_RATING(PROG);
+                break;
+              case PART_IO:
+                GET_CYBERDECK_IO_RATING(PROG->in_obj) = GET_PART_RATING(PROG);
+                break;
+              case PART_STORAGE:
+                GET_CYBERDECK_TOTAL_STORAGE(PROG->in_obj) = GET_PART_RATING(PROG);
+                break;
+              case PART_HARDENING:
+                GET_CYBERDECK_HARDENING(PROG->in_obj) = GET_PART_RATING(PROG);
+                break;
+              case PART_ACTIVE:
+                GET_CYBERDECK_ACTIVE_MEMORY(PROG->in_obj) = GET_PART_RATING(PROG);
+                break;
             }
             if (GET_OBJ_VAL(PROG->in_obj, 9)) {
               int x = 0;
               for (struct obj_data *obj = PROG->in_obj->contains; obj; obj = obj->next_content)
                 if (GET_OBJ_TYPE(obj) == ITEM_PART)
-                  switch (GET_OBJ_VAL(obj, 0)) {
-                  case PART_MPCP:
-                  case PART_ACTIVE:
-                  case PART_BOD:
-                  case PART_SENSOR:
-                  case PART_IO:
-                  case PART_MATRIX_INTERFACE:
-                    x++;
+                  switch (GET_PART_TYPE(PROG)) {
+                    case PART_MPCP:
+                    case PART_ACTIVE:
+                    case PART_BOD:
+                    case PART_SENSOR:
+                    case PART_IO:
+                    case PART_MATRIX_INTERFACE:
+                      x++;
+                      break;
                   }
               if (x == 6)
                 GET_CYBERDECK_IS_INCOMPLETE(PROG->in_obj) = 0;

@@ -6,6 +6,7 @@
 #include <time.h>
 #include <string.h>
 #include <mysql/mysql.h>
+#include <vector>
 
 #include "telnet.hpp"
 
@@ -23,6 +24,7 @@
 #include "constants.hpp"
 #include "db.hpp"
 #include "newdb.hpp"
+#include "deck_build.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
@@ -125,6 +127,17 @@ ACMD(do_debug) {
 
   if (strn_cmp(arg1, "pgroups", strlen(arg1)) == 0) {
     do_pgroup_debug(ch, rest_of_argument);
+    return;
+  }
+
+  if (strn_cmp(arg1, "partslist", strlen(arg1)) == 0) {
+    if (!global_in_progress_deck_parts.size()) {
+      send_to_char("The global parts list is empty.\r\n", ch);
+      return;
+    }
+    for (auto it : global_in_progress_deck_parts) {
+      send_to_char(ch, "%50s^n   %s^n\r\n", GET_OBJ_NAME(it), it->cyberdeck_part_pointer ? GET_OBJ_NAME(it->cyberdeck_part_pointer) : "^r<null>");
+    }
     return;
   }
 

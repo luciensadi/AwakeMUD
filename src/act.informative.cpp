@@ -3873,7 +3873,7 @@ ACMD(do_examine)
           strlcpy(buf, "Custom Components:\r\n", sizeof(buf));
           for (struct obj_data *soft = tmp_object->contains; soft; soft = soft->next_content)
             if (GET_OBJ_TYPE(soft) == ITEM_PART)
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-40s  Type: %-24s  Rating: %d\r\n",
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-40s  Type: ^c%-24s^n (rating ^c%d^n)\r\n",
                       GET_OBJ_NAME(soft),
                       parts[GET_OBJ_VAL(soft, 0)].name,
                       GET_PART_RATING(soft));
