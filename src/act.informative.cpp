@@ -6806,7 +6806,7 @@ ACMD(do_status)
       targ = ch;
   }
 
-  char aff_buf[1000] = { '\0' };
+  char aff_buf[10000] = { '\0' };
 
   if (ch == targ)
     send_to_char("You are affected by:\r\n", ch);
