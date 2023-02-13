@@ -4914,7 +4914,7 @@ SPECIAL(pocket_sec)
         return FALSE;
       }
       
-      if (GET_POCKET_SECRETARY_LOCKED_BY(sec) > 0 && GET_POCKET_SECRETARY_LOCKED_BY(sec) != GET_IDNUM(ch)) {
+      if (GET_POCKET_SECRETARY_LOCKED_BY(sec) > 0 && GET_POCKET_SECRETARY_LOCKED_BY(sec) != GET_IDNUM(ch) && !(GET_POCKET_SECRETARY_LOCKED_BY(sec) == 1 && GET_OBJ_VNUM(sec) == 39865)) {
         if (access_level(ch, LVL_ADMIN)) {
           send_to_char("You use your staff powers to bypass the lock on it.\r\n", ch);
         } else {
