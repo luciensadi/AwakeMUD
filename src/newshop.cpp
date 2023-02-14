@@ -520,7 +520,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     }
 
     for (check = recipient->bioware; check; check = check->next_content) {
-      if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(ware))) {
+      if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(ware)) && !is_custom_ware(ware)) {
         if (IS_NPC(installer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have that installed.");
           do_say(installer, buf, cmd_say, SCMD_SAYTO);
@@ -529,7 +529,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
         }
         return FALSE;
       }
-      if (GET_BIOWARE_TYPE(check) == GET_BIOWARE_TYPE(ware)) {
+      if (GET_BIOWARE_TYPE(check) == GET_BIOWARE_TYPE(ware) && !is_custom_ware(ware)) {
         if (IS_NPC(installer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have %s installed, and it's too similar to %s for them to work together.", GET_OBJ_NAME(check), GET_OBJ_NAME(ware));
           do_say(installer, buf, cmd_say, SCMD_SAYTO);
