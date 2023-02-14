@@ -1010,9 +1010,10 @@ ACMD(do_build) {
       success = secondary_successes;
   }
 
+  GET_PART_BUILD_SUCCESSES_ROLLED(obj) = success;
+
   // If we failed, shorten the build time.
   if (success < 1) {
-      GET_PART_BUILD_SUCCESSES_ROLLED(obj) = success;
       success = srdice() + srdice();
   }
 
@@ -1201,12 +1202,15 @@ void clear_all_cyberdeck_part_pointers_pointing_to_deck(struct obj_data *deck) {
   log_vfprintf("DEBUG_DECKPART: Clearing deck part pointers to %s.", GET_OBJ_NAME(deck));
 
   // Iterate over the in-progress deck parts.
-  for (std::vector<struct obj_data *>::iterator it = global_in_progress_deck_parts.begin(); it != global_in_progress_deck_parts.end(); it++) {
+  for (std::vector<struct obj_data *>::iterator it = global_in_progress_deck_parts.begin(); it != global_in_progress_deck_parts.end(); ) {
     // If it's pointing to our deck, clear its pointer and drop it from the list.
-    if ((*it)->cyberdeck_part_pointer == deck) {
+    if ((*it) && (*it)->cyberdeck_part_pointer == deck) {
       log_vfprintf("DEBUG_DECKPART: Clearing %s's deck pointer to %s.", GET_OBJ_NAME(*it), GET_OBJ_NAME(deck));
       (*it)->cyberdeck_part_pointer = NULL;
+      (*it) = NULL;
       it = global_in_progress_deck_parts.erase(it);
+    } else {
+      ++it;
     }
   }
 }
