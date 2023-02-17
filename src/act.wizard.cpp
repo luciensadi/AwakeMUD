@@ -303,6 +303,16 @@ ACMD(do_copyover)
     return;
   }
 
+#ifdef USE_PRIVATE_CE_WORLD
+#ifndef IS_BUILDPORT
+  // Guard against accidental copyovers on main port.
+  if (str_cmp(argument, "confirm") != 0) {
+    send_to_char("Copyover is possible, no error conditions noted. Type ^WCOPYOVER CONFIRM^n to execute.\r\n", ch);
+    return;
+  }
+#endif // IS_BUILDPORT
+#endif // USE_PRIVATE_CE_WORLD
+
   snprintf(buf, sizeof(buf), "Copyover initiated by %s", GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
