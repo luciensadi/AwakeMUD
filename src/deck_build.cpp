@@ -821,8 +821,14 @@ ACMD(do_build) {
     
     int required_rating = GET_PART_TARGET_MPCP(obj);
 
-    if (GET_PART_TYPE(obj) == PART_BOD || GET_PART_TYPE(obj) == PART_EVASION || GET_PART_TYPE(obj) == PART_MASKING || GET_PART_TYPE(obj) == PART_SENSOR) {
-      required_rating = GET_PART_RATING(obj);
+    switch (GET_PART_TYPE(obj)) {
+      case PART_BOD:
+      case PART_EVASION:
+      case PART_MASKING:
+      case PART_SENSOR:
+      case PART_RESPONSE:
+        required_rating = GET_PART_RATING(obj);
+        break;
     }
 
     // Find requisite software.
