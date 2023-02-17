@@ -182,6 +182,7 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
       if (GET_CYBERWARE_TYPE(cyber) == CYB_TACTICALCOMPUTER) {
         dice += GET_CYBERWARE_RATING(cyber);
         buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "TacComp", GET_CYBERWARE_RATING(cyber));
+        break;
       }
       else if (GET_CYBERWARE_TYPE(cyber) == CYB_SKULL) {
         if (IS_SET(GET_CYBERWARE_FLAGS(cyber), SKULL_MOD_TAC_COMP)) {
