@@ -1763,7 +1763,6 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           break;
         case CYB_ARMS:
         case CYB_LEGS:
-        case CYB_SKULL:
         case CYB_TORSO:
           switch (GET_CYBERWARE_TYPE(cyber2)) {
             case CYB_DERMALPLATING:
@@ -1783,6 +1782,13 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
             return FALSE;
           }
 
+          // fall through
+        case CYB_SKULL:
+          // Guard against installing a standalone TC when you already have a skull TC installed.
+          if (IS_SET(GET_CYBERWARE_FLAGS(cyber1), SKULL_MOD_TAC_COMP) && GET_CYBERWARE_TYPE(cyber2) == CYB_TACTICALCOMPUTER) {
+            send_to_char("You already have a tactical computer installed.\r\n", ch);
+            return FALSE;
+          }
           break;
         case CYB_MUSCLEREP:
           switch (GET_CYBERWARE_TYPE(cyber2)) {
@@ -1805,6 +1811,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           }
           break;
         case CYB_TACTICALCOMPUTER:
+          // Guard against installing a skull with TC when you already have a standalone TC installed.
           if (GET_CYBERWARE_TYPE(cyber2) == CYB_SKULL && IS_SET(GET_CYBERWARE_FLAGS(cyber2), SKULL_MOD_TAC_COMP)) {
             send_to_char("You already have a tactical computer installed.\r\n", ch);
             return FALSE;

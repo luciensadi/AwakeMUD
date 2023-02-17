@@ -3201,6 +3201,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           else
             strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
 
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), SKULL_MOD_TAC_COMP))
+            strlcpy(flag_parse, ", combat-enhancing", sizeof(flag_parse));
+
           /*
           if (IS_SET(GET_CYBERWARE_FLAGS(j), SKULL_MOD_ARMOR_MOD1))
             strlcpy(flag_parse, ", armored", sizeof(flag_parse));
