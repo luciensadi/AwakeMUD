@@ -1497,7 +1497,8 @@ enum {
 #define SKULL_MOD_OBVIOUS    (1 << 0)
 #define SKULL_MOD_SYNTHETIC    (1 << 1)
 #define SKULL_MOD_ARMOR_MOD1    (1 << 2)
-#define NUM_SKULL_MODS    3
+#define SKULL_MOD_TAC_COMP    (1 << 3)
+#define NUM_SKULL_MODS    4
 
 #define TORSO_MOD_OBVIOUS    (1 << 0)
 #define TORSO_MOD_SYNTHETIC    (1 << 1)
