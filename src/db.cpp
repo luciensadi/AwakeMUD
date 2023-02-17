@@ -6542,6 +6542,13 @@ void price_cyber(struct obj_data *obj)
         GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 8);
         GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 14);
       }
+
+      if (IS_SET(GET_CYBERWARE_FLAGS(obj), SKULL_MOD_TAC_COMP)) {
+        GET_OBJ_COST(obj) += 400000 + (GET_CYBERWARE_RATING(obj) * 20000);
+        GET_CYBERWARE_ESSENCE_COST(obj) += 20 + (GET_CYBERWARE_RATING(obj) * 20);
+        GET_OBJ_AVAILTN(obj) = MAX(GET_OBJ_AVAILTN(obj), 12);
+        GET_OBJ_AVAILDAY(obj) = MAX(GET_OBJ_AVAILDAY(obj), 60);
+      }
       break;
     case CYB_TORSO:
       GET_OBJ_AVAILTN(obj) = 6;

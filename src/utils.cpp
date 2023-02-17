@@ -1804,6 +1804,12 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
               return FALSE;
           }
           break;
+        case CYB_TACTICALCOMPUTER:
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_SKULL && IS_SET(GET_CYBERWARE_FLAGS(cyber2), SKULL_MOD_TAC_COMP)) {
+            send_to_char("You already have a tactical computer installed.\r\n", ch);
+            return FALSE;
+          }
+          break;
       }
     if (GET_CYBERWARE_TYPE(cyber1) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(cyber1), EYE_DATAJACK) && GET_CYBERWARE_TYPE(cyber2) == CYB_DATAJACK) {
       send_to_char("You already have a datajack installed.\r\n", ch);
