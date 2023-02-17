@@ -2410,6 +2410,7 @@ const char *skullmods[] = {
   "Obvious",
   "Synthetic",
   "Armor Mod1",
+  "Tac Comp",
   "\n"
 };
 
