@@ -2328,6 +2328,7 @@ void extract_obj(struct obj_data * obj)
   }
 
   delete [] obj->dropped_by_host;
+  obj->dropped_by_host = NULL;
 
   if (obj->in_room)
     obj->in_room->dirty_bit = TRUE;

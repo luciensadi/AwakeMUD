@@ -1225,7 +1225,10 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
     char *representation = generate_new_loggable_representation(obj);
 
     if (obj->dropped_by_char > 0 && obj->dropped_by_char != GET_IDNUM(ch) && ch->desc && !str_cmp(obj->dropped_by_host, ch->desc->host)) {
-      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s getting from room: %s, which was dropped/donated by someone at their same host!", representation);
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s getting from room: %s, which was dropped/donated by someone (%ld) at their same host!", GET_CHAR_NAME(ch), representation, obj->dropped_by_char);
+      obj->dropped_by_char = 0;
+      delete [] obj->dropped_by_host;
+      obj->dropped_by_host = NULL;
     } else if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
               || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) 
               || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
