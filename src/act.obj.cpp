@@ -1221,14 +1221,21 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
        }
   }
 
-  if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
   {
     char *representation = generate_new_loggable_representation(obj);
-    snprintf(buf, sizeof(buf), "%s gets from room: %s", GET_CHAR_NAME(ch), representation);
-    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+
+    if (obj->dropped_by_char > 0 && obj->dropped_by_char != GET_IDNUM(ch) && ch->desc && !str_cmp(obj->dropped_by_host, ch->desc->host)) {
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s getting from room: %s, which was dropped/donated by someone at their same host!", representation);
+    } else if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
+              || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) 
+              || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
+    {
+      snprintf(buf, sizeof(buf), "%s gets from room: %s", GET_CHAR_NAME(ch), representation);
+      mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    }
+
     delete [] representation;
-  }
+  }  
 
   obj_from_room(obj);
   obj_to_char(obj, ch);
@@ -1792,6 +1799,9 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
   act("$n drops $p.", TRUE, ch, obj, 0, TO_ROOM);
   affect_total(ch);
 
+  obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
+  obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : NULL;
+
   if (ch->in_veh)
   {
     obj_to_veh(obj, ch->in_veh);
@@ -2022,6 +2032,9 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
     delete [] representation;
   }
+
+  obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
+  obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : NULL;
 
   switch (mode)
   {

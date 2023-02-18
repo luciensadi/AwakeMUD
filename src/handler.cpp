@@ -2327,6 +2327,8 @@ void extract_obj(struct obj_data * obj)
     clear_cyberdeck_part_pointer(obj);
   }
 
+  delete [] obj->dropped_by_host;
+
   if (obj->in_room)
     obj->in_room->dirty_bit = TRUE;
 
