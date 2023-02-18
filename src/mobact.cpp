@@ -1561,7 +1561,6 @@ void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapo
   GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
 }
 
-ACMD_DECLARE(do_get);
 void mobile_activity(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);

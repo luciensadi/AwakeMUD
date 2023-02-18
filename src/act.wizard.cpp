@@ -8509,3 +8509,25 @@ int _error_on_invalid_real_veh(rnum_t rnum, int zone_num, char *buf, size_t buf_
     return _check_for_zone_error(GET_VEH_VNUM(&veh_proto[rnum]), zone_num, buf, buf_len, "veh");
   return 0;
 }
+
+ACMD(do_cheatmark) {
+  skip_spaces(&argument);
+
+  struct obj_data *obj = get_obj_in_list_vis(ch, argument, ch->carrying);
+
+  FAILURE_CASE_PRINTF(!obj, "You don't seem to have any %ss in your inventory.", argument);
+
+  const char *repr = generate_new_loggable_representation(obj);
+
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)) {
+    send_to_char(ch, "OK, removing cheatlog mark from %s.\r\n", GET_OBJ_NAME(obj));
+    GET_OBJ_EXTRA(obj).RemoveBit(ITEM_EXTRA_CHEATLOG_MARK);
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s removed cheatmark from %s.", GET_CHAR_NAME(ch), repr);
+  } else {
+    send_to_char(ch, "OK, adding cheatlog mark to %s.\r\n", GET_OBJ_NAME(obj));
+    GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_CHEATLOG_MARK);
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s added cheatmark to %s.", GET_CHAR_NAME(ch), repr);
+  }
+
+  delete [] repr;
+}

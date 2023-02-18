@@ -603,6 +603,10 @@ void make_corpse(struct char_data * ch)
     }
   }
 
+  if (AFF_FLAGGED(ch, AFF_CHEATLOG_MARK)) {
+    (corpse)->obj_flags.extra_flags.SetBit(ITEM_EXTRA_CHEATLOG_MARK);
+  }
+
   if (IS_NPC(ch))
   {
     if (MOB_FLAGGED(ch, MOB_INANIMATE)) {

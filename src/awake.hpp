@@ -558,7 +558,8 @@ enum {
 #define AFF_FLAME_AURA                          53
 #define AFF_VOICE_MODULATOR                     54
 #define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER    55
-#define AFF_MAX                                 56
+#define AFF_CHEATLOG_MARK                       56
+#define AFF_MAX                                 57
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -1352,7 +1353,8 @@ enum {
 #define ITEM_EXTRA_NBC_RESISTANT      30    // Gives a bonus on resistance tests for contact chemical/toxin damage.
 #define ITEM_EXTRA_NBC_IMMUNE         31    // Conveys immunity to contact chemical / toxin damage (full-body hazard suit, etc)
 #define ITEM_EXTRA_PURGE_ON_DEATH     32    // Vanishes when you die (won't make it to your corpse)
-#define MAX_ITEM_EXTRA                33
+#define ITEM_EXTRA_CHEATLOG_MARK      33
+#define MAX_ITEM_EXTRA                34
 
 /* Ammo types */
 #define AMMO_NORMAL     0

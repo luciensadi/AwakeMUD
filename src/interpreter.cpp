@@ -428,6 +428,7 @@ ACMD_DECLARE(do_zswitch);
 ACMD_DECLARE(do_deduct);
 ACMD_DECLARE(do_holster);
 ACMD_DECLARE(do_draw);
+ACMD_DECLARE(do_cheatmark);
 ACMD_DECLARE(do_copyover);
 ACMD_DECLARE(do_language);
 ACMD_DECLARE(do_subscribe);
@@ -534,6 +535,7 @@ struct command_info cmd_info[] =
     { "call"       , POS_LYING   , do_phone    , 0, SCMD_RING, FALSE },
     { "chase"      , POS_SITTING , do_chase    , 0, 0, FALSE },
     { "charge"     , POS_DEAD    , do_charge   , LVL_FIXER, 0, FALSE },
+    { "cheatmark"  , POS_DEAD    , do_cheatmark, LVL_VICEPRES, 0, FALSE },
     { "cleanup"    , POS_SITTING , do_cleanup  , 0, 0, FALSE },
     { "cleanse"    , POS_LYING   , do_cleanse  , 0, 0, FALSE },
     { "clear"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, TRUE },

@@ -182,7 +182,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
       act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
       if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-           || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) ) {
+           || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)) {
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
@@ -236,7 +236,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
   act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
   act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) ) {
+       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)) {
     char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
             GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
@@ -880,7 +880,8 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       act("$p: you can't hold any more items.", FALSE, ch, obj, 0, TO_CHAR);
     else {
       if ( (!IS_NPC(ch) && access_level(ch, LVL_BUILDER))
-            || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)
+            || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)
+            || IS_OBJ_STAT(cont, ITEM_EXTRA_CHEATLOG_MARK)
             || (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(cont, 4))) {
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s",
@@ -1221,7 +1222,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
   }
 
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) )
+       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
   {
     char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "%s gets from room: %s", GET_CHAR_NAME(ch), representation);
@@ -1783,6 +1784,8 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
        || IS_NPC(ch)))
     obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
 
+  obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_CHEATLOG_MARK);
+
   // Dropping money is not a sink.
   GET_NUYEN_RAW(ch) -= amount;
   act("You drop $p.", FALSE, ch, obj, 0, TO_CHAR);
@@ -1796,14 +1799,8 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
   } else
     obj_to_room(obj, ch->in_room);
 
-  if (IS_NPC(ch)
-      || (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)))
-  {
-
-    snprintf(buf, sizeof(buf), "%s drops: %d nuyen *", GET_CHAR_NAME(ch),
-            amount);
-    mudlog(buf, ch, LOG_CHEATLOG, TRUE);
-  }
+  snprintf(buf, sizeof(buf), "%s drops: %d nuyen *", GET_CHAR_NAME(ch), amount);
+  mudlog(buf, ch, LOG_CHEATLOG, TRUE);
 
   return;
 }
@@ -2016,7 +2013,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     mode = SCMD_JUNK;
 
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) )
+       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
   {
     char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "%s %ss: %s", GET_CHAR_NAME(ch),
@@ -2247,7 +2244,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   act("$n gives $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
 
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) )
+       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
   {
     // Default/preliminary logging message; this is appended to where necessary.
     char *representation = generate_new_loggable_representation(obj);
@@ -2321,26 +2318,16 @@ struct char_data *give_find_vict(struct char_data * ch, char *arg)
 
 void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)
 {
-  if (amount <= 0)
-  {
-    send_to_char("Heh heh heh ... we are jolly funny today, eh?\r\n", ch);
-    return;
+  FAILURE_CASE(amount <= 0, "You must specify a positive quantity, like GIVE 30 NUYEN MAN.");
+  FAILURE_CASE(IS_ASTRAL(vict), "You can't hand astral beings anything.");
+  FAILURE_CASE((GET_NUYEN(ch) < amount) && (IS_NPC(ch) || (!access_level(ch, LVL_VICEPRES))), "You don't have that much!");
+  FAILURE_CASE(IS_SENATOR(ch) && !access_level(ch, LVL_PRESIDENT) && !IS_SENATOR(vict) && !IS_NPC(vict), "Staff must use the PAYOUT command instead.");
+  
+  if (IS_NPC(vict)) {
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s gave NPC %s %d nuyen.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), amount);
+    AFF_FLAGS(vict).SetBit(AFF_CHEATLOG_MARK);
   }
-  if (IS_ASTRAL(vict))
-  {
-    send_to_char("Yeah, like astrals need nuyen.\r\n", ch);
-    return;
-  }
-  if ((GET_NUYEN(ch) < amount) && (IS_NPC(ch) || (!access_level(ch, LVL_VICEPRES))))
-  {
-    send_to_char("You don't have that much!\r\n", ch);
-    return;
-  }
-  if (IS_SENATOR(ch) && !access_level(ch, LVL_PRESIDENT) && !IS_SENATOR(vict) && !IS_NPC(vict))
-  {
-    send_to_char("Staff must use the PAYOUT command instead.\r\n", ch);
-    return;
-  }
+
   send_to_char(OK, ch);
   snprintf(buf, sizeof(buf), "$n gives you %d nuyen.", amount);
   act(buf, FALSE, ch, 0, vict, TO_VICT);

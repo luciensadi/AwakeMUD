@@ -797,7 +797,8 @@ const char *affected_bits[] =
     "Levitate",
     "Flame Aura",
     "Voice Modulator",
-    "Wearing DocWagon Receiver"
+    "Wearing DocWagon Receiver",
+    "Cheatlog Mark"
   };
 
 /* CON_x */
@@ -1089,6 +1090,7 @@ const char *extra_bits[] =
     "NBC_RESIST",
     "NBC_IMMUNE",
     "PURGE_ON_DEATH",
+    "CHEATLOG_MARK",
     MAX_FLAG_MARKER
   };
 
@@ -1127,6 +1129,7 @@ const char *pc_readable_extra_bits[] =
     "Resists Bio/Chemical Weapons (NERP)",
     "Immune to Bio/Chemical Weapons (NERP)",
     "Vanishes on Death",
+    "Doesn't Save", // Deliberate -- concealing cheatlog mark
     "\n"
   };
 

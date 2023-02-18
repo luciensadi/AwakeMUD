@@ -1830,8 +1830,12 @@ SPECIAL(janitor)
     obj_from_room(i);
     if (extract)
       extract_obj(i);
-    else
+    else {
       obj_to_char(i, jan);
+      if (IS_OBJ_STAT(i, ITEM_EXTRA_CHEATLOG_MARK)) {
+        AFF_FLAGS(jan).SetBit(AFF_CHEATLOG_MARK);
+      }
+    }
     return FALSE;
   }
 

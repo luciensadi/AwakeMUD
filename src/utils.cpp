@@ -3420,10 +3420,14 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
     return str_dup(log_string);
   }
 
-  snprintf(log_string, sizeof(log_string), "(obj %ld) %s^g%s",
+  snprintf(log_string, sizeof(log_string), "(obj %ld) %s^g",
           GET_OBJ_VNUM(obj),
-          obj->text.name,
-          IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? " [wizloaded]" : "");
+          obj->text.name);
+  
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD))
+    strlcat(log_string, " [wizloaded]", sizeof(log_string));
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
+    strlcat(log_string, " [cheat-marked]", sizeof(log_string));
 
   if (obj->restring)
     snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s^g]", obj->restring);
