@@ -707,12 +707,12 @@ ACMD(do_radio)
   int *crypt = 0;
   int max_crypt = 0;
   if (cyberware) {
-    *freq = &GET_CYBERWARE_SETTABLE1(radio);
-    *crypt = &GET_CYBERWARE_SETTABLE2(radio);
+    *freq = &GET_CYBERWARE_RADIO_FREQ(radio);
+    *crypt = &GET_CYBERWARE_RADIO_CRYPT(radio);
     max_crypt = GET_CYBERWARE_RADIO_MAX_CRYPT(radio);
   } else if (vehicle) {
-    *freq = &GET_VEHICLE_MOD_SETTABLE1(radio);
-    *crypt = &GET_VEHICLE_MOD_SETTABLE2(radio);
+    *freq = &GET_VEHICLE_MOD_RADIO_FREQ(radio);
+    *crypt = &GET_VEHICLE_MOD_RADIO_CRYPT(radio);
     max_crypt = GET_VEHICLE_MOD_RADIO_MAX_CRYPT(radio);
   } else {
     *freq = &GET_RADIO_CENTERED_FREQUENCY(radio);
@@ -883,11 +883,11 @@ ACMD(do_broadcast)
   } else {
     // Player character with radio
     if (cyberware) {
-      frequency = GET_CYBERWARE_SETTABLE1(radio);
-      crypt_lvl = GET_CYBERWARE_SETTABLE2(radio);
+      frequency = GET_CYBERWARE_RADIO_FREQ(radio);
+      crypt_lvl = GET_CYBERWARE_RADIO_CRYPT(radio);
     } else if (vehicle) {
-      frequency = GET_VEHICLE_MOD_SETTABLE1(radio);
-      crypt_lvl = GET_VEHICLE_MOD_SETTABLE2(radio);
+      frequency = GET_VEHICLE_MOD_RADIO_FREQ(radio);
+      crypt_lvl = GET_VEHICLE_MOD_RADIO_CRYPT(radio);
     } else {
       frequency = GET_RADIO_CENTERED_FREQUENCY(radio);
       crypt_lvl = GET_RADIO_CURRENT_CRYPT(radio);
@@ -972,11 +972,11 @@ ACMD(do_broadcast)
             to_room = 1;
           */
           if (cyberware) {
-            rec_freq = GET_CYBERWARE_SETTABLE1(radio);
+            rec_freq = GET_CYBERWARE_RADIO_FREQ(radio);
             rec_range = GET_CYBERWARE_RATING(radio);
             decrypt = GET_CYBERWARE_RADIO_MAX_CRYPT(radio);
           } else if (vehicle) {
-            rec_freq = GET_VEHICLE_MOD_SETTABLE1(radio);
+            rec_freq = GET_VEHICLE_MOD_RADIO_FREQ(radio);
             rec_range = GET_VEHICLE_MOD_RATING(radio);
             decrypt = GET_VEHICLE_MOD_RADIO_MAX_CRYPT(radio);
           } else {

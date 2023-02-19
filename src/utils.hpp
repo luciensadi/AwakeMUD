@@ -1051,8 +1051,9 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERWARE_LACING_TYPE(cyberware)      (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
 #define GET_CYBERWARE_ESSENCE_COST(cyberware)     (GET_OBJ_VAL((cyberware), 4))
 #define GET_CYBERWARE_RADIO_MAX_CRYPT(cyberware)  (GET_OBJ_VAL((cyberware), 5))
-#define GET_CYBERWARE_SETTABLE1(cyberware)        (GET_OBJ_VAL((cyberware), 7)) // Settable by player 
-#define GET_CYBERWARE_SETTABLE2(cyberware)        (GET_OBJ_VAL((cyberware), 8)) // Settable by player
+#define GET_CYBERWARE_RADIO_FREQ(cyberware)       (GET_OBJ_VAL((cyberware), 6)) // Settable by player
+#define GET_CYBERWARE_RADIO_CRYPT(cyberware)      (GET_OBJ_VAL((cyberware), 7)) // Settable by player
+// Cyberware phones use 6, 7, and 8 for... stuff?
 #define GET_CYBERWARE_IS_DISABLED(cyberware)      (GET_OBJ_VAL((cyberware), 9))
 
 // ITEM_CYBERDECK convenience defines
@@ -1163,8 +1164,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(mod)             (GET_OBJ_VAL((mod), 4))
 #define GET_VEHICLE_MOD_ENGINE_BITS(mod)                    (GET_OBJ_VAL((mod), 5))
 #define GET_VEHICLE_MOD_LOCATION(mod)                       (GET_OBJ_VAL((mod), 6))
-#define GET_VEHICLE_MOD_SETTABLE1(mod)                      (GET_OBJ_VAL((mod), 7)) // Settable by player
-#define GET_VEHICLE_MOD_SETTABLE2(mod)                      (GET_OBJ_VAL((mod), 8)) // Settable by player
+#define GET_VEHICLE_MOD_RADIO_FREQ(mod)                     (GET_OBJ_VAL((mod), 7)) // Settable by player
+#define GET_VEHICLE_MOD_RADIO_CRYPT(mod)                    (GET_OBJ_VAL((mod), 8)) // Settable by player
 
 // ITEM_HOLSTER convenience defines
 #define GET_HOLSTER_TYPE(holster)                           (GET_OBJ_VAL((holster), 0))
