@@ -989,6 +989,9 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_RADIO convenience defines
 #define GET_RADIO_CENTERED_FREQUENCY(radio)       (GET_OBJ_VAL((radio), 0))
+#define GET_RADIO_FREQ_RANGE(radio)               (GET_OBJ_VAL((radio), 1))
+#define GET_RADIO_MAX_CRYPT(radio)                (GET_OBJ_VAL((radio), 2))
+#define GET_RADIO_CURRENT_CRYPT(radio)            (GET_OBJ_VAL((radio), 3))
 
 // ITEM_DRINKCON convenience defines
 #define GET_DRINKCON_MAX_AMOUNT(cont)             (GET_OBJ_VAL((cont), 0))
@@ -1047,6 +1050,9 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERWARE_FLAGS(cyberware)            (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
 #define GET_CYBERWARE_LACING_TYPE(cyberware)      (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
 #define GET_CYBERWARE_ESSENCE_COST(cyberware)     (GET_OBJ_VAL((cyberware), 4))
+#define GET_CYBERWARE_RADIO_MAX_CRYPT(cyberware)  (GET_OBJ_VAL((cyberware), 5))
+#define GET_CYBERWARE_SETTABLE1(cyberware)        (GET_OBJ_VAL((cyberware), 7)) // Settable by player 
+#define GET_CYBERWARE_SETTABLE2(cyberware)        (GET_OBJ_VAL((cyberware), 8)) // Settable by player
 #define GET_CYBERWARE_IS_DISABLED(cyberware)      (GET_OBJ_VAL((cyberware), 9))
 
 // ITEM_CYBERDECK convenience defines
@@ -1153,10 +1159,12 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_VEHICLE_MOD_MOUNT_TYPE(mod)                     (GET_OBJ_VAL((mod), 1))
 #define GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod)            (GET_OBJ_VAL((mod), 1)) // Yes, this is also value 1.
 #define GET_VEHICLE_MOD_RATING(mod)                         (GET_OBJ_VAL((mod), 2))
-#define GET_VEHICLE_MOD_RADIO_CRYPT(mod)                    (GET_OBJ_VAL((mod), 3))
+#define GET_VEHICLE_MOD_RADIO_MAX_CRYPT(mod)                (GET_OBJ_VAL((mod), 3))
 #define GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(mod)             (GET_OBJ_VAL((mod), 4))
 #define GET_VEHICLE_MOD_ENGINE_BITS(mod)                    (GET_OBJ_VAL((mod), 5))
 #define GET_VEHICLE_MOD_LOCATION(mod)                       (GET_OBJ_VAL((mod), 6))
+#define GET_VEHICLE_MOD_SETTABLE1(mod)                      (GET_OBJ_VAL((mod), 7)) // Settable by player
+#define GET_VEHICLE_MOD_SETTABLE2(mod)                      (GET_OBJ_VAL((mod), 8)) // Settable by player
 
 // ITEM_HOLSTER convenience defines
 #define GET_HOLSTER_TYPE(holster)                           (GET_OBJ_VAL((holster), 0))

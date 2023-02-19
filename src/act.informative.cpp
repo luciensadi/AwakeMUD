@@ -3518,7 +3518,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         // radio range 0-5
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
                  GET_VEHICLE_MOD_RATING(j),
-                 GET_VEHICLE_MOD_RADIO_CRYPT(j));
+                 GET_VEHICLE_MOD_RADIO_MAX_CRYPT(j));
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt functions at rating ^c%d^n.", GET_VEHICLE_MOD_RATING(j));
       }

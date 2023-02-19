@@ -703,29 +703,43 @@ ACMD(do_radio)
   }
   any_one_arg(any_one_arg(argument, one), two);
 
-  int max_crypt = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 3 : 2)));
+  int *freq = 8;
+  int *crypt = 0;
+  int max_crypt = 0;
+  if (cyberware) {
+    *freq = &GET_CYBERWARE_SETTABLE1(radio);
+    *crypt = &GET_CYBERWARE_SETTABLE2(radio);
+    max_crypt = GET_CYBERWARE_RADIO_MAX_CRYPT(radio);
+  } else if (vehicle) {
+    *freq = &GET_VEHICLE_MOD_SETTABLE1(radio);
+    *crypt = &GET_VEHICLE_MOD_SETTABLE2(radio);
+    max_crypt = GET_VEHICLE_MOD_RADIO_MAX_CRYPT(radio);
+  } else {
+    *freq = &GET_RADIO_CENTERED_FREQUENCY(radio);
+    *crypt = &GET_RADIO_CURRENT_CRYPT(radio);
+    max_crypt = GET_RADIO_MAX_CRYPT(radio);
+  }
 
   if (!*one) {
     act("$p:", FALSE, ch, radio, 0, TO_CHAR);
-    if (GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))) == -1)
+    if (*freq == -1)
       send_to_char("  Mode: scan\r\n", ch);
-    else if (!GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))))
+    else if (!*freq)
       send_to_char("  Mode: off\r\n", ch);
     else
-      send_to_char(ch, "  Mode: center @ %d MHz\r\n",
-                   GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))));
-    if (GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))))
-      send_to_char(ch, "  Crypt (max %d): on (level %d)\r\n", max_crypt,
-                   GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))));
+      send_to_char(ch, "  Mode: center @ %d MHz\r\n", *freq);
+
+    if (*crypt)
+      send_to_char(ch, "  Crypt (max %d): on (level %d)\r\n", max_crypt, *crypt);
     else
       send_to_char(ch, "  Crypt (max %d): off\r\n", max_crypt);
     return;
   } else if (!str_cmp(one, "off")) {
     act("You turn $p off.", FALSE, ch, radio, 0, TO_CHAR);
-    GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))) = 0;
+    *freq = 0;
   } else if (!str_cmp(one, "scan")) {
     act("You set $p to scanning mode.", FALSE, ch, radio, 0, TO_CHAR);
-    GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))) = -1;
+    *freq = -1;
     WAIT_STATE(ch, 16); /* Takes time to switch it */
   } else if (!str_cmp(one, "center")) {
     i = atoi(two);
@@ -740,7 +754,7 @@ ACMD(do_radio)
     else {
       snprintf(buf, sizeof(buf), "$p is now centered at %d MHz.", i);
       act(buf, FALSE, ch, radio, 0, TO_CHAR);
-      GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))) = i;
+      *freq = i;
       WAIT_STATE(ch, 16); /* Takes time to adjust */
     }
   } else if (!str_cmp(one, "crypt")) {
@@ -755,25 +769,25 @@ ACMD(do_radio)
       }
       else {
         send_to_char(ch, "Crypt mode enabled at rating %d.\r\n", i);
-        GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))) = i;
+        *crypt = i;
       }
     }
     else {
-      if (!GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))))
+      if (!*crypt)
         act("$p's crypt mode is already disabled.", FALSE, ch, radio, 0, TO_CHAR);
       else {
         send_to_char("Crypt mode disabled.\r\n", ch);
-        GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))) = 0;
+        *crypt = 0;
       }
     }
   } else if (!str_cmp(one, "mode")) {
-    if (GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))) == -1)
+    if (*freq == -1)
       send_to_char(ch, "Your radio is currently scanning all frequencies. You can change the mode with ^WRADIO CENTER <frequency>, or turn it off with ^WRADIO OFF^n^n.\r\n");
-    else if (!GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))))
+    else if (!*freq)
       send_to_char(ch, "Your radio is currently off. You can turn it on with ^WRADIO CENTER <frequency>^n or ^WRADIO SCAN^n.\r\n");
     else
       send_to_char(ch, "Your radio is currently centered at %d MHz. You can change the mode with ^WRADIO SCAN^n, or turn it off with ^WRADIO OFF^n.\r\n",
-                   GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))));
+                   *freq);
   } else
     send_to_char("Valid commands are ^WRADIO OFF^n, ^WRADIO SCAN^n, ^WRADIO CENTER <frequency>^n, ^WRADIO CRYPT <level>^n, and ^WRADIO MODE^n. See ^WHELP RADIO^n for more.\r\n", ch);
 }
@@ -830,7 +844,7 @@ ACMD(do_broadcast)
 
   struct obj_data *radio = NULL;
   struct descriptor_data *d;
-  int i, j, frequency, crypt_lvl, decrypt;
+  int frequency, crypt_lvl, rec_freq, rec_freq_range, decrypt;
   char voice[16] = "$v";
   bool cyberware = FALSE, vehicle = FALSE;
 
@@ -862,17 +876,32 @@ ACMD(do_broadcast)
         return;
       }
     }
+    crypt_lvl = 0;
   } else if (!radio) {
     send_to_char("You have to have a radio to do that!\r\n", ch);
     return;
-  } else if (!GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0)))) {
-    act("$p must be on in order to broadcast.", FALSE, ch, radio, 0, TO_CHAR);
-    return;
-  } else if (GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))) == -1) {
-    act("$p can't broadcast while scanning.", FALSE, ch, radio, 0, TO_CHAR);
-    return;
-  } else
-    frequency = GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0)));
+  } else {
+    // Player character with radio
+    if (cyberware) {
+      frequency = GET_CYBERWARE_SETTABLE1(radio);
+      crypt_lvl = GET_CYBERWARE_SETTABLE2(radio);
+    } else if (vehicle) {
+      frequency = GET_VEHICLE_MOD_SETTABLE1(radio);
+      crypt_lvl = GET_VEHICLE_MOD_SETTABLE2(radio);
+    } else {
+      frequency = GET_RADIO_CENTERED_FREQUENCY(radio);
+      crypt_lvl = GET_RADIO_CURRENT_CRYPT(radio);
+    }
+    
+    if (!frequency) {
+      act("$p must be on in order to broadcast.", FALSE, ch, radio, 0, TO_CHAR);
+      return;
+    }
+    if (frequency == -1) {
+      act("$p can't broadcast while scanning.", FALSE, ch, radio, 0, TO_CHAR);
+      return;
+    }
+  }
 
   if (PLR_FLAGGED(ch, PLR_NOSHOUT)) {
     send_to_char("You aren't allowed to broadcast!\r\n", ch);
@@ -892,11 +921,6 @@ ACMD(do_broadcast)
   int language = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);
   if (!has_required_language_ability_for_sentence(ch, argument, language))
     return;
-
-  if (radio && GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))))
-    crypt_lvl = GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3)));
-  else
-    crypt_lvl = 0;
 
   char untouched_message[MAX_STRING_LENGTH], capitalized_and_punctuated[MAX_STRING_LENGTH], color_stripped_arg[MAX_STRING_LENGTH];
   strlcpy(color_stripped_arg, get_string_after_color_code_removal(argument, ch), sizeof(color_stripped_arg));
@@ -947,11 +971,21 @@ ACMD(do_broadcast)
           else
             to_room = 1;
           */
+          if (cyberware) {
+            rec_freq = GET_CYBERWARE_SETTABLE1(radio);
+            rec_range = GET_CYBERWARE_RATING(radio);
+            decrypt = GET_CYBERWARE_RADIO_MAX_CRYPT(radio);
+          } else if (vehicle) {
+            rec_freq = GET_VEHICLE_MOD_SETTABLE1(radio);
+            rec_range = GET_VEHICLE_MOD_RATING(radio);
+            decrypt = GET_VEHICLE_MOD_RADIO_MAX_CRYPT(radio);
+          } else {
+            rec_freq = GET_RADIO_CENTERED_FREQUENCY(radio);
+            rec_range = GET_RADIO_FREQ_RANGE(radio);
+            decrypt = GET_RADIO_MAX_CRYPT(radio);
+          }
 
-          i = GET_OBJ_VAL(radio, (cyberware ? 3 : (vehicle ? 4 : 0))); // Centered frequency.
-          j = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 2 : 1))); // Frequency range. TODO ASDF
-          decrypt = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 3 : 2)));
-          if (i == 0 || ((i != -1 && frequency != -1) && !(frequency >= (i - j) && frequency <= (i + j))))
+          if (rec_freq == 0 || ((rec_freq != -1 && frequency != -1) && !(frequency >= (rec_freq - rec_range) && frequency <= (rec_freq + rec_range))))
             continue;
 
           // Skip message-send for anyone who's blocked you.
