@@ -2906,8 +2906,19 @@ bool damage_without_message(struct char_data *ch, struct char_data *victim, int 
 }
 
 // return 1 if victim died, 0 otherwise
+// Note that dam is in BOXES, not wound types
 bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message)
 {
+  if (dam > convert_damage(DEADLY)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received greater-than-deadly damage integer %d to raw_damage(%s, %s, ...): Capping to Deadly.", dam, GET_CHAR_NAME(ch), GET_CHAR_NAME(victim));
+    dam = convert_damage(DEADLY);
+  }
+
+  if (attacktype < TYPE_HIT) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received too-low attack type %d to raw_damage(%s, %s, ...): Changing to TYPE_HIT.", attacktype, GET_CHAR_NAME(ch), GET_CHAR_NAME(victim));
+    attacktype = TYPE_HIT;
+  }
+
   char rbuf[MAX_STRING_LENGTH];
   memset(rbuf, 0, sizeof(rbuf));
 
@@ -5973,7 +5984,7 @@ void perform_violence(void)
       } else if (GET_MAG(mage) < 1) {
         send_to_char(mage, "Your magic spent from your battle with %s, you fall unconscious.\r\n", GET_NAME(spirit));
         act("$n falls unconscious, drained by magical combat.", FALSE, mage, 0, 0, TO_ROOM);
-        if (damage(spirit, mage, TYPE_DRAIN, DEADLY, MENTAL)) {
+        if (damage(spirit, mage, convert_damage(DEADLY), TYPE_DRAIN, MENTAL)) {
           continue;
         }
         stop_fighting(spirit);
