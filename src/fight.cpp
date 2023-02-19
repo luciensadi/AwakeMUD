@@ -5946,7 +5946,7 @@ void perform_violence(void)
       if (success < 0) {
         GET_EXTRA(mage) = 0;
         GET_EXTRA(spirit) = 1;
-        GET_TEMP_MAGIC_LOSS(mage) -= success;
+        GET_TEMP_MAGIC_LOSS(mage) += MAX(-success, GET_MAG(mage));
         send_to_char(mage, "You lock minds with %s, but are beaten back by its force!\r\n", GET_NAME(spirit));
       } else if (success == 0) {
         send_to_char(mage, "You lock minds with %s, but fail to gain any ground.\r\n",
@@ -5978,6 +5978,14 @@ void perform_violence(void)
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
         AFF_FLAGS(spirit).RemoveBit(AFF_BANISH);
       }
+      continue;
+    }
+
+    // SR3 pg 189, when in banishment clashes, a spirit doesn't otherwise act
+    if (IS_AFFECTED(ch, AFF_BANISH)
+        && FIGHTING(ch)
+        && (IS_ANY_ELEMENTAL(ch) || IS_SPIRIT(ch)))
+    {
       continue;
     }
 
