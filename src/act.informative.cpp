@@ -7540,3 +7540,139 @@ void display_room_desc(struct char_data *ch) {
   else
     send_to_char(ch->in_room->description, ch);
 }
+
+ACMD(do_penalties) {
+  int total_damage_modifier = 0, total_sustain_modifier = 0, total_modify_target_mundane_action = 0, total_modify_target_magical_action = 0, skill_idx = -1;
+  char msg_buffer[20000] = {0};
+  char dummy_rbuf[10] = {0};
+  struct char_data *vict = ch;
+  char skill_name[MAX_INPUT_LENGTH] = {0};
+
+
+  skip_spaces(&argument);
+
+  // Staff syntax: PENALTIES [target] [skillname]
+  if (GET_LEVEL(ch) >= LVL_BUILDER && *argument) {
+    char targ_name[MAX_INPUT_LENGTH];
+    const char *remainder = one_argument(argument, targ_name);
+    strlcpy(skill_name, remainder, sizeof(skill_name));
+
+    vict = get_char_room_vis(ch, targ_name);
+    if (!vict)
+      vict = get_char_vis(ch, targ_name);
+    if (!vict) {
+      vict = ch;
+      send_to_char(ch, "Didn't find a character named '%s', so I'll treat your whole argument as a skill name!\r\n", targ_name);
+      strlcpy(skill_name, argument, sizeof(skill_name));
+    }
+  } 
+  // Player syntax: PENALTIES [skillname]
+  else {
+    strlcpy(skill_name, argument, sizeof(skill_name));
+  }
+
+  if (*skill_name) {
+    if ((skill_idx = find_skill_num(skill_name)) < 0) {
+      send_to_char(ch, "Sorry, '%s' is not a valid skill name.\r\n", skill_name);
+      return;
+    }
+
+    if (skills[skill_idx].no_defaulting_allowed && GET_SKILL(vict, skill_idx) <= 0) {
+      send_to_char(ch, "%s can't use %s without at least one rank in it.\r\n", 
+                   vict == ch ? "You" : GET_CHAR_NAME(vict), 
+                   skills[skill_idx].name);
+      return;
+    }
+
+    int dummy_target = 4;
+    int total_skill = get_skill(vict, skill_idx, dummy_target, msg_buffer, sizeof(msg_buffer));
+    int total_penalty = dummy_target - 4;
+
+    if (total_skill <= 0) {
+      send_to_char(ch, "%s will roll ^c%d^n dice with %s, so will always fail.\r\n", 
+                   vict == ch ? "You" : GET_CHAR_NAME(vict),
+                   total_skill,
+                   skills[skill_idx].name);
+      return;
+    }
+
+    total_penalty += damage_modifier(vict, dummy_rbuf, sizeof(dummy_rbuf), msg_buffer, sizeof(msg_buffer));
+    total_penalty += sustain_modifier(vict, dummy_rbuf, sizeof(dummy_rbuf), FALSE, msg_buffer, sizeof(msg_buffer));
+    if (skills[skill_idx].requires_magic) {
+      total_penalty += modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, TRUE, msg_buffer, sizeof(msg_buffer));
+    } else {
+      total_penalty += modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, FALSE, msg_buffer, sizeof(msg_buffer));
+    }
+
+    if (total_penalty == 0) {
+      send_to_char(ch, "%s will roll ^c%d^n dice and will not have any TN modifiers when using %s.\r\n", 
+                   vict == ch ? "You" : GET_CHAR_NAME(vict),
+                   total_skill,
+                   skills[skill_idx].name);
+      return;
+    }
+
+    send_to_char(ch, "%s will roll ^c%d^n dice and take ^c%d^n in TN penalties when using %s:\r\n%s\r\n", 
+                 vict == ch ? "You" : GET_CHAR_NAME(vict),
+                 total_skill,
+                 total_penalty,
+                 skills[skill_idx].name,
+                 msg_buffer);
+    return;
+  }
+
+  send_to_char(ch, "%s %s affected by the following penalties:\r\n", 
+               vict == ch ? "You" : GET_CHAR_NAME(vict),
+               vict == ch ? "are" : "is");
+  
+  total_damage_modifier = damage_modifier(vict, dummy_rbuf, sizeof(dummy_rbuf), msg_buffer, sizeof(msg_buffer));
+  if (*msg_buffer) {
+    send_to_char(ch, "Damage penalties (subtotal ^c%d^n):\r\n%s", total_damage_modifier, msg_buffer);
+  } else {
+    send_to_char("No damage penalties.\r\n", ch);
+  }
+  *msg_buffer = '\0';
+
+  if (GET_MAG(vict) > 0) {
+    total_sustain_modifier = sustain_modifier(vict, dummy_rbuf, sizeof(dummy_rbuf), FALSE, msg_buffer, sizeof(msg_buffer));
+    if (*msg_buffer) {
+      send_to_char(ch, "\r\nSpell sustaining penalties (subtotal ^c%d^n):\r\n%s", total_sustain_modifier, msg_buffer);
+    } else {
+      send_to_char("\r\nNo spell sustaining penalties.\r\n", ch);
+    }
+    *msg_buffer = '\0';
+
+    send_to_char(ch, "\r\nThe following general penalties apply when performing magical actions:\r\n");
+    total_modify_target_magical_action = modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, TRUE, msg_buffer, sizeof(msg_buffer));
+    if (*msg_buffer) {
+      send_to_char(ch, " General penalties (subtotal ^c%d^n):\r\n%s", total_modify_target_magical_action, msg_buffer);
+    } else {
+      send_to_char(" No general penalties.\r\n", ch);
+    }
+    *msg_buffer = '\0';
+
+    send_to_char(ch, "\r\nThe following general penalties apply when performing mundane actions:\r\n");
+    total_modify_target_mundane_action = modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, FALSE, msg_buffer, sizeof(msg_buffer));
+    if (*msg_buffer) {
+      send_to_char(ch, " General penalties (subtotal ^c%d^n):\r\n%s", total_modify_target_mundane_action, msg_buffer);
+    } else {
+      send_to_char(" No general penalties.\r\n", ch);
+    }
+    *msg_buffer = '\0';
+
+    send_to_char(ch, "\r\nIn total, you'll take ^C%d^n in TN penalties when performing magic, ^C%d^n otherwise.\r\n", 
+                 total_damage_modifier + total_sustain_modifier + total_modify_target_magical_action,
+                 total_damage_modifier + total_sustain_modifier + total_modify_target_mundane_action);
+  } else {
+    total_modify_target_mundane_action = modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, FALSE, msg_buffer, sizeof(msg_buffer));
+    if (*msg_buffer) {
+      send_to_char(ch, "\r\nGeneral penalties (subtotal ^c%d^n):\r\n%s", total_modify_target_mundane_action, msg_buffer);
+    } else {
+      send_to_char("\r\nNo general penalties.\r\n", ch);
+    }
+    *msg_buffer = '\0';
+
+    send_to_char(ch, "\r\nIn total, you'll take ^C%d^n in TN penalties.\r\n",
+                 total_damage_modifier + total_sustain_modifier + total_modify_target_mundane_action);
+  }
+}

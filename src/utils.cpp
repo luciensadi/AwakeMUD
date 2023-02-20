@@ -312,7 +312,8 @@ int light_level(struct room_data *room)
   }
 }
 
-int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
+#define WRITEOUT_MSG(name, amt) { if (writeout_buffer) { snprintf(ENDOF(writeout_buffer), writeout_buffer_size - strlen(writeout_buffer), "  %s: ^c%d^n\r\n", name, amt); }}
+int damage_modifier(struct char_data *ch, char *rbuf, size_t rbuf_size, char *writeout_buffer, size_t writeout_buffer_size)
 {
   int physical = GET_PHYSICAL(ch) / 100;
   int mental = GET_MENTAL(ch) / 100;
@@ -347,32 +348,38 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
   {
     base_target += 3;
     buf_mod(rbuf, rbuf_size, "Physical damage (S)", 3 );
+    WRITEOUT_MSG("Physical Damage (Serious)", 3);
   } else if (physical <= 7)
   {
     base_target += 2;
     buf_mod(rbuf, rbuf_size, "Physical damage (M)", 2 );
+    WRITEOUT_MSG("Physical Damage (Moderate)", 2);
   } else if (physical <= 9)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_size, "Physical damage (L)", 1 );
+    WRITEOUT_MSG("Physical Damage (Light)", 1);
   }
   if (mental <= 4)
   {
     base_target += 3;
     buf_mod(rbuf, rbuf_size, "Mental damage (S)", 3 );
+    WRITEOUT_MSG("Mental Damage (Serious)", 3);
   } else if (mental <= 7)
   {
     base_target += 2;
     buf_mod(rbuf, rbuf_size, "Mental damage (M)", 2 );
+    WRITEOUT_MSG("Mental Damage (Moderate)", 2);
   } else if (mental <= 9)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_size, "Mental damage (L)", 1 );
+    WRITEOUT_MSG("Mental Damage (Light)", 1);
   }
   return base_target;
 }
 
-int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool minus_one_sustained) {
+int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool minus_one_sustained, char *writeout_buffer, size_t writeout_buffer_size) {
   int base_target = 0;
 
   // Since NPCs don't have sustain foci available to them at the moment, we don't throw these penalties on them.
@@ -388,6 +395,7 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool min
     int delta = sustained_num * 2;
     base_target += delta;
     buf_mod(rbuf, rbuf_len, "Sustain", delta);
+    WRITEOUT_MSG("Sustaining Spells", delta);
   }
 
   if (IS_PROJECT(ch) && ch->desc && ch->desc->original) {
@@ -395,6 +403,7 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool min
       int delta = (GET_SUSTAINED_NUM(ch->desc->original) - GET_SUSTAINED_FOCI(ch->desc->original)) * 2;
       base_target += delta;
       buf_mod(rbuf, rbuf_len, "Sustain", delta);
+      WRITEOUT_MSG("Sustaining Spells", delta);
     }
   }
 
@@ -402,13 +411,17 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool min
 }
 
 // Adds the combat_mode toggle
-int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty, bool skill_is_magic) {
+int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, int current_visibility_penalty, bool skill_is_magic, char *writeout_buffer, size_t writeout_buffer_size) {
   extern time_info_data time_info;
   int base_target = 0;
-  // get damage modifier
-  base_target += damage_modifier(ch, rbuf, rbuf_len);
-  // then apply modifiers for sustained spells
-  base_target += sustain_modifier(ch, rbuf, rbuf_len);
+
+  // We skip these for writeout_buffer calls, since those handle damage and sustain modifiers separately:
+  if (!writeout_buffer) {
+    // get damage modifier
+    base_target += damage_modifier(ch, rbuf, rbuf_len);
+    // then apply modifiers for sustained spells
+    base_target += sustain_modifier(ch, rbuf, rbuf_len);
+  }
 
   struct room_data *temp_room = get_ch_in_room(ch);
 
@@ -427,6 +440,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
   if (skill_is_magic && GET_CONCENTRATION_TARGET_MOD(ch)) {
     base_target += GET_CONCENTRATION_TARGET_MOD(ch);
     buf_mod(rbuf, rbuf_len, "DrugConcTN", GET_CONCENTRATION_TARGET_MOD(ch));
+    WRITEOUT_MSG("Concentration Penalty (Drug-Induced)", GET_CONCENTRATION_TARGET_MOD(ch));
   }
 
   // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here.
@@ -434,6 +448,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     if (!skill_is_magic && IS_PERCEIVING(ch)) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
+      WRITEOUT_MSG("Perceiving", 2);
     }
   }
   // Otherwise, check to see if you've exceeded the vision pen max coming in here. This only happens for totalinvis and staff opponents.
@@ -453,7 +468,10 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
       visibility_penalty = new_visibility_penalty;
     }
 
-    base_target += visibility_penalty;
+    if (visibility_penalty != 0) {
+      WRITEOUT_MSG("Visibility Penalty", visibility_penalty);
+      base_target += visibility_penalty;
+    }
   }
 
   base_target += GET_TARGET_MOD(ch);
@@ -462,33 +480,41 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_len, "Sunlight", 1);
+    WRITEOUT_MSG("Sunlight Allergy", 1);
   }
   if (temp_room->poltergeist[0] && !IS_ASTRAL(ch) && !MOB_FLAGGED(ch, MOB_DUAL_NATURE))
   {
     base_target += 2;
     buf_mod(rbuf, rbuf_len, "Polter", 2);
+    WRITEOUT_MSG("Poltergeist Spell", 2);
   }
   if (AFF_FLAGGED(ch, AFF_ACID))
   {
     base_target += 4;
     buf_mod(rbuf, rbuf_len, "Acid", 4);
+    WRITEOUT_MSG("Being Melted by Acid", 4);
   }
   if (ch->points.fire[0] > 0)
   {
     base_target += 4;
     buf_mod(rbuf, rbuf_len, "OnFire", 4);
+    WRITEOUT_MSG("Being On Fire", 4);
   }
   for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
     if (sust->caster == FALSE && (sust->spell == SPELL_CONFUSION || sust->spell == SPELL_CHAOS)) {
-      base_target += MIN(sust->force, sust->success);
-      buf_mod(rbuf, rbuf_len, "Confused", MIN(sust->force, sust->success));
+      int amount = MIN(sust->force, sust->success);
+      base_target += amount;
+      buf_mod(rbuf, rbuf_len, "Confused", amount);
+      WRITEOUT_MSG("Confusion (Spell)", amount);
     }
   }
   if (!(IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch))) {
     for (struct spirit_sustained *sust = SPIRIT_SUST(ch); sust; sust = sust->next) {
       if (sust->type == CONFUSION) {
-        base_target += GET_LEVEL(sust->target);
-        buf_mod(rbuf, rbuf_len, "SConfused", GET_LEVEL(sust->target));
+        int amount = GET_LEVEL(sust->target);
+        base_target += amount;
+        buf_mod(rbuf, rbuf_len, "SConfused", amount);
+        WRITEOUT_MSG("Confusion (Spirit Power)", amount);
         break;
       }
     }
@@ -499,6 +525,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     if (heightdif > 1) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "TooTallRatio", (int)(heightdif*100));
+      WRITEOUT_MSG("Slouch Penalty", 2); // todo: inaccurate, but also disabled code, so...
     }
     if (heightdif > 1.2)
       base_target += 2;
@@ -510,13 +537,14 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
 #endif
   return base_target;
 }
+#undef WRITEOUT_MSG
 
-int modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len)
+int modify_target_rbuf(struct char_data *ch, char *rbuf, size_t rbuf_len)
 {
   return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0, FALSE);
 }
 
-int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len)
+int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, size_t rbuf_len)
 {
   return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0, TRUE);
 }
@@ -1395,9 +1423,9 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
 
 }
 
+#define WRITEOUT_MSG(name, amt) { if (writeout_buffer) { snprintf(ENDOF(writeout_buffer), writeout_buffer_size - strlen(writeout_buffer), "  %s: ^c%d^n\r\n", name, amt); }}
 // I hate this name. This isn't just a getter, it's a setter as well. -LS
-int get_skill(struct char_data *ch, int skill, int &target)
-{
+int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffer, size_t writeout_buffer_size) {
   char gskbuf[MAX_STRING_LENGTH];
   int increase = 0;
   int defaulting_tn = 0;
@@ -1417,7 +1445,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     }
 
     // Some skills cannot be defaulted on.
-    if (skill == SKILL_AURA_READING || skill == SKILL_SORCERY || skill == SKILL_CONJURING) {
+    if (skills[skill].no_defaulting_allowed) {
       strlcat(gskbuf, "failed to default (skill prohibits default), returning 0 dice. ", sizeof(gskbuf));
       act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       return 0;
@@ -1436,6 +1464,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
         skill = max_defaultable_skill;
         defaulting_tn = 2;
         snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "defaulting to %s (+2 TN). ", skills[skill].name);
+        if (writeout_buffer) { snprintf(ENDOF(writeout_buffer), writeout_buffer_size - strlen(writeout_buffer), "  Defaulting to %s: ^c%d^n\r\n", skills[skill].name, 2); }
       }
     }
 
@@ -1443,6 +1472,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     if (defaulting_tn == 0) {
       defaulting_tn = 4;
       snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "defaulting to %s (+4 TN). ", short_attributes[skills[skill].attribute]);
+      if (writeout_buffer) { snprintf(ENDOF(writeout_buffer), writeout_buffer_size - strlen(writeout_buffer), "  Defaulting to %s: ^c%d^n\r\n", attributes[skills[skill].attribute], 4); }
     }
   }
 
@@ -1451,11 +1481,13 @@ int get_skill(struct char_data *ch, int skill, int &target)
     if (GET_TOTALIMP(ch) > GET_QUI(ch)) {
       increase = GET_TOTALIMP(ch) - GET_QUI(ch);
       buf_mod(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "OverImp", increase);
+      WRITEOUT_MSG("Excessive Impact Armor", increase);
       target += increase;
     }
     if (GET_TOTALBAL(ch) > GET_QUI(ch)) {
       increase = GET_TOTALBAL(ch) - GET_QUI(ch);
       buf_mod(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "OverBal", increase);
+      WRITEOUT_MSG("Excessive Ballistic Armor", increase);
       target += increase;
     }
   }
@@ -1684,6 +1716,31 @@ int get_skill(struct char_data *ch, int skill, int &target)
   act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
 
   return skill_dice;
+}
+#undef WRITEOUT_MSG
+
+int get_num_of_cyber_replacements(struct char_data *ch) {
+  int total = 0;
+
+  if (!ch) {
+    mudlog("SYSERR: Received NULL character to get_num_of_cyber_replacements()!", ch, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+
+  for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+    switch (GET_CYBERWARE_TYPE(cyber)) {
+      case CYB_ARMS:
+      case CYB_LEGS:
+        total += 2;
+        break;
+      case CYB_SKULL:
+      case CYB_TORSO:
+        total++;
+        break;
+    }
+  }
+
+  return total;
 }
 
 #define INCOMPATIBLE_BIO(biotype, message) { if (GET_BIOWARE_TYPE(bio1) == biotype) { send_to_char(ch, "%s\r\n", message); return FALSE; } }
@@ -1929,7 +1986,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           return FALSE;
         }
         if (GET_BIOWARE_TYPE(bio1) == BIO_CALCITONIN) {
-          send_to_char("Cybernetic replacements (limbs, torso) isn't compatible with Calcitonin treatments.\r\n", ch);
+          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Calcitonin treatments.\r\n", ch);
           return FALSE;
         }
         break;

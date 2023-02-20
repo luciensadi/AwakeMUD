@@ -270,6 +270,7 @@ ACMD_DECLARE(do_page);
 ACMD_DECLARE(do_patch);
 ACMD_DECLARE(do_payout);
 ACMD_DECLARE(do_perfmon);
+ACMD_DECLARE(do_penalties);
 ACMD_DECLARE(do_pgroup);
 ACMD_DECLARE(do_photo);
 ACMD_DECLARE(do_playerrolls);
@@ -750,6 +751,7 @@ struct command_info cmd_info[] =
     { "payout"     , POS_DEAD    , do_payout   , LVL_FIXER, 0, FALSE },
     { "perceive"   , POS_LYING   , do_astral   , 0, SCMD_PERCEIVE, FALSE },
     { "perfmon"    , POS_DEAD    , do_perfmon  , LVL_ADMIN, 0, FALSE },
+    { "penalties"  , POS_MORTALLYW, do_penalties, 0, 0, FALSE },
     { "pgroup"     , POS_LYING   , do_pgroup   , 0, 0, FALSE },
     { "phone"      , POS_LYING   , do_phone    , 0, 0, FALSE },
     { "phonelist"  , POS_DEAD    , do_phonelist, LVL_BUILDER, 0, FALSE },

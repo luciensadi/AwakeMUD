@@ -77,7 +77,6 @@ WSPEC(monowhip);
 
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
                          int tar_for_vict);
-extern int modify_target(struct char_data *ch);
 extern int skill_web (struct char_data *ch, int skillnumber);
 extern bool attempt_reload(struct char_data *mob, int pos);
 extern void switch_weapons(struct char_data *mob, int pos);
