@@ -1971,22 +1971,23 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
         break;
       case CYB_ARMS:
       case CYB_LEGS:
-      case CYB_SKULL:
-      case CYB_TORSO:
         if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLEAUG) {
-          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Muscle Augmentations.\r\n", ch);
+          send_to_char("Cybernetic replacement limbs are incompatible with Muscle Augmentations.\r\n", ch);
           return FALSE;
         }
         if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLETONER) {
-          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Muscle Toners.\r\n", ch);
-          return FALSE;
-        }
-        if (GET_BIOWARE_TYPE(bio1) == BIO_ORTHOSKIN) {
-          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Orthoskin.\r\n", ch);
+          send_to_char("Cybernetic replacement limbs are incompatible with Muscle Toners.\r\n", ch);
           return FALSE;
         }
         if (GET_BIOWARE_TYPE(bio1) == BIO_CALCITONIN) {
-          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Calcitonin treatments.\r\n", ch);
+          send_to_char("Cybernetic replacement limbs are incompatible with Calcitonin treatments.\r\n", ch);
+          return FALSE;
+        }
+        // fall through
+      case CYB_SKULL:
+      case CYB_TORSO:
+        if (GET_BIOWARE_TYPE(bio1) == BIO_ORTHOSKIN) {
+          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Orthoskin.\r\n", ch);
           return FALSE;
         }
         break;
