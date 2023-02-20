@@ -703,20 +703,20 @@ ACMD(do_radio)
   }
   any_one_arg(any_one_arg(argument, one), two);
 
-  int *freq = 8;
-  int *crypt = 0;
+  int *freq;
+  int *crypt;
   int max_crypt = 0;
   if (cyberware) {
-    *freq = &GET_CYBERWARE_RADIO_FREQ(radio);
-    *crypt = &GET_CYBERWARE_RADIO_CRYPT(radio);
+    freq = &GET_CYBERWARE_RADIO_FREQ(radio);
+    crypt = &GET_CYBERWARE_RADIO_CRYPT(radio);
     max_crypt = GET_CYBERWARE_RADIO_MAX_CRYPT(radio);
   } else if (vehicle) {
-    *freq = &GET_VEHICLE_MOD_RADIO_FREQ(radio);
-    *crypt = &GET_VEHICLE_MOD_RADIO_CRYPT(radio);
+    freq = &GET_VEHICLE_MOD_RADIO_FREQ(radio);
+    crypt = &GET_VEHICLE_MOD_RADIO_CRYPT(radio);
     max_crypt = GET_VEHICLE_MOD_RADIO_MAX_CRYPT(radio);
   } else {
-    *freq = &GET_RADIO_CENTERED_FREQUENCY(radio);
-    *crypt = &GET_RADIO_CURRENT_CRYPT(radio);
+    freq = &GET_RADIO_CENTERED_FREQUENCY(radio);
+    crypt = &GET_RADIO_CURRENT_CRYPT(radio);
     max_crypt = GET_RADIO_MAX_CRYPT(radio);
   }
 
@@ -844,7 +844,7 @@ ACMD(do_broadcast)
 
   struct obj_data *radio = NULL;
   struct descriptor_data *d;
-  int frequency, crypt_lvl, rec_freq, rec_freq_range, decrypt;
+  int frequency, crypt_lvl, receiver_freq, receiver_freq_range, decrypt;
   char voice[16] = "$v";
   bool cyberware = FALSE, vehicle = FALSE;
 
@@ -972,20 +972,21 @@ ACMD(do_broadcast)
             to_room = 1;
           */
           if (cyberware) {
-            rec_freq = GET_CYBERWARE_RADIO_FREQ(radio);
-            rec_range = GET_CYBERWARE_RATING(radio);
+            receiver_freq = GET_CYBERWARE_RADIO_FREQ(radio);
+            receiver_freq_range = GET_CYBERWARE_RATING(radio);
             decrypt = GET_CYBERWARE_RADIO_MAX_CRYPT(radio);
           } else if (vehicle) {
-            rec_freq = GET_VEHICLE_MOD_RADIO_FREQ(radio);
-            rec_range = GET_VEHICLE_MOD_RATING(radio);
+            receiver_freq = GET_VEHICLE_MOD_RADIO_FREQ(radio);
+            receiver_freq_range = GET_VEHICLE_MOD_RATING(radio);
             decrypt = GET_VEHICLE_MOD_RADIO_MAX_CRYPT(radio);
           } else {
-            rec_freq = GET_RADIO_CENTERED_FREQUENCY(radio);
-            rec_range = GET_RADIO_FREQ_RANGE(radio);
+            receiver_freq = GET_RADIO_CENTERED_FREQUENCY(radio);
+            receiver_freq_range = GET_RADIO_FREQ_RANGE(radio);
             decrypt = GET_RADIO_MAX_CRYPT(radio);
           }
 
-          if (rec_freq == 0 || ((rec_freq != -1 && frequency != -1) && !(frequency >= (rec_freq - rec_range) && frequency <= (rec_freq + rec_range))))
+          if (receiver_freq == 0 
+              || ((receiver_freq != -1 && frequency != -1) && !(frequency >= (receiver_freq - receiver_freq_range) && frequency <= (receiver_freq + receiver_freq_range))))
             continue;
 
           // Skip message-send for anyone who's blocked you.
