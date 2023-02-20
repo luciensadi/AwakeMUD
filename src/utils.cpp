@@ -1471,7 +1471,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
   // If you ever implement the Adept power Improved Ability, it would go here. See Core p169 for details.
 
   bool should_gain_physical_boosts = !IS_JACKED_IN(ch);
-  int mbw = 0, enhan = 0, synth = 0;
+  int mbw = 0, enhan = 0, synth = 0, eryth = 0, recorder = 0;
 
   // Calculate our starting skill dice.
   int skill_dice = defaulting_tn == 4 ? GET_ATT(ch, skills[skill].attribute) : GET_SKILL(ch, skill);
@@ -1549,13 +1549,185 @@ int get_skill(struct char_data *ch, int skill, int &target)
   // Iterate through their bioware, looking for anything important.
   if (should_gain_physical_boosts && ch->bioware) {
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_BIOWARE_TYPE(bio) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill) {
-        strlcat(gskbuf, "Reflex Recorder skill increase: 1. ", sizeof(gskbuf));
-        skill_dice++;
+      if (GET_BIOWARE_TYPE(bio) == BIO_REFLEXRECORDER) {
+        recorder = GET_BIOWARE_REFLEXRECORDER_DATA(bio);
       } else if (GET_BIOWARE_TYPE(bio) == BIO_ENHANCEDARTIC)
-        enhan = should_gain_physical_boosts;
+        enhan = TRUE;
       else if (GET_BIOWARE_TYPE(bio) == BIO_SYNTHACARDIUM)
-        synth = GET_BIOWARE_RATING(bio);
+        synth = GET_OBJ_VAL(bio, 1);
+      else if (GET_BIOWARE_TYPE(bio) == BIO_ERYTHROPOITIN)
+        eryth = TRUE;
+    }
+  }
+
+  // Reflex Recorder, adds +1 die to Physical Skill tests for its associated skill.
+  // Reflex recorder types references can be found in awake.cpp -Vile
+  // Utilizes Value 5 to reference its associated skill.
+  if (recorder) {
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_EDGED_WEAPONS && GET_OBJ_VAL(bio, 5) == 0) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_POLE_ARMS && GET_OBJ_VAL(bio, 5) == 1) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_WHIPS_FLAILS && GET_OBJ_VAL(bio, 5) == 2) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_CLUBS && GET_OBJ_VAL(bio, 5) == 3) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_UNARMED_COMBAT && GET_OBJ_VAL(bio, 5) == 4) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_CYBER_IMPLANTS && GET_OBJ_VAL(bio, 5) == 5) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_PISTOLS && GET_OBJ_VAL(bio, 5) == 6) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_RIFLES && GET_OBJ_VAL(bio, 5) == 7) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_SHOTGUNS && GET_OBJ_VAL(bio, 5) == 8) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_ASSAULT_RIFLES && GET_OBJ_VAL(bio, 5) == 9) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_SMG && GET_OBJ_VAL(bio, 5) == 10) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_TASERS && GET_OBJ_VAL(bio, 5) == 11) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_GUNNERY && GET_OBJ_VAL(bio, 5) == 12) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_MACHINE_GUNS && GET_OBJ_VAL(bio, 5) == 13) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_ASSAULT_CANNON && GET_OBJ_VAL(bio, 5) == 14) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_PROJECTILES && GET_OBJ_VAL(bio, 5) == 15) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_THROWING_WEAPONS && GET_OBJ_VAL(bio, 5) == 16) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_ATHLETICS && GET_OBJ_VAL(bio, 5) == 17) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_STEALTH && GET_OBJ_VAL(bio, 5) == 18) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_ELECTRONICS && GET_OBJ_VAL(bio, 5) == 19) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_BIOTECH && GET_OBJ_VAL(bio, 5) == 20) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_BR_BIKE && GET_OBJ_VAL(bio, 5) == 21) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_BR_CAR && GET_OBJ_VAL(bio, 5) == 22) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_BR_DRONE && GET_OBJ_VAL(bio, 5) == 23) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_BR_TRUCK && GET_OBJ_VAL(bio, 5) == 24) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_BR_PISTOL && GET_OBJ_VAL(bio, 5) == 25) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_BR_SHOTGUN && GET_OBJ_VAL(bio, 5) == 26) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_BR_RIFLE && GET_OBJ_VAL(bio, 5) == 27) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_BR_HEAVYWEAPON && GET_OBJ_VAL(bio, 5) == 28) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_BR_SMG && GET_OBJ_VAL(bio, 5) == 29) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_PILOT_BIKE && GET_OBJ_VAL(bio, 5) == 30) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_PILOT_CAR && GET_OBJ_VAL(bio, 5) == 31) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
+  }
+  for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+  if (skill == SKILL_PILOT_TRUCK && GET_OBJ_VAL(bio, 5) == 32) {
+    strlcat(gskbuf, "Reflex Recorder +1", sizeof(gskbuf));
+    skill_dice += 1;
     }
   }
 
@@ -1668,6 +1840,12 @@ int get_skill(struct char_data *ch, int skill, int &target)
   if (skill == SKILL_ATHLETICS && synth) {
     snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Synthacardium Skill Increase: %d. ", synth);
     skill_dice += synth;
+  }
+
+  // Erythropoitin.
+  if (skill == SKILL_ATHLETICS && eryth) {
+    strlcat(gskbuf, "Erythropoitin: +2 ", sizeof(gskbuf));
+    skill_dice += 2;
   }
 
   snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Final total skill: %d dice.", skill_dice);
@@ -1882,6 +2060,14 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           send_to_char("Muscle replacement isn't compatible with Muscle Augmentation or Toners.\r\n", ch);
           return FALSE;
         }
+        if (GET_BIOWARE_TYPE(bio1) == BIO_CALCITONIN) {
+          send_to_char("Muscle replacement isn't compatible with Calcitonin treatments.\r\n", ch);
+          return FALSE;
+        }
+        if (GET_BIOWARE_TYPE(bio1) == BIO_ERYTHROPOITIN) {
+          send_to_char("Muscle replacement isn't compatible with Erythropoitin treatments.\r\n", ch);
+          return FALSE;
+        }
         break;
       case CYB_DERMALPLATING:
       case CYB_DERMALSHEATHING:
@@ -1904,6 +2090,10 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
         }
         if (GET_BIOWARE_TYPE(bio1) == BIO_ORTHOSKIN) {
           send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Orthoskin.\r\n", ch);
+          return FALSE;
+        }
+        if (GET_BIOWARE_TYPE(bio1) == BIO_CALCITONIN) {
+          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Calcitonin treatments.\r\n", ch);
           return FALSE;
         }
         break;
