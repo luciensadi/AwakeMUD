@@ -1549,13 +1549,14 @@ int get_skill(struct char_data *ch, int skill, int &target)
   // Iterate through their bioware, looking for anything important.
   if (should_gain_physical_boosts && ch->bioware) {
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_BIOWARE_TYPE(bio) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill) {
+      if (skills[skill].reflex_recorder_compatible && GET_BIOWARE_TYPE(bio) == BIO_REFLEXRECORDER && GET_BIOWARE_REFLEXRECORDER_DATA(bio) == skill) {
         strlcat(gskbuf, "Reflex Recorder skill increase: 1. ", sizeof(gskbuf));
         skill_dice++;
-      } else if (GET_BIOWARE_TYPE(bio) == BIO_ENHANCEDARTIC)
-        enhan = should_gain_physical_boosts;
-      else if (GET_BIOWARE_TYPE(bio) == BIO_SYNTHACARDIUM)
+      } else if (GET_BIOWARE_TYPE(bio) == BIO_ENHANCEDARTIC) {
+        enhan = TRUE;
+      } else if (GET_BIOWARE_TYPE(bio) == BIO_SYNTHACARDIUM) {
         synth = GET_BIOWARE_RATING(bio);
+      }
     }
   }
 

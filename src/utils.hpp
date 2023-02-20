@@ -1036,6 +1036,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_BIOWARE_PUMP_ADRENALINE(bioware)         (GET_OBJ_VAL((bioware), 5)) //Adrenaline in the Adrenaline Pump sack. Controls duration.
 #define GET_BIOWARE_PUMP_TEST_TN(bioware)            (GET_OBJ_VAL((bioware), 6)) //TN for Adrenaline Pump crash test, set when activating the pump the the value of GET_BIOWARE_PUMP_ADRENALINE()
 
+// Reflex Recorder extra data.
+#define GET_BIOWARE_REFLEXRECORDER_DATA(bioware)       (GET_OBJ_VAL((bioware), 5))
 
 // ITEM_FOUNTAIN convenience defines
 #define GET_FOUNTAIN_MAX_AMOUNT(cont)             (GET_OBJ_VAL((cont), 0))
