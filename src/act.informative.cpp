@@ -7612,7 +7612,7 @@ ACMD(do_penalties) {
       return;
     }
 
-    send_to_char(ch, "%s will roll ^c%d^n dice and take ^c%d^n in TN penalties when using %s:\r\n%s\r\n", 
+    send_to_char(ch, "%s will roll ^c%d^n dice and take ^c%d^n in TN penalties when using %s:\r\n%s", 
                  vict == ch ? "You" : GET_CHAR_NAME(vict),
                  total_skill,
                  total_penalty,
