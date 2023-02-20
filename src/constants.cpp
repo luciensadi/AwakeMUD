@@ -2589,7 +2589,9 @@ const char *bio_types[] = {
   "Synaptic Accelerator",
   "Thermosense Organs",
   "Trauma Damper",
-  "Custom NERPS Bioware"
+  "Custom NERPS Bioware",
+  "Erythropoitin",
+  "Calcitonin"
 };
 
 const char *decap_bio_types[] = {
@@ -2619,8 +2621,46 @@ const char *decap_bio_types[] = {
   "synaptic accelerator",
   "thermosense organs",
   "trauma damper",
-  "custom NERPS bioware"
+  "custom NERPS bioware",
+  "erythropoitin",
+  "calcitonin"
 };
+
+const char *record_types[] =
+  {
+    "Edged",
+    "Pole Arms",
+    "Whips & Clubs",
+    "Clubs",
+    "Unarmed",
+    "Cyber Implants",
+    "Pistols",
+    "Rifles",
+    "Shotguns",
+    "Assault Rifles",
+    "SMG",
+    "Tasers",
+    "Machine Guns",
+    "Assault Cannons",
+    "Projectiles",
+    "Throwing Weapons",
+    "Athletics",
+    "Stealth",
+    "Electronics",
+    "Biotech",
+    "B/R Car",
+    "B/R Bike",
+    "B/R Drone",
+    "B/R Truck",
+    "B/R Pistol",
+    "B/R Shotgun",
+    "B/R Rifle",
+    "B/R Heavy Weapons",
+    "B/R SMG",
+    "Piloting Bike",
+    "Piloting Car",
+    "Piloting Truck"
+  };
 
 const char *metamagic[] = {
   "UNDEFINED",
