@@ -5966,7 +5966,7 @@ void perform_violence(void)
         stop_fighting(mage);
         end_spirit_existance(spirit, TRUE);
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
-      } else if (GET_REAL_MAG(mage) - GET_TEMP_MAGIC_LOSS(mage) < 1) {
+      } else if ((GET_REAL_MAG(mage) / 100) - GET_TEMP_MAGIC_LOSS(mage) < 1) {
         send_to_char(mage, "Your magic spent from your battle with %s, you fall unconscious.\r\n", GET_NAME(spirit));
         act("$n falls unconscious, drained by magical combat.", FALSE, mage, 0, 0, TO_ROOM);
         if (damage(spirit, mage, TYPE_DRAIN, DEADLY, MENTAL)) {
