@@ -1471,7 +1471,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
   // If you ever implement the Adept power Improved Ability, it would go here. See Core p169 for details.
 
   bool should_gain_physical_boosts = !IS_JACKED_IN(ch);
-  int mbw = 0, enhan = 0, synth = 0;
+  int mbw = 0, enhan = 0, synth = 0, eryth = 0;
 
   // Calculate our starting skill dice.
   int skill_dice = defaulting_tn == 4 ? GET_ATT(ch, skills[skill].attribute) : GET_SKILL(ch, skill);
@@ -1552,6 +1552,8 @@ int get_skill(struct char_data *ch, int skill, int &target)
       if (skills[skill].reflex_recorder_compatible && GET_BIOWARE_TYPE(bio) == BIO_REFLEXRECORDER && GET_BIOWARE_REFLEXRECORDER_DATA(bio) == skill) {
         strlcat(gskbuf, "Reflex Recorder skill increase: 1. ", sizeof(gskbuf));
         skill_dice++;
+      } else if (GET_BIOWARE_TYPE(bio) == BIO_ERYTHROPOITIN) {
+        eryth = TRUE;
       } else if (GET_BIOWARE_TYPE(bio) == BIO_ENHANCEDARTIC) {
         enhan = TRUE;
       } else if (GET_BIOWARE_TYPE(bio) == BIO_SYNTHACARDIUM) {
@@ -1671,6 +1673,12 @@ int get_skill(struct char_data *ch, int skill, int &target)
     skill_dice += synth;
   }
 
+  // Erythropoitin.
+  if (skill == SKILL_ATHLETICS && eryth) {
+    strlcat(gskbuf, "Erythropoitin: +2 ", sizeof(gskbuf));
+    skill_dice += 2;
+  }
+
   snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Final total skill: %d dice.", skill_dice);
 
   act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
@@ -1678,21 +1686,26 @@ int get_skill(struct char_data *ch, int skill, int &target)
   return skill_dice;
 }
 
+#define INCOMPATIBLE_BIO(biotype, message) { if (GET_BIOWARE_TYPE(bio1) == biotype) { send_to_char(ch, "%s\r\n", message); return FALSE; } }
 bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch)
 {
-  struct obj_data *cyber1 = NULL, *cyber2 = NULL, *bio1 = NULL;
-  if (GET_OBJ_TYPE(obj1) == ITEM_CYBERWARE)
+  struct obj_data *cyber1 = NULL, *cyber2 = NULL, *bio1 = NULL, *bio2 = NULL;
+  if (GET_OBJ_TYPE(obj1) == ITEM_CYBERWARE) {
     cyber1 = obj1;
-  else
-    bio1 = obj1;
-  if (GET_OBJ_TYPE(obj2) == ITEM_BIOWARE)
-    bio1 = obj2;
-  else {
-    if (cyber1)
+    if (GET_OBJ_TYPE(obj2) == ITEM_BIOWARE) {
+      bio1 = obj2;
+    } else {
       cyber2 = obj2;
-    else
+    }
+  } else {
+    bio1 = obj1;
+    if (GET_OBJ_TYPE(obj2) == ITEM_BIOWARE) {
+      bio2 = obj2;
+    } else {
       cyber1 = obj2;
+    }
   }
+
   if (cyber1 && cyber2) {
     if (GET_CYBERWARE_TYPE(cyber1) != CYB_EYES)
       switch (GET_CYBERWARE_TYPE(cyber1)) {
@@ -1883,6 +1896,14 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           send_to_char("Muscle replacement isn't compatible with Muscle Augmentation or Toners.\r\n", ch);
           return FALSE;
         }
+        if (GET_BIOWARE_TYPE(bio1) == BIO_CALCITONIN) {
+          send_to_char("Muscle replacement isn't compatible with Calcitonin treatments.\r\n", ch);
+          return FALSE;
+        }
+        if (GET_BIOWARE_TYPE(bio1) == BIO_ERYTHROPOITIN) {
+          send_to_char("Muscle replacement isn't compatible with Erythropoitin treatments.\r\n", ch);
+          return FALSE;
+        }
         break;
       case CYB_DERMALPLATING:
       case CYB_DERMALSHEATHING:
@@ -1907,11 +1928,26 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Orthoskin.\r\n", ch);
           return FALSE;
         }
+        if (GET_BIOWARE_TYPE(bio1) == BIO_CALCITONIN) {
+          send_to_char("Cybernetic replacements (limbs, torso) isn't compatible with Calcitonin treatments.\r\n", ch);
+          return FALSE;
+        }
+        break;
+    }
+  }
+  else if (bio1 && bio2) {
+    switch (GET_BIOWARE_TYPE(bio2)) {
+      case BIO_CALCITONIN:
+        INCOMPATIBLE_BIO(BIO_PLATELETFACTORY, "Calcitonin treatments are incompatible with platelet factories..");
+        break;
+      case BIO_PLATELETFACTORY:
+        INCOMPATIBLE_BIO(BIO_CALCITONIN, "Platelet factories are incompatible with calcitonin treatments.");
         break;
     }
   }
   return TRUE;
 }
+#undef INCOMPATIBLE_BIO
 
 void reduce_abilities(struct char_data *vict)
 {

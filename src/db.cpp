@@ -7235,6 +7235,18 @@ void price_bio(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 8;
       break;
+    case BIO_ERYTHROPOITIN:
+      GET_OBJ_COST(obj) = 40000;
+      GET_OBJ_VAL(obj, 4) = 40;
+      GET_OBJ_AVAILTN(obj) = 6;
+      GET_OBJ_AVAILDAY(obj) = 30;
+      break;
+    case BIO_CALCITONIN:
+      GET_OBJ_COST(obj) = 60000;
+      GET_OBJ_VAL(obj, 4) = 40;
+      GET_OBJ_AVAILTN(obj) = 6;
+      GET_OBJ_AVAILDAY(obj) = 30;
+      break;
   }
   // Check for cultured.
   if (GET_OBJ_VAL(obj, 0) < BIO_CEREBRALBOOSTER && GET_OBJ_VAL(obj, 2)) {
