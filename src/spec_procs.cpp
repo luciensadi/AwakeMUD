@@ -2442,7 +2442,7 @@ SPECIAL(adept_guard)
             FALSE, ch, 0, vict, TO_VICT);
         act("Sensing an oppertune moment, you come out of hiding and draw upon "
             "your mystic abilities to kill $N.", FALSE, ch, 0, vict, TO_CHAR);
-        damage(ch, vict, 1, 0, PHYSICAL);
+        damage(ch, vict, 1, TYPE_SUFFERING, PHYSICAL);
         return(TRUE);
       }
     }
@@ -2462,7 +2462,7 @@ SPECIAL(adept_guard)
             FALSE, ch, 0, vict, TO_NOTVICT);
         act("You grab $N and let energy flow through him.",
             FALSE, ch, 0, vict, TO_CHAR);
-        if (damage(ch, vict, number(0, 2), 0, PHYSICAL))
+        if (damage(ch, vict, number(0, 2), TYPE_SUFFERING, PHYSICAL))
           return TRUE;
         return FALSE;
     }
@@ -3795,7 +3795,7 @@ SPECIAL(simulate_bar_fight)
   act("A chair flies across the room, hitting you square in the head!",
       TRUE, vict, 0, 0, TO_CHAR);
   dam = convert_damage(stage(-success_test(GET_WIL(vict), 4), MODERATE));
-  damage(vict, vict, dam, 0, FALSE);
+  damage(vict, vict, dam, TYPE_BLUDGEON, FALSE);
   return TRUE;
 }
 
@@ -3810,7 +3810,7 @@ SPECIAL(waterfall)
     } else {
       act("You succumb to the heavy waves and crack your skull on the floor!", FALSE, ch, 0, 0, TO_CHAR);
       act("$n gets slammed down by the waves and hits $s head on the floor!", TRUE, ch, 0, 0, TO_ROOM);
-      damage(ch, ch, number(1, 2), 0, TRUE);
+      damage(ch, ch, number(1, 2), TYPE_BLUDGEON, TRUE);
       return TRUE;
     }
   }
@@ -4346,7 +4346,7 @@ SPECIAL(room_damage_radiation)
           act("You feel itchy all over and your eyes become very irritated.  You get the metallic taste of pennies in the back of your throat.",FALSE, vict, 0, 0, TO_CHAR);
           act("$n suddenly doesn't look well at all, seems they're developing a rash.", TRUE, vict, 0, 0, TO_ROOM);
         }
-        damage(vict,vict,rad_dam,0, TRUE);
+        damage(vict,vict,rad_dam,TYPE_SUFFERING, TRUE);
       }
     }
   return FALSE;
@@ -4534,7 +4534,7 @@ SPECIAL(quest_debug_scanner)
   // Reject mortals, violently.
   if (GET_LEVEL(ch) <= 1) {
     send_to_char(ch, "%s arcs violently in your hands!\r\n");
-    damage(ch, ch, 100, TYPE_TASER, TRUE);
+    damage(ch, ch, 10, TYPE_TASER, TRUE);
     return TRUE;
   }
 
@@ -4964,7 +4964,7 @@ SPECIAL(floor_has_glass_shards) {
     if (CMD_IS(exitdirs[dir_index]) || CMD_IS(fulldirs[dir_index])) {
       send_to_char(ch, "^rAs you walk away, the %s shards tear at your bare feet!^n\r\n\r\n", floor_material);
       act(act_buf, TRUE, ch, NULL, NULL, TO_ROOM);
-      if (damage(ch, ch, LIGHT, 0, TRUE) || GET_POS(ch) <= POS_STUNNED)
+      if (damage(ch, ch, 1, TYPE_SLASH, TRUE) || GET_POS(ch) <= POS_STUNNED)
         return TRUE;
       break;
     }
@@ -7256,7 +7256,7 @@ SPECIAL(medical_workshop) {
     PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
 
     // Damage the character. This damage type does not result in a killer check.
-    if (ch != found_char && damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
+    if (ch != found_char && damage(ch, found_char, 6, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
       send_to_char(ch, "Seems your scalpel cut something critical... your patient has died.\r\n");
     }
 
