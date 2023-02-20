@@ -5946,7 +5946,7 @@ void perform_violence(void)
       if (success < 0) {
         GET_EXTRA(mage) = 0;
         GET_EXTRA(spirit) = 1;
-        GET_TEMP_MAGIC_LOSS(mage) += MAX(-success, GET_MAG(mage));
+        GET_TEMP_MAGIC_LOSS(mage) += MIN(-success, GET_MAG(mage) / 100);
         send_to_char(mage, "You lock minds with %s, but are beaten back by its force!\r\n", GET_NAME(spirit));
       } else if (success == 0) {
         send_to_char(mage, "You lock minds with %s, but fail to gain any ground.\r\n",
