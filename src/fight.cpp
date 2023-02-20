@@ -5961,7 +5961,7 @@ void perform_violence(void)
       if (success < 0) {
         GET_EXTRA(mage) = 0;
         GET_EXTRA(spirit) = 1;
-        GET_TEMP_MAGIC_LOSS(mage) -= success;
+        GET_TEMP_MAGIC_LOSS(mage) = MIN(GET_TEMP_MAGIC_LOSS(mage) - success, GET_REAL_MAG(mage) / 100);
         send_to_char(mage, "You lock minds with %s, but are beaten back by its force!\r\n", GET_NAME(spirit));
       } else if (success == 0) {
         send_to_char(mage, "You lock minds with %s, but fail to gain any ground.\r\n",
@@ -5981,7 +5981,7 @@ void perform_violence(void)
         stop_fighting(mage);
         end_spirit_existance(spirit, TRUE);
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
-      } else if (GET_MAG(mage) < 1) {
+      } else if ((GET_REAL_MAG(mage) / 100) - GET_TEMP_MAGIC_LOSS(mage) < 1) {
         send_to_char(mage, "Your magic spent from your battle with %s, you fall unconscious.\r\n", GET_NAME(spirit));
         act("$n falls unconscious, drained by magical combat.", FALSE, mage, 0, 0, TO_ROOM);
         if (damage(spirit, mage, convert_damage(DEADLY), TYPE_DRAIN, MENTAL)) {
@@ -5993,6 +5993,14 @@ void perform_violence(void)
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
         AFF_FLAGS(spirit).RemoveBit(AFF_BANISH);
       }
+      continue;
+    }
+
+    // SR3 pg 189, when in banishment clashes, a spirit doesn't otherwise act
+    if (IS_AFFECTED(ch, AFF_BANISH)
+        && FIGHTING(ch)
+        && (IS_ANY_ELEMENTAL(ch) || IS_SPIRIT(ch)))
+    {
       continue;
     }
 

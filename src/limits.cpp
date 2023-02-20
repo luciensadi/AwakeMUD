@@ -863,7 +863,7 @@ void process_regeneration(int half_hour)
   }
 }
 
-/* Update PCs, NPCs, and objects */
+/* Update PCs, NPCs, and objects, called every mud hour */
 void point_update(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -924,6 +924,11 @@ void point_update(void)
         send_to_char("You feel you could benefit with some time at a shooting range.\r\n", i);
       }
 #endif
+
+      // Temp magic loss (banishing) regains 1/hour, SR3 pg 189
+      if (GET_TEMP_MAGIC_LOSS(i) > 0) {
+        GET_TEMP_MAGIC_LOSS(i)--;
+      }
 
       // Geas check from focus / foci overuse.
       if (GET_MAG(i) > 0) {
