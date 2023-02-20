@@ -857,6 +857,8 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
         if (d->iedit_limit_edits)
           d->iedit_limit_edits++;
         iedit_disp_val6_menu(d);
+      } else {
+        iedit_disp_menu(d);
       }
       break;
     default:
