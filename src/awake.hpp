@@ -1608,10 +1608,47 @@ enum {
 #define BIO_THERMOSENSEORGAN  24
 #define BIO_TRAUMADAMPER  25
 #define BIO_CUSTOM_NERPS  26
-#define NUM_BIOWARE       27
+#define BIO_ERYTHROPOITIN  27
+#define BIO_CALCITONIN  28
+#define NUM_BIOWARE       29
 
 #define BIOWARE_STANDARD 0
 #define BIOWARE_CULTURED 1
+
+/* Reflex recorder types */
+#define RECORD_EDGED_WEAPONS     1
+#define RECORD_POLE_ARMS         2
+#define RECORD_WHIPS_FLAILS      3
+#define RECORD_CLUBS             4
+#define RECORD_UNARMED_COMBAT    5
+#define RECORD_CYBER_IMPLANTS    6
+#define RECORD_PISTOLS           7
+#define RECORD_RIFLES            8
+#define RECORD_SHOTGUNS          9
+#define RECORD_ASSAULT_RIFLES    10
+#define RECORD_SMG               11
+#define RECORD_TASERS            12
+#define RECORD_MACHINE_GUNS      13
+#define RECORD_ASSAULT_CANNON    14
+#define RECORD_PROJECTILES       15
+#define RECORD_THROWING_WEAPONS  16
+#define RECORD_ATHLETICS         17
+#define RECORD_STEALTH           18
+#define RECORD_ELECTRONICS       19
+#define RECORD_BIOTECH           20
+#define RECORD_BR_BIKE           21
+#define RECORD_BR_CAR            22
+#define RECORD_BR_DRONE          23
+#define RECORD_BR_TRUCK          24
+#define RECORD_BR_PISTOL         25
+#define RECORD_BR_SHOTGUN        26
+#define RECORD_BR_RIFLE          27
+#define RECORD_BR_HEAVYWEAPON    28
+#define RECORD_BR_SMG            29
+#define RECORD_PILOT_BIKE        30
+#define RECORD_PILOT_CAR         31
+#define RECORD_PILOT_TRUCK       32
+#define MAX_RECORD_TYPES         32
 
 /* program types */
 #define SOFT_BOD                1
