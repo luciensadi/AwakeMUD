@@ -1838,13 +1838,13 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           switch (GET_CYBERWARE_TYPE(cyber2)) {
             case CYB_DERMALPLATING:
             case CYB_DERMALSHEATHING:
-              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with skin modifications.\r\n", ch);
+              send_to_char("Cybernetic replacements (limbs, torso) are incompatible with skin modifications.\r\n", ch);
               return FALSE;
             case CYB_BONELACING:
-              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with bone lacings.\r\n", ch);
+              send_to_char("Cybernetic replacements (limbs, torso) are incompatible with bone lacings.\r\n", ch);
               return FALSE;
             case CYB_MUSCLEREP:
-              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with muscle replacements.\r\n", ch);
+              send_to_char("Cybernetic replacements (limbs, torso) are incompatible with muscle replacements.\r\n", ch);
               return FALSE;
           }
 
@@ -1865,9 +1865,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           switch (GET_CYBERWARE_TYPE(cyber2)) {
             case CYB_ARMS:
             case CYB_LEGS:
-            case CYB_SKULL:
-            case CYB_TORSO:
-              send_to_char("Muscle replacements are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
+              send_to_char("Muscle replacements are incompatible with cybernetic replacement limbs.\r\n", ch);
               return FALSE;
           }
           break;
