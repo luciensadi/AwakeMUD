@@ -1166,6 +1166,7 @@ struct skill_data {
   bool type;
   bool requires_magic;
   sh_int group;
+  bool reflex_recorder_compatible;
 };
 
 struct part_data {
