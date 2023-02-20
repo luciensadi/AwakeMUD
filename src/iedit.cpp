@@ -41,6 +41,7 @@ extern char *cleanup(char *dest, const char *src);
 
 #define NUM_WEAPON_TYPES        27
 #define NUM_SKILL_TYPES         20
+#define NUM_RECORD_TYPES        32
 void iedit_disp_container_flags_menu(struct descriptor_data * d);
 void iedit_disp_extradesc_menu(struct descriptor_data * d);
 void iedit_disp_weapon_menu(struct descriptor_data * d);
@@ -70,6 +71,7 @@ void iedit_disp_spells_menu(struct descriptor_data * d);
 void iedit_disp_cybertype_menu(struct descriptor_data * d);
 void iedit_program_types_menu(struct descriptor_data *d);
 void iedit_disp_biotype_menu(struct descriptor_data * d);
+void iedit_disp_recordtypes_menu(struct descriptor_data * d);
 
 
 /**************************************************************************
@@ -205,6 +207,24 @@ void iedit_disp_spells_menu(struct descriptor_data * d)
                  counter + 2, counter + 2 < MAX_SPELLS ? spells[counter + 2].name : "");
 
   send_to_char("Enter spell:\r\n", CH);
+}
+
+/* reflex recorder linked skill */
+void iedit_record_types_menu(struct descriptor_data *d)
+{
+  CLS(CH);
+  send_to_char( " 1) Edged Weapons\r\n"     " 2) Pole Arms\r\n"         " 3) Whips and flails\r\n"
+                " 4) Clubs\r\n"             " 5) Unarmed Combat\r\n"    " 6) Cyber Implants\r\n"
+                " 7) Pistols\r\n"           " 8) Rifles\r\n"            " 9) Shotguns\r\n"
+                "10) Assault Rifles\r\n"    "11) Submachine Guns\r\n"   "12) Tasers\r\n"
+                "13) Machine Guns\r\n"      "14) Assault Cannons\r\n"   "15) Projectiles\r\n"
+                "16) Throwing Weapons\r\n"  "17) Athletics\r\n"         "18) Stealth\r\n"
+                "19) Electronics\r\n"       "20) Biotech\r\n"           "21) Bike B/R\r\n"
+                "22) Car B/R\r\n"           "23) Drone B/R\r\n"         "24) Truck B/R\r\n"
+                "25) Pistol B/R\r\n"        "26) Shotgun B/R\r\n"       "27) Rifle B/R\r\n"
+                "28) Heavy Weapons B/R\r\n" "29) SMG B/R\r\n"           "30) Piloting Bike\r\n"
+                "31) Piloting Car\r\n"      "32) Piloting Truck\r\n"
+               "Enter skill for reflex recorder:\r\n", CH);
 }
 
 void iedit_disp_cybereyes_menu(struct descriptor_data *d)
@@ -481,7 +501,11 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
       send_to_char("Force/Rating: ", CH);
       break;
     case ITEM_BIOWARE:
-      send_to_char("Rating: ", CH);
+      if (GET_OBJ_VAL(OBJ, 0) == BIO_REFLEXRECORDER)
+        iedit_disp_val6_menu(d);
+      else {
+        send_to_char("Rating: ", CH);
+      }
       break;
     case ITEM_CYBERDECK:
       send_to_char("Hardening: ", CH);
@@ -926,6 +950,10 @@ void iedit_disp_val6_menu(struct descriptor_data * d)
       break;
     case ITEM_FIREWEAPON:
       send_to_char("  0) Bow\r\n  1) Crossbow\r\nType: ", CH);
+      break;
+    case ITEM_BIOWARE:
+      if (GET_OBJ_VAL(OBJ, 0) == BIO_REFLEXRECORDER)
+      iedit_record_types_menu(d);
       break;
     case ITEM_WORN:
       send_to_char("Ballistic Rating: ", CH);
