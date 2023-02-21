@@ -7247,6 +7247,24 @@ void price_bio(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 30;
       break;
+    case BIO_PHENOTYPIC_BOD:
+      GET_OBJ_COST(obj) = 65000;
+      GET_OBJ_VAL(obj, 4) = 50;
+      GET_OBJ_AVAILTN(obj) = 5;
+      GET_OBJ_AVAILDAY(obj) = 21;
+      break;
+    case BIO_PHENOTYPIC_QUI:
+      GET_OBJ_COST(obj) = 65000;
+      GET_OBJ_VAL(obj, 4) = 50;
+      GET_OBJ_AVAILTN(obj) = 5;
+      GET_OBJ_AVAILDAY(obj) = 21;
+      break;
+    case BIO_PHENOTYPIC_STR:
+      GET_OBJ_COST(obj) = 65000;
+      GET_OBJ_VAL(obj, 4) = 50;
+      GET_OBJ_AVAILTN(obj) = 5;
+      GET_OBJ_AVAILDAY(obj) = 21;
+      break;
   }
   // Check for cultured.
   if (GET_OBJ_VAL(obj, 0) < BIO_CEREBRALBOOSTER && GET_OBJ_VAL(obj, 2)) {
