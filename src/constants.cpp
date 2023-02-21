@@ -2590,7 +2590,10 @@ const char *bio_types[] = {
   "Trauma Damper",
   "Custom NERPS Bioware",
   "Erythropoitin",
-  "Calcitonin"
+  "Calcitonin",
+  "Phenotypic Alteration (Bod)",
+  "Phenotypic Alteration (Qui)",
+  "Phenotypic Alteration (Str)"
 };
 
 const char *decap_bio_types[] = {
@@ -2622,7 +2625,10 @@ const char *decap_bio_types[] = {
   "trauma damper",
   "custom NERPS bioware",
   "erythropoitin",
-  "calcitonin"
+  "calcitonin",
+  "phenotypic alteration (bod)",
+  "phenotypic alteration (qui)",
+  "phenotypic alteration (str)"
 };
 
 const char *metamagic[] = {
