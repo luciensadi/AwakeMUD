@@ -253,7 +253,10 @@ ACMD(do_drive)
       send_to_char("You can't drive with the hood up.\r\n", ch);
       return;
     }
-
+    if (!VEH->locked && VEH->owner) {
+      send_to_veh("The doors click locked.\r\n", VEH, NULL, FALSE);
+      VEH->locked = TRUE;
+    }
     AFF_FLAGS(ch).SetBit(AFF_PILOT);
     VEH->cspeed = SPEED_CRUISING;
     VEH->lastin[0] = VEH->in_room;
