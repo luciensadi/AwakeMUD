@@ -1672,6 +1672,9 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       send_to_char("You use your staff powers to bypass the locked doors.\r\n", ch);
     } else if (IS_ASTRAL(ch)) {
       // No message-- it just works. Astrals don't care about locks.
+    } else if (GET_IDNUM(ch) == found_veh->owner) {
+      send_to_char("You unlock the doors.\r\n", ch);
+      found_veh->locked = FALSE;
     } else {
       send_to_char("It's locked.\r\n", ch);
       return;
