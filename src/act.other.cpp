@@ -1998,7 +1998,7 @@ ACMD(do_unattach)
     else if (item->worn_by)
       send_to_char(ch, "Someone is manning that mount.\r\n");
     else if (!((gun = get_mount_weapon(item)) || (gun = item->contains)))
-      send_to_char("There isn't anything mounted on it.\r\n", ch);
+      send_to_char(ch, "There isn't anything mounted on %s.\r\n", GET_OBJ_NAME(item));
     else {
       if (veh->locked && GET_IDNUM(ch) != veh->owner) {
         send_to_char(ch, "%s is locked in place.\r\n", capitalize(GET_OBJ_NAME(gun)));

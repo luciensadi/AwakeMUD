@@ -6149,6 +6149,7 @@ void boot_shop_orders(void)
   }
 }
 
+#define MAKE_INCOMPATIBLE_WITH_MAGIC(obj) GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 void price_cyber(struct obj_data *obj)
 {
   bool has_strength = FALSE, has_qui = FALSE;
@@ -6525,7 +6526,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 75;
-      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
+      MAKE_INCOMPATIBLE_WITH_MAGIC(obj);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), SKULL_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 35000;
@@ -6554,7 +6555,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 150;
-      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
+      MAKE_INCOMPATIBLE_WITH_MAGIC(obj);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), TORSO_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 90000;
@@ -6586,7 +6587,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 200;
-      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
+      MAKE_INCOMPATIBLE_WITH_MAGIC(obj);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), LEGS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 150000;
@@ -6641,7 +6642,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 4;
       GET_CYBERWARE_ESSENCE_COST(obj) = 200;
-      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
+      MAKE_INCOMPATIBLE_WITH_MAGIC(obj);
 
       if (IS_SET(GET_CYBERWARE_FLAGS(obj), ARMS_MOD_OBVIOUS)) {
         GET_OBJ_COST(obj) = 75000;
@@ -6950,7 +6951,7 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 60;
 #ifdef DIES_IRAE
       // Houserule: Tactical computers are mundane-only items.
-      obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
+      GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_MAGIC_INCOMPATIBLE);
 #endif
       switch (GET_CYBERWARE_RATING(obj)) {
         case 1:
@@ -7044,214 +7045,216 @@ void price_bio(struct obj_data *obj)
       // Do absolutely nothing with it.
       return;
     case BIO_ADRENALPUMP:
-      if (GET_OBJ_VAL(obj, 1) == 1)
+      if (GET_BIOWARE_RATING(obj) == 1)
         GET_OBJ_COST(obj) = 60000;
       else GET_OBJ_COST(obj) = 100000;
-      GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 1) * 125;
+      GET_BIOWARE_ESSENCE_COST(obj) = GET_BIOWARE_RATING(obj) * 125;
       GET_OBJ_AVAILTN(obj) = 10;
       GET_OBJ_AVAILDAY(obj) = 16;
       break;
     case BIO_CATSEYES:
       GET_OBJ_COST(obj) = 15000;
-      GET_OBJ_VAL(obj, 4) = 20;
+      GET_BIOWARE_ESSENCE_COST(obj) = 20;
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 6;
       break;
     case BIO_DIGESTIVEEXPANSION:
       GET_OBJ_COST(obj) = 80000;
-      GET_OBJ_VAL(obj, 4) = 100;
+      GET_BIOWARE_ESSENCE_COST(obj) = 100;
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 10;
       break;
     case BIO_ENHANCEDARTIC:
       GET_OBJ_COST(obj) = 40000;
-      GET_OBJ_VAL(obj, 4) = 60;
+      GET_BIOWARE_ESSENCE_COST(obj) = 60;
       GET_OBJ_AVAILTN(obj) = 5;
       GET_OBJ_AVAILDAY(obj) = 6;
       break;
     case BIO_EXTENDEDVOLUME:
-      if (GET_OBJ_VAL(obj, 1) == 1)
+      if (GET_BIOWARE_RATING(obj) == 1)
         GET_OBJ_COST(obj) = 8000;
-      else if (GET_OBJ_VAL(obj, 1) == 2)
+      else if (GET_BIOWARE_RATING(obj) == 2)
         GET_OBJ_COST(obj) = 15000;
       else GET_OBJ_COST(obj) = 25000;
-      GET_OBJ_VAL(obj, 4) = (GET_OBJ_VAL(obj, 1) * 10) + 10;
+      GET_BIOWARE_ESSENCE_COST(obj) = (GET_BIOWARE_RATING(obj) * 10) + 10;
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = 4;
       break;
     case BIO_METABOLICARRESTER:
       GET_OBJ_COST(obj) = 20000;
-      GET_OBJ_VAL(obj, 4) = 60;
+      GET_BIOWARE_ESSENCE_COST(obj) = 60;
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 8;
       break;
     case BIO_MUSCLEAUG:
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 20000;
-      GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 1) * 40;
+      GET_OBJ_COST(obj) = GET_BIOWARE_RATING(obj) * 20000;
+      GET_BIOWARE_ESSENCE_COST(obj) = GET_BIOWARE_RATING(obj) * 40;
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = 6;
       break;
     case BIO_MUSCLETONER:
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 25000;
-      GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 1) * 40;
+      GET_OBJ_COST(obj) = GET_BIOWARE_RATING(obj) * 25000;
+      GET_BIOWARE_ESSENCE_COST(obj) = GET_BIOWARE_RATING(obj) * 40;
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = 6;
       break;
     case BIO_NEPHRITICSCREEN:
       GET_OBJ_COST(obj) = 20000;
-      GET_OBJ_VAL(obj, 4) = 40;
+      GET_BIOWARE_ESSENCE_COST(obj) = 40;
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = 4;
       break;
     case BIO_NICTATINGGLAND:
       GET_OBJ_COST(obj) = 8000;
-      GET_OBJ_VAL(obj, 4) = 10;
+      GET_BIOWARE_ESSENCE_COST(obj) = 10;
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 6;
       break;
     case BIO_ORTHOSKIN:
-      if (GET_OBJ_VAL(obj, 1) == 1)
+      if (GET_BIOWARE_RATING(obj) == 1)
         GET_OBJ_COST(obj) = 25000;
-      else if (GET_OBJ_VAL(obj, 1) == 2)
+      else if (GET_BIOWARE_RATING(obj) == 2)
         GET_OBJ_COST(obj) = 60000;
       else GET_OBJ_COST(obj) = 100000;
-      GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 1) * 50;
+      GET_BIOWARE_ESSENCE_COST(obj) = GET_BIOWARE_RATING(obj) * 50;
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = 8;
       break;
     case BIO_PATHOGENICDEFENSE:
       GET_OBJ_COST(obj) = 24000;
-      GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 1) * 20;
+      GET_BIOWARE_ESSENCE_COST(obj) = GET_BIOWARE_RATING(obj) * 20;
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = 4;
       break;
     case BIO_PLATELETFACTORY:
       GET_OBJ_COST(obj) = 30000;
-      GET_OBJ_VAL(obj, 4) = 40;
+      GET_BIOWARE_ESSENCE_COST(obj) = 40;
       GET_OBJ_AVAILTN(obj) = 5;
       GET_OBJ_AVAILDAY(obj) = 8;
       break;
     case BIO_SUPRATHYROIDGLAND:
       GET_OBJ_COST(obj) = 50000;
-      GET_OBJ_VAL(obj, 4) = 140;
+      GET_BIOWARE_ESSENCE_COST(obj) = 140;
       GET_OBJ_AVAILTN(obj) = 8;
       GET_OBJ_AVAILDAY(obj) = 12;
       break;
     case BIO_SYMBIOTES:
-      if (GET_OBJ_VAL(obj, 1) == 1) {
+      if (GET_BIOWARE_RATING(obj) == 1) {
         GET_OBJ_COST(obj) = 15000;
-        GET_OBJ_VAL(obj, 4) = 40;
-      } else if (GET_OBJ_VAL(obj, 1) == 2) {
+        GET_BIOWARE_ESSENCE_COST(obj) = 40;
+      } else if (GET_BIOWARE_RATING(obj) == 2) {
         GET_OBJ_COST(obj) = 35000;
-        GET_OBJ_VAL(obj, 4) = 70;
+        GET_BIOWARE_ESSENCE_COST(obj) = 70;
       } else {
         GET_OBJ_COST(obj) = 60000;
-        GET_OBJ_VAL(obj, 4) = 100;
+        GET_BIOWARE_ESSENCE_COST(obj) = 100;
       }
       GET_OBJ_AVAILTN(obj) = 5;
       GET_OBJ_AVAILDAY(obj) = 10;
       break;
     case BIO_SYNTHACARDIUM:
-      if (GET_OBJ_VAL(obj, 1) == 1) {
+      if (GET_BIOWARE_RATING(obj) == 1) {
         GET_OBJ_COST(obj) = 6000;
-        GET_OBJ_VAL(obj, 4) = 20;
+        GET_BIOWARE_ESSENCE_COST(obj) = 20;
       } else {
         GET_OBJ_COST(obj) = 15000;
-        GET_OBJ_VAL(obj, 4) = 30;
+        GET_BIOWARE_ESSENCE_COST(obj) = 30;
       }
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 10;
       break;
     case BIO_TAILOREDPHEROMONES:
-      if (GET_OBJ_VAL(obj, 1) == 1) {
+      if (GET_BIOWARE_RATING(obj) == 1) {
         GET_OBJ_COST(obj) = 20000;
-        GET_OBJ_VAL(obj, 4) = 40;
+        GET_BIOWARE_ESSENCE_COST(obj) = 40;
       } else {
         GET_OBJ_COST(obj) = 45000;
-        GET_OBJ_VAL(obj, 4) = 60;
+        GET_BIOWARE_ESSENCE_COST(obj) = 60;
       }
       GET_OBJ_AVAILTN(obj) = 12;
       GET_OBJ_AVAILDAY(obj) = 14;
       break;
     case BIO_TOXINEXTRACTOR:
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 45000;
-      GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 1) * 40;
+      GET_OBJ_COST(obj) = GET_BIOWARE_RATING(obj) * 45000;
+      GET_BIOWARE_ESSENCE_COST(obj) = GET_BIOWARE_RATING(obj) * 40;
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = 4;
       break;
     case BIO_TRACHEALFILTER:
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 60000;
-      GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 1) * 40;
+      GET_OBJ_COST(obj) = GET_BIOWARE_RATING(obj) * 60000;
+      GET_BIOWARE_ESSENCE_COST(obj) = GET_BIOWARE_RATING(obj) * 40;
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = 4;
       break;
     case BIO_CEREBRALBOOSTER:
-      if (GET_OBJ_VAL(obj, 1) == 1)
+      if (GET_BIOWARE_RATING(obj) == 1)
         GET_OBJ_COST(obj) = 50000;
       else GET_OBJ_COST(obj) = 110000;
-      GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 1) * 40;
+      GET_BIOWARE_ESSENCE_COST(obj) = GET_BIOWARE_RATING(obj) * 40;
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 14;
       break;
     case BIO_DAMAGECOMPENSATOR:
-      if (GET_OBJ_VAL(obj, 1) < 3) {
-        GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 25000;
+      if (GET_BIOWARE_RATING(obj) < 3) {
+        GET_OBJ_COST(obj) = GET_BIOWARE_RATING(obj) * 25000;
         GET_OBJ_AVAILTN(obj) = 6;
-      } else if (GET_OBJ_VAL(obj, 1) < 6) {
-        GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 50000;
+      } else if (GET_BIOWARE_RATING(obj) < 6) {
+        GET_OBJ_COST(obj) = GET_BIOWARE_RATING(obj) * 50000;
         GET_OBJ_AVAILTN(obj) = 10;
       } else {
-        GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 1) * 100000;
+        GET_OBJ_COST(obj) = GET_BIOWARE_RATING(obj) * 100000;
         GET_OBJ_AVAILTN(obj) = 12;
       }
-      GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 1) * 20;
+      GET_BIOWARE_ESSENCE_COST(obj) = GET_BIOWARE_RATING(obj) * 20;
       GET_OBJ_AVAILDAY(obj) = 6;
       break;
     case BIO_PAINEDITOR:
       GET_OBJ_COST(obj) = 60000;
-      GET_OBJ_VAL(obj, 4) = 60;
+      GET_BIOWARE_ESSENCE_COST(obj) = 60;
       GET_OBJ_AVAILDAY(obj) = GET_OBJ_AVAILTN(obj) = 6;
       break;
     case BIO_REFLEXRECORDER:
       GET_OBJ_COST(obj) = 25000;
-      GET_OBJ_VAL(obj, 4) = 25;
+      GET_BIOWARE_ESSENCE_COST(obj) = 25;
       GET_OBJ_AVAILTN(obj) = 8;
       GET_OBJ_AVAILDAY(obj) = 6;
       break;
     case BIO_SYNAPTICACCELERATOR:
-      switch (GET_OBJ_VAL(obj, 1)) {
+      switch (GET_BIOWARE_RATING(obj)) {
         case 1:
           GET_OBJ_COST(obj) = 75000;
-          GET_OBJ_VAL(obj, 4) = 40;
+          GET_BIOWARE_ESSENCE_COST(obj) = 40;
           break;
         case 2:
           GET_OBJ_COST(obj) = 200000;
-          GET_OBJ_VAL(obj, 4) = 100;
+          GET_BIOWARE_ESSENCE_COST(obj) = 100;
       }
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 12;
       break;
     case BIO_THERMOSENSEORGAN:
       GET_OBJ_COST(obj) = 25000;
-      GET_OBJ_VAL(obj, 4) = 50;
+      GET_BIOWARE_ESSENCE_COST(obj) = 50;
       GET_OBJ_AVAILTN(obj) = 10;
       GET_OBJ_AVAILDAY(obj) = 12;
       break;
     case BIO_TRAUMADAMPER:
       GET_OBJ_COST(obj) = 40000;
-      GET_OBJ_VAL(obj, 4) = 40;
+      GET_BIOWARE_ESSENCE_COST(obj) = 40;
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 8;
       break;
     case BIO_ERYTHROPOITIN:
       GET_OBJ_COST(obj) = 40000;
-      GET_OBJ_VAL(obj, 4) = 40;
+      GET_BIOWARE_ESSENCE_COST(obj) = 40;
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 30;
+      MAKE_INCOMPATIBLE_WITH_MAGIC(obj);
       break;
     case BIO_CALCITONIN:
       GET_OBJ_COST(obj) = 60000;
-      GET_OBJ_VAL(obj, 4) = 40;
+      GET_BIOWARE_ESSENCE_COST(obj) = 40;
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 30;
+      MAKE_INCOMPATIBLE_WITH_MAGIC(obj);
       break;
   }
   // Check for cultured.
   if (GET_OBJ_VAL(obj, 0) < BIO_CEREBRALBOOSTER && GET_OBJ_VAL(obj, 2)) {
     GET_OBJ_COST(obj) *= 4;
-    GET_OBJ_VAL(obj, 4) = (int) round(GET_OBJ_VAL(obj, 4) * .75);
+    GET_BIOWARE_ESSENCE_COST(obj) = (int) round(GET_BIOWARE_ESSENCE_COST(obj) * .75);
     GET_OBJ_AVAILTN(obj) += 2;
     GET_OBJ_AVAILDAY(obj) *= 5;
   }
