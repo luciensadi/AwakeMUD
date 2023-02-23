@@ -1805,6 +1805,11 @@ int new_descriptor(int s)
 
   /* determine if the site is banned */
   if (isbanned(newd->host) == BAN_ALL) {
+#ifdef USE_PRIVATE_CE_WORLD
+    write_to_descriptor(desc, "Sorry, this IP address has been banned. If you believe this to be in error, contact luciensadi@gmail.com.\r\n");
+#else
+    write_to_descriptor(desc, "Sorry, this IP address has been banned.\r\n");
+#endif
     close(desc);
     snprintf(buf2, sizeof(buf2), "Connection attempt denied from banned site [%s]", newd->host);
     mudlog(buf2, NULL, LOG_BANLOG, TRUE);
