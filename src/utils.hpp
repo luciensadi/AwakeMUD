@@ -140,6 +140,7 @@ int     get_focus_bond_cost(struct obj_data *obj);
 bool    char_is_in_social_room(struct char_data *ch);
 bool    is_custom_ware(struct obj_data *ware);
 void    render_targets_abilities_to_viewer(struct char_data *viewer, struct char_data *vict);
+bool    obj_is_a_vehicle_title(struct obj_data *obj);
 
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);
@@ -974,6 +975,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_RITUAL_TICKS_AT_START(components)     (GET_OBJ_VAL((components), 6))
 
 #define GET_POCKET_SECRETARY_LOCKED_BY(obj)       (GET_OBJ_VAL((obj), 1))
+
+#define GET_VEHICLE_TITLE_OWNER(title)            (GET_OBJ_VAL((obj), 0))
 
 // ITEM_MAGIC_TOOL convenience defines
 #define GET_MAGIC_TOOL_TYPE(tool)                 (GET_OBJ_VAL((tool), 0))

@@ -5684,6 +5684,35 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *
   return TRUE;
 }
 
+// Is the specified object a vehicle title?
+bool obj_is_a_vehicle_title(struct obj_data *obj) {
+    switch (GET_OBJ_VNUM(obj)) {
+      case OBJ_TITLE_TO_AMERICAR        :
+      case OBJ_TITLE_TO_SCORPION        :
+      case OBJ_TITLE_TO_JACKRABBIT      :
+      case OBJ_TITLE_TO_RUNABOUT        :
+      case OBJ_TITLE_TO_RAPIER          :
+      case OBJ_TITLE_TO_BISON           :
+      case OBJ_TITLE_TO_WESTWIND        :
+      case OBJ_TITLE_TO_DOBERMAN        :
+      case OBJ_TITLE_TO_SNOOPER         :
+      case OBJ_TITLE_TO_SURVEILLANCE    :
+      case OBJ_TITLE_TO_ROTODRONE       :
+      case OBJ_TITLE_TO_DALMATION       :
+      case OBJ_TITLE_TO_SUPERCOMBI_RV   :
+      case OBJ_TITLE_TO_NOMAD_SUV       :
+      case OBJ_TITLE_TO_BRUMBY_SUV      :
+      case OBJ_TITLE_TO_GOPHER_PICKUP   :
+      case OBJ_TITLE_TO_TRANSPORT_PICKUP:
+      case OBJ_TITLE_TO_GMC_4201        :
+      case OBJ_TITLE_TO_GMC_BULLDOG     :
+      case OBJ_TITLE_TO_ARES_ROADMASTER :
+      case OBJ_TITLE_TO_WHITE_EAGLE_BIKE:
+        return TRUE;
+    }
+    return FALSE;
+  }
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

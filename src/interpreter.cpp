@@ -1657,7 +1657,7 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     }
 
     if (PLR_FLAGGED(ch, PLR_FROZEN)) {
-      if (!access_level(ch, LVL_VICEPRES)) {
+      if (!access_level(ch, LVL_PRESIDENT)) {
         send_to_char("You try, but the mind-numbing cold prevents you...\r\n", ch);
         return;
       } else

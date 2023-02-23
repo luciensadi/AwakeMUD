@@ -2536,6 +2536,7 @@ enum {
 #define OBJ_TITLE_TO_GMC_BULLDOG           967
 #define OBJ_TITLE_TO_ARES_ROADMASTER       968
 #define OBJ_TITLE_TO_WHITE_EAGLE_BIKE      969
+// If you add more titles here, also add them to utils.cpp's obj_is_a_vehicle_title()!
 
 #ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_GAS_VENT_IV                    80403

@@ -1979,10 +1979,18 @@ void parse_object(File &fl, long nr)
     GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_DONT_TOUCH);
   }
 
+  // Set !DONATE / !SELL / KEPT on vehicle titles.
+  if (obj_is_a_vehicle_title(obj)) {
+    GET_OBJ_EXTRA(obj).SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NOSELL, ITEM_EXTRA_KEPT, ENDBIT);
+  }
+
   { // Per-type modifications and settings.
     int mult;
     const char *type_as_string = NULL;
     switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_DOCWAGON:
+        GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_NODONATE);
+        break;
       case ITEM_MOD:
         // Weapon mounts go on all vehicle types.
         if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_MOUNT) {

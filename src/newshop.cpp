@@ -922,6 +922,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
           GET_OBJ_VAL(obj, 0) = GET_IDNUM(ch);
 
+        // Vehicle titles are ID-locked to the purchaser.
+        if (obj_is_a_vehicle_title(obj))
+          GET_VEHICLE_TITLE_OWNER(obj) = GET_IDNUM(ch);
+
         obj_to_char(obj, ch);
         bought++;
 

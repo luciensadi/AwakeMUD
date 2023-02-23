@@ -3903,6 +3903,24 @@ SPECIAL(newbie_car)
       send_to_char(ch, "You don't have a deed for that.\r\n");
       return TRUE;
     }
+    if (!obj_is_a_vehicle_title(obj)) {
+      send_to_char(ch, "%s is not the title to a vehicle.\r\n", CAP(GET_OBJ_NAME(obj)));
+      return TRUE;
+    }
+    if (GET_VEHICLE_TITLE_OWNER(obj) && GET_VEHICLE_TITLE_OWNER(obj) != GET_IDNUM(ch)) {
+      send_to_char(ch, "%s was issued to someone else!\r\n", CAP(GET_OBJ_NAME(obj)));
+
+      const char *plrname = get_player_name(GET_VEHICLE_TITLE_OWNER(obj));
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s attempted to redeem vehicle title '%s' (%ld) which actually belongs to '%s' (%ld).",
+                      GET_CHAR_NAME(ch), 
+                      GET_OBJ_NAME(obj),
+                      GET_OBJ_VNUM(obj),
+                      plrname,
+                      GET_VEHICLE_TITLE_OWNER(obj));
+      delete [] plrname;
+
+      return TRUE;
+    }
     if (ch->in_veh) {
       send_to_char("You cannot collect a vehicle while in another vehicle.\r\n", ch);
       return TRUE;
