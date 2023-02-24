@@ -1663,7 +1663,9 @@ int process_elevator(struct room_data *room,
       snprintf(buf, sizeof(buf), "The elevator car %s swiftly away from you.\r\n", elevator[num].dir == DOWN ? "descends" : "ascends");
       send_to_room(buf, &world[real_room(shaft->number)]);
       /* If you fail an athletics test, you get dragged by the car, sustaining impact damage and getting pulled along with the elevator. */
-      for (struct char_data *vict = shaft->people; vict; vict = vict->next_in_room) {
+      for (struct char_data *vict = shaft->people, *temp; vict; vict = temp) {
+        temp = vict->next_in_room;
+
         // Nohassle imms and astral projections are immune to this bullshit.
         if (PRF_FLAGGED(vict, PRF_NOHASSLE) || IS_ASTRAL(vict))
           continue;
@@ -1691,6 +1693,7 @@ int process_elevator(struct room_data *room,
         dam = convert_damage(stage(-success, power));
 
         // Check for vict's death. This continue statement is essentially no-op, but proves that I've cleared this statement.
+        // ...Except you DIDN'T, dumbass: if they're killed by the elevator, their ->next_in_room is garbage! Fixed by adding temp.
         if (damage(vict, vict, dam, TYPE_ELEVATOR, TRUE))
           continue;
       }
