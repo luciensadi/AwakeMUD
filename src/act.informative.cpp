@@ -6684,7 +6684,7 @@ ACMD(do_scan)
 
   RIG_VEH(ch, in_veh);
   if (in_veh)
-    in_room = in_veh->in_room;
+    in_room = get_veh_in_room(in_veh);
 
   // Scanning all rooms:
   if (!specific) {
