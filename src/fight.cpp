@@ -703,8 +703,14 @@ void make_corpse(struct char_data * ch)
       nuyen = 0;
       credits = 0;
     } else {
-      nuyen = (int)(GET_NUYEN(ch) / 10);
-      nuyen = number(GET_NUYEN(ch) - nuyen, GET_NUYEN(ch) + nuyen) * NUYEN_GAIN_MULTIPLIER;
+      if (AFF_FLAGGED(ch, AFF_CHEATLOG_MARK)) {
+        // Someone has given us money, so we return the exact and full amount.
+        nuyen = GET_NUYEN(ch);
+      } else {
+        nuyen = (int)(GET_NUYEN(ch) / 10);
+        nuyen = number(GET_NUYEN(ch) - nuyen, GET_NUYEN(ch) + nuyen) * NUYEN_GAIN_MULTIPLIER;
+      }
+      // Nobody can modify our bank, so we return that regardless.
       credits = (int)(GET_BANK(ch) / 10);
       credits = number(GET_BANK(ch) - credits, GET_BANK(ch) + credits) * NUYEN_GAIN_MULTIPLIER;
     }
