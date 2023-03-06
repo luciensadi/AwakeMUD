@@ -260,7 +260,9 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
 
       // Show them the room name, room description, and exits.
       struct room_data *was_in_room = ch->in_room;
+      struct veh_data *was_in_veh = ch->in_veh;
       ch->in_room = get_ch_in_room(d->character);
+      ch->in_veh = NULL;
 
       // Room name.
       display_room_name(ch, ch->in_room, FALSE);
@@ -273,6 +275,7 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
 
       // Reset their in_room to the stored value.
       ch->in_room = was_in_room;
+      ch->in_veh = was_in_veh;
 
       return TRUE;
     } else {
