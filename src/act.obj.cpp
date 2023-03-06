@@ -879,16 +879,33 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
     if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
       act("$p: you can't hold any more items.", FALSE, ch, obj, 0, TO_CHAR);
     else {
-      if ( (!IS_NPC(ch) && access_level(ch, LVL_BUILDER))
-            || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)
-            || IS_OBJ_STAT(cont, ITEM_EXTRA_CHEATLOG_MARK)
-            || (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(cont, 4))) {
+      bool should_wizlog = IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD);
+      bool should_cheatlog = (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)) || (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK) || IS_OBJ_STAT(cont, ITEM_EXTRA_CHEATLOG_MARK));
+      bool should_gridlog = FALSE;
+
+      if (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_CORPSE_IS_PC(obj)) {
+        if (GET_CORPSE_IDNUM(obj) == GET_IDNUM(ch)) {
+          should_gridlog = TRUE;
+        } else {
+          should_cheatlog = TRUE;
+        }
+      }
+
+      if (should_wizlog || should_cheatlog || should_gridlog) {
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s",
                 GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
                 representation);
-        mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+        if (should_wizlog) {
+          mudlog(buf, ch, LOG_WIZITEMLOG, TRUE);
+        }
+        else if (should_cheatlog) {
+          mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+        }
+        else {
+          mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+        }
         delete [] representation;
       }
 
@@ -1225,8 +1242,15 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
     char *representation = generate_new_loggable_representation(obj);
 
     if (obj->dropped_by_char > 0 && obj->dropped_by_char != GET_IDNUM(ch) && ch->desc && !str_cmp(obj->dropped_by_host, ch->desc->host)) {
-      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s getting from room: %s, which was dropped/donated by someone (%ld) at their same host!", GET_CHAR_NAME(ch), representation, obj->dropped_by_char);
+      const char *pname = get_player_name(obj->dropped_by_char);
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s getting from room: %s, which was dropped/donated by %s (%ld) at their same host (%s)!", 
+                      GET_CHAR_NAME(ch), 
+                      representation, 
+                      pname, 
+                      obj->dropped_by_char,
+                      GET_LEVEL(ch) < LVL_PRESIDENT ? obj->dropped_by_host : "<obscured>");
       obj->dropped_by_char = 0;
+      delete [] pname;
       delete [] obj->dropped_by_host;
       obj->dropped_by_host = NULL;
     } else if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
@@ -1374,7 +1398,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
                  owner,
                  veh->owner
                 );
-        mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+        mudlog(buf, ch, GET_IDNUM(ch) != veh->owner ? LOG_CHEATLOG : LOG_GRIDLOG, TRUE);
         DELETE_ARRAY_IF_EXTANT(owner);
 
         playerDB.SaveChar(ch);
@@ -1813,7 +1837,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
     obj_to_room(obj, ch->in_room);
 
   snprintf(buf, sizeof(buf), "%s drops: %d nuyen *", GET_CHAR_NAME(ch), amount);
-  mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+  mudlog(buf, ch, amount > 5 ? LOG_CHEATLOG : LOG_GRIDLOG, TRUE);
 
   return;
 }
@@ -1914,14 +1938,15 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
 
         const char *owner = get_player_name(veh->owner);
-        snprintf(buf, sizeof(buf), "%s (%ld) dropped vehicle %s (%ld, idnum %ld) belonging to %s (%ld).",
+        snprintf(buf, sizeof(buf), "%s (%ld) dropped vehicle %s (%ld, idnum %ld) belonging to %s (%ld) in %s.",
                  GET_CHAR_NAME(ch),
                  GET_IDNUM(ch),
                  GET_VEH_NAME(veh),
                  GET_VEH_VNUM(veh),
                  veh->idnum,
                  owner,
-                 veh->owner
+                 veh->owner,
+                 GET_ROOM_NAME(veh->in_room)
                 );
         mudlog(buf, ch, LOG_CHEATLOG, TRUE);
         DELETE_ARRAY_IF_EXTANT(owner);

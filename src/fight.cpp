@@ -637,18 +637,18 @@ void make_corpse(struct char_data * ch)
                                           ITEM_EXTRA_CORPSE, ENDBIT);
 
   GET_OBJ_VAL(corpse, 0) = 0;   /* You can't store stuff in a corpse */
-  GET_OBJ_VAL(corpse, 4) = 1;   /* corpse identifier */
+  GET_CORPSE_IS_PC(corpse) = 1;   /* corpse identifier */
   GET_OBJ_WEIGHT(corpse) = MAX(100, GET_WEIGHT(ch)) + IS_CARRYING_W(ch);
   if (IS_NPC(ch))
   {
     GET_OBJ_TIMER(corpse) = max_npc_corpse_time;
-    GET_OBJ_VAL(corpse, 4) = 0;
-    GET_OBJ_VAL(corpse, 5) = ch->nr;
+    GET_CORPSE_IS_PC(corpse) = 0;
+    GET_CORPSE_IDNUM(corpse) = ch->nr;
   } else
   {
     GET_OBJ_TIMER(corpse) = max_pc_corpse_time;
-    GET_OBJ_VAL(corpse, 4) = 1;
-    GET_OBJ_VAL(corpse, 5) = GET_IDNUM(ch);
+    GET_CORPSE_IS_PC(corpse) = 1;
+    GET_CORPSE_IDNUM(corpse) = GET_IDNUM(ch);
     /* make 'em bullet proof...(anti-twink measure) */
     GET_OBJ_BARRIER(corpse) = PC_CORPSE_BARRIER;
 
@@ -754,7 +754,7 @@ void make_corpse(struct char_data * ch)
   IS_CARRYING_W(ch) = 0;
 
   // Empty player belongings? Pointless.
-  if (GET_OBJ_VAL(corpse, 4) == 1 && !corpse->contains) {
+  if (GET_CORPSE_IS_PC(corpse) == 1 && !corpse->contains) {
     extract_obj(corpse);
     return;
   }

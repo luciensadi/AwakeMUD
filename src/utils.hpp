@@ -990,6 +990,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_DOCWAGON_BONDED_IDNUM(modulator)      (GET_OBJ_VAL((modulator), 1))
 
 // ITEM_CONTAINER convenience defines
+#define GET_CORPSE_IS_PC(corpse)                  (GET_OBJ_VAL((corpse), 4))
+#define GET_CORPSE_IDNUM(corpse)                  (GET_OBJ_VAL((corpse), 5))
 
 // ITEM_RADIO convenience defines
 #define GET_RADIO_CENTERED_FREQUENCY(radio)       (GET_OBJ_VAL((radio), 0))
