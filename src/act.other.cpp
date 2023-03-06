@@ -3313,6 +3313,12 @@ ACMD(do_assense)
   else target += GET_BACKGROUND_COUNT(ch->in_room);
   int success = success_test(skill, target);
   success += (int)(success_test(GET_SKILL(ch, SKILL_AURA_READING), 4) / 2);
+
+  if (GET_LEVEL(ch) >= LVL_FIXER && success < 10) {
+    send_to_char(ch, "You forcibly raise your successes from %d to 10 by staff fiat.\r\n", success);
+    success = 10;
+  }
+
   if (success < 1) {
     send_to_char(ch, "You fail to notice anything about that aura.\r\n");
     return;
@@ -3666,6 +3672,11 @@ ACMD(do_assense)
       if (success >= 3) {
         if (GET_IDNUM(ch) == GET_FOCUS_BONDED_TO(obj))
           strlcat(buf, ", it is bonded to you", sizeof(buf));
+        else if (GET_LEVEL(ch) >= LVL_BUILDER) {
+          const char *pname = get_player_name(GET_FOCUS_BONDED_TO(obj));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", it is bonded by %s", pname);
+          delete [] pname;
+        }
         else {
           for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
             if (mem->idnum == GET_FOCUS_BONDED_TO(obj))
