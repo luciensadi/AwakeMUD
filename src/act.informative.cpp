@@ -5719,7 +5719,7 @@ ACMD(do_users)
 
       if (*host_search && !strstr((const char *)d->host, host_search))
         continue;
-      if (*name_search && isname(name_search, GET_KEYWORDS(tch)))
+      if (*name_search && !isname(name_search, GET_KEYWORDS(tch)))
         continue;
       if (!CAN_SEE(ch, tch))
         continue;
