@@ -1471,7 +1471,7 @@ ACMD(do_chase)
   struct char_data *vict;
 
   if (!(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
-    send_to_char("You have to be controlling a vehicle to do that.\r\n", ch);
+    send_to_char(ch, "You have to be %s to do that.\r\n", ch->in_veh ? "driving" : "controlling a vehicle");
     return;
   }
   RIG_VEH(ch, veh);
@@ -2173,7 +2173,7 @@ ACMD(do_tow)
 {
   struct veh_data *veh = NULL, *tveh = NULL;
   if (!(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
-    send_to_char("You have to be controlling a vehicle to do that.\r\n", ch);
+    send_to_char(ch, "You have to be %s to do that.\r\n", ch->in_veh ? "driving" : "controlling a vehicle");
     return;
   }
   RIG_VEH(ch, veh);
