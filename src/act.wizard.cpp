@@ -235,9 +235,28 @@ ACMD(do_copyover)
       cab_inhabitants++;
   }
 
+  if (!ch->desc) {
+    mudlog("SYSERR: Somehow, we ended up in COPYOVER with no ch->desc!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
   skip_spaces(&argument);
-  if (str_cmp(argument, "force") != 0) {
+  // COPYOVER FORCE.
+  if (!str_cmp(argument, "force")){
+    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, refund %d cab fare%s, drop %d quest%s, and lose any repairman items.\r\n",
+             fucky_states,    fucky_states    != 1 ? "s" : "",
+             cab_inhabitants, cab_inhabitants != 1 ? "s" : "",
+             num_questors,    num_questors    != 1 ? "s" : "");
+    if (write_to_descriptor(ch->desc->descriptor, buf) < 0) {
+      // Rofl, the copyover initiatior disconnected? Um.
+      close_socket(ch->desc);
+    }
+  } 
+  // Non-forcible copyover command (CHECK or CONFIRM).
+  else {
     bool will_not_copyover = FALSE;
+
+    // Check for questors.
     if (num_questors > 0) {
       send_to_char(ch, "There %s %d character%s doing autoruns right now.\r\n%s^n.\r\n",
                    num_questors != 1 ? "are" : "is",
@@ -254,16 +273,7 @@ ACMD(do_copyover)
       will_not_copyover = TRUE;
     }
 
-    /* Check no longer needed since we now save PC corpses.
-    if (num_corpses) {
-      send_to_char(ch, "There %s %d player corpse%s out there with things still in them.\r\n",
-                   num_corpses != 1 ? "are" : "is",
-                   num_corpses,
-                   num_corpses != 1 ? "s" : "");
-      will_not_copyover = TRUE;
-    }
-    */
-
+    // Check for cab-riders.
     if (cab_inhabitants) {
       send_to_char(ch, "There %s %d %s.\r\n",
                    cab_inhabitants != 1 ? "are" : "is",
@@ -272,6 +282,7 @@ ACMD(do_copyover)
       will_not_copyover = TRUE;
     }
 
+    // Check for repairman items.
     for (struct char_data *i = character_list; i; i = i->next) {
       if (IS_NPC(i) && (GET_MOB_SPEC(i) == fixer || GET_MOB_SPEC2(i) == fixer) && i->carrying) {
         send_to_char("The repairman has unclaimed items.\r\n", ch);
@@ -280,38 +291,31 @@ ACMD(do_copyover)
       }
     }
 
+    // There is no command in this if-statement that allows us to bypass a failed check state.
     if (will_not_copyover) {
-      if (str_cmp(argument, "check") != 0)
-        send_to_char("Copyover aborted. Use 'copyover force' to override this.\r\n", ch);
+      send_to_char("Copyover aborted. Use 'copyover force' to override this.\r\n", ch);
+      return;
+    } 
+    // If there were no errors, note this.
+    else {
+      send_to_char("Copyover is possible, no error conditions noted.\r\n", ch);
+    }
+
+    // COPYOVER CHECK bails out at this point.
+    if (!str_cmp(argument, "check")) {
       return;
     }
-  } else if (ch->desc){
-    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, refund %d cab fare%s, drop %d quest%s, and lose any repairman items.\r\n",
-             fucky_states,    fucky_states    != 1 ? "s" : "",
-             cab_inhabitants, cab_inhabitants != 1 ? "s" : "",
-             num_questors,    num_questors    != 1 ? "s" : "");
-    if (write_to_descriptor(ch->desc->descriptor, buf) < 0) {
-      // Rofl, the copyover initiatior disconnected? Um.
-      close_socket(ch->desc);
-    }
-  } else {
-    log("WTF, ch who initiated copyover had no desc? ;-;");
-  }
-
-  if (str_cmp(argument, "check") == 0) {
-    send_to_char("Copyover is possible, no error conditions noted.\r\n", ch);
-    return;
-  }
 
 #ifdef USE_PRIVATE_CE_WORLD
 #ifndef IS_BUILDPORT
-  // Guard against accidental copyovers on main port.
-  if (str_cmp(argument, "confirm") != 0) {
-    send_to_char("Copyover is possible, no error conditions noted. Type ^WCOPYOVER CONFIRM^n to execute.\r\n", ch);
-    return;
-  }
+    // Guard against accidental copyovers on main port.
+    if (str_cmp(argument, "confirm") != 0) {
+      send_to_char("This is the PLAYER PORT, so you need to type ^WCOPYOVER CONFIRM^n to execute.\r\n", ch);
+      return;
+    }
 #endif // IS_BUILDPORT
 #endif // USE_PRIVATE_CE_WORLD
+  }
 
   snprintf(buf, sizeof(buf), "Copyover initiated by %s", GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
