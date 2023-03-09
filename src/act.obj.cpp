@@ -883,8 +883,8 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       bool should_cheatlog = (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)) || (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK) || IS_OBJ_STAT(cont, ITEM_EXTRA_CHEATLOG_MARK));
       bool should_gridlog = FALSE;
 
-      if (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_CORPSE_IS_PC(obj)) {
-        if (GET_CORPSE_IDNUM(obj) == GET_IDNUM(ch)) {
+      if (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_CORPSE_IS_PC(cont)) {
+        if (GET_CORPSE_IDNUM(cont) == GET_IDNUM(ch)) {
           should_gridlog = TRUE;
         } else {
           should_cheatlog = TRUE;
