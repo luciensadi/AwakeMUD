@@ -1359,6 +1359,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   }
 
   make_desc(ch, i, buf, FALSE, FALSE, sizeof(buf));
+  strlcat(buf, "^n", sizeof(buf));
 
   if (GET_MOB_QUEST_CHAR_ID(i)) {
     if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {

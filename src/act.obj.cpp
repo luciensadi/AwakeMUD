@@ -319,20 +319,30 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     }
   }
   // Prevent installing persona firmware into a store-bought deck.
-  if (GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM
-      && (GET_OBJ_VAL(obj, 0) == SOFT_BOD
-          || GET_OBJ_VAL(obj, 0) == SOFT_SENSOR
-          || GET_OBJ_VAL(obj, 0) == SOFT_MASKING
-          || GET_OBJ_VAL(obj, 0) == SOFT_EVASION)) {
-    if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
-      send_to_char(ch, "%s is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", GET_OBJ_NAME(obj));
-    } else {
-      send_to_char(ch, "%s is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n",
-                   GET_OBJ_NAME(obj));
+  if (GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM) {
+    switch (GET_PROGRAM_TYPE(obj)) {
+      case SOFT_BOD:
+      case SOFT_SENSOR:
+      case SOFT_MASKING:
+      case SOFT_EVASION:
+      case SOFT_ASIST_COLD:
+      case SOFT_ASIST_HOT:
+      case SOFT_HARDENING:
+      case SOFT_ICCM:
+      case SOFT_ICON:
+      case SOFT_MPCP:
+      case SOFT_REALITY:
+      case SOFT_RESPONSE:
+        if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
+          send_to_char(ch, "%s is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", CAP(GET_OBJ_NAME(obj)));
+        } else {
+          send_to_char(ch, "%s is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n", CAP(GET_OBJ_NAME(obj)));
+        }
+        return;
     }
-    return;
   }
-  else if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM)
+
+  if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM)
     send_to_char(ch, "You'll have to cook %s before you can install it.\r\n", GET_OBJ_NAME(obj));
   else if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
     display_cyberdeck_issues(ch, cont);
