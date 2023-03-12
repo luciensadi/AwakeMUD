@@ -1834,7 +1834,7 @@ ACMD(do_drag)
       return;
     }
 
-    if ((int)((GET_STR(ch)*10) * 3/2) < (GET_WEIGHT(vict) + IS_CARRYING_W(vict))) {
+    if (!affected_by_spell(vict, SPELL_LEVITATE) && (int)((GET_STR(ch)*10) * 3/2) < (GET_WEIGHT(vict) + IS_CARRYING_W(vict))) {
       act("$N is too heavy for you to drag!", FALSE, ch, 0, vict, TO_CHAR);
       return;
     }
