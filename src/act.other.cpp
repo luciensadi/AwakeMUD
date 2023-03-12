@@ -72,6 +72,8 @@ extern void disable_xterm_256(descriptor_t *apDescriptor);
 extern void enable_xterm_256(descriptor_t *apDescriptor);
 extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern int get_docwagon_faux_id(struct char_data *ch);
+extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
+extern unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
 
 extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
 
@@ -4913,6 +4915,40 @@ ACMD(do_syspoints) {
       playerDB.SaveChar(ch);
 
       return;
+    }
+
+    if (is_abbrev(arg, "analyze")) {
+#define ANALYZE_COST 2
+      FAILURE_CASE_PRINTF(!*buf,
+                          "This will spend %d syspoints to tell you the min-max rep range and number of jobs available from a given Johnson.\r\nSyntax: SYSPOINTS ANALYZE <target Johnson>\r\n",
+                          ANALYZE_COST);
+
+      struct char_data *to = ch->in_veh ? get_char_veh(ch, buf, ch->in_veh) : to = get_char_room_vis(ch, buf);
+
+      FAILURE_CASE_PRINTF(!to, "You don't see any Johnsons named '%s' here.\r\n", buf);
+      FAILURE_CASE_PRINTF(!IS_NPC(to) || !(mob_index[GET_MOB_RNUM(to)].func == johnson || mob_index[GET_MOB_RNUM(to)].sfunc == johnson), "%s is not a Johnson.", GET_NAME(to));
+
+      if (GET_SYSTEM_POINTS(ch) >= ANALYZE_COST) {
+        send_to_char(ch, "You spend %d syspoint%s.\r\n", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
+        GET_SYSTEM_POINTS(ch) -= ANALYZE_COST;
+      } else {
+        send_to_char(ch, "You can't afford that: SYSPOINTS ANALYZE costs %d syspoint%s.", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
+        return;
+      }
+
+      int num_jobs = 0;
+      for (int i = 0; i <= top_of_questt; i++)
+        if (quest_table[i].johnson == GET_MOB_VNUM(to))
+          num_jobs++;
+
+      send_to_char(ch, "OOC: %s^n's reputation range is ^c%d^n-^c%d^n, with ^c%d^n total job%s available.\r\n",
+                   GET_CHAR_NAME(to),
+                   get_johnson_overall_max_rep(to),
+                   get_johnson_overall_min_rep(to),
+                   num_jobs,
+                   num_jobs == 1 ? "" : "s");
+      return;
+#undef ANALYZE_COST
     }
 
     send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
