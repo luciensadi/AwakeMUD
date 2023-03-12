@@ -326,18 +326,40 @@ int damage_modifier(struct char_data *ch, char *rbuf, size_t rbuf_size, char *wr
     } else if (GET_BIOWARE_TYPE(obj) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(obj))
       mental = 10;
   }
-  if (AFF_FLAGGED(ch, AFF_RESISTPAIN))
-  {
+  if (AFF_FLAGGED(ch, AFF_RESISTPAIN) && ch->points.resistpain > 0) {
     physical += ch->points.resistpain;
-    mental += ch->points.resistpain;
   }
   if (!IS_NPC(ch)) {
-    if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_PAIN_RESISTANCE) > 0)
-    {
-      physical += GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
-      mental += GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
+    if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_PAIN_RESISTANCE) > 0) {
+      int pain_resist_boxes = GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
+
+      // Physical boxes first if physical is lower then mental.
+      if (physical < mental) {
+        int physical_delta_from_max = GET_MAX_PHYSICAL(ch) - physical;
+        int physical_gain = MIN(physical_delta_from_max, pain_resist_boxes);
+        physical += physical_gain;
+        pain_resist_boxes -= physical_gain;
+
+        int mental_delta_from_max = GET_MAX_MENTAL(ch) - mental;
+        int mental_gain = MIN(mental_delta_from_max, pain_resist_boxes);
+        mental += mental_gain;
+        pain_resist_boxes -= mental_gain;
+      } 
+      // Otherwise, mental boxes first, then physical.
+      else {
+        int mental_delta_from_max = GET_MAX_MENTAL(ch) - mental;
+        int mental_gain = MIN(mental_delta_from_max, pain_resist_boxes);
+        mental += mental_gain;
+        pain_resist_boxes -= mental_gain;
+
+        int physical_delta_from_max = GET_MAX_PHYSICAL(ch) - physical;
+        int physical_gain = MIN(physical_delta_from_max, pain_resist_boxes);
+        physical += physical_gain;
+        pain_resist_boxes -= physical_gain;
+      }
     }
 
+    // Then add drug pain resist.
     int drug_pain_resist = get_drug_pain_resist_level(ch);
     physical += drug_pain_resist;
     mental += drug_pain_resist;
