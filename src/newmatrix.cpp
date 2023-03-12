@@ -33,6 +33,8 @@ extern void create_deck(struct char_data *ch);
 extern void create_spell(struct char_data *ch);
 extern void create_ammo(struct char_data *ch);
 
+ACMD_DECLARE(do_look);
+
 struct matrix_icon *find_icon_by_id(vnum_t idnum);
 
 void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ);
@@ -1761,6 +1763,12 @@ ACMD(do_logoff)
   extract_icon(PERSONA);
   PERSONA = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+
+  // Make 'em look if they're not screenreaders.
+  if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+    char emptybuf[10] = { '\0' };
+    do_look(ch, emptybuf, 0, 0);
+  }
 }
 
 ACMD(do_connect)
