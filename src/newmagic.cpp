@@ -6492,8 +6492,8 @@ ACMD(do_think)
       if (viewer == ch || !AWAKE(viewer))
         continue;
 
-      if (access_level(viewer, LVL_FIXER) || (PRF_FLAGGED(viewer, PRF_QUEST) && PRF_FLAGGED(ch, PRF_QUESTOR))) {
-        send_to_char(viewer, "^LOOC: %s thinks to %s, \"%s^n\"^n\r\n",
+      if (access_level(viewer, LVL_FIXER) || (PRF_FLAGGED(viewer, PRF_QUESTOR) && PRF_FLAGGED(ch, PRF_QUEST))) {
+        send_to_char(viewer, "^LOOC Info: %s thinks to %s, \"%s^n\"^n\r\n",
                      GET_CHAR_NAME(ch),
                      GET_SEX(ch) == SEX_NEUTRAL ? "themselves" : (GET_SEX(ch) == SEX_MALE ? "himself" : "herself"),
                      formatted_think_string);
