@@ -1814,8 +1814,8 @@ ACMD(do_alias)
         send_to_char("You can't alias 'alias'.\r\n", ch);
         return;
       }
-      /* Should cover every possbile case of 'kill', 'hit', and 'murder' */
-      else if ( (str_str(repl, "kill") || str_str(repl, "hit") || str_str(repl, "murder")) && strlen(arg) < 4 ) {
+      /* Should cover every possbile case of 'kill', 'hit', and 'murder', but allow through 'killing' from killing hands. */
+      else if ( (str_str(repl, "kill") || str_str(repl, "hit") || str_str(repl, "murder")) && !str_str(repl, "killing") && strlen(arg) < 4 ) {
         send_to_char(
           "If your alias contains the 'kill', 'hit', or 'murder' commands,"
           " it must be accompanied by at least a 4 letter alias.\n\r",ch);
