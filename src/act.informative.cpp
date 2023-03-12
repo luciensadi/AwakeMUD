@@ -2637,10 +2637,11 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
           k->autonav, (int)k->load, (int)k->usedload);
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its engine is adapted for ^c%s^n. If loaded into another vehicle, it takes up ^c%d^n load.\r\n",
                   engine_types[k->engine], calculate_vehicle_entry_load(k));
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can travel over %s%s%s.\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can travel over ^c%s%s%s^n.\r\n",
            veh_can_traverse_land(k) ? "land" : "",
            veh_can_traverse_land(k) && veh_can_traverse_water(k) ? " and " : "",
            veh_can_traverse_water(k) ? "water" : "");
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It ^c%s^n enough space to set up a workshop inside it.\r\n", k->flags.IsSet(VFLAG_WORKSHOP) ? "has" : "doesn't have");
   send_to_char(buf, ch);
 }
 
@@ -2805,6 +2806,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 if (has_smartlink) {
                   strlcat(buf, "^Y\r\nIt has multiple smartlinks attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
                 } else {
+                  has_smartlink = TRUE;
+
                   int cyberware_rating = 0;
                   for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
                     if (GET_CYBERWARE_TYPE(cyber) == CYB_SMARTLINK) {
@@ -2827,7 +2830,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                     }
                     // No goggles either.
                     else {
-                      strlcat(buf, "\r\n^YIt has a smartlink installed, but you have neither the cyberware nor goggles to use it.^n", sizeof(buf));
+                      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n^YIt has a Smartlink%s attached to the %s, but you have neither the cyberware nor goggles to use it.^n",
+                               GET_ACCESSORY_RATING(accessory) == 2 ? "-II" : "",
+                               gun_accessory_locations[mount_location]);
+                      // You don't get to use it: unflag this weapon as having a smartlink.
+                      has_smartlink = FALSE;
                     }
                   }
 
@@ -2853,7 +2860,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                             (GET_ACCESSORY_RATING(accessory) == 1 || GET_ACCESSORY_RATING(accessory) < 2) ? -SMARTLINK_I_MODIFIER : -SMARTLINK_II_MODIFIER);
                   }
                 }
-                has_smartlink = TRUE;
                 break;
               case ACCESS_SCOPE:
                 if (GET_OBJ_AFFECT(accessory).IsSet(AFF_LASER_SIGHT)) {
