@@ -45,6 +45,24 @@ int objList::PrintList(struct char_data *ch, const char *arg, bool override_vis_
   return num;
 }
 
+int objList::PrintBelongings(struct char_data *ch)
+{
+  nodeStruct<struct obj_data *> *temp = head;
+  int num = 0;
+
+  for (;temp; temp = temp->next) {
+    // Skip anything that doesn't exist or isn't a container.
+    if (!temp->data || GET_OBJ_TYPE(temp->data) != ITEM_CONTAINER)
+      continue;
+
+    // Note the out-of-order calls here. We check the idnums (cheap calls) before checking the obj flags (slightly more expensive).
+    if (GET_CORPSE_IS_PC(temp->data) && GET_CORPSE_IDNUM(temp->data) == GET_IDNUM(ch) && IS_OBJ_STAT(temp->data, ITEM_EXTRA_CORPSE))
+      print_object_location(++num, temp->data, ch, TRUE);
+  }
+
+  return num;
+}
+
 void objList::Traverse(void (*func)(struct obj_data *))
 {
   for (nodeStruct<struct obj_data *> *temp = head; temp; temp = temp->next)

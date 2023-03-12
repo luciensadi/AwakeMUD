@@ -5829,6 +5829,20 @@ extern void nonsensical_reply(struct char_data *ch, const char *arg, const char 
 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
+  // Locating belongings.
+  if (*arg && (is_abbrev(arg, "belongings") || is_abbrev(arg, "corpses") || is_abbrev(arg, "stuff") || is_abbrev(arg, "body") || is_abbrev(arg, "bodies"))) {
+    // Clear buf first so we don't send junk:
+    strlcpy(buf, "", sizeof(buf));
+
+    // Query the object list.
+    if (ObjList.PrintBelongings(ch) == 0) {
+      send_to_char("You query DocWagon's list of places they couldn't retrieve your belongings from, but nothing comes up.\r\n", ch);
+    } else {
+      send_to_char(ch, "You take a moment and query DocWagon's list of places they couldn't retrieve your belongings from:\r\n%s", buf);
+    }
+    return;
+  }
+
   // array slot 0 is total PCs, array slot 1 is active PCs
   std::unordered_map<vnum_t, std::vector<struct char_data *>> occupied_rooms = {};
   std::unordered_map<vnum_t, std::vector<struct char_data *>>::iterator room_iterator;
