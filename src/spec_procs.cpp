@@ -2667,6 +2667,10 @@ SPECIAL(saeder_guard) {
   if (!AWAKE(guard) || (GET_POS(guard) == POS_FIGHTING))
     return(FALSE);
 
+  // The guards won't stop astrals from exploring.
+  if (IS_ASTRAL(ch))
+    return FALSE;
+
   if (CMD_IS("east") && CAN_SEE(guard, ch) && guard->in_room->number == 4930) {
     for (obj = ch->carrying; obj; obj = obj->next_content)
       if (GET_OBJ_VNUM(obj) == 4914)
@@ -2689,6 +2693,10 @@ SPECIAL(crime_mall_guard) {
     return FALSE;
 
   struct char_data *guard = (struct char_data *) me;
+
+  // The guards won't stop astrals from exploring.
+  if (IS_ASTRAL(ch))
+    return FALSE;
 
   if ((guard->in_room->number == 100075 && CMD_IS("east")) ||
       (guard->in_room->number == 100077 && CMD_IS("west"))) {
