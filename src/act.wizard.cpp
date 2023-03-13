@@ -2436,7 +2436,6 @@ ACMD(do_purge)
       is_editor |= (zone_table[zone_idx].editor_ids[editor_idx] == GET_IDNUM(ch));
     }
     FAILURE_CASE(!is_editor, "You can only purge in zones you're an editor of.");
-    return;
   }
 
   one_argument(argument, buf);
