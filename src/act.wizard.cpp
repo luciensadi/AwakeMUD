@@ -1036,8 +1036,8 @@ void do_stat_room(struct char_data * ch)
   send_to_char(ch, "Room name: ^c%s\r\n", rm->name);
 
   sprinttype(rm->sector_type, spirit_name, buf2, sizeof(buf2));
-  snprintf(buf, sizeof(buf), "Zone: [%3d], VNum: [^g%8ld^n], RNum: [%5ld], Rating: [%2d], Type: %s\r\n",
-          rm->zone, rm->number, real_room(rm->number), rm->rating, buf2);
+  snprintf(buf, sizeof(buf), "Zone: [%d (%d)], VNum: [^g%8ld^n], RNum: [%5ld], Rating: [%2d], Type: %s\r\n",
+          zone_table[rm->zone].number, rm->zone, rm->number, real_room(rm->number), rm->rating, buf2);
   send_to_char(buf, ch);
 
   rm->room_flags.PrintBits(buf2, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
@@ -2429,9 +2429,13 @@ ACMD(do_purge)
   struct veh_data *veh, *next_ve;
   extern void die_follower(struct char_data * ch);
 
-  if (!access_level(ch, LVL_EXECUTIVE) &&
-      (ch->player_specials->saved.zonenum != zone_table[get_ch_in_room(ch)->zone].number)) {
-    send_to_char("You can only purge in your zone.\r\n", ch);
+  if (!access_level(ch, LVL_EXECUTIVE)) {
+    bool is_editor = FALSE;
+    int zone_idx = get_ch_in_room(ch)->zone;
+    for (int editor_idx = 0; editor_idx < NUM_ZONE_EDITOR_IDS; editor_idx++) {
+      is_editor |= (zone_table[zone_idx].editor_ids[editor_idx] == GET_IDNUM(ch));
+    }
+    FAILURE_CASE(!is_editor, "You can only purge in zones you're an editor of.");
     return;
   }
 
