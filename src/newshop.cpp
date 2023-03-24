@@ -926,6 +926,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         if (obj_is_a_vehicle_title(obj))
           GET_VEHICLE_TITLE_OWNER(obj) = GET_IDNUM(ch);
 
+        // Hardened armor is not ID-locked on purchase, but IS on first wear.
+        if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR))
+          GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = -1;
+
         obj_to_char(obj, ch);
         bought++;
 

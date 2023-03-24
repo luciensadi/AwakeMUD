@@ -953,12 +953,14 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_CHEMS_QTY(chems)                      (GET_OBJ_VAL((chems), 0))
 
 // ITEM_WORN convenience defines
-#define GET_WORN_POCKETS_HOLSTERS(worn)           (GET_OBJ_VAL((worn), 0))
-#define GET_WORN_POCKETS_MISC(worn)               (GET_OBJ_VAL((worn), 4))
-#define GET_WORN_BALLISTIC(worn)                  (GET_OBJ_VAL((worn), 5))
-#define GET_WORN_IMPACT(worn)                     (GET_OBJ_VAL((worn), 6))
-#define GET_WORN_CONCEAL_RATING(worn)             (GET_OBJ_VAL((worn), 7))
-#define GET_WORN_MATCHED_SET(worn)                (GET_OBJ_VAL((worn), 8))
+#define GET_WORN_POCKETS_HOLSTERS(worn)              (GET_OBJ_VAL((worn), 0))
+#define GET_WORN_POCKETS_MISC(worn)                  (GET_OBJ_VAL((worn), 4))
+#define GET_WORN_BALLISTIC(worn)                     (GET_OBJ_VAL((worn), 5))
+#define GET_WORN_IMPACT(worn)                        (GET_OBJ_VAL((worn), 6))
+#define GET_WORN_CONCEAL_RATING(worn)                (GET_OBJ_VAL((worn), 7))
+#define GET_WORN_MATCHED_SET(worn)                   (GET_OBJ_VAL((worn), 8))
+
+#define GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(worn) (GET_OBJ_VAL((worn), 11))
 
 // ITEM_OTHER convenience defines
 #define GET_VEHCONTAINER_VEH_VNUM(cont)           (GET_OBJ_VAL((cont), 1))

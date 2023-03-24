@@ -3119,14 +3119,13 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
                             };
 
   /* first, make sure that the wear position is valid. */
-  if (!CAN_WEAR(obj, wear_bitvectors[where]))
-  {
+  if (!CAN_WEAR(obj, wear_bitvectors[where])) {
     if (print_messages)
       act("You can't wear $p there.", FALSE, ch, obj, 0, TO_CHAR);
     return;
   }
-  switch (GET_RACE(ch))
-  {
+
+  switch (GET_RACE(ch)) {
   case RACE_WAKYAMBI:
   case RACE_DRYAD:
   case RACE_ELF:
@@ -3276,6 +3275,20 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
         (GET_OBJ_TYPE(obj) == ITEM_WORN && (GET_WORN_IMPACT(obj) || GET_WORN_BALLISTIC(obj)))) {
       if (print_messages)
         send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
+      return;
+    }
+  }
+
+  // If it's hardened armor, it's customized to a specific person.
+  if (!IS_NPC(ch) && IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+    // -1 means it's not yet customized, you can wear it and it molds to you.
+    if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) == -1) {
+      send_to_char(ch, "You take a moment to check %s over, making sure the armorer really customized it to fit you.\r\n", GET_OBJ_NAME(obj));
+      GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = GET_IDNUM(ch);
+    } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) == GET_IDNUM(ch)) {
+      // Silent success: it's already customized to you.
+    } else {
+      send_to_char(ch, "%s has been customized for someone else.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
   }

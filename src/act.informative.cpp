@@ -325,6 +325,15 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (IS_OBJ_STAT(object, ITEM_EXTRA_KEPT)) {
       strlcat(buf, " ^c(kept)^n", sizeof(buf));
     }
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_HARDENED_ARMOR)) {
+      if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(object) == GET_IDNUM(ch)) {
+        strlcat(buf, " (yours)", sizeof(buf));
+      } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(object) == -1) {
+        strlcat(buf, " ^g(not yet customized)", sizeof(buf));
+      } else {
+        strlcat(buf, " ^y(unusable)", sizeof(buf));
+      }
+    }
   }
   else if (GET_OBJ_NAME(object) && ((mode == 3) || (mode == 4) || (mode == SHOW_MODE_OWN_EQUIPMENT) || (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT))) {
     strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
@@ -3059,6 +3068,16 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. "
                                                         "People have a ^c%d^n target number when trying to see under it.\r\n", bal, imp, GET_WORN_CONCEAL_RATING(j));
+      }
+
+      if (IS_OBJ_STAT(j, ITEM_EXTRA_HARDENED_ARMOR)) {
+        if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == GET_IDNUM(ch)) {
+          strlcat(buf, "It has been permanently customized to fit you. Nobody else can wear it.\r\n", sizeof(buf));
+        } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == -1) {
+          strlcat(buf, "^gIt will be permanently customized to fit the first person to wear it (AKA soul-bound).^n\r\n", sizeof(buf));
+        } else {
+          strlcat(buf, "^yIt has been permanently customized to fit someone else-- you can't wear it.^n\r\n", sizeof(buf));
+        }
       }
       break;
     case ITEM_DOCWAGON:
