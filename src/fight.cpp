@@ -980,6 +980,7 @@ void raw_kill(struct char_data * ch)
       char_to_room(ch, &world[i]);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
       PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
+      GET_LAST_IN(ch) = GET_ROOM_VNUM(ch->in_room);
 
       if (GET_QUEST(ch)) {
         end_quest(ch);
@@ -2411,6 +2412,10 @@ void docwagon_retrieve(struct char_data *ch) {
     GET_MENTAL(ch) = 1000;
     GET_POS(ch) = POS_STANDING;
   } else {
+    if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+      send_to_char("(TIP: Your belongings have been left behind, so you'll need to go and retrieve them if you want them back.)\r\n", ch);
+    }
+
     struct obj_data *docwagon = find_best_active_docwagon_modulator(ch);
 
     // Compensate for edge case: Their modulator was destroyed since they were flagged.
