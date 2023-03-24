@@ -3286,11 +3286,13 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
       send_to_char(ch, "You take a moment to check %s over, making sure the armorer really customized it to fit you.\r\n", GET_OBJ_NAME(obj));
       GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = GET_IDNUM(ch);
     } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) == GET_IDNUM(ch)) {
-      // Silent success: it's already customized to you.
+      send_to_char("It takes you a moment to get suited up.\r\n", ch);
     } else {
       send_to_char(ch, "%s has been customized for someone else.\r\n", capitalize(GET_OBJ_NAME(obj)));
       return;
     }
+    // Takes a bit to put it on.
+    WAIT_STATE(ch, 4 RL_SEC);
   }
 
   // House rule: Swapping in and out of ruthenium takes time. This addresses potential cheese.
@@ -3591,6 +3593,12 @@ void perform_remove(struct char_data * ch, int pos)
   int previous_armor_penalty = get_armor_penalty_grade(ch);
 
   obj_to_char(unequip_char(ch, pos, TRUE), ch);
+
+  // Taking off hardened armor takes time.
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+    send_to_char("It takes you a moment to step out of the heavily-customized armor.\r\n", ch);
+    WAIT_STATE(ch, 4 RL_SEC);
+  }
 
   // House rule: Swapping in and out of ruthenium takes time. This addresses potential cheese.
   {
