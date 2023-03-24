@@ -583,6 +583,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             } else {
               att->ranged->power = att->ranged->power_before_armor - (int)(GET_BALLISTIC(def->ch) / 2);
             }
+            def->hardened_armor_ballistic_rating /= 2;
             break;
           case AMMO_EX:
             att->ranged->power_before_armor++;
@@ -623,6 +624,20 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
     if (GET_SKILL(att->ch, att->ranged->skill) >= 8 && SHOTS_FIRED(att->ch) < 10000)
       SHOTS_FIRED(att->ch)++;
+
+    // Check for hardened armor per CC p51.
+    if (def->hardened_armor_ballistic_rating >= GET_WEAPON_POWER(att->weapon)) {
+      act("Your rounds ricochet off of $S hardened armor!", FALSE, att->ch, 0, def->ch, TO_CHAR);
+      act("$n's rounds ricochet off of your hardened armor!", FALSE, att->ch, 0, def->ch, TO_VICT);
+      act("$n's rounds ricochet off of $N's hardened armor!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+      send_to_char(att->ch, "^o(OOC: %s has hardened armor! You need at least ^O%d^o weapon power to damage %s with your current ammo type, and you only have %d.)^n\r\n",
+                    decapitalize_a_an(GET_CHAR_NAME(def->ch)),
+                    def->hardened_armor_ballistic_rating + 1,
+                    HMHR(def->ch),
+                    GET_WEAPON_POWER(att->weapon)
+                  );
+      return FALSE;
+    }
 
     // The power of an attack can't be below 2 from ammo changes.
     att->ranged->power = MAX(att->ranged->power, 2);
@@ -968,6 +983,20 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
                    GET_WOUND_NAME(att->melee->damage_level));
         }
       }
+    }
+
+    // Handle hardened armor per CC p51.
+    if (def->hardened_armor_impact_rating >= att->melee->power_before_armor) {
+      act("Your strike ricochets off of $S hardened armor!", FALSE, att->ch, 0, def->ch, TO_CHAR);
+      act("$n's strike ricochets off of your hardened armor!", FALSE, att->ch, 0, def->ch, TO_VICT);
+      act("$n's strike ricochets off of $N's hardened armor!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+      send_to_char(att->ch, "^o(OOC: %s has hardened armor! You need at least ^O%d^o attack power to damage %s, and you only have %d.)^n\r\n",
+                    decapitalize_a_an(GET_CHAR_NAME(def->ch)),
+                    def->hardened_armor_impact_rating + 1,
+                    HMHR(def->ch),
+                    att->melee->power_before_armor
+                  );
+      return FALSE;
     }
 
     // Core p113.
