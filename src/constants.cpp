@@ -1121,7 +1121,7 @@ const char *pc_readable_extra_bits[] =
     "Loaded by Staff (!!)",
     "No Coded Effect (NERP)",
     "Prevents Wearing Other Armor",
-    "Hardened Armor (NERP)",
+    "Hardened Armor",
     "Derived from Template Item",
     "Incompatible with Magic",
     "Kept",

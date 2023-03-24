@@ -898,7 +898,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
         // SR3 p121: Halve impact armor, but double barrier ratings. This approximates that.
         if (MOB_FLAGGED(def->ch, MOB_INANIMATE)) {
-          att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch) * 2;
+          att->melee->power = att->melee->power_before_armor - MAX(7, GET_IMPACT(def->ch) * 2);
         } else {
           att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch) / 2;
         }
