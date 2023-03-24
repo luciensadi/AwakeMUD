@@ -3458,6 +3458,11 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
     return FALSE;
   }
 
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR) && GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) != -1) {
+    send_to_char(ch, "%s has been customized already, so it can't be sold.\r\n", capitalize(GET_OBJ_NAME(obj)));
+    return FALSE;
+  }
+
   if (!obj->contains && GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
     send_to_char(ch, "%s is empty!\r\n", capitalize(GET_OBJ_NAME(obj)));
     snprintf(buf, sizeof(buf), "SYSERR: Shop container '%s' is empty!", GET_OBJ_NAME(obj));
