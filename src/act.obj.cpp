@@ -3281,6 +3281,11 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
 
   // If it's hardened armor, it's customized to a specific person.
   if (!IS_NPC(ch) && IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+    if (CH_IN_COMBAT(ch)) {
+      send_to_char("While fighting?? That would be a neat trick.\r\n", ch);
+      return;
+    }
+    
     // -1 means it's not yet customized, you can wear it and it molds to you.
     if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) == -1) {
       send_to_char(ch, "You take a moment to check %s over, making sure the armorer really customized it to fit you.\r\n", GET_OBJ_NAME(obj));
@@ -3596,6 +3601,10 @@ void perform_remove(struct char_data * ch, int pos)
 
   // Taking off hardened armor takes time.
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+    if (CH_IN_COMBAT(ch)) {
+      send_to_char("While fighting?? That would be a neat trick.\r\n", ch);
+      return;
+    }
     send_to_char("It takes you a moment to step out of the heavily-customized armor.\r\n", ch);
     WAIT_STATE(ch, 4 RL_SEC);
   }
