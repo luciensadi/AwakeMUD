@@ -3544,6 +3544,40 @@ int vnum_object_weaponfocus(char *searchname, struct char_data * ch)
   return (found);
 }
 
+
+int vnum_object_extra_bit(char *searchname, struct char_data * ch)
+{
+  char buf[MAX_STRING_LENGTH*8] = {'\0'};
+  int found = 0, type = 0;
+
+  for (; type < MAX_ITEM_EXTRA; type++) {
+    if (is_abbrev(searchname, extra_bits[type]))
+      break;
+  }
+
+  if (type >= MAX_ITEM_EXTRA) {
+    send_to_char("That's not a type. Please specify a type from constants.cpp's extra_bits[] (ex: GLOW, HUM, !RENT...)\r\n", ch);
+    return 0;
+  }
+
+  send_to_char(ch, "The following items have the extra flag %s set:\r\n", extra_bits[type]);
+
+  for (int nr = 0; nr <= top_of_objt; nr++) {
+    if (IS_OBJ_STAT(&obj_proto[nr], type)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %s^n%s\r\n",
+              OBJ_VNUM_RNUM(nr),
+              ObjList.CountObj(nr),
+              obj_proto[nr].text.name,
+              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+      found++;
+    }
+  }
+        
+  page_string(ch->desc, buf, 1);
+  return (found);
+}
+
+
 int vnum_object(char *searchname, struct char_data * ch)
 {
   int nr, found = 0;
@@ -3576,6 +3610,8 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_affflag(atoi(arg2),ch);
   if (!strcmp(arg1, "poison"))
     return vnum_object_poison(ch);
+  if (!strcmp(arg1, "extra"))
+    return vnum_object_extra_bit(arg2, ch);
 
   // Make it easier for people to find specific types of things.
   for (int index = ITEM_LIGHT; index < NUM_ITEMS; index++) {
