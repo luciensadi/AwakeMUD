@@ -33,6 +33,8 @@ ACMD_DECLARE(do_sit);
 
 std::vector<struct obj_data *> global_in_progress_deck_parts = {};
 
+#define PART_CAN_HAVE_MPCP_SET(the_part) (parts[GET_PART_TYPE(the_part)].design >= 0 || GET_PART_TYPE(the_part) == PART_ACTIVE || GET_PART_TYPE(the_part) == PART_STORAGE || GET_PART_TYPE(the_part) == PART_MATRIX_INTERFACE)
+
 bool part_is_nerps(int part_type) {
   switch (part_type) {
     case PART_PORTS:
@@ -223,7 +225,6 @@ void partbuild_disp_types(struct descriptor_data *d) {
   d->edit_mode = DEDIT_TYPE;
 }
 
-#define PART_CAN_HAVE_MPCP_SET(the_part) (parts[GET_PART_TYPE(the_part)].design >= 0 || GET_PART_TYPE(the_part) == PART_ACTIVE || GET_PART_TYPE(the_part) == PART_STORAGE || GET_PART_TYPE(the_part) == PART_MATRIX_INTERFACE)
 void pbuild_parse(struct descriptor_data *d, const char *arg) {
     int number = atoi(arg);
     switch (d->edit_mode) {
@@ -877,11 +878,11 @@ ACMD(do_build) {
 
     // Ensure we have enough.
     if (GET_PART_CHIP_COST(obj) && !chips) {
-      send_to_char(ch, "You don't have enough optical chips for that part; you need %d nuyen's worth of chips in the same container.\r\n", GET_PART_PART_COST(obj));
+      send_to_char(ch, "You don't have enough optical chips for that part; you need %d nuyen's worth of chips in the same container.\r\n", GET_PART_CHIP_COST(obj));
       return;
     }
     if (GET_PART_PART_COST(obj) && !parts) {
-      send_to_char(ch, "You don't have enough materials for that part; you need %d nuyen's worth of parts in the same container.\r\n", GET_PART_CHIP_COST(obj));
+      send_to_char(ch, "You don't have enough materials for that part; you need %d nuyen's worth of parts in the same container.\r\n", GET_PART_PART_COST(obj));
       return;
     }
 
@@ -1238,7 +1239,7 @@ bool part_is_compatible_with_deck(struct obj_data *part, struct obj_data *deck, 
   // You must be targeting the same MPCP as parts already in the deck.
   for (struct obj_data *contained = deck->contains; contained; contained = contained->next_content) {
     if (GET_OBJ_TYPE(contained) == ITEM_PART) {
-      if (GET_PART_TARGET_MPCP(part) != GET_PART_TARGET_MPCP(contained)) {
+      if (PART_CAN_HAVE_MPCP_SET(part) && GET_PART_TARGET_MPCP(part) != GET_PART_TARGET_MPCP(contained)) {
         MSG_CHAR("%s doesn't match the MPCP of the already-installed %s^n.\r\n", capitalize(GET_OBJ_NAME(part)), decapitalize_a_an(GET_OBJ_NAME(contained)));
         return FALSE;
       }
@@ -1302,3 +1303,4 @@ bool part_is_compatible_with_deck(struct obj_data *part, struct obj_data *deck, 
   return TRUE;
 }
 #undef MSG_CHAR
+#undef PART_CAN_HAVE_MPCP_SET
