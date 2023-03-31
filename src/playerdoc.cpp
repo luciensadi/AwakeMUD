@@ -297,10 +297,10 @@ const char *get_char_representation_for_docwagon(struct char_data *vict, struct 
 
   strlcpy(display_string, decapitalize_a_an(GET_NAME(vict)), sizeof(display_string));
 
-  if ((mem_record = safe_found_mem(plr, ch)))
+  if ((mem_record = safe_found_mem(viewer, vict)))
     snprintf(ENDOF(display_string), sizeof(display_string) - strlen(display_string), "^n ( %s )", CAP(mem_record->mem));
-  else if (IS_SENATOR(plr))
-    snprintf(ENDOF(display_string), sizeof(display_string) - strlen(display_string), "^n ( %s )", GET_CHAR_NAME(ch));
+  else if (IS_SENATOR(viewer))
+    snprintf(ENDOF(display_string), sizeof(display_string) - strlen(display_string), "^n ( %s )", GET_CHAR_NAME(vict));
 
   return display_string;
 }

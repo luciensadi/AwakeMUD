@@ -1919,37 +1919,6 @@ char *get_player_name(vnum_t id)
   return x;
 }
 
-bool player_is_dead_hardcore(long id) {
-  char query_buf[500];
-  MYSQL_RES *res;
-  MYSQL_ROW row;
-
-  // Compose and execute our query.
-  snprintf(query_buf, sizeof(query_buf), "SELECT * FROM pfiles WHERE idnum=%ld AND name != '%s';",
-           id, CHARACTER_DELETED_NAME_FOR_SQL);
-  mysql_wrapper(mysql, query_buf);
-
-  // If the character doesn't exist or we encounter another error, bail out.
-  if (!(res = mysql_use_result(mysql))) {
-    return FALSE;
-  }
-  if (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
-    mysql_free_result(res);
-    return FALSE;
-  }
-
-  // Extract the PLR and PRF flags from the entry.
-  Bitfield plr_flags, prf_flags;
-  plr_flags.FromString(row[7]);
-  prf_flags.FromString(row[8]);
-
-  // Free the result before we go any further.
-  mysql_free_result(res);
-
-  // Check if they're a dead hardcore char.
-  return plr_flags.IsSet(PLR_JUST_DIED) && prf_flags.IsSet(PRF_HARDCORE);
-}
-
 bool _get_flag_is_set_by_idnum(int flag, vnum_t id, int mode) {
   char buf[MAX_STRING_LENGTH];
 
