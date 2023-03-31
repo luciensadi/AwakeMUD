@@ -4887,6 +4887,7 @@ ACMD(do_set)
                { "noooc", LVL_FIXER, PC, BINARY },
                { "noradio", LVL_FIXER, PC, BINARY }, // 85
                { "sitehidden",  LVL_PRESIDENT, PC, BINARY },
+               { "lifestyle",  LVL_PRESIDENT, PC, MISC },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -5550,6 +5551,16 @@ ACMD(do_set)
   case 86: /* site hidden */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_SITE_HIDDEN);
     log_vfprintf("CHEATLOG: %s turned %s's site-hidden flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_SITE_HIDDEN) ? "ON" : "OFF");
+    break;
+  case 87: /* lifestyle string */
+    if (is_file) {
+      send_to_char("Sorry, you can only do that to online characters right now.\r\n", ch);
+      SET_CLEANUP(true);
+      return;
+    }
+    set_lifestyle_string(vict, val_arg);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s's lifestyle to '%s^n'.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), val_arg);
+    strlcpy(buf, "OK.", sizeof(buf));
     break;
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");
