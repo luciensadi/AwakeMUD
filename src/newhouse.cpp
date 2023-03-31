@@ -49,11 +49,7 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 // TODO: Add back crap counts and formatting to hcontrol command
 
 // TODOs for lifestyle:
-// - Add houseedit apartment lifestyle selection
-// - Add accessor / mutator for lifestyle w/ bounds checking
-// - Add bounds checking to rent setting based on lifestyle
-// - Force rent to conform to range when changing lifestyle
-// - Add ability for complexes / apartments to have custom lifestyle strings unique to them
+// - Show garage status in receptionist list
 
 // EVENTUALTODO: Sanity checks for things like reused vnums, etc.
 
