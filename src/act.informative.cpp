@@ -3114,7 +3114,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       strlcat(buf, "No OOC information is available about this key.", sizeof(buf));
       break;
     case ITEM_FOOD:
+#ifdef ENABLE_HUNGER
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n units of nutrition when eaten.", GET_OBJ_VAL(j, 0));
+#endif
       break;
     case ITEM_QUIVER:
       if (GET_OBJ_VAL(j, 1) >= 0 && GET_OBJ_VAL(j, 1) <= 3) {
