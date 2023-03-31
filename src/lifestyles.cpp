@@ -32,36 +32,30 @@ using nlohmann::json;
 - √ Individual apartments are Garages if the number of garage rooms in the apartment exceeds the number of non-garage rooms.
   - 1 garage, 0 non: garage.
   - 1 garage, 1 non: not garage.
-- Apartment complexes and apartments MAY have additional lifestyle strings available to them. These are separated between Garage and Non-Garage.
 - Apartment rents are constrained to their lifestyle bands.
 
-- PCs have a maximum available lifestyle, which is derived from the highest-class apartment they are currently renting.
-- PCs always display a lifestyle string when looked at. This string is chosen from the set composed of:
-  - All default lifestyle strings from all lifestyles at or below their current maximum
-  - All custom lifestyle strings for all complexes and apartments they currently rent at
+- √ PCs always display a lifestyle string when looked at.
+- Via CUSTOMIZE PHYSICAL, PCs can select a lifestyle string from the set composed of:
+  - All default lifestyle strings from all lifestyles at or below their current maximum ('maximum' being the highest-class apartment they are currently renting)
   - IF THEY OWN AT LEAST ONE GARAGE: All default garage strings
   - IF THEY OWN AT LEAST ONE GARAGE: All complex/apartment garage strings for all garages they currently rent at
-
-- Lifestyle strings can be swapped out with available ones at any time with CUSTOMIZE PHYSICAL.
-  - The selected lifestyle string is saved to the DB in full.
-  - To avoid inconsistencies with editing / changes to the lifestyle string list, when a character loads, compare their lifestyle string to their available ones: If it's not in the list, give them a random default from their highest lifestyle and notify them.
+- √ Selected lifestyle string is saved to the DB in full.
 
 STRETCH:
 - Lifestyle strings can be edited in-game by staff, tridlog style.
 - PCs can submit lifestyle strings for approval / inclusion in the lists.
 - Builders can set custom lifestyles on individual complexes / apartments.
-
+- To avoid inconsistencies with editing / changes to the lifestyle string list, when a character loads, compare their lifestyle string to their available ones: If it's not in the list, give them a random default from their highest lifestyle and notify them.
+- Complexes / apartments can have custom lifestyle strings available to them, separated between garage / non-garage
 */
 
 /////// CODE TODOS
-// TODO: Add DB entry for lifestyle string, ensure it's loaded / saved properly.
-
 // TODO: Add audit command to check for complexes / apartments with rents out of lifestyle bounds
 
 // TODO: Give a health regen bonus based on your lifestyle (better food, living conditions, etc)
 // TODO: Add shop bonus for etiquettes of different lifestyles
 
-// TODO: Add cedit (cust phys) parsing code to let players select from all available lifestyles
+// TODO: Add cedit (cust phys) parsing code to let players select from all available lifestyles- stubbed out below
 
 /////// CONTENT TODOS
 // TODO: Fill out garage strings for Low, High, Luxury lifestyles in json file.
@@ -169,6 +163,7 @@ void cedit_lifestyle_menu(struct descriptor_data *d) {
 
 void cedit_lifestyle_parse(struct descriptor_data *d, char *arg) {
   // TODO: Parse this out.
+  SEND_TO_Q("Not yet implemented.\r\n", d);
 }
 
 ///// Setting / Getting /////

@@ -1148,6 +1148,18 @@ void Apartment::set_complex(ApartmentComplex *new_complex) {
   base_directory = complex->base_directory / shortname;
 }
 
+void Apartment::clamp_rent(struct char_data *ch) {
+  // Clamp the rent to the lifestyle's band.
+  int lifestyle = get_lifestyle();
+  long minimum = lifestyles[lifestyle].monthly_cost_min;
+  long maximum = lifestyle < NUM_LIFESTYLES - 1 ? lifestyles[lifestyle + 1].monthly_cost_min : UINT_MAX;
+  if (nuyen_per_month < minimum || nuyen_per_month > maximum) {
+    if (ch)
+      send_to_char(ch, "Your selected lifestyle's rent band is %d - %d nuyen. Clamped your apartment's rent to match.\r\n", minimum, maximum);
+    nuyen_per_month = MIN(maximum, MAX(minimum, nuyen_per_month));
+  }
+}
+
 bool Apartment::set_rent(long amount, struct char_data *ch) {
   // Rent value must be 1 or greater.
   if (amount <= 0) {
@@ -1157,6 +1169,9 @@ bool Apartment::set_rent(long amount, struct char_data *ch) {
   }
 
   nuyen_per_month = amount;
+
+  clamp_rent(ch);
+
   return TRUE;
 }
 
@@ -1167,6 +1182,8 @@ bool Apartment::set_lifestyle(int new_lifestyle, struct char_data *ch) {
   }
 
   lifestyle = new_lifestyle;
+
+  clamp_rent(ch);
 
   return TRUE;
 }

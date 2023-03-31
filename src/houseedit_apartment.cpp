@@ -213,7 +213,11 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           d->edit_mode = HOUSEEDIT_APARTMENT_LIFESTYLE;
           break;
         case '5': // rent
-          send_to_char(CH, "Enter the new rent amount per month (%d minimum): ", lifestyles[APT->get_lifestyle()].monthly_cost_min);
+          if (APT->get_lifestyle() < NUM_LIFESTYLES - 1) {
+            send_to_char(CH, "Enter the new rent amount per month (%d - %d): ", lifestyles[APT->get_lifestyle()].monthly_cost_min, lifestyles[APT->get_lifestyle() + 1].monthly_cost_min);
+          } else {
+            send_to_char(CH, "Enter the new rent amount per month (%d minimum): ", lifestyles[APT->get_lifestyle()].monthly_cost_min);
+          }
           d->edit_mode = HOUSEEDIT_APARTMENT_RENT;
           break;
         case '6': // key vnum
@@ -460,12 +464,8 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           houseedit_display_apartment_edit_menu(d);
           return;
         } else {
-          send_to_char("WARNING: Edited rent value for an apartment that's already in use! Player will not receive a refund or deduction.\r\n", CH);
+          send_to_char(CH, "WARNING: Editing rent value for an apartment that's already in use! Was %d. Player will not receive a refund or deduction.\r\n", APT->get_rent_cost());
         }
-      }
-
-      if (parsed_long < lifestyles[APT->get_lifestyle()].monthly_cost_min) {
-        send_to_char(CH, "That's too low. Automatically raised to the minimum %s rent of %ld.", lifestyles[APT->get_lifestyle()].name, lifestyles[APT->get_lifestyle()].monthly_cost_min);
       }
 
       // We push all the remaining error checking into the rent setting function.

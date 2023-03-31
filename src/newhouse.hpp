@@ -217,6 +217,7 @@ class Apartment {
     void recalculate_garages();
     bool is_garage_lifestyle();
     void apply_rooms();
+    void clamp_rent(struct char_data *ch);
 
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);

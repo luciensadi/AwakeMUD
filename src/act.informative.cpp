@@ -7555,7 +7555,7 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
     send_to_char(ch, "^C[%5ld] %s^n [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
     if (GET_APARTMENT(ch->in_room)) {
-      send_to_char(ch, " ^c(%sApartment - %s^c%s)",
+      send_to_char(ch, " ^c(%sApartment - %s^c%s)\r\n",
                    GET_APARTMENT(ch->in_room)->get_paid_until() > 0 ? "Leased " : "",
                    GET_APARTMENT(ch->in_room)->get_full_name(),
                    GET_APARTMENT_DECORATION(ch->in_room) ? " [decorated]" : "");
