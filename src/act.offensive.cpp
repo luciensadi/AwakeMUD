@@ -89,7 +89,6 @@ ACMD(do_assist)
         send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
         return;
       }
-
       send_to_char("You join the fight!\r\n", ch);
       act("$N assists you!", FALSE, helpee, 0, ch, TO_CHAR);
       act("$n assists $N.", FALSE, ch, 0, helpee, TO_NOTVICT);
