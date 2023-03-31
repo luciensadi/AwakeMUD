@@ -13,6 +13,7 @@ public:
   objList() { trideo_ticks = 0; }
 
   int PrintList(struct char_data *ch, const char *arg, bool override_vis_check=FALSE);
+  int PrintBelongings(struct char_data *ch);
   int CountObj(int num);
   int CountPlayerCorpses();
   struct obj_data *FindObj(int num);
@@ -25,7 +26,6 @@ public:
   void CallSpec();
   void RemoveObjNum(int num);
   void RemoveQuestObjs(int id);
-  void DisassociateCyberdeckPartsFromDeck(struct obj_data *deck);
 
   #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   void CheckPointers();

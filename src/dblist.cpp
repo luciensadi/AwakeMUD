@@ -21,6 +21,7 @@
 #include "perfmon.hpp"
 #include "config.hpp"
 #include "newmatrix.hpp"
+#include "deck_build.hpp"
 
 // extern vars
 extern class helpList Help;
@@ -40,6 +41,24 @@ int objList::PrintList(struct char_data *ch, const char *arg, bool override_vis_
     if (temp->data && (override_vis_check || CAN_SEE_OBJ(ch, temp->data))
         && isname(arg, temp->data->text.keywords))
       print_object_location(++num, temp->data, ch, TRUE);
+
+  return num;
+}
+
+int objList::PrintBelongings(struct char_data *ch)
+{
+  nodeStruct<struct obj_data *> *temp = head;
+  int num = 0;
+
+  for (;temp; temp = temp->next) {
+    // Skip anything that doesn't exist or isn't a container.
+    if (!temp->data || GET_OBJ_TYPE(temp->data) != ITEM_CONTAINER)
+      continue;
+
+    // Note the out-of-order calls here. We check the idnums (cheap calls) before checking the obj flags (slightly more expensive).
+    if (GET_CORPSE_IS_PC(temp->data) && GET_CORPSE_IDNUM(temp->data) == GET_IDNUM(ch) && IS_OBJ_STAT(temp->data, ITEM_EXTRA_CORPSE))
+      print_object_location(++num, temp->data, ch, TRUE);
+  }
 
   return num;
 }
@@ -181,46 +200,6 @@ void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_
         affect_total(temp->data->worn_by);
 
       temp->data->item_number = new_rnum;
-    }
-  }
-}
-
-void objList::DisassociateCyberdeckPartsFromDeck(struct obj_data *deck)
-{
-  PERF_PROF_SCOPE(updatecounters_, __func__);
-
-  static nodeStruct<struct obj_data *> *temp, *next;
-
-  if (!deck) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: DisassociateCyberdeckPartsFromDeck passed a NULL deck!");
-    return;
-  }
-
-  if (GET_OBJ_TYPE(deck) != ITEM_CYBERDECK && GET_OBJ_TYPE(deck) != ITEM_CUSTOM_DECK) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: DisassociateCyberdeckPartsFromDeck passed non-deck item %s^n (%ld)!", GET_OBJ_NAME(deck), GET_OBJ_VNUM(deck));
-    return;
-  }
-
-  // Iterate through the list.
-  for (temp = head; temp; temp = next) {
-    next = temp->next;
-
-    // Precondition: The object being examined must exist.
-    if (!OBJ) {
-      mudlog("SYSERR: DisassociateCyberdeckPartsFromDeck encountered a non-existent object.", NULL, LOG_SYSLOG, TRUE);
-      continue;
-    }
-
-    // If it's a part, make sure it doesn't contain our deck.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_PART) {
-      if (OBJ->cyberdeck_part_pointer == deck) {
-        mudlog_vfprintf(NULL, LOG_SYSLOG, "Disassociating in-progress part %s (%ld) from deck %s (%ld) [deck destroyed OR another part completed].",
-                        GET_OBJ_NAME(OBJ),
-                        GET_OBJ_VNUM(OBJ),
-                        GET_OBJ_NAME(deck),
-                        GET_OBJ_VNUM(deck));
-        OBJ->cyberdeck_part_pointer = NULL;
-      }
     }
   }
 }

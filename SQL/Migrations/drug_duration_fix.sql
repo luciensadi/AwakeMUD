@@ -1,1 +1,1 @@
-alter table pfiles_drugdata modify duration smallint(2) unsigned default '0';
+alter table `pfiles_drugs` modify `Duration` smallint(2) unsigned default '0';

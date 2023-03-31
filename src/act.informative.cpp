@@ -95,6 +95,7 @@ extern SPECIAL(marksmanship_second);
 extern SPECIAL(marksmanship_third);
 extern SPECIAL(marksmanship_fourth);
 extern SPECIAL(marksmanship_master);
+extern SPECIAL(pocsec_unlocker);
 extern SPECIAL(bank);
 extern WSPEC(monowhip);
 
@@ -325,6 +326,15 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     }
     if (IS_OBJ_STAT(object, ITEM_EXTRA_KEPT)) {
       strlcat(buf, " ^c(kept)^n", sizeof(buf));
+    }
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_HARDENED_ARMOR)) {
+      if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(object) == GET_IDNUM(ch)) {
+        strlcat(buf, " (yours)", sizeof(buf));
+      } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(object) == -1) {
+        strlcat(buf, " ^g(not yet customized)", sizeof(buf));
+      } else {
+        strlcat(buf, " ^y(unusable)", sizeof(buf));
+      }
     }
   }
   else if (GET_OBJ_NAME(object) && ((mode == 3) || (mode == 4) || (mode == SHOW_MODE_OWN_EQUIPMENT) || (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT))) {
@@ -1286,6 +1296,13 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    SHOULD_SEE_TIPS(ch) ? " Use the ^YLIST^y command to see them." : "");
           already_printed = TRUE;
         }
+        if (MOB_HAS_SPEC(i, pocsec_unlocker)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can unlock pocket secretaries.%s^n\r\n",
+                   HSSH(i),
+                   already_printed ? " also" : "",
+                   SHOULD_SEE_TIPS(ch) ? " Use the ^YUNLOCK^y command to begin." : "");
+          already_printed = TRUE;
+        }
         if (MOB_HAS_SPEC(i, landlord_spec)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n",
                    HSSH(i),
@@ -1357,6 +1374,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   }
 
   make_desc(ch, i, buf, FALSE, FALSE, sizeof(buf));
+  strlcat(buf, "^n", sizeof(buf));
 
   if (GET_MOB_QUEST_CHAR_ID(i)) {
     if (GET_MOB_QUEST_CHAR_ID(i) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
@@ -2631,10 +2649,11 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
           k->autonav, (int)k->load, (int)k->usedload);
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Its engine is adapted for ^c%s^n. If loaded into another vehicle, it takes up ^c%d^n load.\r\n",
                   engine_types[k->engine], calculate_vehicle_entry_load(k));
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can travel over %s%s%s.\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It can travel over ^c%s%s%s^n.\r\n",
            veh_can_traverse_land(k) ? "land" : "",
            veh_can_traverse_land(k) && veh_can_traverse_water(k) ? " and " : "",
            veh_can_traverse_water(k) ? "water" : "");
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It ^c%s^n enough space to set up a workshop inside it.\r\n", k->flags.IsSet(VFLAG_WORKSHOP) ? "has" : "doesn't have");
   send_to_char(buf, ch);
 }
 
@@ -2799,6 +2818,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 if (has_smartlink) {
                   strlcat(buf, "^Y\r\nIt has multiple smartlinks attached, and they do not stack. You should remove one and replace it with something else.^n", sizeof(buf));
                 } else {
+                  has_smartlink = TRUE;
+
                   int cyberware_rating = 0;
                   for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
                     if (GET_CYBERWARE_TYPE(cyber) == CYB_SMARTLINK) {
@@ -2821,7 +2842,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                     }
                     // No goggles either.
                     else {
-                      strlcat(buf, "\r\n^YIt has a smartlink installed, but you have neither the cyberware nor goggles to use it.^n", sizeof(buf));
+                      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n^YIt has a Smartlink%s attached to the %s, but you have neither the cyberware nor goggles to use it.^n",
+                               GET_ACCESSORY_RATING(accessory) == 2 ? "-II" : "",
+                               gun_accessory_locations[mount_location]);
+                      // You don't get to use it: unflag this weapon as having a smartlink.
+                      has_smartlink = FALSE;
                     }
                   }
 
@@ -2847,7 +2872,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                             (GET_ACCESSORY_RATING(accessory) == 1 || GET_ACCESSORY_RATING(accessory) < 2) ? -SMARTLINK_I_MODIFIER : -SMARTLINK_II_MODIFIER);
                   }
                 }
-                has_smartlink = TRUE;
                 break;
               case ACCESS_SCOPE:
                 if (GET_OBJ_AFFECT(accessory).IsSet(AFF_LASER_SIGHT)) {
@@ -3048,6 +3072,16 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. "
                                                         "People have a ^c%d^n target number when trying to see under it.\r\n", bal, imp, GET_WORN_CONCEAL_RATING(j));
       }
+
+      if (IS_OBJ_STAT(j, ITEM_EXTRA_HARDENED_ARMOR)) {
+        if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == GET_IDNUM(ch)) {
+          strlcat(buf, "It has been permanently customized to fit you. Nobody else can wear it.\r\n", sizeof(buf));
+        } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == -1) {
+          strlcat(buf, "^gIt will be permanently customized to fit the first person to wear it (AKA soul-bound).^n\r\n", sizeof(buf));
+        } else {
+          strlcat(buf, "^yIt has been permanently customized to fit someone else-- you can't wear it.^n\r\n", sizeof(buf));
+        }
+      }
       break;
     case ITEM_DOCWAGON:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
@@ -3083,7 +3117,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       strlcat(buf, "No OOC information is available about this key.", sizeof(buf));
       break;
     case ITEM_FOOD:
+#ifdef ENABLE_HUNGER
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It provides ^c%d^n units of nutrition when eaten.", GET_OBJ_VAL(j, 0));
+#endif
       break;
     case ITEM_QUIVER:
       if (GET_OBJ_VAL(j, 1) >= 0 && GET_OBJ_VAL(j, 1) <= 3) {
@@ -3195,6 +3231,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             strlcat(flag_parse, " obvious", sizeof(flag_parse));
           else
             strlcpy(flag_parse, " synthetic", sizeof(flag_parse));
+
+          if (IS_SET(GET_CYBERWARE_FLAGS(j), SKULL_MOD_TAC_COMP))
+            strlcpy(flag_parse, ", combat-enhancing", sizeof(flag_parse));
 
           /*
           if (IS_SET(GET_CYBERWARE_FLAGS(j), SKULL_MOD_ARMOR_MOD1))
@@ -3510,7 +3549,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         // radio range 0-5
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
                  GET_VEHICLE_MOD_RATING(j),
-                 GET_VEHICLE_MOD_RADIO_CRYPT(j));
+                 GET_VEHICLE_MOD_RADIO_MAX_CRYPT(j));
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt functions at rating ^c%d^n.", GET_VEHICLE_MOD_RATING(j));
       }
@@ -3876,7 +3915,7 @@ ACMD(do_examine)
           strlcpy(buf, "Custom Components:\r\n", sizeof(buf));
           for (struct obj_data *soft = tmp_object->contains; soft; soft = soft->next_content)
             if (GET_OBJ_TYPE(soft) == ITEM_PART)
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-40s  Type: %-24s  Rating: %d\r\n",
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-40s  Type: ^c%-24s^n (rating ^c%d^n)\r\n",
                       GET_OBJ_NAME(soft),
                       parts[GET_OBJ_VAL(soft, 0)].name,
                       GET_PART_RATING(soft));
@@ -4322,8 +4361,13 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
     strlcat(buf2, "You are thirsty.\r\n", sizeof(buf2));
 #endif
 
-  if (GET_COND(ch, COND_DRUNK) > 10)
-    strlcat(buf2, "You are intoxicated.\r\n", sizeof(buf2));
+  if (GET_COND(ch, COND_DRUNK) > 10) {
+    if (affected_by_spell(ch, SPELL_DETOX)) {
+      strlcat(buf2, "Your intoxication is suppressed by a detox spell.\r\n", sizeof(buf2));
+    } else {
+      strlcat(buf2, "You are intoxicated.\r\n", sizeof(buf2));
+    }
+  }
 
   if (AFF_FLAGGED(ch, AFF_SNEAK))
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You are sneaking.\r\n");
@@ -4701,7 +4745,7 @@ ACMD(do_score)
                           (((float)GET_ESS(ch) / 100) + 3), "");
 #endif
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nMagic         ^w%2d (^W%2d^w)    ^g%-20s                     ^L/^b/\r\n",
-                          MAX(0, ((int)ch->real_abils.mag / 100)), ((int)GET_MAG(ch) / 100), GET_COND(ch, COND_DRUNK) > 10 ? "You are intoxicated." : "");
+                          MAX(0, ((int)ch->real_abils.mag / 100)), ((int)GET_MAG(ch) / 100), GET_COND(ch, COND_DRUNK) > 10 && !affected_by_spell(ch, SPELL_DETOX) ? "You are intoxicated." : "");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nReaction      ^w%2d (^W%2d^w)    ^c%-41s^b/^L/\r\n",
                           GET_REAL_REA(ch), GET_REA(ch), out_of_body_string);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nInitiative^w   [^W%2d^w+^W%d^rd6^n]    %-41s^L/^b/\r\n",
@@ -5706,7 +5750,7 @@ ACMD(do_users)
 
       if (*host_search && !strstr((const char *)d->host, host_search))
         continue;
-      if (*name_search && isname(name_search, GET_KEYWORDS(tch)))
+      if (*name_search && !isname(name_search, GET_KEYWORDS(tch)))
         continue;
       if (!CAN_SEE(ch, tch))
         continue;
@@ -5815,6 +5859,20 @@ extern void nonsensical_reply(struct char_data *ch, const char *arg, const char 
 
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
+  // Locating belongings.
+  if (*arg && (is_abbrev(arg, "belongings") || is_abbrev(arg, "corpses") || is_abbrev(arg, "stuff") || is_abbrev(arg, "body") || is_abbrev(arg, "bodies"))) {
+    // Clear buf first so we don't send junk:
+    strlcpy(buf, "", sizeof(buf));
+
+    // Query the object list.
+    if (ObjList.PrintBelongings(ch) == 0) {
+      send_to_char("You query DocWagon's list of places they couldn't retrieve your belongings from, but nothing comes up.\r\n", ch);
+    } else {
+      send_to_char(ch, "You take a moment and query DocWagon's list of places they couldn't retrieve your belongings from:\r\n%s", buf);
+    }
+    return;
+  }
+
   // array slot 0 is total PCs, array slot 1 is active PCs
   std::unordered_map<vnum_t, std::vector<struct char_data *>> occupied_rooms = {};
   std::unordered_map<vnum_t, std::vector<struct char_data *>>::iterator room_iterator;
@@ -6174,9 +6232,9 @@ ACMD(do_consider)
     }
 
     int vict_expected_power;
-    struct obj_data *vict_weapon = GET_EQ(ch, WEAR_WIELD);
+    struct obj_data *vict_weapon = GET_EQ(victim, WEAR_WIELD);
     if (!vict_weapon || GET_OBJ_TYPE(vict_weapon) != ITEM_WEAPON)
-      vict_weapon = GET_EQ(ch, WEAR_HOLD);
+      vict_weapon = GET_EQ(victim, WEAR_HOLD);
     if (!vict_weapon || GET_OBJ_TYPE(vict_weapon) != ITEM_WEAPON)
       vict_weapon = NULL;
     if (vict_weapon) {
@@ -6671,7 +6729,7 @@ ACMD(do_scan)
 
   RIG_VEH(ch, in_veh);
   if (in_veh)
-    in_room = in_veh->in_room;
+    in_room = get_veh_in_room(in_veh);
 
   // Scanning all rooms:
   if (!specific) {
@@ -6796,7 +6854,7 @@ ACMD(do_status)
       targ = ch;
   }
 
-  char aff_buf[1000] = { '\0' };
+  char aff_buf[10000] = { '\0' };
 
   if (ch == targ)
     send_to_char("You are affected by:\r\n", ch);
@@ -7532,4 +7590,140 @@ void display_room_desc(struct char_data *ch) {
   }
 
   send_to_char(get_room_desc(ch->in_room), ch);
+}
+
+ACMD(do_penalties) {
+  int total_damage_modifier = 0, total_sustain_modifier = 0, total_modify_target_mundane_action = 0, total_modify_target_magical_action = 0, skill_idx = -1;
+  char msg_buffer[20000] = {0};
+  char dummy_rbuf[10] = {0};
+  struct char_data *vict = ch;
+  char skill_name[MAX_INPUT_LENGTH] = {0};
+
+
+  skip_spaces(&argument);
+
+  // Staff syntax: PENALTIES [target] [skillname]
+  if (GET_LEVEL(ch) >= LVL_BUILDER && *argument) {
+    char targ_name[MAX_INPUT_LENGTH];
+    const char *remainder = one_argument(argument, targ_name);
+    strlcpy(skill_name, remainder, sizeof(skill_name));
+
+    vict = get_char_room_vis(ch, targ_name);
+    if (!vict)
+      vict = get_char_vis(ch, targ_name);
+    if (!vict) {
+      vict = ch;
+      send_to_char(ch, "Didn't find a character named '%s', so I'll treat your whole argument as a skill name!\r\n", targ_name);
+      strlcpy(skill_name, argument, sizeof(skill_name));
+    }
+  } 
+  // Player syntax: PENALTIES [skillname]
+  else {
+    strlcpy(skill_name, argument, sizeof(skill_name));
+  }
+
+  if (*skill_name) {
+    if ((skill_idx = find_skill_num(skill_name)) < 0) {
+      send_to_char(ch, "Sorry, '%s' is not a valid skill name.\r\n", skill_name);
+      return;
+    }
+
+    if (skills[skill_idx].no_defaulting_allowed && GET_SKILL(vict, skill_idx) <= 0) {
+      send_to_char(ch, "%s can't use %s without at least one rank in it.\r\n", 
+                   vict == ch ? "You" : GET_CHAR_NAME(vict), 
+                   skills[skill_idx].name);
+      return;
+    }
+
+    int dummy_target = 4;
+    int total_skill = get_skill(vict, skill_idx, dummy_target, msg_buffer, sizeof(msg_buffer));
+    int total_penalty = dummy_target - 4;
+
+    if (total_skill <= 0) {
+      send_to_char(ch, "%s will roll ^c%d^n dice with %s, so will always fail.\r\n", 
+                   vict == ch ? "You" : GET_CHAR_NAME(vict),
+                   total_skill,
+                   skills[skill_idx].name);
+      return;
+    }
+
+    total_penalty += damage_modifier(vict, dummy_rbuf, sizeof(dummy_rbuf), msg_buffer, sizeof(msg_buffer));
+    total_penalty += sustain_modifier(vict, dummy_rbuf, sizeof(dummy_rbuf), FALSE, msg_buffer, sizeof(msg_buffer));
+    if (skills[skill_idx].requires_magic) {
+      total_penalty += modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, TRUE, msg_buffer, sizeof(msg_buffer));
+    } else {
+      total_penalty += modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, FALSE, msg_buffer, sizeof(msg_buffer));
+    }
+
+    if (total_penalty == 0) {
+      send_to_char(ch, "%s will roll ^c%d^n dice and will not have any TN modifiers when using %s.\r\n", 
+                   vict == ch ? "You" : GET_CHAR_NAME(vict),
+                   total_skill,
+                   skills[skill_idx].name);
+      return;
+    }
+
+    send_to_char(ch, "%s will roll ^c%d^n dice and take ^c%d^n in TN penalties when using %s:\r\n%s", 
+                 vict == ch ? "You" : GET_CHAR_NAME(vict),
+                 total_skill,
+                 total_penalty,
+                 skills[skill_idx].name,
+                 msg_buffer);
+    return;
+  }
+
+  send_to_char(ch, "%s %s affected by the following penalties:\r\n", 
+               vict == ch ? "You" : GET_CHAR_NAME(vict),
+               vict == ch ? "are" : "is");
+  
+  total_damage_modifier = damage_modifier(vict, dummy_rbuf, sizeof(dummy_rbuf), msg_buffer, sizeof(msg_buffer));
+  if (*msg_buffer) {
+    send_to_char(ch, "Damage penalties (subtotal ^c%d^n):\r\n%s", total_damage_modifier, msg_buffer);
+  } else {
+    send_to_char("No damage penalties.\r\n", ch);
+  }
+  *msg_buffer = '\0';
+
+  if (GET_MAG(vict) > 0) {
+    total_sustain_modifier = sustain_modifier(vict, dummy_rbuf, sizeof(dummy_rbuf), FALSE, msg_buffer, sizeof(msg_buffer));
+    if (*msg_buffer) {
+      send_to_char(ch, "\r\nSpell sustaining penalties (subtotal ^c%d^n):\r\n%s", total_sustain_modifier, msg_buffer);
+    } else {
+      send_to_char("\r\nNo spell sustaining penalties.\r\n", ch);
+    }
+    *msg_buffer = '\0';
+
+    send_to_char(ch, "\r\nThe following general penalties apply when performing magical actions:\r\n");
+    total_modify_target_magical_action = modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, TRUE, msg_buffer, sizeof(msg_buffer));
+    if (*msg_buffer) {
+      send_to_char(ch, " General penalties (subtotal ^c%d^n):\r\n%s", total_modify_target_magical_action, msg_buffer);
+    } else {
+      send_to_char(" No general penalties.\r\n", ch);
+    }
+    *msg_buffer = '\0';
+
+    send_to_char(ch, "\r\nThe following general penalties apply when performing mundane actions:\r\n");
+    total_modify_target_mundane_action = modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, FALSE, msg_buffer, sizeof(msg_buffer));
+    if (*msg_buffer) {
+      send_to_char(ch, " General penalties (subtotal ^c%d^n):\r\n%s", total_modify_target_mundane_action, msg_buffer);
+    } else {
+      send_to_char(" No general penalties.\r\n", ch);
+    }
+    *msg_buffer = '\0';
+
+    send_to_char(ch, "\r\nIn total, you'll take ^C%d^n in TN penalties when performing magic, ^C%d^n otherwise.\r\n", 
+                 total_damage_modifier + total_sustain_modifier + total_modify_target_magical_action,
+                 total_damage_modifier + total_sustain_modifier + total_modify_target_mundane_action);
+  } else {
+    total_modify_target_mundane_action = modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, FALSE, msg_buffer, sizeof(msg_buffer));
+    if (*msg_buffer) {
+      send_to_char(ch, "\r\nGeneral penalties (subtotal ^c%d^n):\r\n%s", total_modify_target_mundane_action, msg_buffer);
+    } else {
+      send_to_char("\r\nNo general penalties.\r\n", ch);
+    }
+    *msg_buffer = '\0';
+
+    send_to_char(ch, "\r\nIn total, you'll take ^C%d^n in TN penalties.\r\n",
+                 total_damage_modifier + total_sustain_modifier + total_modify_target_mundane_action);
+  }
 }

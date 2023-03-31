@@ -274,6 +274,7 @@ ACMD_DECLARE(do_page);
 ACMD_DECLARE(do_patch);
 ACMD_DECLARE(do_payout);
 ACMD_DECLARE(do_perfmon);
+ACMD_DECLARE(do_penalties);
 ACMD_DECLARE(do_pgroup);
 ACMD_DECLARE(do_photo);
 ACMD_DECLARE(do_playerrolls);
@@ -432,6 +433,7 @@ ACMD_DECLARE(do_zswitch);
 ACMD_DECLARE(do_deduct);
 ACMD_DECLARE(do_holster);
 ACMD_DECLARE(do_draw);
+ACMD_DECLARE(do_cheatmark);
 ACMD_DECLARE(do_copyover);
 ACMD_DECLARE(do_language);
 ACMD_DECLARE(do_subscribe);
@@ -538,8 +540,9 @@ struct command_info cmd_info[] =
     { "call"       , POS_LYING   , do_phone    , 0, SCMD_RING, FALSE },
     { "chase"      , POS_SITTING , do_chase    , 0, 0, FALSE },
     { "charge"     , POS_DEAD    , do_charge   , LVL_FIXER, 0, FALSE },
-    { "cleanse"    , POS_LYING   , do_cleanse  , 0, 0, FALSE },
+    { "cheatmark"  , POS_DEAD    , do_cheatmark, LVL_VICEPRES, 0, FALSE },
     { "cleanup"    , POS_SITTING , do_cleanup  , 0, 0, FALSE },
+    { "cleanse"    , POS_LYING   , do_cleanse  , 0, 0, FALSE },
     { "clear"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, TRUE },
     { "close"      , POS_SITTING , do_gen_door , 0, SCMD_CLOSE, FALSE },
     { "closecombat", POS_LYING   , do_closecombat, 0, 0, FALSE },
@@ -753,6 +756,7 @@ struct command_info cmd_info[] =
     { "payout"     , POS_DEAD    , do_payout   , LVL_FIXER, 0, FALSE },
     { "perceive"   , POS_LYING   , do_astral   , 0, SCMD_PERCEIVE, FALSE },
     { "perfmon"    , POS_DEAD    , do_perfmon  , LVL_ADMIN, 0, FALSE },
+    { "penalties"  , POS_MORTALLYW, do_penalties, 0, 0, FALSE },
     { "pgroup"     , POS_LYING   , do_pgroup   , 0, 0, FALSE },
     { "phone"      , POS_LYING   , do_phone    , 0, 0, FALSE },
     { "phonelist"  , POS_DEAD    , do_phonelist, LVL_BUILDER, 0, FALSE },
@@ -951,7 +955,7 @@ struct command_info cmd_info[] =
     { "who"        , POS_DEAD    , do_who      , 0, 0, TRUE },
     { "whoami"     , POS_DEAD    , do_gen_ps   , 0, SCMD_WHOAMI, TRUE },
     { "whotitle"   , POS_DEAD    , do_wiztitle , LVL_BUILDER, SCMD_WHOTITLE, TRUE },
-    { "where"      , POS_DEAD    , do_where    , 1, 0, TRUE },
+    { "where"      , POS_MORTALLYW, do_where    , 1, 0, TRUE },
     { "wheresmycar", POS_RESTING , do_wheresmycar, 1, 0, FALSE },
     { "whisper"    , POS_LYING   , do_spec_comm, 0, SCMD_WHISPER, FALSE },
     { "wield"      , POS_RESTING , do_wield    , 0, 0, FALSE },
@@ -1658,8 +1662,8 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     }
 
     if (PLR_FLAGGED(ch, PLR_FROZEN)) {
-      if (!access_level(ch, LVL_VICEPRES)) {
-        send_to_char("You try, but the mind-numbing cold prevents you...\r\n", ch);
+      if (!access_level(ch, LVL_PRESIDENT)) {
+        send_to_char("Sorry, this character has been frozen by staff and is unable to take any input. If you're seeing this message, it usually means that you've connected to a character that was banned.\r\n", ch);
         return;
       } else
         send_to_char("The ice covering you crackles alarmingly as you slam your sovereign will through it.\r\n", ch);
@@ -1815,8 +1819,8 @@ ACMD(do_alias)
         send_to_char("You can't alias 'alias'.\r\n", ch);
         return;
       }
-      /* Should cover every possbile case of 'kill', 'hit', and 'murder' */
-      else if ( (str_str(repl, "kill") || str_str(repl, "hit") || str_str(repl, "murder")) && strlen(arg) < 4 ) {
+      /* Should cover every possbile case of 'kill', 'hit', and 'murder', but allow through 'killing' from killing hands. */
+      else if ( (str_str(repl, "kill") || str_str(repl, "hit") || str_str(repl, "murder")) && !str_str(repl, "killing") && strlen(arg) < 4 ) {
         send_to_char(
           "If your alias contains the 'kill', 'hit', or 'murder' commands,"
           " it must be accompanied by at least a 4 letter alias.\n\r",ch);

@@ -145,6 +145,9 @@ struct obj_data
   struct char_data *targ;	  /* Data for mounts */
   struct veh_data *tveh;
 
+  const char *dropped_by_host;
+  idnum_t dropped_by_char;
+
 #ifdef USE_DEBUG_CANARIES
   int canary;
 #endif
@@ -152,7 +155,8 @@ struct obj_data
       item_number(0), in_room(NULL), in_veh(NULL), vfront(FALSE), ex_description(NULL),
       restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
       worn_by(NULL), worn_on(0), in_obj(NULL), contains(NULL), next_content(NULL),
-      in_host(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL)
+      in_host(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL), 
+      dropped_by_host(NULL), dropped_by_char(0)
   {
     #ifdef USE_DEBUG_CANARIES
       canary = CANARY_VALUE;
@@ -1180,6 +1184,8 @@ struct skill_data {
   bool type;
   bool requires_magic;
   sh_int group;
+  bool reflex_recorder_compatible;
+  bool no_defaulting_allowed;
 };
 
 struct part_data {

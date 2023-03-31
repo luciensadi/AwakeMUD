@@ -558,7 +558,8 @@ enum {
 #define AFF_FLAME_AURA                          53
 #define AFF_VOICE_MODULATOR                     54
 #define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER    55
-#define AFF_MAX                                 56
+#define AFF_CHEATLOG_MARK                       56
+#define AFF_MAX                                 57
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -1352,7 +1353,8 @@ enum {
 #define ITEM_EXTRA_NBC_RESISTANT      30    // Gives a bonus on resistance tests for contact chemical/toxin damage.
 #define ITEM_EXTRA_NBC_IMMUNE         31    // Conveys immunity to contact chemical / toxin damage (full-body hazard suit, etc)
 #define ITEM_EXTRA_PURGE_ON_DEATH     32    // Vanishes when you die (won't make it to your corpse)
-#define MAX_ITEM_EXTRA                33
+#define ITEM_EXTRA_CHEATLOG_MARK      33
+#define MAX_ITEM_EXTRA                34
 
 /* Ammo types */
 #define AMMO_NORMAL     0
@@ -1497,7 +1499,8 @@ enum {
 #define SKULL_MOD_OBVIOUS    (1 << 0)
 #define SKULL_MOD_SYNTHETIC    (1 << 1)
 #define SKULL_MOD_ARMOR_MOD1    (1 << 2)
-#define NUM_SKULL_MODS    3
+#define SKULL_MOD_TAC_COMP    (1 << 3)
+#define NUM_SKULL_MODS    4
 
 #define TORSO_MOD_OBVIOUS    (1 << 0)
 #define TORSO_MOD_SYNTHETIC    (1 << 1)
@@ -1605,7 +1608,12 @@ enum {
 #define BIO_THERMOSENSEORGAN  24
 #define BIO_TRAUMADAMPER  25
 #define BIO_CUSTOM_NERPS  26
-#define NUM_BIOWARE       27
+#define BIO_ERYTHROPOITIN  27
+#define BIO_CALCITONIN  28
+#define BIO_PHENOTYPIC_BOD  29
+#define BIO_PHENOTYPIC_QUI  30
+#define BIO_PHENOTYPIC_STR  31
+#define NUM_BIOWARE       32
 
 #define BIOWARE_STANDARD 0
 #define BIOWARE_CULTURED 1
@@ -2378,6 +2386,7 @@ enum {
 #define JURISDICTION_PORTLAND  1
 #define JURISDICTION_CARIBBEAN 2
 #define JURISDICTION_OCEAN     3
+#define NUM_JURISDICTIONS      4
 
 // Locations, to remove the magic numbers from the code.
 #define RM_CHARGEN_START_ROOM        60500
@@ -2534,6 +2543,7 @@ enum {
 #define OBJ_TITLE_TO_GMC_BULLDOG           967
 #define OBJ_TITLE_TO_ARES_ROADMASTER       968
 #define OBJ_TITLE_TO_WHITE_EAGLE_BIKE      969
+// If you add more titles here, also add them to utils.cpp's obj_is_a_vehicle_title()!
 
 #ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_GAS_VENT_IV                    80403
@@ -2903,8 +2913,6 @@ enum {
 
 #define SMARTLINK_II_MODIFIER 3
 #define SMARTLINK_I_MODIFIER  2
-
-#define DECK_FLAG_HAS_PART_POINTING_TO_IT (1 << 0)
 
 // Don't actually change this value unless you're rewriting regeneration etc.
 #define TEMP_QUI_LOSS_DIVISOR                 4

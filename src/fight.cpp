@@ -78,7 +78,6 @@ WSPEC(monowhip);
 
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
                          int tar_for_vict);
-extern int modify_target(struct char_data *ch);
 extern int skill_web (struct char_data *ch, int skillnumber);
 extern bool attempt_reload(struct char_data *mob, int pos);
 extern void switch_weapons(struct char_data *mob, int pos);
@@ -602,6 +601,10 @@ void make_corpse(struct char_data * ch)
     }
   }
 
+  if (AFF_FLAGGED(ch, AFF_CHEATLOG_MARK)) {
+    (corpse)->obj_flags.extra_flags.SetBit(ITEM_EXTRA_CHEATLOG_MARK);
+  }
+
   if (IS_NPC(ch))
   {
     if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
@@ -633,18 +636,18 @@ void make_corpse(struct char_data * ch)
                                           ITEM_EXTRA_CORPSE, ENDBIT);
 
   GET_OBJ_VAL(corpse, 0) = 0;   /* You can't store stuff in a corpse */
-  GET_OBJ_VAL(corpse, 4) = 1;   /* corpse identifier */
+  GET_CORPSE_IS_PC(corpse) = 1;   /* corpse identifier */
   GET_OBJ_WEIGHT(corpse) = MAX(100, GET_WEIGHT(ch)) + IS_CARRYING_W(ch);
   if (IS_NPC(ch))
   {
     GET_OBJ_TIMER(corpse) = max_npc_corpse_time;
-    GET_OBJ_VAL(corpse, 4) = 0;
-    GET_OBJ_VAL(corpse, 5) = ch->nr;
+    GET_CORPSE_IS_PC(corpse) = 0;
+    GET_CORPSE_IDNUM(corpse) = ch->nr;
   } else
   {
     GET_OBJ_TIMER(corpse) = max_pc_corpse_time;
-    GET_OBJ_VAL(corpse, 4) = 1;
-    GET_OBJ_VAL(corpse, 5) = GET_IDNUM(ch);
+    GET_CORPSE_IS_PC(corpse) = 1;
+    GET_CORPSE_IDNUM(corpse) = GET_IDNUM(ch);
     /* make 'em bullet proof...(anti-twink measure) */
     GET_OBJ_BARRIER(corpse) = PC_CORPSE_BARRIER;
 
@@ -699,8 +702,14 @@ void make_corpse(struct char_data * ch)
       nuyen = 0;
       credits = 0;
     } else {
-      nuyen = (int)(GET_NUYEN(ch) / 10);
-      nuyen = number(GET_NUYEN(ch) - nuyen, GET_NUYEN(ch) + nuyen) * NUYEN_GAIN_MULTIPLIER;
+      if (AFF_FLAGGED(ch, AFF_CHEATLOG_MARK)) {
+        // Someone has given us money, so we return the exact and full amount.
+        nuyen = GET_NUYEN(ch);
+      } else {
+        nuyen = (int)(GET_NUYEN(ch) / 10);
+        nuyen = number(GET_NUYEN(ch) - nuyen, GET_NUYEN(ch) + nuyen) * NUYEN_GAIN_MULTIPLIER;
+      }
+      // Nobody can modify our bank, so we return that regardless.
       credits = (int)(GET_BANK(ch) / 10);
       credits = number(GET_BANK(ch) - credits, GET_BANK(ch) + credits) * NUYEN_GAIN_MULTIPLIER;
     }
@@ -744,7 +753,7 @@ void make_corpse(struct char_data * ch)
   IS_CARRYING_W(ch) = 0;
 
   // Empty player belongings? Pointless.
-  if (GET_OBJ_VAL(corpse, 4) == 1 && !corpse->contains) {
+  if (GET_CORPSE_IS_PC(corpse) == 1 && !corpse->contains) {
     extract_obj(corpse);
     return;
   }
@@ -968,6 +977,7 @@ void raw_kill(struct char_data * ch)
       char_to_room(ch, &world[i]);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
       PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
+      GET_LAST_IN(ch) = GET_ROOM_VNUM(ch->in_room);
 
       if (GET_QUEST(ch)) {
         end_quest(ch);
@@ -2399,6 +2409,10 @@ void docwagon_retrieve(struct char_data *ch) {
     GET_MENTAL(ch) = 1000;
     GET_POS(ch) = POS_STANDING;
   } else {
+    if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+      send_to_char("(TIP: Your belongings have been left behind, so you'll need to go and retrieve them if you want them back.)\r\n", ch);
+    }
+
     struct obj_data *docwagon = find_best_active_docwagon_modulator(ch);
 
     // Compensate for edge case: Their modulator was destroyed since they were flagged.
@@ -2469,14 +2483,18 @@ bool docwagon(struct char_data *ch)
     if (successes > 0)
     {
       send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
-      send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
+      if (GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
+        send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L at any time for pickup.]\r\n");
+      } else {
+        send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
+      }
       PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
     } else {
       send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
     }
   }
 
-  if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
+  if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT) && GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD) {
     int num_responders = alert_player_doctors_of_mort(ch, docwagon);
     if (num_responders > 0) {
       send_to_char(ch, "^L[OOC: There %s ^w%d^L player%s online who may be able to respond to your DocWagon call.]^n\r\n",
@@ -2893,8 +2911,19 @@ bool damage_without_message(struct char_data *ch, struct char_data *victim, int 
 }
 
 // return 1 if victim died, 0 otherwise
+// Note that dam is in BOXES, not wound types
 bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message)
 {
+  if (dam > convert_damage(DEADLY)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received greater-than-deadly damage integer %d to raw_damage(%s, %s, ...): Capping to Deadly.", dam, GET_CHAR_NAME(ch), GET_CHAR_NAME(victim));
+    dam = convert_damage(DEADLY);
+  }
+
+  if (attacktype < TYPE_HIT) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received too-low attack type %d to raw_damage(%s, %s, ...): Changing to TYPE_HIT.", attacktype, GET_CHAR_NAME(ch), GET_CHAR_NAME(victim));
+    attacktype = TYPE_HIT;
+  }
+
   char rbuf[MAX_STRING_LENGTH];
   memset(rbuf, 0, sizeof(rbuf));
 
@@ -5933,7 +5962,7 @@ void perform_violence(void)
       if (success < 0) {
         GET_EXTRA(mage) = 0;
         GET_EXTRA(spirit) = 1;
-        GET_TEMP_MAGIC_LOSS(mage) -= success;
+        GET_TEMP_MAGIC_LOSS(mage) = MIN(GET_TEMP_MAGIC_LOSS(mage) - success, GET_REAL_MAG(mage) / 100);
         send_to_char(mage, "You lock minds with %s, but are beaten back by its force!\r\n", GET_NAME(spirit));
       } else if (success == 0) {
         send_to_char(mage, "You lock minds with %s, but fail to gain any ground.\r\n",
@@ -5953,10 +5982,10 @@ void perform_violence(void)
         stop_fighting(mage);
         end_spirit_existance(spirit, TRUE);
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
-      } else if (GET_MAG(mage) < 1) {
+      } else if ((GET_REAL_MAG(mage) / 100) - GET_TEMP_MAGIC_LOSS(mage) < 1) {
         send_to_char(mage, "Your magic spent from your battle with %s, you fall unconscious.\r\n", GET_NAME(spirit));
         act("$n falls unconscious, drained by magical combat.", FALSE, mage, 0, 0, TO_ROOM);
-        if (damage(spirit, mage, TYPE_DRAIN, DEADLY, MENTAL)) {
+        if (damage(spirit, mage, convert_damage(DEADLY), TYPE_DRAIN, MENTAL)) {
           continue;
         }
         stop_fighting(spirit);
@@ -5965,6 +5994,14 @@ void perform_violence(void)
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
         AFF_FLAGS(spirit).RemoveBit(AFF_BANISH);
       }
+      continue;
+    }
+
+    // SR3 pg 189, when in banishment clashes, a spirit doesn't otherwise act
+    if (IS_AFFECTED(ch, AFF_BANISH)
+        && FIGHTING(ch)
+        && (IS_ANY_ELEMENTAL(ch) || IS_SPIRIT(ch)))
+    {
       continue;
     }
 

@@ -1606,6 +1606,9 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       send_to_char("You use your staff powers to bypass the locked doors.\r\n", ch);
     } else if (IS_ASTRAL(ch)) {
       // No message-- it just works. Astrals don't care about locks.
+    } else if (GET_IDNUM(ch) == found_veh->owner) {
+      send_to_char("You unlock the doors.\r\n", ch);
+      found_veh->locked = FALSE;
     } else {
       send_to_char("It's locked.\r\n", ch);
       return;
@@ -1675,7 +1678,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     next = k->next;
     if ((door && door == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
       act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
-      if (!found_veh->seating[front]) {
+      if (!found_veh->seating[1] && found_veh->seating[0]) {
         strlcpy(buf3, "rear", sizeof(buf3));
       } else {
         strlcpy(buf3, argument, sizeof(buf3));
@@ -1765,7 +1768,7 @@ ACMD(do_drag)
       return;
     }
 
-    if ((int)((GET_STR(ch)*10) * 3/2) < (GET_WEIGHT(vict) + IS_CARRYING_W(vict))) {
+    if (!affected_by_spell(vict, SPELL_LEVITATE) && (int)((GET_STR(ch)*10) * 3/2) < (GET_WEIGHT(vict) + IS_CARRYING_W(vict))) {
       act("$N is too heavy for you to drag!", FALSE, ch, 0, vict, TO_CHAR);
       return;
     }

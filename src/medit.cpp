@@ -451,6 +451,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.arrive);
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.leave);
         DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(&mob_proto[mob_number]));
+        SETTABLE_CHAR_COLOR_HIGHLIGHT(&mob_proto[mob_number]) = NULL;
 
         // Store the innate armor values before anything else-- we apply them later, otherwise handler.cpp will reset them.
         int innate_impact = GET_INNATE_IMPACT(MOB);

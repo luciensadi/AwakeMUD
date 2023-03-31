@@ -316,7 +316,8 @@ int light_level(struct room_data *room)
   }
 }
 
-int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
+#define WRITEOUT_MSG(name, amt) { if (writeout_buffer) { snprintf(ENDOF(writeout_buffer), writeout_buffer_size - strlen(writeout_buffer), "  %s: ^c%d^n\r\n", name, amt); }}
+int damage_modifier(struct char_data *ch, char *rbuf, size_t rbuf_size, char *writeout_buffer, size_t writeout_buffer_size)
 {
   int physical = GET_PHYSICAL(ch) / 100;
   int mental = GET_MENTAL(ch) / 100;
@@ -329,18 +330,40 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
     } else if (GET_BIOWARE_TYPE(obj) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(obj))
       mental = 10;
   }
-  if (AFF_FLAGGED(ch, AFF_RESISTPAIN))
-  {
+  if (AFF_FLAGGED(ch, AFF_RESISTPAIN) && ch->points.resistpain > 0) {
     physical += ch->points.resistpain;
-    mental += ch->points.resistpain;
   }
   if (!IS_NPC(ch)) {
-    if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_PAIN_RESISTANCE) > 0)
-    {
-      physical += GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
-      mental += GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
+    if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_PAIN_RESISTANCE) > 0) {
+      int pain_resist_boxes = GET_POWER(ch, ADEPT_PAIN_RESISTANCE);
+
+      // Physical boxes first if physical is lower then mental.
+      if (physical < mental) {
+        int physical_delta_from_max = GET_MAX_PHYSICAL(ch) - physical;
+        int physical_gain = MIN(physical_delta_from_max, pain_resist_boxes);
+        physical += physical_gain;
+        pain_resist_boxes -= physical_gain;
+
+        int mental_delta_from_max = GET_MAX_MENTAL(ch) - mental;
+        int mental_gain = MIN(mental_delta_from_max, pain_resist_boxes);
+        mental += mental_gain;
+        pain_resist_boxes -= mental_gain;
+      } 
+      // Otherwise, mental boxes first, then physical.
+      else {
+        int mental_delta_from_max = GET_MAX_MENTAL(ch) - mental;
+        int mental_gain = MIN(mental_delta_from_max, pain_resist_boxes);
+        mental += mental_gain;
+        pain_resist_boxes -= mental_gain;
+
+        int physical_delta_from_max = GET_MAX_PHYSICAL(ch) - physical;
+        int physical_gain = MIN(physical_delta_from_max, pain_resist_boxes);
+        physical += physical_gain;
+        pain_resist_boxes -= physical_gain;
+      }
     }
 
+    // Then add drug pain resist.
     int drug_pain_resist = get_drug_pain_resist_level(ch);
     physical += drug_pain_resist;
     mental += drug_pain_resist;
@@ -351,32 +374,38 @@ int damage_modifier(struct char_data *ch, char *rbuf, int rbuf_size)
   {
     base_target += 3;
     buf_mod(rbuf, rbuf_size, "Physical damage (S)", 3 );
+    WRITEOUT_MSG("Physical Damage (Serious)", 3);
   } else if (physical <= 7)
   {
     base_target += 2;
     buf_mod(rbuf, rbuf_size, "Physical damage (M)", 2 );
+    WRITEOUT_MSG("Physical Damage (Moderate)", 2);
   } else if (physical <= 9)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_size, "Physical damage (L)", 1 );
+    WRITEOUT_MSG("Physical Damage (Light)", 1);
   }
   if (mental <= 4)
   {
     base_target += 3;
     buf_mod(rbuf, rbuf_size, "Mental damage (S)", 3 );
+    WRITEOUT_MSG("Mental Damage (Serious)", 3);
   } else if (mental <= 7)
   {
     base_target += 2;
     buf_mod(rbuf, rbuf_size, "Mental damage (M)", 2 );
+    WRITEOUT_MSG("Mental Damage (Moderate)", 2);
   } else if (mental <= 9)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_size, "Mental damage (L)", 1 );
+    WRITEOUT_MSG("Mental Damage (Light)", 1);
   }
   return base_target;
 }
 
-int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool minus_one_sustained) {
+int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool minus_one_sustained, char *writeout_buffer, size_t writeout_buffer_size) {
   int base_target = 0;
 
   // Since NPCs don't have sustain foci available to them at the moment, we don't throw these penalties on them.
@@ -392,6 +421,7 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool min
     int delta = sustained_num * 2;
     base_target += delta;
     buf_mod(rbuf, rbuf_len, "Sustain", delta);
+    WRITEOUT_MSG("Sustaining Spells", delta);
   }
 
   if (IS_PROJECT(ch) && ch->desc && ch->desc->original) {
@@ -399,6 +429,7 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool min
       int delta = (GET_SUSTAINED_NUM(ch->desc->original) - GET_SUSTAINED_FOCI(ch->desc->original)) * 2;
       base_target += delta;
       buf_mod(rbuf, rbuf_len, "Sustain", delta);
+      WRITEOUT_MSG("Sustaining Spells", delta);
     }
   }
 
@@ -406,13 +437,17 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool min
 }
 
 // Adds the combat_mode toggle
-int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty, bool skill_is_magic) {
+int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, int current_visibility_penalty, bool skill_is_magic, char *writeout_buffer, size_t writeout_buffer_size) {
   extern time_info_data time_info;
   int base_target = 0;
-  // get damage modifier
-  base_target += damage_modifier(ch, rbuf, rbuf_len);
-  // then apply modifiers for sustained spells
-  base_target += sustain_modifier(ch, rbuf, rbuf_len);
+
+  // We skip these for writeout_buffer calls, since those handle damage and sustain modifiers separately:
+  if (!writeout_buffer) {
+    // get damage modifier
+    base_target += damage_modifier(ch, rbuf, rbuf_len);
+    // then apply modifiers for sustained spells
+    base_target += sustain_modifier(ch, rbuf, rbuf_len);
+  }
 
   struct room_data *temp_room = get_ch_in_room(ch);
 
@@ -431,6 +466,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
   if (skill_is_magic && GET_CONCENTRATION_TARGET_MOD(ch)) {
     base_target += GET_CONCENTRATION_TARGET_MOD(ch);
     buf_mod(rbuf, rbuf_len, "DrugConcTN", GET_CONCENTRATION_TARGET_MOD(ch));
+    WRITEOUT_MSG("Concentration Penalty (Drug-Induced)", GET_CONCENTRATION_TARGET_MOD(ch));
   }
 
   // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here.
@@ -438,6 +474,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     if (!skill_is_magic && IS_PERCEIVING(ch)) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
+      WRITEOUT_MSG("Perceiving", 2);
     }
   }
   // Otherwise, check to see if you've exceeded the vision pen max coming in here. This only happens for totalinvis and staff opponents.
@@ -457,7 +494,10 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
       visibility_penalty = new_visibility_penalty;
     }
 
-    base_target += visibility_penalty;
+    if (visibility_penalty != 0) {
+      WRITEOUT_MSG("Visibility Penalty", visibility_penalty);
+      base_target += visibility_penalty;
+    }
   }
 
   base_target += GET_TARGET_MOD(ch);
@@ -466,33 +506,41 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_len, "Sunlight", 1);
+    WRITEOUT_MSG("Sunlight Allergy", 1);
   }
   if (temp_room->poltergeist[0] && !IS_ASTRAL(ch) && !MOB_FLAGGED(ch, MOB_DUAL_NATURE))
   {
     base_target += 2;
     buf_mod(rbuf, rbuf_len, "Polter", 2);
+    WRITEOUT_MSG("Poltergeist Spell", 2);
   }
   if (AFF_FLAGGED(ch, AFF_ACID))
   {
     base_target += 4;
     buf_mod(rbuf, rbuf_len, "Acid", 4);
+    WRITEOUT_MSG("Being Melted by Acid", 4);
   }
   if (ch->points.fire[0] > 0)
   {
     base_target += 4;
     buf_mod(rbuf, rbuf_len, "OnFire", 4);
+    WRITEOUT_MSG("Being On Fire", 4);
   }
   for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
     if (sust->caster == FALSE && (sust->spell == SPELL_CONFUSION || sust->spell == SPELL_CHAOS)) {
-      base_target += MIN(sust->force, sust->success);
-      buf_mod(rbuf, rbuf_len, "Confused", MIN(sust->force, sust->success));
+      int amount = MIN(sust->force, sust->success);
+      base_target += amount;
+      buf_mod(rbuf, rbuf_len, "Confused", amount);
+      WRITEOUT_MSG("Confusion (Spell)", amount);
     }
   }
   if (!(IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch))) {
     for (struct spirit_sustained *sust = SPIRIT_SUST(ch); sust; sust = sust->next) {
       if (sust->type == CONFUSION) {
-        base_target += GET_LEVEL(sust->target);
-        buf_mod(rbuf, rbuf_len, "SConfused", GET_LEVEL(sust->target));
+        int amount = GET_LEVEL(sust->target);
+        base_target += amount;
+        buf_mod(rbuf, rbuf_len, "SConfused", amount);
+        WRITEOUT_MSG("Confusion (Spirit Power)", amount);
         break;
       }
     }
@@ -503,6 +551,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
     if (heightdif > 1) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "TooTallRatio", (int)(heightdif*100));
+      WRITEOUT_MSG("Slouch Penalty", 2); // todo: inaccurate, but also disabled code, so...
     }
     if (heightdif > 1.2)
       base_target += 2;
@@ -514,13 +563,14 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int c
 #endif
   return base_target;
 }
+#undef WRITEOUT_MSG
 
-int modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len)
+int modify_target_rbuf(struct char_data *ch, char *rbuf, size_t rbuf_len)
 {
   return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0, FALSE);
 }
 
-int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len)
+int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, size_t rbuf_len)
 {
   return modify_target_rbuf_raw(ch, rbuf, rbuf_len, 0, TRUE);
 }
@@ -1399,9 +1449,9 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
 
 }
 
+#define WRITEOUT_MSG(name, amt) { if (writeout_buffer) { snprintf(ENDOF(writeout_buffer), writeout_buffer_size - strlen(writeout_buffer), "  %s: ^c%d^n\r\n", name, amt); }}
 // I hate this name. This isn't just a getter, it's a setter as well. -LS
-int get_skill(struct char_data *ch, int skill, int &target)
-{
+int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffer, size_t writeout_buffer_size) {
   char gskbuf[MAX_STRING_LENGTH];
   int increase = 0;
   int defaulting_tn = 0;
@@ -1421,7 +1471,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     }
 
     // Some skills cannot be defaulted on.
-    if (skill == SKILL_AURA_READING || skill == SKILL_SORCERY || skill == SKILL_CONJURING) {
+    if (skills[skill].no_defaulting_allowed) {
       strlcat(gskbuf, "failed to default (skill prohibits default), returning 0 dice. ", sizeof(gskbuf));
       act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
       return 0;
@@ -1440,6 +1490,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
         skill = max_defaultable_skill;
         defaulting_tn = 2;
         snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "defaulting to %s (+2 TN). ", skills[skill].name);
+        if (writeout_buffer) { snprintf(ENDOF(writeout_buffer), writeout_buffer_size - strlen(writeout_buffer), "  Defaulting to %s: ^c%d^n\r\n", skills[skill].name, 2); }
       }
     }
 
@@ -1447,6 +1498,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     if (defaulting_tn == 0) {
       defaulting_tn = 4;
       snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "defaulting to %s (+4 TN). ", short_attributes[skills[skill].attribute]);
+      if (writeout_buffer) { snprintf(ENDOF(writeout_buffer), writeout_buffer_size - strlen(writeout_buffer), "  Defaulting to %s: ^c%d^n\r\n", attributes[skills[skill].attribute], 4); }
     }
   }
 
@@ -1455,11 +1507,13 @@ int get_skill(struct char_data *ch, int skill, int &target)
     if (GET_TOTALIMP(ch) > GET_QUI(ch)) {
       increase = GET_TOTALIMP(ch) - GET_QUI(ch);
       buf_mod(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "OverImp", increase);
+      WRITEOUT_MSG("Excessive Impact Armor", increase);
       target += increase;
     }
     if (GET_TOTALBAL(ch) > GET_QUI(ch)) {
       increase = GET_TOTALBAL(ch) - GET_QUI(ch);
       buf_mod(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "OverBal", increase);
+      WRITEOUT_MSG("Excessive Ballistic Armor", increase);
       target += increase;
     }
   }
@@ -1475,7 +1529,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
   // If you ever implement the Adept power Improved Ability, it would go here. See Core p169 for details.
 
   bool should_gain_physical_boosts = !IS_JACKED_IN(ch);
-  int mbw = 0, enhan = 0, synth = 0;
+  int mbw = 0, enhan = 0, synth = 0, eryth = 0;
 
   // Calculate our starting skill dice.
   int skill_dice = defaulting_tn == 4 ? GET_ATT(ch, skills[skill].attribute) : GET_SKILL(ch, skill);
@@ -1553,13 +1607,16 @@ int get_skill(struct char_data *ch, int skill, int &target)
   // Iterate through their bioware, looking for anything important.
   if (should_gain_physical_boosts && ch->bioware) {
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_BIOWARE_TYPE(bio) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill) {
+      if (skills[skill].reflex_recorder_compatible && GET_BIOWARE_TYPE(bio) == BIO_REFLEXRECORDER && GET_BIOWARE_REFLEXRECORDER_DATA(bio) == skill) {
         strlcat(gskbuf, "Reflex Recorder skill increase: 1. ", sizeof(gskbuf));
         skill_dice++;
-      } else if (GET_BIOWARE_TYPE(bio) == BIO_ENHANCEDARTIC)
-        enhan = should_gain_physical_boosts;
-      else if (GET_BIOWARE_TYPE(bio) == BIO_SYNTHACARDIUM)
+      } else if (GET_BIOWARE_TYPE(bio) == BIO_ERYTHROPOITIN) {
+        eryth = TRUE;
+      } else if (GET_BIOWARE_TYPE(bio) == BIO_ENHANCEDARTIC) {
+        enhan = TRUE;
+      } else if (GET_BIOWARE_TYPE(bio) == BIO_SYNTHACARDIUM) {
         synth = GET_BIOWARE_RATING(bio);
+      }
     }
   }
 
@@ -1674,28 +1731,64 @@ int get_skill(struct char_data *ch, int skill, int &target)
     skill_dice += synth;
   }
 
+  // Erythropoitin.
+  if (skill == SKILL_ATHLETICS && eryth) {
+    strlcat(gskbuf, "Erythropoitin: +2 ", sizeof(gskbuf));
+    skill_dice += 2;
+  }
+
   snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Final total skill: %d dice.", skill_dice);
 
   act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
 
   return skill_dice;
 }
+#undef WRITEOUT_MSG
 
+int get_num_of_cyber_replacements(struct char_data *ch) {
+  int total = 0;
+
+  if (!ch) {
+    mudlog("SYSERR: Received NULL character to get_num_of_cyber_replacements()!", ch, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+
+  for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+    switch (GET_CYBERWARE_TYPE(cyber)) {
+      case CYB_ARMS:
+      case CYB_LEGS:
+        total += 2;
+        break;
+      case CYB_SKULL:
+      case CYB_TORSO:
+        total++;
+        break;
+    }
+  }
+
+  return total;
+}
+
+#define INCOMPATIBLE_BIO(biotype, message) { if (GET_BIOWARE_TYPE(bio1) == biotype) { send_to_char(ch, "%s\r\n", message); return FALSE; } }
 bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch)
 {
-  struct obj_data *cyber1 = NULL, *cyber2 = NULL, *bio1 = NULL;
-  if (GET_OBJ_TYPE(obj1) == ITEM_CYBERWARE)
+  struct obj_data *cyber1 = NULL, *cyber2 = NULL, *bio1 = NULL, *bio2 = NULL;
+  if (GET_OBJ_TYPE(obj1) == ITEM_CYBERWARE) {
     cyber1 = obj1;
-  else
-    bio1 = obj1;
-  if (GET_OBJ_TYPE(obj2) == ITEM_BIOWARE)
-    bio1 = obj2;
-  else {
-    if (cyber1)
+    if (GET_OBJ_TYPE(obj2) == ITEM_BIOWARE) {
+      bio1 = obj2;
+    } else {
       cyber2 = obj2;
-    else
+    }
+  } else {
+    bio1 = obj1;
+    if (GET_OBJ_TYPE(obj2) == ITEM_BIOWARE) {
+      bio2 = obj2;
+    } else {
       cyber1 = obj2;
+    }
   }
+
   if (cyber1 && cyber2) {
     if (GET_CYBERWARE_TYPE(cyber1) != CYB_EYES)
       switch (GET_CYBERWARE_TYPE(cyber1)) {
@@ -1767,18 +1860,17 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           break;
         case CYB_ARMS:
         case CYB_LEGS:
-        case CYB_SKULL:
         case CYB_TORSO:
           switch (GET_CYBERWARE_TYPE(cyber2)) {
             case CYB_DERMALPLATING:
             case CYB_DERMALSHEATHING:
-              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with skin modifications.\r\n", ch);
+              send_to_char("Cybernetic replacements (limbs, torso) are incompatible with skin modifications.\r\n", ch);
               return FALSE;
             case CYB_BONELACING:
-              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with bone lacings.\r\n", ch);
+              send_to_char("Cybernetic replacements (limbs, torso) are incompatible with bone lacings.\r\n", ch);
               return FALSE;
             case CYB_MUSCLEREP:
-              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with muscle replacements.\r\n", ch);
+              send_to_char("Cybernetic replacements (limbs, torso) are incompatible with muscle replacements.\r\n", ch);
               return FALSE;
           }
 
@@ -1787,14 +1879,19 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
             return FALSE;
           }
 
+          // fall through
+        case CYB_SKULL:
+          // Guard against installing a standalone TC when you already have a skull TC installed.
+          if (IS_SET(GET_CYBERWARE_FLAGS(cyber1), SKULL_MOD_TAC_COMP) && GET_CYBERWARE_TYPE(cyber2) == CYB_TACTICALCOMPUTER) {
+            send_to_char("You already have a tactical computer installed.\r\n", ch);
+            return FALSE;
+          }
           break;
         case CYB_MUSCLEREP:
           switch (GET_CYBERWARE_TYPE(cyber2)) {
             case CYB_ARMS:
             case CYB_LEGS:
-            case CYB_SKULL:
-            case CYB_TORSO:
-              send_to_char("Muscle replacements are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
+              send_to_char("Muscle replacements are incompatible with cybernetic replacement limbs.\r\n", ch);
               return FALSE;
           }
           break;
@@ -1808,8 +1905,15 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
               return FALSE;
           }
           break;
+        case CYB_TACTICALCOMPUTER:
+          // Guard against installing a skull with TC when you already have a standalone TC installed.
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_SKULL && IS_SET(GET_CYBERWARE_FLAGS(cyber2), SKULL_MOD_TAC_COMP)) {
+            send_to_char("You already have a tactical computer installed.\r\n", ch);
+            return FALSE;
+          }
+          break;
       }
-    if (IS_SET(GET_CYBERWARE_FLAGS(cyber1), EYE_DATAJACK) && GET_CYBERWARE_TYPE(cyber2) == CYB_DATAJACK) {
+    if (GET_CYBERWARE_TYPE(cyber1) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(cyber1), EYE_DATAJACK) && GET_CYBERWARE_TYPE(cyber2) == CYB_DATAJACK) {
       send_to_char("You already have a datajack installed.\r\n", ch);
       return FALSE;
     }
@@ -1873,6 +1977,14 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           send_to_char("Muscle replacement isn't compatible with Muscle Augmentation or Toners.\r\n", ch);
           return FALSE;
         }
+        if (GET_BIOWARE_TYPE(bio1) == BIO_CALCITONIN) {
+          send_to_char("Muscle replacement isn't compatible with Calcitonin treatments.\r\n", ch);
+          return FALSE;
+        }
+        if (GET_BIOWARE_TYPE(bio1) == BIO_ERYTHROPOITIN) {
+          send_to_char("Muscle replacement isn't compatible with Erythropoitin treatments.\r\n", ch);
+          return FALSE;
+        }
         break;
       case CYB_DERMALPLATING:
       case CYB_DERMALSHEATHING:
@@ -1883,16 +1995,21 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
         break;
       case CYB_ARMS:
       case CYB_LEGS:
-      case CYB_SKULL:
-      case CYB_TORSO:
         if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLEAUG) {
-          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Muscle Augmentations.\r\n", ch);
+          send_to_char("Cybernetic replacement limbs are incompatible with Muscle Augmentations.\r\n", ch);
           return FALSE;
         }
         if (GET_BIOWARE_TYPE(bio1) == BIO_MUSCLETONER) {
-          send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Muscle Toners.\r\n", ch);
+          send_to_char("Cybernetic replacement limbs are incompatible with Muscle Toners.\r\n", ch);
           return FALSE;
         }
+        if (GET_BIOWARE_TYPE(bio1) == BIO_CALCITONIN) {
+          send_to_char("Cybernetic replacement limbs are incompatible with Calcitonin treatments.\r\n", ch);
+          return FALSE;
+        }
+        // fall through
+      case CYB_SKULL:
+      case CYB_TORSO:
         if (GET_BIOWARE_TYPE(bio1) == BIO_ORTHOSKIN) {
           send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with Orthoskin.\r\n", ch);
           return FALSE;
@@ -1900,8 +2017,19 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
         break;
     }
   }
+  else if (bio1 && bio2) {
+    switch (GET_BIOWARE_TYPE(bio2)) {
+      case BIO_CALCITONIN:
+        INCOMPATIBLE_BIO(BIO_PLATELETFACTORY, "Calcitonin treatments are incompatible with platelet factories..");
+        break;
+      case BIO_PLATELETFACTORY:
+        INCOMPATIBLE_BIO(BIO_CALCITONIN, "Platelet factories are incompatible with calcitonin treatments.");
+        break;
+    }
+  }
   return TRUE;
 }
+#undef INCOMPATIBLE_BIO
 
 void reduce_abilities(struct char_data *vict)
 {
@@ -3411,10 +3539,14 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
     return str_dup(log_string);
   }
 
-  snprintf(log_string, sizeof(log_string), "(obj %ld) %s^g%s",
+  snprintf(log_string, sizeof(log_string), "(obj %ld) %s^g",
           GET_OBJ_VNUM(obj),
-          obj->text.name,
-          IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? " [wizloaded]" : "");
+          obj->text.name);
+  
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD))
+    strlcat(log_string, " [wizloaded]", sizeof(log_string));
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
+    strlcat(log_string, " [cheat-marked]", sizeof(log_string));
 
   if (obj->restring)
     snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s^g]", obj->restring);
@@ -5635,6 +5767,35 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *
 
   return TRUE;
 }
+
+// Is the specified object a vehicle title?
+bool obj_is_a_vehicle_title(struct obj_data *obj) {
+    switch (GET_OBJ_VNUM(obj)) {
+      case OBJ_TITLE_TO_AMERICAR        :
+      case OBJ_TITLE_TO_SCORPION        :
+      case OBJ_TITLE_TO_JACKRABBIT      :
+      case OBJ_TITLE_TO_RUNABOUT        :
+      case OBJ_TITLE_TO_RAPIER          :
+      case OBJ_TITLE_TO_BISON           :
+      case OBJ_TITLE_TO_WESTWIND        :
+      case OBJ_TITLE_TO_DOBERMAN        :
+      case OBJ_TITLE_TO_SNOOPER         :
+      case OBJ_TITLE_TO_SURVEILLANCE    :
+      case OBJ_TITLE_TO_ROTODRONE       :
+      case OBJ_TITLE_TO_DALMATION       :
+      case OBJ_TITLE_TO_SUPERCOMBI_RV   :
+      case OBJ_TITLE_TO_NOMAD_SUV       :
+      case OBJ_TITLE_TO_BRUMBY_SUV      :
+      case OBJ_TITLE_TO_GOPHER_PICKUP   :
+      case OBJ_TITLE_TO_TRANSPORT_PICKUP:
+      case OBJ_TITLE_TO_GMC_4201        :
+      case OBJ_TITLE_TO_GMC_BULLDOG     :
+      case OBJ_TITLE_TO_ARES_ROADMASTER :
+      case OBJ_TITLE_TO_WHITE_EAGLE_BIKE:
+        return TRUE;
+    }
+    return FALSE;
+  }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.

@@ -43,6 +43,7 @@
 #include "transport.hpp"
 #include "memory.hpp"
 #include "newhouse.hpp"
+#include "house.hpp"
 
 extern class objList ObjList;
 extern int modify_target(struct char_data *ch);
@@ -348,7 +349,7 @@ void gain_condition(struct char_data * ch, int condition, int value)
   if (GET_COND(ch, condition) == -1)    /* No change */
     return;
 
-  intoxicated = (GET_COND(ch, COND_DRUNK) > MIN_DRUNK);
+  intoxicated = (GET_COND(ch, COND_DRUNK) > MIN_DRUNK) && !affected_by_spell(ch, SPELL_DETOX);
 
   if (value == -1) {
     for (bio = ch->bioware; bio; bio = bio->next_content) {
@@ -525,6 +526,16 @@ void check_idling(void)
         */
 
       if (!ch->desc && !PLR_FLAGGED(ch, PLR_PROJECT) && (ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION || PLR_FLAGGED(ch, PLR_IN_CHARGEN))) {
+        // If they're a PC in an apartment that they own, set their loadroom there.
+        if (!IS_NPC(ch)) {
+          struct room_data *in_room = get_ch_in_room(ch);
+          if (in_room && ROOM_FLAGGED(in_room, ROOM_HOUSE)) {
+            struct house_control_rec *house_record = find_house(GET_ROOM_VNUM(in_room));
+
+            if (house_record && house_record->owner == GET_IDNUM(ch))
+              GET_LOADROOM(ch) = GET_ROOM_VNUM(in_room);
+          }
+        }
         snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
         extract_char(ch);
@@ -852,7 +863,7 @@ void process_regeneration(int half_hour)
   }
 }
 
-/* Update PCs, NPCs, and objects */
+/* Update PCs, NPCs, and objects, called every mud hour */
 void point_update(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -913,6 +924,11 @@ void point_update(void)
         send_to_char("You feel you could benefit with some time at a shooting range.\r\n", i);
       }
 #endif
+
+      // Temp magic loss (banishing) regains 1/hour, SR3 pg 189
+      if (GET_TEMP_MAGIC_LOSS(i) > 0) {
+        GET_TEMP_MAGIC_LOSS(i)--;
+      }
 
       // Geas check from focus / foci overuse.
       if (GET_MAG(i) > 0) {

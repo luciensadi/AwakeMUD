@@ -335,7 +335,7 @@ extern void write_index_file(const char *suffix);
 #define ZEDIT_SECURITY                  23
 #define ZEDIT_ID_LIST                   24
 #define ZEDIT_CONNECTED                 25
-#define ZEDIT_JURID			                26
+#define ZEDIT_JURISDICTIONS			    26
 #define ZEDIT_PGHQ                      27
 
 #define CEDIT_CONFIRM_EDIT        0

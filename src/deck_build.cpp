@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <vector>
+#include <algorithm>
 
 #include "structs.hpp"
 #include "awake.hpp"
@@ -23,7 +25,15 @@
 
 extern void ammo_build(struct char_data *ch, struct obj_data *obj);
 
+void set_cyberdeck_part_pointer(struct obj_data *part, struct obj_data *deck);
+void clear_cyberdeck_part_pointer(struct obj_data *part);
+bool part_is_compatible_with_deck(struct obj_data *part, struct obj_data *deck, struct char_data *ch);
+
 ACMD_DECLARE(do_sit);
+
+std::vector<struct obj_data *> global_in_progress_deck_parts = {};
+
+#define PART_CAN_HAVE_MPCP_SET(the_part) (parts[GET_PART_TYPE(the_part)].design >= 0 || GET_PART_TYPE(the_part) == PART_ACTIVE || GET_PART_TYPE(the_part) == PART_STORAGE || GET_PART_TYPE(the_part) == PART_MATRIX_INTERFACE)
 
 bool part_is_nerps(int part_type) {
   switch (part_type) {
@@ -228,8 +238,7 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
             partbuild_disp_types(d);
             break;
         case '3':
-            if (parts[GET_PART_TYPE(PART)].design >= 0 ||
-                    GET_PART_TYPE(PART) == PART_ACTIVE || GET_PART_TYPE(PART) == PART_STORAGE || GET_PART_TYPE(PART) == PART_MATRIX_INTERFACE) {
+            if (PART_CAN_HAVE_MPCP_SET(PART)) {
                 send_to_char(CH, "MPCP of Target Deck: ");
                 d->edit_mode = DEDIT_MPCP;
             } else
@@ -237,6 +246,20 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
             break;
         case 'q':
         case 'Q':
+            // Require that the MPCP is set.
+            if (PART_CAN_HAVE_MPCP_SET(PART) && !GET_PART_TARGET_MPCP(PART)) {
+              send_to_char("You must specify the part's target MPCP first with option '3'.\r\n", CH);
+              partbuild_main_menu(d);
+              return;
+            }
+
+            // Require that the rating is set if needed.
+            if (part_can_have_its_rating_set(PART) && !GET_PART_RATING(PART)) {
+              send_to_char("You must specify the part's rating first with option '4'.\r\n", CH);
+              partbuild_main_menu(d);
+              return;
+            }
+
             // Set design requirements (if needed)
             if (parts[GET_PART_TYPE(PART)].design == -1) {
                 GET_PART_DESIGN_COMPLETION(PART) = 0;
@@ -612,394 +635,413 @@ void part_design(struct char_data *ch, struct obj_data *part) {
 }
 
 ACMD(do_build) {
-    char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH], arg3[MAX_INPUT_LENGTH];
-    struct obj_data *obj, *deck;
-    if (!*argument) {
-      if (IS_WORKING(ch)) {
-        STOP_WORKING(ch);
-        send_to_char("You stop working.\r\n", ch);
-      } else
-        send_to_char(ch, "What do you want to build?\r\n");
-      return;
-    }
-    if (GET_POS(ch) > POS_SITTING) {
-      do_sit(ch, NULL, 0, 0);
-      if (GET_POS(ch) > POS_SITTING) {
-        send_to_char(ch, "You have to be sitting to do that.\r\n");
-        return;
-      }
-    }
+  char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH], arg3[MAX_INPUT_LENGTH];
+  struct obj_data *obj, *deck;
+  if (!*argument) {
     if (IS_WORKING(ch)) {
-        send_to_char(TOOBUSY, ch);
-        return;
+      STOP_WORKING(ch);
+      send_to_char("You stop working.\r\n", ch);
+    } else
+      send_to_char(ch, "What do you want to build?\r\n");
+    return;
+  }
+  if (GET_POS(ch) > POS_SITTING) {
+    do_sit(ch, NULL, 0, 0);
+    if (GET_POS(ch) > POS_SITTING) {
+      send_to_char(ch, "You have to be sitting to do that.\r\n");
+      return;
     }
-    half_chop(argument, arg1, buf);
-    half_chop(buf, arg2, arg3);
-    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      if (ch->in_room)
-        obj = get_obj_in_list_vis(ch, arg1, ch->in_room->contents);
-      else
-        obj = get_obj_in_list_vis(ch, arg1, ch->in_veh->contents);
+  }
+  if (IS_WORKING(ch)) {
+      send_to_char(TOOBUSY, ch);
+      return;
+  }
+  half_chop(argument, arg1, buf);
+  half_chop(buf, arg2, arg3);
+  if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
+    if (ch->in_room)
+      obj = get_obj_in_list_vis(ch, arg1, ch->in_room->contents);
+    else
+      obj = get_obj_in_list_vis(ch, arg1, ch->in_veh->contents);
 
-      // They're building a new thing.
-      if (!obj) {
-        // Building a new circle or lodge?
-        if (!str_cmp(arg1, "circle") || !str_cmp(arg1, "lodge")) {
-          if (ch->in_veh) {
-            send_to_char(ch, "You can't build circles or lodges in vehicles.\r\n");
-            return;
-          }
+    // They're building a new thing.
+    if (!obj) {
+      // Building a new circle or lodge?
+      if (!str_cmp(arg1, "circle") || !str_cmp(arg1, "lodge")) {
+        if (ch->in_veh) {
+          send_to_char(ch, "You can't build circles or lodges in vehicles.\r\n");
+          return;
+        }
 
-          FOR_ITEMS_AROUND_CH(ch, obj) {
-            if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_MAGIC_TOOL_TYPE(obj) == TYPE_CIRCLE || GET_MAGIC_TOOL_TYPE(obj) == TYPE_LODGE)) {
-              send_to_char("There is already a lodge or a hermetic circle here.\r\n", ch);
-              return;
-            }
-          }
-
-          // Circle-specific code.
-          if (!str_cmp(arg1, "circle")) {
-            if (!*arg2 || !*arg3)
-              send_to_char("Draw the circle at what force and to what element?\r\n", ch);
-            else
-              circle_build(ch, arg3, atoi(arg2));
-            return;
-          }
-
-          // Lodge-specific code.
-          if (!str_cmp(arg1, "lodge")) {
-            if (!*arg2)
-              send_to_char("What force do you wish that lodge to be?\r\n", ch);
-            else
-              lodge_build(ch, atoi(arg2));
+        FOR_ITEMS_AROUND_CH(ch, obj) {
+          if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_MAGIC_TOOL_TYPE(obj) == TYPE_CIRCLE || GET_MAGIC_TOOL_TYPE(obj) == TYPE_LODGE)) {
+            send_to_char("There is already a lodge or a hermetic circle here.\r\n", ch);
             return;
           }
         }
 
-        // Whatever they're building isn't supported, so they must have typod a part.
-        send_to_char(ch, "You don't seem to have that part.\r\n");
-        return;
+        // Circle-specific code.
+        if (!str_cmp(arg1, "circle")) {
+          if (!*arg2 || !*arg3)
+            send_to_char("Draw the circle at what force and to what element?\r\n", ch);
+          else
+            circle_build(ch, arg3, atoi(arg2));
+          return;
+        }
+
+        // Lodge-specific code.
+        if (!str_cmp(arg1, "lodge")) {
+          if (!*arg2)
+            send_to_char("What force do you wish that lodge to be?\r\n", ch);
+          else
+            lodge_build(ch, atoi(arg2));
+          return;
+        }
       }
 
-      // We know obj exists.
-      if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL) {
-          if (!GET_OBJ_VAL(obj, 9))
-              send_to_char("It has already been completed!\r\n", ch);
-          else if (GET_OBJ_VAL(obj, 3) != GET_IDNUM(ch))
-              send_to_char("That's not yours!\r\n", ch);
-          else if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_LODGE) {
-              AFF_FLAGS(ch).SetBit(AFF_LODGE);
-              GET_BUILDING(ch) = obj;
-              send_to_char(ch, "You continue working on your lodge.\r\n");
-              act("$n continues to build $s lodge.", FALSE, ch, 0, 0, TO_ROOM);
-          } else if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_CIRCLE) {
-              AFF_FLAGS(ch).SetBit(AFF_CIRCLE);
-              GET_BUILDING(ch) = obj;
-              send_to_char(ch, "You continue working on %s.\r\n", GET_OBJ_NAME(obj));
-              act("$n continues to draw the hermetic circle.", FALSE, ch, 0, 0, TO_ROOM);
-          } else
-              send_to_char(ch, "There's nothing about %s that strikes you as buildable.\r\n", GET_OBJ_NAME(obj));
-      } else {
-        send_to_char(ch, "You'll need to pick %s up before you can do anything else with it.\r\n", GET_OBJ_NAME(obj));
+      // Whatever they're building isn't supported, so they must have typod a part.
+      send_to_char(ch, "You don't seem to have that part.\r\n");
+      return;
+    }
+
+    // We know obj exists.
+    if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL) {
+        if (!GET_OBJ_VAL(obj, 9))
+            send_to_char("It has already been completed!\r\n", ch);
+        else if (GET_OBJ_VAL(obj, 3) != GET_IDNUM(ch))
+            send_to_char("That's not yours!\r\n", ch);
+        else if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_LODGE) {
+            AFF_FLAGS(ch).SetBit(AFF_LODGE);
+            GET_BUILDING(ch) = obj;
+            send_to_char(ch, "You continue working on your lodge.\r\n");
+            act("$n continues to build $s lodge.", FALSE, ch, 0, 0, TO_ROOM);
+        } else if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_CIRCLE) {
+            AFF_FLAGS(ch).SetBit(AFF_CIRCLE);
+            GET_BUILDING(ch) = obj;
+            send_to_char(ch, "You continue working on %s.\r\n", GET_OBJ_NAME(obj));
+            act("$n continues to draw the hermetic circle.", FALSE, ch, 0, 0, TO_ROOM);
+        } else
+            send_to_char(ch, "There's nothing about %s that strikes you as buildable.\r\n", GET_OBJ_NAME(obj));
+    } else {
+      send_to_char(ch, "You'll need to pick %s up before you can do anything else with it.\r\n", GET_OBJ_NAME(obj));
+    }
+    return;
+
+  } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+    ammo_build(ch, obj);
+    return;
+  }
+
+  if (!*arg2) {
+    send_to_char("Syntax: BUILD <part> <deck>\r\n", ch);
+    return;
+  }
+
+  if (!(deck = get_obj_in_list_vis(ch, arg2, ch->carrying))) {
+    send_to_char(ch, "You don't have a deck named '%s'.\r\n", arg2);
+    return;
+  }
+
+  if(GET_OBJ_TYPE(obj) != ITEM_PART) {
+    send_to_char(ch, "You can't build a cyberdeck part out of %s %s like %s.\r\n", 
+                  AN(item_types[(int) GET_OBJ_TYPE(obj)]), 
+                  item_types[(int) GET_OBJ_TYPE(obj)], 
+                  decapitalize_a_an(GET_OBJ_NAME(obj)));
+    return;
+  }
+
+  if (GET_OBJ_TYPE(deck) != ITEM_CUSTOM_DECK) {
+    send_to_char(ch, "%s isn't a custom deck, so you can't build anything into it.\r\n", capitalize(GET_OBJ_NAME(deck)));
+    return;
+  }
+
+  if (GET_PART_DESIGN_COMPLETION(obj)) {
+    send_to_char(ch, "You must ##^WDESIGN^n %s first.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    return;
+  }
+
+  if (GET_PART_BUILDER_IDNUM(obj) != GET_IDNUM(ch) && GET_PART_BUILDER_IDNUM(obj) > 0) {
+    send_to_char(ch, "Someone else has already started on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    return;
+  }
+
+  if (!part_is_compatible_with_deck(obj, deck, ch)) {
+    // Message was already sent above.
+    return;
+  }
+
+  struct obj_data *workshop = NULL;
+
+  int kit_rating = 0, target = -GET_PART_DESIGN_SUCCESSES(obj), duration_in_hours = 0, skill = 0;
+
+  if ((workshop = find_workshop(ch, TYPE_MICROTRONIC)) && GET_OBJ_VAL(workshop, 0) > kit_rating) {
+    kit_rating = GET_WORKSHOP_TYPE(workshop);
+  } else if (has_kit(ch, TYPE_MICROTRONIC)) {
+    kit_rating = TYPE_KIT;
+  }
+
+  // Ensure we have the right rating of tools.
+  if (kit_rating < parts[GET_PART_TYPE(obj)].tools) {
+      send_to_char(ch, "You don't have the right tools for that job. You need to %s %s %s.\r\n",
+                    parts[GET_PART_TYPE(obj)].tools == TYPE_WORKSHOP ? "have an unpacked" : "have a",
+                    workshops[TYPE_MICROTRONIC],
+                    kit_workshop_facility[parts[GET_PART_TYPE(obj)].tools]);
+      return;
+  }
+
+  // Continue work.
+  if (GET_PART_BUILD_TICKS_REMAINING(obj) > 0) {
+    send_to_char(ch, "You continue work on building %s.\r\n", GET_OBJ_NAME(obj));
+    set_cyberdeck_part_pointer(obj, deck);
+    ch->char_specials.programming = obj;
+    AFF_FLAGS(ch).SetBit(AFF_PART_BUILD);
+    return;
+  }
+
+  // Once we hit here, we're building something new.
+
+  // Give bonuses for exceeding the tool requirement.
+  switch (parts[GET_OBJ_VAL(obj, 0)].tools) {
+    case TYPE_KIT:
+      if (kit_rating == TYPE_WORKSHOP) {
+        target--;
+      } else if (kit_rating == TYPE_FACILITY) {
+        target -= 3;
       }
-      return;
+      break;
+    case TYPE_WORKSHOP:
+      if (kit_rating == TYPE_FACILITY) {
+        target--;
+      }
+      break;
+  }
 
-    } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
-      ammo_build(ch, obj);
-      return;
+  // When the ticks remaining is -1, they haven't paid for it yet.
+  if (GET_PART_BUILD_TICKS_REMAINING(obj) == -1) {
+    struct obj_data *soft = NULL;
+    
+    int required_rating = GET_PART_TARGET_MPCP(obj);
+
+    switch (GET_PART_TYPE(obj)) {
+      case PART_BOD:
+      case PART_EVASION:
+      case PART_MASKING:
+      case PART_SENSOR:
+      case PART_RESPONSE:
+        required_rating = GET_PART_RATING(obj);
+        break;
     }
 
-    if (!*arg2) {
-      send_to_char("Syntax: BUILD <part> <deck>\r\n", ch);
-      return;
-    }
-
-    if (!(deck = get_obj_in_list_vis(ch, arg2, ch->carrying))) {
-      send_to_char(ch, "You don't have a deck named '%s'.\r\n", arg2);
-      return;
-    }
-
-    if(GET_OBJ_TYPE(obj) != ITEM_PART) {
-      send_to_char(ch, "You can't build a cyberdeck part out of %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-      return;
-    }
-
-    if (GET_OBJ_TYPE(deck) != ITEM_CUSTOM_DECK) {
-      send_to_char(ch, "%s isn't a custom deck, so you can't build anything into it.\r\n", capitalize(GET_OBJ_NAME(deck)));
-      return;
-    }
-
-    if (GET_PART_DESIGN_COMPLETION(obj)) {
-      send_to_char(ch, "You must make a design for %s first.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-      return;
-    }
-
-    if (GET_PART_BUILDER_IDNUM(obj) != GET_IDNUM(ch) && GET_PART_BUILDER_IDNUM(obj) > 0) {
-      send_to_char(ch, "Someone else has already started on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-      return;
-    }
-
-    if (GET_PART_TYPE(obj) == PART_MPCP && GET_CYBERDECK_MPCP(deck)) {
-        struct obj_data *temp = deck->contains;
-        if (GET_PART_TARGET_MPCP(obj) != GET_CYBERDECK_MPCP(deck))
-            for (; temp; temp = temp->next_content)
-                if (GET_OBJ_TYPE(temp) == ITEM_PART && GET_PART_TARGET_MPCP(obj) == GET_PART_TARGET_MPCP(temp))
-                    break;
-        if (!temp) {
-            send_to_char(ch, "%s is not designed for the same MPCP as %s.\r\n", capitalize(GET_OBJ_NAME(obj)), decapitalize_a_an(GET_OBJ_NAME(deck)));
-            return;
+    // Find requisite software.
+    if (parts[GET_PART_TYPE(obj)].software) {
+      for (soft = ch->carrying; soft; soft = soft->next_content) {
+        if (GET_PROGRAM_TYPE(soft) == parts[GET_PART_TYPE(obj)].software
+            && GET_OBJ_TIMER(soft) == 1
+            && GET_PROGRAM_RATING(soft) == required_rating)
+        {
+          break;
         }
+      }
+
+      if (!soft) {
+        send_to_char(ch, "You need to program and cook the required software (rating-%d %s) for that first.\r\n",
+                      required_rating,
+                      programs[parts[GET_PART_TYPE(obj)].software].name);
+        return;
+      }
     }
 
-    if (GET_PART_TYPE(obj) != PART_MPCP
-             && (GET_CYBERDECK_MPCP(deck) && GET_PART_TARGET_MPCP(obj) != GET_CYBERDECK_MPCP(deck))
-             && (parts[GET_PART_TYPE(obj)].design >= 0
-                 || GET_PART_TYPE(obj) == PART_ACTIVE
-                 || GET_PART_TYPE(obj) == PART_STORAGE
-                 || GET_PART_TYPE(obj) == PART_MATRIX_INTERFACE))
-        send_to_char(ch, "%s is not designed for the same MPCP as %s.\r\n", capitalize(GET_OBJ_NAME(obj)), decapitalize_a_an(GET_OBJ_NAME(deck)));
-    else {
-        struct obj_data *workshop = NULL;
-        int kit_rating = 0, target = -GET_PART_DESIGN_SUCCESSES(obj), duration_in_hours = 0, skill = 0;
-        if (has_kit(ch, TYPE_MICROTRONIC))
-            kit_rating = TYPE_KIT;
-        if ((workshop = find_workshop(ch, TYPE_MICROTRONIC)) && GET_OBJ_VAL(workshop, 0) > kit_rating)
-            kit_rating = GET_WORKSHOP_TYPE(workshop);
-        if (kit_rating < parts[GET_PART_TYPE(obj)].tools) {
-            send_to_char(ch, "You don't have the right tools for that job. You need to %s %s %s.\r\n",
-                         parts[GET_PART_TYPE(obj)].tools == TYPE_WORKSHOP ? "have an unpacked" : "have a",
-                         workshops[TYPE_MICROTRONIC],
-                         kit_workshop_facility[parts[GET_PART_TYPE(obj)].tools]);
-            return;
-        } else if (parts[GET_OBJ_VAL(obj, 0)].tools == TYPE_KIT) {
-            if (kit_rating == TYPE_WORKSHOP)
-                target--;
-            else if (kit_rating == TYPE_FACILITY)
-                target -= 3;
-        } else if (parts[GET_OBJ_VAL(obj, 0)].tools == TYPE_WORKSHOP && kit_rating == TYPE_FACILITY)
-            target--;
-        if (GET_PART_TYPE(obj) == PART_BOD || GET_PART_TYPE(obj) == PART_SENSOR || GET_PART_TYPE(obj) == PART_MASKING || GET_PART_TYPE(obj) == PART_EVASION) {
-            int total = GET_PART_RATING(obj);
-            for (struct obj_data *part = deck->contains; part; part = part->next_content)
-                if (GET_OBJ_TYPE(part) == ITEM_PART && (GET_PART_TYPE(part) == PART_BOD || GET_PART_TYPE(part) == PART_SENSOR || GET_PART_TYPE(part) == PART_MASKING || GET_PART_TYPE(part) == PART_EVASION))
-                    total += GET_OBJ_VAL(part, 1);
-            if (total > GET_CYBERDECK_MPCP(deck) * 3) {
-                send_to_char(ch, "The total persona program rating for MPCP %d decks is limited to %d; that would make it %d.\r\n",
-                             GET_CYBERDECK_MPCP(deck),
-                             GET_CYBERDECK_MPCP(deck) * 3,
-                             total);
-                return;
-            }
-        }
-        for (struct obj_data *part = deck->contains; part; part = part->next_content)
-            if (GET_OBJ_TYPE(part) == TYPE_PARTS && (GET_PART_TYPE(part) == GET_PART_TYPE(obj) || (GET_PART_TYPE(part) ==
-                    PART_ASIST_HOT && GET_PART_TYPE(obj) == PART_ASIST_COLD) || (GET_PART_TYPE(part) == PART_ASIST_COLD && GET_PART_TYPE(obj) == PART_ASIST_HOT))) {
-                send_to_char(ch, "You have already installed a part of that type in there.\r\n");
-                return;
-            }
-        if (GET_OBJ_VAL(obj, 4) > 0) {
-            send_to_char(ch, "You continue work on building %s.\r\n", GET_OBJ_NAME(obj));
-            obj->cyberdeck_part_pointer = deck;
-            SET_BIT(GET_CYBERDECK_FLAGS(deck), DECK_FLAG_HAS_PART_POINTING_TO_IT);
-            ch->char_specials.programming = obj;
-            AFF_FLAGS(ch).SetBit(AFF_PART_BUILD);
-        } else {
-            for (struct obj_data *part = deck->contains; part; part = part->next_content)
-                if (GET_OBJ_TYPE(part) == TYPE_PARTS && (GET_OBJ_VAL(part, 0) == GET_OBJ_VAL(obj, 0) || (GET_OBJ_VAL(part, 0) ==
-                        PART_ASIST_HOT && GET_OBJ_VAL(obj, 0) == PART_ASIST_COLD) || (GET_OBJ_VAL(part, 0) == PART_ASIST_COLD && GET_OBJ_VAL(obj, 0) == PART_ASIST_HOT))) {
-                    send_to_char(ch, "You have already installed a part of that type in there.\r\n");
-                    return;
-                }
-            if (GET_OBJ_VAL(obj, 4) == -1) {
-                struct obj_data *soft = NULL;
-                if (parts[GET_OBJ_VAL(obj, 0)].software) {
-                    for (soft = ch->carrying; soft; soft = soft->next_content)
-                        if (GET_OBJ_VAL(soft, 0) == parts[GET_OBJ_VAL(obj, 0)].software
-                            && GET_OBJ_TIMER(soft) == 1
-                            && GET_OBJ_VAL(soft, 1) == GET_OBJ_VAL(obj, 1))
-                            break;
-                    if (!soft) {
-                        send_to_char(ch,
-                                     "You need to program and cook the required software (rating %d %s) for that first.\r\n",
-                                     GET_OBJ_VAL(obj, 1),
-                                     programs[parts[GET_OBJ_VAL(obj, 0)].software].name);
-                        return;
-                    }
-                }
-                struct obj_data *chips = NULL, *part = NULL, *find;
-                FOR_ITEMS_AROUND_CH(ch, find) {
-                    if (GET_OBJ_TYPE(find) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(find) == TYPE_PARTS) {
-                        if (GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 9))
-                            chips = find;
-                        else if (!GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 8))
-                            part = find;
-                    }
-                }
-                for (struct obj_data *find = ch->carrying; find; find = find->next_content)
-                    if (GET_OBJ_TYPE(find) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(find) == TYPE_PARTS) {
-                        if (GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 9))
-                            chips = find;
-                        else if (!GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 8))
-                            part = find;
-                    }
-
-                if (GET_OBJ_VAL(obj, 8) && !part) {
-                  send_to_char(ch, "You don't have enough materials for that part; you need %d nuyen's worth in the same container.\r\n", GET_OBJ_VAL(obj, 8));
-                  return;
-                }
-                if (GET_OBJ_VAL(obj, 9) && !chips) {
-                  send_to_char(ch, "You don't have enough optical chips for that part; you need %d nuyen's worth in the same container.\r\n", GET_OBJ_VAL(obj, 9));
-                  return;
-                }
-
-                if (GET_OBJ_VAL(obj, 8)) {
-                  GET_OBJ_COST(part) -= GET_OBJ_VAL(obj, 8);
-                  if (!GET_OBJ_COST(part)) {
-                    send_to_char(ch, "You use up the last of the parts in %s.\r\n", GET_OBJ_NAME(part));
-                    extract_obj(part);
-                  }
-                }
-
-                if (GET_OBJ_VAL(obj, 9)) {
-                  GET_OBJ_COST(chips) -= GET_OBJ_VAL(obj, 9);
-                  if (!GET_OBJ_COST(chips)) {
-                    send_to_char(ch, "You use up the last of the chips in %s.\r\n", GET_OBJ_NAME(chips));
-                    extract_obj(chips);
-                  }
-                }
-
-
-                if (soft)
-                    extract_obj(soft);
-            }
-            #define WORKING_DAYS * 24  /* eventually, this will be 12: hours required per working day (8), with fudge factor to account for inability to track overtime penalties etc */
-            switch (GET_OBJ_VAL(obj, 0)) {
-            case PART_ACTIVE:
-                target += 4;
-                duration_in_hours = GET_PART_RATING(obj) / 200;
-                break;
-            case PART_ASIST_HOT:
-            case PART_ASIST_COLD:
-                target += GET_PART_TARGET_MPCP(obj);
-                duration_in_hours = GET_PART_TARGET_MPCP(obj) * 1 WORKING_DAYS;
-                break;
-            case PART_HARDENING:
-                target += GET_PART_TARGET_MPCP(obj);
-                duration_in_hours = GET_PART_TARGET_MPCP(obj) * GET_PART_RATING(obj) * 1 WORKING_DAYS;
-                break;
-            case PART_ICCM:
-                target += 4;
-                duration_in_hours = GET_PART_TARGET_MPCP(obj) * 2 WORKING_DAYS;
-                break;
-            case PART_ICON:
-                target += GET_PART_RATING(obj);
-                duration_in_hours = 1;
-                break;
-            case PART_IO:
-                target += (int)(GET_PART_RATING(obj) / 100);
-                duration_in_hours = (int)(GET_PART_RATING(obj) / 100) * 1 WORKING_DAYS;
-                break;
-            case PART_MASER:
-                target += GET_PART_TARGET_MPCP(obj);
-                duration_in_hours = GET_PART_TARGET_MPCP(obj) + 4;
-                break;
-            case PART_MATRIX_INTERFACE:
-            case PART_PORTS:
-            case PART_SIGNAL_AMP:
-                target += 4;
-                duration_in_hours = 1;
-                break;
-            case PART_MPCP:
-                target += GET_PART_RATING(obj);
-                duration_in_hours = GET_PART_RATING(obj);
-                break;
-            case PART_BOD:
-            case PART_SENSOR:
-            case PART_MASKING:
-            case PART_EVASION:
-                target += GET_PART_RATING(obj);
-                duration_in_hours = 1;
-                break;
-            case PART_RAS_OVERRIDE:
-                target += GET_PART_TARGET_MPCP(obj);
-                duration_in_hours = GET_PART_TARGET_MPCP(obj) * 1 WORKING_DAYS;
-                break;
-            case PART_RESPONSE:
-                target += GET_PART_RATING(obj) * 2;
-                duration_in_hours = GET_PART_RATING(obj) + GET_PART_TARGET_MPCP(obj);
-                break;
-            case PART_STORAGE:
-                target += 4;
-                duration_in_hours = GET_PART_RATING(obj) / 200;
-                break;
-            case PART_CELLULAR:
-            case PART_RADIO:
-            case PART_MICROWAVE:
-                target += GET_PART_TARGET_MPCP(obj);
-                duration_in_hours = GET_PART_RATING(obj) + GET_PART_TARGET_MPCP(obj);
-                break;
-            case PART_LASER:
-            case PART_SATELLITE:
-                target += GET_PART_TARGET_MPCP(obj);
-                duration_in_hours = GET_PART_TARGET_MPCP(obj) + 4;
-                break;
-            }
-            int duration_in_minutes = duration_in_hours * 60;
-            skill = get_skill(ch, SKILL_BR_COMPUTER, target);
-            int success = success_test(skill, target);
-            target = 0;
-
-            switch(GET_OBJ_VAL(obj, 0)) {
-            case PART_ICCM:
-            case PART_REALITY_FILTER:
-                target = GET_PART_TARGET_MPCP(obj);
-                skill = SKILL_COMPUTER;
-                break;
-            case PART_MASER:
-            case PART_PORTS:
-            case PART_LASER:
-            case PART_MICROWAVE:
-                target = 4;
-                skill = SKILL_BR_ELECTRONICS;
-                break;
-            case PART_RADIO:
-            case PART_SATELLITE:
-            case PART_SIGNAL_AMP:
-            case PART_CELLULAR:
-                target = GET_PART_RATING(obj);
-                skill = SKILL_BR_ELECTRONICS;
-                break;
-            }
-            if (target) {
-                skill = get_skill(ch, skill, target);
-                if (success_test(skill, target) < 0)
-                    success = -1;
-            }
-            if (success < 1) {
-                success = srdice() + srdice();
-                GET_PART_BUILD_SUCCESSES_ROLLED(obj) = -1;
-            }
-            GET_PART_INITIAL_BUILD_TICKS(obj) = GET_PART_BUILD_TICKS_REMAINING(obj) = duration_in_minutes / success;
-
-            if (get_and_deduct_one_deckbuilding_token_from_char(ch)) {
-              send_to_char("A deckbuilding token fuzzes into digital static, greatly accelerating the build time.\r\n", ch);
-              GET_PART_INITIAL_BUILD_TICKS(obj) = GET_PART_BUILD_TICKS_REMAINING(obj) = 1;
-              GET_PART_BUILD_SUCCESSES_ROLLED(obj) = 1;
-            }
-            else if (access_level(ch, LVL_ADMIN)) {
-              send_to_char("You use your admin powers to greatly accelerate the build time.\r\n", ch);
-              GET_PART_INITIAL_BUILD_TICKS(obj) = GET_PART_BUILD_TICKS_REMAINING(obj) = 1;
-              GET_PART_BUILD_SUCCESSES_ROLLED(obj) = 1;
-            }
-            send_to_char(ch, "You start building %s.\r\n", GET_OBJ_NAME(obj));
-            ch->char_specials.programming = obj;
-            obj->cyberdeck_part_pointer = deck;
-            SET_BIT(GET_CYBERDECK_FLAGS(deck), DECK_FLAG_HAS_PART_POINTING_TO_IT);
-            AFF_FLAGS(ch).SetBit(AFF_PART_BUILD);
-            if (!GET_CYBERDECK_MPCP(deck))
-                GET_CYBERDECK_MPCP(deck) = GET_PART_TARGET_MPCP(obj);
-        }
+    // Find requisite chips / parts.
+    struct obj_data *chips = NULL, *parts = NULL, *find = NULL;
+    
+    // Carried parts take priority.
+    for (struct obj_data *find = ch->carrying; find; find = find->next_content) {
+      if (GET_OBJ_TYPE(find) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(find) == TYPE_PARTS) {
+        if (GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_PART_CHIP_COST(obj))
+          chips = find;
+        else if (!GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_PART_PART_COST(obj))
+          parts = find;
+      }
     }
+
+    // If we're missing something, search their surroundings.
+    if (!chips || !parts) {
+      FOR_ITEMS_AROUND_CH(ch, find) {
+        if (GET_OBJ_TYPE(find) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(find) == TYPE_PARTS) {
+          if (GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_PART_CHIP_COST(obj))
+            chips = find;
+          else if (!GET_DECK_ACCESSORY_IS_CHIPS(find) && GET_OBJ_COST(find) >= GET_PART_PART_COST(obj))
+            parts = find;
+        }
+      }
+    }
+
+    // Ensure we have enough.
+    if (GET_PART_CHIP_COST(obj) && !chips) {
+      send_to_char(ch, "You don't have enough optical chips for that part; you need %d nuyen's worth of chips in the same container.\r\n", GET_PART_CHIP_COST(obj));
+      return;
+    }
+    if (GET_PART_PART_COST(obj) && !parts) {
+      send_to_char(ch, "You don't have enough materials for that part; you need %d nuyen's worth of parts in the same container.\r\n", GET_PART_PART_COST(obj));
+      return;
+    }
+
+    // Toll their value, and extract them if this empties them.
+    if (GET_PART_CHIP_COST(obj)) {
+      GET_OBJ_COST(chips) -= GET_PART_CHIP_COST(obj);
+      if (!GET_OBJ_COST(chips)) {
+        send_to_char(ch, "You use up the last of the parts in %s.\r\n", GET_OBJ_NAME(chips));
+        extract_obj(chips);
+      }
+    }
+    if (GET_PART_PART_COST(obj)) {
+      GET_OBJ_COST(parts) -= GET_PART_PART_COST(obj);
+      if (!GET_OBJ_COST(parts)) {
+        send_to_char(ch, "You use up the last of the parts in %s.\r\n", GET_OBJ_NAME(parts));
+        extract_obj(parts);
+      }
+    }
+
+    // Extract the driver (it's now baked into the part)
+    if (soft)
+      extract_obj(soft);
+  }
+
+  // They've now paid for it. Establish how long it will take to build.
+  #define WORKING_DAYS * 24  /* eventually, this will be 12: hours required per working day (8), with fudge factor to account for inability to track overtime penalties etc */
+  switch (GET_PART_TYPE(obj)) {
+    case PART_ACTIVE:
+        target += 4;
+        duration_in_hours = GET_PART_RATING(obj) / 200;
+        break;
+    case PART_ASIST_HOT:
+    case PART_ASIST_COLD:
+        target += GET_PART_TARGET_MPCP(obj);
+        duration_in_hours = GET_PART_TARGET_MPCP(obj) * 1 WORKING_DAYS;
+        break;
+    case PART_HARDENING:
+        target += GET_PART_TARGET_MPCP(obj);
+        duration_in_hours = GET_PART_TARGET_MPCP(obj) * GET_PART_RATING(obj) * 1 WORKING_DAYS;
+        break;
+    case PART_ICCM:
+        target += 4;
+        duration_in_hours = GET_PART_TARGET_MPCP(obj) * 2 WORKING_DAYS;
+        break;
+    case PART_ICON:
+        target += GET_PART_RATING(obj);
+        duration_in_hours = 1;
+        break;
+    case PART_IO:
+        target += (int)(GET_PART_RATING(obj) / 100);
+        duration_in_hours = (int)(GET_PART_RATING(obj) / 100) * 1 WORKING_DAYS;
+        break;
+    case PART_MASER:
+        target += GET_PART_TARGET_MPCP(obj);
+        duration_in_hours = GET_PART_TARGET_MPCP(obj) + 4;
+        break;
+    case PART_MATRIX_INTERFACE:
+    case PART_PORTS:
+    case PART_SIGNAL_AMP:
+        target += 4;
+        duration_in_hours = 1;
+        break;
+    case PART_MPCP:
+        target += GET_PART_RATING(obj);
+        duration_in_hours = GET_PART_RATING(obj);
+        break;
+    case PART_BOD:
+    case PART_SENSOR:
+    case PART_MASKING:
+    case PART_EVASION:
+        target += GET_PART_RATING(obj);
+        duration_in_hours = 1;
+        break;
+    case PART_RAS_OVERRIDE:
+        target += GET_PART_TARGET_MPCP(obj);
+        duration_in_hours = GET_PART_TARGET_MPCP(obj) * 1 WORKING_DAYS;
+        break;
+    case PART_RESPONSE:
+        target += GET_PART_RATING(obj) * 2;
+        duration_in_hours = GET_PART_RATING(obj) + GET_PART_TARGET_MPCP(obj);
+        break;
+    case PART_STORAGE:
+        target += 4;
+        duration_in_hours = GET_PART_RATING(obj) / 200;
+        break;
+    case PART_CELLULAR:
+    case PART_RADIO:
+    case PART_MICROWAVE:
+        target += GET_PART_TARGET_MPCP(obj);
+        duration_in_hours = GET_PART_RATING(obj) + GET_PART_TARGET_MPCP(obj);
+        break;
+    case PART_LASER:
+    case PART_SATELLITE:
+        target += GET_PART_TARGET_MPCP(obj);
+        duration_in_hours = GET_PART_TARGET_MPCP(obj) + 4;
+        break;
+  }
+
+  int duration_in_minutes = duration_in_hours * 60;
+  skill = get_skill(ch, SKILL_BR_COMPUTER, target);
+  int success = success_test(skill, target);
+
+  // Now that we've rolled our Computer B/R test, check to see if we need an additional test.
+  target = 0;
+  switch(GET_PART_TYPE(obj)) {
+    case PART_ICCM:
+    case PART_REALITY_FILTER:
+      target = GET_PART_TARGET_MPCP(obj);
+      skill = SKILL_COMPUTER;
+      break;
+    case PART_MASER:
+    case PART_PORTS:
+    case PART_LASER:
+    case PART_MICROWAVE:
+      target = 4;
+      skill = SKILL_BR_ELECTRONICS;
+      break;
+    case PART_RADIO:
+    case PART_SATELLITE:
+    case PART_SIGNAL_AMP:
+    case PART_CELLULAR:
+      target = GET_PART_RATING(obj);
+      skill = SKILL_BR_ELECTRONICS;
+      break;
+  }
+
+  // If an additional test is needed, roll and see if it succeeds. If it doesn't, use this value for the part's success test.
+  if (target) {
+    skill = get_skill(ch, skill, target);
+    int secondary_successes = success_test(skill, target);
+    if (secondary_successes <= 0)
+      success = secondary_successes;
+  }
+
+  GET_PART_BUILD_SUCCESSES_ROLLED(obj) = success;
+
+  // If we failed, shorten the build time.
+  if (success < 1) {
+      success = srdice() + srdice();
+  }
+
+  GET_PART_INITIAL_BUILD_TICKS(obj) = GET_PART_BUILD_TICKS_REMAINING(obj) = duration_in_minutes / success;
+
+  if (get_and_deduct_one_deckbuilding_token_from_char(ch)) {
+    send_to_char("A deckbuilding token fuzzes into digital static, greatly accelerating the build time.\r\n", ch);
+    GET_PART_INITIAL_BUILD_TICKS(obj) = GET_PART_BUILD_TICKS_REMAINING(obj) = 1;
+    GET_PART_BUILD_SUCCESSES_ROLLED(obj) = 1;
+  }
+  else if (access_level(ch, LVL_ADMIN)) {
+    send_to_char("You use your admin powers to greatly accelerate the build time.\r\n", ch);
+    GET_PART_INITIAL_BUILD_TICKS(obj) = GET_PART_BUILD_TICKS_REMAINING(obj) = 1;
+    GET_PART_BUILD_SUCCESSES_ROLLED(obj) = 1;
+  }
+  send_to_char(ch, "You start building %s.\r\n", GET_OBJ_NAME(obj));
+  ch->char_specials.programming = obj;
+  set_cyberdeck_part_pointer(obj, deck);
+  AFF_FLAGS(ch).SetBit(AFF_PART_BUILD);
+  if (!GET_CYBERDECK_MPCP(deck))
+      GET_CYBERDECK_MPCP(deck) = GET_PART_TARGET_MPCP(obj);
 }
 
 
@@ -1109,3 +1151,158 @@ ACMD(do_progress)
   } else
     send_to_char("You are not working on anything at this time.\r\n", ch);
 }
+
+void set_cyberdeck_part_pointer(struct obj_data *part, struct obj_data *deck) {
+  PERF_PROF_SCOPE(updatecounters_, __func__);
+  if (!part || !deck) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL %s to set_cyberdeck_part_pointer()!", !part ? "part" : "deck");
+    return;
+  }
+
+  if (GET_OBJ_TYPE(part) != ITEM_PART) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received non-part %s to set_cyberdeck_part_pointer()!", GET_OBJ_NAME(part));
+    return;
+  }
+
+  if (GET_OBJ_TYPE(deck) != ITEM_CUSTOM_DECK && GET_OBJ_TYPE(deck) != ITEM_CYBERDECK) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received non-deck %s to set_cyberdeck_part_pointer()!", GET_OBJ_NAME(deck));
+    return;
+  }
+
+  // Set the pointer.
+  part->cyberdeck_part_pointer = deck;
+
+  // Check to see if it's in our in-progress part list. If it's not, add it.
+  if (std::find(global_in_progress_deck_parts.begin(), global_in_progress_deck_parts.end(), part) == global_in_progress_deck_parts.end()) {
+    log_vfprintf("DEBUG_DECKPART: Adding %s to the global deck part list.", GET_OBJ_NAME(part));
+    global_in_progress_deck_parts.emplace_back(part);
+  } else {
+    log_vfprintf("DEBUG_DECKPART: %s was already in the global deck part list (so won't be added).", GET_OBJ_NAME(part));
+  }
+}
+
+void clear_cyberdeck_part_pointer(struct obj_data *part) {
+  PERF_PROF_SCOPE(updatecounters_, __func__);
+  if (!part) {
+    mudlog("SYSERR: Received NULL part to clear_cyberdeck_part_pointer()!", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  if (GET_OBJ_TYPE(part) != ITEM_PART) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received non-part %s to clear_cyberdeck_part_pointer()!", GET_OBJ_NAME(part));
+    return;
+  }
+
+  // Set the pointer.
+  part->cyberdeck_part_pointer = NULL;
+
+  // Check to see if it's in our in-progress part list. If it's not, add it.
+  auto it = std::find(global_in_progress_deck_parts.begin(), global_in_progress_deck_parts.end(), part);
+  if (it != global_in_progress_deck_parts.end()) {
+    log_vfprintf("DEBUG_DECKPART: Removing %s from global deck part list.", GET_OBJ_NAME(part));
+    global_in_progress_deck_parts.erase(it);
+  } else {
+    log_vfprintf("DEBUG_DECKPART: %s wasn't in the global deck part list (so won't be removed).", GET_OBJ_NAME(part));
+  }
+}
+
+void clear_all_cyberdeck_part_pointers_pointing_to_deck(struct obj_data *deck) {
+  PERF_PROF_SCOPE(updatecounters_, __func__);
+  log_vfprintf("DEBUG_DECKPART: Clearing deck part pointers to %s.", GET_OBJ_NAME(deck));
+
+  // Iterate over the in-progress deck parts.
+  for (std::vector<struct obj_data *>::iterator it = global_in_progress_deck_parts.begin(); it != global_in_progress_deck_parts.end(); ) {
+    // If it's pointing to our deck, clear its pointer and drop it from the list.
+    if ((*it) && (*it)->cyberdeck_part_pointer == deck) {
+      log_vfprintf("DEBUG_DECKPART: Clearing %s's deck pointer to %s.", GET_OBJ_NAME(*it), GET_OBJ_NAME(deck));
+      (*it)->cyberdeck_part_pointer = NULL;
+      (*it) = NULL;
+      it = global_in_progress_deck_parts.erase(it);
+    } else {
+      ++it;
+    }
+  }
+}
+
+#define MSG_CHAR(msg, ...) if (ch) { send_to_char(ch, msg, __VA_ARGS__); }
+bool part_is_compatible_with_deck(struct obj_data *part, struct obj_data *deck, struct char_data *ch) {
+  int bod = 0, sensor = 0, masking = 0, evasion = 0;
+
+  // No operating on null things.
+  if (!part || !deck) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received NULL %s to part_is_compatible_with_deck()!", !part ? "part" : "deck");
+    return FALSE;
+  }
+  
+  // No such thing as an incompatibility with an empty deck.
+  if (!deck->contains)
+    return TRUE;
+  
+  // You must be targeting the same MPCP as parts already in the deck.
+  for (struct obj_data *contained = deck->contains; contained; contained = contained->next_content) {
+    if (GET_OBJ_TYPE(contained) == ITEM_PART) {
+      if (PART_CAN_HAVE_MPCP_SET(part) && GET_PART_TARGET_MPCP(part) != GET_PART_TARGET_MPCP(contained)) {
+        MSG_CHAR("%s doesn't match the MPCP of the already-installed %s^n.\r\n", capitalize(GET_OBJ_NAME(part)), decapitalize_a_an(GET_OBJ_NAME(contained)));
+        return FALSE;
+      }
+
+      if (GET_PART_TYPE(part) == GET_PART_TYPE(contained)) {
+        MSG_CHAR("%s would conflict with the already-installed part %s^n.\r\n", capitalize(GET_OBJ_NAME(part)), decapitalize_a_an(GET_OBJ_NAME(contained)));
+        return FALSE;
+      }
+
+      if ((GET_PART_TYPE(part) == PART_ASIST_HOT && GET_PART_TYPE(contained) == PART_ASIST_COLD) 
+           || (GET_PART_TYPE(part) == PART_ASIST_COLD && GET_PART_TYPE(contained) == PART_ASIST_HOT))
+      {
+        MSG_CHAR("%s would conflict with the already-installed ASIST interface %s^n.\r\n", capitalize(GET_OBJ_NAME(part)), decapitalize_a_an(GET_OBJ_NAME(contained)));
+        return FALSE;
+      }
+
+      // Total up our ratings. These are used after the for-loop.
+      switch (GET_PART_TYPE(contained)) {
+        case PART_BOD:
+          bod += GET_PART_RATING(contained);
+          break;
+        case PART_SENSOR:
+          sensor += GET_PART_RATING(contained);
+          break;
+        case PART_MASKING:
+          masking += GET_PART_RATING(contained);
+          break;
+        case PART_EVASION:
+          evasion += GET_PART_RATING(contained);
+          break;
+      }
+    }
+  }
+
+  // Final checks.
+  switch (GET_PART_TYPE(part)) {
+    case PART_BOD:
+    case PART_SENSOR:
+    case PART_MASKING:
+    case PART_EVASION:
+      // Verify that this part is kosher on its own.
+      if (GET_PART_RATING(part) > GET_CYBERDECK_MPCP(deck)) {
+        MSG_CHAR("You can't install a persona chip with a rating higher than %d.", GET_CYBERDECK_MPCP(deck));
+        return FALSE;
+      }
+
+      // Verify that this part won't exceed our persona limits.
+      {
+        int total = bod + sensor + masking + evasion + GET_PART_RATING(part);
+        if (total > GET_CYBERDECK_MPCP(deck) * 3) {
+          MSG_CHAR("The total persona program rating for MPCP %d decks is limited to %d; that would make it %d.\r\n",
+                    GET_CYBERDECK_MPCP(deck),
+                    GET_CYBERDECK_MPCP(deck) * 3,
+                    total);
+          return FALSE;
+        }
+      }
+      break;
+  }
+
+  return TRUE;
+}
+#undef MSG_CHAR
+#undef PART_CAN_HAVE_MPCP_SET

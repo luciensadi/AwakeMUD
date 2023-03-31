@@ -74,6 +74,8 @@ extern void disable_xterm_256(descriptor_t *apDescriptor);
 extern void enable_xterm_256(descriptor_t *apDescriptor);
 extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern int get_docwagon_faux_id(struct char_data *ch);
+extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
+extern unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
 
 extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
 
@@ -2000,7 +2002,7 @@ ACMD(do_unattach)
     else if (item->worn_by)
       send_to_char(ch, "Someone is manning that mount.\r\n");
     else if (!((gun = get_mount_weapon(item)) || (gun = item->contains)))
-      send_to_char("There isn't anything mounted on it.\r\n", ch);
+      send_to_char(ch, "There isn't anything mounted on %s.\r\n", GET_OBJ_NAME(item));
     else {
       if (veh->locked && GET_IDNUM(ch) != veh->owner) {
         send_to_char(ch, "%s is locked in place.\r\n", capitalize(GET_OBJ_NAME(gun)));
@@ -3327,6 +3329,12 @@ ACMD(do_assense)
   else target += GET_BACKGROUND_COUNT(ch->in_room);
   int success = success_test(skill, target);
   success += (int)(success_test(GET_SKILL(ch, SKILL_AURA_READING), 4) / 2);
+
+  if (GET_LEVEL(ch) >= LVL_FIXER && success < 10) {
+    send_to_char(ch, "You forcibly raise your successes from %d to 10 by staff fiat.\r\n", success);
+    success = 10;
+  }
+
   if (success < 1) {
     send_to_char(ch, "You fail to notice anything about that aura.\r\n");
     return;
@@ -3680,6 +3688,11 @@ ACMD(do_assense)
       if (success >= 3) {
         if (GET_IDNUM(ch) == GET_FOCUS_BONDED_TO(obj))
           strlcat(buf, ", it is bonded to you", sizeof(buf));
+        else if (GET_LEVEL(ch) >= LVL_BUILDER) {
+          const char *pname = get_player_name(GET_FOCUS_BONDED_TO(obj));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", it is bonded by %s", pname);
+          delete [] pname;
+        }
         else {
           for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
             if (mem->idnum == GET_FOCUS_BONDED_TO(obj))
@@ -4695,8 +4708,8 @@ ACMD(do_cleanup)
     }
   }
 
-  send_to_char(ch, "You spend a few moments scrubbing away %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
-  act("$n spends a few moments scrubbing away $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
+  send_to_char(ch, "You spend a few moments scrubbing away at %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
+  act("$n spends a few moments scrubbing away at $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
 
   WAIT_STATE(ch, 3 RL_SEC);
 
@@ -4916,6 +4929,40 @@ ACMD(do_syspoints) {
       playerDB.SaveChar(ch);
 
       return;
+    }
+
+    if (is_abbrev(arg, "analyze")) {
+#define ANALYZE_COST 2
+      FAILURE_CASE_PRINTF(!*buf,
+                          "This will spend %d syspoints to tell you the min-max rep range and number of jobs available from a given Johnson.\r\nSyntax: SYSPOINTS ANALYZE <target Johnson>\r\n",
+                          ANALYZE_COST);
+
+      struct char_data *to = ch->in_veh ? get_char_veh(ch, buf, ch->in_veh) : to = get_char_room_vis(ch, buf);
+
+      FAILURE_CASE_PRINTF(!to, "You don't see any Johnsons named '%s' here.\r\n", buf);
+      FAILURE_CASE_PRINTF(!IS_NPC(to) || !(mob_index[GET_MOB_RNUM(to)].func == johnson || mob_index[GET_MOB_RNUM(to)].sfunc == johnson), "%s is not a Johnson.", GET_NAME(to));
+
+      if (GET_SYSTEM_POINTS(ch) >= ANALYZE_COST) {
+        send_to_char(ch, "You spend %d syspoint%s.\r\n", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
+        GET_SYSTEM_POINTS(ch) -= ANALYZE_COST;
+      } else {
+        send_to_char(ch, "You can't afford that: SYSPOINTS ANALYZE costs %d syspoint%s.", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
+        return;
+      }
+
+      int num_jobs = 0;
+      for (int i = 0; i <= top_of_questt; i++)
+        if (quest_table[i].johnson == GET_MOB_VNUM(to))
+          num_jobs++;
+
+      send_to_char(ch, "OOC: %s^n's reputation range is ^c%d^n-^c%d^n, with ^c%d^n total job%s available.\r\n",
+                   GET_CHAR_NAME(to),
+                   get_johnson_overall_max_rep(to),
+                   get_johnson_overall_min_rep(to),
+                   num_jobs,
+                   num_jobs == 1 ? "" : "s");
+      return;
+#undef ANALYZE_COST
     }
 
     send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);

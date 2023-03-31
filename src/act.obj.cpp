@@ -182,7 +182,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
       act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
       if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-           || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) ) {
+           || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)) {
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
@@ -236,7 +236,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
   act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
   act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) ) {
+       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)) {
     char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
             GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
@@ -319,20 +319,30 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     }
   }
   // Prevent installing persona firmware into a store-bought deck.
-  if (GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM
-      && (GET_OBJ_VAL(obj, 0) == SOFT_BOD
-          || GET_OBJ_VAL(obj, 0) == SOFT_SENSOR
-          || GET_OBJ_VAL(obj, 0) == SOFT_MASKING
-          || GET_OBJ_VAL(obj, 0) == SOFT_EVASION)) {
-    if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
-      send_to_char(ch, "%s is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", GET_OBJ_NAME(obj));
-    } else {
-      send_to_char(ch, "%s is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n",
-                   GET_OBJ_NAME(obj));
+  if (GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM) {
+    switch (GET_PROGRAM_TYPE(obj)) {
+      case SOFT_BOD:
+      case SOFT_SENSOR:
+      case SOFT_MASKING:
+      case SOFT_EVASION:
+      case SOFT_ASIST_COLD:
+      case SOFT_ASIST_HOT:
+      case SOFT_HARDENING:
+      case SOFT_ICCM:
+      case SOFT_ICON:
+      case SOFT_MPCP:
+      case SOFT_REALITY:
+      case SOFT_RESPONSE:
+        if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
+          send_to_char(ch, "%s is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", CAP(GET_OBJ_NAME(obj)));
+        } else {
+          send_to_char(ch, "%s is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n", CAP(GET_OBJ_NAME(obj)));
+        }
+        return;
     }
-    return;
   }
-  else if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM)
+
+  if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM)
     send_to_char(ch, "You'll have to cook %s before you can install it.\r\n", GET_OBJ_NAME(obj));
   else if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
     display_cyberdeck_issues(ch, cont);
@@ -879,15 +889,33 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
     if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
       act("$p: you can't hold any more items.", FALSE, ch, obj, 0, TO_CHAR);
     else {
-      if ( (!IS_NPC(ch) && access_level(ch, LVL_BUILDER))
-            || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)
-            || (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(cont, 4))) {
+      bool should_wizlog = IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD);
+      bool should_cheatlog = (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)) || (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK) || IS_OBJ_STAT(cont, ITEM_EXTRA_CHEATLOG_MARK));
+      bool should_gridlog = FALSE;
+
+      if (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_CORPSE_IS_PC(cont)) {
+        if (GET_CORPSE_IDNUM(cont) == GET_IDNUM(ch)) {
+          should_gridlog = TRUE;
+        } else {
+          should_cheatlog = TRUE;
+        }
+      }
+
+      if (should_wizlog || should_cheatlog || should_gridlog) {
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s",
                 GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
                 representation);
-        mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+        if (should_wizlog) {
+          mudlog(buf, ch, LOG_WIZITEMLOG, TRUE);
+        }
+        else if (should_cheatlog) {
+          mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+        }
+        else {
+          mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+        }
         delete [] representation;
       }
 
@@ -947,6 +975,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           switch(GET_OBJ_VAL(obj, 0)) {
           case PART_MPCP:
               GET_PART_RATING(obj) = GET_CYBERDECK_MPCP(cont);
+              GET_PART_TARGET_MPCP(obj) = GET_CYBERDECK_MPCP(cont);
               // fall through
           case PART_ACTIVE:
           case PART_BOD:
@@ -1049,19 +1078,25 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
     perform_get_from_container(ch, obj, cont, mode);
     return;
   }
-  if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cont, 0) == TYPE_COOKER)
-  {
-    if (GET_OBJ_VAL(cont, 9))
-      send_to_char(ch, "You cannot remove a chip while it is being encoded.\r\n");
-    else {
-      obj = cont->contains;
-      if (!obj)
-        send_to_char(ch, "There's no chip in there to take out.\r\n");
-      else
-        perform_get_from_container(ch, obj, cont, mode);
+
+  if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cont) == TYPE_COOKER) {
+    struct obj_data *chip = cont->contains;
+
+    FAILURE_CASE(!chip, "There's no chip in there to take out.");
+
+    if (GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cont)) {
+      FAILURE_CASE(!access_level(ch, LVL_ADMIN), "You cannot remove a chip while it is being encoded.");
+
+      // Staff override.
+      send_to_char("You use your staff powers to forcibly complete the encoding process.\r\n", ch);
+      GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cont) = 0;
+      GET_OBJ_TIMER(chip) = 1;
     }
+
+    perform_get_from_container(ch, chip, cont, mode);
     return;
   }
+
   if ( IS_OBJ_STAT(cont, ITEM_EXTRA_CORPSE) )
   {
     if (GET_OBJ_VAL(cont, 4) == 1 && GET_OBJ_VAL(cont, 5) != GET_IDNUM(ch)
@@ -1213,14 +1248,31 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
        }
   }
 
-  if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) )
   {
     char *representation = generate_new_loggable_representation(obj);
-    snprintf(buf, sizeof(buf), "%s gets from room: %s", GET_CHAR_NAME(ch), representation);
-    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+
+    if (obj->dropped_by_char > 0 && obj->dropped_by_char != GET_IDNUM(ch) && ch->desc && !str_cmp(obj->dropped_by_host, ch->desc->host)) {
+      const char *pname = get_player_name(obj->dropped_by_char);
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s getting from room: %s, which was dropped/donated by %s (%ld) at their same host (%s)!", 
+                      GET_CHAR_NAME(ch), 
+                      representation, 
+                      pname, 
+                      obj->dropped_by_char,
+                      GET_LEVEL(ch) < LVL_PRESIDENT ? obj->dropped_by_host : "<obscured>");
+      obj->dropped_by_char = 0;
+      delete [] pname;
+      delete [] obj->dropped_by_host;
+      obj->dropped_by_host = NULL;
+    } else if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
+              || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) 
+              || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
+    {
+      snprintf(buf, sizeof(buf), "%s gets from room: %s", GET_CHAR_NAME(ch), representation);
+      mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    }
+
     delete [] representation;
-  }
+  }  
 
   obj_from_room(obj);
   obj_to_char(obj, ch);
@@ -1356,7 +1408,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
                  owner,
                  veh->owner
                 );
-        mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+        mudlog(buf, ch, GET_IDNUM(ch) != veh->owner ? LOG_CHEATLOG : LOG_GRIDLOG, TRUE);
         DELETE_ARRAY_IF_EXTANT(owner);
 
         playerDB.SaveChar(ch);
@@ -1776,11 +1828,16 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
        || IS_NPC(ch)))
     obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
 
+  obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_CHEATLOG_MARK);
+
   // Dropping money is not a sink.
   GET_NUYEN_RAW(ch) -= amount;
   act("You drop $p.", FALSE, ch, obj, 0, TO_CHAR);
   act("$n drops $p.", TRUE, ch, obj, 0, TO_ROOM);
   affect_total(ch);
+
+  obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
+  obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : NULL;
 
   if (ch->in_veh)
   {
@@ -1789,14 +1846,8 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
   } else
     obj_to_room(obj, ch->in_room);
 
-  if (IS_NPC(ch)
-      || (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)))
-  {
-
-    snprintf(buf, sizeof(buf), "%s drops: %d nuyen *", GET_CHAR_NAME(ch),
-            amount);
-    mudlog(buf, ch, LOG_CHEATLOG, TRUE);
-  }
+  snprintf(buf, sizeof(buf), "%s drops: %d nuyen *", GET_CHAR_NAME(ch), amount);
+  mudlog(buf, ch, amount > 5 ? LOG_CHEATLOG : LOG_GRIDLOG, TRUE);
 
   return;
 }
@@ -1897,14 +1948,15 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
 
         const char *owner = get_player_name(veh->owner);
-        snprintf(buf, sizeof(buf), "%s (%ld) dropped vehicle %s (%ld, idnum %ld) belonging to %s (%ld).",
+        snprintf(buf, sizeof(buf), "%s (%ld) dropped vehicle %s (%ld, idnum %ld) belonging to %s (%ld) in %s.",
                  GET_CHAR_NAME(ch),
                  GET_IDNUM(ch),
                  GET_VEH_NAME(veh),
                  GET_VEH_VNUM(veh),
                  veh->idnum,
                  owner,
-                 veh->owner
+                 veh->owner,
+                 GET_ROOM_NAME(veh->in_room)
                 );
         mudlog(buf, ch, LOG_CHEATLOG, TRUE);
         DELETE_ARRAY_IF_EXTANT(owner);
@@ -2009,7 +2061,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     mode = SCMD_JUNK;
 
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) )
+       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
   {
     char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "%s %ss: %s", GET_CHAR_NAME(ch),
@@ -2018,6 +2070,9 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
     delete [] representation;
   }
+
+  obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
+  obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : NULL;
 
   switch (mode)
   {
@@ -2240,7 +2295,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   act("$n gives $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
 
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) )
+       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
   {
     // Default/preliminary logging message; this is appended to where necessary.
     char *representation = generate_new_loggable_representation(obj);
@@ -2314,26 +2369,16 @@ struct char_data *give_find_vict(struct char_data * ch, char *arg)
 
 void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)
 {
-  if (amount <= 0)
-  {
-    send_to_char("Heh heh heh ... we are jolly funny today, eh?\r\n", ch);
-    return;
+  FAILURE_CASE(amount <= 0, "You must specify a positive quantity, like GIVE 30 NUYEN MAN.");
+  FAILURE_CASE(IS_ASTRAL(vict), "You can't hand astral beings anything.");
+  FAILURE_CASE((GET_NUYEN(ch) < amount) && (IS_NPC(ch) || (!access_level(ch, LVL_VICEPRES))), "You don't have that much!");
+  FAILURE_CASE(IS_SENATOR(ch) && !access_level(ch, LVL_PRESIDENT) && !IS_SENATOR(vict) && !IS_NPC(vict), "Staff must use the PAYOUT command instead.");
+  
+  if (IS_NPC(vict)) {
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s gave NPC %s %d nuyen.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), amount);
+    AFF_FLAGS(vict).SetBit(AFF_CHEATLOG_MARK);
   }
-  if (IS_ASTRAL(vict))
-  {
-    send_to_char("Yeah, like astrals need nuyen.\r\n", ch);
-    return;
-  }
-  if ((GET_NUYEN(ch) < amount) && (IS_NPC(ch) || (!access_level(ch, LVL_VICEPRES))))
-  {
-    send_to_char("You don't have that much!\r\n", ch);
-    return;
-  }
-  if (IS_SENATOR(ch) && !access_level(ch, LVL_PRESIDENT) && !IS_SENATOR(vict) && !IS_NPC(vict))
-  {
-    send_to_char("Staff must use the PAYOUT command instead.\r\n", ch);
-    return;
-  }
+
   send_to_char(OK, ch);
   snprintf(buf, sizeof(buf), "$n gives you %d nuyen.", amount);
   act(buf, FALSE, ch, 0, vict, TO_VICT);
@@ -2568,7 +2613,7 @@ ACMD(do_drink)
     send_to_char(ch, "You have to be holding %s to drink from it.\r\n", GET_OBJ_NAME(temp));
     return;
   }
-  if ((GET_COND(ch, COND_DRUNK) > MAX_DRUNK)) {
+  if (GET_COND(ch, COND_DRUNK) > MAX_DRUNK && !affected_by_spell(ch, SPELL_DETOX)) {
     send_to_char("You can't seem to get close enough to your mouth.\r\n", ch);
     act("$n tries to drink but misses $s mouth!", TRUE, ch, 0, 0, TO_ROOM);
     return;
@@ -2612,7 +2657,7 @@ ACMD(do_drink)
                  (int) ((int) drink_aff[GET_DRINKCON_LIQ_TYPE(temp)][COND_THIRST] * amount) / 4);
 #endif
 
-  if (GET_COND(ch, COND_DRUNK) > MAX_DRUNK)
+  if (GET_COND(ch, COND_DRUNK) > MAX_DRUNK && !affected_by_spell(ch, SPELL_DETOX))
     send_to_char("You feel drunk.\r\n", ch);
 
 #ifdef ENABLE_HUNGER
@@ -3074,14 +3119,13 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
                             };
 
   /* first, make sure that the wear position is valid. */
-  if (!CAN_WEAR(obj, wear_bitvectors[where]))
-  {
+  if (!CAN_WEAR(obj, wear_bitvectors[where])) {
     if (print_messages)
       act("You can't wear $p there.", FALSE, ch, obj, 0, TO_CHAR);
     return;
   }
-  switch (GET_RACE(ch))
-  {
+
+  switch (GET_RACE(ch)) {
   case RACE_WAKYAMBI:
   case RACE_DRYAD:
   case RACE_ELF:
@@ -3233,6 +3277,31 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
         send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
       return;
     }
+  }
+
+  // Gyros take a bit to get into.
+  if (GET_OBJ_TYPE(obj) == ITEM_GYRO) {
+    FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting?? That would be a neat trick.");
+    send_to_char("It takes you a moment to get strapped in.\r\n", ch);
+    WAIT_STATE(ch, 3 RL_SEC);
+  }
+
+  // If it's hardened armor, it's customized to a specific person.
+  if (!IS_NPC(ch) && IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+    FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting?? That would be a neat trick.");
+
+    // -1 means it's not yet customized, you can wear it and it molds to you.
+    if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) == -1) {
+      send_to_char(ch, "You take a moment to check %s over, making sure the armorer really customized it to fit you.\r\n", GET_OBJ_NAME(obj));
+      GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = GET_IDNUM(ch);
+    } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) == GET_IDNUM(ch)) {
+      send_to_char("It takes you a moment to get suited up.\r\n", ch);
+    } else {
+      send_to_char(ch, "%s has been customized for someone else.\r\n", capitalize(GET_OBJ_NAME(obj)));
+      return;
+    }
+    // Takes a bit to put it on.
+    WAIT_STATE(ch, 4 RL_SEC);
   }
 
   // House rule: Swapping in and out of ruthenium takes time. This addresses potential cheese.
@@ -3533,6 +3602,20 @@ void perform_remove(struct char_data * ch, int pos)
   int previous_armor_penalty = get_armor_penalty_grade(ch);
 
   obj_to_char(unequip_char(ch, pos, TRUE), ch);
+
+  // Gyros take a bit to get out of.
+  if (GET_OBJ_TYPE(obj) == ITEM_GYRO) {
+    FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting?? That would be a neat trick.");
+    send_to_char("It takes you a moment to get unstrapped.\r\n", ch);
+    WAIT_STATE(ch, 3 RL_SEC);
+  }
+
+  // Taking off hardened armor takes time.
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+    FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting?? That would be a neat trick.");
+    send_to_char("It takes you a moment to step out of the heavily-customized armor.\r\n", ch);
+    WAIT_STATE(ch, 4 RL_SEC);
+  }
 
   // House rule: Swapping in and out of ruthenium takes time. This addresses potential cheese.
   {

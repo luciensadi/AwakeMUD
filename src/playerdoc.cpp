@@ -15,7 +15,7 @@ extern void display_room_desc(struct char_data *ch);
 extern void disp_long_exits(struct char_data *ch, bool autom);
 extern int isname(const char *str, const char *namelist);
 
-const char *get_char_representation_for_docwagon(struct char_data *ch, struct char_data *plr);
+const char *get_char_representation_for_docwagon(struct char_data *vict, struct char_data *viewer);
 
 #define IS_VALID_POTENTIAL_RESCUER(plr) (GET_LEVEL(plr) == LVL_MORTAL && plr->char_specials.timer < 5 && !PRF_FLAGGED(plr, PRF_AFK) && !PRF_FLAGGED(plr, PRF_QUEST))
 
@@ -248,15 +248,21 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
     if (!d->character || d->character == ch || GET_POS(d->character) != POS_MORTALLYW)
       continue;
 
-    if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character))
+    if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character)) {
+      if (access_level(ch, LVL_PRESIDENT)) {
+        send_to_char(ch, "DEBUG: Skipping %s: Ignoring or ignored.\r\n", GET_CHAR_NAME(d->character));
+      }
       continue;
+    }
 
     if (isname(argument, get_char_representation_for_docwagon(d->character, ch))) {
       send_to_char("You squint at the tiny screen on your DocWagon receiver to try and get a better idea of where your client is...\r\n", ch);
 
       // Show them the room name, room description, and exits.
       struct room_data *was_in_room = ch->in_room;
+      struct veh_data *was_in_veh = ch->in_veh;
       ch->in_room = get_ch_in_room(d->character);
+      ch->in_veh = NULL;
 
       // Room name.
       display_room_name(ch, ch->in_room, FALSE);
@@ -269,8 +275,14 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
 
       // Reset their in_room to the stored value.
       ch->in_room = was_in_room;
+      ch->in_veh = was_in_veh;
 
       return TRUE;
+    } else {
+      if (access_level(ch, LVL_PRESIDENT)) {
+        send_to_char(ch, "DEBUG: Skipping %s (%s): '%s' does not match their representation.\r\n", get_char_representation_for_docwagon(d->character, ch), GET_CHAR_NAME(d->character), argument);
+      }
+      continue;
     }
   }
 
@@ -278,12 +290,12 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
   return TRUE;
 }
 
-const char *get_char_representation_for_docwagon(struct char_data *ch, struct char_data *plr) {
+const char *get_char_representation_for_docwagon(struct char_data *vict, struct char_data *viewer) {
   // Compose the perceived description.
   struct remem *mem_record;
   static char display_string[500];
 
-  strlcpy(display_string, decapitalize_a_an(GET_NAME(ch)), sizeof(display_string));
+  strlcpy(display_string, decapitalize_a_an(GET_NAME(vict)), sizeof(display_string));
 
   if ((mem_record = safe_found_mem(plr, ch)))
     snprintf(ENDOF(display_string), sizeof(display_string) - strlen(display_string), "^n ( %s )", CAP(mem_record->mem));
@@ -341,24 +353,39 @@ ACMD(do_docwagon) {
       continue;
 
     // Couldn't have alerted in the first place?
-    if (PRF_FLAGGED(d->character, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT))
+    if (PRF_FLAGGED(d->character, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
+      if (access_level(ch, LVL_PRESIDENT)) {
+        send_to_char(ch, " - Skipping %s: Opted out of system.\r\n", GET_CHAR_NAME(d->character));
+      }
       continue;
+    }
 
     // Being ignored?
-    if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character))
+    if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character)) {
+      if (access_level(ch, LVL_PRESIDENT)) {
+        send_to_char(ch, " - Skipping %s: Ignoring or ignored.\r\n", GET_CHAR_NAME(d->character));
+      }
       continue;
+    }
 
     // Short circuit: LIST has no further logic to evaluate, so just print.
     if (mode == MODE_LIST) {
+      if (access_level(ch, LVL_PRESIDENT)) {
+        send_to_char(ch, " - Listing %s.\r\n", GET_CHAR_NAME(d->character));
+      }
       snprintf(ENDOF(output), sizeof(output) - strlen(output), " - %s: %s\r\n",
-               get_char_representation_for_docwagon(ch, d->character),
+               get_char_representation_for_docwagon(d->character, ch),
                get_location_string_for_room(get_ch_in_room(d->character)));
       continue;
     }
 
     // Wrong person? (does not apply to DOCWAGON LIST)
-    if (!keyword_appears_in_char(name, d->character, TRUE, TRUE, FALSE))
+    if (!keyword_appears_in_char(name, d->character, TRUE, TRUE, FALSE)) {
+      if (access_level(ch, LVL_PRESIDENT)) {
+        send_to_char(ch, " - Skipping %s: Keyword '%s' not applicable.\r\n", GET_CHAR_NAME(d->character), name);
+      }
       continue;
+    }
 
     // They have not yet received a message from us. ACCEPT is valid, WITHDRAW is not.
     if (d->character->received_docwagon_ack_from.find(GET_IDNUM(ch)) == d->character->received_docwagon_ack_from.end()) {
@@ -366,7 +393,7 @@ ACMD(do_docwagon) {
         send_to_char(ch, "You haven't messaged %s yet. Use DOCWAGON ACCEPT instead.\r\n", GET_CHAR_NAME(d->character));
         return;
       }
-      send_to_char("You anonymously notify them that you're on the way.", ch);
+      send_to_char("You anonymously notify them that you're on the way.\r\n", ch);
       send_to_char(d->character, "Your DocWagon modulator buzzes-- someone with the DocWagon ID %5d has acknowledged your request for assistance and is on their way!\r\n", get_docwagon_faux_id(ch));
       d->character->received_docwagon_ack_from.insert(std::make_pair(GET_IDNUM(ch), TRUE));
       mudlog_vfprintf(ch, LOG_GRIDLOG, "%s has accepted %s's DocWagon contract.", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
@@ -378,7 +405,7 @@ ACMD(do_docwagon) {
         send_to_char(ch, "You've already messaged %s.\r\n", GET_CHAR_NAME(d->character));
         return;
       }
-      send_to_char("You anonymously notify them that you're no longer on the way.", ch);
+      send_to_char("You anonymously notify them that you're no longer on the way.\r\n", ch);
       send_to_char(d->character, "Your DocWagon modulator buzzes-- someone with the DocWagon ID %5d is no longer able to respond to your contract.\r\n", get_docwagon_faux_id(ch));
       d->character->received_docwagon_ack_from.erase(d->character->received_docwagon_ack_from.find(GET_IDNUM(ch)));
       mudlog_vfprintf(ch, LOG_GRIDLOG, "%s has dropped %s's DocWagon contract (command).", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));

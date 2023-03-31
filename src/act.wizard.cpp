@@ -49,6 +49,7 @@
 #include "transport.hpp"
 #include "vision_overhaul.hpp"
 #include "newhouse.hpp"
+#include "deck_build.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -103,6 +104,7 @@ extern void turn_hardcore_off_for_character(struct char_data *ch);
 extern void DBFinalize();
 
 extern void display_characters_ignore_entries(struct char_data *viewer, struct char_data *target);
+extern int count_objects(struct obj_data *obj);
 
 ACMD_DECLARE(do_goto);
 
@@ -235,9 +237,28 @@ ACMD(do_copyover)
       cab_inhabitants++;
   }
 
+  if (!ch->desc) {
+    mudlog("SYSERR: Somehow, we ended up in COPYOVER with no ch->desc!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
   skip_spaces(&argument);
-  if (str_cmp(argument, "force") != 0) {
+  // COPYOVER FORCE.
+  if (!str_cmp(argument, "force")){
+    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, refund %d cab fare%s, drop %d quest%s, and lose any repairman items.\r\n",
+             fucky_states,    fucky_states    != 1 ? "s" : "",
+             cab_inhabitants, cab_inhabitants != 1 ? "s" : "",
+             num_questors,    num_questors    != 1 ? "s" : "");
+    if (write_to_descriptor(ch->desc->descriptor, buf) < 0) {
+      // Rofl, the copyover initiatior disconnected? Um.
+      close_socket(ch->desc);
+    }
+  } 
+  // Non-forcible copyover command (CHECK or CONFIRM).
+  else {
     bool will_not_copyover = FALSE;
+
+    // Check for questors.
     if (num_questors > 0) {
       send_to_char(ch, "There %s %d character%s doing autoruns right now.\r\n%s^n.\r\n",
                    num_questors != 1 ? "are" : "is",
@@ -254,16 +275,7 @@ ACMD(do_copyover)
       will_not_copyover = TRUE;
     }
 
-    /* Check no longer needed since we now save PC corpses.
-    if (num_corpses) {
-      send_to_char(ch, "There %s %d player corpse%s out there with things still in them.\r\n",
-                   num_corpses != 1 ? "are" : "is",
-                   num_corpses,
-                   num_corpses != 1 ? "s" : "");
-      will_not_copyover = TRUE;
-    }
-    */
-
+    // Check for cab-riders.
     if (cab_inhabitants) {
       send_to_char(ch, "There %s %d %s.\r\n",
                    cab_inhabitants != 1 ? "are" : "is",
@@ -272,6 +284,7 @@ ACMD(do_copyover)
       will_not_copyover = TRUE;
     }
 
+    // Check for repairman items.
     for (struct char_data *i = character_list; i; i = i->next) {
       if (IS_NPC(i) && (GET_MOB_SPEC(i) == fixer || GET_MOB_SPEC2(i) == fixer) && i->carrying) {
         send_to_char("The repairman has unclaimed items.\r\n", ch);
@@ -280,34 +293,37 @@ ACMD(do_copyover)
       }
     }
 
+    // There is no command in this if-statement that allows us to bypass a failed check state.
     if (will_not_copyover) {
-      if (str_cmp(argument, "check") != 0)
-        send_to_char("Copyover aborted. Use 'copyover force' to override this.\r\n", ch);
+      send_to_char("Copyover aborted. Use 'copyover force' to override this.\r\n", ch);
+      return;
+    } 
+    // If there were no errors, note this.
+    else {
+      send_to_char("Copyover is possible, no error conditions noted.\r\n", ch);
+    }
+
+    // COPYOVER CHECK bails out at this point.
+    if (!str_cmp(argument, "check")) {
       return;
     }
-  } else if (ch->desc){
-    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, refund %d cab fare%s, drop %d quest%s, and lose any repairman items.\r\n",
-             fucky_states,    fucky_states    != 1 ? "s" : "",
-             cab_inhabitants, cab_inhabitants != 1 ? "s" : "",
-             num_questors,    num_questors    != 1 ? "s" : "");
-    if (write_to_descriptor(ch->desc->descriptor, buf) < 0) {
-      // Rofl, the copyover initiatior disconnected? Um.
-      close_socket(ch->desc);
-    }
-  } else {
-    log("WTF, ch who initiated copyover had no desc? ;-;");
-  }
 
-  if (str_cmp(argument, "check") == 0) {
-    send_to_char("Copyover is possible, no error conditions noted.\r\n", ch);
-    return;
+#ifdef USE_PRIVATE_CE_WORLD
+#ifndef IS_BUILDPORT
+    // Guard against accidental copyovers on main port.
+    if (str_cmp(argument, "confirm") != 0) {
+      send_to_char("This is the PLAYER PORT, so you need to type ^WCOPYOVER CONFIRM^n to execute.\r\n", ch);
+      return;
+    }
+#endif // IS_BUILDPORT
+#endif // USE_PRIVATE_CE_WORLD
   }
 
   snprintf(buf, sizeof(buf), "Copyover initiated by %s", GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
 
-  log("Disconnecting players.");
+  log("COPYOVERLOG: Disconnecting players.");
   /* For each playing descriptor, save its state */
   for (d = descriptor_list; d ; d = d_next) {
     och = d->character;
@@ -348,17 +364,17 @@ ACMD(do_copyover)
   /* Close reserve and other always-open files and release other resources */
 
   // Save vehicles.
-  log("Saving vehicles.");
+  log("COPYOVERLOG: Saving vehicles.");
   save_vehicles(TRUE);
 
   // Save shop orders.
-  log("Saving shop orders.");
+  log("COPYOVERLOG: Saving shop orders.");
   save_shop_orders();
 
-  log("Closing database connection.");
+  log("COPYOVERLOG: Closing database connection.");
   DBFinalize();
 
-  log("Clearing alarm handler.");
+  log("COPYOVERLOG: Clearing alarm handler.");
   signal(SIGALRM, SIG_IGN);
 
   snprintf(buf, sizeof(buf), "%d", port);
@@ -982,7 +998,7 @@ ACMD(do_teleport)
 #define VNUM_LOOKUP(name) {                                            \
   if (is_abbrev(buf, #name)) {                                         \
     extern int vnum_ ## name(char *searchname, struct char_data * ch); \
-    if (!vnum_ ## name(buf2, ch)) {                                    \
+    if (!vnum_ ## name(remainder, ch)) {                               \
       send_to_char("No " #name "s by that name.\r\n", ch);             \
     }                                                                  \
     return;                                                            \
@@ -992,7 +1008,7 @@ ACMD(do_teleport)
 #define VNUM_USAGE_STRING "Usage: vnum { obj | mob | veh | room | host | ic | quest } <name>\r\n"
 ACMD(do_vnum)
 {
-  two_arguments(argument, buf, buf2);
+  char *remainder = one_argument(argument, buf);
 
   if (!*buf || !*buf2) {
     send_to_char(VNUM_USAGE_STRING, ch);
@@ -1022,8 +1038,8 @@ void do_stat_room(struct char_data * ch)
   send_to_char(ch, "Room name: ^c%s\r\n", rm->name);
 
   sprinttype(rm->sector_type, spirit_name, buf2, sizeof(buf2));
-  snprintf(buf, sizeof(buf), "Zone: [%3d], VNum: [^g%8ld^n], RNum: [%5ld], Rating: [%2d], Type: %s\r\n",
-          rm->zone, rm->number, real_room(rm->number), rm->rating, buf2);
+  snprintf(buf, sizeof(buf), "Zone: [%d (%d)], VNum: [^g%8ld^n], RNum: [%5ld], Rating: [%2d], Type: %s\r\n",
+          zone_table[rm->zone].number, rm->zone, rm->number, real_room(rm->number), rm->rating, buf2);
   send_to_char(buf, ch);
 
   rm->room_flags.PrintBits(buf2, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
@@ -1420,7 +1436,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^n\r\nCyberdeck Part Pointer: ^c%s^n", GET_OBJ_NAME(j->cyberdeck_part_pointer));
     } else {
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Non-part %s (%ld) has a cyberdeck part pointer set!! Clearing it.", GET_OBJ_NAME(j), GET_OBJ_VNUM(j));
-      j->cyberdeck_part_pointer = NULL;
+      clear_cyberdeck_part_pointer(j);
     }
   }
   strlcat(buf, "^n\r\n", sizeof(buf));
@@ -2270,22 +2286,53 @@ ACMD(do_wizload)
 
 ACMD(do_vfind) {
   struct room_data *room;
-  idnum_t idnum;
+  idnum_t idnum = 0;
   int idx = 1;
 
   skip_spaces(&argument);
 
-  if ((idnum = get_player_id(argument)) <= 0) {
-    send_to_char(ch, "Didn't find anyone named '%s'. Syntax: vfind <character name>\r\n", argument);
+  if (!str_cmp(argument, "all")) {
+    send_to_char("OK, listing ALL player-owned vehicles.\r\n", ch);
+  } else if ((idnum = get_player_id(argument)) <= 0) {
+    send_to_char(ch, "Didn't find anyone named '%s'. Syntax: ^WVFIND <character name>^n, or ^WVFIND ALL^n\r\n", argument);
     return;
   }
 
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     room = get_veh_in_room(veh);
 
-    if (veh->owner == idnum) {
-      send_to_char(ch, "%2d) %s^n (%ld): %s^n (%ld)",
-                   idx++,
+    if (veh->owner && (!idnum || veh->owner == idnum)) {
+      int count = 0;
+      char color_char = 'c';
+
+      for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content) {
+        count += count_objects(obj);
+      }
+
+      if (count < 25)
+        color_char = 'c';
+      else if (count < 50)
+        color_char = 'y';
+      else if (count < 75)
+        color_char = 'Y';
+      else if (count < 100)
+        color_char = 'o';
+      else if (count < 150)
+        color_char = 'O';
+      else if (count < 200)
+        color_char = 'r';
+      else
+        color_char = 'R';
+
+      send_to_char(ch, "%2d) ^%c%3d^n items", idx++, color_char, count);
+
+      if (!idnum) {
+        const char *plr_name = get_player_name(veh->owner);
+        send_to_char(ch, ", owned by ^c%s^n", plr_name);
+        delete [] plr_name;
+      }
+
+      send_to_char(ch, ": ^W%s^n (%ld) ^cin^n %s^n (%ld)",
                    GET_VEH_NAME(veh),
                    GET_VEH_VNUM(veh),
                    GET_ROOM_NAME(room),
@@ -2293,7 +2340,7 @@ ACMD(do_vfind) {
                   );
 
       if (veh->in_veh) {
-        send_to_char(ch, " inside %s^n (%ld)",
+        send_to_char(ch, " ^cinside^n %s^n (%ld)",
                      GET_VEH_NAME(veh->in_veh),
                      GET_VEH_VNUM(veh->in_veh)
                     );
@@ -2394,10 +2441,13 @@ ACMD(do_purge)
   struct veh_data *veh, *next_ve;
   extern void die_follower(struct char_data * ch);
 
-  if (!access_level(ch, LVL_EXECUTIVE) &&
-      (ch->player_specials->saved.zonenum != zone_table[get_ch_in_room(ch)->zone].number)) {
-    send_to_char("You can only purge in your zone.\r\n", ch);
-    return;
+  if (!access_level(ch, LVL_EXECUTIVE)) {
+    bool is_editor = FALSE;
+    int zone_idx = get_ch_in_room(ch)->zone;
+    for (int editor_idx = 0; editor_idx < NUM_ZONE_EDITOR_IDS; editor_idx++) {
+      is_editor |= (zone_table[zone_idx].editor_ids[editor_idx] == GET_IDNUM(ch));
+    }
+    FAILURE_CASE(!is_editor, "You can only purge in zones you're an editor of.");
   }
 
   one_argument(argument, buf);
@@ -3957,8 +4007,9 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed)
             zone_table[zone].name);
     for (i = 0; i < color; i++)
       strlcat(bufptr, " ", buf_size);
-    snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%sAge: %3d; Res: %3d (%1d); Top: %5d; Sec: %2d\r\n",
+    snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s (%20s) Age: %3d; Res: %3d (%1d); Top: %5d; Sec: %2d\r\n",
             zone_table[zone].connected ? "* " : "  ",
+            jurisdictions[zone_table[zone].jurisdiction],
             zone_table[zone].age, zone_table[zone].lifespan,
             zone_table[zone].reset_mode, zone_table[zone].top,
             zone_table[zone].security);
@@ -3989,7 +4040,7 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed)
             zone_table[zone].lifespan, zone_table[zone].reset_mode,
             zone_table[zone].top, rooms, mobs, objs, shops, vehs,
             zone_table[zone].security,
-            zone_table[zone].connected ? "Connected" : "In Progress", jurid[zone_table[zone].jurisdiction]);
+            zone_table[zone].connected ? "Connected" : "In Progress", jurisdictions[zone_table[zone].jurisdiction]);
 /* FIXCHE   for (i = 0; i < NUM_ZONE_EDITOR_IDS; i++) {
       const char *name = playerDB.GetNameV(zone_table[zone].editor_ids[i]);
 
@@ -4087,6 +4138,7 @@ ACMD(do_show)
                { "weight",         LVL_PRESIDENT },
                { "ignore",         LVL_FIXER },
                { "vehicles",       LVL_ADMIN },
+               { "dirtyelves",     LVL_BUILDER },
                { "\n", 0 }
              };
 
@@ -4639,6 +4691,16 @@ ACMD(do_show)
       send_to_char(ch, "Total crap: %d\r\n", total_crap);
     }
     return;
+  case 27:
+    send_to_char("The following mobs have 'elven' in their name or keywords w/o 'elf' as well:\r\n", ch);
+    for (int idx = 0; idx <= top_of_mobt; idx++) {
+      if (str_str(GET_KEYWORDS(&mob_proto[idx]), "elven") || str_str(GET_NAME(&mob_proto[idx]), "elven")) {
+        if (!str_str(GET_KEYWORDS(&mob_proto[idx]), " elf") && !is_abbrev("elf", GET_KEYWORDS(&mob_proto[idx]))) {
+          send_to_char(ch, "  [%6ld] %s\r\n", GET_MOB_VNUM(&mob_proto[idx]), GET_NAME(&mob_proto[idx]));
+        }
+      }
+    }
+    break;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
     break;
@@ -8465,4 +8527,26 @@ int _error_on_invalid_real_veh(rnum_t rnum, int zone_num, char *buf, size_t buf_
   if (rnum >= 0)
     return _check_for_zone_error(GET_VEH_VNUM(&veh_proto[rnum]), zone_num, buf, buf_len, "veh");
   return 0;
+}
+
+ACMD(do_cheatmark) {
+  skip_spaces(&argument);
+
+  struct obj_data *obj = get_obj_in_list_vis(ch, argument, ch->carrying);
+
+  FAILURE_CASE_PRINTF(!obj, "You don't seem to have any %ss in your inventory.", argument);
+
+  const char *repr = generate_new_loggable_representation(obj);
+
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)) {
+    send_to_char(ch, "OK, removing cheatlog mark from %s.\r\n", GET_OBJ_NAME(obj));
+    GET_OBJ_EXTRA(obj).RemoveBit(ITEM_EXTRA_CHEATLOG_MARK);
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s removed cheatmark from %s.", GET_CHAR_NAME(ch), repr);
+  } else {
+    send_to_char(ch, "OK, adding cheatlog mark to %s.\r\n", GET_OBJ_NAME(obj));
+    GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_CHEATLOG_MARK);
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s added cheatmark to %s.", GET_CHAR_NAME(ch), repr);
+  }
+
+  delete [] repr;
 }

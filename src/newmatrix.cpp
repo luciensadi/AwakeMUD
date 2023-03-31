@@ -33,6 +33,8 @@ extern void create_deck(struct char_data *ch);
 extern void create_spell(struct char_data *ch);
 extern void create_ammo(struct char_data *ch);
 
+ACMD_DECLARE(do_look);
+
 struct matrix_icon *find_icon_by_id(vnum_t idnum);
 
 void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ);
@@ -1761,6 +1763,12 @@ ACMD(do_logoff)
   extract_icon(PERSONA);
   PERSONA = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+
+  // Make 'em look if they're not screenreaders.
+  if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+    char emptybuf[10] = { '\0' };
+    do_look(ch, emptybuf, 0, 0);
+  }
 }
 
 ACMD(do_connect)
@@ -2659,30 +2667,37 @@ ACMD(do_software)
                    "Sensors: ^g%2d^n   Evasion: ^g%2d^n\r\n", bod, masking, sensor, evasion);
     }
 
-    strcpy(buf, "Other Software:\r\n");
+    strcpy(buf, "^cOther Software:^n\r\n");
     if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK) {
-      strcpy(buf2, "Custom Components:\r\n");
+      strcpy(buf2, "^cCustom Components:^n\r\n");
     }
+
+    bool has_other_software = FALSE;
+    bool has_custom_components = FALSE;
 
     const char *defaulted_string = PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(defaulted)" : "*";
     for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content) {
       if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s Rating: %2d %s\r\n",
+        has_other_software = TRUE;
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n Rating: %2d %s\r\n",
                  get_obj_name_with_padding(soft, 40),
                  GET_PROGRAM_RATING(soft),
                  GET_PROGRAM_IS_DEFAULTED(soft) ? defaulted_string : " ");
       } else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(soft) == TYPE_FILE) {
+        has_other_software = TRUE;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", GET_OBJ_NAME(soft));
       } else if (GET_OBJ_TYPE(soft) == ITEM_PART) {
-        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s Type: %-15s Rating: %d\r\n",
+        has_custom_components = TRUE;
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s Type: ^c%-24s^n (rating ^c%d^n)\r\n",
                 get_obj_name_with_padding(soft, 40),
                 parts[GET_PART_TYPE(soft)].name,
                 GET_PART_RATING(soft));
       }
     }
 
-    send_to_char(buf, ch);
-    if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK)
+    if (has_other_software)
+      send_to_char(buf, ch);
+    if (has_custom_components && GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK)
       send_to_char(buf2, ch);
   }
 }

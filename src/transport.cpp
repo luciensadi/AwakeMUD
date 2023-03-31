@@ -126,6 +126,7 @@ struct dest_data seattle_taxi_destinations[] =
   { "muscovite", "lounge", "The Muscovite Lounge", 30548, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS , FALSE },
   { "neophyte", "guild",  "The Neophyte Guild", 32679, TAXI_DEST_TYPE_OTHER, TRUE },
   { "skeleton", "", "The Skeleton", 25308, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+  { "lonestar", "", "Lone Star 17th Precinct", 30557, TAXI_DEST_TYPE_OOC, TRUE},
   { "sapphire", "star", "The Star Sapphire", 70301, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
   { "stop", "gap", "The Stop Gap", 32708, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "junkyard", "",  "The Tacoma Junkyard", 2070, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
@@ -1663,7 +1664,9 @@ int process_elevator(struct room_data *room,
       snprintf(buf, sizeof(buf), "The elevator car %s swiftly away from you.\r\n", elevator[num].dir == DOWN ? "descends" : "ascends");
       send_to_room(buf, &world[real_room(shaft->number)]);
       /* If you fail an athletics test, you get dragged by the car, sustaining impact damage and getting pulled along with the elevator. */
-      for (struct char_data *vict = shaft->people; vict; vict = vict->next_in_room) {
+      for (struct char_data *vict = shaft->people, *temp; vict; vict = temp) {
+        temp = vict->next_in_room;
+
         // Nohassle imms and astral projections are immune to this bullshit.
         if (PRF_FLAGGED(vict, PRF_NOHASSLE) || IS_ASTRAL(vict))
           continue;
@@ -1691,6 +1694,7 @@ int process_elevator(struct room_data *room,
         dam = convert_damage(stage(-success, power));
 
         // Check for vict's death. This continue statement is essentially no-op, but proves that I've cleared this statement.
+        // ...Except you DIDN'T, dumbass: if they're killed by the elevator, their ->next_in_room is garbage! Fixed by adding temp.
         if (damage(vict, vict, dam, TYPE_ELEVATOR, TRUE))
           continue;
       }

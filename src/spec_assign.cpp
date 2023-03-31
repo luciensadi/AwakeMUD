@@ -622,6 +622,7 @@ void assign_mobiles(void)
   SPECIAL(axehead);
   SPECIAL(chargen_docwagon_checker);
   SPECIAL(fatcop);
+  SPECIAL(pocsec_unlocker);
 
 #ifdef USE_PRIVATE_CE_WORLD
   SPECIAL(marksmanship_first);
@@ -824,6 +825,9 @@ void assign_mobiles(void)
 
   /* Homewood */
   ASSIGNMOB(30705, fatcop);
+
+  /* Misc */
+  ASSIGNMOB(35020, pocsec_unlocker);
 
   /* Secret areas */
   perform_secret_mob_assignments();

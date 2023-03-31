@@ -285,7 +285,7 @@ void copyover_recover()
   char name[MAX_NAME_LENGTH + 1];
   int desc;
 
-  log ("Copyover recovery initiated");
+  log ("COPYOVERLOG: Copyover recovery initiated.");
 
   fp = fopen (COPYOVER_FILE, "r");
 
@@ -305,8 +305,11 @@ void copyover_recover()
     if (desc == -1)
       break;
 
+    log_vfprintf("COPYOVERLOG: Restoring %s (%s)...", name, host);
+
     /* Write something, and check if it goes error-free */
     if (write_to_descriptor (desc, "\n\rJust kidding. Restoring from copyover...\n\r") < 0) {
+       log_vfprintf("COPYOVERLOG:  - Failed to write to %s (%s), closing their descriptor.", name, host);
       close (desc); /* nope */
       continue;
     }
@@ -340,6 +343,7 @@ void copyover_recover()
     if (!fOld) /* Player file not found?! */
     {
       write_to_descriptor (desc, "\n\rSomehow, your character was lost in the copyover. Sorry.\n\r");
+      log_vfprintf("COPYOVERLOG:  - Playerfile for %s (%s) was not found??", name, host);
       close_socket (d);
     } else /* ok! */
     {
@@ -381,27 +385,30 @@ void copyover_recover()
   fclose (fp);
 
   // Regenerate everyone's subscriber lists.
+  log("COPYOVERLOG: Regenerating subscriber lists.");
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
-    if (!veh->sub)
+    if (!veh->sub || !veh->owner)
       continue;
 
-    for (struct char_data *i = character_list; i; i = i->next) {
-      if (GET_IDNUM(i) != veh->owner)
+    for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+      struct char_data *operative_character = (d->original && GET_IDNUM(d->original) == veh->owner ? d->original : d->character);
+      
+      if (operative_character && GET_IDNUM(operative_character) != veh->owner)
         continue;
 
       struct veh_data *f = NULL;
-      for (f = i->char_specials.subscribe; f; f = f->next_sub)
+      for (f = operative_character->char_specials.subscribe; f; f = f->next_sub)
         if (f == veh)
           break;
 
       if (!f) {
-        veh->next_sub = i->char_specials.subscribe;
+        veh->next_sub = operative_character->char_specials.subscribe;
 
         // Doubly link it into the list.
-        if (i->char_specials.subscribe)
-          i->char_specials.subscribe->prev_sub = veh;
+        if (operative_character->char_specials.subscribe)
+          operative_character->char_specials.subscribe->prev_sub = veh;
 
-        i->char_specials.subscribe = veh;
+        operative_character->char_specials.subscribe = veh;
       }
 
       break;
@@ -409,12 +416,13 @@ void copyover_recover()
   }
 
   // Force all player characters to look now that everyone's properly loaded.
-  struct char_data *plr = character_list;
-  while (plr) {
-    if (!IS_NPC(plr) && !PRF_FLAGGED(plr, PRF_SCREENREADER))
-      look_at_room(plr, 0, 0);
-    plr = plr->next;
+  log("COPYOVERLOG: Forcing look.");
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    if (d->character && !PRF_FLAGGED(d->character, PRF_SCREENREADER))
+      look_at_room(d->character, 0, 0);
   }
+
+  log("COPYOVERLOG: Copyover complete. Have a nice day!");
 }
 
 
@@ -1800,6 +1808,11 @@ int new_descriptor(int s)
 
   /* determine if the site is banned */
   if (isbanned(newd->host) == BAN_ALL) {
+#ifdef USE_PRIVATE_CE_WORLD
+    write_to_descriptor(desc, "Sorry, this IP address has been banned. If you believe this to be in error, contact luciensadi@gmail.com.\r\n");
+#else
+    write_to_descriptor(desc, "Sorry, this IP address has been banned.\r\n");
+#endif
     close(desc);
     snprintf(buf2, sizeof(buf2), "Connection attempt denied from banned site [%s]", newd->host);
     mudlog(buf2, NULL, LOG_BANLOG, TRUE);

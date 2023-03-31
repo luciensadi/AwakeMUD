@@ -209,9 +209,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 #define INITIATION_CAP                                         50
 
-#define RITUAL_SPELL_BASE_TIME                                 2
-#define RITUAL_SPELL_COMPONENT_COST                            100
-#define RITUAL_SPELL_MAX_SUCCESS_MULTIPLIER                    0.8
+#define RITUAL_SPELL_BASE_TIME                                 3
+#define RITUAL_SPELL_COMPONENT_COST                            500
+#define RITUAL_SPELL_MAX_SUCCESS_MULTIPLIER                    1.0
 
 // This stat is x100 when stored, so the cap is 20 * 100 = 2000 aka 20 magic.
 #define MAGIC_CAP                                              2000

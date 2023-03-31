@@ -33,7 +33,6 @@ extern bool would_become_killer(struct char_data * ch, struct char_data * vict);
 extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
-extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern bool process_single_boost(struct char_data *ch, int boost_attribute);
 extern void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
@@ -2968,6 +2967,12 @@ bool mob_magic(struct char_data *ch)
   // Elementals don't get to cast: it breaks the game.
   if (!FIGHTING(ch) || IS_PC_CONJURED_ELEMENTAL(ch))
     return FALSE;
+
+  // If you're an NPC and your target is already down, chill out.
+  if (IS_NPC(ch) && GET_POS(FIGHTING(ch)) <= POS_MORTALLYW) {
+    return FALSE;
+  }
+
   char buf[MAX_STRING_LENGTH], rbuf[5000];
   int spell = 0, sub = 0, force, magic = GET_MAG(ch) / 100;
   if (GET_WIL(ch) <= 2)
@@ -6487,8 +6492,8 @@ ACMD(do_think)
       if (viewer == ch || !AWAKE(viewer))
         continue;
 
-      if (access_level(viewer, LVL_FIXER) || (PRF_FLAGGED(viewer, PRF_QUEST) && PRF_FLAGGED(ch, PRF_QUESTOR))) {
-        send_to_char(viewer, "^LOOC: %s thinks to %s, \"%s^n\"^n\r\n",
+      if (access_level(viewer, LVL_FIXER) || (PRF_FLAGGED(viewer, PRF_QUESTOR) && PRF_FLAGGED(ch, PRF_QUEST))) {
+        send_to_char(viewer, "^LOOC Info: %s thinks to %s, \"%s^n\"^n\r\n",
                      GET_CHAR_NAME(ch),
                      GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL ? "themselves" : (GET_PRONOUNS(ch) == PRONOUNS_MASCULINE ? "himself" : "herself"),
                      formatted_think_string);

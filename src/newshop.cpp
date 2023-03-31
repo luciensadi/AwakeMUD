@@ -520,7 +520,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     }
 
     for (check = recipient->bioware; check; check = check->next_content) {
-      if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(ware))) {
+      if ((GET_OBJ_VNUM(check) == GET_OBJ_VNUM(ware)) && !is_custom_ware(ware)) {
         if (IS_NPC(installer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have that installed.");
           do_say(installer, buf, cmd_say, SCMD_SAYTO);
@@ -529,7 +529,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
         }
         return FALSE;
       }
-      if (GET_BIOWARE_TYPE(check) == GET_BIOWARE_TYPE(ware)) {
+      if (GET_BIOWARE_TYPE(check) == GET_BIOWARE_TYPE(ware) && !is_custom_ware(ware)) {
         if (IS_NPC(installer)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You already have %s installed, and it's too similar to %s for them to work together.", GET_OBJ_NAME(check), GET_OBJ_NAME(ware));
           do_say(installer, buf, cmd_say, SCMD_SAYTO);
@@ -922,6 +922,14 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
           GET_OBJ_VAL(obj, 0) = GET_IDNUM(ch);
 
+        // Vehicle titles are ID-locked to the purchaser.
+        if (obj_is_a_vehicle_title(obj))
+          GET_VEHICLE_TITLE_OWNER(obj) = GET_IDNUM(ch);
+
+        // Hardened armor is not ID-locked on purchase, but IS on first wear.
+        if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR))
+          GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = -1;
+
         obj_to_char(obj, ch);
         bought++;
 
@@ -1253,7 +1261,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     // Placed order successfully. Order time is multiplied by 10% per availoffset tick, then multiplied again by quantity.
     float totaltime = (GET_OBJ_AVAILDAY(obj) * (GET_AVAIL_OFFSET(ch) ? 0.1 * GET_AVAIL_OFFSET(ch) : 1) * buynum) / success;
 
-    if (access_level(ch, LVL_ADMIN)) {
+    if (access_level(ch, LVL_VICEPRES)) {
       send_to_char(ch, "You use your staff powers to greatly accelerate the ordering process (was %.2f days).\r\n", totaltime);
       totaltime = 0.0;
     }
@@ -1491,10 +1499,10 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         x--;
       REMOVE_FROM_LIST(sell, shop_table[shop_nr].selling, next);
     }
-
-
-  } else if (sell->type == SELL_STOCK || sell->type == SELL_BOUGHT)
+  } 
+  else if ((sell->type == SELL_STOCK || sell->type == SELL_BOUGHT) && sell->stock <= 10) {
     sell->stock++;
+  }
 
  extract_obj(obj);
  obj = NULL;
@@ -2165,7 +2173,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     strcat(buf, " engines.");
     break;
   default:
-    snprintf(buf, sizeof(buf), "%s I don't know anything about that.", GET_CHAR_NAME(ch));
+    strcat(buf, " for sale.");
   }
   strcat(buf, " It weighs about ");
   if (GET_OBJ_WEIGHT(obj) < 1) {
@@ -3447,6 +3455,11 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
   // This item cannot be sold.
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_STAFF_ONLY) || IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
     send_to_char(ch, "%s can't be sold.\r\n", capitalize(GET_OBJ_NAME(obj)));
+    return FALSE;
+  }
+
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR) && GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) != -1) {
+    send_to_char(ch, "%s has been customized already, so it can't be sold.\r\n", capitalize(GET_OBJ_NAME(obj)));
     return FALSE;
   }
 

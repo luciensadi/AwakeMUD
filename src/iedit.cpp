@@ -607,7 +607,11 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
         send_to_char(CH, "Cultured (%d - Yes, %d - No): ", BIOWARE_CULTURED, BIOWARE_STANDARD);
       else {
         GET_OBJ_VAL(OBJ, 2) = BIOWARE_CULTURED;
-        iedit_disp_menu(d);
+        if (GET_BIOWARE_TYPE(OBJ) == BIO_REFLEXRECORDER) {
+          iedit_disp_val6_menu(d);
+        } else {
+          iedit_disp_menu(d);
+        }
       }
       break;
     case ITEM_GUN_AMMO:
@@ -947,6 +951,18 @@ void iedit_disp_val6_menu(struct descriptor_data * d)
         d->iedit_limit_edits++;
       iedit_disp_val7_menu(d);
       return;
+    case ITEM_BIOWARE:
+      if (GET_BIOWARE_TYPE(OBJ) == BIO_REFLEXRECORDER) {
+        for (int idx = 0; idx < MAX_SKILLS; idx++) {
+          if (skills[idx].reflex_recorder_compatible)
+            send_to_char(CH, "%3d) %s\r\n", idx, skills[idx].name);
+        }
+        send_to_char("Select the skill to boost: ", CH);
+      } else {
+        iedit_disp_menu(d);
+        return;
+      }
+      break;
     default:
       iedit_disp_menu(d);
   }
@@ -2736,6 +2752,12 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           TOGGLE_BIT(GET_OBJ_VAL(OBJ, 5), 1 << number);
           iedit_disp_mod_engine_menu(d);
           return;
+        case ITEM_BIOWARE:
+          if (GET_BIOWARE_TYPE(OBJ) == BIO_REFLEXRECORDER && (number <= 0 || number >= MAX_SKILLS || !skills[number].reflex_recorder_compatible)) {
+            send_to_char("\r\nThat's not a reflex-recordable skill number. Try again: ", CH);
+            return;
+          }
+          break;
       }
       GET_OBJ_VAL(d->edit_obj, 5) = number;
       iedit_disp_val7_menu(d);

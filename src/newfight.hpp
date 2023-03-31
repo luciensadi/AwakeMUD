@@ -359,13 +359,17 @@ struct combat_data
 
   // Generic combat data.
   bool too_tall;
+  int hardened_armor_ballistic_rating;
+  int hardened_armor_impact_rating;
 
   combat_data(struct char_data *character, struct obj_data *weap) :
     ch(NULL),
     veh(NULL),
     weapon(NULL),
     ranged_combat_mode(FALSE),
-    too_tall(FALSE)
+    too_tall(FALSE),
+    hardened_armor_ballistic_rating(0),
+    hardened_armor_impact_rating(0)
   {
     ch = character;
 
@@ -387,6 +391,15 @@ struct combat_data
     // Special case: Bayonet charge.
     if (ranged_combat_mode && !weapon->contains && does_weapon_have_bayonet(weapon))
       ranged_combat_mode = FALSE;
+
+    // Calculate hardened armor ratings, if any.
+    for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+      struct obj_data *armor = GET_EQ(ch, wear_idx);
+      if (armor && GET_OBJ_TYPE(armor) == ITEM_WORN && IS_OBJ_STAT(armor, ITEM_EXTRA_HARDENED_ARMOR) && !GET_WORN_MATCHED_SET(armor)) {
+        hardened_armor_ballistic_rating = MAX(hardened_armor_ballistic_rating, GET_WORN_BALLISTIC(armor));
+        hardened_armor_impact_rating = MAX(hardened_armor_impact_rating, GET_WORN_IMPACT(armor));
+      }
+    }
   }
 
   ~combat_data() {

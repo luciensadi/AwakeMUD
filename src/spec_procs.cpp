@@ -1830,8 +1830,12 @@ SPECIAL(janitor)
     obj_from_room(i);
     if (extract)
       extract_obj(i);
-    else
+    else {
       obj_to_char(i, jan);
+      if (IS_OBJ_STAT(i, ITEM_EXTRA_CHEATLOG_MARK)) {
+        AFF_FLAGS(jan).SetBit(AFF_CHEATLOG_MARK);
+      }
+    }
     return FALSE;
   }
 
@@ -2438,7 +2442,7 @@ SPECIAL(adept_guard)
             FALSE, ch, 0, vict, TO_VICT);
         act("Sensing an oppertune moment, you come out of hiding and draw upon "
             "your mystic abilities to kill $N.", FALSE, ch, 0, vict, TO_CHAR);
-        damage(ch, vict, 1, 0, PHYSICAL);
+        damage(ch, vict, 1, TYPE_SUFFERING, PHYSICAL);
         return(TRUE);
       }
     }
@@ -2458,7 +2462,7 @@ SPECIAL(adept_guard)
             FALSE, ch, 0, vict, TO_NOTVICT);
         act("You grab $N and let energy flow through him.",
             FALSE, ch, 0, vict, TO_CHAR);
-        if (damage(ch, vict, number(0, 2), 0, PHYSICAL))
+        if (damage(ch, vict, number(0, 2), TYPE_SUFFERING, PHYSICAL))
           return TRUE;
         return FALSE;
     }
@@ -2663,6 +2667,10 @@ SPECIAL(saeder_guard) {
   if (!AWAKE(guard) || (GET_POS(guard) == POS_FIGHTING))
     return(FALSE);
 
+  // The guards won't stop astrals from exploring.
+  if (IS_ASTRAL(ch))
+    return FALSE;
+
   if (CMD_IS("east") && CAN_SEE(guard, ch) && guard->in_room->number == 4930) {
     for (obj = ch->carrying; obj; obj = obj->next_content)
       if (GET_OBJ_VNUM(obj) == 4914)
@@ -2685,6 +2693,10 @@ SPECIAL(crime_mall_guard) {
     return FALSE;
 
   struct char_data *guard = (struct char_data *) me;
+
+  // The guards won't stop astrals from exploring.
+  if (IS_ASTRAL(ch))
+    return FALSE;
 
   if ((guard->in_room->number == 100075 && CMD_IS("east")) ||
       (guard->in_room->number == 100077 && CMD_IS("west"))) {
@@ -3791,7 +3803,7 @@ SPECIAL(simulate_bar_fight)
   act("A chair flies across the room, hitting you square in the head!",
       TRUE, vict, 0, 0, TO_CHAR);
   dam = convert_damage(stage(-success_test(GET_WIL(vict), 4), MODERATE));
-  damage(vict, vict, dam, 0, FALSE);
+  damage(vict, vict, dam, TYPE_BLUDGEON, FALSE);
   return TRUE;
 }
 
@@ -3806,7 +3818,7 @@ SPECIAL(waterfall)
     } else {
       act("You succumb to the heavy waves and crack your skull on the floor!", FALSE, ch, 0, 0, TO_CHAR);
       act("$n gets slammed down by the waves and hits $s head on the floor!", TRUE, ch, 0, 0, TO_ROOM);
-      damage(ch, ch, number(1, 2), 0, TRUE);
+      damage(ch, ch, number(1, 2), TYPE_BLUDGEON, TRUE);
       return TRUE;
     }
   }
@@ -3897,6 +3909,24 @@ SPECIAL(newbie_car)
     any_one_arg(argument, arg);
     if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
       send_to_char(ch, "You don't have a deed for that.\r\n");
+      return TRUE;
+    }
+    if (!obj_is_a_vehicle_title(obj)) {
+      send_to_char(ch, "%s is not the title to a vehicle.\r\n", CAP(GET_OBJ_NAME(obj)));
+      return TRUE;
+    }
+    if (GET_VEHICLE_TITLE_OWNER(obj) && GET_VEHICLE_TITLE_OWNER(obj) != GET_IDNUM(ch)) {
+      send_to_char(ch, "%s was issued to someone else!\r\n", CAP(GET_OBJ_NAME(obj)));
+
+      const char *plrname = get_player_name(GET_VEHICLE_TITLE_OWNER(obj));
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s attempted to redeem vehicle title '%s' (%ld) which actually belongs to '%s' (%ld).",
+                      GET_CHAR_NAME(ch), 
+                      GET_OBJ_NAME(obj),
+                      GET_OBJ_VNUM(obj),
+                      plrname,
+                      GET_VEHICLE_TITLE_OWNER(obj));
+      delete [] plrname;
+
       return TRUE;
     }
     if (ch->in_veh) {
@@ -4342,7 +4372,7 @@ SPECIAL(room_damage_radiation)
           act("You feel itchy all over and your eyes become very irritated.  You get the metallic taste of pennies in the back of your throat.",FALSE, vict, 0, 0, TO_CHAR);
           act("$n suddenly doesn't look well at all, seems they're developing a rash.", TRUE, vict, 0, 0, TO_ROOM);
         }
-        damage(vict,vict,rad_dam,0, TRUE);
+        damage(vict,vict,rad_dam,TYPE_SUFFERING, TRUE);
       }
     }
   return FALSE;
@@ -4530,7 +4560,7 @@ SPECIAL(quest_debug_scanner)
   // Reject mortals, violently.
   if (GET_LEVEL(ch) <= 1) {
     send_to_char(ch, "%s arcs violently in your hands!\r\n");
-    damage(ch, ch, 100, TYPE_TASER, TRUE);
+    damage(ch, ch, 10, TYPE_TASER, TRUE);
     return TRUE;
   }
 
@@ -4896,22 +4926,37 @@ SPECIAL(pocket_sec)
 {
   struct obj_data *sec = (struct obj_data *) me;
   extern void pocketsec_menu(struct descriptor_data *ch);
+
   if (*argument && cmd && CMD_IS("use")) {
+    if (!(sec->carried_by == ch || sec->worn_by == ch))
+      return FALSE;
+
     skip_spaces(&argument);
-    if ((isname(argument, sec->text.keywords) || isname(argument, sec->text.name) ||
-         (sec->restring && isname(argument, sec->restring))) && (sec->carried_by == ch || sec->worn_by == ch)) {
-      if (FIGHTING(ch))
+
+    if ((isname(argument, sec->text.keywords) || isname(argument, sec->text.name) || (sec->restring && isname(argument, sec->restring)))) {
+      if (FIGHTING(ch)) {
         send_to_char("You're too busy to do that.\r\n", ch);
-      else if (AFF_FLAGGED(ch, AFF_PILOT))
-        send_to_char("You are too scared of The Star adding demerit points to your license.\r\n", ch);
-      else if (GET_OBJ_VAL(sec, 1) > 0 && GET_OBJ_VAL(sec, 1) != GET_IDNUM(ch))
-        send_to_char("You don't know the password.\r\n", ch);
-      else {
-        act("$n starts looking at $p.", TRUE, ch, sec, 0, TO_ROOM);
-        STATE(ch->desc) = CON_POCKETSEC;
-        ch->desc->edit_obj = sec;
-        pocketsec_menu(ch->desc);
+        return FALSE;
       }
+      
+      if (AFF_FLAGGED(ch, AFF_PILOT)) {
+        send_to_char("You are too scared of The Star adding demerit points to your license.\r\n", ch);
+        return FALSE;
+      }
+      
+      if (GET_POCKET_SECRETARY_LOCKED_BY(sec) > 0 && GET_POCKET_SECRETARY_LOCKED_BY(sec) != GET_IDNUM(ch) && !(GET_POCKET_SECRETARY_LOCKED_BY(sec) == 1 && GET_OBJ_VNUM(sec) == 39865)) {
+        if (access_level(ch, LVL_ADMIN)) {
+          send_to_char("You use your staff powers to bypass the lock on it.\r\n", ch);
+        } else {
+          send_to_char("You don't know the password.\r\n", ch);
+          return FALSE;
+        } 
+      }
+      
+      act("$n starts looking at $p.", TRUE, ch, sec, 0, TO_ROOM);
+      STATE(ch->desc) = CON_POCKETSEC;
+      ch->desc->edit_obj = sec;
+      pocketsec_menu(ch->desc);
       return TRUE;
     }
   }
@@ -4945,7 +4990,7 @@ SPECIAL(floor_has_glass_shards) {
     if (CMD_IS(exitdirs[dir_index]) || CMD_IS(fulldirs[dir_index])) {
       send_to_char(ch, "^rAs you walk away, the %s shards tear at your bare feet!^n\r\n\r\n", floor_material);
       act(act_buf, TRUE, ch, NULL, NULL, TO_ROOM);
-      if (damage(ch, ch, LIGHT, 0, TRUE) || GET_POS(ch) <= POS_STUNNED)
+      if (damage(ch, ch, 1, TYPE_SLASH, TRUE) || GET_POS(ch) <= POS_STUNNED)
         return TRUE;
       break;
     }
@@ -6312,33 +6357,63 @@ SPECIAL(mageskill_nightwing)
   if (time_info.hours == 9 && GET_SPARE1(mage))
     GET_SPARE1(mage) = 0;
   if (!cmd && time_info.hours == 8 && !GET_SPARE1(mage)) {
+    const char *location_string = NULL;
+
     int toroom = NOWHERE;
     // TODO: Make it so that she can't go to the room she's already in.
-    switch (number(0, 5)) {
-      case 0:
-        toroom = real_room(2496);
-        break;
-      case 1:
-        toroom = real_room(5405);
-        break;
-      case 2:
-        toroom = real_room(2347);
-        break;
-      case 3:
-        toroom = real_room(14379);
-        break;
-      case 4:
-        toroom = real_room(2590);
-        break;
-      case 5:
-        toroom = real_room(12502);
-        break;
+    int limiter = 10;
+    while ((limiter-- > 0) && (toroom <= 0 || &world[toroom] == mage->in_room)) {
+      switch (number(0, 5)) {
+        case 0:
+          toroom = real_room(2496);
+          location_string = "somewhere in Puyallup";
+          break;
+        case 1:
+          toroom = real_room(5405);
+          location_string = "somewhere in J'Valdi";
+          break;
+        case 2:
+          toroom = real_room(2347);
+          location_string = "somewhere in Puyallup";
+          break;
+        case 3:
+          toroom = real_room(14379);
+          location_string = "somewhere in Redmond";
+          break;
+        case 4:
+          toroom = real_room(2590);
+          location_string = "somewhere in Tacoma";
+          break;
+        case 5:
+          toroom = real_room(12502);
+          location_string = "somewhere in Seattle";
+          break;
+      }
     }
+    if (limiter <= 0)
+      mudlog("SYSERR: Could not find a new room for Fleeting Nightwing after 10 tries!", mage, LOG_SYSLOG, TRUE);
+
     act("$n suddenly dashes towards the nearest entrance.", FALSE, mage, 0, 0, TO_ROOM);
     char_from_room(mage);
     char_to_room(mage, &world[toroom]);
     act("$n dashes into the room, searching for the darkest corner.", FALSE, mage, 0, 0, TO_ROOM);
     GET_SPARE1(mage) = 1;
+
+    for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+      if (d->character 
+          && (GET_TRADITION(d->character) == TRAD_SHAMANIC || GET_TRADITION(d->character) == TRAD_HERMETIC) 
+          && GET_SKILL(d->character, SKILL_SORCERY) == 8
+          && SEES_ASTRAL(d->character)) {
+        for (struct obj_data *tmp_obj = d->character->carrying; tmp_obj; tmp_obj = tmp_obj->next_content) {
+          if (GET_OBJ_VNUM(tmp_obj) == OBJ_MAGE_LETTER) {
+            if (GET_OBJ_VAL(tmp_obj, 4) < 2) {
+              send_to_char(d->character, "Your astral senses tingle as an almost-ultrasonic cry emanates from %s.", location_string);
+            }
+            break;
+          }
+        }
+      }
+    }
     return TRUE;
   }
   if (CMD_IS("say") || CMD_IS("'") || CMD_IS("ask")) {
@@ -7207,7 +7282,7 @@ SPECIAL(medical_workshop) {
     PRF_FLAGS(found_char).RemoveBit(PRF_TOUCH_ME_DADDY);
 
     // Damage the character. This damage type does not result in a killer check.
-    if (ch != found_char && damage(ch, found_char, SERIOUS, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
+    if (ch != found_char && damage(ch, found_char, 6, TYPE_MEDICAL_MISHAP, PHYSICAL)) {
       send_to_char(ch, "Seems your scalpel cut something critical... your patient has died.\r\n");
     }
 
@@ -7389,6 +7464,106 @@ SPECIAL(graffiti_cleaner) {
   }
 
   return TRUE;
+}
+
+SPECIAL(pocsec_unlocker) {
+  struct char_data *fixer = (struct char_data *) me;
+  struct obj_data *obj, *credstick = NULL;
+  int cost = 0;
+
+  if (cmd && !CMD_IS("unlock"))
+    return FALSE;
+
+  if (cmd && (!AWAKE(fixer) || IS_NPC(ch)))
+    return FALSE;
+  if (cmd && !CAN_SEE(fixer, ch)) {
+    do_say(fixer, "I don't deal with someone I can't see!", 0, 0);
+    return TRUE;
+  }
+
+  if (CMD_IS("unlock")) {
+    skip_spaces(&argument);
+
+    if (!*argument) {
+      send_to_char("Syntax: UNLOCK [cash|credstick] <item>\r\n", ch);
+      return TRUE;
+    }
+
+    // Pick the first argument, but don't re-index *argument yet.
+    any_one_arg(argument, buf);
+
+    bool force_cash = !str_cmp(buf, "cash");
+    bool force_credstick = !str_cmp(buf, "credstick");
+
+    if (force_cash || force_credstick) {
+      // Actually re-index *argument now.
+      argument = any_one_arg(argument, buf);
+      skip_spaces(&argument);
+
+      // Yes, we need this twice, because we stripped out an argument item in cash/credstick checking.
+      if (!*argument) {
+        send_to_char("Syntax: REPAIR [cash|credstick] <item>\r\n", ch);
+        return TRUE;
+      }
+    }
+
+    // We default to cash-- only look for a credstick if they used the credstick command.
+    if (force_credstick && !(credstick = get_first_credstick(ch, "credstick"))) {
+      send_to_char("You don't have an activated credstick.\r\n", ch);
+      return TRUE;
+    }
+
+    if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
+      send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
+      return TRUE;
+    }
+    
+    if (GET_OBJ_SPEC(obj) != pocket_sec) {
+      snprintf(arg, sizeof(arg), "%s I can only unlock pocket secretaries.", GET_CHAR_NAME(ch));
+      do_say(fixer, arg, 0, SCMD_SAYTO);
+      return TRUE;
+    }
+
+    if (!GET_POCKET_SECRETARY_LOCKED_BY(obj)) {
+      snprintf(arg, sizeof(arg), "%s %s isn't locked...", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
+      do_say(fixer, arg, 0, SCMD_SAYTO);
+      return TRUE;
+    }
+
+    cost = 2000;
+
+    if ((credstick ? GET_ITEM_MONEY_VALUE(credstick) : GET_NUYEN(ch)) < cost) {
+      snprintf(arg, sizeof(arg), "%s You can't afford to unlock that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);
+      do_say(fixer, arg, 0, SCMD_SAYTO);
+      return TRUE;
+    }
+
+    if (credstick)
+      lose_nuyen_from_credstick(ch, credstick, cost, NUYEN_OUTFLOW_REPAIRS);
+    else
+      lose_nuyen(ch, cost, NUYEN_OUTFLOW_REPAIRS);
+
+    // Perform the unlock.
+    act("$n plugs $p into a machine and taps a few keys. After a long moment, $e unplugs it and hands it back to $N. \"^cAll set. Thanks for stopping by The Shack!^n\"",
+        FALSE, fixer, obj, ch, TO_ROOM);
+    act("You plug $p into a machine and tap a few keys. After a long moment, you unplug it and hand it back to $N. \"^cAll set. Thanks for stopping by The Shack!^n\"",
+        FALSE, fixer, obj, ch, TO_CHAR);
+
+    if (GET_POCKET_SECRETARY_LOCKED_BY(obj) != GET_IDNUM(ch) 
+        && does_player_exist(GET_POCKET_SECRETARY_LOCKED_BY(obj))
+        && !(GET_OBJ_VNUM(obj) == 39865 && GET_POCKET_SECRETARY_LOCKED_BY(obj) == TYPE_KIT))  /* Don't logspam re: bug where blue crystal screens got locked */
+    {
+      const char *owner_name = get_player_name(GET_POCKET_SECRETARY_LOCKED_BY(obj));
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s unlocked stolen(?) pocket secretary belonging to %s (%ld).", GET_CHAR_NAME(ch), owner_name, GET_POCKET_SECRETARY_LOCKED_BY(obj));
+      delete [] owner_name;
+    }
+
+    GET_POCKET_SECRETARY_LOCKED_BY(obj) = 0;
+
+    return TRUE;
+  }
+  
+  return FALSE;
 }
 
 /*

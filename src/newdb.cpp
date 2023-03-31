@@ -1988,6 +1988,17 @@ bool get_aff_flag_is_set_by_idnum(int flag, vnum_t id) {
   return _get_flag_is_set_by_idnum(flag, id, 2);
 }
 
+bool player_is_dead_hardcore(long id) {
+  Bitfield plr_flags, prf_flags;
+
+  if (!does_player_exist(id)) {
+    return FALSE;
+  }
+
+  // Check if they're a dead hardcore char.
+  return get_plr_flag_is_set_by_idnum(PLR_JUST_DIED, id) && get_prf_flag_is_set_by_idnum(PRF_HARDCORE, id);
+}
+
 void DeleteChar(long idx)
 {
   /* Delete a character in such a way that it can be restored if desired. */
@@ -2199,10 +2210,18 @@ if (prior_data != (field)) {                                                    
 
 #define FORCE_PROTO_VALUE(itemtype, value, proto_value)                                                                \
 if (proto_value != value) {                                                                                            \
-  snprintf(buf, sizeof(buf), "INFO: System self-healed " #itemtype " %s (%ld), whose " #value  " was %d (becomes %d)", \
+  snprintf(buf, sizeof(buf), "INFO: System self-healed " #itemtype " %s (%ld), whose " #value " was %d (becomes %d)",  \
            GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), value, proto_value);                                                  \
   mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                                      \
   value = proto_value;                                                                                                 \
+}
+
+#define FORCE_PROTO_VALUE_INDEXED_BY_I(itemtype, value, proto_value)                                                        \
+if (proto_value != value) {                                                                                                 \
+  snprintf(buf, sizeof(buf), "INFO: System self-healed " #itemtype " %s (%ld), whose " #value " (%d) was %d (becomes %d)",  \
+           GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), i, value, proto_value);                                                    \
+  mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);                                                                           \
+  value = proto_value;                                                                                                      \
 }
 
 void auto_repair_obj(struct obj_data *obj) {
@@ -2265,7 +2284,7 @@ void auto_repair_obj(struct obj_data *obj) {
     case ITEM_MOD:
       // Mods don't ever get changed, so we clamp them aggressively.
       for (int i = 0; i < NUM_VALUES; i++) {
-        FORCE_PROTO_VALUE("vehicle mod", GET_OBJ_VAL(obj, i), GET_OBJ_VAL(&obj_proto[rnum], i));
+        FORCE_PROTO_VALUE_INDEXED_BY_I("vehicle mod", GET_OBJ_VAL(obj, i), GET_OBJ_VAL(&obj_proto[rnum], i));
       }
       break;
     case ITEM_WEAPON:
@@ -2392,6 +2411,7 @@ void auto_repair_obj(struct obj_data *obj) {
 }
 #undef CLAMP_VALUE
 #undef FORCE_PROTO_VALUE
+#undef FORCE_PROTO_VALUE_INDEXED_BY_I
 
 // Allows you to supply an email address.
 ACMD(do_register) {

@@ -56,11 +56,12 @@ int     stage(int successes, int wound);
 bool    access_level(struct char_data *ch, int level);
 char *  buf_mod(char *buf, size_t buf_len, const char *name, int bonus);
 char *  buf_roll(char *buf, size_t buf_len, const char *name, int bonus);
-int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int rbuf_len, int current_visibility_penalty, bool skill_is_magic);
-int     modify_target_rbuf(struct char_data *ch, char *rbuf, int rbuf_len);
+int     modify_target_rbuf_magical(struct char_data *ch, char *rbuf, size_t rbuf_len);
+int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, int current_visibility_penalty, bool skill_is_magic, char *mb=NULL, size_t mb_len=0);
+int     modify_target_rbuf(struct char_data *ch, char *rbuf, size_t rbuf_len);
 int     modify_target(struct char_data *ch);
-int     damage_modifier(struct char_data *ch, char *rbuf, int rbuf_len);
-int     sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool minus_one_sustained=0);
+int     damage_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, char *mb=NULL, size_t mb_len=0);
+int     sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool minus_one_sustained=0, char *mb=NULL, size_t mb_len=0);
 int     roll_default_initiative(struct char_data *ch);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
@@ -69,7 +70,7 @@ char *  string_to_lowercase(const char *source);
 int     get_speed(struct veh_data *veh);
 int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy, bool include_metavariant_penalty=1);
 float   gen_size(int race, bool height, int size, int pronouns);
-int     get_skill(struct char_data *ch, int skill, int &target);
+int     get_skill(struct char_data *ch, int skill, int &target, char *mb=NULL, size_t mb_len=0);
 void    add_follower(struct char_data *ch, struct char_data *leader);
 int     light_level(struct room_data *room);
 bool    biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch);
@@ -142,6 +143,7 @@ void    render_targets_abilities_to_viewer(struct char_data *viewer, struct char
 void    mob_say(struct char_data *mob, const char *msg);
 const char *get_room_desc(struct room_data *room);
 bool    string_is_valid_for_paths(const char *str);
+bool    obj_is_a_vehicle_title(struct obj_data *obj);
 
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);
@@ -959,12 +961,14 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_CHEMS_QTY(chems)                      (GET_OBJ_VAL((chems), 0))
 
 // ITEM_WORN convenience defines
-#define GET_WORN_POCKETS_HOLSTERS(worn)           (GET_OBJ_VAL((worn), 0))
-#define GET_WORN_POCKETS_MISC(worn)               (GET_OBJ_VAL((worn), 4))
-#define GET_WORN_BALLISTIC(worn)                  (GET_OBJ_VAL((worn), 5))
-#define GET_WORN_IMPACT(worn)                     (GET_OBJ_VAL((worn), 6))
-#define GET_WORN_CONCEAL_RATING(worn)             (GET_OBJ_VAL((worn), 7))
-#define GET_WORN_MATCHED_SET(worn)                (GET_OBJ_VAL((worn), 8))
+#define GET_WORN_POCKETS_HOLSTERS(worn)              (GET_OBJ_VAL((worn), 0))
+#define GET_WORN_POCKETS_MISC(worn)                  (GET_OBJ_VAL((worn), 4))
+#define GET_WORN_BALLISTIC(worn)                     (GET_OBJ_VAL((worn), 5))
+#define GET_WORN_IMPACT(worn)                        (GET_OBJ_VAL((worn), 6))
+#define GET_WORN_CONCEAL_RATING(worn)                (GET_OBJ_VAL((worn), 7))
+#define GET_WORN_MATCHED_SET(worn)                   (GET_OBJ_VAL((worn), 8))
+
+#define GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(worn) (GET_OBJ_VAL((worn), 11))
 
 // ITEM_OTHER convenience defines
 #define GET_VEHCONTAINER_VEH_VNUM(cont)           (GET_OBJ_VAL((cont), 1))
@@ -980,6 +984,10 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_RITUAL_TICKS_LEFT(components)         (GET_OBJ_VAL((components), 5))
 #define GET_RITUAL_TICKS_AT_START(components)     (GET_OBJ_VAL((components), 6))
 
+#define GET_POCKET_SECRETARY_LOCKED_BY(obj)       (GET_OBJ_VAL((obj), 1))
+
+#define GET_VEHICLE_TITLE_OWNER(title)            (GET_OBJ_VAL((obj), 0))
+
 // ITEM_MAGIC_TOOL convenience defines
 #define GET_MAGIC_TOOL_TYPE(tool)                 (GET_OBJ_VAL((tool), 0))
 #define GET_MAGIC_TOOL_RATING(tool)               (GET_OBJ_VAL((tool), 1))
@@ -992,9 +1000,14 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_DOCWAGON_BONDED_IDNUM(modulator)      (GET_OBJ_VAL((modulator), 1))
 
 // ITEM_CONTAINER convenience defines
+#define GET_CORPSE_IS_PC(corpse)                  (GET_OBJ_VAL((corpse), 4))
+#define GET_CORPSE_IDNUM(corpse)                  (GET_OBJ_VAL((corpse), 5))
 
 // ITEM_RADIO convenience defines
 #define GET_RADIO_CENTERED_FREQUENCY(radio)       (GET_OBJ_VAL((radio), 0))
+#define GET_RADIO_FREQ_RANGE(radio)               (GET_OBJ_VAL((radio), 1))
+#define GET_RADIO_MAX_CRYPT(radio)                (GET_OBJ_VAL((radio), 2))
+#define GET_RADIO_CURRENT_CRYPT(radio)            (GET_OBJ_VAL((radio), 3))
 
 // ITEM_DRINKCON convenience defines
 #define GET_DRINKCON_MAX_AMOUNT(cont)             (GET_OBJ_VAL((cont), 0))
@@ -1039,6 +1052,8 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_BIOWARE_PUMP_ADRENALINE(bioware)         (GET_OBJ_VAL((bioware), 5)) //Adrenaline in the Adrenaline Pump sack. Controls duration.
 #define GET_BIOWARE_PUMP_TEST_TN(bioware)            (GET_OBJ_VAL((bioware), 6)) //TN for Adrenaline Pump crash test, set when activating the pump the the value of GET_BIOWARE_PUMP_ADRENALINE()
 
+// Reflex Recorder extra data.
+#define GET_BIOWARE_REFLEXRECORDER_DATA(bioware)       (GET_OBJ_VAL((bioware), 5))
 
 // ITEM_FOUNTAIN convenience defines
 #define GET_FOUNTAIN_MAX_AMOUNT(cont)             (GET_OBJ_VAL((cont), 0))
@@ -1053,6 +1068,10 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERWARE_FLAGS(cyberware)            (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
 #define GET_CYBERWARE_LACING_TYPE(cyberware)      (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
 #define GET_CYBERWARE_ESSENCE_COST(cyberware)     (GET_OBJ_VAL((cyberware), 4))
+#define GET_CYBERWARE_RADIO_MAX_CRYPT(cyberware)  (GET_OBJ_VAL((cyberware), 5))
+#define GET_CYBERWARE_RADIO_FREQ(cyberware)       (GET_OBJ_VAL((cyberware), 6)) // Settable by player
+#define GET_CYBERWARE_RADIO_CRYPT(cyberware)      (GET_OBJ_VAL((cyberware), 7)) // Settable by player
+// Cyberware phones use 6, 7, and 8 for... stuff?
 #define GET_CYBERWARE_IS_DISABLED(cyberware)      (GET_OBJ_VAL((cyberware), 9))
 
 // ITEM_CYBERDECK convenience defines
@@ -1159,10 +1178,12 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_VEHICLE_MOD_MOUNT_TYPE(mod)                     (GET_OBJ_VAL((mod), 1))
 #define GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod)            (GET_OBJ_VAL((mod), 1)) // Yes, this is also value 1.
 #define GET_VEHICLE_MOD_RATING(mod)                         (GET_OBJ_VAL((mod), 2))
-#define GET_VEHICLE_MOD_RADIO_CRYPT(mod)                    (GET_OBJ_VAL((mod), 3))
+#define GET_VEHICLE_MOD_RADIO_MAX_CRYPT(mod)                (GET_OBJ_VAL((mod), 3))
 #define GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(mod)             (GET_OBJ_VAL((mod), 4))
 #define GET_VEHICLE_MOD_ENGINE_BITS(mod)                    (GET_OBJ_VAL((mod), 5))
 #define GET_VEHICLE_MOD_LOCATION(mod)                       (GET_OBJ_VAL((mod), 6))
+#define GET_VEHICLE_MOD_RADIO_FREQ(mod)                     (GET_OBJ_VAL((mod), 7)) // Settable by player
+#define GET_VEHICLE_MOD_RADIO_CRYPT(mod)                    (GET_OBJ_VAL((mod), 8)) // Settable by player
 
 // ITEM_HOLSTER convenience defines
 #define GET_HOLSTER_TYPE(holster)                           (GET_OBJ_VAL((holster), 0))

@@ -331,6 +331,34 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
   bool is_alarmed_racist = mob_is_aggressive(ch, FALSE) && GET_MOBALERT(ch) == MALERT_ALARM;
   bool is_racially_motivated = mob_is_aggressive_towards_race(ch, GET_RACE(vict));
 
+  bool dissuaded_by_hardened_armor = FALSE;
+
+  // Non-mages won't initiate against someone in hardened armor if they don't think they can breach it.
+  if (GET_MAG(ch) <= 0) {
+    struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+    int my_power = GET_STR(ch);
+    if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
+      if (WEAPON_IS_GUN(weapon)) {
+        my_power = GET_WEAPON_POWER(weapon);
+        if (weapon->contains && GET_OBJ_TYPE(weapon->contains) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_AMMO_TYPE(weapon->contains) == AMMO_APDS)
+          my_power *= 2;
+      } else {
+        my_power += GET_WEAPON_STR_BONUS(weapon);
+        weapon = NULL;
+      }
+    }
+    for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+      struct obj_data *armor = GET_EQ(vict, wear_idx);
+      if (armor && IS_OBJ_STAT(armor, ITEM_EXTRA_HARDENED_ARMOR)) {
+        if (my_power <= (weapon ? GET_WORN_BALLISTIC(armor) : GET_WORN_IMPACT(armor))) {
+          // Refuse to attack anyone whose armor we can't breach.
+          dissuaded_by_hardened_armor = TRUE;
+          break;
+        }
+      }
+    }
+  }
+
   if (is_aggressive || is_alarmed_guard || is_alarmed_racist || is_racially_motivated) {
 #ifdef MOBACT_DEBUG
     snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: Target found (conditions: %s/%s/%s/%s): %s.",
@@ -341,6 +369,14 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
              GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);
 #endif
+
+    if (dissuaded_by_hardened_armor) {
+#ifdef MOBACT_DEBUG
+      strlcpy(buf3, "...But I'm refusing to attack due to hardened armor.", sizeof(buf3));
+      do_say(ch, buf3, 0, 0);
+#endif
+      return FALSE;
+    }
     return TRUE;
   }
 
@@ -350,6 +386,13 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
     snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: I am alarmed, so %s is a valid aggro target.", GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);
 #endif
+    if (dissuaded_by_hardened_armor) {
+#ifdef MOBACT_DEBUG
+      strlcpy(buf3, "...But I'm refusing to attack due to hardened armor.", sizeof(buf3));
+      do_say(ch, buf3, 0, 0);
+#endif
+      return FALSE;
+    }
     return TRUE;
   }
 
@@ -373,7 +416,7 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
          "%s Who told you you could have %s here??",
          "%s I'm keeping %s for myself, just watch.",
          "%s %s?? What is that, your safety blanket? Shadows too scary for you?",
-/* 15 */ "%s If you think %s is going to make a difference here, you've got another think coming.",
+/* 15 */ "%s If you think %s is going to make a difference here, you've got another thin' coming.",
          "%s I'm gonna feed you %s!",
          "%s I'm gonna break %s off in your hoop!",
          "%s Frag off, and take %s with you!",
@@ -1561,7 +1604,6 @@ void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapo
   GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
 }
 
-ACMD_DECLARE(do_get);
 void mobile_activity(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);

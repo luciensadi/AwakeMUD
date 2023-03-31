@@ -64,7 +64,7 @@ extern const char *mod_name[NUM_MODS];
 extern const char *engine_types[6];
 extern const char *veh_aff[];
 extern const char *veh_flag[];
-extern const char *jurid[];
+extern const char *jurisdictions[];
 extern const char *host_type[];
 extern const char *host_color[5];
 extern const char *intrusion[3];

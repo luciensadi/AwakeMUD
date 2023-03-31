@@ -761,10 +761,12 @@ bool check_quest_kill(struct char_data *ch, struct char_data *victim)
     return FALSE;
   }
 
+  struct char_data *original_ch = ch->desc && ch->desc->original ? ch->desc->original : ch;
+
   if (IS_NPC(ch) || !IS_NPC(victim))
     return FALSE;
 
-  if (_raw_check_quest_kill(ch, victim))
+  if (_raw_check_quest_kill(original_ch, victim))
     return TRUE;
 
   if (AFF_FLAGGED(ch, AFF_GROUP)) {
@@ -781,6 +783,25 @@ bool check_quest_kill(struct char_data *ch, struct char_data *victim)
     // Master
     if (ch->master && !IS_NPC(ch->master) && _raw_check_quest_kill(ch->master, victim)) {
       return TRUE;
+    }
+  }
+
+  if (original_ch != ch) {
+    if (AFF_FLAGGED(original_ch, AFF_GROUP)) {
+      // Followers
+      for (struct follow_type *f = original_ch->followers; f; f = f->next) {
+        if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
+          continue;
+
+        if (_raw_check_quest_kill(f->follower, victim)) {
+          return TRUE;
+        }
+      }
+
+      // Master
+      if (original_ch->master && !IS_NPC(original_ch->master) && _raw_check_quest_kill(original_ch->master, victim)) {
+        return TRUE;
+      }
     }
   }
 
