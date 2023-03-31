@@ -382,7 +382,6 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (CH_IN_COMBAT(ch))
     return;
 
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
   char warnbuf[5000];
   if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
     snprintf(warnbuf, sizeof(warnbuf), "WARNING: Entered set_fighting with vict %s ignoring attacker %s!", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
@@ -395,7 +394,6 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     mudlog(warnbuf, ch, LOG_SYSLOG, TRUE);
     return;
   }
-#endif
 
   // Check to see if they're already in the combat list.
   bool already_there = FALSE;
@@ -2887,13 +2885,11 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
       return false;
 
   } else {
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
   if (IS_IGNORING(victim, is_blocking_ic_interaction_from, ch))
     return FALSE;
 
   if (IS_IGNORING(ch, is_blocking_ic_interaction_from, victim))
     return FALSE;
-#endif
 
     // Known ignored edge case: if the player is not a killer but would become a killer because of this action.
     if (ch != victim && would_become_killer(ch, victim))
@@ -2984,7 +2980,6 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
 
   if (victim != ch)
   {
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
     if (ch != victim && IS_IGNORING(victim, is_blocking_ic_interaction_from, ch)) {
       char oopsbuf[5000];
       snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the victim ignoring the attacker! "
@@ -3004,7 +2999,6 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
       return 0;
     }
-#endif
 
     if (GET_POS(ch) > POS_STUNNED && attacktype < TYPE_SUFFERING) {
       if (!FIGHTING(ch) && !ch->in_veh)
@@ -5428,7 +5422,6 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         return;
       }
 
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
       if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
         send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
         log_attempt_to_bypass_ic_ignore(ch, vict, "range_combat");
@@ -5439,7 +5432,6 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         send_to_char("You can't attack someone you're ignoring.\r\n", ch);
         return;
       }
-#endif
     }
     else if (npc_is_protected_by_spec(vict)) {
       send_to_char("You can't attack protected NPCs like that.\r\n", ch);

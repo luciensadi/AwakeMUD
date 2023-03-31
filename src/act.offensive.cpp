@@ -79,7 +79,6 @@ ACMD(do_assist)
     else if (!CAN_SEE(ch, opponent))
       act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
     else {
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
       if (IS_IGNORING(opponent, is_blocking_ic_interaction_from, ch)) {
         act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
         log_attempt_to_bypass_ic_ignore(ch, opponent, "do_assist");
@@ -90,7 +89,6 @@ ACMD(do_assist)
         send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
         return;
       }
-#endif
       send_to_char("You join the fight!\r\n", ch);
       act("$N assists you!", FALSE, helpee, 0, ch, TO_CHAR);
       act("$n assists $N.", FALSE, ch, 0, helpee, TO_NOTVICT);
@@ -391,7 +389,6 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       return TRUE;
     }
 
-#ifdef IGNORING_IC_ALSO_IGNORES_COMBAT
     if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
       send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
       log_attempt_to_bypass_ic_ignore(ch, vict, "perform_hit");
@@ -402,7 +399,6 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
       return TRUE;
     }
-#endif
 
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       find_and_draw_weapon(ch);
