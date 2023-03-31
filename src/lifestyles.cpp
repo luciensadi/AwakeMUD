@@ -53,16 +53,19 @@ STRETCH:
 
 */
 
+/////// CODE TODOS
 // TODO: Add DB entry for lifestyle string, ensure it's loaded / saved properly.
-
-// TODO: Fill out garage strings for Low, High, Luxury lifestyles in json file.
-// TODO: Poll playerbase to collect more lifestyle strings.
 
 // TODO: Add audit command to check for complexes / apartments with rents out of lifestyle bounds
 
 // TODO: Give a health regen bonus based on your lifestyle (better food, living conditions, etc)
+// TODO: Add shop bonus for etiquettes of different lifestyles
 
-// TODO: Add cedit parsing code to let players select from all available lifestyles
+// TODO: Add cedit (cust phys) parsing code to let players select from all available lifestyles
+
+/////// CONTENT TODOS
+// TODO: Fill out garage strings for Low, High, Luxury lifestyles in json file.
+// TODO: Poll playerbase to collect more lifestyle strings.
 
 extern void _json_parse_from_file(bf::path path, json &target);
 

@@ -81,6 +81,7 @@ CREATE TABLE `pfiles` (
   `highlight` varchar(15) default '^n',
   `email` varchar(200),
   `multiplier` smallint(5) unsigned default 100,
+  `lifestyle_string` varchar(200) default 'The metallic scent of the Neophyte Guild clings to $m.',
   PRIMARY KEY (`idnum`),
   KEY (`name`)
 );

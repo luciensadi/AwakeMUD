@@ -538,6 +538,7 @@ void boot_world(void)
   require_that_field_exists_in_table("anti-vehicle", "pfiles_ammo", "SQL/Migrations/add_harmless_and_anti_vehicle.sql");
   require_that_field_exists_in_table("Duration", "pfiles_drugs", "SQL/Migrations/drug_overhaul.sql");
   require_that_field_meets_constraints("LastFix", "pfiles_drugs", "SQL/Migrations/lastfix_bigint.sql", 12, "bigint", TRUE);
+  require_that_field_exists_in_table("lifestyle_string", "pfiles", "SQL/Migrations/lifestyles.sql");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
