@@ -2748,6 +2748,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^c%s^n", first_mode ? "" : ",", fire_mode[mode]);
               first_mode = FALSE;
             }
+          if (!first_mode && PRF_FLAGGED(ch, PRF_SEE_TIPS))
+            strlcat(buf, "  (see ##^WHELP MODE^n)", sizeof(buf));
           strlcat(buf, "\r\n", sizeof(buf));
         }
 
