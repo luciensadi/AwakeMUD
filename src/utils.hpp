@@ -141,6 +141,7 @@ bool    char_is_in_social_room(struct char_data *ch);
 bool    is_custom_ware(struct obj_data *ware);
 void    render_targets_abilities_to_viewer(struct char_data *viewer, struct char_data *vict);
 bool    obj_is_a_vehicle_title(struct obj_data *obj);
+bool    can_perform_aggressive_action(struct char_data *actor, struct char_data *victim, const char *calling_func_name, bool send_message);
 
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);

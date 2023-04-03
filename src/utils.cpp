@@ -44,6 +44,7 @@
 #include "bullet_pants.hpp"
 #include "invis_resistance_tests.hpp"
 #include "vision_overhaul.hpp"
+#include "ignore_system.hpp"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -5708,32 +5709,122 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *
 
 // Is the specified object a vehicle title?
 bool obj_is_a_vehicle_title(struct obj_data *obj) {
-    switch (GET_OBJ_VNUM(obj)) {
-      case OBJ_TITLE_TO_AMERICAR        :
-      case OBJ_TITLE_TO_SCORPION        :
-      case OBJ_TITLE_TO_JACKRABBIT      :
-      case OBJ_TITLE_TO_RUNABOUT        :
-      case OBJ_TITLE_TO_RAPIER          :
-      case OBJ_TITLE_TO_BISON           :
-      case OBJ_TITLE_TO_WESTWIND        :
-      case OBJ_TITLE_TO_DOBERMAN        :
-      case OBJ_TITLE_TO_SNOOPER         :
-      case OBJ_TITLE_TO_SURVEILLANCE    :
-      case OBJ_TITLE_TO_ROTODRONE       :
-      case OBJ_TITLE_TO_DALMATION       :
-      case OBJ_TITLE_TO_SUPERCOMBI_RV   :
-      case OBJ_TITLE_TO_NOMAD_SUV       :
-      case OBJ_TITLE_TO_BRUMBY_SUV      :
-      case OBJ_TITLE_TO_GOPHER_PICKUP   :
-      case OBJ_TITLE_TO_TRANSPORT_PICKUP:
-      case OBJ_TITLE_TO_GMC_4201        :
-      case OBJ_TITLE_TO_GMC_BULLDOG     :
-      case OBJ_TITLE_TO_ARES_ROADMASTER :
-      case OBJ_TITLE_TO_WHITE_EAGLE_BIKE:
-        return TRUE;
+  switch (GET_OBJ_VNUM(obj)) {
+    case OBJ_TITLE_TO_AMERICAR        :
+    case OBJ_TITLE_TO_SCORPION        :
+    case OBJ_TITLE_TO_JACKRABBIT      :
+    case OBJ_TITLE_TO_RUNABOUT        :
+    case OBJ_TITLE_TO_RAPIER          :
+    case OBJ_TITLE_TO_BISON           :
+    case OBJ_TITLE_TO_WESTWIND        :
+    case OBJ_TITLE_TO_DOBERMAN        :
+    case OBJ_TITLE_TO_SNOOPER         :
+    case OBJ_TITLE_TO_SURVEILLANCE    :
+    case OBJ_TITLE_TO_ROTODRONE       :
+    case OBJ_TITLE_TO_DALMATION       :
+    case OBJ_TITLE_TO_SUPERCOMBI_RV   :
+    case OBJ_TITLE_TO_NOMAD_SUV       :
+    case OBJ_TITLE_TO_BRUMBY_SUV      :
+    case OBJ_TITLE_TO_GOPHER_PICKUP   :
+    case OBJ_TITLE_TO_TRANSPORT_PICKUP:
+    case OBJ_TITLE_TO_GMC_4201        :
+    case OBJ_TITLE_TO_GMC_BULLDOG     :
+    case OBJ_TITLE_TO_ARES_ROADMASTER :
+    case OBJ_TITLE_TO_WHITE_EAGLE_BIKE:
+      return TRUE;
+  }
+  return FALSE;
+}
+
+#define FALSE_CASE(condition, ...) {                   \
+  if ((condition)) {                                   \
+    if ((actor)) {                                     \
+      send_to_char((actor), __VA_ARGS__);              \
+    }                                                  \
+    return FALSE;                                      \
+  }                                                    \
+}
+
+#define TRUE_CASE(condition) { if ((condition)) { return TRUE; } }
+
+bool can_perform_aggressive_action(struct char_data *actor, struct char_data *victim, const char *calling_func_name, bool send_message) {
+  if (!actor || !victim) {
+    if (actor) {
+      send_to_char("You don't see anyone by that name here.\r\n", actor);
     }
+
+    mudlog_vfprintf(actor, LOG_SYSLOG, "SYSERR: Received actor=%s, victim=%s to can_perform_aggressive_action() from %s!", 
+                    actor ? GET_CHAR_NAME(actor) : "NULL", 
+                    victim ? GET_CHAR_NAME(victim) : "NULL",
+                    calling_func_name);
     return FALSE;
   }
+
+  // Like Johnny Cash, you can always hurt yourself.
+  TRUE_CASE(actor == victim);
+
+  struct room_data *actor_in_room = get_ch_in_room(actor);
+  struct room_data *victim_in_room = get_ch_in_room(victim);
+
+  if (!actor_in_room || !victim_in_room) {
+    send_to_char("An error has occurred in aggressive-action check (error: no room). Please notify staff of what you were doing, and do NOT repeat this action.\r\n", actor);
+    mudlog_vfprintf(actor, LOG_SYSLOG, "SYSERR: A character passed to can_perform_aggressive_action() from %s has an invalid room! (%s = %s, %s = %s)",
+                    calling_func_name,
+                    GET_CHAR_NAME(actor),
+                    actor_in_room ? GET_ROOM_NAME(actor_in_room) : "NO ROOM",
+                    GET_CHAR_NAME(victim),
+                    victim_in_room ? GET_ROOM_NAME(victim_in_room) : "NO ROOM");
+    return FALSE;
+  }
+
+  // Peaceful flags stop aggressive actions.
+  FALSE_CASE(actor_in_room->peaceful || victim_in_room->peaceful, "You can't-- this is a peaceful area.\r\n");
+
+  // Compare astral states.
+  FALSE_CASE(IS_ASTRAL(actor) && !SEES_ASTRAL(victim), "You can't harm someone who isn't astrally active.\r\n");
+
+  if (IS_ASTRAL(victim) && !SEES_ASTRAL(actor)) {
+    mudlog_vfprintf(actor, LOG_SYSLOG, "SYSERR: Received astral victim and non-perceiving attacker to can_perform_aggressive_action from %s!", calling_func_name);
+    send_to_char("They are nothing but a figment of your imagination.\r\n", actor);
+    return FALSE;
+  }
+
+  // Aggressive actions can be done on NPCs.
+  if (IS_NPC(victim)) {
+    FALSE_CASE(npc_is_protected_by_spec(victim) || MOB_FLAGGED(victim, MOB_NOKILL), "You're not able to harm %s: they're protected by staff edict.\r\n", GET_CHAR_NAME(victim));
+
+    // If it's a projection or a possessing character, we bounce to their original for subsequent checks.
+    if (victim->desc && victim->desc->original) {
+      victim = victim->desc->original;
+      // fall through
+    }
+
+    // Otherwise, it's an unprotected NPC: Go for it.
+    else {
+      return TRUE;
+    }
+  }
+
+  // Check for ignores.
+  FALSE_CASE(IS_IGNORING(actor, is_blocking_ic_interaction_from, victim), "You can't harm someone you've blocked IC interaction with.\r\n");
+
+  if (IS_IGNORING(victim, is_blocking_ic_interaction_from, actor)) {
+    send_to_char("You don't see anyone by that name here.\r\n", actor);
+    log_attempt_to_bypass_ic_ignore(actor, victim, calling_func_name);
+    return FALSE;
+  }
+
+  // Arena flags bypass all PK checks.
+  TRUE_CASE(ROOM_FLAGGED(actor_in_room, ROOM_ARENA) && ROOM_FLAGGED(actor_in_room, ROOM_ARENA));
+
+  // PK flag checks: You must be flagged PK before you can attack anyone outside of an arena.
+  FALSE_CASE(!PRF_FLAGGED(actor, PRF_PKER), "You must ##^WTOGGLE PK^n before you can do that.\r\n");
+
+  // A victim is valid if they are a PKer or a KILLER (note that you must now be PKer yourself to attack a killer).
+  FALSE_CASE(!PRF_FLAGGED(victim, PRF_PKER) && !PRF_FLAGGED(victim, PLR_KILLER), "Your victim must ##^WTOGGLE PK^n before you can do that.\r\n");
+
+  return TRUE;
+}
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
