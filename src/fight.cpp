@@ -335,37 +335,6 @@ void increase_debris(struct room_data *rm)
   rm->debris= MIN(rm->debris + 1, 50);
 }
 
-
-void check_killer(struct char_data * ch, struct char_data * vict)
-{
-  char_data *attacker;
-  char buf[256];
-
-  if (IS_NPC(ch) && (ch->desc == NULL || ch->desc->original == NULL))
-    return;
-
-  if (!IS_NPC(ch))
-    attacker = ch;
-  else
-    attacker = ch->desc->original;
-
-  if (!IS_NPC(vict) &&
-      !PLR_FLAGS(vict).AreAnySet(PLR_KILLER, ENDBIT) &&
-      !(ROOM_FLAGGED(ch->in_room, ROOM_ARENA) && ROOM_FLAGGED(vict->in_room, ROOM_ARENA)) &&
-      (!PRF_FLAGGED(attacker, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)) &&
-      !PLR_FLAGGED(attacker, PLR_KILLER) && attacker != vict && !IS_SENATOR(attacker))
-  {
-    PLR_FLAGS(attacker).SetBit(PLR_KILLER);
-
-    snprintf(buf, sizeof(buf), "PC Killer bit set on %s for initiating attack on %s at %s.",
-            GET_CHAR_NAME(attacker),
-            GET_CHAR_NAME(vict), get_ch_in_room(vict)->name);
-    mudlog(buf, ch, LOG_MISCLOG, TRUE);
-
-    send_to_char(KILLER_FLAG_MESSAGE, ch);
-  }
-}
-
 /* start one char fighting another (yes, it is horrible, I know... )  */
 void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 {
@@ -438,7 +407,6 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
       AFF_FLAGS(ch).SetBit(AFF_APPROACH);
   }
 
-  check_killer(ch, vict);
   AFF_FLAGS(ch).RemoveBit(AFF_BANISH);
   AFF_FLAGS(vict).RemoveBit(AFF_BANISH);
 
@@ -3041,16 +3009,23 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       WAIT_STATE(victim, PULSE_VIOLENCE);
     }
 
-    if (attacktype == TYPE_SCATTERING && !IS_NPC(ch) && !IS_NPC(victim)) {
-      // Unless both chars are PK, or victim is KILLER, deal no damage and abort without flagging anyone as KILLER.
-      if (!(PLR_FLAGGED(victim, PLR_KILLER) || (PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(victim, PRF_PKER)))) {
-        dam = -1;
-        buf_mod(rbuf, sizeof(rbuf), "accidental", dam);
-      } else {
-        check_killer(ch, victim);
+    if (!can_perform_aggressive_action(ch, victim, "raw_damage", FALSE)) {
+      switch (attacktype) {
+        case TYPE_SCATTERING:
+          // Silently negate scattering damage for invalid PC targets.
+          if (!IS_NPC(ch) && !IS_NPC(victim)) {
+            dam = -1;
+            buf_mod(rbuf, sizeof(rbuf), "accidental", dam);
+          }
+          break;
+        case TYPE_MEDICAL_MISHAP:
+          break;
+        default:
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s damaged %s with type %d, which would have triggered a killer flag if that logic still existed!",
+                          GET_CHAR_NAME(ch),
+                          GET_CHAR_NAME(victim),
+                          attacktype);
       }
-    } else if (attacktype != TYPE_MEDICAL_MISHAP) {
-      check_killer(ch, victim);
     }
 
     if (PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(victim))
@@ -3768,7 +3743,6 @@ int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyrom
 
 bool astral_fight(struct char_data *ch, struct char_data *vict)
 {
-  char oopsbuf[1000];
   int w_type, dam, power, attack_success, newskill, skill_total, base_target;
   bool focus = FALSE, is_physical;
 
@@ -3776,8 +3750,7 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
     stop_fighting(ch);
     if (FIGHTING(vict) == ch)
       stop_fighting(vict);
-    snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Entered astral_fight with %s and %s who are not in the same room.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
-    mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Entered astral_fight with %s and %s who are not in the same room.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
     send_to_char("You struggle to figure out how to attack astral targets at range.\r\n", ch);
     return FALSE;
   }
@@ -3786,6 +3759,16 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
   {
     mudlog("SYSERR: Attempt to damage a corpse.", ch, LOG_SYSLOG, TRUE);
     return FALSE;                     /* -je, 7/7/92 */
+  }
+
+  if (!can_perform_aggressive_action(ch, vict, "astral_fight", TRUE)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Hit aggressive action failure case (%s vs %s) in astral_fight where we should have already passed all checks!",
+                    GET_CHAR_NAME(ch),
+                    GET_CHAR_NAME(vict));
+    stop_fighting(ch);
+    if (FIGHTING(vict) == ch)
+      stop_fighting(vict);
+    return FALSE;
   }
 
   snprintf(buf3, sizeof(buf3), "^WWelcome to the ancient-ass astral_fight()! Featuring: %s vs %s.^n", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
@@ -3807,18 +3790,6 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
     wielded = NULL;
     // stop_fighting(ch);
     // return;
-  }
-
-  if (IS_PROJECT(ch) && (ch != vict) && !IS_NPC(vict) && SEES_ASTRAL(vict) &&
-      !PLR_FLAGGED(vict, PLR_KILLER) && !PLR_FLAGGED(vict,PLR_WANTED) &&
-      (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)) &&
-      !PLR_FLAGGED(ch->desc->original, PLR_KILLER))
-  {
-    PLR_FLAGS(ch->desc->original).SetBit(PLR_KILLER);
-    snprintf(buf, sizeof(buf), "PC Killer bit set on %s (astral) for initiating attack on %s at %s.",
-            GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), GET_ROOM_NAME(get_ch_in_room(vict)));
-    mudlog(buf, ch, LOG_MISCLOG, TRUE);
-    send_to_char("If you want to be a PLAYER KILLER, so be it...\r\n", ch);
   }
 
   if (wielded) {
@@ -4947,7 +4918,7 @@ void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, st
 
   extract_obj(weapon);
 
-  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || GET_APARTMENT(room)) {
+  if (room->peaceful || GET_APARTMENT(room)) {
     mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got an explosive grenade into an invalid room!", GET_CHAR_NAME(ch));
     return;
   }
@@ -5027,7 +4998,7 @@ void explode_flashbang_grenade(struct char_data *ch, struct obj_data *weapon, st
 
   extract_obj(weapon);
 
-  if (ROOM_FLAGGED(room, ROOM_PEACEFUL) || GET_APARTMENT(room)) {
+  if (room->peaceful || GET_APARTMENT(room)) {
     mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got a flashbang grenade into an invalid room!", GET_CHAR_NAME(ch));
     return;
   }
@@ -5410,39 +5381,14 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       return;
     }
 
-    if (!IS_NPC(vict)) {
-      struct room_data *ch_in_room = get_ch_in_room(ch), *vict_in_room = get_ch_in_room(vict);
-      // PC vs PC: Both must be PK, AND/OR both must be standing in an arena.
-      if (!IS_NPC(ch)
-          && !(PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER))
-          && !(ROOM_FLAGGED(ch_in_room, ROOM_ARENA) && ROOM_FLAGGED(vict_in_room, ROOM_ARENA)))
-      {
-        send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
+    if (!can_perform_aggressive_action(ch, vict, "range_combat", TRUE))
         return;
-      }
-
-      if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
-        send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
-        log_attempt_to_bypass_ic_ignore(ch, vict, "range_combat");
-        return;
-      }
-
-      if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
-        send_to_char("You can't attack someone you're ignoring.\r\n", ch);
-        return;
-      }
-    }
-    else if (npc_is_protected_by_spec(vict)) {
-      send_to_char("You can't attack protected NPCs like that.\r\n", ch);
-      return;
-    }
 
     SHOOTING_DIR(ch) = dir;
 
     if (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON) {
       act("$n draws $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
       act("You draw $p, aim it at $N and fire!", FALSE, ch, weapon, vict, TO_CHAR);
-      check_killer(ch, vict);
       if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
         GET_DEFENSE(vict) = GET_COMBAT(vict);
         GET_OFFENSE(vict) = 0;
@@ -5461,7 +5407,6 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     act("$n aims $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
     act("You aim $p at $N and fire!", FALSE, ch, weapon, vict, TO_CHAR);
     if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
-      check_killer(ch, vict);
       if (GET_WEAPON_ATTACK_TYPE(weapon) < TYPE_PISTOL || has_ammo_no_deduct(ch, weapon)) {
         if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
           GET_DEFENSE(vict) = GET_COMBAT(vict);

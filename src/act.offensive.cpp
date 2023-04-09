@@ -376,29 +376,8 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         FALSE, ch, 0, vict, TO_CHAR);
   else
   {
-    if (IS_ASTRAL(ch) && !SEES_ASTRAL(vict)) {
-      send_to_char("You can't attack someone who isn't astrally active.\r\n", ch);
+    if (!can_perform_aggressive_action(ch, vict, "perform_hit", TRUE))
       return TRUE;
-    }
-    if (IS_ASTRAL(vict) && !SEES_ASTRAL(ch)) {
-      send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
-      return TRUE;
-    }
-    if (!IS_NPC(ch) && !IS_NPC(vict) && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER))) {
-      send_to_char("You and your opponent must both be toggled PK for that.\r\n", ch);
-      return TRUE;
-    }
-
-    if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
-      send_to_char("They are nothing but a figment of your imagination.\r\n", ch);
-      log_attempt_to_bypass_ic_ignore(ch, vict, "perform_hit");
-      return TRUE;
-    }
-
-    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, vict)) {
-      send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
-      return TRUE;
-    }
 
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       find_and_draw_weapon(ch);

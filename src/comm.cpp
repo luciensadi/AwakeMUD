@@ -3378,14 +3378,15 @@ void increase_congregation_bonus_pools() {
       continue;
     }
 
-    int occupants = 1, total_occupants = 1;
+    int occupants = 1;
+    // int total_occupants = 1;
 
     // Two iterations over the room. First, if you're not an NPC and not idle, you proceed to second check.
     for (struct char_data *tempch = i->in_room->people; tempch; tempch = tempch->next_in_room) {
       if (tempch == i || !ch_is_eligible_to_receive_socialization_bonus(tempch))
         continue;
 
-      total_occupants++;
+      // total_occupants++;
 
       // Second, if your host does not match anyone else's host, you count as an occupant.
       // Disabled this code for now since grapevine is a thing. It's still against the rules, we just don't check it here.

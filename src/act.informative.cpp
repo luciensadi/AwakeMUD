@@ -2751,6 +2751,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ^c%s^n", first_mode ? "" : ",", fire_mode[mode]);
               first_mode = FALSE;
             }
+          if (!first_mode && PRF_FLAGGED(ch, PRF_SEE_TIPS))
+            strlcat(buf, "  (see ##^WHELP MODE^n)", sizeof(buf));
           strlcat(buf, "\r\n", sizeof(buf));
         }
 
@@ -7080,7 +7082,7 @@ ACMD(do_status)
 
   if (GET_MAG(targ) > 0) {
     send_to_char("\r\n", ch);
-    int force = 0, total = 0;
+    int force = 0;
     struct obj_data *focus;
     for (int x = 0; x < NUM_WEARS; x++) {
       if (!(focus = GET_EQ(targ, x)))
@@ -7088,12 +7090,10 @@ ACMD(do_status)
 
       if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(targ) && GET_FOCUS_ACTIVATED(focus)) {
         force += GET_FOCUS_FORCE(focus);
-        total++;
       }
 
       else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && WEAPON_FOCUS_USABLE_BY(focus, targ)) {
         force += GET_WEAPON_FOCUS_RATING(focus);
-        total++;
       }
     }
     if (force == 0) {
