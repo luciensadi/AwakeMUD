@@ -1432,6 +1432,10 @@ int get_push_command_index() {
 }
 
 bool check_sentinel_snap_back(struct char_data *ch) {
+  // Don't snap back if you're a quest-loaded target.
+  if (GET_MOB_QUEST_CHAR_ID(ch))
+    return FALSE;
+
   if (MOB_FLAGGED(ch, MOB_SENTINEL) && ch->mob_loaded_in_room && (!ch->in_room || GET_ROOM_VNUM(ch->in_room) != ch->mob_loaded_in_room)) {
     rnum_t room_rnum = real_room(ch->mob_loaded_in_room);
 
