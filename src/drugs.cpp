@@ -886,12 +886,12 @@ bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental,
     dice = GET_REAL_WIL(ch);
     base_addiction_rating = drug_types[drug_id].mental_addiction_rating;
     if (guided_withdrawal_modifier)
-      base_addiction_rating += 1;
+      base_addiction_rating -= 1;
   } else {
     dice = GET_REAL_BOD(ch) + (GET_RACE(ch) == RACE_DWARF ? 2 : 0);
     base_addiction_rating = drug_types[drug_id].physical_addiction_rating;
     if (guided_withdrawal_modifier)
-      base_addiction_rating += 3;
+      base_addiction_rating -= 3;
   }
 
   // Being trapped in a drug addiction loop is not fun, so we cap the TN here.
