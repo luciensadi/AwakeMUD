@@ -169,7 +169,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
       GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_COMEDOWN;
 
       // Apply comedown durations and instant effects (damage etc).
-      int bod_for_success_test = GET_REAL_BOD(ch) - (GET_BIOOVER(ch) / 2);
+      int bod_for_success_test = GET_REAL_BOD(ch) - ((GET_BIOOVER(ch) + 1) / 2);
       switch (drug_id) {
         case DRUG_JAZZ:
           GET_DRUG_DURATION(ch, drug_id) = 100 * dice(1,6);
@@ -268,7 +268,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
         }
 
         // How many successes did we roll to stage down the damage?
-        int resist_test_successes = success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) / 2), power, ch, "onset damage resist");
+        int resist_test_successes = success_test(GET_REAL_BOD(ch) - ((GET_BIOOVER(ch) + 1) / 2), power, ch, "onset damage resist");
 
         // Calculate the boxes of damage to apply.
         damage_boxes = convert_damage(stage(-resist_test_successes, damage_level));
