@@ -3720,7 +3720,7 @@ const char *traffic_messages[] = {
   "A sleek ^rred^n roto-drone zips past.\r\n",
   "A crumpled-up plastic bag skitters past, carried by the wind.\r\n",
   "A poised and confident executive strides past, talking on her phone.\r\n",
-  "An annoying-ass teen on a scooter does a drive-by on you with a squirt gun.\r\n",
+  "A subdued-looking teen on a scooter whizzes by on his way to class.\r\n",
   "A billboard nearby flickers with an ad for ^RChernobyl Vodka^n.\r\n", // 40
   "A billboard nearby displays an ad for ^rBrimstone ^RRed^n Ale^n.\r\n",
   "The greasy scent of fast food is carried to you on the breeze.\r\n"
