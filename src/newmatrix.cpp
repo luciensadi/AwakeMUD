@@ -1520,7 +1520,8 @@ ACMD(do_analyze)
   if (is_abbrev(arg, "host")) {
     success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
     if (success > 0) {
-      send_to_icon(PERSONA, "You analyze the host.\r\n");
+      snprintf(buf, sizeof(buf), "You analyze the ^W%s^n host.\r\n", host_type[matrix[PERSONA->in_host].type]);
+      send_to_icon(PERSONA, buf);
       int found[] = { 0, 0, 0, 0, 0, 0, 0};
       if (success < 7) {
         for (int current;success; success--) {
