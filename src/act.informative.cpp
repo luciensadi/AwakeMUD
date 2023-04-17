@@ -5888,6 +5888,11 @@ void perform_mortal_where(struct char_data * ch, char *arg)
       if (IS_IGNORING(i, is_blocking_where_visibility_for, ch) || !CAN_SEE(ch, i))
         continue;
 
+      // Skip them if they've not acted in the last 30 minutes or are flagged AFK. 
+      // (Note: No need to check descriptor here, we iterated descriptors to find this record.)
+      if (i->char_specials.timer >= 30 || PRF_FLAGGED(i, PRF_AFK))
+        continue;
+
       // They're a valid target-- emplace them.
       if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
         (room_iterator->second).push_back(i);
@@ -5899,7 +5904,7 @@ void perform_mortal_where(struct char_data * ch, char *arg)
   }
 
   if (occupied_rooms.empty()) {
-    send_to_char("Nobody's in a socialization room right now. Why not go find one?\r\n", ch);
+    send_to_char("Nobody's active in a socialization room right now. Why not go start something?\r\n", ch);
     return;
   } else {
     send_to_char("There are people RPing in these rooms:\r\n", ch);
