@@ -38,7 +38,7 @@ bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, 
 bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch);
 bool _drug_dose_exceeds_tolerance(struct char_data *ch, int drug_id);
 bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier);
-bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *test_identifier, bool is_guided_withdrawal_check=FALSE);
+bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *test_identifier, bool is_starting_guided_withdrawal_check=FALSE);
 int _seek_drugs_purchase_cost(struct char_data *ch, int drug_id);
 bool seek_drugs(struct char_data *ch, int drug_id);
 void update_withdrawal_flags(struct char_data *ch);
@@ -878,24 +878,28 @@ bool _drug_dose_exceeds_tolerance(struct char_data *ch, int drug_id) {
 }
 
 // Perform a test against mental or physical ratings.
-bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier, bool guided_withdrawal_modifier) {
+bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier, bool starting_guided_withdrawal_modifier) {
   int dice, base_addiction_rating;
 
   // M&M p108: Use unaugmented wil or body for these tests.
   if (is_mental) {
     dice = GET_REAL_WIL(ch);
     base_addiction_rating = drug_types[drug_id].mental_addiction_rating;
-    if (guided_withdrawal_modifier)
+    if (starting_guided_withdrawal_modifier)
       base_addiction_rating += 1;
   } else {
     dice = GET_REAL_BOD(ch) + (GET_RACE(ch) == RACE_DWARF ? 2 : 0);
     base_addiction_rating = drug_types[drug_id].physical_addiction_rating;
-    if (guided_withdrawal_modifier)
+    if (starting_guided_withdrawal_modifier)
       base_addiction_rating += 3;
   }
 
+  // House rule: If you're using chems for guided withdrawal, your TN is slightly reduced.
+  if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL)
+    tn = MAX(2, tn - 1);
+
   // Being trapped in a drug addiction loop is not fun, so we cap the TN here.
-  int tn = MIN(MAX_ADDICTION_TEST_DIFFICULTY, base_addiction_rating + GET_DRUG_ADDICTION_EDGE(ch, drug_id));
+  int tn = MAX(2, MIN(MAX_ADDICTION_TEST_DIFFICULTY, base_addiction_rating + GET_DRUG_ADDICTION_EDGE(ch, drug_id)));
 
   int num_successes = success_test(dice, tn, ch, "specific addiction test");
   bool addiction_passed = (num_successes > 0);
@@ -918,9 +922,9 @@ bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental,
   return addiction_passed;
 }
 
-bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *test_identifier, bool is_guided_withdrawal_check) {
-  return    _specific_addiction_test(ch, drug_id, FALSE, test_identifier, is_guided_withdrawal_check)
-         && _specific_addiction_test(ch, drug_id, TRUE, test_identifier, is_guided_withdrawal_check);
+bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *test_identifier, bool is_starting_guided_withdrawal_check) {
+  return    _specific_addiction_test(ch, drug_id, FALSE, test_identifier, is_starting_guided_withdrawal_check)
+         && _specific_addiction_test(ch, drug_id, TRUE, test_identifier, is_starting_guided_withdrawal_check);
 }
 
 struct room_data *_get_random_drug_seller_room() {
