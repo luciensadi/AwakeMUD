@@ -610,19 +610,37 @@ ACMD(do_put)
   }
 
   // Combine cyberdeck parts/chips, or combine summoning materials.
-  if ((GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cont, 0) == TYPE_PARTS) ||
-             (GET_OBJ_TYPE(cont) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(cont, 0) == TYPE_SUMMONING)) {
-    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)))
-      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
-    else if (obj == cont)
-      send_to_char(ch, "You cannot combine %s with itself.\r\n", GET_OBJ_NAME(obj));
-    else if (GET_OBJ_TYPE(cont) != GET_OBJ_TYPE(obj) || GET_OBJ_VAL(obj, 0) != GET_OBJ_VAL(cont, 0))
-      send_to_char(ch, "You cannot combine %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
-    else {
-      GET_OBJ_COST(cont) += GET_OBJ_COST(obj);
-      send_to_char(ch, "You combine %s and %s.\r\n", GET_OBJ_NAME(cont), GET_OBJ_NAME(obj));
-      extract_obj(obj);
+  if ((GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cont) == TYPE_PARTS) ||
+      (GET_OBJ_TYPE(cont) == ITEM_MAGIC_TOOL && GET_MAGIC_TOOL_TYPE(cont) == TYPE_SUMMONING)) 
+  {
+    // Find the object.
+    FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)), "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
+
+    // Not the same object as container.
+    FAILURE_CASE_PRINTF(obj == cont, "You cannot combine %s with itself.\r\n", GET_OBJ_NAME(obj));
+
+    // Must match types.
+    FAILURE_CASE_PRINTF(GET_OBJ_TYPE(cont) != GET_OBJ_TYPE(obj), "You cannot combine %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+
+    // Must match subtypes.
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_DECK_ACCESSORY:
+        FAILURE_CASE_PRINTF(GET_DECK_ACCESSORY_TYPE(obj) != GET_DECK_ACCESSORY_TYPE(cont) || GET_DECK_ACCESSORY_IS_CHIPS(obj) != GET_DECK_ACCESSORY_IS_CHIPS(cont), 
+                            "You cannot combine %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+        break;
+      case ITEM_MAGIC_TOOL:
+        FAILURE_CASE_PRINTF(GET_MAGIC_TOOL_TYPE(obj) != GET_MAGIC_TOOL_TYPE(cont), 
+                            "You cannot combine %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+        break;
+      default:
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received unknown type %d to part/chip/material combine switch case.", GET_OBJ_TYPE(obj));
+        return;
     }
+    
+    // All preconditions passed: Add value, then extract.
+    GET_OBJ_COST(cont) += GET_OBJ_COST(obj);
+    send_to_char(ch, "You dump the contents of %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+    extract_obj(obj);
     return;
   }
 
