@@ -894,12 +894,12 @@ bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental,
       base_addiction_rating += 3;
   }
 
+  // Being trapped in a drug addiction loop is not fun, so we cap the TN here.
+  int tn = MAX(2, MIN(MAX_ADDICTION_TEST_DIFFICULTY, base_addiction_rating + GET_DRUG_ADDICTION_EDGE(ch, drug_id)));
+
   // House rule: If you're using chems for guided withdrawal, your TN is slightly reduced.
   if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL)
     tn = MAX(2, tn - 1);
-
-  // Being trapped in a drug addiction loop is not fun, so we cap the TN here.
-  int tn = MAX(2, MIN(MAX_ADDICTION_TEST_DIFFICULTY, base_addiction_rating + GET_DRUG_ADDICTION_EDGE(ch, drug_id)));
 
   int num_successes = success_test(dice, tn, ch, "specific addiction test");
   bool addiction_passed = (num_successes > 0);
