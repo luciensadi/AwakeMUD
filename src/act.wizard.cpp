@@ -3074,7 +3074,7 @@ void staff_induced_karma_alteration_for_offline_char(struct char_data *ch, const
 
 ACMD(do_award)
 {
-  struct char_data *vict;
+  struct char_data *vict = NULL;
   char amt[MAX_STRING_LENGTH];
   char reason[MAX_STRING_LENGTH];
 
@@ -3088,7 +3088,20 @@ ACMD(do_award)
     return;
   }
 
-  if (!(vict = get_char_vis(ch, arg))) {
+  // Scan online PCs only.
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    struct char_data *tmp = d->original ? d->original : d->character;
+
+    if (!tmp)
+      continue;
+
+    if (!str_cmp(arg, GET_CHAR_NAME(tmp))) {
+      vict = tmp;
+      break;
+    }
+  }
+
+  if (!vict) {
     staff_induced_karma_alteration_for_offline_char(ch, arg, karma_times_100, reason, TRUE);
     return;
   }
