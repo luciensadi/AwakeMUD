@@ -19,6 +19,8 @@ using nlohmann::json;
 #include "newdb.hpp"
 #include "olc.hpp"
 
+extern void cedit_disp_menu(struct descriptor_data *d, int mode);
+
 /* System design:
 
 - √ Lifestyles exist: Streets, Squatter, Low, Middle, High, Luxury. See SR3 p62.
@@ -32,7 +34,6 @@ using nlohmann::json;
 - √ Individual apartments are Garages if the number of garage rooms in the apartment exceeds the number of non-garage rooms.
   - 1 garage, 0 non: garage.
   - 1 garage, 1 non: not garage.
-- Apartment rents are constrained to their lifestyle bands.
 
 - √ PCs always display a lifestyle string when looked at.
 - Via CUSTOMIZE PHYSICAL, PCs can select a lifestyle string from the set composed of:
@@ -42,6 +43,7 @@ using nlohmann::json;
 - √ Selected lifestyle string is saved to the DB in full.
 
 STRETCH:
+- Apartment rents are constrained to their lifestyle bands.
 - Lifestyle strings can be edited in-game by staff, tridlog style.
 - PCs can submit lifestyle strings for approval / inclusion in the lists.
 - Builders can set custom lifestyles on individual complexes / apartments.
@@ -50,16 +52,16 @@ STRETCH:
 */
 
 /////// CODE TODOS
-// TODO: Add audit command to check for complexes / apartments with rents out of lifestyle bounds
-
 // TODO: Give a health regen bonus based on your lifestyle (better food, living conditions, etc)
 // TODO: Add shop bonus for etiquettes of different lifestyles
-
-// TODO: Add cedit (cust phys) parsing code to let players select from all available lifestyles- stubbed out below
 
 /////// CONTENT TODOS
 // TODO: Fill out garage strings for Low, High, Luxury lifestyles in json file.
 // TODO: Poll playerbase to collect more lifestyle strings.
+
+/////// STRETCH TODOS
+// TODO: Add audit command to check for complexes / apartments with rents out of lifestyle bounds
+// TODO: If they haven't selected a lifestyle string: Iterate over all apartments, finding the best one that belongs to them, and return a string from that. "Best" is first by highest lifestyle, then by not-garage as a tiebreaker.
 
 extern void _json_parse_from_file(bf::path path, json &target);
 
@@ -133,15 +135,15 @@ std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
   for (int lifestyle_idx = best_lifestyle; lifestyle_idx >= LIFESTYLE_STREETS; lifestyle_idx--) {
     if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
       if (is_garage) {
-        APPEND_VECTOR_TO_RESULTS(lifestyles[best_lifestyle].garage_strings_neutral);
+        APPEND_VECTOR_TO_RESULTS(lifestyles[lifestyle_idx].garage_strings_neutral);
       } else {
-        APPEND_VECTOR_TO_RESULTS(lifestyles[best_lifestyle].default_strings_neutral);
+        APPEND_VECTOR_TO_RESULTS(lifestyles[lifestyle_idx].default_strings_neutral);
       }
     } else {
       if (is_garage) {
-        APPEND_VECTOR_TO_RESULTS(lifestyles[best_lifestyle].garage_strings_gendered);
+        APPEND_VECTOR_TO_RESULTS(lifestyles[lifestyle_idx].garage_strings_gendered);
       } else {
-        APPEND_VECTOR_TO_RESULTS(lifestyles[best_lifestyle].default_strings_gendered);
+        APPEND_VECTOR_TO_RESULTS(lifestyles[lifestyle_idx].default_strings_gendered);
       }
     }
   }
@@ -152,18 +154,41 @@ std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
 
 void cedit_lifestyle_menu(struct descriptor_data *d) {
   struct char_data *ch = d->original ? d->original : d->character;
+  int idx = 0;
 
   for (auto it : *_get_lifestyle_vector(ch)) {
-    send_to_char(CH, "%2d) %s\r\n", it);
+    send_to_char(CH, "%2d) %s\r\n", idx++, it);
   }
-  send_to_char("\r\nMake a selection: ", CH);
+  send_to_char("\r\nSelect the lifestyle string you'd like to display: ", CH);
 
   d->edit_mode = CEDIT_LIFESTYLE;
 }
 
 void cedit_lifestyle_parse(struct descriptor_data *d, char *arg) {
-  // TODO: Parse this out.
-  SEND_TO_Q("Not yet implemented.\r\n", d);
+  struct char_data *ch = d->original ? d->original : d->character;
+
+  if (!ch) {
+    SEND_TO_Q("Something went wrong- you have no character!", d);
+    mudlog("SYSERR: Descriptor had NO character in cedit_lifestyle_parse()!", NULL, LOG_SYSLOG, TRUE);
+    cedit_disp_menu(d, FALSE);
+    return;
+  }
+
+  std::vector<const char *> *lifestyle_vector = _get_lifestyle_vector(ch);
+
+  size_t parsed = atol(arg);
+
+  // Failure-- invalid input.
+  if (lifestyle_vector->size() <= parsed) {
+    send_to_char("Invalid choice.\r\n", ch);
+    cedit_lifestyle_menu(d);
+    return;
+  }
+
+  // Success-- set the string.
+  set_lifestyle_string(d->edit_mob, lifestyle_vector->at(parsed));
+  send_to_char("OK.\r\n", ch);
+  cedit_disp_menu(d, FALSE);
 }
 
 ///// Setting / Getting /////
@@ -179,6 +204,9 @@ void set_lifestyle_string(struct char_data *ch, const char *str) {
     return;
   }
 
+  if (ch->player_specials->saved.lifestyle_string)
+    delete [] ch->player_specials->saved.lifestyle_string;
+  
   ch->player_specials->saved.lifestyle_string = str_dup(str);
 
   playerDB.SaveChar(ch);
@@ -197,24 +225,16 @@ const char *get_lifestyle_string(struct char_data *ch) {
 
   // If they don't have a string set at all, attempt to set it from the best apartment they have.
   if (!ch->player_specials->saved.lifestyle_string) {
-    // TODO: Iterate over all apartments, finding the best one that belongs to them. "Best" is first by highest lifestyle, then by not-garage as a tiebreaker.
-    Apartment *best_apartment = NULL;
+    // If they haven't picked a string, and they're new, give them the newbie / default one.
+    if (GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
+      return "The metallic scent of the Neophyte Guild clings to $m.";
+    }
 
-    // Set their lifestyle string to a random one from their best apartment's set.
-    if (best_apartment) {
-      // TODO: Implement.
+    // Assume they're renting at a coffin motel.
+    if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
+      return "They've got a smell about them-- eau de Coffin Motel?";
     } else {
-      // If that failed, and they're new, give them the newbie / default one.
-      if (GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
-        return "The metallic scent of the Neophyte Guild clings to $m.";
-      }
-
-      // They have no house and are not a newbie. Assume they're renting at a coffin motel.
-      if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
-        return "They've got a smell about them-- eau de Coffin Motel?";
-      } else {
-        return "$e's got a smell about him-- eau de Coffin Motel?";
-      }
+      return "$e's got a smell about him-- eau de Coffin Motel?";
     }
   }
 

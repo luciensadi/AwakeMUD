@@ -449,8 +449,11 @@ bool load_char(const char *name, char_data *ch, bool logon)
   SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(row[79]);
   SETTABLE_EMAIL(ch) = str_dup(row[80]);
   GET_CHAR_MULTIPLIER(ch) = atoi(row[81]);
-  set_lifestyle_string(ch, row[82]);
+  const char *lifestyle_string = str_dup(row[82]);
   mysql_free_result(res);
+
+  set_lifestyle_string(ch, lifestyle_string);
+  delete [] lifestyle_string;
 
   if (GET_LEVEL(ch) <= 1) {
     for (int i = 0; i <= WIL; i++) {

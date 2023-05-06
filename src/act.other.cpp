@@ -2475,7 +2475,7 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
       send_to_char(CH, "7) Change Height: ^c%dcm^n\r\n", GET_HEIGHT(CH));
       send_to_char(CH, "8) Change Weight: ^c%dkg^n\r\n", GET_WEIGHT(CH));
 
-      send_to_char(CH, "\r\n9) Change Lifestyle: ^c%s^n\r\n", get_lifestyle_string(CH));
+      send_to_char(CH, "\r\n9) Change Lifestyle: ^c%s^n\r\n", get_lifestyle_string(d->edit_mob));
     }
   }
   if (mode)
