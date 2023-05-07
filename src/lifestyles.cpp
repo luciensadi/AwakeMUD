@@ -79,6 +79,14 @@ int _get_best_lifestyle(struct char_data *ch) {
   bool best_lifestyle_is_garage = FALSE;
   Apartment *best_apartment = NULL;
 
+  // Check for a descriptor. If they don't have one, they don't get this.
+  if (!ch->desc)
+    return LIFESTYLE_SQUATTER;
+
+  // Snap back to their original so we're not finding the apartment of a projection or whatnot.
+  if (ch->desc->original)
+    ch = ch->desc->original;
+
   for (auto &complex : global_apartment_complexes) {
     for (auto &apartment : complex->get_apartments()) {
       if (apartment->has_owner_privs(ch)) {

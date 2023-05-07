@@ -1235,6 +1235,19 @@ ACMD(do_gen_comm)
       return;
     }
     */
+
+    // Add a nudge to not just say 'help x' on the newbie channel.
+    if (strlen(argument) > 6) {
+      if (tolower(argument[0]) == 'h' && tolower(argument[1]) == 'e' && tolower(argument[2]) == 'l' && tolower(argument[3]) == 'p' && tolower(argument[4]) == ' ') {
+        bool is_help_x = TRUE;
+        for (size_t i = 5; i < strlen(argument) && is_help_x; i++) {
+          is_help_x = !isspace(argument[i]);
+        }
+        if (is_help_x) {
+          send_to_char("^c(Gentle reminder: It's not a great newbie experience to be told 'help x' with no context! Please explain a little more if you can.)^n\r\n", ch);
+        }
+      }
+    }
   }
 
   // Returning command to handle shout.
