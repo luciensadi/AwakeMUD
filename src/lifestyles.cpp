@@ -101,18 +101,18 @@ int _get_best_lifestyle(struct char_data *ch) {
   }
 
   if (best_apartment) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "Using %s (%s / %s) as best apartment for %s.",
-                    best_apartment->get_full_name(),
-                    lifestyles[best_apartment->get_lifestyle()].name,
-                    best_apartment->is_garage_lifestyle() ? "garage" : "standard",
-                    GET_CHAR_NAME(ch));
+    log_vfprintf("Using %s (%s / %s) as best apartment for %s.",
+                 best_apartment->get_full_name(),
+                 lifestyles[best_apartment->get_lifestyle()].name,
+                 best_apartment->is_garage_lifestyle() ? "garage" : "standard",
+                 GET_CHAR_NAME(ch));
 
     if (best_lifestyle_is_garage)
       best_lifestyle_found *= -1;
 
     return best_lifestyle_found;
   } else {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "No apartment found for %s. Using Squatter lifestyle.", GET_CHAR_NAME(ch));
+    log_vfprintf("No apartment found for %s. Using Squatter lifestyle.", GET_CHAR_NAME(ch));
     return LIFESTYLE_SQUATTER;
   }
 }
