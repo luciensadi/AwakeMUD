@@ -19,6 +19,7 @@
 #include "constants.hpp"
 #include "config.hpp"
 #include "newmail.hpp"
+#include "lifestyles.hpp"
 
 extern struct time_info_data time_info;
 extern const char *pc_race_types[];
@@ -37,6 +38,7 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
 void shop_install(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 struct obj_data *shop_package_up_ware(struct obj_data *obj);
+extern int _get_best_lifestyle(struct char_data *ch);
 
 int cmd_say;
 int cmd_echo;
@@ -1204,7 +1206,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     // Calculate their skill level, including bioware.
     bool pheromones = FALSE;
     int skill = get_skill(ch, shop_table[shop_nr].etiquette, target);
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
       if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEROMONES) {
         pheromones = TRUE;
         int delta = GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
@@ -1213,6 +1215,21 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
         break;
       }
+    }
+
+    // House rule: Give a better TN for high-grade lifestyles.
+    {
+      switch (abs(_get_best_lifestyle(ch))) {
+        case LIFESTYLE_HIGH:
+          target -= 1;
+          act("Lifestyle TN modifier: -1.", TRUE, ch, 0, 0, TO_ROLLS);
+          break;
+        case LIFESTYLE_LUXURY:
+          target -= 2;
+          act("Lifestyle TN modifier: -2.", TRUE, ch, 0, 0, TO_ROLLS);
+          break;
+      }
+    }
 
     // Roll up the success test.
     int success = success_test(skill, target);

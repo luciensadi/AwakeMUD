@@ -36,7 +36,7 @@ extern void cedit_disp_menu(struct descriptor_data *d, int mode);
   - 1 garage, 1 non: not garage.
 
 - √ PCs always display a lifestyle string when looked at.
-- Via CUSTOMIZE PHYSICAL, PCs can select a lifestyle string from the set composed of:
+- √ Via CUSTOMIZE PHYSICAL, PCs can select a lifestyle string from the set composed of:
   - All default lifestyle strings from all lifestyles at or below their current maximum ('maximum' being the highest-class apartment they are currently renting)
   - IF THEY OWN AT LEAST ONE GARAGE: All default garage strings
   - IF THEY OWN AT LEAST ONE GARAGE: All complex/apartment garage strings for all garages they currently rent at
@@ -50,10 +50,6 @@ STRETCH:
 - To avoid inconsistencies with editing / changes to the lifestyle string list, when a character loads, compare their lifestyle string to their available ones: If it's not in the list, give them a random default from their highest lifestyle and notify them.
 - Complexes / apartments can have custom lifestyle strings available to them, separated between garage / non-garage
 */
-
-/////// CODE TODOS
-// TODO: Give a health regen bonus based on your lifestyle (better food, living conditions, etc)
-// TODO: Add shop bonus for etiquettes of different lifestyles
 
 /////// CONTENT TODOS
 // TODO: Fill out garage strings for Low, High, Luxury lifestyles in json file.
