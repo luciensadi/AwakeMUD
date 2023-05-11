@@ -51,6 +51,9 @@ STRETCH:
 - Complexes / apartments can have custom lifestyle strings available to them, separated between garage / non-garage
 */
 
+/////// LOGISTICAL TODOS
+// TODO: Test the conversion from old-style to new-style apartments REPEATEDLY. Check for loss of items, vehicles, ownership, guests, etc.
+
 /////// CONTENT TODOS
 // TODO: Fill out garage strings for Low, High, Luxury lifestyles in json file.
 // TODO: Poll playerbase to collect more lifestyle strings.

@@ -165,6 +165,12 @@ bool spawn_ic(struct matrix_icon *target, vnum_t ic_vnum, int triggerstep) {
     return FALSE;
   }
 
+  // Sanity check: IC must have a vnum field, otherwise when it's deleted it'll wipe out proto values.
+  if (!ic->vnum) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR while processing host %ld, trigger step %d, IC %ld: IC's datastructure vnum is zero! Forcibly setting it.", matrix[target->in_host].vnum, triggerstep, ic_vnum);
+    ic->vnum = ic_vnum;
+  }
+
   ic->ic.target = target->idnum;
   for (struct matrix_icon *icon = matrix[target->in_host].icons; icon; icon = icon->next_in_host) {
     if (icon->decker) {
