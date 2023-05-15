@@ -25,7 +25,7 @@ void aedit_disp_menu(struct descriptor_data *d)
   CLS(CH);
   send_to_char(CH, "1) Weapon: ^c%s^n\r\n", weapon_types[GET_AMMOBOX_WEAPON(OBJ)]);
   send_to_char(CH, "2) Type: ^c%s^n\r\n", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name);
-  send_to_char(CH, "3) Amount: ^c%d^n  (^c%d^n nuyen)\r\n", GET_AMMOBOX_INTENDED_QUANTITY(OBJ), get_ammo_cost(GET_AMMOBOX_WEAPON(OBJ), GET_AMMOBOX_TYPE(OBJ)) * GET_AMMOBOX_INTENDED_QUANTITY(OBJ));
+  send_to_char(CH, "3) Amount: ^c%d^n  (^c%d^n nuyen)\r\n", GET_AMMOBOX_INTENDED_QUANTITY(OBJ), get_ammo_cost(GET_AMMOBOX_WEAPON(OBJ), GET_AMMOBOX_TYPE(OBJ), GET_AMMOBOX_INTENDED_QUANTITY(OBJ)));
   send_to_char(CH, "q) Quit\r\nEnter your choice: ");
   d->edit_mode = AEDIT_MENU;
 }
@@ -180,7 +180,7 @@ int gunsmith_skill(int weapon_type)
 
 bool ammo_test(struct char_data *ch, struct obj_data *obj)
 {
-  if (GET_NUYEN(ch) <= get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj)) * AMMOBUILD_BATCH_SIZE) {
+  if (GET_NUYEN(ch) <= get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), AMMOBUILD_BATCH_SIZE)) {
     send_to_char(ch, "You don't have enough nuyen for the materials to create %s.\r\n",
                  GET_OBJ_NAME(obj));
     if (IS_WORKING(ch))
@@ -203,7 +203,7 @@ bool ammo_test(struct char_data *ch, struct obj_data *obj)
     }
   } else
     GET_AMMOBOX_TIME_TO_COMPLETION(obj) = -1;
-  lose_nuyen(ch, (int)((get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj)) * AMMOBUILD_BATCH_SIZE) * (1 - (csuccess * .05))), NUYEN_OUTFLOW_AMMO_BUILDING);
+  lose_nuyen(ch, (int)((get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), AMMOBUILD_BATCH_SIZE)) * (1 - (csuccess * .05))), NUYEN_OUTFLOW_AMMO_BUILDING);
   GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(obj) = GET_AMMOBOX_TIME_TO_COMPLETION(obj);
   return TRUE;
 }

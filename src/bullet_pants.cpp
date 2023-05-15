@@ -277,7 +277,7 @@ ACMD(do_pockets) {
       }
 
       // Make sure they can carry it. We don't do this check for already-carried boxes.
-      if (ammobox && (IS_CARRYING_W(ch) + (quantity * get_ammo_weight(weapon, ammotype))) > CAN_CARRY_W(ch)) {
+      if (ammobox && (IS_CARRYING_W(ch) + get_ammo_weight(weapon, ammotype, quantity)) > CAN_CARRY_W(ch)) {
         send_to_char("You can't carry that much weight.\r\n", ch);
         return;
       }
@@ -482,7 +482,7 @@ float get_bulletpants_weight(struct char_data *ch) {
 
   for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
     for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
-      weight += GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) * get_ammo_weight(wp, am);
+      weight += get_ammo_weight(wp, am, GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am));
 
   return weight;
 }
@@ -832,22 +832,54 @@ struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapont
   return ammobox;
 }
 
-float get_ammo_weight(int weapontype, int ammotype) {
-  // SR3 p281
-  if (weapontype == WEAP_CANNON) {
-    return 0.125;
+float get_ammo_weight(int weapontype, int ammotype, int qty) {
+  if (qty <= 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got negative qty %d to get_ammo_weight!", qty);
+    return 0;
   }
 
-  return ammo_type[ammotype]._weight;
+  if (weapontype < START_OF_AMMO_USING_WEAPONS || weapontype > END_OF_AMMO_USING_WEAPONS) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid weapontype %d to get_ammo_weight!", weapontype);
+    return 0;
+  }
+
+  if (ammotype < AMMO_NORMAL || ammotype >= NUM_AMMOTYPES) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid ammotype %d to get_ammo_weight!", ammotype);
+    return 0;
+  }
+  
+  // SR3 p281: Cannon rounds are much heavier than others.
+  if (weapontype == WEAP_CANNON) {
+    return 0.125 * qty;
+  }
+
+  // If it's not a cannon round, it weighs the same as all other rounds. (Probably need to houserule this differently in the future.)
+  return ammo_type[ammotype]._weight * qty;
 }
 
-int get_ammo_cost(int weapontype, int ammotype) {
-  // SR3 p281
-  if (weapontype == WEAP_CANNON) {
-    return 45;
+int get_ammo_cost(int weapontype, int ammotype, int qty) {
+  if (qty <= 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got negative qty %d to get_ammo_cost!", qty);
+    return 0;
   }
 
-  return ammo_type[ammotype].cost;
+  if (weapontype < START_OF_AMMO_USING_WEAPONS || weapontype > END_OF_AMMO_USING_WEAPONS) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid weapontype %d to get_ammo_cost!", weapontype);
+    return 0;
+  }
+
+  if (ammotype < AMMO_NORMAL || ammotype >= NUM_AMMOTYPES) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid ammotype %d to get_ammo_cost!", ammotype);
+    return 0;
+  }
+  
+  // SR3 p281: Cannon rounds are much more expensive than others.
+  if (weapontype == WEAP_CANNON) {
+    return 45 * qty;
+  }
+
+  // If it's not a cannon round, it costs the same as all other rounds. (Probably need to houserule this differently in the future.)
+  return ammo_type[ammotype].cost * qty;
 }
 
 // Shorthand for various weapon types. "" for nothing.

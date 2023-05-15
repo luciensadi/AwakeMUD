@@ -1,7 +1,7 @@
 #ifndef _bullet_pants_h
 #define _bullet_pants_h
 
-#define MAX_NUMBER_OF_BULLETS_IN_PANTS USHRT_MAX
+#define MAX_NUMBER_OF_BULLETS_IN_PANTS 5000
 
 // Set to the number of mags' worth of normal ammo you want to give to NPCs with weapons but no ammo data set. Remember that the first mag goes into the weapon.
 #define NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS 4
@@ -32,7 +32,7 @@ bool is_valid_pockets_get_command(char *mode_buf);
 const char *get_ammobox_default_restring(struct obj_data *ammobox);
 bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapon, int ammotype);
 
-float get_ammo_weight(int weapontype, int ammotype);
-int get_ammo_cost(int weapontype, int ammotype);
+float get_ammo_weight(int weapontype, int ammotype, int qty);
+int get_ammo_cost(int weapontype, int ammotype, int qty);
 
 #endif

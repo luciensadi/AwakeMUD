@@ -884,7 +884,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
             break;
           case ITEM_GUN_AMMO:
             // Process weight.
-            GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj));
+            GET_OBJ_WEIGHT(obj) = get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj));
             break;
           case ITEM_VEHCONTAINER:
             // We did some hacky shit and force-saved the weight of the container to value 11. Pull it back out.

@@ -845,7 +845,7 @@ void update_buildrepair(void)
 
           // Add the weight of the completed ammo to the box. Due to some ammo having miniscule weight, we must fully re-calc every time.
           weight_change_object(PROG, -GET_OBJ_WEIGHT(PROG));
-          weight_change_object(PROG, GET_AMMOBOX_QUANTITY(PROG) * get_ammo_weight(GET_AMMOBOX_WEAPON(PROG), GET_AMMOBOX_TYPE(PROG)));
+          weight_change_object(PROG, get_ammo_weight(GET_AMMOBOX_WEAPON(PROG), GET_AMMOBOX_TYPE(PROG), GET_AMMOBOX_QUANTITY(PROG)));
         }
         GET_AMMOBOX_INTENDED_QUANTITY(PROG) -= AMMOBUILD_BATCH_SIZE;
         if (GET_AMMOBOX_INTENDED_QUANTITY(PROG) <= 0) {
