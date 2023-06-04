@@ -268,7 +268,12 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
 
     int space_required = 0;
     if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-      space_required = GET_PROGRAM_SIZE(obj);
+      // Persona programs don't take up storage memory in store-bought decks
+      if ((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR)) {
+        space_required = 0;
+      } else {
+        space_required = GET_PROGRAM_SIZE(obj);
+      }
     } else {
       space_required = (int) GET_DESIGN_SIZE(obj) * 1.1;
     }
