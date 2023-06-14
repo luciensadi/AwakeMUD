@@ -268,7 +268,12 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
 
     int space_required = 0;
     if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-      space_required = GET_PROGRAM_SIZE(obj);
+      // Persona programs don't take up storage memory in store-bought decks
+      if ((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR)) {
+        space_required = 0;
+      } else {
+        space_required = GET_PROGRAM_SIZE(obj);
+      }
     } else {
       space_required = (int) GET_DESIGN_SIZE(obj) * 1.1;
     }
@@ -976,9 +981,11 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           return;
         }
 
-        if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM ||
-            (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE))
-          GET_OBJ_VAL(cont, 5) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
+        // Subtract program size from storage, but a persona program on a store-bought deck doesn't use storage
+        if (((GET_OBJ_TYPE(obj) == ITEM_PROGRAM) && !((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR)))
+            || (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE)) {
+          GET_CYBERDECK_USED_STORAGE(cont) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
+        }
 
         if (GET_OBJ_TYPE(obj) == ITEM_PART) {
           if (GET_OBJ_VAL(obj, 0) == PART_STORAGE) {
