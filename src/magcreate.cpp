@@ -285,7 +285,8 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
   }
   design_duration *= 1440;
 
-  // Ripped out this weird houserule stuff, I can't find it in the books anywhere. -LS
+  // These rules should affect drain code for custom spells (MitS pg 54), not design TNs directly
+  // Drain codes for canon spells are assumed to have these modifiers already included
   /*
   if (spells[GET_SPELLFORMULA_SPELL(formula)].category == DETECTION || spells[GET_SPELLFORMULA_SPELL(formula)].category == ILLUSION)
     target--;

@@ -4903,7 +4903,7 @@ POWER(spirit_confusion)
 
   if (IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-    log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+    log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_confusion");
     return;
   }
 
