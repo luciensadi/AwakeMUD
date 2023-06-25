@@ -2702,7 +2702,7 @@ ACMD(do_software)
         has_components = TRUE;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n Rating: %2d\r\n",
                  get_obj_name_with_padding(soft, 40),
-                 GET_PROGRAM_RATING(soft);
+                 GET_PROGRAM_RATING(soft));
     }
 
     if (has_other_software)
