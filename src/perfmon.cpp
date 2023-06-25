@@ -8,6 +8,7 @@
 #include <ctime>
 #include <cfloat>
 #include <cstring>
+#include <cmath>
 
 #include <sys/time.h>
 
