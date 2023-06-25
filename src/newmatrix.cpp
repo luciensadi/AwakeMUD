@@ -2700,7 +2700,7 @@ ACMD(do_software)
       } else if ((GET_OBJ_TYPE(cyberdeck) == ITEM_CYBERDECK) && (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR))
         // Persona programs in store-bought decks are handled here as components
         has_components = TRUE;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n Rating: %2d\r\n",
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s^n Rating: %2d\r\n",
                  get_obj_name_with_padding(soft, 40),
                  GET_PROGRAM_RATING(soft));
     }
