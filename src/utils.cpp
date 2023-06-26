@@ -5763,22 +5763,31 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   // Like Johnny Cash, you can always hurt yourself.
   TRUE_CASE(actor == victim);
 
-  struct room_data *actor_in_room = get_ch_in_room(actor);
-  struct room_data *victim_in_room = get_ch_in_room(victim);
+  // Trace back projecting NPCs, puppeted characters, etc.
+  struct char_data *actor_original = actor->desc && actor->desc->original ? actor->desc->original : actor;
+  struct char_data *victim_original = victim->desc && victim->desc->original ? victim->desc->original : actor;
 
-  if (!actor_in_room || !victim_in_room) {
+  struct room_data *actor_in_room = get_ch_in_room(actor);
+  struct room_data *actor_original_in_room = get_ch_in_room(actor_original);
+  struct room_data *victim_in_room = get_ch_in_room(victim);
+  struct room_data *victim_original_in_room = get_ch_in_room(victim_original);
+
+  if (!actor_in_room || !victim_in_room || !actor_original_in_room || !victim_original_in_room) {
     send_to_char("An error has occurred in aggressive-action check (error: no room). Please notify staff of what you were doing, and do NOT repeat this action.\r\n", actor);
-    mudlog_vfprintf(actor, LOG_SYSLOG, "SYSERR: A character passed to can_perform_aggressive_action() from %s has an invalid room! (%s = %s, %s = %s)",
+    mudlog_vfprintf(actor, LOG_SYSLOG, "SYSERR: A character passed to can_perform_aggressive_action() from %s has an invalid room! (%s = %s & %s, %s = %s & %s)",
                     calling_func_name,
                     GET_CHAR_NAME(actor),
                     actor_in_room ? GET_ROOM_NAME(actor_in_room) : "NO ROOM",
+                    actor_original_in_room ? GET_ROOM_NAME(actor_original_in_room) : "NO ROOM",
                     GET_CHAR_NAME(victim),
-                    victim_in_room ? GET_ROOM_NAME(victim_in_room) : "NO ROOM");
+                    victim_in_room ? GET_ROOM_NAME(victim_in_room) : "NO ROOM",
+                    victim_original_in_room ? GET_ROOM_NAME(victim_original_in_room) : "NO ROOM");
     return FALSE;
   }
 
   // Peaceful flags stop aggressive actions.
   FALSE_CASE(actor_in_room->peaceful || victim_in_room->peaceful, "You can't-- this is a peaceful area.\r\n");
+  FALSE_CASE(actor_original_in_room->peaceful, "You can't -- you're projecting from a peaceful area.\r\n");
 
   // Compare astral states.
   FALSE_CASE(IS_ASTRAL(actor) && !SEES_ASTRAL(victim), "You can't harm someone who isn't astrally active.\r\n");
@@ -5789,39 +5798,35 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
     return FALSE;
   }
 
-  // Aggressive actions can be done on NPCs.
-  if (IS_NPC(victim)) {
+  // Special cases for actions done on NPCs (they skip a lot of the PC damage checks).
+  if (IS_NPC(victim) && !victim_original) {
     FALSE_CASE(npc_is_protected_by_spec(victim) || MOB_FLAGGED(victim, MOB_NOKILL), "You're not able to harm %s: they're protected by staff edict.\r\n", GET_CHAR_NAME(victim));
 
-    // If it's a projection or a possessing character, we bounce to their original for subsequent checks.
-    if (victim->desc && victim->desc->original) {
-      victim = victim->desc->original;
-      // fall through
-    }
-
-    // Otherwise, it's an unprotected NPC: Go for it.
-    else {
-      return TRUE;
-    }
+    return TRUE;
   }
 
-  // Check for ignores.
-  FALSE_CASE(IS_IGNORING(actor, is_blocking_ic_interaction_from, victim), "You can't harm someone you've blocked IC interaction with.\r\n");
+  // Aggressive actions can be done by non-puppeted NPCs. Otherwise, use player logic.
+  if (IS_NPC(actor) && !actor_original) {
+    return TRUE;
+  }
 
-  if (IS_IGNORING(victim, is_blocking_ic_interaction_from, actor)) {
+  // Check for ignores. Use _original here, as it's either filled out (projection/puppeted) or defaulted to actor/victim.
+  FALSE_CASE(IS_IGNORING(actor_original, is_blocking_ic_interaction_from, victim_original), "You can't harm someone you've blocked IC interaction with.\r\n");
+
+  if (IS_IGNORING(victim_original, is_blocking_ic_interaction_from, actor_original)) {
     send_to_char("You don't see anyone by that name here.\r\n", actor);
-    log_attempt_to_bypass_ic_ignore(actor, victim, calling_func_name);
+    log_attempt_to_bypass_ic_ignore(actor_original, victim_original, calling_func_name);
     return FALSE;
   }
 
-  // Arena flags bypass all PK checks.
+  // Arena flags bypass all PK checks. We do NOT use original here.
   TRUE_CASE(ROOM_FLAGGED(actor_in_room, ROOM_ARENA) && ROOM_FLAGGED(actor_in_room, ROOM_ARENA));
 
   // PK flag checks: You must be flagged PK before you can attack anyone outside of an arena.
-  FALSE_CASE(!PRF_FLAGGED(actor, PRF_PKER), "You must ##^WTOGGLE PK^n before you can do that.\r\n");
+  FALSE_CASE(!PRF_FLAGGED(actor_original, PRF_PKER), "You must ##^WTOGGLE PK^n before you can do that.\r\n");
 
   // A victim is valid if they are a PKer or a KILLER (note that you must now be PKer yourself to attack a killer).
-  FALSE_CASE(!PRF_FLAGGED(victim, PRF_PKER) && !PRF_FLAGGED(victim, PLR_KILLER), "Your victim must ##^WTOGGLE PK^n before you can do that.\r\n");
+  FALSE_CASE(!PRF_FLAGGED(victim_original, PRF_PKER) && !PRF_FLAGGED(victim_original, PLR_KILLER), "Your victim must ##^WTOGGLE PK^n before you can do that.\r\n");
 
   return TRUE;
 }
