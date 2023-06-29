@@ -1009,6 +1009,8 @@ void die(struct char_data * ch)
   if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
     docwagon_retrieve(ch);
     return;
+  } else if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && !PLR_FLAGGED(ch, PLR_NEWBIE)) {
+    send_to_char("(TIP: Your belongings have been left behind, so you'll need to go and retrieve them if you want them back.)\r\n", ch);
   }
 
   struct room_data *temp_room = get_ch_in_room(ch);
@@ -2372,16 +2374,12 @@ void docwagon_retrieve(struct char_data *ch) {
     char_to_room(ch, &world[recovery_room]);
   }
 
-  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || PLR_FLAGGED(ch, PLR_NEWBIE)) {
     send_to_char("Your DocWagon rescue is free due to your newbie status, and you've been restored to full health.\r\n", ch);
     GET_PHYSICAL(ch) = 1000;
     GET_MENTAL(ch) = 1000;
     GET_POS(ch) = POS_STANDING;
   } else {
-    if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
-      send_to_char("(TIP: Your belongings have been left behind, so you'll need to go and retrieve them if you want them back.)\r\n", ch);
-    }
-
     struct obj_data *docwagon = find_best_active_docwagon_modulator(ch);
 
     // Compensate for edge case: Their modulator was destroyed since they were flagged.
