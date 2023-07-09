@@ -3458,6 +3458,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("programs", "software");
   COMMAND_ALIAS("bank", "balance");
   COMMAND_ALIAS("recall", "recap");
+  COMMAND_ALIAS("summon", "conjure");
 
   // Toggles.
   COMMAND_ALIAS("settings", "toggle");
