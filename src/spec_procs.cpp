@@ -80,6 +80,8 @@ ACMD_DECLARE(do_holster);
 ACMD_DECLARE(do_remove);
 ACMD_DECLARE(do_new_echo);
 
+void add_cash_to_housing_card(struct char_data *ch, int amount, bool message);
+
 struct social_type
 {
   char *cmd;
@@ -4257,8 +4259,17 @@ void make_newbie(struct obj_data *obj)
 
 void process_auth_room(struct char_data *ch) {
   PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
-  // Raw amount-- chargen money is meaningless.
+
+  // Dump spare money onto a housing card.
+  if (GET_NUYEN(ch) > 5000) {
+    int amount = ((int) GET_NUYEN(ch) / 5000) * 5000;
+    add_cash_to_housing_card(ch, amount, FALSE);
+    send_to_char(ch, "You receive a housing card with your remaining %d nuyen on it.\r\n", amount);
+  }
+
+  // Clear the rest, it can't be kept.
   GET_NUYEN_RAW(ch) = 0;
+
   make_newbie(ch->carrying);
   for (int i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i))
@@ -5247,48 +5258,61 @@ struct obj_data *find_neophyte_housing_card(struct obj_data *obj) {
 
   return NULL;
 }
+
+void add_cash_to_housing_card(struct char_data *ch, int amount, bool message) {
+  if (GET_NUYEN(ch) < amount) {
+    if (message)
+      send_to_char(ch, "You don't have enough nuyen to recharge a housing card. You need %d.\r\n", amount);
+    return;
+  }
+
+  struct obj_data *card = NULL, *result = NULL;
+
+  // Search their carried inventory for the housing card.
+  for (card = ch->carrying; card; card = card->next_content) {
+    if ((result = find_neophyte_housing_card(card))) {
+      card = result;
+      break;
+    }
+  }
+
+  // Search their worn inventory for the housing card.
+  if (!card) {
+    for (int i = 0; i < NUM_WEARS; i++) {
+      if ((result = find_neophyte_housing_card(GET_EQ(ch, i)))) {
+        card = result;
+        break;
+      }
+    }
+  }
+
+  // Couldn't find it anywhere? Give them a new one.
+  if (!card) {
+    card = read_object(OBJ_NEOPHYTE_SUBSIDY_CARD, VIRTUAL);
+    GET_OBJ_VAL(card, 0) = GET_IDNUM(ch);
+    obj_to_char(card, ch);
+  }
+  GET_OBJ_VAL(card, 1) += amount;
+  // We should probably track this one as going out into the game world, but eh.
+  GET_NUYEN_RAW(ch) -= amount;
+
+  if (message) {
+    if (card->carried_by == ch)
+        send_to_char(ch, "You place your card into the machine and add an extra %d nuyen.", amount);
+      else
+        send_to_char(ch, "You dig your card out and put it in the machine, adding %d extra nuyen.");
+
+      send_to_char(ch, " The value is currently at %d nuyen.\r\n", GET_OBJ_VAL(card, 1));
+  }
+}
+
 SPECIAL(newbie_housing)
 {
   if (!ch || !cmd || !CMD_IS("recharge"))
     return FALSE;
-  if (GET_NUYEN(ch) < 10000)
-    send_to_char("You don't have enough nuyen to recharge a housing card.\r\n", ch);
-  else {
-    struct obj_data *card = NULL, *result = NULL;
 
-    // Search their carried inventory for the housing card.
-    for (card = ch->carrying; card; card = card->next_content)
-      if ((result = find_neophyte_housing_card(card))) {
-        card = result;
-        break;
-      }
+  add_cash_to_housing_card(ch, 10000, TRUE);
 
-    // Search their worn inventory for the housing card.
-    if (!card) {
-      for (int i = 0; i < NUM_WEARS; i++)
-        if ((result = find_neophyte_housing_card(GET_EQ(ch, i)))) {
-          card = result;
-          break;
-        }
-    }
-
-    // Couldn't find it anywhere? Give them a new one.
-    if (!card) {
-      card = read_object(OBJ_NEOPHYTE_SUBSIDY_CARD, VIRTUAL);
-      GET_OBJ_VAL(card, 0) = GET_IDNUM(ch);
-      obj_to_char(card, ch);
-    }
-    GET_OBJ_VAL(card, 1) += 10000;
-    // We should probably track this one as going out into the game world, but eh.
-    GET_NUYEN_RAW(ch) -= 10000;
-
-    if (card->carried_by == ch)
-      send_to_char("You place your card into the machine and add an extra 10,000 nuyen.", ch);
-    else
-      send_to_char("You dig your card out and put it in the machine, adding 10,000 extra nuyen.", ch);
-
-    send_to_char(ch, " The value is currently at %d nuyen.\r\n", GET_OBJ_VAL(card, 1));
-  }
   return TRUE;
 }
 
