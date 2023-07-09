@@ -845,7 +845,7 @@ void affect_total(struct char_data * ch)
       set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
     }
     if (GET_POWER(ch, ADEPT_IMAGE_MAG)) {
-      AFF_FLAGS(ch).SetBit(AFF_VISION_MAG_2);
+      AFF_FLAGS(ch).SetBit(AFF_VISION_MAG_3);
     }
   }
 
