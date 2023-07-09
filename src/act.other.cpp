@@ -5198,12 +5198,6 @@ ACMD(do_stop) {
     return;
   }
 
-  if (IS_WORKING(ch)) {
-    STOP_WORKING(ch);
-    send_to_char("You stop working.\r\n", ch);
-    return;
-  }
-
   if (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     struct veh_data *veh = NULL;
     RIG_VEH(ch, veh);
@@ -5214,6 +5208,12 @@ ACMD(do_stop) {
     } else {
       send_to_char("Your vehicle isn't moving.\r\n", ch);
     }
+    return;
+  }
+
+  if (IS_WORKING(ch)) {
+    STOP_WORKING(ch);
+    send_to_char("You stop working.\r\n", ch);
     return;
   }
 
