@@ -2429,13 +2429,20 @@ ACMD(do_wake)
 
   one_argument(argument, arg);
   if (*arg) {
-    if (GET_POS(ch) == POS_SLEEPING)
+    vict = get_char_room_vis(ch, arg);
+
+    // 'wake up'
+    if (!vict && !str_cmp(arg, "up"))
+      vict = ch;
+      
+    if (GET_POS(ch) == POS_SLEEPING && vict != ch)
       send_to_char("You can't wake people up if you're asleep yourself!\r\n", ch);
-    else if ((vict = get_char_room_vis(ch, arg)) == NULL)
+    else if (vict == NULL)
       send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
-    else if (vict == ch)
+    else if (vict == ch) {
+      // This is a weird way to break, but it means that the code immediately below doesn't fire, and instead the self-wake version fires.
       self = 1;
-    else if (GET_POS(vict) > POS_SLEEPING)
+    } else if (GET_POS(vict) > POS_SLEEPING)
       act("$E is already awake.", FALSE, ch, 0, vict, TO_CHAR);
     else if (GET_POS(vict) <= POS_STUNNED || GET_PHYSICAL(vict) < 100)
       act("You can't wake $M up!", FALSE, ch, 0, vict, TO_CHAR);
