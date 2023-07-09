@@ -935,7 +935,7 @@ enum {
 #define SKILL_SPERETHIEL             74
 #define SKILL_SPANISH                75
 #define SKILL_JAPANESE               76
-#define SKILL_CHINESE                77
+#define SKILL_CANTONESE              77
 #define SKILL_KOREAN                 78
 #define SKILL_ITALIAN                79
 #define SKILL_RUSSIAN                80
@@ -1012,6 +1012,7 @@ enum {
 #define SKILL_PILOT_SUBORBITAL          149
 #define SKILL_PILOT_TRACKED             150
 #define SKILL_PILOT_WALKER              151
+#define SKILL_MANDARIN                  152
 
 #define MAX_SKILLS                152
 // Adding a pilot skill? Update utils.cpp's pilot_skills[].

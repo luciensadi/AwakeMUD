@@ -1642,7 +1642,7 @@ struct skill_data skills[] =
     {"Sperethiel",                              INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Spanish",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Japanese",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
-    {"Chinese",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
+    {"Cantonese",                               INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Korean",                                  INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Italian",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Russian",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
@@ -1716,7 +1716,8 @@ struct skill_data skills[] =
     {"Piloting Semiballistic Aircraft",         REA, SKILL_TYPE_ACTIVE,    FALSE,     9,  FALSE,  FALSE },
     {"Piloting Suborbital Craft",               REA, SKILL_TYPE_ACTIVE,    FALSE,     9,  FALSE,  FALSE },
     {"Piloting Tracked Vehicles",               REA, SKILL_TYPE_ACTIVE,    FALSE,    10,  FALSE,  FALSE },
-    {"Piloting Walkers",                        REA, SKILL_TYPE_ACTIVE,    FALSE,    11,  FALSE,  FALSE }
+    {"Piloting Walkers",                        REA, SKILL_TYPE_ACTIVE,    FALSE,    11,  FALSE,  FALSE },
+    {"Mandarin",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
   };
 
 int rev_dir[] =
