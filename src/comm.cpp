@@ -1496,6 +1496,15 @@ int make_prompt(struct descriptor_data * d)
               else
                 strlcpy(str, "@z", sizeof(str));
               break;
+            case 'Z':
+              if (d->original) {
+                // Projecting: Survival ticks left.
+                snprintf(str, sizeof(str), "%d", (int) ceil(((float)GET_ESS(d->original)) / 100));
+              } else {
+                // Meatform: Your essence.
+                snprintf(str, sizeof(str), "%.2f", ((float)GET_ESS(d->character)) / 100);
+              }
+              break;
             case '@':
               strlcpy(str, "@", sizeof(str));
               break;
