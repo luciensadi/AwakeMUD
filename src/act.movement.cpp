@@ -2449,7 +2449,7 @@ ACMD(do_wake)
     else {
       act("You wake $M up.", FALSE, ch, 0, vict, TO_CHAR);
       act("You are awakened by $n.", FALSE, ch, 0, vict, TO_VICT | TO_SLEEP);
-      GET_POS(vict) = POS_SITTING;
+      GET_POS(vict) = POS_STANDING;
     }
     if (!self)
       return;
@@ -2457,13 +2457,13 @@ ACMD(do_wake)
   if (GET_POS(ch) > POS_SLEEPING)
     send_to_char("You are already awake...\r\n", ch);
   else {
-    send_to_char("You awaken, and sit up.\r\n", ch);
+    send_to_char("You awaken and stand up.\r\n", ch);
     if (ch->in_veh) {
       snprintf(buf, sizeof(buf), "%s awakens.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
     } else
       act("$n awakens.", TRUE, ch, 0, 0, TO_ROOM);
-    GET_POS(ch) = POS_SITTING;
+    GET_POS(ch) = POS_STANDING;
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
