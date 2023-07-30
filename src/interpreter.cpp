@@ -862,7 +862,7 @@ struct command_info cmd_info[] =
     { "slist"      , POS_DEAD    , do_slist    , LVL_BUILDER, 0, FALSE },
     { "sleep"      , POS_SLEEPING, do_sleep    , 0, 0, FALSE },
     { "slowns"     , POS_DEAD    , do_slowns   , LVL_DEVELOPER, 0, FALSE },
-    { "sneak"      , POS_STANDING, do_sneak    , 1, 0, FALSE },
+    { "sneak"      , POS_SITTING, do_sneak    , 1, 0, FALSE },
     { "snoop"      , POS_DEAD    , do_snoop    , LVL_EXECUTIVE, 0, FALSE },
     { "socials"    , POS_DEAD    , do_commands , 0, SCMD_SOCIALS, TRUE },
     { "software"   , POS_LYING   , do_software , 0, 0, FALSE },

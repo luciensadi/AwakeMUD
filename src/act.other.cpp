@@ -202,6 +202,8 @@ ACMD(do_sneak)
     return;
   }
 
+  FAILURE_CASE(GET_POS(ch) != POS_STANDING, "You must be standing to sneak.");
+
   send_to_char("You begin to move with stealth.\r\n", ch);
   AFF_FLAGS(ch).SetBit(AFF_SNEAK);
 }
