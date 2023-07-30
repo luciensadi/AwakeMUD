@@ -5799,14 +5799,14 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   }
 
   // Special cases for actions done on NPCs (they skip a lot of the PC damage checks).
-  if (IS_NPC(victim) && !victim_original) {
+  if (IS_NPC(victim) && victim == victim_original) {
     FALSE_CASE(npc_is_protected_by_spec(victim) || MOB_FLAGGED(victim, MOB_NOKILL), "You're not able to harm %s: they're protected by staff edict.\r\n", GET_CHAR_NAME(victim));
 
     return TRUE;
   }
 
   // Aggressive actions can be done by non-puppeted NPCs. Otherwise, use player logic.
-  if (IS_NPC(actor) && !actor_original) {
+  if (IS_NPC(actor) && actor == actor_original) {
     return TRUE;
   }
 
