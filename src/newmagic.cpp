@@ -3377,6 +3377,8 @@ ACMD(do_contest)
 }
 ACMD(do_unbond)
 {
+  FAILURE_CASE(IS_NPC(ch), "NPCs can't unbond.");
+
   if (GET_TRADITION(ch) == TRAD_MUNDANE) {
     send_to_char("You can't unbond something with no sense of the astral plane.\r\n", ch);
     return;

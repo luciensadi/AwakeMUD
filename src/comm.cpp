@@ -1252,6 +1252,7 @@ int make_prompt(struct descriptor_data * d)
     } else {
       char temp[MAX_INPUT_LENGTH], str[20];
       int i = 0, j, physical;
+      struct char_data *original_character = d->original ? d->original : d->character;
 
       for (; *prompt; prompt++) {
         if (*prompt == '@' && *(prompt+1)) {
@@ -1475,9 +1476,9 @@ int make_prompt(struct descriptor_data * d)
 
                 if (!room) {
                   strlcpy(str, "@v", sizeof(str));
-                } else if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER || PLR_FLAGGED(d->character, PLR_PAID_FOR_VNUMS)) {
+                } else if (GET_REAL_LEVEL(original_character) >= LVL_BUILDER || PLR_FLAGGED(original_character, PLR_PAID_FOR_VNUMS)) {
                   snprintf(str, sizeof(str), "%ld", room->number);
-                } else if (GET_REAL_LEVEL(d->character) <= LVL_MORTAL) {
+                } else if (GET_REAL_LEVEL(original_character) <= LVL_MORTAL) {
                   strlcpy(str, "^WHELP SYSPOINTS^n", sizeof(str));
                 } else {
                   strlcpy(str, "@v", sizeof(str));
