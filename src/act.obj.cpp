@@ -2943,8 +2943,8 @@ ACMD(do_pour)
 void wear_message(struct char_data * ch, struct obj_data * obj, int where)
 {
   const char *wear_messages[][2] = {
-                               {"$n activates $p.",
-                                "You activate $p."},
+                               {"$n equip and activates $p.",
+                                "You equip and activate $p."},
 
                                {"$n wears $p on $s head.",
                                 "You wear $p on your head."},
@@ -3924,7 +3924,10 @@ ACMD(do_activate)
     affect_total(ch);
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_FOCUS(obj)) {
-    send_to_char(ch, "There's no need to activate or deactivate %s. Just wield it when you want to use it.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "There's no need to activate or deactivate %s. Just ^WWIELD^n it when you want to use it.\r\n", GET_OBJ_NAME(obj));
+    return;
+  } else if (GET_OBJ_TYPE(obj) == ITEM_LIGHT) {
+    send_to_char(ch, "There's no need to activate or deactivate %s. Just ^WWEAR^n it when you want to use it.\r\n", GET_OBJ_NAME(obj));
     return;
   } else if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1)) {
     send_to_char(ch, "You can't activate %s.\r\n", GET_OBJ_NAME(obj));
