@@ -1364,6 +1364,7 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", CAN_CARRY_W(d->character));
               break;
             case 'm':       // current mental
+            case '*':       // current mental, but subtracted from 10 to give damage boxes taken instead
               physical = (int)(GET_MENTAL(ch) / 100);
               if (IS_JACKED_IN(ch)) {
                 physical = 10;
@@ -1374,6 +1375,10 @@ int make_prompt(struct descriptor_data * d)
                     break;
                   }
                 }
+              }
+
+              if (*prompt != 'm') {
+                physical = 10 - physical;
               }
 
               snprintf(str, sizeof(str), "%d", physical);
@@ -1388,6 +1393,7 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", GET_OFFENSE(d->character));
               break;
             case 'p':       // current physical
+            case '&':       // current physical, but subtracted from 10 to give damage boxes taken instead
               physical = (int)(GET_PHYSICAL(ch) / 100);
 
               if (IS_JACKED_IN(ch)) {
@@ -1401,7 +1407,12 @@ int make_prompt(struct descriptor_data * d)
                 }
               }
 
+              if (*prompt != 'p') {
+                physical = 10 - physical;
+              }
+
               snprintf(str, sizeof(str), "%d", physical);
+              
               break;
             case 'P':       // max physical
               snprintf(str, sizeof(str), "%d", (int)(GET_MAX_PHYSICAL(d->character) / 100));
