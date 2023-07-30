@@ -3560,6 +3560,9 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
 
   COMMAND_ALIAS("psuh", "push");
 
+  // the weird shit
+  COMMAND_ALIAS("whomst've", "who");
+
 
   // Found nothing, return the failure code.
   return -1;
