@@ -1622,7 +1622,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         if (sell->stock <= 0)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SoldOut  ");
         else
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d     ", sell->stock);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d      ", sell->stock);
       }
       if (GET_OBJ_VAL(obj, 1) > 0)
         snprintf(buf2, sizeof(buf2), "%d", GET_OBJ_VAL(obj, 1));
