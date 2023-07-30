@@ -1967,6 +1967,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
 #ifndef DIES_IRAE  // note: if NOT def
         else if (GET_SUSTAINED(vict)) {
           for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
+            // Prevent you from having the CYBER flag set if your modification is from another spell.
             if (sus->caster == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
               cyber = false;
               break;
@@ -1975,15 +1976,23 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         }
 #endif
         if (cyber && (spell == SPELL_DECATTR || spell == SPELL_INCATTR || spell == SPELL_INCREA)) {
-          snprintf(buf, sizeof(buf), "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
-          act(buf, TRUE, ch, 0, vict, TO_CHAR);
+          if (vict == ch) {
+            send_to_char(ch, "Your %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+          } else {
+            snprintf(buf, sizeof(buf), "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+            act(buf, TRUE, ch, 0, vict, TO_CHAR);
+          }
           return;
         }
       }
 
       if ((spell == SPELL_DECCYATTR || spell == SPELL_INCCYATTR) && (!cyber || GET_ATT(vict, sub) == GET_REAL_ATT(vict, sub))) {
-        snprintf(buf, sizeof(buf), "$N's %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
-        act(buf, TRUE, ch, 0, vict, TO_CHAR);
+        if (vict == ch) {
+          send_to_char(ch, "Your %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+        } else {
+          snprintf(buf, sizeof(buf), "$N's %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+          act(buf, TRUE, ch, 0, vict, TO_CHAR);
+        }
         return;
       }
 
