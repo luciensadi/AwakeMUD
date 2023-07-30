@@ -994,7 +994,14 @@ void point_update(void)
         AFF_FLAGS(HUNTING(i->desc->original)).RemoveBit(AFF_TRACKED);
         HUNTING(i->desc->original) = NULL;
       }
+
       GET_ESS(i) -= 100;
+      if (i->desc && i->desc->original) {
+        // Tick up temporary essence loss.
+        GET_TEMP_ESSLOSS(i->desc->original) = GET_ESS(i->desc->original) - GET_ESS(i);
+        affect_total(i->desc->original);
+      }
+
       if (GET_ESS(i) <= 0) {
         struct char_data *victim = i->desc->original;
         send_to_char("As you feel the attachment to your physical body fade, you quickly return. The backlash from the fading connection rips through you...\r\n", i);
@@ -1008,8 +1015,13 @@ void point_update(void)
         i->desc = NULL;
         extract_char(i);
 
-        // Deal the damage instead of setting it.
-        if (damage(victim, victim, GET_BOD(victim) - 1, TYPE_SUFFERING, TRUE))
+        // First, nuke their health.
+        GET_PHYSICAL(victim) = -50;
+        GET_MENTAL(victim) = 0;
+        // Next, remove their death saves.
+        GET_PC_SALVATION_TICKS(victim) = 0;
+        // Finally, deal them massive damage.
+        if (damage(victim, victim, 100, TYPE_SUFFERING, TRUE))
           continue;
 
         // Continue regardless- i no longer exists.

@@ -6895,7 +6895,7 @@ ACMD(do_status)
     snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(targ));
   }
   if (GET_TEMP_ESSLOSS(targ)) {
-    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(targ));
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Essence Loss: %.2f\r\n", ((float) GET_TEMP_ESSLOSS(targ)) / 100);
   }
   if (GET_REACH(targ) && !(AFF_FLAGGED(targ, AFF_CLOSECOMBAT))) {
     snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Extra Reach (%dm)\r\n", GET_REACH(targ));
