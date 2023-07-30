@@ -43,6 +43,7 @@ extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data
 extern int max_ability(int i);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern void end_quest(struct char_data *ch);
+extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch);
 int get_skill_dice_in_use_for_weapons(struct char_data *ch);
@@ -937,12 +938,13 @@ void affect_total(struct char_data * ch)
     } else {
       // Only Shamans and Hermetics get these pools.
       if (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) {
-        GET_SDEFENSE(ch) = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
-        GET_DRAIN(ch) = MIN(GET_MAGIC(ch), GET_DRAIN(ch));
-        GET_REFLECT(ch) = MIN(GET_MAGIC(ch), GET_REFLECT(ch));
+        int sdef = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
+        int drain = MIN(GET_MAGIC(ch), GET_DRAIN(ch));
+        int reflect = MIN(GET_MAGIC(ch), GET_REFLECT(ch));
+        int casting = MAX(0, GET_MAGIC(ch) - drain - reflect - sdef);
 
-        // Chuck the remaining dice into the casting pool.
-        GET_CASTING(ch) = MAX(0, GET_MAGIC(ch) - GET_DRAIN(ch) - GET_REFLECT(ch) - GET_SDEFENSE(ch));
+        // It's possible for the casting value to be greater than sorcery right now. This setter resolves that.
+        set_casting_pools(ch, casting, drain, sdef, reflect, FALSE);
       } else {
         GET_CASTING(ch) = GET_MAGIC(ch) = GET_SDEFENSE(ch) = GET_DRAIN(ch) = GET_REFLECT(ch) = 0;
       }

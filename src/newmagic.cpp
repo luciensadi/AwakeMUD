@@ -6622,3 +6622,39 @@ const char *get_spell_name(int spell, int subtype) {
 
   return spell_name;
 }
+
+void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message) {
+  if (!ch) {
+    mudlog("SYSERR: Received NULL ch to set_casting_pools!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  if (casting < 0 || drain < 0 || spell_defense < 0 || reflection < 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received invalid val to set_casting_pools(%s, %d, %d, %d, %d)!", GET_CHAR_NAME(ch), casting, drain, spell_defense, reflection);
+    return;
+  }
+
+  int total = GET_MAGIC(ch);
+
+  total -= ch->real_abils.casting_pool = GET_CASTING(ch) = MIN(casting, total);
+  total -= ch->real_abils.drain_pool = GET_DRAIN(ch) = MIN(drain, total);
+  total -= ch->real_abils.spell_defense_pool = GET_SDEFENSE(ch) = MIN(spell_defense, total);
+  if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
+    total -= ch->real_abils.reflection_pool = GET_REFLECT(ch) = MIN(reflection, total);
+  if (total > 0)
+    GET_CASTING(ch) += total;
+
+  // Sanity check: If casting has exceeded sorc, push the overflow into drain pool.
+  if (GET_CASTING(ch) > GET_SKILL(ch, SKILL_SORCERY)) {
+    ch->real_abils.drain_pool = (GET_DRAIN(ch) += (GET_CASTING(ch) - GET_SKILL(ch, SKILL_SORCERY)));
+    ch->real_abils.casting_pool = GET_CASTING(ch) = GET_SKILL(ch, SKILL_SORCERY);
+  }
+
+  if (message) {
+    snprintf(buf, sizeof(buf), "Pools set as: Casting-%d Drain-%d Defense-%d", GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
+    if (GET_REFLECT(ch))
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Reflect-%d", GET_REFLECT(ch));
+    strlcat(buf, "\r\n", sizeof(buf));
+    send_to_char(buf, ch); 
+  }
+}

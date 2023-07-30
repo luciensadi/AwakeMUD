@@ -4411,7 +4411,7 @@ ACMD(do_cpool)
 
 ACMD(do_spool)
 {
-  int cast = 0, drain = 0, def = 0, reflect = 0, total = GET_MAGIC(ch);
+  int cast = 0, drain = 0, def = 0, reflect = 0;
   half_chop(argument, arg, buf);
   if (!*arg) {
     do_pool(ch, argument, 0, 0);
@@ -4425,11 +4425,7 @@ ACMD(do_spool)
     return;
   }
 
-  if (cast > GET_SKILL(ch, SKILL_SORCERY)) {
-    // This was always the case, but it was a hidden constraint that just wasted dice. Making it explicit here.
-    send_to_char(ch, "You can't allocate more than %d dice to your casting pool (limited by Sorcery skill).", GET_SKILL(ch, SKILL_SORCERY));
-    return;
-  }
+  FAILURE_CASE_PRINTF(cast > GET_SKILL(ch, SKILL_SORCERY), "You can't allocate more than %d dice to your casting pool (limited by Sorcery skill).", GET_SKILL(ch, SKILL_SORCERY));
 
   half_chop(buf, argument, arg);
   drain = atoi(argument);
@@ -4437,24 +4433,7 @@ ACMD(do_spool)
   def = atoi(argument);
   reflect = atoi(buf);
 
-  total -= ch->real_abils.casting_pool = GET_CASTING(ch) = MIN(cast, total);
-  total -= ch->real_abils.drain_pool = GET_DRAIN(ch) = MIN(drain, total);
-  total -= ch->real_abils.spell_defense_pool = GET_SDEFENSE(ch) = MIN(def, total);
-  if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
-    total -= ch->real_abils.reflection_pool = GET_REFLECT(ch) = MIN(reflect, total);
-  if (total > 0)
-    GET_CASTING(ch) += total;
-
-  if (GET_CASTING(ch) > GET_SKILL(ch, SKILL_SORCERY)) {
-    ch->real_abils.drain_pool = (GET_DRAIN(ch) += (GET_CASTING(ch) - GET_SKILL(ch, SKILL_SORCERY)));
-    ch->real_abils.casting_pool = GET_CASTING(ch) = GET_SKILL(ch, SKILL_SORCERY);
-  }
-
-  snprintf(buf, sizeof(buf), "Pools set as: Casting-%d Drain-%d Defense-%d", GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
-  if (GET_REFLECT(ch))
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Reflect-%d", GET_REFLECT(ch));
-  strlcat(buf, "\r\n", sizeof(buf));
-  send_to_char(buf, ch);
+  set_casting_pools(ch, cast, drain, def, reflect, TRUE);
 }
 
 ACMD(do_watch)
