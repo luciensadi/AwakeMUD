@@ -368,6 +368,10 @@ void redit_disp_menu(struct descriptor_data * d)
     send_to_char(CH, "m) Radiation power: %s%d%s\r\n", CCCYN(CH, C_CMP), ROOM->rating, CCNRM(CH, C_CMP));
   }
   send_to_char(CH, "n) Staff Level Required to Enter: %s%d%s\r\n", CCCYN(CH, C_CMP), ROOM->staff_level_lock, CCNRM(CH, C_CMP));
+  if (ROOM_FLAGGED(ROOM, ROOM_HELIPAD) || ROOM_FLAGGED(ROOM, ROOM_RUNWAY)) {
+    send_to_char(CH, "o) Flight destination code: %s%s%s\r\n", CCCYN(CH, C_CMP), ROOM->flight_code, CCNRM(CH, C_CMP));
+    send_to_char(CH, "p) Latitude: %s%f%s, Longitude: %s%f%s\r\n", CCCYN(CH, C_CMP), ROOM->latitude, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP), ROOM->longitude, CCNRM(CH, C_CMP));
+  }
   if (d->edit_convert_color_codes)
     send_to_char("t) Restore color codes\r\n", d->character);
   else
@@ -393,6 +397,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 
   int             number;
   int             room_num;
+  float number_float;
   switch (d->edit_mode)
   {
   case REDIT_CONFIRM_EDIT:
@@ -772,6 +777,14 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       send_to_char("Enter the privilege level a character must have to enter this room (0: NPC; 1: Player; X>1: Staff rank X): ", CH);
       d->edit_mode = REDIT_STAFF_LOCK_LEVEL;
       break;
+    case 'o':
+      send_to_char("Enter three-letter room flight code, like YVR:", d->character);
+      d->edit_mode = REDIT_FLIGHT_CODE;
+      break;
+    case 'p':
+      send_to_char(CH, "Enter the real-world latitude of this location. (hint: use Google Maps, click on empty ground, find the bit that looks like 47.601704, -122.331225 and put that first number here with ALL decimal places): ");
+      d->edit_mode = REDIT_LATITUDE;
+      break;
     default:
       send_to_char("Invalid choice!\r\n", d->character);
       redit_disp_menu(d);
@@ -893,6 +906,35 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     if (d->edit_room->name)
       delete [] d->edit_room->name;
     d->edit_room->name = str_dup(arg);
+    redit_disp_menu(d);
+    break;
+  case REDIT_FLIGHT_CODE:
+    if (strlen(arg) != 3) {
+      send_to_char("You must specify a 3-letter airport code, like YVR, SEA, etc. Make one up if you have to.\r\n", CH);
+      return;
+    }
+    if (d->edit_room->flight_code)
+      delete [] d->edit_room->flight_code;
+    d->edit_room->flight_code = str_dup(arg);
+    redit_disp_menu(d);
+    break;
+  case REDIT_LATITUDE:
+    number_float = atof(arg);
+    if (number_float > 90 || number_float < -90) {
+      send_to_char(CH, "Valid latitudes are between 90 and -90. Please use an actual map latitude to ensure correct flight times!\r\n");
+      return;
+    }
+    d->edit_room->latitude = number_float;
+    send_to_char(CH, "Enter the real-world longitude of this location. (hint: put the SECOND number from Google Maps here with ALL decimal places): ");
+    d->edit_mode = REDIT_LONGITUDE;
+    break;
+  case REDIT_LONGITUDE:
+    number_float = atof(arg);
+    if (number_float > 180 || number_float < -180) {
+      send_to_char(CH, "Valid longitudes are between 180 and -180. Please use an actual map longitude to ensure correct flight times!\r\n");
+      return;
+    }
+    d->edit_room->longitude = number_float;
     redit_disp_menu(d);
     break;
   case REDIT_DESC:
@@ -1421,6 +1463,10 @@ void write_world_to_disk(int vnum)
       }
 
       PRINT_TO_FILE_IF_TRUE("\tStaffLockLevel:\t%d\n", RM.staff_level_lock);
+
+      PRINT_TO_FILE_IF_TRUE("\tFlightCode:\t%s\n", RM.flight_code);
+      PRINT_TO_FILE_IF_TRUE("\tLatitude:\t%f\n", RM.latitude);
+      PRINT_TO_FILE_IF_TRUE("\tLongitude:\t%f\n", RM.longitude);
 
       for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
         room_direction_data *ptr = RM.dir_option[counter2];

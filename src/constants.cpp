@@ -297,6 +297,8 @@ const char *room_bits[] =
     "SMALL_DRONE_ONLY",
     "RADIOACTIVE",
     "ALL_VEH_ACCESS",
+    "HELIPAD",
+    "RUNWAY",
     MAX_FLAG_MARKER
   };
 
@@ -3012,7 +3014,8 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Ritual Casting", NI_IS_SINK},
     {"Staff Payout", NI_IS_FAUCET},
     {"Staff Charge", NI_IS_SINK},
-    {"Syspoint Purchase", NI_IS_SINK}
+    {"Syspoint Purchase", NI_IS_SINK},
+    {"Flight Fuel", NI_IS_SINK}
   };
 
 const char *ignored_bits_in_english[] =

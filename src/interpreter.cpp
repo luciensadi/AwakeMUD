@@ -197,6 +197,7 @@ ACMD_DECLARE(do_exit);
 ACMD_DECLARE(do_exits);
 ACMD_DECLARE(do_flee);
 ACMD_DECLARE(do_flip);
+ACMD_DECLARE(do_flyto);
 ACMD_DECLARE(do_focus);
 ACMD_DECLARE(do_follow);
 ACMD_DECLARE(do_force);
@@ -624,6 +625,7 @@ struct command_info cmd_info[] =
     { "fix"        , POS_SITTING , do_repair   , 0, 0, FALSE },
     { "flee"       , POS_FIGHTING, do_flee     , 0, 0, FALSE },
     { "flip"       , POS_SITTING , do_flip     , 0, 0, FALSE },
+    { "flyto"      , POS_SITTING , do_flyto    , 0, 0, FALSE },
     { "focus"      , POS_RESTING , do_focus    , 0, 0, FALSE },
     { "follow"     , POS_LYING   , do_follow   , 0, 0, FALSE },
     { "freeze"     , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_FREEZE, FALSE },

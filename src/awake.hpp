@@ -629,7 +629,9 @@ enum {
 #define ROOM_TOO_CRAMPED_FOR_CHARACTERS 35 // Prevents you from entering if you're not a projection or tiny drone.
 #define ROOM_RADIATION                  36 // You take radiation damage while you're here, scaled by Rating.
 #define ROOM_ALL_VEHICLE_ACCESS         37 // Bypasses land/air/water constraints.
-#define ROOM_MAX                        38
+#define ROOM_HELIPAD                    38 // Allows rotorcraft and vector thrust takeoff and landing.
+#define ROOM_RUNWAY                     39 // Allows fixed-wing takeoff and landing.
+#define ROOM_MAX                        40
 
 #define VISION_NORMAL         0
 #define VISION_LOWLIGHT       1
@@ -2890,8 +2892,9 @@ enum {
 #define NUYEN_INCOME_STAFF_PAYOUT           29
 #define NUYEN_OUTFLOW_STAFF_CHARGE          30
 #define NUYEN_OUTFLOW_SYSPOINT_PURCHASE     31
+#define NUYEN_OUTFLOW_FLIGHT_FUEL           32
 
-#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 32
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 33
 // Make sure you update constants.cpp's nuyen_faucets_and_sinks[] too!
 
 #define NI_IS_SINK   0

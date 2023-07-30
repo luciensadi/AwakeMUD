@@ -5736,7 +5736,7 @@ bool obj_is_a_vehicle_title(struct obj_data *obj) {
   return FALSE;
 }
 
-#define FALSE_CASE(condition, ...) {                   \
+#define FALSE_CASE_ACTOR(condition, ...) {             \
   if ((condition)) {                                   \
     if ((actor)) {                                     \
       send_to_char((actor), __VA_ARGS__);              \
@@ -5786,11 +5786,11 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   }
 
   // Peaceful flags stop aggressive actions.
-  FALSE_CASE(actor_in_room->peaceful || victim_in_room->peaceful, "You can't-- this is a peaceful area.\r\n");
-  FALSE_CASE(actor_original_in_room->peaceful, "You can't -- you're projecting from a peaceful area.\r\n");
+  FALSE_CASE_ACTOR(actor_in_room->peaceful || victim_in_room->peaceful, "You can't-- this is a peaceful area.\r\n");
+  FALSE_CASE_ACTOR(actor_original_in_room->peaceful, "You can't -- you're projecting from a peaceful area.\r\n");
 
   // Compare astral states.
-  FALSE_CASE(IS_ASTRAL(actor) && !SEES_ASTRAL(victim), "You can't harm someone who isn't astrally active.\r\n");
+  FALSE_CASE_ACTOR(IS_ASTRAL(actor) && !SEES_ASTRAL(victim), "You can't harm someone who isn't astrally active.\r\n");
 
   if (IS_ASTRAL(victim) && !SEES_ASTRAL(actor)) {
     mudlog_vfprintf(actor, LOG_SYSLOG, "SYSERR: Received astral victim and non-perceiving attacker to can_perform_aggressive_action from %s!", calling_func_name);
@@ -5800,7 +5800,7 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
 
   // Special cases for actions done on NPCs (they skip a lot of the PC damage checks).
   if (IS_NPC(victim) && victim == victim_original) {
-    FALSE_CASE(npc_is_protected_by_spec(victim) || MOB_FLAGGED(victim, MOB_NOKILL), "You're not able to harm %s: they're protected by staff edict.\r\n", GET_CHAR_NAME(victim));
+    FALSE_CASE_ACTOR(npc_is_protected_by_spec(victim) || MOB_FLAGGED(victim, MOB_NOKILL), "You're not able to harm %s: they're protected by staff edict.\r\n", GET_CHAR_NAME(victim));
 
     return TRUE;
   }
@@ -5811,7 +5811,7 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   }
 
   // Check for ignores. Use _original here, as it's either filled out (projection/puppeted) or defaulted to actor/victim.
-  FALSE_CASE(IS_IGNORING(actor_original, is_blocking_ic_interaction_from, victim_original), "You can't harm someone you've blocked IC interaction with.\r\n");
+  FALSE_CASE_ACTOR(IS_IGNORING(actor_original, is_blocking_ic_interaction_from, victim_original), "You can't harm someone you've blocked IC interaction with.\r\n");
 
   if (IS_IGNORING(victim_original, is_blocking_ic_interaction_from, actor_original)) {
     send_to_char("You don't see anyone by that name here.\r\n", actor);
@@ -5823,10 +5823,10 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   TRUE_CASE(ROOM_FLAGGED(actor_in_room, ROOM_ARENA) && ROOM_FLAGGED(actor_in_room, ROOM_ARENA));
 
   // PK flag checks: You must be flagged PK before you can attack anyone outside of an arena.
-  FALSE_CASE(!PRF_FLAGGED(actor_original, PRF_PKER), "You must ##^WTOGGLE PK^n before you can do that.\r\n");
+  FALSE_CASE_ACTOR(!PRF_FLAGGED(actor_original, PRF_PKER), "You must ##^WTOGGLE PK^n before you can do that.\r\n");
 
   // A victim is valid if they are a PKer or a KILLER (note that you must now be PKer yourself to attack a killer).
-  FALSE_CASE(!PRF_FLAGGED(victim_original, PRF_PKER) && !PRF_FLAGGED(victim_original, PLR_KILLER), "Your victim must ##^WTOGGLE PK^n before you can do that.\r\n");
+  FALSE_CASE_ACTOR(!PRF_FLAGGED(victim_original, PRF_PKER) && !PRF_FLAGGED(victim_original, PLR_KILLER), "Your victim must ##^WTOGGLE PK^n before you can do that.\r\n");
 
   return TRUE;
 }
