@@ -26,6 +26,7 @@
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
 #include "quest.hpp"
+#include "zoomies.hpp"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -1717,11 +1718,11 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   }
   door = ch->in_room;
   if (drag)
-    snprintf(buf2, sizeof(buf2), "$n is dragged into %s.\r\n", GET_VEH_NAME(found_veh));
+    snprintf(buf2, sizeof(buf2), "$n is dragged into %s.", GET_VEH_NAME(found_veh));
   else if (found_veh->type == VEH_BIKE)
-    snprintf(buf2, sizeof(buf2), "$n gets on %s.\r\n", GET_VEH_NAME(found_veh));
+    snprintf(buf2, sizeof(buf2), "$n gets on %s.", GET_VEH_NAME(found_veh));
   else
-    snprintf(buf2, sizeof(buf2), "$n climbs into %s.\r\n", GET_VEH_NAME(found_veh));
+    snprintf(buf2, sizeof(buf2), "$n climbs into %s.", GET_VEH_NAME(found_veh));
   act(buf2, FALSE, ch, 0, 0, TO_ROOM);
   ch->vfront = front;
   char_to_veh(found_veh, ch);
@@ -1743,7 +1744,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   {
     next = k->next;
     if ((door && door == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
-      act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
+      act("You follow $N.", FALSE, k->follower, 0, ch, TO_CHAR);
       if (!found_veh->seating[1] && found_veh->seating[0]) {
         strlcpy(buf3, "rear", sizeof(buf3));
       } else {
@@ -2004,6 +2005,11 @@ void leave_veh(struct char_data *ch)
   }
 
   RIG_VEH(ch, veh);
+
+  if (veh_is_currently_flying(veh)) {
+    send_to_char("You take one look at the far-distant ground and reconsider your plan of action.\r\n", ch);
+    return;
+  }
 
   if ((AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) && veh->in_veh) {
     if (veh->in_veh->in_veh) {

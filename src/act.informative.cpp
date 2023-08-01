@@ -46,6 +46,7 @@
 #include "ignore_system.hpp"
 #include "newmagic.hpp"
 #include "newmatrix.hpp"
+#include "zoomies.hpp"
 
 const char *CCHAR;
 
@@ -474,7 +475,13 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
         }
         break;
       case SPEED_CRUISING:
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s cruises through here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+        if (veh_is_currently_flying(vehicle)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s is airborne somewhere in the distance", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+        } else if (veh_can_traverse_air(vehicle)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s taxis around here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+        } else {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s cruises through here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+        }
         break;
       case SPEED_SPEEDING:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s speeds past you", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
@@ -1851,6 +1858,8 @@ void look_in_veh(struct char_data * ch)
     if (!ch->vfront) {
       CCHAR = "^y";
       list_veh_to_char(ch->in_veh->carriedvehs, ch);
+    } else if (veh_is_currently_flying(ch->in_veh)) {
+      send_flight_estimate(ch, ch->in_veh);
     }
   }
   if (!ch->in_room || PLR_FLAGGED(ch, PLR_REMOTE))

@@ -1334,6 +1334,7 @@ struct command_info rig_info[] =
     { "emote", 0, do_new_echo, 0, SCMD_VEMOTE, FALSE },
     { "enter", 0, do_enter, 0, 0, FALSE },
     { "exits", 0, do_exits, 0, 0, FALSE },
+    { "flyto", 0, do_flyto, 0, 0, FALSE },
     { "gridguide", 0, do_gridguide, 0, 0, FALSE },
     { "help", 0, do_help, 0, 0, FALSE },
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, FALSE },

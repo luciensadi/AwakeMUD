@@ -2325,6 +2325,7 @@ enum {
 #define PULSE_MOBILE              (10 RL_SEC)
 #define PULSE_VIOLENCE            (3 RL_SEC)
 #define PULSE_MONORAIL            (5 RL_SEC)
+#define PULSE_FLIGHT              (30 RL_SEC)
 
 #ifdef USE_PRIVATE_CE_WORLD
 #define MAX_SOCK_BUF              4194304 /* hand-picked from `cat /proc/sys/net/ipv4/tcp_wmem` */

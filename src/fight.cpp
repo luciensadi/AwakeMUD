@@ -113,6 +113,7 @@ extern bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_
 
 extern void mobact_change_firemode(struct char_data *ch);
 extern bool dumpshock(struct matrix_icon *icon);
+extern void clear_veh_flight_info(struct veh_data *veh);
 
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
@@ -6327,6 +6328,9 @@ void chkdmg(struct veh_data * veh)
     // Remove any vehicle brains, we don't want them thrown into the street.
     remove_vehicle_brain(veh);
 
+    // Remove flight information.
+    clear_veh_flight_info(veh);
+
     // This only matters for NPC vehicles, but there's no harm in setting it on player vehicles.
     GET_VEH_DESTRUCTION_TIMER(veh) = 0;
 
@@ -6375,8 +6379,8 @@ void chkdmg(struct veh_data * veh)
 
     // Write purgelogs for player vehicle kills.
     if (veh->owner) {
-      mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_WRECKLOG, TRUE);
-      mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_PURGELOG, TRUE);
+      mudlog_vfprintf(NULL, LOG_WRECKLOG, "Writing player vehicle contents to purgelog (%s)-- destroyed via standard damage.", GET_VEH_NAME(veh));
+      mudlog_vfprintf(NULL, LOG_PURGELOG, "Writing player vehicle contents to purgelog (%s)-- destroyed via standard damage.", GET_VEH_NAME(veh));
       purgelog(veh);
     }
 

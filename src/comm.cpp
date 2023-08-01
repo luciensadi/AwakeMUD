@@ -180,6 +180,7 @@ extern void warn_about_apartment_deletion();
 void process_wheres_my_car();
 extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
 void set_descriptor_canaries(struct descriptor_data *newd);
+extern void process_flying_vehicles();
 
 extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
 
@@ -921,6 +922,10 @@ void game_loop(int mother_desc)
 
     if (!(pulse % PULSE_MONORAIL)) {
       MonorailProcess();
+    }
+
+    if (!(pulse % PULSE_FLIGHT)) {
+      process_flying_vehicles();
     }
 
     if (!(pulse % PULSE_MOBILE)) {
