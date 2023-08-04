@@ -993,8 +993,8 @@ SPECIAL(taxi)
             if (!weap || (GET_OBJ_TYPE(weap) != ITEM_WEAPON && GET_OBJ_TYPE(weap) != ITEM_FIREWEAPON))
               continue;
 
-            act("As $e works, $n silently reaches up and taps on a sign that reads, \"^WDRAWN WEAPONS PROHIBITED^n\"", FALSE, driver, 0, 0, TO_ROOM);
-            act("As you work, you silently reach up and tap on a sign that reads, \"^WDRAWN WEAPONS PROHIBITED\"", FALSE, driver, 0, 0, TO_CHAR);
+            act("As $e works, $n silently reaches up and taps on a sign that reads, \"^yDRAWN WEAPONS PROHIBITED^n\"", FALSE, driver, 0, 0, TO_ROOM);
+            act("As you work, you silently reach up and tap on a sign that reads, \"^yDRAWN WEAPONS PROHIBITED\"", FALSE, driver, 0, 0, TO_CHAR);
             break;
           }
           break;
