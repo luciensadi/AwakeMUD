@@ -379,7 +379,9 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define IS_LIGHT(room)  (light_level((room)) <= LIGHT_NORMALNOLIT || light_level((room)) == LIGHT_PARTLIGHT)
 #define IS_LOW(room)	(light_level((room)) == LIGHT_MINLIGHT || light_level((room)) == LIGHT_PARTLIGHT)
 
-#define GET_ROOM_NAME(room) ((room) ? (room)->name : "(null room name)")
+#define GET_ROOM_NAME(room) ((room) ? (room)->name : "(null room's name)")
+#define GET_ROOM_DESC(room) ((room) ? ((room)->night_desc && weather_info.sunlight == SUN_DARK ? (room)->night_desc : (room)->description) : "(null room's desc)")
+#define GET_ROOM_FLIGHT_CODE(room) ((room) ? (room)->flight_code : (room)->name)
 
 #define VALID_ROOM_RNUM(rnum) ((rnum) != NOWHERE && (rnum) <= top_of_world)
 
@@ -468,7 +470,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_ESSHOLE(ch)       ((ch)->real_abils.esshole)
 #define GET_INDEX(ch)         ((ch)->real_abils.bod_index)
 #define GET_HIGHEST_INDEX(ch)      ((ch)->real_abils.highestindex)
-#define GET_BIOOVER(ch)       (-((int)((GET_ESS((ch)) + 300) - GET_INDEX((ch))) / 100))
+#define GET_BIOOVER(ch)       ((int)(GET_INDEX(ch) - (GET_ESS(ch) + 300) + 99) / 100)
 #define GET_TEMP_MAGIC_LOSS(ch)	((ch)->points.magic_loss)
 #define GET_TEMP_ESSLOSS(ch)	((ch)->points.ess_loss)
 
@@ -635,7 +637,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define BOOST(ch)               ((ch)->char_specials.saved.boosted)
 #define GET_EQ(ch, i)         ((ch)->equipment[i])
 
-#define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS))
+#define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS) || (skill) == SKILL_MANDARIN)
 
 #define GET_SKILL_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_SKILLS])
 #define GET_ADEPT_POWER_DIRTY_BIT(ch)   ((ch)->char_specials.dirty_bits[DIRTY_BIT_POWERS])
@@ -1369,6 +1371,20 @@ char    *crypt(const char *key, const char *salt);
   if ((condition)) {                          \
     send_to_char(ch, __VA_ARGS__);            \
     return;                                   \
+  }                                           \
+}                                             \
+
+#define FALSE_CASE(condition, message) {   \
+  if ((condition)) {                       \
+    send_to_char(ch, "%s\r\n", (message)); \
+    return FALSE;                          \
+  }                                        \
+}                                          \
+
+#define FALSE_CASE_PRINTF(condition, ...) {   \
+  if ((condition)) {                          \
+    send_to_char(ch, __VA_ARGS__);            \
+    return FALSE;                             \
   }                                           \
 }                                             \
 

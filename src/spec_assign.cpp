@@ -158,9 +158,9 @@ struct teach_data teachers[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
 
-  { 60503, { SKILL_ARABIC, SKILL_CHINESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
+  { 60503, { SKILL_ARABIC, SKILL_CANTONESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
     SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
-    SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, SKILL_IROQUOIS, 0, 0, 0 },
+    SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, SKILL_IROQUOIS, SKILL_MANDARIN, 0, 0 },
     "Von Richter runs through basic conjugation and sentence structure with you.\r\n", NEWBIE },
 
   { 60504, { SKILL_PILOT_BIKE, SKILL_PILOT_CAR, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
@@ -198,9 +198,9 @@ struct teach_data teachers[] = {
     "Steve roughly throws you a text book and tells you to read it, you feel like you've learned something.\r\n", NEWBIE},
   // End newbie teachers.
 
-   { 30700, { SKILL_ARABIC, SKILL_CHINESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
+   { 30700, { SKILL_ARABIC, SKILL_CANTONESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
      SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
-     SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, SKILL_IROQUOIS, 0, 0, 0 }, "Socrates shows you the intricities "
+     SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, SKILL_IROQUOIS, SKILL_MANDARIN, 0, 0 }, "Socrates shows you the intricities "
        "of the language and you emerge with a greater understanding.\r\n", ADVANCED },
 
    { 3125, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_CYBERTERM, SKILL_CYBERTERM_DESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Brian explains some concepts you had yet to understand "
@@ -245,9 +245,9 @@ struct teach_data teachers[] = {
               SKILL_BR_ELECTRONICS, SKILL_DATA_BROKERAGE, SKILL_PROGRAM_CYBERTERM, SKILL_PROGRAM_SPECIAL, SKILL_BIOTECH, SKILL_MEDICINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
      "You read through various academic journals.\r\n", LIBRARY },
 
-   { 18313, { SKILL_ARABIC, SKILL_CHINESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
+   { 18313, { SKILL_ARABIC, SKILL_CANTONESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
               SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
-              SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, SKILL_IROQUOIS, 0, 0, 0 },
+              SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, SKILL_IROQUOIS, SKILL_MANDARIN, 0, 0 },
      "You raid the teach-yourself-languages section.\r\n", LIBRARY },
 
 #ifdef USE_PRIVATE_CE_WORLD
@@ -288,7 +288,7 @@ struct teach_data teachers[] = {
 
 struct adept_data adepts[] = {//0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85
                      { 10011,{  0,  1, 50,  1,  1, 50,  1,  1,  1, 50, 50, 50, 50, 50, 50, 50, 50,  1,  1,  1, 50, 50, 50, 50, 50,  1,  1, 50, 50, 50, 50, 50,  1, 50,  1,  1,  1,  1, 50, 50, 50, 50, 50, 50,  1, 50,  1,  1,  1,  1,  1, 50,  1, 50,  1,  1, 50,  1, 50,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1, 50, 50,  1,  1,  1,  1,  1, 50, 50, 50, 50,  1,  1,  1,  1,  1}, 0 },
-                     { 60507,{  0,  1,  3,  1,  1,  4,  1,  1,  1,  3,  6,  6,  6,  6,  6,  6,  3,  1,  1,  1,  3, 10,  3,  0,  3,  0,  0,  6,  6,  6,  0,  0,  1,  3,  0,  1,  0,  1,  3,  6,  0,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, 1 },
+                     { 60507,{  0,  1,  3,  1,  1,  4,  1,  1,  1,  3,  6,  6,  6,  6,  6,  6,  3,  1,  1,  1,  3, 10,  3,  0,  3,  0,  0,  6,  6,  6,  0,  0,  1,  3,  0,  1,  0,  1,  3,  6,  0,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, 1 },
                      { 7223, {  0,  1,  3,  0,  1,  4,  1,  0,  0,  3,  0,  6,  0,  0,  6,  0,  6,  0,  0,  0,  0, 10,  0,  0,  6,  0,  0,  2,  0,  6,  0,  0,  0,  0,  0,  0,  0,  0,  3,  6,  0,  6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, 0 },
                      { 2701, {  0,  1,  3,  0,  0,  4,  0,  1,  1,  0,  6,  0,  6,  6,  0,  6,  0,  1,  1,  1,  4,  0,  3,  0,  0,  0,  0,  6,  6,  0,  0,  0,  1,  0,  0,  1,  0,  1,  2,  0,  0,  6,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, 0 },
                      { 3603, {  0,  0,  3,  1,  1,  4,  1,  1,  1,  3,  6,  0,  0,  0,  0,  6,  0,  1,  1,  1,  4, 10,  6,  0,  0,  0,  0,  6,  0,  0,  0,  0,  1,  3,  0,  1,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}, 0 },

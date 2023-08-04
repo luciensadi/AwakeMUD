@@ -297,6 +297,8 @@ const char *room_bits[] =
     "SMALL_DRONE_ONLY",
     "RADIOACTIVE",
     "ALL_VEH_ACCESS",
+    "HELIPAD",
+    "RUNWAY",
     MAX_FLAG_MARKER
   };
 
@@ -1644,7 +1646,7 @@ struct skill_data skills[] =
     {"Sperethiel",                              INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Spanish",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Japanese",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
-    {"Chinese",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
+    {"Cantonese",                               INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Korean",                                  INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Italian",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Russian",                                 INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
@@ -1678,12 +1680,12 @@ struct skill_data skills[] =
     {"Off-hand Clubs",                          STR, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
     {"Off-hand Cyber Implants",                 STR, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
     {"Off-hand Whips/Flails",                   QUI, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
-    {"Survival",                                INT, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
-    {"Land Navigation",                         INT, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
-    {"Water Navigation",                        INT, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
-    {"Air Navigation",                          INT, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
+    {"Survival",                                WIL, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
+    {"Land Navigation",                         INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
+    {"Water Navigation",                        INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
+    {"Air Navigation",                          INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Small Unit Tactics",                      INT, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
-    {"Chemistry",                               INT, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
+    {"Chemistry",                               INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Diving",                                  BOD, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
     {"Parachuting",                             BOD, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
     {"Underwater Combat",                       STR, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
@@ -1718,7 +1720,8 @@ struct skill_data skills[] =
     {"Piloting Semiballistic Aircraft",         REA, SKILL_TYPE_ACTIVE,    FALSE,     9,  FALSE,  FALSE },
     {"Piloting Suborbital Craft",               REA, SKILL_TYPE_ACTIVE,    FALSE,     9,  FALSE,  FALSE },
     {"Piloting Tracked Vehicles",               REA, SKILL_TYPE_ACTIVE,    FALSE,    10,  FALSE,  FALSE },
-    {"Piloting Walkers",                        REA, SKILL_TYPE_ACTIVE,    FALSE,    11,  FALSE,  FALSE }
+    {"Piloting Walkers",                        REA, SKILL_TYPE_ACTIVE,    FALSE,    11,  FALSE,  FALSE },
+    {"Mandarin",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
   };
 
 int rev_dir[] =
@@ -3013,7 +3016,8 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Ritual Casting", NI_IS_SINK},
     {"Staff Payout", NI_IS_FAUCET},
     {"Staff Charge", NI_IS_SINK},
-    {"Syspoint Purchase", NI_IS_SINK}
+    {"Syspoint Purchase", NI_IS_SINK},
+    {"Flight Fuel", NI_IS_SINK}
   };
 
 const char *ignored_bits_in_english[] =

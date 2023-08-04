@@ -17,6 +17,7 @@
 #include "act.drive.hpp"
 #include "config.hpp"
 #include "ignore_system.hpp"
+#include "zoomies.hpp"
 
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
@@ -265,6 +266,11 @@ ACMD(do_drive)
     snprintf(buf1, sizeof(buf1), "%s takes the wheel and accelerates to a cruise.\r\n", capitalize(GET_NAME(ch)));
     send_to_veh(buf1, VEH, ch, FALSE);
   } else {
+    if (veh_is_currently_flying(VEH)) {
+      send_to_char("Relinquishing the controls in midair is a great way to crash and die.\r\n", ch);
+      return;
+    }
+
     AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
     send_to_char("You relinquish the driver's seat.\r\n", ch);
     snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
@@ -413,6 +419,10 @@ ACMD(do_ram)
     return;
   }
   RIG_VEH(ch, veh);
+  if (veh_is_currently_flying(veh)) {
+    send_to_char("While airborne? You'd die.\r\n", ch);
+    return;
+  }
   if (veh->cspeed <= SPEED_IDLE) {
     send_to_char("You're moving far too slowly.\r\n", ch);
     return;
@@ -1260,6 +1270,10 @@ ACMD(do_driveby)
     send_to_char(ch, "You must be in a vehicle to perform a driveby.\r\n");
     return;
   }
+  if (veh_is_currently_flying(ch->in_veh)) {
+    send_to_char("While airborne? You'd fall out.\r\n", ch);
+    return;
+  }
 
   if (IS_RIGGING(ch)) {
     send_to_char("You're jacked into the vehicle itself, so you can't perform a driveby.\r\n", ch);
@@ -1433,6 +1447,8 @@ ACMD(do_speed)
     DELETE_AND_NULL_ARRAY(GET_VEH_DEFPOS(veh));
   }
 
+  FAILURE_CASE(veh_can_traverse_air(veh) && i > 2, "Sorry, you can't accelerate aircraft faster than cruising speed.");
+
   if (veh->hood) {
     send_to_char("You can't move with the hood up.\r\n", ch);
     return;
@@ -1443,17 +1459,17 @@ ACMD(do_speed)
     } else {
       if (!IS_RIGGING(ch)) {
         send_to_char("You put your foot on the brake.\r\n", ch);
-        send_to_veh("You slow down.", veh, ch, TRUE);
+        send_to_veh("You slow down.\r\n", veh, ch, TRUE);
       } else {
-        send_to_veh("You slow down.", veh, NULL, TRUE);
+        send_to_veh("You slow down.\r\n", veh, NULL, TRUE);
       }
     }
   } else if (i > veh->cspeed) {
     if (!IS_RIGGING(ch)) {
       send_to_char("You put your foot on the accelerator.\r\n", ch);
-      send_to_veh("You speed up.", veh, ch, TRUE);
+      send_to_veh("You speed up.\r\n", veh, ch, TRUE);
     } else {
-      send_to_veh("You speed up.", veh, NULL, TRUE);
+      send_to_veh("You speed up.\r\n", veh, NULL, TRUE);
     }
   } else {
     send_to_char("But you're already traveling that fast!\r\n", ch);
@@ -1545,6 +1561,10 @@ ACMD(do_target)
     send_to_char("It'd be a bad idea to start firing in such an enclosed space.\r\n", ch);
     return;
   }
+  if (veh_is_currently_flying(veh)) {
+    send_to_char("While airborne? What is this, World War II?\r\n", ch);
+    return;
+  }
 
   two_arguments(argument, arg, buf2);
   if (!*arg) {
@@ -1565,11 +1585,11 @@ ACMD(do_target)
       if (--j < 0)
         break;
     if (!obj) {
-      send_to_char("There aren't that many mounts.\r\n", ch);
+      send_to_char("Your vehicle doesn't have that many mounts.\r\n", ch);
       return;
     }
     if (!obj->contains) {
-      send_to_char("It has no weapon mounted.\r\n", ch);
+      send_to_char(ch, "There is no weapon mounted on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
       return;
     }
     strlcpy(arg, buf2, sizeof(arg));
@@ -1825,27 +1845,12 @@ ACMD(do_gridguide)
 
   RIG_VEH(ch, veh);
 
-  if (!veh) {
-    send_to_char("You have to be in a vehicle to do that.\r\n", ch);
-    return;
-  }
-  if (IS_ASTRAL(ch)) {
-    send_to_char("You cannot seem to touch physical objects.\r\n", ch);
-    return;
-  }
-
-  if (!veh->autonav) {
-    send_to_char("You need to have an autonav system installed.\r\n", ch);
-    return;
-  }
-  if (veh->hood) {
-    send_to_char("Gridguide refuses to engage with the hood up.\r\n", ch);
-    return;
-  }
-  if ((veh->locked && GET_IDNUM(ch) != veh->owner) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_PILOT))) {
-    send_to_char("You don't have control over the vehicle.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!veh, "You have to be in a vehicle to do that.");
+  FAILURE_CASE(IS_ASTRAL(ch), "You cannot seem to touch physical objects");
+  FAILURE_CASE(veh_can_traverse_air(veh), "Unfortunately, aircraft can't interface with the gridguide system.");
+  FAILURE_CASE(!veh->autonav, "You need to have an autonav system installed.");
+  FAILURE_CASE(veh->hood, "Gridguide refuses to engage with the hood up.");
+  FAILURE_CASE((veh->locked && GET_IDNUM(ch) != veh->owner) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_PILOT)), "You don't have control over the vehicle.");
 
   argument = two_arguments(argument, arg, buf2);
   if (!*arg) {

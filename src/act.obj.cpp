@@ -268,7 +268,12 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
 
     int space_required = 0;
     if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-      space_required = GET_PROGRAM_SIZE(obj);
+      // Persona programs don't take up storage memory in store-bought decks
+      if ((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR)) {
+        space_required = 0;
+      } else {
+        space_required = GET_PROGRAM_SIZE(obj);
+      }
     } else {
       space_required = (int) GET_DESIGN_SIZE(obj) * 1.1;
     }
@@ -610,19 +615,37 @@ ACMD(do_put)
   }
 
   // Combine cyberdeck parts/chips, or combine summoning materials.
-  if ((GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cont, 0) == TYPE_PARTS) ||
-             (GET_OBJ_TYPE(cont) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(cont, 0) == TYPE_SUMMONING)) {
-    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)))
-      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
-    else if (obj == cont)
-      send_to_char(ch, "You cannot combine %s with itself.\r\n", GET_OBJ_NAME(obj));
-    else if (GET_OBJ_TYPE(cont) != GET_OBJ_TYPE(obj) || GET_OBJ_VAL(obj, 0) != GET_OBJ_VAL(cont, 0))
-      send_to_char(ch, "You cannot combine %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
-    else {
-      GET_OBJ_COST(cont) += GET_OBJ_COST(obj);
-      send_to_char(ch, "You combine %s and %s.\r\n", GET_OBJ_NAME(cont), GET_OBJ_NAME(obj));
-      extract_obj(obj);
+  if ((GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cont) == TYPE_PARTS) ||
+      (GET_OBJ_TYPE(cont) == ITEM_MAGIC_TOOL && GET_MAGIC_TOOL_TYPE(cont) == TYPE_SUMMONING)) 
+  {
+    // Find the object.
+    FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)), "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
+
+    // Not the same object as container.
+    FAILURE_CASE_PRINTF(obj == cont, "You cannot combine %s with itself.\r\n", GET_OBJ_NAME(obj));
+
+    // Must match types.
+    FAILURE_CASE_PRINTF(GET_OBJ_TYPE(cont) != GET_OBJ_TYPE(obj), "You cannot combine %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+
+    // Must match subtypes.
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_DECK_ACCESSORY:
+        FAILURE_CASE_PRINTF(GET_DECK_ACCESSORY_TYPE(obj) != GET_DECK_ACCESSORY_TYPE(cont) || GET_DECK_ACCESSORY_IS_CHIPS(obj) != GET_DECK_ACCESSORY_IS_CHIPS(cont), 
+                            "You cannot combine %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+        break;
+      case ITEM_MAGIC_TOOL:
+        FAILURE_CASE_PRINTF(GET_MAGIC_TOOL_TYPE(obj) != GET_MAGIC_TOOL_TYPE(cont), 
+                            "You cannot combine %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+        break;
+      default:
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received unknown type %d to part/chip/material combine switch case.", GET_OBJ_TYPE(obj));
+        return;
     }
+    
+    // All preconditions passed: Add value, then extract.
+    GET_OBJ_COST(cont) += GET_OBJ_COST(obj);
+    send_to_char(ch, "You dump the contents of %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+    extract_obj(obj);
     return;
   }
 
@@ -958,9 +981,11 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           return;
         }
 
-        if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM ||
-            (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE))
-          GET_OBJ_VAL(cont, 5) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
+        // Subtract program size from storage, but a persona program on a store-bought deck doesn't use storage
+        if (((GET_OBJ_TYPE(obj) == ITEM_PROGRAM) && !((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR)))
+            || (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE)) {
+          GET_CYBERDECK_USED_STORAGE(cont) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
+        }
 
         if (GET_OBJ_TYPE(obj) == ITEM_PART) {
           if (GET_OBJ_VAL(obj, 0) == PART_STORAGE) {
@@ -2918,8 +2943,8 @@ ACMD(do_pour)
 void wear_message(struct char_data * ch, struct obj_data * obj, int where)
 {
   const char *wear_messages[][2] = {
-                               {"$n activates $p.",
-                                "You activate $p."},
+                               {"$n equip and activates $p.",
+                                "You equip and activate $p."},
 
                                {"$n wears $p on $s head.",
                                 "You wear $p on your head."},
@@ -3899,7 +3924,10 @@ ACMD(do_activate)
     affect_total(ch);
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_FOCUS(obj)) {
-    send_to_char(ch, "There's no need to activate or deactivate %s. Just wield it when you want to use it.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "There's no need to activate or deactivate %s. Just ^WWIELD^n it when you want to use it.\r\n", GET_OBJ_NAME(obj));
+    return;
+  } else if (GET_OBJ_TYPE(obj) == ITEM_LIGHT) {
+    send_to_char(ch, "There's no need to activate or deactivate %s. Just ^WWEAR^n it when you want to use it.\r\n", GET_OBJ_NAME(obj));
     return;
   } else if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1)) {
     send_to_char(ch, "You can't activate %s.\r\n", GET_OBJ_NAME(obj));

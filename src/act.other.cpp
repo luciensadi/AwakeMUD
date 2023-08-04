@@ -140,7 +140,7 @@ ACMD(do_quit)
       // Quitting out in a staff-only area? You won't load back there.
       GET_LAST_IN(ch) = RM_ENTRANCE_TO_DANTES;
       snprintf(buf, sizeof(buf), "%s (%ld) quitting out in staff-only room '%s^n' (%ld); they will load at Dante's instead.",
-              GET_CHAR_NAME(ch), GET_IDNUM(ch), GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room));
+              GET_CHAR_NAME(ch), GET_IDNUM_EVEN_IF_PROJECTING(ch), GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     } else
       GET_LAST_IN(ch) = GET_ROOM_VNUM(ch->in_room);
@@ -203,6 +203,8 @@ ACMD(do_sneak)
     send_to_char("You stop sneaking around.\r\n", ch);
     return;
   }
+
+  FAILURE_CASE(GET_POS(ch) != POS_STANDING, "You must be standing to sneak.");
 
   send_to_char("You begin to move with stealth.\r\n", ch);
   AFF_FLAGS(ch).SetBit(AFF_SNEAK);
@@ -3686,7 +3688,7 @@ ACMD(do_assense)
           strlcat(buf, ". It has more astral presence than you", sizeof(buf));
       }
       if (success >= 3) {
-        if (GET_IDNUM(ch) == GET_FOCUS_BONDED_TO(obj))
+        if (GET_IDNUM_EVEN_IF_PROJECTING(ch) == GET_FOCUS_BONDED_TO(obj))
           strlcat(buf, ", it is bonded to you", sizeof(buf));
         else if (GET_LEVEL(ch) >= LVL_BUILDER) {
           const char *pname = get_player_name(GET_FOCUS_BONDED_TO(obj));
@@ -3755,7 +3757,7 @@ ACMD(do_assense)
           strlcat(buf, ". It has more astral presence than you", sizeof(buf));
       }
       if (success >= 3) {
-        if (GET_IDNUM(ch) == GET_WEAPON_FOCUS_BONDED_BY(obj))
+        if (GET_IDNUM_EVEN_IF_PROJECTING(ch) == GET_WEAPON_FOCUS_BONDED_BY(obj))
           strlcat(buf, ", it is bonded to you", sizeof(buf));
         else {
           for (mem = GET_PLAYER_MEMORY(ch); mem; mem = mem->next)
@@ -4423,7 +4425,7 @@ ACMD(do_cpool)
 
 ACMD(do_spool)
 {
-  int cast = 0, drain = 0, def = 0, reflect = 0, total = GET_MAGIC(ch);
+  int cast = 0, drain = 0, def = 0, reflect = 0;
   half_chop(argument, arg, buf);
   if (!*arg) {
     do_pool(ch, argument, 0, 0);
@@ -4437,11 +4439,7 @@ ACMD(do_spool)
     return;
   }
 
-  if (cast > GET_SKILL(ch, SKILL_SORCERY)) {
-    // This was always the case, but it was a hidden constraint that just wasted dice. Making it explicit here.
-    send_to_char(ch, "You can't allocate more than %d dice to your casting pool (limited by Sorcery skill).", GET_SKILL(ch, SKILL_SORCERY));
-    return;
-  }
+  FAILURE_CASE_PRINTF(cast > GET_SKILL(ch, SKILL_SORCERY), "You can't allocate more than %d dice to your casting pool (limited by Sorcery skill).", GET_SKILL(ch, SKILL_SORCERY));
 
   half_chop(buf, argument, arg);
   drain = atoi(argument);
@@ -4449,24 +4447,7 @@ ACMD(do_spool)
   def = atoi(argument);
   reflect = atoi(buf);
 
-  total -= ch->real_abils.casting_pool = GET_CASTING(ch) = MIN(cast, total);
-  total -= ch->real_abils.drain_pool = GET_DRAIN(ch) = MIN(drain, total);
-  total -= ch->real_abils.spell_defense_pool = GET_SDEFENSE(ch) = MIN(def, total);
-  if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
-    total -= ch->real_abils.reflection_pool = GET_REFLECT(ch) = MIN(reflect, total);
-  if (total > 0)
-    GET_CASTING(ch) += total;
-
-  if (GET_CASTING(ch) > GET_SKILL(ch, SKILL_SORCERY)) {
-    ch->real_abils.drain_pool = (GET_DRAIN(ch) += (GET_CASTING(ch) - GET_SKILL(ch, SKILL_SORCERY)));
-    ch->real_abils.casting_pool = GET_CASTING(ch) = GET_SKILL(ch, SKILL_SORCERY);
-  }
-
-  snprintf(buf, sizeof(buf), "Pools set as: Casting-%d Drain-%d Defense-%d", GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
-  if (GET_REFLECT(ch))
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Reflect-%d", GET_REFLECT(ch));
-  strlcat(buf, "\r\n", sizeof(buf));
-  send_to_char(buf, ch);
+  set_casting_pools(ch, cast, drain, def, reflect, TRUE);
 }
 
 ACMD(do_watch)
@@ -4730,7 +4711,7 @@ ACMD(do_costtime)
   if (*argument)
     GET_COST_BREAKUP(ch) = MAX(0, MIN(100, atoi(argument)));
   send_to_char(ch, "Your current cost/time allocation is: %d/%d\r\n", GET_COST_BREAKUP(ch), 100 - GET_COST_BREAKUP(ch));
-  snprintf(buf, sizeof(buf), "UPDATE pfiles SET CostTime=%d WHERE idnum=%ld;", GET_COST_BREAKUP(ch), GET_IDNUM(ch));
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET CostTime=%d WHERE idnum=%ld;", GET_COST_BREAKUP(ch), GET_IDNUM_EVEN_IF_PROJECTING(ch));
   mysql_wrapper(mysql, buf);
 }
 
@@ -4739,7 +4720,7 @@ ACMD(do_availoffset)
   if (*argument)
     GET_AVAIL_OFFSET(ch) = MAX(0, MIN(5, atoi(argument)));
   send_to_char(ch, "Your current availability offset is: %d\r\n", GET_AVAIL_OFFSET(ch));
-  snprintf(buf, sizeof(buf), "UPDATE pfiles SET AvailOffset=%d WHERE idnum=%ld;", GET_AVAIL_OFFSET(ch), GET_IDNUM(ch));
+  snprintf(buf, sizeof(buf), "UPDATE pfiles SET AvailOffset=%d WHERE idnum=%ld;", GET_AVAIL_OFFSET(ch), GET_IDNUM_EVEN_IF_PROJECTING(ch));
   mysql_wrapper(mysql, buf);
 }
 
@@ -5212,12 +5193,6 @@ ACMD(do_stop) {
     return;
   }
 
-  if (IS_WORKING(ch)) {
-    STOP_WORKING(ch);
-    send_to_char("You stop working.\r\n", ch);
-    return;
-  }
-
   if (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     struct veh_data *veh = NULL;
     RIG_VEH(ch, veh);
@@ -5228,6 +5203,12 @@ ACMD(do_stop) {
     } else {
       send_to_char("Your vehicle isn't moving.\r\n", ch);
     }
+    return;
+  }
+
+  if (IS_WORKING(ch)) {
+    STOP_WORKING(ch);
+    send_to_char("You stop working.\r\n", ch);
     return;
   }
 

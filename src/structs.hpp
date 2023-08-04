@@ -235,6 +235,7 @@ struct room_data
   char *name;                  /* Rooms name 'You are ...'           */
   char *description;           /* Shown when entered                 */
   char *night_desc;
+  char *flight_code;
   struct extra_descr_data *ex_description; /* for examine/look       */
   struct room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
   struct room_direction_data *temporary_stored_exit[NUM_OF_DIRS]; // Stores exits that elevators or spec procs overwrote
@@ -275,6 +276,9 @@ struct room_data
 
   struct obj_data *best_workshop[NUM_WORKSHOP_TYPES];
 
+  // Geolocation information for flight.
+  float latitude, longitude;
+
   // Apartment/housing information.
   class Apartment *apartment;
   class ApartmentRoom *apartment_room;
@@ -284,12 +288,12 @@ struct room_data
 #endif
   room_data() :
       number(0), zone(0), sector_type(0), name(NULL), description(NULL),
-      night_desc(NULL), ex_description(NULL), matrix(0), access(0), io(0),
+      night_desc(NULL), flight_code(NULL), ex_description(NULL), matrix(0), access(0), io(0),
       trace(0), bandwidth(0), rtg(0), jacknumber(0),
       address(NULL), blood(0), debris(0), spec(0), rating(0), cover(0), crowd(0),
       type(0), x(0), y(0), z(0), peaceful(0), func(NULL), dirty_bit(FALSE),
       staff_level_lock(0), elevator_number(0), contents(NULL), people(NULL),
-      vehicles(NULL), watching(NULL), apartment(NULL), apartment_room(NULL)
+      vehicles(NULL), watching(NULL), latitude(0), longitude(0), apartment(NULL), apartment_room(NULL)
   {
     ZERO_OUT_ARRAY(dir_option, NUM_OF_DIRS);
     ZERO_OUT_ARRAY(temporary_stored_exit, NUM_OF_DIRS);
@@ -835,6 +839,10 @@ struct veh_data
   char *leave;
   char *arrive;
   struct veh_data *next;
+  
+  // Flight info.
+  struct room_data *flight_target;
+  int flight_duration;
 
 #ifdef USE_DEBUG_CANARIES
   int canary;
@@ -847,7 +855,7 @@ struct veh_data
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL), defined_position(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
       next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL),
-      leave(NULL), arrive(NULL), next(NULL)
+      leave(NULL), arrive(NULL), next(NULL), flight_target(NULL), flight_duration(0)
   {
     for (int i = 0; i < NUM_MODS; i++)
       mod[i] = NULL;

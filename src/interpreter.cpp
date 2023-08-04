@@ -200,6 +200,7 @@ ACMD_DECLARE(do_exit);
 ACMD_DECLARE(do_exits);
 ACMD_DECLARE(do_flee);
 ACMD_DECLARE(do_flip);
+ACMD_DECLARE(do_flyto);
 ACMD_DECLARE(do_focus);
 ACMD_DECLARE(do_follow);
 ACMD_DECLARE(do_force);
@@ -628,6 +629,7 @@ struct command_info cmd_info[] =
     { "fix"        , POS_SITTING , do_repair   , 0, 0, FALSE },
     { "flee"       , POS_FIGHTING, do_flee     , 0, 0, FALSE },
     { "flip"       , POS_SITTING , do_flip     , 0, 0, FALSE },
+    { "flyto"      , POS_SITTING , do_flyto    , 0, 0, FALSE },
     { "focus"      , POS_RESTING , do_focus    , 0, 0, FALSE },
     { "follow"     , POS_LYING   , do_follow   , 0, 0, FALSE },
     { "freeze"     , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_FREEZE, FALSE },
@@ -867,7 +869,7 @@ struct command_info cmd_info[] =
     { "slist"      , POS_DEAD    , do_slist    , LVL_BUILDER, 0, FALSE },
     { "sleep"      , POS_SLEEPING, do_sleep    , 0, 0, FALSE },
     { "slowns"     , POS_DEAD    , do_slowns   , LVL_DEVELOPER, 0, FALSE },
-    { "sneak"      , POS_STANDING, do_sneak    , 1, 0, FALSE },
+    { "sneak"      , POS_SITTING, do_sneak    , 1, 0, FALSE },
     { "snoop"      , POS_DEAD    , do_snoop    , LVL_EXECUTIVE, 0, FALSE },
     { "socials"    , POS_DEAD    , do_commands , 0, SCMD_SOCIALS, TRUE },
     { "software"   , POS_LYING   , do_software , 0, 0, FALSE },
@@ -1337,6 +1339,7 @@ struct command_info rig_info[] =
     { "emote", 0, do_new_echo, 0, SCMD_VEMOTE, FALSE },
     { "enter", 0, do_enter, 0, 0, FALSE },
     { "exits", 0, do_exits, 0, 0, FALSE },
+    { "flyto", 0, do_flyto, 0, 0, FALSE },
     { "gridguide", 0, do_gridguide, 0, 0, FALSE },
     { "help", 0, do_help, 0, 0, FALSE },
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, FALSE },
@@ -2634,6 +2637,11 @@ void nanny(struct descriptor_data * d, char *arg)
 
         return;
       }
+      // Drop the HELP crawler.
+      if (strcmp(buf, "HELP") == 0) {
+        close_socket(d);
+        return;
+      }
       if (does_player_exist(tmp_name)) {
         d->character = playerDB.LoadChar(tmp_name, TRUE);
         d->character->desc = d;
@@ -3468,6 +3476,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("programs", "software");
   COMMAND_ALIAS("bank", "balance");
   COMMAND_ALIAS("recall", "recap");
+  COMMAND_ALIAS("summon", "conjure");
 
   // Toggles.
   COMMAND_ALIAS("settings", "toggle");
@@ -3568,6 +3577,9 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("hepl", "help");
 
   COMMAND_ALIAS("psuh", "push");
+
+  // the weird shit
+  COMMAND_ALIAS("whomst've", "who");
 
 
   // Found nothing, return the failure code.

@@ -1526,7 +1526,8 @@ ACMD(do_analyze)
   if (is_abbrev(arg, "host")) {
     success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
     if (success > 0) {
-      send_to_icon(PERSONA, "You analyze the host.\r\n");
+      snprintf(buf, sizeof(buf), "You analyze the ^W%s^n host.\r\n", host_type[matrix[PERSONA->in_host].type]);
+      send_to_icon(PERSONA, buf);
       int found[] = { 0, 0, 0, 0, 0, 0, 0};
       if (success < 7) {
         for (int current;success; success--) {
@@ -2161,7 +2162,9 @@ ACMD(do_load)
         }
       }
 
-      if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 2) > DECKER->active) {
+      if (subcmd == SCMD_SWAP && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR)) {
+        send_to_icon(PERSONA, "Persona programs are loaded at time of connection.\r\n");
+      } else if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 2) > DECKER->active) {
         send_to_icon(PERSONA, "You don't have enough active memory to load that program.\r\n");
       } else if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
         send_to_icon(PERSONA, "Your deck is not powerful enough to run that program.\r\n");
@@ -2552,7 +2555,7 @@ void send_storage_program_list(struct char_data *ch) {
   send_to_icon(PERSONA, "\r\nStorage Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(DECKER->deck, 3),
                GET_OBJ_VAL(DECKER->deck, 3) - GET_OBJ_VAL(DECKER->deck, 5));
   for (struct obj_data *soft = DECKER->deck->contains; soft; soft = soft->next_content)
-    if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM)
+    if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) > SOFT_SENSOR))
       send_to_icon(PERSONA, "%-30s^n Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
     else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE)
       send_to_icon(PERSONA, "%s^n\r\n", GET_OBJ_NAME(soft));
@@ -2676,14 +2679,16 @@ ACMD(do_software)
     strcpy(buf, "^cOther Software:^n\r\n");
     if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK) {
       strcpy(buf2, "^cCustom Components:^n\r\n");
+    } else {
+      strcpy(buf2, "^cPersona Programs:^n\r\n");
     }
 
     bool has_other_software = FALSE;
-    bool has_custom_components = FALSE;
+    bool has_components = FALSE;
 
     const char *defaulted_string = PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(defaulted)" : "*";
     for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content) {
-      if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
+      if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) > SOFT_SENSOR)) {
         has_other_software = TRUE;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n Rating: %2d %s\r\n",
                  get_obj_name_with_padding(soft, 40),
@@ -2693,17 +2698,23 @@ ACMD(do_software)
         has_other_software = TRUE;
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", GET_OBJ_NAME(soft));
       } else if (GET_OBJ_TYPE(soft) == ITEM_PART) {
-        has_custom_components = TRUE;
+        has_components = TRUE;
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s Type: ^c%-24s^n (rating ^c%d^n)\r\n",
                 get_obj_name_with_padding(soft, 40),
                 parts[GET_PART_TYPE(soft)].name,
                 GET_PART_RATING(soft));
+      } else if ((GET_OBJ_TYPE(cyberdeck) == ITEM_CYBERDECK) && (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR)) {
+        // Persona programs in store-bought decks are handled here as components
+        has_components = TRUE;
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s^n Rating: %2d\r\n",
+                 get_obj_name_with_padding(soft, 40),
+                 GET_PROGRAM_RATING(soft));
       }
     }
 
     if (has_other_software)
       send_to_char(buf, ch);
-    if (has_custom_components && GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK)
+    if (has_components)
       send_to_char(buf2, ch);
   }
 }

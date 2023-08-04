@@ -193,6 +193,9 @@ extern void write_index_file(const char *suffix);
 #define REDIT_EXIT_ENTRY_STRING_THIRDPERSON 50
 #define REDIT_EXIT_EXIT_STRING_THIRDPERSON  51
 #define REDIT_STAFF_LOCK_LEVEL 52
+#define REDIT_FLIGHT_CODE      53
+#define REDIT_LATITUDE         54
+#define REDIT_LONGITUDE        55
 
 #define MEDIT_CONFIRM_EDIT              0
 #define MEDIT_CONFIRM_SAVESTRING        1

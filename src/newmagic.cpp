@@ -1718,7 +1718,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
         act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
         if (success > 0) {
-          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
           send_to_char("You notice the effects of the drugs suddenly wear off.\r\n", vict);
           act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         } else
@@ -1736,7 +1736,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
       act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0 && force >= (GET_PHYSICAL(vict) <= 0 ? -(GET_PHYSICAL(vict) / 100) : 50)) {
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         send_to_char("Your condition stabilizes, you manage to grab a thin hold on life.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       } else
@@ -1754,14 +1754,18 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         drain = SERIOUS;
       else if (GET_PHYSICAL(vict) <= 700)
         drain = MODERATE;
+      else if (GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
+        send_to_char("You can only cast that on injured victims.\r\n", ch);
+        return;
+      }
       if (success > 0 && !AFF_FLAGGED(ch, AFF_RESISTPAIN)) {
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_RESISTPAIN].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         send_to_char("Your pain begins to fade.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
         vict->points.resistpain = MIN(force, success) * 100;
       } else
         send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0);
+      spell_drain(ch, spell, force, drain);
       break;
     case SPELL_HEALTHYGLOW:
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
@@ -1769,7 +1773,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
       act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
       if (success > 0) {
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_HEALTHYGLOW].draindamage);
+        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         send_to_char("You begin to feel healthier and more attractive.\r\n", vict);
         act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
       } else
@@ -1797,6 +1801,9 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
         act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
+        // For code reasons, the number of successes is capped at the number of boxes of damage they've taken.
+        int boxes_healed = MIN((GET_MAX_PHYSICAL(vict) - GET_PHYSICAL(vict)) / 100, success);
+
         if (GET_PHYSICAL(vict) <= 0)
           drain = DEADLY;
         else if (GET_PHYSICAL(vict) <= 300)
@@ -1810,7 +1817,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
           AFF_FLAGS(vict).SetBit(AFF_HEALED);
           send_to_char("A warm feeling floods your body.\r\n", vict);
           act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, drain);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, boxes_healed, drain);
           update_pos(vict);
         }
       }
@@ -1964,6 +1971,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
 #ifndef DIES_IRAE  // note: if NOT def
         else if (GET_SUSTAINED(vict)) {
           for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
+            // Prevent you from having the CYBER flag set if your modification is from another spell.
             if (sus->caster == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
               cyber = false;
               break;
@@ -1972,15 +1980,23 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         }
 #endif
         if (cyber && (spell == SPELL_DECATTR || spell == SPELL_INCATTR || spell == SPELL_INCREA)) {
-          snprintf(buf, sizeof(buf), "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
-          act(buf, TRUE, ch, 0, vict, TO_CHAR);
+          if (vict == ch) {
+            send_to_char(ch, "Your %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+          } else {
+            snprintf(buf, sizeof(buf), "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+            act(buf, TRUE, ch, 0, vict, TO_CHAR);
+          }
           return;
         }
       }
 
       if ((spell == SPELL_DECCYATTR || spell == SPELL_INCCYATTR) && (!cyber || GET_ATT(vict, sub) == GET_REAL_ATT(vict, sub))) {
-        snprintf(buf, sizeof(buf), "$N's %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
-        act(buf, TRUE, ch, 0, vict, TO_CHAR);
+        if (vict == ch) {
+          send_to_char(ch, "Your %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+        } else {
+          snprintf(buf, sizeof(buf), "$N's %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+          act(buf, TRUE, ch, 0, vict, TO_CHAR);
+        }
         return;
       }
 
@@ -2196,7 +2212,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       if (*buf1)
         vict = get_char_room_vis(ch, buf1);
       if (ch == vict) {
-        send_to_char("You can't target yourself with a combat spell!\r\n", ch);
+        send_to_char("You can't target yourself with a damaging manipulation spell!\r\n", ch);
         return;
       }
 
@@ -2295,7 +2311,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     }
 
     if (ch == vict) {
-      send_to_char("You can't target yourself with a combat spell!\r\n", ch);
+      send_to_char("You can't target yourself with a damaging manipulation spell!\r\n", ch);
       return;
     }
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
@@ -2509,7 +2525,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       act("$n dodges the acid, which evaporates as it passes $m.", FALSE, vict, 0, 0, TO_ROOM);
       send_to_char("You easily dodge the acid!\r\n", vict);
     } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
+      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
       int dam = convert_damage(stage(success, basedamage));
       if (!AWAKE(vict)) {
         act("$n spasms as the acid hits $m.", TRUE, vict, 0, 0, TO_ROOM);
@@ -2722,7 +2738,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       send_to_char("You easily dodge it!\r\n", vict);
       act("$n dodges out of the way of a cloud of steam.", TRUE, vict, 0, ch, TO_NOTVICT);
     } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
+      success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
       int dam = convert_damage(stage(success, basedamage));
       if (!AWAKE(vict)) {
         act("$n's body reels from the blast of steam.", TRUE, vict, 0, 0, TO_ROOM);
@@ -3365,6 +3381,8 @@ ACMD(do_contest)
 }
 ACMD(do_unbond)
 {
+  FAILURE_CASE(IS_NPC(ch), "NPCs can't unbond.");
+
   if (GET_TRADITION(ch) == TRAD_MUNDANE) {
     send_to_char("You can't unbond something with no sense of the astral plane.\r\n", ch);
     return;
@@ -4119,15 +4137,19 @@ ACMD(do_conjure)
     // Calculate the skill and TN used.
     int skill = GET_SKILL(ch, SKILL_CONJURING);
     int target = force;
+    totem_bonus(ch, CONJURING, spirit, target, skill);
+
+    // Aspected shamanists can only conjure things that their totem gives them a bonus to.
+    if (GET_ASPECT(ch) == ASPECT_SHAMANIST && skill <= GET_SKILL(ch, SKILL_CONJURING)) {
+      send_to_char("Your totem will not let you conjure that spirit!\r\n", ch);
+      return;
+    }
+
+    // Apply power site / background count bonus or penalty.
     if (ch->in_room->background[CURRENT_BACKGROUND_TYPE] == AURA_POWERSITE)
       skill += GET_BACKGROUND_COUNT(ch->in_room);
     else
       target += GET_BACKGROUND_COUNT(ch->in_room);
-    totem_bonus(ch, CONJURING, spirit, target, skill);
-    if (GET_ASPECT(ch) == ASPECT_SHAMANIST && skill == GET_SKILL(ch, SKILL_CONJURING)) {
-      send_to_char("Your totem will not let you conjure that spirit!\r\n", ch);
-      return;
-    }
 
     // Modify the skill rating by foci.
     bool used_spirit_focus = FALSE, used_power_focus = FALSE;
@@ -4905,7 +4927,7 @@ POWER(spirit_confusion)
 
   if (IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-    log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+    log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_confusion");
     return;
   }
 
@@ -4948,7 +4970,7 @@ POWER(spirit_engulf)
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     if (ignoring)
-      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_engulf");
   }
   else {
     act("$n rushes towards $N and attempts to engulf them!", FALSE, spirit, 0, tch, TO_ROOM);
@@ -5007,7 +5029,7 @@ POWER(spirit_fear)
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     if (ignoring)
-      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_fear");
   }
   else {
     int success = success_test(GET_SPARE2(spirit), GET_WIL(tch)) - success_test(GET_WIL(tch), GET_SPARE2(spirit));
@@ -5064,7 +5086,7 @@ POWER(spirit_flamethrower)
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     if (ignoring)
-      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_flamethrower");
   }
   else {
     snprintf(buf, sizeof(buf), "moderate %s", arg);
@@ -5177,7 +5199,7 @@ POWER(spirit_movement)
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || (increase < 0 && would_become_killer(ch, tch))) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     if (ignoring)
-      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_movement");
   }
   else {
     act("$n performs that service for you.", FALSE, spirit, 0, ch, TO_VICT);
@@ -5211,7 +5233,7 @@ POWER(spirit_breath)
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     if (ignoring)
-      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_breath");
   }
   else {
     act("$n turns towards $N as a cloud of noxious fumes forms around $S.", TRUE, spirit, 0, tch, TO_NOTVICT);
@@ -5250,7 +5272,7 @@ POWER(spirit_attack)
   else if (!can_hurt(ch, tch, TYPE_HIT, TRUE) || (ignoring = IS_IGNORING(tch, is_blocking_ic_interaction_from, ch)) || would_become_killer(ch, tch)) {
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     if (ignoring)
-      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_conceal");
+      log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_attack");
   }
   else {
     if (would_become_killer(ch, tch)) {
@@ -5504,7 +5526,7 @@ bool deactivate_power(struct char_data *ch, int power)
       remove_vision_bit(ch, EYE_FLARECOMP, VISION_BIT_IS_ADEPT_POWER);
       break;
     case ADEPT_IMAGE_MAG:
-      AFF_FLAGS(ch).RemoveBit(AFF_VISION_MAG_2);
+      AFF_FLAGS(ch).RemoveBit(AFF_VISION_MAG_3);
       break;
     case ADEPT_LIVINGFOCUS:
       if (GET_SUSTAINED_NUM(ch))
@@ -6606,4 +6628,40 @@ const char *get_spell_name(int spell, int subtype) {
   }
 
   return spell_name;
+}
+
+void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message) {
+  if (!ch) {
+    mudlog("SYSERR: Received NULL ch to set_casting_pools!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  if (casting < 0 || drain < 0 || spell_defense < 0 || reflection < 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received invalid val to set_casting_pools(%s, %d, %d, %d, %d)!", GET_CHAR_NAME(ch), casting, drain, spell_defense, reflection);
+    return;
+  }
+
+  int total = GET_MAGIC(ch);
+
+  total -= ch->real_abils.casting_pool = GET_CASTING(ch) = MIN(casting, total);
+  total -= ch->real_abils.drain_pool = GET_DRAIN(ch) = MIN(drain, total);
+  total -= ch->real_abils.spell_defense_pool = GET_SDEFENSE(ch) = MIN(spell_defense, total);
+  if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
+    total -= ch->real_abils.reflection_pool = GET_REFLECT(ch) = MIN(reflection, total);
+  if (total > 0)
+    GET_CASTING(ch) += total;
+
+  // Sanity check: If casting has exceeded sorc, push the overflow into drain pool.
+  if (GET_CASTING(ch) > GET_SKILL(ch, SKILL_SORCERY)) {
+    ch->real_abils.drain_pool = (GET_DRAIN(ch) += (GET_CASTING(ch) - GET_SKILL(ch, SKILL_SORCERY)));
+    ch->real_abils.casting_pool = GET_CASTING(ch) = GET_SKILL(ch, SKILL_SORCERY);
+  }
+
+  if (message) {
+    snprintf(buf, sizeof(buf), "Pools set as: Casting-%d Drain-%d Defense-%d", GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
+    if (GET_REFLECT(ch))
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Reflect-%d", GET_REFLECT(ch));
+    strlcat(buf, "\r\n", sizeof(buf));
+    send_to_char(buf, ch); 
+  }
 }

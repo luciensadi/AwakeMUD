@@ -629,7 +629,9 @@ enum {
 #define ROOM_TOO_CRAMPED_FOR_CHARACTERS 35 // Prevents you from entering if you're not a projection or tiny drone.
 #define ROOM_RADIATION                  36 // You take radiation damage while you're here, scaled by Rating.
 #define ROOM_ALL_VEHICLE_ACCESS         37 // Bypasses land/air/water constraints.
-#define ROOM_MAX                        38
+#define ROOM_HELIPAD                    38 // Allows rotorcraft and vector thrust takeoff and landing.
+#define ROOM_RUNWAY                     39 // Allows fixed-wing takeoff and landing.
+#define ROOM_MAX                        40
 
 #define VISION_NORMAL         0
 #define VISION_LOWLIGHT       1
@@ -935,7 +937,7 @@ enum {
 #define SKILL_SPERETHIEL             74
 #define SKILL_SPANISH                75
 #define SKILL_JAPANESE               76
-#define SKILL_CHINESE                77
+#define SKILL_CANTONESE              77
 #define SKILL_KOREAN                 78
 #define SKILL_ITALIAN                79
 #define SKILL_RUSSIAN                80
@@ -1012,6 +1014,7 @@ enum {
 #define SKILL_PILOT_SUBORBITAL          149
 #define SKILL_PILOT_TRACKED             150
 #define SKILL_PILOT_WALKER              151
+#define SKILL_MANDARIN                  152
 
 #define MAX_SKILLS                152
 // Adding a pilot skill? Update utils.cpp's pilot_skills[].
@@ -2326,6 +2329,7 @@ enum {
 #define PULSE_MOBILE              (10 RL_SEC)
 #define PULSE_VIOLENCE            (3 RL_SEC)
 #define PULSE_MONORAIL            (5 RL_SEC)
+#define PULSE_FLIGHT              (30 RL_SEC)
 
 #ifdef USE_PRIVATE_CE_WORLD
 #define MAX_SOCK_BUF              4194304 /* hand-picked from `cat /proc/sys/net/ipv4/tcp_wmem` */
@@ -2893,8 +2897,9 @@ enum {
 #define NUYEN_INCOME_STAFF_PAYOUT           29
 #define NUYEN_OUTFLOW_STAFF_CHARGE          30
 #define NUYEN_OUTFLOW_SYSPOINT_PURCHASE     31
+#define NUYEN_OUTFLOW_FLIGHT_FUEL           32
 
-#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 32
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 33
 // Make sure you update constants.cpp's nuyen_faucets_and_sinks[] too!
 
 #define NI_IS_SINK   0

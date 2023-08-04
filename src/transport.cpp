@@ -126,7 +126,7 @@ struct dest_data seattle_taxi_destinations[] =
   { "muscovite", "lounge", "The Muscovite Lounge", 30548, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS , FALSE },
   { "neophyte", "guild",  "The Neophyte Guild", 32679, TAXI_DEST_TYPE_OTHER, TRUE },
   { "skeleton", "", "The Skeleton", 25308, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-  { "lonestar", "", "Lone Star 17th Precinct", 30557, TAXI_DEST_TYPE_OOC, TRUE},
+  { "lonestar", "17th", "Lone Star 17th Precinct", 30557, TAXI_DEST_TYPE_OTHER, TRUE},
   { "sapphire", "star", "The Star Sapphire", 70301, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
   { "stop", "gap", "The Stop Gap", 32708, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "junkyard", "",  "The Tacoma Junkyard", 2070, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
@@ -769,19 +769,21 @@ struct dest_data *get_dest_data_list_for_zone(int zone_num) {
     case 42:
     case 45:
     case 49:
+    case 72: // Chinatown
     case 74:
     case 81:
     case 91:
     case 143:
     case 194:
+    case 253:
     case 290:
     case 293:
     case 301:
     case 305:
     case 325:
     case 392:
+    case 703: // Star Sapphire
     case 707:
-    case 253:
     case 725:
       return seattle_taxi_destinations;
     case 27:
@@ -956,6 +958,12 @@ SPECIAL(taxi)
 
   skip_spaces(&argument);
 
+  if (CMD_IS("spray")) {
+    act("As you reach for your spray can, $N reaches for the passenger ejection button, staring you down in the mirror. You slowly withdraw your hand, and $E does the same.", FALSE, ch, 0, driver, TO_CHAR);
+    act("As $n reaches for $s spray can, you reach for the passenger ejection button, staring $m down in the mirror. When $e slowly withdraws $s hand, you do the same.", FALSE, ch, 0, driver, TO_VICT);
+    act("As $n reaches for $s spray can, $N reaches for the passenger ejection button, staring $n down in the mirror. When $n slowly withdraws $s hand, $N does the same.", FALSE, ch, 0, driver, TO_NOTVICT);
+    return TRUE;
+  }
   if (CMD_IS("say") || CMD_IS("'")) {
     // Failure condition: If you can't speak, the cabbie can't hear you.
     if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
@@ -985,8 +993,8 @@ SPECIAL(taxi)
             if (!weap || (GET_OBJ_TYPE(weap) != ITEM_WEAPON && GET_OBJ_TYPE(weap) != ITEM_FIREWEAPON))
               continue;
 
-            act("As $e works, $n silently reaches up and taps on a sign that reads, \"^WDRAWN WEAPONS PROHIBITED^n\"", FALSE, driver, 0, 0, TO_ROOM);
-            act("As you work, you silently reach up and tap on a sign that reads, \"^WDRAWN WEAPONS PROHIBITED\"", FALSE, driver, 0, 0, TO_CHAR);
+            act("As $e works, $n silently reaches up and taps on a sign that reads, \"^yDRAWN WEAPONS PROHIBITED^n\"", FALSE, driver, 0, 0, TO_ROOM);
+            act("As you work, you silently reach up and tap on a sign that reads, \"^yDRAWN WEAPONS PROHIBITED\"", FALSE, driver, 0, 0, TO_CHAR);
             break;
           }
           break;

@@ -26,12 +26,17 @@ void _remove_ch_from_pc_invis_resistance_records(struct char_data *ch, struct ch
     idnum = GET_IDNUM(ch);
   }
 
+  if (!map_to_operate_on) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received NULL map_to_operate_on when removing %s from %s's invis list, AFTER sanity checks completed!", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+    return;
+  }
+
   // If they're not already in the map, bail out.
   if (map_to_operate_on->find(idnum) == map_to_operate_on->end())
     return;
 
   // They were there-- erase them from it.
-  vict->pc_invis_resistance_test_results->erase(idnum);
+  map_to_operate_on->erase(idnum);
 }
 
 // Remove the given character from all PC's invis resistance test results. Used when ch is destroyed (death, quit, etc).

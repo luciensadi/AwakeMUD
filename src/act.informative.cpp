@@ -48,6 +48,7 @@
 #include "newmatrix.hpp"
 #include "lifestyles.hpp"
 #include "newhouse.hpp"
+#include "zoomies.hpp"
 
 const char *CCHAR;
 
@@ -476,7 +477,13 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
         }
         break;
       case SPEED_CRUISING:
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s cruises through here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+        if (veh_is_currently_flying(vehicle)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s is airborne somewhere in the distance", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+        } else if (veh_can_traverse_air(vehicle)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s taxis around here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+        } else {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s cruises through here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+        }
         break;
       case SPEED_SPEEDING:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s speeds past you", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
@@ -1857,6 +1864,8 @@ void look_in_veh(struct char_data * ch)
     if (!ch->vfront) {
       CCHAR = "^y";
       list_veh_to_char(ch->in_veh->carriedvehs, ch);
+    } else if (veh_is_currently_flying(ch->in_veh)) {
+      send_flight_estimate(ch, ch->in_veh);
     }
   }
   if (!ch->in_room || PLR_FLAGGED(ch, PLR_REMOTE))
@@ -5891,6 +5900,11 @@ void perform_mortal_where(struct char_data * ch, char *arg)
       if (IS_IGNORING(i, is_blocking_where_visibility_for, ch) || !CAN_SEE(ch, i))
         continue;
 
+      // Skip them if they've not acted in the last 30 minutes or are flagged AFK. 
+      // (Note: No need to check descriptor here, we iterated descriptors to find this record.)
+      if (i->char_specials.timer >= 30 || PRF_FLAGGED(i, PRF_AFK))
+        continue;
+
       // They're a valid target-- emplace them.
       if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
         (room_iterator->second).push_back(i);
@@ -5902,7 +5916,7 @@ void perform_mortal_where(struct char_data * ch, char *arg)
   }
 
   if (occupied_rooms.empty()) {
-    send_to_char("Nobody's in a socialization room right now. Why not go find one?\r\n", ch);
+    send_to_char("Nobody's active in a socialization room right now. Why not go start something?\r\n", ch);
     return;
   } else {
     send_to_char("There are people RPing in these rooms:\r\n", ch);
@@ -6396,8 +6410,10 @@ ACMD(do_consider)
       send_to_char("An accomplished runner.\r\n", ch);
     else if (GET_REP(victim) < 3000)
       send_to_char("Definite lifer.\r\n", ch);
-    else
+    else if (GET_REP(victim) < 10000)
       send_to_char("A legend of the Sprawl.\r\n", ch);
+    else // 10k+ rep, the people who have been playing for ages.
+      send_to_char("Could probably be trusted with package deliveries.\r\n", ch);
   }
 }
 
@@ -6893,7 +6909,7 @@ ACMD(do_status)
     snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Magic Loss: %d\r\n", GET_TEMP_MAGIC_LOSS(targ));
   }
   if (GET_TEMP_ESSLOSS(targ)) {
-    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Essence Loss: %d\r\n", GET_TEMP_ESSLOSS(targ));
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Temporary Essence Loss: %.2f\r\n", ((float) GET_TEMP_ESSLOSS(targ)) / 100);
   }
   if (GET_REACH(targ) && !(AFF_FLAGGED(targ, AFF_CLOSECOMBAT))) {
     snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Extra Reach (%dm)\r\n", GET_REACH(targ));

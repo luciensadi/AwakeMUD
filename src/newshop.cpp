@@ -1639,7 +1639,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         if (sell->stock <= 0)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "SoldOut  ");
         else
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d     ", sell->stock);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%-3d      ", sell->stock);
       }
       if (GET_OBJ_VAL(obj, 1) > 0)
         snprintf(buf2, sizeof(buf2), "%d", GET_OBJ_VAL(obj, 1));
@@ -3440,7 +3440,7 @@ void save_shop_orders() {
         totaltime = order->timeavail - time(0);
         if (!order->sent && totaltime < 0) {
           int real_obj = real_object(order->item);
-          snprintf(shop_message, sizeof(shop_message), "%s has arrived at %s and is ready for pickup for a total cost of %d nuyen. It will be held for you for %d days.\r\n",
+          snprintf(shop_message, sizeof(shop_message), "%s has arrived at %s and is ready to be received for a total cost of %d nuyen. It will be held for you for %d days.\r\n",
                    real_obj > 0 ? CAP(obj_proto[real_obj].text.name) : "Something",
                    shop_table[shop_nr].shopname,
                    (order->price - order->paid) * order->number,

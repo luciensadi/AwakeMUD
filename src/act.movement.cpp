@@ -27,6 +27,7 @@
 #include "invis_resistance_tests.hpp"
 #include "newhouse.hpp"
 #include "quest.hpp"
+#include "zoomies.hpp"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -1651,11 +1652,11 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   }
   door = ch->in_room;
   if (drag)
-    snprintf(buf2, sizeof(buf2), "$n is dragged into %s.\r\n", GET_VEH_NAME(found_veh));
+    snprintf(buf2, sizeof(buf2), "$n is dragged into %s.", GET_VEH_NAME(found_veh));
   else if (found_veh->type == VEH_BIKE)
-    snprintf(buf2, sizeof(buf2), "$n gets on %s.\r\n", GET_VEH_NAME(found_veh));
+    snprintf(buf2, sizeof(buf2), "$n gets on %s.", GET_VEH_NAME(found_veh));
   else
-    snprintf(buf2, sizeof(buf2), "$n climbs into %s.\r\n", GET_VEH_NAME(found_veh));
+    snprintf(buf2, sizeof(buf2), "$n climbs into %s.", GET_VEH_NAME(found_veh));
   act(buf2, FALSE, ch, 0, 0, TO_ROOM);
   ch->vfront = front;
   char_to_veh(found_veh, ch);
@@ -1677,7 +1678,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   {
     next = k->next;
     if ((door && door == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
-      act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
+      act("You follow $N.", FALSE, k->follower, 0, ch, TO_CHAR);
       if (!found_veh->seating[1] && found_veh->seating[0]) {
         strlcpy(buf3, "rear", sizeof(buf3));
       } else {
@@ -1938,6 +1939,11 @@ void leave_veh(struct char_data *ch)
   }
 
   RIG_VEH(ch, veh);
+
+  if (veh_is_currently_flying(veh)) {
+    send_to_char("You take one look at the far-distant ground and reconsider your plan of action.\r\n", ch);
+    return;
+  }
 
   if ((AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) && veh->in_veh) {
     if (veh->in_veh->in_veh) {
@@ -2347,20 +2353,27 @@ ACMD(do_wake)
 
   one_argument(argument, arg);
   if (*arg) {
-    if (GET_POS(ch) == POS_SLEEPING)
+    vict = get_char_room_vis(ch, arg);
+
+    // 'wake up'
+    if (!vict && !str_cmp(arg, "up"))
+      vict = ch;
+      
+    if (GET_POS(ch) == POS_SLEEPING && vict != ch)
       send_to_char("You can't wake people up if you're asleep yourself!\r\n", ch);
-    else if ((vict = get_char_room_vis(ch, arg)) == NULL)
+    else if (vict == NULL)
       send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
-    else if (vict == ch)
+    else if (vict == ch) {
+      // This is a weird way to break, but it means that the code immediately below doesn't fire, and instead the self-wake version fires.
       self = 1;
-    else if (GET_POS(vict) > POS_SLEEPING)
+    } else if (GET_POS(vict) > POS_SLEEPING)
       act("$E is already awake.", FALSE, ch, 0, vict, TO_CHAR);
     else if (GET_POS(vict) <= POS_STUNNED || GET_PHYSICAL(vict) < 100)
       act("You can't wake $M up!", FALSE, ch, 0, vict, TO_CHAR);
     else {
       act("You wake $M up.", FALSE, ch, 0, vict, TO_CHAR);
       act("You are awakened by $n.", FALSE, ch, 0, vict, TO_VICT | TO_SLEEP);
-      GET_POS(vict) = POS_SITTING;
+      GET_POS(vict) = POS_STANDING;
     }
     if (!self)
       return;
@@ -2368,13 +2381,13 @@ ACMD(do_wake)
   if (GET_POS(ch) > POS_SLEEPING)
     send_to_char("You are already awake...\r\n", ch);
   else {
-    send_to_char("You awaken, and sit up.\r\n", ch);
+    send_to_char("You awaken and stand up.\r\n", ch);
     if (ch->in_veh) {
       snprintf(buf, sizeof(buf), "%s awakens.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
     } else
       act("$n awakens.", TRUE, ch, 0, 0, TO_ROOM);
-    GET_POS(ch) = POS_SITTING;
+    GET_POS(ch) = POS_STANDING;
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }

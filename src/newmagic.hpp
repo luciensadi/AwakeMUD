@@ -20,6 +20,7 @@ extern int get_spell_affected_successes(struct char_data * ch, int type);
 extern int get_max_usable_spell_successes(int spell, int force);
 extern const char *warn_if_spell_under_potential(struct sustain_data *sust);
 extern const char *get_spell_name(int spell, int subtype);
+extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
 
 #define DAMOBJ_NONE                     0
 #define DAMOBJ_ACID                     1

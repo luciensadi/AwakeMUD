@@ -112,6 +112,7 @@ extern bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_
 
 extern void mobact_change_firemode(struct char_data *ch);
 extern bool dumpshock(struct matrix_icon *icon);
+extern void clear_veh_flight_info(struct veh_data *veh);
 
 extern void Storage_save(const char *file_name, struct room_data *room);
 
@@ -1008,6 +1009,8 @@ void die(struct char_data * ch)
   if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
     docwagon_retrieve(ch);
     return;
+  } else if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && !PLR_FLAGGED(ch, PLR_NEWBIE)) {
+    send_to_char("(TIP: Your belongings have been left behind, so you'll need to go and retrieve them if you want them back.)\r\n", ch);
   }
 
   struct room_data *temp_room = get_ch_in_room(ch);
@@ -2371,16 +2374,12 @@ void docwagon_retrieve(struct char_data *ch) {
     char_to_room(ch, &world[recovery_room]);
   }
 
-  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || PLR_FLAGGED(ch, PLR_NEWBIE)) {
     send_to_char("Your DocWagon rescue is free due to your newbie status, and you've been restored to full health.\r\n", ch);
     GET_PHYSICAL(ch) = 1000;
     GET_MENTAL(ch) = 1000;
     GET_POS(ch) = POS_STANDING;
   } else {
-    if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
-      send_to_char("(TIP: Your belongings have been left behind, so you'll need to go and retrieve them if you want them back.)\r\n", ch);
-    }
-
     struct obj_data *docwagon = find_best_active_docwagon_modulator(ch);
 
     // Compensate for edge case: Their modulator was destroyed since they were flagged.
@@ -4260,8 +4259,8 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     }
   }
 
-  // If the player's in a silent room, don't propagate the gunshot.
-  if (ch_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0)
+  // If the player's in a silent room or is stealthed, don't propagate the gunshot.
+  if (ch_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0 || affected_by_spell(ch, SPELL_STEALTH))
     return;
 
   // If the player has a silencer or suppressor, restrict the propagation of the gunshot.
@@ -6328,6 +6327,9 @@ void chkdmg(struct veh_data * veh)
     // Remove any vehicle brains, we don't want them thrown into the street.
     remove_vehicle_brain(veh);
 
+    // Remove flight information.
+    clear_veh_flight_info(veh);
+
     // This only matters for NPC vehicles, but there's no harm in setting it on player vehicles.
     GET_VEH_DESTRUCTION_TIMER(veh) = 0;
 
@@ -6376,8 +6378,8 @@ void chkdmg(struct veh_data * veh)
 
     // Write purgelogs for player vehicle kills.
     if (veh->owner) {
-      mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_WRECKLOG, TRUE);
-      mudlog("Writing player vehicle contents to purgelog-- destroyed via standard damage.", NULL, LOG_PURGELOG, TRUE);
+      mudlog_vfprintf(NULL, LOG_WRECKLOG, "Writing player vehicle contents to purgelog (%s)-- destroyed via standard damage.", GET_VEH_NAME(veh));
+      mudlog_vfprintf(NULL, LOG_PURGELOG, "Writing player vehicle contents to purgelog (%s)-- destroyed via standard damage.", GET_VEH_NAME(veh));
       purgelog(veh);
     }
 

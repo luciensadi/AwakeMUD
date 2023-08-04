@@ -5,7 +5,7 @@
 #define LEXICON_SPERETHIEL 1
 #define LEXICON_SPANISH    2
 #define LEXICON_JAPANESE   3
-#define LEXICON_CHINESE    4
+#define LEXICON_CANTONESE  4
 #define LEXICON_KOREAN     5
 #define LEXICON_ITALIAN    6
 #define LEXICON_RUSSIAN    7
@@ -23,7 +23,8 @@
 #define LEXICON_FRENCH     19
 #define LEXICON_HEBREW     20
 #define LEXICON_IROQUOIS   21
-#define NUM_LEXICONS       22
+#define LEXICON_MANDARIN   22
+#define NUM_LEXICONS       23
 
 #define NUM_LEXICON_WORDS_BEFORE_REPEAT 5
 
@@ -32,7 +33,7 @@ extern const char *lexicon_english[];
 extern const char *lexicon_sperethiel[];
 extern const char *lexicon_spanish[];
 extern const char *lexicon_japanese[];
-extern const char *lexicon_chinese[];
+extern const char *lexicon_cantonese[];
 extern const char *lexicon_korean[];
 extern const char *lexicon_italian[];
 extern const char *lexicon_russian[];
@@ -50,6 +51,7 @@ extern const char *lexicon_gaelic[];
 extern const char *lexicon_french[];
 extern const char *lexicon_hebrew[];
 extern const char *lexicon_iroquois[];
+extern const char *lexicon_mandarin[];
 
 extern void populate_lexicon_size_table();
 extern const char *get_random_word_from_lexicon(int language_skill);

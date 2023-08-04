@@ -181,6 +181,7 @@ extern void warn_about_apartment_deletion();
 void process_wheres_my_car();
 extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
 void set_descriptor_canaries(struct descriptor_data *newd);
+extern void process_flying_vehicles();
 
 extern void save_all_apartments_and_storage_rooms();
 
@@ -926,6 +927,10 @@ void game_loop(int mother_desc)
       MonorailProcess();
     }
 
+    if (!(pulse % PULSE_FLIGHT)) {
+      process_flying_vehicles();
+    }
+
     if (!(pulse % PULSE_MOBILE)) {
       mobile_activity();
     }
@@ -1255,6 +1260,7 @@ int make_prompt(struct descriptor_data * d)
     } else {
       char temp[MAX_INPUT_LENGTH], str[20];
       int i = 0, j, physical;
+      struct char_data *original_character = d->original ? d->original : d->character;
 
       for (; *prompt; prompt++) {
         if (*prompt == '@' && *(prompt+1)) {
@@ -1367,6 +1373,7 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", CAN_CARRY_W(d->character));
               break;
             case 'm':       // current mental
+            case '*':       // current mental, but subtracted from 10 to give damage boxes taken instead
               physical = (int)(GET_MENTAL(ch) / 100);
               if (IS_JACKED_IN(ch)) {
                 physical = 10;
@@ -1377,6 +1384,10 @@ int make_prompt(struct descriptor_data * d)
                     break;
                   }
                 }
+              }
+
+              if (*prompt != 'm') {
+                physical = 10 - physical;
               }
 
               snprintf(str, sizeof(str), "%d", physical);
@@ -1391,6 +1402,7 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", GET_OFFENSE(d->character));
               break;
             case 'p':       // current physical
+            case '&':       // current physical, but subtracted from 10 to give damage boxes taken instead
               physical = (int)(GET_PHYSICAL(ch) / 100);
 
               if (IS_JACKED_IN(ch)) {
@@ -1404,7 +1416,12 @@ int make_prompt(struct descriptor_data * d)
                 }
               }
 
+              if (*prompt != 'p') {
+                physical = 10 - physical;
+              }
+
               snprintf(str, sizeof(str), "%d", physical);
+              
               break;
             case 'P':       // max physical
               snprintf(str, sizeof(str), "%d", (int)(GET_MAX_PHYSICAL(d->character) / 100));
@@ -1467,9 +1484,9 @@ int make_prompt(struct descriptor_data * d)
 
                 if (!room) {
                   strlcpy(str, "@v", sizeof(str));
-                } else if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER || PLR_FLAGGED(d->character, PLR_PAID_FOR_VNUMS)) {
+                } else if (GET_REAL_LEVEL(original_character) >= LVL_BUILDER || PLR_FLAGGED(original_character, PLR_PAID_FOR_VNUMS)) {
                   snprintf(str, sizeof(str), "%ld", room->number);
-                } else if (GET_REAL_LEVEL(d->character) <= LVL_MORTAL) {
+                } else if (GET_REAL_LEVEL(original_character) <= LVL_MORTAL) {
                   strlcpy(str, "^WHELP SYSPOINTS^n", sizeof(str));
                 } else {
                   strlcpy(str, "@v", sizeof(str));
@@ -1487,6 +1504,15 @@ int make_prompt(struct descriptor_data * d)
                 snprintf(str, sizeof(str), "%d", d->character->player_specials->saved.zonenum);
               else
                 strlcpy(str, "@z", sizeof(str));
+              break;
+            case 'Z':
+              if (d->original) {
+                // Projecting: Survival ticks left.
+                snprintf(str, sizeof(str), "%d", (int) ceil(((float)GET_ESS(d->original)) / 100));
+              } else {
+                // Meatform: Your essence.
+                snprintf(str, sizeof(str), "%.2f", ((float)GET_ESS(d->character)) / 100);
+              }
               break;
             case '@':
               strlcpy(str, "@", sizeof(str));

@@ -43,6 +43,7 @@ extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data
 extern int max_ability(int i);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern void end_quest(struct char_data *ch);
+extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch);
 int get_skill_dice_in_use_for_weapons(struct char_data *ch);
@@ -845,7 +846,7 @@ void affect_total(struct char_data * ch)
       set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
     }
     if (GET_POWER(ch, ADEPT_IMAGE_MAG)) {
-      AFF_FLAGS(ch).SetBit(AFF_VISION_MAG_2);
+      AFF_FLAGS(ch).SetBit(AFF_VISION_MAG_3);
     }
   }
 
@@ -937,12 +938,13 @@ void affect_total(struct char_data * ch)
     } else {
       // Only Shamans and Hermetics get these pools.
       if (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) {
-        GET_SDEFENSE(ch) = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
-        GET_DRAIN(ch) = MIN(GET_MAGIC(ch), GET_DRAIN(ch));
-        GET_REFLECT(ch) = MIN(GET_MAGIC(ch), GET_REFLECT(ch));
+        int sdef = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
+        int drain = MIN(GET_MAGIC(ch), GET_DRAIN(ch));
+        int reflect = MIN(GET_MAGIC(ch), GET_REFLECT(ch));
+        int casting = MAX(0, GET_MAGIC(ch) - drain - reflect - sdef);
 
-        // Chuck the remaining dice into the casting pool.
-        GET_CASTING(ch) = MAX(0, GET_MAGIC(ch) - GET_DRAIN(ch) - GET_REFLECT(ch) - GET_SDEFENSE(ch));
+        // It's possible for the casting value to be greater than sorcery right now. This setter resolves that.
+        set_casting_pools(ch, casting, drain, sdef, reflect, FALSE);
       } else {
         GET_CASTING(ch) = GET_MAGIC(ch) = GET_SDEFENSE(ch) = GET_DRAIN(ch) = GET_REFLECT(ch) = 0;
       }
@@ -1286,13 +1288,18 @@ void char_to_room(struct char_data * ch, struct room_data *room)
 {
   if (!ch || !room)
   {
-    log("SYSLOG: Illegal value(s) passed to char_to_room");
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Illegal value(s) passed to char_to_room(%s, %s).", 
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    room ? GET_ROOM_NAME(room) : "NULL");
     room = &world[0];
+
+    if (!ch)
+      return;
   }
 
   // Warn on exceeding privileges, but don't fail.
   if (builder_cant_go_there(ch, room)) {
-    mudlog("Warning: Builder exceeding allowed bounds. Make sure their loadroom etc is set properly.", ch, LOG_WIZLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Warning: Builder %s exceeding allowed bounds. Make sure their loadroom etc is set properly.", GET_CHAR_NAME(ch));
   }
 
   ch->next_in_room = room->people;

@@ -93,7 +93,7 @@ void mental_gain(struct char_data * ch)
   }
 
   if (find_workshop(ch, TYPE_MEDICAL))
-    gain = (int)(gain * 1.5);
+    gain *= 1.5;
 
 #ifdef ENABLE_HUNGER
   if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
@@ -107,14 +107,16 @@ void mental_gain(struct char_data * ch)
 
   if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
     gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+
+  // Biosystem overstress reduces rate by 10% per point
   if (GET_BIOOVER(ch) > 0)
-    gain /= GET_BIOOVER(ch);
+    gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
 
   // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
   gain += abs(_get_best_lifestyle(ch)) - LIFESTYLE_SQUATTER;
 
+  // Prevent reaching 0 gain
   gain = MAX(1, gain);
-
   GET_MENTAL(ch) = MIN(GET_MAX_MENTAL(ch), GET_MENTAL(ch) + gain);
 
   update_pos(ch);
@@ -157,7 +159,7 @@ void physical_gain(struct char_data * ch)
 #endif
 
   if (find_workshop(ch, TYPE_MEDICAL))
-    gain = (int)(gain * 1.8);
+    gain *= 1.8;
 
   if (char_is_in_social_room(ch))
     gain *= 2;
@@ -173,10 +175,10 @@ void physical_gain(struct char_data * ch)
       if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
         switch (GET_BIOWARE_RATING(bio)) {
           case 1:
-            gain = (int)(gain * 10/9);
+            gain *= 1.1;
             break;
           case 2:
-            gain = (int)(gain * 7/5);
+            gain *= 1.4;
             break;
           case 3:
             gain *= 2;
@@ -190,8 +192,13 @@ void physical_gain(struct char_data * ch)
   }
   if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
     gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+
+  // Biosystem overstress reduces healing rate by 10% per point
   if (GET_BIOOVER(ch) > 0)
-    gain /= GET_BIOOVER(ch);
+    gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
+
+  // Prevent reaching 0 gain
+  gain = MAX(1, gain);
   GET_PHYSICAL(ch) = MIN(GET_MAX_PHYSICAL(ch), GET_PHYSICAL(ch) + gain);
   update_pos(ch);
 }
@@ -437,8 +444,8 @@ void remove_patch(struct char_data *ch)
       update_pos(ch);
       break;
     case PATCH_TRANQ:
-      stun = resisted_test(GET_OBJ_VAL(patch, 1), GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0),
-                           GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), GET_OBJ_VAL(patch, 1));
+      stun = resisted_test(GET_OBJ_VAL(patch, 1), GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? (GET_BIOOVER(ch) + 1) / 2 : 0),
+                           GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? (GET_BIOOVER(ch) + 1) / 2 : 0), GET_OBJ_VAL(patch, 1));
       if (stun > 0) {
         act("You feel the drugs from $p take effect.", FALSE, ch, patch, 0, TO_CHAR);
         GET_MENTAL(ch) = MAX(0, GET_MENTAL(ch) - (stun * 100));
@@ -447,7 +454,7 @@ void remove_patch(struct char_data *ch)
         act("You resist the feeble effects of $p.", FALSE, ch, patch, 0, TO_CHAR);
       break;
     case PATCH_TRAUMA:
-      if (success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? GET_BIOOVER(ch) / 2 : 0), GET_OBJ_VAL(patch, 1)) > 0)
+      if (success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? (GET_BIOOVER(ch) + 1) / 2 : 0), GET_OBJ_VAL(patch, 1)) > 0)
         AFF_FLAGS(ch).RemoveBit(AFF_STABILIZE);
       break;
   }
@@ -988,7 +995,14 @@ void point_update(void)
         AFF_FLAGS(HUNTING(i->desc->original)).RemoveBit(AFF_TRACKED);
         HUNTING(i->desc->original) = NULL;
       }
+
       GET_ESS(i) -= 100;
+      if (i->desc && i->desc->original) {
+        // Tick up temporary essence loss.
+        GET_TEMP_ESSLOSS(i->desc->original) = GET_ESS(i->desc->original) - GET_ESS(i);
+        affect_total(i->desc->original);
+      }
+
       if (GET_ESS(i) <= 0) {
         struct char_data *victim = i->desc->original;
         send_to_char("As you feel the attachment to your physical body fade, you quickly return. The backlash from the fading connection rips through you...\r\n", i);
@@ -1002,8 +1016,13 @@ void point_update(void)
         i->desc = NULL;
         extract_char(i);
 
-        // Deal the damage instead of setting it.
-        if (damage(victim, victim, GET_BOD(victim) - 1, TYPE_SUFFERING, TRUE))
+        // First, nuke their health.
+        GET_PHYSICAL(victim) = -50;
+        GET_MENTAL(victim) = 0;
+        // Next, remove their death saves.
+        GET_PC_SALVATION_TICKS(victim) = 0;
+        // Finally, deal them massive damage.
+        if (damage(victim, victim, 100, TYPE_SUFFERING, TRUE))
           continue;
 
         // Continue regardless- i no longer exists.
