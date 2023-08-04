@@ -1,4 +1,5 @@
 // Point-to-point flight between rooms.
+#include <math.h>
 
 #include "awake.hpp"
 #include "structs.hpp"

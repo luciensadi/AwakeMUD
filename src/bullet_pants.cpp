@@ -833,7 +833,7 @@ struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapont
 }
 
 float get_ammo_weight(int weapontype, int ammotype, int qty) {
-  if (qty <= 0) {
+  if (qty < 0) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got negative qty %d to get_ammo_weight!", qty);
     return 0;
   }

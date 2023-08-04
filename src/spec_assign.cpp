@@ -17,6 +17,10 @@
 #include "utils.hpp"
 #include "archetypes.hpp"
 
+extern void perform_secret_room_assignments();
+extern void perform_secret_mob_assignments();
+extern void perform_secret_obj_assignments();
+
 void ASSIGNMOB(long mob, SPECIAL(fname));
 
 /* arrays for trainers/teachers/adepts/masters */

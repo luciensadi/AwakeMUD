@@ -1,6 +1,8 @@
 #ifndef __LIFESTYLES_HPP__
 #define __LIFESTYLES_HPP__
 
+#include <vector>
+
 #define LIFESTYLE_STREETS         0
 #define LIFESTYLE_SQUATTER        1
 #define LIFESTYLE_LOW             2
