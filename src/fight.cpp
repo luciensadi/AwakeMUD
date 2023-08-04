@@ -4260,8 +4260,8 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     }
   }
 
-  // If the player's in a silent room, don't propagate the gunshot.
-  if (ch_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0)
+  // If the player's in a silent room or is stealthed, don't propagate the gunshot.
+  if (ch_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0 || affected_by_spell(ch, SPELL_STEALTH))
     return;
 
   // If the player has a silencer or suppressor, restrict the propagation of the gunshot.
