@@ -956,6 +956,12 @@ SPECIAL(taxi)
 
   skip_spaces(&argument);
 
+  if (CMD_IS("spray")) {
+    act("As you reach for your spray can, $N reaches for the passenger ejection button, staring you down in the mirror. You slowly withdraw your hand, and $E does the same.", FALSE, ch, 0, driver, TO_CHAR);
+    act("As $n reaches for $s spray can, you reach for the passenger ejection button, staring $m down in the mirror. When $e slowly withdraws $s hand, you do the same.", FALSE, ch, 0, driver, TO_VICT);
+    act("As $n reaches for $s spray can, $N reaches for the passenger ejection button, staring $n down in the mirror. When $n slowly withdraws $s hand, $N does the same.", FALSE, ch, 0, driver, TO_NOTVICT);
+    return TRUE;
+  }
   if (CMD_IS("say") || CMD_IS("'")) {
     // Failure condition: If you can't speak, the cabbie can't hear you.
     if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
