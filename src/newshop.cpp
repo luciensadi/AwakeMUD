@@ -2137,7 +2137,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       strcat(buf, "computer");
     else strcat(buf, mod_name[GET_VEHICLE_MOD_LOCATION(obj)]);
     strcat(buf, ". It is for ");
-    for (int q = 1; q <= ENGINE_DIESEL; q++)
+    for (int q = 1; q < NUM_ENGINE_TYPES; q++)
       if (IS_SET(GET_VEHICLE_MOD_ENGINE_BITS(obj), 1 << q))
         num++;
     if (num) {
@@ -2183,6 +2183,16 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
           else strcat(buf, " and ");
         }
         strcat(buf, "diesel");
+        num2++;
+        num--;
+      }
+      if (IS_SET(GET_VEHICLE_MOD_ENGINE_BITS(obj), 1 << ENGINE_JET)) {
+        if (num2) {
+          if (num > 1)
+            strcat(buf, ", ");
+          else strcat(buf, " and ");
+        }
+        strcat(buf, "jet");
         num2++;
         num--;
       }

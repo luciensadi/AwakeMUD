@@ -1857,12 +1857,13 @@ const char *mod_name[NUM_MODS] =
 
 const char *engine_types[NUM_ENGINE_TYPES] =
   {
-     "Nothing",
-     "Electric",
-     "Fuel Cell",
-     "Gasoline",
-     "Methane",
-     "Diesel"
+    "Nothing",
+    "Electric",
+    "Fuel Cell",
+    "Gasoline",
+    "Methane",
+    "Diesel",
+    "Jet"
   };
 
 const char *veh_aff[] =

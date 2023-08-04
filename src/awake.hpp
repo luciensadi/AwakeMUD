@@ -1906,7 +1906,8 @@ enum {
 #define ENGINE_GASOLINE    3
 #define ENGINE_METHANE    4
 #define ENGINE_DIESEL      5
-#define NUM_ENGINE_TYPES  6
+#define ENGINE_JET        6
+#define NUM_ENGINE_TYPES  7
 
 #define SEATING_REAR      0
 #define SEATING_FRONT     1

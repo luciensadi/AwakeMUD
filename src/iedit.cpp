@@ -264,7 +264,7 @@ void iedit_disp_firemodes_menu(struct descriptor_data *d)
 void iedit_disp_mod_engine_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int engine_type = ENGINE_ELECTRIC; engine_type <= ENGINE_DIESEL; engine_type++)
+  for (int engine_type = ENGINE_ELECTRIC; engine_type < NUM_ENGINE_TYPES; engine_type++)
     send_to_char(CH, "  %d) %s\r\n", engine_type, engine_types[engine_type]);
   sprintbit(GET_OBJ_VAL(OBJ, 5), engine_types, buf1, sizeof(buf1));
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
@@ -695,7 +695,7 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
           return;
         case TYPE_ENGINECUST:
           CLS(CH);
-          for (int engine_type = ENGINE_ELECTRIC; engine_type <= ENGINE_DIESEL; engine_type++)
+          for (int engine_type = ENGINE_ELECTRIC; engine_type < NUM_ENGINE_TYPES; engine_type++)
             send_to_char(CH, " %d) %s\r\n", engine_type, engine_types[engine_type]);
           send_to_char("Engine type: ", CH);
           break;
@@ -2741,7 +2741,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_MOD:
-          if (number < 0 || number > ENGINE_DIESEL) {
+          if (number < 0 || number >= NUM_ENGINE_TYPES) {
             send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
             return;
           }

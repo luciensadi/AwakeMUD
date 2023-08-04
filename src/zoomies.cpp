@@ -16,6 +16,8 @@ extern void chkdmg(struct veh_data * veh);
 // TODO: Test mortals logging in in the airborne room.
 // TODO: Confirm that rigged flight works. (RIG and CONTROL)
 // TODO: Prevent rigger from unrigging during flight. (this sounds shitty, especially for long flights?)
+// TODO: TN is handling, not 4
+// TODO: No morts to staff landing fields
 
 ACMD(do_flyto) {
   // FLYTO <destination code>

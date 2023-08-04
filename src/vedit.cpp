@@ -417,7 +417,7 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
       d->edit_mode = VEDIT_TYPE;
       break;
     case 'c':
-      for (number = 1; number <= ENGINE_DIESEL; number ++)
+      for (number = 1; number < NUM_ENGINE_TYPES; number ++)
         send_to_char(CH, "  %d) %s\r\n", number, engine_types[number]);
       send_to_char("Enter default engine type: ", CH);
       d->edit_mode = VEDIT_ENGINE;
@@ -692,7 +692,7 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
     break;
   case VEDIT_ENGINE:
     number = atoi(arg);
-    if (number < 1 || number > ENGINE_DIESEL)
+    if (number < 1 || number >= NUM_ENGINE_TYPES)
       send_to_char("Invalid Engine Type. Select Type : ", CH);
     else {
       d->edit_veh->engine = number;
