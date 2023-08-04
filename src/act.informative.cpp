@@ -1861,11 +1861,12 @@ void look_in_veh(struct char_data * ch)
     // Show corpses.
     list_obj_to_char(ch->in_veh->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
     list_char_to_char(ch->in_veh->people, ch);
+    if (veh_is_currently_flying(ch->in_veh)) {
+      send_flight_estimate(ch, ch->in_veh);
+    }
     if (!ch->vfront) {
       CCHAR = "^y";
       list_veh_to_char(ch->in_veh->carriedvehs, ch);
-    } else if (veh_is_currently_flying(ch->in_veh)) {
-      send_flight_estimate(ch, ch->in_veh);
     }
   }
   if (!ch->in_room || PLR_FLAGGED(ch, PLR_REMOTE))
@@ -7568,13 +7569,13 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
   }
 
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
-    ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-    send_to_char(ch, "^C[%5ld] %s^n [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
-    if (GET_APARTMENT(ch->in_room)) {
+    ROOM_FLAGS(in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
+    send_to_char(ch, "^C[%5ld] %s^n [ %s ]^n\r\n", GET_ROOM_VNUM(in_room), GET_ROOM_NAME(in_room), buf);
+    if (GET_APARTMENT(in_room)) {
       send_to_char(ch, " ^c(%sApartment - %s^c%s)\r\n",
-                   GET_APARTMENT(ch->in_room)->get_paid_until() > 0 ? "Leased " : "",
-                   GET_APARTMENT(ch->in_room)->get_full_name(),
-                   GET_APARTMENT_DECORATION(ch->in_room) ? " [decorated]" : "");
+                   GET_APARTMENT(in_room)->get_paid_until() > 0 ? "Leased " : "",
+                   GET_APARTMENT(in_room)->get_full_name(),
+                   GET_APARTMENT_DECORATION(in_room) ? " [decorated]" : "");
     }
   } else {
     #define APPEND_ROOM_FLAG(check, flagname) { if ((check)) {strlcat(room_title_buf, flagname, sizeof(room_title_buf));} }

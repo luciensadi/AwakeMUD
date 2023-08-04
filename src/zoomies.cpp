@@ -176,6 +176,11 @@ void send_flight_estimate(struct char_data *ch, veh_data *veh) {
     return;
   }
 
+  if (!ch) {
+    mudlog("SYSERR: Got NULL character to send_flight_estimate()!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
   float flight_irl_seconds = veh->flight_duration * (PULSE_FLIGHT / PASSES_PER_SEC);
   float flight_game_hours = flight_irl_seconds / SECS_PER_MUD_HOUR;
   int irl_minutes = (int) ceilf(flight_irl_seconds / 60);
@@ -183,9 +188,6 @@ void send_flight_estimate(struct char_data *ch, veh_data *veh) {
                flight_game_hours,
                irl_minutes,
                irl_minutes == 1 ? "" : "s");
-  if (IS_SENATOR(ch)) {
-    // send_to_char(ch, "(debug: duration %d, giving %f seconds, %f hours)\r\n", veh->flight_duration, flight_irl_seconds, flight_game_hours);
-  }
 }
 
 bool check_for_valid_launch_location(struct char_data *ch, struct veh_data *veh, bool message) {
