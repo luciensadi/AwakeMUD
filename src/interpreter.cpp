@@ -2627,6 +2627,11 @@ void nanny(struct descriptor_data * d, char *arg)
 
         return;
       }
+      // Drop the HELP crawler.
+      if (strcmp(buf, "HELP") == 0) {
+        close_socket(d);
+        return;
+      }
       if (does_player_exist(tmp_name)) {
         d->character = playerDB.LoadChar(tmp_name, TRUE);
         d->character->desc = d;

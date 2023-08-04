@@ -1288,13 +1288,18 @@ void char_to_room(struct char_data * ch, struct room_data *room)
 {
   if (!ch || !room)
   {
-    log("SYSLOG: Illegal value(s) passed to char_to_room");
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Illegal value(s) passed to char_to_room(%s, %s).", 
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    room ? GET_ROOM_NAME(room) : "NULL");
     room = &world[0];
+
+    if (!ch)
+      return;
   }
 
   // Warn on exceeding privileges, but don't fail.
   if (builder_cant_go_there(ch, room)) {
-    mudlog("Warning: Builder exceeding allowed bounds. Make sure their loadroom etc is set properly.", ch, LOG_WIZLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Warning: Builder %s exceeding allowed bounds. Make sure their loadroom etc is set properly.", GET_CHAR_NAME(ch));
   }
 
   ch->next_in_room = room->people;
