@@ -1348,10 +1348,12 @@ SPECIAL(spell_trainer)
         else {
           struct obj_data *obj = ch->carrying;
           for (; obj; obj = obj->next_content)
-            if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING)
+            if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_MAGIC_TOOL_TYPE(obj) == TYPE_SUMMONING)
               break;
           if (!obj) {
             obj = read_object(OBJ_CONJURING_MATERIALS, VIRTUAL);
+            // We zero it out since it's got an existing value when spawned new.
+            GET_OBJ_COST(obj) = 0;
             obj_to_char(obj, ch);
           }
           GET_OBJ_COST(obj) += i * 1000;
