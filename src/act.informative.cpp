@@ -6407,8 +6407,10 @@ ACMD(do_consider)
       send_to_char("An accomplished runner.\r\n", ch);
     else if (GET_REP(victim) < 3000)
       send_to_char("Definite lifer.\r\n", ch);
-    else
+    else if (GET_REP(victim) < 10000)
       send_to_char("A legend of the Sprawl.\r\n", ch);
+    else // 10k+ rep, the people who have been playing for ages.
+      send_to_char("Could probably be trusted with package deliveries.\r\n", ch);
   }
 }
 
