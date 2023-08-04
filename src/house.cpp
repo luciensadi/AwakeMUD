@@ -1491,9 +1491,9 @@ void warn_about_apartment_deletion() {
 
       int days_until_deletion = (house->date - time(0)) / (60 * 60 * 24);
 
-      if (days_until_deletion <= 5) {
+      if (days_until_deletion <= 5 && days_until_deletion >= 0) {
         mudlog_vfprintf(NULL, LOG_GRIDLOG, "Sending %d-day rent warning message for apartment %s to %ld.", days_until_deletion, house->name, house->owner);
-        if (days_until_deletion > 0) {
+        if (days_until_deletion == 0) {
           snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s! It will be deemed abandoned and its contents reclaimed at any time.\r\n", house->name);
         } else {
           snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s. It will be deemed abandoned and its contents reclaimed in %d days.\r\n", house->name, days_until_deletion);
