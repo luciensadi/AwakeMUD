@@ -1585,11 +1585,11 @@ ACMD(do_target)
       if (--j < 0)
         break;
     if (!obj) {
-      send_to_char("There aren't that many mounts.\r\n", ch);
+      send_to_char("Your vehicle doesn't have that many mounts.\r\n", ch);
       return;
     }
     if (!obj->contains) {
-      send_to_char("It has no weapon mounted.\r\n", ch);
+      send_to_char(ch, "There is no weapon mounted on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
       return;
     }
     strlcpy(arg, buf2, sizeof(arg));
