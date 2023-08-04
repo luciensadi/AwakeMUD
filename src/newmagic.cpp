@@ -1800,6 +1800,9 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
         act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
+        // For code reasons, the number of successes is capped at the number of boxes of damage they've taken.
+        int boxes_healed = MIN((GET_MAX_PHYSICAL(vict) - GET_PHYSICAL(vict)) / 100, success);
+
         if (GET_PHYSICAL(vict) <= 0)
           drain = DEADLY;
         else if (GET_PHYSICAL(vict) <= 300)
@@ -1813,7 +1816,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
           AFF_FLAGS(vict).SetBit(AFF_HEALED);
           send_to_char("A warm feeling floods your body.\r\n", vict);
           act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, drain);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, boxes_healed, drain);
           update_pos(vict);
         }
       }
