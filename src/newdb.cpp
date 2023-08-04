@@ -1048,7 +1048,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     if (AFF_FLAGS(ch).IsSet(AFF_HEALED))
       AFF_FLAGS(ch).SetBit(AFF_HEALED);
   }
-  if ( !IS_SENATOR(ch) )
+  if ( !IS_SENATOR(ch) && !PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) )
     PRF_FLAGS(ch).RemoveBit(PRF_ROLLS);
 
   // If you logged out in a cab or have been away more than 2 hours, snap back to home.
