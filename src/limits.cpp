@@ -1056,14 +1056,29 @@ vnum_t junkyard_room_numbers[] = {
   RM_JUNKYARD_ELECT  // The Electronics Scrapheap
 };
 
+vnum_t boneyard_room_numbers[] = {
+#ifndef USE_PRIVATE_CE_WORLD
+  RM_BONEYARD_MAIN
+#else
+  RM_BONEYARD_MAIN
+#endif
+};
+
 // Returns TRUE if vehicle is in one of the Junkyard vehicle-depositing rooms, FALSE otherwise.
 bool veh_is_in_junkyard(struct veh_data *veh) {
   if (!veh || !veh->in_room)
     return FALSE;
 
-  for (int index = 0; index < NUM_JUNKYARD_ROOMS; index++)
-    if (veh->in_room->number == junkyard_room_numbers[index])
-      return TRUE;
+  // Aircraft end up in the Boneyard instead of the Junkyard.
+  if (veh_is_aircraft(veh)) {
+    for (int index = 0; index < NUM_BONEYARD_ROOMS; index++)
+      if (veh->in_room->number == boneyard_room_numbers[index])
+        return TRUE;
+  } else {
+    for (int index = 0; index < NUM_JUNKYARD_ROOMS; index++)
+      if (veh->in_room->number == junkyard_room_numbers[index])
+        return TRUE;
+  }
 
   return FALSE;
 }
@@ -1090,7 +1105,7 @@ bool should_save_this_vehicle(struct veh_data *veh) {
     if (!veh->in_veh && !veh->in_room)
       return TRUE;
 
-    // We don't preserve damaged watercraft, etc.
+    // We don't preserve damaged watercraft, mostly because we don't have a water version of the junkyard yet.
     switch (veh->type) {
       case VEH_CAR:
       case VEH_BIKE:
@@ -1098,7 +1113,7 @@ bool should_save_this_vehicle(struct veh_data *veh) {
       case VEH_TRUCK:
         break;
       default:
-        return FALSE;
+        return veh_is_aircraft(veh);
     }
   }
 
@@ -1178,6 +1193,14 @@ void save_vehicles(bool fromCopyover)
         case VEH_TRUCK:
           // Standard vehicles just inside the gates.
           junkyard_number = RM_JUNKYARD_GATES;
+          break;
+        case VEH_LTA:
+        case VEH_FIXEDWING:
+        case VEH_ROTORCRAFT:
+        case VEH_VECTORTHRUST:
+        case VEH_SEMIBALLISTIC:
+        case VEH_SUBORBITAL:
+          junkyard_number = RM_BONEYARD_MAIN;
           break;
         default:
           // Pick a random one to scatter them about.

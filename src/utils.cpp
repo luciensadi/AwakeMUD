@@ -85,6 +85,7 @@ extern SPECIAL(nerp_skills_teacher);
 ACMD_DECLARE(do_say);
 
 bool npc_can_see_in_any_situation(struct char_data *npc);
+bool veh_is_aircraft(struct veh_data *veh);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
@@ -4883,7 +4884,13 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
     }
   #endif
 
-  // Flying vehicles can traverse any terrain.
+  // Prevent aircraft from traveling anywhere they're not supposed to be.
+  if (veh_is_aircraft(veh) && !ROOM_FLAGGED(room, ROOM_AIRCRAFT_CAN_DRIVE_HERE)) {
+    SEND_MESSAGE("That's not a taxiway.\r\n");
+    return FALSE;
+  }
+
+  // Flying vehicles can traverse any terrain, so only apply the following checks to non-flying ones going into potentially-inaccessible rooms.
   if (!ROOM_FLAGGED(room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
     // Non-flying vehicles can't pass fall rooms.
     if (ROOM_FLAGGED(room, ROOM_FALL)) {
@@ -4942,15 +4949,13 @@ bool veh_can_traverse_land(struct veh_data *veh) {
     case VEH_BIKE:
     case VEH_CAR:
     case VEH_TRUCK:
-    case VEH_FIXEDWING:
-    case VEH_ROTORCRAFT:
-    case VEH_VECTORTHRUST:
     case VEH_HOVERCRAFT:
-    case VEH_LTA:
+    case VEH_TRACKED:
+    case VEH_WALKER:
       return TRUE;
   }
 
-  return FALSE;
+  return veh_is_aircraft(veh);
 }
 
 bool veh_can_traverse_water(struct veh_data *veh) {
@@ -4959,17 +4964,13 @@ bool veh_can_traverse_water(struct veh_data *veh) {
   }
 
   switch (veh->type) {
-    case VEH_FIXEDWING:
-    case VEH_ROTORCRAFT:
-    case VEH_VECTORTHRUST:
     case VEH_HOVERCRAFT:
     case VEH_MOTORBOAT:
     case VEH_SHIP:
-    case VEH_LTA:
       return TRUE;
   }
 
-  return FALSE;
+  return veh_is_aircraft(veh);
 }
 
 bool veh_can_traverse_air(struct veh_data *veh) {
@@ -4977,15 +4978,7 @@ bool veh_can_traverse_air(struct veh_data *veh) {
     return TRUE;
   }
 
-  switch (veh->type) {
-    case VEH_FIXEDWING:
-    case VEH_ROTORCRAFT:
-    case VEH_VECTORTHRUST:
-    case VEH_LTA:
-      return TRUE;
-  }
-
-  return FALSE;
+  return veh_is_aircraft(veh);
 }
 
 int get_pilot_skill_for_veh(struct veh_data *veh) {
@@ -5891,6 +5884,19 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   FALSE_CASE_ACTOR(!PRF_FLAGGED(victim_original, PRF_PKER) && !PRF_FLAGGED(victim_original, PLR_KILLER), "Your victim must ##^WTOGGLE PK^n before you can do that.\r\n");
 
   return TRUE;
+}
+
+bool veh_is_aircraft(struct veh_data *veh) {
+  switch (veh->type) {
+    case VEH_FIXEDWING:
+    case VEH_LTA:
+    case VEH_ROTORCRAFT:
+    case VEH_VECTORTHRUST:
+    case VEH_SEMIBALLISTIC:
+    case VEH_SUBORBITAL:
+      return TRUE;
+  }
+  return FALSE;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

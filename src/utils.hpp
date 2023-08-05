@@ -145,6 +145,7 @@ const char *get_room_desc(struct room_data *room);
 bool    string_is_valid_for_paths(const char *str);
 bool    obj_is_a_vehicle_title(struct obj_data *obj);
 bool    can_perform_aggressive_action(struct char_data *actor, struct char_data *victim, const char *calling_func_name, bool send_message);
+bool    veh_is_aircraft(struct veh_data *veh);
 
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);

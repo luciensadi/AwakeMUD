@@ -631,7 +631,8 @@ enum {
 #define ROOM_ALL_VEHICLE_ACCESS         37 // Bypasses land/air/water constraints.
 #define ROOM_HELIPAD                    38 // Allows rotorcraft and vector thrust takeoff and landing.
 #define ROOM_RUNWAY                     39 // Allows fixed-wing takeoff and landing.
-#define ROOM_MAX                        40
+#define ROOM_AIRCRAFT_CAN_DRIVE_HERE    40 // Allows aircraft to drive in this room.
+#define ROOM_MAX                        41
 
 #define VISION_NORMAL         0
 #define VISION_LOWLIGHT       1
@@ -2467,6 +2468,9 @@ enum {
 #define RM_JUNKYARD_APPLI           70505
 #define RM_JUNKYARD_ELECT           70509
 #define NUM_JUNKYARD_ROOMS          5
+
+#define RM_BONEYARD_MAIN            RM_DANTES_GARAGE
+#define NUM_BONEYARD_ROOMS          1
 
 // This is specifically not included in the above since not every vehicle can leave it successfully. BIKES AND DRONES ONLY.
 #define RM_JUNKYARD_BIKES           70508
