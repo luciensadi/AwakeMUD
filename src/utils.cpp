@@ -85,7 +85,6 @@ extern SPECIAL(nerp_skills_teacher);
 ACMD_DECLARE(do_say);
 
 bool npc_can_see_in_any_situation(struct char_data *npc);
-bool veh_is_aircraft(struct veh_data *veh);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
@@ -5897,6 +5896,43 @@ bool veh_is_aircraft(struct veh_data *veh) {
       return TRUE;
   }
   return FALSE;
+}
+
+// Recursively count this object and its contents.
+int count_object_including_contents(struct obj_data *obj) {
+  int count = 1; // self
+
+  for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
+    count += count_object_including_contents(contained);
+  }
+
+  return count;
+}
+
+// Get and return the count of all objects contained in this room. Does not include vehicle objects.
+int count_objects_in_room(struct room_data *room) {
+  int count = 0;
+
+  for (struct obj_data *contents = room->contents; contents; contents = contents->next_content) {
+    count += count_object_including_contents(contents);
+  }
+
+  return count;
+}
+
+// Get and return the count of all objects in this vehicle, including in nested vehicles.
+int count_objects_in_veh(struct veh_data *veh) {
+  int count = 0;
+
+  for (struct obj_data *contained = veh->contents; contained; contained = contained->next_content) {
+    count += count_object_including_contents(contained);
+  }
+
+  for (struct veh_data *contained = veh->carriedvehs; contained; contained = contained->next_veh) {
+    count += count_objects_in_veh(contained);
+  }
+
+  return count;
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

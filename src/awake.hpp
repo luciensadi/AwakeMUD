@@ -2469,8 +2469,17 @@ enum {
 #define RM_JUNKYARD_ELECT           70509
 #define NUM_JUNKYARD_ROOMS          5
 
-#define RM_BONEYARD_MAIN            RM_DANTES_GARAGE
-#define NUM_BONEYARD_ROOMS          1
+#ifndef USE_PRIVATE_CE_WORLD
+   #define RM_BONEYARD_WRECK_ROOM      RM_DANTES_GARAGE
+   #define RM_BONEYARD_INTACT_ROOM_1   RM_ENTRANCE_TO_DANTES
+   #define RM_BONEYARD_INTACT_ROOM_2   RM_ENTRANCE_TO_DANTES
+   #define NUM_BONEYARD_ROOMS          1
+#else
+   #define RM_BONEYARD_WRECK_ROOM      65508
+   #define RM_BONEYARD_INTACT_ROOM_1   65506
+   #define RM_BONEYARD_INTACT_ROOM_2   65507
+   #define NUM_BONEYARD_ROOMS          1
+#endif
 
 // This is specifically not included in the above since not every vehicle can leave it successfully. BIKES AND DRONES ONLY.
 #define RM_JUNKYARD_BIKES           70508

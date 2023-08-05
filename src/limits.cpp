@@ -1057,11 +1057,7 @@ vnum_t junkyard_room_numbers[] = {
 };
 
 vnum_t boneyard_room_numbers[] = {
-#ifndef USE_PRIVATE_CE_WORLD
-  RM_BONEYARD_MAIN
-#else
-  RM_BONEYARD_MAIN
-#endif
+  RM_BONEYARD_WRECK_ROOM
 };
 
 // Returns TRUE if vehicle is in one of the Junkyard vehicle-depositing rooms, FALSE otherwise.
@@ -1180,33 +1176,30 @@ void save_vehicles(bool fromCopyover)
     if (send_veh_to_junkyard) {
       // Pick a spot and put the vehicle there. Sort roughly based on type.
       int junkyard_number;
-      switch (veh->type) {
-        case VEH_DRONE:
-          // Drones in the drone spot.
-          junkyard_number = RM_JUNKYARD_PARTS;
-          break;
-        case VEH_BIKE:
-          // Bikes in the bike spot.
-          junkyard_number = RM_JUNKYARD_BIKES;
-          break;
-        case VEH_CAR:
-        case VEH_TRUCK:
-          // Standard vehicles just inside the gates.
-          junkyard_number = RM_JUNKYARD_GATES;
-          break;
-        case VEH_LTA:
-        case VEH_FIXEDWING:
-        case VEH_ROTORCRAFT:
-        case VEH_VECTORTHRUST:
-        case VEH_SEMIBALLISTIC:
-        case VEH_SUBORBITAL:
-          junkyard_number = RM_BONEYARD_MAIN;
-          break;
-        default:
-          // Pick a random one to scatter them about.
-          junkyard_number = junkyard_room_numbers[number(0, NUM_JUNKYARD_ROOMS - 1)];
-          break;
+      if (veh_is_aircraft(veh)) {
+        junkyard_number = RM_BONEYARD_WRECK_ROOM;
+      } else {
+        switch (veh->type) {
+          case VEH_DRONE:
+            // Drones in the drone spot.
+            junkyard_number = RM_JUNKYARD_PARTS;
+            break;
+          case VEH_BIKE:
+            // Bikes in the bike spot.
+            junkyard_number = RM_JUNKYARD_BIKES;
+            break;
+          case VEH_CAR:
+          case VEH_TRUCK:
+            // Standard vehicles just inside the gates.
+            junkyard_number = RM_JUNKYARD_GATES;
+            break;
+          default:
+            // Pick a random one to scatter them about.
+            junkyard_number = junkyard_room_numbers[number(0, NUM_JUNKYARD_ROOMS - 1)];
+            break;
+        }
       }
+      
       temp_room = &world[real_room(junkyard_number)];
     } else {
       // If veh is not in a garage (or the owner is not allowed to enter the house anymore), send it to a garage.
@@ -1222,36 +1215,44 @@ void save_vehicles(bool fromCopyover)
       // Otherwise, derive the garage from its location.
       else if (!fromCopyover && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE) || !IDNUM_CAN_ENTER_APARTMENT(temp_room, veh->owner)))
       {
-       /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
-                   GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));
-       log(buf); */
-        switch (GET_JURISDICTION(temp_room)) {
-          case ZONE_SEATTLE:
-            temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
-            break;
-          case ZONE_CARIB:
-            temp_room = &world[real_room(RM_CARIB_PARKING_GARAGE)];
-            break;
-          case ZONE_OCEAN:
-            temp_room = &world[real_room(RM_OCEAN_PARKING_GARAGE)];
-            break;
-          case ZONE_PORTLAND:
+        /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
+                    GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));
+        log(buf); */
+        if (veh_is_aircraft(veh)) {
+          if (dice(1, 2) == 1) {
+            temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_1)];
+          } else {
+            temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_2)];
+          }
+        } else {
+          switch (GET_JURISDICTION(temp_room)) {
+            case ZONE_SEATTLE:
+              temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
+              break;
+            case ZONE_CARIB:
+              temp_room = &world[real_room(RM_CARIB_PARKING_GARAGE)];
+              break;
+            case ZONE_OCEAN:
+              temp_room = &world[real_room(RM_OCEAN_PARKING_GARAGE)];
+              break;
+            case ZONE_PORTLAND:
 #ifdef USE_PRIVATE_CE_WORLD
-            switch (number(0, 2)) {
-              case 0:
-                temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE1)];
-                break;
-              case 1:
-                temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE2)];
-                break;
-              case 2:
-                temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE3)];
-                break;
-            }
+              switch (number(0, 2)) {
+                case 0:
+                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE1)];
+                  break;
+                case 1:
+                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE2)];
+                  break;
+                case 2:
+                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE3)];
+                  break;
+              }
 #else
-            temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
+              temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
 #endif
-            break;
+              break;
+          }
         }
       }
     }

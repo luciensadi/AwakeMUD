@@ -196,6 +196,11 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
 
             // Write to disk.
             d->edit_complex_original->save();
+
+            // Update apartment full names.
+            for (auto &apartment : d->edit_complex_original->get_apartments()) {
+              apartment->regenerate_full_name();
+            }
           }
           // It didn't exist: Save new.
           else {

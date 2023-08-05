@@ -46,10 +46,7 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
-// TODO: Add back crap counts and formatting to hcontrol command
-
-// TODOs for lifestyle:
-// - Show garage status in receptionist list
+// TODO: Remove lifestyle strings from someone who doesn't control an apartment with that lifestyle.
 
 // EVENTUALTODO: Sanity checks for things like reused vnums, etc.
 
@@ -381,8 +378,8 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
 
     bool first_print = TRUE;
     send_to_char(ch, "You have ownership control over the following apartment%s: ", owned_apartments.size() == 1 ? "" : "s");
-    for (auto &apartment : apartments) {
-      send_to_char(ch, "%s%s", first_print ? "" : ", ", apartment->get_name());
+    for (auto &apartment : owned_apartments) {
+      send_to_char(ch, "%s%s%s", first_print ? "" : ", ", apartment->get_name(), apartment->is_garage_lifestyle() ? " (garage)" : "");
       first_print = FALSE;
     }
     send_to_char("\r\n", ch);
@@ -542,6 +539,17 @@ void ApartmentComplex::add_apartment(Apartment *apartment) {
   apartments.push_back(apartment);
   sort(apartments.begin(), apartments.end(), apartment_sort_func);
 }
+
+int ApartmentComplex::get_crap_count() {
+  int crap_count = 0;
+
+  for (auto &apartment : get_apartments()) {
+    crap_count += apartment->get_crap_count();
+  }
+
+  return crap_count;
+}
+
 /*********** Apartment ************/
 
 /* Blank apartment for editing. */
@@ -988,11 +996,13 @@ bool Apartment::has_owner_privs(struct char_data *ch) {
     if (!GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_LEADER, PRIV_LANDLORD, ENDBIT)) {
       return FALSE;
     }
+
+    // Has the right perms etc.
+    return TRUE;
   } else {
+    // We just care if they're the actual owner right now.
     return GET_IDNUM(ch) == owned_by_player;
   }
-
-  return FALSE;
 }
 
 bool Apartment::has_owner_privs_by_idnum(idnum_t idnum) {
@@ -1242,14 +1252,18 @@ void Apartment::recalculate_garages() {
   }
 }
 
+void Apartment::regenerate_full_name() {
+  delete [] full_name;
+  char formatted_name[120];
+  snprintf(formatted_name, sizeof(formatted_name), "%s's %s", complex->get_name(), name);
+  full_name = str_dup(formatted_name);
+}
+
 void Apartment::set_name(const char *newname) {
   delete [] name;
   name = str_dup(newname);
 
-  delete [] full_name;
-  char formatted_name[100];
-  snprintf(formatted_name, sizeof(formatted_name), "%s's %s", complex->get_name(), newname);
-  full_name = str_dup(formatted_name);
+  regenerate_full_name();
 }
 
 void Apartment::apply_rooms() {
@@ -1262,6 +1276,25 @@ void Apartment::apply_rooms() {
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Invalid vnum %ld when applying rooms for %s!", room->vnum, get_full_name());
     }
   }
+}
+
+int Apartment::get_crap_count() {
+  int crap_count = 0;
+
+  for (auto &room : get_rooms()) {
+    rnum_t rnum = real_room(room->get_vnum());
+    if (rnum >= 0) {
+      struct room_data *world_room = &world[rnum];
+
+      crap_count += count_objects_in_room(world_room);
+
+      for (struct veh_data *veh = world_room->vehicles; veh; veh = veh->next_veh) {
+        crap_count += count_objects_in_veh(veh);
+      }
+    }
+  }
+
+  return crap_count;
 }
 
 /********** ApartmentRoom ************/

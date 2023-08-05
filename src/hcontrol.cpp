@@ -22,6 +22,31 @@ bool name_compare_func(const char *a, const char *b) {
   return strcmp(a, b) < 0;
 }
 
+const char *get_crap_count_string(int crap_count, const char *default_color = "^n") {
+  static char crap_count_string[50];
+
+  const char *crap_count_color = NULL;
+  if (crap_count > 500) {
+    crap_count_color = "^R";
+  } else if (crap_count > 400) {
+    crap_count_color = "^r";
+  } else if (crap_count > 300) {
+    crap_count_color = "^Y";
+  } else if (crap_count > 200) {
+    crap_count_color = "^y";
+  } else {
+    crap_count_color = "^n";
+  }
+
+  snprintf(crap_count_string, sizeof(crap_count_string), "%s%d%s item%s",
+           crap_count_color,
+           crap_count,
+           default_color,
+           crap_count == 1 ? "" : "s");
+
+  return crap_count_string;
+}
+
 /* The hcontrol command itself, used by imms to create/destroy houses */
 const char *HCONTROL_FORMAT =
   "Usage:  hcontrol destroy <full apartment name with complex>\r\n"
@@ -41,7 +66,11 @@ void hcontrol_list_houses(struct char_data *ch) {
         if (!owner_name)
           owner_name = str_dup("<UNDEF>");
 
-        snprintf(compose_buf, sizeof(compose_buf), "%s (%ld): %s\r\n", CAP(owner_name), apartment->get_owner_id(), apartment->get_full_name());
+        snprintf(compose_buf, sizeof(compose_buf), "%s (%ld): %s^n (%s)\r\n", 
+                 CAP(owner_name), 
+                 apartment->get_owner_id(), 
+                 apartment->get_full_name(),
+                 get_crap_count_string(apartment->get_crap_count()));
         entries.push_back(str_dup(compose_buf));
 
         DELETE_ARRAY_IF_EXTANT(owner_name);
@@ -115,6 +144,9 @@ void hcontrol_display_house_by_name(struct char_data * ch, vnum_t house_number) 
                          crap_count_veh);
           }
         }
+
+        send_to_char(ch, "Its crap count is %s.", get_crap_count_string(apartment->get_crap_count()));
+        
         return;
       }
     }

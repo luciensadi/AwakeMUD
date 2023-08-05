@@ -105,6 +105,7 @@ class ApartmentComplex {
     bool can_houseedit_complex(struct char_data *ch);
     const char *list_editors();
     void mark_as_deleted();
+    int get_crap_count();
 };
 
 /* An Apartment is composed of N ApartmentRooms, and has tracking data for the lease etc. */
@@ -175,6 +176,7 @@ class Apartment {
     void set_owner(idnum_t);
     void set_paid_until(time_t);
     void set_complex(ApartmentComplex *new_complex);
+    void regenerate_full_name();
     void set_name(const char *newname);
     void set_short_name(const char *newname) {delete [] shortname; shortname = str_dup(newname);}
 
@@ -222,6 +224,8 @@ class Apartment {
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);
     bool is_guest(idnum_t idnum);
+
+    int get_crap_count();
 
     // Returns new-- must delete output!
     const char *get_owner_name__returns_new();
