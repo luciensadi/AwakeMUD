@@ -452,6 +452,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
   const char *lifestyle_string = str_dup(row[82]);
   mysql_free_result(res);
 
+  // Update lifestyle information.
+  calculate_best_lifestyle(ch);
   set_lifestyle_string(ch, lifestyle_string);
   delete [] lifestyle_string;
 

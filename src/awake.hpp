@@ -2967,6 +2967,14 @@ enum {
 
 #define MAX_VISIBILITY_PENALTY             8
 
+#define LIFESTYLE_STREETS         0
+#define LIFESTYLE_SQUATTER        1
+#define LIFESTYLE_LOW             2
+#define LIFESTYLE_MIDDLE          3
+#define LIFESTYLE_HIGH            4
+#define LIFESTYLE_LUXURY          5
+#define NUM_LIFESTYLES            6
+
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens

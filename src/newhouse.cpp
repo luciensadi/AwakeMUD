@@ -46,8 +46,6 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
-// TODO: Remove lifestyle strings from someone who doesn't control an apartment with that lifestyle.
-
 // EVENTUALTODO: Sanity checks for things like reused vnums, etc.
 
 // EVENTUALTODO: When purging contents and encoutering belongings, move them somewhere safe.
@@ -970,6 +968,15 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
   }
 
   save_lease();
+
+  // Update their lifestyle, forcing confirmation of lifestyle string validity.
+  int old_best_lifestyle = GET_BEST_LIFESTYLE(ch);
+  calculate_best_lifestyle(ch);
+
+  if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && GET_BEST_LIFESTYLE(ch) > old_best_lifestyle) {
+    send_to_char("^L(Hint: Since your lifestyle has just increased, you can flaunt your new status with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L!)^n\r\n", ch);
+  }
+
   return TRUE;
 }
 
@@ -1910,13 +1917,27 @@ SPECIAL(landlord_spec)
 
     for (auto &apartment : complex->get_apartments()) {
       if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
-        if (!apartment->has_owner_privs(ch)) {
+        if (!apartment->has_owner()) {
+          snprintf(say_string, sizeof(say_string), "Nobody's rented out %s yet.", apartment->get_name());
+          mob_say(recep, say_string);
+        } else if (!apartment->has_owner_privs(ch)) {
           snprintf(say_string, sizeof(say_string), "I would get fired if I let you break the lease on %s.", apartment->get_name());
           mob_say(recep, say_string);
         } else {
           mudlog_vfprintf(NULL, LOG_GRIDLOG, "%s broke their lease on %s.", GET_CHAR_NAME(ch), apartment->get_full_name());
           apartment->break_lease();
           mob_say(recep, "I hope you enjoyed your time here.");
+
+          // Iterate over all characters in the game and have them recalculate their lifestyles. This also confirms their lifestyle string.
+          for (struct char_data *plr = character_list; plr; plr = plr->next) {
+            int old_best_lifestyle = GET_BEST_LIFESTYLE(plr);
+            
+            calculate_best_lifestyle(plr);
+
+            if (plr->desc && PRF_FLAGGED(plr, PRF_SEE_TIPS) && GET_BEST_LIFESTYLE(plr) < old_best_lifestyle) {
+              send_to_char("^L(Hint: Your lifestyle went down due to a broken lease. You should select a new lifestyle string with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L.)^n\r\n", ch);
+            }
+          }
         }
         return TRUE;
       }

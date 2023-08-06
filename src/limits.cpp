@@ -56,7 +56,6 @@ extern int get_paydata_market_minimum(int host_color);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
 extern void save_shop_orders();
 extern bool docwagon(struct char_data *ch);
-extern int _get_best_lifestyle(struct char_data *ch);
 
 void mental_gain(struct char_data * ch)
 {
@@ -113,7 +112,7 @@ void mental_gain(struct char_data * ch)
     gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
 
   // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
-  gain += abs(_get_best_lifestyle(ch)) - LIFESTYLE_SQUATTER;
+  gain += abs(GET_BEST_LIFESTYLE(ch)) - LIFESTYLE_SQUATTER;
 
   // Prevent reaching 0 gain
   gain = MAX(1, gain);

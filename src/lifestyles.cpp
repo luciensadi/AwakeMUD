@@ -21,6 +21,10 @@ using nlohmann::json;
 
 extern void cedit_disp_menu(struct descriptor_data *d, int mode);
 
+#define DEFAULT_NEOPHYTE_GUILD_LIFESTYLE_STRING "The metallic scent of the Neophyte Guild clings to $m."
+#define DEFAULT_COFFIN_MOTEL_GENDERED_LIFESTYLE_STRING "They've got a smell about them-- eau de Coffin Motel?"
+#define DEFAULT_COFFIN_MOTEL_AGENDER_LIFESTYLE_STRING "$e's got a smell about him-- eau de Coffin Motel?"
+
 /* System design:
 
 - √ Lifestyles exist: Streets, Squatter, Low, Middle, High, Luxury. See SR3 p62.
@@ -51,6 +55,8 @@ STRETCH:
 - Complexes / apartments can have custom lifestyle strings available to them, separated between garage / non-garage
 */
 
+// TODO: Confirm lifestyle is recalculated on hcontrol destroy.
+
 /////// LOGISTICAL TODOS
 // TODO: Test the conversion from old-style to new-style apartments REPEATEDLY. Check for loss of items, vehicles, ownership, guests, etc.
 
@@ -77,18 +83,21 @@ struct lifestyle_data lifestyles[] = {
 };
 
 // Returns your best lifestyle. Changes to negative if it's a garage lifestyle.
-int _get_best_lifestyle(struct char_data *ch) {
+int calculate_best_lifestyle(struct char_data *ch) {
   int best_lifestyle_found = LIFESTYLE_SQUATTER;
   bool best_lifestyle_is_garage = FALSE;
   Apartment *best_apartment = NULL;
 
-  // Check for a descriptor. If they don't have one, they don't get this.
-  if (!ch->desc)
+  // Check for NPC status. If they don't have one, they don't get this.
+  if (IS_NPC(ch) && !ch->desc) {
+    GET_BEST_LIFESTYLE(ch) = LIFESTYLE_SQUATTER;
     return LIFESTYLE_SQUATTER;
+  }
 
   // Snap back to their original so we're not finding the apartment of a projection or whatnot.
-  if (ch->desc->original)
+  if (ch->desc && ch->desc->original) {
     ch = ch->desc->original;
+  }
 
   for (auto &complex : global_apartment_complexes) {
     for (auto &apartment : complex->get_apartments()) {
@@ -108,20 +117,27 @@ int _get_best_lifestyle(struct char_data *ch) {
   }
 
   if (best_apartment) {
+    /*
     log_vfprintf("Using %s (%s / %s) as best apartment for %s.",
                  best_apartment->get_full_name(),
                  lifestyles[best_apartment->get_lifestyle()].name,
                  best_apartment->is_garage_lifestyle() ? "garage" : "standard",
                  GET_CHAR_NAME(ch));
+    */
 
     if (best_lifestyle_is_garage)
       best_lifestyle_found *= -1;
 
-    return best_lifestyle_found;
+    GET_BEST_LIFESTYLE(ch) = best_lifestyle_found;
   } else {
-    log_vfprintf("No apartment found for %s. Using Squatter lifestyle.", GET_CHAR_NAME(ch));
-    return LIFESTYLE_SQUATTER;
+    //log_vfprintf("No apartment found for %s. Using Squatter lifestyle.", GET_CHAR_NAME(ch));
+    GET_BEST_LIFESTYLE(ch) = LIFESTYLE_SQUATTER;
   }
+
+  // Ensure their lifestyle string matches the expected value.
+  set_lifestyle_string(ch, get_lifestyle_string(ch));
+
+  return GET_BEST_LIFESTYLE(ch);
 }
 
 #define APPEND_VECTOR_TO_RESULTS(vecname) { results.insert(results.end(), vecname.begin(), vecname.end() ); }
@@ -129,7 +145,7 @@ std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
   static std::vector<const char *> results = {};
   results.clear();
 
-  int best_lifestyle = _get_best_lifestyle(ch);
+  int best_lifestyle = GET_BEST_LIFESTYLE(ch);
   bool is_garage = FALSE;
 
   if (best_lifestyle < 0) {
@@ -154,6 +170,13 @@ std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
       }
     }
   }
+
+  /*
+  log_vfprintf("LV for %s is:", GET_CHAR_NAME(ch));
+  for (auto &it: results) {
+    log(it);
+  }
+  */
 
   return &results;
 }
@@ -211,10 +234,44 @@ void set_lifestyle_string(struct char_data *ch, const char *str) {
     return;
   }
 
+  // Iterate through the strings they're allowed to have. If this new one isn't in it, select the first one on the list.
+  // Of course, we only do this if the string being set isn't one of our defaults.
+  if (strcmp(DEFAULT_NEOPHYTE_GUILD_LIFESTYLE_STRING, str)
+      && strcmp(DEFAULT_COFFIN_MOTEL_GENDERED_LIFESTYLE_STRING, str)
+      && strcmp(DEFAULT_COFFIN_MOTEL_AGENDER_LIFESTYLE_STRING, str)) 
+  {
+    std::vector<const char *> *lifestyle_vector = _get_lifestyle_vector(ch);
+
+    if (lifestyle_vector->empty()) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got EMPTY lifestyle vector for %s in set_lifestyle_string(\"%s\")!", GET_CHAR_NAME(ch), str);
+      str = (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL ? DEFAULT_COFFIN_MOTEL_AGENDER_LIFESTYLE_STRING : DEFAULT_COFFIN_MOTEL_GENDERED_LIFESTYLE_STRING);
+    } else {
+      bool found_lifestyle = FALSE;
+      for (auto it : *lifestyle_vector) {
+        if (!strcmp(str, it)) {
+          // log_vfprintf("LV for %s: Comparison string %s matches LV string %s.", GET_CHAR_NAME(ch), str, it);
+          found_lifestyle = TRUE;
+          break;
+        } else {
+          // log_vfprintf("LV for %s: Comparison string %s does not match LV string %s.", GET_CHAR_NAME(ch), str, it);
+        }
+      }
+      if (!found_lifestyle) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "%s's lifestyle string isn't listed in %s currently-available set, so changing to the first in that set.", 
+                        GET_CHAR_NAME(ch),
+                        HSHR(ch));
+        str = lifestyle_vector->at(0);
+      }
+    }
+  }
+
+  // Because there's a decent chance that str points to their saved lifestyle string, we dup it here first.
+  const char *duped = str_dup(str);
+
   if (ch->player_specials->saved.lifestyle_string)
     delete [] ch->player_specials->saved.lifestyle_string;
   
-  ch->player_specials->saved.lifestyle_string = str_dup(str);
+  ch->player_specials->saved.lifestyle_string = duped;
 
   playerDB.SaveChar(ch);
 }
@@ -234,14 +291,14 @@ const char *get_lifestyle_string(struct char_data *ch) {
   if (!ch->player_specials->saved.lifestyle_string) {
     // If they haven't picked a string, and they're new, give them the newbie / default one.
     if (GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
-      return "The metallic scent of the Neophyte Guild clings to $m.";
+      return DEFAULT_NEOPHYTE_GUILD_LIFESTYLE_STRING;
     }
 
     // Assume they're renting at a coffin motel.
     if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
-      return "They've got a smell about them-- eau de Coffin Motel?";
+      return DEFAULT_COFFIN_MOTEL_GENDERED_LIFESTYLE_STRING;
     } else {
-      return "$e's got a smell about him-- eau de Coffin Motel?";
+      return DEFAULT_COFFIN_MOTEL_AGENDER_LIFESTYLE_STRING;
     }
   }
 
@@ -307,115 +364,3 @@ void save_lifestyles_file() {
 }
 
 ///// Util /////
-
-///////////////////////////////// old file / logic below ////////////////////////////
-
-#ifdef use_old_code_from_lifestyles_file
-
-const char *lifestyle_garage_strings[NUM_GARAGE_STRINGS] = {
-
-};
-
-int house_to_lifestyle_map[NUM_LIFESTYLES] = {
-  /* 0 is house's Low    */ LIFESTYLE_LOW,
-  /* 1 is house's Middle */ LIFESTYLE_MIDDLE,
-  /* 2 is house's High   */ LIFESTYLE_HIGH,
-  /* 3 is house's Luxury */ LIFESTYLE_LUXURY
-};
-
-// Return a string that describes their lifestyle.
-const char *get_lifestyle_string(struct char_data *ch) {
-  static char compiled_string[500] = { '\0' };
-
-  if (!ch || IS_NPC(ch)) {
-    mudlog("SYSERR: Received invalid char to get_lifestyle_string().", ch, LOG_SYSLOG, TRUE);
-    return compiled_string;
-  }
-
-  if (GET_LIFESTYLE_SELECTION(ch) < 0 || GET_LIFESTYLE_SELECTION(ch) >= NUM_LIFESTYLES) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Lifestyle %d is out of range in get_lifestyle_string().", GET_LIFESTYLE_SELECTION(ch));
-    return compiled_string;
-  }
-
-  if (GET_LIFESTYLE_STRING_SELECTION(ch) < 0 || GET_LIFESTYLE_STRING_SELECTION(ch) >= NUM_STRINGS_PER_LIFESTYLE) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Lifestyle string selection %d is out of range in get_lifestyle_string().", GET_LIFESTYLE_STRING_SELECTION(ch));
-    return compiled_string;
-  }
-
-  strlcpy(compiled_string, lifestyles[GET_LIFESTYLE_SELECTION(ch)].strings[GET_LIFESTYLE_STRING_SELECTION(ch)][GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL ? 1 : 0], sizeof(compiled_string));
-
-  if (GET_LIFESTYLE_IS_GARAGE_SELECTION(ch)) {
-    snprintf(ENDOF(compiled_string),
-                   sizeof(compiled_string) - strlen(compiled_string),
-                   " %s",
-                   lifestyle_garage_strings[GET_LIFESTYLE_GARAGE_STRING_SELECTION(ch)]);
-  }
-
-  return compiled_string;
-}
-
-// Iterate through all houses and assign the best owned one to the character.
-void determine_lifestyle(struct char_data *ch) {
-  int best_lifestyle_found = -1;
-  bool best_lifestyle_is_garage = FALSE;
-  Apartment *best_apartment = NULL;
-
-  if (!ch || IS_NPC(ch)) {
-    mudlog("SYSERR: Received invalid char to determine_lifestyle()!", ch, LOG_SYSLOG, TRUE);
-    return;
-  }
-
-  for (auto &complex : global_apartment_complexes) {
-    for (auto &apartment : complex->get_apartments()) {
-      if (apartment->has_owner_privs(ch)) {
-        int found_lifestyle = apartment->get_lifestyle();
-
-        // An apartment is a lifestyle garage if more than half of the rooms are garages.
-        bool found_lifestyle_is_garage = apartment->get_garage_count() > (apartment->get_rooms().size() / 2);
-
-        if (found_lifestyle > best_lifestyle_found || (found_lifestyle == best_lifestyle_found && !best_lifestyle_is_garage)) {
-          best_lifestyle_found = found_lifestyle;
-          best_lifestyle_is_garage = found_lifestyle_is_garage;
-          best_apartment = apartment;
-        }
-      }
-    }
-  }
-
-  if (best_lifestyle_found == -1) {
-    best_lifestyle_found = LIFESTYLE_SQUATTER;
-    best_lifestyle_is_garage = FALSE;
-    log_vfprintf("Assigned %s the squatter lifestyle.", GET_CHAR_NAME(ch));
-    return;
-  }
-
-  GET_SETTABLE_LIFESTYLE(ch) = GET_SETTABLE_ORIGINAL_LIFESTYLE(ch) = best_lifestyle_found;
-  GET_SETTABLE_LIFESTYLE_IS_GARAGE(ch) = GET_SETTABLE_ORIGINAL_LIFESTYLE_IS_GARAGE(ch) = best_lifestyle_is_garage;
-
-  log_vfprintf("Assigned %s lifestyle: %d (%s), %s is%s garage.",
-               GET_CHAR_NAME(ch),
-               GET_LIFESTYLE_SELECTION(ch),
-               lifestyles[GET_LIFESTYLE_SELECTION(ch)].name,
-               best_apartment ? best_apartment->get_full_name() : "(null)",
-               GET_LIFESTYLE_IS_GARAGE_SELECTION(ch) ? "" : " NOT");
-}
-
-// TODO: Add this to point_update(?) and fill out.
-void lifestyle_tick(struct char_data *ch) {}
-
-// TODO: Replace this with CUSTOMIZE LIFESTYLE.
-ACMD(do_lifestyle) {
-  FAILURE_CASE(IS_NPC(ch), "Only player characters can configure their lifestyle.\r\n");
-
-  // No argument? Display current.
-  if (!*argument) {
-    if (GET_ORIGINAL_LIFESTYLE(ch) != GET_LIFESTYLE_SELECTION(ch)) {
-      send_to_char(ch, "You currently present as leading a %s-class lifestyle, but your standard is %d-class.\r\n", GET_LIFESTYLE_SELECTION(ch), GET_ORIGINAL_LIFESTYLE(ch));
-    } else {
-      send_to_char(ch, "You lead a %s-class lifestyle.\r\n", GET_LIFESTYLE_SELECTION(ch));
-    }
-    send_to_char(ch, "Your lifestyle is represented as '%s'. Change this with ^WCUSTOMIZE LIFESTYLE^n.", get_lifestyle_string(ch));
-    return;
-  }
-}
-#endif

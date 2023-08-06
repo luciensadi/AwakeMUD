@@ -282,6 +282,11 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
               // Write to disk.
               d->edit_apartment_original->save_base_info();
               d->edit_apartment_original->save_rooms();
+
+              // Iterate over all characters in the game and have them recalculate their lifestyles. This also confirms lifestyle string validity.
+              for (struct char_data *plr = character_list; plr; plr = plr->next) {
+                calculate_best_lifestyle(plr);
+              }
             }
             // It didn't exist: Save new.
             else {

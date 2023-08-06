@@ -38,7 +38,6 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
 void shop_install(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 struct obj_data *shop_package_up_ware(struct obj_data *obj);
-extern int _get_best_lifestyle(struct char_data *ch);
 
 int cmd_say;
 int cmd_echo;
@@ -1219,7 +1218,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
 
     // House rule: Give a better TN for high-grade lifestyles.
     {
-      switch (abs(_get_best_lifestyle(ch))) {
+      switch (abs(GET_BEST_LIFESTYLE(ch))) {
         case LIFESTYLE_HIGH:
           target -= 1;
           act("Lifestyle TN modifier: -1.", TRUE, ch, 0, 0, TO_ROLLS);
