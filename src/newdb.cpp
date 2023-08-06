@@ -122,7 +122,7 @@ static void init_char(struct char_data * ch)
   ch->player_specials->saved.wimp_level   = 0;
   ch->player_specials->saved.bad_pws      = 0;
 
-  GET_LOADROOM(ch) = NOWHERE;
+  GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
   GET_WAS_IN(ch) = NULL;
 
   ch->player.time.birth = time(0);
@@ -1140,6 +1140,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   /* Default their loadroom if it wasn't provided specially. */
   if (loadroom == NOWHERE)
     loadroom = GET_LOADROOM(player);
+  // If that didn't fix it, set it to Dante's to prevent failed SQL saves.
+  if (loadroom == NOWHERE)
+    loadroom = RM_ENTRANCE_TO_DANTES;
 
   /* Figure out what room to load them in. */
   if (player->in_room) {
