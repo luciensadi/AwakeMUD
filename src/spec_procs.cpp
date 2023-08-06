@@ -1389,7 +1389,6 @@ SPECIAL(spell_trainer)
     else if (force > spelltrainers[i].force)
       send_to_char(ch, "%s can only teach %s up to force %d.\r\n", GET_NAME(trainer), compose_spell_name(spelltrainers[i].type, spelltrainers[i].subtype), spelltrainers[i].force);
     else {
-      // TODO: Decrease force by amount already known.
       int cost = force;
       struct spell_data *spell = NULL;
 
@@ -1399,6 +1398,7 @@ SPECIAL(spell_trainer)
             send_to_char("You already know this spell at an equal or higher force.\r\n", ch);
             return TRUE;
           } else {
+            // Discount it by the known cost.
             cost -= spell->force;
             break;
           }
@@ -6386,7 +6386,6 @@ SPECIAL(mageskill_nightwing)
     const char *location_string = NULL;
 
     int toroom = NOWHERE;
-    // TODO: Make it so that she can't go to the room she's already in.
     int limiter = 10;
     while ((limiter-- > 0) && (toroom <= 0 || &world[toroom] == mage->in_room)) {
       switch (number(0, 5)) {
@@ -6415,9 +6414,14 @@ SPECIAL(mageskill_nightwing)
           location_string = "somewhere in Seattle";
           break;
       }
+      // Prevent her from going to the same room she's already in.
+      if (&world[toroom] == mage->in_room)
+        continue;
     }
-    if (limiter <= 0)
+    if (limiter <= 0) {
       mudlog("SYSERR: Could not find a new room for Fleeting Nightwing after 10 tries!", mage, LOG_SYSLOG, TRUE);
+      return TRUE;
+    }
 
     act("$n suddenly dashes towards the nearest entrance.", FALSE, mage, 0, 0, TO_ROOM);
     char_from_room(mage);

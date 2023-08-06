@@ -843,6 +843,17 @@ void Apartment::break_lease() {
     room->purge_contents();
     room->delete_decoration();
   }
+
+  // Iterate over all characters in the game and have them recalculate their lifestyles. This also confirms their lifestyle string.
+  for (struct char_data *plr = character_list; plr; plr = plr->next) {
+    int old_best_lifestyle = GET_BEST_LIFESTYLE(plr);
+    
+    calculate_best_lifestyle(plr);
+
+    if (plr->desc && PRF_FLAGGED(plr, PRF_SEE_TIPS) && GET_BEST_LIFESTYLE(plr) < old_best_lifestyle) {
+      send_to_char("^L(Hint: Your lifestyle went down due to a broken lease. You should select a new lifestyle string with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L.)^n\r\n", plr);
+    }
+  }
 }
 
 /* Check for entry permissions. */
@@ -1927,17 +1938,6 @@ SPECIAL(landlord_spec)
           mudlog_vfprintf(NULL, LOG_GRIDLOG, "%s broke their lease on %s.", GET_CHAR_NAME(ch), apartment->get_full_name());
           apartment->break_lease();
           mob_say(recep, "I hope you enjoyed your time here.");
-
-          // Iterate over all characters in the game and have them recalculate their lifestyles. This also confirms their lifestyle string.
-          for (struct char_data *plr = character_list; plr; plr = plr->next) {
-            int old_best_lifestyle = GET_BEST_LIFESTYLE(plr);
-            
-            calculate_best_lifestyle(plr);
-
-            if (plr->desc && PRF_FLAGGED(plr, PRF_SEE_TIPS) && GET_BEST_LIFESTYLE(plr) < old_best_lifestyle) {
-              send_to_char("^L(Hint: Your lifestyle went down due to a broken lease. You should select a new lifestyle string with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L.)^n\r\n", ch);
-            }
-          }
         }
         return TRUE;
       }

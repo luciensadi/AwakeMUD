@@ -100,6 +100,8 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg) {
           delete [] name;
         }
 
+        // TODO: Find the owner and notify them, if online. Otherwise, send a mail.
+
         apartment->break_lease();
         return;
       }
@@ -146,7 +148,7 @@ void hcontrol_display_house_by_name(struct char_data * ch, vnum_t house_number) 
         }
 
         send_to_char(ch, "Its crap count is %s.", get_crap_count_string(apartment->get_crap_count()));
-        
+
         return;
       }
     }
