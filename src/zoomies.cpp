@@ -16,8 +16,6 @@ extern void chkdmg(struct veh_data * veh);
 // TODO: Test mortals logging in in the airborne room.
 // TODO: Confirm that rigged flight works. (RIG and CONTROL)
 // TODO: Prevent rigger from unrigging during flight. (this sounds shitty, especially for long flights?)
-// TODO: TN is handling, not 4
-// TODO: No morts to staff landing fields
 
 ACMD(do_flyto) {
   // FLYTO <destination code>
@@ -60,7 +58,10 @@ ACMD(do_flyto) {
   if (!*argument) {
     send_to_char("You're aware of the following destinations:\r\n", ch);
     for (rnum_t rnum = 0; rnum <= top_of_world; rnum++) {
-      if (veh->in_room != &world[rnum] && veh_can_launch_from_or_land_at(veh, &world[rnum])) {
+      if (veh->in_room != &world[rnum] 
+          && veh_can_launch_from_or_land_at(veh, &world[rnum])
+          && (!ROOM_FLAGGED(&world[rnum], ROOM_STAFF_ONLY) || IS_SENATOR(ch))) 
+      {
         float distance = get_flight_distance_to_room(veh, &world[rnum]);
 
         send_to_char(ch, "%3s) %40s  (%.1f kms, %d nuyen in fuel)\r\n", 
@@ -325,10 +326,10 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
     return 0;
   }
 
-  snprintf(rbuf, sizeof(rbuf), "Flight test modifiers for %s: ", GET_CHAR_NAME(ch));
-
   int skill_num = get_pilot_skill_for_veh(veh);
-  int tn = 4;
+  int tn = veh->handling;
+
+  snprintf(rbuf, sizeof(rbuf), "Flight test modifiers for %s (base %d from handling): ", GET_CHAR_NAME(ch), tn);
 
   modify_target_rbuf(ch, rbuf, sizeof(rbuf));
   
