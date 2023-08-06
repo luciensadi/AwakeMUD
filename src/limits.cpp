@@ -1181,9 +1181,9 @@ void save_vehicles(bool fromCopyover)
     if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
       int junkyard_number;
 
-      // If it's already in the junkyard, move it to the crusher.
+      // If it's already in the junkyard, move it to the crusher, but only on crashes.
       // Vehicles in the crusher will not be saved, effectively destroying them.
-      if (veh_is_in_junkyard(veh)) {
+      if (!fromCopyover && veh_is_in_junkyard(veh)) {
         junkyard_number = RM_VEHICLE_CRUSHER;
       } else {
         // Pick a spot and put the vehicle there. Sort roughly based on type.
