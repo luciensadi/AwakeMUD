@@ -311,7 +311,7 @@ void copyover_recover()
 
     /* Write something, and check if it goes error-free */
     if (write_to_descriptor (desc, "\n\rJust kidding. Restoring from copyover...\n\r") < 0) {
-       log_vfprintf("COPYOVERLOG:  - Failed to write to %s (%s), closing their descriptor.", name, host);
+      log_vfprintf("COPYOVERLOG:  - Failed to write to %s (%s), closing their descriptor.", name, host);
       close (desc); /* nope */
       continue;
     }
@@ -327,7 +327,6 @@ void copyover_recover()
 
     // Restore KaVir protocol data.
     CopyoverSet(d, copyover_get);
-
 
     d->connected = CON_CLOSE;
 

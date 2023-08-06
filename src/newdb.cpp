@@ -348,10 +348,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles WHERE Name='%s';", prepare_quotes(buf3, name, sizeof(buf3) / sizeof(buf3[0])));
   mysql_wrapper(mysql, buf);
   if (!(res = mysql_use_result(mysql))) {
+    log_vfprintf("Refusing to load character '%s' (quoted from '%s'): No result on select-star query.", buf3, name);
     return FALSE;
   }
   row = mysql_fetch_row(res);
   if (!row && mysql_field_count(mysql)) {
+    log_vfprintf("Refusing to load character '%s' (quoted from '%s'): No row found on select-star query.", buf3, name);
     mysql_free_result(res);
     return FALSE;
   }

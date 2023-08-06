@@ -272,8 +272,6 @@ void set_lifestyle_string(struct char_data *ch, const char *str) {
     delete [] ch->player_specials->saved.lifestyle_string;
   
   ch->player_specials->saved.lifestyle_string = duped;
-
-  playerDB.SaveChar(ch);
 }
 
 const char *get_lifestyle_string(struct char_data *ch) {
