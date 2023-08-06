@@ -1078,6 +1078,13 @@ bool veh_is_in_junkyard(struct veh_data *veh) {
   return FALSE;
 }
 
+bool veh_is_in_crusher_queue(struct veh_data *veh) {
+  if (!veh || !veh->in_room)
+    return FALSE;
+
+  return GET_ROOM_VNUM(veh->in_room) == RM_VEHICLE_CRUSHER;
+}
+
 bool should_save_this_vehicle(struct veh_data *veh) {
   // Must be a PC vehicle. We specifically don't check for PC exist-- that's handled in LOADING, not saving.
   if (veh->owner <= 0)
@@ -1088,8 +1095,8 @@ bool should_save_this_vehicle(struct veh_data *veh) {
 
   // If it's thrashed, it must be in the proper location.
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-    // It was in the Junkyard and nobody came to fix it.
-    if (veh_is_in_junkyard(veh))
+    // It was in the crusher queue and nobody came to fix it.
+    if (veh_is_in_crusher_queue(veh))
       return FALSE;
 
     // It's being taken care of.
@@ -1106,7 +1113,7 @@ bool should_save_this_vehicle(struct veh_data *veh) {
       case VEH_BIKE:
       case VEH_DRONE:
       case VEH_TRUCK:
-        break;
+        return TRUE;
       default:
         return veh_is_aircraft(veh);
     }
@@ -1131,20 +1138,18 @@ void save_vehicles(bool fromCopyover)
     if (!should_save_this_vehicle(veh))
       continue;
 
-    num_veh++;
-
-    bool send_veh_to_junkyard = FALSE;
-    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(fromCopyover || veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
-      // If we've gotten here, the vehicle is not in the Junkyard-- save it and send it there.
-      send_veh_to_junkyard = TRUE;
-    }
-
-    /* Disabling this code-- we want to save ownerless vehicles so that they can disgorge their contents when they load in next.
-    if (!does_player_exist(veh->owner)) {
+    // Previously, ownerless vehicles were saved, allowing them to disgorge contents on next load. This is bad for the economy. Instead, we just drop them.
+    if (veh->owner > 0 && !does_player_exist(veh->owner)) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Vehicle '%s' no longer has a valid owner (was %ld). Locking it and refusing to save it.", GET_VEH_NAME(veh), veh->owner);
+      // Auto-lock the doors to prevent cheese.
+      veh->locked = TRUE;
+      // Clear the owner. This vehicle will be DQ'd in should_save_this_vehicle() henceforth.
       veh->owner = 0;
       continue;
     }
-     */
+
+    // This must come AFTER all disqualifications.
+    num_veh++;
 
     snprintf(buf, sizeof(buf), "veh/%07d", v);
     v++;
@@ -1172,30 +1177,38 @@ void save_vehicles(bool fromCopyover)
           break;
         }
 
-    if (send_veh_to_junkyard) {
-      // Pick a spot and put the vehicle there. Sort roughly based on type.
+    // Any vehicle that's destroyed and not being actively tended to (in a vehicle, in a garage) gets sent to either the junkyard or the crusher.
+    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
       int junkyard_number;
-      if (veh_is_aircraft(veh)) {
-        junkyard_number = RM_BONEYARD_WRECK_ROOM;
+
+      // If it's already in the junkyard, move it to the crusher.
+      // Vehicles in the crusher will not be saved, effectively destroying them.
+      if (veh_is_in_junkyard(veh)) {
+        junkyard_number = RM_VEHICLE_CRUSHER;
       } else {
-        switch (veh->type) {
-          case VEH_DRONE:
-            // Drones in the drone spot.
-            junkyard_number = RM_JUNKYARD_PARTS;
-            break;
-          case VEH_BIKE:
-            // Bikes in the bike spot.
-            junkyard_number = RM_JUNKYARD_BIKES;
-            break;
-          case VEH_CAR:
-          case VEH_TRUCK:
-            // Standard vehicles just inside the gates.
-            junkyard_number = RM_JUNKYARD_GATES;
-            break;
-          default:
-            // Pick a random one to scatter them about.
-            junkyard_number = junkyard_room_numbers[number(0, NUM_JUNKYARD_ROOMS - 1)];
-            break;
+        // Pick a spot and put the vehicle there. Sort roughly based on type.
+        if (veh_is_aircraft(veh)) {
+          junkyard_number = RM_BONEYARD_WRECK_ROOM;
+        } else {
+          switch (veh->type) {
+            case VEH_DRONE:
+              // Drones in the drone spot.
+              junkyard_number = RM_JUNKYARD_PARTS;
+              break;
+            case VEH_BIKE:
+              // Bikes in the bike spot.
+              junkyard_number = RM_JUNKYARD_BIKES;
+              break;
+            case VEH_CAR:
+            case VEH_TRUCK:
+              // Standard vehicles just inside the gates.
+              junkyard_number = RM_JUNKYARD_GATES;
+              break;
+            default:
+              // Pick a random one to scatter them about.
+              junkyard_number = junkyard_room_numbers[number(0, NUM_JUNKYARD_ROOMS - 1)];
+              break;
+          }
         }
       }
       
