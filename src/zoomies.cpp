@@ -17,6 +17,12 @@ extern void chkdmg(struct veh_data * veh);
 // TODO: Confirm that rigged flight works. (RIG and CONTROL)
 // TODO: Prevent rigger from unrigging during flight. (this sounds shitty, especially for long flights?)
 
+bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *veh, struct char_data *ch) {
+  return veh->in_room != room 
+          && veh_can_launch_from_or_land_at(veh, room)
+          && (!ROOM_FLAGGED(room, ROOM_STAFF_ONLY) || IS_SENATOR(ch));
+}
+
 ACMD(do_flyto) {
   // FLYTO <destination code>
   struct veh_data *veh = NULL;
@@ -58,10 +64,7 @@ ACMD(do_flyto) {
   if (!*argument) {
     send_to_char("You're aware of the following destinations:\r\n", ch);
     for (rnum_t rnum = 0; rnum <= top_of_world; rnum++) {
-      if (veh->in_room != &world[rnum] 
-          && veh_can_launch_from_or_land_at(veh, &world[rnum])
-          && (!ROOM_FLAGGED(&world[rnum], ROOM_STAFF_ONLY) || IS_SENATOR(ch))) 
-      {
+      if (room_is_valid_flyto_destination(&world[rnum], veh, ch)) {
         float distance = get_flight_distance_to_room(veh, &world[rnum]);
 
         send_to_char(ch, "%3s) %40s  (%.1f kms, %d nuyen in fuel)\r\n", 
@@ -76,7 +79,7 @@ ACMD(do_flyto) {
 
   // They've provided a flight destination. Find it.
   for (rnum_t rnum = 0; rnum <= top_of_world; rnum++) {
-    if (veh_can_launch_from_or_land_at(veh, &world[rnum]) && !str_cmp(argument, GET_ROOM_FLIGHT_CODE(&world[rnum]))) {
+    if (room_is_valid_flyto_destination(&world[rnum], veh, ch) && !str_cmp(argument, GET_ROOM_FLIGHT_CODE(&world[rnum]))) {
       target_room = &world[rnum];
       break;
     }
