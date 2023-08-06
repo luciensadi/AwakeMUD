@@ -105,7 +105,7 @@ ACMD(do_house) {
 void load_apartment_complexes() {
   // Iterate over the contents of the lib/housing directory.
   if (!exists(global_housing_dir)) {
-    log("FATAL ERROR: Unable to find lib/housing. Terminating.");
+    log("WARNING: Unable to find lib/housing.");
     log_vfprintf("Rendered path: %s", global_housing_dir.string().c_str());
     exit(1);
   }
@@ -617,6 +617,7 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
 #ifndef IS_BUILDPORT
       if (!does_player_exist(owner) || player_is_dead_hardcore(owner)) {
         // Unit's not valid.
+        log_vfprintf(" ----- Owner %ld is not valid: Breaking lease. ", owner);
         break_lease();
       }
 #endif
@@ -1315,6 +1316,20 @@ int Apartment::get_crap_count() {
   return crap_count;
 }
 
+void Apartment::set_owner(idnum_t owner) {
+  owned_by_player = owner;
+
+  // Overwrite the lease file.
+  save_lease();
+}
+
+void Apartment::set_paid_until(time_t paid_tm) {
+  paid_until = paid_tm;
+
+  // Overwrite the lease file.
+  save_lease();
+}
+
 /********** ApartmentRoom ************/
 
 ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
@@ -1351,9 +1366,15 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   room->apartment_room = this;
   room->apartment = apartment;
 
-  // Load storage contents.
-  storage_path = filename / "storage";
-  load_storage();
+  // If we have a valid lease, load storage contents.
+  if (apartment->get_paid_until() - time(0) >= 0) {
+    storage_path = filename / "storage";
+    load_storage();
+  } else {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to load storage for %ld: Lease is expired.", GET_ROOM_VNUM(room));
+    delete [] decoration;
+    decoration = NULL;
+  }
 }
 
 // Note that we DO NOT set room's backlink pointers to us here. You MUST true up later.
@@ -1440,7 +1461,7 @@ void ApartmentRoom::purge_contents() {
   bool had_anything = FALSE;
 
   if (rnum < 0) {
-    // mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to purge contents for %ld: Invalid vnum", vnum);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to purge contents for apartment room %ld: Invalid vnum", vnum);
     return;
   }
 
