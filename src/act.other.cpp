@@ -131,19 +131,9 @@ ACMD(do_quit)
           GET_LOADROOM(ch) = RM_ENTRANCE_TO_DANTES;
       }
     }
-
-    /*
-     * Get the last room they were in, in case they try to come in before the time
-     * limit is up.
-     */
-    if (ROOM_FLAGGED(ch->in_room, ROOM_STAFF_ONLY) && !access_level(ch, LVL_BUILDER)) {
-      // Quitting out in a staff-only area? You won't load back there.
-      GET_LAST_IN(ch) = RM_ENTRANCE_TO_DANTES;
-      snprintf(buf, sizeof(buf), "%s (%ld) quitting out in staff-only room '%s^n' (%ld); they will load at Dante's instead.",
-              GET_CHAR_NAME(ch), GET_IDNUM_EVEN_IF_PROJECTING(ch), GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-    } else
-      GET_LAST_IN(ch) = GET_ROOM_VNUM(ch->in_room);
+    
+    // Setting GET_LAST_IN() is done in save_char().
+    
     if(!ch->in_veh)
       act("$n has left the game.", TRUE, ch, 0, 0, TO_ROOM);
     else {

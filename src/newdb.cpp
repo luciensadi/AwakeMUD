@@ -1171,6 +1171,15 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     }
   }
 
+  // Ensure that they're not snapping back to a staff room.
+  {
+    rnum_t last_in_rnum = real_room(GET_LAST_IN(player));
+    if (last_in_rnum >= 0 && ROOM_FLAGGED(&world[last_in_rnum], ROOM_STAFF_ONLY) && !access_level(player, LVL_BUILDER)) {
+      // Snap to Dante's instead.
+      GET_LAST_IN(player) = RM_ENTRANCE_TO_DANTES;
+    }
+  }
+
   /* Figure out their vehicle-- they can only load in it if they own it.  Unless we're calling from copyover.*/
   if (player->in_veh && (fromCopyover || player->in_veh->owner == GET_IDNUM(player)))
     inveh = player->in_veh->idnum;
