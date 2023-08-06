@@ -7590,6 +7590,7 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
     }
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ARENA), " ^y(Arena)^n");
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_PEACEFUL), " (Peaceful)");
     APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
     APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ENCOURAGE_CONGREGATION), " ^W(Socialization Bonus)^n");

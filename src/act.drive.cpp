@@ -928,18 +928,10 @@ ACMD(do_control)
     else if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK || (GET_OBJ_VAL(cyber, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber, 3), EYE_DATAJACK)))
       jack = cyber;
 
-  if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char("While driving? Now that would be a neat trick.\r\n", ch);
-    return;
-  }
-  if (IS_WORKING(ch)) {
-    send_to_char("You can't pilot something while working on another project.\r\n", ch);
-    return;
-  }
-  if (!jack || !has_rig) {
-    send_to_char("You need both a datajack and a vehicle control rig to do that.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(AFF_FLAGGED(ch, AFF_PILOT), "While driving? Now that would be a neat trick.");
+  FAILURE_CASE(IS_WORKING(ch), "You can't pilot something while working on another project.");
+  FAILURE_CASE(!jack || !has_rig, "You need both a datajack and a vehicle control rig to do that.");
+  FAILURE_CASE(get_ch_in_room(ch)->peaceful, "You can't do that in peaceful rooms.");
 
   if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK && GET_OBJ_VAL(jack, 3) == DATA_INDUCTION) {
     if (GET_EQ(ch, WEAR_HANDS)) {
