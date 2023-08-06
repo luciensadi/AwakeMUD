@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "awake.hpp"
 #include "structs.hpp"
 #include "interpreter.hpp"
