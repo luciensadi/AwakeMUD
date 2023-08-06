@@ -6127,7 +6127,7 @@ SPECIAL(Janis_Meet)
       // Eventually we should verify the sayto target, but for now, we skip it. This block just serves to allow the next to identify the blue-eyes string.
     }
 
-    if (!str_cmp(argument, "Blue-eyes sent me") || !str_cmp(argument, "blue-eyes sent me")) {
+    if (str_str(argument, "Blue-eyes sent me")) {
       if (GET_RACE(ch) != RACE_HUMAN || GET_PRONOUNS(ch) != PRONOUNS_MASCULINE || !(GET_EQ(ch, WEAR_BODY) && GET_OBJ_VNUM(GET_EQ(ch, WEAR_BODY)) == 5032))  {
         do_say(mob, "Who the frag are you!? Oh wait, I fraggin' get it! This is a bust!", 0, 0);
         act("$n turns and starts running towards the road, quickly vanishing into the crowd.", FALSE, mob, 0, 0, TO_ROOM);
