@@ -13,10 +13,6 @@
 // External prototypes.
 extern void chkdmg(struct veh_data * veh);
 
-// TODO: Test mortals logging in in the airborne room.
-// TODO: Confirm that rigged flight works. (RIG and CONTROL)
-// TODO: Prevent rigger from unrigging during flight. (this sounds shitty, especially for long flights?)
-
 bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *veh, struct char_data *ch) {
   return veh->in_room != room 
           && veh_can_launch_from_or_land_at(veh, room)
@@ -362,6 +358,12 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
 }
 
 void crash_flying_vehicle(struct veh_data *veh) {
+  // Sanity check: Error if we've been given a non-flying vehicle.
+  if (!veh_is_aircraft(veh)) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received non-flying vehicle %s (%ld) to crash_flying_vehicle()!", GET_VEH_NAME(veh), GET_VEH_VNUM(veh));
+    return;
+  }
+
   // If airborne, move to random road location and destroy. Otherwise, destroy in place.
   rnum_t in_flight_room_rnum;
 
@@ -382,10 +384,12 @@ void crash_flying_vehicle(struct veh_data *veh) {
 
     // Select a random road room that's in a connected zone.
     for (int world_idx = 0; world_idx <= top_of_world; world_idx++) {
-      if (ROOM_FLAGGED(&world[world_idx], ROOM_ROAD) && dice(1, 200) <= 1 && !vnum_from_non_connected_zone(world[world_idx].number)) {
+      if (ROOM_FLAGGED(&world[world_idx], ROOM_AIRCRAFT_CAN_CRASH_HERE) && dice(1, 200) <= 1 && !vnum_from_non_connected_zone(world[world_idx].number)) {
         veh_from_room(veh);
         veh_to_room(veh, &world[world_idx]);
-        snprintf(buf, sizeof(buf), "%s comes hurtling in on a collision course with the road!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+        snprintf(buf, sizeof(buf), "%s comes hurtling in on a collision course with the %s!\r\n", 
+                 CAP(GET_VEH_NAME_NOFORMAT(veh)),
+                 ROOM_FLAGGED(&world[world_idx], ROOM_ROAD) ? "road" : "ground");
         send_to_room(buf, veh->in_room, veh);
         break;
       }
@@ -420,7 +424,10 @@ void process_flying_vehicles() {
     return;
   }
 
-  for (struct veh_data *veh = world[in_flight_room_rnum].vehicles; veh; veh = veh->next_veh) {
+  struct veh_data *next_veh = NULL;
+  for (struct veh_data *veh = world[in_flight_room_rnum].vehicles; veh; veh = next_veh) {
+    next_veh = veh->next_veh;
+
     struct char_data *controller;
 
     // Figure out who's controlling it.

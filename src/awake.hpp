@@ -632,7 +632,8 @@ enum {
 #define ROOM_HELIPAD                    38 // Allows rotorcraft and vector thrust takeoff and landing.
 #define ROOM_RUNWAY                     39 // Allows fixed-wing takeoff and landing.
 #define ROOM_AIRCRAFT_CAN_DRIVE_HERE    40 // Allows aircraft to drive in this room.
-#define ROOM_MAX                        41
+#define ROOM_AIRCRAFT_CAN_CRASH_HERE    41
+#define ROOM_MAX                        42
 
 #define VISION_NORMAL         0
 #define VISION_LOWLIGHT       1

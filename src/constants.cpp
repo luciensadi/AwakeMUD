@@ -300,6 +300,7 @@ const char *room_bits[] =
     "HELIPAD",
     "RUNWAY",
     "AIRCRAFT_ROAD",
+    "AIRCRAFT_CRASH_OK",
     MAX_FLAG_MARKER
   };
 
