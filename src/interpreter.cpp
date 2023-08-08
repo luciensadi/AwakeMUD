@@ -436,6 +436,7 @@ ACMD_DECLARE(do_holster);
 ACMD_DECLARE(do_draw);
 ACMD_DECLARE(do_cheatmark);
 ACMD_DECLARE(do_copyover);
+ACMD_DECLARE(do_land);
 ACMD_DECLARE(do_language);
 ACMD_DECLARE(do_subscribe);
 ACMD_DECLARE(do_subpoint);
@@ -703,6 +704,7 @@ struct command_info cmd_info[] =
     { "look"       , POS_LYING   , do_look     , 0, SCMD_LOOK, TRUE },
     { "lay"        , POS_RESTING , do_lay      , 0, 0, FALSE },
     { "language"   , POS_DEAD    , do_language , 0, 0, TRUE },
+    { "land"       , POS_RESTING , do_land     , 0, 0, FALSE },
     { "last"       , POS_DEAD    , do_last     , LVL_BUILDER, 0, FALSE },
     { "leaderboards", POS_DEAD  , do_leaderboard, LVL_MORTAL, 0, FALSE },
     { "learn"      , POS_RESTING , do_learn    , 0, 0, FALSE },
@@ -1001,7 +1003,6 @@ struct command_info cmd_info[] =
     { "climb"      , POS_STANDING, do_not_here , 0, 0, FALSE },
     { "deposit"    , POS_STANDING, do_not_here , 1, 0, FALSE },
     { "hours"      , POS_LYING   , do_not_here , 0, 0, FALSE },
-    { "land"       , POS_RESTING , do_not_here , 0, 0, FALSE },
     { "lease"      , POS_RESTING , do_not_here , 1, 0, FALSE },
     { "light"      , POS_STANDING, do_not_here , 0, 0, FALSE },
     { "list"       , POS_RESTING , do_not_here , 0, 0, TRUE },

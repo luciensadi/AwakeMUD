@@ -294,6 +294,9 @@ int calculate_flight_cost(struct veh_data *veh, float distance) {
   // Crank it up by 10% to account for maintenance and storage.
   optempo_cost *= 1.1;
 
+  // Cap it at 5k.
+  optempo_cost = MIN(5000, optempo_cost);
+
   return (int) ceilf(distance * optempo_cost);
 }
 
@@ -312,6 +315,9 @@ int calculate_flight_time(struct veh_data *veh, float distance) {
 
   // Convert these to game ticks.
   float in_game_ticks = ceilf(flight_hours * SECS_PER_MUD_HOUR / (PULSE_FLIGHT / PASSES_PER_SEC));
+
+  // Cap it at 5 IRL minutes.
+  in_game_ticks = MIN(5 * 60 / (PULSE_FLIGHT / PASSES_PER_SEC), in_game_ticks);
 
   return in_game_ticks;
 }
@@ -357,7 +363,17 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
   return successes;
 }
 
-void crash_flying_vehicle(struct veh_data *veh) {
+void _crash_plane_into_room(struct veh_data *veh, struct room_data *room, bool is_controlled_landing) {
+  veh_from_room(veh);
+  veh_to_room(veh, room);
+  snprintf(buf, sizeof(buf), "%s comes hurtling in on %s with the %s!\r\n", 
+            CAP(GET_VEH_NAME_NOFORMAT(veh)),
+            is_controlled_landing ? "an emergency landing approach" : "a collision course",
+            ROOM_FLAGGED(room, ROOM_ROAD) ? "road" : "ground");
+  send_to_room(buf, veh->in_room, veh);
+}
+
+void crash_flying_vehicle(struct veh_data *veh, bool is_controlled_landing) {
   // Sanity check: Error if we've been given a non-flying vehicle.
   if (!veh_is_aircraft(veh)) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received non-flying vehicle %s (%ld) to crash_flying_vehicle()!", GET_VEH_NAME(veh), GET_VEH_VNUM(veh));
@@ -379,18 +395,17 @@ void crash_flying_vehicle(struct veh_data *veh) {
 
   if (veh->in_room == &world[in_flight_room_rnum]) {
     // Let them know it's falling.
-    snprintf(buf, sizeof(buf), "Somewhere in the distance, you see %s plunge rapidly towards the ground!\r\n", GET_VEH_NAME(veh));
+    if (is_controlled_landing) {
+      snprintf(buf, sizeof(buf), "Somewhere in the distance, you see %s begin an emergency descent.\r\n", GET_VEH_NAME(veh));
+    } else {
+      snprintf(buf, sizeof(buf), "Somewhere in the distance, you see %s plunge rapidly towards the ground!\r\n", GET_VEH_NAME(veh));
+    }
     send_to_room(buf, veh->in_room, veh);
 
     // Select a random road room that's in a connected zone.
     for (int world_idx = 0; world_idx <= top_of_world; world_idx++) {
-      if (ROOM_FLAGGED(&world[world_idx], ROOM_AIRCRAFT_CAN_CRASH_HERE) && dice(1, 200) <= 1 && !vnum_from_non_connected_zone(world[world_idx].number)) {
-        veh_from_room(veh);
-        veh_to_room(veh, &world[world_idx]);
-        snprintf(buf, sizeof(buf), "%s comes hurtling in on a collision course with the %s!\r\n", 
-                 CAP(GET_VEH_NAME_NOFORMAT(veh)),
-                 ROOM_FLAGGED(&world[world_idx], ROOM_ROAD) ? "road" : "ground");
-        send_to_room(buf, veh->in_room, veh);
+      if (ROOM_FLAGGED(&world[world_idx], ROOM_AIRCRAFT_CAN_CRASH_HERE) && dice(1, 100) <= 1 && !vnum_from_non_connected_zone(world[world_idx].number)) {
+        _crash_plane_into_room(veh, &world[world_idx], is_controlled_landing);
         break;
       }
     }
@@ -403,16 +418,40 @@ void crash_flying_vehicle(struct veh_data *veh) {
         return;
       }
 
-      veh_from_room(veh);
-      veh_to_room(veh, &world[i5_room]);
-      snprintf(buf, sizeof(buf), "%s comes hurtling in on a collision course with the road!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
-      send_to_room(buf, veh->in_room, veh);
+      _crash_plane_into_room(veh, &world[i5_room], is_controlled_landing);
     }
   }
 
-  // Now that we're certain it's landed in the real world, destroy it.
-  veh->damage = VEH_DAM_THRESHOLD_DESTROYED;
+  // By the time we're here, we know the vehicle is in the game world and not airborne.
+  if (is_controlled_landing) {
+    // Controlled emergency landing: Take a hit. Technically this should be rolled against body etc, but I don't have the spoons to write that right now-- a PR is welcome!
+    veh->damage = MIN(VEH_DAM_THRESHOLD_DESTROYED, veh->damage + 3);
+  } else {
+    // Uncontrolled crash: Set it to having taken lethal damage.
+    veh->damage = VEH_DAM_THRESHOLD_DESTROYED;
+  }
+  // Execute damage results.
   chkdmg(veh);
+}
+
+#define MUST_TYPE_CONFIRM_STRING "There aren't any nearby safe landing spots. If you want to forcibly land on a road, type LAND CONFIRM."
+ACMD(do_land) {
+  struct veh_data *veh;
+  RIG_VEH(ch, veh);
+
+  FAILURE_CASE(!veh, "You're not in a vehicle.");
+  FAILURE_CASE_PRINTF(get_veh_controlled_by_char(ch) != veh, "You're not controlling %s.", GET_VEH_NAME(veh));
+  FAILURE_CASE_PRINTF(!veh_is_aircraft(veh), "%s isn't airworthy to begin with...", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+  FAILURE_CASE(!veh_is_currently_flying(veh), "You're not currently airborne.");
+
+  // LAND CONFIRM: Set you down in a random area, taking damage.
+  FAILURE_CASE(!*argument, MUST_TYPE_CONFIRM_STRING);
+  skip_spaces(&argument);
+  FAILURE_CASE(str_cmp(argument, "confirm"), MUST_TYPE_CONFIRM_STRING);
+
+  send_to_char(ch, "You tighten your sphincter and bring %s in for an emergency landing.\r\n", GET_VEH_NAME(veh));
+  send_to_veh("%s tips forward and begins an emergency descent.\r\n", veh, ch, TRUE, CAP(GET_VEH_NAME_NOFORMAT(veh)));
+  crash_flying_vehicle(veh, TRUE);
 }
 
 void process_flying_vehicles() {
