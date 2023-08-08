@@ -5948,6 +5948,8 @@ bool obj_is_apartment_only_drop_item(struct obj_data *obj) {
     case ITEM_BIOWARE:
       return TRUE;
   }
+
+  return FALSE;
 }
 
 bool obj_contains_apartment_only_drop_items(struct obj_data *obj) {
