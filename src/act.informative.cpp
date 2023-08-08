@@ -7594,6 +7594,13 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
     APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
     APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ENCOURAGE_CONGREGATION), " ^W(Socialization Bonus)^n");
+
+    if (in_room->flight_code && (ROOM_FLAGGED(in_room, ROOM_HELIPAD) || ROOM_FLAGGED(in_room, ROOM_RUNWAY))) {
+      snprintf(ENDOF(room_title_buf), sizeof(room_title_buf), " (%s: %3s)", 
+               ROOM_FLAGGED(in_room, ROOM_RUNWAY) ? "Runway" : "Helipad",
+               in_room->flight_code);
+    }
+
     strlcat(room_title_buf, "\r\n", sizeof(room_title_buf));
 
     send_to_char(room_title_buf, ch);

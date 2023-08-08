@@ -1827,24 +1827,11 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
 {
   struct obj_data *obj;
 
-  if (mode != SCMD_DROP)
-  {
-    send_to_char("You can't do that!\r\n", ch);
-    return;
-  } else if (amount < 1)
-  {
-    send_to_char("You can't drop less than one nuyen.\r\n", ch);
-    return;
-  } else if (amount > GET_NUYEN(ch))
-  {
-    send_to_char("You don't even have that much!\r\n", ch);
-    return;
-  }
-
-  if (GET_LEVEL(ch) > LVL_MORTAL && !access_level(ch, LVL_PRESIDENT)) {
-    send_to_char(ch, "Staff can't drop nuyen. Use the PAYOUT command to award a character.\r\n");
-    return;
-  }
+  FAILURE_CASE(mode != SCMD_DROP, "You can't do that!");
+  FAILURE_CASE(amount < 1, "You can't drop less than one nuyen.");
+  FAILURE_CASE(amount > GET_NUYEN(ch), "You don't even have that much!");
+  FAILURE_CASE(GET_LEVEL(ch) > LVL_MORTAL && !access_level(ch, LVL_PRESIDENT),
+               "Staff can't drop nuyen. Use the PAYOUT command to award a character.");
 
   obj = read_object(OBJ_ROLL_OF_NUYEN, VIRTUAL);
   GET_OBJ_VAL(obj, 0) = amount;
@@ -1884,8 +1871,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 {
   int value;
 
-  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP))
-  {
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP)) {
     snprintf(buf, sizeof(buf), "You can't %s $p, it must be CURSED!", sname);
     act(buf, FALSE, ch, obj, 0, TO_CHAR);
     return 0;
@@ -1904,6 +1890,29 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   if (obj_contains_kept_items(obj) && !IS_SENATOR(ch)) {
     act("Action blocked: $p contains at least one kept item.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
+  }
+
+  // You must be in an apartment or vehicle in order to drop or donate economically-sensitive items.
+  if (mode == SCMD_DONATE || (mode != SCMD_JUNK && !((ch->in_room && ch->in_room->apartment) || ch->in_veh))) {
+    bool action_blocked = FALSE;
+
+    if ((action_blocked |= obj_is_apartment_only_drop_item(obj))) {
+      act("Action blocked: $p is an economically-sensitive item (cyberware, bioware, custom cyberdeck) that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
+    }
+    else if ((action_blocked |= obj_contains_apartment_only_drop_items(obj))) {
+      act("Action blocked: $p contains at least one economically-sensitive item (cyberware, bioware, custom cyberdeck) that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
+    }
+
+    if (action_blocked) {
+      struct room_data *in_room = get_ch_in_room(ch);
+      
+      // Hardcoded start and end of the Neophyte Guild area.
+      if (mode == SCMD_DONATE || (GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD && GET_ROOM_VNUM(in_room) >= 60500 && GET_ROOM_VNUM(in_room) <= 60699)) {
+        send_to_char(ch, "Please avoid giving newbies free cyberware / bioware / etc! It's a kind gesture, but it undercuts their economic balance and leads to less overall player retention.\r\n");
+      }
+
+      return 0;
+    }
   }
 
   if (mode == SCMD_DONATE) {
@@ -2136,22 +2145,11 @@ ACMD(do_drop)
   extern rnum_t donation_room_3;  /* uncomment if needed! */
 
 
-  if (IS_ASTRAL(ch)) {
-    send_to_char("Astral projections can't touch things!\r\n", ch);
-    return;
-  }
-  if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char("While driving? Now that would be a good trick!\r\n", ch);
-    return;
-  }
-
-  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && (subcmd == SCMD_DROP || subcmd == SCMD_DONATE)) {
-    send_to_char(ch, "You cannot drop or donate items until you complete character generation.\r\n");
-    return;
-  } else if (IS_WORKING(ch)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
+  FAILURE_CASE(IS_ASTRAL(ch), "Astral projections can't touch things!");
+  FAILURE_CASE(AFF_FLAGGED(ch, AFF_PILOT), "While driving? Now that would be a good trick!");
+  FAILURE_CASE(PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && (subcmd == SCMD_DROP || subcmd == SCMD_DONATE),
+               "You cannot drop or donate items until you complete character generation.");
+  FAILURE_CASE(IS_WORKING(ch), "You're too busy to do that.");
 
   struct obj_data *obj, *next_obj;
   struct room_data *random_donation_room = NULL;
@@ -2190,10 +2188,9 @@ ACMD(do_drop)
 
   argument = one_argument(argument, arg);
 
-  if (!*arg) {
-    send_to_char(ch, "What do you want to %s?\r\n", sname);
-    return;
-  } else if (is_number(arg)) {
+  FAILURE_CASE_PRINTF(!*arg, "What do you want to %s?\r\n", sname);
+  
+  if (is_number(arg)) {
     amount = atoi(arg);
     argument = one_argument(argument, arg);
     if (!str_cmp("nuyen", arg))

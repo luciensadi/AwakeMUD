@@ -150,6 +150,9 @@ int     count_object_including_contents(struct obj_data *obj);
 int     count_objects_in_room(struct room_data *room);
 int     count_objects_in_veh(struct veh_data *veh);
 
+bool obj_is_apartment_only_drop_item(struct obj_data *obj);
+bool obj_contains_apartment_only_drop_items(struct obj_data *obj);
+
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);
 

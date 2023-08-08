@@ -5935,6 +5935,38 @@ int count_objects_in_veh(struct veh_data *veh) {
   return count;
 }
 
+bool obj_is_apartment_only_drop_item(struct obj_data *obj) {
+  if (!obj) {
+    mudlog("SYSERR: Received NULL object to obj_is_apartment_only_drop_item()!", NULL, LOG_SYSLOG, TRUE);
+    return TRUE;
+  }
+
+  switch (GET_OBJ_TYPE(obj)) {
+    case ITEM_CUSTOM_DECK:
+      return obj->contains;
+    case ITEM_CYBERWARE:
+    case ITEM_BIOWARE:
+      return TRUE;
+  }
+}
+
+bool obj_contains_apartment_only_drop_items(struct obj_data *obj) {
+  if (!obj) {
+    mudlog("SYSERR: Received NULL object to obj_contains_apartment_only_drop_items()!", NULL, LOG_SYSLOG, TRUE);
+    return TRUE;
+  }
+
+  for (struct obj_data *cont = obj->contains; cont; cont = cont->next_content) {
+    if (obj_is_apartment_only_drop_item(cont))
+      return TRUE;
+
+    if (obj_contains_apartment_only_drop_items(cont))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
