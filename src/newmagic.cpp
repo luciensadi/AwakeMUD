@@ -6085,7 +6085,8 @@ void disp_geas_menu(struct descriptor_data *d)
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_FOCUS_GEAS(obj) == GET_IDNUM(CH)) {
       send_to_char(CH, "%d) %s\r\n", x++, GET_OBJ_NAME(obj));
     }
-    else if ((i == WEAR_WIELD || i == WEAR_HOLD) && GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_WEAPON_FOCUS_GEAS(obj) == GET_IDNUM(CH)) {
+    else if ((i == WEAR_WIELD || i == WEAR_HOLD) && GET_OBJ_TYPE(obj) == ITEM_WEAPON
+             && WEAPON_IS_FOCUS(obj) && GET_WEAPON_FOCUS_GEAS(obj) == GET_IDNUM(CH)) {
       send_to_char(CH, "%d) %s\r\n", x++, GET_OBJ_NAME(obj));
     }
   }
@@ -6286,7 +6287,7 @@ void init_parse(struct descriptor_data *d, char *arg)
             focus_geas = obj;
           }
           else if ((i == WEAR_WIELD || i == WEAR_HOLD) && GET_OBJ_TYPE(obj) == ITEM_WEAPON
-                   && GET_WEAPON_FOCUS_GEAS(obj) == GET_IDNUM(CH) && --number < 0) {
+                   && WEAPON_IS_FOCUS(obj) && GET_WEAPON_FOCUS_GEAS(obj) == GET_IDNUM(CH) && --number < 0) {
             focus_geas = obj;
           }
         }
