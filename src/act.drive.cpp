@@ -259,11 +259,18 @@ ACMD(do_drive)
       VEH->locked = TRUE;
     }
     AFF_FLAGS(ch).SetBit(AFF_PILOT);
-    VEH->cspeed = SPEED_CRUISING;
     VEH->lastin[0] = VEH->in_room;
     stop_manning_weapon_mounts(ch, TRUE);
-    send_to_char("You take the wheel and accelerate to a cruise.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s takes the wheel and accelerates to a cruise.\r\n", capitalize(GET_NAME(ch)));
+
+    if (veh_is_aircraft(VEH)) {
+      send_to_char("You take the stick.\r\n", ch);
+      snprintf(buf1, sizeof(buf1), "%s takes the stick.\r\n", capitalize(GET_NAME(ch)));
+      VEH->cspeed = SPEED_IDLE;
+    } else {
+      send_to_char("You take the wheel and accelerate to a cruise.\r\n", ch);
+      snprintf(buf1, sizeof(buf1), "%s takes the wheel and accelerates to a cruise.\r\n", capitalize(GET_NAME(ch)));
+      VEH->cspeed = SPEED_CRUISING;
+    }
     send_to_veh(buf1, VEH, ch, FALSE);
   } else {
     if (veh_is_currently_flying(VEH)) {

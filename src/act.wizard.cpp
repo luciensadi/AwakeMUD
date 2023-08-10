@@ -680,7 +680,8 @@ struct room_data *find_target_room(struct char_data * ch, char *roomstr)
       location = target_obj->in_room;
     else {
       if ((location = get_obj_in_room(target_obj))) {
-        send_to_char(ch, "Going to that object's containing room. Veh: %s, In-Obj: %s, Carried-By: %s, Worn-By: %s.\r\n",
+        send_to_char(ch, "Going to that object (%s)'s containing room. Veh: %s, In-Obj: %s, Carried-By: %s, Worn-By: %s.\r\n",
+                     GET_OBJ_NAME(target_obj),
                      target_obj->in_veh ? GET_VEH_NAME(target_obj->in_veh) : "(null)",
                      target_obj->in_obj ? GET_OBJ_NAME(target_obj->in_obj) : "(null)",
                      target_obj->carried_by ? GET_CHAR_NAME(target_obj->carried_by) : "(null)",
@@ -760,6 +761,7 @@ ACMD(do_goto)
     // Seattle taxi destinations, including deactivated and invalid ones.
     for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
       if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
+        send_to_char(ch, "OK, going to Seattle taxi destination %s.\r\n", dest_data_list->str);
         location = &world[rnum];
         break;
       }
@@ -770,6 +772,7 @@ ACMD(do_goto)
       dest_data_list = portland_taxi_destinations;
       for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
         if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
+          send_to_char(ch, "OK, going to Portland taxi destination %s.\r\n", dest_data_list->str);
           location = &world[rnum];
           break;
         }
@@ -781,6 +784,18 @@ ACMD(do_goto)
       dest_data_list = caribbean_taxi_destinations;
       for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
         if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
+          send_to_char(ch, "OK, going to Caribbean taxi destination %s.\r\n", dest_data_list->str);
+          location = &world[rnum];
+          break;
+        }
+      }
+    }
+
+    // Also look for exact-match flight codes if the buf is exactly three characters long.
+    if (!location && strlen(buf) == 3) {
+      for (rnum_t rnum = 0; rnum <= top_of_world; rnum++) {
+        if (world[rnum].flight_code && !str_cmp(world[rnum].flight_code, buf)) {
+          send_to_char(ch, "OK, going to airstrip %s.\r\n", world[rnum].flight_code);
           location = &world[rnum];
           break;
         }

@@ -13,6 +13,10 @@
 
 // External prototypes.
 extern void chkdmg(struct veh_data * veh);
+ACMD_DECLARE(do_drive);
+
+// Internal prototypes.
+bool destination_is_within_flight_range(struct veh_data *veh, struct room_data *room);
 
 bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *veh, struct char_data *ch) {
   // Must have a landing code.
@@ -31,9 +35,17 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
   struct zone_data *zone = get_zone_from_vnum(GET_ROOM_VNUM(room));
   if (zone && zone->is_pghq && !(GET_PGROUP_MEMBER_DATA(ch) && GET_PGROUP(ch) && GET_PGROUP(ch)->controls_room(room)))
     return FALSE;
+
+  // Standard validity checks.
+  if (!veh_can_launch_from_or_land_at(veh, room))
+    return FALSE;
+
+  // Must be within range for your vehicle.
+  if (!destination_is_within_flight_range(veh, room))
+    return FALSE;
   
-  // Final validity checks.
-  return veh_can_launch_from_or_land_at(veh, room);
+  // Everything looks good.
+  return TRUE;
 }
 
 ACMD(do_flyto) {
@@ -52,8 +64,13 @@ ACMD(do_flyto) {
     return;
   }
 
-  FAILURE_CASE_PRINTF(get_veh_controlled_by_char(ch) != veh, "You're not controlling %s.", GET_VEH_NAME(veh));
-
+  if (get_veh_controlled_by_char(ch) != veh) {
+    // Try to pilot it.
+    char argbuf[] = { '\0' };
+    do_drive(ch, argbuf, 0, 0);
+    FAILURE_CASE_PRINTF(get_veh_controlled_by_char(ch) != veh, "You're not controlling %s.", GET_VEH_NAME(veh));
+  }
+  
   // Is the flight system working?
   rnum_t in_flight_room_rnum = real_room(RM_AIRBORNE);
   if (in_flight_room_rnum < 0) {
@@ -285,6 +302,27 @@ float get_flight_distance_to_room(struct veh_data *veh, struct room_data *room) 
   return distance;
 }
 #undef EARTH_RADIUS_KM
+
+bool destination_is_within_flight_range(struct veh_data *veh, struct room_data *room) {
+  switch (veh->type) {
+    case VEH_ROTORCRAFT:
+    case VEH_DRONE:
+      // Helicopters and drones have limited range.
+      return get_flight_distance_to_room(veh, room) < 500;
+    case VEH_VECTORTHRUST:
+    case VEH_FIXEDWING:
+      // These technically are limited in range, but they can get anywhere in the current game world.
+      return get_flight_distance_to_room(veh, room) < 8000;
+    case VEH_LTA:
+      // LTAs are slow but can go pretty much anywhere (they just kinda... float)
+      return TRUE;
+    case VEH_SUBORBITAL:
+      // Good luck getting one of these.
+      return TRUE;
+  }
+
+  return FALSE;
+}
 
 float _calculate_flight_hours(struct veh_data *veh, float distance) {
   // Given a distance in kilometers, calculates how long it will take for a vehicle to traverse it.
