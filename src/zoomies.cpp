@@ -8,15 +8,32 @@
 #include "comm.hpp"
 #include "utils.hpp"
 #include "handler.hpp"
+#include "playergroups.hpp"
 #include "zoomies.hpp"
 
 // External prototypes.
 extern void chkdmg(struct veh_data * veh);
 
 bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *veh, struct char_data *ch) {
-  return veh->in_room != room 
-          && veh_can_launch_from_or_land_at(veh, room)
-          && (!ROOM_FLAGGED(room, ROOM_STAFF_ONLY) || IS_SENATOR(ch));
+  // Must have a landing code.
+  if (!room->flight_code)
+    return FALSE;
+
+  // Cannot be the same room.
+  if (veh->in_room == room)
+    return FALSE;
+
+  // Can't be a staff room if you're not a staffer.
+  if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY) && !IS_SENATOR(ch))
+    return FALSE;
+
+  // Can't be a PGHQ room if you're not in that PG.
+  struct zone_data *zone = get_zone_from_vnum(GET_ROOM_VNUM(room));
+  if (zone && zone->is_pghq && !(GET_PGROUP_MEMBER_DATA(ch) && GET_PGROUP(ch) && GET_PGROUP(ch)->controls_room(room)))
+    return FALSE;
+  
+  // Final validity checks.
+  return veh_can_launch_from_or_land_at(veh, room);
 }
 
 ACMD(do_flyto) {

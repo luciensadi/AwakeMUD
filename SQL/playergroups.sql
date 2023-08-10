@@ -11,6 +11,7 @@ CREATE TABLE `playergroups` (
   `Tag` varchar(200) default '^R[^WEMPTY^R]^n' NOT NULL,
   `Settings` varchar(128) default '0' NOT NULL,
   `bank` bigint(9) unsigned default '0' NOT NULL,
+  `zone` mediumint(5) unsigned default '0' NOT NULL,
   PRIMARY KEY (`idnum`),
   KEY (`Alias`)
 );

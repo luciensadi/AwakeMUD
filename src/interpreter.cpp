@@ -277,6 +277,7 @@ ACMD_DECLARE(do_payout);
 ACMD_DECLARE(do_perfmon);
 ACMD_DECLARE(do_penalties);
 ACMD_DECLARE(do_pgroup);
+ACMD_DECLARE(do_pgset);
 ACMD_DECLARE(do_photo);
 ACMD_DECLARE(do_playerrolls);
 ACMD_DECLARE(do_pockets);
@@ -762,6 +763,7 @@ struct command_info cmd_info[] =
     { "perfmon"    , POS_DEAD    , do_perfmon  , LVL_ADMIN, 0, FALSE },
     { "penalties"  , POS_MORTALLYW, do_penalties, 0, 0, FALSE },
     { "pgroup"     , POS_LYING   , do_pgroup   , 0, 0, FALSE },
+    { "pgset"      , POS_MORTALLYW, do_pgset   , LVL_ADMIN, 0, FALSE },
     { "phone"      , POS_LYING   , do_phone    , 0, 0, FALSE },
     { "phonelist"  , POS_DEAD    , do_phonelist, LVL_BUILDER, 0, FALSE },
     { "photo"      , POS_RESTING , do_photo    , 0, 0, FALSE },

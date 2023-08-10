@@ -14,6 +14,7 @@ class Playergroup {
   const char *tag;
   const char *name;
   const char *alias;
+  int pghq_zone;
 
   Bitfield settings;
 public:
@@ -73,6 +74,11 @@ public:
   void invite(struct char_data *ch, char *argument);
   void add_member(struct char_data *ch);
   void remove_member(struct char_data *ch);
+
+  // Zone ownership management.
+  void set_zone(unsigned long znum);
+  int get_zone() { return pghq_zone; }
+  bool controls_room(struct room_data *room);
 };
 
 class Pgroup_invitation {

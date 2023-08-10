@@ -162,6 +162,64 @@ ACMD(do_decline) {
   send_to_char(ch, "You don't seem to have any invitations from '%s'.\r\n", argument);
 }
 
+Playergroup *load_pgroup_if_exists(const char *alias) {
+  if (!alias || !*alias) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got %s alias to load_pgroup_if_exists()!", alias ? "empty" : "NULL");
+    return NULL;
+  }
+
+  // Declare our local vars-- in this case, something to stick alias in, and something to hold our query.
+  char local_alias[100];
+  char querybuf[1000];
+
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
+  // Clone over alias to the new local version. This way we can state conclusively the size of the buffer that contains it-- crucial for prepare_quotes.
+  strlcpy(local_alias, alias, sizeof(local_alias));
+
+  // Compose and execute our query.
+  snprintf(querybuf, sizeof(querybuf), "SELECT idnum FROM playergroups WHERE alias = '%s'", prepare_quotes(buf, alias, sizeof(local_alias) / sizeof(local_alias[0])));
+  mysql_wrapper(mysql, querybuf);
+
+  if (!(res = mysql_use_result(mysql))) {
+    // Query failed. Bail out.
+    return NULL;
+  }
+
+  if (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
+    // No such group exists.
+    return NULL;
+  }
+
+  // Parse out the idnum.
+  long idnum = atol(row[0]);
+
+  // Clean up our database state.
+  mysql_free_result(res);
+
+  return new Playergroup(idnum);
+}
+
+Playergroup *find_pgroup(const char *alias) {
+  if (!alias || !*alias) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got %s alias to find_pgroup()!", alias ? "empty" : "NULL");
+    return NULL;
+  }
+
+  Playergroup *pgr = loaded_playergroups;
+
+  while (pgr) {
+    if (!str_cmp(pgr->get_alias(), alias))
+      return pgr;
+
+    pgr = pgr->next_pgroup;
+  }
+
+  // The group is not loaded: Load it from the DB, assuming it exists.
+  return load_pgroup_if_exists(alias);
+}
+
 // Find or load the specified group. Note that Playergroup(idnum) makes a DB call!
 Playergroup *Playergroup::find_pgroup(long idnum) {
   Playergroup *pgr = loaded_playergroups;
@@ -1675,4 +1733,184 @@ bool pgroup_char_has_any_priv(idnum_t char_idnum, idnum_t pgroup_idnum, Bitfield
   mysql_free_result(res);
 
   return privileges.AreAnyShared(derived_privileges);
+}
+
+// Configure information about playergroups.
+#define PGSET_SYNTAX_MESSAGE "Syntax: PGSET <group alias> <field> <value>"
+ACMD(do_pgset) {
+  // PGSET <group alias> <field> <value>
+  char group_alias[100], field[100];
+  char *remainder;
+
+  FAILURE_CASE(!*argument, PGSET_SYNTAX_MESSAGE);
+
+  // Parse out the group alias.
+  memset(group_alias, 0, sizeof(group_alias) * sizeof(char));
+  remainder = any_one_arg(argument, group_alias);
+  FAILURE_CASE(!*group_alias, PGSET_SYNTAX_MESSAGE);
+
+  // Look up the pgroup.
+  Playergroup *pgroup = find_pgroup(group_alias);
+  FAILURE_CASE_PRINTF(!pgroup, "There is no group named '%s'.", group_alias);
+
+  // Parse out the field we want to modify on this group.
+  memset(field, 0, sizeof(field) * sizeof(char));
+  remainder = any_one_arg(remainder, field);
+  skip_spaces(&remainder);
+  FAILURE_CASE_PRINTF(!*field, "You must specify the field you want to alter on %s (bank, tag, name, zone, leader, founded, disabled, secret).", group_alias);
+  FAILURE_CASE_PRINTF(!*remainder, "You must specify a value to set %s's %s to.", group_alias, field);
+
+  send_to_char(ch, "Debug: pgset '%s' '%s' '%s'\r\n", group_alias, field, remainder);
+
+  if (!str_cmp(field, "bank")) {
+    // Set their bank value.
+    long value = atol(remainder);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s (%s / %ld)'s bank from %ld to %ld.", 
+                    GET_CHAR_NAME(ch),
+                    pgroup->get_name(),
+                    pgroup->get_alias(),
+                    pgroup->get_idnum(),
+                    pgroup->get_bank(),
+                    value);
+    pgroup->set_bank(value);
+    pgroup->save_pgroup_to_db();
+    send_to_char("Done.\r\n", ch);
+    return;
+  }
+
+  if (!str_cmp(field, "zone")) {
+    long value = atol(remainder);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s (%s / %ld)'s zone from %ld to %ld.", 
+                    GET_CHAR_NAME(ch),
+                    pgroup->get_name(),
+                    pgroup->get_alias(),
+                    pgroup->get_idnum(),
+                    pgroup->get_zone(),
+                    value);
+    pgroup->set_zone(value);
+    pgroup->save_pgroup_to_db();
+    send_to_char("Done.\r\n", ch);
+    return;
+  }
+
+  if (!str_cmp(field, "tag")) {
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s (%s / %ld)'s tag to %s.", 
+                    GET_CHAR_NAME(ch),
+                    pgroup->get_name(),
+                    pgroup->get_alias(),
+                    pgroup->get_idnum(),
+                    remainder);
+    pgroup->set_alias(remainder, ch);
+    pgroup->save_pgroup_to_db();
+    send_to_char("OK.\r\n", ch);
+    return;
+  }
+
+  if (!str_cmp(field, "name")) {
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s (%s / %ld)'s name to %s.", 
+                    GET_CHAR_NAME(ch),
+                    pgroup->get_name(),
+                    pgroup->get_alias(),
+                    pgroup->get_idnum(),
+                    remainder);
+    pgroup->set_name(remainder, ch);
+    pgroup->save_pgroup_to_db();
+    send_to_char("OK.\r\n", ch);
+    return;
+  }
+
+  if (!str_cmp(field, "founded")) {
+    bool truth = !str_cmp(remainder, "on") || !str_cmp(remainder, "true") || !str_cmp(remainder, "1") || !str_cmp(remainder, "founded");
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s (%s / %ld)'s founded status to %s.", 
+                    GET_CHAR_NAME(ch),
+                    pgroup->get_name(),
+                    pgroup->get_alias(),
+                    pgroup->get_idnum(),
+                    truth ? "TRUE" : "FALSE");
+    pgroup->set_founded(truth);
+    pgroup->save_pgroup_to_db();
+    send_to_char("Done.\r\n", ch);
+    return;
+  }
+
+  if (!str_cmp(field, "disabled")) {
+    bool truth = !str_cmp(remainder, "on") || !str_cmp(remainder, "true") || !str_cmp(remainder, "1") || !str_cmp(remainder, "disabled");
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s (%s / %ld)'s disabled status to %s.", 
+                    GET_CHAR_NAME(ch),
+                    pgroup->get_name(),
+                    pgroup->get_alias(),
+                    pgroup->get_idnum(),
+                    truth ? "TRUE" : "FALSE");
+    pgroup->set_disabled(truth);
+    pgroup->save_pgroup_to_db();
+    send_to_char("Done.\r\n", ch);
+    return;
+  }
+
+  if (!str_cmp(field, "secret")) {
+    bool truth = !str_cmp(remainder, "on") || !str_cmp(remainder, "true") || !str_cmp(remainder, "1") || !str_cmp(remainder, "secret");
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s (%s / %ld)'s secret status to %s.", 
+                    GET_CHAR_NAME(ch),
+                    pgroup->get_name(),
+                    pgroup->get_alias(),
+                    pgroup->get_idnum(),
+                    truth ? "TRUE" : "FALSE");
+    pgroup->set_secret(truth);
+    pgroup->save_pgroup_to_db();
+    send_to_char("Done.\r\n", ch);
+    return;
+  }
+
+  if (!str_cmp(field, "leader")) {
+    idnum_t idnum = get_player_id(remainder);
+    FAILURE_CASE_PRINTF(idnum <= 0, "There is no character named %s.", remainder);
+
+    // Look for them online.
+    struct char_data *target = NULL;
+    for (struct char_data *target = character_list; target; target = target->next) {
+      if (GET_IDNUM(target) == idnum) {
+        break;
+      }
+    }
+
+    // Not found? Load from DB.
+    bool from_file = FALSE;
+    if (!target) {
+      from_file = TRUE;
+      const char *name = get_player_name(idnum);
+      target = playerDB.LoadChar(name, FALSE);
+      delete [] name;
+    }
+
+    if (!target) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unable to find or load character '%s' despite successfully looking them up as idnum %ld!", remainder, idnum);
+      send_to_char(ch, "Sorry, couldn't find a character named '%s'.\r\n", remainder);
+      return;
+    }
+
+    FAILURE_CASE_PRINTF(!GET_PGROUP_MEMBER_DATA(target) || !GET_PGROUP(target) || GET_PGROUP(target) != pgroup,
+                        "%s is not a member of %s.", GET_CHAR_NAME(target), pgroup->get_name());
+    
+    // At this point, they're a member of the group. Give them the leader bit.
+    GET_PGROUP_MEMBER_DATA(target)->rank = MAX_PGROUP_RANK;
+    GET_PGROUP_MEMBER_DATA(target)->privileges.SetBit(PRIV_LEADER);
+
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s made %s a leader of %s (%s / %ld).", 
+                    GET_CHAR_NAME(ch),
+                    GET_CHAR_NAME(target),
+                    pgroup->get_name(),
+                    pgroup->get_alias(),
+                    pgroup->get_idnum());
+    send_to_char("Done.\r\n", ch);
+
+    // Clean up.
+    if (from_file) {
+      extract_char(target);
+      target = NULL;
+    }
+    return;
+  }
+
+  send_to_char(ch, "You must specify the field you want to alter on %s (bank, tag, name, zone, leader, founded, disabled, secret).", group_alias);
+  return;
 }

@@ -4857,6 +4857,15 @@ int get_zone_index_number_from_vnum(vnum_t vnum) {
   return -1;
 }
 
+struct zone_data *get_zone_from_vnum(vnum_t vnum) {
+  int zone_num = get_zone_index_number_from_vnum(vnum);
+
+  if (zone_num >= 0)
+    return &zone_table[zone_num];
+  
+  return NULL;
+}
+
 #define SEND_MESSAGE(...) { if (send_message) { send_to_char(ch, __VA_ARGS__); } }
 bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch, bool send_message) {
   if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE)) {
