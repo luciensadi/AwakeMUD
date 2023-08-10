@@ -2207,6 +2207,7 @@ enum {
 #define CON_HELPEDIT            47
 #define CON_HOUSEEDIT_COMPLEX   48
 #define CON_HOUSEEDIT_APARTMENT 49
+#define CON_DECORATE_VEH        50
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
 

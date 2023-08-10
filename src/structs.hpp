@@ -787,6 +787,8 @@ struct veh_data
   char *restring;
   char *long_description;         /* long description when examined   */
   char *restring_long;
+  char *decorate_front;
+  char *decorate_rear;
   char *inside_description;       /*  Description inside the car      */
   char *rear_description;
   sbyte handling;
@@ -852,8 +854,9 @@ struct veh_data
 
   veh_data() :
       in_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
-      long_description(NULL), restring_long(NULL), inside_description(NULL), rear_description(NULL),
-      veh_destruction_timer(0), followers(NULL), following(NULL), followch(NULL), mount(NULL),
+      long_description(NULL), restring_long(NULL), decorate_front(NULL), decorate_rear(NULL),
+      inside_description(NULL), rear_description(NULL), veh_destruction_timer(0), 
+      followers(NULL), following(NULL), followch(NULL), mount(NULL),
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL), defined_position(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
       next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL),

@@ -60,8 +60,16 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 ACMD(do_decorate) {
   extern void write_world_to_disk(int vnum);
 
-  FAILURE_CASE(ch->in_veh, "You can't decorate the interior of vehicles, but you can still customize the outside by visiting a painting booth.\r\n");
-  FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be in an apartment to decorate it.");
+  if (ch->in_veh) {
+    STATE(ch->desc) = CON_DECORATE_VEH;
+    DELETE_D_STR_IF_EXTANT(ch->desc);
+    INITIALIZE_NEW_D_STR(ch->desc);
+    ch->desc->max_str = MAX_MESSAGE_LENGTH;
+    ch->desc->mail_to = 0;
+    return;
+  }
+
+  FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be in an apartment or vehicle to decorate it.");
   FAILURE_CASE(!GET_APARTMENT(ch->in_room)->has_owner_privs(ch), "You must be the owner of this apartment to decorate it.")
   FAILURE_CASE(!GET_APARTMENT_SUBROOM(ch->in_room), "This apartment is bugged! Notify staff.");
 

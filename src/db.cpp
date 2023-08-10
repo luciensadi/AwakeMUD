@@ -5687,6 +5687,8 @@ void load_saved_veh()
       veh_to_room(veh, &world[veh_room_rnum]);
     veh->restring = str_dup(data.GetString("VEHICLE/VRestring", NULL));
     veh->restring_long = str_dup(data.GetString("VEHICLE/VRestringLong", NULL));
+    veh->decorate_front = str_dup(data.GetString("VEHICLE/VDecorateFront", NULL));
+    veh->decorate_rear = str_dup(data.GetString("VEHICLE/VDecorateRear", NULL));
     int inside = 0, last_inside = 0;
     int num_objs = data.NumSubsections("CONTENTS");
 

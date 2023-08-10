@@ -1851,7 +1851,11 @@ void look_in_veh(struct char_data * ch)
       return;
     }
     send_to_char(ch, "^CInside %s^n\r\n", GET_VEH_NAME(ch->in_veh), ch);
-    send_to_char(ch->vfront ? ch->in_veh->inside_description : ch->in_veh->rear_description, ch);
+    if (ch->vfront) {
+      send_to_char(ch->in_veh->decorate_front ? ch->in_veh->decorate_front : ch->in_veh->inside_description, ch);
+    } else {
+      send_to_char(ch->in_veh->decorate_rear ? ch->in_veh->decorate_rear : ch->in_veh->rear_description, ch);
+    }
     CCHAR = "^g";
     CGLOB = KGRN;
     // Show non-corpses.

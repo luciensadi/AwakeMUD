@@ -919,6 +919,10 @@ void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
         break;
     }
   }
+
+  if (veh->restring) {
+    send_to_char(ch, "\r\n^L(restrung from: %s^L)^n\r\n", get_string_after_color_code_removal(veh->short_description, NULL));
+  }
 }
 
 ACMD(do_control)

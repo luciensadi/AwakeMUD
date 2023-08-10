@@ -1135,8 +1135,10 @@ void save_vehicles(bool fromCopyover)
 
   for (veh = veh_list, v = 0; veh; veh = veh->next) {
     // Skip disqualified vehicles.
-    if (!should_save_this_vehicle(veh))
+    if (!should_save_this_vehicle(veh)) {
+      // mudlog_vfprintf(NULL, LOG_GRIDLOG, "Refusing to save vehicle %s: Not a candidate for saving.", GET_VEH_NAME(veh));
       continue;
+    }
 
     // Previously, ownerless vehicles were saved, allowing them to disgorge contents on next load. This is bad for the economy. Instead, we just drop them.
     if (veh->owner > 0 && !does_player_exist(veh->owner)) {
@@ -1288,6 +1290,10 @@ void save_vehicles(bool fromCopyover)
       fprintf(fl, "\tVRestring:\t%s\n", veh->restring);
     if (veh->restring_long)
       fprintf(fl, "\tVRestringLong:$\n%s~\n", cleanup(buf2, veh->restring_long));
+    if (veh->decorate_front)
+      fprintf(fl, "\tVDecorateFront:$\n%s~\n", cleanup(buf2, veh->decorate_front));
+    if (veh->decorate_rear)
+      fprintf(fl, "\tVDecorateRear:$\n%s~\n", cleanup(buf2, veh->decorate_rear));
     fprintf(fl, "[CONTENTS]\n");
     int o = 0, level = 0;
     std::vector<std::string> obj_strings;

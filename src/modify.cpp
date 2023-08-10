@@ -41,6 +41,7 @@ void qedit_disp_menu(struct descriptor_data *d);
 void format_tabs(struct descriptor_data *d);
 
 extern void insert_or_append_emote_at_position(struct descriptor_data *d, char *string);
+extern void save_vehicles(bool fromCopyover);
 
 /* ************************************************************************
 *  modification of new'ed strings                                      *
@@ -264,6 +265,21 @@ void string_add(struct descriptor_data *d, char *str)
       snprintf(buf, sizeof(buf), "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str, sizeof(buf2) / sizeof(buf2[0])));
       mysql_wrapper(mysql, buf);
       DELETE_D_STR_IF_EXTANT(d);
+      STATE(d) = CON_PLAYING;
+    } else if (STATE(d) == CON_DECORATE_VEH) {
+      if (!d->character->in_veh) {
+        mudlog("SYSERR: Vehicle decoration command completed while not in a vehicle!", d->character, LOG_SYSLOG, TRUE);
+        send_to_char("Sorry, an error has occurred. Your decoration was NOT saved.\r\n", d->character);
+      } else {
+        if (d->character->vfront) {
+          REPLACE_STRING(d->character->in_veh->decorate_front);
+        } else {
+          REPLACE_STRING(d->character->in_veh->decorate_rear);
+        }
+        DELETE_D_STR_IF_EXTANT(d);
+        send_to_char("OK.\r\n", d->character);
+      }
+      save_vehicles(FALSE);
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_DECORATE) {
       if (!d->character->in_room || !GET_APARTMENT_SUBROOM(d->character->in_room)) {
