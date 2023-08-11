@@ -326,6 +326,12 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
       }
       break;
     case HOUSEEDIT_APARTMENT_SHORTNAME:
+      if (strlen(arg) == 0) {
+        send_to_char("OK, aborting.\r\n", CH);
+        houseedit_display_apartment_edit_menu(d);
+        return;
+      }
+
       // Length constraints.
       if (strlen(arg) < 1 || strlen(arg) > 20) {
         send_to_char("Name must be between 1 and 20 characters. Try again: ", CH);
@@ -348,7 +354,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
       if (COMPLEX) {
         for (auto &apartment : COMPLEX->get_apartments()) {
           if (!strcmp(arg, apartment->get_short_name())) {
-            send_to_char("That short name is already in use in this complex. Please choose another: ", CH);
+            send_to_char("That short name is already in use in this complex. Please choose another, or enter nothing to abort: ", CH);
             return;
           }
         }
@@ -387,6 +393,12 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
       houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_NAME:
+      if (strlen(arg) == 0) {
+        send_to_char("OK, aborting.\r\n", CH);
+        houseedit_display_apartment_edit_menu(d);
+        return;
+      }
+
       // Length constraints.
       if (strlen(arg) < 3 || strlen(arg) > 30) {
         send_to_char("Name must be between 3 and 30 characters. Try again: ", CH);
@@ -409,7 +421,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
       if (COMPLEX) {
         for (auto &apartment : COMPLEX->get_apartments()) {
           if (!strcmp(arg, apartment->get_name())) {
-            send_to_char("That short name is already in use in this complex. Please choose another: ", CH);
+            send_to_char("That apartment name is already in use in this complex. Please choose another, or enter nothing to abort: ", CH);
             return;
           }
         }
