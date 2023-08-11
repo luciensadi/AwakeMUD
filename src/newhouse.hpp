@@ -91,6 +91,7 @@ class ApartmentComplex {
     void remove_editor(idnum_t idnum);
     void set_base_directory(bf::path path) { base_directory = path; }
     void add_apartment(Apartment *apartment);
+    void delete_apartment(Apartment *apartment);
 
     // Clone our data from the provided complex.
     void clone_from(ApartmentComplex *);

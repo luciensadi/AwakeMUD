@@ -214,6 +214,7 @@ ApartmentComplex::ApartmentComplex(vnum_t landlord) {
 
   display_name = str_dup(tmp);
 
+  // Becomes something like '.../lib/housing/22608'
   base_directory = global_housing_dir / vnum_to_string(GET_MOB_VNUM(&mob_proto[landlord_rnum]));
 }
 
@@ -558,6 +559,19 @@ void ApartmentComplex::add_apartment(Apartment *apartment) {
   sort(apartments.begin(), apartments.end(), apartment_sort_func);
 }
 
+void ApartmentComplex::delete_apartment(Apartment *apartment) {
+  auto it = find(apartments.begin(), apartments.end(), apartment);
+  if (it == apartments.end()) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to delete apartment %s from complex %s, but it wasn't part of it!",
+                    apartment->get_name(),
+                    get_name());
+    return;
+  }
+
+  // Delete us from this complex.
+  apartments.erase(it);
+}
+
 int ApartmentComplex::get_crap_count() {
   int crap_count = 0;
 
@@ -597,7 +611,8 @@ Apartment::Apartment(ApartmentComplex *complex, const char *new_name, vnum_t key
   snprintf(tmp, sizeof(tmp), "%s's %s", complex->get_name(), name);
   full_name = str_dup(tmp);
 
-  base_directory = complex->get_base_directory() / shortname;
+  // Becomes something like 'lib/housing/22608/3A'
+  base_directory = complex->base_directory / shortname;
 }
 
 /* Load this apartment entry from files. */
@@ -1194,7 +1209,7 @@ void Apartment::set_complex(ApartmentComplex *new_complex) {
   complex->apartments.push_back(this);
   sort(complex->apartments.begin(), complex->apartments.end(), apartment_sort_func);
 
-  // Change our save directory.
+  // Change our save directory. Becomes something like 'lib/housing/22608/3A'
   base_directory = complex->base_directory / shortname;
 }
 
@@ -1327,8 +1342,8 @@ void Apartment::set_short_name(const char *newname) {
   delete [] shortname; 
   shortname = str_dup(newname); 
 
-  // We have to regenerate our base directory at this point.
-  base_directory = complex->get_base_directory() / shortname;
+  // We have to regenerate our base directory at this point. Becomes something like 'lib/housing/22608/3A'
+  base_directory = complex->base_directory / shortname;
 }
 
 void Apartment::apply_rooms() {

@@ -295,8 +295,8 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
                               GET_CHAR_NAME(CH),
                               APT->get_full_name());
 
-              // Add to complex's apartment list.
-              COMPLEX->add_apartment(APT);
+              // We don't need to add ourselves to the complex's apartment list, this was already done in set_complex().
+              // COMPLEX->add_apartment(APT);
 
               // Write to disk.
               APT->save_base_info();
@@ -312,6 +312,9 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
             // Fall through.
           } else {
             send_to_char("OK, discarding changes.\r\n", CH);
+
+            // Special case: We must remove this apartment from the complex now.
+            COMPLEX->delete_apartment(APT);
           }
 
           delete APT;
