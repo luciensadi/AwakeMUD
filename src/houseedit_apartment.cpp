@@ -569,8 +569,11 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
 
           // Add ApartmentRoom that points to room, then add it to our list of rooms.
           ApartmentRoom *new_aptroom = new ApartmentRoom(APT, room);
-          APT->add_room(new_aptroom);
-          send_to_char("Done.\r\n", CH);
+          if (APT->add_room(new_aptroom)) {
+            send_to_char("Done.\r\n", CH);
+          } else {
+            send_to_char("Sorry, an error occurred. Room NOT added.\r\n", CH);
+          }
         }
       }
       houseedit_display_room_edit_menu(d);

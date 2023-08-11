@@ -533,7 +533,9 @@ const char *ApartmentComplex::list_apartments__returns_new() {
 
 void ApartmentComplex::add_apartment(Apartment *apartment) {
   if (find(apartments.begin(), apartments.end(), apartment) != apartments.end()) {
-    mudlog("SYSERR: Attempted to add apartment to complex, but it was already there!", NULL, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to add apartment %s to complex %s, but it was already there!",
+                    apartment->get_name(),
+                    get_name());
     return;
   }
 
@@ -743,7 +745,9 @@ bool Apartment::is_garage_lifestyle() {
 
 void Apartment::save_base_info() {
   // Ensure our base directory exists.
+  log_vfprintf("apartment::save_base_info(): Checking for base directory %s...", base_directory.string().c_str());
   if (!bf::exists(base_directory)) {
+    log_vfprintf("apartment::save_base_info(): Not found. Creating base directory %s.", base_directory.string().c_str());
     bf::create_directory(base_directory);
   }
 
@@ -761,6 +765,7 @@ void Apartment::save_base_info() {
 
   // Write it out.
   write_json_file(base_directory / APARTMENT_INFO_FILE_NAME, &base_info);
+  log("apartment::save_base_info(): Write complete.");
 }
 
 void Apartment::save_rooms() {
@@ -771,6 +776,8 @@ void Apartment::save_rooms() {
 
   // Add all on-disk room directories to a vector.
   std::vector<std::string> existing_dirs = {};
+
+  log("apartment::save_rooms(): Searching for existing room directories.");
 
   bf::directory_iterator end_itr; // default construction yields past-the-end
   for (bf::directory_iterator itr(base_directory); itr != end_itr; ++itr) {
@@ -1239,27 +1246,28 @@ void Apartment::add_guest(idnum_t idnum) {
   }
 }
 
-void Apartment::add_room(ApartmentRoom *room) {
+bool Apartment::add_room(ApartmentRoom *room) {
   // Check to make sure it's not part of this apartment. Technically duplicates work done below, but with a different message.
   auto it = find(rooms.begin(), rooms.end(), room);
   if (it != rooms.end()) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to add room %ld to %s, but it was already there!", room->vnum, get_full_name());
-    return;
+    return FALSE;
   }
 
   // Check to make sure this isn't part of another apartment somewhere.
   for (auto &cplx : global_apartment_complexes) {
     for (auto &apt : cplx->get_apartments()) {
       auto it = find(apt->rooms.begin(), apt->rooms.end(), room);
-      if (it != rooms.end()) {
+      if (it != apt->rooms.end()) {
         mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to add room %ld to %s, but it is already part of %s!", room->vnum, get_full_name(), apt->get_full_name());
-        return;
+        return FALSE;
       }
     }
   }
 
   rooms.push_back(room);
   recalculate_garages();
+  return TRUE;
 }
 
 void Apartment::delete_room(ApartmentRoom *room) {
@@ -1844,6 +1852,7 @@ Apartment *find_apartment(const char *full_name, struct char_data *ch) {
 }
 
 void write_json_file(bf::path path, json *contents) {
+  log_vfprintf("write_json_file(%s, ...): Beginning to write.", path.string().c_str());
   bf::ofstream ofs(path);
   ofs << std::setw(4) << *contents << std::endl;
   ofs.close();
