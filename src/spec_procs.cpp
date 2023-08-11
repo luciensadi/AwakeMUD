@@ -3822,6 +3822,7 @@ SPECIAL(waterfall)
     } else {
       act("You succumb to the heavy waves and crack your skull on the floor!", FALSE, ch, 0, 0, TO_CHAR);
       act("$n gets slammed down by the waves and hits $s head on the floor!", TRUE, ch, 0, 0, TO_ROOM);
+      // TODO: A PC controlling a drone gets hit by this. Damage the vehicle instead in this case.
       damage(ch, ch, number(1, 2), TYPE_BLUDGEON, TRUE);
       return TRUE;
     }

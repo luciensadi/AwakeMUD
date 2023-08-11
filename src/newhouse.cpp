@@ -46,10 +46,6 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
-// EVENTUALTODO: Sanity checks for things like reused vnums, etc.
-
-// EVENTUALTODO: When purging contents and encoutering belongings, move them somewhere safe.
-
 // EVENTUALTODOs for pgroups:
 // - Write pgroup log when a lease is broken.
 // - When a pgroup has no members left, it should be auto-disabled.
@@ -1244,13 +1240,25 @@ void Apartment::add_guest(idnum_t idnum) {
 }
 
 void Apartment::add_room(ApartmentRoom *room) {
+  // Check to make sure it's not part of this apartment. Technically duplicates work done below, but with a different message.
   auto it = find(rooms.begin(), rooms.end(), room);
-  if (it == rooms.end()) {
-    rooms.push_back(room);
-  } else {
+  if (it != rooms.end()) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to add room %ld to %s, but it was already there!", room->vnum, get_full_name());
+    return;
   }
 
+  // Check to make sure this isn't part of another apartment somewhere.
+  for (auto &cplx : global_apartment_complexes) {
+    for (auto &apt : cplx->get_apartments()) {
+      auto it = find(apt->rooms.begin(), apt->rooms.end(), room);
+      if (it != rooms.end()) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to add room %ld to %s, but it is already part of %s!", room->vnum, get_full_name(), apt->get_full_name());
+        return;
+      }
+    }
+  }
+
+  rooms.push_back(room);
   recalculate_garages();
 }
 
@@ -1499,10 +1507,20 @@ void ApartmentRoom::purge_contents() {
 
       const char *representation = generate_new_loggable_representation(obj);
 
-      // If this is belongings, don't purge it.
+      // If this is belongings, don't purge it. Move it to Dante's if possible.
       if (GET_OBJ_TYPE(obj) == ITEM_CONTAINER && obj->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE)) {
-        mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %s (%ld) REFUSING to purge corpse %s.", apartment->full_name, GET_ROOM_VNUM(room), representation);
-      } else {
+        rnum_t dantes_rnum = real_room(RM_ENTRANCE_TO_DANTES);
+        if (dantes_rnum >= 0) {
+          mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %s (%ld) REFUSING to purge PC corpse %s. Will instead move it to Dante's.", apartment->full_name, GET_ROOM_VNUM(room), representation);
+          obj_from_room(obj);
+          obj_to_room(obj, &world[dantes_rnum]);
+          send_to_room("You blink and realize that a pile of belongings must have been here the whole time.", obj->in_room);
+        } else {
+          mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %s (%ld) REFUSING to purge PC corpse %s, but FAILED to move it to Dante's!", apartment->full_name, GET_ROOM_VNUM(room), representation);
+        }
+      } 
+      // Blow it away.
+      else {
         mudlog_vfprintf(NULL, LOG_PURGELOG, "Apartment cleanup for %s (%ld) has purged %s (cost: %d).", apartment->full_name, GET_ROOM_VNUM(room), representation, GET_OBJ_COST(obj));
         total_value_destroyed += GET_OBJ_COST(obj);
         extract_obj(obj);
@@ -1510,7 +1528,7 @@ void ApartmentRoom::purge_contents() {
 
       delete [] representation;
     }
-    mudlog_vfprintf(NULL, LOG_PURGELOG, "Total value destroyed: %d nuyen.", total_value_destroyed);
+    mudlog_vfprintf(NULL, LOG_PURGELOG, "Total value destroyed from %s (%ld): %d nuyen.", apartment->full_name, GET_ROOM_VNUM(room), total_value_destroyed);
   }
 
   // Transfer all vehicles to the nearest garage.
