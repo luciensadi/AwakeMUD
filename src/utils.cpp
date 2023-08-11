@@ -5978,6 +5978,13 @@ bool obj_contains_apartment_only_drop_items(struct obj_data *obj) {
   return FALSE;
 }
 
+// Seemed marginally easier than copy-pasting this conversion all over for use in Boost functions.
+const char *vnum_to_string(vnum_t vnum) {
+  static char result[50];
+  snprintf(result, sizeof(result), "%ld", vnum);
+  return result;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

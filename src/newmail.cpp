@@ -51,6 +51,12 @@ void store_mail(long to, struct char_data *from, const char *message_pointer) {
 void raw_store_mail(long to, long from_id, const char *from_name, const char *message_pointer) {
   // Note: We trust that whoever is calling this has already validated that the message fits in the query buffer.
 
+  // We do not, however, trust that they've not fucked up on the to-ID.
+  if (to <= 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: raw_store_mail(%ld, %ld, %s, %s): Invalid to-id!", to, from_id, from_name, message_pointer);
+    return;
+  }
+
   char prepared_quote_buf[2 * strlen(message_pointer) + 1];
   char prepared_name_buf[2 * strlen(from_name) + 1];
 

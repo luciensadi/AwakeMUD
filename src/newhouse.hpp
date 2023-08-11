@@ -178,7 +178,7 @@ class Apartment {
     void set_complex(ApartmentComplex *new_complex);
     void regenerate_full_name();
     void set_name(const char *newname);
-    void set_short_name(const char *newname) {delete [] shortname; shortname = str_dup(newname);}
+    void set_short_name(const char *newname);
 
     void set_atrium(vnum_t vnum) {atrium = vnum;}
     void set_key_vnum(vnum_t vnum) {key_vnum = vnum;}

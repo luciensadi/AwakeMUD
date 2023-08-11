@@ -46,6 +46,8 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
+// TODO: If the short name of an apartment is changed, rename the save directory as well (copy over existing info) so it's not lost.
+
 // EVENTUALTODOs for pgroups:
 // - Write pgroup log when a lease is broken.
 // - When a pgroup has no members left, it should be auto-disabled.
@@ -124,6 +126,16 @@ void load_apartment_complexes() {
       ApartmentComplex *complex = new ApartmentComplex(filename);
       global_apartment_complexes.push_back(complex);
       log_vfprintf(" - Fully loaded %s.", complex->get_name());
+      
+      // Ensure it's been saved with the vnum instead of the name. Convert if not.
+      if (atol(filename.filename().string().c_str()) <= 0) {
+        bf::path new_name = filename.parent_path() / vnum_to_string(complex->get_landlord_vnum());
+        log_vfprintf(" (Complex %s was saved in the old manner ('%s' is not a number), so I'll rename it to '%s'.)", 
+                     complex->get_name(),
+                     filename.filename().string().c_str(),
+                     new_name.string().c_str());
+        bf::rename(filename, new_name);
+      }
     }
   }
   // Sort after fully loaded.
@@ -202,7 +214,7 @@ ApartmentComplex::ApartmentComplex(vnum_t landlord) {
 
   display_name = str_dup(tmp);
 
-  base_directory = global_housing_dir / std::string(GET_CHAR_NAME(&mob_proto[landlord_rnum]));
+  base_directory = global_housing_dir / vnum_to_string(GET_MOB_VNUM(&mob_proto[landlord_rnum]));
 }
 
 ApartmentComplex::ApartmentComplex(bf::path filename) :
@@ -837,7 +849,7 @@ void Apartment::break_lease() {
   // Mail the owner.
   if (owned_by_pgroup) {
     // EVENTUALTODO
-  } else {
+  } else if (owned_by_player > 0) {
     char mail_buf[1000];
     snprintf(mail_buf, sizeof(mail_buf), "The lease on %s has expired, and its contents have been reclaimed.\r\n", get_full_name());
     raw_store_mail(get_owner_id(), 0, "Your former landlord", mail_buf);
@@ -1311,6 +1323,14 @@ void Apartment::set_name(const char *newname) {
   regenerate_full_name();
 }
 
+void Apartment::set_short_name(const char *newname) {
+  delete [] shortname; 
+  shortname = str_dup(newname); 
+
+  // We have to regenerate our base directory at this point.
+  base_directory = complex->get_base_directory() / shortname;
+}
+
 void Apartment::apply_rooms() {
   for (auto &room : rooms) {
     rnum_t rnum = real_room(room->vnum);
@@ -1410,9 +1430,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, struct room_data *room) :
   vnum = GET_ROOM_VNUM(room);
   decoration = NULL;
 
-  char vnum_as_string[50];
-  snprintf(vnum_as_string, sizeof(vnum_as_string), "%ld", vnum);
-  base_path = apartment->base_directory / vnum_as_string;
+  base_path = apartment->base_directory / vnum_to_string(vnum);
 
   storage_path = base_path / "storage";
 }

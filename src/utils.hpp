@@ -150,6 +150,7 @@ int     count_object_including_contents(struct obj_data *obj);
 int     count_objects_in_room(struct room_data *room);
 int     count_objects_in_veh(struct veh_data *veh);
 struct zone_data *get_zone_from_vnum(vnum_t vnum);
+const char *vnum_to_string(vnum_t vnum);
 
 bool obj_is_apartment_only_drop_item(struct obj_data *obj);
 bool obj_contains_apartment_only_drop_items(struct obj_data *obj);
