@@ -200,6 +200,28 @@ int gettimeofday(struct timeval *t, struct timezone *dummy)
   return 0;
 }
 
+// If you select option -t, this code is executed, then the game immediately dies. Nothing is loaded.
+void run_tests_with_no_backing_resources() {
+  ApartmentComplex *complex = new ApartmentComplex();
+  global_apartment_complexes.push_back(complex);
+
+  Apartment *apartment = new Apartment();
+  apartment->set_complex(complex);
+
+  world = new struct room_data[1];
+  world[0].number = 1;
+  top_of_world = 1;
+  top_of_world_array = 1;
+  
+  ApartmentRoom *room = new ApartmentRoom(apartment, &world[0]);
+  apartment->add_room(room);
+  delete room;
+
+  // Clean up the rest.
+  delete apartment;
+  delete complex;
+}
+
 /* *********************************************************************
  *  main game loop and related stuff                                    *
  ********************************************************************* */
@@ -240,6 +262,11 @@ int main(int argc, char **argv)
       case 's':
         no_specials = 1;
         log("Suppressing assignment of special routines.");
+        break;
+      case 't':
+        log("Running whatever point-in-time test you specified, then terminating.");
+        run_tests_with_no_backing_resources();
+        exit(0);
         break;
       default:
         log_vfprintf("SYSERR: Unknown option -%c in argument string.", *(argv[pos] + 1));

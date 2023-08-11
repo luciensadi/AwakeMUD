@@ -162,6 +162,7 @@ void memoryClass::DeleteIcon(struct matrix_icon *icon)
 
 void memoryClass::DeleteVehicle(struct veh_data *veh)
 {
-  free_veh(veh);
+  // Used to be free_veh(veh), but that just pointed to clear_vehicle(veh), so...
+  clear_vehicle(veh);
   delete veh;
 }

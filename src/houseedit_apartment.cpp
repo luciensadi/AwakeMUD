@@ -547,7 +547,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
         // First, iterate through our own rooms. If it's there, we want to remove it.
         for (auto &apt_room : APT->get_rooms()) {
           if (apt_room->get_vnum() == GET_ROOM_VNUM(room)) {
-            APT->delete_room(apt_room);
+            delete apt_room;
             send_to_char(CH, "OK, deleted %s^n from the room list.", GET_ROOM_NAME(room));
             houseedit_display_room_edit_menu(d);
             return;
@@ -578,6 +578,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
             send_to_char("Done.\r\n", CH);
           } else {
             send_to_char("Sorry, an error occurred. Room NOT added.\r\n", CH);
+            delete new_aptroom;
           }
         }
       }

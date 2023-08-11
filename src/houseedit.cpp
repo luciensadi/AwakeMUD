@@ -336,7 +336,11 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
         mudlog_vfprintf(ch, LOG_SYSLOG, "Transferring storage for subroom %ld.", house_vnum);
         // It does exist-- clone it over, then immediately load it so we don't lose contents to an overwrite.
         bf::path new_save_file = room->get_base_directory() / "storage";
+#ifdef USE_OLD_BOOST
+        bf::copy_file(original_save_file, new_save_file, bf::copy_option::overwrite_if_exists);
+#else
         bf::copy_file(original_save_file, new_save_file, bf::copy_options::overwrite_existing);
+#endif
         room->load_storage_from_specified_path(new_save_file);
       } else {
         mudlog_vfprintf(ch, LOG_SYSLOG, "Subroom %ld had no storage.", house_vnum);

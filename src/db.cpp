@@ -4965,11 +4965,6 @@ void free_room(struct room_data *room)
   clear_room(room);
 }
 
-void free_veh(struct veh_data * veh)
-{
-  clear_vehicle(veh);
-}
-
 void free_host(struct host_data * host)
 {
   DELETE_ARRAY_IF_EXTANT(host->name);
@@ -5200,13 +5195,27 @@ void clear_room(struct room_data *room)
 
 void clear_vehicle(struct veh_data *veh)
 {
-  /* TODO: We are leaking more memory here from mods etc, but it's suuuuuuuuuper
-      rare that we ever actually extract a vehicle from the game, so the effort
-      to fix it is currently not warranted. -- LS */
+  struct obj_data *next_obj;
+
   DELETE_ARRAY_IF_EXTANT(veh->restring);
   DELETE_ARRAY_IF_EXTANT(veh->restring_long);
   DELETE_ARRAY_IF_EXTANT(veh->decorate_front);
   DELETE_ARRAY_IF_EXTANT(veh->decorate_rear);
+
+  // Remove any mounts.
+  for (struct obj_data *mount = veh->mount; mount; mount = next_obj) {
+    next_obj = mount->next_content;
+    extract_obj(mount);
+  }
+  veh->mount = NULL;
+
+  // Go through the installed mods and extract them.
+  for (int mod_idx = 0; mod_idx < NUM_MODS; mod_idx++) {
+    extract_obj(veh->mod[mod_idx]);
+    veh->mod[mod_idx] = NULL;
+  }
+
+  // Wipe out the veh.
   memset((char *) veh, 0, sizeof(struct veh_data));
   veh->in_room = NULL;
 

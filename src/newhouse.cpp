@@ -263,9 +263,13 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
 }
 
 ApartmentComplex::~ApartmentComplex() {
+  // Remove us from the global apartment complex list.
   auto it = find(global_apartment_complexes.begin(), global_apartment_complexes.end(), this);
   if (it != global_apartment_complexes.end())
     global_apartment_complexes.erase(it);
+
+  // Clear our strings.
+  delete [] display_name;
 }
 
 void ApartmentComplex::save() {
@@ -568,7 +572,7 @@ void ApartmentComplex::delete_apartment(Apartment *apartment) {
     return;
   }
 
-  // Delete us from this complex.
+  // The apartment destructor removes us from our apartments list, so no need to do more here.
   apartments.erase(it);
 }
 
@@ -586,7 +590,7 @@ int ApartmentComplex::get_crap_count() {
 
 /* Blank apartment for editing. */
 Apartment::Apartment() :
-  shortname(str_dup("unnamed")), name(str_dup("Unit Unnamed")), full_name(str_dup("Somewhere's Unit Unnamed")), base_directory(global_housing_dir)
+  shortname(NULL), name(NULL), full_name(NULL), base_directory(global_housing_dir)
 {
   snprintf(buf, sizeof(buf), "unnamed-%ld", time(0));
   set_short_name(buf);
@@ -1304,17 +1308,6 @@ bool Apartment::add_room(ApartmentRoom *room) {
   return TRUE;
 }
 
-void Apartment::delete_room(ApartmentRoom *room) {
-  auto it = find(rooms.begin(), rooms.end(), room);
-  if (it != rooms.end()) {
-    rooms.erase(it);
-  } else {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to remove room %ld from %s, but it wasn't a member!", room->vnum, get_full_name());
-  }
-
-  recalculate_garages();
-}
-
 void Apartment::recalculate_garages() {
   garages = 0;
 
@@ -1473,6 +1466,13 @@ ApartmentRoom::~ApartmentRoom() {
   rnum_t rnum = real_room(vnum);
   if (rnum >= 0 && world[rnum].apartment_room == this) {
     world[rnum].apartment_room = NULL;
+  }
+
+  // Remove us from our parent apartment, if we have one.
+  if (apartment) {
+    auto it = find(apartment->rooms.begin(), apartment->rooms.end(), this);
+    if (it != apartment->rooms.end())
+      apartment->rooms.erase(it);
   }
 }
 

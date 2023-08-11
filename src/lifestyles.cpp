@@ -326,6 +326,7 @@ void load_lifestyles() {
 
     lifestyles[lifestyle_idx].monthly_cost_min = specific_lifestyle_info["monthly_cost_min"].get<long>();
 
+    // Note: Being str_dup(), these are lost sometime around program shutdown... but that's inconsequential. -LS
     JSON_TO_STRING_VECTOR(default_strings_neutral);
     JSON_TO_STRING_VECTOR(default_strings_gendered);
     JSON_TO_STRING_VECTOR(garage_strings_neutral);

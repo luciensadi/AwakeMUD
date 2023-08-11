@@ -191,7 +191,6 @@ class Apartment {
 
     std::vector<ApartmentRoom*> get_rooms() { return rooms; }
     bool add_room(ApartmentRoom *);
-    void delete_room(ApartmentRoom *);
 
     bool create_or_extend_lease(struct char_data *ch);
     void save_lease();
