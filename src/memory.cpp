@@ -130,6 +130,7 @@ void memoryClass::DeleteCh(struct char_data *ch)
   // Delete their ignore data. This deconstructs it as expected.
   if (ch->ignore_data)
     delete ch->ignore_data;
+  ch->ignore_data = NULL;
 
   // Delete their invis resistance data, then remove them from all other PC's invis resistance records.
   purge_invis_invis_resistance_records(ch);

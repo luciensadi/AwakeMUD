@@ -310,7 +310,7 @@ const char *get_lifestyle_string(struct char_data *ch) {
 #define JSON_TO_STRING_VECTOR(field_name) { \
   lifestyles[lifestyle_idx].field_name.clear(); \
   for (auto it : specific_lifestyle_info[#field_name].get<std::vector<std::string>>()) { \
-    lifestyles[lifestyle_idx].field_name.push_back(str_dup(it.c_str())); \
+    lifestyles[lifestyle_idx].field_name.push_back(it.c_str()); \
   } \
 }
 
@@ -338,7 +338,6 @@ void load_lifestyles() {
     lifestyles[LIFESTYLE_LUXURY].monthly_cost_min = min_luxury_cost;
   }
 }
-
 #undef JSON_TO_STRING_VECTOR
 
 // Save lifestyles in memory to file.

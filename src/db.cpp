@@ -5205,6 +5205,8 @@ void clear_vehicle(struct veh_data *veh)
       to fix it is currently not warranted. -- LS */
   DELETE_ARRAY_IF_EXTANT(veh->restring);
   DELETE_ARRAY_IF_EXTANT(veh->restring_long);
+  DELETE_ARRAY_IF_EXTANT(veh->decorate_front);
+  DELETE_ARRAY_IF_EXTANT(veh->decorate_rear);
   memset((char *) veh, 0, sizeof(struct veh_data));
   veh->in_room = NULL;
 

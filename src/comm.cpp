@@ -143,6 +143,7 @@ void send_keepalives();
 void msdp_update();
 void increase_congregation_bonus_pools();
 void send_nuyen_rewards_to_pcs();
+void cleanup_things_valgrind_complains_about();
 
 /* extern fcnts */
 extern void DBInit();
@@ -450,6 +451,7 @@ void init_game(int port)
   log("Entering game loop.");
   game_loop(mother_desc);
 
+  // Since game_loop() is an infinite loop until shutdown is triggered, this is only reached when the game is ready to close.
   log("Saving all apartments and storage rooms.");
   save_all_apartments_and_storage_rooms();
 
@@ -457,8 +459,12 @@ void init_game(int port)
   while (descriptor_list)
     close_socket(descriptor_list);
 
+  // Clean up things Valgrind gets mad about.
+  cleanup_things_valgrind_complains_about();
+
   close(mother_desc);
 
+  // Close out the DB.
   DBFinalize();
 
   if (circle_reboot) {
@@ -1081,6 +1087,24 @@ void game_loop(int mother_desc)
 #endif
 
     tics++;                     /* tics since last checkpoint signal */
+  }
+
+  // Shutdown is handled in the greater loop above: search for DBFinalize().
+}
+
+void cleanup_things_valgrind_complains_about() {
+  // We're shutting down: Extract all characters, as they contain new'd data that Valgrind will complain about.
+  struct char_data *next_ch = NULL;
+  for (struct char_data *ch = character_list; ch; ch = next_ch) {
+    next_ch = ch->next;
+    extract_char(ch);
+  }
+
+  // Extract vehicles for Valgrind cleanliness reasons.
+  struct veh_data *next_veh = NULL;
+  for (struct veh_data *veh = veh_list; veh; veh = next_veh) {
+    next_veh = veh->next;
+    extract_veh(veh);
   }
 }
 
