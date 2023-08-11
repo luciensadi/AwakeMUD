@@ -532,10 +532,12 @@ const char *ApartmentComplex::list_apartments__returns_new() {
 }
 
 void ApartmentComplex::add_apartment(Apartment *apartment) {
-  if (find(apartments.begin(), apartments.end(), apartment) != apartments.end()) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to add apartment %s to complex %s, but it was already there!",
+  auto it = find(apartments.begin(), apartments.end(), apartment);
+  if (it != apartments.end()) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to add apartment %s to complex %s, but it was already there (%s)!",
                     apartment->get_name(),
-                    get_name());
+                    get_name(),
+                    (*it)->get_full_name());
     return;
   }
 
