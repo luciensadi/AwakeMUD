@@ -586,7 +586,7 @@ int ApartmentComplex::get_crap_count() {
 
 /* Blank apartment for editing. */
 Apartment::Apartment() :
-  shortname(str_dup("unnamed")), name(str_dup("Unit Unnamed")), full_name(str_dup("Somewhere's Unit Unnamed"))
+  shortname(str_dup("unnamed")), name(str_dup("Unit Unnamed")), full_name(str_dup("Somewhere's Unit Unnamed")), base_directory(global_housing_dir)
 {
   snprintf(buf, sizeof(buf), "unnamed-%ld", time(0));
   set_short_name(buf);
@@ -703,6 +703,11 @@ Apartment::~Apartment() {
       world[rnum].apartment = NULL;
     }
   }
+
+  // Clean up our str_dup'd bits.
+  delete [] shortname;
+  delete [] name;
+  delete [] full_name;
 }
 
 #define REPLACE_STR(item) {delete [] item; item = str_dup(source->item);}
@@ -1343,7 +1348,11 @@ void Apartment::set_short_name(const char *newname) {
   shortname = str_dup(newname); 
 
   // We have to regenerate our base directory at this point. Becomes something like 'lib/housing/22608/3A'
-  base_directory = complex->base_directory / shortname;
+  if (complex) {
+    base_directory = complex->base_directory / shortname;
+  } else {
+    base_directory = global_housing_dir;
+  }
 }
 
 void Apartment::apply_rooms() {

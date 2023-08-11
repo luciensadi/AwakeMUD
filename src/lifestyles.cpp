@@ -172,9 +172,11 @@ std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
   }
 
   /*
-  log_vfprintf("LV for %s is:", GET_CHAR_NAME(ch));
-  for (auto &it: results) {
-    log(it);
+  if (!IS_NPC(ch)) {
+    log_vfprintf("LV for %s is:", GET_CHAR_NAME(ch));
+    for (auto &it: results) {
+      log(it);
+    }
   }
   */
 
@@ -310,7 +312,7 @@ const char *get_lifestyle_string(struct char_data *ch) {
 #define JSON_TO_STRING_VECTOR(field_name) { \
   lifestyles[lifestyle_idx].field_name.clear(); \
   for (auto it : specific_lifestyle_info[#field_name].get<std::vector<std::string>>()) { \
-    lifestyles[lifestyle_idx].field_name.push_back(it.c_str()); \
+    lifestyles[lifestyle_idx].field_name.push_back(str_dup(it.c_str())); \
   } \
 }
 

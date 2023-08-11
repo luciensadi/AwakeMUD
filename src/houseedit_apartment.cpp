@@ -243,6 +243,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
 
             if (APT->get_rent_cost() < lifestyles[APT->get_lifestyle()].monthly_cost_min) {
               send_to_char(CH, "Rent is too low, so raising it to %ld.\r\n", lifestyles[APT->get_lifestyle()].monthly_cost_min);
+              APT->set_rent(lifestyles[APT->get_lifestyle()].monthly_cost_min);
             }
 
             // It already existed: Overwrite.
@@ -317,6 +318,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
             COMPLEX->delete_apartment(APT);
           }
 
+          // Clean up our str_dup()'d bits.
           delete APT;
           APT = NULL;
           d->edit_apartment_original = NULL;
