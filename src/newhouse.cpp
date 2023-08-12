@@ -687,9 +687,7 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
   }
 
   // Calculate any derived data.
-  char tmp_buf[100];
-  snprintf(tmp_buf, sizeof(tmp_buf), "%s's %s", complex->display_name, name);
-  full_name = str_dup(tmp_buf);
+  regenerate_full_name();
 }
 
 Apartment::~Apartment() {
@@ -1220,6 +1218,9 @@ void Apartment::set_complex(ApartmentComplex *new_complex) {
 
   // Change our save directory. Becomes something like 'lib/housing/22608/3A'
   base_directory = complex->base_directory / shortname;
+
+  // Recalculate our full name.
+  regenerate_full_name();
 }
 
 void Apartment::clamp_rent(struct char_data *ch) {
