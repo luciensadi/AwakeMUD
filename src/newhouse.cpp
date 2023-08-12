@@ -621,7 +621,7 @@ Apartment::Apartment(ApartmentComplex *complex, const char *new_name, vnum_t key
 
 /* Load this apartment entry from files. */
 Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
-  base_directory(base_directory), garages(0), complex(complex)
+  full_name(NULL), base_directory(base_directory), garages(0), complex(complex)
 {
   // Load base info from <name>/info.
   {
