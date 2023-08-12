@@ -5211,7 +5211,9 @@ void clear_vehicle(struct veh_data *veh)
 
   // Go through the installed mods and extract them.
   for (int mod_idx = 0; mod_idx < NUM_MODS; mod_idx++) {
-    extract_obj(veh->mod[mod_idx]);
+    if (veh->mod[mod_idx]) {
+      extract_obj(veh->mod[mod_idx]);
+    }
     veh->mod[mod_idx] = NULL;
   }
 
