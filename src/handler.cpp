@@ -721,7 +721,7 @@ void affect_total(struct char_data * ch)
   }
 
   if (GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_MINOTAUR)
-    GET_IMPACT(ch)++;
+    GET_BOD(ch)++;
 
   /* effects of cyberware */
   for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
