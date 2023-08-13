@@ -6628,7 +6628,7 @@ bool char_passed_moving_vehicle_perception_test(struct char_data *ch, struct veh
 }
 
 const char *render_room_for_scan(struct char_data *ch, struct room_data *room, struct veh_data *in_veh) {
-  static char results[1000];
+  static char results[10000];
   results[0] = '\0';
 
   // If you can't see into the room, skip.
@@ -6664,13 +6664,13 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
     // You see the person-- render them.
     {
       // First, fill out the prepended flags.
-      char flag_line[256] = { '\0' };
+      char flag_line[512] = { '\0' };
 
       if (GET_MOB_QUEST_CHAR_ID(list)) {
         if (GET_MOB_QUEST_CHAR_ID(list) == GET_IDNUM_EVEN_IF_PROJECTING(ch)) {
           strlcat(flag_line, "(quest) ", sizeof(flag_line));
         } else if (!ch_is_blocked_by_quest_protections(ch, list)) {
-          strlcat(buf, "(group quest) ", sizeof(buf));
+          strlcat(flag_line, "(group quest) ", sizeof(flag_line));
         } else {
           strlcat(flag_line, "(protected) ", sizeof(flag_line));
         }
@@ -6696,7 +6696,7 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
       }
 
       // Finally, append it to the output buf.
-      snprintf(ENDOF(results), sizeof(results) - strlen(buf1), "  %s%s^n%s\r\n",
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "  %s%s^n%s\r\n",
                flag_line,
                their_name,
                FIGHTING(list) == ch ? " ^R(fighting you!)^n" : (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD)) ? " ^r(alarmed)^n" : ""));
