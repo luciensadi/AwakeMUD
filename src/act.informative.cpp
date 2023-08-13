@@ -313,7 +313,9 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " (Plan)", sizeof(buf));
     if (GET_OBJ_VNUM(object) == 108 && !GET_OBJ_TIMER(object))
       strlcat(buf, " (Uncooked)", sizeof(buf));
-    if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_FOCUS_BOND_TIME_REMAINING(object) == GET_IDNUM(ch))
+    if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_FOCUS_GEAS(object) == GET_IDNUM(ch))
+      strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
+    if (GET_OBJ_TYPE(object) == ITEM_WEAPON && WEAPON_IS_FOCUS(object) && GET_WEAPON_FOCUS_GEAS(object) == GET_IDNUM(ch))
       strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_GUN_AMMO
         || (GET_OBJ_TYPE(object) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(object) == TYPE_PARTS))
@@ -372,8 +374,18 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     else if (GET_OBJ_TYPE(object) == ITEM_FOCUS) {
       if (GET_FOCUS_ACTIVATED(object))
         strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
-      if (GET_FOCUS_BONDED_TO(object) == GET_IDNUM(ch) && GET_FOCUS_BOND_TIME_REMAINING(object) == GET_IDNUM(ch))
+      if (GET_FOCUS_BONDED_TO(object) == GET_IDNUM(ch) && GET_FOCUS_GEAS(object) == GET_IDNUM(ch))
         strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
+    }
+    else if (GET_OBJ_TYPE(object) == ITEM_WEAPON && WEAPON_IS_FOCUS(object) && WEAPON_FOCUS_USABLE_BY(object, ch)) {
+      if (GET_WEAPON_FOCUS_GEAS(object) == GET_IDNUM(ch))
+        strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
+      
+      struct obj_data *wielded = NULL;
+      if (wielded = GET_EQ(ch, WEAR_WIELD) && wielded->item_number == object->item_number)
+        strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
+      if (wielded = GET_EQ(ch, WEAR_HOLD) && wielded->item_number == object->item_number)
+        strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
     }
 
     if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)

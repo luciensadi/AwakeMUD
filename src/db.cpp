@@ -83,7 +83,7 @@ extern bool player_is_dead_hardcore(long id);
 
 extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 
-extern void auto_repair_obj(struct obj_data *obj);
+extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
 // transport.cpp
 extern void boot_escalators();
@@ -5717,7 +5717,7 @@ void load_saved_veh()
 
         // Don't auto-repair cyberdecks until they're fully loaded.
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-          auto_repair_obj(obj);
+          auto_repair_obj(obj, veh->owner);
 
         if (veh_version == VERSION_VEH_FILE) {
           // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
@@ -5845,7 +5845,7 @@ void load_saved_veh()
         snprintf(buf, sizeof(buf), "%s/AmmoWeap", sect_name);
         GET_AMMOBOX_WEAPON(ammo) = data.GetInt(buf, 0);
         ammo->restring = str_dup(get_ammobox_default_restring(ammo));
-        auto_repair_obj(ammo);
+        auto_repair_obj(ammo, veh->owner);
         obj_to_obj(ammo, obj);
       }
       snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
@@ -5860,7 +5860,7 @@ void load_saved_veh()
           snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
           GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));
         }
-        auto_repair_obj(weapon);
+        auto_repair_obj(weapon, veh->owner);
         obj_to_obj(weapon, obj);
         veh->usedload += GET_OBJ_WEIGHT(weapon);
       }
@@ -6017,7 +6017,7 @@ void load_consist(void)
 
             // Don't auto-repair cyberdecks until they're fully loaded.
             if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-              auto_repair_obj(obj);
+              auto_repair_obj(obj, 0);
 
             snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
             inside = data.GetInt(buf, 0);

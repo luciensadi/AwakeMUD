@@ -960,13 +960,24 @@ void point_update(void)
         } else {
           if (force * 100 > GET_REAL_MAG(i) * 2 && success_test(GET_REAL_MAG(i) / 100, force / 2) < 1) {
             int num = number(1, total);
-            struct obj_data *foci = NULL;
-            for (int x = 0; x < NUM_WEARS && !foci; x++)
-              if (GET_EQ(i, x) && GET_OBJ_TYPE(GET_EQ(i, x)) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(GET_EQ(i, x)) == GET_IDNUM(i) && GET_FOCUS_ACTIVATED(GET_EQ(i, x)) && !GET_FOCUS_BOND_TIME_REMAINING(GET_EQ(i, x)) && !--num)
-                foci = GET_EQ(i, x);
-            if (foci) {
+            struct obj_data *focus_geas = NULL;
+            for (int x = 0; x < NUM_WEARS && !focus_geas; x++) {
+              if (!(focus = GET_EQ(i, x)))
+                continue;
+
+              if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(i) && GET_FOCUS_ACTIVATED(focus)
+                  && !GET_FOCUS_BOND_TIME_REMAINING(focus) && !GET_FOCUS_GEAS(focus) && !--num) {
+                focus_geas = focus;
+              }
+              else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus)
+                  && WEAPON_FOCUS_USABLE_BY(focus, i) && !GET_WEAPON_FOCUS_GEAS(focus) && !--num) {
+                focus_geas = focus;
+              }
+            }
+
+            if (focus_geas) {
               send_to_char(i, "^RYou feel some of your magic becoming locked in %s!^n Quick, take off all your foci before it happens again!\r\n", GET_OBJ_NAME(foci));
-              GET_OBJ_VAL(foci, 9) = GET_IDNUM(i);
+              GET_FOCUS_GEAS(focus_geas) = GET_IDNUM(i);
               magic_loss(i, 100, FALSE);
             }
           }

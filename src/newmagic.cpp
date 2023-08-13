@@ -6077,11 +6077,19 @@ void disp_geas_menu(struct descriptor_data *d)
 {
   CLS(CH);
   int x = 0;
-  for (int i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(CH, i)
-        && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS
-        && GET_OBJ_VAL(GET_EQ(CH, i), 9) == GET_IDNUM(CH))
-      send_to_char(CH, "%d) %s\r\n", x++, GET_OBJ_NAME(GET_EQ(CH, i)));
+  struct obj_data *obj = NULL;
+  for (int i = 0; i < NUM_WEARS; i++) {
+    if (!(obj = GET_EQ(CH, i)))
+      continue;
+
+    if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_FOCUS_GEAS(obj) == GET_IDNUM(CH)) {
+      send_to_char(CH, "%d) %s\r\n", x++, GET_OBJ_NAME(obj));
+    }
+    else if ((i == WEAR_WIELD || i == WEAR_HOLD) && GET_OBJ_TYPE(obj) == ITEM_WEAPON
+             && WEAPON_IS_FOCUS(obj) && GET_WEAPON_FOCUS_GEAS(obj) == GET_IDNUM(CH)) {
+      send_to_char(CH, "%d) %s\r\n", x++, GET_OBJ_NAME(obj));
+    }
+  }
   send_to_char("q) Quit Initiation\r\nSelect geas to shed: ", CH);
   d->edit_mode = INIT_GEAS;
 }
@@ -6270,22 +6278,28 @@ void init_parse(struct descriptor_data *d, char *arg)
       } else if (number < 0) {
         send_to_char("Invalid Response. Select geas to shed: ", CH);
       } else {
-        for (i = 0; i < NUM_WEARS; i++)
-          if (GET_EQ(CH, i)
-              && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS
-              && GET_OBJ_VAL(GET_EQ(CH, i), 9) == GET_IDNUM(CH)
-              && --number < 0) {
-            obj = GET_EQ(CH, i);
-            break;
+        struct obj_data *focus_geas = NULL;
+        for (i = 0; i < NUM_WEARS && (number >= 0); i++) {
+          if (!(obj = GET_EQ(CH, i)))
+            continue;
+
+          if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_FOCUS_GEAS(obj) == GET_IDNUM(CH) && --number < 0) {
+            focus_geas = obj;
           }
-        if (!obj) {
+          else if ((i == WEAR_WIELD || i == WEAR_HOLD) && GET_OBJ_TYPE(obj) == ITEM_WEAPON
+                   && WEAPON_IS_FOCUS(obj) && GET_WEAPON_FOCUS_GEAS(obj) == GET_IDNUM(CH) && --number < 0) {
+            focus_geas = obj;
+          }
+        }
+
+        if (!focus_geas) {
           send_to_char("You don't have that many geasa. Select geas to shed: ", CH);
           return;
         }
         init_cost(CH, TRUE);
         GET_GRADE(CH)++;
         GET_SETTABLE_REAL_MAG(CH) += 100;
-        GET_OBJ_VAL(obj, 9) = 0;
+        GET_FOCUS_GEAS(focus_geas) = 0;
         if (GET_TRADITION(CH) == TRAD_ADEPT)
           GET_PP(CH) += 100;
         send_to_char(CH, "You feel your magic return from that object, once again binding to your spirit.\r\n", CH);
