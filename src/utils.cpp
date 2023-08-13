@@ -5828,7 +5828,7 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
 
   // Trace back projecting NPCs, puppeted characters, etc.
   struct char_data *actor_original = actor->desc && actor->desc->original ? actor->desc->original : actor;
-  struct char_data *victim_original = victim->desc && victim->desc->original ? victim->desc->original : actor;
+  struct char_data *victim_original = victim->desc && victim->desc->original ? victim->desc->original : victim;
 
   struct room_data *actor_in_room = get_ch_in_room(actor);
   struct room_data *actor_original_in_room = get_ch_in_room(actor_original);
