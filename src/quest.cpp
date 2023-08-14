@@ -55,11 +55,6 @@ ACMD_DECLARE(do_new_echo);
 
 #define QUEST          d->edit_quest
 
-#define NUM_OBJ_LOADS            7
-#define NUM_MOB_LOADS            3
-#define NUM_OBJ_OBJECTIVES       8
-#define NUM_MOB_OBJECTIVES       5
-
 #define DELETE_ENTRY_FROM_VECTOR_PTR(iterator, vector_ptr) {delete [] *(iterator); *(iterator) = NULL; (vector_ptr)->erase((iterator));}
 
 const char *obj_loads[] =
@@ -102,13 +97,14 @@ const char *mob_objectives[] =
     "Kill target",
     "Kill as many targets as possible",
     "Target hunts a different quest target",
+    "Do not kill",
     "\n"
   };
 
 
 const char *sol[] =
   {
-    "DNL",
+    "do not load",
     "give to PC",
     "give to target",
     "equip on target",
@@ -733,6 +729,11 @@ bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
     return FALSE;
 
   for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
+    if (ch->player_specials->mob_complete[i] == -1) {
+      // They've failed their quest by killing a QMO_DONT_KILL: Bail out, we don't want to process further.
+      return FALSE;
+    }
+
     if (GET_MOB_VNUM(victim) == quest_table[GET_QUEST(ch)].mob[i].vnum) {
       switch (quest_table[GET_QUEST(ch)].mob[i].objective)
       {
@@ -743,6 +744,12 @@ bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
         }
         ch->player_specials->mob_complete[i]++;
         return TRUE;
+      case QMO_DONT_KILL:
+        if (IS_SENATOR(ch)) {
+          send_to_char("check_quest_kill: qmo_dont_kill, failing\r\n", ch);
+        }
+        ch->player_specials->mob_complete[i] = -1;
+        send_to_char(ch, "^rJust a moment too late, you remember that you weren't supposed to kill %s^r...^n\r\n", GET_CHAR_NAME(victim));
       }
     }
   }
@@ -1386,6 +1393,16 @@ SPECIAL(johnson)
         do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
         send_to_char("^L(OOC note: You can hit RECAP to see who gave you your current job.)^n\r\n", ch);
         return TRUE;
+      }
+
+      // Check for failure.
+      for (i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
+        if (ch->player_specials->mob_complete[i] == -1) {
+          do_say(johnson, "You fragged it up, and you still want to get paid?", 0, 0);
+          end_quest(ch);
+          forget(johnson, ch);
+          return TRUE;
+        }
       }
 
       // Check for some form of completion-- even if one thing is done, we'll allow them to turn in the quest.
@@ -2291,6 +2308,9 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
               (rnum = real_mobile(QUEST->mob[i].vnum)) > -1 ?
               GET_NAME(mob_proto+rnum) : "null");
       break;
+    default:
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n - Unknown QML %d\r\n", QUEST->mob[i].load);
+      break;
     }
     switch (QUEST->mob[i].objective) {
     case QUEST_NONE:
@@ -2341,6 +2361,14 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)\r\n", GET_NAME(mob_proto+rnum));
       } else
         strlcat(buf, "(null)\r\n", sizeof(buf));
+      break;
+    case QMO_DONT_KILL:
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Fail quest if target '%s' (%ld) is killed\r\n",
+               GET_CHAR_NAME(&mob_proto[real_mob]),
+               QUEST->mob[i].vnum);
+      break;
+    default:
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n - Unknown QMO %d\r\n", QUEST->mob[i].objective);
       break;
     }
   }
