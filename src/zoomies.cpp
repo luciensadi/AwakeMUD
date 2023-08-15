@@ -32,6 +32,14 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
   if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY) && !IS_SENATOR(ch))
     return FALSE;
 
+  // Standard validity checks.
+  if (!veh_can_launch_from_or_land_at(veh, room))
+    return FALSE;
+
+  // Must be within range for your vehicle.
+  if (!destination_is_within_flight_range(veh, room))
+    return FALSE;
+
   // Can't be a PGHQ room if you're not in that PG.
   struct zone_data *zone = get_zone_from_vnum(GET_ROOM_VNUM(room));
   if (zone && zone->is_pghq && !(GET_PGROUP_MEMBER_DATA(ch) && GET_PGROUP(ch) && GET_PGROUP(ch)->controls_room(room)))
@@ -39,14 +47,6 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
 
   // Can't be an apartment if you don't have ownership or guest privileges there.
   if (room->apartment && !(room->apartment->can_enter(ch)))
-    return FALSE;
-
-  // Standard validity checks.
-  if (!veh_can_launch_from_or_land_at(veh, room))
-    return FALSE;
-
-  // Must be within range for your vehicle.
-  if (!destination_is_within_flight_range(veh, room))
     return FALSE;
   
   // Everything looks good.

@@ -929,7 +929,7 @@ bool Apartment::can_enter(struct char_data *ch) {
       return TRUE;
     // Owned by a player, but not this one: Fall through.
   } else {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s is owned by neither player nor group! Allowing entry.", full_name);
+    // mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s is owned by neither player nor group! Allowing entry.", full_name);
     return TRUE;
   }
 
