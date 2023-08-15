@@ -1099,6 +1099,14 @@ void assign_rooms(void)
   ASSIGNROOM(62201, car_dealer);
   ASSIGNROOM(62331, car_dealer);
 
+#ifdef USE_PRIVATE_CE_WORLD
+  // Aircraft dealers.
+  ASSIGNROOM(8911, car_dealer);
+  ASSIGNROOM(8894, car_dealer);
+  ASSIGNROOM(19499, car_dealer);
+  ASSIGNROOM(24146, car_dealer);
+#endif
+
   /* Mitsuhama */
   ASSIGNROOM(17171, circulation_fan);
 
