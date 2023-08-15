@@ -4114,24 +4114,40 @@ ACMD(do_conjure)
         break;
     if (spirit == NUM_SPIRITS) {
       strcpy(buf, "Which spirit do you wish to conjure? In your currently-selected domain, you can conjure:");
-      bool have_sent_text = FALSE;
-      for (spirit = 0; spirit < NUM_SPIRITS; spirit++)
-        if (GET_DOMAIN(ch) == spirit) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", have_sent_text ? "," : "", spirits[spirit].name);
-          have_sent_text = TRUE;
+
+      if (GET_DOMAIN(ch) == SPIRIT_SPECIAL_DOMAIN_SKY) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s, %s, %s", 
+                 spirits[SPIRIT_MIST].name,
+                 spirits[SPIRIT_STORM].name,
+                 spirits[SPIRIT_WIND].name);
+      } else {
+        bool have_sent_text = FALSE;
+        for (spirit = 0; spirit < NUM_SPIRITS; spirit++) {
+          if (GET_DOMAIN(ch) == spirit) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", have_sent_text ? "," : "", spirits[spirit].name);
+            have_sent_text = TRUE;
+          }
         }
-
-      if (GET_DOMAIN(ch) == SPIRIT_MIST || GET_DOMAIN(ch) == SPIRIT_STORM || GET_DOMAIN(ch) == SPIRIT_WIND) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", have_sent_text ? "," : "", spirits[SPIRIT_SKY].name);
-        have_sent_text = TRUE;
       }
-
-      send_to_char(buf, ch);
+      send_to_char(ch, "%s\r\n", buf);
       return;
     }
-    if (GET_DOMAIN(ch) != ((spirit == SPIRIT_MIST || spirit == SPIRIT_STORM || spirit == SPIRIT_WIND) ? SPIRIT_SKY : spirit)) {
-      send_to_char("You aren't in the correct domain to conjure that spirit.\r\n", ch);
-      return;
+
+    switch (spirit) {
+      case SPIRIT_MIST:
+      case SPIRIT_STORM:
+      case SPIRIT_WIND:
+        if (GET_DOMAIN(ch) != SPIRIT_SPECIAL_DOMAIN_SKY) {
+          send_to_char(ch, "You aren't in the correct domain to conjure %s spirits. You must be in the Sky domain.\r\n", spirits[spirit].name);
+          return;
+        }
+        break;
+      default:
+        if (GET_DOMAIN(ch) != spirit) {
+          send_to_char(ch, "You must be in the %s domain to conjure related spirits.\r\n", spirits[spirit].name);
+          return;
+        }
+        break;
     }
 
     // Calculate the skill and TN used.
@@ -5451,6 +5467,30 @@ ACMD(do_order)
   }
 }
 
+void send_domains_to_char(struct char_data *ch) {
+  struct room_data *temp_room = get_ch_in_room(ch);
+  
+  if (GET_DOMAIN(ch) == SPIRIT_SPECIAL_DOMAIN_SKY) {
+    send_to_char("You are currently standing in the Sky domain, granting access to Mist, Storm, and Wind spirits.\r\n", ch);
+  } else {
+    send_to_char(ch, "You are currently standing in the %s domain.\r\n", spirits[GET_DOMAIN(ch)].name);
+  }
+  
+  if (SECT(temp_room) != SPIRIT_FOREST && SECT(temp_room) != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS)) {
+    switch (SECT(temp_room)) {
+      case SPIRIT_MIST:
+      case SPIRIT_WIND:
+      case SPIRIT_STORM:
+        // There is no switch message: you're in the Sky domain already.
+        break;
+      default:
+        send_to_char(ch, "You can switch %s the following domains here:\r\n  %s\r\n  Sky spirit\r\n", 
+                      GET_DOMAIN(ch) != SECT(temp_room) && GET_DOMAIN(ch) != SPIRIT_SPECIAL_DOMAIN_SKY ? "to" : "between",
+                      spirits[SECT(temp_room)].name);
+    }
+  }
+}
+
 ACMD(do_domain)
 {
   if (GET_TRADITION(ch) != TRAD_SHAMANIC) {
@@ -5459,42 +5499,70 @@ ACMD(do_domain)
   }
   struct room_data *temp_room = get_ch_in_room(ch);
   if (!*argument) {
-    send_to_char(ch, "You are currently in the %s domain.\r\n", spirits[GET_DOMAIN(ch)].name);
-    if (SECT(temp_room) != SPIRIT_FOREST && SECT(temp_room) != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS)) {
-      send_to_char(ch, "You can switch to the following domains:\r\n  %s\r\n  Sky spirit\r\n", spirits[SECT(temp_room)].name);
-    }
+    send_domains_to_char(ch);
   } else {
     struct spirit_data *next;
     skip_spaces(&argument);
     int newdomain = -1;
-    if (SECT(temp_room) != SPIRIT_FOREST && SECT(temp_room) != SPIRIT_HEARTH && !ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS)) {
-      if (is_abbrev(argument, spirits[SECT(temp_room)].name))
+
+    // Prevent switching to Sky if you can't currently do so.
+    if (is_abbrev(argument, "sky spirit")
+        || is_abbrev(argument, spirits[SPIRIT_MIST].name)
+        || is_abbrev(argument, spirits[SPIRIT_STORM].name)
+        || is_abbrev(argument, spirits[SPIRIT_WIND].name))
+    {
+      if (SECT(temp_room) == SPIRIT_FOREST || SECT(temp_room) == SPIRIT_HEARTH || ROOM_FLAGGED(temp_room, ROOM_INDOORS)) {
+        send_to_char("You have no sense of the sky from in here.\r\n", ch);
+        return;
+      } else {
+        newdomain = SPIRIT_SPECIAL_DOMAIN_SKY;
+      }
+    } else {
+      if (is_abbrev(argument, spirits[SECT(temp_room)].name)) {
         newdomain = SECT(temp_room);
-      else if (is_abbrev(argument, "sky spirit"))
-        newdomain = SPIRIT_SKY;
-    }
-    if (newdomain == GET_DOMAIN(ch))
-      send_to_char("You are already focusing on that domain.\r\n", ch);
-    else if (newdomain == -1)
-      send_to_char("Which domain do you wish to focus on?\r\n", ch);
-    else {
-      GET_DOMAIN(ch) = newdomain;
-      send_to_char(ch, "You switch your focus to the %s domain.\r\n", GET_DOMAIN(ch) == SPIRIT_SKY ? "Sky spirit" : spirits[GET_DOMAIN(ch)].name);
-      for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = next) {
-        next = spirit->next;
-        if (GET_DOMAIN(ch) != spirit->type) {
-          struct spirit_data *temp;
-          struct char_data *tch = find_spirit_by_id(spirit->id, GET_IDNUM(ch));
-          if (tch) {
-            send_to_char(ch, "You release %s from the rest of its services.\r\n", GET_NAME(tch));
-            act("$n returns to the metaplanes.", TRUE, tch, 0, ch, TO_NOTVICT);
-            extract_char(tch);
+      } else {
+        // See if they gave us a valid domain.
+        for (int spirit_idx = 0; spirit_idx < NUM_SPIRITS; spirit_idx++) {
+          if (spirit_idx == SPIRIT_MIST || spirit_idx == SPIRIT_STORM || spirit_idx == SPIRIT_WIND)
+            continue;
+          
+          if (is_abbrev(argument, spirits[spirit_idx].name)) {
+            send_to_char(ch, "Your current location is not connected to the %s domain.\r\n", spirits[spirit_idx].name);
+            return;
           }
-          REMOVE_FROM_LIST(spirit, GET_SPIRIT(ch), next);
-          GET_NUM_SPIRITS(ch)--;
-          delete spirit;
-          GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
         }
+
+        // They gave us an invalid domain. Bail out.
+        send_to_char("Which domain do you wish to focus on?\r\n", ch);
+        send_domains_to_char(ch);
+        return;
+      }
+    }
+
+    FAILURE_CASE_PRINTF(newdomain == GET_DOMAIN(ch), "You are already focusing on the %s domain.", newdomain == SPIRIT_SPECIAL_DOMAIN_SKY ? "Sky spirit" : spirits[newdomain].name);
+
+    GET_DOMAIN(ch) = newdomain;
+    send_to_char(ch, "You switch your focus to the %s domain.\r\n", GET_DOMAIN(ch) == SPIRIT_SPECIAL_DOMAIN_SKY ? "Sky spirit" : spirits[GET_DOMAIN(ch)].name);
+    
+    // Dismiss any mismatched spirits.
+    for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = next) {
+      next = spirit->next;
+      if (GET_DOMAIN(ch) != spirit->type && 
+          (GET_DOMAIN(ch) != SPIRIT_SPECIAL_DOMAIN_SKY || (spirit->type != SPIRIT_MIST 
+                                                            && spirit->type != SPIRIT_STORM 
+                                                            && spirit->type != SPIRIT_WIND)))
+      {
+        struct spirit_data *temp;
+        struct char_data *tch = find_spirit_by_id(spirit->id, GET_IDNUM(ch));
+        if (tch) {
+          send_to_char(ch, "You release %s from the rest of its services.\r\n", GET_NAME(tch));
+          act("$n returns to the metaplanes.", TRUE, tch, 0, ch, TO_NOTVICT);
+          extract_char(tch);
+        }
+        REMOVE_FROM_LIST(spirit, GET_SPIRIT(ch), next);
+        GET_NUM_SPIRITS(ch)--;
+        delete spirit;
+        GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
       }
     }
   }

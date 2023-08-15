@@ -819,22 +819,23 @@ enum {
 #define TYPE_LODGE              3
 #define TYPE_SUMMONING          4
 
-#define SPIRIT_HEARTH           0
-#define SPIRIT_CITY             1
-#define SPIRIT_FIELD            2
-#define SPIRIT_FOREST           3
-#define SPIRIT_DESERT           4
-#define SPIRIT_MOUNTAIN         5
-#define SPIRIT_RIVER            6
-#define SPIRIT_SEA              7
-#define SPIRIT_PRAIRIE          8
-#define SPIRIT_SKY    9
-#define SPIRIT_MIST             9
-#define SPIRIT_STORM            10
-#define SPIRIT_WIND             11
-#define SPIRIT_LAKE             12
-#define SPIRIT_SWAMP            13
-#define NUM_SPIRITS    14
+#define SPIRIT_HEARTH             0
+#define SPIRIT_CITY               1
+#define SPIRIT_FIELD              2
+#define SPIRIT_FOREST             3
+#define SPIRIT_DESERT             4
+#define SPIRIT_MOUNTAIN           5
+#define SPIRIT_RIVER              6
+#define SPIRIT_SEA                7
+#define SPIRIT_PRAIRIE            8
+#define SPIRIT_MIST               9
+#define SPIRIT_STORM              10
+#define SPIRIT_WIND               11
+#define SPIRIT_LAKE               12
+#define SPIRIT_SWAMP              13
+#define NUM_SPIRITS               14
+
+#define SPIRIT_SPECIAL_DOMAIN_SKY 50
 
 #define ELEM_EARTH    0
 #define ELEM_FIRE    1

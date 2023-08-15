@@ -1309,8 +1309,18 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY))
     room->peaceful++;
 
-  if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-    GET_DOMAIN(ch) = SECT(ch->in_room);
+  if (GET_TRADITION(ch) == TRAD_SHAMANIC) {
+    switch (SECT(ch->in_room)) {
+      case SPIRIT_MIST:
+      case SPIRIT_STORM:
+      case SPIRIT_WIND:
+        GET_DOMAIN(ch) = SPIRIT_SPECIAL_DOMAIN_SKY;
+        break;
+      default:
+        GET_DOMAIN(ch) = SECT(ch->in_room);
+        break;
+    }
+  }
 
   _char_with_light_to_room(ch);
 
