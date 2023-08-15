@@ -5985,6 +5985,44 @@ const char *vnum_to_string(vnum_t vnum) {
   return result;
 }
 
+const char *get_ch_domain_str(struct char_data *ch, bool include_possibilities) {
+  static char result[100];
+  strlcpy(result, "N/A", sizeof(result));
+
+  struct room_data *in_room;
+
+  if (!ch || !(in_room = get_ch_in_room(ch)))
+    return result;
+
+  if (GET_TRADITION(ch) != TRAD_SHAMANIC) {
+    // No change, just send back N/A.
+    return result;
+  }
+
+  // Sanity checks.
+  if (GET_DOMAIN(ch) < 0 || (GET_DOMAIN(ch) >= NUM_SPIRITS && GET_DOMAIN(ch) != SPIRIT_SPECIAL_DOMAIN_SKY)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s has unknown domain %s in get_ch_domain_str()!", GET_CHAR_NAME(ch), GET_DOMAIN(ch));
+    return result;
+  }
+
+  // The only available thing is sky? Just write that.
+  if (ROOM_SUPPORTS_SKY_DOMAIN(in_room) && GET_DOMAIN(ch) == SPIRIT_SPECIAL_DOMAIN_SKY) {
+    strlcpy(result, "Sky", sizeof(result));
+  } 
+  // We either don't want possibilities, or there's only one possibility.
+  else if (!include_possibilities || (!ROOM_SUPPORTS_SKY_DOMAIN(in_room) && GET_DOMAIN(ch) != SPIRIT_SPECIAL_DOMAIN_SKY)) {
+    strlcpy(result, spirit_name_with_hearth[GET_DOMAIN(ch)], sizeof(result));
+  } 
+  // There are multiple possibilities.
+  else {
+    // Sky and something else.
+    int something_else = (GET_DOMAIN(ch) == SPIRIT_SPECIAL_DOMAIN_SKY ? SECT(in_room) : GET_DOMAIN(ch));
+    snprintf(result, sizeof(result), "%s, Sky", spirit_name_with_hearth[something_else]);
+  }
+
+  return result;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

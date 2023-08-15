@@ -386,6 +386,25 @@ const char *spirit_name[] =
     "\n"
   };
 
+const char *spirit_name_with_hearth[] =
+{
+  "Hearth",
+  "City",
+  "Field",
+  "Forest",
+  "Desert",
+  "Mountain",
+  "River",
+  "Sea",
+  "Prairie",
+  "Mist",
+  "Storm",
+  "Wind",
+  "Lake",
+  "Swamp",
+  "\n"
+};
+
 const char *spirit_powers[] =
   {
     "accident",

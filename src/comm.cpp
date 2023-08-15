@@ -1479,12 +1479,7 @@ int make_prompt(struct descriptor_data * d)
               break;
             case 'q': // Selected Domain, plus Sky if available
               {
-                struct room_data *room = get_ch_in_room(d->character);
-                if (room && SECT(room) != SPIRIT_FOREST && SECT(room) != SPIRIT_HEARTH && !ROOM_FLAGGED(room, ROOM_INDOORS)) {
-                  snprintf(str, sizeof(str), "%s, Sky", spirit_name[GET_DOMAIN(ch)]);
-                } else {
-                  strlcpy(str, GET_DOMAIN(ch) == SPIRIT_HEARTH ? "Hearth" : spirit_name[GET_DOMAIN(ch)], sizeof(str));
-                }
+                strlcpy(str, get_ch_domain_str(ch, TRUE), sizeof(str));
               }
               break;
             case 'r':

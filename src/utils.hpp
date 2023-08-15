@@ -151,6 +151,7 @@ int     count_objects_in_room(struct room_data *room);
 int     count_objects_in_veh(struct veh_data *veh);
 struct zone_data *get_zone_from_vnum(vnum_t vnum);
 const char *vnum_to_string(vnum_t vnum);
+const char *get_ch_domain_str(struct char_data *ch, bool include_possibilities);
 
 bool obj_is_apartment_only_drop_item(struct obj_data *obj);
 bool obj_contains_apartment_only_drop_items(struct obj_data *obj);
@@ -1413,5 +1414,8 @@ void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick,
 #define GET_SHORT_WOUND_NAME(damage_level) (wound_arr[MIN(DEADLY, MAX(0, damage_level))])
 
 #define DEBUG_TO_STAFF(ch, ...) if (access_level((ch), LVL_BUILDER)) { send_to_char((ch), __VA_ARGS__); }
+
+#define SPIRIT_IS_SKY_DOMAIN(sprt) ((sprt) == SPIRIT_MIST || (sprt) == SPIRIT_STORM || (sprt) == SPIRIT_WIND || (sprt) == SPIRIT_SPECIAL_DOMAIN_SKY)
+#define ROOM_SUPPORTS_SKY_DOMAIN(rum) ((rum) && (SPIRIT_IS_SKY_DOMAIN(SECT((rum))) || (SECT((rum)) != SPIRIT_FOREST && SECT((rum)) != SPIRIT_HEARTH && !ROOM_FLAGGED((rum), ROOM_INDOORS))))
 
 #endif
