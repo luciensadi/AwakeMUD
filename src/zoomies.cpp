@@ -26,7 +26,7 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
 
   // Cannot be the same room.
   if (veh->in_room == room) {
-#ifdef BUILDPORT
+#ifdef IS_BUILDPORT
     send_to_char(ch, "^L(Flight to %s denied: It's the room you're currently in.)^n\r\n", GET_ROOM_NAME(room));
 #endif
     return FALSE;
@@ -34,7 +34,7 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
 
   // Can't be a staff room if you're not a staffer.
   if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY) && !IS_SENATOR(ch)) {
-#ifdef BUILDPORT
+#ifdef IS_BUILDPORT
     send_to_char(ch, "^L(Flight to %s denied: It's staff only.)^n\r\n", GET_ROOM_NAME(room));
 #endif
     return FALSE;
@@ -42,7 +42,7 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
 
   // Standard validity checks.
   if (!veh_can_launch_from_or_land_at(veh, room)) {
-#ifdef BUILDPORT
+#ifdef IS_BUILDPORT
     send_to_char(ch, "^L(Flight to %s denied: %s can't land there due to vehicle type restrictions.)^n\r\n", GET_ROOM_NAME(room), CAP(GET_VEH_NAME_NOFORMAT(veh)));
 #endif
     return FALSE;
@@ -50,7 +50,7 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
 
   // Must be within range for your vehicle.
   if (!destination_is_within_flight_range(veh, room)) {
-#ifdef BUILDPORT
+#ifdef IS_BUILDPORT
     send_to_char(ch, "^L(Flight to %s denied: It's outside of %s's flight range.)^n\r\n", GET_ROOM_NAME(room), GET_VEH_NAME(veh));
 #endif
     return FALSE;
@@ -59,7 +59,7 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
   // Can't be a PGHQ room if you're not in that PG. Staff override this.
   struct zone_data *zone = get_zone_from_vnum(GET_ROOM_VNUM(room));
   if (zone && zone->is_pghq && (IS_SENATOR(ch) || !(GET_PGROUP_MEMBER_DATA(ch) && GET_PGROUP(ch) && GET_PGROUP(ch)->controls_room(room)))) {
-#ifdef BUILDPORT
+#ifdef IS_BUILDPORT
     send_to_char(ch, "^L(Flight to %s denied: It's a PGHQ you can't enter.)^n\r\n", GET_ROOM_NAME(room));
 #endif
     return FALSE;
@@ -67,7 +67,7 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
 
   // Can't be an apartment if you don't have ownership or guest privileges there.
   if (room->apartment && !(room->apartment->can_enter(ch))) {
-#ifdef BUILDPORT
+#ifdef IS_BUILDPORT
     send_to_char(ch, "^L(Flight to %s denied: It's an apartment you can't enter.)^n\r\n", GET_ROOM_NAME(room));
 #endif
     return FALSE;
