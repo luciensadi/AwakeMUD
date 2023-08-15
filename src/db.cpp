@@ -60,6 +60,7 @@
 #include "bullet_pants.hpp"
 #include "lexicons.hpp"
 #include "newhouse.hpp"
+#include "zoomies.hpp"
 
 ACMD_DECLARE(do_reload);
 
