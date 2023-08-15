@@ -2922,9 +2922,121 @@ int vnum_mobile_affflag(int i, struct char_data * ch)
   return (found);
 }
 
+int vnum_vehicles_by_attribute(int vaff_idx, struct char_data *ch) {
+  send_to_char(ch, "Displaying all vehicle prototypes sorted by %s (descending):\r\n", veh_aff[vaff_idx]);
+
+  std::vector<struct veh_data *> veh_vect = {};
+
+  for (rnum_t nr = 0; nr <= top_of_veht; nr++) {
+    veh_vect.push_back(&veh_proto[nr]);
+  }
+
+  std::sort(veh_vect.begin(), 
+            veh_vect.end(),
+            [vaff_idx](struct veh_data *a, struct veh_data *b) {
+              switch (vaff_idx) {
+                case VAFF_HAND:
+                  return a->handling > b->handling;
+                case VAFF_SPD:
+                  return a->speed > b->speed;
+                case VAFF_ACCL:
+                  return a->accel > b->accel;
+                case VAFF_BOD:
+                  return a->body > b->body;
+                case VAFF_ARM:
+                  return a->armor > b->armor;
+                case VAFF_SIG:
+                  return a->sig > b->sig;
+                case VAFF_AUTO:
+                  return a->autonav > b->autonav;
+                case VAFF_SEAF:
+                  // should these indexes be swapped?
+                  return a->seating[0] > b->seating[0];
+                case VAFF_SEAB:
+                  return a->seating[1] > b->seating[1];
+                case VAFF_LOAD:
+                  return a->load > b->load;
+                case VAFF_SEN:
+                  return a->sensor > b->sensor;
+                case VAFF_PILOT:
+                  return a->pilot > b->pilot;
+                default:
+                  // Unsupported sort.
+                  return TRUE;
+              }
+            });
+  
+  int found = 0, value = 0;
+  for (auto *veh : veh_vect) {
+    switch (vaff_idx) {
+      case VAFF_HAND:
+        value = veh->handling;
+        break;
+      case VAFF_SPD:
+        value = veh->speed;
+        break;
+      case VAFF_ACCL:
+        value = veh->accel;
+        break;
+      case VAFF_BOD:
+        value = veh->body;
+        break;
+      case VAFF_ARM:
+        value = veh->armor;
+        break;
+      case VAFF_SIG:
+        value = veh->sig;
+        break;
+      case VAFF_AUTO:
+        value = veh->autonav;
+        break;
+      case VAFF_SEAF:
+        // should these indexes be swapped?
+        value = veh->seating[0];
+        break;
+      case VAFF_SEAB:
+        value = veh->seating[1];
+        break;
+      case VAFF_LOAD:
+        value = veh->load;
+        break;
+      case VAFF_SEN:
+        value = veh->sensor;
+        break;
+      case VAFF_PILOT:
+        value = veh->pilot;
+        break;
+      default:
+        // Unsupported sort.
+        return -1;
+    }
+    
+    snprintf(buf, MIN(sizeof(buf), 50), "%s", veh->short_description == NULL ? "(BUG)" : get_string_after_color_code_removal(veh->short_description, NULL));
+
+    send_to_char(ch, "%3d. [%5ld] %-50s ^n(%4d)\r\n", 
+              ++found,
+              veh_index[veh->veh_number].vnum,
+              buf,
+              value);
+  }
+
+  return found;
+}
+
 int vnum_vehicle(char *searchname, struct char_data * ch)
 {
   int nr, found = 0;
+  char arg1[MAX_STRING_LENGTH];
+  char arg2[MAX_STRING_LENGTH];
+
+  two_arguments(searchname, arg1, arg2);
+
+  for (int vaff_idx = VAFF_HAND; vaff_idx < VAFF_MAX; vaff_idx++) {
+    if (!str_cmp(searchname, veh_aff[vaff_idx])) {
+      return vnum_vehicles_by_attribute(vaff_idx, ch);
+    }
+  }
+
   for (nr = 0; nr <= top_of_veht; nr++)
   {
     bool is_keyword = isname(searchname, get_string_after_color_code_removal(veh_proto[nr].name, NULL));
