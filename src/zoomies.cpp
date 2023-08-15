@@ -9,6 +9,7 @@
 #include "utils.hpp"
 #include "handler.hpp"
 #include "playergroups.hpp"
+#include "newhouse.hpp"
 #include "zoomies.hpp"
 
 // External prototypes.
@@ -34,6 +35,10 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
   // Can't be a PGHQ room if you're not in that PG.
   struct zone_data *zone = get_zone_from_vnum(GET_ROOM_VNUM(room));
   if (zone && zone->is_pghq && !(GET_PGROUP_MEMBER_DATA(ch) && GET_PGROUP(ch) && GET_PGROUP(ch)->controls_room(room)))
+    return FALSE;
+
+  // Can't be an apartment if you don't have ownership or guest privileges there.
+  if (room->apartment && !(room->apartment->can_enter(ch)))
     return FALSE;
 
   // Standard validity checks.
