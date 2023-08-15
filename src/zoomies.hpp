@@ -3,6 +3,7 @@
 
 #define RM_AIRBORNE 10096
 #define RM_FLIGHT_CRASH_FALLBACK 2048
+#define INVALID_FLIGHT_CODE "---"
 
 bool check_for_valid_launch_location(struct char_data *ch, struct veh_data *veh, bool message);
 bool veh_can_launch_from_or_land_at(struct veh_data *veh, struct room_data *room);

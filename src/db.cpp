@@ -1313,7 +1313,7 @@ void parse_room(File &fl, long nr)
   room->background[CURRENT_BACKGROUND_COUNT] = room->background[PERMANENT_BACKGROUND_COUNT] = data.GetInt("POINTS/Background", 0);
   room->background[CURRENT_BACKGROUND_TYPE] = room->background[PERMANENT_BACKGROUND_TYPE] = data.GetInt("POINTS/BackgroundType", 0);
   room->staff_level_lock = data.GetInt("POINTS/StaffLockLevel", 0);
-  room->flight_code = str_dup(data.GetString("POINTS/FlightCode", "---"));
+  room->flight_code = str_dup(data.GetString("POINTS/FlightCode", INVALID_FLIGHT_CODE));
   room->latitude = data.GetFloat("POINTS/Latitude", 0.0);
   room->longitude = data.GetFloat("POINTS/Longitude", 0.0);
   if (room->vision[0] == -1) {

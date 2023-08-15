@@ -21,7 +21,7 @@ bool destination_is_within_flight_range(struct veh_data *veh, struct room_data *
 
 bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *veh, struct char_data *ch) {
   // Must have a landing code.
-  if (!room->flight_code || !*(room->flight_code))
+  if (!room->flight_code || !strcmp(room->flight_code, INVALID_FLIGHT_CODE))
     return FALSE;
 
   // Cannot be the same room.
