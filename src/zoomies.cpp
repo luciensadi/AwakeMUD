@@ -349,10 +349,8 @@ int calculate_flight_cost(struct veh_data *veh, float distance) {
   // Crank it up by 10% to account for maintenance and storage.
   optempo_cost *= 1.1;
 
-  // Cap it at 5k.
-  optempo_cost = MIN(5000, optempo_cost);
-
-  return (int) ceilf(distance * optempo_cost);
+  // Multiply distance by optempo cost, cap at 5k nuyen.
+  return (int) MIN(5000, ceilf(distance * optempo_cost));
 }
 
 int calculate_flight_time(struct veh_data *veh, float distance) {
