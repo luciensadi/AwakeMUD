@@ -2079,6 +2079,18 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     send_to_veh(buf, ch->in_veh, ch, FALSE);
   } else
   {
+    // If you're dropping something in the donation area, zero its cost.
+    if (mode == SCMD_DROP) {
+      // Pull from config.cpp
+      extern vnum_t donation_room_1;
+      extern vnum_t donation_room_2;
+      extern vnum_t donation_room_3;
+      
+      // If you're in a donation room, zero it.
+      if (GET_ROOM_VNUM(ch->in_room) == donation_room_1 || GET_ROOM_VNUM(ch->in_room) == donation_room_2 || GET_ROOM_VNUM(ch->in_room) == donation_room_3) {
+        zero_cost_of_obj_and_contents(obj);
+      }
+    }
     snprintf(buf, sizeof(buf), "$n %ss $p.%s", sname, VANISH(mode));
     act(buf, TRUE, ch, obj, 0, TO_ROOM);
   }
@@ -2120,6 +2132,9 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       check_quest_delivery(ch, obj);
     return 0;
   case SCMD_DONATE:
+    // Wipe its value with the make_newbie() function to prevent reselling.
+    zero_cost_of_obj_and_contents(obj);
+    // Move it to the donation room.
     obj_to_room(obj, random_donation_room);
     if (random_donation_room->people)
       act("You notice $p exposed beneath the junk.", FALSE, random_donation_room->people, obj, 0, TO_ROOM);
@@ -2140,9 +2155,9 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 
 ACMD(do_drop)
 {
-  extern rnum_t donation_room_1;
-  extern rnum_t donation_room_2;  /* uncomment if needed! */
-  extern rnum_t donation_room_3;  /* uncomment if needed! */
+  extern vnum_t donation_room_1;
+  extern vnum_t donation_room_2;  /* uncomment if needed! */
+  extern vnum_t donation_room_3;  /* uncomment if needed! */
 
 
   FAILURE_CASE(IS_ASTRAL(ch), "Astral projections can't touch things!");

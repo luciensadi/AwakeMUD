@@ -878,8 +878,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         resist = GET_BOD(targ->decker->ch);
       else
         resist = GET_WIL(targ->decker->ch);
-      success -= targ->decker->iccm ? MAX(success_test(GET_WIL(targ->decker->ch), power), success_test(GET_BOD(targ->decker->ch), power))
-                 : success_test(resist, power);
+
+      int wil_test_result = success_test(GET_WIL(targ->decker->ch), power);
+      int bod_test_result = success_test(GET_BOD(targ->decker->ch), power);
+      success -= targ->decker->iccm ? MAX(wil_test_result, bod_test_result) : success_test(resist, power);
       dam = convert_damage(stage(success, dam));
       send_to_icon(targ, "You smell something burning.\r\n");
 

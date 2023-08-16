@@ -4247,19 +4247,6 @@ SPECIAL(smelly)
   return FALSE;
 }
 
-void make_newbie(struct obj_data *obj)
-{
-  for (;obj;obj = obj->next_content)
-  {
-    if (obj->contains)
-      make_newbie(obj->contains);
-    if (GET_OBJ_TYPE(obj) != ITEM_MAGIC_TOOL) {
-      GET_OBJ_EXTRA(obj).SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NOSELL, ENDBIT);
-      GET_OBJ_COST(obj) = 0;
-    }
-  }
-}
-
 void process_auth_room(struct char_data *ch) {
   PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
 
@@ -4273,10 +4260,10 @@ void process_auth_room(struct char_data *ch) {
   // Clear the rest, it can't be kept.
   GET_NUYEN_RAW(ch) = 0;
 
-  make_newbie(ch->carrying);
+  zero_cost_of_obj_and_contents(ch->carrying);
   for (int i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i))
-      make_newbie(GET_EQ(ch, i));
+      zero_cost_of_obj_and_contents(GET_EQ(ch, i));
   for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
     GET_OBJ_COST(obj) = 1;
   for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
@@ -5616,7 +5603,7 @@ SPECIAL(chargen_hopper)
     }
 
     modulator = read_object(modulator_rnum, REAL);
-    make_newbie(modulator);
+    zero_cost_of_obj_and_contents(modulator);
     obj_to_obj(modulator, hopper);
     //mudlog("DEBUG: Loaded hopper with modulator.", NULL, LOG_SYSLOG, TRUE);
   }

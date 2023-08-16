@@ -6023,6 +6023,18 @@ const char *get_ch_domain_str(struct char_data *ch, bool include_possibilities) 
   return result;
 }
 
+void zero_cost_of_obj_and_contents(struct obj_data *obj) {
+  for (;obj;obj = obj->next_content)
+  {
+    if (obj->contains)
+      zero_cost_of_obj_and_contents(obj->contains);
+    if (GET_OBJ_TYPE(obj) != ITEM_MAGIC_TOOL) {
+      GET_OBJ_EXTRA(obj).SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NOSELL, ENDBIT);
+      GET_OBJ_COST(obj) = 0;
+    }
+  }
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
