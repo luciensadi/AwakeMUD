@@ -12,6 +12,7 @@ extern void ASSIGNMOB(long mob, SPECIAL(fname));
 
 void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave=FALSE);
 void houseedit_reload(struct char_data *ch, const char *filename);
+void houseedit_trueup_lifestyles_to_rent(struct char_data *ch);
 
 #define HED_NUKEANDPAVE TRUE
 #define HED_IMPORT FALSE
@@ -24,7 +25,7 @@ ACMD(do_houseedit) {
   if (is_abbrev(mode, "nukeandpave")) {
     // Completely blow away all of our existing apartments and complexes and rebuild from old housing files. DESTRUCTIVE.
     FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
-    FAILURE_CASE(str_cmp(func, "hurtmedaddy"), "To blow away ALL existing apartment complexes and create them fresh from old files, type HOUSEEDIT NUKEANDPAVE HURTMEDADDY.");
+    FAILURE_CASE(str_cmp(func, "hurtmedaddy"), "To blow away ALL existing apartment COMPLEXES and create them fresh from old files, type HOUSEEDIT NUKEANDPAVE HURTMEDADDY.");
 
     houseedit_import_from_old_files(ch, HED_NUKEANDPAVE);
     return;
@@ -33,9 +34,18 @@ ACMD(do_houseedit) {
   if (is_abbrev(mode, "import")) {
     // Destroy current room contents, then assign owners and storage contents from old files. You probably want to run this on the live port.
     FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
-    FAILURE_CASE(str_cmp(func, "confirm"), "To blow away existing apartment contents and leases and load from old files, type HOUSEEDIT IMPORT CONFIRM.");
+    FAILURE_CASE(str_cmp(func, "confirm"), "To blow away existing apartment CONTENTS and LEASES and load from old files, type HOUSEEDIT IMPORT CONFIRM.");
 
     houseedit_import_from_old_files(ch, HED_IMPORT);
+    return;
+  }
+
+  if (is_abbrev(mode, "trueup")) {
+    // Recalculate lifestyle settings for all rooms based on their current rent amounts.
+    FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
+    FAILURE_CASE(str_cmp(func, "confirm"), "To true-up apartment lifestyle settings to match their current rent values, type HOUSEEDIT TRUEUP CONFIRM.");
+
+    houseedit_trueup_lifestyles_to_rent(ch);
     return;
   }
 
@@ -367,3 +377,26 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
 
 #undef HED_IMPORT
 #undef HED_NUKEPANDPAVE
+
+void houseedit_trueup_lifestyles_to_rent(struct char_data *ch) {
+  mudlog_vfprintf(ch, LOG_SYSLOG, "Housing lifestyle true-up initiated by %s.", GET_CHAR_NAME(ch));
+  for (auto *complex : global_apartment_complexes) {
+    for (auto *apartment : complex->get_apartments()) {
+      for (int lifestyle = NUM_LIFESTYLES - 1; lifestyle >= 0; lifestyle--) {
+        if (apartment->get_rent_cost() >= lifestyles[lifestyle].monthly_cost_min) {
+          if (apartment->get_lifestyle() != lifestyle) {
+            mudlog_vfprintf(ch, LOG_SYSLOG, "Updating lifestyle of %s from %s to %s (rent: %d).",
+                            apartment->get_full_name(),
+                            lifestyles[apartment->get_lifestyle()].name,
+                            lifestyles[lifestyle].name,
+                            apartment->get_rent_cost());
+            apartment->set_lifestyle(lifestyle);
+            apartment->save_base_info();
+          }
+          break;
+        }
+      }
+    }
+  }
+  mudlog_vfprintf(ch, LOG_SYSLOG, "Housing lifestyle true-up by %s complete.", GET_CHAR_NAME(ch));
+}

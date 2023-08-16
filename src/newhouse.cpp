@@ -46,7 +46,8 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
-// TODO: If the short name of an apartment is changed, rename the save directory as well (copy over existing info) so it's not lost.
+// TODO: If the short name of an apartment is changed, rename the save directory as well (copy over existing info) so it's not lost. [edit: think this is done?]
+// TODO: When auto-generating apartments, set the lifestyle relative to the rent value.
 
 // EVENTUALTODOs for pgroups:
 // - Write pgroup log when a lease is broken.
