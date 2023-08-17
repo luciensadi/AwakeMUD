@@ -56,8 +56,8 @@ struct quest_om_data
   int nuyen, karma;
   byte load;
   byte objective;
-  int l_data, l_data2;
-  int o_data;
+  vnum_t l_data, l_data2;
+  vnum_t o_data;
 
   quest_om_data() :
     vnum(0), nuyen(0), karma(0), load(0), objective(0), l_data(0), l_data2(0), o_data(0)

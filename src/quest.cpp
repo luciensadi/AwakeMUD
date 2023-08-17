@@ -1808,7 +1808,7 @@ void list_detailed_quest(struct char_data *ch, long rnum)
           quest_table[rnum].reward);
 
   for (i = 0; i < quest_table[rnum].num_mobs; i++) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^mM^n%2d) ^c%d^n (%d) nuyen/^c%0.2f^n (%0.2f) karma: vnum %ld; %s (%d); %s (%d)\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^mM^n%2d) ^c%d^n (%d) nuyen/^c%0.2f^n (%0.2f) karma: vnum %ld; %s (%ld); %s (%ld)\r\n",
             i,
             (int) (quest_table[rnum].mob[i].nuyen * NUYEN_GAIN_MULTIPLIER),
             quest_table[rnum].mob[i].nuyen,
@@ -1822,7 +1822,7 @@ void list_detailed_quest(struct char_data *ch, long rnum)
 
 
   for (i = 0; i < quest_table[rnum].num_objs; i++) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^oO^n%2d) ^c%d^n (%d) nuyen/^c%0.2f^n (%0.2f) karma: vnum %ld; %s (%d/%d); %s (%d)\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^oO^n%2d) ^c%d^n (%d) nuyen/^c%0.2f^n (%0.2f) karma: vnum %ld; %s (%ld/%ld); %s (%ld)\r\n",
             i,
             (int) (quest_table[rnum].obj[i].nuyen * NUYEN_GAIN_MULTIPLIER),
             quest_table[rnum].obj[i].nuyen,
@@ -2099,17 +2099,25 @@ int write_quests_to_disk(int zone) {
             );
 
       for (j = 0; j < quest_table[i].num_objs; j++)
-        fprintf(fp, "%ld %d %d %d %d %d %d %d\n", quest_table[i].obj[j].vnum,
-                quest_table[i].obj[j].nuyen, quest_table[i].obj[j].karma,
-                quest_table[i].obj[j].load, quest_table[i].obj[j].objective,
-                quest_table[i].obj[j].l_data, quest_table[i].obj[j].l_data2,
+        fprintf(fp, "%ld %d %d %d %d %ld %ld %ld\n", 
+                quest_table[i].obj[j].vnum,
+                quest_table[i].obj[j].nuyen, 
+                quest_table[i].obj[j].karma,
+                quest_table[i].obj[j].load, 
+                quest_table[i].obj[j].objective,
+                quest_table[i].obj[j].l_data, 
+                quest_table[i].obj[j].l_data2,
                 quest_table[i].obj[j].o_data);
 
       for (j = 0; j < quest_table[i].num_mobs; j++)
-        fprintf(fp, "%ld %d %d %d %d %d %d %d\n", quest_table[i].mob[j].vnum,
-                quest_table[i].mob[j].nuyen, quest_table[i].mob[j].karma,
-                quest_table[i].mob[j].load, quest_table[i].mob[j].objective,
-                quest_table[i].mob[j].l_data, quest_table[i].mob[j].l_data2,
+        fprintf(fp, "%ld %d %d %d %d %ld %ld %ld\n", 
+                quest_table[i].mob[j].vnum,
+                quest_table[i].mob[j].nuyen, 
+                quest_table[i].mob[j].karma,
+                quest_table[i].mob[j].load, 
+                quest_table[i].mob[j].objective,
+                quest_table[i].mob[j].l_data, 
+                quest_table[i].mob[j].l_data2,
                 quest_table[i].mob[j].o_data);
 
 #define WRITE_EMOTES_TO_DISK(type) if (quest_table[i].type##_emotes) {for (auto a: *(quest_table[i].type##_emotes)) { fprintf(fp, "%s~\r\n", cleanup(buf2, a)); }}
@@ -2169,112 +2177,145 @@ int write_quests_to_disk(int zone) {
 
 void qedit_list_obj_objectives(struct descriptor_data *d)
 {
-  int i, real_obj;
-  long rnum;
-
   CLS(CH);
 
   *buf = '\0';
 
-  for (i = 0; i < QUEST->num_objs; i++)
+  for (int i = 0; i < QUEST->num_objs; i++)
   {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) ", i);
-    switch (QUEST->obj[i].load) {
-    case QUEST_NONE:
-      strlcat(buf, "Load nothing", sizeof(buf));
-      break;
-    case QOL_JOHNSON:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Give %ld to Johnson", QUEST->obj[i].vnum);
-      break;
-    case QOL_TARMOB_I:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Add %ld to inventory of M%d ", QUEST->obj[i].vnum,
-              QUEST->obj[i].l_data);
-      if (QUEST->obj[i].l_data >= 0 &&
-          QUEST->obj[i].l_data < QUEST->num_mobs &&
-          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].l_data].vnum)) > -1) {
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)", GET_NAME(mob_proto+rnum));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) ", i);
+
+    rnum_t obj_rnum = real_object(QUEST->obj[i].vnum);
+    struct obj_data *obj = (obj_rnum >= 0 ? &obj_proto[obj_rnum] : NULL);
+
+    {
+      // These are derived from l_data, which is not used in the second stanza.
+      rnum_t mob_rnum;
+      bool target_is_listed_mob;
+      if (QUEST->obj[i].l_data < 0 || QUEST->obj[i].l_data >= QUEST->num_mobs || (mob_rnum = real_mobile(QUEST->mob[QUEST->obj[i].l_data].vnum)) < 0) {
+        mob_rnum = real_mobile(QUEST->obj[i].l_data);
+        target_is_listed_mob = FALSE;
+      } else {
+        target_is_listed_mob = TRUE;
       }
-      else
-        strlcat(buf, "(null)", sizeof(buf));
-      strlcat(buf, "(NOT A DELIVERY OBJECTIVE)", sizeof(buf));
-      break;
+      struct char_data *mob = (mob_rnum >= 0 ? &mob_proto[mob_rnum] : NULL);
 
-    case QOL_TARMOB_E:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Equip M%d ", QUEST->obj[i].l_data);
+      rnum_t room_rnum = real_room(QUEST->obj[i].l_data);
+      struct room_data *room = (room_rnum >= 0 ? &world[room_rnum] : NULL);
 
-      if (QUEST->obj[i].l_data >= 0 &&
-          QUEST->obj[i].l_data < QUEST->num_mobs &&
-          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].l_data].vnum)) > -1) {
-                    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s) ",
-                GET_NAME(mob_proto+rnum));
+      rnum_t host_rnum = real_host(QUEST->obj[i].l_data);
+      struct host_data *host = (host_rnum >= 0 ? &matrix[host_rnum] : NULL);
+      
+      switch (QUEST->obj[i].load) {
+        case QUEST_NONE:
+          strlcat(buf, "Load nothing", sizeof(buf));
+          break;
+        case QOL_JOHNSON:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Give %ld (%s) to Johnson", 
+                   QUEST->obj[i].vnum,
+                   obj ? GET_OBJ_NAME(obj) : "N/A");
+          break;
+        case QOL_TARMOB_I:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Add %ld (%s) to inventory of %s%ld (%s) (NOT A DELIVERY OBJECTIVE)", 
+                   QUEST->obj[i].vnum,
+                   obj ? GET_OBJ_NAME(obj) : "N/A",
+                   target_is_listed_mob ? "M" : "vnum ",
+                   QUEST->obj[i].l_data,
+                   mob ? GET_NAME(mob) : "NULL");
+          break;
+        case QOL_TARMOB_E:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Equip %s%ld (%s) with %ld (%s) at %s", 
+                   target_is_listed_mob ? "M" : "vnum ",
+                   QUEST->obj[i].l_data,
+                   mob ? GET_NAME(mob) : "NULL",
+                   QUEST->obj[i].vnum,
+                   obj ? GET_OBJ_NAME(obj) : "N/A",
+                   wear_bits[QUEST->obj[i].l_data2]);
+          break;
+        case QOL_TARMOB_C:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Install %ld (%s) in %s%ld (%s)", 
+                   QUEST->obj[i].vnum,
+                   obj ? GET_OBJ_NAME(obj) : "N/A",
+                   target_is_listed_mob ? "M" : "vnum ",
+                   QUEST->obj[i].l_data,
+                   mob ? GET_NAME(mob) : "NULL");
+          break;
+        case QOL_HOST:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) in host %ld (%s)", 
+                   QUEST->obj[i].vnum, 
+                   obj ? GET_OBJ_NAME(obj) : "N/A",
+                   QUEST->obj[i].l_data,
+                   host ? host->name : NULL);
+          break;
+        case QOL_LOCATION:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) in room %ld (%s)", 
+                   QUEST->obj[i].vnum,
+                   obj ? GET_OBJ_NAME(obj) : "N/A",
+                   QUEST->obj[i].l_data,
+                   room ? GET_ROOM_NAME(room) : "NULL");
+          break;
       }
-
-      strlcat(buf, "(null) ", sizeof(buf));
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "with %ld at %s", QUEST->obj[i].vnum,
-              wear_bits[QUEST->obj[i].l_data2]);
-      break;
-
-    case QOL_TARMOB_C:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Install %ld in M%d ", QUEST->obj[i].vnum,
-              QUEST->obj[i].l_data);
-
-      if (QUEST->obj[i].l_data >= 0 &&
-          QUEST->obj[i].l_data < QUEST->num_mobs &&
-          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].l_data].vnum)) > -1) {
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)", GET_NAME(mob_proto+rnum));
-      }
-      else
-        strlcat(buf, "(null)", sizeof(buf));
-
-      break;
-    case QOL_HOST:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld in host %d", QUEST->obj[i].vnum, QUEST->obj[i].l_data);
-      break;
-    case QOL_LOCATION:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld in room %d", QUEST->obj[i].vnum,
-              QUEST->obj[i].l_data);
-      break;
     }
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for ",
-            (int) (QUEST->obj[i].nuyen * NUYEN_GAIN_MULTIPLIER),
-            QUEST->obj[i].nuyen,
-            ((float)QUEST->obj[i].karma / 100) * KARMA_GAIN_MULTIPLIER, ((float)QUEST->obj[i].karma / 100));
-    switch (QUEST->obj[i].objective) {
-    case QUEST_NONE:
-      strlcat(buf, "nothing\r\n", sizeof(buf));
-      break;
-    case QOO_JOHNSON:
-      strlcat(buf, "returning item to Johnson\r\n", sizeof(buf));
-      break;
-    case QOO_TAR_MOB:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item %ld (%s) to M%d ",
-              QUEST->obj[i].vnum,
-              (real_obj = real_object(QUEST->obj[i].vnum)) >= 0 ? GET_OBJ_NAME(&obj_proto[real_obj]) : "N/A",
-              QUEST->obj[i].o_data);
-      if (QUEST->obj[i].o_data >= 0 &&
-          QUEST->obj[i].o_data < QUEST->num_mobs &&
-          (rnum = real_mobile(QUEST->mob[QUEST->obj[i].o_data].vnum)) > -1) {
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)\r\n", GET_NAME(mob_proto+rnum));
+
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for ",
+        (int) (QUEST->obj[i].nuyen * NUYEN_GAIN_MULTIPLIER),
+        QUEST->obj[i].nuyen,
+        ((float)QUEST->obj[i].karma / 100) * KARMA_GAIN_MULTIPLIER, ((float)QUEST->obj[i].karma / 100));
+
+    {
+      // These are derived from o_data, which is not used in the first stanza.
+      rnum_t mob_rnum;
+      bool target_is_listed_mob;
+      if (QUEST->obj[i].o_data < 0 || QUEST->obj[i].o_data >= QUEST->num_mobs || (mob_rnum = real_mobile(QUEST->mob[QUEST->obj[i].o_data].vnum)) < 0) {
+        mob_rnum = real_mobile(QUEST->obj[i].o_data);
+        target_is_listed_mob = FALSE;
+      } else {
+        target_is_listed_mob = TRUE;
       }
-      else
-        strlcat(buf, "(null)\r\n", sizeof(buf));
-      break;
-    case QOO_LOCATION:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item to room %d\r\n",
-              QUEST->obj[i].o_data);
-      break;
-    case QOO_DSTRY_ONE:
-      strlcat(buf, "destroying item\r\n", sizeof(buf));
-      break;
-    case QOO_DSTRY_MANY:
-      strlcat(buf, "each item destroyed\r\n", sizeof(buf));
-      break;
-    case QOO_UPLOAD:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "uploading to host %d\n\n", QUEST->obj[i].o_data);
-      break;
-    case QOO_RETURN_PAY:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "returning paydata from host %d\r\n",
-              QUEST->obj[i].o_data);
+      struct char_data *mob = (mob_rnum >= 0 ? &mob_proto[mob_rnum] : NULL);
+
+      rnum_t room_rnum = real_room(QUEST->obj[i].o_data);
+      struct room_data *room = (room_rnum >= 0 ? &world[room_rnum] : NULL);
+
+      rnum_t host_rnum = real_host(QUEST->obj[i].o_data);
+      struct host_data *host = (host_rnum >= 0 ? &matrix[host_rnum] : NULL);
+      
+      switch (QUEST->obj[i].objective) {
+        case QUEST_NONE:
+          strlcat(buf, "nothing (no objective)\r\n", sizeof(buf));
+          break;
+        case QOO_JOHNSON:
+          strlcat(buf, "returning item to Johnson\r\n", sizeof(buf));
+          break;
+        case QOO_TAR_MOB:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item %ld (%s) to %s%ld (%s)",
+                  QUEST->obj[i].vnum,
+                  obj ? GET_OBJ_NAME(obj) : "N/A",
+                  target_is_listed_mob ? "M" : "vnum ",
+                  QUEST->obj[i].o_data,
+                  mob ? GET_NAME(mob) : "NULL");
+          break;
+        case QOO_LOCATION:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item to room %ld (%s)\r\n",
+                   QUEST->obj[i].o_data,
+                   room ? GET_ROOM_NAME(room) : "NULL");
+          break;
+        case QOO_DSTRY_ONE:
+          strlcat(buf, "destroying item\r\n", sizeof(buf));
+          break;
+        case QOO_DSTRY_MANY:
+          strlcat(buf, "each item destroyed\r\n", sizeof(buf));
+          break;
+        case QOO_UPLOAD:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "uploading to host %ld (%s)\n\n", 
+                   QUEST->obj[i].o_data,
+                   host ? host->name : "NULL");
+          break;
+        case QOO_RETURN_PAY:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "returning paydata from host %ld (%s)\r\n",
+                   QUEST->obj[i].o_data,
+                   host ? host->name : "NULL");
+      }
     }
   }
   send_to_char(buf, CH);
@@ -2282,94 +2323,86 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
 
 void qedit_list_mob_objectives(struct descriptor_data *d)
 {
-  int i, rnum = 0, real_mob;
-
   CLS(CH);
 
   *buf = '\0';
 
-  for (i = 0; i < QUEST->num_mobs; i++)
+  for (int i = 0; i < QUEST->num_mobs; i++)
   {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) ", i);
+    rnum_t mob_rnum = real_mobile(QUEST->mob[i].vnum);
+    struct char_data *mob = (mob_rnum >= 0 ? &mob_proto[mob_rnum] : NULL);
+    
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) ", i);
+
     switch (QUEST->mob[i].load) {
-    case QUEST_NONE:
-      strlcat(buf, "Not set", sizeof(buf));
-      break;
-    case QML_LOCATION:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) at room %d",
-              QUEST->mob[i].vnum,
-              (rnum = real_mobile(QUEST->mob[i].vnum)) > -1 ?
-              GET_NAME(mob_proto+rnum) : "null",
-              QUEST->mob[i].l_data);
-      break;
-    case QML_FOLQUESTER:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) and follow quester",
-              QUEST->mob[i].vnum,
-              (rnum = real_mobile(QUEST->mob[i].vnum)) > -1 ?
-              GET_NAME(mob_proto+rnum) : "null");
-      break;
-    default:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n - Unknown QML %d\r\n", QUEST->mob[i].load);
-      break;
+      case QUEST_NONE:
+        strlcat(buf, "Not set", sizeof(buf));
+        break;
+      case QML_LOCATION:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) at room %ld (%s)",
+                 QUEST->mob[i].vnum,
+                 mob ? GET_NAME(mob) : "null",
+                 QUEST->mob[i].l_data,
+                 real_room(QUEST->mob[i].l_data) >= 0 ? GET_ROOM_NAME(&world[real_room(QUEST->mob[i].l_data)]) : "NULL");
+        break;
+      case QML_FOLQUESTER:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) and follow quester",
+                 QUEST->mob[i].vnum,
+                 mob ? GET_NAME(mob) : "null");
+        break;
+      default:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n - Unknown QML %d\r\n", QUEST->mob[i].load);
+        break;
     }
+
+    rnum_t target_rnum;
+    bool target_is_listed_mob;
+    if (QUEST->mob[i].o_data < 0 || QUEST->mob[i].o_data >= QUEST->num_mobs || (target_rnum = real_mobile(QUEST->mob[QUEST->mob[i].o_data].vnum)) < 0) {
+      target_rnum = real_mobile(QUEST->mob[i].o_data);
+      target_is_listed_mob = FALSE;
+    } else {
+      target_is_listed_mob = TRUE;
+    }
+    struct char_data *target = (target_rnum >= 0 ? &mob_proto[target_rnum] : NULL);
+
     switch (QUEST->mob[i].objective) {
-    case QUEST_NONE:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for "
-              "nothing\r\n",
-              (int) (QUEST->mob[i].nuyen * NUYEN_GAIN_MULTIPLIER),
-              QUEST->mob[i].nuyen,
-              ((float)QUEST->mob[i].karma / 100) * KARMA_GAIN_MULTIPLIER,
-              ((float)QUEST->mob[i].karma / 100));
-      break;
-    case QMO_LOCATION:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for "
-              "escorting target to room %d\r\n",
-              (int) (QUEST->mob[i].nuyen * NUYEN_GAIN_MULTIPLIER),
-              QUEST->mob[i].nuyen,
-              ((float)QUEST->mob[i].karma / 100) * KARMA_GAIN_MULTIPLIER,
-              ((float)QUEST->mob[i].karma / 100),
-              QUEST->mob[i].o_data);
-      break;
-    case QMO_KILL_ONE:
-            if ((real_mob = real_mobile(QUEST->mob[i].vnum)) >= 0)
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for "
-                "killing target '%s' (%ld)\r\n",
-                (int) (QUEST->mob[i].nuyen * NUYEN_GAIN_MULTIPLIER),
-                QUEST->mob[i].nuyen,
-                ((float)QUEST->mob[i].karma / 100) * KARMA_GAIN_MULTIPLIER,
-                ((float)QUEST->mob[i].karma / 100),
-                GET_CHAR_NAME(&mob_proto[real_mob]),
-                QUEST->mob[i].vnum);
-      break;
-    case QMO_KILL_MANY:
-            if ((real_mob = real_mobile(QUEST->mob[i].vnum)) >= 0)
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for "
-                "each target '%s' (%ld) killed\r\n",
-                (int) (QUEST->mob[i].nuyen * NUYEN_GAIN_MULTIPLIER),
-                QUEST->mob[i].nuyen,
-                ((float)QUEST->mob[i].karma / 100) * KARMA_GAIN_MULTIPLIER,
-                ((float)QUEST->mob[i].karma / 100),
-                GET_CHAR_NAME(&mob_proto[real_mob]),
-                QUEST->mob[i].vnum);
-      break;
-    case QMO_KILL_ESCORTEE:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Target hunts M%d \r\n",
-              QUEST->mob[i].o_data);
-      if (QUEST->mob[i].o_data >= 0 &&
-          QUEST->mob[i].o_data < QUEST->num_mobs &&
-          (rnum = real_mobile(QUEST->mob[QUEST->mob[i].o_data].vnum)) > -1) {
-                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%s)\r\n", GET_NAME(mob_proto+rnum));
-      } else
-        strlcat(buf, "(null)\r\n", sizeof(buf));
-      break;
-    case QMO_DONT_KILL:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Fail quest if target '%s' (%ld) is killed\r\n",
-               GET_CHAR_NAME(&mob_proto[real_mob]),
-               QUEST->mob[i].vnum);
-      break;
-    default:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n - Unknown QMO %d\r\n", QUEST->mob[i].objective);
-      break;
+      case QUEST_NONE:
+      case QMO_LOCATION:
+      case QMO_KILL_ONE:
+      case QMO_KILL_MANY:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Award %d (%d) nuyen & %0.2f (%0.2f) karma for ",
+                 (int) (QUEST->mob[i].nuyen * NUYEN_GAIN_MULTIPLIER),
+                 QUEST->mob[i].nuyen,
+                 ((float)QUEST->mob[i].karma / 100) * KARMA_GAIN_MULTIPLIER,
+                 ((float)QUEST->mob[i].karma / 100));
+
+        if (QUEST->mob[i].objective == QUEST_NONE) {
+          strlcat(buf, "nothing\r\n", sizeof(buf));
+        } else if (QUEST->mob[i].objective == QMO_LOCATION) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "escorting target to room %ld\r\n", QUEST->mob[i].o_data);
+        } else if (QUEST->mob[i].objective == QMO_KILL_ONE) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "killing target '%s' (%ld)\r\n",
+                   mob ? GET_NAME(mob) : "NULL",
+                   QUEST->mob[i].vnum);
+        } else if (QUEST->mob[i].objective == QMO_KILL_MANY) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "each target '%s' (%ld) killed\r\n",
+                   mob ? GET_NAME(mob) : "NULL",
+                   QUEST->mob[i].vnum);
+        }
+      case QMO_KILL_ESCORTEE:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Target hunts %s%ld (%s)\r\n", 
+                 target_is_listed_mob ? "M" : "vnum ",
+                 QUEST->mob[i].o_data,
+                 target ? GET_NAME(target) : "NULL");
+        break;
+      case QMO_DONT_KILL:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Fail quest if target '%s' (%ld) is killed.\r\n",
+                 mob ? GET_NAME(mob) : "NULL",
+                 QUEST->mob[i].vnum);
+        break;
+      default:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n - Unknown QMO %d\r\n", QUEST->mob[i].objective);
+        break;
     }
   }
   send_to_char(buf, CH);

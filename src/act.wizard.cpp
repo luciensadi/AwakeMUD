@@ -7708,7 +7708,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
           if (quest->obj[obj_idx].l_data < 0
               || quest->obj[obj_idx].l_data >= quest->num_mobs
               || real_mobile(quest->mob[quest->obj[obj_idx].l_data].vnum) <= -1) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid load mobile M%d^n.\r\n", obj_idx, quest->obj[obj_idx].l_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid load mobile M%ld^n.\r\n", obj_idx, quest->obj[obj_idx].l_data);
             printed = TRUE;
             issues++;
           }
@@ -7721,14 +7721,14 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
           if (((quest->obj[obj_idx].o_data < 0 || quest->obj[obj_idx].o_data >= quest->num_mobs) || real_mobile(quest->mob[quest->obj[obj_idx].o_data].vnum) <= -1)
               && real_mobile(quest->obj[obj_idx].o_data) <= -1)
           {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid dest mobile M%d^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid dest mobile M%ld^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
             printed = TRUE;
             issues++;
           }
           break;
         case QOO_LOCATION:
           if (real_room(quest->obj[obj_idx].o_data) <= -1) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid room %d^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid room %ld^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
             printed = TRUE;
             issues++;
           }
@@ -7736,7 +7736,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
         case QOO_RETURN_PAY:
         case QOO_UPLOAD:
           if (real_host(quest->obj[obj_idx].o_data) <= -1) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid host %d^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: invalid host %ld^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
             printed = TRUE;
             issues++;
           }
@@ -7760,7 +7760,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       switch (quest->mob[mob_idx].load) {
         case QML_LOCATION:
           if (real_room(quest->mob[mob_idx].l_data) <= -1) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: invalid load room %d^n.\r\n", mob_idx, quest->mob[mob_idx].l_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: invalid load room %ld^n.\r\n", mob_idx, quest->mob[mob_idx].l_data);
             printed = TRUE;
             issues++;
           }
@@ -7770,14 +7770,14 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       switch (quest->mob[mob_idx].objective) {
         case QMO_LOCATION:
           if (real_room(quest->mob[mob_idx].o_data) <= -1) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: invalid destination room %d^n.\r\n", mob_idx, quest->mob[mob_idx].o_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: invalid destination room %ld^n.\r\n", mob_idx, quest->mob[mob_idx].o_data);
             printed = TRUE;
             issues++;
           }
           break;
         case QMO_KILL_ESCORTEE:
           if (real_room(quest->mob[mob_idx].o_data) <= -1) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: invalid escortee %d^n.\r\n", mob_idx, quest->mob[mob_idx].o_data);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: invalid escortee %ld^n.\r\n", mob_idx, quest->mob[mob_idx].o_data);
             printed = TRUE;
             issues++;
           }
