@@ -200,7 +200,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // What is the "" that you want to deny new connections at?
 #define DOS_DENIAL_THRESHOLD                                   (15 * 10)
 // What is the number of seconds that you'd consider to be too long to pause the game for resolving a player's domain name?
-#define THRESHOLD_IN_SECONDS_FOR_SLOWNS_AUTOMATIC_ACTIVATION   1
+#define THRESHOLD_IN_SECONDS_FOR_SLOWNS_AUTOMATIC_ACTIVATION   2
 
 // How long do we put characters in a wait state when performing various magical activities?
 #define SPELL_WAIT_STATE_TIME                                  (0.2  RL_SEC)
