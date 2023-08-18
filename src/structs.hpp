@@ -60,6 +60,7 @@ struct text_data
   char *name;
   char *room_desc;
   char *look_desc;
+  // Adding more strings? Make sure you update mclone, medit, etc.
 
   text_data() :
       keywords(NULL), name(NULL), room_desc(NULL), look_desc(NULL)
@@ -622,6 +623,7 @@ struct char_special_data
 
   const char *highlight_color_code;
   /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
+  // Touch olc's mclone, medit etc if it's a string.
 
   char_special_data() :
       fight_veh(NULL), fighting(NULL), hunting(NULL), programming(NULL), num_spirits(0), idnum(0),
