@@ -2462,41 +2462,32 @@ ACMD(do_follow)
     return;
   }
 
-  if (ch->master == leader) {
-    act("You are already following $M.", FALSE, ch, 0, leader, TO_CHAR);
-    return;
-  }
-  if (IS_ASTRAL(leader) && !IS_ASTRAL(ch)) {
-    send_to_char("You can't do that.\r\n", ch);
-    return;
-  }
-  if (IS_AFFECTED(ch, AFF_CHARM) && (ch->master)) {
-    act("But you only feel like following $N!", FALSE, ch, 0, ch->master, TO_CHAR);
-  } else {                      /* Not Charmed follow person */
-    if (leader == ch) {
-      if (!ch->master) {
-        send_to_char("You are already following yourself.\r\n", ch);
-        return;
-      }
-      stop_follower(ch);
-      AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
-    } else {
-      if (circle_follow(ch, leader)) {
-        act("Sorry, but following in loops is not allowed.", FALSE, ch, 0, 0, TO_CHAR);
-        return;
-      }
-
-      if (IS_IGNORING(leader, is_blocking_following_from, ch)) {
-        send_to_char("You can't do that.\r\n", ch);
-        return;
-      }
-
-      if (ch->master)
-        stop_follower(ch);
-      AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
-      add_follower(ch, leader);
+  FAILURE_CASE_PRINTF(ch->master == leader, "You are already following %s.", HMHR(leader));
+  FAILURE_CASE(IS_ASTRAL(leader) && !IS_ASTRAL(ch), "Non-astral beings can't follow astral beings.");
+  FAILURE_CASE_PRINTF(IS_AFFECTED(ch, AFF_CHARM) && (ch->master), "But you only feel like following %s!", GET_NAME(ch->master));
+  
+  // Special case: FOLLOW SELF unfollows anyone else.
+  if (leader == ch) {
+    if (!ch->master) {
+      send_to_char("You are already following yourself.\r\n", ch);
+      return;
     }
+    stop_follower(ch);
+    AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
+    return;
   }
+  
+  FAILURE_CASE(circle_follow(ch, leader), "Sorry, but following in loops is not allowed.");
+
+  FAILURE_CASE(PRF_FLAGGED(leader, PRF_NOFOLLOW) && GET_LEVEL(ch) < LVL_ADMIN, "You can't: They've set the NOFOLLOW flag.");
+  // Mimic other failure message to lessen info leakage.
+  FAILURE_CASE(IS_IGNORING(leader, is_blocking_following_from, ch), "You can't: They've set the NOFOLLOW flag.");
+
+  // Do the following.
+  if (ch->master)
+    stop_follower(ch);
+  AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
+  add_follower(ch, leader);
 }
 
 ACMD(do_stuck) {

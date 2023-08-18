@@ -684,6 +684,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Client-Configurable Color", FALSE, TRUE  },
   { "Don't Alert Doctors on Mort", FALSE, TRUE  },
   { "MailLog"              , TRUE , TRUE  },
+  { "No Follow"            , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -759,6 +760,7 @@ const char *preference_bits[] =
     "COERCE_ANSI",
     "ALERT_DOCTORS_ON_MORT",
     "MAILLOG",
+    "NOFOLLOW",
     MAX_FLAG_MARKER
   };
 

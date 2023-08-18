@@ -1173,7 +1173,9 @@ const char *tog_messages[][2] = {
                             {"ANSI colors will no longer be enforced. You'll see the MUD in the intended colors.\r\n",
                              "You can now configure ANSI colors in your client.\r\n"},
                             {"Your modulator will now send alerts to all player doctors when you are mortally wounded.\r\n",
-                             "Your modulator will no longer send alerts to all player doctors when you go down.\r\n"}
+                             "Your modulator will no longer send alerts to all player doctors when you go down.\r\n"},
+                            {"You can now be followed again.\r\n",
+                             "OK, player characters are unable to follow you until you ^WTOGGLE NOFOLLOW^n again. You can lose existing followers with ^WUNFOLLOW X^n."}
                           };
 
 ACMD(do_toggle)
@@ -1447,6 +1449,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "alert doctors on mort") || is_abbrev(argument, "don't alert doctors on mort") || is_abbrev(argument, "doctors") || is_abbrev(argument, "docwagon")) {
       result = PRF_TOG_CHK(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT);
       mode = 48;
+    } else if (is_abbrev(argument, "nofollow") || is_abbrev(argument, "follow") || is_abbrev(argument, "no follow")) {
+      result = PRF_TOG_CHK(ch, PRF_NOFOLLOW);
+      mode = 49;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

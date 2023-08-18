@@ -2350,7 +2350,7 @@ int perform_dupe_check(struct descriptor_data *d)
       continue;
 
     if (k->original && (GET_IDNUM(k->original) == id)) {    /* switched char */
-      SEND_TO_Q("\r\nMultiple login detected -- disconnecting.\r\n", k);
+      SEND_TO_Q("\r\nMultiple login detected (type 1) -- disconnecting.\r\n", k);
       STATE(k) = CON_CLOSE;
       if (!target) {
         target = k->original;
@@ -2374,7 +2374,7 @@ int perform_dupe_check(struct descriptor_data *d)
       // TODO: Character is leaked?
       k->character = NULL;
       k->original = NULL;
-      SEND_TO_Q("\r\nMultiple login detected -- disconnecting.\r\n", k);
+      SEND_TO_Q("\r\nMultiple login detected (type 2) -- disconnecting.\r\n", k);
       STATE(k) = CON_CLOSE;
     }
   }
@@ -2428,7 +2428,7 @@ int perform_dupe_check(struct descriptor_data *d)
   d->character->desc = d;
   d->original = NULL;
   d->character->char_specials.timer = 0;
-  PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_EDITING,
+  PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_EDITING, PLR_WRITING,
                                      PLR_SPELL_CREATE, PLR_CUSTOMIZE,
                                      PLR_PROJECT, PLR_MATRIX, ENDBIT);
   if (STATE(d) == CON_VEHCUST)
