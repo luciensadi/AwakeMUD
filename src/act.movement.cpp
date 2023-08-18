@@ -2406,7 +2406,37 @@ void perform_unfollow(struct char_data *ch) {
 }
 
 ACMD(do_unfollow) {
-  perform_unfollow(ch);
+  // First form: UNFOLLOW with no arguments has you stop following.
+  if (!*argument) {
+    if (ch->master) {
+      stop_follower(ch);
+      AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
+    } else {
+      send_to_char("You are already following yourself. If you want to drop a follower, use UNFOLLOW <target>.\r\n", ch);
+    }
+    return;
+  }
+
+  // Second form: UNFOLLOW <leader>, which will stop you from following X.
+  skip_spaces(&argument);
+  if (ch->master && keyword_appears_in_char(argument, ch->master)) {
+    stop_follower(ch);
+    AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
+    return;
+  }
+
+  // Third form: UNFOLLOW <follower>, which loses an existing follower (grouped or not).
+  for (follow_type *f = ch->followers; f; f = f->next) {
+    if (keyword_appears_in_char(argument, f->follower)) {
+      act("You move around abruptly and lose $N.", FALSE, ch, 0, f->follower, TO_CHAR);
+      act("$n moves around abruptly and loses $N.", FALSE, ch, 0, f->follower, TO_ROOM);
+      AFF_FLAGS(f->follower).RemoveBit(AFF_GROUP);
+      stop_follower(f->follower);
+      return;
+    }
+  }
+
+  send_to_char(ch, "You're neither following nor being followed by anyone matching the keyword '%s'.\r\n", argument);
 }
 
 ACMD(do_follow)

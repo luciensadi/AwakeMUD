@@ -3542,6 +3542,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("description", "describe");
   COMMAND_ALIAS("ride", "enter"); // for motorcycles
   COMMAND_ALIAS("unsheathe", "draw");
+  COMMAND_ALIAS("disband", "ungroup");
+  COMMAND_ALIAS("lose", "unfollow");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
