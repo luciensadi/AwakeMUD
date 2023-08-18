@@ -760,7 +760,7 @@ ACMD(do_goto)
 
     // Seattle taxi destinations, including deactivated and invalid ones.
     for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
-      if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
+      if (!str_cmp(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
         send_to_char(ch, "OK, going to Seattle taxi destination %s.\r\n", dest_data_list->str);
         location = &world[rnum];
         break;
@@ -771,7 +771,7 @@ ACMD(do_goto)
     if (!location) {
       dest_data_list = portland_taxi_destinations;
       for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
-        if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
+        if (!str_cmp(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
           send_to_char(ch, "OK, going to Portland taxi destination %s.\r\n", dest_data_list->str);
           location = &world[rnum];
           break;
@@ -783,7 +783,7 @@ ACMD(do_goto)
     if (!location) {
       dest_data_list = caribbean_taxi_destinations;
       for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
-        if (str_str(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
+        if (!str_cmp(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
           send_to_char(ch, "OK, going to Caribbean taxi destination %s.\r\n", dest_data_list->str);
           location = &world[rnum];
           break;

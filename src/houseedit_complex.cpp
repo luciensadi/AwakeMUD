@@ -87,11 +87,22 @@ void houseedit_list_complexes(struct char_data *ch, char *arg) {
   else
     send_to_char("The following complexes exist:\r\n", ch);
 
+  size_t max_len = 0;
+  for (auto &complex : global_apartment_complexes) {
+    if (arg && *arg && !is_abbrev(arg, complex->get_name()))
+      continue;
+    max_len = MAX(strlen(complex->get_name()), max_len);
+  }
+
+  // Calculate our formatting string. Note that this doesn't take any user-supplied content.
+  char formatting_string[500];
+  snprintf(formatting_string, sizeof(formatting_string), "  ^C%%%lds^n  Landlord ^c%%6ld^n, ^c%%2d^n apartment%%s, editable by: %%s\r\n", max_len);
+
   for (auto &complex : global_apartment_complexes) {
     if (arg && *arg && !is_abbrev(arg, complex->get_name()))
       continue;
 
-    send_to_char(ch, "  ^C%s^n: Landlord ^c%ld^n, ^c%d^n apartment%s, editable by: %s\r\n",
+    send_to_char(ch, formatting_string,
                  complex->get_name(),
                  complex->get_landlord_vnum(),
                  complex->get_apartments().size(),

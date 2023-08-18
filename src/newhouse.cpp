@@ -16,6 +16,7 @@ namespace bf = boost::filesystem;
 #include "limits.hpp"
 #include "interpreter.hpp"
 #include "newmail.hpp"
+#include "constants.hpp"
 #include "newhouse.hpp"
 
 #include "nlohmann/json.hpp"
@@ -350,13 +351,15 @@ const char *ApartmentComplex::list_editors() {
       continue;
 
     const char *name = get_player_name(editor_id);
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^c%s^n", printed_anything ? ", " : "", name);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^C%s^n", printed_anything ? ", " : "", name);
     delete [] name;
     printed_anything = TRUE;
   }
 
-  if (!printed_anything)
-    strlcpy(buf, "^yNobody^n", sizeof(buf));
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^c%s-level (%d+) staffers^n", 
+           printed_anything ? ", " : "", 
+           status_ratings[MIN_LEVEL_TO_IGNORE_HOUSEEDIT_EDITOR_STATUS],
+           MIN_LEVEL_TO_IGNORE_HOUSEEDIT_EDITOR_STATUS);
 
   return buf;
 }
