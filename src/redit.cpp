@@ -27,6 +27,7 @@
 #include "constants.hpp"
 #include "handler.hpp"
 #include "config.hpp"
+#include "newhouse.hpp"
 
 extern class memoryClass *Mem;
 
@@ -622,6 +623,12 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         send_to_char("Writing room to disk.\r\n", d->character);
         write_world_to_disk(d->character->player_specials->saved.zonenum);
         send_to_char("Saved.\r\n", CH);
+
+        // Update room apartment values, if necessary.
+        if (world[room_num].apartment) {
+          world[room_num].apartment->recalculate_garages();
+        }
+
         /* do NOT free strings! just the room structure */
         clear_room(d->edit_room);
         delete d->edit_room;
