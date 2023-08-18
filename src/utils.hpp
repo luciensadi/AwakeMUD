@@ -153,6 +153,7 @@ struct zone_data *get_zone_from_vnum(vnum_t vnum);
 const char *vnum_to_string(vnum_t vnum);
 const char *get_ch_domain_str(struct char_data *ch, bool include_possibilities);
 void    zero_cost_of_obj_and_contents(struct obj_data *obj);
+struct char_data *ch_is_grouped_with_idnum(struct char_data *ch, idnum_t idnum);
 
 bool obj_is_apartment_only_drop_item(struct obj_data *obj);
 bool obj_contains_apartment_only_drop_items(struct obj_data *obj);
@@ -1158,15 +1159,16 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_DECK_ACCESSORY_IS_CHIPS(accessory)               (GET_OBJ_VAL((accessory), 1))
 
 // ITEM_DECK_ACCESSORY TYPE_FILE convenience defines
-#define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory)     (GET_OBJ_VAL((accessory), 1))
-#define GET_DECK_ACCESSORY_FILE_SIZE(accessory)              (GET_OBJ_VAL((accessory), 2))
-#define GET_DECK_ACCESSORY_FILE_HOST_VNUM(accessory)         (GET_OBJ_VAL((accessory), 3))
-#define GET_DECK_ACCESSORY_FILE_HOST_COLOR(accessory)        (GET_OBJ_VAL((accessory), 4))
-#define GET_DECK_ACCESSORY_FILE_PROTECTION(accessory)        (GET_OBJ_VAL((accessory), 5))
-#define GET_DECK_ACCESSORY_FILE_RATING(accessory)            (GET_OBJ_VAL((accessory), 6))
-#define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)          (GET_OBJ_VAL((accessory), 7))
-#define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)      (GET_OBJ_VAL((accessory), 8))
-#define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)         (GET_OBJ_VAL((accessory), 9))
+#define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory)        (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_FILE_SIZE(accessory)                 (GET_OBJ_VAL((accessory), 2))
+#define GET_DECK_ACCESSORY_FILE_HOST_VNUM(accessory)            (GET_OBJ_VAL((accessory), 3))
+#define GET_DECK_ACCESSORY_FILE_HOST_COLOR(accessory)           (GET_OBJ_VAL((accessory), 4))
+#define GET_DECK_ACCESSORY_FILE_PROTECTION(accessory)           (GET_OBJ_VAL((accessory), 5))
+#define GET_DECK_ACCESSORY_FILE_RATING(accessory)               (GET_OBJ_VAL((accessory), 6))
+#define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)             (GET_OBJ_VAL((accessory), 7))
+#define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)         (GET_OBJ_VAL((accessory), 8))
+#define GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(accessory) (GET_OBJ_VAL((accessory), 8))
+#define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)            (GET_OBJ_VAL((accessory), 9))
 
 // ITEM_DECK_ACCESSORY TYPE_COOKER convenience defines
 #define GET_DECK_ACCESSORY_COOKER_RATING(accessory)          (GET_OBJ_VAL((accessory), 1))

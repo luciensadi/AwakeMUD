@@ -353,8 +353,8 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           obj = read_object(rnum, REAL);
           obj->obj_flags.quest_id = GET_IDNUM(ch);
           obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
-          GET_OBJ_VAL(obj, 7) = GET_IDNUM(ch);
-          GET_OBJ_VAL(obj, 9) = 1;
+          GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = GET_IDNUM(ch);
+          GET_DECK_ACCESSORY_FILE_REMAINING(obj) = 1;
           obj_to_host(obj, &matrix[room]);
         }
         obj = NULL;
@@ -525,27 +525,30 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
   return FALSE;
 }
 
+// Checks if this successfully completed a quest step. Note the lack of false returns in the loop, this is on purpose to allow for multiple quest objectives to have the same object vnum!
 bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj, bool commit_changes=TRUE) {
   if (!GET_QUEST(ch))
     return FALSE;
 
   for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
-    if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_LOCATION &&
-        GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
-        ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data)
-    {
-      if (commit_changes)
-        ch->player_specials->obj_complete[i] = 1;
-      return TRUE;
-    }
+    if (GET_OBJ_VNUM(obj) != quest_table[GET_QUEST(ch)].obj[i].vnum)
+      continue;
 
-    if (ch->persona && ch->persona->in_host && quest_table[GET_QUEST(ch)].obj[i].objective == QOO_UPLOAD &&
-        GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
-        matrix[ch->persona->in_host].vnum == quest_table[GET_QUEST(ch)].obj[i].o_data)
-    {
-      if (commit_changes)
-        ch->player_specials->obj_complete[i] = 1;
-      return TRUE;
+    // QOO_LOCATION, in right location? True.
+    if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_LOCATION) {
+      if (ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data) {
+        if (commit_changes)
+          ch->player_specials->obj_complete[i] = 1;
+        return TRUE;
+      }
+    }
+    // QOO_UPLOAD, in right host? True.
+    else if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_UPLOAD) {
+      if (ch->persona && ch->persona->in_host && matrix[ch->persona->in_host].vnum == quest_table[GET_QUEST(ch)].obj[i].o_data) {
+        if (commit_changes)
+          ch->player_specials->obj_complete[i] = 1;
+        return TRUE;
+      }
     }
   }
 

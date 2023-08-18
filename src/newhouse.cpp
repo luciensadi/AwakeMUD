@@ -1736,13 +1736,16 @@ void warn_about_apartment_deletion() {
       if (apartment->get_owner_pgroup()) {
         // EVENTUALTODO
       } else {
-        if (days_until_deletion <= 0) {
+        if (days_until_deletion == 0) {
           snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s^n! It will be deemed abandoned and its contents reclaimed ^Rat any time^n.\r\n",
                    apartment->get_full_name());
-        } else {
+        } else if (days_until_deletion > 0) {
           snprintf(buf, sizeof(buf), "Remember to pay your rent for apartment %s^n. It will be deemed abandoned and its contents reclaimed in %d days.\r\n",
                    apartment->get_full_name(),
                    days_until_deletion);
+        } else {
+          // Negative days: No-op.
+          continue;
         }
         raw_store_mail(apartment->get_owner_id(), 0, "Your landlord", buf);
       }

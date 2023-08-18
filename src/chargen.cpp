@@ -250,20 +250,25 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   // Equip weapon.
   if (archetypes[i]->weapon > 0) {
-    // snprintf(buf, sizeof(buf), "Attempting to attach %lu %lu %lu...", archetypes[i]->weapon_top, archetypes[i]->weapon_barrel, archetypes[i]->weapon_under);
-    // log(buf);
     struct obj_data *weapon = read_object(archetypes[i]->weapon, VIRTUAL);
 
-    ATTACH_IF_EXISTS(archetypes[i]->weapon_top, ACCESS_ACCESSORY_LOCATION_TOP);
-    ATTACH_IF_EXISTS(archetypes[i]->weapon_barrel, ACCESS_ACCESSORY_LOCATION_BARREL);
-    ATTACH_IF_EXISTS(archetypes[i]->weapon_under, ACCESS_ACCESSORY_LOCATION_UNDER);
+    if (weapon) {
+      // snprintf(buf, sizeof(buf), "Attempting to attach %lu %lu %lu...", archetypes[i]->weapon_top, archetypes[i]->weapon_barrel, archetypes[i]->weapon_under);
+      // log(buf);
 
-    // Fill pockets.
-    if (archetypes[i]->ammo_q)
-      update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL, archetypes[i]->ammo_q);
+      ATTACH_IF_EXISTS(archetypes[i]->weapon_top, ACCESS_ACCESSORY_LOCATION_TOP);
+      ATTACH_IF_EXISTS(archetypes[i]->weapon_barrel, ACCESS_ACCESSORY_LOCATION_BARREL);
+      ATTACH_IF_EXISTS(archetypes[i]->weapon_under, ACCESS_ACCESSORY_LOCATION_UNDER);
 
-    // Put the weapon in their inventory.
-    obj_to_char(weapon, CH);
+      // Fill pockets.
+      if (archetypes[i]->ammo_q)
+        update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL, archetypes[i]->ammo_q);
+
+      // Put the weapon in their inventory.
+      obj_to_char(weapon, CH);
+    } else {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Chargen archetype %d has invalid weapon vnum %ld!", i, archetypes[i]->weapon);
+    }
   }
 
   // Grant modulator (unbonded, unworn).

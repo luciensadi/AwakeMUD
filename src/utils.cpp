@@ -5682,43 +5682,77 @@ bool string_is_valid_for_paths(const char *str) {
   return TRUE;
 }
 
+bool chars_are_in_same_location(struct char_data *ch, struct char_data *vict) {
+  return (ch->in_room ? ch->in_room == vict->in_room : ch->in_veh == vict->in_veh);
+}
+
+struct char_data *ch_is_grouped_with_idnum(struct char_data *ch, idnum_t idnum) {
+  // Sanity checks.
+  if (!ch || idnum <= 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid parameter to ch_is_grouped_with_idnum(%s, %ld)!", 
+                    ch ? GET_CHAR_NAME(ch) : NULL, 
+                    idnum);
+    return NULL;
+  }
+
+  // If the idnum is you, congratulations! You're always grouped with yourself.
+  if (GET_IDNUM_EVEN_IF_PROJECTING(ch) == idnum)
+    return ch;
+
+  // Otherwise, you can only be associated with grouped people.
+  if (!AFF_FLAGGED(ch, AFF_GROUP))
+    return NULL;
+  
+  // Check your followers for the specified idnum.
+  for (struct follow_type *f = ch->followers; f; f = f->next) {
+    if (GET_IDNUM_EVEN_IF_PROJECTING(f->follower) == idnum) {
+      // You found them!
+      if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
+        send_to_char(ch, "%s must be part of your group in order for you to participate in their quest.\r\n", GET_CHAR_NAME(f->follower));
+        return NULL;
+      }
+      return f->follower;
+    }
+  }
+
+  // Check your leader.
+  if (ch->master && idnum == GET_IDNUM_EVEN_IF_PROJECTING(ch->master)) {
+    if (!AFF_FLAGGED(ch->master, AFF_GROUP)) {
+      send_to_char(ch, "You must be part of %s's group in order for you to participate in their quest.\r\n", GET_CHAR_NAME(ch->master));
+      return NULL;
+    }
+    return ch->master;
+  }
+
+  // Nobody found.
+  return NULL;
+}
+
 bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor) {
+  struct char_data *questor;
+  
   // Not quest-protected.
   if (!obj->obj_flags.quest_id)
     return FALSE;
 
-  // NPCs can never pick up quest objects.
-  if (!ch->desc)
-    return TRUE;
-
-  // Character is the questor.
+  // Character is the questor, so won't be blocked.
   if (obj->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
     return FALSE;
 
   // Are you grouped with the questor?
-  if (AFF_FLAGGED(ch, AFF_GROUP)) {
-    // Followers
-    for (struct follow_type *f = ch->followers; f; f = f->next) {
-      if (!IS_NPC(f->follower)
-          && AFF_FLAGGED(f->follower, AFF_GROUP)
-          && GET_IDNUM(f->follower) == obj->obj_flags.quest_id)
-      {
-        if (requires_ch_to_be_in_same_room_as_questor && ch->in_room != f->follower->in_room) {
-          send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(f->follower));
-          return TRUE;
-        }
+  if ((questor = ch_is_grouped_with_idnum(ch, obj->obj_flags.quest_id))) {
+    // If you're grouped with them but aren't in the same room for a location-locked quest, you're blocked.
+    if (requires_ch_to_be_in_same_room_as_questor && !chars_are_in_same_location(ch, questor)) {
+      send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(questor));
+
+      if (access_level(ch, LVL_PRESIDENT)) {
+        act("...but you bypass the location restriction on $p.", FALSE, ch, obj, 0, TO_CHAR);
         return FALSE;
       }
+      return TRUE;
     }
-
-    // Master
-    if (ch->master && !IS_NPC(ch->master) && obj->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch->master)) {
-      if (requires_ch_to_be_in_same_room_as_questor && ch->in_room != ch->master->in_room) {
-        send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(ch->master));
-        return TRUE;
-      }
-      return FALSE;
-    }
+    // Otherwise, you're okay.
+    return FALSE;
   }
 
   // Staff bypass.
@@ -5745,26 +5779,9 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *
     return FALSE;
 */
 
-  // NPCs can't fight quest-protected things.
-  if (!ch->desc)
-    return TRUE;
-
-  // Check to see if you are grouped with someone who can fight it.
-  if (AFF_FLAGGED(ch, AFF_GROUP)) {
-    // Followers
-    for (struct follow_type *f = ch->followers; f; f = f->next) {
-      if (!IS_NPC(f->follower)
-          && AFF_FLAGGED(f->follower, AFF_GROUP)
-          && GET_IDNUM(f->follower) == victim->mob_specials.quest_id)
-      {
-        return FALSE;
-      }
-    }
-
-    // Master
-    if (ch->master && !IS_NPC(ch->master) && victim->mob_specials.quest_id == GET_IDNUM(ch->master)) {
-      return FALSE;
-    }
+  if (ch_is_grouped_with_idnum(ch, victim->mob_specials.quest_id)) {
+    // You're grouped with the questor, so you're good.
+    return FALSE;
   }
 
   return TRUE;
