@@ -171,6 +171,11 @@ std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
     }
   }
 
+  // If they're a newbie, they get to return to the newbie lifestyle string.
+  if (GET_TKE(ch) <= NEWBIE_KARMA_THRESHOLD) {
+    results.push_back("The metallic scent of the Neophyte Guild clings to $m.");
+  }
+
   /*
   if (!IS_NPC(ch)) {
     log_vfprintf("LV for %s is:", GET_CHAR_NAME(ch));
@@ -189,7 +194,11 @@ void cedit_lifestyle_menu(struct descriptor_data *d) {
   int idx = 0;
 
   for (auto it : *_get_lifestyle_vector(ch)) {
-    send_to_char(CH, "%2d) %s\r\n", idx++, it);
+    // Prepend the number...
+    send_to_char(CH, "%2d) ", idx++);
+
+    // Send the string. Splitting it like this capitalizes the string.
+    act(it, FALSE, d->edit_mob, 0, ch, TO_VICT_FORCE);
   }
   send_to_char("\r\nSelect the lifestyle string you'd like to display: ", CH);
 

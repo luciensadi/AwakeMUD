@@ -2467,7 +2467,15 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
       send_to_char(CH, "7) Change Height: ^c%dcm^n\r\n", GET_HEIGHT(CH));
       send_to_char(CH, "8) Change Weight: ^c%dkg^n\r\n", GET_WEIGHT(CH));
 
-      send_to_char(CH, "\r\n9) Change Lifestyle: ^c%s^n\r\n", get_lifestyle_string(d->edit_mob));
+      {
+        // Prepend the number and qualifier...
+        send_to_char("\r\n9) Change Lifestyle: ", CH);
+
+        // Send the string. Splitting it like this capitalizes the string.
+        char colorized_lifestyle[1000];
+        snprintf(colorized_lifestyle, sizeof(colorized_lifestyle), "^c%s^n", get_lifestyle_string(d->edit_mob));
+        act(colorized_lifestyle, FALSE, d->edit_mob, 0, CH, TO_VICT_FORCE);
+      }
     }
   }
   if (mode)

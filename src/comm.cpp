@@ -3203,15 +3203,18 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   if ( type == TO_ROLLS )
     sleep = 1;
 
-  if (type == TO_CHAR)
+  if (type == TO_CHAR || type == TO_CHAR_FORCE)
   {
-    if (ch && SENDOK(ch) && (remote || !PLR_FLAGGED(ch, PLR_REMOTE)) && !PLR_FLAGGED(ch, PLR_MATRIX))
+    if (ch && (type == TO_CHAR_FORCE || (SENDOK(ch) && (remote || !PLR_FLAGGED(ch, PLR_REMOTE)) && !PLR_FLAGGED(ch, PLR_MATRIX))))
       return perform_act(str, ch, obj, vict_obj, ch, skip_you_stanzas);
     return NULL;
   }
-  if (type == TO_VICT)
+  if (type == TO_VICT || type == TO_VICT_FORCE)
   {
     to = (struct char_data *) vict_obj;
+
+    if (to && type == TO_VICT_FORCE)
+      return perform_act(str, ch, obj, vict_obj, to, skip_you_stanzas);
 
     if (!to || !SENDOK(to))
       return NULL;
