@@ -30,6 +30,7 @@
 #include "newecho.hpp"
 #include "ignore_system.hpp"
 #include "config.hpp"
+#include "moderation.hpp"
 
 /* extern variables */
 extern struct skill_data skills[];
@@ -59,6 +60,10 @@ ACMD(do_say)
   skip_spaces(&argument);
 
   FAILURE_CASE(!*argument, "Yes, but WHAT do you want to say?");
+
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(argument, ch))
+    return;
 
   FAILURE_CASE(subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && !IS_NPC(ch) && !char_can_make_noise(ch),
                "You can't seem to make any noise.");
@@ -236,6 +241,10 @@ ACMD(do_exclaim)
     return;
   }
 
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(argument, ch))
+    return;
+
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
 
@@ -329,6 +338,10 @@ ACMD(do_tell)
     return;
   }
 
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(buf2, ch))
+    return;
+
   if (!(vict = get_player_vis(ch, buf, 0))) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     return;
@@ -396,6 +409,10 @@ ACMD(do_reply)
     return;
   }
 
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(argument, ch))
+    return;
+
   /* Make sure the person you're replying to is still playing by searching
    * for them.  Note, this will break in a big way if I ever implement some
    * scheme where it keeps a pool of char_data structures for reuse.
@@ -431,6 +448,10 @@ ACMD(do_ask)
     send_to_char(ch, "Yes, but WHAT do you like to ask?\r\n");
     return;
   }
+
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(argument, ch))
+    return;
 
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
@@ -494,6 +515,10 @@ ACMD(do_spec_comm)
     action_plur = "asks";
     action_others = "$z asks $N something.";
   }
+
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(argument, ch))
+    return;
 
   half_chop(argument, buf, buf2);
 
@@ -638,6 +663,10 @@ ACMD(do_spec_comm)
 ACMD(do_page)
 {
   struct char_data *vict;
+
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(argument, ch))
+    return;
 
   half_chop(argument, arg, buf2);
 
@@ -840,6 +869,10 @@ struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_v
 
 ACMD(do_broadcast)
 {
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(argument, ch))
+    return;
+
   // No color highlights over the radio. It's already colored.
 
   struct obj_data *radio = NULL;
@@ -1092,6 +1125,10 @@ extern int _NO_OOC_;
 
 ACMD(do_gen_comm)
 {
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(argument, ch))
+    return;
+
   // No color highlights over these channels. They're either OOC or already colored.
   struct veh_data *veh;
   struct descriptor_data *i;
@@ -1862,7 +1899,6 @@ ACMD(do_phone)
     send_to_char(buf, ch);
   }
 }
-
 
 ACMD(do_phonelist)
 {

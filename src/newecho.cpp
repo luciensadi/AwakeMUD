@@ -9,6 +9,7 @@
 #include "newecho.hpp"
 #include "db.hpp"
 #include "ignore_system.hpp"
+#include "moderation.hpp"
 
 char mutable_echo_string[MAX_STRING_LENGTH];
 char tag_check_string[MAX_STRING_LENGTH];
@@ -647,6 +648,10 @@ ACMD(do_new_echo) {
 
   // Require an argument.
   FAILURE_CASE(!*argument, "Yes... but what?\r\n");
+
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(buf2, ch))
+    return;
 
   // Can't speak? No emote speech for you. NOTE: Wrapping your speech in single quotes to avoid this is a punishable exploit.
   FAILURE_CASE(strchr(argument, '"') != NULL && !char_can_make_noise(ch), "You can't seem to make any noise.\r\n");

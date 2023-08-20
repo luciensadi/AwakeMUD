@@ -1661,7 +1661,7 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
 
     if (PLR_FLAGGED(ch, PLR_FROZEN)) {
       if (!access_level(ch, LVL_PRESIDENT)) {
-        send_to_char("Sorry, this character has been frozen by staff and is unable to take any input. If you're seeing this message, it usually means that you've connected to a character that was banned.\r\n", ch);
+        send_to_char("Sorry, this character has been frozen by staff and is unable to take any input. If you're seeing this message, it usually means that you've connected to a character that is pending review or has been banned.\r\n", ch);
         return;
       } else
         send_to_char("The ice covering you crackles alarmingly as you slam your sovereign will through it.\r\n", ch);
@@ -3529,6 +3529,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("description", "describe");
   COMMAND_ALIAS("ride", "enter"); // for motorcycles
   COMMAND_ALIAS("unsheathe", "draw");
+  COMMAND_ALIAS("unfreeze", "thaw");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");

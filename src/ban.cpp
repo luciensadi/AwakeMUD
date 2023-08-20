@@ -50,9 +50,9 @@ void load_banned(void)
   }
   while (fscanf(fl, " %99s %50s %d %20s ", ban_type, site_name, &date, name) == 4) {
     next_node = new ban_list_element;
-    strncpy(next_node->site, site_name, BANNED_SITE_LENGTH);
+    strlcpy(next_node->site, site_name, BANNED_SITE_LENGTH);
     next_node->site[BANNED_SITE_LENGTH] = '\0';
-    strncpy(next_node->name, name, MAX_NAME_LENGTH);
+    strlcpy(next_node->name, name, MAX_NAME_LENGTH);
     next_node->name[MAX_NAME_LENGTH] = '\0';
     next_node->date = date;
 
@@ -69,20 +69,14 @@ void load_banned(void)
 
 int isbanned(char *hostname)
 {
-  int i;
-  struct ban_list_element *banned_node;
-  char *nextchar;
-
   if (!hostname || !*hostname)
-    return (0);
+    return BAN_NOT;
 
-  i = 0;
-  for (nextchar = hostname; *nextchar; nextchar++)
-    *nextchar = LOWER(*nextchar);
-
-  for (banned_node = ban_list; banned_node; banned_node = banned_node->next)
-    if (strstr((const char *)hostname, banned_node->site))      /* if hostname is a substring */
+  int i = BAN_NOT;
+  for (struct ban_list_element *banned_node = ban_list; banned_node; banned_node = banned_node->next) {
+    if (str_str((const char *)hostname, banned_node->site))      /* if hostname is a substring */
       i = MAX(i, banned_node->type);
+  }
 
   return i;
 }
@@ -110,10 +104,68 @@ void write_ban_list(void)
   return;
 }
 
+void _create_ban_entry(const char *site, int ban_type, const char *banned_by) {
+  struct ban_list_element *ban_node = new ban_list_element;
+
+  // Copy in the site name.
+  strlcpy(ban_node->site, site, BANNED_SITE_LENGTH);
+
+  // Lower-case it.
+  for (char *nextchar = ban_node->site; *nextchar; nextchar++)
+    *nextchar = LOWER(*nextchar);
+
+  // Write out who banned it.
+  strlcpy(ban_node->name, banned_by, MAX_NAME_LENGTH);
+
+  // And when.
+  ban_node->date = time(0);
+
+  // And what type it is.
+  ban_node->type = ban_type;
+
+  // Add it to our active ban list.
+  ban_node->next = ban_list;
+  ban_list = ban_node;
+
+  // Save bans to disk.
+  write_ban_list();
+
+  // Log it for posterity.
+  mudlog_vfprintf(NULL, LOG_BANLOG, "%s has banned %s for %s players.", 
+                  CAP(banned_by),
+                  site,
+                  ban_types[ban_type]);
+}
+
+// Adds or changes a ban node for the current site. Returns the type of node it was.
+int add_or_rewrite_ban_entry(const char *site, int ban_type, const char *banned_by) {
+  struct ban_list_element *ban_node;
+
+  for (ban_node = ban_list; ban_node; ban_node = ban_node->next) {
+    if (!str_cmp(ban_node->site, site)) {
+      int old_node_type = ban_node->type;
+      // Ban exists, so rewrite it.
+      mudlog_vfprintf(NULL, LOG_BANLOG, "Ban for %s (%s by %s) overwritten to %s by %s.", 
+                      ban_node->site, 
+                      ban_types[ban_node->type], 
+                      ban_node->name, 
+                      ban_type, 
+                      banned_by);
+      ban_node->type = ban_type;
+      write_ban_list();
+      return old_node_type;
+    }
+  }
+
+  // Ban didn't exist, so write a new one.
+  _create_ban_entry(site, ban_type, banned_by);
+  return BAN_NOT;
+}
+
 ACMD(do_ban)
 {
   char flag[MAX_INPUT_LENGTH], site[MAX_INPUT_LENGTH];
-  char *nextchar, *timestr;
+  char *timestr;
   int i;
   struct ban_list_element *ban_node;
 
@@ -153,42 +205,23 @@ ACMD(do_ban)
 #undef FORMAT_STR
   }
   two_arguments(argument, flag, site);
-  if (!*site || !*flag) {
-    send_to_char("Usage: ban {all | select | new} site_name\r\n", ch);
-    return;
-  }
-  if (!(!str_cmp(flag, "select") || !str_cmp(flag, "all") || !str_cmp(flag, "new"))) {
-    send_to_char("Flag must be ALL, SELECT, or NEW.\r\n", ch);
-    return;
-  }
-  for (ban_node = ban_list; ban_node; ban_node = ban_node->next) {
-    if (!str_cmp(ban_node->site, site)) {
-      send_to_char("That site has already been banned -- unban it to change the ban type.\r\n", ch);
-      return;
+  
+  FAILURE_CASE(!*site || !*flag, "Usage: ban {all | select | new} site_name");
+  FAILURE_CASE(!(!str_cmp(flag, "select") || !str_cmp(flag, "all") || !str_cmp(flag, "new")), "Flag must be ALL, SELECT, or NEW.");
+
+  int ban_type = -1;
+  for (i = BAN_NEW; i <= BAN_ALL; i++) {
+    if (!str_cmp(flag, ban_types[i])) {
+      ban_type = i;
+      break;
     }
   }
 
-  ban_node = new ban_list_element;
-  strncpy(ban_node->site, site, BANNED_SITE_LENGTH);
-  for (nextchar = ban_node->site; *nextchar; nextchar++)
-    *nextchar = LOWER(*nextchar);
-  ban_node->site[BANNED_SITE_LENGTH] = '\0';
-  strncpy(ban_node->name, GET_CHAR_NAME(ch), MAX_NAME_LENGTH);
-  ban_node->name[MAX_NAME_LENGTH] = '\0';
-  ban_node->date = time(0);
+  FAILURE_CASE(ban_type == -1, "Invalid ban type specified.");
 
-  for (i = BAN_NEW; i <= BAN_ALL; i++)
-    if (!str_cmp(flag, ban_types[i]))
-      ban_node->type = i;
+  add_or_rewrite_ban_entry(site, ban_type, GET_CHAR_NAME(ch));
 
-  ban_node->next = ban_list;
-  ban_list = ban_node;
-
-  snprintf(buf, sizeof(buf), "%s has banned %s for %s players.", GET_CHAR_NAME(ch), site,
-          ban_types[ban_node->type]);
-  mudlog(buf, ch, LOG_WIZLOG, TRUE);
   send_to_char("Site banned.\r\n", ch);
-  write_ban_list();
 }
 
 ACMD(do_unban)
