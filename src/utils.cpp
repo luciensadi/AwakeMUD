@@ -2086,7 +2086,7 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
       if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(ch)) {
         GET_FOCUS_BONDED_TO(focus) = GET_FOCUS_ACTIVATED(focus) =  GET_FOCUS_GEAS(focus) = 0;
       }
-      else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && GET_WEAPON_FOCUS_BONDED_BY(focus, ch)) {
+      else if ((i == WEAR_WIELD || i == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && GET_WEAPON_FOCUS_BONDED_BY(focus) == GET_IDNUM(ch)) {
         GET_WEAPON_FOCUS_BONDED_BY(focus) = GET_WEAPON_FOCUS_GEAS(focus) = 0;
       }
     }

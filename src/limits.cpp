@@ -976,7 +976,7 @@ void point_update(void)
             }
 
             if (focus_geas) {
-              send_to_char(i, "^RYou feel some of your magic becoming locked in %s!^n Quick, take off all your foci before it happens again!\r\n", GET_OBJ_NAME(foci));
+              send_to_char(i, "^RYou feel some of your magic becoming locked in %s!^n Quick, take off all your foci before it happens again!\r\n", GET_OBJ_NAME(focus));
               GET_FOCUS_GEAS(focus_geas) = GET_IDNUM(i);
               magic_loss(i, 100, FALSE);
             }

@@ -382,9 +382,9 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
       
       struct obj_data *wielded = NULL;
-      if (wielded = GET_EQ(ch, WEAR_WIELD) && wielded->item_number == object->item_number)
+      if ((wielded = GET_EQ(ch, WEAR_WIELD)) && wielded->item_number == object->item_number)
         strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
-      if (wielded = GET_EQ(ch, WEAR_HOLD) && wielded->item_number == object->item_number)
+      if ((wielded = GET_EQ(ch, WEAR_HOLD)) && wielded->item_number == object->item_number)
         strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
     }
 
