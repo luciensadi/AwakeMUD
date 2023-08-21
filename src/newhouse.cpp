@@ -50,6 +50,10 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
+// TODO: Something is fucky.
+I tried diagnosing the issues causing renamed apartments to not have their files moved over, but this has led me down a rabbit hole.
+Might be best to revert everything and try again from a clean slate. I've touched a lot here.'
+
 // TODO: If the short name of an apartment is changed, rename the save directory as well (copy over existing info) so it's not lost. [edit: think this is done?]
 // TODO: When auto-generating apartments, set the lifestyle relative to the rent value.
 
@@ -241,6 +245,7 @@ ApartmentComplex::ApartmentComplex(vnum_t landlord) {
 
   // Becomes something like '.../lib/housing/22608'
   base_directory = global_housing_dir / vnum_to_string(GET_MOB_VNUM(&mob_proto[landlord_rnum]));
+  log_vfprintf("Newly-initialized AC w/ LL %ld's base_directory: %s", landlord_vnum, base_directory.string().c_str());
 }
 
 ApartmentComplex::ApartmentComplex(bf::path filename) :
@@ -513,6 +518,7 @@ void ApartmentComplex::clone_from(ApartmentComplex *source) {
   landlord_vnum = source->landlord_vnum;
 
   base_directory = source->base_directory;
+  log_vfprintf("Cloned AC w/ LL %ld's base_directory: %s", landlord_vnum, base_directory.string().c_str());
 
   editors.clear();
   for (auto idnum : source->editors) {
@@ -617,7 +623,7 @@ int ApartmentComplex::get_crap_count() {
 
 /* Blank apartment for editing. */
 Apartment::Apartment() :
-  shortname(NULL), name(NULL), full_name(NULL), base_directory(global_housing_dir)
+  shortname(NULL), name(NULL), full_name(NULL), base_directory(global_apartment_complexes)
 {
   snprintf(buf, sizeof(buf), "unnamed-%ld", time(0));
   set_short_name(buf);
@@ -644,6 +650,7 @@ Apartment::Apartment(ApartmentComplex *complex, const char *new_name, vnum_t key
 
   // Becomes something like 'lib/housing/22608/3A'
   base_directory = complex->base_directory / shortname;
+  log_vfprintf("Apartment %s's base_directory: %s", full_name, base_directory.string().c_str());
 }
 
 /* Load this apartment entry from files. */
@@ -807,6 +814,15 @@ bool Apartment::is_garage_lifestyle() {
 }
 
 void Apartment::save_base_info() {
+  if (!base_directory) {
+    if (!complex) {
+      // Some kind of editing going on, just stop.
+      return;
+    }
+    log_vfprintf("No base directory found! Generating a new one...");
+    set_base_directory(complex->base_directory / shortname);
+  }
+
   // Ensure our base directory exists.
   log_vfprintf("apartment::save_base_info(): Checking for base directory %s...", base_directory.string().c_str());
   if (!bf::exists(base_directory)) {
@@ -1246,6 +1262,7 @@ void Apartment::set_complex(ApartmentComplex *new_complex) {
 
   // Change our save directory. Becomes something like 'lib/housing/22608/3A'
   base_directory = complex->base_directory / shortname;
+  log_vfprintf("Changed apartment %s's complex; new base_directory: %s", full_name, base_directory.string().c_str());
 
   // Recalculate our full name.
   regenerate_full_name();
@@ -1366,14 +1383,32 @@ void Apartment::set_name(const char *newname) {
 }
 
 void Apartment::set_short_name(const char *newname) {
+  // We absolutely requre that the new name contains only letters, spaces, and numbers.
+  for (const char *c = newname; *c; c++) {
+    if (!isalnum(*c) && !isspace(*c) && *c != '-') {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to set invalid apartment shortname '%s' for '%s'.", newname, full_name);
+      return;
+    }
+  }
+
+  // Clean up old one.
   delete [] shortname; 
   shortname = str_dup(newname); 
 
-  // We have to regenerate our base directory at this point. Becomes something like 'lib/housing/22608/3A'
-  if (complex) {
-    base_directory = complex->base_directory / shortname;
-  } else {
-    base_directory = global_housing_dir;
+  // Move our files over. Generates something like 'lib/housing/22608/3A'
+  bf::path new_base_directory = complex ? (complex->base_directory / shortname) : (global_housing_dir / shortname);
+  if (bf::exists(base_directory)) {
+    log_vfprintf("Moving files over for %s's rename: '''%s''' -> '''%s'''", full_name, base_directory.string().c_str(), new_base_directory.string().c_str());
+    bf::rename(base_directory, new_base_directory);
+  }
+
+  // Change where we save to in the future.
+  base_directory = new_base_directory;
+  log_vfprintf("Changed apartment %s's short_name: new base_directory is %s", full_name, base_directory.string().c_str());
+
+  // Force all sub-rooms to recalculate as well.
+  for (auto *aroom : rooms) {
+    aroom->regenerate_paths();
   }
 }
 
@@ -1485,9 +1520,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, struct room_data *room) :
   decoration = NULL;
   decorated_name = NULL;
 
-  base_path = apartment->base_directory / vnum_to_string(vnum);
-
-  storage_path = base_path / "storage";
+  regenerate_paths();
 }
 
 // Clone, duplicating the decoration but straight referencing apartment.
@@ -1513,6 +1546,13 @@ ApartmentRoom::~ApartmentRoom() {
     if (it != apartment->rooms.end())
       apartment->rooms.erase(it);
   }
+}
+
+void ApartmentRoom::regenerate_paths() {
+  log_vfprintf("Regenerating paths for %ld (%s || %s)...", vnum, base_path.string().c_str(), storage_path.string().c_str());
+  base_path = apartment->base_directory / vnum_to_string(vnum);
+  storage_path = base_path / "storage";
+  log_vfprintf("Done, got %s || %s.", base_path.string().c_str(), storage_path.string().c_str());
 }
 
 void ApartmentRoom::save_info() {
@@ -2011,6 +2051,8 @@ void _json_parse_from_file(bf::path path, json &target) {
   if (!exists(path)) {
     log_vfprintf("FATAL ERROR: Unable to find file at path %s. Terminating.");
     exit(1);
+  } else {
+    log_vfprintf("Reading JSON data from %s.", path.string().c_str());
   }
 
   bf::ifstream f(path);

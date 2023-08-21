@@ -276,6 +276,7 @@ class ApartmentRoom {
     void load_storage();
     void load_storage_from_specified_path(bf::path path);
     const char *get_full_name();
+    void regenerate_paths();
 
     struct room_data *get_world_room();
 
