@@ -14,6 +14,7 @@
 #include "quest.hpp"
 #include "config.hpp"
 #include "ignore_system.hpp"
+#include "moderation.hpp"
 
 #define PERSONA ch->persona
 #define DECKER PERSONA->decker
@@ -3274,6 +3275,10 @@ ACMD(do_abort)
 
 ACMD(do_talk)
 {
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(argument, ch))
+    return;
+
   skip_spaces(&argument);
   if (!PERSONA)
     send_to_char(ch, "You can't do that while hitching.\r\n");

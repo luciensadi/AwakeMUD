@@ -46,7 +46,7 @@ extern void handle_weapon_attachments(struct obj_data *obj);
 extern int get_deprecated_cybereye_essence_cost(struct obj_data *obj);
 extern void price_cyber(struct obj_data *obj);
 
-void auto_repair_obj(struct obj_data *obj);
+void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
 void save_adept_powers_to_db(struct char_data *player);
 void save_spells_to_db(struct char_data *player);
@@ -686,7 +686,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         */
         inside = atoi(row[17]);
 
-        auto_repair_obj(obj);
+        auto_repair_obj(obj, GET_IDNUM(ch));
 
         // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
         // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
@@ -751,7 +751,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         }
         if (row[15] && *row[15])
           obj->restring = str_dup(row[15]);
-        auto_repair_obj(obj);
+        auto_repair_obj(obj, GET_IDNUM(ch));
         obj_to_bioware(obj, ch);
       }
     }
@@ -800,7 +800,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         GET_OBJ_ATTEMPT(obj) = atoi(row[21]);
         GET_OBJ_CONDITION(obj) = atoi(row[22]);
 
-        auto_repair_obj(obj);
+        auto_repair_obj(obj, GET_IDNUM(ch));
 
         // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
         // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
@@ -913,7 +913,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         GET_OBJ_ATTEMPT(obj) = atoi(row[20]);
         GET_OBJ_CONDITION(obj) = atoi(row[21]);
 
-        auto_repair_obj(obj);
+        auto_repair_obj(obj, GET_IDNUM(ch));
 
         // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
         // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
@@ -1038,12 +1038,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
 
   // Self-repair their gear. Don't worry about contents- it's recursive.
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
-    auto_repair_obj(obj);
+    auto_repair_obj(obj, GET_IDNUM(ch));
   }
 
   for (int i = 0; i < NUM_WEARS; i++) {
     if (GET_EQ(ch, i))
-      auto_repair_obj(GET_EQ(ch, i));
+      auto_repair_obj(GET_EQ(ch, i), GET_IDNUM(ch));
   }
 
   set_natural_vision_for_race(ch);
@@ -2213,10 +2213,10 @@ if (proto_value != value) {                                                     
   value = proto_value;                                                                                                      \
 }
 
-void auto_repair_obj(struct obj_data *obj) {
+void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
   // Go through its contents first and rectify them.
   for (struct obj_data *contents = obj->contains; contents; contents = contents->next_content) {
-    auto_repair_obj(contents);
+    auto_repair_obj(contents, owner);
   }
 
   int old_storage;
@@ -2269,6 +2269,12 @@ void auto_repair_obj(struct obj_data *obj) {
     case ITEM_FOCUS:
       FORCE_PROTO_VALUE("focus", GET_FOCUS_TYPE(obj), GET_FOCUS_TYPE(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("focus", GET_FOCUS_FORCE(obj), GET_FOCUS_FORCE(&obj_proto[rnum]));
+
+      // Geas now uses its own field instead of reusing GET_FOCUS_BOND_TIME_REMAINING
+      if (GET_FOCUS_BOND_TIME_REMAINING(obj) == owner) {
+        GET_FOCUS_GEAS(obj) = owner;
+        GET_FOCUS_BOND_TIME_REMAINING(obj) = 0;
+      }
       break;
     case ITEM_MOD:
       // Mods don't ever get changed, so we clamp them aggressively.

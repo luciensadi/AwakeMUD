@@ -38,6 +38,7 @@
 #include "newhouse.hpp"
 #include "quest.hpp"
 #include "lifestyles.hpp"
+#include "moderation.hpp"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -4571,6 +4572,10 @@ ACMD(do_spray)
     send_to_char("What do you want to spray?\r\n", ch);
     return;
   }
+
+  // If they trigger automod with this, bail out.
+  if (check_for_banned_content(argument, ch))
+    return;
 
   FAILURE_CASE(!ch->in_room, "You can't do that in a vehicle.");
 

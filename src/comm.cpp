@@ -70,6 +70,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "dblist.hpp"
+#include "moderation.hpp"
 #include "newhouse.hpp"
 
 
@@ -466,6 +467,10 @@ void init_game(int port)
     log ("Opening mother connection.");
     mother_desc = init_socket (port);
   }
+
+  // Set up automod.
+  log("Preparing compiled regexes for automod.");
+  prepare_compiled_regexes();
 
   DBInit();
 

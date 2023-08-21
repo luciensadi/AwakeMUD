@@ -31,7 +31,7 @@
 
 extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *obj);
-extern void auto_repair_obj(struct obj_data *obj);
+extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 extern void handle_weapon_attachments(struct obj_data *obj);
 
 /* First, the basics: finding the filename; loading/saving objects */
@@ -140,7 +140,7 @@ bool House_load_storage(struct room_data *world_room, const char *filename)
 
       // Don't auto-repair cyberdecks until they're fully loaded.
       if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-        auto_repair_obj(obj);
+        auto_repair_obj(obj, house->owner);
 
       snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
       inside = data.GetInt(buf, 0);

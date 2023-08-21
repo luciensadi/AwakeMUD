@@ -941,6 +941,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_WEAPON_ATTACH_UNDER_VNUM(weapon)   (GET_OBJ_VAL((weapon), 9))
 #define GET_WEAPON_FOCUS_BONDED_BY(weapon)     (GET_OBJ_VAL((weapon), 9)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
 #define GET_WEAPON_POSSIBLE_FIREMODES(weapon)  (GET_OBJ_VAL((weapon), 10))
+#define GET_WEAPON_FOCUS_GEAS(weapon)          (GET_OBJ_VAL((weapon), 10)) /* Only melee weapons can be weapon foci, same slot as GET_FOCUS_GEAS */
 #define GET_WEAPON_FIREMODE(weapon)            (GET_OBJ_VAL((weapon), 11))
 #define GET_WEAPON_INTEGRAL_RECOIL_COMP(weap)  (GET_OBJ_ATTEMPT((weap)))
 #define GET_WEAPON_FULL_AUTO_COUNT(weapon)     (GET_OBJ_TIMER((weapon)))
@@ -1142,6 +1143,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_FOCUS_ACTIVATED(focus)                (GET_OBJ_VAL((focus), 4))
 #define GET_FOCUS_TRADITION(focus)                (GET_OBJ_VAL((focus), 5))
 #define GET_FOCUS_BOND_TIME_REMAINING(focus)      (GET_OBJ_VAL((focus), 9))
+#define GET_FOCUS_GEAS(focus)                     (GET_OBJ_VAL((focus), 10))
 
 // ITEM_PATCH convenience defines
 #define GET_PATCH_TYPE(patch)                      (GET_OBJ_VAL((patch), 0))

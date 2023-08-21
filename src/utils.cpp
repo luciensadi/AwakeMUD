@@ -2082,9 +2082,18 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Tradition=%d WHERE idnum=%ld;", TRAD_MUNDANE, GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
 
-    for (int i = 0; i < NUM_WEARS; i++)
-      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, i), 2) == GET_IDNUM(ch))
-        GET_OBJ_VAL(GET_EQ(ch, i), 2) = GET_OBJ_VAL(GET_EQ(ch, i), 4) =  GET_OBJ_VAL(GET_EQ(ch, i), 9) = 0;
+    struct obj_data *focus;
+    for (int i = 0; i < NUM_WEARS; i++) {
+      if (!(focus = GET_EQ(ch, i)))
+        continue;
+
+      if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(ch)) {
+        GET_FOCUS_BONDED_TO(focus) = GET_FOCUS_ACTIVATED(focus) =  GET_FOCUS_GEAS(focus) = 0;
+      }
+      else if ((i == WEAR_WIELD || i == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && GET_WEAPON_FOCUS_BONDED_BY(focus) == GET_IDNUM(ch)) {
+        GET_WEAPON_FOCUS_BONDED_BY(focus) = GET_WEAPON_FOCUS_GEAS(focus) = 0;
+      }
+    }
 
     struct sustain_data *nextsust;
 
