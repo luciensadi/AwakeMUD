@@ -28,6 +28,7 @@
 #include "file.hpp"
 #include "vtable.hpp"
 #include "limits.hpp"
+#include "newhouse.hpp"
 
 extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *obj);
@@ -139,8 +140,10 @@ bool House_load_storage(struct room_data *world_room, const char *filename)
       }
 
       // Don't auto-repair cyberdecks until they're fully loaded.
-      if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-        auto_repair_obj(obj, house->owner);
+      if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK) {
+        idnum_t owner_id = world_room->apartment && world_room->apartment->get_owner_id() > 0 ? world_room->apartment->get_owner_id() : 0;
+        auto_repair_obj(obj, owner_id);
+      }
 
       snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
       inside = data.GetInt(buf, 0);
