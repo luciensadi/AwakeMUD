@@ -18,6 +18,7 @@ namespace bf = boost::filesystem;
 #include "newmail.hpp"
 #include "constants.hpp"
 #include "newhouse.hpp"
+#include "moderation.hpp"
 
 #include "nlohmann/json.hpp"
 using nlohmann::json;
@@ -27,6 +28,8 @@ using nlohmann::json;
 #define LEASE_INFO_FILE_NAME        "lease.json"
 #define ROOM_INFO_FILE_NAME         "room_info.json"
 #define DELETED_APARTMENTS_DIR_NAME "deleted-apartments"
+
+#define MAX_ROOM_DECORATION_NAME_LEN  70
 
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
@@ -73,8 +76,28 @@ ACMD(do_decorate) {
   FAILURE_CASE(!GET_APARTMENT(ch->in_room)->has_owner_privs(ch), "You must be the owner of this apartment to decorate it.")
   FAILURE_CASE(!GET_APARTMENT_SUBROOM(ch->in_room), "This apartment is bugged! Notify staff.");
 
+  // If they've specified an argument, use that to set the room's name.
+  skip_spaces(&argument);
+  if (*argument) {
+    FAILURE_CASE_PRINTF(get_string_length_after_color_code_removal(argument, ch) > MAX_ROOM_DECORATION_NAME_LEN,
+                        "You must specify a title of %d characters or fewer.", MAX_ROOM_DECORATION_NAME_LEN);
+    
+    // No offensive room names.
+    if (check_for_banned_content(argument, ch))
+      return;
+
+    GET_APARTMENT_SUBROOM(ch->in_room)->set_decorated_name(argument);
+    send_to_char(ch, "OK, room name set to '%s'. Customize the description next.\r\n", GET_ROOM_NAME(ch->in_room));
+  } else if (GET_APARTMENT_SUBROOM(ch->in_room)->get_decorated_name()) {
+    send_to_char("Clearing the old decorated name (you must re-specify it with DECORATE <name> when editing).\r\n", ch);
+    GET_APARTMENT_SUBROOM(ch->in_room)->delete_decorated_name();
+    GET_APARTMENT_SUBROOM(ch->in_room)->save_decoration();
+  }
+
   PLR_FLAGS(ch).SetBit(PLR_WRITING);
-  send_to_char("Enter your new room description. Terminate with a @ on a new line. No formatting will be applied, so indent as/if desired! MUD-standard indent is 3 spaces.\r\n", ch);
+  send_to_char("Welcome to the description editor! Enter your new room description.\r\n"
+               "Terminate with @ on an empty line. You can also just enter @ right now to remove any existing decoration.\r\n"
+               "Note that no formatting will be applied here, so indent as/if desired! (MUD-standard indent is 3 spaces.)\r\n", ch);
   act("$n starts to move things around the room.", TRUE, ch, 0, 0, TO_ROOM);
   STATE(ch->desc) = CON_DECORATE;
   DELETE_D_STR_IF_EXTANT(ch->desc);
@@ -894,6 +917,7 @@ void Apartment::break_lease() {
   for (auto &room: rooms) {
     room->purge_contents();
     room->delete_decoration();
+    room->delete_decorated_name();
   }
 
   // Iterate over all characters in the game and have them recalculate their lifestyles. This also confirms their lifestyle string.
@@ -1409,6 +1433,12 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
 
   vnum = base_info["vnum"].get<vnum_t>();
 
+  if (base_info.find("decorated_name") != base_info.end()) {
+    decorated_name = str_dup(base_info["decorated_name"].get<std::string>().c_str());
+  } else {
+    decorated_name = NULL;
+  }
+
   rnum_t rnum = real_room(vnum);
   if (vnum < 0 || rnum < 0) {
     log_vfprintf("SYSERR: Invalid vnum %ld specified in %s.", filename.string().c_str());
@@ -1442,6 +1472,8 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
     mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to load storage for %ld: Lease is expired.", GET_ROOM_VNUM(room));
     delete [] decoration;
     decoration = NULL;
+    delete [] decorated_name;
+    decorated_name = NULL;
   }
 }
 
@@ -1451,6 +1483,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, struct room_data *room) :
 {
   vnum = GET_ROOM_VNUM(room);
   decoration = NULL;
+  decorated_name = NULL;
 
   base_path = apartment->base_directory / vnum_to_string(vnum);
 
@@ -1461,6 +1494,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, struct room_data *room) :
 ApartmentRoom::ApartmentRoom(ApartmentRoom *source) {
   vnum = source->vnum;
   decoration = source->decoration ? str_dup(source->decoration) : NULL;
+  decorated_name = source->decorated_name ? str_dup(source->decorated_name) : NULL;
   base_path = source->base_path;
   storage_path = source->storage_path;
   apartment = source->apartment;
@@ -1485,6 +1519,9 @@ void ApartmentRoom::save_info() {
   json info_data;
 
   info_data["vnum"] = vnum;
+  if (decorated_name) {
+    info_data["decorated_name"] = decorated_name;
+  }
 
   // We can't guarantee our base path exists at this point, so we ensure it does here.
   if (!bf::exists(base_path)) {
@@ -1497,9 +1534,46 @@ void ApartmentRoom::save_info() {
 }
 
 void ApartmentRoom::save_decoration() {
-  bf::ofstream o(base_path / "decoration.txt");
-  o << decoration;
-  o.close();
+  bf::path filepath = base_path / "decoration.txt";
+
+  if (decoration) {
+    // Write the decoration file.
+    bf::ofstream o(filepath);
+    o << decoration;
+    o.close();
+  } else {
+    // Delete the decoration file.
+    bf::remove(filepath);
+  }
+
+  // The decorated name is saved to the info file, so we save that here too.
+  save_info();
+}
+
+void ApartmentRoom::set_decorated_name(const char *new_desc) {
+  // Wipe out existing decoration.
+  delete [] decorated_name;
+  decorated_name = NULL;
+
+  // Clearing decoration.
+  if (!*new_desc)
+    return;
+
+  // Initialize our formatted desc.
+  size_t new_desc_len = strlen(new_desc);
+  size_t formatted_desc_size = new_desc_len + 1000;
+  char formatted_desc[formatted_desc_size];
+  strlcpy(formatted_desc, new_desc, formatted_desc_size);
+
+  // Ensure that it's terminated with a color code.
+  if (new_desc[new_desc_len - 2] != '^' || (new_desc[new_desc_len - 1] != 'n' || new_desc[new_desc_len - 1] != 'N')) {
+    strlcat(formatted_desc, "^n", formatted_desc_size);
+  }
+
+  decorated_name = str_dup(new_desc);
+
+  // Save it.
+  save_info();
 }
 
 void ApartmentRoom::set_decoration(const char *new_desc) {
@@ -1508,8 +1582,10 @@ void ApartmentRoom::set_decoration(const char *new_desc) {
   decoration = NULL;
 
   // Clearing decoration.
-  if (!*new_desc)
+  if (!*new_desc) {
+    save_decoration();
     return;
+  }
 
   // Initialize our formatted desc.
   size_t new_desc_len = strlen(new_desc);
@@ -1608,7 +1684,7 @@ void ApartmentRoom::delete_decoration() {
   rnum_t rnum = real_room(vnum);
 
   if (rnum < 0) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to clear room desc for %ld: Invalid vnum", vnum);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to clear decoration for %ld: Invalid vnum", vnum);
     return;
   }
 
@@ -1623,6 +1699,27 @@ void ApartmentRoom::delete_decoration() {
   decoration = NULL;
 
   send_to_room("You blink, then shrug-- this place must have always looked this way.\r\n", room);
+}
+
+void ApartmentRoom::delete_decorated_name() {
+  rnum_t rnum = real_room(vnum);
+
+  if (rnum < 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to clear decorated name for %ld: Invalid vnum", vnum);
+    return;
+  }
+
+  struct room_data *room = &world[rnum];
+
+  if (!decorated_name) {
+    // No action to take-- bail out.
+    return;
+  }
+
+  delete [] decorated_name;
+  decorated_name = NULL;
+
+  send_to_room("You blink, then shrug-- this place must have always been called that.\r\n", room);
 }
 
 /* Write storage data to <apartment name>/storage. This is basically the existing houses/<vnum> file. */

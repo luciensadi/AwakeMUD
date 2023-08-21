@@ -7584,9 +7584,19 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
     return;
   }
 
+  const char *room_name = GET_ROOM_NAME(in_room);
+
+  if (GET_APARTMENT_SUBROOM(in_room) && GET_APARTMENT_SUBROOM(in_room)->get_decorated_name()) {
+    room_name = GET_APARTMENT_SUBROOM(in_room)->get_decorated_name();
+  }
+
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-    send_to_char(ch, "^C[%5ld] %s^n [ %s ]^n\r\n", GET_ROOM_VNUM(in_room), GET_ROOM_NAME(in_room), buf);
+    send_to_char(ch, "^C[%5ld] %s^n%s [ %s ]^n\r\n", 
+                 GET_ROOM_VNUM(in_room), 
+                 room_name,
+                 room_name != GET_ROOM_NAME(in_room) ? " ^L(name-dec'd)^n" : "",
+                 buf);
     if (GET_APARTMENT(in_room)) {
       send_to_char(ch, " ^c(%sApartment - %s^c%s)\r\n",
                    GET_APARTMENT(in_room)->get_paid_until() > 0 ? "Leased " : "",
@@ -7596,7 +7606,7 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
   } else {
     #define APPEND_ROOM_FLAG(check, flagname) { if ((check)) {strlcat(room_title_buf, flagname, sizeof(room_title_buf));} }
     char room_title_buf[1000];
-    snprintf(room_title_buf, sizeof(room_title_buf), "^C%s%s^n", in_veh ? "Around you is " : "", GET_ROOM_NAME(in_room));
+    snprintf(room_title_buf, sizeof(room_title_buf), "^C%s%s^n", in_veh ? "Around you is " : "", room_name);
 
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_GARAGE), " (Garage)");
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STORAGE) && !ROOM_FLAGGED(in_room, ROOM_CORPSE_SAVE_HACK), " (Storage)");

@@ -241,6 +241,7 @@ class ApartmentRoom {
 
     // What desc will be restored when this apartment's lease is broken?
     const char *decoration = NULL;
+    const char *decorated_name = NULL;
 
     bf::path base_path;
     bf::path storage_path;
@@ -256,12 +257,14 @@ class ApartmentRoom {
 
     // Accessors.
     vnum_t get_vnum() { return vnum; }
+    const char *get_decorated_name() { return decorated_name; }
     const char *get_decoration() { return decoration; }
     Apartment *get_apartment() { return apartment; }
     ApartmentComplex *get_complex() { return apartment->complex; }
     bf::path get_base_directory() { return base_path; }
 
     // Mutators.
+    void set_decorated_name(const char *new_name);
     void set_decoration(const char *new_desc);
 
     // Save functions.
@@ -278,6 +281,7 @@ class ApartmentRoom {
 
     // Restore the apartment's default description.
     void delete_decoration();
+    void delete_decorated_name();
     void purge_contents();
     void delete_info();
 };
