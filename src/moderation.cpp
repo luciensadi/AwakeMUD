@@ -70,7 +70,7 @@ bool check_for_banned_content(const char *raw_msg, struct char_data *speaker) {
       // I don't want to get frozen while testing this, so high-level staff are immune.
       if (GET_LEVEL(speaker) >= LVL_CONSPIRATOR) {
         send_to_char("WARNING: You would have been frozen by automod for that command.\r\n", speaker);
-        mudlog_vfprintf(speaker, LOG_WIZLOG, "Automoderator staff warning: Staff member %s attempted to write banned content '''%s'''.", GET_CHAR_NAME(speaker), raw_msg);
+        mudlog_vfprintf(speaker, LOG_WIZLOG, "Automoderator staff warning: Staff member %s wrote banned content '''%s'''.", GET_CHAR_NAME(speaker), raw_msg);
         return FALSE;
       }
 
