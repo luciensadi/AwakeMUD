@@ -27,7 +27,12 @@ void prepare_compiled_regexes() {
 
   for (auto &base_pattern : regex_list) {
     char pattern[1000];
+
+#ifdef osx
     snprintf(pattern, sizeof(pattern), ".*[[:<:]]%s[[:>:]].*", base_pattern);
+#else
+    snprintf(pattern, sizeof(pattern), ".*\\b%s\\b.*", base_pattern);
+#endif
 
     log_vfprintf("Compiling regex pattern '%s' (base pattern '%s')...", pattern, base_pattern);
     regex_t *regex = new regex_t;
