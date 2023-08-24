@@ -266,6 +266,11 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
     }
   }
 
+  if (GET_CYBERWARE_TYPE(obj) == CYB_CHIPJACK && obj->contains) {
+    send_to_char("You can't uninstall a chipjack with chips in it.\r\n", remover);
+    return FALSE;
+  }
+
   if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
     obj_from_bioware(obj);
     GET_INDEX(victim) -= GET_CYBERWARE_ESSENCE_COST(obj);
@@ -1436,7 +1441,17 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         return;
       }
     }
-    uninstall_ware_from_target_character(obj, keeper, ch, !shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN));
+
+    if (GET_CYBERWARE_TYPE(obj) == CYB_CHIPJACK && obj->contains) {
+      send_to_char("You can't uninstall a chipjack with chips in it.\r\n", ch);
+      return;
+    }
+
+    if (!uninstall_ware_from_target_character(obj, keeper, ch, !shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN))) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to shop-uninstall %s from %s: Bailing out without paying them.", GET_OBJ_NAME(obj), GET_CHAR_NAME(ch));
+      send_to_char(ch, "You're not able to sell %s right now.\r\n", GET_OBJ_NAME(obj));
+      return;
+    }
   }
   else {
     if (obj->in_obj) {
@@ -3308,6 +3323,11 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
   if (!cred && uninstall_cost > GET_NUYEN(ch)) {
     snprintf(buf, sizeof(buf), "%s I'd charge %d nuyen to uninstall that. Come back when you've got the cash.", GET_CHAR_NAME(ch), uninstall_cost);
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    return;
+  }
+
+  if (GET_CYBERWARE_TYPE(obj) == CYB_CHIPJACK && obj->contains) {
+    send_to_char("You can't uninstall a chipjack with chips in it.\r\n", ch);
     return;
   }
 
