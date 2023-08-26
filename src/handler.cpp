@@ -781,9 +781,6 @@ void affect_total(struct char_data * ch)
     if (!sust->caster)
       spell_modify(ch, sust, TRUE);
 
-  if (GET_TEMP_QUI_LOSS(ch))
-    GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / TEMP_QUI_LOSS_DIVISOR));
-
   for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
     switch (GET_BIOWARE_TYPE(bio)) {
       case BIO_PAINEDITOR:
@@ -799,38 +796,14 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  i = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
-  GET_REA(ch) += (GET_INT(ch) + GET_QUI(ch)) >> 1;
-  GET_QUI(ch) = MAX(0, MIN(GET_QUI(ch), i));
-  GET_CHA(ch) = MAX(1, MIN(GET_CHA(ch), i));
-  GET_INT(ch) = MAX(1, MIN(GET_INT(ch), i));
-  GET_WIL(ch) = MAX(1, MIN(GET_WIL(ch), i));
-  GET_BOD(ch) = MAX(1, MIN(GET_BOD(ch), i));
-  GET_STR(ch) = MAX(1, MIN(GET_STR(ch), i));
-  GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), i * 100));
-  GET_ESS(ch) = MAX(0, MIN(GET_ESS(ch), 600));
-  GET_REA(ch) = MAX(1, MIN(GET_REA(ch), i));
-  GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
-  GET_ESS(ch) -= GET_TEMP_ESSLOSS(ch);
-  GET_MAX_MENTAL(ch) = 1000;
-  GET_MAX_PHYSICAL(ch) = 1000;
-  GET_TARGET_MOD(ch) = 0;
-  GET_CONCENTRATION_TARGET_MOD(ch) = 0;
-  GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
-  GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
-
   if (GET_TRADITION(ch) == TRAD_ADEPT)
   {
     if (GET_INIT_DICE(ch) == 0)
       GET_INIT_DICE(ch) += MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
     if (GET_REAL_REA(ch) == GET_REA(ch))
       GET_REA(ch) += 2*MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
-    if (GET_POWER(ch, ADEPT_IMPROVED_QUI)) {
-      GET_REA(ch) -= (GET_QUI(ch) + GET_INT(ch)) / 2;
-      GET_QUI(ch) += GET_POWER(ch, ADEPT_IMPROVED_QUI);
-      GET_REA(ch) += (GET_QUI(ch) + GET_INT(ch)) / 2;
-    }
     GET_BOD(ch) += GET_POWER(ch, ADEPT_IMPROVED_BOD);
+    GET_QUI(ch) += GET_POWER(ch, ADEPT_IMPROVED_QUI);
     GET_STR(ch) += GET_POWER(ch, ADEPT_IMPROVED_STR);
     if (BOOST(ch)[STR][0] > 0)
       GET_STR(ch) += BOOST(ch)[STR][1];
@@ -852,8 +825,33 @@ void affect_total(struct char_data * ch)
 
   apply_drug_modifiers_to_ch(ch);
 
-  skill_dice = get_skill_dice_in_use_for_weapons(ch);
+  // Min attribute is one, max is soft capped
+  cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
+  for (int att = BOD; att <= WIL; att++) {
+    GET_ATT(ch, att) = MAX(1, GET_ATT(ch, att));
+    if (GET_ATT(ch, att) > cap)
+      GET_ATT(ch, att) = cap + ((GET_ATT(ch, att) - cap + 1) >> 1);
+  }
+  GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), cap * 100));
+  GET_ESS(ch) = MAX(0, MIN(GET_ESS(ch), 600));
+  GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
+  GET_ESS(ch) -= GET_TEMP_ESSLOSS(ch);
+  GET_MAX_MENTAL(ch) = 1000;
+  GET_MAX_PHYSICAL(ch) = 1000;
+  GET_TARGET_MOD(ch) = 0;
+  GET_CONCENTRATION_TARGET_MOD(ch) = 0;
+  GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
+  GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
 
+  // Here so that other modifiers can't make the char immune to disabling via nerve strike
+  if (GET_TEMP_QUI_LOSS(ch))
+    GET_QUI(ch) = MAX(0, GET_QUI(ch) - (GET_TEMP_QUI_LOSS(ch) / TEMP_QUI_LOSS_DIVISOR));
+
+  // Reaction is derived from current atts, so we calculate it after all att modifiers
+  // We don't cap reaction because qui and int are already capped
+  GET_REA(ch) += (GET_INT(ch) + GET_QUI(ch)) >> 1;
+
+  // Combat pool is derived from current atts, so we calculate it after all att modifiers
   GET_COMBAT(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
   if (GET_TOTALBAL(ch) > GET_QUI(ch))
     GET_COMBAT(ch) -= (GET_TOTALBAL(ch) - GET_QUI(ch)) / 2;
@@ -885,6 +883,8 @@ void affect_total(struct char_data * ch)
       }
     }
   }
+
+  skill_dice = get_skill_dice_in_use_for_weapons(ch);
 
   GET_DEFENSE(ch) = MIN(GET_DEFENSE(ch), GET_COMBAT(ch));
   GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DEFENSE(ch));
