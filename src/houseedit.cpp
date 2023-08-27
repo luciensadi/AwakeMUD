@@ -4,6 +4,7 @@
 #include "utils.hpp"
 #include "db.hpp"
 #include "newdb.hpp"
+#include "redit.hpp"
 #include "newhouse.hpp"
 #include "houseedit_complex.hpp"
 #include "houseedit_apartment.hpp"
@@ -13,6 +14,7 @@ extern void ASSIGNMOB(long mob, SPECIAL(fname));
 void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave=FALSE);
 void houseedit_reload(struct char_data *ch, const char *filename);
 void houseedit_trueup_lifestyles_to_rent(struct char_data *ch);
+int copy_old_file_into_subroom_if_it_exists(bf::path old_file, ApartmentRoom *subroom, bool is_house_file);
 
 #define HED_NUKEANDPAVE TRUE
 #define HED_IMPORT FALSE
@@ -182,6 +184,8 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
   int num_complexes;
   char line[256], storage_file_name[256];
   bf::path old_house_directory("house");
+  bf::path old_storage_directory("storage");
+  bf::path parsed_storage_directory = old_storage_directory / "loaded-into-housing-subroom";
 
   // Failure case: The file does not exist.
   if (!(fl = fopen(HCONTROL_FILE, "r+b"))) {
@@ -283,7 +287,7 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
       atrium = GET_ROOM_VNUM(EXIT2(&world[house_rnum], atrium_dir)->to_room);
 
       Apartment *apartment = NULL;
-      ApartmentRoom *room = NULL;
+      ApartmentRoom *subroom = NULL;
       if (nuke_and_pave) {
         // Create an apartment to represent this.
         apartment = new Apartment(complex, name, key_vnum, atrium, lifestyle, owner, paid_until);
@@ -298,31 +302,31 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
         apartment->save_base_info();
 
         // Create a room for its entry and save it to create its directory.
-        room = new ApartmentRoom(apartment, &world[house_rnum]);
-        room->save_info();
+        subroom = new ApartmentRoom(apartment, &world[house_rnum]);
+        subroom->save_info();
 
         // Apply it to the world.
         world[house_rnum].apartment = apartment;
-        world[house_rnum].apartment_room = room;
+        world[house_rnum].apartment_room = subroom;
 
         // Add our new room to our apartment.
-        apartment->add_room(room);
+        apartment->add_room(subroom);
 
         // Add our new apartment to our complex.
         complex->add_apartment(apartment);
       } else {
-        // TODO: Find the existing apartment in this complex that matches the selected one.
+        // Find the existing apartment in this complex that matches the selected one.
         for (auto &apt : complex->get_apartments()) {
-          for (auto &ruum : apt->get_rooms()) {
-            if (ruum->get_world_room() == &world[house_rnum]) {
+          for (auto &room : apt->get_rooms()) {
+            if (room->get_world_room() == &world[house_rnum]) {
               apartment = apt;
-              room = ruum;
+              subroom = room;
               break;
             }
           }
         }
 
-        if (!room) {
+        if (!subroom) {
           send_to_char(ch, "Ah, crapbaskets. No existing apartment room was found to match %s's %ld (landlord %ld). You're gonna have to do some manual repair work.\r\n", 
                       name, GET_ROOM_VNUM(&world[house_rnum]), landlord_vnum);
           return;
@@ -330,30 +334,44 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
       }
 
       // Clone the current desc as a decoration, provided no decoration already exists.
-      if (!room->get_decoration() && *(world[house_rnum].description)) {
-        room->set_decoration(world[house_rnum].description);
-        room->save_decoration();
+      if (!subroom->get_decoration() && *(world[house_rnum].description)) {
+        subroom->set_decoration(world[house_rnum].description);
+        subroom->save_decoration();
       }
 
       // Set our owner and lease time.
       apartment->set_owner(owner);
       apartment->set_paid_until(paid_until);
 
-      // Look for the old storage file. If it exists, clobber existing contents and load this in.
+      // Look for the old house file. If it exists, clobber existing contents and load this in.
       snprintf(storage_file_name, sizeof(storage_file_name), "%ld.house", house_vnum);
       bf::path original_save_file = old_house_directory / storage_file_name;
-      if (bf::exists(original_save_file)) {
-        mudlog_vfprintf(ch, LOG_SYSLOG, "Transferring storage for subroom %ld.", house_vnum);
-        // It does exist-- clone it over, then immediately load it so we don't lose contents to an overwrite.
-        bf::path new_save_file = room->get_base_directory() / "storage";
-#ifdef USE_OLD_BOOST
-        bf::copy_file(original_save_file, new_save_file, bf::copy_option::overwrite_if_exists);
-#else
-        bf::copy_file(original_save_file, new_save_file, bf::copy_options::overwrite_existing);
-#endif
-        room->load_storage_from_specified_path(new_save_file);
-      } else {
-        mudlog_vfprintf(ch, LOG_SYSLOG, "Subroom %ld had no storage.", house_vnum);
+
+      // Load our guests from the old file.
+      apartment->load_guests_from_old_house_file(original_save_file.c_str());
+      // Load our contents from the old file.
+      copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, TRUE);
+
+      // Look for any associated storage rooms. If they exist, merge them into the new house structure.
+      for (auto &room : apartment->get_rooms()) {
+        struct room_data *world_room = room->get_world_room();
+
+        if (world_room && ROOM_FLAGGED(world_room, ROOM_STORAGE)) {
+          // Room exists and is a storage room. Load it up.
+          bf::path original_save_file = old_storage_directory / vnum_to_string(house_vnum);
+          copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, FALSE);
+
+          // Strip the storage flag from the room.
+          ROOM_FLAGS(world_room).RemoveBit(ROOM_STORAGE);
+
+          // Save the removal of the storage flag.
+          int zone_idx = get_zone_index_number_from_vnum(GET_ROOM_VNUM(world_room));
+          if (zone_idx < 0) {
+            mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unable to derive valid zone index from EXISTING room %ld. Stripping storage flag failed to save, WILL CAUSE ITEM DUPLICATION ON LOAD.", GET_ROOM_VNUM(world_room));
+          } else {
+            write_world_to_disk(zone_table[zone_idx].number);
+          }
+        }
       }
     }
   }
@@ -399,4 +417,38 @@ void houseedit_trueup_lifestyles_to_rent(struct char_data *ch) {
     }
   }
   mudlog_vfprintf(ch, LOG_SYSLOG, "Housing lifestyle true-up by %s complete.", GET_CHAR_NAME(ch));
+}
+
+// Loads an old file into a subroom. Returns 0 on success, anything else on failure.
+int copy_old_file_into_subroom_if_it_exists(bf::path old_file, ApartmentRoom *subroom, bool is_house_file) {
+  if (old_file.empty()) {
+    mudlog("SYSERR: Received EMPTY old_file path to copy_old_file_into_subroom()!", NULL, LOG_SYSLOG, TRUE);
+    return 1;
+  }
+
+  if (!subroom) {
+    mudlog("SYSERR: Received NULL subroom to copy_old_file_into_subroom()!", NULL, LOG_SYSLOG, TRUE);
+    return 2;
+  }
+
+  if (!bf::exists(old_file)) {
+    // This not an error case, we allow non-existant files to be loaded here.
+    return 0;
+  }
+
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "Transferring %s storage for subroom %ld.", is_house_file ? "house-file" : "storage-file", subroom->get_vnum());
+
+  // Compose our new location, then transfer the existing file to that location.
+  bf::path new_save_file = subroom->get_base_directory() / "storage";
+#ifdef USE_OLD_BOOST
+  bf::copy_file(old_file, new_save_file, bf::copy_option::overwrite_if_exists);
+#else
+  bf::copy_file(old_file, new_save_file, bf::copy_options::overwrite_existing);
+#endif
+
+  // Immediately load from the newly-transferred file so that we don't lose room contents in a room save.
+  subroom->load_storage_from_specified_path(new_save_file);
+
+  // All is good.
+  return 0;
 }

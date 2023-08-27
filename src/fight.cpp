@@ -27,6 +27,7 @@
 #include "sound_propagation.hpp"
 #include "newhouse.hpp"
 #include "quest.hpp"
+#include "redit.hpp"
 
 int initiative_until_global_reroll = 0;
 
@@ -100,7 +101,6 @@ extern bool check_sentinel_snap_back(struct char_data *ch);
 extern void end_quest(struct char_data *ch);
 
 // Corpse saving externs.
-extern void write_world_to_disk(int vnum);
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
 
 extern bool item_should_be_treated_as_melee_weapon(struct obj_data *obj);

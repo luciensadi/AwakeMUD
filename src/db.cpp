@@ -61,6 +61,7 @@
 #include "lexicons.hpp"
 #include "newhouse.hpp"
 #include "zoomies.hpp"
+#include "redit.hpp"
 
 ACMD_DECLARE(do_reload);
 
@@ -77,7 +78,6 @@ extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
 extern void generate_archetypes();
 extern void populate_mobact_aggression_octets();
-extern void write_world_to_disk(int vnum);
 extern void handle_weapon_attachments(struct obj_data *obj);
 extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon);
 extern void reset_host_paydata(rnum_t rnum);

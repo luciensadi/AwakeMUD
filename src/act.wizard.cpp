@@ -50,6 +50,7 @@
 #include "vision_overhaul.hpp"
 #include "newhouse.hpp"
 #include "deck_build.hpp"
+#include "redit.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -92,7 +93,6 @@ extern struct elevator_data *elevator;
 extern int num_elevators;
 
 extern int write_quests_to_disk(int zone);
-extern void write_world_to_disk(int vnum);
 extern void write_objs_to_disk(vnum_t zone);
 extern void alarm_handler(int signal);
 extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);

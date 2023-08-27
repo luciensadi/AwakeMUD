@@ -151,6 +151,9 @@ class Apartment {
     std::vector<const char *> garage_strings_gendered = {};
 
   public:
+    // Is this just an editing struct?
+    bool is_editing_struct = FALSE;
+
     // Given a filename to read from, instantiate an individual apartment.
     Apartment(ApartmentComplex *complex, bf::path filename);
     Apartment(ApartmentComplex *complex, const char *, vnum_t, vnum_t, int, idnum_t, time_t);
@@ -185,7 +188,7 @@ class Apartment {
     void set_key_vnum(vnum_t vnum) {key_vnum = vnum;}
     bool set_rent(long amount, struct char_data *ch=NULL);
     bool set_lifestyle(int new_lifestyle, struct char_data *ch=NULL);
-    void set_base_directory(bf::path path) { base_directory = path; }
+    void set_base_directory(bf::path path);
     void set_garage_override(bool value) { garage_override = value; }
 
 
@@ -220,6 +223,7 @@ class Apartment {
     bool is_garage_lifestyle();
     void apply_rooms();
     void clamp_rent(struct char_data *ch);
+    void load_guests_from_old_house_file(const char *filename);
 
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);

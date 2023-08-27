@@ -54,7 +54,7 @@ void redit_disp_flag_menu(struct descriptor_data * d);
 void redit_disp_sector_menu(struct descriptor_data * d);
 void redit_disp_menu(struct descriptor_data * d);
 void redit_parse(struct descriptor_data * d, const char *arg);
-void write_world_to_disk(int vnum);
+void write_world_to_disk(vnum_t vnum);
 /**************************************************************************
  Menu functions
  **************************************************************************/
@@ -1390,10 +1390,10 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 // world saving routine
 #define PRINT_TO_FILE_IF_TRUE(section, value) { if (value) { fprintf(fp, (section), (value)); } }
 #define RM world[realcounter]
-void write_world_to_disk(int vnum)
+void write_world_to_disk(vnum_t zone_vnum)
 {
   long             counter, counter2, realcounter;
-  int             znum = real_zone(vnum);
+  int             znum = real_zone(zone_vnum);
   FILE           *fp;
   struct extra_descr_data *ex_desc;
   bool wrote_something = FALSE;

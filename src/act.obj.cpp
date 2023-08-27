@@ -29,6 +29,7 @@
 #include "newhouse.hpp"
 #include "invis_resistance_tests.hpp"
 #include "quest.hpp"
+#include "redit.hpp"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -44,9 +45,6 @@ extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
 extern int calculate_vehicle_weight(struct veh_data *veh);
-
-// Corpse saving externs.
-extern void write_world_to_disk(int vnum);
 
 extern SPECIAL(fence);
 extern SPECIAL(hacker);

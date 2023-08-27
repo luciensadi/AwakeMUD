@@ -22,11 +22,11 @@
 #include "config.hpp"
 #include "newmatrix.hpp"
 #include "deck_build.hpp"
+#include "redit.hpp"
 
 // extern vars
 extern class helpList Help;
 extern class helpList WizHelp;
-extern void write_world_to_disk(int vnum);
 
 // extern funcs
 extern void print_object_location(int, struct obj_data *, struct char_data *, int);

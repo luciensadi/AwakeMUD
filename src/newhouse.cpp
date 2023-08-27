@@ -17,8 +17,11 @@ namespace bf = boost::filesystem;
 #include "interpreter.hpp"
 #include "newmail.hpp"
 #include "constants.hpp"
+#include "file.hpp"
+#include "vtable.hpp"
 #include "newhouse.hpp"
 #include "moderation.hpp"
+#include "redit.hpp"
 
 #include "nlohmann/json.hpp"
 using nlohmann::json;
@@ -50,13 +53,6 @@ std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
-// TODO: Something is fucky.
-I tried diagnosing the issues causing renamed apartments to not have their files moved over, but this has led me down a rabbit hole.
-Might be best to revert everything and try again from a clean slate. I've touched a lot here.'
-
-// TODO: If the short name of an apartment is changed, rename the save directory as well (copy over existing info) so it's not lost. [edit: think this is done?]
-// TODO: When auto-generating apartments, set the lifestyle relative to the rent value.
-
 // EVENTUALTODOs for pgroups:
 // - Write pgroup log when a lease is broken.
 // - When a pgroup has no members left, it should be auto-disabled.
@@ -65,8 +61,6 @@ Might be best to revert everything and try again from a clean slate. I've touche
 // - Verify that an apartment owned by non-buildport pgroup X is not permanently borked when loaded on the buildport and then transferred back to main
 
 ACMD(do_decorate) {
-  extern void write_world_to_disk(int vnum);
-
   if (ch->in_veh) {
     STATE(ch->desc) = CON_DECORATE_VEH;
     DELETE_D_STR_IF_EXTANT(ch->desc);
@@ -582,6 +576,14 @@ const char *ApartmentComplex::list_apartments__returns_new() {
 }
 
 void ApartmentComplex::add_apartment(Apartment *apartment) {
+  // It is an error to call this on an editing struct.
+  if (apartment->is_editing_struct) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to add apartment %s to complex %s, but it is an editing struct instead of an actual apartment!",
+                    apartment->get_name(),
+                    get_name());
+    return;
+  }
+
   auto it = find(apartments.begin(), apartments.end(), apartment);
   if (it != apartments.end()) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to add apartment %s to complex %s, but it was already there (%s)!",
@@ -597,6 +599,14 @@ void ApartmentComplex::add_apartment(Apartment *apartment) {
 }
 
 void ApartmentComplex::delete_apartment(Apartment *apartment) {
+  // It is an error to call this on an editing struct.
+  if (apartment->is_editing_struct) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to remove apartment %s from complex %s, but it is an editing struct instead of an actual apartment!",
+                    apartment->get_name(),
+                    get_name());
+    return;
+  }
+
   auto it = find(apartments.begin(), apartments.end(), apartment);
   if (it == apartments.end()) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to delete apartment %s from complex %s, but it wasn't part of it!",
@@ -623,7 +633,7 @@ int ApartmentComplex::get_crap_count() {
 
 /* Blank apartment for editing. */
 Apartment::Apartment() :
-  shortname(NULL), name(NULL), full_name(NULL), base_directory(global_apartment_complexes)
+  shortname(NULL), name(NULL), full_name(NULL)
 {
   snprintf(buf, sizeof(buf), "unnamed-%ld", time(0));
   set_short_name(buf);
@@ -649,7 +659,7 @@ Apartment::Apartment(ApartmentComplex *complex, const char *new_name, vnum_t key
   full_name = str_dup(tmp);
 
   // Becomes something like 'lib/housing/22608/3A'
-  base_directory = complex->base_directory / shortname;
+  set_base_directory(complex->base_directory / shortname);
   log_vfprintf("Apartment %s's base_directory: %s", full_name, base_directory.string().c_str());
 }
 
@@ -756,7 +766,6 @@ void Apartment::clone_from(Apartment *source) {
 
   REPLACE(lifestyle);
   REPLACE(nuyen_per_month);
-  REPLACE(base_directory);
   REPLACE(garage_override);
 
   REPLACE(atrium);
@@ -784,6 +793,9 @@ void Apartment::clone_from(Apartment *source) {
 
   // Note that we're not pushing ourselves into the complex's list! This may cause issues.
   REPLACE(complex);
+
+  // If the base directory has changed, move our files over.
+  set_base_directory(source->base_directory);
 }
 
 bool Apartment::can_houseedit_apartment(struct char_data *ch) {
@@ -813,8 +825,33 @@ bool Apartment::is_garage_lifestyle() {
   return garage_override || garages > (rooms.size() + 1) / 2;
 }
 
+void Apartment::set_base_directory(bf::path new_base) {
+  // If we had no base directory to begin with, this is probably happening during initialization or editing. Take no on-disc action.
+  if (base_directory.empty() || is_editing_struct) {
+    base_directory = new_base;
+    return;
+  }
+
+  // If this is a rename, process that.
+  if (base_directory != new_base) {
+    log_vfprintf("Renaming %s's base directory from %s to %s.",
+                 full_name,
+                 base_directory.c_str(),
+                 new_base.c_str());
+    bf::rename(base_directory, new_base);
+  }
+
+  // Finally, make the change.
+  base_directory = new_base;
+
+  // Update our rooms as well.
+  for (auto *aroom : rooms) {
+    aroom->regenerate_paths();
+  }
+}
+
 void Apartment::save_base_info() {
-  if (!base_directory) {
+  if (base_directory.empty()) {
     if (!complex) {
       // Some kind of editing going on, just stop.
       return;
@@ -851,6 +888,13 @@ void Apartment::save_rooms() {
   if (rooms.empty()) {
     log_vfprintf("Skipping save_rooms() for %s: No rooms to save.", get_full_name());
     return;
+  }
+
+  // Looks like we're some kind of editing structure.
+  if (base_directory.empty()) {
+    // Regardless, if someone's trying to save_rooms() on us, we must matter. Save base info to create the dir, then save here.
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "WARNING: Called save_rooms() on improperly-initialized apartment '%s'! Saving its base info first.", get_full_name());
+    save_base_info();
   }
 
   // Add all on-disk room directories to a vector.
@@ -1066,6 +1110,12 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
   if (!has_owner()) {
     owned_by_player = GET_IDNUM(ch);
     paid_until = time(0) + (SECS_PER_REAL_DAY*30);
+
+    // We expect that there were no existing guests.
+    if (!guests.empty()) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Newly-rented apartment %s already had guests! Wiping the list.", full_name);
+      guests.clear();
+    }
   } else {
     paid_until += SECS_PER_REAL_DAY*30;
   }
@@ -1076,8 +1126,10 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
   int old_best_lifestyle = GET_BEST_LIFESTYLE(ch);
   calculate_best_lifestyle(ch);
 
-  if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && GET_BEST_LIFESTYLE(ch) > old_best_lifestyle) {
-    send_to_char("^L(Hint: Since your lifestyle has just increased, you can flaunt your new status with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L!)^n\r\n", ch);
+  if (GET_BEST_LIFESTYLE(ch) > old_best_lifestyle) {
+    if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+      send_to_char("^L(Hint: Since your lifestyle has just increased, you can flaunt your new status with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L!)^n\r\n", ch);
+    }
   }
 
   return TRUE;
@@ -1261,11 +1313,13 @@ void Apartment::set_complex(ApartmentComplex *new_complex) {
   sort(complex->apartments.begin(), complex->apartments.end(), apartment_sort_func);
 
   // Change our save directory. Becomes something like 'lib/housing/22608/3A'
-  base_directory = complex->base_directory / shortname;
+  set_base_directory(complex->base_directory / shortname);
   log_vfprintf("Changed apartment %s's complex; new base_directory: %s", full_name, base_directory.string().c_str());
 
   // Recalculate our full name.
   regenerate_full_name();
+
+  // Note: Sub-room directory recalculation was handled in set_base_directory().
 }
 
 void Apartment::clamp_rent(struct char_data *ch) {
@@ -1324,7 +1378,7 @@ bool Apartment::delete_guest(idnum_t idnum) {
 }
 
 void Apartment::add_guest(idnum_t idnum) {
-  if (!is_guest(idnum)) {
+  if (idnum != 0 && !is_guest(idnum)) {
     guests.push_back(idnum);
     save_lease();
   }
@@ -1371,7 +1425,9 @@ void Apartment::recalculate_garages() {
 void Apartment::regenerate_full_name() {
   delete [] full_name;
   char formatted_name[120];
-  snprintf(formatted_name, sizeof(formatted_name), "%s's %s", complex->get_name(), name);
+  snprintf(formatted_name, sizeof(formatted_name), "%s's %s", 
+           complex ? complex->get_name() : "<editing struct>", 
+           name);
   full_name = str_dup(formatted_name);
 }
 
@@ -1395,21 +1451,30 @@ void Apartment::set_short_name(const char *newname) {
   delete [] shortname; 
   shortname = str_dup(newname); 
 
-  // Move our files over. Generates something like 'lib/housing/22608/3A'
+  /*
   bf::path new_base_directory = complex ? (complex->base_directory / shortname) : (global_housing_dir / shortname);
-  if (bf::exists(base_directory)) {
-    log_vfprintf("Moving files over for %s's rename: '''%s''' -> '''%s'''", full_name, base_directory.string().c_str(), new_base_directory.string().c_str());
-    bf::rename(base_directory, new_base_directory);
+
+  // Move our files over (only if we have a base dir in the first place). Generates something like 'lib/housing/22608/3A'
+  if (!base_directory.empty()) {
+    if (bf::exists(base_directory)) {
+      log_vfprintf("Moving files over for %s's rename: '''%s''' -> '''%s'''", full_name, base_directory.string().c_str(), new_base_directory.string().c_str());
+      bf::rename(base_directory, new_base_directory);
+    }
   }
 
   // Change where we save to in the future.
   base_directory = new_base_directory;
-  log_vfprintf("Changed apartment %s's short_name: new base_directory is %s", full_name, base_directory.string().c_str());
+
+  log_vfprintf("Changed apartment %s's short_name: new name is %s, new base_directory is %s", full_name, shortname, base_directory.c_str());
 
   // Force all sub-rooms to recalculate as well.
   for (auto *aroom : rooms) {
     aroom->regenerate_paths();
   }
+  */
+
+  // Recalculate our full name.
+  regenerate_full_name();
 }
 
 void Apartment::apply_rooms() {
@@ -1455,6 +1520,33 @@ void Apartment::set_paid_until(time_t paid_tm) {
 
   // Overwrite the lease file.
   save_lease();
+}
+
+void Apartment::load_guests_from_old_house_file(const char *filename) {
+  File fl;
+
+  if (!(fl.Open(filename, "r+b"))) { /* no file found */
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Not loading house file %s: File not found.", filename);
+    return;
+  }
+
+  log_vfprintf("Loading house file %s (guest mode).", filename);
+  VTable data;
+  data.Parse(&fl);
+  fl.Close();
+  snprintf(buf3, sizeof(buf3), "house-load-guests %s", filename);
+
+  // Wipe old guests.
+  for (auto guest : guests) {
+    log_vfprintf("Wiping old guest %ld from %s.", guest, full_name);
+  }
+  guests.clear();
+
+  for (int i = 0; i < MAX_GUESTS; i++) {
+    snprintf(buf, sizeof(buf), "GUESTS/Guest%d", i);
+    idnum_t guest = data.GetLong(buf, 0);
+    add_guest(guest);
+  }
 }
 
 /********** ApartmentRoom ************/

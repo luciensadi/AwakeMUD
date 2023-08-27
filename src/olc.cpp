@@ -30,6 +30,7 @@
 #include "config.hpp"
 #include "helpedit.hpp"
 #include "newdb.hpp"
+#include "redit.hpp"
 
 extern class objList ObjList;
 extern sh_int mortal_start_room;
@@ -40,7 +41,6 @@ extern void char_from_room(struct char_data * ch);
 extern void write_mobs_to_disk(vnum_t zone);
 extern void write_objs_to_disk(vnum_t zone);
 extern void write_shops_to_disk(int zone);
-extern void write_world_to_disk(int);
 extern void write_zone_to_disk(int vnum);
 extern void iedit_disp_menu(struct descriptor_data *d);
 extern void redit_disp_menu(struct descriptor_data *d);

@@ -135,6 +135,7 @@ void houseedit_edit_apartment(struct char_data *ch, const char *func_remainder) 
   // Allowed to edit: Put them into that mode.
   ch->desc->edit_apartment = new Apartment();
   ch->desc->edit_apartment->clone_from(apartment);
+  ch->desc->edit_apartment->is_editing_struct = TRUE;
   ch->desc->edit_apartment_original = apartment;
   houseedit_display_apartment_edit_menu(ch->desc);
 }
@@ -313,9 +314,6 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
             // Fall through.
           } else {
             send_to_char("OK, discarding changes.\r\n", CH);
-
-            // Special case: We must remove this apartment from the complex now.
-            COMPLEX->delete_apartment(APT);
           }
 
           // Clean up our str_dup()'d bits.
@@ -375,7 +373,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
 
       {
         // Create our new dir and check to make sure it doesn't already exist.
-        bf::path new_save_dir = APT->get_base_directory() / arg; // safe because we filtered characters earlier
+        bf::path new_save_dir = APT->get_complex()->get_base_directory() / arg; // safe because we filtered characters earlier
         if (bf::exists(new_save_dir) && (!d->edit_apartment_original || new_save_dir != d->edit_apartment_original->get_base_directory())) {
           send_to_char("There's already a directory that matches your new apartment. You'll need to change its name.\r\n", CH);
           houseedit_display_apartment_edit_menu(d);

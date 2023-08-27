@@ -62,18 +62,12 @@ bool House_load_storage(struct room_data *world_room, const char *filename)
     return FALSE;
   }
 
-  log_vfprintf("Loading house file %s.", filename);
+  log_vfprintf("Loading house file %s (storage mode).", filename);
   VTable data;
   data.Parse(&fl);
   fl.Close();
-  snprintf(buf3, sizeof(buf3), "house-load %s", filename);
+  snprintf(buf3, sizeof(buf3), "house-load-storage %s", filename);
   house_version = data.GetInt("METADATA/Version", 0);
-
-  for (int i = 0; i < MAX_GUESTS; i++) {
-    snprintf(buf, sizeof(buf), "GUESTS/Guest%d", i);
-    data.GetLong(buf, 0);
-    // We discard this data - guests are handled in newhouse.
-  }
 
   int num_objs = data.NumSubsections("HOUSE");
   int x;
