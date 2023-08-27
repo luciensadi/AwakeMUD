@@ -1854,6 +1854,7 @@ ACMD(do_gridguide)
   FAILURE_CASE(!veh->autonav, "You need to have an autonav system installed.");
   FAILURE_CASE(veh->hood, "Gridguide refuses to engage with the hood up.");
   FAILURE_CASE((veh->locked && GET_IDNUM(ch) != veh->owner) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_PILOT)), "You don't have control over the vehicle.");
+  FAILURE_CASE(!veh->in_room, "You'll have to drive out first.");
 
   argument = two_arguments(argument, arg, buf2);
   if (!*arg) {

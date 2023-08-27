@@ -5824,12 +5824,8 @@ void load_saved_veh()
       snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
       vnum = data.GetLong(buf, 0);
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
-        snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-        obj->restring = str_dup(data.GetString(buf, NULL));
-        snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
-        GET_OBJ_COST(obj) = data.GetInt(buf, 0);
-        snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
-        obj->photo = str_dup(data.GetString(buf, NULL));
+        snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
+        inside = data.GetInt(buf, 0);
         for (int x = 0; x < NUM_VALUES; x++) {
           snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
           GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
@@ -5841,12 +5837,20 @@ void load_saved_veh()
         }
         snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
         GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
-        snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
-        inside = data.GetInt(buf, 0);
-        snprintf(buf, sizeof(buf), "%s/Front", sect_name);
-        obj->vfront = data.GetInt(buf, TRUE);
+        snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
+        GET_OBJ_COST(obj) = data.GetInt(buf, 0);
         snprintf(buf, sizeof(buf), "%s/Timer", sect_name);
         GET_OBJ_TIMER(obj) = data.GetInt(buf, TRUE);
+        snprintf(buf, sizeof(buf), "%s/Attempt", sect_name);
+        GET_OBJ_ATTEMPT(obj) = data.GetInt(buf, 0);
+        snprintf(buf, sizeof(buf), "%s/ExtraFlags", sect_name);
+        GET_OBJ_EXTRA(obj).FromString(data.GetString(buf, "0"));
+        snprintf(buf, sizeof(buf), "%s/Front", sect_name);
+        obj->vfront = data.GetInt(buf, TRUE);
+        snprintf(buf, sizeof(buf), "%s/Name", sect_name);
+        obj->restring = str_dup(data.GetString(buf, NULL));
+        snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
+        obj->photo = str_dup(data.GetString(buf, NULL));
 
         if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
           // Invalid belongings.

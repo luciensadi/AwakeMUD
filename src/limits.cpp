@@ -1313,13 +1313,26 @@ void save_vehicles(bool fromCopyover)
       if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
         obj_string_buf << "\t\tVnum:\t" << GET_OBJ_VNUM(obj) << "\n";
         obj_string_buf << "\t\tInside:\t" << level << "\n";
-        if (GET_OBJ_TYPE(obj) == ITEM_PHONE)
-          for (int x = 0; x < 4; x++)
-            obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) <<"\n";
-        else if (GET_OBJ_TYPE(obj) != ITEM_WORN)
-          for (int x = 0; x < NUM_VALUES; x++)
-            obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) << "\n";
 
+        switch (GET_OBJ_TYPE(obj)) {
+          case ITEM_PHONE:
+            for (int x = 0; x < 4; x++) {
+              obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) <<"\n";
+            }
+            break;
+          case ITEM_WORN:
+            // The only thing we save is the hardened armor bond status.
+            if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+              obj_string_buf << "\t\tValue " << WORN_OBJ_HARDENED_ARMOR_SLOT << ":\t" << GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) << "\n";
+            }
+            break;
+          default:
+            for (int x = 0; x < NUM_VALUES; x++) {
+              obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) << "\n";
+            }
+            break;
+        }
+        
         obj_string_buf << "\t\tCondition:\t" << (int) GET_OBJ_CONDITION(obj) << "\n";
         obj_string_buf << "\t\tCost:\t" << GET_OBJ_COST(obj) << "\n";
         obj_string_buf << "\t\tTimer:\t" << GET_OBJ_TIMER(obj) << "\n";

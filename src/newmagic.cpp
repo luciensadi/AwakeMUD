@@ -4745,7 +4745,7 @@ POWER(spirit_sustain)
   else {
     int i = atoi(arg);
     if (i <= 0) {
-      send_to_char(ch, "Syntax: 'order <%s> sustain <spell number from the AFFECT command>\r\n'", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+      send_to_char(ch, "Syntax: 'ORDER <%s> SUSTAIN <spell number from the AFFECT command>'\r\n'", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
     }
 
@@ -6435,6 +6435,22 @@ ACMD(do_masking)
   } else send_to_char("What do you wish to mask?\r\n", ch);
 }
 
+bool _spell_is_sustained_with_no_spirit_or_focus(struct sustain_data *spell) {
+  // Must be of SUSTAINED duration.
+  if (spells[spell->spell].duration != SUSTAINED)
+    return FALSE;
+
+  // This can't be sustained by a spirit / elemental.
+  if (spell->spirit)
+    return FALSE;
+
+  // This can't be sustained by a focus.
+  if (spell->focus)
+    return FALSE;
+
+  return TRUE;
+}
+
 ACMD(do_focus)
 {
   if (GET_TRADITION(ch) != TRAD_ADEPT || !GET_POWER(ch, ADEPT_LIVINGFOCUS)) {
@@ -6443,18 +6459,37 @@ ACMD(do_focus)
   }
   skip_spaces(&argument);
   if (!*argument) {
-    if (GET_SUSTAINED_NUM(ch)) {
-      send_to_char("You are already sustaining a spell.\r\n", ch);
-      return;
-    }
+    FAILURE_CASE(GET_SUSTAINED_NUM(ch), "You are already sustaining a spell.");
+    FAILURE_CASE(!GET_SUSTAINED(ch), "You are not affected by any spells.");
+
     struct sustain_data *spell = GET_SUSTAINED(ch);
-    for (; spell; spell = spell->next)
-      if (!spell->caster && !spell->spirit && !spell->focus && spells[spell->spell].duration == SUSTAINED)
+    for (; spell; spell = spell->next) {
+      // This can't be a caster record (must be affecting us)
+      if (spell->caster)
+        continue;
+
+      // Must meet our constraints.
+      if (!_spell_is_sustained_with_no_spirit_or_focus(spell))
+        continue;
+
+      // We think we found one: Validate that it's not sustained on the caster's end as well.
+      bool spell_is_valid_target = FALSE;
+      for (struct sustain_data *ospell = GET_SUSTAINED(spell->other); ospell; ospell = ospell->next) {
+        // Look for a matching spell (same idnum, cast on us)
+        if (ospell->idnum == spell->idnum && ospell->other == ch) {
+          // Found it: Check qualifiers, then stop iterating (this is the matching spell record)
+          spell_is_valid_target = _spell_is_sustained_with_no_spirit_or_focus(ospell);
+          break;
+        }
+      }
+
+      // We found a valid one-- break off.
+      if (spell_is_valid_target)
         break;
-    if (!spell) {
-      send_to_char("You are not affected by any spells that need sustaining.\r\n", ch);
-      return;
     }
+
+    FAILURE_CASE(!spell, "You are not affected by any spells that need sustaining.");
+
     spell->spirit = ch;
     GET_SUSTAINED_NUM(ch)++;
     GET_SUSTAINED_FOCI(spell->other)++;
