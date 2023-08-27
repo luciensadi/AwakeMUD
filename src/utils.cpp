@@ -416,7 +416,7 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool min
       sustained_num--;
 
     int delta = sustained_num * 2;
-    base_target += delta;
+    base_target += MAX(0, delta);
     buf_mod(rbuf, rbuf_len, "Sustain", delta);
     WRITEOUT_MSG("Sustaining Spells", delta);
   }
@@ -424,9 +424,9 @@ int sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool min
   if (IS_PROJECT(ch) && ch->desc && ch->desc->original) {
     if (GET_SUSTAINED_NUM(ch->desc->original) > 0) {
       int delta = (GET_SUSTAINED_NUM(ch->desc->original) - GET_SUSTAINED_FOCI(ch->desc->original)) * 2;
-      base_target += delta;
+      base_target += MAX(0, delta);
       buf_mod(rbuf, rbuf_len, "Sustain", delta);
-      WRITEOUT_MSG("Sustaining Spells", delta);
+      WRITEOUT_MSG("Sustaining Spells (Meatform)", delta);
     }
   }
 
@@ -525,7 +525,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
   }
   for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
     if (sust->caster == FALSE && (sust->spell == SPELL_CONFUSION || sust->spell == SPELL_CHAOS)) {
-      int amount = MIN(sust->force, sust->success);
+      int amount = MAX(0, MIN(sust->force, sust->success));
       base_target += amount;
       buf_mod(rbuf, rbuf_len, "Confused", amount);
       WRITEOUT_MSG("Confusion (Spell)", amount);
@@ -534,7 +534,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
   if (!(IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch))) {
     for (struct spirit_sustained *sust = SPIRIT_SUST(ch); sust; sust = sust->next) {
       if (sust->type == CONFUSION) {
-        int amount = GET_LEVEL(sust->target);
+        int amount = MAX(0, GET_LEVEL(sust->target));
         base_target += amount;
         buf_mod(rbuf, rbuf_len, "SConfused", amount);
         WRITEOUT_MSG("Confusion (Spirit Power)", amount);

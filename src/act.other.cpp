@@ -4779,6 +4779,9 @@ ACMD(do_syspoints) {
                     GET_SYSTEM_POINTS(ch),
                     GET_SYSTEM_POINTS(ch) == 1 ? "" : "s"
                   );
+      send_to_char(ch, " - You %s^n purchased NODELETE.\r\n", PLR_FLAGGED(ch, PLR_NODELETE) ? "^ghave" : "^yhave not yet");
+      send_to_char(ch, " - You %s^n purchased the ability to see ROLLS output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
+      send_to_char(ch, " - You %s^n purchased the ability to see VNUMS in your prompt.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS) ? "^ghave" : "^yhave not yet");
       return;
     }
 
@@ -4789,12 +4792,115 @@ ACMD(do_syspoints) {
       return;
     }
 
+    if (is_abbrev(arg, "transfer") || is_abbrev(arg, "send")) {
+      // No target? Message.
+      FAILURE_CASE(!*buf, "To transfer your syspoints to another character you control, use SYSPOINTS TRANSFER <target> <amount> <reason>.");
+
+
+      // Separate out the character name and amount fields.
+      half_chop(buf, target, arg);
+      FAILURE_CASE(!*target, "Syntax: SYSPOINTS TRANSFER <target> <amount> <reason>.");
+      FAILURE_CASE_PRINTF(!*amt, "You must specify an amount to transfer to %s.", target);
+
+      // Separate out the reason field.
+      half_chop(arg, amt, reason);
+      FAILURE_CASE(!*reason, "You must specify a reason for this transfer.");
+
+      // Parse and validate the amount.
+      int amount = atoi(amt);
+      FAILURE_CASE(amount < 0, "You realize that that would be an exploit if it worked, right?");
+      FAILURE_CASE_PRINTF(amount == 0, "You must specify a positive amount to transfer ('%s' is not greater than 0).", amt);
+      FAILURE_CASE_PRINTF(GET_SYSTEM_POINTS(ch) < amount, "You only have %d syspoints available.", GET_SYSTEM_POINTS(ch));
+
+      idnum_t idnum;
+      int current_amount;
+      struct char_data *found_char = NULL;
+
+      // Find the specified character.
+      if (!(vict = get_player_vis(ch, target, FALSE))) {
+        snprintf(buf3, sizeof(buf3), "SELECT Name, SysPoints FROM pfiles WHERE name='%s';", prepare_quotes(buf2, target, sizeof(buf2) / sizeof(buf2[0])));
+        if (mysql_wrapper(mysql, buf3)) {
+          send_to_char("An unexpected error occurred (query failed).\r\n", ch);
+          return;
+        }
+        if (!(res = mysql_use_result(mysql))) {
+          send_to_char("An unexpected error occurred (use_result failed).\r\n", ch);
+          return;
+        }
+        row = mysql_fetch_row(res);
+        if (!row && mysql_field_count(mysql)) {
+          mysql_free_result(res);
+          send_to_char(ch, "Could not find a PC named %s.\r\n", target);
+          return;
+        }
+        idnum = atol(row[0]);
+        current_amount = atoi(row[1]);
+        mysql_free_result(res);
+      } else {
+        // Target cannot be NPC. We don't expect to ever hit this case using get_player_vis though.
+        if (IS_NPC(vict)) {
+          send_to_char(ch, "Not on NPCs.\r\n");
+          return;
+        }
+        idnum = GET_IDNUM(vict);
+        current_amount = GET_SYSTEM_POINTS(vict);
+        found_char = vict;
+      }
+
+      // Decrement our syspoints.
+      GET_SYSTEM_POINTS(ch) -= amount;
+
+      // Increment their syspoints by the amount.
+      current_amount += amount;
+
+      // Save the result on the target.
+      if (found_char) {
+        playerDB.SaveChar(found_char);
+      } else {
+        snprintf(buf, sizeof(buf), "UPDATE pfiles SET SysPoints = SysPoints + %d WHERE idnum='%ld';", current_amount, idnum);
+        if (mysql_wrapper(mysql, buf)) {
+          send_to_char("An unexpected error occurred on update (query failed).\r\n", ch);
+
+          // Unwind the change to the actor.
+          GET_SYSTEM_POINTS(ch) += amount;
+          return;
+        }
+      }
+
+      // Mail the victim.
+      snprintf(buf, sizeof(buf), "%s has transferred %d system point%s to you for %s%s^n\r\n",
+              GET_CHAR_NAME(ch),
+              amount,
+              amount == 1 ? "" : "s",
+              reason,
+              ispunct(get_final_character_from_string(reason)) ? "" : ".");
+      store_mail(idnum, ch, buf);
+
+        // Log it.
+      const char *name = found_char ? GET_CHAR_NAME(found_char) : get_player_name(idnum);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "%s transferred %d syspoints to %s (%ld; %d -> %d) for %s%s",
+                      GET_CHAR_NAME(ch),
+                      amount,
+                      name,
+                      target,
+                      current_amount - amount,
+                      current_amount,
+                      reason,
+                      ispunct(get_final_character_from_string(reason)) ? "" : ".");
+      if (!found_char)
+        delete [] name;
+
+      // Save the result on the actor.
+      playerDB.SaveChar(ch);
+    }
+
     // Restring mode.
     if (is_abbrev(arg, "restring")) {
       restring_with_args(ch, buf, TRUE);
       return;
     }
 
+    // Turn on the nodelete flag.
     if (is_abbrev(arg, "nodelete")) {
       if (PRF_FLAGGED(ch, PRF_HARDCORE)) {
         send_to_char("Hardcore characters are nodelete by default.\r\n", ch);
@@ -4951,10 +5057,7 @@ ACMD(do_syspoints) {
 
   if (is_abbrev(arg, "show")) {
     // No target? Show your own.
-    if (!*buf) {
-      send_to_char(ch, "You have %d system point%s.\r\n", GET_SYSTEM_POINTS(ch), GET_SYSTEM_POINTS(ch) == 1 ? "" : "s");
-      return;
-    }
+    FAILURE_CASE_PRINTF(!*buf, "You have %d system point%s.\r\n", GET_SYSTEM_POINTS(ch), GET_SYSTEM_POINTS(ch) == 1 ? "" : "s");
 
     // Otherwise, if the target was specified, look them up.
     if (!(vict = get_player_vis(ch, buf, FALSE))) {
