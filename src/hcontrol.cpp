@@ -62,17 +62,23 @@ void hcontrol_list_houses(struct char_data *ch) {
   for (auto &complex : global_apartment_complexes) {
     for (auto &apartment : complex->get_apartments()) {
       if (apartment->get_paid_until() > 0) {
-        // TODO: Add back in info like formatting, guest count, crap count etc
         const char *owner_name = apartment->get_owner_name__returns_new();
 
-        if (!owner_name)
-          owner_name = str_dup("<UNDEF>");
+        if (!owner_name) {
+#ifdef IS_BUILDPORT
+          owner_name = str_dup("<owner not loaded>");
+#else
+          owner_name = str_dup("<BAD OWNER>");
+#endif
+        }
 
-        snprintf(compose_buf, sizeof(compose_buf), "%s (%ld): %s^n (%s)\r\n", 
+        snprintf(compose_buf, sizeof(compose_buf), "%s (%ld): %s^n (%s, %ld guest%s)\r\n", 
                  CAP(owner_name), 
                  apartment->get_owner_id(), 
                  apartment->get_full_name(),
-                 get_crap_count_string(apartment->get_crap_count()));
+                 get_crap_count_string(apartment->get_crap_count()),
+                 apartment->get_guests().size(),
+                 apartment->get_guests().size() == 1 ? "" : "s");
         entries.push_back(str_dup(compose_buf));
 
         DELETE_ARRAY_IF_EXTANT(owner_name);
