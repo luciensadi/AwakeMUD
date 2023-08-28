@@ -4291,9 +4291,6 @@ ACMD(do_show)
             world_chunk_size, mob_chunk_size, obj_chunk_size);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Large bufs: ^c%-5d^n       Buf switches: ^C%-5d^n Overflows: ^r%-5d^n\r\n",
             buf_largecount, buf_switches, buf_overflows);
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ObjStackSize: %d(%d), ChStackSize: %d(%d), RmStackSize: %d(%d)\r\n",
-            Mem->ObjSize(), Mem->ObjMaxSize(), Mem->ChSize(), Mem->ChMaxSize(),
-            Mem->RoomSize(), Mem->RoomMaxSize());
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  OLC is %s\r\n",
             (olc_state ? "^GAvailable.^n" : "^RUnavailable.^n"));
     send_to_char(buf, ch);
