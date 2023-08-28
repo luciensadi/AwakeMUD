@@ -1,5 +1,6 @@
 #include "perfmon.hpp"
 
+#include <math.h>
 #include <map>
 #include <string>
 #include <sstream>
@@ -11,10 +12,6 @@
 #include <cmath>
 
 #include <sys/time.h>
-
-#ifndef osx
-static double const INFINITY = DBL_MAX;
-#endif
 
 using perfmon::kPulsePerSecond;
 #define SEC_PER_MIN 60
