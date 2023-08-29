@@ -6115,7 +6115,7 @@ void load_consist(void)
 
   // First, move all storage files that aren't linked to rooms.
   {
-    log("Moving orphaned storage files.")
+    log("Moving orphaned storage files.");
     bf::path storage_directory = bf::path("storage");
 
     // Ensure our orphaned storage files directory exists if it does not already.
