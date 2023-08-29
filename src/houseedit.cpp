@@ -362,7 +362,11 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
           copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, FALSE);
 
           // Strip the storage flag from the room.
+#ifdef IS_BUILDPORT
+          mudlog_vfprintf(ch, LOG_SYSLOG, "Refusing to remove ROOM_STORAGE flag from apartment subroom %ld: We're on the buildport.", GET_ROOM_VNUM(world_room));
+#else
           ROOM_FLAGS(world_room).RemoveBit(ROOM_STORAGE);
+#endif
 
           // Save the removal of the storage flag.
           int zone_idx = get_zone_index_number_from_vnum(GET_ROOM_VNUM(world_room));
