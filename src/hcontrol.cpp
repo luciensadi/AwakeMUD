@@ -108,7 +108,8 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg) {
           delete [] name;
         }
 
-        // TODO: Find the owner and notify them, if online. Otherwise, send a mail.
+        // EVENTUALTODO: Find the owner and notify them, if online. Otherwise, send a mail.
+        // Really, we're only doing this for enforcement reasons, so notifying the player is not a huge priority (they will have already been told they dun goofed)
 
         apartment->break_lease();
         return;
@@ -143,8 +144,17 @@ void hcontrol_display_house_by_name(struct char_data * ch, vnum_t house_number) 
           } else {
             struct room_data *world_room = &world[rnum];
 
-            // TODO: Fill out crap count.
-            int crap_count_obj = -1, crap_count_veh = -1;
+            // Count objects in room
+            int crap_count_obj = count_objects_in_room(world_room);
+            // Count vehicles in room
+            int crap_count_veh = 0;
+            for (struct veh_data *veh = world_room->vehicles; veh; veh = veh->next_veh) {
+              // +1 veh.
+              crap_count_veh++;
+
+              // Also count the objects in the vehicle.
+              crap_count_obj += count_objects_in_veh(veh);
+            }
 
             send_to_char(ch, "%7ld^n: %s^n (%ld) [%d items, %d vehicles]\r\n",
                          room->get_vnum(),

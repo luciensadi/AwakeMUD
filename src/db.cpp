@@ -31,6 +31,10 @@
 #endif
 #include <sodium.h>
 
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
+namespace bf = boost::filesystem;
+
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
 #include "mysql_config.hpp"
@@ -6103,9 +6107,52 @@ void load_saved_veh()
   }
 }
 
+
+
 void load_consist(void)
 {
   File file;
+
+  // First, move all storage files that aren't linked to rooms.
+  {
+    log("Moving orphaned storage files.")
+    bf::path storage_directory = bf::path("storage");
+
+    // Ensure our orphaned storage files directory exists if it does not already.
+    bf::path orphan_storage_files = storage_directory / "orphaned";
+    if (!bf::exists(orphan_storage_files)) {
+      bf::create_directory(orphan_storage_files);
+    }
+
+    bf::directory_iterator end_itr; // default construction yields past-the-end
+    for (bf::directory_iterator itr(storage_directory); itr != end_itr; ++itr) {
+      // Skip directories.
+      if (is_directory(itr->status()))
+        continue;
+
+      // Skip . and .. meta-files.
+      if (itr->path().filename_is_dot() || itr->path().filename_is_dot_dot())
+        continue;
+
+      // Skip anything that's not a number.
+      vnum_t vnum = atol(itr->path().filename().c_str());
+      if (vnum <= 0)
+        continue;
+
+      // It's a number. Calculate its rnum.
+      rnum_t rnum = real_room(vnum);
+
+      // If the room doesn't exist, or if it's not storage-flagged, this is an orphaned file.
+      if (rnum < 0 || !ROOM_FLAGGED(&world[rnum], ROOM_STORAGE)) {
+        log_vfprintf(" - Marking storage file %s as orphaned: %s.",
+                      itr->path().c_str(),
+                      rnum < 0 ? "No matching vnum" : "Room not flagged storage");
+        bf::rename(itr->path(), orphan_storage_files / itr->path().filename());
+      }
+
+      // EVENTUALTODO: Load the file here directly instead of iterating through the whole world as is done in the old code below.
+    }
+  }
 
   for (int nr = 0; nr <= top_of_world; nr++) {
     if (ROOM_FLAGGED(&world[nr], ROOM_STORAGE)) {
