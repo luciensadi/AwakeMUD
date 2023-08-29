@@ -4255,7 +4255,7 @@ ACMD(do_dice)
     return;
   }
   dice = atoi(buf);
-  snprintf(buf, sizeof(buf), "%d dice are rolled by $n ", dice);
+  snprintf(buf, sizeof(buf), "%d dice are %srolled by $n ", dice, subcmd == SCMD_PRIVATE_ROLL ? "privately " : "");
   if (*buf1) {
     tn = MAX(2, atoi(buf1));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "against a TN of %d ", tn);
@@ -4280,9 +4280,25 @@ ACMD(do_dice)
     }
     strlcat(buf, ".", sizeof(buf));
     if (tn > 0)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d successes.", suc);
-    act(buf, FALSE, ch, 0, 0, TO_ROOM);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d success%s.", suc, suc == 1 ? "" : "es");
+
+    // Message the roller.
     act(buf, FALSE, ch, 0, 0, TO_CHAR);
+
+    if (subcmd != SCMD_PRIVATE_ROLL) {
+      // Message the whole room.
+      act(buf, FALSE, ch, 0, 0, TO_ROOM);
+    } else {
+      // Only message staff chars in the room.
+      for (struct char_data *vict = (ch->in_room ? ch->in_room->people : ch->in_veh->people); 
+           vict; 
+           vict = (ch->in_room ? vict->next_in_room : vict->next_in_veh))
+      {
+        if (IS_SENATOR(vict)) {
+          act(buf, FALSE, ch, 0, vict, TO_VICT);
+        }
+      }
+    }
   }
 }
 

@@ -1074,7 +1074,6 @@ const char *wear_bits[] =
     "UNDERARM",
     "FACE",
     "THIGH",
-    "PATCH",
     "UNDERWEAR",
     "CHEST/UNDER",
     "LAPEL",

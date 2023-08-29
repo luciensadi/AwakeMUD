@@ -1314,15 +1314,18 @@ enum {
 #define ITEM_WEAR_HOLD          14 /* Can be held                */
 #define ITEM_WEAR_EYES          15 /* worn on eyes          */
 #define ITEM_WEAR_EAR           16 /* can be worn on/in ear  */
-#define ITEM_WEAR_UNDER  17
-#define ITEM_WEAR_BACK  18
-#define ITEM_WEAR_ANKLE  19
-#define ITEM_WEAR_SOCK  20
-#define ITEM_WEAR_BELLY  21
-#define ITEM_WEAR_ARM    22
-#define ITEM_WEAR_FACE   23
-#define ITEM_WEAR_THIGH  24
-#define ITEM_WEAR_MAX    25
+#define ITEM_WEAR_UNDER         17
+#define ITEM_WEAR_BACK          18
+#define ITEM_WEAR_ANKLE         19
+#define ITEM_WEAR_SOCK          20
+#define ITEM_WEAR_BELLY         21
+#define ITEM_WEAR_ARM           22
+#define ITEM_WEAR_FACE          23
+#define ITEM_WEAR_THIGH         24
+#define ITEM_WEAR_UNDERWEAR     25
+#define ITEM_WEAR_CHEST         26
+#define ITEM_WEAR_LAPEL         27
+#define ITEM_WEAR_MAX           28
 
 /* extra object flags: used by obj_data.obj_flags.extra_flags */
 /* see: https://github.com/luciensadi/AwakeMUD/wiki/Item-Extra-Flags */
@@ -1941,6 +1944,10 @@ enum {
 #define ALIAS_GLOB_CHAR '*'
 
 /* Subcommands section: Originally from interpreter.h */
+
+/* do_dice */
+#define SCMD_STANDARD_ROLL  0
+#define SCMD_PRIVATE_ROLL   1
 
 /* do_cast */
 #define SCMD_STANDARD_CAST  0

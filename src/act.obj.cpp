@@ -58,15 +58,48 @@ SPECIAL(weapon_dominator);
 extern WSPEC(monowhip);
 
 int wear_bitvectors[] = {
-                          ITEM_WEAR_TAKE, ITEM_WEAR_HEAD, ITEM_WEAR_EYES, ITEM_WEAR_EAR,
-                          ITEM_WEAR_EAR, ITEM_WEAR_FACE, ITEM_WEAR_NECK, ITEM_WEAR_NECK,
-                          ITEM_WEAR_BACK, ITEM_WEAR_ABOUT, ITEM_WEAR_BODY, ITEM_WEAR_UNDER,
-                          ITEM_WEAR_ARMS, ITEM_WEAR_ARM, ITEM_WEAR_ARM, ITEM_WEAR_WRIST,
-                          ITEM_WEAR_WRIST, ITEM_WEAR_HANDS, ITEM_WEAR_WIELD, ITEM_WEAR_HOLD, ITEM_WEAR_SHIELD,
-                          ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
-                          ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
-                          ITEM_WEAR_BELLY, ITEM_WEAR_WAIST, ITEM_WEAR_THIGH, ITEM_WEAR_THIGH,
-                          ITEM_WEAR_LEGS, ITEM_WEAR_ANKLE, ITEM_WEAR_ANKLE, ITEM_WEAR_SOCK, ITEM_WEAR_FEET };
+                          ITEM_WEAR_TAKE,
+                          ITEM_WEAR_HEAD,
+                          ITEM_WEAR_EYES, 
+                          ITEM_WEAR_EAR,
+                          ITEM_WEAR_EAR, 
+                          ITEM_WEAR_FACE, 
+                          ITEM_WEAR_NECK,
+                          ITEM_WEAR_NECK,
+                          ITEM_WEAR_BACK,
+                          ITEM_WEAR_ABOUT,
+                          ITEM_WEAR_BODY,
+                          ITEM_WEAR_UNDER,
+                          ITEM_WEAR_ARMS,
+                          ITEM_WEAR_ARM,
+                          ITEM_WEAR_ARM,
+                          ITEM_WEAR_WRIST,
+                          ITEM_WEAR_WRIST,
+                          ITEM_WEAR_HANDS,
+                          ITEM_WEAR_WIELD,
+                          ITEM_WEAR_HOLD, 
+                          ITEM_WEAR_SHIELD,
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_FINGER, 
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_FINGER, 
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_BELLY,
+                          ITEM_WEAR_WAIST,
+                          ITEM_WEAR_THIGH, 
+                          ITEM_WEAR_THIGH,
+                          ITEM_WEAR_LEGS,
+                          ITEM_WEAR_ANKLE,
+                          ITEM_WEAR_ANKLE, 
+                          ITEM_WEAR_SOCK,
+                          ITEM_WEAR_FEET,
+                          ITEM_WEAR_FEET /* Technically should be PATCH but we're not doing that here */,
+                          ITEM_WEAR_UNDERWEAR, 
+                          ITEM_WEAR_CHEST,
+                          ITEM_WEAR_LAPEL };
 
 bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 {
@@ -3065,7 +3098,23 @@ void wear_message(struct char_data * ch, struct obj_data * obj, int where)
                                 "You wear $p on your feet."},
 
                                {"$n wears $p on $s feet.",
-                                "You put $p on your feet."}
+                                "You put $p on your feet."},
+
+                                // Patch
+                               {"$n wears $p in an ERRONEOUS LOCATION.",
+                                "You put $p on an ERRONEOUS LOCATION."},
+
+                                // Underwear
+                               {"$n slips into $p.",
+                                "You slip into $p (u)."},
+
+                                // Chest
+                               {"$n slips into $p.",
+                                "You slip into $p (c)."},
+
+                                // Lapel
+                               {"$n pins $p to $s lapel area.",
+                                "You pin $p to your lapel area."}
 
                               /*
                                 {"$n sticks $p in $s mouth.",
@@ -3144,13 +3193,16 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
                               "You already have something in your belly button.\r\n",
                               "You already have something around your waist.\r\n",
                               "YOU SHOULD NEVER SEE THIS MESSAGE (#11).  PLEASE REPORT.\r\n",
-                              "You are already wearing something around both or your thighs.\r\n",
+                              "You are already wearing something around both of your thighs.\r\n",
                               "You're already wearing something on your legs.\r\n",
                               "YOU SHOULD NEVER SEE THIS MESSAGE (#12).  PLEASE REPORT.\r\n",
                               "You already have something on each of your ankles.\r\n",
                               "You are already wearing something on your feet.\r\n",
                               "You're already wearing something on your feet.\r\n",
-                              /*"You already have something in your mouth.\r\n" */
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#13).  PLEASE REPORT.\r\n",
+                              "You're already wearing underwear.\r\n",
+                              "You already have something on your chest.\r\n",
+                              "You already have a lapel pin.\r\n"
                             };
 
   /* first, make sure that the wear position is valid. */
@@ -3431,7 +3483,10 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
       "!RESERVED!",
       "sock",
       "feet",
-      // "mouth",
+      "!RESERVED!",
+      "underwear",
+      "chest",
+      "lapel",
       "\n"
     };
 
@@ -3486,6 +3541,12 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
     where = WEAR_FACE;
   if (CAN_WEAR(obj, ITEM_WEAR_THIGH))
     where = WEAR_THIGH_R;
+  if (CAN_WEAR(obj, ITEM_WEAR_UNDERWEAR))
+    where = WEAR_UNDERWEAR;
+  if (CAN_WEAR(obj, ITEM_WEAR_CHEST))
+    where = WEAR_CHEST;
+  if (CAN_WEAR(obj, ITEM_WEAR_LAPEL))
+    where = WEAR_LAPEL;
 /*
   if (CAN_WEAR(obj, ITEM_WEAR_MOUTH))
     where = WEAR_MOUTH;
