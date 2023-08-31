@@ -93,6 +93,7 @@ void houseedit_create_apartment(struct char_data *ch, const char *func_remainder
   FAILURE_CASE(!complex->can_houseedit_complex(ch), "You're not an editor of that complex.");
 
   ch->desc->edit_apartment = new Apartment();
+  ch->desc->edit_apartment->is_editing_struct = TRUE;
   ch->desc->edit_apartment->set_complex(complex);
   ch->desc->edit_apartment_original = NULL;
   houseedit_display_apartment_edit_menu(ch->desc);
@@ -124,18 +125,18 @@ void houseedit_edit_apartment(struct char_data *ch, const char *func_remainder) 
   FAILURE_CASE(!ch->desc, "I don't know how you got here, but this won't work.");
 
   // houseedit apartment edit [full name]
-  Apartment *apartment = find_apartment(func_remainder, ch);
+  Apartment *apartment;
 
   // Error message came from find_apartment().
-  if (!apartment)
+  if (!(apartment = find_apartment(func_remainder, ch)))
     return;
 
   FAILURE_CASE(!apartment->can_houseedit_apartment(ch), "You don't have edit access for that apartment.");
 
   // Allowed to edit: Put them into that mode.
   ch->desc->edit_apartment = new Apartment();
-  ch->desc->edit_apartment->clone_from(apartment);
   ch->desc->edit_apartment->is_editing_struct = TRUE;
+  ch->desc->edit_apartment->clone_from(apartment);
   ch->desc->edit_apartment_original = apartment;
   houseedit_display_apartment_edit_menu(ch->desc);
 }
@@ -297,8 +298,8 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
                               GET_CHAR_NAME(CH),
                               APT->get_full_name());
 
-              // We don't need to add ourselves to the complex's apartment list, this was already done in set_complex().
-              // COMPLEX->add_apartment(APT);
+              // Remove our editing tag, we're a real boy now.
+              APT->is_editing_struct = FALSE;
 
               // Write to disk.
               APT->save_base_info();

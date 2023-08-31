@@ -791,11 +791,8 @@ void Apartment::clone_from(Apartment *source) {
     guests.push_back(idnum);
   }
 
-  // Note that we're not pushing ourselves into the complex's list! This may cause issues.
-  REPLACE(complex);
-
-  // If the base directory has changed, move our files over.
-  set_base_directory(source->base_directory);
+  // set_base_directory() is called as part of set_complex()
+  set_complex(source->get_complex());
 }
 
 bool Apartment::can_houseedit_apartment(struct char_data *ch) {
@@ -1303,16 +1300,26 @@ void Apartment::mark_as_deleted() {
 }
 
 void Apartment::set_complex(ApartmentComplex *new_complex) {
-  // Remove us from our existing complex.
-  if (complex)
-    complex->apartments.erase(find(complex->apartments.begin(), complex->apartments.end(), this));
+  // If we're an editing struct, just point us at the new complex.
+  if (is_editing_struct) {
+    complex = new_complex;
+    regenerate_full_name();
+    return;
+  }
 
-  // Add us to the new complex.
+  // Remove us from our existing complex, provided we have one.
+  if (complex) {
+    complex->delete_apartment(this);
+  }
+
+  // Perform the actual update.
   complex = new_complex;
-  complex->apartments.push_back(this);
-  sort(complex->apartments.begin(), complex->apartments.end(), apartment_sort_func);
+
+  // Add us to that complex's apartments.
+  complex->add_apartment(this);
 
   // Change our save directory. Becomes something like 'lib/housing/22608/3A'
+  // TODO: Validate that an existing apartment with this name does not already exist in that directory.
   set_base_directory(complex->base_directory / shortname);
   log_vfprintf("Changed apartment %s's complex; new base_directory: %s", full_name, base_directory.string().c_str());
 
