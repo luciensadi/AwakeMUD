@@ -2148,7 +2148,7 @@ void write_json_file(bf::path path, json *contents) {
 
 void _json_parse_from_file(bf::path path, json &target) {
   if (!exists(path)) {
-    log_vfprintf("FATAL ERROR: Unable to find file at path %s. Terminating.");
+    log_vfprintf("FATAL ERROR: Unable to find file at path %s. Terminating.", path.string().c_str());
     exit(1);
   } else {
     log_vfprintf("Reading JSON data from %s.", path.string().c_str());
