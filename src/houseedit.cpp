@@ -348,7 +348,7 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
       bf::path original_save_file = old_house_directory / storage_file_name;
 
       // Load our guests from the old file.
-      apartment->load_guests_from_old_house_file(original_save_file.c_str());
+      apartment->load_guests_from_old_house_file(original_save_file.string().c_str());
       // Load our contents from the old file.
       copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, TRUE);
 
