@@ -66,7 +66,7 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
   }
 
   // Can't be an apartment if you don't have ownership or guest privileges there.
-  if (room->apartment && !(room->apartment->can_enter(ch))) {
+  if (room->apartment && (!room->apartment->can_enter(ch) || !room->apartment->get_owner_id())) {
 #ifdef IS_BUILDPORT
     send_to_char(ch, "^L(Flight to %s denied: It's an apartment you can't enter.)^n\r\n", GET_ROOM_NAME(room));
 #endif
