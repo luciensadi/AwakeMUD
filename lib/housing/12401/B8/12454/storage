@@ -1,0 +1,108 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	14614
+		Inside:	0
+		Cost:	350
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	14614
+		Inside:	0
+		Cost:	350
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	37597
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	691
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	691
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	660
+		Inside:	0
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	14623
+		Inside:	0
+		Cost:	750
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	7283
+		Inside:	0
+		Cost:	1250
+		ExtraFlags:	1001001000
+	[Object 8]
+		Vnum:	7282
+		Inside:	0
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	127
+		Inside:	1
+		Value 0:	13
+		Value 1:	12
+		Value 9:	11
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 13-round sniper rifle magazine
+	[Object 10]
+		Vnum:	14636
+		Inside:	0
+		Value 11:	2
+		Attempt:	-2
+		Cost:	4000
+		ExtraFlags:	1000000001000000000000
+	[Object 11]
+		Vnum:	15630
+		Inside:	0
+		Cost:	3500
+		ExtraFlags:	1000000000000
+	[Object 12]
+		Vnum:	121
+		Inside:	0
+		Value 0:	1000
+		Value 1:	14
+		Cost:	2000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal shotgun ammunition
+	[Object 13]
+		Vnum:	121
+		Inside:	0
+		Value 0:	3100
+		Value 1:	14
+		Value 2:	1
+		Cost:	21700
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 14]
+		Vnum:	80209
+		Inside:	0
+		Value 11:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 15]
+		Vnum:	19895
+		Inside:	0
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	16412
+		Inside:	0
+		Cost:	380000
+		ExtraFlags:	1000001
+	[Object 17]
+		Vnum:	949
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0

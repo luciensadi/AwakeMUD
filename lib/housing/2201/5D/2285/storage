@@ -1,0 +1,208 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+	Guest0:	15059
+	Guest1:	15252
+[HOUSE]
+	[Object 0]
+		Vnum:	19849
+		Inside:	0
+		Cost:	1200
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	31123
+		Inside:	0
+		Cost:	500
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	8498
+		Inside:	0
+		Cost:	1200
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	39929
+		Inside:	0
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	39936
+		Inside:	0
+		Cost:	7350
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	31126
+		Inside:	0
+		Cost:	200
+		ExtraFlags:	1
+	[Object 6]
+		Vnum:	12799
+		Inside:	0
+		Cost:	2
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	39757
+		Inside:	0
+		Cost:	500
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	31124
+		Inside:	0
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	39667
+		Inside:	0
+		Cost:	30
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	1176
+		Inside:	0
+		Value 8:	13
+		Cost:	9500
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	5
+		Value 2:	100
+		Value 3:	3
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l ATTACK^L:^l 5S ^AMatrix Sword^N
+	[Object 12]
+		Vnum:	108
+		Inside:	1
+		Value 0:	7
+		Value 1:	5
+		Value 2:	100
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l MEDIC^L:^l ver 3.03r5 ^AHeal^N
+	[Object 13]
+		Vnum:	108
+		Inside:	1
+		Value 0:	29
+		Value 1:	5
+		Value 2:	75
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l CLOAK^L:^l ver 1.18r5 ^ASneak^N
+	[Object 14]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	6
+		Value 2:	540
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l Loophole OS^L:^l ver 1.23r6 ^ANyaaar!^N
+	[Object 15]
+		Vnum:	108
+		Inside:	1
+		Value 0:	13
+		Value 1:	6
+		Value 2:	72
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l DECEPTION^L:^l ver 1.18r6 ^bLies^N
+	[Object 16]
+		Vnum:	108
+		Inside:	1
+		Value 0:	15
+		Value 1:	6
+		Value 2:	108
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l SLEAZE^L:^l ver 3.07r6^A Hide^N
+	[Object 17]
+		Vnum:	108
+		Inside:	1
+		Value 0:	17
+		Value 1:	5
+		Value 2:	25
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l BROWSE^L:^l ver 5.12r5 ^bSearch^N
+	[Object 18]
+		Vnum:	108
+		Inside:	1
+		Value 0:	12
+		Value 1:	5
+		Value 2:	25
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l DECRYPT^L:^l ver 3.3r5 ^bCrack^N
+	[Object 19]
+		Vnum:	108
+		Inside:	1
+		Value 0:	23
+		Value 1:	5
+		Value 2:	50
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l DEFUSE^L:^l ver 2.8r5 ^bDisable^N
+	[Object 20]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	5
+		Value 2:	75
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l ARMOR^L:^l ver 7.71r5 ^bBlock^N
+	[Object 21]
+		Vnum:	108
+		Inside:	1
+		Value 0:	18
+		Value 1:	5
+		Value 2:	50
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l READ/WRITE^L:^l ver 2.9r5 ^bFiles^N
+	[Object 22]
+		Vnum:	108
+		Inside:	1
+		Value 0:	30
+		Value 1:	5
+		Value 2:	75
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l LOCK-ON^L:^l ver 4.01r5 ^bTarget^N
+	[Object 23]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	5
+		Value 2:	75
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l ANALYZE^L:^l ver 2.4r5 ^bFind^N
+	[Object 24]
+		Vnum:	108
+		Inside:	1
+		Value 0:	13
+		Value 1:	5
+		Value 2:	50
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l DECEPTION^L:^l ver 1.11r5 ^bLies^N
+	[Object 25]
+		Vnum:	107
+		Inside:	1
+		Value 0:	24
+		Value 1:	5
+		Value 6:	50
+		Value 8:	1
+		Value 9:	15059
+		Value 10:	1
+		Timer:	200
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	^la ^L[^bC^Byber^bC^Batz^L]^l EVALUATE^L:^l ver 1.4r5 ^bInspect^N
+	[Object 26]
+		Vnum:	1120
+		Inside:	0
+		Value 3:	1475
+		Cost:	33600
+		ExtraFlags:	0

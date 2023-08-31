@@ -1,0 +1,1852 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+	Guest0:	12808
+[HOUSE]
+	[Object 0]
+		Vnum:	870
+		Inside:	0
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	29324
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	707
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	60593
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 4]
+		Vnum:	60593
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 5]
+		Vnum:	700
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	29325
+		Inside:	0
+		Cost:	30
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	29325
+		Inside:	0
+		Cost:	30
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	127
+		Inside:	2
+		Value 0:	13
+		Value 1:	12
+		Value 9:	13
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 13-round sniper rifle magazine
+	[Object 9]
+		Vnum:	14636
+		Inside:	1
+		Value 11:	2
+		Attempt:	-2
+		Cost:	4000
+		ExtraFlags:	1000000001000000000000
+	[Object 10]
+		Vnum:	14727
+		Inside:	1
+		Value 11:	2
+		Cost:	4870
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	781
+		Inside:	1
+		Value 9:	0
+		Value 11:	4
+		Timer:	5
+		Attempt:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 12]
+		Vnum:	127
+		Inside:	2
+		Value 0:	32
+		Value 1:	10
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 32-round submachine gun magazine
+	[Object 13]
+		Vnum:	781
+		Inside:	1
+		Value 11:	3
+		Attempt:	1
+		Cost:	950
+		ExtraFlags:	0
+	[Object 14]
+		Vnum:	127
+		Inside:	2
+		Value 0:	32
+		Value 1:	10
+		Value 9:	32
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 32-round submachine gun magazine
+	[Object 15]
+		Vnum:	781
+		Inside:	1
+		Value 11:	3
+		Attempt:	1
+		Cost:	950
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	127
+		Inside:	2
+		Value 0:	28
+		Value 1:	10
+		Value 9:	25
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 28-round submachine gun magazine
+	[Object 17]
+		Vnum:	779
+		Inside:	1
+		Value 11:	3
+		Attempt:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 18]
+		Vnum:	17136
+		Inside:	1
+		Cost:	1200
+		ExtraFlags:	100000000
+	[Object 19]
+		Vnum:	60535
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	1122
+		Inside:	1
+		Cost:	64900
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	112
+		Inside:	2
+		Value 0:	2
+		Value 1:	5400
+		Value 2:	9
+		Value 4:	-2
+		Value 8:	2700
+		Value 9:	5400
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Storage Memory
+	[Object 22]
+		Vnum:	112
+		Inside:	2
+		Value 0:	1
+		Value 1:	2250
+		Value 2:	9
+		Value 4:	-2
+		Value 8:	3375
+		Value 9:	4500
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Active Memory
+	[Object 23]
+		Vnum:	112
+		Inside:	2
+		Value 0:	15
+		Value 1:	9
+		Value 2:	9
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	1315
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	RAS Overide Part
+	[Object 24]
+		Vnum:	112
+		Inside:	2
+		Value 0:	18
+		Value 1:	9
+		Value 2:	9
+		Value 4:	-2
+		Value 8:	37
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Matrix Interface
+	[Object 25]
+		Vnum:	112
+		Inside:	2
+		Value 0:	8
+		Value 1:	900
+		Value 2:	9
+		Value 4:	-2
+		Value 5:	8
+		Value 8:	3150
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	I/O Speed Part Rtg 900
+	[Object 26]
+		Vnum:	112
+		Inside:	2
+		Value 0:	3
+		Value 1:	9
+		Value 2:	9
+		Value 4:	-2
+		Value 5:	8
+		Value 8:	3275
+		Value 9:	162
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Hot ASIST Interface/9 Part
+	[Object 27]
+		Vnum:	112
+		Inside:	2
+		Value 0:	9
+		Value 1:	9
+		Value 2:	9
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	2835
+		Value 9:	324
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	MPCP/9 Part
+	[Object 28]
+		Vnum:	112
+		Inside:	2
+		Value 0:	5
+		Value 1:	9
+		Value 2:	9
+		Value 4:	-2
+		Value 5:	8
+		Value 8:	2025
+		Value 9:	324
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Hardening Part 9
+	[Object 29]
+		Vnum:	112
+		Inside:	2
+		Value 0:	11
+		Value 1:	9
+		Value 2:	9
+		Value 4:	-2
+		Value 5:	8
+		Value 8:	2835
+		Value 9:	81
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Sensor 9 Part
+	[Object 30]
+		Vnum:	112
+		Inside:	2
+		Value 0:	10
+		Value 1:	9
+		Value 2:	9
+		Value 4:	-2
+		Value 5:	8
+		Value 8:	2835
+		Value 9:	121
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Bod Chip
+	[Object 31]
+		Vnum:	112
+		Inside:	2
+		Value 0:	17
+		Value 1:	2
+		Value 2:	9
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	270
+		Value 9:	324
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Response Increase 2
+	[Object 32]
+		Vnum:	112
+		Inside:	2
+		Value 0:	12
+		Value 1:	9
+		Value 2:	9
+		Value 4:	-2
+		Value 5:	14
+		Value 8:	2835
+		Value 9:	81
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Masking part 9
+	[Object 33]
+		Vnum:	112
+		Inside:	2
+		Value 0:	16
+		Value 1:	9
+		Value 2:	9
+		Value 4:	-2
+		Value 5:	8
+		Value 8:	630
+		Value 9:	405
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Reality Filters part
+	[Object 34]
+		Vnum:	112
+		Inside:	2
+		Value 0:	6
+		Value 1:	9
+		Value 2:	9
+		Value 4:	-2
+		Value 5:	8
+		Value 8:	1315
+		Value 9:	162
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	ICCM Biofeedback Filter 9 Prog
+	[Object 35]
+		Vnum:	113
+		Inside:	1
+		Value 0:	9
+		Value 1:	9
+		Value 2:	2250
+		Value 3:	5400
+		Value 4:	900
+		Value 6:	2
+		Value 9:	0
+		Cost:	0
+		ExtraFlags:	10100000000000000000000000000
+		Name:	A Flaming Cyberdeck
+		Photo:$
+A High-tech looking Cyberdeck wreathed in fiberoptic ^Rf^Ol^Ya^Rm^Ye^Os^N 
+~
+	[Object 36]
+		Vnum:	112
+		Inside:	2
+		Value 0:	9
+		Value 1:	6
+		Value 2:	6
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	1260
+		Value 9:	144
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	MPCP/PART/6
+	[Object 37]
+		Vnum:	112
+		Inside:	2
+		Value 0:	2
+		Value 1:	3600
+		Value 2:	6
+		Value 4:	-2
+		Value 8:	1800
+		Value 9:	3600
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Storage Memory Part - 3600
+	[Object 38]
+		Vnum:	112
+		Inside:	2
+		Value 0:	8
+		Value 1:	600
+		Value 2:	6
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	2100
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	I/O/6 part
+	[Object 39]
+		Vnum:	112
+		Inside:	2
+		Value 0:	3
+		Value 1:	6
+		Value 2:	6
+		Value 4:	-2
+		Value 5:	12
+		Value 8:	2150
+		Value 9:	72
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	HOT ASIST PART
+	[Object 40]
+		Vnum:	112
+		Inside:	2
+		Value 0:	15
+		Value 1:	6
+		Value 2:	6
+		Value 4:	-2
+		Value 5:	8
+		Value 8:	1210
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	RAS Part
+	[Object 41]
+		Vnum:	112
+		Inside:	2
+		Value 0:	18
+		Value 1:	6
+		Value 2:	6
+		Value 4:	-2
+		Value 8:	37
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Matrix Interface 6
+	[Object 42]
+		Vnum:	112
+		Inside:	2
+		Value 0:	1
+		Value 1:	1500
+		Value 2:	6
+		Value 4:	-2
+		Value 8:	2250
+		Value 9:	3000
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Active Memory 6 1500mbs
+	[Object 43]
+		Vnum:	112
+		Inside:	2
+		Value 0:	5
+		Value 1:	6
+		Value 2:	6
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	900
+		Value 9:	144
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Hardening 6
+	[Object 44]
+		Vnum:	112
+		Inside:	2
+		Value 0:	17
+		Value 1:	1
+		Value 2:	6
+		Value 4:	-2
+		Value 5:	8
+		Value 8:	135
+		Value 9:	72
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Response Increase
+	[Object 45]
+		Vnum:	112
+		Inside:	2
+		Value 0:	16
+		Value 1:	6
+		Value 2:	6
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	420
+		Value 9:	180
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Reality Filters - 6
+	[Object 46]
+		Vnum:	112
+		Inside:	2
+		Value 0:	6
+		Value 1:	6
+		Value 2:	6
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	1210
+		Value 9:	72
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	ICCM Biofeedback Filter - 6
+	[Object 47]
+		Vnum:	113
+		Inside:	1
+		Value 0:	6
+		Value 1:	6
+		Value 2:	1500
+		Value 3:	3600
+		Value 4:	600
+		Value 6:	1
+		Value 9:	0
+		Cost:	0
+		ExtraFlags:	10100000000000000000000000000
+		Name:	A Slim black cyberdeck with ^BNeon Blue^n Highlights
+		Photo:$
+A Slim black cyberdeck with ^BNeon Blue^n Highlights 
+~
+	[Object 48]
+		Vnum:	1112
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 49]
+		Vnum:	33369
+		Inside:	2
+		Cost:	11250
+		ExtraFlags:	0
+	[Object 50]
+		Vnum:	33369
+		Inside:	2
+		Cost:	11250
+		ExtraFlags:	0
+	[Object 51]
+		Vnum:	33368
+		Inside:	2
+		Cost:	11250
+		ExtraFlags:	0
+	[Object 52]
+		Vnum:	33351
+		Inside:	2
+		Cost:	7500
+		ExtraFlags:	0
+	[Object 53]
+		Vnum:	33230
+		Inside:	2
+		Cost:	10800
+		ExtraFlags:	0
+	[Object 54]
+		Vnum:	33362
+		Inside:	2
+		Cost:	7500
+		ExtraFlags:	0
+	[Object 55]
+		Vnum:	33347
+		Inside:	2
+		Cost:	7500
+		ExtraFlags:	0
+	[Object 56]
+		Vnum:	33370
+		Inside:	2
+		Cost:	11250
+		ExtraFlags:	0
+	[Object 57]
+		Vnum:	9503
+		Inside:	1
+		Cost:	35
+		ExtraFlags:	0
+		Name:	A case of Activesofts^n
+	[Object 58]
+		Vnum:	108
+		Inside:	2
+		Value 0:	30
+		Value 1:	6
+		Value 2:	108
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	lock-on/6
+	[Object 59]
+		Vnum:	108
+		Inside:	2
+		Value 0:	35
+		Value 1:	6
+		Value 2:	72
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Icon/6
+	[Object 60]
+		Vnum:	108
+		Inside:	2
+		Value 0:	18
+		Value 1:	6
+		Value 2:	72
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Read/Write/6
+	[Object 61]
+		Vnum:	108
+		Inside:	2
+		Value 0:	23
+		Value 1:	6
+		Value 2:	72
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Defuse/6
+	[Object 62]
+		Vnum:	108
+		Inside:	2
+		Value 0:	23
+		Value 1:	6
+		Value 2:	72
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Defuse/6
+	[Object 63]
+		Vnum:	108
+		Inside:	2
+		Value 0:	12
+		Value 1:	6
+		Value 2:	36
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Decrypt/6
+	[Object 64]
+		Vnum:	108
+		Inside:	2
+		Value 0:	17
+		Value 1:	6
+		Value 2:	36
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Browse/6
+	[Object 65]
+		Vnum:	108
+		Inside:	2
+		Value 0:	17
+		Value 1:	6
+		Value 2:	36
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Browse/6
+	[Object 66]
+		Vnum:	108
+		Inside:	2
+		Value 0:	36
+		Value 1:	6
+		Value 2:	288
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	MPCP-6-prog
+	[Object 67]
+		Vnum:	108
+		Inside:	2
+		Value 0:	29
+		Value 1:	6
+		Value 2:	108
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	cloak/6
+	[Object 68]
+		Vnum:	108
+		Inside:	2
+		Value 0:	18
+		Value 1:	6
+		Value 2:	72
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Read/Write/6
+	[Object 69]
+		Vnum:	108
+		Inside:	2
+		Value 0:	13
+		Value 1:	6
+		Value 2:	72
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Deception/6
+	[Object 70]
+		Vnum:	108
+		Inside:	2
+		Value 0:	5
+		Value 1:	6
+		Value 2:	180
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Attack/6D
+	[Object 71]
+		Vnum:	108
+		Inside:	2
+		Value 0:	30
+		Value 1:	6
+		Value 2:	108
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	lock-on/6
+	[Object 72]
+		Vnum:	108
+		Inside:	2
+		Value 0:	10
+		Value 1:	6
+		Value 2:	72
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Compressor 6
+	[Object 73]
+		Vnum:	108
+		Inside:	2
+		Value 0:	10
+		Value 1:	6
+		Value 2:	72
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Compressor 6
+	[Object 74]
+		Vnum:	108
+		Inside:	2
+		Value 0:	29
+		Value 1:	6
+		Value 2:	108
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	cloak/6
+	[Object 75]
+		Vnum:	108
+		Inside:	2
+		Value 0:	12
+		Value 1:	6
+		Value 2:	36
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Decrypt/6
+	[Object 76]
+		Vnum:	108
+		Inside:	2
+		Value 0:	13
+		Value 1:	6
+		Value 2:	72
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Deception/6
+	[Object 77]
+		Vnum:	108
+		Inside:	2
+		Value 0:	23
+		Value 1:	6
+		Value 2:	72
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Defuse/6
+	[Object 78]
+		Vnum:	108
+		Inside:	2
+		Value 0:	20
+		Value 1:	6
+		Value 2:	108
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Armour/6
+	[Object 79]
+		Vnum:	108
+		Inside:	2
+		Value 0:	5
+		Value 1:	6
+		Value 2:	180
+		Value 3:	4
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Attack/6D
+	[Object 80]
+		Vnum:	108
+		Inside:	2
+		Value 0:	27
+		Value 1:	6
+		Value 2:	540
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Programmin Suite/6
+	[Object 81]
+		Vnum:	108
+		Inside:	2
+		Value 0:	20
+		Value 1:	6
+		Value 2:	108
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Armour/6
+	[Object 82]
+		Vnum:	108
+		Inside:	2
+		Value 0:	29
+		Value 1:	6
+		Value 2:	108
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	cloak/6
+	[Object 83]
+		Vnum:	108
+		Inside:	2
+		Value 0:	29
+		Value 1:	6
+		Value 2:	108
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	cloak/6
+	[Object 84]
+		Vnum:	108
+		Inside:	2
+		Value 0:	7
+		Value 1:	6
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Medic -6- Cure light wounds
+	[Object 85]
+		Vnum:	108
+		Inside:	2
+		Value 0:	7
+		Value 1:	6
+		Value 2:	144
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Medic -6- Cure light wounds
+	[Object 86]
+		Vnum:	108
+		Inside:	2
+		Value 0:	23
+		Value 1:	6
+		Value 2:	72
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Defuse/6
+	[Object 87]
+		Vnum:	108
+		Inside:	2
+		Value 0:	7
+		Value 1:	6
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Medic-6
+	[Object 88]
+		Vnum:	17113
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 89]
+		Vnum:	107
+		Inside:	2
+		Value 0:	25
+		Value 1:	6
+		Value 4:	480
+		Value 6:	144
+		Value 9:	15154
+		Timer:	480
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Validate/6
+	[Object 90]
+		Vnum:	6108
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 91]
+		Vnum:	112
+		Inside:	2
+		Value 0:	9
+		Value 1:	6
+		Value 2:	6
+		Value 4:	-1
+		Value 5:	16
+		Value 7:	15154
+		Value 8:	1260
+		Value 9:	144
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	MPCP-6
+	[Object 92]
+		Vnum:	9503
+		Inside:	1
+		Cost:	35
+		ExtraFlags:	0
+		Name:	A case of level 6 chips and parts^n
+	[Object 93]
+		Vnum:	17115
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 94]
+		Vnum:	17116
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 95]
+		Vnum:	1966
+		Inside:	2
+		Value 4:	1
+		Attempt:	64913
+		Cost:	0
+		ExtraFlags:	0
+	[Object 96]
+		Vnum:	1140
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 97]
+		Vnum:	1141
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 98]
+		Vnum:	60532
+		Inside:	3
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 99]
+		Vnum:	108
+		Inside:	3
+		Value 0:	5
+		Value 1:	9
+		Value 2:	405
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Attack - 9 - Shotgun
+	[Object 100]
+		Vnum:	108
+		Inside:	3
+		Value 0:	24
+		Value 2:	128
+		Value 5:	1691066906
+		Value 6:	1687775043
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Evaluate - 8 - Treasurehunter
+	[Object 101]
+		Vnum:	108
+		Inside:	3
+		Value 0:	10
+		Value 1:	6
+		Value 2:	72
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Compressor 6
+	[Object 102]
+		Vnum:	108
+		Inside:	3
+		Value 0:	20
+		Value 1:	9
+		Value 2:	243
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Armour - 9 - Chainmail
+	[Object 103]
+		Vnum:	108
+		Inside:	3
+		Value 0:	17
+		Value 1:	9
+		Value 2:	81
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Browse -9- Searchlight
+	[Object 104]
+		Vnum:	108
+		Inside:	3
+		Value 0:	15
+		Value 1:	9
+		Value 2:	243
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Sleaze -9- Scroll of Charm person
+	[Object 105]
+		Vnum:	17155
+		Inside:	2
+		Cost:	120
+		ExtraFlags:	0
+		Name:	A leather case of level 9 programmes and chips^n
+	[Object 106]
+		Vnum:	1139
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 107]
+		Vnum:	387
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 108]
+		Vnum:	6105
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 109]
+		Vnum:	108
+		Inside:	2
+		Value 0:	20
+		Value 1:	9
+		Value 2:	243
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Armour - 9 - Chainmail
+	[Object 110]
+		Vnum:	108
+		Inside:	2
+		Value 0:	36
+		Value 1:	7
+		Value 2:	392
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	MPCP-7-Program
+	[Object 111]
+		Vnum:	108
+		Inside:	2
+		Value 0:	18
+		Value 1:	12
+		Value 2:	288
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Read/Write -12- Scroll of identify
+	[Object 112]
+		Vnum:	108
+		Inside:	2
+		Value 0:	12
+		Value 1:	12
+		Value 2:	144
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Decrypt -12- scroll of speak with animals
+	[Object 113]
+		Vnum:	108
+		Inside:	2
+		Value 0:	5
+		Value 1:	7
+		Value 2:	245
+		Value 3:	4
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Attack-7
+	[Object 114]
+		Vnum:	108
+		Inside:	2
+		Value 0:	21
+		Value 1:	4
+		Value 2:	48
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Camo/4
+	[Object 115]
+		Vnum:	108
+		Inside:	2
+		Value 0:	15
+		Value 1:	9
+		Value 2:	243
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Sleaze -9- Scroll of Charm person
+	[Object 116]
+		Vnum:	108
+		Inside:	2
+		Value 0:	11
+		Value 1:	9
+		Value 2:	243
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Analyze -9- Spyglass
+	[Object 117]
+		Vnum:	108
+		Inside:	2
+		Value 0:	13
+		Value 1:	9
+		Value 2:	162
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Deception -9- Disguse Kit
+	[Object 118]
+		Vnum:	108
+		Inside:	2
+		Value 0:	12
+		Value 1:	9
+		Value 2:	81
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Decrypt -9- Codex
+	[Object 119]
+		Vnum:	108
+		Inside:	2
+		Value 0:	17
+		Value 1:	12
+		Value 2:	144
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Browse -12- scroll of Detect invisibility 
+	[Object 120]
+		Vnum:	108
+		Inside:	2
+		Value 0:	20
+		Value 1:	11
+		Value 2:	363
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Armor -11- Steelskin
+	[Object 121]
+		Vnum:	108
+		Inside:	2
+		Value 0:	30
+		Value 1:	10
+		Value 2:	300
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Lock-on -10- Infravision
+	[Object 122]
+		Vnum:	108
+		Inside:	2
+		Value 0:	17
+		Value 1:	12
+		Value 2:	144
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Browse -12- scroll of Detect invisibility 
+	[Object 123]
+		Vnum:	108
+		Inside:	2
+		Value 0:	17
+		Value 1:	12
+		Value 2:	144
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Browse -12- scroll of Detect invisibility 
+	[Object 124]
+		Vnum:	108
+		Inside:	2
+		Value 0:	29
+		Value 1:	12
+		Value 2:	432
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Cloak -12- Cloak of invisibility 
+	[Object 125]
+		Vnum:	108
+		Inside:	2
+		Value 0:	11
+		Value 1:	12
+		Value 2:	432
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Analyze -12- scroll of detect magic
+	[Object 126]
+		Vnum:	9503
+		Inside:	1
+		Cost:	35
+		ExtraFlags:	0
+		Name:	A small leather case of cooked programmes.^n
+	[Object 127]
+		Vnum:	108
+		Inside:	2
+		Value 0:	27
+		Value 1:	7
+		Value 2:	735
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Programming Suite 7
+	[Object 128]
+		Vnum:	108
+		Inside:	2
+		Value 0:	18
+		Value 1:	9
+		Value 2:	162
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Read/Write -9- Textbook
+	[Object 129]
+		Vnum:	108
+		Inside:	2
+		Value 0:	23
+		Value 1:	9
+		Value 2:	162
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Defuse -9- Bombsquad
+	[Object 130]
+		Vnum:	108
+		Inside:	2
+		Value 0:	13
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Deception -12- scroll of polymorph self
+	[Object 131]
+		Vnum:	108
+		Inside:	2
+		Value 0:	17
+		Value 1:	12
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Browse -12- scroll of Detect invisibility 
+	[Object 132]
+		Vnum:	108
+		Inside:	2
+		Value 0:	23
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Defuse -12- Scroll of find and remove traps
+	[Object 133]
+		Vnum:	108
+		Inside:	2
+		Value 0:	29
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Cloak -12- Cloak of invisibility 
+	[Object 134]
+		Vnum:	108
+		Inside:	2
+		Value 0:	20
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Armour -12- Stoneskin
+	[Object 135]
+		Vnum:	108
+		Inside:	2
+		Value 0:	12
+		Value 1:	12
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Decrypt -12- scroll of speak with animals
+	[Object 136]
+		Vnum:	108
+		Inside:	2
+		Value 0:	5
+		Value 1:	7
+		Value 2:	245
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Attack-7
+	[Object 137]
+		Vnum:	108
+		Inside:	2
+		Value 0:	27
+		Value 1:	3
+		Value 2:	135
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	program suite 3
+	[Object 138]
+		Vnum:	108
+		Inside:	2
+		Value 0:	21
+		Value 1:	4
+		Value 2:	48
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Camo/4
+	[Object 139]
+		Vnum:	108
+		Inside:	2
+		Value 0:	27
+		Value 1:	4
+		Value 2:	240
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Programing Suit/4
+	[Object 140]
+		Vnum:	108
+		Inside:	2
+		Value 0:	15
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Sleaze -12- Sneakthief
+	[Object 141]
+		Vnum:	108
+		Inside:	2
+		Value 0:	11
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Analyze -12- scroll of detect magic
+	[Object 142]
+		Vnum:	108
+		Inside:	2
+		Value 0:	18
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Read/Write -12- Scroll of identify
+	[Object 143]
+		Vnum:	108
+		Inside:	2
+		Value 0:	27
+		Value 1:	9
+		Value 2:	1215
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Programming Suite 9
+	[Object 144]
+		Vnum:	108
+		Inside:	2
+		Value 0:	11
+		Value 1:	9
+		Value 2:	243
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Analyze -9- Spyglass
+	[Object 145]
+		Vnum:	108
+		Inside:	2
+		Value 0:	23
+		Value 1:	9
+		Value 2:	162
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Defuse -9- Bombsquad
+	[Object 146]
+		Vnum:	108
+		Inside:	2
+		Value 0:	17
+		Value 1:	9
+		Value 2:	81
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Browse -9- Searchlight
+	[Object 147]
+		Vnum:	108
+		Inside:	2
+		Value 0:	20
+		Value 1:	11
+		Value 2:	363
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Armor -11- Steelskin
+	[Object 148]
+		Vnum:	108
+		Inside:	2
+		Value 0:	13
+		Value 1:	9
+		Value 2:	162
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Deception -9- Disguse Kit
+	[Object 149]
+		Vnum:	108
+		Inside:	2
+		Value 0:	12
+		Value 1:	9
+		Value 2:	81
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Decrypt -9- Codex
+	[Object 150]
+		Vnum:	108
+		Inside:	2
+		Value 0:	30
+		Value 1:	10
+		Value 2:	300
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Lock-on -10- Infravision
+	[Object 151]
+		Vnum:	108
+		Inside:	2
+		Value 0:	29
+		Value 1:	9
+		Value 2:	243
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Cloak -9- Cloak of invisibility 
+	[Object 152]
+		Vnum:	108
+		Inside:	2
+		Value 0:	29
+		Value 1:	9
+		Value 2:	243
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Cloak -9- Cloak of invisibility 
+	[Object 153]
+		Vnum:	108
+		Inside:	2
+		Value 0:	29
+		Value 1:	9
+		Value 2:	243
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Cloak -9- Cloak of invisibility 
+	[Object 154]
+		Vnum:	108
+		Inside:	2
+		Value 0:	21
+		Value 1:	9
+		Value 2:	243
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Camo -9- Masque
+	[Object 155]
+		Vnum:	108
+		Inside:	2
+		Value 0:	21
+		Value 1:	9
+		Value 2:	243
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Camo -9- Masque
+	[Object 156]
+		Vnum:	108
+		Inside:	2
+		Value 0:	30
+		Value 1:	6
+		Value 2:	108
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Lock-on 6 - scroll of eagle-eye
+	[Object 157]
+		Vnum:	9503
+		Inside:	1
+		Cost:	35
+		ExtraFlags:	0
+		Name:	A small leather case of uncooked programmes.^n
+	[Object 158]
+		Vnum:	108
+		Inside:	1
+		Value 0:	30
+		Value 1:	6
+		Value 2:	108
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Lock-on 6 - scroll of eagle-eye
+	[Object 159]
+		Vnum:	7269
+		Inside:	0
+		Value 1:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 160]
+		Vnum:	1167
+		Inside:	0
+		Value 2:	1
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 161]
+		Vnum:	29326
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	0
+	[Object 162]
+		Vnum:	39712
+		Inside:	0
+		Cost:	400
+		ExtraFlags:	0
+	[Object 163]
+		Vnum:	1904
+		Inside:	1
+		Cost:	65
+		ExtraFlags:	0
+	[Object 164]
+		Vnum:	19968
+		Inside:	1
+		Value 0:	-1
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 165]
+		Vnum:	4921
+		Inside:	1
+		Value 0:	-1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 166]
+		Vnum:	127
+		Inside:	3
+		Value 0:	30
+		Value 1:	10
+		Value 9:	30
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 30-round submachine gun magazine
+	[Object 167]
+		Vnum:	91000
+		Inside:	2
+		Value 11:	3
+		Cost:	0
+		ExtraFlags:	0
+	[Object 168]
+		Vnum:	3494
+		Inside:	1
+		Condition:	3
+		Cost:	0
+		ExtraFlags:	0
+	[Object 169]
+		Vnum:	38041
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 170]
+		Vnum:	60532
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	1000000000
+	[Object 171]
+		Vnum:	80734
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000
+	[Object 172]
+		Vnum:	60530
+		Inside:	1
+		Value 0:	3321
+		Value 1:	9433
+		Value 2:	1
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 173]
+		Vnum:	60531
+		Inside:	1
+		Value 0:	-1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 174]
+		Vnum:	60595
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 175]
+		Vnum:	60595
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 176]
+		Vnum:	1847
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 177]
+		Vnum:	80004
+		Inside:	1
+		Value 5:	-934
+		Cost:	0
+		ExtraFlags:	0
+	[Object 178]
+		Vnum:	3739
+		Inside:	1
+		Cost:	600
+		ExtraFlags:	0
+	[Object 179]
+		Vnum:	31580
+		Inside:	1
+		Cost:	700
+		ExtraFlags:	0
+	[Object 180]
+		Vnum:	29021
+		Inside:	1
+		Value 7:	0
+		Value 11:	2
+		Cost:	0
+		ExtraFlags:	1001000000000
+	[Object 181]
+		Vnum:	60553
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 182]
+		Vnum:	5105
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 183]
+		Vnum:	127
+		Inside:	2
+		Value 0:	15
+		Value 1:	8
+		Value 9:	12
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 15-round heavy pistol magazine
+	[Object 184]
+		Vnum:	621
+		Inside:	1
+		Value 11:	2
+		Cost:	550
+		ExtraFlags:	0
+	[Object 185]
+		Vnum:	711
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	100000000
+	[Object 186]
+		Vnum:	711
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	100000000
+	[Object 187]
+		Vnum:	566
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 188]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'Eye package w/LL, TH and FC -alpha'
+	[Object 189]
+		Vnum:	85907
+		Inside:	2
+		Cost:	240000
+		ExtraFlags:	0
+	[Object 190]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'muscle augmentation III - cultured'
+	[Object 191]
+		Vnum:	660
+		Inside:	1
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 192]
+		Vnum:	14618
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 193]
+		Vnum:	38064
+		Inside:	1
+		Cost:	4000
+		ExtraFlags:	100000000
+	[Object 194]
+		Vnum:	39867
+		Inside:	1
+		Value 0:	7206
+		Value 1:	2422
+		Value 2:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 195]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 196]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 197]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 198]
+		Vnum:	64916
+		Inside:	0
+		Cost:	2100
+		ExtraFlags:	0
+	[Object 199]
+		Vnum:	1172
+		Inside:	0
+		Value 8:	24
+		Cost:	2700
+		ExtraFlags:	0
+	[Object 200]
+		Vnum:	1172
+		Inside:	0
+		Value 8:	32
+		Cost:	0
+		ExtraFlags:	0
+	[Object 201]
+		Vnum:	1173
+		Inside:	0
+		Value 8:	18
+		Cost:	3400
+		ExtraFlags:	0
+	[Object 202]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	12
+		Value 2:	2160
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Programming Suite -12- Jarvis
+	[Object 203]
+		Vnum:	107
+		Inside:	1
+		Value 0:	24
+		Value 1:	12
+		Value 6:	288
+		Value 8:	2
+		Value 9:	15154
+		Value 10:	1
+		Timer:	480
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Evaluate -12- Treasure Hunter
+	[Object 204]
+		Vnum:	1126
+		Inside:	0
+		Value 3:	2476
+		Cost:	362500
+		ExtraFlags:	10
+	[Object 205]
+		Vnum:	1182
+		Inside:	0
+		Cost:	40
+		ExtraFlags:	0
+	[Object 206]
+		Vnum:	1182
+		Inside:	0
+		Cost:	3602
+		ExtraFlags:	0
+	[Object 207]
+		Vnum:	1182
+		Inside:	0
+		Cost:	16
+		ExtraFlags:	0
+	[Object 208]
+		Vnum:	1182
+		Inside:	0
+		Cost:	8
+		ExtraFlags:	0
+	[Object 209]
+		Vnum:	1187
+		Inside:	0
+		Cost:	3885
+		ExtraFlags:	0
+	[Object 210]
+		Vnum:	1187
+		Inside:	0
+		Cost:	2543
+		ExtraFlags:	0
+	[Object 211]
+		Vnum:	1176
+		Inside:	0
+		Value 8:	14
+		Cost:	9500
+		ExtraFlags:	0
+	[Object 212]
+		Vnum:	862
+		Inside:	0
+		Value 0:	6712
+		Cost:	13424
+		ExtraFlags:	0
+		Name:	a box of normal submachine gun ammunition
+	[Object 213]
+		Vnum:	864
+		Inside:	0
+		Value 0:	750
+		Cost:	3750
+		ExtraFlags:	0
+		Name:	a box of explosive submachine gun ammunition
+	[Object 214]
+		Vnum:	910
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 215]
+		Vnum:	121
+		Inside:	0
+		Value 0:	500
+		Value 1:	13
+		Cost:	1000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal assault rifle ammunition
+	[Object 216]
+		Vnum:	121
+		Inside:	0
+		Value 0:	11
+		Value 1:	14
+		Cost:	22
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal shotgun ammunition
+	[Object 217]
+		Vnum:	121
+		Inside:	0
+		Value 0:	78
+		Value 1:	13
+		Value 2:	2
+		Cost:	390
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of explosive assault rifle ammunition
+	[Object 218]
+		Vnum:	121
+		Inside:	0
+		Value 0:	13
+		Value 1:	8
+		Value 2:	3
+		Cost:	130
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX heavy pistol ammunition
+	[Object 219]
+		Vnum:	121
+		Inside:	0
+		Value 0:	201
+		Value 1:	8
+		Cost:	402
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal heavy pistol ammunition
+	[Object 220]
+		Vnum:	863
+		Inside:	0
+		Value 0:	750
+		Cost:	5250
+		ExtraFlags:	0
+		Name:	a box of APDS submachine gun ammunition
+	[Object 221]
+		Vnum:	9503
+		Inside:	0
+		Cost:	35
+		ExtraFlags:	0

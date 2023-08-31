@@ -1,0 +1,505 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	121
+		Inside:	0
+		Value 0:	216
+		Value 1:	10
+		Cost:	432
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal submachine gun ammunition
+	[Object 1]
+		Vnum:	121
+		Inside:	0
+		Value 0:	100
+		Value 1:	10
+		Value 2:	3
+		Cost:	1000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX submachine gun ammunition
+	[Object 2]
+		Vnum:	1167
+		Inside:	0
+		Value 2:	1
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	1176
+		Inside:	0
+		Value 8:	24
+		Cost:	9500
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	5
+		Value 2:	375
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the EZ+ Byte-n Programming Suite
+	[Object 5]
+		Vnum:	108
+		Inside:	1
+		Value 0:	13
+		Value 1:	9
+		Value 2:	162
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the Stealth-Mode Deception Program
+	[Object 6]
+		Vnum:	108
+		Inside:	1
+		Value 0:	15
+		Value 1:	9
+		Value 2:	243
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the ghostly Sleaze prgram
+	[Object 7]
+		Vnum:	108
+		Inside:	1
+		Value 0:	17
+		Value 1:	9
+		Value 2:	81
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the Flying Iron Butterfly Browse program
+	[Object 8]
+		Vnum:	108
+		Inside:	1
+		Value 0:	18
+		Value 1:	9
+		Value 2:	162
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the Sensitive Read/Write program
+	[Object 9]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	9
+		Value 2:	243
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the Iron Butterfly Carapace Armor program
+	[Object 10]
+		Vnum:	108
+		Inside:	1
+		Value 0:	23
+		Value 1:	9
+		Value 2:	162
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the Safe-Operation Defuse program
+	[Object 11]
+		Vnum:	108
+		Inside:	1
+		Value 0:	12
+		Value 1:	9
+		Value 2:	81
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the de-Scramble Decrypt program
+	[Object 12]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	9
+		Value 2:	243
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the Animal-Eyes Analyze program
+	[Object 13]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	8
+		Value 2:	320
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the Spikey Iron Butterfly attack program
+	[Object 14]
+		Vnum:	108
+		Inside:	1
+		Value 0:	29
+		Value 1:	7
+		Value 2:	147
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the Invisibility Cloak program
+	[Object 15]
+		Vnum:	108
+		Inside:	1
+		Value 0:	30
+		Value 1:	7
+		Value 2:	147
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the Sticking Iron Butterfly Lock-On program
+	[Object 16]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 2:	98
+		Value 5:	1690309259
+		Value 6:	1684739471
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the Iron Butterfly Pollen Evaluate program
+	[Object 17]
+		Vnum:	1121
+		Inside:	0
+		Value 3:	2464
+		Cost:	44600
+		ExtraFlags:	0
+	[Object 18]
+		Vnum:	1187
+		Inside:	0
+		Cost:	3933
+		ExtraFlags:	0
+	[Object 19]
+		Vnum:	1182
+		Inside:	0
+		Cost:	9040
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	112
+		Inside:	1
+		Value 0:	9
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	2240
+		Value 9:	256
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n MPCP
+	[Object 21]
+		Vnum:	112
+		Inside:	1
+		Value 0:	10
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	8
+		Value 8:	2240
+		Value 9:	96
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^gCarapace^n" Bod Chip
+	[Object 22]
+		Vnum:	112
+		Inside:	1
+		Value 0:	13
+		Value 1:	2
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	12
+		Value 8:	140
+		Value 9:	96
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^TCreepy Crawler^n" Evasion chip
+	[Object 23]
+		Vnum:	112
+		Inside:	1
+		Value 0:	8
+		Value 1:	800
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	2800
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^jSpindly Eight^n" I/O Module
+	[Object 24]
+		Vnum:	112
+		Inside:	1
+		Value 0:	11
+		Value 1:	7
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	14
+		Value 8:	1715
+		Value 9:	64
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^yPedipalps^n" Sensor chip
+	[Object 25]
+		Vnum:	112
+		Inside:	1
+		Value 0:	1
+		Value 1:	2000
+		Value 2:	8
+		Value 4:	-2
+		Value 8:	3000
+		Value 9:	4000
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "Spinneret" Active Memory Module
+	[Object 26]
+		Vnum:	112
+		Inside:	1
+		Value 0:	12
+		Value 1:	7
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	1715
+		Value 9:	64
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "Dolophones" Masking chip
+	[Object 27]
+		Vnum:	112
+		Inside:	1
+		Value 0:	18
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 8:	37
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^mSilken Strands^n" Matrix Interface module
+	[Object 28]
+		Vnum:	112
+		Inside:	1
+		Value 0:	17
+		Value 1:	2
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	4
+		Value 8:	270
+		Value 9:	256
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^JExoskeleton^n" Response Increase 
+	[Object 29]
+		Vnum:	112
+		Inside:	1
+		Value 0:	2
+		Value 1:	4800
+		Value 2:	8
+		Value 4:	-2
+		Value 8:	2400
+		Value 9:	4800
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^lWrithing Egg Sac^n" Storage Memory Module
+	[Object 30]
+		Vnum:	112
+		Inside:	1
+		Value 0:	3
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	2850
+		Value 9:	128
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^pBook Lung^n" Hot ASIST Interface
+	[Object 31]
+		Vnum:	112
+		Inside:	1
+		Value 0:	15
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	1280
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^CArgyroneta^n" RAS Override module
+	[Object 32]
+		Vnum:	112
+		Inside:	1
+		Value 0:	6
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	1280
+		Value 9:	128
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^bTheridiidae^n" ICCM Biofeedback Filter
+	[Object 33]
+		Vnum:	112
+		Inside:	1
+		Value 0:	5
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	12
+		Value 8:	1600
+		Value 9:	256
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F023]Ctenizidae^n" Hardening Module
+	[Object 34]
+		Vnum:	112
+		Inside:	1
+		Value 0:	7
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	2240
+		Value 9:	64
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F100]Red Widow^n" Icon
+	[Object 35]
+		Vnum:	112
+		Inside:	1
+		Value 0:	16
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	560
+		Value 9:	320
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F355]Spider Sense^n" Reality Filter
+	[Object 36]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	8
+		Value 2:	192
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F410]Gastercantha^n" Armor program
+	[Object 37]
+		Vnum:	108
+		Inside:	1
+		Value 0:	17
+		Value 1:	8
+		Value 2:	64
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F254]Mesothelae^n" Browse program
+	[Object 38]
+		Vnum:	108
+		Inside:	1
+		Value 0:	15
+		Value 1:	8
+		Value 2:	192
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F010]Gnaphosidae^n" Sleaze program
+	[Object 39]
+		Vnum:	108
+		Inside:	1
+		Value 0:	13
+		Value 1:	8
+		Value 2:	128
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F111]Zodariidae^n" Deception program
+	[Object 40]
+		Vnum:	108
+		Inside:	1
+		Value 0:	12
+		Value 1:	8
+		Value 2:	64
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F214]Nephilinae^n" Decrypt Program
+	[Object 41]
+		Vnum:	108
+		Inside:	1
+		Value 0:	23
+		Value 1:	8
+		Value 2:	128
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F145]Maratus^n" Defuse program
+	[Object 42]
+		Vnum:	108
+		Inside:	1
+		Value 0:	18
+		Value 1:	8
+		Value 2:	128
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F210]Deinopis^n" Read/Write program
+	[Object 43]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	8
+		Value 2:	192
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^v8-Eyes^n" Analyze program
+	[Object 44]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	6
+		Value 2:	180
+		Value 3:	4
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the EZ+ Dive-Bomb Attack Program
+	[Object 45]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 2:	98
+		Value 4:	1
+		Value 5:	1690309259
+		Value 6:	1683019915
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	the Payday Evaluate program
+	[Object 46]
+		Vnum:	113
+		Inside:	0
+		Value 0:	8
+		Value 1:	8
+		Value 2:	2000
+		Value 3:	4800
+		Value 4:	800
+		Value 5:	1366
+		Value 6:	2
+		Value 9:	0
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a custom-built "^[F100]Red ^[F200]Widow^n" matte black cyberdeck^n
+		Photo:$
+Made for easy carry and concealment, this sleek black cyberdeck is small but
+powerful. The case is made of anodized aluminum, coated matte black to reduce
+reflections, with a small strap to sling it under an arm. Along the edge, two
+sections swivel out to create a low profile keyboard, and several little
+outlets line the back edge for additional peripherals. In the corner of the
+case, the only sort of color on the machine, is a small emblem of a spider
+crawling through a web made of wires. 
+~

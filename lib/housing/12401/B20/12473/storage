@@ -1,0 +1,75 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	916
+		Inside:	1
+		Value 0:	1000
+		Cost:	2000
+		ExtraFlags:	0
+		Name:	a box of normal assault rifle ammunition
+	[Object 1]
+		Vnum:	64916
+		Inside:	0
+		Cost:	2100
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	658
+		Inside:	1
+		Cost:	750
+		ExtraFlags:	1000000000000
+	[Object 3]
+		Vnum:	651
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	64922
+		Inside:	0
+		Cost:	1600
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	7271
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	37599
+		Inside:	0
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	919
+		Inside:	1
+		Value 0:	500
+		Cost:	5000
+		ExtraFlags:	0
+		Name:	a box of EX assault rifle ammunition
+	[Object 8]
+		Vnum:	919
+		Inside:	1
+		Value 0:	500
+		Cost:	5000
+		ExtraFlags:	0
+		Name:	a box of EX assault rifle ammunition
+	[Object 9]
+		Vnum:	917
+		Inside:	1
+		Value 0:	500
+		Cost:	3500
+		ExtraFlags:	0
+		Name:	a box of APDS assault rifle ammunition
+	[Object 10]
+		Vnum:	917
+		Inside:	1
+		Value 0:	500
+		Cost:	3500
+		ExtraFlags:	0
+		Name:	a box of APDS assault rifle ammunition
+	[Object 11]
+		Vnum:	64919
+		Inside:	0
+		Value 1:	5
+		Cost:	3200
+		ExtraFlags:	0

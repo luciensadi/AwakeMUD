@@ -1,0 +1,9 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	60322
+		Inside:	0
+		Cost:	500
+		ExtraFlags:	1001001000

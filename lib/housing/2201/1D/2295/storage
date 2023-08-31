@@ -1,0 +1,173 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	8498
+		Inside:	0
+		Value 0:	1
+		Cost:	1200
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	30192
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 2]
+		Vnum:	30194
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	1000000000
+	[Object 3]
+		Vnum:	60335
+		Inside:	1
+		Value 0:	-1
+		Cost:	400
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	19937
+		Inside:	1
+		Cost:	350
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	60593
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 6]
+		Vnum:	60595
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	31564
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	19408
+		Inside:	1
+		Cost:	1750
+		ExtraFlags:	1000000000000
+	[Object 9]
+		Vnum:	60322
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	1001001000
+	[Object 10]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 11]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 12]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 13]
+		Vnum:	18981
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 14]
+		Vnum:	8477
+		Inside:	1
+		Cost:	1200
+		ExtraFlags:	1001001000
+	[Object 15]
+		Vnum:	7284
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	1001001000001
+	[Object 16]
+		Vnum:	127
+		Inside:	2
+		Value 0:	12
+		Value 1:	8
+		Value 9:	12
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 12-round heavy pistol magazine
+	[Object 17]
+		Vnum:	746
+		Inside:	1
+		Value 7:	0
+		Value 11:	3
+		Attempt:	3
+		Cost:	750
+		ExtraFlags:	0
+	[Object 18]
+		Vnum:	30105
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 19]
+		Vnum:	19848
+		Inside:	0
+		Cost:	500
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	85808
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'muscle augmentation IV'
+	[Object 22]
+		Vnum:	85812
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 23]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'muscle toner IV'
+	[Object 24]
+		Vnum:	85277
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 25]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a dermal sheathing III - alpha'
+	[Object 26]
+		Vnum:	85415
+		Inside:	2
+		Cost:	12000
+		ExtraFlags:	0
+	[Object 27]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'an induction datajack - beta'
+	[Object 28]
+		Vnum:	85267
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 29]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'some bone lacing (titanium) - alpha'
+	[Object 30]
+		Vnum:	29325
+		Inside:	0
+		Cost:	30
+		ExtraFlags:	0

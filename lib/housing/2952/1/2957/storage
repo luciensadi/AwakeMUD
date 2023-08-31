@@ -1,0 +1,66 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	37599
+		Inside:	0
+		Value 2:	1
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	14641
+		Inside:	1
+		Cost:	1200
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	37540
+		Inside:	1
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	37537
+		Inside:	1
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	14639
+		Inside:	1
+		Cost:	3500
+		ExtraFlags:	100000000000000000000000
+	[Object 5]
+		Vnum:	14639
+		Inside:	1
+		Cost:	3500
+		ExtraFlags:	100000000000000000000000
+	[Object 6]
+		Vnum:	14639
+		Inside:	1
+		Cost:	3500
+		ExtraFlags:	100000000000000000000000
+	[Object 7]
+		Vnum:	37512
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	100000000000000000000000
+	[Object 8]
+		Vnum:	37512
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	100000000000000000000000
+	[Object 9]
+		Vnum:	25522
+		Inside:	1
+		Cost:	9000
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	95801
+		Inside:	0
+		Cost:	6000
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	25568
+		Inside:	0
+		Value 1:	1
+		Cost:	1200
+		ExtraFlags:	0
