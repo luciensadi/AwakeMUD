@@ -1,0 +1,134 @@
+{
+  "Streets": {
+    "monthly_cost_min": 0,
+    "default_strings_neutral": [
+      "Judging by the smell, you're pretty sure they're homeless.",
+      "Their clothes are ragged and hole-filled."
+    ],
+    "default_strings_gendered": [
+      "Judging by the smell, you're pretty sure $e's homeless.",
+      "$s clothes are ragged and hole-filled."
+    ],
+    "garage_strings_neutral": [
+      "<todo: streets neutral garage string>"
+    ],
+    "garage_strings_gendered": [
+      "<todo: streets gendered garage string>"
+    ]
+  },
+  "Squatter": {
+    "monthly_cost_min": 500,
+    "default_strings_neutral": [
+      "You figure they might have a roof over their head, but not much of one.",
+      "The scent of burnt fry oil hangs about them.",
+      "Their wrinkled clothes suggest they live out of their car.",
+      "They aren't emaciated, but still look like they've had to skip a meal or three.",
+      "The distinct scent of public transportation clings to them.",
+      "They've got a smell about them-- eau de Coffin Motel?"
+    ],
+    "default_strings_gendered": [
+      "You figure $e might have a roof over $s head, but not much of one.",
+      "The scent of burnt fry oil hangs about $m.",
+      "$s wrinkled clothes suggest $e lives out of $s car.",
+      "$e isn't emaciated, but still looks like $e's had to skip a meal or three.",
+      "The distinct scent of public transportation clings to $m.",
+      "$e's got a smell about him-- eau de Coffin Motel?"
+    ],
+    "garage_strings_neutral": [
+      "<todo: squatter neutral garage string>"
+    ],
+    "garage_strings_gendered": [
+      "<todo: squatter gendered garage string>"
+    ]
+  },
+  "Low": {
+    "monthly_cost_min": 5000,
+    "default_strings_neutral": [
+      "They look like they've fallen on hard times.",
+      "You get the feeling that they lead a low-class lifestyle.",
+      "They probably have a few nuyen to rub together-- but only a few.",
+      "Their clothing looks like a cheap knock-off,but it mostly fits and isn't falling apart.",
+      "They don't look like they've had to miss any meals recently."
+    ],
+    "default_strings_gendered": [
+      "$e looks like he's fallen on hard times.",
+      "You get the feeling that $e leads a low-class lifestyle.",
+      "$e probably has a few nuyen to rub together-- but only a few.",
+      "$s clothing looks like a cheap knock-off, but it mostly fits and isn't falling apart.",
+      "$e doesn't look like he's had to miss any meals recently."
+    ],
+    "garage_strings_neutral": [
+      "<todo: low neutral garage string>"
+    ],
+    "garage_strings_gendered": [
+      "<todo: low gendered garage string>"
+    ]
+  },
+  "Middle": {
+    "monthly_cost_min": 30000,
+    "default_strings_neutral": [
+      "They seem like they've been able to take care of themselves.",
+      "They look like they probably lead a middle-class life.",
+      "They're not doing badly at all for a shadowrunner.",
+      "They probably shower regularly,as they smell lightly of cheap soap.",
+      "They smell like soap,shampoo,and some sort of cologne or perfume."
+    ],
+    "default_strings_gendered": [
+      "$e seems like $e's been able to take care of $mself.",
+      "$e looks like $e probably leads a middle-class life.",
+      "$e's not doing badly at all for a shadowrunner.",
+      "$e probably showers regularly, as $e smells lightly of cheap soap.",
+      "$e smells like soap, shampoo, and some sort of cologne or perfume."
+    ],
+    "garage_strings_neutral": [
+      "The stink of old motor oil hangs about them.",
+      "Bits of automotive rust speckle their outfit.",
+      "You catch a whiff of stale exhaust from them."
+    ],
+    "garage_strings_gendered": [
+      "The stink of old motor oil hangs about $m.",
+      "Bits of automotive rust speckle $s outfit.",
+      "You catch a whiff of stale exhaust from $m."
+    ]
+  },
+  "High": {
+    "monthly_cost_min": 120000,
+    "default_strings_neutral": [
+      "They seem pretty well-off.",
+      "They look like they're living the high life.",
+      "They're doing well for themselves.",
+      "They have the healthy glow of someone that eats real food."
+    ],
+    "default_strings_gendered": [
+      "$e seems pretty well-off.",
+      "$e looks like he's living the high life.",
+      "$e's doing well for himself.",
+      "$e has the healthy glow of someone that eats real food."
+    ],
+    "garage_strings_neutral": [
+      "<todo: high neutral garage string>"
+    ],
+    "garage_strings_gendered": [
+      "<todo: high gendered garage string>"
+    ]
+  },
+  "Luxury": {
+    "monthly_cost_min": 750000,
+    "default_strings_neutral": [
+      "You feel like they probably rub shoulders with the social elite.",
+      "Sharply groomed and tailored,they know how take care of themselves.",
+      "There's a sense of privileged wealth about them."
+    ],
+    "default_strings_gendered": [
+      "You feel like $e probably rubs shoulders with the social elite.",
+      "Sharply groomed and tailored, $e knows how take care of $mself.",
+      "There's a sense of privileged wealth about $m."
+    ],
+    "garage_strings_neutral": [
+      "<todo: luxury neutral garage string>"
+    ],
+    "garage_strings_gendered": [
+      "<todo: luxury gendered garage string>"
+    ]
+  }
+}
