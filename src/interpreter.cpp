@@ -223,7 +223,6 @@ ACMD_DECLARE(do_hail);
 ACMD_DECLARE(do_hcontrol);
 ACMD_DECLARE(do_heal);
 ACMD_DECLARE(do_help);
-ACMD_DECLARE(do_hide);
 ACMD_DECLARE(do_hit);
 ACMD_DECLARE(do_highlight);
 ACMD_DECLARE(do_house);
@@ -3453,6 +3452,21 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("gird", "gridguide");
   COMMAND_ALIAS("percieve", "perceive");
   COMMAND_ALIAS("sheaht", "sheathe");
+  COMMAND_ALIAS("senak", "sneak");
+  COMMAND_ALIAS("etner", "enter");
+  COMMAND_ALIAS("wehre", "where");
+  COMMAND_ALIAS("socre", "score");
+  COMMAND_ALIAS("dirve", "drive");
+  COMMAND_ALIAS("ener", "enter");
+  COMMAND_ALIAS("satnd", "stand");
+  COMMAND_ALIAS("levae", "leave");
+  COMMAND_ALIAS("waer", "wear");
+  COMMAND_ALIAS("porbe", "probe");
+  COMMAND_ALIAS("lave", "leave");
+  COMMAND_ALIAS("relaod", "reload");
+  COMMAND_ALIAS("scpre", "score");
+  COMMAND_ALIAS("llook", "look");
+  COMMAND_ALIAS("sneka", "sneak");
 
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
@@ -3546,6 +3560,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unfreeze", "thaw");
   COMMAND_ALIAS("disband", "ungroup");
   COMMAND_ALIAS("lose", "unfollow");
+  COMMAND_ALIAS("hide", "sneak");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
