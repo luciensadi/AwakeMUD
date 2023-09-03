@@ -2373,28 +2373,42 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   }
 
   if (!IS_NPC(ch) && IS_NPC(vict)) {
-    // Quest reward.
-    if (COULD_BE_ON_QUEST(ch) && check_quest_delivery(ch, vict, obj)) {
-      act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
-      extract_obj(obj);
-    }
-    // No quest found.
-    else {
-      if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)) {
-        // These specs handle objects, so don't mess with them.
-        if (GET_MOB_SPEC(vict) == fence || GET_MOB_SPEC(vict) == hacker || GET_MOB_SPEC(vict) == fixer || GET_MOB_SPEC(vict) == mageskill_herbie)
-          return 1;
-        if (GET_MOB_SPEC2(vict) == fence || GET_MOB_SPEC2(vict) == hacker || GET_MOB_SPEC2(vict) == fixer || GET_MOB_SPEC2(vict) == mageskill_herbie)
-          return 1;
+    // Quest item delivery checks.
+    if (COULD_BE_ON_QUEST(ch)) {
+      // Successful delivery of quest item.
+      if (check_quest_delivery(ch, vict, obj)) {
+        act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
+        extract_obj(obj);
+        return 1;
       }
-
-      act("$n glances at $p, then lets it fall from $s hand.", TRUE, vict, obj, 0, TO_ROOM);
-      obj_from_char(obj);
-      if (vict->in_room)
-        obj_to_room(obj, vict->in_room);
-      else
-        obj_to_veh(obj, vict->in_veh);
+      
+      // If it's a quest item, refuse to hand it off.
+      if (obj->obj_flags.quest_id) {
+        send_to_char("You're pretty sure your Johnson wouldn't be happy with you if you did that.\r\n", ch);
+        return 0;
+      }
     }
+
+    // Not a quest item.
+  
+    if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)) {
+      // These specs handle objects, so don't mess with them.
+      if (GET_MOB_SPEC(vict) == fence || GET_MOB_SPEC(vict) == hacker || GET_MOB_SPEC(vict) == fixer || GET_MOB_SPEC(vict) == mageskill_herbie)
+        return 0;
+      if (GET_MOB_SPEC2(vict) == fence || GET_MOB_SPEC2(vict) == hacker || GET_MOB_SPEC2(vict) == fixer || GET_MOB_SPEC2(vict) == mageskill_herbie)
+        return 0;
+    }
+
+    if (obj->obj_flags.quest_id) {
+      // Don't let the person give it to the wrong target.
+    }
+
+    act("$n glances at $p, then lets it fall from $s hand.", TRUE, vict, obj, 0, TO_ROOM);
+    obj_from_char(obj);
+    if (vict->in_room)
+      obj_to_room(obj, vict->in_room);
+    else
+      obj_to_veh(obj, vict->in_veh);
   }
 
   return 1;
