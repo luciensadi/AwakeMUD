@@ -1450,7 +1450,7 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
   }
 }
 
-void obj_to_cyberware(struct obj_data * object, struct char_data * ch)
+void obj_to_cyberware(struct obj_data * object, struct char_data * ch, bool recalc)
 {
   // Check our object-related preconditions. All error logging is done there.
   if (!check_obj_to_x_preconditions(object, ch))
@@ -1473,10 +1473,13 @@ void obj_to_cyberware(struct obj_data * object, struct char_data * ch)
   object->carried_by = ch;
   object->in_room = NULL;
   object->in_veh = NULL;
-  affect_total(ch);
+
+  if (recalc) {
+    affect_total(ch);
+  }
 }
 
-void obj_to_bioware(struct obj_data * object, struct char_data * ch)
+void obj_to_bioware(struct obj_data * object, struct char_data * ch, bool recalc)
 {
   int temp;
 
@@ -1509,10 +1512,12 @@ void obj_to_bioware(struct obj_data * object, struct char_data * ch)
                     object->affected[temp].modifier,
                     object->obj_flags.bitvector, TRUE);
 
-  affect_total(ch);
+  if (recalc) {
+    affect_total(ch);
+  }
 }
 
-void obj_from_bioware(struct obj_data *bio)
+void obj_from_bioware(struct obj_data *bio, bool recalc)
 {
   struct obj_data *temp;
 
@@ -1545,7 +1550,9 @@ void obj_from_bioware(struct obj_data *bio)
   bio->carried_by = NULL;
   bio->next_content = NULL;
 
-  affect_total(ch);
+  if (recalc) {
+    affect_total(ch);
+  }
 }
 
 /* take an object from a char */
@@ -1579,7 +1586,7 @@ void obj_from_char(struct obj_data * object)
 }
 
 /* Removes a piece of cyberware from the cyberware list */
-void obj_from_cyberware(struct obj_data * cyber)
+void obj_from_cyberware(struct obj_data * cyber, bool recalc)
 {
   struct obj_data *temp;
   if (cyber == NULL)
@@ -1608,10 +1615,12 @@ void obj_from_cyberware(struct obj_data * cyber)
   cyber->carried_by = NULL;
   cyber->next_content = NULL;
 
-  affect_total(ch);
+  if (recalc) {
+    affect_total(ch);
+  }
 }
 
-bool equip_char(struct char_data * ch, struct obj_data * obj, int pos)
+bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool recalc)
 {
   int j;
 
@@ -1667,12 +1676,14 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos)
                   obj->affected[j].modifier,
                   obj->obj_flags.bitvector, TRUE);
 
-  affect_total(ch);
-  calc_weight(ch);
+  if (recalc) {
+    affect_total(ch);
+    calc_weight(ch);
+  }
   return TRUE;
 }
 
-struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
+struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool recalc)
 {
   int j;
   struct obj_data *obj;
@@ -1723,8 +1734,10 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
     GET_FOCI(ch)--;
     GET_OBJ_VAL(obj, 4) = 0;
   }
-  affect_total(ch);
-  calc_weight(ch);
+  if (recalc) {
+    affect_total(ch);
+    calc_weight(ch);
+  }
   return (obj);
 }
 

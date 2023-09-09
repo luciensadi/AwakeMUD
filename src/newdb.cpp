@@ -1105,7 +1105,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   /* Remove their worn equipment to inventory. */
   for (i = 0; i < NUM_WEARS; i++) {
     if (player->equipment[i])
-      char_eq[i] = unequip_char(player, i, FALSE);
+      char_eq[i] = unequip_char(player, i, FALSE, FALSE);
     else
       char_eq[i] = NULL;
   }
@@ -1113,14 +1113,14 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   /* Remove their cyberware to inventory. */
   for (temp = player->cyberware; temp; temp = next_obj) {
     next_obj = temp->next_content;
-    obj_from_cyberware(temp);
+    obj_from_cyberware(temp, FALSE);
     obj_to_char(temp, player);
   }
 
   /* Remove their bioware to inventory. */
   for (temp = player->bioware; temp; temp = next_obj) {
     next_obj = temp->next_content;
-    obj_from_bioware(temp);
+    obj_from_bioware(temp, FALSE);
     obj_to_char(temp, player);
   }
 
@@ -1202,11 +1202,11 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     next_obj = temp->next_content;
     if (GET_OBJ_TYPE(temp) == ITEM_CYBERWARE) {
       obj_from_char(temp);
-      obj_to_cyberware(temp, player);
+      obj_to_cyberware(temp, player, FALSE);
     }
     if (GET_OBJ_TYPE(temp) == ITEM_BIOWARE) {
       obj_from_char(temp);
-      obj_to_bioware(temp, player);
+      obj_to_bioware(temp, player, FALSE);
     }
   }
 
@@ -1218,7 +1218,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   /* Re-equip equipment. */
   for (i = 0; i < NUM_WEARS; i++) {
     if (char_eq[i])
-      equip_char(player, char_eq[i], i);
+      equip_char(player, char_eq[i], i, FALSE);
   }
 
   /* Re-calculate affects. */
