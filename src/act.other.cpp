@@ -644,8 +644,7 @@ ACMD(do_patch)
 
       act("You slap $p on your shoulder and feel more aware.", FALSE, ch, patch, 0, TO_CHAR);
       act("$n slaps $p on $s shoulder and appears more aware.", TRUE, ch, patch, 0, TO_ROOM);
-      GET_PATCH_STIMPATCH_ORIGINAL_MENTAL(patch) = GET_MENTAL(ch);
-      GET_MENTAL(ch) = MIN(GET_MAX_MENTAL(ch), GET_MENTAL(ch) + (GET_OBJ_VAL(patch, 1) * 100));
+      GET_MENTAL(ch) = MIN(GET_MAX_MENTAL(ch), GET_MENTAL(ch) + GET_PATCH_RATING(patch) * 100));
       obj_from_char(patch);
       GET_EQ(vict, WEAR_PATCH) = patch;
       patch->worn_by = vict;

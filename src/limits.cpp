@@ -431,9 +431,9 @@ void remove_patch(struct char_data *ch)
   {
     case PATCH_STIM:
       act("The effects of $p wear off, leaving you exhausted!", FALSE, ch, patch, 0, TO_CHAR);
-      GET_MENTAL(ch) = MAX(0, GET_MENTAL(ch) - (GET_OBJ_VAL(patch, 1) - 1) * 100);
+      GET_MENTAL(ch) = MAX(0, GET_MENTAL(ch) - (GET_PATCH_RATING(patch) - 1) * 100);
       if ((GET_TRADITION(ch) == TRAD_HERMETIC || GET_TRADITION(ch) == TRAD_SHAMANIC) &&
-          success_test(GET_MAGIC(ch), GET_OBJ_VAL(patch, 1)) < 0) {
+          success_test(GET_MAGIC(ch), GET_PATCH_RATING(patch)) < 0) {
         magic_loss(ch, 100, TRUE);
         affect_total(ch);
       }
@@ -441,7 +441,7 @@ void remove_patch(struct char_data *ch)
       break;
     case PATCH_TRANQ:
       stun = resisted_test(GET_OBJ_VAL(patch, 1), GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? (GET_BIOOVER(ch) + 1) / 2 : 0),
-                           GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? (GET_BIOOVER(ch) + 1) / 2 : 0), GET_OBJ_VAL(patch, 1));
+                           GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? (GET_BIOOVER(ch) + 1) / 2 : 0), GET_PATCH_RATING(patch));
       if (stun > 0) {
         act("You feel the drugs from $p take effect.", FALSE, ch, patch, 0, TO_CHAR);
         GET_MENTAL(ch) = MAX(0, GET_MENTAL(ch) - (stun * 100));
@@ -450,7 +450,7 @@ void remove_patch(struct char_data *ch)
         act("You resist the feeble effects of $p.", FALSE, ch, patch, 0, TO_CHAR);
       break;
     case PATCH_TRAUMA:
-      if (success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? (GET_BIOOVER(ch) + 1) / 2 : 0), GET_OBJ_VAL(patch, 1)) > 0)
+      if (success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? (GET_BIOOVER(ch) + 1) / 2 : 0), GET_PATCH_RATING(patch)) > 0)
         AFF_FLAGS(ch).RemoveBit(AFF_STABILIZE);
       break;
   }
