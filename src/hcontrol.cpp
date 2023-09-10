@@ -72,13 +72,41 @@ void hcontrol_list_houses(struct char_data *ch) {
 #endif
         }
 
-        snprintf(compose_buf, sizeof(compose_buf), "%s (%ld): %s^n (%s, %ld guest%s)\r\n", 
+        // Add apartment info and crap count.
+        snprintf(compose_buf, sizeof(compose_buf), "%s (%ld): %s^n (%s", 
                  CAP(owner_name), 
                  apartment->get_owner_id(), 
                  apartment->get_full_name(),
-                 get_crap_count_string(apartment->get_crap_count()),
-                 apartment->get_guests().size(),
-                 apartment->get_guests().size() == 1 ? "" : "s");
+                 get_crap_count_string(apartment->get_crap_count()));
+
+        // Add guest info, assuming they have guests. 
+        if (apartment->get_guests().size() > 0) {
+          snprintf(ENDOF(compose_buf), sizeof(compose_buf) - strlen(compose_buf), ", %ld guest%s", 
+                   apartment->get_guests().size(),
+                   apartment->get_guests().size() == 1 ? "" : "s");
+        }
+
+        // Add lease info.
+        {
+          time_t paid_until = apartment->get_paid_until();
+          double delta = difftime(paid_until, time(0));
+          int hours = delta / SECS_PER_REAL_HOUR;
+
+          if (hours <= 24) {
+            snprintf(ENDOF(compose_buf), sizeof(compose_buf) - strlen(compose_buf), ", %d hour%s", 
+                     hours,
+                     hours == 1 ? "" : "s");
+          } else {
+            int days = hours / 24;
+
+            snprintf(ENDOF(compose_buf), sizeof(compose_buf) - strlen(compose_buf), ", %d days%s", 
+                     days,
+                     days == 1 ? "" : "s");
+          }
+        }
+
+        strlcat(compose_buf, ")\r\n", sizeof(compose_buf));
+
         entries.push_back(str_dup(compose_buf));
 
         DELETE_ARRAY_IF_EXTANT(owner_name);
