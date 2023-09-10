@@ -1678,8 +1678,8 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool reca
 
   if (recalc) {
     affect_total(ch);
-    calc_weight(ch);
   }
+  calc_weight(ch);
   return TRUE;
 }
 
@@ -1736,8 +1736,8 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
   }
   if (recalc) {
     affect_total(ch);
-    calc_weight(ch);
   }
+  calc_weight(ch);
   return (obj);
 }
 
