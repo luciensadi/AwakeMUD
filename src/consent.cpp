@@ -54,10 +54,6 @@ ACMD(do_consent) {
       snprintf(ENDOF(participants), sizeof(participants) + strlen(participants), "%s%s (rigging)", *participants ? ", " : "", GET_CHAR_NAME(veh->rigger));
   }
 
-  if (IS_SENATOR(ch)) {
-    send_to_char(ch, "^Lconsent debug: '%s'; %s\r\n", argument, participants);
-  }
-
   // GREEN: Full consent, enthusiastic.
   if (is_abbrev(argument, "green flag") || is_abbrev(argument, "green card") || is_abbrev(argument, "enthusiastic") || is_abbrev(argument, "granted")) {
     const char *msg = "[^gOOC NOTICE:^n Someone present has indicated full consent.]\r\n";
