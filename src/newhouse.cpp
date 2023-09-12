@@ -1962,7 +1962,7 @@ void warn_about_apartment_deletion() {
 
       int days_until_deletion = (apartment->get_paid_until() - time(0)) / (60 * 60 * 24);
 
-      if (days_until_deletion != 14 && days_until_deletion != 7 && days_until_deletion > 5) {
+      if (days_until_deletion != 14 && days_until_deletion != 7 && (days_until_deletion > 5 || days_until_deletion < 0)) {
         //log_vfprintf("House %s is OK-- %d days left (%d - %d)", apartment->get_full_name(), days_until_deletion, apartment->get_paid_until(), time(0));
         continue;
       }
