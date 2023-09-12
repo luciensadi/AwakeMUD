@@ -22,6 +22,11 @@ ACMD(do_consent) {
     return;
   }
 
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    send_to_char("You can't do that until you've finished character generation.\r\n", ch);
+    return;
+  }
+
   // Compose the list of who all is present.
   char participants[10000] = { '\0' };
 
