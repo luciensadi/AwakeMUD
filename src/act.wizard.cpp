@@ -6520,13 +6520,17 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     return FALSE;
   }
 
-  if (!*buf) {
-    send_to_char("Restring to what?\r\n", ch);
+  if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
+    send_to_char("You're not carrying that item.\r\n", ch);
     return FALSE;
   }
 
-  if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char("You're not carrying that item.\r\n", ch);
+  if (!*buf) {
+    if (obj->restring) {
+      send_to_char(ch, "%s's current restring is: %s\r\n", GET_OBJ_RAW_NAME(obj), double_up_color_codes(obj->restring));
+    } else {
+      send_to_char(ch, "%s isn't currently restrung. Syntax: RESTRING %s <string to change it to>\r\n", GET_OBJ_NAME(obj), arg);
+    }
     return FALSE;
   }
 
@@ -6550,8 +6554,16 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     return FALSE;
   }
 
-  // TODO: Wrap this in an ifcheck so we don't double up on neutrals.
-  strlcat(buf, "^n", sizeof(buf));
+  // If it's too short to contain a terminal color code,
+  if (strlen(buf) < 2 || 
+      // Or the second to last character is not ^
+      (buf[strlen(buf) - 2] != '^' 
+       // Or the last character is not n
+       || (buf[strlen(buf) - 1] != 'n' && buf[strlen(buf) - 1] != 'N')))
+  {
+    // Add a terminal color code.
+    strlcat(buf, "^n", sizeof(buf));
+  }
 
   int length_with_no_color = get_string_length_after_color_code_removal(buf, ch);
 

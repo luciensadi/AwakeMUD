@@ -535,11 +535,13 @@ void check_idling(void)
         }
         */
 
+      #define VNUM_IS_NERPCORPOLIS(vnum) (vnum >= 6900 && vnum <= 6999)
+
       if (!ch->desc && !PLR_FLAGGED(ch, PLR_PROJECT) && (ch->char_specials.timer > NUM_MINUTES_BEFORE_LINKDEAD_EXTRACTION || PLR_FLAGGED(ch, PLR_IN_CHARGEN))) {
         // If they're a PC in an apartment that they own, set their loadroom there.
         if (!IS_NPC(ch)) {
           struct room_data *in_room = get_ch_in_room(ch);
-          if (in_room && GET_APARTMENT(in_room) && GET_APARTMENT(in_room)->get_owner_id() == GET_IDNUM(ch)) {
+          if (in_room && GET_APARTMENT(in_room) && GET_APARTMENT(in_room)->get_owner_id() == GET_IDNUM(ch) && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(in_room))) {
             GET_LOADROOM(ch) = GET_ROOM_VNUM(in_room);
           }
         }

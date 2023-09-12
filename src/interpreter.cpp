@@ -147,6 +147,7 @@ ACMD_DECLARE(do_cleanse);
 ACMD_DECLARE(do_closecombat);
 ACMD_DECLARE(do_commands);
 ACMD_DECLARE(do_compact);
+ACMD_DECLARE(do_consent);
 ACMD_DECLARE(do_conjure);
 ACMD_DECLARE(do_consider);
 ACMD_DECLARE(do_contest);
@@ -550,6 +551,7 @@ struct command_info cmd_info[] =
     { "closecombat", POS_LYING   , do_closecombat, 0, 0, FALSE },
     { "cls"        , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, TRUE },
     { "consider"   , POS_LYING   , do_consider , 0, 0, FALSE },
+    { "consent"    , POS_MORTALLYW, do_consent , 0, 0, TRUE },
     { "configure"  , POS_DEAD    , do_toggle   , 0, 0, TRUE },
     { "conjure"    , POS_RESTING , do_conjure  , 0, 0, FALSE },
     { "connect"    , POS_RESTING , do_connect  , 0, 0, FALSE },
