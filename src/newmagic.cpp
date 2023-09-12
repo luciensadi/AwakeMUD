@@ -641,8 +641,12 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         skill += 2;
       break;
     case TOTEM_DRAGONSLAYER:
-      if (type == SPIRIT_CITY || type == SPIRIT_FIELD || type == SPIRIT_HEARTH)
+      if (type == SPIRIT_HEARTH)
         skill += 1;
+      break;
+    case TOTEM_FIREBRINGER:
+      if (type == SPIRIT_CITY || type == SPIRIT_FIELD || type == SPIRIT_HEARTH)
+        skill += 2;
       break;
     case TOTEM_GREATMOTHER:
       if (type == SPIRIT_FIELD || type == SPIRIT_FOREST || type == SPIRIT_SEA || type == SPIRIT_LAKE ||
