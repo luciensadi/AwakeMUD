@@ -92,17 +92,10 @@ struct teach_data teachers[] = {
     "You polish and hone your melee skills and learn to flow like water.\r\n", ADVANCED },
   { 784, { SKILL_PILOT_BIKE, SKILL_PILOT_CAR, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
            SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, SKILL_GUNNERY,
-#ifdef WE_HAVE_VEHICLE_QUEST
            SKILL_PILOT_ROTORCRAFT, SKILL_PILOT_FIXEDWING, SKILL_PILOT_VECTORTHRUST,
            SKILL_BR_FIXEDWING, SKILL_BR_ROTORCRAFT, SKILL_BR_VECTORTHRUST, SKILL_BR_HOVERCRAFT,
            SKILL_BR_MOTORBOAT, SKILL_BR_SHIP, SKILL_BR_LTA, SKILL_PILOT_HOVERCRAFT,
            SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, SKILL_PILOT_WALKER, SKILL_PILOT_TRACKED, 0 },
-#else
-           0, 0, 0,
-           0, 0, 0, 0,
-           0, 0, 0, 0,
-           0, 0, 0, 0, 0, 0 },
-#endif
     "You pick up a few new tricks of the trade and emerge more skilled than before.\r\n", ADVANCED },
   { 786, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_DATA_BROKERAGE, SKILL_CYBERTERM_DESIGN,
     SKILL_ELECTRONICS, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_CYBERTERM,
@@ -121,16 +114,16 @@ struct teach_data teachers[] = {
                          SKILL_WHIPS_FLAILS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          "Toh Li gives you the workout of your life, but you come out more learned.", AMATEUR },
                        { 3722, { SKILL_ATHLETICS, SKILL_RIFLES, SKILL_PISTOLS, SKILL_POLICE_PROCEDURES, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
+                         "After hours of study and physical practice, you feel like you've learned something.\r\n", AMATEUR },
                        { 4101, { SKILL_SHOTGUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SMG, SKILL_ASSAULT_RIFLES, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After hours of study and target practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
+                         "After hours of study and target practice, you feel like you've learned something.\r\n", AMATEUR },
                        { 4102, { SKILL_CLUBS, SKILL_EDGED_WEAPONS, SKILL_POLE_ARMS, SKILL_WHIPS_FLAILS,
-                         SKILL_PILOT_CAR, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of study and practice, you feel like you've "
-                         "learned\r\nsomething.\r\n", AMATEUR },
+                         SKILL_PILOT_CAR, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                         "After hours of study and practice, you feel like you've learned something.\r\n", AMATEUR },
                        { 4250, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After hours of study and magical practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
+                         "After hours of study and magical practice, you feel like you've learned something.\r\n", AMATEUR },
                        { 4251, { SKILL_CONJURING, SKILL_SORCERY, SKILL_AURA_READING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After hours of study and magical practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
+                         "After hours of study and magical practice, you feel like you've learned something.\r\n", AMATEUR },
 
 
 // These trainers aren't in the game.

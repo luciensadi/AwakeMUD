@@ -1731,7 +1731,7 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
         }
     }
     GET_FOCI(ch)--;
-    GET_OBJ_VAL(obj, 4) = 0;
+    GET_FOCUS_ACTIVATED(obj) = 0;
   }
   affect_total(ch);
   calc_weight(ch);

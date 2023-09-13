@@ -60,6 +60,9 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 // - Add logic for mailing pgroup officers with apartment deletion warnings.
 // - Verify that an apartment owned by non-buildport pgroup X is not permanently borked when loaded on the buildport and then transferred back to main
 
+// TODO: Test apartment lease expiry (demonstrate clearing of stuff, etc)
+// TODO: Test HCONTROL DESTROY on an apartment with stuff in it
+
 ACMD(do_decorate) {
   if (ch->in_veh) {
     STATE(ch->desc) = CON_DECORATE_VEH;
@@ -1213,6 +1216,8 @@ void Apartment::list_guests_to_char(struct char_data *ch) {
 
   if (!printed_guest_yet) {
     send_to_char("None.\r\n", ch);
+  } else {
+    send_to_char("\r\n", ch);
   }
 }
 

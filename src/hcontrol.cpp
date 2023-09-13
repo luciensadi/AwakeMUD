@@ -147,10 +147,11 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg) {
   send_to_char("No apartment matched your search. Please use the exact and full name of the apartment, like 'Triple Tree Inn - Garages's Unit B2'.\r\n", ch);
 }
 
-void hcontrol_display_house_by_name(struct char_data * ch, vnum_t house_number) {
+void hcontrol_display_house_by_number(struct char_data * ch, vnum_t house_number) {
   for (auto &complex : global_apartment_complexes) {
     for (auto &apartment : complex->get_apartments()) {
-      if (!str_cmp(arg, apartment->get_full_name())) {
+      for (auto &room : apartment->get_rooms()) {
+        if (room->get_vnum() == house_number) {
         {
           const char *owner_name = apartment->get_owner_name__returns_new();
           send_to_char(ch, "%s is owned by ^c%s^n (^c%ld^n).\r\n",
@@ -193,14 +194,15 @@ void hcontrol_display_house_by_name(struct char_data * ch, vnum_t house_number) 
           }
         }
 
-        send_to_char(ch, "Its crap count is %s.", get_crap_count_string(apartment->get_crap_count()));
+        send_to_char(ch, "Its crap count is %s.\r\n", get_crap_count_string(apartment->get_crap_count()));
 
         return;
+        }
       }
     }
   }
 
-
+  send_to_char(ch, "No apartment was found for room %ld.\r\n", house_number);
 }
 
 void hcontrol_display_house_with_owner_or_guest(struct char_data * ch, const char *name, vnum_t idnum) {
@@ -259,6 +261,14 @@ ACMD(do_hcontrol)
     // With no argument, we default to the standard behavior.
     if (!*arg2) {
       hcontrol_list_houses(ch);
+      return;
+    }
+
+    // Check to see if they've specified a vnum or '.'.
+    {
+      vnum_t parsed_vnum = (*arg2 == '.' ? GET_ROOM_VNUM(get_ch_in_room(ch)) : atol(arg2));
+      
+      hcontrol_display_house_by_number(ch, parsed_vnum);
       return;
     }
 

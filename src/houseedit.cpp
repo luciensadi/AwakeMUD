@@ -27,7 +27,7 @@ ACMD(do_houseedit) {
   if (is_abbrev(mode, "nukeandpave")) {
     // Completely blow away all of our existing apartments and complexes and rebuild from old housing files. DESTRUCTIVE.
     FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
-    FAILURE_CASE(str_cmp(func, "hurtmedaddy"), "To blow away ALL existing apartment COMPLEXES and create them fresh from old files, type HOUSEEDIT NUKEANDPAVE HURTMEDADDY.");
+    FAILURE_CASE(str_cmp(func, "hurtmedaddy"), "To ^RBLOW AWAY ALL EXISTING APARTMENT COMPLEXES^n and create them fresh from old files, type HOUSEEDIT NUKEANDPAVE HURTMEDADDY.");
 
     houseedit_import_from_old_files(ch, HED_NUKEANDPAVE);
     return;

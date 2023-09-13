@@ -761,7 +761,7 @@ ACMD(do_goto)
     // Seattle taxi destinations, including deactivated and invalid ones.
     for (int dest = 0; !location && *(dest_data_list[dest].keyword) != '\n'; dest++) {
       if (!str_cmp(buf, dest_data_list[dest].keyword) && (rnum = real_room(dest_data_list[dest].vnum)) >= 0) {
-        send_to_char(ch, "OK, going to Seattle taxi destination %s.\r\n", dest_data_list->str);
+        send_to_char(ch, "OK, going to Seattle taxi destination %s.\r\n", dest_data_list[dest].str);
         location = &world[rnum];
         break;
       }

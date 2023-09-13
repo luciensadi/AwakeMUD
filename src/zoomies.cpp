@@ -27,7 +27,8 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
   // Cannot be the same room.
   if (veh->in_room == room) {
 #ifdef IS_BUILDPORT
-    send_to_char(ch, "^L(Flight to %s denied: It's the room you're currently in.)^n\r\n", GET_ROOM_NAME(room));
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: It's the room you're currently in.)^n\r\n", GET_ROOM_NAME(room));
 #endif
     return FALSE;
   }
@@ -35,7 +36,8 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
   // Can't be a staff room if you're not a staffer.
   if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY) && !IS_SENATOR(ch)) {
 #ifdef IS_BUILDPORT
-    send_to_char(ch, "^L(Flight to %s denied: It's staff only.)^n\r\n", GET_ROOM_NAME(room));
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: It's staff only.)^n\r\n", GET_ROOM_NAME(room));
 #endif
     return FALSE;
   }
@@ -43,7 +45,8 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
   // Standard validity checks.
   if (!veh_can_launch_from_or_land_at(veh, room)) {
 #ifdef IS_BUILDPORT
-    send_to_char(ch, "^L(Flight to %s denied: %s can't land there due to vehicle type restrictions.)^n\r\n", GET_ROOM_NAME(room), CAP(GET_VEH_NAME_NOFORMAT(veh)));
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: %s can't land there due to vehicle type restrictions.)^n\r\n", GET_ROOM_NAME(room), CAP(GET_VEH_NAME_NOFORMAT(veh)));
 #endif
     return FALSE;
   }
@@ -51,7 +54,8 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
   // Must be within range for your vehicle.
   if (!destination_is_within_flight_range(veh, room)) {
 #ifdef IS_BUILDPORT
-    send_to_char(ch, "^L(Flight to %s denied: It's outside of %s's flight range.)^n\r\n", GET_ROOM_NAME(room), GET_VEH_NAME(veh));
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: It's outside of %s's flight range.)^n\r\n", GET_ROOM_NAME(room), GET_VEH_NAME(veh));
 #endif
     return FALSE;
   }
@@ -60,7 +64,8 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
   struct zone_data *zone = get_zone_from_vnum(GET_ROOM_VNUM(room));
   if (zone && zone->is_pghq && (IS_SENATOR(ch) || !(GET_PGROUP_MEMBER_DATA(ch) && GET_PGROUP(ch) && GET_PGROUP(ch)->controls_room(room)))) {
 #ifdef IS_BUILDPORT
-    send_to_char(ch, "^L(Flight to %s denied: It's a PGHQ you can't enter.)^n\r\n", GET_ROOM_NAME(room));
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: It's a PGHQ you can't enter.)^n\r\n", GET_ROOM_NAME(room));
 #endif
     return FALSE;
   }
@@ -68,7 +73,8 @@ bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *ve
   // Can't be an apartment if you don't have ownership or guest privileges there.
   if (room->apartment && (!room->apartment->can_enter(ch) || !room->apartment->get_owner_id())) {
 #ifdef IS_BUILDPORT
-    send_to_char(ch, "^L(Flight to %s denied: It's an apartment you can't enter.)^n\r\n", GET_ROOM_NAME(room));
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: It's an apartment you can't enter.)^n\r\n", GET_ROOM_NAME(room));
 #endif
     return FALSE;
   }
@@ -151,8 +157,8 @@ ACMD(do_flyto) {
   float distance = get_flight_distance_to_room(veh, target_room);
   int fuel_cost = calculate_flight_cost(veh, distance);
 
-  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost, "It will cost %d nuyen for fuel and maintenance, but you only have %d on hand.", fuel_cost, GET_NUYEN(ch));
-  send_to_char(ch, "After purchasing the requisite fuel and maintenance for %d nuyen, you begin the takeoff process.\r\n", fuel_cost);
+  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost, "It will cost %d nuyen for fuel, maintenance, and fees, but you only have %d on hand.", fuel_cost, GET_NUYEN(ch));
+  send_to_char(ch, "After paying %d nuyen for the requisite fuel, maintenance, and fees, you begin the takeoff process.\r\n", fuel_cost);
   lose_nuyen(ch, fuel_cost, NUYEN_OUTFLOW_FLIGHT_FUEL);
 
   // Roll your flight test, which is modified by weather etc.
@@ -365,7 +371,6 @@ float _calculate_flight_hours(struct veh_data *veh, float distance) {
 
 int calculate_flight_cost(struct veh_data *veh, float distance) {
   // Returns the fuel, maintenance, storage etc cost for a vehicle of this type/load/etc to fly the given distance.
-  // Approximated from an online calculator that gave the flight hour cost for a Cessna. If someone wants to get more granular and provide better numbers, I welcome a PR!
 
   if (!veh) {
     mudlog("SYSERR: Received NULL vehicle to calculate_flight_cost()!", NULL, LOG_SYSLOG, TRUE);
@@ -379,7 +384,10 @@ int calculate_flight_cost(struct veh_data *veh, float distance) {
   optempo_cost *= 1.1;
 
   // Multiply distance by optempo cost, cap at 5k nuyen.
-  return (int) MIN(5000, ceilf(distance * optempo_cost));
+  optempo_cost = (int) MIN(5000, ceilf(distance * optempo_cost));
+
+  // Apply a minimum value.
+  return MAX(100, optempo_cost);
 }
 
 int calculate_flight_time(struct veh_data *veh, float distance) {
@@ -423,15 +431,15 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
   // Apply weather modifiers.
   switch (weather_info.sky) {
     case SKY_CLOUDY:
-      strlcat(rbuf, "Cloudy, TN +1", sizeof(rbuf));
+      strlcat(rbuf, "Cloudy(+1)", sizeof(rbuf));
       tn += 1;
       break;
     case SKY_RAINING:
-      strlcat(rbuf, "Raining, TN +2", sizeof(rbuf));
+      strlcat(rbuf, "Raining(+2)", sizeof(rbuf));
       tn += 2;
       break;
     case SKY_LIGHTNING:
-      strlcat(rbuf, "Storming, TN +3", sizeof(rbuf));
+      strlcat(rbuf, "Storming(+3)", sizeof(rbuf));
       tn += 3;
       break;
   }
