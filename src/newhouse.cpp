@@ -1898,7 +1898,7 @@ void ApartmentRoom::load_storage_from_specified_path(bf::path path) {
   // Blow away any existing storage.
   while (room->contents) {
     const char *representation = generate_new_loggable_representation(room->contents);
-    mudlog_vfprintf(NULL, LOG_PURGELOG, "Purging room contents in preparation for storage load: %s", representation);
+    log_vfprintf("Purging room contents in preparation for storage load: %s", representation);
     extract_obj(room->contents);
     delete [] representation;
   }
