@@ -340,17 +340,21 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
       }
 
       // Set our owner and lease time.
-      apartment->set_owner(owner);
-      apartment->set_paid_until(paid_until);
+      if (owner == 0 || paid_until > time(0)) {
+        apartment->set_owner(owner);
+        apartment->set_paid_until(paid_until);
 
-      // Look for the old house file. If it exists, clobber existing contents and load this in.
-      snprintf(storage_file_name, sizeof(storage_file_name), "%ld.house", house_vnum);
-      bf::path original_save_file = old_house_directory / storage_file_name;
+        // Look for the old house file. If it exists, clobber existing contents and load this in.
+        snprintf(storage_file_name, sizeof(storage_file_name), "%ld.house", house_vnum);
+        bf::path original_save_file = old_house_directory / storage_file_name;
 
-      // Load our guests from the old file.
-      apartment->load_guests_from_old_house_file(original_save_file.string().c_str());
-      // Load our contents from the old file.
-      copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, TRUE);
+        // Load our guests from the old file.
+        apartment->load_guests_from_old_house_file(original_save_file.string().c_str());
+        // Load our contents from the old file.
+        copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, TRUE);
+      } else {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "NOT loading guests / contents / etc from old house file %ld.house: Lease is not valid.", house_vnum);
+      }
 
       // Look for any associated storage rooms. If they exist, merge them into the new house structure.
       for (auto &room : apartment->get_rooms()) {

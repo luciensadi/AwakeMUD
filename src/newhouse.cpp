@@ -1533,7 +1533,7 @@ void Apartment::load_guests_from_old_house_file(const char *filename) {
   File fl;
 
   if (!(fl.Open(filename, "r+b"))) { /* no file found */
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "Not loading house file %s: File not found.", filename);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Not loading house file %s (guests): File not found.", filename);
     return;
   }
 
