@@ -8,11 +8,10 @@
 #include "db.hpp"
 #include "handler.hpp"
 #include "comm.hpp"
+#include "moderation.hpp"
 
 extern int add_or_rewrite_ban_entry(const char *site, int ban_type, const char *banned_by);
 extern int isbanned(char *hostname);
-
-// TODO: If someone's IP is already blocked for new characters and they trigger this again, ban their IP.
 
 // TODO: Read this from a file on disk. Check in an empty copy of that file so people can't see your filters.
 // Note that all regexes will automatically be surrounded by .*\b\b.* when compiled.
@@ -74,33 +73,50 @@ bool check_for_banned_content(const char *raw_msg, struct char_data *speaker) {
     else if (match_code == 0) {
       // I don't want to get frozen while testing this, so high-level staff are immune.
       if (GET_LEVEL(speaker) >= LVL_CONSPIRATOR) {
-        send_to_char("WARNING: You would have been frozen by automod for that command.\r\n", speaker);
+        send_to_char("WARNING: You would have been dinged by automod for that command. It has been blocked from execution.\r\n", speaker);
         mudlog_vfprintf(speaker, LOG_WIZLOG, "Automoderator staff warning: Staff member %s wrote banned content '''%s'''.", GET_CHAR_NAME(speaker), raw_msg);
-        return FALSE;
+        return TRUE;
       }
 
-      mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR ACTION TAKEN: %s attempted to write '''%s'''. Freezing and transporting away for staff review.", GET_CHAR_NAME(speaker), raw_msg);
+      int strikes = (speaker->player_specials ? ++speaker->player_specials->saved.automod_counter : AUTOMOD_FREEZE_THRESHOLD + 1);
 
-      // Ban new character registrations from their IP, provided they weren't already banned.
-      if (speaker->desc && isbanned(speaker->desc->host) < BAN_NEW) {
-        add_or_rewrite_ban_entry(speaker->desc->host, BAN_NEW, "automod system");
-        mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR HAS BANNED NEW CHARACTERS FROM %s.", speaker->desc->host);
+      // Not enough strikes to be frozen? Just warn.
+      if (strikes < AUTOMOD_FREEZE_THRESHOLD) {
+        // Notify player.
+        mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR WARNED: %s attempted to write '''%s'''. Issued warning, strike %d/%d.", GET_CHAR_NAME(speaker), raw_msg, strikes, AUTOMOD_FREEZE_THRESHOLD);
+        send_to_char("^RYou're not allowed to write that.^n Your command has been aborted. Please be cautious: continued triggerings of the automated moderator system will result in your play session being halted for staff review.\r\n", speaker);
+        return TRUE;
+      } else {
+        // Knock the threshold back down to 0 (they're already frozen, and this cleans up paperwork for if they're unfrozen):
+        if (speaker->player_specials) {
+          speaker->player_specials->saved.automod_counter = 0;
+        }
+
+        // Log it.
+        mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR FROZE AN OFFENDER: %s attempted to write '''%s'''. Freezing and transporting away for staff review.", GET_CHAR_NAME(speaker), raw_msg);
+
+        // Ban new character registrations from their IP, provided they weren't already banned.
+        if (speaker->desc && isbanned(speaker->desc->host) < BAN_NEW) {
+          add_or_rewrite_ban_entry(speaker->desc->host, BAN_NEW, "automod system");
+          mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR HAS BANNED NEW CHARACTERS FROM %s.", speaker->desc->host);
+        }
+
+        // Notify player.
+        send_to_char("^RYou're not allowed to write that.^n Your character has been frozen pending staff review. Reach out on Discord if you need this expedited.\r\n", speaker);
+
+        // Freeze the character.
+        PLR_FLAGS(speaker).SetBit(PLR_FROZEN);
+        GET_FREEZE_LEV(speaker) = MAX(2, GET_FREEZE_LEV(speaker));
+
+        // Transport away.
+        if (frozen_rnum >= 0) {
+          act("$n is whisked away by the game administration.", TRUE, speaker, 0, 0, TO_ROOM);
+          char_from_room(speaker);
+          char_to_room(speaker, &world[frozen_rnum]);
+          act("$n is unceremoniously deposited at the conference table.", TRUE, speaker, 0, 0, TO_ROOM);
+        }
       }
 
-      // Notify player.
-      send_to_char("^RYou're not allowed to write that.^n Your character has been frozen pending staff review. Reach out on Discord if you need this expedited.\r\n", speaker);
-
-      // Freeze the character.
-      PLR_FLAGS(speaker).SetBit(PLR_FROZEN);
-      GET_FREEZE_LEV(speaker) = MAX(2, GET_FREEZE_LEV(speaker));
-
-      // Transport away.
-      if (frozen_rnum >= 0) {
-        act("$n is whisked away by the game administration.", TRUE, speaker, 0, 0, TO_ROOM);
-        char_from_room(speaker);
-        char_to_room(speaker, &world[frozen_rnum]);
-        act("$n is unceremoniously deposited at the conference table.", TRUE, speaker, 0, 0, TO_ROOM);
-      }
       return TRUE;
     }
     

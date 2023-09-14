@@ -650,6 +650,7 @@ struct player_special_data_saved
   vnum_t last_veh;
   Bitfield pref;        /* preference flags for PC's.           */
   ubyte bad_pws;               /* number of bad password attemps       */
+  ubyte automod_counter;
   sbyte conditions[3];         /* Drunk, full, thirsty                 */
 
   ubyte totem;                 /* totem player chooses                 */
@@ -671,7 +672,7 @@ struct player_special_data_saved
 
   player_special_data_saved() :
     wimp_level(0), freeze_level(0), invis_level(0), incog_level(0), load_room(NOWHERE),
-    last_in(0), last_veh(NOTHING), bad_pws(0), totem(0), totemspirit(0),
+    last_in(0), last_veh(NOTHING), bad_pws(0), automod_counter(0), totem(0), totemspirit(0),
     att_points(0), skill_points(0), force_points(0), restring_points(0), zonenum(0),
     archetype(0), archetypal(FALSE), system_points(0), best_lifestyle(LIFESTYLE_SQUATTER), 
     lifestyle_string(NULL)
