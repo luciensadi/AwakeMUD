@@ -1083,6 +1083,11 @@ ACMD(do_die)
     case RM_SEATTLE_DOCWAGON:
       // Sanity check / edge case: If mortally wounded, fix it.
       GET_PHYSICAL(ch) = MAX(GET_PHYSICAL(ch), 100);
+      if (GET_MENTAL(ch) >= 100) {
+        GET_POS(ch) = POS_LYING;
+      } else {
+        GET_POS(ch) = POS_STUNNED;
+      }
       // Then error out.
       send_to_char(ch, "You're already in a DocWagon recovery room! You'll heal up soon enough.\r\n");
       return;
