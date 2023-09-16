@@ -943,6 +943,11 @@ void assign_objects(void)
   ASSIGNOBJ(14799, bank);
   ASSIGNOBJ(95839, trideo);
 
+  // Pluto's assigns
+  ASSIGNOBJ(96521, pocket_sec);
+  ASSIGNOBJ(96522, pocket_sec);
+  ASSIGNOBJ(96523, pocket_sec);
+
   perform_secret_obj_assignments();
 #endif
 
