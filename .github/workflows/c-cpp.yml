@@ -16,13 +16,13 @@ jobs:
 
     # Install dependencies.
     - name: Install Boost filesystem
-      run: apt install libboost-filesystem-dev
+      run: sudo apt install libboost-filesystem-dev
     - name: Install MySQL development headers
-      run: apt install libmysqlclient-dev
+      run: sudo apt install libmysqlclient-dev
     - name: Install libcurl4-openssl-dev
-      run: apt install libcurl4-openssl-dev 
+      run: sudo apt install libcurl4-openssl-dev 
     - name: Install zlib1g-dev
-      run: apt install zlib1g-dev
+      run: sudo apt install zlib1g-dev
 
     # Ensure we're operating in the src directory.
     - name: select-directory
