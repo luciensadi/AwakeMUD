@@ -17,19 +17,14 @@ jobs:
     # Install dependencies.
     - name: Install Boost filesystem
       run: sudo apt install libboost-filesystem-dev
-    - name: Install MySQL development headers
-      run: sudo apt install libmysqlclient-dev
     - name: Install libcurl4-openssl-dev
       run: sudo apt install libcurl4-openssl-dev 
     - name: Install zlib1g-dev
       run: sudo apt install zlib1g-dev
 
-    # Ensure we're operating in the src directory.
-    - name: select-directory
-      run: cd src
-
     # Populate our config file with dummy values.
     - name: Write mysql_config.cpp
+      working-directory: ./src
       run: |
         echo 'const char *mysql_host =     "host"; \
           const char *mysql_password = "pass";       \
@@ -43,11 +38,12 @@ jobs:
       uses: actions/cache/restore@v3
       with:
         path: |
-          *.d
-          *.o
+          src/*.d
+          src/*.o
         key: cache-key-${{ github.event.number }}
     
     - name: make
+      working-directory: ./src
       run: make
 
     # Save any compiled dependencies for next time.
@@ -56,6 +52,6 @@ jobs:
       uses: actions/cache/save@v3
       with:
         path: |
-          *.d
-          *.o
+          src/*.d
+          src/*.o
         key: ${{ steps.cache-primes-restore.outputs.cache-primary-key }}
