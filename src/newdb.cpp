@@ -1046,7 +1046,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     GET_PHYSICAL(ch) = GET_MAX_PHYSICAL(ch);
     GET_MENTAL(ch) = GET_MAX_MENTAL(ch);
     if (AFF_FLAGS(ch).IsSet(AFF_HEALED))
-      AFF_FLAGS(ch).SetBit(AFF_HEALED);
+      AFF_FLAGS(ch).RemoveBit(AFF_HEALED);
   }
   if ( !IS_SENATOR(ch) && !PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) )
     PRF_FLAGS(ch).RemoveBit(PRF_ROLLS);
