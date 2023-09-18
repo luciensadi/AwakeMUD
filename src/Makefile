@@ -28,9 +28,13 @@ CVS = cvs
 
 COMMON_FLAGS = -lmysqlclient -lz -lm -lsodium -lstdc++ -std=c++11
 
+# You probably want to comment this out: This is the makefile specification for the GitHub runner.
+LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lnsl -lcurl
+MYFLAGS = -DNOCRYPT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+
 # OSX? Uncomment these:
-LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl
-MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11 -DSUPPRESS_MOB_SKILL_ERRORS -DACCELERATE_FOR_TESTING -D_GLIBCXX_DEBUG
+#LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl
+#MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11 -DSUPPRESS_MOB_SKILL_ERRORS -DACCELERATE_FOR_TESTING -D_GLIBCXX_DEBUG
 
 # Linux / others? Uncomment these:
 #LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lcurl
