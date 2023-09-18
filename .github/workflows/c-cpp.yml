@@ -1,0 +1,61 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    # Install dependencies.
+    - name: Install Boost filesystem
+      run: apt install libboost-filesystem-dev
+    - name: Install MySQL development headers
+      run: apt install libmysqlclient-dev
+    - name: Install libcurl4-openssl-dev
+      run: apt install libcurl4-openssl-dev 
+    - name: Install zlib1g-dev
+      run: apt install zlib1g-dev
+
+    # Ensure we're operating in the src directory.
+    - name: select-directory
+      run: cd src
+
+    # Populate our config file with dummy values.
+    - name: Write mysql_config.cpp
+      run: |
+        echo 'const char *mysql_host =     "host"; \
+          const char *mysql_password = "pass";       \
+          const char *mysql_user =     "user";       \
+          const char *mysql_db =       "db";       ' \
+          > mysql_config.cpp
+      
+    # Restore our built artifact cache, if any available.
+    - name: Restore cached artifacts
+      id: cache-artifact-restore
+      uses: actions/cache/restore@v3
+      with:
+        path: |
+          *.d
+          *.o
+        key: cache-key-${{ github.event.number }}
+    
+    - name: make
+      run: make
+
+    # Save any compiled dependencies for next time.
+    - name: Save cached artifacts
+      id: cache-artifact-save
+      uses: actions/cache/save@v3
+      with:
+        path: |
+          *.d
+          *.o
+        key: ${{ steps.cache-primes-restore.outputs.cache-primary-key }}
