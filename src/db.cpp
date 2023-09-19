@@ -23,13 +23,13 @@
 #include <vector>
 #include <algorithm>
 #include <mysql/mysql.h>
+
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <process.h>
 #define getpid() _getpid()
 #else
 #include <unistd.h>
 #endif
-#include <sodium.h>
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -504,12 +504,14 @@ void boot_world(void)
     }
   }
 
+#ifndef NOCRYPT
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
     // The library could not be initialized. Fail.
     log("ERROR: Libsodium initialization failed. Terminating program.");
     exit(ERROR_LIBSODIUM_INIT_FAILED);
   }
+#endif
 
 #ifdef CRYPTO_DEBUG
   log("Performing crypto performance and validation tests.");
