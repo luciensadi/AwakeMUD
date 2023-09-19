@@ -2852,11 +2852,11 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
       return false;
 
   } else {
-  if (IS_IGNORING(victim, is_blocking_ic_interaction_from, ch))
-    return FALSE;
+    if (IS_IGNORING(victim, is_blocking_ic_interaction_from, ch))
+      return FALSE;
 
-  if (IS_IGNORING(ch, is_blocking_ic_interaction_from, victim))
-    return FALSE;
+    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, victim))
+      return FALSE;
 
     // Known ignored edge case: if the player is not a killer but would become a killer because of this action.
     if (ch != victim && would_become_killer(ch, victim))
