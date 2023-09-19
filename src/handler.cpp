@@ -826,7 +826,7 @@ void affect_total(struct char_data * ch)
   apply_drug_modifiers_to_ch(ch);
 
   // Min attribute is one, max is soft capped
-  cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
+  int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
   for (int att = BOD; att <= WIL; att++) {
     GET_ATT(ch, att) = MAX(1, GET_ATT(ch, att));
     if (GET_ATT(ch, att) > cap)
