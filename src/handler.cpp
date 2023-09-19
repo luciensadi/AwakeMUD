@@ -3126,7 +3126,7 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
                  struct char_data ** tar_ch, struct obj_data ** tar_obj)
 {
   int i;
-  char name[MAX_INPUT + 1];
+  char name[MAX_INPUT_LENGTH + 1];
 
   *tar_ch = NULL;
   *tar_obj = NULL;

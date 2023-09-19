@@ -9,12 +9,9 @@
 #include <cfloat>
 #include <cstring>
 #include <cmath>
+#include <math.h>
 
 #include <sys/time.h>
-
-#ifndef osx
-static double const INFINITY = DBL_MAX;
-#endif
 
 using perfmon::kPulsePerSecond;
 #define SEC_PER_MIN 60
