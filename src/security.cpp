@@ -1,6 +1,5 @@
 #include <time.h>
 #include <string.h>
-#include <sodium.h>
 
 #include "utils.hpp"
 #include "structs.hpp"
@@ -21,6 +20,7 @@ bool validate_and_update_password(const char* password, char* hashed_password) {
   return strncmp(password, hashed_password, strlen(password)) == 0;
 }
 #else
+#include <sodium.h>
 
 
 // Insecure test password is used for crypto tests.
