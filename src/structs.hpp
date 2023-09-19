@@ -5,8 +5,11 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sodium.h> // for crypto_pwhash_STRBYTES
 #include <unordered_map>
+
+#ifndef NOCRYPT
+#include <sodium.h> // for crypto_pwhash_STRBYTES
+#endif
 
 #include "types.hpp"
 #include "awake.hpp"
@@ -405,7 +408,12 @@ struct time_data
 struct char_player_data
 {
   char *char_name;
+
+#ifndef NOCRYPT
   char passwd[crypto_pwhash_STRBYTES + 1];     /* character's password         */
+#else
+  char passwd[10000];
+#endif
 
   text_data physical_text;
   text_data astral_text;
