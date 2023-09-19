@@ -29,7 +29,10 @@
 #else
 #include <unistd.h>
 #endif
+
+#ifndef NOCRYPT
 #include <sodium.h>
+#endif
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -499,12 +502,14 @@ void boot_world(void)
     }
   }
 
+#ifndef NOCRYPT  
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
     // The library could not be initialized. Fail.
     log("ERROR: Libsodium initialization failed. Terminating program.");
     exit(ERROR_LIBSODIUM_INIT_FAILED);
   }
+#endif
 
 #ifdef CRYPTO_DEBUG
   log("Performing crypto performance and validation tests.");
