@@ -1,5 +1,6 @@
 #ifndef _bullet_pants_h
 #define _bullet_pants_h
+#include <climits>
 
 #define MAX_NUMBER_OF_BULLETS_IN_PANTS USHRT_MAX
 

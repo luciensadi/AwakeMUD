@@ -21,6 +21,9 @@ char storage_string[MAX_STRING_LENGTH];
 // #define NEW_EMOTE_DEBUG_SPEECH(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define NEW_EMOTE_DEBUG_SPEECH(...)
 
+// #define NEW_EMOTE_DEBUG_TARGETING(ch, ...) send_to_char((ch), ##__VA_ARGS__)
+#define NEW_EMOTE_DEBUG_TARGETING(...)
+
 // #define SPEECH_COLOR_CODE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define SPEECH_COLOR_CODE_DEBUG(...)
 
@@ -118,7 +121,11 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
   bool should_highlight = !PRF_FLAGGED(viewer, PRF_NOHIGHLIGHT) && !PRF_FLAGGED(viewer, PRF_NOCOLOR);
   const char *viewer_highlight = should_highlight ? GET_CHAR_COLOR_HIGHLIGHT(viewer) : "";
 
-  struct veh_data *viewer_veh = NULL, *target_veh = NULL;
+  struct veh_data *actor_veh = NULL, *viewer_veh = NULL, *target_veh = NULL;
+
+  if (PLR_FLAGGED(actor, PLR_REMOTE) || AFF_FLAGGED(actor, AFF_PILOT) || AFF_FLAGGED(actor, AFF_RIG)) {
+    RIG_VEH(actor, actor_veh);
+  }
 
   if (PLR_FLAGGED(viewer, PLR_REMOTE) || AFF_FLAGGED(viewer, AFF_PILOT) || AFF_FLAGGED(viewer, AFF_RIG)) {
     RIG_VEH(viewer, viewer_veh);
@@ -230,20 +237,58 @@ const char *str_str_isolated(const char *string, const char *search_string) {
 }
 
 char newecho_debug_buf[MAX_STRING_LENGTH];
-void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string, bool require_char_name) {
+void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const char *echo_string, bool require_char_name, int subcmd, bool message_should_go_to_remote) {
   int tag_index, i;
   char scratch_space[500];
   struct char_data *target_ch = NULL;
+  
+  bool message_is_astral_only = (subcmd == SCMD_AECHO);
 
   // Sanity check.
   if (!actor || !viewer) {
-    mudlog("SYSERR: Received null actor or viewer to send_emote_to_char!", actor, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(actor, LOG_SYSLOG, "SYSERR: Received invalid parameter to send_emote_to_char(%s, %s, ..., %s, %s)!",
+                    actor ? GET_CHAR_NAME(actor) : "NULL",
+                    viewer ? GET_CHAR_NAME(viewer) : "NULL",
+                    require_char_name ? "TRUE" : "FALSE",
+                    message_is_astral_only ? "TRUE" : "FALSE");
     return;
   }
 
   // Don't bother processing emotes for those who can't appreciate them.
-  if (!viewer->desc)
+  if (!viewer->desc) {
     return;
+  }
+
+  // Handle preconditions.
+  {
+    // If they've ignored you, no luck.
+    if (IS_IGNORING(viewer, is_blocking_ic_interaction_from, actor)) {
+      NEW_EMOTE_DEBUG_TARGETING(actor, "Won't send to %s: Blocking interaction.", GET_CHAR_NAME(viewer));
+      return;
+    }
+
+    // If it's aecho, only send to people who see astral.
+    if (message_is_astral_only && !SEES_ASTRAL(viewer)) {
+      NEW_EMOTE_DEBUG_TARGETING(actor, "Won't send to %s: This is astral-only and they can't perceive it.", GET_CHAR_NAME(viewer));
+      return;
+    }
+
+    if (!AWAKE(viewer)) {
+      NEW_EMOTE_DEBUG_TARGETING(actor, "Won't send to %s: !AWAKE.", GET_CHAR_NAME(viewer));
+      return;
+    }
+
+    if (!message_should_go_to_remote && PLR_FLAGGED(viewer, PLR_REMOTE)) {
+      NEW_EMOTE_DEBUG_TARGETING(actor, "Won't send to %s: Is remote and no-remote is set.", GET_CHAR_NAME(viewer));
+      return;
+    }
+
+    // If they're insensate, nvm.
+    if (PLR_FLAGGED(viewer, PLR_MATRIX)) {
+      NEW_EMOTE_DEBUG_TARGETING(actor, "Won't send to %s: They're currently decking.", GET_CHAR_NAME(viewer));
+      return;
+    }
+  }
 
   struct veh_data *veh = NULL, *in_veh = actor->in_veh, *unpiloted_vehicle = NULL;
   struct room_data *in_room = actor->in_room;
@@ -316,7 +361,6 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
         // send_to_char("Found name in final analysis.\r\n", actor);
       }
     }
-
   } else {
     must_prepend_name = FALSE;
   }
@@ -408,7 +452,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
           // Fetch the representation of this character. Edge case: actor is viewer and @self: just give your name.
           if (self_mode && viewer == target_ch && viewer == actor) {
             NEW_EMOTE_DEBUG(actor, "^mActor == viewer == target, using straight strings.^n\r\n");
-            if (veh && viewer->in_veh != veh) {
+            if (veh && (subcmd == SCMD_VEMOTE || viewer->in_veh != veh)) {
               display_string = GET_VEH_NAME(veh);
             } else {
               display_string = GET_CHAR_NAME(actor);
@@ -609,6 +653,18 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   for (char *ptr = mutable_echo_string; *ptr; ptr++) {
     if (*ptr == '\7')
       *ptr = '"';
+  }
+
+  // Finally, ensure that it has terminal punctuation.
+  // 1. Strip color codes so we don't trip on something like "emote waves.^n"
+  const char *string_with_no_color = get_string_after_color_code_removal(mutable_echo_string, NULL);
+  // 2. Check that the stripped string still has length to process.
+  if (strlen(string_with_no_color) >= 1) {
+    // 3. Check if the stripped string ends with punctuation.
+    if (!ispunct(string_with_no_color[strlen(string_with_no_color) - 1])) {
+      // 4. Since it didn't, append a period to the mutable echo string.
+      strlcat(mutable_echo_string, ".", sizeof(mutable_echo_string));
+    }
   }
 
   NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nFinished evaluation of emote projection for %s.\r\n\r\n", GET_CHAR_NAME(viewer));
@@ -824,20 +880,7 @@ ACMD(do_new_echo) {
        viewer;
        viewer = in_room ? viewer->next_in_room : viewer->next_in_veh)
   {
-    // If they've ignored you, no luck.
-    if (IS_IGNORING(viewer, is_blocking_ic_interaction_from, ch))
-      continue;
-
-    // If it's aecho, only send to people who see astral.
-    if (subcmd == SCMD_AECHO && !SEES_ASTRAL(viewer))
-      continue;
-
-    // If they're insensate, nvm.
-    if (!AWAKE(viewer) || PLR_FLAGGED(viewer, PLR_REMOTE) || PLR_FLAGGED(viewer, PLR_MATRIX))
-      continue;
-
-    // Since the viewer is a valid target, send it to them. Yes, ch is deliberately a possible viewer.
-    send_echo_to_char(ch, viewer, (const char *) emote_buf, must_echo_with_name);
+    send_echo_to_char(ch, viewer, (const char *) emote_buf, must_echo_with_name, subcmd, FALSE);
   }
 
   // Send it to anyone who's rigging a vehicle here.
@@ -845,8 +888,13 @@ ACMD(do_new_echo) {
        veh;
        veh = veh->next_veh)
   {
-    if (veh->rigger && veh->rigger->desc)
-      send_echo_to_char(ch, veh->rigger, (const char *) emote_buf, must_echo_with_name);
+    if (veh->rigger) {
+      send_echo_to_char(ch, veh->rigger, (const char *) emote_buf, must_echo_with_name, subcmd, TRUE);
+    }
+
+    for (struct char_data *viewer = veh->people; viewer; viewer = viewer->next_in_veh) {
+      send_echo_to_char(ch, viewer, (const char *) emote_buf, must_echo_with_name, subcmd, FALSE);
+    }
   }
 }
 
