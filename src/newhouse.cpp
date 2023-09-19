@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <limits.h>
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
