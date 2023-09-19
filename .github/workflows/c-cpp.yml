@@ -50,4 +50,4 @@ jobs:
         path: |
           src/*.d
           src/*.o
-        key: ${{ steps.cache-primes-restore.outputs.cache-primary-key }}
+        key: ${{ steps.cache-artifact-restore.outputs.cache-primary-key }}
