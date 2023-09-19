@@ -507,11 +507,7 @@ void boot_world(void)
     }
   }
 
-<<<<<<< HEAD
 #ifndef NOCRYPT
-=======
-#ifndef NOCRYPT  
->>>>>>> master
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
     // The library could not be initialized. Fail.
