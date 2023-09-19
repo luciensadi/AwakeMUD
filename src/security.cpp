@@ -20,6 +20,7 @@ bool validate_and_update_password(const char* password, char* hashed_password) {
   return strncmp(password, hashed_password, strlen(password)) == 0;
 }
 #else
+#include <sodium.h>
 
 #include <sodium.h>
 

@@ -18,7 +18,6 @@
 #include <ctype.h>
 #include <time.h>
 #include <errno.h>
-#include <time.h>
 #include <math.h>
 #include <vector>
 #include <algorithm>
@@ -34,6 +33,10 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 namespace bf = boost::filesystem;
+
+#ifndef NOCRYPT
+#include <sodium.h>
+#endif
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -504,7 +507,11 @@ void boot_world(void)
     }
   }
 
+<<<<<<< HEAD
 #ifndef NOCRYPT
+=======
+#ifndef NOCRYPT  
+>>>>>>> master
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
     // The library could not be initialized. Fail.

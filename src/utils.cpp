@@ -2400,7 +2400,7 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
 
 void store_message_to_history(struct descriptor_data *d, int channel, const char *message) {
   // We use our very own message buffer to ensure we'll never overwrite whatever buffer the caller is using.
-  static char log_message[MAX_INPUT];
+  static char log_message[MAX_INPUT_LENGTH];
 
   // Precondition: No screwy pointers. Removed warning since we can be passed NPC descriptors (which we ignore).
   if (d == NULL || !message || !*message) {

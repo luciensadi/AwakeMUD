@@ -10,6 +10,7 @@
 #include <cfloat>
 #include <cstring>
 #include <cmath>
+#include <math.h>
 
 #include <sys/time.h>
 
