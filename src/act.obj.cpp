@@ -3675,7 +3675,7 @@ void perform_remove(struct char_data * ch, int pos)
     GET_HOLSTER_READY_STATUS(obj) = 0;
   /* add damage back from stim patches */
   else if ( GET_OBJ_TYPE(obj) == ITEM_PATCH && GET_PATCH_TYPE(obj) == PATCH_STIM ) {
-    GET_MENTAL(ch) = MAX(0, GET_MENTAL(ch) - (GET_PATCH_RATING(patch) * 100));
+    GET_MENTAL(ch) = MAX(0, GET_MENTAL(ch) - (GET_PATCH_RATING(obj) * 100));
   }
 
   return;
