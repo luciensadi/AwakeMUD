@@ -18,7 +18,7 @@ jobs:
     - name: Install Boost filesystem and libcurl4
       run: sudo apt install libboost-filesystem-dev libcurl4-openssl-dev 
 
-    # Populate our config file with dummy values.
+    # Populate our config file with dummy(!) values.
     - name: Write mysql_config.cpp
       working-directory: ./src
       run: |
