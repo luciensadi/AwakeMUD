@@ -23,6 +23,7 @@
 #include <time.h>
 #include <iostream>
 #include <chrono>
+#include <math.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
   #include <windows.h>

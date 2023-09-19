@@ -13,9 +13,9 @@ SHELL = /bin/sh
 .DELETE_ON_ERROR :
 .PHONY : unittest
 #CXX = g++
-CXX = clang -fsanitize=address
+CXX = clang
 #CXX = /opt/homebrew/Cellar/gcc/11.2.0_3/bin/aarch64-apple-darwin21-g++-11 -Wno-format-truncation -Wno-deprecated-copy
-CC = g++ -fsanitize=address
+CC = g++
 #CC = /opt/homebrew/Cellar/gcc/11.2.0_3/bin/aarch64-apple-darwin21-g++-11 -Wno-format-truncation -Wno-deprecated-copy
 
 PROFILE = -ggdb
