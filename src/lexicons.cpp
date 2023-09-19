@@ -7,29 +7,30 @@ int lexicon_last_used[NUM_LEXICONS][NUM_LEXICON_WORDS_BEFORE_REPEAT];
 
 int get_lexicon_number_for_language(int language_skill) {
   switch (language_skill) {
-    case SKILL_ENGLISH    : return LEXICON_ENGLISH;
-    case SKILL_SPERETHIEL : return LEXICON_SPERETHIEL;
-    case SKILL_SPANISH    : return LEXICON_SPANISH;
-    case SKILL_JAPANESE   : return LEXICON_JAPANESE;
-    case SKILL_CANTONESE  : return LEXICON_CANTONESE;
-    case SKILL_KOREAN     : return LEXICON_KOREAN;
-    case SKILL_ITALIAN    : return LEXICON_ITALIAN;
-    case SKILL_RUSSIAN    : return LEXICON_RUSSIAN;
-    case SKILL_SIOUX      : return LEXICON_SIOUX;
-    case SKILL_MAKAW      : return LEXICON_MAKAW;
-    case SKILL_CROW       : return LEXICON_CROW;
-    case SKILL_SALISH     : return LEXICON_SALISH;
-    case SKILL_UTE        : return LEXICON_UTE;
-    case SKILL_NAVAJO     : return LEXICON_NAVAJO;
-    case SKILL_GERMAN     : return LEXICON_GERMAN;
-    case SKILL_ORZET      : return LEXICON_ORZET;
-    case SKILL_ARABIC     : return LEXICON_ARABIC;
-    case SKILL_LATIN      : return LEXICON_LATIN;
-    case SKILL_GAELIC     : return LEXICON_GAELIC;
-    case SKILL_FRENCH     : return LEXICON_FRENCH;
-    case SKILL_HEBREW     : return LEXICON_HEBREW;
-    case SKILL_IROQUOIS   : return LEXICON_IROQUOIS;
-    case SKILL_MANDARIN   : return LEXICON_MANDARIN;
+    case SKILL_ENGLISH        : return LEXICON_ENGLISH;
+    case SKILL_SPERETHIEL     : return LEXICON_SPERETHIEL;
+    case SKILL_SPANISH        : return LEXICON_SPANISH;
+    case SKILL_JAPANESE       : return LEXICON_JAPANESE;
+    case SKILL_CANTONESE      : return LEXICON_CANTONESE;
+    case SKILL_KOREAN         : return LEXICON_KOREAN;
+    case SKILL_ITALIAN        : return LEXICON_ITALIAN;
+    case SKILL_RUSSIAN        : return LEXICON_RUSSIAN;
+    case SKILL_SIOUX          : return LEXICON_SIOUX;
+    case SKILL_MAKAW          : return LEXICON_MAKAW;
+    case SKILL_CROW           : return LEXICON_CROW;
+    case SKILL_SALISH         : return LEXICON_SALISH;
+    case SKILL_UTE            : return LEXICON_UTE;
+    case SKILL_NAVAJO         : return LEXICON_NAVAJO;
+    case SKILL_GERMAN         : return LEXICON_GERMAN;
+    case SKILL_ORZET          : return LEXICON_ORZET;
+    case SKILL_ARABIC         : return LEXICON_ARABIC;
+    case SKILL_LATIN          : return LEXICON_LATIN;
+    case SKILL_GAELIC         : return LEXICON_GAELIC;
+    case SKILL_FRENCH         : return LEXICON_FRENCH;
+    case SKILL_HEBREW         : return LEXICON_HEBREW;
+    case SKILL_IROQUOIS       : return LEXICON_IROQUOIS;
+    case SKILL_MANDARIN       : return LEXICON_MANDARIN;
+    case SKILL_HAITIAN_CREOLE : return LEXICON_HAITIAN_CREOLE;
 
     default: return LEXICON_ENGLISH;
   }
@@ -58,7 +59,8 @@ const char **lexicons[] = {
   lexicon_french,
   lexicon_hebrew,
   lexicon_iroquois,
-  lexicon_mandarin
+  lexicon_mandarin,
+  lexicon_haitian_creole
 };
 
 void populate_lexicon_size_table() {
@@ -228,4 +230,8 @@ const char *lexicon_iroquois[] = {
 const char *lexicon_mandarin[] = {
   "yi", "shi", "bu", "le", "ren", "wo", "zai", "you", "ta", "zhe", "zhong", "da", "lai", "shang", "ge", "dao", "shuo", "men", "wei", "zi", "he", "ni", "di", "chu", "dao", "ye", "shii", "nian", "de", "jiu", "na", "yao", "xia", "yii", "sheng", "hui", "zii", "zhee", "qu", "zhi", "guo", "jia", "xue", "dui", "ke", "taa", "li", "hou", "xiao", "me", "xin", "duo", "tian", "er", "neng", "hao", "dou", "ran", "mei", "ri", "yu", "qi", "hai", "fa", "cheng", "shie", "yong", "zhu", "xing", "fang", "youu", "ru", "qian", "suo", "ben", "jian", "jing", "tou", "mian", "gong", "tong", "san", "yie", "lao", "cong", "dong", "liang", "chang", "chengshi", "gengyan", "mingmie", "jiedeng", "zhaoyaozhe", "xingzhe", "beiying", "yumao", "panxuan", "hengxin", "liyue", "tiankong", "shenme", "fasheng", "qixi", "chandou", "ziyou", "feixing", "shouze", "weiyi", "tiaokuan", "xuanzhuan", "huozhe", "chaoxiang", "chicheng", "shengcun", "chengren", "youren", "wuxu", "zhengfu", "zhongli", "zhengwu", "shenhou", "dishang", "guxiang", "ditou", "lhu", "ru", "luo", "daowei", "anjiu", "zhen", "lianyi", "lian", "zhiyong", "biansushuo", "yongxinqu", "chenshan", "shouzhi", "weidao", "xintiao", "mingliao", "qinao", "jueyun", "mianao", "shijie", "dengzhe", "yichu", "nanyijie", "fangqingle", "yutian", "xihuan", "qingxin", "kanshu", "xinkan", "youxi", "jiushuan", "fannao", "shuxue", "zhidao", "sui", "xijie", "meizai", "ba", "kai", "renmian", "nong", "biaoqing", "shenqi", "zhongyu", "xiangling", "shengbu", "tifang", "tongdui", "pian", "leiguang", "cangxie", "shoucang", "yuanyi", "diaoxie", "diao", "xie", "mengzheng", "guoleng", "shilian", "youshi", "woyao", "wocheng", "fengben", "feng", "benpao", "pao", "liwu", "zu", "fazu", "fuhao", "haowu", "zaixuan", "laibu", "ganyu", "nimen", "tamen", "zheli", "nali", "woumen", "jiuzhe", "yangzi", "liqu", "xindeng", "cai", "buwanggu", "xuexiao", "jiaoshi", "xuesheng", "laoshi", "keben", "zuoye", "ceyan", "kaoshi", "lishi", "lixue", "pijin", "baijiu", "taojiu", "hongjiu", "qipaojiu", "futejia", "weishiji", "jinjiu", "guomin", "gou", "haitun", "she", "niu", "hu", "tuzi", "ma", "shenti", "zui", "xiong", "bei", "shou", "tui", "jiaodi", "kafei", "heise", "baise", "hongse", "fense", "huangse", "lanse", "ting", "zhua", "wen", "qiaokeli", "yanggao", "xingfen", "ganjide", "yonggan", "shengqi", "mangguo", "zhuozi", "chuang", "jingzi", "nihao", "xinghui", "zao", "jiuyang", "woshi", "jita", "datiqin", "xiaotiqin", "shuqin", "gangqin", "muqin", "gu", "laba", "changhao", "changdi", "jiezhi", "shoulian", "bihuan", "huangjin", "yin", "zuanshi", "difuni", "panduola", "fendi", "ping", "shuang", "gongjin", "dun", "gongli", "gongqing", "dianchi", "wuxian", "youjian", "weixin", "xiangji", "yingbi", "zhaiwu", "yinhang", "xinyongka", "jiaqian", "fu", "lingqian", "zidongqukuanji", "jiushijiu", "yue", "gongzuo", "kuaiji", "shejishi", "lushi", "meirongshi", "yisheng", "nongmin", "aoyuhuihuqi", "youyong", "tianjing", "jinpai", "yundongyuan", "jiankang", "kuai", "kuaile", "shangxin", "xianrenzhang", "meigui", "xiangrikui", "xunyicao", "lianhua", "zhuzi", "shei", "weishenme", "xingqiyi", "xingqitian", "yiyue", "shireryue", "xiatian", "dongtian", "lifangti", "jiadian", "jujia", "qiche", "wanju", "meizhuang", "jiaju", "xizao", "linyu", "xifashui", "hufasu", "maojin", "diqiu", "taikong", "shuixing", "huixing", "yinhexi", "yueliang", "lanqiu", "zuqiu", "huaxue", "quanji", "bi", "qianbi", "shubao", "xiangpi", "zhuanbidao", "qubiezhen", "saibaiwei", "mianbao", "shengcai", "zhizhuxia", "chaoren", "bianfuxia", "zhilao", "xinlixue", "miao", "zaosheng", "jintian", "mingtian", "xingqisan", "zixingche", "motuoche", "qiezi", "zuofan", "tingjian", "yiyuan", "yaodian", "yaojishi", "bushufu", "touteng", "xinao", "fengshui", "guanxi", "hanfu", "chuntzu", "gaoling", "koan", "kautau", "loumin", "maotaijiu", "ooliong", "shifu", "zhongguo", "yizhi", "song", "shu", "zen", "mi", "yan", "la", "nu", "xi", "shui", "ying", "ku", "wa", "qiu", "heishehui"
   , "\n"
+};
+
+const char *lexicon_haitian_creole[] = {
+  "byen", "venu", "byenvini", "belantre", "sak", "pase", "ki", "jan", "ou", "ye", "ap", "boule", "sa", "fe", "lon", "temps", "nou", "pa", "we", "rele", "non", "soti", "m'soti", "bonjou", "maten", "apre", "midi", "bon", "bonswa", "bonn", "nui", "et", "rev", "orevwa", "babay", "demen", "ta", "chans", "ochan", "sante", "one", "respe", "yon", "jounen", "apeti", "vwayaj", "konprann", "es'ke", "mwen", "wi", "petet", "souple", "pale", "dousma", "ecri'l", "tanpri", "angle", "kreyol", "wi", "ayisyen", "kijan", "eskize", "konbyen", "dezole", "padon", "mesi", "ampil", "merite", "padekwa", "kote", "ryen", "twalet", "danse", "vle", "sonje", "renmen", "tale", "zan", "vou", "anrepo'm", "te'm", "anmwe", "dife", "polis", "jwaye", "nowel", "ane", "pak", "fet", "erez", "felisitasyon", "yon", "bato", "flote", "dlo", "avek", "poisson", "vache", "poulet", "coq", "escargot", "chien", "chiot", "chat", "chaton", "grenouille", "l'oiseau", "chevre", "dinde", "lapin", "l'ours", "renard", "chouette", "laveur", "rat", "l'ecureuil", "loup", "l'errant", "buffle", "dauphin", "aigle", "allumeur", "souris", "l'hibou", "raton", "corbeau", "requin", "serpent", "blaireau", "chauve", "sanglier", "guepard", "oie", "cheval", "chacal", "lezard", "singe", "l'outre", "perroquet", "putois", "araignee", "tortue", "baleine", "seductrice", "sirene", "chene", "courant", "vent", "adversaire", "createur", "fou", "filou", "cerfs", "couleur", "noir", "noire", "blanc", "blanche", "rouge", "jaune", "bleu", "bleue", "vert", "verte", "janvier", "fevrier", "mars", "avril", "mai", "juin", "aout", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche", "deux", "trois", "quatre", "cinq", "sommes", "etes", "sont", "serai", "seras", "faire", "fais", "fait", "fis", "dire", "dis", "disons", "dites", "dirai", "direz", "aller", "vais", "va", "allons", "allez", "vont", "j'irai", "ira", "iront"
 };

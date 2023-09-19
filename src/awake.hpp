@@ -1019,8 +1019,9 @@ enum {
 #define SKILL_PILOT_TRACKED             150
 #define SKILL_PILOT_WALKER              151
 #define SKILL_MANDARIN                  152
+#define SKILL_HAITIAN_CREOLE            153
 
-#define MAX_SKILLS                153
+#define MAX_SKILLS                      154
 // Adding a pilot skill? Update utils.cpp's pilot_skills[].
 
 // Skill type definitions.

@@ -1,30 +1,31 @@
 #ifndef _lexicons_h_
 #define _lexicons_h_
 
-#define LEXICON_ENGLISH    0
-#define LEXICON_SPERETHIEL 1
-#define LEXICON_SPANISH    2
-#define LEXICON_JAPANESE   3
-#define LEXICON_CANTONESE  4
-#define LEXICON_KOREAN     5
-#define LEXICON_ITALIAN    6
-#define LEXICON_RUSSIAN    7
-#define LEXICON_SIOUX      8
-#define LEXICON_MAKAW      9
-#define LEXICON_CROW       10
-#define LEXICON_SALISH     11
-#define LEXICON_UTE        12
-#define LEXICON_NAVAJO     13
-#define LEXICON_GERMAN     14
-#define LEXICON_ORZET      15
-#define LEXICON_ARABIC     16
-#define LEXICON_LATIN      17
-#define LEXICON_GAELIC     18
-#define LEXICON_FRENCH     19
-#define LEXICON_HEBREW     20
-#define LEXICON_IROQUOIS   21
-#define LEXICON_MANDARIN   22
-#define NUM_LEXICONS       23
+#define LEXICON_ENGLISH         0
+#define LEXICON_SPERETHIEL      1
+#define LEXICON_SPANISH         2
+#define LEXICON_JAPANESE        3
+#define LEXICON_CANTONESE       4
+#define LEXICON_KOREAN          5
+#define LEXICON_ITALIAN         6
+#define LEXICON_RUSSIAN         7
+#define LEXICON_SIOUX           8
+#define LEXICON_MAKAW           9
+#define LEXICON_CROW            10
+#define LEXICON_SALISH          11
+#define LEXICON_UTE             12
+#define LEXICON_NAVAJO          13
+#define LEXICON_GERMAN          14
+#define LEXICON_ORZET           15
+#define LEXICON_ARABIC          16
+#define LEXICON_LATIN           17
+#define LEXICON_GAELIC          18
+#define LEXICON_FRENCH          19
+#define LEXICON_HEBREW          20
+#define LEXICON_IROQUOIS        21
+#define LEXICON_MANDARIN        22
+#define LEXICON_HAITIAN_CREOLE  23
+#define NUM_LEXICONS            24
 
 #define NUM_LEXICON_WORDS_BEFORE_REPEAT 5
 
@@ -52,6 +53,7 @@ extern const char *lexicon_french[];
 extern const char *lexicon_hebrew[];
 extern const char *lexicon_iroquois[];
 extern const char *lexicon_mandarin[];
+extern const char *lexicon_haitian_creole[];
 
 extern void populate_lexicon_size_table();
 extern const char *get_random_word_from_lexicon(int language_skill);

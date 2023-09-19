@@ -1744,6 +1744,7 @@ struct skill_data skills[] =
     {"Piloting Tracked Vehicles",               REA, SKILL_TYPE_ACTIVE,    FALSE,    10,  FALSE,  FALSE },
     {"Piloting Walkers",                        REA, SKILL_TYPE_ACTIVE,    FALSE,    11,  FALSE,  FALSE },
     {"Mandarin",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
+    {"Haitian Creole",                          INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
   };
 
 int rev_dir[] =
