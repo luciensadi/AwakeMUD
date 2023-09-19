@@ -26,23 +26,23 @@ CVS = cvs
 # The obvious drawback is that it's time consuming, so once things go
 # smooth, the define can be removed.
 
-COMMON_FLAGS = -lmysqlclient -lz -lm -lsodium -lstdc++ -std=c++11
+COMMON_FLAGS = -lmysqlclient -lz -lm -lstdc++ -std=c++11
 
 # You probably want to comment this out: This is the makefile specification for the GitHub runner.
 LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lnsl -lcurl
 MYFLAGS = -DNOCRYPT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
 # OSX? Uncomment these:
-#LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl
+#LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lsodium -lcurl
 #MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11 -DSUPPRESS_MOB_SKILL_ERRORS -DACCELERATE_FOR_TESTING -D_GLIBCXX_DEBUG
 
 # Linux / others? Uncomment these:
-#LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lcurl
+#LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lsodium -lcurl
 #MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS
 # If you want GitHub integration, add -DGITHUB_INTEGRATION to the above and fill out your basic auth credentials in github_config.cpp.
 
 # Cygwin:
-#LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcrypt
+#LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lsodium -lcrypt
 #MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DWIN32 -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS
 
 CPPFLAGS = $(MYFLAGS) $(PROFILE)
