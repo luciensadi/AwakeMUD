@@ -51,7 +51,7 @@ int add_spaces(char *str, int size, int from, int spaces)
 {
   int i;
 
-  if (strlen(str) + spaces > (u_int)size)
+  if (strlen(str) + spaces >= (u_int)size)
     return 0;
 
   for (i = strlen(str) + spaces; i > from + spaces - 1; i--)
