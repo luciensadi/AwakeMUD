@@ -668,7 +668,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // It's hard for you to fight while prone. (SR3 p123)
     if (AFF_FLAGGED(att->ch, AFF_PRONE)) {
       send_to_char(att->ch, "You struggle to fight while prone!\r\n");
-      def->melee->modifiers[COMBAT_MOD_POSITION] += 2;
+      att->melee->modifiers[COMBAT_MOD_POSITION] += 2;
     }
 
     // Treat unconscious as being a position mod of -6 (reflects ease of coup de grace)
