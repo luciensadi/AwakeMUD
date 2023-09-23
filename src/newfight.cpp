@@ -861,7 +861,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (net_successes < 0) {
       if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
         // MitS 149: You cannot be counterstriked while using distance strike.
-        net_successes = 0;
+        return FALSE;
       }
       // This messaging gets a little annoying.
       act("You successfully counter $N's attack!", FALSE, def->ch, 0, att->ch, TO_CHAR);
