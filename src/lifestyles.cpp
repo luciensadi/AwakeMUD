@@ -153,7 +153,7 @@ std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
     is_garage = TRUE;
   }
 
-  mudlog_vfprintf(ch, LOG_SYSLOG, "Best lifestyle for %s is %s, which %s a garage.", GET_CHAR_NAME(ch), lifestyles[best_lifestyle].name, is_garage ? "is" : "is NOT");
+  // mudlog_vfprintf(ch, LOG_SYSLOG, "Best lifestyle for %s is %s, which %s a garage.", GET_CHAR_NAME(ch), lifestyles[best_lifestyle].name, is_garage ? "is" : "is NOT");
 
   for (int lifestyle_idx = best_lifestyle; lifestyle_idx >= LIFESTYLE_STREETS; lifestyle_idx--) {
     if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
