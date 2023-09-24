@@ -99,7 +99,7 @@ void hcontrol_list_houses(struct char_data *ch) {
           } else {
             int days = hours / 24;
 
-            snprintf(ENDOF(compose_buf), sizeof(compose_buf) - strlen(compose_buf), ", %d days%s", 
+            snprintf(ENDOF(compose_buf), sizeof(compose_buf) - strlen(compose_buf), ", %d day%s", 
                      days,
                      days == 1 ? "" : "s");
           }
@@ -217,7 +217,8 @@ void hcontrol_display_house_with_owner_or_guest(struct char_data * ch, const cha
         printed_something = TRUE;
       } else {
         // Traditional guests.
-        if (find(apartment->get_guests().begin(), apartment->get_guests().end(), idnum) != apartment->get_guests().end()) {
+        auto guest_vec = apartment->get_guests();
+        if (find(guest_vec.begin(), guest_vec.end(), idnum) != guest_vec.end()) {
           const char *owner_name = apartment->get_owner_name__returns_new();
           send_to_char(ch, "- Guest at ^c%s^n, owned by ^c%s^n (^c%ld^n).\r\n", apartment->get_full_name(), owner_name, apartment->get_owner_id());
           delete [] owner_name;
@@ -265,9 +266,8 @@ ACMD(do_hcontrol)
     }
 
     // Check to see if they've specified a vnum or '.'.
-    {
-      vnum_t parsed_vnum = (*arg2 == '.' ? GET_ROOM_VNUM(get_ch_in_room(ch)) : atol(arg2));
-      
+    vnum_t parsed_vnum = (*arg2 == '.' ? GET_ROOM_VNUM(get_ch_in_room(ch)) : atol(arg2));
+    if (parsed_vnum > 0) { 
       hcontrol_display_house_by_number(ch, parsed_vnum);
       return;
     }
