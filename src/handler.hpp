@@ -42,8 +42,8 @@ int find_ability_num(char *name);
 void    obj_to_char(struct obj_data *object, struct char_data *ch);
 void    obj_from_char(struct obj_data *object);
 
-bool    equip_char(struct char_data *ch, struct obj_data *obj, int pos);
-struct obj_data *unequip_char(struct char_data *ch, int pos, bool focus);
+bool    equip_char(struct char_data *ch, struct obj_data *obj, int pos, bool recalc = TRUE);
+struct obj_data *unequip_char(struct char_data *ch, int pos, bool focus, bool recalc = TRUE);
 
 struct obj_data *get_obj_in_list(char *name, struct obj_data *list);
 struct obj_data *get_obj_in_list_num(int num, struct obj_data *list);
@@ -58,10 +58,10 @@ void    obj_from_obj(struct obj_data *obj);
 void    obj_to_host(struct obj_data *obj, struct host_data *host);
 void    obj_from_host(struct obj_data *obj);
 
-void obj_from_cyberware(struct obj_data *cyber);
-void obj_from_bioware(struct obj_data *bio);
-void obj_to_cyberware(struct obj_data *object, struct char_data *ch);
-void obj_to_bioware(struct obj_data *object, struct char_data *ch);
+void obj_from_cyberware(struct obj_data *cyber, bool recalc = TRUE);
+void obj_from_bioware(struct obj_data *bio, bool recalc = TRUE);
+void obj_to_cyberware(struct obj_data *object, struct char_data *ch, bool recalc = TRUE);
+void obj_to_bioware(struct obj_data *object, struct char_data *ch, bool recalc = TRUE);
 
 void    extract_obj(struct obj_data *obj);
 void    extract_veh(struct veh_data *veh);

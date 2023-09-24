@@ -2222,7 +2222,7 @@ ACMD(do_stand)
     act("You have to wake up first!", FALSE, ch, 0, 0, TO_CHAR);
     break;
   case POS_FIGHTING:
-    act("Do you not consider fighting as standing?", FALSE, ch, 0, 0, TO_CHAR);
+    act("You are already on your feet.", FALSE, ch, 0, 0, TO_CHAR);
     break;
   default:
     act("You stop floating around, and put your feet on the ground.",
