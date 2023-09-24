@@ -1843,7 +1843,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           switch (GET_CYBERWARE_TYPE(cyber2)) {
             case CYB_DERMALPLATING:
             case CYB_DERMALSHEATHING:
-              send_to_char("You already have an skin modification.\r\n", ch);
+              send_to_char("You already have a skin modification.\r\n", ch);
               return FALSE;
             case CYB_ARMS:
             case CYB_LEGS:
@@ -1861,30 +1861,34 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           break;
         case CYB_ARMS:
         case CYB_LEGS:
+          switch (GET_CYBERWARE_TYPE(cyber2)) {
+            case CYB_MUSCLEREP:
+              send_to_char("Cybernetic replacements limbs are incompatible with muscle replacements.\r\n", ch);
+              return FALSE;
+          }
+          // fall through
         case CYB_TORSO:
           switch (GET_CYBERWARE_TYPE(cyber2)) {
-            case CYB_DERMALPLATING:
-            case CYB_DERMALSHEATHING:
-              send_to_char("Cybernetic replacements (limbs, torso) are incompatible with skin modifications.\r\n", ch);
-              return FALSE;
             case CYB_BONELACING:
               send_to_char("Cybernetic replacements (limbs, torso) are incompatible with bone lacings.\r\n", ch);
               return FALSE;
-            case CYB_MUSCLEREP:
-              send_to_char("Cybernetic replacements (limbs, torso) are incompatible with muscle replacements.\r\n", ch);
-              return FALSE;
           }
-
-          if (GET_CYBERWARE_TYPE(cyber1) == GET_CYBERWARE_TYPE(cyber2)) {
-            send_to_char("You already have a cybernetic replacement of that type installed.\r\n", ch);
-            return FALSE;
-          }
-
           // fall through
         case CYB_SKULL:
+          switch (GET_CYBERWARE_TYPE(cyber2)) {
+            case CYB_DERMALPLATING:
+            case CYB_DERMALSHEATHING:
+              send_to_char("Cybernetic replacements (limbs, skull, torso) are incompatible with skin modifications.\r\n", ch);
+              return FALSE;
+          }
           // Guard against installing a standalone TC when you already have a skull TC installed.
           if (IS_SET(GET_CYBERWARE_FLAGS(cyber1), SKULL_MOD_TAC_COMP) && GET_CYBERWARE_TYPE(cyber2) == CYB_TACTICALCOMPUTER) {
             send_to_char("You already have a tactical computer installed.\r\n", ch);
+            return FALSE;
+          }
+          // Only one of each replacement
+          if (GET_CYBERWARE_TYPE(cyber1) == GET_CYBERWARE_TYPE(cyber2)) {
+            send_to_char("You already have a cybernetic replacement of that type installed.\r\n", ch);
             return FALSE;
           }
           break;
@@ -1900,9 +1904,8 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           switch (GET_CYBERWARE_TYPE(cyber2)) {
             case CYB_ARMS:
             case CYB_LEGS:
-            case CYB_SKULL:
             case CYB_TORSO:
-              send_to_char("Bone lacings are incompatible with cybernetic replacements (limbs, skull, torso).\r\n", ch);
+              send_to_char("Bone lacings are incompatible with cybernetic replacements (limbs, torso).\r\n", ch);
               return FALSE;
           }
           break;
