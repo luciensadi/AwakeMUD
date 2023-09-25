@@ -35,7 +35,7 @@ ACMD_DECLARE(do_look);
 
 // ----------------- Helper Prototypes
 bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, int drug_id);
-bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch);
+bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch, bool voluntary=TRUE);
 bool _drug_dose_exceeds_tolerance(struct char_data *ch, int drug_id);
 bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier);
 bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *test_identifier, bool is_starting_guided_withdrawal_check=FALSE);
@@ -115,7 +115,7 @@ bool do_drug_take(struct char_data *ch, struct obj_data *obj, bool voluntary) {
     }
   }
 
-  if (_apply_doses_of_drug_to_char(doses_to_take, drug_id, ch)) {
+  if (_apply_doses_of_drug_to_char(doses_to_take, drug_id, ch, voluntary)) {
     return TRUE;
   }
 
@@ -873,14 +873,16 @@ bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, 
   return FALSE;
 }
 
-bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch) {
+bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch, bool voluntary) {
   if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
     mudlog("SYSERR: Got to _apply_doses_of_drug_to_char() for character who did not enable the drug system!", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
   // Add the number of doses to both the current and lifetime doses.
-  GET_DRUG_LIFETIME_DOSES(ch, drug_id) += doses;
+  if (voluntary) {
+    GET_DRUG_LIFETIME_DOSES(ch, drug_id) += doses;
+  }
   GET_DRUG_DOSE(ch, drug_id) += doses;
 
   return FALSE;
@@ -1007,7 +1009,7 @@ bool seek_drugs(struct char_data *ch, int drug_id) {
       GET_DRUG_ADDICT(ch, drug_id) = IS_TAKING_INVOLUNTARY;
     }
 
-    if (_apply_doses_of_drug_to_char(sought_dosage, drug_id, ch)) {
+    if (_apply_doses_of_drug_to_char(sought_dosage, drug_id, ch, FALSE)) {
       return TRUE;
     }
 
