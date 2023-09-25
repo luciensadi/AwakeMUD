@@ -402,11 +402,10 @@ bool ApartmentComplex::can_houseedit_complex(struct char_data *ch) {
 
 void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
   std::vector<Apartment*> available_apartments = {};
-  std::vector<Apartment*> owned_apartments = {};
 
   if (apartments.empty()) {
     send_to_char(ch, "It doesn't look like there are any rooms to rent at all.\r\n");
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Found ZERO apartments in %s!", display_name);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Found ZERO apartments in %s on list!", display_name);
     return;
   }
 
@@ -415,10 +414,57 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
       available_apartments.push_back(apartment);
       continue;
     }
+  }
 
+  if (available_apartments.empty()) {
+    send_to_char(ch, "It looks like all the rooms here have been claimed.\r\n");
+    return;
+  } else {
+    sort(available_apartments.begin(), available_apartments.end(), apartment_sort_func);
+
+    send_to_char(ch, "The following rooms are free: \r\n");
+
+    if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+      send_to_char(ch, "Name                           Lifestyle      Rooms   Garages  Price  \r\n");
+      send_to_char(ch, "----------------------------   ------------   -----   -------  -------\r\n");
+    }
+
+    bool color_toggle = TRUE;
+    for (auto &apartment : available_apartments) {
+      int non_garage = apartment->rooms.size() - apartment->garages;
+
+      if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+        send_to_char(ch, "%s (lifestyle %s, %ld room%s, of which %d %s): %ld nuyen.\r\n",
+                    apartment->name,
+                    lifestyles[apartment->get_lifestyle()].name,
+                    apartment->rooms.size(),
+                    apartment->rooms.size() == 1 ? "" : "s",
+                    apartment->garages,
+                    apartment->garages == 1 ? "is a garage" : "are garages",
+                    apartment->get_rent_cost());
+      } else {
+        send_to_char(ch, "%s%-28s%s   %-12s   %-5d   %-7d  %ld\r\n",
+                    color_toggle ? "^W" : "^w",
+                    apartment->name,
+                    color_toggle ? "^W" : "^w",
+                    lifestyles[apartment->get_lifestyle()].name,
+                    non_garage,
+                    apartment->garages,
+                    apartment->get_rent_cost());
+      }
+      color_toggle = !color_toggle;
+    }
+
+    list_owned_apartments_to_ch(ch);
+  }
+}
+
+void ApartmentComplex::list_owned_apartments_to_ch(struct char_data *ch) {
+  std::vector<Apartment*> owned_apartments = {};
+
+  for (auto &apartment : apartments) {
     if (apartment->has_owner_privs(ch)) {
       owned_apartments.push_back(apartment);
-      continue;
     }
   }
 
@@ -426,52 +472,12 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
     sort(owned_apartments.begin(), owned_apartments.end(), apartment_sort_func);
 
     bool first_print = TRUE;
-    send_to_char(ch, "You have ownership control over the following apartment%s: ", owned_apartments.size() == 1 ? "" : "s");
+    send_to_char("\r\nYou are the owner of: ", ch);
     for (auto &apartment : owned_apartments) {
-      send_to_char(ch, "%s%s%s", first_print ? "" : ", ", apartment->get_name(), apartment->is_garage_lifestyle() ? " (garage)" : "");
+      send_to_char(ch, "%s^c%s^n%s", first_print ? "" : ", ", apartment->get_name(), apartment->is_garage_lifestyle() ? " (garage)" : "");
       first_print = FALSE;
     }
     send_to_char("\r\n", ch);
-  }
-
-  if (available_apartments.empty()) {
-    send_to_char(ch, "It looks like all the rooms here have been claimed.\r\n");
-    return;
-  }
-
-  sort(available_apartments.begin(), available_apartments.end(), apartment_sort_func);
-
-  send_to_char(ch, "The following rooms are free: \r\n");
-
-  if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-    send_to_char(ch, "Name                           Lifestyle      Rooms   Garages  Price  \r\n");
-    send_to_char(ch, "----------------------------   ------------   -----   -------  -------\r\n");
-  }
-
-  bool color_toggle = TRUE;
-  for (auto &apartment : available_apartments) {
-    int non_garage = apartment->rooms.size() - apartment->garages;
-
-    if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-      send_to_char(ch, "%s (lifestyle %s, %ld room%s, of which %d %s): %ld nuyen.\r\n",
-                   apartment->name,
-                   lifestyles[apartment->get_lifestyle()].name,
-                   apartment->rooms.size(),
-                   apartment->rooms.size() == 1 ? "" : "s",
-                   apartment->garages,
-                   apartment->garages == 1 ? "is a garage" : "are garages",
-                   apartment->get_rent_cost());
-    } else {
-      send_to_char(ch, "%s%-28s%s   %-12s   %-5d   %-7d  %ld\r\n",
-                   color_toggle ? "^W" : "^w",
-                   apartment->name,
-                   color_toggle ? "^W" : "^w",
-                   lifestyles[apartment->get_lifestyle()].name,
-                   non_garage,
-                   apartment->garages,
-                   apartment->get_rent_cost());
-    }
-    color_toggle = !color_toggle;
   }
 }
 
@@ -999,9 +1005,13 @@ bool Apartment::can_enter(struct char_data *ch) {
   if (IS_NPC(ch) && !(IS_SPIRIT(ch) || IS_PC_CONJURED_ELEMENTAL(ch)))
     return FALSE;
 
-  // Admins, astral projections, and owners can enter any room.
+  // Admins and astral projections can enter any room.
   if (GET_LEVEL(ch) >= LVL_ADMIN || IS_ASTRAL(ch))
     return TRUE;
+
+  // The lease must be paid up for guest / owner status to work. Fine if it's not leased though.
+  if ((owned_by_pgroup || owned_by_player) && get_paid_until() < time(0))
+    return FALSE;
 
   // Check for owner status or pgroup perms.
   if (owned_by_pgroup) {
@@ -1067,9 +1077,43 @@ bool Apartment::can_enter_by_idnum(idnum_t idnum) {
   return FALSE;
 }
 
+int Apartment::get_days_in_arrears() {
+  if (paid_until < time(0)) {
+    int secs_in_arrears = time(0) - paid_until;
+    int days_in_arrears = secs_in_arrears / SECS_PER_REAL_DAY;
+
+    return days_in_arrears;
+  }
+
+  return 0;
+}
+
 bool Apartment::create_or_extend_lease(struct char_data *ch) {
   struct obj_data *neophyte_card;
   int cost = nuyen_per_month;
+
+  // Special case: The apartment has already been leased and has expired.
+  // You must pay the cost in arrears for the room, PLUS the new month.
+  if (paid_until < time(0)) {
+    int days_in_arrears = get_days_in_arrears();
+
+    if (days_in_arrears > 0) {
+      send_to_char(ch, "You grimace at the realization that %s is %d day%s in arrears, increasing the cost you have to pay to regain access.\r\n",
+                   get_full_name(),
+                   days_in_arrears,
+                   days_in_arrears == 1 ? "" : "s");
+      
+      int cost_per_day = nuyen_per_month / 30;
+
+      // Arrears penalty: 10% on top of cost.
+      cost += (cost_per_day * days_in_arrears) * 1.1;
+
+      // Max cost is 4 IRL months (3 months of arrears plus a month of rent): don't want to penalize people too harshly when they're returning to the game.
+      cost = MIN(nuyen_per_month * 4, cost);
+    }
+  }
+
+  int displayed_cost = cost;
 
   // Subtract subsidy card amounts.
   for (neophyte_card = ch->carrying; neophyte_card; neophyte_card = neophyte_card->next_content) {
@@ -1090,20 +1134,20 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
       send_to_char("You arrange for a bank transfer to cover what you can't pay from your cash on hand.\r\n", ch);
       lose_bank(ch, cost, NUYEN_OUTFLOW_HOUSING);
     } else {
-      send_to_char(ch, "You don't have the %d nuyen required.\r\n", nuyen_per_month);
+      send_to_char(ch, "You don't have the %d nuyen required.\r\n", displayed_cost);
       return FALSE;
     }
   } else {
     lose_nuyen(ch, cost, NUYEN_OUTFLOW_HOUSING);
-    send_to_char(ch, "You hand over %d nuyen.\r\n", nuyen_per_month);
+    send_to_char(ch, "You hand over %d nuyen.\r\n", displayed_cost);
   }
 
   if (neophyte_card) {
-    if (nuyen_per_month >= GET_OBJ_VAL(neophyte_card, 1)) {
+    if (displayed_cost >= GET_OBJ_VAL(neophyte_card, 1)) {
       send_to_char(ch, "%s is now empty, so you junk it.\r\n", GET_OBJ_NAME(neophyte_card));
       extract_obj(neophyte_card);
     } else {
-      GET_OBJ_VAL(neophyte_card, 1) -= nuyen_per_month;
+      GET_OBJ_VAL(neophyte_card, 1) -= displayed_cost;
       send_to_char(ch, "Your housing card has %d nuyen left on it.\r\n", GET_OBJ_VAL(neophyte_card, 1));
     }
   }
@@ -1117,7 +1161,13 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Newly-rented apartment %s already had guests! Wiping the list.", full_name);
       guests.clear();
     }
-  } else {
+  } 
+  // Arrears extension requires setting a new lease timeout.
+  else if (get_days_in_arrears() > 0) {
+    paid_until = time(0) + (SECS_PER_REAL_DAY * 30);
+  } 
+  // Standard lease extension.
+  else {
     paid_until += SECS_PER_REAL_DAY*30;
   }
 
@@ -2198,7 +2248,8 @@ SPECIAL(landlord_spec)
   char say_string[500];
 
   if (!(CMD_IS("list") || CMD_IS("retrieve") || CMD_IS("lease")
-        || CMD_IS("leave") || CMD_IS("break") || CMD_IS("pay") || CMD_IS("status")))
+        || CMD_IS("leave") || CMD_IS("break") || CMD_IS("pay") || CMD_IS("status")
+        || CMD_IS("info") || CMD_IS("check") || CMD_IS("payout")))
     return FALSE;
 
   if (!CAN_SEE(recep, ch)) {
@@ -2299,7 +2350,8 @@ SPECIAL(landlord_spec)
     return TRUE;
   }
 
-  else if (CMD_IS("pay")) {
+  // 'payout' is here so staff can pay for rooms too.
+  else if (CMD_IS("pay") || CMD_IS("payout")) {
     if (!*arg) {
       send_to_char("Syntax: ^WPAY <unit name>^n\r\n", ch);
       return TRUE;
@@ -2308,7 +2360,7 @@ SPECIAL(landlord_spec)
     for (auto &apartment : complex->get_apartments()) {
       if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
         if (!apartment->has_owner_privs(ch) && !apartment->is_guest(GET_IDNUM(ch))) {
-          snprintf(say_string, sizeof(say_string), "You aren't the owner of %s.", apartment->get_name());
+          snprintf(say_string, sizeof(say_string), "You aren't an owner or guest of %s.", apartment->get_name());
           mob_say(recep, say_string);
         } else {
           if (apartment->create_or_extend_lease(ch)) {
@@ -2324,9 +2376,10 @@ SPECIAL(landlord_spec)
     return TRUE;
   }
 
-  else if (CMD_IS("status")) {
+  else if (CMD_IS("status") || CMD_IS("info") || CMD_IS("check")) {
     if (!*arg) {
       send_to_char("Syntax: ^WSTATUS <unit name>^n\r\n", ch);
+      complex->list_owned_apartments_to_ch(ch);
       return TRUE;
     }
 
@@ -2340,13 +2393,34 @@ SPECIAL(landlord_spec)
           mob_say(recep, say_string);
         } else {
           if (apartment->get_paid_until() - time(0) < 0) {
-            snprintf(say_string, sizeof(say_string), "%s's rent has expired.", CAP(apartment->get_name()));
+            int days_in_arrears = apartment->get_days_in_arrears();
+
+            if (days_in_arrears > 0) {
+              snprintf(say_string, sizeof(say_string), "%s's rent is %d day%s in arrears. You'll have to PAY it to regain access.", 
+                       CAP(apartment->get_name()),
+                       days_in_arrears,
+                       days_in_arrears == 1 ? "" : "s");
+            } else {
+              snprintf(say_string, sizeof(say_string), "%s's rent has expired. You'll have to PAY it to regain access.", CAP(apartment->get_name()));
+            }
             mob_say(recep, say_string);
           } else {
-            int days = (int)((apartment->get_paid_until() - time(0)) / 86400);
-            snprintf(buf2, sizeof(buf2), "%s is paid up for another %d day%s.", CAP(apartment->get_name()), days, days == 1 ? "" : "s");
+            int days = (int)((apartment->get_paid_until() - time(0)) / SECS_PER_REAL_DAY);
+            int hours = (int)((apartment->get_paid_until() - time(0)) / SECS_PER_REAL_HOUR);
+            int minutes = (int)((apartment->get_paid_until() - time(0)) / SECS_PER_REAL_MIN);
+            int seconds = apartment->get_paid_until() - time(0);
+            
+            if (days > 0) {
+              snprintf(buf2, sizeof(buf2), "%s is paid up for another %d day%s.", CAP(apartment->get_name()), days, days == 1 ? "" : "s");
+            } else if (hours > 0) {
+              snprintf(buf2, sizeof(buf2), "%s is paid up for another %d hour%s.", CAP(apartment->get_name()), hours, hours == 1 ? "" : "s");
+            } else if (minutes > 0) {
+              snprintf(buf2, sizeof(buf2), "%s is paid up for another %d minute%s.", CAP(apartment->get_name()), minutes, minutes == 1 ? "" : "s");
+            } else {
+              snprintf(buf2, sizeof(buf2), "%s is paid up for another %d second%s.", CAP(apartment->get_name()), seconds, seconds == 1 ? "" : "s");
+            }
             mob_say(recep, buf2);
-            strlcpy(buf2, "Note: Those are real-world days.", sizeof(buf2));
+            strlcpy(buf2, "(Note: That's in real-world time.)", sizeof(buf2));
             do_say(recep, buf2, 0, SCMD_OSAY);
           }
         }

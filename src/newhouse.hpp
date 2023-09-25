@@ -107,6 +107,7 @@ class ApartmentComplex {
     const char *list_editors();
     void mark_as_deleted();
     int get_crap_count();
+    void list_owned_apartments_to_ch(struct char_data *ch);
 };
 
 /* An Apartment is composed of N ApartmentRooms, and has tracking data for the lease etc. */
@@ -224,6 +225,7 @@ class Apartment {
     void apply_rooms();
     void clamp_rent(struct char_data *ch);
     void load_guests_from_old_house_file(const char *filename);
+    int get_days_in_arrears();
 
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);

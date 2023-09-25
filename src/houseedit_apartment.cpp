@@ -121,6 +121,26 @@ void houseedit_delete_apartment(struct char_data *ch, const char *func_remainder
   delete apartment;
 }
 
+
+void houseedit_set_apartment_lease_length(struct char_data *ch, time_t seconds_left, const char *func_remainder) {
+  Apartment *apartment;
+
+  // Error message came from find_apartment().
+  if (!(apartment = find_apartment(func_remainder, ch)))
+    return;
+
+  // Must have an owner.
+  FAILURE_CASE_PRINTF(!apartment->get_owner_id() && !apartment->get_owner_pgroup(), "%s has no current owner.", apartment->get_full_name());
+
+  // Passed preconditions, set it.
+  mudlog_vfprintf(ch, LOG_WIZLOG, "%s set %s's lease to expire %ld seconds from now (was %ld).",
+                  GET_CHAR_NAME(ch),
+                  apartment->get_full_name(),
+                  seconds_left,
+                  apartment->get_paid_until() - time(0));
+  apartment->set_paid_until(time(0) + seconds_left);
+}
+
 void houseedit_edit_apartment(struct char_data *ch, const char *func_remainder) {
   FAILURE_CASE(!ch->desc, "I don't know how you got here, but this won't work.");
 

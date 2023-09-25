@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "awake.hpp"
 #include "structs.hpp"
 #include "interpreter.hpp"
@@ -137,6 +139,24 @@ ACMD(do_houseedit) {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
 
       houseedit_edit_apartment(ch, func_remainder);
+      return;
+    }
+
+    // Set apartment lease info.
+    if (is_abbrev(func, "daysleft")) {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "Sorry, that function is owner-only.");
+
+      // Parse out the days. This comes before the apartment name.
+      char num[MAX_INPUT_LENGTH];
+      char *num_remainder = one_argument(func_remainder, num);
+
+      int parsed_num = atoi(num);
+
+      FAILURE_CASE(parsed_num == 0, "Syntax: HOUSEEDIT APARTMENT DAYSLEFT <days> <apartment name> (positive days: days, negative days: seconds [abs]) 0 is not a valid days quantity.");
+
+      time_t secs = (parsed_num < 0 ? abs(parsed_num) : parsed_num * SECS_PER_REAL_DAY);
+
+      houseedit_set_apartment_lease_length(ch, secs, num_remainder);
       return;
     }
 
