@@ -586,10 +586,16 @@ void process_withdrawal(struct char_data *ch) {
             continue;
           }
           send_to_char(ch, "Your body cries out for some %s.\r\n", drug_types[drug_id].name);
-        }
 
-        // If they got here, they're still addicted. Check to see if they're weak-willed enough to auto-take it.
-        if (days_since_last_fix >= drug_types[drug_id].fix_factor) {
+        // For now, put the edge reduction and testing / chem usage on the same timing.
+        // The condition below that tries to use fix_factor is broken, since that value
+        // stays constant. So once days_since_last_fix exceeds the the fix_factor, we
+        // would test 24 times (if they managed to succeed every time) or use chems 48
+        // times for every point of edge.
+        // }
+
+        // // If they got here, they're still addicted. Check to see if they're weak-willed enough to auto-take it.
+        // if (days_since_last_fix >= drug_types[drug_id].fix_factor) {
           // If you're undergoing guided withdrawal AND have the right chems on you, you skip the test (consumes chems though)
           if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL && _take_anti_drug_chems(ch, drug_id)) {
             continue;
