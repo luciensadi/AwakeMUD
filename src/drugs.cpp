@@ -475,11 +475,11 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
     // M&M p110
     GET_MAX_MENTAL(ch) = MIN(600, GET_MAX_MENTAL(ch));
     GET_MENTAL(ch) = MIN(GET_MENTAL(ch), GET_MAX_MENTAL(ch));
-    GET_TARGET_MOD(ch) += 3;
-    GET_CONCENTRATION_TARGET_MOD(ch) += 6;
-  } else if (AFF_FLAGGED(ch, AFF_WITHDRAWAL)) {
     GET_TARGET_MOD(ch) += 2;
     GET_CONCENTRATION_TARGET_MOD(ch) += 4;
+  } else if (AFF_FLAGGED(ch, AFF_WITHDRAWAL)) {
+    GET_TARGET_MOD(ch) += 1;
+    GET_CONCENTRATION_TARGET_MOD(ch) += 2;
   }
 }
 #undef GET_PERCEPTION_TEST_DICE_MOD
