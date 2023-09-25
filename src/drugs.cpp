@@ -734,7 +734,8 @@ void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
   // Test for success. If they fail, they immediately seek out drugs.
   if (!_combined_addiction_test(ch, drug_id, "guided withdrawal", TRUE)) {
     send_to_char(ch, "Even with the chems, you can't kick the urge for %s.\r\n", drug_types[drug_id].name);
-    seek_drugs(ch, drug_id);
+    // Fugue on failure when you're already paying a premium is probably too much
+    // seek_drugs(ch, drug_id);
     return;
   }
 
