@@ -848,7 +848,7 @@ bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, 
       if (!_combined_addiction_test(ch, drug_id, "application-time")) {
         // Character failed their addiction check and has become addicted.
         GET_DRUG_ADDICT(ch, drug_id) = IS_ADDICTED;
-        GET_DRUG_ADDICTION_EDGE(ch, drug_id) = 1;
+        GET_DRUG_ADDICTION_EDGE(ch, drug_id) = 2; // So that forced withdrawal faces at least one test
       }
     }
 
