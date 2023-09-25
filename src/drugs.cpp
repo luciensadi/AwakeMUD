@@ -561,7 +561,7 @@ void process_withdrawal(struct char_data *ch) {
       // Tick down their addiction rating as they withdraw. Speed varies based on whether this is forced or not.
       if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
         // Decrement their edge, allowing their addiction rating to decrease.
-        if (days_since_last_fix > GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id)) {
+        if (days_since_last_fix >= GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id)) {
           snprintf(rbuf, sizeof(rbuf), "$n: %s withdrawal: d_s_l_f %ld > l_w_t %d, ticking down edge.\r\n",
                    GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL ? "Forced" : "Guided",
                    days_since_last_fix,
@@ -587,15 +587,6 @@ void process_withdrawal(struct char_data *ch) {
           }
           send_to_char(ch, "Your body cries out for some %s.\r\n", drug_types[drug_id].name);
 
-        // For now, put the edge reduction and testing / chem usage on the same timing.
-        // The condition below that tries to use fix_factor is broken, since that value
-        // stays constant. So once days_since_last_fix exceeds the the fix_factor, we
-        // would test 24 times (if they managed to succeed every time) or use chems 48
-        // times for every point of edge.
-        // }
-
-        // // If they got here, they're still addicted. Check to see if they're weak-willed enough to auto-take it.
-        // if (days_since_last_fix >= drug_types[drug_id].fix_factor) {
           // If you're undergoing guided withdrawal AND have the right chems on you, you skip the test (consumes chems though)
           if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL && _take_anti_drug_chems(ch, drug_id)) {
             continue;
@@ -1077,7 +1068,7 @@ void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_guided) 
     GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_FORCED_WITHDRAWAL;
   }
 
-  GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = 1; // Set to 1 so we don't tick on the first day.
+  GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = drug_types[drug_id].fix_factor;
   GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) = 0;
   update_withdrawal_flags(ch);
 }
