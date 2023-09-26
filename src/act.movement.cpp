@@ -1794,14 +1794,13 @@ ACMD(do_drag)
     char drag_veh_name[500], act_buf[1000];
     strlcpy(drag_veh_name, GET_VEH_NAME(drag_veh), sizeof(drag_veh_name));
 
-    veh_from_room(drag_veh);
-
     if (dir == -1 && veh) {
       enter_veh(ch, veh, "rear", FALSE);
       if (ch->in_veh == veh) {
         send_to_char(ch, "Heaving and straining, you drag %s into %s.\r\n", drag_veh_name, GET_VEH_NAME(veh));
         snprintf(act_buf, sizeof(act_buf), "Heaving and straining, $n drags %s into %s.\r\n", drag_veh_name, GET_VEH_NAME(veh));
         act(act_buf, TRUE, ch, 0, 0, TO_ROOM);
+        veh_from_room(drag_veh);
         veh_to_veh(drag_veh, veh);
       } else {
         send_to_char("You can't get in there yourself.\r\n", ch);
@@ -1815,6 +1814,7 @@ ACMD(do_drag)
         snprintf(act_buf, sizeof(act_buf), "Heaving and straining, $n drags %s into the room.\r\n", drag_veh_name);
         act(act_buf, TRUE, ch, 0, 0, TO_ROOM);
       }
+      veh_from_room(drag_veh);
       veh_to_room(drag_veh, ch->in_room);
     }
     WAIT_STATE(ch, 3 RL_SEC);
