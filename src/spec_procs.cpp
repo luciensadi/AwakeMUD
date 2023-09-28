@@ -4090,7 +4090,8 @@ int find_hotel_cost(struct char_data *ch)
       cost = 6.0;
       break;
   }
-  val = (int)(cost * MAX(1, (GET_REP(ch) + number(-1, 1)) / 10));
+  int tmp_cost = (GET_REP(ch) + number(-1, 1)) / 10;
+  val = (int)(cost * MAX(1, tmp_cost));
   return val;
 }
 
