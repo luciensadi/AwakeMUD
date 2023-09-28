@@ -1495,18 +1495,42 @@ SPECIAL(johnson)
           send_to_char(ch, "[OOC: This Johnson has a minimum reputation requirement of %d. Come back when you have at least that much rep.]\r\n", johnson_min_rep);
         } else {
             int rep_delta = quest_table[new_q].min_rep - GET_REP(ch);
-            if (rep_delta >= 1000)
+            if (rep_delta >= 1000) {
                 do_say(johnson, "Who are you?", 0, 0);
-            else if  (rep_delta >= 500)
+                if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+                  send_to_char(ch, "[OOC: You need to earn a whole lot more rep before you can take on this job.]\r\n", johnson_min_rep);
+                }
+            }
+            else if  (rep_delta >= 500) {
                 do_say(johnson, "Don't talk to me.", 0, 0);
-            else if  (rep_delta >= 200)
+                if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+                  send_to_char(ch, "[OOC: You need to earn significantly more rep before you can take on this job.]\r\n", johnson_min_rep);
+                }
+            }
+            else if  (rep_delta >= 200) {
                 do_say(johnson, "Go pick up a few new tricks.", 0, 0);
-            else if  (rep_delta >= 100)
-                do_say(johnson, "Wet behind the ears, huh?", 0, 0);
-            else if  (rep_delta >= 20)
+                if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+                  send_to_char(ch, "[OOC: You need to earn %d more points of rep before you can take on this job.]\r\n", rep_delta);
+                }
+            }
+            else if  (rep_delta >= 100) {
+                do_say(johnson, "You're still a little wet behind the ears for this one.", 0, 0);
+                if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+                  send_to_char(ch, "[OOC: You need to earn %d more points of rep before you can take on this job.]\r\n", rep_delta);
+                }
+            }
+            else if  (rep_delta >= 20) {
                 do_say(johnson, "Come back later, omae.", 0, 0);
-            else
+                if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+                  send_to_char(ch, "[OOC: You need to earn %d more points of rep before you can take on this job.]\r\n", rep_delta);
+                }
+            }
+            else {
                 do_say(johnson, "I might have something for you soon.", 0, 0);
+                if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
+                  send_to_char(ch, "[OOC: You need to earn %d more points of rep before you can take on this job.]\r\n", rep_delta);
+                }
+            }
         }
 
         GET_SPARE1(johnson) = -1;
