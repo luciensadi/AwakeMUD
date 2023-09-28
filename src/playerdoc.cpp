@@ -295,6 +295,12 @@ const char *get_char_representation_for_docwagon(struct char_data *vict, struct 
   struct remem *mem_record;
   static char display_string[500];
 
+  if (!GET_NAME(vict)) {
+    mudlog_vfprintf(viewer, LOG_SYSLOG, "SYSERR: Got NULL-NAMED vict to get_char_representation_for_docwagon(%s, %s)!", GET_CHAR_NAME(vict), GET_CHAR_NAME(viewer));
+    *display_string = '\0';
+    return display_string;
+  }
+
   strlcpy(display_string, decapitalize_a_an(GET_NAME(vict)), sizeof(display_string));
 
   if ((mem_record = safe_found_mem(viewer, vict)))

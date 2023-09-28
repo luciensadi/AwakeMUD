@@ -673,6 +673,13 @@ char *string_to_lowercase(const char *source) {
 char *decapitalize_a_an(const char *source)
 {
   static char dest[MAX_STRING_LENGTH];
+
+  if (!source) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL source string to decapitalize_a_an()!");
+    *dest = '\0';
+    return dest;
+  }
+  
   strlcpy(dest, source, sizeof(dest));
 
   int len = strlen(source);
@@ -3423,20 +3430,26 @@ Returns total length of the string that would have been created.
 */
 size_t strlcpy(char *buf, const char *src, size_t bufsz)
 {
-    size_t src_len = strlen(src);
-    size_t rtn = src_len;
+  if (!src) {
+    log("SYSERR: Received NULL source string to strlcpy()!");
+    strlcpy(buf, "strlcpy-error", bufsz);
+    return 0;
+  }
 
-    if (bufsz > 0)
+  size_t src_len = strlen(src);
+  size_t rtn = src_len;
+
+  if (bufsz > 0)
+  {
+    if (src_len >= bufsz)
     {
-        if (src_len >= bufsz)
-        {
-            src_len = bufsz - 1;
-        }
-        memcpy(buf, src, src_len);
-        buf[src_len] = '\0';
+        src_len = bufsz - 1;
     }
+    memcpy(buf, src, src_len);
+    buf[src_len] = '\0';
+  }
 
-    return rtn;
+  return rtn;
 }
 
 /*
