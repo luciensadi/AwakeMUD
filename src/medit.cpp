@@ -1700,9 +1700,13 @@ void write_mobs_to_disk(vnum_t zone_num)
   int i;
 
   // ideally, this would just fill a VTable with vals...maybe one day
+  char final_file_name[1000];
+  snprintf(final_file_name, sizeof(final_file_name), "%s/%d.mob", MOB_PREFIX, zone_table[znum].number);
 
-  snprintf(buf, sizeof(buf), "%s/%d.mob", MOB_PREFIX, zone_table[znum].number);
-  fp = fopen(buf, "w+");
+  char tmp_file_name[1000];
+  snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
+
+  fp = fopen(tmp_file_name, "w+");
 
   /* start running through all mobiles in this zone */
   for (counter = zone_table[znum].number * 100;
@@ -1861,4 +1865,8 @@ void write_mobs_to_disk(vnum_t zone_num)
   fclose(fp);
 
   write_index_file("mob");
+
+  // Move the tmp to clobber the old.
+  remove(final_file_name);
+  rename(tmp_file_name, final_file_name);
 }

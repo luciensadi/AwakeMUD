@@ -1400,9 +1400,15 @@ void write_world_to_disk(vnum_t zone_vnum)
 
   // ideally, this would just fill a VTable with vals...maybe one day
 
-  snprintf(buf, sizeof(buf), "%s/%d.wld", WLD_PREFIX,
-          zone_table[znum].number);
-  fp = fopen(buf, "w+");
+  // Compute the final file name.
+  char final_file_name[1000];
+  snprintf(final_file_name, sizeof(final_file_name), "%s/%d.wld", WLD_PREFIX, zone_table[znum].number);
+
+  // Writing happens to a temporary file to avoid clobbering the world on failed write.
+  char tmp_file_name[1000];
+  snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
+
+  fp = fopen(tmp_file_name, "w+");
   for (counter = zone_table[znum].number * 100;
        counter <= zone_table[znum].top; counter++) {
     realcounter = real_room(counter);
@@ -1566,10 +1572,16 @@ void write_world_to_disk(vnum_t zone_vnum)
   fprintf(fp, "END\n");
   fclose(fp);
 
-  if (wrote_something)
+  if (wrote_something) {
     write_index_file("wld");
-  else
-    remove(buf);
+    // Remove the old file.
+    remove(final_file_name);
+    // Rename the temp file.
+    rename(tmp_file_name, final_file_name);
+  } else {
+    // Nothing written: Remove the temp file.
+    remove(tmp_file_name);
+  }
   /* do NOT free strings! just the room structure */
 }
 #undef RM

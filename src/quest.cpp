@@ -2097,10 +2097,14 @@ int write_quests_to_disk(int zone) {
   zone = real_zone(zone);
   bool wrote_something = FALSE;
 
-  snprintf(buf, sizeof(buf), "world/qst/%d.qst", zone_table[zone].number);
+  char final_file_name[1000];
+  snprintf(final_file_name, sizeof(final_file_name), "world/qst/%d.qst", zone_table[zone].number);
 
-  if (!(fp = fopen(buf, "w+"))) {
-    log_vfprintf("SYSERR: could not open file %d.qst", zone_table[zone].number);
+  char tmp_file_name[1000];
+  snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
+
+  if (!(fp = fopen(tmp_file_name, "w+"))) {
+    log_vfprintf("SYSERR: could not open file %s", tmp_file_name);
 
     fclose(fp);
     return 0;
@@ -2194,10 +2198,14 @@ int write_quests_to_disk(int zone) {
 
     fprintf(fp, "$~\n");
     fclose(fp);
+
+    // Then remove the old file and rename the temp file.
+    remove(final_file_name);
+    rename(tmp_file_name, final_file_name);
   }
   // Otherwise, delete the empty junk file.
   else
-    remove(buf);
+    remove(tmp_file_name);
 
   return 1;
 }

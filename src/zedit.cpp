@@ -58,8 +58,13 @@ void write_zone_to_disk(int vnum)
   FILE  *fp;
   int i;
 
-  snprintf(buf, sizeof(buf), "%s/%d.zon", ZON_PREFIX, vnum);
-  fp = fopen(buf, "w+");
+  char final_file_name[1000];
+  snprintf(final_file_name, sizeof(final_file_name), "%s/%d.zon", ZON_PREFIX, vnum);
+
+  char tmp_file_name[1000];
+  snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
+  
+  fp = fopen(tmp_file_name, "w+");
 
   // write it out!
   fprintf(fp, "#%d\n", vnum);
@@ -173,6 +178,10 @@ void write_zone_to_disk(int vnum)
   }
   fprintf(fp, "$\n");
   fclose(fp);
+
+  // Remove old, move tmp to cover.
+  remove(final_file_name);
+  rename(tmp_file_name, final_file_name);
 }
 #undef ZONE
 #undef Zcmd

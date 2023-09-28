@@ -3117,9 +3117,13 @@ void write_objs_to_disk(vnum_t zonenum)
   rnum_t zone = real_zone(zonenum);
 
   // ideally, this would just fill a VTable with vals...maybe one day
+  char final_file_name[1000];
+  snprintf(final_file_name, sizeof(final_file_name), "%s/%d.obj", OBJ_PREFIX, zone_table[zone].number);
 
-  snprintf(buf, sizeof(buf), "%s/%d.obj", OBJ_PREFIX, zone_table[zone].number);
-  fp = fopen(buf, "w+");
+  char tmp_file_name[1000];
+  snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
+  
+  fp = fopen(tmp_file_name, "w+");
 
   bool wrote_something = FALSE;
 
@@ -3229,8 +3233,11 @@ void write_objs_to_disk(vnum_t zonenum)
   fprintf(fp, "END\n");
   fclose(fp);
 
-  if (wrote_something)
+  if (wrote_something) {
     write_index_file("obj");
-  else
-    remove(buf);
+    // Move the tmp to clobber the old.
+    remove(final_file_name);
+    rename(tmp_file_name, final_file_name);
+  } else
+    remove(tmp_file_name);
 }

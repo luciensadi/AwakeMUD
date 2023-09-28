@@ -40,8 +40,14 @@ void write_ic_to_disk(int vnum)
   int zone = real_zone(vnum);
   FILE *fl;
 
-  snprintf(buf, sizeof(buf), "%s/%d.ic", MTX_PREFIX, vnum);
-  fl = fopen(buf, "w+");
+  char final_file_name[1000];
+  snprintf(final_file_name, sizeof(final_file_name), "%s/%d.ic", MTX_PREFIX, vnum);
+
+  char tmp_file_name[1000];
+  snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
+  
+  fl = fopen(tmp_file_name, "w+");
+
   for (counter = zone_table[zone].number * 100;
        counter <= zone_table[zone].top;
        counter++) {
@@ -68,6 +74,10 @@ void write_ic_to_disk(int vnum)
   fprintf(fl, "END\n");
   fclose(fl);
   write_index_file("ic");
+
+  // Remove old, move tmp to cover.
+  remove(final_file_name);
+  rename(tmp_file_name, final_file_name);
 }
 void icedit_disp_option_menu(struct descriptor_data *d)
 {
