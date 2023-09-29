@@ -35,7 +35,7 @@ ACMD_DECLARE(do_look);
 
 // ----------------- Helper Prototypes
 bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, int drug_id);
-bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch);
+bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch, bool voluntary=TRUE);
 bool _drug_dose_exceeds_tolerance(struct char_data *ch, int drug_id);
 bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier);
 bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *test_identifier, bool is_starting_guided_withdrawal_check=FALSE);
@@ -68,7 +68,7 @@ ACMD(do_drugs) {
 
 
 // Given a character and a drug object, dose the character with that drug object, then extract it if needed. Effects apply at next limit tick.
-bool do_drug_take(struct char_data *ch, struct obj_data *obj) {
+bool do_drug_take(struct char_data *ch, struct obj_data *obj, bool voluntary) {
   char oopsbuf[500];
 
   if (!ch) {
@@ -101,11 +101,21 @@ bool do_drug_take(struct char_data *ch, struct obj_data *obj) {
   int available_drug_doses = GET_OBJ_DRUG_DOSES(obj) > 0 ? GET_OBJ_DRUG_DOSES(obj) : 1;
 
   // Onboard doses until the object runs out or they end up high (whichever comes first)
-  int doses_to_take = MIN(available_drug_doses, GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) + 1);
+  int doses_to_take = MIN(available_drug_doses, GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) + 1 - GET_DRUG_DOSE(ch, drug_id));
   GET_OBJ_DRUG_DOSES(obj) -= doses_to_take;
   weight_change_object(obj, -1 * (doses_to_take * 0.01));
 
-  if (_apply_doses_of_drug_to_char(doses_to_take, drug_id, ch)) {
+  // We only want to set/keep the involuntary dosing flag if no doses in the set are taken deliberately
+  // Involuntary dosing can only happen if addicted
+  if (GET_DRUG_ADDICT(ch, drug_id)) {
+    if (voluntary) {
+      GET_DRUG_ADDICT(ch, drug_id) = IS_ADDICTED;
+    } else if (GET_DRUG_DOSE(ch, drug_id) == 0) {
+      GET_DRUG_ADDICT(ch, drug_id) = IS_TAKING_INVOLUNTARY;
+    }
+  }
+
+  if (_apply_doses_of_drug_to_char(doses_to_take, drug_id, ch, voluntary)) {
     return TRUE;
   }
 
@@ -465,11 +475,11 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
     // M&M p110
     GET_MAX_MENTAL(ch) = MIN(600, GET_MAX_MENTAL(ch));
     GET_MENTAL(ch) = MIN(GET_MENTAL(ch), GET_MAX_MENTAL(ch));
-    GET_TARGET_MOD(ch) += 3;
-    GET_CONCENTRATION_TARGET_MOD(ch) += 6;
-  } else if (AFF_FLAGGED(ch, AFF_WITHDRAWAL)) {
     GET_TARGET_MOD(ch) += 2;
     GET_CONCENTRATION_TARGET_MOD(ch) += 4;
+  } else if (AFF_FLAGGED(ch, AFF_WITHDRAWAL)) {
+    GET_TARGET_MOD(ch) += 1;
+    GET_CONCENTRATION_TARGET_MOD(ch) += 2;
   }
 }
 #undef GET_PERCEPTION_TEST_DICE_MOD
@@ -551,7 +561,7 @@ void process_withdrawal(struct char_data *ch) {
       // Tick down their addiction rating as they withdraw. Speed varies based on whether this is forced or not.
       if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
         // Decrement their edge, allowing their addiction rating to decrease.
-        if (days_since_last_fix > GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id)) {
+        if (days_since_last_fix >= GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id)) {
           snprintf(rbuf, sizeof(rbuf), "$n: %s withdrawal: d_s_l_f %ld > l_w_t %d, ticking down edge.\r\n",
                    GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL ? "Forced" : "Guided",
                    days_since_last_fix,
@@ -576,10 +586,7 @@ void process_withdrawal(struct char_data *ch) {
             continue;
           }
           send_to_char(ch, "Your body cries out for some %s.\r\n", drug_types[drug_id].name);
-        }
 
-        // If they got here, they're still addicted. Check to see if they're weak-willed enough to auto-take it.
-        if (days_since_last_fix >= drug_types[drug_id].fix_factor) {
           // If you're undergoing guided withdrawal AND have the right chems on you, you skip the test (consumes chems though)
           if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL && _take_anti_drug_chems(ch, drug_id)) {
             continue;
@@ -598,7 +605,7 @@ void process_withdrawal(struct char_data *ch) {
             for (struct obj_data *obj = ch->carrying, *next_content; obj; obj = next_content) {
               next_content = obj->next_content;
               if (GET_OBJ_TYPE(obj) == ITEM_DRUG && GET_OBJ_DRUG_TYPE(obj) == drug_id) {
-                do_drug_take(ch, obj); // obj is potentially extracted at this point
+                do_drug_take(ch, obj, FALSE); // obj is potentially extracted at this point
                 if (GET_DRUG_DOSE(ch, drug_id) > GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)) {
                   return;
                 }
@@ -724,7 +731,8 @@ void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
   // Test for success. If they fail, they immediately seek out drugs.
   if (!_combined_addiction_test(ch, drug_id, "guided withdrawal", TRUE)) {
     send_to_char(ch, "Even with the chems, you can't kick the urge for %s.\r\n", drug_types[drug_id].name);
-    seek_drugs(ch, drug_id);
+    // Fugue on failure when you're already paying a premium is probably too much
+    // seek_drugs(ch, drug_id);
     return;
   }
 
@@ -819,33 +827,36 @@ bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, 
 
   bool is_first_time_taking = (GET_DRUG_LIFETIME_DOSES(ch, drug_id) - GET_DRUG_DOSE(ch, drug_id) <= 0);
 
-  // Increase our tolerance and addiction levels if we've passed the edge value.
-  int edge_value = (GET_DRUG_ADDICT(ch, drug_id) ? drug_types[drug_id].edge_posadd : drug_types[drug_id].edge_preadd);
-  int edge_delta = 0;
-  if (edge_value > 0) {
-    edge_delta = ((GET_DRUG_LIFETIME_DOSES(ch, drug_id) % edge_value) + GET_DRUG_DOSE(ch, drug_id)) / edge_value;
-    if (edge_delta > 0) {
-      GET_DRUG_ADDICTION_EDGE(ch, drug_id) += edge_delta;
-      GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) += edge_delta;
+  // We only increase edge or tolerance if doses are deliberate
+  if (GET_DRUG_ADDICT(ch, drug_id) != IS_TAKING_INVOLUNTARY) {
+    // Increase our tolerance and addiction levels if we've passed the edge value.
+    int edge_value = (GET_DRUG_ADDICT(ch, drug_id) ? drug_types[drug_id].edge_posadd : drug_types[drug_id].edge_preadd);
+    int edge_delta = 0;
+    if (edge_value > 0) {
+      edge_delta = ((GET_DRUG_LIFETIME_DOSES(ch, drug_id) % edge_value) + GET_DRUG_DOSE(ch, drug_id)) / edge_value;
+      if (edge_delta > 0) {
+        GET_DRUG_ADDICTION_EDGE(ch, drug_id) = MIN(MAX_DRUG_EDGE, GET_DRUG_ADDICTION_EDGE(ch, drug_id) + edge_delta);
+        GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) = MIN(MAX_DRUG_TOLERANCE, GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) + edge_delta);
+      }
+      snprintf(rbuf, sizeof(rbuf), "Edge rating: %d, edge delta: %d.", edge_value, edge_delta);
+      act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
     }
-    snprintf(rbuf, sizeof(rbuf), "Edge rating: %d, edge delta: %d.", edge_value, edge_delta);
-    act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
-  }
 
-  // Check to see if they become addicted.
-  if (GET_DRUG_ADDICT(ch, drug_id) == NOT_ADDICTED && (edge_delta > 0 || is_first_time_taking)) {
-    // It's their first dose, or they've taken more than Edge doses.
-    if (!_combined_addiction_test(ch, drug_id, "application-time")) {
-      // Character failed their addiction check and has become addicted.
-      GET_DRUG_ADDICT(ch, drug_id) = IS_ADDICTED;
-      GET_DRUG_ADDICTION_EDGE(ch, drug_id) = 1;
+    // Check to see if they become addicted.
+    if (GET_DRUG_ADDICT(ch, drug_id) == NOT_ADDICTED && (edge_delta > 0 || is_first_time_taking)) {
+      // It's their first dose, or they've taken more than Edge doses.
+      if (!_combined_addiction_test(ch, drug_id, "application-time")) {
+        // Character failed their addiction check and has become addicted.
+        GET_DRUG_ADDICT(ch, drug_id) = IS_ADDICTED;
+        GET_DRUG_ADDICTION_EDGE(ch, drug_id) = 2; // So that forced withdrawal faces at least one test
+      }
     }
-  }
 
-  // Check to see if their tolerance increases.
-  if (drug_types[drug_id].tolerance > 0 && (edge_delta > 0 || is_first_time_taking)) {
-    if (!_combined_addiction_test(ch, drug_id, "tolerance"))
-      GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)++;
+    // Check to see if their tolerance increases.
+    if (drug_types[drug_id].tolerance > 0 && (edge_delta > 0 || is_first_time_taking)) {
+      if (!_combined_addiction_test(ch, drug_id, "tolerance"))
+        GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)++;
+    }
   }
 
   // Deal a box of damage every time you onboard at least 2*Body rating in doses, and one additional per Bod doses past that.
@@ -860,14 +871,16 @@ bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, 
   return FALSE;
 }
 
-bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch) {
+bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch, bool voluntary) {
   if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
     mudlog("SYSERR: Got to _apply_doses_of_drug_to_char() for character who did not enable the drug system!", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
   // Add the number of doses to both the current and lifetime doses.
-  GET_DRUG_LIFETIME_DOSES(ch, drug_id) += doses;
+  if (voluntary) {
+    GET_DRUG_LIFETIME_DOSES(ch, drug_id) += doses;
+  }
   GET_DRUG_DOSE(ch, drug_id) += doses;
 
   return FALSE;
@@ -988,7 +1001,13 @@ bool seek_drugs(struct char_data *ch, int drug_id) {
       lose_nuyen(ch, GET_NUYEN(ch), NUYEN_OUTFLOW_DRUGS);
     }
 
-    if (_apply_doses_of_drug_to_char(sought_dosage, drug_id, ch)) {
+    // We only want to set/keep the involuntary dosing flag if no doses in the set are taken deliberately
+    // Involuntary dosing can only happen if addicted
+    if (GET_DRUG_DOSE(ch, drug_id) == 0) {
+      GET_DRUG_ADDICT(ch, drug_id) = IS_TAKING_INVOLUNTARY;
+    }
+
+    if (_apply_doses_of_drug_to_char(sought_dosage, drug_id, ch, FALSE)) {
       return TRUE;
     }
 
@@ -1049,7 +1068,7 @@ void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_guided) 
     GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_FORCED_WITHDRAWAL;
   }
 
-  GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = 1; // Set to 1 so we don't tick on the first day.
+  GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = drug_types[drug_id].fix_factor;
   GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) = 0;
   update_withdrawal_flags(ch);
 }

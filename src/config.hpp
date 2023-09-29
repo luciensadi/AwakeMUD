@@ -277,6 +277,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define INVOLUNTARY_DRUG_PURCHASE_COST_MULTIPLIER              3
 #define AVG_HOURS_PER_TOLERANCE_TICKDOWN                       (24 * 7)
 #define MAX_ADDICTION_TEST_DIFFICULTY                          12
+#define MAX_DRUG_TOLERANCE                                     10
+#define MAX_DRUG_EDGE                                          10
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
