@@ -1,7 +1,7 @@
 #ifndef _drugs_h_
 #define _drugs_h_
 
-bool    do_drug_take(struct char_data *ch, struct obj_data *obj);
+bool    do_drug_take(struct char_data *ch, struct obj_data *obj, bool voluntary = TRUE);
 void    reset_drug_for_char(struct char_data *ch, int drugval);
 void    reset_all_drugs_for_char(struct char_data *ch);
 int     get_drug_pain_resist_level(struct char_data *ch);
@@ -53,6 +53,7 @@ void    clear_all_drug_data_for_char(struct char_data *ch);
 
 #define NOT_ADDICTED                 0
 #define IS_ADDICTED                  1
+#define IS_TAKING_INVOLUNTARY        2
 
 #define MAX_DRUG_NAME_LENGTH         12
 #define MAX_DELIVERY_METHOD_LENGTH   10
