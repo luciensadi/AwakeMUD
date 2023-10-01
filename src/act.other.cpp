@@ -4293,7 +4293,8 @@ ACMD(do_dice)
            vict; 
            vict = (ch->in_room ? vict->next_in_room : vict->next_in_veh))
       {
-        if (IS_SENATOR(vict)) {
+        // Don't double-message staff rollers
+        if (IS_SENATOR(vict) && vict != ch) {
           act(buf, FALSE, ch, 0, vict, TO_VICT);
         }
       }
