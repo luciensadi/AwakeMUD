@@ -173,7 +173,7 @@ bool attempt_quit_job(struct char_data *ch, struct char_data *johnson) {
   }
 
   // Drop the quest.
-  if (quest_table[GET_QUEST(ch)].quit_emote) {
+  if (quest_table[GET_QUEST(ch)].quit_emote && *quest_table[GET_QUEST(ch)].quit_emote) {
     // Don't @ me about this, it's the only way to reliably display a newline in this context.
     act("^n", FALSE, johnson, 0, 0, TO_ROOM);
     char emote_with_carriage_return[MAX_STRING_LENGTH];
@@ -1427,7 +1427,7 @@ SPECIAL(johnson)
           return TRUE;
         }
 
-        if (quest_table[GET_QUEST(ch)].finish_emote) {
+        if (quest_table[GET_QUEST(ch)].finish_emote && *quest_table[GET_QUEST(ch)].finish_emote) {
           // Don't @ me about this, it's the only way to reliably display a newline in this context.
           act("^n", FALSE, johnson, 0, 0, TO_ROOM);
           char emote_with_carriage_return[MAX_STRING_LENGTH];
@@ -1561,7 +1561,7 @@ SPECIAL(johnson)
 
       // Assign the quest.
       GET_SPARE1(johnson) = 0;
-      if (quest_table[new_q].intro_emote) {
+      if (quest_table[new_q].intro_emote && *quest_table[new_q].intro_emote) {
         // Don't @ me about this, it's the only way to reliably display a newline in this context.
         act("^n", FALSE, johnson, 0, 0, TO_ROOM);
         char intro_emote_with_carriage_return[MAX_STRING_LENGTH];
@@ -1698,7 +1698,7 @@ SPECIAL(johnson)
       GET_SPARE1(johnson) = -1;
       GET_QUEST(ch) = 0;
       forget(johnson, ch);
-      if (quest_table[new_q].decline_emote) {
+      if (quest_table[new_q].decline_emote && *quest_table[new_q].decline_emote) {
         // Don't @ me about this, it's the only way to reliably display a newline in this context.
         act("^n", FALSE, johnson, 0, 0, TO_ROOM);
         char emote_with_carriage_return[MAX_STRING_LENGTH];
