@@ -247,7 +247,7 @@ ACMD(do_hcontrol)
   vnum_t idnum;
 
   skip_spaces(&argument);
-  half_chop(argument, arg1, arg2);
+  half_chop(argument, arg1, arg2, sizeof(arg2));
 
   if (!str_cmp(arg1, "destroy")) {
     if (GET_LEVEL(ch) >= LVL_EXECUTIVE) {

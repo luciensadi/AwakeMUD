@@ -656,8 +656,8 @@ ACMD(do_build) {
       send_to_char(TOOBUSY, ch);
       return;
   }
-  half_chop(argument, arg1, buf);
-  half_chop(buf, arg2, arg3);
+  half_chop(argument, arg1, buf, sizeof(buf));
+  half_chop(buf, arg2, arg3, sizeof(arg3));
   if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
     if (ch->in_room)
       obj = get_obj_in_list_vis(ch, arg1, ch->in_room->contents);

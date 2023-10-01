@@ -3446,7 +3446,7 @@ ACMD(do_bond)
     send_to_char("What do you want to bond?\r\n", ch);
     return;
   }
-  half_chop(argument, buf1, buf2);
+  half_chop(argument, buf1, buf2, sizeof(buf2));
   struct obj_data *obj;
   int karma = 0, spirit = 0;
   struct spell_data *spell = GET_SPELLS(ch);
@@ -3873,11 +3873,11 @@ ACMD(do_cast)
     one_argument(argument, buf);
     force = atoi(buf);
   } else {
-    half_chop(argument, buf, buf1);
+    half_chop(argument, buf, buf1, sizeof(buf1));
     if (!(force = atoi(buf))) {
       strcpy(spell_name, buf);
     } else {
-      half_chop(buf1, buf2, buf3);
+      half_chop(buf1, buf2, buf3, sizeof(buf3));
       strlcpy(buf1, buf3, sizeof(buf1));
       strlcpy(spell_name, buf2, sizeof(spell_name));
     }
@@ -5345,7 +5345,7 @@ ACMD(do_order)
     send_to_char("You don't have the ability to do that.\r\n", ch);
     return;
   }
-  half_chop(argument, buf, buf1);
+  half_chop(argument, buf, buf1, sizeof(buf1));
   struct spirit_data *spirit;
   int i, order = 0;
   if (!(i = atoi(buf)) || i > GET_NUM_SPIRITS(ch)) {
@@ -5418,7 +5418,7 @@ ACMD(do_order)
     }
     send_to_char("  Attack\r\n", ch);
   } else {
-    half_chop(buf1, buf, buf2);
+    half_chop(buf1, buf, buf2, sizeof(buf2));
     for (;order < NUM_SERVICES; order++) {
       if (is_abbrev(buf, services[order].name) && spirit_can_perform(spirit->type, order, GET_TRADITION(ch)))
         break;

@@ -567,7 +567,7 @@ ACMD(do_patch)
 {
   struct char_data *vict;
   struct obj_data *patch;
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
 
   if (!*arg || !*buf) {
     send_to_char("Who do you want to patch and with what?\r\n", ch);
@@ -710,7 +710,7 @@ ACMD(do_use)
     return;
   }
 
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
   if (!*arg) {
     send_to_char(ch, "What do you want to %s?\r\n", CMD_NAME);
     return;
@@ -4414,7 +4414,7 @@ ACMD(do_cpool)
     do_pool(ch, argument, 0, 0);
     return;
   }
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
   dodge = atoi(arg);
 
   if (dodge == 0 && *arg != '0') {
@@ -4422,7 +4422,7 @@ ACMD(do_cpool)
     return;
   }
 
-  half_chop(buf, argument, arg);
+  half_chop(buf, argument, arg, sizeof(arg));
   bod = atoi(argument);
   off = atoi(arg);
 
@@ -4449,7 +4449,7 @@ ACMD(do_cpool)
 ACMD(do_spool)
 {
   int cast = 0, drain = 0, def = 0, reflect = 0;
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
   if (!*arg) {
     do_pool(ch, argument, 0, 0);
     return;
@@ -4464,9 +4464,9 @@ ACMD(do_spool)
 
   FAILURE_CASE_PRINTF(cast > GET_SKILL(ch, SKILL_SORCERY), "You can't allocate more than %d dice to your casting pool (limited by Sorcery skill).", GET_SKILL(ch, SKILL_SORCERY));
 
-  half_chop(buf, argument, arg);
+  half_chop(buf, argument, arg, sizeof(arg));
   drain = atoi(argument);
-  half_chop(arg, argument, buf);
+  half_chop(arg, argument, buf, sizeof(buf));
   def = atoi(argument);
   reflect = atoi(buf);
 
@@ -4821,7 +4821,7 @@ ACMD(do_syspoints) {
       return;
     }
 
-    half_chop(argument, arg, buf);
+    half_chop(argument, arg, buf, sizeof(buf));
 
     if (!*arg) {
       send_to_char("See ^WHELP SYSPOINTS^n for command syntax.\r\n", ch);
@@ -4834,12 +4834,12 @@ ACMD(do_syspoints) {
 
 
       // Separate out the character name and amount fields.
-      half_chop(buf, target, arg);
+      half_chop(buf, target, arg, sizeof(arg));
       FAILURE_CASE(!*target, "Syntax: SYSPOINTS TRANSFER <target> <amount> <reason>.");
       FAILURE_CASE_PRINTF(!*amt, "You must specify an amount to transfer to %s.", target);
 
       // Separate out the reason field.
-      half_chop(arg, amt, reason);
+      half_chop(arg, amt, reason, sizeof(reason));
       FAILURE_CASE(!*reason, "You must specify a reason for this transfer.");
 
       // Parse and validate the amount.
@@ -5084,7 +5084,7 @@ ACMD(do_syspoints) {
   }
 
   // Viable modes: award deduct show
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
 
   if (!*arg) {
     send_to_char("Syntax: syspoints <award|deduct|show> <target>\r\n", ch);
@@ -5127,8 +5127,8 @@ ACMD(do_syspoints) {
   }
 
   // deduct and award modes.
-  half_chop(buf, target, buf2);
-  half_chop(buf2, amt, reason);
+  half_chop(buf, target, buf2, sizeof(buf2));
+  half_chop(buf2, amt, reason, sizeof(reason));
 
   int k = atoi(amt);
 

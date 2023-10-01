@@ -602,7 +602,7 @@ ACMD(do_upgrade)
   int j = 0, skill = 0, target = 0, kit = 0, mod_load_required = 0, mod_signature_change = 0, bod_already_used = 0;
   bool need_extract = FALSE;
 
-  half_chop(argument, buf1, buf2);
+  half_chop(argument, buf1, buf2, sizeof(buf2));
 
   if (!*buf1) {
     send_to_char("What do you want to upgrade?\r\n", ch);

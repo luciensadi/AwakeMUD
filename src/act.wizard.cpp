@@ -595,7 +595,7 @@ ACMD(do_send)
 {
   struct char_data *vict;
 
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
 
   if (!*arg) {
     send_to_char("Send what to who?\r\n", ch);
@@ -706,7 +706,7 @@ ACMD(do_at)
   struct veh_data *veh = NULL, *oveh = NULL;
   struct char_data *vict = NULL;
 
-  half_chop(argument, buf, command);
+  half_chop(argument, buf, command, sizeof(command));
   if (!*buf) {
     send_to_char("You must supply a room number or a name.\r\n", ch);
     return;
@@ -751,7 +751,7 @@ ACMD(do_goto)
   struct char_data *vict = NULL;
   rnum_t rnum;
 
-  half_chop(argument, buf, command);
+  half_chop(argument, buf, command, sizeof(command));
 
   // Only look for taxi destinations if our goto does not start with a digit.
   if (*buf && !isdigit(*buf)) {
@@ -1869,7 +1869,7 @@ ACMD(do_stat)
   struct veh_data *veh = NULL;
   int tmp;
 
-  half_chop(argument, buf1, buf2);
+  half_chop(argument, buf1, buf2, sizeof(buf2));
 
   if (!*buf1) {
     send_to_char("Stats on who or what?\r\n", ch);
@@ -2765,8 +2765,8 @@ ACMD(do_payout) {
   char reason[MAX_STRING_LENGTH];
   int k;
 
-  half_chop(argument, arg, buf);
-  half_chop(buf, amt, reason);
+  half_chop(argument, arg, buf, sizeof(buf));
+  half_chop(buf, amt, reason, sizeof(reason));
 
   k = atoi(amt);
 
@@ -2863,8 +2863,8 @@ ACMD(do_charge) {
   char reason[MAX_STRING_LENGTH];
   int k;
 
-  half_chop(argument, arg, buf);
-  half_chop(buf, amt, reason);
+  half_chop(argument, arg, buf, sizeof(buf));
+  half_chop(buf, amt, reason, sizeof(reason));
 
   k = atoi(amt);
 
@@ -3105,8 +3105,8 @@ ACMD(do_award)
   char amt[MAX_STRING_LENGTH];
   char reason[MAX_STRING_LENGTH];
 
-  half_chop(argument, arg, buf);
-  half_chop(buf, amt, reason);
+  half_chop(argument, arg, buf, sizeof(buf));
+  half_chop(buf, amt, reason, sizeof(reason));
 
   int karma_times_100 = atoi(amt);
 
@@ -3149,8 +3149,8 @@ ACMD(do_deduct)
   char reason[MAX_STRING_LENGTH];
   int karma_times_100;
 
-  half_chop(argument, arg, buf);
-  half_chop(buf, amt, reason);
+  half_chop(argument, arg, buf, sizeof(buf));
+  half_chop(buf, amt, reason, sizeof(reason));
 
   karma_times_100 = atoi(amt);
 
@@ -3633,7 +3633,7 @@ ACMD(do_force)
   struct char_data *vict, *next_force;
   char to_force[MAX_INPUT_LENGTH + 2];
 
-  half_chop(argument, arg, to_force);
+  half_chop(argument, arg, to_force, sizeof(to_force));
 
   snprintf(buf1, sizeof(buf1), "%s has forced you to '%s'.\r\n", GET_CHAR_NAME(ch), to_force);
 
@@ -4761,7 +4761,7 @@ ACMD(do_vset)
   struct veh_data *veh = NULL;
   int value = 0;
   char name[MAX_INPUT_LENGTH], field[MAX_INPUT_LENGTH], val_arg[MAX_INPUT_LENGTH];
-  half_chop(argument, name, buf);
+  half_chop(argument, name, buf, sizeof(buf));
   if (!*name || !*buf) {
     send_to_char("Usage: vset <victim> <field> <value>\r\n", ch);
     return;
@@ -4771,7 +4771,7 @@ ACMD(do_vset)
     return;
   }
 
-  half_chop(buf, field, val_arg);
+  half_chop(buf, field, val_arg, sizeof(val_arg));
   snprintf(buf, sizeof(buf), "Choose ^rowner^n, ^rlocked^n, or ^rsubscribed^n.\r\n");
 
   if (is_abbrev(field, "owner")) {
@@ -4916,7 +4916,7 @@ ACMD(do_set)
                { "\n", 0, BOTH, MISC }
              };
 
-  half_chop(argument, name, buf);
+  half_chop(argument, name, buf, sizeof(buf));
   if (!strcmp(name, "file")) {
     is_file = 1;
     char remainder[MAX_INPUT_LENGTH];
@@ -4932,7 +4932,7 @@ ACMD(do_set)
     strlcpy(remainder, one_argument(buf, name), sizeof(remainder));
     strlcpy(buf, remainder, sizeof(buf));
   }
-  half_chop(buf, field, buf2);
+  half_chop(buf, field, buf2, sizeof(buf2));
   strlcpy(val_arg, buf2, sizeof(val_arg));
 
   if (!*name || !*field) {
@@ -6513,7 +6513,7 @@ ACMD(do_destring)
 
 bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   struct obj_data *obj;
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
 
   if (!*arg) {
     send_to_char("Syntax: RESTRING <item> <new short description>\r\n", ch);
@@ -6644,7 +6644,7 @@ ACMD(do_restring) {
 
 ACMD(do_redesc) {
   struct obj_data *obj;
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
 
   FAILURE_CASE(!*arg, "Syntax: REDESC <item> <new full description>");
   FAILURE_CASE(!*buf, "You need to provide a short desc.");

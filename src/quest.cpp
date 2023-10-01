@@ -1276,7 +1276,7 @@ SPECIAL(johnson)
     struct char_data *to = NULL;
 
     strlcpy(mangled_argument, argument, sizeof(mangled_argument));
-    half_chop(argument, buf, buf2);
+    half_chop(argument, buf, buf2, sizeof(buf2));
     if (ch->in_veh)
       to = get_char_veh(ch, buf, ch->in_veh);
     else

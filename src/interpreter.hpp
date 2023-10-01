@@ -46,7 +46,7 @@ char    *any_one_arg(char *argument, char *first_arg, bool preserve_case=0);
 const char *any_one_arg_const(const char *argument, char *first_arg, bool preserve_case=0);
 char    *two_arguments(char *argument, char *first_arg, char *second_arg);
 int     fill_word(char *argument);
-void    half_chop(char *string, char *arg1, char *arg2);
+void    half_chop(char *string, char *arg1, char *arg2, size_t arg2_sz);
 void    nanny(struct descriptor_data *d, char *arg);
 int     is_abbrev(const char *arg1, const char *arg2);
 int     is_number(char *str);

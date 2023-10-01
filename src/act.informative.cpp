@@ -2611,7 +2611,7 @@ ACMD(do_look)
   else if (!LIGHT_OK(ch)) {
     send_to_char("It is pitch black...\r\n", ch);
   } else {
-    half_chop(argument, arg, arg2);
+    half_chop(argument, arg, arg2, sizeof(arg2));
 
     if (subcmd == SCMD_READ) {
       if (!*arg)
@@ -5362,7 +5362,7 @@ ACMD(do_who)
   if (subcmd)
     level = 1;
   while (*buf) {
-    half_chop(buf, arg, buf1);
+    half_chop(buf, arg, buf1, sizeof(buf1));
 
     if (is_abbrev(arg, "sort"))
       sort = LVL_MAX;
@@ -5723,7 +5723,7 @@ ACMD(do_users)
 
   strlcpy(buf, argument, sizeof(buf));
   while (*buf) {
-    half_chop(buf, arg, buf1);
+    half_chop(buf, arg, buf1, sizeof(buf1));
     if (*arg == '-') {
       mode = *(arg + 1);  /* just in case; we destroy arg in the switch */
       switch (mode) {
@@ -5743,11 +5743,11 @@ ACMD(do_users)
           break;
         case 'n':
           playing = 1;
-          half_chop(buf1, name_search, buf);
+          half_chop(buf1, name_search, buf, sizeof(buf));
           break;
         case 'h':
           playing = 1;
-          half_chop(buf1, host_search, buf);
+          half_chop(buf1, host_search, buf, sizeof(buf));
           break;
         default:
           send_to_char(USERS_FORMAT, ch);

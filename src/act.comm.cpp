@@ -116,7 +116,7 @@ ACMD(do_say)
   }
 
   if (subcmd == SCMD_SAYTO) {
-    half_chop(arg_known_size, buf, buf2);
+    half_chop(arg_known_size, buf, buf2, sizeof(buf2));
     strlcpy(arg_known_size, buf2, sizeof(arg_known_size));
 
     if (ch->in_veh)
@@ -331,7 +331,7 @@ ACMD(do_tell)
   struct char_data *vict = NULL;
   SPECIAL(johnson);
 
-  half_chop(argument, buf, buf2);
+  half_chop(argument, buf, buf2, sizeof(buf2));
 
   if (!*buf || !*buf2) {
     send_to_char("Who do you wish to tell what??\r\n", ch);
@@ -520,7 +520,7 @@ ACMD(do_spec_comm)
   if (check_for_banned_content(argument, ch))
     return;
 
-  half_chop(argument, buf, buf2);
+  half_chop(argument, buf, buf2, sizeof(buf2));
 
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
@@ -668,7 +668,7 @@ ACMD(do_page)
   if (check_for_banned_content(argument, ch))
     return;
 
-  half_chop(argument, arg, buf2);
+  half_chop(argument, arg, buf2, sizeof(buf2));
 
   if (IS_NPC(ch))
     send_to_char("NPCs can't page.. go away.\r\n", ch);
@@ -2144,7 +2144,7 @@ ACMD(do_message_history) {
     return;
   }
 
-  half_chop(argument, buf, buf2);
+  half_chop(argument, buf, buf2, sizeof(buf2));
 
   // Find the channel referenced in first parameter.
   for (channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)

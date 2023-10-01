@@ -295,7 +295,7 @@ ACMD(do_pgroup) {
   int cmd_index = 0;
 
   skip_spaces(&argument);
-  half_chop(argument, command, parameters);
+  half_chop(argument, command, parameters, sizeof(parameters));
 
   // In the absence of a command, show help and exit.
   if (!*command) {
@@ -1456,7 +1456,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   bool vict_is_logged_in = TRUE;
 
   // Parse argument into name and privilege.
-  half_chop(argument, name, privilege);
+  half_chop(argument, name, privilege, sizeof(privilege));
 
   if (!*name || !*privilege) {
     send_to_char(ch, "Syntax: PGROUP %s <character> <privilege>\r\n", revoke ? "REVOKE" : "GRANT");
@@ -1576,14 +1576,14 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
 }
 
 void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote) {
-  char name[strlen(argument)];
-  char rank_string[strlen(argument)];
+  char name[strlen(argument) + 1];
+  char rank_string[strlen(argument) + 1];
   int rank;
   struct char_data *vict = NULL;
   bool vict_is_logged_in = TRUE;
 
   // Parse argument into name and rank string.
-  half_chop(argument, name, rank_string);
+  half_chop(argument, name, rank_string, sizeof(rank_string));
 
   // Require name.
   if (!*name) {

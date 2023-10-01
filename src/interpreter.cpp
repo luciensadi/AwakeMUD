@@ -2207,13 +2207,24 @@ int is_abbrev(const char *arg1, const char *arg2)
 }
 
 /* return first space-delimited token in arg1; remainder of string in arg2 */
-void half_chop(char *string, char *arg1, char *arg2)
+void half_chop(char *string, char *arg1, char *arg2, size_t arg2_sz)
 {
   char *temp;
 
+  if (arg2_sz == sizeof(char *)) {
+    log("ERROR: half_chop received an arg2_sz equal to sizeof(char *): You fucked up!");
+#ifdef IS_BUILDPORT
+    log("Crashing to provide traceback.");
+    assert(1 == 0);
+#endif
+  }
+
   temp = any_one_arg(string, arg1);
   skip_spaces(&temp);
-  strcpy(arg2, temp);
+
+  char memory_overlap_prevention_buf[MAX_INPUT_LENGTH];
+  strlcpy(memory_overlap_prevention_buf, arg2, sizeof(memory_overlap_prevention_buf));
+  strlcpy(arg2, memory_overlap_prevention_buf, arg2_sz);
 }
 
 /* Used in specprocs, mostly.  (Exactly) matches "command" to cmd number */

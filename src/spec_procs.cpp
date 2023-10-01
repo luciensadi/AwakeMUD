@@ -4516,7 +4516,7 @@ SPECIAL(matchsticks)
   if (!AWAKE(carl))
     return FALSE;
   if (CMD_IS("give")) {
-    half_chop(argument, arg, buf);
+    half_chop(argument, arg, buf, sizeof(buf));
     two_arguments(buf, buf1, buf2);
 
     if (!*buf || !*buf1 || !*buf2)
