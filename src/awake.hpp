@@ -519,7 +519,7 @@ enum {
 #define AFF_LOW_LIGHT                           13 /* Char has low light eyes       */
 #define AFF_LASER_SIGHT                         14 /* Char using laser sight       */
 #define AFF_SNEAK                               15 /* Char can move quietly           */
-#define AFF_HIDE                                16 /* Char is hidden                */
+#define AFF_DO_NOT_USE_OLD_HIDE_AFF             16 /* Char is hidden                */
 #define AFF_VISION_MAG_1                        17 /* Magnification level 1        */
 #define AFF_CHARM                               18 /* Char is charmed              */
 #define AFF_ACTION                              19 /* Player gets -10 on next init roll     */

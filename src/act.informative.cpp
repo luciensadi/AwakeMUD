@@ -1423,8 +1423,6 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     else if (PLR_FLAGGED(ch, PLR_NEWBIE))
       strlcat(buf, " (player)", sizeof(buf));
   }
-  if (IS_AFFECTED(i, AFF_HIDE))
-    strlcat(buf, " (hidden)", sizeof(buf));
   if (!IS_NPC(i) && !i->desc &&
       !PLR_FLAGS(i).AreAnySet(PLR_MATRIX, PLR_PROJECT, PLR_SWITCHED, ENDBIT))
     strlcat(buf, " (linkless)", sizeof(buf));

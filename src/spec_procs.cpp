@@ -2450,12 +2450,6 @@ SPECIAL(adept_guard)
         return(TRUE);
       }
     }
-    if (!IS_AFFECTED(ch, AFF_HIDE)) {
-      act("$n fades out of sight.", FALSE, ch, 0, ch, TO_NOTVICT);
-      act("You fade out of the sight of others.", FALSE, ch, 0, 0, TO_CHAR);
-      AFF_FLAGS(ch).SetBit(AFF_HIDE);
-      return(FALSE);
-    }
   } else {
     vict = FIGHTING(ch);
     switch(number(1,20)) {

@@ -783,7 +783,7 @@ const char *affected_bits[] =
     "LL-eyes",
     "Laser-sight",
     "Sneak",
-    "Hide",
+    "DO NOT USE",
     "Vision x1",
     "Charm",
     "ACTION",

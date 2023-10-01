@@ -97,8 +97,33 @@ void adept_release_spell(struct char_data *ch, bool end_spell)
   }
 }
 
+void print_sust_list_for_debugging(struct char_data *viewer, struct char_data *vict, const char *context_str) {
+  if (!IS_SENATOR(viewer))
+    return;
+
+  send_to_char(viewer, "DEBUG: %s %s sustaining the following spells %s:\r\n", 
+               viewer == vict ? "You" : GET_CHAR_NAME(vict),
+               viewer == vict ? "are" : "is",
+               context_str);
+
+  bool printed = FALSE;
+  for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
+    send_to_char(viewer, " - %s (%s %s): idnum %d\r\n", 
+                 spells[sust->spell].name,
+                 sust->caster ? "cast BY" : "cast ON",
+                 sust->other != vict ? GET_CHAR_NAME(sust->other) : "self",
+                 sust->idnum);
+    printed = TRUE;
+  }
+  if (!printed)
+    send_to_char("  ...nothing\r\n", viewer);
+  send_to_char("\r\n", viewer);
+}
+
 void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
 {
+  // print_sust_list_for_debugging(ch, ch, "at start of end_sustained_spell()");
+
   if (sust->caster) {
     switch (sust->spell) {
       case SPELL_SILENCE:
@@ -128,10 +153,13 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
   bool spell_is_heal = sust->spell == SPELL_HEAL;
   struct char_data *other = sust->other;
 
-  struct sustain_data *temp, *vsust;
+  // temp for REMOVE_FROM_LIST macro
+  struct sustain_data *temp;
+
+  // Remove the paired caster / cast-on record, if applicable.
   if (sust->other) {
-    for (vsust = GET_SUSTAINED(sust->other); vsust; vsust = vsust->next)
-      if (sust->caster != vsust->caster && vsust->other == ch && vsust->idnum == sust->idnum)
+    for (struct sustain_data *vsust = GET_SUSTAINED(sust->other); vsust; vsust = vsust->next) {
+      if (sust->caster != vsust->caster && vsust->other == ch && vsust->idnum == sust->idnum && vsust->spell == sust->spell)
       {
         if (vsust->spirit) {
           if (GET_TRADITION(vsust->spirit) == TRAD_ADEPT)
@@ -142,17 +170,23 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
             GET_SUSTAINED(vsust->spirit) = NULL;
           }
         }
+        // print_sust_list_for_debugging(ch, sust->other, "before removal from sust->other");
         REMOVE_FROM_LIST(vsust, GET_SUSTAINED(sust->other), next);
+        // print_sust_list_for_debugging(ch, sust->other, "after removal from sust->other");
         delete vsust;
+        // print_sust_list_for_debugging(ch, sust->other, "after deletion of already-removed record");
         break;
       }
+    }
     if (sust->spell == SPELL_INVIS || sust->spell == SPELL_IMP_INVIS) {
       act("You blink and suddenly $n appears!", FALSE, sust->caster ? sust->other : ch, 0, 0, TO_ROOM);
       purge_invis_invis_resistance_records(sust->caster ? sust->other : ch);
     }
   }
+
   spell_modify(sust->caster ? sust->other : ch, sust, FALSE);
   REMOVE_FROM_LIST(sust, GET_SUSTAINED(ch), next);
+  // print_sust_list_for_debugging(ch, ch, "after removal from own sust list");
   if (sust->focus)
   {
     GET_SUSTAINED_FOCI(sust->caster ? ch : sust->other)--;

@@ -153,17 +153,23 @@ struct attack_hit_type attack_hit_text[] =
 
 /* The Fight related routines */
 
-void appear(struct char_data * ch)
-{
-  AFF_FLAGS(ch).RemoveBit(AFF_HIDE);
-
+void repeatedly_strip_invis_spells_until_done(struct char_data *ch) {
   // Remove any spells that are causing this character to be invisible.
   for (struct sustain_data *hjp = GET_SUSTAINED(ch), *next_spell; hjp; hjp = next_spell) {
     next_spell = hjp->next;
     if ((hjp->spell == SPELL_IMP_INVIS || hjp->spell == SPELL_INVIS) && (hjp->caster == FALSE)) {
       end_sustained_spell(ch, hjp);
+
+      // We must restart at this point, otherwise there's a chance that next_spell points to the paired record for the spell we just dropped.
+      repeatedly_strip_invis_spells_until_done(ch);
+      break;
     }
   }
+}
+
+void appear(struct char_data * ch)
+{
+  repeatedly_strip_invis_spells_until_done(ch);
 
   if (!IS_SENATOR(ch))
     act("$n slowly fades into existence.", FALSE, ch, 0, 0, TO_ROOM);
@@ -2999,9 +3005,6 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     stop_follower(victim);
 
   if (attacktype != TYPE_SPELL_DRAIN) {
-    if (IS_AFFECTED(ch, AFF_HIDE))
-      appear(ch);
-
     /* stop sneaking if it's the case */
     if (IS_AFFECTED(ch, AFF_SNEAK))
       AFF_FLAGS(ch).RemoveBit(AFF_SNEAK);

@@ -1490,8 +1490,6 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
   extern int no_specials;
   char *line;
 
-  AFF_FLAGS(ch).RemoveBit(AFF_HIDE);
-
   if (PRF_FLAGS(ch).IsSet(PRF_AFK)) {
     send_to_char("You return from AFK.\r\n", ch);
     PRF_FLAGS(ch).RemoveBit(PRF_AFK);
@@ -2223,7 +2221,7 @@ void half_chop(char *string, char *arg1, char *arg2, size_t arg2_sz)
   skip_spaces(&temp);
 
   char memory_overlap_prevention_buf[MAX_INPUT_LENGTH];
-  strlcpy(memory_overlap_prevention_buf, arg2, sizeof(memory_overlap_prevention_buf));
+  strlcpy(memory_overlap_prevention_buf, temp, sizeof(memory_overlap_prevention_buf));
   strlcpy(arg2, memory_overlap_prevention_buf, arg2_sz);
 }
 
