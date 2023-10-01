@@ -3860,8 +3860,10 @@ ACMD(do_activate)
       if (!(desired_level = atoi(buf))) {
         strncpy(name, buf, sizeof(name) - 1);
       } else {
-        half_chop(buf1, buf2, buf1);
-        strncpy(name, buf2, sizeof(name) - 1);
+        char remainder[MAX_INPUT_LENGTH];
+        half_chop(buf1, buf2, remainder);
+        strlcpy(name, buf2, sizeof(name));
+        strlcpy(buf1, remainder, sizeof(buf1));
       }
     }
 
