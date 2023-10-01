@@ -34,7 +34,7 @@ struct char_data *find_target_character_for_emote(struct char_data *actor, const
 struct veh_data *find_target_vehicle_for_emote(struct char_data *actor, const char *tag_check_string, struct room_data *in_room, struct veh_data *in_veh);
 
 const char *allowed_abbreviations[] = {
-  "Mr", "Ms", "Mrs", "Mz"
+  "Mr", "Ms", "Mrs", "Mz", "Dr"
   , "\n"
 };
 
@@ -610,18 +610,22 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       quote_termination = ".^n";
     }
 
-    // If the listener is not the speaker and can't understand the speech, mangle it.
+    // If the listener is not the speaker:
     const char *replacement = NULL;
     if (viewer != actor) {
+      // Mangle any words they can't understand.
       replacement = replace_too_long_words(viewer, actor, speech_buf, language_in_use, GET_CHAR_COLOR_HIGHLIGHT(actor));
       if (!strcmp(replacement, speech_buf)) {
+        // If no changes were made, don't replace anything.
         replacement = NULL;
-      } else if (!ispunct(get_final_character_from_string(replacement))){
+      } else if (!ispunct(get_final_character_from_string(replacement))) {
+        // Changes were made. Make sure it's terminated properly.
         quote_termination = ".^n";
       }
 
       NEW_EMOTE_DEBUG_SPEECH(actor, "\r\nProposed replacement: '%s'\r\n", replacement ? double_up_color_codes(replacement) : "n/a");
     } else {
+      // Replace nothing (you always understand what you're attempting to say)
       replacement = NULL;
     }
 
@@ -660,8 +664,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   const char *string_with_no_color = get_string_after_color_code_removal(mutable_echo_string, NULL);
   // 2. Check that the stripped string still has length to process.
   if (strlen(string_with_no_color) >= 1) {
-    // 3. Check if the stripped string ends with punctuation.
-    if (!ispunct(string_with_no_color[strlen(string_with_no_color) - 1])) {
+    const char terminal_char = string_with_no_color[strlen(string_with_no_color) - 1];
+    // 3. Check if the stripped string ends with punctuation or a newline (latter case only happens with quest emotes)
+    if (!ispunct(terminal_char) && terminal_char != '\r' && terminal_char != '\n') {
       // 4. Since it didn't, append a period to the mutable echo string.
       strlcat(mutable_echo_string, ".", sizeof(mutable_echo_string));
     }
