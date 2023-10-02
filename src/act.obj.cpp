@@ -3856,7 +3856,7 @@ ACMD(do_activate)
       one_argument(argument, buf);
       desired_level = atoi(buf);
     } else {
-      half_chop(argument, buf, buf1, sizeof(argument));
+      half_chop(argument, buf, buf1, sizeof(buf1));
       if (!(desired_level = atoi(buf))) {
         strncpy(name, buf, sizeof(name) - 1);
       } else {
