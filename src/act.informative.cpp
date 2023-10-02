@@ -2209,7 +2209,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   SPECIAL(car_dealer);
   if (ch->in_room->func) {
     if (ch->in_room->func == car_dealer) {
-      send_to_char("^y...There are vehicles for sale here.^n\r\n", ch);
+      send_to_char("^Y...There are vehicles for sale here.^n\r\n", ch);
     }
 
     // TODO: Add any other relevant funcs with room displays here.
