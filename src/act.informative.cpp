@@ -6861,8 +6861,8 @@ ACMD(do_position)
     return;
   }
 
-  if (!ispunct(get_final_character_from_string(argument))) {
-    send_to_char(ch, "You need to specify punctuation too. Example: 'position %s.'\r\n", argument);
+  if (ispunct(get_final_character_from_string(argument))) {
+    send_to_char("Please don't specify terminal punctuation for your position (it gets an automatic period).\r\n", ch);
     return;
   }
 
