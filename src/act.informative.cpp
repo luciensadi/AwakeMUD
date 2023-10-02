@@ -6898,7 +6898,12 @@ ACMD(do_status)
   else send_to_char(ch, "%s is affected by:\r\n", GET_CHAR_NAME(targ));
 
   if (!IS_NPC(targ) && GET_POS(targ) == POS_MORTALLYW) {
-    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^RBleeding Out ^r(^R%d^r ticks left until death)^n\r\n", GET_PC_SALVATION_TICKS(targ));
+    int min_body = -GET_BOD(targ) + (GET_BIOOVER(targ) > 0 ? GET_BIOOVER(targ) : 0);
+    if ((int)((GET_PHYSICAL(targ) + 1) / 100) <= min_body) {
+      snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^RBleeding Out ^r(^R%d^r ticks left until death)^n\r\n", GET_PC_SALVATION_TICKS(targ));
+    } else {
+      snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^rBleeding Out^n\r\n");
+    }
   }
 
   if (targ->real_abils.esshole) {

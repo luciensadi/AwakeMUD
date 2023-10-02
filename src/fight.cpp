@@ -240,6 +240,7 @@ void load_messages(void)
 bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 {
   bool was_morted = GET_POS(victim) == POS_MORTALLYW;
+  // If you update this min_body, change it in act.informative.cpp too (score section for bleeding out)
   int min_body = -GET_BOD(victim) + (GET_BIOOVER(victim) > 0 ? GET_BIOOVER(victim) : 0);
 
   // Are they stunned?
