@@ -2126,9 +2126,9 @@ ACMD(do_pop)
     send_to_char("You cannot close the hood from in here.\r\n", ch);
     return;
   }
-  if (!veh && (!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)))) {
-    send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", argument);
-    return;
+  if (!veh) {
+    FAILURE_CASE(!*argument, "Syntax: POP <target vehicle>");
+    FAILURE_CASE_PRINTF(!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)), "You don't see any vehicles named '%s' here.", argument);
   }
   if (!ch->in_veh && !veh->hood && veh->owner != GET_IDNUM(ch)) {
     if (access_level(ch, LVL_ADMIN)) {
