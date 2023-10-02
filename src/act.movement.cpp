@@ -121,7 +121,7 @@ int can_move(struct char_data *ch, int dir, int extra)
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch)) {
     int num_occupants = 0;
     for (struct char_data *in_room_ptr = EXIT(ch, dir)->to_room->people; in_room_ptr && num_occupants < 2; in_room_ptr = in_room_ptr->next_in_room) {
-      if (!IS_ASTRAL(in_room_ptr) && !access_level(in_room_ptr, LVL_BUILDER))
+      if (!IS_ASTRAL(in_room_ptr) && !access_level(in_room_ptr, LVL_BUILDER) && GET_POS(in_room_ptr) > POS_STUNNED)
         num_occupants++;
     }
     if (num_occupants >= 2) {
