@@ -2681,7 +2681,7 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
   send_to_char(buf, ch);
 }
 
-void do_probe_object(struct char_data * ch, struct obj_data * j) {
+void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop) {
   int i, found, mount_location, bal, imp;
   bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE;
   struct obj_data *accessory = NULL;
@@ -3100,12 +3100,16 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
 
       if (IS_OBJ_STAT(j, ITEM_EXTRA_HARDENED_ARMOR)) {
-        if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == GET_IDNUM(ch)) {
-          strlcat(buf, "It has been permanently customized to fit you. Nobody else can wear it.\r\n", sizeof(buf));
-        } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == -1) {
-          strlcat(buf, "^gIt will be permanently customized to fit the first person to wear it (AKA soul-bound).^n\r\n", sizeof(buf));
+        if (is_in_shop) {
+          strlcat(buf, "It is customized armor that will be fitted permanently to the first person to wear it.\r\n", sizeof(buf));
         } else {
-          strlcat(buf, "^yIt has been permanently customized to fit someone else-- you can't wear it.^n\r\n", sizeof(buf));
+          if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == GET_IDNUM(ch)) {
+            strlcat(buf, "It has been permanently customized to fit you. Nobody else can wear it.\r\n", sizeof(buf));
+          } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == -1) {
+            strlcat(buf, "^gIt will be permanently customized to fit the first person to wear it (AKA soul-bound).^n\r\n", sizeof(buf));
+          } else {
+            strlcat(buf, "^yIt has been permanently customized to fit someone else-- you can't wear it.^n\r\n", sizeof(buf));
+          }
         }
       }
       break;
@@ -3656,7 +3660,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_SHOPCONTAINER:
       send_to_char(ch, "%s is a shop container (see ^WHELP CYBERDOC^n for info). It contains:\r\n\r\n", capitalize(GET_OBJ_NAME(j)));
-      do_probe_object(ch, j->contains);
+      do_probe_object(ch, j->contains, FALSE);
       return;
     default:
       strncpy(buf, "This item type has no probe string. Contact the staff to request one.", sizeof(buf) - strlen(buf));
@@ -3803,7 +3807,7 @@ ACMD(do_examine)
     generic_find(arg, FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
 
     if (tmp_object) {
-      do_probe_object(ch, tmp_object);
+      do_probe_object(ch, tmp_object, FALSE);
     } else {
       send_to_char("You're not wearing or carrying any such object, and there are no vehicles like that here.\r\n", ch);
 

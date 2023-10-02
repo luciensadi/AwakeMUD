@@ -26,7 +26,7 @@ extern const char *pc_race_types[];
 
 extern struct obj_data *get_first_credstick(struct char_data *ch, const char *arg);
 extern void reduce_abilities(struct char_data *vict);
-extern void do_probe_object(struct char_data * ch, struct obj_data * j);
+extern void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern char *short_object(int virt, int where);
@@ -1836,7 +1836,7 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   }
 
   send_to_char(ch, "^yProbing ^Yshopkeeper's^y ^n%s^y...^n\r\n", GET_OBJ_NAME(obj));
-  do_probe_object(ch, obj);
+  do_probe_object(ch, obj, TRUE);
   return TRUE;
 }
 
