@@ -422,13 +422,18 @@ bool hunting_escortee(struct char_data *ch, struct char_data *vict)
   if (!IS_NPC(ch) || !is_escortee(vict))
     return FALSE;
 
+  // Only attack the escortees of the person with your specific quest.
+  if (GET_MOB_QUEST_CHAR_ID(ch) != GET_MOB_QUEST_CHAR_ID(vict))
+    return FALSE;
+
   num = GET_QUEST(vict->master);
 
-  for (i = 0; i < quest_table[num].num_mobs; i++)
+  for (i = 0; i < quest_table[num].num_mobs; i++) {
     if (quest_table[num].mob[i].vnum == GET_MOB_VNUM(ch) &&
         quest_table[num].mob[i].objective == QMO_KILL_ESCORTEE &&
         quest_table[num].mob[quest_table[num].mob[i].o_data].vnum == GET_MOB_VNUM(vict))
       return TRUE;
+  }
 
   return FALSE;
 }
