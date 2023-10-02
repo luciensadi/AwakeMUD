@@ -1017,7 +1017,7 @@ void die(struct char_data * ch)
     docwagon_retrieve(ch);
     return;
   } else if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && !PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    send_to_char("(TIP: Your belongings have been left behind, so you'll need to go and retrieve them if you want them back.)\r\n", ch);
+    send_to_char("(TIP: Your belongings have been left behind, so you'll need to go and retrieve them if you want them back. If you forget where they are, you can use ^WWHERE BELONGINGS^n to find them.)\r\n", ch);
   }
 
   struct room_data *temp_room = get_ch_in_room(ch);
