@@ -1559,10 +1559,10 @@ ACMD(do_gen_door)
   }
 
   else {
-    send_to_char("You don't see anything you can open there.\r\n", ch);
-      if (ch->in_veh) {
-        send_to_char("(Maybe you should exit your vehicle?)\r\n", ch);
-      }
+    send_to_char(ch, "You don't see anything you can %s there.\r\n", subcmd == SCMD_CLOSE ? "close" : "open");
+    if (ch->in_veh) {
+      send_to_char("(Maybe you should ^WLEAVE^n your vehicle?)\r\n", ch);
+    }
   }
 
   return;
