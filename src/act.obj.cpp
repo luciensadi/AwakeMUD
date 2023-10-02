@@ -35,6 +35,8 @@
 extern int drink_aff[][3];
 extern PCIndex playerDB;
 
+ACMD_DECLARE(do_bond);
+
 // extern funcs
 extern char *get_token(char *, char*);
 extern int modify_target(struct char_data *ch);
@@ -4012,6 +4014,31 @@ ACMD(do_activate)
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_LIGHT) {
     send_to_char(ch, "There's no need to activate or deactivate %s. Just ^WWEAR^n it when you want to use it.\r\n", GET_OBJ_NAME(obj));
+    return;
+  } else if (GET_OBJ_TYPE(obj) == ITEM_DOCWAGON) {
+    bool bonded = (GET_DOCWAGON_BONDED_IDNUM(obj) == GET_IDNUM(ch));
+    bool bonded_to_someone_else = GET_DOCWAGON_BONDED_IDNUM(obj) && !bonded;
+    bool worn = (obj->worn_by == ch);
+
+    char tmp_arg[MAX_INPUT_LENGTH];
+    snprintf(tmp_arg, sizeof(tmp_arg), " %s", arg);
+    
+    if (bonded && worn) {
+      send_to_char(ch, "%s is already bonded and worn: You're all set.\r\n", CAP(GET_OBJ_NAME(obj)));
+    } else if (bonded_to_someone_else) {
+      send_to_char(ch, "%s is bonded to someone else, so it won't work for you.\r\n", CAP(GET_OBJ_NAME(obj)));
+    } else if (bonded) {
+      send_to_char(ch, "%s is already bonded, so you just need to ^WWEAR^n it. Trying that now...\r\n", CAP(GET_OBJ_NAME(obj)));
+      do_wear(ch, tmp_arg, 0, 0);
+    } else if (worn) {
+      send_to_char(ch, "%s hasn't been bonded yet, so you need to ^WREMOVE^n it and ^WBOND^n it, then ^WWEAR^n it again. Trying that now...\r\n", CAP(GET_OBJ_NAME(obj)));
+      obj_to_char(unequip_char(ch, obj->worn_on, FALSE, TRUE), ch);
+      do_bond(ch, tmp_arg, 0, 0);
+      do_wear(ch, tmp_arg, 0, 0);
+    } else {
+      do_bond(ch, tmp_arg, 0, 0);
+      do_wear(ch, tmp_arg, 0, 0);
+    }
     return;
   } else if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1)) {
     send_to_char(ch, "You can't activate %s.\r\n", GET_OBJ_NAME(obj));
