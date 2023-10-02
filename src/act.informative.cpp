@@ -2209,7 +2209,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   SPECIAL(car_dealer);
   if (ch->in_room->func) {
     if (ch->in_room->func == car_dealer) {
-      send_to_char("^Y...There are vehicles for sale here.^n\r\n", ch);
+      send_to_char(ch, "%s...There are vehicles for sale here.^n\r\n", ch->in_room->vehicles ? "^Y" : "^y");
     }
 
     // TODO: Add any other relevant funcs with room displays here.
@@ -2218,7 +2218,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   // Show a training info string for totalinvis trainers.
   for (struct char_data *trainer = ch->in_room->people; trainer; trainer = trainer->next_in_room) {
     if (MOB_HAS_SPEC(trainer, teacher) && MOB_FLAGGED(trainer, MOB_TOTALINVIS)) {
-      send_to_char("^y...You can practice skills here.^n\r\n", ch);
+      send_to_char(ch, "%s...You can practice skills here.^n\r\n", ch->in_room->vehicles ? "^Y" : "^y");
       break;
     }
   }
