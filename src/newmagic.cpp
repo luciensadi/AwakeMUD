@@ -2454,20 +2454,20 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       if (!AWAKE(vict)) {
         act("$n spasms as the flames hit $m.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+      } else if (dam >= convert_damage(DEADLY)) {
         act("$n is hit full force by the intense flames causing $m to fall to the ground, gurgling.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("The flames burn intensely around you, your last memory before falling unconscious is the hideous pain.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+      } else if (dam >= convert_damage(SERIOUS)) {
         act("$n screams as the flames impact $s body, horribly burning $m.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("The flames crash into you, causing you great pain as they horribly burn you.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
-        act("$n cringes as the flames hit, patting at the spots where the flame continues to burn.", TRUE, vict, 0, 0, TO_ROOM);
+      } else if (dam >= convert_damage(MODERATE)) {
+        act("$n cringes as the flames hit, slapping at the spots where the flame continues to burn.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("As the flames hit you quickly pat at the spots that continue to burn, causing searing pain.\r\n", vict);
-      } else if (dam > 0) {
-        act("The flames burst around $m, causing seemingly little damage.", TRUE, vict, 0, 0, TO_ROOM);
+      } else if (dam >= convert_damage(LIGHT)) {
+        act("The flames burst around $m, causing only minor burns.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("The flames burst around you causing you slight pain as it burns some of your hair.\r\n", vict);
       } else {
-        act("The flames impact $m, but disperse on impact.", FALSE, vict, 0, ch, TO_ROOM);
+        act("The flames impact $m, but disperse on impact.", FALSE, vict, 0, 0, TO_ROOM);
         send_to_char("The flames rapidly disperse around you, causing only mild discomfort.\r\n", vict);
       }
 
