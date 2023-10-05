@@ -130,8 +130,16 @@ void remove_vision_bit(struct char_data *ch, int type, int bit) {
 #define TH_PENALTY(str, pen) { thermo_penalties.emplace(str, pen); tn_with_thermo += pen; }
 #define LL_PENALTY(str, pen) { lowlight_penalties.emplace(str, pen); tn_with_ll += pen; }
 #define NM_PENALTY(str, pen) { normal_penalties.emplace(str, pen); tn_with_none += pen; }
-/* Calculate the vision penalty for character based on their room. */
-int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *rbuf, int rbuf_size) {
+int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *rbuf, size_t rbuf_size) {
+  if (!ch || !temp_room || !rbuf) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_vision_penalty(%s, %s, %s, %ld) called with invalid parameters! Returning insane vision penalty.",
+                    ch ? GET_CHAR_NAME(ch) : "NULL",
+                    temp_room ? GET_ROOM_NAME(temp_room) : "NULL",
+                    rbuf ? "rbuf" : "NULL", 
+                    rbuf_size);
+    return 20;
+  }
+
   int tn_with_thermo = 0;
   int tn_with_ll = 0;
   int tn_with_none = 0;
