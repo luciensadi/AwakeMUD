@@ -374,7 +374,7 @@ ACMD(do_title)
     skip_spaces(&argument);
     strlcat(argument, "^n", sizeof(buf));
     set_title(ch, argument);
-    send_to_char(ch, "Okay, you're now %s %s.\r\n", GET_CHAR_NAME(ch), GET_TITLE(ch));
+    send_to_char(ch, "Okay, you're now %s%s%s %s.\r\n", GET_PRETITLE(ch), GET_PRETITLE(ch) && *(GET_PRETITLE(ch)) ? " " : "", GET_CHAR_NAME(ch), GET_TITLE(ch));
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Title='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_TITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
   }

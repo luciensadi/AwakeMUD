@@ -126,12 +126,19 @@ ACMD(do_debug) {
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
 
+  if (is_abbrev(arg1, "traceback")) {
+    send_to_char(ch, "OK, printing traceback.\r\n");
+    log_traceback("manual invocation via debug by %s", GET_CHAR_NAME(ch));
+    return;
+  }
+
   if (is_abbrev(arg1, "hardcorecheck")) {
     if (player_is_dead_hardcore(57)) {
       send_to_char(ch, "Success!\r\n");
     } else {
       send_to_char(ch, "Failure :(\r\n");
     }
+    return;
   }
 
   if (is_abbrev(arg1, "dirtybit")) {

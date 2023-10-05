@@ -17,6 +17,9 @@
 #include <sys/types.h>
 #include <stdarg.h>
 #include <iostream>
+#include <execinfo.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
@@ -6074,6 +6077,29 @@ void zero_cost_of_obj_and_contents(struct obj_data *obj) {
       GET_OBJ_EXTRA(obj).SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NOSELL, ENDBIT);
       GET_OBJ_COST(obj) = 0;
     }
+  }
+}
+
+void log_traceback(const char *format, ...) {
+  // Compose our context string.
+  char context[100000];
+  {
+    va_list args;
+    va_start(args, format);
+    vsnprintf(context, sizeof(context), format, args);
+    va_end(args);
+  }
+
+  // Print a backtrace.
+  {
+    void *array[15];
+
+    // get void*'s for all entries on the stack
+    size_t size = backtrace(array, 15);
+
+    // print out all the frames to stderr
+    fprintf(stderr, "Writing traceback for error context %s:\n", context);
+    backtrace_symbols_fd(array, size, STDERR_FILENO);
   }
 }
 

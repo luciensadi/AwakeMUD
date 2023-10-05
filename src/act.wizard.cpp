@@ -3849,8 +3849,7 @@ ACMD(do_wiztitle)
       send_to_char(ch, "Sorry, pretitles can't be longer than %d characters.\r\n", MAX_TITLE_LENGTH - 2);
     } else {
       set_pretitle(ch, argument);
-      snprintf(buf, sizeof(buf), "Okay, you're now %s %s %s.\r\n",
-              GET_PRETITLE(ch), GET_CHAR_NAME(ch), GET_TITLE(ch));
+      snprintf(buf, sizeof(buf), "Okay, you're now %s %s %s.\r\n", GET_PRETITLE(ch), GET_CHAR_NAME(ch), GET_TITLE(ch));
       send_to_char(buf, ch);
       snprintf(buf, sizeof(buf), "UPDATE pfiles SET Pretitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_PRETITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);

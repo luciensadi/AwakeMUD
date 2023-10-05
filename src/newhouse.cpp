@@ -139,7 +139,7 @@ void load_apartment_complexes() {
   // Iterate over the contents of the lib/housing directory.
   if (!exists(global_housing_dir)) {
     log("WARNING: Unable to find lib/housing.");
-    log_vfprintf("Rendered path: %s", global_housing_dir.string().c_str());
+    log_vfprintf("Rendered path: %s", global_housing_dir.c_str());
     exit(1);
   }
 
@@ -149,18 +149,18 @@ void load_apartment_complexes() {
   for (bf::directory_iterator itr(global_housing_dir); itr != end_itr; ++itr) {
     if (is_directory(itr->status())) {
       bf::path filename = itr->path();
-      log_vfprintf(" - Initializing apartment complex from file %s.", filename.string().c_str());
+      log_vfprintf(" - Initializing apartment complex from file %s.", filename.c_str());
       ApartmentComplex *complex = new ApartmentComplex(filename);
       global_apartment_complexes.push_back(complex);
       log_vfprintf(" - Fully loaded %s.", complex->get_name());
       
       // Ensure it's been saved with the vnum instead of the name. Convert if not.
-      if (atol(filename.filename().string().c_str()) <= 0) {
+      if (atol(filename.filename().c_str()) <= 0) {
         bf::path new_name = filename.parent_path() / vnum_to_string(complex->get_landlord_vnum());
         log_vfprintf(" (Complex %s was saved in the old manner ('%s' is not a number), so I'll rename it to '%s'.)", 
                      complex->get_name(),
-                     filename.filename().string().c_str(),
-                     new_name.string().c_str());
+                     filename.filename().c_str(),
+                     new_name.c_str());
         bf::rename(filename, new_name);
       }
     }
@@ -194,7 +194,7 @@ void save_all_apartments_and_storage_rooms() {
 
       // Otherwise, save all the rooms (save_storage logic will skip any that haven't been altered)
       for (auto &room : apartment->get_rooms()) {
-        log_vfprintf("Saving storage contents for %s's %ld.", apartment->get_full_name(), room->get_vnum());
+        // log_vfprintf("Saving storage contents for %s's %ld.", apartment->get_full_name(), room->get_vnum());
         room->save_storage();
       }
     }
@@ -215,7 +215,7 @@ void save_all_apartments_and_storage_rooms() {
       // Clear the dirty bit now that we've processed it.
       room->dirty_bit = FALSE;
 
-      if (Storage_get_filename(GET_ROOM_VNUM(&world[x]), filename, sizeof(filename))) {
+      if (Storage_get_filename(GET_ROOM_VNUM(room), filename, sizeof(filename))) {
         Storage_save(filename, room);
       } else {
         mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Unable to save storage room %ld: Can't get filename!", GET_ROOM_VNUM(room));
@@ -243,7 +243,7 @@ ApartmentComplex::ApartmentComplex(vnum_t landlord) {
 
   // Becomes something like '.../lib/housing/22608'
   base_directory = global_housing_dir / vnum_to_string(GET_MOB_VNUM(&mob_proto[landlord_rnum]));
-  log_vfprintf("Newly-initialized AC w/ LL %ld's base_directory: %s", landlord_vnum, base_directory.string().c_str());
+  log_vfprintf("Newly-initialized AC w/ LL %ld's base_directory: %s", landlord_vnum, base_directory.c_str());
 }
 
 ApartmentComplex::ApartmentComplex(bf::path filename) :
@@ -274,7 +274,7 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
       if (is_directory(itr->status())) {
         bf::path room_path = itr->path();
 
-#define ROOM_NAME room_path.filename().string().c_str()
+#define ROOM_NAME room_path.filename().c_str()
         if (!str_cmp(ROOM_NAME, DELETED_APARTMENTS_DIR_NAME))
           continue;
 
@@ -522,7 +522,7 @@ void ApartmentComplex::clone_from(ApartmentComplex *source) {
   landlord_vnum = source->landlord_vnum;
 
   base_directory = source->base_directory;
-  log_vfprintf("Cloned AC w/ LL %ld's base_directory: %s", landlord_vnum, base_directory.string().c_str());
+  log_vfprintf("Cloned AC w/ LL %ld's base_directory: %s", landlord_vnum, base_directory.c_str());
 
   editors.clear();
   for (auto idnum : source->editors) {
@@ -670,7 +670,7 @@ Apartment::Apartment(ApartmentComplex *complex, const char *new_name, vnum_t key
 
   // Becomes something like 'lib/housing/22608/3A'
   set_base_directory(complex->base_directory / shortname);
-  log_vfprintf("Apartment %s's base_directory: %s", full_name, base_directory.string().c_str());
+  log_vfprintf("Apartment %s's base_directory: %s", full_name, base_directory.c_str());
 }
 
 /* Load this apartment entry from files. */
@@ -679,7 +679,7 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
 {
   // Load base info from <name>/info.
   {
-    log_vfprintf(" ---- Loading apartment base data for %s.", base_directory.filename().string().c_str());
+    log_vfprintf(" ---- Loading apartment base data for %s.", base_directory.filename().c_str());
     json base_info;
     _json_parse_from_file(base_directory / APARTMENT_INFO_FILE_NAME, base_info);
 
@@ -727,14 +727,14 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
 
         // Ensure it has an info file. A missing file means this room was deleted.
         if (!bf::exists(room_path / ROOM_INFO_FILE_NAME)) {
-          log_vfprintf(" ----- Skipping sub-room '%s': No info path.", room_path.filename().string().c_str());
+          log_vfprintf(" ----- Skipping sub-room '%s': No info path.", room_path.filename().c_str());
           continue;
         }
 
-        log_vfprintf(" ----- Initializing sub-room '%s'.", room_path.filename().string().c_str());
+        log_vfprintf(" ----- Initializing sub-room '%s'.", room_path.filename().c_str());
         ApartmentRoom *apartment_room = new ApartmentRoom(this, room_path);
         rooms.push_back(apartment_room);
-        log_vfprintf(" ----- Fully loaded %s's %s at %ld.", name, room_path.filename().string().c_str(), apartment_room->get_vnum());
+        log_vfprintf(" ----- Fully loaded %s's %s at %ld.", name, room_path.filename().c_str(), apartment_room->get_vnum());
       }
     }
     recalculate_garages();
@@ -868,9 +868,9 @@ void Apartment::save_base_info() {
   }
 
   // Ensure our base directory exists.
-  log_vfprintf("apartment::save_base_info(): Checking for base directory %s...", base_directory.string().c_str());
+  log_vfprintf("apartment::save_base_info(): Checking for base directory %s...", base_directory.c_str());
   if (!bf::exists(base_directory)) {
-    log_vfprintf("apartment::save_base_info(): Not found. Creating base directory %s.", base_directory.string().c_str());
+    log_vfprintf("apartment::save_base_info(): Not found. Creating base directory %s.", base_directory.c_str());
     bf::create_directory(base_directory);
   }
 
@@ -924,7 +924,7 @@ void Apartment::save_rooms() {
 
   // Iterate through all rooms in apartment.
   for (auto &room : rooms) {
-    log_vfprintf(" - %ld @ %s", room->get_vnum(), room->base_path.string().c_str());
+    log_vfprintf(" - %ld @ %s", room->get_vnum(), room->base_path.c_str());
     // Write or update room data. This also auto-creates subdir if necessary.
     room->save_info();
 
@@ -1377,7 +1377,7 @@ void Apartment::set_complex(ApartmentComplex *new_complex) {
   // Change our save directory. Becomes something like 'lib/housing/22608/3A'
   // TODO: Validate that an existing apartment with this name does not already exist in that directory.
   set_base_directory(complex->base_directory / shortname);
-  log_vfprintf("Changed apartment %s's complex; new base_directory: %s", full_name, base_directory.string().c_str());
+  log_vfprintf("Changed apartment %s's complex; new base_directory: %s", full_name, base_directory.c_str());
 
   // Recalculate our full name.
   regenerate_full_name();
@@ -1520,7 +1520,7 @@ void Apartment::set_short_name(const char *newname) {
   // Move our files over (only if we have a base dir in the first place). Generates something like 'lib/housing/22608/3A'
   if (!base_directory.empty()) {
     if (bf::exists(base_directory)) {
-      log_vfprintf("Moving files over for %s's rename: '''%s''' -> '''%s'''", full_name, base_directory.string().c_str(), new_base_directory.string().c_str());
+      log_vfprintf("Moving files over for %s's rename: '''%s''' -> '''%s'''", full_name, base_directory.c_str(), new_base_directory.c_str());
       bf::rename(base_directory, new_base_directory);
     }
   }
@@ -1631,7 +1631,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
 
   rnum_t rnum = real_room(vnum);
   if (vnum < 0 || rnum < 0) {
-    log_vfprintf("SYSERR: Invalid vnum %ld specified in %s.", filename.string().c_str());
+    log_vfprintf("SYSERR: Invalid vnum %ld specified in %s.", filename.c_str());
     exit(1);
   }
 
@@ -1641,7 +1641,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   ifs.close();
   decoration = *(content.c_str()) ? str_dup(content.c_str()) : NULL;
 
-  log_vfprintf(" ----- Applying changes from %s to world...", filename.filename().string().c_str());
+  log_vfprintf(" ----- Applying changes from %s to world...", filename.filename().c_str());
 
   struct room_data *room = &world[rnum];
 
@@ -1653,10 +1653,10 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   // Set apartment pointer, etc.
   room->apartment_room = this;
   room->apartment = apartment;
+  storage_path = filename / "storage";
 
   // If we have a valid lease, load storage contents.
   if (apartment->get_paid_until() - time(0) >= 0) {
-    storage_path = filename / "storage";
     load_storage();
   } else {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to load storage for %ld: Lease is expired.", GET_ROOM_VNUM(room));
@@ -1704,10 +1704,10 @@ ApartmentRoom::~ApartmentRoom() {
 }
 
 void ApartmentRoom::regenerate_paths() {
-  log_vfprintf("Regenerating paths for %ld (%s || %s)...", vnum, base_path.string().c_str(), storage_path.string().c_str());
+  log_vfprintf("Regenerating paths for %ld (%s || %s)...", vnum, base_path.c_str(), storage_path.c_str());
   base_path = apartment->base_directory / vnum_to_string(vnum);
   storage_path = base_path / "storage";
-  log_vfprintf("Done, got %s || %s.", base_path.string().c_str(), storage_path.string().c_str());
+  log_vfprintf("Done, got %s || %s.", base_path.c_str(), storage_path.c_str());
 }
 
 void ApartmentRoom::save_info() {
@@ -1822,7 +1822,7 @@ void ApartmentRoom::purge_contents() {
   char filename[100];
   snprintf(filename, sizeof(filename), "%ld_%ld", time(0), apartment->get_owner_id());
   bf::path expired_storage_path = expired_path / filename;
-  Storage_save(expired_storage_path.string().c_str(), room);
+  Storage_save(expired_storage_path.c_str(), room);
 #endif
 
   if (room->contents) {
@@ -1929,11 +1929,25 @@ void ApartmentRoom::save_storage() {
     return;
   }
 
+  // Warn if we've been given a room with an invalid lease.
+  if (apartment->get_paid_until() - time(0) < 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received save_storage() call for apartment with invalid lease (%s / %ld)!", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
+    return;
+  }
+
+  const char *save_location = storage_path.c_str();
+
+  log_vfprintf("Saving storage for room %s (%ld): %s dirty, %s occupied. Saving to %s.", 
+                room->dirty_bit ? "is" : "not",
+                GET_ROOM_VNUM(room),
+                room->people ? "is" : "not",
+                save_location);
+
   // Clear the dirty bit now that we've processed it.
   room->dirty_bit = FALSE;
 
   // Write the file.
-  Storage_save(storage_path.string().c_str(), room);
+  Storage_save(save_location, room);
 }
 
 void ApartmentRoom::load_storage() {
@@ -1960,7 +1974,7 @@ void ApartmentRoom::load_storage_from_specified_path(bf::path path) {
   }
 
   // Perform load.
-  House_load_storage(room, path.string().c_str());
+  House_load_storage(room, path.c_str());
 }
 
 const char * ApartmentRoom::get_full_name() {
@@ -2196,7 +2210,7 @@ Apartment *find_apartment(const char *full_name, struct char_data *ch) {
 }
 
 void write_json_file(bf::path path, json *contents) {
-  log_vfprintf("write_json_file(%s, ...): Beginning to write.", path.string().c_str());
+  log_vfprintf("write_json_file(%s, ...): Beginning to write.", path.c_str());
   bf::ofstream ofs(path);
   ofs << std::setw(4) << *contents << std::endl;
   ofs.close();
@@ -2204,10 +2218,10 @@ void write_json_file(bf::path path, json *contents) {
 
 void _json_parse_from_file(bf::path path, json &target) {
   if (!exists(path)) {
-    log_vfprintf("FATAL ERROR: Unable to find file at path %s. Terminating.", path.string().c_str());
+    log_vfprintf("FATAL ERROR: Unable to find file at path %s. Terminating.", path.c_str());
     exit(1);
   } else {
-    log_vfprintf("Reading JSON data from %s.", path.string().c_str());
+    log_vfprintf("Reading JSON data from %s.", path.c_str());
   }
 
   bf::ifstream f(path);

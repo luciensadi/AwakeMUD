@@ -296,7 +296,17 @@ void Storage_save(const char *file_name, struct room_data *room) {
   FILE *fl;
 
   // Can't open the house file? Oof.
-  if (!file_name || !*file_name || !(fl = fopen(file_name, "wb"))) {
+  if (!file_name || !*file_name) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received invalid file name to Storage_save() for %s (%ld)!", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
+    return;
+  }
+
+  if (!room) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received invalid room to Storage_save(%s, NULL)!", file_name);
+    return;
+  }
+
+  if (!(fl = fopen(file_name, "wb"))) {
     perror("SYSERR: Error saving house file");
     return;
   } else {

@@ -2208,13 +2208,16 @@ int is_abbrev(const char *arg1, const char *arg2)
 void half_chop(char *string, char *arg1, char *arg2, size_t arg2_sz)
 {
   char *temp;
+  char errbuf[50];
 
   if (arg2_sz == sizeof(char *)) {
     log("ERROR: half_chop received an arg2_sz equal to sizeof(char *): You fucked up!");
-#ifdef IS_BUILDPORT
-    log("Crashing to provide traceback.");
-    assert(1 == 0);
-#endif
+
+    log_traceback("half_chop(%s, arg1, arg2, %ld) w/ arg2_sz equal to sizeof(char *)", string, arg2_sz);
+
+    strlcpy(errbuf, "Error", sizeof(errbuf));
+    arg2 = errbuf;
+    arg2_sz = sizeof(errbuf);
   }
 
   temp = any_one_arg(string, arg1);
