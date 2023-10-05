@@ -945,18 +945,13 @@ ACMD(do_control)
   FAILURE_CASE(get_ch_in_room(ch)->peaceful, "You can't do that in peaceful rooms.");
 
   if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK && GET_OBJ_VAL(jack, 3) == DATA_INDUCTION) {
-    if (GET_EQ(ch, WEAR_HANDS)) {
-      send_to_char(ch, "Try removing your gloves first.\r\n");
-      return;
-    }
-  } else if (GET_EQ(ch, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(ch, WEAR_HEAD), 7) > 0) {
-    send_to_char(ch, "Try removing your helmet first.\r\n");
-    return;
+    FAILURE_CASE(GET_EQ(ch, WEAR_HANDS), "Try removing your gloves first.");
+  } else if (GET_EQ(ch, WEAR_HEAD)) {
+    FAILURE_CASE(GET_WORN_CONCEAL_RATING(GET_EQ(ch, WEAR_HEAD)) > 0, "Try removing your helmet first.");
   }
-  if (ch->in_veh) {
-    send_to_char(ch, "You can't control a vehicle from inside one.\r\n");
-    return;
-  }
+
+  FAILURE_CASE(ch->in_veh, "You can't control a vehicle from inside one.");
+
   has_rig = FALSE;
   for (cyber = ch->carrying; cyber; cyber = cyber->next_content)
     if (GET_OBJ_TYPE(cyber) == ITEM_RCDECK)
@@ -973,10 +968,7 @@ ACMD(do_control)
       if (GET_CYBERWARE_TYPE(cyber) == CYB_CRD)
         has_rig = TRUE;
 
-  if (!has_rig) {
-    send_to_char("You need a Remote Control Deck to do that.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!has_rig, "You need a Remote Control Deck to do that.");
 
   if ((i = atoi(argument)) < 0) {
     send_to_char("Which position on your subscriber list?\r\n", ch);
@@ -997,13 +989,20 @@ ACMD(do_control)
     return;
   }
 
+  // Prevent controlling a towed or lost vehicle.
   if (!veh->in_room && !veh->in_veh) {
-    send_to_char("You can't seem to make contact with it.\r\n", ch);
-    snprintf(buf, sizeof(buf), "SYSERR: Vehicle %s is not located in a valid room or vehicle!\r\n", GET_VEH_NAME(veh));
-    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    send_to_char("The tow hookup has overridden your controls.\r\n", ch);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Vehicle %s (%ld, %ld) is not located in a valid room or vehicle in do_control()! (Probably being towed?)", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), veh->idnum);
     return;
   }
 
+  // Prevent controlling something inside a towed vehicle.
+  if (!get_veh_in_room(veh)) {
+    send_to_char("The tow hookup on the containing vehicle has overridden your controls.\r\n", ch);
+    return;
+  }
+
+  // Prevent controlling a carried vehicle.
   if (veh->in_room && GET_ROOM_VNUM(veh->in_room) == RM_PORTABLE_VEHICLE_STORAGE) {
     send_to_char("The automated safety systems won't let you control a vehicle that's being carried around.\r\n", ch);
     return;

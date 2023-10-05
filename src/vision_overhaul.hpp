@@ -42,7 +42,7 @@ void remove_racial_vision_due_to_eye_replacement(struct char_data *ch);
 
 void apply_vision_bits_from_implant(struct char_data *ch, struct obj_data *cyber);
 
-int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *rbuf, int rbuf_len);
+int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *rbuf, size_t rbuf_len);
 
 void copy_vision_from_original_to_clone(struct char_data *original, struct char_data *clone);
 
