@@ -1849,7 +1849,7 @@ ACMD(do_gridguide)
 
   FAILURE_CASE(!veh, "You have to be in a vehicle to do that.");
   FAILURE_CASE(IS_ASTRAL(ch), "You cannot seem to touch physical objects");
-  FAILURE_CASE(veh_can_traverse_air(veh), "Unfortunately, aircraft can't interface with the gridguide system.");
+  FAILURE_CASE(veh_can_traverse_air(veh) && GET_VEH_TYPE(veh) != VEH_DRONE, "Unfortunately, aircraft can't interface with the gridguide system.");
   FAILURE_CASE(!veh->autonav, "You need to have an autonav system installed.");
   FAILURE_CASE(veh->hood, "Gridguide refuses to engage with the hood up.");
   FAILURE_CASE((veh->locked && GET_IDNUM(ch) != veh->owner) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_PILOT)), "You don't have control over the vehicle.");

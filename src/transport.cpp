@@ -1740,7 +1740,11 @@ int process_elevator(struct room_data *room,
       send_to_room(buf, &world[real_room(shaft->number)]);
 
       /* If you fail an athletics test, the elevator knocks you off the wall, dealing D impact damage and triggering fall. */
-      for (struct char_data *vict = shaft->people; vict; vict = vict->next_in_room) {
+      struct char_data *nextc;
+      for (struct char_data *vict = shaft->people; vict; vict = nextc) {
+        // Safeguard against weirdness around dead characters. Will still crash in certain circumstances with extracted followers.
+        nextc = vict->next_in_room;
+
         // Nohassle imms and astral projections are immune to this bullshit.
         if (PRF_FLAGGED(vict, PRF_NOHASSLE) || IS_ASTRAL(vict))
           continue;
