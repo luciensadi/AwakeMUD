@@ -1241,7 +1241,7 @@ bool part_is_compatible_with_deck(struct obj_data *part, struct obj_data *deck, 
   // You must be targeting the same MPCP as parts already in the deck.
   for (struct obj_data *contained = deck->contains; contained; contained = contained->next_content) {
     if (GET_OBJ_TYPE(contained) == ITEM_PART) {
-      if (PART_CAN_HAVE_MPCP_SET(part) && GET_PART_TARGET_MPCP(part) != GET_PART_TARGET_MPCP(contained)) {
+      if (PART_CAN_HAVE_MPCP_SET(part) && GET_PART_TARGET_MPCP(contained) && GET_PART_TARGET_MPCP(part) != GET_PART_TARGET_MPCP(contained)) {
         MSG_CHAR("%s doesn't match the MPCP of the already-installed %s^n.\r\n", capitalize(GET_OBJ_NAME(part)), decapitalize_a_an(GET_OBJ_NAME(contained)));
         return FALSE;
       }
