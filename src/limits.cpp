@@ -1326,6 +1326,12 @@ void save_vehicles(bool fromCopyover)
             // The only thing we save is the hardened armor bond status.
             if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
               obj_string_buf << "\t\tValue " << WORN_OBJ_HARDENED_ARMOR_SLOT << ":\t" << GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) << "\n";
+            } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj)) {
+              mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Worn item %s (%ld) has the customized armor value set to %ld, but it's not hardened armor! Saving anyways.",
+                              GET_OBJ_NAME(obj),
+                              GET_OBJ_VNUM(obj),
+                              GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj));
+              obj_string_buf << "\t\tValue " << WORN_OBJ_HARDENED_ARMOR_SLOT << ":\t" << GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) << "\n";
             }
             break;
           default:
