@@ -2396,9 +2396,9 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)) {
       // These specs handle objects, so don't mess with them.
       if (GET_MOB_SPEC(vict) == fence || GET_MOB_SPEC(vict) == hacker || GET_MOB_SPEC(vict) == fixer || GET_MOB_SPEC(vict) == mageskill_herbie)
-        return 0;
+        return 1;
       if (GET_MOB_SPEC2(vict) == fence || GET_MOB_SPEC2(vict) == hacker || GET_MOB_SPEC2(vict) == fixer || GET_MOB_SPEC2(vict) == mageskill_herbie)
-        return 0;
+        return 1;
     }
 
     if (obj->obj_flags.quest_id) {
