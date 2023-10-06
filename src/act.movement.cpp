@@ -2381,13 +2381,16 @@ ACMD(do_wake)
   if (GET_POS(ch) > POS_SLEEPING)
     send_to_char("You are already awake...\r\n", ch);
   else {
-    send_to_char("You awaken and stand up.\r\n", ch);
     if (ch->in_veh) {
+      send_to_char("You awaken and sit up.\r\n", ch);
       snprintf(buf, sizeof(buf), "%s awakens.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
-    } else
+      GET_POS(ch) = POS_SITTING;
+    } else {
+      send_to_char("You awaken and stand up.\r\n", ch);
       act("$n awakens.", TRUE, ch, 0, 0, TO_ROOM);
-    GET_POS(ch) = POS_STANDING;
+      GET_POS(ch) = POS_STANDING;
+    }
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
