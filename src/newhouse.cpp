@@ -1931,7 +1931,9 @@ void ApartmentRoom::save_storage() {
 
   // Warn if we've been given a room with an invalid lease.
   if (apartment->get_paid_until() - time(0) < 0) {
+#ifndef IS_BUILDPORT
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received save_storage() call for apartment with invalid lease (%s / %ld)!", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
+#endif
     return;
   }
 
