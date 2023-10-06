@@ -1676,7 +1676,7 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool reca
   obj->worn_by = ch;
   obj->worn_on = pos;
 
-  if (ch->in_room) {
+  if (ch->in_room && GET_OBJ_TYPE(obj) == ITEM_LIGHT && pos == WEAR_LIGHT) {
     _char_with_light_to_room(ch);
   }
 
