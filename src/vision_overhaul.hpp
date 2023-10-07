@@ -48,6 +48,7 @@ void copy_vision_from_original_to_clone(struct char_data *original, struct char_
 
 const char *write_vision_string_for_display(struct char_data *ch, int mode);
 
+int get_character_light_sources(struct char_data *ch);
 void recalculate_room_light(struct room_data *room);
 
 bool has_flare_compensation(struct char_data *ch);

@@ -3992,8 +3992,14 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
     return TRUE;
 
   // If your vision can't see in the ambient light, fail.
-  if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified))
-    return FALSE;
+  if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified)) {
+    if (get_character_light_sources(obj) <= 0) {
+      // They're not holding a light, so you can't see them.
+      return FALSE;
+    } else {
+      // fall through: the object you're trying to see has a light source, so you can see them.
+    }
+  }
 
   // If they're in an invis state (spell or setting) you can't handle, fail.
   if (!invis_ok(subj, obj))
@@ -4047,6 +4053,11 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
 
   // Fetch the room's light level. Note that light_level already handles flashlights etc.
   int room_light_level = light_level(provided_room);
+
+  // Special case: If you're holding a light, you get LIGHT_PARTLIGHT because you're theoretically pointing it at whatever you want to see
+  if (get_character_light_sources(sub) > 0) {
+    room_light_level = MAX(LIGHT_PARTLIGHT, room_light_level);
+  }
 
   // We already checked for thermo and ultra above, which means at that this point you have LL or Normal vision. You can't see in full darkness.
   if (room_light_level == LIGHT_FULLDARK) {

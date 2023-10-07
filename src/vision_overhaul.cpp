@@ -547,15 +547,50 @@ int get_vision_mag(struct char_data *ch) {
   return vision_mag;
 }
 
+int get_character_light_sources(struct char_data *ch) {
+  int sources = 0;
+
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL ch to get_character_light_sources()!");
+    return 0;
+  }
+
+  if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_HOLYLIGHT)) {
+    sources = 10;
+  }
+
+  for (int pos = 0; pos < NUM_WEARS; pos++) {
+    struct obj_data *eq = GET_EQ(ch, pos);
+
+    if (!eq) {
+      continue;
+    }
+
+    if (GET_OBJ_TYPE(eq) == ITEM_LIGHT) {
+      sources++;
+      continue;
+    }
+
+    if (IS_OBJ_STAT(eq, ITEM_EXTRA_GLOW)) {
+      sources++;
+      continue;
+    }
+  }
+
+  return sources;
+}
+
 void recalculate_room_light(struct room_data *room) {
+  if (!room) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got NULL room to recalculate_room_light()!");
+    return;
+  }
+
   room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] = 0;
 
   // Characters with lights add to the light level.
   for (struct char_data *ch = room->people; ch; ch = ch->next_in_room) {
-    struct obj_data *light = GET_EQ(ch, WEAR_LIGHT);
-    if (light && GET_OBJ_TYPE(light) == ITEM_LIGHT) {
-      room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]++;
-    }
+    room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] += get_character_light_sources(ch);
 
     // If they're staff, max out the light level and stop processing.
     // This isn't enough to make a room more than partially lit, but it's partial AF.
