@@ -552,7 +552,10 @@ void recalculate_room_light(struct room_data *room) {
 
   // Characters with lights add to the light level.
   for (struct char_data *ch = room->people; ch; ch = ch->next_in_room) {
-    room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]++;
+    struct obj_data *light = GET_EQ(ch, WEAR_LIGHT);
+    if (light && GET_OBJ_TYPE(light) == ITEM_LIGHT) {
+      room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]++;
+    }
 
     // If they're staff, max out the light level and stop processing.
     // This isn't enough to make a room more than partially lit, but it's partial AF.
