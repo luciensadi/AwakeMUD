@@ -1712,10 +1712,6 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
   obj->worn_by = NULL;
   obj->worn_on = -1;
 
-  if (ch->in_room) {
-    recalculate_room_light(ch->in_room);
-  }
-
   if (pos == WEAR_HOLD || pos == WEAR_WIELD)
   {
     if (FIGHTING(ch))
@@ -1723,6 +1719,10 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
   }
 
   GET_EQ(ch, pos) = NULL;
+
+  if (ch->in_room) {
+    recalculate_room_light(ch->in_room);
+  }
 
   for (j = 0; j < MAX_OBJ_AFFECT; j++)
     affect_modify(ch,
