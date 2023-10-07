@@ -20,6 +20,11 @@ bool has_vision(struct char_data *ch, int type, bool staff_override) {
   if (!_vision_prereqs_are_valid(ch, type, __func__))
     return FALSE;
 
+  // Riggers get thermo and low-light while rigging.
+  bool is_rigging = (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
+  if (is_rigging && (type == VISION_LOWLIGHT || type == VISION_THERMOGRAPHIC))
+    return TRUE;
+
   return ch->points.vision[type].HasAnythingSetAtAll();
 }
 
