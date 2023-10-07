@@ -571,10 +571,12 @@ int get_character_light_sources(struct char_data *ch) {
       continue;
     }
 
+#ifdef GLOWING_ITEMS_ARE_LIGHT_SOURCES
     if (IS_OBJ_STAT(eq, ITEM_EXTRA_GLOW)) {
       sources++;
       continue;
     }
+#endif
   }
 
   return sources;
