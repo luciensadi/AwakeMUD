@@ -2293,6 +2293,54 @@ ACMD(do_drop)
   }
 }
 
+void _ch_gives_obj_to_vict(struct char_data *ch, struct obj_data *obj, struct char_data *vict) {
+  if (!ch || !obj || !vict) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid invocation of _ch_gives_obj_to_vict(%s, %s, %s)!",
+                    GET_CHAR_NAME(ch),
+                    GET_OBJ_NAME(obj),
+                    GET_CHAR_NAME(vict));
+    return;
+  }
+  
+  obj_from_char(obj);
+  obj_to_char(obj, vict);
+  act("You give $p to $N.", FALSE, ch, obj, vict, TO_CHAR);
+  act("$n gives you $p.", FALSE, ch, obj, vict, TO_VICT);
+  if (ch->in_veh)
+  {
+    snprintf(buf, sizeof(buf), "%s gives %s to %s.\r\n", GET_NAME(ch), GET_OBJ_NAME(obj), GET_NAME(vict));
+    send_to_veh(buf, ch->in_veh, ch, vict, FALSE);
+  }
+  act("$n gives $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
+
+  // Always log the transfer of vehicle containers.
+  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER) {
+    const char *owner = get_player_name(GET_VEHCONTAINER_VEH_OWNER(obj));
+    snprintf(buf, sizeof(buf), "%s (%ld) gave veh-container %s (%d, idnum %d), belonging to %s (%d), to %s (%ld).",
+              GET_CHAR_NAME(ch),
+              GET_IDNUM(ch),
+              GET_OBJ_NAME(obj),
+              GET_VEHCONTAINER_VEH_VNUM(obj),
+              GET_VEHCONTAINER_VEH_IDNUM(obj),
+              owner,
+              GET_VEHCONTAINER_VEH_OWNER(obj),
+              GET_CHAR_NAME(vict),
+              GET_IDNUM(vict)
+            );
+    mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+    DELETE_ARRAY_IF_EXTANT(owner);
+  }
+  
+  // Always log staff giving things away and/or wizloaded/cheat-marked items being given away.
+  if ( (!IS_NPC(ch) && IS_SENATOR(ch)) || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)) {
+    // Default/preliminary logging message; this is appended to where necessary.
+    char *representation = generate_new_loggable_representation(obj);
+    snprintf(buf, sizeof(buf), "%s gives %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
+    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    delete [] representation;
+  }
+}
+
 bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_data * obj)
 {
   if (IS_ASTRAL(vict))
@@ -2306,7 +2354,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     return 0;
   }
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch)) {
-    act("You'll have to use the KEEP command on $p before you can give it away.", FALSE, ch, obj, 0, TO_CHAR);
+    act("You'll have to use the ^WKEEP^n command on $p before you can give it away.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
   if (obj_contains_kept_items(obj) && !IS_SENATOR(ch)) {
@@ -2329,56 +2377,19 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     send_to_char(ch, "You cannot give away something you are working on.\r\n");
     return 0;
   }
-  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER) {
-    if (IS_NPC(vict)) {
-      send_to_char("You can't give NPCs vehicles.\r\n", ch);
-      return 0;
-    }
-
-    else {
-      const char *owner = get_player_name(GET_VEHCONTAINER_VEH_OWNER(obj));
-      snprintf(buf, sizeof(buf), "%s (%ld) gave veh-container %s (%d, idnum %d), belonging to %s (%d), to %s (%ld).",
-               GET_CHAR_NAME(ch),
-               GET_IDNUM(ch),
-               GET_OBJ_NAME(obj),
-               GET_VEHCONTAINER_VEH_VNUM(obj),
-               GET_VEHCONTAINER_VEH_IDNUM(obj),
-               owner,
-               GET_VEHCONTAINER_VEH_OWNER(obj),
-               GET_CHAR_NAME(vict),
-               GET_IDNUM(vict)
-              );
-      mudlog(buf, ch, LOG_CHEATLOG, TRUE);
-      DELETE_ARRAY_IF_EXTANT(owner);
-    }
+  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER && IS_NPC(vict)) {
+    send_to_char("You can't give NPCs vehicles.\r\n", ch);
+    return 0;
   }
 
-  obj_from_char(obj);
-  obj_to_char(obj, vict);
-  act("You give $p to $N.", FALSE, ch, obj, vict, TO_CHAR);
-  act("$n gives you $p.", FALSE, ch, obj, vict, TO_VICT);
-  if (ch->in_veh)
-  {
-    snprintf(buf, sizeof(buf), "%s gives %s to %s.\r\n", GET_NAME(ch), GET_OBJ_NAME(obj), GET_NAME(vict));
-    send_to_veh(buf, ch->in_veh, ch, vict, FALSE);
-  }
-  act("$n gives $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
-
-  if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
-  {
-    // Default/preliminary logging message; this is appended to where necessary.
-    char *representation = generate_new_loggable_representation(obj);
-    snprintf(buf, sizeof(buf), "%s gives %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
-    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
-    delete [] representation;
-  }
-
+  // player giving something to an NPC: check quest stuff
   if (!IS_NPC(ch) && IS_NPC(vict)) {
     // Quest item delivery checks.
     if (COULD_BE_ON_QUEST(ch)) {
       // Successful delivery of quest item.
       if (check_quest_delivery(ch, vict, obj)) {
+        // Give it to them now.
+        _ch_gives_obj_to_vict(ch, obj, vict);
         act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
         extract_obj(obj);
         return 1;
@@ -2391,26 +2402,27 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
       }
     }
 
-    // Not a quest item.
+    // Not a quest item. Give succeeds.
+    _ch_gives_obj_to_vict(ch, obj, vict);
   
     if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)) {
-      // These specs handle objects, so don't mess with them.
+      // These specs handle objects, so don't mess with them by having the NPC drop the thing.
       if (GET_MOB_SPEC(vict) == fence || GET_MOB_SPEC(vict) == hacker || GET_MOB_SPEC(vict) == fixer || GET_MOB_SPEC(vict) == mageskill_herbie)
         return 1;
       if (GET_MOB_SPEC2(vict) == fence || GET_MOB_SPEC2(vict) == hacker || GET_MOB_SPEC2(vict) == fixer || GET_MOB_SPEC2(vict) == mageskill_herbie)
         return 1;
     }
 
-    if (obj->obj_flags.quest_id) {
-      // Don't let the person give it to the wrong target.
-    }
-
+    // NPC doesn't want it: Drop the thing.
     act("$n glances at $p, then lets it fall from $s hand.", TRUE, vict, obj, 0, TO_ROOM);
     obj_from_char(obj);
     if (vict->in_room)
       obj_to_room(obj, vict->in_room);
     else
       obj_to_veh(obj, vict->in_veh);
+  } else {
+    // All other cases (pc -> pc, npc -> npc): succeed without further checks
+    _ch_gives_obj_to_vict(ch, obj, vict);
   }
 
   return 1;
