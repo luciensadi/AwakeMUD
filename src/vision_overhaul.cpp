@@ -547,6 +547,27 @@ int get_vision_mag(struct char_data *ch) {
   return vision_mag;
 }
 
+void recalculate_room_light(struct room_data *room) {
+  room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] = 0;
+
+  // Characters with lights add to the light level.
+  for (struct char_data *ch = room->people; ch; ch = ch->next_in_room) {
+    room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]++;
+
+    // If they're staff, max out the light level and stop processing.
+    // This isn't enough to make a room more than partially lit, but it's partial AF.
+    if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_HOLYLIGHT)) {
+      room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] = 16;
+      return;
+    }
+  }
+
+  // Vehicles always provide light.
+  for (struct veh_data *veh = room->vehicles; veh; veh = veh->next_veh) {
+    room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]++;
+  }
+}
+
 
 ////////////////////////// Internal helper methods. ////////////////////////////
 bool _vision_prereqs_are_valid(struct char_data *ch, int type, const char *function_name) {
