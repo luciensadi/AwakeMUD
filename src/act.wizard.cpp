@@ -3449,8 +3449,10 @@ ACMD(do_dc)
   struct char_data *vict;
   one_argument(argument, arg);
 
-  if (atoi(arg)) {
-    send_to_char("Usage: dc <name>\r\n       dc *\r\n", ch);
+  if (!*arg) {
+    send_to_char("Usage: dc <name>\r\n"
+                 "       dc <connection number>\r\n"
+                 "       dc *\r\n", ch);
     return;
   }
 
@@ -3461,6 +3463,24 @@ ACMD(do_dc)
     for (d = descriptor_list; d; d = d->next)
       if ((d->connected > 0 && d->connected < CON_SPELL_CREATE) || d->connected == CON_ASKNAME)
         close_socket(d);
+    return;
+  }
+
+  if (atoi(arg) > 0) {
+    for (d = descriptor_list; d; d = d->next) {
+      if (d->desc_num == atoi(arg)) {
+        if (d->connected == CON_PLAYING) {
+          send_to_char(ch, "You can't DC someone in the playing state by number. Use DC <name> instead.\r\n");
+          return;
+        }
+
+        send_to_char(ch, "OK, disconnecting connection %d.\r\n", d->desc_num);
+        mudlog_vfprintf(ch, LOG_WIZLOG, "%s disconnecting non-playing connection %d.", GET_CHAR_NAME(ch), d->desc_num);
+        close_socket(d);
+        return;
+      }
+    }
+    send_to_char(ch, "There is no connected descriptor numbered %d.\r\n", atoi(arg));
     return;
   }
 
