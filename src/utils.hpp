@@ -162,9 +162,13 @@ bool obj_contains_apartment_only_drop_items(struct obj_data *obj);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);
 
-bool    keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords=1, bool search_name=1, bool search_desc=0);
-bool    keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords=1, bool search_name=1, bool search_desc=0);
-bool    keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name=1, bool search_desc=0);
+const char * keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords=1, bool search_name=1, bool search_desc=0);
+const char * keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords=1, bool search_name=1, bool search_desc=0);
+const char * keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name=1, bool search_desc=0, bool search_messages=0);
+const char * keyword_appears_in_room(const char *keyword, struct room_data *room, bool search_name, bool search_descs, bool search_exits);
+const char * keyword_appears_in_host(const char *keyword, struct host_data *host, bool search_name, bool search_descs, bool search_messages);
+const char * keyword_appears_in_icon(const char *keyword, struct matrix_icon *icon, bool search_name, bool search_descs);
+const char * keyword_appears_in_quest(const char *keyword, struct quest_data *quest);
 
 struct obj_data *find_best_active_docwagon_modulator(struct char_data *ch);
 

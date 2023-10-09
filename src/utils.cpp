@@ -50,6 +50,8 @@
 #include "newhouse.hpp"
 #include "interpreter.hpp"
 #include "ignore_system.hpp"
+#include "newmatrix.hpp"
+#include "quest.hpp"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -5588,100 +5590,220 @@ void render_targets_abilities_to_viewer(struct char_data *viewer, struct char_da
 #endif
 }
 
-bool keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords, bool search_name, bool search_desc) {
+#define CHECK_KEYWORD(target_string, context) {if ((target_string) && isname(keyword, get_string_after_color_code_removal((target_string), NULL))) { return (context); }}
+const char * keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords, bool search_name, bool search_desc) {
   if (!keyword || !*keyword) {
-    return FALSE;
+    return NULL;
   }
 
   if (!obj) {
     mudlog("SYSERR: Received NULL obj to keyword_appears_in_obj()!", NULL, LOG_SYSLOG, TRUE);
-    return FALSE;
+    return NULL;
   }
 
-  if (search_keywords && isname(keyword, obj->text.keywords))
-    return TRUE;
+  if (search_keywords) {
+    CHECK_KEYWORD(obj->text.keywords, "keyword");
+  }
 
   if (search_name) {
-    if (isname(keyword, get_string_after_color_code_removal(obj->text.name, NULL)))
-      return TRUE;
-    if (obj->restring && isname(keyword, get_string_after_color_code_removal(obj->restring, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(obj->text.name, "name");
+    CHECK_KEYWORD(obj->restring, "restring");
   }
 
   if (search_desc) {
-    if (isname(keyword, get_string_after_color_code_removal(obj->text.room_desc, NULL)))
-      return TRUE;
-    if (isname(keyword, get_string_after_color_code_removal(obj->text.look_desc, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(obj->text.room_desc, "room desc");
+    CHECK_KEYWORD(obj->text.look_desc, "look desc");
   }
 
-  return FALSE;
+  return NULL;
 }
 
-bool keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords, bool search_name, bool search_desc) {
+const char * keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords, bool search_name, bool search_desc) {
   if (!keyword || !*keyword) {
-    return FALSE;
+    return NULL;
   }
 
   if (!ch) {
     mudlog("SYSERR: Received NULL ch to keyword_appears_in_char()!", NULL, LOG_SYSLOG, TRUE);
-    return FALSE;
+    return NULL;
   }
 
-  if (search_keywords && isname(keyword, ch->player.physical_text.keywords))
-    return TRUE;
+  if (search_keywords) {
+    CHECK_KEYWORD(ch->player.physical_text.keywords, "keywords");
+  }
 
   if (search_name) {
-    if (isname(keyword, get_string_after_color_code_removal(ch->player.physical_text.name, NULL)))
-      return TRUE;
-    if (ch->player.char_name && isname(keyword, get_string_after_color_code_removal(ch->player.char_name, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(ch->player.physical_text.name, "physical name");
+    CHECK_KEYWORD(ch->player.char_name, "name");
   }
 
   if (search_desc) {
-    if (isname(keyword, get_string_after_color_code_removal(ch->player.physical_text.room_desc, NULL)))
-      return TRUE;
-    if (isname(keyword, get_string_after_color_code_removal(ch->player.physical_text.look_desc, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(ch->player.physical_text.room_desc, "room desc");
+    CHECK_KEYWORD(ch->player.physical_text.look_desc, "look desc");
 
     // Since this is not a common use case, we use full keyword matching here to prevent mixups like 'hu' from 'hunter' matching 'human'
     if (!str_cmp(keyword, pc_race_types[(int) GET_RACE(ch)]))
-      return TRUE;
+      return "race";
     if (!str_cmp(keyword, genders[(int) GET_PRONOUNS(ch)]))
-      return TRUE;
+      return "pronoun";
   }
 
   return FALSE;
 }
 
-bool keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name, bool search_desc) {
+const char * keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name, bool search_desc, bool search_messages) {
   if (!keyword || !*keyword) {
-    return FALSE;
+    return NULL;
   }
 
   if (!veh) {
     mudlog("SYSERR: Received NULL veh to keyword_appears_in_veh()!", NULL, LOG_SYSLOG, TRUE);
-    return FALSE;
+    return NULL;
   }
 
   if (search_name) {
-    if (isname(keyword, get_string_after_color_code_removal(veh->name, NULL)))
-      return TRUE;
-    if (veh->restring && isname(keyword, get_string_after_color_code_removal(veh->restring, NULL)))
-      return TRUE;
-    if (isname(keyword, get_string_after_color_code_removal(veh->description, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(veh->name, "name");
+    CHECK_KEYWORD(veh->restring, "restring");
+    CHECK_KEYWORD(veh->description, "description");
   }
 
   if (search_desc) {
-    if (isname(keyword, get_string_after_color_code_removal(veh->long_description, NULL)))
-      return TRUE;
-    if (veh->restring_long && isname(keyword, get_string_after_color_code_removal(veh->restring_long, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(veh->long_description, "long desc");
+    CHECK_KEYWORD(veh->restring_long, "restring");
+    CHECK_KEYWORD(veh->rear_description, "rear desc");
+    CHECK_KEYWORD(veh->inside_description, "front desc");
   }
+
+  if (search_messages) {
+    CHECK_KEYWORD(veh->arrive, "arrive msg");
+    CHECK_KEYWORD(veh->leave, "leave msg");
+  }
+
+  return NULL;
+}
+
+const char * keyword_appears_in_room(const char *keyword, struct room_data *room, bool search_name, bool search_descs, bool search_exits) {
+  if (!keyword || !*keyword) {
+    return NULL;
+  }
+
+  if (!room) {
+    mudlog("SYSERR: Received NULL room to keyword_appears_in_room()!", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  if (search_name) {
+    CHECK_KEYWORD(GET_ROOM_NAME(room), "name");
+  }
+
+  if (search_descs) {
+    CHECK_KEYWORD(room->description, "desc");
+    CHECK_KEYWORD(room->night_desc, "night desc");
+    
+    for (struct extra_descr_data *ed = room->ex_description; ed; ed = ed->next) {
+      CHECK_KEYWORD(ed->keyword, "exdesc keyword");
+      CHECK_KEYWORD(ed->description, "exdesc desc");
+    }
+  }
+
+  if (search_exits) {
+    for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+      if (!EXIT2(room, dir))
+        continue;
+
+      CHECK_KEYWORD(EXIT2(room, dir)->general_description, "exit general");
+      CHECK_KEYWORD(EXIT2(room, dir)->go_into_secondperson, "exit 2p into");
+      CHECK_KEYWORD(EXIT2(room, dir)->go_into_thirdperson, "exit 3p into");
+      CHECK_KEYWORD(EXIT2(room, dir)->come_out_of_thirdperson, "exit 3p leave");
+      CHECK_KEYWORD(EXIT2(room, dir)->keyword, "exit keyword");
+    }
+  }
+
+  return NULL;
+}
+
+const char * keyword_appears_in_host(const char *keyword, struct host_data *host, bool search_name, bool search_descs, bool search_messages) {
+  if (!keyword || !*keyword) {
+    return NULL;
+  }
+
+  if (!host) {
+    mudlog("SYSERR: Received NULL host to keyword_appears_in_host()!", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  if (search_name) {
+    CHECK_KEYWORD(host->name, "name");
+    CHECK_KEYWORD(host->keywords, "keywords");
+  }
+
+  if (search_descs) {
+    CHECK_KEYWORD(host->desc, "desc");
+  }
+
+  if (search_messages) {
+    CHECK_KEYWORD(host->shutdown_start, "shutdown start");
+    CHECK_KEYWORD(host->shutdown_stop, "shutdown stop");
+  }
+
+  return NULL;
+}
+
+const char * keyword_appears_in_icon(const char *keyword, struct matrix_icon *icon, bool search_name, bool search_descs) {
+  if (!keyword || !*keyword) {
+    return NULL;
+  }
+
+  if (!icon) {
+    mudlog("SYSERR: Received NULL icon to keyword_appears_in_icon()!", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  if (search_name) {
+    CHECK_KEYWORD(icon->name, "name");
+  }
+
+  if (search_descs) {
+    CHECK_KEYWORD(icon->long_desc, "long desc");
+    CHECK_KEYWORD(icon->look_desc, "look desc");
+  }
+
+  return NULL;
+}
+
+const char * keyword_appears_in_quest(const char *keyword, struct quest_data *quest) {
+  if (!keyword || !*keyword) {
+    return NULL;
+  }
+
+  if (!quest) {
+    mudlog("SYSERR: Received NULL icon to keyword_appears_in_quest()!", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  CHECK_KEYWORD(quest->intro, "intro");
+  CHECK_KEYWORD(quest->decline, "decline");
+  CHECK_KEYWORD(quest->quit, "quit");
+  CHECK_KEYWORD(quest->finish, "finish");
+  CHECK_KEYWORD(quest->info, "info");
+  CHECK_KEYWORD(quest->s_string, "start speech");
+  CHECK_KEYWORD(quest->e_string, "end speech");
+  CHECK_KEYWORD(quest->done, "done speech");
+  CHECK_KEYWORD(quest->intro_emote, "intro emote");
+  CHECK_KEYWORD(quest->decline_emote, "decline emote");
+  CHECK_KEYWORD(quest->quit_emote, "quit emote");
+  CHECK_KEYWORD(quest->finish_emote, "finish emote");
+
+  if (quest->info_emotes) {
+    for (auto em : *(quest->info_emotes)) {
+    CHECK_KEYWORD(em, "info emote");
+  }
+  }
+  
 
   return FALSE;
 }
+#undef CHECK_KEYWORD
 
 void mob_say(struct char_data *mob, const char *msg) {
   static char not_const[MAX_STRING_LENGTH];

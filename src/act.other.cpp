@@ -1059,6 +1059,10 @@ ACMD(do_gen_write)
 #endif
 
   if (subcmd == SCMD_TYPO && !PLR_FLAGGED(ch, PLR_NO_AUTO_SYSP_AWARDS)) {
+    // Nudge them to report from the correct room.
+    struct room_data *room = get_ch_in_room(ch);
+    send_to_char(ch, "Got it-- your typo report has been associated with the room you're standing in (%s^n). If you're reporting a typo for somewhere else, please go there to report it instead.\r\n\r\n", GET_ROOM_NAME(room));
+
     // We reward typos instantly-- they're quick to verify and don't have grey area.
     send_to_char("Thanks! You've earned +1 system points for your contribution.\r\n", ch);
     if (GET_SYSTEM_POINTS(ch) < 10) {

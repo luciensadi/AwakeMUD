@@ -3089,6 +3089,131 @@ int vnum_ic(char *searchname, struct char_data * ch)
   return (found);
 }
 
+// Search for the specified text across the whole game.
+int vnum_text(char *searchname, struct char_data *ch) {
+  char results[100000];
+  int count = 0;
+
+  // Rooms.
+  send_to_char("Scanning rooms...\r\n", ch);
+  strlcpy(results, "^c> Rooms: ^n\r\n", sizeof(results));
+  for (int idx = 0; idx <= top_of_world; idx++) {
+    struct room_data *room = &world[idx];
+    const char *context = keyword_appears_in_room(searchname, room, TRUE, TRUE, TRUE);
+
+    if (context) {
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               GET_ROOM_VNUM(room),
+               GET_ROOM_NAME(room),
+               context);
+      count++;
+    }
+  }
+
+  // Mobs.
+  send_to_char("Scanning mobs...\r\n", ch);
+  strlcat(results, "\r\n^c> Mobs: ^n\r\n", sizeof(results));
+  for (int idx = 0; idx <= top_of_mobt; idx++) {
+    struct char_data *mob = &mob_proto[idx];
+    const char *context = keyword_appears_in_char(searchname, mob, TRUE, TRUE, TRUE);
+
+    if (context) {
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               GET_MOB_VNUM(mob),
+               GET_CHAR_NAME(mob),
+               context);
+      count++;
+    }
+  }
+
+  // Vehicles.
+  send_to_char("Scanning vehicles...\r\n", ch);
+  strlcat(results, "\r\n^c> Vehicles: ^n\r\n", sizeof(results));
+  for (int idx = 0; idx <= top_of_veht; idx++) {
+    struct veh_data *veh = &veh_proto[idx];
+    const char *context = keyword_appears_in_veh(searchname, veh, TRUE, TRUE, TRUE);
+
+    if (context) {
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               GET_VEH_VNUM(veh),
+               GET_VEH_NAME(veh),
+               context);
+      count++;
+    }
+  }
+
+  // Objects.
+  send_to_char("Scanning objects...\r\n", ch);
+  strlcat(results, "\r\n^c> Objects: ^n\r\n", sizeof(results));
+  for (int idx = 0; idx <= top_of_objt; idx++) {
+    struct obj_data *obj = &obj_proto[idx];
+    const char *context = keyword_appears_in_obj(searchname, obj, TRUE, TRUE, TRUE);
+
+    if (context) {
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               GET_OBJ_VNUM(obj),
+               GET_OBJ_NAME(obj),
+               context);
+      count++;
+    }
+  }
+
+  // Quests.
+  send_to_char("Scanning quests...\r\n", ch);
+  strlcat(results, "\r\n^c> Quests: ^n\r\n", sizeof(results));
+  for (int idx = 0; idx <= top_of_questt; idx++) {
+    struct quest_data *qst = &quest_table[idx];
+    const char *context = keyword_appears_in_quest(searchname, qst);
+
+    if (context) {
+      vnum_t rnum = real_mobile(qst->johnson);
+
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               qst->vnum,
+               rnum > 0 ? GET_CHAR_NAME(&mob_proto[rnum]) : "<bad Johnson>",
+               context);
+      count++;
+    }
+  }
+
+  // Hosts.
+  send_to_char("Scanning hosts...\r\n", ch);
+  strlcat(results, "\r\n^c> Hosts: ^n\r\n", sizeof(results));
+  for (int idx = 0; idx <= top_of_matrix; idx++) {
+    struct host_data *host = &matrix[idx];
+    const char *context = keyword_appears_in_host(searchname, host, TRUE, TRUE, TRUE);
+
+    if (context) {
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               host->vnum,
+               host->name,
+               context);
+      count++;
+    }
+  }
+
+  // ICs.
+  send_to_char("Scanning ICs...\r\n", ch);
+  strlcat(results, "\r\n^c> ICs: ^n\r\n", sizeof(results));
+  for (int idx = 0; idx <= top_of_ic; idx++) {
+    struct matrix_icon *icon = &ic_proto[idx];
+    const char *context = keyword_appears_in_icon(searchname, icon, TRUE, TRUE);
+
+    if (context) {
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               icon->vnum,
+               icon->name,
+               context);
+      count++;
+    }
+  }
+
+  send_to_char("Done.\r\n\r\n", ch);
+  page_string(ch->desc, results, FALSE);
+
+  return count;
+}
+
 #define SEARCH_STRING(string_name)                                                                           \
   if (quest_table[nr].string_name && *quest_table[nr].string_name && isname(searchname, get_string_after_color_code_removal(quest_table[nr].string_name, NULL))) {          \
     snprintf(ENDOF(found_in), sizeof(found_in) - strlen(found_in), "%s" #string_name, *found_in ? ", " : ""); \

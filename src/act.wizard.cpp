@@ -1037,6 +1037,7 @@ ACMD(do_vnum)
   VNUM_LOOKUP(host);
   VNUM_LOOKUP(ic);
   VNUM_LOOKUP(quest);
+  VNUM_LOOKUP(text);
 
   send_to_char(VNUM_USAGE_STRING, ch);
 }
@@ -3461,7 +3462,7 @@ ACMD(do_dc)
     snprintf(buf, sizeof(buf), "Non-playing connections closed by %s.", GET_CHAR_NAME(ch));
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     for (d = descriptor_list; d; d = d->next)
-      if ((d->connected > 0 && d->connected < CON_SPELL_CREATE) || d->connected == CON_ASKNAME)
+      if ((d->connected > 0 && d->connected < CON_SPELL_CREATE && d->connected != CON_PART_CREATE) || d->connected == CON_ASKNAME)
         close_socket(d);
     return;
   }
