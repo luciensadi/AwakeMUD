@@ -3089,19 +3089,25 @@ int vnum_ic(char *searchname, struct char_data * ch)
   return (found);
 }
 
+#define PRINT_HEADER_IF_NEEDED(text) { if (!printed_header) { strlcat(results, text, sizeof(results)); printed_header = TRUE; }}
 // Search for the specified text across the whole game.
 int vnum_text(char *searchname, struct char_data *ch) {
   char results[100000];
   int count = 0;
+  bool printed_header = FALSE;
+
+  strlcpy(results, "", sizeof(results));
+
+  send_to_char("Scanning rooms, mobs, vehicles, objects, quests, hosts, and ICs for that text.\r\n\r\n", ch);
 
   // Rooms.
-  send_to_char("Scanning rooms...\r\n", ch);
-  strlcpy(results, "^c> Rooms: ^n\r\n", sizeof(results));
+  printed_header = FALSE;
   for (int idx = 0; idx <= top_of_world; idx++) {
     struct room_data *room = &world[idx];
     const char *context = keyword_appears_in_room(searchname, room, TRUE, TRUE, TRUE);
 
     if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Rooms: ^n\r\n");
       snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
                GET_ROOM_VNUM(room),
                GET_ROOM_NAME(room),
@@ -3111,13 +3117,13 @@ int vnum_text(char *searchname, struct char_data *ch) {
   }
 
   // Mobs.
-  send_to_char("Scanning mobs...\r\n", ch);
-  strlcat(results, "\r\n^c> Mobs: ^n\r\n", sizeof(results));
+  printed_header = FALSE;
   for (int idx = 0; idx <= top_of_mobt; idx++) {
     struct char_data *mob = &mob_proto[idx];
     const char *context = keyword_appears_in_char(searchname, mob, TRUE, TRUE, TRUE);
 
     if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Mobs: ^n\r\n");
       snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
                GET_MOB_VNUM(mob),
                GET_CHAR_NAME(mob),
@@ -3127,13 +3133,13 @@ int vnum_text(char *searchname, struct char_data *ch) {
   }
 
   // Vehicles.
-  send_to_char("Scanning vehicles...\r\n", ch);
-  strlcat(results, "\r\n^c> Vehicles: ^n\r\n", sizeof(results));
+  printed_header = FALSE;
   for (int idx = 0; idx <= top_of_veht; idx++) {
     struct veh_data *veh = &veh_proto[idx];
     const char *context = keyword_appears_in_veh(searchname, veh, TRUE, TRUE, TRUE);
 
     if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Vehicles: ^n\r\n");
       snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
                GET_VEH_VNUM(veh),
                GET_VEH_NAME(veh),
@@ -3143,13 +3149,13 @@ int vnum_text(char *searchname, struct char_data *ch) {
   }
 
   // Objects.
-  send_to_char("Scanning objects...\r\n", ch);
-  strlcat(results, "\r\n^c> Objects: ^n\r\n", sizeof(results));
+  printed_header = FALSE;
   for (int idx = 0; idx <= top_of_objt; idx++) {
     struct obj_data *obj = &obj_proto[idx];
     const char *context = keyword_appears_in_obj(searchname, obj, TRUE, TRUE, TRUE);
 
     if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Objects: ^n\r\n");
       snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
                GET_OBJ_VNUM(obj),
                GET_OBJ_NAME(obj),
@@ -3159,13 +3165,13 @@ int vnum_text(char *searchname, struct char_data *ch) {
   }
 
   // Quests.
-  send_to_char("Scanning quests...\r\n", ch);
-  strlcat(results, "\r\n^c> Quests: ^n\r\n", sizeof(results));
+  printed_header = FALSE;
   for (int idx = 0; idx <= top_of_questt; idx++) {
     struct quest_data *qst = &quest_table[idx];
     const char *context = keyword_appears_in_quest(searchname, qst);
 
     if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Quests: ^n\r\n");
       vnum_t rnum = real_mobile(qst->johnson);
 
       snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
@@ -3177,13 +3183,13 @@ int vnum_text(char *searchname, struct char_data *ch) {
   }
 
   // Hosts.
-  send_to_char("Scanning hosts...\r\n", ch);
-  strlcat(results, "\r\n^c> Hosts: ^n\r\n", sizeof(results));
+  printed_header = FALSE;
   for (int idx = 0; idx <= top_of_matrix; idx++) {
     struct host_data *host = &matrix[idx];
     const char *context = keyword_appears_in_host(searchname, host, TRUE, TRUE, TRUE);
 
     if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Hosts: ^n\r\n");
       snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
                host->vnum,
                host->name,
@@ -3193,13 +3199,13 @@ int vnum_text(char *searchname, struct char_data *ch) {
   }
 
   // ICs.
-  send_to_char("Scanning ICs...\r\n", ch);
-  strlcat(results, "\r\n^c> ICs: ^n\r\n", sizeof(results));
+  printed_header = FALSE;
   for (int idx = 0; idx <= top_of_ic; idx++) {
     struct matrix_icon *icon = &ic_proto[idx];
     const char *context = keyword_appears_in_icon(searchname, icon, TRUE, TRUE);
 
     if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> ICs: ^n\r\n");
       snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
                icon->vnum,
                icon->name,
@@ -3209,7 +3215,9 @@ int vnum_text(char *searchname, struct char_data *ch) {
   }
 
   send_to_char("Done.\r\n\r\n", ch);
-  page_string(ch->desc, results, FALSE);
+  if (*results) {
+    page_string(ch->desc, results, FALSE);
+  }
 
   return count;
 }
