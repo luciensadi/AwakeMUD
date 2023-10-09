@@ -846,6 +846,8 @@ ACMD(do_display)
     return;
   }
 
+  send_to_char(ch, "OK, changing your prompt. In case you need it back, your previous prompt was:^c  %s^n\r\n", double_up_color_codes(GET_PROMPT(ch)));
+
   prepare_quotes(arg_with_prepared_quotes, argument, sizeof(arg_with_prepared_quotes) / sizeof(arg_with_prepared_quotes[0]));
 
   DELETE_ARRAY_IF_EXTANT(GET_PROMPT(tch));
