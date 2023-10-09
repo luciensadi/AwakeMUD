@@ -3098,7 +3098,7 @@ int vnum_text(char *searchname, struct char_data *ch) {
 
   strlcpy(results, "", sizeof(results));
 
-  send_to_char("Scanning rooms, mobs, vehicles, objects, quests, hosts, and ICs for that text.\r\n\r\n", ch);
+  send_to_char("Scanning rooms, mobs, vehicles, objects, quests, hosts, and ICs for that text...\r\n", ch);
 
   // Rooms.
   printed_header = FALSE;
@@ -3214,7 +3214,7 @@ int vnum_text(char *searchname, struct char_data *ch) {
     }
   }
 
-  send_to_char("Done.\r\n\r\n", ch);
+  send_to_char("Done.\r\n", ch);
   if (*results) {
     page_string(ch->desc, results, FALSE);
   }
