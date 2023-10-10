@@ -852,7 +852,6 @@ ACMD(do_display)
 
   DELETE_ARRAY_IF_EXTANT(GET_PROMPT(tch));
   GET_PROMPT(tch) = str_dup(argument);
-  send_to_char(OK, ch);
   snprintf(buf, sizeof(buf), "UPDATE pfiles SET%sPrompt='%s' WHERE idnum=%ld;", PLR_FLAGGED((ch), PLR_MATRIX) ? " Matrix" : " ", arg_with_prepared_quotes, GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
 }
@@ -871,7 +870,7 @@ ACMD(do_gen_write)
     return;
   }
 
-#ifdef IS_BUILDPORT
+#ifdef DISABLED_CHECK___IS_BUILDPORT
   send_to_char("That command is disabled on the buildport. Please file ideas etc on the main port!\r\n", ch);
   return;
 #endif
