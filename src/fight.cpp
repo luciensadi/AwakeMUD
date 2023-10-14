@@ -5408,6 +5408,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
           (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD)),
           (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD)),
           NULL);
+      // note: vict may be dead at this point!
       WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
       return;
     }
@@ -5422,12 +5423,16 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         }
         if (CH_IN_COMBAT(ch))
           stop_fighting(ch);
-        hit(ch,
-            vict,
-            (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD)),
-            (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD)),
-            NULL);
-        ranged_response(ch, vict);
+
+        {
+          struct obj_data *ch_weap = (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD));
+          struct obj_data *vict_weap = (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD));
+
+          if (!hit(ch, vict, ch_weap, vict_weap, NULL)) {
+            // Only do ranged_response if the victim survived the hit.
+            ranged_response(ch, vict);
+          }
+        }
       } else
         send_to_char("*Click*\r\n", ch);
       WAIT_STATE(ch, 2 * PULSE_VIOLENCE);

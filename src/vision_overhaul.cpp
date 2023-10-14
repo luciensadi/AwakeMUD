@@ -560,6 +560,8 @@ int get_character_light_sources(struct char_data *ch) {
     return 0;
   }
 
+  log_vfprintf("Entered get_character_light_sources(%s) (%sPC)", GET_CHAR_NAME(ch), IS_NPC(ch) ? "N" : "");
+
   if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_HOLYLIGHT)) {
     sources = 10;
   }
@@ -584,6 +586,7 @@ int get_character_light_sources(struct char_data *ch) {
 #endif
   }
 
+  log_vfprintf("Got %d sources from get_character_light_sources(%s)", sources, GET_CHAR_NAME(ch));
   return sources;
 }
 
