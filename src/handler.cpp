@@ -777,10 +777,6 @@ void affect_total(struct char_data * ch)
                       cyber->obj_flags.bitvector, TRUE);
   }
 
-  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-    if (!sust->caster)
-      spell_modify(ch, sust, TRUE);
-
   for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
     switch (GET_BIOWARE_TYPE(bio)) {
       case BIO_PAINEDITOR:
@@ -796,12 +792,21 @@ void affect_total(struct char_data * ch)
     }
   }
 
+  // We want the higher of either cyber+bio or magic/adept
+  sbyte aug_rea = GET_REA(ch);
+  sbyte aug_init_dice = GET_INIT_DICE(ch);
+  GET_REA(ch) = 0;
+  GET_INIT_DICE(ch) = 0;
+
+  /* effects of magic */
+  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
+    if (!sust->caster)
+      spell_modify(ch, sust, TRUE);
+
   if (GET_TRADITION(ch) == TRAD_ADEPT)
   {
-    if (GET_INIT_DICE(ch) == 0)
-      GET_INIT_DICE(ch) += MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
-    if (GET_REAL_REA(ch) == GET_REA(ch))
-      GET_REA(ch) += 2*MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
+    GET_INIT_DICE(ch) += MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
+    GET_REA(ch) += 2*MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
     GET_BOD(ch) += GET_POWER(ch, ADEPT_IMPROVED_BOD);
     GET_QUI(ch) += GET_POWER(ch, ADEPT_IMPROVED_QUI);
     GET_STR(ch) += GET_POWER(ch, ADEPT_IMPROVED_STR);
@@ -822,6 +827,10 @@ void affect_total(struct char_data * ch)
       AFF_FLAGS(ch).SetBit(AFF_VISION_MAG_3);
     }
   }
+
+  // We want the higher of either cyber+bio or magic/adept
+  GET_REA(ch) = (GET_REA(ch) > aug_rea) ? GET_REA(ch) : aug_rea;
+  GET_INIT_DICE(ch) = (GET_INIT_DICE(ch) > aug_init_dice) ? GET_INIT_DICE(ch) : aug_init_dice;
 
   apply_drug_modifiers_to_ch(ch);
 
