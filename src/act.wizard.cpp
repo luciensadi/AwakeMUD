@@ -893,11 +893,19 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
   look_at_room(victim, 0, 0);
 }
 
+#ifdef IS_BUILDPORT
+// On the buildport, any staff member can transfer anyone below their level.
+#define TRANSFER_LEVEL_REQ  LVL_BUILDER
+#else
+// On the mainport, you must be 5+.
+#define TRANSFER_LEVEL_REQ  LVL_CONSPIRATOR
+#endif
+
 ACMD(do_trans)
 {
   ACMD_DECLARE(do_transfer);
 
-  if (!access_level(ch, LVL_CONSPIRATOR)) {
+  if (!access_level(ch, TRANSFER_LEVEL_REQ)) {
     do_transfer(ch, argument, 0, 0);
     return;
   }
@@ -907,8 +915,8 @@ ACMD(do_trans)
   any_one_arg(argument, buf);
 
   if (!*buf)
-    send_to_char("Whom do you wish to transfer?\r\n", ch);
-  else if (str_cmp("all", buf)) {
+    send_to_char("Whom do you wish to transfer to your location?\r\n", ch);
+  else if (str_cmp("*", buf)) {
     if (!(victim = get_char_vis(ch, buf)))
       send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
     else if (victim == ch)
@@ -928,7 +936,7 @@ ACMD(do_trans)
       transfer_ch_to_ch(victim, ch);
     }
   } else {                      /* Trans All */
-    if (!access_level(ch, LVL_DEVELOPER)) {
+    if (!access_level(ch, LVL_PRESIDENT)) {
       send_to_char("I think not.\r\n", ch);
       return;
     }
