@@ -2478,6 +2478,9 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
       send_to_char(CH, "8) Change Weight: ^c%dkg^n\r\n", GET_WEIGHT(CH));
 
       {
+        struct room_data *error_suppressor = d->edit_mob->in_room;
+        d->edit_mob->in_room = &world[1];
+
         // Prepend the number and qualifier...
         send_to_char("\r\n9) Change Lifestyle: ", CH);
 
@@ -2485,6 +2488,8 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
         char colorized_lifestyle[1000];
         snprintf(colorized_lifestyle, sizeof(colorized_lifestyle), "^c%s^n", get_lifestyle_string(d->edit_mob));
         act(colorized_lifestyle, FALSE, d->edit_mob, 0, CH, TO_VICT_FORCE);
+
+        d->edit_mob->in_room = error_suppressor;
       }
     }
   }
