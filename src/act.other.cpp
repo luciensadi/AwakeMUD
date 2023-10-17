@@ -4650,6 +4650,16 @@ ACMD(do_spray)
         }
       }
 
+      // Don't spam the same sprays.
+      if (ch->desc) {
+        if (!str_cmp(argument, ch->desc->last_sprayed)) {
+          send_to_char("For spam reduction reasons, you can't spray the same thing twice in a row.\r\n", ch);
+          return;
+        } else {
+          strlcpy(ch->desc->last_sprayed, argument, sizeof(ch->desc->last_sprayed));
+        }
+      }
+
       struct obj_data *paint = read_object(OBJ_DYNAMIC_GRAFFITI, VIRTUAL);
       snprintf(buf, sizeof(buf), "a piece of graffiti that says \"%s^n\"", argument);
       paint->restring = str_dup(buf);

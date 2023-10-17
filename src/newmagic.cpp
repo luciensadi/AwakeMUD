@@ -3944,11 +3944,12 @@ ACMD(do_cast)
     FAILURE_CASE(CH_IN_COMBAT(ch), "Ritual cast while fighting?? You ARE mad!\r\n");
     FAILURE_CASE(IS_PROJECT(ch), "You can't manipulate physical objects in this form, so setting up a ritual space will be hard.\r\n");
     FAILURE_CASE(!GET_APARTMENT(in_room), "Ritual casting requires an undisturbed place with room to move around-- you'll need to be in an apartment.\r\n");
+    FAILURE_CASE(GET_ROOM_VNUM(in_room) >= 6900 && GET_ROOM_VNUM(in_room) <= 6999, "You can't do that in NERPcorpolis.");
     FAILURE_CASE(ch->in_veh, "Ritual casting requires more space to move around-- you'll need to leave your vehicle.\r\n");
     FAILURE_CASE(!spell_is_valid_ritual_spell(spell->type), "That spell isn't eligible for ritual casting. You can only ritual-cast buffs.\r\n");
 
     // Only one ritual at a time.
-    for (struct obj_data *obj = ch->in_room->contents; obj; obj = obj->next_content) {
+    for (struct obj_data *obj = in_room->contents; obj; obj = obj->next_content) {
       FAILURE_CASE(GET_OBJ_VNUM(obj) == OBJ_RITUAL_SPELL_COMPONENTS,
                    "There's already a ritual in progress here. Either wait for it to finish, or ##^WDESTROY^n the components so you can begin your own.\r\n");
     }
@@ -3960,7 +3961,8 @@ ACMD(do_cast)
       return;
     }
 
-    FAILURE_CASE(IS_NPC(vict), "You can only cast ritual spells on player characters.\r\n");
+    FAILURE_CASE(IS_NPC(vict), "You can only cast ritual spells on player characters.");
+    FAILURE_CASE(ch != vict, "You can only cast ritual spells on yourself.");
 
     // Charge them.
     int cost = RITUAL_SPELL_COMPONENT_COST * force * MAX(1, spells[spell->type].drainpower);

@@ -1048,6 +1048,7 @@ struct descriptor_data
   struct descriptor_data *next; /* link to next descriptor              */
   struct ccreate_t ccr;
   int invalid_command_counter;
+  char last_sprayed[MAX_INPUT_LENGTH];
 
   long nuyen_paid_for_wheres_my_car;
   long nuyen_income_this_play_session[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES];
@@ -1109,6 +1110,9 @@ struct descriptor_data
     for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {
       nuyen_income_this_play_session[i] = 0;
     }
+
+    // Wipe last_sprayed.
+    last_sprayed[0] = '\0';
   }
 }
 ;
