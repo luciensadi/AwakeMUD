@@ -1094,7 +1094,7 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
 
   // Special case: The apartment has already been leased and has expired.
   // You must pay the cost in arrears for the room, PLUS the new month.
-  if (paid_until < time(0)) {
+  if (paid_until < time(0) && owned_by_player == GET_IDNUM(ch)) {
     int days_in_arrears = get_days_in_arrears();
 
     if (days_in_arrears > 0) {

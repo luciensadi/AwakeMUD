@@ -900,7 +900,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
     else
       act("You see nothing special about $m.", FALSE, i, 0, ch, TO_VICT);
 
-    if (!IS_NPC(i) && GET_TKE(i) > NEWBIE_KARMA_THRESHOLD && GET_LEVEL(ch) >= GET_LEVEL(i)) {
+    if (!IS_NPC(i) && GET_LEVEL(ch) >= GET_LEVEL(i)) {
       act(get_lifestyle_string(i), FALSE, i, 0, ch, TO_VICT | SKIP_YOU_STANZAS);
     }
 
