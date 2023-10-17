@@ -364,6 +364,7 @@ ACMD_DECLARE(do_switched_message_history);
 ACMD_DECLARE(do_syspoints);
 ACMD_DECLARE(do_teleport);
 ACMD_DECLARE(do_tell);
+ACMD_DECLARE(do_tempdesc);
 ACMD_DECLARE(do_think);
 ACMD_DECLARE(do_throw);
 ACMD_DECLARE(do_time);
@@ -904,6 +905,7 @@ struct command_info cmd_info[] =
     { "target"     , POS_SITTING , do_target   , 0, 0, FALSE },
     { "taste"      , POS_RESTING , do_eat      , 0, SCMD_TASTE, FALSE },
     { "teleport"   , POS_DEAD    , do_teleport , LVL_CONSPIRATOR, 0, FALSE },
+    { "tempdesc"   , POS_MORTALLYW, do_tempdesc , LVL_CONSPIRATOR, 0, TRUE },
     { "think"      , POS_LYING   , do_think    , 0, 0, FALSE },
     { "throw"      , POS_FIGHTING, do_throw    , 0, 0, FALSE },
     { "thaw"       , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_THAW, FALSE },

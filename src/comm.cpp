@@ -189,6 +189,7 @@ extern void process_flying_vehicles();
 extern void save_all_apartments_and_storage_rooms();
 
 extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
+extern void tick_down_room_tempdesc_expiries();
 
 #ifdef USE_DEBUG_CANARIES
 void check_memory_canaries();
@@ -1081,6 +1082,7 @@ void game_loop(int mother_desc)
       send_keepalives();
       // johnson_update();
       process_boost();
+      tick_down_room_tempdesc_expiries();
     }
 
     // By default, every IRL hour, but configurable in config.h.
@@ -2432,7 +2434,7 @@ void close_socket(struct descriptor_data *d)
     /* added to Free up temporary editing constructs */
     if (d->connected == CON_PLAYING
         || d->connected == CON_PART_CREATE
-        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_DECORATE_VEH && d->connected != CON_ASKNAME))
+        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_TEMPDESC_EDIT && d->connected != CON_ASKNAME))
     {
       if (d->connected == CON_VEHCUST)
         d->edit_veh = NULL;

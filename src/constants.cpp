@@ -879,6 +879,8 @@ const char *connected_types[] =
     "Helpfile Editing",
     "Apartment Complex Editing",
     "Apartment Editing",
+    "Vehicle Decorating",
+    "Tempdesc Editing",
     "\n"
   };
 

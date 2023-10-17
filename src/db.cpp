@@ -503,6 +503,13 @@ void boot_world(void)
     }
   }
 
+  for (int i = 0; i < CON_MAX; i++) {
+    if (str_str(connected_types[i], MAX_FLAG_MARKER)) {
+      log("Error: You added a connection type but didn't add it to connected_types in constants.cpp (or forgot a comma)!");
+      exit(ERROR_FLAG_CONSTANT_MISSING);
+    }
+  }
+
 #ifndef NOCRYPT
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {

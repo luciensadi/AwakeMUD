@@ -7610,6 +7610,9 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
                    GET_APARTMENT(in_room)->get_full_name(),
                    GET_APARTMENT_DECORATION(in_room) ? " [decorated]" : "");
     }
+    if (in_room->temp_desc && in_room->temp_desc_timeout > 0) {
+      send_to_char(ch, " ^c(Temp Desc for next %d minute%s)\r\n", in_room->temp_desc_timeout, in_room->temp_desc_timeout == 1 ? "" : "s");
+    }
   } else {
     #define APPEND_ROOM_FLAG(check, flagname) { if ((check)) {strlcat(room_title_buf, flagname, sizeof(room_title_buf));} }
     char room_title_buf[1000];

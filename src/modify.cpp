@@ -42,6 +42,7 @@ void format_tabs(struct descriptor_data *d);
 
 extern void insert_or_append_emote_at_position(struct descriptor_data *d, char *string);
 extern void save_vehicles(bool fromCopyover);
+extern void set_room_tempdesc(struct room_data *room, const char *desc);
 
 /* ************************************************************************
 *  modification of new'ed strings                                      *
@@ -287,6 +288,23 @@ void string_add(struct descriptor_data *d, char *str)
         send_to_char("Sorry, an error has occurred. Your decoration was NOT saved.\r\n", d->character);
       } else {
         GET_APARTMENT_SUBROOM(d->character->in_room)->set_decoration(*d->str);
+        DELETE_D_STR_IF_EXTANT(d);
+        if (!PRF_FLAGGED(d->character, PRF_SCREENREADER)) {
+          look_at_room(d->character, 1, 0);
+        }
+      }
+      STATE(d) = CON_PLAYING;
+    } else if (STATE(d) == CON_TEMPDESC_EDIT) {
+      if (!d->character->in_room) {
+        mudlog("SYSERR: Decoration command completed in non-room!", d->character, LOG_SYSLOG, TRUE);
+        send_to_char("Sorry, an error has occurred. Your decoration was NOT saved.\r\n", d->character);
+      } else {
+        mudlog_vfprintf(d->character, LOG_WIZLOG, "%s set %s (%ld) temp desc to: '''%s^n'''", 
+                        GET_CHAR_NAME(d->character),
+                        GET_ROOM_NAME(d->character->in_room),
+                        GET_ROOM_VNUM(d->character->in_room),
+                        double_up_color_codes(*d->str));
+        set_room_tempdesc(d->character->in_room, *d->str);
         DELETE_D_STR_IF_EXTANT(d);
         if (!PRF_FLAGGED(d->character, PRF_SCREENREADER)) {
           look_at_room(d->character, 1, 0);
