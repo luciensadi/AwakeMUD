@@ -60,10 +60,6 @@ STRETCH:
 /////// LOGISTICAL TODOS
 // TODO: Test the conversion from old-style to new-style apartments REPEATEDLY. Check for loss of items, vehicles, ownership, guests, etc.
 
-/////// CONTENT TODOS
-// TODO: Fill out garage strings for Low, High, Luxury lifestyles in json file.
-// TODO: Poll playerbase to collect more lifestyle strings.
-
 /////// STRETCH TODOS
 // TODO: Add audit command to check for complexes / apartments with rents out of lifestyle bounds
 // TODO: If they haven't selected a lifestyle string: Iterate over all apartments, finding the best one that belongs to them, and return a string from that. "Best" is first by highest lifestyle, then by not-garage as a tiebreaker.
@@ -193,6 +189,9 @@ void cedit_lifestyle_menu(struct descriptor_data *d) {
   struct char_data *ch = d->original ? d->original : d->character;
   int idx = 0;
 
+  struct room_data *error_suppressor = d->edit_mob->in_room;
+  d->edit_mob->in_room = &world[1];
+
   for (auto it : *_get_lifestyle_vector(ch)) {
     // Prepend the number...
     send_to_char(CH, "%2d) ", idx++);
@@ -201,6 +200,8 @@ void cedit_lifestyle_menu(struct descriptor_data *d) {
     act(it, FALSE, d->edit_mob, 0, ch, TO_VICT_FORCE);
   }
   send_to_char("\r\nSelect the lifestyle string you'd like to display: ", CH);
+
+  d->edit_mob->in_room = error_suppressor;
 
   d->edit_mode = CEDIT_LIFESTYLE;
 }
