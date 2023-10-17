@@ -3919,7 +3919,7 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
   if (attack_success < 1)
   {
     act("$n whiffs $s attack on $N!", 1, ch, NULL, vict, TO_ROOM);
-    act("$n whiffs $s attack on $N!", 1, ch, NULL, vict, TO_CHAR);
+    act("$n whiff $s attack on $N!", 1, ch, NULL, vict, TO_CHAR);
     act("$n whiffs $s attack on $N!", 1, ch, NULL, vict, TO_VICT);
     if (!AFF_FLAGGED(ch, AFF_COUNTER_ATT)) {
       bool victim_died = FALSE;
