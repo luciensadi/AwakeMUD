@@ -793,8 +793,8 @@ void affect_total(struct char_data * ch)
   }
 
   // We want the higher of either cyber+bio or magic/adept
-  sbyte aug_rea = GET_REA(ch);
-  sbyte aug_init_dice = GET_INIT_DICE(ch);
+  int aug_rea = GET_REA(ch);
+  int aug_init_dice = GET_INIT_DICE(ch);
   GET_REA(ch) = 0;
   GET_INIT_DICE(ch) = 0;
 
