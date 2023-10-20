@@ -997,6 +997,10 @@ void reward(struct char_data *ch, struct char_data *johnson)
       act("$n gives you $p.", FALSE, johnson, obj, ch, TO_VICT);
       act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
     }
+  } else {
+    char saybuf[1000];
+    snprintf(saybuf, sizeof(saybuf), "%s Partially done's better than nothing.", GET_CHAR_NAME(ch));
+    do_say(johnson, saybuf, 0, SCMD_SAYTO);
   }
 
   nuyen = negotiate(ch, johnson, 0, nuyen, 0, FALSE, FALSE) * NUYEN_GAIN_MULTIPLIER * ((float) GET_CHAR_MULTIPLIER(ch) / 100);

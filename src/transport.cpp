@@ -108,7 +108,7 @@ struct dest_data seattle_taxi_destinations[] =
   { "formal", "", "Seattle Formal Wear", 32746, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "zoo", "", "Seattle Municipal Zoo", 32569, TAXI_DEST_TYPE_OTHER, TRUE },
   { "garage", "parking", "Seattle Parking Garage", 32720, TAXI_DEST_TYPE_OTHER , TRUE },
-  { "park", "", "Seattle State Park", 4000, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
+  { "park", "", "Seattle State Park", 32573, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "library", "", "Seattle Public Library", 30600, TAXI_DEST_TYPE_OTHER, TRUE },
   { "airport", "seatac", "Seattle-Tacoma Airport", 19410, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "shintaru", "", "Shintaru", 32513, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },

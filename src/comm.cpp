@@ -3441,6 +3441,10 @@ bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
   if (!ch->desc || ch->char_specials.timer >= 10)
     return FALSE;
 
+  // Best if you're not AFK too.
+  if (PRF_FLAGGED(ch, PRF_AFK))
+    return FALSE;
+
   return TRUE;
 }
 

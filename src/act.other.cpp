@@ -4258,7 +4258,7 @@ ACMD(do_flip)
 ACMD(do_dice)
 {
   int dice = 0, tn = 0, suc = 0, roll = 0, tot = 0;
-  two_arguments(argument, buf, buf1);
+  const char *remainder = two_arguments(argument, buf, buf1);
   if (!*buf) {
     send_to_char("Roll how many dice?\r\n", ch);
     return;
@@ -4291,6 +4291,10 @@ ACMD(do_dice)
     if (tn > 0)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d success%s.", suc, suc == 1 ? "" : "es");
 
+    if (remainder && *remainder) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (note: %s^n)", remainder);
+    }
+    
     // Message the roller.
     act(buf, FALSE, ch, 0, 0, TO_CHAR);
 

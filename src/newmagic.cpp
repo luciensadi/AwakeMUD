@@ -19,6 +19,7 @@
 #include "playerdoc.hpp"
 #include "newhouse.hpp"
 #include "quest.hpp"
+#include "ritualcast.hpp"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -1214,17 +1215,29 @@ bool find_duplicate_spell(struct char_data *ch, struct char_data *vict, int spel
 {
   if (spells[spell].duration == INSTANT)
     return FALSE;
+
+  if (!ch || spell < 0 || spell >= MAX_SPELLS || sub < 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received invalid parameter to find_duplicate_spell(%s, %s, %d, %d)",
+                    GET_CHAR_NAME(ch),
+                    GET_CHAR_NAME(vict),
+                    spell,
+                    sub);
+    return TRUE;
+  }
+
   struct sustain_data *sus;
   if (!vict || vict == ch)
     sus = GET_SUSTAINED(ch);
   else
     sus = GET_SUSTAINED(vict);
-  for (; sus; sus = sus->next)
-    if (!sus->caster && sus->spell == spell && sus->subtype == sub)
-    {
-      send_to_char(ch, "%s are already affected by that spell.\r\n", (!vict || vict == ch) ? "You" : "They");
+  for (; sus; sus = sus->next) {
+    if (!sus->caster && sus->spell == spell && sus->subtype == sub) {
+      send_to_char(ch, "%s are already affected by %s.\r\n", 
+                   (!vict || vict == ch) ? "You" : "They", 
+                   spells[spell].name);
       return TRUE;
     }
+  }
   return FALSE;
 }
 
@@ -1583,21 +1596,11 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
   }
 }
 
-void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg, struct char_data *mob)
+void raw_cast_detection_spell(struct char_data *ch, struct char_data *vict, int spell, int force, struct char_data *mob, int ritual_successes)
 {
-  struct char_data *vict = NULL;
-  if (mob)
-    vict = mob;
-  else if (*arg)
-    vict = get_char_room_vis(ch, arg);
-  if (!check_spell_victim(ch, vict, spell, arg))
-    return;
-  if (find_duplicate_spell(ch, vict, spell, 0))
-    return;
-
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
   char rbuf[MAX_STRING_LENGTH];
-  strlcpy(rbuf, "cast_detection_spell modify_target_rbuf: ", sizeof(rbuf));
+  snprintf(rbuf, sizeof(rbuf), "%scast_detection_spell modify_target_rbuf: ", ritual_successes > 0 ? "ritual" : "");
   int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
   act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
@@ -1613,94 +1616,123 @@ void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg,
   switch (spell)
   {
     case SPELL_MINDLINK:
-      // Block mindlinks from ignoring characters without divulging information.
-      if (IS_IGNORING(vict, is_blocking_mindlinks_from, ch)) {
-        send_to_char("They are already under the influence of a mindlink.\r\n", ch);
-        return;
-      }
-
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 4 + target_modifiers);
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-        if (sust->spell == SPELL_MINDLINK) {
-          send_to_char("You are already under the influence of a mindlink.\r\n", ch);
-          return;
-        }
-      for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next)
-        if (sust->spell == SPELL_MINDLINK) {
+      {
+        // Block mindlinks from ignoring characters without divulging information.
+        if (IS_IGNORING(vict, is_blocking_mindlinks_from, ch)) {
           send_to_char("They are already under the influence of a mindlink.\r\n", ch);
           return;
         }
-      if (success > 0) {
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        vict->char_specials.mindlink = ch;
-        ch->char_specials.mindlink = vict;
 
-        send_to_char(vict, "(OOC notice: ^c%s^n has cast the Mindlink spell on you, allowing for telepathic communication "
-                     "via the ^WTHINK^n command. If you wish to terminate this, you can ##^WBREAK MINDLINK^n, "
-                     "or ##^WBLOCK %s^W MINDLINKS^n to prevent new ones from being made.)\r\n",
-                     GET_CHAR_NAME(ch), GET_CHAR_NAME(ch));
-      } else send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0, direct_sustain);
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+        success = success_test(skill, 4 + target_modifiers);
+        snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
+          if (sust->spell == SPELL_MINDLINK) {
+            send_to_char("You are already under the influence of a mindlink.\r\n", ch);
+            return;
+          }
+        for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next)
+          if (sust->spell == SPELL_MINDLINK) {
+            send_to_char("They are already under the influence of a mindlink.\r\n", ch);
+            return;
+          }
+        if (success > 0) {
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+          vict->char_specials.mindlink = ch;
+          ch->char_specials.mindlink = vict;
+
+          send_to_char(vict, "(OOC notice: ^c%s^n has cast the Mindlink spell on you, allowing for telepathic communication "
+                      "via the ^WTHINK^n command. If you wish to terminate this, you can ##^WBREAK MINDLINK^n, "
+                      "or ##^WBLOCK %s^W MINDLINKS^n to prevent new ones from being made.)\r\n",
+                      GET_CHAR_NAME(ch), GET_CHAR_NAME(ch));
+        } else send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
+      }
       break;
     case SPELL_COMBATSENSE:
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 4 + target_modifiers);
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (success > 0) {
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-        send_to_char("The world seems to slow down around you as your sense of your surroundings becomes clearer.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0, direct_sustain);
+      {
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+        if (ritual_successes) {
+          success = ritual_successes;
+          snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
+        } else {
+          success = success_test(skill, 4 + target_modifiers);
+          snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        }
+
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0) {
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          send_to_char("The world seems to slow down around you as your sense of your surroundings becomes clearer.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
+      }
       break;
     case SPELL_NIGHTVISION:
-      if (has_vision(ch, VISION_LOWLIGHT)) {
-        act("$N already has low-light vision.", FALSE, ch, 0, vict, TO_CHAR);
-        return;
-      }
+      {
+        if (has_vision(ch, VISION_LOWLIGHT)) {
+          act("$N already has low-light vision.", FALSE, ch, 0, vict, TO_CHAR);
+          return;
+        }
 
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 6 + target_modifiers);
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (success > 0) {
-        send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0);
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+        if (ritual_successes) {
+          success = ritual_successes;
+          snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
+        } else {
+          success = success_test(skill, 6 + target_modifiers);
+          snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        }
+        
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0) {
+          send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+          create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        } else {
+          send_to_char(FAILED_CAST, ch);
+        }
+        spell_drain(ch, spell, force, 0);
+      }
       break;
     case SPELL_INFRAVISION:
-      if (has_vision(ch, VISION_THERMOGRAPHIC)) {
-        act("$N already has thermographic vision.", FALSE, ch, 0, vict, TO_CHAR);
-        return;
-      }
+      {
+        if (has_vision(ch, VISION_THERMOGRAPHIC)) {
+          act("$N already has thermographic vision.", FALSE, ch, 0, vict, TO_CHAR);
+          return;
+        }
 
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 6 + target_modifiers);
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (success > 0) {
-        send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0);
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+        if (ritual_successes) {
+          success = ritual_successes;
+          snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
+        } else {
+          success = success_test(skill, 6 + target_modifiers);
+          snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        }
+        
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0) {
+          send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+          create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0);
+      }
       break;
   }
 
 }
 
-void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char *arg, struct char_data *mob)
-{
+void cast_detection_spell(struct char_data *ch, int spell, int force, char *arg, struct char_data *mob) {
   struct char_data *vict = NULL;
   if (mob)
     vict = mob;
@@ -1708,12 +1740,17 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     vict = get_char_room_vis(ch, arg);
   if (!check_spell_victim(ch, vict, spell, arg))
     return;
-  if (find_duplicate_spell(ch, vict, spell, sub))
+  if (find_duplicate_spell(ch, vict, spell, 0))
     return;
 
+  raw_cast_detection_spell(ch, vict, spell, force, mob, -1);
+}
+
+void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spell, int sub, int force, struct char_data *mob, int ritual_successes)
+{
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
   char rbuf[MAX_STRING_LENGTH];
-  strlcpy(rbuf, "cast_health_spell modify_target_rbuf: ", sizeof(rbuf));
+  snprintf(rbuf, sizeof(rbuf), "%scast_health_spell modify_target_rbuf: ", ritual_successes >= 0 ? "ritual" : "");
   int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
   act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
@@ -1752,8 +1789,15 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
           return;
         }
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-        success = success_test(skill, base_target + target_modifiers);
-        snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+
+        if (ritual_successes > 0) {
+          success = ritual_successes;
+          snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
+        } else {
+          success = success_test(skill, base_target + target_modifiers);
+          snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        }
+
         act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
         if (success > 0) {
           direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
@@ -1765,58 +1809,84 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       }
       break;
     case SPELL_STABILIZE:
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       {
-        // Removing wound age modifier because time() can be seconds OR milliseconds depending on platform.
-        // int wound_age_modifier = ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR);
-        success = success_test(skill, 4 /* + wound_age_modifier */ + target_modifiers);
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+        if (ritual_successes > 0) {
+          success = ritual_successes;
+          snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
+        } else {
+          // Removing wound age modifier because time() can be seconds OR milliseconds depending on platform.
+          // int wound_age_modifier = ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR);
+          success = success_test(skill, 4 /* + wound_age_modifier */ + target_modifiers);
+          snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        }
+        
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0 && force >= (GET_PHYSICAL(vict) <= 0 ? -(GET_PHYSICAL(vict) / 100) : 50)) {
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          send_to_char("Your condition stabilizes, you manage to grab a thin hold on life.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
       }
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (success > 0 && force >= (GET_PHYSICAL(vict) <= 0 ? -(GET_PHYSICAL(vict) / 100) : 50)) {
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-        send_to_char("Your condition stabilizes, you manage to grab a thin hold on life.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_RESISTPAIN:
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 4 + target_modifiers);
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (GET_PHYSICAL(vict) <= 0)
-        drain = DEADLY;
-      else if (GET_PHYSICAL(vict) <= 300)
-        drain = SERIOUS;
-      else if (GET_PHYSICAL(vict) <= 700)
-        drain = MODERATE;
-      else if (GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
-        send_to_char("You can only cast that on injured victims.\r\n", ch);
-        return;
+      {
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+        if (ritual_successes > 0) {
+          success = ritual_successes;
+          snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
+        } else {
+          success = success_test(skill, 4 + target_modifiers);
+          snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        }
+
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (GET_PHYSICAL(vict) <= 0)
+          drain = DEADLY;
+        else if (GET_PHYSICAL(vict) <= 300)
+          drain = SERIOUS;
+        else if (GET_PHYSICAL(vict) <= 700)
+          drain = MODERATE;
+        else if (GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
+          send_to_char("You can only cast that on injured victims.\r\n", ch);
+          return;
+        }
+        if (success > 0 && !AFF_FLAGGED(ch, AFF_RESISTPAIN)) {
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          send_to_char("Your pain begins to fade.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+          vict->points.resistpain = MIN(force, success) * 100;
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, drain);
       }
-      if (success > 0 && !AFF_FLAGGED(ch, AFF_RESISTPAIN)) {
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-        send_to_char("Your pain begins to fade.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        vict->points.resistpain = MIN(force, success) * 100;
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, drain);
       break;
     case SPELL_HEALTHYGLOW:
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      success = success_test(skill, 4 + target_modifiers);
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (success > 0) {
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-        send_to_char("You begin to feel healthier and more attractive.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0, direct_sustain);
+      {
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+        if (ritual_successes > 0) {
+          success = ritual_successes;
+          snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
+        } else {
+          success = success_test(skill, 4 + target_modifiers);
+          snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        }
+
+        snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0) {
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          send_to_char("You begin to feel healthier and more attractive.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
+      }
       break;
     case SPELL_TREAT:
       if (!AFF_FLAGGED(vict, AFF_DAMAGED)) {
@@ -1825,111 +1895,130 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       }
       // fall through
     case SPELL_HEAL:
-      if (AFF_FLAGGED(vict, AFF_HEALED)) {
-        send_to_char(ch, "%s has been healed too recently for this spell.\r\n", GET_NAME(vict));
-        return;
-      }
-
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-
-      if (GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
-        act("The spell fizzles-- $N is already at full health.", FALSE, ch, 0, vict, TO_CHAR);
-      } else {
-        success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target_modifiers + (int)(GET_INDEX(ch) / 200)));
-        snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-
-        // For code reasons, the number of successes is capped at the number of boxes of damage they've taken.
-        int boxes_healed = MIN((GET_MAX_PHYSICAL(vict) - GET_PHYSICAL(vict) + 99) / 100, success);
-
-        if (GET_PHYSICAL(vict) <= 0)
-          drain = DEADLY;
-        else if (GET_PHYSICAL(vict) <= 300)
-          drain = SERIOUS;
-        else if (GET_PHYSICAL(vict) <= 700)
-          drain = MODERATE;
-
-        if (success < 1) {
-          send_to_char(FAILED_CAST, ch);
-        } else {
-          AFF_FLAGS(vict).SetBit(AFF_HEALED);
-          send_to_char("A warm feeling floods your body.\r\n", vict);
-          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-          direct_sustain = create_sustained(ch, vict, spell, force, 0, boxes_healed, drain);
-          update_pos(vict);
+      {
+        if (AFF_FLAGGED(vict, AFF_HEALED)) {
+          send_to_char(ch, "%s has been healed too recently for this spell.\r\n", GET_NAME(vict));
+          return;
         }
-      }
 
-      spell_drain(ch, spell, force, drain, direct_sustain);
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+        if (GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
+          act("The spell fizzles-- $N is already at full health.", FALSE, ch, 0, vict, TO_CHAR);
+        } else {
+          if (ritual_successes > 0) {
+            success = ritual_successes;
+            snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
+          } else {
+            success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target_modifiers + (int)(GET_INDEX(ch) / 200)));
+            snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+          }
+
+          act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
+          // For code reasons, the number of successes is capped at the number of boxes of damage they've taken.
+          int boxes_healed = MIN((GET_MAX_PHYSICAL(vict) - GET_PHYSICAL(vict) + 99) / 100, success);
+
+          if (GET_PHYSICAL(vict) <= 0)
+            drain = DEADLY;
+          else if (GET_PHYSICAL(vict) <= 300)
+            drain = SERIOUS;
+          else if (GET_PHYSICAL(vict) <= 700)
+            drain = MODERATE;
+
+          if (success < 1) {
+            send_to_char(FAILED_CAST, ch);
+          } else {
+            AFF_FLAGS(vict).SetBit(AFF_HEALED);
+            send_to_char("A warm feeling floods your body.\r\n", vict);
+            act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+            direct_sustain = create_sustained(ch, vict, spell, force, 0, boxes_healed, drain);
+            update_pos(vict);
+          }
+        }
+
+        spell_drain(ch, spell, force, drain, direct_sustain);
+      }
       break;
     case SPELL_INCREF1:
     case SPELL_INCREF2:
     case SPELL_INCREF3:
       {
-        int int_with_just_bioware = GET_REAL_INT(vict);
-        int qui_with_just_bioware = GET_REAL_QUI(vict);
-        int rea_from_bioware = 0;
-        int initiative_dice_with_just_bioware = 0;
-
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
-        for (struct obj_data *bioware = vict->bioware; bioware; bioware = bioware->next_content)
         {
-          // Skip deactivated adrenal pumps.
-          if (GET_BIOWARE_TYPE(bioware) == BIO_ADRENALPUMP && GET_OBJ_VAL(bioware, 5) <= 0)
-            continue;
+          int int_with_just_bioware = GET_REAL_INT(vict);
+          int qui_with_just_bioware = GET_REAL_QUI(vict);
+          int rea_from_bioware = 0;
+          int initiative_dice_with_just_bioware = 0;
 
-          // Apply the int penalty from an activated pain editor.
-          if (GET_BIOWARE_TYPE(bioware) == BIO_PAINEDITOR && GET_OBJ_VAL(bioware, 3))
-            int_with_just_bioware -= 1;
+          if (!check_spell_victim(ch, vict, spell, arg))
+            return;
 
-          // Add any miscellaneous affects to your int / qui / dice.
-          for (int j = 0; j < MAX_OBJ_AFFECT; j++) {
-            if (bioware->affected[j].location == APPLY_INT) {
-              int_with_just_bioware += bioware->affected[j].modifier;
-            }
-            else if (bioware->affected[j].location == APPLY_QUI) {
-              qui_with_just_bioware += bioware->affected[j].modifier;
-            }
-            else if (bioware->affected[j].location == APPLY_REA) {
-              rea_from_bioware += bioware->affected[j].modifier;
-            }
-            else if (bioware->affected[j].location == APPLY_INITIATIVE_DICE) {
-              initiative_dice_with_just_bioware += bioware->affected[j].modifier;
+          for (struct obj_data *bioware = vict->bioware; bioware; bioware = bioware->next_content)
+          {
+            // Skip deactivated adrenal pumps.
+            if (GET_BIOWARE_TYPE(bioware) == BIO_ADRENALPUMP && GET_OBJ_VAL(bioware, 5) <= 0)
+              continue;
+
+            // Apply the int penalty from an activated pain editor.
+            if (GET_BIOWARE_TYPE(bioware) == BIO_PAINEDITOR && GET_OBJ_VAL(bioware, 3))
+              int_with_just_bioware -= 1;
+
+            // Add any miscellaneous affects to your int / qui / dice.
+            for (int j = 0; j < MAX_OBJ_AFFECT; j++) {
+              if (bioware->affected[j].location == APPLY_INT) {
+                int_with_just_bioware += bioware->affected[j].modifier;
+              }
+              else if (bioware->affected[j].location == APPLY_QUI) {
+                qui_with_just_bioware += bioware->affected[j].modifier;
+              }
+              else if (bioware->affected[j].location == APPLY_REA) {
+                rea_from_bioware += bioware->affected[j].modifier;
+              }
+              else if (bioware->affected[j].location == APPLY_INITIATIVE_DICE) {
+                initiative_dice_with_just_bioware += bioware->affected[j].modifier;
+              }
             }
           }
-        }
 
-        /*
-        send_to_char(ch, "iwjb %d vs %d, qwjb %d vs %d, dwjb %d vs %d\r\n",
-                     int_with_just_bioware, GET_INT(vict),
-                     qui_with_just_bioware, GET_QUI(vict),
-                     initiative_dice_with_just_bioware, GET_INIT_DICE(vict)
-                   );
-        */
+          /*
+          send_to_char(ch, "iwjb %d vs %d, qwjb %d vs %d, dwjb %d vs %d\r\n",
+                      int_with_just_bioware, GET_INT(vict),
+                      qui_with_just_bioware, GET_QUI(vict),
+                      initiative_dice_with_just_bioware, GET_INIT_DICE(vict)
+                    );
+          */
 
-        // If the numbers don't match exactly, refuse to cast.
-        if (((((int_with_just_bioware + qui_with_just_bioware) / 2) + rea_from_bioware) != GET_REA(vict))
-            || (initiative_dice_with_just_bioware != GET_INIT_DICE(vict)))
-        {
-          if (ch == vict) {
-            send_to_char(ch, "Your reflexes have already been modified, so the increased reflexes spell won't work for you.\r\n");
-          } else {
-            act("$N's reflexes have already been modified, so you can't cast that spell on $M.", FALSE, ch, 0, vict, TO_CHAR);
+          // If the numbers don't match exactly, refuse to cast.
+          if (((((int_with_just_bioware + qui_with_just_bioware) / 2) + rea_from_bioware) != GET_REA(vict))
+              || (initiative_dice_with_just_bioware != GET_INIT_DICE(vict)))
+          {
+            if (ch == vict) {
+              send_to_char(ch, "Your reflexes have already been modified, so the increased reflexes spell won't work for you.\r\n");
+            } else {
+              act("$N's reflexes have already been modified, so you can't cast that spell on $M.", FALSE, ch, 0, vict, TO_CHAR);
+            }
+            return;
           }
-          return;
         }
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+        if (ritual_successes > 0) {
+          success = ritual_successes;
+          snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
+        } else {
+          success = success_test(skill, GET_REA(vict) + target_modifiers);
+          snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        }
+
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0) {
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          send_to_char("The world slows down around you.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
       }
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-
-      if ((success = success_test(skill, GET_REA(vict) + target_modifiers)) > 0) {
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-        send_to_char("The world slows down around you.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_INCREA:
       sub = REA;
@@ -1938,259 +2027,292 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
     case SPELL_DECCYATTR:
     case SPELL_INCATTR:
     case SPELL_INCCYATTR:
-      if (!check_spell_victim(ch, vict, spell, arg))
-        return;
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
 
 
-      if (GET_SUSTAINED(vict)) {
-        for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
-          /*  Q: Can you cast Decrease Attribute, followed by Increase Attribute (which is easier because the attribute TN is smaller),
-                 then un-sustain the Decrease Attribute, allowing you to have a higher Attribute than you’d have without having
-                 Decreased it? How about changing your Reaction after an Increased Reflexes spell?
-              A: No. Only one attribute-affecting health spell can be used to modify an attribute at a time.
+        if (GET_SUSTAINED(vict)) {
+          for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
+            /*  Q: Can you cast Decrease Attribute, followed by Increase Attribute (which is easier because the attribute TN is smaller),
+                  then un-sustain the Decrease Attribute, allowing you to have a higher Attribute than you’d have without having
+                  Decreased it? How about changing your Reaction after an Increased Reflexes spell?
+                A: No. Only one attribute-affecting health spell can be used to modify an attribute at a time.
 
-              Sources:
-              - https://www.shadowrunrpg.com/resources/sr3faq.html
-              - http://www.shadowruntabletop.com/game-resources/shadowrun-third-edition-faq/
-          */
-          // Skip over caster records.
-          if (sus->caster)
-            continue;
+                Sources:
+                - https://www.shadowrunrpg.com/resources/sr3faq.html
+                - http://www.shadowruntabletop.com/game-resources/shadowrun-third-edition-faq/
+            */
+            // Skip over caster records.
+            if (sus->caster)
+              continue;
 
-          if (sus->subtype == sub) {
-            switch (sus->spell) {
-              case SPELL_INCATTR:
-              case SPELL_INCCYATTR:
-                if (spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) {
-                  send_to_char(ch, "You can't cast a decrease-attribute spell on someone who is affected by an increase spell for that attribute.\r\n");
+            if (sus->subtype == sub) {
+              switch (sus->spell) {
+                case SPELL_INCATTR:
+                case SPELL_INCCYATTR:
+                  if (spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) {
+                    send_to_char(ch, "You can't cast a decrease-attribute spell on someone who is affected by an increase spell for that attribute.\r\n");
+                    return;
+                  }
+                  // fall through
+                case SPELL_DECATTR:
+                case SPELL_DECCYATTR:
+  #ifdef DIES_IRAE
+                  send_to_char(ch, "%s is already affected by a similar spell.\r\n", GET_CHAR_NAME(vict));
                   return;
-                }
-                // fall through
-              case SPELL_DECATTR:
-              case SPELL_DECCYATTR:
-#ifdef DIES_IRAE
-                send_to_char(ch, "%s is already affected by a similar spell.\r\n", GET_CHAR_NAME(vict));
-                return;
-#else
-                target_modifiers += MAX(1, MIN(sus->force, sus->success) / TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING);
-#endif
+  #else
+                  target_modifiers += MAX(1, MIN(sus->force, sus->success) / TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING);
+  #endif
+                  break;
+              }
+            }
+
+            if (spell == SPELL_INCREA && (sus->spell == SPELL_INCREF1 || sus->spell == SPELL_INCREF2 || sus->spell == SPELL_INCREF3)) {
+  #ifdef DIES_IRAE
+              send_to_char(ch, "%s's reflexes have already been modified, so this spell can't take effect.\r\n", GET_CHAR_NAME(vict));
+              return;
+  #else
+              target_modifiers += MAX(1, MIN(sus->force, sus->success) / TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING);
+  #endif
+            }
+          }
+        }
+
+        if (GET_ATT(vict, sub) != GET_REAL_ATT(vict, sub)) {
+          if (GET_TRADITION(vict) == TRAD_ADEPT && sub < CHA) {
+            switch (sub) {
+              case BOD:
+                if (BOOST(vict)[BOD][0] || GET_POWER(vict, ADEPT_IMPROVED_BOD))
+                  cyber = false;
+                break;
+              case QUI:
+                if (BOOST(vict)[QUI][0] || GET_POWER(vict, ADEPT_IMPROVED_QUI))
+                  cyber = false;
+                break;
+              case STR:
+                if (BOOST(vict)[STR][0] || GET_POWER(vict, ADEPT_IMPROVED_STR))
+                  cyber = false;
                 break;
             }
           }
-
-          if (spell == SPELL_INCREA && (sus->spell == SPELL_INCREF1 || sus->spell == SPELL_INCREF2 || sus->spell == SPELL_INCREF3)) {
-#ifdef DIES_IRAE
-            send_to_char(ch, "%s's reflexes have already been modified, so this spell can't take effect.\r\n", GET_CHAR_NAME(vict));
-            return;
-#else
-            target_modifiers += MAX(1, MIN(sus->force, sus->success) / TN_INCREASE_DIVISOR_FOR_ATTRIBUTE_SPELL_STACKING);
-#endif
-          }
-        }
-      }
-
-      if (GET_ATT(vict, sub) != GET_REAL_ATT(vict, sub)) {
-        if (GET_TRADITION(vict) == TRAD_ADEPT && sub < CHA) {
-          switch (sub) {
-            case BOD:
-              if (BOOST(vict)[BOD][0] || GET_POWER(vict, ADEPT_IMPROVED_BOD))
+  #ifndef DIES_IRAE  // note: if NOT def
+          else if (GET_SUSTAINED(vict)) {
+            for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
+              // Prevent you from having the CYBER flag set if your modification is from another spell.
+              if (sus->caster == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
                 cyber = false;
-              break;
-            case QUI:
-              if (BOOST(vict)[QUI][0] || GET_POWER(vict, ADEPT_IMPROVED_QUI))
-                cyber = false;
-              break;
-            case STR:
-              if (BOOST(vict)[STR][0] || GET_POWER(vict, ADEPT_IMPROVED_STR))
-                cyber = false;
-              break;
-          }
-        }
-#ifndef DIES_IRAE  // note: if NOT def
-        else if (GET_SUSTAINED(vict)) {
-          for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
-            // Prevent you from having the CYBER flag set if your modification is from another spell.
-            if (sus->caster == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
-              cyber = false;
-              break;
+                break;
+              }
             }
           }
+  #endif
+          if (cyber && (spell == SPELL_DECATTR || spell == SPELL_INCATTR || spell == SPELL_INCREA)) {
+            if (vict == ch) {
+              send_to_char(ch, "Your %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+            } else {
+              snprintf(buf, sizeof(buf), "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+              act(buf, TRUE, ch, 0, vict, TO_CHAR);
+            }
+            return;
+          }
         }
-#endif
-        if (cyber && (spell == SPELL_DECATTR || spell == SPELL_INCATTR || spell == SPELL_INCREA)) {
+
+        if ((spell == SPELL_DECCYATTR || spell == SPELL_INCCYATTR) && (!cyber || GET_ATT(vict, sub) == GET_REAL_ATT(vict, sub))) {
           if (vict == ch) {
-            send_to_char(ch, "Your %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+            send_to_char(ch, "Your %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
           } else {
-            snprintf(buf, sizeof(buf), "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+            snprintf(buf, sizeof(buf), "$N's %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
             act(buf, TRUE, ch, 0, vict, TO_CHAR);
           }
           return;
         }
-      }
 
-      if ((spell == SPELL_DECCYATTR || spell == SPELL_INCCYATTR) && (!cyber || GET_ATT(vict, sub) == GET_REAL_ATT(vict, sub))) {
-        if (vict == ch) {
-          send_to_char(ch, "Your %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+        int target = target_modifiers;
+        if (spell == SPELL_INCREA)
+          target += GET_REA(vict);
+        else if (spell == SPELL_INCATTR || spell == SPELL_INCCYATTR)
+          target += GET_ATT(vict, sub);
+        else
+          target += 10 - (GET_ESS(vict) / 100);
+
+        if (ritual_successes > 0) {
+          success = ritual_successes;
         } else {
-          snprintf(buf, sizeof(buf), "$N's %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
-          act(buf, TRUE, ch, 0, vict, TO_CHAR);
-        }
-        return;
-      }
+          success = success_test(skill, target);
 
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-      int target = target_modifiers;
-      if (spell == SPELL_INCREA)
-        target += GET_REA(vict);
-      else if (spell == SPELL_INCATTR || spell == SPELL_INCCYATTR)
-        target += GET_ATT(vict, sub);
-      else
-        target += 10 - (GET_ESS(vict) / 100);
-      success = success_test(skill, target);
-
-      if (spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) {
-        success -= resist_spell(vict, spell, force, sub);
-
-        // Limiter code: We cannot apply decrease-attribute spells that would send the target into negatives.
-        int att_limit = GET_ATT(vict, sub) - 1;
-        if (success > 2 * att_limit || force > att_limit) {
-          success = MIN(success, 2 * att_limit);
-          force = MIN(force, att_limit);
-          snprintf(rbuf, sizeof(rbuf), "att limit: successes now %d, force now %d", success, force);
-          act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-
-          if (success <= 0 || force <= 0) {
-            send_to_char(ch, "%s's %s is already at the minimum.\r\n", capitalize(GET_CHAR_NAME(vict)), attributes[sub]);
-            return;
+          if (spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) {
+            success -= resist_spell(vict, spell, force, sub);
           }
         }
+        
+        if (spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) {
+          // Limiter code: We cannot apply decrease-attribute spells that would send the target into negatives.
+          int att_limit = GET_ATT(vict, sub) - 1;
+          if (success > 2 * att_limit || force > att_limit) {
+            success = MIN(success, 2 * att_limit);
+            force = MIN(force, att_limit);
+            snprintf(rbuf, sizeof(rbuf), "att limit: successes now %d, force now %d", success, force);
+            act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
+            if (success <= 0 || force <= 0) {
+              send_to_char(ch, "%s's %s is already at the minimum.\r\n", capitalize(GET_CHAR_NAME(vict)), attributes[sub]);
+              return;
+            }
+          }
+        }
+
+        snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
+        if (success > 1) {
+          direct_sustain = create_sustained(ch, vict, spell, force, sub, success, spells[spell].draindamage);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+          send_to_char("You feel your body tingle.\r\n", vict);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
       }
-
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-
-      if (success > 1) {
-        direct_sustain = create_sustained(ch, vict, spell, force, sub, success, spells[spell].draindamage);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        send_to_char("You feel your body tingle.\r\n", vict);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
-    }
   }
+}
 
-  void cast_illusion_spell(struct char_data *ch, int spell, int force, char *arg, struct char_data *mob)
-  {
-    struct char_data *vict = NULL;
-    bool reflected = FALSE;
-    if (mob)
-      vict = mob;
-    else if (*arg)
-      vict = get_char_room_vis(ch, arg);
-    if (find_duplicate_spell(ch, vict, spell, 0))
-      return;
+void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char *arg, struct char_data *mob) {
+  struct char_data *vict = NULL;
+  if (mob)
+    vict = mob;
+  else if (*arg)
+    vict = get_char_room_vis(ch, arg);
+  if (!check_spell_victim(ch, vict, spell, arg))
+    return;
+  if (find_duplicate_spell(ch, vict, spell, sub))
+    return;
 
-    bool direct_sustain = FALSE;
+  raw_cast_health_spell(ch, vict, spell, sub, force, mob, -1);
+}
 
-    // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
-    char rbuf[MAX_STRING_LENGTH];
-    strlcpy(rbuf, "cast_illusion_spell modify_target_rbuf: ", sizeof(rbuf));
-    int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
-    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+void raw_cast_illusion_spell(struct char_data *ch, struct char_data *vict, int spell, int force, struct char_data *mob, int ritual_successes)
+{
+  bool reflected = FALSE;
+  bool direct_sustain = FALSE;
 
-    int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
-    int success = 0;
-    spell_bonus(ch, spell, skill, target_modifiers);
-    snprintf(rbuf, sizeof(rbuf), "after spell_bonus, skill = %d, target_modifiers = %d", skill, target_modifiers);
-    act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-    if (skill == -1)
-      return;
-    struct char_data *temp = vict;
-    switch (spell)
-    {
+  // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
+  char rbuf[MAX_STRING_LENGTH];
+  strlcpy(rbuf, "cast_illusion_spell modify_target_rbuf: ", sizeof(rbuf));
+  int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
+  act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
+  int skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
+  int success = 0;
+  spell_bonus(ch, spell, skill, target_modifiers);
+  snprintf(rbuf, sizeof(rbuf), "after spell_bonus, skill = %d, target_modifiers = %d", skill, target_modifiers);
+  act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+  if (skill == -1)
+    return;
+  struct char_data *temp = vict;
+  switch (spell) {
     case SPELL_CONFUSION:
     case SPELL_CHAOS:
-      if (!check_spell_victim(ch, vict, spell, arg))
-        return;
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
 
-      if (would_become_killer(ch, vict)) {
-        send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
-        return;
-      }
+        if (would_become_killer(ch, vict)) {
+          send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+          return;
+        }
 
-      if (!IS_NPC(ch) && !IS_NPC(vict) && PLR_FLAGGED(ch, PLR_KILLER)) {
-        act("You have the KILLER flag, so you can't affect $N with a mind-altering spell.", TRUE, ch, 0, vict, TO_CHAR);
-        return;
-      }
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+        if (!IS_NPC(ch) && !IS_NPC(vict) && PLR_FLAGGED(ch, PLR_KILLER)) {
+          act("You have the KILLER flag, so you can't affect $N with a mind-altering spell.", TRUE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-      success = success_test(skill, (spell == SPELL_CONFUSION ? GET_WIL(vict) : GET_INT(vict)) + target_modifiers);
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, (spell == SPELL_CONFUSION ? GET_WIL(ch) : GET_INT(ch)), success))) {
-        vict = ch;
-        ch = temp;
+        success = success_test(skill, (spell == SPELL_CONFUSION ? GET_WIL(vict) : GET_INT(vict)) + target_modifiers);
+        snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, (spell == SPELL_CONFUSION ? GET_WIL(ch) : GET_INT(ch)), success))) {
+          vict = ch;
+          ch = temp;
+        }
+        success -= resist_spell(vict, spell, force, 0);
+        snprintf(rbuf, sizeof(rbuf), "after spell resist: %d", success);
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0) {
+          send_to_char("Coherent thought is suddenly a foreign concept.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        } else
+          send_to_char(FAILED_CAST, reflected ? vict : ch);
+        spell_drain(reflected ? vict : ch, spell, force, 0, direct_sustain);
       }
-      success -= resist_spell(vict, spell, force, 0);
-      snprintf(rbuf, sizeof(rbuf), "after spell resist: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (success > 0) {
-        send_to_char("Coherent thought is suddenly a foreign concept.\r\n", vict);
-        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      } else
-        send_to_char(FAILED_CAST, reflected ? vict : ch);
-      spell_drain(reflected ? vict : ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_INVIS:
     case SPELL_IMP_INVIS:
-      if (!check_spell_victim(ch, vict, spell, arg))
-        return;
-
-      // Anti-cheese: No having a baller spell on yourself, then casting and releasing a weak one to reset your invis resistance table.
-      for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
-        if (!sust->caster && (sust->spell == SPELL_IMP_INVIS || sust->spell == SPELL_INVIS)) {
-          send_to_char("They're already invisible.\r\n", ch);
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
           return;
+
+        // Anti-cheese: No having a baller spell on yourself, then casting and releasing a weak one to reset your invis resistance table.
+        for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
+          if (!sust->caster && (sust->spell == SPELL_IMP_INVIS || sust->spell == SPELL_INVIS)) {
+            send_to_char("They're already invisible.\r\n", ch);
+            return;
+          }
         }
+
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+        if (ritual_successes > 0) {
+          success = ritual_successes;
+          snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
+        } else {
+          success = success_test(skill, 4 + target_modifiers);
+          snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        }
+        
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0) {
+          act("You blink and suddenly $n is gone!", TRUE, vict, 0, 0, TO_ROOM);
+          send_to_char("You feel your body tingle.\r\n", vict);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people; viewer; viewer = (ch->in_veh ? viewer->next_in_veh : viewer->next_in_room)) {
+            // You get to immediately try to break the invis.
+            can_see_through_invis(viewer, vict);
+          }
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
       }
-
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-
-      success = success_test(skill, 4 + target_modifiers);
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (success > 0) {
-        act("You blink and suddenly $n is gone!", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel your body tingle.\r\n", vict);
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-        for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people; viewer; viewer = (ch->in_veh ? viewer->next_in_veh : viewer->next_in_room)) {
-          // You get to immediately try to break the invis.
-          can_see_through_invis(viewer, vict);
-        }
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0, direct_sustain);
       break;
     case SPELL_STEALTH:
-      if (!check_spell_victim(ch, vict, spell, arg))
-        return;
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
 
-      WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-      success = success_test(skill, 4 + target_modifiers);
-      snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
-      act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-      if (success > 0) {
-        act("You successfully sustain that spell on $n.", FALSE, vict, 0, ch, TO_VICT);
-        send_to_char("Your every move becomes silent.\r\n", vict);
-        direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      } else
-        send_to_char(FAILED_CAST, ch);
-      spell_drain(ch, spell, force, 0, direct_sustain);
+        if (ritual_successes > 0) {
+          success = ritual_successes;
+          snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
+        } else {
+          success = success_test(skill, 4 + target_modifiers);
+          snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
+        }
+        
+        act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+        if (success > 0) {
+          act("You successfully sustain that spell on $n.", FALSE, vict, 0, ch, TO_VICT);
+          send_to_char("Your every move becomes silent.\r\n", vict);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
+      }
       break;
     case SPELL_SILENCE:
+    {
       WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
       success = success_test(skill, 4 + target_modifiers);
       snprintf(rbuf, sizeof(rbuf), "successes: %d", success);
@@ -2202,17 +2324,805 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       } else
         send_to_char(FAILED_CAST, ch);
       spell_drain(ch, spell, force, 0, direct_sustain);
+    }
       break;
   }
 }
 
-void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *arg, struct char_data *mob)
-{
+void cast_illusion_spell(struct char_data *ch, int spell, int force, char *arg, struct char_data *mob) {
   struct char_data *vict = NULL;
+  if (mob)
+    vict = mob;
+  else if (*arg)
+    vict = get_char_room_vis(ch, arg);
+  if (find_duplicate_spell(ch, vict, spell, 0))
+    return;
+
+  raw_cast_illusion_spell(ch, vict, spell, force, NULL, -1);
+}
+
+void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, int spell, int force, struct char_data *mob, int ritual_successes, int basedamage)
+{
   bool reflected = FALSE;
-  int basedamage = 0;
   bool cast_by_npc = IS_NPC(ch);
   bool direct_sustain = FALSE;
+  
+  if (find_duplicate_spell(ch, vict, spell, 0))
+    return;
+
+  // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
+  char rbuf[MAX_STRING_LENGTH];
+  strlcpy(rbuf, "cast_manipulation_spell modify_target_rbuf: ", sizeof(rbuf));
+  int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
+  act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
+
+  int success = 0;
+  int skill;
+  if (IS_ANY_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
+    skill = GET_LEVEL(ch);
+  } else {
+    skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
+    spell_bonus(ch, spell, skill, target_modifiers);
+  }
+
+  if (skill == -1)
+    return;
+  struct char_data *temp = vict;
+
+  switch (spell) {
+    case SPELL_ARMOR:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+        if (ritual_successes > 0) {
+          success = ritual_successes;
+        } else {
+          success = success_test(skill, 6 + target_modifiers);
+        }
+        
+        if (success > 0) {
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          send_to_char("You feel your body tingle.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
+      }
+      break;
+    case SPELL_POLTERGEIST:
+      {
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+        success = success_test(skill, 4 + target_modifiers);
+        if (success > 0) {
+          direct_sustain = create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
+          act("An invisible wind begins to spin small objects around the area!", FALSE, ch, 0, 0, TO_ROOM);
+          act("An invisible wind begins to spin small objects around the area!", FALSE, ch, 0, 0, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
+      }
+      break;
+    case SPELL_LIGHT:
+      {
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+        success = success_test(skill, 4 + target_modifiers);
+        if (success > 0) {
+          direct_sustain = create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
+          act("Light radiates from $n, illuminating the area!", FALSE, ch, 0, 0, TO_ROOM);
+          act("The area brightens as your light spell takes affect!", FALSE, ch, 0, 0, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
+      }
+      break;
+    case SPELL_ICESHEET:
+      {
+        if (!ch->in_room) {
+          send_to_char("You can't create ice in here!\r\n", ch);
+          return;
+        }
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+        success = success_test(skill, 4 + target_modifiers);
+        if (success > 0) {
+          ch->in_room->icesheet[0] = (int)(3.14 * ((GET_MAG(ch) * GET_MAG(ch)) / 10000));
+          ch->in_room->icesheet[1] = force + MIN(force, success / 2);
+          act("The floor is suddenly covered in ice!", FALSE, ch, 0, 0, TO_ROOM);
+          act("The floor is suddenly covered in ice!", FALSE, ch, 0, 0, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0);
+      }
+      break;
+    case SPELL_IGNITE:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        if (would_become_killer(ch, vict)) {
+          send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+          return;
+        }
+
+        if (ch == vict) {
+          send_to_char("You can't target yourself with a damaging manipulation spell!\r\n", ch);
+          return;
+        }
+        if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+          act("You have the KILLER flag, so you can't affect $N with ignite.", TRUE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+        SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
+
+        success = success_test(skill, 4 + target_modifiers);
+        if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
+          vict = ch;
+          ch = temp;
+        }
+        success -= resist_spell(vict, spell, force, 0);
+        success -= GET_BOD(vict) / 2;
+
+        if (success > 0) {
+          send_to_char("You feel the room temperature sharply rise.\r\n", vict);
+          act("You succeed in raising the body temperature of $N to dangerous levels.", FALSE, ch, 0, vict, TO_CHAR);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, MAX(1, 10 / MIN(force, success)));
+          if (!FIGHTING(vict) && vict != ch && AWAKE(vict))
+            set_fighting(vict, ch);
+          if (IS_NPC(vict) && !IS_NPC(ch))
+            GET_LASTHIT(vict) = GET_IDNUM(ch);
+        } else {
+          send_to_char("You feel your body heat slightly then return to normal.\r\n", vict);
+          send_to_char("You fail to generate enough heat in your target.\r\n", reflected ? vict : ch);
+        }
+        spell_drain(reflected ? vict : ch, spell, force, 0, direct_sustain);
+      }
+      break;
+    case SPELL_SHADOW:
+      {
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+        success = success_test(skill, 4 + target_modifiers);
+        if (success > 0) {
+          direct_sustain = create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
+          act("Dark shadows fall over the area.", FALSE, ch, 0, 0, TO_ROOM);
+          act("Dark shadows fall over the area as your spell takes affect.", FALSE, ch, 0, 0, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0, direct_sustain);
+      }
+      break;
+    case SPELL_CLOUT:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        if (would_become_killer(ch, vict)) {
+          send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+          return;
+        }
+
+        if (!AWAKE(vict))
+          target_modifiers -= 2;
+        else {
+          // Dodge test: You must be awake.
+          success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
+        }
+        success += success_test(skill, 4 + target_modifiers);
+
+        if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+          act("You have the KILLER flag, so you can't affect $N with clout.", TRUE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+        SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
+
+        send_to_char("You feel a rush of air head towards you!\r\n", vict);
+
+        if (success <= 0) {
+          act("Your clout spell harmlessly disperses as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
+          send_to_char("You easily dodge it!\r\n", vict);
+          act("$n dodges out of the way of unseen force.", TRUE, vict, 0, ch, TO_NOTVICT);
+        } else {
+          success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - GET_IMPACT(vict));
+          int dam = convert_damage(stage(success, basedamage));
+          if (!AWAKE(vict)) {
+            act("$n's body recoils as though hit.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You feel a dull thud in the back of your mind.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+            act("$n is thrown to the ground, unconscious, from an immense invisible force.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("It slams into you with the force of a freight train, knocking you to the ground, unconscious.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+            act("$n stumbles backwards, almost losing $s footing, as $e is hit by an invisible force.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You stumble backwards, feeling groggy as the air slams into you at full force.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+            act("$n steps back, and shakes $s head to clear it.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You step back as the force hits you, feeling a little worse for wear.\r\n", vict);
+          } else if (dam > 0) {
+            act("$n recoils, as if from a light punch.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You feel as though a fist strikes you across the face.\r\n", vict);
+          } else {
+            send_to_char("It rushes past you, not causing any damage.\r\n", vict);
+            act("$n doesn't seem hurt by your clout spell.", FALSE, vict, 0, ch, TO_VICT);
+          }
+          if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
+            // We only care about updating last_hit for non-dead characters.
+            if (IS_NPC(vict) && !IS_NPC(ch))
+              GET_LASTHIT(vict) = GET_IDNUM(ch);
+          }
+          else if (cast_by_npc) {
+            // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+            return;
+          }
+        }
+        spell_drain(ch, spell, force, basedamage);
+      }
+      break;
+    case SPELL_FLAMETHROWER:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        if (would_become_killer(ch, vict)) {
+          send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+          return;
+        }
+
+        if (!AWAKE(vict))
+          target_modifiers -= 2;
+        else
+          success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
+        if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+          act("You have the KILLER flag, so you can't affect $N with flamethrower.", TRUE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+        SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
+
+        act("$n's hands seem to spontaneously combust as $e directs a stream of flame at $N!", TRUE, ch, 0, vict, TO_ROOM);
+
+        success += success_test(skill, 4 + target_modifiers);
+        if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
+          vict = ch;
+          ch = temp;
+        }
+        if (success <= 0) {
+          act("$n dodges the flames, which disperse as they past $m.", FALSE, vict, 0, 0, TO_ROOM);
+          send_to_char("You easily dodge the flames!\r\n", vict);
+        } else {
+          success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
+          int dam = convert_damage(stage(success, basedamage));
+          if (!AWAKE(vict)) {
+            act("$n spasms as the flames hit $m.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+            act("$n is hit full force by the intense flames causing $m to fall to the ground, gurgling.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("The flames burn intensely around you, your last memory before falling unconscious is the hideous pain.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+            act("$n screams as the flames impact $s body, horribly burning $m.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("The flames crash into you, causing you great pain as they horribly burn you.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+            act("$n cringes as the flames hit, patting at the spots where the flame continues to burn.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("As the flames hit you quickly pat at the spots that continue to burn, causing searing pain.\r\n", vict);
+          } else if (dam > 0) {
+            act("The flames burst around $m, causing seemingly little damage.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("The flames burst around you causing you slight pain as it burns some of your hair.\r\n", vict);
+          } else {
+            act("The flames impact $m, but disperse on impact.", FALSE, vict, 0, ch, TO_ROOM);
+            send_to_char("The flames rapidly disperse around you, causing only mild discomfort.\r\n", vict);
+          }
+
+          if (dam > 0) {
+            if (IS_NPC(ch) || IS_NPC(vict)) {
+              damage_equip(ch, vict, force, TYPE_FIRE);
+            }
+
+            if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
+              if (number(0, 8) <= basedamage + 1) {
+                act("^RThe flames continue to burn around $m!^N", TRUE, vict, 0, 0, TO_ROOM);
+                send_to_char("^RYou continue to burn!\r\n", vict);
+                int rolled_fire_duration = srdice() + 1;
+                GET_CHAR_FIRE_DURATION(vict) = MIN(force, rolled_fire_duration);
+                GET_CHAR_FIRE_BONUS_DAMAGE(vict) = (int) (force / 6);
+                GET_CHAR_FIRE_CAUSED_BY_PC(vict) = !IS_NPC(ch);
+              }
+
+              if (IS_NPC(vict) && !IS_NPC(ch))
+                GET_LASTHIT(vict) = GET_IDNUM(ch);
+            }
+            else if (reflected || cast_by_npc) {
+              // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+              return;
+            }
+          }
+        }
+        spell_drain(reflected ? vict : ch, spell, force, basedamage);
+      }
+      break;
+    case SPELL_ACIDSTREAM:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        if (would_become_killer(ch, vict)) {
+          send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+          return;
+        }
+
+        if (!AWAKE(vict))
+          target_modifiers -= 2;
+        else
+          success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
+
+        if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+          act("You have the KILLER flag, so you can't affect $N with acid stream.", TRUE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+        SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
+        act("Dark clouds form around $n moments before it condenses into a dark sludge and flies towards $N!", TRUE, ch, 0, vict, TO_ROOM);
+
+        success += success_test(skill, 4 + target_modifiers);
+        // Known bug: Adept sidestep and the defense test don't reply to the reflected spell.
+        if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
+          vict = ch;
+          ch = temp;
+        }
+        if (success <= 0) {
+          act("$n dodges the acid, which evaporates as it passes $m.", FALSE, vict, 0, 0, TO_ROOM);
+          send_to_char("You easily dodge the acid!\r\n", vict);
+        } else {
+          success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
+          int dam = convert_damage(stage(success, basedamage));
+          if (!AWAKE(vict)) {
+            act("$n spasms as the acid hits $m.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+            act("As the acid hits $n $e falls to the ground twitching and screaming as $s body smokes.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("The fumes from the acid burning through your body fill your lungs, burning you from the inside out as you fade into unconsciousness.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+            act("The acid hits $n, $e cries out in pain as trails of smoke come from $s body.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("The acid impacts you with a great force, causing you to step back as it burns through your skin.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+            act("$n cringes as the acid hits.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("The acid begins to burn your skin as it hits you, causing a bit of pain.\r\n", vict);
+          } else if (dam > 0) {
+            act("$n is splashed by the acid, causing nothing but mild irritation.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("The acid splashes against you causing a mild burning sensation.\r\n", vict);
+          } else {
+            act("The acid splashes on $n, but $e doesn't seem to flinch.", FALSE, vict, 0, ch, TO_ROOM);
+            send_to_char("You are splashed by the acid, but it causes nothing more than a moment's irritation.\r\n", vict);
+          }
+
+          if (IS_NPC(ch) || IS_NPC(vict)) {
+            damage_equip(ch, vict, force, TYPE_ACID);
+          }
+
+          AFF_FLAGS(vict).SetBit(AFF_ACID);
+          if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
+            if (IS_NPC(vict) && !IS_NPC(ch))
+              GET_LASTHIT(vict) = GET_IDNUM(ch);
+          }
+          else if (reflected || cast_by_npc) {
+            // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+            return;
+          }
+        }
+        spell_drain(reflected ? vict : ch, spell, force, basedamage);
+      }
+      break;
+    case SPELL_LIGHTNINGBOLT:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        if (would_become_killer(ch, vict)) {
+          send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+          return;
+        }
+
+        if (!AWAKE(vict))
+          target_modifiers -= 2;
+        else {
+          // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
+          success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
+        }
+        if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+          act("You have the KILLER flag, so you can't affect $N with lightning bolt.", TRUE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+        SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
+        act("Lightning bursts forth from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
+
+        success += success_test(skill, 4 + target_modifiers);
+        // Known bug: Defense test does not apply to reflected spell.
+        if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
+          vict = ch;
+          ch = temp;
+        }
+        if (success <= 0) {
+          act("$n easily dodges it, and it vanishes to nothing.", FALSE, vict, 0, 0, TO_ROOM);
+          send_to_char("You easily dodge it!\r\n", vict);
+        } else {
+          success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
+          int dam = convert_damage(stage(success, basedamage));
+          if (!AWAKE(vict)) {
+            act("$n's body goes into convulsions as the lightning flows through it.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+            act("$n is propelled backwards by the force of the lightning bolt, $s body smoking as it lands, not a sign of life from it.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You feel your body begin to spasm as the huge charge of electricity fries your nervous system.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+            act("$n is almost lifted in the air by the lightning, spasms filling $s body, as a thin trail of smoke rises from $m.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("Your body is filled with pain as the lightning hits you, your limbs going into an uncontrollable seizure.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+            act("$n spasms as the lightning hits $m, $s body wracked with spasms as the lightning dissipates.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("Pain flashes through your body as the lightning hits, your body wracked with several serious spasms.\r\n", vict);
+          } else if (dam > 0) {
+            act("$n visibly recoils as the lightning hits, but otherwise seems fine.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You recoil as the lightning hits you, your mind going fuzzy for a moment.\r\n", vict);
+          } else {
+            act("The lightning hits $n, but seems to be easily absorbed.", FALSE, vict, 0, ch, TO_ROOM);
+            send_to_char("Your body absorbs the lightning without harm.\r\n", vict);
+          }
+
+          // Lightning cascades to all electronic/computerized items worn (50% chance of damage for each).
+          for (int i = 0; i < NUM_WEARS; i++) {
+            struct obj_data *eq = GET_EQ(vict, i);
+            if (number(0, 1) && eq && (GET_OBJ_MATERIAL(eq) == MATERIAL_ELECTRONICS || GET_OBJ_MATERIAL(eq) == MATERIAL_COMPUTERS)) {
+              damage_obj(vict, eq, force, DAMOBJ_LIGHTNING);
+            }
+          }
+
+          if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
+            if (IS_NPC(vict) && !IS_NPC(ch))
+              GET_LASTHIT(vict) = GET_IDNUM(ch);
+          }
+          else if (reflected || cast_by_npc) {
+            // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+            return;
+          }
+        }
+        spell_drain(reflected ? vict : ch, spell, force, basedamage);
+      }
+      break;
+    case SPELL_LASER:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        if (would_become_killer(ch, vict)) {
+          send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+          return;
+        }
+
+        if (!AWAKE(vict))
+          target_modifiers -= 2;
+        else {
+          // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
+          success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
+        }
+        if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+          act("You have the KILLER flag, so you can't affect $N with your laser.", TRUE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+        SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
+        act("A thin laser beam is emitted from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
+
+        success += success_test(skill, 4 + target_modifiers);
+        // Known bug: Defense test does not apply when reflected.
+        if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
+          vict = ch;
+          ch = temp;
+        }
+        if (success <= 0) {
+          act("$n easily dodges it, and the beam flickers and vanishes.", FALSE, vict, 0, 0, TO_ROOM);
+          send_to_char("You easily dodge it!\r\n", vict);
+        } else {
+          success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
+          int dam = convert_damage(stage(success, basedamage));
+          if (!AWAKE(vict)) {
+            act("$n's body recoils in pain as the laser beam finds its mark.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You feel an extremely uncomfortable and painful burning sensation.\r\n", vict);
+          } else if (GET_PHYSICAL(vict) - (dam * 100) <= 0) {
+            act("$n is cleanly pierced by the laser beam, the hole cut in $s body smoking as they drop like a rock.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You feel your body cleanly pierced by the laser beam, which leaves a smoking hole in your body.\r\n", vict);
+          } else if (GET_PHYSICAL(vict) - (dam * 100) <= 300) {
+            act("$n is almost pierced by the laser beam, pain filling $s body as a thin wisp of smoke rises from $m.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("Your body is filled with intense pain as the laser beam strikes you, inflicting a cauterized wound.\r\n", vict);
+          } else if (GET_PHYSICAL(vict) - (dam * 100) <= 700) {
+            act("$n jolts back as the laser strikes $m, $s body shuddering in pain as the laser beam dissipates.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("Pain flashes through your body as the laser strikes, your body shuddering at the intense heat.\r\n", vict);
+          } else if (dam > 0) {
+            act("$n visibly flinches as the laser connects, but otherwise seems fine.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You flinch as the laser strikes you, feeling an intense heat for a moment.\r\n", vict);
+          } else {
+            act("The laser beam strikes $n, but seems to be easily absorbed.", FALSE, vict, 0, ch, TO_ROOM);
+            send_to_char("Your body absorbs the laser beam without injury.\r\n", vict);
+          }
+
+          // Lasers can pierce multiple worn objects. 1/51 chance per item.
+          for (int i = 0; i < NUM_WEARS; i++) {
+            struct obj_data *eq = GET_EQ(vict, i);
+            if (eq && !number(0, 50))
+              damage_obj(vict, eq, force, DAMOBJ_PIERCE);
+          }
+
+          if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
+            if (IS_NPC(vict) && !IS_NPC(ch))
+              GET_LASTHIT(vict) = GET_IDNUM(ch);
+          }
+          else if (reflected || cast_by_npc) {
+            // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+            return;
+          }
+        }
+        spell_drain(reflected ? vict : ch, spell, force, basedamage);
+      }
+      break;
+    case SPELL_STEAM:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        if (would_become_killer(ch, vict)) {
+          send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+          return;
+        }
+
+        if (!AWAKE(vict))
+          target_modifiers -= 2;
+        else {
+          // Dodge test: You must be awake.
+          success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
+        }
+        success += success_test(skill, 4 + target_modifiers);
+
+        if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+          act("You have the KILLER flag, so you can't affect $N with your steam cloud.", TRUE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+        SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
+
+        send_to_char("You see a cloud of steam vapours rush towards you!\r\n", vict);
+
+        if (success <= 0) {
+          act("Your steam spell harmlessly evaporates as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
+          send_to_char("You easily dodge it!\r\n", vict);
+          act("$n dodges out of the way of a cloud of steam.", TRUE, vict, 0, ch, TO_NOTVICT);
+        } else {
+          success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
+          int dam = convert_damage(stage(success, basedamage));
+          if (!AWAKE(vict)) {
+            act("$n's body reels from the blast of steam.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You feel lightheaded from the blast of steam.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+            act("$n chokes and collapses to the ground, unconscious, from the steam vapours.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("It slams into you and robs the breath from your lungs, choking you into unconsciousness.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+            act("$n flounders backwards, almost losing $s footing, as $e is choked by the steam cloud.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You flounder backwards, feeling lightheaded as the steam threatens to choke you.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+            act("$n steps back and coughs a few times to catch their breath.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You step back as the steam hits you, feeling a little short on oxygen.\r\n", vict);
+          } else if (dam > 0) {
+            act("$n blanches as they're exposed briefly to the steam.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You blanch as the feeling of hot steam washes over your face.\r\n", vict);
+          } else {
+            send_to_char("It rushes past you, not causing any damage.\r\n", vict);
+            act("$n doesn't seem hurt by your steam spell.", FALSE, vict, 0, ch, TO_VICT);
+          }
+          if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
+            if (IS_NPC(vict) && !IS_NPC(ch))
+              GET_LASTHIT(vict) = GET_IDNUM(ch);
+          }
+          else if (reflected || cast_by_npc) {
+            // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+            return;
+          }
+        }
+        spell_drain(ch, spell, force, basedamage);
+      }
+      break;
+    case SPELL_THUNDERBOLT:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        if (would_become_killer(ch, vict)) {
+          send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+          return;
+        }
+
+        if (!AWAKE(vict))
+          target_modifiers -= 2;
+        else {
+          // Dodge test: You must be awake.
+          success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
+        }
+        success += success_test(skill, 4 + target_modifiers);
+
+        if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+          act("You have the KILLER flag, so you can't affect $N with thunderbolt.", TRUE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+        SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
+
+        send_to_char("The air around you explodes into a deafening roar!\r\n", vict);
+
+        if (success <= 0) {
+          act("Your thunderbolt spell harmlessly echoes as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
+          send_to_char("You easily dodge it!\r\n", vict);
+          act("$n dodges out of the way of the concussive blast.", TRUE, vict, 0, ch, TO_NOTVICT);
+        } else {
+          success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
+          int dam = convert_damage(stage(success, basedamage));
+          if (!AWAKE(vict)) {
+            act("$n's shudders from the concussive blast.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You feel dizzy from the concussive blast.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+            act("$n is violently thrown to the ground, rendered unconscious from the blast.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("It slams into you and rattles your brain and organs, rendering you unconsciousness.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+            act("$n is shoved backwards, almost losing $s footing as the blast washes over them.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You're shoved backwards from the intensity of the concussive blast.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+            act("$n is shoved back and has to shake their head to get their bearings.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You're shoved back as the concussive blast hits you, feeling a bit shaken up.\r\n", vict);
+          } else if (dam > 0) {
+            act("$n flinches as the blast passes by them.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You flinch as the blast passes by you.\r\n", vict);
+          } else {
+            send_to_char("It rolls past you, not causing any damage.\r\n", vict);
+            act("$n doesn't seem hurt by your thunderbolt spell.", FALSE, vict, 0, ch, TO_VICT);
+          }
+          if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
+            if (IS_NPC(vict) && !IS_NPC(ch))
+              GET_LASTHIT(vict) = GET_IDNUM(ch);
+          }
+          else if (reflected || cast_by_npc) {
+            // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+            return;
+          }
+        }
+        spell_drain(ch, spell, force, basedamage);
+      }
+      break;
+    case SPELL_WATERBOLT:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        if (would_become_killer(ch, vict)) {
+          send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
+          return;
+        }
+
+        if (!AWAKE(vict))
+          target_modifiers -= 2;
+        else {
+          // Dodge test: You must be awake.
+          success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
+        }
+        success += success_test(skill, 4 + target_modifiers);
+
+        if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
+          act("You have the KILLER flag, so you can't affect $N with waterbolt.", TRUE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+        SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
+
+        send_to_char("You see a bolt of water head towards you!\r\n", vict);
+
+        if (success <= 0) {
+          act("Your waterbolt spell harmlessly evaporates as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
+          send_to_char("You easily dodge it!\r\n", vict);
+          act("$n dodges out of the way of the bolt of water.", TRUE, vict, 0, ch, TO_NOTVICT);
+        } else {
+          success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
+          int dam = convert_damage(stage(success, basedamage));
+          if (!AWAKE(vict)) {
+            act("$n's stumbles as they're splashed with water.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You stumble back as the bolt of water connects.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+            act("$n is knocked to the ground, unconscious, from the force of the rushing water.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("It slams into you like a sack of bricks, knocking you to the ground, unconscious.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+            act("$n stumbles backwards, almost losing $s footing, as $e is hit by the bolt of water.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You stumble backwards, absolutely drenched as the water slams into you at full force.\r\n", vict);
+          } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+            act("$n steps back, and shakes $s limbs to dry off.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You step back as the water hits you, feeling like you swam a mile.\r\n", vict);
+          } else if (dam > 0) {
+            act("$n stumbles, knocked off balance by the water bolt.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("You feel the water bolt strike you and splash across your face.\r\n", vict);
+          } else {
+            send_to_char("It rushes past you, not causing any damage.\r\n", vict);
+            act("$n doesn't seem hurt by your waterbolt spell.", FALSE, vict, 0, ch, TO_VICT);
+          }
+          if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
+            if (IS_NPC(vict) && !IS_NPC(ch))
+              GET_LASTHIT(vict) = GET_IDNUM(ch);
+          }
+          else if (reflected || cast_by_npc) {
+            // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
+            return;
+          }
+        }
+        spell_drain(ch, spell, force, basedamage);
+      }
+      break;
+    case SPELL_FLAME_AURA:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        // No double-aura-ing.
+        if (MOB_FLAGGED(vict, MOB_FLAMEAURA)) {
+          send_to_char("They already have a flame aura.\r\n", ch);
+          return;
+        }
+
+        // Specific message checking if they're already affected by the flag.
+        for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
+          if (!sust->caster && (sust->spell == SPELL_FLAME_AURA)) {
+            send_to_char("They already have a flame aura.\r\n", ch);
+            return;
+          }
+        }
+
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+
+        if (ritual_successes > 0) {
+          success = ritual_successes;
+        } else {
+          success = success_test(skill, 4 + target_modifiers);
+        }
+
+        if (success > 0 && !AFF_FLAGGED(ch, AFF_FLAME_AURA)) {
+          create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          act("$n's body is enveloped in an aura of fierce flames.", TRUE, vict, 0, 0, TO_ROOM);
+          send_to_char("Your body is enveloped in an aura of fierce flames.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0);
+      }
+      break;
+    case SPELL_LEVITATE:
+      {
+        if (!check_spell_victim(ch, vict, spell, arg))
+          return;
+
+        if (AFF_FLAGGED(vict, AFF_LEVITATE)) {
+          act("$N is already affected by the levitate spell.", FALSE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+
+        WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
+        
+        if (ritual_successes > 0) {
+          success = ritual_successes;
+        } else {
+          success = success_test(skill, 4 + target_modifiers);
+        }
+
+        if (success > 0) {
+          char msg_buf[500];
+          snprintf(msg_buf, sizeof(msg_buf), "$n's feet gently lift off from the ground as $e begin%s to levitate.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
+          act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
+          send_to_char("Your feet gently lift off from the ground as you begin to levitate.\r\n", vict);
+          act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+          create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        } else
+          send_to_char(FAILED_CAST, ch);
+        spell_drain(ch, spell, force, 0);
+      }
+      break;
+  }
+}
+
+void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *arg, struct char_data *mob) {
+  struct char_data *vict = NULL;
+  int basedamage = 0;
+
   switch (spell)
   {
     case SPELL_LASER:
@@ -2264,727 +3174,8 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       else if (*arg)
         vict = get_char_room_vis(ch, arg);
   }
-  if (find_duplicate_spell(ch, vict, spell, 0))
-    return;
 
-  // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
-  char rbuf[MAX_STRING_LENGTH];
-  strlcpy(rbuf, "cast_manipulation_spell modify_target_rbuf: ", sizeof(rbuf));
-  int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
-  act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
-
-  int success = 0;
-  int skill;
-  if (IS_ANY_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
-    skill = GET_LEVEL(ch);
-  } else {
-    skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch));
-    spell_bonus(ch, spell, skill, target_modifiers);
-  }
-
-  if (skill == -1)
-    return;
-  struct char_data *temp = vict;
-  switch (spell)
-  {
-  case SPELL_ARMOR:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-    success = success_test(skill, 6 + target_modifiers);
-    if (success > 0) {
-      direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      send_to_char("You feel your body tingle.\r\n", vict);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0, direct_sustain);
-    break;
-  case SPELL_POLTERGEIST:
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-    success = success_test(skill, 4 + target_modifiers);
-    if (success > 0) {
-      direct_sustain = create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
-      act("An invisible wind begins to spin small objects around the area!", FALSE, ch, 0, 0, TO_ROOM);
-      act("An invisible wind begins to spin small objects around the area!", FALSE, ch, 0, 0, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0, direct_sustain);
-    break;
-  case SPELL_LIGHT:
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-    success = success_test(skill, 4 + target_modifiers);
-    if (success > 0) {
-      direct_sustain = create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
-      act("Light radiates from $n, illuminating the area!", FALSE, ch, 0, 0, TO_ROOM);
-      act("The area brightens as your light spell takes affect!", FALSE, ch, 0, 0, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0, direct_sustain);
-    break;
-  case SPELL_ICESHEET:
-    if (!ch->in_room) {
-      send_to_char("You can't create ice in here!\r\n", ch);
-      return;
-    }
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-    success = success_test(skill, 4 + target_modifiers);
-    if (success > 0) {
-      ch->in_room->icesheet[0] = (int)(3.14 * ((GET_MAG(ch) * GET_MAG(ch)) / 10000));
-      ch->in_room->icesheet[1] = force + MIN(force, success / 2);
-      act("The floor is suddenly covered in ice!", FALSE, ch, 0, 0, TO_ROOM);
-      act("The floor is suddenly covered in ice!", FALSE, ch, 0, 0, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
-  case SPELL_IGNITE:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    if (would_become_killer(ch, vict)) {
-      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
-      return;
-    }
-
-    if (ch == vict) {
-      send_to_char("You can't target yourself with a damaging manipulation spell!\r\n", ch);
-      return;
-    }
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
-      act("You have the KILLER flag, so you can't affect $N with ignite.", TRUE, ch, 0, vict, TO_CHAR);
-      return;
-    }
-    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-
-    success = success_test(skill, 4 + target_modifiers);
-    if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
-      vict = ch;
-      ch = temp;
-    }
-    success -= resist_spell(vict, spell, force, 0);
-    success -= GET_BOD(vict) / 2;
-
-    if (success > 0) {
-      send_to_char("You feel the room temperature sharply rise.\r\n", vict);
-      act("You succeed in raising the body temperature of $N to dangerous levels.", FALSE, ch, 0, vict, TO_CHAR);
-      direct_sustain = create_sustained(ch, vict, spell, force, 0, success, MAX(1, 10 / MIN(force, success)));
-      if (!FIGHTING(vict) && vict != ch && AWAKE(vict))
-        set_fighting(vict, ch);
-      if (IS_NPC(vict) && !IS_NPC(ch))
-        GET_LASTHIT(vict) = GET_IDNUM(ch);
-    } else {
-      send_to_char("You feel your body heat slightly then return to normal.\r\n", vict);
-      send_to_char("You fail to generate enough heat in your target.\r\n", reflected ? vict : ch);
-    }
-    spell_drain(reflected ? vict : ch, spell, force, 0, direct_sustain);
-    break;
-  case SPELL_SHADOW:
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-    success = success_test(skill, 4 + target_modifiers);
-    if (success > 0) {
-      direct_sustain = create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
-      act("Dark shadows fall over the area.", FALSE, ch, 0, 0, TO_ROOM);
-      act("Dark shadows fall over the area as your spell takes affect.", FALSE, ch, 0, 0, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0, direct_sustain);
-    break;
-  case SPELL_CLOUT:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    if (would_become_killer(ch, vict)) {
-      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
-      return;
-    }
-
-    if (!AWAKE(vict))
-      target_modifiers -= 2;
-    else {
-      // Dodge test: You must be awake.
-      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
-    }
-    success += success_test(skill, 4 + target_modifiers);
-
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
-      act("You have the KILLER flag, so you can't affect $N with clout.", TRUE, ch, 0, vict, TO_CHAR);
-      return;
-    }
-    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-
-    send_to_char("You feel a rush of air head towards you!\r\n", vict);
-
-    if (success <= 0) {
-      act("Your clout spell harmlessly disperses as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
-      send_to_char("You easily dodge it!\r\n", vict);
-      act("$n dodges out of the way of unseen force.", TRUE, vict, 0, ch, TO_NOTVICT);
-    } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - GET_IMPACT(vict));
-      int dam = convert_damage(stage(success, basedamage));
-      if (!AWAKE(vict)) {
-        act("$n's body recoils as though hit.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel a dull thud in the back of your mind.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-        act("$n is thrown to the ground, unconscious, from an immense invisible force.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("It slams into you with the force of a freight train, knocking you to the ground, unconscious.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
-        act("$n stumbles backwards, almost losing $s footing, as $e is hit by an invisible force.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You stumble backwards, feeling groggy as the air slams into you at full force.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
-        act("$n steps back, and shakes $s head to clear it.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You step back as the force hits you, feeling a little worse for wear.\r\n", vict);
-      } else if (dam > 0) {
-        act("$n recoils, as if from a light punch.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel as though a fist strikes you across the face.\r\n", vict);
-      } else {
-        send_to_char("It rushes past you, not causing any damage.\r\n", vict);
-        act("$n doesn't seem hurt by your clout spell.", FALSE, vict, 0, ch, TO_VICT);
-      }
-      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
-        // We only care about updating last_hit for non-dead characters.
-        if (IS_NPC(vict) && !IS_NPC(ch))
-          GET_LASTHIT(vict) = GET_IDNUM(ch);
-      }
-      else if (cast_by_npc) {
-        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
-        return;
-      }
-    }
-    spell_drain(ch, spell, force, basedamage);
-    break;
-  case SPELL_FLAMETHROWER:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    if (would_become_killer(ch, vict)) {
-      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
-      return;
-    }
-
-    if (!AWAKE(vict))
-      target_modifiers -= 2;
-    else
-      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
-      act("You have the KILLER flag, so you can't affect $N with flamethrower.", TRUE, ch, 0, vict, TO_CHAR);
-      return;
-    }
-    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-
-    act("$n's hands seem to spontaneously combust as $e directs a stream of flame at $N!", TRUE, ch, 0, vict, TO_ROOM);
-
-    success += success_test(skill, 4 + target_modifiers);
-    if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
-      vict = ch;
-      ch = temp;
-    }
-    if (success <= 0) {
-      act("$n dodges the flames, which disperse as they past $m.", FALSE, vict, 0, 0, TO_ROOM);
-      send_to_char("You easily dodge the flames!\r\n", vict);
-    } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
-      int dam = convert_damage(stage(success, basedamage));
-      if (!AWAKE(vict)) {
-        act("$n spasms as the flames hit $m.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-        act("$n is hit full force by the intense flames causing $m to fall to the ground, gurgling.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("The flames burn intensely around you, your last memory before falling unconscious is the hideous pain.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
-        act("$n screams as the flames impact $s body, horribly burning $m.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("The flames crash into you, causing you great pain as they horribly burn you.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
-        act("$n cringes as the flames hit, patting at the spots where the flame continues to burn.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("As the flames hit you quickly pat at the spots that continue to burn, causing searing pain.\r\n", vict);
-      } else if (dam > 0) {
-        act("The flames burst around $m, causing seemingly little damage.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("The flames burst around you causing you slight pain as it burns some of your hair.\r\n", vict);
-      } else {
-        act("The flames impact $m, but disperse on impact.", FALSE, vict, 0, ch, TO_ROOM);
-        send_to_char("The flames rapidly disperse around you, causing only mild discomfort.\r\n", vict);
-      }
-
-      if (dam > 0) {
-        if (IS_NPC(ch) || IS_NPC(vict)) {
-          damage_equip(ch, vict, force, TYPE_FIRE);
-        }
-
-        if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
-          if (number(0, 8) <= basedamage + 1) {
-            act("^RThe flames continue to burn around $m!^N", TRUE, vict, 0, 0, TO_ROOM);
-            send_to_char("^RYou continue to burn!\r\n", vict);
-            int rolled_fire_duration = srdice() + 1;
-            GET_CHAR_FIRE_DURATION(vict) = MIN(force, rolled_fire_duration);
-            GET_CHAR_FIRE_BONUS_DAMAGE(vict) = (int) (force / 6);
-            GET_CHAR_FIRE_CAUSED_BY_PC(vict) = !IS_NPC(ch);
-          }
-
-          if (IS_NPC(vict) && !IS_NPC(ch))
-            GET_LASTHIT(vict) = GET_IDNUM(ch);
-        }
-        else if (reflected || cast_by_npc) {
-          // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
-          return;
-        }
-      }
-    }
-    spell_drain(reflected ? vict : ch, spell, force, basedamage);
-    break;
-  case SPELL_ACIDSTREAM:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    if (would_become_killer(ch, vict)) {
-      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
-      return;
-    }
-
-    if (!AWAKE(vict))
-      target_modifiers -= 2;
-    else
-      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
-
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
-      act("You have the KILLER flag, so you can't affect $N with acid stream.", TRUE, ch, 0, vict, TO_CHAR);
-      return;
-    }
-    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-    act("Dark clouds form around $n moments before it condenses into a dark sludge and flies towards $N!", TRUE, ch, 0, vict, TO_ROOM);
-
-    success += success_test(skill, 4 + target_modifiers);
-    // Known bug: Adept sidestep and the defense test don't reply to the reflected spell.
-    if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
-      vict = ch;
-      ch = temp;
-    }
-    if (success <= 0) {
-      act("$n dodges the acid, which evaporates as it passes $m.", FALSE, vict, 0, 0, TO_ROOM);
-      send_to_char("You easily dodge the acid!\r\n", vict);
-    } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
-      int dam = convert_damage(stage(success, basedamage));
-      if (!AWAKE(vict)) {
-        act("$n spasms as the acid hits $m.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-        act("As the acid hits $n $e falls to the ground twitching and screaming as $s body smokes.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("The fumes from the acid burning through your body fill your lungs, burning you from the inside out as you fade into unconsciousness.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
-        act("The acid hits $n, $e cries out in pain as trails of smoke come from $s body.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("The acid impacts you with a great force, causing you to step back as it burns through your skin.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
-        act("$n cringes as the acid hits.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("The acid begins to burn your skin as it hits you, causing a bit of pain.\r\n", vict);
-      } else if (dam > 0) {
-        act("$n is splashed by the acid, causing nothing but mild irritation.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("The acid splashes against you causing a mild burning sensation.\r\n", vict);
-      } else {
-        act("The acid splashes on $n, but $e doesn't seem to flinch.", FALSE, vict, 0, ch, TO_ROOM);
-        send_to_char("You are splashed by the acid, but it causes nothing more than a moment's irritation.\r\n", vict);
-      }
-
-      if (IS_NPC(ch) || IS_NPC(vict)) {
-        damage_equip(ch, vict, force, TYPE_ACID);
-      }
-
-      AFF_FLAGS(vict).SetBit(AFF_ACID);
-      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
-        if (IS_NPC(vict) && !IS_NPC(ch))
-          GET_LASTHIT(vict) = GET_IDNUM(ch);
-      }
-      else if (reflected || cast_by_npc) {
-        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
-        return;
-      }
-    }
-    spell_drain(reflected ? vict : ch, spell, force, basedamage);
-    break;
-  case SPELL_LIGHTNINGBOLT:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    if (would_become_killer(ch, vict)) {
-      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
-      return;
-    }
-
-    if (!AWAKE(vict))
-      target_modifiers -= 2;
-    else {
-      // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
-      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
-    }
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
-      act("You have the KILLER flag, so you can't affect $N with lightning bolt.", TRUE, ch, 0, vict, TO_CHAR);
-      return;
-    }
-    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-    act("Lightning bursts forth from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
-
-    success += success_test(skill, 4 + target_modifiers);
-    // Known bug: Defense test does not apply to reflected spell.
-    if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
-      vict = ch;
-      ch = temp;
-    }
-    if (success <= 0) {
-      act("$n easily dodges it, and it vanishes to nothing.", FALSE, vict, 0, 0, TO_ROOM);
-      send_to_char("You easily dodge it!\r\n", vict);
-    } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
-      int dam = convert_damage(stage(success, basedamage));
-      if (!AWAKE(vict)) {
-        act("$n's body goes into convulsions as the lightning flows through it.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-        act("$n is propelled backwards by the force of the lightning bolt, $s body smoking as it lands, not a sign of life from it.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel your body begin to spasm as the huge charge of electricity fries your nervous system.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
-        act("$n is almost lifted in the air by the lightning, spasms filling $s body, as a thin trail of smoke rises from $m.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Your body is filled with pain as the lightning hits you, your limbs going into an uncontrollable seizure.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
-        act("$n spasms as the lightning hits $m, $s body wracked with spasms as the lightning dissipates.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Pain flashes through your body as the lightning hits, your body wracked with several serious spasms.\r\n", vict);
-      } else if (dam > 0) {
-        act("$n visibly recoils as the lightning hits, but otherwise seems fine.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You recoil as the lightning hits you, your mind going fuzzy for a moment.\r\n", vict);
-      } else {
-        act("The lightning hits $n, but seems to be easily absorbed.", FALSE, vict, 0, ch, TO_ROOM);
-        send_to_char("Your body absorbs the lightning without harm.\r\n", vict);
-      }
-
-      // Lightning cascades to all electronic/computerized items worn (50% chance of damage for each).
-      for (int i = 0; i < NUM_WEARS; i++) {
-        struct obj_data *eq = GET_EQ(vict, i);
-        if (number(0, 1) && eq && (GET_OBJ_MATERIAL(eq) == MATERIAL_ELECTRONICS || GET_OBJ_MATERIAL(eq) == MATERIAL_COMPUTERS)) {
-          damage_obj(vict, eq, force, DAMOBJ_LIGHTNING);
-        }
-      }
-
-      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
-        if (IS_NPC(vict) && !IS_NPC(ch))
-          GET_LASTHIT(vict) = GET_IDNUM(ch);
-      }
-      else if (reflected || cast_by_npc) {
-        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
-        return;
-      }
-    }
-    spell_drain(reflected ? vict : ch, spell, force, basedamage);
-    break;
-  case SPELL_LASER:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    if (would_become_killer(ch, vict)) {
-      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
-      return;
-    }
-
-    if (!AWAKE(vict))
-      target_modifiers -= 2;
-    else {
-      // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
-      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
-    }
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
-      act("You have the KILLER flag, so you can't affect $N with your laser.", TRUE, ch, 0, vict, TO_CHAR);
-      return;
-    }
-    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-    act("A thin laser beam is emitted from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
-
-    success += success_test(skill, 4 + target_modifiers);
-    // Known bug: Defense test does not apply when reflected.
-    if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
-      vict = ch;
-      ch = temp;
-    }
-    if (success <= 0) {
-      act("$n easily dodges it, and the beam flickers and vanishes.", FALSE, vict, 0, 0, TO_ROOM);
-      send_to_char("You easily dodge it!\r\n", vict);
-    } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
-      int dam = convert_damage(stage(success, basedamage));
-      if (!AWAKE(vict)) {
-        act("$n's body recoils in pain as the laser beam finds its mark.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel an extremely uncomfortable and painful burning sensation.\r\n", vict);
-      } else if (GET_PHYSICAL(vict) - (dam * 100) <= 0) {
-        act("$n is cleanly pierced by the laser beam, the hole cut in $s body smoking as they drop like a rock.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel your body cleanly pierced by the laser beam, which leaves a smoking hole in your body.\r\n", vict);
-      } else if (GET_PHYSICAL(vict) - (dam * 100) <= 300) {
-        act("$n is almost pierced by the laser beam, pain filling $s body as a thin wisp of smoke rises from $m.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Your body is filled with intense pain as the laser beam strikes you, inflicting a cauterized wound.\r\n", vict);
-      } else if (GET_PHYSICAL(vict) - (dam * 100) <= 700) {
-        act("$n jolts back as the laser strikes $m, $s body shuddering in pain as the laser beam dissipates.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Pain flashes through your body as the laser strikes, your body shuddering at the intense heat.\r\n", vict);
-      } else if (dam > 0) {
-        act("$n visibly flinches as the laser connects, but otherwise seems fine.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You flinch as the laser strikes you, feeling an intense heat for a moment.\r\n", vict);
-      } else {
-        act("The laser beam strikes $n, but seems to be easily absorbed.", FALSE, vict, 0, ch, TO_ROOM);
-        send_to_char("Your body absorbs the laser beam without injury.\r\n", vict);
-      }
-
-      // Lasers can pierce multiple worn objects. 1/51 chance per item.
-      for (int i = 0; i < NUM_WEARS; i++) {
-        struct obj_data *eq = GET_EQ(vict, i);
-        if (eq && !number(0, 50))
-          damage_obj(vict, eq, force, DAMOBJ_PIERCE);
-      }
-
-      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
-        if (IS_NPC(vict) && !IS_NPC(ch))
-          GET_LASTHIT(vict) = GET_IDNUM(ch);
-      }
-      else if (reflected || cast_by_npc) {
-        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
-        return;
-      }
-    }
-    spell_drain(reflected ? vict : ch, spell, force, basedamage);
-    break;
-  case SPELL_STEAM:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    if (would_become_killer(ch, vict)) {
-      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
-      return;
-    }
-
-    if (!AWAKE(vict))
-      target_modifiers -= 2;
-    else {
-      // Dodge test: You must be awake.
-      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
-    }
-    success += success_test(skill, 4 + target_modifiers);
-
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
-      act("You have the KILLER flag, so you can't affect $N with your steam cloud.", TRUE, ch, 0, vict, TO_CHAR);
-      return;
-    }
-    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-
-    send_to_char("You see a cloud of steam vapours rush towards you!\r\n", vict);
-
-    if (success <= 0) {
-      act("Your steam spell harmlessly evaporates as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
-      send_to_char("You easily dodge it!\r\n", vict);
-      act("$n dodges out of the way of a cloud of steam.", TRUE, vict, 0, ch, TO_NOTVICT);
-    } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
-      int dam = convert_damage(stage(success, basedamage));
-      if (!AWAKE(vict)) {
-        act("$n's body reels from the blast of steam.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel lightheaded from the blast of steam.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-        act("$n chokes and collapses to the ground, unconscious, from the steam vapours.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("It slams into you and robs the breath from your lungs, choking you into unconsciousness.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
-        act("$n flounders backwards, almost losing $s footing, as $e is choked by the steam cloud.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You flounder backwards, feeling lightheaded as the steam threatens to choke you.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
-        act("$n steps back and coughs a few times to catch their breath.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You step back as the steam hits you, feeling a little short on oxygen.\r\n", vict);
-      } else if (dam > 0) {
-        act("$n blanches as they're exposed briefly to the steam.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You blanch as the feeling of hot steam washes over your face.\r\n", vict);
-      } else {
-        send_to_char("It rushes past you, not causing any damage.\r\n", vict);
-        act("$n doesn't seem hurt by your steam spell.", FALSE, vict, 0, ch, TO_VICT);
-      }
-      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
-        if (IS_NPC(vict) && !IS_NPC(ch))
-          GET_LASTHIT(vict) = GET_IDNUM(ch);
-      }
-      else if (reflected || cast_by_npc) {
-        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
-        return;
-      }
-    }
-    spell_drain(ch, spell, force, basedamage);
-    break;
-  case SPELL_THUNDERBOLT:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    if (would_become_killer(ch, vict)) {
-      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
-      return;
-    }
-
-    if (!AWAKE(vict))
-      target_modifiers -= 2;
-    else {
-      // Dodge test: You must be awake.
-      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
-    }
-    success += success_test(skill, 4 + target_modifiers);
-
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
-      act("You have the KILLER flag, so you can't affect $N with thunderbolt.", TRUE, ch, 0, vict, TO_CHAR);
-      return;
-    }
-    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-
-    send_to_char("The air around you explodes into a deafening roar!\r\n", vict);
-
-    if (success <= 0) {
-      act("Your thunderbolt spell harmlessly echoes as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
-      send_to_char("You easily dodge it!\r\n", vict);
-      act("$n dodges out of the way of the concussive blast.", TRUE, vict, 0, ch, TO_NOTVICT);
-    } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
-      int dam = convert_damage(stage(success, basedamage));
-      if (!AWAKE(vict)) {
-        act("$n's shudders from the concussive blast.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel dizzy from the concussive blast.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-        act("$n is violently thrown to the ground, rendered unconscious from the blast.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("It slams into you and rattles your brain and organs, rendering you unconsciousness.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
-        act("$n is shoved backwards, almost losing $s footing as the blast washes over them.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You're shoved backwards from the intensity of the concussive blast.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
-        act("$n is shoved back and has to shake their head to get their bearings.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You're shoved back as the concussive blast hits you, feeling a bit shaken up.\r\n", vict);
-      } else if (dam > 0) {
-        act("$n flinches as the blast passes by them.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You flinch as the blast passes by you.\r\n", vict);
-      } else {
-        send_to_char("It rolls past you, not causing any damage.\r\n", vict);
-        act("$n doesn't seem hurt by your thunderbolt spell.", FALSE, vict, 0, ch, TO_VICT);
-      }
-      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
-        if (IS_NPC(vict) && !IS_NPC(ch))
-          GET_LASTHIT(vict) = GET_IDNUM(ch);
-      }
-      else if (reflected || cast_by_npc) {
-        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
-        return;
-      }
-    }
-    spell_drain(ch, spell, force, basedamage);
-    break;
-  case SPELL_WATERBOLT:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    if (would_become_killer(ch, vict)) {
-      send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
-      return;
-    }
-
-    if (!AWAKE(vict))
-      target_modifiers -= 2;
-    else {
-      // Dodge test: You must be awake.
-      success -= success_test(GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP), 4 + damage_modifier(vict, buf, sizeof(buf)));
-    }
-    success += success_test(skill, 4 + target_modifiers);
-
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict)) {
-      act("You have the KILLER flag, so you can't affect $N with waterbolt.", TRUE, ch, 0, vict, TO_CHAR);
-      return;
-    }
-    SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
-
-    send_to_char("You see a bolt of water head towards you!\r\n", vict);
-
-    if (success <= 0) {
-      act("Your waterbolt spell harmlessly evaporates as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
-      send_to_char("You easily dodge it!\r\n", vict);
-      act("$n dodges out of the way of the bolt of water.", TRUE, vict, 0, ch, TO_NOTVICT);
-    } else {
-      success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
-      int dam = convert_damage(stage(success, basedamage));
-      if (!AWAKE(vict)) {
-        act("$n's stumbles as they're splashed with water.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You stumble back as the bolt of water connects.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-        act("$n is knocked to the ground, unconscious, from the force of the rushing water.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("It slams into you like a sack of bricks, knocking you to the ground, unconscious.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
-        act("$n stumbles backwards, almost losing $s footing, as $e is hit by the bolt of water.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You stumble backwards, absolutely drenched as the water slams into you at full force.\r\n", vict);
-      } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
-        act("$n steps back, and shakes $s limbs to dry off.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You step back as the water hits you, feeling like you swam a mile.\r\n", vict);
-      } else if (dam > 0) {
-        act("$n stumbles, knocked off balance by the water bolt.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You feel the water bolt strike you and splash across your face.\r\n", vict);
-      } else {
-        send_to_char("It rushes past you, not causing any damage.\r\n", vict);
-        act("$n doesn't seem hurt by your waterbolt spell.", FALSE, vict, 0, ch, TO_VICT);
-      }
-      if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, MENTAL)) {
-        if (IS_NPC(vict) && !IS_NPC(ch))
-          GET_LASTHIT(vict) = GET_IDNUM(ch);
-      }
-      else if (reflected || cast_by_npc) {
-        // Janky crash avoidance: If we killed our target and we're an NPC, bail out immediately.
-        return;
-      }
-    }
-    spell_drain(ch, spell, force, basedamage);
-    break;
-  case SPELL_FLAME_AURA:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    // No double-aura-ing.
-    if (MOB_FLAGGED(vict, MOB_FLAMEAURA)) {
-      send_to_char("They already have a flame aura.\r\n", ch);
-      return;
-    }
-
-    // Specific message checking if they're already affected by the flag.
-    for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
-      if (!sust->caster && (sust->spell == SPELL_FLAME_AURA)) {
-        send_to_char("They already have a flame aura.\r\n", ch);
-        return;
-      }
-    }
-
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-
-    success = success_test(skill, 4 + target_modifiers);
-    if (success > 0 && !AFF_FLAGGED(ch, AFF_FLAME_AURA)) {
-      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      act("$n's body is enveloped in an aura of fierce flames.", TRUE, vict, 0, 0, TO_ROOM);
-      send_to_char("Your body is enveloped in an aura of fierce flames.\r\n", vict);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
-  case SPELL_LEVITATE:
-    if (!check_spell_victim(ch, vict, spell, arg))
-      return;
-
-    if (AFF_FLAGGED(vict, AFF_LEVITATE)) {
-      act("$N is already affected by the levitate spell.", FALSE, ch, 0, vict, TO_CHAR);
-      return;
-    }
-
-    WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
-    success = success_test(skill, 4 + target_modifiers);
-    if (success > 0) {
-      char msg_buf[500];
-      snprintf(msg_buf, sizeof(msg_buf), "$n's feet gently lift off from the ground as $e begin%s to levitate.", HSSH_SHOULD_PLURAL(ch) ? "s" : "");
-      act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
-      send_to_char("Your feet gently lift off from the ground as you begin to levitate.\r\n", vict);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
-  }
+  raw_cast_manipulation_spell(ch, vict, spell, force, mob, -1, basedamage);
 }
 
 void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg)
@@ -3803,75 +3994,6 @@ ACMD(do_release)
   send_to_char("You'll want to specify an spell number, an elemental/spirit number, or 'all'. HELP RELEASE for more.\r\n", ch);
 }
 
-bool spell_is_valid_ritual_spell(int spell) {
-  switch (spell) {
-    case SPELL_COMBATSENSE:
-    case SPELL_DECATTR:
-    case SPELL_DECCYATTR:
-    case SPELL_DETOX:
-    case SPELL_HEAL:
-    case SPELL_TREAT:
-    case SPELL_HEALTHYGLOW:
-    case SPELL_INCATTR:
-    case SPELL_INCCYATTR:
-    case SPELL_INCREA:
-    case SPELL_INCREF1:
-    case SPELL_INCREF2:
-    case SPELL_INCREF3:
-    case SPELL_PROPHYLAXIS:
-    case SPELL_RESISTPAIN:
-    case SPELL_STABILIZE:
-    case SPELL_INVIS:
-    case SPELL_IMP_INVIS:
-    case SPELL_MASK:
-    case SPELL_PHYSMASK:
-    case SPELL_STEALTH:
-    case SPELL_ARMOR:
-    case SPELL_NIGHTVISION:
-    case SPELL_INFRAVISION:
-    case SPELL_LEVITATE:
-    case SPELL_FLAME_AURA:
-      // You may ritual-cast these spells.
-      return TRUE;
-  }
-  return FALSE;
-}
-
-// Helper function for ritual spells. Returns TRUE if you can have this spell cast on you, FALSE otherwise.
-bool vict_meets_spell_preconditions(struct char_data *vict, int spell, int subtype) {
-  switch (spell) {
-    case SPELL_COMBATSENSE:
-    case SPELL_DECATTR:
-    case SPELL_DECCYATTR:
-    case SPELL_DETOX:
-    case SPELL_HEAL:
-    case SPELL_TREAT:
-    case SPELL_HEALTHYGLOW:
-    case SPELL_INCATTR:
-    case SPELL_INCCYATTR:
-    case SPELL_INCREA:
-    case SPELL_INCREF1:
-    case SPELL_INCREF2:
-    case SPELL_INCREF3:
-    case SPELL_PROPHYLAXIS:
-    case SPELL_RESISTPAIN:
-    case SPELL_STABILIZE:
-    case SPELL_INVIS:
-    case SPELL_IMP_INVIS:
-    case SPELL_MASK:
-    case SPELL_PHYSMASK:
-    case SPELL_STEALTH:
-    case SPELL_ARMOR:
-    case SPELL_NIGHTVISION:
-    case SPELL_INFRAVISION:
-    case SPELL_LEVITATE:
-    case SPELL_FLAME_AURA:
-      // TODO: Enable constraints.
-      break;
-  }
-  return TRUE;
-}
-
 ACMD(do_cast)
 {
   struct room_data *in_room = get_ch_in_room(ch);
@@ -3939,63 +4061,7 @@ ACMD(do_cast)
 
   // Restrictions for the houseruled ritual spell system.
   if (subcmd == SCMD_RITUAL_CAST) {
-    FAILURE_CASE(!in_room, "You can't quite figure out where to put things...\r\n");
-    FAILURE_CASE(IS_WORKING(ch), "You're too busy to cast a ritual spell.\r\n");
-    FAILURE_CASE(CH_IN_COMBAT(ch), "Ritual cast while fighting?? You ARE mad!\r\n");
-    FAILURE_CASE(IS_PROJECT(ch), "You can't manipulate physical objects in this form, so setting up a ritual space will be hard.\r\n");
-    FAILURE_CASE(!GET_APARTMENT(in_room), "Ritual casting requires an undisturbed place with room to move around-- you'll need to be in an apartment.\r\n");
-    FAILURE_CASE(GET_ROOM_VNUM(in_room) >= 6900 && GET_ROOM_VNUM(in_room) <= 6999, "You can't do that in NERPcorpolis.");
-    FAILURE_CASE(ch->in_veh, "Ritual casting requires more space to move around-- you'll need to leave your vehicle.\r\n");
-    FAILURE_CASE(!spell_is_valid_ritual_spell(spell->type), "That spell isn't eligible for ritual casting. You can only ritual-cast buffs.\r\n");
-
-    // Only one ritual at a time.
-    for (struct obj_data *obj = in_room->contents; obj; obj = obj->next_content) {
-      FAILURE_CASE(GET_OBJ_VNUM(obj) == OBJ_RITUAL_SPELL_COMPONENTS,
-                   "There's already a ritual in progress here. Either wait for it to finish, or ##^WDESTROY^n the components so you can begin your own.\r\n");
-    }
-
-    // Find the target.
-    struct char_data *vict = get_char_room_vis(ch, buf1);
-
-    if (!check_spell_victim(ch, vict, spell->type, buf1)) {
-      return;
-    }
-
-    FAILURE_CASE(IS_NPC(vict), "You can only cast ritual spells on player characters.");
-    FAILURE_CASE(ch != vict, "You can only cast ritual spells on yourself.");
-
-    // Charge them.
-    int cost = RITUAL_SPELL_COMPONENT_COST * force * MAX(1, spells[spell->type].drainpower);
-    int time_in_ticks = (RITUAL_SPELL_BASE_TIME * force * MAX(1, spells[spell->type].drainpower)) / (GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)));
-
-    if (GET_NUYEN(ch) < cost) {
-      send_to_char(ch, "You need at least %d nuyen on hand to pay for the ritual components.\r\n", cost);
-      return;
-    }
-    lose_nuyen(ch, cost, NUYEN_OUTFLOW_RITUAL_CASTING);
-
-    // Load the ritual casting tracking object.
-    AFF_FLAGS(ch).SetBit(AFF_RITUALCAST);
-    struct obj_data *components = read_object(OBJ_RITUAL_SPELL_COMPONENTS, VIRTUAL);
-
-    GET_RITUAL_COMPONENT_CASTER(components) = GET_IDNUM(ch);
-    GET_RITUAL_COMPONENT_SPELL(components) = spell->type;
-    GET_RITUAL_COMPONENT_SUBTYPE(components) = spell->subtype;
-    GET_RITUAL_COMPONENT_FORCE(components) = force;
-    GET_RITUAL_COMPONENT_TARGET(components) = GET_IDNUM(vict);
-    GET_RITUAL_TICKS_AT_START(components) = GET_RITUAL_TICKS_LEFT(components) = time_in_ticks;
-
-    char restring_buf[500];
-    snprintf(restring_buf, sizeof(restring_buf), "a ritual invocation of %s", get_spell_name(spell->type, spell->subtype));
-    components->restring = str_dup(restring_buf);
-
-    GET_BUILDING(ch) = components;
-
-    obj_to_room(components, ch->in_room);
-
-    send_to_char(ch, "You set up candles, incense, and other ritual components, then settle in to cast %s.\r\n", get_spell_name(spell->type, spell->subtype));
-    act("$n sets up candles, incense, and other ritual components, then settles in to cast a spell.", FALSE, ch, 0, 0, TO_ROOM);
-
+    set_up_ritualcast(ch, in_room, spell, force);
     return;
   }
 
