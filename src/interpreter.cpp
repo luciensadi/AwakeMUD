@@ -3577,6 +3577,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("disband", "ungroup");
   COMMAND_ALIAS("lose", "unfollow");
   COMMAND_ALIAS("hide", "sneak");
+  COMMAND_ALIAS("privateroll", "privatedice");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");

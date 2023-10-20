@@ -4265,9 +4265,11 @@ ACMD(do_dice)
   }
   dice = atoi(buf);
   snprintf(buf, sizeof(buf), "%d dice are %srolled by $n ", dice, subcmd == SCMD_PRIVATE_ROLL ? "privately " : "");
-  if (*buf1) {
+  if (*buf1 && atoi(buf1)) {
     tn = MAX(2, atoi(buf1));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "against a TN of %d ", tn);
+  } else {
+    remainder = buf1;
   }
   if (dice <= 0) {
     send_to_char("You have to roll at least 1 die.\r\n", ch);
