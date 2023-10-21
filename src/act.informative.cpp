@@ -1055,7 +1055,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         ware_is_internal = FALSE;
         break;
       case CYB_EYES:
-        if (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1))
+        if (!ch_can_see_all_ware && (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1)))
           continue;
 
         ware_is_internal = FALSE;
