@@ -13,10 +13,11 @@
 
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 
-void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave=FALSE);
+void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave, struct room_data *target_room);
 void houseedit_reload(struct char_data *ch, const char *filename);
 void houseedit_trueup_lifestyles_to_rent(struct char_data *ch);
 int copy_old_file_into_subroom_if_it_exists(bf::path old_file, ApartmentRoom *subroom, bool is_house_file);
+void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *subroom, struct room_data *room, idnum_t owner, time_t paid_until, bool force_load);
 
 #define HED_NUKEANDPAVE TRUE
 #define HED_IMPORT FALSE
@@ -31,16 +32,23 @@ ACMD(do_houseedit) {
     FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
     FAILURE_CASE(str_cmp(func, "hurtmedaddy"), "To ^RBLOW AWAY ALL EXISTING APARTMENT COMPLEXES^n and create them fresh from old files, type HOUSEEDIT NUKEANDPAVE HURTMEDADDY.");
 
-    houseedit_import_from_old_files(ch, HED_NUKEANDPAVE);
+    houseedit_import_from_old_files(ch, HED_NUKEANDPAVE, NULL);
     return;
   }
 
   if (is_abbrev(mode, "import")) {
     // Destroy current room contents, then assign owners and storage contents from old files. You probably want to run this on the live port.
     FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
-    FAILURE_CASE(str_cmp(func, "confirm"), "To blow away existing apartment CONTENTS and LEASES and load from old files, type HOUSEEDIT IMPORT CONFIRM.");
 
-    houseedit_import_from_old_files(ch, HED_IMPORT);
+    if (!str_cmp(func, "confirm")) {
+      houseedit_import_from_old_files(ch, HED_IMPORT, NULL);
+    }
+    else if (!str_cmp(func, "here")) {
+      houseedit_import_from_old_files(ch, HED_IMPORT, get_ch_in_room(ch));
+    }
+    else {
+      send_to_char("To blow away existing apartment CONTENTS and LEASES and load from old files, type HOUSEEDIT IMPORT CONFIRM.\r\n", ch);
+    }
     return;
   }
 
@@ -191,10 +199,18 @@ void houseedit_reload(struct char_data *ch, const char *filename) {
 }
 
 // Load old house files, parse, and transfer to new format.
-void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
+void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave, struct room_data *target_room) {
   int old_house_lifestyle_multiplier[] = { 1, 3, 10, 25 };
 
-  mudlog_vfprintf(ch, LOG_SYSLOG, "House %s started by %s.", nuke_and_pave ? "nuke-and-pave" : "import", GET_CHAR_NAME(ch));
+  if (nuke_and_pave && target_room) {
+    mudlog("SYSERR: Cannot combine nuke-and-pave with target_room for houseedit_import_from_old_files().", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  mudlog_vfprintf(ch, LOG_SYSLOG, "House %s%s started by %s.", 
+                  nuke_and_pave ? "nuke-and-pave" : "import", 
+                  target_room ? " (single)" : "",
+                  GET_CHAR_NAME(ch));
 
   // If we're nuking, we'll need a new set of apartment complexes to create. This is left untouched in standard import mode.
   std::vector<ApartmentComplex*> read_apartment_complexes = {};
@@ -202,10 +218,7 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
   // Read the old house control file. Ripped most of this code straight from house.cpp.
   FILE *fl;
   int num_complexes;
-  char line[256], storage_file_name[256];
-  bf::path old_house_directory("house");
-  bf::path old_storage_directory("storage");
-  bf::path parsed_storage_directory = old_storage_directory / "loaded-into-housing-subroom";
+  char line[256];
 
   // Failure case: The file does not exist.
   if (!(fl = fopen(HCONTROL_FILE, "r+b"))) {
@@ -353,54 +366,11 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave) {
         }
       }
 
-      // Clone the current desc as a decoration, provided no decoration already exists.
-      if (!subroom->get_decoration() && *(world[house_rnum].description)) {
-        subroom->set_decoration(world[house_rnum].description);
-        subroom->save_decoration();
+      if (target_room && target_room != &world[house_rnum]) {
+        continue;
       }
 
-      // Set our owner and lease time.
-      if (owner == 0 || paid_until > time(0)) {
-        apartment->set_owner(owner);
-        apartment->set_paid_until(paid_until);
-
-        // Look for the old house file. If it exists, clobber existing contents and load this in.
-        snprintf(storage_file_name, sizeof(storage_file_name), "%ld.house", house_vnum);
-        bf::path original_save_file = old_house_directory / storage_file_name;
-
-        // Load our guests from the old file.
-        apartment->load_guests_from_old_house_file(original_save_file.string().c_str());
-        // Load our contents from the old file.
-        copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, TRUE);
-      } else {
-        mudlog_vfprintf(ch, LOG_SYSLOG, "NOT loading guests / contents / etc from old house file %ld.house: Lease is not valid.", house_vnum);
-      }
-
-      // Look for any associated storage rooms. If they exist, merge them into the new house structure.
-      for (auto &room : apartment->get_rooms()) {
-        struct room_data *world_room = room->get_world_room();
-
-        if (world_room && ROOM_FLAGGED(world_room, ROOM_STORAGE)) {
-          // Room exists and is a storage room. Load it up.
-          bf::path original_save_file = old_storage_directory / vnum_to_string(house_vnum);
-          copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, FALSE);
-
-          // Strip the storage flag from the room.
-#ifdef IS_BUILDPORT
-          mudlog_vfprintf(ch, LOG_SYSLOG, "Refusing to remove ROOM_STORAGE flag from apartment subroom %ld: We're on the buildport.", GET_ROOM_VNUM(world_room));
-#else
-          ROOM_FLAGS(world_room).RemoveBit(ROOM_STORAGE);
-#endif
-
-          // Save the removal of the storage flag.
-          int zone_idx = get_zone_index_number_from_vnum(GET_ROOM_VNUM(world_room));
-          if (zone_idx < 0) {
-            mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unable to derive valid zone index from EXISTING room %ld. Stripping storage flag failed to save, WILL CAUSE ITEM DUPLICATION ON LOAD.", GET_ROOM_VNUM(world_room));
-          } else {
-            write_world_to_disk(zone_table[zone_idx].number);
-          }
-        }
-      }
+      _load_apartment_from_old_house_file(apartment, subroom, &world[house_rnum], owner, paid_until, target_room);
     }
   }
 
@@ -479,4 +449,61 @@ int copy_old_file_into_subroom_if_it_exists(bf::path old_file, ApartmentRoom *su
 
   // All is good.
   return 0;
+}
+
+// Given a room, apartment, and subroom, imports the room.
+void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *subroom, struct room_data *room, idnum_t owner, time_t paid_until, bool force_load) {
+  char storage_file_name[256];
+
+  bf::path old_house_directory("house");
+  bf::path old_storage_directory("storage");
+
+  // Clone the current desc as a decoration, provided no decoration already exists.
+  if (!subroom->get_decoration() && *(GET_ROOM_DESC(room))) {
+    subroom->set_decoration(GET_ROOM_DESC(room));
+    subroom->save_decoration();
+  }
+
+  // Set our owner and lease time.
+  if (force_load || (owner && paid_until > time(0))) {
+    apartment->set_owner(owner);
+    apartment->set_paid_until(paid_until);
+
+    // Look for the old house file. If it exists, clobber existing contents and load this in.
+    snprintf(storage_file_name, sizeof(storage_file_name), "%ld.house", GET_ROOM_VNUM(room));
+    bf::path original_save_file = old_house_directory / storage_file_name;
+
+    // Load our guests from the old file.
+    apartment->load_guests_from_old_house_file(original_save_file.string().c_str());
+    // Load our contents from the old file.
+    copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, TRUE);
+  } else {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "NOT loading guests / contents / etc from old house file %ld.house: Lease is not valid.", GET_ROOM_VNUM(room));
+  }
+
+  // Look for any associated storage rooms. If they exist, merge them into the new house structure.
+  for (auto &room : apartment->get_rooms()) {
+    struct room_data *world_room = room->get_world_room();
+
+    if (world_room && ROOM_FLAGGED(world_room, ROOM_STORAGE)) {
+      // Room exists and is a storage room. Load it up.
+      bf::path original_save_file = old_storage_directory / vnum_to_string(GET_ROOM_VNUM(world_room));
+      copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, FALSE);
+
+      // Strip the storage flag from the room.
+#ifdef IS_BUILDPORT
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to remove ROOM_STORAGE flag from apartment subroom %ld: We're on the buildport.", GET_ROOM_VNUM(world_room));
+#else
+      ROOM_FLAGS(world_room).RemoveBit(ROOM_STORAGE);
+#endif
+
+      // Save the removal of the storage flag.
+      int zone_idx = get_zone_index_number_from_vnum(GET_ROOM_VNUM(world_room));
+      if (zone_idx < 0) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Unable to derive valid zone index from EXISTING room %ld. Stripping storage flag failed to save, WILL CAUSE ITEM DUPLICATION ON LOAD.", GET_ROOM_VNUM(world_room));
+      } else {
+        write_world_to_disk(zone_table[zone_idx].number);
+      }
+    }
+  }
 }
