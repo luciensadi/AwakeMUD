@@ -510,7 +510,6 @@ void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *su
       mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to remove ROOM_STORAGE flag from apartment subroom %ld: We're on the buildport.", GET_ROOM_VNUM(world_room));
 #else
       ROOM_FLAGS(world_room).RemoveBit(ROOM_STORAGE);
-#endif
 
       // Save the removal of the storage flag.
       int zone_idx = get_zone_index_number_from_vnum(GET_ROOM_VNUM(world_room));
@@ -519,6 +518,7 @@ void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *su
       } else {
         write_world_to_disk(zone_table[zone_idx].number);
       }
+#endif
     }
   }
 }
