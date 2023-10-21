@@ -483,7 +483,7 @@ void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *su
     bf::path original_save_file = old_house_directory / storage_file_name;
 
     // Load our guests from the old file.
-    apartment->load_guests_from_old_house_file(original_save_file.string().c_str());
+    apartment->load_guests_from_old_house_file(original_save_file.c_str());
     // Load our contents from the old file.
     copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, TRUE);
   } else {
@@ -494,13 +494,13 @@ void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *su
   }
 
   // Look for any associated storage rooms. If they exist, merge them into the new house structure.
-  for (auto &room : apartment->get_rooms()) {
-    struct room_data *world_room = room->get_world_room();
+  for (auto subroom_itr : apartment->get_rooms()) {
+    struct room_data *world_room = subroom_itr->get_world_room();
 
-    if (world_room && ROOM_FLAGGED(world_room, ROOM_STORAGE)) {
+    if (world_room && world_room != room && ROOM_FLAGGED(world_room, ROOM_STORAGE)) {
       // Room exists and is a storage room. Load it up.
       bf::path original_save_file = old_storage_directory / vnum_to_string(GET_ROOM_VNUM(world_room));
-      copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, FALSE);
+      copy_old_file_into_subroom_if_it_exists(original_save_file, subroom_itr, FALSE);
 
       // Strip the storage flag from the room.
 #ifdef IS_BUILDPORT
