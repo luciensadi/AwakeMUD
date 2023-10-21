@@ -4923,13 +4923,47 @@ ACMD(do_equipment)
 {
   int i, found = 0;
 
-  send_to_char("You are using:\r\n", ch);
+  bool filter_broken = FALSE;
+  bool filter_keyword = FALSE;
+
+  char message[1000];
+  strlcpy(message, "You are using:\r\n", sizeof(message));
+
+  skip_spaces(&argument);
+  if (*argument) {
+    if (is_abbrev(argument, "damaged") || is_abbrev(argument, "broken") || is_abbrev(argument, "destroyed")) {
+      filter_broken = TRUE;
+      strlcpy(message, "You are using the following broken items:\r\n", sizeof(message));
+    } else {
+      filter_keyword = TRUE;
+      snprintf(message, sizeof(message), "You are using the following items matching '%s':\r\n", argument);
+    }
+  }
+  
+  send_to_char(message, ch);
+
   for (i = 0; i < NUM_WEARS; i++) {
-    if (GET_EQ(ch, i)) {
+    struct obj_data *obj = GET_EQ(ch, i);
+
+    if (obj) {
+      // Apply filters.
+      if (filter_broken) {
+        // Skip anything that's not damaged.
+        if (GET_OBJ_CONDITION(obj) >= GET_OBJ_BARRIER(obj))
+          continue;
+      }
+
+      if (filter_keyword) {
+        // Skip anything that doesn't match the keyword.
+        if (!keyword_appears_in_obj(argument, obj))
+          continue;
+      }
+
+      // Send wearslot info.
       if (i == WEAR_WIELD || i == WEAR_HOLD) {
-        if (IS_OBJ_STAT(GET_EQ(ch, i), ITEM_EXTRA_TWOHANDS))
+        if (IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS))
           send_to_char(hands[2], ch);
-        else if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WEAPON) { // wielding something?
+        else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) { // wielding something?
           if (i == WEAR_WIELD)
             send_to_char(wielding_hands[(int)ch->char_specials.saved.left_handed], ch);
           else
@@ -4940,10 +4974,13 @@ ACMD(do_equipment)
           else
             send_to_char(hands[!ch->char_specials.saved.left_handed], ch);
         }
-      } else
+      } else {
         send_to_char(where[i], ch);
-      if (CAN_SEE_OBJ(ch, GET_EQ(ch, i)))
-        show_obj_to_char(GET_EQ(ch, i), ch, SHOW_MODE_OWN_EQUIPMENT);
+      }
+      
+      // Send object description.
+      if (CAN_SEE_OBJ(ch, obj))
+        show_obj_to_char(obj, ch, SHOW_MODE_OWN_EQUIPMENT);
       else
         send_to_char("Something.\r\n", ch);
       found = TRUE;

@@ -782,19 +782,19 @@ int str_cmp(const char *one, const char *two)
 /* str_str: A case-insensitive version of strstr */
 /* returns: A pointer to the first occurance of str2 in str1 */
 /* or a null pointer if it isn't found.                      */
-char *str_str( const char *str1, const char *str2 )
+char *str_str( const char *string, const char *keyword )
 {
   int i;
   char temp1[MAX_INPUT_LENGTH], temp2[MAX_INPUT_LENGTH];
 
-  for ( i = 0; *(str1 + i); i++ ) {
-    temp1[i] = LOWER(*(str1 + i));
+  for ( i = 0; *(string + i); i++ ) {
+    temp1[i] = LOWER(*(string + i));
   }
 
   temp1[i] = '\0';
 
-  for ( i = 0; *(str2 + i); i++ ) {
-    temp2[i] = LOWER(*(str2 + i));
+  for ( i = 0; *(keyword + i); i++ ) {
+    temp2[i] = LOWER(*(keyword + i));
   }
 
   temp2[i] = '\0';

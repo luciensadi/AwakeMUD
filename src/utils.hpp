@@ -30,7 +30,7 @@ struct obj_data;
 /* public functions in utils.c */
 bool    has_cyberweapon(struct char_data *ch);
 char *  str_dup(const char *source);
-char *  str_str( const char *str1, const char *str2 );
+char *  str_str(const char *string, const char *keyword);
 int     str_cmp(const char *arg1, const char *arg2);
 int     strn_cmp(const char *arg1, const char *arg2, int n);
 size_t  strlcpy(char *buf, const char *src, size_t bufsz);
