@@ -5234,11 +5234,11 @@ struct obj_data *make_new_finished_part(int part_type, int mpcp, int rating=0) {
   GET_PART_RATING(part) = rating;
 
   part->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
-  part->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NORENT);
   part->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+  part->obj_flags.extra_flags.SetBit(ITEM_EXTRA_STAFF_ONLY);
 
   char restring[500];
-  snprintf(restring, sizeof(restring), "a rating-%d %s part (MPCP %d)", rating, parts[part_type].name, mpcp);
+  snprintf(restring, sizeof(restring), "a rating-%d %s part (MPCP %d, STAFF)", rating, parts[part_type].name, mpcp);
   part->restring = str_dup(restring);
 
   return part;
@@ -5259,7 +5259,7 @@ struct obj_data *make_new_finished_program(int part_type, int mpcp, int rating=0
   GET_PROGRAM_RATING(prog) = rating;
 
   prog->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
-  prog->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NORENT);
+  prog->obj_flags.extra_flags.SetBit(ITEM_EXTRA_STAFF_ONLY);
   prog->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
 
   char restring[500];
