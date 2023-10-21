@@ -2269,6 +2269,10 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
           );
           mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);
         }
+        if (GET_CYBERDECK_USED_STORAGE(obj) > GET_CYBERDECK_TOTAL_STORAGE(obj)) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: After self-heal, deck %s owned by %ld is overloaded on programs! Setting to 0 free space, this will cause problems.", GET_OBJ_NAME(obj), owner);
+          GET_CYBERDECK_USED_STORAGE(obj) = GET_CYBERDECK_TOTAL_STORAGE(obj);
+        }
       }
       break;
     case ITEM_FOCUS:
