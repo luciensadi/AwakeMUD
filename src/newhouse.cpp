@@ -112,8 +112,16 @@ ACMD(do_decorate) {
 ACMD(do_house) {
   one_argument(argument, arg);
 
-  FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be in your house to set guests.");
-  FAILURE_CASE(!GET_APARTMENT(ch->in_room)->has_owner_privs(ch), "You're not an owner or landlord here.");
+  FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be in an apartment to set guests.");
+
+  if (!GET_APARTMENT(ch->in_room)->has_owner_privs(ch)) {
+    if (access_level(ch, LVL_FIXER)) {
+      send_to_char("You use your staff powers to bypass the fact that you have no ownership stake here.\r\n", ch);
+    } else {
+      send_to_char("You're not an owner or landlord here.\r\n", ch);
+      return;
+    }
+  }
 
   if (!*arg) {
     GET_APARTMENT(ch->in_room)->list_guests_to_char(ch);
@@ -129,9 +137,25 @@ ACMD(do_house) {
 
   if (GET_APARTMENT(ch->in_room)->delete_guest(idnum)) {
     send_to_char("Guest deleted.\r\n", ch);
+
+    if (!GET_APARTMENT(ch->in_room)->has_owner_privs(ch)) {
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s removed guest idnum %ld from %ld (%s) by staff fiat.", 
+                      GET_CHAR_NAME(ch),
+                      idnum,
+                      GET_ROOM_VNUM(ch->in_room),
+                      GET_ROOM_NAME(ch->in_room));
+    }
   } else {
     GET_APARTMENT(ch->in_room)->add_guest(idnum);
     send_to_char("Guest added.\r\n", ch);
+
+    if (!GET_APARTMENT(ch->in_room)->has_owner_privs(ch)) {
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s added guest idnum %ld from %ld (%s) by staff fiat.", 
+                      GET_CHAR_NAME(ch),
+                      idnum,
+                      GET_ROOM_VNUM(ch->in_room),
+                      GET_ROOM_NAME(ch->in_room));
+    }
   }
 }
 
