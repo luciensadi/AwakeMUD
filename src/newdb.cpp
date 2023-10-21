@@ -2241,29 +2241,34 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
       }
       break;
     case ITEM_CYBERDECK:
-      // Rectify the memory.
-      old_storage = GET_CYBERDECK_USED_STORAGE(obj);
-      GET_CYBERDECK_USED_STORAGE(obj) = 0;
-      for (struct obj_data *installed = obj->contains; installed; installed = installed->next_content) {
-        if (GET_OBJ_TYPE(installed) == ITEM_DECK_ACCESSORY) {
-          switch (GET_DECK_ACCESSORY_TYPE(installed)) {
-            case TYPE_FILE:
-              GET_CYBERDECK_USED_STORAGE(obj) += GET_DECK_ACCESSORY_FILE_SIZE(installed);
-              break;
-            case TYPE_UPGRADE:
-              GET_PART_BUILDER_IDNUM(obj) = 0;
-              break;
+    case ITEM_CUSTOM_DECK:
+      {
+        // Rectify the memory.
+        old_storage = GET_CYBERDECK_USED_STORAGE(obj);
+        GET_CYBERDECK_USED_STORAGE(obj) = 0;
+        for (struct obj_data *installed = obj->contains; installed; installed = installed->next_content) {
+          if (GET_OBJ_TYPE(installed) == ITEM_DECK_ACCESSORY) {
+            switch (GET_DECK_ACCESSORY_TYPE(installed)) {
+              case TYPE_FILE:
+                GET_CYBERDECK_USED_STORAGE(obj) += GET_DECK_ACCESSORY_FILE_SIZE(installed);
+                break;
+              case TYPE_UPGRADE:
+                GET_PART_BUILDER_IDNUM(obj) = 0;
+                break;
+            }
+          }
+          if (GET_OBJ_TYPE(installed) == ITEM_PROGRAM) {
+            GET_CYBERDECK_USED_STORAGE(obj) += GET_PROGRAM_SIZE(installed);
           }
         }
-
-      }
-      if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {
-        snprintf(buf, sizeof(buf), "INFO: System self-healed mismatching cyberdeck used storage for %s (was %d, should have been %d)",
-                GET_OBJ_NAME(obj),
-                old_storage,
-                GET_CYBERDECK_USED_STORAGE(obj)
-        );
-        mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);
+        if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {
+          snprintf(buf, sizeof(buf), "INFO: System self-healed mismatching cyberdeck used storage for %s (was %d, should have been %d)",
+                  GET_OBJ_NAME(obj),
+                  old_storage,
+                  GET_CYBERDECK_USED_STORAGE(obj)
+          );
+          mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);
+        }
       }
       break;
     case ITEM_FOCUS:
