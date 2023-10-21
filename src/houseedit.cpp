@@ -434,7 +434,10 @@ int copy_old_file_into_subroom_if_it_exists(bf::path old_file, ApartmentRoom *su
     return 0;
   }
 
-  mudlog_vfprintf(NULL, LOG_SYSLOG, "Transferring %s storage for subroom %ld.", is_house_file ? "house-file" : "storage-file", subroom->get_vnum());
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "Transferring %s storage for subroom %ld of %s.", 
+                  is_house_file ? "house-file" : "storage-file",
+                  subroom->get_vnum(),
+                  subroom->get_apartment()->get_full_name());
 
   // Compose our new location, then transfer the existing file to that location.
   bf::path new_save_file = subroom->get_base_directory() / "storage";
