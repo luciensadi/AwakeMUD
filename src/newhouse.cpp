@@ -2417,7 +2417,9 @@ SPECIAL(landlord_spec)
                        days_in_arrears,
                        days_in_arrears == 1 ? "" : "s");
             } else {
-              snprintf(say_string, sizeof(say_string), "%s's rent has expired. You'll have to PAY it to regain access.", CAP(apartment->get_name()));
+              snprintf(say_string, sizeof(say_string), "%s's rent has expired. You'll have to ^WPAY%s it to regain access.", 
+                       CAP(apartment->get_name()),
+                       GET_CHAR_COLOR_HIGHLIGHT(ch));
             }
             mob_say(recep, say_string);
           } else {
@@ -2440,6 +2442,14 @@ SPECIAL(landlord_spec)
             do_say(recep, buf2, 0, SCMD_OSAY);
           }
         }
+
+        if (IS_SENATOR(ch)) {
+          send_to_char(ch, "(staff info: owner %ld, lease %ld [%ld secs left])\r\n", 
+                        apartment->get_owner_id(), 
+                        apartment->get_paid_until(), 
+                        apartment->get_paid_until() - time(0));
+        }
+        
         return TRUE;
       }
     }

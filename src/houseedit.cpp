@@ -464,8 +464,17 @@ void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *su
     subroom->save_decoration();
   }
 
+  bool should_load = (owner && paid_until > time(0));
+
   // Set our owner and lease time.
-  if (force_load || (owner && paid_until > time(0))) {
+  if (should_load || force_load) {
+    if (!should_load) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "FORCE-LOADING %ld.house: Lease not valid (%ld / %ld), but overridden.", 
+                      GET_ROOM_VNUM(room),
+                      owner,
+                      paid_until);
+    }
+
     apartment->set_owner(owner);
     apartment->set_paid_until(paid_until);
 
@@ -478,7 +487,10 @@ void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *su
     // Load our contents from the old file.
     copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, TRUE);
   } else {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "NOT loading guests / contents / etc from old house file %ld.house: Lease is not valid.", GET_ROOM_VNUM(room));
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "NOT loading guests / contents / etc from old house file %ld.house: Lease is not valid (%ld / %ld).", 
+                    GET_ROOM_VNUM(room),
+                    owner,
+                    paid_until);
   }
 
   // Look for any associated storage rooms. If they exist, merge them into the new house structure.
