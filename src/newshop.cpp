@@ -2469,7 +2469,7 @@ SPECIAL(shop_keeper)
     shop_cancel(argument, ch, keeper, shop_nr);
   else if (CMD_IS("probe"))
     return shop_probe(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("install"))
+  else if (CMD_IS("install") && shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
     shop_install(argument, ch, keeper, shop_nr);
   else if (CMD_IS("uninstall"))
     shop_uninstall(argument, ch, keeper, shop_nr);
