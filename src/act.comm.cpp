@@ -1406,11 +1406,16 @@ ACMD(do_gen_comm)
       if (!d->character || IS_IGNORING(d->character, is_blocking_oocs_from, ch))
         continue;
 
-      // Anyone who's not either staff or in specific playing states is skipped.
-      if (!access_level(d->character, LVL_BUILDER)
-          && ((d->connected != CON_PLAYING && !PRF_FLAGGED(d->character, PRF_MENUGAG))
-              || PRF_FLAGGED( d->character, PRF_NOOOC)
-              || PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)))
+      // Skip chargen chars (they never see OOC)
+      if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED))
+        continue;
+
+      // Skip anyone who's opted out of OOC.
+      if (PRF_FLAGGED(d->character, PRF_NOOOC))
+        continue;
+
+      // Skip anyone who's flagged themselves as menu-gagged.
+      if ((d->connected != CON_PLAYING && PRF_FLAGGED(d->character, PRF_MENUGAG)))
         continue;
 
       // No autopunct for channels.
