@@ -936,13 +936,43 @@ void affect_total(struct char_data * ch)
     } else {
       // Only Shamans and Hermetics get these pools.
       if (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) {
+#ifdef IS_BUILDPORT
+        if (ch->desc) {
+          send_to_char(ch, "[handler: before magic constraints, casting=%d drain=%d sdef=%d reflect=%d]\r\n",
+                       GET_CASTING(ch),
+                       GET_DRAIN(ch),
+                       GET_SDEFENSE(ch),
+                       GET_REFLECT(ch));
+        }
+#endif
+        // Note that this uses GET_MAGIC (their magic pool) rather than GET_MAG (their magic attribute).
         int sdef = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
         int drain = MIN(GET_MAGIC(ch), GET_DRAIN(ch));
         int reflect = MIN(GET_MAGIC(ch), GET_REFLECT(ch));
         int casting = MAX(0, GET_MAGIC(ch) - drain - reflect - sdef);
 
+#ifdef IS_BUILDPORT
+        if (ch->desc) {
+          send_to_char(ch, "[handler: after magic constraints, casting=%d drain=%d sdef=%d reflect=%d]\r\n",
+                       casting,
+                       drain,
+                       sdef,
+                       reflect);
+        }
+#endif
+
         // It's possible for the casting value to be greater than sorcery right now. This setter resolves that.
         set_casting_pools(ch, casting, drain, sdef, reflect, FALSE);
+
+#ifdef IS_BUILDPORT
+        if (ch->desc) {
+          send_to_char(ch, "[handler: after set_casting_pools, casting=%d drain=%d sdef=%d reflect=%d]\r\n",
+                       GET_CASTING(ch),
+                       GET_DRAIN(ch),
+                       GET_SDEFENSE(ch),
+                       GET_REFLECT(ch));
+        }
+#endif
       } else {
         GET_CASTING(ch) = GET_MAGIC(ch) = GET_SDEFENSE(ch) = GET_DRAIN(ch) = GET_REFLECT(ch) = 0;
       }

@@ -6864,6 +6864,7 @@ void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_d
     return;
   }
 
+  // GET_MAGIC (total dice available) rather than GET_MAG (magic attribute). No need to divide by 100.
   int total = GET_MAGIC(ch);
 
   total -= ch->real_abils.casting_pool = GET_CASTING(ch) = MIN(casting, total);
@@ -6876,7 +6877,8 @@ void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_d
 
   // Sanity check: If casting has exceeded sorc, push the overflow into drain pool.
   if (GET_CASTING(ch) > GET_SKILL(ch, SKILL_SORCERY)) {
-    ch->real_abils.drain_pool = (GET_DRAIN(ch) += (GET_CASTING(ch) - GET_SKILL(ch, SKILL_SORCERY)));
+    int delta = GET_CASTING(ch) - GET_SKILL(ch, SKILL_SORCERY);
+    ch->real_abils.drain_pool = (GET_DRAIN(ch) += delta);
     ch->real_abils.casting_pool = GET_CASTING(ch) = GET_SKILL(ch, SKILL_SORCERY);
   }
 
