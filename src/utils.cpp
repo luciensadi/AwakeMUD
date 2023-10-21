@@ -5279,6 +5279,8 @@ struct obj_data *make_staff_deck_target_mpcp(int mpcp) {
   obj_to_obj(make_new_finished_part(PART_MASKING, mpcp, (int) (mpcp / 3)), new_deck);
   obj_to_obj(make_new_finished_part(PART_ASIST_HOT, mpcp), new_deck);
   obj_to_obj(make_new_finished_part(PART_RAS_OVERRIDE, mpcp), new_deck);
+  obj_to_obj(make_new_finished_part(PART_STORAGE, mpcp, mpcp * 600), new_deck);
+  obj_to_obj(make_new_finished_part(PART_ACTIVE, mpcp, mpcp * 250), new_deck);
 
   // Add software.
   for (int soft_type = SOFT_ATTACK; soft_type <= SOFT_LOCKON; soft_type++) {
@@ -5294,8 +5296,8 @@ struct obj_data *make_staff_deck_target_mpcp(int mpcp) {
   GET_CYBERDECK_IS_INCOMPLETE(new_deck) = FALSE;
 
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
-  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NORENT);
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_STAFF_ONLY);
 
   char restring[500];
   snprintf(restring, sizeof(restring), "a staff-only MPCP-%d cyberdeck", mpcp);

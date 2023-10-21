@@ -1869,7 +1869,7 @@ ACMD(do_connect)
     }
 
   for (cyber = ch->carrying; !cyberdeck && cyber; cyber = cyber->next_content)
-    if (GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK)
+    if ((GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK) && (IS_SENATOR(ch) || !IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY)))
       cyberdeck = cyber;
   for (int i = 0; !cyberdeck && i < NUM_WEARS; i++)
     if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
