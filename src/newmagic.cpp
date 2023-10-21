@@ -6853,6 +6853,7 @@ const char *get_spell_name(int spell, int subtype) {
   return spell_name;
 }
 
+#define SET_POOL_INFO(real_pool, macro_pool, variable) (ch->real_abils.real_pool = (macro_pool) = MAX(0, MIN((variable), total)))
 void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message) {
   if (!ch) {
     mudlog("SYSERR: Received NULL ch to set_casting_pools!", ch, LOG_SYSLOG, TRUE);
@@ -6867,11 +6868,13 @@ void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_d
   // GET_MAGIC (total dice available) rather than GET_MAG (magic attribute). No need to divide by 100.
   int total = GET_MAGIC(ch);
 
-  total -= ch->real_abils.casting_pool = GET_CASTING(ch) = MIN(casting, total);
-  total -= ch->real_abils.drain_pool = GET_DRAIN(ch) = MIN(drain, total);
-  total -= ch->real_abils.spell_defense_pool = GET_SDEFENSE(ch) = MIN(spell_defense, total);
+  total -= SET_POOL_INFO(casting_pool, GET_CASTING(ch), casting);
+  total -= SET_POOL_INFO(drain_pool, GET_DRAIN(ch), drain);
+  total -= SET_POOL_INFO(spell_defense_pool, GET_SDEFENSE(ch), spell_defense);
   if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
-    total -= ch->real_abils.reflection_pool = GET_REFLECT(ch) = MIN(reflection, total);
+    total -= SET_POOL_INFO(reflection_pool, GET_REFLECT(ch), reflection);
+
+  // Allocate remainder to casting pool.
   if (total > 0)
     GET_CASTING(ch) += total;
 
