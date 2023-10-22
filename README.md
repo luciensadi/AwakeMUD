@@ -14,13 +14,13 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 
 ## OS Support
 Actively tested on:
-- Mac OS 12
+- Mac OS 13
 - Ubuntu 18 LTS
 
-Previously tested on:
+Previously tested on (it worked there in the past, but is not guaranteed to now):
 - Amazon Linux
 - Cygwin (beta)
-- Mac OS 10.12-10.14
+- Mac OS 10.12-10.14, 12
 - Raspbian Jessie
 - Ubuntu 14, 16
 
