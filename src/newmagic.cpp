@@ -2528,16 +2528,16 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           if (!AWAKE(vict)) {
             act("$n's body recoils as though hit.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You feel a dull thud in the back of your mind.\r\n", vict);
-          } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+          } else if (dam >= convert_damage(DEADLY)) {
             act("$n is thrown to the ground, unconscious, from an immense invisible force.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("It slams into you with the force of a freight train, knocking you to the ground, unconscious.\r\n", vict);
-          } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+          } else if (dam >= convert_damage(SERIOUS)) {
             act("$n stumbles backwards, almost losing $s footing, as $e is hit by an invisible force.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You stumble backwards, feeling groggy as the air slams into you at full force.\r\n", vict);
-          } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+          } else if (dam >= convert_damage(MODERATE)) {
             act("$n steps back, and shakes $s head to clear it.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You step back as the force hits you, feeling a little worse for wear.\r\n", vict);
-          } else if (dam > 0) {
+          } else if (dam >= convert_damage(LIGHT)) {
             act("$n recoils, as if from a light punch.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You feel as though a fist strikes you across the face.\r\n", vict);
           } else {
@@ -2593,20 +2593,20 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           if (!AWAKE(vict)) {
             act("$n spasms as the flames hit $m.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
-          } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+          } else if (dam >= convert_damage(DEADLY)) {
             act("$n is hit full force by the intense flames causing $m to fall to the ground, gurgling.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("The flames burn intensely around you, your last memory before falling unconscious is the hideous pain.\r\n", vict);
-          } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+          } else if (dam >= convert_damage(SERIOUS)) {
             act("$n screams as the flames impact $s body, horribly burning $m.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("The flames crash into you, causing you great pain as they horribly burn you.\r\n", vict);
-          } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
-            act("$n cringes as the flames hit, patting at the spots where the flame continues to burn.", TRUE, vict, 0, 0, TO_ROOM);
+          } else if (dam >= convert_damage(MODERATE)) {
+            act("$n cringes as the flames hit, slapping at the spots where the flame continues to burn.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("As the flames hit you quickly pat at the spots that continue to burn, causing searing pain.\r\n", vict);
-          } else if (dam > 0) {
-            act("The flames burst around $m, causing seemingly little damage.", TRUE, vict, 0, 0, TO_ROOM);
+          } else if (dam >= convert_damage(LIGHT)) {
+            act("The flames burst around $m, causing only minor burns.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("The flames burst around you causing you slight pain as it burns some of your hair.\r\n", vict);
           } else {
-            act("The flames impact $m, but disperse on impact.", FALSE, vict, 0, ch, TO_ROOM);
+            act("The flames impact $m, but disperse on impact.", FALSE, vict, 0, 0, TO_ROOM);
             send_to_char("The flames rapidly disperse around you, causing only mild discomfort.\r\n", vict);
           }
 
@@ -2746,16 +2746,16 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           if (!AWAKE(vict)) {
             act("$n's body goes into convulsions as the lightning flows through it.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
-          } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
+          } else if (dam >= convert_damage(DEADLY)) {
             act("$n is propelled backwards by the force of the lightning bolt, $s body smoking as it lands, not a sign of life from it.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You feel your body begin to spasm as the huge charge of electricity fries your nervous system.\r\n", vict);
-          } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
+          } else if (dam >= convert_damage(SERIOUS)) {
             act("$n is almost lifted in the air by the lightning, spasms filling $s body, as a thin trail of smoke rises from $m.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("Your body is filled with pain as the lightning hits you, your limbs going into an uncontrollable seizure.\r\n", vict);
-          } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
+          } else if (dam >= convert_damage(MODERATE)) {
             act("$n spasms as the lightning hits $m, $s body wracked with spasms as the lightning dissipates.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("Pain flashes through your body as the lightning hits, your body wracked with several serious spasms.\r\n", vict);
-          } else if (dam > 0) {
+          } else if (dam >= convert_damage(LIGHT)) {
             act("$n visibly recoils as the lightning hits, but otherwise seems fine.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You recoil as the lightning hits you, your mind going fuzzy for a moment.\r\n", vict);
           } else {
