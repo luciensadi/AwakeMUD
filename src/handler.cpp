@@ -1010,7 +1010,7 @@ void affect_total(struct char_data * ch)
   if (has_rig) {
     // a VCR adds to reaction, thus control pool
     mental_rea += 2 * has_rig;
-    GET_CONTROL(ch) += GET_REA(ch);
+    GET_CONTROL(ch) += mental_rea;
 
     // also adds to initiative dice
     mental_init_dice += has_rig;
