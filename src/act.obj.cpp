@@ -1939,7 +1939,8 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     if (action_blocked) {
       struct room_data *in_room = get_ch_in_room(ch);
       
-      // Hardcoded start and end of the Neophyte Guild area.
+      // Hardcoded start and end of the Neophyte Guild area. You can drop things you've picked up here, but only as a newbie.
+      // Note that bypassing these checks by handing something to a newbie to drop in the donation area is considered exploiting.
       if (mode == SCMD_DONATE || (GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD && GET_ROOM_VNUM(in_room) >= 60500 && GET_ROOM_VNUM(in_room) <= 60699)) {
         send_to_char(ch, "Please avoid giving newbies free cyberware / bioware / etc! It's a kind gesture, but it undercuts their economic balance and leads to less overall player retention.\r\n");
       }

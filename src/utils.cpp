@@ -6137,7 +6137,10 @@ bool obj_is_apartment_only_drop_item(struct obj_data *obj) {
       return obj->contains;
     case ITEM_CYBERWARE:
     case ITEM_BIOWARE:
+    case ITEM_MAGIC_TOOL:
       return TRUE;
+    case ITEM_DECK_ACCESSORY:
+      return (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PARTS);
   }
 
   return FALSE;
@@ -6208,12 +6211,17 @@ const char *get_ch_domain_str(struct char_data *ch, bool include_possibilities) 
 void zero_cost_of_obj_and_contents(struct obj_data *obj) {
   for (;obj;obj = obj->next_content)
   {
+    // Recurse.
     if (obj->contains)
       zero_cost_of_obj_and_contents(obj->contains);
+
+    // Zero the value. (We don't want to zero out conjuring mats etc)
     if (GET_OBJ_TYPE(obj) != ITEM_MAGIC_TOOL) {
-      GET_OBJ_EXTRA(obj).SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NOSELL, ENDBIT);
       GET_OBJ_COST(obj) = 0;
     }
+
+    // Flag it so it can't be sold.
+    GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_NOSELL);
   }
 }
 
