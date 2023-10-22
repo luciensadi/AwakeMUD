@@ -1013,7 +1013,7 @@ void affect_total(struct char_data * ch)
     GET_CONTROL(ch) += GET_REA(ch);
 
     // also adds to initiative dice
-    mental_init += has_rig;
+    mental_init_dice += has_rig;
 
     // but reduces hacking pool
     GET_HACKING(ch) -= has_rig;
