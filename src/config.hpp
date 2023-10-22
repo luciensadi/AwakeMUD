@@ -281,8 +281,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MAX_DRUG_EDGE                                          10
 
 // Decorations are great nuyen sinks.
-#define COST_TO_DECORATE_APT                                   1500
-#define COST_TO_DECORATE_VEH                                   750
+#define COST_TO_DECORATE_APT                                   5000
+#define COST_TO_DECORATE_VEH                                   1000
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES

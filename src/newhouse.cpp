@@ -66,10 +66,12 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
 ACMD(do_decorate) {
   if (ch->in_veh) {
-    FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_VEH, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_VEH);
+    if ((ch->vfront && !ch->in_veh->decorate_front) || (!ch->vfront && !ch->in_veh->decorate_rear)) {
+      FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_VEH, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_VEH);
 
-    send_to_char(ch, "You spend %d nuyen to purchase new decorating materials.\r\n", COST_TO_DECORATE_VEH);
-    lose_nuyen(ch, COST_TO_DECORATE_VEH, NUYEN_OUTFLOW_DECORATING);
+      send_to_char(ch, "You spend %d nuyen to purchase decorating materials.\r\n", COST_TO_DECORATE_VEH);
+      lose_nuyen(ch, COST_TO_DECORATE_VEH, NUYEN_OUTFLOW_DECORATING);
+    }
 
     STATE(ch->desc) = CON_DECORATE_VEH;
     DELETE_D_STR_IF_EXTANT(ch->desc);
@@ -82,8 +84,7 @@ ACMD(do_decorate) {
   FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be in an apartment or vehicle to decorate it.");
   FAILURE_CASE(!GET_APARTMENT(ch->in_room)->has_owner_privs(ch), "You must be the owner of this apartment to decorate it.")
   FAILURE_CASE(!GET_APARTMENT_SUBROOM(ch->in_room), "This apartment is bugged! Notify staff.");
-  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_APT, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_APT);
-
+  
   // If they've specified an argument, use that to set the room's name.
   skip_spaces(&argument);
   if (*argument) {
@@ -97,13 +98,17 @@ ACMD(do_decorate) {
     GET_APARTMENT_SUBROOM(ch->in_room)->set_decorated_name(argument);
     send_to_char(ch, "OK, room name set to '%s'. Customize the description next.\r\n", GET_ROOM_NAME(ch->in_room));
   } else if (GET_APARTMENT_SUBROOM(ch->in_room)->get_decorated_name()) {
-    send_to_char("Clearing the old decorated name (you must re-specify it with DECORATE <name> when editing).\r\n", ch);
+    send_to_char("Clearing the old decorated name (you must re-specify it with DECORATE <name> when editing if you want to keep it).\r\n", ch);
     GET_APARTMENT_SUBROOM(ch->in_room)->delete_decorated_name();
     GET_APARTMENT_SUBROOM(ch->in_room)->save_decoration();
   }
 
-  send_to_char(ch, "You spend %d nuyen to purchase new decorating materials.\r\n", COST_TO_DECORATE_APT);
-  lose_nuyen(ch, COST_TO_DECORATE_APT, NUYEN_OUTFLOW_DECORATING);
+  if (!GET_APARTMENT_SUBROOM(ch->in_room)->get_decoration()) {
+    FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_APT, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_APT);
+
+    send_to_char(ch, "You spend %d nuyen to purchase new decorating materials.\r\n", COST_TO_DECORATE_APT);
+    lose_nuyen(ch, COST_TO_DECORATE_APT, NUYEN_OUTFLOW_DECORATING);
+  }
 
   PLR_FLAGS(ch).SetBit(PLR_WRITING);
   send_to_char("Welcome to the description editor! Enter your new room description.\r\n"
