@@ -66,6 +66,11 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 
 ACMD(do_decorate) {
   if (ch->in_veh) {
+    FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_VEH, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_VEH);
+
+    send_to_char(ch, "You spend %d nuyen to purchase new decorating materials.\r\n", COST_TO_DECORATE_VEH);
+    lose_nuyen(ch, COST_TO_DECORATE_VEH, NUYEN_OUTFLOW_DECORATING);
+
     STATE(ch->desc) = CON_DECORATE_VEH;
     DELETE_D_STR_IF_EXTANT(ch->desc);
     INITIALIZE_NEW_D_STR(ch->desc);
@@ -77,6 +82,7 @@ ACMD(do_decorate) {
   FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be in an apartment or vehicle to decorate it.");
   FAILURE_CASE(!GET_APARTMENT(ch->in_room)->has_owner_privs(ch), "You must be the owner of this apartment to decorate it.")
   FAILURE_CASE(!GET_APARTMENT_SUBROOM(ch->in_room), "This apartment is bugged! Notify staff.");
+  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_APT, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_APT);
 
   // If they've specified an argument, use that to set the room's name.
   skip_spaces(&argument);
@@ -95,6 +101,9 @@ ACMD(do_decorate) {
     GET_APARTMENT_SUBROOM(ch->in_room)->delete_decorated_name();
     GET_APARTMENT_SUBROOM(ch->in_room)->save_decoration();
   }
+
+  send_to_char(ch, "You spend %d nuyen to purchase new decorating materials.\r\n", COST_TO_DECORATE_APT);
+  lose_nuyen(ch, COST_TO_DECORATE_APT, NUYEN_OUTFLOW_DECORATING);
 
   PLR_FLAGS(ch).SetBit(PLR_WRITING);
   send_to_char("Welcome to the description editor! Enter your new room description.\r\n"
