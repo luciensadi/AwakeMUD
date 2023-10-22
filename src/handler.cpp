@@ -765,6 +765,7 @@ void affect_total(struct char_data * ch)
     GET_INIT_DICE(ch) += has_wired;
     GET_REA(ch) += has_wired * 2;
   }
+  
   /* effects of bioware */
   for (cyber = ch->bioware; cyber; cyber = cyber->next_content)
   {
@@ -832,7 +833,19 @@ void affect_total(struct char_data * ch)
   GET_REA(ch) = (GET_REA(ch) > aug_rea) ? GET_REA(ch) : aug_rea;
   GET_INIT_DICE(ch) = (GET_INIT_DICE(ch) > aug_init_dice) ? GET_INIT_DICE(ch) : aug_init_dice;
 
+  // Reaction/initiative mods from cyber/bio/magic/adept don't apply to decking/rigging
+  int mental_rea = 0, mental_init_dice = 0;
+
+  // Let drug rea/init mods apply to rigging/decking
+  // Unclear in SR3 canon, but is consistent with genre fiction
+  // Subtract current values, then add post-drug values
+  mental_rea -= GET_REA(ch);
+  mental_init_dice -= GET_INIT_DICE(ch);
+
   apply_drug_modifiers_to_ch(ch);
+
+  mental_rea += GET_REA(ch);
+  mental_init_dice += GET_INIT_DICE(ch);
 
   // Min attribute is one, max is soft capped
   int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
@@ -859,6 +872,17 @@ void affect_total(struct char_data * ch)
   // Reaction is derived from current atts, so we calculate it after all att modifiers
   // We don't cap reaction because qui and int are already capped
   GET_REA(ch) += (GET_INT(ch) + GET_QUI(ch)) >> 1;
+
+  // Qui mods don't contribute (but int mods do) to reaction when decking/rigging
+  mental_rea += (GET_INT(ch) + GET_REAL_QUI(ch)) >> 1;
+
+  // Qui bonus from mbw doesn't increase reaction (MM pg 30)
+  // Also makes sense that mbw DOES protect from disabling via nervestrike
+  if (has_mbw) {
+    GET_QUI(ch) += has_mbw;
+    GET_REA(ch) += has_mbw * 2;
+    GET_INIT_DICE(ch) += has_mbw;
+  }
 
   // Combat pool is derived from current atts, so we calculate it after all att modifiers
   GET_COMBAT(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
@@ -976,27 +1000,38 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  if (has_rig)
-  {
-    int reaction = GET_REAL_INT(ch) + GET_REAL_QUI(ch);
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-      if (GET_OBJ_VAL(bio, 0) == BIO_CEREBRALBOOSTER)
-        reaction += GET_OBJ_VAL(bio, 1);
-    GET_CONTROL(ch) += (reaction / 2) + (int)(2 * has_rig);
+  // Decking
+  if (PLR_FLAGGED(ch, PLR_MATRIX)) {
+    GET_REA(ch) = mental_rea;
+    GET_INIT_DICE(ch) = mental_init_dice;
+  }
+
+  // Rigging
+  if (has_rig) {
+    // a VCR adds to reaction, thus control pool
+    mental_rea += 2 * has_rig;
+    GET_CONTROL(ch) += GET_REA(ch);
+
+    // also adds to initiative dice
+    mental_init += has_rig;
+
+    // but reduces hacking pool
     GET_HACKING(ch) -= has_rig;
     if (GET_HACKING(ch) < 0)
       GET_HACKING(ch) = 0;
+  } else {
+    // direct control with a datajack and no VCR (SR3 pg 140)
+    mental_rea += 1;
+  }
+
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    GET_REA(ch) = mental_rea; 
+    GET_INIT_DICE(ch) = mental_init_dice;
   }
 
   // Restore their max_hacking and rem_hacking, which were wiped out in the earlier aff_abils = real_abils.
   GET_REM_HACKING(ch) = MIN(old_rem_hacking, GET_HACKING(ch));
   GET_MAX_HACKING(ch) = MIN(old_max_hacking, GET_HACKING(ch));
-
-  if (has_mbw) {
-    GET_QUI(ch) += has_mbw;
-    GET_REA(ch) += has_mbw * 2;
-    GET_INIT_DICE(ch) += has_mbw;
-  }
 
   // Update current vision to match what's being worn.
   if (AFF_FLAGGED(ch, AFF_INFRAVISION)) {

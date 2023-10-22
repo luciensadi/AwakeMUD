@@ -5599,21 +5599,7 @@ void roll_individual_initiative(struct char_data *ch)
 {
   if (AWAKE(ch))
   {
-    // While rigging, riggers receive only the modifications given them by the vehicle control rig (see Vehicles and Drones, p. 130) they are using.
-    if (IS_RIGGING(ch)) {
-      // Note: Dice don't explode in initiative rolls. This is your base value.
-      GET_INIT_ROLL(ch) = GET_REAL_REA(ch) + dice(1, 6);
-
-      for (struct obj_data *rig = ch->cyberware; rig; rig = rig->next_content) {
-        if (GET_CYBERWARE_TYPE(rig) == CYB_VCR) {
-          // Each level adds +2 to the user’s Reaction and +1D6 Initiative dice while rigging. (SR3 p301)
-          GET_INIT_ROLL(ch) += (GET_CYBERWARE_RATING(rig) * 2) + dice(GET_CYBERWARE_RATING(rig), 6);
-          break;
-        }
-      }
-    }
-    else
-      GET_INIT_ROLL(ch) = roll_default_initiative(ch);
+    GET_INIT_ROLL(ch) = roll_default_initiative(ch);
     GET_INIT_ROLL(ch) -= damage_modifier(ch, buf, sizeof(buf));
     if (AFF_FLAGGED(ch, AFF_ACTION)) {
       GET_INIT_ROLL(ch) -= 10;
