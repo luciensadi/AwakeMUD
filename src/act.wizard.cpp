@@ -52,6 +52,7 @@
 #include "deck_build.hpp"
 #include "redit.hpp"
 #include "zoomies.hpp"
+#include "bullet_pants.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -7504,6 +7505,36 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
         printed = TRUE;
         issues++;
       }
+
+      // Check for special ammo or high quantities of it.
+      for (int weapon_idx = START_OF_AMMO_USING_WEAPONS; weapon_idx <= END_OF_AMMO_USING_WEAPONS; weapon_idx++) {
+        for (int ammo_idx = 0; ammo_idx < NUM_AMMOTYPES; ammo_idx++) {
+          int ammo_qty = GET_BULLETPANTS_AMMO_AMOUNT(mob, weapon_idx, ammo_idx);
+
+          if (ammo_qty < 0) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has NEGATIVE %d %s^n.\r\n",
+                     ammo_qty,
+                     get_ammo_representation(weapon_idx, ammo_idx, ammo_qty));
+            printed = TRUE;
+            issues++;
+          }
+          else if (ammo_idx == AMMO_NORMAL) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - large amount of %s (%d > 200)^n.\r\n",
+                     get_ammo_representation(weapon_idx, ammo_idx, ammo_qty),
+                     ammo_qty);
+            printed = TRUE;
+            issues++;
+          } 
+          else if (ammo_qty > 0) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %d %s^n.\r\n",
+                     ammo_qty,
+                     get_ammo_representation(weapon_idx, ammo_idx, ammo_qty));
+            printed = TRUE;
+            issues++;
+          }
+        }
+      }
+      
 
       if (mob->cyberware || mob->bioware) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has cyberware / bioware.\r\n");
