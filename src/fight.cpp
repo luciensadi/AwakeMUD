@@ -4111,11 +4111,15 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       strcpy(vehicle_message, "");
 
     if (damage < 0) {
-      switch (number(1, 3)) {
+      int switch_num = number(1, 3);
+      if (AFF_FLAGGED(victim, AFF_PRONE)) {
+        switch_num = 1;
+      }
+      switch (switch_num) {
         case 1:
-          snprintf(buf1, sizeof(buf1), "^r%s$n^r %sfires a %s^r at you, but you manage to dodge.^n", vehicle_message, blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y, but $E manage%s to dodge.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
-          snprintf(buf3, sizeof(buf3), "%s$n %sfires a %s^n at $N, but $E manage%s to dodge.", vehicle_message, blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf1, sizeof(buf1), "^r%s$n^r %sfires a %s^r at you, but the shot goes wide.^n", vehicle_message, blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y, but the shot goes wide.^n", blindfire_buf, buf);
+          snprintf(buf3, sizeof(buf3), "%s$n %sfires a %s^n at $N, but the shot goes wide.", vehicle_message, blindfire_buf, buf);
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r%s$n^r %sfires a %s^r at you, but you easily dodge.^n", vehicle_message, blindfire_buf, buf);
