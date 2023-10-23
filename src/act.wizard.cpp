@@ -7795,7 +7795,15 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
 
       // Check for shared value overruns.
       WARN_ON_NON_KOSHER_VAL(GET_WEAPON_POWER, >, power);
-      WARN_ON_NON_KOSHER_VAL(GET_WEAPON_DAMAGE_CODE, >, damage_code);
+
+      if (GET_WEAPON_DAMAGE_CODE(obj) > kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].damage_code) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon's damage code ^yis not in PGHQ spec for %s^n (%s > %s).\r\n",
+                 GET_WEAPON_TYPE_NAME(GET_WEAPON_ATTACK_TYPE(obj)),
+                 GET_WOUND_NAME(GET_WEAPON_DAMAGE_CODE(obj)),
+                 GET_WOUND_NAME(kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].damage_code));
+        printed = TRUE;
+        issues++;
+      }
       
       if (GET_WEAPON_SKILL(obj) != kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].skill) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon's skill (%s) may not match attack type %s's expected skill (%s)\r\n", 
