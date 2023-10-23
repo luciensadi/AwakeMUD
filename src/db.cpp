@@ -3592,21 +3592,41 @@ int vnum_object_magazines(char *searchname, struct char_data * ch)
 
 int vnum_object_foci(char *searchname, struct char_data * ch)
 {
-  int nr, found = 0;
+  int found = 0;
 
-  for (nr = 0; nr <= top_of_objt; nr++)
-  {
-    if (GET_OBJ_TYPE(&obj_proto[nr]) == ITEM_FOCUS
-        && !vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr))) {
-      snprintf(buf, sizeof(buf), "%3d. [%5ld -%2d] %s %s +%2d %s^n%s\r\n", ++found,
-              OBJ_VNUM_RNUM(nr),
-              ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
-              foci_type[GET_OBJ_VAL(&obj_proto[nr], 0)],
-              GET_OBJ_VAL(&obj_proto[nr], VALUE_FOCUS_RATING),
-              obj_proto[nr].text.name,
-              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
-      send_to_char(buf, ch);
+  for (int type_idx = 0; type_idx < NUM_FOCUS_TYPES; type_idx++) {
+    for (int power = 10; power >= 0; power--) {
+      for (int nr = 0; nr <= top_of_objt; nr++) {
+        if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_FOCUS)
+          continue;
+
+        if (GET_FOCUS_TYPE(&obj_proto[nr]) != type_idx)
+          continue;
+
+        // Skip anything that doesn't match our sought power. At max (10), we accept anything at or above.
+        if (power == 10 ? GET_FOCUS_FORCE(&obj_proto[nr]) >= power : GET_FOCUS_FORCE(&obj_proto[nr]) == power)
+          continue;
+
+        if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+          continue;
+
+        int count = ObjList.CountObj(nr);
+
+        snprintf(buf, sizeof(buf), "%3d. [%5ld -%s%2d^n] %s +%2d '%s^n'%s", ++found,
+                OBJ_VNUM_RNUM(nr),
+                count != 0 ? "^c" : "",
+                count,
+                foci_type[GET_OBJ_VAL(&obj_proto[nr], 0)],
+                GET_OBJ_VAL(&obj_proto[nr], VALUE_FOCUS_RATING),
+                obj_proto[nr].text.name,
+                obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+        
+        char wear_bit_buf[10000] = { '\0' };
+        obj_proto[nr].obj_flags.wear_flags.PrintBits(wear_bit_buf, sizeof(wear_bit_buf), wear_bits, NUM_WEARS);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%s]\r\n", wear_bit_buf);
+
+        send_to_char(buf, ch);
+      }
     }
   }
   return (found);

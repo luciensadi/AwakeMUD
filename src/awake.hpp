@@ -1827,6 +1827,7 @@ enum {
 #define FOCI_SUSTAINED    5
 // #define FOCI_WEAPON    6
 #define FOCI_SPELL_DEFENSE 7
+#define NUM_FOCUS_TYPES    8
 
 #define ACCESS_SMARTLINK  1
 #define ACCESS_SCOPE    2

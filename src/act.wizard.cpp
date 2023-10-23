@@ -7727,11 +7727,115 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       printed = TRUE;
       issues++;
     }
-
     else if (GET_OBJ_TYPE(obj) == ITEM_FOUNTAIN && GET_FOUNTAIN_POISON_RATING(obj) > 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yis poisoned^n (^y%d^n)^n.\r\n", GET_FOUNTAIN_POISON_RATING(obj));
       printed = TRUE;
       issues++;
+    }
+
+    // Check for weapons with high stats etc.
+    if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
+      if (WEAPON_IS_GUN(obj)) {
+        // Ranged checks.
+
+        // Recoil comp
+        if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^c%d^n integral recoil comp^n.\r\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
+          printed = TRUE;
+          issues++;
+        }
+
+        // Attachments
+        for (int idx = ACCESS_LOCATION_TOP; idx <= ACCESS_LOCATION_UNDER; idx++) {
+          vnum_t attach_vnum = GET_WEAPON_ATTACH_LOC(obj, idx);
+
+          if (attach_vnum) {
+            rnum_t attach_rnum = real_object(attach_vnum);
+            const char *attach_loc = gun_accessory_locations[idx - ACCESS_LOCATION_TOP];
+
+            if (attach_rnum < 0) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^yinvalid^n %s-attached item (%ld).\r\n", attach_loc, attach_vnum);
+              printed = TRUE;
+              issues++;
+            } else {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %s-attached item %s^n (%ld).\r\n", 
+                       attach_loc, 
+                       GET_OBJ_NAME(&obj_proto[attach_rnum]),
+                       attach_vnum);
+              printed = TRUE;
+              issues++;
+            }
+          }
+        }
+      } else {
+        // Melee checks.
+
+        // Reach
+        if (GET_WEAPON_REACH(obj)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^c%d^n reach^n.\r\n", GET_WEAPON_REACH(obj));
+          printed = TRUE;
+          issues++;
+        }
+      }
+    }
+
+    // Check for cash items with high values.
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_MONEY:
+        if (GET_ITEM_MONEY_VALUE(obj)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yis money^n with ^c%d^n value^n.\r\n", GET_ITEM_MONEY_VALUE(obj));
+          printed = TRUE;
+          issues++;
+        }
+        break;
+      case ITEM_DECK_ACCESSORY:
+        if (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PARTS && GET_OBJ_COST(obj)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yis chips/parts^n with ^c%d^n value^n.\r\n", GET_OBJ_COST(obj));
+          printed = TRUE;
+          issues++;
+        }
+        break;
+      case ITEM_MAGIC_TOOL:
+        if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_SUMMONING && GET_OBJ_COST(obj)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yis summoning mats^n with ^c%d^n value^n.\r\n", GET_OBJ_COST(obj));
+          printed = TRUE;
+          issues++;
+        }
+        break;
+    }
+
+    // Check for foci with high ratings.
+    if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
+      switch (GET_FOCUS_TYPE(obj)) {
+        case FOCI_EXPENDABLE:
+          break;
+        case FOCI_SPEC_SPELL:
+          break;
+        case FOCI_SPELL_CAT:
+          break;
+        case FOCI_SPIRIT:
+          break;
+        case FOCI_POWER:
+          if (GET_FOCUS_FORCE(obj) > 4) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris an over-strength power focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+            printed = TRUE;
+            issues++;
+          }
+          break;
+        case FOCI_SUSTAINED:
+          if (GET_FOCUS_FORCE(obj) > 4) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris an over-strength sustain focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+            printed = TRUE;
+            issues++;
+          } else if (GET_FOCUS_FORCE(obj) == 4) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis a max-strength sustain focus^n (%d): check wearslots for eyes only.\r\n", GET_FOCUS_FORCE(obj));
+            printed = TRUE;
+            issues++;
+          }
+          break;
+        case FOCI_SPELL_DEFENSE:
+          break;
+      }
     }
 
     if (printed) {
