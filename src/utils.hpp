@@ -398,7 +398,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_ROOM_NAME(room) ((room) ? (room)->name : "(null room's name)")
 #define GET_ROOM_DESC(room) ((room) ? ((room)->night_desc && weather_info.sunlight == SUN_DARK ? (room)->night_desc : (room)->description) : "(null room's desc)")
-#define GET_ROOM_FLIGHT_CODE(room) ((room) ? (room)->flight_code : (room)->name)
+#define GET_ROOM_FLIGHT_CODE(room) ((room) ? (room)->flight_code : "(null room's flight code)")
 
 #define VALID_ROOM_RNUM(rnum) ((rnum) != NOWHERE && (rnum) <= top_of_world)
 
@@ -424,7 +424,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_WAS_IN(ch)  ((ch)->was_in_room)
 
-#define GET_VEH_NAME(veh) (decapitalize_a_an((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE")))
+#define GET_VEH_NAME(veh) (veh ? decapitalize_a_an((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE")) : "(null veh)")
 #define GET_VEH_NAME_NOFORMAT(veh) ((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE"))
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
 #define GET_VEH_RNUM(veh) ((veh)->veh_number)

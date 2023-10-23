@@ -7,7 +7,7 @@
 
 bool check_for_valid_launch_location(struct char_data *ch, struct veh_data *veh, bool message);
 bool veh_can_launch_from_or_land_at(struct veh_data *veh, struct room_data *room);
-float get_flight_distance_to_room(struct veh_data *veh, struct room_data *room);
+float get_flight_distance_to_room(struct room_data *origin, struct room_data *dest);
 int calculate_flight_cost(struct veh_data *veh, float distance);
 int flight_test(struct char_data *ch, struct veh_data *veh);
 int calculate_flight_time(struct veh_data *veh, float distance);

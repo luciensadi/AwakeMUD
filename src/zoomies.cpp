@@ -132,7 +132,7 @@ ACMD(do_flyto) {
     send_to_char("You're aware of the following destinations:\r\n", ch);
     for (rnum_t rnum = 0; rnum <= top_of_world; rnum++) {
       if (room_is_valid_flyto_destination(&world[rnum], veh, ch)) {
-        float distance = get_flight_distance_to_room(veh, &world[rnum]);
+        float distance = get_flight_distance_to_room(veh->in_room, &world[rnum]);
 
         send_to_char(ch, "%3s) %40s  (%.1f kms, %d nuyen in fuel)\r\n", 
                      GET_ROOM_FLIGHT_CODE(&world[rnum]), 
@@ -156,7 +156,7 @@ ACMD(do_flyto) {
   FAILURE_CASE(target_room == veh->in_room, "You're already there.");
 
   // Valid destination. Calculate fuel cost.
-  float distance = get_flight_distance_to_room(veh, target_room);
+  float distance = get_flight_distance_to_room(veh->in_room, target_room);
   int fuel_cost = calculate_flight_cost(veh, distance);
 
   FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost, "It will cost %d nuyen for fuel, maintenance, and fees, but you only have %d on hand.", fuel_cost, GET_NUYEN(ch));
@@ -310,14 +310,19 @@ double degrees_to_radians(float degrees) {
 }
 
 #define EARTH_RADIUS_KM 6371
-float get_flight_distance_to_room(struct veh_data *veh, struct room_data *room) {
-  // Calculates the great circle distance in kilometers between two GPS points (the ones occupied by the vehicle and the room).
-  // Adapted from https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates.
-  float dLat = degrees_to_radians(veh->in_room->latitude - room->latitude);
-  float dLon = degrees_to_radians(veh->in_room->longitude - room->longitude);
+float get_flight_distance_to_room(struct room_data *origin, struct room_data *dest) {
+  if (!origin || !dest) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: precondition failure in gfdtr(%s, %s)", GET_ROOM_NAME(origin), GET_ROOM_NAME(dest));
+    return FALSE;
+  }
 
-  float lat1 = degrees_to_radians(room->latitude);
-  float lat2 = degrees_to_radians(veh->in_room->latitude);
+  // Calculates the great circle distance in kilometers between two GPS points (the ones occupied by the vehicle and the dest).
+  // Adapted from https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates.
+  float dLat = degrees_to_radians(origin->latitude - dest->latitude);
+  float dLon = degrees_to_radians(origin->longitude - dest->longitude);
+
+  float lat1 = degrees_to_radians(dest->latitude);
+  float lat2 = degrees_to_radians(origin->latitude);
 
   float a = sin(dLat/2) * sin(dLat/2) +
           sin(dLon/2) * sin(dLon/2) * cos(lat1) * cos(lat2); 
@@ -327,12 +332,12 @@ float get_flight_distance_to_room(struct veh_data *veh, struct room_data *room) 
 
   /*
   mudlog_vfprintf(NULL, LOG_MISCLOG, "DEBUG: Distance between %s (%f, %f) and %s (%f, %f) is %0.2f kilometers.",
-                  GET_ROOM_NAME(veh->in_room),
-                  veh->in_room->latitude,
-                  veh->in_room->longitude,
-                  GET_ROOM_NAME(room),
-                  room->latitude,
-                  room->longitude,
+                  GET_ROOM_NAME(origin),
+                  origin->latitude,
+                  origin->longitude,
+                  GET_ROOM_NAME(dest),
+                  dest->latitude,
+                  dest->longitude,
                   distance);
   */
 
@@ -341,15 +346,20 @@ float get_flight_distance_to_room(struct veh_data *veh, struct room_data *room) 
 #undef EARTH_RADIUS_KM
 
 bool destination_is_within_flight_range(struct veh_data *veh, struct room_data *room) {
+  if (!veh || !veh->in_room || !room) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: precondition failure in diwfr(%s, %s)", GET_VEH_NAME(veh), GET_ROOM_NAME(room));
+    return FALSE;
+  }
+
   switch (veh->type) {
     case VEH_ROTORCRAFT:
     case VEH_DRONE:
       // Helicopters and drones have limited range.
-      return get_flight_distance_to_room(veh, room) < 500;
+      return get_flight_distance_to_room(veh->in_room, room) < 500;
     case VEH_VECTORTHRUST:
     case VEH_FIXEDWING:
       // These technically are limited in range, but they can get anywhere in the current game world.
-      return get_flight_distance_to_room(veh, room) < 8000;
+      return get_flight_distance_to_room(veh->in_room, room) < 8000;
     case VEH_LTA:
       // LTAs are slow but can go pretty much anywhere (they just kinda... float)
       return TRUE;

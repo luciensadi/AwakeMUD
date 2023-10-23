@@ -51,6 +51,7 @@
 #include "newhouse.hpp"
 #include "deck_build.hpp"
 #include "redit.hpp"
+#include "zoomies.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -7193,6 +7194,53 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Background count: Mana warp (%d > 5).\r\n", GET_BACKGROUND_COUNT(room));
       issues++;
       printed = TRUE;
+    }
+
+    // Check for issues with flight location.
+    {
+      bool is_landable = ROOM_FLAGGED(room, ROOM_HELIPAD) || ROOM_FLAGGED(room, ROOM_RUNWAY);
+      bool has_flight_code = GET_ROOM_FLIGHT_CODE(room) && strcmp(room->flight_code, INVALID_FLIGHT_CODE);
+
+      if (is_landable || has_flight_code) {
+        if (is_landable && has_flight_code) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Has a ^c%s^n w/ flight code ^c%s^n.\r\n", 
+                   ROOM_FLAGGED(room, ROOM_HELIPAD) ? "helipad" : "runway",
+                   GET_ROOM_FLIGHT_CODE(room));
+        } else if (is_landable) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Is a ^c%s^n with ^yno^n flight code.\r\n", 
+                   ROOM_FLAGGED(room, ROOM_HELIPAD) ? "helipad" : "runway");
+        } else {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Has a flight code (^c%s^n) but no helipad/runway flag.\r\n",
+                   GET_ROOM_FLIGHT_CODE(room));
+        }
+        issues++;
+        printed = TRUE;
+
+        // Make sure it's not at origin.
+        if (room->latitude == 0 || room->longitude == 0) {
+          strlcat(buf, "  - Has flight-related info with at least one zeroed lat/long field.\r\n", sizeof(buf));
+          issues++;
+          printed = TRUE;
+        } 
+        // Calculate distance to Seattle.
+        else {
+          struct room_data east_seattle;
+          east_seattle.latitude = 47.598457;
+          east_seattle.longitude = -122.338623;
+          
+          char tmp_name[] = { "(tmp audit room: east seattle)" };
+          east_seattle.name = tmp_name;
+
+          int distance = get_flight_distance_to_room(room, &east_seattle);
+
+          if (distance > 200) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Is far from Seattle (%d kms > 200 kms).\r\n",
+                     distance);
+            issues++;
+            printed = TRUE;
+          }
+        }
+      }
     }
 
     // Check its exits.
