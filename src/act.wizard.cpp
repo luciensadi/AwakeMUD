@@ -7777,8 +7777,9 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       WARN_ON_NON_KOSHER_VAL(GET_WEAPON_DAMAGE_CODE, >, damage_code);
       
       if (GET_WEAPON_SKILL(obj) != kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].skill) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon's skill (%s) may not match attack type (%s)\r\n", 
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon's skill (%s) may not match attack type %s's expected skill (%s)\r\n", 
                  skills[GET_WEAPON_SKILL(obj)].name,
+                 GET_WEAPON_TYPE_NAME(GET_WEAPON_ATTACK_TYPE(obj)),
                  skills[kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].skill].name);
         printed = TRUE;
         issues++;
