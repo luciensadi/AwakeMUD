@@ -833,19 +833,19 @@ void affect_total(struct char_data * ch)
   GET_REA(ch) = (GET_REA(ch) > aug_rea) ? GET_REA(ch) : aug_rea;
   GET_INIT_DICE(ch) = (GET_INIT_DICE(ch) > aug_init_dice) ? GET_INIT_DICE(ch) : aug_init_dice;
 
-  // Reaction/initiative mods from cyber/bio/magic/adept don't apply to decking/rigging
-  int mental_rea = 0, mental_init_dice = 0;
+  // Except for VCRs, reaction/initiative augmentations don't apply to rigging (R3 pg 27)
+  int rigger_rea = 0, rigger_init_dice = 0;
 
-  // Let drug rea/init mods apply to rigging/decking
+  // Let drug rea/init mods apply to rigging
   // Unclear in SR3 canon, but is consistent with genre fiction
   // Subtract current values, then add post-drug values
-  mental_rea -= GET_REA(ch);
-  mental_init_dice -= GET_INIT_DICE(ch);
+  rigger_rea -= GET_REA(ch);
+  rigger_init_dice -= GET_INIT_DICE(ch);
 
   apply_drug_modifiers_to_ch(ch);
 
-  mental_rea += GET_REA(ch);
-  mental_init_dice += GET_INIT_DICE(ch);
+  rigger_rea += GET_REA(ch);
+  rigger_init_dice += GET_INIT_DICE(ch);
 
   // Min attribute is one, max is soft capped
   int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
@@ -873,8 +873,8 @@ void affect_total(struct char_data * ch)
   // We don't cap reaction because qui and int are already capped
   GET_REA(ch) += (GET_INT(ch) + GET_QUI(ch)) >> 1;
 
-  // Qui mods don't contribute (but int mods do) to reaction when decking/rigging
-  mental_rea += (GET_INT(ch) + GET_REAL_QUI(ch)) >> 1;
+  // When rigging, qui mods don't contribute (R3 pg 27)
+  rigger_rea += (GET_INT(ch) + GET_REAL_QUI(ch)) >> 1;
 
   // Qui bonus from mbw doesn't increase reaction (MM pg 30)
   // Also makes sense that mbw DOES protect from disabling via nervestrike
@@ -883,6 +883,39 @@ void affect_total(struct char_data * ch)
     GET_REA(ch) += has_mbw * 2;
     GET_INIT_DICE(ch) += has_mbw;
   }
+
+  // Matrix pg 18 & 24, assume pure DNI (thus reaction = intelligence)
+  // No direct reaction/initiative bonuses from cyber/bio apply (assume no bonuses from magic/adept either)
+  if (PLR_FLAGGED(ch, PLR_MATRIX)) {
+    GET_REA(ch) = GET_INT(ch);
+    GET_INIT_DICE(ch) = 0;
+  }
+
+  // Rigging
+  if (has_rig) {
+    // a VCR adds to reaction, thus control pool
+    rigger_rea += 2 * has_rig;
+    GET_CONTROL(ch) += rigger_rea;
+
+    // also adds to initiative dice
+    rigger_init_dice += has_rig;
+
+    // but reduces hacking pool
+    GET_HACKING(ch) -= has_rig;
+    if (GET_HACKING(ch) < 0)
+      GET_HACKING(ch) = 0;
+  } else {
+    // direct control with a datajack and no VCR (SR3 pg 140)
+    rigger_rea += 1;
+  }
+
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    GET_REA(ch) = rigger_rea; 
+    GET_INIT_DICE(ch) = rigger_init_dice;
+  }
+
+  // Cap init dice
+  GET_INIT_DICE(ch) = MAX(0, MIN(GET_INIT_DICE(ch), 5));
 
   // Combat pool is derived from current atts, so we calculate it after all att modifiers
   GET_COMBAT(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
@@ -998,35 +1031,6 @@ void affect_total(struct char_data * ch)
       mpcp += GET_INT(ch);
       GET_HACKING(ch) += (int)(mpcp / 3);
     }
-  }
-
-  // Decking
-  if (PLR_FLAGGED(ch, PLR_MATRIX)) {
-    GET_REA(ch) = mental_rea;
-    GET_INIT_DICE(ch) = mental_init_dice;
-  }
-
-  // Rigging
-  if (has_rig) {
-    // a VCR adds to reaction, thus control pool
-    mental_rea += 2 * has_rig;
-    GET_CONTROL(ch) += mental_rea;
-
-    // also adds to initiative dice
-    mental_init_dice += has_rig;
-
-    // but reduces hacking pool
-    GET_HACKING(ch) -= has_rig;
-    if (GET_HACKING(ch) < 0)
-      GET_HACKING(ch) = 0;
-  } else {
-    // direct control with a datajack and no VCR (SR3 pg 140)
-    mental_rea += 1;
-  }
-
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    GET_REA(ch) = mental_rea; 
-    GET_INIT_DICE(ch) = mental_init_dice;
   }
 
   // Restore their max_hacking and rem_hacking, which were wiped out in the earlier aff_abils = real_abils.

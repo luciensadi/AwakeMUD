@@ -200,8 +200,9 @@ void roll_matrix_init(struct matrix_icon *icon)
   int init_dice = 1;
   if (icon->decker && icon->decker->ch)
   {
-    icon->initiative = GET_REA(icon->decker->ch) + (icon->decker->response * 2) + (icon->decker->reality ? 2 : 0);
-    init_dice += GET_INIT_DICE(icon->decker->ch) + icon->decker->response + (icon->decker->reality ? 1 : 0);
+    // Matrix pg 18 & 24, available bonuses are response increase, reality filter, and hot asist
+    icon->initiative = GET_REA(icon->decker->ch) + (icon->decker->response * 2) + (icon->decker->reality ? 2 : 0) + (icon->decker->asist[0] ? 2 : 0);
+    init_dice += GET_INIT_DICE(icon->decker->ch) + icon->decker->response + (icon->decker->reality ? 1 : 0) + (icon->decker->asist[0] ? 1 : 0);
   } else
   {
     icon->initiative = icon->ic.rating;
