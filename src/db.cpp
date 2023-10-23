@@ -3594,6 +3594,8 @@ int vnum_object_foci(char *searchname, struct char_data * ch)
 {
   int found = 0;
 
+  strlcpy(buf, "", sizeof(buf));
+
   for (int type_idx = 0; type_idx < NUM_FOCUS_TYPES; type_idx++) {
     for (int power = 10; power >= 0; power--) {
       for (int nr = 0; nr <= top_of_objt; nr++) {
@@ -3604,7 +3606,7 @@ int vnum_object_foci(char *searchname, struct char_data * ch)
           continue;
 
         // Skip anything that doesn't match our sought power. At max (10), we accept anything at or above.
-        if (power == 10 ? GET_FOCUS_FORCE(&obj_proto[nr]) >= power : GET_FOCUS_FORCE(&obj_proto[nr]) == power)
+        if ((power == 10 ? GET_FOCUS_FORCE(&obj_proto[nr]) < power : GET_FOCUS_FORCE(&obj_proto[nr]) != power))
           continue;
 
         if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
@@ -3612,7 +3614,7 @@ int vnum_object_foci(char *searchname, struct char_data * ch)
 
         int count = ObjList.CountObj(nr);
 
-        snprintf(buf, sizeof(buf), "%3d. [%5ld -%s%2d^n] %s +%2d '%s^n'%s", ++found,
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%3d. [%5ld -%s%2d^n] %s +%2d '%s^n'%s", ++found,
                 OBJ_VNUM_RNUM(nr),
                 count != 0 ? "^c" : "",
                 count,
@@ -3624,11 +3626,12 @@ int vnum_object_foci(char *searchname, struct char_data * ch)
         char wear_bit_buf[10000] = { '\0' };
         obj_proto[nr].obj_flags.wear_flags.PrintBits(wear_bit_buf, sizeof(wear_bit_buf), wear_bits, NUM_WEARS);
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%s]\r\n", wear_bit_buf);
-
-        send_to_char(buf, ch);
       }
     }
   }
+
+  page_string(ch->desc, buf, 1);
+
   return (found);
 }
 
