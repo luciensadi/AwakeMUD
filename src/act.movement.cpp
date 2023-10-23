@@ -181,7 +181,7 @@ int can_move(struct char_data *ch, int dir, int extra)
   return 1;
 }
 
-bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data *ch) {
+bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data *ch, bool we_care_about_sneaking) {
   if (!tch) {
     mudlog("SYSERR: Received null tch to s_v_o_s_m_m!", tch, LOG_SYSLOG, TRUE);
     return FALSE;
@@ -196,13 +196,17 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
   if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || IS_IGNORING(tch, is_blocking_ic_interaction_from, ch))
     return FALSE;
 
+  // Tuned out doing other things.
+  if (PLR_FLAGGED(tch, PLR_REMOTE) || PLR_FLAGGED(tch, PLR_MATRIX))
+    return FALSE;
+
   // Failed to see from vehicle.
   if (tch->in_veh && (tch->in_veh->cspeed > SPEED_IDLE && success_test(GET_INT(tch), 4) <= 0)) {
     return FALSE;
   }
 
   // Check for stealth and other person-to-person modifiers.
-  if (IS_AFFECTED(ch, AFF_SNEAK)) {
+  if (we_care_about_sneaking && IS_AFFECTED(ch, AFF_SNEAK)) {
     int dummy_tn = 2;
     char rbuf[1000];
     struct room_data *in_room = get_ch_in_room(ch);
@@ -317,26 +321,25 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   // People in the room.
   for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
-    if (should_tch_see_chs_movement_message(tch, ch))
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
 
   // Vehicle occupants, including riggers.
   for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
     for (tch = tveh->people; tch; tch = tch->next_in_veh) {
-      if (should_tch_see_chs_movement_message(tch, ch))
+      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
 
-    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
       act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
 
   // Watchers.
-  if (ch->in_room->watching) {
-    for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
-      if (should_tch_see_chs_movement_message(tch, ch))
-        act(buf2, TRUE, ch, 0, tch, TO_VICT);
+  for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
 
   was_in = ch->in_room;
@@ -413,7 +416,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   // People in the room.
   for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
-    if (should_tch_see_chs_movement_message(tch, ch)) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE)) {
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
 
       if (IS_NPC(tch) && !FIGHTING(tch)) {
@@ -446,19 +449,18 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   // Vehicle occupants.
   for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
     for (tch = tveh->people; tch; tch = tch->next_in_veh) {
-      if (should_tch_see_chs_movement_message(tch, ch))
+      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
 
-    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
       act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
 
   // Watchers.
-  if (ch->in_room->watching) {
-    for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
-      if (should_tch_see_chs_movement_message(tch, ch))
-        act(buf2, TRUE, ch, 0, tch, TO_VICT);
+  for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
 
 #ifdef DEATH_FLAGS
@@ -798,10 +800,32 @@ void move_vehicle(struct char_data *ch, int dir)
   snprintf(buf2, sizeof(buf2), "%s %s from %s.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)), veh->arrive, thedirs[rev_dir[dir]]);
   snprintf(buf1, sizeof(buf1), "%s %s to %s.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)), veh->leave, thedirs[dir]);
 
-  send_to_room(buf1, veh->in_room, veh);
+  // People in the room.
+  for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf1, TRUE, ch, 0, tch, TO_VICT);
+  }
 
-  for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching)
-    act(buf2, FALSE, ch, 0, 0, TO_CHAR);
+  // Vehicle occupants, including riggers.
+  for (struct veh_data *tveh = veh->in_room->vehicles; tveh; tveh = tveh->next_veh) {
+    if (tveh == veh)
+      continue;
+    
+    for (tch = tveh->people; tch; tch = tch->next_in_veh) {
+      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+        act(buf1, TRUE, ch, 0, tch, TO_VICT);
+    }
+
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
+      act(buf1, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
+  }
+
+  // Watchers.
+  for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf1, TRUE, ch, 0, tch, TO_VICT);
+  }
+
   // for (int r = 1; r >= 0; r--)        <-- Why.
   //  veh->lastin[r+1] = veh->lastin[r];
   veh->lastin[2] = veh->lastin[1];
@@ -812,10 +836,32 @@ void move_vehicle(struct char_data *ch, int dir)
   veh_to_room(veh, was_in);
   veh->lastin[0] = veh->in_room;
 
-  send_to_room(buf2, veh->in_room, veh);
+  // People in the room.
+  for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf2, TRUE, ch, 0, tch, TO_VICT);
+  }
 
-  for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching)
-    act(buf2, FALSE, ch, 0, 0, TO_CHAR);
+  // Vehicle occupants, including riggers.
+  for (struct veh_data *tveh = veh->in_room->vehicles; tveh; tveh = tveh->next_veh) {
+    if (tveh == veh)
+      continue;
+    
+    for (tch = tveh->people; tch; tch = tch->next_in_veh) {
+      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+        act(buf2, TRUE, ch, 0, tch, TO_VICT);
+    }
+
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
+      act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
+  }
+
+  // Watchers.
+  for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf2, TRUE, ch, 0, tch, TO_VICT);
+  }
+
   stop_fighting(ch);
   for (v = veh->followers; v; v = nextv)
   {
