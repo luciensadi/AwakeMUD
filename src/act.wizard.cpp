@@ -7518,7 +7518,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
             printed = TRUE;
             issues++;
           }
-          else if (ammo_idx == AMMO_NORMAL) {
+          else if (ammo_idx == AMMO_NORMAL && ammo_qty > 200) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - large amount of %s (%d > 200)^n.\r\n",
                      get_ammo_representation(weapon_idx, ammo_idx, ammo_qty),
                      ammo_qty);
@@ -7775,7 +7775,14 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       // Check for shared value overruns.
       WARN_ON_NON_KOSHER_VAL(GET_WEAPON_POWER, >, power);
       WARN_ON_NON_KOSHER_VAL(GET_WEAPON_DAMAGE_CODE, >, damage_code);
-      WARN_ON_NON_KOSHER_VAL(GET_WEAPON_SKILL, !=, skill);
+      
+      if (GET_WEAPON_SKILL(obj) != kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].skill) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon's skill (%s) may not match attack type (%s)\r\n", 
+                 skills[GET_WEAPON_SKILL(obj)].name,
+                 skills[kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].skill].name);
+        printed = TRUE;
+        issues++;
+      }
 
       if (WEAPON_IS_GUN(obj)) {
         // Ranged checks.
