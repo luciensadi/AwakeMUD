@@ -7815,15 +7815,15 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
 
       switch (GET_FOCUS_TYPE(obj)) {
         case FOCI_EXPENDABLE:
-          if (GET_FOCUS_FORCE(obj) > 6) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris an over-strength expendable focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+          if (GET_FOCUS_FORCE(obj) > 8) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength expendable focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
             printed = TRUE;
             issues++;
           }
           break;
         case FOCI_SPEC_SPELL:
           if (GET_FOCUS_FORCE(obj) > 8) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris an over-strength specific spell focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength specific spell focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
             printed = TRUE;
             issues++;
           } else if (GET_FOCUS_FORCE(obj) > 4) {
@@ -7837,14 +7837,14 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
           break;
         case FOCI_SPELL_CAT:
           if (GET_FOCUS_FORCE(obj) > 4) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris an over-strength category focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength category focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
             printed = TRUE;
             issues++;
           }
           break;
         case FOCI_SPIRIT:
-          if (GET_FOCUS_FORCE(obj) > 5) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris an over-strength defense focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+          if (GET_FOCUS_FORCE(obj) > 6) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength spirit focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
             printed = TRUE;
             issues++;
           }
@@ -7864,15 +7864,15 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
           } else if (GET_FOCUS_FORCE(obj) == 4) {
             unacceptable_bits.RemoveBits(ITEM_WEAR_HOLD, ITEM_WEAR_EYES, ENDBIT);
             if (GET_OBJ_WEAR(obj).AreAnyShared(unacceptable_bits)) {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis a max-strength sustain focus^n (%d) ^youtside of eye/hold slots^n\r\n", GET_FOCUS_FORCE(obj));
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris a max-strength sustain focus^n (%d) ^youtside of eye/hold slots^n\r\n", GET_FOCUS_FORCE(obj));
               printed = TRUE;
               issues++;
             }
           }
           break;
         case FOCI_SPELL_DEFENSE:
-          if (GET_FOCUS_FORCE(obj) > 3) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris an over-strength defense focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+          if (GET_FOCUS_FORCE(obj) > 4) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength defense focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
             printed = TRUE;
             issues++;
           }

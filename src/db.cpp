@@ -3625,7 +3625,7 @@ int vnum_object_foci(char *searchname, struct char_data * ch)
         
         char wear_bit_buf[10000] = { '\0' };
         obj_proto[nr].obj_flags.wear_flags.PrintBits(wear_bit_buf, sizeof(wear_bit_buf), wear_bits, NUM_WEARS);
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%s]\r\n", wear_bit_buf);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " [%s]\r\n", wear_bit_buf);
       }
     }
   }
