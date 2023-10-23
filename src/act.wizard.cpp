@@ -1859,6 +1859,22 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   }
 
   {
+    char ammo_buf[10000] = { '\0' };
+    for (int weapon_idx = START_OF_AMMO_USING_WEAPONS; weapon_idx <= END_OF_AMMO_USING_WEAPONS; weapon_idx++) {
+      for (int ammo_idx = 0; ammo_idx < NUM_AMMOTYPES; ammo_idx++) {
+        int ammo_qty = GET_BULLETPANTS_AMMO_AMOUNT(k, weapon_idx, ammo_idx);
+
+        if (ammo_qty) {
+          snprintf(ENDOF(ammo_buf), sizeof(ammo_buf) - strlen(ammo_buf), "  ^c%d^n %s\r\n", ammo_qty, get_ammo_representation(weapon_idx, ammo_idx, ammo_qty));
+        }
+      }
+    }
+    if (*ammo_buf) {
+      send_to_char(ch, "Ammo:\r\n%s", ammo_buf);
+    }
+  }
+
+  {
     char skill_buf[1000] = { '\0' };
     for (int skill_idx = 0; skill_idx <= 8; skill_idx += 2) {
       if (k->mob_specials.mob_skills[skill_idx + 1] && (k->mob_specials.mob_skills[skill_idx] > 0 && k->mob_specials.mob_skills[skill_idx] < MAX_SKILLS)) {
