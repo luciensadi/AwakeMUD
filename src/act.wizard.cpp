@@ -7518,7 +7518,10 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
         for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
           struct obj_data *worn = GET_EQ(mob, wearloc);
           if (worn) {
-            total_value += GET_OBJ_COST(worn);
+            if (!(IS_OBJ_STAT(worn, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(worn, ITEM_EXTRA_STAFF_ONLY))) {
+              total_value += GET_OBJ_COST(worn);
+            }
+
             total_items++;
 
             vnum_t vnum = GET_OBJ_VNUM(worn);
@@ -7675,7 +7678,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       // Everything else: warn about !TAKE.
       default:
         if (!GET_OBJ_WEAR(obj).IsSet(ITEM_WEAR_TAKE)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cannot be picked up if dropped^n.\r\n");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cannot be picked up if dropped (should this be obj type Loaded Decoration?)^n.\r\n");
           printed = TRUE;
           issues++;
         }
@@ -7712,7 +7715,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
     else {
-      if (!ispunct((candidate = get_final_character_from_string(obj->text.room_desc)))) {
+      if (!ispunct((candidate = get_final_character_from_string(get_string_after_color_code_removal(obj->text.room_desc, ch))))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - room desc not ending in punctuation (%c)^n.\r\n", candidate);
         printed = TRUE;
         issues++;
