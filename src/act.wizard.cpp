@@ -7749,7 +7749,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         for (int idx = ACCESS_LOCATION_TOP; idx <= ACCESS_LOCATION_UNDER; idx++) {
           vnum_t attach_vnum = GET_WEAPON_ATTACH_LOC(obj, idx);
 
-          if (attach_vnum) {
+          if (attach_vnum > 0) {
             rnum_t attach_rnum = real_object(attach_vnum);
             const char *attach_loc = gun_accessory_locations[idx - ACCESS_LOCATION_TOP];
 
