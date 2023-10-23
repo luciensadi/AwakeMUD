@@ -763,6 +763,7 @@ void affect_total(struct char_data * ch)
     GET_INIT_DICE(ch) += has_wired;
     GET_REA(ch) += has_wired * 2;
   }
+  
   /* effects of bioware */
   for (cyber = ch->bioware; cyber; cyber = cyber->next_content)
   {
@@ -774,10 +775,6 @@ void affect_total(struct char_data * ch)
                       cyber->affected[j].modifier,
                       cyber->obj_flags.bitvector, TRUE);
   }
-
-  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-    if (!sust->caster)
-      spell_modify(ch, sust, TRUE);
 
   for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
     switch (GET_BIOWARE_TYPE(bio)) {
@@ -794,12 +791,21 @@ void affect_total(struct char_data * ch)
     }
   }
 
+  // We want the higher of either cyber+bio or magic/adept
+  int aug_rea = GET_REA(ch);
+  int aug_init_dice = GET_INIT_DICE(ch);
+  GET_REA(ch) = 0;
+  GET_INIT_DICE(ch) = 0;
+
+  /* effects of magic */
+  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
+    if (!sust->caster)
+      spell_modify(ch, sust, TRUE);
+
   if (GET_TRADITION(ch) == TRAD_ADEPT)
   {
-    if (GET_INIT_DICE(ch) == 0)
-      GET_INIT_DICE(ch) += MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
-    if (GET_REAL_REA(ch) == GET_REA(ch))
-      GET_REA(ch) += 2*MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
+    GET_INIT_DICE(ch) += MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
+    GET_REA(ch) += 2*MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
     GET_BOD(ch) += GET_POWER(ch, ADEPT_IMPROVED_BOD);
     GET_QUI(ch) += GET_POWER(ch, ADEPT_IMPROVED_QUI);
     GET_STR(ch) += GET_POWER(ch, ADEPT_IMPROVED_STR);
@@ -821,7 +827,23 @@ void affect_total(struct char_data * ch)
     }
   }
 
+  // We want the higher of either cyber+bio or magic/adept
+  GET_REA(ch) = (GET_REA(ch) > aug_rea) ? GET_REA(ch) : aug_rea;
+  GET_INIT_DICE(ch) = (GET_INIT_DICE(ch) > aug_init_dice) ? GET_INIT_DICE(ch) : aug_init_dice;
+
+  // Except for VCRs, reaction/initiative augmentations don't apply to rigging (R3 pg 27)
+  int rigger_rea = 0, rigger_init_dice = 0;
+
+  // Let drug rea/init mods apply to rigging
+  // Unclear in SR3 canon, but is consistent with genre fiction
+  // Subtract current values, then add post-drug values
+  rigger_rea -= GET_REA(ch);
+  rigger_init_dice -= GET_INIT_DICE(ch);
+
   apply_drug_modifiers_to_ch(ch);
+
+  rigger_rea += GET_REA(ch);
+  rigger_init_dice += GET_INIT_DICE(ch);
 
   // Min attribute is one, max is soft capped
   int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
@@ -848,6 +870,50 @@ void affect_total(struct char_data * ch)
   // Reaction is derived from current atts, so we calculate it after all att modifiers
   // We don't cap reaction because qui and int are already capped
   GET_REA(ch) += (GET_INT(ch) + GET_QUI(ch)) >> 1;
+
+  // When rigging, qui mods don't contribute (R3 pg 27)
+  rigger_rea += (GET_INT(ch) + GET_REAL_QUI(ch)) >> 1;
+
+  // Qui bonus from mbw doesn't increase reaction (MM pg 30)
+  // Also makes sense that mbw DOES protect from disabling via nervestrike
+  if (has_mbw) {
+    GET_QUI(ch) += has_mbw;
+    GET_REA(ch) += has_mbw * 2;
+    GET_INIT_DICE(ch) += has_mbw;
+  }
+
+  // Matrix pg 18 & 24, assume pure DNI (thus reaction = intelligence)
+  // No direct reaction/initiative bonuses from cyber/bio apply (assume no bonuses from magic/adept either)
+  if (PLR_FLAGGED(ch, PLR_MATRIX)) {
+    GET_REA(ch) = GET_INT(ch);
+    GET_INIT_DICE(ch) = 0;
+  }
+
+  // Rigging
+  if (has_rig) {
+    // a VCR adds to reaction, thus control pool
+    rigger_rea += 2 * has_rig;
+    GET_CONTROL(ch) += rigger_rea;
+
+    // also adds to initiative dice
+    rigger_init_dice += has_rig;
+
+    // but reduces hacking pool
+    GET_HACKING(ch) -= has_rig;
+    if (GET_HACKING(ch) < 0)
+      GET_HACKING(ch) = 0;
+  } else {
+    // direct control with a datajack and no VCR (SR3 pg 140)
+    rigger_rea += 1;
+  }
+
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    GET_REA(ch) = rigger_rea; 
+    GET_INIT_DICE(ch) = rigger_init_dice;
+  }
+
+  // Cap init dice
+  GET_INIT_DICE(ch) = MAX(0, MIN(GET_INIT_DICE(ch), 5));
 
   // Combat pool is derived from current atts, so we calculate it after all att modifiers
   GET_COMBAT(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
@@ -966,27 +1032,9 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  if (has_rig)
-  {
-    int reaction = GET_REAL_INT(ch) + GET_REAL_QUI(ch);
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-      if (GET_OBJ_VAL(bio, 0) == BIO_CEREBRALBOOSTER)
-        reaction += GET_OBJ_VAL(bio, 1);
-    GET_CONTROL(ch) += (reaction / 2) + (int)(2 * has_rig);
-    GET_HACKING(ch) -= has_rig;
-    if (GET_HACKING(ch) < 0)
-      GET_HACKING(ch) = 0;
-  }
-
   // Restore their max_hacking and rem_hacking, which were wiped out in the earlier aff_abils = real_abils.
   GET_REM_HACKING(ch) = MIN(old_rem_hacking, GET_HACKING(ch));
   GET_MAX_HACKING(ch) = MIN(old_max_hacking, GET_HACKING(ch));
-
-  if (has_mbw) {
-    GET_QUI(ch) += has_mbw;
-    GET_REA(ch) += has_mbw * 2;
-    GET_INIT_DICE(ch) += has_mbw;
-  }
 
   // Update current vision to match what's being worn.
   if (AFF_FLAGGED(ch, AFF_INFRAVISION)) {

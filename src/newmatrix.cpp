@@ -203,19 +203,20 @@ bool spawn_ic(struct matrix_icon *target, vnum_t ic_vnum, int triggerstep) {
 
 void roll_matrix_init(struct matrix_icon *icon)
 {
-  int x = 1;
+  int init_dice = 1;
   if (icon->decker && icon->decker->ch)
   {
-    icon->initiative = GET_REAL_REA(icon->decker->ch) + (icon->decker->response * 2) + (icon->decker->reality ? 2 : 0);
-    x += icon->decker->response + (icon->decker->reality ? 1 : 0);
+    // Matrix pg 18 & 24, available bonuses are response increase, reality filter, and hot asist
+    icon->initiative = GET_REA(icon->decker->ch) + (icon->decker->response * 2) + (icon->decker->reality ? 2 : 0) + (icon->decker->asist[0] ? 2 : 0);
+    init_dice += GET_INIT_DICE(icon->decker->ch) + icon->decker->response + (icon->decker->reality ? 1 : 0) + (icon->decker->asist[0] ? 1 : 0);
   } else
   {
     icon->initiative = icon->ic.rating;
     if (matrix[icon->in_host].shutdown)
       icon->initiative--;
-    x += matrix[icon->in_host].color;
+    init_dice += matrix[icon->in_host].color;
   }
-  icon->initiative += dice(x, 6);
+  icon->initiative += dice(init_dice, 6);
   icon->initiative -= matrix[icon->in_host].pass * 10;
 }
 
