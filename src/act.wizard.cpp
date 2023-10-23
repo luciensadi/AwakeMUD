@@ -7783,7 +7783,12 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     // Check for weapons with high stats etc.
     if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
       #define WARN_ON_NON_KOSHER_VAL(val_macro, comparison, val_name)  if (val_macro(obj) comparison kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].val_name) { \
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon's %s value ^yis not in PGHQ spec^n (%d %s %d).\r\n", #val_name, val_macro(obj), #comparison, kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].val_name); \
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon's %s value ^yis not in PGHQ spec for %s^n (%d %s %d).\r\n", \
+                 #val_name, \
+                 GET_WEAPON_TYPE_NAME(GET_WEAPON_ATTACK_TYPE(obj)), \
+                 val_macro(obj), \
+                 #comparison, \
+                 kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].val_name); \
         printed = TRUE; \
         issues++; \
       }
@@ -7860,7 +7865,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
               printed = TRUE;
               issues++;
             } else {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %s-attached item %s^n (%ld).\r\n", 
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %s-attached item '%s^n' (%ld).\r\n", 
                        attach_loc, 
                        GET_OBJ_NAME(&obj_proto[attach_rnum]),
                        attach_vnum);
