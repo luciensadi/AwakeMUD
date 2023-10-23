@@ -7534,14 +7534,14 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
             printed = TRUE;
             issues++;
           }
-          else if (ammo_idx == AMMO_NORMAL && ammo_qty > 200) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - large amount of %s (%d > 200)^n.\r\n",
+          else if (ammo_qty > 200) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^ylarge amount^n of %s (%d > 200)^n.\r\n",
                      get_ammo_representation(weapon_idx, ammo_idx, ammo_qty),
                      ammo_qty);
             printed = TRUE;
             issues++;
           } 
-          else if (ammo_qty > 0) {
+          else if (ammo_qty > 0 && ammo_idx != AMMO_NORMAL) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %d %s^n.\r\n",
                      ammo_qty,
                      get_ammo_representation(weapon_idx, ammo_idx, ammo_qty));
