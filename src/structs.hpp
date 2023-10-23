@@ -1361,4 +1361,28 @@ struct ban_list_element
   struct ban_list_element *next;
 };
 
+// For listing allowed max values for weapon types. Has settings for both ranged and melee.
+struct kosher_weapon_values_struct {
+    // Shared
+    int power;
+    int damage_code;
+    int skill;
+    int conceal;
+
+    // Ranged
+    int max_ammo;
+    bool can_ss;
+    bool can_sa;
+    bool can_bf;
+    bool can_fa;
+    int recoil_comp;
+    bool can_attach_bottom;
+    bool can_attach_barrel;
+    bool can_attach_top;
+
+    // Melee
+    int str_bonus;
+    int reach;
+};
+
 #endif

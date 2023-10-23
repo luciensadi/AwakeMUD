@@ -3037,16 +3037,18 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
         }
         else if (GET_WEAPON_STR_BONUS(j) != 0) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR%s%d)%s%s^n.",
-                  weapon_types[GET_OBJ_VAL(j, 3)],
-                  skills[GET_OBJ_VAL(j, 4)].name,
-                  GET_OBJ_VAL(j, 2) < 0 ? "" : "+",
-                  GET_OBJ_VAL(j, 2),
-                  wound_arr[GET_OBJ_VAL(j, 1)],
-                  !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+                   GET_WEAPON_TYPE_NAME(GET_WEAPON_ATTACK_TYPE(j)),
+                   skills[GET_WEAPON_SKILL(j)].name,
+                   GET_WEAPON_STR_BONUS(j) < 0 ? "" : "+",
+                   GET_WEAPON_STR_BONUS(j),
+                   GET_WOUND_NAME(GET_WEAPON_DAMAGE_CODE(j)),
+                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         } else {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR)%s%s^n.",
-                  weapon_types[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, wound_arr[GET_OBJ_VAL(j, 1)],
-                  !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+                   GET_WEAPON_TYPE_NAME(GET_WEAPON_ATTACK_TYPE(j)), 
+                   skills[GET_WEAPON_SKILL(j)].name,
+                   GET_WOUND_NAME(GET_WEAPON_DAMAGE_CODE(j)),
+                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
         if (GET_WEAPON_REACH(j)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt grants ^c%d^n meters of reach when wielded.", GET_WEAPON_REACH(j));

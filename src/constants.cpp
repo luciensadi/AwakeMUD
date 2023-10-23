@@ -3076,3 +3076,31 @@ const char *veh_speeds[] = {
   "speeding",
   "max"
 };
+
+struct kosher_weapon_values_struct kosher_weapon_values[MAX_WEAP] = {
+/*                    POWER, DAM CODE, SKILL                  , CONC, AMMO, FM_SS, FM_SA, FM_BF, FM_FA, COMP, BOTTM, BARRL, TOP  , STR+, REACH */
+/* EDGED          */ {  0  , SERIOUS , SKILL_EDGED_WEAPONS    , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 3   , 1    }, // WEAP_EDGED          
+/* CLUB           */ {  0  , SERIOUS , SKILL_CLUBS            , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 3   , 1    }, // WEAP_CLUB           
+/* POLEARM        */ {  0  , SERIOUS , SKILL_POLE_ARMS        , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 4   , 2    }, // WEAP_POLEARM        
+/* WHIP           */ {  0  , MODERATE, SKILL_WHIPS_FLAILS     , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 2   , 2    }, // WEAP_WHIP           
+/* GLOVE          */ {  0  , MODERATE, SKILL_UNARMED_COMBAT   , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 1   , 0    }, // WEAP_GLOVE          
+/* HOLDOUT        */ {  5  , LIGHT   , SKILL_PISTOLS          , 8   , 7   , FALSE, TRUE , FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 0   , 0    }, // WEAP_HOLDOUT        
+/* LIGHT_PISTOL   */ {  7  , LIGHT   , SKILL_PISTOLS          , 6   , 24  , FALSE, TRUE , TRUE , FALSE, 0   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_LIGHT_PISTOL   
+/* MACHINE_PISTOL */ {  7  , LIGHT   , SKILL_PISTOLS          , 6   , 40  , FALSE, TRUE , TRUE , TRUE , 1   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_MACHINE_PISTOL 
+/* HEAVY_PISTOL   */ {  10 , MODERATE, SKILL_PISTOLS          , 5   , 24  , FALSE, TRUE , TRUE , FALSE, 1   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_HEAVY_PISTOL   
+/* TASER          */ {  10 , SERIOUS , SKILL_TASERS           , 5   , 8   , FALSE, TRUE , FALSE, FALSE, 0   , FALSE, FALSE, TRUE , 0   , 0    }, // WEAP_TASER          
+/* SMG            */ {  7  , MODERATE, SKILL_SMG              , 4   , 40  , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SMG            
+/* SPORT_RIFLE    */ {  10 , SERIOUS , SKILL_RIFLES           , 2   , 10  , TRUE , TRUE , TRUE , FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SPORT_RIFLE    
+/* SNIPER_RIFLE   */ {  14 , SERIOUS , SKILL_RIFLES           , 0   , 14  , TRUE , TRUE , FALSE, FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SNIPER_RIFLE   
+/* ASSAULT_RIFLE  */ {  9  , MODERATE, SKILL_ASSAULT_RIFLES   , 3   , 50  , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_ASSAULT_RIFLE  
+/* SHOTGUN        */ {  10 , SERIOUS , SKILL_SHOTGUNS         , 0   , 50  , TRUE , TRUE , TRUE , FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SHOTGUN        
+/* LMG            */ {  8  , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_LMG            
+/* MMG            */ {  10 , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MMG            
+/* HMG            */ {  11 , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_HMG            
+/* CANNON         */ {  20 , DEADLY  , SKILL_ASSAULT_CANNON   , 0   , 100 , TRUE , FALSE, FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_CANNON         
+/* MINIGUN        */ {  0  , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MINIGUN        
+/* GREN_LAUNCHER  */ {  0  , 0       , SKILL_GRENADE_LAUNCHERS, 0   , 6   , FALSE, TRUE , FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_GREN_LAUNCHER  
+/* MISS_LAUNCHER  */ {  0  , 0       , SKILL_MISSILE_LAUNCHERS, 0   , 1   , TRUE , FALSE, FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MISS_LAUNCHER  
+/* REVOLVER       */ {  9  , MODERATE, SKILL_PISTOLS          , 0   , 7   , TRUE , TRUE , FALSE, FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_REVOLVER       
+/* GRENADE        */ {  0  , 0       , 0                      , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, TRUE , TRUE , 0   , 0    }  // WEAP_GRENADE        
+};

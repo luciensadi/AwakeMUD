@@ -3362,6 +3362,34 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
   return (found);
 }
 
+int vnum_object_weapons_broken(char *searchname, struct char_data * ch)
+{
+  char buf[MAX_STRING_LENGTH*8];
+  extern const char *wound_arr[];
+  int nr, found = 0;
+  buf[0] = '\0';
+
+  for (nr = 0; nr <= top_of_objt; nr++) {
+    if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
+      continue;
+
+    bool bad_attack_type = GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) < 0 || GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) >= MAX_WEAP;
+
+    if (bad_attack_type) {
+      ++found;
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] %s '%s^n'  %s\r\n",
+              OBJ_VNUM_RNUM(nr),
+              ObjList.CountObj(nr),
+              vnum_from_non_connected_zone(GET_OBJ_VNUM(&obj_proto[nr])) ? " " : "*",
+              GET_OBJ_NAME(&obj_proto[nr]),
+              bad_attack_type ? "(bad attack type)" : "");
+    }
+  }
+  
+  page_string(ch->desc, buf, 1);
+  return (found);
+}
+
 int vnum_object_weapons_fa_pro(char *searchname, struct char_data * ch)
 {
   char buf[MAX_STRING_LENGTH*8];
@@ -3878,6 +3906,8 @@ int vnum_object(char *searchname, struct char_data * ch)
 
   if (!strcmp(searchname,"weaponslist"))
     return vnum_object_weapons(searchname,ch);
+  if (!strcmp(searchname,"brokenweaponslist"))
+    return vnum_object_weapons_broken(searchname,ch);
   if (!strcmp(searchname,"faweaponslist"))
     return vnum_object_weapons_fa_pro(searchname,ch);
   if (!strcmp(searchname,"weaponsbytype"))

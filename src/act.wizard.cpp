@@ -1350,9 +1350,9 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
             skills[GET_OBJ_VAL(j, 4)].name, (GET_OBJ_VAL(j, 5) == 0 ? "Bow" : "Crossbow"));
     break;
   case ITEM_WEAPON:
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Power: %d, Wound: %s, Str+: %d, WeapType: %s, Skill: %s\r\nMax Ammo: %d, Range: %d",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Power: %d, Wound: %s, Str+: %d, WeapType: %s (%d), Skill: %s\r\nMax Ammo: %d, Range: %d",
             GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], GET_OBJ_VAL(j, 2),
-            weapon_types[GET_OBJ_VAL(j, 3)],
+            GET_WEAPON_TYPE_NAME(GET_WEAPON_ATTACK_TYPE(j)), GET_WEAPON_ATTACK_TYPE(j),
             skills[GET_OBJ_VAL(j, 4)].name, GET_OBJ_VAL(j, 5), GET_OBJ_VAL(j, 6));
     if (GET_OBJ_VAL(j, 3) >= WEAP_HOLDOUT)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Top: %d, Barrel: %d, Under: %d", GET_OBJ_VAL(j, 7), GET_OBJ_VAL(j, 8), GET_OBJ_VAL(j, 9));
@@ -7735,10 +7735,35 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
 
     // Check for weapons with high stats etc.
     if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
+      #define WARN_ON_NON_KOSHER_VAL(val_macro, comparison, val_name)  if (val_macro(obj) comparison kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].val_name) { \
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon's %s value ^yis not in PGHQ spec^n (%d %s %d).\r\n", #val_name, val_macro(obj), #comparison, kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].val_name); \
+        printed = TRUE; \
+        issues++; \
+      }
+
+      // Check for shared value overruns.
+      WARN_ON_NON_KOSHER_VAL(GET_WEAPON_POWER, >, power);
+      WARN_ON_NON_KOSHER_VAL(GET_WEAPON_DAMAGE_CODE, >, damage_code);
+      WARN_ON_NON_KOSHER_VAL(GET_WEAPON_SKILL, !=, skill);
+
       if (WEAPON_IS_GUN(obj)) {
         // Ranged checks.
+        WARN_ON_NON_KOSHER_VAL(GET_WEAPON_MAX_AMMO, >, max_ammo);
+        WARN_ON_NON_KOSHER_VAL(GET_WEAPON_INTEGRAL_RECOIL_COMP, >, recoil_comp);
 
-        // Recoil comp
+        // Firemode check.
+        #define FIREMODE_CHECK(val_mode, val_name)  if (WEAPON_CAN_USE_FIREMODE(obj, val_mode) && !kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].val_name) { \
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon can use ^ynon-kosher^n %s firemode\r\n", #val_mode); \
+          printed = TRUE; \
+          issues++; \
+        }
+
+        FIREMODE_CHECK(MODE_SS, can_ss);
+        FIREMODE_CHECK(MODE_SA, can_sa);
+        FIREMODE_CHECK(MODE_BF, can_bf);
+        FIREMODE_CHECK(MODE_FA, can_fa);
+
+        // Notify on ANY recoil comp, erroneous or not
         if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^c%d^n integral recoil comp^n.\r\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
           printed = TRUE;
@@ -7748,10 +7773,32 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         // Attachments
         for (int idx = ACCESS_LOCATION_TOP; idx <= ACCESS_LOCATION_UNDER; idx++) {
           vnum_t attach_vnum = GET_WEAPON_ATTACH_LOC(obj, idx);
+          const char *attach_loc = gun_accessory_locations[idx - ACCESS_LOCATION_TOP];
+          bool should_be_able_to_take_attachment = FALSE;
+
+          if (attach_vnum == -1)
+            continue;
+
+          switch (idx) {
+            case ACCESS_LOCATION_TOP:
+              should_be_able_to_take_attachment = kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].can_attach_top;
+              break;
+            case ACCESS_LOCATION_BARREL:
+              should_be_able_to_take_attachment = kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].can_attach_barrel;
+              break;
+            case ACCESS_LOCATION_UNDER:
+              should_be_able_to_take_attachment = kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].can_attach_bottom;
+              break;
+          }
+
+          if (!should_be_able_to_take_attachment) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yshouldn't^n be able to take %s attachments (based on weapon type), but can.\r\n", attach_loc);
+            printed = TRUE;
+            issues++;
+          }
 
           if (attach_vnum > 0) {
             rnum_t attach_rnum = real_object(attach_vnum);
-            const char *attach_loc = gun_accessory_locations[idx - ACCESS_LOCATION_TOP];
 
             if (attach_rnum < 0) {
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^yinvalid^n %s-attached item (%ld).\r\n", attach_loc, attach_vnum);
@@ -7769,10 +7816,11 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         }
       } else {
         // Melee checks.
+        WARN_ON_NON_KOSHER_VAL(GET_WEAPON_STR_BONUS, >, str_bonus);
+        WARN_ON_NON_KOSHER_VAL(GET_WEAPON_REACH, >, reach);
 
-        // Reach
-        if (GET_WEAPON_REACH(obj)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^c%d^n reach^n.\r\n", GET_WEAPON_REACH(obj));
+        if (GET_WEAPON_FOCUS_RATING(obj)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is a rating-^c%d^n weapon focus^n.\r\n", GET_WEAPON_FOCUS_RATING(obj));
           printed = TRUE;
           issues++;
         }

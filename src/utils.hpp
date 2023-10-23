@@ -1423,6 +1423,7 @@ void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick,
 
 #define GET_WOUND_NAME(damage_level) (wound_name[MIN(DEADLY, MAX(0, damage_level))])
 #define GET_SHORT_WOUND_NAME(damage_level) (wound_arr[MIN(DEADLY, MAX(0, damage_level))])
+#define GET_WEAPON_TYPE_NAME(weapon_type) (weapon_types[MIN(MAX_WEAP - 1, MAX(0, weapon_type))])
 
 #define DEBUG_TO_STAFF(ch, ...) if (access_level((ch), LVL_BUILDER)) { send_to_char((ch), __VA_ARGS__); }
 
