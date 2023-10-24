@@ -804,8 +804,10 @@ void affect_total(struct char_data * ch)
 
   if (GET_TRADITION(ch) == TRAD_ADEPT)
   {
-    GET_INIT_DICE(ch) += MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
-    GET_REA(ch) += 2*MIN(3, GET_POWER(ch, ADEPT_REFLEXES));
+    // Adept Improved Reflexes doesn't stack with other magical increases to rea/init (SR3 pg 169)
+    // Let the char have the higher modifier for each
+    GET_INIT_DICE(ch) = MAX(GET_INIT_DICE(ch), MIN(3, GET_POWER(ch, ADEPT_REFLEXES)));
+    GET_REA(ch) = MAX(GET_REA(ch), 2*MIN(3, GET_POWER(ch, ADEPT_REFLEXES)));
     GET_BOD(ch) += GET_POWER(ch, ADEPT_IMPROVED_BOD);
     GET_QUI(ch) += GET_POWER(ch, ADEPT_IMPROVED_QUI);
     GET_STR(ch) += GET_POWER(ch, ADEPT_IMPROVED_STR);
