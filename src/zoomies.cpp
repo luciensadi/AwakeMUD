@@ -438,7 +438,7 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
 
   snprintf(rbuf, sizeof(rbuf), "Flight test modifiers for %s (base %d from handling): ", GET_CHAR_NAME(ch), tn);
 
-  modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+  tn += modify_target_rbuf(ch, rbuf, sizeof(rbuf));
   
   // Apply weather modifiers.
   switch (weather_info.sky) {

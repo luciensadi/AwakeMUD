@@ -126,6 +126,40 @@ ACMD(do_debug) {
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
 
+  if (is_abbrev(arg1, "vision_penalties")) {
+    send_to_char(ch, "OK, getting vision penalties.\r\n");
+
+    char rbuf[10000] = { '\0' };
+    int penalty = get_vision_penalty(ch, get_ch_in_room(ch), rbuf, sizeof(rbuf));
+    send_to_char(ch, "...Got penalty %d. RBUF: %s\r\n", penalty, rbuf);
+
+    *rbuf = 0;
+    int tn = 2;
+    int dice = get_skill(ch, SKILL_PILOT_FIXEDWING, tn, rbuf, sizeof(rbuf));
+    send_to_char(ch, "...dice and tn after get_skill: %d, %d (%s)\r\n", dice, tn, rbuf);
+    int successes = success_test(dice, tn, ch, "debug");
+    send_to_char(ch, "...result %d\r\n", successes);
+    return;
+  }
+
+  if (is_abbrev(arg1, "get_skill")) {
+    send_to_char(ch, "OK, testing get_skill with and without pointers.\r\n");
+    set_character_skill(ch, SKILL_PISTOLS, 0, FALSE);
+    set_character_skill(ch, SKILL_RIFLES, 0, FALSE);
+    set_character_skill(ch, SKILL_ASSAULT_RIFLES, 0, FALSE);
+    set_character_skill(ch, SKILL_SHOTGUNS, 0, FALSE);
+    set_character_skill(ch, SKILL_SMG, 5, FALSE);
+
+    int first_tn = 4;
+    get_skill(ch, SKILL_PISTOLS, first_tn);
+    send_to_char(ch, "first_tn = %d\r\n", first_tn);
+
+    int second_tn = 4;
+    get_skill(ch, SKILL_PISTOLS, second_tn);
+    send_to_char(ch, "second_tn = %d\r\n", second_tn);
+    return;
+  }
+
   if (is_abbrev(arg1, "traceback")) {
     send_to_char(ch, "OK, printing traceback.\r\n");
     log_traceback("manual invocation via debug by %s", GET_CHAR_NAME(ch));
