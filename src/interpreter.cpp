@@ -3035,22 +3035,36 @@ void nanny(struct descriptor_data * d, char *arg)
 
       // Rewrote the entire janky-ass load room tree.
       // First: Frozen characters. They go to the frozen start room.
-      if (PLR_FLAGGED(d->character, PLR_FROZEN))
+      if (PLR_FLAGGED(d->character, PLR_FROZEN)) {
+        mudlog_vfprintf(d->character, LOG_MISCLOG, "Setting loadroom for %s (%ld) to the frozen room (%ld).", GET_CHAR_NAME(d->character), GET_IDNUM(d->character), frozen_start_room);
         load_room_vnum = frozen_start_room;
+      }
 
       // Next: Unauthed (chargen) characters. They go to the start of their chargen areas.
       else if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)) {
         if (GET_ARCHETYPAL_MODE(d->character)) {
           load_room_vnum = archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room;
+
           if (real_room(load_room_vnum) == NOWHERE) {
-            char oopsbuf[500];
-            snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Archetypal start room %ld for arch %d did not exist! Redirecting to standard CG.", load_room_vnum, GET_ARCHETYPAL_TYPE(d->character));
-            mudlog(oopsbuf, d->character, LOG_SYSLOG, TRUE);
+            mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: Archetypal start room %ld for arch %d (%s) did not exist! Redirecting to standard CG.", 
+                            load_room_vnum, 
+                            GET_ARCHETYPAL_TYPE(d->character),
+                            archetypes[GET_ARCHETYPAL_TYPE(d->character)]->name);
 
             load_room_vnum = RM_CHARGEN_START_ROOM;
+          } else {
+            mudlog_vfprintf(d->character, LOG_MISCLOG, "Loadroom for %s (%ld) is the %s archetypal start room (%ld).", 
+                          GET_CHAR_NAME(d->character), 
+                          GET_IDNUM(d->character), 
+                          archetypes[GET_ARCHETYPAL_TYPE(d->character)]->name,
+                          load_room_vnum);
           }
         } else {
           load_room_vnum = RM_CHARGEN_START_ROOM;
+          mudlog_vfprintf(d->character, LOG_MISCLOG, "Loadroom for %s (%ld) is the newbie start room (%ld).", 
+                          GET_CHAR_NAME(d->character), 
+                          GET_IDNUM(d->character), 
+                          load_room_vnum);
         }
       }
 
@@ -3067,25 +3081,31 @@ void nanny(struct descriptor_data * d, char *arg)
       if (!PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)) {
         for (int arch_idx = 0; arch_idx < NUM_CCR_ARCHETYPES; arch_idx++) {
           if (load_room_vnum == archetypes[arch_idx]->start_room) {
-            mudlog("SYSERR: Non-chargen character would have started in arch chargen! Sending to mortal start.", d->character, LOG_SYSLOG, TRUE);
+            mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: Non-chargen character %s would have started in arch chargen! Sending to mortal start.", GET_CHAR_NAME(d->character));
             load_room_vnum = mortal_start_room;
+            break;
           }
         }
 
         if (load_room_vnum == RM_CHARGEN_START_ROOM) {
-          mudlog("SYSERR: Non-chargen character would have started in standard chargen! Sending to mortal start.", d->character, LOG_SYSLOG, TRUE);
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: Non-chargen character %s would have started in standard chargen! Sending to mortal start.", GET_CHAR_NAME(d->character));
           load_room_vnum = mortal_start_room;
         }
       }
 
       // Non-newbies don't get to start in the newbie loadroom-- rewrite their loadroom value.
       if (load_room_vnum == RM_NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE)) {
-        mudlog("Moving character from newbie loadroom to mortal start (they're no longer a newbie)", d->character, LOG_SYSLOG, TRUE);
+        mudlog_vfprintf(d->character, LOG_SYSLOG, "Moving %s from newbie loadroom to mortal start (they're no longer a newbie)", GET_CHAR_NAME(d->character));
         load_room_vnum = mortal_start_room;
       }
 
       // Post-processing: Invalid load room characters go to the newbie or mortal start rooms.
       if (load_room_vnum == NOWHERE || (load_room_rnum = real_room(load_room_vnum)) < 0) {
+        // Log in case of someone loading in a room that doesn't exist.
+        if (load_room_vnum != NOWHERE) {
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: %s had an invalid loadroom! Redirecting to the expected start room.", GET_CHAR_NAME(d->character));
+        }
+
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
           load_room_vnum = RM_NEWBIE_LOADROOM;
         } else {
@@ -3096,29 +3116,31 @@ void nanny(struct descriptor_data * d, char *arg)
 
       // Post-processing: Characters who are trying to load into a house get rejected if they're not allowed in there.
       if (world[load_room_rnum].apartment && !world[load_room_rnum].apartment->can_enter(d->character)) {
+        mudlog_vfprintf(d->character, LOG_MISCLOG, "%s wanted to load into apartment %ld, but has no guest rights there. Redirecting to the expected start room.", 
+                        GET_CHAR_NAME(d->character),
+                        load_room_vnum);
+        
         load_room_vnum = mortal_start_room;
         load_room_rnum = real_room(mortal_start_room);
       }
 
       // First-time login. This overrides the above, but it's for a good cause.
       if (!GET_LEVEL(d->character)) {
-        snprintf(buf, sizeof(buf), "Overriding new character %s'd loadroom to chargen/arch-cg.", GET_CHAR_NAME(d->character));
-        mudlog(buf, d->character, LOG_SYSLOG, TRUE);
-
         if (GET_ARCHETYPAL_MODE(d->character)) {
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "Overriding new character %s'd loadroom to archetypal chargen.", GET_CHAR_NAME(d->character));
           load_room_vnum = archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room;
           load_room_rnum = real_room(load_room_vnum);
           // Correct for invalid archetype start rooms.
           if (load_room_rnum < 0) {
-            snprintf(buf, sizeof(buf), "WARNING: Start room %ld for archetype %s does not exist!",
-                     archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room,
-                     archetypes[GET_ARCHETYPAL_TYPE(d->character)]->name);
-            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            mudlog_vfprintf(NULL, LOG_SYSLOG, "WARNING: Start room %ld for archetype %s does not exist!",
+                            archetypes[GET_ARCHETYPAL_TYPE(d->character)]->start_room,
+                            archetypes[GET_ARCHETYPAL_TYPE(d->character)]->name);
             load_room_vnum = newbie_start_room;
             load_room_rnum = real_room(load_room_vnum);
           }
           do_start(d->character, FALSE);
         } else {
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "Overriding new character %s'd loadroom to standard chargen.", GET_CHAR_NAME(d->character));
           load_room_vnum = newbie_start_room;
           load_room_rnum = real_room(load_room_vnum);
           do_start(d->character, TRUE);
@@ -3146,8 +3168,7 @@ void nanny(struct descriptor_data * d, char *arg)
       if (!d->character->in_veh)
         char_to_room(d->character, &world[load_room_rnum]);
       act("$n has entered the game.", TRUE, d->character, 0, 0, TO_ROOM);
-      snprintf(buf, sizeof(buf), "%s has entered the game.", GET_CHAR_NAME(d->character));
-      mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+      mudlog_vfprintf(d->character, LOG_CONNLOG, "%s has entered the game.", GET_CHAR_NAME(d->character));
 
       STATE(d) = CON_PLAYING;
 
