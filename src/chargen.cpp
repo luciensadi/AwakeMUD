@@ -432,7 +432,10 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   GET_RESTRING_POINTS(d->character) = STARTING_RESTRING_POINTS;
   GET_LOADROOM(d->character) = archetypes[i]->start_room;
 
+  GET_ARCHETYPAL_MODE(d->character) = TRUE;
+  GET_ARCHETYPAL_TYPE(d->character) = i;
   init_char_sql(d->character);
+
   GET_CHAR_MULTIPLIER(d->character) = 100;
   snprintf(buf, sizeof(buf), "%s new character (archetypal %s).", GET_CHAR_NAME(d->character), archetypes[i]->name);
   mudlog(buf, d->character, LOG_CONNLOG, TRUE);
