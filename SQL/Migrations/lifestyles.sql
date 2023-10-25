@@ -1,0 +1,1 @@
+alter table pfiles add `lifestyle_string` varchar(200) default 'The metallic scent of the Neophyte Guild clings to $m.';

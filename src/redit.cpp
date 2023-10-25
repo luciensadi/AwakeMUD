@@ -27,6 +27,7 @@
 #include "constants.hpp"
 #include "handler.hpp"
 #include "config.hpp"
+#include "newhouse.hpp"
 
 extern class memoryClass *Mem;
 
@@ -53,7 +54,7 @@ void redit_disp_flag_menu(struct descriptor_data * d);
 void redit_disp_sector_menu(struct descriptor_data * d);
 void redit_disp_menu(struct descriptor_data * d);
 void redit_parse(struct descriptor_data * d, const char *arg);
-void write_world_to_disk(int vnum);
+void write_world_to_disk(vnum_t vnum);
 /**************************************************************************
  Menu functions
  **************************************************************************/
@@ -244,7 +245,7 @@ void redit_disp_flag_menu(struct descriptor_data * d)
   CLS(CH);
   for (counter = 0; counter < ROOM_MAX; counter += 2)
   {
-    send_to_char(CH, "%2d) %-12s      %2d) %-12s\r\n",
+    send_to_char(CH, "%2d) %-14s    %2d) %-12s\r\n",
                  counter + 1, room_bits[counter],
                  counter + 2, counter + 1 < ROOM_MAX ?
                  room_bits[counter + 1] : "");
@@ -622,6 +623,12 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         send_to_char("Writing room to disk.\r\n", d->character);
         write_world_to_disk(d->character->player_specials->saved.zonenum);
         send_to_char("Saved.\r\n", CH);
+
+        // Update room apartment values, if necessary.
+        if (world[room_num].apartment) {
+          world[room_num].apartment->recalculate_garages();
+        }
+
         /* do NOT free strings! just the room structure */
         clear_room(d->edit_room);
         delete d->edit_room;
@@ -1383,19 +1390,25 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 // world saving routine
 #define PRINT_TO_FILE_IF_TRUE(section, value) { if (value) { fprintf(fp, (section), (value)); } }
 #define RM world[realcounter]
-void write_world_to_disk(int vnum)
+void write_world_to_disk(vnum_t zone_vnum)
 {
   long             counter, counter2, realcounter;
-  int             znum = real_zone(vnum);
+  int             znum = real_zone(zone_vnum);
   FILE           *fp;
   struct extra_descr_data *ex_desc;
   bool wrote_something = FALSE;
 
   // ideally, this would just fill a VTable with vals...maybe one day
 
-  snprintf(buf, sizeof(buf), "%s/%d.wld", WLD_PREFIX,
-          zone_table[znum].number);
-  fp = fopen(buf, "w+");
+  // Compute the final file name.
+  char final_file_name[1000];
+  snprintf(final_file_name, sizeof(final_file_name), "%s/%d.wld", WLD_PREFIX, zone_table[znum].number);
+
+  // Writing happens to a temporary file to avoid clobbering the world on failed write.
+  char tmp_file_name[1000];
+  snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
+
+  fp = fopen(tmp_file_name, "w+");
   for (counter = zone_table[znum].number * 100;
        counter <= zone_table[znum].top; counter++) {
     realcounter = real_room(counter);
@@ -1559,10 +1572,16 @@ void write_world_to_disk(int vnum)
   fprintf(fp, "END\n");
   fclose(fp);
 
-  if (wrote_something)
+  if (wrote_something) {
     write_index_file("wld");
-  else
-    remove(buf);
+    // Remove the old file.
+    remove(final_file_name);
+    // Rename the temp file.
+    rename(tmp_file_name, final_file_name);
+  } else {
+    // Nothing written: Remove the temp file.
+    remove(tmp_file_name);
+  }
   /* do NOT free strings! just the room structure */
 }
 #undef RM

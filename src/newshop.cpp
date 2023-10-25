@@ -19,13 +19,14 @@
 #include "constants.hpp"
 #include "config.hpp"
 #include "newmail.hpp"
+#include "lifestyles.hpp"
 
 extern struct time_info_data time_info;
 extern const char *pc_race_types[];
 
 extern struct obj_data *get_first_credstick(struct char_data *ch, const char *arg);
 extern void reduce_abilities(struct char_data *vict);
-extern void do_probe_object(struct char_data * ch, struct obj_data * j);
+extern void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern char *short_object(int virt, int where);
@@ -1209,7 +1210,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     // Calculate their skill level, including bioware.
     bool pheromones = FALSE;
     int skill = get_skill(ch, shop_table[shop_nr].etiquette, target);
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
       if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEROMONES) {
         pheromones = TRUE;
         int delta = GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
@@ -1218,6 +1219,21 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
         break;
       }
+    }
+
+    // House rule: Give a better TN for high-grade lifestyles.
+    {
+      switch (abs(GET_BEST_LIFESTYLE(ch))) {
+        case LIFESTYLE_HIGH:
+          target -= 1;
+          act("Lifestyle TN modifier: -1.", TRUE, ch, 0, 0, TO_ROLLS);
+          break;
+        case LIFESTYLE_LUXURY:
+          target -= 2;
+          act("Lifestyle TN modifier: -2.", TRUE, ch, 0, 0, TO_ROLLS);
+          break;
+      }
+    }
 
     // Roll up the success test.
     int success = success_test(skill, target);
@@ -1538,6 +1554,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
   struct obj_data *obj;
   int i = 1;
+  bool has_availtns = FALSE;
 
   if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
     snprintf(buf, sizeof(buf), "%s has the following items available for sale:\r\n", GET_NAME(keeper));
@@ -1565,6 +1582,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       // Finish up with availability info.
       if (!(sell->type == SELL_ALWAYS) && !(sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0)) {
         if (sell->type == SELL_AVAIL) {
+          has_availtns = TRUE;
           int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
           if (arbitrary_difficulty <= 2) {
             strlcat(buf, ". It's a trivial special order", sizeof(buf));
@@ -1594,6 +1612,10 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       obj = NULL;
     }
     strlcat(buf, "\r\nYou can use PROBE #1 or INFO #1 for more details.\r\n", sizeof(buf));
+
+    if (has_availtns)
+      snprintf(ENDOF(buf), sizeof(buf), "This shop uses %s for difficult purchases.\r\n", skills[shop_table[shop_nr].etiquette].name);
+
     page_string(ch->desc, buf, 1);
     return;
   }
@@ -1613,6 +1635,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) == 0))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes      ");
       else if (sell->type == SELL_AVAIL) {
+        has_availtns = TRUE;
         int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
         if (arbitrary_difficulty <= 2) {
           strlcat(buf, "Trivial  ", sizeof(buf));
@@ -1664,8 +1687,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       obj = NULL;
     }
     send_to_char(buf, ch);
-  } else
-  {
+    // Tips and TN skill are shown at the end of the function.
+  } else {
     send_to_char(ch, " **   Avail    Item                                                                          Price\r\n"
                      "----------------------------------------------------------------------------------------------------\r\n");
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
@@ -1678,6 +1701,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) == 0))
         strlcat(buf, "Yes      ", sizeof(buf));
       else if (sell->type == SELL_AVAIL) {
+        has_availtns = TRUE;
         int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);
         if (arbitrary_difficulty <= 2) {
           strlcat(buf, "Trivial  ", sizeof(buf));
@@ -1722,6 +1746,9 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   // New characters get reminded about the probe and info commands.
   if (SHOULD_SEE_TIPS(ch))
     send_to_char("\r\nUse ^WPROBE^n for more details.\r\n", ch);
+
+  if (has_availtns)
+    send_to_char(ch, "This shop uses %s for difficult purchases.\r\n", skills[shop_table[shop_nr].etiquette].name);
 }
 
 void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
@@ -1820,7 +1847,7 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   }
 
   send_to_char(ch, "^yProbing ^Yshopkeeper's^y ^n%s^y...^n\r\n", GET_OBJ_NAME(obj));
-  do_probe_object(ch, obj);
+  do_probe_object(ch, obj, TRUE);
   return TRUE;
 }
 
@@ -2135,7 +2162,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       strcat(buf, "computer");
     else strcat(buf, mod_name[GET_VEHICLE_MOD_LOCATION(obj)]);
     strcat(buf, ". It is for ");
-    for (int q = 1; q <= ENGINE_DIESEL; q++)
+    for (int q = 1; q < NUM_ENGINE_TYPES; q++)
       if (IS_SET(GET_VEHICLE_MOD_ENGINE_BITS(obj), 1 << q))
         num++;
     if (num) {
@@ -2181,6 +2208,16 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
           else strcat(buf, " and ");
         }
         strcat(buf, "diesel");
+        num2++;
+        num--;
+      }
+      if (IS_SET(GET_VEHICLE_MOD_ENGINE_BITS(obj), 1 << ENGINE_JET)) {
+        if (num2) {
+          if (num > 1)
+            strcat(buf, ", ");
+          else strcat(buf, " and ");
+        }
+        strcat(buf, "jet");
         num2++;
         num--;
       }
@@ -2432,7 +2469,7 @@ SPECIAL(shop_keeper)
     shop_cancel(argument, ch, keeper, shop_nr);
   else if (CMD_IS("probe"))
     return shop_probe(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("install"))
+  else if (CMD_IS("install") && shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
     shop_install(argument, ch, keeper, shop_nr);
   else if (CMD_IS("uninstall"))
     shop_uninstall(argument, ch, keeper, shop_nr);

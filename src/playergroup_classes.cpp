@@ -22,6 +22,8 @@
 #include "comm.hpp"
 #include "ignore_system.hpp"
 
+// TODO: Add a staff command to set PGHQ ownership of a given zone.
+
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
 
@@ -29,23 +31,24 @@ extern void raw_store_mail(long to, long from_id, const char *from_name, const c
 
 /************* Constructors *************/
 Playergroup::Playergroup() :
-idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
+idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL), pghq_zone(0)
 {}
 
 Playergroup::Playergroup(long id_to_load) :
-idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
+idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL), pghq_zone(0)
 {
   load_pgroup_from_db(id_to_load);
 }
 
 Playergroup::Playergroup(Playergroup *clone_strings_from) :
-idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
+idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL), pghq_zone(0)
 {
   raw_set_tag(clone_strings_from->tag);
   raw_set_name(clone_strings_from->name);
   raw_set_alias(clone_strings_from->alias);
   set_secret(clone_strings_from->is_secret());
   settings.SetBit(PGROUP_CLONE);
+  set_zone(clone_strings_from->pghq_zone);
 }
 
 /************* Destructor *************/
@@ -171,7 +174,7 @@ bool Playergroup::alias_is_in_use(const char *alias) {
   char querybuf[1000];
 
   // Clone over alias to the new local version. This way we can state conclusively the size of the buffer that contains it-- crucial for prepare_quotes.
-  strcpy(local_alias, alias);
+  strncpy(local_alias, alias, sizeof(local_alias));
 
   // Compose and execute our query.
   snprintf(querybuf, sizeof(querybuf), "SELECT idnum FROM playergroups WHERE alias = '%s'", prepare_quotes(buf, alias, sizeof(local_alias) / sizeof(local_alias[0])));
@@ -295,7 +298,7 @@ void Playergroup::secret_log_vfprintf(const char *format, ...)
 
 const char *Playergroup::render_settings() {
   static char settings_string[100];
-  strcpy(settings_string, "");
+  strlcpy(settings_string, "", sizeof(settings_string));
   bool is_first = TRUE;
 
   for (int index = 0; index < NUM_PGROUP_SETTINGS; index++) {
@@ -305,7 +308,7 @@ const char *Playergroup::render_settings() {
     }
   }
   if (is_first)
-    strcpy(settings_string, "(none)");
+    strlcpy(settings_string, "(none)", sizeof(settings_string));
 
   return settings_string;
 }
@@ -319,13 +322,14 @@ bool Playergroup::save_pgroup_to_db() {
   char quotedsettings[settings.TotalWidth()];
 
   const char * pgroup_save_query_format =
-  "INSERT INTO playergroups (idnum, Name, Alias, Tag, Settings, bank) VALUES ('%ld', '%s', '%s', '%s', '%s', '%lu')"
+  "INSERT INTO playergroups (idnum, Name, Alias, Tag, Settings, bank, zone) VALUES ('%ld', '%s', '%s', '%s', '%s', '%lu', '%lu')"
   " ON DUPLICATE KEY UPDATE"
   "   Name = VALUES(Name),"
   "   Alias = VALUES(Alias),"
   "   Tag = VALUES(Tag),"
   "   Settings = VALUES(Settings),"
-  "   bank = VALUES(bank)";
+  "   bank = VALUES(bank),"
+  "   zone = VALUES(zone)";
 
   if (!idnum) {
     // We've never saved this group before. Give it a new idnum.
@@ -338,7 +342,8 @@ bool Playergroup::save_pgroup_to_db() {
           prepare_quotes(quotedalias, alias, sizeof(quotedalias) / sizeof(quotedalias[0])),
           prepare_quotes(quotedtag, tag, sizeof(quotedtag) / sizeof(quotedtag[0])),
           prepare_quotes(quotedsettings, settings.ToString(), sizeof(quotedsettings) / sizeof(quotedsettings[0])),
-          bank);
+          bank,
+          pghq_zone);
   mysql_wrapper(mysql, querybuf);
 
   return mysql_errno(mysql) != 0;
@@ -350,12 +355,13 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
   const char * pgroup_load_query_format = "SELECT * FROM playergroups WHERE idnum = %ld";
 
   // Defines for the purposes of avoiding magic numbers.
-#define PGROUP_DB_ROW_IDNUM    0
-#define PGROUP_DB_ROW_NAME     1
-#define PGROUP_DB_ROW_ALIAS    2
-#define PGROUP_DB_ROW_TAG      3
-#define PGROUP_DB_ROW_SETTINGS 4
-#define PGROUP_DB_ROW_BANK     5
+#define PGROUP_DB_ROW_IDNUM          0
+#define PGROUP_DB_ROW_NAME           1
+#define PGROUP_DB_ROW_ALIAS          2
+#define PGROUP_DB_ROW_TAG            3
+#define PGROUP_DB_ROW_SETTINGS       4
+#define PGROUP_DB_ROW_BANK           5
+#define PGROUP_DB_ROW_ZONE_OWNERSHIP 6
 
   snprintf(querybuf, sizeof(querybuf), pgroup_load_query_format, load_idnum);
   mysql_wrapper(mysql, querybuf);
@@ -368,6 +374,7 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
     raw_set_alias(row[PGROUP_DB_ROW_ALIAS]);
     raw_set_tag(row[PGROUP_DB_ROW_TAG]);
     settings.FromString(row[PGROUP_DB_ROW_SETTINGS]);
+    set_zone(atol(row[PGROUP_DB_ROW_ZONE_OWNERSHIP]));
     mysql_free_result(res);
 
     // Add the group to the linked list.
@@ -441,7 +448,7 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
       temp = temp->next;
     }
 
-    strcpy(buf, "You invite $N to join your group.");
+    strlcpy(buf, "You invite $N to join your group.", sizeof(buf));
     act(buf, FALSE, ch, NULL, target, TO_CHAR);
     if (is_secret())
       snprintf(buf, MAX_STRING_LENGTH, "^GSomeone has invited you to join their playergroup, '%s'. You can ACCEPT or DECLINE this at any time in the next %d days.^n", get_name(), PGROUP_INVITATION_LIFETIME_IN_DAYS);
@@ -536,6 +543,38 @@ void Playergroup::remove_member(struct char_data *ch) {
 
   // Save the character.
   playerDB.SaveChar(ch);
+}
+
+void Playergroup::set_zone(unsigned long znum) {
+  pghq_zone = znum;
+}
+
+bool Playergroup::controls_room(struct room_data *room) {
+  struct zone_data *fetched_zone = NULL;
+
+  // If we control no zone, bail.
+  if (pghq_zone == 0)
+    return FALSE;
+
+  // Fetch the zone. If it doesn't exist, bail.
+  if (!(fetched_zone = get_zone_from_vnum(GET_ROOM_VNUM(room)))) {
+    return FALSE;
+  }
+
+  // If it's not ours, bail.
+  if (fetched_zone->number != pghq_zone) {
+    return FALSE;
+  }
+
+  // If the zone is not flagged pgroup, warn loudly and return false
+  if (!fetched_zone->is_pghq) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Playergroup %s (%ld) claims to own zone %d, but the zone is not flagged PGHQ!",
+                    name, idnum, fetched_zone->number);
+    return FALSE;
+  }
+
+  // Otherwise, we own the zone this room is in.
+  return TRUE;
 }
 
 /*************** Invitation methods. *****************/

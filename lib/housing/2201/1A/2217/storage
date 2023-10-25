@@ -1,0 +1,939 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+	Guest0:	13073
+	Guest1:	11710
+	Guest2:	5054
+	Guest3:	11484
+	Guest4:	11870
+[HOUSE]
+	[Object 0]
+		Vnum:	982
+		Inside:	0
+		Value 2:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	951
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	28640
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	691
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	692
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	80420
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	64916
+		Inside:	0
+		Cost:	2100
+		ExtraFlags:	0
+		Name:	a ^lblack enameled^N foot-locker
+	[Object 7]
+		Vnum:	453
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	453
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	453
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	2508
+		Inside:	1
+		Cost:	400
+		ExtraFlags:	100000000000000000000000
+	[Object 11]
+		Vnum:	2508
+		Inside:	1
+		Cost:	400
+		ExtraFlags:	100000000000000000000000
+	[Object 12]
+		Vnum:	35525
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 13]
+		Vnum:	2511
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 14]
+		Vnum:	2511
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 15]
+		Vnum:	1522
+		Inside:	1
+		Cost:	40
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	1522
+		Inside:	1
+		Cost:	40
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	35530
+		Inside:	1
+		Cost:	5
+		ExtraFlags:	0
+	[Object 18]
+		Vnum:	35530
+		Inside:	1
+		Cost:	5
+		ExtraFlags:	0
+	[Object 19]
+		Vnum:	35530
+		Inside:	1
+		Cost:	5
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	31537
+		Inside:	1
+		Cost:	60
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	24104
+		Inside:	1
+		Cost:	1299
+		ExtraFlags:	0
+		Name:	a Smooth n' Sweet Bandidos ^[F210]cigarillo
+	[Object 22]
+		Vnum:	35529
+		Inside:	1
+		Value 1:	10
+		Cost:	100
+		ExtraFlags:	0
+		Name:	a box of Nitro doses
+	[Object 23]
+		Vnum:	39643
+		Inside:	0
+		Value 1:	1
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 24]
+		Vnum:	1949
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+		Name:	a ^Ob^ournt orange^N sweater with a ^Lja^lck-o-lante^Lrn^N stitched onto the breast
+	[Object 25]
+		Vnum:	1949
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+		Name:	a ^rr^Red^N and ^ww^White^N ^rst^Wri^Rpe^Wd^N spaghetti strap top
+	[Object 26]
+		Vnum:	1949
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+		Name:	a ^Lsleeveless undershirt^N that accentuates the ^Tmuscles^N
+	[Object 27]
+		Vnum:	1949
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+		Name:	a ^lsleeve^Lless turtlenec^lk shirt^N
+	[Object 28]
+		Vnum:	27414
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 29]
+		Vnum:	27414
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 30]
+		Vnum:	1948
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	0
+		Name:	a ^Lb^lomber ^Lj^lacket^N with a ^bUni^Won J^rack^N patch on the sleeve
+	[Object 31]
+		Vnum:	1948
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	0
+		Name:	an ^[F221]o^[F231]live drab milsurp jacke^[F221]t^N with a ^bUni^Won J^rack^N patch on the chest
+	[Object 32]
+		Vnum:	1950
+		Inside:	1
+		Cost:	900
+		ExtraFlags:	0
+		Name:	a pair of ^Lsli^lck leather shit-kick^Lers^N with ^Tparacord laces^N
+	[Object 33]
+		Vnum:	1950
+		Inside:	1
+		Cost:	900
+		ExtraFlags:	0
+		Name:	a pair of ^Lh^ligh-top ^Ls^lneakers^N with a signature ^Ws^wwis^Wh^N
+	[Object 34]
+		Vnum:	1950
+		Inside:	1
+		Cost:	900
+		ExtraFlags:	0
+		Name:	pristine ^rN^Rike flyknit^rs^N with a signature ^Wswish^N
+	[Object 35]
+		Vnum:	1951
+		Inside:	1
+		Cost:	1200
+		ExtraFlags:	0
+		Name:	a form-fitting pair of ^lt^Lapered ^lj^Loggers^N
+	[Object 36]
+		Vnum:	1951
+		Inside:	1
+		Cost:	1200
+		ExtraFlags:	0
+		Name:	a pair of high-rise ^Bac^Wid^A-washe^Bd^b jean^Bs^N cuffed at the ankles
+	[Object 37]
+		Vnum:	1951
+		Inside:	1
+		Cost:	1200
+		ExtraFlags:	0
+		Name:	a pair of tight ^Lb^llack denim^N jeans with ^Wsilver chains^N
+	[Object 38]
+		Vnum:	14310
+		Inside:	1
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 39]
+		Vnum:	18889
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+		Name:	an open ^lblack^N and ^oorange ^lst^ori^lpe^od^N flannel jacket
+	[Object 40]
+		Vnum:	18854
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	0
+		Name:	a ^BGeorgia Aquarium^W "Bitches Love Fishes"^n t-shirt
+	[Object 41]
+		Vnum:	14614
+		Inside:	1
+		Cost:	350
+		ExtraFlags:	0
+	[Object 42]
+		Vnum:	721
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 43]
+		Vnum:	18816
+		Inside:	1
+		Cost:	10000
+		ExtraFlags:	0
+		Name:	a ^lno-face-no-case balaclava^N
+	[Object 44]
+		Vnum:	39611
+		Inside:	0
+		Value 1:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 45]
+		Vnum:	39757
+		Inside:	0
+		Cost:	500
+		ExtraFlags:	0
+	[Object 46]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 47]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 48]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 49]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 50]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 51]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 52]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 53]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 54]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 55]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 56]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 57]
+		Vnum:	65121
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 58]
+		Vnum:	65120
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 59]
+		Vnum:	65120
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 60]
+		Vnum:	65120
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 61]
+		Vnum:	65120
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 62]
+		Vnum:	65120
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 63]
+		Vnum:	65120
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 64]
+		Vnum:	65120
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 65]
+		Vnum:	9934
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 66]
+		Vnum:	9934
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 67]
+		Vnum:	9934
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 68]
+		Vnum:	9934
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 69]
+		Vnum:	9934
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 70]
+		Vnum:	9934
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 71]
+		Vnum:	9934
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	100000000000000000000000
+	[Object 72]
+		Vnum:	677
+		Inside:	1
+		Timer:	4
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 73]
+		Vnum:	677
+		Inside:	1
+		Timer:	4
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 74]
+		Vnum:	677
+		Inside:	1
+		Timer:	4
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 75]
+		Vnum:	677
+		Inside:	1
+		Timer:	4
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 76]
+		Vnum:	677
+		Inside:	1
+		Timer:	4
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 77]
+		Vnum:	677
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 78]
+		Vnum:	677
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 79]
+		Vnum:	677
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 80]
+		Vnum:	677
+		Inside:	1
+		Timer:	4
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 81]
+		Vnum:	677
+		Inside:	1
+		Timer:	4
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 82]
+		Vnum:	61507
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	100000000000000000000000
+	[Object 83]
+		Vnum:	61507
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	100000000000000000000000
+	[Object 84]
+		Vnum:	29326
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	0
+	[Object 85]
+		Vnum:	39621
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 86]
+		Vnum:	121
+		Inside:	0
+		Value 0:	978
+		Value 1:	8
+		Cost:	1956
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal heavy pistol ammunition
+	[Object 87]
+		Vnum:	121
+		Inside:	0
+		Value 0:	1000
+		Value 1:	17
+		Cost:	2000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal heavy machine gun ammunition
+	[Object 88]
+		Vnum:	121
+		Inside:	0
+		Value 0:	21369
+		Value 1:	13
+		Value 2:	1
+		Cost:	149583
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS assault rifle ammunition
+	[Object 89]
+		Vnum:	5415
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 90]
+		Vnum:	39602
+		Inside:	0
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 91]
+		Vnum:	39603
+		Inside:	0
+		Cost:	4000
+		ExtraFlags:	0
+	[Object 92]
+		Vnum:	14609
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 93]
+		Vnum:	32302
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+		Name:	a bottle of overproof ^vcherry^n mead with a slight kick of ^rchili^n
+	[Object 94]
+		Vnum:	39620
+		Inside:	0
+		Value 1:	1
+		Cost:	4000
+		ExtraFlags:	10
+	[Object 95]
+		Vnum:	29327
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 96]
+		Vnum:	29327
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 97]
+		Vnum:	29327
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 98]
+		Vnum:	61536
+		Inside:	1
+		Timer:	2
+		Cost:	10
+		ExtraFlags:	0
+	[Object 99]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 100]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 101]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 102]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 103]
+		Vnum:	61536
+		Inside:	1
+		Timer:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 104]
+		Vnum:	1843
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 105]
+		Vnum:	15845
+		Inside:	1
+		Cost:	4000
+		ExtraFlags:	100000000000000000000000
+	[Object 106]
+		Vnum:	29328
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 107]
+		Vnum:	3460
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 108]
+		Vnum:	12304
+		Inside:	1
+		Cost:	45
+		ExtraFlags:	0
+	[Object 109]
+		Vnum:	127
+		Inside:	2
+		Value 0:	1
+		Value 1:	8
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 1-round heavy pistol magazine
+	[Object 110]
+		Vnum:	64981
+		Inside:	1
+		Value 11:	1
+		Cost:	900
+		ExtraFlags:	1000000000000
+	[Object 111]
+		Vnum:	30512
+		Inside:	2
+		Cost:	180000
+		ExtraFlags:	0
+	[Object 112]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'biosculpting tissue II - cultured'
+	[Object 113]
+		Vnum:	6813
+		Inside:	2
+		Cost:	920000
+		ExtraFlags:	0
+	[Object 114]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a tactical computer IV -alpha'
+	[Object 115]
+		Vnum:	85691
+		Inside:	2
+		Value 9:	1
+		Cost:	140000
+		ExtraFlags:	0
+		Name:	a set of ^[F200]ano^[F300]dize^[F400]d cri^[F500]mson r^[F400]ed han^[F300]d raz^[F200]ors^N
+	[Object 116]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a set of ^[F200]ano^[F300]dize^[F400]d cri^[F500]mson r^[F400]ed han^[F300]d raz^[F200]ors^N' (restrung)
+	[Object 117]
+		Vnum:	85307
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 118]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a reaction enhancer - alpha'
+	[Object 119]
+		Vnum:	18806
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+		Name:	a ^[F111]viso^[F222]red hel^[F111]met with a ^[F520]jack-^[F530]o^[F520]-lantern^[F111] on the cheekplate^N
+	[Object 120]
+		Vnum:	64921
+		Inside:	0
+		Cost:	2100
+		ExtraFlags:	0
+	[Object 121]
+		Vnum:	19930
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000000000
+	[Object 122]
+		Vnum:	7284
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	1001001000001
+	[Object 123]
+		Vnum:	660
+		Inside:	1
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 124]
+		Vnum:	660
+		Inside:	1
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 125]
+		Vnum:	127
+		Inside:	2
+		Value 0:	40
+		Value 1:	17
+		Value 9:	4
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 40-round heavy machine gun magazine
+	[Object 126]
+		Vnum:	19909
+		Inside:	1
+		Value 7:	64988
+		Value 8:	691
+		Value 11:	4
+		Timer:	9
+		Cost:	7000
+		ExtraFlags:	1000000000000
+	[Object 127]
+		Vnum:	127
+		Inside:	2
+		Value 0:	30
+		Value 1:	13
+		Value 9:	28
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 30-round assault rifle magazine
+	[Object 128]
+		Vnum:	29400
+		Inside:	1
+		Value 11:	2
+		Attempt:	1
+		Cost:	3500
+		ExtraFlags:	1000000000000
+	[Object 129]
+		Vnum:	127
+		Inside:	2
+		Value 0:	12
+		Value 1:	8
+		Value 9:	12
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 12-round heavy pistol magazine
+	[Object 130]
+		Vnum:	746
+		Inside:	1
+		Value 7:	64988
+		Value 11:	3
+		Attempt:	3
+		Cost:	2750
+		ExtraFlags:	0
+		Name:	a scroll of Ruger's Thunderbolt^n
+	[Object 131]
+		Vnum:	127
+		Inside:	2
+		Value 0:	42
+		Value 1:	13
+		Value 2:	1
+		Value 9:	42
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 42-round assault rifle magazine
+	[Object 132]
+		Vnum:	836
+		Inside:	1
+		Value 8:	691
+		Value 11:	4
+		Timer:	10
+		Attempt:	2
+		Cost:	3000
+		ExtraFlags:	1000000000000
+	[Object 133]
+		Vnum:	15809
+		Inside:	0
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 134]
+		Vnum:	85012
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 135]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a datajack'
+	[Object 136]
+		Vnum:	85822
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 137]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'synthacardium II'
+	[Object 138]
+		Vnum:	556
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 139]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'an image link -alpha'
+	[Object 140]
+		Vnum:	85118
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 141]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a smartlink-2 system'
+	[Object 142]
+		Vnum:	6555
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	1000000000000000000000000000
+	[Object 143]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a pair of obvious mk. II cyberarms -alpha'
+	[Object 144]
+		Vnum:	85816
+		Inside:	2
+		Value 5:	15
+		Cost:	1
+		ExtraFlags:	0
+	[Object 145]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a platelet factory'
+	[Object 146]
+		Vnum:	566
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 147]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'Eye package w/LL, TH and FC -alpha'
+	[Object 148]
+		Vnum:	85321
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 149]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a wired reflexes II - alpha'
+	[Object 150]
+		Vnum:	61525
+		Inside:	0
+		Cost:	7500
+		ExtraFlags:	10
+	[Object 151]
+		Vnum:	15876
+		Inside:	0
+		Cost:	4750
+		ExtraFlags:	0
+	[Object 152]
+		Vnum:	19966
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 153]
+		Vnum:	15887
+		Inside:	1
+		Cost:	30000
+		ExtraFlags:	100000000000000000000000
+	[Object 154]
+		Vnum:	15888
+		Inside:	1
+		Cost:	10000
+		ExtraFlags:	100000000000000000000000
+	[Object 155]
+		Vnum:	38028
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	0
+		Name:	a ^[F301]wine-colored^n Cantarelli blazer
+	[Object 156]
+		Vnum:	113
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a small stack of books
+		Photo:$
+Several texts on electronics. A beginner level book sits at the top, while the
+other two titles are more dense. Not immediately apparent by weight or feel,
+but the opening the second book reveals that it's been hollowed out. A small
+rectangular pocket large enough to contain a pack of cigarettes. Within a tiny
+remote control has been taped, to prevent it from shifting about when carried.
+~
+	[Object 157]
+		Vnum:	113
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a tiny remote control
+		Photo:$
+About the size of a pack of chewing gum, this simple remote is contoured to
+fit the palm. Controls are straightforward. ON/OFF, Plus or Minus symbols, and
+a digital number indicator ranging from 1 to 10. A singular button on the side
+says MODE, but offers no hints at to what modes are toggled through. 
+~
+	[Object 158]
+		Vnum:	113
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a chess set
+		Photo:$
+A simple chess set. Hinges in the middle where it folds in half into a handy
+case for storing the pieces. 
+~
+	[Object 159]
+		Vnum:	60701
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 160]
+		Vnum:	64919
+		Inside:	0
+		Cost:	3200
+		ExtraFlags:	0
+	[Object 161]
+		Vnum:	94307
+		Inside:	0
+		Cost:	120
+		ExtraFlags:	0
+	[Object 162]
+		Vnum:	94306
+		Inside:	0
+		Cost:	500
+		ExtraFlags:	0

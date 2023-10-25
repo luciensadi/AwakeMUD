@@ -34,9 +34,9 @@
 
 /* gender */
 
-#define SEX_NEUTRAL   0
-#define SEX_MALE      1
-#define SEX_FEMALE    2
+#define PRONOUNS_NEUTRAL    0
+#define PRONOUNS_MASCULINE  1
+#define PRONOUNS_FEMININE   2
 
 /* positions */
 
@@ -452,7 +452,8 @@ enum {
 #define PRF_COERCE_ANSI                        66
 #define PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT  67
 #define PRF_MAILLOG                            68
-#define PRF_MAX                                69
+#define PRF_NOFOLLOW                           69
+#define PRF_MAX                                70
 
 /* log watch */
 
@@ -518,7 +519,7 @@ enum {
 #define AFF_LOW_LIGHT                           13 /* Char has low light eyes       */
 #define AFF_LASER_SIGHT                         14 /* Char using laser sight       */
 #define AFF_SNEAK                               15 /* Char can move quietly           */
-#define AFF_HIDE                                16 /* Char is hidden                */
+#define AFF_DO_NOT_USE_OLD_HIDE_AFF             16 /* Char is hidden                */
 #define AFF_VISION_MAG_1                        17 /* Magnification level 1        */
 #define AFF_CHARM                               18 /* Char is charmed              */
 #define AFF_ACTION                              19 /* Player gets -10 on next init roll     */
@@ -604,8 +605,8 @@ enum {
 #define ROOM_ARENA                      9   /* Can't teleport in         */
 #define ROOM_STREETLIGHTS               10  /* Room has a streetlight    */
 #define ROOM_HOUSE                      11  /* (R) Room is a house       */
-#define ROOM_HOUSE_CRASH                12  /* (R) House needs saving    */
-#define ROOM_ATRIUM                     13  /* (R) The door to a house   */
+// UNUSED SLOT                          12
+// UNUSED SLOT                          13
 #define ROOM_OLC                        14  /* (R) Modifyable/!compress  */
 #define ROOM_BFS_MARK                   15  /* (R) breath-first srch mrk */
 #define ROOM_LOW_LIGHT                  16  /* Room viewable with ll-eyes */
@@ -631,7 +632,9 @@ enum {
 #define ROOM_ALL_VEHICLE_ACCESS         37 // Bypasses land/air/water constraints.
 #define ROOM_HELIPAD                    38 // Allows rotorcraft and vector thrust takeoff and landing.
 #define ROOM_RUNWAY                     39 // Allows fixed-wing takeoff and landing.
-#define ROOM_MAX                        40
+#define ROOM_AIRCRAFT_CAN_DRIVE_HERE    40 // Allows aircraft to drive in this room.
+#define ROOM_AIRCRAFT_CAN_CRASH_HERE    41
+#define ROOM_MAX                        42
 
 #define VISION_NORMAL         0
 #define VISION_LOWLIGHT       1
@@ -817,22 +820,23 @@ enum {
 #define TYPE_LODGE              3
 #define TYPE_SUMMONING          4
 
-#define SPIRIT_HEARTH           0
-#define SPIRIT_CITY             1
-#define SPIRIT_FIELD            2
-#define SPIRIT_FOREST           3
-#define SPIRIT_DESERT           4
-#define SPIRIT_MOUNTAIN         5
-#define SPIRIT_RIVER            6
-#define SPIRIT_SEA              7
-#define SPIRIT_PRAIRIE          8
-#define SPIRIT_SKY    9
-#define SPIRIT_MIST             9
-#define SPIRIT_STORM            10
-#define SPIRIT_WIND             11
-#define SPIRIT_LAKE             12
-#define SPIRIT_SWAMP            13
-#define NUM_SPIRITS    14
+#define SPIRIT_HEARTH             0
+#define SPIRIT_CITY               1
+#define SPIRIT_FIELD              2
+#define SPIRIT_FOREST             3
+#define SPIRIT_DESERT             4
+#define SPIRIT_MOUNTAIN           5
+#define SPIRIT_RIVER              6
+#define SPIRIT_SEA                7
+#define SPIRIT_PRAIRIE            8
+#define SPIRIT_MIST               9
+#define SPIRIT_STORM              10
+#define SPIRIT_WIND               11
+#define SPIRIT_LAKE               12
+#define SPIRIT_SWAMP              13
+#define NUM_SPIRITS               14
+
+#define SPIRIT_SPECIAL_DOMAIN_SKY 50
 
 #define ELEM_EARTH    0
 #define ELEM_FIRE    1
@@ -1015,8 +1019,9 @@ enum {
 #define SKILL_PILOT_TRACKED             150
 #define SKILL_PILOT_WALKER              151
 #define SKILL_MANDARIN                  152
+#define SKILL_HAITIAN_CREOLE            153
 
-#define MAX_SKILLS                153
+#define MAX_SKILLS                      154
 // Adding a pilot skill? Update utils.cpp's pilot_skills[].
 
 // Skill type definitions.
@@ -1310,15 +1315,18 @@ enum {
 #define ITEM_WEAR_HOLD          14 /* Can be held                */
 #define ITEM_WEAR_EYES          15 /* worn on eyes          */
 #define ITEM_WEAR_EAR           16 /* can be worn on/in ear  */
-#define ITEM_WEAR_UNDER  17
-#define ITEM_WEAR_BACK  18
-#define ITEM_WEAR_ANKLE  19
-#define ITEM_WEAR_SOCK  20
-#define ITEM_WEAR_BELLY  21
-#define ITEM_WEAR_ARM    22
-#define ITEM_WEAR_FACE   23
-#define ITEM_WEAR_THIGH  24
-#define ITEM_WEAR_MAX    25
+#define ITEM_WEAR_UNDER         17
+#define ITEM_WEAR_BACK          18
+#define ITEM_WEAR_ANKLE         19
+#define ITEM_WEAR_SOCK          20
+#define ITEM_WEAR_BELLY         21
+#define ITEM_WEAR_ARM           22
+#define ITEM_WEAR_FACE          23
+#define ITEM_WEAR_THIGH         24
+#define ITEM_WEAR_UNDERWEAR     25
+#define ITEM_WEAR_CHEST         26
+#define ITEM_WEAR_LAPEL         27
+#define ITEM_WEAR_MAX           28
 
 /* extra object flags: used by obj_data.obj_flags.extra_flags */
 /* see: https://github.com/luciensadi/AwakeMUD/wiki/Item-Extra-Flags */
@@ -1819,6 +1827,7 @@ enum {
 #define FOCI_SUSTAINED    5
 // #define FOCI_WEAPON    6
 #define FOCI_SPELL_DEFENSE 7
+#define NUM_FOCUS_TYPES    8
 
 #define ACCESS_SMARTLINK  1
 #define ACCESS_SCOPE    2
@@ -1906,7 +1915,8 @@ enum {
 #define ENGINE_GASOLINE    3
 #define ENGINE_METHANE    4
 #define ENGINE_DIESEL      5
-#define NUM_ENGINE_TYPES  6
+#define ENGINE_JET        6
+#define NUM_ENGINE_TYPES  7
 
 #define SEATING_REAR      0
 #define SEATING_FRONT     1
@@ -1936,6 +1946,10 @@ enum {
 #define ALIAS_GLOB_CHAR '*'
 
 /* Subcommands section: Originally from interpreter.h */
+
+/* do_dice */
+#define SCMD_STANDARD_ROLL  0
+#define SCMD_PRIVATE_ROLL   1
 
 /* do_cast */
 #define SCMD_STANDARD_CAST  0
@@ -2146,63 +2160,69 @@ enum {
 
 /* END SUBCOMMANDS SECTION */
 
-#define FREE    0
-#define SIMPLE    1
-#define COMPLEX    2
-#define EXCLUSIVE  3
-#define NOCOMBAT  4
+#define ACTION_FREE       0
+#define ACTION_SIMPLE     1
+#define ACTION_COMPLEX    2
+#define ACTION_EXCLUSIVE  3
+#define ACTION_NOCOMBAT   4
 
 /* modes of connectedness: used by descriptor_data.state */
 
-#define CON_PLAYING      0              /* Playing - Nominal state      */
-#define CON_CLOSE        1              /* Disconnecting                */
-#define CON_GET_NAME     2              /* By what name ..?             */
-#define CON_NAME_CNFRM   3              /* Did I get that right, x?     */
-#define CON_PASSWORD     4              /* Password:                    */
-#define CON_NEWPASSWD    5              /* Give me a password for x     */
-#define CON_CNFPASSWD    6              /* Please retype password:      */
-#define CON_CCREATE      7
-#define CON_RMOTD        8              /* PRESS RETURN after MOTD      */
-#define CON_MENU         9              /* Your choice: (main menu)     */
-#define CON_PART_CREATE  10
-#define CON_CHPWD_GETOLD 11             /* Changing passwd: get old     */
-#define CON_CHPWD_GETNEW 12             /* Changing passwd: get new     */
-#define CON_CHPWD_VRFY   13             /* Verify new password          */
-#define CON_DELCNF1      14             /* Delete confirmation 1        */
-#define CON_DELCNF2      15             /* Delete confirmation 2        */
-#define CON_QMENU        16             /* quit menu                    */
-#define CON_QGETOLDPW    17
-#define CON_QGETNEWPW    18
-#define CON_QVERIFYPW    19
-#define CON_QDELCONF1    20
-#define CON_QDELCONF2    21
-#define CON_SPELL_CREATE 22             /* Spell creation menus         */
-#define CON_PCUSTOMIZE   23             /* customize persona description menu */
-#define CON_ACUSTOMIZE   24             /* customize reflection description menu */
-#define CON_FCUSTOMIZE   25
-#define CON_VEDIT        26
-#define CON_IEDIT        27  /* olc edit mode */
-#define CON_REDIT        28  /* olc edit mode */
-#define CON_MEDIT        29
-#define CON_QEDIT        30
-#define CON_SHEDIT       31
-#define CON_ZEDIT        32
-#define CON_HEDIT        33
-#define CON_ICEDIT       34
-#define CON_PRO_CREATE   35
-#define CON_DECK_CREATE  36
-#define CON_SPE_CREATE   37
-#define CON_INITIATE     38
-#define CON_DECORATE     39
-#define CON_POCKETSEC    40
-#define CON_VEHCUST      41
-#define CON_BCUSTOMIZE   42
-#define CON_TRIDEO       43
-#define CON_AMMO_CREATE  44
-#define CON_ASKNAME      45            /* Ask user for name            */
-#define CON_PGEDIT       46
-#define CON_HELPEDIT     47
+#define CON_PLAYING             0              /* Playing - Nominal state      */
+#define CON_CLOSE               1              /* Disconnecting                */
+#define CON_GET_NAME            2              /* By what name ..?             */
+#define CON_NAME_CNFRM          3              /* Did I get that right, x?     */
+#define CON_PASSWORD            4              /* Password:                    */
+#define CON_NEWPASSWD           5              /* Give me a password for x     */
+#define CON_CNFPASSWD           6              /* Please retype password:      */
+#define CON_CCREATE             7
+#define CON_RMOTD               8              /* PRESS RETURN after MOTD      */
+#define CON_MENU                9              /* Your choice: (main menu)     */
+#define CON_PART_CREATE         10
+#define CON_CHPWD_GETOLD        11             /* Changing passwd: get old     */
+#define CON_CHPWD_GETNEW        12             /* Changing passwd: get new     */
+#define CON_CHPWD_VRFY          13             /* Verify new password          */
+#define CON_DELCNF1             14             /* Delete confirmation 1        */
+#define CON_DELCNF2             15             /* Delete confirmation 2        */
+#define CON_QMENU               16             /* quit menu                    */
+#define CON_QGETOLDPW           17
+#define CON_QGETNEWPW           18
+#define CON_QVERIFYPW           19
+#define CON_QDELCONF1           20
+#define CON_QDELCONF2           21
+#define CON_SPELL_CREATE        22             /* Spell creation menus         */
+#define CON_PCUSTOMIZE          23             /* customize persona description menu */
+#define CON_ACUSTOMIZE          24             /* customize reflection description menu */
+#define CON_FCUSTOMIZE          25
+#define CON_VEDIT               26
+#define CON_IEDIT               27  /* olc edit mode */
+#define CON_REDIT               28  /* olc edit mode */
+#define CON_MEDIT               29
+#define CON_QEDIT               30
+#define CON_SHEDIT              31
+#define CON_ZEDIT               32
+#define CON_HEDIT               33
+#define CON_ICEDIT              34
+#define CON_PRO_CREATE          35
+#define CON_DECK_CREATE         36
+#define CON_SPE_CREATE          37
+#define CON_INITIATE            38
+#define CON_DECORATE            39
+#define CON_POCKETSEC           40
+#define CON_VEHCUST             41
+#define CON_BCUSTOMIZE          42
+#define CON_TRIDEO              43
+#define CON_AMMO_CREATE         44
+#define CON_ASKNAME             45            /* Ask user for name            */
+#define CON_PGEDIT              46
+#define CON_HELPEDIT            47
+#define CON_HOUSEEDIT_COMPLEX   48
+#define CON_HOUSEEDIT_APARTMENT 49
+#define CON_DECORATE_VEH        50
+#define CON_TEMPDESC_EDIT       51
+#define CON_MAX                 51
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
+// Also add it to constants's connected_types.
 
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD     0
@@ -2230,7 +2250,8 @@ enum {
 #define TO_VICT_FORCE          12
 #define TO_SLEEP               (1 << 5)     /* to char, even if sleeping */
 #define TO_REMOTE              (1 << 6)
-#define TO_STAFF_ONLY          (1 << 7)
+#define SKIP_YOU_STANZAS       (1 << 7)
+#define TO_STAFF_ONLY          (1 << 8)
 
 #define TO_STAFF_ROLLS         TO_ROLLS | TO_STAFF_ONLY
 
@@ -2405,15 +2426,18 @@ enum {
 #define RM_CAIROS_APARTMENT          96100
 #ifdef USE_PRIVATE_CE_WORLD
 #define RM_TEMPORARY_DOCWAGON        10097
-#define RM_SEATTLE_DOCWAGON          RM_TEMPORARY_DOCWAGON
-#define RM_PORTLAND_DOCWAGON         RM_TEMPORARY_DOCWAGON
-#define RM_CARIB_DOCWAGON            RM_TEMPORARY_DOCWAGON
-#define RM_OCEAN_DOCWAGON            RM_TEMPORARY_DOCWAGON
+#define RM_SEATTLE_DOCWAGON          16295
+#define RM_PORTLAND_DOCWAGON         14709
+#define RM_CARIB_DOCWAGON            62300
+#define RM_OCEAN_DOCWAGON            62502
 #define RM_NERPCORPOLIS_RECEPTIONIST 6900
 #define RM_NERPCORPOLIS_LOBBY        6901
 #define RM_PORTLAND_PARKING_GARAGE1  2751 + number(0, 2)
 #define RM_PORTLAND_PARKING_GARAGE2  2756 + number(0, 2)
 #define RM_PORTLAND_PARKING_GARAGE3  2762 + number(0, 2)
+#define RM_SEATTLE_PARKING_GARAGE    22670 + number(0, 16)
+#define RM_CARIB_PARKING_GARAGE      62334
+#define RM_OCEAN_PARKING_GARAGE      62504
 #else
 #define RM_SEATTLE_DOCWAGON          RM_ENTRANCE_TO_DANTES
 #define RM_PORTLAND_DOCWAGON         RM_ENTRANCE_TO_DANTES
@@ -2423,10 +2447,10 @@ enum {
 #define RM_NERPCORPOLIS_RECEPTIONIST RM_ENTRANCE_TO_DANTES
 #define RM_NERPCORPOLIS_LOBBY        RM_ENTRANCE_TO_DANTES
 #define RM_PORTLAND_PARKING_GARAGE   RM_DANTES_GARAGE
-#endif
 #define RM_SEATTLE_PARKING_GARAGE    RM_DANTES_GARAGE
 #define RM_CARIB_PARKING_GARAGE      RM_DANTES_GARAGE
 #define RM_OCEAN_PARKING_GARAGE      RM_DANTES_GARAGE
+#endif
 #define RM_PAINTER_LOT               37518
 #define RM_MULTNOMAH_GATE_NORTH      17598
 #define RM_MULTNOMAH_GATE_SOUTH      17599
@@ -2437,10 +2461,15 @@ enum {
 
 // Chargen room defines
 #define RM_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC  60520
-#define RM_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC  60623
 #define RM_CHARGEN_PATH_OF_THE_ADEPT              60518
 #define RM_CHARGEN_CONJURING_HERMETIC             60522
-#define RM_CHARGEN_CONJURING_SHAMANIC             60625
+#ifdef USE_PRIVATE_CE_WORLD
+   #define RM_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC  60657
+   #define RM_CHARGEN_CONJURING_SHAMANIC             60659
+#else
+   #define RM_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC  60623
+   #define RM_CHARGEN_CONJURING_SHAMANIC             60625
+#endif
 
 // Archetypal chargen room defines
 #define RM_ARCHETYPAL_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC 90701
@@ -2454,6 +2483,24 @@ enum {
 #define RM_JUNKYARD_APPLI           70505
 #define RM_JUNKYARD_ELECT           70509
 #define NUM_JUNKYARD_ROOMS          5
+
+#ifdef USE_PRIVATE_CE_WORLD
+   #define RM_VEHICLE_CRUSHER          70515
+#else
+   #define RM_VEHICLE_CRUSHER          RM_ENTRANCE_TO_DANTES
+#endif
+
+#ifndef USE_PRIVATE_CE_WORLD
+   #define RM_BONEYARD_WRECK_ROOM      RM_DANTES_GARAGE
+   #define RM_BONEYARD_INTACT_ROOM_1   RM_ENTRANCE_TO_DANTES
+   #define RM_BONEYARD_INTACT_ROOM_2   RM_ENTRANCE_TO_DANTES
+   #define NUM_BONEYARD_ROOMS          1
+#else
+   #define RM_BONEYARD_WRECK_ROOM      65508
+   #define RM_BONEYARD_INTACT_ROOM_1   65506
+   #define RM_BONEYARD_INTACT_ROOM_2   65507
+   #define NUM_BONEYARD_ROOMS          1
+#endif
 
 // This is specifically not included in the above since not every vehicle can leave it successfully. BIKES AND DRONES ONLY.
 #define RM_JUNKYARD_BIKES           70508
@@ -2894,8 +2941,9 @@ enum {
 #define NUYEN_OUTFLOW_STAFF_CHARGE          30
 #define NUYEN_OUTFLOW_SYSPOINT_PURCHASE     31
 #define NUYEN_OUTFLOW_FLIGHT_FUEL           32
+#define NUYEN_OUTFLOW_DECORATING            33
 
-#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 33
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 34
 // Make sure you update constants.cpp's nuyen_faucets_and_sinks[] too!
 
 #define NI_IS_SINK   0
@@ -2940,6 +2988,14 @@ enum {
 #define MAX_FLAG_MARKER "\n"
 
 #define MAX_VISIBILITY_PENALTY             8
+
+#define LIFESTYLE_STREETS         0
+#define LIFESTYLE_SQUATTER        1
+#define LIFESTYLE_LOW             2
+#define LIFESTYLE_MIDDLE          3
+#define LIFESTYLE_HIGH            4
+#define LIFESTYLE_LUXURY          5
+#define NUM_LIFESTYLES            6
 
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's

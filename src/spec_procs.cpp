@@ -1389,7 +1389,6 @@ SPECIAL(spell_trainer)
     else if (force > spelltrainers[i].force)
       send_to_char(ch, "%s can only teach %s up to force %d.\r\n", GET_NAME(trainer), compose_spell_name(spelltrainers[i].type, spelltrainers[i].subtype), spelltrainers[i].force);
     else {
-      // TODO: Decrease force by amount already known.
       int cost = force;
       struct spell_data *spell = NULL;
 
@@ -1399,6 +1398,7 @@ SPECIAL(spell_trainer)
             send_to_char("You already know this spell at an equal or higher force.\r\n", ch);
             return TRUE;
           } else {
+            // Discount it by the known cost.
             cost -= spell->force;
             break;
           }
@@ -2449,12 +2449,6 @@ SPECIAL(adept_guard)
         damage(ch, vict, 1, TYPE_SUFFERING, PHYSICAL);
         return(TRUE);
       }
-    }
-    if (!IS_AFFECTED(ch, AFF_HIDE)) {
-      act("$n fades out of sight.", FALSE, ch, 0, ch, TO_NOTVICT);
-      act("You fade out of the sight of others.", FALSE, ch, 0, 0, TO_CHAR);
-      AFF_FLAGS(ch).SetBit(AFF_HIDE);
-      return(FALSE);
     }
   } else {
     vict = FIGHTING(ch);
@@ -3604,7 +3598,7 @@ SPECIAL(bank)
     else if (!*buf1)
       send_to_char("Who do you want to wire funds to?\r\n", ch);
     else {
-      vnum_t isfile = -1;
+      idnum_t isfile = -1;
       if ((isfile = get_player_id(buf1)) == -1) {
         send_to_char("It won't let you transfer to that account.\r\n", ch);
         return TRUE;
@@ -3822,6 +3816,7 @@ SPECIAL(waterfall)
     } else {
       act("You succumb to the heavy waves and crack your skull on the floor!", FALSE, ch, 0, 0, TO_CHAR);
       act("$n gets slammed down by the waves and hits $s head on the floor!", TRUE, ch, 0, 0, TO_ROOM);
+      // TODO: A PC controlling a drone gets hit by this. Damage the vehicle instead in this case.
       damage(ch, ch, number(1, 2), TYPE_BLUDGEON, TRUE);
       return TRUE;
     }
@@ -4089,7 +4084,8 @@ int find_hotel_cost(struct char_data *ch)
       cost = 6.0;
       break;
   }
-  val = (int)(cost * MAX(1, (GET_REP(ch) + number(-1, 1)) / 10));
+  int tmp_cost = (GET_REP(ch) + number(-1, 1)) / 10;
+  val = (int)(cost * MAX(1, tmp_cost));
   return val;
 }
 
@@ -4246,19 +4242,6 @@ SPECIAL(smelly)
   return FALSE;
 }
 
-void make_newbie(struct obj_data *obj)
-{
-  for (;obj;obj = obj->next_content)
-  {
-    if (obj->contains)
-      make_newbie(obj->contains);
-    if (GET_OBJ_TYPE(obj) != ITEM_MAGIC_TOOL) {
-      GET_OBJ_EXTRA(obj).SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NOSELL, ENDBIT);
-      GET_OBJ_COST(obj) = 0;
-    }
-  }
-}
-
 void process_auth_room(struct char_data *ch) {
   PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
 
@@ -4272,10 +4255,10 @@ void process_auth_room(struct char_data *ch) {
   // Clear the rest, it can't be kept.
   GET_NUYEN_RAW(ch) = 0;
 
-  make_newbie(ch->carrying);
+  zero_cost_of_obj_and_contents(ch->carrying);
   for (int i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i))
-      make_newbie(GET_EQ(ch, i));
+      zero_cost_of_obj_and_contents(GET_EQ(ch, i));
   for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
     GET_OBJ_COST(obj) = 1;
   for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
@@ -4527,7 +4510,7 @@ SPECIAL(matchsticks)
   if (!AWAKE(carl))
     return FALSE;
   if (CMD_IS("give")) {
-    half_chop(argument, arg, buf);
+    half_chop(argument, arg, buf, sizeof(buf));
     two_arguments(buf, buf1, buf2);
 
     if (!*buf || !*buf1 || !*buf2)
@@ -5615,7 +5598,7 @@ SPECIAL(chargen_hopper)
     }
 
     modulator = read_object(modulator_rnum, REAL);
-    make_newbie(modulator);
+    zero_cost_of_obj_and_contents(modulator);
     obj_to_obj(modulator, hopper);
     //mudlog("DEBUG: Loaded hopper with modulator.", NULL, LOG_SYSLOG, TRUE);
   }
@@ -6025,7 +6008,7 @@ SPECIAL(Janis_Amer_Girl) {
           break;
       if (!tch)
         GET_SPARE1(mob) = 0;
-      else if (GET_RACE(tch) != RACE_HUMAN || GET_SEX(tch) != SEX_MALE)
+      else if (GET_RACE(tch) != RACE_HUMAN || GET_PRONOUNS(tch) != PRONOUNS_MASCULINE)
         do_say(mob, "And for frags sake, try and get someone who looks something like this guy to make the collection.", 0, 0);
       else
         do_say(mob, "Make sure you don't do anything weird, this guy won't hand it over if you're acting suspicious.", 0, 0);
@@ -6127,8 +6110,8 @@ SPECIAL(Janis_Meet)
       // Eventually we should verify the sayto target, but for now, we skip it. This block just serves to allow the next to identify the blue-eyes string.
     }
 
-    if (!str_cmp(argument, "Blue-eyes sent me") || !str_cmp(argument, "blue-eyes sent me")) {
-      if (GET_RACE(ch) != RACE_HUMAN || GET_SEX(ch) != SEX_MALE || !(GET_EQ(ch, WEAR_BODY) && GET_OBJ_VNUM(GET_EQ(ch, WEAR_BODY)) == 5032))  {
+    if (str_str(argument, "Blue-eyes sent me")) {
+      if (GET_RACE(ch) != RACE_HUMAN || GET_PRONOUNS(ch) != PRONOUNS_MASCULINE || !(GET_EQ(ch, WEAR_BODY) && GET_OBJ_VNUM(GET_EQ(ch, WEAR_BODY)) == 5032))  {
         do_say(mob, "Who the frag are you!? Oh wait, I fraggin' get it! This is a bust!", 0, 0);
         act("$n turns and starts running towards the road, quickly vanishing into the crowd.", FALSE, mob, 0, 0, TO_ROOM);
       } else {
@@ -6386,7 +6369,6 @@ SPECIAL(mageskill_nightwing)
     const char *location_string = NULL;
 
     int toroom = NOWHERE;
-    // TODO: Make it so that she can't go to the room she's already in.
     int limiter = 10;
     while ((limiter-- > 0) && (toroom <= 0 || &world[toroom] == mage->in_room)) {
       switch (number(0, 5)) {
@@ -6415,9 +6397,14 @@ SPECIAL(mageskill_nightwing)
           location_string = "somewhere in Seattle";
           break;
       }
+      // Prevent her from going to the same room she's already in.
+      if (&world[toroom] == mage->in_room)
+        continue;
     }
-    if (limiter <= 0)
+    if (limiter <= 0) {
       mudlog("SYSERR: Could not find a new room for Fleeting Nightwing after 10 tries!", mage, LOG_SYSLOG, TRUE);
+      return TRUE;
+    }
 
     act("$n suddenly dashes towards the nearest entrance.", FALSE, mage, 0, 0, TO_ROOM);
     char_from_room(mage);
@@ -6504,7 +6491,7 @@ SPECIAL(mageskill_trainer)
       act("$n reaches out and snatches the chain from around $N's neck.", FALSE, mage, 0, ch, TO_NOTVICT);
       extract_obj(unequip_char(ch, i, TRUE));
     } else {
-      snprintf(arg, sizeof(arg), "%s Welcome %s, the Master awaits.", GET_CHAR_NAME(ch), GET_SEX(ch) == SEX_FEMALE ? "Sister" : "Brother");
+      snprintf(arg, sizeof(arg), "%s Welcome %s, the Master awaits.", GET_CHAR_NAME(ch), GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL ? "Sibling" : (GET_PRONOUNS(ch) == PRONOUNS_FEMININE ? "Sister" : "Brother"));
       do_say(mage, arg, 0, SCMD_SAYTO);
       send_to_char(ch, "%s beckons you to pass through the field to the north, and you do.\r\n", GET_NAME(mage));
       act("$n passes through the field to the north.", TRUE, ch, 0, 0, TO_ROOM);

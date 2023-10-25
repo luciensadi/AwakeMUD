@@ -22,12 +22,17 @@
 #include <vector>
 #include <algorithm>
 #include <mysql/mysql.h>
+
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <process.h>
 #define getpid() _getpid()
 #else
 #include <unistd.h>
 #endif
+
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
+namespace bf = boost::filesystem;
 
 #ifndef NOCRYPT
 #include <sodium.h>
@@ -61,6 +66,9 @@
 #include "transport.hpp"
 #include "bullet_pants.hpp"
 #include "lexicons.hpp"
+#include "newhouse.hpp"
+#include "zoomies.hpp"
+#include "redit.hpp"
 
 ACMD_DECLARE(do_reload);
 
@@ -73,13 +81,11 @@ extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
 extern void generate_archetypes();
 extern void populate_mobact_aggression_octets();
-extern void write_world_to_disk(int vnum);
 extern void handle_weapon_attachments(struct obj_data *obj);
 extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon);
 extern void reset_host_paydata(rnum_t rnum);
 extern bool player_is_dead_hardcore(long id);
-
-extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
+extern void load_apartment_complexes();
 
 extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
@@ -497,7 +503,14 @@ void boot_world(void)
     }
   }
 
-#ifndef NOCRYPT  
+  for (int i = 0; i < CON_MAX; i++) {
+    if (str_str(connected_types[i], MAX_FLAG_MARKER)) {
+      log("Error: You added a connection type but didn't add it to connected_types in constants.cpp (or forgot a comma)!");
+      exit(ERROR_FLAG_CONSTANT_MISSING);
+    }
+  }
+
+#ifndef NOCRYPT
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
     // The library could not be initialized. Fail.
@@ -538,6 +551,8 @@ void boot_world(void)
   require_that_field_exists_in_table("anti-vehicle", "pfiles_ammo", "SQL/Migrations/add_harmless_and_anti_vehicle.sql");
   require_that_field_exists_in_table("Duration", "pfiles_drugs", "SQL/Migrations/drug_overhaul.sql");
   require_that_field_meets_constraints("LastFix", "pfiles_drugs", "SQL/Migrations/lastfix_bigint.sql", 12, "bigint", TRUE);
+  require_that_field_exists_in_table("lifestyle_string", "pfiles", "SQL/Migrations/lifestyles.sql");
+  require_that_field_exists_in_table("zone", "playergroups", "SQL/Migrations/playergroup_zone_ownership.sql");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
@@ -626,6 +641,9 @@ void DBInit()
   log("Loading fight messages.");
   load_messages();
 
+  log("Loading lifestyles.");
+  load_lifestyles();
+
   log("Booting world.");
   boot_world();
 
@@ -685,7 +703,8 @@ void DBInit()
   purge_unowned_vehs();
 
   log("Booting houses.");
-  House_boot();
+  load_apartment_complexes();
+  warn_about_apartment_deletion();
   boot_time = time(0);
 
   log("Loading shop orders.");
@@ -1307,7 +1326,7 @@ void parse_room(File &fl, long nr)
   room->background[CURRENT_BACKGROUND_COUNT] = room->background[PERMANENT_BACKGROUND_COUNT] = data.GetInt("POINTS/Background", 0);
   room->background[CURRENT_BACKGROUND_TYPE] = room->background[PERMANENT_BACKGROUND_TYPE] = data.GetInt("POINTS/BackgroundType", 0);
   room->staff_level_lock = data.GetInt("POINTS/StaffLockLevel", 0);
-  room->flight_code = str_dup(data.GetString("POINTS/FlightCode", "---"));
+  room->flight_code = str_dup(data.GetString("POINTS/FlightCode", INVALID_FLIGHT_CODE));
   room->latitude = data.GetFloat("POINTS/Latitude", 0.0);
   room->longitude = data.GetFloat("POINTS/Longitude", 0.0);
   if (room->vision[0] == -1) {
@@ -1721,7 +1740,7 @@ void parse_mobile(File &in, long nr)
   AFF_FLAGS(mob).FromString(data.GetString("AffFlags", "0"));
 
   GET_RACE(mob) = data.LookupInt("Race", pc_race_types, RACE_HUMAN);
-  GET_SEX(mob) = data.LookupInt("Gender", genders, SEX_NEUTRAL);
+  GET_PRONOUNS(mob) = data.LookupInt("Gender", genders, PRONOUNS_NEUTRAL);
 
   GET_POS(mob) = data.LookupInt("Position", position_types, POS_STANDING);
   GET_DEFAULT_POS(mob) =
@@ -2130,7 +2149,7 @@ void parse_object(File &fl, long nr)
           GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 1000), 10);
 
           // Update weight.
-          GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj));
+          GET_OBJ_WEIGHT(obj) = get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj));
 
           // Set the TNs for this ammo per the default values.
           GET_OBJ_AVAILDAY(obj) = ammo_type[GET_AMMOBOX_TYPE(obj)].time;
@@ -2916,9 +2935,121 @@ int vnum_mobile_affflag(int i, struct char_data * ch)
   return (found);
 }
 
+int vnum_vehicles_by_attribute(int vaff_idx, struct char_data *ch) {
+  send_to_char(ch, "Displaying all vehicle prototypes sorted by %s (descending):\r\n", veh_aff[vaff_idx]);
+
+  std::vector<struct veh_data *> veh_vect = {};
+
+  for (rnum_t nr = 0; nr <= top_of_veht; nr++) {
+    veh_vect.push_back(&veh_proto[nr]);
+  }
+
+  std::sort(veh_vect.begin(), 
+            veh_vect.end(),
+            [vaff_idx](struct veh_data *a, struct veh_data *b) {
+              switch (vaff_idx) {
+                case VAFF_HAND:
+                  return a->handling > b->handling;
+                case VAFF_SPD:
+                  return a->speed > b->speed;
+                case VAFF_ACCL:
+                  return a->accel > b->accel;
+                case VAFF_BOD:
+                  return a->body > b->body;
+                case VAFF_ARM:
+                  return a->armor > b->armor;
+                case VAFF_SIG:
+                  return a->sig > b->sig;
+                case VAFF_AUTO:
+                  return a->autonav > b->autonav;
+                case VAFF_SEAF:
+                  // should these indexes be swapped?
+                  return a->seating[0] > b->seating[0];
+                case VAFF_SEAB:
+                  return a->seating[1] > b->seating[1];
+                case VAFF_LOAD:
+                  return a->load > b->load;
+                case VAFF_SEN:
+                  return a->sensor > b->sensor;
+                case VAFF_PILOT:
+                  return a->pilot > b->pilot;
+                default:
+                  // Unsupported sort.
+                  return TRUE;
+              }
+            });
+  
+  int found = 0, value = 0;
+  for (auto *veh : veh_vect) {
+    switch (vaff_idx) {
+      case VAFF_HAND:
+        value = veh->handling;
+        break;
+      case VAFF_SPD:
+        value = veh->speed;
+        break;
+      case VAFF_ACCL:
+        value = veh->accel;
+        break;
+      case VAFF_BOD:
+        value = veh->body;
+        break;
+      case VAFF_ARM:
+        value = veh->armor;
+        break;
+      case VAFF_SIG:
+        value = veh->sig;
+        break;
+      case VAFF_AUTO:
+        value = veh->autonav;
+        break;
+      case VAFF_SEAF:
+        // should these indexes be swapped?
+        value = veh->seating[0];
+        break;
+      case VAFF_SEAB:
+        value = veh->seating[1];
+        break;
+      case VAFF_LOAD:
+        value = veh->load;
+        break;
+      case VAFF_SEN:
+        value = veh->sensor;
+        break;
+      case VAFF_PILOT:
+        value = veh->pilot;
+        break;
+      default:
+        // Unsupported sort.
+        return -1;
+    }
+    
+    snprintf(buf, MIN(sizeof(buf), 50), "%s", veh->short_description == NULL ? "(BUG)" : get_string_after_color_code_removal(veh->short_description, NULL));
+
+    send_to_char(ch, "%3d. [%5ld] %-50s ^n(%4d)\r\n", 
+              ++found,
+              veh_index[veh->veh_number].vnum,
+              buf,
+              value);
+  }
+
+  return found;
+}
+
 int vnum_vehicle(char *searchname, struct char_data * ch)
 {
   int nr, found = 0;
+  char arg1[MAX_STRING_LENGTH];
+  char arg2[MAX_STRING_LENGTH];
+
+  two_arguments(searchname, arg1, arg2);
+
+  for (int vaff_idx = VAFF_HAND; vaff_idx < VAFF_MAX; vaff_idx++) {
+    if (!str_cmp(searchname, veh_aff[vaff_idx])) {
+      return vnum_vehicles_by_attribute(vaff_idx, ch);
+    }
+  }
+
   for (nr = 0; nr <= top_of_veht; nr++)
   {
     bool is_keyword = isname(searchname, get_string_after_color_code_removal(veh_proto[nr].name, NULL));
@@ -2963,6 +3094,139 @@ int vnum_ic(char *searchname, struct char_data * ch)
   }
 
   return (found);
+}
+
+#define PRINT_HEADER_IF_NEEDED(text) { if (!printed_header) { strlcat(results, text, sizeof(results)); printed_header = TRUE; }}
+// Search for the specified text across the whole game.
+int vnum_text(char *searchname, struct char_data *ch) {
+  char results[100000];
+  int count = 0;
+  bool printed_header = FALSE;
+
+  strlcpy(results, "", sizeof(results));
+
+  send_to_char("Scanning rooms, mobs, vehicles, objects, quests, hosts, and ICs for that text...\r\n", ch);
+
+  // Rooms.
+  printed_header = FALSE;
+  for (int idx = 0; idx <= top_of_world; idx++) {
+    struct room_data *room = &world[idx];
+    const char *context = keyword_appears_in_room(searchname, room, TRUE, TRUE, TRUE);
+
+    if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Rooms: ^n\r\n");
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               GET_ROOM_VNUM(room),
+               GET_ROOM_NAME(room),
+               context);
+      count++;
+    }
+  }
+
+  // Mobs.
+  printed_header = FALSE;
+  for (int idx = 0; idx <= top_of_mobt; idx++) {
+    struct char_data *mob = &mob_proto[idx];
+    const char *context = keyword_appears_in_char(searchname, mob, TRUE, TRUE, TRUE);
+
+    if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Mobs: ^n\r\n");
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               GET_MOB_VNUM(mob),
+               GET_CHAR_NAME(mob),
+               context);
+      count++;
+    }
+  }
+
+  // Vehicles.
+  printed_header = FALSE;
+  for (int idx = 0; idx <= top_of_veht; idx++) {
+    struct veh_data *veh = &veh_proto[idx];
+    const char *context = keyword_appears_in_veh(searchname, veh, TRUE, TRUE, TRUE);
+
+    if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Vehicles: ^n\r\n");
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               GET_VEH_VNUM(veh),
+               GET_VEH_NAME(veh),
+               context);
+      count++;
+    }
+  }
+
+  // Objects.
+  printed_header = FALSE;
+  for (int idx = 0; idx <= top_of_objt; idx++) {
+    struct obj_data *obj = &obj_proto[idx];
+    const char *context = keyword_appears_in_obj(searchname, obj, TRUE, TRUE, TRUE);
+
+    if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Objects: ^n\r\n");
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               GET_OBJ_VNUM(obj),
+               GET_OBJ_NAME(obj),
+               context);
+      count++;
+    }
+  }
+
+  // Quests.
+  printed_header = FALSE;
+  for (int idx = 0; idx <= top_of_questt; idx++) {
+    struct quest_data *qst = &quest_table[idx];
+    const char *context = keyword_appears_in_quest(searchname, qst);
+
+    if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Quests: ^n\r\n");
+      vnum_t rnum = real_mobile(qst->johnson);
+
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               qst->vnum,
+               rnum > 0 ? GET_CHAR_NAME(&mob_proto[rnum]) : "<bad Johnson>",
+               context);
+      count++;
+    }
+  }
+
+  // Hosts.
+  printed_header = FALSE;
+  for (int idx = 0; idx <= top_of_matrix; idx++) {
+    struct host_data *host = &matrix[idx];
+    const char *context = keyword_appears_in_host(searchname, host, TRUE, TRUE, TRUE);
+
+    if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> Hosts: ^n\r\n");
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               host->vnum,
+               host->name,
+               context);
+      count++;
+    }
+  }
+
+  // ICs.
+  printed_header = FALSE;
+  for (int idx = 0; idx <= top_of_ic; idx++) {
+    struct matrix_icon *icon = &ic_proto[idx];
+    const char *context = keyword_appears_in_icon(searchname, icon, TRUE, TRUE);
+
+    if (context) {
+      PRINT_HEADER_IF_NEEDED("\r\n^c> ICs: ^n\r\n");
+      snprintf(ENDOF(results), sizeof(results) - strlen(results), "[%7ld]: %s^n:  %s^n\r\n",
+               icon->vnum,
+               icon->name,
+               context);
+      count++;
+    }
+  }
+
+  send_to_char("Done.\r\n", ch);
+  if (*results) {
+    page_string(ch->desc, results, FALSE);
+  }
+
+  return count;
 }
 
 #define SEARCH_STRING(string_name)                                                                           \
@@ -3094,6 +3358,34 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
                   obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
         }
       }
+  page_string(ch->desc, buf, 1);
+  return (found);
+}
+
+int vnum_object_weapons_broken(char *searchname, struct char_data * ch)
+{
+  char buf[MAX_STRING_LENGTH*8];
+  extern const char *wound_arr[];
+  int nr, found = 0;
+  buf[0] = '\0';
+
+  for (nr = 0; nr <= top_of_objt; nr++) {
+    if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
+      continue;
+
+    bool bad_attack_type = GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) < 0 || GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) >= MAX_WEAP;
+
+    if (bad_attack_type) {
+      ++found;
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] %s '%s^n'  %s\r\n",
+              OBJ_VNUM_RNUM(nr),
+              ObjList.CountObj(nr),
+              vnum_from_non_connected_zone(GET_OBJ_VNUM(&obj_proto[nr])) ? " " : "*",
+              GET_OBJ_NAME(&obj_proto[nr]),
+              bad_attack_type ? "(bad attack type)" : "");
+    }
+  }
+  
   page_string(ch->desc, buf, 1);
   return (found);
 }
@@ -3328,23 +3620,46 @@ int vnum_object_magazines(char *searchname, struct char_data * ch)
 
 int vnum_object_foci(char *searchname, struct char_data * ch)
 {
-  int nr, found = 0;
+  int found = 0;
 
-  for (nr = 0; nr <= top_of_objt; nr++)
-  {
-    if (GET_OBJ_TYPE(&obj_proto[nr]) == ITEM_FOCUS
-        && !vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr))) {
-      snprintf(buf, sizeof(buf), "%3d. [%5ld -%2d] %s %s +%2d %s^n%s\r\n", ++found,
-              OBJ_VNUM_RNUM(nr),
-              ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
-              foci_type[GET_OBJ_VAL(&obj_proto[nr], 0)],
-              GET_OBJ_VAL(&obj_proto[nr], VALUE_FOCUS_RATING),
-              obj_proto[nr].text.name,
-              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
-      send_to_char(buf, ch);
+  strlcpy(buf, "", sizeof(buf));
+
+  for (int type_idx = 0; type_idx < NUM_FOCUS_TYPES; type_idx++) {
+    for (int power = 10; power >= 0; power--) {
+      for (int nr = 0; nr <= top_of_objt; nr++) {
+        if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_FOCUS)
+          continue;
+
+        if (GET_FOCUS_TYPE(&obj_proto[nr]) != type_idx)
+          continue;
+
+        // Skip anything that doesn't match our sought power. At max (10), we accept anything at or above.
+        if ((power == 10 ? GET_FOCUS_FORCE(&obj_proto[nr]) < power : GET_FOCUS_FORCE(&obj_proto[nr]) != power))
+          continue;
+
+        if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+          continue;
+
+        int count = ObjList.CountObj(nr);
+
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%3d. [%5ld -%s%2d^n] %s +%2d '%s^n'%s", ++found,
+                OBJ_VNUM_RNUM(nr),
+                count != 0 ? "^c" : "",
+                count,
+                foci_type[GET_OBJ_VAL(&obj_proto[nr], 0)],
+                GET_OBJ_VAL(&obj_proto[nr], VALUE_FOCUS_RATING),
+                obj_proto[nr].text.name,
+                obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+        
+        char wear_bit_buf[10000] = { '\0' };
+        obj_proto[nr].obj_flags.wear_flags.PrintBits(wear_bit_buf, sizeof(wear_bit_buf), wear_bits, NUM_WEARS);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " [%s]\r\n", wear_bit_buf);
+      }
     }
   }
+
+  page_string(ch->desc, buf, 1);
+
   return (found);
 }
 
@@ -3591,6 +3906,8 @@ int vnum_object(char *searchname, struct char_data * ch)
 
   if (!strcmp(searchname,"weaponslist"))
     return vnum_object_weapons(searchname,ch);
+  if (!strcmp(searchname,"brokenweaponslist"))
+    return vnum_object_weapons_broken(searchname,ch);
   if (!strcmp(searchname,"faweaponslist"))
     return vnum_object_weapons_fa_pro(searchname,ch);
   if (!strcmp(searchname,"weaponsbytype"))
@@ -4823,6 +5140,8 @@ void free_char(struct char_data * ch)
     DELETE_ARRAY_IF_EXTANT(ch->player_specials->obj_complete);
     DELETE_ARRAY_IF_EXTANT(ch->player_specials->mob_complete);
 
+    delete [] ch->player_specials->saved.lifestyle_string;
+
     DELETE_IF_EXTANT(ch->player_specials);
 
     if (IS_NPC(ch))
@@ -4843,6 +5162,7 @@ void free_char(struct char_data * ch)
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.leave);
     DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
     DELETE_ARRAY_IF_EXTANT(ch->player.email);
+
 
     if(!IS_NPC(ch))
       DELETE_ARRAY_IF_EXTANT(ch->player.host);
@@ -4954,11 +5274,6 @@ void free_room(struct room_data *room)
   }
 
   clear_room(room);
-}
-
-void free_veh(struct veh_data * veh)
-{
-  clear_vehicle(veh);
 }
 
 void free_host(struct host_data * host)
@@ -5191,11 +5506,29 @@ void clear_room(struct room_data *room)
 
 void clear_vehicle(struct veh_data *veh)
 {
-  /* TODO: We are leaking more memory here from mods etc, but it's suuuuuuuuuper
-      rare that we ever actually extract a vehicle from the game, so the effort
-      to fix it is currently not warranted. -- LS */
+  struct obj_data *next_obj;
+
   DELETE_ARRAY_IF_EXTANT(veh->restring);
   DELETE_ARRAY_IF_EXTANT(veh->restring_long);
+  DELETE_ARRAY_IF_EXTANT(veh->decorate_front);
+  DELETE_ARRAY_IF_EXTANT(veh->decorate_rear);
+
+  // Remove any mounts.
+  for (struct obj_data *mount = veh->mount; mount; mount = next_obj) {
+    next_obj = mount->next_content;
+    extract_obj(mount);
+  }
+  veh->mount = NULL;
+
+  // Go through the installed mods and extract them.
+  for (int mod_idx = 0; mod_idx < NUM_MODS; mod_idx++) {
+    if (veh->mod[mod_idx]) {
+      extract_obj(veh->mod[mod_idx]);
+    }
+    veh->mod[mod_idx] = NULL;
+  }
+
+  // Wipe out the veh.
   memset((char *) veh, 0, sizeof(struct veh_data));
   veh->in_room = NULL;
 
@@ -5224,8 +5557,11 @@ void clear_icon(struct matrix_icon *icon)
 }
 
 /* returns the real number of the room with given virtual number */
-long real_room(long virt)
+rnum_t real_room(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   long bot, top, mid;
 
   bot = 0;
@@ -5251,8 +5587,11 @@ long real_room(long virt)
 }
 
 /* returns the real number of the monster with given virtual number */
-long real_mobile(long virt)
+rnum_t real_mobile(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5273,8 +5612,11 @@ long real_mobile(long virt)
   }
 }
 
-long real_quest(long virt)
+rnum_t real_quest(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5294,8 +5636,11 @@ long real_quest(long virt)
   }
 }
 
-long real_shop(long virt)
+rnum_t real_shop(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5315,8 +5660,11 @@ long real_shop(long virt)
   }
 }
 
-long real_zone(long virt)
+rnum_t real_zone(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
 
   bot = 0;
@@ -5337,8 +5685,11 @@ long real_zone(long virt)
   }
 }
 
-long real_vehicle(long virt)
+rnum_t real_vehicle(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
   bot = 0;
   top = top_of_veht;
@@ -5356,8 +5707,11 @@ long real_vehicle(long virt)
   }
 }
 
-long real_host(long virt)
+rnum_t real_host(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
   bot = 0;
   top = top_of_matrix;
@@ -5375,8 +5729,11 @@ long real_host(long virt)
   }
 }
 
-long real_ic(long virt)
+rnum_t real_ic(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   int bot, top, mid;
   bot = 0;
   top = top_of_ic;
@@ -5395,8 +5752,11 @@ long real_ic(long virt)
 }
 
 /* returns the real number of the object with given virtual number */
-long real_object(long virt)
+rnum_t real_object(vnum_t virt)
 {
+  if (virt < 0)
+    return -1;
+
   long bot, top, mid;
 
   bot = 0;
@@ -5639,7 +5999,7 @@ void load_saved_veh()
 
     // Can't get there? Pull your veh out.
     rnum_t veh_room_rnum = real_room(veh_room_vnum);
-    if (veh_room_rnum < 0 || (veh->owner > 0 && ROOM_FLAGGED(&world[veh_room_rnum], ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, veh_room_vnum))) {
+    if (veh_room_rnum < 0 || (veh->owner > 0 && world[veh_room_rnum].apartment && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) {
       veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
     }
 
@@ -5651,6 +6011,8 @@ void load_saved_veh()
       veh_to_room(veh, &world[veh_room_rnum]);
     veh->restring = str_dup(data.GetString("VEHICLE/VRestring", NULL));
     veh->restring_long = str_dup(data.GetString("VEHICLE/VRestringLong", NULL));
+    veh->decorate_front = str_dup(data.GetString("VEHICLE/VDecorateFront", NULL));
+    veh->decorate_rear = str_dup(data.GetString("VEHICLE/VDecorateRear", NULL));
     int inside = 0, last_inside = 0;
     int num_objs = data.NumSubsections("CONTENTS");
 
@@ -5919,7 +6281,7 @@ void load_saved_veh()
       }
       if (!veh->in_veh) {
         rnum_t veh_room_rnum = real_room(veh_room_vnum);
-        if (veh_room_rnum < 0 || (veh->owner > 0 && ROOM_FLAGGED(&world[veh_room_rnum], ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, veh_room_vnum))) {
+        if (veh_room_rnum < 0 || (veh->owner > 0 && world[veh_room_rnum].apartment && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) {
           veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
           snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no valid room was found! Dumping to Seattle Garage (%ld).\r\n",
                    veh->name, veh->veh_number, veh_room_vnum);
@@ -5939,9 +6301,52 @@ void load_saved_veh()
   }
 }
 
+
+
 void load_consist(void)
 {
   File file;
+
+  // First, move all storage files that aren't linked to rooms.
+  {
+    log("Moving orphaned storage files.");
+    bf::path storage_directory = bf::path("storage");
+
+    // Ensure our orphaned storage files directory exists if it does not already.
+    bf::path orphan_storage_files = storage_directory / "orphaned";
+    if (!bf::exists(orphan_storage_files)) {
+      bf::create_directory(orphan_storage_files);
+    }
+
+    bf::directory_iterator end_itr; // default construction yields past-the-end
+    for (bf::directory_iterator itr(storage_directory); itr != end_itr; ++itr) {
+      // Skip directories.
+      if (is_directory(itr->status()))
+        continue;
+
+      // Skip . and .. meta-files.
+      if (itr->path().filename_is_dot() || itr->path().filename_is_dot_dot())
+        continue;
+
+      // Skip anything that's not a number.
+      vnum_t vnum = atol(itr->path().filename().c_str());
+      if (vnum <= 0)
+        continue;
+
+      // It's a number. Calculate its rnum.
+      rnum_t rnum = real_room(vnum);
+
+      // If the room doesn't exist, or if it's not storage-flagged, this is an orphaned file.
+      if (rnum < 0 || !ROOM_FLAGGED(&world[rnum], ROOM_STORAGE)) {
+        log_vfprintf(" - Marking storage file %s as orphaned: %s.",
+                      itr->path().c_str(),
+                      rnum < 0 ? "No matching vnum" : "Room not flagged storage");
+        bf::rename(itr->path(), orphan_storage_files / itr->path().filename());
+      }
+
+      // EVENTUALTODO: Load the file here directly instead of iterating through the whole world as is done in the old code below.
+    }
+  }
 
   for (int nr = 0; nr <= top_of_world; nr++) {
     if (ROOM_FLAGGED(&world[nr], ROOM_STORAGE)) {

@@ -193,7 +193,7 @@ ACMD(do_wizfeel)
     return;
   }
 
-  half_chop(argument, buf, buf1);
+  half_chop(argument, buf, buf1, sizeof(buf1));
 
   if (!isalpha(*buf))
     *buf = '\0';

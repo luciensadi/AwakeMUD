@@ -1,0 +1,216 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	982
+		Inside:	0
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	948
+		Inside:	0
+		Value 2:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	37597
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	60200
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	60200
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	60200
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	60219
+		Inside:	1
+		Value 8:	0
+		Value 9:	13400
+		Cost:	500
+		ExtraFlags:	1001001001000
+	[Object 7]
+		Vnum:	5406
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	8108
+		Inside:	1
+		Cost:	2600
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	8108
+		Inside:	1
+		Cost:	2600
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	18806
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	3615
+		Inside:	1
+		Condition:	3
+		Cost:	600
+		ExtraFlags:	0
+	[Object 12]
+		Vnum:	24100
+		Inside:	1
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 13]
+		Vnum:	15813
+		Inside:	0
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 14]
+		Vnum:	779
+		Inside:	1
+		Value 11:	3
+		Attempt:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 15]
+		Vnum:	779
+		Inside:	1
+		Value 11:	3
+		Attempt:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	15809
+		Inside:	0
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	121
+		Inside:	1
+		Value 0:	1000
+		Value 1:	10
+		Value 2:	1
+		Cost:	7000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 18]
+		Vnum:	121
+		Inside:	1
+		Value 0:	1000
+		Value 1:	10
+		Value 2:	1
+		Cost:	7000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 19]
+		Vnum:	121
+		Inside:	1
+		Value 0:	2000
+		Value 1:	10
+		Value 2:	1
+		Cost:	14000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 20]
+		Vnum:	39643
+		Inside:	0
+		Value 1:	1
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	121
+		Inside:	1
+		Value 0:	2000
+		Value 1:	10
+		Value 2:	1
+		Cost:	14000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 22]
+		Vnum:	39625
+		Inside:	0
+		Value 1:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 23]
+		Vnum:	121
+		Inside:	0
+		Value 0:	480
+		Value 1:	10
+		Value 2:	1
+		Cost:	3360
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 24]
+		Vnum:	121
+		Inside:	0
+		Value 0:	180
+		Value 1:	10
+		Value 2:	1
+		Value 9:	13400
+		Value 10:	840
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 25]
+		Vnum:	121
+		Inside:	0
+		Value 0:	190
+		Value 1:	10
+		Value 2:	1
+		Value 4:	-2
+		Value 9:	13400
+		Value 10:	-1
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 26]
+		Vnum:	121
+		Inside:	0
+		Value 0:	150
+		Value 1:	10
+		Value 2:	1
+		Value 9:	13400
+		Value 10:	840
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 27]
+		Vnum:	121
+		Inside:	0
+		Value 0:	180
+		Value 1:	10
+		Value 2:	1
+		Value 4:	-2
+		Value 9:	13400
+		Value 10:	-1
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 28]
+		Vnum:	121
+		Inside:	0
+		Value 0:	220
+		Value 1:	10
+		Value 2:	1
+		Value 9:	13400
+		Value 10:	840
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 29]
+		Vnum:	12304
+		Inside:	0
+		Cost:	45
+		ExtraFlags:	0

@@ -1,0 +1,733 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+	Guest0:	14905
+	Guest1:	15106
+	Guest2:	14525
+	Guest3:	12808
+	Guest4:	12065
+	Guest6:	15139
+	Guest7:	14592
+	Guest8:	653
+	Guest9:	15042
+[HOUSE]
+	[Object 0]
+		Vnum:	64920
+		Inside:	0
+		Cost:	1300
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	65201
+		Inside:	1
+		Cost:	150
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	2109
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	121
+		Inside:	1
+		Value 1:	17
+		Value 2:	1
+		Cost:	70
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS heavy machine gun ammunition
+	[Object 4]
+		Vnum:	121
+		Inside:	1
+		Value 0:	500
+		Value 1:	17
+		Cost:	1000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal heavy machine gun ammunition
+	[Object 5]
+		Vnum:	121
+		Inside:	1
+		Value 0:	246
+		Value 1:	15
+		Value 2:	1
+		Cost:	1722
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS light machine gun ammunition
+	[Object 6]
+		Vnum:	705
+		Inside:	1
+		Cost:	675
+		ExtraFlags:	0
+		Name:	^[F000]a black ^band blue ^[F000]c^ba^[F000]m^bo^[F000]u^bf^[F000]l^ba^[F000]g^be^[F000]d ^barmor jacket^n
+	[Object 7]
+		Vnum:	127
+		Inside:	2
+		Value 0:	40
+		Value 1:	13
+		Value 9:	40
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 40-round assault rifle magazine
+	[Object 8]
+		Vnum:	839
+		Inside:	1
+		Value 7:	80424
+		Value 8:	691
+		Value 9:	28704
+		Value 11:	4
+		Condition:	5
+		Timer:	10
+		Cost:	600
+		ExtraFlags:	1000000000000
+		Name:	^[F000]a black ^band blue ^[F000]c^ba^[F000]m^bo^[F000]u^bf^[F000]l^ba^[F000]g^be^[F000]d Heckler & Koch ^bG36c^[F000] assault rifle^n
+	[Object 9]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 10]
+		Vnum:	15819
+		Inside:	1
+		Cost:	2850
+		ExtraFlags:	0
+		Name:	^[F000]a black ^band blue ^[F000]c^ba^[F000]m^bo^[F000]u^bf^[F000]l^ba^[F000]g^be^[F000]d BlackHawk(TM) enhanced battle bag^n
+	[Object 11]
+		Vnum:	973
+		Inside:	1
+		Cost:	350
+		ExtraFlags:	0
+	[Object 12]
+		Vnum:	975
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 13]
+		Vnum:	974
+		Inside:	1
+		Cost:	300
+		ExtraFlags:	0
+	[Object 14]
+		Vnum:	127
+		Inside:	2
+		Value 0:	15
+		Value 1:	8
+		Value 9:	15
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 15-round heavy pistol magazine
+	[Object 15]
+		Vnum:	45191
+		Inside:	1
+		Value 11:	2
+		Cost:	3250
+		ExtraFlags:	11010000001000000000
+	[Object 16]
+		Vnum:	64919
+		Inside:	0
+		Cost:	3200
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	2211
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	0
+	[Object 18]
+		Vnum:	2211
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	0
+	[Object 19]
+		Vnum:	2211
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	1920
+		Inside:	1
+		Value 1:	1
+		Cost:	125
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	100
+		Inside:	1
+		Value 0:	3738
+		Value 3:	1
+		Value 4:	15071
+		Value 5:	944863
+		Cost:	125
+		ExtraFlags:	0
+	[Object 22]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Rocko
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: Rocko^n
+^mOOC Date: 2023-05-29 01:42:25^n
+A 500-round box of normal light machine gun ammunition has arrived at Rocko - Platinum Club and is ready for pickup for a total cost of 2134 nuyen. It will be held for you for 7 days.
+~
+	[Object 23]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Brick
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: Brick^n
+^mOOC Date: 2023-05-30 02:53:18^n
+A carbon fiber tripod has arrived at Brick and is ready for pickup for a total cost of 580 nuyen. It will be held for you for 7 days.
+~
+	[Object 24]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Oudius
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: Oudius^n
+^mOOC Date: 2023-05-31 22:02:32^n
+Long time no see, chummer. Hope this message finds you well amidst the chaos of the sprawl. I've been keeping an eye on the shadows, and I gotta say, things have been getting crazier by the day. But hey, that's just how we like it, right?
+Listen, I wanted to touch base and check in on your endeavors to build that Shadowrun Collective we've been dreaming about. How's the hustle going? Have you managed to gather a crew of like-minded runners who are ready to kick ass and take names?
+I've been running my own solo gigs, trying to keep my head above the fray. But deep down, I know we can achieve so much more together. So, let me know how things are shaping up on your end. I'm eager to hear about any leads, breakthroughs, or even near misses you've had in building our little army of shadow warriors.
+~
+	[Object 25]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	A Shady Supply Store cashier
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: a Shady Supply Store cashier^n
+^mOOC Date: 2023-06-01 02:11:37^n
+A "Shady Business" stylish ^Lblack^N helmet can't be held for you any longer at Shady Supply Store. 15 nuyen will be refunded to your account.
+~
+	[Object 26]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Stanley Yaha
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: Stanley Yaha^n
+^mOOC Date: 2023-06-01 06:42:03^n
+An Ammunition Workshop has arrived at Stanley's RGA and is ready for pickup for a total cost of 41667 nuyen. It will be held for you for 7 days.
+~
+	[Object 27]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Jerrry
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: Jerrry^n
+^mOOC Date: 2023-06-01 09:20:08^n
+Sweet! A safehouse? Ill bring my stuff over
+~
+	[Object 28]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Jerrry
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: Jerrry^n
+^mOOC Date: 2023-06-01 09:26:42^n
+I need a key for it. Im locked out :(
+~
+	[Object 29]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	LackLight
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: LackLight^n
+^mOOC Date: 2023-06-01 17:45:38^n
+~
+	[Object 30]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Oudius
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: Oudius^n
+^mOOC Date: 2023-06-01 18:08:42^n
+Got your message, and I must say, you've got my attention. Pretorian Legion, huh? Sounds like the kind of crew that knows how to get the job done. I've been flying solo for a while now, and I'm starting to feel the need for a solid team by my side.
+Tell me more about this Pretorian Legion. What's your vision? What sets your crew apart from the rest? I've heard rumors floating around the shadows, but I want to hear it straight from you. Are you a band of rebels fighting the corrupt corporations, or are you more focused on lucrative runs? Give me the lowdown, Morbius.
+And speaking of which, any meetups planned in the near future? I'd like to see you and the rest of the crew in action, get a feel for the dynamics. It's one thing to hear tales of your exploits, but it's another to witness it firsthand. Let me know when and where, and I'll make sure to clear my schedule.
+Now, don't get me wrong, Morbius. I'm not one to jump into just any crew. I've been around the block, seen my fair share of backstabbing and treachery. So, if you're serious about building a strong team with trust and loyalty at its core, count me in. But I need to know I'm joining a crew I can rely on, a crew that's got my back.
+Looking forward to hearing from you soon. Let's make some waves in the shadows, my friend.
+Stay sharp, stay true.
+-Odi
+~
+	[Object 31]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Jerrry
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: Jerrry^n
+^mOOC Date: 2023-06-02 06:02:40^n
+Im Available now
+~
+	[Object 32]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Oudius
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: Oudius^n
+^mOOC Date: 2023-06-02 16:48:52^n
+You're absolutely right, there aren't enough runners out there truly taking the fight to the corps. It's a drekking shame, considering the power and resources they wield against us.
+Streamlining contacts, resources, and knowledge is crucial in this biz. We need to be able to rely on each other and work together to face the challenges that come our way. Count me in, pal.
+As for the safe house in Auburn, I appreciate the offer. Having a key to a secure location is always a handy thing in this line of work. Let's arrange a meetup soon to discuss the details and get the team together. I'm eager to contribute and fight alongside fellow runners who share our spirit.
+Keep me posted on the progress and any upcoming plans. I'm ready to roll up my sleeves and dive into the action.
+Stay sharp and stay safe, Morbius. Looking forward to connecting soon.
+-Odi
+((OOC: This sounds fun and I'm totally down to get into the RP of it. I aspire to host PRUNs and if you are down, I'd love to run us a couple adventures I've been planning. If your down, I would love the help to "playtest" hosting PRUNs and find my groove. I've spoken to Vile and Jank and have some details lined up to get them rolling. Just need some willing players.
+I play through Discord and Blowtorch alot so I am pretty casually around and online most of the time, whether I am in Who or not.
+If this sounds like something you'd be in to with me, let's schedule a meetip to run through some Shadowruns together!))
+~
+	[Object 33]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Jade
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: Jade^n
+^mOOC Date: 2023-06-04 02:42:39^n
+A grapple gun has arrived at Jade and is ready for pickup for a total cost of 420 nuyen. It will be held for you for 7 days.
+~
+	[Object 34]
+		Vnum:	111
+		Inside:	3
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Tanq
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: MorbiusPhyre^n
+^C    From: Tanq^n
+^mOOC Date: 2023-06-04 09:06:08^n
+Yeah, sure. Going to take me a minute to get back to the states but I'll hit you up one I am there.
+-T
+~
+	[Object 35]
+		Vnum:	118
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mail
+	[Object 36]
+		Vnum:	118
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Notes
+	[Object 37]
+		Vnum:	118
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Phonebook
+	[Object 38]
+		Vnum:	118
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Files
+	[Object 39]
+		Vnum:	31542
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 40]
+		Vnum:	127
+		Inside:	2
+		Value 0:	40
+		Value 1:	13
+		Value 9:	15
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 40-round assault rifle magazine
+	[Object 41]
+		Vnum:	45189
+		Inside:	1
+		Value 11:	2
+		Cost:	1250
+		ExtraFlags:	1000000000000
+		Name:	^[F000]a ^b-PL-^[F000] Colt ^bM22A2 ^[F000]assault rifle^n
+	[Object 42]
+		Vnum:	127
+		Inside:	2
+		Value 0:	40
+		Value 1:	13
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 40-round assault rifle magazine
+	[Object 43]
+		Vnum:	45189
+		Inside:	1
+		Value 11:	2
+		Cost:	1250
+		ExtraFlags:	1000000000000
+		Name:	^[F000]a ^b-PL-^[F000] Colt ^bM22A2 ^[F000]assault rifle^n
+	[Object 44]
+		Vnum:	127
+		Inside:	2
+		Value 0:	40
+		Value 1:	13
+		Value 9:	13
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 40-round assault rifle magazine
+	[Object 45]
+		Vnum:	45189
+		Inside:	1
+		Value 11:	2
+		Cost:	1250
+		ExtraFlags:	1000000000000
+		Name:	^[F000]a ^b-PL-^[F000] Colt ^bM22A2 ^[F000]assault rifle^n
+	[Object 46]
+		Vnum:	127
+		Inside:	2
+		Value 0:	40
+		Value 1:	13
+		Value 9:	31
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 40-round assault rifle magazine
+	[Object 47]
+		Vnum:	45189
+		Inside:	1
+		Value 11:	2
+		Cost:	1250
+		ExtraFlags:	1000000000000
+		Name:	^[F000]a ^b-PL-^[F000] Colt ^bM22A2 ^[F000]assault rifle^n
+	[Object 48]
+		Vnum:	60315
+		Inside:	1
+		Cost:	12000
+		ExtraFlags:	10100001000000000000000000000000
+		Name:	^b-PL- ^[F000]Sealed Armor^n
+	[Object 49]
+		Vnum:	127
+		Inside:	2
+		Value 0:	10
+		Value 1:	12
+		Value 9:	4
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 10-round sniper rifle magazine
+	[Object 50]
+		Vnum:	831
+		Inside:	1
+		Value 11:	2
+		Cost:	6500
+		ExtraFlags:	1000000001000000000000
+		Name:	^b-PL- ^[F000]Sniper Rifle^n
+	[Object 51]
+		Vnum:	64916
+		Inside:	0
+		Cost:	2100
+		ExtraFlags:	0
+	[Object 52]
+		Vnum:	948
+		Inside:	0
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 53]
+		Vnum:	37526
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 54]
+		Vnum:	37597
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 55]
+		Vnum:	689
+		Inside:	2
+		Value 8:	18981
+		Value 11:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 56]
+		Vnum:	27808
+		Inside:	1
+		Value 3:	1
+		Cost:	70
+		ExtraFlags:	0
+	[Object 57]
+		Vnum:	660
+		Inside:	1
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 58]
+		Vnum:	60593
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 59]
+		Vnum:	101
+		Inside:	1
+		Value 3:	1
+		Value 4:	15139
+		Value 5:	798763
+		Cost:	275
+		ExtraFlags:	0
+	[Object 60]
+		Vnum:	100
+		Inside:	1
+		Value 0:	2366
+		Timer:	4
+		Cost:	125
+		ExtraFlags:	0
+	[Object 61]
+		Vnum:	22874
+		Inside:	2
+		Value 11:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 62]
+		Vnum:	64978
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	1000000000
+	[Object 63]
+		Vnum:	28704
+		Inside:	1
+		Cost:	600
+		ExtraFlags:	0
+	[Object 64]
+		Vnum:	15821
+		Inside:	1
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 65]
+		Vnum:	9402
+		Inside:	1
+		Condition:	3
+		Cost:	0
+		ExtraFlags:	0
+		Name:	^[F555]a starch white silk fukuro obi with^N ^[F520]a obijime kumihimo cord^N^n
+	[Object 66]
+		Vnum:	15823
+		Inside:	1
+		Timer:	4
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 67]
+		Vnum:	127
+		Inside:	3
+		Value 0:	12
+		Value 1:	8
+		Value 2:	2
+		Value 9:	9
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 12-round heavy pistol magazine
+	[Object 68]
+		Vnum:	24501
+		Inside:	2
+		Value 7:	64988
+		Value 8:	18981
+		Value 11:	2
+		Cost:	2750
+		ExtraFlags:	0
+	[Object 69]
+		Vnum:	64974
+		Inside:	1
+		Cost:	135
+		ExtraFlags:	0
+	[Object 70]
+		Vnum:	64976
+		Inside:	0
+		Cost:	1495
+		ExtraFlags:	0
+		Name:	^[F120]a standard issue Russian armed forces rucksack^N^n
+	[Object 71]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	13
+		Value 2:	3
+		Cost:	2500
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX assault rifle ammunition
+	[Object 72]
+		Vnum:	64976
+		Inside:	0
+		Cost:	1495
+		ExtraFlags:	0
+		Name:	^[F222]a carbon steel mil-spec ammo can^N^n
+	[Object 73]
+		Vnum:	35525
+		Inside:	1
+		Timer:	4
+		Cost:	20
+		ExtraFlags:	0
+	[Object 74]
+		Vnum:	35526
+		Inside:	1
+		Timer:	4
+		Cost:	20
+		ExtraFlags:	0
+	[Object 75]
+		Vnum:	766
+		Inside:	1
+		Timer:	4
+		Cost:	20
+		ExtraFlags:	0
+	[Object 76]
+		Vnum:	9416
+		Inside:	1
+		Timer:	4
+		Cost:	200
+		ExtraFlags:	0
+	[Object 77]
+		Vnum:	22892
+		Inside:	1
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	0
+	[Object 78]
+		Vnum:	22859
+		Inside:	1
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 79]
+		Vnum:	33028
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 80]
+		Vnum:	33029
+		Inside:	1
+		Cost:	900
+		ExtraFlags:	0
+	[Object 81]
+		Vnum:	33023
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 82]
+		Vnum:	33022
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 83]
+		Vnum:	33021
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 84]
+		Vnum:	33020
+		Inside:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 85]
+		Vnum:	38094
+		Inside:	1
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 86]
+		Vnum:	38095
+		Inside:	1
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 87]
+		Vnum:	19961
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	1100000000000000000000000000000
+	[Object 88]
+		Vnum:	70509
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 89]
+		Vnum:	19895
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 90]
+		Vnum:	62127
+		Inside:	0
+		Value 1:	1
+		Cost:	350
+		ExtraFlags:	0
+	[Object 91]
+		Vnum:	1847
+		Inside:	0
+		Cost:	9000
+		ExtraFlags:	0
+	[Object 92]
+		Vnum:	70509
+		Inside:	0
+		Cost:	500
+		ExtraFlags:	0
+	[Object 93]
+		Vnum:	8498
+		Inside:	0
+		Value 0:	1
+		Cost:	1200
+		ExtraFlags:	0
+	[Object 94]
+		Vnum:	24560
+		Inside:	0
+		Value 11:	4
+		Timer:	10
+		Cost:	7200
+		ExtraFlags:	1000000000000
+	[Object 95]
+		Vnum:	982
+		Inside:	0
+		Value 2:	1
+		Cost:	10000
+		ExtraFlags:	0

@@ -1,0 +1,404 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	32019
+		Inside:	0
+		Cost:	25000
+		ExtraFlags:	11000000000000001000000000
+	[Object 1]
+		Vnum:	19879
+		Inside:	1
+		Cost:	36000
+		ExtraFlags:	1
+	[Object 2]
+		Vnum:	19878
+		Inside:	1
+		Cost:	36000
+		ExtraFlags:	1
+	[Object 3]
+		Vnum:	32014
+		Inside:	1
+		Cost:	40000
+		ExtraFlags:	1
+	[Object 4]
+		Vnum:	32014
+		Inside:	1
+		Cost:	40000
+		ExtraFlags:	1
+	[Object 5]
+		Vnum:	4906
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	19859
+		Inside:	1
+		Value 2:	5503
+		Value 3:	25
+		Value 5:	1
+		Cost:	25000
+		ExtraFlags:	0
+		Name:	a delicately carved ^Ls^Wn^Lo^Ww^Lf^Wl^La^Wk^Le o^Wb^Ls^Wi^Ld^Wi^La^Wn^N band
+	[Object 7]
+		Vnum:	19859
+		Inside:	1
+		Value 2:	5503
+		Value 3:	42
+		Value 5:	1
+		Cost:	25000
+		ExtraFlags:	0
+		Name:	a slender, delicately carved ^Wwhite moonstone^N band
+	[Object 8]
+		Vnum:	19859
+		Inside:	1
+		Value 2:	5503
+		Value 3:	25
+		Value 5:	1
+		Cost:	25000
+		ExtraFlags:	0
+		Name:	a ^Wsilver^N and ^Lblack gold^N etched ^Lm^Wo^Lk^Wu^Lm^We^N-^Lg^Wa^Ln^We^N band
+	[Object 9]
+		Vnum:	4229
+		Inside:	1
+		Value 2:	5503
+		Value 5:	1
+		Cost:	0
+		ExtraFlags:	1000000
+		Name:	a carved ^Ls^wn^Wo^lw^Lf^wl^Wa^lk^Le ^wo^Wb^ls^Li^wd^Wi^la^Ln^N ring
+	[Object 10]
+		Vnum:	26905
+		Inside:	1
+		Value 2:	5503
+		Value 3:	25
+		Value 5:	1
+		Cost:	45000
+		ExtraFlags:	1000000000
+		Name:	a set of blank, ^Lblack^n nitinol dogtags
+	[Object 11]
+		Vnum:	29326
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	0
+	[Object 12]
+		Vnum:	25599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	10
+	[Object 13]
+		Vnum:	949
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 14]
+		Vnum:	38064
+		Inside:	1
+		Cost:	4000
+		ExtraFlags:	100000000
+	[Object 15]
+		Vnum:	18923
+		Inside:	1
+		Value 7:	64988
+		Value 8:	691
+		Value 9:	749
+		Value 11:	4
+		Timer:	10
+		Cost:	1550
+		ExtraFlags:	1000000000000
+	[Object 16]
+		Vnum:	62218
+		Inside:	1
+		Cost:	1650
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	19894
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 18]
+		Vnum:	19895
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 19]
+		Vnum:	29326
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	127
+		Inside:	4
+		Value 0:	80
+		Value 1:	17
+		Value 9:	80
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 80-round heavy machine gun magazine
+	[Object 21]
+		Vnum:	24560
+		Inside:	3
+		Value 7:	64988
+		Value 8:	691
+		Value 9:	28704
+		Value 11:	4
+		Timer:	10
+		Cost:	10100
+		ExtraFlags:	1000000000000
+	[Object 22]
+		Vnum:	2059
+		Inside:	2
+		Cost:	50
+		ExtraFlags:	0
+	[Object 23]
+		Vnum:	15823
+		Inside:	1
+		Cost:	1250
+		ExtraFlags:	0
+		Name:	a modular ^Lblack^N-^Lnylon^N universal shoulder rig
+	[Object 24]
+		Vnum:	100010
+		Inside:	2
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 25]
+		Vnum:	64978
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	1000000000
+		Name:	a lacquered ^bmi^Bd^bni^Bg^bht bl^Bu^be^N maki-e scabbard decorated with ^Wsnowflakes^N
+	[Object 26]
+		Vnum:	15630
+		Inside:	2
+		Cost:	3500
+		ExtraFlags:	1000000000000
+	[Object 27]
+		Vnum:	31564
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+		Name:	an unadorned ^ys^Ln^la^yk^Le^ls^yk^Li^yn s^La^ly^ya^N with a ^Ygolden silk^N sageo
+	[Object 28]
+		Vnum:	16412
+		Inside:	2
+		Value 8:	0
+		Value 9:	5503
+		Cost:	380000
+		ExtraFlags:	1000001
+	[Object 29]
+		Vnum:	31564
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+		Name:	a lacquered ^lblack^N saya adorned with ^mume blosoms^N and matching ^msilk^N sageo
+	[Object 30]
+		Vnum:	100010
+		Inside:	2
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 31]
+		Vnum:	31526
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 32]
+		Vnum:	29326
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	0
+	[Object 33]
+		Vnum:	25523
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 34]
+		Vnum:	29326
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	0
+	[Object 35]
+		Vnum:	982
+		Inside:	0
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 36]
+		Vnum:	948
+		Inside:	0
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 37]
+		Vnum:	25623
+		Inside:	0
+		Cost:	64000
+		ExtraFlags:	1
+	[Object 38]
+		Vnum:	25624
+		Inside:	0
+		Cost:	64000
+		ExtraFlags:	1
+	[Object 39]
+		Vnum:	115
+		Inside:	0
+		Value 1:	8
+		Value 3:	5503
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+	[Object 40]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	8
+		Value 2:	960
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Programming Suite-8
+	[Object 41]
+		Vnum:	1123
+		Inside:	0
+		Value 3:	960
+		Cost:	82000
+		ExtraFlags:	0
+	[Object 42]
+		Vnum:	1176
+		Inside:	0
+		Value 8:	24
+		Cost:	9500
+		ExtraFlags:	0
+	[Object 43]
+		Vnum:	1167
+		Inside:	0
+		Value 2:	1
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 44]
+		Vnum:	121
+		Inside:	0
+		Value 0:	1000
+		Value 1:	12
+		Value 2:	1
+		Cost:	7000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS sniper rifle ammunition
+	[Object 45]
+		Vnum:	121
+		Inside:	0
+		Value 0:	600
+		Value 1:	17
+		Value 2:	1
+		Cost:	4200
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS heavy machine gun ammunition
+	[Object 46]
+		Vnum:	121
+		Inside:	0
+		Value 0:	600
+		Value 1:	17
+		Value 2:	1
+		Cost:	4200
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS heavy machine gun ammunition
+	[Object 47]
+		Vnum:	121
+		Inside:	0
+		Value 0:	271
+		Value 1:	17
+		Cost:	542
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal heavy machine gun ammunition
+	[Object 48]
+		Vnum:	121
+		Inside:	0
+		Value 0:	800
+		Value 1:	12
+		Value 2:	1
+		Cost:	5600
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS sniper rifle ammunition
+	[Object 49]
+		Vnum:	1180
+		Inside:	0
+		Cost:	12692
+		ExtraFlags:	0
+	[Object 50]
+		Vnum:	1187
+		Inside:	0
+		Cost:	10728
+		ExtraFlags:	0
+	[Object 51]
+		Vnum:	38041
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 52]
+		Vnum:	1967
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 53]
+		Vnum:	1970
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 54]
+		Vnum:	6108
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 55]
+		Vnum:	1141
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 56]
+		Vnum:	6109
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 57]
+		Vnum:	1140
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 58]
+		Vnum:	1139
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 59]
+		Vnum:	1963
+		Inside:	2
+		Cost:	14400
+		ExtraFlags:	0
+	[Object 60]
+		Vnum:	1961
+		Inside:	2
+		Cost:	21600
+		ExtraFlags:	0
+	[Object 61]
+		Vnum:	14712
+		Inside:	2
+		Cost:	49000
+		ExtraFlags:	0
+	[Object 62]
+		Vnum:	29005
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 63]
+		Vnum:	38004
+		Inside:	0
+		Value 1:	1
+		Cost:	350
+		ExtraFlags:	0
+	[Object 64]
+		Vnum:	61530
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0

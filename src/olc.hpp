@@ -348,11 +348,12 @@ extern void write_index_file(const char *suffix);
 #define CEDIT_SHORT_DESC          4
 #define CEDIT_DESC                5
 #define CEDIT_LONG_DESC           6
-#define CEDIT_VOICE    7
-#define CEDIT_HEIGHT		  8
-#define CEDIT_WEIGHT		  9
-#define CEDIT_ARRIVE		10
-#define CEDIT_LEAVE		11
+#define CEDIT_VOICE               7
+#define CEDIT_HEIGHT              8
+#define CEDIT_WEIGHT              9
+#define CEDIT_ARRIVE              10
+#define CEDIT_LEAVE               11
+#define CEDIT_LIFESTYLE           12
 
 #define SHEDIT_CONFIRM_EDIT	0
 #define SHEDIT_MAIN_MENU	1
@@ -381,5 +382,21 @@ extern void write_index_file(const char *suffix);
 #define SHEDIT_SELL_DELETE	24
 #define SHEDIT_ETTI		25
 #define SHEDIT_SHOPNAME		26
+
+#define HOUSEEDIT_COMPLEX_MAIN_MENU         0
+#define HOUSEEDIT_COMPLEX_NAME              1
+#define HOUSEEDIT_COMPLEX_LANDLORD          2
+#define HOUSEEDIT_COMPLEX_EDITORS           3
+
+#define HOUSEEDIT_APARTMENT_MAIN_MENU       0
+#define HOUSEEDIT_APARTMENT_SHORTNAME       1
+#define HOUSEEDIT_APARTMENT_NAME            2
+#define HOUSEEDIT_APARTMENT_ATRIUM          3
+#define HOUSEEDIT_APARTMENT_LIFESTYLE       4
+#define HOUSEEDIT_APARTMENT_RENT            5
+#define HOUSEEDIT_APARTMENT_KEY             6
+#define HOUSEEDIT_APARTMENT_COMPLEX         7
+#define HOUSEEDIT_APARTMENT_ROOMS           8
+#define HOUSEEDIT_APARTMENT_GARAGE_OVERRIDE 9
 
 #endif

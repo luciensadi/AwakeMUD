@@ -34,7 +34,7 @@ Engine:	2
 BREAK
 #10010
 Name:	prop plane tiny
-ShortDesc:	a tiny prop plane
+ShortDesc:	a ^Ybright^n prop plane
 RoomDesc:	A tiny prop plane sits here cutely
 LongDesc:$
 You're inside a plane. Rejoice! 
@@ -57,7 +57,7 @@ Seating:	2
 SeatingBack:	2
 Load:	0
 Cost:	0
-Type:	4
+Type:	5
 Flags:	10
 Engine:	3
 BREAK

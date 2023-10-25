@@ -1,0 +1,66 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	950
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	952
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	60523
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+		Name:	^ta rusted, jagged old ax^n^n
+	[Object 3]
+		Vnum:	22833
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	101100000000000000000
+	[Object 4]
+		Vnum:	5408
+		Inside:	0
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	61517
+		Inside:	0
+		Cost:	4000
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	38064
+		Inside:	0
+		Cost:	4000
+		ExtraFlags:	100000000
+	[Object 7]
+		Vnum:	38095
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 8]
+		Vnum:	65191
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	3090
+		Inside:	0
+		Cost:	200
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	38094
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 11]
+		Vnum:	14626
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+		Name:	a ^Bblue^N and ^Lblack^N ^Bp^Ll^Ba^Li^Ad^N vinyl^N miniskirt with pleats

@@ -1,0 +1,10 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	37599
+		Inside:	0
+		Value 2:	1
+		Cost:	15000
+		ExtraFlags:	0

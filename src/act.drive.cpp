@@ -259,11 +259,18 @@ ACMD(do_drive)
       VEH->locked = TRUE;
     }
     AFF_FLAGS(ch).SetBit(AFF_PILOT);
-    VEH->cspeed = SPEED_CRUISING;
     VEH->lastin[0] = VEH->in_room;
     stop_manning_weapon_mounts(ch, TRUE);
-    send_to_char("You take the wheel and accelerate to a cruise.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s takes the wheel and accelerates to a cruise.\r\n", capitalize(GET_NAME(ch)));
+
+    if (veh_is_aircraft(VEH)) {
+      send_to_char("You take the stick.\r\n", ch);
+      snprintf(buf1, sizeof(buf1), "%s takes the stick.\r\n", capitalize(GET_NAME(ch)));
+      VEH->cspeed = SPEED_IDLE;
+    } else {
+      send_to_char("You take the wheel and accelerate to a cruise.\r\n", ch);
+      snprintf(buf1, sizeof(buf1), "%s takes the wheel and accelerates to a cruise.\r\n", capitalize(GET_NAME(ch)));
+      VEH->cspeed = SPEED_CRUISING;
+    }
     send_to_veh(buf1, VEH, ch, FALSE);
   } else {
     if (veh_is_currently_flying(VEH)) {
@@ -595,7 +602,7 @@ ACMD(do_upgrade)
   int j = 0, skill = 0, target = 0, kit = 0, mod_load_required = 0, mod_signature_change = 0, bod_already_used = 0;
   bool need_extract = FALSE;
 
-  half_chop(argument, buf1, buf2);
+  half_chop(argument, buf1, buf2, sizeof(buf2));
 
   if (!*buf1) {
     send_to_char("What do you want to upgrade?\r\n", ch);
@@ -911,6 +918,10 @@ void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
         send_to_char(ch, "  %s\r\n", GET_OBJ_NAME(GET_MOD(veh, x)));
         break;
     }
+  }
+
+  if (veh->restring) {
+    send_to_char(ch, "\r\n^L(restrung from: %s^L)^n\r\n", get_string_after_color_code_removal(veh->short_description, NULL));
   }
 }
 
@@ -1838,7 +1849,7 @@ ACMD(do_gridguide)
 
   FAILURE_CASE(!veh, "You have to be in a vehicle to do that.");
   FAILURE_CASE(IS_ASTRAL(ch), "You cannot seem to touch physical objects");
-  FAILURE_CASE(veh_can_traverse_air(veh), "Unfortunately, aircraft can't interface with the gridguide system.");
+  FAILURE_CASE(veh_can_traverse_air(veh) && veh->type != VEH_DRONE, "Unfortunately, aircraft can't interface with the gridguide system.");
   FAILURE_CASE(!veh->autonav, "You need to have an autonav system installed.");
   FAILURE_CASE(veh->hood, "Gridguide refuses to engage with the hood up.");
   FAILURE_CASE((veh->locked && GET_IDNUM(ch) != veh->owner) && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_PILOT)), "You don't have control over the vehicle.");
@@ -2114,9 +2125,9 @@ ACMD(do_pop)
     send_to_char("You cannot close the hood from in here.\r\n", ch);
     return;
   }
-  if (!veh && (!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)))) {
-    send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", argument);
-    return;
+  if (!veh) {
+    FAILURE_CASE(!*argument, "Syntax: POP <target vehicle>");
+    FAILURE_CASE_PRINTF(!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)), "You don't see any vehicles named '%s' here.", argument);
   }
   if (!ch->in_veh && !veh->hood && veh->owner != GET_IDNUM(ch)) {
     if (access_level(ch, LVL_ADMIN)) {

@@ -1,0 +1,375 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	42128
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	42132
+		Inside:	0
+		Cost:	70
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	60596
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	119
+		Inside:	0
+		Value 0:	14525
+		Value 1:	15000
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+	[Object 4]
+		Vnum:	60597
+		Inside:	0
+		Cost:	1
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	14314
+		Inside:	0
+		Cost:	75
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	14314
+		Inside:	0
+		Cost:	75
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 12]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 13]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 14]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 15]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 18]
+		Vnum:	14316
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 19]
+		Vnum:	14309
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	2607
+		Inside:	0
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	4913
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 22]
+		Vnum:	4912
+		Inside:	0
+		Cost:	5
+		ExtraFlags:	0
+	[Object 23]
+		Vnum:	42125
+		Inside:	0
+		Cost:	100
+		ExtraFlags:	0
+	[Object 24]
+		Vnum:	37597
+		Inside:	0
+		Cost:	500
+		ExtraFlags:	0
+	[Object 25]
+		Vnum:	100
+		Inside:	0
+		Value 0:	2464
+		Value 4:	3564
+		Value 5:	851646
+		Cost:	125
+		ExtraFlags:	0
+	[Object 26]
+		Vnum:	100
+		Inside:	0
+		Value 0:	2324
+		Value 4:	3565
+		Value 5:	764802
+		Cost:	125
+		ExtraFlags:	0
+	[Object 27]
+		Vnum:	100
+		Inside:	0
+		Value 0:	2058
+		Value 4:	3565
+		Value 5:	986896
+		Cost:	125
+		ExtraFlags:	0
+	[Object 28]
+		Vnum:	60535
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 29]
+		Vnum:	37597
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 30]
+		Vnum:	450
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 31]
+		Vnum:	450
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 32]
+		Vnum:	450
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 33]
+		Vnum:	450
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 34]
+		Vnum:	450
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 35]
+		Vnum:	60590
+		Inside:	1
+		Value 3:	1
+		Value 4:	14525
+		Value 5:	761692
+		Cost:	1
+		ExtraFlags:	1000000000
+	[Object 36]
+		Vnum:	16204
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	100000000000000000000000
+	[Object 37]
+		Vnum:	16204
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	100000000000000000000000
+	[Object 38]
+		Vnum:	677
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 39]
+		Vnum:	677
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 40]
+		Vnum:	677
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	100000000000000000000000
+	[Object 41]
+		Vnum:	100
+		Inside:	1
+		Value 0:	1022
+		Value 4:	3431
+		Value 5:	126617
+		Cost:	125
+		ExtraFlags:	0
+	[Object 42]
+		Vnum:	100
+		Inside:	1
+		Value 0:	2184
+		Value 3:	1
+		Value 4:	14525
+		Value 5:	995390
+		Cost:	125
+		ExtraFlags:	0
+	[Object 43]
+		Vnum:	100
+		Inside:	1
+		Value 0:	2324
+		Value 3:	1
+		Value 4:	14525
+		Value 5:	464063
+		Cost:	125
+		ExtraFlags:	0
+	[Object 44]
+		Vnum:	100
+		Inside:	1
+		Value 0:	2170
+		Value 4:	3564
+		Value 5:	925423
+		Cost:	125
+		ExtraFlags:	0
+	[Object 45]
+		Vnum:	100
+		Inside:	1
+		Value 0:	2030
+		Value 4:	3564
+		Value 5:	399397
+		Cost:	125
+		ExtraFlags:	0
+	[Object 46]
+		Vnum:	12304
+		Inside:	1
+		Cost:	45
+		ExtraFlags:	0
+	[Object 47]
+		Vnum:	10135
+		Inside:	1
+		Cost:	12
+		ExtraFlags:	0
+	[Object 48]
+		Vnum:	60593
+		Inside:	1
+		Condition:	5
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 49]
+		Vnum:	453
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 50]
+		Vnum:	453
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 51]
+		Vnum:	453
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 52]
+		Vnum:	453
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 53]
+		Vnum:	101
+		Inside:	1
+		Value 0:	10864
+		Value 4:	718
+		Value 5:	877714
+		Cost:	275
+		ExtraFlags:	0
+	[Object 54]
+		Vnum:	101
+		Inside:	1
+		Value 3:	1
+		Value 4:	14525
+		Value 5:	860172
+		Cost:	275
+		ExtraFlags:	0
+	[Object 55]
+		Vnum:	61536
+		Inside:	1
+		Timer:	2
+		Cost:	10
+		ExtraFlags:	0
+	[Object 56]
+		Vnum:	4023
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 57]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 58]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 59]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 60]
+		Vnum:	60532
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 61]
+		Vnum:	60535
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+		Name:	a sleek, black cloth, bookbag with multiple zipper pocets^n
+	[Object 62]
+		Vnum:	30160
+		Inside:	0
+		Cost:	250
+		ExtraFlags:	0
+	[Object 63]
+		Vnum:	30160
+		Inside:	0
+		Cost:	250
+		ExtraFlags:	0
+	[Object 64]
+		Vnum:	711
+		Inside:	0
+		Cost:	2000
+		ExtraFlags:	100000000
+	[Object 65]
+		Vnum:	60531
+		Inside:	0
+		Value 0:	8
+		Cost:	250
+		ExtraFlags:	0

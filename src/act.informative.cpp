@@ -46,6 +46,8 @@
 #include "ignore_system.hpp"
 #include "newmagic.hpp"
 #include "newmatrix.hpp"
+#include "lifestyles.hpp"
+#include "newhouse.hpp"
 #include "zoomies.hpp"
 
 const char *CCHAR;
@@ -176,9 +178,9 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
         strlcat(buf, " huge", buf_size);
     }
 
-    // Sex.
+    // Gender seeming.
     if (perception_successes > 2)
-      snprintf(ENDOF(buf), buf_size - strlen(buf), " %s", genders[(int)GET_SEX(i)]);
+      snprintf(ENDOF(buf), buf_size - strlen(buf), " %s", genders[(int)GET_PRONOUNS(i)]);
 
     // Race.
     if (perception_successes > 3)
@@ -898,6 +900,10 @@ void look_at_char(struct char_data * i, struct char_data * ch)
     else
       act("You see nothing special about $m.", FALSE, i, 0, ch, TO_VICT);
 
+    if (!IS_NPC(i) && GET_LEVEL(ch) >= GET_LEVEL(i)) {
+      act(get_lifestyle_string(i), FALSE, i, 0, ch, TO_VICT | SKIP_YOU_STANZAS);
+    }
+
     if (i != ch && GET_HEIGHT(i) > 0 && GET_WEIGHT(i) > 0) {
       if ((GET_HEIGHT(i) % 10) < 5)
         height = (float)(GET_HEIGHT(i) - (GET_HEIGHT(i) % 10)) / 100;
@@ -1049,7 +1055,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         ware_is_internal = FALSE;
         break;
       case CYB_EYES:
-        if (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1))
+        if (!ch_can_see_all_ware && (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1)))
           continue;
 
         ware_is_internal = FALSE;
@@ -1417,8 +1423,6 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     else if (PLR_FLAGGED(ch, PLR_NEWBIE))
       strlcat(buf, " (player)", sizeof(buf));
   }
-  if (IS_AFFECTED(i, AFF_HIDE))
-    strlcat(buf, " (hidden)", sizeof(buf));
   if (!IS_NPC(i) && !i->desc &&
       !PLR_FLAGS(i).AreAnySet(PLR_MATRIX, PLR_PROJECT, PLR_SWITCHED, ENDBIT))
     strlcat(buf, " (linkless)", sizeof(buf));
@@ -1643,7 +1647,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
                  EXIT(ch, door)->to_room->number,
                  EXIT(ch, door)->to_room->name,
                  (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) ? " (closed)" : ""),
-                 (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch)) ? " (impassible)" : ""
+                 (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch, FALSE)) ? " (impassible)" : ""
                 );
         if (autom)
           strlcat(buf, "^c", sizeof(buf));
@@ -1857,7 +1861,11 @@ void look_in_veh(struct char_data * ch)
       return;
     }
     send_to_char(ch, "^CInside %s^n\r\n", GET_VEH_NAME(ch->in_veh), ch);
-    send_to_char(ch->vfront ? ch->in_veh->inside_description : ch->in_veh->rear_description, ch);
+    if (ch->vfront) {
+      send_to_char(ch->in_veh->decorate_front ? ch->in_veh->decorate_front : ch->in_veh->inside_description, ch);
+    } else {
+      send_to_char(ch->in_veh->decorate_rear ? ch->in_veh->decorate_rear : ch->in_veh->rear_description, ch);
+    }
     CCHAR = "^g";
     CGLOB = KGRN;
     // Show non-corpses.
@@ -1867,11 +1875,12 @@ void look_in_veh(struct char_data * ch)
     // Show corpses.
     list_obj_to_char(ch->in_veh->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
     list_char_to_char(ch->in_veh->people, ch);
+    if (veh_is_currently_flying(ch->in_veh)) {
+      send_flight_estimate(ch, ch->in_veh);
+    }
     if (!ch->vfront) {
       CCHAR = "^y";
       list_veh_to_char(ch->in_veh->carriedvehs, ch);
-    } else if (veh_is_currently_flying(ch->in_veh)) {
-      send_flight_estimate(ch, ch->in_veh);
     }
   }
   if (!ch->in_room || PLR_FLAGGED(ch, PLR_REMOTE))
@@ -1905,10 +1914,7 @@ void look_in_veh(struct char_data * ch)
       display_room_name(ch, veh->in_room, TRUE);
 
       if (get_speed(veh) <= 200) {
-        if (veh->in_room->night_desc && weather_info.sunlight == SUN_DARK)
-          send_to_char(veh->in_room->night_desc, ch);
-        else
-          send_to_char(veh->in_room->description, ch);
+        send_to_char(get_room_desc(veh->in_room), ch);
       } else {
         send_to_char("Your surroundings blur past.\r\n", ch);
       }
@@ -2203,7 +2209,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   SPECIAL(car_dealer);
   if (ch->in_room->func) {
     if (ch->in_room->func == car_dealer) {
-      send_to_char("^y...There are vehicles for sale here.^n\r\n", ch);
+      send_to_char(ch, "%s...There are vehicles for sale here.^n\r\n", ch->in_room->vehicles ? "^Y" : "^y");
     }
 
     // TODO: Add any other relevant funcs with room displays here.
@@ -2212,7 +2218,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   // Show a training info string for totalinvis trainers.
   for (struct char_data *trainer = ch->in_room->people; trainer; trainer = trainer->next_in_room) {
     if (MOB_HAS_SPEC(trainer, teacher) && MOB_FLAGGED(trainer, MOB_TOTALINVIS)) {
-      send_to_char("^y...You can practice skills here.^n\r\n", ch);
+      send_to_char(ch, "%s...You can practice skills here.^n\r\n", ch->in_room->vehicles ? "^Y" : "^y");
       break;
     }
   }
@@ -2270,7 +2276,7 @@ void look_in_direction(struct char_data * ch, int dir)
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_ISDOOR) && EXIT(ch, dir)->keyword)
       send_to_char(ch, "The %s is open.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
 
-    if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)){
+    if (GET_APARTMENT(ch->in_room)){
       /* Apartments have peepholes. */
       send_to_char("Through the peephole, you see:\r\n", ch);
       peek_into_adjacent(ch, dir);
@@ -2603,7 +2609,7 @@ ACMD(do_look)
   else if (!LIGHT_OK(ch)) {
     send_to_char("It is pitch black...\r\n", ch);
   } else {
-    half_chop(argument, arg, arg2);
+    half_chop(argument, arg, arg2, sizeof(arg2));
 
     if (subcmd == SCMD_READ) {
       if (!*arg)
@@ -2675,7 +2681,7 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
   send_to_char(buf, ch);
 }
 
-void do_probe_object(struct char_data * ch, struct obj_data * j) {
+void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop) {
   int i, found, mount_location, bal, imp;
   bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE;
   struct obj_data *accessory = NULL;
@@ -3031,16 +3037,18 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         }
         else if (GET_WEAPON_STR_BONUS(j) != 0) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR%s%d)%s%s^n.",
-                  weapon_types[GET_OBJ_VAL(j, 3)],
-                  skills[GET_OBJ_VAL(j, 4)].name,
-                  GET_OBJ_VAL(j, 2) < 0 ? "" : "+",
-                  GET_OBJ_VAL(j, 2),
-                  wound_arr[GET_OBJ_VAL(j, 1)],
-                  !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+                   GET_WEAPON_TYPE_NAME(GET_WEAPON_ATTACK_TYPE(j)),
+                   skills[GET_WEAPON_SKILL(j)].name,
+                   GET_WEAPON_STR_BONUS(j) < 0 ? "" : "+",
+                   GET_WEAPON_STR_BONUS(j),
+                   GET_WOUND_NAME(GET_WEAPON_DAMAGE_CODE(j)),
+                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         } else {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR)%s%s^n.",
-                  weapon_types[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, wound_arr[GET_OBJ_VAL(j, 1)],
-                  !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+                   GET_WEAPON_TYPE_NAME(GET_WEAPON_ATTACK_TYPE(j)), 
+                   skills[GET_WEAPON_SKILL(j)].name,
+                   GET_WOUND_NAME(GET_WEAPON_DAMAGE_CODE(j)),
+                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
         if (GET_WEAPON_REACH(j)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt grants ^c%d^n meters of reach when wielded.", GET_WEAPON_REACH(j));
@@ -3094,12 +3102,16 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
 
       if (IS_OBJ_STAT(j, ITEM_EXTRA_HARDENED_ARMOR)) {
-        if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == GET_IDNUM(ch)) {
-          strlcat(buf, "It has been permanently customized to fit you. Nobody else can wear it.\r\n", sizeof(buf));
-        } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == -1) {
-          strlcat(buf, "^gIt will be permanently customized to fit the first person to wear it (AKA soul-bound).^n\r\n", sizeof(buf));
+        if (is_in_shop) {
+          strlcat(buf, "It is customized armor that will be fitted permanently to the first person to wear it.\r\n", sizeof(buf));
         } else {
-          strlcat(buf, "^yIt has been permanently customized to fit someone else-- you can't wear it.^n\r\n", sizeof(buf));
+          if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == GET_IDNUM(ch)) {
+            strlcat(buf, "It has been permanently customized to fit you. Nobody else can wear it.\r\n", sizeof(buf));
+          } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == -1) {
+            strlcat(buf, "^gIt will be permanently customized to fit the first person to wear it (AKA soul-bound).^n\r\n", sizeof(buf));
+          } else {
+            strlcat(buf, "^yIt has been permanently customized to fit someone else-- you can't wear it.^n\r\n", sizeof(buf));
+          }
         }
       }
       break;
@@ -3650,7 +3662,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_SHOPCONTAINER:
       send_to_char(ch, "%s is a shop container (see ^WHELP CYBERDOC^n for info). It contains:\r\n\r\n", capitalize(GET_OBJ_NAME(j)));
-      do_probe_object(ch, j->contains);
+      do_probe_object(ch, j->contains, FALSE);
       return;
     default:
       strncpy(buf, "This item type has no probe string. Contact the staff to request one.", sizeof(buf) - strlen(buf));
@@ -3797,7 +3809,7 @@ ACMD(do_examine)
     generic_find(arg, FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
 
     if (tmp_object) {
-      do_probe_object(ch, tmp_object);
+      do_probe_object(ch, tmp_object, FALSE);
     } else {
       send_to_char("You're not wearing or carrying any such object, and there are no vehicles like that here.\r\n", ch);
 
@@ -4913,13 +4925,47 @@ ACMD(do_equipment)
 {
   int i, found = 0;
 
-  send_to_char("You are using:\r\n", ch);
+  bool filter_broken = FALSE;
+  bool filter_keyword = FALSE;
+
+  char message[1000];
+  strlcpy(message, "You are using:\r\n", sizeof(message));
+
+  skip_spaces(&argument);
+  if (*argument) {
+    if (is_abbrev(argument, "damaged") || is_abbrev(argument, "broken") || is_abbrev(argument, "destroyed")) {
+      filter_broken = TRUE;
+      strlcpy(message, "You are using the following broken items:\r\n", sizeof(message));
+    } else {
+      filter_keyword = TRUE;
+      snprintf(message, sizeof(message), "You are using the following items matching '%s':\r\n", argument);
+    }
+  }
+  
+  send_to_char(message, ch);
+
   for (i = 0; i < NUM_WEARS; i++) {
-    if (GET_EQ(ch, i)) {
+    struct obj_data *obj = GET_EQ(ch, i);
+
+    if (obj) {
+      // Apply filters.
+      if (filter_broken) {
+        // Skip anything that's not damaged.
+        if (GET_OBJ_CONDITION(obj) >= GET_OBJ_BARRIER(obj))
+          continue;
+      }
+
+      if (filter_keyword) {
+        // Skip anything that doesn't match the keyword.
+        if (!keyword_appears_in_obj(argument, obj))
+          continue;
+      }
+
+      // Send wearslot info.
       if (i == WEAR_WIELD || i == WEAR_HOLD) {
-        if (IS_OBJ_STAT(GET_EQ(ch, i), ITEM_EXTRA_TWOHANDS))
+        if (IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS))
           send_to_char(hands[2], ch);
-        else if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WEAPON) { // wielding something?
+        else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) { // wielding something?
           if (i == WEAR_WIELD)
             send_to_char(wielding_hands[(int)ch->char_specials.saved.left_handed], ch);
           else
@@ -4930,10 +4976,13 @@ ACMD(do_equipment)
           else
             send_to_char(hands[!ch->char_specials.saved.left_handed], ch);
         }
-      } else
+      } else {
         send_to_char(where[i], ch);
-      if (CAN_SEE_OBJ(ch, GET_EQ(ch, i)))
-        show_obj_to_char(GET_EQ(ch, i), ch, SHOW_MODE_OWN_EQUIPMENT);
+      }
+      
+      // Send object description.
+      if (CAN_SEE_OBJ(ch, obj))
+        show_obj_to_char(obj, ch, SHOW_MODE_OWN_EQUIPMENT);
       else
         send_to_char("Something.\r\n", ch);
       found = TRUE;
@@ -5131,11 +5180,11 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
     }
   }
 
-  // Second strategy: Search for possible like-matches.
-  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", prepared_for_like);
+  // Second strategy: Search for possible like-matches where words start with the entered text.
+  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name REGEXP '.*[[:<:]]%s.*' ORDER BY name ASC", prepared_for_like);
   if (mysql_wrapper(mysql, query)) {
     // If we don't find it here either, we know the file doesn't exist-- failure condition.
-    snprintf(help, help_len, "No such help file exists.\r\n");
+    snprintf(help, help_len, "No such help file exists (error case).\r\n");
     return;
   }
   res = mysql_store_result(mysql);
@@ -5345,7 +5394,7 @@ ACMD(do_who)
   struct descriptor_data *d;
   struct char_data *tch;
   int sort = LVL_MAX, num_can_see = 0, level = GET_LEVEL(ch);
-  bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE, drugs = FALSE, br = FALSE;
+  bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE, drugs = FALSE, br = FALSE, rpe = FALSE;
   int output_header;
   int num_in_socialization_rooms = 0;
 
@@ -5354,11 +5403,11 @@ ACMD(do_who)
   if (subcmd)
     level = 1;
   while (*buf) {
-    half_chop(buf, arg, buf1);
+    half_chop(buf, arg, buf1, sizeof(buf1));
 
     if (is_abbrev(arg, "sort"))
       sort = LVL_MAX;
-    else if (is_abbrev(arg, "quest"))
+    else if (is_abbrev(arg, "questor"))
       quest = 1;
     else if (is_abbrev(arg, "pker"))
       pker = 1;
@@ -5372,6 +5421,8 @@ ACMD(do_who)
       ooc = 1;
     else if (is_abbrev(arg, "newbie"))
       newbie = 1;
+    else if (access_level(ch, LVL_BUILDER) && is_abbrev(arg, "rpe"))
+      rpe = 1;
     else if (access_level(ch, LVL_BUILDER) && (is_abbrev(arg, "b/r") || is_abbrev(arg, "br")))
       br = 1;
     else if (access_level(ch, LVL_BUILDER) && is_abbrev(arg, "drugs"))
@@ -5416,6 +5467,8 @@ ACMD(do_who)
       if (drugs && !PLR_FLAGGED(tch, PLR_ENABLED_DRUGS))
         continue;
       if (br && !AFF_FLAGS(tch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT))
+        continue;
+      if (rpe && !PLR_FLAGGED(tch, PLR_RPE))
         continue;
       if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
         continue;
@@ -5715,7 +5768,7 @@ ACMD(do_users)
 
   strlcpy(buf, argument, sizeof(buf));
   while (*buf) {
-    half_chop(buf, arg, buf1);
+    half_chop(buf, arg, buf1, sizeof(buf1));
     if (*arg == '-') {
       mode = *(arg + 1);  /* just in case; we destroy arg in the switch */
       switch (mode) {
@@ -5735,11 +5788,11 @@ ACMD(do_users)
           break;
         case 'n':
           playing = 1;
-          half_chop(buf1, name_search, buf);
+          half_chop(buf1, name_search, buf, sizeof(buf));
           break;
         case 'h':
           playing = 1;
-          half_chop(buf1, host_search, buf);
+          half_chop(buf1, host_search, buf, sizeof(buf));
           break;
         default:
           send_to_char(USERS_FORMAT, ch);
@@ -6851,8 +6904,8 @@ ACMD(do_position)
     return;
   }
 
-  if (!ispunct(get_final_character_from_string(argument))) {
-    send_to_char(ch, "You need to specify punctuation too. Example: 'position %s.'\r\n", argument);
+  if (ispunct(get_final_character_from_string(argument))) {
+    send_to_char("Please don't specify terminal punctuation for your position (it gets an automatic period).\r\n", ch);
     return;
   }
 
@@ -6888,7 +6941,12 @@ ACMD(do_status)
   else send_to_char(ch, "%s is affected by:\r\n", GET_CHAR_NAME(targ));
 
   if (!IS_NPC(targ) && GET_POS(targ) == POS_MORTALLYW) {
-    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^RBleeding Out ^r(^R%d^r ticks left until death)^n\r\n", GET_PC_SALVATION_TICKS(targ));
+    int min_body = -GET_BOD(targ) + (GET_BIOOVER(targ) > 0 ? GET_BIOOVER(targ) : 0);
+    if ((int)((GET_PHYSICAL(targ) + 1) / 100) <= min_body) {
+      snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^RBleeding Out ^r(^R%d^r ticks left until death)^n\r\n", GET_PC_SALVATION_TICKS(targ));
+    } else {
+      snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^rBleeding Out^n\r\n");
+    }
   }
 
   if (targ->real_abils.esshole) {
@@ -7576,22 +7634,62 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
     return;
   }
 
+  const char *room_name = GET_ROOM_NAME(in_room);
+
+  if (GET_APARTMENT_SUBROOM(in_room) && GET_APARTMENT_SUBROOM(in_room)->get_decorated_name()) {
+    room_name = GET_APARTMENT_SUBROOM(in_room)->get_decorated_name();
+  }
+
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-    send_to_char(ch, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(in_room), GET_ROOM_NAME(in_room), buf);
+    send_to_char(ch, "^C[%5ld] %s^n%s [ %s ]^n\r\n", 
+                 GET_ROOM_VNUM(in_room), 
+                 room_name,
+                 room_name != GET_ROOM_NAME(in_room) ? " ^L(name-dec'd)^n" : "",
+                 buf);
+    if (GET_APARTMENT(in_room)) {
+      send_to_char(ch, " ^c(%sApartment - %s^c%s)\r\n",
+                   GET_APARTMENT(in_room)->get_paid_until() > 0 ? "Leased " : "",
+                   GET_APARTMENT(in_room)->get_full_name(),
+                   GET_APARTMENT_DECORATION(in_room) ? " [decorated]" : "");
+    }
+    if (in_room->temp_desc && in_room->temp_desc_timeout > 0) {
+      const char *author_name = get_player_name(in_room->temp_desc_author_idnum);
+      send_to_char(ch, " ^c(Temp Desc by %s (%ld) for next %d minute%s)\r\n", 
+                   author_name,
+                   in_room->temp_desc_author_idnum,
+                   in_room->temp_desc_timeout,
+                   in_room->temp_desc_timeout == 1 ? "" : "s");
+      delete [] author_name;
+    }
   } else {
     #define APPEND_ROOM_FLAG(check, flagname) { if ((check)) {strlcat(room_title_buf, flagname, sizeof(room_title_buf));} }
     char room_title_buf[1000];
-    snprintf(room_title_buf, sizeof(room_title_buf), "^C%s%s^n", in_veh ? "Around you is " : "", GET_ROOM_NAME(in_room));
+    snprintf(room_title_buf, sizeof(room_title_buf), "^C%s%s^n", in_veh ? "Around you is " : "", room_name);
 
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_GARAGE), " (Garage)");
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STORAGE) && !ROOM_FLAGGED(in_room, ROOM_CORPSE_SAVE_HACK), " (Storage)");
-    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_HOUSE), " (Apartment)");
+    if (GET_APARTMENT(in_room)) {
+      snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s-Class Apartment)",
+               lifestyles[GET_APARTMENT(in_room)->get_lifestyle()].name);
+    }
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ARENA), " ^y(Arena)^n");
+    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_PEACEFUL), " (Peaceful)");
     APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
     APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
     APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ENCOURAGE_CONGREGATION), " ^W(Socialization Bonus)^n");
+
+    if (in_room->flight_code && (ROOM_FLAGGED(in_room, ROOM_HELIPAD) || ROOM_FLAGGED(in_room, ROOM_RUNWAY))) {
+      snprintf(ENDOF(room_title_buf), sizeof(room_title_buf), " (%s: %3s)", 
+               ROOM_FLAGGED(in_room, ROOM_RUNWAY) ? "Runway" : "Helipad",
+               in_room->flight_code);
+    }
+
+    if (in_room->temp_desc && in_room->temp_desc_timeout > 0) {
+      strlcat(room_title_buf, " ^c(Altered)^n", sizeof(room_title_buf));
+    }
+
     strlcat(room_title_buf, "\r\n", sizeof(room_title_buf));
 
     send_to_char(room_title_buf, ch);
@@ -7605,10 +7703,7 @@ void display_room_desc(struct char_data *ch) {
     return;
   }
 
-  if (ch->in_room->night_desc && weather_info.sunlight == SUN_DARK)
-    send_to_char(ch->in_room->night_desc, ch);
-  else
-    send_to_char(ch->in_room->description, ch);
+  send_to_char(get_room_desc(ch->in_room), ch);
 }
 
 ACMD(do_penalties) {

@@ -1,0 +1,280 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+	Guest0:	10193
+[HOUSE]
+	[Object 0]
+		Vnum:	121
+		Inside:	0
+		Value 0:	85
+		Value 1:	15
+		Value 2:	3
+		Cost:	850
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX light machine gun ammunition
+	[Object 1]
+		Vnum:	121
+		Inside:	0
+		Value 0:	1000
+		Value 1:	10
+		Value 2:	1
+		Cost:	7000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 2]
+		Vnum:	121
+		Inside:	0
+		Value 0:	1000
+		Value 1:	10
+		Value 2:	1
+		Cost:	7000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 3]
+		Vnum:	121
+		Inside:	0
+		Value 0:	1000
+		Value 1:	10
+		Value 2:	1
+		Cost:	7000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 4]
+		Vnum:	121
+		Inside:	0
+		Value 0:	1000
+		Value 1:	10
+		Value 2:	1
+		Cost:	7000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 5]
+		Vnum:	121
+		Inside:	0
+		Value 0:	282
+		Value 1:	10
+		Value 2:	1
+		Cost:	1974
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 6]
+		Vnum:	121
+		Inside:	0
+		Value 0:	105
+		Value 1:	10
+		Value 2:	1
+		Cost:	735
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 7]
+		Vnum:	121
+		Inside:	0
+		Value 0:	192
+		Value 1:	10
+		Value 2:	1
+		Cost:	1344
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 8]
+		Vnum:	121
+		Inside:	0
+		Value 0:	92
+		Value 1:	10
+		Value 2:	1
+		Cost:	644
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 9]
+		Vnum:	121
+		Inside:	0
+		Value 0:	94
+		Value 1:	10
+		Value 2:	1
+		Cost:	658
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 10]
+		Vnum:	121
+		Inside:	0
+		Value 0:	107
+		Value 1:	10
+		Value 2:	1
+		Cost:	749
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 11]
+		Vnum:	121
+		Inside:	0
+		Value 0:	105
+		Value 1:	10
+		Value 2:	1
+		Cost:	735
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 12]
+		Vnum:	121
+		Inside:	0
+		Value 0:	106
+		Value 1:	10
+		Value 2:	1
+		Cost:	742
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 13]
+		Vnum:	121
+		Inside:	0
+		Value 0:	105
+		Value 1:	10
+		Value 2:	1
+		Cost:	735
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 14]
+		Vnum:	121
+		Inside:	0
+		Value 0:	104
+		Value 1:	10
+		Value 2:	1
+		Cost:	728
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 15]
+		Vnum:	121
+		Inside:	0
+		Value 0:	34
+		Value 1:	16
+		Value 2:	3
+		Cost:	340
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX medium machine gun ammunition
+	[Object 16]
+		Vnum:	121
+		Inside:	0
+		Value 0:	200
+		Value 1:	15
+		Cost:	400
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal light machine gun ammunition
+	[Object 17]
+		Vnum:	121
+		Inside:	0
+		Value 0:	85
+		Value 1:	15
+		Value 2:	3
+		Cost:	850
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX light machine gun ammunition
+	[Object 18]
+		Vnum:	121
+		Inside:	0
+		Value 0:	85
+		Value 1:	15
+		Value 2:	3
+		Cost:	850
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX light machine gun ammunition
+	[Object 19]
+		Vnum:	121
+		Inside:	0
+		Value 0:	4662
+		Value 1:	13
+		Cost:	9324
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal assault rifle ammunition
+	[Object 20]
+		Vnum:	121
+		Inside:	0
+		Value 0:	285
+		Value 1:	12
+		Cost:	570
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal sniper rifle ammunition
+	[Object 21]
+		Vnum:	121
+		Inside:	0
+		Value 0:	94
+		Value 1:	15
+		Value 2:	3
+		Cost:	940
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX light machine gun ammunition
+	[Object 22]
+		Vnum:	121
+		Inside:	0
+		Value 0:	6011
+		Value 1:	13
+		Cost:	12022
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal assault rifle ammunition
+	[Object 23]
+		Vnum:	121
+		Inside:	0
+		Value 0:	60
+		Value 1:	15
+		Value 2:	3
+		Cost:	600
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX light machine gun ammunition
+	[Object 24]
+		Vnum:	121
+		Inside:	0
+		Value 0:	74
+		Value 1:	17
+		Cost:	148
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal heavy machine gun ammunition
+	[Object 25]
+		Vnum:	121
+		Inside:	0
+		Value 0:	14
+		Value 1:	13
+		Value 2:	3
+		Cost:	140
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX assault rifle ammunition
+	[Object 26]
+		Vnum:	121
+		Inside:	0
+		Value 0:	1404
+		Value 1:	10
+		Value 2:	3
+		Cost:	14040
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX submachine gun ammunition
+	[Object 27]
+		Vnum:	940
+		Inside:	0
+		Value 0:	800
+		Cost:	1600
+		ExtraFlags:	0
+		Name:	a box of normal heavy machine gun ammunition
+	[Object 28]
+		Vnum:	911
+		Inside:	0
+		Cost:	1750
+		ExtraFlags:	0
+	[Object 29]
+		Vnum:	950
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 30]
+		Vnum:	952
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 31]
+		Vnum:	949
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 32]
+		Vnum:	37599
+		Inside:	0
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 33]
+		Vnum:	16242
+		Inside:	0
+		Cost:	15000
+		ExtraFlags:	0

@@ -108,7 +108,7 @@ struct dest_data seattle_taxi_destinations[] =
   { "formal", "", "Seattle Formal Wear", 32746, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "zoo", "", "Seattle Municipal Zoo", 32569, TAXI_DEST_TYPE_OTHER, TRUE },
   { "garage", "parking", "Seattle Parking Garage", 32720, TAXI_DEST_TYPE_OTHER , TRUE },
-  { "park", "", "Seattle State Park", 4000, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
+  { "park", "", "Seattle State Park", 32573, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "library", "", "Seattle Public Library", 30600, TAXI_DEST_TYPE_OTHER, TRUE },
   { "airport", "seatac", "Seattle-Tacoma Airport", 19410, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "shintaru", "", "Shintaru", 32513, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
@@ -135,6 +135,8 @@ struct dest_data seattle_taxi_destinations[] =
   { "bank", "ucasbank", "UCASBank", 30524, TAXI_DEST_TYPE_OTHER, TRUE },
   { "yoshi", "sushi", "Yoshi's Sushi Bar", 32751, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
   { "docwagon", "doc", "Seattle DocWagon", 32688, TAXI_DEST_TYPE_HOSPITALS, TRUE },
+  { "renton", "", "Renton", 30140, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
+  { "circuit", "couriers", "Circuit Couriers", 29308, TAXI_DEST_TYPE_OTHER, TRUE },
 #ifdef USE_PRIVATE_CE_WORLD
     { "slitch", "pit", "The Slitch Pit", 32660, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "planetary", "", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, FALSE },
@@ -1740,7 +1742,11 @@ int process_elevator(struct room_data *room,
       send_to_room(buf, &world[real_room(shaft->number)]);
 
       /* If you fail an athletics test, the elevator knocks you off the wall, dealing D impact damage and triggering fall. */
-      for (struct char_data *vict = shaft->people; vict; vict = vict->next_in_room) {
+      struct char_data *nextc;
+      for (struct char_data *vict = shaft->people; vict; vict = nextc) {
+        // Safeguard against weirdness around dead characters. Will still crash in certain circumstances with extracted followers.
+        nextc = vict->next_in_room;
+
         // Nohassle imms and astral projections are immune to this bullshit.
         if (PRF_FLAGGED(vict, PRF_NOHASSLE) || IS_ASTRAL(vict))
           continue;

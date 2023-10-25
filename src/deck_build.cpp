@@ -656,8 +656,8 @@ ACMD(do_build) {
       send_to_char(TOOBUSY, ch);
       return;
   }
-  half_chop(argument, arg1, buf);
-  half_chop(buf, arg2, arg3);
+  half_chop(argument, arg1, buf, sizeof(buf));
+  half_chop(buf, arg2, arg3, sizeof(arg3));
   if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
     if (ch->in_room)
       obj = get_obj_in_list_vis(ch, arg1, ch->in_room->contents);
@@ -1142,9 +1142,11 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_AMMOBUILD)) {
-    send_to_char(ch, "You are about %d%% of the way through making a batch of ammo for %s.\r\n",
-           (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 10) - GET_OBJ_VAL(GET_BUILDING(ch), 4)) /
-           GET_OBJ_VAL(GET_BUILDING(ch), 10)) * 100), GET_OBJ_NAME(GET_BUILDING(ch)));
+    float current = GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(GET_BUILDING(ch)) - GET_AMMOBOX_TIME_TO_COMPLETION(GET_BUILDING(ch));
+    float target = GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(GET_BUILDING(ch));
+    float percentage = (current / target) * 100;
+
+    send_to_char(ch, "You are about %d%% of the way through making a batch of ammo for %s.\r\n", (int) percentage);
     return;
   } else
     send_to_char("You are not working on anything at this time.\r\n", ch);
@@ -1239,7 +1241,7 @@ bool part_is_compatible_with_deck(struct obj_data *part, struct obj_data *deck, 
   // You must be targeting the same MPCP as parts already in the deck.
   for (struct obj_data *contained = deck->contains; contained; contained = contained->next_content) {
     if (GET_OBJ_TYPE(contained) == ITEM_PART) {
-      if (PART_CAN_HAVE_MPCP_SET(part) && GET_PART_TARGET_MPCP(part) != GET_PART_TARGET_MPCP(contained)) {
+      if (PART_CAN_HAVE_MPCP_SET(part) && GET_PART_TARGET_MPCP(contained) && GET_PART_TARGET_MPCP(part) != GET_PART_TARGET_MPCP(contained)) {
         MSG_CHAR("%s doesn't match the MPCP of the already-installed %s^n.\r\n", capitalize(GET_OBJ_NAME(part)), decapitalize_a_an(GET_OBJ_NAME(contained)));
         return FALSE;
       }

@@ -20,6 +20,11 @@ bool has_vision(struct char_data *ch, int type, bool staff_override) {
   if (!_vision_prereqs_are_valid(ch, type, __func__))
     return FALSE;
 
+  // Riggers get thermo and low-light while rigging.
+  bool is_rigging = (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
+  if (is_rigging && (type == VISION_LOWLIGHT || type == VISION_THERMOGRAPHIC))
+    return TRUE;
+
   return ch->points.vision[type].HasAnythingSetAtAll();
 }
 
@@ -545,6 +550,70 @@ int get_vision_mag(struct char_data *ch) {
     vision_mag = 1;
 
   return vision_mag;
+}
+
+int get_character_light_sources(struct char_data *ch) {
+  int sources = 0;
+
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL ch to get_character_light_sources()!");
+    return 0;
+  }
+
+  // log_vfprintf("Entered get_character_light_sources(%s) (%sPC)", GET_CHAR_NAME(ch), IS_NPC(ch) ? "N" : "");
+
+  if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_HOLYLIGHT)) {
+    sources = 10;
+  }
+
+  for (int pos = 0; pos < NUM_WEARS; pos++) {
+    struct obj_data *eq = GET_EQ(ch, pos);
+
+    if (!eq) {
+      continue;
+    }
+
+    if (GET_OBJ_TYPE(eq) == ITEM_LIGHT) {
+      sources++;
+      continue;
+    }
+
+#ifdef GLOWING_ITEMS_ARE_LIGHT_SOURCES
+    if (IS_OBJ_STAT(eq, ITEM_EXTRA_GLOW)) {
+      sources++;
+      continue;
+    }
+#endif
+  }
+
+  // log_vfprintf("Got %d sources from get_character_light_sources(%s)", sources, GET_CHAR_NAME(ch));
+  return sources;
+}
+
+void recalculate_room_light(struct room_data *room) {
+  if (!room) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got NULL room to recalculate_room_light()!");
+    return;
+  }
+
+  room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] = 0;
+
+  // Characters with lights add to the light level.
+  for (struct char_data *ch = room->people; ch; ch = ch->next_in_room) {
+    room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] += get_character_light_sources(ch);
+
+    // If they're staff, max out the light level and stop processing.
+    // This isn't enough to make a room more than partially lit, but it's partial AF.
+    if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_HOLYLIGHT)) {
+      room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] = 16;
+      return;
+    }
+  }
+
+  // Vehicles always provide light.
+  for (struct veh_data *veh = room->vehicles; veh; veh = veh->next_veh) {
+    room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]++;
+  }
 }
 
 

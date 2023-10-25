@@ -71,6 +71,7 @@
 #include "ignore_system.hpp"
 #include "dblist.hpp"
 #include "moderation.hpp"
+#include "newhouse.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -143,6 +144,7 @@ void send_keepalives();
 void msdp_update();
 void increase_congregation_bonus_pools();
 void send_nuyen_rewards_to_pcs();
+void cleanup_things_valgrind_complains_about();
 
 /* extern fcnts */
 extern void DBInit();
@@ -184,7 +186,10 @@ extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t targe
 void set_descriptor_canaries(struct descriptor_data *newd);
 extern void process_flying_vehicles();
 
+extern void save_all_apartments_and_storage_rooms();
+
 extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
+extern void tick_down_room_tempdesc_expiries();
 
 #ifdef USE_DEBUG_CANARIES
 void check_memory_canaries();
@@ -195,6 +200,28 @@ int gettimeofday(struct timeval *t, struct timezone *dummy)
   t->tv_usec =   std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
   t->tv_sec = (int) (t->tv_usec / 1000);
   return 0;
+}
+
+// If you select option -t, this code is executed, then the game immediately dies. Nothing is loaded.
+void run_tests_with_no_backing_resources() {
+  ApartmentComplex *complex = new ApartmentComplex();
+  global_apartment_complexes.push_back(complex);
+
+  Apartment *apartment = new Apartment();
+  apartment->set_complex(complex);
+
+  world = new struct room_data[1];
+  world[0].number = 1;
+  top_of_world = 1;
+  top_of_world_array = 1;
+  
+  ApartmentRoom *room = new ApartmentRoom(apartment, &world[0]);
+  apartment->add_room(room);
+  delete room;
+
+  // Clean up the rest.
+  delete apartment;
+  delete complex;
 }
 
 /* *********************************************************************
@@ -237,6 +264,11 @@ int main(int argc, char **argv)
       case 's':
         no_specials = 1;
         log("Suppressing assignment of special routines.");
+        break;
+      case 't':
+        log("Running whatever point-in-time test you specified, then terminating.");
+        run_tests_with_no_backing_resources();
+        exit(0);
         break;
       default:
         log_vfprintf("SYSERR: Unknown option -%c in argument string.", *(argv[pos] + 1));
@@ -309,7 +341,7 @@ void copyover_recover()
 
     /* Write something, and check if it goes error-free */
     if (write_to_descriptor (desc, "\n\rJust kidding. Restoring from copyover...\n\r") < 0) {
-       log_vfprintf("COPYOVERLOG:  - Failed to write to %s (%s), closing their descriptor.", name, host);
+      log_vfprintf("COPYOVERLOG:  - Failed to write to %s (%s), closing their descriptor.", name, host);
       close (desc); /* nope */
       continue;
     }
@@ -325,7 +357,6 @@ void copyover_recover()
 
     // Restore KaVir protocol data.
     CopyoverSet(d, copyover_get);
-
 
     d->connected = CON_CLOSE;
 
@@ -453,15 +484,20 @@ void init_game(int port)
   log("Entering game loop.");
   game_loop(mother_desc);
 
-  log("Saving all players.");
-  House_save_all();
+  // Since game_loop() is an infinite loop until shutdown is triggered, this is only reached when the game is ready to close.
+  log("Saving all apartments and storage rooms.");
+  save_all_apartments_and_storage_rooms();
 
   log("Closing all sockets.");
   while (descriptor_list)
     close_socket(descriptor_list);
 
+  // Clean up things Valgrind gets mad about.
+  cleanup_things_valgrind_complains_about();
+
   close(mother_desc);
 
+  // Close out the DB.
   DBFinalize();
 
   if (circle_reboot) {
@@ -1014,7 +1050,7 @@ void game_loop(int mother_desc)
 
     // Every 70 MUD minutes
     if (!(pulse % (70 * SECS_PER_MUD_MINUTE * PASSES_PER_SEC)))
-      House_save_all();
+      save_all_apartments_and_storage_rooms();
 
     // Every MUD day
     if (!(pulse % (24 * SECS_PER_MUD_HOUR * PASSES_PER_SEC)))
@@ -1046,6 +1082,7 @@ void game_loop(int mother_desc)
       send_keepalives();
       // johnson_update();
       process_boost();
+      tick_down_room_tempdesc_expiries();
     }
 
     // By default, every IRL hour, but configurable in config.h.
@@ -1084,6 +1121,24 @@ void game_loop(int mother_desc)
 #endif
 
     tics++;                     /* tics since last checkpoint signal */
+  }
+
+  // Shutdown is handled in the greater loop above: search for DBFinalize().
+}
+
+void cleanup_things_valgrind_complains_about() {
+  // We're shutting down: Extract all characters, as they contain new'd data that Valgrind will complain about.
+  struct char_data *next_ch = NULL;
+  for (struct char_data *ch = character_list; ch; ch = next_ch) {
+    next_ch = ch->next;
+    extract_char(ch);
+  }
+
+  // Extract vehicles for Valgrind cleanliness reasons.
+  struct veh_data *next_veh = NULL;
+  for (struct veh_data *veh = veh_list; veh; veh = next_veh) {
+    next_veh = veh->next;
+    extract_veh(veh);
   }
 }
 
@@ -1431,12 +1486,7 @@ int make_prompt(struct descriptor_data * d)
               break;
             case 'q': // Selected Domain, plus Sky if available
               {
-                struct room_data *room = get_ch_in_room(d->character);
-                if (room && SECT(room) != SPIRIT_FOREST && SECT(room) != SPIRIT_HEARTH && !ROOM_FLAGGED(room, ROOM_INDOORS)) {
-                  snprintf(str, sizeof(str), "%s, Sky", spirit_name[GET_DOMAIN(ch)]);
-                } else {
-                  strlcpy(str, GET_DOMAIN(ch) == SPIRIT_HEARTH ? "Hearth" : spirit_name[GET_DOMAIN(ch)], sizeof(str));
-                }
+                strlcpy(str, get_ch_domain_str(ch, TRUE), sizeof(str));
               }
               break;
             case 'r':
@@ -2283,10 +2333,13 @@ void free_editing_structs(descriptor_data *d, int state)
     Mem->DeleteIcon(d->edit_icon);
     d->edit_icon = NULL;
   }
-  if (d->edit_pgroup) {
-    delete d->edit_pgroup;
-    d->edit_pgroup = NULL;
-  }
+
+#define DELETE_EDITING_INFO(field) { if ((field)) { delete (field); (field) = NULL; }}
+  DELETE_EDITING_INFO(d->edit_pgroup);
+  DELETE_EDITING_INFO(d->edit_complex);
+  DELETE_EDITING_INFO(d->edit_apartment);
+  DELETE_EDITING_INFO(d->edit_apartment_room);
+#undef DELETE_EDITING_INFO
 }
 
 void close_socket(struct descriptor_data *d)
@@ -2381,7 +2434,7 @@ void close_socket(struct descriptor_data *d)
     /* added to Free up temporary editing constructs */
     if (d->connected == CON_PLAYING
         || d->connected == CON_PART_CREATE
-        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_HELPEDIT && d->connected != CON_ASKNAME))
+        || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_TEMPDESC_EDIT && d->connected != CON_ASKNAME))
     {
       if (d->connected == CON_VEHCUST)
         d->edit_veh = NULL;
@@ -2538,7 +2591,7 @@ void free_up_memory(int Empty)
     delete ch;
   }
   // Write houses.
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   // Die.
   exit(ERROR_UNABLE_TO_FREE_MEMORY_IN_CLEARSTACKS);
 }
@@ -2546,21 +2599,21 @@ void free_up_memory(int Empty)
 void hupsig(int Empty)
 {
   mudlog("Received SIGHUP.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 void intsig(int Empty)
 {
   mudlog("Received SIGINT.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
 void termsig(int Empty)
 {
   mudlog("Received SIGTERM.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
-  House_save_all();
+  save_all_apartments_and_storage_rooms();
   exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }
 
@@ -2893,7 +2946,7 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
 /* higher-level communication: the act() function */
 // now returns the composed line, in case you need to capture it for some reason
 const char *perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
-                 void *vict_obj, struct char_data * to)
+                 void *vict_obj, struct char_data * to, bool skip_you_stanzas)
 {
   extern char *make_desc(char_data *ch, char_data *i, char *buf, int act, bool dont_capitalize_a_an, size_t buf_size);
   const char *i = NULL;
@@ -2928,7 +2981,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           i = CHECK_NULL(vict_obj, SANA((struct obj_data *) vict_obj));
           break;
         case 'e':
-          if (to == ch)
+          if (to == ch && !skip_you_stanzas)
             i = "you";
           else if (CAN_SEE(to, ch))
             i = HSSH(ch);
@@ -2937,7 +2990,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           break;
         case 'E':
           if (vict_obj) {
-            if (to == vict)
+            if (to == vict && !skip_you_stanzas)
               i = "you";
             else if (CAN_SEE(to, vict))
               i = HSSH(vict);
@@ -2949,7 +3002,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           i = CHECK_NULL(vict_obj, fname((char *) vict_obj));
           break;
         case 'm':
-          if (to == ch)
+          if (to == ch && !skip_you_stanzas)
             i = "you";
           else if (CAN_SEE(to, ch))
             i = HMHR(ch);
@@ -2959,7 +3012,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'M':
           if (!vict)
             i = "someone";
-          else if (to == vict)
+          else if (to == vict && !skip_you_stanzas)
             i = "you";
           else if (CAN_SEE(to, vict))
             i = HMHR(vict);
@@ -2967,7 +3020,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             i = "them";
           break;
         case 'n':
-          if (to == ch)
+          if (to == ch && !skip_you_stanzas)
             i = "you";
           else if (!IS_NPC(ch) && (IS_SENATOR(to) || IS_SENATOR(ch)))
             i = GET_CHAR_NAME(ch);
@@ -2986,7 +3039,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'N':
           if (!vict)
             i = "someone";
-          else if (to == vict)
+          else if (to == vict && !skip_you_stanzas)
             i = "you";
           else if (!IS_NPC(vict) && (IS_SENATOR(to) || IS_SENATOR(vict)))
             i = GET_CHAR_NAME(vict);
@@ -3015,7 +3068,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           i = CHECK_NULL(vict_obj, OBJS((struct obj_data *) vict_obj, to));
           break;
         case 's':
-          if (to == ch)
+          if (to == ch && !skip_you_stanzas)
             i = "your";
           else if (CAN_SEE(to, ch))
             i = HSHR(ch);
@@ -3025,7 +3078,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'S':
           if (!vict_obj)
             i = "someone's";
-          else if (to == vict)
+          else if (to == vict && !skip_you_stanzas)
             i = "your";
           else if (CAN_SEE(to, vict))
             i = HSHR(vict);
@@ -3040,7 +3093,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           break;
         case 'z': /* Desc if visible, voice if not */
           // You always know if it's you.
-          if (to == ch) {
+          if (to == ch && !skip_you_stanzas) {
             i = "you";
           }
 
@@ -3123,7 +3176,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
          struct obj_data * obj, void *vict_obj, int type)
 {
   struct char_data *to, *next, *tch;
-  int sleep, staff_only;
+  int sleep, staff_only, skip_you_stanzas;
   bool remote;
   struct veh_data *rigger_check;
 
@@ -3148,21 +3201,27 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   if ((remote = (type & TO_REMOTE)))
     type &= ~TO_REMOTE;
 
+  if ((skip_you_stanzas = (type & SKIP_YOU_STANZAS)))
+    type &= ~SKIP_YOU_STANZAS;
+    
   if ((staff_only = (type & TO_STAFF_ONLY)))
     type &= ~TO_STAFF_ONLY;
 
   if ( type == TO_ROLLS )
     sleep = 1;
 
-  if (type == TO_CHAR)
+  if (type == TO_CHAR || type == TO_CHAR_FORCE)
   {
-    if (ch && SENDOK(ch) && (remote || !PLR_FLAGGED(ch, PLR_REMOTE)) && !PLR_FLAGGED(ch, PLR_MATRIX))
-      return perform_act(str, ch, obj, vict_obj, ch);
+    if (ch && (type == TO_CHAR_FORCE || (SENDOK(ch) && (remote || !PLR_FLAGGED(ch, PLR_REMOTE)) && !PLR_FLAGGED(ch, PLR_MATRIX))))
+      return perform_act(str, ch, obj, vict_obj, ch, skip_you_stanzas);
     return NULL;
   }
-  if (type == TO_VICT)
+  if (type == TO_VICT || type == TO_VICT_FORCE)
   {
     to = (struct char_data *) vict_obj;
+
+    if (to && type == TO_VICT_FORCE)
+      return perform_act(str, ch, obj, vict_obj, to, skip_you_stanzas);
 
     if (!to || !SENDOK(to))
       return NULL;
@@ -3173,12 +3232,12 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     if (hide_invisible && ch && !CAN_SEE(to, ch))
       return NULL;
 
-    return perform_act(str, ch, obj, vict_obj, to);
+    return perform_act(str, ch, obj, vict_obj, to, skip_you_stanzas);
   }
   if (type == TO_DECK)
   {
     if ((to = (struct char_data *) vict_obj) && SENDOK(to) && PLR_FLAGGED(to, PLR_MATRIX))
-      return perform_act(str, ch, obj, vict_obj, to);
+      return perform_act(str, ch, obj, vict_obj, to, skip_you_stanzas);
     return NULL;
   }
   /* ASSUMPTION: at this point we know type must be TO_NOTVICT
@@ -3246,7 +3305,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
           && !(hide_invisible
                && ch
                && !CAN_SEE(to, ch)))
-        perform_act(str, ch, obj, vict_obj, to);
+        perform_act(str, ch, obj, vict_obj, to, skip_you_stanzas);
     }
 
     // Send rolls to riggers.
@@ -3259,7 +3318,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
             && !(hide_invisible
                  && ch
                  && !CAN_SEE(tch, ch)))
-          perform_act(str, ch, obj, vict_obj, tch);
+          perform_act(str, ch, obj, vict_obj, tch, skip_you_stanzas);
         remove_vision_bit(tch, VISION_ULTRASONIC, VISION_BIT_OVERRIDE);
       }
     }
@@ -3288,7 +3347,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
       return NULL;
     }
     if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, to, type))
-      perform_act(str, ch, obj, vict_obj, to);
+      perform_act(str, ch, obj, vict_obj, to, skip_you_stanzas);
   }
 
   // Send to riggers.
@@ -3298,7 +3357,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
       // Since the check is done to the rigger, we have to apply det-invis to them directly, then remove it when done.
       set_vision_bit(tch, VISION_ULTRASONIC, VISION_BIT_OVERRIDE);
       if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, tch, type | TO_REMOTE))
-        perform_act(str, ch, obj, vict_obj, tch);
+        perform_act(str, ch, obj, vict_obj, tch, skip_you_stanzas);
       remove_vision_bit(tch, VISION_ULTRASONIC, VISION_BIT_OVERRIDE);
     }
   }
@@ -3380,6 +3439,10 @@ bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
 
   // You must be present.
   if (!ch->desc || ch->char_specials.timer >= 10)
+    return FALSE;
+
+  // Best if you're not AFK too.
+  if (PRF_FLAGGED(ch, PRF_AFK))
     return FALSE;
 
   return TRUE;

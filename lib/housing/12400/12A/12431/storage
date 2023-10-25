@@ -1,0 +1,392 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	948
+		Inside:	0
+		Value 2:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	64920
+		Inside:	0
+		Cost:	1300
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	64983
+		Inside:	1
+		Cost:	45
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	80715
+		Inside:	1
+		Cost:	850
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	16244
+		Inside:	1
+		Timer:	4
+		Cost:	12500
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	911
+		Inside:	1
+		Value 0:	220
+		Cost:	1540
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	946
+		Inside:	1
+		Value 0:	80
+		Cost:	3600
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	64962
+		Inside:	1
+		Cost:	32500
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	121
+		Inside:	1
+		Value 0:	170
+		Value 1:	12
+		Value 2:	3
+		Value 9:	14387
+		Value 10:	180
+		Cost:	1700
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX sniper rifle ammunition
+	[Object 9]
+		Vnum:	64916
+		Inside:	0
+		Cost:	2100
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	16206
+		Inside:	1
+		Value 1:	14387
+		Cost:	5000
+		ExtraFlags:	1000
+	[Object 11]
+		Vnum:	80734
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	100000000
+	[Object 12]
+		Vnum:	2109
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 13]
+		Vnum:	4919
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+		Name:	a pair of ^Lu^lr^Lb^la^Ln^N camouflage armored pants^n
+	[Object 14]
+		Vnum:	4950
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 15]
+		Vnum:	14627
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	707
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	9402
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 18]
+		Vnum:	1948
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	0
+		Name:	a ^Lheavy oilskin ^tduster^n^n
+	[Object 19]
+		Vnum:	127
+		Inside:	3
+		Value 0:	12
+		Value 1:	8
+		Value 2:	2
+		Value 9:	8
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 12-round heavy pistol magazine
+	[Object 20]
+		Vnum:	24501
+		Inside:	2
+		Value 7:	80424
+		Value 8:	18981
+		Value 11:	2
+		Cost:	2650
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	27808
+		Inside:	1
+		Cost:	70
+		ExtraFlags:	0
+	[Object 22]
+		Vnum:	1905
+		Inside:	1
+		Cost:	45
+		ExtraFlags:	0
+		Name:	a ^Lpair of ^Tboot^N ^Lcut black jeans^N^n
+	[Object 23]
+		Vnum:	17503
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+		Name:	a pair of ^tleather^N cowboy boots^n
+	[Object 24]
+		Vnum:	1949
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+		Name:	a heavy cotton white button up shirt^n
+	[Object 25]
+		Vnum:	62126
+		Inside:	0
+		Value 1:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 26]
+		Vnum:	60531
+		Inside:	1
+		Value 0:	8
+		Cost:	250
+		ExtraFlags:	0
+	[Object 27]
+		Vnum:	119
+		Inside:	1
+		Value 0:	14387
+		Value 1:	5000
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+	[Object 28]
+		Vnum:	62946
+		Inside:	1
+		Timer:	4
+		Cost:	1
+		ExtraFlags:	0
+	[Object 29]
+		Vnum:	22859
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 30]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 31]
+		Vnum:	3090
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 32]
+		Vnum:	5961
+		Inside:	1
+		Value 0:	14387
+		Cost:	100
+		ExtraFlags:	1000001000
+	[Object 33]
+		Vnum:	1816
+		Inside:	1
+		Value 0:	3206
+		Value 1:	6686
+		Value 2:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 34]
+		Vnum:	19999
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 35]
+		Vnum:	30109
+		Inside:	1
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	0
+	[Object 36]
+		Vnum:	24599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 37]
+		Vnum:	62100
+		Inside:	1
+		Value 0:	14387
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 38]
+		Vnum:	38083
+		Inside:	1
+		Value 0:	924
+		Value 3:	1
+		Value 4:	14387
+		Cost:	350
+		ExtraFlags:	0
+	[Object 39]
+		Vnum:	64919
+		Inside:	0
+		Cost:	3200
+		ExtraFlags:	0
+	[Object 40]
+		Vnum:	121
+		Inside:	1
+		Value 0:	216
+		Value 1:	12
+		Value 2:	3
+		Cost:	2160
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX sniper rifle ammunition
+	[Object 41]
+		Vnum:	121
+		Inside:	1
+		Value 0:	150
+		Value 1:	8
+		Value 2:	3
+		Value 9:	14387
+		Value 10:	180
+		Cost:	1500
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX heavy pistol ammunition
+	[Object 42]
+		Vnum:	121
+		Inside:	1
+		Value 0:	140
+		Value 1:	12
+		Value 2:	3
+		Value 9:	14387
+		Value 10:	180
+		Cost:	1400
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX sniper rifle ammunition
+	[Object 43]
+		Vnum:	121
+		Inside:	1
+		Value 0:	80
+		Value 1:	12
+		Value 2:	1
+		Cost:	560
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS sniper rifle ammunition
+	[Object 44]
+		Vnum:	121
+		Inside:	1
+		Value 0:	70
+		Value 1:	8
+		Value 2:	5
+		Value 9:	14387
+		Value 10:	120
+		Cost:	210
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of gel heavy pistol ammunition
+	[Object 45]
+		Vnum:	121
+		Inside:	1
+		Value 0:	150
+		Value 1:	8
+		Value 9:	14387
+		Value 10:	12
+		Cost:	300
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal heavy pistol ammunition
+	[Object 46]
+		Vnum:	121
+		Inside:	1
+		Value 0:	50
+		Value 1:	8
+		Cost:	100
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal heavy pistol ammunition
+	[Object 47]
+		Vnum:	127
+		Inside:	2
+		Value 0:	12
+		Value 1:	14
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 12-round shotgun magazine
+	[Object 48]
+		Vnum:	95807
+		Inside:	1
+		Value 8:	691
+		Value 11:	2
+		Attempt:	1
+		Cost:	200
+		ExtraFlags:	1000000000000
+	[Object 49]
+		Vnum:	9149
+		Inside:	2
+		Cost:	50
+		ExtraFlags:	0
+	[Object 50]
+		Vnum:	127
+		Inside:	4
+		Value 0:	12
+		Value 1:	8
+		Value 2:	2
+		Value 9:	7
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 12-round heavy pistol magazine
+	[Object 51]
+		Vnum:	24501
+		Inside:	3
+		Value 7:	64988
+		Value 8:	18981
+		Value 11:	2
+		Cost:	3350
+		ExtraFlags:	0
+	[Object 52]
+		Vnum:	9149
+		Inside:	2
+		Value 3:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 53]
+		Vnum:	15823
+		Inside:	1
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 54]
+		Vnum:	746
+		Inside:	1
+		Value 7:	0
+		Value 11:	3
+		Attempt:	3
+		Cost:	750
+		ExtraFlags:	0
+	[Object 55]
+		Vnum:	30131
+		Inside:	1
+		Value 11:	2
+		Cost:	4000
+		ExtraFlags:	1000000001000000000000
+	[Object 56]
+		Vnum:	29324
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 57]
+		Vnum:	15809
+		Inside:	0
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 58]
+		Vnum:	39611
+		Inside:	0
+		Value 1:	1
+		Cost:	20
+		ExtraFlags:	0

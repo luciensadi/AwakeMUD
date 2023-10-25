@@ -1,0 +1,78 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	15814
+		Inside:	0
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	4201
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	12414
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	85477
+		Inside:	2
+		Cost:	480000
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	10100000000000000000000000000
+		Name:	a packaged-up 'a dermal sheathing III - beta'
+	[Object 5]
+		Vnum:	9416
+		Inside:	1
+		Condition:	5
+		Cost:	200
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	766
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	24599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 8]
+		Vnum:	829
+		Inside:	1
+		Value 11:	2
+		Attempt:	-2
+		Cost:	4800
+		ExtraFlags:	1000000001000000000000
+	[Object 9]
+		Vnum:	15813
+		Inside:	0
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	863
+		Inside:	0
+		Cost:	1750
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	910
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 12]
+		Vnum:	121
+		Inside:	0
+		Value 0:	950
+		Value 1:	13
+		Value 9:	14503
+		Value 10:	15
+		Cost:	1900
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal assault rifle ammunition

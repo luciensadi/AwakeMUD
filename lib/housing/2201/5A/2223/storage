@@ -1,0 +1,79 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+	Guest0:	15076
+	Guest1:	15252
+[HOUSE]
+	[Object 0]
+		Vnum:	982
+		Inside:	0
+		Value 2:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	114
+		Inside:	0
+		Value 1:	3
+		Value 2:	3
+		Value 3:	15076
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+	[Object 2]
+		Vnum:	878
+		Inside:	0
+		Value 8:	691
+		Value 9:	692
+		Value 11:	4
+		Timer:	6
+		Cost:	0
+		ExtraFlags:	1000000000000
+	[Object 3]
+		Vnum:	121
+		Inside:	0
+		Value 0:	1000
+		Value 1:	15
+		Value 9:	15059
+		Value 10:	7
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal light machine gun ammunition
+	[Object 4]
+		Vnum:	121
+		Inside:	0
+		Value 0:	720
+		Value 1:	15
+		Value 9:	15059
+		Value 10:	10
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal light machine gun ammunition
+	[Object 5]
+		Vnum:	1182
+		Inside:	0
+		Cost:	76
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	1182
+		Inside:	0
+		Cost:	1
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	19895
+		Inside:	0
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	949
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	29709
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	950
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0

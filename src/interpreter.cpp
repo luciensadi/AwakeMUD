@@ -38,6 +38,7 @@
 #include "helpedit.hpp"
 #include "archetypes.hpp"
 #include "ignore_system.hpp"
+#include "newhouse.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -76,6 +77,8 @@ void dbuild_parse(struct descriptor_data *d, const char *arg);
 void pbuild_parse(struct descriptor_data *d, const char *arg);
 void spedit_parse(struct descriptor_data *d, const char *arg);
 void aedit_parse(struct descriptor_data *d, const char *arg);
+void houseedit_apartment_parse(struct descriptor_data *d, const char *arg);
+void houseedit_complex_parse(struct descriptor_data *d, const char *arg);
 void free_shop(struct shop_data *shop);
 void free_quest(struct quest_data *quest);
 void init_parse(struct descriptor_data *d, char *arg);
@@ -221,10 +224,10 @@ ACMD_DECLARE(do_hail);
 ACMD_DECLARE(do_hcontrol);
 ACMD_DECLARE(do_heal);
 ACMD_DECLARE(do_help);
-ACMD_DECLARE(do_hide);
 ACMD_DECLARE(do_hit);
 ACMD_DECLARE(do_highlight);
 ACMD_DECLARE(do_house);
+ACMD_DECLARE(do_houseedit);
 ACMD_DECLARE(do_hp);
 ACMD_DECLARE(do_iclist);
 ACMD_DECLARE(do_ignore);
@@ -274,6 +277,7 @@ ACMD_DECLARE(do_payout);
 ACMD_DECLARE(do_perfmon);
 ACMD_DECLARE(do_penalties);
 ACMD_DECLARE(do_pgroup);
+ACMD_DECLARE(do_pgset);
 ACMD_DECLARE(do_photo);
 ACMD_DECLARE(do_playerrolls);
 ACMD_DECLARE(do_pockets);
@@ -360,6 +364,7 @@ ACMD_DECLARE(do_switched_message_history);
 ACMD_DECLARE(do_syspoints);
 ACMD_DECLARE(do_teleport);
 ACMD_DECLARE(do_tell);
+ACMD_DECLARE(do_tempdesc);
 ACMD_DECLARE(do_think);
 ACMD_DECLARE(do_throw);
 ACMD_DECLARE(do_time);
@@ -433,6 +438,7 @@ ACMD_DECLARE(do_holster);
 ACMD_DECLARE(do_draw);
 ACMD_DECLARE(do_cheatmark);
 ACMD_DECLARE(do_copyover);
+ACMD_DECLARE(do_land);
 ACMD_DECLARE(do_language);
 ACMD_DECLARE(do_subscribe);
 ACMD_DECLARE(do_subpoint);
@@ -587,7 +593,7 @@ struct command_info cmd_info[] =
     { "destroy"    , POS_STANDING, do_destroy  , 0, 0, FALSE },
 //    { "destring" , POS_DEAD    , do_destring , 0, 0, FALSE },
     { "diagnose"   , POS_RESTING , do_diagnose , 0, 0, FALSE },
-    { "dice"       , POS_DEAD    , do_dice     , 0, 0, FALSE },
+    { "dice"       , POS_DEAD    , do_dice     , 0, SCMD_STANDARD_ROLL, FALSE },
     { "die"        , POS_DEAD    , do_die      , 0, 0, FALSE },
     { "dig"        , POS_RESTING , do_dig      , LVL_BUILDER, SCMD_DIG, FALSE },
     { "dispell"    , POS_SITTING , do_dispell  , 0, 0, FALSE },
@@ -658,6 +664,7 @@ struct command_info cmd_info[] =
     { "hold"       , POS_RESTING , do_grab     , 1, 0, FALSE },
     { "holster"    , POS_RESTING , do_holster  , 0, 0, FALSE },
     { "house"      , POS_LYING   , do_house    , 0, 0, FALSE },
+    { "houseedit"  , POS_SLEEPING, do_houseedit, LVL_BUILDER, 0, FALSE },
     { "ht"         , POS_DEAD    , do_gen_comm , 0, SCMD_HIREDTALK, FALSE },
     { "hts"        , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_HIRED, TRUE },
     { "hp"         , POS_DEAD    , do_hp       , 0, 0, TRUE },
@@ -700,6 +707,7 @@ struct command_info cmd_info[] =
     { "look"       , POS_LYING   , do_look     , 0, SCMD_LOOK, TRUE },
     { "lay"        , POS_RESTING , do_lay      , 0, 0, FALSE },
     { "language"   , POS_DEAD    , do_language , 0, 0, TRUE },
+    { "land"       , POS_RESTING , do_land     , 0, 0, FALSE },
     { "last"       , POS_DEAD    , do_last     , LVL_BUILDER, 0, FALSE },
     { "leaderboards", POS_DEAD  , do_leaderboard, LVL_MORTAL, 0, FALSE },
     { "learn"      , POS_RESTING , do_learn    , 0, 0, FALSE },
@@ -757,6 +765,7 @@ struct command_info cmd_info[] =
     { "perfmon"    , POS_DEAD    , do_perfmon  , LVL_ADMIN, 0, FALSE },
     { "penalties"  , POS_MORTALLYW, do_penalties, 0, 0, FALSE },
     { "pgroup"     , POS_LYING   , do_pgroup   , 0, 0, FALSE },
+    { "pgset"      , POS_MORTALLYW, do_pgset   , LVL_ADMIN, 0, FALSE },
     { "phone"      , POS_LYING   , do_phone    , 0, 0, FALSE },
     { "phonelist"  , POS_DEAD    , do_phonelist, LVL_BUILDER, 0, FALSE },
     { "photo"      , POS_RESTING , do_photo    , 0, 0, FALSE },
@@ -780,6 +789,7 @@ struct command_info cmd_info[] =
     { "program"    , POS_RESTING , do_program  , 0, 0, FALSE },
     { "progress"   , POS_RESTING , do_progress , 0, 0, TRUE },
     { "prone"      , POS_FIGHTING, do_prone    , 0, 0, FALSE },
+    { "privatedice", POS_DEAD    , do_dice     , 0, SCMD_PRIVATE_ROLL, FALSE },
     { "praise"     , POS_DEAD    , do_gen_write, 0, SCMD_PRAISE, TRUE },
     { "push"       , POS_SITTING , do_push     , 0, 0, FALSE },
     { "playerrolls", POS_DEAD    , do_playerrolls, LVL_ADMIN, 0, FALSE },
@@ -895,6 +905,7 @@ struct command_info cmd_info[] =
     { "target"     , POS_SITTING , do_target   , 0, 0, FALSE },
     { "taste"      , POS_RESTING , do_eat      , 0, SCMD_TASTE, FALSE },
     { "teleport"   , POS_DEAD    , do_teleport , LVL_CONSPIRATOR, 0, FALSE },
+    { "tempdesc"   , POS_LYING   , do_tempdesc , LVL_MORTAL, 0, TRUE },
     { "think"      , POS_LYING   , do_think    , 0, 0, FALSE },
     { "throw"      , POS_FIGHTING, do_throw    , 0, 0, FALSE },
     { "thaw"       , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_THAW, FALSE },
@@ -998,7 +1009,6 @@ struct command_info cmd_info[] =
     { "climb"      , POS_STANDING, do_not_here , 0, 0, FALSE },
     { "deposit"    , POS_STANDING, do_not_here , 1, 0, FALSE },
     { "hours"      , POS_LYING   , do_not_here , 0, 0, FALSE },
-    { "land"       , POS_RESTING , do_not_here , 0, 0, FALSE },
     { "lease"      , POS_RESTING , do_not_here , 1, 0, FALSE },
     { "light"      , POS_STANDING, do_not_here , 0, 0, FALSE },
     { "list"       , POS_RESTING , do_not_here , 0, 0, TRUE },
@@ -1481,8 +1491,6 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
   int cmd, length;
   extern int no_specials;
   char *line;
-
-  AFF_FLAGS(ch).RemoveBit(AFF_HIDE);
 
   if (PRF_FLAGS(ch).IsSet(PRF_AFK)) {
     send_to_char("You return from AFK.\r\n", ch);
@@ -2199,13 +2207,27 @@ int is_abbrev(const char *arg1, const char *arg2)
 }
 
 /* return first space-delimited token in arg1; remainder of string in arg2 */
-void half_chop(char *string, char *arg1, char *arg2)
+void half_chop(char *string, char *arg1, char *arg2, size_t arg2_sz)
 {
   char *temp;
+  char errbuf[50];
+
+  if (arg2_sz == sizeof(char *)) {
+    log("ERROR: half_chop received an arg2_sz equal to sizeof(char *): You fucked up!");
+
+    log_traceback("half_chop(%s, arg1, arg2, %ld) w/ arg2_sz equal to sizeof(char *)", string, arg2_sz);
+
+    strlcpy(errbuf, "Error", sizeof(errbuf));
+    arg2 = errbuf;
+    arg2_sz = sizeof(errbuf);
+  }
 
   temp = any_one_arg(string, arg1);
   skip_spaces(&temp);
-  strcpy(arg2, temp);
+
+  char memory_overlap_prevention_buf[MAX_INPUT_LENGTH];
+  strlcpy(memory_overlap_prevention_buf, temp, sizeof(memory_overlap_prevention_buf));
+  strlcpy(arg2, memory_overlap_prevention_buf, arg2_sz);
 }
 
 /* Used in specprocs, mostly.  (Exactly) matches "command" to cmd number */
@@ -2344,7 +2366,7 @@ int perform_dupe_check(struct descriptor_data *d)
       continue;
 
     if (k->original && (GET_IDNUM(k->original) == id)) {    /* switched char */
-      SEND_TO_Q("\r\nMultiple login detected -- disconnecting.\r\n", k);
+      SEND_TO_Q("\r\nMultiple login detected (type 1) -- disconnecting.\r\n", k);
       STATE(k) = CON_CLOSE;
       if (!target) {
         target = k->original;
@@ -2368,7 +2390,7 @@ int perform_dupe_check(struct descriptor_data *d)
       // TODO: Character is leaked?
       k->character = NULL;
       k->original = NULL;
-      SEND_TO_Q("\r\nMultiple login detected -- disconnecting.\r\n", k);
+      SEND_TO_Q("\r\nMultiple login detected (type 2) -- disconnecting.\r\n", k);
       STATE(k) = CON_CLOSE;
     }
   }
@@ -2422,7 +2444,7 @@ int perform_dupe_check(struct descriptor_data *d)
   d->character->desc = d;
   d->original = NULL;
   d->character->char_specials.timer = 0;
-  PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_EDITING,
+  PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_EDITING, PLR_WRITING,
                                      PLR_SPELL_CREATE, PLR_CUSTOMIZE,
                                      PLR_PROJECT, PLR_MATRIX, ENDBIT);
   if (STATE(d) == CON_VEHCUST)
@@ -2524,7 +2546,6 @@ void nanny(struct descriptor_data * d, char *arg)
   extern vnum_t frozen_start_room;
   extern vnum_t newbie_start_room;
   extern int max_bad_pws;
-  extern bool House_can_enter(struct char_data *ch, vnum_t vnum);
   vnum_t load_room_vnum;
   rnum_t load_room_rnum;
   bool dirty_password = FALSE;
@@ -2603,6 +2624,12 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_HELPEDIT:
     helpedit_parse(d, arg);
+    break;
+  case CON_HOUSEEDIT_COMPLEX:
+    houseedit_complex_parse(d, arg);
+    break;
+  case CON_HOUSEEDIT_APARTMENT:
+    houseedit_apartment_parse(d, arg);
     break;
   case CON_GET_NAME:            /* wait for input of name */
     d->idle_ticks = 0;
@@ -3068,7 +3095,7 @@ void nanny(struct descriptor_data * d, char *arg)
       }
 
       // Post-processing: Characters who are trying to load into a house get rejected if they're not allowed in there.
-      if (ROOM_FLAGGED(&world[load_room_rnum], ROOM_HOUSE) && !House_can_enter(d->character, world[load_room_rnum].number)) {
+      if (world[load_room_rnum].apartment && !world[load_room_rnum].apartment->can_enter(d->character)) {
         load_room_vnum = mortal_start_room;
         load_room_rnum = real_room(mortal_start_room);
       }
@@ -3441,6 +3468,21 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("gird", "gridguide");
   COMMAND_ALIAS("percieve", "perceive");
   COMMAND_ALIAS("sheaht", "sheathe");
+  COMMAND_ALIAS("senak", "sneak");
+  COMMAND_ALIAS("etner", "enter");
+  COMMAND_ALIAS("wehre", "where");
+  COMMAND_ALIAS("socre", "score");
+  COMMAND_ALIAS("dirve", "drive");
+  COMMAND_ALIAS("ener", "enter");
+  COMMAND_ALIAS("satnd", "stand");
+  COMMAND_ALIAS("levae", "leave");
+  COMMAND_ALIAS("waer", "wear");
+  COMMAND_ALIAS("porbe", "probe");
+  COMMAND_ALIAS("lave", "leave");
+  COMMAND_ALIAS("relaod", "reload");
+  COMMAND_ALIAS("scpre", "score");
+  COMMAND_ALIAS("llook", "look");
+  COMMAND_ALIAS("sneka", "sneak");
 
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
@@ -3532,6 +3574,10 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("ride", "enter"); // for motorcycles
   COMMAND_ALIAS("unsheathe", "draw");
   COMMAND_ALIAS("unfreeze", "thaw");
+  COMMAND_ALIAS("disband", "ungroup");
+  COMMAND_ALIAS("lose", "unfollow");
+  COMMAND_ALIAS("hide", "sneak");
+  COMMAND_ALIAS("privateroll", "privatedice");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");

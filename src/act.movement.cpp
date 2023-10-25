@@ -25,6 +25,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
+#include "newhouse.hpp"
 #include "quest.hpp"
 #include "zoomies.hpp"
 
@@ -113,16 +114,14 @@ int can_move(struct char_data *ch, int dir, int extra)
     }
   }
 
-  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_HOUSE))
-    if (!House_can_enter(ch, EXIT(ch, dir)->to_room->number))
-    {
-      send_to_char("That's private property -- no trespassing!\r\n", ch);
-      return 0;
-    }
+  if (!CH_CAN_ENTER_APARTMENT(EXIT(ch, dir)->to_room, ch)) {
+    send_to_char("That's private property -- no trespassing!\r\n", ch);
+    return 0;
+  }
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch)) {
     int num_occupants = 0;
     for (struct char_data *in_room_ptr = EXIT(ch, dir)->to_room->people; in_room_ptr && num_occupants < 2; in_room_ptr = in_room_ptr->next_in_room) {
-      if (!IS_ASTRAL(in_room_ptr) && !access_level(in_room_ptr, LVL_BUILDER))
+      if (!IS_ASTRAL(in_room_ptr) && !access_level(in_room_ptr, LVL_BUILDER) && GET_POS(in_room_ptr) > POS_STUNNED)
         num_occupants++;
     }
     if (num_occupants >= 2) {
@@ -182,7 +181,7 @@ int can_move(struct char_data *ch, int dir, int extra)
   return 1;
 }
 
-bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data *ch) {
+bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data *ch, bool we_care_about_sneaking) {
   if (!tch) {
     mudlog("SYSERR: Received null tch to s_v_o_s_m_m!", tch, LOG_SYSLOG, TRUE);
     return FALSE;
@@ -197,13 +196,17 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
   if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || IS_IGNORING(tch, is_blocking_ic_interaction_from, ch))
     return FALSE;
 
+  // Tuned out doing other things.
+  if (PLR_FLAGGED(tch, PLR_REMOTE) || PLR_FLAGGED(tch, PLR_MATRIX))
+    return FALSE;
+
   // Failed to see from vehicle.
   if (tch->in_veh && (tch->in_veh->cspeed > SPEED_IDLE && success_test(GET_INT(tch), 4) <= 0)) {
     return FALSE;
   }
 
   // Check for stealth and other person-to-person modifiers.
-  if (IS_AFFECTED(ch, AFF_SNEAK)) {
+  if (we_care_about_sneaking && IS_AFFECTED(ch, AFF_SNEAK)) {
     int dummy_tn = 2;
     char rbuf[1000];
     struct room_data *in_room = get_ch_in_room(ch);
@@ -318,26 +321,25 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   // People in the room.
   for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
-    if (should_tch_see_chs_movement_message(tch, ch))
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
 
   // Vehicle occupants, including riggers.
   for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
     for (tch = tveh->people; tch; tch = tch->next_in_veh) {
-      if (should_tch_see_chs_movement_message(tch, ch))
+      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
 
-    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
       act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
 
   // Watchers.
-  if (ch->in_room->watching) {
-    for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
-      if (should_tch_see_chs_movement_message(tch, ch))
-        act(buf2, TRUE, ch, 0, tch, TO_VICT);
+  for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
 
   was_in = ch->in_room;
@@ -414,7 +416,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   // People in the room.
   for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
-    if (should_tch_see_chs_movement_message(tch, ch)) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE)) {
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
 
       if (IS_NPC(tch) && !FIGHTING(tch)) {
@@ -447,19 +449,18 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   // Vehicle occupants.
   for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
     for (tch = tveh->people; tch; tch = tch->next_in_veh) {
-      if (should_tch_see_chs_movement_message(tch, ch))
+      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
 
-    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch))
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
       act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
 
   // Watchers.
-  if (ch->in_room->watching) {
-    for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
-      if (should_tch_see_chs_movement_message(tch, ch))
-        act(buf2, TRUE, ch, 0, tch, TO_VICT);
+  for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
 
 #ifdef DEATH_FLAGS
@@ -765,98 +766,33 @@ void move_vehicle(struct char_data *ch, int dir)
   struct room_data *room = EXIT(veh, dir)->to_room;
 
   if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
-      if ((ROOM_FLAGGED(room, ROOM_HOUSE) // It only checks house, not garage, so drones can enter/leave apts.
-             && House_can_enter(ch, room->number)
-             && has_key(ch, (EXIT(veh, dir)->key)))
-          || (ROOM_FLAGGED(veh->in_room, ROOM_HOUSE)))
-      {
-          send_to_char("The remote on your key beeps, allowing the door to swing open briefly enough to slide through.\r\n", ch);
-          snprintf(buf, sizeof(buf), "A door beeps before swinging open electronically to allow %s through in that brief moment.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-          send_to_room(buf, get_veh_in_room(veh), veh);
-      } else {
-          send_to_char(CANNOT_GO_THAT_WAY, ch);
-          return;
+    if (GET_APARTMENT(EXIT(veh, dir)->to_room) || GET_APARTMENT(veh->in_room)) {
+      if (IS_SET(EXIT(veh, dir)->exit_info, EX_LOCKED) && !has_key(ch, (EXIT(veh, dir)->key))) {
+        send_to_char("You need the key in your inventory to use the garage door opener.\r\n", ch);
+        return;
       }
-  }
 
-#ifdef DEATH_FLAGS
-  if (ROOM_FLAGGED(room, ROOM_DEATH)) {
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
-  }
-#endif
+      if (!CH_CAN_ENTER_APARTMENT(EXIT(veh, dir)->to_room, ch)) {
+        send_to_char("That's private property-- no trespassing.\r\n", ch);
+        return;
+      }
 
-  // Flying vehicles can traverse any terrain.
-  if (!ROOM_FLAGGED(room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
-    // Non-flying vehicles can't pass fall rooms.
-    if (ROOM_FLAGGED(room, ROOM_FALL)) {
-      send_to_char(ch, "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+      send_to_char("The remote on your key beeps, and the door swings open just enough to let you through.\r\n", ch);
+      snprintf(buf, sizeof(buf), "A door beeps before briefly opening just enough to allow %s through.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+      send_to_room(buf, get_veh_in_room(veh), veh);
+    } else {
+      send_to_char(CANNOT_GO_THAT_WAY, ch);
       return;
     }
-
-    // Check to see if your vehicle can handle the terrain type you're giving it.
-    if (IS_WATER(room)) {
-      if (!veh_can_traverse_water(veh)) {
-        send_to_char(ch, "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-        return;
-      }
-    } else {
-      if (!veh_can_traverse_land(veh)) {
-        send_to_char(ch, "You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(veh));
-        return;
-      }
-    }
   }
 
+  // Error messages presumably sent in-function.
   if (special(ch, convert_dir[dir], &empty_argument))
     return;
 
-  if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(ch, room->number)) {
-    send_to_char("You can't use other people's garages without permission.\r\n", ch);
+  // Error messages sent in-function.
+  if (!room_accessible_to_vehicle_piloted_by_ch(room, veh, ch, TRUE))
     return;
-  }
-
-  if (!IS_WATER(room) && !ROOM_FLAGGED(room, ROOM_ROAD) && !ROOM_FLAGGED(room, ROOM_GARAGE)) {
-    if (veh->type != VEH_DRONE && veh->type != VEH_BIKE) {
-      send_to_char("That's not an easy path-- only drones and bikes have a chance of making it through.\r\n", ch);
-      return;
-    }
-  }
-
-  if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE)) {
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
-  }
-
-#ifdef DEATH_FLAGS
-  if (ROOM_FLAGGED(room, ROOM_DEATH)) {
-    return FALSE;
-  }
-#endif
-
-  if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
-    send_to_char("Your vehicle is too big to fit in there, but a small drone might make it in.\r\n", ch);
-    return;
-  }
-
-  for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
-    if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY) && !IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
-      send_to_char("Everyone in the vehicle must be a member of the game's administration to go there.\r\n", ch);
-      return;
-    }
-
-    if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(tch, GET_ROOM_VNUM(room))) {
-      send_to_char("Everyone in the vehicle must be a guest of the apartment to go there.\r\n", ch);
-      return;
-    }
-  }
-
-  // Sanity check: Did you update the impassibility code without updating this?
-  if (!room_accessible_to_vehicle_piloted_by_ch(room, veh, ch)) {
-    mudlog("SYSERR: room_accessible_to_vehicle() does not match move_vehicle() constraints!", ch, LOG_SYSLOG, TRUE);
-    send_to_char(CANNOT_GO_THAT_WAY, ch);
-    return;
-  }
 
   // Clear their position string, if any.
   DELETE_AND_NULL_ARRAY(GET_VEH_DEFPOS(veh));
@@ -864,10 +800,32 @@ void move_vehicle(struct char_data *ch, int dir)
   snprintf(buf2, sizeof(buf2), "%s %s from %s.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)), veh->arrive, thedirs[rev_dir[dir]]);
   snprintf(buf1, sizeof(buf1), "%s %s to %s.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)), veh->leave, thedirs[dir]);
 
-  send_to_room(buf1, veh->in_room, veh);
+  // People in the room.
+  for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf1, TRUE, ch, 0, tch, TO_VICT);
+  }
 
-  for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching)
-    act(buf2, FALSE, ch, 0, 0, TO_CHAR);
+  // Vehicle occupants, including riggers.
+  for (struct veh_data *tveh = veh->in_room->vehicles; tveh; tveh = tveh->next_veh) {
+    if (tveh == veh)
+      continue;
+    
+    for (tch = tveh->people; tch; tch = tch->next_in_veh) {
+      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+        act(buf1, TRUE, ch, 0, tch, TO_VICT);
+    }
+
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
+      act(buf1, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
+  }
+
+  // Watchers.
+  for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf1, TRUE, ch, 0, tch, TO_VICT);
+  }
+
   // for (int r = 1; r >= 0; r--)        <-- Why.
   //  veh->lastin[r+1] = veh->lastin[r];
   veh->lastin[2] = veh->lastin[1];
@@ -878,10 +836,32 @@ void move_vehicle(struct char_data *ch, int dir)
   veh_to_room(veh, was_in);
   veh->lastin[0] = veh->in_room;
 
-  send_to_room(buf2, veh->in_room, veh);
+  // People in the room.
+  for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf2, TRUE, ch, 0, tch, TO_VICT);
+  }
 
-  for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching)
-    act(buf2, FALSE, ch, 0, 0, TO_CHAR);
+  // Vehicle occupants, including riggers.
+  for (struct veh_data *tveh = veh->in_room->vehicles; tveh; tveh = tveh->next_veh) {
+    if (tveh == veh)
+      continue;
+    
+    for (tch = tveh->people; tch; tch = tch->next_in_veh) {
+      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+        act(buf2, TRUE, ch, 0, tch, TO_VICT);
+    }
+
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
+      act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
+  }
+
+  // Watchers.
+  for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      act(buf2, TRUE, ch, 0, tch, TO_VICT);
+  }
+
   stop_fighting(ch);
   for (v = veh->followers; v; v = nextv)
   {
@@ -1625,10 +1605,10 @@ ACMD(do_gen_door)
   }
 
   else {
-    send_to_char("You don't see anything you can open there.\r\n", ch);
-      if (ch->in_veh) {
-        send_to_char("(Maybe you should exit your vehicle?)\r\n", ch);
-      }
+    send_to_char(ch, "You don't see anything you can %s there.\r\n", subcmd == SCMD_CLOSE ? "close" : "open");
+    if (ch->in_veh) {
+      send_to_char("(Maybe you should ^WLEAVE^n your vehicle?)\r\n", ch);
+    }
   }
 
   return;
@@ -1860,14 +1840,13 @@ ACMD(do_drag)
     char drag_veh_name[500], act_buf[1000];
     strlcpy(drag_veh_name, GET_VEH_NAME(drag_veh), sizeof(drag_veh_name));
 
-    veh_from_room(drag_veh);
-
     if (dir == -1 && veh) {
       enter_veh(ch, veh, "rear", FALSE);
       if (ch->in_veh == veh) {
         send_to_char(ch, "Heaving and straining, you drag %s into %s.\r\n", drag_veh_name, GET_VEH_NAME(veh));
         snprintf(act_buf, sizeof(act_buf), "Heaving and straining, $n drags %s into %s.\r\n", drag_veh_name, GET_VEH_NAME(veh));
         act(act_buf, TRUE, ch, 0, 0, TO_ROOM);
+        veh_from_room(drag_veh);
         veh_to_veh(drag_veh, veh);
       } else {
         send_to_char("You can't get in there yourself.\r\n", ch);
@@ -1881,6 +1860,7 @@ ACMD(do_drag)
         snprintf(act_buf, sizeof(act_buf), "Heaving and straining, $n drags %s into the room.\r\n", drag_veh_name);
         act(act_buf, TRUE, ch, 0, 0, TO_ROOM);
       }
+      veh_from_room(drag_veh);
       veh_to_room(drag_veh, ch->in_room);
     }
     WAIT_STATE(ch, 3 RL_SEC);
@@ -2104,44 +2084,28 @@ ACMD(do_leave)
   }
 
   // If you're in an apartment, you're able to leave to the atriun no matter what. Prevents lockin.
-  if (ROOM_FLAGGED(in_room, ROOM_HOUSE)) {
-    for (door = 0; door < NUM_OF_DIRS; door++) {
-      if (EXIT(ch, door) && EXIT(ch, door)->to_room && ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_ATRIUM)) {
-        send_to_char(ch, "You make your way out of the residence through the door to %s, leaving it locked behind you.\r\n", thedirs[door]);
-        act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
+  if (GET_APARTMENT(in_room)) {
+    rnum_t atrium_rnum = real_room(GET_APARTMENT(in_room)->get_atrium_vnum());
 
-        // Transfer the char.
-        struct room_data *target_room = EXIT(ch, door)->to_room;
-        char_from_room(ch);
-        char_to_room(ch, target_room);
-
-        // Message the room.
-        snprintf(buf, sizeof(buf), "$n enters from %s.", thedirs[rev_dir[door]]);
-        act(buf, TRUE, ch, 0, 0, TO_ROOM);
-
-        // If not screenreader, look.
-        if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
-          look_at_room(ch, 0, 0);
-        return;
-      }
+    if (atrium_rnum < 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Atrium for %s was inaccessible! Using A Bright Light.", GET_APARTMENT(in_room)->get_full_name());
+      atrium_rnum = 0; // A Bright Light
     }
-    // If we got here, there was no valid exit. Error condition.
-    snprintf(buf, sizeof(buf), "WARNING: %s attempted to leave apartment, but there was no valid exit! Rescuing to Dante's.",
-             GET_CHAR_NAME(ch));
 
-    struct room_data *room = &world[real_room(RM_DANTES_GARAGE)];
-    if (room) {
-      act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
-      char_from_room(ch);
-      char_to_room(ch, room);
-      act("$n steps out of the shadows, looking slightly confused.", TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char("(System message: Something went wrong with getting you out of the apartment. Staff has been notified, and you have been relocated to Dante's Inferno.)\r\n", ch);
-      return;
-    } else {
-      snprintf(buf, sizeof(buf), "^RERROR:^g %s attempted to leave apartment, but there was no valid exit, and Dante's was unreachable! They're FUCKED.",
-               GET_CHAR_NAME(ch));
-    }
-    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    act("You leave the residence.", TRUE, ch, 0, 0, TO_CHAR);
+    act("$n leaves the residence.", TRUE, ch, 0, 0, TO_ROOM);
+
+    // Transfer the char.
+    struct room_data *target_room = &world[atrium_rnum];
+    char_from_room(ch);
+    char_to_room(ch, target_room);
+
+    act("$n arrives.", TRUE, ch, 0, 0, TO_ROOM);
+
+    // If not screenreader, look.
+    if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
+      look_at_room(ch, 0, 0);
+    return;
   }
 
   // If you're in a PGHQ, you teleport to the first room of the PGHQ's zone.
@@ -2463,13 +2427,16 @@ ACMD(do_wake)
   if (GET_POS(ch) > POS_SLEEPING)
     send_to_char("You are already awake...\r\n", ch);
   else {
-    send_to_char("You awaken and stand up.\r\n", ch);
     if (ch->in_veh) {
+      send_to_char("You awaken and sit up.\r\n", ch);
       snprintf(buf, sizeof(buf), "%s awakens.\r\n", GET_NAME(ch));
       send_to_veh(buf, ch->in_veh, ch, FALSE);
-    } else
+      GET_POS(ch) = POS_SITTING;
+    } else {
+      send_to_char("You awaken and stand up.\r\n", ch);
       act("$n awakens.", TRUE, ch, 0, 0, TO_ROOM);
-    GET_POS(ch) = POS_STANDING;
+      GET_POS(ch) = POS_STANDING;
+    }
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
@@ -2488,7 +2455,37 @@ void perform_unfollow(struct char_data *ch) {
 }
 
 ACMD(do_unfollow) {
-  perform_unfollow(ch);
+  // First form: UNFOLLOW with no arguments has you stop following.
+  if (!*argument) {
+    if (ch->master) {
+      stop_follower(ch);
+      AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
+    } else {
+      send_to_char("You are already following yourself. If you want to drop a follower, use UNFOLLOW <target>.\r\n", ch);
+    }
+    return;
+  }
+
+  // Second form: UNFOLLOW <leader>, which will stop you from following X.
+  skip_spaces(&argument);
+  if (ch->master && keyword_appears_in_char(argument, ch->master)) {
+    stop_follower(ch);
+    AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
+    return;
+  }
+
+  // Third form: UNFOLLOW <follower>, which loses an existing follower (grouped or not).
+  for (follow_type *f = ch->followers; f; f = f->next) {
+    if (keyword_appears_in_char(argument, f->follower)) {
+      act("You move around abruptly and lose $N.", FALSE, ch, 0, f->follower, TO_CHAR);
+      act("$n moves around abruptly and loses $N.", FALSE, ch, 0, f->follower, TO_ROOM);
+      AFF_FLAGS(f->follower).RemoveBit(AFF_GROUP);
+      stop_follower(f->follower);
+      return;
+    }
+  }
+
+  send_to_char(ch, "You're neither following nor being followed by anyone matching the keyword '%s'.\r\n", argument);
 }
 
 ACMD(do_follow)
@@ -2514,41 +2511,32 @@ ACMD(do_follow)
     return;
   }
 
-  if (ch->master == leader) {
-    act("You are already following $M.", FALSE, ch, 0, leader, TO_CHAR);
-    return;
-  }
-  if (IS_ASTRAL(leader) && !IS_ASTRAL(ch)) {
-    send_to_char("You can't do that.\r\n", ch);
-    return;
-  }
-  if (IS_AFFECTED(ch, AFF_CHARM) && (ch->master)) {
-    act("But you only feel like following $N!", FALSE, ch, 0, ch->master, TO_CHAR);
-  } else {                      /* Not Charmed follow person */
-    if (leader == ch) {
-      if (!ch->master) {
-        send_to_char("You are already following yourself.\r\n", ch);
-        return;
-      }
-      stop_follower(ch);
-      AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
-    } else {
-      if (circle_follow(ch, leader)) {
-        act("Sorry, but following in loops is not allowed.", FALSE, ch, 0, 0, TO_CHAR);
-        return;
-      }
-
-      if (IS_IGNORING(leader, is_blocking_following_from, ch)) {
-        send_to_char("You can't do that.\r\n", ch);
-        return;
-      }
-
-      if (ch->master)
-        stop_follower(ch);
-      AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
-      add_follower(ch, leader);
+  FAILURE_CASE_PRINTF(ch->master == leader, "You are already following %s.", HMHR(leader));
+  FAILURE_CASE(IS_ASTRAL(leader) && !IS_ASTRAL(ch), "Non-astral beings can't follow astral beings.");
+  FAILURE_CASE_PRINTF(IS_AFFECTED(ch, AFF_CHARM) && (ch->master), "But you only feel like following %s!", GET_NAME(ch->master));
+  
+  // Special case: FOLLOW SELF unfollows anyone else.
+  if (leader == ch) {
+    if (!ch->master) {
+      send_to_char("You are already following yourself.\r\n", ch);
+      return;
     }
+    stop_follower(ch);
+    AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
+    return;
   }
+  
+  FAILURE_CASE(circle_follow(ch, leader), "Sorry, but following in loops is not allowed.");
+
+  FAILURE_CASE(PRF_FLAGGED(leader, PRF_NOFOLLOW) && GET_LEVEL(ch) < LVL_ADMIN, "You can't: They've set the NOFOLLOW flag.");
+  // Mimic other failure message to lessen info leakage.
+  FAILURE_CASE(IS_IGNORING(leader, is_blocking_following_from, ch), "You can't: They've set the NOFOLLOW flag.");
+
+  // Do the following.
+  if (ch->master)
+    stop_follower(ch);
+  AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
+  add_follower(ch, leader);
 }
 
 ACMD(do_stuck) {

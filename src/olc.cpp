@@ -30,6 +30,7 @@
 #include "config.hpp"
 #include "helpedit.hpp"
 #include "newdb.hpp"
+#include "redit.hpp"
 
 extern class objList ObjList;
 extern sh_int mortal_start_room;
@@ -40,7 +41,6 @@ extern void char_from_room(struct char_data * ch);
 extern void write_mobs_to_disk(vnum_t zone);
 extern void write_objs_to_disk(vnum_t zone);
 extern void write_shops_to_disk(int zone);
-extern void write_world_to_disk(int);
 extern void write_zone_to_disk(int vnum);
 extern void iedit_disp_menu(struct descriptor_data *d);
 extern void redit_disp_menu(struct descriptor_data *d);
@@ -93,10 +93,14 @@ bool can_edit_zone(struct char_data *ch, rnum_t real_zone) {
     return FALSE;
   }
 
+  if (access_level(ch, LVL_ADMIN))
+    return TRUE;
+
   for (int i = 0; i < NUM_ZONE_EDITOR_IDS; i++)
     if (zone_table[real_zone].editor_ids[i] == GET_IDNUM(ch))
       return TRUE;
-  return access_level(ch, LVL_ADMIN);
+
+  return FALSE;
 }
 
 void write_index_file(const char *suffix)
@@ -1398,7 +1402,7 @@ ACMD(do_medit)
     GET_ESS(MOB) = 600;
     MOB->real_abils.ess = 600;
     GET_POS(MOB) = POS_STANDING;
-    GET_SEX(MOB) = SEX_NEUTRAL;
+    GET_PRONOUNS(MOB) = PRONOUNS_NEUTRAL;
     MOB->mob_specials.attack_type = 300;
     d->edit_mode = MEDIT_CONFIRM_EDIT;
     set_new_mobile_unique_id(d->edit_mob);
@@ -1472,6 +1476,8 @@ ACMD(do_mclone)
     mob->char_specials.arrive = str_dup(mob_proto[mob_num1].char_specials.arrive);
   if (mob_proto[mob_num1].char_specials.leave)
     mob->char_specials.leave = str_dup(mob_proto[mob_num1].char_specials.leave);
+  if (mob_proto[mob_num1].char_specials.highlight_color_code)
+    mob->char_specials.highlight_color_code = str_dup(mob_proto[mob_num1].char_specials.highlight_color_code);
 
   if (mob_proto[mob_num1].player_specials)
     mob->player_specials = &dummy_mob;

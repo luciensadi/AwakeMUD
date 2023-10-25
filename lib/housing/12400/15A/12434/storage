@@ -1,0 +1,72 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	4914
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	9503
+		Inside:	0
+		Cost:	35
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	8
+		Value 2:	960
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a level 8 programming suite
+	[Object 3]
+		Vnum:	108
+		Inside:	1
+		Value 0:	7
+		Value 1:	8
+		Value 2:	256
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	healer master
+	[Object 4]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a rating 8 armour
+	[Object 5]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 2:	128
+		Value 5:	1690962375
+		Value 6:	1684912244
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a rating 8 hunting program
+	[Object 6]
+		Vnum:	1120
+		Inside:	0
+		Value 3:	1536
+		Cost:	33600
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	38094
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 8]
+		Vnum:	17135
+		Inside:	0
+		Cost:	36000
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	19879
+		Inside:	0
+		Cost:	36000
+		ExtraFlags:	1

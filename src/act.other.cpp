@@ -35,7 +35,9 @@
 #include "config.hpp"
 #include "newmail.hpp"
 #include "ignore_system.hpp"
+#include "newhouse.hpp"
 #include "quest.hpp"
+#include "lifestyles.hpp"
 #include "moderation.hpp"
 
 #ifdef GITHUB_INTEGRATION
@@ -118,7 +120,7 @@ ACMD(do_quit)
     if (GET_QUEST(ch))
       end_quest(ch);
 
-    if (ROOM_FLAGGED(save_room, ROOM_HOUSE) && House_can_enter(ch, save_room->number)) {
+    if (CH_CAN_ENTER_APARTMENT(save_room, ch)) {
       // Only guests and owners can load back into an apartment.
       GET_LOADROOM(ch) = save_room->number;
     } else {
@@ -130,19 +132,9 @@ ACMD(do_quit)
           GET_LOADROOM(ch) = RM_ENTRANCE_TO_DANTES;
       }
     }
-
-    /*
-     * Get the last room they were in, in case they try to come in before the time
-     * limit is up.
-     */
-    if (ROOM_FLAGGED(ch->in_room, ROOM_STAFF_ONLY) && !access_level(ch, LVL_BUILDER)) {
-      // Quitting out in a staff-only area? You won't load back there.
-      GET_LAST_IN(ch) = RM_ENTRANCE_TO_DANTES;
-      snprintf(buf, sizeof(buf), "%s (%ld) quitting out in staff-only room '%s^n' (%ld); they will load at Dante's instead.",
-              GET_CHAR_NAME(ch), GET_IDNUM_EVEN_IF_PROJECTING(ch), GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-    } else
-      GET_LAST_IN(ch) = GET_ROOM_VNUM(ch->in_room);
+    
+    // Setting GET_LAST_IN() is done in save_char().
+    
     if(!ch->in_veh)
       act("$n has left the game.", TRUE, ch, 0, 0, TO_ROOM);
     else {
@@ -382,7 +374,7 @@ ACMD(do_title)
     skip_spaces(&argument);
     strlcat(argument, "^n", sizeof(buf));
     set_title(ch, argument);
-    send_to_char(ch, "Okay, you're now %s %s.\r\n", GET_CHAR_NAME(ch), GET_TITLE(ch));
+    send_to_char(ch, "Okay, you're now %s%s%s %s.\r\n", GET_PRETITLE(ch), GET_PRETITLE(ch) && *(GET_PRETITLE(ch)) ? " " : "", GET_CHAR_NAME(ch), GET_TITLE(ch));
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Title='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_TITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
   }
@@ -575,7 +567,7 @@ ACMD(do_patch)
 {
   struct char_data *vict;
   struct obj_data *patch;
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
 
   if (!*arg || !*buf) {
     send_to_char("Who do you want to patch and with what?\r\n", ch);
@@ -718,7 +710,7 @@ ACMD(do_use)
     return;
   }
 
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
   if (!*arg) {
     send_to_char(ch, "What do you want to %s?\r\n", CMD_NAME);
     return;
@@ -854,11 +846,12 @@ ACMD(do_display)
     return;
   }
 
+  send_to_char(ch, "OK, changing your prompt. In case you need it back, your previous prompt was:^c  %s^n\r\n", double_up_color_codes(GET_PROMPT(ch)));
+
   prepare_quotes(arg_with_prepared_quotes, argument, sizeof(arg_with_prepared_quotes) / sizeof(arg_with_prepared_quotes[0]));
 
   DELETE_ARRAY_IF_EXTANT(GET_PROMPT(tch));
   GET_PROMPT(tch) = str_dup(argument);
-  send_to_char(OK, ch);
   snprintf(buf, sizeof(buf), "UPDATE pfiles SET%sPrompt='%s' WHERE idnum=%ld;", PLR_FLAGGED((ch), PLR_MATRIX) ? " Matrix" : " ", arg_with_prepared_quotes, GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
 }
@@ -877,7 +870,7 @@ ACMD(do_gen_write)
     return;
   }
 
-#ifdef IS_BUILDPORT
+#ifdef DISABLED_CHECK___IS_BUILDPORT
   send_to_char("That command is disabled on the buildport. Please file ideas etc on the main port!\r\n", ch);
   return;
 #endif
@@ -1067,6 +1060,10 @@ ACMD(do_gen_write)
 #endif
 
   if (subcmd == SCMD_TYPO && !PLR_FLAGGED(ch, PLR_NO_AUTO_SYSP_AWARDS)) {
+    // Nudge them to report from the correct room.
+    struct room_data *room = get_ch_in_room(ch);
+    send_to_char(ch, "Got it-- your typo report has been associated with the room you're standing in (%s^n). If you're reporting a typo for somewhere else, please go there to report it instead.\r\n\r\n", GET_ROOM_NAME(room));
+
     // We reward typos instantly-- they're quick to verify and don't have grey area.
     send_to_char("Thanks! You've earned +1 system points for your contribution.\r\n", ch);
     if (GET_SYSTEM_POINTS(ch) < 10) {
@@ -1181,7 +1178,9 @@ const char *tog_messages[][2] = {
                             {"ANSI colors will no longer be enforced. You'll see the MUD in the intended colors.\r\n",
                              "You can now configure ANSI colors in your client.\r\n"},
                             {"Your modulator will now send alerts to all player doctors when you are mortally wounded.\r\n",
-                             "Your modulator will no longer send alerts to all player doctors when you go down.\r\n"}
+                             "Your modulator will no longer send alerts to all player doctors when you go down.\r\n"},
+                            {"You can now be followed again.\r\n",
+                             "OK, player characters are unable to follow you until you ^WTOGGLE NOFOLLOW^n again. You can lose existing followers with ^WUNFOLLOW X^n."}
                           };
 
 ACMD(do_toggle)
@@ -1455,6 +1454,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "alert doctors on mort") || is_abbrev(argument, "don't alert doctors on mort") || is_abbrev(argument, "doctors") || is_abbrev(argument, "docwagon")) {
       result = PRF_TOG_CHK(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT);
       mode = 48;
+    } else if (is_abbrev(argument, "nofollow") || is_abbrev(argument, "follow") || is_abbrev(argument, "no follow")) {
+      result = PRF_TOG_CHK(ch, PRF_NOFOLLOW);
+      mode = 49;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -2474,6 +2476,21 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
 
       send_to_char(CH, "7) Change Height: ^c%dcm^n\r\n", GET_HEIGHT(CH));
       send_to_char(CH, "8) Change Weight: ^c%dkg^n\r\n", GET_WEIGHT(CH));
+
+      {
+        struct room_data *error_suppressor = d->edit_mob->in_room;
+        d->edit_mob->in_room = &world[1];
+
+        // Prepend the number and qualifier...
+        send_to_char("\r\n9) Change Lifestyle: ", CH);
+
+        // Send the string. Splitting it like this capitalizes the string.
+        char colorized_lifestyle[1000];
+        snprintf(colorized_lifestyle, sizeof(colorized_lifestyle), "^c%s^n", get_lifestyle_string(d->edit_mob));
+        act(colorized_lifestyle, FALSE, d->edit_mob, 0, CH, TO_VICT_FORCE);
+
+        d->edit_mob->in_room = error_suppressor;
+      }
     }
   }
   if (mode)
@@ -2496,6 +2513,10 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       d->edit_mob = Mem->GetCh();
       d->edit_mob->player_specials = &dummy_mob;
 
+      // Copy over lifestyle-impacting information.
+      GET_PRONOUNS(d->edit_mob) = GET_PRONOUNS(CH);
+      GET_BEST_LIFESTYLE(d->edit_mob) = GET_BEST_LIFESTYLE(CH);
+
       if (STATE(d) == CON_BCUSTOMIZE)
         d->edit_mob->player.background = str_dup(CH->player.background);
       else if (STATE(d) == CON_FCUSTOMIZE) {
@@ -2509,6 +2530,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
           str_dup(CH->player.physical_text.look_desc);
         d->edit_mob->char_specials.arrive = str_dup(CH->char_specials.arrive);
         d->edit_mob->char_specials.leave = str_dup(CH->char_specials.leave);
+        set_lifestyle_string(d->edit_mob, get_lifestyle_string(CH));
       } else if (STATE(d) == CON_PCUSTOMIZE) {
         d->edit_mob->player.physical_text.keywords =
           str_dup(CH->player.matrix_text.keywords);
@@ -2592,6 +2614,9 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         CH->char_specials.leave = str_dup(d->edit_mob->char_specials.leave);
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", LeaveMsg='%s', Height=%d, Weight=%d", prepare_quotes(buf3, CH->char_specials.leave, sizeof(buf3) / sizeof(buf3[0])),
                 GET_HEIGHT(CH), GET_WEIGHT(CH));
+
+        set_lifestyle_string(CH, get_lifestyle_string(d->edit_mob));
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", lifestyle_string='%s'", prepare_quotes(buf3, get_lifestyle_string(CH), sizeof(buf3) / sizeof(buf3[0])));
       } else if (STATE(d) == CON_PCUSTOMIZE) {
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.keywords);
         CH->player.matrix_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
@@ -2741,6 +2766,9 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         d->edit_mode = CEDIT_WEIGHT;
       }
       break;
+    case '9':
+      cedit_lifestyle_menu(d);
+      break;
     default:
       cedit_disp_menu(d, 0);
       break;
@@ -2748,11 +2776,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     break;
   case CEDIT_HEIGHT:
-    GET_HEIGHT(CH) = (int)gen_size(GET_RACE(CH), 1, atoi(arg), GET_SEX(CH));
+    GET_HEIGHT(CH) = (int)gen_size(GET_RACE(CH), 1, atoi(arg), GET_PRONOUNS(CH));
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_WEIGHT:
-    GET_WEIGHT(CH) = (int)gen_size(GET_RACE(CH), 0, atoi(arg), GET_SEX(CH));
+    GET_WEIGHT(CH) = (int)gen_size(GET_RACE(CH), 0, atoi(arg), GET_PRONOUNS(CH));
     cedit_disp_menu(d, 0);
     break;
   case CEDIT_ALIAS:
@@ -2795,6 +2823,9 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     DELETE_ARRAY_IF_EXTANT(d->edit_mob->char_specials.leave);
     d->edit_mob->char_specials.leave = str_dup(arg);
     cedit_disp_menu(d, 0);
+    break;
+  case CEDIT_LIFESTYLE:
+    cedit_lifestyle_parse(d, arg);
     break;
   case CEDIT_SHORT_DESC:
     if (strlen(arg) >= MAX_SHORTDESC_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5) {
@@ -3056,7 +3087,7 @@ ACMD(do_photo)
     if (ch->in_veh)
       ch->in_room = get_ch_in_room(ch);
     snprintf(buf2, sizeof(buf2), "a photo of %s", GET_ROOM_NAME(ch->in_room));
-    snprintf(buf, sizeof(buf), "^c%s^n\r\n%s", GET_ROOM_NAME(ch->in_room), GET_ROOM_DESC(ch->in_room));
+    snprintf(buf, sizeof(buf), "^c%s^n\r\n%s", GET_ROOM_NAME(ch->in_room), get_room_desc(ch->in_room));
     for (struct char_data *tch = ch->in_room->people; tch; tch = tch->next_in_room)
       if (tch != ch && !(AFF_FLAGGED(tch, AFF_IMP_INVIS) || AFF_FLAGGED(tch, AFF_SPELLIMPINVIS)) && GET_INVIS_LEV(tch) < 2) {
         if (IS_NPC(tch) && tch->player.physical_text.room_desc &&
@@ -3396,7 +3427,7 @@ ACMD(do_assense)
       strlcpy(buf, make_desc(ch, vict, buf2, 2, FALSE, sizeof(buf2)), sizeof(buf));
       if (success < 3) {
         if (vict->cyberware) {
-          if (GET_SEX(vict) != SEX_NEUTRAL || (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE)))
+          if (GET_PRONOUNS(vict) != PRONOUNS_NEUTRAL || (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_INANIMATE)))
             strlcat(buf, " has cyberware present and", sizeof(buf));
           else
             strlcat(buf, " have cyberware present and", sizeof(buf));
@@ -4227,16 +4258,18 @@ ACMD(do_flip)
 ACMD(do_dice)
 {
   int dice = 0, tn = 0, suc = 0, roll = 0, tot = 0;
-  two_arguments(argument, buf, buf1);
+  const char *remainder = two_arguments(argument, buf, buf1);
   if (!*buf) {
     send_to_char("Roll how many dice?\r\n", ch);
     return;
   }
   dice = atoi(buf);
-  snprintf(buf, sizeof(buf), "%d dice are rolled by $n ", dice);
-  if (*buf1) {
+  snprintf(buf, sizeof(buf), "%d dice are %srolled by $n ", dice, subcmd == SCMD_PRIVATE_ROLL ? "privately " : "");
+  if (*buf1 && atoi(buf1)) {
     tn = MAX(2, atoi(buf1));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "against a TN of %d ", tn);
+  } else {
+    remainder = buf1;
   }
   if (dice <= 0) {
     send_to_char("You have to roll at least 1 die.\r\n", ch);
@@ -4258,9 +4291,30 @@ ACMD(do_dice)
     }
     strlcat(buf, ".", sizeof(buf));
     if (tn > 0)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d successes.", suc);
-    act(buf, FALSE, ch, 0, 0, TO_ROOM);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d success%s.", suc, suc == 1 ? "" : "es");
+
+    if (remainder && *remainder) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (note: %s^n)", remainder);
+    }
+    
+    // Message the roller.
     act(buf, FALSE, ch, 0, 0, TO_CHAR);
+
+    if (subcmd != SCMD_PRIVATE_ROLL) {
+      // Message the whole room.
+      act(buf, FALSE, ch, 0, 0, TO_ROOM);
+    } else {
+      // Only message staff chars in the room.
+      for (struct char_data *vict = (ch->in_room ? ch->in_room->people : ch->in_veh->people); 
+           vict; 
+           vict = (ch->in_room ? vict->next_in_room : vict->next_in_veh))
+      {
+        // Don't double-message staff rollers
+        if (IS_SENATOR(vict) && vict != ch) {
+          act(buf, FALSE, ch, 0, vict, TO_VICT);
+        }
+      }
+    }
   }
 }
 
@@ -4377,7 +4431,7 @@ ACMD(do_cpool)
     do_pool(ch, argument, 0, 0);
     return;
   }
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
   dodge = atoi(arg);
 
   if (dodge == 0 && *arg != '0') {
@@ -4385,7 +4439,7 @@ ACMD(do_cpool)
     return;
   }
 
-  half_chop(buf, argument, arg);
+  half_chop(buf, argument, arg, sizeof(arg));
   bod = atoi(argument);
   off = atoi(arg);
 
@@ -4412,7 +4466,7 @@ ACMD(do_cpool)
 ACMD(do_spool)
 {
   int cast = 0, drain = 0, def = 0, reflect = 0;
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
   if (!*arg) {
     do_pool(ch, argument, 0, 0);
     return;
@@ -4427,9 +4481,9 @@ ACMD(do_spool)
 
   FAILURE_CASE_PRINTF(cast > GET_SKILL(ch, SKILL_SORCERY), "You can't allocate more than %d dice to your casting pool (limited by Sorcery skill).", GET_SKILL(ch, SKILL_SORCERY));
 
-  half_chop(buf, argument, arg);
+  half_chop(buf, argument, arg, sizeof(arg));
   drain = atoi(argument);
-  half_chop(arg, argument, buf);
+  half_chop(arg, argument, buf, sizeof(buf));
   def = atoi(argument);
   reflect = atoi(buf);
 
@@ -4604,6 +4658,16 @@ ACMD(do_spray)
         if (nonalpha > 5 && (alpha / 4 < nonalpha)) {
           send_to_char("ASCII art doesn't play well with screenreaders, please write things out!\r\n", ch);
           return;
+        }
+      }
+
+      // Don't spam the same sprays.
+      if (ch->desc) {
+        if (!str_cmp(argument, ch->desc->last_sprayed)) {
+          send_to_char("For spam reduction reasons, you can't spray the same thing twice in a row.\r\n", ch);
+          return;
+        } else {
+          strlcpy(ch->desc->last_sprayed, argument, sizeof(ch->desc->last_sprayed));
         }
       }
 
@@ -4784,7 +4848,7 @@ ACMD(do_syspoints) {
       return;
     }
 
-    half_chop(argument, arg, buf);
+    half_chop(argument, arg, buf, sizeof(buf));
 
     if (!*arg) {
       send_to_char("See ^WHELP SYSPOINTS^n for command syntax.\r\n", ch);
@@ -4797,12 +4861,12 @@ ACMD(do_syspoints) {
 
 
       // Separate out the character name and amount fields.
-      half_chop(buf, target, arg);
+      half_chop(buf, target, arg, sizeof(arg));
       FAILURE_CASE(!*target, "Syntax: SYSPOINTS TRANSFER <target> <amount> <reason>.");
       FAILURE_CASE_PRINTF(!*amt, "You must specify an amount to transfer to %s.", target);
 
       // Separate out the reason field.
-      half_chop(arg, amt, reason);
+      half_chop(arg, amt, reason, sizeof(reason));
       FAILURE_CASE(!*reason, "You must specify a reason for this transfer.");
 
       // Parse and validate the amount.
@@ -5047,7 +5111,7 @@ ACMD(do_syspoints) {
   }
 
   // Viable modes: award deduct show
-  half_chop(argument, arg, buf);
+  half_chop(argument, arg, buf, sizeof(buf));
 
   if (!*arg) {
     send_to_char("Syntax: syspoints <award|deduct|show> <target>\r\n", ch);
@@ -5090,8 +5154,8 @@ ACMD(do_syspoints) {
   }
 
   // deduct and award modes.
-  half_chop(buf, target, buf2);
-  half_chop(buf2, amt, reason);
+  half_chop(buf, target, buf2, sizeof(buf2));
+  half_chop(buf2, amt, reason, sizeof(reason));
 
   int k = atoi(amt);
 

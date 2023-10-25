@@ -17,6 +17,9 @@
 #include <sys/types.h>
 #include <stdarg.h>
 #include <iostream>
+#include <execinfo.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
@@ -44,7 +47,11 @@
 #include "bullet_pants.hpp"
 #include "invis_resistance_tests.hpp"
 #include "vision_overhaul.hpp"
+#include "newhouse.hpp"
+#include "interpreter.hpp"
 #include "ignore_system.hpp"
+#include "newmatrix.hpp"
+#include "quest.hpp"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -79,6 +86,8 @@ extern SPECIAL(fence);
 extern SPECIAL(taxi);
 extern SPECIAL(painter);
 extern SPECIAL(nerp_skills_teacher);
+
+ACMD_DECLARE(do_say);
 
 bool npc_can_see_in_any_situation(struct char_data *npc);
 
@@ -773,19 +782,19 @@ int str_cmp(const char *one, const char *two)
 /* str_str: A case-insensitive version of strstr */
 /* returns: A pointer to the first occurance of str2 in str1 */
 /* or a null pointer if it isn't found.                      */
-char *str_str( const char *str1, const char *str2 )
+char *str_str( const char *string, const char *keyword )
 {
   int i;
   char temp1[MAX_INPUT_LENGTH], temp2[MAX_INPUT_LENGTH];
 
-  for ( i = 0; *(str1 + i); i++ ) {
-    temp1[i] = LOWER(*(str1 + i));
+  for ( i = 0; *(string + i); i++ ) {
+    temp1[i] = LOWER(*(string + i));
   }
 
   temp1[i] = '\0';
 
-  for ( i = 0; *(str2 + i); i++ ) {
-    temp2[i] = LOWER(*(str2 + i));
+  for ( i = 0; *(keyword + i); i++ ) {
+    temp2[i] = LOWER(*(keyword + i));
   }
 
   temp2[i] = '\0';
@@ -3750,10 +3759,10 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount, const ch
 
   // Update the box's weight. We must fully subtract and re-add it due to miniscule ammo weight amounts.
   weight_change_object(ammobox, -GET_OBJ_WEIGHT(ammobox));
-  weight_change_object(ammobox, GET_AMMOBOX_QUANTITY(ammobox) * get_ammo_weight(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox)));
+  weight_change_object(ammobox, get_ammo_weight(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox)));
 
   // Calculate cost as count * multiplier (multiplier is per round)
-  GET_OBJ_COST(ammobox) = GET_AMMOBOX_QUANTITY(ammobox) * get_ammo_cost(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox));
+  GET_OBJ_COST(ammobox) = get_ammo_cost(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox));
 
   // Update the carrier's carry weight.
   if (ammobox->carried_by) {
@@ -3985,8 +3994,14 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
     return TRUE;
 
   // If your vision can't see in the ambient light, fail.
-  if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified))
-    return FALSE;
+  if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified)) {
+    if (get_character_light_sources(obj) <= 0) {
+      // They're not holding a light, so you can't see them.
+      return FALSE;
+    } else {
+      // fall through: the object you're trying to see has a light source, so you can see them.
+    }
+  }
 
   // If they're in an invis state (spell or setting) you can't handle, fail.
   if (!invis_ok(subj, obj))
@@ -4040,6 +4055,11 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
 
   // Fetch the room's light level. Note that light_level already handles flashlights etc.
   int room_light_level = light_level(provided_room);
+
+  // Special case: If you're holding a light, you get LIGHT_PARTLIGHT because you're theoretically pointing it at whatever you want to see
+  if (get_character_light_sources(sub) > 0) {
+    room_light_level = MAX(LIGHT_PARTLIGHT, room_light_level);
+  }
 
   // We already checked for thermo and ultra above, which means at that this point you have LL or Normal vision. You can't see in full darkness.
   if (room_light_level == LIGHT_FULLDARK) {
@@ -4828,7 +4848,7 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, str
   {
     if (ch) {
       char susbuf[1000];
-      snprintf(susbuf, sizeof(susbuf), "%s attempted to grid to room #%ld (%s), but it's not a legal gridguide destination.",
+      snprintf(susbuf, sizeof(susbuf), "%s attempted to calculate gridguide coords for room #%ld (%s), but it's not a legal gridguide destination.",
                GET_CHAR_NAME(ch),
                candidate_vnum,
                GET_ROOM_NAME(&world[candidate_rnum])
@@ -4842,7 +4862,7 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, str
   }
 
   // -4: Vehicle not compatible with room.
-  if (veh && !room_accessible_to_vehicle_piloted_by_ch(&world[candidate_rnum], veh, ch)) {
+  if (veh && !room_accessible_to_vehicle_piloted_by_ch(&world[candidate_rnum], veh, ch, FALSE)) {
     return -4;
   }
 
@@ -4878,60 +4898,95 @@ int get_zone_index_number_from_vnum(vnum_t vnum) {
   return -1;
 }
 
-bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch) {
-  // Flying vehicles can traverse any terrain.
+struct zone_data *get_zone_from_vnum(vnum_t vnum) {
+  int zone_num = get_zone_index_number_from_vnum(vnum);
+
+  if (zone_num >= 0)
+    return &zone_table[zone_num];
+  
+  return NULL;
+}
+
+#define SEND_MESSAGE(...) { if (send_message) { send_to_char(ch, __VA_ARGS__); } }
+bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch, bool send_message) {
+  if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE)) {
+    SEND_MESSAGE(CANNOT_GO_THAT_WAY);
+    return FALSE;
+  }
+
+  if (!IS_WATER(room) && !ROOM_FLAGGED(room, ROOM_ROAD) && !ROOM_FLAGGED(room, ROOM_GARAGE)) {
+    if (veh->type != VEH_BIKE && veh->type != VEH_DRONE) {
+      SEND_MESSAGE("That's not an easy path-- only drones and bikes have a chance of making it through.\r\n");
+      return FALSE;
+    }
+  }
+
+  if (!CH_CAN_ENTER_APARTMENT(room, ch)) {
+    SEND_MESSAGE("You can't use other people's garages without permission.\r\n");
+    return FALSE;
+  }
+
+  #ifdef DEATH_FLAGS
+    if (ROOM_FLAGGED(room, ROOM_DEATH)) {
+      SEND_MESSAGE(CANNOT_GO_THAT_WAY);
+      return FALSE;
+    }
+  #endif
+
+  // Prevent aircraft from traveling anywhere they're not supposed to be.
+  if (veh_is_aircraft(veh) && !ROOM_FLAGGED(room, ROOM_AIRCRAFT_CAN_DRIVE_HERE)) {
+    SEND_MESSAGE("That's not a taxiway.\r\n");
+    return FALSE;
+  }
+
+  // Flying vehicles can traverse any terrain, so only apply the following checks to non-flying ones going into potentially-inaccessible rooms.
   if (!ROOM_FLAGGED(room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(veh)) {
     // Non-flying vehicles can't pass fall rooms.
     if (ROOM_FLAGGED(room, ROOM_FALL)) {
+      SEND_MESSAGE("%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
       return FALSE;
     }
 
     // Check to see if your vehicle can handle the terrain type you're giving it.
     if (IS_WATER(room)) {
       if (!veh_can_traverse_water(veh)) {
+        SEND_MESSAGE("%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
         return FALSE;
       }
     } else {
       if (!veh_can_traverse_land(veh)) {
+        SEND_MESSAGE("You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(veh));
         return FALSE;
       }
     }
   }
 
-  if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(ch, GET_ROOM_VNUM(room))) {
-    return FALSE;
-  }
-
-  if (!IS_WATER(room) && !ROOM_FLAGGED(room, ROOM_ROAD) && !ROOM_FLAGGED(room, ROOM_GARAGE)) {
-    if (veh->type != VEH_BIKE && veh->type != VEH_DRONE)
-      return FALSE;
-  }
-
-  if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE))
-    return FALSE;
-
-  #ifdef DEATH_FLAGS
-    if (ROOM_FLAGGED(room, ROOM_DEATH)) {
+  if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS)) {
+    if (veh->type != VEH_DRONE) {
+      SEND_MESSAGE("Your vehicle is too big to fit in there, but a small drone might make it in.\r\n");
       return FALSE;
     }
-  #endif
-
-  if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && (veh->body > 1 || veh->type != VEH_DRONE)) {
-    return FALSE;
+    if (veh->body > 1) {
+      SEND_MESSAGE("Your drone is too big to fit in there. You'll need a tiny one (1 BOD or less).\r\n");
+      return FALSE;
+    }
   }
 
   for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
     if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY) && !IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
+      SEND_MESSAGE("Everyone in the vehicle must be a member of the game's administration to go there.\r\n");
       return FALSE;
     }
 
-    if (ROOM_FLAGGED(room, ROOM_HOUSE) && !House_can_enter(tch, GET_ROOM_VNUM(room))) {
+    if (!CH_CAN_ENTER_APARTMENT(room, tch)) {
+      SEND_MESSAGE("Everyone in the vehicle must be a guest of the apartment to go there.\r\n");
       return FALSE;
     }
   }
 
   return TRUE;
 }
+#undef SEND_MESSAGE
 
 bool veh_can_traverse_land(struct veh_data *veh) {
   if (veh_can_traverse_air(veh) || veh->flags.IsSet(VFLAG_AMPHIB)) {
@@ -4943,15 +4998,13 @@ bool veh_can_traverse_land(struct veh_data *veh) {
     case VEH_BIKE:
     case VEH_CAR:
     case VEH_TRUCK:
-    case VEH_FIXEDWING:
-    case VEH_ROTORCRAFT:
-    case VEH_VECTORTHRUST:
     case VEH_HOVERCRAFT:
-    case VEH_LTA:
+    case VEH_TRACKED:
+    case VEH_WALKER:
       return TRUE;
   }
 
-  return FALSE;
+  return veh_is_aircraft(veh);
 }
 
 bool veh_can_traverse_water(struct veh_data *veh) {
@@ -4960,17 +5013,13 @@ bool veh_can_traverse_water(struct veh_data *veh) {
   }
 
   switch (veh->type) {
-    case VEH_FIXEDWING:
-    case VEH_ROTORCRAFT:
-    case VEH_VECTORTHRUST:
     case VEH_HOVERCRAFT:
     case VEH_MOTORBOAT:
     case VEH_SHIP:
-    case VEH_LTA:
       return TRUE;
   }
 
-  return FALSE;
+  return veh_is_aircraft(veh);
 }
 
 bool veh_can_traverse_air(struct veh_data *veh) {
@@ -4978,15 +5027,7 @@ bool veh_can_traverse_air(struct veh_data *veh) {
     return TRUE;
   }
 
-  switch (veh->type) {
-    case VEH_FIXEDWING:
-    case VEH_ROTORCRAFT:
-    case VEH_VECTORTHRUST:
-    case VEH_LTA:
-      return TRUE;
-  }
-
-  return FALSE;
+  return veh_is_aircraft(veh);
 }
 
 int get_pilot_skill_for_veh(struct veh_data *veh) {
@@ -5193,11 +5234,11 @@ struct obj_data *make_new_finished_part(int part_type, int mpcp, int rating=0) {
   GET_PART_RATING(part) = rating;
 
   part->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
-  part->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NORENT);
   part->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+  part->obj_flags.extra_flags.SetBit(ITEM_EXTRA_STAFF_ONLY);
 
   char restring[500];
-  snprintf(restring, sizeof(restring), "a rating-%d %s part (MPCP %d)", rating, parts[part_type].name, mpcp);
+  snprintf(restring, sizeof(restring), "a rating-%d %s part (MPCP %d, STAFF)", rating, parts[part_type].name, mpcp);
   part->restring = str_dup(restring);
 
   return part;
@@ -5218,7 +5259,7 @@ struct obj_data *make_new_finished_program(int part_type, int mpcp, int rating=0
   GET_PROGRAM_RATING(prog) = rating;
 
   prog->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
-  prog->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NORENT);
+  prog->obj_flags.extra_flags.SetBit(ITEM_EXTRA_STAFF_ONLY);
   prog->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
 
   char restring[500];
@@ -5238,6 +5279,8 @@ struct obj_data *make_staff_deck_target_mpcp(int mpcp) {
   obj_to_obj(make_new_finished_part(PART_MASKING, mpcp, (int) (mpcp / 3)), new_deck);
   obj_to_obj(make_new_finished_part(PART_ASIST_HOT, mpcp), new_deck);
   obj_to_obj(make_new_finished_part(PART_RAS_OVERRIDE, mpcp), new_deck);
+  obj_to_obj(make_new_finished_part(PART_STORAGE, mpcp, mpcp * 600), new_deck);
+  obj_to_obj(make_new_finished_part(PART_ACTIVE, mpcp, mpcp * 250), new_deck);
 
   // Add software.
   for (int soft_type = SOFT_ATTACK; soft_type <= SOFT_LOCKON; soft_type++) {
@@ -5253,8 +5296,8 @@ struct obj_data *make_staff_deck_target_mpcp(int mpcp) {
   GET_CYBERDECK_IS_INCOMPLETE(new_deck) = FALSE;
 
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
-  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NORENT);
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_STAFF_ONLY);
 
   char restring[500];
   snprintf(restring, sizeof(restring), "a staff-only MPCP-%d cyberdeck", mpcp);
@@ -5549,138 +5592,332 @@ void render_targets_abilities_to_viewer(struct char_data *viewer, struct char_da
 #endif
 }
 
-bool keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords, bool search_name, bool search_desc) {
+#define CHECK_KEYWORD(target_string, context) {if ((target_string) && isname(keyword, get_string_after_color_code_removal((target_string), NULL))) { return (context); }}
+const char * keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords, bool search_name, bool search_desc) {
   if (!keyword || !*keyword) {
-    return FALSE;
+    return NULL;
   }
 
   if (!obj) {
     mudlog("SYSERR: Received NULL obj to keyword_appears_in_obj()!", NULL, LOG_SYSLOG, TRUE);
-    return FALSE;
+    return NULL;
   }
 
-  if (search_keywords && isname(keyword, obj->text.keywords))
-    return TRUE;
+  if (search_keywords) {
+    CHECK_KEYWORD(obj->text.keywords, "keyword");
+  }
 
   if (search_name) {
-    if (isname(keyword, get_string_after_color_code_removal(obj->text.name, NULL)))
-      return TRUE;
-    if (obj->restring && isname(keyword, get_string_after_color_code_removal(obj->restring, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(obj->text.name, "name");
+    CHECK_KEYWORD(obj->restring, "restring");
   }
 
   if (search_desc) {
-    if (isname(keyword, get_string_after_color_code_removal(obj->text.room_desc, NULL)))
-      return TRUE;
-    if (isname(keyword, get_string_after_color_code_removal(obj->text.look_desc, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(obj->text.room_desc, "room desc");
+    CHECK_KEYWORD(obj->text.look_desc, "look desc");
   }
 
-  return FALSE;
+  return NULL;
 }
 
-bool keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords, bool search_name, bool search_desc) {
+const char * keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords, bool search_name, bool search_desc) {
   if (!keyword || !*keyword) {
-    return FALSE;
+    return NULL;
   }
 
   if (!ch) {
     mudlog("SYSERR: Received NULL ch to keyword_appears_in_char()!", NULL, LOG_SYSLOG, TRUE);
-    return FALSE;
+    return NULL;
   }
 
-  if (search_keywords && isname(keyword, ch->player.physical_text.keywords))
-    return TRUE;
+  if (search_keywords) {
+    CHECK_KEYWORD(ch->player.physical_text.keywords, "keywords");
+  }
 
   if (search_name) {
-    if (isname(keyword, get_string_after_color_code_removal(ch->player.physical_text.name, NULL)))
-      return TRUE;
-    if (ch->player.char_name && isname(keyword, get_string_after_color_code_removal(ch->player.char_name, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(ch->player.physical_text.name, "physical name");
+    CHECK_KEYWORD(ch->player.char_name, "name");
   }
 
   if (search_desc) {
-    if (isname(keyword, get_string_after_color_code_removal(ch->player.physical_text.room_desc, NULL)))
-      return TRUE;
-    if (isname(keyword, get_string_after_color_code_removal(ch->player.physical_text.look_desc, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(ch->player.physical_text.room_desc, "room desc");
+    CHECK_KEYWORD(ch->player.physical_text.look_desc, "look desc");
 
     // Since this is not a common use case, we use full keyword matching here to prevent mixups like 'hu' from 'hunter' matching 'human'
     if (!str_cmp(keyword, pc_race_types[(int) GET_RACE(ch)]))
-      return TRUE;
-    if (!str_cmp(keyword, genders[(int) GET_SEX(ch)]))
-      return TRUE;
+      return "race";
+    if (!str_cmp(keyword, genders[(int) GET_PRONOUNS(ch)]))
+      return "pronoun";
   }
 
   return FALSE;
 }
 
-bool keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name, bool search_desc) {
+const char * keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name, bool search_desc, bool search_messages) {
   if (!keyword || !*keyword) {
-    return FALSE;
+    return NULL;
   }
 
   if (!veh) {
     mudlog("SYSERR: Received NULL veh to keyword_appears_in_veh()!", NULL, LOG_SYSLOG, TRUE);
-    return FALSE;
+    return NULL;
   }
 
   if (search_name) {
-    if (isname(keyword, get_string_after_color_code_removal(veh->name, NULL)))
-      return TRUE;
-    if (veh->restring && isname(keyword, get_string_after_color_code_removal(veh->restring, NULL)))
-      return TRUE;
-    if (isname(keyword, get_string_after_color_code_removal(veh->description, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(veh->name, "name");
+    CHECK_KEYWORD(veh->restring, "restring");
+    CHECK_KEYWORD(veh->description, "description");
   }
 
   if (search_desc) {
-    if (isname(keyword, get_string_after_color_code_removal(veh->long_description, NULL)))
-      return TRUE;
-    if (veh->restring_long && isname(keyword, get_string_after_color_code_removal(veh->restring_long, NULL)))
-      return TRUE;
+    CHECK_KEYWORD(veh->long_description, "long desc");
+    CHECK_KEYWORD(veh->restring_long, "restring");
+    CHECK_KEYWORD(veh->rear_description, "rear desc");
+    CHECK_KEYWORD(veh->inside_description, "front desc");
   }
+
+  if (search_messages) {
+    CHECK_KEYWORD(veh->arrive, "arrive msg");
+    CHECK_KEYWORD(veh->leave, "leave msg");
+  }
+
+  return NULL;
+}
+
+const char * keyword_appears_in_room(const char *keyword, struct room_data *room, bool search_name, bool search_descs, bool search_exits) {
+  if (!keyword || !*keyword) {
+    return NULL;
+  }
+
+  if (!room) {
+    mudlog("SYSERR: Received NULL room to keyword_appears_in_room()!", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  if (search_name) {
+    CHECK_KEYWORD(GET_ROOM_NAME(room), "name");
+  }
+
+  if (search_descs) {
+    CHECK_KEYWORD(room->description, "desc");
+    CHECK_KEYWORD(room->night_desc, "night desc");
+    
+    for (struct extra_descr_data *ed = room->ex_description; ed; ed = ed->next) {
+      CHECK_KEYWORD(ed->keyword, "exdesc keyword");
+      CHECK_KEYWORD(ed->description, "exdesc desc");
+    }
+  }
+
+  if (search_exits) {
+    for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+      if (!EXIT2(room, dir))
+        continue;
+
+      CHECK_KEYWORD(EXIT2(room, dir)->general_description, "exit general");
+      CHECK_KEYWORD(EXIT2(room, dir)->go_into_secondperson, "exit 2p into");
+      CHECK_KEYWORD(EXIT2(room, dir)->go_into_thirdperson, "exit 3p into");
+      CHECK_KEYWORD(EXIT2(room, dir)->come_out_of_thirdperson, "exit 3p leave");
+      CHECK_KEYWORD(EXIT2(room, dir)->keyword, "exit keyword");
+    }
+  }
+
+  return NULL;
+}
+
+const char * keyword_appears_in_host(const char *keyword, struct host_data *host, bool search_name, bool search_descs, bool search_messages) {
+  if (!keyword || !*keyword) {
+    return NULL;
+  }
+
+  if (!host) {
+    mudlog("SYSERR: Received NULL host to keyword_appears_in_host()!", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  if (search_name) {
+    CHECK_KEYWORD(host->name, "name");
+    CHECK_KEYWORD(host->keywords, "keywords");
+  }
+
+  if (search_descs) {
+    CHECK_KEYWORD(host->desc, "desc");
+  }
+
+  if (search_messages) {
+    CHECK_KEYWORD(host->shutdown_start, "shutdown start");
+    CHECK_KEYWORD(host->shutdown_stop, "shutdown stop");
+  }
+
+  return NULL;
+}
+
+const char * keyword_appears_in_icon(const char *keyword, struct matrix_icon *icon, bool search_name, bool search_descs) {
+  if (!keyword || !*keyword) {
+    return NULL;
+  }
+
+  if (!icon) {
+    mudlog("SYSERR: Received NULL icon to keyword_appears_in_icon()!", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  if (search_name) {
+    CHECK_KEYWORD(icon->name, "name");
+  }
+
+  if (search_descs) {
+    CHECK_KEYWORD(icon->long_desc, "long desc");
+    CHECK_KEYWORD(icon->look_desc, "look desc");
+  }
+
+  return NULL;
+}
+
+const char * keyword_appears_in_quest(const char *keyword, struct quest_data *quest) {
+  if (!keyword || !*keyword) {
+    return NULL;
+  }
+
+  if (!quest) {
+    mudlog("SYSERR: Received NULL icon to keyword_appears_in_quest()!", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  CHECK_KEYWORD(quest->intro, "intro");
+  CHECK_KEYWORD(quest->decline, "decline");
+  CHECK_KEYWORD(quest->quit, "quit");
+  CHECK_KEYWORD(quest->finish, "finish");
+  CHECK_KEYWORD(quest->info, "info");
+  CHECK_KEYWORD(quest->s_string, "start speech");
+  CHECK_KEYWORD(quest->e_string, "end speech");
+  CHECK_KEYWORD(quest->done, "done speech");
+  CHECK_KEYWORD(quest->intro_emote, "intro emote");
+  CHECK_KEYWORD(quest->decline_emote, "decline emote");
+  CHECK_KEYWORD(quest->quit_emote, "quit emote");
+  CHECK_KEYWORD(quest->finish_emote, "finish emote");
+
+  if (quest->info_emotes) {
+    for (auto em : *(quest->info_emotes)) {
+    CHECK_KEYWORD(em, "info emote");
+  }
+  }
+  
 
   return FALSE;
 }
+#undef CHECK_KEYWORD
+
+void mob_say(struct char_data *mob, const char *msg) {
+  static char not_const[MAX_STRING_LENGTH];
+  strlcpy(not_const, msg, sizeof(not_const));
+  do_say(mob, not_const, 0, 0);
+}
+
+const char *get_room_desc(struct room_data *room) {
+  static char room_desc[MAX_STRING_LENGTH];
+  strlcpy(room_desc, "  (null)\r\n", sizeof(room_desc));
+
+  if (!room) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL room to GET_ROOM_DESC()!", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
+    return room_desc;
+  }
+
+  if (room->temp_desc && room->temp_desc_timeout > 0) {
+    snprintf(room_desc, sizeof(room_desc), "  %s", room->temp_desc);
+  } else if (GET_APARTMENT_DECORATION(room)) {
+    strlcpy(room_desc, GET_APARTMENT_DECORATION(room), sizeof(room_desc));
+  } else if (weather_info.sunlight == SUN_DARK && room->night_desc) {
+    strlcpy(room_desc, room->night_desc, sizeof(room_desc));
+  } else if (room->description) {
+    strlcpy(room_desc, room->description, sizeof(room_desc));
+  } else {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Room %s (%ld) has all NULL descriptions!", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
+  }
+
+  return room_desc;
+}
+
+// Return TRUE if all chars in string are in [a-zA-Z0-9_.'"-], FALSE otherwise
+bool string_is_valid_for_paths(const char *str) {
+  for (const char *c = str; *c; c++) {
+    if (!isalnum(*c) && *c != '_' && *c != '-' && *c != '.' && *c != '\'' && *c != '"' && *c != ' ')
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
+bool chars_are_in_same_location(struct char_data *ch, struct char_data *vict) {
+  return (ch->in_room ? ch->in_room == vict->in_room : ch->in_veh == vict->in_veh);
+}
+
+struct char_data *ch_is_grouped_with_idnum(struct char_data *ch, idnum_t idnum) {
+  // Sanity checks.
+  if (!ch || idnum <= 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid parameter to ch_is_grouped_with_idnum(%s, %ld)!", 
+                    ch ? GET_CHAR_NAME(ch) : NULL, 
+                    idnum);
+    return NULL;
+  }
+
+  // If the idnum is you, congratulations! You're always grouped with yourself.
+  if (GET_IDNUM_EVEN_IF_PROJECTING(ch) == idnum)
+    return ch;
+
+  // Otherwise, you can only be associated with grouped people.
+  if (!AFF_FLAGGED(ch, AFF_GROUP))
+    return NULL;
+  
+  // Check your followers for the specified idnum.
+  for (struct follow_type *f = ch->followers; f; f = f->next) {
+    if (GET_IDNUM_EVEN_IF_PROJECTING(f->follower) == idnum) {
+      // You found them!
+      if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
+        send_to_char(ch, "%s must be part of your group in order for you to participate in their quest.\r\n", GET_CHAR_NAME(f->follower));
+        return NULL;
+      }
+      return f->follower;
+    }
+  }
+
+  // Check your leader.
+  if (ch->master && idnum == GET_IDNUM_EVEN_IF_PROJECTING(ch->master)) {
+    if (!AFF_FLAGGED(ch->master, AFF_GROUP)) {
+      send_to_char(ch, "You must be part of %s's group in order for you to participate in their quest.\r\n", GET_CHAR_NAME(ch->master));
+      return NULL;
+    }
+    return ch->master;
+  }
+
+  // Nobody found.
+  return NULL;
+}
 
 bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor) {
+  struct char_data *questor;
+  
   // Not quest-protected.
   if (!obj->obj_flags.quest_id)
     return FALSE;
 
-  // NPCs can never pick up quest objects.
-  if (!ch->desc)
-    return TRUE;
-
-  // Character is the questor.
+  // Character is the questor, so won't be blocked.
   if (obj->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
     return FALSE;
 
   // Are you grouped with the questor?
-  if (AFF_FLAGGED(ch, AFF_GROUP)) {
-    // Followers
-    for (struct follow_type *f = ch->followers; f; f = f->next) {
-      if (!IS_NPC(f->follower)
-          && AFF_FLAGGED(f->follower, AFF_GROUP)
-          && GET_IDNUM(f->follower) == obj->obj_flags.quest_id)
-      {
-        if (requires_ch_to_be_in_same_room_as_questor && ch->in_room != f->follower->in_room) {
-          send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(f->follower));
-          return TRUE;
-        }
+  if ((questor = ch_is_grouped_with_idnum(ch, obj->obj_flags.quest_id))) {
+    // If you're grouped with them but aren't in the same room for a location-locked quest, you're blocked.
+    if (requires_ch_to_be_in_same_room_as_questor && !chars_are_in_same_location(ch, questor)) {
+      send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(questor));
+
+      if (access_level(ch, LVL_PRESIDENT)) {
+        act("...but you bypass the location restriction on $p.", FALSE, ch, obj, 0, TO_CHAR);
         return FALSE;
       }
+      return TRUE;
     }
-
-    // Master
-    if (ch->master && !IS_NPC(ch->master) && obj->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch->master)) {
-      if (requires_ch_to_be_in_same_room_as_questor && ch->in_room != ch->master->in_room) {
-        send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(ch->master));
-        return TRUE;
-      }
-      return FALSE;
-    }
+    // Otherwise, you're okay.
+    return FALSE;
   }
 
   // Staff bypass.
@@ -5707,26 +5944,9 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *
     return FALSE;
 */
 
-  // NPCs can't fight quest-protected things.
-  if (!ch->desc)
-    return TRUE;
-
-  // Check to see if you are grouped with someone who can fight it.
-  if (AFF_FLAGGED(ch, AFF_GROUP)) {
-    // Followers
-    for (struct follow_type *f = ch->followers; f; f = f->next) {
-      if (!IS_NPC(f->follower)
-          && AFF_FLAGGED(f->follower, AFF_GROUP)
-          && GET_IDNUM(f->follower) == victim->mob_specials.quest_id)
-      {
-        return FALSE;
-      }
-    }
-
-    // Master
-    if (ch->master && !IS_NPC(ch->master) && victim->mob_specials.quest_id == GET_IDNUM(ch->master)) {
-      return FALSE;
-    }
+  if (ch_is_grouped_with_idnum(ch, victim->mob_specials.quest_id)) {
+    // You're grouped with the questor, so you're good.
+    return FALSE;
   }
 
   return TRUE;
@@ -5854,6 +6074,178 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   FALSE_CASE_ACTOR(!PRF_FLAGGED(victim_original, PRF_PKER) && !PRF_FLAGGED(victim_original, PLR_KILLER), "Your victim must ##^WTOGGLE PK^n before you can do that.\r\n");
 
   return TRUE;
+}
+
+bool veh_is_aircraft(struct veh_data *veh) {
+  switch (veh->type) {
+    case VEH_FIXEDWING:
+    case VEH_LTA:
+    case VEH_ROTORCRAFT:
+    case VEH_VECTORTHRUST:
+    case VEH_SEMIBALLISTIC:
+    case VEH_SUBORBITAL:
+      return TRUE;
+  }
+  return FALSE;
+}
+
+// Recursively count this object and its contents.
+int count_object_including_contents(struct obj_data *obj) {
+  int count = 1; // self
+
+  for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
+    count += count_object_including_contents(contained);
+  }
+
+  return count;
+}
+
+// Get and return the count of all objects contained in this room. Does not include vehicle objects.
+int count_objects_in_room(struct room_data *room) {
+  int count = 0;
+
+  for (struct obj_data *contents = room->contents; contents; contents = contents->next_content) {
+    count += count_object_including_contents(contents);
+  }
+
+  return count;
+}
+
+// Get and return the count of all objects in this vehicle, including in nested vehicles.
+int count_objects_in_veh(struct veh_data *veh) {
+  int count = 0;
+
+  for (struct obj_data *contained = veh->contents; contained; contained = contained->next_content) {
+    count += count_object_including_contents(contained);
+  }
+
+  for (struct veh_data *contained = veh->carriedvehs; contained; contained = contained->next_veh) {
+    count += count_objects_in_veh(contained);
+  }
+
+  return count;
+}
+
+bool obj_is_apartment_only_drop_item(struct obj_data *obj) {
+  if (!obj) {
+    mudlog("SYSERR: Received NULL object to obj_is_apartment_only_drop_item()!", NULL, LOG_SYSLOG, TRUE);
+    return TRUE;
+  }
+
+  switch (GET_OBJ_TYPE(obj)) {
+    case ITEM_CUSTOM_DECK:
+      return obj->contains;
+    case ITEM_CYBERWARE:
+    case ITEM_BIOWARE:
+    case ITEM_MAGIC_TOOL:
+      return TRUE;
+    case ITEM_DECK_ACCESSORY:
+      return (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PARTS);
+  }
+
+  return FALSE;
+}
+
+bool obj_contains_apartment_only_drop_items(struct obj_data *obj) {
+  if (!obj) {
+    mudlog("SYSERR: Received NULL object to obj_contains_apartment_only_drop_items()!", NULL, LOG_SYSLOG, TRUE);
+    return TRUE;
+  }
+
+  for (struct obj_data *cont = obj->contains; cont; cont = cont->next_content) {
+    if (obj_is_apartment_only_drop_item(cont))
+      return TRUE;
+
+    if (obj_contains_apartment_only_drop_items(cont))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+// Seemed marginally easier than copy-pasting this conversion all over for use in Boost functions.
+const char *vnum_to_string(vnum_t vnum) {
+  static char result[50];
+  snprintf(result, sizeof(result), "%ld", vnum);
+  return result;
+}
+
+const char *get_ch_domain_str(struct char_data *ch, bool include_possibilities) {
+  static char result[100];
+  strlcpy(result, "N/A", sizeof(result));
+
+  struct room_data *in_room;
+
+  if (!ch || !(in_room = get_ch_in_room(ch)))
+    return result;
+
+  if (GET_TRADITION(ch) != TRAD_SHAMANIC) {
+    // No change, just send back N/A.
+    return result;
+  }
+
+  // Sanity checks.
+  if (GET_DOMAIN(ch) < 0 || (GET_DOMAIN(ch) >= NUM_SPIRITS && GET_DOMAIN(ch) != SPIRIT_SPECIAL_DOMAIN_SKY)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s has unknown domain %s in get_ch_domain_str()!", GET_CHAR_NAME(ch), GET_DOMAIN(ch));
+    return result;
+  }
+
+  // The only available thing is sky? Just write that.
+  if (ROOM_SUPPORTS_SKY_DOMAIN(in_room) && GET_DOMAIN(ch) == SPIRIT_SPECIAL_DOMAIN_SKY) {
+    strlcpy(result, "Sky", sizeof(result));
+  } 
+  // We either don't want possibilities, or there's only one possibility.
+  else if (!include_possibilities || (!ROOM_SUPPORTS_SKY_DOMAIN(in_room) && GET_DOMAIN(ch) != SPIRIT_SPECIAL_DOMAIN_SKY)) {
+    strlcpy(result, spirit_name_with_hearth[GET_DOMAIN(ch)], sizeof(result));
+  } 
+  // There are multiple possibilities.
+  else {
+    // Sky and something else.
+    int something_else = (GET_DOMAIN(ch) == SPIRIT_SPECIAL_DOMAIN_SKY ? SECT(in_room) : GET_DOMAIN(ch));
+    snprintf(result, sizeof(result), "%s, Sky", spirit_name_with_hearth[something_else]);
+  }
+
+  return result;
+}
+
+void zero_cost_of_obj_and_contents(struct obj_data *obj) {
+  for (;obj;obj = obj->next_content)
+  {
+    // Recurse.
+    if (obj->contains)
+      zero_cost_of_obj_and_contents(obj->contains);
+
+    // Zero the value. (We don't want to zero out conjuring mats etc)
+    if (GET_OBJ_TYPE(obj) != ITEM_MAGIC_TOOL) {
+      GET_OBJ_COST(obj) = 0;
+    }
+
+    // Flag it so it can't be sold.
+    GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_NOSELL);
+  }
+}
+
+void log_traceback(const char *format, ...) {
+  // Compose our context string.
+  char context[100000];
+  {
+    va_list args;
+    va_start(args, format);
+    vsnprintf(context, sizeof(context), format, args);
+    va_end(args);
+  }
+
+  // Print a backtrace.
+  {
+    void *array[15];
+
+    // get void*'s for all entries on the stack
+    size_t size = backtrace(array, 15);
+
+    // print out all the frames to stderr
+    fprintf(stderr, "Writing traceback for error context %s:\n", context);
+    backtrace_symbols_fd(array, size, STDERR_FILENO);
+  }
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

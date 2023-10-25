@@ -1259,7 +1259,7 @@ void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_d
         act("$n shifts $s grip on $p, trying to get inside your guard!", TRUE, att->ch, att->weapon, def->ch, TO_VICT);
       } else {
         act("$n ducks in close, trying to get inside $N's guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
-        act("$n ducks in close, trying to get inside your guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
+        act("$n ducks in close, trying to get inside your guard!", TRUE, att->ch, NULL, def->ch, TO_VICT);
       }
     }
 

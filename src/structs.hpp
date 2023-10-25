@@ -22,6 +22,10 @@
 #include "vision_overhaul.hpp"
 #include "drugs.hpp"
 
+class ApartmentComplex;
+class Apartment;
+class ApartmentRoom;
+
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)
 #define WSPEC(name) \
@@ -59,6 +63,7 @@ struct text_data
   char *name;
   char *room_desc;
   char *look_desc;
+  // Adding more strings? Make sure you update mclone, medit, etc.
 
   text_data() :
       keywords(NULL), name(NULL), room_desc(NULL), look_desc(NULL)
@@ -275,7 +280,17 @@ struct room_data
 
   struct obj_data *best_workshop[NUM_WORKSHOP_TYPES];
 
+  // Geolocation information for flight.
   float latitude, longitude;
+
+  // Apartment/housing information.
+  class Apartment *apartment;
+  class ApartmentRoom *apartment_room;
+
+  // Temp desc info.
+  char *temp_desc;
+  int temp_desc_timeout;
+  idnum_t temp_desc_author_idnum;
 
 #ifdef USE_DEBUG_CANARIES
   int canary;
@@ -287,7 +302,8 @@ struct room_data
       address(NULL), blood(0), debris(0), spec(0), rating(0), cover(0), crowd(0),
       type(0), x(0), y(0), z(0), peaceful(0), func(NULL), dirty_bit(FALSE),
       staff_level_lock(0), elevator_number(0), contents(NULL), people(NULL),
-      vehicles(NULL), watching(NULL), latitude(0), longitude(0)
+      vehicles(NULL), watching(NULL), latitude(0), longitude(0), apartment(NULL), apartment_room(NULL),
+      temp_desc(NULL), temp_desc_timeout(0), temp_desc_author_idnum(0)
   {
     ZERO_OUT_ARRAY(dir_option, NUM_OF_DIRS);
     ZERO_OUT_ARRAY(temporary_stored_exit, NUM_OF_DIRS);
@@ -430,7 +446,7 @@ struct char_player_data
   int multiplier;
   int salvation_ticks;
 
-  byte sex;                  /* PC / NPC's sex                       */
+  byte pronouns;                  /* PC / NPC's pronoun set and gender appearance  */
   byte level;
   long last_room;              /* PC s Hometown (zone)                 */
   struct time_data time;     /* PC's AGE in days                     */
@@ -444,7 +460,7 @@ struct char_player_data
   char_player_data() :
       char_name(NULL), background(NULL), title(NULL), pretitle(NULL), whotitle(NULL),
       prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL), email(NULL),
-      multiplier(0), salvation_ticks(5), sex(YES_PLEASE), level(0), last_room(NOWHERE),
+      multiplier(0), salvation_ticks(5), pronouns(PRONOUNS_NEUTRAL), level(0), last_room(NOWHERE),
       weight(0), height(0), race(0), tradition(TRAD_MUNDANE), aspect(0), host(NULL)
   {
     memset(passwd, 0, sizeof(passwd));
@@ -621,6 +637,7 @@ struct char_special_data
 
   const char *highlight_color_code;
   /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
+  // Touch olc's mclone, medit etc if it's a string.
 
   char_special_data() :
       fight_veh(NULL), fighting(NULL), hunting(NULL), programming(NULL), num_spirits(0), idnum(0),
@@ -647,6 +664,7 @@ struct player_special_data_saved
   vnum_t last_veh;
   Bitfield pref;        /* preference flags for PC's.           */
   ubyte bad_pws;               /* number of bad password attemps       */
+  ubyte automod_counter;
   sbyte conditions[3];         /* Drunk, full, thirsty                 */
 
   ubyte totem;                 /* totem player chooses                 */
@@ -663,11 +681,15 @@ struct player_special_data_saved
 
   int system_points;
 
+  int best_lifestyle;
+  const char *lifestyle_string;
+
   player_special_data_saved() :
     wimp_level(0), freeze_level(0), invis_level(0), incog_level(0), load_room(NOWHERE),
-    last_in(0), last_veh(NOTHING), bad_pws(0), totem(0), totemspirit(0),
+    last_in(0), last_veh(NOTHING), bad_pws(0), automod_counter(0), totem(0), totemspirit(0),
     att_points(0), skill_points(0), force_points(0), restring_points(0), zonenum(0),
-    archetype(0), archetypal(FALSE), system_points(0)
+    archetype(0), archetypal(FALSE), system_points(0), best_lifestyle(LIFESTYLE_SQUATTER), 
+    lifestyle_string(NULL)
   {
     ZERO_OUT_ARRAY(conditions, 3);
   }
@@ -782,6 +804,8 @@ struct veh_data
   char *restring;
   char *long_description;         /* long description when examined   */
   char *restring_long;
+  char *decorate_front;
+  char *decorate_rear;
   char *inside_description;       /*  Description inside the car      */
   char *rear_description;
   sbyte handling;
@@ -847,8 +871,9 @@ struct veh_data
 
   veh_data() :
       in_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
-      long_description(NULL), restring_long(NULL), inside_description(NULL), rear_description(NULL),
-      veh_destruction_timer(0), followers(NULL), following(NULL), followch(NULL), mount(NULL),
+      long_description(NULL), restring_long(NULL), decorate_front(NULL), decorate_rear(NULL),
+      inside_description(NULL), rear_description(NULL), veh_destruction_timer(0), 
+      followers(NULL), following(NULL), followch(NULL), mount(NULL),
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL), defined_position(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
       next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL),
@@ -1029,6 +1054,7 @@ struct descriptor_data
   struct descriptor_data *next; /* link to next descriptor              */
   struct ccreate_t ccr;
   int invalid_command_counter;
+  char last_sprayed[MAX_INPUT_LENGTH];
 
   long nuyen_paid_for_wheres_my_car;
   long nuyen_income_this_play_session[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES];
@@ -1055,6 +1081,12 @@ struct descriptor_data
   struct host_data *edit_host;  /* hedit */
   struct matrix_icon *edit_icon; /* icedit */
   struct help_data *edit_helpfile;
+  ApartmentComplex *edit_complex;
+  ApartmentComplex *edit_complex_original;
+  Apartment *edit_apartment;
+  Apartment *edit_apartment_original;
+  ApartmentRoom *edit_apartment_room;
+  ApartmentRoom *edit_apartment_room_original;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   Playergroup *edit_pgroup; /* playergroups */
@@ -1072,7 +1104,9 @@ struct descriptor_data
       invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
-      edit_helpfile(NULL), edit_pgroup(NULL), canary(CANARY_VALUE), pProtocol(NULL)
+      edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
+      edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
+      edit_apartment_room_original(NULL), edit_pgroup(NULL), canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
@@ -1082,6 +1116,9 @@ struct descriptor_data
     for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {
       nuyen_income_this_play_session[i] = 0;
     }
+
+    // Wipe last_sprayed.
+    last_sprayed[0] = '\0';
   }
 }
 ;
@@ -1323,6 +1360,30 @@ struct ban_list_element
   time_t date;
   char name[MAX_NAME_LENGTH+1];
   struct ban_list_element *next;
+};
+
+// For listing allowed max values for weapon types. Has settings for both ranged and melee.
+struct kosher_weapon_values_struct {
+    // Shared
+    int power;
+    int damage_code;
+    int skill;
+    int conceal;
+
+    // Ranged
+    int max_ammo;
+    bool can_ss;
+    bool can_sa;
+    bool can_bf;
+    bool can_fa;
+    int recoil_comp;
+    bool can_attach_bottom;
+    bool can_attach_barrel;
+    bool can_attach_top;
+
+    // Melee
+    int str_bonus;
+    int reach;
 };
 
 #endif

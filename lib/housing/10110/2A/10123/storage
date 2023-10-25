@@ -1,0 +1,25 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	31001
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	121
+		Inside:	0
+		Value 0:	321
+		Value 1:	14
+		Cost:	642
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal shotgun ammunition
+	[Object 2]
+		Vnum:	121
+		Inside:	0
+		Value 0:	24
+		Value 1:	14
+		Cost:	48
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal shotgun ammunition

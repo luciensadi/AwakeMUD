@@ -1,4 +1,5 @@
 // Point-to-point flight between rooms.
+#include <math.h>
 
 #include <math.h>
 
@@ -9,14 +10,80 @@
 #include "comm.hpp"
 #include "utils.hpp"
 #include "handler.hpp"
+#include "playergroups.hpp"
+#include "newhouse.hpp"
 #include "zoomies.hpp"
 
 // External prototypes.
 extern void chkdmg(struct veh_data * veh);
+ACMD_DECLARE(do_drive);
 
-// TODO: Test mortals logging in in the airborne room.
-// TODO: Confirm that rigged flight works. (RIG and CONTROL)
-// TODO: Prevent rigger from unrigging during flight. (this sounds shitty, especially for long flights?)
+// Internal prototypes.
+bool destination_is_within_flight_range(struct veh_data *veh, struct room_data *room);
+
+bool room_is_valid_flyto_destination(struct room_data *room, struct veh_data *veh, struct char_data *ch) {
+  // Must have a landing code.
+  if (!room->flight_code || !strcmp(room->flight_code, INVALID_FLIGHT_CODE))
+    return FALSE;
+
+  // Cannot be the same room.
+  if (veh->in_room == room) {
+#ifdef IS_BUILDPORT
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: It's the room you're currently in.)^n\r\n", GET_ROOM_NAME(room));
+#endif
+    return FALSE;
+  }
+
+  // Can't be a staff room if you're not a staffer.
+  if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY) && !IS_SENATOR(ch)) {
+#ifdef IS_BUILDPORT
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: It's staff only.)^n\r\n", GET_ROOM_NAME(room));
+#endif
+    return FALSE;
+  }
+
+  // Standard validity checks.
+  if (!veh_can_launch_from_or_land_at(veh, room)) {
+#ifdef IS_BUILDPORT
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: %s can't land there due to vehicle type restrictions.)^n\r\n", GET_ROOM_NAME(room), CAP(GET_VEH_NAME_NOFORMAT(veh)));
+#endif
+    return FALSE;
+  }
+
+  // Must be within range for your vehicle.
+  if (!destination_is_within_flight_range(veh, room)) {
+#ifdef IS_BUILDPORT
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: It's outside of %s's flight range.)^n\r\n", GET_ROOM_NAME(room), GET_VEH_NAME(veh));
+#endif
+    return FALSE;
+  }
+
+  // Can't be a PGHQ room if you're not in that PG. Staff override this.
+  struct zone_data *zone = get_zone_from_vnum(GET_ROOM_VNUM(room));
+  if (zone && zone->is_pghq && (IS_SENATOR(ch) || !(GET_PGROUP_MEMBER_DATA(ch) && GET_PGROUP(ch) && GET_PGROUP(ch)->controls_room(room)))) {
+#ifdef IS_BUILDPORT
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: It's a PGHQ you can't enter.)^n\r\n", GET_ROOM_NAME(room));
+#endif
+    return FALSE;
+  }
+
+  // Can't be an apartment if you don't have ownership or guest privileges there.
+  if (room->apartment && (!room->apartment->can_enter(ch) || !room->apartment->get_owner_id())) {
+#ifdef IS_BUILDPORT
+    if (IS_SENATOR(ch))
+      send_to_char(ch, "^L(Flight to %s denied: It's an apartment you can't enter.)^n\r\n", GET_ROOM_NAME(room));
+#endif
+    return FALSE;
+  }
+  
+  // Everything looks good.
+  return TRUE;
+}
 
 ACMD(do_flyto) {
   // FLYTO <destination code>
@@ -34,8 +101,13 @@ ACMD(do_flyto) {
     return;
   }
 
-  FAILURE_CASE_PRINTF(get_veh_controlled_by_char(ch) != veh, "You're not controlling %s.", GET_VEH_NAME(veh));
-
+  if (get_veh_controlled_by_char(ch) != veh) {
+    // Try to pilot it.
+    char argbuf[] = { '\0' };
+    do_drive(ch, argbuf, 0, 0);
+    FAILURE_CASE_PRINTF(get_veh_controlled_by_char(ch) != veh, "You're not controlling %s.", GET_VEH_NAME(veh));
+  }
+  
   // Is the flight system working?
   rnum_t in_flight_room_rnum = real_room(RM_AIRBORNE);
   if (in_flight_room_rnum < 0) {
@@ -59,8 +131,8 @@ ACMD(do_flyto) {
   if (!*argument) {
     send_to_char("You're aware of the following destinations:\r\n", ch);
     for (rnum_t rnum = 0; rnum <= top_of_world; rnum++) {
-      if (veh->in_room != &world[rnum] && veh_can_launch_from_or_land_at(veh, &world[rnum])) {
-        float distance = get_flight_distance_to_room(veh, &world[rnum]);
+      if (room_is_valid_flyto_destination(&world[rnum], veh, ch)) {
+        float distance = get_flight_distance_to_room(veh->in_room, &world[rnum]);
 
         send_to_char(ch, "%3s) %40s  (%.1f kms, %d nuyen in fuel)\r\n", 
                      GET_ROOM_FLIGHT_CODE(&world[rnum]), 
@@ -74,7 +146,7 @@ ACMD(do_flyto) {
 
   // They've provided a flight destination. Find it.
   for (rnum_t rnum = 0; rnum <= top_of_world; rnum++) {
-    if (veh_can_launch_from_or_land_at(veh, &world[rnum]) && !str_cmp(argument, GET_ROOM_FLIGHT_CODE(&world[rnum]))) {
+    if (room_is_valid_flyto_destination(&world[rnum], veh, ch) && !str_cmp(argument, GET_ROOM_FLIGHT_CODE(&world[rnum]))) {
       target_room = &world[rnum];
       break;
     }
@@ -84,11 +156,11 @@ ACMD(do_flyto) {
   FAILURE_CASE(target_room == veh->in_room, "You're already there.");
 
   // Valid destination. Calculate fuel cost.
-  float distance = get_flight_distance_to_room(veh, target_room);
+  float distance = get_flight_distance_to_room(veh->in_room, target_room);
   int fuel_cost = calculate_flight_cost(veh, distance);
 
-  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost, "It will cost %d nuyen for fuel and maintenance, but you only have %d on hand.", fuel_cost, GET_NUYEN(ch));
-  send_to_char(ch, "After purchasing the requisite fuel and maintenance for %d nuyen, you begin the takeoff process.\r\n", fuel_cost);
+  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost, "It will cost %d nuyen for fuel, maintenance, and fees, but you only have %d on hand.", fuel_cost, GET_NUYEN(ch));
+  send_to_char(ch, "After paying %d nuyen for the requisite fuel, maintenance, and fees, you begin the takeoff process.\r\n", fuel_cost);
   lose_nuyen(ch, fuel_cost, NUYEN_OUTFLOW_FLIGHT_FUEL);
 
   // Roll your flight test, which is modified by weather etc.
@@ -177,6 +249,11 @@ void send_flight_estimate(struct char_data *ch, veh_data *veh) {
     return;
   }
 
+  if (!ch) {
+    mudlog("SYSERR: Got NULL character to send_flight_estimate()!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
   float flight_irl_seconds = veh->flight_duration * (PULSE_FLIGHT / PASSES_PER_SEC);
   float flight_game_hours = flight_irl_seconds / SECS_PER_MUD_HOUR;
   int irl_minutes = (int) ceilf(flight_irl_seconds / 60);
@@ -184,9 +261,6 @@ void send_flight_estimate(struct char_data *ch, veh_data *veh) {
                flight_game_hours,
                irl_minutes,
                irl_minutes == 1 ? "" : "s");
-  if (IS_SENATOR(ch)) {
-    // send_to_char(ch, "(debug: duration %d, giving %f seconds, %f hours)\r\n", veh->flight_duration, flight_irl_seconds, flight_game_hours);
-  }
 }
 
 bool check_for_valid_launch_location(struct char_data *ch, struct veh_data *veh, bool message) {
@@ -236,14 +310,19 @@ double degrees_to_radians(float degrees) {
 }
 
 #define EARTH_RADIUS_KM 6371
-float get_flight_distance_to_room(struct veh_data *veh, struct room_data *room) {
-  // Calculates the great circle distance in kilometers between two GPS points (the ones occupied by the vehicle and the room).
-  // Adapted from https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates.
-  float dLat = degrees_to_radians(veh->in_room->latitude - room->latitude);
-  float dLon = degrees_to_radians(veh->in_room->longitude - room->longitude);
+float get_flight_distance_to_room(struct room_data *origin, struct room_data *dest) {
+  if (!origin || !dest) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: precondition failure in gfdtr(%s, %s)", GET_ROOM_NAME(origin), GET_ROOM_NAME(dest));
+    return FALSE;
+  }
 
-  float lat1 = degrees_to_radians(room->latitude);
-  float lat2 = degrees_to_radians(veh->in_room->latitude);
+  // Calculates the great circle distance in kilometers between two GPS points (the ones occupied by the vehicle and the dest).
+  // Adapted from https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates.
+  float dLat = degrees_to_radians(origin->latitude - dest->latitude);
+  float dLon = degrees_to_radians(origin->longitude - dest->longitude);
+
+  float lat1 = degrees_to_radians(dest->latitude);
+  float lat2 = degrees_to_radians(origin->latitude);
 
   float a = sin(dLat/2) * sin(dLat/2) +
           sin(dLon/2) * sin(dLon/2) * cos(lat1) * cos(lat2); 
@@ -253,18 +332,44 @@ float get_flight_distance_to_room(struct veh_data *veh, struct room_data *room) 
 
   /*
   mudlog_vfprintf(NULL, LOG_MISCLOG, "DEBUG: Distance between %s (%f, %f) and %s (%f, %f) is %0.2f kilometers.",
-                  GET_ROOM_NAME(veh->in_room),
-                  veh->in_room->latitude,
-                  veh->in_room->longitude,
-                  GET_ROOM_NAME(room),
-                  room->latitude,
-                  room->longitude,
+                  GET_ROOM_NAME(origin),
+                  origin->latitude,
+                  origin->longitude,
+                  GET_ROOM_NAME(dest),
+                  dest->latitude,
+                  dest->longitude,
                   distance);
   */
 
   return distance;
 }
 #undef EARTH_RADIUS_KM
+
+bool destination_is_within_flight_range(struct veh_data *veh, struct room_data *room) {
+  if (!veh || !veh->in_room || !room) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: precondition failure in diwfr(%s, %s)", GET_VEH_NAME(veh), GET_ROOM_NAME(room));
+    return FALSE;
+  }
+
+  switch (veh->type) {
+    case VEH_ROTORCRAFT:
+    case VEH_DRONE:
+      // Helicopters and drones have limited range.
+      return get_flight_distance_to_room(veh->in_room, room) < 500;
+    case VEH_VECTORTHRUST:
+    case VEH_FIXEDWING:
+      // These technically are limited in range, but they can get anywhere in the current game world.
+      return get_flight_distance_to_room(veh->in_room, room) < 8000;
+    case VEH_LTA:
+      // LTAs are slow but can go pretty much anywhere (they just kinda... float)
+      return TRUE;
+    case VEH_SUBORBITAL:
+      // Good luck getting one of these.
+      return TRUE;
+  }
+
+  return FALSE;
+}
 
 float _calculate_flight_hours(struct veh_data *veh, float distance) {
   // Given a distance in kilometers, calculates how long it will take for a vehicle to traverse it.
@@ -278,7 +383,6 @@ float _calculate_flight_hours(struct veh_data *veh, float distance) {
 
 int calculate_flight_cost(struct veh_data *veh, float distance) {
   // Returns the fuel, maintenance, storage etc cost for a vehicle of this type/load/etc to fly the given distance.
-  // Approximated from an online calculator that gave the flight hour cost for a Cessna. If someone wants to get more granular and provide better numbers, I welcome a PR!
 
   if (!veh) {
     mudlog("SYSERR: Received NULL vehicle to calculate_flight_cost()!", NULL, LOG_SYSLOG, TRUE);
@@ -288,10 +392,14 @@ int calculate_flight_cost(struct veh_data *veh, float distance) {
   // Optempo: Divide by 100,000, round to nearest tenth.
   float optempo_cost = ((((float) veh->cost) / 1000) + .5) / 100;
 
-  // Crank it up by 10% to account for maintenance and storage.
-  optempo_cost *= 1.1;
+  // Crank it up by 30% to account for maintenance and storage.
+  optempo_cost *= 1.3;
 
-  return (int) ceilf(distance * optempo_cost);
+  // Multiply distance by optempo cost, cap at 3k nuyen.
+  optempo_cost = (int) MIN(3000, ceilf(distance * optempo_cost));
+
+  // Apply a minimum value.
+  return MAX(150, optempo_cost);
 }
 
 int calculate_flight_time(struct veh_data *veh, float distance) {
@@ -310,6 +418,9 @@ int calculate_flight_time(struct veh_data *veh, float distance) {
   // Convert these to game ticks.
   float in_game_ticks = ceilf(flight_hours * SECS_PER_MUD_HOUR / (PULSE_FLIGHT / PASSES_PER_SEC));
 
+  // Cap it at 5 IRL minutes.
+  in_game_ticks = MIN(5 * 60 / (PULSE_FLIGHT / PASSES_PER_SEC), in_game_ticks);
+
   return in_game_ticks;
 }
 
@@ -322,25 +433,25 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
     return 0;
   }
 
-  snprintf(rbuf, sizeof(rbuf), "Flight test modifiers for %s: ", GET_CHAR_NAME(ch));
-
   int skill_num = get_pilot_skill_for_veh(veh);
-  int tn = 4;
+  int tn = veh->handling;
+
+  snprintf(rbuf, sizeof(rbuf), "Flight test modifiers for %s (base %d from handling): ", GET_CHAR_NAME(ch), tn);
 
   modify_target_rbuf(ch, rbuf, sizeof(rbuf));
   
   // Apply weather modifiers.
   switch (weather_info.sky) {
     case SKY_CLOUDY:
-      strlcat(rbuf, "Cloudy, TN +1", sizeof(rbuf));
+      strlcat(rbuf, "Cloudy(+1)", sizeof(rbuf));
       tn += 1;
       break;
     case SKY_RAINING:
-      strlcat(rbuf, "Raining, TN +2", sizeof(rbuf));
+      strlcat(rbuf, "Raining(+2)", sizeof(rbuf));
       tn += 2;
       break;
     case SKY_LIGHTNING:
-      strlcat(rbuf, "Storming, TN +3", sizeof(rbuf));
+      strlcat(rbuf, "Storming(+3)", sizeof(rbuf));
       tn += 3;
       break;
   }
@@ -354,7 +465,23 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
   return successes;
 }
 
-void crash_flying_vehicle(struct veh_data *veh) {
+void _crash_plane_into_room(struct veh_data *veh, struct room_data *room, bool is_controlled_landing) {
+  veh_from_room(veh);
+  veh_to_room(veh, room);
+  snprintf(buf, sizeof(buf), "%s comes hurtling in on %s with the %s!\r\n", 
+            CAP(GET_VEH_NAME_NOFORMAT(veh)),
+            is_controlled_landing ? "an emergency landing approach" : "a collision course",
+            ROOM_FLAGGED(room, ROOM_ROAD) ? "road" : "ground");
+  send_to_room(buf, veh->in_room, veh);
+}
+
+void crash_flying_vehicle(struct veh_data *veh, bool is_controlled_landing) {
+  // Sanity check: Error if we've been given a non-flying vehicle.
+  if (!veh_is_aircraft(veh)) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received non-flying vehicle %s (%ld) to crash_flying_vehicle()!", GET_VEH_NAME(veh), GET_VEH_VNUM(veh));
+    return;
+  }
+
   // If airborne, move to random road location and destroy. Otherwise, destroy in place.
   rnum_t in_flight_room_rnum;
 
@@ -370,16 +497,17 @@ void crash_flying_vehicle(struct veh_data *veh) {
 
   if (veh->in_room == &world[in_flight_room_rnum]) {
     // Let them know it's falling.
-    snprintf(buf, sizeof(buf), "Somewhere in the distance, you see %s plunge rapidly towards the ground!\r\n", GET_VEH_NAME(veh));
+    if (is_controlled_landing) {
+      snprintf(buf, sizeof(buf), "Somewhere in the distance, you see %s begin an emergency descent.\r\n", GET_VEH_NAME(veh));
+    } else {
+      snprintf(buf, sizeof(buf), "Somewhere in the distance, you see %s plunge rapidly towards the ground!\r\n", GET_VEH_NAME(veh));
+    }
     send_to_room(buf, veh->in_room, veh);
 
     // Select a random road room that's in a connected zone.
     for (int world_idx = 0; world_idx <= top_of_world; world_idx++) {
-      if (ROOM_FLAGGED(&world[world_idx], ROOM_ROAD) && dice(1, 200) <= 1 && !vnum_from_non_connected_zone(world[world_idx].number)) {
-        veh_from_room(veh);
-        veh_to_room(veh, &world[world_idx]);
-        snprintf(buf, sizeof(buf), "%s comes hurtling in on a collision course with the road!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
-        send_to_room(buf, veh->in_room, veh);
+      if (ROOM_FLAGGED(&world[world_idx], ROOM_AIRCRAFT_CAN_CRASH_HERE) && dice(1, 100) <= 1 && !vnum_from_non_connected_zone(world[world_idx].number)) {
+        _crash_plane_into_room(veh, &world[world_idx], is_controlled_landing);
         break;
       }
     }
@@ -392,16 +520,40 @@ void crash_flying_vehicle(struct veh_data *veh) {
         return;
       }
 
-      veh_from_room(veh);
-      veh_to_room(veh, &world[i5_room]);
-      snprintf(buf, sizeof(buf), "%s comes hurtling in on a collision course with the road!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
-      send_to_room(buf, veh->in_room, veh);
+      _crash_plane_into_room(veh, &world[i5_room], is_controlled_landing);
     }
   }
 
-  // Now that we're certain it's landed in the real world, destroy it.
-  veh->damage = VEH_DAM_THRESHOLD_DESTROYED;
+  // By the time we're here, we know the vehicle is in the game world and not airborne.
+  if (is_controlled_landing) {
+    // Controlled emergency landing: Take a hit. Technically this should be rolled against body etc, but I don't have the spoons to write that right now-- a PR is welcome!
+    veh->damage = MIN(VEH_DAM_THRESHOLD_DESTROYED, veh->damage + 3);
+  } else {
+    // Uncontrolled crash: Set it to having taken lethal damage.
+    veh->damage = VEH_DAM_THRESHOLD_DESTROYED;
+  }
+  // Execute damage results.
   chkdmg(veh);
+}
+
+#define MUST_TYPE_CONFIRM_STRING "There aren't any nearby safe landing spots. If you want to forcibly land on a road, type LAND CONFIRM."
+ACMD(do_land) {
+  struct veh_data *veh;
+  RIG_VEH(ch, veh);
+
+  FAILURE_CASE(!veh, "You're not in a vehicle.");
+  FAILURE_CASE_PRINTF(get_veh_controlled_by_char(ch) != veh, "You're not controlling %s.", GET_VEH_NAME(veh));
+  FAILURE_CASE_PRINTF(!veh_is_aircraft(veh), "%s isn't airworthy to begin with...", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+  FAILURE_CASE(!veh_is_currently_flying(veh), "You're not currently airborne.");
+
+  // LAND CONFIRM: Set you down in a random area, taking damage.
+  FAILURE_CASE(!*argument, MUST_TYPE_CONFIRM_STRING);
+  skip_spaces(&argument);
+  FAILURE_CASE(str_cmp(argument, "confirm"), MUST_TYPE_CONFIRM_STRING);
+
+  send_to_char(ch, "You tighten your sphincter and bring %s in for an emergency landing.\r\n", GET_VEH_NAME(veh));
+  send_to_veh("%s tips forward and begins an emergency descent.\r\n", veh, ch, TRUE, CAP(GET_VEH_NAME_NOFORMAT(veh)));
+  crash_flying_vehicle(veh, TRUE);
 }
 
 void process_flying_vehicles() {
@@ -413,7 +565,10 @@ void process_flying_vehicles() {
     return;
   }
 
-  for (struct veh_data *veh = world[in_flight_room_rnum].vehicles; veh; veh = veh->next_veh) {
+  struct veh_data *next_veh = NULL;
+  for (struct veh_data *veh = world[in_flight_room_rnum].vehicles; veh; veh = next_veh) {
+    next_veh = veh->next_veh;
+
     struct char_data *controller;
 
     // Figure out who's controlling it.

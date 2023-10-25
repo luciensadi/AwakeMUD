@@ -64,7 +64,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MAX_SKILL_LEVEL_FOR_IMMS                               100
 
 // What do you want the newbie karma threshold to be? Above this, you lose the newbie flag.
-#define NEWBIE_KARMA_THRESHOLD                                 50
+#define NEWBIE_KARMA_THRESHOLD                                 100
 
 // How many syspoints do the various options cost?
 #define SYSP_RESTRING_COST                                     2
@@ -200,7 +200,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // What is the "" that you want to deny new connections at?
 #define DOS_DENIAL_THRESHOLD                                   (15 * 10)
 // What is the number of seconds that you'd consider to be too long to pause the game for resolving a player's domain name?
-#define THRESHOLD_IN_SECONDS_FOR_SLOWNS_AUTOMATIC_ACTIVATION   1
+#define THRESHOLD_IN_SECONDS_FOR_SLOWNS_AUTOMATIC_ACTIVATION   2
 
 // How long do we put characters in a wait state when performing various magical activities?
 #define SPELL_WAIT_STATE_TIME                                  (0.2  RL_SEC)
@@ -279,6 +279,10 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define MAX_ADDICTION_TEST_DIFFICULTY                          12
 #define MAX_DRUG_TOLERANCE                                     10
 #define MAX_DRUG_EDGE                                          10
+
+// Decorations are great nuyen sinks.
+#define COST_TO_DECORATE_APT                                   5000
+#define COST_TO_DECORATE_VEH                                   1000
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES

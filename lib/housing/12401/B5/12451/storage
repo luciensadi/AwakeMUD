@@ -1,0 +1,129 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	37526
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 1]
+		Vnum:	37525
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 2]
+		Vnum:	37525
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 3]
+		Vnum:	37525
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 4]
+		Vnum:	80424
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 5]
+		Vnum:	37527
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 6]
+		Vnum:	1844
+		Inside:	2
+		Value 0:	9321
+		Value 1:	1302
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 7]
+		Vnum:	31542
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 8]
+		Vnum:	60535
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 9]
+		Vnum:	127
+		Inside:	2
+		Value 0:	1
+		Value 1:	14
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 1-round shotgun magazine
+	[Object 10]
+		Vnum:	744
+		Inside:	1
+		Value 11:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	95807
+		Inside:	1
+		Value 11:	2
+		Attempt:	1
+		Cost:	1000
+		ExtraFlags:	1000000000000
+	[Object 12]
+		Vnum:	121
+		Inside:	1
+		Value 0:	50
+		Value 1:	14
+		Cost:	100
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal shotgun ammunition
+	[Object 13]
+		Vnum:	121
+		Inside:	1
+		Value 0:	317
+		Value 1:	15
+		Cost:	634
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal light machine gun ammunition
+	[Object 14]
+		Vnum:	95830
+		Inside:	1
+		Value 11:	4
+		Timer:	10
+		Cost:	2000
+		ExtraFlags:	1000000000000
+	[Object 15]
+		Vnum:	3090
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	5022
+		Inside:	1
+		Value 1:	37
+		Cost:	0
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	878
+		Inside:	1
+		Value 11:	3
+		Cost:	0
+		ExtraFlags:	1001000001000
+	[Object 18]
+		Vnum:	39625
+		Inside:	0
+		Value 1:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 19]
+		Vnum:	80425
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 20]
+		Vnum:	37599
+		Inside:	0
+		Value 2:	1
+		Cost:	15000
+		ExtraFlags:	0

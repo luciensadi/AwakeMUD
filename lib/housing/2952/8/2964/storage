@@ -1,0 +1,3564 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+	Guest0:	3967
+	Guest3:	653
+	Guest5:	5054
+	Guest6:	4450
+[HOUSE]
+	[Object 0]
+		Vnum:	883
+		Inside:	0
+		Value 11:	1
+		Cost:	0
+		ExtraFlags:	1000000000000
+	[Object 1]
+		Vnum:	883
+		Inside:	0
+		Value 11:	1
+		Cost:	0
+		ExtraFlags:	1000000000000
+	[Object 2]
+		Vnum:	127
+		Inside:	1
+		Value 0:	20
+		Value 1:	18
+		Value 2:	2
+		Value 9:	8
+		Condition:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 20-round assault cannon magazine
+	[Object 3]
+		Vnum:	883
+		Inside:	0
+		Value 7:	64988
+		Value 9:	749
+		Value 11:	1
+		Condition:	7
+		Cost:	10050
+		ExtraFlags:	1000000000000
+	[Object 4]
+		Vnum:	919
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	17147
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 6]
+		Vnum:	17147
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 7]
+		Vnum:	17147
+		Inside:	0
+		Cost:	420000
+		ExtraFlags:	1001000000
+	[Object 8]
+		Vnum:	17147
+		Inside:	0
+		Cost:	420000
+		ExtraFlags:	1001000000
+	[Object 9]
+		Vnum:	17147
+		Inside:	0
+		Cost:	420000
+		ExtraFlags:	1001000000
+	[Object 10]
+		Vnum:	38095
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 11]
+		Vnum:	127
+		Inside:	1
+		Value 0:	10
+		Value 1:	12
+		Value 9:	2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 10-round sniper rifle magazine
+	[Object 12]
+		Vnum:	831
+		Inside:	0
+		Value 11:	2
+		Cost:	0
+		ExtraFlags:	1000000001000000000000
+	[Object 13]
+		Vnum:	19763
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	10010000001000001000
+	[Object 14]
+		Vnum:	60310
+		Inside:	0
+		Value 8:	27
+		Cost:	0
+		ExtraFlags:	0
+	[Object 15]
+		Vnum:	60310
+		Inside:	0
+		Value 8:	21
+		Cost:	0
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	711
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	100000000
+	[Object 17]
+		Vnum:	38064
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	100000000
+	[Object 18]
+		Vnum:	38064
+		Inside:	0
+		Cost:	4000
+		ExtraFlags:	100000000
+	[Object 19]
+		Vnum:	38064
+		Inside:	0
+		Timer:	647
+		Cost:	4000
+		ExtraFlags:	100000000
+	[Object 20]
+		Vnum:	1173
+		Inside:	0
+		Value 8:	30
+		Cost:	0
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	1173
+		Inside:	0
+		Value 8:	40
+		Cost:	0
+		ExtraFlags:	0
+	[Object 22]
+		Vnum:	1173
+		Inside:	0
+		Value 8:	26
+		Cost:	0
+		ExtraFlags:	0
+	[Object 23]
+		Vnum:	2964
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 24]
+		Vnum:	2964
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 25]
+		Vnum:	2964
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 26]
+		Vnum:	19770
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 27]
+		Vnum:	108
+		Inside:	1
+		Value 0:	34
+		Value 1:	8
+		Value 2:	256
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	iccm8
+	[Object 28]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	8
+		Value 2:	960
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	suite8
+	[Object 29]
+		Vnum:	108
+		Inside:	1
+		Value 0:	15
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Sleaze 8
+	[Object 30]
+		Vnum:	108
+		Inside:	1
+		Value 0:	32
+		Value 1:	10
+		Value 2:	400
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	pasist10
+	[Object 31]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	10
+		Value 2:	500
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	attack10
+	[Object 32]
+		Vnum:	108
+		Inside:	1
+		Value 0:	36
+		Value 1:	10
+		Value 2:	800
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	pmpcp10
+	[Object 33]
+		Vnum:	30190
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 34]
+		Vnum:	30190
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 35]
+		Vnum:	30190
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 36]
+		Vnum:	30190
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 37]
+		Vnum:	30190
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 38]
+		Vnum:	30190
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 39]
+		Vnum:	30190
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 40]
+		Vnum:	30190
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 41]
+		Vnum:	30190
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 42]
+		Vnum:	30192
+		Inside:	1
+		Value 2:	647
+		Value 3:	1
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 43]
+		Vnum:	30192
+		Inside:	1
+		Value 2:	647
+		Value 3:	3
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 44]
+		Vnum:	30192
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 45]
+		Vnum:	30192
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 46]
+		Vnum:	30192
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 47]
+		Vnum:	30192
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 48]
+		Vnum:	30192
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 49]
+		Vnum:	30192
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 50]
+		Vnum:	30192
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 51]
+		Vnum:	45188
+		Inside:	1
+		Value 2:	647
+		Value 3:	3
+		Cost:	0
+		ExtraFlags:	11010000001000001001
+	[Object 52]
+		Vnum:	45188
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	11010000001000001001
+	[Object 53]
+		Vnum:	45188
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	11010000001000001001
+	[Object 54]
+		Vnum:	45188
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	11010000001000001001
+	[Object 55]
+		Vnum:	45188
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	11010000001000001001
+	[Object 56]
+		Vnum:	4242
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 57]
+		Vnum:	4242
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 58]
+		Vnum:	4243
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000001
+	[Object 59]
+		Vnum:	4243
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000001
+	[Object 60]
+		Vnum:	60204
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 61]
+		Vnum:	60206
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 62]
+		Vnum:	60221
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 63]
+		Vnum:	11118
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 64]
+		Vnum:	11119
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 65]
+		Vnum:	117
+		Inside:	1
+		Value 0:	11
+		Value 1:	62
+		Value 2:	1
+		Value 6:	-1
+		Value 7:	43200
+		Value 8:	647
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	thund11
+		Photo:$
+It looks very blank.~
+	[Object 66]
+		Vnum:	117
+		Inside:	1
+		Value 0:	11
+		Value 1:	4
+		Value 2:	1
+		Value 6:	-1
+		Value 7:	86400
+		Value 8:	647
+		Value 9:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	power11
+		Photo:$
+It looks very blank.~
+	[Object 67]
+		Vnum:	117
+		Inside:	1
+		Value 0:	9
+		Value 1:	21
+		Value 2:	1
+		Value 6:	-1
+		Value 7:	28800
+		Value 8:	647
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	heal9
+		Photo:$
+It looks very blank.~
+	[Object 68]
+		Vnum:	117
+		Inside:	1
+		Value 0:	11
+		Value 1:	6
+		Value 2:	1
+		Value 7:	86400
+		Value 8:	647
+		Value 9:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	stun11
+		Photo:$
+It looks very blank.~
+	[Object 69]
+		Vnum:	117
+		Inside:	1
+		Value 0:	9
+		Value 1:	24
+		Value 2:	1
+		Value 3:	3
+		Value 7:	12960
+		Value 8:	647
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	cha9
+		Photo:$
+It looks very blank.~
+	[Object 70]
+		Vnum:	117
+		Inside:	1
+		Value 0:	9
+		Value 1:	25
+		Value 2:	1
+		Value 3:	1
+		Value 6:	5495
+		Value 7:	25920
+		Value 8:	647
+		Value 9:	3
+		Timer:	-3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	cybqui9
+		Photo:$
+It looks very blank.~
+	[Object 71]
+		Vnum:	117
+		Inside:	1
+		Value 0:	4
+		Value 1:	51
+		Value 2:	1
+		Value 6:	-4
+		Value 7:	8640
+		Value 8:	647
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	arm4
+		Photo:$
+It looks very blank.~
+	[Object 72]
+		Vnum:	117
+		Inside:	1
+		Value 0:	11
+		Value 1:	25
+		Value 2:	1
+		Value 3:	2
+		Value 6:	-2
+		Value 7:	25920
+		Value 8:	647
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	incstr11
+		Photo:$
+It looks very blank.~
+	[Object 73]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	6
+		Value 2:	1
+		Value 7:	21600
+		Value 8:	647
+		Value 9:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	stun12
+		Photo:$
+It looks very blank.~
+	[Object 74]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	2
+		Value 2:	1
+		Value 7:	86400
+		Value 8:	647
+		Value 9:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	mbolt12
+		Photo:$
+It looks very blank.~
+	[Object 75]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	35
+		Value 2:	1
+		Value 6:	-1
+		Value 7:	17280
+		Value 8:	653
+		Value 9:	4
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Chaos 12
+		Photo:$
+It looks very blank.~
+	[Object 76]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	24
+		Value 2:	1
+		Value 3:	5
+		Value 6:	-1
+		Value 7:	25920
+		Value 8:	653
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	will 12
+		Photo:$
+It looks very blank.~
+	[Object 77]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	19
+		Value 2:	1
+		Value 3:	1
+		Value 6:	-2
+		Value 7:	25920
+		Value 8:	653
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	dec cyb qui 12
+		Photo:$
+It looks very blank.~
+	[Object 78]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	25
+		Value 2:	1
+		Value 3:	1
+		Value 6:	-2
+		Value 7:	25920
+		Value 8:	653
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	inc cyb qui 12
+		Photo:$
+It looks very blank.~
+	[Object 79]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	25
+		Value 2:	1
+		Value 3:	4
+		Value 6:	-2
+		Value 7:	25920
+		Value 8:	653
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	inc cyb int 12
+		Photo:$
+It looks very blank.~
+	[Object 80]
+		Vnum:	117
+		Inside:	1
+		Value 0:	9
+		Value 1:	19
+		Value 2:	1
+		Value 3:	3
+		Value 6:	-2
+		Value 7:	6480
+		Value 8:	653
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	decr cybered cha 9
+		Photo:$
+It looks very blank.~
+	[Object 81]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	43
+		Value 2:	1
+		Value 7:	17280
+		Value 8:	653
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Acid Stream 12
+		Photo:$
+It looks very blank.~
+	[Object 82]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	45
+		Value 2:	1
+		Value 7:	43200
+		Value 8:	653
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	flame 12
+		Photo:$
+It looks very blank.~
+	[Object 83]
+		Vnum:	117
+		Inside:	1
+		Value 0:	11
+		Value 1:	24
+		Value 2:	1
+		Value 3:	5
+		Value 6:	-1
+		Value 7:	25920
+		Value 8:	647
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	incwill11
+		Photo:$
+It looks very blank.~
+	[Object 84]
+		Vnum:	62175
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000
+	[Object 85]
+		Vnum:	38028
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 86]
+		Vnum:	7284
+		Inside:	1
+		Value 8:	13
+		Value 9:	647
+		Cost:	2500
+		ExtraFlags:	1001001000001
+	[Object 87]
+		Vnum:	80404
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 88]
+		Vnum:	4244
+		Inside:	1
+		Value 2:	8
+		Value 3:	4
+		Value 5:	4
+		Value 7:	647
+		Value 8:	1280
+		Value 9:	128
+		Timer:	647
+		Cost:	0
+		ExtraFlags:	1001001000
+		Name:	a cyclomethicone bracelet
+	[Object 89]
+		Vnum:	4906
+		Inside:	1
+		Timer:	647
+		Cost:	0
+		ExtraFlags:	0
+		Name:	an orichalcum bracelet
+	[Object 90]
+		Vnum:	39932
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 91]
+		Vnum:	39932
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 92]
+		Vnum:	108
+		Inside:	2
+		Value 0:	12
+		Value 1:	8
+		Value 2:	64
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	decrypt8
+	[Object 93]
+		Vnum:	108
+		Inside:	2
+		Value 0:	11
+		Value 1:	8
+		Value 2:	192
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	analyze8
+	[Object 94]
+		Vnum:	108
+		Inside:	2
+		Value 0:	13
+		Value 1:	8
+		Value 2:	128
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	decept8
+	[Object 95]
+		Vnum:	108
+		Inside:	2
+		Value 0:	15
+		Value 1:	8
+		Value 2:	192
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Sleaze 8
+	[Object 96]
+		Vnum:	108
+		Inside:	2
+		Value 0:	20
+		Value 1:	8
+		Value 2:	192
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	armor8
+	[Object 97]
+		Vnum:	108
+		Inside:	2
+		Value 0:	17
+		Value 1:	8
+		Value 2:	64
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	browse8
+	[Object 98]
+		Vnum:	108
+		Inside:	2
+		Value 0:	5
+		Value 1:	8
+		Value 2:	320
+		Value 3:	4
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	attack8
+	[Object 99]
+		Vnum:	108
+		Inside:	2
+		Value 0:	18
+		Value 1:	8
+		Value 2:	128
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Upload/download
+	[Object 100]
+		Vnum:	108
+		Inside:	2
+		Value 0:	23
+		Value 1:	8
+		Value 2:	128
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	defuse8
+	[Object 101]
+		Vnum:	112
+		Inside:	2
+		Value 0:	6
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	4
+		Value 8:	1280
+		Value 9:	128
+		Value 10:	2560
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	piccm8
+	[Object 102]
+		Vnum:	112
+		Inside:	2
+		Value 0:	3
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	2850
+		Value 9:	128
+		Value 10:	11520
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	asist8
+	[Object 103]
+		Vnum:	112
+		Inside:	2
+		Value 0:	16
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	560
+		Value 9:	320
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	real8
+	[Object 104]
+		Vnum:	112
+		Inside:	2
+		Value 0:	10
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 8:	2240
+		Value 9:	96
+		Value 10:	12
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	bod8
+	[Object 105]
+		Vnum:	112
+		Inside:	2
+		Value 0:	17
+		Value 1:	2
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	4
+		Value 8:	270
+		Value 9:	256
+		Value 10:	85
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	resp2
+	[Object 106]
+		Vnum:	112
+		Inside:	2
+		Value 0:	11
+		Value 1:	1
+		Value 2:	8
+		Value 4:	-2
+		Value 8:	35
+		Value 9:	64
+		Value 10:	8
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	chipsens
+	[Object 107]
+		Vnum:	112
+		Inside:	2
+		Value 0:	9
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 8:	2240
+		Value 9:	256
+		Value 10:	240
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	mpcp8
+	[Object 108]
+		Vnum:	112
+		Inside:	2
+		Value 0:	8
+		Value 1:	800
+		Value 2:	8
+		Value 4:	-2
+		Value 8:	2800
+		Value 10:	5760
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	io
+	[Object 109]
+		Vnum:	112
+		Inside:	2
+		Value 0:	18
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 8:	37
+		Value 10:	8
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	interface
+	[Object 110]
+		Vnum:	112
+		Inside:	2
+		Value 0:	2
+		Value 1:	4800
+		Value 2:	8
+		Value 4:	-2
+		Value 8:	2400
+		Value 9:	4800
+		Value 10:	240
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	stor8
+	[Object 111]
+		Vnum:	112
+		Inside:	2
+		Value 0:	1
+		Value 1:	2000
+		Value 2:	8
+		Value 4:	-2
+		Value 8:	3000
+		Value 9:	4000
+		Value 10:	75
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	act8
+	[Object 112]
+		Vnum:	112
+		Inside:	2
+		Value 0:	5
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	1600
+		Value 9:	256
+		Value 10:	46080
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	phard8
+	[Object 113]
+		Vnum:	112
+		Inside:	2
+		Value 0:	12
+		Value 1:	7
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	1715
+		Value 9:	64
+		Value 10:	12
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	cmask7
+	[Object 114]
+		Vnum:	112
+		Inside:	2
+		Value 0:	13
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	2240
+		Value 9:	96
+		Value 10:	12
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	pevas
+	[Object 115]
+		Vnum:	113
+		Inside:	1
+		Value 0:	8
+		Value 1:	8
+		Value 2:	2000
+		Value 3:	4800
+		Value 4:	800
+		Value 5:	1409
+		Value 6:	2
+		Value 9:	0
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	A gutted and refurbished PCD-100 cyberdeck
+		Photo:$
+Seems like a vintage 2050's Radio Shack cyberdeck, with a little more oomph
+under the hood. It has the initials J.A. engraved in the underside of it. 
+~
+	[Object 116]
+		Vnum:	112
+		Inside:	2
+		Value 0:	5
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 8:	3600
+		Value 9:	576
+		Value 10:	207360
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Hardening Component
+	[Object 117]
+		Vnum:	112
+		Inside:	2
+		Value 0:	12
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	5040
+		Value 9:	144
+		Value 10:	15
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Masking Chip
+	[Object 118]
+		Vnum:	112
+		Inside:	2
+		Value 0:	3
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	4850
+		Value 9:	288
+		Value 10:	8640
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Hot ASIST chip
+	[Object 119]
+		Vnum:	112
+		Inside:	2
+		Value 0:	17
+		Value 1:	3
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	405
+		Value 9:	864
+		Value 10:	64
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n response increase component
+	[Object 120]
+		Vnum:	112
+		Inside:	2
+		Value 0:	10
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	5040
+		Value 9:	216
+		Value 10:	15
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Bod Chip
+	[Object 121]
+		Vnum:	112
+		Inside:	2
+		Value 0:	11
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	4
+		Value 8:	5040
+		Value 9:	144
+		Value 10:	20
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Sensor Chip
+	[Object 122]
+		Vnum:	112
+		Inside:	2
+		Value 0:	1
+		Value 1:	3000
+		Value 2:	12
+		Value 4:	-2
+		Value 8:	4500
+		Value 9:	6000
+		Value 10:	100
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n active memory processor
+	[Object 123]
+		Vnum:	112
+		Inside:	2
+		Value 0:	8
+		Value 1:	1200
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	4200
+		Value 10:	3456
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n I/O processor
+	[Object 124]
+		Vnum:	112
+		Inside:	2
+		Value 0:	18
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 8:	37
+		Value 10:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n matrix interface
+	[Object 125]
+		Vnum:	112
+		Inside:	2
+		Value 0:	9
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	10
+		Value 8:	5040
+		Value 9:	576
+		Value 10:	51
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n MPCP 12 component
+	[Object 126]
+		Vnum:	112
+		Inside:	2
+		Value 0:	2
+		Value 1:	7200
+		Value 2:	12
+		Value 4:	-2
+		Value 8:	3600
+		Value 9:	7200
+		Value 10:	166
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n storage memory hard drive
+	[Object 127]
+		Vnum:	112
+		Inside:	2
+		Value 0:	7
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	4
+		Value 8:	5040
+		Value 9:	144
+		Value 10:	30
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Icon Chip
+	[Object 128]
+		Vnum:	108
+		Inside:	2
+		Value 0:	18
+		Value 1:	12
+		Value 2:	288
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Read/Write program
+	[Object 129]
+		Vnum:	108
+		Inside:	2
+		Value 0:	17
+		Value 1:	12
+		Value 2:	144
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Browse program
+	[Object 130]
+		Vnum:	108
+		Inside:	2
+		Value 0:	13
+		Value 1:	12
+		Value 2:	288
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Deception program
+	[Object 131]
+		Vnum:	108
+		Inside:	2
+		Value 0:	12
+		Value 1:	12
+		Value 2:	144
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Decrypt program
+	[Object 132]
+		Vnum:	108
+		Inside:	2
+		Value 0:	11
+		Value 1:	12
+		Value 2:	432
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Analyze program
+	[Object 133]
+		Vnum:	108
+		Inside:	2
+		Value 0:	15
+		Value 1:	12
+		Value 2:	432
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Sleaze program
+	[Object 134]
+		Vnum:	108
+		Inside:	2
+		Value 0:	23
+		Value 1:	12
+		Value 2:	288
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Defuse program
+	[Object 135]
+		Vnum:	108
+		Inside:	2
+		Value 0:	5
+		Value 1:	10
+		Value 2:	500
+		Value 3:	4
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	attack10
+	[Object 136]
+		Vnum:	108
+		Inside:	2
+		Value 0:	20
+		Value 1:	10
+		Value 2:	300
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	armor10
+	[Object 137]
+		Vnum:	113
+		Inside:	1
+		Value 0:	12
+		Value 1:	12
+		Value 2:	3000
+		Value 3:	7200
+		Value 4:	1200
+		Value 5:	2816
+		Value 6:	3
+		Value 9:	0
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^RSIN^rtax ^RHELL^rhound^n ^WCustom^n
+		Photo:$
+A stylistic and minimalist black-on-red design of a Hellhound is centered on
+the back of this notebook-style cyberdeck. Its slim silhouette and blood-red
+chassis gives it a professional and personalized aesthetic. It is an
+understated work of art, where only a practiced eye would be able to see it
+for the powerful device that it is. 
+~
+	[Object 138]
+		Vnum:	26905
+		Inside:	1
+		Cost:	45000
+		ExtraFlags:	1000000000
+	[Object 139]
+		Vnum:	127
+		Inside:	2
+		Value 0:	30
+		Value 1:	11
+		Value 9:	18
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 30-round sport rifle magazine
+	[Object 140]
+		Vnum:	22894
+		Inside:	1
+		Value 11:	3
+		Cost:	4000
+		ExtraFlags:	1000000000000
+	[Object 141]
+		Vnum:	11120
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001001
+	[Object 142]
+		Vnum:	9933
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 143]
+		Vnum:	14310
+		Inside:	1
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 144]
+		Vnum:	127
+		Inside:	2
+		Value 0:	12
+		Value 1:	14
+		Value 9:	12
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 12-round shotgun magazine
+	[Object 145]
+		Vnum:	19708
+		Inside:	1
+		Value 11:	2
+		Cost:	1000
+		ExtraFlags:	1000000000000
+	[Object 146]
+		Vnum:	117
+		Inside:	1
+		Value 0:	9
+		Value 1:	2
+		Value 2:	1
+		Value 7:	21600
+		Value 8:	647
+		Value 9:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	mbolt9
+		Photo:$
+It looks very blank.~
+	[Object 147]
+		Vnum:	85477
+		Inside:	2
+		Cost:	480000
+		ExtraFlags:	0
+	[Object 148]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a dermal sheathing III - beta'
+	[Object 149]
+		Vnum:	9335
+		Inside:	1
+		Condition:	2
+		Timer:	647
+		Cost:	1
+		ExtraFlags:	0
+	[Object 150]
+		Vnum:	4239
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001000
+	[Object 151]
+		Vnum:	127
+		Inside:	2
+		Value 0:	50
+		Value 1:	15
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 50-round light machine gun magazine
+	[Object 152]
+		Vnum:	80224
+		Inside:	1
+		Value 11:	3
+		Cost:	850
+		ExtraFlags:	1000000000000
+	[Object 153]
+		Vnum:	9933
+		Inside:	0
+		Cost:	350
+		ExtraFlags:	0
+	[Object 154]
+		Vnum:	14638
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 155]
+		Vnum:	12301
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 156]
+		Vnum:	60532
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 157]
+		Vnum:	121
+		Inside:	0
+		Value 0:	90
+		Value 1:	17
+		Value 2:	3
+		Cost:	900
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX heavy machine gun ammunition
+	[Object 158]
+		Vnum:	121
+		Inside:	0
+		Value 0:	760
+		Value 1:	17
+		Value 2:	3
+		Cost:	7600
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX heavy machine gun ammunition
+	[Object 159]
+		Vnum:	121
+		Inside:	0
+		Value 0:	80
+		Value 1:	17
+		Value 2:	1
+		Value 4:	-2
+		Value 9:	4078
+		Value 10:	-1
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS heavy machine gun ammunition
+	[Object 160]
+		Vnum:	121
+		Inside:	0
+		Value 1:	17
+		Value 2:	1
+		Value 3:	460
+		Value 4:	792
+		Value 9:	647
+		Value 10:	840
+		Cost:	20
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS heavy machine gun ammunition
+	[Object 161]
+		Vnum:	121
+		Inside:	0
+		Value 0:	20
+		Value 1:	17
+		Value 2:	2
+		Value 3:	30
+		Value 4:	6
+		Value 9:	647
+		Value 10:	18
+		Cost:	20
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of explosive heavy machine gun ammunition
+	[Object 162]
+		Vnum:	121
+		Inside:	0
+		Value 0:	124
+		Value 1:	8
+		Cost:	248
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal heavy pistol ammunition
+	[Object 163]
+		Vnum:	121
+		Inside:	0
+		Value 0:	150
+		Value 1:	18
+		Value 2:	2
+		Cost:	6750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of explosive assault cannon ammunition
+	[Object 164]
+		Vnum:	121
+		Inside:	0
+		Value 0:	400
+		Value 1:	18
+		Value 2:	2
+		Cost:	18000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of explosive assault cannon ammunition
+	[Object 165]
+		Vnum:	7272
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 166]
+		Vnum:	4244
+		Inside:	1
+		Value 2:	647
+		Value 3:	18
+		Condition:	4
+		Cost:	0
+		ExtraFlags:	1001001000
+	[Object 167]
+		Vnum:	4244
+		Inside:	1
+		Value 2:	647
+		Value 3:	18
+		Condition:	4
+		Cost:	0
+		ExtraFlags:	1001001000
+	[Object 168]
+		Vnum:	7272
+		Inside:	0
+		Value 0:	7
+		Cost:	75
+		ExtraFlags:	0
+		Name:	a small box
+	[Object 169]
+		Vnum:	108
+		Inside:	1
+		Value 0:	33
+		Value 1:	8
+		Value 2:	512
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	hard8
+	[Object 170]
+		Vnum:	108
+		Inside:	1
+		Value 0:	23
+		Value 1:	8
+		Value 2:	128
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	defuse8
+	[Object 171]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	8
+		Value 2:	320
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	attack8
+	[Object 172]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	armor8
+	[Object 173]
+		Vnum:	108
+		Inside:	1
+		Value 0:	17
+		Value 1:	8
+		Value 2:	64
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	browse8
+	[Object 174]
+		Vnum:	108
+		Inside:	1
+		Value 0:	13
+		Value 1:	8
+		Value 2:	128
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	decept8
+	[Object 175]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	analyze8
+	[Object 176]
+		Vnum:	108
+		Inside:	1
+		Value 0:	12
+		Value 1:	8
+		Value 2:	64
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	decrypt8
+	[Object 177]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	10
+		Value 2:	1500
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	suite10
+	[Object 178]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	10
+		Value 2:	500
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	attack10
+	[Object 179]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	10
+		Value 2:	300
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	armor10
+	[Object 180]
+		Vnum:	108
+		Inside:	1
+		Value 0:	15
+		Value 1:	10
+		Value 2:	300
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	sleaze10
+	[Object 181]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	10
+		Value 2:	300
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	analyze10
+	[Object 182]
+		Vnum:	1120
+		Inside:	0
+		Value 3:	4500
+		Cost:	0
+		ExtraFlags:	0
+	[Object 183]
+		Vnum:	114
+		Inside:	0
+		Value 1:	12
+		Value 2:	17
+		Value 3:	647
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+	[Object 184]
+		Vnum:	3090
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 185]
+		Vnum:	107
+		Inside:	0
+		Value 0:	1
+		Value 1:	8
+		Value 6:	192
+		Value 8:	-1
+		Value 9:	4078
+		Timer:	480
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	est
+	[Object 186]
+		Vnum:	1187
+		Inside:	0
+		Cost:	4204
+		ExtraFlags:	0
+	[Object 187]
+		Vnum:	127
+		Inside:	1
+		Value 0:	40
+		Value 1:	13
+		Value 9:	40
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 40-round assault rifle magazine
+	[Object 188]
+		Vnum:	843
+		Inside:	0
+		Value 11:	3
+		Timer:	10
+		Cost:	0
+		ExtraFlags:	1000000000000
+	[Object 189]
+		Vnum:	948
+		Inside:	0
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 190]
+		Vnum:	1167
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 191]
+		Vnum:	14310
+		Inside:	1
+		Cost:	950
+		ExtraFlags:	0
+	[Object 192]
+		Vnum:	38064
+		Inside:	1
+		Cost:	4000
+		ExtraFlags:	100000000
+	[Object 193]
+		Vnum:	3023
+		Inside:	1
+		Cost:	300
+		ExtraFlags:	1000000000000
+	[Object 194]
+		Vnum:	4907
+		Inside:	1
+		Cost:	2300
+		ExtraFlags:	1001001001
+	[Object 195]
+		Vnum:	30191
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001001001
+	[Object 196]
+		Vnum:	60565
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000
+	[Object 197]
+		Vnum:	4242
+		Inside:	1
+		Cost:	560
+		ExtraFlags:	1001001001
+	[Object 198]
+		Vnum:	30163
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 199]
+		Vnum:	30109
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 200]
+		Vnum:	64976
+		Inside:	0
+		Cost:	1495
+		ExtraFlags:	0
+	[Object 201]
+		Vnum:	64988
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 202]
+		Vnum:	85118
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 203]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a smartlink-2 system'
+	[Object 204]
+		Vnum:	85412
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 205]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a datajack - beta'
+	[Object 206]
+		Vnum:	6547
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	1000000000000000000000000000
+	[Object 207]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'an armored synthetic cyberskull -alpha'
+	[Object 208]
+		Vnum:	6523
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	1000000000000000000000000000
+	[Object 209]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a lightly armored synthetic cybertorso -alpha'
+	[Object 210]
+		Vnum:	39379
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 211]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a Math SPU III -alpha'
+	[Object 212]
+		Vnum:	85903
+		Inside:	2
+		Cost:	160000
+		ExtraFlags:	0
+	[Object 213]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'enhanced articulation - cultured'
+	[Object 214]
+		Vnum:	444
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 215]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a datajack -alpha'
+	[Object 216]
+		Vnum:	85274
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 217]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a dermal plating III - alpha'
+	[Object 218]
+		Vnum:	19770
+		Inside:	1
+		Cost:	300
+		ExtraFlags:	0
+	[Object 219]
+		Vnum:	64976
+		Inside:	0
+		Cost:	1495
+		ExtraFlags:	0
+	[Object 220]
+		Vnum:	25599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	10
+	[Object 221]
+		Vnum:	25599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	10
+	[Object 222]
+		Vnum:	25599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	10
+	[Object 223]
+		Vnum:	2510
+		Inside:	1
+		Cost:	80
+		ExtraFlags:	0
+	[Object 224]
+		Vnum:	2510
+		Inside:	1
+		Cost:	80
+		ExtraFlags:	0
+	[Object 225]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 226]
+		Vnum:	112
+		Inside:	1
+		Value 0:	9
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-1
+		Value 5:	4
+		Value 7:	647
+		Value 8:	2240
+		Value 9:	256
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	pmpcp
+	[Object 227]
+		Vnum:	112
+		Inside:	1
+		Value 0:	5
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-1
+		Value 5:	2
+		Value 7:	647
+		Value 8:	1600
+		Value 9:	256
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	hardpart8
+	[Object 228]
+		Vnum:	24599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 229]
+		Vnum:	24599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 230]
+		Vnum:	24599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 231]
+		Vnum:	24599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 232]
+		Vnum:	24599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 233]
+		Vnum:	24599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 234]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	2
+		Value 2:	1
+		Value 7:	86400
+		Value 8:	647
+		Value 9:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	mbolt12
+		Photo:$
+It looks very blank.~
+	[Object 235]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	32
+		Value 2:	1
+		Value 6:	5513
+		Value 7:	6480
+		Value 8:	653
+		Value 9:	3
+		Timer:	-2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	stabilize 12
+		Photo:$
+It looks very blank.~
+	[Object 236]
+		Vnum:	117
+		Inside:	1
+		Value 0:	6
+		Value 1:	58
+		Value 2:	1
+		Value 6:	33444
+		Value 7:	86400
+		Value 8:	647
+		Value 9:	5
+		Timer:	-3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	las6
+		Photo:$
+It looks very blank.~
+	[Object 237]
+		Vnum:	117
+		Inside:	1
+		Value 0:	4
+		Value 1:	35
+		Value 2:	1
+		Value 7:	51840
+		Value 8:	647
+		Value 9:	4
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	chaos4
+		Photo:$
+It looks very blank.~
+	[Object 238]
+		Vnum:	117
+		Inside:	1
+		Value 0:	4
+		Value 1:	35
+		Value 2:	1
+		Value 6:	-4
+		Value 7:	17280
+		Value 8:	647
+		Value 9:	4
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	chaos4
+		Photo:$
+aha! # 
+~
+	[Object 239]
+		Vnum:	117
+		Inside:	1
+		Value 0:	4
+		Value 1:	25
+		Value 2:	1
+		Value 6:	-2
+		Value 7:	8640
+		Value 8:	647
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	incbod4
+		Photo:$
+It looks very blank.~
+	[Object 240]
+		Vnum:	117
+		Inside:	1
+		Value 0:	4
+		Value 1:	11
+		Value 2:	1
+		Value 6:	-2
+		Value 7:	12960
+		Value 8:	647
+		Value 9:	2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	comb4
+		Photo:$
+It looks very blank.~
+	[Object 241]
+		Vnum:	117
+		Inside:	1
+		Value 0:	4
+		Value 1:	2
+		Value 2:	1
+		Value 6:	13971
+		Value 7:	21600
+		Value 8:	647
+		Value 9:	1
+		Timer:	-2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	mbolt4
+		Photo:$
+It looks very blank.~
+	[Object 242]
+		Vnum:	117
+		Inside:	1
+		Value 0:	1
+		Value 1:	38
+		Value 2:	1
+		Value 7:	6480
+		Value 8:	647
+		Value 9:	4
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	ii1
+		Photo:$
+It looks very blank.~
+	[Object 243]
+		Vnum:	117
+		Inside:	1
+		Value 0:	4
+		Value 1:	2
+		Value 2:	1
+		Value 6:	-1
+		Value 7:	17280
+		Value 8:	647
+		Value 9:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	mbolt4
+		Photo:$
+It looks very blank.~
+	[Object 244]
+		Vnum:	117
+		Inside:	1
+		Value 0:	4
+		Value 1:	4
+		Value 2:	1
+		Value 6:	11811
+		Value 7:	21600
+		Value 8:	647
+		Value 9:	1
+		Timer:	-2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	pbolt4
+		Photo:$
+It looks very blank.~
+	[Object 245]
+		Vnum:	117
+		Inside:	1
+		Value 0:	4
+		Value 1:	64
+		Value 2:	1
+		Value 6:	-1
+		Value 7:	43200
+		Value 8:	647
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	wbolt4
+		Photo:$
+It looks very blank.~
+	[Object 246]
+		Vnum:	117
+		Inside:	1
+		Value 0:	4
+		Value 1:	4
+		Value 2:	1
+		Value 7:	28800
+		Value 8:	647
+		Value 9:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	pbolt4
+		Photo:$
+It looks very blank.~
+	[Object 247]
+		Vnum:	117
+		Inside:	1
+		Value 0:	1
+		Value 1:	38
+		Value 2:	1
+		Value 7:	3702
+		Value 8:	647
+		Value 9:	4
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	ii1
+		Photo:$
+It looks very blank.~
+	[Object 248]
+		Vnum:	117
+		Inside:	1
+		Value 0:	10
+		Value 1:	18
+		Value 2:	1
+		Value 3:	4
+		Value 6:	-1
+		Value 7:	51840
+		Value 8:	647
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	decint10
+		Photo:$
+It looks very blank.~
+	[Object 249]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	11
+		Value 2:	1
+		Value 7:	25920
+		Value 8:	647
+		Value 9:	2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	comb12
+		Photo:$
+It looks very blank.~
+	[Object 250]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	32
+		Value 2:	1
+		Value 7:	25920
+		Value 8:	647
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	stab12
+		Photo:$
+It looks very blank.~
+	[Object 251]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	31
+		Value 2:	1
+		Value 7:	28800
+		Value 8:	647
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	resist12
+		Photo:$
+It looks very blank.~
+	[Object 252]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	24
+		Value 2:	1
+		Value 3:	4
+		Value 6:	-1
+		Value 7:	25920
+		Value 8:	653
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	int 12
+		Photo:$
+It looks very blank.~
+	[Object 253]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	11
+		Value 2:	1
+		Value 6:	-1
+		Value 7:	25920
+		Value 8:	647
+		Value 9:	2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	comb12
+		Photo:$
+It looks very blank.~
+	[Object 254]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	35
+		Value 2:	1
+		Value 7:	51840
+		Value 8:	647
+		Value 9:	4
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	chaos12
+		Photo:$
+It looks very blank.~
+	[Object 255]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	49
+		Value 2:	1
+		Value 7:	86400
+		Value 8:	653
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	clout 12
+		Photo:$
+It looks very blank.~
+	[Object 256]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	24
+		Value 2:	1
+		Value 3:	3
+		Value 7:	25920
+		Value 8:	653
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	inc cha 12
+		Photo:$
+It looks very blank.~
+	[Object 257]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	18
+		Value 2:	1
+		Value 7:	51840
+		Value 8:	647
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	decbod12
+		Photo:$
+It looks very blank.~
+	[Object 258]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	2
+		Value 2:	1
+		Value 6:	-1
+		Value 7:	86400
+		Value 8:	647
+		Value 9:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	mbo12
+		Photo:$
+It looks very blank.~
+	[Object 259]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	25
+		Value 2:	1
+		Value 3:	1
+		Value 7:	25920
+		Value 8:	647
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	inccybqui12
+		Photo:$
+It looks very blank.~
+	[Object 260]
+		Vnum:	14501
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 261]
+		Vnum:	4956
+		Inside:	1
+		Cost:	25
+		ExtraFlags:	0
+	[Object 262]
+		Vnum:	19999
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 263]
+		Vnum:	22859
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 264]
+		Vnum:	22859
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 265]
+		Vnum:	22859
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 266]
+		Vnum:	765
+		Inside:	1
+		Cost:	8000
+		ExtraFlags:	0
+	[Object 267]
+		Vnum:	64987
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 268]
+		Vnum:	5734
+		Inside:	1
+		Value 0:	647
+		Condition:	6
+		Cost:	110
+		ExtraFlags:	0
+	[Object 269]
+		Vnum:	4239
+		Inside:	1
+		Value 2:	647
+		Timer:	647
+		Cost:	200
+		ExtraFlags:	1001001000
+	[Object 270]
+		Vnum:	766
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 271]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	8
+		Value 2:	192
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	armor8
+	[Object 272]
+		Vnum:	1182
+		Inside:	1
+		Cost:	10511
+		ExtraFlags:	0
+	[Object 273]
+		Vnum:	17513
+		Inside:	1
+		Value 0:	647
+		Cost:	25000
+		ExtraFlags:	0
+	[Object 274]
+		Vnum:	5961
+		Inside:	1
+		Value 0:	647
+		Cost:	100
+		ExtraFlags:	1000001000
+	[Object 275]
+		Vnum:	17147
+		Inside:	1
+		Cost:	420000
+		ExtraFlags:	1001000000
+	[Object 276]
+		Vnum:	127
+		Inside:	1
+		Value 0:	38
+		Value 1:	13
+		Value 9:	32
+		Condition:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 38-round assault rifle magazine
+	[Object 277]
+		Vnum:	14309
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 278]
+		Vnum:	25598
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001000
+	[Object 279]
+		Vnum:	64976
+		Inside:	0
+		Timer:	647
+		Cost:	1495
+		ExtraFlags:	0
+	[Object 280]
+		Vnum:	629
+		Inside:	1
+		Cost:	1300
+		ExtraFlags:	0
+	[Object 281]
+		Vnum:	17147
+		Inside:	1
+		Cost:	420000
+		ExtraFlags:	1001000000
+	[Object 282]
+		Vnum:	22859
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 283]
+		Vnum:	117
+		Inside:	1
+		Value 0:	12
+		Value 1:	18
+		Value 2:	1
+		Value 3:	1
+		Value 7:	51840
+		Value 8:	647
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	decqui12
+		Photo:$
+It looks very blank.~
+	[Object 284]
+		Vnum:	25599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	10
+	[Object 285]
+		Vnum:	26905
+		Inside:	1
+		Cost:	45000
+		ExtraFlags:	1000000000
+	[Object 286]
+		Vnum:	26905
+		Inside:	1
+		Cost:	45000
+		ExtraFlags:	1000000000
+	[Object 287]
+		Vnum:	14309
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 288]
+		Vnum:	14307
+		Inside:	1
+		Value 2:	647
+		Cost:	200
+		ExtraFlags:	1000000000
+	[Object 289]
+		Vnum:	100
+		Inside:	1
+		Value 0:	1760
+		Value 4:	2774
+		Value 5:	437249
+		Cost:	125
+		ExtraFlags:	0
+	[Object 290]
+		Vnum:	100
+		Inside:	1
+		Value 0:	590
+		Value 4:	2547
+		Value 5:	898094
+		Cost:	125
+		ExtraFlags:	0
+	[Object 291]
+		Vnum:	101
+		Inside:	1
+		Value 0:	4680
+		Value 4:	2519
+		Value 5:	579057
+		Cost:	275
+		ExtraFlags:	0
+	[Object 292]
+		Vnum:	101
+		Inside:	1
+		Value 0:	3870
+		Value 4:	2528
+		Value 5:	797950
+		Cost:	275
+		ExtraFlags:	0
+	[Object 293]
+		Vnum:	101
+		Inside:	1
+		Value 0:	4350
+		Value 4:	2491
+		Value 5:	231869
+		Cost:	275
+		ExtraFlags:	0
+	[Object 294]
+		Vnum:	101
+		Inside:	1
+		Value 0:	3810
+		Value 4:	2491
+		Value 5:	519574
+		Cost:	275
+		ExtraFlags:	0
+	[Object 295]
+		Vnum:	660
+		Inside:	1
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 296]
+		Vnum:	30192
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 297]
+		Vnum:	30192
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 298]
+		Vnum:	30190
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001001001
+	[Object 299]
+		Vnum:	30190
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001001001
+	[Object 300]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 301]
+		Vnum:	450
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 302]
+		Vnum:	60590
+		Inside:	1
+		Value 0:	39732
+		Value 3:	1
+		Value 4:	647
+		Value 5:	926179
+		Condition:	1
+		Cost:	1
+		ExtraFlags:	1000000000
+	[Object 303]
+		Vnum:	62100
+		Inside:	1
+		Value 0:	647
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 304]
+		Vnum:	64976
+		Inside:	0
+		Cost:	1495
+		ExtraFlags:	0
+	[Object 305]
+		Vnum:	658
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000000000000
+	[Object 306]
+		Vnum:	39243
+		Inside:	0
+		Cost:	850
+		ExtraFlags:	0
+	[Object 307]
+		Vnum:	39241
+		Inside:	0
+		Cost:	850
+		ExtraFlags:	0
+	[Object 308]
+		Vnum:	39241
+		Inside:	0
+		Cost:	850
+		ExtraFlags:	0
+	[Object 309]
+		Vnum:	39241
+		Inside:	0
+		Cost:	850
+		ExtraFlags:	0
+	[Object 310]
+		Vnum:	11118
+		Inside:	0
+		Cost:	420000
+		ExtraFlags:	1000000000
+	[Object 311]
+		Vnum:	11119
+		Inside:	0
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 312]
+		Vnum:	7284
+		Inside:	0
+		Value 8:	0
+		Value 9:	647
+		Cost:	2500
+		ExtraFlags:	1001001000001
+	[Object 313]
+		Vnum:	946
+		Inside:	0
+		Value 0:	200
+		Cost:	9000
+		ExtraFlags:	0
+		Name:	a box of explosive assault cannon ammunition
+	[Object 314]
+		Vnum:	127
+		Inside:	1
+		Value 0:	50
+		Value 1:	8
+		Value 9:	42
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 50-round heavy pistol magazine
+	[Object 315]
+		Vnum:	65499
+		Inside:	0
+		Value 11:	2
+		Cost:	250
+		ExtraFlags:	0
+	[Object 316]
+		Vnum:	8498
+		Inside:	0
+		Value 0:	1
+		Cost:	1200
+		ExtraFlags:	0
+	[Object 317]
+		Vnum:	917
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 318]
+		Vnum:	127
+		Inside:	1
+		Value 0:	17
+		Value 1:	8
+		Value 9:	2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 17-round heavy pistol magazine
+	[Object 319]
+		Vnum:	62303
+		Inside:	0
+		Value 11:	2
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 320]
+		Vnum:	62304
+		Inside:	0
+		Cost:	800
+		ExtraFlags:	0
+	[Object 321]
+		Vnum:	663
+		Inside:	0
+		Cost:	15000
+		ExtraFlags:	1000000000000
+	[Object 322]
+		Vnum:	127
+		Inside:	1
+		Value 0:	15
+		Value 1:	8
+		Value 9:	15
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 15-round heavy pistol magazine
+	[Object 323]
+		Vnum:	62145
+		Inside:	0
+		Value 11:	2
+		Cost:	2250
+		ExtraFlags:	0
+	[Object 324]
+		Vnum:	127
+		Inside:	1
+		Value 0:	8
+		Value 1:	14
+		Value 9:	7
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 8-round shotgun magazine
+	[Object 325]
+		Vnum:	62123
+		Inside:	0
+		Value 11:	2
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 326]
+		Vnum:	38094
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 327]
+		Vnum:	117
+		Inside:	0
+		Value 0:	12
+		Value 1:	58
+		Value 2:	1
+		Value 6:	71306
+		Value 7:	86400
+		Value 8:	647
+		Value 9:	5
+		Timer:	-2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	las12
+		Photo:$
+It looks very blank.~
+	[Object 328]
+		Vnum:	1844
+		Inside:	0
+		Value 0:	321
+		Value 1:	9762
+		Value 2:	1
+		Condition:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 329]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Ace (wire transfer)
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Ace (wire transfer)^n
+^mOOC Date: 2021-12-23 21:07:11^n
+Ace has wired 200000 nuyen to your account.
+~
+	[Object 330]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mick "Trash" Lawson
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mick "Trash" Lawson^n
+^mOOC Date: 2022-01-17 03:03:15^n
+A 100-shell box of explosive assault cannon ammunition has arrived at Roswell's Garage and is ready for pickup for a total cost of 7200 nuyen. It will be held for you for 7 days.
+~
+	[Object 331]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Herbie the Talismonger
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Herbie the Talismonger^n
+^mOOC Date: 2022-01-17 07:09:04^n
+Some conjuring materials has arrived at Herbie's Herbals and is ready for pickup for a total cost of 6312 nuyen. It will be held for you for 7 days.
+~
+	[Object 332]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mick "Trash" Lawson
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mick "Trash" Lawson^n
+^mOOC Date: 2022-01-24 01:50:13^n
+A 100-shell box of explosive assault cannon ammunition can't be held for you any longer at Roswell's Garage. 2700 nuyen will be refunded to your account.
+~
+	[Object 333]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Herbie the Talismonger
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Herbie the Talismonger^n
+^mOOC Date: 2022-01-24 06:28:46^n
+Some conjuring materials can't be held for you any longer at Herbie's Herbals. 5998 nuyen will be refunded to your account.
+~
+	[Object 334]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	An overweight, bored-looking man
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: an overweight, bored-looking man^n
+^mOOC Date: 2022-01-26 08:45:09^n
+A 500-round box of normal heavy pistol ammunition has arrived at Rapid Fire - Long-Term orders and is ready for pickup for a total cost of 2250 nuyen. It will be held for you for 7 days.
+~
+	[Object 335]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	An overweight, bored-looking man
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: an overweight, bored-looking man^n
+^mOOC Date: 2022-01-26 09:07:21^n
+A 500-round box of normal heavy pistol ammunition has arrived at Rapid Fire - Long-Term orders and is ready for pickup for a total cost of 2160 nuyen. It will be held for you for 7 days.
+~
+	[Object 336]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Ace (wire transfer)
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Ace (wire transfer)^n
+^mOOC Date: 2022-01-26 10:04:35^n
+Ace has wired 250000 nuyen to your account.
+~
+	[Object 337]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mick "Trash" Lawson
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mick "Trash" Lawson^n
+^mOOC Date: 2022-02-02 05:59:06^n
+A 100-shell box of explosive assault cannon ammunition has arrived at Roswell's Garage and is ready for pickup for a total cost of 7200 nuyen. It will be held for you for 7 days.
+~
+	[Object 338]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mick "Trash" Lawson
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mick "Trash" Lawson^n
+^mOOC Date: 2022-02-02 07:15:47^n
+A 100-shell box of explosive assault cannon ammunition has arrived at Roswell's Garage and is ready for pickup for a total cost of 7650 nuyen. It will be held for you for 7 days.
+~
+	[Object 339]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	An overweight, bored-looking man
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: an overweight, bored-looking man^n
+^mOOC Date: 2022-02-02 08:54:47^n
+A 500-round box of normal heavy pistol ammunition can't be held for you any longer at Rapid Fire - Long-Term orders. 1199 nuyen will be refunded to your account.
+~
+	[Object 340]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mike Haynes, the store's owner
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mike Haynes, the store's owner^n
+^mOOC Date: 2022-02-02 16:00:07^n
+A large bag of optical chips has arrived at Action Computers and is ready for pickup for a total cost of 200 nuyen. It will be held for you for 7 days.
+~
+	[Object 341]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mike Haynes, the store's owner
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mike Haynes, the store's owner^n
+^mOOC Date: 2022-02-02 16:34:26^n
+A large box of cyberdeck parts has arrived at Action Computers and is ready for pickup for a total cost of 400 nuyen. It will be held for you for 7 days.
+~
+	[Object 342]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Doctor Aurora
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Doctor Aurora^n
+^mOOC Date: 2022-02-04 01:53:07^n
+A dermal sheathing III - beta has arrived at Executive Body Enhancements and is ready for pickup for a total cost of 360000 nuyen. It will be held for you for 7 days.
+~
+	[Object 343]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mick "Trash" Lawson
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mick "Trash" Lawson^n
+^mOOC Date: 2022-02-04 05:47:05^n
+A 100-shell box of explosive assault cannon ammunition has arrived at Roswell's Garage and is ready for pickup for a total cost of 8100 nuyen. It will be held for you for 7 days.
+~
+	[Object 344]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mick "Trash" Lawson
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mick "Trash" Lawson^n
+^mOOC Date: 2022-02-11 05:17:09^n
+A 100-shell box of explosive assault cannon ammunition can't be held for you any longer at Roswell's Garage. 2700 nuyen will be refunded to your account.
+~
+	[Object 345]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Honest Obie
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Honest Obie^n
+^mOOC Date: 2022-02-14 18:15:03^n
+A form-fitting body armor IV has arrived at Honest Obie and is ready for pickup for a total cost of 3600 nuyen. It will be held for you for 7 days.
+~
+	[Object 346]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Lulu
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Lulu^n
+^mOOC Date: 2022-02-16 07:26:55^n
+Your deck is ready for pickup.
+~
+	[Object 347]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Lulu
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Lulu^n
+^mOOC Date: 2022-02-16 10:54:23^n
+Give me a call at 1503-9775 when you're ready to get your deck.
+~
+	[Object 348]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Elroy the Loon
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Elroy the Loon^n
+^mOOC Date: 2022-02-16 17:55:51^n
+A pair of gecko tape gloves has arrived at The Loon's Armoury and is ready for pickup for a total cost of 375 nuyen. It will be held for you for 7 days.
+~
+	[Object 349]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mick "Trash" Lawson
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mick "Trash" Lawson^n
+^mOOC Date: 2022-02-17 03:38:37^n
+A 100-shell box of explosive assault cannon ammunition has arrived at Roswell's Garage and is ready for pickup for a total cost of 7200 nuyen. It will be held for you for 7 days.
+~
+	[Object 350]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Aves
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Aves^n
+^mOOC Date: 2022-02-17 03:54:44^n
+An improved gas vent IV has arrived at Aves' Guns and Gear and is ready for pickup for a total cost of 2250 nuyen. It will be held for you for 7 days.
+~
+	[Object 351]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mick "Trash" Lawson
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mick "Trash" Lawson^n
+^mOOC Date: 2022-02-17 16:55:18^n
+A 100-shell box of explosive assault cannon ammunition has arrived at Roswell's Garage and is ready for pickup for a total cost of 7200 nuyen. It will be held for you for 7 days.
+~
+	[Object 352]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Honest Obie
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Honest Obie^n
+^mOOC Date: 2022-02-21 17:46:53^n
+A form-fitting body armor IV has arrived at Honest Obie and is ready for pickup for a total cost of 3000 nuyen. It will be held for you for 7 days.
+~
+	[Object 353]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Elroy the Loon
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Elroy the Loon^n
+^mOOC Date: 2022-02-23 17:54:18^n
+A pair of gecko tape gloves can't be held for you any longer at The Loon's Armoury. 75 nuyen will be refunded to your account.
+~
+	[Object 354]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Aves
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Aves^n
+^mOOC Date: 2022-02-24 03:54:04^n
+An improved gas vent IV can't be held for you any longer at Aves' Guns and Gear. 300 nuyen will be refunded to your account.
+~
+	[Object 355]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mick "Trash" Lawson
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mick "Trash" Lawson^n
+^mOOC Date: 2022-02-24 16:01:40^n
+A 100-shell box of explosive assault cannon ammunition can't be held for you any longer at Roswell's Garage. 1350 nuyen will be refunded to your account.
+~
+	[Object 356]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Honest Obie
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Honest Obie^n
+^mOOC Date: 2022-02-28 17:47:23^n
+A form-fitting body armor IV can't be held for you any longer at Honest Obie. 1200 nuyen will be refunded to your account.
+~
+	[Object 357]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Lucien
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Lucien^n
+^mOOC Date: 2022-03-23 09:31:36^n
+You have been awarded 22 system points for bugs, typos, ideas, and praise entries-- thanks!^n
+~
+	[Object 358]
+		Vnum:	111
+		Inside:	2
+		Value 0:	1
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Honest Obie
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Honest Obie^n
+^mOOC Date: 2022-09-02 18:31:37^n
+A form-fitting body armor IV has arrived at Honest Obie and is ready for pickup for a total cost of 3000 nuyen. It will be held for you for 7 days.
+~
+	[Object 359]
+		Vnum:	111
+		Inside:	2
+		Cost:	30
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mick "Trash" Lawson
+		Photo:$
+^W * * * * Shadowland Mail System * * * *
+^B      To: Ekaj^n
+^C    From: Mick "Trash" Lawson^n
+^mOOC Date: 2022-09-06 04:12:42^n
+A 100-shell box of explosive assault cannon ammunition has arrived at Roswell's Garage and is ready for pickup for a total cost of 8100 nuyen. It will be held for you for 7 days.
+~
+	[Object 360]
+		Vnum:	118
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Mail
+	[Object 361]
+		Vnum:	118
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Notes
+	[Object 362]
+		Vnum:	118
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Phonebook
+	[Object 363]
+		Vnum:	118
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Files
+	[Object 364]
+		Vnum:	31542
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 365]
+		Vnum:	60531
+		Inside:	0
+		Value 0:	8
+		Cost:	0
+		ExtraFlags:	0
+	[Object 366]
+		Vnum:	19756
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 367]
+		Vnum:	62307
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 368]
+		Vnum:	14507
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 369]
+		Vnum:	14500
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 370]
+		Vnum:	22815
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 371]
+		Vnum:	1100
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 372]
+		Vnum:	65192
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 373]
+		Vnum:	12517
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 374]
+		Vnum:	70327
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	0
+	[Object 375]
+		Vnum:	70345
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	0
+	[Object 376]
+		Vnum:	30163
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 377]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 378]
+		Vnum:	45195
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 379]
+		Vnum:	45195
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 380]
+		Vnum:	2964
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 381]
+		Vnum:	9917
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 382]
+		Vnum:	2959
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 383]
+		Vnum:	8492
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 384]
+		Vnum:	14624
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 385]
+		Vnum:	30109
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 386]
+		Vnum:	30109
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 387]
+		Vnum:	3741
+		Inside:	1
+		Cost:	5
+		ExtraFlags:	0
+	[Object 388]
+		Vnum:	3741
+		Inside:	1
+		Cost:	5
+		ExtraFlags:	0
+	[Object 389]
+		Vnum:	22878
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 390]
+		Vnum:	4707
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	0
+	[Object 391]
+		Vnum:	22875
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 392]
+		Vnum:	22859
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 393]
+		Vnum:	22859
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 394]
+		Vnum:	22859
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 395]
+		Vnum:	3614
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 396]
+		Vnum:	22892
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 397]
+		Vnum:	9309
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 398]
+		Vnum:	4995
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000
+	[Object 399]
+		Vnum:	25599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	10
+	[Object 400]
+		Vnum:	4241
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 401]
+		Vnum:	3729
+		Inside:	1
+		Cost:	5
+		ExtraFlags:	0
+	[Object 402]
+		Vnum:	50000
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 403]
+		Vnum:	50001
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 404]
+		Vnum:	602
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	1000001000
+	[Object 405]
+		Vnum:	2109
+		Inside:	0
+		Condition:	4
+		Cost:	0
+		ExtraFlags:	0
+	[Object 406]
+		Vnum:	19738
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 407]
+		Vnum:	717
+		Inside:	0
+		Cost:	5100
+		ExtraFlags:	0
+	[Object 408]
+		Vnum:	39223
+		Inside:	0
+		Value 2:	647
+		Value 3:	51
+		Cost:	60000
+		ExtraFlags:	1000000
+	[Object 409]
+		Vnum:	26905
+		Inside:	0
+		Cost:	45000
+		ExtraFlags:	1000000000
+	[Object 410]
+		Vnum:	14310
+		Inside:	0
+		Cost:	950
+		ExtraFlags:	0
+	[Object 411]
+		Vnum:	38028
+		Inside:	0
+		Timer:	647
+		Cost:	800
+		ExtraFlags:	0
+	[Object 412]
+		Vnum:	700
+		Inside:	0
+		Timer:	647
+		Cost:	0
+		ExtraFlags:	0
+	[Object 413]
+		Vnum:	30192
+		Inside:	0
+		Value 2:	647
+		Value 3:	3
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 414]
+		Vnum:	30192
+		Inside:	0
+		Value 2:	647
+		Value 3:	3
+		Cost:	0
+		ExtraFlags:	1001000000
+	[Object 415]
+		Vnum:	45188
+		Inside:	0
+		Value 2:	647
+		Value 3:	3
+		Cost:	0
+		ExtraFlags:	11010000001000001001
+	[Object 416]
+		Vnum:	19859
+		Inside:	0
+		Value 2:	647
+		Value 3:	38
+		Timer:	647
+		Cost:	25000
+		ExtraFlags:	0
+	[Object 417]
+		Vnum:	19859
+		Inside:	0
+		Value 2:	647
+		Value 3:	42
+		Timer:	647
+		Cost:	25000
+		ExtraFlags:	0
+	[Object 418]
+		Vnum:	4229
+		Inside:	0
+		Value 2:	647
+		Timer:	647
+		Cost:	0
+		ExtraFlags:	1000000
+	[Object 419]
+		Vnum:	12599
+		Inside:	0
+		Value 0:	8
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 420]
+		Vnum:	704
+		Inside:	0
+		Cost:	500
+		ExtraFlags:	0
+	[Object 421]
+		Vnum:	60565
+		Inside:	0
+		Value 2:	647
+		Value 3:	68
+		Cost:	15000
+		ExtraFlags:	1000000
+	[Object 422]
+		Vnum:	64969
+		Inside:	0
+		Timer:	647
+		Cost:	0
+		ExtraFlags:	0
+	[Object 423]
+		Vnum:	29326
+		Inside:	0
+		Timer:	2
+		Cost:	50
+		ExtraFlags:	0

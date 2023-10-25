@@ -99,8 +99,8 @@ void medit_disp_menu(struct descriptor_data *d)
                */
 
   send_to_char(CH, "h) Ammunition\r\n");
-  sprinttype(GET_SEX(MOB), genders, buf1, sizeof(buf1));
-  //  strcpy(buf1, genders[GET_SEX(d->edit_mob)]);
+  sprinttype(GET_PRONOUNS(MOB), genders, buf1, sizeof(buf1));
+  //  strcpy(buf1, genders[GET_PRONOUNS(d->edit_mob)]);
   send_to_char(CH, "i) Gender: %s%s%s, ", CCCYN(CH, C_CMP), buf1,
                CCNRM(CH, C_CMP));
   send_to_char(CH, "j) Weight: %s%d%s, ", CCCYN(CH, C_CMP), GET_WEIGHT(MOB),
@@ -1673,7 +1673,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       medit_disp_gender_menu(d);
     } else
       if (number != 0) // 0 = quit
-        GET_SEX(MOB) = (number - 1);
+        GET_PRONOUNS(MOB) = (number - 1);
     medit_disp_menu(d);
     break;
 
@@ -1700,9 +1700,13 @@ void write_mobs_to_disk(vnum_t zone_num)
   int i;
 
   // ideally, this would just fill a VTable with vals...maybe one day
+  char final_file_name[1000];
+  snprintf(final_file_name, sizeof(final_file_name), "%s/%d.mob", MOB_PREFIX, zone_table[znum].number);
 
-  snprintf(buf, sizeof(buf), "%s/%d.mob", MOB_PREFIX, zone_table[znum].number);
-  fp = fopen(buf, "w+");
+  char tmp_file_name[1000];
+  snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
+
+  fp = fopen(tmp_file_name, "w+");
 
   /* start running through all mobiles in this zone */
   for (counter = zone_table[znum].number * 100;
@@ -1748,7 +1752,7 @@ void write_mobs_to_disk(vnum_t zone_num)
               MOB_FLAGS(mob).ToString(),
               AFF_FLAGS(mob).ToString(),
               pc_race_types[(int)mob->player.race],
-              genders[(int)mob->player.sex]);
+              genders[(int)mob->player.pronouns]);
 
       if (mob->char_specials.position != POS_STANDING)
         fprintf(fp, "Position:\t%s\n",
@@ -1861,4 +1865,8 @@ void write_mobs_to_disk(vnum_t zone_num)
   fclose(fp);
 
   write_index_file("mob");
+
+  // Move the tmp to clobber the old.
+  remove(final_file_name);
+  rename(tmp_file_name, final_file_name);
 }

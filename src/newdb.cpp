@@ -27,6 +27,7 @@
 #include "config.hpp"
 #include "bullet_pants.hpp"
 #include "ignore_system.hpp"
+#include "lifestyles.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -121,15 +122,15 @@ static void init_char(struct char_data * ch)
   ch->player_specials->saved.wimp_level   = 0;
   ch->player_specials->saved.bad_pws      = 0;
 
-  GET_LOADROOM(ch) = NOWHERE;
+  GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
   GET_WAS_IN(ch) = NULL;
 
   ch->player.time.birth = time(0);
   ch->player.time.played = 0;
   ch->player.time.lastdisc = time(0);
 
-  ch->player.weight = (int)gen_size(GET_RACE(ch), 0, 3, GET_SEX(ch));
-  ch->player.height = (int)gen_size(GET_RACE(ch), 1, 3, GET_SEX(ch));
+  ch->player.weight = (int)gen_size(GET_RACE(ch), 0, 3, GET_PRONOUNS(ch));
+  ch->player.height = (int)gen_size(GET_RACE(ch), 1, 3, GET_PRONOUNS(ch));
 
   ch->points.max_mental = 1000;
   ch->points.max_physical = 1000;
@@ -178,11 +179,11 @@ static void init_char_strings(char_data *ch)
   *(ch->player.physical_text.keywords) = LOWER(*ch->player.physical_text.keywords);
 
   delete [] ch->player.physical_text.name;
-  snprintf(temp, sizeof(temp), "an average %s %s", genders_decap[(int)GET_SEX(ch)], pc_race_types_decap[(int)GET_RACE(ch)]);
+  snprintf(temp, sizeof(temp), "an average %s %s", genders_decap[(int)GET_PRONOUNS(ch)], pc_race_types_decap[(int)GET_RACE(ch)]);
   ch->player.physical_text.name = str_dup(temp);
 
   delete [] ch->player.physical_text.room_desc;
-  snprintf(temp, sizeof(temp), "A %s %s voice", genders_decap[(int)GET_SEX(ch)], pc_race_types_decap[(int)GET_RACE(ch)]);
+  snprintf(temp, sizeof(temp), "A %s %s voice", genders_decap[(int)GET_PRONOUNS(ch)], pc_race_types_decap[(int)GET_RACE(ch)]);
   ch->player.physical_text.room_desc = str_dup(temp);
 
   delete [] ch->player.physical_text.look_desc;
@@ -347,10 +348,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles WHERE Name='%s';", prepare_quotes(buf3, name, sizeof(buf3) / sizeof(buf3[0])));
   mysql_wrapper(mysql, buf);
   if (!(res = mysql_use_result(mysql))) {
+    log_vfprintf("Refusing to load character '%s' (quoted from '%s'): No result on select-star query.", buf3, name);
     return FALSE;
   }
   row = mysql_fetch_row(res);
   if (!row && mysql_field_count(mysql)) {
+    log_vfprintf("Refusing to load character '%s' (quoted from '%s'): No row found on select-star query.", buf3, name);
     mysql_free_result(res);
     return FALSE;
   }
@@ -358,7 +361,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   ch->player.char_name = str_dup(row[1]);
   strcpy(GET_PASSWD(ch), row[2]);
   GET_RACE(ch) = atoi(row[3]);
-  GET_SEX(ch) = atoi(row[4]);
+  GET_PRONOUNS(ch) = atoi(row[4]);
   GET_LEVEL(ch) = atoi(row[5]);
   AFF_FLAGS(ch).FromString(row[6]);
   PLR_FLAGS(ch).FromString(row[7]);
@@ -448,7 +451,13 @@ bool load_char(const char *name, char_data *ch, bool logon)
   SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(row[79]);
   SETTABLE_EMAIL(ch) = str_dup(row[80]);
   GET_CHAR_MULTIPLIER(ch) = atoi(row[81]);
+  const char *lifestyle_string = str_dup(row[82]);
   mysql_free_result(res);
+
+  // Update lifestyle information.
+  calculate_best_lifestyle(ch);
+  set_lifestyle_string(ch, lifestyle_string);
+  delete [] lifestyle_string;
 
   if (GET_LEVEL(ch) <= 1) {
     for (int i = 0; i <= WIL; i++) {
@@ -879,7 +888,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
             break;
           case ITEM_GUN_AMMO:
             // Process weight.
-            GET_OBJ_WEIGHT(obj) = GET_AMMOBOX_QUANTITY(obj) * get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj));
+            GET_OBJ_WEIGHT(obj) = get_ammo_weight(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj));
             break;
           case ITEM_VEHCONTAINER:
             // We did some hacky shit and force-saved the weight of the container to value 11. Pull it back out.
@@ -1133,6 +1142,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   /* Default their loadroom if it wasn't provided specially. */
   if (loadroom == NOWHERE)
     loadroom = GET_LOADROOM(player);
+  // If that didn't fix it, set it to Dante's to prevent failed SQL saves.
+  if (loadroom == NOWHERE)
+    loadroom = RM_ENTRANCE_TO_DANTES;
 
   /* Figure out what room to load them in. */
   if (player->in_room) {
@@ -1159,6 +1171,15 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     }
   }
 
+  // Ensure that they're not snapping back to a staff room.
+  {
+    rnum_t last_in_rnum = real_room(GET_LAST_IN(player));
+    if (last_in_rnum >= 0 && ROOM_FLAGGED(&world[last_in_rnum], ROOM_STAFF_ONLY) && !access_level(player, LVL_BUILDER)) {
+      // Snap to Dante's instead.
+      GET_LAST_IN(player) = RM_ENTRANCE_TO_DANTES;
+    }
+  }
+
   /* Figure out their vehicle-- they can only load in it if they own it.  Unless we're calling from copyover.*/
   if (player->in_veh && (fromCopyover || player->in_veh->owner == GET_IDNUM(player)))
     inveh = player->in_veh->idnum;
@@ -1177,24 +1198,54 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
                "Inveh=%ld, `rank`=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
-               "multiplier=%d WHERE idnum=%ld;",
-               AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(),
-               PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
-               GET_REAL_STR(player), GET_REAL_CHA(player), GET_REAL_INT(player), GET_REAL_WIL(player),
-               GET_REAL_ESS(player), player->real_abils.esshole, GET_INDEX(player),
-               player->real_abils.highestindex, GET_MAX_HACKING(player), GET_BODY(player),
-               GET_DEFENSE(player), GET_NUYEN(player), GET_BANK(player), GET_KARMA(player),
-               MAX(0, GET_REP(player)), MAX(0, GET_NOT(player)), MAX(0, GET_TKE(player)),
-               PLR_FLAGGED(player, PLR_JUST_DIED), MAX(0, GET_PHYSICAL(player)), GET_PHYSICAL_LOSS(player),
-               MAX(0, GET_MENTAL(player)), GET_MENTAL_LOSS(player), 0, GET_WIMP_LEV(player),
-               GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, COND_FULL),
-               GET_COND(player, COND_THIRST), GET_COND(player, COND_DRUNK),
-               SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player), pgroup_num,
-               inveh, GET_LEVEL(player), GET_SEX(player), GET_SYSTEM_POINTS(player),
+               "multiplier=%d, lifestyle_string='%s' WHERE idnum=%ld;",
+               AFF_FLAGS(player).ToString(),
+               PLR_FLAGS(player).ToString(),
+               PRF_FLAGS(player).ToString(),
+               GET_REAL_BOD(player),
+               GET_REAL_QUI(player),
+               GET_REAL_STR(player),
+               GET_REAL_CHA(player),
+               GET_REAL_INT(player),
+               GET_REAL_WIL(player),
+               GET_REAL_ESS(player),
+               player->real_abils.esshole,
+               GET_INDEX(player),
+               player->real_abils.highestindex,
+               GET_MAX_HACKING(player),
+               GET_BODY(player),
+               GET_DEFENSE(player),
+               GET_NUYEN(player),
+               GET_BANK(player),
+               GET_KARMA(player),
+               MAX(0, GET_REP(player)),
+               MAX(0, GET_NOT(player)),
+               MAX(0, GET_TKE(player)),
+               PLR_FLAGGED(player, PLR_JUST_DIED),
+               MAX(0, GET_PHYSICAL(player)),
+               GET_PHYSICAL_LOSS(player),
+               MAX(0, GET_MENTAL(player)),
+               GET_MENTAL_LOSS(player), 0, GET_WIMP_LEV(player),
+               GET_LOADROOM(player),
+               GET_LAST_IN(player),
+               time(0),
+               GET_COND(player, COND_FULL),
+               GET_COND(player, COND_THIRST),
+               GET_COND(player, COND_DRUNK),
+               SHOTS_FIRED(player),
+               SHOTS_TRIGGERED(player),
+               GET_TRADITION(player),
+               pgroup_num,
+               inveh,
+               GET_LEVEL(player),
+               GET_PRONOUNS(player),
+               GET_SYSTEM_POINTS(player),
                MIN(GET_CONGREGATION_BONUS(player), MAX_CONGREGATION_BONUS),
                prepare_quotes(buf1, GET_EMAIL(player), sizeof(buf1) / sizeof(char)),
                prepare_quotes(buf2, GET_CHAR_COLOR_HIGHLIGHT(player), sizeof(buf2) / sizeof(char)),
-               GET_CHAR_MULTIPLIER(player), GET_IDNUM(player));
+               GET_CHAR_MULTIPLIER(player),
+               prepare_quotes(buf3, get_lifestyle_string(player), sizeof(buf3) / sizeof(char)),
+               GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
 
   /* Re-equip cyberware and bioware. */
@@ -1838,7 +1889,7 @@ bool does_player_exist(long id)
   return TRUE;
 }
 
-vnum_t get_player_id(char *name)
+idnum_t get_player_id(const char *name)
 {
   if (!name || !*name || !str_cmp(name, CHARACTER_DELETED_NAME_FOR_SQL))
     return -1;
@@ -2190,29 +2241,38 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
       }
       break;
     case ITEM_CYBERDECK:
-      // Rectify the memory.
-      old_storage = GET_CYBERDECK_USED_STORAGE(obj);
-      GET_CYBERDECK_USED_STORAGE(obj) = 0;
-      for (struct obj_data *installed = obj->contains; installed; installed = installed->next_content) {
-        if (GET_OBJ_TYPE(installed) == ITEM_DECK_ACCESSORY) {
-          switch (GET_DECK_ACCESSORY_TYPE(installed)) {
-            case TYPE_FILE:
-              GET_CYBERDECK_USED_STORAGE(obj) += GET_DECK_ACCESSORY_FILE_SIZE(installed);
-              break;
-            case TYPE_UPGRADE:
-              GET_PART_BUILDER_IDNUM(obj) = 0;
-              break;
+    case ITEM_CUSTOM_DECK:
+      {
+        // Rectify the memory.
+        old_storage = GET_CYBERDECK_USED_STORAGE(obj);
+        GET_CYBERDECK_USED_STORAGE(obj) = 0;
+        for (struct obj_data *installed = obj->contains; installed; installed = installed->next_content) {
+          if (GET_OBJ_TYPE(installed) == ITEM_DECK_ACCESSORY) {
+            switch (GET_DECK_ACCESSORY_TYPE(installed)) {
+              case TYPE_FILE:
+                GET_CYBERDECK_USED_STORAGE(obj) += GET_DECK_ACCESSORY_FILE_SIZE(installed);
+                break;
+              case TYPE_UPGRADE:
+                GET_PART_BUILDER_IDNUM(obj) = 0;
+                break;
+            }
+          }
+          if (GET_OBJ_TYPE(installed) == ITEM_PROGRAM) {
+            GET_CYBERDECK_USED_STORAGE(obj) += GET_PROGRAM_SIZE(installed);
           }
         }
-
-      }
-      if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {
-        snprintf(buf, sizeof(buf), "INFO: System self-healed mismatching cyberdeck used storage for %s (was %d, should have been %d)",
-                GET_OBJ_NAME(obj),
-                old_storage,
-                GET_CYBERDECK_USED_STORAGE(obj)
-        );
-        mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);
+        if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {
+          snprintf(buf, sizeof(buf), "INFO: System self-healed mismatching cyberdeck used storage for %s (was %d, should have been %d)",
+                  GET_OBJ_NAME(obj),
+                  old_storage,
+                  GET_CYBERDECK_USED_STORAGE(obj)
+          );
+          mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);
+        }
+        if (GET_CYBERDECK_USED_STORAGE(obj) > GET_CYBERDECK_TOTAL_STORAGE(obj)) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: After self-heal, deck %s owned by %ld is overloaded on programs! Setting to 0 free space, this will cause problems.", GET_OBJ_NAME(obj), owner);
+          GET_CYBERDECK_USED_STORAGE(obj) = GET_CYBERDECK_TOTAL_STORAGE(obj);
+        }
       }
       break;
     case ITEM_FOCUS:

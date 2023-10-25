@@ -1,0 +1,68 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	4913
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	660
+		Inside:	0
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	114
+		Inside:	0
+		Value 1:	7
+		Value 2:	12
+		Value 3:	15338
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+	[Object 3]
+		Vnum:	26902
+		Inside:	0
+		Cost:	800
+		ExtraFlags:	1000000000
+	[Object 4]
+		Vnum:	19847
+		Inside:	0
+		Cost:	500
+		ExtraFlags:	0
+		Name:	a ^Tbel^N^yov^n^ted c^n^yh^n^ri^n^tll^n^ri^n ^tdog^n^n
+	[Object 5]
+		Vnum:	26917
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	1001000000000
+	[Object 6]
+		Vnum:	117
+		Inside:	0
+		Value 0:	8
+		Value 1:	38
+		Value 2:	1
+		Value 7:	2160
+		Value 8:	653
+		Value 9:	4
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	imp invis 8
+		Photo:$
+It looks very blank.~
+	[Object 7]
+		Vnum:	127
+		Inside:	1
+		Value 0:	12
+		Value 1:	8
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 12-round heavy pistol magazine
+	[Object 8]
+		Vnum:	746
+		Inside:	0
+		Value 11:	3
+		Attempt:	3
+		Cost:	1250
+		ExtraFlags:	0

@@ -22,6 +22,11 @@ ACMD(do_consent) {
     return;
   }
 
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    send_to_char("You can't do that until you've finished character generation.\r\n", ch);
+    return;
+  }
+
   // Compose the list of who all is present.
   char participants[10000] = { '\0' };
 
@@ -52,10 +57,6 @@ ACMD(do_consent) {
     // Rigger of the veh.
     if (veh->rigger)
       snprintf(ENDOF(participants), sizeof(participants) + strlen(participants), "%s%s (rigging)", *participants ? ", " : "", GET_CHAR_NAME(veh->rigger));
-  }
-
-  if (IS_SENATOR(ch)) {
-    send_to_char(ch, "^Lconsent debug: '%s'; %s\r\n", argument, participants);
   }
 
   // GREEN: Full consent, enthusiastic.

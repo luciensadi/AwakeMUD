@@ -22,6 +22,7 @@ bool validate_and_update_password(const char* password, char* hashed_password) {
 #else
 #include <sodium.h>
 
+#include <sodium.h>
 
 // Insecure test password is used for crypto tests.
 #define INSECURE_TEST_PASSWORD "8h4engowo)(WTWerhio*"

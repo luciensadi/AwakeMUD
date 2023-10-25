@@ -1,0 +1,293 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	35529
+		Inside:	0
+		Value 1:	7
+		Cost:	100
+		ExtraFlags:	0
+		Name:	a box of Nitro doses
+	[Object 1]
+		Vnum:	9107
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1001001000
+	[Object 2]
+		Vnum:	65192
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	35527
+		Inside:	0
+		Value 1:	2
+		Cost:	50
+		ExtraFlags:	0
+		Name:	a box of Kamikaze inhalers
+	[Object 4]
+		Vnum:	1522
+		Inside:	0
+		Cost:	40
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	30195
+		Inside:	0
+		Cost:	3500
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	30195
+		Inside:	0
+		Cost:	3500
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	30195
+		Inside:	0
+		Cost:	3500
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	4995
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000
+	[Object 9]
+		Vnum:	22859
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 10]
+		Vnum:	35526
+		Inside:	0
+		Value 1:	2
+		Cost:	20
+		ExtraFlags:	0
+		Name:	a box of Cram capsules
+	[Object 11]
+		Vnum:	108
+		Inside:	1
+		Value 0:	16
+		Value 1:	12
+		Value 2:	432
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec scanner r12
+	[Object 12]
+		Vnum:	1176
+		Inside:	0
+		Value 8:	26
+		Cost:	9500
+		ExtraFlags:	0
+	[Object 13]
+		Vnum:	112
+		Inside:	0
+		Value 0:	10
+		Value 1:	6
+		Value 2:	6
+		Value 4:	-1
+		Value 5:	14
+		Value 7:	12466
+		Value 8:	1260
+		Value 9:	54
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	broadspec body r6
+	[Object 14]
+		Vnum:	112
+		Inside:	0
+		Value 0:	13
+		Value 1:	6
+		Value 2:	6
+		Value 4:	-1
+		Value 5:	14
+		Value 7:	12466
+		Value 8:	1260
+		Value 9:	54
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	broadspec evasion r6
+	[Object 15]
+		Vnum:	127
+		Inside:	1
+		Value 0:	22
+		Value 1:	18
+		Value 2:	2
+		Value 9:	22
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 22-round assault cannon magazine
+	[Object 16]
+		Vnum:	884
+		Inside:	0
+		Value 7:	626
+		Value 9:	749
+		Value 11:	1
+		Cost:	7750
+		ExtraFlags:	1000000000000
+	[Object 17]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	12
+		Value 2:	2160
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadtech programming r12
+	[Object 18]
+		Vnum:	108
+		Inside:	1
+		Value 0:	26
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	swerve r12
+	[Object 19]
+		Vnum:	108
+		Inside:	1
+		Value 0:	29
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec cloak and dagger
+	[Object 20]
+		Vnum:	108
+		Inside:	1
+		Value 0:	30
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec locked and loaded
+	[Object 21]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	12
+		Value 2:	720
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec attack r12
+	[Object 22]
+		Vnum:	108
+		Inside:	1
+		Value 0:	23
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec defuse r12
+	[Object 23]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec analyze r12
+	[Object 24]
+		Vnum:	108
+		Inside:	1
+		Value 0:	12
+		Value 1:	12
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec decrypt r12
+	[Object 25]
+		Vnum:	108
+		Inside:	1
+		Value 0:	22
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec crash and trash r12
+	[Object 26]
+		Vnum:	108
+		Inside:	1
+		Value 0:	13
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec deception r12
+	[Object 27]
+		Vnum:	108
+		Inside:	1
+		Value 0:	15
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec sleaze r12
+	[Object 28]
+		Vnum:	108
+		Inside:	1
+		Value 0:	17
+		Value 1:	12
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec browse r12
+	[Object 29]
+		Vnum:	108
+		Inside:	1
+		Value 0:	6
+		Value 1:	12
+		Value 2:	576
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspecslow r12
+	[Object 30]
+		Vnum:	108
+		Inside:	1
+		Value 0:	21
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec camo r12
+	[Object 31]
+		Vnum:	108
+		Inside:	1
+		Value 0:	18
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec read r12
+	[Object 32]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec armor r12
+	[Object 33]
+		Vnum:	108
+		Inside:	1
+		Value 0:	16
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	broadspec scanner r12
+	[Object 34]
+		Vnum:	1126
+		Inside:	0
+		Value 3:	8496
+		Cost:	362500
+		ExtraFlags:	10
+	[Object 35]
+		Vnum:	1167
+		Inside:	0
+		Value 2:	1
+		Cost:	15000
+		ExtraFlags:	0

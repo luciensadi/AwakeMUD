@@ -42,6 +42,7 @@
 #include "config.hpp"
 #include "transport.hpp"
 #include "memory.hpp"
+#include "newhouse.hpp"
 #include "house.hpp"
 
 extern class objList ObjList;
@@ -50,7 +51,6 @@ extern void end_quest(struct char_data *ch);
 extern char *cleanup(char *dest, const char *src);
 extern void damage_equip(struct char_data *ch, struct char_data *victim, int power, int type);
 extern bool check_adrenaline(struct char_data *, int);
-extern bool House_can_enter_by_idnum(long idnum, vnum_t house);
 extern int get_paydata_market_maximum(int host_color);
 extern int get_paydata_market_minimum(int host_color);
 extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
@@ -110,6 +110,9 @@ void mental_gain(struct char_data * ch)
   // Biosystem overstress reduces rate by 10% per point
   if (GET_BIOOVER(ch) > 0)
     gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
+
+  // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
+  gain += abs(GET_BEST_LIFESTYLE(ch)) - LIFESTYLE_SQUATTER;
 
   // Prevent reaching 0 gain
   gain = MAX(1, gain);
@@ -538,13 +541,8 @@ void check_idling(void)
         // If they're a PC in an apartment that they own, set their loadroom there.
         if (!IS_NPC(ch)) {
           struct room_data *in_room = get_ch_in_room(ch);
-
-          // But don't do it if you're in NERPcorpolis.
-          if (in_room && ROOM_FLAGGED(in_room, ROOM_HOUSE) && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(in_room))) {
-            struct house_control_rec *house_record = find_house(GET_ROOM_VNUM(in_room));
-
-            if (house_record && house_record->owner == GET_IDNUM(ch))
-              GET_LOADROOM(ch) = GET_ROOM_VNUM(in_room);
+          if (in_room && GET_APARTMENT(in_room) && GET_APARTMENT(in_room)->get_owner_id() == GET_IDNUM(ch) && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(in_room))) {
+            GET_LOADROOM(ch) = GET_ROOM_VNUM(in_room);
           }
         }
         snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
@@ -1070,16 +1068,34 @@ vnum_t junkyard_room_numbers[] = {
   RM_JUNKYARD_ELECT  // The Electronics Scrapheap
 };
 
+vnum_t boneyard_room_numbers[] = {
+  RM_BONEYARD_WRECK_ROOM
+};
+
 // Returns TRUE if vehicle is in one of the Junkyard vehicle-depositing rooms, FALSE otherwise.
 bool veh_is_in_junkyard(struct veh_data *veh) {
   if (!veh || !veh->in_room)
     return FALSE;
 
-  for (int index = 0; index < NUM_JUNKYARD_ROOMS; index++)
-    if (veh->in_room->number == junkyard_room_numbers[index])
-      return TRUE;
+  // Aircraft end up in the Boneyard instead of the Junkyard.
+  if (veh_is_aircraft(veh)) {
+    for (int index = 0; index < NUM_BONEYARD_ROOMS; index++)
+      if (veh->in_room->number == boneyard_room_numbers[index])
+        return TRUE;
+  } else {
+    for (int index = 0; index < NUM_JUNKYARD_ROOMS; index++)
+      if (veh->in_room->number == junkyard_room_numbers[index])
+        return TRUE;
+  }
 
   return FALSE;
+}
+
+bool veh_is_in_crusher_queue(struct veh_data *veh) {
+  if (!veh || !veh->in_room)
+    return FALSE;
+
+  return GET_ROOM_VNUM(veh->in_room) == RM_VEHICLE_CRUSHER;
 }
 
 bool should_save_this_vehicle(struct veh_data *veh) {
@@ -1092,8 +1108,8 @@ bool should_save_this_vehicle(struct veh_data *veh) {
 
   // If it's thrashed, it must be in the proper location.
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-    // It was in the Junkyard and nobody came to fix it.
-    if (veh_is_in_junkyard(veh))
+    // It was in the crusher queue and nobody came to fix it.
+    if (veh_is_in_crusher_queue(veh))
       return FALSE;
 
     // It's being taken care of.
@@ -1104,15 +1120,15 @@ bool should_save_this_vehicle(struct veh_data *veh) {
     if (!veh->in_veh && !veh->in_room)
       return TRUE;
 
-    // We don't preserve damaged watercraft, etc.
+    // We don't preserve damaged watercraft, mostly because we don't have a water version of the junkyard yet.
     switch (veh->type) {
       case VEH_CAR:
       case VEH_BIKE:
       case VEH_DRONE:
       case VEH_TRUCK:
-        break;
+        return TRUE;
       default:
-        return FALSE;
+        return veh_is_aircraft(veh);
     }
   }
 
@@ -1132,23 +1148,23 @@ void save_vehicles(bool fromCopyover)
 
   for (veh = veh_list, v = 0; veh; veh = veh->next) {
     // Skip disqualified vehicles.
-    if (!should_save_this_vehicle(veh))
+    if (!should_save_this_vehicle(veh)) {
+      // mudlog_vfprintf(NULL, LOG_GRIDLOG, "Refusing to save vehicle %s: Not a candidate for saving.", GET_VEH_NAME(veh));
       continue;
-
-    num_veh++;
-
-    bool send_veh_to_junkyard = FALSE;
-    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(fromCopyover || veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
-      // If we've gotten here, the vehicle is not in the Junkyard-- save it and send it there.
-      send_veh_to_junkyard = TRUE;
     }
 
-    /* Disabling this code-- we want to save ownerless vehicles so that they can disgorge their contents when they load in next.
-    if (!does_player_exist(veh->owner)) {
+    // Previously, ownerless vehicles were saved, allowing them to disgorge contents on next load. This is bad for the economy. Instead, we just drop them.
+    if (veh->owner > 0 && !does_player_exist(veh->owner)) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Vehicle '%s' no longer has a valid owner (was %ld). Locking it and refusing to save it.", GET_VEH_NAME(veh), veh->owner);
+      // Auto-lock the doors to prevent cheese.
+      veh->locked = TRUE;
+      // Clear the owner. This vehicle will be DQ'd in should_save_this_vehicle() henceforth.
       veh->owner = 0;
       continue;
     }
-     */
+
+    // This must come AFTER all disqualifications.
+    num_veh++;
 
     snprintf(buf, sizeof(buf), "veh/%07d", v);
     v++;
@@ -1176,28 +1192,41 @@ void save_vehicles(bool fromCopyover)
           break;
         }
 
-    if (send_veh_to_junkyard) {
-      // Pick a spot and put the vehicle there. Sort roughly based on type.
+    // Any vehicle that's destroyed and not being actively tended to (in a vehicle, in a garage) gets sent to either the junkyard or the crusher.
+    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
       int junkyard_number;
-      switch (veh->type) {
-        case VEH_DRONE:
-          // Drones in the drone spot.
-          junkyard_number = RM_JUNKYARD_PARTS;
-          break;
-        case VEH_BIKE:
-          // Bikes in the bike spot.
-          junkyard_number = RM_JUNKYARD_BIKES;
-          break;
-        case VEH_CAR:
-        case VEH_TRUCK:
-          // Standard vehicles just inside the gates.
-          junkyard_number = RM_JUNKYARD_GATES;
-          break;
-        default:
-          // Pick a random one to scatter them about.
-          junkyard_number = junkyard_room_numbers[number(0, NUM_JUNKYARD_ROOMS - 1)];
-          break;
+
+      // If it's already in the junkyard, move it to the crusher, but only on crashes.
+      // Vehicles in the crusher will not be saved, effectively destroying them.
+      if (!fromCopyover && veh_is_in_junkyard(veh)) {
+        junkyard_number = RM_VEHICLE_CRUSHER;
+      } else {
+        // Pick a spot and put the vehicle there. Sort roughly based on type.
+        if (veh_is_aircraft(veh)) {
+          junkyard_number = RM_BONEYARD_WRECK_ROOM;
+        } else {
+          switch (veh->type) {
+            case VEH_DRONE:
+              // Drones in the drone spot.
+              junkyard_number = RM_JUNKYARD_PARTS;
+              break;
+            case VEH_BIKE:
+              // Bikes in the bike spot.
+              junkyard_number = RM_JUNKYARD_BIKES;
+              break;
+            case VEH_CAR:
+            case VEH_TRUCK:
+              // Standard vehicles just inside the gates.
+              junkyard_number = RM_JUNKYARD_GATES;
+              break;
+            default:
+              // Pick a random one to scatter them about.
+              junkyard_number = junkyard_room_numbers[number(0, NUM_JUNKYARD_ROOMS - 1)];
+              break;
+          }
+        }
       }
+      
       temp_room = &world[real_room(junkyard_number)];
     } else {
       // If veh is not in a garage (or the owner is not allowed to enter the house anymore), send it to a garage.
@@ -1211,40 +1240,46 @@ void save_vehicles(bool fromCopyover)
       }
 
       // Otherwise, derive the garage from its location.
-      else if (!fromCopyover
-               && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE)
-                   || (ROOM_FLAGGED(temp_room, ROOM_HOUSE) && !House_can_enter_by_idnum(veh->owner, temp_room->number))))
+      else if (!fromCopyover && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE) || !IDNUM_CAN_ENTER_APARTMENT(temp_room, veh->owner)))
       {
-       /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
-                   GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));
-       log(buf); */
-        switch (GET_JURISDICTION(temp_room)) {
-          case ZONE_SEATTLE:
-            temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
-            break;
-          case ZONE_CARIB:
-            temp_room = &world[real_room(RM_CARIB_PARKING_GARAGE)];
-            break;
-          case ZONE_OCEAN:
-            temp_room = &world[real_room(RM_OCEAN_PARKING_GARAGE)];
-            break;
-          case ZONE_PORTLAND:
+        /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
+                    GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));
+        log(buf); */
+        if (veh_is_aircraft(veh)) {
+          if (dice(1, 2) == 1) {
+            temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_1)];
+          } else {
+            temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_2)];
+          }
+        } else {
+          switch (GET_JURISDICTION(temp_room)) {
+            case ZONE_SEATTLE:
+              temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
+              break;
+            case ZONE_CARIB:
+              temp_room = &world[real_room(RM_CARIB_PARKING_GARAGE)];
+              break;
+            case ZONE_OCEAN:
+              temp_room = &world[real_room(RM_OCEAN_PARKING_GARAGE)];
+              break;
+            case ZONE_PORTLAND:
 #ifdef USE_PRIVATE_CE_WORLD
-            switch (number(0, 2)) {
-              case 0:
-                temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE1)];
-                break;
-              case 1:
-                temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE2)];
-                break;
-              case 2:
-                temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE3)];
-                break;
-            }
+              switch (number(0, 2)) {
+                case 0:
+                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE1)];
+                  break;
+                case 1:
+                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE2)];
+                  break;
+                case 2:
+                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE3)];
+                  break;
+              }
 #else
-            temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
+              temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
 #endif
-            break;
+              break;
+          }
         }
       }
     }
@@ -1268,6 +1303,10 @@ void save_vehicles(bool fromCopyover)
       fprintf(fl, "\tVRestring:\t%s\n", veh->restring);
     if (veh->restring_long)
       fprintf(fl, "\tVRestringLong:$\n%s~\n", cleanup(buf2, veh->restring_long));
+    if (veh->decorate_front)
+      fprintf(fl, "\tVDecorateFront:$\n%s~\n", cleanup(buf2, veh->decorate_front));
+    if (veh->decorate_rear)
+      fprintf(fl, "\tVDecorateRear:$\n%s~\n", cleanup(buf2, veh->decorate_rear));
     fprintf(fl, "[CONTENTS]\n");
     int o = 0, level = 0;
     std::vector<std::string> obj_strings;
@@ -1286,6 +1325,12 @@ void save_vehicles(bool fromCopyover)
           case ITEM_WORN:
             // The only thing we save is the hardened armor bond status.
             if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+              obj_string_buf << "\t\tValue " << WORN_OBJ_HARDENED_ARMOR_SLOT << ":\t" << GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) << "\n";
+            } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj)) {
+              mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Worn item %s (%ld) has the customized armor value set to %ld, but it's not hardened armor! Saving anyways.",
+                              GET_OBJ_NAME(obj),
+                              GET_OBJ_VNUM(obj),
+                              GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj));
               obj_string_buf << "\t\tValue " << WORN_OBJ_HARDENED_ARMOR_SLOT << ":\t" << GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) << "\n";
             }
             break;
@@ -1625,7 +1670,7 @@ void misc_update(void)
   }
 }
 
-float gen_size(int race, bool height, int size, int sex)
+float gen_size(int race, bool height, int size, int pronouns)
 {
   float mod;
   switch (size) {
@@ -1649,7 +1694,7 @@ float gen_size(int race, bool height, int size, int sex)
   }
   switch (race) {
     case RACE_HUMAN:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(160, 187) * mod;
         else
@@ -1662,7 +1707,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_DWARF:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(115, 133) * mod;
         else
@@ -1675,7 +1720,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_ELF:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(180, 205) * mod;
         else
@@ -1688,7 +1733,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_ORK:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(185, 210) * mod;
         else
@@ -1701,7 +1746,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_TROLL:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(270, 295) * mod;
         else
@@ -1715,7 +1760,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_CYCLOPS:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(290, 340) * mod;
         else
@@ -1728,7 +1773,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_KOBOROKURU:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(115, 133) * mod;
         else
@@ -1741,7 +1786,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_FOMORI:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(270, 295) * mod;
         else
@@ -1754,7 +1799,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_MENEHUNE:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(115, 133) * mod;
         else
@@ -1767,7 +1812,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_HOBGOBLIN:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(185, 210) * mod;
         else
@@ -1780,7 +1825,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_GIANT:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(300, 450) * mod;
         else
@@ -1793,7 +1838,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_GNOME:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(85, 137) * mod;
         else
@@ -1806,7 +1851,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_ONI:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(185, 215) * mod;
         else
@@ -1819,7 +1864,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_WAKYAMBI:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(180, 205) * mod;
         else
@@ -1832,7 +1877,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_OGRE:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(185, 235) * mod;
         else
@@ -1845,7 +1890,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_MINOTAUR:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(200, 255) * mod;
         else
@@ -1858,7 +1903,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_SATYR:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(180, 217) * mod;
         else
@@ -1871,7 +1916,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_NIGHTONE:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(185, 227) * mod;
         else
@@ -1884,7 +1929,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     case RACE_DRAGON:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(300, 400) * mod;
         else
@@ -1897,7 +1942,7 @@ float gen_size(int race, bool height, int size, int sex)
       }
       break;
     default:
-      if (sex == SEX_MALE) {
+      if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
           return number(160, 187) * mod;
         else

@@ -299,6 +299,8 @@ const char *room_bits[] =
     "ALL_VEH_ACCESS",
     "HELIPAD",
     "RUNWAY",
+    "AIRCRAFT_ROAD",
+    "AIRCRAFT_CRASH_OK",
     MAX_FLAG_MARKER
   };
 
@@ -321,7 +323,7 @@ const char *exit_bits[] =
   };
 
 
-/* SEX_x */
+/* PRONOUNS_x -- for appearance, rather than the pronouns themselves */
 const char *genders[] =
   {
     "Neutral",
@@ -383,6 +385,25 @@ const char *spirit_name[] =
     "Swamp",
     "\n"
   };
+
+const char *spirit_name_with_hearth[] =
+{
+  "Hearth",
+  "City",
+  "Field",
+  "Forest",
+  "Desert",
+  "Mountain",
+  "River",
+  "Sea",
+  "Prairie",
+  "Mist",
+  "Storm",
+  "Wind",
+  "Lake",
+  "Swamp",
+  "\n"
+};
 
 const char *spirit_powers[] =
   {
@@ -663,6 +684,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Client-Configurable Color", FALSE, TRUE  },
   { "Don't Alert Doctors on Mort", FALSE, TRUE  },
   { "MailLog"              , TRUE , TRUE  },
+  { "No Follow"            , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -738,6 +760,7 @@ const char *preference_bits[] =
     "COERCE_ANSI",
     "ALERT_DOCTORS_ON_MORT",
     "MAILLOG",
+    "NOFOLLOW",
     MAX_FLAG_MARKER
   };
 
@@ -760,7 +783,7 @@ const char *affected_bits[] =
     "LL-eyes",
     "Laser-sight",
     "Sneak",
-    "Hide",
+    "DO NOT USE",
     "Vision x1",
     "Charm",
     "ACTION",
@@ -808,11 +831,11 @@ const char *connected_types[] =
   {
     "Playing",                                    // 0
     "Disconnecting",
-    "Get name",
-    "Confirm name",
-    "Get password",
-    "Get new PW",                                 // 5
-    "Confirm new PW",
+    "Get Name",
+    "Confirm Name",
+    "Get Password",
+    "Get New PW",                                 // 5
+    "Confirm New PW",
     "CharGen",
     "Reading MOTD",
     "Main Menu",
@@ -822,7 +845,7 @@ const char *connected_types[] =
     "Changing PW 3",
     "Self-Delete 1",
     "Self-Delete 2",                              // 15
-    "Quit menu",
+    "Quit Menu",
     "Changing PW Q1",
     "Changing PW Q2",
     "Changing PW Q3",
@@ -851,9 +874,13 @@ const char *connected_types[] =
     "Background Customizing",
     "Trideo Message Adding",
     "Creating Ammo",
-    "Asking name",
-    "Playergroup editing",
-    "Helpfile editing",
+    "Asking Name",
+    "Playergroup Editing",
+    "Helpfile Editing",
+    "Apartment Complex Editing",
+    "Apartment Editing",
+    "Vehicle Decorating",
+    "Tempdesc Editing",
     "\n"
   };
 
@@ -1049,7 +1076,6 @@ const char *wear_bits[] =
     "UNDERARM",
     "FACE",
     "THIGH",
-    "PATCH",
     "UNDERWEAR",
     "CHEST/UNDER",
     "LAPEL",
@@ -1720,6 +1746,7 @@ struct skill_data skills[] =
     {"Piloting Tracked Vehicles",               REA, SKILL_TYPE_ACTIVE,    FALSE,    10,  FALSE,  FALSE },
     {"Piloting Walkers",                        REA, SKILL_TYPE_ACTIVE,    FALSE,    11,  FALSE,  FALSE },
     {"Mandarin",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
+    {"Haitian Creole",                          INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
   };
 
 int rev_dir[] =
@@ -1855,12 +1882,13 @@ const char *mod_name[NUM_MODS] =
 
 const char *engine_types[NUM_ENGINE_TYPES] =
   {
-     "Nothing",
-     "Electric",
-     "Fuel Cell",
-     "Gasoline",
-     "Methane",
-     "Diesel"
+    "Nothing",
+    "Electric",
+    "Fuel Cell",
+    "Gasoline",
+    "Methane",
+    "Diesel",
+    "Jet"
   };
 
 const char *veh_aff[] =
@@ -3015,7 +3043,8 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Staff Payout", NI_IS_FAUCET},
     {"Staff Charge", NI_IS_SINK},
     {"Syspoint Purchase", NI_IS_SINK},
-    {"Flight Fuel", NI_IS_SINK}
+    {"Flight Fuel", NI_IS_SINK},
+    {"Decorating", NI_IS_SINK}
   };
 
 const char *ignored_bits_in_english[] =
@@ -3046,4 +3075,32 @@ const char *veh_speeds[] = {
   "cruising",
   "speeding",
   "max"
+};
+
+struct kosher_weapon_values_struct kosher_weapon_values[MAX_WEAP] = {
+/*                    POWER, DAM CODE, SKILL                  , CONC, AMMO, FM_SS, FM_SA, FM_BF, FM_FA, COMP, BOTTM, BARRL, TOP  , STR+, REACH */
+/* EDGED          */ {  0  , SERIOUS , SKILL_EDGED_WEAPONS    , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 3   , 1    }, // WEAP_EDGED          
+/* CLUB           */ {  0  , SERIOUS , SKILL_CLUBS            , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 3   , 1    }, // WEAP_CLUB           
+/* POLEARM        */ {  0  , SERIOUS , SKILL_POLE_ARMS        , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 4   , 2    }, // WEAP_POLEARM        
+/* WHIP           */ {  0  , MODERATE, SKILL_WHIPS_FLAILS     , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 2   , 2    }, // WEAP_WHIP           
+/* GLOVE          */ {  0  , MODERATE, SKILL_UNARMED_COMBAT   , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 1   , 0    }, // WEAP_GLOVE          
+/* HOLDOUT        */ {  5  , LIGHT   , SKILL_PISTOLS          , 8   , 7   , FALSE, TRUE , FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 0   , 0    }, // WEAP_HOLDOUT        
+/* LIGHT_PISTOL   */ {  7  , LIGHT   , SKILL_PISTOLS          , 6   , 24  , FALSE, TRUE , TRUE , FALSE, 0   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_LIGHT_PISTOL   
+/* MACHINE_PISTOL */ {  7  , LIGHT   , SKILL_PISTOLS          , 6   , 40  , FALSE, TRUE , TRUE , TRUE , 1   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_MACHINE_PISTOL 
+/* HEAVY_PISTOL   */ {  10 , MODERATE, SKILL_PISTOLS          , 5   , 24  , FALSE, TRUE , TRUE , FALSE, 1   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_HEAVY_PISTOL   
+/* TASER          */ {  10 , SERIOUS , SKILL_TASERS           , 5   , 8   , FALSE, TRUE , FALSE, FALSE, 0   , FALSE, FALSE, TRUE , 0   , 0    }, // WEAP_TASER          
+/* SMG            */ {  7  , MODERATE, SKILL_SMG              , 4   , 40  , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SMG            
+/* SPORT_RIFLE    */ {  10 , SERIOUS , SKILL_RIFLES           , 2   , 10  , TRUE , TRUE , TRUE , FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SPORT_RIFLE    
+/* SNIPER_RIFLE   */ {  14 , SERIOUS , SKILL_RIFLES           , 0   , 14  , TRUE , TRUE , FALSE, FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SNIPER_RIFLE   
+/* ASSAULT_RIFLE  */ {  9  , MODERATE, SKILL_ASSAULT_RIFLES   , 3   , 50  , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_ASSAULT_RIFLE  
+/* SHOTGUN        */ {  10 , SERIOUS , SKILL_SHOTGUNS         , 0   , 50  , TRUE , TRUE , TRUE , FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SHOTGUN        
+/* LMG            */ {  8  , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_LMG            
+/* MMG            */ {  10 , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MMG            
+/* HMG            */ {  11 , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_HMG            
+/* CANNON         */ {  20 , DEADLY  , SKILL_ASSAULT_CANNON   , 0   , 100 , TRUE , FALSE, FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_CANNON         
+/* MINIGUN        */ {  0  , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MINIGUN        
+/* GREN_LAUNCHER  */ {  0  , 0       , SKILL_GRENADE_LAUNCHERS, 0   , 6   , FALSE, TRUE , FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_GREN_LAUNCHER  
+/* MISS_LAUNCHER  */ {  0  , 0       , SKILL_MISSILE_LAUNCHERS, 0   , 1   , TRUE , FALSE, FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MISS_LAUNCHER  
+/* REVOLVER       */ {  9  , MODERATE, SKILL_PISTOLS          , 0   , 7   , TRUE , TRUE , FALSE, FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_REVOLVER       
+/* GRENADE        */ {  0  , 0       , 0                      , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, TRUE , TRUE , 0   , 0    }  // WEAP_GRENADE        
 };

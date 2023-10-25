@@ -417,7 +417,7 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
       d->edit_mode = VEDIT_TYPE;
       break;
     case 'c':
-      for (number = 1; number <= ENGINE_DIESEL; number ++)
+      for (number = 1; number < NUM_ENGINE_TYPES; number ++)
         send_to_char(CH, "  %d) %s\r\n", number, engine_types[number]);
       send_to_char("Enter default engine type: ", CH);
       d->edit_mode = VEDIT_ENGINE;
@@ -692,7 +692,7 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
     break;
   case VEDIT_ENGINE:
     number = atoi(arg);
-    if (number < 1 || number > ENGINE_DIESEL)
+    if (number < 1 || number >= NUM_ENGINE_TYPES)
       send_to_char("Invalid Engine Type. Select Type : ", CH);
     else {
       d->edit_veh->engine = number;
@@ -714,8 +714,13 @@ void write_vehs_to_disk(int zone)
 
   veh = Mem->GetVehicle();
 
-  snprintf(buf, sizeof(buf), "%s/%d.veh", VEH_PREFIX, zone_table[zone].number);
-  fp = fopen(buf, "w+");
+  char final_file_name[1000];
+  snprintf(final_file_name, sizeof(final_file_name), "%s/%d.veh", VEH_PREFIX, zone_table[zone].number);
+
+  char tmp_file_name[1000];
+  snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
+  
+  fp = fopen(tmp_file_name, "w+");
 
   /* start running through all vehicles in this zone */
   for (counter = zone_table[zone].number * 100; counter <= zone_table[zone].top; counter++) {
@@ -762,4 +767,8 @@ void write_vehs_to_disk(int zone)
   clear_vehicle(veh);
   delete veh;
   write_index_file("veh");
+
+  // Remove old, move tmp to cover.
+  remove(final_file_name);
+  rename(tmp_file_name, final_file_name);
 }

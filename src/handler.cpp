@@ -50,8 +50,6 @@ int get_skill_dice_in_use_for_weapons(struct char_data *ch);
 
 void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
 void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
-void _char_with_light_to_room(struct char_data *ch);
-void _char_with_light_from_room(struct char_data *ch);
 
 struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 
@@ -1006,6 +1004,7 @@ void affect_total(struct char_data * ch)
     } else {
       // Only Shamans and Hermetics get these pools.
       if (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) {
+        // Note that this uses GET_MAGIC (their magic pool) rather than GET_MAG (their magic attribute).
         int sdef = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
         int drain = MIN(GET_MAGIC(ch), GET_DRAIN(ch));
         int reflect = MIN(GET_MAGIC(ch), GET_REFLECT(ch));
@@ -1137,7 +1136,7 @@ void veh_from_room(struct veh_data * veh)
     veh->in_veh->usedload -= veh->body * mult;
   } else {
     REMOVE_FROM_LIST(veh, veh->in_room->vehicles, next_veh);
-    veh->in_room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]--;
+    recalculate_room_light(veh->in_room);
   }
   veh->in_room = NULL;
   veh->next_veh = NULL;
@@ -1163,8 +1162,7 @@ void char_from_room(struct char_data * ch)
     stop_fighting(ch);
 
   if (ch->in_room) {
-    // Character is in a room. Clean up room effects sourced by character.
-    _char_with_light_from_room(ch);
+    struct room_data *in_room = ch->in_room;
 
     _char_with_spell_from_room(ch, SPELL_SILENCE, ch->in_room->silence);
     _char_with_spell_from_room(ch, SPELL_SHADOW, ch->in_room->shadow);
@@ -1179,6 +1177,9 @@ void char_from_room(struct char_data * ch)
     ch->in_room = NULL;
     ch->next_in_room = NULL;
     CHAR_X(ch) = CHAR_Y(ch) = 0;
+
+    // Character was in a room. Clean up room effects sourced by character.
+    recalculate_room_light(in_room);
   }
 
   if (ch->in_veh) {
@@ -1223,7 +1224,7 @@ void veh_to_room(struct veh_data * veh, struct room_data *room)
     veh->next_veh = room->vehicles;
     room->vehicles = veh;
     veh->in_room = room;
-    room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]++; // headlights
+    recalculate_room_light(room);
   }
 }
 
@@ -1359,10 +1360,20 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY))
     room->peaceful++;
 
-  if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-    GET_DOMAIN(ch) = SECT(ch->in_room);
+  if (GET_TRADITION(ch) == TRAD_SHAMANIC) {
+    switch (SECT(ch->in_room)) {
+      case SPIRIT_MIST:
+      case SPIRIT_STORM:
+      case SPIRIT_WIND:
+        GET_DOMAIN(ch) = SPIRIT_SPECIAL_DOMAIN_SKY;
+        break;
+      default:
+        GET_DOMAIN(ch) = SECT(ch->in_room);
+        break;
+    }
+  }
 
-  _char_with_light_to_room(ch);
+  recalculate_room_light(ch->in_room);
 
   _char_with_spell_to_room(ch, SPELL_SILENCE, ch->in_room->silence);
   _char_with_spell_to_room(ch, SPELL_SHADOW, ch->in_room->shadow);
@@ -1717,7 +1728,7 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool reca
   obj->worn_on = pos;
 
   if (ch->in_room) {
-    _char_with_light_to_room(ch);
+    recalculate_room_light(ch->in_room);
   }
 
   for (j = 0; j < MAX_OBJ_AFFECT; j++)
@@ -1752,11 +1763,6 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
   obj->worn_by = NULL;
   obj->worn_on = -1;
 
-  if (ch->in_room)
-  {
-    _char_with_light_from_room(ch);
-  }
-
   if (pos == WEAR_HOLD || pos == WEAR_WIELD)
   {
     if (FIGHTING(ch))
@@ -1764,6 +1770,10 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
   }
 
   GET_EQ(ch, pos) = NULL;
+
+  if (ch->in_room) {
+    recalculate_room_light(ch->in_room);
+  }
 
   for (j = 0; j < MAX_OBJ_AFFECT; j++)
     affect_modify(ch,
@@ -1782,7 +1792,7 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
         }
     }
     GET_FOCI(ch)--;
-    GET_OBJ_VAL(obj, 4) = 0;
+    GET_FOCUS_ACTIVATED(obj) = 0;
   }
   if (recalc) {
     affect_total(ch);
@@ -3522,28 +3532,4 @@ void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_
       }
     }
   }
-}
-
-void _handle_char_with_light(struct char_data *ch, bool add) {
-  if (!ch->in_room) {
-    mudlog("SYSERR: Got NULL ch->in_room to _handle_char_with_light()!", ch, LOG_SYSLOG, TRUE);
-    return;
-  }
-
-  struct obj_data *light = GET_EQ(ch, WEAR_LIGHT);
-  if (light && GET_OBJ_TYPE(light) == ITEM_LIGHT) {
-    if (add) {
-      ch->in_room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]++;
-    } else {
-      ch->in_room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS]--;
-    }
-  }
-}
-
-void _char_with_light_to_room(struct char_data *ch) {
-  _handle_char_with_light(ch, TRUE);
-}
-
-void _char_with_light_from_room(struct char_data *ch) {
-  _handle_char_with_light(ch, FALSE);
 }

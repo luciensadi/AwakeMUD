@@ -116,7 +116,7 @@ ACMD(do_say)
   }
 
   if (subcmd == SCMD_SAYTO) {
-    half_chop(arg_known_size, buf, buf2);
+    half_chop(arg_known_size, buf, buf2, sizeof(buf2));
     strlcpy(arg_known_size, buf2, sizeof(arg_known_size));
 
     if (ch->in_veh)
@@ -141,7 +141,7 @@ ACMD(do_say)
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM) && !IS_IGNORING(tmp, is_blocking_osays_from, ch)) {
         // They're a valid target, so send the message with a raw perform_act() call.
-        store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp));
+        store_message_to_history(tmp->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, tmp, FALSE));
       }
     }
     // Send it to anyone who's rigging a vehicle here.
@@ -150,7 +150,7 @@ ACMD(do_say)
          veh = veh->next_veh)
     {
       if (veh->rigger && veh->rigger->desc && !IS_IGNORING(veh->rigger, is_blocking_osays_from, ch))
-        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_OSAYS, perform_act(buf, ch, NULL, NULL, veh->rigger, FALSE));
     }
   } else {
     // Speech gives you 5 minutes of grace period. Emotes give you more.
@@ -199,7 +199,7 @@ ACMD(do_say)
                 capitalize(replace_too_long_words(veh->rigger, ch, arg_known_size, language, GET_CHAR_COLOR_HIGHLIGHT(ch))),
                 ispunct(get_final_character_from_string(arg_known_size)) ? "" : "."
               );
-        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+        store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger, FALSE));
       }
     }
   }
@@ -264,7 +264,7 @@ ACMD(do_exclaim)
                capitalize(replace_too_long_words(tmp, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
 
       // They're a valid target, so send the message with a raw perform_act() call.
-      store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
+      store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp, FALSE));
     }
   }
 
@@ -279,7 +279,7 @@ ACMD(do_exclaim)
                (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
                capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
 
-      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger, FALSE));
     }
   }
 
@@ -331,7 +331,7 @@ ACMD(do_tell)
   struct char_data *vict = NULL;
   SPECIAL(johnson);
 
-  half_chop(argument, buf, buf2);
+  half_chop(argument, buf, buf2, sizeof(buf2));
 
   if (!*buf || !*buf2) {
     send_to_char("Who do you wish to tell what??\r\n", ch);
@@ -469,7 +469,7 @@ ACMD(do_ask)
                capitalize(replace_too_long_words(tmp, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
 
       // They're a valid target, so send the message with a raw perform_act() call.
-      store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp));
+      store_message_to_history(tmp->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, tmp, FALSE));
     }
   }
 
@@ -484,7 +484,7 @@ ACMD(do_ask)
                (PRF_FLAGGED(veh->rigger, PRF_NOHIGHLIGHT) || PRF_FLAGGED(veh->rigger, PRF_NOCOLOR)) ? "" : GET_CHAR_COLOR_HIGHLIGHT(ch),
                capitalize(replace_too_long_words(veh->rigger, ch, argument, language, GET_CHAR_COLOR_HIGHLIGHT(ch))));
 
-      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger));
+      store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger, FALSE));
     }
   }
 
@@ -520,7 +520,7 @@ ACMD(do_spec_comm)
   if (check_for_banned_content(argument, ch))
     return;
 
-  half_chop(argument, buf, buf2);
+  half_chop(argument, buf, buf2, sizeof(buf2));
 
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
@@ -668,7 +668,7 @@ ACMD(do_page)
   if (check_for_banned_content(argument, ch))
     return;
 
-  half_chop(argument, arg, buf2);
+  half_chop(argument, arg, buf2, sizeof(buf2));
 
   if (IS_NPC(ch))
     send_to_char("NPCs can't page.. go away.\r\n", ch);
@@ -1272,6 +1272,19 @@ ACMD(do_gen_comm)
       return;
     }
     */
+
+    // Add a nudge to not just say 'help x' on the newbie channel.
+    if (strlen(argument) > 6) {
+      if (tolower(argument[0]) == 'h' && tolower(argument[1]) == 'e' && tolower(argument[2]) == 'l' && tolower(argument[3]) == 'p' && tolower(argument[4]) == ' ') {
+        bool is_help_x = TRUE;
+        for (size_t i = 5; i < strlen(argument) && is_help_x; i++) {
+          is_help_x = !isspace(argument[i]);
+        }
+        if (is_help_x) {
+          send_to_char("^c(Gentle reminder: It's not a great newbie experience to be told 'help x' with no context! Please explain a little more if you can.)^n\r\n", ch);
+        }
+      }
+    }
   }
 
   // Returning command to handle shout.
@@ -1332,7 +1345,7 @@ ACMD(do_gen_comm)
           // Replicate act() in a way that lets us capture the message.
           if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
             // They're a valid target, so send the message with a raw perform_act() call.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp, FALSE));
           }
         }
       }
@@ -1351,7 +1364,7 @@ ACMD(do_gen_comm)
                      com_msgs[subcmd][3]);
 
             // They're a valid target, so send the message with a raw perform_act() call.
-            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp));
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, perform_act(buf1, ch, NULL, NULL, tmp, FALSE));
           }
         }
         ch->in_veh = NULL;
@@ -1393,11 +1406,16 @@ ACMD(do_gen_comm)
       if (!d->character || IS_IGNORING(d->character, is_blocking_oocs_from, ch))
         continue;
 
-      // Anyone who's not either staff or in specific playing states is skipped.
-      if (!access_level(d->character, LVL_BUILDER)
-          && ((d->connected != CON_PLAYING && !PRF_FLAGGED(d->character, PRF_MENUGAG))
-              || PRF_FLAGGED( d->character, PRF_NOOOC)
-              || PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)))
+      // Skip chargen chars (they never see OOC)
+      if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED))
+        continue;
+
+      // Skip anyone who's opted out of OOC.
+      if (PRF_FLAGGED(d->character, PRF_NOOOC))
+        continue;
+
+      // Skip anyone who's flagged themselves as menu-gagged.
+      if ((d->connected != CON_PLAYING && PRF_FLAGGED(d->character, PRF_MENUGAG)))
         continue;
 
       // No autopunct for channels.
@@ -1421,12 +1439,14 @@ ACMD(do_gen_comm)
 
   // The commands after this line don't return-- they just set things and follow the loop at the end.
   if (subcmd == SCMD_RPETALK) {
-    snprintf(buf, sizeof(buf), "%s%s ^W[^rRPE^W]^r %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
+    snprintf(buf, sizeof(buf), "^W%s [^CRPEtalk^n]^c %s^n\r\n", GET_CHAR_NAME(ch), capitalize(argument));
+    send_to_char(buf, ch);
 
     channel = COMM_CHANNEL_RPE;
     store_message_to_history(ch->desc, channel, buf);
   } else if (subcmd == SCMD_HIREDTALK) {
     snprintf(buf, sizeof(buf), "%s%s ^y[^YHIRED^y]^Y %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
+    send_to_char(buf, ch);
 
     channel = COMM_CHANNEL_HIRED;
     store_message_to_history(ch->desc, channel, buf);
@@ -2131,7 +2151,7 @@ ACMD(do_message_history) {
     return;
   }
 
-  half_chop(argument, buf, buf2);
+  half_chop(argument, buf, buf2, sizeof(buf2));
 
   // Find the channel referenced in first parameter.
   for (channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)

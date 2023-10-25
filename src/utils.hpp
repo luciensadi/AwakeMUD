@@ -30,7 +30,7 @@ struct obj_data;
 /* public functions in utils.c */
 bool    has_cyberweapon(struct char_data *ch);
 char *  str_dup(const char *source);
-char *  str_str( const char *str1, const char *str2 );
+char *  str_str(const char *string, const char *keyword);
 int     str_cmp(const char *arg1, const char *arg2);
 int     strn_cmp(const char *arg1, const char *arg2, int n);
 size_t  strlcpy(char *buf, const char *src, size_t bufsz);
@@ -69,7 +69,7 @@ char *  string_to_uppercase(const char *source);
 char *  string_to_lowercase(const char *source);
 int     get_speed(struct veh_data *veh);
 int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy, bool include_metavariant_penalty=1);
-float   gen_size(int race, bool height, int size, int sex);
+float   gen_size(int race, bool height, int size, int pronouns);
 int     get_skill(struct char_data *ch, int skill, int &target, char *mb=NULL, size_t mb_len=0);
 void    add_follower(struct char_data *ch, struct char_data *leader);
 int     light_level(struct room_data *room);
@@ -125,7 +125,7 @@ void    set_new_mobile_unique_id(struct char_data *ch);
 int     return_general(int skill_num);
 bool    perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_to_avoid_knockback=0);
 int     get_zone_index_number_from_vnum(vnum_t vnum);
-bool    room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch);
+bool    room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch, bool send_message);
 bool    veh_can_traverse_land(struct veh_data *veh);
 bool    veh_can_traverse_water(struct veh_data *veh);
 bool    veh_can_traverse_air(struct veh_data *veh);
@@ -140,15 +140,35 @@ int     get_focus_bond_cost(struct obj_data *obj);
 bool    char_is_in_social_room(struct char_data *ch);
 bool    is_custom_ware(struct obj_data *ware);
 void    render_targets_abilities_to_viewer(struct char_data *viewer, struct char_data *vict);
+void    mob_say(struct char_data *mob, const char *msg);
+const char *get_room_desc(struct room_data *room);
+bool    string_is_valid_for_paths(const char *str);
 bool    obj_is_a_vehicle_title(struct obj_data *obj);
 bool    can_perform_aggressive_action(struct char_data *actor, struct char_data *victim, const char *calling_func_name, bool send_message);
+bool    veh_is_aircraft(struct veh_data *veh);
+int     count_object_including_contents(struct obj_data *obj);
+int     count_objects_in_room(struct room_data *room);
+int     count_objects_in_veh(struct veh_data *veh);
+struct zone_data *get_zone_from_vnum(vnum_t vnum);
+const char *vnum_to_string(vnum_t vnum);
+const char *get_ch_domain_str(struct char_data *ch, bool include_possibilities);
+void    zero_cost_of_obj_and_contents(struct obj_data *obj);
+struct char_data *ch_is_grouped_with_idnum(struct char_data *ch, idnum_t idnum);
+void    log_traceback(const char *context, ...);
+
+bool obj_is_apartment_only_drop_item(struct obj_data *obj);
+bool obj_contains_apartment_only_drop_items(struct obj_data *obj);
 
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);
 
-bool    keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords=1, bool search_name=1, bool search_desc=0);
-bool    keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords=1, bool search_name=1, bool search_desc=0);
-bool    keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name=1, bool search_desc=0);
+const char * keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords=1, bool search_name=1, bool search_desc=0);
+const char * keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords=1, bool search_name=1, bool search_desc=0);
+const char * keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name=1, bool search_desc=0, bool search_messages=0);
+const char * keyword_appears_in_room(const char *keyword, struct room_data *room, bool search_name, bool search_descs, bool search_exits);
+const char * keyword_appears_in_host(const char *keyword, struct host_data *host, bool search_name, bool search_descs, bool search_messages);
+const char * keyword_appears_in_icon(const char *keyword, struct matrix_icon *icon, bool search_name, bool search_descs);
+const char * keyword_appears_in_quest(const char *keyword, struct quest_data *quest);
 
 struct obj_data *find_best_active_docwagon_modulator(struct char_data *ch);
 
@@ -254,6 +274,10 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define SECS_PER_REAL_HOUR      (60*SECS_PER_REAL_MIN)
 #define SECS_PER_REAL_DAY       (24*SECS_PER_REAL_HOUR)
 #define SECS_PER_REAL_YEAR      (365*SECS_PER_REAL_DAY)
+
+#define MINS_PER_REAL_HOUR      60
+#define MINS_PER_REAL_DAY       (24*MINS_PER_REAL_HOUR)
+#define MINS_PER_REAL_MONTH     (30*MINS_PER_REAL_DAY)
 
 /* string utils **********************************************************/
 
@@ -374,7 +398,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_ROOM_NAME(room) ((room) ? (room)->name : "(null room's name)")
 #define GET_ROOM_DESC(room) ((room) ? ((room)->night_desc && weather_info.sunlight == SUN_DARK ? (room)->night_desc : (room)->description) : "(null room's desc)")
-#define GET_ROOM_FLIGHT_CODE(room) ((room) ? (room)->flight_code : (room)->name)
+#define GET_ROOM_FLIGHT_CODE(room) ((room) ? (room)->flight_code : "(null room's flight code)")
 
 #define VALID_ROOM_RNUM(rnum) ((rnum) != NOWHERE && (rnum) <= top_of_world)
 
@@ -389,6 +413,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_SETTABLE_BACKGROUND_COUNT(room) ((room)->background[0])
 #define GET_SETTABLE_BACKGROUND_AURA(room)  ((room)->background[1])
 
+#define ROOM_IS_PEACEFUL(room) ((room)->peaceful || GET_APARTMENT((room)))
+
 /* zone utils ************************************************************/
 
 #define GET_JURISDICTION(room) (zone_table[(room)->zone].jurisdiction)
@@ -398,7 +424,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_WAS_IN(ch)  ((ch)->was_in_room)
 
-#define GET_VEH_NAME(veh) (decapitalize_a_an((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE")))
+#define GET_VEH_NAME(veh) (veh ? decapitalize_a_an((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE")) : "(null veh)")
 #define GET_VEH_NAME_NOFORMAT(veh) ((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE"))
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
 #define GET_VEH_RNUM(veh) ((veh)->veh_number)
@@ -446,7 +472,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_LASTROOM(ch)          ((ch)->player.last_room)
 #define GET_HEIGHT(ch)        ((ch)->player.height)
 #define GET_WEIGHT(ch)        ((ch)->player.weight)
-#define GET_SEX(ch)           ((ch)->player.sex)
+#define GET_PRONOUNS(ch)           ((ch)->player.pronouns)
 
 #define GET_ATT(ch, i)        ((ch)->aff_abils.attributes[(i)])
 #define GET_REAL_ATT(ch, i)   ((ch)->real_abils.attributes[(i)])
@@ -629,7 +655,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define BOOST(ch)               ((ch)->char_specials.saved.boosted)
 #define GET_EQ(ch, i)         ((ch)->equipment[i])
 
-#define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS) || (skill) == SKILL_MANDARIN)
+#define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS) || ((skill) == SKILL_MANDARIN || (skill) == SKILL_HAITIAN_CREOLE))
 
 #define GET_SKILL_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_SKILLS])
 #define GET_ADEPT_POWER_DIRTY_BIT(ch)   ((ch)->char_specials.dirty_bits[DIRTY_BIT_POWERS])
@@ -755,12 +781,12 @@ float get_proto_weight(struct obj_data *obj);
 
 /* compound utilities and other macros **********************************/
 
-#define HSHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "his":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "its": "their"))
-#define HSSH(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "he" :"she") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "they" ))
-#define HMHR(ch)    (GET_SEX(ch) ? (GET_SEX(ch)==SEX_MALE ? "him":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "them" ))
-#define HASHAVE(ch) (GET_SEX(ch) != SEX_NEUTRAL ?              "has"     : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "has": "have" ))
-#define ISARE(ch)   (GET_SEX(ch) != SEX_NEUTRAL ?              "is"      : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "is" : "are"  ))
-#define HSSH_SHOULD_PLURAL(ch) (GET_SEX(ch) || (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)))
+#define HSHR(ch)    (GET_PRONOUNS(ch) ? (GET_PRONOUNS(ch)==PRONOUNS_MASCULINE ? "his":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "its": "their"))
+#define HSSH(ch)    (GET_PRONOUNS(ch) ? (GET_PRONOUNS(ch)==PRONOUNS_MASCULINE ? "he" :"she") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "they" ))
+#define HMHR(ch)    (GET_PRONOUNS(ch) ? (GET_PRONOUNS(ch)==PRONOUNS_MASCULINE ? "him":"her") : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "it" : "them" ))
+#define HASHAVE(ch) (GET_PRONOUNS(ch) != PRONOUNS_NEUTRAL ?              "has"     : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "has": "have" ))
+#define ISARE(ch)   (GET_PRONOUNS(ch) != PRONOUNS_NEUTRAL ?              "is"      : ((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) ? "is" : "are"  ))
+#define HSSH_SHOULD_PLURAL(ch) (GET_PRONOUNS(ch) || (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)))
 
 #define ANA(obj) (strchr((const char *)"aeiouyAEIOUY", *(obj)->text.keywords) ? "An" : "A")
 #define SANA(obj) (strchr((const char *)"aeiouyAEIOUY", *(obj)->text.keywords) ? "an" : "a")
@@ -1141,15 +1167,16 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_DECK_ACCESSORY_IS_CHIPS(accessory)               (GET_OBJ_VAL((accessory), 1))
 
 // ITEM_DECK_ACCESSORY TYPE_FILE convenience defines
-#define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory)     (GET_OBJ_VAL((accessory), 1))
-#define GET_DECK_ACCESSORY_FILE_SIZE(accessory)              (GET_OBJ_VAL((accessory), 2))
-#define GET_DECK_ACCESSORY_FILE_HOST_VNUM(accessory)         (GET_OBJ_VAL((accessory), 3))
-#define GET_DECK_ACCESSORY_FILE_HOST_COLOR(accessory)        (GET_OBJ_VAL((accessory), 4))
-#define GET_DECK_ACCESSORY_FILE_PROTECTION(accessory)        (GET_OBJ_VAL((accessory), 5))
-#define GET_DECK_ACCESSORY_FILE_RATING(accessory)            (GET_OBJ_VAL((accessory), 6))
-#define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)          (GET_OBJ_VAL((accessory), 7))
-#define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)      (GET_OBJ_VAL((accessory), 8))
-#define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)         (GET_OBJ_VAL((accessory), 9))
+#define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory)        (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_FILE_SIZE(accessory)                 (GET_OBJ_VAL((accessory), 2))
+#define GET_DECK_ACCESSORY_FILE_HOST_VNUM(accessory)            (GET_OBJ_VAL((accessory), 3))
+#define GET_DECK_ACCESSORY_FILE_HOST_COLOR(accessory)           (GET_OBJ_VAL((accessory), 4))
+#define GET_DECK_ACCESSORY_FILE_PROTECTION(accessory)           (GET_OBJ_VAL((accessory), 5))
+#define GET_DECK_ACCESSORY_FILE_RATING(accessory)               (GET_OBJ_VAL((accessory), 6))
+#define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)             (GET_OBJ_VAL((accessory), 7))
+#define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)         (GET_OBJ_VAL((accessory), 8))
+#define GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(accessory) (GET_OBJ_VAL((accessory), 8))
+#define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)            (GET_OBJ_VAL((accessory), 9))
 
 // ITEM_DECK_ACCESSORY TYPE_COOKER convenience defines
 #define GET_DECK_ACCESSORY_COOKER_RATING(accessory)          (GET_OBJ_VAL((accessory), 1))
@@ -1207,6 +1234,7 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_AMMOBOX_INTENDED_QUANTITY(box)                  (GET_OBJ_VAL((box), 3))
 #define GET_AMMOBOX_TIME_TO_COMPLETION(box)                 (GET_OBJ_VAL((box), 4))
 #define GET_AMMOBOX_CREATOR(box)                            (GET_OBJ_VAL((box), 9))
+#define GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(box)        (GET_OBJ_VAL((box), 10))
 
 // ITEM_KEYRING convenience defines
 
@@ -1395,7 +1423,11 @@ void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick,
 
 #define GET_WOUND_NAME(damage_level) (wound_name[MIN(DEADLY, MAX(0, damage_level))])
 #define GET_SHORT_WOUND_NAME(damage_level) (wound_arr[MIN(DEADLY, MAX(0, damage_level))])
+#define GET_WEAPON_TYPE_NAME(weapon_type) (weapon_types[MIN(MAX_WEAP - 1, MAX(0, weapon_type))])
 
 #define DEBUG_TO_STAFF(ch, ...) if (access_level((ch), LVL_BUILDER)) { send_to_char((ch), __VA_ARGS__); }
+
+#define SPIRIT_IS_SKY_DOMAIN(sprt) ((sprt) == SPIRIT_MIST || (sprt) == SPIRIT_STORM || (sprt) == SPIRIT_WIND || (sprt) == SPIRIT_SPECIAL_DOMAIN_SKY)
+#define ROOM_SUPPORTS_SKY_DOMAIN(rum) ((rum) && (SPIRIT_IS_SKY_DOMAIN(SECT((rum))) || (SECT((rum)) != SPIRIT_FOREST && SECT((rum)) != SPIRIT_HEARTH && !ROOM_FLAGGED((rum), ROOM_INDOORS))))
 
 #endif

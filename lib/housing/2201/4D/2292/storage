@@ -1,0 +1,1227 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+	Guest0:	13831
+	Guest1:	13727
+[HOUSE]
+	[Object 0]
+		Vnum:	39358
+		Inside:	0
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	39363
+		Inside:	0
+		Cost:	2650
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	25569
+		Inside:	0
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	17582
+		Inside:	1
+		Timer:	4
+		Cost:	1200
+		ExtraFlags:	0
+		Name:	^[F555]a white hachimaki bandana bearing a c^[F400]rimson-re^[F555]d circle^N^n
+	[Object 4]
+		Vnum:	25627
+		Inside:	0
+		Value 1:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	121
+		Inside:	0
+		Value 0:	82
+		Value 1:	15
+		Value 2:	3
+		Cost:	820
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX light machine gun ammunition
+	[Object 6]
+		Vnum:	121
+		Inside:	0
+		Value 0:	79
+		Value 1:	13
+		Value 2:	2
+		Cost:	395
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of explosive assault rifle ammunition
+	[Object 7]
+		Vnum:	121
+		Inside:	0
+		Value 0:	40
+		Value 1:	10
+		Value 2:	3
+		Cost:	400
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX submachine gun ammunition
+	[Object 8]
+		Vnum:	121
+		Inside:	0
+		Value 1:	13
+		Value 2:	3
+		Cost:	100
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX assault rifle ammunition
+	[Object 9]
+		Vnum:	121
+		Inside:	0
+		Value 0:	500
+		Value 1:	12
+		Value 2:	2
+		Cost:	2500
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of explosive sniper rifle ammunition
+	[Object 10]
+		Vnum:	121
+		Inside:	0
+		Value 0:	38
+		Value 1:	13
+		Cost:	76
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal assault rifle ammunition
+	[Object 11]
+		Vnum:	121
+		Inside:	0
+		Value 0:	102
+		Value 1:	13
+		Value 2:	2
+		Cost:	510
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of explosive assault rifle ammunition
+	[Object 12]
+		Vnum:	121
+		Inside:	0
+		Value 0:	290
+		Value 1:	13
+		Value 2:	3
+		Value 4:	-2
+		Value 9:	13727
+		Value 10:	-1
+		Cost:	2900
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX assault rifle ammunition
+	[Object 13]
+		Vnum:	121
+		Inside:	0
+		Value 0:	690
+		Value 1:	17
+		Value 2:	1
+		Value 9:	13727
+		Value 10:	840
+		Cost:	4830
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS heavy machine gun ammunition
+	[Object 14]
+		Vnum:	121
+		Inside:	0
+		Value 0:	250
+		Value 1:	12
+		Cost:	500
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal sniper rifle ammunition
+	[Object 15]
+		Vnum:	121
+		Inside:	1
+		Value 0:	380
+		Value 1:	13
+		Value 2:	3
+		Value 3:	550
+		Value 4:	108
+		Value 9:	13682
+		Value 10:	180
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX assault rifle ammunition
+	[Object 16]
+		Vnum:	29326
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	1187
+		Inside:	1
+		Cost:	748
+		ExtraFlags:	0
+	[Object 18]
+		Vnum:	14307
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	1000000000
+	[Object 19]
+		Vnum:	60335
+		Inside:	1
+		Value 0:	8
+		Cost:	400
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	9402
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	11119
+		Inside:	1
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 22]
+		Vnum:	27808
+		Inside:	1
+		Cost:	70
+		ExtraFlags:	0
+	[Object 23]
+		Vnum:	39223
+		Inside:	1
+		Cost:	60000
+		ExtraFlags:	1000000
+	[Object 24]
+		Vnum:	30192
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 25]
+		Vnum:	30192
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 26]
+		Vnum:	18907
+		Inside:	1
+		Cost:	4000
+		ExtraFlags:	0
+	[Object 27]
+		Vnum:	61507
+		Inside:	1
+		Timer:	4
+		Cost:	250
+		ExtraFlags:	100000000000000000000000
+	[Object 28]
+		Vnum:	28640
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 29]
+		Vnum:	762
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 30]
+		Vnum:	17159
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 31]
+		Vnum:	1180
+		Inside:	1
+		Cost:	2963
+		ExtraFlags:	0
+	[Object 32]
+		Vnum:	29326
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	0
+		Name:	a sat-on plastiboard box adorned with the word '^oMIKAN^w'^n
+	[Object 33]
+		Vnum:	8439
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 34]
+		Vnum:	8453
+		Inside:	1
+		Cost:	6500
+		ExtraFlags:	1010000000000000000
+	[Object 35]
+		Vnum:	8453
+		Inside:	1
+		Cost:	6500
+		ExtraFlags:	1010000000000000000
+	[Object 36]
+		Vnum:	39241
+		Inside:	1
+		Cost:	850
+		ExtraFlags:	0
+	[Object 37]
+		Vnum:	17141
+		Inside:	1
+		Cost:	400
+		ExtraFlags:	0
+	[Object 38]
+		Vnum:	19409
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+		Name:	^[F541]a d^[F421]ikoted military tunic with a g^[F021]reen high-colla^[F421]r^N^n
+	[Object 39]
+		Vnum:	19409
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+		Name:	^[F111]a dikoted ^[F555]S^[F444]o^[F333]ki of Tok^[F444]y^[F555]o^N(tm) ^[F111]dress shirt^N^n
+	[Object 40]
+		Vnum:	33024
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	0
+		Name:	^[F541]a d^[F421]ouble-breasted overcoat with ^[F021]gr^[F421]een accen^[F021]ts^N^n
+	[Object 41]
+		Vnum:	5406
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 42]
+		Vnum:	5406
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 43]
+		Vnum:	5406
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 44]
+		Vnum:	29419
+		Inside:	1
+		Cost:	850
+		ExtraFlags:	0
+	[Object 45]
+		Vnum:	17147
+		Inside:	1
+		Cost:	420000
+		ExtraFlags:	1001000000
+	[Object 46]
+		Vnum:	17147
+		Inside:	1
+		Cost:	420000
+		ExtraFlags:	1001000000
+	[Object 47]
+		Vnum:	17147
+		Inside:	1
+		Cost:	420000
+		ExtraFlags:	1001000000
+	[Object 48]
+		Vnum:	29709
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+		Name:	^[F222]an ^[F111]Arman^[F555]te ^[F222]classic silk necktie^N^n
+	[Object 49]
+		Vnum:	14628
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 50]
+		Vnum:	14625
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 51]
+		Vnum:	29418
+		Inside:	1
+		Cost:	4000
+		ExtraFlags:	0
+	[Object 52]
+		Vnum:	681
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+		Name:	^la tight^L-^lfitting leather jacket riddled with ^[F110]st^[F210]ra^[F110]ps^l and ^[F420]bu^[F310]c^yk^[F310]l^[F420]es^n^n
+	[Object 53]
+		Vnum:	94317
+		Inside:	0
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 54]
+		Vnum:	31123
+		Inside:	0
+		Cost:	500
+		ExtraFlags:	0
+	[Object 55]
+		Vnum:	378
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 56]
+		Vnum:	38041
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 57]
+		Vnum:	39847
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 58]
+		Vnum:	60532
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 59]
+		Vnum:	19413
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 60]
+		Vnum:	60530
+		Inside:	1
+		Value 0:	3321
+		Value 1:	5551
+		Value 2:	1
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 61]
+		Vnum:	39864
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 62]
+		Vnum:	19459
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 63]
+		Vnum:	19459
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 64]
+		Vnum:	19458
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 65]
+		Vnum:	60531
+		Inside:	1
+		Value 0:	8
+		Timer:	4
+		Cost:	250
+		ExtraFlags:	0
+	[Object 66]
+		Vnum:	4922
+		Inside:	1
+		Value 0:	2206
+		Value 1:	7767
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 67]
+		Vnum:	2109
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 68]
+		Vnum:	16207
+		Inside:	1
+		Value 1:	13682
+		Condition:	12
+		Cost:	25000
+		ExtraFlags:	1000
+	[Object 69]
+		Vnum:	2415
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000
+	[Object 70]
+		Vnum:	2415
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000
+	[Object 71]
+		Vnum:	2415
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000
+	[Object 72]
+		Vnum:	2415
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000
+	[Object 73]
+		Vnum:	2415
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000
+	[Object 74]
+		Vnum:	2415
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000
+	[Object 75]
+		Vnum:	119
+		Inside:	1
+		Value 0:	13693
+		Value 1:	55000
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+	[Object 76]
+		Vnum:	119
+		Inside:	1
+		Value 0:	13650
+		Value 1:	30000
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+	[Object 77]
+		Vnum:	1822
+		Inside:	3
+		Cost:	0
+		ExtraFlags:	0
+	[Object 78]
+		Vnum:	9926
+		Inside:	3
+		Cost:	0
+		ExtraFlags:	0
+	[Object 79]
+		Vnum:	9927
+		Inside:	3
+		Cost:	0
+		ExtraFlags:	0
+	[Object 80]
+		Vnum:	17113
+		Inside:	3
+		Cost:	0
+		ExtraFlags:	0
+	[Object 81]
+		Vnum:	1139
+		Inside:	3
+		Cost:	0
+		ExtraFlags:	0
+	[Object 82]
+		Vnum:	1916
+		Inside:	2
+		Value 5:	292
+		Cost:	0
+		ExtraFlags:	0
+	[Object 83]
+		Vnum:	1187
+		Inside:	2
+		Cost:	400
+		ExtraFlags:	0
+	[Object 84]
+		Vnum:	1172
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 85]
+		Vnum:	1847
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 86]
+		Vnum:	38004
+		Inside:	1
+		Value 1:	1
+		Cost:	350
+		ExtraFlags:	0
+	[Object 87]
+		Vnum:	62126
+		Inside:	1
+		Value 1:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 88]
+		Vnum:	64921
+		Inside:	0
+		Cost:	2100
+		ExtraFlags:	0
+	[Object 89]
+		Vnum:	45188
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	11010000001000001001
+	[Object 90]
+		Vnum:	39921
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 91]
+		Vnum:	64919
+		Inside:	0
+		Cost:	3200
+		ExtraFlags:	0
+	[Object 92]
+		Vnum:	31124
+		Inside:	0
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 93]
+		Vnum:	4955
+		Inside:	1
+		Value 1:	18
+		Cost:	50
+		ExtraFlags:	0
+	[Object 94]
+		Vnum:	60349
+		Inside:	1
+		Cost:	18
+		ExtraFlags:	0
+	[Object 95]
+		Vnum:	60349
+		Inside:	1
+		Value 1:	4
+		Cost:	18
+		ExtraFlags:	0
+	[Object 96]
+		Vnum:	5022
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 97]
+		Vnum:	5022
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 98]
+		Vnum:	5022
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 99]
+		Vnum:	5022
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 100]
+		Vnum:	5022
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 101]
+		Vnum:	14609
+		Inside:	1
+		Value 1:	7
+		Cost:	20
+		ExtraFlags:	0
+	[Object 102]
+		Vnum:	31715
+		Inside:	1
+		Value 1:	25
+		Cost:	350
+		ExtraFlags:	0
+	[Object 103]
+		Vnum:	32339
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 104]
+		Vnum:	42174
+		Inside:	1
+		Value 1:	10
+		Cost:	90
+		ExtraFlags:	0
+	[Object 105]
+		Vnum:	30110
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 106]
+		Vnum:	39618
+		Inside:	0
+		Cost:	650
+		ExtraFlags:	0
+	[Object 107]
+		Vnum:	8498
+		Inside:	0
+		Cost:	1200
+		ExtraFlags:	0
+	[Object 108]
+		Vnum:	38041
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 109]
+		Vnum:	64930
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 110]
+		Vnum:	64930
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 111]
+		Vnum:	30172
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 112]
+		Vnum:	30172
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 113]
+		Vnum:	30173
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 114]
+		Vnum:	30173
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 115]
+		Vnum:	30169
+		Inside:	1
+		Value 1:	21
+		Cost:	10
+		ExtraFlags:	0
+	[Object 116]
+		Vnum:	30170
+		Inside:	1
+		Cost:	2
+		ExtraFlags:	0
+	[Object 117]
+		Vnum:	30170
+		Inside:	1
+		Cost:	2
+		ExtraFlags:	0
+	[Object 118]
+		Vnum:	15842
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 119]
+		Vnum:	92133
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 120]
+		Vnum:	92133
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 121]
+		Vnum:	92117
+		Inside:	1
+		Cost:	40
+		ExtraFlags:	0
+	[Object 122]
+		Vnum:	92117
+		Inside:	1
+		Cost:	40
+		ExtraFlags:	0
+	[Object 123]
+		Vnum:	92109
+		Inside:	1
+		Cost:	15
+		ExtraFlags:	0
+	[Object 124]
+		Vnum:	4913
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 125]
+		Vnum:	4912
+		Inside:	1
+		Cost:	5
+		ExtraFlags:	0
+	[Object 126]
+		Vnum:	85937
+		Inside:	2
+		Cost:	60000
+		ExtraFlags:	0
+	[Object 127]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a pain editor - cultured'
+	[Object 128]
+		Vnum:	85926
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 129]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a cerebral booster I - cultured'
+	[Object 130]
+		Vnum:	85270
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 131]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a boosted reflexes III - alpha'
+	[Object 132]
+		Vnum:	85684
+		Inside:	2
+		Cost:	24000
+		ExtraFlags:	0
+	[Object 133]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a fingertip compartment - delta'
+	[Object 134]
+		Vnum:	85277
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 135]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a dermal sheathing III - alpha'
+	[Object 136]
+		Vnum:	85267
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 137]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'some bone lacing (titanium) - alpha'
+	[Object 138]
+		Vnum:	85803
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 139]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'enhanced articulation'
+	[Object 140]
+		Vnum:	85938
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 141]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a synaptic accelerator I - cultured'
+	[Object 142]
+		Vnum:	39930
+		Inside:	0
+		Value 1:	5
+		Cost:	9500
+		ExtraFlags:	10
+	[Object 143]
+		Vnum:	27416
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	100000000000001000000000
+	[Object 144]
+		Vnum:	14642
+		Inside:	1
+		Cost:	10000
+		ExtraFlags:	1000001000000000000
+		Name:	^[F222]an ^[F111]all-black ^[F222]nodachi with a ^[F521]m^[F531]o^[F541]nofilament ed^[F531]g^[F521]e^N^n
+	[Object 145]
+		Vnum:	30178
+		Inside:	1
+		Value 11:	2
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 146]
+		Vnum:	30194
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	1000000000
+	[Object 147]
+		Vnum:	30194
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	1000000000
+	[Object 148]
+		Vnum:	127
+		Inside:	2
+		Value 0:	15
+		Value 1:	8
+		Value 9:	14
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 15-round heavy pistol magazine
+	[Object 149]
+		Vnum:	45191
+		Inside:	1
+		Value 11:	2
+		Cost:	3250
+		ExtraFlags:	11010000001000000000
+	[Object 150]
+		Vnum:	11118
+		Inside:	1
+		Cost:	420000
+		ExtraFlags:	1000000000
+	[Object 151]
+		Vnum:	11118
+		Inside:	1
+		Cost:	420000
+		ExtraFlags:	1000000000
+	[Object 152]
+		Vnum:	11119
+		Inside:	1
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 153]
+		Vnum:	11119
+		Inside:	1
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 154]
+		Vnum:	11120
+		Inside:	1
+		Cost:	20000
+		ExtraFlags:	1001001001
+	[Object 155]
+		Vnum:	11120
+		Inside:	1
+		Cost:	20000
+		ExtraFlags:	1001001001
+	[Object 156]
+		Vnum:	17152
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	1000000000
+	[Object 157]
+		Vnum:	8477
+		Inside:	1
+		Cost:	1200
+		ExtraFlags:	1001001000
+	[Object 158]
+		Vnum:	8477
+		Inside:	1
+		Cost:	1200
+		ExtraFlags:	1001001000
+	[Object 159]
+		Vnum:	8477
+		Inside:	1
+		Cost:	1200
+		ExtraFlags:	1001001000
+	[Object 160]
+		Vnum:	17148
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	1001001000
+	[Object 161]
+		Vnum:	17148
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	1001001000
+	[Object 162]
+		Vnum:	29417
+		Inside:	1
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 163]
+		Vnum:	29400
+		Inside:	1
+		Value 7:	0
+		Value 8:	0
+		Value 9:	0
+		Value 11:	4
+		Timer:	4
+		Attempt:	1
+		Cost:	2150
+		ExtraFlags:	1000000000000
+	[Object 164]
+		Vnum:	658
+		Inside:	1
+		Cost:	750
+		ExtraFlags:	1000000000000
+	[Object 165]
+		Vnum:	14320
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1000001000
+	[Object 166]
+		Vnum:	29420
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 167]
+		Vnum:	30192
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 168]
+		Vnum:	30192
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 169]
+		Vnum:	30192
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 170]
+		Vnum:	39244
+		Inside:	1
+		Cost:	1450
+		ExtraFlags:	1
+	[Object 171]
+		Vnum:	17582
+		Inside:	1
+		Cost:	1200
+		ExtraFlags:	0
+	[Object 172]
+		Vnum:	4907
+		Inside:	1
+		Cost:	2300
+		ExtraFlags:	1001001001
+	[Object 173]
+		Vnum:	26902
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	1000000000
+	[Object 174]
+		Vnum:	19408
+		Inside:	1
+		Cost:	1750
+		ExtraFlags:	1000000000000
+		Name:	^[F444]a gleaming ^[F125]b^[F135]l^[F145]ue-ste^[F135]e^[F125]l ^[F444]katana^N^n
+	[Object 175]
+		Vnum:	30195
+		Inside:	1
+		Cost:	3500
+		ExtraFlags:	0
+	[Object 176]
+		Vnum:	7283
+		Inside:	1
+		Cost:	1250
+		ExtraFlags:	1001001000
+	[Object 177]
+		Vnum:	15810
+		Inside:	0
+		Cost:	3500
+		ExtraFlags:	0
+	[Object 178]
+		Vnum:	683
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+		Name:	a ^blong and tattered blue hoodie^w with ^C"BAKA"^w on the front^n
+	[Object 179]
+		Vnum:	29324
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 180]
+		Vnum:	15807
+		Inside:	0
+		Cost:	200
+		ExtraFlags:	0
+	[Object 181]
+		Vnum:	61536
+		Inside:	0
+		Timer:	2
+		Cost:	10
+		ExtraFlags:	0
+	[Object 182]
+		Vnum:	61536
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 183]
+		Vnum:	61536
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 184]
+		Vnum:	61536
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 185]
+		Vnum:	1176
+		Inside:	0
+		Value 8:	36
+		Cost:	9500
+		ExtraFlags:	0
+	[Object 186]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	6
+		Value 2:	180
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha STRIKE protocol
+	[Object 187]
+		Vnum:	108
+		Inside:	1
+		Value 0:	13
+		Value 1:	6
+		Value 2:	72
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha DECEIVE protocol
+	[Object 188]
+		Vnum:	108
+		Inside:	1
+		Value 0:	17
+		Value 1:	6
+		Value 2:	36
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha SEEKER protocol
+	[Object 189]
+		Vnum:	108
+		Inside:	1
+		Value 0:	15
+		Value 1:	6
+		Value 2:	108
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha SLINK protocol
+	[Object 190]
+		Vnum:	108
+		Inside:	1
+		Value 0:	18
+		Value 1:	6
+		Value 2:	72
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha SCRIVENER protocol
+	[Object 191]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	6
+		Value 2:	108
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha DIVINER protocol
+	[Object 192]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	6
+		Value 2:	108
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha Bulwark protocol
+	[Object 193]
+		Vnum:	108
+		Inside:	1
+		Value 0:	23
+		Value 1:	6
+		Value 2:	72
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha INERT defusal protocol
+	[Object 194]
+		Vnum:	108
+		Inside:	1
+		Value 0:	30
+		Value 1:	6
+		Value 2:	108
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha HARRIER protocol
+	[Object 195]
+		Vnum:	108
+		Inside:	1
+		Value 0:	12
+		Value 1:	6
+		Value 2:	36
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha SHIV decryption protocol
+	[Object 196]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 2:	50
+		Value 5:	1690309259
+		Value 6:	1673823108
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha APPRAISAL2 protocol
+	[Object 197]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	3
+		Value 2:	27
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-minor BUCKLER protocol
+	[Object 198]
+		Vnum:	108
+		Inside:	1
+		Value 0:	7
+		Value 1:	6
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha RESPITE module
+	[Object 199]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	8
+		Value 2:	960
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-delta INVECTIVE-OMEGA programming environment
+	[Object 200]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 2:	72
+		Value 5:	1690309259
+		Value 6:	1675066609
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-alpha EVALUATE7 protocol
+	[Object 201]
+		Vnum:	108
+		Inside:	1
+		Value 0:	36
+		Value 1:	8
+		Value 2:	512
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a Kaminari-delta INNERMIND MPCP
+	[Object 202]
+		Vnum:	1120
+		Inside:	0
+		Value 3:	2665
+		Cost:	33600
+		ExtraFlags:	0
+	[Object 203]
+		Vnum:	19878
+		Inside:	0
+		Cost:	36000
+		ExtraFlags:	1
+	[Object 204]
+		Vnum:	19879
+		Inside:	0
+		Cost:	36000
+		ExtraFlags:	1
+	[Object 205]
+		Vnum:	2250
+		Inside:	0
+		Cost:	1
+		ExtraFlags:	0
+	[Object 206]
+		Vnum:	64920
+		Inside:	0
+		Cost:	1300
+		ExtraFlags:	0
+	[Object 207]
+		Vnum:	930
+		Inside:	0
+		Value 0:	500
+		Cost:	2500
+		ExtraFlags:	0
+		Name:	a box of explosive light machine gun ammunition

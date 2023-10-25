@@ -1,0 +1,355 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	121
+		Inside:	1
+		Value 0:	230
+		Value 1:	14
+		Value 2:	3
+		Value 9:	12828
+		Value 10:	60
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX shotgun ammunition
+	[Object 1]
+		Vnum:	64919
+		Inside:	0
+		Cost:	3200
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 3]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 4]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 5]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 6]
+		Vnum:	127
+		Inside:	2
+		Value 0:	24
+		Value 1:	10
+		Value 9:	24
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 24-round submachine gun magazine
+	[Object 7]
+		Vnum:	22876
+		Inside:	1
+		Value 11:	4
+		Timer:	6
+		Attempt:	1
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	127
+		Inside:	2
+		Value 0:	24
+		Value 1:	10
+		Value 9:	6
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 24-round submachine gun magazine
+	[Object 9]
+		Vnum:	22876
+		Inside:	1
+		Value 11:	4
+		Timer:	6
+		Attempt:	1
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	9402
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	64989
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 12]
+		Vnum:	1833
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 13]
+		Vnum:	18804
+		Inside:	1
+		Cost:	600
+		ExtraFlags:	0
+	[Object 14]
+		Vnum:	18805
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 15]
+		Vnum:	683
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	39864
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	658
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000000000
+	[Object 18]
+		Vnum:	101
+		Inside:	1
+		Value 3:	1
+		Value 4:	12828
+		Value 5:	466798
+		Cost:	275
+		ExtraFlags:	0
+	[Object 19]
+		Vnum:	101
+		Inside:	1
+		Value 3:	1
+		Value 4:	12828
+		Value 5:	551806
+		Cost:	275
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	951
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	60535
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+		Name:	a black nylon bag
+	[Object 22]
+		Vnum:	28618
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 23]
+		Vnum:	28618
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 24]
+		Vnum:	691
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 25]
+		Vnum:	691
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 26]
+		Vnum:	64963
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 27]
+		Vnum:	28703
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 28]
+		Vnum:	692
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 29]
+		Vnum:	31111
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 30]
+		Vnum:	28702
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 31]
+		Vnum:	30136
+		Inside:	1
+		Cost:	1200
+		ExtraFlags:	0
+	[Object 32]
+		Vnum:	64988
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 33]
+		Vnum:	127
+		Inside:	2
+		Value 0:	50
+		Value 1:	15
+		Value 9:	50
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 50-round light machine gun magazine
+	[Object 34]
+		Vnum:	878
+		Inside:	1
+		Value 8:	0
+		Value 11:	3
+		Cost:	1050
+		ExtraFlags:	1000000000000
+	[Object 35]
+		Vnum:	64916
+		Inside:	0
+		Value 1:	5
+		Cost:	2100
+		ExtraFlags:	0
+	[Object 36]
+		Vnum:	982
+		Inside:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 37]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	13
+		Value 2:	3
+		Value 9:	12828
+		Value 10:	180
+		Cost:	2500
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX assault rifle ammunition
+	[Object 38]
+		Vnum:	92173
+		Inside:	0
+		Cost:	1200
+		ExtraFlags:	0
+	[Object 39]
+		Vnum:	121
+		Inside:	0
+		Value 0:	250
+		Value 1:	13
+		Value 2:	3
+		Value 9:	12828
+		Value 10:	180
+		Cost:	2500
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX assault rifle ammunition
+	[Object 40]
+		Vnum:	39864
+		Inside:	1
+		Cost:	700
+		ExtraFlags:	0
+	[Object 41]
+		Vnum:	24599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 42]
+		Vnum:	24599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 43]
+		Vnum:	38083
+		Inside:	1
+		Value 0:	5300
+		Cost:	350
+		ExtraFlags:	0
+	[Object 44]
+		Vnum:	60532
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 45]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 46]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 47]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 48]
+		Vnum:	450
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 49]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 50]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 51]
+		Vnum:	766
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 52]
+		Vnum:	127
+		Inside:	2
+		Value 0:	45
+		Value 1:	13
+		Value 9:	45
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 45-round assault rifle magazine
+	[Object 53]
+		Vnum:	3616
+		Inside:	1
+		Value 7:	629
+		Value 8:	691
+		Value 9:	670
+		Value 11:	4
+		Timer:	6
+		Cost:	4600
+		ExtraFlags:	1000000000000
+	[Object 54]
+		Vnum:	60595
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 55]
+		Vnum:	64969
+		Inside:	1
+		Cost:	350
+		ExtraFlags:	0
+	[Object 56]
+		Vnum:	38064
+		Inside:	1
+		Cost:	4000
+		ExtraFlags:	100000000
+	[Object 57]
+		Vnum:	18806
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 58]
+		Vnum:	64976
+		Inside:	0
+		Cost:	1495
+		ExtraFlags:	0

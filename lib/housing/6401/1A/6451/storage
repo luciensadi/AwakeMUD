@@ -1,0 +1,817 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+	Guest0:	15042
+	Guest1:	15071
+	Guest2:	12677
+	Guest3:	10193
+	Guest4:	14592
+	Guest7:	14759
+	Guest8:	12722
+[HOUSE]
+	[Object 0]
+		Vnum:	19967
+		Inside:	1
+		Value 0:	6321
+		Value 1:	7663
+		Value 2:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	16218
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	19999
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 3]
+		Vnum:	19999
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 4]
+		Vnum:	19999
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 5]
+		Vnum:	19999
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 6]
+		Vnum:	19999
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 7]
+		Vnum:	19999
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 8]
+		Vnum:	19999
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 9]
+		Vnum:	35529
+		Inside:	2
+		Value 1:	4
+		Timer:	4
+		Cost:	400
+		ExtraFlags:	0
+		Name:	a box of Nitro doses
+	[Object 10]
+		Vnum:	1521
+		Inside:	2
+		Value 1:	2
+		Timer:	4
+		Cost:	360
+		ExtraFlags:	0
+		Name:	a box of Hyper pills
+	[Object 11]
+		Vnum:	35526
+		Inside:	2
+		Value 1:	5
+		Timer:	4
+		Cost:	100
+		ExtraFlags:	0
+		Name:	a box of Cram capsules
+	[Object 12]
+		Vnum:	35525
+		Inside:	2
+		Value 1:	5
+		Timer:	4
+		Cost:	100
+		ExtraFlags:	0
+		Name:	a box of Novacoke baggies
+	[Object 13]
+		Vnum:	35525
+		Inside:	2
+		Value 1:	4
+		Timer:	4
+		Cost:	80
+		ExtraFlags:	0
+		Name:	a box of Novacoke baggies
+	[Object 14]
+		Vnum:	35531
+		Inside:	2
+		Cost:	5
+		ExtraFlags:	0
+	[Object 15]
+		Vnum:	61528
+		Inside:	2
+		Cost:	20
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	61528
+		Inside:	2
+		Cost:	20
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	61528
+		Inside:	2
+		Cost:	20
+		ExtraFlags:	0
+	[Object 18]
+		Vnum:	61529
+		Inside:	2
+		Cost:	80
+		ExtraFlags:	0
+	[Object 19]
+		Vnum:	35527
+		Inside:	2
+		Value 1:	2
+		Cost:	100
+		ExtraFlags:	0
+		Name:	a box of Kamikaze inhalers
+	[Object 20]
+		Vnum:	35528
+		Inside:	2
+		Value 1:	5
+		Cost:	75
+		ExtraFlags:	0
+		Name:	a box of Bliss syringes
+	[Object 21]
+		Vnum:	35530
+		Inside:	2
+		Value 1:	4
+		Cost:	25
+		ExtraFlags:	0
+		Name:	a box of Zen blunts
+	[Object 22]
+		Vnum:	95849
+		Inside:	2
+		Cost:	100
+		ExtraFlags:	0
+	[Object 23]
+		Vnum:	95849
+		Inside:	2
+		Cost:	100
+		ExtraFlags:	0
+	[Object 24]
+		Vnum:	2057
+		Inside:	2
+		Cost:	200
+		ExtraFlags:	0
+	[Object 25]
+		Vnum:	38084
+		Inside:	1
+		Value 1:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 26]
+		Vnum:	31564
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 27]
+		Vnum:	29903
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 28]
+		Vnum:	660
+		Inside:	1
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 29]
+		Vnum:	100009
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 30]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 31]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 32]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 33]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 34]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 35]
+		Vnum:	80405
+		Inside:	1
+		Cost:	400
+		ExtraFlags:	0
+	[Object 36]
+		Vnum:	39867
+		Inside:	1
+		Value 0:	9206
+		Value 1:	5968
+		Value 2:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 37]
+		Vnum:	2109
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 38]
+		Vnum:	5961
+		Inside:	1
+		Value 0:	12808
+		Cost:	100
+		ExtraFlags:	1000001000
+	[Object 39]
+		Vnum:	14652
+		Inside:	1
+		Value 0:	9503
+		Value 1:	4065
+		Value 2:	1
+		Cost:	3500
+		ExtraFlags:	0
+		Name:	^la large onyx ring^n^n
+	[Object 40]
+		Vnum:	14785
+		Inside:	1
+		Cost:	850
+		ExtraFlags:	0
+	[Object 41]
+		Vnum:	14784
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 42]
+		Vnum:	14784
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 43]
+		Vnum:	22892
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 44]
+		Vnum:	9307
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 45]
+		Vnum:	9306
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 46]
+		Vnum:	9323
+		Inside:	1
+		Value 1:	9
+		Cost:	75
+		ExtraFlags:	0
+	[Object 47]
+		Vnum:	9301
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	0
+	[Object 48]
+		Vnum:	64964
+		Inside:	1
+		Cost:	6000
+		ExtraFlags:	0
+	[Object 49]
+		Vnum:	30163
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 50]
+		Vnum:	4707
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	0
+	[Object 51]
+		Vnum:	949
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 52]
+		Vnum:	949
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 53]
+		Vnum:	64967
+		Inside:	1
+		Cost:	10500
+		ExtraFlags:	0
+	[Object 54]
+		Vnum:	26905
+		Inside:	1
+		Cost:	45000
+		ExtraFlags:	1000000000
+	[Object 55]
+		Vnum:	26905
+		Inside:	1
+		Cost:	45000
+		ExtraFlags:	1000000000
+	[Object 56]
+		Vnum:	26905
+		Inside:	1
+		Cost:	45000
+		ExtraFlags:	1000000000
+	[Object 57]
+		Vnum:	38081
+		Inside:	1
+		Cost:	600
+		ExtraFlags:	101100000000000000000
+		Name:	an enormous ^gs^jl^eee^Jve^Ele^js^gs^N flak jacket
+	[Object 58]
+		Vnum:	38082
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	101100000000000000000
+		Name:	a scuffed pair of ^ylar^oge^y w^oo^yrk^N boots
+	[Object 59]
+		Vnum:	38082
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	101100000000000000000
+	[Object 60]
+		Vnum:	6451
+		Inside:	2
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	0
+	[Object 61]
+		Vnum:	70352
+		Inside:	2
+		Timer:	4
+		Cost:	1
+		ExtraFlags:	0
+	[Object 62]
+		Vnum:	29705
+		Inside:	1
+		Cost:	3500
+		ExtraFlags:	0
+		Name:	a worn and patched b^lla^Lck ^ltr^Le^lnc^Nh coat adorned with bits of chain
+	[Object 63]
+		Vnum:	38079
+		Inside:	1
+		Cost:	900
+		ExtraFlags:	101100000000000000000
+	[Object 64]
+		Vnum:	95825
+		Inside:	1
+		Cost:	10000
+		ExtraFlags:	1001001010
+	[Object 65]
+		Vnum:	64974
+		Inside:	1
+		Cost:	135
+		ExtraFlags:	0
+	[Object 66]
+		Vnum:	92108
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 67]
+		Vnum:	1520
+		Inside:	2
+		Value 1:	100
+		Cost:	48700
+		ExtraFlags:	0
+		Name:	a box of ACTH tablets
+	[Object 68]
+		Vnum:	39213
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 69]
+		Vnum:	42136
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 70]
+		Vnum:	857
+		Inside:	1
+		Cost:	1750
+		ExtraFlags:	0
+	[Object 71]
+		Vnum:	911
+		Inside:	1
+		Cost:	1750
+		ExtraFlags:	0
+	[Object 72]
+		Vnum:	863
+		Inside:	1
+		Value 0:	1250
+		Cost:	8750
+		ExtraFlags:	0
+		Name:	a box of APDS submachine gun ammunition
+	[Object 73]
+		Vnum:	85307
+		Inside:	3
+		Cost:	120000
+		ExtraFlags:	0
+	[Object 74]
+		Vnum:	83
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'a reaction enhancer - alpha'
+	[Object 75]
+		Vnum:	85612
+		Inside:	3
+		Cost:	8000
+		ExtraFlags:	0
+	[Object 76]
+		Vnum:	83
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	10100000000000000000000000000
+		Name:	a packaged-up 'a datajack - delta'
+	[Object 77]
+		Vnum:	61525
+		Inside:	1
+		Cost:	7500
+		ExtraFlags:	10
+	[Object 78]
+		Vnum:	61525
+		Inside:	1
+		Value 1:	1
+		Cost:	7500
+		ExtraFlags:	10
+	[Object 79]
+		Vnum:	25551
+		Inside:	1
+		Timer:	4
+		Cost:	250
+		ExtraFlags:	0
+	[Object 80]
+		Vnum:	865
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 81]
+		Vnum:	121
+		Inside:	1
+		Value 0:	20
+		Value 1:	17
+		Value 2:	1
+		Value 3:	920
+		Value 4:	667
+		Value 9:	12808
+		Value 10:	840
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS heavy machine gun ammunition
+	[Object 82]
+		Vnum:	121
+		Inside:	1
+		Value 0:	860
+		Value 1:	17
+		Value 2:	1
+		Value 9:	12808
+		Value 10:	840
+		Cost:	6020
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS heavy machine gun ammunition
+	[Object 83]
+		Vnum:	121
+		Inside:	1
+		Value 0:	450
+		Value 1:	10
+		Value 2:	1
+		Cost:	3150
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 84]
+		Vnum:	121
+		Inside:	1
+		Value 0:	514
+		Value 1:	12
+		Value 2:	1
+		Cost:	3598
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS sniper rifle ammunition
+	[Object 85]
+		Vnum:	121
+		Inside:	1
+		Value 0:	240
+		Value 1:	17
+		Value 2:	1
+		Value 3:	120
+		Value 4:	518
+		Value 9:	12808
+		Value 10:	840
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS heavy machine gun ammunition
+	[Object 86]
+		Vnum:	121
+		Inside:	1
+		Value 0:	220
+		Value 1:	17
+		Value 2:	1
+		Value 3:	70
+		Value 4:	133
+		Value 9:	12808
+		Value 10:	840
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS heavy machine gun ammunition
+	[Object 87]
+		Vnum:	127
+		Inside:	2
+		Value 0:	22
+		Value 1:	18
+		Value 2:	2
+		Value 9:	22
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 22-round assault cannon magazine
+	[Object 88]
+		Vnum:	884
+		Inside:	1
+		Value 7:	64988
+		Value 9:	749
+		Value 11:	1
+		Cost:	9250
+		ExtraFlags:	1000000000000
+	[Object 89]
+		Vnum:	948
+		Inside:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 90]
+		Vnum:	15606
+		Inside:	0
+		Value 1:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 91]
+		Vnum:	15607
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 92]
+		Vnum:	15609
+		Inside:	0
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 93]
+		Vnum:	25566
+		Inside:	0
+		Cost:	120
+		ExtraFlags:	1
+	[Object 94]
+		Vnum:	80407
+		Inside:	1
+		Cost:	750
+		ExtraFlags:	0
+	[Object 95]
+		Vnum:	80407
+		Inside:	1
+		Cost:	750
+		ExtraFlags:	0
+	[Object 96]
+		Vnum:	80407
+		Inside:	1
+		Cost:	750
+		ExtraFlags:	0
+	[Object 97]
+		Vnum:	80407
+		Inside:	1
+		Cost:	750
+		ExtraFlags:	0
+	[Object 98]
+		Vnum:	80404
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 99]
+		Vnum:	80404
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 100]
+		Vnum:	80404
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 101]
+		Vnum:	691
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 102]
+		Vnum:	691
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 103]
+		Vnum:	691
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 104]
+		Vnum:	691
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 105]
+		Vnum:	691
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 106]
+		Vnum:	691
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 107]
+		Vnum:	629
+		Inside:	1
+		Cost:	1300
+		ExtraFlags:	0
+	[Object 108]
+		Vnum:	64988
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 109]
+		Vnum:	64988
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 110]
+		Vnum:	64988
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 111]
+		Vnum:	64988
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 112]
+		Vnum:	15631
+		Inside:	1
+		Value 7:	64988
+		Value 8:	691
+		Value 11:	4
+		Timer:	5
+		Cost:	3700
+		ExtraFlags:	111100000000000000000
+	[Object 113]
+		Vnum:	28618
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 114]
+		Vnum:	28618
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 115]
+		Vnum:	28618
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 116]
+		Vnum:	28618
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 117]
+		Vnum:	28618
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 118]
+		Vnum:	692
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 119]
+		Vnum:	692
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 120]
+		Vnum:	692
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 121]
+		Vnum:	127
+		Inside:	2
+		Value 0:	50
+		Value 1:	10
+		Value 9:	50
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 50-round submachine gun magazine
+	[Object 122]
+		Vnum:	12087
+		Inside:	1
+		Value 11:	4
+		Timer:	4
+		Attempt:	1
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 123]
+		Vnum:	80405
+		Inside:	1
+		Cost:	400
+		ExtraFlags:	0
+	[Object 124]
+		Vnum:	15633
+		Inside:	1
+		Value 11:	3
+		Attempt:	3
+		Cost:	2925
+		ExtraFlags:	111100000000000000000
+	[Object 125]
+		Vnum:	15633
+		Inside:	1
+		Value 11:	3
+		Attempt:	3
+		Cost:	2925
+		ExtraFlags:	111100000000000000000
+	[Object 126]
+		Vnum:	61515
+		Inside:	1
+		Value 11:	3
+		Cost:	32500
+		ExtraFlags:	1000000000000
+	[Object 127]
+		Vnum:	24536
+		Inside:	1
+		Value 8:	18981
+		Value 11:	2
+		Cost:	2800
+		ExtraFlags:	0
+	[Object 128]
+		Vnum:	31111
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 129]
+		Vnum:	829
+		Inside:	1
+		Value 7:	80424
+		Value 11:	2
+		Attempt:	-2
+		Cost:	5000
+		ExtraFlags:	1000000001000000000000
+	[Object 130]
+		Vnum:	15634
+		Inside:	1
+		Value 11:	3
+		Cost:	1500
+		ExtraFlags:	111100000000000000000
+	[Object 131]
+		Vnum:	15809
+		Inside:	0
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 132]
+		Vnum:	39623
+		Inside:	0
+		Cost:	200
+		ExtraFlags:	0
+	[Object 133]
+		Vnum:	982
+		Inside:	0
+		Value 2:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 134]
+		Vnum:	3612
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 135]
+		Vnum:	917
+		Inside:	0
+		Cost:	1750
+		ExtraFlags:	0
+	[Object 136]
+		Vnum:	121
+		Inside:	0
+		Value 0:	2500
+		Value 1:	17
+		Value 2:	1
+		Cost:	17500
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS heavy machine gun ammunition

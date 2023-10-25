@@ -17,6 +17,10 @@
 #include "utils.hpp"
 #include "archetypes.hpp"
 
+extern void perform_secret_room_assignments();
+extern void perform_secret_mob_assignments();
+extern void perform_secret_obj_assignments();
+
 void ASSIGNMOB(long mob, SPECIAL(fname));
 
 /* arrays for trainers/teachers/adepts/masters */
@@ -88,17 +92,10 @@ struct teach_data teachers[] = {
     "You polish and hone your melee skills and learn to flow like water.\r\n", ADVANCED },
   { 784, { SKILL_PILOT_BIKE, SKILL_PILOT_CAR, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
            SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, SKILL_GUNNERY,
-#ifdef WE_HAVE_VEHICLE_QUEST
            SKILL_PILOT_ROTORCRAFT, SKILL_PILOT_FIXEDWING, SKILL_PILOT_VECTORTHRUST,
            SKILL_BR_FIXEDWING, SKILL_BR_ROTORCRAFT, SKILL_BR_VECTORTHRUST, SKILL_BR_HOVERCRAFT,
            SKILL_BR_MOTORBOAT, SKILL_BR_SHIP, SKILL_BR_LTA, SKILL_PILOT_HOVERCRAFT,
            SKILL_PILOT_MOTORBOAT, SKILL_PILOT_SHIP, SKILL_PILOT_LTA, SKILL_PILOT_WALKER, SKILL_PILOT_TRACKED, 0 },
-#else
-           0, 0, 0,
-           0, 0, 0, 0,
-           0, 0, 0, 0,
-           0, 0, 0, 0, 0, 0 },
-#endif
     "You pick up a few new tricks of the trade and emerge more skilled than before.\r\n", ADVANCED },
   { 786, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_DATA_BROKERAGE, SKILL_CYBERTERM_DESIGN,
     SKILL_ELECTRONICS, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_CYBERTERM,
@@ -117,16 +114,16 @@ struct teach_data teachers[] = {
                          SKILL_WHIPS_FLAILS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          "Toh Li gives you the workout of your life, but you come out more learned.", AMATEUR },
                        { 3722, { SKILL_ATHLETICS, SKILL_RIFLES, SKILL_PISTOLS, SKILL_POLICE_PROCEDURES, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
+                         "After hours of study and physical practice, you feel like you've learned something.\r\n", AMATEUR },
                        { 4101, { SKILL_SHOTGUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SMG, SKILL_ASSAULT_RIFLES, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After hours of study and target practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
+                         "After hours of study and target practice, you feel like you've learned something.\r\n", AMATEUR },
                        { 4102, { SKILL_CLUBS, SKILL_EDGED_WEAPONS, SKILL_POLE_ARMS, SKILL_WHIPS_FLAILS,
-                         SKILL_PILOT_CAR, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of study and practice, you feel like you've "
-                         "learned\r\nsomething.\r\n", AMATEUR },
+                         SKILL_PILOT_CAR, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                         "After hours of study and practice, you feel like you've learned something.\r\n", AMATEUR },
                        { 4250, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After hours of study and magical practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
+                         "After hours of study and magical practice, you feel like you've learned something.\r\n", AMATEUR },
                        { 4251, { SKILL_CONJURING, SKILL_SORCERY, SKILL_AURA_READING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After hours of study and magical practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
+                         "After hours of study and magical practice, you feel like you've learned something.\r\n", AMATEUR },
 
 
 // These trainers aren't in the game.
@@ -160,7 +157,8 @@ struct teach_data teachers[] = {
 
   { 60503, { SKILL_ARABIC, SKILL_CANTONESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
     SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
-    SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, SKILL_IROQUOIS, SKILL_MANDARIN, 0, 0 },
+    SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, 
+    SKILL_IROQUOIS, SKILL_MANDARIN, SKILL_HAITIAN_CREOLE, 0 },
     "Von Richter runs through basic conjugation and sentence structure with you.\r\n", NEWBIE },
 
   { 60504, { SKILL_PILOT_BIKE, SKILL_PILOT_CAR, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
@@ -200,7 +198,8 @@ struct teach_data teachers[] = {
 
    { 30700, { SKILL_ARABIC, SKILL_CANTONESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
      SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
-     SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, SKILL_IROQUOIS, SKILL_MANDARIN, 0, 0 }, "Socrates shows you the intricities "
+     SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, 
+     SKILL_IROQUOIS, SKILL_MANDARIN, SKILL_HAITIAN_CREOLE, 0 }, "Socrates shows you the intricities "
        "of the language and you emerge with a greater understanding.\r\n", ADVANCED },
 
    { 3125, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_CYBERTERM, SKILL_CYBERTERM_DESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Brian explains some concepts you had yet to understand "
@@ -247,7 +246,8 @@ struct teach_data teachers[] = {
 
    { 18313, { SKILL_ARABIC, SKILL_CANTONESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
               SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
-              SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, SKILL_IROQUOIS, SKILL_MANDARIN, 0, 0 },
+              SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW,
+              SKILL_IROQUOIS, SKILL_MANDARIN, SKILL_HAITIAN_CREOLE, 0 },
      "You raid the teach-yourself-languages section.\r\n", LIBRARY },
 
 #ifdef USE_PRIVATE_CE_WORLD
@@ -946,6 +946,11 @@ void assign_objects(void)
   ASSIGNOBJ(14799, bank);
   ASSIGNOBJ(95839, trideo);
 
+  // Pluto's assigns
+  ASSIGNOBJ(96521, pocket_sec);
+  ASSIGNOBJ(96522, pocket_sec);
+  ASSIGNOBJ(96523, pocket_sec);
+
   perform_secret_obj_assignments();
 #endif
 
@@ -1094,6 +1099,14 @@ void assign_rooms(void)
   ASSIGNROOM(62501, car_dealer);
   ASSIGNROOM(62201, car_dealer);
   ASSIGNROOM(62331, car_dealer);
+
+#ifdef USE_PRIVATE_CE_WORLD
+  // Aircraft dealers.
+  ASSIGNROOM(8911, car_dealer);
+  ASSIGNROOM(8894, car_dealer);
+  ASSIGNROOM(19499, car_dealer);
+  ASSIGNROOM(24146, car_dealer);
+#endif
 
   /* Mitsuhama */
   ASSIGNROOM(17171, circulation_fan);

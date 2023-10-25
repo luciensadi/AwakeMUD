@@ -1,0 +1,483 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+	Guest0:	13621
+	Guest1:	11285
+	Guest2:	13681
+[HOUSE]
+	[Object 0]
+		Vnum:	30190
+		Inside:	1
+		Value 2:	13623
+		Value 5:	1
+		Cost:	1
+		ExtraFlags:	1001001001
+		Name:	a ^[F200]cor^[F300]usc^[F500]ant r^[F300]uby v^[F200]eil ^[F000]made of ^[F211]fine voile^n
+	[Object 1]
+		Vnum:	30190
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001001001
+	[Object 2]
+		Vnum:	30190
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001001001
+	[Object 3]
+		Vnum:	30190
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001001001
+	[Object 4]
+		Vnum:	45188
+		Inside:	1
+		Value 2:	13623
+		Value 3:	1
+		Value 5:	1
+		Cost:	0
+		ExtraFlags:	11010000001000001001
+		Name:	a ^[F000]pair of silk gloves ^[F222]with ^[F200]p^[F400]u^[F200]ls^[F400]i^[F200]ng ^[F400]ruby ^[F200]threads^n
+	[Object 5]
+		Vnum:	45188
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	11010000001000001001
+	[Object 6]
+		Vnum:	45188
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	11010000001000001001
+	[Object 7]
+		Vnum:	14655
+		Inside:	1
+		Value 2:	13623
+		Value 3:	24
+		Value 5:	1
+		Cost:	45000
+		ExtraFlags:	0
+		Name:	a ^[F222]b^[F000]lack stee^[F222]l ^[F000]ring etched ^[F222]with ^[F211]kn^[F311]ot pa^[F211]tterns^n
+	[Object 8]
+		Vnum:	14655
+		Inside:	1
+		Value 2:	13623
+		Value 3:	24
+		Value 5:	1
+		Cost:	45000
+		ExtraFlags:	0
+		Name:	a silver ring with an orichalcum thread^n
+	[Object 9]
+		Vnum:	30192
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 10]
+		Vnum:	30192
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 11]
+		Vnum:	30192
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 12]
+		Vnum:	64989
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+		Name:	a ^[F000]low-profile l^[F333]ea^[F000]th^[F333]e^[F000]r sh^[F333]ea^[F000]th attached to a sl^[F211]ee^[F000]v^[F211]e^n
+	[Object 13]
+		Vnum:	19859
+		Inside:	1
+		Value 2:	13623
+		Value 3:	17
+		Value 5:	1
+		Cost:	25000
+		ExtraFlags:	0
+		Name:	a slender ^bzircon^n inlaid ring^n
+	[Object 14]
+		Vnum:	7284
+		Inside:	1
+		Cost:	2500
+		ExtraFlags:	1001001000001
+	[Object 15]
+		Vnum:	26905
+		Inside:	1
+		Cost:	45000
+		ExtraFlags:	1000000000
+	[Object 16]
+		Vnum:	39222
+		Inside:	1
+		Cost:	71000
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	60577
+		Inside:	1
+		Value 2:	13623
+		Value 5:	1
+		Cost:	225000
+		ExtraFlags:	1000000
+	[Object 18]
+		Vnum:	22893
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	1001000001000
+	[Object 19]
+		Vnum:	64921
+		Inside:	0
+		Cost:	2100
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	39932
+		Inside:	1
+		Cost:	2000
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	32302
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 22]
+		Vnum:	39604
+		Inside:	0
+		Cost:	8000
+		ExtraFlags:	0
+	[Object 23]
+		Vnum:	39619
+		Inside:	0
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 24]
+		Vnum:	28706
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 25]
+		Vnum:	28706
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 26]
+		Vnum:	70343
+		Inside:	1
+		Cost:	12
+		ExtraFlags:	0
+	[Object 27]
+		Vnum:	70343
+		Inside:	1
+		Cost:	12
+		ExtraFlags:	0
+	[Object 28]
+		Vnum:	15840
+		Inside:	1
+		Cost:	25
+		ExtraFlags:	0
+	[Object 29]
+		Vnum:	15840
+		Inside:	1
+		Cost:	25
+		ExtraFlags:	0
+	[Object 30]
+		Vnum:	15841
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 31]
+		Vnum:	15841
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 32]
+		Vnum:	92151
+		Inside:	1
+		Cost:	150
+		ExtraFlags:	0
+	[Object 33]
+		Vnum:	92151
+		Inside:	1
+		Cost:	150
+		ExtraFlags:	0
+	[Object 34]
+		Vnum:	92151
+		Inside:	1
+		Cost:	150
+		ExtraFlags:	0
+	[Object 35]
+		Vnum:	92150
+		Inside:	1
+		Cost:	60
+		ExtraFlags:	0
+	[Object 36]
+		Vnum:	92198
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 37]
+		Vnum:	92198
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 38]
+		Vnum:	92198
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 39]
+		Vnum:	32327
+		Inside:	1
+		Cost:	60
+		ExtraFlags:	0
+	[Object 40]
+		Vnum:	32327
+		Inside:	1
+		Cost:	60
+		ExtraFlags:	0
+	[Object 41]
+		Vnum:	32327
+		Inside:	1
+		Cost:	60
+		ExtraFlags:	0
+	[Object 42]
+		Vnum:	32327
+		Inside:	1
+		Cost:	60
+		ExtraFlags:	0
+	[Object 43]
+		Vnum:	32326
+		Inside:	1
+		Cost:	80
+		ExtraFlags:	0
+	[Object 44]
+		Vnum:	32326
+		Inside:	1
+		Cost:	80
+		ExtraFlags:	0
+	[Object 45]
+		Vnum:	32326
+		Inside:	1
+		Cost:	80
+		ExtraFlags:	0
+	[Object 46]
+		Vnum:	32326
+		Inside:	1
+		Cost:	80
+		ExtraFlags:	0
+	[Object 47]
+		Vnum:	5421
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 48]
+		Vnum:	5421
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 49]
+		Vnum:	5420
+		Inside:	1
+		Cost:	3200
+		ExtraFlags:	0
+	[Object 50]
+		Vnum:	39351
+		Inside:	1
+		Cost:	120
+		ExtraFlags:	0
+	[Object 51]
+		Vnum:	39351
+		Inside:	1
+		Cost:	120
+		ExtraFlags:	0
+	[Object 52]
+		Vnum:	39351
+		Inside:	1
+		Cost:	120
+		ExtraFlags:	0
+	[Object 53]
+		Vnum:	39349
+		Inside:	1
+		Cost:	135
+		ExtraFlags:	0
+	[Object 54]
+		Vnum:	39349
+		Inside:	1
+		Cost:	135
+		ExtraFlags:	0
+	[Object 55]
+		Vnum:	39349
+		Inside:	1
+		Cost:	135
+		ExtraFlags:	0
+	[Object 56]
+		Vnum:	64931
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 57]
+		Vnum:	64931
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 58]
+		Vnum:	64932
+		Inside:	1
+		Cost:	18
+		ExtraFlags:	0
+	[Object 59]
+		Vnum:	64932
+		Inside:	1
+		Cost:	18
+		ExtraFlags:	0
+	[Object 60]
+		Vnum:	92165
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 61]
+		Vnum:	92166
+		Inside:	1
+		Cost:	45
+		ExtraFlags:	0
+	[Object 62]
+		Vnum:	92161
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 63]
+		Vnum:	39620
+		Inside:	0
+		Value 1:	1
+		Cost:	4000
+		ExtraFlags:	10
+	[Object 64]
+		Vnum:	39688
+		Inside:	0
+		Cost:	9000
+		ExtraFlags:	0
+	[Object 65]
+		Vnum:	39694
+		Inside:	0
+		Cost:	20000
+		ExtraFlags:	0
+	[Object 66]
+		Vnum:	691
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 67]
+		Vnum:	127
+		Inside:	2
+		Value 0:	28
+		Value 1:	10
+		Value 9:	26
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 28-round submachine gun magazine
+	[Object 68]
+		Vnum:	779
+		Inside:	1
+		Value 11:	2
+		Attempt:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 69]
+		Vnum:	14623
+		Inside:	1
+		Cost:	750
+		ExtraFlags:	0
+	[Object 70]
+		Vnum:	121
+		Inside:	1
+		Value 0:	472
+		Value 1:	10
+		Cost:	944
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal submachine gun ammunition
+	[Object 71]
+		Vnum:	30195
+		Inside:	1
+		Cost:	3500
+		ExtraFlags:	0
+	[Object 72]
+		Vnum:	9107
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1001001000
+	[Object 73]
+		Vnum:	660
+		Inside:	1
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 74]
+		Vnum:	64916
+		Inside:	0
+		Cost:	2100
+		ExtraFlags:	0
+	[Object 75]
+		Vnum:	115
+		Inside:	0
+		Value 1:	8
+		Value 2:	2
+		Value 3:	13623
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+	[Object 76]
+		Vnum:	16243
+		Inside:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 77]
+		Vnum:	19960
+		Inside:	1
+		Value 1:	1
+		Cost:	250
+		ExtraFlags:	0
+		Name:	^La ^Wbrutal ^Lgift box ^lwith ^rstuds ^land ^rspikes^n
+	[Object 78]
+		Vnum:	19960
+		Inside:	1
+		Value 1:	1
+		Cost:	250
+		ExtraFlags:	0
+		Name:	^Lan ^lall-black ^Lgift box ^lwith ^Llace ribbon^n
+	[Object 79]
+		Vnum:	39888
+		Inside:	1
+		Cost:	40
+		ExtraFlags:	0
+		Name:	^la super ^[F534]chunky ^[F300]u^[F400]rsu^Rs ^[F310]piasma ^[F444]hea^wv^Lil^ly^w ^lgeared with ^Wspikes^n
+	[Object 80]
+		Vnum:	2055
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	0
+	[Object 81]
+		Vnum:	39892
+		Inside:	1
+		Cost:	40
+		ExtraFlags:	0
+		Name:	a ^[F100]fearsome ^land ^[F534]very soft ^n'^[F120]T^[F031]l^ea^Jz^ho^Eh^et^gl^[F120]i^n' ^lthe ^[F120]f^[F031]e^Jat^hh^Ee^er^ge^[F120]d ^Eser^epe^gn^[F120]t ^[F534]plush^n
+	[Object 82]
+		Vnum:	39641
+		Inside:	0
+		Value 1:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 83]
+		Vnum:	121
+		Inside:	0
+		Value 0:	1851
+		Value 1:	10
+		Value 2:	1
+		Cost:	12957
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS submachine gun ammunition
+	[Object 84]
+		Vnum:	25623
+		Inside:	0
+		Cost:	64000
+		ExtraFlags:	1
+	[Object 85]
+		Vnum:	25624
+		Inside:	0
+		Cost:	64000
+		ExtraFlags:	1

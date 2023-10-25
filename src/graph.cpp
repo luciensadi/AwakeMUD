@@ -46,6 +46,8 @@ static struct bfs_queue_struct *queue_head = 0, *queue_tail = 0;
                           (!ROOM_FLAGGED(&world[x], ROOM_NOGRID)) &&                                      \
                           (!IS_MARKED(TOROOM(x, y))))
 
+// asdf valid edge should take into acct veh restricts
+
 #define VALID_EDGE_IGNORE_ROADS(x, y) (world[(x)].dir_option[(y)] && TOROOM(x, y) != NOWHERE && !IS_CLOSED(x, y) && !IS_MARKED(TOROOM(x, y)))
 
 void bfs_enqueue(vnum_t room, char dir)
@@ -113,11 +115,13 @@ int find_first_step(vnum_t src, vnum_t target, bool ignore_roads)
   MARK(src);
 
   /* first, enqueue the first steps, saving which direction we're going. */
-  for (curr_dir = 0; curr_dir < NUM_OF_DIRS; curr_dir++)
+  for (curr_dir = 0; curr_dir < NUM_OF_DIRS; curr_dir++) {
     if (ignore_roads ? VALID_EDGE_IGNORE_ROADS(src, curr_dir) : VALID_EDGE(src, curr_dir)) {
       MARK(TOROOM(src, curr_dir));
       bfs_enqueue(TOROOM(src, curr_dir), curr_dir);
     }
+  }
+
   /* now, do the classic BFS. */
   while (queue_head) {
     if (queue_head->room == target) {

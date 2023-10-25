@@ -21,6 +21,8 @@ extern int get_max_usable_spell_successes(int spell, int force);
 extern const char *warn_if_spell_under_potential(struct sustain_data *sust);
 extern const char *get_spell_name(int spell, int subtype);
 extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
+extern bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell, char *buf);
+extern bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, int force, int sub, int success, int time_to_take_effect);
 
 #define DAMOBJ_NONE                     0
 #define DAMOBJ_ACID                     1

@@ -25,7 +25,9 @@
 #include "invis_resistance_tests.hpp"
 #include "playerdoc.hpp"
 #include "sound_propagation.hpp"
+#include "newhouse.hpp"
 #include "quest.hpp"
+#include "redit.hpp"
 
 int initiative_until_global_reroll = 0;
 
@@ -99,10 +101,7 @@ extern bool check_sentinel_snap_back(struct char_data *ch);
 extern void end_quest(struct char_data *ch);
 
 // Corpse saving externs.
-extern void House_save(struct house_control_rec *house, const char *file_name, long rnum);
-extern void write_world_to_disk(int vnum);
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
-extern bool House_get_filename(vnum_t vnum, char *filename, int filename_size);
 
 extern bool item_should_be_treated_as_melee_weapon(struct obj_data *obj);
 extern bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj);
@@ -114,6 +113,8 @@ extern bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_
 extern void mobact_change_firemode(struct char_data *ch);
 extern bool dumpshock(struct matrix_icon *icon);
 extern void clear_veh_flight_info(struct veh_data *veh);
+
+extern void Storage_save(const char *file_name, struct room_data *room);
 
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
@@ -152,17 +153,23 @@ struct attack_hit_type attack_hit_text[] =
 
 /* The Fight related routines */
 
-void appear(struct char_data * ch)
-{
-  AFF_FLAGS(ch).RemoveBit(AFF_HIDE);
-
+void repeatedly_strip_invis_spells_until_done(struct char_data *ch) {
   // Remove any spells that are causing this character to be invisible.
   for (struct sustain_data *hjp = GET_SUSTAINED(ch), *next_spell; hjp; hjp = next_spell) {
     next_spell = hjp->next;
     if ((hjp->spell == SPELL_IMP_INVIS || hjp->spell == SPELL_INVIS) && (hjp->caster == FALSE)) {
       end_sustained_spell(ch, hjp);
+
+      // We must restart at this point, otherwise there's a chance that next_spell points to the paired record for the spell we just dropped.
+      repeatedly_strip_invis_spells_until_done(ch);
+      break;
     }
   }
+}
+
+void appear(struct char_data * ch)
+{
+  repeatedly_strip_invis_spells_until_done(ch);
 
   if (!IS_SENATOR(ch))
     act("$n slowly fades into existence.", FALSE, ch, 0, 0, TO_ROOM);
@@ -233,6 +240,7 @@ void load_messages(void)
 bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 {
   bool was_morted = GET_POS(victim) == POS_MORTALLYW;
+  // If you update this min_body, change it in act.informative.cpp too (score section for bleeding out)
   int min_body = -GET_BOD(victim) + (GET_BIOOVER(victim) > 0 ? GET_BIOOVER(victim) : 0);
 
   // Are they stunned?
@@ -736,7 +744,7 @@ void make_corpse(struct char_data * ch)
       char filename[500];
       filename[0] = 0;
 
-      if (!ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
+      if (!ROOM_FLAGGED(ch->in_room, ROOM_STORAGE) && !GET_APARTMENT(ch->in_room)) {
         snprintf(buf, sizeof(buf), "Setting storage flag for %s (%ld) due to player corpse being in it.",
                  GET_ROOM_NAME(ch->in_room),
                  GET_ROOM_VNUM(ch->in_room));
@@ -756,25 +764,23 @@ void make_corpse(struct char_data * ch)
         }
       }
 
-      if (ROOM_FLAGGED(ch->in_room, ROOM_STORAGE)) {
-        if (!Storage_get_filename(GET_ROOM_VNUM(ch->in_room), filename, sizeof(filename))) {
-          mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
-          send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
-          return;
-        }
-      } else if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)) {
-        if (!House_get_filename(GET_ROOM_VNUM(ch->in_room), filename, sizeof(filename))) {
-          mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
-          send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
-          return;
-        }
-      } else {
-        mudlog("WARNING: Failed to make room into a save room for corpse - flag not set!!", ch, LOG_SYSLOG, TRUE);
-        send_to_char("WARNING: Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!\r\n", ch);
+      if (GET_APARTMENT_SUBROOM(ch->in_room)) {
+        GET_APARTMENT_SUBROOM(ch->in_room)->save_storage();
         return;
       }
 
-      House_save(NULL, filename, real_room(GET_ROOM_VNUM(ch->in_room)));
+      if (ROOM_FLAGGED(ch->in_room, ROOM_STORAGE)) {
+        if (!Storage_get_filename(GET_ROOM_VNUM(ch->in_room), filename, sizeof(filename))) {
+          mudlog("WARNING: Failed to make room into a save room for corpse - no filename!!", ch, LOG_SYSLOG, TRUE);
+          send_to_char("^RWARNING:^W Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!^n\r\n", ch);
+          return;
+        }
+        Storage_save(filename, ch->in_room);
+      } else {
+        mudlog("WARNING: Failed to make room into a save room for corpse - flag not set!!", ch, LOG_SYSLOG, TRUE);
+        send_to_char("^RWARNING:^W Due to an error, your corpse will not be saved on copyover or crash! Prioritize retrieving it!^n\r\n", ch);
+        return;
+      }
     }
   }
 }
@@ -1011,7 +1017,7 @@ void die(struct char_data * ch)
     docwagon_retrieve(ch);
     return;
   } else if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && !PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    send_to_char("(TIP: Your belongings have been left behind, so you'll need to go and retrieve them if you want them back.)\r\n", ch);
+    send_to_char("(TIP: Your belongings have been left behind, so you'll need to go and retrieve them if you want them back. If you forget where they are, you can use ^WWHERE BELONGINGS^n to find them.)\r\n", ch);
   }
 
   struct room_data *temp_room = get_ch_in_room(ch);
@@ -1441,11 +1447,11 @@ void dam_message(int dam, struct char_data * ch, struct char_data * victim, int 
                        attack_hit_text[w_type].different);
   for (witness = get_ch_in_room(victim)->people; witness; witness = witness->next_in_room)
     if (witness != ch && witness != victim && !PRF_FLAGGED(witness, PRF_FIGHTGAG) && SENDOK(witness))
-      perform_act(buf, ch, NULL, victim, witness);
+      perform_act(buf, ch, NULL, victim, witness, FALSE);
   if (ch->in_room != victim->in_room && !PLR_FLAGGED(ch, PLR_REMOTE))
     for (witness = get_ch_in_room(ch)->people; witness; witness = witness->next_in_room)
       if (witness != ch && witness != victim && !PRF_FLAGGED(witness, PRF_FIGHTGAG) && SENDOK(witness))
-        perform_act(buf, ch, NULL, victim, witness);
+        perform_act(buf, ch, NULL, victim, witness, FALSE);
 
 
   /* damage message to damager */
@@ -1455,7 +1461,7 @@ void dam_message(int dam, struct char_data * ch, struct char_data * victim, int 
                        attack_hit_text[w_type].different);
   strcat(buf1, buf);
   if (SENDOK(ch))
-    perform_act(buf1, ch, NULL, victim, ch);
+    perform_act(buf1, ch, NULL, victim, ch, FALSE);
 
   /* damage message to damagee */
   strcpy(buf1, "^r");
@@ -2655,8 +2661,8 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
       switch (number(0, 4)) {
         case 0:
           snprintf(buf2, sizeof(buf2), "%s just hasn't been taking %s medication.  Oops. "
-                  "{%s (%ld)}", GET_CHAR_NAME(vict), GET_SEX(vict) == SEX_MALE ?
-                  "his" : (GET_SEX(vict) == SEX_FEMALE ? "her" : "its"),
+                  "{%s (%ld)}", GET_CHAR_NAME(vict), GET_PRONOUNS(vict) == PRONOUNS_MASCULINE ?
+                  "his" : (GET_PRONOUNS(vict) == PRONOUNS_FEMININE ? "her" : "its"),
                   vict->in_room ? GET_ROOM_NAME(vict->in_room) : GET_VEH_NAME(vict->in_veh),
                   GET_ROOM_VNUM(get_ch_in_room(vict)));
           break;
@@ -3000,9 +3006,6 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     stop_follower(victim);
 
   if (attacktype != TYPE_SPELL_DRAIN) {
-    if (IS_AFFECTED(ch, AFF_HIDE))
-      appear(ch);
-
     /* stop sneaking if it's the case */
     if (IS_AFFECTED(ch, AFF_SNEAK))
       AFF_FLAGS(ch).RemoveBit(AFF_SNEAK);
@@ -3916,7 +3919,7 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
   if (attack_success < 1)
   {
     act("$n whiffs $s attack on $N!", 1, ch, NULL, vict, TO_ROOM);
-    act("$n whiffs $s attack on $N!", 1, ch, NULL, vict, TO_CHAR);
+    act("$n whiff $s attack on $N!", 1, ch, NULL, vict, TO_CHAR);
     act("$n whiffs $s attack on $N!", 1, ch, NULL, vict, TO_VICT);
     if (!AFF_FLAGGED(ch, AFF_COUNTER_ATT)) {
       bool victim_died = FALSE;
@@ -4108,11 +4111,15 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       strcpy(vehicle_message, "");
 
     if (damage < 0) {
-      switch (number(1, 3)) {
+      int switch_num = number(1, 3);
+      if (AFF_FLAGGED(victim, AFF_PRONE)) {
+        switch_num = 1;
+      }
+      switch (switch_num) {
         case 1:
-          snprintf(buf1, sizeof(buf1), "^r%s$n^r %sfires a %s^r at you, but you manage to dodge.^n", vehicle_message, blindfire_buf, buf);
-          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y, but $E manage%s to dodge.^n", blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
-          snprintf(buf3, sizeof(buf3), "%s$n %sfires a %s^n at $N, but $E manage%s to dodge.", vehicle_message, blindfire_buf, buf, HSSH_SHOULD_PLURAL(victim) ? "s" : "");
+          snprintf(buf1, sizeof(buf1), "^r%s$n^r %sfires a %s^r at you, but the shot goes wide.^n", vehicle_message, blindfire_buf, buf);
+          snprintf(buf2, sizeof(buf2), "^yYou %sfire a %s^y at $N^y, but the shot goes wide.^n", blindfire_buf, buf);
+          snprintf(buf3, sizeof(buf3), "%s$n %sfires a %s^n at $N, but the shot goes wide.", vehicle_message, blindfire_buf, buf);
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r%s$n^r %sfires a %s^r at you, but you easily dodge.^n", vehicle_message, blindfire_buf, buf);
@@ -4787,8 +4794,8 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   if (!vict
       || ch->in_room == vict->in_room
       || GET_POS(vict) <= POS_STUNNED
-      || (!ch->in_room || ch->in_room->peaceful)
-      || (!vict->in_room || vict->in_room->peaceful)
+      || (!ch->in_room || ROOM_IS_PEACEFUL(ch->in_room))
+      || (!vict->in_room || ROOM_IS_PEACEFUL(vict->in_room))
       || CH_IN_COMBAT(vict))
   {
     return FALSE;
@@ -4923,7 +4930,7 @@ void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, st
 
   extract_obj(weapon);
 
-  if (room->peaceful || ROOM_FLAGGED(room, ROOM_HOUSE)) {
+  if (room->peaceful || GET_APARTMENT(room)) {
     mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got an explosive grenade into an invalid room!", GET_CHAR_NAME(ch));
     return;
   }
@@ -5003,7 +5010,7 @@ void explode_flashbang_grenade(struct char_data *ch, struct obj_data *weapon, st
 
   extract_obj(weapon);
 
-  if (room->peaceful || ROOM_FLAGGED(room, ROOM_HOUSE)) {
+  if (room->peaceful || GET_APARTMENT(room)) {
     mudlog_vfprintf(ch, LOG_CHEATLOG, "Somehow, %s got a flashbang grenade into an invalid room!", GET_CHAR_NAME(ch));
     return;
   }
@@ -5215,7 +5222,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
   struct room_data *in_room = ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room;
 
-  if (in_room->peaceful || ROOM_FLAGGED(in_room, ROOM_HOUSE))
+  if (ROOM_IS_PEACEFUL(in_room))
   {
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
     return;
@@ -5241,7 +5248,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       send_to_char("There seems to be something in the way...\r\n", ch);
       return;
     }
-    if (nextroom->peaceful || ROOM_FLAGGED(nextroom, ROOM_HOUSE)) {
+    if (ROOM_IS_PEACEFUL(nextroom)) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     }
@@ -5376,7 +5383,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       return;
     }
 
-    if (get_ch_in_room(vict)->peaceful) {
+    if (!vict->in_room || ROOM_IS_PEACEFUL(vict->in_room)) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     }
@@ -5405,6 +5412,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
           (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD)),
           (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD)),
           NULL);
+      // note: vict may be dead at this point!
       WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
       return;
     }
@@ -5419,12 +5427,16 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         }
         if (CH_IN_COMBAT(ch))
           stop_fighting(ch);
-        hit(ch,
-            vict,
-            (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD)),
-            (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD)),
-            NULL);
-        ranged_response(ch, vict);
+
+        {
+          struct obj_data *ch_weap = (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD));
+          struct obj_data *vict_weap = (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD));
+
+          if (!hit(ch, vict, ch_weap, vict_weap, NULL)) {
+            // Only do ranged_response if the victim survived the hit.
+            ranged_response(ch, vict);
+          }
+        }
       } else
         send_to_char("*Click*\r\n", ch);
       WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
@@ -5545,7 +5557,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     } else if (!IS_SET(EXIT2(nextroom, dir)->exit_info, EX_CLOSED) && isname(target, EXIT2(nextroom, dir)->keyword) ) {
       send_to_char("You can only damage closed doors!\r\n", ch);
       return;
-    } else if (nextroom->peaceful) {
+    } else if (ROOM_IS_PEACEFUL(nextroom)) {
       send_to_char("Nah - leave it in peace.\r\n", ch);
       return;
     } else if (distance > range) {

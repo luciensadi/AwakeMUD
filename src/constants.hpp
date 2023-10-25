@@ -88,6 +88,7 @@ extern const char *totem_types[];
 extern const char *spell_category[];
 extern const char *durations[3];
 extern const char *spirit_name[];
+extern const char *spirit_name_with_hearth[];
 extern const char *foci_type[];
 extern const char *light_levels[];
 extern const char *room_types[];
@@ -139,4 +140,6 @@ extern const char *pc_race_types[];
 
 extern const char *mtx_subsystem_names[];
 extern const char *veh_speeds[];
+
+extern struct kosher_weapon_values_struct kosher_weapon_values[MAX_WEAP];
 #endif

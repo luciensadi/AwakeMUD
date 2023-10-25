@@ -1,0 +1,1159 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	1176
+		Inside:	0
+		Value 8:	24
+		Cost:	9500
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	9136
+		Inside:	0
+		Cost:	25000
+		ExtraFlags:	1000000000
+	[Object 2]
+		Vnum:	1167
+		Inside:	0
+		Value 2:	1
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	15814
+		Inside:	0
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	24558
+		Inside:	1
+		Value 11:	1
+		Cost:	600
+		ExtraFlags:	1000000000000
+	[Object 5]
+		Vnum:	24557
+		Inside:	1
+		Value 11:	2
+		Cost:	3500
+		ExtraFlags:	1000000000000
+	[Object 6]
+		Vnum:	15809
+		Inside:	0
+		Value 1:	5
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	60595
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	3460
+		Inside:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	705
+		Inside:	1
+		Cost:	675
+		ExtraFlags:	0
+		Name:	a ^Wfaux fur^n lined ^tleather^n bomber jacket^n
+	[Object 10]
+		Vnum:	108
+		Inside:	1
+		Value 0:	3
+		Value 1:	11
+		Value 2:	242
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Masking v11.0 program
+	[Object 11]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	6
+		Value 2:	180
+		Value 3:	4
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Attack v6.0 suite
+	[Object 12]
+		Vnum:	112
+		Inside:	1
+		Value 0:	25
+		Value 4:	-2
+		Value 8:	285
+		Value 10:	10
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Signal Amp
+	[Object 13]
+		Vnum:	112
+		Inside:	1
+		Value 0:	14
+		Value 4:	-2
+		Value 8:	235
+		Value 10:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n FUPS
+	[Object 14]
+		Vnum:	112
+		Inside:	2
+		Value 0:	16
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	4
+		Value 8:	840
+		Value 9:	720
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Reality Filter
+	[Object 15]
+		Vnum:	112
+		Inside:	2
+		Value 0:	2
+		Value 1:	7200
+		Value 2:	12
+		Value 4:	-2
+		Value 8:	3600
+		Value 9:	7200
+		Value 10:	180
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Megapulse Drive
+	[Object 16]
+		Vnum:	112
+		Inside:	2
+		Value 0:	1
+		Value 1:	3000
+		Value 2:	12
+		Value 4:	-2
+		Value 8:	4500
+		Value 9:	6000
+		Value 10:	90
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Megapulse Processor
+	[Object 17]
+		Vnum:	112
+		Inside:	2
+		Value 0:	17
+		Value 1:	3
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	8
+		Value 8:	405
+		Value 9:	864
+		Value 10:	56
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Myelin Sheath Accelerator
+	[Object 18]
+		Vnum:	112
+		Inside:	2
+		Value 0:	12
+		Value 1:	11
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	14
+		Value 8:	4235
+		Value 9:	144
+		Value 10:	4
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Masking v11.0 Component
+	[Object 19]
+		Vnum:	112
+		Inside:	2
+		Value 0:	10
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	5040
+		Value 9:	216
+		Value 10:	30
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Bod v12.0 Component
+	[Object 20]
+		Vnum:	112
+		Inside:	2
+		Value 0:	3
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	4850
+		Value 9:	288
+		Value 10:	3456
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Hot ASIST Interface
+	[Object 21]
+		Vnum:	112
+		Inside:	2
+		Value 0:	15
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	1420
+		Value 10:	2880
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n RAS Override
+	[Object 22]
+		Vnum:	112
+		Inside:	2
+		Value 0:	22
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	560
+		Value 10:	1440
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Microwave Interface
+	[Object 23]
+		Vnum:	112
+		Inside:	2
+		Value 0:	18
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 8:	37
+		Value 10:	7
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Matrix Interface
+	[Object 24]
+		Vnum:	112
+		Inside:	2
+		Value 0:	19
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	3000
+		Value 10:	240
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Maser Interface
+	[Object 25]
+		Vnum:	112
+		Inside:	2
+		Value 0:	21
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	560
+		Value 10:	240
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Laser Interface
+	[Object 26]
+		Vnum:	112
+		Inside:	2
+		Value 0:	23
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	4
+		Value 8:	5040
+		Value 10:	720
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Radio Interface
+	[Object 27]
+		Vnum:	112
+		Inside:	2
+		Value 0:	6
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	4
+		Value 8:	1420
+		Value 9:	288
+		Value 10:	2658
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n ICCM Biofeedback Filter
+	[Object 28]
+		Vnum:	112
+		Inside:	2
+		Value 0:	5
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	3600
+		Value 9:	576
+		Value 10:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Software Protections suite
+	[Object 29]
+		Vnum:	112
+		Inside:	2
+		Value 0:	9
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	5040
+		Value 9:	576
+		Value 10:	360
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n MPCP
+	[Object 30]
+		Vnum:	112
+		Inside:	2
+		Value 0:	7
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	6
+		Value 8:	5040
+		Value 9:	144
+		Value 10:	10
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Icon Chip
+	[Object 31]
+		Vnum:	112
+		Inside:	2
+		Value 0:	8
+		Value 1:	1200
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	4
+		Value 8:	4200
+		Value 10:	5760
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n I/O module
+	[Object 32]
+		Vnum:	112
+		Inside:	2
+		Value 0:	13
+		Value 1:	6
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	4
+		Value 8:	1260
+		Value 9:	216
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Evasion v6.0 Component
+	[Object 33]
+		Vnum:	112
+		Inside:	2
+		Value 0:	11
+		Value 1:	7
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	4
+		Value 8:	1715
+		Value 9:	144
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^ASIN^atax^n Sensor v7.0 Component
+	[Object 34]
+		Vnum:	108
+		Inside:	2
+		Value 0:	11
+		Value 1:	12
+		Value 2:	432
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Analyze program
+	[Object 35]
+		Vnum:	108
+		Inside:	2
+		Value 0:	12
+		Value 1:	12
+		Value 2:	144
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Decrypt program
+	[Object 36]
+		Vnum:	108
+		Inside:	2
+		Value 0:	13
+		Value 1:	12
+		Value 2:	288
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Deception program
+	[Object 37]
+		Vnum:	108
+		Inside:	2
+		Value 0:	18
+		Value 1:	12
+		Value 2:	288
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Read/Write program
+	[Object 38]
+		Vnum:	108
+		Inside:	2
+		Value 0:	17
+		Value 1:	12
+		Value 2:	144
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Browse program
+	[Object 39]
+		Vnum:	108
+		Inside:	2
+		Value 0:	20
+		Value 1:	12
+		Value 2:	432
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Armor program
+	[Object 40]
+		Vnum:	108
+		Inside:	2
+		Value 0:	5
+		Value 1:	6
+		Value 2:	180
+		Value 3:	4
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Attack v6.0 suite
+	[Object 41]
+		Vnum:	108
+		Inside:	2
+		Value 0:	14
+		Value 1:	12
+		Value 2:	288
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Relocate program
+	[Object 42]
+		Vnum:	108
+		Inside:	2
+		Value 0:	22
+		Value 1:	12
+		Value 2:	432
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Crash program
+	[Object 43]
+		Vnum:	108
+		Inside:	2
+		Value 0:	6
+		Value 1:	12
+		Value 2:	576
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Slow program
+	[Object 44]
+		Vnum:	108
+		Inside:	2
+		Value 0:	28
+		Value 1:	12
+		Value 2:	144
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Commlink program
+	[Object 45]
+		Vnum:	108
+		Inside:	2
+		Value 0:	23
+		Value 1:	12
+		Value 2:	288
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Defuse program
+	[Object 46]
+		Vnum:	108
+		Inside:	2
+		Value 0:	15
+		Value 1:	12
+		Value 2:	432
+		Value 4:	1
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Sleaze program
+	[Object 47]
+		Vnum:	108
+		Inside:	2
+		Value 0:	9
+		Value 1:	12
+		Value 2:	720
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n BattleTac suite
+	[Object 48]
+		Vnum:	108
+		Inside:	2
+		Value 0:	21
+		Value 1:	12
+		Value 2:	432
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Camo program
+	[Object 49]
+		Vnum:	108
+		Inside:	2
+		Value 0:	24
+		Value 2:	288
+		Value 4:	1
+		Value 5:	1689427424
+		Value 6:	1681994276
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Eval 4-1923
+	[Object 50]
+		Vnum:	113
+		Inside:	1
+		Value 0:	12
+		Value 1:	12
+		Value 2:	3000
+		Value 3:	7200
+		Value 4:	1200
+		Value 5:	5508
+		Value 6:	3
+		Value 9:	0
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a ^[F110]ci^[F220]rc^[F330]ui^[F440]t-^[F550]fi^[F440]ll^[F330]ed ^lframe^n of an ^Windustrial-grade^n cyberdeck
+		Photo:$
+^LLacking any true casing, this heavy-duty frame forms a cylindrical, polygonal
+shape around the guts of a most practical and powerful cyberdeck. Despite its
+relative lack of protection, the frame---what amounts to be a heavy plasteel
+rollcage---conveys a sense of toughness and rigidity. Liquid cooling systems
+compress and expand never-ending streams of refrigerant along the parts of the
+deck most likely to overheat, hissing and gasping as it heats from processes
+firing and refiring, all just to be cooled back down by a stream of coolant.
+It is clear that this deck is a hands-free unit, requiring peripherals for any
+sort of non-linked usage, emphasizing its purposes as SOTA 'ware rather than a
+script kiddy's joytoy. An elbow in the middle of the frame allows for
+rotation, bending and other manipulations of the deck's alignment in space,
+though its purpose is not apparent.^n 
+~
+	[Object 51]
+		Vnum:	64916
+		Inside:	0
+		Cost:	2100
+		ExtraFlags:	0
+	[Object 52]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 53]
+		Vnum:	38094
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 54]
+		Vnum:	19999
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 55]
+		Vnum:	24599
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 56]
+		Vnum:	64919
+		Inside:	0
+		Cost:	3200
+		ExtraFlags:	0
+	[Object 57]
+		Vnum:	64920
+		Inside:	0
+		Cost:	1300
+		ExtraFlags:	0
+	[Object 58]
+		Vnum:	112
+		Inside:	1
+		Value 0:	14
+		Value 4:	-1
+		Value 8:	235
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Hidden Ports (FUPS)
+	[Object 59]
+		Vnum:	112
+		Inside:	1
+		Value 0:	25
+		Value 4:	-1
+		Value 8:	285
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Signal Amplifier
+	[Object 60]
+		Vnum:	112
+		Inside:	1
+		Value 0:	13
+		Value 1:	3
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	315
+		Value 9:	216
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Evasion v3.0 Component
+	[Object 61]
+		Vnum:	112
+		Inside:	1
+		Value 0:	11
+		Value 1:	10
+		Value 2:	12
+		Value 4:	-2
+		Value 5:	2
+		Value 8:	3500
+		Value 9:	144
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Sensor v10.0 Component
+	[Object 62]
+		Vnum:	108
+		Inside:	1
+		Value 0:	25
+		Value 1:	12
+		Value 2:	576
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Validate XII program
+	[Object 63]
+		Vnum:	108
+		Inside:	1
+		Value 0:	26
+		Value 1:	12
+		Value 2:	432
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Swerve XII program
+	[Object 64]
+		Vnum:	108
+		Inside:	1
+		Value 0:	8
+		Value 1:	12
+		Value 2:	288
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Snooper XII program
+	[Object 65]
+		Vnum:	108
+		Inside:	1
+		Value 0:	14
+		Value 1:	12
+		Value 2:	288
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Relocate XII program
+	[Object 66]
+		Vnum:	108
+		Inside:	1
+		Value 0:	29
+		Value 1:	12
+		Value 2:	432
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Cloak XII program
+	[Object 67]
+		Vnum:	108
+		Inside:	1
+		Value 0:	28
+		Value 1:	12
+		Value 2:	144
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Commlink XII program
+	[Object 68]
+		Vnum:	108
+		Inside:	1
+		Value 0:	22
+		Value 1:	12
+		Value 2:	432
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Crash XII program
+	[Object 69]
+		Vnum:	108
+		Inside:	1
+		Value 0:	21
+		Value 1:	12
+		Value 2:	432
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Camo XII program
+	[Object 70]
+		Vnum:	108
+		Inside:	1
+		Value 0:	16
+		Value 1:	12
+		Value 2:	432
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Scanner XII program
+	[Object 71]
+		Vnum:	108
+		Inside:	1
+		Value 0:	7
+		Value 1:	12
+		Value 2:	576
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Medic XII program
+	[Object 72]
+		Vnum:	108
+		Inside:	1
+		Value 0:	9
+		Value 1:	12
+		Value 2:	720
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n BattleTac XII program
+	[Object 73]
+		Vnum:	108
+		Inside:	1
+		Value 0:	10
+		Value 1:	12
+		Value 2:	288
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Compressor XII program
+	[Object 74]
+		Vnum:	108
+		Inside:	1
+		Value 0:	6
+		Value 1:	12
+		Value 2:	576
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Slow XII program
+	[Object 75]
+		Vnum:	108
+		Inside:	1
+		Value 0:	30
+		Value 1:	12
+		Value 2:	432
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Lock-On XII program
+	[Object 76]
+		Vnum:	108
+		Inside:	1
+		Value 0:	19
+		Value 1:	12
+		Value 2:	1152
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Track XII program
+	[Object 77]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	12
+		Value 2:	720
+		Value 3:	4
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Attack XII program
+	[Object 78]
+		Vnum:	64918
+		Inside:	0
+		Cost:	3200
+		ExtraFlags:	0
+	[Object 79]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	12
+		Value 2:	2160
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a ^ASIN^atax^n Programming Suite
+	[Object 80]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^v8-Eyes^n" Analyze program
+	[Object 81]
+		Vnum:	108
+		Inside:	1
+		Value 0:	12
+		Value 1:	8
+		Value 2:	64
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F214]Nephilinae^n" Decrypt Program
+	[Object 82]
+		Vnum:	108
+		Inside:	1
+		Value 0:	13
+		Value 1:	8
+		Value 2:	128
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F111]Zodariidae^n" Deception program
+	[Object 83]
+		Vnum:	108
+		Inside:	1
+		Value 0:	15
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F010]Gnaphosidae^n" Sleaze program
+	[Object 84]
+		Vnum:	108
+		Inside:	1
+		Value 0:	17
+		Value 1:	8
+		Value 2:	64
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F254]Mesothelae^n" Browse program
+	[Object 85]
+		Vnum:	108
+		Inside:	1
+		Value 0:	18
+		Value 1:	8
+		Value 2:	128
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F210]Deinopis^n" Read/Write program
+	[Object 86]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F410]Gastercantha^n" Armor program
+	[Object 87]
+		Vnum:	108
+		Inside:	1
+		Value 0:	23
+		Value 1:	8
+		Value 2:	128
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^[F145]Maratus^n" Defuse program
+	[Object 88]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	6
+		Value 2:	180
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n "^rVenomous Fangs^n" Attack program
+	[Object 89]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	6
+		Value 2:	180
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Attack VI program
+	[Object 90]
+		Vnum:	108
+		Inside:	1
+		Value 0:	7
+		Value 1:	12
+		Value 2:	576
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Medic XII program
+	[Object 91]
+		Vnum:	108
+		Inside:	1
+		Value 0:	8
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Snooper XII program
+	[Object 92]
+		Vnum:	108
+		Inside:	1
+		Value 0:	9
+		Value 1:	12
+		Value 2:	720
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n BattleTac XII program
+	[Object 93]
+		Vnum:	108
+		Inside:	1
+		Value 0:	10
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Compressor XII program
+	[Object 94]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Analyze XII program
+	[Object 95]
+		Vnum:	108
+		Inside:	1
+		Value 0:	12
+		Value 1:	12
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Decrypt XII program
+	[Object 96]
+		Vnum:	108
+		Inside:	1
+		Value 0:	13
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Deception XII program
+	[Object 97]
+		Vnum:	108
+		Inside:	1
+		Value 0:	14
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Relocate XII program
+	[Object 98]
+		Vnum:	108
+		Inside:	1
+		Value 0:	15
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Sleaze XII program
+	[Object 99]
+		Vnum:	108
+		Inside:	1
+		Value 0:	16
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Scanner XII program
+	[Object 100]
+		Vnum:	108
+		Inside:	1
+		Value 0:	17
+		Value 1:	12
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Browse XII program
+	[Object 101]
+		Vnum:	108
+		Inside:	1
+		Value 0:	18
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Read/Write XII program
+	[Object 102]
+		Vnum:	108
+		Inside:	1
+		Value 0:	19
+		Value 1:	12
+		Value 2:	1152
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Track XII program
+	[Object 103]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Armor XII program
+	[Object 104]
+		Vnum:	108
+		Inside:	1
+		Value 0:	21
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Camo XII program
+	[Object 105]
+		Vnum:	108
+		Inside:	1
+		Value 0:	22
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Crash XII program
+	[Object 106]
+		Vnum:	108
+		Inside:	1
+		Value 0:	23
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Defuse XII program
+	[Object 107]
+		Vnum:	108
+		Inside:	1
+		Value 0:	25
+		Value 1:	12
+		Value 2:	576
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Validate XII program
+	[Object 108]
+		Vnum:	108
+		Inside:	1
+		Value 0:	26
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Swerve XII program
+	[Object 109]
+		Vnum:	108
+		Inside:	1
+		Value 0:	28
+		Value 1:	12
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Commlink XII program
+	[Object 110]
+		Vnum:	108
+		Inside:	1
+		Value 0:	29
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Cloak XII program
+	[Object 111]
+		Vnum:	108
+		Inside:	1
+		Value 0:	30
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Lock-On XII program
+	[Object 112]
+		Vnum:	108
+		Inside:	1
+		Value 0:	6
+		Value 1:	12
+		Value 2:	576
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Slow XII program
+	[Object 113]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	12
+		Value 2:	720
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an ^[F035]Ara^[F033]n^[F031]eae^n Attack XII program
+	[Object 114]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 1:	11
+		Value 2:	288
+		Value 5:	1689296286
+		Value 6:	1689123380
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Eval 7-1123
+	[Object 115]
+		Vnum:	1126
+		Inside:	0
+		Value 3:	14264
+		Cost:	362500
+		ExtraFlags:	10
+	[Object 116]
+		Vnum:	1182
+		Inside:	0
+		Cost:	122411
+		ExtraFlags:	0
+	[Object 117]
+		Vnum:	1187
+		Inside:	0
+		Cost:	113458
+		ExtraFlags:	0

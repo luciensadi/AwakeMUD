@@ -26,12 +26,16 @@
 #include "limits.hpp"
 #include "ignore_system.hpp"
 #include "newmagic.hpp"
+#include "newhouse.hpp"
 #include "invis_resistance_tests.hpp"
 #include "quest.hpp"
+#include "redit.hpp"
 
 /* extern variables */
 extern int drink_aff[][3];
 extern PCIndex playerDB;
+
+ACMD_DECLARE(do_bond);
 
 // extern funcs
 extern char *get_token(char *, char*);
@@ -43,10 +47,6 @@ extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
 extern int calculate_vehicle_weight(struct veh_data *veh);
-extern bool House_can_enter(struct char_data *ch, vnum_t house);
-
-// Corpse saving externs.
-extern void write_world_to_disk(int vnum);
 
 extern SPECIAL(fence);
 extern SPECIAL(hacker);
@@ -60,15 +60,48 @@ SPECIAL(weapon_dominator);
 extern WSPEC(monowhip);
 
 int wear_bitvectors[] = {
-                          ITEM_WEAR_TAKE, ITEM_WEAR_HEAD, ITEM_WEAR_EYES, ITEM_WEAR_EAR,
-                          ITEM_WEAR_EAR, ITEM_WEAR_FACE, ITEM_WEAR_NECK, ITEM_WEAR_NECK,
-                          ITEM_WEAR_BACK, ITEM_WEAR_ABOUT, ITEM_WEAR_BODY, ITEM_WEAR_UNDER,
-                          ITEM_WEAR_ARMS, ITEM_WEAR_ARM, ITEM_WEAR_ARM, ITEM_WEAR_WRIST,
-                          ITEM_WEAR_WRIST, ITEM_WEAR_HANDS, ITEM_WEAR_WIELD, ITEM_WEAR_HOLD, ITEM_WEAR_SHIELD,
-                          ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
-                          ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER,
-                          ITEM_WEAR_BELLY, ITEM_WEAR_WAIST, ITEM_WEAR_THIGH, ITEM_WEAR_THIGH,
-                          ITEM_WEAR_LEGS, ITEM_WEAR_ANKLE, ITEM_WEAR_ANKLE, ITEM_WEAR_SOCK, ITEM_WEAR_FEET };
+                          ITEM_WEAR_TAKE,
+                          ITEM_WEAR_HEAD,
+                          ITEM_WEAR_EYES, 
+                          ITEM_WEAR_EAR,
+                          ITEM_WEAR_EAR, 
+                          ITEM_WEAR_FACE, 
+                          ITEM_WEAR_NECK,
+                          ITEM_WEAR_NECK,
+                          ITEM_WEAR_BACK,
+                          ITEM_WEAR_ABOUT,
+                          ITEM_WEAR_BODY,
+                          ITEM_WEAR_UNDER,
+                          ITEM_WEAR_ARMS,
+                          ITEM_WEAR_ARM,
+                          ITEM_WEAR_ARM,
+                          ITEM_WEAR_WRIST,
+                          ITEM_WEAR_WRIST,
+                          ITEM_WEAR_HANDS,
+                          ITEM_WEAR_WIELD,
+                          ITEM_WEAR_HOLD, 
+                          ITEM_WEAR_SHIELD,
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_FINGER, 
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_FINGER, 
+                          ITEM_WEAR_FINGER,
+                          ITEM_WEAR_BELLY,
+                          ITEM_WEAR_WAIST,
+                          ITEM_WEAR_THIGH, 
+                          ITEM_WEAR_THIGH,
+                          ITEM_WEAR_LEGS,
+                          ITEM_WEAR_ANKLE,
+                          ITEM_WEAR_ANKLE, 
+                          ITEM_WEAR_SOCK,
+                          ITEM_WEAR_FEET,
+                          ITEM_WEAR_FEET /* Technically should be PATCH but we're not doing that here */,
+                          ITEM_WEAR_UNDERWEAR, 
+                          ITEM_WEAR_CHEST,
+                          ITEM_WEAR_LAPEL };
 
 bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 {
@@ -1827,24 +1860,11 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
 {
   struct obj_data *obj;
 
-  if (mode != SCMD_DROP)
-  {
-    send_to_char("You can't do that!\r\n", ch);
-    return;
-  } else if (amount < 1)
-  {
-    send_to_char("You can't drop less than one nuyen.\r\n", ch);
-    return;
-  } else if (amount > GET_NUYEN(ch))
-  {
-    send_to_char("You don't even have that much!\r\n", ch);
-    return;
-  }
-
-  if (GET_LEVEL(ch) > LVL_MORTAL && !access_level(ch, LVL_PRESIDENT)) {
-    send_to_char(ch, "Staff can't drop nuyen. Use the PAYOUT command to award a character.\r\n");
-    return;
-  }
+  FAILURE_CASE(mode != SCMD_DROP, "You can't do that!");
+  FAILURE_CASE(amount < 1, "You can't drop less than one nuyen.");
+  FAILURE_CASE(amount > GET_NUYEN(ch), "You don't even have that much!");
+  FAILURE_CASE(GET_LEVEL(ch) > LVL_MORTAL && !access_level(ch, LVL_PRESIDENT),
+               "Staff can't drop nuyen. Use the PAYOUT command to award a character.");
 
   obj = read_object(OBJ_ROLL_OF_NUYEN, VIRTUAL);
   GET_OBJ_VAL(obj, 0) = amount;
@@ -1884,8 +1904,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 {
   int value;
 
-  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP))
-  {
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP)) {
     snprintf(buf, sizeof(buf), "You can't %s $p, it must be CURSED!", sname);
     act(buf, FALSE, ch, obj, 0, TO_CHAR);
     return 0;
@@ -1904,6 +1923,30 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   if (obj_contains_kept_items(obj) && !IS_SENATOR(ch)) {
     act("Action blocked: $p contains at least one kept item.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
+  }
+
+  // You must be in an apartment or vehicle in order to drop or donate economically-sensitive items.
+  if (mode == SCMD_DONATE || (mode != SCMD_JUNK && !((ch->in_room && ch->in_room->apartment) || ch->in_veh))) {
+    bool action_blocked = FALSE;
+
+    if ((action_blocked |= obj_is_apartment_only_drop_item(obj))) {
+      act("Action blocked: $p is an economically-sensitive item (cyberware, bioware, custom cyberdeck) that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
+    }
+    else if ((action_blocked |= obj_contains_apartment_only_drop_items(obj))) {
+      act("Action blocked: $p contains at least one economically-sensitive item (cyberware, bioware, custom cyberdeck) that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
+    }
+
+    if (action_blocked) {
+      struct room_data *in_room = get_ch_in_room(ch);
+      
+      // Hardcoded start and end of the Neophyte Guild area. You can drop things you've picked up here, but only as a newbie.
+      // Note that bypassing these checks by handing something to a newbie to drop in the donation area is considered exploiting.
+      if (mode == SCMD_DONATE || (GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD && GET_ROOM_VNUM(in_room) >= 60500 && GET_ROOM_VNUM(in_room) <= 60699)) {
+        send_to_char(ch, "Please avoid giving newbies free cyberware / bioware / etc! It's a kind gesture, but it undercuts their economic balance and leads to less overall player retention.\r\n");
+      }
+
+      return 0;
+    }
   }
 
   if (mode == SCMD_DONATE) {
@@ -1946,7 +1989,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     // It'd be great if we could allow drones and bikes to be dropped anywhere not flagged !BIKE, but this
     // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
     // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
-    if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) || House_can_enter(ch, GET_ROOM_VNUM(ch->in_room)))) {
+    if (!ROOM_FLAGGED(ch->in_room, ROOM_ROAD) && !ROOM_FLAGGED(ch->in_room, ROOM_GARAGE)) {
       send_to_char("You can only drop vehicles on roads or in garages.\r\n", ch);
       return 0;
     }
@@ -2070,6 +2113,18 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     send_to_veh(buf, ch->in_veh, ch, FALSE);
   } else
   {
+    // If you're dropping something in the donation area, zero its cost.
+    if (mode == SCMD_DROP) {
+      // Pull from config.cpp
+      extern vnum_t donation_room_1;
+      extern vnum_t donation_room_2;
+      extern vnum_t donation_room_3;
+      
+      // If you're in a donation room, zero it.
+      if (GET_ROOM_VNUM(ch->in_room) == donation_room_1 || GET_ROOM_VNUM(ch->in_room) == donation_room_2 || GET_ROOM_VNUM(ch->in_room) == donation_room_3) {
+        zero_cost_of_obj_and_contents(obj);
+      }
+    }
     snprintf(buf, sizeof(buf), "$n %ss $p.%s", sname, VANISH(mode));
     act(buf, TRUE, ch, obj, 0, TO_ROOM);
   }
@@ -2111,6 +2166,9 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       check_quest_delivery(ch, obj);
     return 0;
   case SCMD_DONATE:
+    // Wipe its value with the make_newbie() function to prevent reselling.
+    zero_cost_of_obj_and_contents(obj);
+    // Move it to the donation room.
     obj_to_room(obj, random_donation_room);
     if (random_donation_room->people)
       act("You notice $p exposed beneath the junk.", FALSE, random_donation_room->people, obj, 0, TO_ROOM);
@@ -2131,27 +2189,16 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 
 ACMD(do_drop)
 {
-  extern rnum_t donation_room_1;
-  extern rnum_t donation_room_2;  /* uncomment if needed! */
-  extern rnum_t donation_room_3;  /* uncomment if needed! */
+  extern vnum_t donation_room_1;
+  extern vnum_t donation_room_2;  /* uncomment if needed! */
+  extern vnum_t donation_room_3;  /* uncomment if needed! */
 
 
-  if (IS_ASTRAL(ch)) {
-    send_to_char("Astral projections can't touch things!\r\n", ch);
-    return;
-  }
-  if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char("While driving? Now that would be a good trick!\r\n", ch);
-    return;
-  }
-
-  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && (subcmd == SCMD_DROP || subcmd == SCMD_DONATE)) {
-    send_to_char(ch, "You cannot drop or donate items until you complete character generation.\r\n");
-    return;
-  } else if (IS_WORKING(ch)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
+  FAILURE_CASE(IS_ASTRAL(ch), "Astral projections can't touch things!");
+  FAILURE_CASE(AFF_FLAGGED(ch, AFF_PILOT), "While driving? Now that would be a good trick!");
+  FAILURE_CASE(PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && (subcmd == SCMD_DROP || subcmd == SCMD_DONATE),
+               "You cannot drop or donate items until you complete character generation.");
+  FAILURE_CASE(IS_WORKING(ch), "You're too busy to do that.");
 
   struct obj_data *obj, *next_obj;
   struct room_data *random_donation_room = NULL;
@@ -2190,10 +2237,9 @@ ACMD(do_drop)
 
   argument = one_argument(argument, arg);
 
-  if (!*arg) {
-    send_to_char(ch, "What do you want to %s?\r\n", sname);
-    return;
-  } else if (is_number(arg)) {
+  FAILURE_CASE_PRINTF(!*arg, "What do you want to %s?\r\n", sname);
+  
+  if (is_number(arg)) {
     amount = atoi(arg);
     argument = one_argument(argument, arg);
     if (!str_cmp("nuyen", arg))
@@ -2248,6 +2294,54 @@ ACMD(do_drop)
   }
 }
 
+void _ch_gives_obj_to_vict(struct char_data *ch, struct obj_data *obj, struct char_data *vict) {
+  if (!ch || !obj || !vict) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid invocation of _ch_gives_obj_to_vict(%s, %s, %s)!",
+                    GET_CHAR_NAME(ch),
+                    GET_OBJ_NAME(obj),
+                    GET_CHAR_NAME(vict));
+    return;
+  }
+  
+  obj_from_char(obj);
+  obj_to_char(obj, vict);
+  act("You give $p to $N.", FALSE, ch, obj, vict, TO_CHAR);
+  act("$n gives you $p.", FALSE, ch, obj, vict, TO_VICT);
+  if (ch->in_veh)
+  {
+    snprintf(buf, sizeof(buf), "%s gives %s to %s.\r\n", GET_NAME(ch), GET_OBJ_NAME(obj), GET_NAME(vict));
+    send_to_veh(buf, ch->in_veh, ch, vict, FALSE);
+  }
+  act("$n gives $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
+
+  // Always log the transfer of vehicle containers.
+  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER) {
+    const char *owner = get_player_name(GET_VEHCONTAINER_VEH_OWNER(obj));
+    snprintf(buf, sizeof(buf), "%s (%ld) gave veh-container %s (%d, idnum %d), belonging to %s (%d), to %s (%ld).",
+              GET_CHAR_NAME(ch),
+              GET_IDNUM(ch),
+              GET_OBJ_NAME(obj),
+              GET_VEHCONTAINER_VEH_VNUM(obj),
+              GET_VEHCONTAINER_VEH_IDNUM(obj),
+              owner,
+              GET_VEHCONTAINER_VEH_OWNER(obj),
+              GET_CHAR_NAME(vict),
+              GET_IDNUM(vict)
+            );
+    mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+    DELETE_ARRAY_IF_EXTANT(owner);
+  }
+  
+  // Always log staff giving things away and/or wizloaded/cheat-marked items being given away.
+  if ( (!IS_NPC(ch) && IS_SENATOR(ch)) || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)) {
+    // Default/preliminary logging message; this is appended to where necessary.
+    char *representation = generate_new_loggable_representation(obj);
+    snprintf(buf, sizeof(buf), "%s gives %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
+    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    delete [] representation;
+  }
+}
+
 bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_data * obj)
 {
   if (IS_ASTRAL(vict))
@@ -2261,7 +2355,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     return 0;
   }
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch)) {
-    act("You'll have to use the KEEP command on $p before you can give it away.", FALSE, ch, obj, 0, TO_CHAR);
+    act("You'll have to use the ^WKEEP^n command on $p before you can give it away.", FALSE, ch, obj, 0, TO_CHAR);
     return 0;
   }
   if (obj_contains_kept_items(obj) && !IS_SENATOR(ch)) {
@@ -2284,74 +2378,52 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     send_to_char(ch, "You cannot give away something you are working on.\r\n");
     return 0;
   }
-  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER) {
-    if (IS_NPC(vict)) {
-      send_to_char("You can't give NPCs vehicles.\r\n", ch);
-      return 0;
-    }
-
-    else {
-      const char *owner = get_player_name(GET_VEHCONTAINER_VEH_OWNER(obj));
-      snprintf(buf, sizeof(buf), "%s (%ld) gave veh-container %s (%d, idnum %d), belonging to %s (%d), to %s (%ld).",
-               GET_CHAR_NAME(ch),
-               GET_IDNUM(ch),
-               GET_OBJ_NAME(obj),
-               GET_VEHCONTAINER_VEH_VNUM(obj),
-               GET_VEHCONTAINER_VEH_IDNUM(obj),
-               owner,
-               GET_VEHCONTAINER_VEH_OWNER(obj),
-               GET_CHAR_NAME(vict),
-               GET_IDNUM(vict)
-              );
-      mudlog(buf, ch, LOG_CHEATLOG, TRUE);
-      DELETE_ARRAY_IF_EXTANT(owner);
-    }
+  if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER && IS_NPC(vict)) {
+    send_to_char("You can't give NPCs vehicles.\r\n", ch);
+    return 0;
   }
 
-  obj_from_char(obj);
-  obj_to_char(obj, vict);
-  act("You give $p to $N.", FALSE, ch, obj, vict, TO_CHAR);
-  act("$n gives you $p.", FALSE, ch, obj, vict, TO_VICT);
-  if (ch->in_veh)
-  {
-    snprintf(buf, sizeof(buf), "%s gives %s to %s.\r\n", GET_NAME(ch), GET_OBJ_NAME(obj), GET_NAME(vict));
-    send_to_veh(buf, ch->in_veh, ch, vict, FALSE);
-  }
-  act("$n gives $p to $N.", TRUE, ch, obj, vict, TO_NOTVICT);
-
-  if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
-  {
-    // Default/preliminary logging message; this is appended to where necessary.
-    char *representation = generate_new_loggable_representation(obj);
-    snprintf(buf, sizeof(buf), "%s gives %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
-    mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
-    delete [] representation;
-  }
-
+  // player giving something to an NPC: check quest stuff
   if (!IS_NPC(ch) && IS_NPC(vict)) {
-    // Quest reward.
-    if (COULD_BE_ON_QUEST(ch) && check_quest_delivery(ch, vict, obj)) {
-      act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
-      extract_obj(obj);
-    }
-    // No quest found.
-    else {
-      if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)) {
-        // These specs handle objects, so don't mess with them.
-        if (GET_MOB_SPEC(vict) == fence || GET_MOB_SPEC(vict) == hacker || GET_MOB_SPEC(vict) == fixer || GET_MOB_SPEC(vict) == mageskill_herbie)
-          return 1;
-        if (GET_MOB_SPEC2(vict) == fence || GET_MOB_SPEC2(vict) == hacker || GET_MOB_SPEC2(vict) == fixer || GET_MOB_SPEC2(vict) == mageskill_herbie)
-          return 1;
+    // Quest item delivery checks.
+    if (COULD_BE_ON_QUEST(ch)) {
+      // Successful delivery of quest item.
+      if (check_quest_delivery(ch, vict, obj)) {
+        // Give it to them now.
+        _ch_gives_obj_to_vict(ch, obj, vict);
+        act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
+        extract_obj(obj);
+        return 1;
       }
-
-      act("$n glances at $p, then lets it fall from $s hand.", TRUE, vict, obj, 0, TO_ROOM);
-      obj_from_char(obj);
-      if (vict->in_room)
-        obj_to_room(obj, vict->in_room);
-      else
-        obj_to_veh(obj, vict->in_veh);
+      
+      // If it's a quest item, refuse to hand it off.
+      if (obj->obj_flags.quest_id) {
+        send_to_char("You're pretty sure your Johnson wouldn't be happy with you if you did that.\r\n", ch);
+        return 0;
+      }
     }
+
+    // Not a quest item. Give succeeds.
+    _ch_gives_obj_to_vict(ch, obj, vict);
+  
+    if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict)) {
+      // These specs handle objects, so don't mess with them by having the NPC drop the thing.
+      if (GET_MOB_SPEC(vict) == fence || GET_MOB_SPEC(vict) == hacker || GET_MOB_SPEC(vict) == fixer || GET_MOB_SPEC(vict) == mageskill_herbie)
+        return 1;
+      if (GET_MOB_SPEC2(vict) == fence || GET_MOB_SPEC2(vict) == hacker || GET_MOB_SPEC2(vict) == fixer || GET_MOB_SPEC2(vict) == mageskill_herbie)
+        return 1;
+    }
+
+    // NPC doesn't want it: Drop the thing.
+    act("$n glances at $p, then lets it fall from $s hand.", TRUE, vict, obj, 0, TO_ROOM);
+    obj_from_char(obj);
+    if (vict->in_room)
+      obj_to_room(obj, vict->in_room);
+    else
+      obj_to_veh(obj, vict->in_veh);
+  } else {
+    // All other cases (pc -> pc, npc -> npc): succeed without further checks
+    _ch_gives_obj_to_vict(ch, obj, vict);
   }
 
   return 1;
@@ -3055,7 +3127,23 @@ void wear_message(struct char_data * ch, struct obj_data * obj, int where)
                                 "You wear $p on your feet."},
 
                                {"$n wears $p on $s feet.",
-                                "You put $p on your feet."}
+                                "You put $p on your feet."},
+
+                                // Patch
+                               {"$n wears $p in an ERRONEOUS LOCATION.",
+                                "You put $p on an ERRONEOUS LOCATION."},
+
+                                // Underwear
+                               {"$n slips into $p.",
+                                "You slip into $p (u)."},
+
+                                // Chest
+                               {"$n slips into $p.",
+                                "You slip into $p (c)."},
+
+                                // Lapel
+                               {"$n pins $p to $s lapel area.",
+                                "You pin $p to your lapel area."}
 
                               /*
                                 {"$n sticks $p in $s mouth.",
@@ -3134,13 +3222,16 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
                               "You already have something in your belly button.\r\n",
                               "You already have something around your waist.\r\n",
                               "YOU SHOULD NEVER SEE THIS MESSAGE (#11).  PLEASE REPORT.\r\n",
-                              "You are already wearing something around both or your thighs.\r\n",
+                              "You are already wearing something around both of your thighs.\r\n",
                               "You're already wearing something on your legs.\r\n",
                               "YOU SHOULD NEVER SEE THIS MESSAGE (#12).  PLEASE REPORT.\r\n",
                               "You already have something on each of your ankles.\r\n",
                               "You are already wearing something on your feet.\r\n",
                               "You're already wearing something on your feet.\r\n",
-                              /*"You already have something in your mouth.\r\n" */
+                              "YOU SHOULD NEVER SEE THIS MESSAGE (#13).  PLEASE REPORT.\r\n",
+                              "You're already wearing underwear.\r\n",
+                              "You already have something on your chest.\r\n",
+                              "You already have a lapel pin.\r\n"
                             };
 
   /* first, make sure that the wear position is valid. */
@@ -3421,7 +3512,10 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
       "!RESERVED!",
       "sock",
       "feet",
-      // "mouth",
+      "!RESERVED!",
+      "underwear",
+      "chest",
+      "lapel",
       "\n"
     };
 
@@ -3476,6 +3570,12 @@ int find_eq_pos(struct char_data * ch, struct obj_data * obj, char *arg)
     where = WEAR_FACE;
   if (CAN_WEAR(obj, ITEM_WEAR_THIGH))
     where = WEAR_THIGH_R;
+  if (CAN_WEAR(obj, ITEM_WEAR_UNDERWEAR))
+    where = WEAR_UNDERWEAR;
+  if (CAN_WEAR(obj, ITEM_WEAR_CHEST))
+    where = WEAR_CHEST;
+  if (CAN_WEAR(obj, ITEM_WEAR_LAPEL))
+    where = WEAR_LAPEL;
 /*
   if (CAN_WEAR(obj, ITEM_WEAR_MOUTH))
     where = WEAR_MOUTH;
@@ -3771,12 +3871,14 @@ ACMD(do_activate)
       one_argument(argument, buf);
       desired_level = atoi(buf);
     } else {
-      half_chop(argument, buf, buf1);
+      half_chop(argument, buf, buf1, sizeof(buf1));
       if (!(desired_level = atoi(buf))) {
         strncpy(name, buf, sizeof(name) - 1);
       } else {
-        half_chop(buf1, buf2, buf1);
-        strncpy(name, buf2, sizeof(name) - 1);
+        char remainder[MAX_INPUT_LENGTH];
+        half_chop(buf1, buf2, remainder, sizeof(remainder));
+        strlcpy(name, buf2, sizeof(name));
+        strlcpy(buf1, remainder, sizeof(buf1));
       }
     }
 
@@ -3925,6 +4027,31 @@ ACMD(do_activate)
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_LIGHT) {
     send_to_char(ch, "There's no need to activate or deactivate %s. Just ^WWEAR^n it when you want to use it.\r\n", GET_OBJ_NAME(obj));
+    return;
+  } else if (GET_OBJ_TYPE(obj) == ITEM_DOCWAGON) {
+    bool bonded = (GET_DOCWAGON_BONDED_IDNUM(obj) == GET_IDNUM(ch));
+    bool bonded_to_someone_else = GET_DOCWAGON_BONDED_IDNUM(obj) && !bonded;
+    bool worn = (obj->worn_by == ch);
+
+    char tmp_arg[MAX_INPUT_LENGTH];
+    snprintf(tmp_arg, sizeof(tmp_arg), " %s", arg);
+    
+    if (bonded && worn) {
+      send_to_char(ch, "%s is already bonded and worn: You're all set.\r\n", CAP(GET_OBJ_NAME(obj)));
+    } else if (bonded_to_someone_else) {
+      send_to_char(ch, "%s is bonded to someone else, so it won't work for you.\r\n", CAP(GET_OBJ_NAME(obj)));
+    } else if (bonded) {
+      send_to_char(ch, "%s is already bonded, so you just need to ^WWEAR^n it. Trying that now...\r\n", CAP(GET_OBJ_NAME(obj)));
+      do_wear(ch, tmp_arg, 0, 0);
+    } else if (worn) {
+      send_to_char(ch, "%s hasn't been bonded yet, so you need to ^WREMOVE^n it and ^WBOND^n it, then ^WWEAR^n it again. Trying that now...\r\n", CAP(GET_OBJ_NAME(obj)));
+      obj_to_char(unequip_char(ch, obj->worn_on, FALSE, TRUE), ch);
+      do_bond(ch, tmp_arg, 0, 0);
+      do_wear(ch, tmp_arg, 0, 0);
+    } else {
+      do_bond(ch, tmp_arg, 0, 0);
+      do_wear(ch, tmp_arg, 0, 0);
+    }
     return;
   } else if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1)) {
     send_to_char(ch, "You can't activate %s.\r\n", GET_OBJ_NAME(obj));

@@ -166,6 +166,12 @@ bool spawn_ic(struct matrix_icon *target, vnum_t ic_vnum, int triggerstep) {
     return FALSE;
   }
 
+  // Sanity check: IC must have a vnum field, otherwise when it's deleted it'll wipe out proto values.
+  if (!ic->vnum) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR while processing host %ld, trigger step %d, IC %ld: IC's datastructure vnum is zero! Forcibly setting it.", matrix[target->in_host].vnum, triggerstep, ic_vnum);
+    ic->vnum = ic_vnum;
+  }
+
   ic->ic.target = target->idnum;
   for (struct matrix_icon *icon = matrix[target->in_host].icons; icon; icon = icon->next_in_host) {
     if (icon->decker) {
@@ -874,8 +880,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         resist = GET_BOD(targ->decker->ch);
       else
         resist = GET_WIL(targ->decker->ch);
-      success -= targ->decker->iccm ? MAX(success_test(GET_WIL(targ->decker->ch), power), success_test(GET_BOD(targ->decker->ch), power))
-                 : success_test(resist, power);
+
+      int wil_test_result = success_test(GET_WIL(targ->decker->ch), power);
+      int bod_test_result = success_test(GET_BOD(targ->decker->ch), power);
+      success -= targ->decker->iccm ? MAX(wil_test_result, bod_test_result) : success_test(resist, power);
       dam = convert_damage(stage(success, dam));
       send_to_icon(targ, "You smell something burning.\r\n");
 
@@ -1267,15 +1275,38 @@ ACMD(do_locate)
     else {
       if (PERSONA) {
         for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj && success > 0; obj = obj->next_content) {
-          if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_PROGRAM)
-              && (GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == 0 || GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum)
-              && keyword_appears_in_obj(arg, obj))
-          {
-            GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = PERSONA->idnum;
-            success--;
-            i++;
+          // Skip over anything that's not a file or program.
+          if (GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(obj) != ITEM_PROGRAM)
+            continue;
+
+          // Skip anything that you can't touch for quest reasons.
+          if (ch_is_blocked_by_quest_protections(ch, obj, FALSE))
+            continue;
+
+          // If it has been found by someone else:
+          if (GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) != PERSONA->idnum) {
+            // You can only overwrite claims for quest objects that you're grouped with the questor for. No quest? Skip.
+            if (!obj->obj_flags.quest_id)
+              continue;
+              
+            // Skip it if you're not grouped with the person whose quest it is.
+            if (!ch_is_grouped_with_idnum(ch, obj->obj_flags.quest_id))
+              continue;
+
+            // Otherwise, you can still potentially find it.
+            // fall through
           }
+
+          // Skip anything without a keyword match.
+          if (!keyword_appears_in_obj(arg, obj))
+            continue;
+         
+          // Found a match!
+          GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = PERSONA->idnum;
+          success--;
+          i++;
         }
+
         if (!i)
           send_to_icon(PERSONA, "You fail to return any data on that search.\r\n");
         else
@@ -1494,7 +1525,9 @@ ACMD(do_matrix_look)
         send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n",
                      GET_OBJ_NAME(obj), percent_complete);
       } else {
-        send_to_icon(PERSONA, "^yA file named %s floats here.^n\r\n", GET_OBJ_NAME(obj));
+        send_to_icon(PERSONA, "^yA file named %s floats here.%s^n\r\n", 
+                     GET_OBJ_NAME(obj),
+                     obj->obj_flags.quest_id ? (ch_is_grouped_with_idnum(ch, obj->obj_flags.quest_id) ? " ^Y(Quest)" : " ^m(Protected)") : "");
       }
     }
 
@@ -1837,7 +1870,7 @@ ACMD(do_connect)
     }
 
   for (cyber = ch->carrying; !cyberdeck && cyber; cyber = cyber->next_content)
-    if (GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK)
+    if ((GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK) && (IS_SENATOR(ch) || !IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY)))
       cyberdeck = cyber;
   for (int i = 0; !cyberdeck && i < NUM_WEARS; i++)
     if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
@@ -2176,13 +2209,16 @@ ACMD(do_load)
         }
         if (success > 0) {
           // TODO: This is accurately transcribed, but feels like a bug.
-          GET_OBJ_VAL(soft, 9) = GET_DECK_ACCESSORY_FILE_SIZE(soft);
+          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_SIZE(soft);
           if (subcmd == SCMD_UPLOAD) {
-            GET_OBJ_VAL(soft, 8) = 1;
+            GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 1;
             GET_OBJ_ATTEMPT(soft) = matrix[PERSONA->in_host].vnum;
           } else
             DECKER->active -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
           send_to_icon(PERSONA, "You begin to upload %s to %s.\r\n", GET_OBJ_NAME(soft), (subcmd ? "the host" : "your icon"));
+          if (IS_SENATOR(ch)) {
+            send_to_icon(PERSONA, "(Upload will take %d ticks.)", GET_DECK_ACCESSORY_FILE_REMAINING(soft));
+          }
         } else
           send_to_icon(PERSONA, "Your commands fail to execute.\r\n");
       }
@@ -2717,61 +2753,23 @@ ACMD(do_software)
 
 void process_upload(struct matrix_icon *persona)
 {
+  // Note: We only upload one file at a time. Find the first valid one and process it, then stop.
   if (persona && persona->decker && persona->decker->deck) {
     for (struct obj_data *soft = persona->decker->deck->contains; soft; soft = soft->next_content) {
-      if (GET_OBJ_TYPE(soft) != ITEM_PART && GET_OBJ_VAL(soft, 9) > 0)
+      if (GET_OBJ_TYPE(soft) != ITEM_PART && GET_DECK_ACCESSORY_FILE_REMAINING(soft) > 0)
       {
         // Require that we're on the same host as we started the upload on.
-        if (GET_OBJ_VAL(soft, 8) == 1) {
-          if (GET_OBJ_ATTEMPT(soft) != matrix[persona->in_host].vnum) {
-            send_to_icon(persona, "Your connection to the host was interrupted, so %s fails to upload.\r\n", GET_OBJ_NAME(soft));
-            GET_OBJ_VAL(soft, 9) = GET_OBJ_VAL(soft, 8) = 0;
-            continue;
-          }
+        if (GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) == 1 && GET_OBJ_ATTEMPT(soft) != matrix[persona->in_host].vnum) {
+          send_to_icon(persona, "Your connection to the host was interrupted, so %s fails to upload.\r\n", GET_OBJ_NAME(soft));
+          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
+          return;
         }
 
-        GET_OBJ_VAL(soft, 9) -= persona->decker->io;
-        if (GET_OBJ_VAL(soft, 9) <= 0) {
-          send_to_icon(persona, "%s has finished uploading to %s.\r\n", CAP(GET_OBJ_NAME(soft)),
-                       GET_OBJ_VAL(soft, 8) ? "the host" : "active memory");
-          if (GET_OBJ_VAL(soft, 8) == 1) {
-            obj_from_obj(soft);
-            obj_to_host(soft, &matrix[persona->in_host]);
-            // Make it seen by them.
-            GET_OBJ_VAL(soft, 7) = GET_IDNUM(persona->decker->ch);
-            GET_OBJ_VAL(persona->decker->deck, 5) -= GET_OBJ_VAL(soft, 2);
-            GET_OBJ_VAL(soft, 8) = 0;
-            GET_OBJ_VAL(soft, 9) = 0;
-            if (GET_QUEST(persona->decker->ch)) {
-              bool potential_failure = FALSE;
-              for (int i = 0; i < quest_table[GET_QUEST(persona->decker->ch)].num_objs; i++) {
-                if (quest_table[GET_QUEST(persona->decker->ch)].obj[i].objective != QOO_UPLOAD)
-                  continue;
-
-                if (GET_OBJ_VNUM(soft) != quest_table[GET_QUEST(persona->decker->ch)].obj[i].vnum)
-                  continue;
-
-                if (matrix[persona->in_host].vnum == quest_table[GET_QUEST(persona->decker->ch)].obj[i].o_data) {
-                  send_to_icon(persona, "You feel a small bit of satisfaction at having completed this part of your job.\r\n");
-                  persona->decker->ch->player_specials->obj_complete[i] = 1;
-                  potential_failure = FALSE;
-                  break;
-                } else {
-                  potential_failure = TRUE;
-                }
-              }
-              if (potential_failure) {
-                send_to_icon(persona, "Something doesn't seem quite right. You're suddenly unsure if this is the right host for the job.\r\n");
-                snprintf(buf, sizeof(buf), "%s tried host %s (%ld) for job %ld, but it was incorrect. Rephrasing needed?",
-                         GET_CHAR_NAME(persona->decker->ch),
-                         matrix[persona->in_host].name,
-                         matrix[persona->in_host].vnum,
-                         quest_table[GET_QUEST(persona->decker->ch)].vnum
-                       );
-                mudlog(buf, persona->decker->ch, LOG_SYSLOG, TRUE);
-              }
-            }
-          } else {
+        GET_DECK_ACCESSORY_FILE_REMAINING(soft) -= persona->decker->io;
+        if (GET_DECK_ACCESSORY_FILE_REMAINING(soft) <= 0) {
+          // Easy finish: Uploading to active memory.
+          if (!GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft)) {
+            send_to_icon(persona, "%s has finished uploading to active memory.\r\n", CAP(GET_OBJ_NAME(soft)));
             struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL);
             if (soft->restring)
               active->restring = str_dup(soft->restring);
@@ -2779,8 +2777,72 @@ void process_upload(struct matrix_icon *persona)
               GET_OBJ_VAL(active, x) = GET_OBJ_VAL(soft, x);
             active->next_content = persona->decker->software;
             persona->decker->software = active;
+            GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
+            return;
           }
-          GET_OBJ_VAL(soft, 9) = 0;
+
+          // We're uploading to a host.
+          struct char_data *questor = NULL;
+
+          // Quest object?
+          if (soft->obj_flags.quest_id && GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft)) {
+            // You must be grouped with the questor for the upload to complete.
+            if (!(questor = ch_is_grouped_with_idnum(persona->decker->ch, soft->obj_flags.quest_id)) || GET_QUEST(questor) < 0) {
+              send_to_icon(persona, "%s failed to upload to the host: You're not grouped with the questor.\r\n", CAP(GET_OBJ_NAME(soft)));
+              GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
+              return;
+            }
+          }
+
+          // Send the success message.
+          send_to_icon(persona, "%s has finished uploading to the host.\r\n", CAP(GET_OBJ_NAME(soft)));
+
+          // Move it onto the host.
+          obj_from_obj(soft);
+          obj_to_host(soft, &matrix[persona->in_host]);
+          // Make it seen by them.
+          GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) = GET_IDNUM(persona->decker->ch);
+          // Remove it from their deck's used storage.
+          GET_CYBERDECK_USED_STORAGE(persona->decker->deck) -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
+          GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
+          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
+
+          if (questor) {
+            log_vfprintf("Questor found for upload.");
+            bool potential_failure = FALSE;
+            for (int i = 0; i < quest_table[GET_QUEST(questor)].num_objs; i++) {
+              if (quest_table[GET_QUEST(questor)].obj[i].objective != QOO_UPLOAD)
+                continue;
+
+              if (GET_OBJ_VNUM(soft) != quest_table[GET_QUEST(questor)].obj[i].vnum)
+                continue;
+
+              if (matrix[persona->in_host].vnum == quest_table[GET_QUEST(questor)].obj[i].o_data) {
+                log_vfprintf("Uploaded to right host.");
+                send_to_icon(persona, "You feel a small bit of satisfaction at having completed this part of %s%s job.\r\n",
+                             questor == persona->decker->ch ? "your" : GET_CHAR_NAME(questor),
+                             questor == persona->decker->ch ? "" : "'s");
+                questor->player_specials->obj_complete[i] = 1;
+                potential_failure = FALSE;
+                break;
+              } else {
+                potential_failure = TRUE;
+              }
+            }
+
+            if (potential_failure) {
+              log_vfprintf("Uploaded to wrong host.");
+              send_to_icon(persona, "Something doesn't seem quite right. You're suddenly unsure if this is the right host for the job.\r\n");
+              snprintf(buf, sizeof(buf), "%s tried host %s (%ld) for job %ld, but it was incorrect. Quest recap rephrasing needed?",
+                      GET_CHAR_NAME(persona->decker->ch),
+                      matrix[persona->in_host].name,
+                      matrix[persona->in_host].vnum,
+                      quest_table[GET_QUEST(questor)].vnum
+                    );
+              mudlog(buf, questor, LOG_SYSLOG, TRUE);
+            }
+          }
+          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
         }
         break;
       }

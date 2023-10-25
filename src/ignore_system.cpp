@@ -55,7 +55,7 @@ ACMD(do_ignore) {
   }
 
   // Extract the idnum from the first argument and verify that it exists.
-  long vict_idnum = get_player_id(first_argument);
+  idnum_t vict_idnum = get_player_id(first_argument);
 
   if (vict_idnum <= 0) {
     // TODO: Check people in the room and see if we can find a player that matches their description.

@@ -1,0 +1,763 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	19966
+		Inside:	0
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	1172
+		Inside:	0
+		Value 8:	36
+		Cost:	0
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	12
+		Value 2:	2160
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	PSuite3
+	[Object 3]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 1:	10
+		Value 2:	288
+		Value 5:	1691210175
+		Value 6:	1690864500
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Evaluation Station
+	[Object 4]
+		Vnum:	1120
+		Inside:	0
+		Value 3:	2448
+		Cost:	33600
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	1167
+		Inside:	0
+		Value 2:	1
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	1182
+		Inside:	0
+		Cost:	8579
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	766
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	766
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	766
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	766
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	9416
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 12]
+		Vnum:	9416
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 13]
+		Vnum:	9416
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 14]
+		Vnum:	9416
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 15]
+		Vnum:	9416
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	1847
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	108
+		Inside:	1
+		Value 0:	15
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Sleazy for Shezee
+	[Object 18]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	a blank program
+	[Object 19]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	eyesonyou
+	[Object 20]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	8
+		Value 2:	192
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	eyesonyou
+	[Object 21]
+		Vnum:	108
+		Inside:	1
+		Value 0:	23
+		Value 1:	8
+		Value 2:	128
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Defuse
+	[Object 22]
+		Vnum:	108
+		Inside:	1
+		Value 0:	21
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	matrix bdu 8
+	[Object 23]
+		Vnum:	108
+		Inside:	1
+		Value 0:	17
+		Value 1:	8
+		Value 2:	64
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Browser
+	[Object 24]
+		Vnum:	108
+		Inside:	1
+		Value 0:	13
+		Value 1:	8
+		Value 2:	128
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Houdini8
+	[Object 25]
+		Vnum:	108
+		Inside:	1
+		Value 0:	18
+		Value 1:	8
+		Value 2:	128
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	HKeller Read
+	[Object 26]
+		Vnum:	108
+		Inside:	1
+		Value 0:	12
+		Value 1:	8
+		Value 2:	64
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Decryption8
+	[Object 27]
+		Vnum:	108
+		Inside:	1
+		Value 0:	29
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Cloak8
+	[Object 28]
+		Vnum:	108
+		Inside:	1
+		Value 0:	16
+		Value 1:	8
+		Value 2:	192
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Skanerz8
+	[Object 29]
+		Vnum:	108
+		Inside:	1
+		Value 0:	9
+		Value 1:	8
+		Value 2:	320
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	BattleTac8
+	[Object 30]
+		Vnum:	108
+		Inside:	1
+		Value 0:	34
+		Value 1:	12
+		Value 2:	576
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	ICCM Filter
+	[Object 31]
+		Vnum:	108
+		Inside:	1
+		Value 0:	20
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Armorz
+	[Object 32]
+		Vnum:	108
+		Inside:	1
+		Value 0:	15
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Fo Sheazy 12
+	[Object 33]
+		Vnum:	108
+		Inside:	1
+		Value 0:	12
+		Value 1:	12
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	DeCrypt12
+	[Object 34]
+		Vnum:	108
+		Inside:	1
+		Value 0:	23
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Defuse
+	[Object 35]
+		Vnum:	108
+		Inside:	1
+		Value 0:	23
+		Value 1:	12
+		Value 2:	288
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Defuse
+	[Object 36]
+		Vnum:	108
+		Inside:	1
+		Value 0:	18
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	R/W 12
+	[Object 37]
+		Vnum:	108
+		Inside:	1
+		Value 0:	17
+		Value 1:	12
+		Value 2:	144
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Browzer 12
+	[Object 38]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 2:	128
+		Value 5:	1691173527
+		Value 6:	1685234102
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Eval 12
+	[Object 39]
+		Vnum:	108
+		Inside:	1
+		Value 0:	5
+		Value 1:	6
+		Value 2:	180
+		Value 3:	4
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Attack
+	[Object 40]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 2:	128
+		Value 5:	1691173527
+		Value 6:	1685242363
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Eval 8
+	[Object 41]
+		Vnum:	108
+		Inside:	1
+		Value 0:	8
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Snoop Dawg
+	[Object 42]
+		Vnum:	108
+		Inside:	1
+		Value 0:	11
+		Value 1:	12
+		Value 2:	432
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Analyze 12
+	[Object 43]
+		Vnum:	108
+		Inside:	1
+		Value 0:	7
+		Value 1:	12
+		Value 2:	576
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Doc Hawkeye
+	[Object 44]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 2:	128
+		Value 4:	1
+		Value 5:	1691173527
+		Value 6:	1685245438
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Eval 8
+	[Object 45]
+		Vnum:	108
+		Inside:	1
+		Value 0:	13
+		Value 1:	12
+		Value 2:	288
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Decept 12
+	[Object 46]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 2:	200
+		Value 5:	1691173527
+		Value 6:	1685400493
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Eval 10
+	[Object 47]
+		Vnum:	108
+		Inside:	1
+		Value 0:	27
+		Value 1:	5
+		Value 2:	375
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	PSuite
+	[Object 48]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 2:	200
+		Value 4:	1
+		Value 5:	1691173527
+		Value 6:	1685402098
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Eval 10
+	[Object 49]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 1:	8
+		Value 2:	288
+		Value 5:	1691170718
+		Value 6:	1690479313
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Evaluation Station
+	[Object 50]
+		Vnum:	108
+		Inside:	1
+		Value 0:	24
+		Value 1:	8
+		Value 2:	288
+		Value 4:	1
+		Value 5:	1691256135
+		Value 6:	1690564611
+		Timer:	1
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Evaluation Station
+	[Object 51]
+		Vnum:	112
+		Inside:	1
+		Value 0:	12
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-1
+		Value 5:	10
+		Value 7:	14790
+		Value 8:	2240
+		Value 9:	64
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a Masking chip
+	[Object 52]
+		Vnum:	112
+		Inside:	1
+		Value 0:	13
+		Value 1:	8
+		Value 2:	8
+		Value 4:	-1
+		Value 5:	12
+		Value 7:	14790
+		Value 8:	2240
+		Value 9:	96
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	an Evasion chip
+	[Object 53]
+		Vnum:	112
+		Inside:	1
+		Value 0:	3
+		Value 1:	12
+		Value 2:	12
+		Value 4:	-1
+		Value 5:	4
+		Value 7:	14790
+		Value 8:	4850
+		Value 9:	288
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	HotAssist12
+	[Object 54]
+		Vnum:	651
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 55]
+		Vnum:	626
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 56]
+		Vnum:	1817
+		Inside:	1
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 57]
+		Vnum:	127
+		Inside:	2
+		Value 0:	10
+		Value 1:	14
+		Value 9:	10
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 10-round shotgun magazine
+	[Object 58]
+		Vnum:	631
+		Inside:	1
+		Value 11:	2
+		Cost:	1000
+		ExtraFlags:	1000000000000
+	[Object 59]
+		Vnum:	107
+		Inside:	1
+		Value 0:	3
+		Value 1:	8
+		Value 6:	128
+		Value 8:	4
+		Value 9:	14790
+		Value 10:	1
+		Timer:	320
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	Masking
+	[Object 60]
+		Vnum:	107
+		Inside:	1
+		Value 0:	2
+		Value 1:	8
+		Value 6:	192
+		Value 8:	6
+		Value 9:	14790
+		Value 10:	1
+		Timer:	480
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	an Evasion program
+	[Object 61]
+		Vnum:	107
+		Inside:	1
+		Value 0:	32
+		Value 1:	12
+		Value 4:	960
+		Value 6:	576
+		Value 9:	14790
+		Timer:	960
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	hotinterface
+	[Object 62]
+		Vnum:	107
+		Inside:	1
+		Value 0:	24
+		Value 1:	8
+		Value 6:	128
+		Value 8:	3
+		Value 9:	14790
+		Value 10:	1
+		Timer:	320
+		Cost:	0
+		ExtraFlags:	100000000000000001000000000
+		Name:	evaluation station
+	[Object 63]
+		Vnum:	17113
+		Inside:	1
+		Cost:	21600
+		ExtraFlags:	0
+	[Object 64]
+		Vnum:	6108
+		Inside:	1
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 65]
+		Vnum:	1140
+		Inside:	1
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 66]
+		Vnum:	1141
+		Inside:	1
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 67]
+		Vnum:	374
+		Inside:	1
+		Value 0:	8
+		Value 3:	2
+		Cost:	500
+		ExtraFlags:	0
+	[Object 68]
+		Vnum:	1816
+		Inside:	1
+		Value 0:	5206
+		Value 1:	7475
+		Value 2:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 69]
+		Vnum:	38072
+		Inside:	1
+		Condition:	3
+		Cost:	400
+		ExtraFlags:	0
+	[Object 70]
+		Vnum:	25586
+		Inside:	1
+		Value 1:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 71]
+		Vnum:	1160
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 72]
+		Vnum:	1941
+		Inside:	2
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 73]
+		Vnum:	1942
+		Inside:	2
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 74]
+		Vnum:	1966
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 75]
+		Vnum:	1943
+		Inside:	2
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 76]
+		Vnum:	29005
+		Inside:	1
+		Value 5:	-321
+		Cost:	0
+		ExtraFlags:	0
+	[Object 77]
+		Vnum:	121
+		Inside:	1
+		Value 0:	142
+		Value 1:	14
+		Value 2:	3
+		Cost:	1420
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of EX shotgun ammunition
+	[Object 78]
+		Vnum:	121
+		Inside:	1
+		Value 0:	270
+		Value 1:	14
+		Value 2:	1
+		Value 4:	-2
+		Value 9:	14790
+		Value 10:	-1
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 79]
+		Vnum:	22883
+		Inside:	1
+		Value 11:	1
+		Cost:	800
+		ExtraFlags:	1000000000000
+	[Object 80]
+		Vnum:	127
+		Inside:	2
+		Value 0:	15
+		Value 1:	8
+		Value 9:	15
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 15-round heavy pistol magazine
+	[Object 81]
+		Vnum:	38029
+		Inside:	1
+		Value 11:	2
+		Cost:	3150
+		ExtraFlags:	0
+	[Object 82]
+		Vnum:	38041
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 83]
+		Vnum:	85212
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	0
+	[Object 84]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	10100000000000000000000000000
+		Name:	a packaged-up 'a datajack - alpha'
+	[Object 85]
+		Vnum:	85118
+		Inside:	2
+		Cost:	3500
+		ExtraFlags:	0
+	[Object 86]
+		Vnum:	83
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	10100000000000000000000000000
+		Name:	a packaged-up 'a smartlink-2 system'
+	[Object 87]
+		Vnum:	3446
+		Inside:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 88]
+		Vnum:	127
+		Inside:	2
+		Value 0:	20
+		Value 1:	8
+		Value 9:	20
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 20-round heavy pistol magazine
+	[Object 89]
+		Vnum:	755
+		Inside:	1
+		Value 11:	2
+		Attempt:	1
+		Cost:	700
+		ExtraFlags:	0
+	[Object 90]
+		Vnum:	949
+		Inside:	1
+		Cost:	1000
+		ExtraFlags:	0
+	[Object 91]
+		Vnum:	39622
+		Inside:	0
+		Value 1:	1
+		Cost:	2500
+		ExtraFlags:	0
+	[Object 92]
+		Vnum:	19845
+		Inside:	0
+		Cost:	1500
+		ExtraFlags:	0
+	[Object 93]
+		Vnum:	1187
+		Inside:	0
+		Cost:	19551
+		ExtraFlags:	0
+	[Object 94]
+		Vnum:	121
+		Inside:	0
+		Value 0:	24
+		Value 1:	14
+		Cost:	48
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal shotgun ammunition
+	[Object 95]
+		Vnum:	121
+		Inside:	0
+		Value 0:	670
+		Value 1:	14
+		Value 2:	1
+		Value 4:	-2
+		Value 9:	14790
+		Value 10:	-1
+		Cost:	4690
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition

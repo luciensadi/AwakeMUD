@@ -27,6 +27,7 @@ CVS = cvs
 # smooth, the define can be removed.
 
 COMMON_FLAGS = -lmysqlclient -lz -lm -lstdc++ -std=c++11
+BOOST_FLAGS = -lboost_filesystem
 
 # You probably want to comment this out: This is the makefile specification for the GitHub runner.
 LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lnsl -lcurl

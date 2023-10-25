@@ -1,0 +1,25 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	17135
+		Inside:	0
+		Cost:	36000
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	17135
+		Inside:	0
+		Cost:	36000
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	982
+		Inside:	0
+		Value 2:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	1954
+		Inside:	0
+		Cost:	8000
+		ExtraFlags:	0

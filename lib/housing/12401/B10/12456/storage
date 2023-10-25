@@ -1,0 +1,320 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	114
+		Inside:	0
+		Value 1:	5
+		Value 2:	36
+		Value 3:	15316
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+	[Object 1]
+		Vnum:	117
+		Inside:	1
+		Value 0:	5
+		Value 1:	2
+		Value 2:	1
+		Value 7:	86400
+		Value 8:	15316
+		Value 9:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	A blue steel bolt
+		Photo:$
+It looks like it came from a hardware store. 
+~
+	[Object 2]
+		Vnum:	117
+		Inside:	1
+		Value 0:	5
+		Value 1:	31
+		Value 2:	1
+		Value 7:	43200
+		Value 8:	15316
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	Tube of anaesthetic.
+		Photo:$
+Just relax; you won't feel a thing... 
+~
+	[Object 3]
+		Vnum:	117
+		Inside:	1
+		Value 0:	1
+		Value 1:	23
+		Value 2:	1
+		Value 7:	1234
+		Value 8:	15316
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	A 'Radioactive BioHazards prohibited!' safety sign.
+		Photo:$
+The radioactive biohazard glow is not the kind of glow we're aiming for here.
+~
+	[Object 4]
+		Vnum:	117
+		Inside:	1
+		Value 0:	5
+		Value 1:	54
+		Value 2:	1
+		Value 7:	51840
+		Value 8:	15316
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	A pouch of ball-bearings
+		Photo:$
+They come with a complimentary Slip Hazard warning sign. 
+~
+	[Object 5]
+		Vnum:	117
+		Inside:	1
+		Value 0:	5
+		Value 1:	5
+		Value 2:	1
+		Value 7:	86400
+		Value 8:	15316
+		Value 9:	1
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a Lottery ticket
+		Photo:$
+Your number's up! 
+~
+	[Object 6]
+		Vnum:	117
+		Inside:	1
+		Value 0:	5
+		Value 1:	41
+		Value 2:	1
+		Value 7:	51840
+		Value 8:	15316
+		Value 9:	4
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	earplugs
+		Photo:$
+If you can't hear them, they can't hear you.
+
+
+ . . . Right? 
+~
+	[Object 7]
+		Vnum:	117
+		Inside:	1
+		Value 0:	4
+		Value 1:	69
+		Value 2:	1
+		Value 7:	12960
+		Value 8:	15316
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a Zippo lighter
+		Photo:$
+Warning: contents may be hot! 
+~
+	[Object 8]
+		Vnum:	117
+		Inside:	1
+		Value 0:	5
+		Value 1:	58
+		Value 2:	1
+		Value 7:	86400
+		Value 8:	15316
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a pen-sized LASER pointer
+		Photo:$
+Promotional material expounds the virtues of exercising domestic cats and
+triggering alarms in commercial airline cockpits. 
+~
+	[Object 9]
+		Vnum:	117
+		Inside:	1
+		Value 0:	5
+		Value 1:	18
+		Value 2:	1
+		Value 3:	4
+		Value 7:	51840
+		Value 8:	15316
+		Value 9:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a cuckoo's nest
+		Photo:$
+It looks like a heavy hydrotherapy control panel. 
+~
+	[Object 10]
+		Vnum:	17232
+		Inside:	1
+		Cost:	400
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	60535
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+		Name:	ContainerEpsilon^n
+	[Object 12]
+		Vnum:	60535
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+		Name:	ContainerZeta^n
+	[Object 13]
+		Vnum:	60535
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+		Name:	ContainerEta^n
+	[Object 14]
+		Vnum:	60535
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+		Name:	ContainerTheta^n
+	[Object 15]
+		Vnum:	26905
+		Inside:	1
+		Cost:	45000
+		ExtraFlags:	1000000000
+	[Object 16]
+		Vnum:	17102
+		Inside:	1
+		Cost:	105000
+		ExtraFlags:	1000000000
+	[Object 17]
+		Vnum:	4244
+		Inside:	1
+		Cost:	180000
+		ExtraFlags:	1001001000
+	[Object 18]
+		Vnum:	4244
+		Inside:	1
+		Cost:	180000
+		ExtraFlags:	1001001000
+	[Object 19]
+		Vnum:	19960
+		Inside:	0
+		Value 1:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	94318
+		Inside:	0
+		Cost:	20
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	16
+		Value 2:	2
+		Cost:	1250
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of explosive medium machine gun ammunition
+	[Object 22]
+		Vnum:	862
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 23]
+		Vnum:	37537
+		Inside:	1
+		Value 1:	80
+		Cost:	1250
+		ExtraFlags:	0
+	[Object 24]
+		Vnum:	29326
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	0
+	[Object 25]
+		Vnum:	29401
+		Inside:	1
+		Cost:	50
+		ExtraFlags:	0
+	[Object 26]
+		Vnum:	127
+		Inside:	2
+		Value 0:	400
+		Value 1:	15
+		Value 2:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 400-round light machine gun magazine
+	[Object 27]
+		Vnum:	65493
+		Inside:	1
+		Value 7:	626
+		Value 8:	691
+		Value 9:	749
+		Value 11:	4
+		Timer:	10
+		Cost:	700
+		ExtraFlags:	1000000000000
+	[Object 28]
+		Vnum:	697
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 29]
+		Vnum:	691
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 30]
+		Vnum:	691
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 31]
+		Vnum:	660
+		Inside:	1
+		Cost:	3000
+		ExtraFlags:	0
+	[Object 32]
+		Vnum:	64963
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 33]
+		Vnum:	779
+		Inside:	2
+		Value 9:	749
+		Value 11:	2
+		Attempt:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 34]
+		Vnum:	27808
+		Inside:	1
+		Cost:	70
+		ExtraFlags:	0
+	[Object 35]
+		Vnum:	16206
+		Inside:	1
+		Value 1:	15316
+		Cost:	0
+		ExtraFlags:	1000
+	[Object 36]
+		Vnum:	29903
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 37]
+		Vnum:	14605
+		Inside:	1
+		Cost:	40
+		ExtraFlags:	0
+	[Object 38]
+		Vnum:	29325
+		Inside:	0
+		Cost:	30
+		ExtraFlags:	0

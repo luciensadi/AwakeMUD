@@ -1,0 +1,1393 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	1844
+		Inside:	2
+		Value 0:	2321
+		Value 1:	6549
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	0
+		Name:	a antiqued ^PH^MO^PT^M-^PP^MI^PN^MK^n ^W'Hello Kitty'^n flip-phone^n
+	[Object 1]
+		Vnum:	961
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	961
+		Inside:	2
+		Value 0:	14553
+		Cost:	0
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	9152
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	1000000
+	[Object 4]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	2510
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	2510
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 12]
+		Vnum:	2510
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 13]
+		Vnum:	2510
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 14]
+		Vnum:	2510
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 15]
+		Vnum:	2510
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 16]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 17]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 18]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 19]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 20]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 21]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 22]
+		Vnum:	5022
+		Inside:	2
+		Value 1:	34
+		Cost:	0
+		ExtraFlags:	0
+	[Object 23]
+		Vnum:	5022
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 24]
+		Vnum:	5022
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 25]
+		Vnum:	16228
+		Inside:	2
+		Cost:	2000
+		ExtraFlags:	1000000000000
+	[Object 26]
+		Vnum:	60596
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 27]
+		Vnum:	4960
+		Inside:	2
+		Timer:	4
+		Cost:	40
+		ExtraFlags:	0
+	[Object 28]
+		Vnum:	14785
+		Inside:	2
+		Cost:	850
+		ExtraFlags:	0
+	[Object 29]
+		Vnum:	30183
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 30]
+		Vnum:	18911
+		Inside:	2
+		Timer:	4
+		Cost:	10
+		ExtraFlags:	0
+	[Object 31]
+		Vnum:	891
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 32]
+		Vnum:	891
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 33]
+		Vnum:	14702
+		Inside:	2
+		Cost:	5
+		ExtraFlags:	0
+	[Object 34]
+		Vnum:	30179
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 35]
+		Vnum:	85222
+		Inside:	4
+		Cost:	1
+		ExtraFlags:	0
+	[Object 36]
+		Vnum:	83
+		Inside:	3
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a packaged-up 'memory (300 Mp) - alpha'
+	[Object 37]
+		Vnum:	2054
+		Inside:	2
+		Value 1:	1
+		Cost:	5
+		ExtraFlags:	0
+	[Object 38]
+		Vnum:	35525
+		Inside:	2
+		Cost:	140
+		ExtraFlags:	0
+		Name:	a box of Novacoke baggies
+	[Object 39]
+		Vnum:	906
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 40]
+		Vnum:	969
+		Inside:	2
+		Value 0:	14553
+		Cost:	0
+		ExtraFlags:	0
+	[Object 41]
+		Vnum:	969
+		Inside:	2
+		Value 0:	14580
+		Cost:	0
+		ExtraFlags:	0
+	[Object 42]
+		Vnum:	35530
+		Inside:	2
+		Value 1:	7
+		Timer:	4
+		Cost:	35
+		ExtraFlags:	0
+		Name:	a box of Zen blunts
+	[Object 43]
+		Vnum:	895
+		Inside:	2
+		Value 0:	14580
+		Cost:	0
+		ExtraFlags:	0
+	[Object 44]
+		Vnum:	892
+		Inside:	2
+		Value 0:	14580
+		Cost:	0
+		ExtraFlags:	0
+	[Object 45]
+		Vnum:	25467
+		Inside:	2
+		Cost:	2000
+		ExtraFlags:	1001001001000
+	[Object 46]
+		Vnum:	39328
+		Inside:	1
+		Cost:	1500
+		ExtraFlags:	0
+		Name:	a Gator(tm) ^rb^Ru^rr^Rg^ru^Rn^rd^ry ^Lsynth^l-^rl^te^ra^tt^rh^te^rr^n guitar case^n
+	[Object 47]
+		Vnum:	119
+		Inside:	1
+		Value 0:	14550
+		Value 1:	30000
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+	[Object 48]
+		Vnum:	15807
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 49]
+		Vnum:	39211
+		Inside:	1
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	0
+	[Object 50]
+		Vnum:	9905
+		Inside:	1
+		Cost:	30
+		ExtraFlags:	0
+	[Object 51]
+		Vnum:	9902
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 52]
+		Vnum:	9139
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 53]
+		Vnum:	22437
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 54]
+		Vnum:	14601
+		Inside:	1
+		Value 11:	2
+		Cost:	700
+		ExtraFlags:	0
+	[Object 55]
+		Vnum:	9502
+		Inside:	1
+		Cost:	450
+		ExtraFlags:	0
+	[Object 56]
+		Vnum:	705
+		Inside:	1
+		Cost:	675
+		ExtraFlags:	0
+	[Object 57]
+		Vnum:	127
+		Inside:	2
+		Value 0:	24
+		Value 1:	10
+		Value 9:	21
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	a 24-round submachine gun magazine
+	[Object 58]
+		Vnum:	785
+		Inside:	1
+		Value 11:	3
+		Attempt:	1
+		Cost:	600
+		ExtraFlags:	0
+	[Object 59]
+		Vnum:	9904
+		Inside:	1
+		Cost:	500
+		ExtraFlags:	0
+	[Object 60]
+		Vnum:	61500
+		Inside:	1
+		Cost:	350
+		ExtraFlags:	0
+	[Object 61]
+		Vnum:	30192
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 62]
+		Vnum:	30192
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	1001000000
+	[Object 63]
+		Vnum:	30190
+		Inside:	2
+		Cost:	1
+		ExtraFlags:	1001001001
+	[Object 64]
+		Vnum:	117
+		Inside:	2
+		Value 0:	6
+		Value 1:	60
+		Value 2:	1
+		Value 7:	14400
+		Value 8:	13813
+		Value 9:	5
+		Cost:	0
+		ExtraFlags:	100000000000000000000000000
+		Name:	^oSteam^n spell - Level ^oVI^n, by ^OCP ^n'n ^LC^lh^Li^le^Lf^n
+		Photo:$
+Formerly a holosheet flier for "Al's Vacuum Repair Shop", the foreground has
+been crudely hacked to show a cartoonish rowdy raccoon and disheveled dwarf
+duo. As the animation starts a hoard of Humanis soldiers rush at the scrappy
+pair only to be vaporized by a fountain of super-heated steam emanating from
+their outstretched hands. They jump and high-five over the pile of corpses and
+flash double-finger guns toward the viewer before the loop repeats. 
+~
+	[Object 65]
+		Vnum:	11120
+		Inside:	2
+		Cost:	20000
+		ExtraFlags:	1001001001
+	[Object 66]
+		Vnum:	11119
+		Inside:	2
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 67]
+		Vnum:	11118
+		Inside:	2
+		Cost:	420000
+		ExtraFlags:	1000000000
+	[Object 68]
+		Vnum:	25586
+		Inside:	1
+		Value 1:	1
+		Cost:	800
+		ExtraFlags:	0
+	[Object 69]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 70]
+		Vnum:	15808
+		Inside:	0
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 71]
+		Vnum:	60530
+		Inside:	1
+		Value 0:	1321
+		Value 1:	5428
+		Value 2:	1
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 72]
+		Vnum:	18347
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 73]
+		Vnum:	64983
+		Inside:	1
+		Timer:	4
+		Cost:	45
+		ExtraFlags:	0
+	[Object 74]
+		Vnum:	39885
+		Inside:	1
+		Cost:	25
+		ExtraFlags:	0
+	[Object 75]
+		Vnum:	5005
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 76]
+		Vnum:	30503
+		Inside:	1
+		Value 1:	13
+		Value 2:	27
+		Cost:	6
+		ExtraFlags:	0
+	[Object 77]
+		Vnum:	15807
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 78]
+		Vnum:	65125
+		Inside:	1
+		Cost:	2
+		ExtraFlags:	0
+	[Object 79]
+		Vnum:	16219
+		Inside:	1
+		Timer:	4
+		Cost:	10
+		ExtraFlags:	0
+	[Object 80]
+		Vnum:	39913
+		Inside:	1
+		Value 1:	0
+		Value 2:	0
+		Cost:	20
+		ExtraFlags:	0
+	[Object 81]
+		Vnum:	4705
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	1001001010
+	[Object 82]
+		Vnum:	39884
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	0
+	[Object 83]
+		Vnum:	2510
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 84]
+		Vnum:	2510
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 85]
+		Vnum:	2510
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 86]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 87]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 88]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 89]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 90]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 91]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 92]
+		Vnum:	453
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 93]
+		Vnum:	453
+		Inside:	2
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	0
+	[Object 94]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 95]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 96]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 97]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 98]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 99]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 100]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 101]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 102]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 103]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 104]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 105]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 106]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 107]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 108]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 109]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 110]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 111]
+		Vnum:	2511
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 112]
+		Vnum:	2053
+		Inside:	1
+		Value 1:	1
+		Cost:	5
+		ExtraFlags:	0
+	[Object 113]
+		Vnum:	7407
+		Inside:	1
+		Cost:	20
+		ExtraFlags:	1000000000000
+	[Object 114]
+		Vnum:	38095
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 115]
+		Vnum:	982
+		Inside:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 116]
+		Vnum:	7269
+		Inside:	0
+		Value 1:	1
+		Cost:	250
+		ExtraFlags:	0
+	[Object 117]
+		Vnum:	7273
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	0
+	[Object 118]
+		Vnum:	9136
+		Inside:	0
+		Cost:	25000
+		ExtraFlags:	1000000000
+	[Object 119]
+		Vnum:	9136
+		Inside:	0
+		Cost:	25000
+		ExtraFlags:	1000000000
+	[Object 120]
+		Vnum:	9136
+		Inside:	0
+		Cost:	25000
+		ExtraFlags:	1000000000
+	[Object 121]
+		Vnum:	9405
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 122]
+		Vnum:	8498
+		Inside:	0
+		Value 0:	1
+		Cost:	1200
+		ExtraFlags:	0
+		Name:	an antiqued ^lF^ti^ll^tt^lh^ty^n old ^OFuchi I.E.^l(^ctm^l)^n Trideo Unit^n
+	[Object 123]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 124]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 125]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 126]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 127]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 128]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Value 4:	-2
+		Value 9:	14553
+		Value 10:	-1
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 129]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 130]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 131]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 132]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 133]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 134]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 135]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 136]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 137]
+		Vnum:	121
+		Inside:	1
+		Value 0:	0
+		Value 1:	14
+		Value 2:	1
+		Value 3:	960
+		Value 4:	828
+		Value 9:	14553
+		Value 10:	840
+		Cost:	0
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 138]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 139]
+		Vnum:	7270
+		Inside:	0
+		Cost:	150
+		ExtraFlags:	0
+	[Object 140]
+		Vnum:	65151
+		Inside:	0
+		Cost:	50
+		ExtraFlags:	1
+	[Object 141]
+		Vnum:	1187
+		Inside:	1
+		Cost:	400
+		ExtraFlags:	0
+	[Object 142]
+		Vnum:	1182
+		Inside:	1
+		Cost:	200
+		ExtraFlags:	0
+	[Object 143]
+		Vnum:	3461
+		Inside:	1
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 144]
+		Vnum:	39709
+		Inside:	1
+		Cost:	100
+		ExtraFlags:	0
+	[Object 145]
+		Vnum:	1176
+		Inside:	1
+		Cost:	9500
+		ExtraFlags:	0
+	[Object 146]
+		Vnum:	38041
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 147]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 148]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 149]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 150]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 151]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 152]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 153]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 154]
+		Vnum:	61536
+		Inside:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 155]
+		Vnum:	61536
+		Inside:	1
+		Timer:	1
+		Cost:	10
+		ExtraFlags:	0
+	[Object 156]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 157]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 158]
+		Vnum:	9926
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 159]
+		Vnum:	17116
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 160]
+		Vnum:	9929
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 161]
+		Vnum:	1140
+		Inside:	2
+		Value 4:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 162]
+		Vnum:	17113
+		Inside:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 163]
+		Vnum:	17118
+		Inside:	2
+		Cost:	15000
+		ExtraFlags:	0
+	[Object 164]
+		Vnum:	29005
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 165]
+		Vnum:	64917
+		Inside:	0
+		Cost:	1200
+		ExtraFlags:	0
+	[Object 166]
+		Vnum:	39760
+		Inside:	0
+		Cost:	40
+		ExtraFlags:	0
+	[Object 167]
+		Vnum:	30183
+		Inside:	0
+		Timer:	4
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 168]
+		Vnum:	30183
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000000000
+	[Object 169]
+		Vnum:	64904
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 170]
+		Vnum:	30179
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	1000001000
+	[Object 171]
+		Vnum:	15807
+		Inside:	0
+		Cost:	200
+		ExtraFlags:	0
+	[Object 172]
+		Vnum:	9137
+		Inside:	0
+		Cost:	1
+		ExtraFlags:	1000000000
+	[Object 173]
+		Vnum:	39913
+		Inside:	0
+		Value 1:	7
+		Timer:	4
+		Cost:	20
+		ExtraFlags:	0
+	[Object 174]
+		Vnum:	948
+		Inside:	0
+		Value 2:	1
+		Cost:	10000
+		ExtraFlags:	0
+	[Object 175]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 176]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 177]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 178]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 179]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 180]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 181]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 182]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 183]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 184]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 185]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 186]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 187]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 188]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 189]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 190]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 191]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 192]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 193]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 194]
+		Vnum:	37500
+		Inside:	1
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 195]
+		Vnum:	15813
+		Inside:	0
+		Cost:	5000
+		ExtraFlags:	0
+	[Object 196]
+		Vnum:	30527
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 197]
+		Vnum:	30144
+		Inside:	1
+		Cost:	25
+		ExtraFlags:	0
+	[Object 198]
+		Vnum:	6108
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 199]
+		Vnum:	10300
+		Inside:	1
+		Cost:	1
+		ExtraFlags:	1
+	[Object 200]
+		Vnum:	892
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+		Name:	keyfob^n
+	[Object 201]
+		Vnum:	646
+		Inside:	1
+		Value 1:	1
+		Value 3:	315
+		Value 4:	27
+		Value 5:	-1
+		Value 7:	-1
+		Value 8:	-1
+		Value 9:	-1
+		Timer:	4
+		Cost:	30
+		ExtraFlags:	100000000000000000000000
+	[Object 202]
+		Vnum:	18346
+		Inside:	1
+		Cost:	5
+		ExtraFlags:	0
+	[Object 203]
+		Vnum:	39913
+		Inside:	1
+		Value 1:	7
+		Timer:	4
+		Cost:	20
+		ExtraFlags:	0
+	[Object 204]
+		Vnum:	1847
+		Inside:	1
+		Cost:	0
+		ExtraFlags:	0
+	[Object 205]
+		Vnum:	4022
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 206]
+		Vnum:	33046
+		Inside:	0
+		Cost:	10
+		ExtraFlags:	0
+	[Object 207]
+		Vnum:	39930
+		Inside:	0
+		Cost:	9500
+		ExtraFlags:	10
+	[Object 208]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 209]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 210]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 211]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 212]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 213]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 214]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 215]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 216]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 217]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 218]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 219]
+		Vnum:	121
+		Inside:	1
+		Value 0:	250
+		Value 1:	14
+		Value 2:	1
+		Cost:	1750
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of APDS shotgun ammunition
+	[Object 220]
+		Vnum:	39931
+		Inside:	0
+		Cost:	9500
+		ExtraFlags:	0

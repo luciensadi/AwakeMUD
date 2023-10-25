@@ -1,0 +1,86 @@
+[METADATA]
+	Version:	1
+[GUESTS]
+[HOUSE]
+	[Object 0]
+		Vnum:	37597
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 1]
+		Vnum:	38041
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 2]
+		Vnum:	8456
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 3]
+		Vnum:	8456
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 4]
+		Vnum:	80209
+		Inside:	0
+		Value 11:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 5]
+		Vnum:	80209
+		Inside:	0
+		Value 11:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 6]
+		Vnum:	80209
+		Inside:	0
+		Value 11:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 7]
+		Vnum:	80209
+		Inside:	0
+		Value 11:	2
+		Cost:	0
+		ExtraFlags:	0
+	[Object 8]
+		Vnum:	691
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 9]
+		Vnum:	691
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 10]
+		Vnum:	691
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 11]
+		Vnum:	80425
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 12]
+		Vnum:	80425
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 13]
+		Vnum:	80424
+		Inside:	0
+		Cost:	0
+		ExtraFlags:	0
+	[Object 14]
+		Vnum:	121
+		Inside:	0
+		Value 0:	5500
+		Value 1:	13
+		Cost:	11000
+		ExtraFlags:	100000000000000001000001000
+		Name:	a box of normal assault rifle ammunition

@@ -1,5 +1,6 @@
 #include "perfmon.hpp"
 
+#include <math.h>
 #include <map>
 #include <string>
 #include <sstream>
