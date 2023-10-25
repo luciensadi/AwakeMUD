@@ -1978,8 +1978,9 @@ void ApartmentRoom::save_storage() {
   const char *save_location = storage_path.c_str();
 
   log_vfprintf("Saving storage for room %s (%ld): %s dirty, %s occupied. Saving to %s.", 
-                room->dirty_bit ? "is" : "not",
+                GET_ROOM_NAME(room),
                 GET_ROOM_VNUM(room),
+                room->dirty_bit ? "is" : "not",
                 room->people ? "is" : "not",
                 save_location);
 
