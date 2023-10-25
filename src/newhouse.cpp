@@ -1066,8 +1066,9 @@ bool Apartment::can_enter(struct char_data *ch) {
       return TRUE;
     // Owned by a player, but not this one: Fall through.
   } else {
+    // Only staff can enter unleased rooms.
     // mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s is owned by neither player nor group! Allowing entry.", full_name);
-    return TRUE;
+    return IS_SENATOR(ch);
   }
 
   // Guests can enter any room.
@@ -1102,8 +1103,9 @@ bool Apartment::can_enter_by_idnum(idnum_t idnum) {
     if (pgroup_char_has_any_priv(idnum, owned_by_pgroup->get_idnum(), required_privileges))
       return TRUE;
   } else {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: %s is owned by neither player nor group! Allowing entry.", full_name);
-    return TRUE;
+    // If nobody owns it, nobody but staff can enter it.
+    // mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: %s is owned by neither player nor group! Allowing entry.", full_name);
+    return get_player_rank(idnum) >= LVL_BUILDER;
   }
 
   // Guests can enter any room.
