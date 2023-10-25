@@ -15,14 +15,14 @@ char mutable_echo_string[MAX_STRING_LENGTH];
 char tag_check_string[MAX_STRING_LENGTH];
 char storage_string[MAX_STRING_LENGTH];
 
-// #define NEW_EMOTE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
-#define NEW_EMOTE_DEBUG(...)
+#define NEW_EMOTE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
+// #define NEW_EMOTE_DEBUG(...)
 
 // #define NEW_EMOTE_DEBUG_SPEECH(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define NEW_EMOTE_DEBUG_SPEECH(...)
 
-// #define NEW_EMOTE_DEBUG_TARGETING(ch, ...) send_to_char((ch), ##__VA_ARGS__)
-#define NEW_EMOTE_DEBUG_TARGETING(...)
+#define NEW_EMOTE_DEBUG_TARGETING(ch, ...) send_to_char((ch), ##__VA_ARGS__)
+// #define NEW_EMOTE_DEBUG_TARGETING(...)
 
 // #define SPEECH_COLOR_CODE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define SPEECH_COLOR_CODE_DEBUG(...)
@@ -114,7 +114,7 @@ int max_allowable_word_length_at_language_level(int level) {
   }
 }
 
-const char *generate_display_string_for_character(struct char_data *actor, struct char_data *viewer, struct char_data *target_ch, bool terminate_with_actors_color_code) {
+const char *generate_display_string_for_character(struct char_data *actor, struct char_data *viewer, struct char_data *target_ch, bool terminate_with_actors_color_code, bool force_capitalization) {
   static char result_string[MAX_STRING_LENGTH];
   struct remem *mem_record;
   const char *terminal_code = "^n";
@@ -210,6 +210,10 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
     if (*ptr == '"')
       *ptr = '\7';
   }
+
+  // Finally, force-capitalize if needed.
+  if (force_capitalization && *result_string)
+    *result_string = toupper(*result_string);
 
   return result_string;
 }
@@ -463,7 +467,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
               display_string = scratch_space;
               NEW_EMOTE_DEBUG(actor, "^mQuote mode: Using tag_check_string directly for %s resulted in '%s'.^n\r\n", GET_CHAR_NAME(actor), display_string);
             } else {
-              display_string = generate_display_string_for_character(actor, viewer, target_ch, FALSE);
+              display_string = generate_display_string_for_character(actor, viewer, target_ch, FALSE, start_of_new_sentence);
               NEW_EMOTE_DEBUG(actor, "^mComposing display string for %s resulted in '%s'.^n\r\n", GET_CHAR_NAME(actor), display_string);
             }
           }

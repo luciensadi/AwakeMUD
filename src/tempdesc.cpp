@@ -5,10 +5,33 @@
 #include "comm.hpp"
 #include "db.hpp"
 
-void set_room_tempdesc(struct room_data *room, const char *desc) {
+void set_room_tempdesc(struct room_data *room, const char *desc, idnum_t idnum) {
   DELETE_AND_NULL_ARRAY(room->temp_desc);
   room->temp_desc = str_dup(desc);
   room->temp_desc_timeout = MAX(1, room->temp_desc_timeout);
+  room->temp_desc_author_idnum = idnum;
+
+  if (room->people) {
+    send_to_room("You blink and your surroundings look a little different.\r\n", room);
+  }
+}
+
+void clear_temp_desc(struct room_data *room, struct char_data *clearer) {
+  if (!room)
+    return;
+
+  if (clearer) {
+    mudlog_vfprintf(clearer, LOG_WIZLOG, "%s deleted temp room desc @ %s (%ld)", 
+                        GET_CHAR_NAME(clearer),
+                        GET_ROOM_NAME(room),
+                        GET_ROOM_VNUM(room));
+  } else {
+    mudlog_vfprintf(NULL, LOG_MISCLOG, "Cleaning up temp room desc @ %s (%ld).", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
+  }
+
+  DELETE_AND_NULL_ARRAY(room->temp_desc);
+  room->temp_desc_timeout = 0;
+  room->temp_desc_author_idnum = 0;
 
   if (room->people) {
     send_to_room("You blink and your surroundings look a little different.\r\n", room);
@@ -18,13 +41,7 @@ void set_room_tempdesc(struct room_data *room, const char *desc) {
 void tick_down_room_tempdesc_expiries() {
   for (int idx = 0; idx < top_of_world; idx++) {
     if (world[idx].temp_desc && --world[idx].temp_desc_timeout <= 0) {
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Cleaning up temp room desc @ %s (%ld).", GET_ROOM_NAME(&world[idx]), GET_ROOM_VNUM(&world[idx]));
-      DELETE_AND_NULL_ARRAY(world[idx].temp_desc);
-      world[idx].temp_desc_timeout = 0;
-
-      if (world[idx].people) {
-        send_to_room("You blink and your surroundings look a little different.\r\n", &world[idx]);
-      }
+      clear_temp_desc(&world[idx], NULL);
     }
   }
 }
@@ -32,15 +49,15 @@ void tick_down_room_tempdesc_expiries() {
 ACMD(do_tempdesc) {
   int minutes_to_expiry = 480;
 
+  FAILURE_CASE(!PLR_FLAGGED(ch, PLR_RPE), "You can't use this command. Speak to RP staff if you want to apply for the ability to do so.");
+  FAILURE_CASE(IS_NPC(ch), "NPCs can't set tempdescs.");
   FAILURE_CASE(!ch->in_room, "You must be standing in a room to do that.");
 
   // tempdesc <time in minutes>: Set a temporary room description that expires in X IRL minutes.
   skip_spaces(&argument);
   if (*argument) {
     if (!str_cmp(argument, "clear")) {
-      send_to_char("OK, clearing temp desc.\r\n", ch);
-      DELETE_AND_NULL_ARRAY(ch->in_room->temp_desc);
-      ch->in_room->temp_desc_timeout = 0;
+      clear_temp_desc(ch->in_room, ch);
       return;
     }
 

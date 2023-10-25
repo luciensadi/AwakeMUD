@@ -1439,12 +1439,14 @@ ACMD(do_gen_comm)
 
   // The commands after this line don't return-- they just set things and follow the loop at the end.
   if (subcmd == SCMD_RPETALK) {
-    snprintf(buf, sizeof(buf), "%s%s ^W[^rRPE^W]^r %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
+    snprintf(buf, sizeof(buf), "^W%s [^CRPEtalk^n]^c %s^n\r\n", GET_CHAR_NAME(ch), capitalize(argument));
+    send_to_char(buf, ch);
 
     channel = COMM_CHANNEL_RPE;
     store_message_to_history(ch->desc, channel, buf);
   } else if (subcmd == SCMD_HIREDTALK) {
     snprintf(buf, sizeof(buf), "%s%s ^y[^YHIRED^y]^Y %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
+    send_to_char(buf, ch);
 
     channel = COMM_CHANNEL_HIRED;
     store_message_to_history(ch->desc, channel, buf);

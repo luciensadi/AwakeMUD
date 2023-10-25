@@ -5394,7 +5394,7 @@ ACMD(do_who)
   struct descriptor_data *d;
   struct char_data *tch;
   int sort = LVL_MAX, num_can_see = 0, level = GET_LEVEL(ch);
-  bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE, drugs = FALSE, br = FALSE;
+  bool mortal = FALSE, hardcore = FALSE, quest = FALSE, pker = FALSE, immort = FALSE, ooc = FALSE, newbie = FALSE, drugs = FALSE, br = FALSE, rpe = FALSE;
   int output_header;
   int num_in_socialization_rooms = 0;
 
@@ -5407,7 +5407,7 @@ ACMD(do_who)
 
     if (is_abbrev(arg, "sort"))
       sort = LVL_MAX;
-    else if (is_abbrev(arg, "quest"))
+    else if (is_abbrev(arg, "questor"))
       quest = 1;
     else if (is_abbrev(arg, "pker"))
       pker = 1;
@@ -5421,6 +5421,8 @@ ACMD(do_who)
       ooc = 1;
     else if (is_abbrev(arg, "newbie"))
       newbie = 1;
+    else if (access_level(ch, LVL_BUILDER) && is_abbrev(arg, "rpe"))
+      rpe = 1;
     else if (access_level(ch, LVL_BUILDER) && (is_abbrev(arg, "b/r") || is_abbrev(arg, "br")))
       br = 1;
     else if (access_level(ch, LVL_BUILDER) && is_abbrev(arg, "drugs"))
@@ -5465,6 +5467,8 @@ ACMD(do_who)
       if (drugs && !PLR_FLAGGED(tch, PLR_ENABLED_DRUGS))
         continue;
       if (br && !AFF_FLAGS(tch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT))
+        continue;
+      if (rpe && !PLR_FLAGGED(tch, PLR_RPE))
         continue;
       if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
         continue;
@@ -7650,7 +7654,13 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
                    GET_APARTMENT_DECORATION(in_room) ? " [decorated]" : "");
     }
     if (in_room->temp_desc && in_room->temp_desc_timeout > 0) {
-      send_to_char(ch, " ^c(Temp Desc for next %d minute%s)\r\n", in_room->temp_desc_timeout, in_room->temp_desc_timeout == 1 ? "" : "s");
+      const char *author_name = get_player_name(in_room->temp_desc_author_idnum);
+      send_to_char(ch, " ^c(Temp Desc by %s (%ld) for next %d minute%s)\r\n", 
+                   author_name,
+                   in_room->temp_desc_author_idnum,
+                   in_room->temp_desc_timeout,
+                   in_room->temp_desc_timeout == 1 ? "" : "s");
+      delete [] author_name;
     }
   } else {
     #define APPEND_ROOM_FLAG(check, flagname) { if ((check)) {strlcat(room_title_buf, flagname, sizeof(room_title_buf));} }
@@ -7674,6 +7684,10 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
       snprintf(ENDOF(room_title_buf), sizeof(room_title_buf), " (%s: %3s)", 
                ROOM_FLAGGED(in_room, ROOM_RUNWAY) ? "Runway" : "Helipad",
                in_room->flight_code);
+    }
+
+    if (in_room->temp_desc && in_room->temp_desc_timeout > 0) {
+      strlcat(room_title_buf, " ^c(Altered)^n", sizeof(room_title_buf));
     }
 
     strlcat(room_title_buf, "\r\n", sizeof(room_title_buf));

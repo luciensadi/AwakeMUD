@@ -42,7 +42,7 @@ void format_tabs(struct descriptor_data *d);
 
 extern void insert_or_append_emote_at_position(struct descriptor_data *d, char *string);
 extern void save_vehicles(bool fromCopyover);
-extern void set_room_tempdesc(struct room_data *room, const char *desc);
+extern void set_room_tempdesc(struct room_data *room, const char *desc, idnum_t idnum);
 
 /* ************************************************************************
 *  modification of new'ed strings                                      *
@@ -304,7 +304,7 @@ void string_add(struct descriptor_data *d, char *str)
                         GET_ROOM_NAME(d->character->in_room),
                         GET_ROOM_VNUM(d->character->in_room),
                         double_up_color_codes(*d->str));
-        set_room_tempdesc(d->character->in_room, *d->str);
+        set_room_tempdesc(d->character->in_room, *d->str, GET_IDNUM(d->character));
         DELETE_D_STR_IF_EXTANT(d);
         if (!PRF_FLAGGED(d->character, PRF_SCREENREADER)) {
           look_at_room(d->character, 1, 0);

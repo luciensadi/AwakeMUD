@@ -5823,7 +5823,7 @@ const char *get_room_desc(struct room_data *room) {
   }
 
   if (room->temp_desc && room->temp_desc_timeout > 0) {
-    strlcpy(room_desc, room->temp_desc, sizeof(room_desc));
+    snprintf(room_desc, sizeof(room_desc), "  %s", room->temp_desc);
   } else if (GET_APARTMENT_DECORATION(room)) {
     strlcpy(room_desc, GET_APARTMENT_DECORATION(room), sizeof(room_desc));
   } else if (weather_info.sunlight == SUN_DARK && room->night_desc) {

@@ -290,6 +290,7 @@ struct room_data
   // Temp desc info.
   char *temp_desc;
   int temp_desc_timeout;
+  idnum_t temp_desc_author_idnum;
 
 #ifdef USE_DEBUG_CANARIES
   int canary;
@@ -302,7 +303,7 @@ struct room_data
       type(0), x(0), y(0), z(0), peaceful(0), func(NULL), dirty_bit(FALSE),
       staff_level_lock(0), elevator_number(0), contents(NULL), people(NULL),
       vehicles(NULL), watching(NULL), latitude(0), longitude(0), apartment(NULL), apartment_room(NULL),
-      temp_desc(NULL), temp_desc_timeout(0)
+      temp_desc(NULL), temp_desc_timeout(0), temp_desc_author_idnum(0)
   {
     ZERO_OUT_ARRAY(dir_option, NUM_OF_DIRS);
     ZERO_OUT_ARRAY(temporary_stored_exit, NUM_OF_DIRS);
