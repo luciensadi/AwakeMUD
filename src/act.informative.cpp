@@ -6904,15 +6904,15 @@ ACMD(do_position)
     return;
   }
 
-  if (ispunct(get_final_character_from_string(argument))) {
-    send_to_char("Please don't specify terminal punctuation for your position (it gets an automatic period).\r\n", ch);
-    return;
-  }
-
   if (veh) {
+    if (ispunct(get_final_character_from_string(argument))) {
+      send_to_char("Please don't specify terminal punctuation for your position (it gets an automatic period).\r\n", ch);
+      return;
+    }
+    
     DELETE_ARRAY_IF_EXTANT(GET_VEH_DEFPOS(veh));
     GET_VEH_DEFPOS(veh) = str_dup(argument);
-    send_to_char(ch, "Position set. Your vehicle will appear as '(your vehicle) %s^n'\r\n", GET_VEH_DEFPOS(veh));
+    send_to_char(ch, "Position set. Your vehicle will appear as '(your vehicle) %s.^n'\r\n", GET_VEH_DEFPOS(veh));
   } else {
     DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
     GET_DEFPOS(ch) = str_dup(argument);
