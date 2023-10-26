@@ -39,7 +39,7 @@ int objList::PrintList(struct char_data *ch, const char *arg, bool override_vis_
 
   for (;temp; temp = temp->next)
     if (temp->data && (override_vis_check || CAN_SEE_OBJ(ch, temp->data))
-        && isname(arg, temp->data->text.keywords))
+        && keyword_appears_in_obj(arg, temp->data))
       print_object_location(++num, temp->data, ch, TRUE);
 
   return num;

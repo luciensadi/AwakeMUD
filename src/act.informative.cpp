@@ -6123,7 +6123,7 @@ void perform_immort_where(struct char_data * ch, char *arg)
   // Location version of the command (where <keyword>)
   *buf = '\0';
   for (struct char_data *i = character_list; i; i = i->next)
-    if ((i->in_room || i->in_veh) && CAN_SEE(ch, i) && isname(arg, GET_KEYWORDS(i))) {
+    if ((i->in_room || i->in_veh) && CAN_SEE(ch, i) && keyword_appears_in_char(arg, i, TRUE, TRUE, FALSE)) {
       found = 1;
       room = get_ch_in_room(i);
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "M%3d. %-25s - [%5ld] %s^n", ++num,
