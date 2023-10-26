@@ -6004,19 +6004,30 @@ void load_saved_veh()
              && world[veh_room_rnum].apartment 
              && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) 
     {
-      log_vfprintf("Vehicle %ld owned by %ld would have loaded in %s room %ld, sending it to the Seattle garage.",
+      log_vfprintf("Vehicle %ld owned by %ld would have loaded in %s room %ld, sending it to a parking spot.",
                    veh->idnum,
                    veh->owner,
                    veh_room_rnum < 0 ? "non-existent" : "inaccessible",
                    veh_room_vnum);
 
-      veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
-      veh_room_rnum = real_room(veh_room_vnum);
+      if (veh_is_aircraft(veh)) {
+        veh_room_vnum = RM_BONEYARD_INTACT_ROOM_1;
+        veh_room_rnum = real_room(veh_room_vnum);
 
-      if (veh_room_rnum < 0) {
-        log_vfprintf("FATAL ERROR: Seattle parking garage does not exist, cannot send vehicle there. Add a room at %ld or remove all vehicles.", veh_room_vnum);
-        shutdown();
-        return;
+        if (veh_room_rnum < 0) {
+          log_vfprintf("FATAL ERROR: Boneyard room 1 does not exist, cannot send vehicle there. Add a room at %ld or remove all vehicles.", veh_room_vnum);
+          shutdown();
+          return;
+        }
+      } else {
+        veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
+        veh_room_rnum = real_room(veh_room_vnum);
+
+        if (veh_room_rnum < 0) {
+          log_vfprintf("FATAL ERROR: Seattle parking garage does not exist, cannot send vehicle there. Add a room at %ld or remove all vehicles.", veh_room_vnum);
+          shutdown();
+          return;
+        }
       }
     }
 

@@ -1236,7 +1236,11 @@ void save_vehicles(bool fromCopyover)
       if (!temp_room) {
         // snprintf(buf, sizeof(buf), "Falling back to Seattle garage for non-veh, non-room veh %s.", GET_VEH_NAME(veh));
         // log(buf);
-        temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
+        if (veh_is_aircraft(veh)) {
+          temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_1)];
+        } else {
+          temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
+        }
       }
 
       // Otherwise, derive the garage from its location.
