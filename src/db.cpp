@@ -696,16 +696,16 @@ void DBInit()
     // log("Written.");
   }
 
+  log("Booting houses.");
+  load_apartment_complexes();
+  warn_about_apartment_deletion();
+  boot_time = time(0);
+
   log("Loading saved vehicles.");
   load_saved_veh();
 
   log("Purging unowned vehicles.");
   purge_unowned_vehs();
-
-  log("Booting houses.");
-  load_apartment_complexes();
-  warn_about_apartment_deletion();
-  boot_time = time(0);
 
   log("Loading shop orders.");
   boot_shop_orders();
