@@ -14,6 +14,7 @@
 #include "olc.hpp"
 #include "newmagic.hpp"
 #include "newmatrix.hpp"
+#include "bullet_pants.hpp"
 
 #define CH d->character
 #define PART d->edit_obj
@@ -1146,7 +1147,9 @@ ACMD(do_progress)
     float target = GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(GET_BUILDING(ch));
     float percentage = (current / target) * 100;
 
-    send_to_char(ch, "You are about %d%% of the way through making a batch of ammo for %s.\r\n", (int) percentage);
+    send_to_char(ch, "You are about %d%% of the way through making a batch of %s.\r\n", 
+                 (int) percentage,
+                 get_ammo_representation(GET_AMMOBOX_WEAPON(GET_BUILDING(ch)), GET_AMMOBOX_TYPE(GET_BUILDING(ch)), GET_AMMOBOX_INTENDED_QUANTITY(GET_BUILDING(ch))));
     return;
   } else
     send_to_char("You are not working on anything at this time.\r\n", ch);
