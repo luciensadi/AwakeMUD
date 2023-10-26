@@ -288,8 +288,31 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
                 room->delete_info();
               }
 
-              // Copy over our changes.
-              d->edit_apartment_original->clone_from(APT);
+              {
+                int old_rent = d->edit_apartment_original->get_rent_cost();
+                time_t paid_secs = d->edit_apartment_original->get_paid_until() - time(0);
+
+                // Copy over our changes.
+                d->edit_apartment_original->clone_from(APT);
+
+                if (APT->get_rent_cost() != old_rent) {
+                  int old_rent_per_day = old_rent / 30;
+                  int old_paid_days = paid_secs / SECS_PER_REAL_DAY;
+                  int old_nuyen_spent = old_rent_per_day * old_paid_days;
+
+                  int new_rent_per_day = APT->get_rent_cost() / 30;
+                  int new_paid_days = MAX(30, old_nuyen_spent / new_rent_per_day);
+
+                  mudlog_vfprintf(CH, LOG_WIZLOG, "NOTE: %s changed from %d/day to %d/day. Converting old prepay of %d days to %d days (min 30).",
+                                  d->edit_apartment_original->get_full_name(),
+                                  old_rent_per_day,
+                                  new_rent_per_day,
+                                  old_paid_days,
+                                  new_paid_days);
+
+                  d->edit_apartment_original->set_paid_until(time(0) + new_paid_days * SECS_PER_REAL_DAY);
+                }
+              }
 
               for (auto &room : d->edit_apartment_original->get_rooms()) {
                 // Apply room status to all new rooms.
@@ -504,8 +527,6 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           send_to_char("You can't edit the rent amount for a leased apartment at your level.\r\n", CH);
           houseedit_display_apartment_edit_menu(d);
           return;
-        } else {
-          send_to_char(CH, "WARNING: Editing rent value for an apartment that's already in use! Was %d. Player will not receive a refund or deduction.\r\n", APT->get_rent_cost());
         }
       }
 
