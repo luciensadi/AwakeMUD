@@ -15,14 +15,14 @@ char mutable_echo_string[MAX_STRING_LENGTH];
 char tag_check_string[MAX_STRING_LENGTH];
 char storage_string[MAX_STRING_LENGTH];
 
-#define NEW_EMOTE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
-// #define NEW_EMOTE_DEBUG(...)
+// #define NEW_EMOTE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
+#define NEW_EMOTE_DEBUG(...)
 
 // #define NEW_EMOTE_DEBUG_SPEECH(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define NEW_EMOTE_DEBUG_SPEECH(...)
 
-#define NEW_EMOTE_DEBUG_TARGETING(ch, ...) send_to_char((ch), ##__VA_ARGS__)
-// #define NEW_EMOTE_DEBUG_TARGETING(...)
+// #define NEW_EMOTE_DEBUG_TARGETING(ch, ...) send_to_char((ch), ##__VA_ARGS__)
+#define NEW_EMOTE_DEBUG_TARGETING(...)
 
 // #define SPEECH_COLOR_CODE_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define SPEECH_COLOR_CODE_DEBUG(...)
