@@ -964,6 +964,9 @@ void reward(struct char_data *ch, struct char_data *johnson)
       nuyen += quest_table[GET_QUEST(ch)].obj[i].nuyen * multiplier;
       karma += quest_table[GET_QUEST(ch)].obj[i].karma * multiplier;
     } else {
+      if (IS_SENATOR(ch)) {
+        send_to_char(ch, "-- Quest turnin: Did not complete obj objective %d.\r\n", i);
+      }
       completed_all_objectives = FALSE;
     }
   }
@@ -979,6 +982,9 @@ void reward(struct char_data *ch, struct char_data *johnson)
       nuyen += quest_table[GET_QUEST(ch)].mob[i].nuyen * multiplier;
       karma += quest_table[GET_QUEST(ch)].mob[i].karma * multiplier;
     } else {
+      if (IS_SENATOR(ch)) {
+        send_to_char(ch, "-- Quest turnin: Did not complete mob objective %d.\r\n", i);
+      }
       completed_all_objectives = FALSE;
     }
   }
