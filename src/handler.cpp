@@ -578,9 +578,12 @@ void affect_total(struct char_data * ch)
   GET_REAL_REA(ch) = (GET_REAL_INT(ch) + GET_REAL_QUI(ch)) / 2;
   GET_REA(ch) = 0;
 
-  // Apply newbie flag removal.
-  if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_TKE(ch) > NEWBIE_KARMA_THRESHOLD)
+  // Toggle newbie flag as appropriate.
+  if (GET_TKE(ch) > NEWBIE_KARMA_THRESHOLD) {
     PLR_FLAGS(ch).RemoveBit(PLR_NEWBIE);
+  } else {
+    PLR_FLAGS(ch).SetBit(PLR_NEWBIE);
+  } 
 
   /* set the dice pools before equip so that they can be affected */
   /* combat pool is equal to quickness, wil, and int divided by 2 */
