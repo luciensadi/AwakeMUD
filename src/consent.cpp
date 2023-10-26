@@ -91,7 +91,7 @@ ACMD(do_consent) {
     } else {
       send_to_veh(msg, ch->in_veh, NULL, TRUE);
     }
-    mudlog_vfprintf(NULL, LOG_WIZLOG, "Consent Note: FYI, someone in a scene involving (%s) has raised a RED consent flag. Please DO NOT engage unless requested.", participants);
+    mudlog_vfprintf(NULL, LOG_WIZLOG, "Consent Note: FYI, someone in a scene involving (%s) at %ld has raised a RED consent flag. Please DO NOT engage unless requested.", participants, GET_ROOM_VNUM(get_ch_in_room(ch)));
 
     send_to_char(ch, "\r\n[FYI, we have a robust IGNORE system that lets you block content from other players. You can IGNORE X ALL to block all contact with X, or IGNORE X to view more granular controls. Please feel free to use this system, and also to contact staff if help is needed!]\r\n");    return;
   }
@@ -104,7 +104,7 @@ ACMD(do_consent) {
     } else {
       send_to_veh(msg, ch->in_veh, NULL, TRUE);
     }
-    mudlog_vfprintf(NULL, LOG_WIZLOG, "^RURGENT HELP NEEDED FOR CONSENT ISSUE^n: Someone in a scene involving (%s) has raised a BLACK consent flag. Please ensure RP is halted and tag Lucien or Jank for followup retconning / resolution.", participants);
+    mudlog_vfprintf(NULL, LOG_WIZLOG, "^RURGENT HELP NEEDED FOR CONSENT ISSUE^n: Someone in a scene involving (%s) at %ld has raised a BLACK consent flag. Please ensure RP is halted and tag Lucien or Jank for followup retconning / resolution.", participants, GET_ROOM_VNUM(get_ch_in_room(ch)));
     
     send_to_char(ch, "\r\n[Staff will respond as soon as possible. In the meantime, please be aware that we have a robust IGNORE system that lets you block content from other players. You can IGNORE X ALL to block all contact with X, or IGNORE X to view more granular controls.]\r\n");
     return;
