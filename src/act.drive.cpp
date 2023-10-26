@@ -2481,13 +2481,16 @@ int get_vehicle_modifier(struct veh_data *veh, bool include_weather)
 
   if (veh->cspeed > SPEED_IDLE && ch)
   {
+    // Subtract VCR rating from handling.
     for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
       if (GET_OBJ_VAL(cyber, 0) == CYB_VCR) {
         mod -= GET_OBJ_VAL(cyber, 1);
         break;
       }
+    // If no VCR, but datajack, sub that.
     if (mod == 0 && AFF_FLAGGED(ch, AFF_RIG))
       mod--;
+    // If it's faster than you can react to, the TN goes up.
     if (get_speed(veh) > (int)(GET_REA(ch) * 20)) {
       if (get_speed(veh) > (int)(GET_REA(ch) * 40))
         mod += 3;
@@ -2497,6 +2500,7 @@ int get_vehicle_modifier(struct veh_data *veh, bool include_weather)
         mod++;
     }
   }
+  // Damaged? TN goes up.
   switch (veh->damage)
   {
   case VEH_DAM_THRESHOLD_LIGHT:
@@ -2515,7 +2519,8 @@ int get_vehicle_modifier(struct veh_data *veh, bool include_weather)
     mod += 3;
     break;
   }
-  if (weather_info.sky >= SKY_RAINING)
+  // Weather makes it harder to drive too.
+  if (include_weather && weather_info.sky >= SKY_RAINING)
     mod++;
   return mod;
 }
