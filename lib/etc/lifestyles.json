@@ -36,7 +36,7 @@
       "$s wrinkled clothes suggest $e lives out of $s car.",
       "$e isn't emaciated, but still looks like $e's had to skip a meal or three.",
       "The distinct scent of public transportation clings to $m.",
-      "$e's got a smell about him-- eau de Coffin Motel?",
+      "$e's got a smell about $m-- eau de Coffin Motel?",
       "There's a musty smell clinging to $m, like $e squats somewhere with a mold problem.",
       "$e seems to only be able to afford to do laundry once a week."
     ],
@@ -114,8 +114,8 @@
     ],
     "default_strings_gendered": [
       "$e seems pretty well-off.",
-      "$e looks like he's living the high life.",
-      "$e's doing well for himself.",
+      "$e looks like $e's living the high life.",
+      "$e's doing well for $mself.",
       "$e has the healthy glow of someone that eats real food.",
       "Money doesn't seem to be a concern for $m."
     ],
