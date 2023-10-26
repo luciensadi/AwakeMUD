@@ -6479,15 +6479,15 @@ ACMD(do_consider)
   } else {
     if (GET_REP(victim) < NEWBIE_KARMA_THRESHOLD)
       send_to_char("Total greenhorn.\r\n", ch);
-    else if (GET_REP(victim) < 100)
+    else if (GET_REP(victim) < 200)
       send_to_char("Still finding their feet.\r\n", ch);
-    else if (GET_REP(victim) < 300)
+    else if (GET_REP(victim) < 400)
       send_to_char("Innocence has been lost.\r\n", ch);
-    else if (GET_REP(victim) < 700)
+    else if (GET_REP(victim) < 800)
       send_to_char("They can handle themselves.\r\n", ch);
-    else if (GET_REP(victim) < 1500)
+    else if (GET_REP(victim) < 1600)
       send_to_char("An accomplished runner.\r\n", ch);
-    else if (GET_REP(victim) < 3000)
+    else if (GET_REP(victim) < 3200)
       send_to_char("Definite lifer.\r\n", ch);
     else if (GET_REP(victim) < 10000)
       send_to_char("A legend of the Sprawl.\r\n", ch);
