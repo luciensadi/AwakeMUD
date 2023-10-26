@@ -59,11 +59,11 @@
       "They're a step above a frathouse tenant."
     ],
     "default_strings_gendered": [
-      "$e looks like he's fallen on hard times.",
+      "$e looks like $e's fallen on hard times.",
       "You get the feeling that $e leads a low-class lifestyle.",
       "$e probably has a few nuyen to rub together-- but only a few.",
       "$s clothing looks like a cheap knock-off, but it mostly fits and isn't falling apart.",
-      "$e doesn't look like he's had to miss any meals recently.",
+      "$e doesn't look like $e's had to miss any meals recently.",
       "$e looks like $s nuyen only covers the necessities.",
       "$e's a step above a frathouse tenant."
     ],
