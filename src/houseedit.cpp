@@ -500,23 +500,25 @@ void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *su
   for (auto subroom_itr : apartment->get_rooms()) {
     struct room_data *world_room = subroom_itr->get_world_room();
 
-    if (world_room && world_room != room && ROOM_FLAGGED(world_room, ROOM_STORAGE)) {
-      // Room exists and is a storage room. Load it up.
+    if (world_room && world_room != room) {
+      // Check for storage files even if the room isn't storage-flagged (addresses a bug on prod)
       bf::path original_save_file = old_storage_directory / vnum_to_string(GET_ROOM_VNUM(world_room));
       copy_old_file_into_subroom_if_it_exists(original_save_file, subroom_itr, FALSE);
 
-      // Strip the storage flag from the room.
 #ifdef IS_BUILDPORT
       mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to remove ROOM_STORAGE flag from apartment subroom %ld: We're on the buildport.", GET_ROOM_VNUM(world_room));
 #else
-      ROOM_FLAGS(world_room).RemoveBit(ROOM_STORAGE);
+      // Make sure it's not flagged storage.
+      if (ROOM_FLAGGED(world_room, ROOM_STORAGE)) {
+        ROOM_FLAGS(world_room).RemoveBit(ROOM_STORAGE);
 
-      // Save the removal of the storage flag.
-      int zone_idx = get_zone_index_number_from_vnum(GET_ROOM_VNUM(world_room));
-      if (zone_idx < 0) {
-        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Unable to derive valid zone index from EXISTING room %ld. Stripping storage flag failed to save, WILL CAUSE ITEM DUPLICATION ON LOAD.", GET_ROOM_VNUM(world_room));
-      } else {
-        write_world_to_disk(zone_table[zone_idx].number);
+        // Save the removal of the storage flag.
+        int zone_idx = get_zone_index_number_from_vnum(GET_ROOM_VNUM(world_room));
+        if (zone_idx < 0) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Unable to derive valid zone index from EXISTING room %ld. Stripping storage flag failed to save, WILL CAUSE ITEM DUPLICATION ON LOAD.", GET_ROOM_VNUM(world_room));
+        } else {
+          write_world_to_disk(zone_table[zone_idx].number);
+        }
       }
 #endif
     }
