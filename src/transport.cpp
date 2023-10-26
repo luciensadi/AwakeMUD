@@ -146,7 +146,7 @@ struct dest_data seattle_taxi_destinations[] =
     { "triple", "inn", "Triple Tree Inn", 12401, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
     { "rokhalla", "hooligans", "Rokhalla", 32759, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "impulse", "", "Impulse Garage Complex", 25310, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
-    { "boneyard", "", "Boneyard Aircraft Parking", 2085, TAXI_DEST_TYPE_OTHER },
+    { "boneyard", "", "Boneyard Aircraft Parking", 2085, TAXI_DEST_TYPE_OTHER, TRUE },
 #endif
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
