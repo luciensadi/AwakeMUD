@@ -619,6 +619,20 @@ void process_flying_vehicles() {
       continue;
     } else if (result == 0) {
       // Fail? Make no progress.
+      switch (number(1, 4)) {
+        case 1:
+          send_to_char(controller, "You stare blankly around for a moment, trying to re-orient yourself amidst the clouds...\r\n");
+          break;
+        case 2:
+          send_to_char(controller, "You frown as you realize you've tracked off course.\r\n");
+          break;
+        case 3:
+          send_to_char(controller, "Your controls beep annoyingly, informing you that you're straying towards protected airspace. You veer off, cursing the added delay.\r\n");
+          break;
+        case 4:
+          send_to_char(controller, "A stiff headwind pushes against the fuselage, dragging your progress to a standstill.\r\n");
+          break;
+      }
     } else {
       // Successful roll: Tick down flight duration.
       veh->flight_duration--;
@@ -656,6 +670,21 @@ void process_flying_vehicles() {
           send_to_veh("One smooth landing later, you're back on solid ground.\r\n", veh, controller, FALSE);
           snprintf(buf, sizeof(buf), "%s flies in and settles gently to the ground.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
           send_to_room(buf, veh->in_room, veh);
+        }
+      } else {
+        switch (number(1, 4)) {
+          case 1:
+            send_to_char(controller, "Clouds roll by in a pillowy expanse as you soar towards your destination.\r\n");
+            break;
+          case 2:
+            send_to_char(controller, "The engine thrums smoothly; all is well.\r\n");
+            break;
+          case 3:
+            send_to_char(controller, "You spot a high-flying bird in the distance, but it stays well clear of you.\r\n");
+            break;
+          case 4:
+            send_to_char(controller, "The landscape below is picture-perfect, a sprawling patchwork of color and light.\r\n");
+            break;
         }
       }
     }

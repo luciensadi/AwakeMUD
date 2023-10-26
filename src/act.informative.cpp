@@ -1737,7 +1737,7 @@ void disp_short_exits(struct char_data *ch) {
 void do_auto_exits(struct char_data * ch)
 {
   // This is SUCH a hack, but the down exit in 'airborne' should only show if you're not in a vehicle.
-  if (ch->in_veh && ch->in_room && GET_ROOM_VNUM(ch->in_room) == 10096) {
+  if (ch->in_veh && ch->in_room && GET_ROOM_VNUM(ch->in_room) == RM_AIRBORNE) {
     send_to_char("^cObvious exits:\r\n", ch);
     send_to_char(" None.\r\n", ch);
     return;
