@@ -6001,6 +6001,13 @@ void load_saved_veh()
     rnum_t veh_room_rnum = real_room(veh_room_vnum);
     if (veh_room_rnum < 0 || (veh->owner > 0 && world[veh_room_rnum].apartment && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) {
       veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
+      veh_room_rnum = real_room(veh_room_vnum);
+
+      if (veh_room_rnum < 0) {
+        log_vfprintf("FATAL ERROR: Seattle parking garage does not exist, cannot send vehicle there. Add a room at %ld or remove all vehicles.", veh_room_vnum);
+        shutdown();
+        return;
+      }
     }
 
     const char *veh_flag_string = data.GetString("VEHICLE/Flags", NULL);
