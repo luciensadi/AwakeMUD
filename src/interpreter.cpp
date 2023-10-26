@@ -1375,6 +1375,7 @@ struct command_info rig_info[] =
     { "speed", 0, do_speed, 0, 0, FALSE },
     { "speak", 0, do_language, 0, 0, FALSE },
     { "subscribe", 0, do_subscribe, 0, 0, FALSE },
+    { "syspoints", POS_MORTALLYW, do_syspoints, 1, 0, TRUE },
     { "target", 0, do_target, 0, 0, FALSE },
     { "tell", 0, do_tell, 0, 0 , FALSE },
     { "time", 0, do_time, 0, 0, FALSE },
