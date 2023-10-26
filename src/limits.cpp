@@ -1241,48 +1241,54 @@ void save_vehicles(bool fromCopyover)
         } else {
           temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
         }
-      }
-
-      // Otherwise, derive the garage from its location.
-      else if (!fromCopyover && (!ROOM_FLAGGED(temp_room, ROOM_GARAGE) || !IDNUM_CAN_ENTER_APARTMENT(temp_room, veh->owner)))
-      {
-        /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
-                    GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));
-        log(buf); */
+      } else {
+        // Otherwise, derive the garage from its location.
+        bool room_is_valid_garage = IDNUM_CAN_ENTER_APARTMENT(temp_room, veh->owner);
         if (veh_is_aircraft(veh)) {
-          if (dice(1, 2) == 1) {
-            temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_1)];
-          } else {
-            temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_2)];
-          }
+          room_is_valid_garage &= ROOM_FLAGGED(temp_room, ROOM_RUNWAY) || ROOM_FLAGGED(temp_room, ROOM_HELIPAD) || ROOM_FLAGGED(temp_room, ROOM_GARAGE);
         } else {
-          switch (GET_JURISDICTION(temp_room)) {
-            case ZONE_SEATTLE:
-              temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
-              break;
-            case ZONE_CARIB:
-              temp_room = &world[real_room(RM_CARIB_PARKING_GARAGE)];
-              break;
-            case ZONE_OCEAN:
-              temp_room = &world[real_room(RM_OCEAN_PARKING_GARAGE)];
-              break;
-            case ZONE_PORTLAND:
-#ifdef USE_PRIVATE_CE_WORLD
-              switch (number(0, 2)) {
-                case 0:
-                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE1)];
-                  break;
-                case 1:
-                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE2)];
-                  break;
-                case 2:
-                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE3)];
-                  break;
-              }
-#else
-              temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
-#endif
-              break;
+          room_is_valid_garage &= ROOM_FLAGGED(temp_room, ROOM_GARAGE);
+        }
+        
+        if (!fromCopyover && !room_is_valid_garage) {
+          /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
+                      GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));
+          log(buf); */
+          if (veh_is_aircraft(veh)) {
+            if (dice(1, 2) == 1) {
+              temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_1)];
+            } else {
+              temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_2)];
+            }
+          } else {
+            switch (GET_JURISDICTION(temp_room)) {
+              case ZONE_SEATTLE:
+                temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
+                break;
+              case ZONE_CARIB:
+                temp_room = &world[real_room(RM_CARIB_PARKING_GARAGE)];
+                break;
+              case ZONE_OCEAN:
+                temp_room = &world[real_room(RM_OCEAN_PARKING_GARAGE)];
+                break;
+              case ZONE_PORTLAND:
+  #ifdef USE_PRIVATE_CE_WORLD
+                switch (number(0, 2)) {
+                  case 0:
+                    temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE1)];
+                    break;
+                  case 1:
+                    temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE2)];
+                    break;
+                  case 2:
+                    temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE3)];
+                    break;
+                }
+  #else
+                temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
+  #endif
+                break;
+            }
           }
         }
       }
