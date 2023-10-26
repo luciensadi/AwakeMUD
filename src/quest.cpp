@@ -964,7 +964,11 @@ void reward(struct char_data *ch, struct char_data *johnson)
       nuyen += quest_table[GET_QUEST(ch)].obj[i].nuyen * multiplier;
       karma += quest_table[GET_QUEST(ch)].obj[i].karma * multiplier;
     } else {
+#ifdef IS_BUILDPORT
+      if (1 == 1) {
+#else
       if (IS_SENATOR(ch)) {
+#endif
         send_to_char(ch, "-- Quest turnin: Did not complete obj objective %d.\r\n", i);
       }
       completed_all_objectives = FALSE;
@@ -982,7 +986,11 @@ void reward(struct char_data *ch, struct char_data *johnson)
       nuyen += quest_table[GET_QUEST(ch)].mob[i].nuyen * multiplier;
       karma += quest_table[GET_QUEST(ch)].mob[i].karma * multiplier;
     } else {
+#ifdef IS_BUILDPORT
+      if (1 == 1) {
+#else
       if (IS_SENATOR(ch)) {
+#endif
         send_to_char(ch, "-- Quest turnin: Did not complete mob objective %d.\r\n", i);
       }
       completed_all_objectives = FALSE;
@@ -1004,9 +1012,15 @@ void reward(struct char_data *ch, struct char_data *johnson)
       act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
     }
   } else {
-    char saybuf[1000];
-    snprintf(saybuf, sizeof(saybuf), "%s Partially done's better than nothing.", GET_CHAR_NAME(ch));
-    do_say(johnson, saybuf, 0, SCMD_SAYTO);
+#ifdef IS_BUILDPORT
+    if (1 == 1) {
+#else
+    if (IS_SENATOR(ch)) {
+#endif
+      char saybuf[1000];
+      snprintf(saybuf, sizeof(saybuf), "%s Partially done's better than nothing.", GET_CHAR_NAME(ch));
+      do_say(johnson, saybuf, 0, SCMD_SAYTO);
+    }
   }
 
   nuyen = negotiate(ch, johnson, 0, nuyen, 0, FALSE, FALSE) * NUYEN_GAIN_MULTIPLIER * ((float) GET_CHAR_MULTIPLIER(ch) / 100);
