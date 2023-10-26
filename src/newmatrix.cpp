@@ -140,7 +140,7 @@ bool spawn_ic(struct matrix_icon *target, vnum_t ic_vnum, int triggerstep) {
     for (struct trigger_step *trig = matrix[target->in_host].trigger; trig; trig = trig->next) {
       // We refuse to spawn anything from a previous step in the security sheaf.
       // We'll have to make do with the latest IC located.
-      if (trig->step < target->decker->last_trigger)
+      if (trig->step < target->decker->last_trigger && ic_to_spawn >= 0)
         break;
 
       // Overwrite the last IC we saw.
@@ -148,7 +148,7 @@ bool spawn_ic(struct matrix_icon *target, vnum_t ic_vnum, int triggerstep) {
         ic_to_spawn = trig->ic;
     }
 
-    // At this point, ic_to_spawn contains the lowest IC vnum that is at or above their last trigger.
+    // At this point, ic_to_spawn contains the lowest IC vnum that is at or above their last trigger OR the last IC-loading trigger in the sheaf.
 
     if (ic_to_spawn < 0 || (ic_rnum = real_ic(ic_to_spawn)) < 0) {
       // In order for us to trigger this code, there needs to have been zero valid ICs at or above that trigger.
