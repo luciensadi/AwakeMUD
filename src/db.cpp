@@ -5999,7 +5999,17 @@ void load_saved_veh()
 
     // Can't get there? Pull your veh out.
     rnum_t veh_room_rnum = real_room(veh_room_vnum);
-    if (veh_room_rnum < 0 || (veh->owner > 0 && world[veh_room_rnum].apartment && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) {
+    if (veh_room_rnum < 0
+        || ( veh->owner > 0 
+             && world[veh_room_rnum].apartment 
+             && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) 
+    {
+      log_vfprintf("Vehicle %ld owned by %ld would have loaded in %s room %ld, sending it to the Seattle garage.",
+                   veh->idnum,
+                   veh->owner,
+                   veh_room_rnum < 0 ? "non-existent" : "inaccessible",
+                   veh_room_vnum);
+
       veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
       veh_room_rnum = real_room(veh_room_vnum);
 

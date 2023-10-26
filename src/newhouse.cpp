@@ -1094,18 +1094,21 @@ bool Apartment::can_enter_by_idnum(idnum_t idnum) {
   if (idnum <= 0)
     return FALSE;
 
+  // If nobody owns it at all, only staff can enter.
+  if ((!owned_by_player && !owned_by_pgroup) || paid_until < time(0)) {
+    return get_player_rank(idnum) >= LVL_BUILDER;
+  }
+
   // Check for owner status or pgroup perms.
   if (owned_by_player > 0) {
     if (idnum == owned_by_player)
       return TRUE;
+    // Fall through: Check for guest status.
   } else if (owned_by_pgroup) {
     required_privileges.SetBits(PRIV_LEADER, PRIV_LANDLORD, PRIV_TENANT, ENDBIT);
     if (pgroup_char_has_any_priv(idnum, owned_by_pgroup->get_idnum(), required_privileges))
       return TRUE;
-  } else {
-    // If nobody owns it, nobody but staff can enter it.
-    // mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: %s is owned by neither player nor group! Allowing entry.", full_name);
-    return get_player_rank(idnum) >= LVL_BUILDER;
+    // Fall through: Check for guest status.
   }
 
   // Guests can enter any room.
@@ -1114,6 +1117,7 @@ bool Apartment::can_enter_by_idnum(idnum_t idnum) {
       return TRUE;
   }
 
+  // Neither owner nor guest: Fail.
   return FALSE;
 }
 
