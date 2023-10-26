@@ -257,7 +257,7 @@ void send_flight_estimate(struct char_data *ch, veh_data *veh) {
   float flight_irl_seconds = veh->flight_duration * (PULSE_FLIGHT / PASSES_PER_SEC);
   float flight_game_hours = flight_irl_seconds / SECS_PER_MUD_HOUR;
   int irl_minutes = (int) ceilf(flight_irl_seconds / 60);
-  send_to_char(ch, "You estimate that you'll be airborne for the next %0.1f hours (%d RL minute%s).\r\n",
+  send_to_char(ch, "If all goes well, you estimate that you'll be airborne for the next %0.1f hours (%d RL minute%s).\r\n",
                flight_game_hours,
                irl_minutes,
                irl_minutes == 1 ? "" : "s");

@@ -2372,9 +2372,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
   switch (spell) {
     case SPELL_ARMOR:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
         if (ritual_successes > 0) {
@@ -2438,9 +2435,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       break;
     case SPELL_IGNITE:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         if (would_become_killer(ch, vict)) {
           send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
           return;
@@ -2494,9 +2488,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       break;
     case SPELL_CLOUT:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         if (would_become_killer(ch, vict)) {
           send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
           return;
@@ -2559,9 +2550,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       break;
     case SPELL_FLAMETHROWER:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         if (would_become_killer(ch, vict)) {
           send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
           return;
@@ -2639,9 +2627,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       break;
     case SPELL_ACIDSTREAM:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         if (would_become_killer(ch, vict)) {
           send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
           return;
@@ -2710,9 +2695,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       break;
     case SPELL_LIGHTNINGBOLT:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         if (would_become_killer(ch, vict)) {
           send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
           return;
@@ -2785,9 +2767,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       break;
     case SPELL_LASER:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         if (would_become_killer(ch, vict)) {
           send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
           return;
@@ -2859,9 +2838,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       break;
     case SPELL_STEAM:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         if (would_become_killer(ch, vict)) {
           send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
           return;
@@ -2923,9 +2899,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       break;
     case SPELL_THUNDERBOLT:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         if (would_become_killer(ch, vict)) {
           send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
           return;
@@ -2987,9 +2960,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       break;
     case SPELL_WATERBOLT:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         if (would_become_killer(ch, vict)) {
           send_to_char("That would make you a PLAYER KILLER! Both you and your opponent must `toggle PK` to do that.\r\n", ch);
           return;
@@ -3051,9 +3021,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       break;
     case SPELL_FLAME_AURA:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         // No double-aura-ing.
         if (MOB_FLAGGED(vict, MOB_FLAMEAURA)) {
           send_to_char("They already have a flame aura.\r\n", ch);
@@ -3088,9 +3055,6 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       break;
     case SPELL_LEVITATE:
       {
-        if (!check_spell_victim(ch, vict, spell, arg))
-          return;
-
         if (AFF_FLAGGED(vict, AFF_LEVITATE)) {
           act("$N is already affected by the levitate spell.", FALSE, ch, 0, vict, TO_CHAR);
           return;
@@ -3163,10 +3127,6 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("You can't target yourself with a damaging manipulation spell!\r\n", ch);
         return;
       }
-
-      if (!check_spell_victim(ch, vict, spell, arg))
-        return;
-
       break;
     default:
       if (mob)
@@ -3174,6 +3134,9 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
       else if (*arg)
         vict = get_char_room_vis(ch, arg);
   }
+
+  if (!check_spell_victim(ch, vict, spell, arg))
+    return;
 
   raw_cast_manipulation_spell(ch, vict, spell, force, mob, -1, basedamage);
 }
