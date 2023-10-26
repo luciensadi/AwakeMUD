@@ -96,7 +96,7 @@ void houseedit_list_complexes(struct char_data *ch, char *arg) {
 
   // Calculate our formatting string. Note that this doesn't take any user-supplied content.
   char formatting_string[500];
-  snprintf(formatting_string, sizeof(formatting_string), "  ^C%%-%lds^n  Landlord ^c%%6ld^n, ^c%%2d^n apartment%%s, editable by: %%s\r\n", max_len);
+  snprintf(formatting_string, sizeof(formatting_string), "  ^C%%-%lds^n  LL ^c%%6ld^n, editable by %%s::", max_len);
 
   for (auto &complex : global_apartment_complexes) {
     if (arg && *arg && !is_abbrev(arg, complex->get_name()))
@@ -105,9 +105,39 @@ void houseedit_list_complexes(struct char_data *ch, char *arg) {
     send_to_char(ch, formatting_string,
                  complex->get_name(),
                  complex->get_landlord_vnum(),
-                 complex->get_apartments().size(),
-                 complex->get_apartments().size() == 1 ? "" : "s",
                  complex->list_editors());
+
+    int lifestyles_occ[NUM_LIFESTYLES];
+    int lifestyles_tot[NUM_LIFESTYLES];
+    
+    for (int idx = 0; idx < NUM_LIFESTYLES; idx++) {
+      lifestyles_occ[idx] = 0;
+      lifestyles_tot[idx] = 0;
+    }
+
+    for (auto &apt : complex->get_apartments()) {
+      lifestyles_tot[apt->get_lifestyle()]++;
+
+      if (apt->get_paid_until() > time(0)) {
+        lifestyles_occ[apt->get_lifestyle()]++;
+      }
+    }
+
+    bool sent_something = FALSE;
+    for (int idx = 0; idx < NUM_LIFESTYLES; idx++) {
+      if (lifestyles_tot[idx]) {
+        sent_something = TRUE;
+        send_to_char(ch, " %s[^c%d^n/^c%d^n]", 
+                     lifestyles[idx].name,
+                     lifestyles_tot[idx] - lifestyles_occ[idx],
+                     lifestyles_tot[idx]);
+      }
+    }
+
+    if (!sent_something) {
+      send_to_char(" (no rooms)", ch);
+    }
+    send_to_char("\r\n", ch);
   }
 }
 

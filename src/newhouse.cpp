@@ -420,9 +420,8 @@ const char *ApartmentComplex::list_editors() {
     printed_anything = TRUE;
   }
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^c%s-level (%d+) staffers^n", 
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^cLevel %d+ staff^n", 
            printed_anything ? ", " : "", 
-           status_ratings[MIN_LEVEL_TO_IGNORE_HOUSEEDIT_EDITOR_STATUS],
            MIN_LEVEL_TO_IGNORE_HOUSEEDIT_EDITOR_STATUS);
 
   return buf;
