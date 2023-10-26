@@ -16,6 +16,8 @@
 
 // External prototypes.
 extern void chkdmg(struct veh_data * veh);
+extern int get_vehicle_modifier(struct veh_data *veh, bool include_weather);
+
 ACMD_DECLARE(do_drive);
 
 // Internal prototypes.
@@ -434,7 +436,7 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
   }
 
   int skill_num = get_pilot_skill_for_veh(veh);
-  int tn = veh->handling;
+  int tn = veh->handling + get_vehicle_modifier(veh, FALSE);
 
   snprintf(rbuf, sizeof(rbuf), "Flight test modifiers for %s (base %d from handling): ", GET_CHAR_NAME(ch), tn);
 

@@ -41,7 +41,7 @@ extern bool memory(struct char_data *ch, struct char_data *vict);
 extern bool is_escortee(struct char_data *mob);
 extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 extern void death_penalty(struct char_data *ch);
-extern int get_vehicle_modifier(struct veh_data *veh);
+extern int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern int calculate_swim_successes(struct char_data *ch);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);

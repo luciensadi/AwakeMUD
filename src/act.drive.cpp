@@ -25,6 +25,7 @@ void order_list(struct char_data *start);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 int move_vehicle(struct char_data *ch, int dir);
 ACMD_CONST(do_return);
+int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
 
 extern int max_npc_vehicle_lootwreck_time;
 
@@ -69,58 +70,6 @@ int get_maneuver(struct veh_data *veh)
     score += x;
   }
   return score;
-}
-
-int get_vehicle_modifier(struct veh_data *veh)
-{
-  struct char_data *ch;
-  struct obj_data *cyber;
-  int mod = 0;
-
-  if (!(ch = veh->rigger))
-    for (ch = veh->people; ch; ch = ch->next_in_veh)
-      if (AFF_FLAGGED(ch, AFF_PILOT))
-        break;
-
-  if (veh->cspeed > SPEED_IDLE && ch)
-  {
-    for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-      if (GET_OBJ_VAL(cyber, 0) == CYB_VCR) {
-        mod -= GET_OBJ_VAL(cyber, 1);
-        break;
-      }
-    if (mod == 0 && AFF_FLAGGED(ch, AFF_RIG))
-      mod--;
-    if (get_speed(veh) > (int)(GET_REA(ch) * 20)) {
-      if (get_speed(veh) > (int)(GET_REA(ch) * 40))
-        mod += 3;
-      else if (get_speed(veh) < (int)(GET_REA(ch) * 40) && get_speed(veh) > (int)(GET_REA(ch) * 30))
-        mod += 2;
-      else
-        mod++;
-    }
-  }
-  switch (veh->damage)
-  {
-  case VEH_DAM_THRESHOLD_LIGHT:
-  case 2:
-    mod += 1;
-    break;
-  case VEH_DAM_THRESHOLD_MODERATE:
-  case 4:
-  case 5:
-    mod += 2;
-    break;
-  case VEH_DAM_THRESHOLD_SEVERE:
-  case 7:
-  case 8:
-  case 9:
-    mod += 3;
-    break;
-  }
-  if (weather_info.sky >= SKY_RAINING)
-    mod++;
-  return mod;
 }
 
 void stop_chase(struct veh_data *veh)
@@ -2517,4 +2466,56 @@ ACMD(do_vehicle_osay) {
     send_to_veh(buf, veh->in_veh, ch, TRUE);
 
   send_to_char(ch, "You say ^mOOCly^n, \"%s^n\".\r\n", capitalize(argument));
+}
+
+int get_vehicle_modifier(struct veh_data *veh, bool include_weather)
+{
+  struct char_data *ch;
+  struct obj_data *cyber;
+  int mod = 0;
+
+  if (!(ch = veh->rigger))
+    for (ch = veh->people; ch; ch = ch->next_in_veh)
+      if (AFF_FLAGGED(ch, AFF_PILOT))
+        break;
+
+  if (veh->cspeed > SPEED_IDLE && ch)
+  {
+    for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
+      if (GET_OBJ_VAL(cyber, 0) == CYB_VCR) {
+        mod -= GET_OBJ_VAL(cyber, 1);
+        break;
+      }
+    if (mod == 0 && AFF_FLAGGED(ch, AFF_RIG))
+      mod--;
+    if (get_speed(veh) > (int)(GET_REA(ch) * 20)) {
+      if (get_speed(veh) > (int)(GET_REA(ch) * 40))
+        mod += 3;
+      else if (get_speed(veh) < (int)(GET_REA(ch) * 40) && get_speed(veh) > (int)(GET_REA(ch) * 30))
+        mod += 2;
+      else
+        mod++;
+    }
+  }
+  switch (veh->damage)
+  {
+  case VEH_DAM_THRESHOLD_LIGHT:
+  case 2:
+    mod += 1;
+    break;
+  case VEH_DAM_THRESHOLD_MODERATE:
+  case 4:
+  case 5:
+    mod += 2;
+    break;
+  case VEH_DAM_THRESHOLD_SEVERE:
+  case 7:
+  case 8:
+  case 9:
+    mod += 3;
+    break;
+  }
+  if (weather_info.sky >= SKY_RAINING)
+    mod++;
+  return mod;
 }

@@ -92,7 +92,7 @@ extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern void find_and_draw_weapon(struct char_data *);
 extern void crash_test(struct char_data *ch);
-extern int get_vehicle_modifier(struct veh_data *veh);
+extern int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
 extern bool mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
 extern char *get_player_name(vnum_t id);
