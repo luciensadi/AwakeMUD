@@ -1407,15 +1407,19 @@ ACMD(do_gen_comm)
         continue;
 
       // Skip chargen chars (they never see OOC)
-      if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED))
+      if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED) || PLR_FLAGGED(d->character, PLR_IN_CHARGEN))
+        continue;
+
+      // Skip anyone in the login menus.
+      if (d->connected > CON_PLAYING && d->connected <= CON_QDELCONF2 && d->connected != CON_PART_CREATE)
         continue;
 
       // Skip anyone who's opted out of OOC.
       if (PRF_FLAGGED(d->character, PRF_NOOOC))
         continue;
 
-      // Skip anyone who's flagged themselves as menu-gagged.
-      if ((d->connected != CON_PLAYING && PRF_FLAGGED(d->character, PRF_MENUGAG)))
+      // Skip anyone who's editing and has flagged themselves as menu-gagged.
+      if (d->connected != CON_PLAYING && PRF_FLAGGED(d->character, PRF_MENUGAG))
         continue;
 
       // No autopunct for channels.
