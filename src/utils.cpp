@@ -1480,7 +1480,7 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
     if (target >= 8) {
       strlcat(gskbuf, "failed to default (TN 8+), returning 0 dice. ", sizeof(gskbuf));
       act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
-      send_to_char("You can't even begin to figure out how to do that...\r\n", ch);
+      send_to_char("You can't even begin to figure out such a complex task...\r\n", ch);
       return 0;
     }
 
