@@ -1936,6 +1936,9 @@ void look_in_veh(struct char_data * ch)
       } else {
         send_to_char("Your surroundings blur past.\r\n", ch);
       }
+      if (veh_is_currently_flying(veh)) {
+        send_flight_estimate(ch, veh);
+      }
       if (PLR_FLAGGED(ch, PLR_REMOTE))
         was_in = ch->in_room;
       ch->in_room = veh->in_room;
