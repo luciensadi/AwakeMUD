@@ -1379,6 +1379,7 @@ struct command_info rig_info[] =
     { "target", 0, do_target, 0, 0, FALSE },
     { "tell", 0, do_tell, 0, 0 , FALSE },
     { "time", 0, do_time, 0, 0, FALSE },
+    { "toggle", POS_MORTALLYW, do_toggle, 1, 0, TRUE },
     { "tow", 0, do_tow , 0, 0 , FALSE },
     { "typo", 0, do_gen_write, 0, SCMD_TYPO, FALSE },
     { "unlock", 0, do_gen_door , 0, SCMD_UNLOCK , FALSE },
