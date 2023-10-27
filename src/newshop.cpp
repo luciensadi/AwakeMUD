@@ -1055,7 +1055,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   struct shop_sell_data *sell;
   int price, buynum;
   bool cash = FALSE;
-  char rollbuf[500];
+  char rollbuf[1000];
 
   // Prevent negative transactions.
   if ((buynum = transaction_amt(arg, arg_len)) < 0)
@@ -1191,8 +1191,20 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     }
 
     // Calculate TNs, factoring in settings, powers, and racism.
-    int target = GET_OBJ_AVAILTN(obj) - GET_AVAIL_OFFSET(ch);
-    target = MAX(0, target - GET_POWER(ch, ADEPT_KINESICS));
+    int target = GET_OBJ_AVAILTN(obj);
+    snprintf(rollbuf, sizeof(rollbuf), "Initial TN %d", target);
+
+    if (GET_AVAIL_OFFSET(ch)) {
+      snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (availoffset)", GET_AVAIL_OFFSET(ch));
+      target -= GET_AVAIL_OFFSET(ch);
+    }
+
+    if (GET_POWER(ch, ADEPT_KINESICS)) {
+      snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (kinesics)", GET_POWER(ch, ADEPT_KINESICS));
+      target -= GET_POWER(ch, ADEPT_KINESICS);
+    }
+    
+#define METAVARIANT_PENALTY 4
     if (GET_RACE(ch) != GET_RACE(keeper)) {
       switch (GET_RACE(ch)) {
         case RACE_HUMAN:
@@ -1202,7 +1214,23 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         case RACE_DWARF:
           break;
         default:
-          target += 4;
+          snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (metavariant)", METAVARIANT_PENALTY);
+          target += METAVARIANT_PENALTY;
+          break;
+      }
+    }
+#undef METAVARIANT_PENALTY
+
+    // House rule: Give a better TN for high-grade lifestyles.
+    {
+      switch (abs(GET_BEST_LIFESTYLE(ch))) {
+        case LIFESTYLE_HIGH:
+          target -= 1;
+          strlcat(rollbuf, ", -1 (high lifestyle)", sizeof(rollbuf));
+          break;
+        case LIFESTYLE_LUXURY:
+          target -= 2;
+          strlcat(rollbuf, ", -2 (luxury lifestyle)", sizeof(rollbuf));
           break;
       }
     }
@@ -1210,34 +1238,20 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     // Calculate their skill level, including bioware.
     bool pheromones = FALSE;
     int skill = get_skill(ch, shop_table[shop_nr].etiquette, target);
+    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", final %d after get_skill(). Base skill %d", target, skill);
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
       if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEROMONES) {
         pheromones = TRUE;
         int delta = GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
         skill += delta;
-        snprintf(rollbuf, sizeof(rollbuf), "Pheromone skill buff: %d.", delta);
-        act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
+        snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (pheremones)", delta);
         break;
-      }
-    }
-
-    // House rule: Give a better TN for high-grade lifestyles.
-    {
-      switch (abs(GET_BEST_LIFESTYLE(ch))) {
-        case LIFESTYLE_HIGH:
-          target -= 1;
-          act("Lifestyle TN modifier: -1.", TRUE, ch, 0, 0, TO_ROLLS);
-          break;
-        case LIFESTYLE_LUXURY:
-          target -= 2;
-          act("Lifestyle TN modifier: -2.", TRUE, ch, 0, 0, TO_ROLLS);
-          break;
       }
     }
 
     // Roll up the success test.
     int success = success_test(skill, target);
-    snprintf(rollbuf, sizeof(rollbuf), "Rolled %d success%s.", success, success == 1 ? "" : "s");
+    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ". Rolled %d success%s.", success, success == 1 ? "" : "s");
     act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
 
     // Failure case.
