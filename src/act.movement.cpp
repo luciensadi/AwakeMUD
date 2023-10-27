@@ -338,8 +338,10 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   // Watchers.
   for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching) {
-    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE)) {
+      send_to_char("From a distance, you see:\r\n", tch);
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
+    }
   }
 
   was_in = ch->in_room;
@@ -459,8 +461,10 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   // Watchers.
   for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching) {
-    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE)) {
+      send_to_char("From a distance, you see:\r\n", tch);
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
+    }
   }
 
 #ifdef DEATH_FLAGS
