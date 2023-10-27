@@ -120,6 +120,7 @@ ACMD(do_flyto) {
 
   // Can it fly at all?
   FAILURE_CASE_PRINTF(!veh_can_traverse_air(veh), "%s isn't flight-capable.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+  FAILURE_CASE_PRINTF(veh->towing, "While towing %s? You'd fall out of the sky!", GET_VEH_NAME(veh->towing));
 
   // Do you have the skills to fly it?
   skill_level = GET_SKILL(ch, get_pilot_skill_for_veh(veh));
