@@ -102,13 +102,6 @@ ACMD(do_flyto) {
     send_to_char("You scrunch up your face and flap your arms furiously, but don't quite manage to achieve liftoff.\r\n", ch);
     return;
   }
-
-  if (get_veh_controlled_by_char(ch) != veh) {
-    // Try to pilot it.
-    char argbuf[] = { '\0' };
-    do_drive(ch, argbuf, 0, 0);
-    FAILURE_CASE_PRINTF(get_veh_controlled_by_char(ch) != veh, "You're not controlling %s.", GET_VEH_NAME(veh));
-  }
   
   // Is the flight system working?
   rnum_t in_flight_room_rnum = real_room(RM_AIRBORNE);
@@ -120,6 +113,16 @@ ACMD(do_flyto) {
 
   // Can it fly at all?
   FAILURE_CASE_PRINTF(!veh_can_traverse_air(veh), "%s isn't flight-capable.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+
+  // It's flight-capable, try taking the controls if needed.
+  if (get_veh_controlled_by_char(ch) != veh) {
+    // Try to pilot it.
+    char argbuf[] = { '\0' };
+    do_drive(ch, argbuf, 0, 0);
+    FAILURE_CASE_PRINTF(get_veh_controlled_by_char(ch) != veh, "You're not controlling %s.", GET_VEH_NAME(veh));
+  }
+
+  // No flying while towing.
   FAILURE_CASE_PRINTF(veh->towing, "While towing %s? You'd fall out of the sky!", GET_VEH_NAME(veh->towing));
 
   // Do you have the skills to fly it?
@@ -441,7 +444,8 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
 
   snprintf(rbuf, sizeof(rbuf), "Flight test modifiers for %s (base %d from handling): ", GET_CHAR_NAME(ch), tn);
 
-  tn += modify_target_rbuf(ch, rbuf, sizeof(rbuf));
+  // Pretend we have a vis penalty of 6 already so the max we take is 2. This is a compromise with the fact that we're also taking weather TNs.
+  tn += modify_target_rbuf_raw(ch, rbuf, sizeof(rbuf), 6, FALSE);
   
   // Apply weather modifiers.
   switch (weather_info.sky) {
