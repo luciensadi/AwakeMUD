@@ -2698,7 +2698,11 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
            veh_can_traverse_land(k) && veh_can_traverse_water(k) ? " and " : "",
            veh_can_traverse_water(k) ? "water" : "");
   }
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It ^c%s^n enough space to set up a workshop inside it.\r\n", k->flags.IsSet(VFLAG_WORKSHOP) ? "has" : "doesn't have");
+  if (k->type == VEH_DRONE) {
+    strlcat(buf, "It can't be entered.\r\n", sizeof(buf));
+  } else {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It ^c%s^n enough space to set up a workshop inside it.\r\n", k->flags.IsSet(VFLAG_WORKSHOP) ? "has" : "doesn't have");
+  }
   send_to_char(buf, ch);
 }
 
