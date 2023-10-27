@@ -5038,7 +5038,23 @@ int get_pilot_skill_for_veh(struct veh_data *veh) {
 
   switch(veh->type) {
     case VEH_DRONE:
-      mudlog("SYSERR: Called get_pilot_skill_for_veh() on a drone!", NULL, LOG_SYSLOG, TRUE);
+      if (veh_can_traverse_air(veh)) {
+        if (keyword_appears_in_veh("UAV", veh)) {
+          return SKILL_PILOT_FIXEDWING;
+        } else {
+          return SKILL_PILOT_ROTORCRAFT;
+        }
+      }
+      else if (veh_can_traverse_land(veh)) {
+        return SKILL_PILOT_CAR;
+      }
+      else if (veh_can_traverse_water(veh)) {
+        return SKILL_PILOT_MOTORBOAT;
+      }
+      else {
+
+      }
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Called get_pilot_skill_for_veh(%s, %ld) on a drone which can't travel over land, sea, or air!", GET_VEH_NAME(veh), GET_VEH_VNUM(veh));
       return 0;
     case VEH_BIKE:
       return SKILL_PILOT_BIKE;
