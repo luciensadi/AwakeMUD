@@ -1409,7 +1409,16 @@ ACMD(do_speed)
       send_to_veh("The vehicle slows to a stop.\r\n", veh, ch, FALSE);
     } else {
       if (!IS_RIGGING(ch)) {
-        send_to_char("You put your foot on the brake.\r\n", ch);
+        switch (veh->type) {
+          case VEH_CAR:
+          case VEH_TRUCK:
+          case VEH_TRACKED:
+            send_to_char("You put your foot on the brake.\r\n", ch);
+            break;
+          default:
+            send_to_char("You reduce the throttle.\r\n", ch);
+            break;
+        }
         send_to_veh("You slow down.\r\n", veh, ch, TRUE);
       } else {
         send_to_veh("You slow down.\r\n", veh, NULL, TRUE);
@@ -1417,7 +1426,16 @@ ACMD(do_speed)
     }
   } else if (i > veh->cspeed) {
     if (!IS_RIGGING(ch)) {
-      send_to_char("You put your foot on the accelerator.\r\n", ch);
+      switch (veh->type) {
+        case VEH_CAR:
+        case VEH_TRUCK:
+        case VEH_TRACKED:
+          send_to_char("You put your foot on the accelerator.\r\n", ch);
+          break;
+        default:
+          send_to_char("You open up the throttle.\r\n", ch);
+          break;
+      }
       send_to_veh("You speed up.\r\n", veh, ch, TRUE);
     } else {
       send_to_veh("You speed up.\r\n", veh, NULL, TRUE);
