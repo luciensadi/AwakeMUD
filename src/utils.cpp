@@ -1480,6 +1480,7 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
     if (target >= 8) {
       strlcat(gskbuf, "failed to default (TN 8+), returning 0 dice. ", sizeof(gskbuf));
       act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
+      send_to_char("You can't even begin to figure out how to do that...\r\n", ch);
       return 0;
     }
 
@@ -1487,6 +1488,7 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
     if (skills[skill].no_defaulting_allowed) {
       strlcat(gskbuf, "failed to default (skill prohibits default), returning 0 dice. ", sizeof(gskbuf));
       act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
+      send_to_char("You can't even begin to figure out how to do that...\r\n", ch);
       return 0;
     }
 
@@ -1753,6 +1755,10 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
   snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Final total skill: %d dice.", skill_dice);
 
   act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
+
+  if (skill_dice <= 0) {
+    send_to_char("You can't even begin to figure out how to do that...\r\n", ch);
+  }
 
   return skill_dice;
 }
