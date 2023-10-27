@@ -864,8 +864,10 @@ void move_vehicle(struct char_data *ch, int dir)
 
   // Watchers.
   for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching) {
-    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE)) {
+      send_to_char("From a distance, you see:\r\n", tch);
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
+    }
   }
 
   stop_fighting(ch);
