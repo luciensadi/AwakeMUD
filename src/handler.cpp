@@ -1846,9 +1846,7 @@ struct veh_data *get_veh_list(char *name, struct veh_data *list, struct char_dat
   if (!(number = get_number(&tmp, sizeof(tmpname))))
     return NULL;
   for (i = list; i && (j <= number); i = i->next_veh)
-    if (isname(tmp, get_string_after_color_code_removal(GET_VEH_NAME(i), NULL))
-        || isname(tmp, get_string_after_color_code_removal(i->name, NULL)))
-    {
+    if (keyword_appears_in_veh(tmp, i)) {
       if (ch && mine && i->owner == GET_IDNUM(ch))
         return i;
       else if (!mine && ++j == number)
@@ -2942,11 +2940,10 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, char *name, struct o
   for (i = list; i && (j <= number); i = i->next_content) {
     if (ch->in_veh && i->in_veh && i->vfront != ch->vfront)
       continue;
-    if (isname(tmp, i->text.keywords)
-        || isname(tmp, get_string_after_color_code_removal(i->text.name, NULL))
-        || (i->restring && isname(tmp, get_string_after_color_code_removal(i->restring, ch))))
+    if (keyword_appears_in_obj(tmp, i)) {
       if (++j == number)
         return i;
+    }
   }
   return NULL;
 }
@@ -2983,29 +2980,27 @@ struct obj_data *get_object_in_equip_vis(struct char_data * ch,
   int i = 0, number;
 
   strlcpy(tmp, arg, sizeof(tmpname));
-  if (!(number = get_number(&tmp, sizeof(tmpname))))
+  if (!(number = get_number(&tmp, sizeof(tmpname)))) {
     return NULL;
+  }
 
   for ((*j) = 0; (*j) < NUM_WEARS && i <= number; (*j)++)
     if (equipment[(*j)])
     {
-      if (isname(tmp, equipment[(*j)]->text.keywords)
-          || isname(tmp, get_string_after_color_code_removal(equipment[(*j)]->text.name, ch))
-          || (equipment[(*j)]->restring && isname(tmp, get_string_after_color_code_removal(equipment[(*j)]->restring, ch))))
-      {
-        if (++i == number)
+      if (keyword_appears_in_obj(tmp, equipment[(*j)])) {
+        if (++i == number) {
           return (equipment[(*j)]);
+        }
       }
 
-      if (GET_OBJ_TYPE(equipment[(*j)]) == ITEM_WORN && equipment[(*j)]->contains)
-        for (struct obj_data *obj = equipment[(*j)]->contains; obj; obj = obj->next_content)
-          if (isname(tmp, obj->text.keywords)
-              || isname(tmp, get_string_after_color_code_removal(obj->text.name, ch))
-              || (obj->restring && isname(tmp, get_string_after_color_code_removal(obj->restring, ch))))
-          {
+      if (GET_OBJ_TYPE(equipment[(*j)]) == ITEM_WORN && equipment[(*j)]->contains) {
+        for (struct obj_data *obj = equipment[(*j)]->contains; obj; obj = obj->next_content) {
+          if (keyword_appears_in_obj(tmp, obj)) {
             if (++i == number)
               return (obj);
           }
+        }
+      }
     }
 
   return NULL;

@@ -5689,6 +5689,57 @@ const char * keyword_appears_in_veh(const char *keyword, struct veh_data *veh, b
     CHECK_KEYWORD(veh->name, "name");
     CHECK_KEYWORD(veh->restring, "restring");
     CHECK_KEYWORD(veh->description, "description");
+
+    switch (veh->type) {
+      case VEH_DRONE:
+        CHECK_KEYWORD("drone", "veh-type");
+        break;
+      case VEH_BIKE:
+        CHECK_KEYWORD("bike motorbike motorcycle", "veh-type");
+        break;
+      case VEH_CAR:
+        CHECK_KEYWORD("car", "veh-type");
+        break;
+      case VEH_TRUCK:
+        CHECK_KEYWORD("truck", "veh-type");
+        break;
+      case VEH_FIXEDWING:
+        CHECK_KEYWORD("wing fixedwing airplane aircraft plane", "veh-type");
+        break;
+      case VEH_ROTORCRAFT:
+        CHECK_KEYWORD("rotorcraft helicopter chopper copter", "veh-type");
+        break;
+      case VEH_VECTORTHRUST:
+        CHECK_KEYWORD("vectorthrust vtol", "veh-type");
+        break;
+      case VEH_HOVERCRAFT:
+        CHECK_KEYWORD("hovercraft", "veh-type");
+        break;
+      case VEH_MOTORBOAT:
+        CHECK_KEYWORD("boat motorboat", "veh-type");
+        break;
+      case VEH_SHIP:
+        CHECK_KEYWORD("ship", "veh-type");
+        break;
+      case VEH_LTA:
+        CHECK_KEYWORD("lta lighter blimp dirigible", "veh-type");
+        break;  
+      case VEH_SEMIBALLISTIC:
+        CHECK_KEYWORD("semi-ballistic semiballistic ballistic", "veh-type");
+        break;  
+      case VEH_SUBORBITAL:
+        CHECK_KEYWORD("sub-orbital suborbital orbital", "veh-type"); 
+        break;  
+      case VEH_TRACKED:
+        CHECK_KEYWORD("tracked", "veh-type");
+        break;  
+      case VEH_WALKER:
+        CHECK_KEYWORD("walker", "veh-type");
+        break; 
+      default:
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Unknown vehicle type %d in keyword_appears_in_veh(), add it there.", veh->type);
+        break;
+    }
   }
 
   if (search_desc) {
