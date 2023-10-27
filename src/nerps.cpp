@@ -27,6 +27,9 @@ ACMD(do_usenerps) {
          viewer;
          viewer = (ch->in_room ? viewer->next_in_room : viewer->next_in_veh)) 
     {
+      if (viewer == ch)
+        continue;
+
       if (PRF_FLAGGED(viewer, PRF_QUESTOR) || (IS_SENATOR(viewer) && CAN_SEE(ch, viewer)))
         break;
     }
@@ -42,6 +45,9 @@ ACMD(do_usenerps) {
         viewer;
         viewer = (ch->in_room ? viewer->next_in_room : viewer->next_in_veh)) 
   {
+    if (viewer == ch)
+      continue;
+      
     if (PRF_FLAGGED(viewer, PRF_QUESTOR) || IS_SENATOR(viewer)) {
       act(msg_buf, FALSE, ch, NULL, viewer, TO_VICT);
     }
