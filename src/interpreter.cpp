@@ -388,6 +388,7 @@ ACMD_DECLARE(do_unpack);
 ACMD_DECLARE(do_unsupported_command);
 ACMD_DECLARE(do_upgrade);
 ACMD_DECLARE(do_use);
+ACMD_DECLARE(do_usenerps);
 ACMD_DECLARE(do_users);
 ACMD_DECLARE(do_vehicle_osay);
 ACMD_DECLARE(do_vset);
@@ -949,6 +950,7 @@ struct command_info cmd_info[] =
     { "upgrade"    , POS_SITTING , do_upgrade  , 0 , 0, BLOCKS_IDLE_REWARD },
     { "uptime"     , POS_DEAD    , do_date     , 0, SCMD_UPTIME, ALLOWS_IDLE_REWARD },
     { "use"        , POS_SITTING , do_use      , 1, SCMD_USE, BLOCKS_IDLE_REWARD },
+    { "usenerps"   , POS_LYING   , do_usenerps , 1, 0, BLOCKS_IDLE_REWARD },
     { "users"      , POS_DEAD    , do_users    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
 
     { "version"    , POS_DEAD    , do_gen_ps   , 0, SCMD_VERSION, ALLOWS_IDLE_REWARD },
