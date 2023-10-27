@@ -151,6 +151,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   char buf2[MAX_STRING_LENGTH];
   if (!IS_NPC(i)
       && !IS_SENATOR(ch)
+      && ch != i
       && ((GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1)
           || (GET_EQ(i, WEAR_FACE) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_FACE)) > 1))
       && (act == 2
