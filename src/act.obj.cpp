@@ -1793,22 +1793,31 @@ ACMD(do_get)
         }
       } else if (!cont) {
         send_to_char(ch, "You don't have %s %s.\r\n", AN(arg2), arg2);
-      } else if ((!cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING || GET_OBJ_TYPE(cont) ==
-                                  ITEM_QUIVER || GET_OBJ_TYPE(cont) == ITEM_HOLSTER || GET_OBJ_TYPE(cont) ==
-                                  ITEM_WORN)) || (cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CYBERDECK ||
-                                                                 GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK ||
-                                                                 GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY))) {
-        snprintf(buf, sizeof(buf), "$p is not a %s.", (!cyberdeck ? "container" : "cyberdeck"));
-        act(buf, FALSE, ch, cont, 0, TO_CHAR);
+      } else if (  (!cyberdeck && !( GET_OBJ_TYPE(cont) == ITEM_CONTAINER 
+                                     || GET_OBJ_TYPE(cont) == ITEM_KEYRING 
+                                     || GET_OBJ_TYPE(cont) == ITEM_QUIVER 
+                                     || GET_OBJ_TYPE(cont) == ITEM_HOLSTER 
+                                     || GET_OBJ_TYPE(cont) == ITEM_WORN)) 
+                 || (cyberdeck && !( GET_OBJ_TYPE(cont) == ITEM_CYBERDECK 
+                                      || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK
+                                      || GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)))
+      {
+        if (!cyberdeck && GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cont) == TYPE_COOKER) {
+          // QOL: Treat it as uninstall.
+          get_from_container(ch, cont, arg1, mode, is_abbrev("confirm", remainder));
+        } else {
+          snprintf(buf, sizeof(buf), "$p is not a %s.", (!cyberdeck ? "container" : "cyberdeck"));
+          act(buf, FALSE, ch, cont, 0, TO_CHAR);
 
-        if (access_level(ch, LVL_ADMIN) && !str_cmp(arg1, "force-all")) {
-          send_to_char("Hoping you know what you're doing, you forcibly remove its contents anyways.\r\n", ch);
-          struct obj_data *next;
-          for (struct obj_data *contained = cont->contains; contained; contained = next) {
-            next = contained->next_content;
-            obj_from_obj(contained);
-            obj_to_char(contained, ch);
-            send_to_char(ch, "You retrieve %s from %s.\r\n", GET_OBJ_NAME(contained), GET_OBJ_NAME(cont));
+          if (access_level(ch, LVL_ADMIN) && !str_cmp(arg1, "force-all")) {
+            send_to_char("Hoping you know what you're doing, you forcibly remove its contents anyways.\r\n", ch);
+            struct obj_data *next;
+            for (struct obj_data *contained = cont->contains; contained; contained = next) {
+              next = contained->next_content;
+              obj_from_obj(contained);
+              obj_to_char(contained, ch);
+              send_to_char(ch, "You retrieve %s from %s.\r\n", GET_OBJ_NAME(contained), GET_OBJ_NAME(cont));
+            }
           }
         }
       } else {
