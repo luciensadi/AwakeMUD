@@ -685,6 +685,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Don't Alert Doctors on Mort", FALSE, TRUE  },
   { "MailLog"              , TRUE , TRUE  },
   { "No Follow"            , FALSE, TRUE  },
+  { "No Prompt ^W##Change Message^n", FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -761,6 +762,7 @@ const char *preference_bits[] =
     "ALERT_DOCTORS_ON_MORT",
     "MAILLOG",
     "NOFOLLOW",
+    "!PROMPT_CHANGE_MSG",
     MAX_FLAG_MARKER
   };
 

@@ -226,6 +226,7 @@ class Apartment {
     void clamp_rent(struct char_data *ch);
     void load_guests_from_old_house_file(const char *filename);
     int get_days_in_arrears();
+    vnum_t get_root_vnum();
 
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);

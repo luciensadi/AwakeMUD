@@ -1614,6 +1614,18 @@ int Apartment::get_crap_count() {
   return crap_count;
 }
 
+// Gets the vnum of the first room in the list. Hopefully the one that's attached to the atrium, but who knows...
+vnum_t Apartment::get_root_vnum() {
+  for (auto &room : get_rooms()) {
+    rnum_t rnum = real_room(room->get_vnum());
+    if (rnum >= 0) {
+      return GET_ROOM_VNUM(&world[rnum]);
+    }
+  }
+
+  return 0;
+}
+
 void Apartment::set_owner(idnum_t owner) {
   owned_by_player = owner;
 

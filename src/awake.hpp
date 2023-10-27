@@ -453,7 +453,8 @@ enum {
 #define PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT  67
 #define PRF_MAILLOG                            68
 #define PRF_NOFOLLOW                           69
-#define PRF_MAX                                70
+#define PRF_SUPPRESS_PROMPT_CHANGE             70
+#define PRF_MAX                                71
 
 /* log watch */
 

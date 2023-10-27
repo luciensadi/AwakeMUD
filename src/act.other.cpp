@@ -846,7 +846,11 @@ ACMD(do_display)
     return;
   }
 
-  send_to_char(ch, "OK, changing your prompt. In case you need it back, your previous prompt was:^c  %s^n\r\n", double_up_color_codes(GET_PROMPT(ch)));
+  if (PRF_FLAGGED(ch, PRF_SUPPRESS_PROMPT_CHANGE)) {
+    send_to_char(ch, "OK.\r\n");
+  } else {
+    send_to_char(ch, "OK, changing your prompt. In case you need it back, your previous prompt was:^c  %s^n\r\n", double_up_color_codes(GET_PROMPT(ch)));
+  }
 
   prepare_quotes(arg_with_prepared_quotes, argument, sizeof(arg_with_prepared_quotes) / sizeof(arg_with_prepared_quotes[0]));
 
@@ -1180,7 +1184,9 @@ const char *tog_messages[][2] = {
                             {"Your modulator will now send alerts to all player doctors when you are mortally wounded.\r\n",
                              "Your modulator will no longer send alerts to all player doctors when you go down.\r\n"},
                             {"You can now be followed again.\r\n",
-                             "OK, player characters are unable to follow you until you ^WTOGGLE NOFOLLOW^n again. You can lose existing followers with ^WUNFOLLOW X^n."}
+                             "OK, player characters are unable to follow you until you ^WTOGGLE NOFOLLOW^n again. You can lose existing followers with ^WUNFOLLOW X^n.\r\n"},
+                            {"You will now see your prompt displayed when you change it.\r\n",
+                             "OK, your prompt will no longer display when you change it.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1457,6 +1463,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "nofollow") || is_abbrev(argument, "follow") || is_abbrev(argument, "no follow")) {
       result = PRF_TOG_CHK(ch, PRF_NOFOLLOW);
       mode = 49;
+    } else if (is_abbrev(argument, "change message")) {
+      result = PRF_TOG_CHK(ch, PRF_SUPPRESS_PROMPT_CHANGE);
+      mode = 50;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

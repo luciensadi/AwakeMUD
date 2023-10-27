@@ -73,10 +73,11 @@ void hcontrol_list_houses(struct char_data *ch) {
         }
 
         // Add apartment info and crap count.
-        snprintf(compose_buf, sizeof(compose_buf), "%s (%ld): %s^n (%s", 
+        snprintf(compose_buf, sizeof(compose_buf), "%s (%ld): %s^n (%ld) (%s", 
                  CAP(owner_name), 
                  apartment->get_owner_id(), 
                  apartment->get_full_name(),
+                 apartment->get_root_vnum(),
                  get_crap_count_string(apartment->get_crap_count()));
 
         // Add guest info, assuming they have guests. 
