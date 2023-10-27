@@ -6933,9 +6933,9 @@ ACMD(do_position)
     return;
   }
 
+  // Auto-punctuate it.
   if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(argument, ch)))) {
-    send_to_char("Please specify punctuation at the end (a period, an exclamation point, etc).\r\n", ch);
-    return;
+    strlcat(argument, ".", sizeof(argument));
   }
 
   if (veh) {    
