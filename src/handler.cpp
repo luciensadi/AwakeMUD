@@ -836,7 +836,9 @@ void affect_total(struct char_data * ch)
   GET_REA(ch) = (GET_REA(ch) > aug_rea) ? GET_REA(ch) : aug_rea;
   GET_INIT_DICE(ch) = (GET_INIT_DICE(ch) > aug_init_dice) ? GET_INIT_DICE(ch) : aug_init_dice;
 
-  // Except for VCRs, reaction/initiative augmentations don't apply to rigging (R3 pg 27)
+  // Except for VCRs, reaction/initiative cyber/bio don't apply to rigging (R3 pg 27)
+  // R3 pg 28 says physical reaction spells apply, but they don't exist
+  //   For general magic/mundane balance, maybe better to treat spells/powers like bio 
   int rigger_rea = 0, rigger_init_dice = 0;
 
   // Let drug rea/init mods apply to rigging
@@ -888,7 +890,9 @@ void affect_total(struct char_data * ch)
   }
 
   // Matrix pg 18 & 24, assume pure DNI (thus reaction = intelligence)
-  // No direct reaction/initiative bonuses from cyber/bio apply (assume no bonuses from magic/adept either)
+  // No direct reaction/initiative bonuses from cyber/bio apply
+  // Matrix pg 28 says physical reaction spells apply, but they don't exist
+  //   For general magic/mundane balance, maybe better to treat spells/powers like bio 
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
     GET_REA(ch) = GET_INT(ch);
     GET_INIT_DICE(ch) = 0;
