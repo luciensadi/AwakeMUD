@@ -1042,7 +1042,7 @@ const char *get_time_until_withdrawal_test(struct char_data *ch, int drug_id) {
   static char time_buf[20];
 
   time_t time_since_last_fix = time(0) - GET_DRUG_LAST_FIX(ch, drug_id);
-  time_t irl_secs = time_since_last_fix - (GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) * SECS_PER_MUD_DAY);
+  time_t irl_secs = (GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) * SECS_PER_MUD_DAY) - time_since_last_fix;
   time_t irl_mins = (irl_secs / 60);
 
   if (irl_secs >= 60)
