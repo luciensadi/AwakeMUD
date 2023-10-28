@@ -302,6 +302,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
       // Onset them and set when their last fix was (used for withdrawal calculations).
       GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_ONSET;
       GET_DRUG_LAST_FIX(ch, drug_id) = current_time;
+      GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = drug_types[drug_id].fix_factor;
 
       // Process increases to addiction and tolerance, and also deal bod damage.
       if (_process_edge_and_tolerance_changes_for_applied_dose(ch, drug_id)) {
@@ -589,8 +590,7 @@ void process_withdrawal(struct char_data *ch) {
               seek_drugs(ch, drug_id);
             }
             
-            // Took drugs, so reset timer and don't tick down edge
-            GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = drug_types[drug_id].fix_factor;
+            // Took drugs, so don't tick down edge
             continue;
           }
 
@@ -1068,7 +1068,6 @@ void _put_char_in_withdrawal(struct char_data *ch, int drug_id, bool is_guided) 
     GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_FORCED_WITHDRAWAL;
   }
 
-  GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = drug_types[drug_id].fix_factor;
   GET_DRUG_ADDICTION_TICK_COUNTER(ch, drug_id) = 0;
   update_withdrawal_flags(ch);
 }
