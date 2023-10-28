@@ -560,15 +560,48 @@ void process_withdrawal(struct char_data *ch) {
 
       // Tick down their addiction rating as they withdraw. Speed varies based on whether this is forced or not.
       if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL || GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-        // Decrement their edge, allowing their addiction rating to decrease.
+        // Timer indicates it's time for a test
         if (days_since_last_fix >= GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id)) {
+          send_to_char(ch, "Your body cries out for some %s.\r\n", drug_types[drug_id].name);
+
+          // If you're undergoing guided withdrawal AND have the right chems on you, you skip the test (consumes chems though)
+          if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL && _take_anti_drug_chems(ch, drug_id)) {
+            // Do nothing - test skipped
+          } else if (!_combined_addiction_test(ch, drug_id, "auto-take resistance")) {
+            // Compose message, which is replaced by craving messages if they're carrying drugs.
+            if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
+              snprintf(buf, sizeof(buf), "Your lack of %s is causing you great pain and discomfort.\r\n", drug_types[drug_id].name);
+            } else {
+              snprintf(buf, sizeof(buf), "You crave some %s.\r\n", drug_types[drug_id].name);
+            }
+
+            // Auto-use drugs if available in inventory.
+            send_to_char(ch, "You attempt to satisfy your craving for %s.\r\n", drug_types[drug_id].name);
+            for (struct obj_data *obj = ch->carrying, *next_content; obj; obj = next_content) {
+              next_content = obj->next_content;
+              if (GET_OBJ_TYPE(obj) == ITEM_DRUG && GET_OBJ_DRUG_TYPE(obj) == drug_id) {
+                do_drug_take(ch, obj, FALSE); // obj is potentially extracted at this point
+              }
+            }
+
+            // Don't have enough? Go find some.
+            if (GET_DRUG_DOSE(ch, drug_id) <= GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)) {
+              seek_drugs(ch, drug_id);
+            }
+            
+            // Took drugs, so reset timer and don't tick down edge
+            GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = drug_types[drug_id].fix_factor;
+            continue;
+          }
+
+          // Update timer until next test
+          GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = days_since_last_fix + (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL ? 2 : 1);
+
           snprintf(rbuf, sizeof(rbuf), "$n: %s withdrawal: d_s_l_f %ld > l_w_t %d, ticking down edge.\r\n",
                    GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL ? "Forced" : "Guided",
                    days_since_last_fix,
                    GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id));
           act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
-
-          GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) = days_since_last_fix + (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL ? 2 : 1);
 
           snprintf(rbuf, sizeof(rbuf), " - New l_w_t = %d. Edge goes from %d to %d.\r\n",
                    GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id),
@@ -583,38 +616,6 @@ void process_withdrawal(struct char_data *ch) {
             send_to_char(ch, "The last of the trembles from your %s%s withdrawal wear off.\r\n",
                          GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL ? "forced " : "",
                          drug_types[drug_id].name);
-            continue;
-          }
-          send_to_char(ch, "Your body cries out for some %s.\r\n", drug_types[drug_id].name);
-
-          // If you're undergoing guided withdrawal AND have the right chems on you, you skip the test (consumes chems though)
-          if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL && _take_anti_drug_chems(ch, drug_id)) {
-            continue;
-          }
-
-          if (!_combined_addiction_test(ch, drug_id, "auto-take resistance")) {
-            // Compose message, which is replaced by craving messages if they're carrying drugs.
-            if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-              snprintf(buf, sizeof(buf), "Your lack of %s is causing you great pain and discomfort.\r\n", drug_types[drug_id].name);
-            } else {
-              snprintf(buf, sizeof(buf), "You crave some %s.\r\n", drug_types[drug_id].name);
-            }
-
-            // Auto-use drugs if available in inventory.
-            send_to_char(ch, "You attempt to satisfy your craving for %s.\r\n", drug_types[drug_id].name);
-            for (struct obj_data *obj = ch->carrying, *next_content; obj; obj = next_content) {
-              next_content = obj->next_content;
-              if (GET_OBJ_TYPE(obj) == ITEM_DRUG && GET_OBJ_DRUG_TYPE(obj) == drug_id) {
-                do_drug_take(ch, obj, FALSE); // obj is potentially extracted at this point
-                if (GET_DRUG_DOSE(ch, drug_id) > GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)) {
-                  return;
-                }
-              }
-            }
-
-            if (GET_DRUG_DOSE(ch, drug_id) <= GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)) {
-              seek_drugs(ch, drug_id);
-            }
           }
         }
       }
@@ -848,7 +849,7 @@ bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, 
       if (!_combined_addiction_test(ch, drug_id, "application-time")) {
         // Character failed their addiction check and has become addicted.
         GET_DRUG_ADDICT(ch, drug_id) = IS_ADDICTED;
-        GET_DRUG_ADDICTION_EDGE(ch, drug_id) = 2; // So that forced withdrawal faces at least one test
+        GET_DRUG_ADDICTION_EDGE(ch, drug_id) = 1;
       }
     }
 
