@@ -1038,13 +1038,12 @@ void update_withdrawal_flags(struct char_data *ch) {
   affect_total(ch);
 }
 
-const char *get_time_until_withdrawal_ends(struct char_data *ch, int drug_id) {
+const char *get_time_until_withdrawal_test(struct char_data *ch, int drug_id) {
   static char time_buf[20];
 
-  // How many days must elapse in total before we're off the drug?
-  int ig_days = GET_DRUG_ADDICTION_EDGE(ch, drug_id);
-  int irl_secs = ig_days * SECS_PER_MUD_DAY;
-  int irl_mins = (irl_secs / 60);
+  time_t time_since_last_fix = time(0) - GET_DRUG_LAST_FIX(ch, drug_id);
+  time_t irl_secs = time_since_last_fix - (GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) * SECS_PER_MUD_DAY);
+  time_t irl_mins = (irl_secs / 60);
 
   if (irl_secs >= 60)
     snprintf(time_buf, sizeof(time_buf), "%d minute%s", irl_mins, irl_mins != 1 ? "s" : "");
