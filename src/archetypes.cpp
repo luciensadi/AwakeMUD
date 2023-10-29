@@ -21,10 +21,10 @@ struct archetype_data *generate_street_samurai() {
   memset(arch, 0, sizeof(struct archetype_data));
 
   arch->name = str_dup("Street Samurai");
-  arch->race = RACE_HUMAN;
+  arch->race = RACE_ELF;
   arch->difficulty_rating = str_dup("easiest to play");
 
-  arch->display_name = str_dup("Street Samurai (Human)");
+  arch->display_name = str_dup("Street Samurai (Elf)");
   arch->description = str_dup("Focusing on cyberware-augmented gunplay with a side order of melee combat,"
                               " the Street Samurai is a fast-paced character that requires minimal knowledge"
                               " of the game to succeed at. This archetype is built with a Human as its base race.");
@@ -195,10 +195,10 @@ struct archetype_data *generate_shaman() {
   memset(arch, 0, sizeof(struct archetype_data));
 
   arch->name = str_dup("Shaman");
-  arch->race = RACE_ELF;
+  arch->race = RACE_DWARF;
   arch->difficulty_rating = str_dup("moderate");
 
-  arch->display_name = str_dup("Shaman (Elf)");
+  arch->display_name = str_dup("Shaman (Dwarf)");
   arch->description = str_dup("As a spellcaster with no initial skill in weapons, the Shaman focuses"
                               " on taking enemies down quickly and avoiding drawn-out fights. They"
                               " have the ability to conjure spirits of nature to boost their power,"
