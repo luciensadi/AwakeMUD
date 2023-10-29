@@ -5588,11 +5588,11 @@ SPECIAL(chargen_hopper)
 
   // Regardless of how or why we were called, this is a great chance to ensure the hopper has a mod in it.
   if (!modulator) {
-    rnum_t modulator_rnum = real_object(OBJ_DOCWAGON_BASIC_MOD);
+    rnum_t modulator_rnum = real_object(OBJ_DOCWAGON_BASIC_MODULATOR);
 
     // Cutout: If the modulator doesn't exist, fail.
     if (modulator_rnum == NOWHERE) {
-      snprintf(buf, sizeof(buf), "SYSERR: Attempting to reference docwagon modulator at item %d, but that item does not exist.", OBJ_DOCWAGON_BASIC_MOD);
+      snprintf(buf, sizeof(buf), "SYSERR: Attempting to reference docwagon modulator at item %d, but that item does not exist.", OBJ_DOCWAGON_BASIC_MODULATOR);
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
       return FALSE;
     }
@@ -5625,21 +5625,21 @@ SPECIAL(chargen_hopper)
 
       // Check their inventory to see if they have one already.
       for (inv = ch->carrying; inv && !ch_already_has_one; inv = inv->next_content) {
-        if (GET_OBJ_VNUM(inv) == OBJ_DOCWAGON_BASIC_MOD)
+        if (GET_OBJ_VNUM(inv) == OBJ_DOCWAGON_BASIC_MODULATOR)
           ch_already_has_one = TRUE;
 
         // Recursively search into the object, just in case it's a container.
-        if (find_matching_obj_in_container(inv, OBJ_DOCWAGON_BASIC_MOD))
+        if (find_matching_obj_in_container(inv, OBJ_DOCWAGON_BASIC_MODULATOR))
           ch_already_has_one = TRUE;
       }
 
       // Check their equipment to see if they have one already.
       for (int i = 0; i < NUM_WEARS && !ch_already_has_one; i++) {
-        if ((inv = GET_EQ(ch, i)) && GET_OBJ_VNUM(inv) == OBJ_DOCWAGON_BASIC_MOD)
+        if ((inv = GET_EQ(ch, i)) && GET_OBJ_VNUM(inv) == OBJ_DOCWAGON_BASIC_MODULATOR)
           ch_already_has_one = TRUE;
 
         // Recursively search into the object, just in case it's a container.
-        if (find_matching_obj_in_container(inv, OBJ_DOCWAGON_BASIC_MOD))
+        if (find_matching_obj_in_container(inv, OBJ_DOCWAGON_BASIC_MODULATOR))
           ch_already_has_one = TRUE;
       }
 

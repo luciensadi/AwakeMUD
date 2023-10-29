@@ -2519,7 +2519,7 @@ enum {
 #define OBJ_COLT_M23                       838
 #define OBJ_NICAMI_SCOPE                   28702
 #define OBJ_SMARTLINK_II                   31111
-#define OBJ_DOCWAGON_BASIC_MOD             16206
+#define OBJ_DOCWAGON_BASIC_MODULATOR       16206
 #define OBJ_DOCWAGON_GOLD_MODULATOR        16207
 #define OBJ_DOCWAGON_PLATINUM_MODULATOR    16208
 #define OBJ_BLACK_TRENCH_COAT              1833
@@ -2569,6 +2569,13 @@ enum {
 #define OBJ_OPTICAL_CHIP_KEY               4600
 #define OBJ_UNFINISHED_EQUATION            1015
 #define OBJ_SCANEYE                        3817
+#define OBJ_BAGGY_BLUE_JEANS               1433
+#define OBJ_SWORD_SHEATH                   29903
+#define OBJ_REAL_LEATHER_PANTS             60572
+#define OBJ_NIGHTSTICK                     60519
+#define OBJ_ORICHALCUM_NECKLACE            19732
+#define OBJ_REMINGTON_990                  30161
+#define OBJ_BO_STAFF                       60510
 
 #define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_TITLE_TO_SCORPION              892
@@ -2598,11 +2605,23 @@ enum {
 #define OBJ_CMT_AVATAR                     80004
 #define OBJ_TOP_MOUNTED_SMARTGUN_LINK      80422
 #define OBJ_FORMFIT_III                    80734
+#define OBJ_INGRAM_SMARTGUN                80215
+#define OBJ_SMARTLINK_II_TOP               80424
+#define OBJ_DEFIANCE_SUPER_SHOCK           80211
+#define OBJ_ARMOR_VEST                     80710
+#define OBJ_SILENCER                       80404
+#define OBJ_REMINGTON_950                  80220
 #else
 #define OBJ_GAS_VENT_IV                    691
 #define OBJ_CMT_AVATAR                     29005
 #define OBJ_TOP_MOUNTED_SMARTGUN_LINK      60554
 #define OBJ_FORMFIT_III                    711
+#define OBJ_INGRAM_SMARTGUN                781
+#define OBJ_SMARTLINK_II_TOP               23302
+#define OBJ_DEFIANCE_SUPER_SHOCK           747
+#define OBJ_ARMOR_VEST                     706
+#define OBJ_SILENCER                       35038
+#define OBJ_REMINGTON_950                  827
 #endif
 
 
@@ -2617,9 +2636,11 @@ enum {
 #define OBJ_FOXFIRE_KITSUNE                1966
 #define OBJ_TRANSYS_ARMOR                  1139
 #define OBJ_MATRIX_SWORD                   387
+#define OBJ_NOVATECH_R5_SLEAZE             1160
 
 #ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_CYB_CERAMIC_BONE_LACING        85066
+#define OBJ_CYB_KEVLAR_BONE_LACING         85064
 #define OBJ_CYB_DATAJACK                   85012
 #define OBJ_CYB_BOOSTED_REFLEXES_III_ALPHA 85270
 #define OBJ_CYB_THERMOGRAPHIC_VISION       85053
@@ -2627,8 +2648,11 @@ enum {
 #define OBJ_CYB_ENCEPHALON_II              85014
 #define OBJ_CYB_MATH_SPU_III               85019
 #define OBJ_CYB_SMARTLINK_II               85118
+#define OBJ_CYB_DERMAL_SHEATHING_I         85075
+#define OBJ_CYB_ARMORED_OBV_ARMS_II        6562
 #else
 #define OBJ_CYB_CERAMIC_BONE_LACING        463
+#define OBJ_CYB_KEVLAR_BONE_LACING         462
 #define OBJ_CYB_DATAJACK                   304
 #define OBJ_CYB_BOOSTED_REFLEXES_III_ALPHA 327
 #define OBJ_CYB_THERMOGRAPHIC_VISION       307
@@ -2636,6 +2660,8 @@ enum {
 #define OBJ_CYB_ENCEPHALON_II              1107
 #define OBJ_CYB_MATH_SPU_III               1110
 #define OBJ_CYB_SMARTLINK_II               302
+#define OBJ_CYB_DERMAL_SHEATHING_I         322
+#define OBJ_CYB_ARMORED_OBV_ARMS_II        572
 #endif
 
 #define OBJ_CYB_EYE_PACKAGE_LL_TH_FC_ALPHA 566
@@ -2649,6 +2675,10 @@ enum {
 #define OBJ_BIO_TRAUMA_DAMPER              85940
 #define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    85939
 #define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
+#define OBJ_BIO_CATS_EYES                  85802
+#define OBJ_BIO_METABOLIC_ARRESTER         85804
+#define OBJ_BIO_PAIN_EDITOR                85937
+#define OBJ_BIO_SYMBIOTES_II               85819
 #else
 #define OBJ_BIO_MUSCLE_TONER_III           60609
 #define OBJ_BIO_MUSCLE_TONER_IV            60610
@@ -2658,6 +2688,10 @@ enum {
 #define OBJ_BIO_TRAUMA_DAMPER              60611
 #define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    414
 #define OBJ_BIO_CEREBRAL_BOOSTER_II        411
+#define OBJ_BIO_CATS_EYES                  1461
+#define OBJ_BIO_METABOLIC_ARRESTER         60605
+#define OBJ_BIO_PAIN_EDITOR                412
+#define OBJ_BIO_SYMBIOTES_II               420
 #endif
 
 

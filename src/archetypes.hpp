@@ -12,6 +12,8 @@
 struct archetype_data {
   const char *name;
   const char *difficulty_rating;
+  const char *display_name;
+  const char *description;
   int race;
   int attributes[6];
   int skills[MAX_SKILLS];

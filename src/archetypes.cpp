@@ -24,6 +24,11 @@ struct archetype_data *generate_street_samurai() {
   arch->race = RACE_HUMAN;
   arch->difficulty_rating = str_dup("easiest to play");
 
+  arch->display_name = str_dup("Street Samurai (Human)");
+  arch->description = str_dup("Focusing on cyberware-augmented gunplay with a side order of melee combat,"
+                              " the Street Samurai is a fast-paced character that requires minimal knowledge"
+                              " of the game to succeed at. This archetype is built with a Human as its base race.");
+
   // correct for street sam
   arch->start_room = 90599;
   arch->auth_room = 90529;
@@ -31,10 +36,10 @@ struct archetype_data *generate_street_samurai() {
 
   // Set attributes.
   arch->attributes[BOD] = 6;
-  arch->attributes[QUI] = 6;
+  arch->attributes[QUI] = 7;
   arch->attributes[STR] = 6;
-  arch->attributes[CHA] = 1;
-  arch->attributes[INT] = 6;
+  arch->attributes[CHA] = 3;
+  arch->attributes[INT] = 5;
   arch->attributes[WIL] = 6;
   // Reaction, essence, etc is autocomputed on character creation.
 
@@ -44,62 +49,53 @@ struct archetype_data *generate_street_samurai() {
   // Set skills.
   arch->skills[SKILL_ASSAULT_RIFLES] = 6;
   arch->skills[SKILL_CLUBS] = 6;
-  arch->skills[SKILL_NEGOTIATION] = 3;
-  arch->skills[SKILL_ATHLETICS] = 3;
+  arch->skills[SKILL_BIOTECH] = 5;
   arch->skills[SKILL_ELECTRONICS] = 3;
-  arch->skills[SKILL_PILOT_BIKE] = 3;
-  arch->skills[SKILL_BR_BIKE] = 3;
-  arch->skills[SKILL_STREET_ETIQUETTE] = 1;
-  arch->skills[SKILL_PILOT_TRUCK] = 1;
+  arch->skills[SKILL_NEGOTIATION] = 3;
+  arch->skills[SKILL_STREET_ETIQUETTE] = 3;
+  arch->skills[SKILL_ATHLETICS] = 3;
+  arch->skills[SKILL_PILOT_BIKE] = 1;
 
   // Inventory.
-  arch->weapon = OBJ_COLT_M23; // colt m-23, TODO: should be set to burst fire
-  arch->weapon_top = OBJ_NICAMI_SCOPE; // nicami scope
-  arch->weapon_barrel = OBJ_GAS_VENT_IV; // vent IV
-  arch->weapon_under = OBJ_SMARTLINK_II; // smartlink II
+  arch->weapon = OBJ_COLT_M23;
+  arch->weapon_top = OBJ_SMARTLINK_II_TOP;
+  arch->weapon_barrel = OBJ_GAS_VENT_IV;
+  arch->weapon_under = OBJ_FOREGRIP;
 
   arch->ammo_q = 500;
 
-  arch->nuyen = 22460;
+  arch->modulator = OBJ_DOCWAGON_PLATINUM_MODULATOR;
 
-  arch->modulator = OBJ_DOCWAGON_PLATINUM_MODULATOR; // platinum
-
-  arch->worn[WEAR_ABOUT] = OBJ_BLACK_TRENCH_COAT; // a black trench coat
-  arch->worn[WEAR_BODY] = OBJ_100_PCT_COTTON_SHIRT; // a 100% cotton t-shirt
-  arch->worn[WEAR_UNDER] = OBJ_FORMFIT_III; // formfit III
-  arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS; // forearm guards
-  arch->worn[WEAR_BACK] = OBJ_RIFLE_STRAP; // rifle strap
-  arch->worn[WEAR_WAIST] = OBJ_BLACK_LEATHER_DUTY_BELT; // a black leather duty belt
-  arch->worn[WEAR_LEGS] = OBJ_BLACK_BDU_PANTS; // a pair of black BDU pants
-  arch->worn[WEAR_FEET] = OBJ_BLACK_COMBAT_BOOTS; // a pair of black combat boots
+  // Worn equipment.
+  arch->worn[WEAR_EYES] = OBJ_THERMOGRAPHIC_GOGGLES;
+  arch->worn[WEAR_ABOUT] = OBJ_SECURE_JACKET;
+  arch->worn[WEAR_BODY] = OBJ_PLATED_ARMOR_VEST;
+  arch->worn[WEAR_UNDER] = OBJ_FORMFIT_III;
+  arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS;
+  arch->worn[WEAR_BACK] = OBJ_RIFLE_STRAP;
+  arch->worn[WEAR_WAIST] = OBJ_BLACK_LEATHER_DUTY_BELT;
+  arch->worn[WEAR_THIGH_L] = OBJ_SWORD_SHEATH;
+  arch->worn[WEAR_LEGS] = OBJ_REAL_LEATHER_PANTS;
+  arch->worn[WEAR_FEET] = OBJ_BLACK_COMBAT_BOOTS;
 
   i = 0;
-  arch->carried[i++] = OBJ_MEDKIT; // medkit
-  arch->carried[i++] = OBJ_VEHICLE_TOOLKIT; // vehicle toolkit
-  arch->carried[i++] = OBJ_ELECTRONICS_KIT; // electronics kit
-  arch->carried[i++] = OBJ_CELL_PHONE; // cell phone
-  arch->carried[i++] = OBJ_TITLE_TO_SCORPION; // scorpion tit
-  arch->carried[i++] = OBJ_TITLE_TO_BISON; // bison tit
-  arch->carried[i++] = OBJ_POCKET_SECRETARY; // secretary
-  arch->carried[i++] = OBJ_NEOPHYTE_DUFFELBAG; // duffelbag
+  arch->carried[i++] = OBJ_NIGHTSTICK;
+  arch->carried[i++] = OBJ_MEDKIT;
+  arch->carried[i++] = OBJ_TITLE_TO_RAPIER;
   assert(i < NUM_ARCHETYPE_CARRIED);
 
   // Cyberware.
   i = 0;
-  arch->cyberware[i++] = OBJ_CYB_CERAMIC_BONE_LACING; // ceramic bone lacing
-  arch->cyberware[i++] = OBJ_CYB_DATAJACK; // datajack
-  arch->cyberware[i++] = OBJ_CYB_BOOSTED_REFLEXES_III_ALPHA; // boosted reflexes III -alpha
-  arch->cyberware[i++] = OBJ_CYB_THERMOGRAPHIC_VISION; // thermographic vision
-  arch->cyberware[i++] = OBJ_CYB_SMARTLINK_II_ALPHA; // smartlink 2 --alpha
+  arch->cyberware[i++] = OBJ_CYB_ARMORED_OBV_ARMS_II;
+  arch->cyberware[i++] = OBJ_CYB_SMARTLINK_II;
   assert(i < NUM_ARCHETYPE_CYBERWARE);
 
   // Bioware.
   i = 0;
-  arch->bioware[i++] = OBJ_BIO_ENHANCED_ARTICULATION; // enhanced articulation
-  arch->bioware[i++] = OBJ_BIO_MUSCLE_TONER_IV; // muscle toner iv
-  arch->bioware[i++] = OBJ_BIO_TRAUMA_DAMPER; // trauma damper
-  arch->bioware[i++] = OBJ_BIO_SYNAPTIC_ACCELERATOR_II; // synamptic accelerator II
-  arch->bioware[i++] = OBJ_BIO_CEREBRAL_BOOSTER_II; // cerebral booster II
+  arch->bioware[i++] = OBJ_BIO_ENHANCED_ARTICULATION;
+  arch->bioware[i++] = OBJ_BIO_METABOLIC_ARRESTER;
+  arch->bioware[i++] = OBJ_BIO_PAIN_EDITOR;
+  arch->bioware[i++] = OBJ_BIO_SYMBIOTES_II;
   assert(i < NUM_ARCHETYPE_BIOWARE);
 
   return arch;
@@ -116,16 +112,22 @@ struct archetype_data *generate_adept() {
   arch->race = RACE_ORK;
   arch->difficulty_rating = str_dup("easy");
 
+  arch->display_name = str_dup("Adept (Ork)");
+  arch->description = str_dup("With a blend of ranged and melee combat, the Adept builds up personal"
+                              " power by focusing their magic towards the improvement of their body."
+                              " While still easy to get into, they have a slower start than Street"
+                              " Samurai, but make up for it with a higher power ceiling in the endgame.");
+
   arch->start_room = 90699;
   arch->auth_room = 90629;
   arch->warning_room = 90626;
 
   // Set attributes.
-  arch->attributes[BOD] = 6;
+  arch->attributes[BOD] = 9;
   arch->attributes[QUI] = 6;
   arch->attributes[STR] = 8;
   arch->attributes[CHA] = 1;
-  arch->attributes[INT] = 5;
+  arch->attributes[INT] = 3;
   arch->attributes[WIL] = 6;
   // Reaction, essence, etc is autocomputed on character creation.
 
@@ -136,56 +138,47 @@ struct archetype_data *generate_adept() {
   // Set adept powers.
   i = 0;
   ARCH_ADEPT_POWER(ADEPT_COUNTERSTRIKE, 2);
-  ARCH_ADEPT_POWER(ADEPT_HEALING, 2);
-  ARCH_ADEPT_POWER(ADEPT_IMPROVED_BOD, 2);
-  ARCH_ADEPT_POWER(ADEPT_MYSTIC_ARMOR, 2);
-  ARCH_ADEPT_POWER(ADEPT_SIDESTEP, 2);
-  ARCH_ADEPT_POWER(ADEPT_MAGIC_RESISTANCE, 1);
+  ARCH_ADEPT_POWER(ADEPT_IMPROVED_QUI, 1);
+  ARCH_ADEPT_POWER(ADEPT_KINESICS, 1);
+  ARCH_ADEPT_POWER(ADEPT_SIDESTEP, 6);
   assert(i < NUM_ARCHETYPE_ABILITIES);
 
   // Set skills.
-  arch->skills[SKILL_ASSAULT_RIFLES] = 6;
   arch->skills[SKILL_POLE_ARMS] = 6;
-  arch->skills[SKILL_ATHLETICS] = 3;
+  arch->skills[SKILL_RIFLES] = 6;
+  arch->skills[SKILL_ELECTRONICS] = 3;
   arch->skills[SKILL_NEGOTIATION] = 3;
-  arch->skills[SKILL_ELECTRONICS] = 1;
-  arch->skills[SKILL_PILOT_BIKE] = 2;
-  arch->skills[SKILL_BR_BIKE] = 1;
-  arch->skills[SKILL_STREET_ETIQUETTE] = 1;
+  arch->skills[SKILL_CORPORATE_ETIQUETTE] = 3;
+  arch->skills[SKILL_STREET_ETIQUETTE] = 3;
+  arch->skills[SKILL_ATHLETICS] = 3;
+  arch->skills[SKILL_STEALTH] = 6;
+  arch->skills[SKILL_PILOT_BIKE] = 1;
 
   // Inventory.
-  arch->weapon = OBJ_COLT_M23; // colt m-23, should be set to burst fire
-  arch->weapon_top = OBJ_TOP_LASER_SIGHT; // laser sight
-  arch->weapon_barrel = OBJ_GAS_VENT_IV; // vent IV
-  arch->weapon_under = OBJ_BAYONET; // bayonet
+  arch->weapon = OBJ_REMINGTON_950; // vnum ?, remington 950 sport rifle, needs reference
+  arch->weapon_top = OBJ_TOP_LASER_SIGHT;
+  arch->weapon_barrel = OBJ_SILENCER; // vnum ?, silencer, needs reference
+  arch->weapon_under = OBJ_BAYONET;
 
   arch->ammo_q = 500;
 
-  arch->nuyen = 36550;
+  arch->modulator = OBJ_DOCWAGON_BASIC_MODULATOR;
 
-  arch->modulator = OBJ_DOCWAGON_GOLD_MODULATOR; // gold
-
-  // actually kosher
-  arch->worn[WEAR_EYES] = OBJ_THERMOGRAPHIC_GOGGLES; // thermographic goggles
-  arch->worn[WEAR_BACK] =  OBJ_POLEARM_STRAP; // a polearm strap
-  arch->worn[WEAR_ABOUT] = OBJ_SECURE_JACKET; // a secure jacket
-  arch->worn[WEAR_BODY] = OBJ_100_PCT_COTTON_SHIRT; // a 100% cotton t-shirt
-  arch->worn[WEAR_UNDER] = OBJ_FORMFIT_III; // formfit III
-  arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS; // forearm guards
-  arch->worn[WEAR_LARM] = OBJ_RIFLE_STRAP; // rifle strap
-  arch->worn[WEAR_WAIST] = OBJ_BLACK_LEATHER_DUTY_BELT; // a black leather duty belt
-  arch->worn[WEAR_LEGS] = OBJ_BLACK_BDU_PANTS; // a pair of black BDU pants
-  arch->worn[WEAR_FEET] = OBJ_BLACK_COMBAT_BOOTS; // a pair of black combat boots
+  // Worn equipment.
+  arch->worn[WEAR_EYES] = OBJ_THERMOGRAPHIC_GOGGLES;
+  arch->worn[WEAR_BACK] =  OBJ_POLEARM_STRAP;
+  arch->worn[WEAR_ABOUT] = OBJ_SECURE_JACKET;
+  arch->worn[WEAR_BODY] = OBJ_ARMOR_VEST; // armor vest (2B/1I), needs reference;
+  arch->worn[WEAR_UNDER] = OBJ_FORMFIT_III;
+  arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS;
+  arch->worn[WEAR_LARM] = OBJ_RIFLE_STRAP;
+  arch->worn[WEAR_WAIST] = OBJ_BLACK_LEATHER_DUTY_BELT;
+  arch->worn[WEAR_LEGS] = OBJ_REAL_LEATHER_PANTS; // vnum 60572, real leather pants, needs reference
+  arch->worn[WEAR_FEET] = OBJ_BLACK_COMBAT_BOOTS;
 
   i = 0;
-  arch->carried[i++] = OBJ_MEDKIT; // medkit
-  arch->carried[i++] = OBJ_VEHICLE_TOOLKIT; // vehicle toolkit
-  arch->carried[i++] = OBJ_ELECTRONICS_KIT; // electronics kit
-  arch->carried[i++] = OBJ_CELL_PHONE; // cell phone
+  arch->carried[i++] = OBJ_BO_STAFF; // vnum ?, needs reference
   arch->carried[i++] = OBJ_TITLE_TO_SCORPION; // scorpion tit
-  arch->carried[i++] = OBJ_POCKET_SECRETARY; // secretary
-  arch->carried[i++] = OBJ_NEOPHYTE_DUFFELBAG; // duffelbag
-  arch->carried[i++] = OBJ_STEEL_COMBAT_AXE;
   assert(i < NUM_ARCHETYPE_CARRIED);
 
   return arch;
@@ -205,74 +198,83 @@ struct archetype_data *generate_shaman() {
   arch->race = RACE_ELF;
   arch->difficulty_rating = str_dup("moderate");
 
+  arch->display_name = str_dup("Shaman (Elf)");
+  arch->description = str_dup("As a spellcaster with no initial skill in weapons, the Shaman focuses"
+                              " on taking enemies down quickly and avoiding drawn-out fights. They"
+                              " have the ability to conjure spirits of nature to boost their power,"
+                              " and can learn to cast higher-powered spells than any other caster type.");
+
   // checked for shamanic mage
   arch->start_room = 90799;
   arch->auth_room = 90738;
   arch->warning_room = 90735;
 
   // Set attributes.
-  arch->attributes[BOD] = 4;
-  arch->attributes[QUI] = 7;
-  arch->attributes[STR] = 2;
-  arch->attributes[CHA] = 3;
-  arch->attributes[INT] = 6;
-  arch->attributes[WIL] = 6;
+  arch->attributes[BOD] = 5;
+  arch->attributes[QUI] = 6;
+  arch->attributes[STR] = 3;
+  arch->attributes[CHA] = 5;
+  arch->attributes[INT] = 5;
+  arch->attributes[WIL] = 7;
   // Reaction, essence, etc is autocomputed on character creation.
-
+  
   // Set magic stats.
   arch->magic = 600;
   arch->tradition = TRAD_SHAMANIC;
   arch->totem = TOTEM_WOLF;
   arch->totemspirit = SPIRIT_FOREST;
-
+  
   // Spells.
   i = 0;
-  ARCH_SPELL(SPELL_TREAT, 0, 3);
-  ARCH_SPELL(SPELL_CLOUT, 0, 6);
+  ARCH_SPELL(SPELL_COMBATSENSE, 0, 3);
   ARCH_SPELL(SPELL_ARMOR, 0, 3);
   ARCH_SPELL(SPELL_LEVITATE, 0, 1);
-  ARCH_SPELL(SPELL_HEAL, 0, 6);
+  ARCH_SPELL(SPELL_STEALTH, 0, 1);
+  ARCH_SPELL(SPELL_IMP_INVIS, 0, 6);
+  ARCH_SPELL(SPELL_HEAL, 0, 5);
   ARCH_SPELL(SPELL_STUNBOLT, 0, 6);
   assert(i < NUM_ARCHETYPE_SPELLS);
-
+  
   // Set skills.
   arch->skills[SKILL_SORCERY] = 6;
-  arch->skills[SKILL_CONJURING] = 5;
-  arch->skills[SKILL_NEGOTIATION] = 2;
-  arch->skills[SKILL_STREET_ETIQUETTE] = 2;
-  arch->skills[SKILL_AURA_READING] = 2;
-  arch->skills[SKILL_STEALTH] = 3;
+  arch->skills[SKILL_CONJURING] = 6;
+  arch->skills[SKILL_SHOTGUNS] = 5;
+  arch->skills[SKILL_POLE_ARMS] = 3;
+  arch->skills[SKILL_NEGOTIATION] = 3;
+  arch->skills[SKILL_STREET_ETIQUETTE] = 3;
   arch->skills[SKILL_PILOT_TRUCK] = 1;
-
+  
   // Inventory.
-  // arch->nuyen = 22660;
-
-  arch->modulator = OBJ_DOCWAGON_BASIC_MOD;
-
-  arch->worn[WEAR_ABOUT] = OBJ_LONDON_FOG_COUNT;
-  arch->worn[WEAR_BACK] = OBJ_NEOPHYTE_DUFFELBAG;
-  arch->worn[WEAR_BODY] = OBJ_PLATED_ARMOR_VEST;
+  arch->weapon = OBJ_REMINGTON_990; // remington 990 shotgun, needs reference
+  arch->weapon_top = OBJ_TOP_LASER_SIGHT;
+  arch->weapon_under = OBJ_BAYONET;
+  
+  arch->ammo_q = 500;
+  
+  arch->modulator = OBJ_DOCWAGON_BASIC_MODULATOR;
+  
+  // Worn equipment.
+  arch->worn[WEAR_ABOUT] = OBJ_BLACK_TRENCH_COAT;
+  arch->worn[WEAR_BODY] = OBJ_ARMOR_VEST; // armor vest (2B/1I), needs reference
   arch->worn[WEAR_UNDER] = OBJ_FORMFIT_III;
   arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS;
+  arch->worn[WEAR_LARM] = OBJ_RIFLE_STRAP;
   arch->worn[WEAR_WAIST] = OBJ_BLACK_LEATHER_DUTY_BELT;
   arch->worn[WEAR_LEGS] = OBJ_BLACK_BDU_PANTS;
   arch->worn[WEAR_FEET] = OBJ_BLACK_COMBAT_BOOTS;
-
+  
   i = 0;
-  arch->carried[i++] = OBJ_ELECTRONICS_KIT;
-  arch->carried[i++] = OBJ_POCKET_SECRETARY;
-  arch->carried[i++] = OBJ_CELL_PHONE;
   assert(i < NUM_ARCHETYPE_CARRIED);
-
+  
   i = 0;
-  ARCH_FOCUS(OBJ_ASH_LEAF_ANKLET, SPELL_LEVITATE);
-  ARCH_FOCUS(OBJ_ORICHALCUM_BRACELET, SPELL_ARMOR);
+  ARCH_FOCUS(OBJ_ASH_LEAF_ANKLET, SPELL_STEALTH); // r1 sustaining focus
+  ARCH_FOCUS(OBJ_ORICHALCUM_BRACELET, SPELL_ARMOR); // r3 sustaining focus
+  ARCH_FOCUS(OBJ_ORICHALCUM_BRACELET, SPELL_COMBATSENSE); // r3 sustaining focus
   assert(i < NUM_ARCHETYPE_FOCI);
 
   return arch;
 }
 
-// TODO
 struct archetype_data *generate_street_mage() {
   struct archetype_data *arch = new archetype_data;
   int i = 0;
@@ -283,73 +285,96 @@ struct archetype_data *generate_street_mage() {
   arch->race = RACE_HUMAN;
   arch->difficulty_rating = str_dup("moderate");
 
+  arch->display_name = str_dup("Street Mage (Human)");
+  arch->description = str_dup("As a spellcaster with no initial skill in weapons, the Street Mage focuses"
+                              " on taking enemies down quickly and avoiding drawn-out fights. They are Hermetic"
+                              " mages, with a focus on book learning and pre-fight preparation, and can summon"
+                              " powerful elementals to sustain their spells and grant them bonuses.");
+
   // kosher for hermetic mage
   arch->start_room = 90799;
   arch->auth_room = 90738;
   arch->warning_room = 90735;
-
+  
   // Set attributes.
-  arch->attributes[BOD] = 3;
+  arch->attributes[BOD] = 4;
   arch->attributes[QUI] = 6;
   arch->attributes[STR] = 2;
   arch->attributes[CHA] = 2;
-  arch->attributes[INT] = 6;
+  arch->attributes[INT] = 4;
   arch->attributes[WIL] = 6;
   // Reaction, essence, etc is autocomputed on character creation.
-
+  
   // Set magic stats.
   arch->magic = 600;
   arch->tradition = TRAD_HERMETIC;
-
-  // Set skills.
-  arch->skills[SKILL_SORCERY] = 6;
-  arch->skills[SKILL_CONJURING] = 2;
-  arch->skills[SKILL_NEGOTIATION] = 3;
-  arch->skills[SKILL_STEALTH] = 1;
-  arch->skills[SKILL_SPELLDESIGN] = 4;
-  arch->skills[SKILL_PILOT_CAR] = 1;
-
-  ARCH_SPELL(SPELL_HEAL, 0, 5);
-  ARCH_SPELL(SPELL_COMBATSENSE, 0, 3);
-  ARCH_SPELL(SPELL_FLAMETHROWER, 0, 6);
-  ARCH_SPELL(SPELL_MINDLINK, 0, 1);
+  
+  // Spells.
+  i = 0;
+  ARCH_SPELL(SPELL_INCATTR, BOD, 3);
   ARCH_SPELL(SPELL_ARMOR, 0, 3);
   ARCH_SPELL(SPELL_LEVITATE, 0, 1);
+  ARCH_SPELL(SPELL_STEALTH, 0, 1);
+  ARCH_SPELL(SPELL_IMP_INVIS, 0, 6);
   ARCH_SPELL(SPELL_STUNBOLT, 0, 6);
-
-  // arch->nuyen = 22660;
-
+  ARCH_SPELL(SPELL_WATERBOLT, 0, 5);
+  assert(i < NUM_ARCHETYPE_SPELLS);
+  
+  // Set skills.
+  arch->skills[SKILL_SORCERY] = 6;
+  arch->skills[SKILL_CONJURING] = 6;
+  arch->skills[SKILL_TASERS] = 5;
+  arch->skills[SKILL_CLUBS] = 3;
+  arch->skills[SKILL_ELECTRONICS] = 3;
+  arch->skills[SKILL_NEGOTIATION] = 3;
+  arch->skills[SKILL_CORPORATE_ETIQUETTE] = 3;
+  arch->skills[SKILL_PILOT_CAR] = 1;
+  
+  // Inventory.
+  arch->weapon = OBJ_DEFIANCE_SUPER_SHOCK; // vnum 80211, Defiance Super Shock, needs reference
+  arch->weapon_top = OBJ_SMARTLINK_II_TOP;
+ 
+  arch->ammo_q = 500;
+ 
   arch->modulator = OBJ_DOCWAGON_GOLD_MODULATOR;
-
-  arch->worn[WEAR_EYES] = OBJ_THERMOGRAPHIC_GOGGLES;
-  arch->worn[WEAR_BACK] = OBJ_NEOPHYTE_DUFFELBAG;
+ 
+  // Worn equipment.
   arch->worn[WEAR_ABOUT] = OBJ_LONDON_FOG_MERLIN;
   arch->worn[WEAR_BODY] = OBJ_PLATED_ARMOR_VEST;
   arch->worn[WEAR_UNDER] = OBJ_FORMFIT_III;
   arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS;
   arch->worn[WEAR_WAIST] = OBJ_BLACK_LEATHER_DUTY_BELT;
+  arch->worn[WEAR_THIGH_L] = OBJ_THIGH_HOLSTER;
   arch->worn[WEAR_LEGS] = OBJ_BLACK_SLACKS;
   arch->worn[WEAR_FEET] = OBJ_BLACK_DRESS_SHOES;
-
+ 
   i = 0;
-  arch->carried[i++] = OBJ_ELECTRONICS_KIT;
   arch->carried[i++] = OBJ_TITLE_TO_AMERICAR;
-  arch->carried[i++] = OBJ_POCKET_SECRETARY;
-  arch->carried[i++] = OBJ_CELL_PHONE;
   assert(i < NUM_ARCHETYPE_CARRIED);
-
+ 
   i = 0;
-  ARCH_FOCUS(OBJ_ASH_LEAF_ANKLET, SPELL_LEVITATE);
-  ARCH_FOCUS(OBJ_ORICHALCUM_BRACELET, SPELL_ARMOR);
-  ARCH_FOCUS(OBJ_ORICHALCUM_BRACELET, SPELL_COMBATSENSE);
+  ARCH_FOCUS(OBJ_ORICHALCUM_NECKLACE, 0); // r1 power focus, need reference
+  ARCH_FOCUS(OBJ_ASH_LEAF_ANKLET, SPELL_STEALTH); // r1 sustaining focus
+  ARCH_FOCUS(OBJ_ORICHALCUM_BRACELET, SPELL_ARMOR); // r3 sustaining focus
+  ARCH_FOCUS(OBJ_ORICHALCUM_BRACELET, SPELL_INCATTR); // r3 sustaining focus
   assert(i < NUM_ARCHETYPE_FOCI);
+  
+  // Cyberware.
+  i = 0;
+  arch->cyberware[i++] = OBJ_CYB_SMARTLINK_II_ALPHA;
+  assert(i < NUM_ARCHETYPE_CYBERWARE);
+  
+  // Bioware.
+  i = 0;
+  arch->bioware[i++] = OBJ_BIO_CEREBRAL_BOOSTER_II;
+  arch->bioware[i++] = OBJ_BIO_TRAUMA_DAMPER;
+  assert(i < NUM_ARCHETYPE_BIOWARE);
 
   return arch;
 }
 #undef ARCH_SPELL
 #undef ARCH_FOCUS
 
-// TODO
 struct archetype_data *generate_decker() {
   struct archetype_data *arch = new archetype_data;
   int i = 0;
@@ -360,18 +385,24 @@ struct archetype_data *generate_decker() {
   arch->race = RACE_HUMAN;
   arch->difficulty_rating = str_dup("difficult but rewarding");
 
-  // correct for decker
+  arch->display_name = str_dup("Decker (Human)");
+  arch->description = str_dup("The Decker is a complex role to play, as it requires navigating the Matrix:"
+                              " the interconnected web of virtual-reality hosts that backend modern commerce."
+                              " Skilled Deckers can extract paydata from the Matrix to sell for nuyen."
+                              " When the data's not selling, this archetype can fall back to firearms to get things done.");
+
+    // correct for decker
   arch->start_room = 91099;
   arch->auth_room = 91032;
   arch->warning_room = 91029;
 
   // Set attributes.
-  arch->attributes[BOD] = 3;
-  arch->attributes[QUI] = 5;
-  arch->attributes[STR] = 2;
+  arch->attributes[BOD] = 4;
+  arch->attributes[QUI] = 6;
+  arch->attributes[STR] = 3;
   arch->attributes[CHA] = 1;
   arch->attributes[INT] = 6;
-  arch->attributes[WIL] = 6;
+  arch->attributes[WIL] = 3;
   // Reaction, essence, etc is autocomputed on character creation.
 
   // Set magic stats.
@@ -380,46 +411,42 @@ struct archetype_data *generate_decker() {
   // Set skills.
   arch->skills[SKILL_SMG] = 6;
   arch->skills[SKILL_BR_COMPUTER] = 6;
+  arch->skills[SKILL_CLUBS] = 3;
   arch->skills[SKILL_COMPUTER] = 6;
-  arch->skills[SKILL_CYBERTERM_DESIGN] = 4;
   arch->skills[SKILL_ELECTRONICS] = 3;
-  arch->skills[SKILL_NEGOTIATION] = 2;
-  arch->skills[SKILL_CORPORATE_ETIQUETTE] = 2;
-  arch->skills[SKILL_STREET_ETIQUETTE] = 1;
-  arch->skills[SKILL_PROGRAM_COMBAT] = 2;
-  arch->skills[SKILL_PROGRAM_DEFENSIVE] = 2;
-  arch->skills[SKILL_PROGRAM_OPERATIONAL] = 2;
-  arch->skills[SKILL_PROGRAM_SPECIAL] = 2;
-  arch->skills[SKILL_PROGRAM_CYBERTERM] = 2;
-  arch->skills[SKILL_DATA_BROKERAGE] = 4;
+  arch->skills[SKILL_NEGOTIATION] = 3;
+  arch->skills[SKILL_CORPORATE_ETIQUETTE] = 3;
+  arch->skills[SKILL_DATA_BROKERAGE] = 6;
+  arch->skills[SKILL_ATHLETICS] = 3;
+  arch->skills[SKILL_BIOTECH] = 4;
   arch->skills[SKILL_PILOT_TRUCK] = 1;
 
   // Inventory.
-  arch->weapon = OBJ_SCK_MODEL_100;
+  arch->weapon = OBJ_INGRAM_SMARTGUN;
+  arch->weapon_top = OBJ_SMARTLINK_II_TOP;
+  arch->weapon_under = OBJ_FOREGRIP;
+  
   arch->ammo_q = 500;
 
-  arch->nuyen = 22660;
+  arch->modulator = OBJ_DOCWAGON_GOLD_MODULATOR;
 
-  arch->modulator = OBJ_DOCWAGON_BASIC_MOD;
-
-  arch->worn[WEAR_ABOUT] = OBJ_LONDON_FOG_PROFESSIONAL;
-  arch->worn[WEAR_BACK] = OBJ_NEOPHYTE_DUFFELBAG;
+  // Worn equipment.
+  arch->worn[WEAR_EYES] = OBJ_THERMOGRAPHIC_GOGGLES;
+  arch->worn[WEAR_ABOUT] = OBJ_SECURE_JACKET;
   arch->worn[WEAR_BODY] = OBJ_PLATED_ARMOR_VEST;
   arch->worn[WEAR_UNDER] = OBJ_FORMFIT_III;
   arch->worn[WEAR_ARMS] = OBJ_FOREARM_GUARDS;
-  arch->worn[WEAR_LEGS] = OBJ_BLACK_BDU_PANTS;
-  arch->worn[WEAR_FEET] = OBJ_PAIR_OF_WHITE_TRAINERS;
+  arch->worn[WEAR_WAIST] = OBJ_BLACK_LEATHER_DUTY_BELT;
   arch->worn[WEAR_THIGH_L] = OBJ_THIGH_HOLSTER;
-
+  arch->worn[WEAR_LEGS] = OBJ_BAGGY_BLUE_JEANS;
+  arch->worn[WEAR_FEET] = OBJ_PAIR_OF_WHITE_TRAINERS;
 
   i = 0;
   arch->carried[i++] = OBJ_CYBERDECK_REPAIR_KIT;
-  arch->carried[i++] = OBJ_TITLE_TO_BISON;
-  arch->carried[i++] = OBJ_NOVATECH_BURNER;
+  arch->carried[i++] = OBJ_MEDKIT;
   arch->carried[i++] = OBJ_MITSUHAMA_Z4;
-  arch->carried[i++] = OBJ_ELECTRONICS_KIT;
-  arch->carried[i++] = OBJ_POCKET_SECRETARY;
-  arch->carried[i++] = OBJ_CELL_PHONE;
+  arch->carried[i++] = OBJ_NOVATECH_BURNER;
+  arch->carried[i++] = OBJ_TITLE_TO_BISON;
   assert(i < NUM_ARCHETYPE_CARRIED);
 
   arch->cyberdeck = OBJ_CMT_AVATAR;
@@ -429,13 +456,13 @@ struct archetype_data *generate_decker() {
   arch->software[i++] = OBJ_NOVATECH_SIX_MASKING;
   arch->software[i++] = OBJ_NOVATECH_SIX_BOD;
   arch->software[i++] = OBJ_FUCHI_LTD_EVASION;
-  arch->software[i++] = OBJ_CATCO_SLEAZE;
-  arch->software[i++] = OBJ_TRANSYS_SCRIBE;
-  arch->software[i++] = OBJ_TRANSYS_RIFFLE;
-  arch->software[i++] = OBJ_RENRAKU_BYPASS;
-  arch->software[i++] = OBJ_FOXFIRE_KITSUNE;
-  arch->software[i++] = OBJ_TRANSYS_ARMOR;
-  arch->software[i++] = OBJ_MATRIX_SWORD;
+  arch->software[i++] = OBJ_NOVATECH_R5_SLEAZE;
+  arch->software[i++] = OBJ_TRANSYS_SCRIBE; // r6 read/write
+  arch->software[i++] = OBJ_TRANSYS_RIFFLE; // r6 browse
+  arch->software[i++] = OBJ_RENRAKU_BYPASS; // r6 deception
+  arch->software[i++] = OBJ_FOXFIRE_KITSUNE; // r6 analyze
+  arch->software[i++] = OBJ_TRANSYS_ARMOR; // r6 armor
+  arch->software[i++] = OBJ_MATRIX_SWORD; //  r4 attack
   assert(i < NUM_ARCHETYPE_SOFTWARE);
 
   i = 0;
@@ -443,14 +470,15 @@ struct archetype_data *generate_decker() {
   arch->cyberware[i++] = OBJ_CYB_ENCEPHALON_II;
   arch->cyberware[i++] = OBJ_CYB_MATH_SPU_III;
   arch->cyberware[i++] = OBJ_CYB_SMARTLINK_II;
-  arch->cyberware[i++] = OBJ_CYB_EYE_PACKAGE_LL_TH_FC_ALPHA;
+  arch->cyberware[i++] = OBJ_CYB_DERMAL_SHEATHING_I;
+  arch->cyberware[i++] = OBJ_CYB_KEVLAR_BONE_LACING;
   assert(i < NUM_ARCHETYPE_CYBERWARE);
 
   i = 0;
-  arch->bioware[i++] = OBJ_BIO_MUSCLE_TONER_III;
+  arch->bioware[i++] = OBJ_BIO_CATS_EYES;
   arch->bioware[i++] = OBJ_BIO_CEREBRAL_BOOSTER_II;
-  arch->bioware[i++] = OBJ_BIO_ENHANCED_ARTICULATION;
-  arch->bioware[i++] = OBJ_BIO_MUSCLE_AUGMENTATION_II;
+  arch->bioware[i++] = OBJ_BIO_MUSCLE_TONER_III;
+  arch->bioware[i++] = OBJ_BIO_TRAUMA_DAMPER;
   assert(i < NUM_ARCHETYPE_BIOWARE);
 
   return arch;
@@ -465,6 +493,10 @@ struct archetype_data *generate_rigger() {
 
   arch->name = str_dup("Rigger");
   arch->race = RACE_HUMAN;
+  arch->difficulty_rating = str_dup("tedious");
+
+  arch->display_name = str_dup("Rigger (Human)");
+  arch->description = str_dup("todo");
 
   // correct for rigger
   arch->start_room = 90999;
