@@ -7116,15 +7116,15 @@ ACMD(do_status)
     }
     else if (GET_DRUG_ADDICT(targ, i) > 0) {
       if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_GUIDED_WITHDRAWAL) {
-        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^y%s Withdrawal (Guided, Edge %d): %s remaining^n\r\n",
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^y%s Withdrawal (Guided, Edge %d): %s until next test^n\r\n",
                      drug_types[i].name,
                      GET_DRUG_ADDICTION_EDGE(targ, i),
-                     get_time_until_withdrawal_ends(targ, i));
+                     get_time_until_withdrawal_test(targ, i));
       } else if (GET_DRUG_STAGE(targ, i) == DRUG_STAGE_FORCED_WITHDRAWAL) {
-        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^Y%s Withdrawal (Forced, Edge %d): %s remaining^n\r\n",
+        snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  ^Y%s Withdrawal (Forced, Edge %d): %s until next test^n\r\n",
                      drug_types[i].name,
                      GET_DRUG_ADDICTION_EDGE(targ, i),
-                     get_time_until_withdrawal_ends(targ, i));
+                     get_time_until_withdrawal_test(targ, i));
       } else {
         snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  Addicted to %s (Edge: %d)\r\n",
                      drug_types[i].name,
