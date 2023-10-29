@@ -1046,9 +1046,9 @@ const char *get_time_until_withdrawal_test(struct char_data *ch, int drug_id) {
   time_t irl_mins = (irl_secs / 60);
 
   if (irl_secs >= 60)
-    snprintf(time_buf, sizeof(time_buf), "%d minute%s", irl_mins, irl_mins != 1 ? "s" : "");
+    snprintf(time_buf, sizeof(time_buf), "%ld minute%s", irl_mins, irl_mins != 1 ? "s" : "");
   else
-    snprintf(time_buf, sizeof(time_buf), "%d second%s", irl_secs, irl_secs != 1 ? "s" : "");
+    snprintf(time_buf, sizeof(time_buf), "%ld second%s", irl_secs, irl_secs != 1 ? "s" : "");
 
   return (const char *) time_buf;
 }

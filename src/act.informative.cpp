@@ -5101,6 +5101,16 @@ ACMD(do_time)
 
 ACMD(do_weather)
 {
+  struct veh_data *veh;
+  RIG_VEH(ch, veh);
+
+  struct room_data *in_room = ch->in_room;
+  struct veh_data *in_veh = ch->in_veh;
+  if (veh) {
+    ch->in_room = veh->in_room;
+    ch->in_veh = veh->in_veh;
+  }
+
   FAILURE_CASE(!OUTSIDE(ch), "You're pretty sure the ceiling won't start raining anytime soon.\r\n");
 
   if (precipitation_is_snow()) {
@@ -5129,6 +5139,9 @@ ACMD(do_weather)
                  sky_look[weather_info.sky],
                  (weather_info.change >= 0 ? "you feel a warm wind from south" : "your foot tells you bad weather is due"));
   }
+
+  ch->in_room = in_room;
+  ch->in_veh = in_veh;
 }
 
 

@@ -2575,6 +2575,7 @@ enum {
 #define OBJ_NIGHTSTICK                     60519
 #define OBJ_ORICHALCUM_NECKLACE            19732
 #define OBJ_REMINGTON_990                  30161
+#define OBJ_RUGER_100                      828
 #define OBJ_BO_STAFF                       60510
 
 #define OBJ_TITLE_TO_AMERICAR              891

@@ -130,7 +130,7 @@ void ccr_confirm_switch_to_custom_parse(struct descriptor_data *d, const char *a
 #define ATTACH_IF_EXISTS(vnum, location) \
 if ((vnum) > 0) { \
   if ((temp_obj = read_object((vnum), VIRTUAL))) { \
-    attach_attachment_to_weapon(temp_obj, weapon, NULL, (location)); \
+    attach_attachment_to_weapon(temp_obj, weapon, NULL, (location), TRUE); \
     extract_obj(temp_obj); \
   } else { \
     snprintf(buf, sizeof(buf), "SYSERR: Attempting to attach nonexistent item %ld to %s of weapon for archetype %s.", (vnum), gun_accessory_locations[(location)], archetypes[i]->name); \

@@ -155,7 +155,7 @@ struct archetype_data *generate_adept() {
   arch->skills[SKILL_PILOT_BIKE] = 1;
 
   // Inventory.
-  arch->weapon = OBJ_REMINGTON_950; // vnum ?, remington 950 sport rifle, needs reference
+  arch->weapon = OBJ_RUGER_100;
   arch->weapon_top = OBJ_TOP_LASER_SIGHT;
   arch->weapon_barrel = OBJ_SILENCER; // vnum ?, silencer, needs reference
   arch->weapon_under = OBJ_BAYONET;

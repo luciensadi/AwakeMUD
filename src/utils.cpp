@@ -2718,7 +2718,7 @@ struct obj_data *find_matching_obj_in_container(struct obj_data *container, vnum
   return NULL;
 }
 
-bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch, int location) {
+bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch, int location, bool override) {
   if (!attachment || !weapon) {
     if (ch)
       send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n", ch);
@@ -2767,21 +2767,29 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     return FALSE;
   }
 
-  // If something is already attached there, bail out.
+  // If something is already attached there, bail out unless we're in override mode.
   if (GET_WEAPON_ATTACH_LOC(weapon, location + ACCESS_ACCESSORY_LOCATION_DELTA) > 0) {
     if (ch) {
       send_to_char(ch, "You cannot mount more than one attachment to the %s of %s.\r\n",
                    gun_accessory_locations[location],
                    GET_OBJ_NAME(weapon));
-    } else {
+      return FALSE;
+    }
+
+    if (!override) {
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to attach '%s' (%ld) to already-filled %s location on '%s' (%ld).",
                       GET_OBJ_NAME(attachment),
                       GET_OBJ_VNUM(attachment),
                       gun_accessory_locations[location],
                       GET_OBJ_NAME(weapon),
                       GET_OBJ_VNUM(weapon));
+      return FALSE;
     }
-    return FALSE;
+
+    // Remove the old attachment.
+    struct obj_data *old_attachment = unattach_attachment_from_weapon(location, weapon, NULL);
+    if (old_attachment)
+      extract_obj(old_attachment);
   }
 
   // A negative number in an attachment slot blocks that attachment.
