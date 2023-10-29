@@ -149,7 +149,7 @@ int add_or_rewrite_ban_entry(const char *site, int ban_type, const char *banned_
                       ban_node->site, 
                       ban_types[ban_node->type], 
                       ban_node->name, 
-                      ban_type, 
+                      ban_types[ban_type], 
                       banned_by);
       ban_node->type = ban_type;
       write_ban_list();
