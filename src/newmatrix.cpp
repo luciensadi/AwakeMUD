@@ -428,7 +428,7 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
     send_to_char(ch, "^y(OOC note: Your security tally hit 80+, so the host disconnected you.)^n\r\n");
     return -1;
   }
-  check_trigger(host, ch);
+  check_trigger(PERSONA->in_host, ch);
   return success;
 }
 #undef HOST
