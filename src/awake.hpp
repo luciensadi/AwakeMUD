@@ -2574,7 +2574,7 @@ enum {
 #define OBJ_REAL_LEATHER_PANTS             60572
 #define OBJ_NIGHTSTICK                     60519
 #define OBJ_ORICHALCUM_NECKLACE            19732
-#define OBJ_REMINGTON_990                  30161
+#define OBJ_REMINGTON_990                  835
 #define OBJ_RUGER_100                      828
 #define OBJ_BO_STAFF                       60510
 

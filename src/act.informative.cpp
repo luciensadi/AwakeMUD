@@ -976,49 +976,86 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       send_to_char("\r\nYou are using:\r\n", ch);
     else
       act("\r\n$n is using:", FALSE, i, 0, ch, TO_VICT);
-    for (j = 0; j < NUM_WEARS; j++)
-      if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
-        if (GET_OBJ_TYPE(GET_EQ(i, j)) == ITEM_HOLSTER && GET_OBJ_VAL(GET_EQ(i, j), 0) == 2) {
+    for (j = 0; j < NUM_WEARS; j++) {
+      struct obj_data *eq = GET_EQ(i, j);
+
+      if (eq && CAN_SEE_OBJ(ch, eq)) {
+        // You can see what's inside a large-weapon holster.
+        if (GET_OBJ_TYPE(eq) == ITEM_HOLSTER && GET_HOLSTER_TYPE(eq) == HOLSTER_TYPE_LARGE_GUNS) {
           send_to_char(where[j], ch);
-          show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_OWN_EQUIPMENT);
-        } else if (j == WEAR_WIELD || j == WEAR_HOLD) {
-          if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_EXTRA_TWOHANDS))
+          show_obj_to_char(eq, ch, SHOW_MODE_OWN_EQUIPMENT);
+          continue;
+        } 
+        
+        // Special strings for wield / hold.
+        if (j == WEAR_WIELD || j == WEAR_HOLD) {
+          if (IS_OBJ_STAT(eq, ITEM_EXTRA_TWOHANDS))
             send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<firmly mounted>     " : hands[2], ch);
           else if (j == WEAR_WIELD)
             send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<mounted>            " : hands[(int)i->char_specials.saved.left_handed], ch);
           else
             send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<mounted>            " : hands[!i->char_specials.saved.left_handed], ch);
-          show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
-        } else if ((j == WEAR_BODY || j == WEAR_LARM || j == WEAR_RARM || j == WEAR_WAIST)
-                   && GET_EQ(i, WEAR_ABOUT)) {
-          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4 + GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7)) >= 2) {
+          show_obj_to_char(eq, ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
+          continue;
+        } 
+        
+        // Body/arm/waist slots are hidden by about unless you pass a check.
+        if (   (j == WEAR_BODY || j == WEAR_LARM || j == WEAR_RARM || j == WEAR_WAIST)
+            && GET_EQ(i, WEAR_ABOUT)) 
+        {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4 + GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_ABOUT))) >= 2) {
             send_to_char(where[j], ch);
-            show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
+            show_obj_to_char(eq, ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
           }
-        } else if (j == WEAR_UNDER && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_BODY))) {
-          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6 +
-                           (GET_EQ(i, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7) : 0) +
-                           (GET_EQ(i, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(i, WEAR_BODY), 7) : 0)) >= 2) {
-            send_to_char(where[j], ch);
-            show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
-          }
-        } else if (j == WEAR_LEGS && GET_EQ(i, WEAR_ABOUT)) {
-          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 2 + GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7)) >= 2) {
-            send_to_char(where[j], ch);
-            show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
-          }
-        } else if ((j == WEAR_RANKLE || j == WEAR_LANKLE) && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_LEGS))) {
-          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5 +
-                           (GET_EQ(i, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7) : 0) +
-                           (GET_EQ(i, WEAR_LEGS) ? GET_OBJ_VAL(GET_EQ(i, WEAR_LEGS), 7) : 0)) >= 2) {
-            send_to_char(where[j], ch);
-            show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
-          }
-        } else {
-          send_to_char(where[j], ch);
-          show_obj_to_char(GET_EQ(i, j), ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
+          continue;
         }
+        
+        // Under-armor slot is hidden by about and body slots unless you pass a check.
+        if (j == WEAR_UNDER && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_BODY))) {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6 +
+                           (GET_EQ(i, WEAR_ABOUT) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_ABOUT)) : 0) +
+                           (GET_EQ(i, WEAR_BODY) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_BODY)) : 0)) >= 2) {
+            send_to_char(where[j], ch);
+            show_obj_to_char(eq, ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
+          }
+          continue;
+        }
+        
+        // Legs are hidden by about unless you pass a check.
+        if (j == WEAR_LEGS && GET_EQ(i, WEAR_ABOUT)) {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 2 + GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_ABOUT))) >= 2) {
+            send_to_char(where[j], ch);
+            show_obj_to_char(eq, ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
+          }
+          continue;
+        }
+        
+        // Ankle slots are hidden by about and legs unless passing a check.
+        if ((j == WEAR_RANKLE || j == WEAR_LANKLE) && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_LEGS))) {
+          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5 +
+                           (GET_EQ(i, WEAR_ABOUT) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_ABOUT)) : 0) +
+                           (GET_EQ(i, WEAR_LEGS) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_LEGS)) : 0)) >= 2) {
+            send_to_char(where[j], ch);
+            show_obj_to_char(eq, ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
+          }
+          continue;
+        }
+
+        // Underwear (lower body) is hidden if you're wearing under/pants.
+        if (j == WEAR_UNDERWEAR && (GET_EQ(i, WEAR_UNDER) || GET_EQ(i, WEAR_LEGS) || GET_EQ(i, WEAR_BODY) || GET_EQ(i, WEAR_ABOUT))) {
+          continue;
+        }
+
+        // Chest slot (upper body underwear) is hidden by under/body.
+        if (j == WEAR_CHEST && (GET_EQ(i, WEAR_UNDER) || GET_EQ(i, WEAR_BODY) || GET_EQ(i, WEAR_ABOUT))) {
+          continue;
+        }
+
+        // Final case: Nothing hid it, show it.
+        send_to_char(where[j], ch);
+        show_obj_to_char(eq, ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
       }
+    }
   }
 
   char internal_ware[MAX_STRING_LENGTH];
