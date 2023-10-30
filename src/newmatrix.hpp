@@ -42,6 +42,11 @@
 #define MTX_STAT_SCRAMBLE_IC_RATING 2
 #define MTX_STAT_TRAPDOOR           5
 
+#define MTX_ALERT_NONE              0
+#define MTX_ALERT_PASSIVE           1
+#define MTX_ALERT_ACTIVE            2
+#define MTX_ALERT_SHUTDOWN          3
+
 extern const char *acifs_strings[];
 
 struct host_data {

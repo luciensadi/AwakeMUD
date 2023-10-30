@@ -230,10 +230,10 @@ void check_trigger(rnum_t host, struct char_data *ch)
       if (trig->alert && trig->alert > HOST.alert) {
         HOST.alert = trig->alert;
         switch (HOST.alert) {
-        case 1:
+        case MTX_ALERT_PASSIVE:
           send_to_host(host, "Your view begins to flash orange.\r\n", NULL, FALSE);
           break;
-        case 2:
+        case MTX_ALERT_ACTIVE:
           send_to_host(host, "Sirens join the flashing lights.\r\n", NULL, FALSE);
           break;
         }

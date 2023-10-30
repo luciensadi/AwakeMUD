@@ -460,14 +460,14 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
 
   if (vehicle->damage >= VEH_DAM_THRESHOLD_DESTROYED)
   {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s lies here wrecked.", CAP(veh_name));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y lies here wrecked.", CAP(veh_name));
   }
 
   else {
     bool should_capitalize = TRUE;
     if (vehicle->type == VEH_BIKE && vehicle->people && CAN_SEE(ch, vehicle->people)) {
       should_capitalize = FALSE;
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s sitting on ", CAP(safe_found_mem(ch, vehicle->people) ?
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y sitting on ", CAP(safe_found_mem(ch, vehicle->people) ?
                                                 safe_found_mem(ch, vehicle->people)->mem :
                                                 GET_NAME(vehicle->people)));
     }
@@ -475,14 +475,14 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
     if (GET_VEH_DEFPOS(vehicle) && (vehicle->cspeed == SPEED_OFF || vehicle->cspeed == SPEED_IDLE)) {
       if (vehicle->towing) {
         bool towing_comma = ispunct(get_final_character_from_string(get_string_after_color_code_removal(GET_VEH_DEFPOS(vehicle), NULL)));
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s^y%stowing %s^y%s", 
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y %s^y%stowing %s^y%s", 
                  should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name), 
                  GET_VEH_DEFPOS(vehicle),
                  towing_comma ? ", " : " (",
                  GET_VEH_NAME(vehicle->towing),
                  towing_comma ? ")" : "");
       } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", 
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y %s^y", 
                should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name), 
                GET_VEH_DEFPOS(vehicle));
       }
@@ -490,39 +490,39 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
       switch (vehicle->cspeed) {
         case SPEED_OFF:
           if ((vehicle->type == VEH_BIKE && vehicle->people) || vehicle->restring) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s waits here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y waits here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           } else {
             strlcat(buf, GET_VEH_ROOM_DESC(vehicle), sizeof(buf));
           }
           break;
         case SPEED_IDLE:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s idles here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y idles here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           break;
         case SPEED_CRUISING:
           if (veh_is_currently_flying(vehicle)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s is airborne somewhere in the distance", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y is airborne somewhere in the distance", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           } else if (veh_can_traverse_air(vehicle)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s taxis around here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y taxis around here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           } else {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s cruises through here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y cruises through here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           }
           break;
         case SPEED_SPEEDING:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s speeds past you", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y speeds past you", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           break;
         case SPEED_MAX:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s zooms by you", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y zooms by you", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           break;
       }
       if (vehicle->towing) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", towing %s", GET_VEH_NAME(vehicle->towing));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", towing %s^y", GET_VEH_NAME(vehicle->towing));
       }
       strlcat(buf, ".", sizeof(buf));
     }
   }
 
   if (vehicle->rigger) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Rigged by %s)", GET_CHAR_NAME(vehicle->rigger));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Rigged by %s^y)", GET_CHAR_NAME(vehicle->rigger));
   }
   if (vehicle->owner && GET_IDNUM(ch) == vehicle->owner)
     strlcat(buf, " ^Y(Yours)", sizeof(buf));
