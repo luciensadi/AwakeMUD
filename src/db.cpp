@@ -4255,9 +4255,26 @@ void spec_update(void)
   // Instead of calculating the random number for every traffic room, just calc once.
   bool will_traffic = (number(0, TRAFFIC_INFREQUENCY_CONTROL) == 0);
 
-  for (i = 0; i <= top_of_world; i++)
-    if (world[i].func != NULL && (will_traffic || world[i].func != traffic))
-      world[i].func (NULL, world + i, 0, &empty_argument);
+  for (i = 0; i <= top_of_world; i++) {
+    if (world[i].func == NULL)
+      continue;
+
+    if (world[i].func == traffic) {
+      // Only print to these if we're doing traffic this pulse.
+      if (!will_traffic)
+        continue;
+      
+#ifdef IS_BUILDPORT
+      // Skip any traffic-proc rooms that are !TRAFFIC. This case only happens during active building.
+      if (ROOM_FLAGGED(&world[i], ROOM_NO_TRAFFIC))
+        continue;
+#endif
+
+      // Fall through.
+    }
+    
+    world[i].func (NULL, world + i, 0, &empty_argument);
+  }
 
   ObjList.CallSpec();
 }
