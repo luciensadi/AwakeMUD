@@ -1336,7 +1336,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "autoinvis")) {
       result = PRF_TOG_CHK(ch, PRF_AUTOINVIS);
       mode = 19;
-    } else if (is_abbrev(argument, "autoassist")) {
+    } else if (is_abbrev(argument, "assist") || is_abbrev(argument, "autoassist")) {
       result = PRF_TOG_CHK(ch, PRF_ASSIST);
       mode = 20;
     } else if (is_abbrev(argument, "norpe") || is_abbrev(argument, "rpe")) {

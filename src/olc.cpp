@@ -2098,7 +2098,11 @@ ACMD(do_hedit)
   d->edit_number = number;
   if (host_num >= 0) {
     host = Mem->GetHost();
+
+    // Clone all values.
     *host = matrix[host_num];
+
+    // Duplicate the strings.
     if (matrix[host_num].name)
       host->name = str_dup(matrix[host_num].name);
     if (matrix[host_num].keywords)
@@ -2112,6 +2116,7 @@ ACMD(do_hedit)
     if (matrix[host_num].trigger) {
       struct trigger_step *This, *temp, *temp2;
 
+      // Duplicate the triggers.
       temp = new trigger_step;
       host->trigger = temp;
       for (This = matrix[host_num].trigger; This; This = This->next) {
@@ -2125,6 +2130,7 @@ ACMD(do_hedit)
       }
     }
 
+    // Duplicate the exits.
     if (matrix[host_num].exit) {
       struct exit_data *This, *temp, *temp2;
 
