@@ -2307,8 +2307,8 @@ ACMD(do_download)
             PERSONA->condition -= dam;
             if (PERSONA->condition < 1) {
               send_to_icon(PERSONA, "The %s explodes, ripping your icon into junk logic\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
-              if (dumpshock(PERSONA))
-                return;
+              dumpshock(PERSONA);
+              return;
             } else
               send_to_icon(PERSONA, "The %s explodes, damaging your icon.\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
           }
