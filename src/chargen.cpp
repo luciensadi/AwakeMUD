@@ -359,13 +359,25 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     }
   }
 
-  // Give them a map.
-  if ((temp_obj = read_object(OBJ_MAP_OF_SEATTLE, VIRTUAL)))
-    obj_to_char(temp_obj, CH);
-  else {
-    snprintf(buf, sizeof(buf), "SYSERR: Invalid map %d specified for archetype %s.",
-             OBJ_MAP_OF_SEATTLE, archetypes[i]->name);
-    mudlog(buf, CH, LOG_SYSLOG, TRUE);
+  // Give them a set of default gear.
+  {
+    #define NUM_ARCH_GEAR_ENTRIES  5
+    vnum_t default_arch_gear[NUM_ARCH_GEAR_ENTRIES] = {
+      OBJ_POCKET_SECRETARY,
+      OBJ_NEOPHYTE_DUFFELBAG,
+      OBJ_CELL_PHONE,
+      OBJ_ELECTRONICS_KIT,
+      OBJ_MAP_OF_SEATTLE
+    };
+
+    for (int idx = 0; idx < NUM_ARCH_GEAR_ENTRIES; idx++) {
+      if ((temp_obj = read_object(default_arch_gear[idx], VIRTUAL)))
+        obj_to_char(temp_obj, CH);
+      else {
+        mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: Invalid item %ld specified for default archetype gear set.", idx);
+      }
+    }
+    #undef NUM_ARCH_GEAR_ENTRIES
   }
 
   // Set their index and essence. Everyone starts with 0 bioware index and 6.00 essence.
