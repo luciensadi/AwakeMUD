@@ -1600,7 +1600,7 @@ void raw_cast_detection_spell(struct char_data *ch, struct char_data *vict, int 
 {
   // Pre-calculate the modifiers to the target (standard modify_target(), altered by spell_bonus()).
   char rbuf[MAX_STRING_LENGTH];
-  snprintf(rbuf, sizeof(rbuf), "%scast_detection_spell modify_target_rbuf: ", ritual_successes > 0 ? "ritual" : "");
+  snprintf(rbuf, sizeof(rbuf), "%scast_detection_spell modify_target_rbuf: ", ritual_successes >= 0 ? "ritual" : "");
   int target_modifiers = modify_target_rbuf_magical(ch, rbuf, sizeof(rbuf));
   act(rbuf, TRUE, ch, NULL, NULL, TO_ROLLS);
 
@@ -1655,7 +1655,7 @@ void raw_cast_detection_spell(struct char_data *ch, struct char_data *vict, int 
       {
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
           snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
         } else {
@@ -1682,7 +1682,7 @@ void raw_cast_detection_spell(struct char_data *ch, struct char_data *vict, int 
 
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
           snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
         } else {
@@ -1710,7 +1710,7 @@ void raw_cast_detection_spell(struct char_data *ch, struct char_data *vict, int 
 
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
           snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
         } else {
@@ -1790,7 +1790,7 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
         }
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes > 0) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
           snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
         } else {
@@ -1812,7 +1812,7 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
       {
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes > 0) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
           snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
         } else {
@@ -1836,7 +1836,7 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
       {
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes > 0) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
           snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
         } else {
@@ -1869,7 +1869,7 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
       {
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes > 0) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
           snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
         } else {
@@ -1906,7 +1906,7 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
         if (GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
           act("The spell fizzles-- $N is already at full health.", FALSE, ch, 0, vict, TO_CHAR);
         } else {
-          if (ritual_successes > 0) {
+          if (ritual_successes >= 0) {
             success = ritual_successes;
             snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
           } else {
@@ -2002,7 +2002,7 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
         }
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes > 0) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
           snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
         } else {
@@ -2137,7 +2137,7 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
         else
           target += 10 - (GET_ESS(vict) / 100);
 
-        if (ritual_successes > 0) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
         } else {
           success = success_test(skill, target);
@@ -2264,7 +2264,7 @@ void raw_cast_illusion_spell(struct char_data *ch, struct char_data *vict, int s
 
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes > 0) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
           snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
         } else {
@@ -2293,7 +2293,7 @@ void raw_cast_illusion_spell(struct char_data *ch, struct char_data *vict, int s
 
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes > 0) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
           snprintf(rbuf, sizeof(rbuf), "ritual successes: %d", success);
         } else {
@@ -2374,7 +2374,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
       {
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes > 0) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
         } else {
           success = success_test(skill, 6 + target_modifiers);
@@ -3037,7 +3037,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
 
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
-        if (ritual_successes > 0) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
         } else {
           success = success_test(skill, 4 + target_modifiers);
@@ -3062,7 +3062,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
 
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
         
-        if (ritual_successes > 0) {
+        if (ritual_successes >= 0) {
           success = ritual_successes;
         } else {
           success = success_test(skill, 4 + target_modifiers);
