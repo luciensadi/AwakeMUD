@@ -270,8 +270,8 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     return FALSE;
   }
 
-  // If we got here, we can see it, as long as we can see them. Has to be after the sneak check.
-  return CAN_SEE(tch, ch);
+  // If we got here, we can see it.
+  return TRUE;
 }
 
 /* do_simple_move assumes
@@ -735,7 +735,6 @@ bool perform_fall(struct char_data *ch)
 
 void move_vehicle(struct char_data *ch, int dir)
 {
-  struct char_data *tch;
   struct room_data *was_in = NULL;
   struct veh_data *veh;
   struct veh_follow *v, *nextv;
@@ -806,7 +805,7 @@ void move_vehicle(struct char_data *ch, int dir)
 
   // People in the room.
   for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room) {
-    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+    if (should_tch_see_chs_movement_message(tch, ch, FALSE))
       act(buf1, TRUE, ch, 0, tch, TO_VICT);
   }
 
@@ -815,18 +814,18 @@ void move_vehicle(struct char_data *ch, int dir)
     if (tveh == veh)
       continue;
     
-    for (tch = tveh->people; tch; tch = tch->next_in_veh) {
-      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+    for (struct char_data *tch = tveh->people; tch; tch = tch->next_in_veh) {
+      if (should_tch_see_chs_movement_message(tch, ch, FALSE))
         act(buf1, TRUE, ch, 0, tch, TO_VICT);
     }
 
-    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, FALSE))
       act(buf1, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
 
   // Watchers.
   for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching) {
-    if (should_tch_see_chs_movement_message(tch, ch, TRUE)) {
+    if (should_tch_see_chs_movement_message(tch, ch, FALSE)) {
       send_to_char("From a distance, you see:\r\n", tch);
       act(buf1, TRUE, ch, 0, tch, TO_VICT);
     }
@@ -844,7 +843,7 @@ void move_vehicle(struct char_data *ch, int dir)
 
   // People in the room.
   for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room) {
-    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+    if (should_tch_see_chs_movement_message(tch, ch, FALSE))
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
 
@@ -853,18 +852,18 @@ void move_vehicle(struct char_data *ch, int dir)
     if (tveh == veh)
       continue;
     
-    for (tch = tveh->people; tch; tch = tch->next_in_veh) {
-      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+    for (struct char_data *tch = tveh->people; tch; tch = tch->next_in_veh) {
+      if (should_tch_see_chs_movement_message(tch, ch, FALSE))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
 
-    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, FALSE))
       act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
 
   // Watchers.
   for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching) {
-    if (should_tch_see_chs_movement_message(tch, ch, TRUE)) {
+    if (should_tch_see_chs_movement_message(tch, ch, FALSE)) {
       send_to_char("From a distance, you see:\r\n", tch);
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
@@ -939,7 +938,7 @@ void move_vehicle(struct char_data *ch, int dir)
   ch->in_room = veh->in_room;
   if (!veh->dest)
     look_at_room(ch, 0, 0);
-  for (tch = veh->in_room->people; tch; tch = tch->next_in_room)
+  for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room)
     if (IS_NPC(tch) && AWAKE(tch) && MOB_FLAGGED(tch, MOB_AGGRESSIVE) &&
         !CH_IN_COMBAT(tch) && !IS_ASTRAL(tch))
       set_fighting(tch, veh);
