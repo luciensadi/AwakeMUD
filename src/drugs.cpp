@@ -1040,7 +1040,7 @@ const char *get_time_until_withdrawal_test(struct char_data *ch, int drug_id) {
   // Tests happen on the hour tick (every 2 irl mins), so round up to even irl minutes
   irl_mins = (irl_mins + 1) >> 1 << 1;
 
-  snprintf(time_buf, sizeof(time_buf), "< %d minutes", MAX(irl_mins, 2));
+  snprintf(time_buf, sizeof(time_buf), "< %ld minutes", MAX(irl_mins, 2));
 
   return (const char *) time_buf;
 }
