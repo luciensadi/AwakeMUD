@@ -729,11 +729,8 @@ void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
     lose_nuyen(ch, treatment_cost, NUYEN_OUTFLOW_DRUGS);
   }
 
-  // Test for success. If they fail, they immediately seek out drugs.
   if (!_combined_addiction_test(ch, drug_id, "guided withdrawal", TRUE)) {
     send_to_char(ch, "Even with the chems, you can't kick the urge for %s.\r\n", drug_types[drug_id].name);
-    // Fugue on failure when you're already paying a premium is probably too much
-    // seek_drugs(ch, drug_id);
     return;
   }
 
@@ -837,7 +834,6 @@ bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, 
       edge_delta = ((GET_DRUG_LIFETIME_DOSES(ch, drug_id) % edge_value) + GET_DRUG_DOSE(ch, drug_id)) / edge_value;
       if (edge_delta > 0) {
         GET_DRUG_ADDICTION_EDGE(ch, drug_id) = MIN(MAX_DRUG_EDGE, GET_DRUG_ADDICTION_EDGE(ch, drug_id) + edge_delta);
-        GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) = MIN(MAX_DRUG_TOLERANCE, GET_DRUG_TOLERANCE_LEVEL(ch, drug_id) + edge_delta);
       }
       snprintf(rbuf, sizeof(rbuf), "Edge rating: %d, edge delta: %d.", edge_value, edge_delta);
       act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
@@ -855,7 +851,7 @@ bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, 
 
     // Check to see if their tolerance increases.
     if (drug_types[drug_id].tolerance > 0 && (edge_delta > 0 || is_first_time_taking)) {
-      if (!_combined_addiction_test(ch, drug_id, "tolerance"))
+      if (!_specific_addiction_test(ch, drug_id, FALSE, "tolerance"))
         GET_DRUG_TOLERANCE_LEVEL(ch, drug_id)++;
     }
   }
@@ -910,10 +906,6 @@ bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental,
 
   // Being trapped in a drug addiction loop is not fun, so we cap the TN here.
   int tn = MAX(2, MIN(MAX_ADDICTION_TEST_DIFFICULTY, base_addiction_rating + GET_DRUG_ADDICTION_EDGE(ch, drug_id)));
-
-  // House rule: If you're using chems for guided withdrawal, your TN is slightly reduced.
-  if (GET_DRUG_STAGE(ch, drug_id) == DRUG_STAGE_GUIDED_WITHDRAWAL)
-    tn = MAX(2, tn - 1);
 
   int num_successes = success_test(dice, tn, ch, "specific addiction test");
   bool addiction_passed = (num_successes > 0);
@@ -1045,10 +1037,10 @@ const char *get_time_until_withdrawal_test(struct char_data *ch, int drug_id) {
   time_t irl_secs = (GET_DRUG_LAST_WITHDRAWAL_TICK(ch, drug_id) * SECS_PER_MUD_DAY) - time_since_last_fix;
   time_t irl_mins = (irl_secs / 60);
 
-  if (irl_secs >= 60)
-    snprintf(time_buf, sizeof(time_buf), "%ld minute%s", irl_mins, irl_mins != 1 ? "s" : "");
-  else
-    snprintf(time_buf, sizeof(time_buf), "%ld second%s", irl_secs, irl_secs != 1 ? "s" : "");
+  // Tests happen on the hour tick (every 2 irl mins), so round up to even irl minutes
+  irl_mins = (irl_mins + 1) >> 1 << 1;
+
+  snprintf(time_buf, sizeof(time_buf), "< %d minutes", MAX(irl_mins, 2));
 
   return (const char *) time_buf;
 }
