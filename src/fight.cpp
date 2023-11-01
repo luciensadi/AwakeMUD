@@ -2463,13 +2463,21 @@ bool docwagon(struct char_data *ch)
     {
       send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
       if (GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
-        send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L at any time for pickup.]\r\n");
+        send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^w##COMEGETME^L at any time for pickup.]\r\n");
       } else {
-        send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
+        send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^w##COMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
       }
       PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
     } else {
-      send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+      if (docwagon_tn >= 12) {
+        send_to_char(ch, "%s^n pulses weakly, struggling to send out a trauma call through heavy interference.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+      } else if (docwagon_tn >= 8) {
+        send_to_char(ch, "%s^n vibrates softly, sending out a trauma call through notable interference.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+      } else if (docwagon_tn > 4) {
+        send_to_char(ch, "%s^n vibrates, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+      } else {
+        send_to_char(ch, "%s^n vibrates powerfully, sending out a trauma call that will hopefully be answered.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+      }
     }
   }
 

@@ -8484,6 +8484,32 @@ int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
     issues += 1;
   }
 
+  // Note the zone security rating.
+  if (zone_table[zone_num].security <= 0) {
+    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Zone security level is ^ynot set^n.\r\n",
+                 zone_table[zone_num].number,
+                 zone_table[zone_num].name);
+    issues += 1;
+  } else if (zone_table[zone_num].security <= 4) {
+    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Zone is ^clow security^n (not an issue).\r\n",
+                 zone_table[zone_num].number,
+                 zone_table[zone_num].name);
+  } else if (zone_table[zone_num].security <= 8) {
+    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Zone is ^gmedium security^n (not an issue).\r\n",
+                 zone_table[zone_num].number,
+                 zone_table[zone_num].name);
+  } else if (zone_table[zone_num].security <= 12) {
+    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Zone is ^yhigh security^n (potential issue).\r\n",
+                 zone_table[zone_num].number,
+                 zone_table[zone_num].name);
+    issues += 1;
+  } else {
+    send_to_char(ch, "\r\nZone ^c%d^n (%s^n): Zone is ^rmax security^n (potential issue).\r\n",
+                 zone_table[zone_num].number,
+                 zone_table[zone_num].name);
+    issues += 1;
+  }
+
   for (int cmd_no = 0; cmd_no < zone_table[zone_num].num_cmds; cmd_no++) {
     int num_found = 0;
 
