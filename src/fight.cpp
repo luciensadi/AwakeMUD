@@ -2434,13 +2434,30 @@ bool docwagon(struct char_data *ch)
     return FALSE;
 
   // Find the best docwagon contract they're wearing.
-  if (!(docwagon = find_best_active_docwagon_modulator(ch)))
+  if (!(docwagon = find_best_active_docwagon_modulator(ch))) {
+    switch (number(0, 3)) {
+      case 0:
+        send_to_char("You hazily wish that you'd remembered to re-up your Docwagon contract...\r\n", ch);
+        break;
+      case 1:
+        send_to_char("Alarmingly, you don't feel the vibration of a Docwagon modulator going off. You're on your own...\r\n", ch);
+        break;
+      case 2:
+        send_to_char("With no Docwagon modulator, you blearily realize that nobody's likely to come get you...\r\n", ch);
+        break;
+      case 3:
+        send_to_char("You can't imagine a trauma team coming to save you soon without a Docwagon modulator...\r\n", ch);
+        break;
+    }
     return FALSE;
+  }
 
   struct room_data *room = get_ch_in_room(ch);
 
-  if (!room)
+  if (!room) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Bailing out of docwagon(%s): No valid room!", GET_CHAR_NAME(ch));
     return FALSE;
+  }
 
   if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
     send_to_char(ch, "%s^n buzzes contentedly: the automated DocWagon trauma team remains en route.\r\n", CAP(GET_OBJ_NAME(docwagon)));
@@ -2488,6 +2505,8 @@ bool docwagon(struct char_data *ch)
                    num_responders == 1 ? "is" : "are",
                    num_responders,
                    num_responders == 1 ? "" : "s");
+    } else {
+      send_to_char("^L[OOC: There are currently no players who can hear your DocWagon call.]^n\r\n", ch);
     }
   }
 
