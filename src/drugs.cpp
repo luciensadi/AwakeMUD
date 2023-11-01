@@ -37,7 +37,7 @@ ACMD_DECLARE(do_look);
 bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, int drug_id);
 bool _apply_doses_of_drug_to_char(int doses, int drug_id, struct char_data *ch, bool voluntary=TRUE);
 bool _drug_dose_exceeds_tolerance(struct char_data *ch, int drug_id);
-bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier);
+bool _specific_addiction_test(struct char_data *ch, int drug_id, bool is_mental, const char *test_identifier, bool starting_guided_withdrawal_modifier=FALSE);
 bool _combined_addiction_test(struct char_data *ch, int drug_id, const char *test_identifier, bool is_starting_guided_withdrawal_check=FALSE);
 int _seek_drugs_purchase_cost(struct char_data *ch, int drug_id);
 bool seek_drugs(struct char_data *ch, int drug_id);
