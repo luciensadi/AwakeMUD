@@ -2498,7 +2498,7 @@ bool docwagon(struct char_data *ch)
     }
   }
 
-  if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT) && GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD) {
+  if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
     int num_responders = alert_player_doctors_of_mort(ch, docwagon);
     if (num_responders > 0) {
       send_to_char(ch, "^L[OOC: There %s ^w%d^L player%s online who may be able to respond to your DocWagon call.]^n\r\n",
