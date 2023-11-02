@@ -8091,6 +8091,16 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
             printed = TRUE;
             issues++;
           }
+
+          {
+            struct obj_data *loaded = read_object(quest->obj[obj_idx].vnum, VIRTUAL);
+            if (GET_OBJ_TYPE(loaded) != ITEM_DECK_ACCESSORY) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: obj %ld is not a deck accessory (it can't be uploaded)^n.\r\n", obj_idx, quest->obj[obj_idx].vnum);
+              printed = TRUE;
+              issues++;
+            }
+            extract_obj(loaded);
+          }
           break;
       }
     }

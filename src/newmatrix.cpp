@@ -2756,7 +2756,11 @@ void process_upload(struct matrix_icon *persona)
   // Note: We only upload one file at a time. Find the first valid one and process it, then stop.
   if (persona && persona->decker && persona->decker->deck) {
     for (struct obj_data *soft = persona->decker->deck->contains; soft; soft = soft->next_content) {
-      if (GET_OBJ_TYPE(soft) != ITEM_PART && GET_DECK_ACCESSORY_FILE_REMAINING(soft) > 0)
+      // Sanity check: Only upload deck accessories.
+      if (GET_OBJ_TYPE(soft) != ITEM_DECK_ACCESSORY)
+        continue;
+
+      if (GET_DECK_ACCESSORY_FILE_REMAINING(soft) > 0)
       {
         // Require that we're on the same host as we started the upload on.
         if (GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) == 1 && GET_OBJ_ATTEMPT(soft) != matrix[persona->in_host].vnum) {
@@ -2818,7 +2822,6 @@ void process_upload(struct matrix_icon *persona)
                 continue;
 
               if (matrix[persona->in_host].vnum == quest_table[GET_QUEST(questor)].obj[i].o_data) {
-                log_vfprintf("Uploaded to right host.");
                 send_to_icon(persona, "You feel a small bit of satisfaction at having completed this part of %s%s job.\r\n",
                              questor == persona->decker->ch ? "your" : GET_CHAR_NAME(questor),
                              questor == persona->decker->ch ? "" : "'s");
@@ -2831,7 +2834,6 @@ void process_upload(struct matrix_icon *persona)
             }
 
             if (potential_failure) {
-              log_vfprintf("Uploaded to wrong host.");
               send_to_icon(persona, "Something doesn't seem quite right. You're suddenly unsure if this is the right host for the job.\r\n");
               snprintf(buf, sizeof(buf), "%s tried host %s (%ld) for job %ld, but it was incorrect. Quest recap rephrasing needed?",
                       GET_CHAR_NAME(persona->decker->ch),
