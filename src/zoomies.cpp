@@ -484,7 +484,7 @@ void _crash_plane_into_room(struct veh_data *veh, struct room_data *room, bool i
 
 void crash_flying_vehicle(struct veh_data *veh, bool is_controlled_landing) {
   // Sanity check: Error if we've been given a non-flying vehicle.
-  if (!veh_is_aircraft(veh)) {
+  if (!veh_is_aircraft(veh) && veh->type != VEH_DRONE) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received non-flying vehicle %s (%ld) to crash_flying_vehicle()!", GET_VEH_NAME(veh), GET_VEH_VNUM(veh));
     return;
   }
