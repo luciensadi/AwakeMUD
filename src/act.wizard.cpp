@@ -1865,7 +1865,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
         int ammo_qty = GET_BULLETPANTS_AMMO_AMOUNT(k, weapon_idx, ammo_idx);
 
         if (ammo_qty) {
-          snprintf(ENDOF(ammo_buf), sizeof(ammo_buf) - strlen(ammo_buf), "  ^c%d^n %s\r\n", ammo_qty, get_ammo_representation(weapon_idx, ammo_idx, ammo_qty));
+          snprintf(ENDOF(ammo_buf), sizeof(ammo_buf) - strlen(ammo_buf), "  ^c%d^n %s\r\n", ammo_qty, get_ammo_representation(weapon_idx, ammo_idx, ammo_qty, k));
         }
       }
     }
@@ -7530,13 +7530,13 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
           if (ammo_qty < 0) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has NEGATIVE %d %s^n.\r\n",
                      ammo_qty,
-                     get_ammo_representation(weapon_idx, ammo_idx, ammo_qty));
+                     get_ammo_representation(weapon_idx, ammo_idx, ammo_qty, mob));
             printed = TRUE;
             issues++;
           }
           else if (ammo_qty > 200) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^ylarge amount^n of %s (%d > 200)^n.\r\n",
-                     get_ammo_representation(weapon_idx, ammo_idx, ammo_qty),
+                     get_ammo_representation(weapon_idx, ammo_idx, ammo_qty, mob),
                      ammo_qty);
             printed = TRUE;
             issues++;
@@ -7544,7 +7544,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
           else if (ammo_qty > 0 && ammo_idx != AMMO_NORMAL) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %d %s^n.\r\n",
                      ammo_qty,
-                     get_ammo_representation(weapon_idx, ammo_idx, ammo_qty));
+                     get_ammo_representation(weapon_idx, ammo_idx, ammo_qty, mob));
             printed = TRUE;
             issues++;
           }

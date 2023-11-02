@@ -27,7 +27,7 @@ extern bool update_bulletpants_ammo_quantity(struct char_data *ch, int weapon, i
 
 // Various helper funcs.
 bool print_one_weapontypes_ammo_to_string(struct char_data *ch, int wp, char *buf, int bufsize);
-const char *get_ammo_representation(int weapon, int ammotype, int quantity);
+const char *get_ammo_representation(int weapon, int ammotype, int quantity, struct char_data *ch);
 bool is_valid_pockets_put_command(char *mode_buf);
 bool is_valid_pockets_get_command(char *mode_buf);
 const char *get_ammobox_default_restring(struct obj_data *ammobox);

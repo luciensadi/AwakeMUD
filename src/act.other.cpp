@@ -1654,7 +1654,7 @@ ACMD(do_reload)
 
       int pocket_quantity = GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype);
       if (pocket_quantity <= 0) {
-        send_to_char(ch, "You don't have any %s in your pockets.\r\n", get_ammo_representation(weapontype, ammotype, 0));
+        send_to_char(ch, "You don't have any %s in your pockets.\r\n", get_ammo_representation(weapontype, ammotype, 0, ch));
         return;
       }
 
@@ -1690,11 +1690,11 @@ ACMD(do_reload)
               update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -max);
               send_to_char(ch, "You insert %d %s into %s.\r\n",
                            max,
-                           get_ammo_representation(weapontype, ammotype, max),
+                           get_ammo_representation(weapontype, ammotype, max, ch),
                            decapitalize_a_an(GET_OBJ_NAME(m)));
             }
           } else {
-            send_to_char(ch, "You don't have any %s in your pockets.\r\n", get_ammo_representation(weapontype, ammotype, 0));
+            send_to_char(ch, "You don't have any %s in your pockets.\r\n", get_ammo_representation(weapontype, ammotype, 0, ch));
           }
           return;
         }
@@ -1712,7 +1712,7 @@ ACMD(do_reload)
       obj_to_obj(ammo, m);
       send_to_char(ch, "You insert %d %s into %s.\r\n",
                    max,
-                   get_ammo_representation(weapontype, ammotype, max),
+                   get_ammo_representation(weapontype, ammotype, max, ch),
                    decapitalize_a_an(GET_OBJ_NAME(m)));
       return;
 
@@ -4798,7 +4798,7 @@ ACMD(do_ammo) {
       send_to_char(ch, "Primary: %d / %d %s.\r\n",
                    MIN(GET_WEAPON_MAX_AMMO(primary), GET_MAGAZINE_AMMO_COUNT(primary->contains)),
                    GET_OBJ_VAL(primary, 5),
-                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(primary), GET_MAGAZINE_AMMO_TYPE(primary->contains), GET_MAGAZINE_AMMO_COUNT(primary->contains))
+                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(primary), GET_MAGAZINE_AMMO_TYPE(primary->contains), GET_MAGAZINE_AMMO_COUNT(primary->contains), ch)
                  );
     } else {
       send_to_char(ch, "Primary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(primary));
@@ -4814,7 +4814,7 @@ ACMD(do_ammo) {
       send_to_char(ch, "Secondary: %d / %d %s.\r\n",
                    MIN(GET_WEAPON_MAX_AMMO(secondary), GET_OBJ_VAL(secondary->contains, 9)),
                    GET_WEAPON_MAX_AMMO(secondary),
-                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(secondary), GET_MAGAZINE_AMMO_TYPE(secondary->contains), GET_MAGAZINE_AMMO_COUNT(secondary->contains))
+                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(secondary), GET_MAGAZINE_AMMO_TYPE(secondary->contains), GET_MAGAZINE_AMMO_COUNT(secondary->contains), ch)
                  );
     } else {
       send_to_char(ch, "Secondary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(secondary));

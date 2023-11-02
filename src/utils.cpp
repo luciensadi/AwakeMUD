@@ -3604,7 +3604,8 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
                GET_MAGAZINE_AMMO_COUNT(obj->contains),
                get_ammo_representation(GET_MAGAZINE_BONDED_ATTACKTYPE(obj->contains),
                                        GET_MAGAZINE_AMMO_TYPE(obj->contains),
-                                       GET_MAGAZINE_AMMO_COUNT(obj->contains)));
+                                       GET_MAGAZINE_AMMO_COUNT(obj->contains),
+                                       NULL));
     } else {
       snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing: [");
       for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
@@ -3641,13 +3642,13 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
       // A box of ammunition.
       snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d %s",
                GET_AMMOBOX_QUANTITY(obj),
-               get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj)));
+               get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj), NULL));
       break;
     case ITEM_GUN_MAGAZINE:
       // A magazine.
       snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing %d %s",
                GET_MAGAZINE_AMMO_COUNT(obj),
-               get_ammo_representation(GET_MAGAZINE_BONDED_ATTACKTYPE(obj), GET_MAGAZINE_AMMO_TYPE(obj), GET_MAGAZINE_AMMO_COUNT(obj)));
+               get_ammo_representation(GET_MAGAZINE_BONDED_ATTACKTYPE(obj), GET_MAGAZINE_AMMO_TYPE(obj), GET_MAGAZINE_AMMO_COUNT(obj), NULL));
     default:
       break;
   }

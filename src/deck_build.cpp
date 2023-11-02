@@ -1149,7 +1149,10 @@ ACMD(do_progress)
 
     send_to_char(ch, "You are about %d%% of the way through making a batch of %s.\r\n", 
                  (int) percentage,
-                 get_ammo_representation(GET_AMMOBOX_WEAPON(GET_BUILDING(ch)), GET_AMMOBOX_TYPE(GET_BUILDING(ch)), GET_AMMOBOX_INTENDED_QUANTITY(GET_BUILDING(ch))));
+                 get_ammo_representation(GET_AMMOBOX_WEAPON(GET_BUILDING(ch)), 
+                                         GET_AMMOBOX_TYPE(GET_BUILDING(ch)), 
+                                         GET_AMMOBOX_INTENDED_QUANTITY(GET_BUILDING(ch)),
+                                         ch));
     return;
   } else
     send_to_char("You are not working on anything at this time.\r\n", ch);

@@ -1830,7 +1830,7 @@ void parse_mobile(File &in, long nr)
   // Load ammo.
   for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
     for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
-      snprintf(buf, sizeof(buf), "AMMO/%s", get_ammo_representation(wp, am, 0));
+      snprintf(buf, sizeof(buf), "AMMO/%s", get_ammo_representation(wp, am, 0, mob));
       GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am) = data.GetInt(buf, 0);
     }
 

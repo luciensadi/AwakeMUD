@@ -1640,7 +1640,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char(CH, "That's not a valid choice. Enter a choice between %d and %d: ", AMMO_NORMAL + 1, NUM_AMMOTYPES);
     else {
       d->edit_number3 = number;
-      send_to_char(CH, "How many %s should this NPC have? ", get_ammo_representation(d->edit_number2, d->edit_number3, 0));
+      send_to_char(CH, "How many %s should this NPC have? ", get_ammo_representation(d->edit_number2, d->edit_number3, 0, CH));
       d->edit_mode = MEDIT_AMMO_SELECT_QUANTITY;
     }
     break;
@@ -1825,7 +1825,7 @@ void write_mobs_to_disk(vnum_t zone_num)
               fprintf(fp, "[AMMO]\n");
             }
             fprintf(fp, "\t%s:\t%u\n",
-                        get_ammo_representation(wp, am, 0),
+                        get_ammo_representation(wp, am, 0, mob),
                         GET_BULLETPANTS_AMMO_AMOUNT(mob, wp, am));
           }
         }

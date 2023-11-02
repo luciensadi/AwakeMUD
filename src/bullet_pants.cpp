@@ -138,7 +138,7 @@ ACMD(do_pockets) {
         int ammotype = GET_AMMOBOX_TYPE(ammobox);
 
         if (GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype) >= MAX_NUMBER_OF_BULLETS_IN_PANTS) {
-          send_to_char(ch, "Your pockets are already full of %s.\r\n", get_ammo_representation(weapontype, ammotype, 0));
+          send_to_char(ch, "Your pockets are already full of %s.\r\n", get_ammo_representation(weapontype, ammotype, 0, ch));
           return;
         }
 
@@ -250,10 +250,10 @@ ACMD(do_pockets) {
 
       if (ammo_delta == 0) {
         send_to_char(ch, "You can't fit any more %s in your pockets!\r\n",
-                     get_ammo_representation(weapon, ammotype, quantity));
+                     get_ammo_representation(weapon, ammotype, quantity, ch));
       } else {
         send_to_char(ch, "Your pockets aren't that big! They can only take %d more %s.\r\n",
-                     ammo_delta, get_ammo_representation(weapon, ammotype, quantity));
+                     ammo_delta, get_ammo_representation(weapon, ammotype, quantity, ch));
       }
       return;
     }
@@ -285,7 +285,7 @@ ACMD(do_pockets) {
 
     if (!ammobox) {
       send_to_char(ch, "You don't have an ammo box containing %d %s.\r\n",
-                   quantity, get_ammo_representation(weapon, ammotype, quantity));
+                   quantity, get_ammo_representation(weapon, ammotype, quantity, ch));
       return;
     }
 
@@ -302,11 +302,11 @@ ACMD(do_pockets) {
     // Message char, and ditch box if it's empty and not customized.
     if (GET_AMMOBOX_QUANTITY(ammobox) <= 0 && (!ammobox->restring || strcmp(ammobox->restring, get_ammobox_default_restring(ammobox)) == 0)) {
       send_to_char(ch, "You take %d %s from %s and secrete them about your person, then junk the empty box.\r\n",
-                   quantity, get_ammo_representation(weapon, ammotype, quantity), GET_OBJ_NAME(ammobox));
+                   quantity, get_ammo_representation(weapon, ammotype, quantity, ch), GET_OBJ_NAME(ammobox));
       extract_obj(ammobox);
     } else {
       send_to_char(ch, "You take %d %s from %s and secrete them about your person.\r\n",
-                   quantity, get_ammo_representation(weapon, ammotype, quantity), GET_OBJ_NAME(ammobox));
+                   quantity, get_ammo_representation(weapon, ammotype, quantity, ch), GET_OBJ_NAME(ammobox));
     }
     return;
   }
@@ -321,7 +321,7 @@ ACMD(do_pockets) {
     }
 
     if (GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, ammotype) <= 0) {
-      send_to_char(ch, "You don't have any %s in your pockets.\r\n", get_ammo_representation(weapon, ammotype, 0));
+      send_to_char(ch, "You don't have any %s in your pockets.\r\n", get_ammo_representation(weapon, ammotype, 0, ch));
       return;
     }
 
@@ -329,10 +329,10 @@ ACMD(do_pockets) {
     if (GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, ammotype) < quantity) {
       quantity = GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, ammotype);
       send_to_char(ch, "You only have %d %s, so you package them up and put them into an ammo box.\r\n",
-                   quantity, get_ammo_representation(weapon, ammotype, quantity));
+                   quantity, get_ammo_representation(weapon, ammotype, quantity, ch));
     } else {
       send_to_char(ch, "You package up %d %s and put them into a spare ammo box.\r\n",
-                   quantity, get_ammo_representation(weapon, ammotype, quantity));
+                   quantity, get_ammo_representation(weapon, ammotype, quantity, ch));
     }
 
     // Generate an ammo box and give it to them.
@@ -496,25 +496,22 @@ bool is_valid_pockets_get_command(char *mode_buf) {
 }
 
 // Returns 'APDS heavy pistol rounds' or equivalent.
-const char *get_ammo_representation(int weapon, int ammotype, int quantity) {
+const char *get_ammo_representation(int weapon, int ammotype, int quantity, struct char_data *ch) {
   static char results_buf[500];
 
   if (weapon < START_OF_AMMO_USING_WEAPONS || weapon > END_OF_AMMO_USING_WEAPONS) {
-    snprintf(buf, sizeof(buf), "SYSERR: get_ammo_representation: %d is out of bounds for weapon type.", weapon);
-    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-    return "ERROR";
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_ammo_representation: %d is out of bounds for weapon type.", weapon);
+    return "ERROR_BAD_WEAPON_TYPE";
   }
 
   if (ammotype < 0 || ammotype >= NUM_AMMOTYPES) {
-    snprintf(buf, sizeof(buf), "SYSERR: get_ammo_representation: %d is out of bounds for ammo type.", ammotype);
-    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-    return "ERROR";
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_ammo_representation: %d is out of bounds for ammo type.", ammotype);
+    return "ERROR_BAD_AMMO_TYPE";
   }
 
   if (quantity < 0 || quantity > MAX_NUMBER_OF_BULLETS_IN_PANTS) {
-    snprintf(buf, sizeof(buf), "SYSERR: get_ammo_representation: %d is out of bounds for quantity.", quantity);
-    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-    return "ERROR";
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_ammo_representation: %d is out of bounds for quantity.", quantity);
+    return "ERROR_TOO_MANY";
   }
 
   // Special case: Certain shotgun rounds are slugs or darts, not shells.
@@ -694,7 +691,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
 
   // No ammo at all...
   if (have_ammo_quantity == 0) {
-    send_to_char(ch, "You don't have any %s in your pockets to reload %s with.\r\n", get_ammo_representation(weapontype, ammotype, 0), GET_OBJ_NAME(weapon));
+    send_to_char(ch, "You don't have any %s in your pockets to reload %s with.\r\n", get_ammo_representation(weapontype, ammotype, 0, ch), GET_OBJ_NAME(weapon));
     return FALSE;
   }
 
@@ -704,7 +701,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
       update_bulletpants_ammo_quantity(ch, weapontype, GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
       send_to_char(ch, "You stow %d %s back into your pockets.\r\n",
                    GET_MAGAZINE_AMMO_COUNT(magazine),
-                   get_ammo_representation(weapontype, GET_MAGAZINE_AMMO_TYPE(magazine), 0));
+                   get_ammo_representation(weapontype, GET_MAGAZINE_AMMO_TYPE(magazine), 0, ch));
     }
     GET_MAGAZINE_AMMO_TYPE(magazine) = ammotype;
     GET_MAGAZINE_AMMO_COUNT(magazine) = 0;
@@ -718,7 +715,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
     send_to_char(ch, "You %sreload %s with %s.\r\n",
                  CH_IN_COMBAT(ch) ? "combat-" : "",
                  GET_OBJ_NAME(weapon),
-                 get_ammo_representation(weapontype, ammotype, required_ammo_quantity));
+                 get_ammo_representation(weapontype, ammotype, required_ammo_quantity, ch));
     act("$n reloads $p.", TRUE, ch, weapon, NULL, TO_ROOM);
     update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -required_ammo_quantity);
 
@@ -726,7 +723,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
     GET_MAGAZINE_AMMO_COUNT(magazine) += required_ammo_quantity;
   } else {
     // Just put in whatever you have.
-    send_to_char(ch, "You reload %s with the last of your %s.\r\n", GET_OBJ_NAME(weapon), get_ammo_representation(weapontype, ammotype, 0));
+    send_to_char(ch, "You reload %s with the last of your %s.\r\n", GET_OBJ_NAME(weapon), get_ammo_representation(weapontype, ammotype, 0, ch));
     act("$n reloads $p.", TRUE, ch, weapon, NULL, TO_ROOM);
     update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -have_ammo_quantity);
     GET_MAGAZINE_AMMO_COUNT(magazine) += have_ammo_quantity;
@@ -793,11 +790,11 @@ bool ammobox_to_bulletpants(struct char_data *ch, struct obj_data *ammobox) {
 
   if (GET_AMMOBOX_QUANTITY(ammobox) == 0 && (!ammobox->restring || strcmp(ammobox->restring, get_ammobox_default_restring(ammobox)) == 0)) {
     send_to_char(ch, "You take %d %s from %s and secrete them about your person, then junk the empty box.\r\n",
-                 quantity, get_ammo_representation(weapontype, ammotype, quantity), GET_OBJ_NAME(ammobox));
+                 quantity, get_ammo_representation(weapontype, ammotype, quantity, ch), GET_OBJ_NAME(ammobox));
     extract_obj(ammobox);
   } else {
     send_to_char(ch, "You take %d %s from %s and secrete them about your person.\r\n",
-                 quantity, get_ammo_representation(weapontype, ammotype, quantity), GET_OBJ_NAME(ammobox));
+                 quantity, get_ammo_representation(weapontype, ammotype, quantity, ch), GET_OBJ_NAME(ammobox));
   }
 
   return TRUE;
