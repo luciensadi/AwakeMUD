@@ -64,7 +64,7 @@ extern int process_elevator(struct room_data *room, struct char_data *ch, int cm
 bool memory(struct char_data *ch, struct char_data *vict);
 int violates_zsp(int security, struct char_data *ch, int pos, struct char_data *mob);
 bool attempt_reload(struct char_data *mob, int pos);
-bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, int quest_id);
+bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t quest_id);
 void switch_weapons(struct char_data *mob, int pos);
 void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 bool mob_cannot_be_aggressive(struct char_data *ch);
@@ -703,7 +703,9 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
         continue;
 
       // Check for our usual conditions.
-      if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM, ch->mob_specials.quest_id) && (!GET_MOB_QUEST_CHAR_ID(ch) || !tveh->owner || tveh->owner == GET_MOB_QUEST_CHAR_ID(ch))) {
+      if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM, ch->mob_specials.quest_id) 
+          && (!GET_MOB_QUEST_CHAR_ID(ch) || !tveh->owner || tveh->owner == GET_MOB_QUEST_CHAR_ID(ch)))
+      {
         // Found a target, stop processing vehicles.
 #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf), "m_p_i_v_g: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
@@ -829,7 +831,9 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
       if (tveh->type != VEH_DRONE && !area_has_pc_occupants && !tveh->people && !tveh->rigger)
         continue;
 
-      if (vehicle_is_valid_mob_target(tveh, TRUE, ch->mob_specials.quest_id) && (!GET_MOB_QUEST_CHAR_ID(ch) || !tveh->owner || tveh->owner == GET_MOB_QUEST_CHAR_ID(ch))) {
+      if (vehicle_is_valid_mob_target(tveh, TRUE, ch->mob_specials.quest_id) 
+          && (!GET_MOB_QUEST_CHAR_ID(ch) || !tveh->owner || tveh->owner == GET_MOB_QUEST_CHAR_ID(ch)))
+      {
         // Found a valid target, stop looking.
 #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf), "m_p_i_v_a: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
@@ -942,7 +946,9 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
           continue;
 
         // Aggros don't care about road/garage status, so they act as if always alarmed.
-        if (vehicle_is_valid_mob_target(veh, TRUE, ch->mob_specials.quest_id) && (!GET_MOB_QUEST_CHAR_ID(ch) || !veh->owner || veh->owner == GET_MOB_QUEST_CHAR_ID(ch))) {
+        if (vehicle_is_valid_mob_target(veh, TRUE, ch->mob_specials.quest_id) 
+            && (!GET_MOB_QUEST_CHAR_ID(ch) || !veh->owner || veh->owner == GET_MOB_QUEST_CHAR_ID(ch))) 
+        {
           stop_fighting(ch);
 
           if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
@@ -1144,45 +1150,52 @@ bool mobact_process_helper(struct char_data *ch) {
   return false;
 }
 
-bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, int quest_id) {
+bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t quest_id) {
   struct room_data *room = veh->in_room;
 
   // Vehicle's not in a room? Skip.
   if (!room)
     return FALSE;
 
-  // We don't attack vehicles in their proper places-- unless we're alarmed.
-  if (!alarmed && (ROOM_FLAGGED(room, ROOM_ROAD) || ROOM_FLAGGED(room, ROOM_GARAGE)))
+  // We don't attack empty, uncontrolled vehicles.
+  if (!veh->people && !veh->rigger)
     return FALSE;
 
   // We don't attack destroyed vehicles.
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
     return FALSE;
 
+  // We don't attack vehicles in their proper places-- unless we're alarmed.
+  if (!alarmed && (ROOM_FLAGGED(room, ROOM_ROAD) || ROOM_FLAGGED(room, ROOM_GARAGE)))
+    return FALSE;
+
   if (quest_id) {
-    // We attack questor-owned vehicles that are occupied or rigged.
-    if (veh->owner == quest_id && (veh->people || veh->rigger))
+    // We attack questor-owned vehicles, no matter who's in them.
+    if (veh->owner == quest_id)
       return TRUE;
 
-    // We attack any vehicle rigged by our questor.
+    // We attack questor-rigged vehicles, no matter who's in them.
     if (veh->rigger && GET_IDNUM(veh->rigger) == quest_id)
       return TRUE;
 
-    // We attack questor-occupied vehicles.
+    // We attack questor-occupied vehicles, no matter who owns them.
     for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
       if (!IS_NPC(vict) && GET_IDNUM(vict) == quest_id)
         return TRUE;
-  } else {
-    // We attack player-owned vehicles that are occupied or rigged.
-    if (veh->owner > 0 && (veh->people || veh->rigger))
-      return TRUE;
 
-    // We attack player-occupied vehicles.
-    for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
-      if (!IS_NPC(vict))
-        return TRUE;
+    // Otherwise, no go.
+    return FALSE;
   }
 
+  // We attack player-owned vehicles, no matter who's in them.
+  if (veh->owner > 0)
+    return TRUE;
+
+  // We attack player-occupied vehicles.
+  for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
+    if (!IS_NPC(vict))
+      return TRUE;
+  
   // Otherwise, no good.
   return FALSE;
 }
@@ -1222,7 +1235,10 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
         continue;
 
       // If the room we're in is neither a road nor a garage, attack any vehicles we see. Never attack vehicles in a garage.
-      if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM && !ROOM_FLAGGED(room, ROOM_GARAGE) && !MOB_FLAGGED(ch, MOB_WIMPY), ch->mob_specials.quest_id)) {
+      if (vehicle_is_valid_mob_target(veh, 
+                                      GET_MOBALERT(ch) == MALERT_ALARM && !ROOM_FLAGGED(room, ROOM_GARAGE) && !MOB_FLAGGED(ch, MOB_WIMPY), 
+                                      ch->mob_specials.quest_id)) 
+      {
         stop_fighting(ch);
 
         if (MOB_FLAGGED(ch, MOB_INANIMATE)) {

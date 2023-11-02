@@ -1029,12 +1029,14 @@ void reward(struct char_data *ch, struct char_data *johnson)
   if (AFF_FLAGGED(ch, AFF_GROUP)) {
     int num_chars_to_give_award_to = 1;
     for (struct follow_type *f = ch->followers; f; f = f->next) {
-      if (follower_can_receive_reward(f->follower, ch, FALSE)) {
+      // Add the follower to the total OR message them about why they can't be split with.
+      if (follower_can_receive_reward(f->follower, ch, TRUE)) {
         num_chars_to_give_award_to++;
       }
     }
 
-    if (ch->master && follower_can_receive_reward(ch->master, ch, FALSE))
+    // Add their leader to the total OR message them about why they can't be split with.
+    if (ch->master && follower_can_receive_reward(ch->master, ch, TRUE))
       num_chars_to_give_award_to++;
 
     if (num_chars_to_give_award_to > 1) {
@@ -1044,8 +1046,8 @@ void reward(struct char_data *ch, struct char_data *johnson)
       send_to_char("You divide the payout amongst your group.\r\n", ch);
 
       for (struct follow_type *f = ch->followers; f; f = f->next) {
-        // Skip invalid folks while telling them why.
-        if (!follower_can_receive_reward(f->follower, ch, TRUE))
+        // Skip invalid folks WITHOUT sending a message.
+        if (!follower_can_receive_reward(f->follower, ch, FALSE))
           continue;
 
         gain_nuyen(f->follower, nuyen, NUYEN_INCOME_AUTORUNS);
@@ -1053,6 +1055,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
         send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
       }
 
+      // Skip invalid leaders WITHOUT sending a message.
       if (ch->master && follower_can_receive_reward(ch->master, ch, FALSE)) {
         gain_nuyen(ch->master, nuyen, NUYEN_INCOME_AUTORUNS);
         int gained = gain_karma(ch->master, karma, TRUE, FALSE, TRUE);
