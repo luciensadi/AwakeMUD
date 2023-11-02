@@ -5660,7 +5660,8 @@ bool deactivate_power(struct char_data *ch, int power)
       remove_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_ADEPT_POWER);
       break;
     case ADEPT_FLARE:
-      remove_vision_bit(ch, EYE_FLARECOMP, VISION_BIT_IS_ADEPT_POWER);
+      // Not actually a thing.
+      // remove_vision_bit(ch, EYE_FLARECOMP, VISION_BIT_IS_ADEPT_POWER);
       break;
     case ADEPT_IMAGE_MAG:
       AFF_FLAGS(ch).RemoveBit(AFF_VISION_MAG_3);
