@@ -57,6 +57,7 @@ struct board_info_type board_info[NUM_OF_BOARDS] =
 #ifdef USE_PRIVATE_CE_WORLD
     {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"},
     {10034, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq-rp"},
+    {6995, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.nerpcorp-scheduling"},
 #else
     {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"},
 #endif
