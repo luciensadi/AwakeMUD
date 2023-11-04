@@ -4932,7 +4932,7 @@ ACMD(do_set)
                { "edcon",           LVL_ADMIN, PC, BINARY }, // 60; 'edit rooms in a connected zone' (for low-level builders)
                { "notoriety",       LVL_ADMIN, PC, NUMBER },
                { "pg",              LVL_ADMIN,      PC,     BINARY },
-               { "rpe",      LVL_ADMIN, PC, BINARY },
+               { "rpe",      LVL_FIXER, PC, BINARY },
                { "quest",    LVL_VICEPRES, PC , BINARY },
                { "questor",      LVL_CONSPIRATOR, PC, BINARY }, // 65
                { "aspect",       LVL_ADMIN, PC, NUMBER},

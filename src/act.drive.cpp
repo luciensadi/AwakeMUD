@@ -2276,7 +2276,7 @@ void vehcust_parse(struct descriptor_data *d, char *arg)
           STATE(d) = CON_PLAYING;
           PLR_FLAGS(CH).RemoveBit(PLR_WRITING);
           d->edit_veh = NULL;
-          send_to_char("Your ride will be ready in 3 days.\r\n", CH);
+          send_to_char("Your ride will be ready within the next 15 minutes.\r\n", CH);
           break;
       }
       break;

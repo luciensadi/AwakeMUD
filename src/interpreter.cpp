@@ -844,7 +844,7 @@ struct command_info cmd_info[] =
     { "rlist"      , POS_DEAD    , do_rlist    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "room"       , POS_DEAD    , do_room     , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "roll"       , POS_DEAD    , do_dice     , 0, 0, BLOCKS_IDLE_REWARD },
-    { "rpe"        , POS_DEAD    , do_wizutil  , LVL_ADMIN, SCMD_RPE, ALLOWS_IDLE_REWARD },
+    { "rpe"        , POS_DEAD    , do_wizutil  , LVL_FIXER, SCMD_RPE, ALLOWS_IDLE_REWARD },
     { "rpetalk"    , POS_DEAD    , do_gen_comm , 0, SCMD_RPETALK, ALLOWS_IDLE_REWARD },
     { "redit"      , POS_DEAD    , do_redit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "redesc"     , POS_DEAD    , do_redesc   , LVL_FIXER, 0, BLOCKS_IDLE_REWARD },

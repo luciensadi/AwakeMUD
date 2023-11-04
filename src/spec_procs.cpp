@@ -4783,21 +4783,27 @@ SPECIAL(portable_gridguide)
 
 SPECIAL(painter)
 {
-  struct veh_data *veh = NULL;
+  struct veh_data *veh = NULL, *next_veh = NULL;
   struct char_data *painter = (struct char_data *) me;
   extern void vehcust_menu(struct descriptor_data *d);
-  if ((veh = world[real_room(painter->in_room->number + 1)].vehicles))
+
+  // Process completed paint jobs.
+  for (veh = world[real_room(painter->in_room->number + 1)].vehicles; veh; veh = next_veh) {
+    next_veh = veh->next_veh;
+
     if (veh->spare <= time(0)) {
       veh_from_room(veh);
       veh_to_room(veh, &world[real_room(painter->in_room->number)]);
       veh->spare = 0;
       if (world[real_room(painter->in_room->number)].people) {
-        snprintf(buf, sizeof(buf), "%s is wheeled out into the parking lot.", GET_VEH_NAME(veh));
+        snprintf(buf, sizeof(buf), "%s is wheeled out into the parking lot.", CAP(GET_VEH_NAME(veh)));
         act(buf, FALSE, world[real_room(painter->in_room->number)].people, 0, 0, TO_ROOM);
         act(buf, FALSE, world[real_room(painter->in_room->number)].people, 0, 0, TO_CHAR);
       }
       save_vehicles(FALSE);
     }
+  }
+    
   if (!CMD_IS("paint"))
     return FALSE;
   if (IS_NPC(ch)) {
@@ -4811,10 +4817,12 @@ SPECIAL(painter)
     send_to_char("(Syntax: ^WPAINT <target>^n)\r\n", ch);
     return TRUE;
   }
+  /*
   if (world[real_room(painter->in_room->number + 1)].vehicles) {
     do_say(painter, "We're already working on someone's ride, bring it back later.", 0, 0);
     return TRUE;
   }
+  */
   if (!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)))
     do_say(painter, "I don't see anything like that here.", 0, 0);
   else if (veh->owner != GET_IDNUM(ch))
@@ -4822,7 +4830,7 @@ SPECIAL(painter)
   else if (GET_NUYEN(ch) < PAINTER_COST)
     do_say(painter, "You don't have the nuyen for that.", 0, 0);
   else {
-    veh->spare = time(0) + (SECS_PER_MUD_DAY * 3);
+    veh->spare = time(0) + (SECS_PER_REAL_MIN * 10);
     ch->desc->edit_veh = veh;
     veh_from_room(veh);
     veh_to_room(veh, &world[real_room(painter->in_room->number + 1)]);
