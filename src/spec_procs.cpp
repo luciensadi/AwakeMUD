@@ -4827,6 +4827,8 @@ SPECIAL(painter)
     do_say(painter, "I don't see anything like that here.", 0, 0);
   else if (veh->owner != GET_IDNUM(ch))
     do_say(painter, "Bring me your OWN ride and I'll paint it.", 0, 0);
+  else if (veh->people)
+    do_say(painter, "Not with people in it.", 0, 0);
   else if (GET_NUYEN(ch) < PAINTER_COST)
     do_say(painter, "You don't have the nuyen for that.", 0, 0);
   else {
