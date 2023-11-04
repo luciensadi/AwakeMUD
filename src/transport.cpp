@@ -64,6 +64,7 @@ struct dest_data seattle_taxi_destinations[] =
   { "action", "electronics", "Action Computers", 32650, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "microdeck", "", "Auburn Microdeck Outlet", 29010, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "aztech", "pyramid",  "Aztechnology Pyramid", 30539, TAXI_DEST_TYPE_CORPORATE_PARK , TRUE },
+  { "renraku", "arcology", "Renraku Arcology", 32690, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
   { "auburn", "", "Auburn", 29011, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "beacon", "", "Beacon Mall Everett", 39253, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "bicson", "", "Bicson Biomedical", 39285, TAXI_DEST_TYPE_HOSPITALS, TRUE },
