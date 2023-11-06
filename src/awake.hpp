@@ -2259,7 +2259,7 @@ enum {
 /* Boards */
 
 #ifdef USE_PRIVATE_CE_WORLD
-#define NUM_OF_BOARDS           3
+#define NUM_OF_BOARDS           4
 #else
 #define NUM_OF_BOARDS           2 /* change if needed! */
 #endif

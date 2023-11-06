@@ -63,6 +63,7 @@ struct board_info_type board_info[NUM_OF_BOARDS] =
 #endif
     {26  , 0, 0, LVL_ADMIN, "etc/board.rp"}
   };
+  // Adding a board? Update NUM_OF_BOARDS in awake.hpp!
 
 
 char *msg_storage[INDEX_SIZE];
