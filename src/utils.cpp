@@ -3774,10 +3774,10 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount, const ch
 
   // Update the box's weight. We must fully subtract and re-add it due to miniscule ammo weight amounts.
   weight_change_object(ammobox, -GET_OBJ_WEIGHT(ammobox));
-  weight_change_object(ammobox, get_ammo_weight(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox)));
+  weight_change_object(ammobox, get_ammo_weight(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox), NULL, caller));
 
   // Calculate cost as count * multiplier (multiplier is per round)
-  GET_OBJ_COST(ammobox) = get_ammo_cost(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox));
+  GET_OBJ_COST(ammobox) = get_ammo_cost(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox), NULL, caller);
 
   // Update the carrier's carry weight.
   if (ammobox->carried_by) {

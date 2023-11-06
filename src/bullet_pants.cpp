@@ -277,7 +277,7 @@ ACMD(do_pockets) {
       }
 
       // Make sure they can carry it. We don't do this check for already-carried boxes.
-      if (ammobox && (IS_CARRYING_W(ch) + get_ammo_weight(weapon, ammotype, quantity)) > CAN_CARRY_W(ch)) {
+      if (ammobox && (IS_CARRYING_W(ch) + get_ammo_weight(weapon, ammotype, quantity, ch)) > CAN_CARRY_W(ch)) {
         send_to_char("You can't carry that much weight.\r\n", ch);
         return;
       }
@@ -482,7 +482,7 @@ float get_bulletpants_weight(struct char_data *ch) {
 
   for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
     for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++)
-      weight += get_ammo_weight(wp, am, GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am));
+      weight += get_ammo_weight(wp, am, GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am), ch);
 
   return weight;
 }
@@ -829,19 +829,19 @@ struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapont
   return ammobox;
 }
 
-float get_ammo_weight(int weapontype, int ammotype, int qty) {
+float get_ammo_weight(int weapontype, int ammotype, int qty, struct char_data *ch, const char *callstr) {
   if (qty < 0) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got negative qty %d to get_ammo_weight!", qty);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got negative qty %d to get_ammo_weight! (%s)", qty, callstr ? callstr : "");
     return 0;
   }
 
   if (weapontype < START_OF_AMMO_USING_WEAPONS || weapontype > END_OF_AMMO_USING_WEAPONS) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid weapontype %d to get_ammo_weight!", weapontype);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid weapontype %d to get_ammo_weight! (%s)", weapontype, callstr ? callstr : "");
     return 0;
   }
 
   if (ammotype < AMMO_NORMAL || ammotype >= NUM_AMMOTYPES) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid ammotype %d to get_ammo_weight!", ammotype);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid ammotype %d to get_ammo_weight! (%s)", ammotype, callstr ? callstr : "");
     return 0;
   }
   
@@ -854,19 +854,19 @@ float get_ammo_weight(int weapontype, int ammotype, int qty) {
   return ammo_type[ammotype]._weight * qty;
 }
 
-int get_ammo_cost(int weapontype, int ammotype, int qty) {
+int get_ammo_cost(int weapontype, int ammotype, int qty, struct char_data *ch, const char *callstr) {
   if (qty <= 0) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got negative qty %d to get_ammo_cost!", qty);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got negative qty %d to get_ammo_cost! (%s)", qty, callstr ? callstr : "");
     return 0;
   }
 
   if (weapontype < START_OF_AMMO_USING_WEAPONS || weapontype > END_OF_AMMO_USING_WEAPONS) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid weapontype %d to get_ammo_cost!", weapontype);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid weapontype %d to get_ammo_cost! (%s)", weapontype, callstr ? callstr : "");
     return 0;
   }
 
   if (ammotype < AMMO_NORMAL || ammotype >= NUM_AMMOTYPES) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid ammotype %d to get_ammo_cost!", ammotype);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid ammotype %d to get_ammo_cost! (%s)", ammotype, callstr ? callstr : "");
     return 0;
   }
   

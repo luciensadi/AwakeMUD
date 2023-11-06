@@ -33,7 +33,7 @@ bool is_valid_pockets_get_command(char *mode_buf);
 const char *get_ammobox_default_restring(struct obj_data *ammobox);
 bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapon, int ammotype);
 
-float get_ammo_weight(int weapontype, int ammotype, int qty);
-int get_ammo_cost(int weapontype, int ammotype, int qty);
+float get_ammo_weight(int weapontype, int ammotype, int qty, struct char_data *caller, const char *callstr=NULL);
+int get_ammo_cost(int weapontype, int ammotype, int qty, struct char_data *caller, const char *callstr=NULL);
 
 #endif
