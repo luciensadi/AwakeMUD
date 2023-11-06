@@ -2757,7 +2757,7 @@ void process_upload(struct matrix_icon *persona)
   if (persona && persona->decker && persona->decker->deck) {
     for (struct obj_data *soft = persona->decker->deck->contains; soft; soft = soft->next_content) {
       // Sanity check: Only upload deck accessories.
-      if (GET_OBJ_TYPE(soft) != ITEM_DECK_ACCESSORY)
+      if (GET_OBJ_TYPE(soft) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
         continue;
 
       if (GET_DECK_ACCESSORY_FILE_REMAINING(soft) > 0)
