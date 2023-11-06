@@ -295,7 +295,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
                 // Copy over our changes.
                 d->edit_apartment_original->clone_from(APT);
 
-                if (APT->get_rent_cost() != old_rent) {
+                if (APT->get_rent_cost() != old_rent && paid_secs > 0) {
                   int old_rent_per_day = old_rent / 30;
                   int old_paid_days = paid_secs / SECS_PER_REAL_DAY;
                   int old_nuyen_spent = old_rent_per_day * old_paid_days;
