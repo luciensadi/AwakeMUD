@@ -236,6 +236,14 @@ void load_messages(void)
   fclose(fl);
 }
 
+void resolve_docwagon_upped(struct char_data *victim) {
+  if (!PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
+      alert_player_doctors_of_contract_withdrawal(victim, FALSE);
+    }
+    victim->sent_docwagon_messages_to.clear();
+    victim->received_docwagon_ack_from.clear();
+}
+
 #define MAKE_MORTALLY_WOUNDED(victim) {GET_POS(victim) = POS_MORTALLYW; AFF_FLAGS(victim).RemoveBit(AFF_PRONE);}
 bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 {
@@ -245,18 +253,20 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 
   // Are they stunned?
   if ((GET_MENTAL(victim) < 100) && (GET_PHYSICAL(victim) >= 100)) {
-    if (!IS_NPC(victim)) {
-      if (was_morted && !PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
-        alert_player_doctors_of_contract_withdrawal(victim, FALSE);
-      }
-      victim->sent_docwagon_messages_to.clear();
-      victim->received_docwagon_ack_from.clear();
+    if (was_morted && !IS_NPC(victim)) {
+      resolve_docwagon_upped(victim);
     }
 
     // Pain editor prevents stunned condition.
-    for (struct obj_data *bio = victim->bioware; bio; bio = bio->next_content)
-      if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio))
+    for (struct obj_data *bio = victim->bioware; bio; bio = bio->next_content) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
+        // Ensure they're not trapped in mort status by an active pain editor.
+        GET_POS(victim) = MAX(POS_LYING, GET_POS(victim));
         return FALSE;
+      }
+    }
+
+    // Set them to stunned.
     GET_POS(victim) = POS_STUNNED;
     GET_INIT_ROLL(victim) = 0;
   }
@@ -268,12 +278,8 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 
   // They were potentially morted and now are healed.
   else if (GET_PHYSICAL(victim) >= 100) {
-    if (!IS_NPC(victim)) {
-      if (was_morted && !PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
-        alert_player_doctors_of_contract_withdrawal(victim, FALSE);
-      }
-      victim->sent_docwagon_messages_to.clear();
-      victim->received_docwagon_ack_from.clear();
+    if (was_morted && !IS_NPC(victim)) {
+      resolve_docwagon_upped(victim);
     }
 
     GET_POS(victim) = POS_STANDING;
