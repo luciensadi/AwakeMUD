@@ -768,6 +768,7 @@ struct dest_data *get_dest_data_list_for_zone(int zone_num) {
     case 29:
     case 30:
     case 32:
+    case 37:
     case 38:
     case 40:
     case 42:
@@ -777,18 +778,27 @@ struct dest_data *get_dest_data_list_for_zone(int zone_num) {
     case 74:
     case 81:
     case 91:
+    case 95:
+    case 124: // Triple Tree
     case 143:
+    case 158:
     case 194:
+    case 198:
+    case 226:
     case 253:
+    case 254:
     case 290:
     case 293:
     case 301:
     case 305:
     case 325:
     case 392:
+    case 398:
+    case 629:
     case 703: // Star Sapphire
     case 707:
     case 725:
+    case 985:
       return seattle_taxi_destinations;
     case 27:
     case 146:
