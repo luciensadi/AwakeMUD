@@ -3135,8 +3135,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         vict = get_char_room_vis(ch, arg);
   }
 
-  if (!check_spell_victim(ch, vict, spell, arg))
-    return;
+  if (spell != SPELL_LIGHT && spell != SPELL_SHADOW && spell != SPELL_POLTERGEIST && spell != SPELL_ICESHEET) {
+    if (!check_spell_victim(ch, vict, spell, arg))
+      return;
+  }
 
   raw_cast_manipulation_spell(ch, vict, spell, force, mob, -1, basedamage);
 }

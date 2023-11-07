@@ -2199,18 +2199,16 @@ char *two_arguments(char *argument, char *first_arg, char *second_arg)
 int is_abbrev(const char *arg1, const char *arg2)
 {
   if (!arg1 || !arg2) {
-    char temp_buf[500];
-    snprintf(temp_buf, sizeof(temp_buf), "SYSERR: Received null arg in is_abbrev (arg1 = %s, arg2 = %s)", arg1, arg2);
-    mudlog(temp_buf, NULL, LOG_SYSLOG, TRUE);
-    return 0;
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received null arg in is_abbrev (arg1 = %s, arg2 = %s)", arg1 ? arg1 : "<NULL>", arg2 ? arg2 : "<NULL>");
+    return FALSE;
   }
 
   if (!*arg1 || !*arg2)
-    return 0;
+    return FALSE;
 
   for (; *arg1 && *arg2; arg1++, arg2++)
     if (LOWER(*arg1) != LOWER(*arg2))
-      return 0;
+      return FALSE;
 
   return !*arg1;
 }
