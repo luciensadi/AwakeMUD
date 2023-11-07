@@ -255,7 +255,7 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
       continue;
     }
 
-    if (isname(argument, get_char_representation_for_docwagon(d->character, ch))) {
+    if (keyword_appears_in_char(argument, ch)) {
       send_to_char("You squint at the tiny screen on your DocWagon receiver to try and get a better idea of where your client is...\r\n", ch);
 
       // Show them the room name, room description, and exits.
