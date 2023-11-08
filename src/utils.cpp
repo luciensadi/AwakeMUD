@@ -477,7 +477,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
 
   // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here.
   if (SEES_ASTRAL(ch)) {
-    if (!skill_is_magic && IS_PERCEIVING(ch)) {
+    if (!skill_is_magic && IS_PERCEIVING(ch) && !IS_GHOUL(ch)) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
       WRITEOUT_MSG("Perceiving", 2);
