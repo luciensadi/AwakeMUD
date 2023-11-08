@@ -2127,9 +2127,9 @@ int racial_attribute_modifiers[][6] = {
   {  3, -1,  2, -1, -1,  1  }, // satyr
   {  0,  2,  0,  2,  0,  0  },  // night one
   {  -1,  1,  -1,  3,  0,  0  },  // dryad
-  {  0,  0,  1,  0,  0,  0  },  // western dragon
-  {  0,  0,  1,  0,  0,  0  },  // eastern dragon
-  {  0,  0,  1,  0,  0,  0  },  // feathered serpent
+  {  0,  0,  0,  0,  0,  0  },  // western dragon
+  {  0,  0,  0,  0,  0,  0  },  // eastern dragon
+  {  0,  0,  0,  0,  0,  0  },  // feathered serpent
   {  0,  0,  0,  0,  0,  0  }, // human (drake)
   {  1,  0,  2,  0,  0,  1  }, // dwarf (drake)
   {  0,  1,  0,  2,  0,  0  }, // elf (drake)
