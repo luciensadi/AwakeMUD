@@ -113,16 +113,16 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
   if ((shop_table[shop_nr].races.IsSet(RACE_HUMAN) && GET_RACE(ch) == RACE_HUMAN) ||
       (shop_table[shop_nr].races.IsSet(RACE_ELF) && (GET_RACE(ch) == RACE_ELF ||
           GET_RACE(ch) == RACE_WAKYAMBI || GET_RACE(ch) == RACE_NIGHTONE ||
-          GET_RACE(ch) == RACE_DRYAD)) ||
+          GET_RACE(ch) == RACE_DRYAD || GET_RACE(ch) == RACE_DRAKE_ELF)) ||
       (shop_table[shop_nr].races.IsSet(RACE_DWARF) && (GET_RACE(ch) == RACE_DWARF ||
           GET_RACE(ch) == RACE_KOBOROKURU || GET_RACE(ch) == RACE_MENEHUNE ||
-          GET_RACE(ch) == RACE_GNOME)) ||
+          GET_RACE(ch) == RACE_GNOME || GET_RACE(ch) == RACE_DRAKE_DWARF)) ||
       (shop_table[shop_nr].races.IsSet(RACE_ORK) && (GET_RACE(ch) == RACE_ORK ||
           GET_RACE(ch) == RACE_ONI || GET_RACE(ch) == RACE_SATYR ||
-          GET_RACE(ch) == RACE_HOBGOBLIN || GET_RACE(ch) == RACE_OGRE)) ||
+          GET_RACE(ch) == RACE_HOBGOBLIN || GET_RACE(ch) == RACE_OGRE || GET_RACE(ch) == RACE_DRAKE_ORK)) ||
       (shop_table[shop_nr].races.IsSet(RACE_TROLL) && (GET_RACE(ch) == RACE_TROLL ||
           GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_GIANT ||
-          GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_FOMORI)))
+          GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_DRAKE_TROLL)))
   {
     snprintf(buf, sizeof(buf), "%s We don't sell to your type here.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -378,6 +378,10 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE) {
     int esscost = GET_CYBERWARE_ESSENCE_COST(ware);
     if (GET_TOTEM(recipient) == TOTEM_EAGLE)
+      esscost *= 2;
+    if (GET_RACE(recipient) >= RACE_GHOUL_HUMAN && GET_RACE(recipient) <= RACE_GHOUL_TROLL)
+      esscost *= 2;
+    if (GET_RACE(recipient) >= RACE_DRAKE_HUMAN && GET_RACE(recipient) <= RACE_DRAKE_TROLL)
       esscost *= 2;
 
     // Check to see if the operation is even possible with their current essence / hole.
