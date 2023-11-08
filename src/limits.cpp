@@ -934,12 +934,7 @@ void point_update(void)
       }
 #endif
 
-      if (IS_GHOUL(i))
-        if (!PLR_FLAGGED(i, PLR_PERCEIVE)) {
-          PLR_FLAGS(i).SetBit(PLR_PERCEIVE);
-      }
-
-      if (IS_DRAGON(i))
+      if (IS_GHOUL(i) || IS_DRAGON(i))
         if (!PLR_FLAGGED(i, PLR_PERCEIVE)) {
           PLR_FLAGS(i).SetBit(PLR_PERCEIVE);
       }
