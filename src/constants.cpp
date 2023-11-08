@@ -2084,7 +2084,24 @@ int racial_limits[][2][6] = {
                               {{ 9, 6, 8, 6, 5, 6 },{ 14, 9, 12, 9, 8, 9 }}, // ogre
                               {{ 10, 5, 9, 5, 5, 6 },{ 15, 8, 14, 8, 8, 9 }},  // minotaur
                               {{ 9, 5, 8, 5, 5, 7 },{ 14, 8, 12, 8, 8, 11 }}, // satyr
-                              {{ 6, 8, 6, 8, 6, 6 },{ 9, 12, 9, 12, 9, 9 }} // night one
+                              {{ 6, 8, 6, 8, 6, 6 },{ 9, 12, 9, 12, 9, 9 }}, // night one
+                              {{ 5, 7, 5, 9, 6, 6 },{ 8, 11, 8, 14, 9, 9 }}, // dryad
+                              {{ 15, 7, 40, 8, 8, 8 },{ 23, 11, 60, 12, 12, 12 }}, // western dragon
+                              {{ 14, 8, 35, 9, 8, 8 },{ 21, 12, 52, 14, 12, 12 }}, // eastern dragon
+                              {{ 12, 6, 30, 8, 8, 8 },{ 23, 9, 45, 12, 12, 12 }}, // feathered serpent
+                              {{ 6, 6, 6, 6, 6, 6 },{ 9, 9, 9, 9, 9, 9 }}, // drake (human)
+                              {{ 7, 6, 8, 6, 6, 7 },{ 11, 9, 12, 9, 9, 11 }}, // drake (dwarf)
+                              {{ 6, 7, 6, 8, 6, 6 },{ 9, 11, 9, 12, 9, 9 }}, // drake (elf)
+                              {{ 9, 6, 8, 5, 5, 6 },{ 14, 9 , 12, 8, 8, 9 }}, // drake (ork)
+                              {{ 11, 5, 10, 4, 4, 6 },{ 17, 8, 15, 6, 6, 9 }}, // drake (troll)
+                              {{ 8, 6, 7, 5, 5, 6 },{ 12, 9, 11, 8, 8, 9 }}, // ghoul (human)
+                              {{ 9, 6, 9, 5, 5, 7 },{ 14, 9, 13, 8, 8, 11 }}, // ghoul (dwarf)
+                              {{ 8, 7, 7, 7, 5, 6 },{ 12, 11, 11, 11, 8, 9 }}, // ghoul (elf)
+                              {{ 11, 6, 9, 4, 4, 6 },{ 17, 9, 13, 6, 6, 9 }}, // ghoul (ork)
+                              {{ 13, 5, 11, 3, 3, 6 },{ 19, 8, 17, 5, 5, 9 }}, // ghoul (troll)
+                              {{ 0, 0, 0, 0, 0, 0 },{ 0, 0, 0, 0, 0, 0 }}, // elemental
+                              {{ 0, 0, 0, 0, 0, 0 },{ 0, 0, 0, 0, 0, 0 }}, // spirit
+                              {{ 0, 0, 0, 0, 0, 0 },{ 0, 0, 0, 0, 0, 0 }} // PC conjured elemental
                             };
 
 int racial_attribute_modifiers[][6] = {
@@ -2108,7 +2125,24 @@ int racial_attribute_modifiers[][6] = {
   {  3,  0,  2,  0, -1,  0  }, // ogre
   {  4, -1,  3, -1, -1,  0  }, // minotaur
   {  3, -1,  2, -1, -1,  1  }, // satyr
-  {  0,  2,  0,  2,  0,  0  }  // night one
+  {  0,  2,  0,  2,  0,  0  },  // night one
+  {  -1,  1,  -1,  3,  0,  0  },  // dryad
+  {  0,  0,  1,  0,  0,  0  },  // western dragon
+  {  0,  0,  1,  0,  0,  0  },  // eastern dragon
+  {  0,  0,  1,  0,  0,  0  },  // feathered serpent
+  {  0,  0,  0,  0,  0,  0  }, // human (drake)
+  {  1,  0,  2,  0,  0,  1  }, // dwarf (drake)
+  {  0,  1,  0,  2,  0,  0  }, // elf (drake)
+  {  3,  0,  2, -1, -1,  0  }, // ork (drake)
+  {  5, -1,  4, -2, -2,  0  }, // troll (drake)
+  {  2,  0,  1,  -1,  -1,  1  }, // human (ghoul)
+  {  3,  0,  3,  -1,  -1,  2  }, // dwarf (ghoul)
+  {  2,  1,  1,  1,  -1,  1  }, // elf (ghoul)
+  {  5,  0,  3, -2, -2,  1  }, // ork (ghoul)
+  {  7, -1,  5, -3, -3,  1  }, // troll (ghoul)
+  {  0,  0,  0,  0,  0,  0  }, // elemental
+  {  0,  0,  0,  0,  0,  0  }, // spirit
+  {  0,  0,  0,  0,  0,  0  } // PC conjured elemental
 };
 
 const char *attributes[] =
@@ -2975,6 +3009,18 @@ const char *pc_race_types[] =
     "Night-One",
     "Dryad",
     "Dragon",
+    "Dragon",
+    "Serpent",
+    "Drake",
+    "Drake",
+    "Drake",
+    "Drake",
+    "Drake",
+    "Ghoul",
+    "Ghoul",
+    "Ghoul",
+    "Ghoul",
+    "Ghoul",
     "Elemental",
     "Spirit",
     "Conjured Elemental",
@@ -3002,9 +3048,21 @@ const char *pc_race_types_decap[] =
     "ogre",
     "minotaur",
     "satyr",
-    "night-One",
+    "night-one",
     "dryad",
     "dragon",
+    "dragon",
+    "serpent",
+    "drake",
+    "drake",
+    "drake",
+    "drake",
+    "drake",
+    "ghoul",
+    "ghoul",
+    "ghoul",
+    "ghoul",
+    "ghoul",
     "elemental",
     "spirit",
     "conjured elemental",
