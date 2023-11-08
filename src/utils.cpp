@@ -514,6 +514,18 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
     buf_mod(rbuf, rbuf_len, "Sunlight", 1);
     WRITEOUT_MSG("Sunlight Allergy", 1);
   }
+  if (IS_GHOUL(ch) && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch) && weather_info.sky < SKY_RAINING)
+  {
+    base_target += 1;
+    buf_mod(rbuf, rbuf_len, "Sunlight", 1);
+    WRITEOUT_MSG("Sunlight Allergy", 1);
+  }
+  if (GET_RACE(ch) == RACE_DRYAD)
+    if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS && ROOM_ROAD) || SECT(get_ch_in_room(ch)) == SPIRIT_HEARTH && SPIRIT_CITY)
+  {
+    base_target += 1;
+    buf_mod(rbuf, rbuf_len, "Urban", 1);
+  }
   if (temp_room->poltergeist[0] && !IS_ASTRAL(ch) && !MOB_FLAGGED(ch, MOB_DUAL_NATURE))
   {
     base_target += 2;
