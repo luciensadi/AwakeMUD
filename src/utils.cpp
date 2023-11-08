@@ -475,9 +475,9 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
     WRITEOUT_MSG("Concentration Penalty (Drug-Induced)", GET_CONCENTRATION_TARGET_MOD(ch));
   }
 
-  // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here.
+  // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here. Ghouls/Dragons excluded. - Vile
   if (SEES_ASTRAL(ch)) {
-    if (!skill_is_magic && IS_PERCEIVING(ch) && !IS_GHOUL(ch)) {
+    if (!skill_is_magic && IS_PERCEIVING(ch) && !IS_GHOUL(ch) && !IS_DRAGON(ch)) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
       WRITEOUT_MSG("Perceiving", 2);
