@@ -209,14 +209,26 @@
 #define RACE_SATYR                 18
 #define RACE_NIGHTONE              19
 #define RACE_DRYAD                 20
-#define RACE_DRAGON                21
-#define RACE_ELEMENTAL             22
-#define RACE_SPIRIT                23
-#define RACE_PC_CONJURED_ELEMENTAL 24
-#define NUM_RACES                  24  /* This must be the NUMBER of races */
+#define RACE_WESTERN_DRAGON        21
+#define RACE_EASTERN_DRAGON        22
+#define RACE_FEATHERED_SERPENT     23
+#define RACE_DRAKE_HUMAN           24
+#define RACE_DRAKE_DWARF           25
+#define RACE_DRAKE_ELF             26
+#define RACE_DRAKE_ORK             27
+#define RACE_DRAKE_TROLL           28
+#define RACE_GHOUL_HUMAN           29
+#define RACE_GHOUL_ELF             30
+#define RACE_GHOUL_DWARF           31
+#define RACE_GHOUL_ORK             32
+#define RACE_GHOUL_TROLL           33
+#define RACE_ELEMENTAL             34
+#define RACE_SPIRIT                35
+#define RACE_PC_CONJURED_ELEMENTAL 36
+#define NUM_RACES                  36  /* This must be the NUMBER of races */
 
 #define MINIMUM_VALID_PLAYER_RACE  2
-#define MAXIMUM_VALID_PLAYER_RACE  19
+#define MAXIMUM_VALID_PLAYER_RACE  33
 
 /* level definitions */
 
