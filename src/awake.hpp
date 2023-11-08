@@ -218,8 +218,8 @@
 #define RACE_DRAKE_ORK             27
 #define RACE_DRAKE_TROLL           28
 #define RACE_GHOUL_HUMAN           29
-#define RACE_GHOUL_ELF             30
-#define RACE_GHOUL_DWARF           31
+#define RACE_GHOUL_DWARF           30
+#define RACE_GHOUL_ELF             31
 #define RACE_GHOUL_ORK             32
 #define RACE_GHOUL_TROLL           33
 #define RACE_ELEMENTAL             34
