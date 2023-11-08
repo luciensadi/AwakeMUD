@@ -934,6 +934,16 @@ void point_update(void)
       }
 #endif
 
+      if (IS_GHOUL(i))
+        if (!PLR_FLAGGED(i, PLR_PERCEIVE)) {
+          PLR_FLAGS(i).SetBit(PLR_PERCEIVE);
+      }
+
+      if (IS_DRAGON(i))
+        if (!PLR_FLAGGED(i, PLR_PERCEIVE)) {
+          PLR_FLAGS(i).SetBit(PLR_PERCEIVE);
+      }
+
       // Temp magic loss (banishing) regains 1/hour, SR3 pg 189
       if (GET_TEMP_MAGIC_LOSS(i) > 0) {
         GET_TEMP_MAGIC_LOSS(i)--;
