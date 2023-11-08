@@ -2239,8 +2239,14 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     }
   }
 
-  if (ch->in_room->poltergeist[0] > 0)
-    send_to_char("^cAn invisible force is whipping small objects around the area.^n\r\n", ch);
+  if (ch->in_room->poltergeist[0] > 0) {
+    if (!number(0, 10000)) {
+      // Poultrygeist joke line.  Don't @ me about this.
+      send_to_char("^cAn invisible force is tumbling chickens about in a ghostly manner.^n\r\n", ch);
+    } else {
+      send_to_char("^cAn invisible force is whipping small objects around the area.^n\r\n", ch);
+    }
+  }
   if (ch->in_room->icesheet[0] > 0)
     send_to_char("^CIce covers the floor.^n\r\n", ch);
   if (ch->in_room->silence[0] > 0)
