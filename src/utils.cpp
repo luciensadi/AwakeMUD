@@ -305,7 +305,7 @@ int light_level(struct room_data *room)
   // Outdoor city rooms (roads, etc) are impacted by ambient light.
   if (room->sector_type == SPIRIT_CITY) {
     // It's daytime. No changes.
-    if ((time_info.hours > 6 && time_info.hours < 19)) {
+    if ((time_ > 6 && time_ < 19)) {
       return candidate_light_level;
     }
     // It's nighttime, and this area is flagged as having no light.
@@ -508,13 +508,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
 
   base_target += GET_TARGET_MOD(ch);
   buf_mod(rbuf, rbuf_len, "GET_TARGET_MOD", GET_TARGET_MOD(ch) );
-  if (GET_RACE(ch) == RACE_NIGHTONE && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch) && weather_info.sky < SKY_RAINING)
-  {
-    base_target += 1;
-    buf_mod(rbuf, rbuf_len, "Sunlight", 1);
-    WRITEOUT_MSG("Sunlight Allergy", 1);
-  }
-  if (IS_GHOUL(ch) && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch) && weather_info.sky < SKY_RAINING)
+  if ((GET_RACE(ch) == RACE_NIGHTONE || IS_GHOUL(ch)) && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch) && weather_info.sky < SKY_RAINING)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_len, "Sunlight", 1);
