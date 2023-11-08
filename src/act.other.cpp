@@ -4866,7 +4866,7 @@ ACMD(do_syspoints) {
 
     if (is_abbrev(arg, "transfer") || is_abbrev(arg, "send")) {
       // No target? Message.
-      FAILURE_CASE(!*buf, "To transfer your syspoints to another character you control, use SYSPOINTS TRANSFER <target> <amount> <reason>.");
+      FAILURE_CASE(!*buf, "To transfer your syspoints to another character ^Wyou control^n, use SYSPOINTS TRANSFER <target> <amount> <reason>.");
 
 
       // Separate out the character name and amount fields.
@@ -4964,6 +4964,9 @@ ACMD(do_syspoints) {
 
       // Save the result on the actor.
       playerDB.SaveChar(ch);
+
+      send_to_char(ch, "Done. Please note that this command is only for transferring to ^Wyour own alts^n. If the character you transferred to is not your alt, please request the points back, or contact staff for next steps.\r\n");
+      return;
     }
 
     // Restring mode.
