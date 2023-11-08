@@ -3255,6 +3255,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
   case RACE_DRYAD:
   case RACE_ELF:
   case RACE_NIGHTONE:
+  case RACE_GHOUL_ELF:
+  case RACE_DRAKE_ELF:
     if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOELF)) {
       if (print_messages)
         send_to_char(ch, "%s isn't sized right for elves.\r\n", capitalize(GET_OBJ_NAME(obj)));
@@ -3265,6 +3267,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
   case RACE_MENEHUNE:
   case RACE_GNOME:
   case RACE_KOBOROKURU:
+  case RACE_GHOUL_DWARF:
+  case RACE_DRAKE_DWARF:
     if (IS_OBJ_STAT(obj, ITEM_EXTRA_NODWARF)) {
       if (print_messages)
         send_to_char(ch, "%s isn't sized right for dwarfs.\r\n", capitalize(GET_OBJ_NAME(obj)));
@@ -3276,6 +3280,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
   case RACE_GIANT:
   case RACE_FOMORI:
   case RACE_CYCLOPS:
+  case RACE_GHOUL_TROLL:
+  case RACE_DRAKE_TROLL:
     if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOTROLL)) {
       if (print_messages)
         send_to_char(ch, "%s isn't sized right for trolls.\r\n", capitalize(GET_OBJ_NAME(obj)));
@@ -3283,6 +3289,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
     }
     break;
   case RACE_HUMAN:
+  case RACE_GHOUL_HUMAN:
+  case RACE_DRAKE_HUMAN:
     if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOHUMAN)) {
       if (print_messages)
         send_to_char(ch, "%s isn't sized right for humans.\r\n", capitalize(GET_OBJ_NAME(obj)));
@@ -3293,6 +3301,8 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
   case RACE_ORK:
   case RACE_OGRE:
   case RACE_HOBGOBLIN:
+  case RACE_GHOUL_ORK:
+  case RACE_DRAKE_ORK:
     if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOORK)) {
       if (print_messages)
         send_to_char(ch, "%s isn't sized right for orks.\r\n", capitalize(GET_OBJ_NAME(obj)));
@@ -4262,6 +4272,8 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     case RACE_DRYAD:
     case RACE_ELF:
     case RACE_NIGHTONE:
+    case RACE_GHOUL_ELF:
+    case RACE_DRAKE_ELF:
       if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOELF)) {
         act("Draw check: Skipping $p, racial check failure (elf).", FALSE, ch, contents, 0, TO_ROLLS);
         return 0;
@@ -4271,6 +4283,8 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     case RACE_MENEHUNE:
     case RACE_GNOME:
     case RACE_KOBOROKURU:
+    case RACE_GHOUL_DWARF:
+    case RACE_DRAKE_DWARF:
       if (IS_OBJ_STAT(contents, ITEM_EXTRA_NODWARF)) {
         act("Draw check: Skipping $p, racial check failure (dwarf).", FALSE, ch, contents, 0, TO_ROLLS);
         return 0;
@@ -4281,12 +4295,16 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     case RACE_GIANT:
     case RACE_FOMORI:
     case RACE_CYCLOPS:
+    case RACE_GHOUL_TROLL:
+    case RACE_DRAKE_TROLL:
       if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOTROLL)) {
         act("Draw check: Skipping $p, racial check failure (troll).", FALSE, ch, contents, 0, TO_ROLLS);
         return 0;
       }
       break;
     case RACE_HUMAN:
+    case RACE_GHOUL_HUMAN:
+    case RACE_DRAKE_HUMAN:
       if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOHUMAN)) {
         act("Draw check: Skipping $p, racial check failure (human).", FALSE, ch, contents, 0, TO_ROLLS);
         return 0;
@@ -4296,6 +4314,8 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     case RACE_ORK:
     case RACE_OGRE:
     case RACE_HOBGOBLIN:
+    case RACE_GHOUL_ORK:
+    case RACE_DRAKE_ORK:
       if (IS_OBJ_STAT(contents, ITEM_EXTRA_NOORK)) {
         act("Draw check: Skipping $p, racial check failure (ork).", FALSE, ch, contents, 0, TO_ROLLS);
         return 0;
