@@ -305,7 +305,7 @@ int light_level(struct room_data *room)
   // Outdoor city rooms (roads, etc) are impacted by ambient light.
   if (room->sector_type == SPIRIT_CITY) {
     // It's daytime. No changes.
-    if ((time_ > 6 && time_ < 19)) {
+    if ((time_info.hours > 6 && time_info.hours < 19)) {
       return candidate_light_level;
     }
     // It's nighttime, and this area is flagged as having no light.
