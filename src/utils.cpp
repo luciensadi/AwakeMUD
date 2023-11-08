@@ -515,7 +515,8 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
     WRITEOUT_MSG("Sunlight Allergy", 1);
   }
   if (GET_RACE(ch) == RACE_DRYAD)
-    if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS && ROOM_ROAD) || SECT(get_ch_in_room(ch)) == SPIRIT_HEARTH && SPIRIT_CITY)
+    if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS) || ROOM_FLAGGED(get_ch_in_room(ch), ROOM_ROAD) ||
+        SECT(get_ch_in_room(ch)) == SPIRIT_HEARTH || SECT(get_ch_in_room(ch)) == SPIRIT_CITY)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_len, "Urban", 1);
