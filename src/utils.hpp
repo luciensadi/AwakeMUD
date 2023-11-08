@@ -355,6 +355,9 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define IS_PERCEIVING(ch) (MOB_FLAGGED(ch, MOB_PERCEIVING) || PLR_FLAGGED(ch, PLR_PERCEIVE))
 #define SEES_ASTRAL(ch) (!IS_RIGGING(ch) && (IS_ASTRAL(ch) || IS_DUAL(ch) || IS_PERCEIVING(ch)))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
+#define IS_GHOUL(ch) (GET_RACE(ch) >= RACE_GHOUL_HUMAN && GET_RACE(ch) <= RACE_GHOUL_TROLL)
+#define IS_DRAKE(ch) (GET_RACE(ch) >= RACE_DRAKE_HUMAN && GET_RACE(ch) <= RACE_DRAKE_TROLL)
+#define IS_DRAGON(ch) (GET_RACE(ch) >= RACE_WESTERN_DRAGON && GET_RACE(ch) <= RACE_FEATHERED_SERPENT)
 
 // ONLY for use on non-Bitfield bitvectors:
 #define IS_SET(set, flag)     ((set) & (flag))
