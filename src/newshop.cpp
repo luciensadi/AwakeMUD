@@ -48,7 +48,9 @@ const char *shop_flags[] =
     "Doctor",
     "!NEGOTIATE",
     "!RESELL",
-    "CHARGEN"
+    "CHARGEN",
+    "YES_GHOUL",
+    MAX_FLAG_MARKER
   };
 
 const char *shop_type[3] =
@@ -113,17 +115,16 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
   if ((shop_table[shop_nr].races.IsSet(RACE_HUMAN) && GET_RACE(ch) == RACE_HUMAN) ||
       (shop_table[shop_nr].races.IsSet(RACE_ELF) && (GET_RACE(ch) == RACE_ELF ||
           GET_RACE(ch) == RACE_WAKYAMBI || GET_RACE(ch) == RACE_NIGHTONE ||
-          GET_RACE(ch) == RACE_DRYAD || GET_RACE(ch) == RACE_GHOUL_ELF || GET_RACE(ch) == RACE_DRAKE_ELF)) ||
+          GET_RACE(ch) == RACE_DRYAD || GET_RACE(ch) == RACE_DRAKE_ELF)) ||
       (shop_table[shop_nr].races.IsSet(RACE_DWARF) && (GET_RACE(ch) == RACE_DWARF ||
           GET_RACE(ch) == RACE_KOBOROKURU || GET_RACE(ch) == RACE_MENEHUNE ||
-          GET_RACE(ch) == RACE_GNOME || GET_RACE(ch) == RACE_GHOUL_DWARF || GET_RACE(ch) == RACE_DRAKE_DWARF)) ||
+          GET_RACE(ch) == RACE_GNOME || GET_RACE(ch) == RACE_DRAKE_DWARF)) ||
       (shop_table[shop_nr].races.IsSet(RACE_ORK) && (GET_RACE(ch) == RACE_ORK ||
           GET_RACE(ch) == RACE_ONI || GET_RACE(ch) == RACE_SATYR ||
-          GET_RACE(ch) == RACE_HOBGOBLIN || GET_RACE(ch) == RACE_OGRE || GET_RACE(ch) == RACE_GHOUL_ORK ||
-          GET_RACE(ch) == RACE_DRAKE_ORK)) ||
+          GET_RACE(ch) == RACE_HOBGOBLIN || GET_RACE(ch) == RACE_OGRE || GET_RACE(ch) == RACE_DRAKE_ORK)) ||
       (shop_table[shop_nr].races.IsSet(RACE_TROLL) && (GET_RACE(ch) == RACE_TROLL ||
           GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_MINOTAUR ||
-          GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_GHOUL_TROLL || GET_RACE(ch) == RACE_DRAKE_TROLL)))
+          GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_DRAKE_TROLL)))
   {
     snprintf(buf, sizeof(buf), "%s We don't sell to your type here.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -1062,6 +1063,13 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   bool cash = FALSE;
   char rollbuf[1000];
 
+  // Prevent ghouls from being loved by anyone except their own mother.
+  if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.IsSet(SHOP_YES_GHOUL)) {
+    snprintf(buf, sizeof(buf), "%s GET THE FRAG OUTTA HERE GHOUL!", GET_CHAR_NAME(ch));
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    return;
+  }
+
   // Prevent negative transactions.
   if ((buynum = transaction_amt(arg, arg_len)) < 0)
   {
@@ -1405,6 +1413,13 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   }
 
   strcpy(buf, GET_CHAR_NAME(ch));
+
+  // Prevent ghouls from being loved by anyone except their own mother.
+  if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.IsSet(SHOP_YES_GHOUL)) {
+    snprintf(buf, sizeof(buf), "%s GET THE FRAG OUTTA HERE GHOUL!", GET_CHAR_NAME(ch));
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    return;
+  }
 
   // Find the object.
   obj = get_obj_in_list_vis(ch, arg, ch->carrying);
