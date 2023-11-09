@@ -1217,6 +1217,11 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         case RACE_ORK:
         case RACE_TROLL:
         case RACE_DWARF:
+        case RACE_DRAKE_HUMAN:
+        case RACE_DRAKE_ELF:
+        case RACE_DRAKE_ORK:
+        case RACE_DRAKE_TROLL:
+        case RACE_DRAKE_DWARF:
           break;
         default:
           snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (metavariant)", METAVARIANT_PENALTY);
