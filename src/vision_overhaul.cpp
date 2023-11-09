@@ -84,6 +84,11 @@ void remove_racial_vision_due_to_eye_replacement(struct char_data *ch) {
     case RACE_FOMORI:
     case RACE_GIANT:
     case RACE_MINOTAUR:
+    case RACE_DRAKE_DWARF:
+    case RACE_DRAKE_TROLL:
+    case RACE_WESTERN_DRAGON:
+    case RACE_EASTERN_DRAGON:
+    case RACE_FEATHERED_SERPENT:
       remove_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_NATURAL);
       break;
     case RACE_ORK:
@@ -94,6 +99,8 @@ void remove_racial_vision_due_to_eye_replacement(struct char_data *ch) {
     case RACE_WAKYAMBI:
     case RACE_NIGHTONE:
     case RACE_DRYAD:
+    case RACE_DRAKE_ELF:
+    case RACE_DRAKE_ORK:
       // We refuse to remove LL vision from someone who has the Cat's Eyes bioware.
       for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
         if (GET_BIOWARE_TYPE(bio) == BIO_CATSEYES)
@@ -349,6 +356,11 @@ void set_natural_vision_for_race(struct char_data *ch) {
     case RACE_FOMORI:
     case RACE_GIANT:
     case RACE_MINOTAUR:
+    case RACE_DRAKE_DWARF:
+    case RACE_DRAKE_TROLL:
+    case RACE_WESTERN_DRAGON:
+    case RACE_EASTERN_DRAGON:
+    case RACE_FEATHERED_SERPENT:
       set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_NATURAL);
       break;
     case RACE_ORK:
@@ -359,6 +371,8 @@ void set_natural_vision_for_race(struct char_data *ch) {
     case RACE_WAKYAMBI:
     case RACE_NIGHTONE:
     case RACE_DRYAD:
+    case RACE_DRAKE_ELF:
+    case RACE_DRAKE_ORK:
       set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_NATURAL);
       break;
   }
