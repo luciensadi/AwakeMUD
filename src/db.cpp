@@ -2923,6 +2923,9 @@ int vnum_mobile_valuedeathnuyen(char *searchname, struct char_data * ch)
 int vnum_mobile_affflag(int i, struct char_data * ch)
 {
   int nr, found = 0;
+
+  send_to_char(ch, "The following mobs have the %s affect flag set:\r\n", affected_bits[i]);
+
   for (nr = 0; nr <= top_of_mobt; nr++)
     if (mob_proto[nr].char_specials.saved.affected_by.IsSet(i))
     {
@@ -3764,6 +3767,8 @@ int vnum_object_affects(struct char_data *ch) {
 int vnum_object_affflag(int type, struct char_data * ch)
 {
   int nr, found = 0;
+
+  send_to_char(ch, "The following objects have the %s affect flag set:\r\n", affected_bits[type]);
 
   for (nr = 0; nr <= top_of_objt; nr++)
     if (obj_proto[nr].obj_flags.bitvector.IsSet(type))
