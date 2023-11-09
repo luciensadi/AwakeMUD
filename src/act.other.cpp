@@ -2284,6 +2284,7 @@ ACMD(do_astral)
   }
 
   if (subcmd == SCMD_PERCEIVE) {
+    FAILURE_CASE(IS_GHOUL(ch) || IS_DRAGON(ch), "As a dual-natured being, you can't turn off your astral sight.");
     if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
       PLR_FLAGS(ch).RemoveBit(PLR_PERCEIVE);
       send_to_char("You return to your physical senses.\r\n", ch);
