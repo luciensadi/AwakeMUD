@@ -3775,7 +3775,6 @@ int vnum_object_affflag(int type, struct char_data * ch)
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
       send_to_char(buf, ch);
       found++;
-      break;
     }
   return (found);
 }
