@@ -112,7 +112,7 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
     return TRUE;
   }
 
-  if ((shop_table[shop_nr].races.IsSet(RACE_HUMAN) && GET_RACE(ch) == RACE_HUMAN) ||
+  if ((shop_table[shop_nr].races.IsSet(RACE_HUMAN) && (GET_RACE(ch) == RACE_HUMAN || GET_RACE(ch) == RACE_DRAKE_HUMAN || GET_RACE(ch) == RACE_GHOUL_HUMAN)) ||
       (shop_table[shop_nr].races.IsSet(RACE_ELF) && (GET_RACE(ch) == RACE_ELF ||
           GET_RACE(ch) == RACE_WAKYAMBI || GET_RACE(ch) == RACE_NIGHTONE ||
           GET_RACE(ch) == RACE_DRYAD || GET_RACE(ch) == RACE_DRAKE_ELF)) ||
