@@ -4008,8 +4008,8 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
   if (npc_can_see_in_any_situation(subj))
     return TRUE;
 
-  // If your vision can't see in the ambient light, fail.
-  if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified)) {
+  // If your vision can't see in the ambient light, fail. Note that astral vision won't see inanimate mobs (turrets etc).
+  if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified, !MOB_FLAGGED(obj, MOB_INANIMATE))) {
     if (get_character_light_sources(obj) <= 0) {
       // They're not holding a light, so you can't see them.
       return FALSE;
