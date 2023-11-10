@@ -333,6 +333,17 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
 
   strlcpy(buf, GET_CHAR_NAME(recipient), sizeof(buf));
 
+  // Go home dragon, you're drunk! Disables installing of cyber/bio in both shops and playerdocs - Vile
+  if (IS_DRAGON(recipient)) {
+    if (IS_NPC(installer)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Your magical nature makes this operation impossible!");
+      do_say(installer, buf, cmd_say, SCMD_SAYTO);
+    } else {
+      send_to_char(installer, "Their magical nature rejects the installation of %s!\r\n", GET_OBJ_NAME(ware));
+    }
+    return FALSE;
+  }
+
   // Item must be compatible with your current gear.
   switch (GET_OBJ_TYPE(ware)) {
     case ITEM_CYBERWARE:
