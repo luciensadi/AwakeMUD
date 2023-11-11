@@ -781,8 +781,12 @@ bool ammobox_to_bulletpants(struct char_data *ch, struct obj_data *ammobox) {
 
   if (quantity + GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype) > MAX_NUMBER_OF_BULLETS_IN_PANTS) {
     quantity = MAX_NUMBER_OF_BULLETS_IN_PANTS - GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype);
-    if (quantity == 0)
+    if (quantity <= 0) {
+      send_to_char(ch, "You've already got the maximum of %d %s secreted about your person.", 
+                   MAX_NUMBER_OF_BULLETS_IN_PANTS,
+                   get_ammo_representation(weapontype, ammotype, MAX_NUMBER_OF_BULLETS_IN_PANTS, ch));
       return FALSE;
+    }
   }
 
   update_bulletpants_ammo_quantity(ch, weapontype, ammotype, quantity);
