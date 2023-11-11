@@ -883,19 +883,35 @@ ACMD(do_gen_write)
 
   switch (subcmd) {
   case SCMD_BUG:
+#ifdef IS_BUILDPORT
+    filename = BUILDPORT_BUG_FILE;
+#else
     filename = BUG_FILE;
+#endif
     cmd_name = "bug";
     break;
   case SCMD_TYPO:
+#ifdef IS_BUILDPORT
+    filename = BUILDPORT_TYPO_FILE;
+#else
     filename = TYPO_FILE;
+#endif
     cmd_name = "typo";
     break;
   case SCMD_IDEA:
+#ifdef IS_BUILDPORT
+    filename = BUILDPORT_IDEA_FILE;
+#else
     filename = IDEA_FILE;
+#endif
     cmd_name = "idea";
     break;
   case SCMD_PRAISE:
+#ifdef IS_BUILDPORT
+    filename = BUILDPORT_PRAISE_FILE;
+#else
     filename = PRAISE_FILE;
+#endif
     cmd_name = "praise";
     break;
   default:
