@@ -281,6 +281,10 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
   } else {
     obj_from_cyberware(obj);
     GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj);
+    if (GET_RACE(victim) >= RACE_GHOUL_HUMAN && GET_RACE(victim) <= RACE_GHOUL_TROLL)
+    GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj) *= 1;
+    if (GET_RACE(victim) >= RACE_DRAKE_HUMAN && GET_RACE(victim) <= RACE_DRAKE_TROLL)
+    GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj) *= 1;
   }
 
   if (!IS_NPC(remover)) {
@@ -386,6 +390,13 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     }
     return FALSE;
   }
+
+  // Double Bioindex Loss for Drakes.
+  if (GET_OBJ_TYPE(ware) == ITEM_BIOWARE) {
+    int biocost = GET_BIOWARE_ESSENCE_COST(ware);
+    if (GET_RACE(recipient) >= RACE_DRAKE_HUMAN && GET_RACE(recipient) <= RACE_DRAKE_TROLL)
+      biocost = GET_BIOWARE_ESSENCE_COST(ware) *= 2;
+    }
 
   // Reject installing magic-incompat 'ware into magic-using characters.
   if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE) {
