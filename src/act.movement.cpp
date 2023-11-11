@@ -2072,21 +2072,11 @@ ACMD(do_leave)
     leave_veh(ch);
     return;
   }
-  if (GET_POS(ch) < POS_STANDING) {
-    send_to_char("Maybe you should get on your feet first?\r\n", ch);
-    return;
-  }
 
   struct room_data *in_room = get_ch_in_room(ch);
   if (!in_room) {
     send_to_char("Panic strikes you-- you're floating in a void!\r\n", ch);
     mudlog("SYSERR: Char has no in_room!", ch, LOG_SYSLOG, TRUE);
-    return;
-  }
-
-  // Leaving an elevator shaft is handled in the button panel's spec proc code. See transport.cpp.
-  if (!ROOM_FLAGGED(in_room, ROOM_INDOORS)) {
-    send_to_char("You are outside.. where do you want to go?\r\n", ch);
     return;
   }
 
@@ -2142,6 +2132,13 @@ ACMD(do_leave)
     do_look(ch, buf, 0, 0);
     return;
   }
+
+  // Movement restriction: Must be standing and not fighting.
+  FAILURE_CASE(GET_POS(ch) < POS_STANDING, "Maybe you should get on your feet first?");
+  FAILURE_CASE(FIGHTING(ch) || FIGHTING_VEH(ch), "You'll have to FLEE if you want to escape from combat!");
+
+  // Leaving an elevator shaft is handled in the button panel's spec proc code. See transport.cpp.
+  FAILURE_CASE(!ROOM_FLAGGED(in_room, ROOM_INDOORS), "You're already outside... where do you want to go?");
 
   // Standard leave from indoors to outdoors.
   for (door = 0; door < NUM_OF_DIRS; door++)
