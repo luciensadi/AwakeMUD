@@ -664,13 +664,14 @@ void affect_total(struct char_data * ch)
           else if (GET_WORN_BALLISTIC(worn_item) || GET_WORN_IMPACT(worn_item)) {
             int bal = 0, imp = 0;
 
-            // Remember that matched set items are 100x their expected value-- compensate for this.
+            // Remember that matched set items are 100x their expected value.
+            // Multiply non-set items here, divide the total later so we don't truncate too early.
             if (GET_WORN_MATCHED_SET(worn_item)) {
-              bal = (int)(GET_WORN_BALLISTIC(worn_item) / 100);
-              imp = (int)(GET_WORN_IMPACT(worn_item) / 100);
-            } else {
               bal = GET_WORN_BALLISTIC(worn_item);
               imp = GET_WORN_IMPACT(worn_item);
+            } else {
+              bal = GET_WORN_BALLISTIC(worn_item) * 100;
+              imp = GET_WORN_IMPACT(worn_item) * 100;
             }
 
             // Keep track of which worn item provides the highest total value.
@@ -694,11 +695,7 @@ void affect_total(struct char_data * ch)
     }
 
     // Add armor clothing set, if any.
-    // KNOWN ISSUE: If the sum of bal or imp is x.5, the .5 is dropped here.
     if (suitbal || suitimp) {
-      suitbal /= 100;
-      suitimp /= 100;
-
       if (suitbal + suitimp > highestbal + highestimp) {
         highestbal = suitbal;
         highestimp = suitimp;
@@ -708,11 +705,11 @@ void affect_total(struct char_data * ch)
       totalimp += suitimp;
     }
 
-    GET_IMPACT(ch) += highestimp + (int)((totalimp - highestimp) / 2);
-    GET_BALLISTIC(ch) += highestbal + (int)((totalbal - highestbal) / 2);
+    GET_IMPACT(ch) += (highestimp + ((totalimp - highestimp) / 2)) / 100;
+    GET_BALLISTIC(ch) += (highestbal + ((totalbal - highestbal) / 2)) / 100;
 
-    GET_TOTALIMP(ch) += totalimp - formfitimp;
-    GET_TOTALBAL(ch) += totalbal - formfitbal;
+    GET_TOTALIMP(ch) += (totalimp - formfitimp) / 100;
+    GET_TOTALBAL(ch) += (totalbal - formfitbal) / 100;
 
     // CC p45: If the only thing you're wearing that gives armor is your matched set, it doesn't apply penalties.
     /*  Still under discussion, so not enabled yet.
