@@ -2418,9 +2418,14 @@ void extract_obj(struct obj_data * obj)
   if (obj->in_room)
     obj->in_room->dirty_bit = TRUE;
 
-  if (obj->worn_by != NULL)
+  if (obj->worn_by) {
     if (unequip_char(obj->worn_by, obj->worn_on, TRUE) != obj)
       log("SYSLOG: Inconsistent worn_by and worn_on pointers!!");
+    if (set)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (worn_by)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+    set = TRUE;
+  }
+
   if (GET_OBJ_TYPE(obj) == ITEM_PHONE ||
       (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE))
   {
@@ -2459,25 +2464,29 @@ void extract_obj(struct obj_data * obj)
 
   if (obj->in_room || obj->in_veh != NULL) {
     obj_from_room(obj);
+    if (set)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_room)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     set = TRUE;
   }
 
   if (obj->in_host) {
     obj_from_host(obj);
+    if (set)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_host)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     set = TRUE;
   }
 
   if (obj->carried_by) {
     obj_from_char(obj);
     if (set)
-      log("SYSLOG: More than one list pointer set!");
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (carried_by)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     set = TRUE;
   }
 
   if (obj->in_obj) {
     obj_from_obj(obj);
     if (set)
-      log("SYSLOG: More than one list pointer set!");
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_obj)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     set = TRUE;
   }
 
@@ -2486,7 +2495,7 @@ void extract_obj(struct obj_data * obj)
     extract_obj(obj->contains);
 
   if (!ObjList.Remove(obj))
-    log_vfprintf("ObjList.Remove returned FALSE!  (%d)", GET_OBJ_VNUM(obj));
+    log_vfprintf("ObjList.Remove returned FALSE!  (%ld)", GET_OBJ_VNUM(obj));
 
   if (GET_OBJ_RNUM(obj) >= 0)
     (obj_index[GET_OBJ_RNUM(obj)].number)--;

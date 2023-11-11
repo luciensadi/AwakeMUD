@@ -467,6 +467,22 @@ void objList::CallSpec()
   }
 }
 
+void _remove_obj_from_world(struct obj_data *obj) {
+  if (obj->carried_by)
+    act("$p disintegrates.", FALSE, obj->carried_by, obj, 0, TO_CHAR);
+  else if (obj->worn_by)
+    act("$p disintegrates.", FALSE, obj->carried_by, obj, 0, TO_CHAR);
+  else if (obj->in_room && obj->in_room->people) {
+    act("$p disintegrates.", TRUE, obj->in_room->people, obj, 0, TO_ROOM);
+    act("$p disintegrates.", TRUE, obj->in_room->people, obj, 0, TO_CHAR);
+  }
+  else if (obj->in_host) {
+    snprintf(buf3, sizeof(buf3), "%s depixelates and vanishes from the host.\r\n", capitalize(GET_OBJ_NAME(obj)));
+    send_to_host(obj->in_host->rnum, buf3, NULL, TRUE);
+  }
+  extract_obj(obj);
+}
+
 void objList::RemoveObjNum(int num)
 {
   nodeStruct<struct obj_data *> *temp, *next;
@@ -475,15 +491,7 @@ void objList::RemoveObjNum(int num)
     next = temp->next;
 
     if (GET_OBJ_RNUM(temp->data) == num) {
-      if (temp->data->carried_by)
-        act("$p disintegrates.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
-      else if (temp->data->worn_by)
-        act("$p disintegrates.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
-      else if (temp->data->in_room && temp->data->in_room->people) {
-        act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
-        act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
-      }
-      extract_obj(temp->data);
+      _remove_obj_from_world(temp->data);
     }
   }
 }
@@ -496,20 +504,7 @@ void objList::RemoveQuestObjs(int id)
     next = temp->next;
 
     if (temp->data->obj_flags.quest_id == id) {
-      if (temp->data->carried_by)
-        act("$p disintegrates.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
-      else if (temp->data->worn_by)
-        act("$p disintegrates.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
-      else if (temp->data->in_room && temp->data->in_room->people) {
-        act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
-        act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
-      }
-      else if (temp->data->in_host) {
-        snprintf(buf3, sizeof(buf3), "%s depixelates and vanishes from the host.\r\n", capitalize(GET_OBJ_NAME(temp->data)));
-        send_to_host(temp->data->in_host->rnum, buf3, NULL, TRUE);
-        obj_from_host(temp->data);
-      }
-      extract_obj(temp->data);
+      _remove_obj_from_world(temp->data);
     }
   }
 }
