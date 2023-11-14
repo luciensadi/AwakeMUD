@@ -987,7 +987,7 @@ void point_update(void)
 #else
             send_to_char(i, "^RThe backlash of focus overuse rips through you!^r Quick, take off your foci before it happens again!\r\n");
             mudlog_vfprintf(i, LOG_SYSLOG, "Damaging %s due to focus overuse (%d foci; %d > %d).", GET_CHAR_NAME(i), total, force * 100, GET_REAL_MAG(i) * 2);
-            if (damage(i, i, SERIOUS, TYPE_BIOWARE, TRUE))
+            if (damage(i, i, convert_damage(DEADLY) - 1, TYPE_BIOWARE, TRUE))
               continue;
 #endif
           }
