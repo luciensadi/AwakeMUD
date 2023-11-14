@@ -3011,7 +3011,10 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       return 0;
     }
 
-    if (GET_POS(ch) > POS_STUNNED && attacktype < TYPE_SUFFERING) {
+    if (GET_POS(ch) > POS_STUNNED
+        && (attacktype < TYPE_SUFFERING  // Pretty much any standard attack
+            || (attacktype >= TYPE_MANABOLT_OR_STUNBOLT && attacktype <= TYPE_MANIPULATION_SPELL))) // Damaging spells
+    {
       if (!FIGHTING(ch) && !ch->in_veh)
         set_fighting(ch, victim);
 

@@ -961,6 +961,8 @@ void point_update(void)
           mudlog("^RSYSERR: Multiplying magic for focus addiction check gave a NEGATIVE number! Increase the size of the variable!^n", i, LOG_SYSLOG, TRUE);
         } else {
           if (force * 100 > GET_REAL_MAG(i) * 2 && success_test(GET_REAL_MAG(i) / 100, force / 2) < 1) {
+
+#ifdef USE_OLD_FOCUS_ADDICTION_RULES
             int num = number(1, total);
             struct obj_data *focus_geas = NULL;
             for (int x = 0; x < NUM_WEARS && !focus_geas; x++) {
@@ -982,6 +984,12 @@ void point_update(void)
               GET_FOCUS_GEAS(focus_geas) = GET_IDNUM(i);
               magic_loss(i, 100, FALSE);
             }
+#else
+            send_to_char(i, "^RThe backlash of focus overuse rips through you!^r Quick, take off your foci before it happens again!\r\n");
+            mudlog_vfprintf(i, LOG_SYSLOG, "Damaging %s due to focus overuse (%d foci; %d > %d).", GET_CHAR_NAME(i), total, force * 100, GET_REAL_MAG(i) * 2);
+            if (damage(i, i, SERIOUS, TYPE_BIOWARE, TRUE))
+              continue;
+#endif
           }
         }
       }
