@@ -6101,9 +6101,9 @@ ACMD(do_heal)
     GET_PHYSICAL(vict) += success;
     GET_PHYSICAL(ch) -= success;
     WAIT_STATE(ch, 3 RL_SEC);
-    act("You feel $n place $s hands on you, $s minstrations seem to cause your wounds to fade!", TRUE, ch, 0, vict, TO_VICT);
+    act("You feel $n place $s hands on you, $s minstration seems to cause your wounds to fade!", TRUE, ch, 0, vict, TO_VICT);
     act("You place your hands on $N, you feel $S pain and suffering transferred to your body!", TRUE, ch, 0, vict, TO_CHAR);
-    act("$n places $s hands on $N seemingly transferring the wound to $mself!", TRUE, ch, 0, vict, TO_NOTVICT);
+    act("$n places $s hands on $N, seemingly transferring the wound to $mself!", TRUE, ch, 0, vict, TO_NOTVICT);
     update_pos(vict);
     update_pos(ch);
   }
