@@ -985,9 +985,21 @@ void point_update(void)
               magic_loss(i, 100, FALSE);
             }
 #else
-            send_to_char(i, "^RThe backlash of focus overuse rips through you!^r Quick, take off your foci before it happens again!\r\n");
-            mudlog_vfprintf(i, LOG_SYSLOG, "Damaging %s due to focus overuse (%d foci; %d > %d).", GET_CHAR_NAME(i), total, force * 100, GET_REAL_MAG(i) * 2);
-            if (damage(i, i, convert_damage(DEADLY) - 1, TYPE_BIOWARE, TRUE))
+            mudlog_vfprintf(i, LOG_SYSLOG, "Damaging %s and breaking sustained spells due to focus overuse (%d foci; %d > %d).", GET_CHAR_NAME(i), total, force * 100, GET_REAL_MAG(i) * 2);
+            send_to_char(i, "^RThe backlash of focus overuse rips through you!^n\r\n");
+
+            // Disarm them.
+            {
+              struct obj_data *weap = GET_EQ(i, WEAR_WIELD);
+              if (weap && GET_OBJ_TYPE(weap) == ITEM_WEAPON && !WEAPON_IS_GUN(weap) && GET_WEAPON_FOCUS_RATING(weap) > 0) {
+                send_to_char(i, "Your fingers spasm from the pain, and you almost drop %s!\r\n", GET_OBJ_NAME(weap));
+                unequip_char(i, weap->worn_on, TRUE);
+                obj_to_char(weap, i);
+              }
+            }
+
+            // Damage them. This also strips all sustained spells.
+            if (damage(i, i, convert_damage(DEADLY) - 1, TYPE_FOCUS_OVERUSE, TRUE))
               continue;
 #endif
           }

@@ -2975,6 +2975,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       snprintf(rbuf, sizeof(rbuf), "Bioware damage (%s: ", GET_CHAR_NAME(ch));
     } else if (attacktype == TYPE_POISON) {
       snprintf(rbuf, sizeof(rbuf), "Poison damage (%s: ", GET_CHAR_NAME(ch));
+    } else if (attacktype == TYPE_FOCUS_OVERUSE) {
+      snprintf(rbuf, sizeof(rbuf), "Focus overuse damage (%s: ", GET_CHAR_NAME(ch));
     } else {
       snprintf(rbuf, sizeof(rbuf), "Self-damage (%s: ", GET_CHAR_NAME(ch));
     }
@@ -3120,7 +3122,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (IS_PROJECT(victim) && victim->desc && victim->desc->original)
     real_body = victim->desc->original;
 
-  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS && attacktype != TYPE_POISON) {
+  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS && attacktype != TYPE_POISON && attacktype != TYPE_FOCUS_OVERUSE) {
     for (bio = real_body->bioware; bio; bio = bio->next_content) {
       if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY && dam >= 3 && is_physical)
         dam--;
@@ -3231,7 +3233,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (GET_SUSTAINED_NUM(victim))
   {
     struct sustain_data *next;
-    if (GET_POS(victim) < POS_LYING) {
+    // If you've been knocked out, or the damage is from focus overuse, lose all your spells.
+    if (GET_POS(victim) < POS_LYING || attacktype == TYPE_FOCUS_OVERUSE) {
       for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
         next = sust->next;
         if (sust->caster && !sust->focus && !sust->spirit) {
@@ -3361,6 +3364,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       case TYPE_DRUGS:
       case TYPE_POISON:
       case TYPE_MANABOLT_OR_STUNBOLT:
+      case TYPE_FOCUS_OVERUSE:
         // These types do not risk equipment damage.
         break;
       default:

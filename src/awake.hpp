@@ -1187,6 +1187,7 @@ enum {
 #define TYPE_SPELL_DRAIN      415
 #define TYPE_DRUGS            416
 #define TYPE_POISON           417
+#define TYPE_FOCUS_OVERUSE    418
 
 /* magic attack types */
 #define TYPE_MANABOLT_OR_STUNBOLT       500
