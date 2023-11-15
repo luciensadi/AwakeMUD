@@ -7920,6 +7920,14 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         break;
     }
 
+    if (GET_OBJ_TYPE(obj) == ITEM_SPELL_FORMULA) {
+      if (GET_SPELLFORMULA_FORCE(obj) <= 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an unrated spell formula^n (%d).\r\n", GET_SPELLFORMULA_FORCE(obj));
+        printed = TRUE;
+        issues++;
+      }
+    }
+
     // Check for foci with high ratings.
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
       // Compose a list of the bits this focus can't have (default: all but take). Only checked for specific foci.
@@ -7929,73 +7937,79 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
           unacceptable_bits.SetBit(wear_idx);
       }
 
-      switch (GET_FOCUS_TYPE(obj)) {
-        case FOCI_EXPENDABLE:
-          if (GET_FOCUS_FORCE(obj) > 8) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength expendable focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
-            printed = TRUE;
-            issues++;
-          }
-          break;
-        case FOCI_SPEC_SPELL:
-          if (GET_FOCUS_FORCE(obj) > 8) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength specific spell focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
-            printed = TRUE;
-            issues++;
-          } else if (GET_FOCUS_FORCE(obj) > 4) {
-            unacceptable_bits.RemoveBit(ITEM_WEAR_HOLD);
-            if (GET_OBJ_WEAR(obj).AreAnyShared(unacceptable_bits)) {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis a high-strength specific spell focus^n (%d) ^youtside of hold only^n\r\n", GET_FOCUS_FORCE(obj));
+      if (GET_FOCUS_FORCE(obj) <= 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an unrated focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+        printed = TRUE;
+        issues++;
+      } else {
+        switch (GET_FOCUS_TYPE(obj)) {
+          case FOCI_EXPENDABLE:
+            if (GET_FOCUS_FORCE(obj) > 8) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength expendable focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
               printed = TRUE;
               issues++;
             }
-          }
-          break;
-        case FOCI_SPELL_CAT:
-          if (GET_FOCUS_FORCE(obj) > 4) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength category focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
-            printed = TRUE;
-            issues++;
-          }
-          break;
-        case FOCI_SPIRIT:
-          if (GET_FOCUS_FORCE(obj) > 6) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength spirit focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
-            printed = TRUE;
-            issues++;
-          }
-          break;
-        case FOCI_POWER:
-          if (GET_FOCUS_FORCE(obj) > 4) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris an over-strength power focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
-            printed = TRUE;
-            issues++;
-          }
-          break;
-        case FOCI_SUSTAINED:
-          if (GET_FOCUS_FORCE(obj) > 4) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris an over-strength sustain focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
-            printed = TRUE;
-            issues++;
-          } else if (GET_FOCUS_FORCE(obj) == 4) {
-            unacceptable_bits.RemoveBits(ITEM_WEAR_HOLD, ITEM_WEAR_EYES, ENDBIT);
-            if (GET_OBJ_WEAR(obj).AreAnyShared(unacceptable_bits)) {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris a max-strength sustain focus^n (%d) ^youtside of eye/hold slots^n\r\n", GET_FOCUS_FORCE(obj));
+            break;
+          case FOCI_SPEC_SPELL:
+            if (GET_FOCUS_FORCE(obj) > 8) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength specific spell focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+              printed = TRUE;
+              issues++;
+            } else if (GET_FOCUS_FORCE(obj) > 4) {
+              unacceptable_bits.RemoveBit(ITEM_WEAR_HOLD);
+              if (GET_OBJ_WEAR(obj).AreAnyShared(unacceptable_bits)) {
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis a high-strength specific spell focus^n (%d) ^youtside of hold only^n\r\n", GET_FOCUS_FORCE(obj));
+                printed = TRUE;
+                issues++;
+              }
+            }
+            break;
+          case FOCI_SPELL_CAT:
+            if (GET_FOCUS_FORCE(obj) > 4) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength category focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
               printed = TRUE;
               issues++;
             }
-          }
-          break;
-        case FOCI_SPELL_DEFENSE:
-          if (GET_FOCUS_FORCE(obj) > 4) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength defense focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
-            printed = TRUE;
-            issues++;
-          }
-          break;
-        default:
-          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown focus type %d encountered in object audit-- add a case for it!", GET_FOCUS_TYPE(obj));
-          break;
+            break;
+          case FOCI_SPIRIT:
+            if (GET_FOCUS_FORCE(obj) > 6) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength spirit focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+              printed = TRUE;
+              issues++;
+            }
+            break;
+          case FOCI_POWER:
+            if (GET_FOCUS_FORCE(obj) > 4) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris an over-strength power focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+              printed = TRUE;
+              issues++;
+            }
+            break;
+          case FOCI_SUSTAINED:
+            if (GET_FOCUS_FORCE(obj) > 4) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris an over-strength sustain focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+              printed = TRUE;
+              issues++;
+            } else if (GET_FOCUS_FORCE(obj) == 4) {
+              unacceptable_bits.RemoveBits(ITEM_WEAR_HOLD, ITEM_WEAR_EYES, ENDBIT);
+              if (GET_OBJ_WEAR(obj).AreAnyShared(unacceptable_bits)) {
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Ris a max-strength sustain focus^n (%d) ^youtside of eye/hold slots^n\r\n", GET_FOCUS_FORCE(obj));
+                printed = TRUE;
+                issues++;
+              }
+            }
+            break;
+          case FOCI_SPELL_DEFENSE:
+            if (GET_FOCUS_FORCE(obj) > 4) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis an over-strength defense focus^n (%d).\r\n", GET_FOCUS_FORCE(obj));
+              printed = TRUE;
+              issues++;
+            }
+            break;
+          default:
+            mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown focus type %d encountered in object audit-- add a case for it!", GET_FOCUS_TYPE(obj));
+            break;
+        }
       }
     }
 

@@ -4383,9 +4383,20 @@ ACMD(do_learn)
     return;
   }
   if (!*buf2 || atoi(buf1) == 0)
-    force = GET_OBJ_VAL(obj, 0);
+    force = GET_SPELLFORMULA_FORCE(obj);
   else
-    force = MIN(GET_OBJ_VAL(obj, 0), atoi(buf1));
+    force = MIN(GET_SPELLFORMULA_FORCE(obj), atoi(buf1));
+
+  if (force <= 0) {
+    send_to_char("You can't learn a spell below force 1.\r\n", ch);
+    
+    if (GET_SPELLFORMULA_FORCE(obj) <= 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got a spell formula with force %d (%s / %ld)", force, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+    }
+    
+    return;
+  }
+
   for (spell = GET_SPELLS(ch); spell; spell = spell->next)
     if (spell->type == GET_SPELLFORMULA_SPELL(obj) && spell->subtype == GET_SPELLFORMULA_SUBTYPE(obj)) {
       if (spell->force >= force) {

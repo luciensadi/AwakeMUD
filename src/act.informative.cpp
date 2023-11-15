@@ -5093,6 +5093,12 @@ ACMD(do_time)
     }
   }
 
+  // You can look at the dash clock in a vehicle.
+  if (subcmd == SCMD_NORMAL && ch->in_veh) {
+    subcmd = SCMD_PRECISE;
+    send_to_char("You glance at the dash.\r\n", ch);
+  }
+
   // If you still get scrub-grade time after the above checks...
   if (subcmd == SCMD_NORMAL) {
     struct room_data *room = get_ch_in_room(ch);
