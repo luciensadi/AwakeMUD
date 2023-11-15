@@ -1006,7 +1006,7 @@ struct command_info cmd_info[] =
 
     /* Commands that will only function in the presence of a spec_proc. */
     { "burn"       , POS_STANDING, do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
-    { "buy"        , POS_SITTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
+    { "buy"        , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
     { "check"      , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
     { "collect"    , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
     { "blastoff"   , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
@@ -1026,7 +1026,7 @@ struct command_info cmd_info[] =
     { "recharge"   , POS_DEAD    , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
     { "rent"       , POS_STANDING, do_not_here , 1, 0, BLOCKS_IDLE_REWARD },
     { "retrieve"   , POS_RESTING , do_not_here , 1, 0, BLOCKS_IDLE_REWARD },
-    { "sell"       , POS_STANDING, do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
+    { "sell"       , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
     { "withdraw"   , POS_STANDING, do_not_here , 1, 0, BLOCKS_IDLE_REWARD },
     { "wire"       , POS_STANDING, do_not_here , 1, 0, BLOCKS_IDLE_REWARD },
     { "write"      , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
