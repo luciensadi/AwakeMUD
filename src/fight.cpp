@@ -3151,6 +3151,9 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     awake = FALSE;
 
   if (dam > 0) {
+    // Remove the effects of damage from their initiative roll.
+    GET_INIT_ROLL(victim) += damage_modifier(victim, 0, 0, 0, 0);
+
     // Physical damage. This one's simple-- no overflow to deal with.
     if (is_physical) {
       GET_PHYSICAL(real_body) -= MAX(dam * 100, 0);
@@ -3213,12 +3216,15 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     if (attacktype == TYPE_DRUGS) {
       GET_PHYSICAL(real_body) = MAX(GET_PHYSICAL(real_body), 100);
     }
+
+    // Re-add the effects of damage to their initiative roll.
+    GET_INIT_ROLL(victim) -= damage_modifier(victim, 0, 0, 0, 0);
   }
   if (!awake && GET_PHYSICAL(victim) <= 0)
     GET_LAST_DAMAGETIME(victim) = time(0);
 
   if (update_pos(victim)) {
-    // They died from dumpshock.
+    // They died. RIP
     return TRUE;
   }
 

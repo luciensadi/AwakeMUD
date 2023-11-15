@@ -5208,7 +5208,11 @@ int calculate_vehicle_weight(struct veh_data *veh) {
 }
 
 int roll_default_initiative(struct char_data *ch) {
-  return dice(1 + GET_INIT_DICE(ch), 6) + GET_REA(ch);
+  int initial_roll = dice(1 + GET_INIT_DICE(ch), 6);
+  initial_roll += GET_REA(ch);
+  initial_roll -= damage_modifier(ch, NULL, 0, NULL, 0);
+
+  return initial_roll;
 }
 
 int pilot_skills[] {
@@ -6126,7 +6130,7 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   }
 
   // Special cases for actions done on NPCs (they skip a lot of the PC damage checks).
-  if (IS_NPC(victim) && victim == victim_original) {
+  if (IS_NPC(victim) && (victim == victim_original || IS_SENATOR(victim_original))) {
     FALSE_CASE_ACTOR(npc_is_protected_by_spec(victim) || MOB_FLAGGED(victim, MOB_NOKILL), "You're not able to harm %s: they're protected by staff edict.\r\n", GET_CHAR_NAME(victim));
 
     return TRUE;
