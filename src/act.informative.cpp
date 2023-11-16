@@ -585,12 +585,34 @@ bool items_are_visually_similar(struct obj_data *first, struct obj_data *second)
       (first->restring && second->restring && strcmp(first->restring, second->restring)))
     return FALSE;
 
-  // If they're magazines, their various bonded stats must match too.
-  if (GET_OBJ_TYPE(first) == ITEM_GUN_MAGAZINE) {
-    if (GET_MAGAZINE_BONDED_MAXAMMO(first) != GET_MAGAZINE_BONDED_MAXAMMO(second) ||
-        GET_MAGAZINE_BONDED_ATTACKTYPE(first) != GET_MAGAZINE_BONDED_ATTACKTYPE(second))
-      return FALSE;
+  #define COMPARE(field)  if (field(first) != field(second)) { return FALSE; }
+  switch (GET_OBJ_TYPE(first)) {
+    case ITEM_GUN_MAGAZINE:
+      // If they're magazines, their various bonded stats must match too.
+      COMPARE(GET_MAGAZINE_BONDED_MAXAMMO);
+      COMPARE(GET_MAGAZINE_BONDED_ATTACKTYPE);
+      break;
+    case ITEM_GUN_AMMO:
+      // Ammo boxes must match requisite fields.
+      COMPARE(GET_AMMOBOX_INTENDED_QUANTITY);
+      COMPARE(GET_AMMOBOX_WEAPON);
+      COMPARE(GET_AMMOBOX_TYPE);
+      break;
+    case ITEM_DESIGN:
+      // Design completion status.
+      COMPARE(GET_DESIGN_COMPLETED);
+      COMPARE(GET_DESIGN_DESIGNING_TICKS_LEFT);
+      break;
+    case ITEM_PROGRAM:
+      // Cooked / uncooked status matters for programs.
+      COMPARE(GET_PROGRAM_IS_COOKED);
+      break;
+    case ITEM_PART:
+      // Designed / not designed.
+      COMPARE(GET_PART_DESIGN_COMPLETION);
+      break;
   }
+  #undef COMPARE
 
   return TRUE;
 }
@@ -913,6 +935,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
 
     if (!IS_NPC(i) && GET_LEVEL(ch) >= GET_LEVEL(i)) {
       act(get_lifestyle_string(i), FALSE, i, 0, ch, TO_VICT | SKIP_YOU_STANZAS);
+      send_to_char("\r\n", i);
     }
 
     if (i != ch && GET_HEIGHT(i) > 0 && GET_WEIGHT(i) > 0) {
