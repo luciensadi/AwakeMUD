@@ -832,9 +832,9 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  // We want the higher of either cyber+bio or magic/adept
-  GET_REA(ch) = (GET_REA(ch) > aug_rea) ? GET_REA(ch) : aug_rea;
-  GET_INIT_DICE(ch) = (GET_INIT_DICE(ch) > aug_init_dice) ? GET_INIT_DICE(ch) : aug_init_dice;
+  // We want the higher of magic/adept, cyber/bio, or mbw
+  GET_REA(ch) = MAX(GET_REA(ch), MAX(aug_rea, has_mbw*2));
+  GET_INIT_DICE(ch) = MAX(GET_INIT_DICE(ch), MAX(aug_init_dice, has_mbw));
 
   // Except for VCRs, reaction/initiative cyber/bio don't apply to rigging (R3 pg 27)
   // R3 pg 28 says physical reaction spells apply, but they don't exist
@@ -883,11 +883,7 @@ void affect_total(struct char_data * ch)
 
   // Qui bonus from mbw doesn't increase reaction (MM pg 30)
   // Also makes sense that mbw DOES protect from disabling via nervestrike
-  if (has_mbw) {
-    GET_QUI(ch) += has_mbw;
-    GET_REA(ch) += has_mbw * 2;
-    GET_INIT_DICE(ch) += has_mbw;
-  }
+  GET_QUI(ch) += has_mbw;
 
   // Matrix pg 18 & 24, assume pure DNI (thus reaction = intelligence)
   // No direct reaction/initiative bonuses from cyber/bio apply
