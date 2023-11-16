@@ -3777,7 +3777,11 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount, const ch
   weight_change_object(ammobox, get_ammo_weight(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox), NULL, caller));
 
   // Calculate cost as count * multiplier (multiplier is per round)
-  GET_OBJ_COST(ammobox) = get_ammo_cost(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox), NULL, caller);
+  if (GET_AMMOBOX_QUANTITY(ammobox) == 0) {
+    GET_OBJ_COST(ammobox) = 0;
+  } else {
+    GET_OBJ_COST(ammobox) = get_ammo_cost(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox), NULL, caller);
+  }
 
   // Update the carrier's carry weight.
   if (ammobox->carried_by) {
@@ -3788,12 +3792,14 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount, const ch
 
 bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages) {
   if (!ch || !from || !into) {
-    mudlog("SYSERR: combine_ammo_boxes received a null value.", ch, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: combine_ammo_boxes(%s, %s, %s) received a null value.", GET_CHAR_NAME(ch), GET_OBJ_NAME(from), GET_OBJ_NAME(into));
     return FALSE;
   }
 
   if (GET_OBJ_TYPE(from) != ITEM_GUN_AMMO || GET_OBJ_TYPE(into) != ITEM_GUN_AMMO) {
-    mudlog("SYSERR: combine_ammo_boxes received something that was not an ammo box.", ch, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: combine_ammo_boxes received something that was not an ammo box (%s / %ld -> %s / %ld).",
+                    GET_OBJ_NAME(from), GET_OBJ_VNUM(from),
+                    GET_OBJ_NAME(into), GET_OBJ_VNUM(into));
     return FALSE;
   }
 
