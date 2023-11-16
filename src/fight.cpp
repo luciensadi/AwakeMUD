@@ -2830,23 +2830,62 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
 {
   char_data *attacker;
 
+  // Fighting yourself? Go for it.
+  if (ch == vict)
+    return FALSE;
+
+  // Unpuppeted NPC or NPC puppeter without a body to return to? Fine.
   if (IS_NPC(ch) && (ch->desc == NULL || ch->desc->original == NULL))
     return FALSE;
 
+  // Otherwise, this is a player or staff member acting.
   if (!IS_NPC(ch))
     attacker = ch;
   else
     attacker = ch->desc->original;
 
-  if (!IS_NPC(vict) &&
-      !PLR_FLAGS(vict).AreAnySet(PLR_KILLER, ENDBIT) &&
-      !(ROOM_FLAGGED(get_ch_in_room(ch), ROOM_ARENA) && ROOM_FLAGGED(get_ch_in_room(vict), ROOM_ARENA)) &&
-      (!PRF_FLAGGED(attacker, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)) &&
-      !PLR_FLAGGED(attacker, PLR_KILLER) && attacker != vict && !IS_SENATOR(attacker))
-  {
-    return TRUE;
+  
+  if (IS_NPC(vict)) {
+    // Is target a vanilla NPC (no puppeting etc)?
+    if (!vict->desc || !vict->desc->original) {
+      // It's just a vanilla NPC. Hit away.
+      return FALSE;
+    }
+
+    // Target is a projection or puppeted NPC
+    // You can hit staff puppeted NPCs.
+    if (IS_SENATOR(vict->desc->original))
+      return FALSE;
+      
+    // Otherwise, this is a player acting as a projection.
+    // Unwind to the original body so checks for PRF_PKER etc work properly.
+    vict = vict->desc->original;
   }
-  return FALSE;
+
+  // At this point, the victim is a player.
+
+  // You can always hit and be hit by killer-flagged PCs.
+  if (PLR_FLAGS(vict).IsSet(PLR_KILLER) || PLR_FLAGGED(attacker, PLR_KILLER)) {
+    return FALSE;
+  }
+
+  // You can always fight someone who's in an arena, provided you're in one yourself.
+  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_ARENA) && ROOM_FLAGGED(get_ch_in_room(vict), ROOM_ARENA)) {
+    return FALSE;
+  }
+
+  // You can always fight a PKer if you're a PKer as well.
+  if (PRF_FLAGGED(attacker, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER)) {
+    return FALSE;
+  }
+
+  // Staff can attack anyone. Hopefully they have good reason for it.
+  if (IS_SENATOR(attacker)) {
+    return FALSE;
+  }
+
+  // Otherwise, you can't harm the other player.
+  return TRUE;
 }
 
 // Basically ripped the logic from damage(). Used to adjust combat messages for edge cases.
