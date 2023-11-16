@@ -2787,7 +2787,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     }
 
     // Remove the old attachment.
-    struct obj_data *old_attachment = unattach_attachment_from_weapon(location, weapon, NULL);
+    struct obj_data *old_attachment = unattach_attachment_from_weapon(location + ACCESS_ACCESSORY_LOCATION_DELTA, weapon, NULL);
     if (old_attachment)
       extract_obj(old_attachment);
   }
