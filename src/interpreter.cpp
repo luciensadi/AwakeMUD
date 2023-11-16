@@ -3345,8 +3345,12 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_ASKNAME:
     break;
 
+  // Is a break here the right move? Need to test this.
+  case CON_TEMPDESC_EDIT:
+    break;
+
   default:
-    log("SYSERR: Nanny: illegal state of con'ness; closing connection");
+    log_vfprintf("SYSERR: Nanny: illegal state of con'ness %d; closing connection", STATE(d));
     close_socket(d);
     break;
   }
