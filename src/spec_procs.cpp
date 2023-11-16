@@ -4247,7 +4247,7 @@ void process_auth_room(struct char_data *ch) {
   PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
 
   // Dump spare money onto a housing card.
-  if (GET_NUYEN(ch) > 5000) {
+  if (GET_NUYEN(ch) >= 5000) {
     int amount = ((int) GET_NUYEN(ch) / 5000) * 5000;
     add_cash_to_housing_card(ch, amount, FALSE);
     send_to_char(ch, "You receive a housing card with your remaining %d nuyen on it.\r\n", amount);

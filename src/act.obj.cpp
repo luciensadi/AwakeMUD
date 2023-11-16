@@ -282,6 +282,8 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
 void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
                            struct obj_data * cont)
 {
+  int space_required = 0;
+
   if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)
   {
     if (GET_DECK_ACCESSORY_TYPE(cont) != TYPE_COMPUTER) {
@@ -299,14 +301,8 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
       return;
     }
 
-    int space_required = 0;
     if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-      // Persona programs don't take up storage memory in store-bought decks
-      if ((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR)) {
-        space_required = 0;
-      } else {
-        space_required = GET_PROGRAM_SIZE(obj);
-      }
+      space_required = GET_PROGRAM_SIZE(obj);
     } else {
       space_required = (int) GET_DESIGN_SIZE(obj) * 1.1;
     }
@@ -384,17 +380,26 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     send_to_char(ch, "You'll have to cook %s before you can install it.\r\n", GET_OBJ_NAME(obj));
   else if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
     display_cyberdeck_issues(ch, cont);
-  else if (GET_OBJ_VAL(cont, 5) + GET_OBJ_VAL(obj, 2) > GET_OBJ_VAL(cont, 3))
-    act("$p takes up too much memory to be installed into $P.", FALSE,
-        ch, obj, cont, TO_CHAR);
   else if (search_cyberdeck(cont, obj))
     act("You already have a similar program installed in $P.", FALSE, ch, obj, cont, TO_CHAR);
   else
   {
-    obj_from_char(obj);
-    obj_to_obj(obj, cont);
-    act("You install $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
-    GET_OBJ_VAL(cont, 5) += GET_OBJ_VAL(obj, 2);
+    // Persona programs don't take up storage memory in store-bought decks
+    if ((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR)) {
+      space_required = 0;
+    } else {
+      space_required = GET_PROGRAM_SIZE(obj);
+    }
+
+    // Check to make sure there's room
+    if (GET_CYBERDECK_USED_STORAGE(cont) + space_required > GET_CYBERDECK_TOTAL_STORAGE(cont)) {
+      act("$p takes up too much memory to be installed into $P.", FALSE, ch, obj, cont, TO_CHAR);
+    } else {
+      obj_from_char(obj);
+      obj_to_obj(obj, cont);
+      act("You install $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
+      GET_CYBERDECK_USED_STORAGE(cont) += space_required;
+    }
   }
 }
 
