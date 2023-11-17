@@ -3462,16 +3462,18 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("opend", "open");
   COMMAND_ALIAS("leaev", "leave");
   COMMAND_ALIAS("leve", "leave");
-  COMMAND_ALIAS("lisy", "list");
   COMMAND_ALIAS("swith", "switch");
   COMMAND_ALIAS("swtich", "switch");
   COMMAND_ALIAS("drie", "drive");
   COMMAND_ALIAS("cyberwear", "cyberware");
   COMMAND_ALIAS("biowear", "bioware");
+  COMMAND_ALIAS("lisy", "list");
+  COMMAND_ALIAS("lst", "list");
   COMMAND_ALIAS("lsit", "list");
   COMMAND_ALIAS("ist", "list");
   COMMAND_ALIAS("lisr", "list");
   COMMAND_ALIAS("lost", "list");
+  COMMAND_ALIAS("listr", "list");
   COMMAND_ALIAS("ivn", "inventory");
   COMMAND_ALIAS("inc", "inventory");
   COMMAND_ALIAS("hoslter", "holster");
@@ -3505,6 +3507,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("wehre", "where");
   COMMAND_ALIAS("socre", "score");
   COMMAND_ALIAS("dirve", "drive");
+  COMMAND_ALIAS("park", "drive");
   COMMAND_ALIAS("ener", "enter");
   COMMAND_ALIAS("satnd", "stand");
   COMMAND_ALIAS("levae", "leave");
@@ -3519,6 +3522,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
   COMMAND_ALIAS("pot", "put");
+  COMMAND_ALIAS("ptu", "put");
 
   // Combat stuff.
   COMMAND_ALIAS("attack", "kill");
