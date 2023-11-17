@@ -3474,6 +3474,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("lisr", "list");
   COMMAND_ALIAS("lost", "list");
   COMMAND_ALIAS("listr", "list");
+  COMMAND_ALIAS("slel", "sell");
   COMMAND_ALIAS("ivn", "inventory");
   COMMAND_ALIAS("inc", "inventory");
   COMMAND_ALIAS("hoslter", "holster");
@@ -3539,6 +3540,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("guest", "house");
   COMMAND_ALIAS("unready", "ready");
   COMMAND_ALIAS("strap", "holster"); // Not sure about this one.
+  COMMAND_ALIAS("unholster", "draw");
   COMMAND_ALIAS("deck", "software");
   COMMAND_ALIAS("email", "register");
   COMMAND_ALIAS("clothing", "equipment");
@@ -3615,6 +3617,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("hide", "sneak");
   COMMAND_ALIAS("privateroll", "privatedice");
   COMMAND_ALIAS("otell", "tell");
+  COMMAND_ALIAS("all", "items");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
