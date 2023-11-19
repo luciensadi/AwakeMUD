@@ -250,6 +250,8 @@ ACMD (do_redit)
       room->night_desc = str_dup (world[room_num].night_desc);
     if (world[room_num].address)
       room->address = str_dup (world[room_num].address);
+    if (world[room_num].flight_code)
+      room->flight_code = str_dup(world[room_num].flight_code);
     room->zone = world[room_num].zone;
     /* exits - alloc only if necessary */
     for (counter = 0; counter < NUM_OF_DIRS; counter++) {
@@ -379,6 +381,8 @@ ACMD(do_rclone)
     room->description = str_dup (world[num1].description);
   if (world[num1].address)
     room->address = str_dup (world[num1].address);
+  if (world[num1].flight_code)
+    room->flight_code = str_dup(world[num1].flight_code);
   room->zone = zone2;
   /* exits - alloc only if necessary */
   for (counter = 0; counter < NUM_OF_DIRS; counter++) {
