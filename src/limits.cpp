@@ -60,6 +60,7 @@ extern bool docwagon(struct char_data *ch);
 void mental_gain(struct char_data * ch)
 {
   int gain = 0;
+  struct obj_data *bio;
 
   if (IS_PROJECT(ch))
     return;
