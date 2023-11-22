@@ -157,7 +157,7 @@ struct dest_data portland_taxi_destinations[] =
     { "hellhound", "bus", "Hellhound Bus Station", 14624, TAXI_DEST_TYPE_TRANSPORTATION, TRUE  },
     { "postal", "", "Royal Postal Station", 14629, TAXI_DEST_TYPE_OTHER, TRUE },
     { "trans-Oregon", "trucking", "Trans-Oregon Trucking", 14604, TAXI_DEST_TYPE_OTHER, TRUE },
-    { "thompson", "autogroup", "Thompson Autogroup",  14602, TAXI_DEST_TYPE_SHOPPING, TRUE},
+    { "thomason", "autogroup", "Thomason Autogroup",  14602, TAXI_DEST_TYPE_SHOPPING, TRUE},
     { "hard", "", "Hard Times", 14608, TAXI_DEST_TYPE_SHOPPING, TRUE},
     { "bank", "", "TT-Bank", 14610, TAXI_DEST_TYPE_OTHER, TRUE},
     { "sixth", "garage", "Sixth Street Parking", 14680, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
