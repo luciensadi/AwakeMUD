@@ -66,6 +66,7 @@ extern const char *get_plaintext_score_essence(struct char_data *ch);
 extern void diag_char_to_char(struct char_data * i, struct char_data * ch);
 extern bool deactivate_power(struct char_data *ch, int power);
 extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
+extern void initialize_quest_for_ch(struct char_data *ch, int quest_rnum, struct char_data *johnson);
 
 
 extern struct command_info cmd_info[];
@@ -4705,7 +4706,7 @@ SPECIAL(quest_debug_scanner)
       }
     }
     if(!found) {
-      send_to_char(ch, "There is no johnson here.\r\n");
+      send_to_char(ch, "There is no Johnson here.\r\n");
       return TRUE;
     }
 
@@ -4742,18 +4743,7 @@ SPECIAL(quest_debug_scanner)
         remember(to, ch);
 
       // Assign them the quest.
-      int num;
-      GET_QUEST(ch) = i;
-      ch->player_specials->obj_complete = new sh_int[quest_table[GET_QUEST(ch)].num_objs];
-      ch->player_specials->mob_complete = new sh_int[quest_table[GET_QUEST(ch)].num_mobs];
-      for (num = 0; num < quest_table[GET_QUEST(ch)].num_objs; num++)
-        ch->player_specials->obj_complete[num] = 0;
-      for (num = 0; num < quest_table[GET_QUEST(ch)].num_mobs; num++)
-        ch->player_specials->mob_complete[num] = 0;
-
-      //Load targets and give the details.
-      load_quest_targets(to, ch);
-      handle_info(to, i, ch);
+      initialize_quest_for_ch(ch, i, to);
 
       return TRUE;
     }
