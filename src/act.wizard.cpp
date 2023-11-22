@@ -1714,14 +1714,21 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     strlcpy(buf, "ILLEGAL-PRONOUNS!!", sizeof(buf));
     break;
   }
-  send_to_char(ch, "^c%s^n ", pc_race_types[(int)GET_RACE(k)]);
+  // Initial info (race, mob type, name)
+  send_to_char(ch, "^c%s^n %s '%s' (Lv %d)", 
+               pc_race_types[(int)GET_RACE(k)], 
+               !IS_MOB(k) ? "NPC" : "MOB", 
+               GET_NAME(k),
+               GET_LEVEL(k));
+
+  // Location
   if (k->in_room)
-    snprintf(buf2, sizeof(buf2), " %s '%s', In room [%8ld]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k), k->in_room->number);
+    snprintf(buf2, sizeof(buf2), ", In room [%8ld]", k->in_room->number);
   else if (k->in_veh)
-    snprintf(buf2, sizeof(buf2), " %s '%s', In veh [%s]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k), GET_VEH_NAME(k->in_veh));
-  else
-    snprintf(buf2, sizeof(buf2), " %s '%s'\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k));
-  strlcat(buf, buf2, sizeof(buf));
+    snprintf(buf2, sizeof(buf2), ", In veh [%s]", GET_VEH_NAME(k->in_veh));
+
+  // Append to existing buf with newline.
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", buf2);
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alias: %s, VNum: [^c%8ld^n], RNum: [%5ld], Unique ID [%s]\r\n", GET_KEYWORDS(k),
           GET_MOB_VNUM(k), GET_MOB_RNUM(k), get_printable_mob_unique_id(k));
