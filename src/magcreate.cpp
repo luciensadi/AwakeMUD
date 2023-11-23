@@ -244,24 +244,39 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
     return;
   }
 
-  int skill = GET_SKILL(ch, SKILL_SPELLDESIGN);
   int target = (GET_SPELLFORMULA_FORCE(formula) * 2) - (int)(GET_REAL_MAG(ch) / 100);
+  int skill_to_use = SKILL_SPELLDESIGN;
+
+  char rbuf[10000];
+  snprintf(rbuf, sizeof(rbuf), "Spell Design for $n: Original TN %d", target);
 
   // Default to sorcery, if applicable. This increases the TN by 2.
-  if (skill < GET_SPELLFORMULA_FORCE(formula)) {
-    if (GET_SKILL(ch, SKILL_SORCERY) >= GET_SPELLFORMULA_FORCE(formula)) {
+  if (GET_SKILL(ch, skill_to_use) < GET_SPELLFORMULA_FORCE(formula)) {
+    skill_to_use = SKILL_SORCERY;
+
+    if (GET_SKILL(ch, skill_to_use) >= GET_SPELLFORMULA_FORCE(formula)) {
       send_to_char("Finding your spell design knowledge insufficient for this task, you fall back on your general grounding in sorcery.\r\n", ch);
-      skill = GET_SKILL(ch, SKILL_SORCERY);
       target += 2;
+      buf_mod(rbuf, sizeof(rbuf), "defaulting", 2);
     } else {
       send_to_char("You don't have the necessary skills to design this spell. Ideally, you want Spell Design at or above the spell's force, but Sorcery at that force will suffice.\r\n", ch);
       return;
     }
   }
 
+  int skill = get_skill(ch, skill_to_use, target, rbuf, sizeof(rbuf));
+
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Resulting roll will be vs TN %d.", target);
+  act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+
+  snprintf(rbuf, sizeof(rbuf), " Dice to roll: %d skill (w/ pool etc if available)", skill);
+
   // MitS p48: if library/lodge exceeds your base skill, skill += (tools - skill) / 2
-  if (GET_MAGIC_TOOL_RATING(lib) > skill)
-    skill += (GET_MAGIC_TOOL_RATING(lib) - skill) / 2;
+  if (GET_MAGIC_TOOL_RATING(lib) > skill) {
+    int delta = (GET_MAGIC_TOOL_RATING(lib) - skill) / 2;
+    skill += delta;
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", +%d from library", delta);
+  }
 
   // Design duration is based on drain level and is measured in days, per MitS p48.
   int design_duration = spells[GET_SPELLFORMULA_SPELL(formula)].draindamage;
@@ -304,7 +319,13 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
   // Apply totem bonuses to their skill. We use the _throwaway_value parameter here because this doesn't affect our TN.
   if (GET_TRADITION(ch) == TRAD_SHAMANIC) {
     int _throwaway_value = 0;
+    int old_skill = skill;
     totem_bonus(ch, SPELLCASTING, GET_SPELLFORMULA_SPELL(formula), _throwaway_value, skill);
+
+    if (skill != old_skill) {
+      int delta = skill - old_skill;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", %s%d from totem", delta > 0 ? "+" : "", delta);
+    }
   }
   // If they're hermetic, they get to apply elemental study bonuses to their spell creation.
   else if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_SPIRIT(ch)) {
@@ -345,8 +366,13 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
         }
       }
     }
+    if (skill != startskill) {
+      int delta = skill - startskill;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ", %s%d from elemental", delta > 0 ? "+" : "", delta);
+    }
   }
 
+  act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   int success = success_test(skill, target);
   if (success < 1) {
@@ -355,6 +381,8 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
     GET_OBJ_TIMER(formula) = SPELL_DESIGN_FAILED_CODE;
   } else
     GET_SPELLFORMULA_TIME_LEFT(formula) = GET_SPELLFORMULA_INITIAL_TIME(formula) = design_duration / success;
+
+  DEBUG_TO_STAFF(ch, "Got %d success%s.", success, success == 1 ? "" : "es");
 
   if (access_level(ch, LVL_ADMIN)) {
     send_to_char("You use your staff privileges to greatly accelerate the design process.\r\n", ch);
