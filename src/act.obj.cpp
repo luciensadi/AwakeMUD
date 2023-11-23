@@ -3381,10 +3381,11 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
     return;
   }
 
-  // Iterate through what they're wearing and check for compatibility.
-  struct obj_data *worn_item = NULL;
-  for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
-    // They're allowed to wear helmets.
+  // Iterate through what they're wearing and check for compatibility-- but only if this is not a helmet.
+  if (where != ITEM_WEAR_HEAD) {
+    struct obj_data *worn_item = NULL;
+    for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+    // Helmets never conflict.
     if (wearloc == WEAR_HEAD)
       continue;
 
@@ -3407,6 +3408,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
         send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
       return;
     }
+  }
   }
 
   // Gyros take a bit to get into.
