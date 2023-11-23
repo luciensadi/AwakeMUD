@@ -1909,6 +1909,8 @@ ACMD(do_enter)
   struct obj_data *found_obj = NULL;
   struct char_data *dummy = NULL;
 
+  FAILURE_CASE(CH_IN_COMBAT(ch), "Not while you're fighting!");
+
   two_arguments(argument, buf, buf2);
   if (*buf) {                   /* an argument was supplied, search for door keyword */
     generic_find(buf, FIND_OBJ_ROOM, ch, &dummy, &found_obj);
