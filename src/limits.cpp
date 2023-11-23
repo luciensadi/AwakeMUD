@@ -60,10 +60,12 @@ extern bool docwagon(struct char_data *ch);
 void mental_gain(struct char_data * ch)
 {
   int gain = 0;
+  struct obj_data *bio;
 
   if (IS_PROJECT(ch))
     return;
 
+  // Base recovery
   switch (GET_POS(ch))
   {
     case POS_SLEEPING:
@@ -85,39 +87,62 @@ void mental_gain(struct char_data * ch)
       break;
   }
 
-  if (IS_NPC(ch)) {
+  // Character related bonuses
+  // NPCs recover faster
+  if (IS_NPC(ch))
     gain *= 2;
-  } else {
-    gain *= get_drug_heal_multiplier(ch);
+
+  // Augmentations
+  for (bio = ch->bioware; bio; bio = bio->next_content) {
+    if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+      switch (GET_BIOWARE_RATING(bio)) {
+        case 1:
+          gain *= 1.1;
+          break;
+        case 2:
+          gain *= 1.4;
+          break;
+        case 3:
+          gain *= 2;
+          break;
+      }
+      break;
+    }
   }
 
+  // Adept rapid healing increases recovery by +50% per rank
+  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+
+  // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
+  gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+
+  // Room related bonuses
   if (find_workshop(ch, TYPE_MEDICAL))
     gain *= 1.5;
+
+  if (char_is_in_social_room(ch))
+    gain *= 2;
+
+  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+    gain *= 1.5;
+
+  // Penalties happen last, to avoid the possibility of truncating to zero too early
+  // Biosystem overstress reduces healing rate by 10% per point
+  if (GET_BIOOVER(ch) > 0)
+    gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
+
+  // Drug multiplier is a float in range 0.1 ≤ X ≤ 1.0
+  gain *= get_drug_heal_multiplier(ch);
 
 #ifdef ENABLE_HUNGER
   if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
     gain >>= 1;
 #endif
 
-  if (char_is_in_social_room(ch))
-    gain *= 2;
-  else if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
-    gain *= 1.5;
-
-  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
-
-  // Biosystem overstress reduces rate by 10% per point
-  if (GET_BIOOVER(ch) > 0)
-    gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
-
-  // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
-  gain += abs(GET_BEST_LIFESTYLE(ch)) - LIFESTYLE_SQUATTER;
-
   // Prevent reaching 0 gain
   gain = MAX(1, gain);
   GET_MENTAL(ch) = MIN(GET_MAX_MENTAL(ch), GET_MENTAL(ch) + gain);
-
   update_pos(ch);
 }
 
@@ -129,6 +154,7 @@ void physical_gain(struct char_data * ch)
   if (IS_PROJECT(ch))
     return;
 
+  // Base recovery
   switch (GET_POS(ch))
   {
     case POS_STUNNED:
@@ -152,49 +178,58 @@ void physical_gain(struct char_data * ch)
       break;
   }
 
-#ifdef ENABLE_HUNGER
-  if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
-    gain >>= 1;
-#endif
+  // Character related bonuses
+  // NPCs recover faster
+  if (IS_NPC(ch))
+    gain *= 2;
 
+  // Augmentations
+  for (bio = ch->bioware; bio; bio = bio->next_content) {
+    if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+      switch (GET_BIOWARE_RATING(bio)) {
+        case 1:
+          gain *= 1.1;
+          break;
+        case 2:
+          gain *= 1.4;
+          break;
+        case 3:
+          gain *= 2;
+          break;
+      }
+      break;
+    }
+  }
+
+  // Adept rapid healing increases recovery by +50% per rank
+  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+
+  // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
+  gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+
+  // Room related bonuses
   if (find_workshop(ch, TYPE_MEDICAL))
     gain *= 1.8;
 
   if (char_is_in_social_room(ch))
     gain *= 2;
-  else if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+
+  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
     gain *= 1.8;
 
-  if (IS_NPC(ch))
-    gain *= 2;
-  else
-  {
-    gain = MAX(1, gain);
-    for (bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
-        switch (GET_BIOWARE_RATING(bio)) {
-          case 1:
-            gain *= 1.1;
-            break;
-          case 2:
-            gain *= 1.4;
-            break;
-          case 3:
-            gain *= 2;
-            break;
-        }
-        break;
-      }
-    }
-
-    gain *= get_drug_heal_multiplier(ch);
-  }
-  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
-
+  // Penalties happen last, to avoid the possibility of truncating to zero too early
   // Biosystem overstress reduces healing rate by 10% per point
   if (GET_BIOOVER(ch) > 0)
     gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
+
+  // Drug multiplier is a float in range 0.1 ≤ X ≤ 1.0
+  gain *= get_drug_heal_multiplier(ch);
+
+#ifdef ENABLE_HUNGER
+  if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
+    gain >>= 1;
+#endif
 
   // Prevent reaching 0 gain
   gain = MAX(1, gain);
