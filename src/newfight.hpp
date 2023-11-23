@@ -410,6 +410,13 @@ struct combat_data
       if (armor && GET_OBJ_TYPE(armor) == ITEM_WORN && IS_OBJ_STAT(armor, ITEM_EXTRA_HARDENED_ARMOR)) {
         hardened_armor_ballistic_rating += GET_WORN_BALLISTIC(armor);
         hardened_armor_impact_rating += GET_WORN_IMPACT(armor);
+
+        for (int aff_idx = 0; aff_idx < MAX_OBJ_AFFECT; aff_idx++) {
+          if (armor->affected[aff_idx].location == APPLY_BALLISTIC)
+            hardened_armor_ballistic_rating += armor->affected[aff_idx].modifier;
+          if (armor->affected[aff_idx].location == APPLY_IMPACT)
+            hardened_armor_impact_rating += armor->affected[aff_idx].modifier;
+        }
       }
     }
   }
