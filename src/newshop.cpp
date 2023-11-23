@@ -278,6 +278,9 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
     obj_from_bioware(obj);
     GET_INDEX(victim) -= GET_CYBERWARE_ESSENCE_COST(obj);
     GET_INDEX(victim) = MAX(0, GET_INDEX(victim));
+    if (GET_RACE(victim) >= RACE_DRAKE_HUMAN && GET_RACE(victim) <= RACE_DRAKE_TROLL)
+    GET_BIOWARE_ESSENCE_COST(obj) *= 0.5;
+    GET_INDEX(victim) = MAX(0, GET_INDEX(victim));
   } else {
     obj_from_cyberware(obj);
     GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj);
