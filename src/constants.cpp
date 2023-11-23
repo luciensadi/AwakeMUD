@@ -2754,6 +2754,7 @@ const char *combat_modifiers[] =
   "Foot Anchors",
   "Vehicle Handling",
   "Non-Weapon",
+  "Riot Shield",
   "ERROR"
 };
 
