@@ -347,15 +347,19 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
         weapon = NULL;
       }
     }
+
+    int total_bal = 0, total_imp = 0;
     for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
       struct obj_data *armor = GET_EQ(vict, wear_idx);
       if (armor && IS_OBJ_STAT(armor, ITEM_EXTRA_HARDENED_ARMOR)) {
-        if (my_power <= (weapon ? GET_WORN_BALLISTIC(armor) : GET_WORN_IMPACT(armor))) {
-          // Refuse to attack anyone whose armor we can't breach.
-          dissuaded_by_hardened_armor = TRUE;
-          break;
-        }
+        total_bal += GET_WORN_BALLISTIC(armor);
+        total_imp += GET_WORN_IMPACT(armor);
       }
+    }
+
+    if (my_power <= (weapon ? total_bal : total_imp)) {
+      // Refuse to attack anyone whose armor we can't breach.
+      dissuaded_by_hardened_armor = TRUE;
     }
   }
 

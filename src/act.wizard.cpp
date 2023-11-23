@@ -2249,6 +2249,11 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   snprintf(buf, sizeof(buf), "%s wizloaded object #%d (%s).",
           GET_CHAR_NAME(ch), vnum, GET_OBJ_NAME(obj));
   mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+
+  // Make staff-loaded hardened armor wearable.
+  if (GET_OBJ_TYPE(obj) == ITEM_WORN && IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+    GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = -1;
+  }
 }
 
 ACMD(do_iload)
