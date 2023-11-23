@@ -407,7 +407,7 @@ struct combat_data
     // Calculate hardened armor ratings, if any. We add all hardened items together (e.g. armor + helm)
     for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
       struct obj_data *armor = GET_EQ(ch, wear_idx);
-      if (armor && GET_OBJ_TYPE(armor) == ITEM_WORN && IS_OBJ_STAT(armor, ITEM_EXTRA_HARDENED_ARMOR) && !GET_WORN_MATCHED_SET(armor)) {
+      if (armor && GET_OBJ_TYPE(armor) == ITEM_WORN && IS_OBJ_STAT(armor, ITEM_EXTRA_HARDENED_ARMOR)) {
         hardened_armor_ballistic_rating += GET_WORN_BALLISTIC(armor);
         hardened_armor_impact_rating += GET_WORN_IMPACT(armor);
       }

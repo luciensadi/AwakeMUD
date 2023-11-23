@@ -627,17 +627,24 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       SHOTS_FIRED(att->ch)++;
 
     // Check for hardened armor per CC p51.
-    if (def->hardened_armor_ballistic_rating >= GET_WEAPON_POWER(att->weapon)) {
-      act("Your rounds ricochet off of $S hardened armor!", FALSE, att->ch, 0, def->ch, TO_CHAR);
-      act("$n's rounds ricochet off of your hardened armor!", FALSE, att->ch, 0, def->ch, TO_VICT);
-      act("$n's rounds ricochet off of $N's hardened armor!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
-      send_to_char(att->ch, "^o(OOC: %s has hardened armor! You need at least ^O%d^o weapon power to damage %s with your current ammo type, and you only have %d.)^n\r\n",
-                    decapitalize_a_an(GET_CHAR_NAME(def->ch)),
-                    def->hardened_armor_ballistic_rating + 1,
-                    HMHR(def->ch),
-                    GET_WEAPON_POWER(att->weapon)
-                  );
-      return FALSE;
+    if (def->hardened_armor_ballistic_rating) {
+      if (def->hardened_armor_ballistic_rating >= GET_WEAPON_POWER(att->weapon)) {
+        act("Your rounds ricochet off of $S hardened armor!", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("$n's rounds ricochet off of your hardened armor!", FALSE, att->ch, 0, def->ch, TO_VICT);
+        act("$n's rounds ricochet off of $N's hardened armor!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+        send_to_char(att->ch, "^o(OOC: %s has hardened armor! You need at least ^O%d^o weapon power to damage %s with your current ammo type, and you only have %d.)^n\r\n",
+                      decapitalize_a_an(GET_CHAR_NAME(def->ch)),
+                      def->hardened_armor_ballistic_rating + 1,
+                      HMHR(def->ch),
+                      GET_WEAPON_POWER(att->weapon)
+                    );
+        return FALSE;
+      } else {
+#ifdef IS_BUILDPORT
+        snprintf(rbuf, sizeof(rbuf), "Defender's hardened armor rating (%d) is less than attacker's weapon power (%d).", def->hardened_armor_ballistic_rating, GET_WEAPON_POWER(att->weapon));
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+#endif
+      }
     }
 
     // The power of an attack can't be below 2 from ammo changes.
