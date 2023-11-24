@@ -2374,6 +2374,12 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
       FORCE_PROTO_VALUE("worn", GET_WORN_IMPACT(obj), GET_WORN_IMPACT(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("worn", GET_WORN_CONCEAL_RATING(obj), GET_WORN_CONCEAL_RATING(&obj_proto[rnum]));
       FORCE_PROTO_VALUE("worn", GET_WORN_MATCHED_SET(obj), GET_WORN_MATCHED_SET(&obj_proto[rnum]));
+
+      // Specific object repair: Military helmet.
+      if (GET_OBJ_VNUM(obj) == OBJ_HEAVY_MILITARY_HELMET && GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) == 0) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "INFO: System self-healed old military helmet '%s' to be unbonded again.", GET_OBJ_NAME(obj));
+        GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = -1;
+      }
       break;
     case ITEM_DOCWAGON:
       FORCE_PROTO_VALUE("docwagon modulator", GET_DOCWAGON_CONTRACT_GRADE(obj), GET_DOCWAGON_CONTRACT_GRADE(&obj_proto[rnum]));

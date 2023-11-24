@@ -2579,6 +2579,7 @@ enum {
 #define OBJ_REMINGTON_990                  835
 #define OBJ_RUGER_100                      828
 #define OBJ_BO_STAFF                       60510
+#define OBJ_HEAVY_MILITARY_HELMET          717
 
 #define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_TITLE_TO_SCORPION              892
