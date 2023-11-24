@@ -2021,7 +2021,7 @@ void leave_veh(struct char_data *ch)
     return;
   }
 
-  if (veh->cspeed > SPEED_IDLE) {
+  if (veh->cspeed > SPEED_IDLE && !AFF_FLAGGED(ch, AFF_PILOT)) {
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to exit the moving vehicle safely.\r\n", ch);
     } else {
@@ -2031,7 +2031,11 @@ void leave_veh(struct char_data *ch)
   }
 
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    act("$n climbs out of the drivers seat and into the street.", FALSE, ch, 0, 0, TO_VEH);
+    if (veh->cspeed > SPEED_IDLE) {
+      act("$n slams on the brake, then climbs out of the drivers seat and into the street.", FALSE, ch, 0, 0, TO_VEH);
+    } else {
+      act("$n climbs out of the drivers seat and into the street.", FALSE, ch, 0, 0, TO_VEH);
+    }
     AFF_FLAGS(ch).ToggleBit(AFF_PILOT);
     veh->cspeed = SPEED_OFF;
     stop_chase(veh);
