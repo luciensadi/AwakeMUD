@@ -1739,6 +1739,10 @@ void parse_mobile(File &in, long nr)
   MOB_FLAGS(mob).FromString(data.GetString("MobFlags", "0"));
   AFF_FLAGS(mob).FromString(data.GetString("AffFlags", "0"));
 
+  // Manifestation requires the astral bit to be set.
+  if (AFF_FLAGS(mob).IsSet(AFF_MANIFEST))
+    MOB_FLAGS(mob).SetBit(MOB_ASTRAL);
+
   GET_RACE(mob) = data.LookupInt("Race", pc_race_types, RACE_HUMAN);
   GET_PRONOUNS(mob) = data.LookupInt("Gender", genders, PRONOUNS_NEUTRAL);
 
