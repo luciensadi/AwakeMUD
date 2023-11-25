@@ -336,6 +336,13 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         strlcat(buf, " (yours)", sizeof(buf));
       } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(object) == -1) {
         strlcat(buf, " ^g(not yet customized)", sizeof(buf));
+      } else if (object->carried_by && object->carried_by != ch && IS_SENATOR(ch)) {
+        if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(object) == GET_IDNUM(object->carried_by))
+          strlcat(buf, " (theirs)", sizeof(buf));
+        else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(object) == 0)
+          strlcat(buf, " ^y(npc's)", sizeof(buf));
+        else
+          strlcat(buf, " ^y(other pc's)", sizeof(buf));
       } else {
         strlcat(buf, " ^y(unusable)", sizeof(buf));
       }
