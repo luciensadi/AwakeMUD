@@ -4276,9 +4276,17 @@ ACMD(do_show)
       }
     }
 
-    else
-      for (i = 0; i <= top_of_zone_table; i++)
+    else {
+      int last_seen_top = 0;
+      for (i = 0; i <= top_of_zone_table; i++) {
+        int bottom = zone_table[i].number * 100;
+        if (GET_LEVEL(ch) >= LVL_PRESIDENT && bottom > last_seen_top + 1) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(gap: %d - %d)^n\r\n", last_seen_top + 1, bottom - 1);
+        }
         print_zone_to_buf(ENDOF(buf), sizeof(buf) - strlen(buf), i, 0);
+        last_seen_top = zone_table[i].top;
+      }
+    }
     page_string(ch->desc, buf, 1);
     break;
   case 2:                     /* player */
