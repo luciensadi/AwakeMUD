@@ -4007,8 +4007,18 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
     return TRUE;
 
   // Does the viewee have an astral state that makes them invisible to subj?
-  if (IS_ASTRAL(obj) && !AFF_FLAGGED(obj, AFF_MANIFEST) && !SEES_ASTRAL(subj))
-    return FALSE;
+  if (IS_ASTRAL(obj) && !SEES_ASTRAL(subj)) {
+    // You will only see them if they've manifested.
+    if (!AFF_FLAGGED(obj, AFF_MANIFEST))
+      return FALSE;
+
+    // You can only see manifested beings if you're looking through your own eyes.
+    if (PLR_FLAGGED(subj, PLR_REMOTE) || AFF_FLAGGED(subj, AFF_RIG))
+      return FALSE;
+
+    // They're manifested and you're not rigging. Go for it. This specifically ignores light levels since manifestations are psychic projections.
+    return TRUE;
+  }
 
   // Johnsons, trainers, and cab drivers can always see. Them going blind doesn't increase the fun.
   if (npc_can_see_in_any_situation(subj))

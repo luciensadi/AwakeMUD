@@ -239,7 +239,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
 
   if (AFF_FLAGGED(i, AFF_MANIFEST) && !SEES_ASTRAL(ch))
   {
-    snprintf(buf2, sizeof(buf2), "The ghostly image of %s", buf);
+    snprintf(buf2, sizeof(buf2), "The ghostly image of %s", decapitalize_a_an(buf));
     strlcpy(buf, buf2, buf_size);
   }
   return buf;
@@ -1295,9 +1295,12 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       else if (IS_NPC(i) && IS_DUAL(i))
         strlcat(buf, "(dual) ", sizeof(buf));
     }
-    if (AFF_FLAGGED(i, AFF_MANIFEST) && !SEES_ASTRAL(ch))
-      strlcat(buf, "The ghostly image of ", sizeof(buf));
-    strlcat(buf, i->player.physical_text.room_desc, sizeof(buf));
+    
+    if (AFF_FLAGGED(i, AFF_MANIFEST) && !SEES_ASTRAL(ch)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "The ghostly image of %s", decapitalize_a_an(i->player.physical_text.room_desc));
+    } else {
+      strlcat(buf, CAP(i->player.physical_text.room_desc), sizeof(buf));
+    }
 
     if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
       bool already_printed = FALSE;
