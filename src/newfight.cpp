@@ -588,9 +588,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             break;
           case AMMO_EX:
             att->ranged->power_before_armor++;
+            def->hardened_armor_ballistic_rating--;
             // fall through
           case AMMO_EXPLOSIVE:
             att->ranged->power_before_armor++;
+            def->hardened_armor_ballistic_rating--;
             att->ranged->power = att->ranged->power_before_armor - def->standard_ballistic_rating;
             break;
           case AMMO_FLECHETTE:
@@ -609,6 +611,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             att->ranged->power = att->ranged->power_before_armor - def->standard_impact_rating;
             // Gel rounds are -2 power.
             att->ranged->power -= 2;
+            def->hardened_armor_ballistic_rating = (def->hardened_armor_ballistic_rating ? def->hardened_armor_ballistic_rating + 2 : 0);
             att->ranged->is_gel = TRUE; // Affects knockdown tests
             att->ranged->is_physical = FALSE;
             break;
