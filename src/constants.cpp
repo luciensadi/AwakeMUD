@@ -826,7 +826,6 @@ const char *affected_bits[] =
     "Voice Modulator",
     "Wearing DocWagon Receiver",
     "Cheatlog Mark",
-    "Eq-Concealed Focus",
     MAX_FLAG_MARKER
   };
 
@@ -1125,6 +1124,7 @@ const char *extra_bits[] =
     "NBC_IMMUNE",
     "PURGE_ON_DEATH",
     "CHEATLOG_MARK",
+    "CONCEALED_IN_EQ",
     MAX_FLAG_MARKER
   };
 
