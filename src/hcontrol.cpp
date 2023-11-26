@@ -24,18 +24,26 @@ bool name_compare_func(const char *a, const char *b) {
   return strcmp(a, b) < 0;
 }
 
-const char *get_crap_count_string(int crap_count, const char *default_color = "^n") {
+const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE) {
   static char crap_count_string[50];
 
   const char *crap_count_color = NULL;
-  if (crap_count > 500) {
+  if (crap_count > 750) {
     crap_count_color = "^R";
-  } else if (crap_count > 400) {
+    if (screenreader)
+      default_color = " (excessive)";
+  } else if (crap_count > 600) {
     crap_count_color = "^r";
-  } else if (crap_count > 300) {
+    if (screenreader)
+      default_color = "(very high) ";
+  } else if (crap_count > 450) {
     crap_count_color = "^Y";
-  } else if (crap_count > 200) {
+    if (screenreader)
+      default_color = "(high) ";
+  } else if (crap_count > 300) {
     crap_count_color = "^y";
+    if (screenreader)
+      default_color = "(moderate) ";
   } else {
     crap_count_color = "^n";
   }
@@ -78,7 +86,7 @@ void hcontrol_list_houses(struct char_data *ch) {
                  apartment->get_owner_id(), 
                  apartment->get_full_name(),
                  apartment->get_root_vnum(),
-                 get_crap_count_string(apartment->get_crap_count()));
+                 get_crap_count_string(apartment->get_crap_count(), "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
 
         // Add guest info, assuming they have guests. 
         if (apartment->get_guests().size() > 0) {
@@ -195,7 +203,7 @@ void hcontrol_display_house_by_number(struct char_data * ch, vnum_t house_number
           }
         }
 
-        send_to_char(ch, "Its crap count is %s.\r\n", get_crap_count_string(apartment->get_crap_count()));
+        send_to_char(ch, "Its crap count is %s.\r\n", get_crap_count_string(apartment->get_crap_count(), "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
 
         return;
         }

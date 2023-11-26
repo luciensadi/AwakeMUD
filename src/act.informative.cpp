@@ -70,7 +70,7 @@ extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
-extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n");
+extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -7998,7 +7998,7 @@ ACMD(do_penalties) {
 int crapcount_target(struct char_data *victim, struct char_data *viewer) {
   // On their person.
   int total_crap = count_objects_on_char(victim);
-  send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(total_crap), "Carrying / equipped / cyberware / bioware");
+  send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)), "Carrying / equipped / cyberware / bioware");
 
   // Apartments.
   for (auto *complex : global_apartment_complexes) {
@@ -8008,7 +8008,8 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
         for (auto *room : apartment->get_rooms()) {
           crap_count += count_objects_in_room(room->get_world_room());
         }
-        send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(crap_count), apartment->get_full_name());
+        send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)), apartment->get_full_name());
+        total_crap += crap_count;
       }
     }
   }
@@ -8017,13 +8018,13 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     if (veh->owner == GET_IDNUM_EVEN_IF_PROJECTING(victim)) {
       int crap_count = count_objects_in_veh(veh);
+      send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)), GET_VEH_NAME(veh));
       total_crap += crap_count;
-      send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(crap_count), GET_VEH_NAME(veh));
     }
   }
 
   // Total.
-  send_to_char(viewer, "Total: %s.\r\n", get_crap_count_string(total_crap));
+  send_to_char(viewer, "Total: %s.\r\n", get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)));
 
   return total_crap;
 }
@@ -8060,7 +8061,7 @@ ACMD(do_count) {
     int crap_count = count_object_including_contents(carried) - 1;
 
     if (crap_count) {
-      send_to_char(ch, "^cCarried:^n %s (contains %s)\r\n", decapitalize_a_an(GET_OBJ_NAME(carried)), get_crap_count_string(crap_count));
+      send_to_char(ch, "^cCarried:^n %s (contains %s)\r\n", decapitalize_a_an(GET_OBJ_NAME(carried)), get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
     }
   }
 
@@ -8072,7 +8073,7 @@ ACMD(do_count) {
     int crap_count = count_object_including_contents(GET_EQ(ch, wear_idx)) - 1;
 
     if (crap_count) {
-      send_to_char(ch, "^cWorn:^n    %s (contains %s)\r\n", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, wear_idx))), get_crap_count_string(crap_count));
+      send_to_char(ch, "^cWorn:^n    %s (contains %s)\r\n", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, wear_idx))), get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
     }
   }
 
