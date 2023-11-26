@@ -1338,7 +1338,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
     } else if (GET_RACE(d->character) == RETURN_HELP) // for when they use help
       return;
 
-    if (GET_RACE(d->character) == RACE_DRAGON)
+    if (GET_RACE(d->character) == RACE_WESTERN_DRAGON)
       d->ccr.pr[0] = PR_RACE;
     else if (GET_RACE(d->character) == RACE_HUMAN)
       d->ccr.pr[4] = PR_RACE;

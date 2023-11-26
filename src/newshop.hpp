@@ -13,7 +13,8 @@
 #define SHOP_WONT_NEGO  2
 #define SHOP_NORESELL  3
 #define SHOP_CHARGEN  4
-#define SHOP_FLAGS  5
+#define SHOP_YES_GHOUL  5
+#define SHOP_FLAGS  6
 
 #define SHOP_LAST_IDNUM_LIST_SIZE 20
 

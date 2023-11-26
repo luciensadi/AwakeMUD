@@ -594,8 +594,8 @@ void affect_total(struct char_data * ch)
   GET_CONTROL(ch) = 0;
 
   // Set reach, depending on race. Stripped out the 'you only get it at X height' thing since it's not canon and a newbie trap.
-  if ((GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_FOMORI ||
-       GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_MINOTAUR) /* && GET_HEIGHT(ch) > 260 */)
+  if ((GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_GIANT ||
+       GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_GHOUL_TROLL || GET_RACE(ch) == RACE_DRAKE_TROLL) /* && GET_HEIGHT(ch) > 260 */)
     GET_REACH(ch) = 1;
   else
     GET_REACH(ch) = 0;
@@ -721,7 +721,7 @@ void affect_total(struct char_data * ch)
     */
   }
 
-  if (GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_MINOTAUR)
+  if (GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_GHOUL_TROLL || GET_RACE(ch) == RACE_DRAKE_TROLL)
     GET_BOD(ch)++;
 
   /* effects of cyberware */

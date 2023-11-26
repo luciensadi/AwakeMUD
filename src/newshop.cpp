@@ -48,7 +48,9 @@ const char *shop_flags[] =
     "Doctor",
     "!NEGOTIATE",
     "!RESELL",
-    "CHARGEN"
+    "CHARGEN",
+    "YES_GHOUL",
+    MAX_FLAG_MARKER
   };
 
 const char *shop_type[3] =
@@ -110,19 +112,19 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
     return TRUE;
   }
 
-  if ((shop_table[shop_nr].races.IsSet(RACE_HUMAN) && GET_RACE(ch) == RACE_HUMAN) ||
+  if ((shop_table[shop_nr].races.IsSet(RACE_HUMAN) && (GET_RACE(ch) == RACE_HUMAN || GET_RACE(ch) == RACE_GHOUL_HUMAN || GET_RACE(ch) == RACE_DRAKE_HUMAN)) ||
       (shop_table[shop_nr].races.IsSet(RACE_ELF) && (GET_RACE(ch) == RACE_ELF ||
           GET_RACE(ch) == RACE_WAKYAMBI || GET_RACE(ch) == RACE_NIGHTONE ||
-          GET_RACE(ch) == RACE_DRYAD)) ||
+          GET_RACE(ch) == RACE_DRYAD || GET_RACE(ch) == RACE_GHOUL_ELF || GET_RACE(ch) == RACE_DRAKE_ELF)) ||
       (shop_table[shop_nr].races.IsSet(RACE_DWARF) && (GET_RACE(ch) == RACE_DWARF ||
           GET_RACE(ch) == RACE_KOBOROKURU || GET_RACE(ch) == RACE_MENEHUNE ||
-          GET_RACE(ch) == RACE_GNOME)) ||
+          GET_RACE(ch) == RACE_GNOME || GET_RACE(ch) == RACE_GHOUL_DWARF || GET_RACE(ch) == RACE_DRAKE_DWARF)) ||
       (shop_table[shop_nr].races.IsSet(RACE_ORK) && (GET_RACE(ch) == RACE_ORK ||
           GET_RACE(ch) == RACE_ONI || GET_RACE(ch) == RACE_SATYR ||
-          GET_RACE(ch) == RACE_HOBGOBLIN || GET_RACE(ch) == RACE_OGRE)) ||
+          GET_RACE(ch) == RACE_HOBGOBLIN || GET_RACE(ch) == RACE_OGRE || GET_RACE(ch) == RACE_GHOUL_ORK || GET_RACE(ch) == RACE_DRAKE_ORK)) ||
       (shop_table[shop_nr].races.IsSet(RACE_TROLL) && (GET_RACE(ch) == RACE_TROLL ||
-          GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_GIANT ||
-          GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_FOMORI)))
+          GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_MINOTAUR ||
+          GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_GHOUL_TROLL || GET_RACE(ch) == RACE_DRAKE_TROLL)))
   {
     snprintf(buf, sizeof(buf), "%s We don't sell to your type here.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -274,10 +276,17 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
 
   if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
     obj_from_bioware(obj);
+    if (GET_RACE(victim) >= RACE_DRAKE_HUMAN && GET_RACE(victim) <= RACE_DRAKE_TROLL)
     GET_INDEX(victim) -= GET_CYBERWARE_ESSENCE_COST(obj);
+    GET_INDEX(victim) -= GET_CYBERWARE_ESSENCE_COST(obj);
+    GET_INDEX(victim) = MAX(0, GET_INDEX(victim));
     GET_INDEX(victim) = MAX(0, GET_INDEX(victim));
   } else {
     obj_from_cyberware(obj);
+    GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj);
+    if (GET_RACE(victim) >= RACE_GHOUL_HUMAN && GET_RACE(victim) <= RACE_GHOUL_TROLL)
+    GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj);
+    if (GET_RACE(victim) >= RACE_DRAKE_HUMAN && GET_RACE(victim) <= RACE_DRAKE_TROLL)
     GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj);
   }
 
@@ -331,6 +340,17 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
 
   strlcpy(buf, GET_CHAR_NAME(recipient), sizeof(buf));
 
+  // Go home dragon, you're drunk! Disables installing of cyber/bio in both shops and playerdocs - Vile
+  if (IS_DRAGON(recipient)) {
+    if (IS_NPC(installer)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Your magical nature makes this operation impossible!");
+      do_say(installer, buf, cmd_say, SCMD_SAYTO);
+    } else {
+      send_to_char(installer, "Their magical nature rejects the installation of %s!\r\n", GET_OBJ_NAME(ware));
+    }
+    return FALSE;
+  }
+
   // Item must be compatible with your current gear.
   switch (GET_OBJ_TYPE(ware)) {
     case ITEM_CYBERWARE:
@@ -374,10 +394,21 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     return FALSE;
   }
 
+  // Double Bioindex Loss for Drakes.
+  if (GET_OBJ_TYPE(ware) == ITEM_BIOWARE) {
+    int biocost = GET_BIOWARE_ESSENCE_COST(ware);
+    if (GET_RACE(recipient) >= RACE_DRAKE_HUMAN && GET_RACE(recipient) <= RACE_DRAKE_TROLL)
+      biocost = GET_BIOWARE_ESSENCE_COST(ware) *= 2;
+    }
+
   // Reject installing magic-incompat 'ware into magic-using characters.
   if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE) {
     int esscost = GET_CYBERWARE_ESSENCE_COST(ware);
     if (GET_TOTEM(recipient) == TOTEM_EAGLE)
+      esscost *= 2;
+    if (GET_RACE(recipient) >= RACE_GHOUL_HUMAN && GET_RACE(recipient) <= RACE_GHOUL_TROLL)
+      esscost *= 2;
+    if (GET_RACE(recipient) >= RACE_DRAKE_HUMAN && GET_RACE(recipient) <= RACE_DRAKE_TROLL)
       esscost *= 2;
 
     // Check to see if the operation is even possible with their current essence / hole.
@@ -503,6 +534,8 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   // You must have the index to support it.
   else if (GET_OBJ_TYPE(ware) == ITEM_BIOWARE) {
     int esscost = GET_BIOWARE_ESSENCE_COST(ware);
+    if (GET_RACE(recipient) >= RACE_DRAKE_HUMAN && GET_RACE(recipient) <= RACE_DRAKE_TROLL)
+      esscost *= 2;
     if (GET_INDEX(recipient) + esscost > 900) {
       if (IS_NPC(installer)) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
@@ -1057,6 +1090,13 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   bool cash = FALSE;
   char rollbuf[1000];
 
+  // Prevent ghouls from being loved by anyone except their own mother.
+  if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.IsSet(SHOP_YES_GHOUL)) {
+    snprintf(buf, sizeof(buf), "%s GET THE FRAG OUTTA HERE GHOUL!", GET_CHAR_NAME(ch));
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    return;
+  }
+
   // Prevent negative transactions.
   if ((buynum = transaction_amt(arg, arg_len)) < 0)
   {
@@ -1212,6 +1252,16 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         case RACE_ORK:
         case RACE_TROLL:
         case RACE_DWARF:
+        case RACE_GHOUL_HUMAN:
+        case RACE_GHOUL_ELF:
+        case RACE_GHOUL_ORK:
+        case RACE_GHOUL_TROLL:
+        case RACE_GHOUL_DWARF:
+        case RACE_DRAKE_HUMAN:
+        case RACE_DRAKE_ELF:
+        case RACE_DRAKE_ORK:
+        case RACE_DRAKE_TROLL:
+        case RACE_DRAKE_DWARF:
           break;
         default:
           snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (metavariant)", METAVARIANT_PENALTY);
@@ -1391,6 +1441,13 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
   if (!*arg) {
     send_to_char("What item do you want to sell?\r\n", ch);
+    return;
+  }
+
+  // Prevent ghouls from being loved by anyone except their own mother.
+  if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.IsSet(SHOP_YES_GHOUL)) {
+    snprintf(buf, sizeof(buf), "%s GET THE FRAG OUTTA HERE GHOUL!", GET_CHAR_NAME(ch));
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
   }
 

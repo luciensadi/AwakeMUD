@@ -475,9 +475,9 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
     WRITEOUT_MSG("Concentration Penalty (Drug-Induced)", GET_CONCENTRATION_TARGET_MOD(ch));
   }
 
-  // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here.
+  // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here. Ghouls/Dragons excluded. - Vile
   if (SEES_ASTRAL(ch)) {
-    if (!skill_is_magic && IS_PERCEIVING(ch)) {
+    if (!skill_is_magic && IS_PERCEIVING(ch) && !IS_GHOUL(ch) && !IS_DRAGON(ch)) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
       WRITEOUT_MSG("Perceiving", 2);
@@ -508,11 +508,18 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
 
   base_target += GET_TARGET_MOD(ch);
   buf_mod(rbuf, rbuf_len, "GET_TARGET_MOD", GET_TARGET_MOD(ch) );
-  if (GET_RACE(ch) == RACE_NIGHTONE && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch) && weather_info.sky < SKY_RAINING)
+  if ((GET_RACE(ch) == RACE_NIGHTONE || IS_GHOUL(ch)) && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch) && weather_info.sky < SKY_RAINING)
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_len, "Sunlight", 1);
     WRITEOUT_MSG("Sunlight Allergy", 1);
+  }
+  if (GET_RACE(ch) == RACE_DRYAD)
+    if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS) || ROOM_FLAGGED(get_ch_in_room(ch), ROOM_ROAD) ||
+        SECT(get_ch_in_room(ch)) == SPIRIT_HEARTH || SECT(get_ch_in_room(ch)) == SPIRIT_CITY)
+  {
+    base_target += 1;
+    buf_mod(rbuf, rbuf_len, "Urban", 1);
   }
   if (temp_room->poltergeist[0] && !IS_ASTRAL(ch) && !MOB_FLAGGED(ch, MOB_DUAL_NATURE))
   {

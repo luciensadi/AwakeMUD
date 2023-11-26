@@ -969,6 +969,11 @@ void point_update(void)
       }
 #endif
 
+      if (IS_GHOUL(i) || IS_DRAGON(i))
+        if (!PLR_FLAGGED(i, PLR_PERCEIVE)) {
+          PLR_FLAGS(i).SetBit(PLR_PERCEIVE);
+      }
+
       // Temp magic loss (banishing) regains 1/hour, SR3 pg 189
       if (GET_TEMP_MAGIC_LOSS(i) > 0) {
         GET_TEMP_MAGIC_LOSS(i)--;
@@ -1993,17 +1998,188 @@ float gen_size(int race, bool height, int size, int pronouns)
           return number(80, 91) * mod;
       }
       break;
-    case RACE_DRAGON:
+    case RACE_DRYAD:
       if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
-          return number(300, 400) * mod;
+          return number(115, 133) * mod;
         else
-          return number(1900, 2100) * mod;
+          return number(50, 62) * mod;
       } else {
         if (height)
-          return number(400, 500) * mod;
+          return number(80, 115) * mod;
         else
-          return number(1950, 2300) * mod;
+          return number(45, 56) * mod;
+      }
+      break;
+    case RACE_WESTERN_DRAGON:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(185, 210) * mod;
+        else
+          return number(90, 105) * mod;
+      } else {
+        if (height)
+          return number(178, 195) * mod;
+        else
+          return number(90, 105) * mod;
+      }
+      break;
+    case RACE_EASTERN_DRAGON:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(185, 210) * mod;
+        else
+          return number(90, 105) * mod;
+      } else {
+        if (height)
+          return number(178, 195) * mod;
+        else
+          return number(90, 105) * mod;
+      }
+      break;
+    case RACE_FEATHERED_SERPENT:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(185, 210) * mod;
+        else
+          return number(90, 105) * mod;
+      } else {
+        if (height)
+          return number(178, 195) * mod;
+        else
+          return number(90, 105) * mod;
+      }
+      break;
+    case RACE_DRAKE_HUMAN:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(160, 187) * mod;
+        else
+          return number(65, 77) * mod;
+      } else {
+        if (height)
+          return number(145, 175) * mod;
+        else
+          return number(56, 69) * mod;
+      }
+      break;
+    case RACE_DRAKE_DWARF:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(115, 133) * mod;
+        else
+          return number(50, 62) * mod;
+      } else {
+        if (height)
+          return number(80, 115) * mod;
+        else
+          return number(45, 56) * mod;
+      }
+      break;
+    case RACE_DRAKE_ELF:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(180, 205) * mod;
+        else
+          return number(70, 82) * mod;
+      } else {
+        if (height)
+          return number(175, 195) * mod;
+        else
+          return number(60, 75) * mod;
+      }
+      break;
+    case RACE_DRAKE_ORK:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(185, 210) * mod;
+        else
+          return number(90, 105) * mod;
+      } else {
+        if (height)
+          return number(178, 195) * mod;
+        else
+          return number(90, 105) * mod;
+      }
+      break;
+    case RACE_DRAKE_TROLL:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(270, 295) * mod;
+        else
+          return number(215, 245) * mod;
+
+      } else {
+        if (height)
+          return number(255, 280) * mod;
+        else
+          return number(200, 230) * mod;
+      }
+      break;
+    case RACE_GHOUL_HUMAN:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(160, 187) * mod;
+        else
+          return number(65, 77) * mod;
+      } else {
+        if (height)
+          return number(145, 175) * mod;
+        else
+          return number(56, 69) * mod;
+      }
+      break;
+    case RACE_GHOUL_DWARF:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(115, 133) * mod;
+        else
+          return number(50, 62) * mod;
+      } else {
+        if (height)
+          return number(80, 115) * mod;
+        else
+          return number(45, 56) * mod;
+      }
+      break;
+    case RACE_GHOUL_ELF:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(180, 205) * mod;
+        else
+          return number(70, 82) * mod;
+      } else {
+        if (height)
+          return number(175, 195) * mod;
+        else
+          return number(60, 75) * mod;
+      }
+      break;
+    case RACE_GHOUL_ORK:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(185, 210) * mod;
+        else
+          return number(90, 105) * mod;
+      } else {
+        if (height)
+          return number(178, 195) * mod;
+        else
+          return number(90, 105) * mod;
+      }
+      break;
+    case RACE_GHOUL_TROLL:
+      if (pronouns == PRONOUNS_MASCULINE) {
+        if (height)
+          return number(270, 295) * mod;
+        else
+          return number(215, 245) * mod;
+
+      } else {
+        if (height)
+          return number(255, 280) * mod;
+        else
+          return number(200, 230) * mod;
       }
       break;
     default:
