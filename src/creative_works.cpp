@@ -12,7 +12,7 @@ void create_art_main_menu(struct descriptor_data *d) {
   send_to_char(CH, "Welcome to art creation. ^WNo ASCII art, please.^n\r\n");
   send_to_char(CH, "1) ^cName: ^n%s^n\r\n", GET_OBJ_NAME(ART));
   send_to_char(CH, "2) ^cDescription: ^n%s^n\r\n", ART->photo ? ART->photo : ART->text.look_desc);
-  send_to_char(CH, "3) ^cRoom Description: ^n%s^n\r\n", ART->graffiti ? ART->graffiti : ART->text.room_desc);
+  send_to_char(CH, "3) ^cRoom Description: ^g%s^n\r\n", ART->graffiti ? ART->graffiti : ART->text.room_desc);
   send_to_char(CH, "q) ^cSave and Quit^n\r\n");
   send_to_char(CH, "Enter Option: ");
 
@@ -77,8 +77,11 @@ void art_edit_parse(struct descriptor_data *d, const char *arg) {
         DELETE_ARRAY_IF_EXTANT(ART->restring);
         ART->restring = str_dup(arg);
       } else {
+        char replaced_colors[strlen(ART->text.room_desc) * 2];
+        replace_substring(ART->text.room_desc, buf2, "^n", "^g");
+        replace_substring(buf2, replaced_colors, "^N", "^g");
         DELETE_ARRAY_IF_EXTANT(ART->graffiti);
-        ART->graffiti = str_dup(arg);
+        ART->graffiti = str_dup(replaced_colors);
       }
       
       create_art_main_menu(d);
