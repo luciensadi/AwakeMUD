@@ -655,8 +655,16 @@ bool load_char(const char *name, char_data *ch, bool logon)
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_quests WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
-  while ((row = mysql_fetch_row(res)))
-    GET_LQUEST(ch, atoi(row[1])) = atoi(row[2]);
+
+  int cquest_idx = 0;
+  while ((row = mysql_fetch_row(res))) {
+    vnum_t vnum = atoi(row[2]);
+
+    GET_LQUEST(ch, atoi(row[1])) = vnum;
+
+    if (atoi(row[3]))
+      GET_CQUEST(ch, cquest_idx++) = vnum; 
+  }
   mysql_free_result(res);
 
   {
@@ -1313,13 +1321,27 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   /* Save data for quests the player has run. */
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_quests WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
-  strcpy(buf, "INSERT INTO pfiles_quests (idnum, number, questnum) VALUES (");
+  strcpy(buf, "INSERT INTO pfiles_quests (idnum, number, questnum, completed) VALUES (");
   for (i = 0, q = 0; i <= QUEST_TIMER - 1; i++) {
     if (GET_LQUEST(player ,i)) {
       if (q)
         strcat(buf, "), (");
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %ld", GET_IDNUM(player), i, GET_LQUEST(player, i));
-      q = 1;
+
+      bool found = FALSE;
+      // Check to see if it's in the CQUEST list. If it is, store it as completed.
+      for (int c_idx = 0; c_idx <= QUEST_TIMER - 1; c_idx++) {
+        if (GET_LQUEST(player, i) == GET_CQUEST(player, c_idx)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %ld, TRUE", GET_IDNUM(player), i, GET_LQUEST(player, i));
+          q = 1;
+          found = TRUE;
+        }
+      }
+
+      // It wasn't in CQUEST, so store it as not completed.
+      if (!found) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %ld, FALSE", GET_IDNUM(player), i, GET_LQUEST(player, i));
+        q = 1;
+      }
     }
   }
   if (q) {

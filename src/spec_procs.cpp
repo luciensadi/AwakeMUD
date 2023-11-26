@@ -4616,10 +4616,16 @@ SPECIAL(quest_debug_scanner)
       strcat(buf, "Not currently on a quest.\r\n");
     }
 
-    send_to_char(ch, "Last %d quests:\r\n", QUEST_TIMER);
+    send_to_char(ch, "Last %d 'completed' quests (both quit and successful):\r\n", QUEST_TIMER);
     for (int i = 0; i < QUEST_TIMER; i++) {
       if (GET_LQUEST(to, i))
         send_to_char(ch, "%d) %ld\r\n", i, GET_LQUEST(to, i));
+    }
+
+    send_to_char(ch, "Last %d successfully completed quests:\r\n", QUEST_TIMER);
+    for (int i = 0; i < QUEST_TIMER; i++) {
+      if (GET_CQUEST(to, i))
+        send_to_char(ch, "%d) %ld\r\n", i, GET_CQUEST(to, i));
     }
 
     send_to_char(buf, ch);
@@ -4651,6 +4657,7 @@ SPECIAL(quest_debug_scanner)
 
     for (int i = 0; i < QUEST_TIMER; i++) {
       GET_LQUEST(to, i) = 0;
+      GET_CQUEST(to, i) = 0;
     }
 
     send_to_char(ch, "OK, wiped out quest history for %s.\r\n", GET_CHAR_NAME(to));
@@ -6183,7 +6190,7 @@ SPECIAL(mageskill_hermes)
       } else {
         bool dq = FALSE;
         for (int i = 0; i < QUEST_TIMER; i++)
-          if (GET_LQUEST(ch, i) == QST_MAGE_INTRO)
+          if (GET_CQUEST(ch, i) == QST_MAGE_INTRO)
             dq = TRUE;
         if (dq) {
           // Reject people who couldn't pass the quest.
