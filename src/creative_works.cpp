@@ -91,7 +91,12 @@ void art_edit_parse(struct descriptor_data *d, const char *arg) {
 
 #undef ART
 
+#define CREATE_ART_COST 500
 void create_art(struct char_data *ch) {
+  FAILURE_CASE(PLR_FLAGGED(ch, PLR_BLACKLIST), "You can't do that while blacklisted.");
+  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < CREATE_ART_COST, "It will cost you %d nuyen in supplies to create a work of art.");
+  lose_nuyen(ch, CREATE_ART_COST, NUYEN_OUTFLOW_DECORATING);
+
   struct obj_data *art = read_object(OBJ_CUSTOM_ART, VIRTUAL);
   GET_ART_AUTHOR_IDNUM(art) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
 
