@@ -276,10 +276,10 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
 
   if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
     obj_from_bioware(obj);
+    if (GET_RACE(victim) >= RACE_DRAKE_HUMAN && GET_RACE(victim) <= RACE_DRAKE_TROLL)
+    GET_INDEX(victim) -= GET_CYBERWARE_ESSENCE_COST(obj);
     GET_INDEX(victim) -= GET_CYBERWARE_ESSENCE_COST(obj);
     GET_INDEX(victim) = MAX(0, GET_INDEX(victim));
-    if (GET_RACE(victim) >= RACE_DRAKE_HUMAN && GET_RACE(victim) <= RACE_DRAKE_TROLL)
-    GET_BIOWARE_ESSENCE_COST(obj) *= 0.5;
     GET_INDEX(victim) = MAX(0, GET_INDEX(victim));
   } else {
     obj_from_cyberware(obj);
@@ -535,7 +535,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   else if (GET_OBJ_TYPE(ware) == ITEM_BIOWARE) {
     int esscost = GET_BIOWARE_ESSENCE_COST(ware);
     if (GET_RACE(recipient) >= RACE_DRAKE_HUMAN && GET_RACE(recipient) <= RACE_DRAKE_TROLL)
-      esscost = GET_BIOWARE_ESSENCE_COST(ware) *= 2;
+      esscost *= 2;
     if (GET_INDEX(recipient) + esscost > 900) {
       if (IS_NPC(installer)) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would kill you!");
