@@ -282,7 +282,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
       resolve_docwagon_upped(victim);
     }
 
-    GET_POS(victim) = POS_STANDING;
+    GET_POS(victim) = victim->in_veh ? POS_SITTING : POS_STANDING;
     return FALSE;
   }
 

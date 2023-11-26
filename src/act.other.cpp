@@ -2224,7 +2224,7 @@ ACMD(do_treat)
   if (successes > 0) {
     // Rectify negative mental.
     if (GET_MENTAL(vict) < 0) {
-      GET_MENTAL(vict) = MAX(GET_MENTAL(vict), 0);
+      GET_MENTAL(vict) = MAX(GET_MAX_MENTAL(vict), 0);
     }
 
     // Add a box of health. They get a second box if they're still mortally wounded.
