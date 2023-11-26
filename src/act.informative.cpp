@@ -289,6 +289,8 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     strlcat(buf, CCHAR ? CCHAR : "", sizeof(buf));
 
     if (object->graffiti) {
+      if (GET_OBJ_VNUM(object) == OBJ_CUSTOM_ART)
+        strlcat(buf, "^g", sizeof(buf));
       strlcat(buf, object->graffiti, sizeof(buf));
       strlcat(buf, "^n", sizeof(buf));
     }
