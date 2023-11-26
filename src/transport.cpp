@@ -181,7 +181,7 @@ struct dest_data portland_taxi_destinations[] =
 
 struct dest_data caribbean_taxi_destinations[] =
   {
-    { "airport", "", "St. Patricks International Airport", 62117, TAXI_DEST_TYPE_TRANSPORTATION, TRUE},
+    { "airport", "patricks", "St. Patricks International Airport", 62117, TAXI_DEST_TYPE_TRANSPORTATION, TRUE},
     { "pelagie", "apartments", "Pelagie Waterfront Apartments", 62125, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE},
     { "montplaisir", "restaurant", "Montplaisir Restaurant", 62151, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
     { "viltz", "motel", "Viltz Motel",  62135, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE},
@@ -193,6 +193,7 @@ struct dest_data caribbean_taxi_destinations[] =
     { "mchughs", "food", "McHughs Fast Food", 62272, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
     { "casino", "grandmaion", "Grandmaion Casino", 62275, TAXI_DEST_TYPE_OTHER, TRUE},
     { "police", "station", "Victoria Police Station", 62264, TAXI_DEST_TYPE_OTHER, TRUE},
+    { "diamond", "estate", "Diamond Estate", 62259, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
 
@@ -810,6 +811,7 @@ struct dest_data *get_dest_data_list_for_zone(int zone_num) {
     case 621:
     case 622:
     case 623:
+    case 958:
       return caribbean_taxi_destinations;
   }
 
