@@ -77,6 +77,7 @@ extern int frozen_start_room;
 extern int last;
 extern int max_ability(int i);
 extern int count_objects(struct obj_data *obj);
+extern void list_mob_precast_spells_to_ch(struct char_data *mob, struct char_data *ch);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
@@ -1893,6 +1894,11 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     if (*skill_buf) {
       send_to_char(ch, "Skills:\r\n%s", skill_buf);
     }
+  }
+
+  if (k->precast_spells) {
+    send_to_char(ch, "Precast Spells:\r\n");
+    list_mob_precast_spells_to_ch(k, ch);
   }
 }
 
@@ -4962,7 +4968,7 @@ ACMD(do_set)
                { "tke", LVL_VICEPRES, PC, NUMBER }, //70
                { "sysp", LVL_VICEPRES, PC, NUMBER },
                { "socializationbonus", LVL_ADMIN, PC,     NUMBER },
-               { "race", LVL_PRESIDENT, PC, NUMBER },
+               { "race", LVL_ADMIN, PC, NUMBER },
                { "rolls", LVL_PRESIDENT, PC, BINARY },
                { "multiplier", LVL_PRESIDENT, PC, NUMBER }, //75
                { "shotsfired", LVL_PRESIDENT, PC, NUMBER },

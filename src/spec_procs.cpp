@@ -5916,7 +5916,7 @@ SPECIAL(weapon_dominator) {
   return FALSE;
 }
 
-extern void end_quest(struct char_data *ch);
+extern void end_quest(struct char_data *ch, bool succeeded);
 
 #define REST_STOP_QUEST_VNUM       5000
 #define REST_STOP_VNUM             8198
@@ -5954,7 +5954,7 @@ SPECIAL(orkish_truckdriver)
       send_to_char("The driver has been alerted! The run is a failure!\r\n", FIGHTING(driver));
       if (driver->in_room->dir_option[WEST])
         orkish_truckdriver_drive_away(driver->in_room);
-      end_quest(FIGHTING(driver));
+      end_quest(FIGHTING(driver), FALSE);
     }
     return FALSE;
   }

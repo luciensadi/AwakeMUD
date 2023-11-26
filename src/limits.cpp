@@ -47,7 +47,7 @@
 
 extern class objList ObjList;
 extern int modify_target(struct char_data *ch);
-extern void end_quest(struct char_data *ch);
+extern void end_quest(struct char_data *ch, bool succeeded);
 extern char *cleanup(char *dest, const char *src);
 extern void damage_equip(struct char_data *ch, struct char_data *victim, int power, int type);
 extern bool check_adrenaline(struct char_data *, int);
@@ -559,7 +559,7 @@ void check_idling(void)
             char_from_room(ch);
           char_to_room(ch, &world[1]);
           if (GET_QUEST(ch))
-            end_quest(ch);
+            end_quest(ch, FALSE);
           if (ch->desc)
             close_socket(ch->desc);
           ch->desc = NULL;

@@ -145,7 +145,7 @@ const char *smo[] =
     "\n"
   };
 
-void end_quest(struct char_data *ch);
+void end_quest(struct char_data *ch, bool succeeded);
 
 void initialize_quest_for_ch(struct char_data *ch, int quest_rnum, struct char_data *johnson) {
   // Assign them the quest.
@@ -211,7 +211,7 @@ bool attempt_quit_job(struct char_data *ch, struct char_data *johnson) {
     do_say(johnson, "Fine.", 0, 0);
   }
 
-  end_quest(ch);
+  end_quest(ch, FALSE);
   forget(johnson, ch);
   return TRUE;
 }
@@ -846,7 +846,7 @@ bool check_quest_kill(struct char_data *ch, struct char_data *victim)
   return FALSE;
 }
 
-void end_quest(struct char_data *ch)
+void end_quest(struct char_data *ch, bool succeeded)
 {
   if (IS_NPC(ch) || !GET_QUEST(ch))
     return;
@@ -854,10 +854,17 @@ void end_quest(struct char_data *ch)
   extract_quest_targets(GET_IDNUM(ch));
   // We mark the quest as completed here because if you fail...
   //well you failed. Better luck next time chummer.
-  for (int i = QUEST_TIMER - 1; i > 0; i--)
+  for (int i = QUEST_TIMER - 1; i > 0; i--) {
     GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
 
+    if (succeeded)
+      GET_CQUEST(ch, i) = GET_CQUEST(ch, i - 1);
+  }
+
   GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+  if (succeeded)
+    GET_CQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+
   GET_QUEST(ch) = 0;
 
   delete [] ch->player_specials->mob_complete;
@@ -968,7 +975,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
 {
   if (vnum_from_non_connected_zone(quest_table[GET_QUEST(ch)].vnum)) {
     send_to_char(ch, "Quest reward suppressed due to this zone not being marked as connected to the game world.\r\n");
-    end_quest(ch);
+    end_quest(ch, TRUE);
     return;
   }
 
@@ -1094,7 +1101,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
   snprintf(buf, sizeof(buf), "$n gives you %d nuyen.", nuyen);
   act(buf, FALSE, johnson, 0, ch, TO_VICT);
   send_to_char(ch, "You gain %.2f karma.\r\n", ((float) gained / 100));
-  end_quest(ch);
+  end_quest(ch, TRUE);
 }
 
 //Comparator function for sorting quest
@@ -1169,7 +1176,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
       if (quest_table[i].prerequisite_quest) {
         bool found = FALSE;
         for (int q = QUEST_TIMER - 1; q >= 0; q--) {
-          if (GET_LQUEST(ch, q) == quest_table[i].prerequisite_quest) {
+          if (GET_CQUEST(ch, q) == quest_table[i].prerequisite_quest) {
             found = TRUE;
             break;
           }
@@ -1375,8 +1382,10 @@ SPECIAL(johnson)
     else if (str_str(argument, "no"))
       comm = CMD_JOB_NO;
     else if (access_level(ch, LVL_BUILDER) && !str_cmp(argument, "clear")) {
-      for (int i = QUEST_TIMER - 1; i >= 0; i--)
+      for (int i = QUEST_TIMER - 1; i >= 0; i--) {
         GET_LQUEST(ch, i) = 0;
+        GET_CQUEST(ch, i) = 0;
+      }
       send_to_char("OK, your quest history has been cleared.\r\n", ch);
       return FALSE;
     } else {
@@ -1474,7 +1483,7 @@ SPECIAL(johnson)
       for (i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
         if (ch->player_specials->mob_complete[i] == -1) {
           do_say(johnson, "You fragged it up, and you still want to get paid?", 0, 0);
-          end_quest(ch);
+          end_quest(ch, FALSE);
           forget(johnson, ch);
           return TRUE;
         }
@@ -3750,7 +3759,7 @@ ACMD(do_endrun) {
         snprintf(buf, sizeof(buf), "$z's phone rings. $e answers, listens for a moment, then says into it, \"%s\"", quest_table[GET_QUEST(ch)].quit);
         act(buf, FALSE, johnson, NULL, NULL, TO_ROOM);
 
-        end_quest(ch);
+        end_quest(ch, FALSE);
         forget(johnson, ch);
       } else if (ch->in_room && ch->in_room == johnson->in_room) {
         attempt_quit_job(ch, johnson);

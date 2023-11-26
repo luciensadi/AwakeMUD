@@ -42,7 +42,7 @@ extern int return_general(int skill_num);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern int max_ability(int i);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
-extern void end_quest(struct char_data *ch);
+extern void end_quest(struct char_data *ch, bool succeeded);
 extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch);
@@ -2537,7 +2537,7 @@ void extract_char(struct char_data * ch)
     // Terminate the player's quest, if any. Realistically, we shouldn't ever trigger this code, but if it happens we're ready for it.
     if (GET_QUEST(ch)) {
       mudlog("Warning: extract_char received PC with quest still active.", ch, LOG_SYSLOG, TRUE);
-      end_quest(ch);
+      end_quest(ch, FALSE);
     }
 
     // Save the player.

@@ -23,6 +23,8 @@
 #include "bullet_pants.hpp"
 
 void write_mobs_to_disk(vnum_t zone);
+void list_mob_precast_spells_to_ch(struct char_data *mob, struct char_data *ch);
+void ensure_spell_exists_in_mob_precast_spells(int spell, int subtype, struct char_data *mob);
 
 // extern vars
 extern int calc_karma(struct char_data *ch, struct char_data *vict);
@@ -34,6 +36,7 @@ extern const char *attack_types[];
 
 // extern funcs
 extern char *cleanup(char *dest, const char *src);
+extern const char *get_spell_name(int spell, int subtype);
 
 // mem func
 extern class memoryClass *Mem;
@@ -1511,6 +1514,79 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
 
+  case MEDIT_PRECAST_SPELLS:
+    switch (*arg) {
+      case 'q':
+      case 'Q':
+      case '0':
+      case 'b':
+      case 'B':
+        medit_disp_menu(d);
+        break;
+      case 'a':
+      case 'A':
+      case 'e':
+      case 'E':
+        for (int spell_idx = 0; spell_idx < MAX_SPELLS; spell_idx++) {
+          send_to_char(CH, "%3d) %s^n\r\n", spell_idx, spells[spell_idx].name);
+        }
+        send_to_char(CH, "Which spell number do you want to add?\r\n");
+        d->edit_mode = MEDIT_ADD_PRECAST_SPELL;
+        break;
+      case 'd':
+      case 'D':
+        list_mob_precast_spells_to_ch(MOB, CH);
+        send_to_char(CH, "Which spell do you want to remove from the list?\r\n");
+        d->edit_mode = MEDIT_DELETE_PRECAST_SPELL;
+        break;
+      default:
+        send_to_char("That's not a choice. Enter a choice (A to add, D to delete, or Q to quit): ", CH);
+        break;
+    }
+  case MEDIT_ADD_PRECAST_SPELL:
+    number = atoi(arg);
+    if (number < 0 || number >= MAX_SPELLS) {
+      send_to_char(CH, "You must pick a spell number between 0 and %d.", MAX_SPELLS - 1);
+      return;
+    }
+
+    // Cache the spell value and clear any stored subtype info.
+    d->edit_number2 = number;
+    d->edit_number3 = 0;
+
+    if (SPELL_HAS_SUBTYPE(number)) {
+      // Get the subtype.
+      for (int attr_idx = 0; attr_idx < NUM_ATTRIBUTES; attr_idx++) {
+        send_to_char(CH, "%d) %s\r\n", attributes[attr_idx]);
+      }
+      send_to_char(CH, "Which attribute will this spell affect?\r\n");
+      d->edit_mode = MEDIT_ADD_PRECAST_SPELL_WITH_SUBTYPE;
+      return;
+    }
+
+    // asdf todo: update proto with the new vector, or discard on cancel... also list should have been cloned on medit so we can edit and discard as desired
+
+    ensure_spell_exists_in_mob_precast_spells(number, 0, MOB);
+
+    send_to_char(CH, "What force should this spell have?\r\n");
+    d->edit_mode = MEDIT_EDIT_EXISTING_SPELL;
+    break;
+  
+  /* Notes:
+  
+  - there will be spell number overlaps (increase attribute, etc)
+  - some spells have subtype, others don't
+  */
+
+  case MEDIT_ADD_PRECAST_SPELL_WITH_SUBTYPE:
+    break;
+
+  case MEDIT_EDIT_EXISTING_SPELL:
+    break;
+  
+  case MEDIT_DELETE_PRECAST_SPELL:
+    break;
+
   case MEDIT_CYBERWARE:
   case MEDIT_BIOWARE:
     switch (*arg) {
@@ -1873,4 +1949,32 @@ void write_mobs_to_disk(vnum_t zone_num)
   // Move the tmp to clobber the old.
   remove(final_file_name);
   rename(tmp_file_name, final_file_name);
+}
+
+void list_mob_precast_spells_to_ch(struct char_data *mob, struct char_data *ch) {
+  int idx = 0;
+  for (auto sust : *(mob->precast_spells)) {
+    send_to_char(ch, "%3d) %40s^n (force %d)\r\n", idx, get_spell_name(sust->spell, sust->subtype), sust->force);
+  }
+}
+
+void ensure_spell_exists_in_mob_precast_spells(int spell, int subtype, struct char_data *mob) {
+  // Ensure we have a precast_spells vector.
+  if (!mob->precast_spells) {
+    mob->precast_spells = new std::vector<sustain_data *>;
+  }
+
+  // Make sure they don't have the spell on them already.
+  for (auto sust : *(mob->precast_spells)) {
+    if (sust->spell == spell) {
+      // It exists.
+      return;
+    }
+  }
+
+  // Create a new one.
+  struct sustain_data *sust = new sustain_data;
+  memset(sust, 0, sizeof(struct sustain_data));
+  sust->spell = spell;
+  sust->subtype = subtype;
 }

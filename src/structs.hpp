@@ -706,6 +706,7 @@ struct player_special_data
   sh_int *obj_complete;
   sh_int *mob_complete;
   long last_quest[QUEST_TIMER];
+  long completed_quest[QUEST_TIMER];
   ush_int drugs[NUM_DRUGS][NUM_DRUG_PLAYER_SPECIAL_FIELDS];
   time_t drug_last_fix[NUM_DRUGS];
   ubyte mental_loss;
@@ -720,6 +721,7 @@ struct player_special_data
       perm_bod(0), watching(NULL), wherelist_checks(0)
   {
     ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
+    ZERO_OUT_ARRAY(completed_quest, QUEST_TIMER);
     ZERO_OUT_ARRAY(drug_last_fix, NUM_DRUGS);
 
     for (int i = 0; i < NUM_DRUGS; i++) {
@@ -955,6 +957,9 @@ struct char_data
 
   vnum_t mob_loaded_in_room;
 
+  // Some NPCs have pre-cast spells on them. We store those here. PROTO, DON'T DELETE!
+  std::vector<sustain_data *> *precast_spells;
+
   /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 #ifdef USE_DEBUG_CANARIES
   int canary;
@@ -966,7 +971,7 @@ struct char_data
       bioware(NULL), next_in_room(NULL), next(NULL), next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL),
       next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
       pgroup_invitations(NULL), congregation_bonus_pool(0), last_violence_loop(0), pc_invis_resistance_test_results(NULL),
-      mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(NULL)
+      mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(NULL), precast_spells(NULL)
   {
     ZERO_OUT_ARRAY(equipment, NUM_WEARS);
 

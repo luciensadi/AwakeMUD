@@ -98,7 +98,7 @@ extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char
 extern char *get_player_name(vnum_t id);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool check_sentinel_snap_back(struct char_data *ch);
-extern void end_quest(struct char_data *ch);
+extern void end_quest(struct char_data *ch, bool succeeded);
 
 // Corpse saving externs.
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
@@ -962,7 +962,7 @@ void raw_kill(struct char_data * ch)
       GET_LAST_IN(ch) = GET_ROOM_VNUM(ch->in_room);
 
       if (GET_QUEST(ch)) {
-        end_quest(ch);
+        end_quest(ch, FALSE);
       }
     }
   }
