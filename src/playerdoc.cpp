@@ -21,7 +21,7 @@ const char *get_char_representation_for_docwagon(struct char_data *vict, struct 
 
 // Returns a 5-digit faux ID to help tell characters apart in anonymous messages.
 int get_docwagon_faux_id(struct char_data *ch) {
-  return (((GET_IDNUM(ch) * 217 + global_non_secure_random_number) + 29783) / 3) % 99999;
+  return (((GET_IDNUM_EVEN_IF_PROJECTING(ch) * 217 + global_non_secure_random_number) + 29783) / 3) % 99999;
 }
 
 const char *get_location_string_for_room(struct room_data *in_room) {
@@ -77,7 +77,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
     const char *display_string = decapitalize_a_an(get_char_representation_for_docwagon(ch, plr));
 
     // We already sent this person a message, so just prompt them instead of doing the whole thing.
-    if (ch->sent_docwagon_messages_to.find(GET_IDNUM(plr)) != ch->sent_docwagon_messages_to.end()) {
+    if (ch->sent_docwagon_messages_to.find(GET_IDNUM_EVEN_IF_PROJECTING(plr)) != ch->sent_docwagon_messages_to.end()) {
       send_to_char(plr, "Your DocWagon receiver vibrates, indicating that %s still needs assistance.\r\n", display_string);
 
       if (IS_VALID_POTENTIAL_RESCUER(plr)) {
@@ -162,7 +162,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
     }
 
     // Add them to our sent-to list.
-    ch->sent_docwagon_messages_to.insert(std::make_pair(GET_IDNUM(plr), TRUE));
+    ch->sent_docwagon_messages_to.insert(std::make_pair(GET_IDNUM_EVEN_IF_PROJECTING(plr), TRUE));
   }
 
   return potential_rescuer_count;
@@ -185,48 +185,52 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
     if (!d->character || d->character == ch)
       continue;
 
-    if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character))
+    if (!AFF_FLAGGED(d->character, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER))
       continue;
 
-    // We didn't message this person.
-    if (ch->sent_docwagon_messages_to.find(GET_IDNUM(d->character)) == ch->sent_docwagon_messages_to.end()) {
+    if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character)) {
+      log_vfprintf("playerdoc-upped-debug: %s skipping %s due to ignore state", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
       continue;
     }
 
-    if (AFF_FLAGGED(d->character, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER)) {
-      const char *display_string = get_string_after_color_code_removal(CAP(get_char_representation_for_docwagon(ch, d->character)), NULL);
+    // We didn't message this person.
+    if (ch->sent_docwagon_messages_to.find(GET_IDNUM_EVEN_IF_PROJECTING(d->character)) == ch->sent_docwagon_messages_to.end()) {
+      log_vfprintf("playerdoc-upped-debug: %s skipping %s -- not in list", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      continue;
+    }
 
-      if (withdrawn_because_of_death) {
-        snprintf(speech_buf, sizeof(speech_buf), "Contract withdrawal notice: %s no longer has viable vital signs.", display_string);
+    const char *display_string = get_string_after_color_code_removal(CAP(get_char_representation_for_docwagon(ch, d->character)), NULL);
 
-        send_to_char(d->character,
-                     "Your DocWagon receiver emits a sad beep and displays: \"^r%s^n\"\r\n",
-                     capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, "^r")));
+    if (withdrawn_because_of_death) {
+      snprintf(speech_buf, sizeof(speech_buf), "Contract withdrawal notice: %s no longer has viable vital signs.", display_string);
 
-        if (d->character->in_room) {
-         act("$n's DocWagon receiver emits a sad beep.", TRUE, d->character, 0, 0, TO_ROOM);
-        } else if (d->character->in_veh) {
-         act("$n's DocWagon receiver emits a sad beep.", TRUE, d->character, 0, 0, TO_VEH);
-        }
-      } else {
-        bool in_same_room = get_ch_in_room(d->character) == get_ch_in_room(ch);
+      send_to_char(d->character,
+                    "Your DocWagon receiver emits a sad beep and displays: \"^r%s^n\"\r\n",
+                    capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, "^r")));
 
-        snprintf(speech_buf, sizeof(speech_buf),
-                 "Contract %s notice: %s is no longer incapacitated.%s",
-                 in_same_room ? "completion" : "withdrawal",
-                 display_string,
-                 in_same_room ? " Well done!" : "");
+      if (d->character->in_room) {
+        act("$n's DocWagon receiver emits a sad beep.", FALSE, d->character, 0, 0, TO_ROOM);
+      } else if (d->character->in_veh) {
+        act("$n's DocWagon receiver emits a sad beep.", FALSE, d->character, 0, 0, TO_VEH);
+      }
+    } else {
+      bool in_same_room = get_ch_in_room(d->character) == get_ch_in_room(ch);
 
-        send_to_char(d->character,
-                     "Your DocWagon receiver emits a cheery beep and displays: \"%s%s^n\"\r\n",
-                     in_same_room ? "^c" : "^o",
-                     capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, "^c")));
+      snprintf(speech_buf, sizeof(speech_buf),
+                "Contract %s notice: %s is no longer incapacitated.%s",
+                in_same_room ? "completion" : "withdrawal",
+                display_string,
+                in_same_room ? " Well done!" : "");
 
-        if (d->character->in_room) {
-         act("$n's DocWagon receiver emits a cheery beep.", TRUE, d->character, 0, 0, TO_ROOM);
-        } else if (d->character->in_veh) {
-         act("$n's DocWagon receiver emits a cheery beep.", TRUE, d->character, 0, 0, TO_VEH);
-        }
+      send_to_char(d->character,
+                    "Your DocWagon receiver emits a cheery beep and displays: \"%s%s^n\"\r\n",
+                    in_same_room ? "^c" : "^o",
+                    capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, "^c")));
+
+      if (d->character->in_room) {
+        act("$n's DocWagon receiver emits a cheery beep.", FALSE, d->character, 0, 0, TO_ROOM);
+      } else if (d->character->in_veh) {
+        act("$n's DocWagon receiver emits a cheery beep.", FALSE, d->character, 0, 0, TO_VEH);
       }
     }
   }
@@ -394,15 +398,15 @@ ACMD(do_docwagon) {
     }
 
     // They have not yet received a message from us. ACCEPT is valid, WITHDRAW is not.
-    if (d->character->received_docwagon_ack_from.find(GET_IDNUM(ch)) == d->character->received_docwagon_ack_from.end()) {
+    if (d->character->received_docwagon_ack_from.find(GET_IDNUM_EVEN_IF_PROJECTING(ch)) == d->character->received_docwagon_ack_from.end()) {
       if (mode == MODE_DECLINE) {
         send_to_char(ch, "You haven't messaged %s yet. Use DOCWAGON ACCEPT instead.\r\n", GET_CHAR_NAME(d->character));
         return;
       }
       send_to_char("You anonymously notify them that you're on the way.\r\n", ch);
       send_to_char(d->character, "Your DocWagon modulator buzzes-- someone with the DocWagon ID %5d has acknowledged your request for assistance and is on their way!\r\n", get_docwagon_faux_id(ch));
-      d->character->received_docwagon_ack_from.insert(std::make_pair(GET_IDNUM(ch), TRUE));
-      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s has accepted %s's DocWagon contract.", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      d->character->received_docwagon_ack_from.insert(std::make_pair(GET_IDNUM_EVEN_IF_PROJECTING(ch), TRUE));
+      mudlog_vfprintf(ch, LOG_SYSLOG, "%s has accepted %s's DocWagon contract.", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
       return;
     }
     // They have already received a message. WITHDRAW is valid, ACCEPT is not.
@@ -413,8 +417,8 @@ ACMD(do_docwagon) {
       }
       send_to_char("You anonymously notify them that you're no longer on the way.\r\n", ch);
       send_to_char(d->character, "Your DocWagon modulator buzzes-- someone with the DocWagon ID %5d is no longer able to respond to your contract.\r\n", get_docwagon_faux_id(ch));
-      d->character->received_docwagon_ack_from.erase(d->character->received_docwagon_ack_from.find(GET_IDNUM(ch)));
-      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s has dropped %s's DocWagon contract (command).", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      d->character->received_docwagon_ack_from.erase(d->character->received_docwagon_ack_from.find(GET_IDNUM_EVEN_IF_PROJECTING(ch)));
+      mudlog_vfprintf(ch, LOG_SYSLOG, "%s has dropped %s's DocWagon contract (command).", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
       return;
     }
   }

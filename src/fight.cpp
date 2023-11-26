@@ -238,10 +238,10 @@ void load_messages(void)
 
 void resolve_docwagon_upped(struct char_data *victim) {
   if (!PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
-      alert_player_doctors_of_contract_withdrawal(victim, FALSE);
-    }
-    victim->sent_docwagon_messages_to.clear();
-    victim->received_docwagon_ack_from.clear();
+    alert_player_doctors_of_contract_withdrawal(victim, FALSE);
+  }
+  victim->sent_docwagon_messages_to.clear();
+  victim->received_docwagon_ack_from.clear();
 }
 
 #define MAKE_MORTALLY_WOUNDED(victim) {GET_POS(victim) = POS_MORTALLYW; AFF_FLAGS(victim).RemoveBit(AFF_PRONE);}
