@@ -208,6 +208,11 @@ void load_apartment_complexes() {
 }
 
 void save_all_apartments_and_storage_rooms() {
+#ifdef IS_BUILDPORT
+  log_vfprintf("Refusing to save all apartments and storage rooms: We're on the buildport.");
+  return;
+#endif
+
   for (auto &complex : global_apartment_complexes) {
     for (auto &apartment : complex->get_apartments()) {
       // Skip non-leased apartments.
