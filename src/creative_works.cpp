@@ -77,8 +77,8 @@ void art_edit_parse(struct descriptor_data *d, const char *arg) {
         DELETE_ARRAY_IF_EXTANT(ART->restring);
         ART->restring = str_dup(arg);
       } else {
-        char replaced_colors[strlen(ART->text.room_desc) * 2];
-        replace_substring(ART->text.room_desc, buf2, "^n", "^g");
+        char replaced_colors[MAX_INPUT_LENGTH + 1];
+        replace_substring(arg, buf2, "^n", "^g");
         replace_substring(buf2, replaced_colors, "^N", "^g");
         DELETE_ARRAY_IF_EXTANT(ART->graffiti);
         ART->graffiti = str_dup(replaced_colors);
