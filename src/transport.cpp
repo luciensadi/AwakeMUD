@@ -157,7 +157,7 @@ struct dest_data portland_taxi_destinations[] =
     { "hellhound", "bus", "Hellhound Bus Station", 14624, TAXI_DEST_TYPE_TRANSPORTATION, TRUE  },
     { "postal", "", "Royal Postal Station", 14629, TAXI_DEST_TYPE_OTHER, TRUE },
     { "trans-Oregon", "trucking", "Trans-Oregon Trucking", 14604, TAXI_DEST_TYPE_OTHER, TRUE },
-    { "thompson", "autogroup", "Thompson Autogroup",  14602, TAXI_DEST_TYPE_SHOPPING, TRUE},
+    { "thomason", "autogroup", "Thomason Autogroup",  14602, TAXI_DEST_TYPE_SHOPPING, TRUE},
     { "hard", "", "Hard Times", 14608, TAXI_DEST_TYPE_SHOPPING, TRUE},
     { "bank", "", "TT-Bank", 14610, TAXI_DEST_TYPE_OTHER, TRUE},
     { "sixth", "garage", "Sixth Street Parking", 14680, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
@@ -181,7 +181,7 @@ struct dest_data portland_taxi_destinations[] =
 
 struct dest_data caribbean_taxi_destinations[] =
   {
-    { "airport", "", "St. Patricks International Airport", 62117, TAXI_DEST_TYPE_TRANSPORTATION, TRUE},
+    { "airport", "patricks", "St. Patricks International Airport", 62117, TAXI_DEST_TYPE_TRANSPORTATION, TRUE},
     { "pelagie", "apartments", "Pelagie Waterfront Apartments", 62125, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE},
     { "montplaisir", "restaurant", "Montplaisir Restaurant", 62151, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
     { "viltz", "motel", "Viltz Motel",  62135, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE},
@@ -193,6 +193,9 @@ struct dest_data caribbean_taxi_destinations[] =
     { "mchughs", "food", "McHughs Fast Food", 62272, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
     { "casino", "grandmaion", "Grandmaion Casino", 62275, TAXI_DEST_TYPE_OTHER, TRUE},
     { "police", "station", "Victoria Police Station", 62264, TAXI_DEST_TYPE_OTHER, TRUE},
+    { "diamond", "estate", "Diamond Estate", 62259, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
+    { "victoria", "waltham", "Waltham and Victoria", 62233, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
+    { "sauteurs", "", "Sauteurs", 62113, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
 
@@ -798,6 +801,7 @@ struct dest_data *get_dest_data_list_for_zone(int zone_num) {
     case 703: // Star Sapphire
     case 707:
     case 725:
+    case 921:
     case 985:
       return seattle_taxi_destinations;
     case 27:
@@ -809,6 +813,7 @@ struct dest_data *get_dest_data_list_for_zone(int zone_num) {
     case 621:
     case 622:
     case 623:
+    case 958:
       return caribbean_taxi_destinations;
   }
 

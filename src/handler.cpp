@@ -832,9 +832,9 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  // We want the higher of either cyber+bio or magic/adept
-  GET_REA(ch) = (GET_REA(ch) > aug_rea) ? GET_REA(ch) : aug_rea;
-  GET_INIT_DICE(ch) = (GET_INIT_DICE(ch) > aug_init_dice) ? GET_INIT_DICE(ch) : aug_init_dice;
+  // We want the higher of magic/adept, cyber/bio, or mbw
+  GET_REA(ch) = MAX(GET_REA(ch), MAX(aug_rea, has_mbw*2));
+  GET_INIT_DICE(ch) = MAX(GET_INIT_DICE(ch), MAX(aug_init_dice, has_mbw));
 
   // Except for VCRs, reaction/initiative cyber/bio don't apply to rigging (R3 pg 27)
   // R3 pg 28 says physical reaction spells apply, but they don't exist
@@ -883,11 +883,7 @@ void affect_total(struct char_data * ch)
 
   // Qui bonus from mbw doesn't increase reaction (MM pg 30)
   // Also makes sense that mbw DOES protect from disabling via nervestrike
-  if (has_mbw) {
-    GET_QUI(ch) += has_mbw;
-    GET_REA(ch) += has_mbw * 2;
-    GET_INIT_DICE(ch) += has_mbw;
-  }
+  GET_QUI(ch) += has_mbw;
 
   // Matrix pg 18 & 24, assume pure DNI (thus reaction = intelligence)
   // No direct reaction/initiative bonuses from cyber/bio apply
@@ -2418,9 +2414,14 @@ void extract_obj(struct obj_data * obj)
   if (obj->in_room)
     obj->in_room->dirty_bit = TRUE;
 
-  if (obj->worn_by != NULL)
+  if (obj->worn_by) {
     if (unequip_char(obj->worn_by, obj->worn_on, TRUE) != obj)
       log("SYSLOG: Inconsistent worn_by and worn_on pointers!!");
+    if (set)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (worn_by)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+    set = TRUE;
+  }
+
   if (GET_OBJ_TYPE(obj) == ITEM_PHONE ||
       (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE))
   {
@@ -2459,25 +2460,29 @@ void extract_obj(struct obj_data * obj)
 
   if (obj->in_room || obj->in_veh != NULL) {
     obj_from_room(obj);
+    if (set)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_room)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     set = TRUE;
   }
 
   if (obj->in_host) {
     obj_from_host(obj);
+    if (set)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_host)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     set = TRUE;
   }
 
   if (obj->carried_by) {
     obj_from_char(obj);
     if (set)
-      log("SYSLOG: More than one list pointer set!");
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (carried_by)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     set = TRUE;
   }
 
   if (obj->in_obj) {
     obj_from_obj(obj);
     if (set)
-      log("SYSLOG: More than one list pointer set!");
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_obj)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     set = TRUE;
   }
 
@@ -2486,7 +2491,7 @@ void extract_obj(struct obj_data * obj)
     extract_obj(obj->contains);
 
   if (!ObjList.Remove(obj))
-    log_vfprintf("ObjList.Remove returned FALSE!  (%d)", GET_OBJ_VNUM(obj));
+    log_vfprintf("ObjList.Remove returned FALSE!  (%ld)", GET_OBJ_VNUM(obj));
 
   if (GET_OBJ_RNUM(obj) >= 0)
     (obj_index[GET_OBJ_RNUM(obj)].number)--;

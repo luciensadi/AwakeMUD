@@ -1739,6 +1739,10 @@ void parse_mobile(File &in, long nr)
   MOB_FLAGS(mob).FromString(data.GetString("MobFlags", "0"));
   AFF_FLAGS(mob).FromString(data.GetString("AffFlags", "0"));
 
+  // Manifestation requires the astral bit to be set.
+  if (AFF_FLAGS(mob).IsSet(AFF_MANIFEST))
+    MOB_FLAGS(mob).SetBit(MOB_ASTRAL);
+
   GET_RACE(mob) = data.LookupInt("Race", pc_race_types, RACE_HUMAN);
   GET_PRONOUNS(mob) = data.LookupInt("Gender", genders, PRONOUNS_NEUTRAL);
 
@@ -2923,6 +2927,9 @@ int vnum_mobile_valuedeathnuyen(char *searchname, struct char_data * ch)
 int vnum_mobile_affflag(int i, struct char_data * ch)
 {
   int nr, found = 0;
+
+  send_to_char(ch, "The following mobs have the %s affect flag set:\r\n", affected_bits[i]);
+
   for (nr = 0; nr <= top_of_mobt; nr++)
     if (mob_proto[nr].char_specials.saved.affected_by.IsSet(i))
     {
@@ -3765,6 +3772,8 @@ int vnum_object_affflag(int type, struct char_data * ch)
 {
   int nr, found = 0;
 
+  send_to_char(ch, "The following objects have the %s affect flag set:\r\n", affected_bits[type]);
+
   for (nr = 0; nr <= top_of_objt; nr++)
     if (obj_proto[nr].obj_flags.bitvector.IsSet(type))
     {
@@ -3775,7 +3784,6 @@ int vnum_object_affflag(int type, struct char_data * ch)
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
       send_to_char(buf, ch);
       found++;
-      break;
     }
   return (found);
 }

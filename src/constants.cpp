@@ -883,6 +883,7 @@ const char *connected_types[] =
     "Apartment Editing",
     "Vehicle Decorating",
     "Tempdesc Editing",
+    "Creating Art",
     "\n"
   };
 
@@ -1047,6 +1048,7 @@ const char *item_types[] =
     "Graffiti",
     "Destroyable",
     "Loaded Decoration",
+    "Art",
     "\n"
   };
 
@@ -2028,6 +2030,31 @@ struct ammo_data ammo_type[] =
   };
 
 /* House rule: Ammo costs for various weapons vary based on assumed caliber. */
+#ifdef DIES_IRAE
+/* Researched on Nov '23, based on a round of 9mm being 1.0x at 16.5c/rd*/
+float weapon_type_ammo_cost_multipliers[] = {
+  0, 0, 0, 0, 0, // melee weapons have a multiplier of 0 (edged, club, polearm, whip, glove)
+  0.5,  // holdout pistol (.22 LR: 9c)
+  1.0,  // light pistol (9mm: 16.5c)
+  1.0,  // machine pistol (9mm: 16.5c)
+  3.9,  // heavy pistol (.44 magnum: 64c)
+  10.0,  // taser (yolo)
+  1.0,  // smg (9mm: 16.5c)
+  2.8,  // sport rifle (5.56: 46c)
+  17.3,  // sniper rifle (.50 BMG: 287c)
+  3.8,  // assault rifle (7.62: 63c)
+  1.7,  // shotgun (12ga, 28.6c)
+  2.8,  // lmg (5.56: 46c)
+  3.8,  // mmg (7.62: 63c)
+  17.3,  // hmg (.50 BMG: 287c)
+  9.0,  // cannon (per SR3 p281, derived from 45 / explosive cost)
+  3.8,  // minigun (7.62: 63c)
+  100.0,  // grenade launcher (placeholder value)
+  100.0,  // missile launcher (placeholder value)
+  1.8,  // revolver (.45 ACP: 30c)
+  100.0   // grenade (placeholder value)
+};
+#else
 float weapon_type_ammo_cost_multipliers[] = {
   0, 0, 0, 0, 0, // melee weapons have a multiplier of 0 (edged, club, polearm, whip, glove)
   1.0,  // holdout pistol
@@ -2050,6 +2077,7 @@ float weapon_type_ammo_cost_multipliers[] = {
   1.0,  // revolver
   1.0   // grenade (placeholder value)
 };
+#endif
 
 const char *positions[] =
   {
@@ -2234,7 +2262,7 @@ struct spell_types spells[] =
     { "Smoke Cloud", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(2) },
     { "Thunderbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(1) },
     { "Thunderclap", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(2) },
-    { "Waterbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(1) }, // these were both VDD+0, but I can't find them in the book, so I'm matching them to the other elemental manips. -LS
+    { "Waterbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(0) }, // Target: Wastelands, pg 124
     { "Splash", TRUE, MANIPULATION, AREA, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(2) },
     { "Nightvision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
     { "Infravision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
@@ -2788,6 +2816,7 @@ const char *combat_modifiers[] =
   "Foot Anchors",
   "Vehicle Handling",
   "Non-Weapon",
+  "Riot Shield",
   "ERROR"
 };
 

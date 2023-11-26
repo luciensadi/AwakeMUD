@@ -1,6 +1,16 @@
 #ifndef _STRUCTS_H_
 #define _STRUCTS_H_
 
+#define NOWHERE (-1)
+#define NOTHING (-1)
+#define NOBODY  (-1)
+
+#define SPECIAL(name) \
+   int (name)(struct char_data *ch, void *me, int cmd, char *argument)
+#define WSPEC(name) \
+   int (name)(struct char_data *ch, struct char_data *vict, struct obj_data \
+              *weapon, int dam)
+
 #include <sys/types.h>
 #include <sys/time.h>
 #include <stdlib.h>
@@ -26,19 +36,9 @@ class ApartmentComplex;
 class Apartment;
 class ApartmentRoom;
 
-#define SPECIAL(name) \
-   int (name)(struct char_data *ch, void *me, int cmd, char *argument)
-#define WSPEC(name) \
-   int (name)(struct char_data *ch, struct char_data *vict, struct obj_data \
-              *weapon, int dam)
-
 /***********************************************************************
  * Structures                                                          *
  **********************************************************************/
-
-#define NOWHERE (-1)
-#define NOTHING (-1)
-#define NOBODY  (-1)
 
 #define ZERO_OUT_ARRAY(array_name, array_size) { for (int array_zero_idx = 0; array_zero_idx < (array_size); array_zero_idx++) { (array_name)[array_zero_idx] = 0; } }
 

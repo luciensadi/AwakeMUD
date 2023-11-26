@@ -14,6 +14,8 @@
 #include <stdio.h>
 #include "bitfield.hpp"
 #include "config.hpp"
+#include "structs.hpp"
+#include "newhouse.hpp"
 
 #if defined(osx)
 /* crypt() is defined in unistd.h in OSX. */
@@ -399,7 +401,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define IS_LIGHT(room)  (light_level((room)) <= LIGHT_NORMALNOLIT || light_level((room)) == LIGHT_PARTLIGHT)
 #define IS_LOW(room)	(light_level((room)) == LIGHT_MINLIGHT || light_level((room)) == LIGHT_PARTLIGHT)
 
-#define GET_ROOM_NAME(room) ((room) ? (room)->name : "(null room's name)")
+#define GET_ROOM_NAME(room) (!(room) ? "(null room's name)" : (                            \
+  GET_APARTMENT_SUBROOM((room)) && GET_APARTMENT_SUBROOM((room))->get_decorated_name() ?   \
+     GET_APARTMENT_SUBROOM(room)->get_decorated_name()                                     \
+     : (room)->name))
 #define GET_ROOM_DESC(room) ((room) ? ((room)->night_desc && weather_info.sunlight == SUN_DARK ? (room)->night_desc : (room)->description) : "(null room's desc)")
 #define GET_ROOM_FLIGHT_CODE(room) ((room) ? (room)->flight_code : "(null room's flight code)")
 
@@ -1248,6 +1253,13 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 // ITEM_GRAFFITI convenience defines
 #define OBJ_IS_GRAFFITI(obj)                                (GET_OBJ_TYPE((obj)) == ITEM_GRAFFITI || GET_OBJ_VNUM((obj)) == OBJ_DYNAMIC_GRAFFITI)
 #define GET_GRAFFITI_SPRAYED_BY(obj)                        (GET_OBJ_VAL((obj), 0))
+
+// ITEM_DESTROYABLE convenience defines
+
+// ITEM_LOADED_DECORATION convenience defines
+
+// ITEM_CREATIVE_EFFORT convenience defines
+#define GET_ART_AUTHOR_IDNUM(obj)                           (GET_OBJ_VAL((obj), 0))
 
 
 /* Misc utils ************************************************************/

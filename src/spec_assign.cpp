@@ -339,6 +339,9 @@ struct spell_trainer spelltrainers[] = {
 
 //{60601, SPELL_HEALTHYGLOW, 0, 6},
 //{60601, SPELL_PROPHYLAXIS, 0, 6},
+  {60601, SPELL_DECATTR, BOD, 6},
+  {60601, SPELL_DECATTR, STR, 6},
+  {60601, SPELL_DECATTR, QUI, 6},
   {60601, SPELL_DECCYATTR, BOD, 6},
   {60601, SPELL_DECCYATTR, STR, 6},
   {60601, SPELL_DECCYATTR, QUI, 6},
@@ -863,11 +866,15 @@ void assign_objects(void)
   SPECIAL(toggled_voice_modulator);
   SPECIAL(initiative_tracker);
 
+  // Adding a board? Add it to the index in boards.cpp too!
   ASSIGNOBJ(26, gen_board);
   ASSIGNOBJ(10018, gen_board);  /* ImmHQ Board */
 #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(10034, gen_board); /* Mortal Relations Board */
+  ASSIGNOBJ(6995, gen_board);  /* Nerpcorp board */
 #endif
+  // Adding a board? Add it to the index in boards.cpp too!
+
   ASSIGNOBJ(1117, desktop);
   ASSIGNOBJ(1118, desktop);
   ASSIGNOBJ(1119, desktop);

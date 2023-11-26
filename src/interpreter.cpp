@@ -39,6 +39,7 @@
 #include "archetypes.hpp"
 #include "ignore_system.hpp"
 #include "newhouse.hpp"
+#include "creative_works.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -1006,7 +1007,7 @@ struct command_info cmd_info[] =
 
     /* Commands that will only function in the presence of a spec_proc. */
     { "burn"       , POS_STANDING, do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
-    { "buy"        , POS_SITTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
+    { "buy"        , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
     { "check"      , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
     { "collect"    , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
     { "blastoff"   , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
@@ -1026,7 +1027,7 @@ struct command_info cmd_info[] =
     { "recharge"   , POS_DEAD    , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
     { "rent"       , POS_STANDING, do_not_here , 1, 0, BLOCKS_IDLE_REWARD },
     { "retrieve"   , POS_RESTING , do_not_here , 1, 0, BLOCKS_IDLE_REWARD },
-    { "sell"       , POS_STANDING, do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
+    { "sell"       , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
     { "withdraw"   , POS_STANDING, do_not_here , 1, 0, BLOCKS_IDLE_REWARD },
     { "wire"       , POS_STANDING, do_not_here , 1, 0, BLOCKS_IDLE_REWARD },
     { "write"      , POS_RESTING , do_not_here , 0, 0, BLOCKS_IDLE_REWARD },
@@ -2199,18 +2200,16 @@ char *two_arguments(char *argument, char *first_arg, char *second_arg)
 int is_abbrev(const char *arg1, const char *arg2)
 {
   if (!arg1 || !arg2) {
-    char temp_buf[500];
-    snprintf(temp_buf, sizeof(temp_buf), "SYSERR: Received null arg in is_abbrev (arg1 = %s, arg2 = %s)", arg1, arg2);
-    mudlog(temp_buf, NULL, LOG_SYSLOG, TRUE);
-    return 0;
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received null arg in is_abbrev (arg1 = %s, arg2 = %s)", arg1 ? arg1 : "<NULL>", arg2 ? arg2 : "<NULL>");
+    return FALSE;
   }
 
   if (!*arg1 || !*arg2)
-    return 0;
+    return FALSE;
 
   for (; *arg1 && *arg2; arg1++, arg2++)
     if (LOWER(*arg1) != LOWER(*arg2))
-      return 0;
+      return FALSE;
 
   return !*arg1;
 }
@@ -2612,6 +2611,9 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_DECK_CREATE:
     dbuild_parse(d, arg);
+    break;
+  case CON_ART_CREATE:
+    art_edit_parse(d, arg);
     break;
   case CON_FCUSTOMIZE:
   case CON_BCUSTOMIZE:
@@ -3347,8 +3349,12 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_ASKNAME:
     break;
 
+  // Is a break here the right move? Need to test this.
+  case CON_TEMPDESC_EDIT:
+    break;
+
   default:
-    log("SYSERR: Nanny: illegal state of con'ness; closing connection");
+    log_vfprintf("SYSERR: Nanny: illegal state of con'ness %d; closing connection", STATE(d));
     close_socket(d);
     break;
   }
@@ -3460,16 +3466,19 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("opend", "open");
   COMMAND_ALIAS("leaev", "leave");
   COMMAND_ALIAS("leve", "leave");
-  COMMAND_ALIAS("lisy", "list");
   COMMAND_ALIAS("swith", "switch");
   COMMAND_ALIAS("swtich", "switch");
   COMMAND_ALIAS("drie", "drive");
   COMMAND_ALIAS("cyberwear", "cyberware");
   COMMAND_ALIAS("biowear", "bioware");
+  COMMAND_ALIAS("lisy", "list");
+  COMMAND_ALIAS("lst", "list");
   COMMAND_ALIAS("lsit", "list");
   COMMAND_ALIAS("ist", "list");
   COMMAND_ALIAS("lisr", "list");
   COMMAND_ALIAS("lost", "list");
+  COMMAND_ALIAS("listr", "list");
+  COMMAND_ALIAS("slel", "sell");
   COMMAND_ALIAS("ivn", "inventory");
   COMMAND_ALIAS("inc", "inventory");
   COMMAND_ALIAS("hoslter", "holster");
@@ -3503,6 +3512,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("wehre", "where");
   COMMAND_ALIAS("socre", "score");
   COMMAND_ALIAS("dirve", "drive");
+  COMMAND_ALIAS("park", "drive");
   COMMAND_ALIAS("ener", "enter");
   COMMAND_ALIAS("satnd", "stand");
   COMMAND_ALIAS("levae", "leave");
@@ -3517,6 +3527,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
   COMMAND_ALIAS("pot", "put");
+  COMMAND_ALIAS("ptu", "put");
 
   // Combat stuff.
   COMMAND_ALIAS("attack", "kill");
@@ -3533,6 +3544,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("guest", "house");
   COMMAND_ALIAS("unready", "ready");
   COMMAND_ALIAS("strap", "holster"); // Not sure about this one.
+  COMMAND_ALIAS("unholster", "draw");
   COMMAND_ALIAS("deck", "software");
   COMMAND_ALIAS("email", "register");
   COMMAND_ALIAS("clothing", "equipment");
@@ -3609,6 +3621,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("hide", "sneak");
   COMMAND_ALIAS("privateroll", "privatedice");
   COMMAND_ALIAS("otell", "tell");
+  COMMAND_ALIAS("all", "items");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");

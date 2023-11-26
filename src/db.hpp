@@ -45,12 +45,16 @@
 #define HANDBOOK_FILE   "text/handbook" /* handbook for new immorts     */
 #define WIZHELP_FILE    "text/wizhelp" /* for WIZHELP <keywrd> */
 
-#define IDEA_FILE       "text/ideas"/* for the 'idea'-command       */
-#define TYPO_FILE       "text/typos"/*         'typo'               */
-#define BUG_FILE        "text/bugs" /*         'bug'                */
-#define PRAISE_FILE     "text/praise" /*       'praise'             */
-#define MESS_FILE       "misc/messages" /* damage messages              */
-#define SOCMESS_FILE    "misc/socials"  /* messgs for social acts       */
+#define IDEA_FILE              "text/ideas"/* for the 'idea'-command       */
+#define TYPO_FILE              "text/typos"/*         'typo'               */
+#define BUG_FILE               "text/bugs" /*         'bug'                */
+#define PRAISE_FILE            "text/praise" /*       'praise'             */
+#define BUILDPORT_IDEA_FILE    "text/buildport-ideas"/* for the 'idea'-command       */
+#define BUILDPORT_TYPO_FILE    "text/buildport-typos"/*         'typo'               */
+#define BUILDPORT_BUG_FILE     "text/buildport-bugs" /*         'bug'                */
+#define BUILDPORT_PRAISE_FILE  "text/buildport-praise" /*       'praise'             */
+#define MESS_FILE              "misc/messages" /* damage messages              */
+#define SOCMESS_FILE           "misc/socials"  /* messgs for social acts       */
 
 #define PLAYER_FILE     "etc/players"   /* the player database          */
 #define MAIL_FILE       "etc/plrmail"   /* for the mudmail system       */

@@ -313,6 +313,15 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
   bool has_thermographic = is_rigging || has_vision(ch, VISION_THERMOGRAPHIC);
   bool has_lowlight = is_rigging || has_vision(ch, VISION_LOWLIGHT);
 
+  // Ultrasound halves normal vision penalties (round up- M&M p18).
+  if (has_vision(ch, VISION_ULTRASONIC)) {
+    int delta = ((tn_with_none + 1) / 2) - tn_with_none;
+
+    if (delta) {
+      NM_PENALTY("Ultrasound (half, round up)", delta);
+    }
+  }
+
   if (has_thermographic && tn_with_thermo <= tn_with_ll && tn_with_thermo <= tn_with_none) {
     penalty_vector = &thermo_penalties;
     penalty_chosen = tn_with_thermo;

@@ -2644,6 +2644,10 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
         SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST;
         act("Dark clouds form around $n moments before it condenses into a dark sludge and flies towards $N!", TRUE, ch, 0, vict, TO_ROOM);
 
+        // asdf todo no effect if opponent is wearing full body protective gear per sr3 p196
+        // also ignore acid +tn if they have an internal air supply
+        // and set fighting or at least alarm for anyone casting a manip spell, hit or not, because it's fully visible
+
         success += success_test(skill, 4 + target_modifiers);
         // Known bug: Adept sidestep and the defense test don't reply to the reflected spell.
         if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, 4, success))) {
@@ -3135,8 +3139,10 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         vict = get_char_room_vis(ch, arg);
   }
 
-  if (!check_spell_victim(ch, vict, spell, arg))
-    return;
+  if (spell != SPELL_LIGHT && spell != SPELL_SHADOW && spell != SPELL_POLTERGEIST && spell != SPELL_ICESHEET) {
+    if (!check_spell_victim(ch, vict, spell, arg))
+      return;
+  }
 
   raw_cast_manipulation_spell(ch, vict, spell, force, mob, -1, basedamage);
 }
@@ -3190,28 +3196,18 @@ bool mob_magic(struct char_data *ch)
     switch (number (0, 26)) { // If you're adding more cases to this switch, increase this number to match!
       case 0:
       case 1:
-        spell = SPELL_POWERBOLT;
-        break;
       case 2:
       case 3:
       case 4:
-        spell = SPELL_MANABOLT;
-        break;
       case 5:
       case 6:
       case 7:
-        spell = SPELL_STUNBOLT;
-        break;
-      case 8:
-        if (ch->cyberware || ch->bioware) {
-          spell = SPELL_DECCYATTR;
-          sub = number(0, 2);
-        }
-        break;
-      case 9:
-        if (!ch->cyberware && !ch->bioware) {
-          spell = SPELL_DECATTR;
-          sub = number(0, 2);
+        if (GET_BOD(FIGHTING(ch)) <= 6) {
+          spell = SPELL_POWERBOLT;
+        } else if (GET_WIL(FIGHTING(ch)) < 6) {
+          spell = SPELL_MANABOLT;
+        } else {
+          spell = SPELL_STUNBOLT;
         }
         break;
       case 10:
@@ -3224,7 +3220,10 @@ bool mob_magic(struct char_data *ch)
       case 14:
         spell = SPELL_FLAMETHROWER;
         break;
+      case 8:
+      case 9:
       case 15:
+      case 19:
         spell = SPELL_ACIDSTREAM;
         break;
       case 16:
@@ -3233,13 +3232,6 @@ bool mob_magic(struct char_data *ch)
         break;
       case 18:
         spell = SPELL_CLOUT;
-        break;
-      case 19:
-/*        if (!affected_by_spell(ch, SPELL_POLTERGEIST))
-        spell = SPELL_POLTERGEIST;
-        break;*/
-        if (!get_ch_in_room(ch)->icesheet[1])
-          spell = SPELL_ICESHEET;
         break;
       case 20:
       case 21:
@@ -3276,7 +3268,7 @@ bool mob_magic(struct char_data *ch)
       snprintf(buf, sizeof(buf), "%s %s", wound_name[number(MIN_MOB_COMBAT_MAGIC_WOUND, MAX_MOB_COMBAT_MAGIC_WOUND)], GET_CHAR_NAME(FIGHTING(ch)));
       break;
     default:
-      strcpy(buf, GET_CHAR_NAME(FIGHTING(ch)));
+      strlcpy(buf, GET_CHAR_NAME(FIGHTING(ch)), sizeof(buf));
   }
   snprintf(rbuf, sizeof(rbuf), "mob_magic: force is %d, spell is %d (%s), invocation is '%s'", force, spell, spells[spell].name, buf);
   act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
@@ -4391,9 +4383,20 @@ ACMD(do_learn)
     return;
   }
   if (!*buf2 || atoi(buf1) == 0)
-    force = GET_OBJ_VAL(obj, 0);
+    force = GET_SPELLFORMULA_FORCE(obj);
   else
-    force = MIN(GET_OBJ_VAL(obj, 0), atoi(buf1));
+    force = MIN(GET_SPELLFORMULA_FORCE(obj), atoi(buf1));
+
+  if (force <= 0) {
+    send_to_char("You can't learn a spell below force 1.\r\n", ch);
+    
+    if (GET_SPELLFORMULA_FORCE(obj) <= 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got a spell formula with force %d (%s / %ld)", force, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+    }
+    
+    return;
+  }
+
   for (spell = GET_SPELLS(ch); spell; spell = spell->next)
     if (spell->type == GET_SPELLFORMULA_SPELL(obj) && spell->subtype == GET_SPELLFORMULA_SUBTYPE(obj)) {
       if (spell->force >= force) {
@@ -6109,9 +6112,9 @@ ACMD(do_heal)
     GET_PHYSICAL(vict) += success;
     GET_PHYSICAL(ch) -= success;
     WAIT_STATE(ch, 3 RL_SEC);
-    act("You feel $n place $s hands on you, $s minstrations seem to cause your wounds to fade!", TRUE, ch, 0, vict, TO_VICT);
+    act("You feel $n place $s hands on you, $s minstration seems to cause your wounds to fade!", TRUE, ch, 0, vict, TO_VICT);
     act("You place your hands on $N, you feel $S pain and suffering transferred to your body!", TRUE, ch, 0, vict, TO_CHAR);
-    act("$n places $s hands on $N seemingly transferring the wound to $mself!", TRUE, ch, 0, vict, TO_NOTVICT);
+    act("$n places $s hands on $N, seemingly transferring the wound to $mself!", TRUE, ch, 0, vict, TO_NOTVICT);
     update_pos(vict);
     update_pos(ch);
   }

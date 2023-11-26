@@ -42,6 +42,7 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def);
 
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);
+void remove_riot_shield_bonuses(struct combat_data *wearer, struct combat_data *other);
 
 #define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room && !PLR_FLAGGED(att->ch, PLR_REMOTE)) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
 
@@ -573,30 +574,32 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (att->ranged->magazine) {
       if (GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_TASER) {
         // SR3 p124.
-        att->ranged->power = att->ranged->power_before_armor - (int)(GET_IMPACT(def->ch) / 2);
+        att->ranged->power = att->ranged->power_before_armor - (int)(def->standard_impact_rating / 2);
       } else {
         switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
           case AMMO_APDS:
             if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
               // APDS, AV, and other armor-piercing munitions are treated as normal VS spirits/elementals.
-              att->ranged->power = att->ranged->power_before_armor - GET_BALLISTIC(def->ch);
+              att->ranged->power = att->ranged->power_before_armor - def->standard_ballistic_rating;
             } else {
-              att->ranged->power = att->ranged->power_before_armor - (int)(GET_BALLISTIC(def->ch) / 2);
+              att->ranged->power = att->ranged->power_before_armor - (int)(def->standard_ballistic_rating / 2);
             }
             def->hardened_armor_ballistic_rating /= 2;
             break;
           case AMMO_EX:
             att->ranged->power_before_armor++;
+            def->hardened_armor_ballistic_rating--;
             // fall through
           case AMMO_EXPLOSIVE:
             att->ranged->power_before_armor++;
-            att->ranged->power = att->ranged->power_before_armor - GET_BALLISTIC(def->ch);
+            def->hardened_armor_ballistic_rating--;
+            att->ranged->power = att->ranged->power_before_armor - def->standard_ballistic_rating;
             break;
           case AMMO_FLECHETTE:
-            if (!GET_IMPACT(def->ch) && !GET_BALLISTIC(def->ch))
+            if (!def->standard_impact_rating && !def->standard_ballistic_rating)
               att->ranged->damage_level++;
             else {
-              att->ranged->power = att->ranged->power_before_armor - MAX(GET_BALLISTIC(def->ch), GET_IMPACT(def->ch) * 2);
+              att->ranged->power = att->ranged->power_before_armor - MAX(def->standard_ballistic_rating, def->standard_impact_rating * 2);
             }
             break;
           case AMMO_HARMLESS:
@@ -605,20 +608,21 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             break;
           case AMMO_GEL:
             // Errata: 'Add the following after the third line: "Impact armor, not Ballistic, applies."'
-            att->ranged->power = att->ranged->power_before_armor - GET_IMPACT(def->ch);
+            att->ranged->power = att->ranged->power_before_armor - def->standard_impact_rating;
             // Gel rounds are -2 power.
             att->ranged->power -= 2;
+            def->hardened_armor_ballistic_rating = (def->hardened_armor_ballistic_rating ? def->hardened_armor_ballistic_rating + 2 : 0);
             att->ranged->is_gel = TRUE; // Affects knockdown tests
             att->ranged->is_physical = FALSE;
             break;
           default:
-            att->ranged->power = att->ranged->power_before_armor - GET_BALLISTIC(def->ch);
+            att->ranged->power = att->ranged->power_before_armor - def->standard_ballistic_rating;
         }
       }
     }
     // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
     else {
-      att->ranged->power = att->ranged->power_before_armor - GET_BALLISTIC(def->ch);
+      att->ranged->power = att->ranged->power_before_armor - def->standard_ballistic_rating;
     }
 
     // Increment character's shots_fired. This is used for internal tracking of eligibility for a skill quest.
@@ -626,17 +630,24 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       SHOTS_FIRED(att->ch)++;
 
     // Check for hardened armor per CC p51.
-    if (def->hardened_armor_ballistic_rating >= GET_WEAPON_POWER(att->weapon)) {
-      act("Your rounds ricochet off of $S hardened armor!", FALSE, att->ch, 0, def->ch, TO_CHAR);
-      act("$n's rounds ricochet off of your hardened armor!", FALSE, att->ch, 0, def->ch, TO_VICT);
-      act("$n's rounds ricochet off of $N's hardened armor!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
-      send_to_char(att->ch, "^o(OOC: %s has hardened armor! You need at least ^O%d^o weapon power to damage %s with your current ammo type, and you only have %d.)^n\r\n",
-                    decapitalize_a_an(GET_CHAR_NAME(def->ch)),
-                    def->hardened_armor_ballistic_rating + 1,
-                    HMHR(def->ch),
-                    GET_WEAPON_POWER(att->weapon)
-                  );
-      return FALSE;
+    if (def->hardened_armor_ballistic_rating) {
+      if (def->hardened_armor_ballistic_rating >= GET_WEAPON_POWER(att->weapon)) {
+        act("Your rounds ricochet off of $S hardened armor!", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("$n's rounds ricochet off of your hardened armor!", FALSE, att->ch, 0, def->ch, TO_VICT);
+        act("$n's rounds ricochet off of $N's hardened armor!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+        send_to_char(att->ch, "^o(OOC: %s has hardened armor! You need at least ^O%d^o weapon power to damage %s with your current ammo type, and you only have %d.)^n\r\n",
+                      decapitalize_a_an(GET_CHAR_NAME(def->ch)),
+                      def->hardened_armor_ballistic_rating + 1,
+                      HMHR(def->ch),
+                      GET_WEAPON_POWER(att->weapon)
+                    );
+        return FALSE;
+      } else {
+#ifdef IS_BUILDPORT
+        snprintf(rbuf, sizeof(rbuf), "Defender's hardened armor rating (%d) is less than attacker's weapon power (%d).", def->hardened_armor_ballistic_rating, GET_WEAPON_POWER(att->weapon));
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+#endif
+      }
     }
 
     // The power of an attack can't be below 2 from ammo changes.
@@ -754,7 +765,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       net_reach = 0;
     }
 
-    if (AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT) || AFF_FLAGGED(def->ch, AFF_CLOSECOMBAT)) {
+    bool is_close_combat = AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT) || AFF_FLAGGED(def->ch, AFF_CLOSECOMBAT);
+    if (is_close_combat) {
       // CC p99: Ignore reach modifiers, decrease user's power by one.
       net_reach = 0;
 
@@ -771,6 +783,35 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       att->melee->modifiers[COMBAT_MOD_REACH] -= net_reach;
     else
       def->melee->modifiers[COMBAT_MOD_REACH] -= -net_reach;
+
+#ifdef USE_RIOT_SHIELD_CODE
+    // Add in riot shield TNs.
+    if (att->melee->riot_shield || def->melee->riot_shield) {
+      int shield_count = (att->melee->riot_shield ? 1 : 0) + (def->melee->riot_shield ? 1 : 0);
+      int shield_tn_penalty = shield_count * 2;
+
+      // Close combat means everyone takes a +2 TN penalty per shield from the shield being involved.
+      if (is_close_combat) {
+        att->melee->modifiers[COMBAT_MOD_RIOT_SHIELD] += shield_tn_penalty;
+        def->melee->modifiers[COMBAT_MOD_RIOT_SHIELD] += shield_tn_penalty;
+      } else {
+        // Otherwise, you only take a penalty if you have less than 2 reach.
+        if (GET_REACH(def->ch) < 2) {
+          def->melee->modifiers[COMBAT_MOD_RIOT_SHIELD] += shield_tn_penalty;
+        } 
+        // 2+ reach? You get to ignore the shield, including its armor value.
+        else if (att->melee->riot_shield) {
+          remove_riot_shield_bonuses(att, def);
+        }
+
+        if (GET_REACH(att->ch) < 2) {
+          att->melee->modifiers[COMBAT_MOD_RIOT_SHIELD] += shield_tn_penalty;
+        } else if (def->melee->riot_shield) {
+          remove_riot_shield_bonuses(def, att);
+        }
+      }
+    }
+#endif
 
     // -------------------------------------------------------------------------------------------------------
     // Calculate and display pre-success-test information.
@@ -898,9 +939,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
         // SR3 p121: Halve impact armor, but double barrier ratings. This approximates that.
         if (MOB_FLAGGED(def->ch, MOB_INANIMATE)) {
-          att->melee->power = att->melee->power_before_armor - MAX(7, GET_IMPACT(def->ch) * 2);
+          att->melee->power = att->melee->power_before_armor - MAX(7, def->standard_impact_rating * 2);
         } else {
-          att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch) / 2;
+          att->melee->power = att->melee->power_before_armor - def->standard_impact_rating / 2;
         }
       }
       // Because we swap att and def pointers if defender wins the clash we need to make sure attacker gets proper values
@@ -908,12 +949,12 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       // weapon as it was happening.
       else if (IS_RANGED(att->weapon)) {
         strlcpy(rbuf, "Using buttstroke.", sizeof(rbuf));
-        att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch);
+        att->melee->power = att->melee->power_before_armor - def->standard_impact_rating;
       }
       // Non-monowhips behave normally.
       else {
         strlcpy(rbuf, "Using weapon.", sizeof(rbuf));
-        att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch);
+        att->melee->power = att->melee->power_before_armor - def->standard_impact_rating;
       }
     }
     // Cyber and unarmed combat.
@@ -924,10 +965,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           && !GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE))
       {
         strlcpy(rbuf, "Using penetrating strike.", sizeof(rbuf));
-        att->melee->power = att->melee->power_before_armor - MAX(0, GET_IMPACT(def->ch) - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
+        att->melee->power = att->melee->power_before_armor - MAX(0, def->standard_impact_rating - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
       } else {
         strlcpy(rbuf, "Using unarmed / cyberweapon.", sizeof(rbuf));
-        att->melee->power = att->melee->power_before_armor - GET_IMPACT(def->ch);
+        att->melee->power = att->melee->power_before_armor - def->standard_impact_rating;
       }
     }
 
@@ -1438,17 +1479,17 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
     return TRUE;
   }
 
-  int impact_armor = GET_IMPACT(def->ch);
+  int impact_armor = def->standard_impact_rating;
   // Apply Penetrating Strike to the nerve strike.
   if (GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && !GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
-    impact_armor = MAX(0, GET_IMPACT(def->ch) - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
+    impact_armor = MAX(0, def->standard_impact_rating - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
   }
 
   // Calculate and display pre-success-test information.
   snprintf(rbuf, rbuf_len, "%s VS %s: Nerve Strike target is 4 + impact %d (PS: -%d) + modifiers: ",
            GET_CHAR_NAME(att->ch),
            GET_CHAR_NAME(def->ch),
-           GET_IMPACT(def->ch),
+           def->standard_impact_rating,
            GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE)
          );
 
@@ -1518,6 +1559,33 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
   handle_flame_aura(att, def);
 
   return TRUE;
+}
+
+void remove_riot_shield_bonuses(struct combat_data *wearer, struct combat_data *other) {
+  int old_bal = wearer->standard_ballistic_rating, old_imp = wearer->standard_impact_rating;
+
+  // Remove affect armor.
+  for (int j = 0; j < MAX_OBJ_AFFECT; j++) {
+    if (wearer->melee->riot_shield->affected[j].location == APPLY_BALLISTIC)
+      wearer->standard_ballistic_rating -= wearer->melee->riot_shield->affected[j].modifier;
+    if (wearer->melee->riot_shield->affected[j].location == APPLY_IMPACT)
+      wearer->standard_impact_rating -= wearer->melee->riot_shield->affected[j].modifier;
+  }
+
+  // Remove standard armor.
+  wearer->standard_impact_rating -= GET_WORN_IMPACT(wearer->melee->riot_shield);
+  wearer->standard_ballistic_rating -= GET_WORN_BALLISTIC(wearer->melee->riot_shield);
+
+  // Debug log it.
+  char rbuf[1000];
+  snprintf(rbuf, sizeof(rbuf), "^PNegated $n's riot shield due to $N's reach. Armor %d/%d -> %d/%d.",
+            old_bal, wearer->standard_ballistic_rating,
+            old_imp, wearer->standard_impact_rating);
+
+  {
+    act(rbuf, 1, wearer->ch, NULL, NULL, TO_ROLLS);
+    if (wearer->ch->in_room != other->ch->in_room && !PLR_FLAGGED(wearer->ch, PLR_REMOTE)) act( rbuf, 1, other->ch, NULL, NULL, TO_ROLLS );
+  }
 }
 
 #undef SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER

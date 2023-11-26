@@ -32,6 +32,7 @@
 #include "helpedit.hpp"
 #include "config.hpp"
 #include "newhouse.hpp"
+#include "creative_works.hpp"
 
 #define DO_FORMAT_INDENT   1
 #define DONT_FORMAT_INDENT 0
@@ -258,6 +259,9 @@ void string_add(struct descriptor_data *d, char *str)
     if (STATE(d) == CON_DECK_CREATE && d->edit_mode == 1) {
       REPLACE_STRING(d->edit_obj->photo);
       deckbuild_main_menu(d);
+    } else if (STATE(d) == CON_ART_CREATE && d->edit_mode == ART_EDIT_DESC) {
+      REPLACE_STRING(d->edit_obj->photo);
+      create_art_main_menu(d);
     } else if (STATE(d) == CON_VEHCUST) {
       REPLACE_STRING(d->edit_veh->restring_long);
       vehcust_menu(d);

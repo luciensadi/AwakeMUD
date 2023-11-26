@@ -147,6 +147,29 @@ const char *smo[] =
 
 void end_quest(struct char_data *ch);
 
+void initialize_quest_for_ch(struct char_data *ch, int quest_rnum, struct char_data *johnson) {
+  // Assign them the quest.
+  GET_QUEST(ch) = quest_rnum;
+
+  // Create their memory structures.
+  ch->player_specials->obj_complete = new sh_int[quest_table[GET_QUEST(ch)].num_objs];
+  ch->player_specials->mob_complete = new sh_int[quest_table[GET_QUEST(ch)].num_mobs];
+  for (int num = 0; num < quest_table[GET_QUEST(ch)].num_objs; num++)
+    ch->player_specials->obj_complete[num] = 0;
+  for (int num = 0; num < quest_table[GET_QUEST(ch)].num_mobs; num++)
+    ch->player_specials->mob_complete[num] = 0;
+
+  // Load up the quest's targets.
+  load_quest_targets(johnson, ch);
+
+  // Clear the Johnson's SPARE1 so they're willing to talk.
+  GET_SPARE1(johnson) = 0;
+
+  // Start the Johnson's spiel.
+  act("^n", FALSE, johnson, 0, 0, TO_ROOM);
+  handle_info(johnson, quest_rnum, ch);
+}
+
 bool attempt_quit_job(struct char_data *ch, struct char_data *johnson) {
   // Precondition: I cannot be talking right now.
   if (GET_SPARE1(johnson) == 0) {
@@ -1199,21 +1222,23 @@ void handle_info(struct char_data *johnson, int num, struct char_data *target)
     return;
   }
 
-  int allowed, pos, i, speech_index = 0;
+  int i, speech_index = 0;
+
+  // Pre-calculate some text string lengths.
+  size_t sayto_invocation_len = strlen(GET_CHAR_NAME(target)) + strlen(" ..."); // "<name> ..."
+  size_t terminal_data_len = strlen("...") + 1; // "...\0"
 
   // Want to control how much the Johnson says per tick? Change this magic number.
-  char speech[strlen(GET_NAME(johnson)) + 200];
-
-  // Calculate how much text we can put into the speech buffer, leaving room for ellipses and \0.
-  allowed = sizeof(speech) - 7;
+  char speech[sayto_invocation_len + 200 + terminal_data_len];
 
   // Spare1 is the position in the info string we last left off at.
-  pos = GET_SPARE1(johnson);
+  int pos = GET_SPARE1(johnson);
 
-  // If we've continued from earlier, let's go ahead and prepend some '...'.
-  if (pos > 0)
-    for (int ellipses = 0; ellipses < 3; ellipses++)
-      speech[speech_index++] = '.';
+  // Prepend the name and initial ellipses if needed.
+  snprintf(speech, sizeof(speech), "%s %s", GET_CHAR_NAME(target), pos > 0 ? "..." : "");
+
+  // Calculate how much text we can put into the speech buffer, leaving room for ellipses and \0.
+  int allowed = sizeof(speech) - strlen(speech) - terminal_data_len;
 
   // i is the total length of the info string. We skip any newlines at the end.
   i = strlen(quest_table[num].info);
@@ -1251,21 +1276,19 @@ void handle_info(struct char_data *johnson, int num, struct char_data *target)
       speech[speech_index++] = *(quest_table[num].info + pos);
   }
 
-  // Add the final ellipses and cap it off with a '\0'.
-  if (will_add_ellipses)
-    for (int ellipses = 0; ellipses < 3; ellipses++)
-      speech[speech_index++] = '.';
-
   speech[speech_index] = '\0';
 
+  if (will_add_ellipses)
+    strlcat(speech, "...", sizeof(speech));
+
   // Say it.
-  do_say(johnson, speech, 0, 0);
+  do_say(johnson, speech, 0, SCMD_SAYTO);
 }
 
 SPECIAL(johnson)
 {
   struct char_data *johnson = (struct char_data *) me, *temp = NULL;
-  int i, obj_complete = 0, mob_complete = 0, num, new_q, cached_new_q = -2, comm = CMD_JOB_NONE;
+  int i, obj_complete = 0, mob_complete = 0, new_q, cached_new_q = -2, comm = CMD_JOB_NONE;
 
   if (!IS_NPC(johnson))
     return FALSE;
@@ -1670,23 +1693,8 @@ SPECIAL(johnson)
         return TRUE;
       }
 
-      // Assign them the quest since they've accepted it.
-      GET_QUEST(ch) = new_q;
-      ch->player_specials->obj_complete =
-        new sh_int[quest_table[GET_QUEST(ch)].num_objs];
-      ch->player_specials->mob_complete =
-        new sh_int[quest_table[GET_QUEST(ch)].num_mobs];
-      for (num = 0; num < quest_table[GET_QUEST(ch)].num_objs; num++)
-        ch->player_specials->obj_complete[num] = 0;
-      for (num = 0; num < quest_table[GET_QUEST(ch)].num_mobs; num++)
-        ch->player_specials->mob_complete[num] = 0;
-
-      // Load up the quest's targets.
-      load_quest_targets(johnson, ch);
-
-      // Go into my spiel.
-      act("^n", FALSE, johnson, 0, 0, TO_ROOM);
-      handle_info(johnson, new_q, ch);
+      // Start the quest.
+      initialize_quest_for_ch(ch, new_q, johnson);
 
       return TRUE;
 

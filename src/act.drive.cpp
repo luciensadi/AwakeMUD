@@ -1332,9 +1332,11 @@ ACMD(do_driveby)
         if (AFF_FLAGGED(pass, AFF_MANNING)) {
           struct obj_data *mount = get_mount_manned_by_ch(ch);
           struct obj_data *ammo = get_mount_ammo(mount);
-          hit(pass, vict, GET_EQ(pass, WEAR_WIELD), NULL, ammo);
+          if (hit(pass, vict, GET_EQ(pass, WEAR_WIELD), NULL, ammo))
+            return;
         } else
-          hit(pass, vict, GET_EQ(pass, WEAR_WIELD), NULL, NULL);
+          if (hit(pass, vict, GET_EQ(pass, WEAR_WIELD), NULL, NULL))
+            return;
 
         GET_INIT_ROLL(pass) -= 10;
       }

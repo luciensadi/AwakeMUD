@@ -1132,7 +1132,7 @@ int Apartment::get_days_in_arrears() {
 }
 
 bool Apartment::create_or_extend_lease(struct char_data *ch) {
-  struct obj_data *neophyte_card;
+  struct obj_data *neophyte_card = NULL;
   int cost = nuyen_per_month;
 
   // Special case: The apartment has already been leased and has expired.
@@ -1158,11 +1158,18 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
 
   int displayed_cost = cost;
 
-  // Subtract subsidy card amounts.
+  // Subtract subsidy card amounts, but only for High or lower.
   for (neophyte_card = ch->carrying; neophyte_card; neophyte_card = neophyte_card->next_content) {
     if (GET_OBJ_VNUM(neophyte_card) == OBJ_NEOPHYTE_SUBSIDY_CARD
         && GET_OBJ_VAL(neophyte_card, 0) == GET_IDNUM(ch))
     {
+      // Deny use of card for anything over High.
+      if (get_lifestyle() > LIFESTYLE_HIGH) {
+        send_to_char(ch, "You offer up %s as payment, but you get a *look* in response. Apparently subsidy cards aren't usable here.\r\n", GET_OBJ_NAME(neophyte_card));
+        neophyte_card = NULL;
+        break;
+      }
+
       if (cost >= GET_OBJ_VAL(neophyte_card, 1))
         cost -= GET_OBJ_VAL(neophyte_card, 1);
       else

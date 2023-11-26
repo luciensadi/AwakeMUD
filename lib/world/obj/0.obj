@@ -1228,7 +1228,6 @@ WearFlags:	1
 ExtraFlags:	100000000000000001000001000
 Material:	metal
 [POINTS]
-	Weight:	0.25
 	Barrier:	32
 	AvailTN:	2
 	AvailDay:	1.00
@@ -1284,25 +1283,27 @@ ritualistic fashion-- candles, incense, representations of totems and
 elements, and other useful magical things. 
 ~
 Type:	Other
+ExtraFlags:	100000000000000000000000000
 Material:	metal
 [POINTS]
 	Weight:	1.00
 	Barrier:	32
 BREAK
 #125
-Keywords:	white tunic keyn jraye
-Name:	a white tunic
+Keywords:	art creative work
+Name:	a work of art
 RoomDesc:$
-A white tunic is folded neatly here.~
+Someone's unfinished creative effort has been left here.~
 LookDesc:$
-A plain white tunic, made of a soft, high-quality linen.  The fabric feels
-odd, as if its not made of anything... earthly. 
+The artist hasn't yet rendered their vision here.
 ~
-Type:	Worn
-WearFlags:	100001
-Material:	fabric
+Type:	Art
+WearFlags:	1
+ExtraFlags:	100000000000000001000001000
+Material:	paper
 [POINTS]
-	Barrier:	32
+	Weight:	0.10
+	Barrier:	4
 BREAK
 #126
 Keywords:	silver cord
@@ -1314,6 +1315,7 @@ A fine silver rope cord.
 ~
 Type:	Worn
 WearFlags:	100000000001
+ExtraFlags:	1000001000
 Material:	metal
 [POINTS]
 	Weight:	1.00

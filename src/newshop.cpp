@@ -1444,8 +1444,6 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     return;
   }
 
-  strcpy(buf, GET_CHAR_NAME(ch));
-
   // Prevent ghouls from being loved by anyone except their own mother.
   if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.IsSet(SHOP_YES_GHOUL)) {
     snprintf(buf, sizeof(buf), "%s GET THE FRAG OUTTA HERE GHOUL!", GET_CHAR_NAME(ch));
@@ -1467,10 +1465,10 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
   if (!obj) {
     if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "displays, \"%s\"", shop_table[shop_nr].no_such_itemp);
+      snprintf(buf, sizeof(buf), "@self displays, \"%s\"", shop_table[shop_nr].no_such_itemp);
       do_new_echo(keeper, buf, cmd_echo, 0);
     } else {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].no_such_itemp);
+      snprintf(buf, sizeof(buf) - strlen(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].no_such_itemp);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     }
     return;
@@ -1483,8 +1481,13 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
   if (GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
     if (!shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I won't buy %s off of you. Take it to a cyberdoc.", GET_OBJ_NAME(obj));
-      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+        strlcpy(buf, "@self displays, \"Error: No surgical suite available.\"", sizeof(buf));
+        do_new_echo(keeper, buf, cmd_echo, 0);
+      } else {
+        snprintf(buf, sizeof(buf), "%s I won't buy %s off of you. Take it to a cyberdoc.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
+        do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      }
       return;
     }
 
@@ -1501,10 +1504,10 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   if (!shop_will_buy_item_from_ch(shop_nr, obj, ch))
   {
     if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "displays, \"%s\"", shop_table[shop_nr].doesnt_buy);
+      snprintf(buf, sizeof(buf), "@self displays, \"%s\"", shop_table[shop_nr].doesnt_buy);
       do_new_echo(keeper, buf, cmd_echo, 0);
     } else {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].doesnt_buy);
+      snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].doesnt_buy);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     }
     return;
@@ -1512,8 +1515,13 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
   if (shop_table[shop_nr].type == SHOP_LEGAL && !cred)
   {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " No cred, no business.");
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+      snprintf(buf, sizeof(buf), "@self displays, \"Error: Credstick required for transactions.\"");
+      do_new_echo(keeper, buf, cmd_echo, 0);
+    } else {
+      snprintf(buf, sizeof(buf), "%s No cred, no business.", GET_CHAR_NAME(ch));
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    }
     return;
   }
 
@@ -1574,9 +1582,14 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   // Use our new replace_substring() function to swap out all %d's in arg with the nuyen string.
   replace_substring(arg, buf3, "%d", price_buf);
 
-  // Compose the sayto string for the keeper.
-  snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), buf3);
-  do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+  if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
+    snprintf(buf, sizeof(buf), "@self displays, \"%s\"", buf3);
+    do_new_echo(keeper, buf, cmd_echo, 0);
+  } else {
+    snprintf(buf, sizeof(buf), "%s %s", GET_CHAR_NAME(ch), buf3);
+    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+  }
+
   for (;sell; sell = sell->next)
     if (sell->vnum == GET_OBJ_VNUM(obj))
       break;

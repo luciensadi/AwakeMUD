@@ -951,6 +951,10 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         medit_disp_menu(d);
       else {
         AFF_FLAGS(MOB).ToggleBit(number - 1);
+
+        if (number-1 == AFF_MANIFEST && AFF_FLAGS(MOB).IsSet(AFF_MANIFEST))
+          MOB_FLAGS(MOB).SetBit(MOB_ASTRAL);
+          
         medit_disp_affected_menu(d);
       }
     }

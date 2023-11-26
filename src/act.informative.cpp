@@ -239,7 +239,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
 
   if (AFF_FLAGGED(i, AFF_MANIFEST) && !SEES_ASTRAL(ch))
   {
-    snprintf(buf2, sizeof(buf2), "The ghostly image of %s", buf);
+    snprintf(buf2, sizeof(buf2), "The ghostly image of %s", decapitalize_a_an(buf));
     strlcpy(buf, buf2, buf_size);
   }
   return buf;
@@ -279,10 +279,17 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
   SPECIAL(pocket_sec);
 
   *buf = '\0';
+
+  if (GET_OBJ_TYPE(object) == ITEM_CREATIVE_EFFORT) {
+    strlcat(buf, "^c(Art) ^n", sizeof(buf));
+  }
+  
   if ((mode == SHOW_MODE_ON_GROUND) && object->text.room_desc) {
-    strlcpy(buf, CCHAR ? CCHAR : "", sizeof(buf));
+    strlcat(buf, CCHAR ? CCHAR : "", sizeof(buf));
+
     if (object->graffiti) {
       strlcat(buf, object->graffiti, sizeof(buf));
+      strlcat(buf, "^n", sizeof(buf));
     }
     else {
       // Gun magazines get special consideration.
@@ -311,7 +318,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     }
   }
   else if (GET_OBJ_NAME(object) && (mode == SHOW_MODE_IN_INVENTORY || mode == SHOW_MODE_INSIDE_CONTAINER)) {
-    strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
+    strlcat(buf, GET_OBJ_NAME(object), sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_DESIGN)
       strlcat(buf, " (Plan)", sizeof(buf));
     if (GET_OBJ_VNUM(object) == 108 && !GET_OBJ_TIMER(object))
@@ -336,22 +343,30 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         strlcat(buf, " (yours)", sizeof(buf));
       } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(object) == -1) {
         strlcat(buf, " ^g(not yet customized)", sizeof(buf));
+      } else if (object->carried_by && object->carried_by != ch && IS_SENATOR(ch)) {
+        if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(object) == GET_IDNUM(object->carried_by))
+          strlcat(buf, " (theirs)", sizeof(buf));
+        else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(object) == 0)
+          strlcat(buf, " ^y(npc's)", sizeof(buf));
+        else
+          strlcat(buf, " ^y(other pc's)", sizeof(buf));
       } else {
         strlcat(buf, " ^y(unusable)", sizeof(buf));
       }
     }
   }
   else if (GET_OBJ_NAME(object) && ((mode == 3) || (mode == 4) || (mode == SHOW_MODE_OWN_EQUIPMENT) || (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT))) {
-    strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
+    strlcat(buf, GET_OBJ_NAME(object), sizeof(buf));
   }
   else if (mode == SHOW_MODE_JUST_DESCRIPTION) {
+    // Deliberately using strlcpy here to overwrite the (Art) tag.
     if (GET_OBJ_DESC(object))
       strlcpy(buf, GET_OBJ_DESC(object), sizeof(buf));
     else
       strlcpy(buf, "You see nothing special..", sizeof(buf));
   }
   else if (mode == SHOW_MODE_CONTAINED_OBJ) {
-    snprintf(buf, sizeof(buf), "\t\t\t\t%s", GET_OBJ_NAME(object));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\t\t\t\t%s", GET_OBJ_NAME(object));
   }
 
   if (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT) {
@@ -585,12 +600,34 @@ bool items_are_visually_similar(struct obj_data *first, struct obj_data *second)
       (first->restring && second->restring && strcmp(first->restring, second->restring)))
     return FALSE;
 
-  // If they're magazines, their various bonded stats must match too.
-  if (GET_OBJ_TYPE(first) == ITEM_GUN_MAGAZINE) {
-    if (GET_MAGAZINE_BONDED_MAXAMMO(first) != GET_MAGAZINE_BONDED_MAXAMMO(second) ||
-        GET_MAGAZINE_BONDED_ATTACKTYPE(first) != GET_MAGAZINE_BONDED_ATTACKTYPE(second))
-      return FALSE;
+  #define COMPARE(field)  if (field(first) != field(second)) { return FALSE; }
+  switch (GET_OBJ_TYPE(first)) {
+    case ITEM_GUN_MAGAZINE:
+      // If they're magazines, their various bonded stats must match too.
+      COMPARE(GET_MAGAZINE_BONDED_MAXAMMO);
+      COMPARE(GET_MAGAZINE_BONDED_ATTACKTYPE);
+      break;
+    case ITEM_GUN_AMMO:
+      // Ammo boxes must match requisite fields.
+      COMPARE(GET_AMMOBOX_INTENDED_QUANTITY);
+      COMPARE(GET_AMMOBOX_WEAPON);
+      COMPARE(GET_AMMOBOX_TYPE);
+      break;
+    case ITEM_DESIGN:
+      // Design completion status.
+      COMPARE(GET_DESIGN_COMPLETED);
+      COMPARE(GET_DESIGN_DESIGNING_TICKS_LEFT);
+      break;
+    case ITEM_PROGRAM:
+      // Cooked / uncooked status matters for programs.
+      COMPARE(GET_PROGRAM_IS_COOKED);
+      break;
+    case ITEM_PART:
+      // Designed / not designed.
+      COMPARE(GET_PART_DESIGN_COMPLETION);
+      break;
   }
+  #undef COMPARE
 
   return TRUE;
 }
@@ -913,6 +950,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
 
     if (!IS_NPC(i) && GET_LEVEL(ch) >= GET_LEVEL(i)) {
       act(get_lifestyle_string(i), FALSE, i, 0, ch, TO_VICT | SKIP_YOU_STANZAS);
+      send_to_char("\r\n", i);
     }
 
     if (i != ch && GET_HEIGHT(i) > 0 && GET_WEIGHT(i) > 0) {
@@ -1272,9 +1310,12 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       else if (IS_NPC(i) && IS_DUAL(i))
         strlcat(buf, "(dual) ", sizeof(buf));
     }
-    if (AFF_FLAGGED(i, AFF_MANIFEST) && !SEES_ASTRAL(ch))
-      strlcat(buf, "The ghostly image of ", sizeof(buf));
-    strlcat(buf, i->player.physical_text.room_desc, sizeof(buf));
+    
+    if (AFF_FLAGGED(i, AFF_MANIFEST) && !SEES_ASTRAL(ch)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "The ghostly image of %s", decapitalize_a_an(i->player.physical_text.room_desc));
+    } else {
+      strlcat(buf, CAP(i->player.physical_text.room_desc), sizeof(buf));
+    }
 
     if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
       bool already_printed = FALSE;
@@ -2239,8 +2280,14 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     }
   }
 
-  if (ch->in_room->poltergeist[0] > 0)
-    send_to_char("^cAn invisible force is whipping small objects around the area.^n\r\n", ch);
+  if (ch->in_room->poltergeist[0] > 0) {
+    if (!number(0, 10000)) {
+      // Poultrygeist joke line.  Don't @ me about this.
+      send_to_char("^cAn invisible force is tumbling chickens about in a ghostly manner.^n\r\n", ch);
+    } else {
+      send_to_char("^cAn invisible force is whipping small objects around the area.^n\r\n", ch);
+    }
+  }
   if (ch->in_room->icesheet[0] > 0)
     send_to_char("^CIce covers the floor.^n\r\n", ch);
   if (ch->in_room->silence[0] > 0)
@@ -3691,6 +3738,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
                      ammo_type[GET_OBJ_VAL(j, 2)].name,GET_OBJ_VAL(j, 0) != 1 ? "s" : "",
                      weapon_types[GET_OBJ_VAL(j, 1)]);
       break;
+    case ITEM_CREATIVE_EFFORT:
+      if (IS_SENATOR(ch)) {
+        const char *author_name = get_player_name(GET_ART_AUTHOR_IDNUM(j));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It was created by ^c%s^n (%d).\r\n", author_name, GET_ART_AUTHOR_IDNUM(j));
+        delete [] author_name;
+      } else {
+        strlcat(buf, "Nothing stands out about this item's OOC values. Try EXAMINE it instead.", sizeof(buf));
+      }
+      break;
     case ITEM_OTHER:
       if (GET_OBJ_VNUM(j) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is bonded to %s and has %d nuyen remaining on it.\r\n",
@@ -3731,7 +3787,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       do_probe_object(ch, j->contains, FALSE);
       return;
     default:
-      strncpy(buf, "This item type has no probe string. Contact the staff to request one.", sizeof(buf) - strlen(buf));
+      strncpy(buf, "This item type has no probe string. Contact staff to request one.", sizeof(buf) - strlen(buf));
       break;
   }
 
@@ -4084,7 +4140,10 @@ ACMD(do_examine)
         send_to_char("It has not been ^WBOND^ned yet, and ^ywill not function until it is^n.\r\n\r\n", ch);
       }
     }
-    if (GET_OBJ_VNUM(tmp_object) > 1) {
+
+    if (GET_OBJ_TYPE(tmp_object) == ITEM_CREATIVE_EFFORT) {
+      send_to_char(ch, "^L(OOC: It's a custom object with no coded effect.)^n\r\n");
+    } else if (GET_OBJ_VNUM(tmp_object) > 1) {
       snprintf(buf, sizeof(buf), "You %s that %s ",
                GET_SKILL(ch, SKILL_POLICE_PROCEDURES) <= 0 ? "have no training in Police Procedures, but you guess" : "think",
                GET_OBJ_NAME(tmp_object));
@@ -5085,6 +5144,12 @@ ACMD(do_time)
         }
       }
     }
+  }
+
+  // You can look at the dash clock in a vehicle.
+  if (subcmd == SCMD_NORMAL && ch->in_veh) {
+    subcmd = SCMD_PRECISE;
+    send_to_char("You glance at the dash.\r\n", ch);
   }
 
   // If you still get scrub-grade time after the above checks...

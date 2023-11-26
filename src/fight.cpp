@@ -2830,23 +2830,62 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
 {
   char_data *attacker;
 
+  // Fighting yourself? Go for it.
+  if (ch == vict)
+    return FALSE;
+
+  // Unpuppeted NPC or NPC puppeter without a body to return to? Fine.
   if (IS_NPC(ch) && (ch->desc == NULL || ch->desc->original == NULL))
     return FALSE;
 
+  // Otherwise, this is a player or staff member acting.
   if (!IS_NPC(ch))
     attacker = ch;
   else
     attacker = ch->desc->original;
 
-  if (!IS_NPC(vict) &&
-      !PLR_FLAGS(vict).AreAnySet(PLR_KILLER, ENDBIT) &&
-      !(ROOM_FLAGGED(get_ch_in_room(ch), ROOM_ARENA) && ROOM_FLAGGED(get_ch_in_room(vict), ROOM_ARENA)) &&
-      (!PRF_FLAGGED(attacker, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)) &&
-      !PLR_FLAGGED(attacker, PLR_KILLER) && attacker != vict && !IS_SENATOR(attacker))
-  {
-    return TRUE;
+  
+  if (IS_NPC(vict)) {
+    // Is target a vanilla NPC (no puppeting etc)?
+    if (!vict->desc || !vict->desc->original) {
+      // It's just a vanilla NPC. Hit away.
+      return FALSE;
+    }
+
+    // Target is a projection or puppeted NPC
+    // You can hit staff puppeted NPCs.
+    if (IS_SENATOR(vict->desc->original))
+      return FALSE;
+      
+    // Otherwise, this is a player acting as a projection.
+    // Unwind to the original body so checks for PRF_PKER etc work properly.
+    vict = vict->desc->original;
   }
-  return FALSE;
+
+  // At this point, the victim is a player.
+
+  // You can always hit and be hit by killer-flagged PCs.
+  if (PLR_FLAGS(vict).IsSet(PLR_KILLER) || PLR_FLAGGED(attacker, PLR_KILLER)) {
+    return FALSE;
+  }
+
+  // You can always fight someone who's in an arena, provided you're in one yourself.
+  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_ARENA) && ROOM_FLAGGED(get_ch_in_room(vict), ROOM_ARENA)) {
+    return FALSE;
+  }
+
+  // You can always fight a PKer if you're a PKer as well.
+  if (PRF_FLAGGED(attacker, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER)) {
+    return FALSE;
+  }
+
+  // Staff can attack anyone. Hopefully they have good reason for it.
+  if (IS_SENATOR(attacker)) {
+    return FALSE;
+  }
+
+  // Otherwise, you can't harm the other player.
+  return TRUE;
 }
 
 // Basically ripped the logic from damage(). Used to adjust combat messages for edge cases.
@@ -2975,6 +3014,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       snprintf(rbuf, sizeof(rbuf), "Bioware damage (%s: ", GET_CHAR_NAME(ch));
     } else if (attacktype == TYPE_POISON) {
       snprintf(rbuf, sizeof(rbuf), "Poison damage (%s: ", GET_CHAR_NAME(ch));
+    } else if (attacktype == TYPE_FOCUS_OVERUSE) {
+      snprintf(rbuf, sizeof(rbuf), "Focus overuse damage (%s: ", GET_CHAR_NAME(ch));
     } else {
       snprintf(rbuf, sizeof(rbuf), "Self-damage (%s: ", GET_CHAR_NAME(ch));
     }
@@ -3011,7 +3052,10 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       return 0;
     }
 
-    if (GET_POS(ch) > POS_STUNNED && attacktype < TYPE_SUFFERING) {
+    if (GET_POS(ch) > POS_STUNNED
+        && (attacktype < TYPE_SUFFERING  // Pretty much any standard attack
+            || (attacktype >= TYPE_MANABOLT_OR_STUNBOLT && attacktype <= TYPE_MANIPULATION_SPELL))) // Damaging spells
+    {
       if (!FIGHTING(ch) && !ch->in_veh)
         set_fighting(ch, victim);
 
@@ -3117,7 +3161,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (IS_PROJECT(victim) && victim->desc && victim->desc->original)
     real_body = victim->desc->original;
 
-  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS && attacktype != TYPE_POISON) {
+  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS && attacktype != TYPE_POISON && attacktype != TYPE_FOCUS_OVERUSE) {
     for (bio = real_body->bioware; bio; bio = bio->next_content) {
       if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY && dam >= 3 && is_physical)
         dam--;
@@ -3148,6 +3192,9 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     awake = FALSE;
 
   if (dam > 0) {
+    // Remove the effects of damage from their initiative roll.
+    GET_INIT_ROLL(victim) += damage_modifier(victim, 0, 0, 0, 0);
+
     // Physical damage. This one's simple-- no overflow to deal with.
     if (is_physical) {
       GET_PHYSICAL(real_body) -= MAX(dam * 100, 0);
@@ -3210,19 +3257,23 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     if (attacktype == TYPE_DRUGS) {
       GET_PHYSICAL(real_body) = MAX(GET_PHYSICAL(real_body), 100);
     }
+
+    // Re-add the effects of damage to their initiative roll.
+    GET_INIT_ROLL(victim) -= damage_modifier(victim, 0, 0, 0, 0);
   }
   if (!awake && GET_PHYSICAL(victim) <= 0)
     GET_LAST_DAMAGETIME(victim) = time(0);
 
   if (update_pos(victim)) {
-    // They died from dumpshock.
+    // They died. RIP
     return TRUE;
   }
 
   if (GET_SUSTAINED_NUM(victim))
   {
     struct sustain_data *next;
-    if (GET_POS(victim) < POS_LYING) {
+    // If you've been knocked out, or the damage is from focus overuse, lose all your spells.
+    if (GET_POS(victim) < POS_LYING || attacktype == TYPE_FOCUS_OVERUSE) {
       for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
         next = sust->next;
         if (sust->caster && !sust->focus && !sust->spirit) {
@@ -3352,6 +3403,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       case TYPE_DRUGS:
       case TYPE_POISON:
       case TYPE_MANABOLT_OR_STUNBOLT:
+      case TYPE_FOCUS_OVERUSE:
         // These types do not risk equipment damage.
         break;
       default:

@@ -188,11 +188,13 @@ struct melee_combat_data {
   int dice;
   int successes;
   bool is_monowhip;
+  struct obj_data *riot_shield;
 
   int modifiers[NUM_COMBAT_MODIFIERS];
 
   melee_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode, struct cyberware_data *cyber) :
-    skill(0), skill_bonus(0), power(0), power_before_armor(0), dam_type(0), damage_level(0), is_physical(FALSE), tn(4), dice(0), successes(0), is_monowhip(FALSE)
+    skill(0), skill_bonus(0), power(0), power_before_armor(0), dam_type(0), damage_level(0), is_physical(FALSE), tn(4), 
+    dice(0), successes(0), is_monowhip(FALSE), riot_shield(NULL)
   {
     assert(ch != NULL);
 
@@ -339,6 +341,12 @@ struct melee_combat_data {
     }
 
     is_physical = is_physical || IS_DAMTYPE_PHYSICAL(dam_type);
+
+    // Check for riot shields.
+    riot_shield = GET_EQ(ch, WEAR_SHIELD);
+    if (!riot_shield || GET_OBJ_TYPE(riot_shield) != ITEM_WORN) {
+      riot_shield = NULL;
+    }
   }
 };
 
@@ -359,6 +367,8 @@ struct combat_data
 
   // Generic combat data.
   bool too_tall;
+  int standard_ballistic_rating;
+  int standard_impact_rating;
   int hardened_armor_ballistic_rating;
   int hardened_armor_impact_rating;
 
@@ -368,6 +378,8 @@ struct combat_data
     weapon(NULL),
     ranged_combat_mode(FALSE),
     too_tall(FALSE),
+    standard_ballistic_rating(GET_BALLISTIC(character)),
+    standard_impact_rating(GET_IMPACT(character)),
     hardened_armor_ballistic_rating(0),
     hardened_armor_impact_rating(0)
   {
@@ -392,12 +404,19 @@ struct combat_data
     if (ranged_combat_mode && !weapon->contains && does_weapon_have_bayonet(weapon))
       ranged_combat_mode = FALSE;
 
-    // Calculate hardened armor ratings, if any.
+    // Calculate hardened armor ratings, if any. We add all hardened items together (e.g. armor + helm)
     for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
       struct obj_data *armor = GET_EQ(ch, wear_idx);
-      if (armor && GET_OBJ_TYPE(armor) == ITEM_WORN && IS_OBJ_STAT(armor, ITEM_EXTRA_HARDENED_ARMOR) && !GET_WORN_MATCHED_SET(armor)) {
-        hardened_armor_ballistic_rating = MAX(hardened_armor_ballistic_rating, GET_WORN_BALLISTIC(armor));
-        hardened_armor_impact_rating = MAX(hardened_armor_impact_rating, GET_WORN_IMPACT(armor));
+      if (armor && GET_OBJ_TYPE(armor) == ITEM_WORN && IS_OBJ_STAT(armor, ITEM_EXTRA_HARDENED_ARMOR)) {
+        hardened_armor_ballistic_rating += GET_WORN_BALLISTIC(armor);
+        hardened_armor_impact_rating += GET_WORN_IMPACT(armor);
+
+        for (int aff_idx = 0; aff_idx < MAX_OBJ_AFFECT; aff_idx++) {
+          if (armor->affected[aff_idx].location == APPLY_BALLISTIC)
+            hardened_armor_ballistic_rating += armor->affected[aff_idx].modifier;
+          if (armor->affected[aff_idx].location == APPLY_IMPACT)
+            hardened_armor_impact_rating += armor->affected[aff_idx].modifier;
+        }
       }
     }
   }

@@ -2794,7 +2794,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     }
 
     // Remove the old attachment.
-    struct obj_data *old_attachment = unattach_attachment_from_weapon(location, weapon, NULL);
+    struct obj_data *old_attachment = unattach_attachment_from_weapon(location + ACCESS_ACCESSORY_LOCATION_DELTA, weapon, NULL);
     if (old_attachment)
       extract_obj(old_attachment);
   }
@@ -3784,7 +3784,11 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount, const ch
   weight_change_object(ammobox, get_ammo_weight(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox), NULL, caller));
 
   // Calculate cost as count * multiplier (multiplier is per round)
-  GET_OBJ_COST(ammobox) = get_ammo_cost(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox), NULL, caller);
+  if (GET_AMMOBOX_QUANTITY(ammobox) == 0) {
+    GET_OBJ_COST(ammobox) = 0;
+  } else {
+    GET_OBJ_COST(ammobox) = get_ammo_cost(GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), GET_AMMOBOX_QUANTITY(ammobox), NULL, caller);
+  }
 
   // Update the carrier's carry weight.
   if (ammobox->carried_by) {
@@ -3795,12 +3799,14 @@ void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount, const ch
 
 bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages) {
   if (!ch || !from || !into) {
-    mudlog("SYSERR: combine_ammo_boxes received a null value.", ch, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: combine_ammo_boxes(%s, %s, %s) received a null value.", GET_CHAR_NAME(ch), GET_OBJ_NAME(from), GET_OBJ_NAME(into));
     return FALSE;
   }
 
   if (GET_OBJ_TYPE(from) != ITEM_GUN_AMMO || GET_OBJ_TYPE(into) != ITEM_GUN_AMMO) {
-    mudlog("SYSERR: combine_ammo_boxes received something that was not an ammo box.", ch, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: combine_ammo_boxes received something that was not an ammo box (%s / %ld -> %s / %ld).",
+                    GET_OBJ_NAME(from), GET_OBJ_VNUM(from),
+                    GET_OBJ_NAME(into), GET_OBJ_VNUM(into));
     return FALSE;
   }
 
@@ -4008,15 +4014,25 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
     return TRUE;
 
   // Does the viewee have an astral state that makes them invisible to subj?
-  if (IS_ASTRAL(obj) && !AFF_FLAGGED(obj, AFF_MANIFEST) && !SEES_ASTRAL(subj))
-    return FALSE;
+  if (IS_ASTRAL(obj) && !SEES_ASTRAL(subj)) {
+    // You will only see them if they've manifested.
+    if (!AFF_FLAGGED(obj, AFF_MANIFEST))
+      return FALSE;
+
+    // You can only see manifested beings if you're looking through your own eyes.
+    if (PLR_FLAGGED(subj, PLR_REMOTE) || AFF_FLAGGED(subj, AFF_RIG))
+      return FALSE;
+
+    // They're manifested and you're not rigging. Go for it. This specifically ignores light levels since manifestations are psychic projections.
+    return TRUE;
+  }
 
   // Johnsons, trainers, and cab drivers can always see. Them going blind doesn't increase the fun.
   if (npc_can_see_in_any_situation(subj))
     return TRUE;
 
-  // If your vision can't see in the ambient light, fail.
-  if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified)) {
+  // If your vision can't see in the ambient light, fail. Note that astral vision won't see inanimate mobs (turrets etc).
+  if (!LIGHT_OK_ROOM_SPECIFIED(subj, room_specified, !MOB_FLAGGED(obj, MOB_INANIMATE))) {
     if (get_character_light_sources(obj) <= 0) {
       // They're not holding a light, so you can't see them.
       return FALSE;
@@ -5215,7 +5231,11 @@ int calculate_vehicle_weight(struct veh_data *veh) {
 }
 
 int roll_default_initiative(struct char_data *ch) {
-  return dice(1 + GET_INIT_DICE(ch), 6) + GET_REA(ch);
+  int initial_roll = dice(1 + GET_INIT_DICE(ch), 6);
+  initial_roll += GET_REA(ch);
+  initial_roll -= damage_modifier(ch, NULL, 0, NULL, 0);
+
+  return initial_roll;
 }
 
 int pilot_skills[] {
@@ -6133,7 +6153,7 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   }
 
   // Special cases for actions done on NPCs (they skip a lot of the PC damage checks).
-  if (IS_NPC(victim) && victim == victim_original) {
+  if (IS_NPC(victim) && (victim == victim_original || IS_SENATOR(victim_original))) {
     FALSE_CASE_ACTOR(npc_is_protected_by_spec(victim) || MOB_FLAGGED(victim, MOB_NOKILL), "You're not able to harm %s: they're protected by staff edict.\r\n", GET_CHAR_NAME(victim));
 
     return TRUE;

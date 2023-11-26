@@ -60,10 +60,12 @@ extern bool docwagon(struct char_data *ch);
 void mental_gain(struct char_data * ch)
 {
   int gain = 0;
+  struct obj_data *bio;
 
   if (IS_PROJECT(ch))
     return;
 
+  // Base recovery
   switch (GET_POS(ch))
   {
     case POS_SLEEPING:
@@ -85,39 +87,62 @@ void mental_gain(struct char_data * ch)
       break;
   }
 
-  if (IS_NPC(ch)) {
+  // Character related bonuses
+  // NPCs recover faster
+  if (IS_NPC(ch))
     gain *= 2;
-  } else {
-    gain *= get_drug_heal_multiplier(ch);
+
+  // Augmentations
+  for (bio = ch->bioware; bio; bio = bio->next_content) {
+    if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+      switch (GET_BIOWARE_RATING(bio)) {
+        case 1:
+          gain *= 1.1;
+          break;
+        case 2:
+          gain *= 1.4;
+          break;
+        case 3:
+          gain *= 2;
+          break;
+      }
+      break;
+    }
   }
 
+  // Adept rapid healing increases recovery by +50% per rank
+  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+
+  // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
+  gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+
+  // Room related bonuses
   if (find_workshop(ch, TYPE_MEDICAL))
     gain *= 1.5;
+
+  if (char_is_in_social_room(ch))
+    gain *= 2;
+
+  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+    gain *= 1.5;
+
+  // Penalties happen last, to avoid the possibility of truncating to zero too early
+  // Biosystem overstress reduces healing rate by 10% per point
+  if (GET_BIOOVER(ch) > 0)
+    gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
+
+  // Drug multiplier is a float in range 0.1 ≤ X ≤ 1.0
+  gain *= get_drug_heal_multiplier(ch);
 
 #ifdef ENABLE_HUNGER
   if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
     gain >>= 1;
 #endif
 
-  if (char_is_in_social_room(ch))
-    gain *= 2;
-  else if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
-    gain *= 1.5;
-
-  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
-
-  // Biosystem overstress reduces rate by 10% per point
-  if (GET_BIOOVER(ch) > 0)
-    gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
-
-  // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
-  gain += abs(GET_BEST_LIFESTYLE(ch)) - LIFESTYLE_SQUATTER;
-
   // Prevent reaching 0 gain
   gain = MAX(1, gain);
   GET_MENTAL(ch) = MIN(GET_MAX_MENTAL(ch), GET_MENTAL(ch) + gain);
-
   update_pos(ch);
 }
 
@@ -129,6 +154,7 @@ void physical_gain(struct char_data * ch)
   if (IS_PROJECT(ch))
     return;
 
+  // Base recovery
   switch (GET_POS(ch))
   {
     case POS_STUNNED:
@@ -152,49 +178,58 @@ void physical_gain(struct char_data * ch)
       break;
   }
 
-#ifdef ENABLE_HUNGER
-  if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
-    gain >>= 1;
-#endif
+  // Character related bonuses
+  // NPCs recover faster
+  if (IS_NPC(ch))
+    gain *= 2;
 
+  // Augmentations
+  for (bio = ch->bioware; bio; bio = bio->next_content) {
+    if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+      switch (GET_BIOWARE_RATING(bio)) {
+        case 1:
+          gain *= 1.1;
+          break;
+        case 2:
+          gain *= 1.4;
+          break;
+        case 3:
+          gain *= 2;
+          break;
+      }
+      break;
+    }
+  }
+
+  // Adept rapid healing increases recovery by +50% per rank
+  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+
+  // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
+  gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+
+  // Room related bonuses
   if (find_workshop(ch, TYPE_MEDICAL))
     gain *= 1.8;
 
   if (char_is_in_social_room(ch))
     gain *= 2;
-  else if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+
+  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
     gain *= 1.8;
 
-  if (IS_NPC(ch))
-    gain *= 2;
-  else
-  {
-    gain = MAX(1, gain);
-    for (bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
-        switch (GET_BIOWARE_RATING(bio)) {
-          case 1:
-            gain *= 1.1;
-            break;
-          case 2:
-            gain *= 1.4;
-            break;
-          case 3:
-            gain *= 2;
-            break;
-        }
-        break;
-      }
-    }
-
-    gain *= get_drug_heal_multiplier(ch);
-  }
-  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
-
+  // Penalties happen last, to avoid the possibility of truncating to zero too early
   // Biosystem overstress reduces healing rate by 10% per point
   if (GET_BIOOVER(ch) > 0)
     gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
+
+  // Drug multiplier is a float in range 0.1 ≤ X ≤ 1.0
+  gain *= get_drug_heal_multiplier(ch);
+
+#ifdef ENABLE_HUNGER
+  if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
+    gain >>= 1;
+#endif
 
   // Prevent reaching 0 gain
   gain = MAX(1, gain);
@@ -966,6 +1001,8 @@ void point_update(void)
           mudlog("^RSYSERR: Multiplying magic for focus addiction check gave a NEGATIVE number! Increase the size of the variable!^n", i, LOG_SYSLOG, TRUE);
         } else {
           if (force * 100 > GET_REAL_MAG(i) * 2 && success_test(GET_REAL_MAG(i) / 100, force / 2) < 1) {
+
+#ifdef USE_OLD_FOCUS_ADDICTION_RULES
             int num = number(1, total);
             struct obj_data *focus_geas = NULL;
             for (int x = 0; x < NUM_WEARS && !focus_geas; x++) {
@@ -987,6 +1024,24 @@ void point_update(void)
               GET_FOCUS_GEAS(focus_geas) = GET_IDNUM(i);
               magic_loss(i, 100, FALSE);
             }
+#else
+            mudlog_vfprintf(i, LOG_SYSLOG, "Damaging %s and breaking sustained spells due to focus overuse (%d foci; %d > %d).", GET_CHAR_NAME(i), total, force * 100, GET_REAL_MAG(i) * 2);
+            send_to_char(i, "^RThe backlash of focus overuse rips through you!^n\r\n");
+
+            // Disarm them.
+            {
+              struct obj_data *weap = GET_EQ(i, WEAR_WIELD);
+              if (weap && GET_OBJ_TYPE(weap) == ITEM_WEAPON && !WEAPON_IS_GUN(weap) && GET_WEAPON_FOCUS_RATING(weap) > 0) {
+                send_to_char(i, "Your fingers spasm from the pain, and you almost drop %s!\r\n", GET_OBJ_NAME(weap));
+                unequip_char(i, weap->worn_on, TRUE);
+                obj_to_char(weap, i);
+              }
+            }
+
+            // Damage them. This also strips all sustained spells.
+            if (damage(i, i, convert_damage(DEADLY) - 1, TYPE_FOCUS_OVERUSE, TRUE))
+              continue;
+#endif
           }
         }
       }

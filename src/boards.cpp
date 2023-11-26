@@ -57,13 +57,14 @@ struct board_info_type board_info[NUM_OF_BOARDS] =
 #ifdef USE_PRIVATE_CE_WORLD
     {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"},
     {10034, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq-rp"},
-    {6995, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.nerpcorp-scheduling"},
+    {6995, 0, 0, 0, "etc/board.nerpcorp-scheduling"},
 #else
     {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"},
 #endif
     {26  , 0, 0, LVL_ADMIN, "etc/board.rp"}
   };
   // Adding a board? Update NUM_OF_BOARDS in awake.hpp!
+  // Adding a board? Don't forget to add it to spec_assign.cpp!
 
 
 char *msg_storage[INDEX_SIZE];

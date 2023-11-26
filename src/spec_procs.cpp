@@ -66,6 +66,7 @@ extern const char *get_plaintext_score_essence(struct char_data *ch);
 extern void diag_char_to_char(struct char_data * i, struct char_data * ch);
 extern bool deactivate_power(struct char_data *ch, int power);
 extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
+extern void initialize_quest_for_ch(struct char_data *ch, int quest_rnum, struct char_data *johnson);
 
 
 extern struct command_info cmd_info[];
@@ -621,6 +622,7 @@ SPECIAL(nerp_skills_teacher) {
   can_teach_skill[SKILL_ARMED_COMBAT] = FALSE; // NPC-only skill
   can_teach_skill[SKILL_UNUSED_WAS_PILOT_FIXED_WING] = FALSE; // what it says on the tin
   can_teach_skill[SKILL_UNUSED_WAS_CLIMBING] = FALSE;
+  can_teach_skill[SKILL_FIREARMS] = FALSE; // NPC-only skill
 
   if (!CMD_IS("practice"))
     return FALSE;
@@ -4246,7 +4248,7 @@ void process_auth_room(struct char_data *ch) {
   PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
 
   // Dump spare money onto a housing card.
-  if (GET_NUYEN(ch) > 5000) {
+  if (GET_NUYEN(ch) >= 5000) {
     int amount = ((int) GET_NUYEN(ch) / 5000) * 5000;
     add_cash_to_housing_card(ch, amount, FALSE);
     send_to_char(ch, "You receive a housing card with your remaining %d nuyen on it.\r\n", amount);
@@ -4704,7 +4706,7 @@ SPECIAL(quest_debug_scanner)
       }
     }
     if(!found) {
-      send_to_char(ch, "There is no johnson here.\r\n");
+      send_to_char(ch, "There is no Johnson here.\r\n");
       return TRUE;
     }
 
@@ -4741,18 +4743,7 @@ SPECIAL(quest_debug_scanner)
         remember(to, ch);
 
       // Assign them the quest.
-      int num;
-      GET_QUEST(ch) = i;
-      ch->player_specials->obj_complete = new sh_int[quest_table[GET_QUEST(ch)].num_objs];
-      ch->player_specials->mob_complete = new sh_int[quest_table[GET_QUEST(ch)].num_mobs];
-      for (num = 0; num < quest_table[GET_QUEST(ch)].num_objs; num++)
-        ch->player_specials->obj_complete[num] = 0;
-      for (num = 0; num < quest_table[GET_QUEST(ch)].num_mobs; num++)
-        ch->player_specials->mob_complete[num] = 0;
-
-      //Load targets and give the details.
-      load_quest_targets(to, ch);
-      handle_info(to, i, ch);
+      initialize_quest_for_ch(ch, i, to);
 
       return TRUE;
     }
