@@ -521,7 +521,11 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
           if (veh_is_currently_flying(vehicle)) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y is airborne somewhere in the distance", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           } else if (veh_can_traverse_air(vehicle)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y taxis around here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+            if (vehicle->type == VEH_DRONE) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y is flying around", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+            } else {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y taxis around here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+            }
           } else {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y cruises through here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           }
