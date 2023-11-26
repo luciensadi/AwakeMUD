@@ -395,6 +395,8 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
       if (GET_FOCUS_BONDED_TO(object) == GET_IDNUM(ch) && GET_FOCUS_GEAS(object) == GET_IDNUM(ch))
         strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
+      if (IS_OBJ_STAT(object, ITEM_EXTRA_CONCEALED_IN_EQ))
+        strlcat(buf, " ^L(concealed from players)^n", sizeof(buf));
     }
     else if (GET_OBJ_TYPE(object) == ITEM_WEAPON && WEAPON_IS_FOCUS(object) && WEAPON_FOCUS_USABLE_BY(object, ch)) {
       if (GET_WEAPON_FOCUS_GEAS(object) == GET_IDNUM(ch))
@@ -1087,6 +1089,11 @@ void look_at_char(struct char_data * i, struct char_data * ch)
 
         // Chest slot (upper body underwear) is hidden by under/body.
         if (j == WEAR_CHEST && (GET_EQ(i, WEAR_UNDER) || GET_EQ(i, WEAR_BODY) || GET_EQ(i, WEAR_ABOUT))) {
+          continue;
+        }
+
+        // Hidden focus (still visible to staff)
+        if (!IS_SENATOR(ch) && GET_OBJ_TYPE(eq) == ITEM_FOCUS && IS_OBJ_STAT(eq, ITEM_EXTRA_CONCEALED_IN_EQ)) {
           continue;
         }
 

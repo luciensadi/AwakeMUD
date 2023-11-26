@@ -4767,3 +4767,62 @@ ACMD(do_keep) {
 
   playerDB.SaveChar(ch);
 }
+
+ACMD(do_conceal_reveal) {
+  skip_spaces(&argument);
+  FAILURE_CASE(!*argument, "Syntax: ^WCONCEAL <focus>^n  (to conceal it when other players look at you)\r\n"
+                           "        ^WREVEAL <focus>^n   (to show it again)\r\n");
+
+  int dotmode = find_all_dots(argument, sizeof(argument));
+
+  if (dotmode == FIND_ALL || dotmode == FIND_ALLDOT) {
+    struct obj_data *eq;
+    bool took_action = FALSE;
+
+    for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+      if ((eq = GET_EQ(ch, wear_idx)) && GET_OBJ_TYPE(eq) == ITEM_FOCUS) {
+        if (dotmode == FIND_ALL || keyword_appears_in_obj(argument, eq)) {
+          if (subcmd == SCMD_CONCEAL) {
+            if (!IS_OBJ_STAT(eq, ITEM_EXTRA_CONCEALED_IN_EQ)) {
+              GET_OBJ_EXTRA(eq).SetBit(ITEM_EXTRA_CONCEALED_IN_EQ);
+              took_action = TRUE;
+            }
+          } else {
+            if (IS_OBJ_STAT(eq, ITEM_EXTRA_CONCEALED_IN_EQ)) {
+              GET_OBJ_EXTRA(eq).RemoveBit(ITEM_EXTRA_CONCEALED_IN_EQ);
+              took_action = TRUE;
+            }
+          }
+        }
+      }
+    }
+
+    if (took_action) {
+      send_to_char("You rearrange your equipment.\r\n", ch);
+      act("$n rearranges $s equipment.", TRUE, ch, 0, 0, TO_ROOM);
+    } else {
+      if (dotmode == FIND_ALL) {
+        send_to_char(ch, "You're not wearing any %sconcealed foci.\r\n", subcmd == SCMD_CONCEAL ? "non-" : "");
+      } else {
+        send_to_char(ch, "Couldn't find any %shidden equipped foci named '%s'.\r\n", subcmd == SCMD_CONCEAL ? "non-" : "", argument);
+      }
+    }
+    return;
+  }
+
+  struct char_data *dummy = NULL;
+  struct obj_data *obj = NULL;
+  generic_find(argument, FIND_OBJ_EQUIP, ch, &dummy, &obj);
+
+  FAILURE_CASE_PRINTF(!obj, "Couldn't find any equipped foci named '%s'.", argument);
+  FAILURE_CASE_PRINTF(GET_OBJ_TYPE(obj) != ITEM_FOCUS, "%s is not a focus.", decapitalize_a_an(GET_OBJ_NAME(obj)));
+
+  if (subcmd == SCMD_CONCEAL) {
+    GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_CONCEALED_IN_EQ);
+  } else {
+    GET_OBJ_EXTRA(obj).RemoveBit(ITEM_EXTRA_CONCEALED_IN_EQ);
+  }
+
+  send_to_char("You rearrange your equipment.\r\n", ch);
+  act("$n rearranges $s equipment.", TRUE, ch, 0, 0, TO_ROOM);
+}

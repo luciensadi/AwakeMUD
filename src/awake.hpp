@@ -1380,7 +1380,8 @@ enum {
 #define ITEM_EXTRA_NBC_IMMUNE         31    // Conveys immunity to contact chemical / toxin damage (full-body hazard suit, etc)
 #define ITEM_EXTRA_PURGE_ON_DEATH     32    // Vanishes when you die (won't make it to your corpse)
 #define ITEM_EXTRA_CHEATLOG_MARK      33
-#define MAX_ITEM_EXTRA                34
+#define ITEM_EXTRA_CONCEALED_IN_EQ    34    // Doesn't show up when someone looks at you.
+#define MAX_ITEM_EXTRA                35
 
 /* Ammo types */
 #define AMMO_NORMAL     0
@@ -2172,6 +2173,10 @@ enum {
 
 /* do_get */
 #define SCMD_TAKE 1
+
+/* do_conceal */
+#define SCMD_CONCEAL 0
+#define SCMD_REVEAL  1
 
 /* END SUBCOMMANDS SECTION */
 

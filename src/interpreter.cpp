@@ -148,6 +148,7 @@ ACMD_DECLARE(do_cleanse);
 ACMD_DECLARE(do_closecombat);
 ACMD_DECLARE(do_commands);
 ACMD_DECLARE(do_compact);
+ACMD_DECLARE(do_conceal_reveal);
 ACMD_DECLARE(do_consent);
 ACMD_DECLARE(do_conjure);
 ACMD_DECLARE(do_consider);
@@ -557,6 +558,7 @@ struct command_info cmd_info[] =
     { "close"      , POS_SITTING , do_gen_door , 0, SCMD_CLOSE, BLOCKS_IDLE_REWARD },
     { "closecombat", POS_LYING   , do_closecombat, 0, 0, BLOCKS_IDLE_REWARD },
     { "cls"        , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, ALLOWS_IDLE_REWARD },
+    { "conceal"    , POS_LYING   , do_conceal_reveal, 0, SCMD_CONCEAL, ALLOWS_IDLE_REWARD },
     { "consider"   , POS_LYING   , do_consider , 0, 0, BLOCKS_IDLE_REWARD },
     { "consent"    , POS_MORTALLYW, do_consent , 0, 0, ALLOWS_IDLE_REWARD },
     { "configure"  , POS_DEAD    , do_toggle   , 0, 0, ALLOWS_IDLE_REWARD },
@@ -843,6 +845,7 @@ struct command_info cmd_info[] =
     { "restring"   , POS_DEAD    , do_restring , 0, 0, BLOCKS_IDLE_REWARD },
     { "retract"    , POS_SITTING , do_retract  , 0, 0, BLOCKS_IDLE_REWARD },
     { "return"     , POS_DEAD    , do_return   , 0, 0, BLOCKS_IDLE_REWARD },
+    { "reveal"     , POS_LYING   , do_conceal_reveal, 0, SCMD_REVEAL, ALLOWS_IDLE_REWARD },
     { "ritualcast" , POS_SITTING , do_cast     , 1, SCMD_RITUAL_CAST, BLOCKS_IDLE_REWARD },
     { "rlist"      , POS_DEAD    , do_rlist    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "room"       , POS_DEAD    , do_room     , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },

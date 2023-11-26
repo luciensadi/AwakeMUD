@@ -825,7 +825,9 @@ const char *affected_bits[] =
     "Flame Aura",
     "Voice Modulator",
     "Wearing DocWagon Receiver",
-    "Cheatlog Mark"
+    "Cheatlog Mark",
+    "Eq-Concealed Focus",
+    MAX_FLAG_MARKER
   };
 
 /* CON_x */
