@@ -194,6 +194,8 @@ struct dest_data caribbean_taxi_destinations[] =
     { "casino", "grandmaion", "Grandmaion Casino", 62275, TAXI_DEST_TYPE_OTHER, TRUE},
     { "police", "station", "Victoria Police Station", 62264, TAXI_DEST_TYPE_OTHER, TRUE},
     { "diamond", "estate", "Diamond Estate", 62259, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
+    { "victoria", "waltham", "Waltham and Victoria", 62233, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
+    { "sauteurs", "", "Sauteurs", 62113, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
 
