@@ -1197,6 +1197,11 @@ bool should_save_this_vehicle(struct veh_data *veh) {
 
 void save_vehicles(bool fromCopyover)
 {
+#ifdef IS_BUILDPORT
+  log_vfprintf("Refusing to save vehicles: We're on the buildport.");
+  return;
+#endif
+
   PERF_PROF_SCOPE(pr_, __func__);
   struct veh_data *veh;
   FILE *fl;
