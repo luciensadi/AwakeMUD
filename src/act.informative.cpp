@@ -279,10 +279,17 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
   SPECIAL(pocket_sec);
 
   *buf = '\0';
+
+  if (GET_OBJ_TYPE(object) == ITEM_CREATIVE_EFFORT) {
+    strlcat(buf, "^c(Art) ^n", sizeof(buf));
+  }
+  
   if ((mode == SHOW_MODE_ON_GROUND) && object->text.room_desc) {
-    strlcpy(buf, CCHAR ? CCHAR : "", sizeof(buf));
+    strlcat(buf, CCHAR ? CCHAR : "", sizeof(buf));
+
     if (object->graffiti) {
       strlcat(buf, object->graffiti, sizeof(buf));
+      strlcat(buf, "^n", sizeof(buf));
     }
     else {
       // Gun magazines get special consideration.
@@ -311,7 +318,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     }
   }
   else if (GET_OBJ_NAME(object) && (mode == SHOW_MODE_IN_INVENTORY || mode == SHOW_MODE_INSIDE_CONTAINER)) {
-    strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
+    strlcat(buf, GET_OBJ_NAME(object), sizeof(buf));
     if (GET_OBJ_TYPE(object) == ITEM_DESIGN)
       strlcat(buf, " (Plan)", sizeof(buf));
     if (GET_OBJ_VNUM(object) == 108 && !GET_OBJ_TIMER(object))
@@ -349,16 +356,17 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     }
   }
   else if (GET_OBJ_NAME(object) && ((mode == 3) || (mode == 4) || (mode == SHOW_MODE_OWN_EQUIPMENT) || (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT))) {
-    strlcpy(buf, GET_OBJ_NAME(object), sizeof(buf));
+    strlcat(buf, GET_OBJ_NAME(object), sizeof(buf));
   }
   else if (mode == SHOW_MODE_JUST_DESCRIPTION) {
+    // Deliberately using strlcpy here to overwrite the (Art) tag.
     if (GET_OBJ_DESC(object))
       strlcpy(buf, GET_OBJ_DESC(object), sizeof(buf));
     else
       strlcpy(buf, "You see nothing special..", sizeof(buf));
   }
   else if (mode == SHOW_MODE_CONTAINED_OBJ) {
-    snprintf(buf, sizeof(buf), "\t\t\t\t%s", GET_OBJ_NAME(object));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\t\t\t\t%s", GET_OBJ_NAME(object));
   }
 
   if (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT) {
@@ -3730,6 +3738,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
                      ammo_type[GET_OBJ_VAL(j, 2)].name,GET_OBJ_VAL(j, 0) != 1 ? "s" : "",
                      weapon_types[GET_OBJ_VAL(j, 1)]);
       break;
+    case ITEM_CREATIVE_EFFORT:
+      if (IS_SENATOR(ch)) {
+        const char *author_name = get_player_name(GET_ART_AUTHOR_IDNUM(j));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It was created by ^c%s^n (%d).\r\n", author_name, GET_ART_AUTHOR_IDNUM(j));
+        delete [] author_name;
+      } else {
+        strlcat(buf, "Nothing stands out about this item's OOC values. Try EXAMINE it instead.", sizeof(buf));
+      }
+      break;
     case ITEM_OTHER:
       if (GET_OBJ_VNUM(j) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is bonded to %s and has %d nuyen remaining on it.\r\n",
@@ -3770,7 +3787,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       do_probe_object(ch, j->contains, FALSE);
       return;
     default:
-      strncpy(buf, "This item type has no probe string. Contact the staff to request one.", sizeof(buf) - strlen(buf));
+      strncpy(buf, "This item type has no probe string. Contact staff to request one.", sizeof(buf) - strlen(buf));
       break;
   }
 
@@ -4123,7 +4140,10 @@ ACMD(do_examine)
         send_to_char("It has not been ^WBOND^ned yet, and ^ywill not function until it is^n.\r\n\r\n", ch);
       }
     }
-    if (GET_OBJ_VNUM(tmp_object) > 1) {
+
+    if (GET_OBJ_TYPE(tmp_object) == ITEM_CREATIVE_EFFORT) {
+      send_to_char(ch, "^L(OOC: It's a custom object with no coded effect.)^n\r\n");
+    } else if (GET_OBJ_VNUM(tmp_object) > 1) {
       snprintf(buf, sizeof(buf), "You %s that %s ",
                GET_SKILL(ch, SKILL_POLICE_PROCEDURES) <= 0 ? "have no training in Police Procedures, but you guess" : "think",
                GET_OBJ_NAME(tmp_object));

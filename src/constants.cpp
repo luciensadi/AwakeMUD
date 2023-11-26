@@ -883,6 +883,7 @@ const char *connected_types[] =
     "Apartment Editing",
     "Vehicle Decorating",
     "Tempdesc Editing",
+    "Creating Art",
     "\n"
   };
 
@@ -1047,6 +1048,7 @@ const char *item_types[] =
     "Graffiti",
     "Destroyable",
     "Loaded Decoration",
+    "Art",
     "\n"
   };
 

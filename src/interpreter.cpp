@@ -39,6 +39,7 @@
 #include "archetypes.hpp"
 #include "ignore_system.hpp"
 #include "newhouse.hpp"
+#include "creative_works.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -2610,6 +2611,9 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_DECK_CREATE:
     dbuild_parse(d, arg);
+    break;
+  case CON_ART_CREATE:
+    art_edit_parse(d, arg);
     break;
   case CON_FCUSTOMIZE:
   case CON_BCUSTOMIZE:

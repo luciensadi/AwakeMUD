@@ -1284,7 +1284,8 @@ enum {
 #define ITEM_GRAFFITI           46
 #define ITEM_DESTROYABLE        47
 #define ITEM_LOADED_DECORATION  48
-#define NUM_ITEMS               49
+#define ITEM_CREATIVE_EFFORT    49
+#define NUM_ITEMS               50
 // Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
 #define PATCH_ANTIDOTE          0
@@ -2222,7 +2223,8 @@ enum {
 #define CON_HOUSEEDIT_APARTMENT 49
 #define CON_DECORATE_VEH        50
 #define CON_TEMPDESC_EDIT       51
-#define CON_MAX                 51
+#define CON_ART_CREATE          52
+#define CON_MAX                 52
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
 
@@ -2724,7 +2726,8 @@ enum {
 #define OBJ_CUSTOM_NERPS_CYBERWARE         122
 #define OBJ_CUSTOM_NERPS_BIOWARE           123
 #define OBJ_RITUAL_SPELL_COMPONENTS        124
-#define TOP_OF_TEMPLATE_ITEMS              124
+#define OBJ_CUSTOM_ART                     125
+#define TOP_OF_TEMPLATE_ITEMS              125
 
 #define OBJ_BLANK_MAGAZINE                 127
 

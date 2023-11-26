@@ -33,6 +33,7 @@ extern void create_part(struct char_data *ch);
 extern void create_deck(struct char_data *ch);
 extern void create_spell(struct char_data *ch);
 extern void create_ammo(struct char_data *ch);
+extern void create_art(struct char_data *ch);
 
 ACMD_DECLARE(do_look);
 
@@ -3688,8 +3689,12 @@ ACMD(do_create)
     create_spell(ch);
   }
 
+  else if (is_abbrev(buf1, "art") || is_abbrev(buf1, "book") || is_abbrev(buf1, "note") || is_abbrev(buf1, "business card") || is_abbrev(buf1, "card") || is_abbrev(buf1, "painting") || is_abbrev(buf1, "drawing")) {
+    create_art(ch);
+  }
+
   else {
-    send_to_char("You can only create programs, parts, decks, ammunition, and spells.\r\n", ch);
+    send_to_char("You can only create programs, parts, decks, ammunition, spells, and art.\r\n", ch);
     return;
   }
 }

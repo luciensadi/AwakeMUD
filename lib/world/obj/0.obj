@@ -1290,19 +1290,20 @@ Material:	metal
 	Barrier:	32
 BREAK
 #125
-Keywords:	white tunic keyn jraye
-Name:	a white tunic
+Keywords:	art creative work
+Name:	a work of art
 RoomDesc:$
-A white tunic is folded neatly here.~
+Someone's unfinished creative effort has been left here.~
 LookDesc:$
-A plain white tunic, made of a soft, high-quality linen.  The fabric feels
-odd, as if its not made of anything... earthly. 
+The artist hasn't yet rendered their vision here.
 ~
-Type:	Worn
-WearFlags:	100001
-Material:	fabric
+Type:	Art
+WearFlags:	1
+ExtraFlags:	1000000000
+Material:	paper
 [POINTS]
-	Barrier:	32
+	Weight:	0.10
+	Barrier:	4
 BREAK
 #126
 Keywords:	silver cord

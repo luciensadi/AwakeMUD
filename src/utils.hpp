@@ -1251,6 +1251,13 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define OBJ_IS_GRAFFITI(obj)                                (GET_OBJ_TYPE((obj)) == ITEM_GRAFFITI || GET_OBJ_VNUM((obj)) == OBJ_DYNAMIC_GRAFFITI)
 #define GET_GRAFFITI_SPRAYED_BY(obj)                        (GET_OBJ_VAL((obj), 0))
 
+// ITEM_DESTROYABLE convenience defines
+
+// ITEM_LOADED_DECORATION convenience defines
+
+// ITEM_CREATIVE_EFFORT convenience defines
+#define GET_ART_AUTHOR_IDNUM(obj)                           (GET_OBJ_VAL((obj), 0))
+
 
 /* Misc utils ************************************************************/
 #define CHECK_FUNC_AND_SFUNC_FOR(npc, function) (mob_index[GET_MOB_RNUM(npc)].func == (function) || mob_index[GET_MOB_RNUM(npc)].sfunc == (function))
