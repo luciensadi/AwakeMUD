@@ -8041,7 +8041,7 @@ ACMD(do_count) {
   if (IS_SENATOR(ch)) {
     struct char_data *vict = get_player_vis(ch, argument, FALSE);
     if (vict) {
-      send_to_char(ch, "Counting all of %s's stuff across the game...\r\n", vict);
+      send_to_char(ch, "Counting all of %s's stuff across the game...\r\n", GET_CHAR_NAME(vict));
       crapcount_target(vict, ch);
       return;
     }
