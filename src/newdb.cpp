@@ -2402,9 +2402,13 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
       FORCE_PROTO_VALUE("worn", GET_WORN_MATCHED_SET(obj), GET_WORN_MATCHED_SET(&obj_proto[rnum]));
 
       // Specific object repair: Military helmet.
-      if (GET_OBJ_VNUM(obj) == OBJ_HEAVY_MILITARY_HELMET && GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) == 0) {
-        mudlog_vfprintf(NULL, LOG_SYSLOG, "INFO: System self-healed old military helmet '%s' to be unbonded again.", GET_OBJ_NAME(obj));
-        GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = -1;
+      if (GET_OBJ_VNUM(obj) == OBJ_HEAVY_MILITARY_HELMET) {
+        if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) == 0) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "INFO: System self-healed old military helmet '%s' to be unbonded again.", GET_OBJ_NAME(obj));
+          GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = -1;
+        }
+
+        GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_HARDENED_ARMOR);
       }
       break;
     case ITEM_DOCWAGON:
