@@ -9,6 +9,7 @@
 
 void create_art_main_menu(struct descriptor_data *d) {
   CLS(CH);
+  send_to_char(CH, "Welcome to art creation. ^WNo ASCII art, please.^n\r\n");
   send_to_char(CH, "1) ^cName: ^n%s^n\r\n", GET_OBJ_NAME(ART));
   send_to_char(CH, "2) ^cDescription: ^n%s^n\r\n", ART->photo ? ART->photo : ART->text.look_desc);
   send_to_char(CH, "3) ^cRoom Description: ^n%s^n\r\n", ART->graffiti ? ART->graffiti : ART->text.room_desc);
