@@ -8052,7 +8052,7 @@ ACMD(do_count) {
     int crap_count = count_object_including_contents(carried);
 
     if (crap_count > 1) {
-      send_to_char(ch, "^cCarried:^n %s (%s)", decapitalize_a_an(GET_OBJ_NAME(carried)), get_crap_count_string(crap_count));
+      send_to_char(ch, "^cCarried:^n %s (%s)\r\n", decapitalize_a_an(GET_OBJ_NAME(carried)), get_crap_count_string(crap_count));
     }
   }
 
@@ -8064,7 +8064,7 @@ ACMD(do_count) {
     int crap_count = count_object_including_contents(GET_EQ(ch, wear_idx));
 
     if (crap_count > 1) {
-      send_to_char(ch, "^cWorn:^n    %s (%s)", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, wear_idx))), get_crap_count_string(crap_count));
+      send_to_char(ch, "^cWorn:^n    %s (%s)\r\n", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, wear_idx))), get_crap_count_string(crap_count));
     }
   }
 
