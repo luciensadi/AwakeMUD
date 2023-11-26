@@ -35,15 +35,15 @@ const char *get_crap_count_string(int crap_count, const char *default_color = "^
   } else if (crap_count > 600) {
     crap_count_color = "^r";
     if (screenreader)
-      default_color = "(very high) ";
+      default_color = " (very high)";
   } else if (crap_count > 450) {
     crap_count_color = "^Y";
     if (screenreader)
-      default_color = "(high) ";
+      default_color = " (high)";
   } else if (crap_count > 300) {
     crap_count_color = "^y";
     if (screenreader)
-      default_color = "(moderate) ";
+      default_color = " (moderate)";
   } else {
     crap_count_color = "^n";
   }
