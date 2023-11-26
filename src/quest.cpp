@@ -985,6 +985,9 @@ void reward(struct char_data *ch, struct char_data *johnson)
 
   // Check object objectives.
   for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
+    if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_NO_OBJECTIVE)
+      continue;
+
     if (ch->player_specials->obj_complete[i]) {
       if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_DSTRY_MANY) {
         multiplier = ch->player_specials->obj_complete[i];
@@ -1007,6 +1010,9 @@ void reward(struct char_data *ch, struct char_data *johnson)
 
   // Check mob objectives.
   for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
+    if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_NO_OBJECTIVE)
+      continue;
+
     if (ch->player_specials->mob_complete[i]) {
       if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_KILL_MANY) {
         multiplier = ch->player_specials->mob_complete[i];
