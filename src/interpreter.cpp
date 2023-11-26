@@ -164,6 +164,7 @@ ACMD_DECLARE(do_credits);
 ACMD_DECLARE(do_customize);
 ACMD_DECLARE(do_cyberware);
 ACMD_DECLARE(do_coredump);
+ACMD_DECLARE(do_count);
 ACMD_DECLARE(do_date);
 ACMD_DECLARE(do_dc);
 ACMD_DECLARE(do_deactivate);
@@ -573,6 +574,7 @@ struct command_info cmd_info[] =
     { "cook"       , POS_SITTING , do_cook     , 0, 0, BLOCKS_IDLE_REWARD },
     { "costtime"   , POS_DEAD    , do_costtime , 0, 0, ALLOWS_IDLE_REWARD },
     { "coredump"   , POS_DEAD    , do_coredump , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
+    { "count"      , POS_DEAD    , do_count, 0, 0, ALLOWS_IDLE_REWARD },
     { "cpool"      , POS_DEAD    , do_cpool    , 0, 0, BLOCKS_IDLE_REWARD },
     { "crack"      , POS_RESTING , do_crack    , 0, 0, BLOCKS_IDLE_REWARD },
     { "crashmu"    , POS_STANDING, do_crash_mud, LVL_PRESIDENT, SCMD_NOOP, BLOCKS_IDLE_REWARD },
@@ -745,7 +747,7 @@ struct command_info cmd_info[] =
 
     { "newbie"     , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE, ALLOWS_IDLE_REWARD },
     { "newbies"    , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_NEWBIE, ALLOWS_IDLE_REWARD },
-    { "news"       , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS, ALLOWS_IDLE_REWARD },
+    //{ "news"       , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS, ALLOWS_IDLE_REWARD },
     { "notitle"    , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_NOTITLE, BLOCKS_IDLE_REWARD },
 
     { "order"      , POS_LYING   , do_order    , 1, 0, BLOCKS_IDLE_REWARD },

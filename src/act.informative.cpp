@@ -70,6 +70,7 @@ extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
+extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n");
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -7984,4 +7985,88 @@ ACMD(do_penalties) {
     send_to_char(ch, "\r\nIn total, you'll take ^C%d^n in TN penalties.\r\n",
                  total_damage_modifier + total_sustain_modifier + total_modify_target_mundane_action);
   }
+}
+
+int crapcount_target(struct char_data *victim, struct char_data *viewer) {
+  // On their person.
+  int total_crap = count_objects_on_char(victim);
+  send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(total_crap), "Carrying / equipped / cyberware / bioware");
+
+  // Apartments.
+  for (auto *complex : global_apartment_complexes) {
+    for (auto *apartment : complex->get_apartments()) {
+      if (apartment->owner_is_valid() && apartment->get_owner_id() == GET_IDNUM_EVEN_IF_PROJECTING(victim)) {
+        int crap_count = 0;
+        for (auto *room : apartment->get_rooms()) {
+          crap_count += count_objects_in_room(room->get_world_room());
+        }
+        send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(crap_count), apartment->get_full_name());
+      }
+    }
+  }
+
+  // Vehicles.
+  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+    if (veh->owner == GET_IDNUM_EVEN_IF_PROJECTING(victim)) {
+      int crap_count = count_objects_in_veh(veh);
+      total_crap += crap_count;
+      send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(crap_count), GET_VEH_NAME(veh));
+    }
+  }
+
+  // Total.
+  send_to_char(viewer, "Total: %s.\r\n", get_crap_count_string(total_crap));
+
+  return total_crap;
+}
+
+ACMD(do_count) {
+  skip_spaces(&argument);
+
+  if (!*argument) {
+    send_to_char("Syntax: ^WCOUNT INV^n  (to count nested things you're carrying)\r\n"
+                 "        ^WCOUNT ALL^n  (to count all your stuff across the game.)\r\n", ch);
+    return;
+  }
+
+  // Count all crap across the game that belongs to you.
+  if (!str_cmp(argument, "all")) {
+    send_to_char("Counting all of your character's stuff across the game...\r\n", ch);
+    crapcount_target(ch, ch);
+    send_to_char("\r\nIf this seems high, note that each individual pocket secretary mail is an item. Deleting old mail etc will help.\r\n", ch);
+    return;
+  }
+
+  // Staff can run a count on a single person as well.
+  if (IS_SENATOR(ch)) {
+    struct char_data *vict = get_player_vis(ch, argument, FALSE);
+    if (vict) {
+      send_to_char(ch, "Counting all of %s's stuff across the game...\r\n", vict);
+      crapcount_target(vict, ch);
+      return;
+    }
+  }
+
+  // Count all the nested stuff you're carrying.
+  for (struct obj_data *carried = ch->carrying; carried; carried = carried->next_content) {
+    int crap_count = count_object_including_contents(carried);
+
+    if (crap_count > 1) {
+      send_to_char(ch, "^cCarried:^n %s (%s)", decapitalize_a_an(GET_OBJ_NAME(carried)), get_crap_count_string(crap_count));
+    }
+  }
+
+  // Same for worn items.
+  for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+    if (!GET_EQ(ch, wear_idx))
+      continue;
+      
+    int crap_count = count_object_including_contents(GET_EQ(ch, wear_idx));
+
+    if (crap_count > 1) {
+      send_to_char(ch, "^cWorn:^n    %s (%s)", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, wear_idx))), get_crap_count_string(crap_count));
+    }
+  }
+
+  send_to_char("\r\nIf any of this seems high, note that each individual pocket secretary mail is an item. Deleting old mail etc will help.\r\n", ch);
 }
