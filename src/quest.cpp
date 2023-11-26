@@ -1166,6 +1166,23 @@ int new_quest(struct char_data *mob, struct char_data *ch)
         continue;
       }
 
+      if (quest_table[i].prerequisite_quest) {
+        bool found = FALSE;
+        for (int q = QUEST_TIMER - 1; q >= 0; q--) {
+          if (GET_LQUEST(ch, q) == quest_table[i].prerequisite_quest) {
+            found = TRUE;
+            break;
+          }
+        }
+
+        if (!found) {
+          if (access_level(ch, LVL_BUILDER)) {
+            send_to_char(ch, "[Skipping quest %ld: You need to have done prerequisite quest %ld first.]\r\n", quest_table[i].prerequisite_quest);
+          }
+          continue;
+        }
+      }
+
       temp_entry.index = i;
       temp_entry.rep = quest_table[i].min_rep;
       qlist.push_back(temp_entry);
@@ -2751,6 +2768,9 @@ void qedit_disp_menu(struct descriptor_data *d)
                  (real_obj = real_object(QUEST->reward)) <= 0 ? "no item reward" : obj_proto[real_obj].text.name,
                  CCNRM(CH, C_CMP));
   }
+
+  send_to_char(CH, "i) Prerequisite quest: %s%ld%s\r\n", CCCYN(CH, C_CMP), QUEST->prerequisite_quest, CCNRM(CH, C_CMP));
+
   send_to_char("q) Quit and save\r\n", CH);
   send_to_char("x) Exit and abort\r\n", CH);
   send_to_char("Enter your choice:\r\n", CH);
@@ -2999,6 +3019,11 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
           d->edit_mode = QEDIT_REWARD;
         }
         break;
+      case 'i':
+      case 'I':
+        send_to_char("Enter the vnum of the quest that must be done before this (0 for no prerequisite):\r\n", CH);
+        d->edit_mode = QEDIT_PREREQUISITE;
+        break;
       default:
         qedit_disp_menu(d);
         break;
@@ -3014,6 +3039,15 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       qedit_disp_menu(d);
     }
     break;
+  case QEDIT_PREREQUISITE:
+    number = atoi(arg);
+    if (number == 0 || real_quest(number) >= 0) {
+      QUEST->prerequisite_quest = number;
+      qedit_disp_menu(d);
+    } else {
+      send_to_char("That's not a valid quest vnum. Enter a vnum, or 0 for no quest: ", CH);
+    }
+    return;
   case QEDIT_TIME:
     number = atoi(arg);
     if (number < 30 || number > 1440)

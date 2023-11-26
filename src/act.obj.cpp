@@ -4800,6 +4800,7 @@ ACMD(do_conceal_reveal) {
     if (took_action) {
       send_to_char("You rearrange your equipment.\r\n", ch);
       act("$n rearranges $s equipment.", TRUE, ch, 0, 0, TO_ROOM);
+      playerDB.SaveChar(ch);
     } else {
       if (dotmode == FIND_ALL) {
         send_to_char(ch, "You're not wearing any %sconcealed foci.\r\n", subcmd == SCMD_CONCEAL ? "non-" : "");
@@ -4825,4 +4826,5 @@ ACMD(do_conceal_reveal) {
 
   send_to_char("You rearrange your equipment.\r\n", ch);
   act("$n rearranges $s equipment.", TRUE, ch, 0, 0, TO_ROOM);
+  playerDB.SaveChar(ch);
 }

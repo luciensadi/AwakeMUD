@@ -789,13 +789,15 @@ bool load_char(const char *name, char_data *ch, bool logon)
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[19]);
 
-        // row 20: extra flags. We want to retain the proto's flags but also persist anti-cheat flags.
+        // row 20: extra flags. We want to retain the proto's flags but also persist anti-cheat flags and other necessary ones.
         Bitfield temp_extra_flags;
         temp_extra_flags.FromString(row[20]);
         if (temp_extra_flags.IsSet(ITEM_EXTRA_WIZLOAD))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_WIZLOAD);
         if (temp_extra_flags.IsSet(ITEM_EXTRA_KEPT))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_KEPT);
+        if (temp_extra_flags.IsSet(ITEM_EXTRA_CONCEALED_IN_EQ))
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_CONCEALED_IN_EQ);
 
         GET_OBJ_ATTEMPT(obj) = atoi(row[21]);
         GET_OBJ_CONDITION(obj) = atoi(row[22]);
@@ -909,6 +911,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_WIZLOAD);
         if (temp_extra_flags.IsSet(ITEM_EXTRA_KEPT))
           GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_KEPT);
+        if (temp_extra_flags.IsSet(ITEM_EXTRA_CONCEALED_IN_EQ))
+          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_CONCEALED_IN_EQ);
 
         GET_OBJ_ATTEMPT(obj) = atoi(row[20]);
         GET_OBJ_CONDITION(obj) = atoi(row[21]);

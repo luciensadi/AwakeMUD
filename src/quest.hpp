@@ -70,6 +70,7 @@ struct quest_data
   vnum_t johnson;
   sh_int time, num_objs, num_mobs, s_time, e_time, s_room;
   unsigned int min_rep, max_rep;
+  vnum_t prerequisite_quest;
   int nuyen, karma, reward;
   struct quest_om_data *obj;
   struct quest_om_data *mob;
@@ -92,7 +93,7 @@ struct quest_data
 
   quest_data() :
       vnum(-1), johnson(-1), time(0), num_objs(0), num_mobs(0),
-      s_time(0), e_time(0), s_room(0), min_rep(0), max_rep(0),
+      s_time(0), e_time(0), s_room(0), min_rep(0), max_rep(0), prerequisite_quest(0),
       nuyen(0), karma(0), reward(-1), obj(NULL), mob(NULL), intro(NULL),
       decline(NULL), quit(NULL), finish(NULL), info(NULL),
       s_string(NULL), e_string(NULL), done(NULL),
