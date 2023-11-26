@@ -276,18 +276,17 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
 
   if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
     obj_from_bioware(obj);
-    if (GET_RACE(victim) >= RACE_DRAKE_HUMAN && GET_RACE(victim) <= RACE_DRAKE_TROLL)
-    GET_INDEX(victim) -= GET_CYBERWARE_ESSENCE_COST(obj);
-    GET_INDEX(victim) -= GET_CYBERWARE_ESSENCE_COST(obj);
-    GET_INDEX(victim) = MAX(0, GET_INDEX(victim));
+    GET_INDEX(victim) -= GET_BIOWARE_ESSENCE_COST(obj);
+    // Drakes have doubled bioware costs.
+    if (IS_DRAKE(victim))
+      GET_INDEX(victim) -= GET_BIOWARE_ESSENCE_COST(obj);
     GET_INDEX(victim) = MAX(0, GET_INDEX(victim));
   } else {
     obj_from_cyberware(obj);
     GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj);
-    if (GET_RACE(victim) >= RACE_GHOUL_HUMAN && GET_RACE(victim) <= RACE_GHOUL_TROLL)
-    GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj);
-    if (GET_RACE(victim) >= RACE_DRAKE_HUMAN && GET_RACE(victim) <= RACE_DRAKE_TROLL)
-    GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj);
+    // Ghouls and drakes have doubled cyberware costs.
+    if (IS_GHOUL(victim) || IS_DRAKE(victim))
+      GET_ESSHOLE(victim) += GET_CYBERWARE_ESSENCE_COST(obj);
   }
 
   if (!IS_NPC(remover)) {
@@ -394,21 +393,13 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     return FALSE;
   }
 
-  // Double Bioindex Loss for Drakes.
-  if (GET_OBJ_TYPE(ware) == ITEM_BIOWARE) {
-    int biocost = GET_BIOWARE_ESSENCE_COST(ware);
-    if (GET_RACE(recipient) >= RACE_DRAKE_HUMAN && GET_RACE(recipient) <= RACE_DRAKE_TROLL)
-      biocost = GET_BIOWARE_ESSENCE_COST(ware) *= 2;
-    }
-
   // Reject installing magic-incompat 'ware into magic-using characters.
   if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE) {
     int esscost = GET_CYBERWARE_ESSENCE_COST(ware);
     if (GET_TOTEM(recipient) == TOTEM_EAGLE)
       esscost *= 2;
-    if (GET_RACE(recipient) >= RACE_GHOUL_HUMAN && GET_RACE(recipient) <= RACE_GHOUL_TROLL)
-      esscost *= 2;
-    if (GET_RACE(recipient) >= RACE_DRAKE_HUMAN && GET_RACE(recipient) <= RACE_DRAKE_TROLL)
+    // Ghouls and drakes have doubled cyberware essence costs.
+    if (IS_GHOUL(recipient) || IS_DRAKE(recipient))
       esscost *= 2;
 
     // Check to see if the operation is even possible with their current essence / hole.
@@ -534,7 +525,8 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   // You must have the index to support it.
   else if (GET_OBJ_TYPE(ware) == ITEM_BIOWARE) {
     int esscost = GET_BIOWARE_ESSENCE_COST(ware);
-    if (GET_RACE(recipient) >= RACE_DRAKE_HUMAN && GET_RACE(recipient) <= RACE_DRAKE_TROLL)
+    // Drakes have doubled bioware index losses.
+    if (IS_DRAKE(recipient))
       esscost *= 2;
     if (GET_INDEX(recipient) + esscost > 900) {
       if (IS_NPC(installer)) {
