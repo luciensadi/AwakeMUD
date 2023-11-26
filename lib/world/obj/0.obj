@@ -1228,7 +1228,6 @@ WearFlags:	1
 ExtraFlags:	100000000000000001000001000
 Material:	metal
 [POINTS]
-	Weight:	0.25
 	Barrier:	32
 	AvailTN:	2
 	AvailDay:	1.00
@@ -1284,6 +1283,7 @@ ritualistic fashion-- candles, incense, representations of totems and
 elements, and other useful magical things. 
 ~
 Type:	Other
+ExtraFlags:	100000000000000000000000000
 Material:	metal
 [POINTS]
 	Weight:	1.00
@@ -1299,7 +1299,7 @@ The artist hasn't yet rendered their vision here.
 ~
 Type:	Art
 WearFlags:	1
-ExtraFlags:	1000000000
+ExtraFlags:	100000000000000001000001000
 Material:	paper
 [POINTS]
 	Weight:	0.10
@@ -1315,6 +1315,7 @@ A fine silver rope cord.
 ~
 Type:	Worn
 WearFlags:	100000000001
+ExtraFlags:	1000001000
 Material:	metal
 [POINTS]
 	Weight:	1.00
