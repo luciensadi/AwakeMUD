@@ -8049,10 +8049,10 @@ ACMD(do_count) {
 
   // Count all the nested stuff you're carrying.
   for (struct obj_data *carried = ch->carrying; carried; carried = carried->next_content) {
-    int crap_count = count_object_including_contents(carried);
+    int crap_count = count_object_including_contents(carried) - 1;
 
-    if (crap_count > 1) {
-      send_to_char(ch, "^cCarried:^n %s (%s)\r\n", decapitalize_a_an(GET_OBJ_NAME(carried)), get_crap_count_string(crap_count));
+    if (crap_count) {
+      send_to_char(ch, "^cCarried:^n %s (contains %s)\r\n", decapitalize_a_an(GET_OBJ_NAME(carried)), get_crap_count_string(crap_count));
     }
   }
 
@@ -8061,10 +8061,10 @@ ACMD(do_count) {
     if (!GET_EQ(ch, wear_idx))
       continue;
       
-    int crap_count = count_object_including_contents(GET_EQ(ch, wear_idx));
+    int crap_count = count_object_including_contents(GET_EQ(ch, wear_idx)) - 1;
 
-    if (crap_count > 1) {
-      send_to_char(ch, "^cWorn:^n    %s (%s)\r\n", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, wear_idx))), get_crap_count_string(crap_count));
+    if (crap_count) {
+      send_to_char(ch, "^cWorn:^n    %s (contains %s)\r\n", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, wear_idx))), get_crap_count_string(crap_count));
     }
   }
 
