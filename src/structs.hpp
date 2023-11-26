@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unordered_map>
+#include <vector>
 
 #ifndef NOCRYPT
 #include <sodium.h> // for crypto_pwhash_STRBYTES
