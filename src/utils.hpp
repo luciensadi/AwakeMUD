@@ -151,6 +151,7 @@ bool    veh_is_aircraft(struct veh_data *veh);
 int     count_object_including_contents(struct obj_data *obj);
 int     count_objects_in_room(struct room_data *room);
 int     count_objects_in_veh(struct veh_data *veh);
+int     count_objects_on_char(struct char_data *ch);
 struct zone_data *get_zone_from_vnum(vnum_t vnum);
 const char *vnum_to_string(vnum_t vnum);
 const char *get_ch_domain_str(struct char_data *ch, bool include_possibilities);

@@ -6198,13 +6198,12 @@ bool veh_is_aircraft(struct veh_data *veh) {
   return FALSE;
 }
 
+#define ITERATE_AND_COUNT(field) for (struct obj_data *temp = field; temp; temp = temp->next_content) { count += count_object_including_contents(temp); }
 // Recursively count this object and its contents.
 int count_object_including_contents(struct obj_data *obj) {
   int count = 1; // self
 
-  for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
-    count += count_object_including_contents(contained);
-  }
+  ITERATE_AND_COUNT(obj->contains);
 
   return count;
 }
@@ -6213,9 +6212,7 @@ int count_object_including_contents(struct obj_data *obj) {
 int count_objects_in_room(struct room_data *room) {
   int count = 0;
 
-  for (struct obj_data *contents = room->contents; contents; contents = contents->next_content) {
-    count += count_object_including_contents(contents);
-  }
+  ITERATE_AND_COUNT(room->contents);
 
   return count;
 }
@@ -6224,9 +6221,7 @@ int count_objects_in_room(struct room_data *room) {
 int count_objects_in_veh(struct veh_data *veh) {
   int count = 0;
 
-  for (struct obj_data *contained = veh->contents; contained; contained = contained->next_content) {
-    count += count_object_including_contents(contained);
-  }
+  ITERATE_AND_COUNT(veh->contents);
 
   for (struct veh_data *contained = veh->carriedvehs; contained; contained = contained->next_veh) {
     count += count_objects_in_veh(contained);
@@ -6234,6 +6229,23 @@ int count_objects_in_veh(struct veh_data *veh) {
 
   return count;
 }
+
+int count_objects_on_char(struct char_data *ch) {
+  int count = 0;
+
+  ITERATE_AND_COUNT(ch->carrying);
+  ITERATE_AND_COUNT(ch->cyberware);
+  ITERATE_AND_COUNT(ch->bioware);
+
+  for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+    if (GET_EQ(ch, wear_idx)) {
+      count += count_object_including_contents(GET_EQ(ch, wear_idx));
+    }
+  }
+
+  return count;
+}
+#undef ITERATE_AND_COUNT
 
 bool obj_is_apartment_only_drop_item(struct obj_data *obj) {
   if (!obj) {
