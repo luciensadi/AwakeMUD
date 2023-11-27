@@ -4889,10 +4889,10 @@ ACMD(do_syspoints) {
       // Separate out the character name and amount fields.
       half_chop(buf, target, arg, sizeof(arg));
       FAILURE_CASE(!*target, "Syntax: SYSPOINTS TRANSFER <target> <amount> <reason>.");
-      FAILURE_CASE_PRINTF(!*amt, "You must specify an amount to transfer to %s.", target);
 
       // Separate out the reason field.
       half_chop(arg, amt, reason, sizeof(reason));
+      FAILURE_CASE_PRINTF(!*amt, "You must specify an amount to transfer to %s.", target);
       FAILURE_CASE(!*reason, "You must specify a reason for this transfer.");
 
       // Parse and validate the amount.
