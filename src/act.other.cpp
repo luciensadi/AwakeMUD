@@ -4939,14 +4939,14 @@ ACMD(do_syspoints) {
       // Decrement our syspoints.
       GET_SYSTEM_POINTS(ch) -= amount;
 
-      // Increment their syspoints by the amount.
-      current_amount += amount;
-
       // Save the result on the target.
       if (found_char) {
+        // Increment.
+        GET_SYSTEM_POINTS(found_char) += amount;
         playerDB.SaveChar(found_char);
       } else {
-        snprintf(buf, sizeof(buf), "UPDATE pfiles SET SysPoints = SysPoints + %d WHERE idnum='%ld';", current_amount, idnum);
+        // Increment.
+        snprintf(buf, sizeof(buf), "UPDATE pfiles SET SysPoints = SysPoints + %d WHERE idnum='%ld';", amount, idnum);
         if (mysql_wrapper(mysql, buf)) {
           send_to_char("An unexpected error occurred on update (query failed).\r\n", ch);
 
