@@ -852,6 +852,7 @@ void affect_total(struct char_data * ch)
   rigger_rea += GET_REA(ch);
   rigger_init_dice += GET_INIT_DICE(ch);
 
+#ifdef USE_DRAGON_CAP
   // Min attribute is one, max is soft capped
   for (int att = BOD; att <= WIL; att++) {
     int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
@@ -868,8 +869,16 @@ void affect_total(struct char_data * ch)
     if (GET_ATT(ch, att) > cap)
       GET_ATT(ch, att) = cap + ((GET_ATT(ch, att) - cap + 1) >> 1);
   }
-
   int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
+#else
+  // Min attribute is one, max is soft capped
+  int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
+  for (int att = BOD; att <= WIL; att++) {
+    GET_ATT(ch, att) = MAX(1, GET_ATT(ch, att));
+    if (GET_ATT(ch, att) > cap)
+      GET_ATT(ch, att) = cap + ((GET_ATT(ch, att) - cap + 1) >> 1);
+  }
+#endif
   GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), cap * 100));
   GET_ESS(ch) = MAX(0, MIN(GET_ESS(ch), 600));
   GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
