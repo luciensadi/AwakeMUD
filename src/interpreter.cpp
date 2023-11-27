@@ -3156,7 +3156,7 @@ void nanny(struct descriptor_data * d, char *arg)
           }
           do_start(d->character, FALSE);
         } else {
-          mudlog_vfprintf(d->character, LOG_SYSLOG, "Overriding new character %s'd loadroom to standard chargen.", GET_CHAR_NAME(d->character));
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "Overriding new character %s's loadroom to standard chargen.", GET_CHAR_NAME(d->character));
           load_room_vnum = newbie_start_room;
           load_room_rnum = real_room(load_room_vnum);
           do_start(d->character, TRUE);
