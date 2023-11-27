@@ -1607,7 +1607,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       }
       // Ensure they have enough
       if (GET_SYSTEM_POINTS(victim) < d->ccr.prestige_cost) {
-        snprintf(buf, sizeof(buf), "You don't have enough system points. You need %d, but only have %d.\r\n", d->ccr.prestige_cost, GET_SYSTEM_POINTS(victim));
+        snprintf(buf, sizeof(buf), "You don't have enough system points. You need %d, but %s only has %d.\r\n", d->ccr.prestige_cost, GET_CHAR_NAME(victim), GET_SYSTEM_POINTS(victim));
         SEND_TO_Q(buf, d);
 
         if (!online) {
