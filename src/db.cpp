@@ -554,6 +554,7 @@ void boot_world(void)
   require_that_field_exists_in_table("lifestyle_string", "pfiles", "SQL/Migrations/lifestyles.sql");
   require_that_field_exists_in_table("zone", "playergroups", "SQL/Migrations/playergroup_zone_ownership.sql");
   require_that_field_exists_in_table("completed", "pfiles_quests", "SQL/Migrations/quest_completed_fix.sql");
+  require_that_field_exists_in_table("graffiti", "pfiles_worn", "SQL/Migrations/add_graffiti_field.sql");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
@@ -6101,6 +6102,8 @@ void load_saved_veh()
         obj->vfront = data.GetInt(buf, TRUE);
         snprintf(buf, sizeof(buf), "%s/Name", sect_name);
         obj->restring = str_dup(data.GetString(buf, NULL));
+        snprintf(buf, sizeof(buf), "%s/Graffiti", sect_name);
+        obj->graffiti = str_dup(data.GetString(buf, NULL));
         snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
         obj->photo = str_dup(data.GetString(buf, NULL));
 
@@ -6426,6 +6429,8 @@ void load_consist(void)
           if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
             snprintf(buf, sizeof(buf), "%s/Name", sect_name);
             obj->restring = str_dup(data.GetString(buf, NULL));
+            snprintf(buf, sizeof(buf), "%s/Graffiti", sect_name);
+            obj->graffiti = str_dup(data.GetString(buf, NULL));
             snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
             obj->photo = str_dup(data.GetString(buf, NULL));
             for (int x = 0; x < NUM_VALUES; x++) {

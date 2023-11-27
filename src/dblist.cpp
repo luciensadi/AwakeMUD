@@ -164,6 +164,7 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
       temp->data->obj_flags.condition = old.obj_flags.condition;
       temp->data->restring = old.restring;
       temp->data->photo = old.photo;
+      temp->data->graffiti = old.graffiti;
       if (temp->data->carried_by)
         affect_total(temp->data->carried_by);
       else if (temp->data->worn_by)
@@ -194,6 +195,7 @@ void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_
       temp->data->obj_flags.condition = old.obj_flags.condition;
       temp->data->restring = old.restring;
       temp->data->photo = old.photo;
+      temp->data->graffiti = old.graffiti;
       if (temp->data->carried_by)
         affect_total(temp->data->carried_by);
       else if (temp->data->worn_by)

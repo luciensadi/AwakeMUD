@@ -82,6 +82,8 @@ bool House_load_storage(struct room_data *world_room, const char *filename)
 
       snprintf(buf, sizeof(buf), "%s/Name", sect_name);
       obj->restring = str_dup(data.GetString(buf, NULL));
+      snprintf(buf, sizeof(buf), "%s/Graffiti", sect_name);
+      obj->graffiti = str_dup(data.GetString(buf, NULL));
       snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
       obj->photo = str_dup(data.GetString(buf, NULL));
       for (x = 0; x < NUM_VALUES; x++) {
@@ -367,6 +369,8 @@ void Storage_save(const char *file_name, struct room_data *room) {
         obj_string_buf << "\t\tExtraFlags:\t"<< GET_OBJ_EXTRA(obj).ToString() << "\n";
       if (obj->restring)
         obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
+      if (obj->graffiti)
+        obj_string_buf << "\t\tGraffiti:\t" << obj->graffiti << "\n";
       if (obj->photo)
         obj_string_buf << "\t\tPhoto:$\n" << cleanup(buf2, obj->photo) << "~\n";
 

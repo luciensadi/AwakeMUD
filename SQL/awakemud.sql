@@ -168,6 +168,7 @@ CREATE TABLE `pfiles_quests` (
   `idnum` mediumint(5) unsigned default '0',
   `number` smallint(3) unsigned default '0',
   `questnum` mediumint(3) unsigned default '0',
+  `completed` boolean default FALSE,
   KEY(`idnum`)
 );
 
@@ -197,6 +198,7 @@ CREATE TABLE `pfiles_bioware` (
   `Value10` int(2) default '0',
   `Value11` int(2) default '0',
   `Restring` varchar(256),
+  `graffiti` varchar(256),
   KEY(`idnum`)
 );
 
@@ -220,6 +222,7 @@ CREATE TABLE `pfiles_cyberware` (
   `Value11` int(2) default '0',
   `Level` tinyint(1) unsigned default '0',
   `posi` smallint(1) unsigned default '0',
+  `graffiti` varchar(256),
   KEY(`idnum`)
 );
 
@@ -247,6 +250,7 @@ CREATE TABLE `pfiles_inv` (
   `Attempt` mediumint(6) default '0',
   `Cond` tinyint(1) unsigned default '0',
   `posi` smallint(1) unsigned default '0',
+  `graffiti` varchar(256),
   KEY(`idnum`)
 );
 
@@ -275,6 +279,7 @@ CREATE TABLE `pfiles_worn` (
   `Attempt` mediumint(6) default '0',
   `Cond` tinyint(1) unsigned default '0',
   `posi` smallint(1) unsigned default '0',
+  `graffiti` varchar(256),
   KEY(`idnum`)
 );
 

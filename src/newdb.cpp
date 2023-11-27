@@ -694,6 +694,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
         */
         inside = atoi(row[17]);
 
+        if (*row[19])
+          obj->graffiti = str_dup(row[19]);
+
         auto_repair_obj(obj, GET_IDNUM(ch));
 
         // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
@@ -759,6 +762,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
         }
         if (row[15] && *row[15])
           obj->restring = str_dup(row[15]);
+        if (row[16] && *row[16])
+          obj->graffiti = str_dup(row[16]);
         auto_repair_obj(obj, GET_IDNUM(ch));
         obj_to_bioware(obj, ch);
       }
@@ -809,6 +814,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
 
         GET_OBJ_ATTEMPT(obj) = atoi(row[21]);
         GET_OBJ_CONDITION(obj) = atoi(row[22]);
+
+        if (*row[24])
+          obj->graffiti = str_dup(row[24]);
 
         auto_repair_obj(obj, GET_IDNUM(ch));
 
@@ -924,6 +932,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
 
         GET_OBJ_ATTEMPT(obj) = atoi(row[20]);
         GET_OBJ_CONDITION(obj) = atoi(row[21]);
+
+        if (*row[23])
+          obj->graffiti = str_dup(row[23]);
 
         auto_repair_obj(obj, GET_IDNUM(ch));
 

@@ -5562,6 +5562,10 @@ ACMD(do_set)
           successful = TRUE;
           snprintf(buf, sizeof(buf), "%s's race set to %s by %s.\r\n", GET_CHAR_NAME(vict), pc_race_types[i], GET_CHAR_NAME(ch));
           mudlog(buf, ch, LOG_WIZLOG, TRUE);
+
+          // Save the new race to disk.
+          snprintf(buf, sizeof(buf), "UPDATE pfiles SET race = %d WHERE idnum = %ld;", GET_RACE(vict), GET_IDNUM(vict));
+          mysql_wrapper(mysql, buf);
           break;
         }
       }
