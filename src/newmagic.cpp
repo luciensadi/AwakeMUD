@@ -5066,7 +5066,7 @@ POWER(spirit_engulf)
     int target = GET_QUI(spirit), targskill = get_skill(tch, SKILL_UNARMED_COMBAT, target);
     int success = success_test(GET_QUI(spirit), targskill) - success_test(targskill, GET_QUI(spirit));
     if (success < 1) {
-      act("$n successfully dodges the attack!", TRUE, ch, 0, 0, TO_ROOM);
+      act("$n successfully dodges the attack!", TRUE, tch, 0, 0, TO_ROOM);
       send_to_char("You successfully dodge!\r\n", tch);
       return;
     }
