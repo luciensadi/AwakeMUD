@@ -477,7 +477,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
 
   // If you're astrally perceiving, you don't take additional vision penalties, and shouldn't have any coming in here. Ghouls/Dragons excluded. - Vile
   if (SEES_ASTRAL(ch)) {
-    if (!skill_is_magic && IS_PERCEIVING(ch) && !IS_GHOUL(ch) && !IS_DRAGON(ch)) {
+    if (!skill_is_magic && IS_PERCEIVING(ch) && !IS_GHOUL(ch) && !IS_DRAGON(ch) && !IS_DUAL(ch)) {
       base_target += 2;
       buf_mod(rbuf, rbuf_len, "AstralPercep", 2);
       WRITEOUT_MSG("Perceiving", 2);
@@ -1477,6 +1477,10 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
   int defaulting_tn = 0;
 
   snprintf(gskbuf, sizeof(gskbuf), "get_skill(%s, %s): ", GET_CHAR_NAME(ch), skills[skill].name);
+
+  // Elementals and spirits have all skills at their force.
+  if (IS_ANY_ELEMENTAL(ch) || IS_SPIRIT(ch))
+    return GET_LEVEL(ch);
 
   // Convert NPCs so that they use the correct base skill for fighting (Armed Combat etc)
   if (IS_NPC(ch))

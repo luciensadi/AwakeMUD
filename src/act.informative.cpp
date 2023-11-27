@@ -7146,7 +7146,7 @@ ACMD(do_status)
   if (AFF_FLAGGED(targ, AFF_RUTHENIUM)) {
     strlcat(aff_buf, "  Ruthenium\r\n", sizeof(aff_buf));
   }
-  if (IS_PERCEIVING(targ)) {
+  if (IS_PERCEIVING(targ) && !IS_DUAL(targ) && !IS_GHOUL(targ) && !IS_DRAGON(targ)) {
     strlcat(aff_buf, "  Astral Perception (^yincreased roll difficulties^n)\r\n", sizeof(aff_buf));
   }
 
