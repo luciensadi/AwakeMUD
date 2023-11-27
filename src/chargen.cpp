@@ -792,9 +792,6 @@ int parse_prestige_race(struct descriptor_data *d, const char *arg)
   switch (LOWER(*arg))
   {
   case '1':
-    if (GET_PRONOUNS(d->character) != PRONOUNS_FEMININE) {
-      SEND_TO_Q("WARNING: Your character will use female pronouns upon selecting the Dryad race. If you don't want this, abort now.", d);
-    }
     return RACE_DRYAD;
   case '2':
     return RACE_GHOUL_HUMAN;
@@ -1453,7 +1450,6 @@ void create_parse(struct descriptor_data *d, const char *arg)
             d->ccr.pr[PO_RACE] = 15;
             break;
           case RACE_DRYAD:
-            GET_PRONOUNS(d->character) = PRONOUNS_FEMININE;
             d->ccr.pr[PO_RACE] = 15;
             break;
           case RACE_GHOUL_ELF:
