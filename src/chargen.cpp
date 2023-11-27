@@ -442,6 +442,9 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Ghouls lose 1.00 essence immediately.
   if (IS_GHOUL(CH))
     GET_REAL_ESS(CH) -= 100;
+  // Dragons gain 1.00 essence.
+  if (IS_DRAGON(CH))
+    GET_REAL_ESS(CH) += 100;
 
   // Equip cyberware (deduct essence and modify stats as appropriate)
   for (int cyb = 0; cyb < NUM_ARCHETYPE_CYBERWARE; cyb++) {
@@ -622,6 +625,9 @@ void set_attributes(struct char_data *ch, int magic)
   // Ghouls lose 1.00 essence immediately.
   if (IS_GHOUL(ch))
     GET_REAL_ESS(ch) -= 100;
+  // Dragons gain 1.00 essence.
+  if (IS_DRAGON(ch))
+    GET_REAL_ESS(ch) += 100;
 
   // If the character is a magic user, their magic is equal to their essence (this is free).
   if (magic) {
