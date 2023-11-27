@@ -17,5 +17,6 @@ bool run_crypto_tests();
 void hash_and_store_password(const char* password, char* array_to_write_to);
 bool validate_password(const char* password, const char* hashed_password);
 bool validate_and_update_password(const char* password, char* hashed_password);
+bool validate_password_for_idnum(const char *password, idnum_t idnum);
 
 #endif // #ifndef _security_h_

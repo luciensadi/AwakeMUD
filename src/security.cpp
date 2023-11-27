@@ -19,6 +19,10 @@ bool validate_password(const char* password, const char* hashed_password) {
 bool validate_and_update_password(const char* password, char* hashed_password) {
   return strncmp(password, hashed_password, strlen(password)) == 0;
 }
+bool validate_password_for_idnum(const char* password, idnum_t idnum) {
+  // I can't be arsed to write the lookup etc for a nocrypt game. This is left as an exercise to the reader.
+  return FALSE;
+}
 #else
 #include <sodium.h>
 
@@ -161,5 +165,25 @@ bool validate_and_update_password(const char* password, char* hashed_password) {
   }
 
   return TRUE;
+}
+
+bool validate_password_for_idnum(const char *password, idnum_t idnum) {
+  char query_buf[500];
+  snprintf(query_buf, sizeof(query_buf), "SELECT Password FROM pfiles WHERE idnum = %ld;", idnum);
+
+  // Error case: False.
+  if (mysql_wrapper(mysql, query_buf))
+    return FALSE;
+
+  bool result = FALSE;
+
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  if (row && mysql_field_count(mysql)) {
+    result = validate_password(password, row[0]);
+  }
+  mysql_free_result(res);
+
+  return result;
 }
 #endif // #ifdef NOCRYPT's #else

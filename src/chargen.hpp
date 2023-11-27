@@ -2,24 +2,28 @@
 #define  _chargen_h
 
 /* chargen connected modes */
-#define CCR_AWAIT_CR                 -1
-#define CCR_PRONOUNS                 0
-#define CCR_RACE                     1
-#define CCR_TOTEM                    2
-#define CCR_PRIORITY                 3
-#define CCR_ASSIGN                   4
-#define CCR_TRADITION                5
-#define CCR_ASPECT                   6
-#define CCR_TOTEM2                   7
-#define CCR_TYPE                     8
-#define CCR_POINTS                   9
-#define CCR_PO_ATTR                  10
-#define CCR_PO_SKILL                 11
-#define CCR_PO_RESOURCES             12
-#define CCR_PO_MAGIC                 13
-#define CCR_ARCHETYPE_MODE           14
-#define CCR_ARCHETYPE_SELECTION_MODE 15
-#define CCR_MAGE                     16
+#define CCR_AWAIT_CR                  -1
+#define CCR_PRONOUNS                  0
+#define CCR_RACE                      1
+#define CCR_TOTEM                     2
+#define CCR_PRIORITY                  3
+#define CCR_ASSIGN                    4
+#define CCR_TRADITION                 5
+#define CCR_ASPECT                    6
+#define CCR_TOTEM2                    7
+#define CCR_TYPE                      8
+#define CCR_POINTS                    9
+#define CCR_PO_ATTR                   10
+#define CCR_PO_SKILL                  11
+#define CCR_PO_RESOURCES              12
+#define CCR_PO_MAGIC                  13
+#define CCR_ARCHETYPE_MODE            14
+#define CCR_ARCHETYPE_SELECTION_MODE  15
+#define CCR_MAGE                      16
+#define CCR_PRESTIGE_RACE             17
+#define CCR_PRESTIGE_PAYMENT_GET_NAME 18
+#define CCR_PRESTIGE_PAYMENT_GET_PASS 19
+#define CCR_PRESTIGE_RACE_PAID_FOR    20
 
 #define PO_RACE		0
 #define PO_ATTR		1

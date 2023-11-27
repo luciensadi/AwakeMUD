@@ -2347,7 +2347,8 @@ const char *totem_types[] =
     "Wise Warrior",
     "Great Mother",
     "Moon Maiden",
-    "Trickster"
+    "Trickster",
+    "Father Tree"
   };
 
 const char *spell_category[6] =

@@ -685,6 +685,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         skill += 2;
       break;
     case TOTEM_GREATMOTHER:
+    case TOTEM_FATHERTREE:
       if (type == SPIRIT_FIELD || type == SPIRIT_FOREST || type == SPIRIT_SEA || type == SPIRIT_LAKE ||
           type == SPIRIT_RIVER || type == SPIRIT_SWAMP)
         skill += 2;

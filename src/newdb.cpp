@@ -694,7 +694,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         */
         inside = atoi(row[17]);
 
-        if (*row[19])
+        if (row[19] && *row[19])
           obj->graffiti = str_dup(row[19]);
 
         auto_repair_obj(obj, GET_IDNUM(ch));
@@ -815,7 +815,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         GET_OBJ_ATTEMPT(obj) = atoi(row[21]);
         GET_OBJ_CONDITION(obj) = atoi(row[22]);
 
-        if (*row[24])
+        if (row[24] && *row[24])
           obj->graffiti = str_dup(row[24]);
 
         auto_repair_obj(obj, GET_IDNUM(ch));
@@ -933,7 +933,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         GET_OBJ_ATTEMPT(obj) = atoi(row[20]);
         GET_OBJ_CONDITION(obj) = atoi(row[21]);
 
-        if (*row[23])
+        if (row[23] && *row[23])
           obj->graffiti = str_dup(row[23]);
 
         auto_repair_obj(obj, GET_IDNUM(ch));

@@ -1020,6 +1020,9 @@ struct ccreate_t
   sh_int force_points;
   sh_int temp;
   int points;
+  sh_int prestige_race;
+  idnum_t prestige_bagholder;
+  int prestige_cost;
 };
 
 struct descriptor_data

@@ -18,6 +18,7 @@
 #include "chargen.hpp"
 #include "archetypes.hpp"
 #include "bullet_pants.hpp"
+#include "security.hpp"
 
 #define CH d->character
 
@@ -40,6 +41,9 @@ void init_create_vars(struct descriptor_data *d);
 
 ACMD_DECLARE(do_help);
 
+void echo_on(struct descriptor_data * d);
+void echo_off(struct descriptor_data * d);
+
 /*********
 EXPECTED FLOW:
 - name
@@ -58,6 +62,52 @@ CUSTOM:
 void ccr_pronoun_menu(struct descriptor_data *d) {
   SEND_TO_Q("What pronouns will your character use? (M)ale, (F)emale, (N)eutral: ", d);
   d->ccr.mode = CCR_PRONOUNS;
+}
+
+#define PRESTIGE_RACE_DRYAD_COST  50
+#define PRESTIGE_RACE_GHOUL_COST  100
+#define PRESTIGE_RACE_DRAKE_COST  250
+#define PRESTIGE_RACE_DRAGON_COST 500
+void display_prestige_race_menu(struct descriptor_data *d) {
+  char msg_buf[10000];
+  snprintf(msg_buf, sizeof(msg_buf), 
+            "\r\nPrestige races cost system points, which you will draw from an existing character."
+            "\r\n"
+            "\r\nThe following races are available:"
+            "\r\n 1) Dryad            (%3d sysp, 15 build points / slot B)",
+            PRESTIGE_RACE_DRYAD_COST);
+
+  snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), 
+            "\r\n"
+            "\r\n 2) Ghoul [Human]    (%3d sysp, 10 build points / slot C)"
+            "\r\n 3) Ghoul [Dwarf]    (%3d sysp, 15 build points / slot B)"
+            "\r\n 4) Ghoul [Elf]      (%3d sysp, 20 build points / slot B)"
+            "\r\n 5) Ghoul [Ork]      (%3d sysp, 15 build points / slot B)"
+            "\r\n 6) Ghoul [Troll]    (%3d sysp, 20 build points / slot B)",
+            PRESTIGE_RACE_GHOUL_COST, PRESTIGE_RACE_GHOUL_COST, PRESTIGE_RACE_GHOUL_COST, PRESTIGE_RACE_GHOUL_COST, PRESTIGE_RACE_GHOUL_COST);
+
+  snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), 
+            "\r\n"
+            "\r\n 7) Drake [Human]    (%3d sysp, 15 build points / slot B)"
+            "\r\n 8) Drake [Dwarf]    (%3d sysp, 20 build points / slot B)"
+            "\r\n 9) Drake [Elf]      (%3d sysp, 25 build points / slot B)"
+            "\r\n 0) Drake [Ork]      (%3d sysp, 20 build points / slot B)"
+            "\r\n A) Drake [Troll]    (%3d sysp, 25 build points / slot B)",
+            PRESTIGE_RACE_DRAKE_COST, PRESTIGE_RACE_DRAKE_COST, PRESTIGE_RACE_DRAKE_COST, PRESTIGE_RACE_DRAKE_COST, PRESTIGE_RACE_DRAKE_COST);
+
+  snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), 
+            "\r\n"
+            "\r\n B) Western Dragon    (%3d sysp, 30 build points / slot B)"
+            "\r\n C) Eastern Dragon    (%3d sysp, 30 build points / slot B)"
+            "\r\n D) Feathered Serpent (%3d sysp, 30 build points / slot B)",
+            PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST);
+
+  strlcat(msg_buf, 
+            "\r\n"
+            "\r\nSelect a prestige race, or X to go back to standard races: ", sizeof(msg_buf));
+  
+  SEND_TO_Q(msg_buf, d);
+  d->ccr.mode = CCR_PRESTIGE_RACE;
 }
 
 void ccr_race_menu(struct descriptor_data *d) {
@@ -84,6 +134,11 @@ void ccr_race_menu(struct descriptor_data *d) {
             "\r\n  [H] Satyr       (10 points / slot C)"
             "\r\n  [I] Night-One   (15 points / slot B)"
             "\r\n"
+#ifdef ALLOW_PRESTIGE_RACES
+            "\r\n Special (has prerequisites):"
+            "\r\n  [*] Prestige Race (costs 50 - 500 system points)"
+            "\r\n"
+#endif
             "\r\n  ?# (for help on a particular race), ex: ?A"
             "\r\n"
             "\r\nRace: ", d);
@@ -384,6 +439,10 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   GET_INDEX(CH) = 0;
   GET_REAL_ESS(CH) = 600;
 
+  // Ghouls lose 1.00 essence immediately.
+  if (IS_GHOUL(CH))
+    GET_REAL_ESS(CH) -= 100;
+
   // Equip cyberware (deduct essence and modify stats as appropriate)
   for (int cyb = 0; cyb < NUM_ARCHETYPE_CYBERWARE; cyb++) {
     if (archetypes[i]->cyberware[cyb]) {
@@ -395,6 +454,9 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       }
 
       int esscost = GET_CYBERWARE_ESSENCE_COST(temp_obj);
+
+      if (IS_GHOUL(CH) || IS_DRAKE(CH))
+        esscost *= 2;
 
       if (GET_TRADITION(CH) != TRAD_MUNDANE) {
         if (GET_TOTEM(CH) == TOTEM_EAGLE)
@@ -418,7 +480,10 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
         continue;
       }
 
-      int esscost = GET_OBJ_VAL(temp_obj, 4);
+      int esscost = GET_BIOWARE_ESSENCE_COST(temp_obj);
+
+      if (IS_DRAKE(CH))
+        esscost *= 2;
 
       GET_INDEX(CH) += esscost;
       if (GET_TRADITION(CH) != TRAD_MUNDANE) {
@@ -550,16 +615,20 @@ const char *gnome_magic_table[4] = { "None", "Full Shaman", "Aspected Shaman", "
 
 void set_attributes(struct char_data *ch, int magic)
 {
-  // If the character is a magic user, their magic is equal to their essence (this is free).
-  if (magic) {
-    GET_SETTABLE_REAL_MAG(ch) = 600;
-  } else {
-    GET_SETTABLE_REAL_MAG(ch) = 0;
-  }
-
   // Everyone starts with 0 bioware index and 6.00 essence.
   GET_INDEX(ch) = 0;
   GET_REAL_ESS(ch) = 600;
+
+  // Ghouls lose 1.00 essence immediately.
+  if (IS_GHOUL(ch))
+    GET_REAL_ESS(ch) -= 100;
+
+  // If the character is a magic user, their magic is equal to their essence (this is free).
+  if (magic) {
+    GET_SETTABLE_REAL_MAG(ch) = GET_REAL_ESS(ch);
+  } else {
+    GET_SETTABLE_REAL_MAG(ch) = 0;
+  }
 
   // Set all of the character's stats to their racial minimums (1 + racial modifier, min 1)
   for (int attr = BOD; attr <= WIL; attr++) {
@@ -633,6 +702,13 @@ int parse_race(struct descriptor_data *d, const char *arg)
     return RACE_SATYR;
   case 'i':
     return RACE_NIGHTONE;
+
+#ifdef ALLOW_PRESTIGE_RACES
+  case '*':
+    display_prestige_race_menu(d);
+    return RETURN_HELP;
+#endif
+
   case '?':
     switch (LOWER(*(arg+1))) {
     case '1':
@@ -688,6 +764,73 @@ int parse_race(struct descriptor_data *d, const char *arg)
       break;
     case 'i':
       display_help(buf2, MAX_STRING_LENGTH, "night one", d->character);
+      break;
+    case '*':
+      display_help(buf2, MAX_STRING_LENGTH, "prestige races", d->character);
+      break;
+    default:
+      return RACE_UNDEFINED;
+    }
+    strlcat(buf2, "\r\n Press [return] to continue", sizeof(buf2));
+    SEND_TO_Q(buf2, d);
+    d->ccr.temp = CCR_RACE;
+    d->ccr.mode = CCR_AWAIT_CR;
+    return RETURN_HELP;
+  default:
+    return RACE_UNDEFINED;
+  }
+}
+
+int parse_prestige_race(struct descriptor_data *d, const char *arg)
+{
+  switch (LOWER(*arg))
+  {
+  case '1':
+    if (GET_PRONOUNS(d->character) != PRONOUNS_FEMININE) {
+      SEND_TO_Q("WARNING: Your character will use female pronouns upon selecting the Dryad race. If you don't want this, abort now.", d);
+    }
+    return RACE_DRYAD;
+  case '2':
+    return RACE_GHOUL_HUMAN;
+  case '3':
+    return RACE_GHOUL_DWARF;
+  case '4':
+    return RACE_GHOUL_ELF;
+  case '5':
+    return RACE_GHOUL_ORK;
+  case '6':
+    return RACE_GHOUL_TROLL;
+  case '7':
+    return RACE_DRAKE_HUMAN;
+  case '8':
+    return RACE_DRAKE_DWARF;
+  case '9':
+    return RACE_DRAKE_ELF;
+  case '0':
+    return RACE_DRAKE_ORK;
+  case 'a':
+  case 'A':
+    return RACE_DRAKE_TROLL;
+  case 'b':
+  case 'B':
+    return RACE_WESTERN_DRAGON;
+  case 'c':
+  case 'C':
+    return RACE_EASTERN_DRAGON;
+  case 'd':
+  case 'D':
+    return RACE_FEATHERED_SERPENT;
+  case 'X':
+  case 'x':
+  case 'Q':
+  case 'q':
+  case '*':
+    ccr_race_menu(d);
+    return RETURN_HELP;
+  case '?':
+    switch (LOWER(*(arg+1))) {
+    case '1':
+      display_help(buf2, MAX_STRING_LENGTH, "human", d->character);
       break;
     default:
       return RACE_UNDEFINED;
@@ -824,13 +967,13 @@ void priority_menu(struct descriptor_data *d)
       break;
     case PR_MAGIC:
       if ( i == 0 ) {
-        if (GET_RACE(CH) == RACE_GNOME) {
+        if (GET_RACE(CH) == RACE_GNOME || GET_RACE(CH) == RACE_DRYAD) {
           strlcat(buf2, "Full Shaman -            -         -\r\n", sizeof(buf2));
         } else {
           strlcat(buf2, "Full Mage   -            -         -\r\n", sizeof(buf2));
         }
       } else if ( i == 1 ) {
-        if (GET_RACE(CH) == RACE_GNOME) {
+        if (GET_RACE(CH) == RACE_GNOME || GET_RACE(CH) == RACE_DRYAD) {
           strlcat(buf2, "Asp. Shaman -            -         -\r\n", sizeof(buf2));
         } else {
           strlcat(buf2, "Adept/Aspect-            -         -\r\n", sizeof(buf2));
@@ -938,6 +1081,12 @@ static void start_game(descriptor_data *d)
 
 void ccr_totem_menu(struct descriptor_data *d)
 {
+  if (GET_RACE(CH) == RACE_DRYAD) {
+    GET_TOTEM(CH) = TOTEM_FATHERTREE;
+    start_game(d);
+    return;
+  }
+  
   snprintf(buf, sizeof(buf), "Select your totem: ");
   for (int i = 1; i < NUM_TOTEMS; i++) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n  %s[%2d] %-20s^n", valid_totem(CH, i) ? "" : "^R", i, totem_types[i]);
@@ -1044,7 +1193,7 @@ void points_menu(struct descriptor_data *d)
 {
   const char **magic_table_ptr;
   d->ccr.mode = CCR_POINTS;
-  if (GET_RACE(CH) == RACE_GNOME) {
+  if (GET_RACE(CH) == RACE_GNOME || GET_RACE(CH) == RACE_DRYAD) {
     magic_table_ptr = gnome_magic_table;
   } else {
     magic_table_ptr = magic_table;
@@ -1148,7 +1297,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
     break;
   case CCR_PO_MAGIC:
     i--;
-    if (i > (GET_RACE(CH) == RACE_GNOME ? CCR_MAGIC_ASPECTED : CCR_MAGIC_ADEPT) || i < CCR_MAGIC_NONE)
+    if (i > ((GET_RACE(CH) == RACE_GNOME || GET_RACE(CH) == RACE_DRYAD) ? CCR_MAGIC_ASPECTED : CCR_MAGIC_ADEPT) || i < CCR_MAGIC_NONE)
       send_to_char(CH, "Invalid number. Enter desired type of magic (^c%d^n points available): ", d->ccr.points);
     else if (magic_cost[i] > d->ccr.points)
       send_to_char(CH, "You do not have enough points for that. Enter desired type of magic (^c%d^n points available):", d->ccr.points);
@@ -1190,7 +1339,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case '4':
         d->ccr.points += magic_cost[d->ccr.pr[PO_MAGIC]];
         snprintf(buf, sizeof(buf), " ");
-        if (GET_RACE(CH) == RACE_GNOME) {
+        if (GET_RACE(CH) == RACE_GNOME || GET_RACE(CH) == RACE_DRYAD) {
           for (int x = 0; x < 3; x++)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %18s (%2d points)\r\n ", x+1, gnome_magic_table[x], magic_cost[x]);
         } else {
@@ -1224,7 +1373,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         GET_ATT_POINTS(CH) = d->ccr.pr[PO_ATTR]/2;
         if (d->ccr.pr[PO_MAGIC] > CCR_MAGIC_NONE) {
           set_attributes(CH, 1);
-          if (GET_RACE(CH) == RACE_GNOME) {
+          if (GET_RACE(CH) == RACE_GNOME || GET_RACE(CH) == RACE_DRYAD) {
             GET_TRADITION(CH) = TRAD_SHAMANIC;
             if (d->ccr.pr[PO_MAGIC] == CCR_MAGIC_FULL) {
               GET_FORCE_POINTS(CH) = 25;
@@ -1292,7 +1441,29 @@ void create_parse(struct descriptor_data *d, const char *arg)
           case RACE_MINOTAUR:
           case RACE_NIGHTONE:
           case RACE_WAKYAMBI:
+          case RACE_GHOUL_DWARF:
+          case RACE_GHOUL_ORK:
+          case RACE_DRAKE_HUMAN:
             d->ccr.pr[PO_RACE] = 15;
+            break;
+          case RACE_DRYAD:
+            GET_PRONOUNS(d->character) = PRONOUNS_FEMININE;
+            d->ccr.pr[PO_RACE] = 15;
+            break;
+          case RACE_GHOUL_ELF:
+          case RACE_GHOUL_TROLL:
+          case RACE_DRAKE_DWARF:
+          case RACE_DRAKE_ORK:
+            d->ccr.pr[PO_RACE] = 20;
+            break;
+          case RACE_DRAKE_ELF:
+          case RACE_DRAKE_TROLL:
+            d->ccr.pr[PO_RACE] = 25;
+            break;
+          case RACE_WESTERN_DRAGON:
+          case RACE_EASTERN_DRAGON:
+          case RACE_FEATHERED_SERPENT:
+            d->ccr.pr[PO_RACE] = 30;
             break;
         }
         d->ccr.points -= d->ccr.pr[PO_RACE];
@@ -1309,6 +1480,9 @@ void create_parse(struct descriptor_data *d, const char *arg)
     d->ccr.mode = d->ccr.temp;
     d->ccr.temp = 0;
     switch (d->ccr.mode) {
+    case CCR_PRESTIGE_RACE:
+      display_prestige_race_menu(d);
+      break;
     case CCR_RACE:
       ccr_race_menu(d);
       break;
@@ -1331,16 +1505,142 @@ void create_parse(struct descriptor_data *d, const char *arg)
   case CCR_ARCHETYPE_SELECTION_MODE:
     archetype_selection_parse(d, arg);
     break;
+  case CCR_PRESTIGE_RACE:
+    if ((d->ccr.prestige_race = parse_prestige_race(d, arg)) == RACE_UNDEFINED) {
+      SEND_TO_Q("\r\nThat's not a prestige race.\r\nRace: ", d);
+      return;
+    } else if (d->ccr.prestige_race == RETURN_HELP) // for when they use help
+      return;
+
+    // Set costs.
+    switch (d->ccr.prestige_race) {
+      case RACE_DRYAD:
+        d->ccr.prestige_cost = PRESTIGE_RACE_DRYAD_COST;
+        break;
+      case RACE_DRAKE_HUMAN:
+      case RACE_DRAKE_DWARF:
+      case RACE_DRAKE_ELF:
+      case RACE_DRAKE_ORK:
+      case RACE_DRAKE_TROLL:
+        d->ccr.prestige_cost = PRESTIGE_RACE_DRAKE_COST;
+        break;
+      case RACE_GHOUL_HUMAN:
+      case RACE_GHOUL_DWARF:
+      case RACE_GHOUL_ELF:
+      case RACE_GHOUL_ORK:
+      case RACE_GHOUL_TROLL:
+        d->ccr.prestige_cost = PRESTIGE_RACE_GHOUL_COST;
+        break;
+      case RACE_EASTERN_DRAGON:
+      case RACE_WESTERN_DRAGON:
+      case RACE_FEATHERED_SERPENT:
+        d->ccr.prestige_cost = PRESTIGE_RACE_DRAGON_COST;
+        break;
+      default:
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Unknown race %d in prestige race cost setting! Bailing.", d->ccr.prestige_race);
+        SEND_TO_Q("Unrecognized race. Try again: ", d);
+        d->ccr.prestige_race = 0;
+        return;
+    }
+
+    SEND_TO_Q("Enter the name of the character to deduct syspoints from: ", d);
+    d->ccr.mode = CCR_PRESTIGE_PAYMENT_GET_NAME;
+    break;
+  case CCR_PRESTIGE_PAYMENT_GET_NAME:
+    if (!str_cmp(arg, "abort")) {
+      d->ccr.prestige_race = d->ccr.prestige_bagholder = 0;
+      display_prestige_race_menu(d);
+      return;
+    }
+
+    d->ccr.prestige_bagholder = get_player_id(arg);
+    if (d->ccr.prestige_bagholder <= 0) {
+      SEND_TO_Q("There is no such player. Enter a valid name, or ABORT to abort: ", d);
+      return;
+    }
+
+    snprintf(buf, sizeof(buf), "Enter %s's password, or ABORT to abort: ", arg);
+    SEND_TO_Q(buf, d);
+    echo_off(d);
+    d->ccr.mode = CCR_PRESTIGE_PAYMENT_GET_PASS;
+    break;
+  case CCR_PRESTIGE_PAYMENT_GET_PASS:
+    echo_on(d);
+    if (!str_cmp(arg, "abort")) {
+      d->ccr.prestige_race = d->ccr.prestige_bagholder = 0;
+      display_prestige_race_menu(d);
+      return;
+    }
+
+    if (!validate_password_for_idnum(arg, d->ccr.prestige_bagholder)) {
+      snprintf(buf, sizeof(buf), "Bad PW: %s [%s]", GET_CHAR_NAME(d->character), d->host);
+      mudlog_vfprintf(NULL, LOG_CONNLOG, "Bad PW in prestige chargen: %s for %ld", d->host, d->ccr.prestige_bagholder);
+      SEND_TO_Q("That's not the right password.\r\nEnter your password, or type ABORT: ", d);
+      return;
+    }
+
+    // They're authorized to deduct from this character.
+    // todo: find them if online, load them if not
+    // Scan online PCs only.
+    {
+      struct char_data *victim = NULL; bool online = FALSE;
+      for (struct descriptor_data *tmp_d = descriptor_list; tmp_d; tmp_d = tmp_d->next) {
+        victim = tmp_d->original ? tmp_d->original : tmp_d->character;
+        if (victim && GET_IDNUM(victim) == d->ccr.prestige_bagholder) {
+          // Found online.
+          online = TRUE;
+          break;
+        }
+      }
+      if (!victim) {
+        // They're not online: Load them.
+        const char *char_name = get_player_name(d->ccr.prestige_bagholder);
+        online = FALSE;
+        victim = playerDB.LoadChar(char_name, FALSE);
+        delete [] char_name;
+      }
+      // Ensure they have enough
+      if (GET_SYSTEM_POINTS(victim) < d->ccr.prestige_cost) {
+        snprintf(buf, sizeof(buf), "You don't have enough system points. You need %d, but only have %d.\r\n", d->ccr.prestige_cost, GET_SYSTEM_POINTS(victim));
+        SEND_TO_Q(buf, d);
+
+        if (!online) {
+          extract_char(victim);
+        }
+        d->ccr.prestige_race = d->ccr.prestige_bagholder = 0;
+        display_prestige_race_menu(d);
+        return;
+      }
+    
+      // Deduct, notify, log, and save
+      GET_SYSTEM_POINTS(victim) -= d->ccr.prestige_cost;
+      if (online)
+        send_to_char(victim, "^RYou've just spent %d system points on a prestige race. If this is not correct, change your password and notify staff immediately.^n\r\n", d->ccr.prestige_cost);
+      mudlog_vfprintf(victim, LOG_CHEATLOG, "%s spent %d of %s's syspoints on a prestige race.", d->host, d->ccr.prestige_cost, GET_CHAR_NAME(victim));
+      playerDB.SaveChar(victim);
+
+      SEND_TO_Q("Nice, you're all paid up.", d);
+      GET_RACE(d->character) = d->ccr.prestige_race;
+      d->ccr.mode = CCR_PRESTIGE_RACE_PAID_FOR;
+
+      // Extract if needed
+      if (!online) {
+        extract_char(victim);
+      }
+    }
+    
+    // Send them right back through the parser.
+    create_parse(d, arg);
+    break;
   case CCR_RACE:
     if ((GET_RACE(d->character) = parse_race(d, arg)) == RACE_UNDEFINED) {
       SEND_TO_Q("\r\nThat's not a race.\r\nRace: ", d);
       return;
     } else if (GET_RACE(d->character) == RETURN_HELP) // for when they use help
       return;
-
-    if (GET_RACE(d->character) == RACE_WESTERN_DRAGON)
-      d->ccr.pr[0] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_HUMAN)
+    // fall through
+  case CCR_PRESTIGE_RACE_PAID_FOR:
+    if (GET_RACE(d->character) == RACE_HUMAN)
       d->ccr.pr[4] = PR_RACE;
     else if (GET_RACE(d->character) == RACE_DWARF)
       d->ccr.pr[3] = PR_RACE;
@@ -1376,6 +1676,12 @@ void create_parse(struct descriptor_data *d, const char *arg)
       d->ccr.pr[2] = PR_RACE;
     else if (GET_RACE(d->character) == RACE_NIGHTONE)
       d->ccr.pr[2] = PR_RACE;
+    else if (GET_RACE(d->character) >= RACE_DRYAD && GET_RACE(d->character) <= RACE_GHOUL_TROLL) {
+      if (GET_RACE(d->character) == RACE_GHOUL_HUMAN)
+        d->ccr.pr[2] = PR_RACE;
+      else
+        d->ccr.pr[1] = PR_RACE;
+    }
 
     if (real_object(OBJ_MAP_OF_SEATTLE) > -1)
       obj_to_char(read_object(OBJ_MAP_OF_SEATTLE, VIRTUAL), d->character);
@@ -1710,7 +2016,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         else
           set_attributes(d->character, 0);
         if (d->ccr.pr[0] == PR_MAGIC || d->ccr.pr[1] == PR_MAGIC) {
-          if (GET_RACE(d->character) == RACE_GNOME) {
+          if (GET_RACE(d->character) == RACE_GNOME || GET_RACE(CH) == RACE_DRYAD) {
             GET_TRADITION(d->character) = TRAD_SHAMANIC;
             if (d->ccr.pr[1] == PR_MAGIC) {
               GET_FORCE_POINTS(CH) = 35;

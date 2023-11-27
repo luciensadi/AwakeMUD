@@ -185,7 +185,8 @@
 #define TOTEM_GREATMOTHER  71
 #define TOTEM_MOONMAIDEN   72
 #define TOTEM_TRICKSTER    73
-#define NUM_TOTEMS         74
+#define TOTEM_FATHERTREE   74
+#define NUM_TOTEMS         75
 
 /* PC races */
 
