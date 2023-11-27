@@ -1,12 +1,12 @@
 # AwakeMUD Community Edition
 A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues and pull requests welcome!
 
-**The current test port for AwakeMUD Community Edition can be reached at awakemud.com port 4000.** Many thanks to Finster for running the previous test port for so long.
+**AwakeMUD CE is up and running at awakemud.com port 4000!** Connect with your favorite telnet client. The current build/test instance for AwakeMUD Community Edition can be reached at awakemud.com port 4001; many thanks to Finster for running the previous test port for so long.
 
 **Join our Discord channel!** https://discord.gg/q5VCMkv
 
 ## Features
-- 62k+ lines of additions including new areas, new features, and massive quality-of-life improvements
+- A full suite of additions including new areas, new features, and massive quality-of-life improvements
 - Screenreader accessibility via TOGGLE SCREENREADER
 - Enhanced security that fixes many serious exploits
 - Significantly increased performance
