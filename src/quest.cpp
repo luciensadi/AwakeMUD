@@ -878,7 +878,7 @@ bool rep_too_high(struct char_data *ch, int num)
   if (num < 0 || num > top_of_questt)
     return TRUE;
 
-  if (GET_REP(ch) > quest_table[num].max_rep)
+  if (quest_table[num].max_rep < 10000 && GET_REP(ch) > quest_table[num].max_rep)
     return TRUE;
 
   return FALSE;
