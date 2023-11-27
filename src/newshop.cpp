@@ -1236,32 +1236,14 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       target -= GET_POWER(ch, ADEPT_KINESICS);
     }
     
-#define METAVARIANT_PENALTY 4
     if (GET_RACE(ch) != GET_RACE(keeper)) {
-      switch (GET_RACE(ch)) {
-        case RACE_HUMAN:
-        case RACE_ELF:
-        case RACE_ORK:
-        case RACE_TROLL:
-        case RACE_DWARF:
-        case RACE_GHOUL_HUMAN:
-        case RACE_GHOUL_ELF:
-        case RACE_GHOUL_ORK:
-        case RACE_GHOUL_TROLL:
-        case RACE_GHOUL_DWARF:
-        case RACE_DRAKE_HUMAN:
-        case RACE_DRAKE_ELF:
-        case RACE_DRAKE_ORK:
-        case RACE_DRAKE_TROLL:
-        case RACE_DRAKE_DWARF:
-          break;
-        default:
-          snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (metavariant)", METAVARIANT_PENALTY);
-          target += METAVARIANT_PENALTY;
-          break;
+      int meta_penalty = get_metavariant_penalty(ch);
+
+      if (meta_penalty) {
+        snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (metavariant)", meta_penalty);
+        target += meta_penalty;
       }
     }
-#undef METAVARIANT_PENALTY
 
     // House rule: Give a better TN for high-grade lifestyles.
     {

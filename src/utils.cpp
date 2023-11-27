@@ -1331,6 +1331,25 @@ int get_speed(struct veh_data *veh)
   return (speed);
 }
 
+#define METAVARIANT_PENALTY 4
+int get_metavariant_penalty(struct char_data *ch) {
+  // Base races take no penalties.
+  if (GET_RACE(ch) >= RACE_HUMAN && GET_RACE(ch) <= RACE_TROLL)
+    return 0;
+
+  // Drakes take no penalties (they look like base races)
+  if (IS_DRAKE(ch))
+    return 0;
+
+  // Ghouls take no penalties (they look like messed-up base races, and only can shop at ghoul-friendly establishments to begin with)
+  if (IS_GHOUL(ch))
+    return 0;
+
+  // Everyone else takes a +4, including metaform dragons (houserule: they're alien enough in nature that they flub social things)
+  return METAVARIANT_PENALTY;
+}
+#undef METAVARIANT_PENALTY
+
 int negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy, bool include_metavariant_penalty)
 {
   struct obj_data *bio;
@@ -1340,30 +1359,13 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
 
   if (include_metavariant_penalty) {
     if (GET_RACE(ch) != GET_RACE(tch)) {
-      switch (GET_RACE(ch)) {
-        case RACE_HUMAN:
-        case RACE_ELF:
-        case RACE_ORK:
-        case RACE_TROLL:
-        case RACE_DWARF:
-          break;
-        default:
-          cmod += 4;
-          snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for PC.");
-          break;
-      }
-      switch (GET_RACE(tch)) {
-        case RACE_HUMAN:
-        case RACE_ELF:
-        case RACE_ORK:
-        case RACE_TROLL:
-        case RACE_DWARF:
-          break;
-        default:
-          tmod += 4;
-          snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +4 for NPC.");
-          break;
-      }
+      int ch_mod = get_metavariant_penalty(ch);
+      int tch_mod = get_metavariant_penalty(tch);
+      
+      if (ch_mod)
+        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +%d for PC.", ch_mod);
+      if (tch_mod)
+        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +%d for NPC.", tch_mod);
     }
   } else {
     snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Skipping any potential metavariant penalties.");

@@ -879,10 +879,33 @@ void affect_total(struct char_data * ch)
       GET_ATT(ch, att) = cap + ((GET_ATT(ch, att) - cap + 1) >> 1);
   }
 #endif
-  GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), cap * 100));
-  GET_ESS(ch) = MAX(0, MIN(GET_ESS(ch), 600));
-  GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
+
+  int base_essence = IS_GHOUL(ch) ? 500 : 600;
+  GET_ESS(ch) = MAX(0, MIN(GET_ESS(ch), base_essence));
   GET_ESS(ch) -= GET_TEMP_ESSLOSS(ch);
+
+#ifdef USE_ESSENCE_LINKED_MAGIC_CAP
+  {
+    // House ruled section here.
+    // Magic cap is 26, and is doubly impacted by cyber/bio costs, down to a minimum of 20.
+    // This allows "pure" characters to have a meaningful power level while still leaving some
+    // flexibility in builds before hitting the "may as well go full borg" cap of 20.
+    // You can take up to approximately 3 points of magic loss from 'ware before hitting the minimum 20 cap.
+    int magic_cap = 2600;
+    int essence_cost = base_essence - GET_ESS(ch);
+    int index_cost = GET_HIGHEST_INDEX(ch) / 2;
+    int cap_delta = 2 * (essence_cost + index_cost);
+    // Cap must be between 20-26 magic.
+    magic_cap = MIN(2600, MAX(2000, magic_cap - cap_delta));
+
+    // Apply the cap before any temporary magic loss effects. Cap is already x100, just like magic is.
+    GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), magic_cap));
+    GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
+  }
+#else
+  GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), cap * 100));
+  GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
+#endif
   GET_MAX_MENTAL(ch) = 1000;
   GET_MAX_PHYSICAL(ch) = 1000;
   GET_TARGET_MOD(ch) = 0;

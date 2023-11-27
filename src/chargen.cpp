@@ -64,42 +64,47 @@ void ccr_pronoun_menu(struct descriptor_data *d) {
   d->ccr.mode = CCR_PRONOUNS;
 }
 
+#define PRESTIGE_RACE_GHOUL_COST  25
 #define PRESTIGE_RACE_DRYAD_COST  50
-#define PRESTIGE_RACE_GHOUL_COST  100
-#define PRESTIGE_RACE_DRAKE_COST  250
-#define PRESTIGE_RACE_DRAGON_COST 500
+#define PRESTIGE_RACE_DRAKE_COST  500
+#define PRESTIGE_RACE_DRAGON_COST 1000
 void display_prestige_race_menu(struct descriptor_data *d) {
   char msg_buf[10000];
   snprintf(msg_buf, sizeof(msg_buf), 
             "\r\nPrestige races cost system points, which you will draw from an existing character."
             "\r\n"
             "\r\nThe following races are available:"
-            "\r\n 1) Dryad            (%3d sysp, 15 build points / slot B)",
+            "\r\n"
+            "\r\n--- Dryads are elves with a +1 TN allergy to cities. ---"
+            "\r\n 1) Dryad            (%4d sysp, 15 build points / slot B)",
             PRESTIGE_RACE_DRYAD_COST);
 
   snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), 
             "\r\n"
-            "\r\n 2) Ghoul [Human]    (%3d sysp, 10 build points / slot C)"
-            "\r\n 3) Ghoul [Dwarf]    (%3d sysp, 15 build points / slot B)"
-            "\r\n 4) Ghoul [Elf]      (%3d sysp, 20 build points / slot B)"
-            "\r\n 5) Ghoul [Ork]      (%3d sysp, 15 build points / slot B)"
-            "\r\n 6) Ghoul [Troll]    (%3d sysp, 20 build points / slot B)",
+            "\r\n^c--- Ghouls take SIGNIFICANT penalties! Choose for RP flavor only. ---^n"
+            "\r\n 2) Ghoul [Human]    (%4d sysp, 10 build points / slot C)"
+            "\r\n 3) Ghoul [Dwarf]    (%4d sysp, 15 build points / slot B)"
+            "\r\n 4) Ghoul [Elf]      (%4d sysp, 20 build points / slot B)"
+            "\r\n 5) Ghoul [Ork]      (%4d sysp, 15 build points / slot B)"
+            "\r\n 6) Ghoul [Troll]    (%4d sysp, 20 build points / slot B)",
             PRESTIGE_RACE_GHOUL_COST, PRESTIGE_RACE_GHOUL_COST, PRESTIGE_RACE_GHOUL_COST, PRESTIGE_RACE_GHOUL_COST, PRESTIGE_RACE_GHOUL_COST);
 
   snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), 
             "\r\n"
-            "\r\n 7) Drake [Human]    (%3d sysp, 15 build points / slot B)"
-            "\r\n 8) Drake [Dwarf]    (%3d sysp, 20 build points / slot B)"
-            "\r\n 9) Drake [Elf]      (%3d sysp, 25 build points / slot B)"
-            "\r\n 0) Drake [Ork]      (%3d sysp, 20 build points / slot B)"
-            "\r\n A) Drake [Troll]    (%3d sysp, 25 build points / slot B)",
+            "\r\n^c--- Drakes take SIGNIFICANT penalties! Choose for RP flavor only. ---^n"
+            "\r\n 7) Drake [Human]    (%4d sysp, 15 build points / slot B)"
+            "\r\n 8) Drake [Dwarf]    (%4d sysp, 20 build points / slot B)"
+            "\r\n 9) Drake [Elf]      (%4d sysp, 25 build points / slot B)"
+            "\r\n 0) Drake [Ork]      (%4d sysp, 20 build points / slot B)"
+            "\r\n A) Drake [Troll]    (%4d sysp, 25 build points / slot B)",
             PRESTIGE_RACE_DRAKE_COST, PRESTIGE_RACE_DRAKE_COST, PRESTIGE_RACE_DRAKE_COST, PRESTIGE_RACE_DRAKE_COST, PRESTIGE_RACE_DRAKE_COST);
 
   snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), 
             "\r\n"
-            "\r\n B) Western Dragon    (%3d sysp, 30 build points / slot B)"
-            "\r\n C) Eastern Dragon    (%3d sysp, 30 build points / slot B)"
-            "\r\n D) Feathered Serpent (%3d sysp, 30 build points / slot B)",
+            "\r\n^c--- Dragons can't use 'ware, but have high stat caps. ---^n"
+            "\r\n B) Western Dragon    (%4d sysp, 30 build points / slot B)"
+            "\r\n C) Eastern Dragon    (%4d sysp, 30 build points / slot B)"
+            "\r\n D) Feathered Serpent (%4d sysp, 30 build points / slot B)",
             PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST);
 
   strlcat(msg_buf, 
