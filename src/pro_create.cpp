@@ -108,6 +108,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       }
       break;
     case 'q':
+    case 'Q':
       send_to_char(CH, "Design saved!\r\n");
       if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
         GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)];

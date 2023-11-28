@@ -1262,6 +1262,7 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
           pgedit_disp_menu(d);
           break;
         case 'q':
+        case 'Q':
           if (d->edit_pgroup->is_clone()) {
             // Log the information about who edited it and what the values are.
             GET_PGROUP(CH)->audit_log_vfprintf("%s modified the group's information (name %s^n, alias %s^n, tag %s^n, %s^n).",

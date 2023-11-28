@@ -97,6 +97,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = AEDIT_QUANTITY;
       break;
     case 'q':
+    case 'Q':
       send_to_char(CH, "Ammo design saved!\r\n");
       snprintf(buf, sizeof(buf), "a box of %s %s ammunition", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name, weapon_types[GET_AMMOBOX_WEAPON(OBJ)]);
       OBJ->restring = str_dup(buf);

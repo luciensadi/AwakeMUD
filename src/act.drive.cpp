@@ -2275,6 +2275,7 @@ void vehcust_parse(struct descriptor_data *d, char *arg)
           d->mail_to = 0;
           break;
         case 'q':
+        case 'Q':
           STATE(d) = CON_PLAYING;
           PLR_FLAGS(CH).RemoveBit(PLR_WRITING);
           d->edit_veh = NULL;
