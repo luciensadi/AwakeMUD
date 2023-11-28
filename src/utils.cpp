@@ -6375,6 +6375,27 @@ void log_traceback(const char *format, ...) {
   }
 }
 
+int get_total_active_focus_rating(struct char_data *i, int &total) {
+  int force = 0;
+  struct obj_data *focus;
+  for (int x = 0; x < NUM_WEARS; x++) {
+    if (!(focus = GET_EQ(i, x)))
+      continue;
+
+    if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(i) && GET_FOCUS_ACTIVATED(focus)) {
+      force += GET_FOCUS_FORCE(focus);
+      total++;
+    }
+
+    else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && WEAPON_FOCUS_USABLE_BY(focus, i)) {
+      force += GET_WEAPON_FOCUS_RATING(focus);
+      total++;
+    }
+  }
+
+  return force;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);

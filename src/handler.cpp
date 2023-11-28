@@ -884,7 +884,10 @@ void affect_total(struct char_data * ch)
   GET_ESS(ch) = MAX(0, MIN(GET_ESS(ch), base_essence));
   GET_ESS(ch) -= GET_TEMP_ESSLOSS(ch);
 
-#ifdef USE_ESSENCE_LINKED_MAGIC_CAP
+#ifdef USE_OLD_MAGIC_CAP
+  GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), cap * 100));
+  GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
+#else
   {
     // House ruled section here.
     // Magic cap is 26, and is doubly impacted by cyber/bio costs, down to a minimum of 20.
@@ -902,9 +905,6 @@ void affect_total(struct char_data * ch)
     GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), magic_cap));
     GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
   }
-#else
-  GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), cap * 100));
-  GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
 #endif
   GET_MAX_MENTAL(ch) = 1000;
   GET_MAX_PHYSICAL(ch) = 1000;

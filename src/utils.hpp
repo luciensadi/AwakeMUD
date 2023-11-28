@@ -159,6 +159,7 @@ void    zero_cost_of_obj_and_contents(struct obj_data *obj);
 struct char_data *ch_is_grouped_with_idnum(struct char_data *ch, idnum_t idnum);
 void    log_traceback(const char *context, ...);
 int     get_metavariant_penalty(struct char_data *ch);
+int     get_total_active_focus_rating(struct char_data *i, int &total);
 
 bool obj_is_apartment_only_drop_item(struct obj_data *obj);
 bool obj_contains_apartment_only_drop_items(struct obj_data *obj);

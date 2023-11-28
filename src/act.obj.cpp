@@ -4015,36 +4015,38 @@ ACMD(do_activate)
     return;
   }
 
-  if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_IDNUM(ch) == GET_OBJ_VAL(obj, 2)) {
+  if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_IDNUM(ch) == GET_FOCUS_BONDED_TO(obj)) {
     if (obj->worn_on == NOWHERE) {
       send_to_char("You have to be wearing or holding a focus to activate it.\r\n", ch);
       return;
     }
-    if (GET_OBJ_VAL(obj, 9) > 0) {
+    if (GET_FOCUS_BOND_TIME_REMAINING(obj) > 0) {
       send_to_char(ch, "You haven't finished bonding %s yet.\r\n", GET_OBJ_NAME(obj));
       return;
     }
-    if (GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED) {
+    if (GET_FOCUS_TYPE(obj) == FOCI_SUSTAINED) {
       send_to_char("This focus is automatically activated when you cast the bonded spell on it.\r\n", ch);
       return;
     }
+#ifdef DIES_IRAE
     if (GET_FOCI(ch) >= GET_INT(ch)) {
-      send_to_char("You have too many foci activated already.\r\n", ch);
+      send_to_char(ch, "You have too many foci activated already. You're limited to %s's intelligence (%d).\r\n", GET_CHAR_NAME(ch), GET_INT(ch));
       return;
     }
-    if (GET_OBJ_VAL(obj, 4)) {
-      send_to_char("This focus is already activated.\r\n", ch);
+#endif
+    if (GET_FOCUS_ACTIVATED(obj)) {
+      send_to_char(ch, "%s is already activated.\r\n", CAP(GET_OBJ_NAME(obj)));
       return;
     }
-    if (GET_OBJ_VAL(obj, 0) == 4)
+    if (GET_FOCUS_TYPE(obj) == FOCI_POWER)
       for (int x = 0; x < NUM_WEARS; x++)
-        if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, x), 0) == 4
-            && GET_OBJ_VAL(GET_EQ(ch, x), 4)) {
+        if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_FOCUS && GET_FOCUS_TYPE(GET_EQ(ch, x)) == FOCI_POWER
+            && GET_FOCUS_ACTIVATED(GET_EQ(ch, x))) {
           send_to_char("You can only activate one power focus at a time.\r\n", ch);
           return;
         }
     send_to_char(ch, "You activate %s.\r\n", GET_OBJ_NAME(obj));
-    GET_OBJ_VAL(obj, 4) = 1;
+    GET_FOCUS_ACTIVATED(obj) = 1;
     GET_FOCI(ch)++;
     affect_total(ch);
     return;
@@ -4263,14 +4265,46 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
     return 0;
   }
 
-  // Refuse to let someone draw a weapon focus that is stronger than twice their magic. At least, I think that's what this does?
-  if (GET_OBJ_TYPE(contents) == ITEM_WEAPON
-           && !IS_GUN(GET_WEAPON_ATTACK_TYPE(contents))
-           && GET_WEAPON_FOCUS_BONDED_BY(contents) == GET_IDNUM(ch)
-           && GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(contents))
-  {
-    act("Draw check: Skipping $p, focus check failure.", FALSE, ch, contents, 0, TO_ROLLS);
+  // Refuse to let someone draw a weapon focus that they can't use.
+  bool weapon_is_focus = FALSE;
+#ifdef DIES_IRAE
+  if (GET_FOCI(ch) >= GET_INT(ch)) {
+    act("Draw check: Skipping $p, would put us over int focus limit.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
+  } else {
+#else
+  {
+#endif
+    if (GET_OBJ_TYPE(contents) == ITEM_WEAPON
+            && !IS_GUN(GET_WEAPON_ATTACK_TYPE(contents))
+            && GET_WEAPON_FOCUS_RATING(contents) > 0)
+    {
+      if (GET_WEAPON_FOCUS_BONDED_BY(contents) != GET_IDNUM(ch)) {
+        act("Draw check: Skipping $p, focus check bond state failure.", FALSE, ch, contents, 0, TO_ROLLS);
+        return 0;
+      }
+
+      if (GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(contents)) {
+        act("Draw check: Skipping $p, focus too strong for magic rating.", FALSE, ch, contents, 0, TO_ROLLS);
+        return 0;
+      }
+
+#ifdef DIES_IRAE
+      int equipped_count = 0;
+      int total_rating = get_total_active_focus_rating(ch, &equipped_count);
+
+      if (equipped_count >= GET_INT(ch)) {
+        act("Draw check: Skipping $p, would exceed max focus count.", FALSE, ch, contents, 0, TO_ROLLS);
+        return 0;
+      }
+      if ((total_rating + GET_WEAPON_FOCUS_RATING(contents)) * 100 >= GET_MAG(ch) * 2) {
+        act("Draw check: Skipping $p, would exceed max focus force.", FALSE, ch, contents, 0, TO_ROLLS);
+        return 0;
+      }
+#endif
+
+      weapon_is_focus = TRUE;
+    }
   }
 
   // Apply racial limitations.
