@@ -280,7 +280,7 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
       }
       if (!has_modulator) {
         if (access_level(ch, LVL_PRESIDENT)) {
-          send_to_char(ch, "DEBUG: Skipping %s (%s): No modulator.\r\n", get_char_representation_for_docwagon(d->character, ch), GET_CHAR_NAME(d->character), argument);
+          send_to_char(ch, "DEBUG: Skipping %s: No modulator.\r\n", GET_CHAR_NAME(d->character));
         }
         continue;
       }
@@ -396,6 +396,24 @@ ACMD(do_docwagon) {
         send_to_char(ch, " - Skipping %s: Ignoring or ignored.\r\n", GET_CHAR_NAME(d->character));
       }
       continue;
+    }
+
+    // Has a modulator?
+    {
+      bool has_modulator = FALSE;
+      for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+        struct obj_data *eq = GET_EQ(d->character, wear_idx);
+        if (eq && GET_OBJ_TYPE(eq) == ITEM_DOCWAGON && GET_DOCWAGON_BONDED_IDNUM(eq) == GET_IDNUM(d->character)) {
+          has_modulator = TRUE;
+          break;
+        }
+      }
+      if (!has_modulator) {
+        if (access_level(ch, LVL_PRESIDENT)) {
+          send_to_char(ch, " - Skipping %s: No modulator.\r\n", GET_CHAR_NAME(d->character));
+        }
+        continue;
+      }
     }
 
     // Short circuit: LIST has no further logic to evaluate, so just print.
