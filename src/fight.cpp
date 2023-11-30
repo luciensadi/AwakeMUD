@@ -424,7 +424,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   AFF_FLAGS(ch).RemoveBit(AFF_BANISH);
   AFF_FLAGS(vict).RemoveBit(AFF_BANISH);
 
-  strcpy(buf, GET_CHAR_NAME(ch));
+  strlcpy(buf, GET_CHAR_NAME(ch), sizeof(buf));
 
   if (!ch->in_veh) {
     if (ch->followers)
@@ -488,9 +488,9 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
     find_and_draw_weapon(ch);
 
   if (IS_NPC(ch))
-    strcpy(buf, GET_NAME(ch));
+    strlcpy(buf, GET_NAME(ch), sizeof(buf));
   else
-    strcpy(buf, GET_CHAR_NAME(ch));
+    strlcpy(buf, GET_CHAR_NAME(ch), sizeof(buf));
   if (ch->followers)
     for (k = ch->followers; k; k = k->next)
       if (PRF_FLAGGED(k->follower, PRF_ASSIST) && k->follower->in_room == ch->in_room &&
@@ -1461,20 +1461,20 @@ void dam_message(int dam, struct char_data * ch, struct char_data * victim, int 
 
 
   /* damage message to damager */
-  strcpy(buf1, "^y");
+  strlcpy(buf1, "^y", sizeof(buf1));
   buf = replace_string(dam_weapons[msgnum].to_char,
                        attack_hit_text[w_type].singular, attack_hit_text[w_type].plural,
                        attack_hit_text[w_type].different);
-  strcat(buf1, buf);
+  strlcat(buf1, buf, sizeof(buf1));
   if (SENDOK(ch))
     perform_act(buf1, ch, NULL, victim, ch, FALSE);
 
   /* damage message to damagee */
-  strcpy(buf1, "^r");
+  strlcpy(buf1, "^r", sizeof(buf1));
   buf = replace_string(dam_weapons[msgnum].to_victim,
                        attack_hit_text[w_type].singular, attack_hit_text[w_type].plural,
                        attack_hit_text[w_type].different);
-  strcat(buf1, buf);
+  strlcat(buf1, buf, sizeof(buf1));
   act(buf1, FALSE, ch, NULL, victim, TO_VICT | TO_SLEEP);
 }
 #undef SENDOK
@@ -3741,7 +3741,7 @@ bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded) {
 
 int check_smartlink(struct char_data *ch, struct obj_data *weapon)
 {
-  struct obj_data *obj, *access;
+  struct obj_data *obj, *accessory;
 
   // are they wielding two weapons?
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) &&
@@ -3753,13 +3753,13 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
     // If they have a smartlink attached:
     if (GET_OBJ_VAL(weapon, i) > 0
         && (real_obj = real_object(GET_OBJ_VAL(weapon, i))) > 0
-        && (access = &obj_proto[real_obj])
-        && GET_ACCESSORY_TYPE(access) == ACCESS_SMARTLINK) {
+        && (accessory = &obj_proto[real_obj])
+        && GET_ACCESSORY_TYPE(accessory) == ACCESS_SMARTLINK) {
 
       // Iterate through their cyberware and look for a matching smartlink.
       for (obj = ch->cyberware; obj; obj = obj->next_content) {
         if (GET_CYBERWARE_TYPE(obj) == CYB_SMARTLINK) {
-          if (GET_CYBERWARE_RATING(obj) == 2 && GET_ACCESSORY_RATING(access) == 2) {
+          if (GET_CYBERWARE_RATING(obj) == 2 && GET_ACCESSORY_RATING(accessory) == 2) {
             // Smartlink II with compatible cyberware.
             return SMARTLINK_II_MODIFIER;
           }
@@ -4165,15 +4165,15 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
 
   if (burst <= 1) {
     if (GET_OBJ_VAL(weapon, 4) == SKILL_SHOTGUNS || GET_OBJ_VAL(weapon, 4) == SKILL_ASSAULT_CANNON)
-      strcpy(buf, "single shell from $p");
+      strlcpy(buf, "single shell from $p", sizeof(buf));
     else
-      strcpy(buf, "single round from $p");
+      strlcpy(buf, "single round from $p", sizeof(buf));
   } else if (burst == 2) {
-    strcpy(buf, "short burst from $p");
+    strlcpy(buf, "short burst from $p", sizeof(buf));
   } else if (burst == 3) {
-    strcpy(buf, "burst from $p");
+    strlcpy(buf, "burst from $p", sizeof(buf));
   } else {
-    strcpy(buf, "long burst from $p");
+    strlcpy(buf, "long burst from $p", sizeof(buf));
   }
 
   char blindfire_buf[100];
@@ -4193,7 +4193,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     if (ch->in_veh)
       snprintf(vehicle_message, sizeof(vehicle_message), "From inside %s, ", decapitalize_a_an(GET_VEH_NAME_NOFORMAT(ch->in_veh)));
     else
-      strcpy(vehicle_message, "");
+      strlcpy(vehicle_message, "", sizeof(vehicle_message));
 
     if (damage < 0) {
       int switch_num = number(1, 3);
@@ -4395,14 +4395,14 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
             send_to_char("You hear muffled gunshots nearby.\r\n", listener);
 
         combat_message_process_ranged_response(ch, room1);
-        strcat(been_heard, temp);
+        strlcat(been_heard, temp, sizeof(been_heard));
       } else {
         // Send gunshot notifications to the selected room. Process guard/helper responses.
         for (struct char_data *listener = world[room1].people; listener; listener = listener->next_in_room)
           if (!PRF_FLAGGED(listener, PRF_FIGHTGAG))
             send_to_char("You hear gunshots nearby!\r\n", listener);
         combat_message_process_ranged_response(ch, room1);
-        strcat(been_heard, temp);
+        strlcat(been_heard, temp, sizeof(been_heard));
 
         // Add the room's exits to the list.
         for (int door2 = 0; door2 < NUM_OF_DIRS; door2++)
@@ -4428,7 +4428,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       if (!PRF_FLAGGED(listener, PRF_FIGHTGAG))
         send_to_char("You hear gunshots not far off.\r\n", listener);
     combat_message_process_ranged_response(ch, room1);
-    strcat(been_heard, temp);
+    strlcat(been_heard, temp, sizeof(been_heard));
 
     // Add the room's exits to the list.
     for (int door = 0; door < NUM_OF_DIRS; door++)
@@ -4450,7 +4450,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       if (!PRF_FLAGGED(listener, PRF_FIGHTGAG))
         send_to_char("You hear gunshots in the distance.\r\n", listener);
     combat_message_process_ranged_response(ch, room1);
-    strcat(been_heard, temp);
+    strlcat(been_heard, temp, sizeof(been_heard));
   }
 }
 
@@ -6723,7 +6723,7 @@ bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
 
     snprintf(buf, sizeof(buf), "You ram a %s!\r\n", GET_VEH_NAME(tveh));
     snprintf(buf1, sizeof(buf1), "%s rams straight into your ride!\r\n", CAP(GET_VEH_NAME_NOFORMAT(tveh)));
-    strcpy(buf3, GET_VEH_NAME(veh));
+    strlcpy(buf3, GET_VEH_NAME(veh), sizeof(buf3));
     snprintf(buf2, sizeof(buf2), "%s rams straight into %s!\r\n", buf3, CAP(GET_VEH_NAME_NOFORMAT(tveh)));
     send_to_veh(buf, veh, NULL, TRUE);
     send_to_veh(buf1, tveh, NULL, TRUE);
@@ -6839,7 +6839,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
   } else
   {
     power = GET_STR(ch);
-    strcpy(ammo_type, "blow");
+    strlcpy(ammo_type, "blow", sizeof(ammo_type));
     /*
     for (obj = ch->cyberware;
          obj && !damage_total;

@@ -733,19 +733,19 @@ ACMD(do_radio)
   any_one_arg(any_one_arg(argument, one), two);
 
   int *freq;
-  int *crypt;
+  int *crypt_rating;
   int max_crypt = 0;
   if (cyberware) {
     freq = &GET_CYBERWARE_RADIO_FREQ(radio);
-    crypt = &GET_CYBERWARE_RADIO_CRYPT(radio);
+    crypt_rating = &GET_CYBERWARE_RADIO_CRYPT(radio);
     max_crypt = GET_CYBERWARE_RADIO_MAX_CRYPT(radio);
   } else if (vehicle) {
     freq = &GET_VEHICLE_MOD_RADIO_FREQ(radio);
-    crypt = &GET_VEHICLE_MOD_RADIO_CRYPT(radio);
+    crypt_rating = &GET_VEHICLE_MOD_RADIO_CRYPT(radio);
     max_crypt = GET_VEHICLE_MOD_RADIO_MAX_CRYPT(radio);
   } else {
     freq = &GET_RADIO_CENTERED_FREQUENCY(radio);
-    crypt = &GET_RADIO_CURRENT_CRYPT(radio);
+    crypt_rating = &GET_RADIO_CURRENT_CRYPT(radio);
     max_crypt = GET_RADIO_MAX_CRYPT(radio);
   }
 
@@ -758,8 +758,8 @@ ACMD(do_radio)
     else
       send_to_char(ch, "  Mode: center @ %d MHz\r\n", *freq);
 
-    if (*crypt)
-      send_to_char(ch, "  Crypt (max %d): on (level %d)\r\n", max_crypt, *crypt);
+    if (*crypt_rating)
+      send_to_char(ch, "  Crypt (max %d): on (level %d)\r\n", max_crypt, *crypt_rating);
     else
       send_to_char(ch, "  Crypt (max %d): off\r\n", max_crypt);
     return;
@@ -798,15 +798,15 @@ ACMD(do_radio)
       }
       else {
         send_to_char(ch, "Crypt mode enabled at rating %d.\r\n", i);
-        *crypt = i;
+        *crypt_rating = i;
       }
     }
     else {
-      if (!*crypt)
+      if (!*crypt_rating)
         act("$p's crypt mode is already disabled.", FALSE, ch, radio, 0, TO_CHAR);
       else {
         send_to_char("Crypt mode disabled.\r\n", ch);
-        *crypt = 0;
+        *crypt_rating = 0;
       }
     }
   } else if (!str_cmp(one, "mode")) {

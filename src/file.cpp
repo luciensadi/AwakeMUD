@@ -136,7 +136,7 @@ char *File::ReadString(const char* section)
       *ptr = '\0';
       done = true;
     } else
-      strcat(line, "\r\n");
+      strlcat(line, "\r\n", sizeof(line));
 
     size_t line_len = strlen(line);
 
@@ -148,7 +148,7 @@ char *File::ReadString(const char* section)
 
       strncpy(buf+buf_len, line, MAX_STRING_LENGTH - buf_len);
       *(buf+MAX_STRING_LENGTH) = '\0';
-      strcat(buf, "\r\n");
+      strlcat(buf, "\r\n", sizeof(buf));
 
       // if line doesn't have the '~', then we need to find it later
       skip_to_end = (strchr(line, '~') == NULL);
@@ -156,7 +156,7 @@ char *File::ReadString(const char* section)
       break;
     }
 
-    strcat(buf, line);
+    strlcat(buf, line, sizeof(buf));
     buf_len += line_len;
   }
 
@@ -175,8 +175,9 @@ char *File::ReadString(const char* section)
   }
 
   if (buf_len > 0) {
-    char *res = new char[buf_len+1];
-    strcpy(res, buf);
+    size_t res_sz = buf_len+1;
+    char *res = new char[res_sz];
+    strlcpy(res, buf, res_sz);
 
     return res;
   }
