@@ -4979,7 +4979,7 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
 
   // Prevent aircraft from traveling anywhere they're not supposed to be.
   if (veh_is_aircraft(veh) && !ROOM_FLAGGED(room, ROOM_AIRCRAFT_CAN_DRIVE_HERE)) {
-    SEND_MESSAGE("That's not a taxiway.\r\n");
+    SEND_MESSAGE("%s can only travel on taxiways.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     return FALSE;
   }
 
@@ -5007,23 +5007,23 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
 
   if (ROOM_FLAGGED(room, ROOM_TOO_CRAMPED_FOR_CHARACTERS)) {
     if (veh->type != VEH_DRONE) {
-      SEND_MESSAGE("Your vehicle is too big to fit in there, but a small drone might make it in.\r\n");
+      SEND_MESSAGE("%s is too big to fit in there, but a small drone might make it in.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       return FALSE;
     }
     if (veh->body > 1) {
-      SEND_MESSAGE("Your drone is too big to fit in there. You'll need a tiny one (1 BOD or less).\r\n");
+      SEND_MESSAGE("%s is too big to fit in there. You'll need a tiny one (1 BOD or less).\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       return FALSE;
     }
   }
 
   for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
     if (ROOM_FLAGGED(room, ROOM_STAFF_ONLY) && !IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
-      SEND_MESSAGE("Everyone in the vehicle must be a member of the game's administration to go there.\r\n");
+      SEND_MESSAGE("Everyone in %s must be a member of the game's administration to go there.\r\n", GET_VEH_NAME_NOFORMAT(veh));
       return FALSE;
     }
 
     if (!CH_CAN_ENTER_APARTMENT(room, tch)) {
-      SEND_MESSAGE("Everyone in the vehicle must be a guest of the apartment to go there.\r\n");
+      SEND_MESSAGE("Everyone in %s must be a guest of the apartment to go there.\r\n", GET_VEH_NAME_NOFORMAT(veh));
       return FALSE;
     }
   }

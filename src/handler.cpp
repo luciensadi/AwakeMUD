@@ -1769,6 +1769,10 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool reca
     return FALSE;
   }
 
+  // Activate the weapon focus.
+  if ((pos == WEAR_WIELD || pos == WEAR_HOLD) && GET_OBJ_TYPE(obj) == ITEM_WEAPON && !WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_BONDED_BY(obj) == GET_IDNUM(ch))
+    GET_FOCI(ch)++;
+
   GET_EQ(ch, pos) = obj;
   obj->worn_by = ch;
   obj->worn_on = pos;
@@ -1826,6 +1830,9 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
                   obj->affected[j].location,
                   obj->affected[j].modifier,
                   obj->obj_flags.bitvector, FALSE);
+
+  if ((pos == WEAR_WIELD || pos == WEAR_HOLD) && GET_OBJ_TYPE(obj) == ITEM_WEAPON && !WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_BONDED_BY(obj) == GET_IDNUM(ch))
+    GET_FOCI(ch)--;
 
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 4) && focus)
   {
