@@ -615,9 +615,13 @@ ACMD_CONST(do_flee) {
 }
 
 struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *ch) {
-  int racial_flee_modifier = 0; // Satyrs have a x4 run multiplier and smaller races have x2, so we're houseruling a +1/-1 TN here.
+  int racial_flee_modifier = 0; // Satyrs/Ghouls have a x4 run multiplier and smaller races have x2, so we're houseruling a +1/-1 TN here.
   switch (GET_RACE(ch)) {
     case RACE_SATYR:
+    case RACE_GHOUL_HUMAN:
+    case RACE_GHOUL_ELF:
+    case RACE_GHOUL_ORK:
+    case RACE_GHOUL_TROLL:
       racial_flee_modifier--;
       break;
     case RACE_DWARF:

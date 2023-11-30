@@ -6117,9 +6117,13 @@ void perform_violence(void)
         if (!CAN_SEE(ch, FIGHTING(ch)))
           target += 4;
 
-        // House rule: Satyrs get -1 TN in their favor for closing the distance due to their speed. Dwarves and related metatypes get +1 against them.
+        // House rule: Satyrs/Ghouls get -1 TN in their favor for closing the distance due to their speed. Dwarves and related metatypes get +1 against them.
         switch (GET_RACE(ch)) {
           case RACE_SATYR:
+          case RACE_GHOUL_HUMAN:
+          case RACE_GHOUL_ELF:
+          case RACE_GHOUL_ORK:
+          case RACE_GHOUL_TROLL:
             target--;
             break;
           case RACE_DWARF:
@@ -6132,6 +6136,10 @@ void perform_violence(void)
         // Same house rule as above, but applied on your opponent.
         switch (GET_RACE(FIGHTING(ch))) {
           case RACE_SATYR:
+          case RACE_GHOUL_HUMAN:
+          case RACE_GHOUL_ELF:
+          case RACE_GHOUL_ORK:
+          case RACE_GHOUL_TROLL:
             target++;
             break;
           case RACE_DWARF:
