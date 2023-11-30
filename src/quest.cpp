@@ -1260,12 +1260,11 @@ void handle_info(struct char_data *johnson, int num, struct char_data *target)
 
   // Want to control how much the Johnson says per tick? Change this magic number.
   char speech[sayto_invocation_len + 200 + terminal_data_len];
+  speech[0] = '\0';
 
   // Spare1 is the position in the info string we last left off at.
   int pos = GET_SPARE1(johnson);
-
-  // Prepend the name and initial ellipses if needed.
-  snprintf(speech, sizeof(speech), "%s %s", GET_CHAR_NAME(target), pos > 0 ? "..." : "");
+  int starting_pos = pos;
 
   // Calculate how much text we can put into the speech buffer, leaving room for ellipses and \0.
   int allowed = sizeof(speech) - strlen(speech) - terminal_data_len;
@@ -1308,11 +1307,11 @@ void handle_info(struct char_data *johnson, int num, struct char_data *target)
 
   speech[speech_index] = '\0';
 
-  if (will_add_ellipses)
-    strlcat(speech, "...", sizeof(speech));
+  char say_buf[strlen(speech) + 100];
+  snprintf(say_buf, sizeof(say_buf), "%s %s%s%s", GET_CHAR_NAME(target), starting_pos > 0 ? "..." : "", speech, will_add_ellipses ? "..." : "");
 
   // Say it.
-  do_say(johnson, speech, 0, SCMD_SAYTO);
+  do_say(johnson, say_buf, 0, SCMD_SAYTO);
 }
 
 SPECIAL(johnson)
