@@ -47,7 +47,7 @@ extern int calculate_swim_successes(struct char_data *ch);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict);
 extern struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *ch);
-extern bool precipitation_is_snow();
+extern bool precipitation_is_snow(int jurisdiction);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -351,7 +351,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   if (ROOM_FLAGGED(was_in, ROOM_INDOORS) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))
   {
-    bool should_be_snowy = precipitation_is_snow();
+    bool should_be_snowy = precipitation_is_snow(GET_JURISDICTION(ch->in_room));
 
     extern const char *moon[];
     const char *time_of_day[] = {

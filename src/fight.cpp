@@ -5505,7 +5505,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     act("$n aims $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
     act("You aim $p at $N and fire!", FALSE, ch, weapon, vict, TO_CHAR);
     if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
-      if (GET_WEAPON_ATTACK_TYPE(weapon) < TYPE_PISTOL || has_ammo_no_deduct(ch, weapon)) {
+      if (has_ammo_no_deduct(ch, weapon)) {
         if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
           GET_DEFENSE(vict) = GET_COMBAT(vict);
           GET_OFFENSE(vict) = 0;
@@ -5522,6 +5522,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
             ranged_response(ch, vict);
           }
         }
+        return;
       } else
         send_to_char("*Click*\r\n", ch);
       WAIT_STATE(ch, 2 * PULSE_VIOLENCE);

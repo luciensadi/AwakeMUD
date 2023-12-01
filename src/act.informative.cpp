@@ -106,7 +106,7 @@ extern float get_bulletpants_weight(struct char_data *ch);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern const char *get_level_wholist_color(int level);
 extern bool cyber_is_retractable(struct obj_data *cyber);
-extern bool precipitation_is_snow();
+extern bool precipitation_is_snow(int jurisdiction);
 
 #ifdef USE_PRIVATE_CE_WORLD
   extern void display_secret_info_about_object(struct char_data *ch, struct obj_data *obj);
@@ -2217,7 +2217,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     }
 
     if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-      bool should_be_snowy = precipitation_is_snow();
+      bool should_be_snowy = precipitation_is_snow(GET_JURISDICTION(ch->in_room));
 
       // Display weather info in the room.
       if (IS_WATER(ch->in_room)) {
@@ -5230,7 +5230,7 @@ ACMD(do_weather)
 
   FAILURE_CASE(!OUTSIDE(ch), "You're pretty sure the ceiling won't start raining anytime soon.\r\n");
 
-  if (precipitation_is_snow()) {
+  if (precipitation_is_snow(GET_JURISDICTION(ch->in_room))) {
     static const char *sky_look[] =
     {
       "cloudless",

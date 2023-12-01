@@ -33,9 +33,13 @@ const char *moon[] =
     "\n"
   };
 
-bool precipitation_is_snow() {
+bool precipitation_is_snow(int jurisdiction) {
   time_t s = time(NULL);
   struct tm* current_time = localtime(&s);
+
+  // It only snows in Seattle. Portland can go fuck itself.
+  if (jurisdiction != JURISDICTION_SEATTLE)
+    return FALSE;
 
   // Our version of Seattle snows in December and January.
   return (current_time->tm_mon + 1) == 12 || (current_time->tm_mon + 1) == 1;
@@ -246,53 +250,72 @@ void weather_change(void)
     break;
   }
 
-  switch (change) {
-  case 0:
-    break;
-  case 1:
+  if (change == 1) {
     send_to_outdoor("^LThe sky starts to get cloudy.^n\r\n", TRUE);
     weather_info.sky = SKY_CLOUDY;
-    break;
-  case 2:
-    if (precipitation_is_snow()) {
-      send_to_outdoor("^WIt starts to snow.^n\r\n", TRUE);
-    } else {
-      send_to_outdoor("^BIt starts to rain.^n\r\n", TRUE);
-    }
-    weather_info.sky = SKY_RAINING;
-    break;
-  case 3:
+  }
+
+  if (change == 3) {
     send_to_outdoor("^CThe clouds disappear.^n\r\n", TRUE);
     weather_info.sky = SKY_CLOUDLESS;
-    break;
-  case 4:
-    if (precipitation_is_snow()) {
-      send_to_outdoor("^WThe snow intensifies.^n\r\n", TRUE);
-    } else {
-      send_to_outdoor("^WLightning^L starts to show in the sky.^n\r\n", TRUE);
-    }
-    weather_info.sky = SKY_LIGHTNING;
-    break;
-  case 5:
-    if (precipitation_is_snow()) {
-      send_to_outdoor("^cThe snow stops.^n\r\n", TRUE);
-    } else {
-      send_to_outdoor("^cThe rain stops.^n\r\n", TRUE);
-    }
-    weather_info.sky = SKY_CLOUDY;
-    weather_info.lastrain = 0;
-    break;
-  case 6:
-    if (precipitation_is_snow()) {
-      send_to_outdoor("^WThe heavy snow slackens to light flurries now and then.^n\r\n", TRUE);
-    } else {
-      send_to_outdoor("^cThe ^Wlightning^c stops.^n\r\n", TRUE);
-    }
-    weather_info.sky = SKY_RAINING;
-    break;
-  default:
-    break;
   }
+
+  if (change == 2 || (change >= 4 && change <= 6)) {
+    for (struct descriptor_data *i = descriptor_list; i; i = i->next) {
+      if (!i->connected && i->character && AWAKE(i->character) &&
+          !(PLR_FLAGGED(i->character, PLR_WRITING) ||
+            PLR_FLAGGED(i->character, PLR_EDITING) ||
+            PLR_FLAGGED(i->character, PLR_MAILING) ||
+            PLR_FLAGGED(i->character, PLR_MATRIX) ||
+            PLR_FLAGGED(i->character, PLR_REMOTE)) &&
+          OUTSIDE(i->character)) 
+      {
+
+        if (PRF_FLAGGED(i->character, PRF_NO_WEATHER) ||
+            (i->original && PRF_FLAGGED(i->original, PRF_NO_WEATHER)))
+        {
+          continue;
+        }
+
+        switch (change) {
+          case 2:
+            if (precipitation_is_snow(GET_JURISDICTION(get_ch_in_room(i->character)))) {
+              SEND_TO_Q("^WIt starts to snow.^n\r\n", i);
+            } else {
+              SEND_TO_Q("^BIt starts to rain.^n\r\n", i);
+            }
+            weather_info.sky = SKY_RAINING;
+            break;
+          case 4:
+            if (precipitation_is_snow(GET_JURISDICTION(get_ch_in_room(i->character)))) {
+              SEND_TO_Q("^WThe snow intensifies.^n\r\n", i);
+            } else {
+              SEND_TO_Q("^WLightning^L starts to show in the sky.^n\r\n", i);
+            }
+            weather_info.sky = SKY_LIGHTNING;
+            break;
+          case 5:
+            if (precipitation_is_snow(GET_JURISDICTION(get_ch_in_room(i->character)))) {
+              SEND_TO_Q("^cThe snow stops.^n\r\n", i);
+            } else {
+              SEND_TO_Q("^cThe rain stops.^n\r\n", i);
+            }
+            weather_info.sky = SKY_CLOUDY;
+            weather_info.lastrain = 0;
+            break;
+          case 6:
+            if (precipitation_is_snow(GET_JURISDICTION(get_ch_in_room(i->character)))) {
+              SEND_TO_Q("^WThe heavy snow slackens to light flurries now and then.^n\r\n", i);
+            } else {
+              SEND_TO_Q("^cThe ^Wlightning^c stops.^n\r\n", i);
+            }
+            weather_info.sky = SKY_RAINING;
+            break;
+        }
+      }
+    }
+  }
+
   if (weather_info.sky < SKY_RAINING)
     weather_info.lastrain++;
 }
