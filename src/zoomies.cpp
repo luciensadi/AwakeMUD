@@ -441,6 +441,7 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
 
   int skill_num = get_pilot_skill_for_veh(veh);
   int tn = veh->handling + get_vehicle_modifier(veh, FALSE);
+  int get_autopilot = veh->pilot;
 
   snprintf(rbuf, sizeof(rbuf), "Flight test modifiers for %s (base %d from handling): ", GET_CHAR_NAME(ch), tn);
 
@@ -463,7 +464,7 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
       break;
   }
   
-  int dice = get_skill(ch, skill_num, tn, rbuf, sizeof(rbuf));
+  int dice = get_autopilot + get_skill(ch, skill_num, tn, rbuf, sizeof(rbuf));
   int successes = success_test(dice, tn, ch, "flight-test");
   snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Dice %d, TN %d: %d success%s.", dice, tn, successes, successes == 1 ? "" : "es");
 
