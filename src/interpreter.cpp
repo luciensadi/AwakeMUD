@@ -1888,7 +1888,8 @@ void perform_complex_alias(struct txt_q *input_q, char *orig, struct alias *a)
   skip_spaces(&orig);
 
   /* First, parse the original string */
-  temp = strtok(strcpy(buf2, orig), " ");
+  strlcpy(buf2, orig, sizeof(buf2));
+  temp = strtok(buf2, " ");
   while (temp != NULL && num_of_tokens < NUM_TOKENS)
   {
     tokens[num_of_tokens++] = temp;
@@ -2998,8 +2999,9 @@ void nanny(struct descriptor_data * d, char *arg)
           STATE(d) = CON_CLOSE;
           return;
         }
-        char char_name[strlen(GET_CHAR_NAME(d->character))+1];
-        strcpy(char_name, GET_CHAR_NAME(d->character));
+        size_t char_name_sz = strlen(GET_CHAR_NAME(d->character))+1;
+        char char_name[char_name_sz];
+        strlcpy(char_name, GET_CHAR_NAME(d->character), char_name_sz);
         free_char(d->character);
         delete d->character;
 

@@ -838,7 +838,30 @@ int parse_prestige_race(struct descriptor_data *d, const char *arg)
   case '?':
     switch (LOWER(*(arg+1))) {
     case '1':
-      display_help(buf2, MAX_STRING_LENGTH, "human", d->character);
+      display_help(buf2, MAX_STRING_LENGTH, "dryads", d->character);
+      break;
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+      display_help(buf2, MAX_STRING_LENGTH, "ghouls", d->character);
+      break;
+    case '7':
+    case '8':
+    case '9':
+    case '0':
+    case 'a':
+    case 'A':
+      display_help(buf2, MAX_STRING_LENGTH, "drakes", d->character);
+      break;
+    case 'b':
+    case 'B':
+    case 'c':
+    case 'C':
+    case 'd':
+    case 'D':
+      display_help(buf2, MAX_STRING_LENGTH, "dragons", d->character);
       break;
     default:
       return RACE_UNDEFINED;
@@ -1582,7 +1605,8 @@ void create_parse(struct descriptor_data *d, const char *arg)
     if (!validate_password_for_idnum(arg, d->ccr.prestige_bagholder)) {
       snprintf(buf, sizeof(buf), "Bad PW: %s [%s]", GET_CHAR_NAME(d->character), d->host);
       mudlog_vfprintf(NULL, LOG_CONNLOG, "Bad PW in prestige chargen: %s for %ld", d->host, d->ccr.prestige_bagholder);
-      SEND_TO_Q("That's not the right password.\r\nEnter your password, or type ABORT: ", d);
+      SEND_TO_Q("That's not the right password.\r\nEnter the target character's password, or type ABORT: ", d);
+      echo_off(d);
       return;
     }
 

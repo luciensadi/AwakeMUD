@@ -252,6 +252,7 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
     if (!d->character || d->character == ch || GET_POS(d->character) != POS_MORTALLYW)
       continue;
 
+    // Ignoring you, or you ignoring them?
     if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character)) {
       if (access_level(ch, LVL_PRESIDENT)) {
         send_to_char(ch, "DEBUG: Skipping %s: Ignoring or ignored.\r\n", GET_CHAR_NAME(d->character));
@@ -259,35 +260,54 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
       continue;
     }
 
-    if (keyword_appears_in_char(argument, ch)) {
-      send_to_char("You squint at the tiny screen on your DocWagon receiver to try and get a better idea of where your client is...\r\n", ch);
-
-      // Show them the room name, room description, and exits.
-      struct room_data *was_in_room = ch->in_room;
-      struct veh_data *was_in_veh = ch->in_veh;
-      ch->in_room = get_ch_in_room(d->character);
-      ch->in_veh = NULL;
-
-      // Room name.
-      display_room_name(ch, ch->in_room, FALSE);
-
-      // Room desc.
-      display_room_desc(ch);
-
-      // Room exits.
-      disp_long_exits(ch, TRUE);
-
-      // Reset their in_room to the stored value.
-      ch->in_room = was_in_room;
-      ch->in_veh = was_in_veh;
-
-      return TRUE;
-    } else {
+    // Wrong target?
+    if (!keyword_appears_in_char(argument, ch)) {
       if (access_level(ch, LVL_PRESIDENT)) {
         send_to_char(ch, "DEBUG: Skipping %s (%s): '%s' does not match their representation.\r\n", get_char_representation_for_docwagon(d->character, ch), GET_CHAR_NAME(d->character), argument);
       }
       continue;
     }
+
+    // No modulator on?
+    {
+      bool has_modulator = FALSE;
+      for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+        struct obj_data *eq = GET_EQ(d->character, wear_idx);
+        if (eq && GET_OBJ_TYPE(eq) == ITEM_DOCWAGON && GET_DOCWAGON_BONDED_IDNUM(eq) == GET_IDNUM(d->character)) {
+          has_modulator = TRUE;
+          break;
+        }
+      }
+      if (!has_modulator) {
+        if (access_level(ch, LVL_PRESIDENT)) {
+          send_to_char(ch, "DEBUG: Skipping %s: No modulator.\r\n", GET_CHAR_NAME(d->character));
+        }
+        continue;
+      }
+    }
+
+    send_to_char("You squint at the tiny screen on your DocWagon receiver to try and get a better idea of where your client is...\r\n", ch);
+
+    // Show them the room name, room description, and exits.
+    struct room_data *was_in_room = ch->in_room;
+    struct veh_data *was_in_veh = ch->in_veh;
+    ch->in_room = get_ch_in_room(d->character);
+    ch->in_veh = NULL;
+
+    // Room name.
+    display_room_name(ch, ch->in_room, FALSE);
+
+    // Room desc.
+    display_room_desc(ch);
+
+    // Room exits.
+    disp_long_exits(ch, TRUE);
+
+    // Reset their in_room to the stored value.
+    ch->in_room = was_in_room;
+    ch->in_veh = was_in_veh;
+
+    return TRUE;
   }
 
   send_to_char(ch, "You don't see any DocWagon clients named '%s' available to be tracked.\r\n", argument);
@@ -376,6 +396,24 @@ ACMD(do_docwagon) {
         send_to_char(ch, " - Skipping %s: Ignoring or ignored.\r\n", GET_CHAR_NAME(d->character));
       }
       continue;
+    }
+
+    // Has a modulator?
+    {
+      bool has_modulator = FALSE;
+      for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+        struct obj_data *eq = GET_EQ(d->character, wear_idx);
+        if (eq && GET_OBJ_TYPE(eq) == ITEM_DOCWAGON && GET_DOCWAGON_BONDED_IDNUM(eq) == GET_IDNUM(d->character)) {
+          has_modulator = TRUE;
+          break;
+        }
+      }
+      if (!has_modulator) {
+        if (access_level(ch, LVL_PRESIDENT)) {
+          send_to_char(ch, " - Skipping %s: No modulator.\r\n", GET_CHAR_NAME(d->character));
+        }
+        continue;
+      }
     }
 
     // Short circuit: LIST has no further logic to evaluate, so just print.

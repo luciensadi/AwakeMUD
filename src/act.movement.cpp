@@ -1848,6 +1848,12 @@ ACMD(do_drag)
     strlcpy(drag_veh_name, GET_VEH_NAME(drag_veh), sizeof(drag_veh_name));
 
     if (dir == -1 && veh) {
+      // Does this veh fit in there?
+      if (veh->usedload + calculate_vehicle_entry_load(veh) > veh->load) {
+        send_to_char(ch, "%s won't fit in %s!", CAP(GET_VEH_NAME_NOFORMAT(drag_veh)), GET_VEH_NAME(veh));
+        return;
+      }
+
       enter_veh(ch, veh, "rear", FALSE);
       if (ch->in_veh == veh) {
         send_to_char(ch, "Heaving and straining, you drag %s into %s.\r\n", drag_veh_name, GET_VEH_NAME(veh));
@@ -1857,9 +1863,18 @@ ACMD(do_drag)
         veh_to_veh(drag_veh, veh);
       } else {
         send_to_char("You can't get in there yourself.\r\n", ch);
+        return;
       }
     } else {
       struct room_data *in_room = ch->in_room;
+
+      // Check to make sure the vehicle is allowed there.
+      struct room_data *target_room = EXIT2(in_room, dir)->to_room;
+      if (!room_accessible_to_vehicle_piloted_by_ch(target_room, drag_veh, ch, TRUE)) {
+        // Error message was already sent in room_accessible.
+        return;
+      }
+
       perform_move(ch, dir, 0, NULL, veh);
       // Message only if we succeeded.
       if (in_room != ch->in_room) {

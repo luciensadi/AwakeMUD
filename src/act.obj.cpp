@@ -2000,14 +2000,6 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       return 0;
     }
 
-    // It'd be great if we could allow drones and bikes to be dropped anywhere not flagged !BIKE, but this
-    // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
-    // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
-    if (!ROOM_FLAGGED(ch->in_room, ROOM_ROAD) && !ROOM_FLAGGED(ch->in_room, ROOM_GARAGE)) {
-      send_to_char("You can only drop vehicles on roads or in garages.\r\n", ch);
-      return 0;
-    }
-
     // Find the veh storage room.
     rnum_t vehicle_storage_rnum = real_room(RM_PORTABLE_VEHICLE_STORAGE);
     if (vehicle_storage_rnum < 0) {
@@ -2022,7 +2014,29 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
           && veh->idnum == GET_VEHCONTAINER_VEH_IDNUM(obj)
           && veh->owner == GET_VEHCONTAINER_VEH_OWNER(obj))
       {
-        // Found it! Proceed to drop.
+        // Found it! Validate preconditions.
+
+        // It'd be great if we could allow drones and bikes to be dropped anywhere not flagged !BIKE, but this
+        // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
+        // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
+        bool can_be_dropped_here = FALSE;
+        if (ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) || ROOM_FLAGGED(ch->in_room, ROOM_ALL_VEHICLE_ACCESS)) {
+          can_be_dropped_here = TRUE;
+        } else if (veh_can_traverse_land(veh) && ROOM_FLAGGED(ch->in_room, ROOM_ROAD)) {
+          can_be_dropped_here = TRUE;
+        } else if (veh_can_traverse_water(veh) && IS_WATER(ch->in_room)) {
+          can_be_dropped_here = TRUE;
+        } else if (veh_can_traverse_air(veh) && (ROOM_FLAGGED(ch->in_room, ROOM_AIRCRAFT_CAN_DRIVE_HERE) || GET_ROOM_FLIGHT_CODE(ch->in_room))) {
+          can_be_dropped_here = TRUE;
+        }
+
+        if (!can_be_dropped_here) {
+          // Exception: You can drop water vehicles on 
+          send_to_char(ch, "%s can't be set down here.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+          return 0;
+        }
+
+        // Proceed to drop.
         veh_from_room(veh);
         veh_to_room(veh, ch->in_room);
         send_to_char(ch, "You set %s down with a sigh of relief.\r\n", GET_VEH_NAME(veh));
@@ -4266,45 +4280,32 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   }
 
   // Refuse to let someone draw a weapon focus that they can't use.
-  bool weapon_is_focus = FALSE;
-#ifdef DIES_IRAE
-  if (GET_FOCI(ch) >= GET_INT(ch)) {
-    act("Draw check: Skipping $p, would put us over int focus limit.", FALSE, ch, contents, 0, TO_ROLLS);
-    return 0;
-  } else {
-#else
+  if (GET_OBJ_TYPE(contents) == ITEM_WEAPON
+          && !IS_GUN(GET_WEAPON_ATTACK_TYPE(contents))
+          && GET_WEAPON_FOCUS_RATING(contents) > 0)
   {
-#endif
-    if (GET_OBJ_TYPE(contents) == ITEM_WEAPON
-            && !IS_GUN(GET_WEAPON_ATTACK_TYPE(contents))
-            && GET_WEAPON_FOCUS_RATING(contents) > 0)
-    {
-      if (GET_WEAPON_FOCUS_BONDED_BY(contents) != GET_IDNUM(ch)) {
-        act("Draw check: Skipping $p, focus check bond state failure.", FALSE, ch, contents, 0, TO_ROLLS);
-        return 0;
-      }
+    if (GET_WEAPON_FOCUS_BONDED_BY(contents) != GET_IDNUM(ch)) {
+      act("Draw check: Skipping $p, focus check bond state failure.", FALSE, ch, contents, 0, TO_ROLLS);
+      return 0;
+    }
 
-      if (GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(contents)) {
-        act("Draw check: Skipping $p, focus too strong for magic rating.", FALSE, ch, contents, 0, TO_ROLLS);
-        return 0;
-      }
+    if (GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(contents)) {
+      act("Draw check: Skipping $p, focus too strong for magic rating.", FALSE, ch, contents, 0, TO_ROLLS);
+      return 0;
+    }
 
 #ifdef DIES_IRAE
-      int equipped_count = 0;
-      int total_rating = get_total_active_focus_rating(ch, &equipped_count);
+    int total_rating = get_total_active_focus_rating(ch, &equipped_count);
 
-      if (equipped_count >= GET_INT(ch)) {
-        act("Draw check: Skipping $p, would exceed max focus count.", FALSE, ch, contents, 0, TO_ROLLS);
-        return 0;
-      }
-      if ((total_rating + GET_WEAPON_FOCUS_RATING(contents)) * 100 >= GET_MAG(ch) * 2) {
-        act("Draw check: Skipping $p, would exceed max focus force.", FALSE, ch, contents, 0, TO_ROLLS);
-        return 0;
-      }
-#endif
-
-      weapon_is_focus = TRUE;
+    if (GET_FOCI(ch) + 1 >= GET_INT(ch)) {
+      act("Draw check: Skipping $p, would exceed max focus count.", FALSE, ch, contents, 0, TO_ROLLS);
+      return 0;
     }
+    if ((total_rating + GET_WEAPON_FOCUS_RATING(contents)) * 100 >= GET_MAG(ch) * 2) {
+      act("Draw check: Skipping $p, would exceed max focus force.", FALSE, ch, contents, 0, TO_ROLLS);
+      return 0;
+    }
+#endif
   }
 
   // Apply racial limitations.

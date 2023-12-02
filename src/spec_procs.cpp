@@ -3920,7 +3920,7 @@ SPECIAL(newbie_car)
       send_to_char(ch, "%s was issued to someone else!\r\n", CAP(GET_OBJ_NAME(obj)));
 
       const char *plrname = get_player_name(GET_VEHICLE_TITLE_OWNER(obj));
-      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s attempted to redeem vehicle title '%s' (%ld) which actually belongs to '%s' (%ld).",
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s attempted to redeem vehicle title '%s' (%ld) which actually belongs to '%s' (%d).",
                       GET_CHAR_NAME(ch), 
                       GET_OBJ_NAME(obj),
                       GET_OBJ_VNUM(obj),
