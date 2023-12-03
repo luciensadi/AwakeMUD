@@ -2962,22 +2962,91 @@ static char *GetMxpTag( const char *apTag, const char *apText )
 
 static const char *GetAnsiColour( bool abBackground, int aRed, int aGreen, int aBlue )
 {
-  if ( aRed == aGreen && aRed == aBlue && aRed < 2)
-    return abBackground ? s_BackBlack : aRed >= 1 ? s_BoldBlack : s_DarkBlack;
-  else if ( aRed == aGreen && aRed == aBlue )
-    return abBackground ? s_BackWhite : aRed >= 4 ? s_BoldWhite : s_DarkWhite;
-  else if ( aRed > aGreen && aRed > aBlue )
-    return abBackground ? s_BackRed : aRed >= 3 ? s_BoldRed : s_DarkRed;
-  else if ( aRed == aGreen && aRed > aBlue )
-    return abBackground ? s_BackYellow : aRed >= 3 ? s_BoldYellow : s_DarkYellow;
-  else if ( aRed == aBlue && aRed > aGreen )
-    return abBackground ? s_BackMagenta : aRed >= 3 ? s_BoldMagenta : s_DarkMagenta;
-  else if ( aGreen > aBlue )
-    return abBackground ? s_BackGreen : aGreen >= 3 ? s_BoldGreen : s_DarkGreen;
-  else if ( aGreen == aBlue )
-    return abBackground ? s_BackCyan : aGreen >= 3 ? s_BoldCyan : s_DarkCyan;
-  else /* aBlue is the highest */
-    return abBackground ? s_BackBlue : aBlue >= 3 ? s_BoldBlue : s_DarkBlue;
+  // Background colors.
+  if (abBackground) {
+    if (aRed == aGreen && aGreen == aBlue)
+      return aRed == 5 ? s_BackWhite : s_BackBlack;
+    if ( aRed > aGreen && aRed > aBlue )
+      return s_BackRed;
+    if ( aRed == aGreen && aRed > aBlue )
+      return s_BackYellow;
+    if ( aRed == aBlue && aRed > aGreen )
+      return s_BackMagenta;
+    if ( aGreen > aBlue )
+      return s_BackGreen;
+    if ( aGreen == aBlue )
+      return s_BackCyan;
+    /* aBlue is the highest */
+    return s_BackBlue;
+  }
+
+  // Handle cases where R=G=B (greyscale). This takes care of Black and White.
+  if ( aRed == aGreen && aGreen == aBlue) {
+    switch (aRed) {
+      case 5:
+      case 4:
+        return s_BoldWhite;
+      case 3:
+      case 2:
+        return s_DarkWhite;
+      case 1:
+        return s_BoldBlack;
+      case 0:
+        return s_DarkBlack;
+    }
+  }
+
+  // Pure RGB colors, AKA the easy cases.
+  if (!aRed && !aGreen)
+    return aBlue <= 3 ? s_DarkBlue : s_BoldBlue;
+  if (!aRed && !aBlue)
+    return aGreen <= 3 ? s_DarkGreen : s_BoldGreen;
+  if (!aBlue && !aGreen)
+    return aRed <= 3 ? s_DarkRed : s_BoldRed;
+
+  // Yellow is when R and G are set equally with little blue.
+  if (aRed == aGreen && aBlue < aRed)
+    return aRed <= 3 ? s_DarkYellow : s_BoldYellow;
+  // It's also when they're within 1 of each other.
+  if ((aRed - 1 == aGreen || aGreen - 1 == aRed) && aBlue < MIN(aGreen, aRed))
+    return MAX(aRed, aGreen) <= 3 ? s_DarkYellow : s_BoldYellow;
+  // Also specifically match 554.
+  if (aRed == 5 && aGreen == 5 && aBlue == 4)
+    return s_BoldYellow;
+
+  // Cyan is when G and B are set equally with little red.
+  if (aGreen == aBlue && aRed < aGreen)
+    return aGreen <= 3 ? s_DarkCyan : s_BoldCyan;
+  // It's also when they're within 1 of each other.
+  if ((aGreen - 1 == aBlue || aBlue - 1 == aGreen) && aRed < MIN(aGreen, aBlue))
+    return MAX(aBlue, aGreen) <= 3 ? s_DarkCyan : s_BoldCyan;
+  // Also specifically match 455.
+  if (aRed == 4 && aGreen == 5 && aBlue == 5)
+    return s_BoldCyan;
+
+  // Magenta is when R and B are equal with little green.
+  if (aRed == aBlue && aGreen < aRed)
+    return aRed <= 3 ? s_DarkMagenta : s_BoldMagenta;
+  // It's also when they're within 1 of each other.
+  if ((aRed - 1 == aBlue || aBlue - 1 == aRed) && aRed < MIN(aRed, aBlue))
+    return MAX(aBlue, aRed) <= 3 ? s_DarkMagenta : s_BoldMagenta;
+  // Also specifically match 545.
+  if (aRed == 5 && aGreen == 4 && aBlue == 5)
+    return s_BoldMagenta;
+    
+  // Finally, we have the predominate color cases, where a single color is greater than the others.
+  if (aRed > aGreen && aRed > aBlue)
+    return aRed <= 3 ? s_DarkRed : s_BoldRed;
+
+  if (aGreen > aRed && aGreen > aBlue)
+    return aGreen <= 3 ? s_DarkGreen : s_BoldGreen;
+
+  if (aBlue > aRed && aBlue > aGreen)
+    return aBlue <= 3 ? s_DarkBlue : s_BoldBlue;
+
+  // And we should never get here, but if we do...
+  log_vfprintf("WARNING: Hit end of color conversion tree with non-handled RGB color %s%d%d%d. Using BoldWhite.", abBackground ? "B" : "F", aRed, aGreen, aBlue);
+  return s_BoldWhite;
 }
 
 static const char *GetRGBColour( bool abBackground, int aRed, int aGreen, int aBlue )
