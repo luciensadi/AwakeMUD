@@ -1257,6 +1257,12 @@ ACMD(do_gen_comm)
     return;
   }
 
+  // <channel> history prompts you to use the HISTORY <channel> command
+  if (!str_cmp(argument, "history")) {
+    send_to_char("Please use the ^WHISTORY^n command to see a list of channels you can pull up info on.\r\n", ch);
+    return;
+  }
+
   if (subcmd == SCMD_NEWBIE) {
     if (IS_NPC(ch)) {
       send_to_char("NPCs can't use the newbie channel.\r\n", ch);
