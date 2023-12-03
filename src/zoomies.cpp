@@ -466,7 +466,7 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
   
   int dice = get_autopilot + get_skill(ch, skill_num, tn, rbuf, sizeof(rbuf));
   int successes = success_test(dice, tn, ch, "flight-test");
-  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Dice %d, TN %d: %d success%s.", dice, tn, successes, successes == 1 ? "" : "es");
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". Dice %d, Autopilot Rating %d, TN %d: %d success%s.", dice, get_autopilot, tn, successes, successes == 1 ? "" : "es");
 
   act(rbuf, TRUE, ch, 0, 0, TO_ROLLS);
 
