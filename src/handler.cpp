@@ -303,7 +303,7 @@ void affect_veh(struct veh_data *veh, byte loc, sbyte mod)
       veh->armor += mod;
       break;
     case VAFF_SEN:
-      veh->sensor += mod;
+      veh->sensor = mod;
       break;
     case VAFF_SIG:
       veh->sig += mod;
