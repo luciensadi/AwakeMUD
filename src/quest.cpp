@@ -1974,6 +1974,7 @@ void boot_one_quest(struct quest_data *quest)
   quest_table[quest_nr].nuyen = quest->nuyen;
   quest_table[quest_nr].karma = quest->karma;
   quest_table[quest_nr].reward = quest->reward;
+  quest_table[quest_nr].prerequisite_quest = quest->prerequisite_quest;
 
   quest_table[quest_nr].num_objs = quest->num_objs;
   if (quest_table[quest_nr].num_objs > 0)
@@ -2063,6 +2064,7 @@ void reboot_quest(int rnum, struct quest_data *quest)
   quest_table[rnum].nuyen = quest->nuyen;
   quest_table[rnum].karma = quest->karma;
   quest_table[rnum].reward = quest->reward;
+  quest_table[rnum].prerequisite_quest = quest->prerequisite_quest;
 
   if (quest_table[rnum].obj)
     delete [] quest_table[rnum].obj;
@@ -2186,7 +2188,7 @@ int write_quests_to_disk(int zone) {
     if ((i = real_quest(counter)) > -1) {
       wrote_something = TRUE;
       fprintf(fp, "#%ld\n", quest_table[i].vnum);
-      fprintf(fp, "%ld %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %ld\n", quest_table[i].johnson,
+      fprintf(fp, "%ld %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %ld %ld\n", quest_table[i].johnson,
               quest_table[i].time, quest_table[i].min_rep,
               quest_table[i].max_rep, quest_table[i].nuyen,
               quest_table[i].karma, quest_table[i].reward,
@@ -2197,7 +2199,8 @@ int write_quests_to_disk(int zone) {
               quest_table[i].decline_emote ? 1 : 0,
               quest_table[i].quit_emote ? 1 : 0,
               quest_table[i].finish_emote ? 1 : 0,
-              quest_table[i].info_emotes ? quest_table[i].info_emotes->size() : 0
+              quest_table[i].info_emotes ? quest_table[i].info_emotes->size() : 0,
+              quest_table[i].prerequisite_quest
             );
 
       for (j = 0; j < quest_table[i].num_objs; j++)
