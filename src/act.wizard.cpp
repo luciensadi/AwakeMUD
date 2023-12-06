@@ -3303,7 +3303,13 @@ ACMD(do_restore)
 
   // Shifted here from interpreter to allow morts to use the restore command for the testing obj.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
+#ifdef IS_BUILDPORT
+    send_to_char("OK, restoring yourself. This will also remove any drug affects.\r\n", ch);
+    restore_character(ch, TRUE);
+    clear_all_drug_data_for_char(ch);
+#else
     nonsensical_reply(ch, NULL, "standard");
+#endif
     return;
   }
 
