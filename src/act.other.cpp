@@ -4907,7 +4907,7 @@ ACMD(do_syspoints) {
 
       // Find the specified character.
       if (!(vict = get_player_vis(ch, target, FALSE))) {
-        snprintf(buf3, sizeof(buf3), "SELECT Name, SysPoints FROM pfiles WHERE name='%s';", prepare_quotes(buf2, target, sizeof(buf2) / sizeof(buf2[0])));
+        snprintf(buf3, sizeof(buf3), "SELECT idnum, SysPoints FROM pfiles WHERE name='%s' AND name != 'deleted';", prepare_quotes(buf2, target, sizeof(buf2) / sizeof(buf2[0])));
         if (mysql_wrapper(mysql, buf3)) {
           send_to_char("An unexpected error occurred (query failed).\r\n", ch);
           return;
@@ -4971,7 +4971,7 @@ ACMD(do_syspoints) {
                       GET_CHAR_NAME(ch),
                       amount,
                       name,
-                      target,
+                      idnum,
                       current_amount - amount,
                       current_amount,
                       reason,
