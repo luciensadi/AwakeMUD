@@ -321,7 +321,7 @@ void affect_veh(struct veh_data *veh, byte loc, sbyte mod)
       veh->load += mod;
       break;
     case VAFF_PILOT:
-      veh->pilot = mod;
+      veh->pilot += mod;
       break;
     case VAFF_ULTRASONIC:
       if (mod > 0)

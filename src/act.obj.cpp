@@ -1684,6 +1684,9 @@ ACMD(do_get)
             case TYPE_POKEYSTICK:
               target = 3;
               break;
+            case TYPE_AUTOPILOT:
+              target = 8 - veh->handling;
+              break;
             default:
               target = 4;
               break;
