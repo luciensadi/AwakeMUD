@@ -161,6 +161,9 @@ void    log_traceback(const char *context, ...);
 int     get_metavariant_penalty(struct char_data *ch);
 int     get_total_active_focus_rating(struct char_data *i, int &total);
 
+struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion);
+void    find_or_load_ch_cleanup(struct char_data *ch);
+
 bool obj_is_apartment_only_drop_item(struct obj_data *obj);
 bool obj_contains_apartment_only_drop_items(struct obj_data *obj);
 
@@ -617,6 +620,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_RESTRING_POINTS(ch)	((ch)->player_specials->saved.restring_points)
 #define GET_ARCHETYPAL_TYPE(ch)	((ch)->player_specials->saved.archetype)
 #define GET_ARCHETYPAL_MODE(ch)	((ch)->player_specials->saved.archetypal)
+#define GET_PRESTIGE_ALT_ID(ch) ((ch)->player_specials->saved.prestige_alt_id)
 #define GET_TARGET_MOD(ch)	    ((ch)->char_specials.target_mod)
 #define GET_CONCENTRATION_TARGET_MOD(ch)	((ch)->char_specials.concentration_target_mod)
 #define LAST_HEAL(ch)		((ch)->char_specials.last_healed)
@@ -1448,5 +1452,11 @@ void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick,
 
 #define SPIRIT_IS_SKY_DOMAIN(sprt) ((sprt) == SPIRIT_MIST || (sprt) == SPIRIT_STORM || (sprt) == SPIRIT_WIND || (sprt) == SPIRIT_SPECIAL_DOMAIN_SKY)
 #define ROOM_SUPPORTS_SKY_DOMAIN(rum) ((rum) && (SPIRIT_IS_SKY_DOMAIN(SECT((rum))) || (SECT((rum)) != SPIRIT_FOREST && SECT((rum)) != SPIRIT_HEARTH && !ROOM_FLAGGED((rum), ROOM_INDOORS))))
+
+#define GET_DATAJACK_NO_ERROR                      0
+#define GET_DATAJACK_ERROR_COVERED_HANDS           1
+#define GET_DATAJACK_ERROR_COVERED_HEAD            2
+#define GET_DATAJACK_ERROR_CANT_USE_TRODES_TO_RIG  3
+struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
 
 #endif

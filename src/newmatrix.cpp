@@ -303,16 +303,24 @@ bool dumpshock(struct matrix_icon *icon)
 
     int resist = -success_test(GET_WIL(icon->decker->ch), matrix[icon->in_host].security);
     int dam = convert_damage(stage(resist, matrix[icon->in_host].color));
-    for (struct obj_data *cyber = icon->decker->ch->cyberware; cyber; cyber = cyber->next_content) {
-      if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK) {
-        if (GET_OBJ_VAL(cyber, 3) == DATA_INDUCTION)
+
+    struct obj_data *jack = get_datajack(icon->decker->ch, FALSE);
+
+    if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
+      if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
+        // Palm induction.
+        if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION)
           snprintf(buf, sizeof(buf), "$n's hand suddenly recoils from $s induction pad, electricity arcing between the two surfaces!");
-        else snprintf(buf, sizeof(buf), "$n suddenly jerks forward and rips the jack out of $s head!");
-        break;
-      } else if (GET_OBJ_VAL(cyber, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber, 3), EYE_DATAJACK)) {
+        // Head jack.
+        else 
+          snprintf(buf, sizeof(buf), "$n suddenly jerks forward and rips the jack out of $s head!");
+      } else {
+        // Eye jack.
         snprintf(buf, sizeof(buf), "$n suddenly jerks forward and rips the jack out of $s eye!");
-        break;
       }
+    } else {
+      // Trode net.
+      snprintf(buf, sizeof(buf), "$n suddenly jerks forward and rips the 'trode net off of $s head!");
     }
     act(buf, FALSE, icon->decker->ch, NULL, NULL, TO_ROOM);
     icon->decker->PERSONA = NULL;
@@ -1812,7 +1820,7 @@ ACMD(do_connect)
 {
   struct char_data *temp;
   struct matrix_icon *icon = NULL;
-  struct obj_data *cyber, *cyberdeck = NULL, *jack = NULL;
+  struct obj_data *cyber, *cyberdeck = NULL, *jack;
   rnum_t host;
 
   if (!ch->in_room || !ch->in_room->matrix || (host = real_host(ch->in_room->matrix)) < 1) {
@@ -1825,23 +1833,10 @@ ACMD(do_connect)
   }
 
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  for (jack = ch->cyberware; jack; jack = jack->next_content)
-    if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK || (GET_OBJ_VAL(jack, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(jack, 3), EYE_DATAJACK)))
-      break;
 
-  if (!jack) {
-    send_to_char("You need a datajack to connect to the matrix.\r\n", ch);
+  // Error message sent in function.
+  if (!(jack = get_datajack(ch, FALSE)))
     return;
-  }
-  if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK && GET_OBJ_VAL(jack, 3) == DATA_INDUCTION) {
-    if (GET_EQ(ch, WEAR_HANDS)) {
-      send_to_char(ch, "Try removing your gloves first.\r\n");
-      return;
-    }
-  } else if (GET_EQ(ch, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(ch, WEAR_HEAD), 7) > 0) {
-    send_to_char(ch, "Try removing your helmet first.\r\n");
-    return;
-  }
 
   for (temp = ch->in_room->people; temp; temp = temp->next_in_room)
     if (PLR_FLAGGED(temp, PLR_MATRIX) && !IS_IGNORING(temp, is_blocking_ic_interaction_from, ch)) {
@@ -2116,11 +2111,19 @@ ACMD(do_connect)
   }
 
 
-  if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK && GET_OBJ_VAL(jack, 3) == DATA_INDUCTION)
-    snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to $s cyberdeck.");
-  else if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK)
-    snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into $s cyberdeck.");
-  else snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides $s cyberdeck cable into $s eye datajack.");
+  if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
+    if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
+      if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
+        snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to $s cyberdeck.");
+      } else {
+        snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into $s cyberdeck.");
+      }
+    } else {
+      snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides $s cyberdeck cable into $s eye datajack.");
+    }
+  } else {
+    snprintf(buf, sizeof(buf), "$n plugs the leads of $s 'trode net into $s cyberdeck.");
+  }
   act(buf, FALSE, ch, 0, 0, TO_ROOM);
   act("You jack into the matrix.", FALSE, ch, 0, 0, TO_CHAR);
   PLR_FLAGS(ch).SetBit(PLR_MATRIX);
@@ -2624,13 +2627,11 @@ ACMD(do_software)
     }
   } else {
     struct obj_data *cyberdeck = NULL, *cyber;
-    for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-      if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK || (GET_OBJ_VAL(cyber, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber, 3), EYE_DATAJACK)))
-        break;
-    if (!cyber) {
-      send_to_char(ch, "You need a datajack to check out the contents of a deck.\r\n");
+
+    // Error message sent in function.
+    if (!get_datajack(ch, FALSE))
       return;
-    }
+    
     for (cyber = ch->carrying; !cyberdeck && cyber; cyber = cyber->next_content)
       if (GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK)
         cyberdeck = cyber;
@@ -3570,13 +3571,11 @@ ACMD(do_default)
     return;
   }
   skip_spaces(&argument);
-  for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-    if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK || (GET_OBJ_VAL(cyber, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber, 3), EYE_DATAJACK)))
-      break;
-  if (!cyber) {
-    send_to_char(ch, "You need a datajack to check out the contents of a deck.\r\n");
+
+  // Error message sent in function.
+  if (!get_datajack(ch, FALSE))
     return;
-  }
+  
   for (cyber = ch->carrying; !cyberdeck && cyber; cyber = cyber->next_content)
     if (GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK)
       cyberdeck = cyber;

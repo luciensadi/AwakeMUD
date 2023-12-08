@@ -2126,16 +2126,24 @@ ACMD(do_return)
     stop_fighting(ch);
 
     send_to_char("You return to your senses.\r\n", ch);
-    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-      if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK) {
-        if (GET_OBJ_VAL(cyber, 3) == DATA_INDUCTION)
-          snprintf(buf, sizeof(buf), "$n slowly removes $s hand from the induction pad.");
-        else snprintf(buf, sizeof(buf), "$n carefully removes the jack from $s head.");
-        break;
-      } else if (GET_OBJ_VAL(cyber, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber, 3), EYE_DATAJACK)) {
-        snprintf(buf, sizeof(buf), "$n carefully removes the jack from $s eye.");
-        break;
+
+    {
+      struct obj_data *jack = get_datajack(ch, TRUE);
+      if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
+        if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
+          if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
+            snprintf(buf, sizeof(buf), "$n slowly removes $s hand from the induction pad.");
+          } else {
+            snprintf(buf, sizeof(buf), "$n carefully removes the jack from $s head.");
+          }
+        } else {
+          snprintf(buf, sizeof(buf), "$n carefully removes the jack from $s eye.");
+        }
+      } else {
+        // We should never see this.
+        snprintf(buf, sizeof(buf), "$n undoes the leads of $s 'trode net.");
       }
+    }
     act(buf, TRUE, ch, 0, 0, TO_ROOM);
     return;
   }

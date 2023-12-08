@@ -284,6 +284,12 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define COST_TO_DECORATE_APT                                   5000
 #define COST_TO_DECORATE_VEH                                   1500
 
+// Prestige race costs.
+#define PRESTIGE_RACE_GHOUL_COST  25
+#define PRESTIGE_RACE_DRYAD_COST  50
+#define PRESTIGE_RACE_DRAKE_COST  500
+#define PRESTIGE_RACE_DRAGON_COST 1000
+
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER

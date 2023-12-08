@@ -241,8 +241,6 @@ ACMD(do_drive)
 ACMD(do_rig)
 {
   struct char_data *temp;
-  struct obj_data *cyber;
-  int has_datajack = 0;
 
   if (IS_ASTRAL(ch)) {
     send_to_char("You cannot seem to touch physical objects.\r\n", ch);
@@ -260,25 +258,11 @@ ACMD(do_rig)
     send_to_char(TOOBUSY, ch);
     return;
   }
-  for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-    if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK || (GET_OBJ_VAL(cyber, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber, 3), EYE_DATAJACK))) {
-      has_datajack = TRUE;
-      break;
-    }
-  if (!has_datajack) {
-    send_to_char("You need at least a datajack to do that.\r\n", ch);
-    return;
-  }
 
-  if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK && GET_OBJ_VAL(cyber, 3) == DATA_INDUCTION) {
-    if (GET_EQ(ch, WEAR_HANDS)) {
-      send_to_char(ch, "Try removing your gloves first.\r\n");
-      return;
-    }
-  } else if (GET_EQ(ch, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(ch, WEAR_HEAD), 7) > 0) {
-    send_to_char(ch, "Try removing your helmet first.\r\n");
+  // Error message sent in function.
+  if (!get_datajack(ch, TRUE))
     return;
-  }
+
   if (GET_SKILL(ch, SKILL_PILOT_CAR) == 0 && GET_SKILL(ch, SKILL_PILOT_BIKE) == 0 &&
       GET_SKILL(ch, SKILL_PILOT_TRUCK) == 0) {
     send_to_char("You have no idea how to do that.\r\n", ch);
@@ -876,28 +860,24 @@ void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
 
 ACMD(do_control)
 {
-  struct obj_data *cyber, *jack = NULL;;
+  struct obj_data *cyber, *jack;
   struct veh_data *veh;
   struct char_data *temp;
   bool has_rig = FALSE;
   int i;
-
+      
   for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-    if (GET_OBJ_VAL(cyber, 0) == CYB_VCR)
+    if (GET_CYBERWARE_TYPE(cyber) == CYB_VCR)
       has_rig = TRUE;
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK || (GET_OBJ_VAL(cyber, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber, 3), EYE_DATAJACK)))
-      jack = cyber;
 
   FAILURE_CASE(AFF_FLAGGED(ch, AFF_PILOT), "While driving? Now that would be a neat trick.");
   FAILURE_CASE(IS_WORKING(ch), "You can't pilot something while working on another project.");
-  FAILURE_CASE(!jack || !has_rig, "You need both a datajack and a vehicle control rig to do that.");
+  FAILURE_CASE(!has_rig, "You need a vehicle control rig to do that.");
   FAILURE_CASE(get_ch_in_room(ch)->peaceful, "You can't do that in peaceful rooms.");
 
-  if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK && GET_OBJ_VAL(jack, 3) == DATA_INDUCTION) {
-    FAILURE_CASE(GET_EQ(ch, WEAR_HANDS), "Try removing your gloves first.");
-  } else if (GET_EQ(ch, WEAR_HEAD)) {
-    FAILURE_CASE(GET_WORN_CONCEAL_RATING(GET_EQ(ch, WEAR_HEAD)) > 0, "Try removing your helmet first.");
-  }
+  // Error message sent in function.
+  if (!(jack = get_datajack(ch, TRUE)))
+    return;
 
   FAILURE_CASE(ch->in_veh, "You can't control a vehicle from inside one.");
 
@@ -979,11 +959,19 @@ ACMD(do_control)
       send_to_char("The vehicle begins to move.\r\n", temp);
 
   GET_POS(ch) = POS_SITTING;
-  if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK && GET_OBJ_VAL(jack, 3) == DATA_INDUCTION)
-    snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to $s deck.");
-  else if (GET_OBJ_VAL(jack, 0) == CYB_DATAJACK)
-    snprintf(buf, sizeof(buf), "$n slides ones end of the cable into $s datajack and the other into $s remote control deck.");
-  else snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides $s remote control deck cable into $s eye datajack.");
+  if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
+    if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
+      if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION)
+        snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to $s deck.");
+      else
+        snprintf(buf, sizeof(buf), "$n slides ones end of the cable into $s datajack and the other into $s remote control deck.");
+    } else {
+      snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides $s remote control deck cable into $s eye datajack.");
+    }
+  } else {
+    // We should never see this.
+    snprintf(buf, sizeof(buf), "$n plugs $s 'trode net into $s remote control deck.");
+  }
   act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
   PLR_FLAGS(ch).SetBit(PLR_REMOTE);
   send_to_char(ch, "You take control of %s.\r\n", GET_VEH_NAME(veh));

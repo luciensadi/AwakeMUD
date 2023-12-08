@@ -2422,9 +2422,6 @@ ACMD(do_astral)
 
 ACMD(do_customize)
 {
-  struct obj_data *cyber;
-  int found = 0;
-
   if (CH_IN_COMBAT(ch)) {
     send_to_char("You can't customize your descriptions while fighting!\r\n", ch);
     return;
@@ -2445,13 +2442,10 @@ ACMD(do_customize)
   else if (is_abbrev(argument, "physical"))
     STATE(ch->desc) = CON_FCUSTOMIZE;
   else if (is_abbrev(argument, "persona")) {
-    for (cyber = ch->cyberware; !found && cyber; cyber = cyber->next_content)
-      if (GET_OBJ_VAL(cyber, 0) == CYB_DATAJACK || (GET_OBJ_VAL(cyber, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(cyber, 3), EYE_DATAJACK)))
-        found = 1;
-    if (!found) {
-      send_to_char("But you don't even have a datajack?!\r\n", ch);
+    // Error messages sent during call.
+    if (!get_datajack(ch, FALSE))
       return;
-    }
+      
     STATE(ch->desc) = CON_PCUSTOMIZE;
   } else if (is_abbrev(argument, "reflection")) {
     if (!IS_SENATOR(ch) && GET_TRADITION(ch) != TRAD_SHAMANIC &&

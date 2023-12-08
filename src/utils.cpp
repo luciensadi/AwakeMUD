@@ -6395,6 +6395,159 @@ int get_total_active_focus_rating(struct char_data *i, int &total) {
   return force;
 }
 
+/* Returns or loads the PC with the given name. You MUST call find_or_load_ch_cleanup(ch) on any returned character afterwards! */
+struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion) {
+  if (idnum < 0 || (idnum && !does_player_exist(idnum))) {
+    mudlog_vfprintf(match_exclusion, LOG_SYSLOG, "SYSERR: Got invalid idnum %ld to find_or_load_ch() from %s.", idnum, caller);
+    return NULL;
+  }
+
+  if (name && (!*name || !str_cmp(name, CHARACTER_DELETED_NAME_FOR_SQL) || !does_player_exist(name))) {
+    mudlog_vfprintf(match_exclusion, LOG_SYSLOG, "SYSERR: Got invalid name %s to find_or_load_ch() from %s.", name, caller);
+    return NULL;
+  }
+
+  if (!idnum && !name) {
+    mudlog_vfprintf(match_exclusion, LOG_SYSLOG, "SYSERR: Got neither name nor idnum to find_or_load_ch() from %s.", caller);
+    return NULL;
+  }
+
+  // Iterate through online characters.
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    struct char_data *vict = d->original ? d->original : d->character;
+
+    if (vict && vict != match_exclusion) {
+      if (name && !str_cmp(name, GET_CHAR_NAME(vict))) {
+        return vict;
+      }
+      if (idnum && GET_IDNUM(vict) == idnum) {
+        return vict;
+      }
+      continue;
+    }
+  }
+
+  // They weren't found. Load them from DB.
+
+  // Ensure we have a name to reference.
+  char *load_name = NULL;
+  if (name) {
+    load_name = str_dup(name);
+  } else {
+    load_name = get_player_name(idnum);
+  }
+
+  struct char_data *loaded = playerDB.LoadChar(load_name, FALSE);
+
+  if (!loaded) {
+    mudlog_vfprintf(match_exclusion, LOG_SYSLOG, "SYSERR: Something went wrong-- attempted to load %s (%ld) from DB for find_or_load_ch(), but it failed.", load_name, idnum);
+    return NULL;
+  }
+
+  // Delete our load_name now that it's been used.
+  delete [] load_name;
+
+  // Set the loaded character as temporary so we know to clean them up.
+  PLR_FLAGS(loaded).SetBit(PLR_IS_TEMPORARILY_LOADED);
+
+  return loaded;
+}
+
+/* Given a character, if that char was created during find_or_load_ch, extracts them without saving. You MUST treat your pointer as undefined after calling this. */
+void find_or_load_ch_cleanup(struct char_data *ch) {
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL char to find_or_load_ch_cleanup()!");
+    return;
+  }
+
+  // No-op: We didn't temp-load this character.
+  if (!PLR_FLAGGED(ch, PLR_IS_TEMPORARILY_LOADED))
+    return;
+
+  // We loaded them. Extract.
+  extract_char(ch);
+}
+
+// Finds your best available datajack. Returns NULL for no usable 'jack. Prints errors.
+struct obj_data *get_datajack(struct char_data *ch, bool is_rigging) {
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL char to get_datajack()!");
+    return NULL;
+  }
+
+  int error_code = GET_DATAJACK_NO_ERROR;
+  struct obj_data *last_seen = NULL;
+
+  // Catalogue obstructions.
+  struct obj_data *helmet = GET_EQ(ch, WEAR_HEAD);
+  bool head_is_covered = helmet && GET_OBJ_TYPE(helmet) == ITEM_WORN && GET_WORN_CONCEAL_RATING(helmet) > 0;
+  bool hands_are_covered = GET_EQ(ch, WEAR_HANDS);
+
+  // Cyberware first. Look for one that's not obstructed etc.
+  for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+    if (GET_CYBERWARE_TYPE(cyber) == CYB_DATAJACK) {
+      last_seen = cyber;
+
+      // Induction datajack.
+      if (GET_CYBERWARE_FLAGS(cyber) == DATA_INDUCTION)  {
+        if (!hands_are_covered) {
+          return cyber;
+        } else {
+          error_code = GET_DATAJACK_ERROR_COVERED_HANDS;
+        }
+      } 
+      
+      // Head datajack.
+      else if (!head_is_covered) {
+        return cyber;
+      } else {
+        error_code = GET_DATAJACK_ERROR_COVERED_HEAD;
+      }
+    }
+
+    if (GET_CYBERWARE_TYPE(cyber) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(cyber), EYE_DATAJACK)) {
+      // Can't be covered.
+      if (!head_is_covered) {
+        return cyber;
+      } else {
+        error_code = GET_DATAJACK_ERROR_COVERED_HEAD;
+      }
+    }
+  }
+
+  // Nothing. Check headware for 'trode net.
+  if (helmet && IS_OBJ_STAT(helmet, ITEM_EXTRA_TRODE_NET)) {
+    if (!is_rigging) {
+      return helmet;
+    } else {
+      error_code = GET_DATAJACK_ERROR_CANT_USE_TRODES_TO_RIG;
+    }
+  }
+
+  // No viable datajack. Send a message about the last failure seen.
+  if (last_seen) {
+    switch (error_code) {
+      case GET_DATAJACK_ERROR_COVERED_HEAD:
+        send_to_char("Try removing your helmet first.\r\n", ch);
+        break;
+      case GET_DATAJACK_ERROR_COVERED_HANDS:
+        send_to_char("Try removing your gloves first.\r\n", ch);
+        break;
+      case GET_DATAJACK_ERROR_CANT_USE_TRODES_TO_RIG:
+        send_to_char("You can't use 'trode nets to rig-- you'll need a datajack.\r\n", ch);
+        break;
+    }
+  } else {
+    if (is_rigging) {
+      send_to_char("You need a datajack to do that.\r\n", ch);
+    } else {
+      send_to_char("You need a datajack or 'trode net to do that.\r\n", ch);
+    }
+  }
+
+  return NULL;
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
