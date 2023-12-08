@@ -964,7 +964,7 @@ int parse_assign(struct descriptor_data *d, const char *arg)
       break;
     }
     d->ccr.temp = 0;
-    GET_PP(d->character) = 600;
+    GET_PP(d->character) = (IS_GHOUL(CH) ? 500 : 600);
     return 1;
   case 'c':
     d->ccr.pr[d->ccr.temp] = PR_NONE;
@@ -1412,7 +1412,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
             }
           } else if (d->ccr.pr[PO_MAGIC] == CCR_MAGIC_ADEPT) {
             GET_TRADITION(CH) = TRAD_ADEPT;
-            GET_PP(CH) = 600;
+            GET_PP(CH) = (IS_GHOUL(CH) ? 500 : 600);
             start_game(d);
           } else {
             d->ccr.mode = CCR_TRADITION;
@@ -2109,7 +2109,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         break;
       case 'a':
         GET_TRADITION(d->character) = TRAD_ADEPT;
-        GET_PP(CH) = 600;
+        GET_PP(CH) = (IS_GHOUL(CH) ? 500 : 600);
         start_game(d);
         break;
       default:
