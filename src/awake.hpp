@@ -1926,7 +1926,8 @@ enum {
 #define TYPE_MISC    21
 #define TYPE_AMMOBIN    22
 #define TYPE_POKEYSTICK 23
-#define NUM_MODTYPES    24
+#define TYPE_AUTOPILOT  24
+#define NUM_MODTYPES    25
 
 #define ENGINE_NONE        0
 #define ENGINE_ELECTRIC    1

@@ -1853,7 +1853,8 @@ struct mod_data mod_types[NUM_MODTYPES] =
     { "Tires", TYPE_KIT },
     { "Other", TYPE_KIT },
     { "Ammo Bin", TYPE_KIT },
-    { "Pokeystick", TYPE_WORKSHOP }
+    { "Pokeystick", TYPE_WORKSHOP },
+    { "Autopilot", TYPE_WORKSHOP }
 
   };
 const char *mod_name[NUM_MODS] =
