@@ -901,6 +901,16 @@ void affect_total(struct char_data * ch)
     // Cap must be between 20-26 magic.
     magic_cap = MIN(2600, MAX(2000, magic_cap - cap_delta));
 
+#ifdef IS_BUILDPORT
+    if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_ROLLS)) {
+      send_to_char(ch, "^L-- Magic cap debug: m_c %d (from 2600 - (e_c(%d-%d=%d), i_c(%d/2=%d), c_d(2*(%d+%d)=%d); tog rolls to disable^n\r\n",
+                   magic_cap,
+                   base_essence, GET_ESS(ch), essence_cost,
+                   GET_HIGHEST_INDEX(ch) / 2, index_cost,
+                   essence_cost, index_cost, cap_delta);
+    }
+#endif
+
     // Apply the cap before any temporary magic loss effects. Cap is already x100, just like magic is.
     GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), magic_cap));
     GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
@@ -962,6 +972,11 @@ void affect_total(struct char_data * ch)
 
   // Cap init dice
   GET_INIT_DICE(ch) = MAX(0, MIN(GET_INIT_DICE(ch), 5));
+
+  // Apply Matrix 'trode net cap (half reaction round down)
+  if (PLR_FLAGGED(ch, PLR_MATRIX) && GET_EQ(ch, WEAR_HEAD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_HEAD), ITEM_EXTRA_TRODE_NET)) {
+    GET_REA(ch) /= 2;
+  }
 
   // Combat pool is derived from current atts, so we calculate it after all att modifiers
   GET_COMBAT(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;

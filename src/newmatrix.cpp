@@ -208,8 +208,14 @@ void roll_matrix_init(struct matrix_icon *icon)
   if (icon->decker && icon->decker->ch)
   {
     // Matrix pg 18 & 24, available bonuses are response increase, reality filter, and hot asist
-    icon->initiative = GET_REA(icon->decker->ch) + (icon->decker->response * 2) + (icon->decker->reality ? 2 : 0) + (icon->decker->asist[0] ? 2 : 0);
     init_dice += GET_INIT_DICE(icon->decker->ch) + icon->decker->response + (icon->decker->reality ? 1 : 0) + (icon->decker->asist[0] ? 1 : 0);
+
+    // Apply Matrix 'trode net cap (max init dice 2d6)
+    if (GET_EQ(icon->decker->ch, WEAR_HEAD) && IS_OBJ_STAT(GET_EQ(icon->decker->ch, WEAR_HEAD), ITEM_EXTRA_TRODE_NET)) {
+      init_dice = MIN(init_dice, 2);
+    }
+
+    icon->initiative = GET_REA(icon->decker->ch) + (icon->decker->response * 2) + (icon->decker->reality ? 2 : 0) + (icon->decker->asist[0] ? 2 : 0);
   } else
   {
     icon->initiative = icon->ic.rating;
