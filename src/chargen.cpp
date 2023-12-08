@@ -64,10 +64,6 @@ void ccr_pronoun_menu(struct descriptor_data *d) {
   d->ccr.mode = CCR_PRONOUNS;
 }
 
-#define PRESTIGE_RACE_GHOUL_COST  25
-#define PRESTIGE_RACE_DRYAD_COST  50
-#define PRESTIGE_RACE_DRAKE_COST  500
-#define PRESTIGE_RACE_DRAGON_COST 1000
 void display_prestige_race_menu(struct descriptor_data *d) {
   char msg_buf[10000];
   snprintf(msg_buf, sizeof(msg_buf), 
@@ -1050,8 +1046,9 @@ void init_char_sql(struct char_data *ch)
                "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints, archetypal, archetype) VALUES"\
-               "('%ld', '%d', '%d', '%d', '%d', '%d');", GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch), GET_ARCHETYPAL_MODE(ch) ? 1 : 0, GET_ARCHETYPAL_TYPE(ch));
+    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints, archetypal, archetype, prestige_alt) VALUES"\
+               "('%ld', '%d', '%d', '%d', '%d', '%d', '%ld');", 
+               GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch), GET_ARCHETYPAL_MODE(ch) ? 1 : 0, GET_ARCHETYPAL_TYPE(ch), GET_PRESTIGE_ALT_ID(ch));
     mysql_wrapper(mysql, buf);
   }
   if (GET_TRADITION(ch) != TRAD_MUNDANE) {
@@ -1611,58 +1608,42 @@ void create_parse(struct descriptor_data *d, const char *arg)
     }
 
     // They're authorized to deduct from this character.
-    // todo: find them if online, load them if not
-    // Scan online PCs only.
     {
-      struct char_data *victim = NULL; bool online = FALSE;
-      for (struct descriptor_data *tmp_d = descriptor_list; tmp_d; tmp_d = tmp_d->next) {
-        victim = tmp_d->original ? tmp_d->original : tmp_d->character;
-        if (victim && GET_IDNUM(victim) == d->ccr.prestige_bagholder) {
-          // Found online.
-          online = TRUE;
-          break;
-        }
-        victim = NULL;
-      }
-      if (!victim) {
-        // They're not online: Load them.
-        const char *char_name = get_player_name(d->ccr.prestige_bagholder);
-        online = FALSE;
-        victim = playerDB.LoadChar(char_name, FALSE);
-        delete [] char_name;
-      }
+      struct char_data *victim = find_or_load_ch(NULL, d->ccr.prestige_bagholder, "chargen prestige deduction", d->character); 
+      bool online = FALSE;
+
       // Ensure they have enough
       if (GET_SYSTEM_POINTS(victim) < d->ccr.prestige_cost) {
-        snprintf(buf, sizeof(buf), "You don't have enough system points. You need %d, but %s (%s) only has %d.\r\n", 
-                 d->ccr.prestige_cost, 
-                 GET_CHAR_NAME(victim), 
-                 online ? "online" : "offline", 
+        snprintf(buf, sizeof(buf), "%s doesn't have enough system points. You need %d, but %s (%s) only has %d.\r\n", 
+                 GET_CHAR_NAME(victim),
+                 d->ccr.prestige_cost,
+                 GET_CHAR_NAME(victim),
+                 online ? "online" : "offline",
                  GET_SYSTEM_POINTS(victim));
         SEND_TO_Q(buf, d);
 
-        if (!online) {
-          extract_char(victim);
-        }
-        d->ccr.prestige_race = d->ccr.prestige_bagholder = 0;
+        find_or_load_ch_cleanup(victim);
+
+        d->ccr.prestige_race = 0;
         display_prestige_race_menu(d);
         return;
       }
     
       // Deduct, notify, log, and save
       GET_SYSTEM_POINTS(victim) -= d->ccr.prestige_cost;
-      if (online)
+      
+      if (victim->desc)
         send_to_char(victim, "^RYou've just spent %d system points on a prestige race. If this is not correct, change your password and notify staff immediately.^n\r\n", d->ccr.prestige_cost);
+
       mudlog_vfprintf(victim, LOG_CHEATLOG, "%s spent %d of %s's syspoints on a prestige race.", d->host, d->ccr.prestige_cost, GET_CHAR_NAME(victim));
       playerDB.SaveChar(victim);
 
       SEND_TO_Q("Nice, you're all paid up.", d);
       GET_RACE(d->character) = d->ccr.prestige_race;
+      GET_PRESTIGE_ALT_ID(d->character) = d->ccr.prestige_bagholder;
       d->ccr.mode = CCR_PRESTIGE_RACE_PAID_FOR;
 
-      // Extract if needed
-      if (!online) {
-        extract_char(victim);
-      }
+      find_or_load_ch_cleanup(victim);
     }
     
     // Send them right back through the parser.

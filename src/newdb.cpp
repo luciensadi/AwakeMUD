@@ -530,6 +530,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
       GET_RESTRING_POINTS(ch) = atoi(row[4]);
       GET_ARCHETYPAL_MODE(ch) = (bool) atoi(row[5]);
       GET_ARCHETYPAL_TYPE(ch) = atoi(row[6]);
+      GET_PRESTIGE_ALT_ID(ch) = atol(row[7]);
+      
     }
     mysql_free_result(res);
   }
@@ -1892,7 +1894,7 @@ DBIndex::vnum_t PCIndex::find_open_id()
   return (tab[entry_cnt-1].id+1);
 }
 
-bool does_player_exist(char *name)
+bool does_player_exist(const char *name)
 {
   char buf[MAX_STRING_LENGTH];
   char prepare_quotes_buf[250];

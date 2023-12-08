@@ -555,6 +555,7 @@ void boot_world(void)
   require_that_field_exists_in_table("zone", "playergroups", "SQL/Migrations/playergroup_zone_ownership.sql");
   require_that_field_exists_in_table("completed", "pfiles_quests", "SQL/Migrations/quest_completed_fix.sql");
   require_that_field_exists_in_table("graffiti", "pfiles_worn", "SQL/Migrations/add_graffiti_field.sql");
+  require_that_field_exists_in_table("prestige_alt", "pfiles_chargendata", "SQL/Migrations/prestige_races.sql");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();

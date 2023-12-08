@@ -563,6 +563,7 @@ const char *player_bits[] =
     "SENT_DOCWAGON",
     "PAID_FOR_VNUMS",
     "DOCWAGON_READY",
+    "TEMPORARILY_LOADED",
     "\n"
   };
 
@@ -1125,6 +1126,7 @@ const char *extra_bits[] =
     "PURGE_ON_DEATH",
     "CHEATLOG_MARK",
     "CONCEALED_IN_EQ",
+    "TRODE_NET",
     MAX_FLAG_MARKER
   };
 

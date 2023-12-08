@@ -128,7 +128,7 @@ private:
 
 extern PCIndex playerDB;
 extern bool does_player_exist(vnum_t idnum);
-extern bool does_player_exist(char *name);
+extern bool does_player_exist(const char *name);
 extern char_data *CreateChar(struct char_data *ch);
 extern void DeleteChar(vnum_t idnum);
 extern bool load_char(const char *name, struct char_data *ch, bool logon);

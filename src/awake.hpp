@@ -347,7 +347,8 @@ enum {
 #define PLR_SENT_DOCWAGON_PLAYER_ALERT      49
 #define PLR_PAID_FOR_VNUMS                  50
 #define PLR_DOCWAGON_READY                  51 /* Flags if a player has rolled successfully for DocWagon. */
-#define PLR_MAX                             52
+#define PLR_IS_TEMPORARILY_LOADED           52
+#define PLR_MAX                             53
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 
@@ -1382,7 +1383,8 @@ enum {
 #define ITEM_EXTRA_PURGE_ON_DEATH     32    // Vanishes when you die (won't make it to your corpse)
 #define ITEM_EXTRA_CHEATLOG_MARK      33
 #define ITEM_EXTRA_CONCEALED_IN_EQ    34    // Doesn't show up when someone looks at you.
-#define MAX_ITEM_EXTRA                35
+#define ITEM_EXTRA_TRODE_NET          35
+#define MAX_ITEM_EXTRA                36
 
 /* Ammo types */
 #define AMMO_NORMAL     0

@@ -3305,6 +3305,46 @@ void nanny(struct descriptor_data * d, char *arg)
         return;
       }
 
+      // Refund syspoints for prestige purchases if they're in chargen.
+      if (GET_PRESTIGE_ALT_ID(d->character)) {
+        int refund_amount = 0;
+        if (IS_GHOUL(d->character)) {
+          refund_amount = PRESTIGE_RACE_GHOUL_COST;
+        } else if (IS_DRAKE(d->character)) {
+          refund_amount = PRESTIGE_RACE_DRAKE_COST;
+        } else if (IS_DRAGON(d->character)) {
+          refund_amount = PRESTIGE_RACE_DRAGON_COST;
+        } else if (GET_RACE(d->character) == RACE_DRYAD) {
+          refund_amount = PRESTIGE_RACE_DRYAD_COST;
+        }
+
+        if (refund_amount) {
+          struct char_data *loaded = find_or_load_ch(NULL, GET_PRESTIGE_ALT_ID(d->character), "syspoints refund during prestige character deletion", d->character);
+
+          if (!loaded) {
+            mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: %s is an in-chargen prestige character that needs to refund %d sysp, but their parent %ld does not exist!.",
+                            GET_CHAR_NAME(d->character), refund_amount, GET_PRESTIGE_ALT_ID(d->character));
+          } else {
+            if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED)) {
+              // Refund the character.
+              int old_sysp = GET_SYSTEM_POINTS(loaded);
+              GET_SYSTEM_POINTS(loaded) += refund_amount;
+              playerDB.SaveChar(loaded, GET_LOADROOM(loaded));
+
+              mudlog_vfprintf(d->character, LOG_SYSLOG, "Refunded %d prestige-purchase syspoints to %s due to %s deleting in character generation (%d -> %d)",
+                              refund_amount, GET_CHAR_NAME(loaded), GET_CHAR_NAME(d->character), old_sysp, GET_SYSTEM_POINTS(loaded));
+              snprintf(buf, sizeof(buf), "Refunded %d prestige-purchase syspoints to %s due to you deleting in character generation.", refund_amount, GET_CHAR_NAME(loaded));
+              SEND_TO_Q(buf, d);
+            } else {
+              mudlog_vfprintf(d->character, LOG_SYSLOG, "Refused to refund %d prestige-purchase syspoints to %s from %s's deletion: Character no longer in chargen.",
+                              refund_amount, GET_CHAR_NAME(loaded), GET_CHAR_NAME(d->character));
+            }
+
+            find_or_load_ch_cleanup(loaded);
+          }
+        }
+      }
+
       DeleteChar(GET_IDNUM(d->character));
 
       snprintf(buf, sizeof(buf), "Character '%s' deleted!\r\nGoodbye.\r\n",
