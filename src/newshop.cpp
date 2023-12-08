@@ -1083,7 +1083,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   char rollbuf[1000];
 
   // Prevent ghouls from being loved by anyone except their own mother.
-  if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.AreAnySet(SHOP_YES_GHOUL, SHOP_CHARGEN, ENDBIT)) {
+  if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.AreAnySet(SHOP_YES_GHOUL, SHOP_CHARGEN, ENDBIT) && !MOB_FLAGGED(keeper, MOB_INANIMATE)) {
     snprintf(buf, sizeof(buf), "%s GET THE FRAG OUTTA HERE GHOUL!", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
@@ -1419,7 +1419,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   }
 
   // Prevent ghouls from being loved by anyone except their own mother.
-  if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.AreAnySet(SHOP_YES_GHOUL, SHOP_CHARGEN, ENDBIT)) {
+  if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.AreAnySet(SHOP_YES_GHOUL, SHOP_CHARGEN, ENDBIT) && !MOB_FLAGGED(keeper, MOB_INANIMATE)) {
     snprintf(buf, sizeof(buf), "%s GET THE FRAG OUTTA HERE GHOUL!", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
