@@ -3808,9 +3808,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
 
   if (GET_OBJ_VNUM(j) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(j) == OBJ_CARIBBEAN_VISA) {
     if (GET_OBJ_VAL(j, 0) == GET_IDNUM(ch)) {
-      strlcat(buf, "It has your picture on it.", sizeof(buf));
+      strlcat(buf, " It has your picture on it.", sizeof(buf));
     } else {
-      strlcat(buf, "It has someone else's picture on it.", sizeof(buf));
+      strlcat(buf, " It has someone else's picture on it.", sizeof(buf));
     }
   }
 
