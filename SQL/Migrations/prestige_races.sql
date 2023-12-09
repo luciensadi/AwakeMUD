@@ -1,0 +1,1 @@
+ALTER TABLE `pfiles_chargendata` ADD `prestige_alt` BIGINT UNSIGNED DEFAULT '0' NOT NULL;

@@ -105,6 +105,7 @@ CREATE TABLE `pfiles_chargendata` (
   `RestringPoints` tinyint(2) unsigned default '5',
   `archetypal` tinyint(2) unsigned default '0',
   `archetype` tinyint(2) unsigned default '0',
+  `prestige_alt` bigint unsigned default '0' not null,
   PRIMARY KEY (`idnum`)
 );
 
