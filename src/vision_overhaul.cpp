@@ -458,9 +458,10 @@ const char *write_vision_string_for_display(struct char_data *ch, int mode) {
 
   if (vision_mag) {
     if (mode == VISION_STRING_MODE_STATUS) {
-      snprintf(ENDOF(vision_string_buf), sizeof(vision_string_buf) - strlen(vision_string_buf), "\r\n\r\nYou%s can see %d rooms away with your magnification.",
+      snprintf(ENDOF(vision_string_buf), sizeof(vision_string_buf) - strlen(vision_string_buf), "\r\n\r\nYou%s can see %d room%s away with your magnification.",
                has_flare_compensation(ch) ? " have flare compensation and" : "",
-               vision_mag
+               vision_mag,
+               vision_mag == 1 ? "" : "s"
              );
     } else {
       snprintf(ENDOF(vision_string_buf), sizeof(vision_string_buf) - strlen(vision_string_buf), "^n, ^CMagnification-%d^n%s",
