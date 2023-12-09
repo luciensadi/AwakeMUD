@@ -852,10 +852,12 @@ void affect_total(struct char_data * ch)
   rigger_rea += GET_REA(ch);
   rigger_init_dice += GET_INIT_DICE(ch);
 
+  int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
+
 #ifdef USE_DRAGON_CAP
   // Min attribute is one, max is soft capped
   for (int att = BOD; att <= WIL; att++) {
-    int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
+    int per_att_cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
 
     GET_ATT(ch, att) = MAX(1, GET_ATT(ch, att));
 
@@ -864,15 +866,13 @@ void affect_total(struct char_data * ch)
       continue;
 
     // Ensure the cap isn't too low.
-    cap = MAX(cap, racial_limits[(int) GET_RACE(ch)][RACIAL_LIMITS_NORMAL][att] * 1.5);
+    per_att_cap = MAX(per_att_cap, racial_limits[(int) GET_RACE(ch)][RACIAL_LIMITS_NORMAL][att] * 1.5);
 
-    if (GET_ATT(ch, att) > cap)
-      GET_ATT(ch, att) = cap + ((GET_ATT(ch, att) - cap + 1) >> 1);
+    if (GET_ATT(ch, att) > per_att_cap)
+      GET_ATT(ch, att) = per_att_cap + ((GET_ATT(ch, att) - per_att_cap + 1) >> 1);
   }
-  int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
 #else
   // Min attribute is one, max is soft capped
-  int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
   for (int att = BOD; att <= WIL; att++) {
     GET_ATT(ch, att) = MAX(1, GET_ATT(ch, att));
     if (GET_ATT(ch, att) > cap)
