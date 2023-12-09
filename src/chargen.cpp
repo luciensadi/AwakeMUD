@@ -112,7 +112,7 @@ void display_prestige_race_menu(struct descriptor_data *d) {
 }
 
 void ccr_race_menu(struct descriptor_data *d) {
-  SEND_TO_Q("\r\nSelect a race:"
+  snprintf(buf, sizeof(buf), "\r\nSelect a race:"
             "\r\n Base Races (no shop penalties):"
             "\r\n  [1] Human       ( 0 points / slot E)"
             "\r\n  [2] Dwarf       ( 5 points / slot D)"
@@ -137,12 +137,13 @@ void ccr_race_menu(struct descriptor_data *d) {
             "\r\n"
 #ifdef ALLOW_PRESTIGE_RACES
             "\r\n Special (has prerequisites):"
-            "\r\n  [*] Prestige Race (costs 50 - 500 system points)"
+            "\r\n  [*] Prestige Race (costs %d - %d system points)"
             "\r\n"
 #endif
             "\r\n  ?# (for help on a particular race), ex: ?A"
             "\r\n"
-            "\r\nRace: ", d);
+            "\r\nRace: ", MIN_PRESTIGE_RACE_COST, MAX_PRESTIGE_RACE_COST);
+  SEND_TO_Q(buf, d);
   d->ccr.mode = CCR_RACE;
 }
 
@@ -436,16 +437,9 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     #undef NUM_ARCH_GEAR_ENTRIES
   }
 
-  // Set their index and essence. Everyone starts with 0 bioware index and 6.00 essence.
+  // Set their index and essence. Everyone starts with 0 bioware index and max natural essence.
   GET_INDEX(CH) = 0;
-  GET_REAL_ESS(CH) = 600;
-
-  // Ghouls lose 1.00 essence immediately.
-  if (IS_GHOUL(CH))
-    GET_REAL_ESS(CH) -= 100;
-  // Dragons gain 1.00 essence.
-  if (IS_DRAGON(CH))
-    GET_REAL_ESS(CH) += 100;
+  GET_REAL_ESS(CH) = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(CH));
 
   // Equip cyberware (deduct essence and modify stats as appropriate)
   for (int cyb = 0; cyb < NUM_ARCHETYPE_CYBERWARE; cyb++) {
@@ -619,16 +613,9 @@ const char *gnome_magic_table[4] = { "None", "Full Shaman", "Aspected Shaman", "
 
 void set_attributes(struct char_data *ch, int magic)
 {
-  // Everyone starts with 0 bioware index and 6.00 essence.
+  // Everyone starts with 0 bioware index and max natural essence.
   GET_INDEX(ch) = 0;
-  GET_REAL_ESS(ch) = 600;
-
-  // Ghouls lose 1.00 essence immediately.
-  if (IS_GHOUL(ch))
-    GET_REAL_ESS(ch) -= 100;
-  // Dragons gain 1.00 essence.
-  if (IS_DRAGON(ch))
-    GET_REAL_ESS(ch) += 100;
+  GET_REAL_ESS(ch) = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(ch));
 
   // If the character is a magic user, their magic is equal to their essence (this is free).
   if (magic) {
@@ -964,7 +951,7 @@ int parse_assign(struct descriptor_data *d, const char *arg)
       break;
     }
     d->ccr.temp = 0;
-    GET_PP(d->character) = (IS_GHOUL(CH) ? 500 : 600);
+    GET_PP(d->character) = (IS_GHOUL(CH) ? 500 : (IS_DRAGON(CH) ? 700 : 600));
     return 1;
   case 'c':
     d->ccr.pr[d->ccr.temp] = PR_NONE;
@@ -1260,7 +1247,7 @@ int get_minimum_attribute_points_for_race(int race) {
 int get_maximum_attribute_points_for_race(int race) {
   int amount = 0;
   for (int attr = BOD; attr <= WIL; attr++) {
-    amount += racial_limits[race][0][attr] - (MAX(1, racial_attribute_modifiers[race][attr] + 1));
+    amount += racial_limits[race][RACIAL_LIMITS_NORMAL][attr] - (MAX(1, racial_attribute_modifiers[race][attr] + 1));
   }
   return amount;
 }
@@ -1412,7 +1399,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
             }
           } else if (d->ccr.pr[PO_MAGIC] == CCR_MAGIC_ADEPT) {
             GET_TRADITION(CH) = TRAD_ADEPT;
-            GET_PP(CH) = (IS_GHOUL(CH) ? 500 : 600);
+            GET_PP(CH) = (IS_GHOUL(CH) ? 500 : (IS_DRAGON(CH) ? 700 : 600));
             start_game(d);
           } else {
             d->ccr.mode = CCR_TRADITION;
@@ -2109,7 +2096,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         break;
       case 'a':
         GET_TRADITION(d->character) = TRAD_ADEPT;
-        GET_PP(CH) = (IS_GHOUL(CH) ? 500 : 600);
+        GET_PP(CH) = (IS_GHOUL(CH) ? 500 : (IS_DRAGON(CH) ? 700 : 600));
         start_game(d);
         break;
       default:

@@ -860,11 +860,11 @@ void affect_total(struct char_data * ch)
     GET_ATT(ch, att) = MAX(1, GET_ATT(ch, att));
 
     // For races that go crazy high, allow them their full amount, then immediately soft cap the remainder.
-    if (GET_ATT(ch, att) <= racial_limits[(int) GET_RACE(ch)][0][att])
+    if (GET_ATT(ch, att) <= racial_limits[(int) GET_RACE(ch)][RACIAL_LIMITS_NORMAL][att])
       continue;
 
     // Ensure the cap isn't too low.
-    cap = MAX(cap, racial_limits[(int) GET_RACE(ch)][0][att] * 1.5);
+    cap = MAX(cap, racial_limits[(int) GET_RACE(ch)][RACIAL_LIMITS_NORMAL][att] * 1.5);
 
     if (GET_ATT(ch, att) > cap)
       GET_ATT(ch, att) = cap + ((GET_ATT(ch, att) - cap + 1) >> 1);
@@ -880,7 +880,7 @@ void affect_total(struct char_data * ch)
   }
 #endif
 
-  int base_essence = IS_GHOUL(ch) ? 500 : 600;
+  int base_essence = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(ch));
   GET_ESS(ch) = MAX(0, MIN(GET_ESS(ch), base_essence));
   GET_ESS(ch) -= GET_TEMP_ESSLOSS(ch);
 
@@ -889,31 +889,37 @@ void affect_total(struct char_data * ch)
   GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
 #else
   {
-    // House ruled section here.
-    // Magic cap is 26, and is doubly impacted by cyber/bio costs, down to a minimum of 20.
-    // This allows "pure" characters to have a meaningful power level while still leaving some
-    // flexibility in builds before hitting the "may as well go full borg" cap of 20.
-    // You can take up to approximately 3 points of magic loss from 'ware before hitting the minimum 20 cap.
-    int magic_cap = 2600;
-    int essence_cost = base_essence - GET_ESS(ch);
-    int index_cost = GET_HIGHEST_INDEX(ch) / 2;
-    int cap_delta = 2 * (essence_cost + index_cost);
-    // Cap must be between 20-26 magic.
-    magic_cap = MIN(2600, MAX(2000, magic_cap - cap_delta));
+    if (!IS_SENATOR(ch)) {
+      // House ruled section here.
+      // Magic cap is 26, and is doubly impacted by cyber/bio costs, down to a minimum of 20.
+      // This allows "pure" characters to have a meaningful power level while still leaving some
+      // flexibility in builds before hitting the "may as well go full borg" cap of 20.
+      // You can take up to approximately 3 points of magic loss from 'ware before hitting the minimum 20 cap.
+      int magic_cap = 2600;
+      int essence_cost = base_essence - GET_ESS(ch);
+      int index_cost = GET_HIGHEST_INDEX(ch) / 2;
+      int cap_delta = 2 * (essence_cost + index_cost);
+      // Cap must be between 20-26 magic.
+      magic_cap = MIN(2600, MAX(2000, magic_cap - cap_delta));
 
-#ifdef IS_BUILDPORT
-    if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_ROLLS)) {
-      send_to_char(ch, "^L-- Magic cap debug: m_c %d (from 2600 - (e_c(%d-%d=%d), i_c(%d/2=%d), c_d(2*(%d+%d)=%d); tog rolls to disable^n\r\n",
-                   magic_cap,
-                   base_essence, GET_ESS(ch), essence_cost,
-                   GET_HIGHEST_INDEX(ch) / 2, index_cost,
-                   essence_cost, index_cost, cap_delta);
-    }
+      // Apply the cap before any temporary magic loss effects. Cap is already x100, just like magic is.
+      GET_MAG(ch) = MIN(GET_MAG(ch), magic_cap);
+      GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
+      GET_MAG(ch) = MAX(0, GET_MAG(ch));
+
+#ifdef MAGIC_CAP_DEBUG
+      if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_ROLLS)) {
+        send_to_char(ch, "^L-- Magic cap debug: m_c %d (from 2600 - (e_c(%d-%d=%d), i_c(%d/2=%d), c_d(2*(%d+%d)=%d); mag now %d (temp loss %d). Tog rolls to disable^n\r\n",
+                    magic_cap,
+                    base_essence, GET_ESS(ch), essence_cost,
+                    GET_HIGHEST_INDEX(ch) / 2, index_cost,
+                    essence_cost, index_cost, cap_delta, GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch));
+      }
 #endif
-
-    // Apply the cap before any temporary magic loss effects. Cap is already x100, just like magic is.
-    GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), magic_cap));
-    GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
+    } else {
+      GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), cap * 100));
+      GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
+    }
   }
 #endif
   GET_MAX_MENTAL(ch) = 1000;
@@ -977,6 +983,8 @@ void affect_total(struct char_data * ch)
   if (PLR_FLAGGED(ch, PLR_MATRIX) && GET_EQ(ch, WEAR_HEAD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_HEAD), ITEM_EXTRA_TRODE_NET)) {
     GET_REA(ch) /= 2;
   }
+
+  // asdf something is wrong - combatsense spell dice?
 
   // Combat pool is derived from current atts, so we calculate it after all att modifiers
   GET_COMBAT(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;

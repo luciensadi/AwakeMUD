@@ -4067,6 +4067,12 @@ bool LIGHT_OK_ROOM_SPECIFIED(struct char_data *sub, struct room_data *provided_r
     return TRUE;
   }
 
+  // If you have no vision types at all, you can't see.
+  if (!has_any_vision(sub)) {
+    DEBUG_LIGHT_OK("- L_O_R_S: $n has no eyes and no astral vision, cannot see.");
+    return FALSE;
+  }
+
   // If you have ultrasonic or thermographic vision or holy light, you're good.
   if (has_vision(sub, VISION_THERMOGRAPHIC)) {
     DEBUG_LIGHT_OK("- L_O_R_S: $n has thermographic vision, can see.");

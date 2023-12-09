@@ -15,6 +15,19 @@
 bool _vision_prereqs_are_valid(struct char_data *ch, int type, const char *function_name);
 bool _vision_bit_is_valid(int bit, const char *function_name);
 
+// Only returns false for characters who are lacking all standard vision types. This would primarily affect ghouls.
+bool has_any_vision(struct char_data *ch) {
+  // Returns TRUE if you have any one vision type.
+  for (int idx = 0; idx < NUM_VISION_TYPES; idx++) {
+    if (ch->points.vision[idx].HasAnythingSetAtAll()) {
+      return TRUE;
+    }
+  }
+
+  // RIP, no vision bits set at all.
+  return FALSE;
+}
+
 // Do we have a given type of vision at all?
 bool has_vision(struct char_data *ch, int type, bool staff_override) {
   if (!_vision_prereqs_are_valid(ch, type, __func__))
@@ -482,9 +495,6 @@ void apply_vision_bits_from_implant(struct char_data *ch, struct obj_data *impla
     return;
   }
 
-  // All implants grant normal vision as a matter of course.
-  set_vision_bit(ch, VISION_NORMAL, VISION_BIT_FROM_IMPLANTS);
-
   switch (GET_OBJ_TYPE(implant)) {
     // Handle cyberware.
     case ITEM_CYBERWARE:
@@ -512,6 +522,12 @@ void apply_vision_bits_from_implant(struct char_data *ch, struct obj_data *impla
       if (IS_SET(GET_CYBERWARE_FLAGS(implant), EYE_ULTRASOUND)) {
         set_vision_bit(ch, VISION_ULTRASONIC, VISION_BIT_FROM_IMPLANTS);
       }
+
+      // All implants grant normal vision as a matter of course-- but only if they're not zero-essence cosmetics.
+      if (GET_CYBERWARE_ESSENCE_COST(implant) > 0) {
+        set_vision_bit(ch, VISION_NORMAL, VISION_BIT_FROM_IMPLANTS);
+      }
+
       break;
 
     // Handle bioware.

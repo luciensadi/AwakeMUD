@@ -363,9 +363,16 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define IS_PERCEIVING(ch) (MOB_FLAGGED(ch, MOB_PERCEIVING) || PLR_FLAGGED(ch, PLR_PERCEIVE))
 #define SEES_ASTRAL(ch) (!IS_RIGGING(ch) && (IS_ASTRAL(ch) || IS_DUAL(ch) || IS_PERCEIVING(ch)))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
-#define IS_GHOUL(ch) (GET_RACE(ch) >= RACE_GHOUL_HUMAN && GET_RACE(ch) <= RACE_GHOUL_TROLL)
-#define IS_DRAKE(ch) (GET_RACE(ch) >= RACE_DRAKE_HUMAN && GET_RACE(ch) <= RACE_DRAKE_TROLL)
-#define IS_DRAGON(ch) (GET_RACE(ch) >= RACE_WESTERN_DRAGON && GET_RACE(ch) <= RACE_FEATHERED_SERPENT)
+
+#define RACE_IS_GHOUL(race)  ((race) >= RACE_GHOUL_HUMAN && (race) <= RACE_GHOUL_TROLL)
+#define RACE_IS_DRAKE(race)  ((race) >= RACE_DRAKE_HUMAN && (race) <= RACE_DRAKE_TROLL)
+#define RACE_IS_DRAGON(race) ((race) >= RACE_WESTERN_DRAGON && (race) <= RACE_FEATHERED_SERPENT)
+
+#define IS_GHOUL(ch)  (RACE_IS_GHOUL(GET_RACE(ch)))
+#define IS_DRAKE(ch)  (RACE_IS_DRAKE(GET_RACE(ch)))
+#define IS_DRAGON(ch) (RACE_IS_DRAGON(GET_RACE(ch)))
+
+#define GET_RACIAL_STARTING_ESSENCE_FOR_RACE(race)  (RACE_IS_GHOUL(race) ? 500 : (RACE_IS_DRAGON(race) ? 700 : 600))
 
 // ONLY for use on non-Bitfield bitvectors:
 #define IS_SET(set, flag)     ((set) & (flag))
@@ -514,7 +521,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_REAL_BOD(ch)           (GET_REAL_ATT((ch), BOD))
 #define GET_REAL_CHA(ch)           (GET_REAL_ATT((ch), CHA))
 #define GET_REAL_REA(ch)           (GET_REAL_ATT((ch), REA))
-#define GET_REAL_MAG(ch)           (MIN((ch)->real_abils.mag, MAGIC_CAP))
+#define GET_REAL_MAG(ch)           (MIN((ch)->real_abils.mag, (IS_SENATOR(ch) ? 5000 : MAGIC_CAP)))
 #define GET_REAL_ESS(ch)           ((ch)->real_abils.ess)
 #define GET_SETTABLE_REAL_MAG(ch)  ((ch)->real_abils.mag)
 

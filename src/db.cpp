@@ -1765,7 +1765,7 @@ void parse_mobile(File &in, long nr)
 
 
   mob->real_abils.mag = data.GetInt("ATTRIBUTES/Mag", 0) * 100;
-  mob->real_abils.ess = 600;
+  mob->real_abils.ess = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(mob));
   mob->real_abils.bod_index = 900;
 
   mob->aff_abils = mob->real_abils;

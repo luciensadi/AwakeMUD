@@ -1416,8 +1416,11 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     if ((number < 0) || (number > NUM_RACES) || number == RACE_PC_CONJURED_ELEMENTAL)
       medit_disp_class_menu(d);
     else {
-      if (number != 0)
+      if (number != 0) {
         GET_RACE(MOB) = number;
+        GET_ESS(MOB) = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(MOB));
+        MOB->real_abils.ess = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(MOB));
+      }
       medit_disp_menu(d);
     }
     break;

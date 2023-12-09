@@ -331,15 +331,15 @@ int train_ability_cost(struct char_data *ch, int abil, int level, bool untrain) 
 
   switch (abil) {
     case ADEPT_IMPROVED_BOD:
-      if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][0][0])
+      if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][BOD])
         cost *= 2;
       break;
     case ADEPT_IMPROVED_QUI:
-      if (GET_REAL_QUI(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][0][1])
+      if (GET_REAL_QUI(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][QUI])
         cost *= 2;
       break;
     case ADEPT_IMPROVED_STR:
-      if (GET_REAL_STR(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][0][2])
+      if (GET_REAL_STR(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][STR])
         cost *= 2;
       break;
   }
@@ -1069,9 +1069,9 @@ int calculate_training_raw_cost(struct char_data *ch, int attribute) {
 bool attribute_below_maximums(struct char_data *ch, int attribute) {
   // Special case: Bod can have permanent loss.
   if (attribute == BOD)
-    return GET_REAL_BOD(ch) < racial_limits[(int)GET_RACE(ch)][0][BOD];
+    return GET_REAL_BOD(ch) < racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][BOD];
 
-  return GET_REAL_ATT(ch, attribute) < racial_limits[(int)GET_RACE(ch)][0][attribute];
+  return GET_REAL_ATT(ch, attribute) < racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][attribute];
 }
 
 void send_training_list_to_char(struct char_data *ch, int ind) {

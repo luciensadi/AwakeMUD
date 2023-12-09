@@ -3306,9 +3306,9 @@ bool process_single_boost(struct char_data *ch, int boost_attribute) {
   // If they have an active boost for this attribute, decrement it by one and test.
   if (BOOST(ch)[boost_attribute][0] > 0 && (--BOOST(ch)[boost_attribute][0]) == 0) {
     send_to_char(ch, msg);
-    if (power <= racial_limits[(int)GET_RACE(ch)][0][2])
+    if (power <= racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][boost_attribute])
       damage = LIGHT;
-    else if (power < racial_limits[(int)GET_RACE(ch)][1][2])
+    else if (power < racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_150_PCT][boost_attribute])
       damage = MODERATE;
     else
       damage = SERIOUS;

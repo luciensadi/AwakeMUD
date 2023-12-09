@@ -213,8 +213,8 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define RITUAL_SPELL_COMPONENT_COST                            500
 #define RITUAL_SPELL_MAX_SUCCESS_MULTIPLIER                    1.0
 
-// This stat is x100 when stored, so the cap is 20 * 100 = 2000 aka 20 magic.
-#define MAGIC_CAP                                              2000
+// This stat is x100 when stored, so the cap is 26 * 100 = 2000 aka 26 magic. Reduced by cyber/bio in handler.cpp
+#define MAGIC_CAP                                              2600
 
 #define MAX_MOB_COMBAT_MAGIC_FORCE                             10
 #define MIN_MOB_COMBAT_MAGIC_FORCE                             4
@@ -285,10 +285,12 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define COST_TO_DECORATE_VEH                                   1500
 
 // Prestige race costs.
+#define MIN_PRESTIGE_RACE_COST    25
 #define PRESTIGE_RACE_GHOUL_COST  25
 #define PRESTIGE_RACE_DRYAD_COST  50
 #define PRESTIGE_RACE_DRAKE_COST  500
 #define PRESTIGE_RACE_DRAGON_COST 1000
+#define MAX_PRESTIGE_RACE_COST    1000
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES

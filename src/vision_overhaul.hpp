@@ -21,6 +21,9 @@
 #define VISION_STRING_MODE_STATUS    2
 
 /* Getters. */
+// Do we even have eyes?
+bool has_any_vision(struct char_data *ch);
+
 // Do we have a given type of vision at all?
 bool has_vision(struct char_data *ch, int type, bool staff_override=FALSE);
 

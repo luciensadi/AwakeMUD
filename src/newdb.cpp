@@ -462,11 +462,11 @@ bool load_char(const char *name, char_data *ch, bool logon)
   if (GET_LEVEL(ch) <= 1) {
     for (int i = 0; i <= WIL; i++) {
       bool exceeding_limits = FALSE;
-      if (i == BOD && (GET_REAL_BOD(ch)) > racial_limits[(int)GET_RACE(ch)][0][i]) {
+      if (i == BOD && (GET_REAL_BOD(ch)) > racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][i]) {
         exceeding_limits = TRUE;
       }
 
-      else if (GET_REAL_ATT(ch, i) > racial_limits[(int)GET_RACE(ch)][0][i]) {
+      else if (GET_REAL_ATT(ch, i) > racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][i]) {
         exceeding_limits = TRUE;
       }
 
@@ -475,10 +475,10 @@ bool load_char(const char *name, char_data *ch, bool logon)
                  GET_CHAR_NAME(ch),
                  attributes[i],
                  GET_REAL_ATT(ch, i),
-                 racial_limits[(int)GET_RACE(ch)][0][i]);
+                 racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][i]);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
 
-        GET_REAL_ATT(ch, i) = racial_limits[(int)GET_RACE(ch)][0][i];
+        GET_REAL_ATT(ch, i) = racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][i];
       }
     }
   }
@@ -2768,8 +2768,8 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
 
     // If there's a remainder after essence hole, ensure it won't kill them or wipe their magic.
     if (total_essence_delta > 0) {
-      if (GET_REAL_ESS(ch) + total_essence_delta > 600) {
-        snprintf(buf, sizeof(buf), "%s refusing to perform cybereye rectification: it would put me above 6 essence!", capitalize(GET_CHAR_NAME(ch)));
+      if (GET_REAL_ESS(ch) + total_essence_delta > GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(ch))) {
+        snprintf(buf, sizeof(buf), "%s refusing to perform cybereye rectification: it would put me above %d essence!", capitalize(GET_CHAR_NAME(ch)), (int) (GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(ch)) / 100));
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
         return;
       }

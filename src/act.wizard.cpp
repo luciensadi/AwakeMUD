@@ -3282,7 +3282,7 @@ void restore_character(struct char_data *vict, bool reset_staff_stats) {
         set_character_skill(vict, i, 100, FALSE);
 
       // Restore their essence to 6.00.
-      vict->real_abils.ess = 600;
+      GET_REAL_ESS(vict) = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(vict));
 
       // Non-executive staff get 15's in stats. Executives get 50s.
       int stat_level = access_level(vict, LVL_EXECUTIVE) ? 50 : 15;
@@ -3294,7 +3294,7 @@ void restore_character(struct char_data *vict, bool reset_staff_stats) {
       GET_REAL_STR(vict) = stat_level;
       GET_REAL_BOD(vict) = stat_level;
       GET_REAL_CHA(vict) = stat_level;
-      vict->real_abils.mag = stat_level * 100;
+      GET_SETTABLE_REAL_MAG(vict) = stat_level * 100;
 
       // Recalculate their affects.
       affect_total(vict);
@@ -4997,6 +4997,7 @@ ACMD(do_set)
                { "noradio", LVL_FIXER, PC, BINARY }, // 85
                { "sitehidden",  LVL_PRESIDENT, PC, BINARY },
                { "lifestyle",  LVL_PRESIDENT, PC, MISC },
+               { "highestindex", LVL_ADMIN, BOTH, NUMBER },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -5173,8 +5174,8 @@ ACMD(do_set)
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(1, 1000);
     else
-      RANGE(1, 600);
-    vict->real_abils.ess = value;
+      RANGE(1, GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(vict)));
+    GET_REAL_ESS(vict) = value;
     affect_total(vict);
     break;
   case 11:
@@ -5495,8 +5496,8 @@ ACMD(do_set)
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(0, 1000);
     else
-      RANGE(0, 600);
-    vict->real_abils.bod_index = value;
+      RANGE(0, 900);
+    GET_INDEX(vict) = value;
     affect_total(vict);
     break;
   case 55:
@@ -5570,11 +5571,23 @@ ACMD(do_set)
   case 73: /* race */
     {
       bool successful = FALSE;
-      for (int i = RACE_HUMAN; i < NUM_RACES; i++) {
-        if (!str_cmp(pc_race_types[i], val_arg)) {
-          GET_RACE(vict) = i;
+      for (int race_idx = RACE_HUMAN; race_idx < NUM_RACES; race_idx++) {
+        if (!str_cmp(pc_race_types[race_idx], val_arg)) {
+          // Check to make sure this won't break their essence scores.
+          int existing_ess_loss = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(vict)) - GET_REAL_ESS(vict);
+          int new_ess = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(race_idx) - existing_ess_loss;
+          if (new_ess <= 0) {
+            send_to_char(ch, "Changing %s's race to %s would put them at %.2f essence!", GET_CHAR_NAME(vict), pc_race_types[race_idx], new_ess / 100);
+            SET_CLEANUP(false);
+            return;
+          }
+
+          // Set their race and essence.
+          GET_RACE(vict) = race_idx;
+          GET_REAL_ESS(vict) = new_ess;
+
           successful = TRUE;
-          snprintf(buf, sizeof(buf), "%s's race set to %s by %s.\r\n", GET_CHAR_NAME(vict), pc_race_types[i], GET_CHAR_NAME(ch));
+          snprintf(buf, sizeof(buf), "%s's race set to %s by %s.\r\n", GET_CHAR_NAME(vict), pc_race_types[race_idx], GET_CHAR_NAME(ch));
           mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
           // Save the new race to disk.
@@ -5636,7 +5649,7 @@ ACMD(do_set)
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 81: /* esshole */
-    RANGE(0, 600);
+    RANGE(0, GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(vict)));
     snprintf(buf, sizeof(buf),"%s changed %s's esshole from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), GET_ESSHOLE(vict), value);
     GET_ESSHOLE(vict) = value;
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
@@ -5675,6 +5688,11 @@ ACMD(do_set)
     mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s's lifestyle to '%s^n'.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), val_arg);
     strlcpy(buf, "OK.", sizeof(buf));
     break;
+  case 88: /* highestindex */
+    RANGE(0, 900);
+    snprintf(buf, sizeof(buf),"%s changed %s's highest bioware index from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), GET_HIGHEST_INDEX(vict), value);
+    GET_HIGHEST_INDEX(vict) = value;
+    mudlog(buf, ch, LOG_WIZLOG, TRUE );
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");
     break;
