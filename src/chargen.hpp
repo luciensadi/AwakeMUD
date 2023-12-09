@@ -42,4 +42,6 @@
 #define NUM_CCR_PR_POINTS 6
 
 extern const char *pc_race_types[];
+
+void refund_chargen_prestige_syspoints_if_needed(struct char_data *ch);
 #endif

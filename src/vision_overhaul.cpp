@@ -380,9 +380,6 @@ void set_natural_vision_for_race(struct char_data *ch) {
     case RACE_MINOTAUR:
     case RACE_DRAKE_DWARF:
     case RACE_DRAKE_TROLL:
-    case RACE_WESTERN_DRAGON:
-    case RACE_EASTERN_DRAGON:
-    case RACE_FEATHERED_SERPENT:
       set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_NATURAL);
       break;
     case RACE_ORK:
@@ -395,6 +392,12 @@ void set_natural_vision_for_race(struct char_data *ch) {
     case RACE_DRYAD:
     case RACE_DRAKE_ELF:
     case RACE_DRAKE_ORK:
+      set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_NATURAL);
+      break;
+    case RACE_WESTERN_DRAGON:
+    case RACE_EASTERN_DRAGON:
+    case RACE_FEATHERED_SERPENT:
+      set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_NATURAL);
       set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_NATURAL);
       break;
   }

@@ -2472,6 +2472,11 @@ void close_socket(struct descriptor_data *d)
         }
       d->character->spells = NULL;
 
+      // If they were a prepaid chargen char and haven't gotten saved yet, drop them.
+      if (d->connected == CON_CCREATE) {
+        refund_chargen_prestige_syspoints_if_needed(d->character);
+      }
+
       Mem->DeleteCh(d->character);
     }
   }

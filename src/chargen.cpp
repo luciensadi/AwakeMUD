@@ -2176,3 +2176,54 @@ void create_parse(struct descriptor_data *d, const char *arg)
     break;
   }
 }
+
+void refund_chargen_prestige_syspoints_if_needed(struct char_data *ch) {
+  int refund_amount = 0;
+  if (IS_GHOUL(ch)) {
+    refund_amount = PRESTIGE_RACE_GHOUL_COST;
+  } else if (IS_DRAKE(ch)) {
+    refund_amount = PRESTIGE_RACE_DRAKE_COST;
+  } else if (IS_DRAGON(ch)) {
+    refund_amount = PRESTIGE_RACE_DRAGON_COST;
+  } else if (GET_RACE(ch) == RACE_DRYAD) {
+    refund_amount = PRESTIGE_RACE_DRYAD_COST;
+  }
+
+  if (!refund_amount)
+    return;
+
+  // You must be in chargen to qualify for a refund.
+  if (!PLR_FLAGGED(ch, PLR_IN_CHARGEN) && !PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Refusing to refund %s's %d syspoints to %ld: Neither in character creation nor chargen.", GET_CHAR_NAME(ch), refund_amount, GET_PRESTIGE_ALT_ID(ch));
+    return;
+  }
+
+  // You qualify, but can't be refunded - no alt known.
+  if (!GET_PRESTIGE_ALT_ID(ch)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Refusing to refund %s's %d prestige-race syspoints: No prestige alt ID (\?\?\?)", GET_CHAR_NAME(ch), refund_amount);
+    send_to_char(ch, "You created this character before the prestige alt ID tracking patch (or had staff set your race manually), so you have no listed alt to refund %d syspoints. Contact Staff with the name of the character to transfer your points to.\r\n", refund_amount);
+    return;
+  }
+
+  struct char_data *payer = find_or_load_ch(NULL, GET_PRESTIGE_ALT_ID(ch), "syspoints refund during prestige character deletion", ch);
+
+  // You qualify, but can't be refunded - your alt was deleted.
+  if (!payer) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s is an in-chargen prestige character that needs to refund %d sysp, but their parent %ld does not exist!.",
+                    GET_CHAR_NAME(ch), refund_amount, GET_PRESTIGE_ALT_ID(ch));
+    send_to_char(ch, "Your alt %ld no longer exists, so your refund of %d syspoints WAS NOT PROCESSED. Contact Staff with the name of the character to transfer your points to.\r\n", GET_PRESTIGE_ALT_ID(ch), refund_amount);
+    return;
+  }
+  
+  // Refund the character.
+  int old_sysp = GET_SYSTEM_POINTS(payer);
+  GET_SYSTEM_POINTS(payer) += refund_amount;
+  playerDB.SaveChar(payer, GET_LOADROOM(payer));
+
+  mudlog_vfprintf(ch, LOG_SYSLOG, "Refunded %d prestige-purchase syspoints to %s due to %s deleting in character generation (%d -> %d)",
+                  refund_amount, GET_CHAR_NAME(payer), GET_CHAR_NAME(ch), old_sysp, GET_SYSTEM_POINTS(payer));
+  snprintf(buf, sizeof(buf), "Refunded %d prestige-purchase syspoints to %s due to you deleting during character generation.", refund_amount, GET_CHAR_NAME(payer));
+  SEND_TO_Q(buf, ch->desc);
+
+  find_or_load_ch_cleanup(payer);
+}
