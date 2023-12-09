@@ -488,8 +488,11 @@ void remove_patch(struct char_data *ch)
         act("You resist the feeble effects of $p.", FALSE, ch, patch, 0, TO_CHAR);
       break;
     case PATCH_TRAUMA:
-      if (success_test(GET_REAL_BOD(ch) - (GET_BIOOVER(ch) > 0 ? (GET_BIOOVER(ch) + 1) / 2 : 0), GET_PATCH_RATING(patch)) > 0)
+      // Houserule: Trauma patches are generally effective.
+      if (success_test(GET_PATCH_RATING(patch), 4) <= 0) {
+        send_to_char("The effects of the trauma patch wear off.\r\n", ch);
         AFF_FLAGS(ch).RemoveBit(AFF_STABILIZE);
+      }
       break;
   }
   GET_EQ(ch, WEAR_PATCH) = NULL;

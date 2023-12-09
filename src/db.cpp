@@ -2066,7 +2066,7 @@ void parse_object(File &fl, long nr)
             obj->obj_flags.bitvector.SetBit(AFF_STABILIZE);
             // fall through
           default:
-            // All other patches are implemented, so make sure they're not flagged.
+            // All patches other than antidote are implemented, so make sure they're not flagged.
             obj->obj_flags.extra_flags.RemoveBit(ITEM_EXTRA_NERPS);
             break;
         }
