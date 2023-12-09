@@ -2479,7 +2479,11 @@ enum {
 #endif
 #define RM_PAINTER_LOT               37518
 #define RM_MULTNOMAH_GATE_NORTH      17598
+#ifdef USE_PRIVATE_CE_WORLD
+#define RM_MULTNOMAH_GATE_SOUTH      24199
+#else
 #define RM_MULTNOMAH_GATE_SOUTH      17599
+#endif
 #define RM_MAGE_TRAINER              778
 #define RM_GUN_TRAINER               781
 #define RM_PORTABLE_VEHICLE_STORAGE  10097

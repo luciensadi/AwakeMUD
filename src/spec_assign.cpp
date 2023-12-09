@@ -819,6 +819,9 @@ void assign_mobiles(void)
   ASSIGNMOB(70302, bouncer_gentle);
 
 #ifdef USE_PRIVATE_CE_WORLD
+  /* New Multnomah gate guard */
+  ASSIGNMOB(24199, multnomah_guard);
+
   /* Slitch Pit */
   ASSIGNMOB(62803, axehead);
   ASSIGNMOB(62807, receptionist);
