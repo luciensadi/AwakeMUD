@@ -960,7 +960,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
 
     if (!IS_NPC(i) && GET_LEVEL(ch) >= GET_LEVEL(i)) {
       act(get_lifestyle_string(i), FALSE, i, 0, ch, TO_VICT | SKIP_YOU_STANZAS);
-      send_to_char("\r\n", i);
+      send_to_char("", ch);
     }
 
     if (i != ch && GET_HEIGHT(i) > 0 && GET_WEIGHT(i) > 0) {
