@@ -2407,12 +2407,7 @@ ACMD(do_sleep)
     break;
   }
   if (GET_POS(ch) == POS_SLEEPING) {
-    struct sustain_data *next;
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
-      next = sust->next;
-      if (sust->caster && !sust->focus && !sust->spirit)
-        end_sustained_spell(ch, sust);
-    }
+    end_all_caster_records(ch, TRUE);
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }

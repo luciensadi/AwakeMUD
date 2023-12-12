@@ -1124,6 +1124,7 @@ ACMD(do_prone)
 
         if (successes <= 0) {
           end_sustained_spell(victim, sust);
+          -- except you can't do this, ending a spell in a for loop can invalidate the next entry too
         }
       }
     }

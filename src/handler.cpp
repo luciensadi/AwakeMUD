@@ -2752,14 +2752,7 @@ void extract_char(struct char_data * ch)
   /* clear any sustained spells (but only if they're not a conjured elemental) */
   else if (GET_SUSTAINED(ch))
   {
-    struct sustain_data *next;
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
-      next = sust->next;
-      if (next && sust->idnum == next->idnum) {
-        next = next->next;
-      }
-      end_sustained_spell(ch, sust);
-    }
+    end_all_sustained_spells(ch);
 
     // Sanity check: They must not have any spells left after this.
     if (GET_SUSTAINED(ch)) {

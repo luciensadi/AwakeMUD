@@ -313,12 +313,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
   // SR3 p178
   if (GET_POS(victim) <= POS_SLEEPING) {
     if (!protect_spells_from_purge) {
-      struct sustain_data *next;
-      for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
-        next = sust->next;
-        if (sust->caster && !sust->focus && !sust->spirit)
-          end_sustained_spell(victim, sust);
-      }
+      end_all_caster_records(victim, TRUE);
     }
 
     char cmd_buf[100];
@@ -541,13 +536,8 @@ void stop_fighting(struct char_data * ch)
 
   // If they're mob who cast confusion/chaos on someone, drop the spell.
   if (IS_NPC(ch) && GET_SUSTAINED(ch)) {
-    struct sustain_data *next;
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
-      next = sust->next;
-      // Removed checks for focus and spirit sustains. It does say 'all'...
-      if (sust->caster && (sust->spell == SPELL_CONFUSION || sust->spell == SPELL_CHAOS))
-        end_sustained_spell(ch, sust);
-    }
+    end_all_spells_of_type_cast_by_ch(SPELL_CONFUSION, 0, ch);
+    end_all_spells_of_type_cast_by_ch(SPELL_CHAOS, 0, ch);
   }
 
   update_pos(ch);
@@ -2311,13 +2301,7 @@ void docwagon_retrieve(struct char_data *ch) {
 
   // Stop all their sustained spells as if they died.
   if (GET_SUSTAINED(ch)) {
-    struct sustain_data *next;
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = next) {
-      next = sust->next;
-      if (next && sust->idnum == next->idnum)
-        next = next->next;
-      end_sustained_spell(ch, sust);
-    }
+    end_all_sustained_spells(ch);
   }
 
   // Remove them from the Matrix.
@@ -3274,20 +3258,15 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     struct sustain_data *next;
     // If you've been knocked out, or the damage is from focus overuse, lose all your spells.
     if (GET_POS(victim) < POS_LYING || attacktype == TYPE_FOCUS_OVERUSE) {
-      for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
-        next = sust->next;
-        if (sust->caster && !sust->focus && !sust->spirit) {
-          if (next && sust->idnum == next->idnum)
-            next = next->next;
-          end_sustained_spell(victim, sust);
-        }
-      }
+      end_all_caster_records(ch, FALSE);
     } else if (dam > 0 && attacktype != TYPE_SPELL_DRAIN) {
       for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
         next = sust->next;
         if (sust->caster && !sust->focus && !sust->spirit)
-          if (success_test(GET_SKILL(victim, SKILL_SORCERY), sust->force + damage_modifier(victim, buf, sizeof(buf))) < 1)
+          if (success_test(GET_SKILL(victim, SKILL_SORCERY), sust->force + damage_modifier(victim, buf, sizeof(buf))) < 1) {
             end_sustained_spell(victim, sust);
+            break;
+          }
       }
     }
   }
@@ -6570,10 +6549,10 @@ void chkdmg(struct veh_data * veh)
   return;
 }
 
-bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
+bool vram(struct veh_data * veh, struct char_data * vict, struct veh_data * tveh)
 {
   int power, damage_total = 0, veh_dam = 0;
-  int veh_resist = 0, ch_resist = 0, modbod = 0;
+  int veh_resist = 0, vict_resist = 0, modbod = 0;
 
   // Alarm all NPCs inside the ramming vehicle.
   for (struct char_data *npc = veh->people; npc; npc = npc->next_in_veh) {
@@ -6583,9 +6562,9 @@ bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     }
   }
 
-  if (ch && IS_NPC(ch)) {
-    GET_MOBALERT(ch) = MALERT_ALARM;
-    GET_MOBALERTTIME(ch) = 30;
+  if (vict && IS_NPC(vict)) {
+    GET_MOBALERT(vict) = MALERT_ALARM;
+    GET_MOBALERTTIME(vict) = 30;
   }
 
   // Alarm all NPCs inside the target vehicle.
@@ -6598,11 +6577,11 @@ bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     }
   }
 
-  if (ch)
+  if (vict)
   {
     power = (int)(get_speed(veh) / 10);
 
-    if (GET_BOD(ch) < 8)
+    if (GET_BOD(vict) < 8)
       modbod = 1;
     else
       modbod = 2;
@@ -6621,8 +6600,8 @@ bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
       veh_dam = LIGHT;
     }
 
-    ch_resist = 0 - success_test(GET_BOD(ch) + GET_BODY(ch), power);
-    int staged_damage = stage(ch_resist, damage_total);
+    vict_resist = 0 - success_test(GET_BOD(vict) + GET_BODY(vict), power);
+    int staged_damage = stage(vict_resist, damage_total);
     damage_total = convert_damage(staged_damage);
 
     veh_resist = success_test(veh->body, power - (veh->body * 1 /* TODO: Replace this 1 with the number of successes rolled on the ram test. */));
@@ -6630,35 +6609,35 @@ bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
 
     bool will_damage_vehicle = FALSE;
 
-    if (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_NORAM)) {
+    if (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_NORAM)) {
       damage_total = -1;
-      snprintf(buf, sizeof(buf), "You can't seem to get close enough to run %s down!\r\n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf, sizeof(buf), "You can't seem to get close enough to run %s down!\r\n", decapitalize_a_an(GET_NAME(vict)));
       snprintf(buf1, sizeof(buf1), "%s can't seem to get close enough to $n to run $m down!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       snprintf(buf2, sizeof(buf2), "%s can't even get close to you!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       send_to_driver(buf, veh);
     } else if (damage_total < LIGHT) {
-      snprintf(buf, sizeof(buf), "You ram into %s, but %s armor holds!\r\n", decapitalize_a_an(GET_NAME(ch)), HSHR(ch));
+      snprintf(buf, sizeof(buf), "You ram into %s, but %s armor holds!\r\n", decapitalize_a_an(GET_NAME(vict)), HSHR(vict));
       snprintf(buf1, sizeof(buf1), "%s rams into $n, but $s armor holds!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       snprintf(buf2, sizeof(buf2), "%s rams into you, but your armor holds!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       send_to_driver(buf, veh);
       will_damage_vehicle = TRUE;
     } else if (veh_dam > 0) {
       send_to_veh("THUMP!\r\n", veh, NULL, TRUE);
-      snprintf(buf, sizeof(buf), "You run %s down!\r\n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf, sizeof(buf), "You run %s down!\r\n", decapitalize_a_an(GET_NAME(vict)));
       snprintf(buf1, sizeof(buf1), "%s runs $n down!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       snprintf(buf2, sizeof(buf2), "%s runs you down!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       send_to_driver(buf, veh);
       will_damage_vehicle = TRUE;
     } else {
       send_to_veh("THUTHUMP!\r\n", veh, NULL, TRUE);
-      snprintf(buf, sizeof(buf), "You roll right over %s!\r\n", decapitalize_a_an(GET_NAME(ch)));
+      snprintf(buf, sizeof(buf), "You roll right over %s!\r\n", decapitalize_a_an(GET_NAME(vict)));
       snprintf(buf1, sizeof(buf1), "%s rolls right over $n!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       snprintf(buf2, sizeof(buf2), "%s runs right over you!", CAP(GET_VEH_NAME_NOFORMAT(veh)));
       send_to_driver(buf, veh);
     }
-    act(buf1, FALSE, ch, 0, 0, TO_ROOM);
-    act(buf2, FALSE, ch, 0, 0, TO_CHAR);
-    bool victim_died = damage(get_driver(veh), ch, damage_total, TYPE_RAM, PHYSICAL);
+    act(buf1, FALSE, vict, 0, 0, TO_ROOM);
+    act(buf2, FALSE, vict, 0, 0, TO_CHAR);
+    bool victim_died = damage(get_driver(veh), vict, damage_total, TYPE_RAM, PHYSICAL);
 
     // Deal damage to the rammer's vehicle if they incurred any.
     if (will_damage_vehicle && veh_dam > 0) {
@@ -6690,8 +6669,8 @@ bool vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
       veh_dam = MODERATE;
     }
 
-    ch_resist = 0 - success_test(tveh->body, power);
-    int staged_damage = stage(ch_resist, damage_total);
+    vict_resist = 0 - success_test(tveh->body, power);
+    int staged_damage = stage(vict_resist, damage_total);
     damage_total = convert_damage(staged_damage);
     tveh->damage += damage_total;
 

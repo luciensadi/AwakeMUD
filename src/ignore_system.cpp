@@ -5,9 +5,9 @@
 #include "comm.hpp"
 #include "db.hpp" // for descriptor_list
 #include "ignore_system.hpp"
+#include "newmagic.hpp"
 
 extern void stop_follower(struct char_data *ch);
-extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust);
 
 // Prototypes for this file.
 void send_ignore_bits_to_character(struct char_data *ch, Bitfield *already_set);
@@ -186,12 +186,21 @@ bool IgnoreData::toggle_blocking_mindlinks(long vict_idnum, const char *vict_nam
     SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer accept mindlinks from %s.\r\n", vict_name);
     _set_ignore_bit_for(IGNORE_BIT_MINDLINK, vict_idnum);
 
-    // Iterate through existing mindlinks and break any that were cast by the ignored person.
-    struct sustain_data *spell = NULL, *next_spell = NULL;
-    for (spell = GET_SUSTAINED(ch); spell; spell = next_spell) {
-      next_spell = spell->next;
-      if (spell->spell == SPELL_MINDLINK && !spell->caster && spell->other && GET_IDNUM_EVEN_IF_PROJECTING(spell->other) == vict_idnum) {
-        end_sustained_spell(ch, spell);
+    // Iterate through existing mindlinks and break any between ignored and ignoring.
+    {
+      bool should_loop = TRUE;
+
+      while (should_loop) {
+        should_loop = FALSE;
+
+        for (struct sustain_data *sust = ch->sustained; sust; sust = sust->next) {
+          if (sust->spell == SPELL_MINDLINK && sust->other && GET_IDNUM_EVEN_IF_PROJECTING(sust->other) == vict_idnum) {
+            // End the spell, then immediately loop again. There's a chance that the next spell in the list is our caster record, and we don't want to touch that since it's been deleted.
+            end_sustained_spell(ch, sust);
+            should_loop = TRUE;
+            break;
+          }
+        }
       }
     }
 

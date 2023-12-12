@@ -3894,7 +3894,7 @@ ACMD(do_release)
     send_to_char("You don't have the ability to do that.\r\n", ch);
     return;
   }
-  struct sustain_data *sust = NULL, *next = NULL;
+  struct sustain_data *sust = NULL;
   two_arguments(argument, buf, buf1);
   int i = 0;
   if (is_abbrev(buf, "spirit") || is_abbrev(buf, "elemental")) {
@@ -3937,12 +3937,18 @@ ACMD(do_release)
       }
     }
   } else if (is_abbrev(buf, "all")) {
-    for (sust = GET_SUSTAINED(ch); sust; sust = next) {
-      next = sust->next;
-      // Removed checks for focus and spirit sustains. It does say 'all'...
-      if (sust->caster)
-        end_sustained_spell(ch, sust);
-    }
+    // End all caster records they have, restarting at beginning each time you touch something.
+    bool should_loop = TRUE;
+    while (should_loop) {
+      should_loop = FALSE;
+      for (struct sustain_data *sust = ch->sustained; sust; sust = sust->next) {
+        if (sust->caster) {
+          end_sustained_spell(ch, sust);
+          should_loop = TRUE;
+          break;
+        }
+      }
+    }    
     send_to_char("OK.\r\n", ch);
     return;
   } else if ((i = atoi(buf)) > 0) {
@@ -6870,3 +6876,64 @@ void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_d
     send_to_char(buf, ch); 
   }
 }
+
+void _end_all_spells_of_type(int spell, int subtype, struct char_data *ch, bool affect_caster, bool affect_cast_on) {
+  bool should_loop = TRUE;
+
+  while (should_loop) {
+    should_loop = FALSE;
+
+    for (struct sustain_data *sust = ch->sustained; sust; sust = sust->next) {
+      // Don't touch caster records, we only want things affecting ch
+      if (sust->caster && !affect_caster)
+        continue;
+
+      if (!sust->caster && !affect_cast_on)
+        continue;
+
+      if (sust->spell == spell && (!subtype || sust->subtype == subtype)) {
+        // End the spell, then immediately loop again. There's a chance that the next spell in the list is our caster record, and we don't want to touch that since it's been deleted.
+        end_sustained_spell(ch, sust);
+        should_loop = TRUE;
+        break;
+      }
+    }
+  }
+}
+
+void end_all_sustained_spells_of_type_affecting_ch(int spell, int subtype, struct char_data *ch) {
+  _end_all_spells_of_type(spell, subtype, ch, FALSE, TRUE);
+}
+
+void end_all_spells_of_type_cast_by_ch(int spell, int subtype, struct char_data *ch) {
+  _end_all_spells_of_type(spell, subtype, ch, TRUE, FALSE);
+}
+
+void end_all_caster_records(struct char_data *ch, bool keep_sustained_by_other) {
+  bool should_loop = TRUE;
+
+  while (should_loop) {
+    should_loop = FALSE;
+
+    for (struct sustain_data *sust = ch->sustained; sust; sust = sust->next) {
+      // Don't touch caster records, we only want things affecting ch
+      if (!sust->caster)
+        continue;
+
+      if (!keep_sustained_by_other || !(sust->focus || sust->spirit)) {
+        // End the spell, then immediately loop again. There's a chance that the next spell in the list is our affect record, and we don't want to touch that since it's been deleted.
+        end_sustained_spell(ch, sust);
+        should_loop = TRUE;
+        break;
+      }
+    }
+  }
+}
+
+void end_all_sustained_spells(struct char_data *ch) {
+  while (ch->sustained) {
+    end_sustained_spell(ch, ch->sustained);
+  }
+}
+
+// TODO: debug why a character showed up twice in the character list: maybe write a function to add a char to the list, scanning the whole list for duplicates in the process

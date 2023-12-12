@@ -23,6 +23,11 @@ extern const char *get_spell_name(int spell, int subtype);
 extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
 extern bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell, char *buf);
 extern bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, int force, int sub, int success, int time_to_take_effect);
+extern void end_all_sustained_spells_of_type_affecting_ch(int spell, int subtype, struct char_data *ch);
+extern void end_all_spells_matching_function(struct char_data *ch, bool (*should_end_sust)(struct sustain_data));
+extern void end_all_caster_records(struct char_data *ch, bool keep_sustained_by_other);
+extern void end_all_spells_of_type_cast_by_ch(int spell, int subtype, struct char_data *ch);
+extern void end_all_sustained_spells(struct char_data *ch);
 
 #define DAMOBJ_NONE                     0
 #define DAMOBJ_ACID                     1

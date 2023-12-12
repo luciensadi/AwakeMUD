@@ -2128,13 +2128,8 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
       }
     }
 
-    struct sustain_data *nextsust;
-
-    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = nextsust) {
-      nextsust = sust->next;
-      if (sust->caster)
-        end_sustained_spell(ch, sust);
-    }
+    // Stop any spells they'd previously cast.
+    end_all_caster_records(ch, FALSE);
 
     // TODO: Deactivate adept powers.
 

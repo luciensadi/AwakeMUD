@@ -42,7 +42,6 @@ extern void cast_detection_spell(struct char_data *ch, int spell, int force, cha
 extern void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *arg, char_data *mob);
 extern void cast_illusion_spell(struct char_data *ch, int spell, int force, char *arg, char_data *mob);
 extern void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char *arg, char_data *mob);
-extern void end_sustained_spell(struct char_data *ch, struct sustain_data *sust);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 
 

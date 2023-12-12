@@ -854,16 +854,7 @@ void process_regeneration(int half_hour)
         if (AFF_FLAGS(ch).IsSet(AFF_RESISTPAIN)) {
           AFF_FLAGS(ch).RemoveBit(AFF_RESISTPAIN);
           send_to_char("Your magical pain resistance wears off.\r\n", ch);
-
-          for (struct sustain_data *sust = ch->sustained, *next_sust; sust; sust = next_sust) {
-            next_sust = sust->next;
-
-            if (sust->caster)
-              continue;
-
-            if (sust->spell == SPELL_RESISTPAIN)
-              end_sustained_spell(ch, sust);
-          }
+          end_all_sustained_spells_of_type_affecting_ch(SPELL_RESISTPAIN, 0, ch);
         }
       }
       if (GET_PHYSICAL(ch) > 0) {
