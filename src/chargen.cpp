@@ -139,10 +139,14 @@ void ccr_race_menu(struct descriptor_data *d) {
             "\r\n Special (has prerequisites):"
             "\r\n  [*] Prestige Race (costs %d - %d system points)"
             "\r\n"
-#endif
             "\r\n  ?# (for help on a particular race), ex: ?A"
             "\r\n"
             "\r\nRace: ", MIN_PRESTIGE_RACE_COST, MAX_PRESTIGE_RACE_COST);
+#else
+            "\r\n  ?# (for help on a particular race), ex: ?A"
+            "\r\n"
+            "\r\nRace: ");
+#endif
   SEND_TO_Q(buf, d);
   d->ccr.mode = CCR_RACE;
 }
