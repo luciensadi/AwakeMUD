@@ -1158,7 +1158,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
         continue;
       }
 
-      if (GET_REP(ch) > quest_table[i].max_rep) {
+      if (rep_too_high(ch, i)) {
         if (access_level(ch, LVL_BUILDER)) {
           send_to_char(ch, "[Skipping quest %ld: You exceed rep cap of %d.]\r\n", quest_table[i].vnum, quest_table[i].max_rep);
         }
@@ -1540,7 +1540,7 @@ SPECIAL(johnson)
 
       // Reject high-rep characters.
       unsigned int johnson_max_rep = get_johnson_overall_max_rep(johnson);
-      if (johnson_max_rep < GET_REP(ch)) {
+      if (johnson_max_rep < 10000 && johnson_max_rep < GET_REP(ch)) {
         do_say(johnson, "My jobs aren't high-profile enough for someone with your rep!", 0, 0);
         send_to_char(ch, "[OOC: This Johnson caps out at %d reputation, so you won't get any further work from them.]\r\n", johnson_max_rep);
 
@@ -3081,7 +3081,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Invalid value.  Enter minimum reputation between 0-1500: ", CH);
     else {
       QUEST->min_rep = number;
-      send_to_char("Enter maximum reputation: ", CH);
+      send_to_char("Enter maximum reputation (10000 for no limit): ", CH);
       d->edit_mode = QEDIT_MAX_REP;
     }
     break;
@@ -3090,10 +3090,8 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if ((unsigned)number < QUEST->min_rep)
       send_to_char("Maximum reputation must be greater than the minimum.\r\n"
                    "Enter maximum reputation: ", CH);
-    else if (number > 10000)
-      send_to_char("Invalid value.  Enter maximum reputation: ", CH);
     else {
-      QUEST->max_rep = number;
+      QUEST->max_rep = number > 10000 ? 10000 : number;
       qedit_disp_menu(d);
     }
     break;
