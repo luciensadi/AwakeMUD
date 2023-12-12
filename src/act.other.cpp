@@ -2993,12 +2993,12 @@ ACMD(do_photo)
   skip_spaces(&argument);
   if (*argument) {
     bool found = FALSE;
-    struct char_data *i;
+    struct char_data *found_ch;
     struct obj_data *found_obj;
     struct veh_data *found_veh;
     char *desc;
     extern char *find_exdesc(char *word, struct extra_descr_data * list);
-    generic_find(argument, FIND_OBJ_ROOM | FIND_CHAR_ROOM, ch, &i, &found_obj);
+    generic_find(argument, FIND_OBJ_ROOM | FIND_CHAR_ROOM, ch, &found_ch, &found_obj);
 
     // Look for a targeted vehicle.
     if ((found_veh = get_veh_list(argument, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
@@ -3013,67 +3013,67 @@ ACMD(do_photo)
 
     if (!found) {
       // Look for a targeted person.
-      if (i) {
+      if (found_ch) {
         // This does not cause info disclosure because generic_find respects CAN_SEE().
-        if (AFF_FLAGGED(i, AFF_IMP_INVIS) || AFF_FLAGGED(i, AFF_SPELLIMPINVIS)) {
+        if (AFF_FLAGGED(found_ch, AFF_IMP_INVIS) || AFF_FLAGGED(found_ch, AFF_SPELLIMPINVIS)) {
           send_to_char(ch, "You don't seem to see them through the viewfinder.\r\n");
           return;
         }
-        snprintf(buf2, sizeof(buf2), "a photo of %s^n", make_desc(ch, i, buf, 2, TRUE, sizeof(buf)));
-        if (i->in_veh) {
+        snprintf(buf2, sizeof(buf2), "a photo of %s^n", make_desc(ch, found_ch, buf, 2, TRUE, sizeof(buf)));
+        if (found_ch->in_veh) {
           snprintf(buf, sizeof(buf), "^c%s^c sitting in the %s of %s^n\r\n%s",
-                  make_desc(ch, i, buf3, 2, FALSE, sizeof(buf3)),
-                  i->vfront ? "front" : "back",
-                  GET_VEH_NAME(i->in_veh),
-                  i->player.physical_text.look_desc);
+                  make_desc(ch, found_ch, buf3, 2, FALSE, sizeof(buf3)),
+                  found_ch->vfront ? "front" : "back",
+                  GET_VEH_NAME(found_ch->in_veh),
+                  found_ch->player.physical_text.look_desc);
         } else {
-          snprintf(buf, sizeof(buf), "^c%s^c in %s^n\r\n%s", make_desc(ch, i, buf3, 2, FALSE, sizeof(buf3)),
-                  GET_ROOM_NAME(ch->in_room), i->player.physical_text.look_desc);
+          snprintf(buf, sizeof(buf), "^c%s^c in %s^n\r\n%s", make_desc(ch, found_ch, buf3, 2, FALSE, sizeof(buf3)),
+                  GET_ROOM_NAME(ch->in_room), found_ch->player.physical_text.look_desc);
         }
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s is using:\r\n", make_desc(ch, i, buf3, 2, FALSE, sizeof(buf3)));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s is using:\r\n", make_desc(ch, found_ch, buf3, 2, FALSE, sizeof(buf3)));
         for (int j = 0; j < NUM_WEARS; j++)
-          if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
+          if (GET_EQ(found_ch, j) && CAN_SEE_OBJ(ch, GET_EQ(found_ch, j))) {
             // Describe special-case wielded/held objects.
             if (j == WEAR_WIELD || j == WEAR_HOLD) {
-              if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_EXTRA_TWOHANDS))
+              if (IS_OBJ_STAT(GET_EQ(found_ch, j), ITEM_EXTRA_TWOHANDS))
                 strlcat(buf, hands[2], sizeof(buf));
               else if (j == WEAR_WIELD)
-                strlcat(buf, hands[(int)i->char_specials.saved.left_handed], sizeof(buf));
+                strlcat(buf, hands[(int)found_ch->char_specials.saved.left_handed], sizeof(buf));
               else
-                strlcat(buf, hands[!i->char_specials.saved.left_handed], sizeof(buf));
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\t%s\r\n", GET_OBJ_NAME(GET_EQ(i, j)));
+                strlcat(buf, hands[!found_ch->char_specials.saved.left_handed], sizeof(buf));
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\t%s\r\n", GET_OBJ_NAME(GET_EQ(found_ch, j)));
               continue;
             }
 
             // Concealed by enveloping clothing? Succeed on a test or you don't see it.
-            if ((j == WEAR_BODY || j == WEAR_LARM || j == WEAR_RARM || j == WEAR_WAIST) && GET_EQ(i, WEAR_ABOUT)) {
-              if (success_test(GET_INT(ch), 4 + GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7)) < 2)
+            if ((j == WEAR_BODY || j == WEAR_LARM || j == WEAR_RARM || j == WEAR_WAIST) && GET_EQ(found_ch, WEAR_ABOUT)) {
+              if (success_test(GET_INT(ch), 4 + GET_OBJ_VAL(GET_EQ(found_ch, WEAR_ABOUT), 7)) < 2)
                 continue;
             }
 
             // Underclothing? Succeed on a test or you don't see it.
-            if (j == WEAR_UNDER && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_BODY))) {
+            if (j == WEAR_UNDER && (GET_EQ(found_ch, WEAR_ABOUT) || GET_EQ(found_ch, WEAR_BODY))) {
               if (success_test(GET_INT(ch), 6 +
-                               (GET_EQ(i, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7) : 0) +
-                               (GET_EQ(i, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(i, WEAR_BODY), 7) : 0)) < 2)
+                               (GET_EQ(found_ch, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(found_ch, WEAR_ABOUT), 7) : 0) +
+                               (GET_EQ(found_ch, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(found_ch, WEAR_BODY), 7) : 0)) < 2)
                 continue;
             }
 
             // Pants under enveloping clothing? Succeed on an easier test.
-            if (j == WEAR_LEGS && GET_EQ(i, WEAR_ABOUT)) {
-              if (success_test(GET_INT(ch), 2 + GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7)) < 2)
+            if (j == WEAR_LEGS && GET_EQ(found_ch, WEAR_ABOUT)) {
+              if (success_test(GET_INT(ch), 2 + GET_OBJ_VAL(GET_EQ(found_ch, WEAR_ABOUT), 7)) < 2)
                 continue;
             }
 
             // Anklets under pants or enveloping clothing? Succeed on a harder test.
-            if ((j == WEAR_RANKLE || j == WEAR_LANKLE) && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_LEGS))) {
+            if ((j == WEAR_RANKLE || j == WEAR_LANKLE) && (GET_EQ(found_ch, WEAR_ABOUT) || GET_EQ(found_ch, WEAR_LEGS))) {
               if (success_test(GET_INT(ch), 5 +
-                               (GET_EQ(i, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7) : 0) +
-                               (GET_EQ(i, WEAR_LEGS) ? GET_OBJ_VAL(GET_EQ(i, WEAR_LEGS), 7) : 0)) < 2)
+                               (GET_EQ(found_ch, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(found_ch, WEAR_ABOUT), 7) : 0) +
+                               (GET_EQ(found_ch, WEAR_LEGS) ? GET_OBJ_VAL(GET_EQ(found_ch, WEAR_LEGS), 7) : 0)) < 2)
                 continue;
             }
 
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s\r\n", where[j], GET_OBJ_NAME(GET_EQ(i, j)));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s\r\n", where[j], GET_OBJ_NAME(GET_EQ(found_ch, j)));
           }
         found = TRUE;
       } else if (found_obj && GET_OBJ_VNUM(found_obj) != OBJ_BLANK_PHOTO) {
@@ -3081,16 +3081,16 @@ ACMD(do_photo)
         if (ch->in_veh) {
           snprintf(buf, sizeof(buf), "^c%s^c in %s^n\r\n%s",
                   GET_OBJ_NAME(found_obj),
-                  GET_VEH_NAME(i->in_veh),
+                  GET_VEH_NAME(ch->in_veh),
                   found_obj->photo ? found_obj->photo : found_obj->text.look_desc);
         } else {
           snprintf(buf, sizeof(buf), "^c%s^c in %s^n\r\n%s", GET_OBJ_NAME(found_obj), GET_ROOM_NAME(ch->in_room), found_obj->photo ? found_obj->photo : found_obj->text.look_desc);
         }
         found = TRUE;
       } else if (ch->in_veh) {
-        if ((i = get_char_veh(ch, arg, ch->in_veh))) {
-          snprintf(buf2, sizeof(buf2), "a photo of %s", decapitalize_a_an(GET_NAME(i)));
-          snprintf(buf, sizeof(buf), "^c%s in %s^n\r\n%s", GET_NAME(i), GET_VEH_NAME(ch->in_veh), i->player.physical_text.look_desc);
+        if ((found_ch = get_char_veh(ch, arg, ch->in_veh))) {
+          snprintf(buf2, sizeof(buf2), "a photo of %s", decapitalize_a_an(GET_NAME(found_ch)));
+          snprintf(buf, sizeof(buf), "^c%s in %s^n\r\n%s", GET_NAME(found_ch), GET_VEH_NAME(ch->in_veh), found_ch->player.physical_text.look_desc);
           found = TRUE;
         }
       } else if (ch->in_room && (desc = find_exdesc(arg, ch->in_room->ex_description))) {
