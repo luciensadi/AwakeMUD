@@ -4106,8 +4106,7 @@ struct char_data *read_mobile(int nr, int type)
 
   mob = Mem->GetCh();
   *mob = mob_proto[i];
-  mob->next = character_list;
-  character_list = mob;
+  add_ch_to_character_list(mob, "read_mobile");
 
   mob->points.physical = mob->points.max_physical;
   mob->points.mental = mob->points.max_mental;
@@ -5485,7 +5484,10 @@ void reset_char(struct char_data * ch)
   ch->followers = NULL;
   ch->master = NULL;
   ch->in_room = NULL;
-  ch->next = NULL;
+
+  remove_ch_from_character_list(ch, "reset_char");
+  ch->next_in_character_list = NULL;
+
   ch->next_fighting = NULL;
   ch->next_in_room = NULL;
   FIGHTING(ch) = NULL;

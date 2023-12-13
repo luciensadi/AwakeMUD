@@ -3333,7 +3333,7 @@ void process_boost()
   struct char_data *next;
 
   for (struct char_data *i = character_list; i; i = next) {
-    next = i->next;
+    next = i->next_in_character_list;
 
     if (GET_TRADITION(i) != TRAD_ADEPT)
       continue;

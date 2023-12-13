@@ -47,7 +47,7 @@ bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
 
 struct char_data *find_spirit_by_id(int spiritid, long playerid)
 {
-  for (struct char_data *ch = character_list; ch; ch = ch->next)
+  for (struct char_data *ch = character_list; ch; ch = ch->next_in_character_list)
     if (IS_NPC(ch) && GET_ACTIVE(ch) == playerid && GET_GRADE(ch) == spiritid)
       return ch;
   return NULL;
@@ -3923,7 +3923,7 @@ ACMD(do_release)
           send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n",
                        (real_mob = real_mobile(spirits[spirit->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit");
         if (spirit->called)
-          for (struct char_data *mob = character_list; mob; mob = mob->next)
+          for (struct char_data *mob = character_list; mob; mob = mob->next_in_character_list)
             if (IS_NPC(mob) && GET_ACTIVE(mob) == GET_IDNUM(ch) && GET_GRADE(mob) == spirit->id) {
               act("Freed from its services, $n returns to the metaplanes", TRUE, mob, 0, ch, TO_NOTVICT);
               extract_char(mob);
@@ -4926,7 +4926,7 @@ POWER(spirit_accident)
       log_attempt_to_bypass_ic_ignore(ch, tch, "spirit_accident");
   } else {
     int success = success_test(MAX(GET_INT(tch), GET_QUI(tch)), GET_SPARE2(spirit));
-    for (struct char_data *mob = spirit->in_room->people; mob; mob = mob->next)
+    for (struct char_data *mob = spirit->in_room->people; mob; mob = mob->next_in_character_list)
       if (IS_NPC(mob) && (GET_RACE(mob) == RACE_SPIRIT || GET_RACE(mob) == RACE_ELEMENTAL || GET_RACE(mob) == RACE_PC_CONJURED_ELEMENTAL) &&
           MOB_FLAGGED(mob, MOB_SPIRITGUARD)) {
         success = 10;

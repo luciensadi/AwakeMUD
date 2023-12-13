@@ -3170,7 +3170,7 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
 
   // Linked lists.
   REPLICATE(next_in_room);
-  REPLICATE(next);
+  REPLICATE(next_in_character_list);
   REPLICATE(next_fighting);
   REPLICATE(next_in_zone);
   REPLICATE(next_in_veh);
@@ -6547,6 +6547,48 @@ struct obj_data *get_datajack(struct char_data *ch, bool is_rigging) {
   }
 
   return NULL;
+}
+
+void add_ch_to_character_list(struct char_data *ch, const char *source) {
+  // Check for validity.
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received NULL character to add_ch_to_character_list() from %s!", source);
+    return;
+  }
+
+  // Check for duplicates.
+  for (struct char_data *tmp = character_list; tmp; tmp = tmp->next_in_character_list) {
+    if (tmp == ch) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received duplicate character %s to add_ch_to_character_list() from %s!", GET_CHAR_NAME(ch), source);
+      return;
+    }
+  }
+
+  // They're valid and weren't already in it. Add them.
+  ch->next_in_character_list = character_list;
+  character_list = ch;
+}
+
+void remove_ch_from_character_list(struct char_data *ch, const char *source) {
+  // Check for validity.
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received NULL character to remove_ch_from_character_list() from %s!", source);
+    return;
+  }
+  
+  // Remove it from the list.
+  {
+    struct char_data *temp;
+    REMOVE_FROM_LIST(ch, character_list, next_in_character_list);
+  }
+
+  // Check to make sure that there are no duplicates left.
+  for (struct char_data *tmp = character_list; tmp; tmp = tmp->next_in_character_list) {
+    if (tmp == ch) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Found %s in character list after removing during %s!", GET_CHAR_NAME(ch), source);
+      return;
+    }
+  }
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

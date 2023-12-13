@@ -2421,7 +2421,7 @@ int perform_dupe_check(struct descriptor_data *d)
 
   for (ch = character_list; ch; ch = next_ch)
   {
-    next_ch = ch->next;
+    next_ch = ch->next_in_character_list;
 
     if (IS_NPC(ch))
       continue;
@@ -3041,8 +3041,7 @@ void nanny(struct descriptor_data * d, char *arg)
       // Wipe out various pointers related to game state and recalculate carry weight.
       reset_char(d->character);
       PLR_FLAGS(d->character).RemoveBit(PLR_CUSTOMIZE);
-      d->character->next = character_list;
-      character_list = d->character;
+      add_ch_to_character_list(d->character, "entering game from option 1");
       d->character->player.time.logon = time(0);
 
       if (PRF_FLAGGED(d->character, PRF_DISABLE_XTERM)) {

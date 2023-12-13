@@ -1553,13 +1553,22 @@ ACMD(do_mdelete)
     mudlog(buf3, ch, LOG_WIZLOG, TRUE);
   }
 
-  struct char_data *j, *temp, *next_char;
+  struct char_data *j, *temp;
   /* cycle through characters, purging soon-to-be-delete mobs as we go */
-  for (temp = character_list; temp; temp = next_char) {
-    next_char = temp->next;
-    if (IS_NPC(temp) && GET_MOB_RNUM(temp) == rnum) {
-      act("$n disintegrates.", FALSE, temp, 0, 0, TO_ROOM);
-      extract_char(temp);
+  {
+    bool should_loop = TRUE;
+
+    while (should_loop) {
+      should_loop = FALSE;
+
+      for (temp = character_list; temp; temp = temp->next_in_character_list) {
+        if (IS_NPC(temp) && GET_MOB_RNUM(temp) == rnum) {
+          act("$n disintegrates.", FALSE, temp, 0, 0, TO_ROOM);
+          extract_char(temp);
+          should_loop = TRUE;
+          break;
+        }
+      }
     }
   }
 
@@ -1570,7 +1579,7 @@ ACMD(do_mdelete)
     mob_proto[counter] = mob_proto[counter + 1];
     mob_proto[counter].nr = counter;
 
-    for (j = character_list; j; j = j->next) {
+    for (j = character_list; j; j = j->next_in_character_list) {
       if (IS_NPC(j) && j->nr == counter) {
         temp = Mem->GetCh();
         *temp = *j;

@@ -421,7 +421,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         // which are pointing to this prototype; if it is, it gets
         // replaced
         struct char_data *i, *temp;
-        for (i = character_list; i; i = i->next) {
+        for (i = character_list; i; i = i->next_in_character_list) {
           if (mob_number == i->nr) {
             // alloc a temp mobile
             temp = Mem->GetCh();
@@ -675,7 +675,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         *  existing in the world. This is because when I start   *
         * extracting mobiles, bad things will happen!           */
         // We explicitly use the settable/raw version here since we're not using it for lookups.
-        for (temp_mob = character_list; temp_mob; temp_mob = temp_mob->next)
+        for (temp_mob = character_list; temp_mob; temp_mob = temp_mob->next_in_character_list)
           if (GET_SETTABLE_MOB_RNUM(temp_mob) >= d->edit_mob->nr)
             GET_SETTABLE_MOB_RNUM(temp_mob)++;
 

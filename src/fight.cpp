@@ -3517,7 +3517,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (GET_POS(victim) == POS_DEAD)
   {
     if (ch == victim && GET_LASTHIT(victim) > 0) {
-      for (struct char_data *i = character_list; i; i = i->next)
+      for (struct char_data *i = character_list; i; i = i->next_in_character_list)
         if (!IS_NPC(i) && GET_IDNUM(i) == GET_LASTHIT(victim)) {
           ch = i;
           break;
@@ -5792,7 +5792,6 @@ bool next_combat_list_is_valid(struct char_data *ncl) {
 
 /* control the fights going on.  Called every 2 seconds from comm.c. */
 // aka combat_loop
-unsigned long violence_loop_counter = 0;
 void perform_violence(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -5805,7 +5804,7 @@ void perform_violence(void)
     return;
 
   // Increment our violence loop counter.
-  violence_loop_counter++;
+  int loop_rand = rand();
 
   if (initiative_until_global_reroll <= 0) {
     roll_initiative();
@@ -5845,11 +5844,11 @@ void perform_violence(void)
     engulfed = FALSE;
 
     // Prevent people from being processed multiple times per loop.
-    if (ch->last_violence_loop == violence_loop_counter) {
+    if (ch->last_loop_rand == loop_rand) {
       mudlog("SYSERR: Encountered someone who already went this combat turn. Fix set_fighting().", ch, LOG_SYSLOG, TRUE);
       continue;
     } else {
-      ch->last_violence_loop = violence_loop_counter;
+      ch->last_loop_rand = loop_rand;
     }
 
     // You're not in combat or not awake.

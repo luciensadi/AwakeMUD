@@ -382,8 +382,7 @@ void copyover_recover()
       write_to_descriptor (desc, "\n\rCopyover recovery complete. Welcome back!\n\r");
       d->connected = CON_PLAYING;
       reset_char(d->character);
-      d->character->next = character_list;
-      character_list = d->character;
+      add_ch_to_character_list(d->character, "copyover recovery");
       // Since we're coming from copyover if the char is in a vehicle and is the owner throw him at the front seat
       // otherwise throw him at the back. Because we don't save frontness and we'll assume the owner is driving
       // anyway.
@@ -1128,11 +1127,8 @@ void game_loop(int mother_desc)
 
 void cleanup_things_valgrind_complains_about() {
   // We're shutting down: Extract all characters, as they contain new'd data that Valgrind will complain about.
-  struct char_data *next_ch = NULL;
-  for (struct char_data *ch = character_list; ch; ch = next_ch) {
-    next_ch = ch->next;
-    extract_char(ch);
-  }
+  while (character_list)
+    extract_char(character_list);
 
   // Extract vehicles for Valgrind cleanliness reasons.
   struct veh_data *next_veh = NULL;
@@ -2592,7 +2588,7 @@ void free_up_memory(int Empty)
   std::cerr << "SYSERR: Out of memory, saving houses and shutting down...\n";
   // Blow away characters to try and free up enough to let us write houses.
   for (struct char_data *next_ch, *ch = character_list; ch; ch = next_ch) {
-    next_ch = ch->next;
+    next_ch = ch->next_in_character_list;
     delete ch;
   }
   // Write houses.
@@ -3427,7 +3423,7 @@ void msdp_update() {
 
 bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
   // NPCs don't get social bonuses.
-  if (IS_NPC(ch))
+  if (!ch || IS_NPC(ch))
     return FALSE;
 
   // Not in a social room? Can't receive the bonus.
@@ -3456,7 +3452,9 @@ bool ch_is_eligible_to_receive_socialization_bonus(struct char_data *ch) {
 void increase_congregation_bonus_pools() {
   // Apply congregation / socializing bonuses. We specifically don't want to tell them when it's full,
   // because that encourages breaking off from RP to go burn it down again. Let them chill.
-  for (struct char_data *i = character_list; i; i = i->next) {
+  for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next) {
+    struct char_data *i = desc->original ? desc->original : desc->character;
+
     if (!ch_is_eligible_to_receive_socialization_bonus(i))
       continue;
 

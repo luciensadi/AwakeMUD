@@ -24,6 +24,8 @@ extern struct time_info_data time_info;
 extern struct char_data *character_list;
 extern struct index_data *mob_index;
 
+void weaken_or_terminate_spirits(bool sunrise);
+
 const char *moon[] =
   {
     "new",
@@ -48,7 +50,6 @@ bool precipitation_is_snow(int jurisdiction) {
 void another_hour(void)
 {
   bool new_month = FALSE;
-  struct char_data *ch, *next;
   const char *temp;
 
   time_info.hours++;
@@ -62,17 +63,9 @@ void another_hour(void)
       temp = "^L";
     snprintf(buf, sizeof(buf), "%sThe sun rises in the east.^n\r\n", temp);
     send_to_outdoor(buf, TRUE);
-    for (ch = character_list; ch; ch = next) {
-      next = ch->next;
-      if (IS_PC_CONJURED_SPIRIT(ch)) {
-        if (--GET_SPARE2(ch) <= 0) {
-          act("$n abruptly fades from existance.", TRUE, ch, 0, 0, TO_ROOM);
-          end_spirit_existance(ch, FALSE);
-        } else {
-          act("$n weakens as the metaphysical power of sunrise ripples through it.\r\n", TRUE, ch, 0, 0, TO_ROOM);
-        }
-      }
-    }
+
+    weaken_or_terminate_spirits(TRUE);
+    
     break;
   case 9:
     weather_info.sunlight = SUN_LIGHT;
@@ -115,17 +108,9 @@ void another_hour(void)
     }
     snprintf(buf, sizeof(buf), "%sThe sun slowly disappears in the west.^n\r\n", temp);
     send_to_outdoor(buf, TRUE);
-    for (ch = character_list; ch; ch = next) {
-      next = ch->next;
-      if (IS_PC_CONJURED_SPIRIT(ch)) {
-        if (--GET_SPARE2(ch) <= 0) {
-          act("$n abruptly fades from existance.", TRUE, ch, 0, 0, TO_ROOM);
-          end_spirit_existance(ch, FALSE);
-        } else {
-          act("$n weakens as the metaphysical power of sunset ripples through it.\r\n", TRUE, ch, 0, 0, TO_ROOM);
-        }
-      }
-    }
+
+    weaken_or_terminate_spirits(FALSE);
+    
     break;
   case 21:
     weather_info.sunlight = SUN_DARK;
@@ -319,3 +304,41 @@ void weather_change(void)
   if (weather_info.sky < SKY_RAINING)
     weather_info.lastrain++;
 }
+
+void weaken_or_terminate_spirits(bool sunrise) {
+      bool should_loop = TRUE;
+      int loop_rand = rand();
+      int loop_counter = 0;
+
+      while (should_loop) {
+        should_loop = FALSE;
+        loop_counter++;
+
+        for (struct char_data *ch = character_list; ch; ch = ch->next_in_character_list) {
+          if (ch->last_loop_rand == loop_rand) {
+            continue;
+          } else {
+            ch->last_loop_rand = loop_rand;
+          }
+          
+          if (IS_PC_CONJURED_SPIRIT(ch)) {
+            if (--GET_SPARE2(ch) <= 0) {
+              act("$n abruptly fades from existance.", TRUE, ch, 0, 0, TO_ROOM);
+              end_spirit_existance(ch, FALSE);
+              should_loop = TRUE;
+              break;
+            } else {
+              if (sunrise) {
+                act("$n weakens as the metaphysical power of sunrise ripples through it.\r\n", TRUE, ch, 0, 0, TO_ROOM);
+              } else {
+                act("$n weakens as the metaphysical power of sunset ripples through it.\r\n", TRUE, ch, 0, 0, TO_ROOM);
+              }
+            }
+          }
+        }
+
+        if (loop_counter > 1) {
+          // mudlog_vfprintf(NULL, LOG_SYSLOG, "Looped %d times over weaken_or_terminate_spirits().", loop_counter);
+        }
+      }
+    }

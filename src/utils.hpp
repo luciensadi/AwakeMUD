@@ -160,6 +160,8 @@ struct char_data *ch_is_grouped_with_idnum(struct char_data *ch, idnum_t idnum);
 void    log_traceback(const char *context, ...);
 int     get_metavariant_penalty(struct char_data *ch);
 int     get_total_active_focus_rating(struct char_data *i, int &total);
+void    add_ch_to_character_list(struct char_data *ch, const char *source);
+void    remove_ch_from_character_list(struct char_data *ch, const char *source);
 
 struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion);
 void    find_or_load_ch_cleanup(struct char_data *ch);

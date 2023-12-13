@@ -400,22 +400,45 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
 
 void extract_quest_targets(int num)
 {
-  struct char_data *mob, *next;
   struct obj_data *obj, *next_obj;
   int i;
 
-  for (mob = character_list; mob; mob = next) {
-    next = mob->next;
-    if (IS_NPC(mob) && mob->mob_specials.quest_id == num) {
-      for (obj = mob->carrying; obj; obj = next_obj) {
-        next_obj = obj->next_content;
-        extract_obj(obj);
+  {
+    bool should_loop = TRUE;
+    int loop_counter = 0;
+    int loop_rand = rand();
+
+    while (should_loop) {
+      should_loop = FALSE;
+      loop_counter++;
+
+      for (struct char_data *mob = character_list; mob; mob = mob->next_in_character_list) {
+        if (mob->last_loop_rand == loop_rand) {
+          continue;
+        } else {
+          mob->last_loop_rand = loop_rand;
+        }
+
+        if (IS_NPC(mob) && mob->mob_specials.quest_id == num) {
+          for (obj = mob->carrying; obj; obj = next_obj) {
+            next_obj = obj->next_content;
+            extract_obj(obj);
+          }
+          for (i = 0; i < NUM_WEARS; i++)
+            if (GET_EQ(mob, i))
+              extract_obj(GET_EQ(mob, i));
+
+          // We extracted a character, so start over.
+          act("$n slips away quietly.", FALSE, mob, 0, 0, TO_ROOM);
+          extract_char(mob);
+          should_loop = TRUE;
+          break;
+        }
       }
-      for (i = 0; i < NUM_WEARS; i++)
-        if (GET_EQ(mob, i))
-          extract_obj(GET_EQ(mob, i));
-      act("$n slips away quietly.", FALSE, mob, 0, 0, TO_ROOM);
-      extract_char(mob);
+
+      if (loop_counter > 1) {
+        // mudlog_vfprintf(NULL, LOG_SYSLOG, "Looped %d times over extract_quest_targets().", loop_counter);
+      }
     }
   }
 
@@ -1834,7 +1857,7 @@ void johnson_update(void)
     else if ( rend || quest_table[i].e_time < time_info.hours ) {
       if ( quest_table[i].e_string != NULL )
         strcpy( buf, quest_table[i].e_string );
-      for ( johnson = character_list; johnson != NULL; johnson = johnson->next ) {
+      for ( johnson = character_list; johnson != NULL; johnson = johnson->next_in_character_list ) {
         if ( johnson->nr == (tmp = read_mobile( quest_table[i].johnson, REAL))->nr )
           break;
       }
@@ -2019,7 +2042,7 @@ void boot_one_quest(struct quest_data *quest)
     mob_proto[i].real_abils.attributes[QUI] = MAX(1, mob_proto[i].real_abils.attributes[QUI]);
 
     // Ensure that all instances of this johnson don't have a spare1 value set
-    for (struct char_data *tmp = character_list; tmp; tmp = tmp->next) {
+    for (struct char_data *tmp = character_list; tmp; tmp = tmp->next_in_character_list) {
       if (IS_NPC(tmp) && GET_MOB_VNUM(tmp) == quest_table[quest_nr].johnson) {
         GET_SPARE1(tmp) = 0;
       }
@@ -3752,7 +3775,7 @@ ACMD(do_endrun) {
         break;
 
   // Drop the quest.
-  for (struct char_data *johnson = character_list; johnson; johnson = johnson->next) {
+  for (struct char_data *johnson = character_list; johnson; johnson = johnson->next_in_character_list) {
     if (IS_NPC(johnson) && (GET_MOB_VNUM(johnson) == quest_table[GET_QUEST(ch)].johnson)) {
       if (phone) {
         send_to_char(ch, "You call your Johnson, and after a short wait the phone is picked up.\r\n"

@@ -1638,7 +1638,7 @@ void mobile_activity(void)
 
   // Iterate through all characters in the game.
   for (ch = character_list; ch; ch = next_ch) {
-    next_ch = ch->next;
+    next_ch = ch->next_in_character_list;
 
     // Skip them if they're a player character, are sleeping, or are operated by a player (ex: projections, possessed).
     if (!IS_NPC(ch) || !AWAKE(ch) || ch->desc)

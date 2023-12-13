@@ -95,8 +95,10 @@ ACMD(do_accept) {
       send_to_char(ch, "You accept the invitation and declare yourself a member of '%s'.\r\n", pgr->get_name());
 
       // Notify all online members. If someone is offline, they need to check the roster or logs to see what changed.
-      for (struct char_data* i = character_list; i; i = i->next) {
-        if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
+      for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next) {
+        struct char_data *i = desc->original ? desc->original : desc->character;
+        
+        if (i && !IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
           // Notify the character.
           if (!pgr->is_secret() || !GET_PGROUP_MEMBER_DATA(i)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT)) {
             send_to_char(i, "^G%s has joined '%s'.\r\n^n", GET_CHAR_NAME(ch), pgr->get_name());
@@ -449,9 +451,13 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   }
 
   // Search the online characters for someone matching the specified name.
-  for (new_leader = character_list; new_leader; new_leader = new_leader->next) {
-    if (!IS_NPC(new_leader) && GET_IDNUM(new_leader) == highest_ranked->idnum)
+  for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next) {
+    new_leader = desc->original ? desc->original : desc->character;
+
+    if (new_leader && !IS_NPC(new_leader) && GET_IDNUM(new_leader) == highest_ranked->idnum)
       break;
+
+    new_leader = NULL;
   }
 
   // If they weren't online, attempt to load them from the DB.
@@ -634,7 +640,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
    * This prevents any issues where players might abuse pgroup commands and then delete them to hide their tracks. */
 
   // Remove this group from all active players' char_data structs. Delete members' pgroup_data pointers.
-  for (struct char_data* i = character_list; i; i = i->next) {
+  for (struct char_data* i = character_list; i; i = i->next_in_character_list) {
     if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
       // Notify the character, unless they're the person doing the disbanding.
       if (i != ch) {
@@ -889,7 +895,7 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   FAILURE_CASE(!*name || !*reason, "Syntax: PGROUP OUTCAST <character name> <reason>");
 
   // Search the online characters for someone matching the specified name.
-  for (vict = character_list; vict; vict = vict->next) {
+  for (vict = character_list; vict; vict = vict->next_in_character_list) {
     if (!IS_NPC(vict) && (isname(name, GET_KEYWORDS(vict)) || isname(name, GET_CHAR_NAME(vict)) || recog(ch, vict, name)))
       break;
   }
@@ -1497,7 +1503,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // Now that we know the privilege is kosher, we can do the more expensive character validity check.
 
   // Search the online characters for someone matching the specified name.
-  for (vict = character_list; vict; vict = vict->next) {
+  for (vict = character_list; vict; vict = vict->next_in_character_list) {
     if (!IS_NPC(vict) && (isname(name, GET_KEYWORDS(vict)) || isname(name, GET_CHAR_NAME(vict)) || recog(ch, vict, name)))
       break;
   }
@@ -1612,7 +1618,7 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   }
 
   // Search the online characters for someone matching the specified name.
-  for (vict = character_list; vict; vict = vict->next) {
+  for (vict = character_list; vict; vict = vict->next_in_character_list) {
     if (!IS_NPC(vict) && (isname(name, GET_KEYWORDS(vict)) || isname(name, GET_CHAR_NAME(vict)) || recog(ch, vict, name)))
       break;
   }
@@ -1868,7 +1874,7 @@ ACMD(do_pgset) {
 
     // Look for them online.
     struct char_data *target = NULL;
-    for (struct char_data *target = character_list; target; target = target->next) {
+    for (struct char_data *target = character_list; target; target = target->next_in_character_list) {
       if (GET_IDNUM(target) == idnum) {
         break;
       }

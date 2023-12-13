@@ -509,7 +509,7 @@ void check_idling(void)
   struct char_data *ch, *next;
 
   for (ch = character_list; ch; ch = next) {
-    next = ch->next;
+    next = ch->next_in_character_list;
 
     if (IS_NPC(ch) && ch->desc && ch->desc->original) {
       if (ch->desc->original->char_specials.timer > 10)
@@ -586,6 +586,9 @@ void check_idling(void)
         snprintf(buf, sizeof(buf), "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
         extract_char(ch);
+
+        // You must either RETURN here or do a while-loop that restarts on removal, because if the next character
+        // depends on this one (elemental, quest, etc), it will be deleted memory when referenced.
         return;
       }
 
@@ -799,97 +802,127 @@ bool check_swimming(struct char_data *ch)
 void process_regeneration(int half_hour)
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  struct char_data *ch, *next_char;
 
-  for (ch = character_list; ch; ch = next_char) {
-    next_char = ch->next;
-    if (GET_TEMP_QUI_LOSS(ch) > 0) {
-      int old_qui = GET_QUI(ch);
+  {
+    bool should_loop = TRUE;
+    int loop_rand = rand();
+    int loop_runs = 0;
 
-      GET_TEMP_QUI_LOSS(ch)--;
-      affect_total(ch);
+    while (should_loop) {
+      should_loop = FALSE;
+      loop_runs++;
 
-      if (old_qui <= 0 && GET_QUI(ch) > 0) {
-        send_to_char("Your muscles unlock, and you find you can move again.\r\n", ch);
-      }
-    }
-    if (GET_POS(ch) >= POS_STUNNED) {
-      // Apply healing.
-      {
-        bool has_pedit = FALSE;
-        for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content) {
-          if (GET_BIOWARE_TYPE(obj) == BIO_PAINEDITOR) {
-            has_pedit = GET_BIOWARE_IS_ACTIVATED(obj);
-            break;
-          }
-        }
-
-        int old_phys = GET_PHYSICAL(ch), old_ment = GET_MENTAL(ch);
-
-        physical_gain(ch);
-        if (!has_pedit && old_phys != GET_MAX_PHYSICAL(ch) && GET_PHYSICAL(ch) == GET_MAX_PHYSICAL(ch)) {
-          send_to_char("The last of your injuries has healed.\r\n", ch);
-        }
-
-        mental_gain(ch);
-        if (!has_pedit && old_ment != GET_MAX_MENTAL(ch)) {
-          if (GET_MENTAL(ch) == GET_MAX_MENTAL(ch)) {
-            send_to_char("You feel fully alert again.\r\n", ch);
-          } else if (old_ment < 100 && GET_MENTAL(ch) >= 100){
-            send_to_char("You regain consciousness.\r\n", ch);
-          }
-        }
-      }
-
-      if (!IS_NPC(ch) && IS_WATER(ch->in_room) && half_hour)
-        if (check_swimming(ch))
+      for (struct char_data *ch = character_list; ch; ch = ch->next_in_character_list) {
+        if (ch->last_loop_rand == loop_rand) {
           continue;
-      if (GET_POS(ch) == POS_STUNNED)
-        update_pos(ch);
-      if (GET_PHYSICAL(ch) >= GET_MAX_PHYSICAL(ch)) {
-        if (AFF_FLAGS(ch).IsSet(AFF_HEALED)) {
-          AFF_FLAGS(ch).RemoveBit(AFF_HEALED);
-          send_to_char("You can now be affected by the heal spell again.\r\n", ch);
+        } else {
+          ch->last_loop_rand = loop_rand;
         }
-        if (AFF_FLAGS(ch).IsSet(AFF_RESISTPAIN)) {
-          AFF_FLAGS(ch).RemoveBit(AFF_RESISTPAIN);
-          send_to_char("Your magical pain resistance wears off.\r\n", ch);
-          end_all_sustained_spells_of_type_affecting_ch(SPELL_RESISTPAIN, 0, ch);
-        }
-      }
-      if (GET_PHYSICAL(ch) > 0) {
-        if (AFF_FLAGS(ch).IsSet(AFF_STABILIZE))
-          AFF_FLAGS(ch).RemoveBit(AFF_STABILIZE);
-      }
-    }
-    if (GET_POS(ch) == POS_MORTALLYW && half_hour) {
-      bool dam = !AFF_FLAGS(ch).IsSet(AFF_STABILIZE);
+        
+        // Tick down temp qui loss (nerve strike, etc)
+        if (GET_TEMP_QUI_LOSS(ch) > 0) {
+          int old_qui = GET_QUI(ch);
 
-      if (dam) {
-        // A ticking metabolic arrester prevents damage.
-        for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content) {
-          if (GET_BIOWARE_TYPE(obj) == BIO_METABOLICARRESTER) {
-            if (++GET_BIOWARE_IS_ACTIVATED(obj) == 5) {
-              // If it's hit 5 ticks, then it resets to 0 and doesn't prevent damage this tick.
-              GET_BIOWARE_IS_ACTIVATED(obj) = 0;
-            } else {
-              // Otherwise, prevent.
-              dam = FALSE;
+          GET_TEMP_QUI_LOSS(ch)--;
+          affect_total(ch);
+
+          if (old_qui <= 0 && GET_QUI(ch) > 0) {
+            send_to_char("Your muscles unlock, and you find you can move again.\r\n", ch);
+          }
+        }
+
+        if (GET_POS(ch) >= POS_STUNNED) {
+          // Apply healing.
+          {
+            bool has_pedit = FALSE;
+            for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content) {
+              if (GET_BIOWARE_TYPE(obj) == BIO_PAINEDITOR) {
+                has_pedit = GET_BIOWARE_IS_ACTIVATED(obj);
+                break;
+              }
             }
-            break;
+
+            int old_phys = GET_PHYSICAL(ch), old_ment = GET_MENTAL(ch);
+
+            physical_gain(ch);
+            if (!has_pedit && old_phys != GET_MAX_PHYSICAL(ch) && GET_PHYSICAL(ch) == GET_MAX_PHYSICAL(ch)) {
+              send_to_char("The last of your injuries has healed.\r\n", ch);
+            }
+
+            mental_gain(ch);
+            if (!has_pedit && old_ment != GET_MAX_MENTAL(ch)) {
+              if (GET_MENTAL(ch) == GET_MAX_MENTAL(ch)) {
+                send_to_char("You feel fully alert again.\r\n", ch);
+              } else if (old_ment < 100 && GET_MENTAL(ch) >= 100){
+                send_to_char("You regain consciousness.\r\n", ch);
+              }
+            }
+          }
+
+          if (!IS_NPC(ch) && IS_WATER(ch->in_room) && half_hour) {
+            if (check_swimming(ch)) {
+              // They died. Stop evaluating and start again.
+              should_loop = TRUE;
+              break;
+            }
+          }
+
+          if (GET_POS(ch) == POS_STUNNED)
+            update_pos(ch);
+
+          if (GET_PHYSICAL(ch) >= GET_MAX_PHYSICAL(ch)) {
+            if (AFF_FLAGS(ch).IsSet(AFF_HEALED)) {
+              AFF_FLAGS(ch).RemoveBit(AFF_HEALED);
+              send_to_char("You can now be affected by the Heal spell again.\r\n", ch);
+            }
+            if (AFF_FLAGS(ch).IsSet(AFF_RESISTPAIN)) {
+              AFF_FLAGS(ch).RemoveBit(AFF_RESISTPAIN);
+              send_to_char("Your magical pain resistance wears off.\r\n", ch);
+              end_all_sustained_spells_of_type_affecting_ch(SPELL_RESISTPAIN, 0, ch);
+            }
+          }
+          if (GET_PHYSICAL(ch) > 0) {
+            if (AFF_FLAGS(ch).IsSet(AFF_STABILIZE))
+              AFF_FLAGS(ch).RemoveBit(AFF_STABILIZE);
+          }
+        }
+
+        if (GET_POS(ch) == POS_MORTALLYW && half_hour) {
+          bool dam = !AFF_FLAGS(ch).IsSet(AFF_STABILIZE);
+
+          if (dam) {
+            // A ticking metabolic arrester prevents damage.
+            for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content) {
+              if (GET_BIOWARE_TYPE(obj) == BIO_METABOLICARRESTER) {
+                if (++GET_BIOWARE_IS_ACTIVATED(obj) == 5) {
+                  // If it's hit 5 ticks, then it resets to 0 and doesn't prevent damage this tick.
+                  GET_BIOWARE_IS_ACTIVATED(obj) = 0;
+                } else {
+                  // Otherwise, prevent.
+                  dam = FALSE;
+                }
+                break;
+              }
+            }
+          }
+
+          if (dam) {
+            // Deal a box of physical damage.
+            if (damage(ch, ch, 1, TYPE_SUFFERING, PHYSICAL)) {
+              // They died. Loop again.
+              should_loop = TRUE;
+              break;
+            }
+          } else {
+            // Otherwise, just check for docwagon pulse.
+            docwagon(ch);
           }
         }
       }
+    }
 
-      if (dam) {
-        // Deal a box of physical damage.
-        if (damage(ch, ch, 1, TYPE_SUFFERING, PHYSICAL))
-          continue;
-      } else {
-        // Otherwise, just try to docwagon you out.
-        if (docwagon(ch))
-          continue;
-      }
+    if (loop_runs > 1) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Ran process_regeneration() %d times due to mid-run alterations and extractions.", loop_runs);
     }
   }
 
@@ -916,7 +949,6 @@ void point_update(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   ACMD_DECLARE(do_use);
-  struct char_data *i, *next_char;
 
   // Generate the wholist file.
   ACMD_CONST(do_who);
@@ -925,182 +957,210 @@ void point_update(void)
 
   /* characters */
   bool is_npc = FALSE;
-  for (i = character_list; i; i = next_char) {
-    next_char = i->next;
 
-    is_npc = IS_NPC(i);
+  {
+    bool should_loop = TRUE;
+    int loop_rand = rand();
+    int loop_counter = 0;
 
-    if (!is_npc) {
-      playerDB.SaveChar(i, GET_LOADROOM(i));
+    while (should_loop) {
+      should_loop = FALSE;
+      loop_counter++;
 
-      AFF_FLAGS(i).RemoveBit(AFF_DAMAGED);
-
-#ifdef ENABLE_HUNGER
-      if (!GET_POWER(i, ADEPT_SUSTENANCE) || !(time_info.hours % 3)) {
-        // Leave this so that people's stomachs empty over time (can eat/drink more if they want to).
-        gain_condition(i, COND_FULL, -1);
-        gain_condition(i, COND_THIRST, -1);
-      }
-#endif
-      gain_condition(i, COND_DRUNK, -1);
-
-      if (GET_TEMP_ESSLOSS(i) > 0)
-        GET_TEMP_ESSLOSS(i) = MAX(0, GET_TEMP_ESSLOSS(i) - 100);
-
-#ifdef USE_PRIVATE_CE_WORLD
-      if (SHOTS_FIRED(i) >= MARKSMAN_QUEST_SHOTS_FIRED_REQUIREMENT && SHOTS_TRIGGERED(i) != -1) {
-        bool has_a_quest_item = FALSE;
-        struct obj_data *tmp = NULL;
-
-        // Check carried.
-        for (tmp = i->carrying; !has_a_quest_item && tmp; tmp = tmp->next_content)
-          has_a_quest_item = GET_OBJ_VNUM(tmp) == OBJ_MARKSMAN_LETTER || GET_OBJ_VNUM(tmp) == OBJ_MARKSMAN_BADGE;
-
-        // Check worn.
-        for (int worn = 0; !has_a_quest_item && worn < NUM_WEARS; worn++)
-          has_a_quest_item = GET_EQ(i, worn) && GET_OBJ_VNUM(GET_EQ(i, worn)) == OBJ_MARKSMAN_BADGE;
-
-        SHOTS_TRIGGERED(i) = (SHOTS_TRIGGERED(i) + 1) % 20;
-
-        if (!has_a_quest_item && SHOTS_TRIGGERED(i) == 0) {
-          send_to_char("^GYou feel you could benefit with some time at a shooting range.^n\r\n", i);
-        }
-      }
-#else
-      if (SHOTS_FIRED(i) >= 10000 && !SHOTS_TRIGGERED(i) && !number(0, 3)) {
-        SHOTS_TRIGGERED(i)++;
-        send_to_char("You feel you could benefit with some time at a shooting range.\r\n", i);
-      }
-#endif
-
-      if (IS_GHOUL(i) || IS_DRAGON(i))
-        if (!PLR_FLAGGED(i, PLR_PERCEIVE)) {
-          PLR_FLAGS(i).SetBit(PLR_PERCEIVE);
-      }
-
-      // Temp magic loss (banishing) regains 1/hour, SR3 pg 189
-      if (GET_TEMP_MAGIC_LOSS(i) > 0) {
-        GET_TEMP_MAGIC_LOSS(i)--;
-      }
-
-      // Geas check from focus / foci overuse.
-      if (GET_MAG(i) > 0) {
-        int total = 0;
-        int force = get_total_active_focus_rating(i, total);   
-
-        if (GET_REAL_MAG(i) * 2 < 0) {
-          mudlog("^RSYSERR: Multiplying magic for focus addiction check gave a NEGATIVE number! Increase the size of the variable!^n", i, LOG_SYSLOG, TRUE);
+      for (struct char_data *i = character_list; i; i = i->next_in_character_list) {
+        if (i->last_loop_rand == loop_rand) {
+          // mudlog("SYSERR: Encountered someone who's already been point_updated. Fix point_update().", i, LOG_SYSLOG, TRUE);
+          continue;
         } else {
-          if (force * 100 > GET_REAL_MAG(i) * 2 && success_test(GET_REAL_MAG(i) / 100, force / 2) < 1) {
+          i->last_loop_rand = loop_rand;
+        }
 
-#ifdef USE_OLD_FOCUS_ADDICTION_RULES
-            int num = number(1, total);
-            struct obj_data *focus_geas = NULL;
-            for (int x = 0; x < NUM_WEARS && !focus_geas; x++) {
-              if (!(focus = GET_EQ(i, x)))
-                continue;
+        is_npc = IS_NPC(i);
 
-              if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(i) && GET_FOCUS_ACTIVATED(focus)
-                  && !GET_FOCUS_BOND_TIME_REMAINING(focus) && !GET_FOCUS_GEAS(focus) && !--num) {
-                focus_geas = focus;
-              }
-              else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus)
-                  && WEAPON_FOCUS_USABLE_BY(focus, i) && !GET_WEAPON_FOCUS_GEAS(focus) && !--num) {
-                focus_geas = focus;
-              }
-            }
+        if (!is_npc) {
+          playerDB.SaveChar(i, GET_LOADROOM(i));
 
-            if (focus_geas) {
-              send_to_char(i, "^RYou feel some of your magic becoming locked in %s!^n Quick, take off all your foci before it happens again!\r\n", GET_OBJ_NAME(focus));
-              GET_FOCUS_GEAS(focus_geas) = GET_IDNUM(i);
-              magic_loss(i, 100, FALSE);
-            }
-#else
-            mudlog_vfprintf(i, LOG_SYSLOG, "Damaging %s and breaking sustained spells due to focus overuse (%d foci; %d > %d).", GET_CHAR_NAME(i), total, force * 100, GET_REAL_MAG(i) * 2);
-            send_to_char(i, "^RThe backlash of focus overuse rips through you!^n\r\n");
+          AFF_FLAGS(i).RemoveBit(AFF_DAMAGED);
 
-            // Disarm them.
-            {
-              struct obj_data *weap = GET_EQ(i, WEAR_WIELD);
-              if (weap && GET_OBJ_TYPE(weap) == ITEM_WEAPON && !WEAPON_IS_GUN(weap) && GET_WEAPON_FOCUS_RATING(weap) > 0) {
-                send_to_char(i, "Your fingers spasm from the pain, and you almost drop %s!\r\n", GET_OBJ_NAME(weap));
-                unequip_char(i, weap->worn_on, TRUE);
-                obj_to_char(weap, i);
-              }
-            }
-
-            // Damage them. This also strips all sustained spells.
-            if (damage(i, i, convert_damage(DEADLY) - 1, TYPE_FOCUS_OVERUSE, TRUE))
-              continue;
-#endif
+    #ifdef ENABLE_HUNGER
+          if (!GET_POWER(i, ADEPT_SUSTENANCE) || !(time_info.hours % 3)) {
+            // Leave this so that people's stomachs empty over time (can eat/drink more if they want to).
+            gain_condition(i, COND_FULL, -1);
+            gain_condition(i, COND_THIRST, -1);
           }
+    #endif
+          gain_condition(i, COND_DRUNK, -1);
+
+          if (GET_TEMP_ESSLOSS(i) > 0)
+            GET_TEMP_ESSLOSS(i) = MAX(0, GET_TEMP_ESSLOSS(i) - 100);
+
+    #ifdef USE_PRIVATE_CE_WORLD
+          if (SHOTS_FIRED(i) >= MARKSMAN_QUEST_SHOTS_FIRED_REQUIREMENT && SHOTS_TRIGGERED(i) != -1) {
+            bool has_a_quest_item = FALSE;
+            struct obj_data *tmp = NULL;
+
+            // Check carried.
+            for (tmp = i->carrying; !has_a_quest_item && tmp; tmp = tmp->next_content)
+              has_a_quest_item = GET_OBJ_VNUM(tmp) == OBJ_MARKSMAN_LETTER || GET_OBJ_VNUM(tmp) == OBJ_MARKSMAN_BADGE;
+
+            // Check worn.
+            for (int worn = 0; !has_a_quest_item && worn < NUM_WEARS; worn++)
+              has_a_quest_item = GET_EQ(i, worn) && GET_OBJ_VNUM(GET_EQ(i, worn)) == OBJ_MARKSMAN_BADGE;
+
+            SHOTS_TRIGGERED(i) = (SHOTS_TRIGGERED(i) + 1) % 20;
+
+            if (!has_a_quest_item && SHOTS_TRIGGERED(i) == 0) {
+              send_to_char("^GYou feel you could benefit with some time at a shooting range.^n\r\n", i);
+            }
+          }
+    #else
+          if (SHOTS_FIRED(i) >= 10000 && !SHOTS_TRIGGERED(i) && !number(0, 3)) {
+            SHOTS_TRIGGERED(i)++;
+            send_to_char("You feel you could benefit with some time at a shooting range.\r\n", i);
+          }
+    #endif
+
+          if (IS_GHOUL(i) || IS_DRAGON(i))
+            if (!PLR_FLAGGED(i, PLR_PERCEIVE)) {
+              PLR_FLAGS(i).SetBit(PLR_PERCEIVE);
+          }
+
+          // Temp magic loss (banishing) regains 1/hour, SR3 pg 189
+          if (GET_TEMP_MAGIC_LOSS(i) > 0) {
+            GET_TEMP_MAGIC_LOSS(i)--;
+          }
+
+          // Geas check from focus / foci overuse.
+          if (GET_MAG(i) > 0) {
+            int total = 0;
+            int force = get_total_active_focus_rating(i, total);   
+
+            if (GET_REAL_MAG(i) * 2 < 0) {
+              mudlog("^RSYSERR: Multiplying magic for focus addiction check gave a NEGATIVE number! Increase the size of the variable!^n", i, LOG_SYSLOG, TRUE);
+            } else {
+              if (force * 100 > GET_REAL_MAG(i) * 2 && success_test(GET_REAL_MAG(i) / 100, force / 2) < 1) {
+
+    #ifdef USE_OLD_FOCUS_ADDICTION_RULES
+                int num = number(1, total);
+                struct obj_data *focus_geas = NULL;
+                for (int x = 0; x < NUM_WEARS && !focus_geas; x++) {
+                  if (!(focus = GET_EQ(i, x)))
+                    continue;
+
+                  if (GET_OBJ_TYPE(focus) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(focus) == GET_IDNUM(i) && GET_FOCUS_ACTIVATED(focus)
+                      && !GET_FOCUS_BOND_TIME_REMAINING(focus) && !GET_FOCUS_GEAS(focus) && !--num) {
+                    focus_geas = focus;
+                  }
+                  else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus)
+                      && WEAPON_FOCUS_USABLE_BY(focus, i) && !GET_WEAPON_FOCUS_GEAS(focus) && !--num) {
+                    focus_geas = focus;
+                  }
+                }
+
+                if (focus_geas) {
+                  send_to_char(i, "^RYou feel some of your magic becoming locked in %s!^n Quick, take off all your foci before it happens again!\r\n", GET_OBJ_NAME(focus));
+                  GET_FOCUS_GEAS(focus_geas) = GET_IDNUM(i);
+                  magic_loss(i, 100, FALSE);
+                }
+    #else
+                mudlog_vfprintf(i, LOG_SYSLOG, "Damaging %s and breaking sustained spells due to focus overuse (%d foci; %d > %d).", GET_CHAR_NAME(i), total, force * 100, GET_REAL_MAG(i) * 2);
+                send_to_char(i, "^RThe backlash of focus overuse rips through you!^n\r\n");
+
+                // Disarm them.
+                {
+                  struct obj_data *weap = GET_EQ(i, WEAR_WIELD);
+                  if (weap && GET_OBJ_TYPE(weap) == ITEM_WEAPON && !WEAPON_IS_GUN(weap) && GET_WEAPON_FOCUS_RATING(weap) > 0) {
+                    send_to_char(i, "Your fingers spasm from the pain, and you almost drop %s!\r\n", GET_OBJ_NAME(weap));
+                    unequip_char(i, weap->worn_on, TRUE);
+                    obj_to_char(weap, i);
+                  }
+                }
+
+                // Damage them. This also strips all sustained spells.
+                if (damage(i, i, convert_damage(DEADLY) - 1, TYPE_FOCUS_OVERUSE, TRUE)) {
+                  // They died? Time to restart the loop.
+                  should_loop = TRUE;
+                  break;
+                }
+    #endif
+              }
+            }
+          }
+
+          if (HUNTING(i) && !AFF_FLAGGED(i, AFF_TRACKING) && ++HOURS_SINCE_TRACK(i) > 8)
+            HUNTING(i) = NULL;
+
+          if (i->bioware)
+            if (check_bioware(i)) {
+              // They died? Time to restart the loop.
+              should_loop = TRUE;
+              break;
+            }
+
+          // Every hour, we check for withdrawal.
+          process_withdrawal(i);
+        }
+
+        if (i->desc && IS_PROJECT(i)) {
+          if (AFF_FLAGGED(i->desc->original, AFF_TRACKING) && HUNTING(i->desc->original) && !--HOURS_LEFT_TRACK(i->desc->original)) {
+            act("The astral signature leads you to $N.", FALSE, i, 0, HUNTING(i->desc->original), TO_CHAR);
+            char_from_room(i);
+            char_to_room(i, HUNTING(i->desc->original)->in_room);
+            act("$n enters the area.", TRUE, i, 0, 0, TO_ROOM);
+            AFF_FLAGS(i->desc->original).RemoveBit(AFF_TRACKING);
+            AFF_FLAGS(HUNTING(i->desc->original)).RemoveBit(AFF_TRACKED);
+            HUNTING(i->desc->original) = NULL;
+          }
+
+          GET_ESS(i) -= 100;
+          if (i->desc && i->desc->original) {
+            // Tick up temporary essence loss.
+            GET_TEMP_ESSLOSS(i->desc->original) = GET_ESS(i->desc->original) - GET_ESS(i);
+            affect_total(i->desc->original);
+          }
+
+          if (GET_ESS(i) <= 0) {
+            struct char_data *victim = i->desc->original;
+            send_to_char("As you feel the attachment to your physical body fade, you quickly return. The backlash from the fading connection rips through you...\r\n", i);
+            PLR_FLAGS(i->desc->original).RemoveBit(PLR_PROJECT);
+            i->desc->character = i->desc->original;
+            i->desc->original = NULL;
+            // GET_PHYSICAL(i->desc->character) = -(GET_BOD(i->desc->character) - 1) * 100;
+            // act("$n collapses in a heap.", TRUE, i->desc->character, 0, 0, TO_ROOM);
+            // update_pos(i->desc->character);
+            i->desc->character->desc = i->desc;
+            i->desc = NULL;
+            extract_char(i);
+
+            // First, nuke their health.
+            GET_PHYSICAL(victim) = -50;
+            GET_MENTAL(victim) = 0;
+            // Next, remove their death saves.
+            GET_PC_SALVATION_TICKS(victim) = 0;
+            // Finally, deal them massive damage.
+            damage(victim, victim, 100, TYPE_SUFFERING, TRUE);
+
+            // Restart the loop: We extracted someone.
+            should_loop = TRUE;
+            break;
+          } else if (GET_ESS(i) <= 100)
+            send_to_char("You feel memories of your physical body slipping away.\r\n", i);
+        }
+
+        if (is_npc || !PLR_FLAGGED(i, PLR_JUST_DIED)) {
+          if (LAST_HEAL(i) > 0)
+            LAST_HEAL(i)--;
+          else if (LAST_HEAL(i) < 0)
+            LAST_HEAL(i)++;
+          if (GET_EQ(i, WEAR_PATCH))
+            remove_patch(i);
         }
       }
 
-      if (HUNTING(i) && !AFF_FLAGGED(i, AFF_TRACKING) && ++HOURS_SINCE_TRACK(i) > 8)
-        HUNTING(i) = NULL;
-
-      if (i->bioware)
-        if (check_bioware(i))
-          continue;
-
-      // Every hour, we check for withdrawal.
-      process_withdrawal(i);
     }
-
-    if (i->desc && IS_PROJECT(i)) {
-      if (AFF_FLAGGED(i->desc->original, AFF_TRACKING) && HUNTING(i->desc->original) && !--HOURS_LEFT_TRACK(i->desc->original)) {
-        act("The astral signature leads you to $N.", FALSE, i, 0, HUNTING(i->desc->original), TO_CHAR);
-        char_from_room(i);
-        char_to_room(i, HUNTING(i->desc->original)->in_room);
-        act("$n enters the area.", TRUE, i, 0, 0, TO_ROOM);
-        AFF_FLAGS(i->desc->original).RemoveBit(AFF_TRACKING);
-        AFF_FLAGS(HUNTING(i->desc->original)).RemoveBit(AFF_TRACKED);
-        HUNTING(i->desc->original) = NULL;
-      }
-
-      GET_ESS(i) -= 100;
-      if (i->desc && i->desc->original) {
-        // Tick up temporary essence loss.
-        GET_TEMP_ESSLOSS(i->desc->original) = GET_ESS(i->desc->original) - GET_ESS(i);
-        affect_total(i->desc->original);
-      }
-
-      if (GET_ESS(i) <= 0) {
-        struct char_data *victim = i->desc->original;
-        send_to_char("As you feel the attachment to your physical body fade, you quickly return. The backlash from the fading connection rips through you...\r\n", i);
-        PLR_FLAGS(i->desc->original).RemoveBit(PLR_PROJECT);
-        i->desc->character = i->desc->original;
-        i->desc->original = NULL;
-        // GET_PHYSICAL(i->desc->character) = -(GET_BOD(i->desc->character) - 1) * 100;
-        // act("$n collapses in a heap.", TRUE, i->desc->character, 0, 0, TO_ROOM);
-        // update_pos(i->desc->character);
-        i->desc->character->desc = i->desc;
-        i->desc = NULL;
-        extract_char(i);
-
-        // First, nuke their health.
-        GET_PHYSICAL(victim) = -50;
-        GET_MENTAL(victim) = 0;
-        // Next, remove their death saves.
-        GET_PC_SALVATION_TICKS(victim) = 0;
-        // Finally, deal them massive damage.
-        if (damage(victim, victim, 100, TYPE_SUFFERING, TRUE))
-          continue;
-
-        // Continue regardless- i no longer exists.
-        continue;
-      } else if (GET_ESS(i) <= 100)
-        send_to_char("You feel memories of your physical body slipping away.\r\n", i);
-    }
-
-    if (is_npc || !PLR_FLAGGED(i, PLR_JUST_DIED)) {
-      if (LAST_HEAL(i) > 0)
-        LAST_HEAL(i)--;
-      else if (LAST_HEAL(i) < 0)
-        LAST_HEAL(i)++;
-      if (GET_EQ(i, WEAR_PATCH))
-        remove_patch(i);
+  
+    if (loop_counter > 1) {
+      // mudlog_vfprintf(NULL, LOG_SYSLOG, "Ran point_update() for %d loops. Fix the logic.", loop_counter);
     }
   }
 
@@ -1230,7 +1290,7 @@ void save_vehicles(bool fromCopyover)
     }
 
     if (veh->sub)
-      for (i = character_list; i; i = i->next)
+      for (i = character_list; i; i = i->next_in_character_list)
         if (GET_IDNUM(i) == veh->owner) {
           struct veh_data *f = NULL;
           for (f = i->char_specials.subscribe; f; f = f->next_sub)
@@ -1539,201 +1599,236 @@ void update_paydata_market() {
 void misc_update(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  struct char_data *ch, *next_ch;
   struct obj_data *obj, *o = NULL;
   int i;
 
-  // loop through all the characters
-  for (ch = character_list; ch; ch = next_ch) {
+  {
+    bool should_loop = TRUE;
+    int loop_rand = rand();
 
-    next_ch = ch->next;
+    while (should_loop) {
+      should_loop = FALSE;
 
-    if (AFF_FLAGGED(ch, AFF_FEAR)) {
-      if (!number(0, 2)) {
-        extern ACMD_CONST(do_flee);
-        do_flee(ch, "", 0, 0);
-        continue;
-      } else {
-        AFF_FLAGS(ch).RemoveBit(AFF_FEAR);
-        send_to_char("You feel calmer.\r\n", ch);
-      }
-    }
-
-    if (!CH_IN_COMBAT(ch) && AFF_FLAGGED(ch, AFF_ACID))
-      AFF_FLAGS(ch).RemoveBit(AFF_ACID);
-
-    if (GET_SUSTAINED_NUM(ch) && !IS_ANY_ELEMENTAL(ch)) {
-      struct sustain_data *next, *temp, *nsus;
-      for (struct sustain_data *sus = GET_SUSTAINED(ch); sus; sus = next) {
-        next = sus->next;
-        if (sus->spell >= MAX_SPELLS) {
-          snprintf(buf, sizeof(buf), "COWS GO MOO %s %d", GET_CHAR_NAME(ch), sus->spell);
-          log(buf);
+      for (struct char_data *ch = character_list, *next_ch; ch; ch = next_ch) {
+        next_ch = ch->next_in_character_list;
+        
+        if (ch->last_loop_rand == loop_rand) {
+          // No error here, I don't want the spam.
           continue;
+        } else {
+          ch->last_loop_rand = loop_rand;
         }
-        if (sus && sus->caster && spells[sus->spell].duration == PERMANENT) {
-          int time_to_take_effect = sus->time_to_take_effect;
-          if (sus->spell == SPELL_IGNITE) {
-            // no-op
-          } else if (sus->spell == SPELL_TREAT) {
-            time_to_take_effect *= 2.5;
-          } else {
-            time_to_take_effect *= 5;
-          }
-
-          if (++sus->time >= time_to_take_effect) {
-            if (sus->spell == SPELL_IGNITE) {
-              send_to_char("Your body erupts in flames!\r\n", sus->other);
-              act("$n's body suddenly bursts into flames!\r\n", TRUE, sus->other, 0, 0, TO_ROOM);
-              GET_CHAR_FIRE_DURATION(sus->other) = srdice();
-              GET_CHAR_FIRE_BONUS_DAMAGE(sus->other) = 0;
-              GET_CHAR_FIRE_CAUSED_BY_PC(sus->other) = !IS_NPC(ch);
-            } else {
-              strcpy(buf, spells[sus->spell].name);
-              send_to_char(ch, "The effects of %s become permanent.\r\n", buf);
-            }
-            GET_SUSTAINED_NUM(ch)--;
-            if (next && sus->idnum == next->idnum)
-              next = next->next;
-            if (sus->other)
-              for (struct sustain_data *vsus = GET_SUSTAINED(sus->other); vsus; vsus = nsus) {
-                nsus = vsus->next;
-                if (vsus->other == ch && vsus->idnum == sus->idnum && (sus->other == ch ? vsus != sus : 1)) {
-                  REMOVE_FROM_LIST(vsus, GET_SUSTAINED(sus->other), next);
-                  delete vsus;
-                }
-              }
-            REMOVE_FROM_LIST(sus, GET_SUSTAINED(ch), next);
-            delete sus;
-          }
-        }
-      }
-    }
-
-    if (affected_by_spell(ch, SPELL_CONFUSION) || affected_by_spell(ch, SPELL_CHAOS) || affected_by_power(ch, CONFUSION)) {
-      if ((i = number(1, 15)) >= 5) {
-        switch(i) {
-          case 5:
-            send_to_char("Lovely weather today.\r\n", ch);
-            break;
-          case 6:
-            send_to_char("Is that who I think it is? ...Nah, my mistake.\r\n", ch);
-            break;
-          case 7:
-            send_to_char("Now, where did I leave my car keys...\r\n", ch);
-            break;
-          case 8:
-            send_to_char("Over There!\r\n", ch);
-            break;
-          case 9:
-            send_to_char("x + 2dy divided by 3 is... no wait CARRY THE 1!\r\n", ch);
-            break;
-          case 10:
-            send_to_char("Skibby dibby dibby do-ah.\r\n", ch);
-            break;
-          case 11:
-            if (ch->carrying)
-              send_to_char(ch, "You stare blankly at %s. What is it? What could it mean?\r\n", GET_OBJ_NAME(ch->carrying));
-            break;
-          case 12:
-            send_to_char("The energies of the chaos spell continue to swirl around you.\r\n", ch);
-            break;
-          case 13:
-            send_to_char("You struggle to concentrate through the haze of the chaos spell.\r\n", ch);
-            break;
-          case 14:
-            send_to_char("The chaos spell drags your attention away from what you're doing.\r\n", ch);
-            break;
-        }
-      }
-      if (number(0, 30)) {
-        // TODO: Make the chaos spell wear off.
-      }
-    }
-
-    if (!IS_NPC(ch)) {
-      // Burn down adrenaline. This can kill the target, so break out if it returns true.
-      if (check_adrenaline(ch, 0))
-        continue;
-
-      // Apply new doses of everything. If they die, bail out.
-      if (process_drug_point_update_tick(ch))
-        continue;
-
-      affect_total(ch);
-    }
-    else { // NPC checks.
-      if (!ch->desc && GET_MOB_VNUM(ch) >= 20 && GET_MOB_VNUM(ch) <= 22) {
-        act("$n dissolves into the background and is no more.",
-            TRUE, ch, 0, 0, TO_ROOM);
-        for (i = 0; i < NUM_WEARS; i++)
-          if (ch->equipment[i])
-            extract_obj(ch->equipment[i]);
-        for (obj = ch->carrying; obj; obj = o) {
-          o = obj->next_content;
-          extract_obj(obj);
-        }
-        GET_PLAYER_MEMORY(ch) = NULL;
-        extract_char(ch);
-        continue;
-      }
-      else if (!ch->desc && GET_MOB_VNUM(ch) >= 50 && GET_MOB_VNUM(ch) < 70) {
-        extract_char(ch);
-        continue;
-      }
-      else if (IS_SPIRIT(ch)) {
-        if (!check_spirit_sector(ch->in_room, GET_SPARE1(ch))) {
-          act("Being away from its environment, $n suddenly ceases to exist.", TRUE, ch, 0, 0, TO_ROOM);
-          end_spirit_existance(ch, FALSE);
-          continue;
-        }
-        if (GET_ACTIVE(ch)) {
-          if (!ch->master || (ch->master->in_room ? (ch->master->in_room != ch->in_room) : (ch->master->in_veh != ch->in_veh))) {
-            act("Being away from its master, $n suddenly ceases to exist.", TRUE, ch, 0, 0, TO_ROOM);
-            end_spirit_existance(ch, FALSE);
+        
+        if (AFF_FLAGGED(ch, AFF_FEAR)) {
+          if (!number(0, 2)) {
+            extern ACMD_CONST(do_flee);
+            do_flee(ch, "", 0, 0);
             continue;
           }
-        }
-      }
-    }
 
-    if (GET_CHAR_FIRE_DURATION(ch) > 0) {
-      GET_CHAR_FIRE_DURATION(ch)--;
-      // If you're outside and it's raining, you get less fire.
-      if (ch->in_room) {
-        // Outdoors in the rain? Fire goes out faster.
-        if (ch->in_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && weather_info.sky >= SKY_RAINING) {
-          GET_CHAR_FIRE_DURATION(ch) -= 2;
+          AFF_FLAGS(ch).RemoveBit(AFF_FEAR);
+          send_to_char("You feel calmer.\r\n", ch);
         }
 
-        // In water? Fire goes out much faster.
-        if (IS_WATER(ch->in_room)) {
-          GET_CHAR_FIRE_DURATION(ch) -= 4;
+        if (!CH_IN_COMBAT(ch) && AFF_FLAGGED(ch, AFF_ACID))
+          AFF_FLAGS(ch).RemoveBit(AFF_ACID);
+
+        if (GET_SUSTAINED_NUM(ch) && !IS_ANY_ELEMENTAL(ch)) {
+          struct sustain_data *next, *temp, *nsus;
+          for (struct sustain_data *sus = GET_SUSTAINED(ch); sus; sus = next) {
+            next = sus->next;
+            if (sus->spell >= MAX_SPELLS) {
+              mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Hit a sustained spell %d that is higher than max %d!", sus->spell, MAX_SPELLS);
+              continue;
+            }
+
+            if (sus && sus->caster && spells[sus->spell].duration == PERMANENT) {
+              int time_to_take_effect = sus->time_to_take_effect;
+              if (sus->spell == SPELL_IGNITE) {
+                // no-op
+              } else if (sus->spell == SPELL_TREAT) {
+                time_to_take_effect *= 2.5;
+              } else {
+                time_to_take_effect *= 5;
+              }
+
+              if (++sus->time >= time_to_take_effect) {
+                if (sus->spell == SPELL_IGNITE) {
+                  send_to_char("Your body erupts in flames!\r\n", sus->other);
+                  act("$n's body suddenly bursts into flames!\r\n", TRUE, sus->other, 0, 0, TO_ROOM);
+                  GET_CHAR_FIRE_DURATION(sus->other) = srdice();
+                  GET_CHAR_FIRE_BONUS_DAMAGE(sus->other) = 0;
+                  GET_CHAR_FIRE_CAUSED_BY_PC(sus->other) = !IS_NPC(ch);
+                } else {
+                  strcpy(buf, spells[sus->spell].name);
+                  send_to_char(ch, "The effects of %s become permanent.\r\n", buf);
+                }
+                GET_SUSTAINED_NUM(ch)--;
+                if (next && sus->idnum == next->idnum)
+                  next = next->next;
+                if (sus->other)
+                  for (struct sustain_data *vsus = GET_SUSTAINED(sus->other); vsus; vsus = nsus) {
+                    nsus = vsus->next;
+                    if (vsus->other == ch && vsus->idnum == sus->idnum && (sus->other == ch ? vsus != sus : 1)) {
+                      REMOVE_FROM_LIST(vsus, GET_SUSTAINED(sus->other), next);
+                      delete vsus;
+                    }
+                  }
+                REMOVE_FROM_LIST(sus, GET_SUSTAINED(ch), next);
+                delete sus;
+              }
+            }
+          }
+        }
+
+        if (affected_by_spell(ch, SPELL_CONFUSION) || affected_by_spell(ch, SPELL_CHAOS) || affected_by_power(ch, CONFUSION)) {
+          if ((i = number(1, 15)) >= 5) {
+            switch(i) {
+              case 5:
+                send_to_char("Lovely weather today.\r\n", ch);
+                break;
+              case 6:
+                send_to_char("Is that who I think it is? ...Nah, my mistake.\r\n", ch);
+                break;
+              case 7:
+                send_to_char("Now, where did I leave my car keys...\r\n", ch);
+                break;
+              case 8:
+                send_to_char("Over There!\r\n", ch);
+                break;
+              case 9:
+                send_to_char("x + 2dy divided by 3 is... no wait CARRY THE 1!\r\n", ch);
+                break;
+              case 10:
+                send_to_char("Skibby dibby dibby do-ah.\r\n", ch);
+                break;
+              case 11:
+                if (ch->carrying)
+                  send_to_char(ch, "You stare blankly at %s. What is it? What could it mean?\r\n", GET_OBJ_NAME(ch->carrying));
+                break;
+              case 12:
+                send_to_char("The energies of the chaos spell continue to swirl around you.\r\n", ch);
+                break;
+              case 13:
+                send_to_char("You struggle to concentrate through the haze of the chaos spell.\r\n", ch);
+                break;
+              case 14:
+                send_to_char("The chaos spell drags your attention away from what you're doing.\r\n", ch);
+                break;
+            }
+          }
+          if (!number(0, 30)) {
+            end_all_sustained_spells_of_type_affecting_ch(SPELL_CONFUSION, 0, ch);
+            end_all_sustained_spells_of_type_affecting_ch(SPELL_CHAOS, 0, ch);
+            send_to_char("Your head seems to clear.\r\n", ch);
+
+            // TODO: Make the confusion power wear off.
+          }
+        }
+
+        if (!IS_NPC(ch)) {
+          // Burn down adrenaline. This can kill the target, so break out if it returns true.
+          if (check_adrenaline(ch, 0)) {
+            // They died. Start the loop again.
+            should_loop = TRUE;
+            break;
+          }
+
+          // Apply new doses of everything. If they die, bail out.
+          if (process_drug_point_update_tick(ch)) {
+            // They died. Start the loop again.
+            should_loop = TRUE;
+            break;
+          }
+
+          affect_total(ch);
+        }
+        else { // NPC checks.
+          if (!ch->desc && GET_MOB_VNUM(ch) >= 20 && GET_MOB_VNUM(ch) <= 22) {
+            act("$n dissolves into the background and is no more.",
+                TRUE, ch, 0, 0, TO_ROOM);
+            for (i = 0; i < NUM_WEARS; i++)
+              if (ch->equipment[i])
+                extract_obj(ch->equipment[i]);
+            for (obj = ch->carrying; obj; obj = o) {
+              o = obj->next_content;
+              extract_obj(obj);
+            }
+            GET_PLAYER_MEMORY(ch) = NULL;
+            extract_char(ch);
+
+            // They died or were extracted. Start the loop again.
+            should_loop = TRUE;
+            break;
+          }
+          else if (!ch->desc && GET_MOB_VNUM(ch) >= 50 && GET_MOB_VNUM(ch) < 70) {
+            extract_char(ch);
+            // They died or were extracted. Start the loop again.
+            should_loop = TRUE;
+            break;
+          }
+          else if (IS_SPIRIT(ch)) {
+            if (!check_spirit_sector(ch->in_room, GET_SPARE1(ch))) {
+              act("Being away from its environment, $n suddenly ceases to exist.", TRUE, ch, 0, 0, TO_ROOM);
+              end_spirit_existance(ch, FALSE);
+              // They died or were extracted, BUT we don't need to re-loop since spirits have no hangers-on.
+              continue;
+            }
+            if (GET_ACTIVE(ch)) {
+              if (!ch->master || (ch->master->in_room ? (ch->master->in_room != ch->in_room) : (ch->master->in_veh != ch->in_veh))) {
+                act("Being away from its master, $n suddenly ceases to exist.", TRUE, ch, 0, 0, TO_ROOM);
+                end_spirit_existance(ch, FALSE);
+                // They died or were extracted, BUT we don't need to re-loop since spirits have no hangers-on.
+                continue;
+              }
+            }
+          }
+        }
+
+        if (GET_CHAR_FIRE_DURATION(ch) > 0) {
+          GET_CHAR_FIRE_DURATION(ch)--;
+          // If you're outside and it's raining, you get less fire.
+          if (ch->in_room) {
+            // Outdoors in the rain? Fire goes out faster.
+            if (ch->in_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && weather_info.sky >= SKY_RAINING) {
+              GET_CHAR_FIRE_DURATION(ch) -= 2;
+            }
+
+            // In water? Fire goes out much faster.
+            if (IS_WATER(ch->in_room)) {
+              GET_CHAR_FIRE_DURATION(ch) -= 4;
+            }
+          }
+
+          if (GET_CHAR_FIRE_DURATION(ch) < 1) {
+            act("The flames around $n die down.", FALSE, ch, 0, 0, TO_ROOM);
+            act("The flames surrounding you die down.", FALSE, ch, 0, 0, TO_CHAR);
+            GET_CHAR_FIRE_DURATION(ch) = 0;
+            GET_CHAR_FIRE_CAUSED_BY_PC(ch) = FALSE;
+            continue;
+          }
+
+          act("Flames continue to burn around $n!", FALSE, ch, 0, 0, TO_ROOM);
+          act("^RYour body is surrounded in flames!", FALSE, ch, 0, 0, TO_CHAR);
+
+          // Only damage equipment in PvE scenarios.
+          if (IS_NPC(ch) || !GET_CHAR_FIRE_CAUSED_BY_PC(ch)) {
+            damage_equip(ch, ch, 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch), TYPE_FIRE);
+          }
+
+          int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch) - GET_IMPACT(ch)), MODERATE));
+          GET_CHAR_FIRE_BONUS_DAMAGE(ch)++;
+          if (damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL)) {
+            // They died or were extracted. Start the loop again.
+            should_loop = TRUE;
+            break;
+          }
         }
       }
-
-      if (GET_CHAR_FIRE_DURATION(ch) < 1) {
-        act("The flames around $n die down.", FALSE, ch, 0, 0, TO_ROOM);
-        act("The flames surrounding you die down.", FALSE, ch, 0, 0, TO_CHAR);
-        GET_CHAR_FIRE_DURATION(ch) = 0;
-        GET_CHAR_FIRE_CAUSED_BY_PC(ch) = FALSE;
-        continue;
-      }
-
-      act("Flames continue to burn around $n!", FALSE, ch, 0, 0, TO_ROOM);
-      act("^RYour body is surrounded in flames!", FALSE, ch, 0, 0, TO_CHAR);
-
-      // Only damage equipment in PvE scenarios.
-      if (IS_NPC(ch) || !GET_CHAR_FIRE_CAUSED_BY_PC(ch)) {
-        damage_equip(ch, ch, 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch), TYPE_FIRE);
-      }
-
-      int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch) - GET_IMPACT(ch)), MODERATE));
-      GET_CHAR_FIRE_BONUS_DAMAGE(ch)++;
-      if (damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL))
-        continue;
     }
   }
+
+  // loop through all the characters
 }
 
 float gen_size(int race, bool height, int size, int pronouns)

@@ -63,8 +63,10 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
 
   location_info = get_location_string_for_room(in_room);
 
-  for (struct char_data *plr = character_list; plr; plr = plr->next) {
-    if (IS_NPC(plr) || !plr->desc || plr == ch)
+  for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next) {
+    struct char_data *plr = desc->original ? desc->original : desc->character;
+
+    if (!plr || IS_NPC(plr) || !plr->desc || plr == ch)
       continue;
 
     if (!AFF_FLAGGED(plr, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER) || !AWAKE(plr))

@@ -66,7 +66,7 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
   char query_buf[1000], name_buf[500];
 
   // We used to just iterate over descriptors, but the change would be lost if someone was linkdead during transfer and reconnected after.
-  for (targ = character_list; targ; targ = targ->next) {
+  for (targ = character_list; targ; targ = targ->next_in_character_list) {
     if (GET_IDNUM(targ) == character_id)
       break;
   }

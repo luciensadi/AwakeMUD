@@ -288,7 +288,7 @@ ACMD(do_copyover)
     }
 
     // Check for repairman items.
-    for (struct char_data *i = character_list; i; i = i->next) {
+    for (struct char_data *i = character_list; i; i = i->next_in_character_list) {
       if (IS_NPC(i) && (GET_MOB_SPEC(i) == fixer || GET_MOB_SPEC2(i) == fixer) && i->carrying) {
         send_to_char("The repairman has unclaimed items.\r\n", ch);
         will_not_copyover = TRUE;
@@ -4348,7 +4348,7 @@ ACMD(do_show)
     k = 0;
     v = 0;
     con = 0;
-    for (vict = character_list; vict; vict = vict->next) {
+    for (vict = character_list; vict; vict = vict->next_in_character_list) {
       if (IS_NPC(vict))
         j++;
       else if (CAN_SEE(ch, vict)) {
@@ -6959,7 +6959,7 @@ ACMD(do_shopfind)
 
     // Get their location.
     location = -1;
-    for (struct char_data *i = character_list; i; i = i->next)
+    for (struct char_data *i = character_list; i; i = i->next_in_character_list)
       if (GET_MOB_VNUM(i) == shop_table[shop_nr].keeper && i->in_room) {
         location = GET_ROOM_VNUM(i->in_room);
         break;

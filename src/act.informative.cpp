@@ -6264,7 +6264,7 @@ void perform_immort_where(struct char_data * ch, char *arg)
 
   // Location version of the command (where <keyword>)
   *buf = '\0';
-  for (struct char_data *i = character_list; i; i = i->next)
+  for (struct char_data *i = character_list; i; i = i->next_in_character_list)
     if ((i->in_room || i->in_veh) && CAN_SEE(ch, i) && keyword_appears_in_char(arg, i, TRUE, TRUE, FALSE)) {
       found = 1;
       room = get_ch_in_room(i);

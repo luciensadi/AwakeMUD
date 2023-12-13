@@ -2348,7 +2348,7 @@ void extract_veh(struct veh_data * veh)
     veh->prev_sub->next_sub = veh->next_sub;
   } else {
     // Veh is the list head. Look for an online owner– they need their list's head updated to point to our next_sub value.
-    for (struct char_data *owner = character_list; owner; owner = owner->next) {
+    for (struct char_data *owner = character_list; owner; owner = owner->next_in_character_list) {
       if (owner->char_specials.subscribe == veh) {
         owner->char_specials.subscribe = veh->next_sub;
         break;
@@ -2802,7 +2802,7 @@ void extract_char(struct char_data * ch)
   }
 
   /* pull the char from the list */
-  REMOVE_FROM_LIST(ch, character_list, next);
+  remove_ch_from_character_list(ch, "extract_char");
 
   /* return people who were possessing or projecting */
   if (ch->desc && ch->desc->original)
@@ -2859,7 +2859,7 @@ struct char_data *get_player_vis(struct char_data * ch, char *name, int inroom)
     return NULL;
 
   // Compile a list of PCs, checking for exact name matches as we go.
-  for (struct char_data *i = character_list; i; i = i->next) {
+  for (struct char_data *i = character_list; i; i = i->next_in_character_list) {
     if (IS_NPC(i) || (inroom && i->in_room != ch->in_room) || GET_LEVEL(ch) < GET_INCOG_LEV(i))
       continue;
 
@@ -2985,7 +2985,7 @@ struct char_data *get_char_vis(struct char_data * ch, char *name)
   if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 0);
 
-  for (i = character_list; i && (j <= number); i = i->next)
+  for (i = character_list; i && (j <= number); i = i->next_in_character_list)
     if ((isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(i), NULL))
          || recog(ch, i, name))
         && CAN_SEE(ch, i))

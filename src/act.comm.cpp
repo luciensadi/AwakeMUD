@@ -413,14 +413,13 @@ ACMD(do_reply)
   if (check_for_banned_content(argument, ch))
     return;
 
-  /* Make sure the person you're replying to is still playing by searching
-   * for them.  Note, this will break in a big way if I ever implement some
-   * scheme where it keeps a pool of char_data structures for reuse.
-   */
+  /* Find the person you're trying to reply to. */
+  for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next) {
+    tch = desc->original ? desc->original : desc->character;
 
-  for (tch = character_list; tch != NULL; tch = tch->next)
-    if (!IS_NPC(tch) && GET_IDNUM(tch) == GET_LAST_TELL(ch))
+    if (tch && !IS_NPC(tch) && GET_IDNUM(tch) == GET_LAST_TELL(ch))
       break;
+  }
 
   if (tch == NULL || (tch && GET_IDNUM(tch) != GET_LAST_TELL(ch))) {
     send_to_char("They are no longer playing.\r\n", ch);

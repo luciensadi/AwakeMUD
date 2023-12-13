@@ -1030,7 +1030,7 @@ void Apartment::break_lease() {
   }
 
   // Iterate over all characters in the game and have them recalculate their lifestyles. This also confirms their lifestyle string.
-  for (struct char_data *plr = character_list; plr; plr = plr->next) {
+  for (struct char_data *plr = character_list; plr; plr = plr->next_in_character_list) {
     int old_best_lifestyle = GET_BEST_LIFESTYLE(plr);
     
     calculate_best_lifestyle(plr);

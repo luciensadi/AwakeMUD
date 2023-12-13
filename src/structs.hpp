@@ -927,7 +927,7 @@ struct char_data
   struct obj_data *bioware;             /* Head of list of bioware       */
 
   struct char_data *next_in_room;     /* For room->people - list         */
-  struct char_data *next;             /* For either monster or ppl-list  */
+  struct char_data *next_in_character_list;             /* For either monster or ppl-list  */
   struct char_data *next_fighting;    /* For fighting list               */
   struct char_data *next_in_zone;     /* for zone->people - list         */
   struct char_data *next_in_veh;      /* For veh->people - list          */
@@ -944,7 +944,7 @@ struct char_data
 
   int congregation_bonus_pool;         /* Bonuses accrued from spending time in a congregation room */
 
-  unsigned long last_violence_loop;
+  int last_loop_rand;
 
   // See invis_resistance_tests.cpp for details.
   std::unordered_map<idnum_t, bool> *pc_invis_resistance_test_results;
@@ -972,9 +972,9 @@ struct char_data
   char_data() :
       nr(0), unique_id(0), in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), vfront(FALSE),
       persona(NULL), squeue(NULL), sustained(NULL), ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL),
-      bioware(NULL), next_in_room(NULL), next(NULL), next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL),
+      bioware(NULL), next_in_room(NULL), next_in_character_list(NULL), next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL),
       next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
-      pgroup_invitations(NULL), congregation_bonus_pool(0), last_violence_loop(0), pc_invis_resistance_test_results(NULL),
+      pgroup_invitations(NULL), congregation_bonus_pool(0), last_loop_rand(0), pc_invis_resistance_test_results(NULL),
       mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(NULL), precast_spells(NULL)
   {
     ZERO_OUT_ARRAY(equipment, NUM_WEARS);

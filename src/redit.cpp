@@ -544,7 +544,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 
           /* now zoom through the character list and update anyone in limbo */
           struct char_data * temp_ch;
-          for (temp_ch = character_list; temp_ch; temp_ch = temp_ch->next) {
+          for (temp_ch = character_list; temp_ch; temp_ch = temp_ch->next_in_character_list) {
             if (GET_WAS_IN(temp_ch) && real_room(GET_WAS_IN(temp_ch)->number) >= room_num)
               GET_WAS_IN(temp_ch) = &world[real_room(GET_WAS_IN(temp_ch)->number) + 1];
           }

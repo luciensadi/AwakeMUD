@@ -97,14 +97,14 @@ void memoryClass::DeleteCh(struct char_data *ch)
   // Verify that we don't have a nulled-out character in the player list. This might add a lot of lag.
   struct char_data *prev = character_list, *next = NULL;
   if (prev && prev == ch) {
-    mudlog("^YWARNING: Would have left a nulled-out character in the character list!", ch, LOG_SYSLOG, TRUE);
-    character_list = character_list->next;
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: ^YWARNING: Would have left a nulled-out character at head of the character list!");
+    character_list = character_list->next_in_character_list;
   } else {
-    for (struct char_data *i = character_list; i; i = i->next) {
+    for (struct char_data *i = character_list; i; i = i->next_in_character_list) {
       if (i == ch) {
-        mudlog("^YWARNING: Would have left a nulled-out character in the character list!", ch, LOG_SYSLOG, TRUE);
-        prev->next = i->next;
-        i->next = NULL;
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: ^YWARNING: Would have left a nulled-out character in the character list!");
+        prev->next_in_character_list = i->next_in_character_list;
+        i->next_in_character_list = NULL;
         break;
       }
       prev = i;
