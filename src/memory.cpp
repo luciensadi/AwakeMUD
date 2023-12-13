@@ -116,7 +116,7 @@ void memoryClass::DeleteCh(struct char_data *ch)
     for (struct char_data *i = combat_list; i; i = next) {
       next = i->next_fighting;
       if (FIGHTING(i) == ch) {
-        mudlog("^YWARNING: Would have left a nulled-out character as a combat target!", ch, LOG_SYSLOG, TRUE);
+        mudlog("SYSERR: ^YWARNING: Would have left a nulled-out character as a combat target!", ch, LOG_SYSLOG, TRUE);
         stop_fighting(i);
         if (FIGHTING(i) == ch) {
           mudlog("^RWE'RE GONNA CRASH, BOIS: Failed to wipe out the fighting pointer pointing to our nulled-out character!", ch, LOG_SYSLOG, TRUE);
