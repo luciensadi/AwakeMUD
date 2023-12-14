@@ -1412,7 +1412,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "autokill") || is_abbrev(argument, "noautokill")) {
       result = PRF_TOG_CHK(ch, PRF_NOAUTOKILL);
       mode = 32;
-    } else if (IS_SENATOR(ch) && is_abbrev(argument, "radionames")) {
+    } else if (is_abbrev(argument, "radionames") || is_abbrev(argument, "voicenames") || is_abbrev(argument, "voice names")) {
       result = PRF_TOG_CHK(ch, PRF_NO_RADIO_NAMES);
       mode = 33;
     } else if (is_abbrev(argument, "brief") || is_abbrev(argument, "roomdescs")) {

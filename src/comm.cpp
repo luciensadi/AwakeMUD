@@ -2931,13 +2931,16 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
       }
     }
 
-    // No radio names mode means just give the voice desc. Otherwise, staff see speaker's name.
-    if (IS_SENATOR(listener) && !PRF_FLAGGED(listener, PRF_NO_RADIO_NAMES))
-      snprintf(ENDOF(voice_buf), sizeof(voice_buf) - strlen(voice_buf), "(%s)", GET_CHAR_NAME(speaker));
+    // No radio names mode means just give the voice desc.
+    if (!PRF_FLAGGED(listener, PRF_NO_RADIO_NAMES)) {
+      // Otherwise, staff see speaker's name.
+      if (IS_SENATOR(listener))
+        snprintf(ENDOF(voice_buf), sizeof(voice_buf) - strlen(voice_buf), "(%s)", GET_CHAR_NAME(speaker));
 
-    // Non-staff, but remembered the speaker? You see their remembered name.
-    else if (!voice_masked && (mem = safe_found_mem(listener, speaker)))
-      snprintf(ENDOF(voice_buf), sizeof(voice_buf) - strlen(voice_buf), "(%s)", CAP(mem->mem));
+      // Non-staff, but remembered the speaker? You see their remembered name.
+      else if (!voice_masked && (mem = safe_found_mem(listener, speaker)))
+        snprintf(ENDOF(voice_buf), sizeof(voice_buf) - strlen(voice_buf), "(%s)", CAP(mem->mem));
+    }
 
     // Return our string. If no checks were passed, it just gives their voice desc with no special frills.
     return voice_buf;
