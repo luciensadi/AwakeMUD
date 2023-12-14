@@ -1297,7 +1297,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
   if (GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000 && GET_MOBALERT(ch) != MALERT_ALARM) {
     bool imp_invis = IS_AFFECTED(ch, AFF_SPELLIMPINVIS) || affected_by_spell(ch, SPELL_IMP_INVIS);
     bool std_invis = IS_AFFECTED(ch, AFF_SPELLINVIS) || affected_by_spell(ch, SPELL_INVIS);
-    int max_force = GET_MAG(ch) / 100;
+    int max_force = MIN(12, GET_MAG(ch) / 100);
     int min_force = MIN(4, max_force);
 
     // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
@@ -1352,23 +1352,26 @@ bool mobact_process_self_buff(struct char_data *ch) {
         }
 
         // We're dead-set on casting a spell, so try to boost attributes.
+        // First, cap our force to something reasonable, like 6.
+        max_force = MIN(6, max_force);
+        // Then, ensure our force isn't odd.
         min_force = min_force % 2 == 0 ? min_force : min_force - 1;
         max_force = max_force % 2 == 0 ? max_force : max_force - 1;
         switch (number(1, 5)) {
           case 1:
-            cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, STR, number(min_force, max_force), NULL, ch);
+            cast_health_spell(ch, (ch->cyberware || ch->bioware) ? SPELL_INCCYATTR : SPELL_INCATTR, STR, number(min_force, max_force), NULL, ch);
             return TRUE;
           case 2:
-            cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, QUI, number(min_force, max_force), NULL, ch);
+            cast_health_spell(ch, (ch->cyberware || ch->bioware) ? SPELL_INCCYATTR : SPELL_INCATTR, QUI, number(min_force, max_force), NULL, ch);
             return TRUE;
           case 3:
-            cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, BOD, number(min_force, max_force), NULL, ch);
+            cast_health_spell(ch, (ch->cyberware || ch->bioware) ? SPELL_INCCYATTR : SPELL_INCATTR, BOD, number(min_force, max_force), NULL, ch);
             return TRUE;
           case 4:
-            cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, INT, number(min_force, max_force), NULL, ch);
+            cast_health_spell(ch, (ch->cyberware || ch->bioware) ? SPELL_INCCYATTR : SPELL_INCATTR, INT, number(min_force, max_force), NULL, ch);
             return TRUE;
           case 5:
-            cast_health_spell(ch, ch->cyberware || ch->bioware ? SPELL_INCCYATTR : SPELL_INCATTR, WIL, number(min_force, max_force), NULL, ch);
+            cast_health_spell(ch, (ch->cyberware || ch->bioware) ? SPELL_INCCYATTR : SPELL_INCATTR, WIL, number(min_force, max_force), NULL, ch);
             return TRUE;
         }
       }
