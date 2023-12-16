@@ -2798,7 +2798,7 @@ void sauteurs_extend(int bus, int to, int room, int from)
   send_to_room("The Lockheed C-260 Transport plane docks with the platform and begins transferring passengers and cargo.\r\n", &world[room]);
   send_to_room("The Lockheed C-260 Transport plane docks with the platform and begins loading passengers and cargo.\r\n", &world[bus]);
 
-  eject_pcs_from_transport_to_station(&world[to], &world[room]);
+  eject_pcs_from_transport_to_station(&world[bus], &world[room]);
 }
 
 void sauteurs_retract(int bus, int to, int room, int from)
