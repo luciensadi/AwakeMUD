@@ -76,8 +76,8 @@ bool check_for_banned_content(const char *raw_msg, struct char_data *speaker) {
 
       // I don't want to get frozen while testing this, so high-level staff are immune.
       if (GET_LEVEL(speaker) >= LVL_CONSPIRATOR) {
-        send_to_char(speaker, "WARNING: You would have been dinged by automod for that command (tripped: '%s' on '%s'). It has been blocked from execution.\r\n", entry.plain_form, matched_string);
-        mudlog_vfprintf(speaker, LOG_WIZLOG, "Automoderator staff warning: Staff member %s wrote banned content '''%s''' (tripped: %s).", GET_CHAR_NAME(speaker), raw_msg, entry.plain_form);
+        send_to_char(speaker, "WARNING: You would have been dinged by automod for that command (tripped: %s). It has been blocked from execution.\r\n", matched_string);
+        mudlog_vfprintf(speaker, LOG_WIZLOG, "Automoderator staff warning: Staff member %s wrote banned content '''%s''' (tripped: %s).", GET_CHAR_NAME(speaker), raw_msg, matched_string);
         return TRUE;
       }
 
@@ -86,7 +86,7 @@ bool check_for_banned_content(const char *raw_msg, struct char_data *speaker) {
       // Not enough strikes to be frozen? Just warn.
       if (strikes < AUTOMOD_FREEZE_THRESHOLD) {
         // Notify player.
-        mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR WARNED: %s attempted to write '''%s''' (tripped: %s). Issued warning, strike %d/%d.", GET_CHAR_NAME(speaker), raw_msg, entry.plain_form, strikes, AUTOMOD_FREEZE_THRESHOLD);
+        mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR WARNED: %s attempted to write '''%s''' (tripped: %s). Issued warning, strike %d/%d.", GET_CHAR_NAME(speaker), raw_msg, matched_string, strikes, AUTOMOD_FREEZE_THRESHOLD);
         send_to_char(speaker, "^RYou're not allowed to write '%s'.^n Your command has been aborted."
                               " Please be cautious: continued triggerings of the automated moderator system"
                               " will result in your play session being halted for staff review.\r\n", matched_string);
@@ -99,7 +99,7 @@ bool check_for_banned_content(const char *raw_msg, struct char_data *speaker) {
         }
 
         // Log it.
-        mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR FROZE AN OFFENDER: %s attempted to write '''%s''' (tripped: %s on '%s'). Freezing and transporting away for staff review.", GET_CHAR_NAME(speaker), raw_msg, entry.plain_form, matched_string);
+        mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR FROZE AN OFFENDER: %s attempted to write '''%s''' (tripped: '%s'). Freezing and transporting away for staff review.", GET_CHAR_NAME(speaker), raw_msg, matched_string);
 
         // Ban new character registrations from their IP, provided they weren't already banned.
         if (speaker->desc && isbanned(speaker->desc->host) < BAN_NEW) {
