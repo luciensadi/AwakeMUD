@@ -53,6 +53,7 @@
 #include "redit.hpp"
 #include "zoomies.hpp"
 #include "bullet_pants.hpp"
+#include "moderation.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -6657,6 +6658,11 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
 
   if (GET_OBJ_TYPE(obj) == ITEM_VEHCONTAINER) {
     send_to_char("Sorry, vehicle containers can't be restrung.\r\n", ch);
+    return FALSE;
+  }
+
+  // Ensure we don't contain any forbidden phrases. Error messages are shown in-function.
+  if (check_for_banned_content(buf, ch)) {
     return FALSE;
   }
 
