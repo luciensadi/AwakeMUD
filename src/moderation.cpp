@@ -48,6 +48,7 @@ void prepare_compiled_regexes() {
 bool check_for_banned_content(const char *raw_msg, struct char_data *speaker) {
   int match_code;
   rnum_t frozen_rnum = real_room(10044);
+  regmatch_t match_array[1];
 
   if (!raw_msg || !speaker) {
     mudlog_vfprintf(speaker, LOG_SYSLOG, "SYSERR: Received invalid arguments to check_for_banned_content('''%s''', %s).", raw_msg ? raw_msg : "NULL", speaker ? GET_CHAR_NAME(speaker) : "NULL");
@@ -63,14 +64,19 @@ bool check_for_banned_content(const char *raw_msg, struct char_data *speaker) {
       continue;
 
     // No match, no problem.
-    if ((match_code = regexec(entry.compiled_regex, msg, 0, NULL, 0)) == REG_NOMATCH)
+    if ((match_code = regexec(entry.compiled_regex, msg, 1, match_array, 0)) == REG_NOMATCH)
       continue;
 
     // Match? Problem.
     else if (match_code == 0) {
+      // Extract the offending phrase.
+      char matched_string[MAX_INPUT_LENGTH + 2];
+      memset(matched_string, 0, sizeof(matched_string));
+      memcpy(matched_string, msg + match_array[0].rm_so, match_array[0].rm_eo - match_array[0].rm_so);
+
       // I don't want to get frozen while testing this, so high-level staff are immune.
       if (GET_LEVEL(speaker) >= LVL_CONSPIRATOR) {
-        send_to_char("WARNING: You would have been dinged by automod for that command. It has been blocked from execution.\r\n", speaker);
+        send_to_char(speaker, "WARNING: You would have been dinged by automod for that command (tripped: '%s' on '%s'). It has been blocked from execution.\r\n", entry.plain_form, matched_string);
         mudlog_vfprintf(speaker, LOG_WIZLOG, "Automoderator staff warning: Staff member %s wrote banned content '''%s''' (tripped: %s).", GET_CHAR_NAME(speaker), raw_msg, entry.plain_form);
         return TRUE;
       }
@@ -83,8 +89,8 @@ bool check_for_banned_content(const char *raw_msg, struct char_data *speaker) {
         mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR WARNED: %s attempted to write '''%s''' (tripped: %s). Issued warning, strike %d/%d.", GET_CHAR_NAME(speaker), raw_msg, entry.plain_form, strikes, AUTOMOD_FREEZE_THRESHOLD);
         send_to_char(speaker, "^RYou're not allowed to write '%s'.^n Your command has been aborted."
                               " Please be cautious: continued triggerings of the automated moderator system"
-                              " will result in your play session being halted for staff review.\r\n", entry.plain_form);
-        send_to_char(speaker, "\r\nFor further info on why that word is disallowed, check out %s.\r\n", entry.explanation);
+                              " will result in your play session being halted for staff review.\r\n", matched_string);
+        send_to_char(speaker, "\r\nContext: %s\r\n", entry.explanation);
         return TRUE;
       } else {
         // Knock the threshold back down to 0 (they're already frozen, and this cleans up paperwork for if they're unfrozen):
@@ -93,7 +99,7 @@ bool check_for_banned_content(const char *raw_msg, struct char_data *speaker) {
         }
 
         // Log it.
-        mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR FROZE AN OFFENDER: %s attempted to write '''%s''' (tripped: %s). Freezing and transporting away for staff review.", GET_CHAR_NAME(speaker), raw_msg, entry.plain_form);
+        mudlog_vfprintf(speaker, LOG_WIZLOG, "AUTOMODERATOR FROZE AN OFFENDER: %s attempted to write '''%s''' (tripped: %s on '%s'). Freezing and transporting away for staff review.", GET_CHAR_NAME(speaker), raw_msg, entry.plain_form, matched_string);
 
         // Ban new character registrations from their IP, provided they weren't already banned.
         if (speaker->desc && isbanned(speaker->desc->host) < BAN_NEW) {
@@ -102,7 +108,7 @@ bool check_for_banned_content(const char *raw_msg, struct char_data *speaker) {
         }
 
         // Notify player.
-        send_to_char(speaker, "^RYou're not allowed to write '%s'.^n Your character has been frozen pending staff review. Reach out on Discord if you need this expedited (link is on our website, file a ticket in #support-main).\r\n", entry.plain_form);
+        send_to_char(speaker, "^RYou're not allowed to write '%s'.^n Your character has been frozen pending staff review. Reach out on Discord if you need this expedited (link is on our website, file a ticket in #support-main).\r\n", matched_string);
         send_to_char(speaker, "\r\nFor further info on why that word is disallowed, check out %s.\r\n", entry.explanation);
 
         // Freeze the character.
