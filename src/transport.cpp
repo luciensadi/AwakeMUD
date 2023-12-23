@@ -2785,9 +2785,15 @@ void process_grenada_plane(void)
   where++;
 }
 
+#ifdef USE_PRIVATE_CE_WORLD
+#define RM_ST_PATRICKS_CARGO_LOADING_PLATFORM  62375
+#else
+#define RM_ST_PATRICKS_CARGO_LOADING_PLATFORM  8897
+#endif
+
 struct transport_type sauteurs[2] =
   {
-    { 8899, NORTH, 8897, SOUTH },
+    { 8899, NORTH, RM_ST_PATRICKS_CARGO_LOADING_PLATFORM, SOUTH },
     { 8899, SOUTH, 8898, NORTH },
   };
 
