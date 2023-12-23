@@ -10,7 +10,6 @@
 class automod_entry {
 public:
     const char *stringified_regex;
-    const char *plain_form;
     const char *explanation;
     regex_t *compiled_regex;
 

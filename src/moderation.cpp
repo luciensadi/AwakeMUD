@@ -16,7 +16,7 @@ extern int isbanned(char *hostname);
 // TODO: Read this from a file on disk. Check in an empty copy of that file so people can't see your filters.
 // Note that all regexes will automatically be surrounded by .*\b\b.* when compiled.
 std::vector<class automod_entry> automod_entries = {
-  {"say_this_if_you_want_to_get_banned", "the ban phrase", "This is a test phrase to ensure automod is working, but it'll ban you all the same.", NULL}
+  {"say_this_if_you_want_to_get_banned", "This is a test phrase to ensure automod is working, but it'll ban you all the same.", NULL}
 };
 
 void automod_entry::compile() {
