@@ -20,7 +20,7 @@
 #include "holiday_gifts.hpp"
 
 std::vector<class holiday_entry> holiday_entries = {
-  {"Christmas '23", 12, 24, 2023,
+  {"Christmas '23", 12, 25, 2023,
      "A puff of peppermint-scented air distracts you, and before you know it, there's a festive present in your hands.\r\n",
      "a festive present with 'Happy Holidays!' emblazoned on the tag",
      "Done up in shiny wrapping paper and finished with a neat bow, this holiday present is sure to please. Why not ^WOPEN^n it now?",
@@ -37,9 +37,6 @@ void award_holiday_gifts() {
   for (auto holiday : holiday_entries) {
     // Skip inactive holidays.
     if (!holiday.is_active()) {
-      #ifdef IS_BUILDPORT
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Skipping holiday '%s' (%d-%d-%d): Not active.", holiday.holiday_name, holiday.year, holiday.month, holiday.day);
-      #endif
       continue;
     }
 
@@ -49,11 +46,6 @@ void award_holiday_gifts() {
 
       if (holiday.is_eligible(ch)) {
         holiday.award_gift(ch);
-      } else {
-        #ifdef IS_BUILDPORT
-        mudlog_vfprintf(NULL, LOG_SYSLOG, "Skipping holiday gift award from '%s' (%d-%d-%d) for %s: Ineligible.", 
-                        holiday.holiday_name, holiday.year, holiday.month, holiday.day, GET_CHAR_NAME(ch));
-        #endif
       }
     }
   }
@@ -156,7 +148,10 @@ SPECIAL(holiday_gift) {
     if (GET_HOLIDAY_GIFT_ISSUED_TO(obj) != GET_IDNUM(ch)) {
       send_to_char(ch, "%s isn't yours. Only the person it was gifted to can open it.\r\n", CAP(GET_OBJ_NAME(obj)));
       char *owner_name = get_player_name(GET_HOLIDAY_GIFT_ISSUED_TO(obj));
-      mudlog_vfprintf(ch, LOG_CHEATLOG, "Warning: %s is holding a holiday gift that actually belongs to %s (%ld).", GET_CHAR_NAME(ch), owner_name);
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "Warning: %s is holding a holiday gift that actually belongs to %s (%ld).",
+                      GET_CHAR_NAME(ch),
+                      owner_name,
+                      GET_HOLIDAY_GIFT_ISSUED_TO(obj));
       delete [] owner_name;
       return TRUE;
     }

@@ -922,7 +922,7 @@ void process_regeneration(int half_hour)
     }
 
     if (loop_runs > 1) {
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Ran process_regeneration() %d times due to mid-run alterations and extractions.", loop_runs);
+      log_vfprintf("Ran process_regeneration() %d times due to mid-run alterations and extractions.", loop_runs);
     }
   }
 
