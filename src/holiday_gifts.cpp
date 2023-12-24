@@ -234,7 +234,7 @@ SPECIAL(holiday_gift) {
       sent_count++;
     }
 
-    send_to_char(ch, "%s.\r\n", sent_count > 0 ? " ...nothing :(" : "");
+    send_to_char(ch, "%s.\r\n", sent_count <= 0 ? " ...nothing :(" : "");
 
     // Extract the present.
     extract_obj(obj);
