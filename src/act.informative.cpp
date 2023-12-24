@@ -3814,6 +3814,32 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
     }
   }
 
+  if (GET_OBJ_VNUM(j) == OBJ_STAFF_REBATE_FOR_DECKBUILDING) {
+    if (GET_DECKBUILDING_TOKEN_IDNUM(j) <= 0) {
+      strlcat(buf, " It can be used by anyone.", sizeof(buf));
+    } else if (GET_DECKBUILDING_TOKEN_IDNUM(j) == GET_IDNUM(ch)) {
+      strlcat(buf, " It can only be used by you.", sizeof(buf));
+    } else {
+      strlcat(buf, " You can't use it-- it belongs to someone else.", sizeof(buf));
+    }
+  }
+
+  if (GET_OBJ_VNUM(j) == OBJ_HOLIDAY_GIFT) {
+    if (GET_HOLIDAY_GIFT_ISSUED_TO(j) == GET_IDNUM(ch)) {
+      strlcat(buf, " It is made out to you.", sizeof(buf));
+    } else {
+      strlcat(buf, " You can't open it-- it is made out to someone else.", sizeof(buf));
+    }
+  }
+
+  if (GET_OBJ_VNUM(j) == OBJ_ONE_SHOT_HEALING_INJECTOR) {
+    if (GET_HEALING_INJECTOR_ISSUED_TO(j) == GET_IDNUM(ch)) {
+      strlcat(buf, " It can only be used by you.", sizeof(buf));
+    } else {
+      strlcat(buf, " You can't use it-- it belongs to someone else.", sizeof(buf));
+    }
+  }
+
   if (GET_OBJ_AFFECT(j).IsSet(AFF_LASER_SIGHT) && has_smartlink) {
     strlcat(buf, "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.", sizeof(buf));
   }

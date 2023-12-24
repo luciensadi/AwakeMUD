@@ -6718,6 +6718,44 @@ SPECIAL(airport_guard)
   return FALSE;
 }
 
+SPECIAL(one_shot_self_heal) {
+  struct obj_data *obj = (struct obj_data *) me;
+
+  if (!cmd || !ch || IS_NPC(ch) || !ch->desc)
+    return FALSE;
+
+  if (CMD_IS("restore")) {
+    // Only use it if it's yours.
+    if (GET_HEALING_INJECTOR_ISSUED_TO(obj) > 0 && GET_HEALING_INJECTOR_ISSUED_TO(obj) != GET_IDNUM(ch)) {
+      send_to_char(ch, "%s belongs to someone else.\r\n", CAP(GET_OBJ_NAME(obj)));
+      char *owner_name = get_player_name(GET_HEALING_INJECTOR_ISSUED_TO(obj));
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "Warning: %s is holding a healing injector that actually belongs to %s (%d).", 
+                      GET_CHAR_NAME(ch),
+                      owner_name,
+                      GET_HEALING_INJECTOR_ISSUED_TO(obj));
+      delete [] owner_name;
+      return TRUE;
+    }
+
+    // Don't allow mistaken use.
+    if (GET_PHYSICAL(ch) >= GET_MAX_PHYSICAL(ch) && GET_MENTAL(ch) >= GET_MAX_MENTAL(ch)) {
+      send_to_char("You're feeling perfectly fine-- there's nothing to restore.\r\n", ch);
+      return TRUE;
+    }
+
+    // It fixes you up.
+    restore_character(ch, FALSE);
+    send_to_char(ch, "You blearily jab %s into your side, and the healing rush roars through you like a wildfire.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "%s used a single-shot healing item.", GET_CHAR_NAME(ch));
+
+    // Remove it.
+    extract_obj(obj);
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
 // Give to morts for testing combat so staff don't have to restore them all the time.
 SPECIAL(restoration_button) {
   if (!cmd)

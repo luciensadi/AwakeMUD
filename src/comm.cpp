@@ -145,6 +145,7 @@ void msdp_update();
 void increase_congregation_bonus_pools();
 void send_nuyen_rewards_to_pcs();
 void cleanup_things_valgrind_complains_about();
+extern void award_holiday_gifts();
 
 /* extern fcnts */
 extern void DBInit();
@@ -1082,6 +1083,7 @@ void game_loop(int mother_desc)
       // johnson_update();
       process_boost();
       tick_down_room_tempdesc_expiries();
+      award_holiday_gifts();
     }
 
     // By default, every IRL hour, but configurable in config.h.

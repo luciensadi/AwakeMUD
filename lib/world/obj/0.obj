@@ -1306,19 +1306,19 @@ Material:	paper
 	Barrier:	4
 BREAK
 #126
-Keywords:	silver cord
-Name:	a silver cord
+Keywords:	holiday gift box present
+Name:	a holiday gift box
 RoomDesc:$
-A silver cord lies here rolled neatly.~
+A holiday gift has been abandoned here.~
 LookDesc:$
-A fine silver rope cord. 
+It's festive! 
 ~
-Type:	Worn
-WearFlags:	100000000001
-ExtraFlags:	1000001000
+Type:	Other
+WearFlags:	1
+ExtraFlags:	100000000000000001000001000
 Material:	metal
 [POINTS]
-	Weight:	1.00
+	Weight:	0.01
 	Barrier:	32
 BREAK
 #127
@@ -1497,6 +1497,70 @@ Material:	metal
 	Val5:	14
 	Val6:	10
 	Val7:	-4
+BREAK
+#196
+Keywords:	sharpened candy cane bayonet
+Name:	a sharpened ^Rc^Wa^Rn^Wd^Ry ^Wc^Ra^Wn^Re^n
+RoomDesc:$
+A sharpened candy cane gathers dirt here.~
+LookDesc:$
+This vaguely-sticky sweet treat has been sharpened into a wicked point, like
+someone's spent a good few minutes licking it in preparation for waging
+holiday-themed war on their friends and family. In a stark departure from
+tradition, they've also added hardware for underbarrel mounting to the base,
+allowing it to be used as a bayonet if so desired. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	1000001000
+Material:	metal
+[POINTS]
+	Barrier:	32
+[VALUES]
+	Val0:	2
+	Val1:	10
+BREAK
+#197
+Keywords:	vintage ugly Christmas sweater 2023
+Name:	a vintage ugly ^GC^Rh^Gr^Ri^Gs^Rt^Gm^Ra^Gs^n sweater from 2023
+RoomDesc:$
+An ugly Christmas sweater has been abandoned here. Probably for the best.~
+LookDesc:$
+The design is garish, the colors are bright, and the overall vibe feels
+straight out of 2023. Who knew a 41-year-old sweater could hurt the eyes so
+badly? 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	1000001000
+Material:	fabric
+[POINTS]
+	Weight:	0.01
+	Barrier:	4
+[VALUES]
+	Val0:	10
+	Val4:	10
+	Val7:	50
+BREAK
+#198
+Keywords:	shady-looking looking single-use use health injector high-tech tech syringe
+Name:	a shady-looking single-use health injector
+RoomDesc:$
+A high-tech syringe has been set down here.~
+LookDesc:$
+Consisting of a pressure-activated syringe filled with a shimmering silver
+liquid, this injector is clearly the product of some highly secret research
+project by a megacorp somewhere. You're probably not even supposed to know it
+exists, let alone have one in your possession... best to keep quiet about it.
+ (OOC: It will fully heal you even if you are mortally wounded. To use it,
+type ^WRESTORE^n.) 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	100000000000000001000001000
+Material:	metal
+[POINTS]
+	Barrier:	32
 BREAK
 #199
 Keywords:	ring wedding gold

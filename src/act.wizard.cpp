@@ -2269,6 +2269,15 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   if (GET_OBJ_TYPE(obj) == ITEM_WORN && IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
     GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = -1;
   }
+
+  // Flag staff-loaded tokens as issued by them.
+  if (GET_OBJ_VNUM(obj) == OBJ_STAFF_REBATE_FOR_DECKBUILDING) {
+    GET_DECKBUILDING_TOKEN_ISSUED_BY(obj) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
+  } else if (GET_OBJ_VNUM(obj) == OBJ_HOLIDAY_GIFT) {
+    GET_HOLIDAY_GIFT_ISSUED_BY(obj) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
+  } else if (GET_OBJ_VNUM(obj) == OBJ_ONE_SHOT_HEALING_INJECTOR) {
+    GET_HEALING_INJECTOR_ISSUED_BY(obj) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
+  }
 }
 
 ACMD(do_iload)

@@ -556,6 +556,7 @@ void boot_world(void)
   require_that_field_exists_in_table("completed", "pfiles_quests", "SQL/Migrations/quest_completed_fix.sql");
   require_that_field_exists_in_table("graffiti", "pfiles_worn", "SQL/Migrations/add_graffiti_field.sql");
   require_that_field_exists_in_table("prestige_alt", "pfiles_chargendata", "SQL/Migrations/prestige_races.sql");
+  require_that_sql_table_exists("pfiles_named_tags", "SQL/Migrations/add_named_tags.sql");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
@@ -2004,7 +2005,7 @@ void parse_object(File &fl, long nr)
 
   // Set the do-not-touch flags for known templated items.
   if ((BOTTOM_OF_TEMPLATE_ITEMS <= nr && nr <= TOP_OF_TEMPLATE_ITEMS)
-      || nr == OBJ_BLANK_MAGAZINE || nr ==  OBJ_VEHCONTAINER || nr == OBJ_SHOPCONTAINER) {
+      || nr == OBJ_VEHCONTAINER || nr == OBJ_SHOPCONTAINER || nr == OBJ_ONE_SHOT_HEALING_INJECTOR) {
     GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_DONT_TOUCH);
   }
 

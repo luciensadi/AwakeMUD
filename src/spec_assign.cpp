@@ -868,6 +868,11 @@ void assign_objects(void)
   SPECIAL(medical_workshop);
   SPECIAL(toggled_voice_modulator);
   SPECIAL(initiative_tracker);
+  SPECIAL(one_shot_self_heal);
+  SPECIAL(holiday_gift);
+
+  ASSIGNOBJ(OBJ_HOLIDAY_GIFT, holiday_gift);
+  ASSIGNOBJ(OBJ_ONE_SHOT_HEALING_INJECTOR, one_shot_self_heal);
 
   // Adding a board? Add it to the index in boards.cpp too!
   ASSIGNOBJ(26, gen_board);

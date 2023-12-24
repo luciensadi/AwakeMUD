@@ -1036,6 +1036,18 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 
 #define GET_VEHICLE_TITLE_OWNER(title)            (GET_OBJ_VAL((obj), 0))
 
+#define GET_DECKBUILDING_TOKEN_IDNUM(token)       (GET_OBJ_VAL((token), 0))
+#define GET_DECKBUILDING_TOKEN_ISSUED_BY(token)   (GET_OBJ_VAL((token), 1))
+
+#define GET_HOLIDAY_GIFT_ISSUED_TO(gift)          (GET_OBJ_VAL((gift), 0))
+#define GET_HOLIDAY_GIFT_SYSPOINT_VALUE(gift)     (GET_OBJ_VAL((gift), 1))
+#define GET_HOLIDAY_GIFT_DECKBUILD_TOKENS(gift)   (GET_OBJ_VAL((gift), 2))
+#define GET_HOLIDAY_GIFT_ONE_SHOT_HEALS(gift)     (GET_OBJ_VAL((gift), 3))
+#define GET_HOLIDAY_GIFT_ISSUED_BY(gift)          (GET_OBJ_VAL((gift), 4))
+
+#define GET_HEALING_INJECTOR_ISSUED_TO(obj)       (GET_OBJ_VAL((obj), 0))
+#define GET_HEALING_INJECTOR_ISSUED_BY(obj)       (GET_OBJ_VAL((obj), 1))
+
 // ITEM_MAGIC_TOOL convenience defines
 #define GET_MAGIC_TOOL_TYPE(tool)                 (GET_OBJ_VAL((tool), 0))
 #define GET_MAGIC_TOOL_RATING(tool)               (GET_OBJ_VAL((tool), 1))

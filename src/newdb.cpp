@@ -2879,3 +2879,52 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
   // Finally, save them. TODO: Does saving them in the middle of the load process break things?
   save_char(ch, GET_LOADROOM(ch));
 }
+
+// Check if a PC has a specified DB tag applied to them.
+bool player_has_db_tag(idnum_t idnum, const char *tag_name) {
+  char prepare_quotes_buf[1000];
+  char query_buf[2000];
+  bool result;
+  
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
+  snprintf(query_buf, sizeof(query_buf), "SELECT idnum FROM pfiles_named_tags WHERE idnum=%ld AND tag_name='%s';", 
+           idnum,
+           prepare_quotes(prepare_quotes_buf, tag_name, sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])));
+
+  mysql_wrapper(mysql, query_buf);
+
+  if (!(res = mysql_use_result(mysql))) {
+    result = FALSE;
+  } else if (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
+    result = FALSE;
+  } else {
+    result = TRUE;
+  }
+  
+  mysql_free_result(res);
+  return result;
+}
+
+void set_db_tag(idnum_t idnum, const char *tag_name) {
+  char prepare_quotes_buf[1000];
+  char query_buf[2000];
+
+  snprintf(query_buf, sizeof(query_buf),  "INSERT IGNORE INTO pfiles_named_tags (idnum, tag_name) VALUES (%ld, '%s')",
+           idnum,
+           prepare_quotes(prepare_quotes_buf, tag_name, sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])));
+  
+  mysql_wrapper(mysql, query_buf);
+}
+
+void remove_db_tag(idnum_t idnum, const char *tag_name) {
+  char prepare_quotes_buf[1000];
+  char query_buf[2000];
+
+  snprintf(query_buf, sizeof(query_buf),  "DELETE FROM pfiles_named_tags WHERE idnum=%ld AND tag_name='%s'",
+           idnum,
+           prepare_quotes(prepare_quotes_buf, tag_name, sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])));
+  
+  mysql_wrapper(mysql, query_buf);
+}

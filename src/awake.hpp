@@ -2607,6 +2607,8 @@ enum {
 #define OBJ_RUGER_100                      828
 #define OBJ_BO_STAFF                       60510
 #define OBJ_HEAVY_MILITARY_HELMET          717
+#define OBJ_VINTAGE_UGLY_CHRISTMAS_SWEATER 197
+#define OBJ_CHRISTMAS_2024_GIFT            196
 
 #define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_TITLE_TO_SCORPION              892
@@ -2730,6 +2732,7 @@ enum {
 
 #define OBJ_SHOPCONTAINER                  83
 #define OBJ_VEHCONTAINER                   13
+#define OBJ_ONE_SHOT_HEALING_INJECTOR      198
 
 #define BOTTOM_OF_TEMPLATE_ITEMS           106
 #define OBJ_BLANK_OPTICAL_CHIP             106
@@ -2752,9 +2755,9 @@ enum {
 #define OBJ_CUSTOM_NERPS_BIOWARE           123
 #define OBJ_RITUAL_SPELL_COMPONENTS        124
 #define OBJ_CUSTOM_ART                     125
-#define TOP_OF_TEMPLATE_ITEMS              125
-
+#define OBJ_HOLIDAY_GIFT                   126
 #define OBJ_BLANK_MAGAZINE                 127
+#define TOP_OF_TEMPLATE_ITEMS              127
 
 #define OBJ_DOCWAGON_PAPER_GOWN            16201
 #define OBJ_ANTI_DRUG_CHEMS                44
