@@ -44,7 +44,7 @@ void award_holiday_gifts() {
     for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
       struct char_data *ch = d->original ? d->original : d->character;
 
-      if (holiday.is_eligible(ch)) {
+      if (ch && holiday.is_eligible(ch)) {
         holiday.award_gift(ch);
       }
     }
@@ -81,7 +81,7 @@ bool holiday_entry::already_got_award(struct char_data *ch) {
 
 bool holiday_entry::is_eligible(struct char_data *ch) {
   // No gifting to NPCs or linkdead folks.
-  if (IS_NPC(ch) || !ch->desc)
+  if (!ch || IS_NPC(ch) || !ch->desc)
     return FALSE;
 
   // They already got a present-- bail out.
