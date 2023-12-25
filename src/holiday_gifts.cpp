@@ -88,6 +88,10 @@ bool holiday_entry::is_eligible(struct char_data *ch) {
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || GET_TKE(ch) < 10)
     return FALSE;
 
+  // Not in playing state? Nope.
+  if (STATE(ch->desc) != CON_PLAYING)
+    return FALSE;
+
   // Idle? Try again later.
   if (ch->char_specials.timer > 15 || PRF_FLAGGED(ch, PRF_AFK))
     return FALSE;
