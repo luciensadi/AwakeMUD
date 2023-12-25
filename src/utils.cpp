@@ -4243,6 +4243,7 @@ bool get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch) {
 
       mudlog_vfprintf(ch, LOG_CHEATLOG, "%s: Consuming a deckbuilding token (issued by %s / %d) to accelerate a deckbuilding task.", 
                       GET_CHAR_NAME(ch), 
+                      issuer_name,
                       GET_DECKBUILDING_TOKEN_ISSUED_BY(ptr));
 
       delete [] issuer_name;
