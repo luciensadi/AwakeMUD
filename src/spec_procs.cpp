@@ -6423,7 +6423,7 @@ SPECIAL(mageskill_nightwing)
     for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
       if (d->character 
           && (GET_TRADITION(d->character) == TRAD_SHAMANIC || GET_TRADITION(d->character) == TRAD_HERMETIC) 
-          && GET_SKILL(d->character, SKILL_SORCERY) == 8
+          && GET_SKILL(d->character, SKILL_SORCERY) >= 8
           && SEES_ASTRAL(d->character)) {
         for (struct obj_data *tmp_obj = d->character->carrying; tmp_obj; tmp_obj = tmp_obj->next_content) {
           if (GET_OBJ_VNUM(tmp_obj) == OBJ_MAGE_LETTER) {
