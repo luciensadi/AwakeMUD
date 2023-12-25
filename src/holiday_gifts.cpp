@@ -84,6 +84,10 @@ bool holiday_entry::is_eligible(struct char_data *ch) {
   if (!ch || IS_NPC(ch) || !ch->desc)
     return FALSE;
 
+  // Idle? Try again later.
+  if (ch->char_specials.timer > 15 || PRF_FLAGGED(ch, PRF_AFK))
+    return FALSE;
+
   // They already got a present-- bail out.
   if (already_got_award(ch))
     return FALSE;
