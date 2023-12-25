@@ -84,6 +84,10 @@ bool holiday_entry::is_eligible(struct char_data *ch) {
   if (!ch || IS_NPC(ch) || !ch->desc)
     return FALSE;
 
+  // Still in chargen or very new to the game? No-go.
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || GET_TKE(ch) < 10)
+    return FALSE;
+
   // Idle? Try again later.
   if (ch->char_specials.timer > 15 || PRF_FLAGGED(ch, PRF_AFK))
     return FALSE;
