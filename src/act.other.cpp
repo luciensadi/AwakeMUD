@@ -1858,11 +1858,18 @@ ACMD(do_eject)
   GET_INIT_ROLL(ch) -= 5;
 
   // If it has a bayonet and you're in combat, you charge forth.
-  if (FIGHTING(ch) && does_weapon_have_bayonet(weapon)) {
-    send_to_char("With your weapon empty, you decide to do a bayonet charge!\r\n", ch);
-    act("$n lets out a banshee screech and charges in with $s bayonet!", FALSE, ch, NULL, NULL, TO_ROOM);
-    if (AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH))
+  if (FIGHTING(ch)) {
+    if (does_weapon_have_bayonet(weapon)) {
+      send_to_char("With your weapon empty, you decide to do a bayonet charge!\r\n", ch);
+      act("$n lets out a banshee screech and charges in with $s bayonet!", FALSE, ch, NULL, NULL, TO_ROOM);
+    } else {
+      send_to_char("With your weapon empty, you charge in for some dirty buttstrokes!\r\n", ch);
+      act("$n lets out a banshee screech and charges in for a melee brawl!", FALSE, ch, NULL, NULL, TO_ROOM);
+    }
+    // Remove the still-approaching flag.
+    if (AFF_FLAGGED(FIGHTING(ch), AFF_APPROACH)) {
       AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
+    }
   }
 }
 

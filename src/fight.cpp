@@ -3090,10 +3090,12 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         case TYPE_MEDICAL_MISHAP:
           break;
         default:
-          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s damaged %s with type %d, which would have triggered a killer flag if that logic still existed!",
+          if (!IS_MOB(ch) && !IS_MOB(victim)) {
+            mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s damaged %s with type %d, which would have triggered a killer flag if that logic still existed!",
                           GET_CHAR_NAME(ch),
                           GET_CHAR_NAME(victim),
                           attacktype);
+          }
       }
     }
 
@@ -3685,19 +3687,15 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
 
       // Regardless-- no ammo in the current weapon means we lose our turn.
       return FALSE;
-    }
-
-    // No magazine, but has a bayonet? They're in charge mode.
-    else if (does_weapon_have_bayonet(wielded)) {
+    } else {
+      // No magazine means it "has ammo".
       // send_to_char(ch, "has bayonet\r\n");
       return TRUE;
-    } else {
-      // send_to_char(ch, "no bayonet\r\n");
     }
 
     // The weapon requires a magazine and doesn't have one.
-    send_to_char(ch, "%s just clicks when you pull the trigger-- it's out of ammo!\r\n", capitalize(GET_OBJ_NAME(wielded)));
-    return FALSE;
+    // send_to_char(ch, "%s just clicks when you pull the trigger-- it's out of ammo!\r\n", capitalize(GET_OBJ_NAME(wielded)));
+    // return FALSE;
   }
 
   // snprintf(buf, sizeof(buf), "Got to end of process_has_ammo (%s, %s (%ld)) with no result. Returning true.",
