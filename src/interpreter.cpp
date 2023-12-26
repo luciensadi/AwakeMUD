@@ -791,7 +791,6 @@ struct command_info cmd_info[] =
     { "powers"     , POS_DEAD    , do_skills   , 0, SCMD_ABILITIES, ALLOWS_IDLE_REWARD },
     { "powerdown"  , POS_LYING   , do_powerdown, 0, 0, BLOCKS_IDLE_REWARD },
     { "press"      , POS_SITTING , do_push     , 0, 0, BLOCKS_IDLE_REWARD },
-    { "prompt"     , POS_DEAD    , do_display  , 0, 0, ALLOWS_IDLE_REWARD },
     { "project"    , POS_LYING   , do_astral   , 0, SCMD_PROJECT, BLOCKS_IDLE_REWARD },
     { "pretitle"   , POS_DEAD    , do_wiztitle , 0, SCMD_PRETITLE, ALLOWS_IDLE_REWARD },
     { "practice"   , POS_RESTING , do_practice , 1, 0, BLOCKS_IDLE_REWARD },
@@ -800,7 +799,8 @@ struct command_info cmd_info[] =
     { "progress"   , POS_RESTING , do_progress , 0, 0, ALLOWS_IDLE_REWARD },
     { "prone"      , POS_FIGHTING, do_prone    , 0, 0, BLOCKS_IDLE_REWARD },
     { "privatedice", POS_DEAD    , do_dice     , 0, SCMD_PRIVATE_ROLL, BLOCKS_IDLE_REWARD },
-    { "praise"     , POS_DEAD    , do_gen_write, 0, SCMD_PRAISE, ALLOWS_IDLE_REWARD },
+    { "praise"     , POS_DEAD    , do_gen_write, 0, SCMD_PRAISE, ALLOWS_IDLE_REWARD }, // Moved down to prevent accidental invocation.
+    { "prompt"     , POS_DEAD    , do_display  , 0, 0, ALLOWS_IDLE_REWARD }, // Moved down to prevent accidental invocation.
     { "push"       , POS_SITTING , do_push     , 0, 0, BLOCKS_IDLE_REWARD },
     { "playerrolls", POS_DEAD    , do_playerrolls, LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
     { "pur"        , POS_RESTING , do_put      , 0, 0, BLOCKS_IDLE_REWARD }, // special case aliasing- this use case is not covered by fuckups below
