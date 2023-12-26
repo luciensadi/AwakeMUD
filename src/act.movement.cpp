@@ -1873,6 +1873,11 @@ ACMD(do_drag)
     } else {
       struct room_data *in_room = ch->in_room;
 
+      if (!EXIT2(in_room, dir)) {
+        send_to_char("You can't go that way.\r\n", ch);
+        return;
+      }
+
       // Check to make sure the vehicle is allowed there.
       struct room_data *target_room = EXIT2(in_room, dir)->to_room;
       if (!room_accessible_to_vehicle_piloted_by_ch(target_room, drag_veh, ch, TRUE)) {
