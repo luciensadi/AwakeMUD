@@ -520,6 +520,11 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
   int i, autosucc = 0, dice, success;
   char roll_buf[10000];
 
+  if (!AWAKE(ch)) {
+    act("$n can't pass fall test: Not conscious.", FALSE, ch, 0, 0, TO_ROLLS);
+    return FALSE;
+  }
+
   snprintf(roll_buf, sizeof(roll_buf), "Computing fall test for %s vs initial TN %d and modifier %d.\r\n", GET_CHAR_NAME(ch), base_target, modifier);
 
   for (i = WEAR_LIGHT; i < NUM_WEARS; i++)
