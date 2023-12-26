@@ -1405,7 +1405,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                      already_printed ? " also" : "",
                      SHOULD_SEE_TIPS(ch) ? " See ^YHELP JOB^y for instructions." : "");
           } else {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s has work for less-experienced 'runners.^n\r\n",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s only has work for less-experienced 'runners.^n\r\n",
                      HSSH(i),
                      already_printed ? " also" : "");
           }
