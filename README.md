@@ -51,6 +51,8 @@ Previously tested on (it worked there in the past, but is not guaranteed to now)
 - With Cygwin, you can also use Eclipse CPP IDE, just create a Cygwin-C++ project and point the directory to where your AwakeMUD is located, play around with build settings to ensure it is using your Makefile in src. Debugging/Running works.
 
 ### Additional OSX Installation Notes
+- To install the Boost library:
+    - `brew install boost`
 - To install mysql@5.7 and mysql-client@5.7:
     - `brew install mysql@5.7`
     - `brew install mysql-client@5.7`
