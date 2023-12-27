@@ -2054,10 +2054,18 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
   else if (bio1 && bio2) {
     switch (GET_BIOWARE_TYPE(bio2)) {
       case BIO_CALCITONIN:
-        INCOMPATIBLE_BIO(BIO_PLATELETFACTORY, "Calcitonin treatments are incompatible with platelet factories..");
+        INCOMPATIBLE_BIO(BIO_PLATELETFACTORY, "Calcitonin treatments are incompatible with platelet factories.");
         break;
       case BIO_PLATELETFACTORY:
         INCOMPATIBLE_BIO(BIO_CALCITONIN, "Platelet factories are incompatible with calcitonin treatments.");
+        break;
+      case BIO_METABOLICARRESTER:
+        INCOMPATIBLE_BIO(BIO_ADRENALPUMP, "Metabolic arresters are incompatible with adrenal pumps.");
+        INCOMPATIBLE_BIO(BIO_SUPRATHYROIDGLAND, "Metabolic arresters are incompatible with suprathyroid glands.");
+        break;
+      case BIO_ADRENALPUMP:
+      case BIO_SUPRATHYROIDGLAND:
+        INCOMPATIBLE_BIO(BIO_METABOLICARRESTER, "Adrenal pumps and suprathyroid glands are incompatible with metabolic arresters.");
         break;
     }
   }
