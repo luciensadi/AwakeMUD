@@ -352,8 +352,8 @@ ACMD(do_design)
     return;
   }
   if (GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) == GET_DESIGN_DESIGNING_TICKS_LEFT(prog)) {
-    if (get_and_deduct_one_deckbuilding_token_from_char(ch)) {
-      send_to_char("A deckbuilding token fuzzes into digital static, greatly accelerating the design time.\r\n", ch);
+    if (get_and_deduct_one_crafting_token_from_char(ch)) {
+      send_to_char("A crafting token fuzzes into digital static, greatly accelerating the design time.\r\n", ch);
       GET_DESIGN_SUCCESSES(prog) = 10;
       GET_DESIGN_DESIGNING_TICKS_LEFT(prog) = 1;
     }
@@ -406,8 +406,8 @@ ACMD(do_program)
     return;
   }
   if (!GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog)) {
-    if (get_and_deduct_one_deckbuilding_token_from_char(ch)) {
-      send_to_char("A deckbuilding token fuzzes into digital static, greatly accelerating the development time.\r\n", ch);
+    if (get_and_deduct_one_crafting_token_from_char(ch)) {
+      send_to_char("A crafting token fuzzes into digital static, greatly accelerating the development time.\r\n", ch);
       GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 1;
       GET_OBJ_TIMER(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
     }

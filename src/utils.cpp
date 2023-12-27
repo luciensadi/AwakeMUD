@@ -4215,36 +4215,36 @@ bool builder_cant_go_there(struct char_data *ch, struct room_data *room) {
   return FALSE;
 }
 
-// Allows morts to have accelerated deckbuilding actions. Useful for when their deck breaks.
-bool get_and_deduct_one_deckbuilding_token_from_char(struct char_data *ch) {
+// Allows morts to have accelerated crafting actions. Useful for when their deck breaks.
+bool get_and_deduct_one_crafting_token_from_char(struct char_data *ch) {
   for (struct obj_data *ptr = ch->carrying; ptr; ptr = ptr->next_content) {
-    // Look for deckbuilding tokens.
-    if (GET_OBJ_VNUM(ptr) == OBJ_STAFF_REBATE_FOR_DECKBUILDING) {
+    // Look for crafting tokens.
+    if (GET_OBJ_VNUM(ptr) == OBJ_STAFF_REBATE_FOR_CRAFTING) {
       // Check for ownership. Staff-loaded tokens can be used by anyone (no token idnum).
-      if (GET_DECKBUILDING_TOKEN_IDNUM(ptr) > 0 && GET_DECKBUILDING_TOKEN_IDNUM(ptr) != GET_IDNUM(ch)) {
-        char *owner_name = get_player_name(GET_DECKBUILDING_TOKEN_IDNUM(ptr));
-        mudlog_vfprintf(ch, LOG_CHEATLOG, "Warning: %s is holding a deckbuilding token that actually belongs to %s (%ld).", 
+      if (GET_CRAFTING_TOKEN_IDNUM(ptr) > 0 && GET_CRAFTING_TOKEN_IDNUM(ptr) != GET_IDNUM(ch)) {
+        char *owner_name = get_player_name(GET_CRAFTING_TOKEN_IDNUM(ptr));
+        mudlog_vfprintf(ch, LOG_CHEATLOG, "Warning: %s is holding a crafting token that actually belongs to %s (%ld).", 
                         GET_CHAR_NAME(ch),
                         owner_name,
-                        GET_DECKBUILDING_TOKEN_IDNUM(ptr));
+                        GET_CRAFTING_TOKEN_IDNUM(ptr));
         delete [] owner_name;
         continue;
       }
 
       // Log it.
       char *issuer_name;
-      if (GET_DECKBUILDING_TOKEN_ISSUED_BY(ptr) == -1) {
+      if (GET_CRAFTING_TOKEN_ISSUED_BY(ptr) == -1) {
         issuer_name = str_dup("coded process");
-      } else if (GET_DECKBUILDING_TOKEN_ISSUED_BY(ptr) == 0) {
+      } else if (GET_CRAFTING_TOKEN_ISSUED_BY(ptr) == 0) {
         issuer_name = str_dup("old iload (probably Lucien)");
       } else {
-        issuer_name = get_player_name(GET_DECKBUILDING_TOKEN_ISSUED_BY(ptr));
+        issuer_name = get_player_name(GET_CRAFTING_TOKEN_ISSUED_BY(ptr));
       }
 
-      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s: Consuming a deckbuilding token (issued by %s / %d) to accelerate a deckbuilding task.", 
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s: Consuming a crafting token (issued by %s / %d) to accelerate a crafting task.", 
                       GET_CHAR_NAME(ch), 
                       issuer_name,
-                      GET_DECKBUILDING_TOKEN_ISSUED_BY(ptr));
+                      GET_CRAFTING_TOKEN_ISSUED_BY(ptr));
 
       delete [] issuer_name;
 

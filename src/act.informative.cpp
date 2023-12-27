@@ -3814,10 +3814,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
     }
   }
 
-  if (GET_OBJ_VNUM(j) == OBJ_STAFF_REBATE_FOR_DECKBUILDING) {
-    if (GET_DECKBUILDING_TOKEN_IDNUM(j) <= 0) {
+  if (GET_OBJ_VNUM(j) == OBJ_STAFF_REBATE_FOR_CRAFTING) {
+    if (GET_CRAFTING_TOKEN_IDNUM(j) <= 0) {
       strlcat(buf, " It can be used by anyone.", sizeof(buf));
-    } else if (GET_DECKBUILDING_TOKEN_IDNUM(j) == GET_IDNUM(ch)) {
+    } else if (GET_CRAFTING_TOKEN_IDNUM(j) == GET_IDNUM(ch)) {
       strlcat(buf, " It can only be used by you.", sizeof(buf));
     } else {
       strlcat(buf, " You can't use it-- it belongs to someone else.", sizeof(buf));

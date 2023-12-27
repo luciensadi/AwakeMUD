@@ -185,12 +185,12 @@ SPECIAL(holiday_gift) {
     if (GET_HOLIDAY_GIFT_DECKBUILD_TOKENS(obj) > 0) {
       // Message.
       if (obj->contains) {
-        send_to_char(ch, "%s%d deckbuilding token%s",
+        send_to_char(ch, "%s%d crafting token%s",
                      sent_count > 0 ? ", " : " ", 
                      GET_HOLIDAY_GIFT_DECKBUILD_TOKENS(obj),
                      GET_HOLIDAY_GIFT_DECKBUILD_TOKENS(obj) == 1 ? "" : "s");
       } else {
-        send_to_char(ch, "%s%d deckbuilding token%s",
+        send_to_char(ch, "%s%d crafting token%s",
                      sent_count > 1 ? ", and " : (sent_count == 1 ? " and " : " "), 
                      GET_HOLIDAY_GIFT_DECKBUILD_TOKENS(obj),
                      GET_HOLIDAY_GIFT_DECKBUILD_TOKENS(obj) == 1 ? "" : "s");
@@ -198,8 +198,8 @@ SPECIAL(holiday_gift) {
 
       // Hand off.
       while (GET_HOLIDAY_GIFT_DECKBUILD_TOKENS(obj)-- > 0) {
-        struct obj_data *token = read_object(OBJ_STAFF_REBATE_FOR_DECKBUILDING, VIRTUAL);
-        GET_DECKBUILDING_TOKEN_ISSUED_BY(obj) = -1;
+        struct obj_data *token = read_object(OBJ_STAFF_REBATE_FOR_CRAFTING, VIRTUAL);
+        GET_CRAFTING_TOKEN_ISSUED_BY(obj) = -1;
         obj_to_char(token, ch);
       }
       

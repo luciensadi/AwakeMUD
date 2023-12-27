@@ -201,7 +201,7 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
   struct obj_data *lib = NULL;
 
   if (GET_SPELLFORMULA_CREATOR_IDNUM(formula) != GET_IDNUM(ch)) {
-    send_to_char("You don't understand where the creator of this spell is coming from.\r\n", ch);
+    send_to_char(ch, "%s was started by someone else.\r\n", CAP(GET_OBJ_NAME(formula)));
     return;
   }
   if (IS_WORKING(ch)) {
@@ -222,17 +222,19 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
   }
 
   if (!lib) {
-    send_to_char("You don't have the right tools here to design that spell.\r\n", ch);
+    send_to_char(ch, "You don't have the right tools here to design that spell. You need a %s of force %d or higher.\r\n", 
+                 GET_TRADITION(ch) == TRAD_SHAMANIC ? "lodge" : "library",
+                 GET_SPELLFORMULA_FORCE(formula));
     return;
   }
 
   if (GET_TRADITION(ch) == TRAD_SHAMANIC && GET_MAGIC_TOOL_BUILD_TIME_LEFT(lib)) {
-    send_to_char("You need to finish building that lodge before you can use it.\r\n", ch);
+    send_to_char(ch, "You need to finish building %s before you can use it.\r\n", decapitalize_a_an(GET_OBJ_NAME(lib)));
     return;
   }
 
   if (GET_SPELLFORMULA_TIME_LEFT(formula)) {
-    send_to_char("You continue to design that spell.\r\n", ch);
+    send_to_char(ch, "You continue to design %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(formula)));
     act("$n sits down and begins to design a spell.", TRUE, ch, 0, 0, TO_ROOM);
     GET_BUILDING(ch) = formula;
     AFF_FLAGS(ch).SetBit(AFF_SPELLDESIGN);
@@ -240,7 +242,7 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
   }
 
   if (!GET_OBJ_TIMER(formula)) {
-    send_to_char("That spell is already complete.\r\n", ch);
+    send_to_char(ch, "%s is already complete.\r\n", CAP(GET_OBJ_NAME(formula)));
     return;
   }
 
@@ -375,18 +377,25 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
   act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   int success = success_test(skill, target);
-  if (success < 1) {
-    GET_SPELLFORMULA_TIME_LEFT(formula) = design_duration / 2;
-    GET_SPELLFORMULA_INITIAL_TIME(formula) = design_duration;
-    GET_OBJ_TIMER(formula) = SPELL_DESIGN_FAILED_CODE;
-  } else
-    GET_SPELLFORMULA_TIME_LEFT(formula) = GET_SPELLFORMULA_INITIAL_TIME(formula) = design_duration / success;
 
-  DEBUG_TO_STAFF(ch, "Got %d success%s.", success, success == 1 ? "" : "es");
-
-  if (access_level(ch, LVL_ADMIN)) {
-    send_to_char("You use your staff privileges to greatly accelerate the design process.\r\n", ch);
+  if (get_and_deduct_one_crafting_token_from_char(ch)) {
+    send_to_char("A crafting token fuzzes into digital static, greatly accelerating the design time.\r\n", ch);
     GET_SPELLFORMULA_TIME_LEFT(formula) = GET_SPELLFORMULA_INITIAL_TIME(formula) = 1;
+    DEBUG_TO_STAFF(ch, "Got %d success%s. (overridden by crafting token)", success, success == 1 ? "" : "es");
+  } else {
+    if (success < 1) {
+      GET_SPELLFORMULA_TIME_LEFT(formula) = design_duration / 2;
+      GET_SPELLFORMULA_INITIAL_TIME(formula) = design_duration;
+      GET_OBJ_TIMER(formula) = SPELL_DESIGN_FAILED_CODE;
+    } else {
+      GET_SPELLFORMULA_TIME_LEFT(formula) = GET_SPELLFORMULA_INITIAL_TIME(formula) = design_duration / success;
+    }
+    DEBUG_TO_STAFF(ch, "Got %d success%s.", success, success == 1 ? "" : "es");
+
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff privileges to greatly accelerate the design process.\r\n", ch);
+      GET_SPELLFORMULA_TIME_LEFT(formula) = GET_SPELLFORMULA_INITIAL_TIME(formula) = 1;
+    }
   }
 
   send_to_char(ch, "You start designing %s.\r\n", GET_OBJ_NAME(formula));

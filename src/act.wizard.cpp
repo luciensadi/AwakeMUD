@@ -2271,8 +2271,8 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   }
 
   // Flag staff-loaded tokens as issued by them.
-  if (GET_OBJ_VNUM(obj) == OBJ_STAFF_REBATE_FOR_DECKBUILDING) {
-    GET_DECKBUILDING_TOKEN_ISSUED_BY(obj) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
+  if (GET_OBJ_VNUM(obj) == OBJ_STAFF_REBATE_FOR_CRAFTING) {
+    GET_CRAFTING_TOKEN_ISSUED_BY(obj) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
   } else if (GET_OBJ_VNUM(obj) == OBJ_HOLIDAY_GIFT) {
     GET_HOLIDAY_GIFT_ISSUED_BY(obj) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
   } else if (GET_OBJ_VNUM(obj) == OBJ_ONE_SHOT_HEALING_INJECTOR) {

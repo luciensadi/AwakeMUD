@@ -6280,8 +6280,8 @@ bool init_cost(struct char_data *ch, bool spend)
     nuyencost = 25000 + (25000 * (1 << GET_GRADE(ch)));
 
   if (karmacost < 0) {
-    send_to_char("You broke it! You can't initiate until the code is fixed to allow someone at your rank to do so.\r\n", ch);
-    mudlog("lol init capped, karma overflowed... this game was not designed for that init level", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Congratulations, you've hit the ceiling! You can't initiate until the code is fixed to allow someone at your rank to do so.\r\n", ch);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "lol init capped at %d for %s, karma overflowed... this game was not designed for that init level", GET_GRADE(ch), GET_CHAR_NAME(ch));
     return FALSE;
   }
 

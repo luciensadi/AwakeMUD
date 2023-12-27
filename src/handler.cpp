@@ -1528,9 +1528,9 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
 
   // Soulbind it if necessary. Items never soulbind to NPCs or staffers.
   if (!IS_NPC(ch) && !IS_SENATOR(ch)) {
-    // Deckbuilding tokens bind to the first non-staffer to take possession of them.
-    if (GET_OBJ_VNUM(object) == OBJ_STAFF_REBATE_FOR_DECKBUILDING && GET_DECKBUILDING_TOKEN_IDNUM(object) <= 0) {
-      GET_DECKBUILDING_TOKEN_IDNUM(object) = GET_IDNUM(ch);
+    // Crafting tokens bind to the first non-staffer to take possession of them.
+    if (GET_OBJ_VNUM(object) == OBJ_STAFF_REBATE_FOR_CRAFTING && GET_CRAFTING_TOKEN_IDNUM(object) <= 0) {
+      GET_CRAFTING_TOKEN_IDNUM(object) = GET_IDNUM(ch);
     } else if (GET_OBJ_VNUM(object) == OBJ_HOLIDAY_GIFT && GET_HOLIDAY_GIFT_ISSUED_BY(object) <= 0) {
       GET_HOLIDAY_GIFT_ISSUED_TO(object) = GET_IDNUM(ch);
     } else if (GET_OBJ_VNUM(object) == OBJ_ONE_SHOT_HEALING_INJECTOR && GET_HEALING_INJECTOR_ISSUED_BY(object) <= 0) {
