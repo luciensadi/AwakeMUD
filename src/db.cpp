@@ -2291,6 +2291,23 @@ void parse_object(File &fl, long nr)
     }
   } // End per-type modifications.
 
+  // Auto-repair deckbuilding tokens to look right.
+  if (GET_OBJ_VNUM(obj) == OBJ_STAFF_REBATE_FOR_CRAFTING) {
+    delete [] obj->text.keywords;
+    obj->text.keywords = str_dup("rapid crafting token ooc item");
+
+    delete [] obj->text.name;
+    obj->text.name = str_dup("a rapid crafting token (OOC item)");
+
+    delete [] obj->text.room_desc;
+    obj->text.room_desc = str_dup("[OOC item] A rapid crafting token has been left here.\n");
+
+    delete [] obj->text.look_desc;
+    obj->text.look_desc = str_dup("If you have this in your inventory when performing any deckbuilding or spell designing action, the task will be greatly accelerated at the cost of one crafting rebate token.\n");
+
+    GET_OBJ_TYPE(obj) = ITEM_OTHER;
+  }
+
   // read in affects
   for (i = 0; i < MAX_OBJ_AFFECT; i++) {
     char sect[16];
