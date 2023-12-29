@@ -848,7 +848,10 @@ SPECIAL(taxi)
   struct room_data *temp_room = NULL;
   int comm = CMD_TAXI_NONE;
   char say[MAX_STRING_LENGTH];
-  vnum_t dest = 0;
+
+  vnum_t dest_vnum;
+  rnum_t dest_rnum;
+  int dest_idx;
 
   struct dest_data *destination_list = get_dest_data_list_from_driver_vnum(GET_MOB_VNUM(driver));
 
@@ -935,18 +938,19 @@ SPECIAL(taxi)
             }
             if (y == NORTHWEST)
               return FALSE;
-            dest = real_room(GET_SPARE2(driver));
-            if (!world[dest].dir_option[j]) {
-              open_taxi_door(&world[dest], j, driver->in_room);
+            dest_rnum = real_room(GET_SPARE2(driver));
+            dest_rnum = MIN(MAX(dest_rnum, 0), top_of_world);
+            if (!world[dest_rnum].dir_option[j]) {
+              open_taxi_door(&world[dest_rnum], j, driver->in_room);
               do_say(driver, "Ok, here we are.", 0, 0);
               forget(driver, temp);
               GET_SPARE2(driver) = 0;
               GET_ACTIVE(driver) = ACT_AWAIT_CMD;
-              if (world[dest].people) {
+              if (world[dest_rnum].people) {
                 act("A taxi pulls to a stop, its door sliding open.",
-                    FALSE, world[dest].people, 0, 0, TO_ROOM);
+                    FALSE, world[dest_rnum].people, 0, 0, TO_ROOM);
                 act("A taxi pulls to a stop, its door sliding open.",
-                    FALSE, world[dest].people, 0, 0, TO_CHAR);
+                    FALSE, world[dest_rnum].people, 0, 0, TO_CHAR);
               }
               snprintf(buf, sizeof(buf), "The door, rather noisily, slides open to the %s.", fulldirs[rev_dir[j]]);
               act(buf, FALSE, driver, 0, 0, TO_ROOM);
@@ -971,6 +975,13 @@ SPECIAL(taxi)
     return FALSE;
   }
 
+  if (CMD_IS("spray")) {
+    act("As you reach for your spray can, $N reaches for the passenger ejection button, staring you down in the mirror. You slowly withdraw your hand, and $E does the same.", FALSE, ch, 0, driver, TO_CHAR);
+    act("As $n reaches for $s spray can, you reach for the passenger ejection button, staring $m down in the mirror. When $e slowly withdraws $s hand, you do the same.", FALSE, ch, 0, driver, TO_VICT);
+    act("As $n reaches for $s spray can, $N reaches for the passenger ejection button, staring $n down in the mirror. When $n slowly withdraws $s hand, $N does the same.", FALSE, ch, 0, driver, TO_NOTVICT);
+    return TRUE;
+  }
+
   // If you're an NPC, or if the driver's not listening in the first place-- bail.
   if (IS_NPC(ch) ||
       (GET_ACTIVE(driver) != ACT_AWAIT_CMD &&
@@ -979,12 +990,6 @@ SPECIAL(taxi)
 
   skip_spaces(&argument);
 
-  if (CMD_IS("spray")) {
-    act("As you reach for your spray can, $N reaches for the passenger ejection button, staring you down in the mirror. You slowly withdraw your hand, and $E does the same.", FALSE, ch, 0, driver, TO_CHAR);
-    act("As $n reaches for $s spray can, you reach for the passenger ejection button, staring $m down in the mirror. When $e slowly withdraws $s hand, you do the same.", FALSE, ch, 0, driver, TO_VICT);
-    act("As $n reaches for $s spray can, $N reaches for the passenger ejection button, staring $n down in the mirror. When $n slowly withdraws $s hand, $N does the same.", FALSE, ch, 0, driver, TO_NOTVICT);
-    return TRUE;
-  }
   if (CMD_IS("say") || CMD_IS("'")) {
     // Failure condition: If you can't speak, the cabbie can't hear you.
     if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
@@ -992,13 +997,13 @@ SPECIAL(taxi)
 
     bool found = FALSE;
     if (GET_ACTIVE(driver) == ACT_AWAIT_CMD)
-      for (dest = 0; *(destination_list[dest].keyword) != '\n'; dest++) {
+      for (dest_idx = 0; *(destination_list[dest_idx].keyword) != '\n'; dest_idx++) {
         // Skip invalid destinations.
-        if (!DEST_IS_VALID(dest, destination_list))
+        if (!DEST_IS_VALID(dest_idx, destination_list))
           continue;
 
-        if (str_str((const char *)argument, destination_list[dest].keyword)
-            || (*(destination_list[dest].subkeyword) && str_str((const char *)argument, destination_list[dest].subkeyword)))
+        if (str_str((const char *)argument, destination_list[dest_idx].keyword)
+            || (*(destination_list[dest_idx].subkeyword) && str_str((const char *)argument, destination_list[dest_idx].subkeyword)))
         {
           comm = CMD_TAXI_DEST;
           found = TRUE;
@@ -1062,7 +1067,7 @@ SPECIAL(taxi)
         // Looks like we got gridguide coordinates.
         if (x_coord && y_coord) {
           // Check to see if they're valid.
-          vnum_t dest_vnum = vnum_from_gridguide_coordinates(x_coord, y_coord, ch);
+          dest_vnum = vnum_from_gridguide_coordinates(x_coord, y_coord, ch);
 
           // Invalid coordinates.
           if (dest_vnum <= 0) {
@@ -1103,7 +1108,7 @@ SPECIAL(taxi)
           // Valid location.
           comm = CMD_TAXI_DEST_GRIDGUIDE;
           found = TRUE;
-          dest = -dest_vnum;
+          dest_vnum = -dest_vnum;
           do_say(ch, argument, 0, 0);
           strncpy(buf2, " punches a few buttons on the meter, calculating the fare.", sizeof(buf2));
           do_echo(driver, buf2, 0, SCMD_EMOTE);
@@ -1144,23 +1149,27 @@ SPECIAL(taxi)
           break;
         }
 
-      int distance_between_rooms;
-      if (comm == CMD_TAXI_DEST)
-        distance_between_rooms = calculate_distance_between_rooms(temp_room->number, destination_list[dest].vnum, FALSE);
-      else
-        distance_between_rooms = calculate_distance_between_rooms(temp_room->number, -dest, FALSE);
+      if (temp_room) {
+        int distance_between_rooms;
+        if (comm == CMD_TAXI_DEST)
+          distance_between_rooms = calculate_distance_between_rooms(temp_room->number, destination_list[dest_idx].vnum, FALSE);
+        else
+          distance_between_rooms = calculate_distance_between_rooms(temp_room->number, -dest_vnum, FALSE);
 
-      if (distance_between_rooms < 0)
+        if (distance_between_rooms < 0)
+          GET_SPARE1(driver) = MAX_CAB_FARE;
+        else
+          GET_SPARE1(driver) = MIN(MAX_CAB_FARE, 5 + distance_between_rooms);
+      } else {
         GET_SPARE1(driver) = MAX_CAB_FARE;
-      else
-        GET_SPARE1(driver) = MIN(MAX_CAB_FARE, 5 + distance_between_rooms);
+      }
     }
 
     // Rides to the NERPcorpolis are free.
-    if (dest > 0 && destination_list[dest].vnum == RM_NERPCORPOLIS_LOBBY)
+    if (dest_idx > 0 && destination_list[dest_idx].vnum == RM_NERPCORPOLIS_LOBBY)
       GET_SPARE1(driver) = 0;
 
-    GET_SPARE2(driver) = dest;
+    GET_SPARE2(driver) = dest_idx;
     GET_ACTIVE(driver) = ACT_REPLY_DEST;
     if (PLR_FLAGGED(ch, PLR_NEWBIE))
       GET_EXTRA(driver) = 1;
