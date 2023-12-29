@@ -1077,7 +1077,7 @@ void game_loop(int mother_desc)
     }
 
     // Every IRL minute
-    if (!(pulse % (60 * PASSES_PER_SEC))) {
+    if (!(pulse % (PASSES_PER_SEC * SECS_PER_REAL_MIN))) {
       check_idling();
       send_keepalives();
       // johnson_update();
@@ -1086,13 +1086,22 @@ void game_loop(int mother_desc)
       award_holiday_gifts();
     }
 
+    // Every 15 real minutes.
+    if (!(pulse % (PASSES_PER_SEC * SECS_PER_REAL_MIN * 15))) {
+      // Disable SlowNS to clean up logs.
+      if (nameserver_is_slow) {
+        mudlog("Disabling SlowNS on tick.", NULL, LOG_SYSLOG, TRUE);
+        nameserver_is_slow = 0;
+      }
+    }
+
     // By default, every IRL hour, but configurable in config.h.
-    if (!(pulse % (60 * PASSES_PER_SEC * IDLE_NUYEN_MINUTES_BETWEEN_AWARDS))) {
+    if (!(pulse % (PASSES_PER_SEC * SECS_PER_REAL_MIN * IDLE_NUYEN_MINUTES_BETWEEN_AWARDS))) {
       send_nuyen_rewards_to_pcs();
     }
 
     // Every IRL day
-    if (!(pulse % (60 * PASSES_PER_SEC * 60 * 24))) {
+    if (!(pulse % (PASSES_PER_SEC * SECS_PER_REAL_DAY))) {
       warn_about_apartment_deletion();
 
       /* Check if the MySQL connection is active, and if not, recreate it. */
