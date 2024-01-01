@@ -779,7 +779,7 @@ bool check_quest_destroy(struct char_data *ch, struct obj_data *obj) {
 }
 
 bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
-  if (!GET_QUEST(ch))
+  if (!GET_QUEST(ch) || !ch->player_specials)
     return FALSE;
 
   for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
@@ -793,23 +793,67 @@ bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
       {
       case QMO_KILL_ONE:
       case QMO_KILL_MANY:
-        if (IS_SENATOR(ch)) {
-          send_to_char("check_quest_kill: +1\r\n", ch);
-        }
+#ifdef IS_BUILDPORT
+        act("_raw_check_quest_kill($n, $N): +1", FALSE, ch, 0, victim, TO_ROLLS);
+#endif
         ch->player_specials->mob_complete[i]++;
         return TRUE;
       case QMO_DONT_KILL:
-        if (IS_SENATOR(ch)) {
-          send_to_char("check_quest_kill: qmo_dont_kill, failing\r\n", ch);
-        }
+#ifdef IS_BUILDPORT
+        act("_raw_check_quest_kill($n, $N): qmo_dont_kill, failed quest", FALSE, ch, 0, victim, TO_ROLLS);
+#endif
         ch->player_specials->mob_complete[i] = -1;
         send_to_char(ch, "^rJust a moment too late, you remember that you weren't supposed to kill %s^r...^n\r\n", GET_CHAR_NAME(victim));
       }
     }
   }
-  if (IS_SENATOR(ch)) {
-    send_to_char("check_quest_kill: didn't count\r\n", ch);
+#ifdef IS_BUILDPORT
+  act("_raw_check_quest_kill($n, $N): didn't count for quest", FALSE, ch, 0, victim, TO_ROLLS);
+#endif
+  return FALSE;
+}
+
+bool _subsection_check_quest_kill(struct char_data *ch, struct char_data *victim) {
+  // You can only share quest ticks if you're grouped.
+  if (!AFF_FLAGGED(ch, AFF_GROUP)) {
+    return FALSE;
   }
+
+  // Followers (both projected and not)
+  for (struct follow_type *f = ch->followers; f; f = f->next) {
+    if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
+      continue;
+    }
+
+    // Check the follower itself.
+    if (_raw_check_quest_kill(f->follower, victim)) {
+      return TRUE;
+    }
+
+    // Check the follower's original body, if one exists.
+    if (f->follower->desc && f->follower->desc->original && _raw_check_quest_kill(f->follower->desc->original, victim)) {
+      return TRUE;
+    }
+  }
+
+  // Master (both projected and not)
+  if (ch->master) {
+    if (!AFF_FLAGGED(ch->master, AFF_GROUP)) {
+      return FALSE;
+    }
+
+    // Check the master itself.
+    if (_raw_check_quest_kill(ch->master, victim)) {
+      return TRUE;
+    }
+
+    // Check the master's original body, if one exists.
+    if (ch->master->desc && ch->master->desc->original && _raw_check_quest_kill(ch->master->desc->original, victim)) {
+      return TRUE;
+    }
+  }
+
+  // Nobody benefited.
   return FALSE;
 }
 
@@ -824,47 +868,21 @@ bool check_quest_kill(struct char_data *ch, struct char_data *victim)
 
   struct char_data *original_ch = ch->desc && ch->desc->original ? ch->desc->original : ch;
 
-  if (IS_NPC(ch) || !IS_NPC(victim))
+  // We can't get quest points for killing players.
+  if (!IS_NPC(victim))
     return FALSE;
 
+  // Did this meet our own quest objective?
   if (_raw_check_quest_kill(original_ch, victim))
     return TRUE;
 
-  if (AFF_FLAGGED(ch, AFF_GROUP)) {
-    // Followers
-    for (struct follow_type *f = ch->followers; f; f = f->next) {
-      if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
-        continue;
+  // Did this meet the quest objective of a grouped follower or leader?
+  if (_subsection_check_quest_kill(ch, victim))
+    return TRUE;
 
-      if (_raw_check_quest_kill(f->follower, victim)) {
-        return TRUE;
-      }
-    }
-
-    // Master
-    if (ch->master && !IS_NPC(ch->master) && _raw_check_quest_kill(ch->master, victim)) {
-      return TRUE;
-    }
-  }
-
-  if (original_ch != ch) {
-    if (AFF_FLAGGED(original_ch, AFF_GROUP)) {
-      // Followers
-      for (struct follow_type *f = original_ch->followers; f; f = f->next) {
-        if (IS_NPC(f->follower) || !AFF_FLAGGED(f->follower, AFF_GROUP))
-          continue;
-
-        if (_raw_check_quest_kill(f->follower, victim)) {
-          return TRUE;
-        }
-      }
-
-      // Master
-      if (original_ch->master && !IS_NPC(original_ch->master) && _raw_check_quest_kill(original_ch->master, victim)) {
-        return TRUE;
-      }
-    }
-  }
+  // If we're projecting, did this meet the quest objective of a meatform grouped follower or leader?
+  if (original_ch != ch && _subsection_check_quest_kill(original_ch, victim))
+    return TRUE;
 
   return FALSE;
 }
