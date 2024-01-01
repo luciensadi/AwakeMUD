@@ -3620,6 +3620,8 @@ ACMD(do_wizlock)
 
 ACMD(do_date)
 {
+  extern int global_last_booted_from;
+
   char *tmstr;
   time_t mytime;
   int d, h, m;
@@ -3641,8 +3643,13 @@ ACMD(do_date)
     h = (mytime / 3600) % 24;
     m = (mytime / 60) % 60;
 
-    snprintf(buf, sizeof(buf), "Up since %s: %d day%s, %d:%02d\r\n", tmstr, d,
-            ((d == 1) ? "" : "s"), h, m);
+    snprintf(buf, sizeof(buf), "Up since %s: %d day%s, %d:%02d\r\nWe booted due to %s.\r\n", 
+             tmstr, 
+             d,
+             d == 1 ? "" : "s", 
+             h, 
+             m,
+             booted_from_string[global_last_booted_from]);
   }
 
   send_to_char(buf, ch);

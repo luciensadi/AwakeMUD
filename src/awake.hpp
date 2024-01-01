@@ -3070,6 +3070,10 @@ enum {
 #define RACIAL_LIMITS_NORMAL      0
 #define RACIAL_LIMITS_150_PCT     1
 
+#define BOOTED_FROM_NOTHING    0
+#define BOOTED_FROM_CRASH      1
+#define BOOTED_FROM_COPYOVER   2
+
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens

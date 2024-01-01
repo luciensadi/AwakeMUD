@@ -3172,6 +3172,13 @@ const char *veh_speeds[] = {
   "max"
 };
 
+const char *booted_from_string[] =
+  {
+    "nothing (boot tracker is in bugged state - inform Lucien)",
+    "a cold start (a crash, a new server, etc)",
+    "a copyover"
+  };
+
 struct kosher_weapon_values_struct kosher_weapon_values[MAX_WEAP] = {
 /*                    POWER, DAM CODE, SKILL                  , CONC, AMMO, FM_SS, FM_SA, FM_BF, FM_FA, COMP, BOTTM, BARRL, TOP  , STR+, REACH */
 /* EDGED          */ {  0  , SERIOUS , SKILL_EDGED_WEAPONS    , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 3   , 1    }, // WEAP_EDGED          

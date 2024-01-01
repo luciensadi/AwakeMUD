@@ -141,5 +141,7 @@ extern const char *pc_race_types[];
 extern const char *mtx_subsystem_names[];
 extern const char *veh_speeds[];
 
+extern const char *booted_from_string[];
+
 extern struct kosher_weapon_values_struct kosher_weapon_values[MAX_WEAP];
 #endif

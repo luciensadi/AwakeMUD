@@ -458,6 +458,7 @@ void copyover_recover()
 
 
 /* Init sockets, run game, and cleanup sockets */
+int global_last_booted_from = BOOTED_FROM_NOTHING;
 void init_game(int port)
 {
   srandom(time(0));
@@ -478,8 +479,12 @@ void init_game(int port)
   log("Signal trapping.");
   signal_setup();
 
-  if (fCopyOver) /* reload players */
+  if (fCopyOver) { /* reload players */
+    global_last_booted_from = BOOTED_FROM_COPYOVER;
     copyover_recover();
+  } else {
+    global_last_booted_from = BOOTED_FROM_CRASH;
+  }
 
   log("Entering game loop.");
   game_loop(mother_desc);
