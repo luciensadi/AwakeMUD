@@ -4285,15 +4285,11 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   // Refuse to let someone draw a weapon focus that they can't use.
   if (GET_OBJ_TYPE(contents) == ITEM_WEAPON
           && !IS_GUN(GET_WEAPON_ATTACK_TYPE(contents))
-          && GET_WEAPON_FOCUS_RATING(contents) > 0)
+          && GET_WEAPON_FOCUS_RATING(contents) > 0
+          && GET_WEAPON_FOCUS_BONDED_BY(contents) == GET_IDNUM(ch))
   {
-    if (GET_WEAPON_FOCUS_BONDED_BY(contents) != GET_IDNUM(ch)) {
-      act("Draw check: Skipping $p, focus check bond state failure.", FALSE, ch, contents, 0, TO_ROLLS);
-      return 0;
-    }
-
     if (GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(contents)) {
-      act("Draw check: Skipping $p, focus too strong for magic rating.", FALSE, ch, contents, 0, TO_ROLLS);
+      act("Draw check: Skipping $p, bonded focus would exceed magic rating focus total.", FALSE, ch, contents, 0, TO_ROLLS);
       return 0;
     }
 
