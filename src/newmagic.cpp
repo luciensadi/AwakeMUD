@@ -3462,6 +3462,8 @@ struct char_data *create_elemental(struct char_data *ch, int type, int force, in
     }
   char_to_room(mob, get_ch_in_room(ch));
   add_follower(mob, ch);
+  AFF_FLAGS(ch).SetBit(AFF_GROUP);
+  AFF_FLAGS(mob).SetBit(AFF_GROUP);
   affect_total(mob);
   return mob;
 }
