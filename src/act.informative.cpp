@@ -5778,9 +5778,9 @@ ACMD(do_who)
     snprintf(buf2, sizeof(buf2), "%s\r\nNo-one at all!\r\n", buf);
   } else if (num_can_see == 1) {
     if (num_in_socialization_rooms > 0) {
-      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed and listed in ##^WWHERE^n.\r\n", buf);
+      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed and listed in ##^WWHERE^n. Might be time to start posting in /r/MUD?\r\n", buf);
     } else {
-      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed.\r\n", buf);
+      snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed... thank you for keeping the faith.\r\n", buf);
     }
   } else {
     if (num_in_socialization_rooms > 0) {
@@ -5791,7 +5791,10 @@ ACMD(do_who)
                num_in_socialization_rooms,
                num_in_socialization_rooms == 1 ? "is" : "are");
     } else {
-      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed.\r\n", buf, num_can_see);
+      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed%s.\r\n",
+               buf,
+               num_can_see,
+               num_can_see == 69 ? " (nice)" : "");
     }
   }
 
