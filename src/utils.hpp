@@ -1127,12 +1127,15 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERWARE_GRADE(cyberware)            (GET_OBJ_VAL((cyberware), 2))
 #define GET_CYBERWARE_FLAGS(cyberware)            (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
 #define GET_CYBERWARE_LACING_TYPE(cyberware)      (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
+#define GET_CYBERWARE_MEMORY_MAX(cyberware)       (GET_OBJ_VAL((cyberware), 3))
 #define GET_CYBERWARE_ESSENCE_COST(cyberware)     (GET_OBJ_VAL((cyberware), 4))
 #define GET_CYBERWARE_RADIO_MAX_CRYPT(cyberware)  (GET_OBJ_VAL((cyberware), 5))
+#define GET_CYBERWARE_MEMORY_USED(cyberware)      (GET_OBJ_VAL((cyberware), 5))
 #define GET_CYBERWARE_RADIO_FREQ(cyberware)       (GET_OBJ_VAL((cyberware), 6)) // Settable by player
 #define GET_CYBERWARE_RADIO_CRYPT(cyberware)      (GET_OBJ_VAL((cyberware), 7)) // Settable by player
 // Cyberware phones use 6, 7, and 8 for... stuff?
 #define GET_CYBERWARE_IS_DISABLED(cyberware)      (GET_OBJ_VAL((cyberware), 9))
+#define GET_CYBERWARE_MEMORY_FREE(cyberware)      (GET_CYBERWARE_MEMORY_MAX((cyberware)) - GET_CYBERWARE_MEMORY_USED((cyberware)))
 
 // ITEM_CYBERDECK convenience defines
 #define GET_CYBERDECK_MPCP(deck)                  (GET_OBJ_VAL((deck), 0))
@@ -1145,6 +1148,9 @@ bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERDECK_IS_INCOMPLETE(deck)         (GET_OBJ_VAL((deck), 9))
 #define GET_CYBERDECK_FLAGS(deck)                 (GET_OBJ_VAL((deck), 10))
 #define GET_CYBERDECK_FREE_STORAGE(deck)          (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
+#define OBJ_IS_VALID_STOREBOUGHT_CYBERDECK(deck)  ((deck) && GET_OBJ_TYPE((deck)) == ITEM_CYBERDECK && GET_CYBERDECK_MPCP((deck)) > 0)
+#define OBJ_IS_VALID_CUSTOM_CYBERDECK(deck)       ((deck) && GET_OBJ_TYPE((deck)) == ITEM_CUSTOM_DECK && GET_CYBERDECK_MPCP((deck)) > 0 && !GET_CYBERDECK_IS_INCOMPLETE((deck)))
+#define OBJ_IS_VALID_CYBERDECK(deck)              (OBJ_IS_VALID_CUSTOM_CYBERDECK((deck)) || OBJ_IS_VALID_STOREBOUGHT_CYBERDECK((deck)))
 
 // ITEM_PROGRAM convenience defines, aka GET_SOFTWARE
 #define GET_PROGRAM_TYPE(prog)                    (GET_OBJ_VAL((prog), 0))
