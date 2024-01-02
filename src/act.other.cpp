@@ -77,7 +77,6 @@ extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern int get_docwagon_faux_id(struct char_data *ch);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 extern unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
-extern void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj, struct obj_data * cont);
 
 extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
 
