@@ -718,7 +718,7 @@ ACMD(do_flee)
     // Get the first valid direction from the sorted list.
     int dir = std::get<0>(valid_directions.front());
 
-    // Supply messaging and put the character into a wait state to match wait state in perform_move.
+    // Supply messaging and put the character into a wait state half that of perform_move.
     act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
     WAIT_STATE(ch, PULSE_VIOLENCE);
 
