@@ -710,7 +710,7 @@ ACMD(do_flee)
 
   if (valid_directions.empty()) {
     send_to_char("PANIC! There's nowhere you can flee to!\r\n", ch);
-    WAIT_STATE(ch, PULSE_VIOLENCE * 2);
+    WAIT_STATE(ch, PULSE_VIOLENCE);
   } else {
     // Sort our list of valid directions by weight.
     std::sort(valid_directions.begin(), valid_directions.end(), _sort_pairs_by_weight);
@@ -720,7 +720,7 @@ ACMD(do_flee)
 
     // Supply messaging and put the character into a wait state to match wait state in perform_move.
     act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
-    WAIT_STATE(ch, PULSE_VIOLENCE * 2);
+    WAIT_STATE(ch, PULSE_VIOLENCE);
 
     // If the character is fighting in melee combat with someone they can hurt, they must pass a test to escape.
     struct char_data *blocker = find_a_character_that_blocks_fleeing_for_ch(ch);
