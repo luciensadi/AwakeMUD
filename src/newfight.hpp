@@ -236,7 +236,7 @@ struct melee_combat_data {
         damage_level = GET_WEAPON_DAMAGE_CODE(weapon);
 
         // Weapon foci. NPC use them implicitly.
-        if (IS_NPC(ch) || WEAPON_FOCUS_USABLE_BY(weapon, ch)) {
+        if (is_weapon_focus_usable_by(weapon, ch)) {
           skill_bonus = MIN(4, GET_WEAPON_FOCUS_RATING(weapon));
         }
 
@@ -400,8 +400,8 @@ struct combat_data
     ranged = new struct ranged_combat_data(ch, weapon, ranged_combat_mode);
     melee = new struct melee_combat_data(ch, weapon, ranged_combat_mode, cyber);
 
-    // Special case: Bayonet charge and/or butt strikes.
-    if (ranged_combat_mode && !weapon->contains)
+    // Special case: Bayonet charge and/or butt strikes. Don't execute this for mounted weapons.
+    if (ranged_combat_mode && !ranged->using_mounted_gun && !weapon->contains)
       ranged_combat_mode = FALSE;
 
     // Calculate hardened armor ratings, if any. We add all hardened items together (e.g. armor + helm)

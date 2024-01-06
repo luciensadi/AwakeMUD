@@ -707,31 +707,29 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     } else {
     */
 
-    strlcpy(rbuf, "Computing dice for attacker...", sizeof(rbuf));
-    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     {
       int prior_tn = att->melee->tn;
-      att->melee->dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
+      int skill_dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
+      int cpool_dice = MIN(skill_dice, GET_OFFENSE(att->ch));
+      att->melee->dice = skill_dice + cpool_dice;
+      snprintf(rbuf, sizeof(rbuf), "Attacker has %d skill (incl %d weap focus), %d pool: rolls %d dice.", skill_dice, att->melee->skill_bonus, cpool_dice, att->melee->dice);
       if (att->melee->tn != prior_tn) {
-        snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", att->melee->tn);
-        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nAttacker TN modified in get_skill() from %d to %d.", prior_tn, att->melee->tn);
       }
     }
-    if (!att->too_tall)
-      att->melee->dice += MIN(GET_SKILL(att->ch, att->melee->skill) + att->melee->skill_bonus, GET_OFFENSE(att->ch));
-
-    strlcpy(rbuf, "Computing dice for defender...", sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+
     {
       int prior_tn = def->melee->tn;
-      def->melee->dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
+      int skill_dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
+      int cpool_dice = MIN(skill_dice, GET_OFFENSE(def->ch));
+      def->melee->dice = skill_dice + cpool_dice;
+      snprintf(rbuf, sizeof(rbuf), "Defender has %d skill (incl %d weap focus), %d pool: rolls %d dice.", skill_dice, def->melee->skill_bonus, cpool_dice, def->melee->dice);
       if (def->melee->tn != prior_tn) {
-        snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", def->melee->tn);
-        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nDefender TN modified in get_skill() from %d to %d.", prior_tn, def->melee->tn);
       }
     }
-    if (!def->too_tall)
-      def->melee->dice += MIN(GET_SKILL(def->ch, def->melee->skill) + def->melee->skill_bonus, GET_OFFENSE(def->ch));
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
 
     // }
@@ -982,7 +980,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       bool has_magic_weapon;
 
       if (att->weapon) {
-        has_magic_weapon = GET_WEAPON_FOCUS_RATING(att->weapon) > 0 && WEAPON_FOCUS_USABLE_BY(att->weapon, att->ch);
+        has_magic_weapon = GET_WEAPON_FOCUS_RATING(att->weapon) > 0 && (IS_NPNPC(att->ch) || is_weapon_focus_usable_by(att->weapon, att->ch));
       } else {
         has_magic_weapon = GET_POWER(att->ch, ADEPT_KILLING_HANDS);
       }
@@ -1004,7 +1002,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           target_died = damage(att->ch, def->ch, 0, att->melee->dam_type, att->melee->is_physical);
 
           //Handle suprise attack/alertness here -- spirits melee.
-          if (!target_died && IS_NPC(def->ch)) {
+          if (!target_died && IS_NPNPC(def->ch)) {
             if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
               AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
 
