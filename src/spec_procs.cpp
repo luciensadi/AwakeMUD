@@ -7391,6 +7391,31 @@ SPECIAL(purge_prevented) {
   return FALSE;
 }
 
+SPECIAL(nerpcorpolis_spawn_tracker) {
+  struct room_data *room = (struct room_data *) me;
+
+  // Spawn in a new initiative tracker if one doesn't already exist here.
+  if (!cmd) {
+    struct obj_data *tracker = NULL;
+
+    for (tracker = room->contents; tracker; tracker = tracker->next_content) {
+      if (GET_OBJ_VNUM(tracker) == OBJ_INITIATIVE_TRACKER) {
+        break;
+      }
+    }
+
+    if (!tracker) {
+      tracker = read_object(OBJ_INITIATIVE_TRACKER, VIRTUAL);
+      obj_to_room(tracker, room);
+
+      if (room->people)
+        send_to_room("You blink and an initiative tracker appears.\r\n", room);
+    }
+  }
+
+  return FALSE;
+}
+
 SPECIAL(toggled_voice_modulator)
 {
   struct obj_data *obj = (struct obj_data *) me;

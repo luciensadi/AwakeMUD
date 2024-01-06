@@ -945,7 +945,7 @@ void assign_objects(void)
   ASSIGNOBJ(9826, locker);
   ASSIGNOBJ(60500, chargen_hopper);
   ASSIGNOBJ(10033, quest_debug_scanner);
-  ASSIGNOBJ(6996, initiative_tracker);
+  ASSIGNOBJ(OBJ_INITIATIVE_TRACKER, initiative_tracker);
 #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(94331, trideo);
   ASSIGNOBJ(70605, desktop);
@@ -1155,6 +1155,31 @@ void assign_rooms(void)
 #ifdef USE_PRIVATE_CE_WORLD
   // Nerpcorpolis
   ASSIGNROOM(RM_NERPCORPOLIS_LOBBY, nerpcorpolis_lobby);
+  ASSIGNROOM(6913, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6914, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6915, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6916, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6917, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6918, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6919, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6920, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6921, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6922, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6923, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6924, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6925, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6926, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6927, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6928, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6929, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6930, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6931, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6932, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6933, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6934, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6935, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6936, nerpcorpolis_spawn_tracker);
+  ASSIGNROOM(6999, nerpcorpolis_spawn_tracker);
 
   // Wither's troll_barrier and others
   ASSIGNROOM(15600, troll_barrier);
