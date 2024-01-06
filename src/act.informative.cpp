@@ -401,7 +401,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       if (GET_FOCUS_BONDED_TO(object) == GET_IDNUM(ch) && GET_FOCUS_GEAS(object) == GET_IDNUM(ch))
         strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
     }
-    else if (GET_OBJ_TYPE(object) == ITEM_WEAPON && WEAPON_IS_FOCUS(object) && WEAPON_FOCUS_USABLE_BY(object, ch)) {
+    else if (GET_OBJ_TYPE(object) == ITEM_WEAPON && WEAPON_IS_FOCUS(object) && is_weapon_focus_usable_by(object, ch)) {
       if (GET_WEAPON_FOCUS_GEAS(object) == GET_IDNUM(ch))
         strlcat(buf, " ^Y(Geas)^n", sizeof(buf));
       
@@ -6484,7 +6484,7 @@ ACMD(do_consider)
       bool has_magic_weapon;
 
       if (weapon) {
-        has_magic_weapon = GET_WEAPON_FOCUS_RATING(weapon) > 0 && WEAPON_FOCUS_USABLE_BY(weapon, ch);
+        has_magic_weapon = GET_WEAPON_FOCUS_RATING(weapon) > 0 && is_weapon_focus_usable_by(weapon, ch);
       } else {
         has_magic_weapon = GET_POWER(ch, ADEPT_KILLING_HANDS);
       }
@@ -7363,7 +7363,7 @@ ACMD(do_status)
         force += GET_FOCUS_FORCE(focus);
       }
 
-      else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && WEAPON_FOCUS_USABLE_BY(focus, targ)) {
+      else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && is_weapon_focus_usable_by(focus, targ)) {
         force += GET_WEAPON_FOCUS_RATING(focus);
       }
     }

@@ -3607,7 +3607,7 @@ ACMD(do_unbond)
         GET_FORCE_POINTS(ch) += get_focus_bond_cost(obj);
         break;
       case ITEM_WEAPON:
-        if (!WEAPON_IS_FOCUS(obj) || !WEAPON_FOCUS_USABLE_BY(obj, ch)) {
+        if (!WEAPON_IS_FOCUS(obj) || !is_weapon_focus_usable_by(obj, ch)) {
           send_to_char(ch, "%s is not bonded to you.\r\n", GET_OBJ_NAME(obj));
           return;
         }

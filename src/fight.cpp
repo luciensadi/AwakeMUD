@@ -3849,7 +3849,7 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
   if ((IS_ASTRAL(ch) || SEES_ASTRAL(ch))
       && wielded
       && GET_OBJ_TYPE(wielded) == ITEM_WEAPON
-      && WEAPON_FOCUS_USABLE_BY(wielded, ch))
+      && is_weapon_focus_usable_by(wielded, ch))
   {
     focus = TRUE;
   }

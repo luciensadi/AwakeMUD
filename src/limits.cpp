@@ -1052,7 +1052,7 @@ void point_update(void)
                     focus_geas = focus;
                   }
                   else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus)
-                      && WEAPON_FOCUS_USABLE_BY(focus, i) && !GET_WEAPON_FOCUS_GEAS(focus) && !--num) {
+                      && is_weapon_focus_usable_by(focus, i) && !GET_WEAPON_FOCUS_GEAS(focus) && !--num) {
                     focus_geas = focus;
                   }
                 }

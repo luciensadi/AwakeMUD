@@ -72,6 +72,7 @@ char *  string_to_lowercase(const char *source);
 int     get_speed(struct veh_data *veh);
 int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy, bool include_metavariant_penalty=1);
 float   gen_size(int race, bool height, int size, int pronouns);
+int     get_best_skill_num(struct char_data *ch, int requested_skill);
 int     get_skill(struct char_data *ch, int skill, int &target, char *mb=NULL, size_t mb_len=0);
 void    add_follower(struct char_data *ch, struct char_data *leader);
 int     light_level(struct room_data *room);
@@ -355,6 +356,7 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define IS_PROJECT(ch) (IS_NPC(ch) && ch->desc && ch->desc->original && \
   PLR_FLAGS(ch->desc->original).IsSet(PLR_PROJECT) && \
   GET_MOB_VNUM(ch) == 22)
+#define IS_NPNPC(ch) (IS_NPC(ch) && !IS_PROJECT(ch))
 #define IS_SPIRIT(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_SPIRIT)
 #define IS_PC_CONJURED_SPIRIT(ch) (IS_SPIRIT((ch)) && GET_ACTIVE((ch)))
 #define IS_ANY_ELEMENTAL(ch) (IS_NPC(ch) && (GET_RACE(ch) == RACE_ELEMENTAL || GET_RACE(ch) == RACE_PC_CONJURED_ELEMENTAL))
@@ -983,7 +985,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GUN_IS_HEAVY_WEAPON(gun)               (GET_WEAPON_SKILL((gun)) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL((gun)) <= SKILL_ARTILLERY)
 
 #define WEAPON_IS_FOCUS(obj)                   (GET_OBJ_TYPE((obj)) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE((obj))) && GET_WEAPON_FOCUS_RATING((obj)) > 0)
-bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch);
+bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 
 #define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << (mode)))
 #define WEAPON_IS_SS(eq)  (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_SS)

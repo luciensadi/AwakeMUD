@@ -1470,6 +1470,20 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
 
 }
 
+// Converts between skill and general version depending on what's available.
+int get_best_skill_num(struct char_data *ch, int requested_skill) {
+  if (!IS_MOB(ch))
+    return requested_skill;
+    
+  int original_skill_amt = GET_SKILL(ch, requested_skill);
+  int general_skill_amt = GET_SKILL(ch, return_general(requested_skill));
+
+  if (general_skill_amt > original_skill_amt)
+    return return_general(requested_skill);
+  
+  return requested_skill;
+}
+
 #define WRITEOUT_MSG(name, amt) { if (writeout_buffer) { snprintf(ENDOF(writeout_buffer), writeout_buffer_size - strlen(writeout_buffer), "  %s: ^c%d^n\r\n", name, amt); }}
 // I hate this name. This isn't just a getter, it's a setter as well. -LS
 int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffer, size_t writeout_buffer_size) {
@@ -1484,8 +1498,7 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
     return GET_LEVEL(ch);
 
   // Convert NPCs so that they use the correct base skill for fighting (Armed Combat etc)
-  if (IS_NPC(ch))
-    skill = GET_SKILL(ch, skill) >= GET_SKILL(ch, return_general(skill)) ? skill : return_general(skill);
+  skill = get_best_skill_num(ch, skill);
 
   if (GET_SKILL(ch, skill) <= 0) {
     // If the base TN is 8 or more and you'd default, you fail instead.
@@ -4301,27 +4314,21 @@ struct obj_data *get_obj_proto_for_vnum(vnum_t vnum) {
   return &obj_proto[rnum];
 }
 
-bool WEAPON_FOCUS_USABLE_BY(struct obj_data *focus, struct char_data *ch) {
+bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch) {
   // Nonexistant and non-weapons can't be used as foci.
   if (!focus || !WEAPON_IS_FOCUS(focus))
     return FALSE;
+
+  // Non-player NPCs can use any focus weapon.
+  if (IS_NPNPC(ch))
+    return TRUE;
 
   // Weapons in the middle of bonding can't be used.
   if (GET_WEAPON_FOCUS_BOND_STATUS(focus) != 0)
     return FALSE;
 
-  // Astral projection? We want to check your original character.
-  if (IS_PROJECT(ch)) {
-    if (ch->desc && ch->desc->original)
-      return GET_WEAPON_FOCUS_BONDED_BY(focus) == GET_IDNUM(ch->desc->original);
-  }
-
-  // Non-projection NPC? You get to use it.
-  if (IS_NPC(ch))
-    return TRUE;
-
-  // Otherwise, yes but only if you bonded it.
-  return GET_WEAPON_FOCUS_BONDED_BY(focus) == GET_IDNUM(ch);
+  // Otherwise, yes, but only if you're the one who bonded it.
+  return GET_WEAPON_FOCUS_BONDED_BY(focus) == GET_IDNUM_EVEN_IF_PROJECTING(ch);
 }
 
 // Cribbed from taxi code. Eventually, we should replace the taxi distance calculation with this.
@@ -6424,7 +6431,7 @@ int get_total_active_focus_rating(struct char_data *i, int &total) {
       total++;
     }
 
-    else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && WEAPON_FOCUS_USABLE_BY(focus, i)) {
+    else if ((x == WEAR_WIELD || x == WEAR_HOLD) && GET_OBJ_TYPE(focus) == ITEM_WEAPON && WEAPON_IS_FOCUS(focus) && is_weapon_focus_usable_by(focus, i)) {
       force += GET_WEAPON_FOCUS_RATING(focus);
       total++;
     }

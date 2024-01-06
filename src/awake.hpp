@@ -2536,6 +2536,7 @@ enum {
 #define RM_JUNKYARD_BIKES           70508
 
 // Objects, to remove the magic numbers from the code.
+#define OBJ_INITIATIVE_TRACKER             6996
 #define OBJ_NEWBIE_RADIO                   60531
 #define OBJ_MULTNOMAH_VISA                 17513
 #define OBJ_CARIBBEAN_VISA                 62100
