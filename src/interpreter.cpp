@@ -184,6 +184,7 @@ ACMD_DECLARE(do_discord);
 ACMD_DECLARE(do_dispell);
 ACMD_DECLARE(do_display);
 ACMD_DECLARE(do_domain);
+ACMD_DECLARE(do_download_headware);
 ACMD_DECLARE(do_drag);
 ACMD_DECLARE(do_drink);
 ACMD_DECLARE(do_drive);
@@ -390,6 +391,7 @@ ACMD_DECLARE(do_ungroup);
 ACMD_DECLARE(do_unpack);
 ACMD_DECLARE(do_unsupported_command);
 ACMD_DECLARE(do_upgrade);
+ACMD_DECLARE(do_upload_headware);
 ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_usenerps);
 ACMD_DECLARE(do_users);
@@ -610,6 +612,7 @@ struct command_info cmd_info[] =
     { "discord"    , POS_DEAD    , do_discord  , 0, 0, ALLOWS_IDLE_REWARD },
     { "docwagon"   , POS_LYING   , do_docwagon , 0, 0, BLOCKS_IDLE_REWARD },
     { "domain"     , POS_LYING   , do_domain   , 0, 0, BLOCKS_IDLE_REWARD },
+    { "download"   , POS_RESTING , do_download_headware, 0, 0, BLOCKS_IDLE_REWARD },
     { "donate"     , POS_RESTING , do_drop     , 0, SCMD_DONATE, BLOCKS_IDLE_REWARD },
     { "drag"       , POS_STANDING, do_drag     , 0, 0, BLOCKS_IDLE_REWARD },
     { "drink"      , POS_RESTING , do_drink    , 0, SCMD_DRINK, BLOCKS_IDLE_REWARD },
@@ -955,6 +958,7 @@ struct command_info cmd_info[] =
     { "unlearn"    , POS_DEAD    , do_forget   , 0, 0, BLOCKS_IDLE_REWARD },
     { "unfollow"   , POS_LYING   , do_unfollow , 0, 0, BLOCKS_IDLE_REWARD },
     { "upgrade"    , POS_SITTING , do_upgrade  , 0 , 0, BLOCKS_IDLE_REWARD },
+    { "upload"     , POS_RESTING , do_upload_headware, 0, 0, BLOCKS_IDLE_REWARD },
     { "uptime"     , POS_DEAD    , do_date     , 0, SCMD_UPTIME, ALLOWS_IDLE_REWARD },
     { "use"        , POS_SITTING , do_use      , 1, SCMD_USE, BLOCKS_IDLE_REWARD },
     { "usenerps"   , POS_LYING   , do_usenerps , 1, 0, BLOCKS_IDLE_REWARD },
