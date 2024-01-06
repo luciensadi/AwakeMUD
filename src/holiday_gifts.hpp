@@ -3,14 +3,11 @@
 
 #include "types.hpp"
 
-#define NUM_DAYS_AFTER_HOLIDAY_FOR_GIFTS  3
-
 class holiday_entry {
 public:
    const char *holiday_name;
-   int month;
-   int day;
-   int year;
+   time_t start_epoch;
+   time_t end_epoch;
 
    const char *present_message;
    const char *present_restring;

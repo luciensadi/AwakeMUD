@@ -20,13 +20,13 @@
 #include "holiday_gifts.hpp"
 
 std::vector<class holiday_entry> holiday_entries = {
-  {"Christmas '23", 12, 25, 2023,
+  {"Christmas '23", 1703322000, 1674464400, // 12/23/23 to 1/23/24. Extended due to errors
      "A puff of peppermint-scented air distracts you, and before you know it, there's a festive present in your hands.\r\n",
      "a festive present with 'Happy Holidays!' emblazoned on the tag",
      "Done up in shiny wrapping paper and finished with a neat bow, this holiday present is sure to please. Why not ^WOPEN^n it now?",
      OBJ_VINTAGE_UGLY_CHRISTMAS_SWEATER},
   // Hopefully I'll be able to come back in 2024 and rewrite the below, but it's here just in case.
-  {"Christmas '24", 12, 25, 2024,
+  {"Christmas '24", 1734944400, 1735549200, // 12/23/24 to 12/30/24
      "A puff of peppermint-scented air distracts you, and before you know it, there's a festive present in your hands.\r\n",
      "a festive present with 'Happy Holidays!' emblazoned on the tag",
      "Done up in shiny wrapping paper and finished with a neat bow, this holiday present is sure to please. Why not ^WOPEN^n it now?",
@@ -54,25 +54,7 @@ void award_holiday_gifts() {
 bool holiday_entry::is_active() {
   time_t current_time_epoch = time(0);
 
-  for (int day_idx = 0; day_idx <= NUM_DAYS_AFTER_HOLIDAY_FOR_GIFTS; day_idx++) {
-    struct tm *local_time = localtime(&current_time_epoch);
-
-    int local_year = local_time->tm_year + 1900;
-    int local_mon = local_time->tm_mon + 1;
-
-    // Yes, the time bracketing will fail around New Year's if you make a holiday for that,
-    // because when the year rolls over this check will fail. Add logic to bridge years
-    // if/when that edge case comes up.
-    if (local_year == year && local_mon == month && local_time->tm_mday == day) {
-      return TRUE;
-    }
-
-    // Increment by one day. Messy, I know, but easier than adding days to the calendar
-    // struct and then trying to roll over the month etc appropriately.
-    current_time_epoch += 86400;
-  }
-  
-  return FALSE;
+  return start_epoch <= current_time_epoch && current_time_epoch <= end_epoch;
 }
 
 bool holiday_entry::already_got_award(struct char_data *ch) {
