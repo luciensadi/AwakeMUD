@@ -852,15 +852,17 @@ struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_v
       }
     }
 
+  // Check your cyberware.
   for (obj = ch->cyberware; obj; obj = obj->next_content)
     if (GET_CYBERWARE_TYPE(obj) == CYB_RADIO && (must_be_on ? GET_CYBERWARE_FLAGS(obj) != 0 : TRUE)) {
       *is_cyberware = TRUE;
       return obj;
     }
 
+  // Check for radios in the room.
   if (ch->in_room)
     for (obj = ch->in_room->contents; obj; obj = obj->next_content)
-      if (GET_OBJ_TYPE(obj) == ITEM_RADIO && (must_be_on ? GET_OBJ_VAL(obj, 0) != 0 : TRUE))
+      if (GET_OBJ_TYPE(obj) == ITEM_RADIO && (must_be_on ? GET_RADIO_CENTERED_FREQUENCY(obj) != 0 : TRUE))
         return obj;
 
   return NULL;
