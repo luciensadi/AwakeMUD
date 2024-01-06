@@ -690,7 +690,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
   int have_ammo_quantity = GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype);
 
   // No ammo at all...
-  if (have_ammo_quantity == 0) {
+  if (!IS_SENATOR(ch) && have_ammo_quantity == 0) {
     send_to_char(ch, "You don't have any %s in your pockets to reload %s with.\r\n", get_ammo_representation(weapontype, ammotype, 0, ch), GET_OBJ_NAME(weapon));
     return FALSE;
   }
@@ -710,14 +710,18 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
   int required_ammo_quantity = GET_MAGAZINE_BONDED_MAXAMMO(magazine) - GET_MAGAZINE_AMMO_COUNT(magazine);
 
   // Try to fill it back up with bullets from pants.
-  if (have_ammo_quantity >= required_ammo_quantity) {
+  if (IS_SENATOR(ch) || have_ammo_quantity >= required_ammo_quantity) {
     // ezpz, reload it and done.
-    send_to_char(ch, "You %sreload %s with %s.\r\n",
+    send_to_char(ch, "You %sreload %s with %s.%s\r\n",
                  CH_IN_COMBAT(ch) ? "combat-" : "",
                  GET_OBJ_NAME(weapon),
-                 get_ammo_representation(weapontype, ammotype, required_ammo_quantity, ch));
+                 get_ammo_representation(weapontype, ammotype, required_ammo_quantity, ch),
+                 IS_SENATOR(ch) ? " ^L(staff-loaded)^n" : "");
     act("$n reloads $p.", TRUE, ch, weapon, NULL, TO_ROOM);
-    update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -required_ammo_quantity);
+
+    if (!IS_SENATOR(ch)) {
+      update_bulletpants_ammo_quantity(ch, weapontype, ammotype, -required_ammo_quantity);
+    }
 
     // Does doing it this way mean the amount of ammo we load into the weapon becomes weightless? Yes. Do I care? Ehhhhhhh. TODO
     GET_MAGAZINE_AMMO_COUNT(magazine) += required_ammo_quantity;
