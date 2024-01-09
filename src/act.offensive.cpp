@@ -61,6 +61,8 @@ ACMD(do_assist)
   }
   one_argument(argument, arg);
 
+  FAILURE_CASE(PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT), "You can't do that while in passive combat mode. ^WTOGGLE PASSIVE^n to disable it.");
+
   if (!*arg)
     send_to_char("Whom do you wish to assist?\r\n", ch);
   else if (!(helpee = get_char_room_vis(ch, arg)))
@@ -433,6 +435,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
 
 ACMD(do_hit)
 {
+  FAILURE_CASE(PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT), "You can't do that while in passive combat mode. ^WTOGGLE PASSIVE^n to disable it.");
   if (!perform_hit(ch, argument, (subcmd == SCMD_HIT ? "hit" : (subcmd == SCMD_KILL ? "kill" : "murder"))))
     send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
 }
@@ -446,6 +449,8 @@ ACMD(do_kil)
 ACMD(do_kill)
 {
   struct char_data *vict;
+
+  FAILURE_CASE(PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT), "You can't do that while in passive combat mode. ^WTOGGLE PASSIVE^n to disable it.");
 
   if ((!access_level(ch, LVL_VICEPRES)) || IS_NPC(ch)) {
     do_hit(ch, argument, cmd, subcmd);
@@ -483,6 +488,8 @@ ACMD(do_shoot)
   char direction[MAX_INPUT_LENGTH];
   char target[MAX_INPUT_LENGTH];
   int dir, i, pos = 0, range = -1;
+
+  FAILURE_CASE(PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT), "You can't do that while in passive combat mode. ^WTOGGLE PASSIVE^n to disable it.");
 
   if (!(GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) &&
       !(GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON)) {
@@ -549,6 +556,8 @@ ACMD(do_throw)
   char arg2[MAX_INPUT_LENGTH];
   char arg1[MAX_INPUT_LENGTH];
   two_arguments(argument, arg1, arg2);
+
+  FAILURE_CASE(PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT), "You can't do that while in passive combat mode. ^WTOGGLE PASSIVE^n to disable it.");
 
   if (!(GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) &&
       !(GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON)) {

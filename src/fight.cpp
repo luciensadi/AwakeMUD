@@ -5843,7 +5843,7 @@ void perform_violence(void)
 
     // Prevent people from being processed multiple times per loop.
     if (ch->last_loop_rand == loop_rand) {
-      mudlog("SYSERR: Encountered someone who already went this combat turn. Fix set_fighting().", ch, LOG_SYSLOG, TRUE);
+      // mudlog("SYSERR: Encountered someone who already went this combat turn. Fix set_fighting().", ch, LOG_SYSLOG, TRUE);
       continue;
     } else {
       ch->last_loop_rand = loop_rand;
@@ -6037,6 +6037,12 @@ void perform_violence(void)
         DELETE_AND_NULL(ch->squeue);
         continue;
       }
+    }
+
+    // Passive mode.
+    if (PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT)) {
+      send_to_char("(You have enabled passive mode and will not attack. ^WTOGGLE PASSIVE^n to disable it.)\r\n", ch);
+      continue;
     }
 
     // Process melee charging.

@@ -1202,7 +1202,9 @@ const char *tog_messages[][2] = {
                             {"You can now be followed again.\r\n",
                              "OK, player characters are unable to follow you until you ^WTOGGLE NOFOLLOW^n again. You can lose existing followers with ^WUNFOLLOW X^n.\r\n"},
                             {"You will now see your prompt displayed when you change it.\r\n",
-                             "OK, your prompt will no longer display when you change it.\r\n"}
+                             "OK, your prompt will no longer display when you change it.\r\n"},
+                            {"You will now participate in combat again.\r\n",
+                             "OK, you will no longer be able to initiate combat or fight back.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1482,6 +1484,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "change message")) {
       result = PRF_TOG_CHK(ch, PRF_SUPPRESS_PROMPT_CHANGE);
       mode = 50;
+    } else if (is_abbrev(argument, "passive combat")) {
+      result = PRF_TOG_CHK(ch, PRF_PASSIVE_IN_COMBAT);
+      mode = 51;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

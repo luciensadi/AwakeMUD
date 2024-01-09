@@ -687,6 +687,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "MailLog"              , TRUE , TRUE  },
   { "No Follow"            , FALSE, TRUE  },
   { "No Prompt ^W##Change Message^n", FALSE, TRUE  },
+  { "Passive Combat"       , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -764,6 +765,7 @@ const char *preference_bits[] =
     "MAILLOG",
     "NOFOLLOW",
     "!PROMPT_CHANGE_MSG",
+    "PASSIVE_COMBAT",
     MAX_FLAG_MARKER
   };
 

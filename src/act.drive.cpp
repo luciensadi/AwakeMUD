@@ -350,6 +350,8 @@ ACMD(do_ram)
   struct veh_data *veh, *tveh = NULL;
   struct char_data *vict = NULL;
 
+  FAILURE_CASE(PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT), "You can't do that while in passive combat mode. ^WTOGGLE PASSIVE^n to disable it.");
+
   if (!(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
     send_to_char("You need to be driving a vehicle to do that...\r\n", ch);
     return;
@@ -1208,6 +1210,8 @@ ACMD(do_driveby)
   struct char_data *vict, *pass, *list = NULL;
   int dir;
 
+  FAILURE_CASE(PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT), "You can't do that while in passive combat mode. ^WTOGGLE PASSIVE^n to disable it.");
+
   if (!ch->in_veh) {
     send_to_char(ch, "You must be in a vehicle to perform a driveby.\r\n");
     return;
@@ -1511,6 +1515,9 @@ ACMD(do_target)
   bool modeall = FALSE;
   int j;
   RIG_VEH(ch, veh);
+
+  FAILURE_CASE(PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT), "You can't do that while in passive combat mode. ^WTOGGLE PASSIVE^n to disable it.");
+
   if (!veh) {
     send_to_char("You must be in a vehicle to target someone with mounted weapons.\r\n", ch);
     return;

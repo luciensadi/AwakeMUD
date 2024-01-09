@@ -468,7 +468,8 @@ enum {
 #define PRF_MAILLOG                            68
 #define PRF_NOFOLLOW                           69
 #define PRF_SUPPRESS_PROMPT_CHANGE             70
-#define PRF_MAX                                71
+#define PRF_PASSIVE_IN_COMBAT                  71
+#define PRF_MAX                                72
 
 /* log watch */
 
