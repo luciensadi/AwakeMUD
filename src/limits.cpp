@@ -1103,10 +1103,15 @@ void point_update(void)
 
         if (i->desc && IS_PROJECT(i)) {
           if (AFF_FLAGGED(i->desc->original, AFF_TRACKING) && HUNTING(i->desc->original) && !--HOURS_LEFT_TRACK(i->desc->original)) {
-            act("The astral signature leads you to $N.", FALSE, i, 0, HUNTING(i->desc->original), TO_CHAR);
-            char_from_room(i);
-            char_to_room(i, HUNTING(i->desc->original)->in_room);
-            act("$n enters the area.", TRUE, i, 0, 0, TO_ROOM);
+            if (!HUNTING(i->desc->original)->in_room || !CH_CAN_ENTER_APARTMENT(HUNTING(i->desc->original)->in_room, i)) {
+              send_to_char("The astral signature fades... you can't follow it all the way back.", i);
+            } else {
+              act("The astral signature leads you to $N.", FALSE, i, 0, HUNTING(i->desc->original), TO_CHAR);
+              char_from_room(i);
+              char_to_room(i, HUNTING(i->desc->original)->in_room);
+              act("$n enters the area.", TRUE, i, 0, 0, TO_ROOM);
+            }
+            // Clear hunting data structs.
             AFF_FLAGS(i->desc->original).RemoveBit(AFF_TRACKING);
             AFF_FLAGS(HUNTING(i->desc->original)).RemoveBit(AFF_TRACKED);
             HUNTING(i->desc->original) = NULL;
