@@ -355,10 +355,17 @@ void Storage_save(const char *file_name, struct room_data *room) {
           if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x))
             obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) << "\n";
       }
-      else if (GET_OBJ_TYPE(obj) != ITEM_WORN)
-        for (int x = 0; x < NUM_VALUES; x++)
-          if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x))
+      else if (GET_OBJ_TYPE(obj) != ITEM_WORN) {
+        for (int x = 0; x < NUM_VALUES; x++) {
+          if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x)) {
             obj_string_buf << "\t\tValue "<< x <<":\t" << GET_OBJ_VAL(obj, x) <<"\n";
+          }
+        }
+      } else if (GET_OBJ_TYPE(obj) == ITEM_WORN) {
+        if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj)) {
+          obj_string_buf << "\t\tValue "<< WORN_OBJ_HARDENED_ARMOR_SLOT <<":\t" << GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) <<"\n";
+        }
+      }
 
       APPEND_IF_CHANGED("\t\tCondition:\t", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
       APPEND_IF_CHANGED("\t\tTimer:\t", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));
