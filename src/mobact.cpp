@@ -1009,11 +1009,6 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
     return;
   }
 
-  if (IS_MOB(pc)) {
-    mudlog_vfprintf(pc, LOG_SYSLOG, "SYSERR: Received non-PC PC to send_mob_aggression_warnings(%s, %s)!", GET_CHAR_NAME(pc), GET_CHAR_NAME(mob));
-    // return;    Fall through-- I don't know what the implications of this are right now and don't want to break anything.
-  }
-
   int pc_tn = 4;
   if (pc->in_room == mob->in_room)
     pc_tn = 2;
