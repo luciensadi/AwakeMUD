@@ -1130,12 +1130,12 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
   }
 
   // Mail the recipient.
-  snprintf(buf, sizeof(buf), "'%s' has wired %lu nuyen to your account.\r\n", GET_PGROUP(ch)->get_name(), amount);
+  snprintf(buf, sizeof(buf), "'%s^n' has wired %lu nuyen to your account with the note: %s^n.\r\n", GET_PGROUP(ch)->get_name(), amount, remainder);
   store_mail(vict ? GET_IDNUM(vict) : isfile, ch, buf);
 
   // Log it.
   char *player_name = NULL;
-  GET_PGROUP(ch)->audit_log_vfprintf("%s wired %lu nuyen to %s. Reason: %s",
+  GET_PGROUP(ch)->audit_log_vfprintf("%s^n wired %lu nuyen to %s. Reason: %s",
                                      GET_CHAR_NAME(ch),
                                      amount,
                                      vict ? GET_CHAR_NAME(vict) : (player_name = get_player_name(isfile)),
@@ -1143,18 +1143,17 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
   GET_PGROUP(ch)->secret_log_vfprintf("A shadowy figure wired %lu nuyen to someone's account. Reason: %s",
                                       amount,
                                       remainder);
-  snprintf(buf, sizeof(buf), "%s wired %lu nuyen to %s on behalf of '%s'. Reason: %s",
+  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s wired %lu nuyen to %s on behalf of '%s^n'. Reason: %s^n",
           GET_CHAR_NAME(ch),
           amount,
           vict ? GET_CHAR_NAME(vict) : player_name,
           GET_PGROUP(ch)->get_name(),
           remainder);
-  mudlog(buf, ch, LOG_GRIDLOG, TRUE);
 
   // Clean up.
   DELETE_ARRAY_IF_EXTANT(player_name);
 
-  send_to_char(ch, "You wire %lu nuyen to %s's account on behalf of '%s'.\r\n",
+  send_to_char(ch, "You wire %lu nuyen to %s's account on behalf of '%s^n'.\r\n",
                amount,
                vict ? GET_CHAR_NAME(vict) : get_player_name(isfile),
                GET_PGROUP(ch)->get_name());

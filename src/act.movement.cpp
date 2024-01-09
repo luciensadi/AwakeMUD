@@ -2130,6 +2130,9 @@ ACMD(do_leave)
 
     act("$n arrives.", TRUE, ch, 0, 0, TO_ROOM);
 
+    if (GET_POS(ch) > POS_STUNNED && GET_POS(ch) != POS_FIGHTING)
+      GET_POS(ch) = POS_STANDING;
+
     // If not screenreader, look.
     if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
       look_at_room(ch, 0, 0);
