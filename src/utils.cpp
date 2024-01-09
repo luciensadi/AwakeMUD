@@ -552,7 +552,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
   if (!(IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch))) {
     for (struct spirit_sustained *sust = SPIRIT_SUST(ch); sust; sust = sust->next) {
       if (sust->type == CONFUSION) {
-        int amount = MAX(0, GET_LEVEL(sust->target));
+        int amount = MAX(0, sust->force);
         base_target += amount;
         buf_mod(rbuf, rbuf_len, "SConfused", amount);
         WRITEOUT_MSG("Confusion (Spirit Power)", amount);
