@@ -840,7 +840,7 @@ struct command_info cmd_info[] =
     { "recap"      , POS_DEAD    , do_recap    , 0, 0, ALLOWS_IDLE_REWARD },
     { "reload"     , POS_RESTING , do_reload   , 0, 0, BLOCKS_IDLE_REWARD },
     { "release"    , POS_LYING   , do_release  , 0, 0, BLOCKS_IDLE_REWARD },
-    { "relieve"    , POS_STANDING, do_relieve  , 0, 0, BLOCKS_IDLE_REWARD },
+    { "relieve"    , POS_SITTING, do_relieve  , 0, 0, BLOCKS_IDLE_REWARD },
     { "remove"     , POS_RESTING , do_remove   , 0, 0, BLOCKS_IDLE_REWARD },
     { "remember"   , POS_LYING   , do_remember , 0, 0, BLOCKS_IDLE_REWARD },
     { "report"     , POS_LYING   , do_report   , 0, 0, BLOCKS_IDLE_REWARD },

@@ -261,7 +261,7 @@ void objList::UpdateCounters(void)
       GET_OBJ_ATTEMPT(OBJ)--;
 
     // Send out the trideo messages. We assume anything that is a trideo box is not anything else.
-    if (trideo_plays && GET_OBJ_SPEC(OBJ) == trideo && GET_OBJ_VAL(OBJ, 0)) {
+    if (trideo_plays && GET_OBJ_SPEC(OBJ) == trideo && GET_OBJ_VAL(OBJ, 0) && (OBJ->in_room || OBJ->in_veh)) {
       snprintf(buf, sizeof(buf), "$p broadcasts, \"%s\"", trid);
       act(buf, TRUE, 0, OBJ, 0, TO_ROOM);
       continue;
