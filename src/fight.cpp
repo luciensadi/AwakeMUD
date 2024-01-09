@@ -6208,7 +6208,7 @@ void perform_violence(void)
         target = MAX(MINIMUM_TN_FOR_CLOSING_CHECK, MIN(target, MAXIMUM_TN_FOR_CLOSING_CHECK));
 
         // Strike.
-        if (quickness > 0 && success_test(quickness, target) > 1) {
+        if (quickness > 0 && success_test(quickness, target) > 0) {
           send_to_char(ch, "You close the distance and strike!\r\n");
           act("$n closes the distance and strikes.", TRUE, ch, 0, 0, TO_ROOM);
           AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
