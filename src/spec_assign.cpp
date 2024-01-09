@@ -1031,6 +1031,7 @@ void assign_rooms(void)
   SPECIAL(archetype_chargen_reverse_magic_split);
   SPECIAL(chargen_language_annex);
   SPECIAL(nerpcorpolis_lobby);
+  SPECIAL(nerpcorpolis_spawn_tracker);
   SPECIAL(troll_barrier);
   SPECIAL(chargen_points_check);
   SPECIAL(purge_prevented);
