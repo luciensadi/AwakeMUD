@@ -24,6 +24,7 @@
 #include <iostream>
 #include <chrono>
 #include <math.h>
+#include <arpa/inet.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
   #include <windows.h>
@@ -1807,14 +1808,13 @@ void init_descriptor (struct descriptor_data *newd, int desc)
   newd->desc_num = last_desc;
 }
 
+extern const char * resolve_hostname_from_ip_str(const char *ip_str);
 int new_descriptor(int s)
 {
   int desc, sockets_connected = 0;
-  unsigned long addr;
   int i;
   struct descriptor_data *newd;
   struct sockaddr_in peer;
-  struct hostent *from;
 
   /* accept the new connection */
   i = sizeof(peer);
@@ -1836,14 +1836,15 @@ int new_descriptor(int s)
   /* keep it from blocking */
   nonblock(desc);
 
-  // Calculate the long address.
-  addr = ntohl(peer.sin_addr.s_addr);
+  // Resolve the addr into a stringified IP.
+  char ip_string[INET_ADDRSTRLEN];
+  inet_ntop(peer.sin_family, &(peer.sin_addr), ip_string, INET_ADDRSTRLEN);
 
   // Block it if we're getting too many openings in a limited time window.
   if (connection_rapidity_tracker_for_dos++ >= DOS_DENIAL_THRESHOLD) {
-    if (write_to_descriptor(desc, "Sorry, we're unable to service your request right now. Please try again in a few minutes.\r\n") >= 0)
+    if (write_to_descriptor(desc, "Please try again in a few minutes.\r\n") >= 0)
       close(desc);
-    log_vfprintf("DOSLOG: ERROR: Denied incoming request from long-format address %ld - DOS protection.", addr);
+    log_vfprintf("DOSLOG: ERROR: Denied incoming request from %s - DOS protection.", ip_string);
     return 0;
   }
   else if (connection_rapidity_tracker_for_dos >= DOS_SLOW_NS_THRESHOLD) {
@@ -1871,31 +1872,8 @@ int new_descriptor(int s)
   // Set our canaries.
   set_descriptor_canaries(newd);
 
-  /* find the sitename */
-  time_t gethostbyaddr_timer = time(0);
-  if (nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
-                                                   sizeof(peer.sin_addr), AF_INET)))
-  {
-    if (!nameserver_is_slow)
-      perror("gethostbyaddr");
-    snprintf(newd->host, sizeof(newd->host), "%03u.%03u.%03u.%03u", (int) ((addr & 0xFF000000) >> 24),
-            (int) ((addr & 0x00FF0000) >> 16), (int) ((addr & 0x0000FF00) >> 8),
-            (int) ((addr & 0x000000FF)));
-  } else
-  {
-    strlcpy(newd->host, from->h_name, HOST_LENGTH);
-    *(newd->host + HOST_LENGTH) = '\0';
-
-    time_t time_delta = time(0) - gethostbyaddr_timer;
-    if (time_delta > THRESHOLD_IN_SECONDS_FOR_SLOWNS_AUTOMATIC_ACTIVATION) {
-      snprintf(buf2, sizeof(buf2), "%03u.%03u.%03u.%03u", (int) ((addr & 0xFF000000) >> 24),
-              (int) ((addr & 0x00FF0000) >> 16), (int) ((addr & 0x0000FF00) >> 8),
-              (int) ((addr & 0x000000FF)));
-      snprintf(buf, sizeof(buf), "^YThe resolution of host '%s' [%s] took too long at %ld second(s). Automatically engaging slow NS defense.^g", newd->host, buf2, time_delta);
-      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-      nameserver_is_slow = TRUE;
-    }
-  }
+  // Resolve our hostname, if possible.
+  strlcpy(newd->host, resolve_hostname_from_ip_str(ip_string), sizeof(newd->host));
 
   /* determine if the site is banned */
   if (isbanned(newd->host) == BAN_ALL) {
@@ -1905,37 +1883,29 @@ int new_descriptor(int s)
     write_to_descriptor(desc, "Sorry, this IP address has been banned.\r\n");
 #endif
     close(desc);
-    snprintf(buf2, sizeof(buf2), "Connection attempt denied from banned site [%s]", newd->host);
-    mudlog(buf2, NULL, LOG_BANLOG, TRUE);
+    mudlog_vfprintf(NULL, LOG_BANLOG, "Connection attempt denied from banned site [%s]", newd->host);
     DELETE_AND_NULL(newd);
     return 0;
   }
 
   if (peer.sin_port == 1194 && _GLOBALLY_BAN_OPENVPN_CONNETIONS_) {
     close(desc);
-    snprintf(buf2, sizeof(buf2), "Connection attempt denied from NON-BANNED site [%s] using VPN origin port 1194", newd->host);
-    mudlog(buf2, NULL, LOG_BANLOG, TRUE);
+    mudlog_vfprintf(NULL, LOG_BANLOG, "Connection attempt denied from NON-BANNED site [%s] using VPN origin port 1194", newd->host);
     DELETE_AND_NULL(newd);
     return 0;
   }
 
   if (nameserver_is_slow) {
-    log_vfprintf("DOSLOG: Connection from [%03u.%03u.%03u.%03u port %d%s] (slow nameserver mode).",
-                 (int) ((addr & 0xFF000000) >> 24),
-                 (int) ((addr & 0x00FF0000) >> 16),
-                 (int) ((addr & 0x0000FF00) >> 8),
-                 (int) ((addr & 0x000000FF)),
+    log_vfprintf("DOSLOG: Connection from [%s port %d%s] (slow nameserver mode).",
+                 ip_string,
                  peer.sin_port,
                  peer.sin_port == 1194 ? "(OpenVPN?)" : ""
                 );
   }
   else {
-    log_vfprintf("DOSLOG: Connection from [%s (%03u.%03u.%03u.%03u) port %d%s].",
+    log_vfprintf("DOSLOG: Connection from [%s (%s) port %d%s].",
                  newd->host,
-                 (int) ((addr & 0xFF000000) >> 24),
-                 (int) ((addr & 0x00FF0000) >> 16),
-                 (int) ((addr & 0x0000FF00) >> 8),
-                 (int) ((addr & 0x000000FF)),
+                 ip_string,
                  peer.sin_port,
                  peer.sin_port == 1194 ? "(OpenVPN?)" : ""
                 );

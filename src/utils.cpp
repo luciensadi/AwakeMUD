@@ -20,6 +20,9 @@
 #include <execinfo.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
@@ -6633,6 +6636,80 @@ void remove_ch_from_character_list(struct char_data *ch, const char *source) {
       return;
     }
   }
+}
+
+// Returns a pointer to a string with either the IP string or the resolved hostname. You are expected to copy or clone.
+const char * resolve_hostname_from_ip_str(const char *ip_str) {
+  struct sockaddr_in peer;
+  int return_code;
+  static char hbuf[NI_MAXHOST];
+
+  // If we're already in slowns defense mode, do nothing here.
+  if (nameserver_is_slow)
+    return ip_str;
+  
+  // Convert string to a socket address.
+  if (inet_pton(AF_INET, ip_str, &(peer.sin_addr)) <= 0) {
+    // Invalid address. Just return what we already were given.
+    return ip_str;
+  }
+
+  // Ensure we're using the right family (this is not automatically set in inet_pton()).
+  peer.sin_family = AF_INET;
+
+  // Start our timer.
+  time_t gethostbyaddr_timer = time(0);
+
+  // Look up the address from the host, returning the IP if failed.
+  if ((return_code = getnameinfo((struct sockaddr *) &peer, sizeof(peer), hbuf, sizeof(hbuf), NULL, 0, NI_NAMEREQD))) {
+    log_vfprintf("Unable to look up hostname from %s: %s.", ip_str, gai_strerror(return_code));
+    return ip_str;
+  }
+
+  // Stop our timer and check the results.
+  time_t time_delta = time(0) - gethostbyaddr_timer;
+  if (time_delta > THRESHOLD_IN_SECONDS_FOR_SLOWNS_AUTOMATIC_ACTIVATION) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "^YThe resolution of host '%s' [%s] took too long at %ld second(s). Automatically engaging slow NS defense.^g", hbuf, buf2, time_delta);
+    nameserver_is_slow = TRUE;
+  }
+
+  // Return our resolved hostname.
+  return hbuf;
+}
+
+// Given an object, attempts to nslookup its dropped-by-host field.
+void rectify_obj_host(struct obj_data *obj) {
+  if (!obj) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL obj to rectify_obj_host()!");
+    return;
+  }
+
+  if (!obj->dropped_by_host) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received obj with NO dropped_by_host to rectify_desc_host()!");
+    return;
+  }
+
+  const char *tmp = resolve_hostname_from_ip_str(obj->dropped_by_host);
+  if (str_cmp(tmp, obj->dropped_by_host)) {
+    delete [] obj->dropped_by_host;
+    obj->dropped_by_host = str_dup(tmp);
+  }
+}
+
+// Given a desc, attempts to nslookup its host field.
+void rectify_desc_host(struct descriptor_data *desc) {
+  if (!desc) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL desc to rectify_desc_host()!");
+    return;
+  }
+
+  strlcpy(desc->host, resolve_hostname_from_ip_str(desc->host), sizeof(desc->host));
+}
+
+// Given a host, checks to see if it's one of the approved ones.
+bool is_approved_multibox_host(const char *host) {
+  // Bare-bones logic right now.
+  return !str_cmp(host, "grapevine.haus");
 }
 
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.

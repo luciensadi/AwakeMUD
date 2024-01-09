@@ -53,6 +53,10 @@ extern SPECIAL(hacker);
 extern SPECIAL(fixer);
 extern SPECIAL(mageskill_herbie);
 
+extern void rectify_obj_host(struct obj_data *obj);
+extern void rectify_desc_host(struct descriptor_data *desc);
+extern bool is_approved_multibox_host(const char *host);
+
 void calc_weight(struct char_data *ch);
 
 SPECIAL(weapon_dominator);
@@ -1269,7 +1273,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
         for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room) {
           if (AFF_FLAGGED(vict, AFF_SPELLDESIGN)) {
             if (vict == ch)
-              send_to_char(ch, "You are using %s to design your spell.\r\n", GET_OBJ_NAME(obj));
+              send_to_char(ch, "You are using %s to design your spell.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
             else
               act("$N seems to be using $p.", FALSE, ch, obj, vict, TO_CHAR);
             return FALSE;
@@ -1280,7 +1284,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
         for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room) {
           if (AFF_FLAGGED(vict, AFF_CONJURE)) {
             if (vict == ch)
-              send_to_char(ch, "You are using %s to conjure.\r\n", GET_OBJ_NAME(obj));
+              send_to_char(ch, "You are using %s to conjure.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
             else
               act("$N seems to be using $p.", FALSE, ch, obj, vict, TO_CHAR);
             return FALSE;
@@ -1295,7 +1299,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
   }
 
   if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 1) > 1 && (GET_OBJ_VAL(obj, 2) || GET_OBJ_VAL(obj, 3))) {
-    send_to_char(ch, "You may wish to pack %s up first.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You may wish to pack %s up first.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
     return FALSE;
   }
 
@@ -1304,17 +1308,28 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
     for (struct char_data *tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)
        if (AFF_FLAGGED(tmp, AFF_PACKING)) {
          if (tmp == ch)
-           send_to_char(ch, "You're already working on %s.\r\n", GET_OBJ_NAME(obj));
+           send_to_char(ch, "You're already working on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
          else
-           send_to_char(ch, "Someone is working on %s.\r\n", GET_OBJ_NAME(obj));
+           send_to_char(ch, "Someone is working on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
          return FALSE;
        }
   }
 
-  {
+  {    
     char *representation = generate_new_loggable_representation(obj);
 
     if (obj->dropped_by_char > 0 && obj->dropped_by_char != GET_IDNUM(ch) && ch->desc && !str_cmp(obj->dropped_by_host, ch->desc->host)) {
+      // Ensure that the object and character both have valid hosts, and convert them from IP to lookup if possible.
+      rectify_obj_host(obj);
+      rectify_desc_host(ch->desc);
+      
+      // Reject anyone who's not on a multibox host (Grapevine, etc)
+      if (!is_approved_multibox_host(ch->desc->host)) {
+        send_to_char(ch, "You can't pick up %s -- it was dropped or donated by someone at your same host.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+        return FALSE;
+      }
+
+      // Log anyone doing this from a multibox host.
       const char *pname = get_player_name(obj->dropped_by_char);
       mudlog_vfprintf(ch, LOG_CHEATLOG, "%s getting from room: %s, which was dropped/donated by %s (%ld) at their same host (%s)!", 
                       GET_CHAR_NAME(ch), 
@@ -1341,7 +1356,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
   obj_to_char(obj, ch);
   act("You get $p.", FALSE, ch, obj, 0, TO_CHAR);
   if (ch->in_veh) {
-    snprintf(buf, sizeof(buf), "%s gets %s.\r\n", GET_NAME(ch), GET_OBJ_NAME(obj));
+    snprintf(buf, sizeof(buf), "%s gets %s.\r\n", GET_NAME(ch), decapitalize_a_an(GET_OBJ_NAME(obj)));
     send_to_veh(buf, ch->in_veh, ch, FALSE);
   } else
     act("$n gets $p.", FALSE, ch, obj, 0, TO_ROOM);
