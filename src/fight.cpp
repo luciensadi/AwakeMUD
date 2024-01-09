@@ -6205,7 +6205,7 @@ void perform_violence(void)
         // Set the target from the defender's attribute.
         target += defender_attribute;
         // Lock the target to a range. Nobody enjoys rolling TN 14 to close with high-level invis mages.
-        target = MIN(MINIMUM_TN_FOR_CLOSING_CHECK, MAX(target, MAXIMUM_TN_FOR_CLOSING_CHECK));
+        target = MAX(MINIMUM_TN_FOR_CLOSING_CHECK, MIN(target, MAXIMUM_TN_FOR_CLOSING_CHECK));
 
         // Strike.
         if (quickness > 0 && success_test(quickness, target) > 1) {
