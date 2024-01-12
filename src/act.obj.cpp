@@ -1323,10 +1323,9 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
       rectify_obj_host(obj);
       rectify_desc_host(ch->desc);
       
-      // Reject anyone who's not on a multibox host (Grapevine, etc)
+      // Warn anyone who's not on a multibox host (Grapevine, etc)
       if (!is_approved_multibox_host(ch->desc->host)) {
-        send_to_char(ch, "You can't pick up %s -- it was dropped or donated by someone at your same host.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-        return FALSE;
+        send_to_char(ch, "^y(Warning: %s^y was dropped or donated by someone at your same host. Please be certain that you are not accidentally transferring items between your own characters.)^n\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
       }
 
       // Log anyone doing this from a multibox host.
@@ -2468,7 +2467,25 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     else
       obj_to_veh(obj, vict->in_veh);
   } else {
+    // Log same-host handoffs.
+    if (ch->desc && vict->desc) {
+      rectify_desc_host(ch->desc);
+      rectify_desc_host(vict->desc);
+      
+      // Log same-host transfers that are not on Grapevine.
+      if (!str_cmp(ch->desc->host, vict->desc->host) && !is_approved_multibox_host(ch->desc->host)) {
+        char *representation = generate_new_loggable_representation(obj);
+        mudlog_vfprintf(ch, LOG_CHEATLOG, "%s is giving same-host character %s '%s' (host: %s).", 
+                        GET_CHAR_NAME(ch),
+                        GET_CHAR_NAME(vict),
+                        representation,
+                        (GET_LEVEL(ch) < LVL_PRESIDENT && GET_LEVEL(vict) < LVL_PRESIDENT) ? ch->desc->host : "<obscured>");
+        delete [] representation;
+      }
+    }
+
     // All other cases (pc -> pc, npc -> npc): succeed without further checks
+
     _ch_gives_obj_to_vict(ch, obj, vict);
   }
 
