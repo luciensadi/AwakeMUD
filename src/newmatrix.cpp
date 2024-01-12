@@ -539,7 +539,7 @@ void evade_detection(struct matrix_icon *icon)
   {
     int success = maneuver_test(icon);
     if (success > 0) {
-      send_to_icon(icon, "You maneuver away from %s.\r\n", icon->fighting->name);
+      send_to_icon(icon, "You maneuver away from %s.\r\n", decapitalize_a_an(icon->fighting->name));
       icon->evasion = success;
       icon->parry = 0;
       icon->fighting->parry = 0;
@@ -549,7 +549,7 @@ void evade_detection(struct matrix_icon *icon)
         icon->fighting->ic.targ_evasion = success;
       }
     } else
-      send_to_icon(icon, "You fail to evade %s.\r\n", icon->fighting->name);
+      send_to_icon(icon, "You fail to evade %s.\r\n", decapitalize_a_an(icon->fighting->name));
     return;
   }
   send_to_icon(icon, "But you're not fighting anyone.\r\n");
@@ -843,7 +843,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
             break;
           }
       } else
-        send_to_icon(targ, "You manage to avoid %s's attack.\r\n", icon->name);
+        send_to_icon(targ, "You manage to avoid %s's attack.\r\n", decapitalize_a_an(icon->name));
       return;
     }
   }
@@ -858,19 +858,19 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     break;
   case 1:
     send_to_icon(targ, "%s's attack skims off you.\r\n", CAP(icon->name));
-    send_to_icon(icon, "Your attack skims off of %s.\r\n", targ->name);
+    send_to_icon(icon, "Your attack skims off of %s.\r\n", decapitalize_a_an(targ->name));
     break;
   case 3:
     send_to_icon(targ, "%s's attack sends parts of you flying.\r\n", CAP(icon->name));
-    send_to_icon(icon, "Parts fly off of %s from your attack.\r\n", targ->name);
+    send_to_icon(icon, "Parts fly off of %s from your attack.\r\n", decapitalize_a_an(targ->name));
     break;
   case 6:
     send_to_icon(targ, "%s's attack leaves you reeling.\r\n", CAP(icon->name));
-    send_to_icon(icon, "Your attack leaves %s reeling.\r\n", targ->name);
+    send_to_icon(icon, "Your attack leaves %s reeling.\r\n", decapitalize_a_an(targ->name));
     break;
   default:
     send_to_icon(targ, "%s's attack completely obliterates you!\r\n", CAP(icon->name));
-    send_to_icon(icon, "You obliterate %s.\r\n", targ->name);
+    send_to_icon(icon, "You obliterate %s.\r\n", decapitalize_a_an(targ->name));
     break;
   }
   if (dam > 0 && targ->decker)
@@ -1403,7 +1403,7 @@ ACMD(do_locate)
 
         // Log spam defense: Have a chance of dumping them.
         send_to_icon(PERSONA, "The node fuzzes around you as it tries to load further defenses-- something's gone wrong, and it's destabilizing! Your connection closes abruptly.\r\n");
-        snprintf(buf, sizeof(buf), "%s abruptly shatters into digital static.\r\n", PERSONA->name);
+        snprintf(buf, sizeof(buf), "%s abruptly shatters into digital static.\r\n", CAP(PERSONA->name));
         send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
 
         // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
@@ -1448,7 +1448,7 @@ void show_icon_to_persona(struct matrix_icon *ch, struct matrix_icon *icon) {
   }
 
   // Start with description.
-  snprintf(buf, sizeof(buf), "%s\r\n%s is ", icon->long_desc, icon->name);
+  snprintf(buf, sizeof(buf), "%s\r\n%s is ", icon->long_desc, CAP(icon->name));
 
   // Generate condition.
   if (icon->condition < 2) {
@@ -1753,7 +1753,7 @@ ACMD(do_logon)
         DECKER->tally = 0;
       DECKER->last_trigger = 0;
       DECKER->located = FALSE;
-      snprintf(buf, sizeof(buf), "%s connects to a different host and vanishes from this one.\r\n", PERSONA->name);
+      snprintf(buf, sizeof(buf), "%s connects to a different host and vanishes from this one.\r\n", CAP(PERSONA->name));
       send_to_host(PERSONA->in_host, buf, PERSONA, TRUE);
       send_to_icon(PERSONA, "You connect to %s.\r\n", matrix[target_host].name);
       icon_from_host(PERSONA);
@@ -2380,7 +2380,7 @@ ACMD(do_run)
             return;
           }
 
-          send_to_icon(PERSONA, "You start running %s against %s.\r\n", GET_OBJ_NAME(soft), icon->name);
+          send_to_icon(PERSONA, "You start running %s against %s.\r\n", GET_OBJ_NAME(soft), decapitalize_a_an(icon->name));
           if (!PERSONA->fighting) {
             PERSONA->next_fighting = matrix[icon->in_host].fighting;
             matrix[icon->in_host].fighting = PERSONA;
@@ -2396,7 +2396,7 @@ ACMD(do_run)
           }
 
           order_list(matrix[icon->in_host].fighting);
-          send_to_icon(icon, "%s begins to run an attack program aimed at you.\r\n", PERSONA->name);
+          send_to_icon(icon, "%s begins to run an attack program aimed at you.\r\n", CAP(PERSONA->name));
 
           for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = temp) {
             temp = ic->next_in_host;
@@ -3019,7 +3019,7 @@ void matrix_update()
               if (icon->ic.type == IC_TRACE && icon->ic.subtype > 0) {
                 if (!--icon->ic.subtype) {
                   icon2->decker->located = TRUE;
-                  send_to_icon(icon2, "Alarms start to ring in your head as %s finds your location.\r\n", icon->name);
+                  send_to_icon(icon2, "Alarms start to ring in your head as %s finds your location.\r\n", decapitalize_a_an(icon->name));
                   snprintf(buf, sizeof(buf), "%s located by Trace IC in host %ld (%s^g).", GET_CHAR_NAME(icon2->decker->ch), matrix[icon->in_host].vnum, matrix[icon->in_host].name);
                   mudlog(buf, icon2->decker->ch, LOG_GRIDLOG, TRUE);
                 }
@@ -3625,7 +3625,7 @@ ACMD(do_reveal)
     for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
       if (icon != PERSONA && icon->decker && !has_spotted(icon, PERSONA)) {
         make_seen(icon, PERSONA->idnum);
-        send_to_icon(icon, "%s fades into the host.\r\n", PERSONA->name);
+        send_to_icon(icon, "%s fades into the host.\r\n", CAP(PERSONA->name));
       }
   }
 }
