@@ -1610,6 +1610,12 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     return;
   */
 
+  // No projecting through doors to get price lists etc though.
+  if (IS_PROJECT(ch)) {
+    send_to_char("You're not able to read the prices from the astral plane.\r\n", ch);
+    return;
+  }
+
   struct obj_data *obj;
   int i = 1;
   bool has_availtns = FALSE;
