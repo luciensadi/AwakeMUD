@@ -6708,7 +6708,7 @@ void rectify_desc_host(struct descriptor_data *desc) {
 
 // Given a host, checks to see if it's one of the approved ones.
 bool is_approved_multibox_host(const char *host) {
-  // Bare-bones logic right now.
+  // Bare-bones logic to identify Grapevine.
   return !str_cmp(host, "grapevine.haus");
 }
 

@@ -1318,28 +1318,34 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
   {    
     char *representation = generate_new_loggable_representation(obj);
 
-    if (obj->dropped_by_char > 0 && obj->dropped_by_char != GET_IDNUM(ch) && ch->desc && !str_cmp(obj->dropped_by_host, ch->desc->host)) {
+    if (obj->dropped_by_char > 0 && obj->dropped_by_char != GET_IDNUM(ch) && ch->desc) {
       // Ensure that the object and character both have valid hosts, and convert them from IP to lookup if possible.
       rectify_obj_host(obj);
       rectify_desc_host(ch->desc);
-      
-      // Warn anyone who's not on a multibox host (Grapevine, etc)
-      if (!is_approved_multibox_host(ch->desc->host)) {
-        send_to_char(ch, "^y(Warning: %s^y was dropped or donated by someone at your same host. Please be certain that you are not accidentally transferring items between your own characters.)^n\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+
+      if (!str_cmp(obj->dropped_by_host, ch->desc->host)) {
+        // Warn anyone who's not on a multibox host (Grapevine, etc)
+        if (!is_approved_multibox_host(ch->desc->host)) {
+          // TODO: Turn this back on once you've gotten account logic improved.
+          // send_to_char(ch, "^y(Warning: %s^y was dropped or donated by someone at your same host. Please be certain that you are not accidentally transferring items between your own characters.)^n\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+        }
+
+        // Log anyone doing this from a multibox host.
+        const char *pname = get_player_name(obj->dropped_by_char);
+        mudlog_vfprintf(ch, LOG_CHEATLOG, "%s getting from room: %s, which was dropped/donated by %s (%ld) at their same host (%s)!", 
+                        GET_CHAR_NAME(ch), 
+                        representation, 
+                        pname, 
+                        obj->dropped_by_char,
+                        GET_LEVEL(ch) < LVL_PRESIDENT ? obj->dropped_by_host : "<obscured>");
+        obj->dropped_by_char = 0;
+        delete [] pname;
       }
 
-      // Log anyone doing this from a multibox host.
-      const char *pname = get_player_name(obj->dropped_by_char);
-      mudlog_vfprintf(ch, LOG_CHEATLOG, "%s getting from room: %s, which was dropped/donated by %s (%ld) at their same host (%s)!", 
-                      GET_CHAR_NAME(ch), 
-                      representation, 
-                      pname, 
-                      obj->dropped_by_char,
-                      GET_LEVEL(ch) < LVL_PRESIDENT ? obj->dropped_by_host : "<obscured>");
-      obj->dropped_by_char = 0;
-      delete [] pname;
-      delete [] obj->dropped_by_host;
-      obj->dropped_by_host = NULL;
+      if (obj->dropped_by_host) {
+        delete [] obj->dropped_by_host;
+        obj->dropped_by_host = NULL;
+      }
     } else if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
               || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) 
               || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
