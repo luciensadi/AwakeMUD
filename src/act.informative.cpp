@@ -7828,59 +7828,71 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
     room_name = GET_APARTMENT_SUBROOM(in_room)->get_decorated_name();
   }
 
-  if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
-    ROOM_FLAGS(in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-    send_to_char(ch, "^C[%5ld] %s^n%s [ %s ]^n\r\n", 
-                 GET_ROOM_VNUM(in_room), 
-                 room_name,
-                 room_name != GET_ROOM_NAME(in_room) ? " ^L(name-dec'd)^n" : "",
-                 buf);
-    if (GET_APARTMENT(in_room)) {
-      send_to_char(ch, " ^c(%sApartment - %s^c%s)\r\n",
-                   GET_APARTMENT(in_room)->get_paid_until() > 0 ? "Leased " : "",
-                   GET_APARTMENT(in_room)->get_full_name(),
-                   GET_APARTMENT_DECORATION(in_room) ? " [decorated]" : "");
-    }
-    if (in_room->temp_desc && in_room->temp_desc_timeout > 0) {
-      const char *author_name = get_player_name(in_room->temp_desc_author_idnum);
-      send_to_char(ch, " ^c(Temp Desc by %s (%ld) for next %d minute%s)\r\n", 
-                   author_name,
-                   in_room->temp_desc_author_idnum,
-                   in_room->temp_desc_timeout,
-                   in_room->temp_desc_timeout == 1 ? "" : "s");
-      delete [] author_name;
-    }
-  } else {
+  {
     #define APPEND_ROOM_FLAG(check, flagname) { if ((check)) {strlcat(room_title_buf, flagname, sizeof(room_title_buf));} }
-    char room_title_buf[1000];
-    snprintf(room_title_buf, sizeof(room_title_buf), "^C%s%s^n", in_veh ? "Around you is " : "", room_name);
+    char room_title_buf[2000];
 
-    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_GARAGE), " (Garage)");
-    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STORAGE) && !ROOM_FLAGGED(in_room, ROOM_CORPSE_SAVE_HACK), " (Storage)");
-    if (GET_APARTMENT(in_room)) {
-      snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s-Class Apartment)",
-               lifestyles[GET_APARTMENT(in_room)->get_lifestyle()].name);
+    if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
+      // Write the room title with bits after it.
+      ROOM_FLAGS(in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
+      snprintf(room_title_buf, sizeof(room_title_buf), "^C[%5ld] %s^n%s [ %s ]^n", 
+                  GET_ROOM_VNUM(in_room), 
+                  room_name,
+                  room_name != GET_ROOM_NAME(in_room) ? " ^L(name-dec'd)^n" : "",
+                  buf);
+      // Append things that don't show up in bits.
+      APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
+      APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
+      if (in_room->flight_code && (ROOM_FLAGGED(in_room, ROOM_HELIPAD) || ROOM_FLAGGED(in_room, ROOM_RUNWAY))) {
+        snprintf(ENDOF(room_title_buf), sizeof(room_title_buf), " (%s: %3s)", 
+                ROOM_FLAGGED(in_room, ROOM_RUNWAY) ? "Runway" : "Helipad",
+                in_room->flight_code);
+      }
+      // Add apartment info.
+      if (GET_APARTMENT(in_room)) {
+        snprintf(room_title_buf, sizeof(room_title_buf), "\r\n ^c(%sApartment - %s^c%s)",
+                    GET_APARTMENT(in_room)->get_paid_until() > 0 ? "Leased " : "",
+                    GET_APARTMENT(in_room)->get_full_name(),
+                    GET_APARTMENT_DECORATION(in_room) ? " [decorated]" : "");
+      }
+      // Add tempdesc info.
+      if (in_room->temp_desc && in_room->temp_desc_timeout > 0) {
+        const char *author_name = get_player_name(in_room->temp_desc_author_idnum);
+        snprintf(room_title_buf, sizeof(room_title_buf), "\r\n ^c(Temp Desc by %s (%ld) for next %d minute%s)", 
+                    author_name,
+                    in_room->temp_desc_author_idnum,
+                    in_room->temp_desc_timeout,
+                    in_room->temp_desc_timeout == 1 ? "" : "s");
+        delete [] author_name;
+      }
+    } else {
+      snprintf(room_title_buf, sizeof(room_title_buf), "^C%s%s^n", in_veh ? "Around you is " : "", room_name);
+
+      APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_GARAGE), " (Garage)");
+      APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STORAGE) && !ROOM_FLAGGED(in_room, ROOM_CORPSE_SAVE_HACK), " (Storage)");
+      if (GET_APARTMENT(in_room)) {
+        snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s-Class Apartment)",
+                lifestyles[GET_APARTMENT(in_room)->get_lifestyle()].name);
+      }
+      APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
+      APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ARENA), " ^y(Arena)^n");
+      APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_PEACEFUL), " (Peaceful)");
+      APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
+      APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
+      APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ENCOURAGE_CONGREGATION), " ^W(Socialization Bonus)^n");
+
+      if (in_room->flight_code && (ROOM_FLAGGED(in_room, ROOM_HELIPAD) || ROOM_FLAGGED(in_room, ROOM_RUNWAY))) {
+        snprintf(ENDOF(room_title_buf), sizeof(room_title_buf), " (%s: %3s)", 
+                ROOM_FLAGGED(in_room, ROOM_RUNWAY) ? "Runway" : "Helipad",
+                in_room->flight_code);
+      }
+
+      if (in_room->temp_desc && in_room->temp_desc_timeout > 0) {
+        strlcat(room_title_buf, " ^c(Altered)^n", sizeof(room_title_buf));
+      }
     }
-    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
-    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ARENA), " ^y(Arena)^n");
-    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_PEACEFUL), " (Peaceful)");
-    APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
-    APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
-    APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ENCOURAGE_CONGREGATION), " ^W(Socialization Bonus)^n");
 
-    if (in_room->flight_code && (ROOM_FLAGGED(in_room, ROOM_HELIPAD) || ROOM_FLAGGED(in_room, ROOM_RUNWAY))) {
-      snprintf(ENDOF(room_title_buf), sizeof(room_title_buf), " (%s: %3s)", 
-               ROOM_FLAGGED(in_room, ROOM_RUNWAY) ? "Runway" : "Helipad",
-               in_room->flight_code);
-    }
-
-    if (in_room->temp_desc && in_room->temp_desc_timeout > 0) {
-      strlcat(room_title_buf, " ^c(Altered)^n", sizeof(room_title_buf));
-    }
-
-    strlcat(room_title_buf, "\r\n", sizeof(room_title_buf));
-
-    send_to_char(room_title_buf, ch);
+    send_to_char(ch, "%s\r\n", room_title_buf);
     #undef APPEND_ROOM_FLAG
   }
 }
