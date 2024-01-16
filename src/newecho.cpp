@@ -83,6 +83,11 @@ ACMD(do_highlight) {
     }
   }
 
+  else {
+    send_to_char("You need to specify a color code. Example: 'highlight ^^r' or 'highlight ^^[F123]'. Use '^^n' for neutral / no highlight.\r\n", ch);
+    return;
+  }
+
   DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
   SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(argument);
   send_to_char(ch, "OK, your highlight is now '%s' (%s*^n).\r\n", double_up_color_codes(GET_CHAR_COLOR_HIGHLIGHT(ch)), GET_CHAR_COLOR_HIGHLIGHT(ch));
