@@ -20,7 +20,7 @@
 #include "holiday_gifts.hpp"
 
 std::vector<class holiday_entry> holiday_entries = {
-  {"Christmas '23", 1703322000, 1674464400, // 12/23/23 to 1/23/24. Extended due to errors
+  {"Christmas '23", 1703322000, 1706574891, // 12/23/23 to 1/30/24. Extended due to errors
      "A puff of peppermint-scented air distracts you, and before you know it, there's a festive present in your hands.\r\n",
      "a festive present with 'Happy Holidays!' emblazoned on the tag",
      "Done up in shiny wrapping paper and finished with a neat bow, this holiday present is sure to please. Why not ^WOPEN^n it now?",
