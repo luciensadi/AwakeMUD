@@ -653,8 +653,14 @@ char *capitalize(const char *source)
 char *string_to_uppercase(const char *source) {
   static char dest[MAX_STRING_LENGTH];
 
-  int i, x = strlen(source);
-  for (i = 0; i < x; i++){
+  if (!source) {
+    mudlog("SYSERR: Received NULL string to string_to_uppercase()!", NULL, LOG_SYSLOG, TRUE);
+    strlcpy(dest, "", sizeof(dest));
+    return dest;
+  }
+
+  int i = 0, x = strlen(source);
+  for (; i < x; i++){
     if (isalpha(source[i])){
       dest[i] = toupper(source[i]);
     } else {

@@ -1009,7 +1009,7 @@ const char *replace_too_long_words(struct char_data *ch, struct char_data *speak
 
   // We always want the viewer's name to stand out, so we make sure it never matches the background/terminal code.
   // KNOWN ISSUE: This does not work with xterm256 codes. Anyone want to write that logic?
-  if (!strcmp((viewer_highlight = string_to_uppercase(viewer_highlight)), terminal_code))
+  if (viewer_highlight && !strcmp((viewer_highlight = string_to_uppercase(viewer_highlight)), terminal_code))
     viewer_highlight = string_to_lowercase(viewer_highlight);
 
   // Calculate their max allowable word length.

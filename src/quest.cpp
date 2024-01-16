@@ -1699,7 +1699,7 @@ SPECIAL(johnson)
         do_say(johnson, quest_table[new_q].intro, 0, 0);
       }
       else {
-        snprintf(buf, sizeof(buf), "WARNING: Null string in quest %ld!", quest_table[new_q].vnum);
+        snprintf(buf, sizeof(buf), "WARNING: Null intro string in quest %ld!", quest_table[new_q].vnum);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
         do_say(johnson, "I've got a job for you.", 0, 0);
       }
