@@ -1168,7 +1168,9 @@ const char *pc_readable_extra_bits[] =
     "Immune to Bio/Chemical Weapons (NERP)",
     "Vanishes on Death",
     "Doesn't Save", // Deliberate -- concealing cheatlog mark
-    "\n"
+    "Concealed in Equipment",
+    "Is Electrode Net",
+    MAX_FLAG_MARKER
   };
 
 /* APPLY_x */

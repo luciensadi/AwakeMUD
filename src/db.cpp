@@ -510,6 +510,17 @@ void boot_world(void)
     }
   }
 
+  for (int i = 0; i < MAX_ITEM_EXTRA; i++) {
+    if (str_str(extra_bits[i], MAX_FLAG_MARKER)) {
+      log("Error: You added an extra bit but didn't add it to extra_bits in constants.cpp (or forgot a comma)! Don't forget pc_readable_extra_bits too.");
+      exit(ERROR_FLAG_CONSTANT_MISSING);
+    }
+    if (str_str(pc_readable_extra_bits[i], MAX_FLAG_MARKER)) {
+      log("Error: You added an extra bit but didn't add it to pc_readable_extra_bits in constants.cpp (or forgot a comma)!");
+      exit(ERROR_FLAG_CONSTANT_MISSING);
+    }
+  }
+
 #ifndef NOCRYPT
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
