@@ -360,79 +360,78 @@ SPECIAL(taxi_sign) {
 // ______________________________
 
 void create_linked_exit(int rnum_a, int dir_a, int rnum_b, int dir_b, const char *source) {
-  if (rnum_a <= -1) {
-    mudlog("WARNING: Got negative rnum for create_linked_exit()!", NULL, LOG_SYSLOG, TRUE);
-  } else {
-    if (!world[rnum_a].dir_option[dir_a]) {
-      world[rnum_a].dir_option[dir_a] = new room_direction_data;
-      memset((char *) world[rnum_a].dir_option[dir_a], 0,
-             sizeof(struct room_direction_data));
-      world[rnum_a].dir_option[dir_a]->to_room = &world[rnum_b];
-      world[rnum_a].dir_option[dir_a]->to_room_vnum = world[rnum_b].number;
-      world[rnum_a].dir_option[dir_a]->barrier = 8;
-      world[rnum_a].dir_option[dir_a]->condition = 8;
-      world[rnum_a].dir_option[dir_a]->material = 8;
-      SET_BIT(world[rnum_a].dir_option[dir_a]->exit_info, EX_IS_TEMPORARY);
-  #ifdef USE_DEBUG_CANARIES
-      world[rnum_a].dir_option[dir_a]->canary = CANARY_VALUE;
-  #endif
-      snprintf(buf, sizeof(buf), "Successfully created %s exit from %s (%ld) to %s (%ld) for %s.",
-               dirs[dir_a],
-               GET_ROOM_NAME(&world[rnum_a]),
-               GET_ROOM_VNUM(&world[rnum_a]),
-               rnum_b >= 0 ? GET_ROOM_NAME(&world[rnum_b]) : "nowhere???",
-               rnum_b >= 0 ? GET_ROOM_VNUM(&world[rnum_b]) : -1,
-               source
-              );
-#ifdef TRANSPORT_DEBUG
-      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-#endif
-    } else {
-      /* This situation happens somewhat often-- either we edit a zone that has a ferry/bus/etc, or someone dies in it,
-         causing it to be saved to disk with the exit already baked in. This isn't a big issue, so I'm disabling the
-         warning. The only real effect is that the state of the transport is out of sync at the start of the game,
-         with potentially a straight bridge across the ferry between destinations if the exits are fucky enough.
-         It fixes itself over time though. -- LS '22
-
-      snprintf(buf, sizeof(buf), "WARNING: create_linked_exit() for %s (%s from %ld) would have overwritten an existing exit!",
-               source, dirs[dir_a], GET_ROOM_VNUM(&world[rnum_a]));
-      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-      */
-    }
+  if (rnum_a <= -1 || rnum_b <= -1) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "WARNING: Got negative rnum for create_linked_exit(%d, %d, %d, %d, %s)!", rnum_a, dir_a, rnum_b, dir_b, source);
+    return;
+  }
+  if (dir_a < NORTH || dir_a > DOWN || dir_b < NORTH || dir_b > DOWN) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "WARNING: Got invalid direction for create_linked_exit(%d, %d, %d, %d, %s)!", rnum_a, dir_a, rnum_b, dir_b, source);
+    return;
   }
 
-  if (rnum_b <= -1) {
-    mudlog("WARNING: Got negative rnum for create_linked_exit()!", NULL, LOG_SYSLOG, TRUE);
-  } else {
-    if (!world[rnum_b].dir_option[dir_b]) {
-      world[rnum_b].dir_option[dir_b] = new room_direction_data;
-      memset((char *) world[rnum_b].dir_option[dir_b], 0,
-             sizeof(struct room_direction_data));
-      world[rnum_b].dir_option[dir_b]->to_room = &world[rnum_a];
-      world[rnum_b].dir_option[dir_b]->to_room_vnum = world[rnum_a].number;
-      world[rnum_b].dir_option[dir_b]->barrier = 8;
-      world[rnum_b].dir_option[dir_b]->condition = 8;
-      world[rnum_b].dir_option[dir_b]->material = 8;
-      SET_BIT(world[rnum_b].dir_option[dir_b]->exit_info, EX_IS_TEMPORARY);
-  #ifdef USE_DEBUG_CANARIES
-      world[rnum_b].dir_option[dir_b]->canary = CANARY_VALUE;
-  #endif
-      snprintf(buf, sizeof(buf), "Successfully created %s exit from %s (%ld) to %s (%ld) for %s.",
-               dirs[dir_b],
-               GET_ROOM_NAME(&world[rnum_b]),
-               GET_ROOM_VNUM(&world[rnum_b]),
-               rnum_b >= 0 ? GET_ROOM_NAME(&world[rnum_a]) : "nowhere???",
-               rnum_b >= 0 ? GET_ROOM_VNUM(&world[rnum_a]) : -1,
-               source
-              );
-#ifdef TRANSPORT_DEBUG
-      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  if (!world[rnum_a].dir_option[dir_a]) {
+    world[rnum_a].dir_option[dir_a] = new room_direction_data;
+    memset((char *) world[rnum_a].dir_option[dir_a], 0,
+            sizeof(struct room_direction_data));
+    world[rnum_a].dir_option[dir_a]->to_room = &world[rnum_b];
+    world[rnum_a].dir_option[dir_a]->to_room_vnum = world[rnum_b].number;
+    world[rnum_a].dir_option[dir_a]->barrier = 8;
+    world[rnum_a].dir_option[dir_a]->condition = 8;
+    world[rnum_a].dir_option[dir_a]->material = 8;
+    SET_BIT(world[rnum_a].dir_option[dir_a]->exit_info, EX_IS_TEMPORARY);
+#ifdef USE_DEBUG_CANARIES
+    world[rnum_a].dir_option[dir_a]->canary = CANARY_VALUE;
 #endif
-    } else {
-      snprintf(buf, sizeof(buf), "WARNING: create_linked_exit() for %s (%s from %ld) would have overwritten an existing exit!",
-               source, dirs[dir_b], GET_ROOM_VNUM(&world[rnum_b]));
-      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-    }
+#ifdef TRANSPORT_DEBUG
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Successfully created %s exit from %s (%ld) to %s (%ld) for %s.",
+                    dirs[dir_a],
+                    GET_ROOM_NAME(&world[rnum_a]),
+                    GET_ROOM_VNUM(&world[rnum_a]),
+                    rnum_b >= 0 ? GET_ROOM_NAME(&world[rnum_b]) : "nowhere???",
+                    rnum_b >= 0 ? GET_ROOM_VNUM(&world[rnum_b]) : -1,
+                    source
+    );
+#endif
+  } else {
+    /* This situation happens somewhat often-- either we edit a zone that has a ferry/bus/etc, or someone dies in it,
+        causing it to be saved to disk with the exit already baked in. This isn't a big issue, so I'm disabling the
+        warning. The only real effect is that the state of the transport is out of sync at the start of the game,
+        with potentially a straight bridge across the ferry between destinations if the exits are fucky enough.
+        It fixes itself over time though. -- LS '22
+
+    snprintf(buf, sizeof(buf), "WARNING: create_linked_exit() for %s (%s from %ld) would have overwritten an existing exit!",
+              source, dirs[dir_a], GET_ROOM_VNUM(&world[rnum_a]));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    */
+  }
+
+  if (!world[rnum_b].dir_option[dir_b]) {
+    world[rnum_b].dir_option[dir_b] = new room_direction_data;
+    memset((char *) world[rnum_b].dir_option[dir_b], 0,
+            sizeof(struct room_direction_data));
+    world[rnum_b].dir_option[dir_b]->to_room = &world[rnum_a];
+    world[rnum_b].dir_option[dir_b]->to_room_vnum = world[rnum_a].number;
+    world[rnum_b].dir_option[dir_b]->barrier = 8;
+    world[rnum_b].dir_option[dir_b]->condition = 8;
+    world[rnum_b].dir_option[dir_b]->material = 8;
+    SET_BIT(world[rnum_b].dir_option[dir_b]->exit_info, EX_IS_TEMPORARY);
+#ifdef USE_DEBUG_CANARIES
+    world[rnum_b].dir_option[dir_b]->canary = CANARY_VALUE;
+#endif
+#ifdef TRANSPORT_DEBUG
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Successfully created %s exit from %s (%ld) to %s (%ld) for %s.",
+                    dirs[dir_b],
+                    GET_ROOM_NAME(&world[rnum_b]),
+                    GET_ROOM_VNUM(&world[rnum_b]),
+                    rnum_b >= 0 ? GET_ROOM_NAME(&world[rnum_a]) : "nowhere???",
+                    rnum_b >= 0 ? GET_ROOM_VNUM(&world[rnum_a]) : -1,
+                    source
+                  );
+#endif
+  } else {
+    snprintf(buf, sizeof(buf), "WARNING: create_linked_exit() for %s (%s from %ld) would have overwritten an existing exit!",
+              source, dirs[dir_b], GET_ROOM_VNUM(&world[rnum_b]));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
   }
 }
 
@@ -444,14 +443,16 @@ void delete_exit(int bus, int to, const char *source) {
     return;
   }
 
-  snprintf(buf, sizeof(buf), "Successfully deleted %s exit from %s (%ld) to %s (%ld) for %s.",
-           dirs[to],
-           GET_ROOM_NAME(&world[bus]),
-           GET_ROOM_VNUM(&world[bus]),
-           world[bus].dir_option[to]->to_room ? GET_ROOM_NAME(world[bus].dir_option[to]->to_room) : "nowhere???",
-           world[bus].dir_option[to]->to_room ? GET_ROOM_VNUM(world[bus].dir_option[to]->to_room) : -1,
-           source
-          );
+#ifdef TRANSPORT_DEBUG
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "Successfully deleted %s exit from %s (%ld) to %s (%ld) for %s.",
+                  dirs[to],
+                  GET_ROOM_NAME(&world[bus]),
+                  GET_ROOM_VNUM(&world[bus]),
+                  world[bus].dir_option[to]->to_room ? GET_ROOM_NAME(world[bus].dir_option[to]->to_room) : "nowhere???",
+                  world[bus].dir_option[to]->to_room ? GET_ROOM_VNUM(world[bus].dir_option[to]->to_room) : -1,
+                  source
+                  );
+#endif
 
   if (world[bus].dir_option[to]->keyword)
     delete [] world[bus].dir_option[to]->keyword;
@@ -462,10 +463,6 @@ void delete_exit(int bus, int to, const char *source) {
   delete world[bus].dir_option[to];
 
   world[bus].dir_option[to] = NULL;
-
-#ifdef TRANSPORT_DEBUG
-  mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-#endif
 }
 
 void delete_linked_exit(int bus, int to, int room, int from, const char *source) {
@@ -734,7 +731,7 @@ ACMD(do_hail)
     return;
   }
 
-  for (int dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1))
+  for (int dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1)) {
     if (!ch->in_room->dir_option[dir]) {
       open_taxi_door(ch->in_room, dir, &world[cab], 1);
       if (dest_data_list == portland_taxi_destinations)
@@ -751,6 +748,7 @@ ACMD(do_hail)
       act(buf, FALSE, ch, 0, 0, TO_CHAR);
       return;
     }
+  }
 }
 
 // ______________________________
@@ -1011,18 +1009,6 @@ SPECIAL(taxi)
           strncpy(buf2, " punches a few buttons on the meter, calculating the fare.", sizeof(buf2));
           do_echo(driver, buf2, 0, SCMD_EMOTE);
           forget(driver, ch);
-
-          for (struct char_data *vict = driver->in_room->people; vict; vict = vict->next_in_room) {
-            struct obj_data *weap = GET_EQ(vict, WEAR_WIELD);
-            if (!weap || (GET_OBJ_TYPE(weap) != ITEM_WEAPON && GET_OBJ_TYPE(weap) != ITEM_FIREWEAPON))
-              weap = GET_EQ(vict, WEAR_HOLD);
-            if (!weap || (GET_OBJ_TYPE(weap) != ITEM_WEAPON && GET_OBJ_TYPE(weap) != ITEM_FIREWEAPON))
-              continue;
-
-            act("As $e works, $n silently reaches up and taps on a sign that reads, \"^yDRAWN WEAPONS PROHIBITED^n\"", FALSE, driver, 0, 0, TO_ROOM);
-            act("As you work, you silently reach up and tap on a sign that reads, \"^yDRAWN WEAPONS PROHIBITED\"", FALSE, driver, 0, 0, TO_CHAR);
-            break;
-          }
           break;
         }
 
@@ -1108,7 +1094,6 @@ SPECIAL(taxi)
           // Valid location.
           comm = CMD_TAXI_DEST_GRIDGUIDE;
           found = TRUE;
-          dest_vnum = -dest_vnum;
           do_say(ch, argument, 0, 0);
           strncpy(buf2, " punches a few buttons on the meter, calculating the fare.", sizeof(buf2));
           do_echo(driver, buf2, 0, SCMD_EMOTE);
@@ -1139,6 +1124,24 @@ SPECIAL(taxi)
 
   /* I would like to extend a personal and heartfelt 'fuck you' to whomever thought that using the anonymously-named 'i' as both an rnum and a direction was a good idea. - LS */
   if ((comm == CMD_TAXI_DEST || comm == CMD_TAXI_DEST_GRIDGUIDE) && !memory(driver, ch) && GET_ACTIVE(driver) == ACT_AWAIT_CMD) {
+    for (struct char_data *vict = driver->in_room->people; vict; vict = vict->next_in_room) {
+      struct obj_data *weap = GET_EQ(vict, WEAR_WIELD);
+      if (!weap || (GET_OBJ_TYPE(weap) != ITEM_WEAPON && GET_OBJ_TYPE(weap) != ITEM_FIREWEAPON))
+        weap = GET_EQ(vict, WEAR_HOLD);
+      if (!weap || (GET_OBJ_TYPE(weap) != ITEM_WEAPON && GET_OBJ_TYPE(weap) != ITEM_FIREWEAPON))
+        continue;
+
+      act("As $e works, $n silently reaches up and taps on a sign that reads, \"^yDRAWN WEAPONS PROHIBITED^n\"", FALSE, driver, 0, 0, TO_ROOM);
+      act("As you work, you silently reach up and tap on a sign that reads, \"^yDRAWN WEAPONS PROHIBITED\"", FALSE, driver, 0, 0, TO_CHAR);
+      break;
+    }
+    
+    if (comm == CMD_TAXI_DEST) {
+      GET_SPARE2(driver) = dest_idx;
+    } else {
+      GET_SPARE2(driver) = -dest_vnum;
+    }
+
     if (real_room(GET_LASTROOM(ch)) <= -1) {
       GET_SPARE1(driver) = MAX_CAB_FARE;
     } else {
@@ -1151,10 +1154,11 @@ SPECIAL(taxi)
 
       if (temp_room) {
         int distance_between_rooms;
-        if (comm == CMD_TAXI_DEST)
+        if (comm == CMD_TAXI_DEST) {
           distance_between_rooms = calculate_distance_between_rooms(temp_room->number, destination_list[dest_idx].vnum, FALSE);
-        else
-          distance_between_rooms = calculate_distance_between_rooms(temp_room->number, -dest_vnum, FALSE);
+        } else {
+          distance_between_rooms = calculate_distance_between_rooms(temp_room->number, dest_vnum, FALSE);
+        }
 
         if (distance_between_rooms < 0)
           GET_SPARE1(driver) = MAX_CAB_FARE;
@@ -1169,7 +1173,6 @@ SPECIAL(taxi)
     if (dest_idx > 0 && destination_list[dest_idx].vnum == RM_NERPCORPOLIS_LOBBY)
       GET_SPARE1(driver) = 0;
 
-    GET_SPARE2(driver) = dest_idx;
     GET_ACTIVE(driver) = ACT_REPLY_DEST;
     if (PLR_FLAGGED(ch, PLR_NEWBIE))
       GET_EXTRA(driver) = 1;

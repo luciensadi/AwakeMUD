@@ -1992,7 +1992,7 @@ void ApartmentRoom::save_storage() {
   // YES, this does induce bugs, like evaluate programs not decaying if nobody is around to see it happen--
   // but fuck it, if someone exploits it we'll just ban them. Easy enough.
   if (!room->dirty_bit && !room->people) {
-    log_vfprintf("Refusing to save room %s (%ld): Not dirty, no people.", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
+    // log_vfprintf("Refusing to save room %s (%ld): Not dirty, no people.", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
     return;
   }
 
@@ -2006,12 +2006,14 @@ void ApartmentRoom::save_storage() {
 
   const char *save_location = storage_path.c_str();
 
+  /*
   log_vfprintf("Saving storage for room %s (%ld): %s dirty, %s occupied. Saving to %s.", 
                 GET_ROOM_NAME(room),
                 GET_ROOM_VNUM(room),
                 room->dirty_bit ? "is" : "not",
                 room->people ? "is" : "not",
                 save_location);
+  */
 
   // Clear the dirty bit now that we've processed it.
   room->dirty_bit = FALSE;
