@@ -5254,7 +5254,14 @@ ACMD(do_weather)
     ch->in_veh = veh->in_veh;
   }
 
-  FAILURE_CASE(!OUTSIDE(ch), "You're pretty sure the ceiling won't start raining anytime soon.\r\n");
+  // DO NOT use FAILURE_CASE() here, since you MUST restore in_room and in_veh before returning control.
+
+  if (!OUTSIDE(ch)) {
+    send_to_char("You're pretty sure the ceiling won't start raining anytime soon.\r\n", ch);
+    ch->in_room = in_room;
+    ch->in_veh = in_veh;
+    return;
+  }
 
   if (precipitation_is_snow(GET_JURISDICTION(ch->in_room))) {
     static const char *sky_look[] =

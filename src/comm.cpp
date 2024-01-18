@@ -1020,8 +1020,15 @@ void game_loop(int mother_desc)
         struct char_data *last_tch = veh->people;
         for (struct char_data *tch = last_tch->next_in_veh; tch; tch = tch->next_in_veh) {
           if (tch->in_veh != veh) {
-            mudlog("Warning: Character is in a vehicle's people list, but not in that vehicle. Rectifying.", tch, LOG_SYSLOG, TRUE);
-            last_tch->next_in_veh = tch->next_in_veh;
+            mudlog_vfprintf(tch, LOG_SYSLOG, "SYSERR: %s is in '%s's people list, but not in that vehicle. Putting them back in it.", GET_CHAR_NAME(tch));
+            send_to_char(tch, "[Note: Your character has been automatically returned to %s. Please use the BUG command to tell staff what you did in the last ~2 minutes.]\r\n", GET_VEH_NAME(veh));
+            tch->in_veh = veh;
+          }
+
+          if (tch->in_room) {
+            mudlog_vfprintf(tch, LOG_SYSLOG, "SYSERR: Found %s in BOTH a vehicle and a room at once! Putting them in the vehicle exclusively.", GET_CHAR_NAME(tch));
+            tch->in_room = NULL;
+            tch->in_veh = veh; // this line should be no-op at this point, but better safe than sorry
           }
           last_tch = tch;
         }
