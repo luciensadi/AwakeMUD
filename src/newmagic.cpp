@@ -6896,7 +6896,8 @@ void _end_all_spells_of_type(int spell, int subtype, struct char_data *ch, bool 
       if (sust->spell == spell && (!subtype || sust->subtype == subtype)) {
         // End the spell, then immediately loop again. There's a chance that the next spell in the list is our caster record, and we don't want to touch that since it's been deleted.
         end_sustained_spell(ch, sust);
-        should_loop = TRUE;
+        // We only want to loop if this is _not_ an elemental, as elementals only conjure one spell but point back to the caster's spell list.
+        should_loop = !IS_PC_CONJURED_ELEMENTAL(ch);
         break;
       }
     }
@@ -6925,7 +6926,8 @@ void end_all_caster_records(struct char_data *ch, bool keep_sustained_by_other) 
       if (!keep_sustained_by_other || !(sust->focus || sust->spirit)) {
         // End the spell, then immediately loop again. There's a chance that the next spell in the list is our affect record, and we don't want to touch that since it's been deleted.
         end_sustained_spell(ch, sust);
-        should_loop = TRUE;
+        // We only want to loop if this is _not_ an elemental, as elementals only conjure one spell but point back to the caster's spell list.
+        should_loop = !IS_PC_CONJURED_ELEMENTAL(ch);
         break;
       }
     }
