@@ -140,8 +140,8 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg) {
       if (!str_cmp(arg, apartment->get_full_name())) {
         {
           const char *name = apartment->get_owner_name__returns_new();
-          send_to_char(ch, "OK, breaking lease for apartment %s (owned by %s).\r\n", apartment->get_full_name(), name);
-          mudlog_vfprintf(ch, LOG_SYSLOG, "Destroying lease for %s (owned by %s) via HCONTROL DESTROY.", apartment->get_full_name(), name);
+          send_to_char(ch, "OK, breaking lease for apartment %s (owned by %s, root vnum %ld).\r\n", apartment->get_full_name(), name, apartment->get_root_vnum());
+          mudlog_vfprintf(ch, LOG_SYSLOG, "Destroying lease for %s (owned by %s, root vnum %ld) via HCONTROL DESTROY.", apartment->get_full_name(), name, apartment->get_root_vnum());
           delete [] name;
         }
 
@@ -163,8 +163,9 @@ void hcontrol_display_house_by_number(struct char_data * ch, vnum_t house_number
         if (room->get_vnum() == house_number) {
         {
           const char *owner_name = apartment->get_owner_name__returns_new();
-          send_to_char(ch, "%s is owned by ^c%s^n (^c%ld^n).\r\n",
+          send_to_char(ch, "%s (%ld) is owned by ^c%s^n (^c%ld^n).\r\n",
                        apartment->get_full_name(),
+                       apartment->get_root_vnum(),
                        owner_name,
                        apartment->get_owner_id());
           delete [] owner_name;
@@ -222,14 +223,14 @@ void hcontrol_display_house_with_owner_or_guest(struct char_data * ch, const cha
   for (auto &complex : global_apartment_complexes) {
     for (auto &apartment : complex->get_apartments()) {
       if (apartment->has_owner_privs_by_idnum(idnum)) {
-        send_to_char(ch, "- Owner privileges at ^c%s^n.\r\n", apartment->get_full_name());
+        send_to_char(ch, "- Owner privileges at ^c%s^n (^c%ld^n).\r\n", apartment->get_full_name(), apartment->get_root_vnum());
         printed_something = TRUE;
       } else {
         // Traditional guests.
         auto guest_vec = apartment->get_guests();
         if (find(guest_vec.begin(), guest_vec.end(), idnum) != guest_vec.end()) {
           const char *owner_name = apartment->get_owner_name__returns_new();
-          send_to_char(ch, "- Guest at ^c%s^n, owned by ^c%s^n (^c%ld^n).\r\n", apartment->get_full_name(), owner_name, apartment->get_owner_id());
+          send_to_char(ch, "- Guest at ^c%s^n (^c%ld^n), owned by ^c%s^n (^c%ld^n).\r\n", apartment->get_full_name(), apartment->get_root_vnum(), owner_name, apartment->get_owner_id());
           delete [] owner_name;
           printed_something = TRUE;
         }
@@ -238,7 +239,7 @@ void hcontrol_display_house_with_owner_or_guest(struct char_data * ch, const cha
           Bitfield required_privileges;
           required_privileges.SetBits(PRIV_LEADER, PRIV_LANDLORD, PRIV_TENANT, ENDBIT);
           if (pgroup_char_has_any_priv(idnum, apartment->get_owner_pgroup()->get_idnum(), required_privileges))
-          send_to_char(ch, "- Can enter ^c%s^n due to pgroup privileges.\r\n", apartment->get_full_name());
+          send_to_char(ch, "- Can enter ^c%s^n (^c%ld^n) due to pgroup privileges.\r\n", apartment->get_full_name(), apartment->get_root_vnum());
         }
       }
     }
