@@ -2460,12 +2460,12 @@ void extract_veh(struct veh_data * veh)
 }
 
 /* Extract an object from the world */
-void extract_obj(struct obj_data * obj)
+void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
 {
   struct phone_data *phone, *temp;
   bool set = FALSE;
 
-  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT)) {
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !dont_warn_on_kept_items) {
     const char *representation = generate_new_loggable_representation(obj);
     mudlog_vfprintf(NULL, LOG_PURGELOG, "extract_obj: Destroying KEPT item: %s", representation);
     delete [] representation;
@@ -2571,9 +2571,11 @@ void extract_obj(struct obj_data * obj)
     set = TRUE;
   }
 
-  /* Get rid of the contents of the object, as well. */
-  while (obj->contains && GET_OBJ_TYPE(obj) != ITEM_PART)
-    extract_obj(obj->contains);
+  /* Get rid of the contents of the object, as well. ITEM_PART contains its cyberdeck, so don't extract that. */
+  if (GET_OBJ_TYPE(obj) != ITEM_PART) {
+    while (obj->contains)
+      extract_obj(obj->contains, dont_warn_on_kept_items);
+  }
 
   if (!ObjList.Remove(obj))
     log_vfprintf("ObjList.Remove returned FALSE!  (%ld)", GET_OBJ_VNUM(obj));
@@ -2674,11 +2676,7 @@ void extract_char(struct char_data * ch)
     if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER)
       GET_VEHCONTAINER_VEH_VNUM(obj) = GET_VEHCONTAINER_VEH_IDNUM(obj) = GET_VEHCONTAINER_VEH_OWNER(obj) = 0;
 
-    // Un-keep items for the same reason.
-    if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT))
-      GET_OBJ_EXTRA(obj).RemoveBit(ITEM_EXTRA_KEPT);
-
-    extract_obj(obj);
+    extract_obj(obj, TRUE);
   }
 
   /* extract all cyberware from NPC's since it can't be reused */
@@ -2686,19 +2684,19 @@ void extract_char(struct char_data * ch)
   {
     next = obj->next_content;
     obj_from_cyberware(obj);
-    extract_obj(obj);
+    extract_obj(obj, TRUE);
   }
   for (obj = ch->bioware; obj; obj = next)
   {
     next = obj->next_content;
     obj_from_bioware(obj);
-    extract_obj(obj);
+    extract_obj(obj, TRUE);
   }
 
   /* transfer equipment to room, if any */
   for (i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i))
-      extract_obj(unequip_char(ch, i, TRUE));
+      extract_obj(unequip_char(ch, i, TRUE), TRUE);
 
   /* stop this char from fighting anyone else */
   if (CH_IN_COMBAT(ch))

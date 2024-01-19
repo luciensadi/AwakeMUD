@@ -63,7 +63,7 @@ void obj_from_bioware(struct obj_data *bio, bool recalc = TRUE);
 void obj_to_cyberware(struct obj_data *object, struct char_data *ch, bool recalc = TRUE);
 void obj_to_bioware(struct obj_data *object, struct char_data *ch, bool recalc = TRUE);
 
-void    extract_obj(struct obj_data *obj);
+void    extract_obj(struct obj_data *obj, bool dont_warn_on_kept_items=FALSE);
 void    extract_veh(struct veh_data *veh);
 void    extract_icon(struct matrix_icon *icon);
 /* ******* characters ********* */
