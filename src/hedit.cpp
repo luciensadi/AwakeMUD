@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "structs.hpp"
 #include "awake.hpp"
@@ -8,11 +9,11 @@
 #include "constants.hpp"
 #include "utils.hpp"
 #include "db.hpp"
-#include <stdlib.h>
 #include "screen.hpp"
 #include "olc.hpp"
 #include "newmatrix.hpp"
 #include "memory.hpp"
+#include "handler.hpp"
 
 #define HOST d->edit_host
 #define NUM_OF_HOST_TYPES 6
@@ -242,23 +243,28 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           int             counter2;
           int             found = 0;
           for (counter = 0; counter <= top_of_matrix; counter++) {
-            if (!found) {
-              /* check if current virtual is bigger than our virtual */
-              if (matrix[counter].vnum > d->edit_number) {
-                // now, zoom backwards through the list copying over
-                // TODO: Okay, but what if top_of_matrix == top_of_matrix_array - 1? SIGSEGV right? -LS
-                for (counter2 = top_of_matrix + 1; counter2 > counter; counter2--) {
-                  matrix[counter2] = matrix[counter2 - 1];
+            /* check if current virtual is bigger than our virtual */
+            if (matrix[counter].vnum > d->edit_number) {
+              // now, zoom backwards through the list copying over
+              // TODO: Okay, but what if top_of_matrix == top_of_matrix_array - 1? SIGSEGV right? -LS
+              for (counter2 = top_of_matrix + 1; counter2 > counter; counter2--) {
+                matrix[counter2] = matrix[counter2 - 1];
+
+                // Update icon backlinks (they work on rnum indexes)
+                for (struct matrix_icon *temp_icon = matrix[counter].icons; temp_icon; temp_icon = temp_icon->next) {
+                  if (temp_icon->in_host != NOWHERE)
+                    temp_icon->in_host++;
                 }
-                matrix[counter] = *(d->edit_host);
-                matrix[counter].vnum = d->edit_number;
-                found = TRUE;
+
+                // Update object backlinks (they work on direct pointers)
+                for (struct obj_data *soft = matrix[counter2].file; soft; soft = soft->next_content) {
+                  soft->in_host = &(matrix[counter2]);
+                }
               }
-            } else {
-              struct matrix_icon *temp_icon;
-              for (temp_icon = matrix[counter].icons; temp_icon; temp_icon = temp_icon->next)
-                if (temp_icon->in_host != NOWHERE)
-                  temp_icon->in_host++;
+              matrix[counter] = *(d->edit_host);
+              matrix[counter].vnum = d->edit_number;
+              found = TRUE;
+              break;
             }
           }
 

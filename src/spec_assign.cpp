@@ -966,6 +966,9 @@ void assign_objects(void)
   ASSIGNOBJ(96522, pocket_sec);
   ASSIGNOBJ(96523, pocket_sec);
 
+  // Reaper's assigns
+  ASSIGNOBJ(99401, bank);
+
   perform_secret_obj_assignments();
 #endif
 
