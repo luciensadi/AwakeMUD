@@ -975,13 +975,15 @@ ACMD(do_vteleport)
     } else if (veh->in_veh) {
       send_to_veh(buf, veh->in_veh, ch, FALSE);
     }
+    char was_in[1000];
+    snprintf(was_in, sizeof(was_in), "%s '%s'", veh->in_veh ? "vehicle" : "room", veh->in_veh ? GET_VEH_NAME(veh->in_veh) : GET_ROOM_NAME(veh->in_room));
+
     veh_from_room(veh);
     veh_to_room(veh, target);
     snprintf(buf, sizeof(buf), "%s screeches suddenly into the area.\r\n", GET_VEH_NAME(veh));
     send_to_room(buf, veh->in_room);
     send_to_veh("You lose track of your surroundings.\r\n", veh, NULL, TRUE);
-    snprintf(buf2, sizeof(buf2), "%s teleported %s to %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh), target->name);
-    mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s teleported %s from %s to %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh), was_in, target->name);
   }
 }
 ACMD(do_teleport)
@@ -1007,6 +1009,9 @@ ACMD(do_teleport)
   else if (!*buf2)
     send_to_char("Where do you wish to send this person?\r\n", ch);
   else if ((target = find_target_room(ch, buf2))) {
+    char was_in[1000];
+    snprintf(was_in, sizeof(was_in), "%s '%s'", victim->in_veh ? "vehicle" : "room", victim->in_veh ? GET_VEH_NAME(victim->in_veh) : GET_ROOM_NAME(victim->in_room));
+
     send_to_char(OK, ch);
     act("$n disappears in a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
     if (AFF_FLAGGED(victim, AFF_PILOT))
@@ -1016,9 +1021,11 @@ ACMD(do_teleport)
     act("$n arrives from a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
     act("$n has teleported you!", FALSE, ch, 0, victim, TO_VICT);
     look_at_room(victim, 0, 0);
-    snprintf(buf2, sizeof(buf2), "%s teleported %s to %s",
-            GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim), target->name);
-    mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s teleported %s from %s to %s",
+                    GET_CHAR_NAME(ch),
+                    IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim),
+                    was_in,
+                    target->name);
   }
 }
 
