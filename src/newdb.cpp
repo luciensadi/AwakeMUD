@@ -1337,12 +1337,12 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   strcpy(buf, "INSERT INTO pfiles_quests (idnum, number, questnum, completed) VALUES (");
   for (i = 0, q = 0; i <= QUEST_TIMER - 1; i++) {
     if (GET_LQUEST(player ,i)) {
-      if (q)
-        strcat(buf, "), (");
-
       bool found = FALSE;
       // Check to see if it's in the CQUEST list. If it is, store it as completed.
       for (int c_idx = 0; c_idx <= QUEST_TIMER - 1; c_idx++) {
+        if (q)
+          strcat(buf, "), (");
+
         if (GET_LQUEST(player, i) == GET_CQUEST(player, c_idx)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %ld, TRUE", GET_IDNUM(player), i, GET_LQUEST(player, i));
           q = 1;
@@ -1352,6 +1352,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
       // It wasn't in CQUEST, so store it as not completed.
       if (!found) {
+        if (q)
+          strcat(buf, "), (");
+          
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %ld, FALSE", GET_IDNUM(player), i, GET_LQUEST(player, i));
         q = 1;
       }
