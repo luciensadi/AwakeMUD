@@ -613,7 +613,7 @@ SPECIAL(metamagic_teacher)
 // Teaches every skill that isn't in the other teachers' train lists. The assumption is that if it exists in code but isn't taught anywhere, it's not implemented.
 SPECIAL(nerp_skills_teacher) {
   struct char_data *master = (struct char_data *) me;
-  int max = NORMAL_MAX_SKILL, skill_num;
+  int max = (master->in_room && GET_ROOM_VNUM(master->in_room) == 60662 ? NEWBIE_SKILL : NORMAL_MAX_SKILL);
 
   bool can_teach_skill[MAX_SKILLS];
   for (int skill = 1; skill < MAX_SKILLS; skill++)
@@ -673,7 +673,7 @@ SPECIAL(nerp_skills_teacher) {
           // Add conditional messaging.
           if (!found_a_skill_already) {
             found_a_skill_already = TRUE;
-            snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
+            snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", CAP(GET_NAME(master)));
           }
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %s\r\n", skills[skill].name);
         }
@@ -681,7 +681,7 @@ SPECIAL(nerp_skills_teacher) {
           // Add conditional messaging.
           if (!found_a_skill_already) {
             found_a_skill_already = TRUE;
-            snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
+            snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", CAP(GET_NAME(master)));
           }
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-35s (%d karma %d nuyen)\r\n", skills[skill].name, get_skill_price(ch, skill),
                   MAX(1000, (GET_SKILL(ch, skill) * 5000)));
@@ -690,7 +690,7 @@ SPECIAL(nerp_skills_teacher) {
     }
     // Failure case.
     if (!found_a_skill_already) {
-      send_to_char(ch, "There's nothing %s can teach you that you don't already know.\r\n", GET_NAME(master));
+      send_to_char(ch, "There's nothing %s can teach you that you don't already know.\r\n", decapitalize_a_an(GET_NAME(master)));
       return TRUE;
     }
 
@@ -704,7 +704,7 @@ SPECIAL(nerp_skills_teacher) {
     return TRUE;
   }
 
-  skill_num = find_skill_num(argument);
+  int skill_num = find_skill_num(argument);
 
   if (skill_num < 0) {
     send_to_char(ch, "That's not a valid skill name. You can use any keyword from the skill, but don't use quotes or other punctuation.\r\n");
