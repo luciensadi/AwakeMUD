@@ -5069,8 +5069,8 @@ ACMD(do_syspoints) {
                       amount,
                       name,
                       idnum,
-                      current_amount - amount,
                       current_amount,
+                      current_amount + amount,
                       reason,
                       ispunct(get_final_character_from_string(reason)) ? "" : ".");
       if (!found_char)
