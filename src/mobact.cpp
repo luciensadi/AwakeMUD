@@ -425,10 +425,14 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
          "%s Frag off, and take %s with you!",
          "%s I'm gonna take %s off your corpse!",
 /* 20 */ "%s %s, really? You don't like breathing, do you?",
-         "%s Look at you, bein' all brave. Is %s your safety blanket?"
+         "%s Look at you, bein' all brave. %s isn't gonna save you from me!",
+         "%s %s?? Get the frag out of here!",
+         "%s Since you like %s so much, I'll make sure they bury you with it!",
+         "%s %s? Cute toy, I'll give it to my kids when you're dead.",
+         "%s You know I gotta hurt you for bringing %s in here."
   };
   // We're zero-indexed, so this is the max string index above plus one.
-  #define NUM_GUARD_MESSAGES 22
+  #define NUM_GUARD_MESSAGES 26
 
   if (!vict_is_valid_target(ch, vict))
     return FALSE;

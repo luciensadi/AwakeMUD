@@ -908,12 +908,25 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
   strcpy(buf2, "");
 
   if (ch && (ch->in_room || ch->in_veh)) {
-    if (ch->desc)
-      snprintf(buf2, sizeof(buf2), "[%5ld] (%s) ",
-              get_ch_in_room(ch)->number,
-              GET_CHAR_NAME(ch));
-    else
-      snprintf(buf2, sizeof(buf2), "[%5ld] ", get_ch_in_room(ch)->number);
+    char char_name_str[1000], location_str[1000];
+
+    // Compose name string.
+    snprintf(char_name_str, sizeof(char_name_str), "(%s%s)", ch->desc ? "" : "NPC ", GET_CHAR_NAME(ch));
+
+    // Compose location string.
+    if (ch->in_veh) {
+      snprintf(location_str, sizeof(location_str), "[veh %ld%s in %ld]",
+               ch->in_veh->idnum,
+               ch->in_veh->in_veh ? " in other veh in" : "",
+               GET_ROOM_VNUM(get_ch_in_room(ch)));
+    } else if (ch->in_room) {
+      snprintf(location_str, sizeof(location_str), "[%ld]",
+               GET_ROOM_VNUM(get_ch_in_room(ch)));
+    } else {
+      strlcpy(location_str, "[NOWHERE]", sizeof(location_str));
+    }
+
+    snprintf(buf2, sizeof(buf2), "%s %s", location_str, char_name_str);
   }
 
   if (file)
