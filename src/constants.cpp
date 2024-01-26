@@ -888,6 +888,7 @@ const char *connected_types[] =
     "Vehicle Decorating",
     "Tempdesc Editing",
     "Creating Art",
+    "Account Editing",
     "\n"
   };
 

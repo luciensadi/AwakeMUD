@@ -2246,7 +2246,8 @@ enum {
 #define CON_DECORATE_VEH        50
 #define CON_TEMPDESC_EDIT       51
 #define CON_ART_CREATE          52
-#define CON_MAX                 52
+#define CON_ACCOUNT_PARSE       53
+#define CON_MAX                 53
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
 
