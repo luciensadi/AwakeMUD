@@ -340,7 +340,7 @@ void string_add(struct descriptor_data *d, char *str)
         break;
       case MEDIT_REG_DESCR:
         REPLACE_STRING(d->edit_mob->player.physical_text.room_desc);
-        char candidate = d->edit_mob->player.physical_text.room_desc[strlen(d->edit_mob->player.physical_text.room_desc) - 4];
+        char candidate = d->edit_mob->player.physical_text.room_desc[MAX(0, strlen(d->edit_mob->player.physical_text.room_desc) - 4)]; // why -4 though?
         if (!ispunct(candidate))
           send_to_char(d->character, "^YWARNING: You're missing punctuation at the end of the room desc. (%c is not punctuation)^n\r\n", candidate);
         medit_disp_menu(d);
