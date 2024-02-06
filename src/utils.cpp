@@ -926,7 +926,7 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
       strlcpy(location_str, "[NOWHERE]", sizeof(location_str));
     }
 
-    snprintf(buf2, sizeof(buf2), "%s %s", location_str, char_name_str);
+    snprintf(buf2, sizeof(buf2), "%s %s ", location_str, char_name_str);
   }
 
   if (file)

@@ -311,7 +311,7 @@ ACMD(do_rig)
       send_to_char("But you're not rigging.\r\n", ch);
       return;
     }
-    AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+    STOP_DRIVING(ch);
     if (!VEH->dest)
       VEH->cspeed = SPEED_OFF;
     stop_chase(VEH);

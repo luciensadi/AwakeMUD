@@ -727,6 +727,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define IS_WORKING(ch)        ((AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, AFF_PILOT, AFF_RIG, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT)))
 #define STOP_WORKING(ch)      {AFF_FLAGS((ch)).RemoveBits(BR_TASK_AFF_FLAGS, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT); \
                                GET_BUILDING((ch)) = NULL;}
+#define STOP_DRIVING(ch)      {AFF_FLAGS((ch)).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);}
 
 #define GET_TOTEM(ch)                              (ch->player_specials->saved.totem)
 #define GET_TOTEMSPIRIT(ch)                        (ch->player_specials->saved.totemspirit)
