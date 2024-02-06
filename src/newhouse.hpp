@@ -201,6 +201,7 @@ class Apartment {
     void save_rooms();
     void break_lease();
     void save_base_info();
+    void kick_out_everyone();
 
     bool issue_key(struct char_data *ch);
 
@@ -284,6 +285,8 @@ class ApartmentRoom {
     void load_storage_from_specified_path(bf::path path);
     const char *get_full_name();
     void regenerate_paths();
+    void kick_out_characters();
+    void kick_out_vehicles();
 
     struct room_data *get_world_room();
 

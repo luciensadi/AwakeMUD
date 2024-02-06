@@ -229,8 +229,12 @@ void save_all_apartments_and_storage_rooms() {
 
       // Invalid lease? Skip it and bail. We just won't load this apartment's contents on next boot.
       if (apartment->get_paid_until() < time(0)) {
+        // Previously, we broke the lease here, but that stopped arrears from working properly.
         // mudlog_vfprintf(NULL, LOG_GRIDLOG, "Skipping save on %s: Lease expired.", apartment->get_full_name());
         // apartment->break_lease();
+
+        // Now, we just kick out anyone in the room and their vehicles.
+        apartment->kick_out_everyone();
         continue;
       }
 #endif
@@ -1000,6 +1004,14 @@ void Apartment::save_lease() {
   o.close();
 }
 
+/* Removes all characters from the apartment and dumps them in the atrium. */
+void Apartment::kick_out_everyone() {
+  for (auto &room: rooms) {
+    room->kick_out_characters();
+    room->kick_out_vehicles();
+  }
+}
+
 /* Delete <apartment name>/lease and restore default descs. */
 void Apartment::break_lease() {
   mudlog_vfprintf(NULL, LOG_GRIDLOG, "Cleaning up lease for %s's %s.", complex->display_name, name);
@@ -1027,6 +1039,8 @@ void Apartment::break_lease() {
     room->purge_contents();
     room->delete_decoration();
     room->delete_decorated_name();
+    room->kick_out_characters();
+    room->kick_out_vehicles();
   }
 
   // Iterate over all characters in the game and have them recalculate their lifestyles. This also confirms their lifestyle string.
@@ -1982,6 +1996,86 @@ void ApartmentRoom::delete_decorated_name() {
   decorated_name = NULL;
 
   send_to_room("You blink, then shrug-- this place must have always been called that.\r\n", room);
+}
+
+void _escort_char_to_atrium(struct char_data *ch, struct room_data *atrium) {
+  send_to_char(ch, "You are escorted out.\r\n");
+  STOP_WORKING(ch);
+  STOP_DRIVING(ch);
+  char_from_room(ch);
+  char_to_room(ch, atrium);
+  GET_POS(ch) = POS_STANDING;
+
+  if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+    look_at_room(ch, 0, 0);
+  }
+}
+
+void _empty_out_vehicle_to_atrium(struct veh_data *veh, struct room_data *atrium) {
+  // Kick out all the characters in the vehicle.
+  for (struct char_data *ch = veh->people, *next_ch; ch; ch = next_ch) {
+    next_ch = ch->next_in_veh;
+    _escort_char_to_atrium(ch, atrium);
+  }
+
+  // Stop the vehicle in case it was running.
+  if (!veh->dest)
+    veh->cspeed = SPEED_OFF;
+  stop_chase(veh);
+
+  // Recurse.
+  for (struct veh_data *contained = veh->carriedvehs, *next_cont; contained; contained = next_cont) {
+    next_cont = contained->next_veh;
+    _empty_out_vehicle_to_atrium(contained, atrium);
+  }
+}
+
+void ApartmentRoom::kick_out_characters() {
+  struct room_data *room = &world[real_room(vnum)];
+  struct room_data *atrium = &world[real_room(apartment->get_atrium_vnum())];
+
+  if (!room || !atrium) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Could not kick out characters from %s (%ld): Room or atrium (%ld) did not exist!", 
+                    get_full_name(),
+                    vnum,
+                    apartment->get_atrium_vnum());
+    return;
+  }
+
+  for (struct char_data *ch = room->people, *next_ch; ch; ch = next_ch) {
+    next_ch = ch->next_in_room;
+    _escort_char_to_atrium(ch, atrium);
+  }
+
+  for (struct veh_data *veh = room->vehicles, *next_veh; veh; veh = next_veh) {
+    next_veh = veh->next_veh;
+    _empty_out_vehicle_to_atrium(veh, atrium);
+  }
+}
+
+void ApartmentRoom::kick_out_vehicles() {
+  struct room_data *room = &world[real_room(vnum)];
+  struct room_data *parking_garage = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
+
+  if (!room || !parking_garage) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Could not kick out vehicles from %s (%ld): Room or garage did not exist!",
+                    get_full_name(),
+                    vnum);
+    return;
+  }
+
+  for (struct veh_data *veh = room->vehicles, *next_veh; veh; veh = next_veh) {
+    next_veh = veh->next_veh;
+
+    // Stuff it somewhere in the Seattle parking garage.
+    veh_from_room(veh);
+    veh_to_room(veh, parking_garage);
+
+    // Give it a pity repair if needed so it's not wiped on crash.
+    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+      veh->damage = VEH_DAM_THRESHOLD_DESTROYED - 1;
+    }
+  }
 }
 
 /* Write storage data to <apartment name>/storage. This is basically the existing houses/<vnum> file. */
