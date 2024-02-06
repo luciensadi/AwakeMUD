@@ -66,7 +66,7 @@ ACMD(do_houseedit) {
     FAILURE_CASE(GET_LEVEL(ch) < LVL_EXECUTIVE, "You're not erudite enough to do that.");
     FAILURE_CASE(!ch->in_room || !GET_APARTMENT_SUBROOM(ch->in_room), "You must be standing in an apartment for that.");
 
-    houseedit_reload(ch, func_remainder);
+    houseedit_reload(ch, func);
     return;
   }
 
