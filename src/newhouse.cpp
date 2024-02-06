@@ -227,10 +227,10 @@ void save_all_apartments_and_storage_rooms() {
         continue;
       }
 
-      // Invalid lease? Break it and bail.
+      // Invalid lease? Skip it and bail. We just won't load this apartment's contents on next boot.
       if (apartment->get_paid_until() < time(0)) {
-        mudlog_vfprintf(NULL, LOG_GRIDLOG, "Breaking lease on %s: Lease expired.", apartment->get_full_name());
-        apartment->break_lease();
+        // mudlog_vfprintf(NULL, LOG_GRIDLOG, "Skipping save on %s: Lease expired.", apartment->get_full_name());
+        // apartment->break_lease();
         continue;
       }
 #endif
@@ -1723,7 +1723,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   storage_path = filename / "storage";
 
   // If we have a valid lease, load storage contents.
-  if (apartment->get_paid_until() - time(0) >= 0) {
+  if (apartment->get_paid_until() > time(0)) {
     load_storage();
   } else {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to load storage for %ld: Lease is expired.", GET_ROOM_VNUM(room));
