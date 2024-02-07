@@ -153,6 +153,8 @@ struct obj_data
   const char *dropped_by_host;
   idnum_t dropped_by_char;
 
+  // Adding new fields? Add them to dblist's UpdateObjs too to avoid iedit breaking things.
+
 #ifdef USE_DEBUG_CANARIES
   int canary;
 #endif

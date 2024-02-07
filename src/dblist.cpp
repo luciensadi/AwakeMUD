@@ -165,6 +165,10 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
       temp->data->restring = old.restring;
       temp->data->photo = old.photo;
       temp->data->graffiti = old.graffiti;
+      temp->data->obj_flags.quest_id = old.obj_flags.quest_id;
+      temp->data->cyberdeck_part_pointer = old.cyberdeck_part_pointer;
+      temp->data->dropped_by_char = old.dropped_by_char;
+      temp->data->dropped_by_host = old.dropped_by_host;
       if (temp->data->carried_by)
         affect_total(temp->data->carried_by);
       else if (temp->data->worn_by)

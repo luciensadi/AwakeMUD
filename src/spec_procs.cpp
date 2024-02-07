@@ -4296,6 +4296,11 @@ void process_auth_room(struct char_data *ch) {
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
 
+#ifdef IS_BUILDPORT
+  send_to_char("You've been given 5m cash for buildport testing.\r\n", ch);
+  GET_NUYEN_RAW(ch) = 5000000;
+#endif
+
   playerDB.SaveChar(ch);
 
   // Make them look.
