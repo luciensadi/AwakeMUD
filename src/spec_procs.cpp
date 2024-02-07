@@ -4283,8 +4283,7 @@ void process_auth_room(struct char_data *ch) {
       }
     }
 
-  if (real_object(OBJ_NEWBIE_RADIO)>-1)
-  {
+  if (real_object(OBJ_NEWBIE_RADIO) > -1) {
     struct obj_data *radio = read_object(OBJ_NEWBIE_RADIO, VIRTUAL);
     GET_OBJ_VAL(radio, 0) = 8;
     obj_to_char(radio, ch);
@@ -4299,6 +4298,12 @@ void process_auth_room(struct char_data *ch) {
 #ifdef IS_BUILDPORT
   send_to_char("You've been given 5m cash for buildport testing.\r\n", ch);
   GET_NUYEN_RAW(ch) = 5000000;
+
+  if (real_object(OBJ_MORTAL_RESTORATION_BUTTON) > -1) {
+    struct obj_data *button = read_object(OBJ_MORTAL_RESTORATION_BUTTON, VIRTUAL);
+    obj_to_char(button, ch);
+    send_to_char("You have been given a restoration button for buildport testing. LOOK at it for instructions.\r\n", ch);
+  }
 #endif
 
   playerDB.SaveChar(ch);

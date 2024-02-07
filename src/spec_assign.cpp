@@ -949,7 +949,6 @@ void assign_objects(void)
 #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(94331, trideo);
   ASSIGNOBJ(70605, desktop);
-  // ASSIGNOBJ(10036, restoration_button);
   ASSIGNOBJ(39799, bank);
   ASSIGNOBJ(60620, bank); // Neophyte ATM
   ASSIGNOBJ(94329, bank); // NERPcropolis ATM
@@ -970,6 +969,10 @@ void assign_objects(void)
   ASSIGNOBJ(99401, bank);
 
   perform_secret_obj_assignments();
+#endif
+
+#ifdef IS_BUILDPORT
+  ASSIGNOBJ(OBJ_MORTAL_RESTORATION_BUTTON, restoration_button);
 #endif
 
   ASSIGNOBJ(OBJ_SEATTLE_TAXI_SIGN, taxi_sign);
