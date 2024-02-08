@@ -130,6 +130,7 @@ int _error_on_invalid_real_obj(rnum_t rnum, int zone_num, char *buf, size_t buf_
 int _error_on_invalid_real_host(rnum_t rnum, int zone_num, char *buf, size_t buf_len);
 int _error_on_invalid_real_veh(rnum_t rnum, int zone_num, char *buf, size_t buf_len);
 bool vnum_is_from_canon_zone(vnum_t vnum);
+void show_host_sheaf_to_ch(struct char_data *ch, struct host_data *host);
 
 #define EXE_FILE "bin/awake" /* maybe use argv[0] but it's not reliable */
 
@@ -1225,6 +1226,8 @@ void do_stat_host(struct char_data *ch, struct host_data *host)
     }
   strlcat(buf, "^n\r\n", sizeof(buf));
   send_to_char(buf, ch);
+
+  show_host_sheaf_to_ch(ch, host);
 }
 
 void do_stat_veh(struct char_data *ch, struct veh_data * k)
@@ -2450,7 +2453,7 @@ ACMD(do_vstat)
   two_arguments(argument, buf, buf2);
 
   if (!*buf || !*buf2 || !isdigit(*buf2)) {
-    send_to_char("Usage: vstat { obj | mob | qst | shp | veh} <number>\r\n", ch);
+    send_to_char("Usage: vstat { obj | mob | qst | shp | veh | host } <number>\r\n", ch);
     return;
   }
   if ((number = atoi(buf2)) < 0) {
@@ -8488,6 +8491,27 @@ int audit_zone_vehicles_(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
+void show_host_sheaf_to_ch(struct char_data *ch, struct host_data *host) {
+  send_to_char("^gSheaf:^n\r\n", ch);
+  bool printed_something = FALSE;
+
+  for (struct trigger_step *trig = host->trigger; trig; trig = trig->next) {
+    char sheafbuf[500];
+    snprintf(sheafbuf, sizeof(sheafbuf), "   %3d) Alert: ^c%d^n", trig->step, trig->alert);
+    if (trig->ic > 0) {
+      rnum_t ic_rnum = real_ic(trig->ic);
+      snprintf(ENDOF(sheafbuf), sizeof(sheafbuf) - strlen(sheafbuf), ", IC: ^y%ld^n (%s)",
+                trig->ic,
+                ic_rnum >= 0 ? ic_proto[ic_rnum].name : "^rinvalid^n");
+    }
+    send_to_char(ch, "%s\r\n", sheafbuf);
+    printed_something = TRUE;
+  }
+
+  if (!printed_something)
+    send_to_char(" ^Y<missing - specify trigger steps for host>^n\r\n", ch);
+}
+
 int audit_zone_hosts_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0;
 
@@ -8501,24 +8525,9 @@ int audit_zone_hosts_(struct char_data *ch, int zone_num, bool verbose) {
 
     struct host_data *host = &matrix[real_hst];
 
-    send_to_char(ch, "^c[%8ld]^n %s^n\r\n  ^gSheaf:^n\r\n", host->vnum, host->name);
-    bool printed_something = FALSE;
+    send_to_char(ch, "^c[%8ld]^n %s^n\r\n", host->vnum, host->name);
 
-    for (struct trigger_step *trig = host->trigger; trig; trig = trig->next) {
-      char sheafbuf[500];
-      snprintf(sheafbuf, sizeof(sheafbuf), "   %3d) Alert: ^c%d^n", trig->step, trig->alert);
-      if (trig->ic > 0) {
-        rnum_t ic_rnum = real_ic(trig->ic);
-        snprintf(ENDOF(sheafbuf), sizeof(sheafbuf) - strlen(sheafbuf), ", IC: ^y%ld^n (%s)",
-                 trig->ic,
-                 ic_rnum >= 0 ? ic_proto[ic_rnum].name : "^rinvalid^n");
-      }
-      send_to_char(ch, "%s\r\n", sheafbuf);
-      printed_something = TRUE;
-    }
-
-    if (!printed_something)
-      send_to_char(" ^Y<missing - specify trigger steps for host>^n\r\n", ch);
+    show_host_sheaf_to_ch(ch, host);
   }
 
   // TODO: Make sure they've got all their strings set.
