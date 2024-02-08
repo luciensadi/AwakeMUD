@@ -870,6 +870,7 @@ void assign_objects(void)
   SPECIAL(initiative_tracker);
   SPECIAL(one_shot_self_heal);
   SPECIAL(holiday_gift);
+  SPECIAL(slot_machine);
 
   ASSIGNOBJ(OBJ_HOLIDAY_GIFT, holiday_gift);
   ASSIGNOBJ(OBJ_ONE_SHOT_HEALING_INJECTOR, one_shot_self_heal);
@@ -946,6 +947,7 @@ void assign_objects(void)
   ASSIGNOBJ(60500, chargen_hopper);
   ASSIGNOBJ(10033, quest_debug_scanner);
   ASSIGNOBJ(OBJ_INITIATIVE_TRACKER, initiative_tracker);
+  ASSIGNOBJ(10093, slot_machine);
 #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(94331, trideo);
   ASSIGNOBJ(70605, desktop);

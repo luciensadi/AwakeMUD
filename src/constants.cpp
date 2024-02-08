@@ -3144,7 +3144,9 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Staff Charge", NI_IS_SINK},
     {"Syspoint Purchase", NI_IS_SINK},
     {"Flight Fuel", NI_IS_SINK},
-    {"Decorating", NI_IS_SINK}
+    {"Decorating", NI_IS_SINK},
+    {"Gambling Costs", NI_IS_SINK},
+    {"Gambling Payouts", NI_IS_FAUCET}
   };
 
 const char *ignored_bits_in_english[] =
