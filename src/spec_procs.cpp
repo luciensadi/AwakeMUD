@@ -7709,10 +7709,10 @@ void payout_slots(struct obj_data *slots) {
   for (struct char_data *ch = slots->in_room->people; ch; ch = ch->next_in_room) {
     if (GET_IDNUM(ch) == GET_SLOTMACHINE_PLAYER_ID(slots)) {
       gain_nuyen(ch, amount_to_pay, NUYEN_INCOME_GAMBLING);
-      send_to_char(ch, "You receive %d nuyen (%dx payout)\r\n", amount_to_pay, payout_multiplier);
-      snprintf(buf, sizeof(buf), "$n receives %d nuyen (%dx payout).", amount_to_pay, payout_multiplier);
+      send_to_char(ch, "You receive %d nuyen (a %dx payout)\r\n", amount_to_pay, payout_multiplier);
+      snprintf(buf, sizeof(buf), "$n receives %d nuyen (a %dx payout).", amount_to_pay, payout_multiplier);
       act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
-      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s got %d nuyen from a %d-nuyen bet on %s (%x payout).",
+      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s got %d nuyen from a %d-nuyen bet on %s (a %x payout).",
                       GET_CHAR_NAME(ch),
                       amount_to_pay,
                       GET_SLOTMACHINE_LAST_SPENT(slots),

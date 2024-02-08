@@ -970,6 +970,10 @@ void assign_objects(void)
   // Reaper's assigns
   ASSIGNOBJ(99401, bank);
 
+  // Slots
+  ASSIGNOBJ(39920, slot_machine);
+  ASSIGNOBJ(62361, slot_machine);
+
   perform_secret_obj_assignments();
 #endif
 
