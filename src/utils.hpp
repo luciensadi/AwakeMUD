@@ -1054,6 +1054,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_SLOTMACHINE_LAST_SPENT(obj)           (GET_OBJ_VAL((obj), 0))
 #define GET_SLOTMACHINE_PLAYER_ID(obj)            (GET_OBJ_VAL((obj), 1))
 #define GET_SLOTMACHINE_PLAY_TICKS(obj)           (GET_OBJ_VAL((obj), 2))
+#define GET_SLOTMACHINE_MONEY_EXTRACTED(obj)      (GET_OBJ_VAL((obj), 9))
 
 // ITEM_MAGIC_TOOL convenience defines
 #define GET_MAGIC_TOOL_TYPE(tool)                 (GET_OBJ_VAL((tool), 0))

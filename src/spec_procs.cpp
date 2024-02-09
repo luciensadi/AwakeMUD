@@ -7660,6 +7660,7 @@ SPECIAL(pocsec_unlocker) {
   return FALSE;
 }
 
+long total_amount_removed_from_economy_by_slots = 0;
 void payout_slots(struct obj_data *slots) {
   if (!slots->in_room) {
     mudlog("SYSERR: Entered payout_slots() with a slot machine that has no room!", NULL, LOG_SYSLOG, TRUE);
@@ -7718,6 +7719,9 @@ void payout_slots(struct obj_data *slots) {
                       GET_SLOTMACHINE_LAST_SPENT(slots),
                       GET_OBJ_NAME(slots),
                       payout_multiplier);
+
+      GET_SLOTMACHINE_MONEY_EXTRACTED(slots) -= amount_to_pay;
+      total_amount_removed_from_economy_by_slots -= amount_to_pay;
       return;
     }
   }
@@ -7810,7 +7814,16 @@ SPECIAL(slot_machine) {
 
     GET_SLOTMACHINE_PLAY_TICKS(slots) = 3;
     GET_SLOTMACHINE_LAST_SPENT(slots) = spend_amount;
+    GET_SLOTMACHINE_MONEY_EXTRACTED(slots) += spend_amount;
+    total_amount_removed_from_economy_by_slots += spend_amount;
     GET_SLOTMACHINE_PLAYER_ID(slots) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
+    return TRUE;
+  }
+
+  if (CMD_IS("value") && IS_SENATOR(ch)) {
+    send_to_char(ch, "This slot machine has removed %d nuyen from the economy. Globally, slots have removed %ld nuyen.\r\n",
+                 GET_SLOTMACHINE_MONEY_EXTRACTED(slots),
+                 total_amount_removed_from_economy_by_slots);
     return TRUE;
   }
 
