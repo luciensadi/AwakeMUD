@@ -118,15 +118,29 @@ void payout_slots(struct obj_data *slots) {
       send_to_char(ch, "You receive %d nuyen (a %dx payout)\r\n", amount_to_pay, payout_multiplier);
       snprintf(buf, sizeof(buf), "$n receives %d nuyen (a %dx payout).", amount_to_pay, payout_multiplier);
       act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
-      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s got %d nuyen from a %d-nuyen bet on %s (a %dx payout).",
-                      GET_CHAR_NAME(ch),
-                      amount_to_pay,
-                      GET_SLOTMACHINE_LAST_SPENT(slots),
-                      GET_OBJ_NAME(slots),
-                      payout_multiplier);
 
       GET_SLOTMACHINE_MONEY_EXTRACTED(slots) -= amount_to_pay;
       total_amount_removed_from_economy_by_slots -= amount_to_pay;
+
+      if (payout_multiplier > 1) {
+        // Log big payouts (3x and up)
+        mudlog_vfprintf(ch, LOG_GRIDLOG, "%s got %d nuyen from a %d-nuyen bet on %s (a %dx payout). Total removed from economy is now %ld.",
+                        GET_CHAR_NAME(ch),
+                        amount_to_pay,
+                        GET_SLOTMACHINE_LAST_SPENT(slots),
+                        GET_OBJ_NAME(slots),
+                        payout_multiplier,
+                        total_amount_removed_from_economy_by_slots);
+      } else {
+        // We don't want to spam the in-game logs with standard payouts from people playing all the time.
+        log_vfprintf("%s got %d nuyen from a %d-nuyen bet on %s (a %dx payout). Total removed from economy is now %ld.",
+                     GET_CHAR_NAME(ch),
+                     amount_to_pay,
+                     GET_SLOTMACHINE_LAST_SPENT(slots),
+                     GET_OBJ_NAME(slots),
+                     payout_multiplier,
+                     total_amount_removed_from_economy_by_slots);
+      }
       return;
     }
   }
