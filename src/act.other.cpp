@@ -3836,7 +3836,9 @@ ACMD(do_unpack)
       continue;
 
     if (GET_WORKSHOP_IS_SETUP(shop) || GET_WORKSHOP_UNPACK_TICKS(shop)) {
-      send_to_char(ch, "There is already a workshop set up here; you'll have to pack up %s first.\r\n", decapitalize_a_an(GET_OBJ_NAME(shop)));
+      send_to_char(ch, "There is already a workshop %s here; you'll have to pack up %s first.\r\n", 
+                   GET_WORKSHOP_IS_SETUP(shop) ? "set up" : "being unpacked",
+                   decapitalize_a_an(GET_OBJ_NAME(shop)));
       return;
     }
   }
@@ -3936,7 +3938,7 @@ ACMD(do_packup)
 
   if (!shop) {
     FOR_ITEMS_AROUND_CH(ch, shop) {
-      if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(shop) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(shop))
+      if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(shop) == TYPE_WORKSHOP && (GET_WORKSHOP_IS_SETUP(shop) || GET_WORKSHOP_UNPACK_TICKS(shop)))
         break;
     }
   }
@@ -3957,13 +3959,13 @@ ACMD(do_packup)
     return;
   }
 
-  if (!GET_WORKSHOP_IS_SETUP(shop)) {
+  if (!GET_WORKSHOP_IS_SETUP(shop) && !GET_WORKSHOP_UNPACK_TICKS(shop)) {
     send_to_char(ch, "%s hasn't been unpacked yet.\r\n", capitalize(GET_OBJ_NAME(shop)));
     return;
   }
 
   if (GET_WORKSHOP_UNPACK_TICKS(shop)) {
-    send_to_char(ch, "Someone is already working on %s.\r\n", GET_OBJ_NAME(shop));
+    send_to_char(ch, "Someone is already working on %s. (If that was you and you got interrupted, give it a bit and things will get reset.)\r\n", GET_OBJ_NAME(shop));
     return;
   }
 
