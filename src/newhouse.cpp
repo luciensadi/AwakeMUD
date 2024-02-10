@@ -65,7 +65,11 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 // TODO: Test HCONTROL DESTROY on an apartment with stuff in it
 
 ACMD(do_decorate) {
+  FAILURE_CASE(IS_ASTRAL(ch), "You can't seem to touch the decorating supplies!");
+  
   if (ch->in_veh) {
+    FAILURE_CASE(!ch->in_veh->owner || ch->in_veh->owner != GET_IDNUM(ch), "You don't own this vehicle.");
+
     if ((ch->vfront && !ch->in_veh->decorate_front) || (!ch->vfront && !ch->in_veh->decorate_rear)) {
       FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_VEH, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_VEH);
 
