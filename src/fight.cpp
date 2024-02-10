@@ -238,7 +238,7 @@ void load_messages(void)
 
 void resolve_docwagon_upped(struct char_data *victim) {
   if (!PRF_FLAGGED(victim, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
-    alert_player_doctors_of_contract_withdrawal(victim, FALSE);
+    alert_player_doctors_of_contract_withdrawal(victim, FALSE, FALSE);
   }
   victim->sent_docwagon_messages_to.clear();
   victim->received_docwagon_ack_from.clear();
@@ -1036,7 +1036,7 @@ void die(struct char_data * ch)
   }
 
   if (!PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
-    alert_player_doctors_of_contract_withdrawal(ch, TRUE);
+    alert_player_doctors_of_contract_withdrawal(ch, TRUE, FALSE);
   }
 
   AFF_FLAGS(ch).RemoveBit(AFF_HEALED);
@@ -2412,7 +2412,7 @@ void docwagon_retrieve(struct char_data *ch) {
     GET_POS(ch) = POS_STUNNED;
   }
 
-  alert_player_doctors_of_contract_withdrawal(ch, FALSE);
+  alert_player_doctors_of_contract_withdrawal(ch, FALSE, TRUE);
 }
 
 bool docwagon(struct char_data *ch)

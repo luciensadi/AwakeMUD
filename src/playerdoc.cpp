@@ -170,7 +170,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
   return potential_rescuer_count;
 }
 
-void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool withdrawn_because_of_death) {
+void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool withdrawn_because_of_death, bool withdrawn_because_of_autodoc) {
   char speech_buf[500];
 
   if (!ch) {
@@ -215,6 +215,20 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
       } else if (d->character->in_veh) {
         act("$n's DocWagon receiver emits a sad beep.", FALSE, d->character, 0, 0, TO_VEH);
       }
+    } else if (withdrawn_because_of_autodoc) {
+      snprintf(speech_buf, sizeof(speech_buf),
+                "Contract withdrawal notice: %s has been picked up by first-party contractors.",
+                display_string);
+
+      send_to_char(d->character,
+                    "Your DocWagon receiver beeps a corporate jingle and displays: \"^o%s^n\"\r\n",
+                    capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, "^o")));
+
+      if (d->character->in_room) {
+        act("$n's DocWagon receiver beeps a corporate jingle.", FALSE, d->character, 0, 0, TO_ROOM);
+      } else if (d->character->in_veh) {
+        act("$n's DocWagon receiver beeps a corporate jingle.", FALSE, d->character, 0, 0, TO_VEH);
+      }
     } else {
       bool in_same_room = get_ch_in_room(d->character) == get_ch_in_room(ch);
 
@@ -227,7 +241,7 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
       send_to_char(d->character,
                     "Your DocWagon receiver emits a cheery beep and displays: \"%s%s^n\"\r\n",
                     in_same_room ? "^c" : "^o",
-                    capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, "^c")));
+                    capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, in_same_room ? "^c" : "^o")));
 
       if (d->character->in_room) {
         act("$n's DocWagon receiver emits a cheery beep.", FALSE, d->character, 0, 0, TO_ROOM);
