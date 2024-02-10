@@ -2952,9 +2952,10 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
 
 struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct char_data *list)
 {
-  int j = 0, number;
+  int j = 0, number, starting_number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
+  bool self_matched = FALSE;
 
   if (!str_cmp(name, "self") || !str_cmp(name, "me") || !str_cmp(name, "myself"))
     return ch;
@@ -2964,15 +2965,28 @@ struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct
   if (!(number = get_number(&tmp, sizeof(tmpname))))
     return get_player_vis(ch, tmp, 1);
 
+  // Keep track of what our starting number was.
+  starting_number = number;
+
   for (; list && j <= number; list = list->next_in_room)
     if ((isname(tmp, get_string_after_color_code_removal(GET_KEYWORDS(list), NULL))
          || isname(tmp, get_string_after_color_code_removal(GET_NAME(list), NULL))
          || recog(ch, list, name))
         && CAN_SEE(ch, list))
     {
-      if (++j == number)
+      // If we're doing something like 'give X man' and 'man' matches self, skip until the end.
+      if (starting_number == 1 && ch == list) {
+        self_matched = TRUE;
+        continue;
+      }
+      if (++j == number) {
         return list;
+      }
     }
+
+  // We skipped ourselves earlier but now have no valid target: return self.
+  if (self_matched)
+    return ch;
 
   return NULL;
 }
