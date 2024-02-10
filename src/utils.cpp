@@ -2668,7 +2668,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   bool vict_is_ruthenium = AFF_FLAGGED(vict, AFF_RUTHENIUM);
 
   // Astral perception sees most things-- unless said thing is an inanimate mob with no spells on it.
-  if (SEES_ASTRAL(ch) && !(MOB_FLAGGED(vict, MOB_INANIMATE) && !GET_SUSTAINED(vict))) {
+  if (SEES_ASTRAL(ch) && (GET_SUSTAINED(vict) || !MOB_FLAGGED(vict, MOB_INANIMATE))) {
     // Set alarm status for ruthenium.
     if (IS_NPC(ch) && vict_is_ruthenium && (has_ultrasound || has_thermographic || is_vehicle))
       process_spotted_invis(ch, vict);
