@@ -719,7 +719,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define CAN_CARRY_W(ch)       ((GET_STR(ch) * 10) + 30)
 #define CAN_CARRY_N(ch)       (8 + GET_QUI(ch) + (GET_REAL_LEVEL(ch)>=LVL_BUILDER?50:0))
-#define AWAKE(ch)             (GET_POS(ch) > POS_SLEEPING && GET_QUI(ch) > 0)
+#define AWAKE(ch)             (GET_POS(ch) > POS_SLEEPING && GET_QUI(ch) > 0 && !PLR_FLAGGED(ch, PLR_PROJECT))
 #define IS_RIGGING(ch)        (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
 #define IS_JACKED_IN(ch)      (IS_RIGGING(ch) || PLR_FLAGGED(ch, PLR_MATRIX))
 #define CAN_SEE_IN_DARK(ch)   (SEES_ASTRAL(ch) || CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT))
