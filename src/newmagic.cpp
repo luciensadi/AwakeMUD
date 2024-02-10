@@ -1537,8 +1537,8 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
     if (success > 0) {
       int dam = convert_damage(stage(success, basedamage));
       if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-        act("$n falls to the floor unconscious.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("^RThe world turns black around you as you suddenly fall unconscious.^n\r\n", vict);
+        act("$n reels as if struck with an invisible haymaker.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("^RThe world spins and darkens as a skull-splitting pressure consumes your thoughts.^n\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
         act("$n grabs $s head and cringes.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("^rYour head is filled with an unbearable pressure as your vision begins to fade.^n\r\n", vict);
@@ -2530,8 +2530,8 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
             act("$n's body recoils as though hit.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You feel a dull thud in the back of your mind.\r\n", vict);
           } else if (dam >= convert_damage(DEADLY)) {
-            act("$n is thrown to the ground, unconscious, from an immense invisible force.", TRUE, vict, 0, 0, TO_ROOM);
-            send_to_char("It slams into you with the force of a freight train, knocking you to the ground, unconscious.\r\n", vict);
+            act("$n is thrown to the ground from an immense invisible force.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("It slams into you with the force of a freight train, knocking you to the ground.\r\n", vict);
           } else if (dam >= convert_damage(SERIOUS)) {
             act("$n stumbles backwards, almost losing $s footing, as $e is hit by an invisible force.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You stumble backwards, feeling groggy as the air slams into you at full force.\r\n", vict);
@@ -2593,7 +2593,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
             send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
           } else if (dam >= convert_damage(DEADLY)) {
             act("$n is hit full force by the intense flames causing $m to fall to the ground, gurgling.", TRUE, vict, 0, 0, TO_ROOM);
-            send_to_char("The flames burn intensely around you, your last memory before falling unconscious is the hideous pain.\r\n", vict);
+            send_to_char("The flames burn intensely around you, filling your every moment with hideous pain.\r\n", vict);
           } else if (dam >= convert_damage(SERIOUS)) {
             act("$n screams as the flames impact $s body, horribly burning $m.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("The flames crash into you, causing you great pain as they horribly burn you.\r\n", vict);
@@ -2675,7 +2675,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
             send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
           } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
             act("As the acid hits $n $e falls to the ground twitching and screaming as $s body smokes.", TRUE, vict, 0, 0, TO_ROOM);
-            send_to_char("The fumes from the acid burning through your body fill your lungs, burning you from the inside out as you fade into unconsciousness.\r\n", vict);
+            send_to_char("The fumes from the acid burning through your body fill your lungs, burning you from the inside out.\r\n", vict);
           } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
             act("The acid hits $n, $e cries out in pain as trails of smoke come from $s body.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("The acid impacts you with a great force, causing you to step back as it burns through your skin.\r\n", vict);
@@ -2884,8 +2884,8 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
             act("$n's body reels from the blast of steam.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You feel lightheaded from the blast of steam.\r\n", vict);
           } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-            act("$n chokes and collapses to the ground, unconscious, from the steam vapours.", TRUE, vict, 0, 0, TO_ROOM);
-            send_to_char("It slams into you and robs the breath from your lungs, choking you into unconsciousness.\r\n", vict);
+            act("$n chokes and collapses to the ground from the steam vapours.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("It slams into you and robs the breath from your lungs, choking you.\r\n", vict);
           } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
             act("$n flounders backwards, almost losing $s footing, as $e is choked by the steam cloud.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You flounder backwards, feeling lightheaded as the steam threatens to choke you.\r\n", vict);
@@ -2945,8 +2945,8 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
             act("$n's shudders from the concussive blast.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You feel dizzy from the concussive blast.\r\n", vict);
           } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-            act("$n is violently thrown to the ground, rendered unconscious from the blast.", TRUE, vict, 0, 0, TO_ROOM);
-            send_to_char("It slams into you and rattles your brain and organs, rendering you unconsciousness.\r\n", vict);
+            act("$n is violently thrown to the ground by the blast.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("It slams into you and rattles your brain and organs.\r\n", vict);
           } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
             act("$n is shoved backwards, almost losing $s footing as the blast washes over them.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You're shoved backwards from the intensity of the concussive blast.\r\n", vict);
@@ -3006,8 +3006,8 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
             act("$n's stumbles as they're splashed with water.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You stumble back as the bolt of water connects.\r\n", vict);
           } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-            act("$n is knocked to the ground, unconscious, from the force of the rushing water.", TRUE, vict, 0, 0, TO_ROOM);
-            send_to_char("It slams into you like a sack of bricks, knocking you to the ground, unconscious.\r\n", vict);
+            act("$n is knocked to the ground from the force of the rushing water.", TRUE, vict, 0, 0, TO_ROOM);
+            send_to_char("It slams into you like a sack of bricks, knocking you to the ground.\r\n", vict);
           } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
             act("$n stumbles backwards, almost losing $s footing, as $e is hit by the bolt of water.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You stumble backwards, absolutely drenched as the water slams into you at full force.\r\n", vict);
