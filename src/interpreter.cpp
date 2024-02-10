@@ -885,7 +885,7 @@ struct command_info cmd_info[] =
     { "shutdown"   , POS_RESTING , do_shutdown , 0, SCMD_SHUTDOWN, BLOCKS_IDLE_REWARD },
     { "sip"        , POS_RESTING , do_drink    , 0, SCMD_SIP, BLOCKS_IDLE_REWARD },
     { "sit"        , POS_LYING   , do_sit      , 0, 0, BLOCKS_IDLE_REWARD },
-    { "skills"     , POS_SLEEPING, do_skills   , 0, 0, ALLOWS_IDLE_REWARD },
+    { "skills"     , POS_MORTALLYW, do_skills   , 0, 0, ALLOWS_IDLE_REWARD },
     { "skillset"   , POS_SLEEPING, do_skillset , LVL_DEVELOPER, 0, BLOCKS_IDLE_REWARD },
     { "slist"      , POS_DEAD    , do_slist    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "sleep"      , POS_SLEEPING, do_sleep    , 0, 0, BLOCKS_IDLE_REWARD },
