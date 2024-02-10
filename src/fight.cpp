@@ -3201,7 +3201,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         if (GET_MENTAL(real_body) >= 100) {
           GET_PHYSICAL(real_body) += 100;
           GET_MENTAL(real_body) -= 100;
-          act("(trauma damper: +1 phys -1 ment)", FALSE, victim, NULL, NULL, TO_ROLLS);
+          act("(trauma damper: -1 phys dmg, +1 ment dmg)", FALSE, victim, NULL, NULL, TO_ROLLS);
         } else {
           act("(damper disabled: not enough ment to flow into)", FALSE, victim, NULL, NULL, TO_ROLLS);
         }
