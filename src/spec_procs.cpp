@@ -906,12 +906,11 @@ SPECIAL(teacher)
 
         // Adepts can't learn externally-focused skills.
         if (GET_TRADITION(ch) == TRAD_ADEPT && (teachers[ind].s[i] == SKILL_CONJURING
-                                                || teachers[ind].s[i] == SKILL_SORCERY
-                                                || teachers[ind].s[i] == SKILL_SPELLDESIGN))
+                                                || teachers[ind].s[i] == SKILL_SORCERY))
           continue;
 
         // Prevent aspected from learning skills they can't use.
-        if (GET_ASPECT(ch) == ASPECT_CONJURER && (teachers[ind].s[i] == SKILL_SORCERY || teachers[ind].s[i] == SKILL_SPELLDESIGN))
+        if (GET_ASPECT(ch) == ASPECT_CONJURER && teachers[ind].s[i] == SKILL_SORCERY)
           continue;
 
         else if (GET_ASPECT(ch) == ASPECT_SORCERER && teachers[ind].s[i] == SKILL_CONJURING)
@@ -997,15 +996,13 @@ SPECIAL(teacher)
 
   // Deny some magic skills to adepts.
   if (GET_TRADITION(ch) == TRAD_ADEPT && (skill_num == SKILL_CONJURING
-                                          || skill_num == SKILL_SORCERY
-                                          || skill_num == SKILL_SPELLDESIGN)) {
+                                          || skill_num == SKILL_SORCERY)) {
     send_to_char("Your magic is focused inwards on improving your physical abilities. You can't learn these external magics.\r\n", ch);
     return TRUE;
   }
 
   // Prevent aspected shamans from learning skills they can't use.
-  if (GET_ASPECT(ch) == ASPECT_CONJURER && (skill_num == SKILL_SORCERY
-                                            || skill_num == SKILL_SPELLDESIGN)) {
+  if (GET_ASPECT(ch) == ASPECT_CONJURER && skill_num == SKILL_SORCERY) {
     send_to_char(ch, "Your magic is focused on the summoning of %s. You cannot learn spellwork.\r\n", GET_TRADITION(ch) == TRAD_SHAMANIC ? "spirits" : "elementals");
     return TRUE;
   }
