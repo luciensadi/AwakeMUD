@@ -4313,36 +4313,23 @@ ACMD(do_conjure)
 ACMD(do_spells)
 {
   // Conjurers cannot cast spells.
-  if (GET_ASPECT(ch) == ASPECT_CONJURER) {
-    send_to_char(ch, "%ss don't have the aptitude for spells.\r\n", aspect_names[GET_ASPECT(ch)]);
-    return;
-  }
+  FAILURE_CASE_PRINTF(GET_ASPECT(ch) == ASPECT_CONJURER, "%ss don't have the aptitude for spells.", aspect_names[GET_ASPECT(ch)]);
 
   // Adepts and Mundanes cannot cast spells.
-  if (GET_TRADITION(ch) == TRAD_ADEPT || GET_TRADITION(ch) == TRAD_MUNDANE) {
-    send_to_char(ch, "%ss don't have the aptitude for spells.\r\n", tradition_names[(int) GET_TRADITION(ch)]);
-    return;
-  }
+  FAILURE_CASE_PRINTF(GET_TRADITION(ch) == TRAD_ADEPT || GET_TRADITION(ch) == TRAD_MUNDANE,
+                      "%ss don't have the aptitude for spells.", 
+                      tradition_names[(int) GET_TRADITION(ch)]);
 
   // Character has no spells known.
-  if (!GET_SPELLS(ch)) {
-    send_to_char("You don't know any spells.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!GET_SPELLS(ch), "You don't know any spells.");
 
   // Character knows spells. List them.
   send_to_char("You know the following spells:\r\n", ch);
   for (struct spell_data *spell = GET_SPELLS(ch); spell; spell = spell->next) {
-    strlcpy(buf, spell->name, sizeof(buf));
-    if (spell->type == SPELL_INCATTR
-        || spell->type == SPELL_INCCYATTR
-        || spell->type == SPELL_DECATTR
-        || spell->type == SPELL_DECCYATTR)
-    {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", attributes[spell->subtype]);
-    }
-
-    send_to_char(ch, "%-50s Category: %12s Force: %d\r\n", spell->name, spell_category[spells[spell->type].category], spell->force);
+    send_to_char(ch, "%-50s Category: %12s Force: %d\r\n", 
+                 compose_spell_name(spell->type, spell->subtype),
+                 spell_category[spells[spell->type].category],
+                 spell->force);
   }
 }
 
