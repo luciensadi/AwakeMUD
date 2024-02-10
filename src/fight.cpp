@@ -327,6 +327,16 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
     if (GET_POS(victim) > POS_DEAD && PLR_FLAGGED(victim, PLR_MATRIX) && victim->persona) {
       return dumpshock(victim->persona);
     }
+
+    // Disarm them.
+    if (GET_EQ(victim, WEAR_WIELD)) {
+      send_to_char(victim, "Your grip on %s loosens.\r\n", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(victim, WEAR_WIELD))));
+      obj_to_char(unequip_char(victim, WEAR_WIELD, TRUE), victim);
+    }
+    if (GET_EQ(victim, WEAR_HOLD)) {
+      send_to_char(victim, "Your grip on %s loosens.\r\n", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(victim, WEAR_HOLD))));
+      obj_to_char(unequip_char(victim, WEAR_HOLD, TRUE), victim);
+    }
   }
 
   return FALSE;
