@@ -23,6 +23,7 @@
 #include "newmatrix.hpp"
 #include "deck_build.hpp"
 #include "redit.hpp"
+#include "newmail.hpp"
 
 // extern vars
 extern class helpList Help;
@@ -31,6 +32,8 @@ extern class helpList WizHelp;
 // extern funcs
 extern void print_object_location(int, struct obj_data *, struct char_data *, int);
 #define OBJ temp->data
+
+SPECIAL(pocket_sec);
 
 int objList::PrintList(struct char_data *ch, const char *arg, bool override_vis_check)
 {
@@ -242,6 +245,17 @@ void objList::UpdateCounters(void)
     if (!OBJ) {
       mudlog("SYSERR: UpdateCounters encountered a non-existent object.", NULL, LOG_SYSLOG, TRUE);
       continue;
+    }
+
+    // We use the trideo broadcast tick, because why not.
+    if (trideo_plays && GET_OBJ_SPEC(OBJ) == pocket_sec) {
+      struct char_data *carried_by = get_obj_carried_by_recursive(OBJ);
+      struct char_data *worn_by = get_obj_worn_by_recursive(OBJ);
+      struct char_data *recipient = carried_by ? carried_by : worn_by;
+      
+      if (recipient) {
+        send_to_char(recipient, "%s buzzes quietly, reminding you that you have mail waiting.\r\n", CAP(GET_OBJ_NAME(OBJ)));
+      }
     }
 
     // Decay evaluate programs. This only fires when they're completed, as non-finished software is ITEM_DESIGN instead.

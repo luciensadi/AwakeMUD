@@ -1056,6 +1056,11 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_SLOTMACHINE_PLAY_TICKS(obj)           (GET_OBJ_VAL((obj), 2))
 #define GET_SLOTMACHINE_MONEY_EXTRACTED(obj)      (GET_OBJ_VAL((obj), 9))
 
+// Which vector in the map this deck uses (0 for unallocated)
+#define GET_CARD_VECTOR_IDNUM(obj)                (GET_OBJ_VAL((obj), 0))
+// Which player this stack belongs to (0 for none)
+#define GET_CARD_PLAYER_IDNUM(obj)                (GET_OBJ_VAL((obj), 0))
+
 // ITEM_MAGIC_TOOL convenience defines
 #define GET_MAGIC_TOOL_TYPE(tool)                 (GET_OBJ_VAL((tool), 0))
 #define GET_MAGIC_TOOL_RATING(tool)               (GET_OBJ_VAL((tool), 1))
@@ -1493,5 +1498,8 @@ void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick,
 #define GET_DATAJACK_ERROR_COVERED_HEAD            2
 #define GET_DATAJACK_ERROR_CANT_USE_TRODES_TO_RIG  3
 struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
+
+#define IS_VALID_POCKET_SEC(obj) ((obj) && GET_OBJ_SPEC((obj)) == pocket_sec && (obj)->contains)
+#define POCKET_SEC_USABLE_BY(obj, ch) ((ch) && (obj) && (!GET_POCKET_SECRETARY_LOCKED_BY((obj)) || GET_POCKET_SECRETARY_LOCKED_BY((obj)) == GET_IDNUM((ch))))
 
 #endif
