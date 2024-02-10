@@ -2609,6 +2609,8 @@ ACMD(quit_the_matrix_first) {
 
 ACMD(do_software)
 {
+  int default_total = 0;
+
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
     if (!PERSONA) {
       send_to_char(ch, "You can't do that while hitching.\r\n");
@@ -2730,13 +2732,19 @@ ACMD(do_software)
     for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content) {
       if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) > SOFT_SENSOR)) {
         has_other_software = TRUE;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n Rating: %2d %s\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n Rating: %2d (%4d MP) %s\r\n",
                  get_obj_name_with_padding(soft, 40),
                  GET_PROGRAM_RATING(soft),
+                 GET_PROGRAM_SIZE(soft),
                  GET_PROGRAM_IS_DEFAULTED(soft) ? defaulted_string : " ");
+        if (GET_PROGRAM_IS_DEFAULTED(soft)) {
+          default_total += GET_PROGRAM_SIZE(soft);
+        }
       } else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(soft) == TYPE_FILE) {
         has_other_software = TRUE;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n\r\n", GET_OBJ_NAME(soft));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s (%4d MP)^n\r\n",
+                 GET_OBJ_NAME(soft),
+                 GET_PROGRAM_SIZE(soft));
       } else if (GET_OBJ_TYPE(soft) == ITEM_PART) {
         has_components = TRUE;
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s Type: ^c%-24s^n (rating ^c%d^n)\r\n",
@@ -2746,14 +2754,23 @@ ACMD(do_software)
       } else if ((GET_OBJ_TYPE(cyberdeck) == ITEM_CYBERDECK) && (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR)) {
         // Persona programs in store-bought decks are handled here as components
         has_components = TRUE;
-        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s^n Rating: %2d\r\n",
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s^n Rating: %2d (%4d MP)\r\n",
                  get_obj_name_with_padding(soft, 40),
-                 GET_PROGRAM_RATING(soft));
+                 GET_PROGRAM_RATING(soft),
+                 GET_PROGRAM_SIZE(soft));
       }
     }
 
-    if (has_other_software)
+    if (has_other_software) {
       send_to_char(buf, ch);
+      if (default_total) {
+        send_to_char(ch, "%s%d^n/%d active memory used by defaulted programs.%s\r\n",
+                     default_total > GET_CYBERDECK_ACTIVE_MEMORY(cyberdeck) ? "^R" : "",
+                     default_total,
+                     GET_CYBERDECK_ACTIVE_MEMORY(cyberdeck),
+                     default_total > GET_CYBERDECK_ACTIVE_MEMORY(cyberdeck) ? " (not enough memory!)" : "");
+      }
+    }
     if (has_components)
       send_to_char(buf2, ch);
   }
