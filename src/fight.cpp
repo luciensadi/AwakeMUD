@@ -3017,22 +3017,16 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (victim != ch)
   {
     if (ch != victim && IS_IGNORING(victim, is_blocking_ic_interaction_from, ch)) {
-      char oopsbuf[5000];
-      snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the victim ignoring the attacker! "
-                                         "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
-                                         GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), dam, attacktype, is_physical, send_message
-                                       );
-      mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SUPER SYSERR: Somehow, we made it all the way to damage() with the victim ignoring the attacker! "
+                      "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
+                      GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), dam, attacktype, is_physical, send_message);
       return 0;
     }
 
     if (ch != victim && IS_IGNORING(ch, is_blocking_ic_interaction_from, victim)) {
-      char oopsbuf[5000];
-      snprintf(oopsbuf, sizeof(oopsbuf), "SUPER SYSERR: Somehow, we made it all the way to damage() with the attacker ignoring the victim! "
-                                         "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
-                                         GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), dam, attacktype, is_physical, send_message
-                                       );
-      mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SUPER SYSERR: Somehow, we made it all the way to damage() with the attacker ignoring the victim! "
+                      "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
+                      GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), dam, attacktype, is_physical, send_message);
       return 0;
     }
 
@@ -3074,7 +3068,12 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
 
   if (ch != victim) {
     if (PLR_FLAGGED(victim, PLR_PROJECT)) {
-      do_return(victim, "", 0, 0);
+      for (struct descriptor_data *t_desc = descriptor_list; t_desc; t_desc = t_desc->next) {
+        if (t_desc->original == victim) {
+          send_to_char("You are snapped back to your body by the sensation of pain!\r\n", t_desc->character);
+          do_return(t_desc->character, "", 0, 0);
+        }
+      }
       WAIT_STATE(victim, PULSE_VIOLENCE);
     }
 
@@ -3117,8 +3116,6 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   else if (dam > 0)
     buf_mod(rbuf, sizeof(rbuf), "", dam);
 
-  act(rbuf, 0, ch, 0, victim, TO_ROLLS);
-
   if (dam == -1)
   {
     total_miss = TRUE;
@@ -3128,16 +3125,21 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   {
     if (!CH_IN_COMBAT(victim)) {
       act("$n is rescued by divine forces.", FALSE, victim, 0, 0, TO_ROOM);
+      mudlog_vfprintf(victim, LOG_SYSLOG, "Rescuing %s from combat with %s due to linkdead status.", GET_CHAR_NAME(victim), GET_CHAR_NAME(ch));
       GET_WAS_IN(victim) = victim->in_room;
       GET_PHYSICAL(victim) = MAX(100, GET_PHYSICAL(victim) -
                                  (int)(GET_MAX_PHYSICAL(victim) / 2));
       GET_MENTAL(victim) = MAX(100, GET_MENTAL(victim) -
                                (int)(GET_MAX_MENTAL(victim) / 2));
       char_from_room(victim);
-      char_to_room(victim, 0);
+      char_to_room(victim, &world[0]);
+      return 0;
     }
-    return 0;
+    
+    // If they were already in combat, they just take the hit and keep rolling.
   }
+
+  act(rbuf, 0, ch, 0, victim, TO_ROLLS);
 
   int comp = 0;
   bool trauma = FALSE, pain = FALSE;

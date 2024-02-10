@@ -1882,7 +1882,7 @@ void johnson_update(void)
       if ( johnson != NULL && johnson->in_room) {
         MOB_FLAGS(johnson).SetBit(MOB_ISNPC);
         char_from_room( johnson );
-        char_to_room( johnson, 0 );
+        char_to_room( johnson, &world[0] );
         extract_char(johnson);
       }
       if ( tmp != NULL && tmp->in_room) {
