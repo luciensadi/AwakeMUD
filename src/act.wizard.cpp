@@ -6742,11 +6742,17 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     }
     GET_SYSTEM_POINTS(ch) -= SYSP_RESTRING_COST;
   } else if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    if (!GET_RESTRING_POINTS(ch)) {
-      send_to_char("You don't have enough restring points left to restring that.\r\n", ch);
-      return FALSE;
+    // In chargen, you can restring already-restrung items for free.
+    if (!obj->restring) {
+      if (!GET_RESTRING_POINTS(ch)) {
+        send_to_char("You don't have enough restring points left to restring that.\r\n", ch);
+        return FALSE;
+      }
+      GET_RESTRING_POINTS(ch)--;
+      send_to_char(ch, "You spend one free restring point. (^c%d^n left)\r\n", GET_RESTRING_POINTS(ch));
+    } else {
+      send_to_char("You rewrite the restring, which is free during character generation.\r\n", ch);
     }
-    GET_RESTRING_POINTS(ch)--;
   } else {
     if (GET_KARMA(ch) < 250) {
       send_to_char("You don't have enough karma to restring that. It costs 2.5 karma.\r\n", ch);
