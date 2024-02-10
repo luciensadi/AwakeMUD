@@ -2112,6 +2112,12 @@ void obj_from_room(struct obj_data * object)
     REMOVE_FROM_LIST(object, object->in_room->contents, next_content);
   }
 
+  // Ensure the workshop is packed up when it's removed from the room / vehicle.
+  if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP) {
+    GET_SETTABLE_WORKSHOP_IS_SETUP(object) = FALSE;
+    GET_WORKSHOP_UNPACK_TICKS(object) = 0;
+  }
+
   // Clear its pointers.
   object->in_veh = NULL;
   object->in_room = NULL;
