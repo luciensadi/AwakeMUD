@@ -1631,7 +1631,7 @@ struct skill_data skills[] =
     {"Artillery",                               STR, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
     {"Projectile Weapons",                      STR, SKILL_TYPE_ACTIVE,    FALSE,    99,  TRUE ,  FALSE },
     {"Oral Strike",                             QUI, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
-    {"Spell Design",                            INT, SKILL_TYPE_KNOWLEDGE, TRUE ,    99,  FALSE,  FALSE },
+    {"Spell Design",                            INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Throwing Weapons",                        STR, SKILL_TYPE_ACTIVE,    FALSE,    99,  TRUE ,  FALSE },
     {"Enchanting",                              WIL, SKILL_TYPE_ACTIVE,    TRUE ,    99,  FALSE,  FALSE },
     {"Cyberterminal Design",                    INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
