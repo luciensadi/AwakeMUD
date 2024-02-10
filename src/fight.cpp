@@ -4234,9 +4234,9 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     } else if (damage >= DEADLY) {
       switch (number(1, 2)) {
         case 1:
-          snprintf(buf1, sizeof(buf1), "^r%s$n^r puts you down with a %sdeadly %s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
-          snprintf(buf2, sizeof(buf2), "^yYou put $N^y down with a %sdeadly %s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
-          snprintf(buf3, sizeof(buf3), "%s$n puts $N down with a %sdeadly %s^n.", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
+          snprintf(buf1, sizeof(buf1), "^r%s$n^r shortens your lifespan with a %sdeadly %s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
+          snprintf(buf2, sizeof(buf2), "^yYou shorten $N^y's lifespan with a %sdeadly %s^y.^n", vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
+          snprintf(buf3, sizeof(buf3), "%s$n shorten $N's lifespan with a %sdeadly %s^n.", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
           break;
         case 2:
           snprintf(buf1, sizeof(buf1), "^r%s$n^r sublimates you with a %sdeadly %s^r.^n", vehicle_message, vision_penalty_for_messaging >= MAX_VISIBILITY_PENALTY ? "blind-fired but still " : "", buf);
