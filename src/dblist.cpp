@@ -252,8 +252,8 @@ void objList::UpdateCounters(void)
       struct char_data *carried_by = get_obj_carried_by_recursive(OBJ);
       struct char_data *worn_by = get_obj_worn_by_recursive(OBJ);
       struct char_data *recipient = carried_by ? carried_by : worn_by;
-      
-      if (recipient) {
+
+      if (recipient && amount_of_mail_waiting(recipient) > 0) {
         send_to_char(recipient, "%s buzzes quietly, reminding you that you have mail waiting.\r\n", CAP(GET_OBJ_NAME(OBJ)));
       }
     }

@@ -547,7 +547,7 @@ struct command_info cmd_info[] =
     { "build"      , POS_RESTING , do_build    , 0, 0, BLOCKS_IDLE_REWARD },
     { "brief"      , POS_RESTING , do_brief    , 0, 0, BLOCKS_IDLE_REWARD },
     { "bug"        , POS_DEAD    , do_gen_write, 0, SCMD_BUG, ALLOWS_IDLE_REWARD },
-    { "bypass"     , POS_STANDING, do_gen_door , 0, SCMD_PICK, BLOCKS_IDLE_REWARD },
+    { "bypass"     , POS_SITTING, do_gen_door , 0, SCMD_PICK, BLOCKS_IDLE_REWARD },
 
     { "cast"       , POS_SITTING , do_cast     , 1, SCMD_STANDARD_CAST, BLOCKS_IDLE_REWARD },
     { "call"       , POS_LYING   , do_phone    , 0, SCMD_RING, ALLOWS_IDLE_REWARD },
