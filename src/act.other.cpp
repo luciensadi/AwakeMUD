@@ -716,10 +716,7 @@ ACMD(do_use)
     return;
   }
 
-  for (obj = ch->carrying; obj; obj = obj->next_content)
-    if (isname(arg, obj->text.keywords))
-      break;
-  if (!obj) {
+  if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
     send_to_char(ch, "You don't have a '%s'.\r\n", arg);
     return;
   }
