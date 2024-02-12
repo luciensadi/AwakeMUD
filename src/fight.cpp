@@ -2396,7 +2396,7 @@ void docwagon_retrieve(struct char_data *ch) {
 
     // Compensate for edge case: Their modulator was destroyed since they were flagged.
     if (docwagon) {
-      int dw_random_cost = number(8, 12) * 500 / GET_DOCWAGON_CONTRACT_GRADE(docwagon);
+      int dw_random_cost = number(8, 12) * 500 / MAX(1, GET_DOCWAGON_CONTRACT_GRADE(docwagon));
       int creds = MAX(dw_random_cost, (int)(GET_NUYEN(ch) / 10));
 
       send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
