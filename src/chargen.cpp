@@ -1626,7 +1626,12 @@ void create_parse(struct descriptor_data *d, const char *arg)
       if (victim->desc)
         send_to_char(victim, "^RYou've just spent %d system points on a prestige race. If this is not correct, change your password and notify staff immediately.^n\r\n", d->ccr.prestige_cost);
 
-      mudlog_vfprintf(victim, LOG_CHEATLOG, "%s spent %d of %s's syspoints on a prestige race.", d->host, d->ccr.prestige_cost, GET_CHAR_NAME(victim));
+      mudlog_vfprintf(d->character, LOG_CHEATLOG, "%s/%s spent %d of %s's syspoints on a prestige race.", 
+                      d->host,
+                      GET_CHAR_NAME(d->character),
+                      d->ccr.prestige_cost,
+                      GET_CHAR_NAME(victim));
+
       playerDB.SaveChar(victim);
 
       SEND_TO_Q("Nice, you're all paid up.", d);

@@ -40,6 +40,7 @@
 #include "ignore_system.hpp"
 #include "newhouse.hpp"
 #include "creative_works.hpp"
+#include "channels.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -1587,7 +1588,10 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
 
       // Nothing was found? Give them the "wat" and bail.
       if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
-        nonsensical_reply(ch, arg, "matrix");
+        // Attempt to send it as a custom channel message. If that doesn't work, nonsensical reply.
+        if (!send_command_as_custom_channel_message(ch, arg)) {
+          nonsensical_reply(ch, arg, "matrix");
+        }
         return;
       }
 
@@ -1636,7 +1640,10 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
 
       // Nothing was found? Give them the "wat" and bail.
       if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
-        nonsensical_reply(ch, arg, "rigging");
+        // Attempt to send it as a custom channel message. If that doesn't work, nonsensical reply.
+        if (!send_command_as_custom_channel_message(ch, arg)) {
+          nonsensical_reply(ch, arg, "matrix");
+        }
         return;
       }
 
@@ -1679,7 +1686,10 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     if (*cmd_info[cmd].command == '\n'
         && ((cmd = fix_common_command_fuckups(arg, cmd_info)) == -1
             || ((cmd_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, cmd_info[cmd].minimum_level)))) {
-      nonsensical_reply(ch, arg, "standard");
+      // Attempt to send it as a custom channel message. If that doesn't work, nonsensical reply.
+      if (!send_command_as_custom_channel_message(ch, arg)) {
+        nonsensical_reply(ch, arg, "matrix");
+      }
       return;
     } else {
       if (ch->desc)
