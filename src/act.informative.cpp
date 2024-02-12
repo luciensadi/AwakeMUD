@@ -5019,17 +5019,17 @@ ACMD(do_cyberware)
   for (obj = ch->cyberware; obj != NULL; obj = obj->next_content) {
     if (GET_CYBERWARE_TYPE(obj) == CYB_FINGERTIP) {
       if (obj->contains && GET_OBJ_TYPE(obj->contains) == ITEM_WEAPON && GET_HOLSTER_READY_STATUS(obj) ) {
-        snprintf(buf, sizeof(buf), "%-32s ^Y(W) (R)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100));
+        snprintf(buf, sizeof(buf), "%-32s ^Y(W) (R)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
         send_to_char(buf, ch);
         continue;
       }
       else if (obj->contains && GET_OBJ_TYPE(obj->contains) == ITEM_WEAPON && !GET_HOLSTER_READY_STATUS(obj)) {
-        snprintf(buf, sizeof(buf), "%-36s ^Y(W)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100));
+        snprintf(buf, sizeof(buf), "%-36s ^Y(W)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
         send_to_char(buf, ch);
         continue;
       }
       else if (obj->contains) {
-        snprintf(buf, sizeof(buf), "%-36s ^Y(F)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100));
+        snprintf(buf, sizeof(buf), "%-36s ^Y(F)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
         send_to_char(buf, ch);
         continue;
       }
@@ -5054,7 +5054,7 @@ ACMD(do_cyberware)
 
     snprintf(buf, sizeof(buf), "%-40s Essence: %0.2f%s\r\n",
              GET_OBJ_NAME(obj),
-             ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100),
+             ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1),
              retraction_string
            );
     send_to_char(buf, ch);
