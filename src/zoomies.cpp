@@ -114,14 +114,6 @@ ACMD(do_flyto) {
   // Can it fly at all?
   FAILURE_CASE_PRINTF(!veh_can_traverse_air(veh), "%s isn't flight-capable.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
 
-  // It's flight-capable, try taking the controls if needed.
-  if (get_veh_controlled_by_char(ch) != veh) {
-    // Try to pilot it.
-    char argbuf[] = { '\0' };
-    do_drive(ch, argbuf, 0, 0);
-    FAILURE_CASE_PRINTF(get_veh_controlled_by_char(ch) != veh, "You're not controlling %s.", GET_VEH_NAME(veh));
-  }
-
   // No flying while towing.
   FAILURE_CASE_PRINTF(veh->towing, "While towing %s? You'd fall out of the sky!", GET_VEH_NAME(veh->towing));
 
@@ -148,6 +140,14 @@ ACMD(do_flyto) {
       }
     }
     return;
+  }
+
+  // It's flight-capable, try taking the controls if needed.
+  if (get_veh_controlled_by_char(ch) != veh) {
+    // Try to pilot it.
+    char argbuf[] = { '\0' };
+    do_drive(ch, argbuf, 0, 0);
+    FAILURE_CASE_PRINTF(get_veh_controlled_by_char(ch) != veh, "You're not controlling %s.", GET_VEH_NAME(veh));
   }
 
   // They've provided a flight destination. Find it.
