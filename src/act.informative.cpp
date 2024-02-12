@@ -5077,12 +5077,12 @@ ACMD(do_bioware)
                    GET_OBJ_NAME(obj),
                    GET_BIOWARE_PUMP_ADRENALINE(obj) *2,
                    GET_BIOWARE_RATING(obj),
-                   ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100));
+                   ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100) * (IS_DRAKE(ch) ? 2 : 1));
     } else {
       send_to_char(ch, "%-40s Rating: %-2d     Bioware Index: %0.2f\r\n",
                    GET_OBJ_NAME(obj),
                    GET_BIOWARE_RATING(obj),
-                   ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100));
+                   ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100) * (IS_DRAKE(ch) ? 2 : 1));
     }
   }
 }
