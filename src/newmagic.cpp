@@ -509,6 +509,11 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         else if (type == ILLUSION)
           skill -= 1;
         break;
+      case TOTEM_GREATMOTHER:
+      case TOTEM_FATHERTREE:
+        if (type == HEALTH)
+          skill += 2;
+        break;
       case TOTEM_HORNEDMAN:
         if (type == COMBAT)
           skill += 2;
