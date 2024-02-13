@@ -24,7 +24,7 @@ void payout_slots(struct obj_data *slots) {
     return;
   }
 
-  int rolled = number(1, 12201);
+  int rolled = number(1, 12501);
   int payout_multiplier;
 
   if (rolled == 1) {

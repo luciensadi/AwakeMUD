@@ -5714,7 +5714,7 @@ ACMD(do_who)
         strlcat(buf1, buf2, sizeof(buf1));
       }
 
-      if (GET_TKE(tch) <= NEWBIE_KARMA_THRESHOLD && !IS_SENATOR(tch)) {
+      if (GET_TKE(tch) <= NEWBIE_KARMA_THRESHOLD && !IS_SENATOR(tch) && !IS_PRESTIGE_RACE(tch)) {
         strlcat(buf1, " ^y(Newbie)^n", sizeof(buf1));
       }
 
