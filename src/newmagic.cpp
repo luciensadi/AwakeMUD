@@ -5851,7 +5851,7 @@ ACMD(do_destroy)
 
   if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_LODGE || GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE)) {
     if (GET_OBJ_VAL(obj, 0) == TYPE_LODGE) {
-      send_to_char(ch, "You kick at the supports and smash the talismans.\r\n");
+      send_to_char(ch, "You pull down the supports and pack away the talismans.\r\n");
       act("$n roughly pulls down $p.", TRUE, ch, obj, 0, TO_ROOM);
     } else {
       send_to_char(ch, "You rub your feet along the lines making up the hermetic circle, erasing them.\r\n");
