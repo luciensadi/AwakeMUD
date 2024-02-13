@@ -1012,7 +1012,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
     }
   }
   if (!IS_NPC(i) && GET_LEVEL(ch) > LVL_MORTAL && i->player.background)
-    send_to_char(ch, "Background:\r\n%s\r\n", i->player.background);
+    send_to_char(ch, "\r\n^cBackground:^n\r\n%s\r\n", i->player.background);
   found = FALSE;
   for (j = 0; !found && j < NUM_WEARS; j++)
     if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j)))
