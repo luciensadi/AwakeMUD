@@ -665,7 +665,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Helplog"              , TRUE , TRUE  },
   { "Purgelog"             , TRUE , TRUE  },
   { "No Autokill"          , FALSE, TRUE  },
-  { "Voice Names"          , TRUE , TRUE  },
+  { "No Voice Names"       , TRUE , TRUE  },
   { "FuckupLog"            , TRUE , TRUE  },
   { "EconLog"              , TRUE , TRUE  },
   { "Brief"                , TRUE , TRUE  },
@@ -686,7 +686,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Don't Alert Doctors on Mort", FALSE, TRUE  },
   { "MailLog"              , TRUE , TRUE  },
   { "No Follow"            , FALSE, TRUE  },
-  { "No Prompt ^W##Change Message^n", FALSE, TRUE  },
+  { "No Prompt Change Message", FALSE, TRUE  },
   { "Passive Combat"       , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
