@@ -844,6 +844,18 @@ ACMD(do_goto)
     return;
   }
 
+#ifndef IS_BUILDPORT
+  {
+    struct room_data *ch_in_room = get_ch_in_room(ch);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s goto'd from '%s^g' (%ld) to '%s^g' (%ld)",
+                    GET_CHAR_NAME(ch),
+                    GET_ROOM_NAME(ch_in_room),
+                    GET_ROOM_VNUM(ch_in_room),
+                    GET_ROOM_NAME(location),
+                    GET_ROOM_VNUM(location));
+  }
+#endif
+
   if (POOFOUT(ch))
     act(POOFOUT(ch), TRUE, ch, 0, 0, TO_ROOM);
   else
@@ -1512,6 +1524,10 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     send_to_char("That character is protected by the NoStat flag. You need to be a higher level than them to stat them.\r\n", ch);
     return;
   }
+
+#ifndef IS_BUILDPORT
+  mudlog_vfprintf(ch, LOG_WIZLOG, "Statted character %s (%ld)", GET_CHAR_NAME(k), GET_IDNUM(k));
+#endif
 
   switch (GET_PRONOUNS(k))
   {
@@ -4352,7 +4368,7 @@ ACMD(do_show)
         send_to_char("You're not erudite enough to do that!\r\n", ch);
         return;
       }
-
+      mudlog_vfprintf(ch, LOG_WIZLOG, "Viewed %s (%ld)'s info.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
       snprintf(buf, sizeof(buf), "Player: %-12s (%s) [%2d]\r\n", GET_NAME(vict),
               genders[(int) GET_PRONOUNS(vict)], GET_LEVEL(vict));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Y: %-8ld  Bal: %-8ld  Karma: %-8d\r\n",
@@ -4445,9 +4461,9 @@ ACMD(do_show)
     if (!(vict = get_char_vis(ch, value))) {
       send_to_char(ch, "You can't see anyone named '%s'.\r\n", value);
       return;
-
-
     }
+
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Viewed %s (%ld)'s skills.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
     send_to_char(ch, "%s's skills:", GET_NAME(vict));
     j = 0;
     snprintf(buf, sizeof(buf), "\r\n");
@@ -4474,6 +4490,7 @@ ACMD(do_show)
       send_to_char(ch, "%s does not know any spells.\r\n", GET_NAME(vict));
       return;
     }
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Viewed %s (%ld)'s spells.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
     send_to_char(ch, "%s's spells:\r\n", GET_NAME(vict));
     i = 0;
     *buf = '\0';
@@ -4546,6 +4563,7 @@ ACMD(do_show)
       return;
     }
 
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Viewed %s (%ld)'s abilities.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
     send_to_char(ch, "%s's abilities:\r\n", GET_CHAR_NAME(vict));
     render_targets_abilities_to_viewer(ch, vict);
     break;
@@ -4559,6 +4577,7 @@ ACMD(do_show)
       return;
     }
     struct alias *a;
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Viewed %s (%ld)'s aliases.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
     send_to_char(ch, "%s's defined aliases:\r\n", GET_CHAR_NAME(vict));
     if ((a = GET_ALIASES(vict)) == NULL)
       send_to_char(" None.\r\n", ch);
@@ -4577,6 +4596,7 @@ ACMD(do_show)
       send_to_char(ch, "You can't see anyone named '%s'.\r\n", value);
       return;
     }
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Viewed %s (%ld)'s metamagics.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
     send_to_char(ch, "%s's metamagic abilities:\r\n", GET_NAME(vict));
     j = 0;
     snprintf(buf, sizeof(buf), "\r\n");
@@ -4636,6 +4656,7 @@ ACMD(do_show)
 
 
     }
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Viewed %s (%ld)'s pockets.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
     display_pockets_to_char(ch, vict);
     break;
   case 20:
@@ -4787,6 +4808,7 @@ ACMD(do_show)
       send_to_char(ch, "You can't see anyone named '%s'.\r\n", value);
       return;
     }
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Viewed %s (%ld)'s ignore entries.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
     display_characters_ignore_entries(ch, vict);
     return;
   case 26:
