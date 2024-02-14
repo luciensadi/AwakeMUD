@@ -2229,7 +2229,7 @@ void refund_chargen_prestige_syspoints_if_needed(struct char_data *ch) {
   GET_SYSTEM_POINTS(payer) += refund_amount;
   playerDB.SaveChar(payer, GET_LOADROOM(payer));
 
-  mudlog_vfprintf(ch, LOG_SYSLOG, "Refunded %d prestige-purchase syspoints to %s due to %s deleting in character generation (%d -> %d)",
+  mudlog_vfprintf(ch, LOG_CHEATLOG, "Refunded %d prestige-purchase syspoints to %s due to %s deleting in character generation (%d -> %d)",
                   refund_amount, GET_CHAR_NAME(payer), GET_CHAR_NAME(ch), old_sysp, GET_SYSTEM_POINTS(payer));
   snprintf(buf, sizeof(buf), "Refunded %d prestige-purchase syspoints to %s due to you deleting during character generation.", refund_amount, GET_CHAR_NAME(payer));
   SEND_TO_Q(buf, ch->desc);
