@@ -3287,11 +3287,11 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   if ( type == TO_ROLLS )
   {
     for (; to; to = to->next_in_room) {
-      if (IS_MOB(to) || !PRF_FLAGGED(to->desc && to->desc->original ? to->desc->original : to, PRF_ROLLS))
+      if (IS_MOB(to) || !PRF_FLAGGED(to, PRF_ROLLS))
         continue;
 
       if (!IS_SENATOR(to)) {
-        if (!_OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ && !PLR_FLAGGED(to->desc && to->desc->original ? to->desc->original : to, PLR_PAID_FOR_ROLLS))
+        if (!_OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ && !PLR_FLAGGED(to, PLR_PAID_FOR_ROLLS))
           continue;
 
         if (staff_only)
