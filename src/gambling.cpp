@@ -14,9 +14,10 @@ const char *slot_icons[] {
   "^CBell^n",
   "^RHeart^n",
   "^GClover^n",
-  "^MCrown^n"
+  "^MCrown^n",
+  "^[F533]Peach^n"   // In honor of Momo getting absolutely booty-blasted by the slot machines the day he found out about them
 };
-#define NUM_SLOT_ICONS 9
+#define NUM_SLOT_ICONS 10
 
 void payout_slots(struct obj_data *slots) {
   if (!slots->in_room) {
@@ -119,27 +120,30 @@ void payout_slots(struct obj_data *slots) {
       snprintf(buf, sizeof(buf), "$n receives %d nuyen (a %dx payout).", amount_to_pay, payout_multiplier);
       act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
 
-      GET_SLOTMACHINE_MONEY_EXTRACTED(slots) -= amount_to_pay;
-      total_amount_removed_from_economy_by_slots -= amount_to_pay;
+      // We only care about player actions in terms of economy tracking.
+      if (!IS_SENATOR(ch)) {
+        GET_SLOTMACHINE_MONEY_EXTRACTED(slots) -= amount_to_pay;
+        total_amount_removed_from_economy_by_slots -= amount_to_pay;
 
-      if (payout_multiplier > 1) {
-        // Log big payouts (3x and up)
-        mudlog_vfprintf(ch, LOG_GRIDLOG, "%s got %d nuyen from a %d-nuyen bet on %s (a %dx payout). Total removed from economy is now %ld.",
-                        GET_CHAR_NAME(ch),
-                        amount_to_pay,
-                        GET_SLOTMACHINE_LAST_SPENT(slots),
-                        GET_OBJ_NAME(slots),
-                        payout_multiplier,
-                        total_amount_removed_from_economy_by_slots);
-      } else {
-        // We don't want to spam the in-game logs with standard payouts from people playing all the time.
-        log_vfprintf("%s got %d nuyen from a %d-nuyen bet on %s (a %dx payout). Total removed from economy is now %ld.",
-                     GET_CHAR_NAME(ch),
-                     amount_to_pay,
-                     GET_SLOTMACHINE_LAST_SPENT(slots),
-                     GET_OBJ_NAME(slots),
-                     payout_multiplier,
-                     total_amount_removed_from_economy_by_slots);
+        if (payout_multiplier > 3) {
+          // Log big payouts (10x and up)
+          mudlog_vfprintf(ch, LOG_GRIDLOG, "%s got %d nuyen from a %d-nuyen bet on %s (a %dx payout). Total removed from economy is now %ld.",
+                          GET_CHAR_NAME(ch),
+                          amount_to_pay,
+                          GET_SLOTMACHINE_LAST_SPENT(slots),
+                          GET_OBJ_NAME(slots),
+                          payout_multiplier,
+                          total_amount_removed_from_economy_by_slots);
+        } else {
+          // We don't want to spam the in-game logs with standard payouts from people playing all the time.
+          log_vfprintf("%s got %d nuyen from a %d-nuyen bet on %s (a %dx payout). Total removed from economy is now %ld.",
+                      GET_CHAR_NAME(ch),
+                      amount_to_pay,
+                      GET_SLOTMACHINE_LAST_SPENT(slots),
+                      GET_OBJ_NAME(slots),
+                      payout_multiplier,
+                      total_amount_removed_from_economy_by_slots);
+        }
       }
       return;
     }
@@ -245,7 +249,7 @@ SPECIAL(slot_machine) {
                  GET_SLOTMACHINE_MONEY_EXTRACTED(slots),
                  GET_SLOTMACHINE_MONEY_EXTRACTED(slots) < 0 ? "into" : "from",
                  total_amount_removed_from_economy_by_slots < 0 ? "generated (-_-)" : "extracted",
-                 total_amount_removed_from_economy_by_slots);
+                 total_amount_removed_from_economy_by_slots < 0 ? total_amount_removed_from_economy_by_slots * -1 : total_amount_removed_from_economy_by_slots);
     return TRUE;
   }
 
