@@ -500,7 +500,7 @@ void affect_total(struct char_data * ch)
 {
   struct obj_data *cyber, *obj;
   struct sustain_data *sust;
-  sh_int i, j, skill_dice;
+  sh_int i, j;
   int has_rig = 0, has_trigger = -1, has_wired = 0, has_mbw = 0;
   bool wearing = FALSE;
   bool ch_is_npc = IS_NPC(ch);
@@ -1019,15 +1019,15 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  skill_dice = get_skill_dice_in_use_for_weapons(ch);
+  int skill_used = get_skill_num_in_use_for_weapons(ch);
 
   GET_DEFENSE(ch) = MIN(GET_DEFENSE(ch), GET_COMBAT(ch));
   GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DEFENSE(ch));
   GET_OFFENSE(ch) = GET_COMBAT(ch) - GET_DEFENSE(ch) - GET_BODY(ch);
-  if (GET_OFFENSE(ch) > skill_dice)
+  if (GET_OFFENSE(ch) > GET_SKILL(ch, skill_used))
   {
-    GET_DEFENSE(ch) += GET_OFFENSE(ch) - skill_dice;
-    GET_OFFENSE(ch) = skill_dice;
+    GET_DEFENSE(ch) += GET_OFFENSE(ch) - GET_SKILL(ch, skill_used);
+    GET_OFFENSE(ch) = GET_SKILL(ch, skill_used);
   }
 
   // NPCs specialize their defenses: unless they've got crazy dodge dice, they'll want to just soak.
@@ -3531,54 +3531,45 @@ int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn)
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch) {
   struct obj_data *one, *two;
-  int skill_num;
+  int one_skill_num = 0, two_skill_num = 0;
 
   if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    skill_num = SKILL_GUNNERY;
-  } else {
-    one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
-           (struct obj_data *) NULL;
-    two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
-           (struct obj_data *) NULL;
-
-    if (!one && !two) {
-      if(has_cyberweapon(ch))
-        skill_num = SKILL_CYBER_IMPLANTS;
-      else
-        skill_num = SKILL_UNARMED_COMBAT;
-    }
-
-    else if (one) {
-      if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
-        skill_num = return_general(GET_OBJ_VAL(one, 4));
-      else
-        skill_num = GET_OBJ_VAL(one, 4);
-    }
-
-    else if (two) {
-      if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-        skill_num = return_general(GET_OBJ_VAL(two, 4));
-      else
-        skill_num = GET_OBJ_VAL(two, 4);
-    }
-
-    // This broken-ass code never worked. "If neither one or two, or if one, or if two, or..." no, that's a full logical stop.
-    else {
-      if (GET_SKILL(ch, GET_OBJ_VAL(one, 4)) <= GET_SKILL(ch, GET_OBJ_VAL(two, 4))) {
-        if (!GET_SKILL(ch, GET_OBJ_VAL(one, 4)))
-          skill_num = return_general(GET_OBJ_VAL(one, 4));
-        else
-          skill_num = GET_OBJ_VAL(one, 4);
-      } else {
-        if (!GET_SKILL(ch, GET_OBJ_VAL(two, 4)))
-          skill_num = return_general(GET_OBJ_VAL(two, 4));
-        else
-          skill_num = GET_OBJ_VAL(two, 4);
-      }
-    }
+    // Manning a turret, presumably with a firearm on it.
+    int skill_num = SKILL_GUNNERY;
+    if (GET_SKILL(ch, SKILL_GUNNERY) < GET_SKILL(ch, SKILL_FIREARMS))
+      skill_num = SKILL_FIREARMS;
+    return skill_num;
   }
 
-  return skill_num;
+  one = (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_WIELD) :
+          (struct obj_data *) NULL;
+  two = (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON) ? GET_EQ(ch, WEAR_HOLD) :
+          (struct obj_data *) NULL;
+
+  // Not wielding a weapon.
+  if (!one && !two) {
+    if(has_cyberweapon(ch))
+      return SKILL_CYBER_IMPLANTS;
+    else
+      return SKILL_UNARMED_COMBAT;
+  }
+
+  if (one) {
+    int general_skill = return_general(GET_WEAPON_SKILL(one));
+    one_skill_num = (GET_SKILL(ch, GET_WEAPON_SKILL(one)) < GET_SKILL(ch, general_skill) ? general_skill : GET_WEAPON_SKILL(one));
+    if (!two)
+      return one_skill_num;
+  }
+
+  if (two) {
+    int general_skill = return_general(GET_WEAPON_SKILL(two));
+    two_skill_num = (GET_SKILL(ch, GET_WEAPON_SKILL(two)) < GET_SKILL(ch, general_skill) ? general_skill : GET_WEAPON_SKILL(two));
+    if (!one)
+      return two_skill_num;
+  }
+
+  // Since we're here, both one and two exist. Pick the better skill.
+  return (GET_SKILL(ch, one_skill_num) < GET_SKILL(ch, two_skill_num) ? two_skill_num : one_skill_num);
 }
 
 int _get_weapon_focus_bonus_dice(struct char_data *ch, struct obj_data *weapon) {
