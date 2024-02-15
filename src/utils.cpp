@@ -491,6 +491,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
     int new_visibility_penalty = MAX_VISIBILITY_PENALTY - current_visibility_penalty;
     buf_mod(rbuf, rbuf_len, "PreconditionVisPenaltyMax8", new_visibility_penalty);
     base_target += new_visibility_penalty;
+    WRITEOUT_MSG("Visibility Over-Penalty Rectifier (Max is 8)", new_visibility_penalty);
   }
   // If we're within the allowed amount, calculate the remaining vision penalty, capping at 8.
   else {
@@ -511,6 +512,8 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
 
   base_target += GET_TARGET_MOD(ch);
   buf_mod(rbuf, rbuf_len, "GET_TARGET_MOD", GET_TARGET_MOD(ch) );
+  WRITEOUT_MSG("Innate Target Mod", GET_TARGET_MOD(ch));
+
   if ((GET_RACE(ch) == RACE_NIGHTONE || IS_GHOUL(ch)) && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch) && weather_info.sky < SKY_RAINING)
   {
     base_target += 1;
@@ -522,6 +525,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
   {
     base_target += 1;
     buf_mod(rbuf, rbuf_len, "Urban", 1);
+    WRITEOUT_MSG("Dryad in Urban", 1);
   }
   if (temp_room->poltergeist[0] && !IS_ASTRAL(ch) && !MOB_FLAGGED(ch, MOB_DUAL_NATURE))
   {

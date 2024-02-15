@@ -924,7 +924,7 @@ bool has_required_language_ability_for_sentence(struct char_data *ch, const char
 
   int max_allowable = max_allowable_word_length_at_language_level(skill_level);
 
-  char current_word[500];
+  char current_word[MAX_INPUT_LENGTH];
   char too_long_words[MAX_STRING_LENGTH];
   memset(too_long_words, '\0', sizeof(too_long_words));
 
