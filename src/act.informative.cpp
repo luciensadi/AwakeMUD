@@ -5714,7 +5714,7 @@ ACMD(do_who)
         strlcat(buf1, buf2, sizeof(buf1));
       }
 
-      if (GET_TKE(tch) <= NEWBIE_KARMA_THRESHOLD && !IS_SENATOR(tch) && !IS_PRESTIGE_RACE(tch)) {
+      if (GET_TKE(tch) <= NEWBIE_KARMA_THRESHOLD && !IS_SENATOR(tch) && !IS_PRESTIGE_CH(tch)) {
         strlcat(buf1, " ^y(Newbie)^n", sizeof(buf1));
       }
 
@@ -7444,14 +7444,19 @@ ACMD(do_mort_show)
   }
 }
 
+extern time_t get_idledelete_days_left(time_t lastd, int tke, int race);
 ACMD(do_karma){
   send_to_char(ch, "You have ^c%d^n reputation and ^c%d^n notoriety. You've earned a lifetime total of ^c%d^n karma", GET_REP(ch), GET_NOT(ch), GET_TKE(ch));
 
   if (PLR_FLAGGED(ch, PLR_NODELETE)) {
     send_to_char(", and will never be idle-deleted.\r\n", ch);
   } else {
-    int grace_days = 50 + (GET_TKE(ch) / NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD);
-    send_to_char(ch, ", which gives you ^c%d^n days of idle-delete grace time.\r\n", grace_days);
+    time_t grace_days = get_idledelete_days_left(time(0), GET_TKE(ch), GET_RACE(ch));
+    send_to_char(ch, ", giving you a total of ^c%ld^n days of idle-delete grace time (%s base of %d, plus 1 per %d TKE).\r\n",
+                 grace_days,
+                 IS_PRESTIGE_CH(ch) ? "prestige" : "standard",
+                 IS_PRESTIGE_CH(ch) ? 365 : 50,
+                 NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD);
   }
 }
 

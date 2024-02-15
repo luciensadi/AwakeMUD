@@ -5639,8 +5639,16 @@ ACMD(do_set)
           snprintf(buf, sizeof(buf), "%s's race set to %s by %s.\r\n", GET_CHAR_NAME(vict), pc_race_types[race_idx], GET_CHAR_NAME(ch));
           mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
+          // Update whotitle unless staff.
+          if (!IS_SENATOR(vict)) {
+            set_whotitle(vict, pc_race_types[race_idx]);
+          }
+
           // Save the new race to disk.
-          snprintf(buf, sizeof(buf), "UPDATE pfiles SET race = %d WHERE idnum = %ld;", GET_RACE(vict), GET_IDNUM(vict));
+          snprintf(buf, sizeof(buf), "UPDATE pfiles SET race=%d, Whotitle='%s' WHERE idnum = %ld;", 
+                   GET_RACE(vict),
+                   GET_WHOTITLE(vict),
+                   GET_IDNUM(vict));
           mysql_wrapper(mysql, buf);
           break;
         }
@@ -5649,8 +5657,10 @@ ACMD(do_set)
         send_to_char(ch, "%s is not a valid race.\r\n", capitalize(val_arg));
         SET_CLEANUP(false);
         return;
-      } else
+      } else {
         send_to_char("OK.\r\n", ch);
+        value = GET_RACE(vict);
+      }
     }
     break;
   case 74: /* rolls for morts */
