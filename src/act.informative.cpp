@@ -71,6 +71,7 @@ extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE);
+extern void display_gamba_ledger_leaderboard(struct char_data *ch);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -7471,6 +7472,11 @@ ACMD(do_leaderboard) {
   skip_spaces(&argument);
   if (!*argument) {
     send_to_char(GET_LEVEL(ch) > LVL_MORTAL ? STAFF_LEADERBOARD_SYNTAX_STRING : MORT_LEADERBOARD_SYNTAX_STRING, ch);
+    return;
+  }
+
+  if (!strncmp(argument, "gambling", strlen(argument))) {
+    display_gamba_ledger_leaderboard(ch);
     return;
   }
 

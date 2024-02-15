@@ -1,23 +1,104 @@
+#include <unordered_map>
+#include <vector>
+
 #include "structs.hpp"
 #include "db.hpp"
 #include "interpreter.hpp"
 #include "handler.hpp"
+#include "newdb.hpp"
 
 long total_amount_removed_from_economy_by_slots = 0;
 
+std::unordered_map<idnum_t, long> gamba_ledger = {};
+
 const char *slot_icons[] {
-  "^WCredstick^n",
-  "^BNuyen^n",
-  "^WDiamond^n",
-  "^YLemon^n",
-  "^OHorseshoe^n",
-  "^CBell^n",
-  "^RHeart^n",
-  "^GClover^n",
-  "^MCrown^n",
-  "^[F533]Peach^n"   // In honor of Momo getting absolutely booty-blasted by the slot machines the day he found out about them
+  "^WCredstick",
+  "^BNuyen",
+  "^L9mm Bullet",
+  "^WDiamond",
+  "^YLemon",
+  "^OHorseshoe",
+  "^CBell",
+  "^RHeart",
+  "^GClover",
+  "^MCrown",
+  "^[F533]Peach"   // In honor of Momo getting absolutely booty-blasted by the slot machines the day he found out about them
 };
-#define NUM_SLOT_ICONS 10
+#define RESERVED_SLOT_END 3
+#define NUM_SLOT_ICONS    11
+#define SLOT_PEACH        10
+
+void add_gambling_ledger_entry(struct char_data *ch, int amount) {
+  try {
+    gamba_ledger.at(GET_IDNUM(ch)) += amount;
+  } catch (std::out_of_range) {
+    gamba_ledger[GET_IDNUM(ch)] = amount;
+  }
+}
+
+bool _gamba_cmp_wins(std::pair<idnum_t, long>& a, std::pair<idnum_t, long>& b) {
+  return a.second > b.second;
+}
+
+bool _gamba_cmp_losses(std::pair<idnum_t, long>& a, std::pair<idnum_t, long>& b) {
+  return a.second < b.second;
+}
+
+void display_gamba_ledger_leaderboard(struct char_data *ch) {
+  std::vector<std::pair<idnum_t, long>> pair_vect = {}; 
+
+  if (gamba_ledger.empty()) {
+    send_to_char("Nobody has any gambling wins or losses yet.\r\n", ch);
+    return;
+  }
+
+  // Build pair_vect with wins.
+  for (auto& it : gamba_ledger) {
+    if (it.second > 0)
+      pair_vect.push_back(it); 
+  }
+
+  send_to_char("Top 3 gamblers by wins:\r\n", ch);
+  std::sort(pair_vect.begin(), pair_vect.end(), _gamba_cmp_wins);
+  
+  int printed = 0;
+  for (auto& it : pair_vect) {
+    if (printed++ == 3)
+      break;
+
+    char *name = get_player_name(it.first);
+    if (!str_cmp(name, CHARACTER_DELETED_NAME_FOR_SQL)) {
+      printed--;
+    } else {
+      send_to_char(ch, "%20s:  ^c%ld^n\r\n", name, it.second);
+    }
+    delete [] name;
+  }
+
+  // Wipe and rebuild pair vect with losses.
+  pair_vect.clear();
+  for (auto& it : gamba_ledger) {
+    if (it.second < 0)
+      pair_vect.push_back(it); 
+  }
+
+  send_to_char("\r\nTop 3 gamblers by losses:\r\n", ch);
+  std::sort(pair_vect.begin(), pair_vect.end(), _gamba_cmp_losses);
+  
+  printed = 0;
+  for (auto& it : pair_vect) {
+    if (printed++ == 3)
+      break;
+
+    char *name = get_player_name(it.first);
+    if (!str_cmp(name, CHARACTER_DELETED_NAME_FOR_SQL)) {
+      printed--;
+    } else {
+      send_to_char(ch, "%20s:  ^c%ld^n\r\n", name, it.second);
+    }
+    delete [] name;
+  }
+}
 
 void payout_slots(struct obj_data *slots) {
   if (!slots->in_room) {
@@ -25,15 +106,15 @@ void payout_slots(struct obj_data *slots) {
     return;
   }
 
-  int rolled = number(1, 12501);
+  int rolled = number(0, 12501);
   int payout_multiplier;
 
   if (rolled == 1) {
-    // 3 BARs
+    // 3 Credstick
     payout_multiplier = 60;
     snprintf(buf, sizeof(buf), "There's an electronic fanfare before %s lights up with a brilliant glow, displaying a perfect three-^WCredstick^n line!\r\n", decapitalize_a_an(GET_OBJ_NAME(slots)));
   } else if (rolled <= 4) {
-    // 3 Sevens
+    // 3 Nuyen
     payout_multiplier = 40;
     snprintf(buf, sizeof(buf), "%s dings and whistles loudly before displaying the extremely rare set of three ^Bstacks of nuyen^n!\r\n", CAP(GET_OBJ_NAME(slots)));
   } else if (rolled <= 40) {
@@ -43,11 +124,15 @@ void payout_slots(struct obj_data *slots) {
   } else if (rolled <= 580) {
     // 3 of Any Other
     payout_multiplier = 10;
-    snprintf(buf, sizeof(buf), "%s flashes celebratory lights as it displays a trio of %ss.\r\n", CAP(GET_OBJ_NAME(slots)), slot_icons[number(2, NUM_SLOT_ICONS - 1)]);
+    int slot_idx = number(RESERVED_SLOT_END, NUM_SLOT_ICONS - 1);
+
+    snprintf(buf, sizeof(buf), "%s flashes celebratory lights as it displays a trio of %s%s^n!\r\n",
+             CAP(GET_OBJ_NAME(slots)),
+             slot_icons[slot_idx],
+             slot_idx == SLOT_PEACH ? "es" : "s");
   } else if (rolled <= 1231) {
     // Any 2 Cherries
     payout_multiplier = 3;
-    snprintf(buf, sizeof(buf), "Colorful tracery lights up around the edges of %s's screen before it displays a pair of cherries.\r\n", decapitalize_a_an(GET_OBJ_NAME(slots)));
     switch (number(0, 2)) {
       case 0:
         snprintf(buf, sizeof(buf), "%s glows happily as it displays ^W[ %s ^W| ^PCherry^n ^W| ^PCherry^n ^W]^n.\r\n",
@@ -88,15 +173,21 @@ void payout_slots(struct obj_data *slots) {
                  slot_icons[number(0, NUM_SLOT_ICONS - 1)]);
         break;
     }
+  } else if (rolled == 0) {
+    // 3 9mms, hehe
+    payout_multiplier = 1;
+    snprintf(buf, sizeof(buf), "With an ominous sting of music, %s lights up red, revealing three ^L9mm bullets^n lined up on the screen.\r\n"
+             "^rA hatch on the front flips open with a bang, revealing the barrel of a built-in pistol!^n\r\n",
+             decapitalize_a_an(GET_OBJ_NAME(slots)));
   } else {
-    // No hits
+    // No hits, display a random set of non-matching reels.
     payout_multiplier = 0;
 
-    int first = number(2, NUM_SLOT_ICONS - 1), second = number(2, NUM_SLOT_ICONS - 1), third = number(2, NUM_SLOT_ICONS - 1);
+    int first = number(0, NUM_SLOT_ICONS - 1), second = number(0, NUM_SLOT_ICONS - 1), third = number(0, NUM_SLOT_ICONS - 1);
     while (first == second && second == third) {
-      first = number(2, NUM_SLOT_ICONS - 1);
-      second = number(2, NUM_SLOT_ICONS - 1);
-      third = number(2, NUM_SLOT_ICONS - 1);
+      first = number(0, NUM_SLOT_ICONS - 1);
+      second = number(0, NUM_SLOT_ICONS - 1);
+      third = number(0, NUM_SLOT_ICONS - 1);
     }
 
     snprintf(buf, sizeof(buf), "%s bleeps sympathetically as it displays ^W[ %s ^W| %s ^W| %s ^W]^n.\r\n",
@@ -115,6 +206,27 @@ void payout_slots(struct obj_data *slots) {
   // Find the person to pay.
   for (struct char_data *ch = slots->in_room->people; ch; ch = ch->next_in_room) {
     if (GET_IDNUM(ch) == GET_SLOTMACHINE_PLAYER_ID(slots)) {
+      if (rolled == 0) {
+        send_to_char("^RThe pistol barks, sending a sharp pain ripping through you!^n\r\nAs you stagger back, the machine closes back up and spits out your original bet.\r\n", ch);
+        act("^RThe pistol barks!^n As $n staggers back, the machine closes up and spits out $s original bet.", FALSE, ch, 0, 0, TO_ROOM);
+        gain_nuyen(ch, amount_to_pay, NUYEN_INCOME_GAMBLING);
+        
+        if (!IS_SENATOR(ch)) {
+          GET_SLOTMACHINE_MONEY_EXTRACTED(slots) -= amount_to_pay;
+          total_amount_removed_from_economy_by_slots -= amount_to_pay;
+          add_gambling_ledger_entry(ch, amount_to_pay);
+        }
+
+        mudlog_vfprintf(ch, LOG_GRIDLOG, "%s got shot by %s! Total removed from economy is now %ld.",
+                          GET_CHAR_NAME(ch),
+                          GET_OBJ_NAME(slots),
+                          total_amount_removed_from_economy_by_slots);
+
+        // No dodge or soak, mostly because this is moderate damage done for the memes.
+        damage(ch, ch, MODERATE, TYPE_PISTOL, TRUE);
+        return;
+      }
+
       gain_nuyen(ch, amount_to_pay, NUYEN_INCOME_GAMBLING);
       send_to_char(ch, "You receive %d nuyen (a %dx payout)\r\n", amount_to_pay, payout_multiplier);
       snprintf(buf, sizeof(buf), "$n receives %d nuyen (a %dx payout).", amount_to_pay, payout_multiplier);
@@ -124,6 +236,7 @@ void payout_slots(struct obj_data *slots) {
       if (!IS_SENATOR(ch)) {
         GET_SLOTMACHINE_MONEY_EXTRACTED(slots) -= amount_to_pay;
         total_amount_removed_from_economy_by_slots -= amount_to_pay;
+        add_gambling_ledger_entry(ch, amount_to_pay);
 
         if (payout_multiplier > 3) {
           // Log big payouts (10x and up)
@@ -149,7 +262,11 @@ void payout_slots(struct obj_data *slots) {
     }
   }
 
-  send_to_room("...But with the player gone, the slot machine just eats the winnings.\r\n", slots->in_room);
+  if (rolled == 0) {
+    send_to_room("...But with the player gone, the slot machine reluctantly closes its hatch again. Phew!\r\n", slots->in_room);
+  } else {
+    send_to_room("...But with the player gone, the slot machine just eats the winnings.\r\n", slots->in_room);
+  }
 }
 
 #define MINIMUM_SLOT_SPEND_AMOUNT 100
@@ -237,9 +354,16 @@ SPECIAL(slot_machine) {
 
     GET_SLOTMACHINE_PLAY_TICKS(slots) = 2;
     GET_SLOTMACHINE_LAST_SPENT(slots) = spend_amount;
-    GET_SLOTMACHINE_MONEY_EXTRACTED(slots) += spend_amount;
-    total_amount_removed_from_economy_by_slots += spend_amount;
     GET_SLOTMACHINE_PLAYER_ID(slots) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
+
+    if (!IS_SENATOR(ch)) {
+      GET_SLOTMACHINE_MONEY_EXTRACTED(slots) += spend_amount;
+      total_amount_removed_from_economy_by_slots += spend_amount;
+
+      // Track it as a loss immediately, then add back the winnings when those pay out.
+      add_gambling_ledger_entry(ch, -spend_amount);
+    }
+
     return TRUE;
   }
 
