@@ -7868,7 +7868,7 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
       }
       // Add apartment info.
       if (GET_APARTMENT(in_room)) {
-        snprintf(room_title_buf, sizeof(room_title_buf), "\r\n ^c(%sApartment - %s^c%s)",
+        snprintf(ENDOF(room_title_buf), sizeof(room_title_buf), "\r\n ^c(%sApartment - %s^c%s)",
                     GET_APARTMENT(in_room)->get_paid_until() > 0 ? "Leased " : "",
                     GET_APARTMENT(in_room)->get_full_name(),
                     GET_APARTMENT_DECORATION(in_room) ? " [decorated]" : "");
