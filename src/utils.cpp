@@ -647,8 +647,17 @@ char *capitalize(const char *source)
   int len = strlen(dest);
   int index = 0;
 
-  while (index < len-2 && *(dest + index) == '^')
-    index += 2;
+  // Skip color codes.
+  while (index < len && *(source + index) == '^') {
+    if (index + 1 < len && *(source + index + 1) == '[')
+      index += 7; // ^[F123]
+    else
+      index += 2; // ^W
+  }
+
+  if (index >= len)
+    return dest;
+
   *(dest + index) = UPPER(*(dest + index));
 
   return dest;
@@ -709,8 +718,17 @@ char *decapitalize_a_an(const char *source)
   int len = strlen(source);
   int index = 0;
 
-  while (*(source + index) == '^')
-    index += 2;
+  // Skip color codes.
+  while (index < len && *(source + index) == '^') {
+    if (index + 1 < len && *(source + index + 1) == '[')
+      index += 7; // ^[F123]
+    else
+      index += 2; // ^W
+  }
+
+  if (index >= len)
+    return dest;
+
   if (*(source + index) == 'A') {
     // If it starts with 'A ' or 'An ' then decapitalize the A.
     if (index < len-1 && (*(source + index+1) == ' ' || (*(source + index+1) == 'n' && index < len-2 && *(source + index+2) == ' '))) {
