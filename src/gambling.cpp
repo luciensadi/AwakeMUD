@@ -1,5 +1,6 @@
 #include <unordered_map>
 #include <vector>
+#include <algorithm>
 
 #include "structs.hpp"
 #include "db.hpp"
