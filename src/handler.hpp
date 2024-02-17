@@ -74,7 +74,7 @@ struct char_data *get_char(char *name);
 
 void    char_from_room(struct char_data *ch);
 void    char_to_room(struct char_data *ch, struct room_data *room);
-void    extract_char(struct char_data *ch);
+void    extract_char(struct char_data *ch, bool do_save=TRUE);
 void    char_to_veh(struct veh_data *veh, struct char_data *ch);
 void veh_from_room(struct veh_data *veh);
 void veh_to_room(struct veh_data *veh, struct room_data *room);

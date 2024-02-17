@@ -2466,7 +2466,10 @@ void close_socket(struct descriptor_data *d)
         refund_chargen_prestige_syspoints_if_needed(d->character);
       }
 
-      Mem->DeleteCh(d->character);
+      // Null their desc and then extract them, which triggers full cleanup and deletion of the character struct.
+      d->character->desc = NULL;
+      extract_char(d->character, FALSE);
+      d->character = NULL;
     }
   }
 

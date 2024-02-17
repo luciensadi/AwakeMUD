@@ -1020,14 +1020,15 @@ void affect_total(struct char_data * ch)
   }
 
   int skill_used = get_skill_num_in_use_for_weapons(ch);
+  int dice_max = get_skill_dice_in_use_for_weapons(ch);
 
   GET_DEFENSE(ch) = MIN(GET_DEFENSE(ch), GET_COMBAT(ch));
   GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DEFENSE(ch));
   GET_OFFENSE(ch) = GET_COMBAT(ch) - GET_DEFENSE(ch) - GET_BODY(ch);
-  if (GET_OFFENSE(ch) > GET_SKILL(ch, skill_used))
+  if (GET_OFFENSE(ch) > dice_max)
   {
-    GET_DEFENSE(ch) += GET_OFFENSE(ch) - GET_SKILL(ch, skill_used);
-    GET_OFFENSE(ch) = GET_SKILL(ch, skill_used);
+    GET_DEFENSE(ch) += GET_OFFENSE(ch) - dice_max;
+    GET_OFFENSE(ch) = dice_max;
   }
 
   // NPCs specialize their defenses: unless they've got crazy dodge dice, they'll want to just soak.
@@ -2593,7 +2594,7 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
 }
 
 /* Extract a ch completely from the world, and leave his stuff behind */
-void extract_char(struct char_data * ch)
+void extract_char(struct char_data * ch, bool do_save)
 {
   struct char_data *k, *temp;
   struct descriptor_data *t_desc;
@@ -2634,7 +2635,8 @@ void extract_char(struct char_data * ch)
     }
 
     // Save the player.
-    playerDB.SaveChar(ch, GET_LOADROOM(ch));
+    if (do_save)
+      playerDB.SaveChar(ch, GET_LOADROOM(ch));
 
     // Hollow player body? Figure out who this was supposed to belong to and return them.
     if (!ch->desc) {
@@ -3576,7 +3578,7 @@ int _get_weapon_focus_bonus_dice(struct char_data *ch, struct obj_data *weapon) 
   if (!ch || !weapon)
     return 0;
 
-  if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_FOCUS(weapon) && is_weapon_focus_usable_by(weapon, ch)) {
+  if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_FOCUS(weapon) && is_weapon_focus_usable_by(weapon, ch)) {
     return GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD));
   }
 
