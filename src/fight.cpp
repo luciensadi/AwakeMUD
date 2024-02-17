@@ -2446,7 +2446,7 @@ bool docwagon(struct char_data *ch)
         send_to_char("With no Docwagon modulator, you blearily realize that nobody's likely to come get you...\r\n", ch);
         break;
       case 3:
-        send_to_char("You can't imagine a trauma team coming to save you soon without a Docwagon modulator...\r\n", ch);
+        send_to_char("You can't imagine a trauma team coming to save you without a Docwagon modulator...\r\n", ch);
         break;
     }
     return FALSE;
@@ -2456,6 +2456,7 @@ bool docwagon(struct char_data *ch)
 
   if (!room) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Bailing out of docwagon(%s): No valid room!", GET_CHAR_NAME(ch));
+    send_to_char(ch, "Your Docwagon modulator emits a harsh buzz: It can't find a signal!\r\n");
     return FALSE;
   }
 

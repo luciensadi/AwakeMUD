@@ -6211,8 +6211,6 @@ void perform_mortal_where(struct char_data * ch, char *arg)
 void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
                            int recur)
 {
-  if (strlen(buf) >= 7500)
-    return;
   if (num > 0)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "O%3d. %-25s - ", num,
             GET_OBJ_NAME(obj));
