@@ -2,7 +2,7 @@
 // author: Andrew Hynek
 // contents: implementation of the index classes
 
-
+#include <cmath>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
