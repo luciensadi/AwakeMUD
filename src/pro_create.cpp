@@ -35,16 +35,18 @@ void pedit_disp_menu(struct descriptor_data *d)
 {
   CLS(CH);
   send_to_char(CH, "1) Name: ^c%s^n\r\n", d->edit_obj->restring);
-  send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[GET_OBJ_VAL(d->edit_obj, 0)].name);
-  send_to_char(CH, "3) Rating: ^c%d^n\r\n", GET_OBJ_VAL(d->edit_obj, 1));
+  send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[GET_DESIGN_PROGRAM(d->edit_obj)].name);
+  send_to_char(CH, "3) Rating: ^c%d^n\r\n", GET_DESIGN_RATING(d->edit_obj));
 
-  int program_size = 0;
-  if (GET_OBJ_VAL(d->edit_obj, 0) == 5)
-  {
-    program_size = (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1)) * attack_multiplier[GET_OBJ_VAL(d->edit_obj, 2)];
-    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(GET_OBJ_VAL(d->edit_obj, 2)));
+  // Minimum program size is rating^2.
+  int program_size = GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_RATING(d->edit_obj);
+  if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
+    // Attack programs multiply size by a factor determined by wound level.
+    program_size *= attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)];
+    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)));
   } else {
-    program_size = (GET_OBJ_VAL(d->edit_obj, 1) * GET_OBJ_VAL(d->edit_obj, 1)) * programs[GET_OBJ_VAL(d->edit_obj, 0)].multiplier;
+    // Others multiply by a set multiplier based on software type.
+    program_size *= programs[GET_DESIGN_PROGRAM(d->edit_obj)].multiplier;
   }
   send_to_char(CH, "\r\nInitial Design Size: ^c%d^n\r\n", (int) (program_size * 1.1));
   send_to_char(CH, "Completed Size: ^c%d^n\r\n\r\n", program_size);
@@ -91,7 +93,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       pedit_disp_program_menu(d);
       break;
     case '3':
-      if (!GET_OBJ_VAL(d->edit_obj, 0))
+      if (!GET_DESIGN_PROGRAM(d->edit_obj))
         send_to_char("Choose a program type first!\r\n", CH);
       else {
         send_to_char("Enter Rating: ", CH);
@@ -99,7 +101,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       }
       break;
     case '4':
-      if (GET_OBJ_VAL(d->edit_obj, 0) != 5)
+      if (GET_DESIGN_PROGRAM(d->edit_obj) != SOFT_ATTACK)
         send_to_char(CH, "Invalid option!\r\n");
       else {
         CLS(CH);
@@ -109,6 +111,12 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
     case 'Q':
+      if (!GET_DESIGN_PROGRAM(d->edit_obj) || !GET_DESIGN_RATING(d->edit_obj)) {
+        send_to_char("You must specify a program type and/or rating first.\r\n", CH);
+        pedit_disp_menu(d);
+        return;
+      }
+
       send_to_char(CH, "Design saved!\r\n");
       if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
         GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)];
@@ -174,7 +182,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     break;
   }
   case PEDIT_WOUND:
-    if (number < 1 || number > 4)
+    if (number < LIGHT || number > DEADLY)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
       GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = number;
@@ -187,6 +195,12 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     else {
       GET_DESIGN_PROGRAM(d->edit_obj) = number;
       GET_DESIGN_RATING(d->edit_obj) = 1;
+
+      if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
+        // Default to Deadly damage.
+        GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = DEADLY;
+      }
+
       pedit_disp_menu(d);
     }
     break;
@@ -474,16 +488,20 @@ ACMD(do_copy)
 
   FAILURE_CASE(!prog, "The program isn't on that computer.");
   FAILURE_CASE(GET_OBJ_TIMER(prog), "You can't copy from an optical chip.");
-  FAILURE_CASE(GET_OBJ_VAL(prog, 2) > GET_OBJ_VAL(comp, 2) - GET_OBJ_VAL(comp, 3), "There isn't enough space on there to copy that.");
+  FAILURE_CASE(GET_PROGRAM_SIZE(prog) > GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(comp) - GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(comp), "There isn't enough space on there to copy that.");
   FAILURE_CASE(!program_can_be_copied(prog), "You can't copy this program.");
 
-  GET_OBJ_VAL(comp, 3) += GET_OBJ_VAL(prog, 2);
+  GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(comp) += GET_PROGRAM_SIZE(prog);
+
+  // Create the new program.
   struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
   newp->restring = str_dup(GET_OBJ_NAME(prog));
-  GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(prog, 0);
-  GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(prog, 1);
-  GET_OBJ_VAL(newp, 2) = GET_OBJ_VAL(prog, 2);
-  GET_OBJ_VAL(newp, 3) = GET_OBJ_VAL(prog, 3);
+  GET_PROGRAM_TYPE(newp) = GET_PROGRAM_TYPE(prog);
+  GET_PROGRAM_RATING(newp) = GET_PROGRAM_RATING(prog);
+  GET_PROGRAM_SIZE(newp) = GET_PROGRAM_SIZE(prog);
+  GET_PROGRAM_ATTACK_DAMAGE(newp) = GET_PROGRAM_ATTACK_DAMAGE(prog);
+
+  // Load it into the computer.
   obj_to_obj(newp, comp);
   send_to_char(ch, "You copy %s.\r\n", GET_OBJ_NAME(prog));
 }
@@ -572,7 +590,7 @@ void update_buildrepair(void)
                 GET_CYBERDECK_ACTIVE_MEMORY(PROG->in_obj) = GET_PART_RATING(PROG);
                 break;
             }
-            if (GET_OBJ_VAL(PROG->in_obj, 9)) {
+            if (GET_CYBERDECK_IS_INCOMPLETE(PROG->in_obj)) {
               int x = 0;
               for (struct obj_data *obj = PROG->in_obj->contains; obj; obj = obj->next_content)
                 if (GET_OBJ_TYPE(obj) == ITEM_PART)
@@ -592,7 +610,7 @@ void update_buildrepair(void)
           }
           STOP_WORKING(desc->character);
         }
-      } else if (AFF_FLAGGED(desc->character, AFF_PART_DESIGN) && --GET_OBJ_VAL(PROG, 3) < 1) {
+      } else if (AFF_FLAGGED(desc->character, AFF_PART_DESIGN) && --GET_PART_DESIGN_COMPLETION(PROG) < 1) {
         send_to_char(desc->character, "You complete the design plan for %s.\r\n", GET_OBJ_NAME(PROG));
         CH->char_specials.timer = 0;
         STOP_WORKING(CH);
@@ -662,7 +680,7 @@ void update_buildrepair(void)
         }
       } else if (AFF_FLAGGED(CH, AFF_BONDING)) {
         if ((GET_OBJ_TYPE(PROG) == ITEM_WEAPON && --GET_WEAPON_FOCUS_BOND_STATUS(PROG) < 1)
-            || (GET_OBJ_TYPE(PROG) == ITEM_FOCUS && --GET_OBJ_VAL(PROG, 9) < 1))
+            || (GET_OBJ_TYPE(PROG) == ITEM_FOCUS && --GET_FOCUS_BOND_TIME_REMAINING(PROG) < 1))
         {
           send_to_char(CH, "You complete the bonding ritual for %s.\r\n", GET_OBJ_NAME(PROG));
           CH->char_specials.timer = 0;
@@ -759,12 +777,12 @@ void update_buildrepair(void)
         GET_NUM_SPIRITS(CH)++;
         GET_ELEMENTALS_DIRTY_BIT(CH) = TRUE;
         GET_SPARE2(mob) = spirit->id;
-      } else if (AFF_FLAGGED(CH, AFF_CIRCLE) && --GET_OBJ_VAL(PROG, 9) < 1) {
+      } else if (AFF_FLAGGED(CH, AFF_CIRCLE) && --GET_MAGIC_TOOL_BUILD_TIME_LEFT(PROG) < 1) {
         send_to_char("You complete drawing the circle.\r\n", CH);
         act("$n finishes drawing the hermetic circle.\r\n", FALSE, CH, 0, 0, TO_ROOM);
         CH->char_specials.timer = 0;
         STOP_WORKING(CH);
-      } else if (AFF_FLAGGED(CH, AFF_LODGE) && --GET_OBJ_VAL(PROG, 9) < 1) {
+      } else if (AFF_FLAGGED(CH, AFF_LODGE) && --GET_MAGIC_TOOL_BUILD_TIME_LEFT(PROG) < 1) {
         send_to_char("You finish building the lodge.\r\n", CH);
         act("$n finishes building the lodge.\r\n", FALSE, CH, 0, 0, TO_ROOM);
         CH->char_specials.timer = 0;
@@ -816,7 +834,7 @@ void update_buildrepair(void)
           send_to_char(CH, "You have finished building %s.\r\n", GET_OBJ_NAME(PROG));
           STOP_WORKING(CH);
         } else ammo_test(CH, PROG);
-      } else if (AFF_FLAGGED(CH, AFF_SPELLDESIGN) && --GET_OBJ_VAL(PROG, 6) < 1) {
+      } else if (AFF_FLAGGED(CH, AFF_SPELLDESIGN) && --GET_SPELLFORMULA_TIME_LEFT(PROG) < 1) {
         if (GET_OBJ_TIMER(PROG) == SPELL_DESIGN_FAILED_CODE) {
           switch(number(1,8)) {
             case 1:
