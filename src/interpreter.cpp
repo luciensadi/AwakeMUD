@@ -3054,6 +3054,11 @@ void nanny(struct descriptor_data * d, char *arg)
           }
         }
 
+        // Turn on perception for ghouls.
+        if (IS_GHOUL(d->character)) {
+          PLR_FLAGS(d->character).SetBit(PLR_PERCEIVE);
+        }
+
         playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
       }
       // Wipe out various pointers related to game state and recalculate carry weight.
