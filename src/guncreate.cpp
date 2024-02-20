@@ -244,7 +244,8 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
   // No valid workshop / kit.
   if (!workshop) {
     if (kitwarn) {
-      send_to_char(ch, "Your ammunition kit doesn't have the right tooling for %s ammo. You'll need a different kit or an ammunition workshop.\r\n",
+      send_to_char(ch, "%s doesn't have the right tooling for %s ammo. You'll need a different kit or an ammunition workshop.\r\n",
+                   CAP(GET_OBJ_NAME(obj)),
                    ammo_type[GET_AMMOBOX_TYPE(obj)].name);
     } else {
       if (GET_AMMOBOX_TYPE(obj) != AMMO_NORMAL) {
