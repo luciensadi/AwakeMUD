@@ -5877,7 +5877,7 @@ SPECIAL(weapon_dominator) {
         return TRUE;
       }
 
-      if (GET_LEVEL(ch) < LVL_ADMIN) {
+      if (GET_LEVEL(ch) < LVL_FIXER) {
         send_to_char(ch, "The Dominator doesn't respond.\r\n");
         return TRUE;
       }
