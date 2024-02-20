@@ -7460,7 +7460,7 @@ ACMD(do_karma){
 }
 
 #define STAFF_LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: tke, reputation, notoriety, nuyen, syspoints, blocks, hardcore\r\n"
-#define MORT_LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: hardcore\r\n"
+#define MORT_LEADERBOARD_SYNTAX_STRING "Syntax: leaderboard <option>, where option is one of: hardcore, gambling\r\n"
 ACMD(do_leaderboard) {
   MYSQL_RES *res;
   MYSQL_ROW row;
