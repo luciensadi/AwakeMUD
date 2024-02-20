@@ -2106,7 +2106,7 @@ void obj_from_room(struct obj_data * object)
     object->in_room->dirty_bit = TRUE;
 
     // Handle workshop removal.
-    if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP)
+    if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP && (GET_WORKSHOP_GRADE(object) == TYPE_WORKSHOP || GET_WORKSHOP_GRADE(object) == TYPE_FACILITY))
       remove_workshop_from_room(object);
 
     // Strip it out of the room's contents.
@@ -2114,7 +2114,7 @@ void obj_from_room(struct obj_data * object)
   }
 
   // Ensure the workshop is packed up when it's removed from the room / vehicle.
-  if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP) {
+  if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(object) == TYPE_WORKSHOP) {
     GET_SETTABLE_WORKSHOP_IS_SETUP(object) = FALSE;
     GET_WORKSHOP_UNPACK_TICKS(object) = 0;
   }
