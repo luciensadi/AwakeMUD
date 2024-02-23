@@ -263,7 +263,7 @@ int light_level(struct room_data *room)
   if (ROOM_FLAGGED(room, ROOM_STREETLIGHTS) && (time_info.hours <= 6 || time_info.hours >= 19)) {
     artificial_light_level = LIGHT_PARTLIGHT;
   } else {
-    int num_light_sources = room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] + room->light[ROOM_HIGHEST_SPELL_FORCE];
+    int num_light_sources = room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS];
 
     // Light sources. More sources, more light.
     if (num_light_sources >= 2) {
