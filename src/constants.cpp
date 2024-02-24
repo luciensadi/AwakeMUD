@@ -2394,7 +2394,7 @@ const char *foci_type[] =
     "power",
     "sustaining",
     "weapon",
-    "defensive"
+    "spell defense"
   };
 
 const char *ranges[4] =
