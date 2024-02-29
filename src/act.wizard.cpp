@@ -9128,3 +9128,32 @@ ACMD(do_cheatmark) {
 
   delete [] repr;
 }
+
+// valset <obj> <slot> <value>
+ACMD(do_valset) {
+  char slot_arg[MAX_INPUT_LENGTH], obj_name[MAX_INPUT_LENGTH];
+  int slot, value;
+  struct obj_data *obj;
+
+  // Split input into arguments.
+  char *value_arg = two_arguments(argument, obj_name, slot_arg);
+  FAILURE_CASE(!value_arg || !*value_arg, "Syntax: VALSET <obj> <slot> <value>");
+
+  // Set the object.
+  FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, argument, ch->carrying)),
+                      "You don't seem to have any %ss in your inventory.", argument);
+  // Parse the slot.
+  FAILURE_CASE_PRINTF(!(slot = atoi(slot_arg)) || slot < 0 || slot > NUM_VALUES, 
+                      "You must provide a valid slot between 0 and %d. (syntax: valset %s <slot> <value>)", NUM_VALUES, argument);
+  // Parse the value to apply.
+  FAILURE_CASE_PRINTF(!(value = atoi(value_arg)) || value < 0, 
+                      "You must provide a value that is 0 or greater. (syntax: valset %s %d <value>)", NUM_VALUES, argument, slot);
+
+  // Log it and notify the character.
+  mudlog_vfprintf(ch, LOG_SYSLOG, "Changed object value %d for %s (%ld) from %d to %d.", 
+                  slot, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), GET_OBJ_VAL(obj, slot), value);
+  send_to_char(ch, "OK, changed %s's value %d from %d to %d.", GET_OBJ_NAME(obj), slot, GET_OBJ_VAL(obj, slot), value);
+
+  // Apply the change.
+  GET_OBJ_VAL(obj, slot) = value;
+}

@@ -237,7 +237,6 @@ ACMD_DECLARE(do_hp);
 ACMD_DECLARE(do_iclist);
 ACMD_DECLARE(do_ignore);
 ACMD_DECLARE(do_ilist);
-ACMD_DECLARE(do_vlist);
 ACMD_DECLARE(do_iload);
 ACMD_DECLARE(do_imagelink);
 ACMD_DECLARE(do_info);
@@ -403,6 +402,8 @@ ACMD_DECLARE(do_visible);
 ACMD_DECLARE(do_vfind);
 ACMD_DECLARE(do_vnum);
 ACMD_DECLARE(do_vstat);
+ACMD_DECLARE(do_vlist);
+ACMD_DECLARE(do_valset);
 ACMD_DECLARE(do_wake);
 ACMD_DECLARE(do_watch);
 ACMD_DECLARE(do_wear);
@@ -965,6 +966,8 @@ struct command_info cmd_info[] =
     { "usenerps"   , POS_LYING   , do_usenerps , 1, 0, BLOCKS_IDLE_REWARD },
     { "users"      , POS_DEAD    , do_users    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
 
+    { "valset"     , POS_DEAD    , do_valset   , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
+    { "vedit"      , POS_DEAD    , do_vedit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "version"    , POS_DEAD    , do_gen_ps   , 0, SCMD_VERSION, ALLOWS_IDLE_REWARD },
     { "vemote"     , POS_SLEEPING, do_new_echo , 0 , SCMD_VEMOTE, BLOCKS_IDLE_REWARD }, // was do_vemote
     { "visible"    , POS_RESTING , do_visible  , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
@@ -974,6 +977,7 @@ struct command_info cmd_info[] =
     { "vnum"       , POS_DEAD    , do_vnum     , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "vset"       , POS_DEAD    , do_vset     , LVL_DEVELOPER, 0, BLOCKS_IDLE_REWARD },
     { "vstat"      , POS_DEAD    , do_vstat    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "vteleport"  , POS_DEAD   , do_vteleport , LVL_CONSPIRATOR, 0, BLOCKS_IDLE_REWARD },
 
     { "wake"       , POS_SLEEPING, do_wake     , 0, 0, BLOCKS_IDLE_REWARD },
     { "watch"      , POS_SITTING , do_watch    , 0, 0, BLOCKS_IDLE_REWARD },
@@ -1000,9 +1004,6 @@ struct command_info cmd_info[] =
     { "wizlist"    , POS_DEAD    , do_gen_ps   , 0, SCMD_IMMLIST, BLOCKS_IDLE_REWARD },
     { "wizlock"    , POS_DEAD    , do_wizlock  , LVL_DEVELOPER, 0, BLOCKS_IDLE_REWARD },
     { "wwho"       , POS_DEAD    , do_wizwho   , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
-
-    { "vedit"      , POS_DEAD    , do_vedit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
-    { "vteleport"  , POS_DEAD   , do_vteleport, LVL_CONSPIRATOR, 0, BLOCKS_IDLE_REWARD },
 
     { "yell"       , POS_LYING   , do_gen_comm , 0, SCMD_SHOUT, BLOCKS_IDLE_REWARD },
 
