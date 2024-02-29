@@ -3675,13 +3675,16 @@ ACMD(do_bond)
   }
 
   if (GET_OBJ_TYPE(obj) == ITEM_DOCWAGON) {
-    if (GET_DOCWAGON_BONDED_IDNUM(obj)) {
-      if (GET_DOCWAGON_BONDED_IDNUM(obj) == GET_IDNUM(ch))
-        act("You have already activated $p.", FALSE, ch, obj, 0, TO_CHAR);
-      else
-        act("$p has already been activated by someone else.", FALSE, ch, obj, 0, TO_CHAR);
+    FAILURE_CASE_PRINTF(GET_DOCWAGON_BONDED_IDNUM(obj) && GET_DOCWAGON_BONDED_IDNUM(obj) == GET_IDNUM(ch), 
+                        "You have already activated %s.", decapitalize_a_an(GET_OBJ_NAME(obj)));
+
+    FAILURE_CASE_PRINTF(GET_DOCWAGON_BONDED_IDNUM(obj) && GET_DOCWAGON_BONDED_IDNUM(obj) == GET_IDNUM(ch), 
+                        "%s has already been activated by someone else.", CAP(GET_OBJ_NAME(obj)));
+
+    // Message is sent in function.
+    if (blocked_by_soulbinding(ch, obj))
       return;
-    }
+    
     GET_DOCWAGON_BONDED_IDNUM(obj) = GET_IDNUM(ch);
     act("$p's lights begin to subtly flash in a rhythmic sequence.", FALSE,
         ch, obj, 0, TO_CHAR);
@@ -3762,24 +3765,22 @@ ACMD(do_bond)
   }
 
   else if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
-
-    if (IS_WORKING(ch)) {
-      send_to_char(TOOBUSY, ch);
+    FAILURE_CASE(IS_WORKING(ch), "You're too busy.");
+    FAILURE_CASE(GET_TRADITION(ch) == TRAD_MUNDANE, "As a mundane, you can't bond foci.");
+    FAILURE_CASE(GET_TRADITION(ch) == TRAD_ADEPT, "Adepts can only bond weapon foci.");
+    FAILURE_CASE_PRINTF(GET_FOCUS_BONDED_TO(obj) && GET_FOCUS_BONDED_TO(obj) != GET_IDNUM(ch),
+                        "%s is already bonded to someone else.\r\n", capitalize(GET_OBJ_NAME(obj)));
+    
+    // Message is sent in function.
+    if (blocked_by_soulbinding(ch, obj))
       return;
-    }
 
     if (GET_POS(ch) > POS_SITTING) {
       GET_POS(ch) = POS_SITTING;
       send_to_char(ch, "You find a place to sit and work.\r\n");
     }
 
-    if (GET_TRADITION(ch) == TRAD_MUNDANE)
-      send_to_char(ch, "You can't bond foci.\r\n");
-    else if (GET_TRADITION(ch) == TRAD_ADEPT)
-      send_to_char("Adepts can only bond weapon foci.\r\n", ch);
-    else if (GET_FOCUS_BONDED_TO(obj) && GET_FOCUS_BONDED_TO(obj) != GET_IDNUM(ch))
-      send_to_char(ch, "%s is already bonded to someone else.\r\n", capitalize(GET_OBJ_NAME(obj)));
-    else if (GET_FOCUS_BONDED_TO(obj) == GET_IDNUM(ch)) {
+    if (GET_FOCUS_BONDED_TO(obj) == GET_IDNUM(ch)) {
       if (GET_FOCUS_BOND_TIME_REMAINING(obj)) {
 
 #ifdef ACCELERATE_FOR_TESTING

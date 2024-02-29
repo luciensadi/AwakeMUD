@@ -2570,7 +2570,7 @@ void parse_shop(File &fl, long virtual_nr)
     // It should be impossible to set a buy price lower than 1.0.
     shop->profit_buy = MAX(1.0, shop->profit_buy);
 
-    // Standardize doc cyberware buy prices.
+    // Standardize doc cyberware/bioware buy prices.
     if (shop->flags.IsSet(SHOP_DOCTOR)) {
       shop->profit_sell = CYBERDOC_MAXIMUM_SELL_TO_SHOPKEEP_MULTIPLIER;
     }

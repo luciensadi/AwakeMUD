@@ -4918,7 +4918,7 @@ SPECIAL(multnomah_guard)
     struct char_data *guard = (struct char_data *) me;
     struct obj_data *visa = get_obj_in_list_vis(ch, buf2, ch->carrying);
     if (visa && GET_OBJ_VNUM(visa) == OBJ_MULTNOMAH_VISA) {
-      if (GET_OBJ_VAL(visa, 0) == GET_IDNUM(ch)) {
+      if (GET_VISA_OWNER(visa) == GET_IDNUM(ch)) {
         PLR_FLAGS(ch).SetBit(PLR_VISA);
         snprintf(arg, sizeof(arg), "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
         do_say(guard, arg, 0, SCMD_SAYTO);
@@ -6710,7 +6710,7 @@ SPECIAL(airport_guard)
     one_argument(argument, buf);
     struct obj_data *visa = get_obj_in_list_vis(ch, buf, ch->carrying);
     if (visa && GET_OBJ_VNUM(visa) == OBJ_CARIBBEAN_VISA) {
-      if (GET_OBJ_VAL(visa, 0) == GET_IDNUM(ch)) {
+      if (GET_VISA_OWNER(visa) == GET_IDNUM(ch)) {
         PLR_FLAGS(ch).SetBit(PLR_VISA);
         snprintf(arg, sizeof(arg), "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
         do_say(guard, arg, 0, SCMD_SAYTO);

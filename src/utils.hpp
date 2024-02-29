@@ -165,6 +165,10 @@ void    add_ch_to_character_list(struct char_data *ch, const char *source);
 void    remove_ch_from_character_list(struct char_data *ch, const char *source);
 int     get_hardened_ballistic_armor_rating(struct char_data *ch);
 int     get_hardened_impact_armor_rating(struct char_data *ch);
+bool    blocked_by_soulbinding(struct char_data *ch, struct obj_data *obj, bool send_message=TRUE);
+const char *get_soulbound_name(struct obj_data *obj);
+idnum_t get_soulbound_idnum(struct obj_data *obj);
+bool    soulbind_obj_to_char(struct obj_data *obj, struct char_data *ch, bool including_chargen_binds);
 
 struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion);
 void    find_or_load_ch_cleanup(struct char_data *ch);
@@ -1061,6 +1065,8 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_SLOTMACHINE_PLAY_TICKS(obj)           (GET_OBJ_VAL((obj), 2))
 #define GET_SLOTMACHINE_MONEY_EXTRACTED(obj)      (GET_OBJ_VAL((obj), 9))
 
+#define GET_VISA_OWNER(obj)                       (GET_OBJ_VAL((obj), 0))
+
 // Which vector in the map this deck uses (0 for unallocated)
 #define GET_CARD_VECTOR_IDNUM(obj)                (GET_OBJ_VAL((obj), 0))
 // Which player this stack belongs to (0 for none)
@@ -1076,6 +1082,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 // ITEM_DOCWAGON convenience defines
 #define GET_DOCWAGON_CONTRACT_GRADE(modulator)    (GET_OBJ_VAL((modulator), 0))
 #define GET_DOCWAGON_BONDED_IDNUM(modulator)      (GET_OBJ_VAL((modulator), 1))
+#define GET_DOCWAGON_SOULBOND(focus)                 (GET_OBJ_VAL((focus), 11))
 
 // ITEM_CONTAINER convenience defines
 #define GET_CORPSE_IS_PC(corpse)                  (GET_OBJ_VAL((corpse), 4))
@@ -1117,6 +1124,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_SETTABLE_BIOWARE_IS_CULTURED(bioware)    (GET_OBJ_VAL((bioware), 2))
 #define GET_BIOWARE_IS_ACTIVATED(bioware)            (GET_OBJ_VAL((bioware), 3))
 #define GET_BIOWARE_ESSENCE_COST(bioware)            (GET_OBJ_VAL((bioware), 4))
+#define GET_BIOWARE_SOULBOND(bioware)                (GET_OBJ_VAL((bioware), 10))
 #define GET_BIOWARE_FLAGS(bioware)                   (GET_OBJ_VAL((bioware), 11))
 
 // Platelet factory extra data.
@@ -1151,6 +1159,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERWARE_MEMORY_USED(cyberware)      (GET_OBJ_VAL((cyberware), 5))
 #define GET_CYBERWARE_RADIO_FREQ(cyberware)       (GET_OBJ_VAL((cyberware), 6)) // Settable by player
 #define GET_CYBERWARE_RADIO_CRYPT(cyberware)      (GET_OBJ_VAL((cyberware), 7)) // Settable by player
+#define GET_CYBERWARE_SOULBOND(cyberware)         (GET_OBJ_VAL((cyberware), 11))
 // Cyberware phones use 6, 7, and 8 for... stuff?
 #define GET_CYBERWARE_IS_DISABLED(cyberware)      (GET_OBJ_VAL((cyberware), 9))
 #define GET_CYBERWARE_MEMORY_FREE(cyberware)      (GET_CYBERWARE_MEMORY_MAX((cyberware)) - GET_CYBERWARE_MEMORY_USED((cyberware)))
@@ -1212,6 +1221,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_FOCUS_TRADITION(focus)                (GET_OBJ_VAL((focus), 5))
 #define GET_FOCUS_BOND_TIME_REMAINING(focus)      (GET_OBJ_VAL((focus), 9))
 #define GET_FOCUS_GEAS(focus)                     (GET_OBJ_VAL((focus), 10))
+#define GET_FOCUS_SOULBOND(focus)                 (GET_OBJ_VAL((focus), 11))
 
 // ITEM_PATCH convenience defines
 #define GET_PATCH_TYPE(patch)                      (GET_OBJ_VAL((patch), 0))

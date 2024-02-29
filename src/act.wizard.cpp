@@ -4286,6 +4286,7 @@ ACMD(do_show)
                { "ignore",         LVL_EXECUTIVE },
                { "vehicles",       LVL_ADMIN },
                { "dirtyelves",     LVL_BUILDER },
+               { "wareshops",      LVL_BUILDER },
                { "\n", 0 }
              };
 
@@ -4856,6 +4857,14 @@ ACMD(do_show)
         if (!str_str(GET_KEYWORDS(&mob_proto[idx]), " elf") && !is_abbrev("elf", GET_KEYWORDS(&mob_proto[idx]))) {
           send_to_char(ch, "  [%6ld] %s\r\n", GET_MOB_VNUM(&mob_proto[idx]), GET_NAME(&mob_proto[idx]));
         }
+      }
+    }
+    break;
+  case 28:
+    send_to_char("The following cyberdoc shops have a player-selling-to-shop profit percentage != 30%:\r\n", ch);
+    for (int idx = 0; idx <= top_of_shopt; idx++) {
+      if (shop_table[idx].flags.IsSet(SHOP_DOCTOR) && shop_table[idx].profit_sell != 0.3f) {
+        send_to_char(ch, "  [%6ld] %.2f\r\n", shop_table[idx].vnum, shop_table[idx].profit_sell);
       }
     }
     break;

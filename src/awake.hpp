@@ -3080,6 +3080,8 @@ enum {
 #define BOOTED_FROM_CRASH      1
 #define BOOTED_FROM_COPYOVER   2
 
+#define HARDENED_ARMOR_NOT_CUSTOMIZED  -1
+
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens

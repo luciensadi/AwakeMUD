@@ -342,6 +342,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (IS_OBJ_STAT(object, ITEM_EXTRA_KEPT)) {
       strlcat(buf, " ^c(kept)^n", sizeof(buf));
     }
+
     if (IS_OBJ_STAT(object, ITEM_EXTRA_HARDENED_ARMOR)) {
       if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(object) == GET_IDNUM(ch)) {
         strlcat(buf, " (yours)", sizeof(buf));
@@ -357,6 +358,12 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       } else {
         strlcat(buf, " ^y(unusable)", sizeof(buf));
       }
+    } else if (blocked_by_soulbinding(ch, object, FALSE)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object));
+    }
+
+    if (GET_OBJ_VNUM(object) == OBJ_SHOPCONTAINER && object->contains && blocked_by_soulbinding(ch, object->contains, FALSE)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object->contains));
     }
   }
   else if (GET_OBJ_NAME(object) && ((mode == 3) || (mode == 4) || (mode == SHOW_MODE_OWN_EQUIPMENT) || (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT))) {
@@ -3236,7 +3243,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
         } else {
           if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == GET_IDNUM(ch)) {
             strlcat(buf, "It has been permanently customized to fit you. Nobody else can wear it.\r\n", sizeof(buf));
-          } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == -1) {
+          } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(j) == HARDENED_ARMOR_NOT_CUSTOMIZED) {
             strlcat(buf, "^gIt will be permanently customized to fit the first person to wear it (AKA soul-bound).^n\r\n", sizeof(buf));
           } else {
             strlcat(buf, "^yIt has been permanently customized to fit someone else-- you can't wear it.^n\r\n", sizeof(buf));
@@ -3514,6 +3521,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n focus of force ^c%d^n.",
                foci_type[GET_FOCUS_TYPE(j)],
                GET_FOCUS_FORCE(j));
+      if (blocked_by_soulbinding(ch, j, FALSE)) {
+        strlcat(buf, "It is ^rsoulbound to someone else^n and cannot be used.", sizeof(buf));
+      }
       break;
     case ITEM_SPELL_FORMULA:
       if (SPELL_HAS_SUBTYPE(GET_SPELLFORMULA_SPELL(j)))
@@ -3776,6 +3786,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       }
       if (GET_OBJ_VNUM(j) == OBJ_SHOPCONTAINER) {
         strlcat(buf, "\r\nIt's a packaged-up bit of cyberware or bioware. See ##^WHELP CYBERDOC^n for what you can do with it.", sizeof(buf));
+        if (j->contains && blocked_by_soulbinding(ch, j->contains, FALSE)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is soulbound to %s and cannot be used by anyone else.\r\n", get_soulbound_name(j->contains));
+        }
         break;
       }
       if (GET_OBJ_VNUM(j) == OBJ_ANTI_DRUG_CHEMS) {
@@ -4180,6 +4193,9 @@ ACMD(do_examine)
           send_to_char("It has been activated by someone else and ^ywill not function for you^n.\r\n\r\n", ch);
       } else {
         send_to_char("It has not been ^WBOND^ned yet, and ^ywill not function until it is^n.\r\n\r\n", ch);
+      }
+      if (blocked_by_soulbinding(ch, tmp_object, FALSE)) {
+        send_to_char("It is ^rsoulbound to someone else^n and cannot be used.\r\n", ch);
       }
     }
 

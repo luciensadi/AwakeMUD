@@ -6979,3 +6979,137 @@ vnum_t get_authoritative_vnum_for_item(vnum_t vnum) {
   return vnum;
 }
 #undef PAIR
+
+idnum_t get_soulbound_idnum(struct obj_data *obj) {
+  if (!obj) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Invalid args to get_soulbound_idnum(%s)", GET_OBJ_NAME(obj));
+    return 1;
+  }
+
+  switch (GET_OBJ_TYPE(obj)) {
+    case ITEM_FOCUS:
+      return GET_FOCUS_SOULBOND(obj);
+    case ITEM_DOCWAGON:
+      return GET_DOCWAGON_SOULBOND(obj);
+    case ITEM_BIOWARE:
+      return GET_BIOWARE_SOULBOND(obj);
+    case ITEM_CYBERWARE:
+      return GET_CYBERWARE_SOULBOND(obj);
+    case ITEM_WORN:
+      return GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj);
+  }
+
+  // Special case: Vehicle titles.
+  if (obj_is_a_vehicle_title(obj))
+    return GET_VEHICLE_TITLE_OWNER(obj);
+
+  // Special case: Visas.
+  if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
+    return GET_VISA_OWNER(obj);
+
+  return 0;
+}
+
+// Returns TRUE on success, FALSE otherwise.
+bool soulbind_obj_to_char(struct obj_data *obj, struct char_data *ch, bool including_chargen_soulbinds) {
+  if (!ch || !obj) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid args to soulbind_obj_to_char(%s, %s)", GET_OBJ_NAME(obj), GET_CHAR_NAME(ch));
+    return FALSE;
+  }
+
+  if (GET_IDNUM(ch) <= 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received invalid idnum %ld to soulbind_obj_to_char(%s, %s)", GET_IDNUM(ch), GET_OBJ_NAME(obj), GET_CHAR_NAME(ch));
+    return FALSE;
+  }
+
+  switch (GET_OBJ_TYPE(obj)) {
+    case ITEM_FOCUS:
+      // Foci are only soulbound when purchased in chargen.
+      if (including_chargen_soulbinds)
+        GET_FOCUS_SOULBOND(obj) = GET_IDNUM(ch);
+      break;
+    case ITEM_DOCWAGON:
+      // Docwagon modulators are only soulbound when purchased in chargen.
+      if (including_chargen_soulbinds)
+        GET_DOCWAGON_SOULBOND(obj) = GET_IDNUM(ch);
+      break;
+    case ITEM_BIOWARE:
+      // Bioware is soulbound on installation.
+      GET_BIOWARE_SOULBOND(obj) = GET_IDNUM(ch);
+      break;
+    case ITEM_CYBERWARE:
+      // Cyberware is soulbound on installation.
+      GET_CYBERWARE_SOULBOND(obj) = GET_IDNUM(ch);
+      break;
+    case ITEM_WORN:
+      // Hardened armor is soulbound when worn.
+      GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = GET_IDNUM(ch);
+      break;
+  }
+
+  // Special case: Vehicle titles.
+  if (obj_is_a_vehicle_title(obj))
+    GET_VEHICLE_TITLE_OWNER(obj) = GET_IDNUM(ch);
+
+  // Special case: Visas.
+  if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
+    GET_VISA_OWNER(obj) = GET_IDNUM(ch);
+
+  return TRUE;
+}
+
+// Returns TRUE if blocked, FALSE otherwise.
+bool blocked_by_soulbinding(struct char_data *ch, struct obj_data *obj, bool send_message) {
+  if (!ch || !obj) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid args to blocked_by_soulbinding(%s, %s, %s)", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), send_message ? "TRUE" : "FALSE");
+    return TRUE;
+  }
+
+  idnum_t soulbound_to = get_soulbound_idnum(obj);
+
+  if (!soulbound_to)
+    return FALSE;
+
+  if (soulbound_to == GET_IDNUM(ch))
+    return FALSE;
+
+  if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR) && soulbound_to == HARDENED_ARMOR_NOT_CUSTOMIZED)
+    return FALSE;
+
+  if (send_message) {
+    send_to_char(ch, "You can't use %s: It's a soulbound item from character creation.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+  }
+  
+  return TRUE;
+}
+
+const char *get_soulbound_name(struct obj_data *obj) {
+  static char soulbound_name[100];
+
+  *(soulbound_name) = '\0';
+
+  if (!obj) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Invalid args to get_soulbound_name(%s)", GET_OBJ_NAME(obj));
+    return soulbound_name;
+  }
+
+  idnum_t soulbound_to = get_soulbound_idnum(obj);
+
+  if (soulbound_to < 0) {
+    // It's an internal code like -1 for hardened armor not being bound yet. This is an error case.
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Called get_soulbound_name(%s / %ld) and got invalid soulbound id %ld back.", 
+                   GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), soulbound_to);
+    strlcpy(soulbound_name, "<error>", sizeof(soulbound_name));
+  }
+  else if (soulbound_to) {
+    const char *player_name = get_player_name(soulbound_to);
+    if (!strcmp(player_name, CHARACTER_DELETED_NAME_FOR_SQL)) {
+      strlcpy(soulbound_name, "a deleted character", sizeof(soulbound_name));
+    } else {
+      strlcpy(soulbound_name, player_name, sizeof(soulbound_name));
+    }
+    delete [] player_name;
+  }
+
+  return soulbound_name;
+}

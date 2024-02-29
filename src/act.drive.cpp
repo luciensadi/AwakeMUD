@@ -29,6 +29,8 @@ int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
 
 extern int max_npc_vehicle_lootwreck_time;
 
+extern void rectify_desc_host(struct descriptor_data *desc);
+
 #define VEH ch->in_veh
 
 int get_maneuver(struct veh_data *veh)
@@ -2410,8 +2412,21 @@ ACMD(do_transfer)
     veh->owner = GET_IDNUM(targ);
     veh->sub = FALSE;
 
-    mudlog_vfprintf(ch, LOG_CHEATLOG, "Transfered ownership of vehicle '%s' (%ld) to %s (%ld).", 
-                    GET_VEH_NAME(veh), veh->idnum, GET_CHAR_NAME(targ), GET_IDNUM(targ));
+    if (ch->desc && targ->desc) {
+      rectify_desc_host(ch->desc);
+      rectify_desc_host(targ->desc);
+
+      if (!strcmp(ch->desc->host, targ->desc->host)) {
+        mudlog_vfprintf(ch, LOG_CHEATLOG, "Transfered ownership of vehicle '%s' (%ld) to SAME HOST character %s (%ld) [host %s].", 
+                      GET_VEH_NAME(veh), veh->idnum, GET_CHAR_NAME(targ), GET_IDNUM(targ), ch->desc->host);
+      } else {
+        mudlog_vfprintf(ch, LOG_CHEATLOG, "Transfered ownership of vehicle '%s' (%ld) to %s (%ld).", 
+                      GET_VEH_NAME(veh), veh->idnum, GET_CHAR_NAME(targ), GET_IDNUM(targ));
+      }
+    } else {
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "Transfered ownership of vehicle '%s' (%ld) to %s (%ld).", 
+                      GET_VEH_NAME(veh), veh->idnum, GET_CHAR_NAME(targ), GET_IDNUM(targ));
+    }
 
     save_vehicles(FALSE);
   }

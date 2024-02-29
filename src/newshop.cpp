@@ -607,12 +607,24 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   // Sanity check.
   else {
     mudlog_vfprintf(installer, LOG_SYSLOG, "CRITICAL SYSERR: Not only is %s (%ld) not cyberware or bioware, our prior check to ensure safety failed!!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+    send_to_char(installer, "An error has occurred and the operation has been aborted. (1)\r\n");
+    send_to_char(recipient, "An error has occurred and the operation has been aborted. (1)\r\n");
+    return FALSE;
+  }
+
+  // Soulbind it. In case there's a need to make this chargen-only later on: "PLR_FLAGGED(recipient, PLR_NOT_YET_AUTHED)"
+  if (!soulbind_obj_to_char(ware, recipient, TRUE)) {
+    send_to_char(installer, "An error has occurred and the operation has been aborted. (2)\r\n");
+    send_to_char(recipient, "An error has occurred and the operation has been aborted. (2)\r\n");
     return FALSE;
   }
 
   if (!IS_NPC(installer)) {
     const char *representation = generate_new_loggable_representation(ware);
-    mudlog_vfprintf(installer, LOG_GRIDLOG, "Player Cyberdoc: %s installed %s in %s.", GET_CHAR_NAME(installer), GET_OBJ_NAME(ware), GET_CHAR_NAME(recipient));
+    mudlog_vfprintf(installer, LOG_GRIDLOG, "Player Cyberdoc: %s (%ld) installed %s in %s (%ld).", 
+                    GET_CHAR_NAME(installer), GET_IDNUM(installer),
+                    representation,
+                    GET_CHAR_NAME(recipient), GET_IDNUM(recipient));
     delete [] representation;
   }
 
@@ -949,15 +961,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
                      && IS_CARRYING_N(ch) < CAN_CARRY_N(ch)
                      && GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch)
                      && (cred ? GET_ITEM_MONEY_VALUE(cred) : GET_NUYEN(ch)) >= price)) {
-        // Visas are ID-locked to the purchaser.
-        if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
-          GET_OBJ_VAL(obj, 0) = GET_IDNUM(ch);
+        // ID-lock anything that needs locking.
+        soulbind_obj_to_char(obj, ch, shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED));
 
-        // Vehicle titles are ID-locked to the purchaser.
-        if (obj_is_a_vehicle_title(obj))
-          GET_VEHICLE_TITLE_OWNER(obj) = GET_IDNUM(ch);
-
-        // Hardened armor is not ID-locked on purchase, but IS on first wear.
+        // Hardened armor is not ID-locked on purchase, but IS on first wear. This unlocks it after the above statement.
         if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR))
           GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = -1;
 
