@@ -2823,8 +2823,10 @@ enum {
 #define COMM_CHANNEL_WTELLS        11
 #define COMM_CHANNEL_EMOTES        12
 #define COMM_CHANNEL_LOCAL         13
+#define COMM_CHANNEL_ROLEPLAY      14
+#define COMM_CHANNEL_ALL           15
 
-#define NUM_COMMUNICATION_CHANNELS 14
+#define NUM_COMMUNICATION_CHANNELS 16
 
 
 /* Exit / error codes. */

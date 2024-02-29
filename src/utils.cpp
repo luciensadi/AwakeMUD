@@ -2511,8 +2511,17 @@ void store_message_to_history(struct descriptor_data *d, int channel, const char
   // Add a clone of the message to the descriptor's channel history.
   d->message_history[channel].AddItem(NULL, str_dup(message));
 
+  int retention_amount = NUM_MESSAGES_TO_RETAIN;
+  switch (channel) {
+    case COMM_CHANNEL_LOCAL:
+    case COMM_CHANNEL_ROLEPLAY:
+    case COMM_CHANNEL_ALL:
+      retention_amount = 1000;
+      break;
+  }
+
   // Constrain message history to the specified amount.
-  if (d->message_history[channel].NumItems() > NUM_MESSAGES_TO_RETAIN) {
+  if (d->message_history[channel].NumItems() > retention_amount) {
     // We're over the amount. Remove the tail, making sure we delete the contents.
     if (d->message_history[channel].Tail()->data)
       delete [] d->message_history[channel].Tail()->data;
@@ -2521,14 +2530,25 @@ void store_message_to_history(struct descriptor_data *d, int channel, const char
   }
 
   // Populate meta-history channels as well.
+  // LOCAL: says, emotes, shouts, and osays: the things you experience in the same room.
+  // ROLEPLAY: says, emotes, shouts, phone, and radio: the in-game things your char reacts to.
+  // ALL: Everything.
   switch (channel) {
     case COMM_CHANNEL_SAYS:
     case COMM_CHANNEL_EMOTES:
-    case COMM_CHANNEL_OSAYS:
     case COMM_CHANNEL_SHOUTS:
+      store_message_to_history(d, COMM_CHANNEL_LOCAL, message);
+      // fall through
+    case COMM_CHANNEL_PHONE:
+    case COMM_CHANNEL_RADIO:
+      store_message_to_history(d, COMM_CHANNEL_ROLEPLAY, message);
+      break;
+    case COMM_CHANNEL_OSAYS:
       store_message_to_history(d, COMM_CHANNEL_LOCAL, message);
       break;
   }
+
+  store_message_to_history(d, COMM_CHANNEL_ALL, message);
 }
 
 void delete_message_history(struct descriptor_data *d) {

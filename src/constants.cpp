@@ -2946,7 +2946,9 @@ const char *message_history_channels[] = {
   "Tells",
   "Wiztells",
   "Emotes",
-  "Local"
+  "Local",
+  "Roleplay",
+  "All"
 };
 
 const char *pgroup_settings[] = {
