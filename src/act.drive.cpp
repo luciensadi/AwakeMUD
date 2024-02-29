@@ -2410,6 +2410,9 @@ ACMD(do_transfer)
     veh->owner = GET_IDNUM(targ);
     veh->sub = FALSE;
 
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "Transfered ownership of vehicle '%s' (%ld) to %s (%ld).", 
+                    GET_VEH_NAME(veh), veh->idnum, GET_CHAR_NAME(targ), GET_IDNUM(targ));
+
     save_vehicles(FALSE);
   }
 }
