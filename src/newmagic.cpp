@@ -1093,30 +1093,42 @@ bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
 #endif
     char focus_selection_rolls_msg[MAX_STRING_LENGTH];
     for (int i = 0; !focus && i < NUM_WEARS; i++) {
-      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_FOCUS_TYPE(GET_EQ(ch, i)) == FOCI_SUSTAINED) {
-        if (!GET_FOCUS_ACTIVATED(GET_EQ(ch, i))
-            && GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)) == spell
-            && GET_FOCUS_FORCE(GET_EQ(ch, i)) >= force
-            && focus_is_usable_by_ch(GET_EQ(ch, i), ch))
-        {
-          focus = GET_EQ(ch, i);
-          snprintf(focus_selection_rolls_msg, sizeof(focus_selection_rolls_msg), "Using sustaining focus %s (%ld).",
-                  GET_OBJ_NAME(GET_EQ(ch, i)),
-                  GET_OBJ_VNUM(GET_EQ(ch, i))
-                  );
-          act(focus_selection_rolls_msg, 0, ch, 0, 0, TO_ROLLS);
-        } else {
-          snprintf(focus_selection_rolls_msg, sizeof(focus_selection_rolls_msg), "Skipping sustaining focus %s (%ld): %s, %s, %s, %s",
-                  GET_OBJ_NAME(GET_EQ(ch, i)),
-                  GET_OBJ_VNUM(GET_EQ(ch, i)),
-                  GET_FOCUS_ACTIVATED(GET_EQ(ch, i)) ? "^ralready in use^n" : "not already activated",
-                  GET_FOCUS_BONDED_SPIRIT_OR_SPELL(GET_EQ(ch, i)) != spell ? "^rwrong spell^n" : "right spell",
-                  GET_FOCUS_FORCE(GET_EQ(ch, i)) < force ? "^rlow force^n" : "adequate force",
-                  !focus_is_usable_by_ch(GET_EQ(ch, i), ch) ? "^runusable^n" : "usable"
-                  );
-          act(focus_selection_rolls_msg, 0, ch, 0, 0, TO_ROLLS);
-        }
+      struct obj_data *temp_focus = GET_EQ(ch, i);
+
+      // Check to make sure this is a sustaining focus.
+      if (!temp_focus || GET_OBJ_TYPE(temp_focus) != ITEM_FOCUS || GET_FOCUS_TYPE(temp_focus) != FOCI_SUSTAINED) {
+        continue;
       }
+
+      // Check for invalid focus.
+      if (GET_FOCUS_ACTIVATED(temp_focus)
+          || GET_FOCUS_BONDED_SPIRIT_OR_SPELL(temp_focus) != spell
+          || GET_FOCUS_FORCE(temp_focus) < force
+          || !focus_is_usable_by_ch(temp_focus, ch))
+      {
+        snprintf(focus_selection_rolls_msg, sizeof(focus_selection_rolls_msg), "Skipping sustaining focus %s (%ld): %s, %s (%d vs %d), %s (%d vs %d), %s",
+              GET_OBJ_NAME(temp_focus),
+              GET_OBJ_VNUM(temp_focus),
+              GET_FOCUS_ACTIVATED(temp_focus) ? "^ralready in use^n" : "not already activated",
+              GET_FOCUS_BONDED_SPIRIT_OR_SPELL(temp_focus) != spell ? "^rwrong spell^n" : "right spell",
+              GET_FOCUS_BONDED_SPIRIT_OR_SPELL(temp_focus),
+              spell,
+              GET_FOCUS_FORCE(temp_focus) < force ? "^rlow force^n" : "adequate force",
+              GET_FOCUS_FORCE(temp_focus),
+              force,
+              !focus_is_usable_by_ch(temp_focus, ch) ? "^runusable^n" : "usable"
+              );
+        act(focus_selection_rolls_msg, 0, ch, 0, 0, TO_ROLLS);
+      }
+
+      // Valid focus.
+      focus = temp_focus;
+      snprintf(focus_selection_rolls_msg, sizeof(focus_selection_rolls_msg), "Using sustaining focus %s (%ld).",
+              GET_OBJ_NAME(temp_focus),
+              GET_OBJ_VNUM(temp_focus)
+              );
+      act(focus_selection_rolls_msg, 0, ch, 0, 0, TO_ROLLS);
+      break;
     }
   }
 
@@ -6807,6 +6819,12 @@ const char *warn_if_spell_under_potential(struct sustain_data *sust) {
 
 const char *get_spell_name(int spell, int subtype) {
   static char spell_name[100];
+
+  if (spell < SPELL_DEATHTOUCH || spell >= MAX_SPELLS) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received invalid spell type to get_spell_name(%d, %d).", spell, subtype);
+    strlcpy(spell_name, "<error>", sizeof(spell_name));
+    return spell_name;
+  }
 
   strlcpy(spell_name, spells[spell].name, sizeof(spell_name));
 

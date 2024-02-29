@@ -3703,26 +3703,27 @@ ACMD(do_assense)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". You bonded it to help with the spell '%s'", get_spell_name(GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj), -1));
       } else if (success >= 5) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It is of force %d", GET_OBJ_VAL(obj, 1));
-        if (GET_OBJ_VAL(obj, 2)) {
-          switch (GET_OBJ_VAL(obj, 0)) {
-          case FOCI_EXPENDABLE:
-          case FOCI_SPELL_CAT:
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It has been bonded to help with %s spells", spell_category[GET_OBJ_VAL(obj, 3)]);
-            break;
-          case FOCI_SPEC_SPELL:
-          case FOCI_SUSTAINED:
-            if (GET_IDNUM(ch) == GET_FOCUS_BONDED_TO(obj)) {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". You bonded it to help with the spell '%s'", spells[GET_OBJ_VAL(obj, 3)].name);
-            } else {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It has been bonded to help a %s spell", spell_category[spells[GET_OBJ_VAL(obj, 3)].category]);
-            }
-            break;
-          case FOCI_SPIRIT:
-            if (GET_OBJ_VAL(obj, 5))
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It as been bonded with a %s elemental", elements[GET_OBJ_VAL(obj, 3)].name);
-            else
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It as been bonded with a %s spirit", spirits[GET_OBJ_VAL(obj, 3)].name);
-            break;
+        
+        if (GET_FOCUS_BONDED_TO(obj)) {
+          switch (GET_FOCUS_TYPE(obj)) {
+            case FOCI_EXPENDABLE:
+            case FOCI_SPELL_CAT:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It has been bonded to help with %s spells", spell_category[GET_OBJ_VAL(obj, 3)]);
+              break;
+            case FOCI_SPEC_SPELL:
+            case FOCI_SUSTAINED:
+              if (GET_IDNUM(ch) == GET_FOCUS_BONDED_TO(obj)) {
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". You bonded it to help with the spell '%s'", get_spell_name(GET_FOCUS_BONDED_SPIRIT_OR_SPELL(obj), -1));
+              } else {
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It has been bonded to help a %s spell", spell_category[spells[GET_OBJ_VAL(obj, 3)].category]);
+              }
+              break;
+            case FOCI_SPIRIT:
+              if (GET_OBJ_VAL(obj, 5))
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It as been bonded with a %s elemental", elements[GET_OBJ_VAL(obj, 3)].name);
+              else
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It as been bonded with a %s spirit", spirits[GET_OBJ_VAL(obj, 3)].name);
+              break;
           }
         }
       } else if (success >= 3) {
