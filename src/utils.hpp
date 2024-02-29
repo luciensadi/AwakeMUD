@@ -163,6 +163,8 @@ int     get_metavariant_penalty(struct char_data *ch);
 int     get_total_active_focus_rating(struct char_data *i, int &total);
 void    add_ch_to_character_list(struct char_data *ch, const char *source);
 void    remove_ch_from_character_list(struct char_data *ch, const char *source);
+int     get_hardened_ballistic_armor_rating(struct char_data *ch);
+int     get_hardened_impact_armor_rating(struct char_data *ch);
 
 struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion);
 void    find_or_load_ch_cleanup(struct char_data *ch);

@@ -321,6 +321,43 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
   return TRUE;
 }
 
+bool is_dissuaded_by_hardened_armor(struct char_data *ch, struct char_data *vict) {
+  // Mages are exempt from this, they think they can cast past it.
+  if (GET_MAG(ch) > 0)
+    return FALSE;
+
+  struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+
+  // Basic unarmed power.
+  int my_power = GET_STR(ch);
+
+  // If you have a weapon, modify or overwrite the power.
+  if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
+    if (WEAPON_IS_GUN(weapon)) {
+      // Overwrite with weapon power.
+      my_power = GET_WEAPON_POWER(weapon);
+      if (weapon->contains && GET_OBJ_TYPE(weapon->contains) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_AMMO_TYPE(weapon->contains) == AMMO_APDS)
+        my_power *= 2;
+      
+      if (get_hardened_ballistic_armor_rating(vict) >= my_power) {
+        // Refuse to attack anyone whose armor we can't breach.
+        return TRUE;
+      }
+    } else {
+      // Add weapon power to strength.
+      my_power += GET_WEAPON_STR_BONUS(weapon);
+      weapon = NULL;
+
+      if (get_hardened_impact_armor_rating(vict) >= my_power) {
+        // Refuse to attack anyone whose armor we can't breach.
+        return TRUE;
+      }
+    }
+  }
+
+  return FALSE;
+}
+
 bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
   if (!vict_is_valid_target(ch, vict))
     return FALSE;
@@ -329,38 +366,6 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
   bool is_alarmed_guard = MOB_FLAGGED(ch, MOB_GUARD) && GET_MOBALERT(ch) == MALERT_ALARM;
   bool is_alarmed_racist = mob_is_aggressive(ch, FALSE) && GET_MOBALERT(ch) == MALERT_ALARM;
   bool is_racially_motivated = mob_is_aggressive_towards_race(ch, GET_RACE(vict));
-
-  bool dissuaded_by_hardened_armor = FALSE;
-
-  // Non-mages won't initiate against someone in hardened armor if they don't think they can breach it.
-  if (GET_MAG(ch) <= 0) {
-    struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
-    int my_power = GET_STR(ch);
-    if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
-      if (WEAPON_IS_GUN(weapon)) {
-        my_power = GET_WEAPON_POWER(weapon);
-        if (weapon->contains && GET_OBJ_TYPE(weapon->contains) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_AMMO_TYPE(weapon->contains) == AMMO_APDS)
-          my_power *= 2;
-      } else {
-        my_power += GET_WEAPON_STR_BONUS(weapon);
-        weapon = NULL;
-      }
-    }
-
-    int total_bal = 0, total_imp = 0;
-    for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
-      struct obj_data *armor = GET_EQ(vict, wear_idx);
-      if (armor && IS_OBJ_STAT(armor, ITEM_EXTRA_HARDENED_ARMOR)) {
-        total_bal += GET_WORN_BALLISTIC(armor);
-        total_imp += GET_WORN_IMPACT(armor);
-      }
-    }
-
-    if (my_power <= (weapon ? total_bal : total_imp)) {
-      // Refuse to attack anyone whose armor we can't breach.
-      dissuaded_by_hardened_armor = TRUE;
-    }
-  }
 
   if (is_aggressive || is_alarmed_guard || is_alarmed_racist || is_racially_motivated) {
 #ifdef MOBACT_DEBUG
@@ -373,7 +378,7 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
     do_say(ch, buf3, 0, 0);
 #endif
 
-    if (dissuaded_by_hardened_armor) {
+    if (is_dissuaded_by_hardened_armor(ch, vict)) {
 #ifdef MOBACT_DEBUG
       strlcpy(buf3, "...But I'm refusing to attack due to hardened armor.", sizeof(buf3));
       do_say(ch, buf3, 0, 0);
@@ -389,7 +394,7 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
     snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: I am alarmed, so %s is a valid aggro target.", GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);
 #endif
-    if (dissuaded_by_hardened_armor) {
+    if (is_dissuaded_by_hardened_armor(ch, vict)) {
 #ifdef MOBACT_DEBUG
       strlcpy(buf3, "...But I'm refusing to attack due to hardened armor.", sizeof(buf3));
       do_say(ch, buf3, 0, 0);
@@ -434,7 +439,7 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
   // We're zero-indexed, so this is the max string index above plus one.
   #define NUM_GUARD_MESSAGES 26
 
-  if (!vict_is_valid_target(ch, vict))
+  if (!vict_is_valid_target(ch, vict) || is_dissuaded_by_hardened_armor(ch, vict))
     return FALSE;
 
   int security_level = GET_SECURITY_LEVEL(get_ch_in_room(ch));

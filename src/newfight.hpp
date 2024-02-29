@@ -405,20 +405,8 @@ struct combat_data
       ranged_combat_mode = FALSE;
 
     // Calculate hardened armor ratings, if any. We add all hardened items together (e.g. armor + helm)
-    for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
-      struct obj_data *armor = GET_EQ(ch, wear_idx);
-      if (armor && GET_OBJ_TYPE(armor) == ITEM_WORN && IS_OBJ_STAT(armor, ITEM_EXTRA_HARDENED_ARMOR)) {
-        hardened_armor_ballistic_rating += GET_WORN_BALLISTIC(armor);
-        hardened_armor_impact_rating += GET_WORN_IMPACT(armor);
-
-        for (int aff_idx = 0; aff_idx < MAX_OBJ_AFFECT; aff_idx++) {
-          if (armor->affected[aff_idx].location == APPLY_BALLISTIC)
-            hardened_armor_ballistic_rating += armor->affected[aff_idx].modifier;
-          if (armor->affected[aff_idx].location == APPLY_IMPACT)
-            hardened_armor_impact_rating += armor->affected[aff_idx].modifier;
-        }
-      }
-    }
+    hardened_armor_ballistic_rating = get_hardened_ballistic_armor_rating(ch);
+    hardened_armor_impact_rating = get_hardened_impact_armor_rating(ch);
   }
 
   ~combat_data() {

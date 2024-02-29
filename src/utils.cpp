@@ -6753,6 +6753,43 @@ bool is_approved_multibox_host(const char *host) {
   return !str_cmp(host, "grapevine.haus");
 }
 
+int _get_hardened_armor_rating(struct char_data *ch, bool true_for_ballistic_false_for_impact) {
+  if (!ch) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL character to _get_hardened_armor_rating(NULL, %s)!", true_for_ballistic_false_for_impact ? "TRUE" : "FALSE");
+    return 0;
+  }
+  
+  int rating = 0;
+
+  for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+    struct obj_data *armor = GET_EQ(ch, wear_idx);
+    if (armor && GET_OBJ_TYPE(armor) == ITEM_WORN && IS_OBJ_STAT(armor, ITEM_EXTRA_HARDENED_ARMOR)) {
+      if (true_for_ballistic_false_for_impact) {
+        rating += GET_WORN_BALLISTIC(armor);
+      } else {
+        rating += GET_WORN_IMPACT(armor);
+      }
+
+      for (int aff_idx = 0; aff_idx < MAX_OBJ_AFFECT; aff_idx++) {
+        if (armor->affected[aff_idx].location == APPLY_BALLISTIC && true_for_ballistic_false_for_impact)
+          rating += armor->affected[aff_idx].modifier;
+        else if (armor->affected[aff_idx].location == APPLY_IMPACT && !true_for_ballistic_false_for_impact)
+          rating += armor->affected[aff_idx].modifier;
+      }
+    }
+  }
+
+  return rating;
+}
+
+int get_hardened_ballistic_armor_rating(struct char_data *ch) {
+  return _get_hardened_armor_rating(ch, TRUE);
+}
+
+int get_hardened_impact_armor_rating(struct char_data *ch) {
+  return _get_hardened_armor_rating(ch, FALSE);
+}
+
 // Pass in an object's vnum during world loading and this will tell you what the authoritative vnum is for it.
 // Great for swapping out old Classic weapons, cyberware, etc for the new guaranteed-canon versions.
 #define PAIR(classic, current) case (classic): return (current);
