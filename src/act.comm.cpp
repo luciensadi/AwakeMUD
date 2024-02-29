@@ -2171,9 +2171,13 @@ ACMD(do_message_history) {
 
   // No channel found? Fail.
   if (channel >= NUM_COMMUNICATION_CHANNELS) {
-    send_to_char(ch, "Sorry, '%s' is not a recognized channel.\r\n", buf);
-    display_message_history_help(ch);
-    return;
+    if (is_abbrev(buf, "echoes") || is_abbrev(buf, "echos")) {
+      channel = COMM_CHANNEL_EMOTES;
+    } else {
+      send_to_char(ch, "Sorry, '%s' is not a recognized channel.\r\n", buf);
+      display_message_history_help(ch);
+      return;
+    }
   }
 
   if (*buf2) {
