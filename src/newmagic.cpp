@@ -3646,7 +3646,6 @@ ACMD(do_bond)
   half_chop(argument, buf1, buf2, sizeof(buf2));
   struct obj_data *obj;
   int karma = 0, spirit = 0;
-  struct spell_data *spell = GET_SPELLS(ch);
 
   if (!argument || !*argument) {
     send_to_char("You need to specify something to bond.\r\n", ch);
@@ -3839,7 +3838,9 @@ ACMD(do_bond)
           break;
       }
       if (GET_OBJ_VAL(obj, 0) == FOCI_SUSTAINED || GET_OBJ_VAL(obj, 0) == FOCI_SPEC_SPELL) {
-        for (;spell; spell = spell->next)
+        struct spell_data *spell;
+
+        for (spell = GET_SPELLS(ch); spell; spell = spell->next)
           if (is_abbrev(buf2, spell->name)) {
             spirit = spell->type;
             break;

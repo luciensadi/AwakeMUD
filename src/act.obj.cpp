@@ -200,6 +200,9 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
 
     act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
     act("$n puts $p in $P.", FALSE, ch, obj, cont, TO_ROOM);
+
+    obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
+    obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : NULL;
     return;
   }
 
@@ -227,6 +230,9 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
         mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
         delete [] representation;
       }
+
+      obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
+      obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : NULL;
     }
     return;
   }
@@ -281,6 +287,9 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
     delete [] representation;
   }
+
+  obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
+  obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : NULL;
 }
 
 void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
@@ -957,6 +966,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       bool should_wizlog = IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD);
       bool should_cheatlog = (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)) || (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK) || IS_OBJ_STAT(cont, ITEM_EXTRA_CHEATLOG_MARK));
       bool should_gridlog = FALSE;
+      bool same_host_warning = FALSE;
 
       if (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_CORPSE_IS_PC(cont)) {
         if (GET_CORPSE_IDNUM(cont) == GET_IDNUM(ch)) {
@@ -966,12 +976,38 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         }
       }
 
+      if (!should_cheatlog && obj->dropped_by_char > 0 && obj->dropped_by_char != GET_IDNUM(ch) && ch->desc) {
+        // Ensure that the object and character both have valid hosts, and convert them from IP to lookup if possible.
+        rectify_obj_host(obj);
+        rectify_desc_host(ch->desc);
+
+        if (!str_cmp(obj->dropped_by_host, ch->desc->host)) {
+          // Log anyone doing this from a multibox host.
+          should_cheatlog = TRUE;
+          same_host_warning = TRUE;
+        }
+      }
+
       if (should_wizlog || should_cheatlog || should_gridlog) {
         char *representation = generate_new_loggable_representation(obj);
+
+        // Compose our log line.
         snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s",
                 GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
                 representation);
+        
+
+        if (same_host_warning) {
+          const char *pname = get_player_name(obj->dropped_by_char);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", which was dropped/donated by %s (%ld) at their same host (%s)!", 
+                          pname, 
+                          obj->dropped_by_char,
+                          GET_LEVEL(ch) < LVL_PRESIDENT ? obj->dropped_by_host : "<obscured>");
+          delete [] pname;
+        }
+
+        // Write it.
         if (should_wizlog) {
           mudlog(buf, ch, LOG_WIZITEMLOG, TRUE);
         }
@@ -982,6 +1018,15 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           mudlog(buf, ch, LOG_GRIDLOG, TRUE);
         }
         delete [] representation;
+
+        if (same_host_warning) {
+          obj->dropped_by_char = 0;
+
+          if (obj->dropped_by_host) {
+            delete [] obj->dropped_by_host;
+            obj->dropped_by_host = NULL;
+          }
+        }
       }
 
       if (GET_OBJ_TYPE(cont) == ITEM_QUIVER)
@@ -2472,6 +2517,9 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
       obj_to_room(obj, vict->in_room);
     else
       obj_to_veh(obj, vict->in_veh);
+
+    obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
+    obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : NULL;
   } else {
     // Log same-host handoffs.
     if (ch->desc && vict->desc) {
