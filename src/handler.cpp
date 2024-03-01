@@ -852,33 +852,20 @@ void affect_total(struct char_data * ch)
   rigger_rea += GET_REA(ch);
   rigger_init_dice += GET_INIT_DICE(ch);
 
-  int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
+  int cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 25);
 
-#ifdef USE_DRAGON_CAP
   // Min attribute is one, max is soft capped
   for (int att = BOD; att <= WIL; att++) {
-    int per_att_cap = ((ch_is_npc || (GET_LEVEL(ch) >= LVL_ADMIN)) ? 50 : 20);
-
+    // Ensure stat is at or above minimum of 1.
     GET_ATT(ch, att) = MAX(1, GET_ATT(ch, att));
 
-    // For races that go crazy high, allow them their full amount, then immediately soft cap the remainder.
-    if (GET_ATT(ch, att) <= racial_limits[(int) GET_RACE(ch)][RACIAL_LIMITS_NORMAL][att])
-      continue;
+    // Set the cap to the higher of existing cap or racial maximum (only impacts dragons)
+    int per_att_cap = MAX(cap, racial_limits[(int) GET_RACE(ch)][RACIAL_LIMITS_NORMAL][att]);
 
-    // Ensure the cap isn't too low.
-    per_att_cap = MAX(per_att_cap, racial_limits[(int) GET_RACE(ch)][RACIAL_LIMITS_NORMAL][att] * 1.5);
-
+    // Apply the soft cap to anything exceeding it.
     if (GET_ATT(ch, att) > per_att_cap)
       GET_ATT(ch, att) = per_att_cap + ((GET_ATT(ch, att) - per_att_cap + 1) >> 1);
   }
-#else
-  // Min attribute is one, max is soft capped
-  for (int att = BOD; att <= WIL; att++) {
-    GET_ATT(ch, att) = MAX(1, GET_ATT(ch, att));
-    if (GET_ATT(ch, att) > cap)
-      GET_ATT(ch, att) = cap + ((GET_ATT(ch, att) - cap + 1) >> 1);
-  }
-#endif
 
   int base_essence = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(ch));
   GET_ESS(ch) = MAX(0, MIN(GET_ESS(ch), base_essence));
@@ -917,6 +904,7 @@ void affect_total(struct char_data * ch)
       }
 #endif
     } else {
+      // Staff cap.
       GET_MAG(ch) = MAX(0, MIN(GET_MAG(ch), cap * 100));
       GET_MAG(ch) -= MIN(GET_MAG(ch), GET_TEMP_MAGIC_LOSS(ch) * 100);
     }
