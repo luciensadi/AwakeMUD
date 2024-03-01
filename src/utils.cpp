@@ -2548,7 +2548,10 @@ void store_message_to_history(struct descriptor_data *d, int channel, const char
       break;
   }
 
-  store_message_to_history(d, COMM_CHANNEL_ALL, message);
+  // Original messages also go to the ALL meta-channel.
+  if (channel != COMM_CHANNEL_ALL && channel != COMM_CHANNEL_LOCAL && channel != COMM_CHANNEL_ROLEPLAY) {
+    store_message_to_history(d, COMM_CHANNEL_ALL, message);
+  }
 }
 
 void delete_message_history(struct descriptor_data *d) {
