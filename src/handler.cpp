@@ -1622,7 +1622,8 @@ void obj_to_cyberware(struct obj_data * object, struct char_data * ch, bool reca
   }
 
   // Soulbind it to this character.
-  soulbind_obj_to_char(object, ch, FALSE);
+  if (!IS_MOB(ch))
+    soulbind_obj_to_char(object, ch, FALSE);
 }
 
 void obj_to_bioware(struct obj_data * object, struct char_data * ch, bool recalc)
@@ -1663,7 +1664,8 @@ void obj_to_bioware(struct obj_data * object, struct char_data * ch, bool recalc
   }
 
   // Soulbind it to this character.
-  soulbind_obj_to_char(object, ch, FALSE);
+  if (!IS_MOB(ch))
+    soulbind_obj_to_char(object, ch, FALSE);
 }
 
 void obj_from_bioware(struct obj_data *bio, bool recalc)
