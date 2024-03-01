@@ -4179,13 +4179,13 @@ struct obj_data *find_cyberdeck(struct char_data *ch)
   }
 
   for (struct obj_data *deck = ch->carrying; deck; deck = deck->next_content) {
-    if (OBJ_IS_VALID_CYBERDECK(deck)) {
+    if (OBJ_IS_VALID_CYBERDECK(deck) && !blocked_by_soulbinding(ch, deck, TRUE)) {
       return deck;
     }
   }
 
   for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
-    if (OBJ_IS_VALID_CYBERDECK(GET_EQ(ch, wear_idx))) {
+    if (OBJ_IS_VALID_CYBERDECK(GET_EQ(ch, wear_idx)) && !blocked_by_soulbinding(ch, GET_EQ(ch, wear_idx), TRUE)) {
       return GET_EQ(ch, wear_idx);
     }
   }

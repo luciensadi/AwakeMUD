@@ -986,6 +986,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_WEAPON_POSSIBLE_FIREMODES(weapon)  (GET_OBJ_VAL((weapon), 10))
 #define GET_WEAPON_FOCUS_GEAS(weapon)          (GET_OBJ_VAL((weapon), 10)) /* Only melee weapons can be weapon foci, same slot as GET_FOCUS_GEAS */
 #define GET_WEAPON_FIREMODE(weapon)            (GET_OBJ_VAL((weapon), 11))
+#define GET_WEAPON_SOULBOND(weapon)            (GET_OBJ_VAL((weapon), 11)) /* Only melee weapon foci can be soulbound */
 #define GET_WEAPON_INTEGRAL_RECOIL_COMP(weap)  (GET_OBJ_ATTEMPT((weap)))
 #define GET_WEAPON_FULL_AUTO_COUNT(weapon)     (GET_OBJ_TIMER((weapon)))
 #define GET_WEAPON_ATTACH_LOC(weapon, loc)     (((loc) >= ACCESS_LOCATION_TOP && (loc) <= ACCESS_LOCATION_UNDER) ? \
@@ -1174,6 +1175,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERDECK_RESPONSE_INCREASE(deck)     (GET_OBJ_VAL((deck), 6))
 #define GET_CYBERDECK_IS_INCOMPLETE(deck)         (GET_OBJ_VAL((deck), 9))
 #define GET_CYBERDECK_FLAGS(deck)                 (GET_OBJ_VAL((deck), 10))
+#define GET_CYBERDECK_SOULBOND(deck)              (GET_OBJ_VAL((deck), 11))
 #define GET_CYBERDECK_FREE_STORAGE(deck)          (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
 #define OBJ_IS_VALID_STOREBOUGHT_CYBERDECK(deck)  ((deck) && GET_OBJ_TYPE((deck)) == ITEM_CYBERDECK && GET_CYBERDECK_MPCP((deck)) > 0)
 #define OBJ_IS_VALID_CUSTOM_CYBERDECK(deck)       ((deck) && GET_OBJ_TYPE((deck)) == ITEM_CUSTOM_DECK && GET_CYBERDECK_MPCP((deck)) > 0 && !GET_CYBERDECK_IS_INCOMPLETE((deck)))

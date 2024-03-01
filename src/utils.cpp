@@ -7020,6 +7020,12 @@ idnum_t get_soulbound_idnum(struct obj_data *obj) {
       return GET_CYBERWARE_SOULBOND(obj);
     case ITEM_WORN:
       return GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj);
+    case ITEM_WEAPON:
+      if (!WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_RATING(obj))
+        return GET_WEAPON_SOULBOND(obj);
+      break;
+    case ITEM_CYBERDECK:
+      return GET_CYBERDECK_SOULBOND(obj);
   }
 
   // Special case: Vehicle titles.
@@ -7067,6 +7073,16 @@ bool soulbind_obj_to_char(struct obj_data *obj, struct char_data *ch, bool inclu
     case ITEM_WORN:
       // Hardened armor is soulbound when worn.
       GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = GET_IDNUM(ch);
+      break;
+    case ITEM_WEAPON:
+      // Weapon foci are soulbound in chargen.
+      if (including_chargen_soulbinds && !WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_RATING(obj))
+        GET_WEAPON_SOULBOND(obj) = GET_IDNUM(ch);
+      break;
+    case ITEM_CYBERDECK:
+      // Decks are soulbound in chargen.
+      if (including_chargen_soulbinds)
+        GET_CYBERDECK_SOULBOND(obj) = GET_IDNUM(ch);
       break;
   }
 
