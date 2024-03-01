@@ -1006,11 +1006,17 @@ void look_at_char(struct char_data * i, struct char_data * ch)
         }
         if (init) {
           snprintf(buf, sizeof(buf), "%s aura is ", CAP(HSHR(i)));
-          if (GET_GRADE(i) > 6)
+          if (GET_GRADE(i) > 20)
             strlcat(buf, "^Wblindingly bright^n.", sizeof(buf));
-          else if (GET_GRADE(i) > 2)
-            strlcat(buf, "^Wshining bright^n.", sizeof(buf));
-          else strlcat(buf, "^Wsomewhat bright^n.", sizeof(buf));
+          else if (GET_GRADE(i) > 16)
+            strlcat(buf, "^Wbrilliant^n.", sizeof(buf));
+          else if (GET_GRADE(i) > 12)
+            strlcat(buf, "^Wbright^n.", sizeof(buf));
+          if (GET_GRADE(i) > 8)
+            strlcat(buf, "^Wa strong glow^n.", sizeof(buf));
+          else if (GET_GRADE(i) > 4)
+            strlcat(buf, "^Wglowing^n.", sizeof(buf));
+          else strlcat(buf, "^Wa lambent glow^n.", sizeof(buf));
           strlcat(buf, "\r\n", sizeof(buf));
           send_to_char(buf, ch);
         }
