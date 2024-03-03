@@ -205,6 +205,11 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     return FALSE;
   }
 
+  // Check for invisibility.
+  if (!can_see_through_invis(tch, ch)) {
+    return FALSE;
+  }
+
   // Check for stealth and other person-to-person modifiers.
   if (we_care_about_sneaking && IS_AFFECTED(ch, AFF_SNEAK)) {
     int dummy_tn = 2;
