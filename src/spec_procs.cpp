@@ -2736,9 +2736,9 @@ SPECIAL(hacker)
       send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
       return(TRUE);
     }
-    if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1) || GET_ITEM_MONEY_VALUE(obj) <= 0 ||
-        !GET_ITEM_MONEY_CREDSTICK_ACTIVATED(obj) || belongs_to(ch, obj)) {
-      snprintf(arg, sizeof(arg), "%s I wouldn't take that. Why are you bringing it to me anyways?", GET_CHAR_NAME(ch));
+    if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_ITEM_MONEY_IS_CREDSTICK(obj) || GET_ITEM_MONEY_VALUE(obj) <= 0 ||
+        !GET_ITEM_MONEY_CREDSTICK_OWNER_ID(obj) || belongs_to(ch, obj)) {
+      snprintf(arg, sizeof(arg), "%s I wouldn't take %s. Why are you bringing it to me anyways?", GET_CHAR_NAME(ch), decapitalize_a_an(GET_OBJ_NAME(obj)));
       do_say(hacker, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
@@ -2776,7 +2776,7 @@ SPECIAL(hacker)
         || GET_OBJ_VAL(obj, 0) <= 0
         || !GET_OBJ_VAL(obj, 4)
         || belongs_to(ch, obj)) {
-      snprintf(arg, sizeof(arg), "%s Why are you bringing this to me?", GET_CHAR_NAME(ch));
+      snprintf(arg, sizeof(arg), "%s Why are you bringing %s to me?", GET_CHAR_NAME(ch), decapitalize_a_an(GET_OBJ_NAME(obj)));
       do_say(hacker, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
@@ -2967,7 +2967,7 @@ SPECIAL(fixer)
     cost += (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) > 0 ? GET_OBJ_BARRIER(obj) : 1)) *
                   (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj))));
 
-    if ((credstick ? GET_ITEM_MONEY_VALUE(credstick) : GET_NUYEN(ch)) < cost) {
+    if ((credstick ? GET_BANK(ch) : GET_NUYEN(ch)) < cost) {
       snprintf(arg, sizeof(arg), "%s You can't afford to repair that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
@@ -2975,7 +2975,7 @@ SPECIAL(fixer)
     if (!perform_give(ch, fixer, obj))
       return TRUE;
     if (credstick)
-      lose_nuyen_from_credstick(ch, credstick, cost, NUYEN_OUTFLOW_REPAIRS);
+      lose_bank(ch, cost, NUYEN_OUTFLOW_REPAIRS);
     else
       lose_nuyen(ch, cost, NUYEN_OUTFLOW_REPAIRS);
 
@@ -3552,12 +3552,12 @@ SPECIAL(bank)
       return TRUE;
     }
     if (!(credstick = get_first_credstick(ch, "credstick"))) {
-      send_to_char("You need a personalized credstick to do that!\r\n", ch);
+      send_to_char("You don't have any activated credsticks to transfer from.\r\n", ch);
       return TRUE;
     }
     if (!str_cmp(buf1, "account")) {
-      if (!str_cmp(buf,"all") || GET_OBJ_VAL(credstick, 0) < amount) {
-        amount = GET_OBJ_VAL(credstick, 0);
+      if (!str_cmp(buf,"all") || GET_ITEM_MONEY_VALUE(credstick) < amount) {
+        amount = GET_ITEM_MONEY_VALUE(credstick);
       }
       if (GET_ITEM_MONEY_VALUE(credstick) == 0) {
         send_to_char(ch, "%s is already empty.\r\n", capitalize(GET_OBJ_NAME(credstick)));
@@ -3568,6 +3568,8 @@ SPECIAL(bank)
       GET_BANK_RAW(ch) += amount;
       snprintf(buf, sizeof(buf), "%d nuyen transferred from $p to your account.", amount);
     } else if (!str_cmp(buf1, "credstick")) {
+      send_to_char("Your credstick is directly linked to your account, so there's no need to load nueyn onto it.\r\n", ch);
+      /*
       if (!str_cmp(buf,"all") || GET_BANK(ch) < amount) {
         amount = GET_BANK(ch);
       }
@@ -3579,6 +3581,7 @@ SPECIAL(bank)
       GET_ITEM_MONEY_VALUE(credstick) += amount;
       GET_BANK_RAW(ch) -= amount;
       snprintf(buf, sizeof(buf), "%d nuyen transferred from your account to $p.", amount);
+      */
     } else {
       send_to_char("Transfer to what? (Type out \"credstick\" or \"account\", please.)\r\n", ch);
       return TRUE;
@@ -7623,14 +7626,14 @@ SPECIAL(pocsec_unlocker) {
 
     cost = 2000;
 
-    if ((credstick ? GET_ITEM_MONEY_VALUE(credstick) : GET_NUYEN(ch)) < cost) {
+    if ((credstick ? GET_BANK(ch) : GET_NUYEN(ch)) < cost) {
       snprintf(arg, sizeof(arg), "%s You can't afford to unlock that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
 
     if (credstick)
-      lose_nuyen_from_credstick(ch, credstick, cost, NUYEN_OUTFLOW_REPAIRS);
+      lose_bank(ch, cost, NUYEN_OUTFLOW_REPAIRS);
     else
       lose_nuyen(ch, cost, NUYEN_OUTFLOW_REPAIRS);
 

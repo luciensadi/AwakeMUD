@@ -671,8 +671,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     return FALSE;
   }
 
+  if (cred) {
+    send_to_char(ch, "You pull out %s to pay.\r\n", decapitalize_a_an(GET_OBJ_NAME(cred)));
+  }
+
   // Character must have enough nuyen for it.
-  if ((cred && GET_ITEM_MONEY_VALUE(cred) < price) || (!cred && GET_NUYEN(ch) < price))
+  if ((cred && GET_BANK(ch) < price) || (!cred && GET_NUYEN(ch) < price))
   {
     if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "displays, \"%s\"", shop_table[shop_nr].not_enough_nuyen);
@@ -708,7 +712,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
     bought = 1;
 
     if (cred)
-      lose_nuyen_from_credstick(ch, cred, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
+      lose_bank(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
     else
       lose_nuyen(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
 
@@ -749,7 +753,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       float current_obj_weight = 0;
 
       // Deduct money up to the amount they can afford. Update the object's cost to match.
-      while (bought < buynum && (cred ? GET_ITEM_MONEY_VALUE(cred) : GET_NUYEN(ch)) >= price) {
+      while (bought < buynum && (cred ? GET_BANK(ch) : GET_NUYEN(ch)) >= price) {
         bought++;
 
         // Prevent taking more than you can carry.
@@ -766,7 +770,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         }
 
         if (cred)
-          lose_nuyen_from_credstick(ch, cred, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
+          lose_bank(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
         else
           lose_nuyen(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
       }
@@ -960,7 +964,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       while (obj && (bought < buynum
                      && IS_CARRYING_N(ch) < CAN_CARRY_N(ch)
                      && GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch)
-                     && (cred ? GET_ITEM_MONEY_VALUE(cred) : GET_NUYEN(ch)) >= price)) {
+                     && (cred ? GET_BANK(ch) : GET_NUYEN(ch)) >= price)) {
         // ID-lock anything that needs locking.
         soulbind_obj_to_char(obj, ch, shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED));
 
@@ -997,7 +1001,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
 
         // Deduct the cost.
         if (cred)
-          lose_nuyen_from_credstick(ch, cred, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
+          lose_bank(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
         else
           lose_nuyen(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
       }
@@ -1014,7 +1018,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
       else if (GET_OBJ_WEIGHT(ch->carrying) > CAN_CARRY_W(ch))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only carry %d.", bought);
-      else if ((cash ? GET_NUYEN(ch) : GET_ITEM_MONEY_VALUE(cred)) < price)
+      else if ((cash ? GET_NUYEN(ch) : GET_BANK(ch)) < price)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " You can only afford %d.", bought);
       else
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I'm only willing to give you %d.", bought); // Error case.
@@ -1221,7 +1225,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     }
 
     if ((cash && GET_NUYEN(ch) < preorder_cost_for_one_object * buynum)
-        || (cred && GET_ITEM_MONEY_VALUE(cred) < preorder_cost_for_one_object * buynum))
+        || (cred && GET_BANK(ch) < preorder_cost_for_one_object * buynum))
     {
       snprintf(buf, sizeof(buf), "%s It'll cost you %d nuyen to place that order. Come back when you've got the funds.", GET_CHAR_NAME(ch), preorder_cost_for_one_object * buynum);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -1336,7 +1340,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     if (cash) {
       lose_nuyen(ch, preorder_cost_for_one_object * buynum, NUYEN_OUTFLOW_SHOP_PURCHASES);
     } else {
-      lose_nuyen_from_credstick(ch, cred, preorder_cost_for_one_object * buynum, NUYEN_OUTFLOW_SHOP_PURCHASES);
+      lose_bank(ch, preorder_cost_for_one_object * buynum, NUYEN_OUTFLOW_SHOP_PURCHASES);
     }
     send_to_char(ch, "You put down a %d nuyen deposit on your order.\r\n", preorder_cost_for_one_object * buynum);
 
@@ -1548,7 +1552,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   if (!cred || shop_table[shop_nr].type == SHOP_BLACK)
     gain_nuyen(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
   else
-    gain_nuyen_on_credstick(ch, cred, sellprice, NUYEN_INCOME_SHOP_SALES);
+    gain_bank(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
 
   const char *representation = generate_new_loggable_representation(obj);
   snprintf(buf3, sizeof(buf3), "%s sold %s^g at %s^g (%ld) for %d.", GET_CHAR_NAME(ch), representation, GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);
@@ -3345,7 +3349,7 @@ void shop_install(char *argument, struct char_data *ch, struct char_data *keeper
 
   // Try to deduct the install cost from their credstick.
   struct obj_data *cred = get_first_credstick(ch, "credstick");
-  if (!cred || install_cost > GET_ITEM_MONEY_VALUE(cred))
+  if (!cred || install_cost > GET_BANK(ch))
     cred = NULL;
 
   if (!cred && install_cost > GET_NUYEN(ch)) {
@@ -3361,7 +3365,7 @@ void shop_install(char *argument, struct char_data *ch, struct char_data *keeper
 
     // Success! Deduct the cost from your payment method.
     if (cred)
-      lose_nuyen_from_credstick(ch, cred, install_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
+      lose_bank(ch, install_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
     else
       lose_nuyen(ch, install_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
   }
@@ -3425,7 +3429,7 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
 
   // Try to deduct the install cost from their credstick.
   struct obj_data *cred = get_first_credstick(ch, "credstick");
-  if (!cred || uninstall_cost > GET_ITEM_MONEY_VALUE(cred))
+  if (!cred || uninstall_cost > GET_BANK(ch))
     cred = NULL;
 
   if (!cred && uninstall_cost > GET_NUYEN(ch)) {
@@ -3446,7 +3450,7 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
 
     // Success! Deduct the cost from your payment method.
     if (cred)
-      lose_nuyen_from_credstick(ch, cred, uninstall_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
+      lose_bank(ch, uninstall_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
     else
       lose_nuyen(ch, uninstall_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
 

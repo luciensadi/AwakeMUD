@@ -2338,9 +2338,10 @@ ACMD(do_drop)
   if (is_number(arg)) {
     amount = atoi(arg);
     argument = one_argument(argument, arg);
-    if (!str_cmp("nuyen", arg))
-      perform_drop_gold(ch, amount, mode, random_donation_room);
-    else {
+    if (!str_cmp("nuyen", arg)) {
+      send_to_char("Nuyen can't be dropped. You can ^WGIVE^n it to another player to pay them, or store it in your bank account at an ATM.\r\n", ch);
+      // perform_drop_gold(ch, amount, mode, random_donation_room);
+    } else {
       /* code to drop multiple items.  anyone want to write it? -je */
       send_to_char("Sorry, you can't do that to more than one item at a time.\r\n", ch);
     }
@@ -4188,33 +4189,38 @@ ACMD(do_activate)
   } else if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1)) {
     send_to_char(ch, "You can't activate %s.\r\n", GET_OBJ_NAME(obj));
     return;
-  } else if (GET_OBJ_VAL(obj, 4) != 0) {
+  } 
+  // Credsticks from here down.
+  else if (GET_ITEM_MONEY_CREDSTICK_OWNER_ID(obj) != 0) {
     send_to_char(ch, "But %s has already been activated!\r\n", GET_OBJ_NAME(obj));
     return;
   }
 
   if (!IS_NPC(ch)) {
-    GET_OBJ_VAL(obj, 3) = 1;
-    GET_OBJ_VAL(obj, 4) = GET_IDNUM(ch);
+    GET_ITEM_MONEY_CREDSTICK_IS_PC_OWNED(obj) = 1;
+    GET_ITEM_MONEY_CREDSTICK_OWNER_ID(obj) = GET_IDNUM(ch);
   } else {
-    GET_OBJ_VAL(obj, 3) = 0;
-    GET_OBJ_VAL(obj, 4) = ch->nr;
+    GET_ITEM_MONEY_CREDSTICK_IS_PC_OWNED(obj) = 0;
+    GET_ITEM_MONEY_CREDSTICK_OWNER_ID(obj) = ch->nr;
   }
 
-  switch (GET_OBJ_VAL(obj, 2)) {
-  case 1:
-    GET_OBJ_VAL(obj, 5) = (number(1, 9) * 100000) + (number(0, 9) * 10000) +
-                          (number(0, 9) * 1000) + (number(0, 9) * 100) +
-                          (number(0, 9) * 10) + number(0, 9);
-    send_to_char(ch, "You key %d as the passcode and the display flashes green.\r\n", GET_OBJ_VAL(obj,5));
-    break;
-  case 2:
-    send_to_char("You press your thumb against the pad and the display flashes green.\r\n", ch);
-    break;
-  case 3:
-    act("$p scans your retina and the display flashes green.", FALSE, ch, obj, 0, TO_CHAR);
-    break;
+  switch (GET_ITEM_MONEY_CREDSTICK_GRADE(obj)) {
+    case 1:
+      GET_ITEM_MONEY_CREDSTICK_LOCKCODE(obj) = number(100000, 999999);
+      send_to_char(ch, "You key %d as the passcode and the display flashes green.\r\n", GET_ITEM_MONEY_CREDSTICK_LOCKCODE(obj));
+      break;
+    case 2:
+      send_to_char("You press your thumb against the pad and the display flashes green.\r\n", ch);
+      break;
+    case 3:
+      act("$p scans your retina and the display flashes green.", FALSE, ch, obj, 0, TO_CHAR);
+      break;
   }
+
+  // Upon activation, credsticks dump their value into your account.
+  act("$p chirps as it establishes an automatic connection to your account and uploads its contents.", FALSE, ch, obj, 0, TO_CHAR);
+  gain_bank(ch, GET_ITEM_MONEY_VALUE(obj), NUYEN_INCOME_CREDSTICK_ACTIVATION);
+  GET_ITEM_MONEY_VALUE(obj) = 0;
 }
 
 ACMD(do_type)

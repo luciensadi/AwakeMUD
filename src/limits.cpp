@@ -377,14 +377,6 @@ void lose_bank(struct char_data *ch, long amount, int category) {
   _raw_gain_nuyen(ch, -amount, category, TRUE, NULL);
 }
 
-void gain_nuyen_on_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category) {
-  _raw_gain_nuyen(ch, amount, category, FALSE, credstick);
-}
-
-void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category) {
-  _raw_gain_nuyen(ch, -amount, category, FALSE, credstick);
-}
-
 // only the pcs should need to access this
 void gain_condition(struct char_data * ch, int condition, int value)
 {
