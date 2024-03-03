@@ -662,6 +662,10 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define SHOTS_FIRED(ch)		((ch)->points.extras[0])
 #define SHOTS_TRIGGERED(ch)	((ch)->points.extras[1])
 
+#define GET_SPIRIT_OR_ELEMENTAL_SUMMONER(ch)  (GET_ACTIVE(ch))
+#define GET_SPIRIT_OR_ELEMENTAL_TYPE(ch)      (GET_SPARE1(ch))
+#define GET_SPIRIT_OR_ELEMENTAL_FORCE(ch)     (GET_SPARE2(ch))
+
 // Changing this? You probably need to change get_veh_controlled_by_char() as well.
 #define RIG_VEH(ch, veh)	((veh) = ((ch)->char_specials.rigging ? (ch)->char_specials.rigging : (ch)->in_veh));
 
@@ -1106,10 +1110,12 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 // ITEM_FOOD convenience defines
 
 // ITEM_MONEY convenience defines
-#define GET_ITEM_MONEY_VALUE(money)               (GET_OBJ_VAL((money), 0))
-#define GET_ITEM_MONEY_IS_CREDSTICK(money)        (GET_OBJ_VAL((money), 1))
-#define GET_ITEM_MONEY_CREDSTICK_GRADE(money)     (GET_OBJ_VAL((money), 2))
-#define GET_ITEM_MONEY_CREDSTICK_ACTIVATED(money) (GET_OBJ_VAL((money), 4))
+#define GET_ITEM_MONEY_VALUE(money)                  (GET_OBJ_VAL((money), 0))
+#define GET_ITEM_MONEY_IS_CREDSTICK(money)           (GET_OBJ_VAL((money), 1))
+#define GET_ITEM_MONEY_CREDSTICK_GRADE(money)        (GET_OBJ_VAL((money), 2))
+#define GET_ITEM_MONEY_CREDSTICK_IS_PC_OWNED(money)  (GET_OBJ_VAL((money), 3))
+#define GET_ITEM_MONEY_CREDSTICK_OWNER_ID(money)     (GET_OBJ_VAL((money), 4))
+#define GET_ITEM_MONEY_CREDSTICK_LOCKCODE(money)     (GET_OBJ_VAL((money), 5))
 
 // ITEM_PHONE convenience defines
 #define GET_ITEM_PHONE_NUMBER_PART_ONE(phone)     (GET_OBJ_VAL((phone), 0))

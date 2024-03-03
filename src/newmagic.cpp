@@ -3419,9 +3419,9 @@ struct char_data *create_elemental(struct char_data *ch, int type, int force, in
   GET_ESS(mob) = force * 100;
   GET_LEVEL(mob) = force;
   GET_ASTRAL(mob) = (sh_int) force * 1.5;
-  GET_ACTIVE(mob) = GET_IDNUM(ch);
-  GET_SPARE1(mob) = type;
-  GET_SPARE2(mob) = force;
+  GET_SPIRIT_OR_ELEMENTAL_SUMMONER(mob) = GET_IDNUM(ch);
+  GET_SPIRIT_OR_ELEMENTAL_TYPE(mob) = type;
+  GET_SPIRIT_OR_ELEMENTAL_FORCE(mob) = force;
   GET_GRADE(mob) = idnum;
   if (trad == TRAD_HERMETIC)
     switch (type)
