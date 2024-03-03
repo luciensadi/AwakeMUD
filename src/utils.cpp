@@ -6325,10 +6325,13 @@ bool veh_is_aircraft(struct veh_data *veh) {
   return FALSE;
 }
 
-#define ITERATE_AND_COUNT(field) for (struct obj_data *temp = field; temp; temp = temp->next_content) { count += count_object_including_contents(temp); }
+#define ITERATE_AND_COUNT(field) for (struct obj_data *temp = field; temp; temp = temp->next_content) { count += count_object_including_contents(temp, cash_value); }
 // Recursively count this object and its contents.
-int count_object_including_contents(struct obj_data *obj) {
+int count_object_including_contents(struct obj_data *obj, long &cash_value) {
   int count = 1; // self
+
+  if (GET_OBJ_TYPE(obj) == ITEM_MONEY)
+    cash_value += GET_ITEM_MONEY_VALUE(obj);
 
   ITERATE_AND_COUNT(obj->contains);
 
@@ -6336,7 +6339,7 @@ int count_object_including_contents(struct obj_data *obj) {
 }
 
 // Get and return the count of all objects contained in this room. Does not include vehicle objects.
-int count_objects_in_room(struct room_data *room) {
+int count_objects_in_room(struct room_data *room, long &cash_value) {
   int count = 0;
 
   ITERATE_AND_COUNT(room->contents);
@@ -6345,19 +6348,19 @@ int count_objects_in_room(struct room_data *room) {
 }
 
 // Get and return the count of all objects in this vehicle, including in nested vehicles.
-int count_objects_in_veh(struct veh_data *veh) {
+int count_objects_in_veh(struct veh_data *veh, long &cash_value) {
   int count = 0;
 
   ITERATE_AND_COUNT(veh->contents);
 
   for (struct veh_data *contained = veh->carriedvehs; contained; contained = contained->next_veh) {
-    count += count_objects_in_veh(contained);
+    count += count_objects_in_veh(contained, cash_value);
   }
 
   return count;
 }
 
-int count_objects_on_char(struct char_data *ch) {
+int count_objects_on_char(struct char_data *ch, long &cash_value) {
   int count = 0;
 
   ITERATE_AND_COUNT(ch->carrying);
@@ -6366,7 +6369,7 @@ int count_objects_on_char(struct char_data *ch) {
 
   for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
     if (GET_EQ(ch, wear_idx)) {
-      count += count_object_including_contents(GET_EQ(ch, wear_idx));
+      count += count_object_including_contents(GET_EQ(ch, wear_idx), cash_value);
     }
   }
 

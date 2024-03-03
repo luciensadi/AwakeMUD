@@ -175,8 +175,10 @@ void hcontrol_display_house_by_number(struct char_data * ch, vnum_t house_number
 
         apartment->list_guests_to_char(ch);
 
+        long total_nuyen = 0;
         send_to_char(ch, "It consists of the following room%s:\r\n", apartment->get_rooms().size() == 1 ? "" : "s");
         for (auto &room : apartment->get_rooms()) {
+          long cash_count = 0;
           rnum_t rnum = real_room(room->get_vnum());
           if (rnum < 0) {
             send_to_char(ch, "    n/a^n: ERRONEOUS (invalid vnum %ld)\r\n", room->get_vnum());
@@ -184,7 +186,7 @@ void hcontrol_display_house_by_number(struct char_data * ch, vnum_t house_number
             struct room_data *world_room = &world[rnum];
 
             // Count objects in room
-            int crap_count_obj = count_objects_in_room(world_room);
+            int crap_count_obj = count_objects_in_room(world_room, cash_count);
             // Count vehicles in room
             int crap_count_veh = 0;
             for (struct veh_data *veh = world_room->vehicles; veh; veh = veh->next_veh) {
@@ -192,19 +194,23 @@ void hcontrol_display_house_by_number(struct char_data * ch, vnum_t house_number
               crap_count_veh++;
 
               // Also count the objects in the vehicle.
-              crap_count_obj += count_objects_in_veh(veh);
+              crap_count_obj += count_objects_in_veh(veh, cash_count);
             }
 
-            send_to_char(ch, "%7ld^n: %s^n (%ld) [%d items, %d vehicles]\r\n",
+            send_to_char(ch, "%7ld^n: %s^n (%ld) [%d items, %d vehicles, %ld nuyen contents]\r\n",
                          room->get_vnum(),
                          GET_ROOM_NAME(world_room),
                          GET_ROOM_VNUM(world_room),
                          crap_count_obj,
-                         crap_count_veh);
+                         crap_count_veh,
+                         cash_count);
           }
+          total_nuyen += cash_count;
         }
 
-        send_to_char(ch, "Its crap count is %s.\r\n", get_crap_count_string(apartment->get_crap_count(), "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
+        send_to_char(ch, "Its crap count is %s, with %ld total nuyen stored..\r\n",
+                     get_crap_count_string(apartment->get_crap_count(), "^n",PRF_FLAGGED(ch, PRF_SCREENREADER)),
+                     total_nuyen);
 
         return;
         }

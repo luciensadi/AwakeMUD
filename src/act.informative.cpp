@@ -8098,24 +8098,35 @@ ACMD(do_penalties) {
 }
 
 int crapcount_target(struct char_data *victim, struct char_data *viewer) {
+  long total_value_of_money_items = 0;
+
   // On their person.
-  int total_crap = count_objects_on_char(victim);
-  send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)), "Carrying / equipped / cyberware / bioware");
+  int total_crap = count_objects_on_char(victim, total_value_of_money_items);
+  if (IS_SENATOR(viewer)) {
+    send_to_char(viewer, "%15s - Carrying / equipped / cyberware / bioware (%ld nuyen contents)\r\n",
+                 get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                 total_value_of_money_items);
+  } else {
+    send_to_char(viewer, "%15s - Carrying / equipped / cyberware / bioware\r\n", get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)));
+  }
 
   // Apartments.
   for (auto *complex : global_apartment_complexes) {
+    long cash_value = 0;
+
     for (auto *apartment : complex->get_apartments()) {
       if (apartment->owner_is_valid() && apartment->get_owner_id() == GET_IDNUM_EVEN_IF_PROJECTING(victim)) {
         int crap_count = 0;
         for (auto *room : apartment->get_rooms()) {
-          crap_count += count_objects_in_room(room->get_world_room());
+          crap_count += count_objects_in_room(room->get_world_room(), cash_value);
         }
 
         if (IS_SENATOR(viewer)) {
-          send_to_char(viewer, "%15s - %s (%ld)\r\n",
+          send_to_char(viewer, "%15s - %s (vnum %ld, nuyen contents %ld)\r\n",
                        get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
                        apartment->get_full_name(),
-                       apartment->get_root_vnum());
+                       apartment->get_root_vnum(),
+                       cash_value);
         } else {
           send_to_char(viewer, "%15s - %s\r\n",
                        get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
@@ -8123,20 +8134,24 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
         }
         
         total_crap += crap_count;
+        total_value_of_money_items += cash_value;
       }
     }
   }
 
   // Vehicles.
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+    long cash_value = 0;
+
     if (veh->owner == GET_IDNUM_EVEN_IF_PROJECTING(victim)) {
-      int crap_count = count_objects_in_veh(veh);
+      int crap_count = count_objects_in_veh(veh, cash_value);
 
       if (IS_SENATOR(viewer)) {
-        send_to_char(viewer, "%15s - %s (at %ld)\r\n",
+        send_to_char(viewer, "%15s - %s (at %ld, nuyen contents %ld)\r\n",
                      get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
                      GET_VEH_NAME(veh),
-                     get_veh_in_room(veh) ? GET_ROOM_VNUM(get_veh_in_room(veh)) : -1);
+                     get_veh_in_room(veh) ? GET_ROOM_VNUM(get_veh_in_room(veh)) : -1,
+                     cash_value);
       } else {
         send_to_char(viewer, "%15s - %s\r\n",
                      get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
@@ -8144,17 +8159,25 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
       }
       
       total_crap += crap_count;
+      total_value_of_money_items += cash_value;
     }
   }
 
   // Total.
-  send_to_char(viewer, "Total: %s.\r\n", get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)));
+  if (IS_SENATOR(viewer)) {
+    send_to_char(viewer, "Total: %s (%ld nuyen stored in credsticks etc).\r\n", 
+                 get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                 total_value_of_money_items);
+  } else {
+    send_to_char(viewer, "Total: %s.\r\n", get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)));
+  }
 
   return total_crap;
 }
 
 ACMD(do_count) {
   skip_spaces(&argument);
+  long dummy_cash = 0;
 
   if (!*argument) {
     send_to_char("Syntax: ^WCOUNT INV^n  (to count nested things you're carrying)\r\n"
@@ -8187,7 +8210,7 @@ ACMD(do_count) {
 
   // Count all the nested stuff you're carrying.
   for (struct obj_data *carried = ch->carrying; carried; carried = carried->next_content) {
-    int crap_count = count_object_including_contents(carried) - 1;
+    int crap_count = count_object_including_contents(carried, dummy_cash) - 1;
 
     if (crap_count) {
       send_to_char(ch, "^cCarried:^n %s (contains %s)\r\n", decapitalize_a_an(GET_OBJ_NAME(carried)), get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
@@ -8199,7 +8222,7 @@ ACMD(do_count) {
     if (!GET_EQ(ch, wear_idx))
       continue;
       
-    int crap_count = count_object_including_contents(GET_EQ(ch, wear_idx)) - 1;
+    int crap_count = count_object_including_contents(GET_EQ(ch, wear_idx), dummy_cash) - 1;
 
     if (crap_count) {
       send_to_char(ch, "^cWorn:^n    %s (contains %s)\r\n", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, wear_idx))), get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));

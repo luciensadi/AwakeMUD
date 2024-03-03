@@ -1627,16 +1627,17 @@ void Apartment::apply_rooms() {
 
 int Apartment::get_crap_count() {
   int crap_count = 0;
+  long cash_count = 0;
 
   for (auto &room : get_rooms()) {
     rnum_t rnum = real_room(room->get_vnum());
     if (rnum >= 0) {
       struct room_data *world_room = &world[rnum];
 
-      crap_count += count_objects_in_room(world_room);
+      crap_count += count_objects_in_room(world_room, cash_count);
 
       for (struct veh_data *veh = world_room->vehicles; veh; veh = veh->next_veh) {
-        crap_count += count_objects_in_veh(veh);
+        crap_count += count_objects_in_veh(veh, cash_count);
       }
     }
   }
