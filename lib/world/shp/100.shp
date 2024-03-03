@@ -3,8 +3,8 @@ Keeper:	10012
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	0
-Open:	0
-Close:	24
+Open (disabled):	0
+Close (disabled):	24
 Type:	Grey
 NoSuchItemKeeper:	Sorry, we don't have that.
 NoSuchItemPlayer:	You don't seem to have that.
@@ -19,7 +19,71 @@ Buytypes:	1000000000000001000000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	127
+		Vnum:	70154
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	70178
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	70196
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	70190
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	70184
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	70172
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	70166
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	70160
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	70148
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	70142
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	70136
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	70130
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	70124
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	70118
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	70112
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	70106
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	70100
 		Type:	Always
 		Stock:	0
 BREAK
@@ -28,8 +92,8 @@ Keeper:	10014
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	0
-Open:	0
-Close:	24
+Open (disabled):	0
+Close (disabled):	24
 Type:	Grey
 NoSuchItemKeeper:	Sorry, we don't have that.
 NoSuchItemPlayer:	You don't seem to have that.
@@ -73,8 +137,8 @@ Keeper:	10016
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	0
-Open:	0
-Close:	24
+Open (disabled):	0
+Close (disabled):	24
 Type:	Grey
 NoSuchItemKeeper:	Sorry, we don't have that.
 NoSuchItemPlayer:	You don't seem to have that.
@@ -89,27 +153,179 @@ Buytypes:	1
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	636
-		Type:	Avail
+		Vnum:	714
+		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	621
-		Type:	Stock
-		Stock:	10
+		Vnum:	715
+		Type:	Always
+		Stock:	0
 	[SELL 2]
-		Vnum:	10013
-		Type:	Avail
+		Vnum:	716
+		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	10001
-		Type:	Stock
-		Stock:	10
+		Vnum:	717
+		Type:	Always
+		Stock:	0
 	[SELL 4]
-		Vnum:	2
-		Type:	Avail
+		Vnum:	3413
+		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	10000
+		Vnum:	25519
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	26496
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	602
+		Type:	Always
+		Stock:	0
+BREAK
+#10017
+Keeper:	10017
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open (disabled):	0
+Close (disabled):	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	1187
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	1182
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	10027
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	10026
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	10024
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	10023
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	10022
+		Type:	Always
+		Stock:	0
+BREAK
+#10018
+Keeper:	10018
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open (disabled):	0
+Close (disabled):	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	116
+		Type:	Always
+		Stock:	0
+BREAK
+#10020
+Keeper:	10020
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open (disabled):	0
+Close (disabled):	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	0
+Races:	0
+Buytypes:	100000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	105
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	104
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	103
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	102
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	101
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	100
+		Type:	Always
+		Stock:	0
+BREAK
+#10024
+Keeper:	10024
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open (disabled):	0
+Close (disabled):	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	197
 		Type:	Always
 		Stock:	0
 BREAK

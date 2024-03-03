@@ -67,6 +67,9 @@ int     sustain_modifier(struct char_data *ch, char *rbuf, size_t rbuf_len, bool
 int     roll_default_initiative(struct char_data *ch);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
+char *  decapitalize_a_an(struct obj_data *obj);
+// There is no char_data version because we can't assume between short name and true name.
+char *  decapitalize_a_an(struct veh_data *veh);
 char *  string_to_uppercase(const char *source);
 char *  string_to_lowercase(const char *source);
 int     get_speed(struct veh_data *veh);
@@ -1504,8 +1507,6 @@ void gain_nuyen(struct char_data *ch, long amount, int category);
 void lose_nuyen(struct char_data *ch, long amount, int category);
 void gain_bank(struct char_data *ch, long amount, int category);
 void lose_bank(struct char_data *ch, long amount, int category);
-void gain_nuyen_on_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category);
-void lose_nuyen_from_credstick(struct char_data *ch, struct obj_data *credstick, long amount, int category);
 
 #define GET_WOUND_NAME(damage_level) (wound_name[MIN(DEADLY, MAX(0, damage_level))])
 #define GET_SHORT_WOUND_NAME(damage_level) (wound_arr[MIN(DEADLY, MAX(0, damage_level))])

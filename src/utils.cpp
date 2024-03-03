@@ -742,6 +742,16 @@ char *decapitalize_a_an(const char *source)
   return dest;
 }
 
+char *decapitalize_a_an(struct obj_data *obj) {
+  return decapitalize_a_an(GET_OBJ_NAME(obj));
+}
+
+// There is no char_data version because we can't assume between short name and true name.
+
+char *decapitalize_a_an(struct veh_data *veh) {
+  return decapitalize_a_an(GET_VEH_NAME(veh));
+}
+
 // duplicate a string -- uses new!
 char *str_dup(const char *source)
 {

@@ -143,6 +143,7 @@ ACMD_DECLARE(do_build);
 ACMD_DECLARE(do_brief);
 ACMD_DECLARE(do_cast);
 ACMD_DECLARE(do_charge);
+ACMD_DECLARE(do_changelog);
 ACMD_DECLARE(do_chipload);
 ACMD_DECLARE(do_cleanup);
 ACMD_DECLARE(do_cleanse);
@@ -555,6 +556,7 @@ struct command_info cmd_info[] =
     { "call"       , POS_LYING   , do_phone    , 0, SCMD_RING, ALLOWS_IDLE_REWARD },
     { "chase"      , POS_SITTING , do_chase    , 0, 0, BLOCKS_IDLE_REWARD },
     { "charge"     , POS_DEAD    , do_charge   , LVL_FIXER, 0, BLOCKS_IDLE_REWARD },
+    { "changelog"  , POS_LYING   , do_changelog, 0, 0, ALLOWS_IDLE_REWARD },
     { "cheatmark"  , POS_DEAD    , do_cheatmark, LVL_VICEPRES, 0, BLOCKS_IDLE_REWARD },
     { "cleanup"    , POS_SITTING , do_cleanup  , 0, 0, BLOCKS_IDLE_REWARD },
     { "cleanse"    , POS_LYING   , do_cleanse  , 0, 0, BLOCKS_IDLE_REWARD },

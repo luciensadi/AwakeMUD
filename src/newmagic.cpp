@@ -5845,8 +5845,8 @@ ACMD(do_deactivate)
       affect_total(ch);
       send_to_char(ch, "You deactivate %s.\r\n", GET_OBJ_NAME(obj));
     }
-  } else if (GET_OBJ_TYPE(obj) == ITEM_MONEY && GET_OBJ_VAL(obj, 1) && GET_OBJ_VAL(obj, 4) == GET_IDNUM(ch)) {
-    GET_OBJ_VAL(obj, 3) = GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 5) = 0;
+  } else if (GET_OBJ_TYPE(obj) == ITEM_MONEY && GET_ITEM_MONEY_IS_CREDSTICK(obj) && GET_ITEM_MONEY_CREDSTICK_OWNER_ID(obj) == GET_IDNUM(ch)) {
+    GET_ITEM_MONEY_CREDSTICK_IS_PC_OWNED(obj) = GET_ITEM_MONEY_CREDSTICK_OWNER_ID(obj) = GET_ITEM_MONEY_CREDSTICK_LOCKCODE(obj) = 0;
     send_to_char(ch, "You deactivate %s.\r\n", GET_OBJ_NAME(obj));
   } else send_to_char(ch, "You can't deactivate %s.\r\n", GET_OBJ_NAME(obj));
 }

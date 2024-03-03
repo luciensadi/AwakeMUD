@@ -16,7 +16,7 @@ There's pretty much no space back here.
 ~
 Leaving:	stomps out
 Arriving:	stomps in
-Handling:	50
+Handling:	0
 Speed:	1500
 Accel:	50
 Body:	50
@@ -24,41 +24,107 @@ Armour:	50
 Pilot:	50
 Sig:	50
 Autonav:	50
-Seating:	1
-SeatingBack:	0
+Seating:	50
+SeatingBack:	50
 Load:	15000
 Cost:	500000
 Type:	6
 Flags:	1110
 Engine:	2
 BREAK
-#10010
-Name:	prop plane tiny
-ShortDesc:	a ^Ybright^n prop plane
-RoomDesc:	A tiny prop plane sits here cutely
+#10001
+Name:	alien-looking looking hovertank tank
+ShortDesc:	An alien-looking hovertank
+RoomDesc:	An alien-looking hovertank lurks nearby
 LongDesc:$
-You're inside a plane. Rejoice! 
+Plated with an odd alloy that seems to regenerate when shot, and bristling
+with odd protrusions that crackle with crimson energies, this hovertank is the
+ultimate in vehicular threats.
+ (OOC: This is a non-canon vehicle released on the streets for fun-- enjoy!)
+~
+Inside:$
+Strange controls and protrusions of all sorts surround you, almost
+incomprehensible in scale and meaning. There's a driver's seat, at least, and
+behind it a hatch leads to the gun controls. 
+~
+InsideRear:$
+A bay of turret controls and gun ports allows the riders to dish out pain on
+their surroundings. 
+~
+Leaving:	hisses out to
+Arriving:	growls in from
+Handling:	0
+Speed:	1500
+Accel:	50
+Body:	50
+Armour:	50
+Pilot:	0
+Sig:	0
+Autonav:	50
+Seating:	1
+SeatingBack:	10
+Load:	10000
+Cost:	100000000
+Type:	7
+Flags:	101110
+Engine:	1
+BREAK
+#10002
+Name:	staff airplane
+ShortDesc:	a staff airplane
+RoomDesc:	A staff airplane has been parked here
+LongDesc:$
+^RFor game administration use only.^n 
 ~
 Inside:$
 You see an uncreative vehicle.~
 InsideRear:$
 You see an uncreative vehicle.~
-Leaving:	taxis
-Arriving:	taxis in
-Handling:	0
-Speed:	300
-Accel:	50
+Leaving:	leaves
+Arriving:	arrives
+Handling:	2
+Speed:	100
+Accel:	0
 Body:	0
 Armour:	0
 Pilot:	0
 Sig:	0
 Autonav:	0
-Seating:	2
-SeatingBack:	2
+Seating:	0
+SeatingBack:	0
 Load:	0
-Cost:	0
-Type:	5
+Cost:	200000
+Type:	6
 Flags:	10
-Engine:	3
+Engine:	1
+BREAK
+#10003
+Name:	staff helicopter
+ShortDesc:	a staff helicopter
+RoomDesc:	A staff helicopter is parked here
+LongDesc:$
+^RFor game administration use only.^n 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	leaves
+Arriving:	arrives
+Handling:	3
+Speed:	50
+Accel:	0
+Body:	0
+Armour:	0
+Pilot:	0
+Sig:	0
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	0
+Cost:	150000
+Type:	5
+Flags:	0
+Engine:	6
 BREAK
 END

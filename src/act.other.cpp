@@ -5511,3 +5511,33 @@ ACMD(do_closecombat) {
     send_to_char("You haven't trained in close combat yet. Find an adept trainer or other martial artist to begin.\r\n", ch);
   }
 }
+
+// Janky-ass way to do an in-game changelog leveraging existing systems.
+ACMD(do_changelog) {
+  rnum_t changelog_rnum = real_room(RM_CHANGELOG);
+
+  if (changelog_rnum < 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Changelog room at %d does not exist!", RM_CHANGELOG);
+    send_to_char(ch, "Sorry, the changelog command is currently offline. Staff have been notified.\r\n");
+    return;
+  }
+
+  skip_spaces(&argument);
+
+  FAILURE_CASE(!is_abbrev(argument, "list") && !is_abbrev("read", argument), "Valid modes are CHANGELOG LIST and CHANGELOG READ <number>.");
+
+  // Store their current location.
+  struct room_data *old_in_room = ch->in_room;
+  struct veh_data *old_in_veh = ch->in_veh;
+
+  // Move them to the changelog location.
+  ch->in_room = &world[changelog_rnum];
+  ch->in_veh = NULL;
+
+  // Run their LIST or READ command again.
+  command_interpreter(ch, argument, GET_CHAR_NAME(ch));
+
+  // Put them back where they came from.
+  ch->in_room = old_in_room;
+  ch->in_veh = old_in_veh;
+}

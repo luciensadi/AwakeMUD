@@ -2285,9 +2285,9 @@ enum {
 /* Boards */
 
 #ifdef USE_PRIVATE_CE_WORLD
-#define NUM_OF_BOARDS           4
+#define NUM_OF_BOARDS           5
 #else
-#define NUM_OF_BOARDS           2 /* change if needed! */
+#define NUM_OF_BOARDS           3 /* change if needed! */
 #endif
 
 #define MAX_BOARD_MESSAGES      300     /* arbitrary -- change if needed */
@@ -2490,6 +2490,7 @@ enum {
 #define RM_GUN_TRAINER               781
 #define RM_PORTABLE_VEHICLE_STORAGE  10097
 #define RM_MORTAL_RELATIONS_CONFERENCE_ROOM 10044
+#define RM_CHANGELOG                        10060
 
 // Chargen room defines
 #define RM_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC  60520
@@ -2613,6 +2614,7 @@ enum {
 #define OBJ_VINTAGE_UGLY_CHRISTMAS_SWEATER 197
 #define OBJ_CHRISTMAS_2024_GIFT            196
 #define OBJ_MORTAL_RESTORATION_BUTTON      10036
+#define OBJ_CHANGELOG_BOARD                10092
 
 #define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_TITLE_TO_SCORPION              892

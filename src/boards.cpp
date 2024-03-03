@@ -55,13 +55,12 @@ TO ADD A NEW BOARD, simply follow our easy 4-step program:
 struct board_info_type board_info[NUM_OF_BOARDS] =
   {
 #ifdef USE_PRIVATE_CE_WORLD
-    {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"},
     {10034, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq-rp"},
-    {6995, 0, 0, 0, "etc/board.nerpcorp-scheduling"},
-#else
-    {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"},
+    {6995 , 0, 0, 0, "etc/board.nerpcorp-scheduling"},
 #endif
-    {26  , 0, 0, LVL_ADMIN, "etc/board.rp"}
+    {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"},
+    {OBJ_CHANGELOG_BOARD, 0, LVL_ADMIN, LVL_ADMIN, "etc/board.changelog"},
+    {26   , 0, 0, LVL_ADMIN, "etc/board.rp"}
   };
   // Adding a board? Update NUM_OF_BOARDS in awake.hpp!
   // Adding a board? Don't forget to add it to spec_assign.cpp!

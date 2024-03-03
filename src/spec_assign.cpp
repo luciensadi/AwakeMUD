@@ -878,6 +878,7 @@ void assign_objects(void)
   // Adding a board? Add it to the index in boards.cpp too!
   ASSIGNOBJ(26, gen_board);
   ASSIGNOBJ(10018, gen_board);  /* ImmHQ Board */
+  ASSIGNOBJ(OBJ_CHANGELOG_BOARD, gen_board);  /* Changelog */
 #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(10034, gen_board); /* Mortal Relations Board */
   ASSIGNOBJ(6995, gen_board);  /* Nerpcorp board */

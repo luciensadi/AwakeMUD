@@ -11,14 +11,14 @@ hell out of anyone who commits violence within its line of sight.
 ~
 ArriveMsg:	soars in from
 LeaveMsg:	soars
-MobFlags:	10000001000000001000
-AffFlags:	1000000000001000000000
-Race:	Dragon
+MobFlags:	10000001100000111000
+AffFlags:	0
+Race:	Human
 Gender:	Male
 DefaultPos:	Standing
 AttackType:	Blast
 [ATTRIBUTES]
-	Bod:	50
+	Bod:	40
 	Qui:	50
 	Str:	50
 	Cha:	50
@@ -29,14 +29,14 @@ AttackType:	Blast
 	Height:	200
 	Weight:	4
 	Level:	9
-	Ballistic:	50
-	Impact:	50
 [SKILLS]
 	Rifles:	50
-[EQUIPMENT]
-	[EQ 0]
-		Vnum:	668
-		Wearloc:	18
+	Brawling:	50
+	Mounted Gunnery:	50
+	Assault Cannons:	50
+[CYBERWARE]
+	[CYBER 0]
+		Vnum:	316
 BREAK
 #10001
 Keywords:	responsive target dummy
@@ -106,6 +106,9 @@ AttackType:	Rifle
 	Impact:	10000
 [SKILLS]
 	Rifles:	50
+	Firearms:	50
+	Armed Combat:	50
+	Brawling:	50
 BREAK
 #10004
 Keywords:	receptionist
@@ -157,7 +160,7 @@ Race:	Undef
 Gender:	Neutral
 DefaultPos:	Standing
 [ATTRIBUTES]
-	Bod:	50
+	Bod:	10
 	Qui:	1
 	Str:	1
 	Cha:	1
@@ -188,7 +191,7 @@ Race:	Undef
 Gender:	Neutral
 DefaultPos:	Standing
 [ATTRIBUTES]
-	Bod:	50
+	Bod:	10
 	Qui:	1
 	Str:	1
 	Cha:	1
@@ -219,7 +222,7 @@ Race:	Undef
 Gender:	Neutral
 DefaultPos:	Standing
 [ATTRIBUTES]
-	Bod:	50
+	Bod:	10
 	Qui:	1
 	Str:	1
 	Cha:	1
@@ -244,13 +247,13 @@ Perfect for shooting.
 ~
 ArriveMsg:	
 LeaveMsg:	leaves
-MobFlags:	100000000000000000000000000001010
+MobFlags:	100000000000000000000000000101010
 AffFlags:	0
 Race:	Undef
 Gender:	Neutral
 DefaultPos:	Standing
 [ATTRIBUTES]
-	Bod:	50
+	Bod:	10
 	Qui:	1
 	Str:	1
 	Cha:	1
@@ -309,7 +312,7 @@ twinkling blue.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1000000000000101110000000001010
+MobFlags:	1000001000000000000101010000000001010
 AffFlags:	10001000001000
 Race:	Human
 Gender:	Male
@@ -346,9 +349,9 @@ retired to a life of scientific inquiry.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1000000000000101010000000001010
-AffFlags:	10001000001000
-Race:	Undef
+MobFlags:	1000000000000101010000000011010
+AffFlags:	0
+Race:	Human
 Gender:	Male
 DefaultPos:	Standing
 [ATTRIBUTES]
@@ -360,11 +363,12 @@ DefaultPos:	Standing
 	Wil:	50
 	Mag:	50
 [POINTS]
-	Height:	2
-	Weight:	100
+	Height:	170
+	Weight:	80
 	Level:	10
-	Ballistic:	10000
-	Impact:	10000
+[BIOWARE]
+	[BIO 0]
+		Vnum:	85940
 BREAK
 #10012
 Keywords:	ammunition vendor vendomatic vend-o-matic
@@ -379,7 +383,7 @@ and a keypad to punch your order into.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
+MobFlags:	101000000000000000000000000001010
 AffFlags:	0
 Race:	Undef
 Gender:	Neutral
@@ -498,6 +502,7 @@ DefaultPos:	Standing
 	Height:	120
 	Weight:	50
 [SKILLS]
+	Mounted Gunnery:	20
 	Driving Trucks:	4
 	Firearms:	5
 BREAK
@@ -532,23 +537,310 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 BREAK
-#10050
-Keywords:	vehicle brain
-Name:	a brain in a jar
+#10017
+Keywords:	pasty-faced faced salesman man
+Name:	a pasty-faced salesman
 RoomDesc:$
-A brain in a jar has been hooked into the vehicle's control systems. 
+A pasty-faced salesman wanders amongst the display racks. 
 
 ~
 LookDesc:$
-It's the hackiest of hacks. "The pathfinding system only works with actual
-characters! Rewriting it to work with empty vehicles would be such a pain!"
-Well, now you don't have to: Introducing the BRAIN IN A JAR! Simply auto-load
-it into an empty vehicle right before a gridguide command is issued, and it
-will path for you. Convenient! 
+He looks like he's spent far too much time under the indoor lights-- has this
+guy even heard of the sun? 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1111000000000000000100000000001000
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	100
+BREAK
+#10018
+Keywords:	pasty-faced faced salesman man
+Name:	a pasty-faced salesman
+RoomDesc:$
+A pasty-faced salesman wanders amongst the display racks. 
+
+~
+LookDesc:$
+He looks like he's spent far too much time under the indoor lights-- has this
+guy even heard of the sun? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	100
+BREAK
+#10019
+Keywords:	questor thews wizard scarecrow patchwork
+Name:	Questor Thews
+RoomDesc:$
+A scarecrow-looking wizard with patchwork robes stands here grumpily. 
+
+~
+LookDesc:$
+He smells vaguely of fair-use copyright for educational purposes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	100
+BREAK
+#10020
+Keywords:	credstick vend-o-matic matic machine vending
+Name:	a CredStick Vend-O-Matic
+RoomDesc:$
+A CredStick Vend-O-Matic has been installed here. 
+
+~
+LookDesc:$
+Great for dispensing credsticks to staff. Not great for mortals. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000000000101010000000001010
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	100
+BREAK
+#10021
+Keywords:	transmitter small beacon newbie chargen neophyte
+Name:	the Neophyte Guild Beacon
+RoomDesc:$
+A small transmitter has been affixed to the ceiling. 
+
+~
+LookDesc:$
+An OOC device to make it easier for the staff to GOTO this location. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000000001101010000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	10
+	Ballistic:	30000
+	Impact:	30000
+BREAK
+#10022
+Keywords:	mike dragon stripper armor
+Name:	Mike the Dragon Stripper
+RoomDesc:$
+A dragon in full plate mail is gyrating on a pole here. 
+
+~
+LookDesc:$
+Dressed in full plate and looking like he's having the time of his life, this
+dragon has coiled himself around a shiny chrome pole and is executing some
+flawless moves. The sound of it is indescribable. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	5000
+	Ballistic:	50
+	Impact:	50
+BREAK
+#10023
+Keywords:	htr high threat high-threat response shock trooper
+Name:	a HTR shock trooper
+RoomDesc:$
+A high-threat response shock trooper glowers here. 
+
+~
+LookDesc:$
+A heavily armed and armored troll, apparently more than ready to kick some
+ass. He looks to be hopped up on several combat drugs, and moves with the
+fluidity of the truly augmented. 
+~
+ArriveMsg:	thuds in from
+LeaveMsg:	pounds
+SpeechHighlight:	^R
+MobFlags:	10000001100000011000
+AffFlags:	1000000000000000000000000000001000000010001000001000
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	6
+	Str:	14
+	Cha:	4
+	Int:	6
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	180
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+	Armed Combat:	12
+	Brawling:	12
+	Firearms:	12
+	Athletics:	12
+	Stealth:	12
+[AMMO]
+	EX assault cannon shells:	1000
+[CYBERWARE]
+	[CYBER 0]
+		Vnum:	6533
+	[CYBER 1]
+		Vnum:	85718
+	[CYBER 2]
+		Vnum:	85707
+	[CYBER 3]
+		Vnum:	85707
+	[CYBER 4]
+		Vnum:	85707
+	[CYBER 5]
+		Vnum:	85707
+	[CYBER 6]
+		Vnum:	85707
+	[CYBER 7]
+		Vnum:	85707
+	[CYBER 8]
+		Vnum:	85670
+	[CYBER 9]
+		Vnum:	6581
+	[CYBER 10]
+		Vnum:	6685
+	[CYBER 11]
+		Vnum:	6879
+[BIOWARE]
+	[BIO 0]
+		Vnum:	85940
+	[BIO 1]
+		Vnum:	85939
+	[BIO 2]
+		Vnum:	85927
+	[BIO 3]
+		Vnum:	85922
+	[BIO 4]
+		Vnum:	85917
+	[BIO 5]
+		Vnum:	85903
+[EQUIPMENT]
+	[EQ 0]
+		Vnum:	12304
+		Wearloc:	0
+	[EQ 1]
+		Vnum:	717
+		Wearloc:	1
+	[EQ 2]
+		Vnum:	64960
+		Wearloc:	2
+	[EQ 3]
+		Vnum:	722
+		Wearloc:	9
+	[EQ 4]
+		Vnum:	716
+		Wearloc:	10
+	[EQ 5]
+		Vnum:	700
+		Wearloc:	12
+	[EQ 6]
+		Vnum:	10041
+		Wearloc:	18
+	[EQ 7]
+		Vnum:	14618
+		Wearloc:	33
+	[EQ 8]
+		Vnum:	29010
+		Wearloc:	37
+BREAK
+#10024
+Keywords:	vendor
+Name:	Lucien's Vendor
+RoomDesc:$
+You shouldn't be seeing this mob. 
+
+~
+LookDesc:$
+For loading in edge-case items for characters on a case-by-case basis. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
 AffFlags:	0
 Race:	Human
 Gender:	Neutral
@@ -562,14 +854,50 @@ DefaultPos:	Standing
 	Wil:	50
 	Mag:	0
 [POINTS]
+	Height:	0
+	Weight:	0
+	Level:	9
+	Ballistic:	50
+	Impact:	50
+BREAK
+#10050
+Keywords:	a vehicle brain
+Name:	a brain in a jar
+RoomDesc:$
+A brain in a jar has been hooked into the vehicle's control systems.
+
+~
+LookDesc:$
+It's the hackiest of hacks. "The pathfinding system only works with actual
+characters! Rewriting it to work with empty vehicles would be such a pain!"
+Well, now you don't have to: Introducing the BRAIN IN A JAR! Simply auto-load
+it into an empty vehicle right before a gridguide command is issued, and it
+will path for you. Convenient!
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1111000000000000000100000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
 	Height:	10
 	Weight:	10
 	Ballistic:	10000
 	Impact:	10000
 [SKILLS]
-	Repairing Hovercraft:	50
-	Driving Cars:	50
-	Piloting Fixed Wing Aircraft:	50
-	Repairing Ships:	50
+	Repairing Hovercraft:	4
+	Driving Cars:	4
+	Piloting Fixed Wing Aircraft:	4
+	Repairing Ships:	4
 BREAK
 END
