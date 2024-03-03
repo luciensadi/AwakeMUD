@@ -4,3 +4,4 @@ storage/*
 !storage/.gitkeep
 deleted-housing/*
 !deleted-housing/.gitkeep
+housing/*/*/lease.json
