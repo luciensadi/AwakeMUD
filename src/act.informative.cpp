@@ -4083,7 +4083,7 @@ ACMD(do_examine)
       else {
         if (!IS_NPC(ch) && GET_ITEM_MONEY_CREDSTICK_OWNER_ID(tmp_object)) {
           if (belongs_to(ch, tmp_object)) {
-            send_to_char("It has been activated by you and linked to your bank account.\r\n", ch);
+            send_to_char("It has been activated by you and linked to one of your numbered bank accounts.\r\n", ch);
             send_to_char(ch, "The account display shows ^c%ld^n nuyen.\r\n", GET_BANK(ch));
           } else {
             send_to_char("It has been activated by someone else.\r\n", ch);

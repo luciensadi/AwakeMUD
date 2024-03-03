@@ -5524,7 +5524,17 @@ ACMD(do_changelog) {
 
   skip_spaces(&argument);
 
-  FAILURE_CASE(!is_abbrev(argument, "list") && !is_abbrev("read", argument), "Valid modes are CHANGELOG LIST and CHANGELOG READ <number>.");
+  int idx = atoi(argument);
+  char command[1000];
+
+  if (!*argument) {
+    strlcpy(command, "list", sizeof(command));
+  } else if (idx > 0) {
+    snprintf(command, sizeof(command), "read %d", idx);
+  } else {
+    send_to_char("Please either use CHANGELOG on its own to see the list, or CHANGELOG <number> for details on a specific index.\r\n", ch);
+    return;
+  }
 
   // Store their current location.
   struct room_data *old_in_room = ch->in_room;
@@ -5535,7 +5545,7 @@ ACMD(do_changelog) {
   ch->in_veh = NULL;
 
   // Run their LIST or READ command again.
-  command_interpreter(ch, argument, GET_CHAR_NAME(ch));
+  command_interpreter(ch, command, GET_CHAR_NAME(ch));
 
   // Put them back where they came from.
   ch->in_room = old_in_room;
