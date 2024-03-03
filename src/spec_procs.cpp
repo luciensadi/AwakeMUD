@@ -3507,9 +3507,9 @@ SPECIAL(bank)
 
   if (CMD_IS("balance")) {
     if (GET_BANK(ch) > 0)
-      send_to_char(ch, "Your current bank balance is %ld nuyen.\r\n", GET_BANK(ch));
+      send_to_char(ch, "Your balance across your various numbered accounts and aliases is %ld nuyen.\r\n", GET_BANK(ch));
     else
-      send_to_char("Your bank account is empty!\r\n", ch);
+      send_to_char("You have no cash squirreled away!\r\n", ch);
     return 1;
   }
 
@@ -3524,7 +3524,7 @@ SPECIAL(bank)
     // Raw amounts-- we don't care about transfering money around like this.
     GET_NUYEN_RAW(ch) -= amount;
     GET_BANK_RAW(ch) += amount;
-    send_to_char(ch, "You deposit %d nuyen.\r\n", amount);
+    send_to_char(ch, "You split %d nuyen across your various numbered accounts for safekeeping.\r\n", amount);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
     return 1;
   }
@@ -3540,7 +3540,7 @@ SPECIAL(bank)
     // Raw amounts-- we don't care about transfering money around like this.
     GET_NUYEN_RAW(ch) += amount;
     GET_BANK_RAW(ch) -= amount;
-    send_to_char(ch, "The ATM ejects %d nuyen and updates your bank account.\r\n", amount);
+    send_to_char(ch, "You do a few sneaky transfers between your accounts, then run a withdrawal. The ATM ejects %d nuyen.\r\n", amount);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
     return 1;
   }
@@ -3566,9 +3566,9 @@ SPECIAL(bank)
       // Just transfers, no faucet/sink.
       GET_ITEM_MONEY_VALUE(credstick) -= amount;
       GET_BANK_RAW(ch) += amount;
-      snprintf(buf, sizeof(buf), "%d nuyen transferred from $p to your account.", amount);
+      snprintf(buf, sizeof(buf), "%d nuyen transferred from $p to one of your many accounts.", amount);
     } else if (!str_cmp(buf1, "credstick")) {
-      send_to_char("Your credstick is directly linked to your account, so there's no need to load nueyn onto it.\r\n", ch);
+      send_to_char("Your credstick is directly linked to your many accounts, so there's no need to load nueyn onto it.\r\n", ch);
       /*
       if (!str_cmp(buf,"all") || GET_BANK(ch) < amount) {
         amount = GET_BANK(ch);
