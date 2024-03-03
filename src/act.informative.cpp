@@ -3281,11 +3281,24 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
                GET_FOUNTAIN_AMOUNT(j), GET_FOUNTAIN_MAX_AMOUNT(j), buf2);
       break;
     case ITEM_MONEY:
-      if (!GET_OBJ_VAL(j, 1))
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a stack of cash worth ^c%d^n nuyen.", GET_OBJ_VAL(j, 0));
-      else
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n-secured ^ccredstick^n loaded with ^c%d^n nuyen.",
-                (GET_OBJ_VAL(j, 2) == 1 ? "6-digit PIN" : (GET_OBJ_VAL(j, 2) == 2 ? "thumbprint" : "retina")), GET_OBJ_VAL(j, 0));
+      if (!GET_ITEM_MONEY_IS_CREDSTICK(j))
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a stack of cash worth ^c%d^n nuyen.", GET_ITEM_MONEY_VALUE(j));
+      else {
+        if (GET_ITEM_MONEY_CREDSTICK_IS_PC_OWNED(j)) {
+          if (!IS_NPC(ch) && GET_ITEM_MONEY_CREDSTICK_OWNER_ID(j) == GET_IDNUM(ch)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n-secured ^ccredstick^n linked to your bank account, which has ^c%ld^n nuyen.",
+                    (GET_OBJ_VAL(j, 2) == 1 ? "6-digit PIN" : (GET_OBJ_VAL(j, 2) == 2 ? "thumbprint" : "retina")), GET_BANK(ch));
+          } else {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n-secured ^ccredstick^n linked to someone else's bank account.",
+                    (GET_OBJ_VAL(j, 2) == 1 ? "6-digit PIN" : (GET_OBJ_VAL(j, 2) == 2 ? "thumbprint" : "retina")));
+          }
+        } else {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^c%s^n-secured ^ccredstick^n loaded with ^c%d^n nuyen.",
+                    GET_ITEM_MONEY_CREDSTICK_OWNER_ID(j) ? "a" : "an unlocked",
+                    (GET_OBJ_VAL(j, 2) == 1 ? "6-digit PIN" : (GET_OBJ_VAL(j, 2) == 2 ? "thumbprint" : "retina")), 
+                    GET_ITEM_MONEY_VALUE(j));
+        }
+      }
       break;
     case ITEM_KEY:
       strlcat(buf, "No OOC information is available about this key.", sizeof(buf));
@@ -4065,17 +4078,21 @@ ACMD(do_examine)
       if (GET_OBJ_VAL(tmp_object, 5) > 0)
         send_to_char(buf, ch);
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_MONEY) {
-      if (!GET_OBJ_VAL(tmp_object, 1))    // paper money
+      if (!GET_ITEM_MONEY_IS_CREDSTICK(tmp_object))    // paper money
         send_to_char(ch, "There looks to be about %d nuyen.\r\n", GET_OBJ_VAL(tmp_object, 0));
       else {
-        if (GET_OBJ_VAL(tmp_object, 4)) {
-          if (belongs_to(ch, tmp_object))
-            send_to_char("It has been activated by you.\r\n", ch);
-          else
-            send_to_char("It has been activated.\r\n", ch);
-        } else
+        if (!IS_NPC(ch) && GET_ITEM_MONEY_CREDSTICK_OWNER_ID(tmp_object)) {
+          if (belongs_to(ch, tmp_object)) {
+            send_to_char("It has been activated by you and linked to your bank account.\r\n", ch);
+            send_to_char(ch, "The account display shows ^c%ld^n nuyen.\r\n", GET_BANK(ch));
+          } else {
+            send_to_char("It has been activated by someone else.\r\n", ch);
+            send_to_char(ch, "The account display shows ^c%d^n nuyen.\r\n", GET_ITEM_MONEY_VALUE(tmp_object));
+          }
+        } else {
           send_to_char("It has not been activated.\r\n", ch);
-        send_to_char(ch, "The account display shows %d nuyen.\r\n", GET_OBJ_VAL(tmp_object, 0));
+          send_to_char(ch, "The account display shows ^c%d^n nuyen.\r\n", GET_ITEM_MONEY_VALUE(tmp_object));
+        }
       }
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_GUN_MAGAZINE) {
       send_to_char(ch, "It has %d %s round%s left.\r\n", GET_OBJ_VAL(tmp_object, 9),
