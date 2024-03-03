@@ -4217,10 +4217,8 @@ ACMD(do_activate)
       break;
   }
 
-  // Upon activation, credsticks dump their value into your account.
-  act("$p chirps as it establishes an automatic connection to your account and uploads its contents.", FALSE, ch, obj, 0, TO_CHAR);
-  gain_bank(ch, GET_ITEM_MONEY_VALUE(obj), NUYEN_INCOME_CREDSTICK_ACTIVATION);
-  GET_ITEM_MONEY_VALUE(obj) = 0;
+  // Credsticks, when activated by a player, dump their contents to their bank account immediately.
+  transfer_credstick_contents_to_bank(obj, ch);
 }
 
 ACMD(do_type)

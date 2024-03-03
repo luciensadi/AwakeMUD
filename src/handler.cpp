@@ -1523,6 +1523,10 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
     } else if (GET_OBJ_VNUM(object) == OBJ_ONE_SHOT_HEALING_INJECTOR && GET_HEALING_INJECTOR_ISSUED_BY(object) <= 0) {
       GET_HEALING_INJECTOR_ISSUED_TO(object) = GET_IDNUM(ch);
     }
+
+    // Credsticks, if activated by a player, dump their contents to their bank account immediately.
+    // This code will only trigger if the item is actually a credstick that meets requirements.
+    transfer_credstick_contents_to_bank(object, ch);
   }
 
   // Iterate over the objects that the character already has.

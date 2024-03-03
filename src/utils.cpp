@@ -7162,3 +7162,39 @@ const char *get_soulbound_name(struct obj_data *obj) {
 
   return soulbound_name;
 }
+
+// Returns TRUE on transfer, FALSE otherwise.
+bool transfer_credstick_contents_to_bank(struct obj_data *credstick, struct char_data *ch) {
+  if (!credstick || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid parameters to transfer_credstick_contents_to_bank(%s, %s)!", GET_OBJ_NAME(credstick), GET_CHAR_NAME(ch));
+    return FALSE;
+  }
+
+  if (GET_OBJ_TYPE(credstick) == ITEM_MONEY 
+      && GET_ITEM_MONEY_IS_CREDSTICK(credstick) 
+      && GET_ITEM_MONEY_VALUE(credstick) > 0
+      && GET_ITEM_MONEY_CREDSTICK_IS_PC_OWNED(credstick)
+      && GET_ITEM_MONEY_CREDSTICK_OWNER_ID(credstick) == GET_IDNUM(ch))
+  {
+    // Notify them.
+    send_to_char(ch, "%s chirps as it establishes an automatic connection to your account and uploads its contents (%d nuyen).\r\n",
+                 CAP(GET_OBJ_NAME(credstick)),
+                 GET_ITEM_MONEY_VALUE(credstick));
+
+    // Log it.
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Auto-transferring credstick contents from %s (%ld) to bank (%ld -> %ld)",
+                    GET_OBJ_NAME(credstick),
+                    GET_OBJ_VNUM(credstick),
+                    GET_BANK(ch),
+                    GET_BANK(ch) + GET_ITEM_MONEY_VALUE(credstick));
+    
+    // Update the bank and stick, then save.
+    gain_bank(ch, GET_ITEM_MONEY_VALUE(credstick), NUYEN_INCOME_CREDSTICK_ACTIVATION);
+    GET_ITEM_MONEY_VALUE(credstick) = 0;
+    playerDB.SaveChar(ch);
+
+    return TRUE;
+  }
+
+  return FALSE;
+}

@@ -8110,7 +8110,18 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
         for (auto *room : apartment->get_rooms()) {
           crap_count += count_objects_in_room(room->get_world_room());
         }
-        send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)), apartment->get_full_name());
+
+        if (IS_SENATOR(viewer)) {
+          send_to_char(viewer, "%15s - %s (%ld)\r\n",
+                       get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                       apartment->get_full_name(),
+                       apartment->get_root_vnum());
+        } else {
+          send_to_char(viewer, "%15s - %s\r\n",
+                       get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                       apartment->get_full_name());
+        }
+        
         total_crap += crap_count;
       }
     }
@@ -8120,7 +8131,18 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     if (veh->owner == GET_IDNUM_EVEN_IF_PROJECTING(victim)) {
       int crap_count = count_objects_in_veh(veh);
-      send_to_char(viewer, "%15s - %s\r\n", get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)), GET_VEH_NAME(veh));
+
+      if (IS_SENATOR(viewer)) {
+        send_to_char(viewer, "%15s - %s (at %ld)\r\n",
+                     get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                     GET_VEH_NAME(veh),
+                     get_veh_in_room(veh) ? GET_ROOM_VNUM(get_veh_in_room(veh)) : -1);
+      } else {
+        send_to_char(viewer, "%15s - %s\r\n",
+                     get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                     GET_VEH_NAME(veh));
+      }
+      
       total_crap += crap_count;
     }
   }
@@ -8137,6 +8159,11 @@ ACMD(do_count) {
   if (!*argument) {
     send_to_char("Syntax: ^WCOUNT INV^n  (to count nested things you're carrying)\r\n"
                  "        ^WCOUNT ALL^n  (to count all your stuff across the game.)\r\n", ch);
+    
+    if (IS_SENATOR(ch)) {
+      send_to_char("        ^WCOUNT <online target>\r\n", ch);
+    }
+
     return;
   }
 

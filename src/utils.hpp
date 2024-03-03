@@ -1507,6 +1507,7 @@ void gain_nuyen(struct char_data *ch, long amount, int category);
 void lose_nuyen(struct char_data *ch, long amount, int category);
 void gain_bank(struct char_data *ch, long amount, int category);
 void lose_bank(struct char_data *ch, long amount, int category);
+bool transfer_credstick_contents_to_bank(struct obj_data *credstick, struct char_data *ch);
 
 #define GET_WOUND_NAME(damage_level) (wound_name[MIN(DEADLY, MAX(0, damage_level))])
 #define GET_SHORT_WOUND_NAME(damage_level) (wound_arr[MIN(DEADLY, MAX(0, damage_level))])
