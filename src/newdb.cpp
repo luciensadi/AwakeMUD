@@ -28,6 +28,7 @@
 #include "bullet_pants.hpp"
 #include "ignore_system.hpp"
 #include "lifestyles.hpp"
+#include "chipjacks.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -333,7 +334,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
 {
   init_char(ch);
   for (int i = MIN_SKILLS; i < MAX_SKILLS; i++)
-    ch->char_specials.saved.skills[i][0] = 0;
+    ch->char_specials.saved.skills[i][SKILLARRAY_LEARNED_VALUE] = 0;
   ch->char_specials.carry_weight = 0;
   ch->char_specials.carry_items = 0;
   GET_BALLISTIC(ch) = GET_TOTALBAL(ch) = GET_INNATE_BALLISTIC(ch) = GET_IMPACT(ch) = GET_TOTALIMP(ch) = GET_INNATE_IMPACT(ch) = 0;
@@ -620,7 +621,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res)))
-    GET_SKILL(ch, atoi(row[1])) = atoi(row[2]);
+    set_character_skill(ch, atoi(row[1]), atoi(row[2]), FALSE);
   mysql_free_result(res);
 
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_alias WHERE idnum=%ld;", GET_IDNUM(ch));
@@ -1037,29 +1038,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   AFF_FLAGS(ch).RemoveBits(AFF_MANNING, AFF_RIG, AFF_PILOT, AFF_BANISH, AFF_FEAR, AFF_STABILIZE, AFF_SPELLINVIS, AFF_SPELLIMPINVIS, AFF_DETOX, AFF_RESISTPAIN, AFF_TRACKING, AFF_TRACKED, AFF_PRONE, ENDBIT);
   PLR_FLAGS(ch).RemoveBits(PLR_REMOTE, PLR_SWITCHED, PLR_MATRIX, PLR_PROJECT, PLR_EDITING, PLR_WRITING, PLR_PERCEIVE, PLR_VISA, ENDBIT);
 
-  for (struct obj_data *jack = ch->cyberware; jack; jack = jack->next_content)
-    if (GET_OBJ_VAL(jack, 0) == CYB_CHIPJACK) {
-      int max = 0;
-      for (struct obj_data *wire = ch->cyberware; wire; wire = wire->next_content)
-        if (GET_OBJ_VAL(wire, 0) == CYB_SKILLWIRE)
-          max = GET_OBJ_VAL(wire, 1);
-      for (struct obj_data *chip = jack->contains; chip; chip = chip->next_content)
-        ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = skills[GET_OBJ_VAL(chip, 0)].type ? GET_CHIP_RATING(chip)
-                                                                                                    : MIN(max, GET_CHIP_RATING(chip));
-    } else if (GET_OBJ_VAL(jack, 0) == CYB_MEMORY) {
-      int max = 0;
-      for (struct obj_data *wire = ch->cyberware; wire; wire = wire->next_content) {
-        if (GET_OBJ_VAL(wire, 0) == CYB_SKILLWIRE)
-          max = GET_OBJ_VAL(wire, 1);
-      }
-
-      GET_OBJ_VAL(jack, 5) = 0;
-      for (struct obj_data *chip = jack->contains; chip; chip = chip->next_content) {
-        ch->char_specials.saved.skills[GET_CHIP_SKILL(chip)][1] = skills[GET_CHIP_SKILL(chip)].type ? GET_CHIP_RATING(chip)
-                                                                                                    : MIN(max, GET_CHIP_RATING(chip));
-        GET_OBJ_VAL(jack, 5) += GET_CHIP_SIZE(chip) - GET_CHIP_COMPRESSION_FACTOR(chip);
-      }
-    }
+  initialize_chipjack_and_memory_for_character(ch);
 
   // Self-repair their gear. Don't worry about contents- it's recursive.
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
@@ -1340,24 +1319,16 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       bool found = FALSE;
       // Check to see if it's in the CQUEST list. If it is, store it as completed.
       for (int c_idx = 0; c_idx <= QUEST_TIMER - 1; c_idx++) {
-        if (q)
-          strcat(buf, "), (");
-
         if (GET_LQUEST(player, i) == GET_CQUEST(player, c_idx)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %ld, TRUE", GET_IDNUM(player), i, GET_LQUEST(player, i));
-          q = 1;
           found = TRUE;
+          break;
         }
       }
 
-      // It wasn't in CQUEST, so store it as not completed.
-      if (!found) {
-        if (q)
-          strcat(buf, "), (");
-          
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %ld, FALSE", GET_IDNUM(player), i, GET_LQUEST(player, i));
-        q = 1;
-      }
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%ld, %d, %ld, %s", 
+               q ? "), (" : "",
+               GET_IDNUM(player), i, GET_LQUEST(player, i), found ? "TRUE" : "FALSE");
+      q = 1;
     }
   }
   if (q) {
@@ -2039,29 +2010,31 @@ void DeleteChar(long idx)
   char prepare_quotes_buf[MAX_STRING_LENGTH * 2 + 1];
 
   const char *table_names[] = {
-    "pfiles             ", // IF YOU CHANGE THIS, CHANGE PFILES_INDEX
-    "pfiles_adeptpowers ",
-    "pfiles_alias       ",
-    "pfiles_ammo        ",
-    "pfiles_bioware     ",
-    "pfiles_chargendata ", // 5
-    "pfiles_cyberware   ",
-    "pfiles_drugs       ",
-    "pfiles_ignore      ", // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
-    "pfiles_immortdata  ", // 10
-    "pfiles_inv         ",
-    "pfiles_magic       ",
-    "pfiles_mail        ",
-    "pfiles_memory      ", // IF YOU CHANGE THIS, CHANGE PFILES_MEMORY_INDEX
-    "pfiles_metamagic   ", // 15
-    "pfiles_quests      ",
-    "pfiles_skills      ",
-    "pfiles_spells      ",
-    "pfiles_spirits     ",
-    "pfiles_worn        ",  // 20
-    "pfiles_ignore_v2   "   // IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
+    "pfiles                  ", // 0. IF YOU CHANGE THIS, CHANGE PFILES_INDEX
+    "pfiles_adeptpowers      ",
+    "pfiles_alias            ",
+    "pfiles_ammo             ",
+    "pfiles_bioware          ",
+    "pfiles_chargendata      ", // 5
+    "pfiles_cyberware        ",
+    "pfiles_drugs            ",
+    "pfiles_ignore           ", // 8. IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
+    "pfiles_immortdata       ",
+    "pfiles_inv              ", // 10
+    "pfiles_magic            ",
+    "pfiles_mail             ",
+    "pfiles_memory           ", // 13. IF YOU CHANGE THIS, CHANGE PFILES_MEMORY_INDEX
+    "pfiles_metamagic        ",
+    "pfiles_quests           ", // 15
+    "pfiles_skills           ",
+    "pfiles_spells           ",
+    "pfiles_spirits          ",
+    "pfiles_worn             ",
+    "pfiles_ignore_v2        ",  // 20. IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
+    "pfiles_drugdata         ",
+    "playergroup_invitations "
   };
-  #define NUM_SQL_TABLE_NAMES     21
+  #define NUM_SQL_TABLE_NAMES     23
   #define PFILES_INDEX            0
   #define PFILES_IGNORE_INDEX     8
   #define PFILES_MEMORY_INDEX     13
@@ -2100,7 +2073,7 @@ void DeleteChar(long idx)
     mysql_free_result(res);
 
     if (first_pass_of_table_description) {
-      log_vfprintf("SYSERR: Failed to describe table %s! This puts us in a fucky state, %ld is only partially deleted.", table_names[table_idx], idx);
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Failed to describe table %s! This puts us in a fucky state, %ld is only partially deleted.", table_names[table_idx], idx);
       return;
     }
     strlcat(buf2, ") VALUES (", sizeof(buf2));
@@ -2635,13 +2608,14 @@ void save_skills_to_db(struct char_data *player) {
   mysql_wrapper(mysql, buf);
   strcpy(buf, "INSERT INTO pfiles_skills (idnum, skillnum, `rank`) VALUES (");
   int q = 0;
-  for (int i = MIN_SKILLS; i < MAX_SKILLS; i++)
-    if (GET_SKILL(player, i)) {
+  for (int i = MIN_SKILLS; i < MAX_SKILLS; i++) {
+    if (GET_RAW_SKILL(player, i)) {
       if (q)
         strcat(buf, "), (");
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, REAL_SKILL(player, i));
       q = 1;
     }
+  }
   if (q) {
     strcat(buf, ");");
     mysql_wrapper(mysql, buf);

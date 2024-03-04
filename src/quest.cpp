@@ -1163,14 +1163,14 @@ bool compareRep(const quest_entry &a, const quest_entry &b)
 //the johnson is broken.
 int new_quest(struct char_data *mob, struct char_data *ch)
 {
-  int i, num = 0;
+  int num = 0;
   bool allow_disconnected = vnum_from_non_connected_zone(GET_MOB_VNUM(mob));
 
   quest_entry temp_entry;
   std::vector<quest_entry> qlist;
 
-  for (i = 0; i <= top_of_questt; i++)
-    if (quest_table[i].johnson == GET_MOB_VNUM(mob))
+  for (int quest_idx = 0; quest_idx <= top_of_questt; quest_idx++)
+    if (quest_table[quest_idx].johnson == GET_MOB_VNUM(mob))
       num++;
 
   if (num < 1) {
@@ -1190,40 +1190,56 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   // done or max_rep is below character rep. We include those with min_rep
   // higher than character rep because we want johnsons to hint to available
   // runs at higher character rep.
-  for (i = 0; i <= top_of_questt; i++) {
-    if (quest_table[i].johnson == GET_MOB_VNUM(mob)) {
-      if (!allow_disconnected && vnum_from_non_connected_zone(quest_table[i].vnum)) {
+  for (int quest_idx = 0; quest_idx <= top_of_questt; quest_idx++) {
+    if (quest_table[quest_idx].johnson == GET_MOB_VNUM(mob)) {
+      if (!allow_disconnected && vnum_from_non_connected_zone(quest_table[quest_idx].vnum)) {
         if (access_level(ch, LVL_BUILDER)) {
-          send_to_char(ch, "[Skipping quest %ld: vnum from non-connected zone.]\r\n", quest_table[i].vnum);
+          send_to_char(ch, "[Skipping quest %ld: vnum from non-connected zone.]\r\n", quest_table[quest_idx].vnum);
         }
         continue;
       }
 
-      if (rep_too_high(ch, i)) {
+      if (rep_too_high(ch, quest_idx)) {
         if (access_level(ch, LVL_BUILDER)) {
-          send_to_char(ch, "[Skipping quest %ld: You exceed rep cap of %d.]\r\n", quest_table[i].vnum, quest_table[i].max_rep);
+          send_to_char(ch, "[Skipping quest %ld: You exceed rep cap of %d.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].max_rep);
         }
         continue;
+      }
+
+      if (ch->master && GET_QUEST(ch->master) == quest_table[quest_idx].vnum) {
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "[Skipping quest %ld: Your group leader %s already has it.]\r\n", quest_table[quest_idx].vnum, GET_CHAR_NAME(ch->master));
+        }
+        continue;
+      }
+
+      for (struct follow_type *fd = ch->followers; fd; fd = fd->next) {
+        if (fd->follower && GET_QUEST(fd->follower) == quest_idx) {
+          if (access_level(ch, LVL_BUILDER)) {
+            send_to_char(ch, "[Skipping quest %ld: Your follower %s already has it.]\r\n", quest_table[quest_idx].vnum, GET_CHAR_NAME(fd->follower));
+          }
+          continue;
+        }
       }
 
       bool found = FALSE;
       for (int q = QUEST_TIMER - 1; q >= 0; q--) {
-        if (GET_LQUEST(ch, q) == quest_table[i].vnum) {
+        if (GET_LQUEST(ch, q) == quest_table[quest_idx].vnum) {
           found = TRUE;
           break;
         }
       }
       if (found) {
         if (access_level(ch, LVL_BUILDER)) {
-          send_to_char(ch, "[Skipping quest %ld: It exists in your LQUEST list. Use a diagnostic scanner and ^WCLEANSE^n yourself.]\r\n", quest_table[i].vnum);
+          send_to_char(ch, "[Skipping quest %ld: It exists in your LQUEST list. Use a diagnostic scanner and ^WCLEANSE^n yourself.]\r\n", quest_table[quest_idx].vnum);
         }
         continue;
       }
 
-      if (quest_table[i].prerequisite_quest) {
+      if (quest_table[quest_idx].prerequisite_quest) {
         bool found = FALSE;
         for (int q = QUEST_TIMER - 1; q >= 0; q--) {
-          if (GET_CQUEST(ch, q) == quest_table[i].prerequisite_quest) {
+          if (GET_CQUEST(ch, q) == quest_table[quest_idx].prerequisite_quest) {
             found = TRUE;
             break;
           }
@@ -1231,14 +1247,14 @@ int new_quest(struct char_data *mob, struct char_data *ch)
 
         if (!found) {
           if (access_level(ch, LVL_BUILDER)) {
-            send_to_char(ch, "[Skipping quest %ld: You need to have done prerequisite quest %ld first.]\r\n", quest_table[i].prerequisite_quest);
+            send_to_char(ch, "[Skipping quest %ld: You need to have done prerequisite quest %ld first.]\r\n", quest_table[quest_idx].prerequisite_quest);
           }
           continue;
         }
       }
 
-      temp_entry.index = i;
-      temp_entry.rep = quest_table[i].min_rep;
+      temp_entry.index = quest_idx;
+      temp_entry.rep = quest_table[quest_idx].min_rep;
       qlist.push_back(temp_entry);
     }
   }
