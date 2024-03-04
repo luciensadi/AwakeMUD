@@ -621,7 +621,7 @@ enum {
 #define ROOM_ARENA                      9   /* Can't teleport in         */
 #define ROOM_STREETLIGHTS               10  /* Room has a streetlight    */
 #define ROOM_HOUSE                      11  /* (R) Room is a house       */
-// UNUSED SLOT                          12
+#define ROOM_NO_DROP                    12  /* You can't drop things here. */
 // UNUSED SLOT                          13
 #define ROOM_OLC                        14  /* (R) Modifyable/!compress  */
 #define ROOM_BFS_MARK                   15  /* (R) breath-first srch mrk */

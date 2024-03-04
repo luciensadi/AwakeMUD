@@ -4446,79 +4446,110 @@ void reset_zone(int zone, int reboot)
       last_cmd = 0;
       break;
     case 'M':                 /* read a mobile */
-      if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
-        if (mob_index[ZCMD.arg1].vnum >= 20 && mob_index[ZCMD.arg1].vnum <= 22) {
-          // Refuse to zoneload projections and matrix personas.
-          char errbuf[1000];
-          snprintf(errbuf, sizeof(errbuf), "Refusing to zoneload mob #%ld for zone %d-- illegal loading vnum.\r\n", mob_index[ZCMD.arg1].vnum, zone_table[zone].number);
-          mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
-          continue;
+      {
+        bool passed_global_limits = (mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
+        bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
+        bool passed_room_limits = FALSE;
+
+        if (ZCMD.arg2 < -1) {
+          int total_seen_in_room = 0;
+          int desired_total = (ZCMD.arg2 * -1) - 1;
+          for (struct char_data *mob = world[ZCMD.arg3].people; mob; mob = mob->next_in_room) {
+            if (GET_MOB_RNUM(mob) == ZCMD.arg1)
+              total_seen_in_room++;
+          }
+          passed_room_limits = (total_seen_in_room < desired_total);
         }
 
-        mob = read_mobile(ZCMD.arg1, REAL);
-        mob->mob_loaded_in_room = GET_ROOM_VNUM(&world[ZCMD.arg3]);
-        char_to_room(mob, &world[ZCMD.arg3]);
-        act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
-        last_cmd = 1;
-      } else {
-        if (ZCMD.arg2 == 0 && !reboot)
-          no_mob = 1;
-        else
-          no_mob = 0;
-        last_cmd = 0;
-        mob = NULL;
+        if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
+          if (mob_index[ZCMD.arg1].vnum >= 20 && mob_index[ZCMD.arg1].vnum <= 22) {
+            // Refuse to zoneload projections and matrix personas.
+            char errbuf[1000];
+            snprintf(errbuf, sizeof(errbuf), "Refusing to zoneload mob #%ld for zone %d-- illegal loading vnum.\r\n", mob_index[ZCMD.arg1].vnum, zone_table[zone].number);
+            mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+            continue;
+          }
+
+          mob = read_mobile(ZCMD.arg1, REAL);
+          mob->mob_loaded_in_room = GET_ROOM_VNUM(&world[ZCMD.arg3]);
+          char_to_room(mob, &world[ZCMD.arg3]);
+          act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
+          last_cmd = 1;
+        } else {
+          if (ZCMD.arg2 == 0 && !reboot)
+            no_mob = 1;
+          else
+            no_mob = 0;
+          last_cmd = 0;
+          mob = NULL;
+        }
       }
       break;
     case 'S':                 /* read a mobile into a vehicle */
       if (!veh)
         break;
-      if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
-        mob = read_mobile(ZCMD.arg1, REAL);
-        mob->mob_loaded_in_room = 0;
-        bool is_driver = !(veh->people);
 
-        char_to_veh(veh, mob);
+      {
+        bool passed_global_limits = (mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
+        bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
+        bool passed_room_limits = FALSE;
 
-        if (is_driver) {
-          // If the vehicle is empty, make the mob the driver.
-          AFF_FLAGS(mob).SetBit(AFF_PILOT);
-          mob->vfront = TRUE;
-
-          veh->cspeed = SPEED_CRUISING;
-        } else {
-          // Look for hardpoints with weapons and man them.
-          struct obj_data *mount = NULL;
-
-          // Find an unmanned mount.
-          for (mount = veh->mount; mount; mount = mount->next_content) {
-            // Man the first unmanned mount we find, as long as it has a weapon in it.
-            struct obj_data *weapon = get_mount_weapon(mount);
-            if (!mount->worn_by && weapon) {
-              mount->worn_by = mob;
-              AFF_FLAGS(mob).SetBit(AFF_MANNING);
-
-              // Ensure this mob has ammo for that weapon.
-              ensure_mob_has_ammo_for_weapon(mob, weapon);
-              char empty_argument[1]; *empty_argument = '\0';
-              do_reload(mob, empty_argument, 0, 0);
-              break;
-            }
+        if (ZCMD.arg2 < -1) {
+          int total_seen_in_room = 0;
+          int desired_total = (ZCMD.arg2 * -1) - 1;
+          for (struct char_data *mob = veh->people; mob; mob = mob->next_in_veh) {
+            if (GET_MOB_RNUM(mob) == ZCMD.arg1)
+              total_seen_in_room++;
           }
-
-          // Mount-users are all back of the bus.
-          mob->vfront = FALSE;
+          passed_room_limits = (total_seen_in_room < desired_total);
         }
 
-        last_cmd = 1;
-      } else {
-        if (ZCMD.arg2 == 0 && !reboot)
-          no_mob = 1;
-        else
-          no_mob = 0;
-        last_cmd = 0;
-        mob = NULL;
+        if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
+          mob = read_mobile(ZCMD.arg1, REAL);
+          mob->mob_loaded_in_room = 0;
+          bool is_driver = !(veh->people);
+
+          char_to_veh(veh, mob);
+
+          if (is_driver) {
+            // If the vehicle is empty, make the mob the driver.
+            AFF_FLAGS(mob).SetBit(AFF_PILOT);
+            mob->vfront = TRUE;
+
+            veh->cspeed = SPEED_CRUISING;
+          } else {
+            // Look for hardpoints with weapons and man them.
+            struct obj_data *mount = NULL;
+
+            // Find an unmanned mount.
+            for (mount = veh->mount; mount; mount = mount->next_content) {
+              // Man the first unmanned mount we find, as long as it has a weapon in it.
+              struct obj_data *weapon = get_mount_weapon(mount);
+              if (!mount->worn_by && weapon) {
+                mount->worn_by = mob;
+                AFF_FLAGS(mob).SetBit(AFF_MANNING);
+
+                // Ensure this mob has ammo for that weapon.
+                ensure_mob_has_ammo_for_weapon(mob, weapon);
+                char empty_argument[1]; *empty_argument = '\0';
+                do_reload(mob, empty_argument, 0, 0);
+                break;
+              }
+            }
+
+            // Mount-users are all back of the bus.
+            mob->vfront = FALSE;
+          }
+
+          last_cmd = 1;
+        } else {
+          if (ZCMD.arg2 == 0 && !reboot)
+            no_mob = 1;
+          else
+            no_mob = 0;
+          last_cmd = 0;
+          mob = NULL;
+        }
       }
       break;
     case 'U':                 /* mount/upgrades a vehicle with object */
@@ -4627,14 +4658,30 @@ void reset_zone(int zone, int reboot)
         last_cmd = 0;
       break;
     case 'V':                 /* loads a vehicle */
-      if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
-        veh = read_vehicle(ZCMD.arg1, REAL);
-        veh_to_room(veh, &world[ZCMD.arg3]);
-        snprintf(buf, sizeof(buf), "%s has arrived.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-        send_to_room(buf, veh->in_room);
-        last_cmd = 1;
-      } else
-        last_cmd = 0;
+      {
+        bool passed_global_limits = (veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
+        bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
+        bool passed_room_limits = FALSE;
+
+        if (ZCMD.arg2 < -1) {
+          int total_seen_in_room = 0;
+          int desired_total = (ZCMD.arg2 * -1) - 1;
+          for (struct veh_data *tmp_veh = world[ZCMD.arg3].vehicles; tmp_veh; tmp_veh = tmp_veh->next_veh) {
+            if (GET_VEH_RNUM(tmp_veh) == ZCMD.arg1)
+              total_seen_in_room++;
+          }
+          passed_room_limits = (total_seen_in_room < desired_total);
+        }
+
+        if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
+          veh = read_vehicle(ZCMD.arg1, REAL);
+          veh_to_room(veh, &world[ZCMD.arg3]);
+          snprintf(buf, sizeof(buf), "%s has arrived.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+          send_to_room(buf, veh->in_room);
+          last_cmd = 1;
+        } else
+          last_cmd = 0;
+      }
       break;
     case 'H':                 /* loads a Matrix file into a host */
       // Count the existing items in this host
@@ -4654,92 +4701,127 @@ void reset_zone(int zone, int reboot)
       }
       break;
     case 'O':                 /* read an object */
-      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
-        obj = read_object(ZCMD.arg1, REAL);
-        obj_to_room(obj, &world[ZCMD.arg3]);
+      {
+        bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
+        bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
+        bool passed_room_limits = FALSE;
 
-        act("You blink and realize that $p must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
-
-        if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(obj) == TYPE_WORKSHOP) {
-          if (GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && !ROOM_FLAGGED(obj->in_room, ROOM_GARAGE)) {
-            // Warn the builder that they're breaking the game's rules (let it continue since it doesn't harm anything though).
-            ZONE_ERROR("Zoneloading a pre-set-up vehicle workshop in a non-GARAGE room violates game convention about vehicle workshop locations. Flag the room as GARAGE.");
+        if (ZCMD.arg2 < -1) {
+          int total_seen_in_room = 0;
+          int desired_total = (ZCMD.arg2 * -1) - 1;
+          for (struct obj_data *obj = world[ZCMD.arg3].contents; obj; obj = obj->next_content) {
+            if (GET_OBJ_RNUM(obj) == ZCMD.arg1)
+              total_seen_in_room++;
           }
-
-          // It's a workshop, set it as unpacked already.
-          GET_SETTABLE_WORKSHOP_IS_SETUP(obj) = 1;
-
-          // Handle the room's workshop[] array.
-          if (obj->in_room)
-            add_workshop_to_room(obj);
+          passed_room_limits = (total_seen_in_room < desired_total);
         }
-        else if (GET_OBJ_TYPE(obj) == ITEM_RADIO) {
-          GET_RADIO_CENTERED_FREQUENCY(obj) = 8;
-        }
-        last_cmd = 1;
-      } else
-        last_cmd = 0;
+
+        if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
+          obj = read_object(ZCMD.arg1, REAL);
+          obj_to_room(obj, &world[ZCMD.arg3]);
+
+          act("You blink and realize that $p must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
+
+          if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(obj) == TYPE_WORKSHOP) {
+            if (GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && !ROOM_FLAGGED(obj->in_room, ROOM_GARAGE)) {
+              // Warn the builder that they're breaking the game's rules (let it continue since it doesn't harm anything though).
+              ZONE_ERROR("Zoneloading a pre-set-up vehicle workshop in a non-GARAGE room violates game convention about vehicle workshop locations. Flag the room as GARAGE.");
+            }
+
+            // It's a workshop, set it as unpacked already.
+            GET_SETTABLE_WORKSHOP_IS_SETUP(obj) = 1;
+
+            // Handle the room's workshop[] array.
+            if (obj->in_room)
+              add_workshop_to_room(obj);
+          }
+          else if (GET_OBJ_TYPE(obj) == ITEM_RADIO) {
+            GET_RADIO_CENTERED_FREQUENCY(obj) = 8;
+          }
+          last_cmd = 1;
+        } else
+          last_cmd = 0;
+      }
       break;
     case 'P':                 /* object to object */
-      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
-        obj = read_object(ZCMD.arg1, REAL);
-        if (!(obj_to = ObjList.FindObj(ZCMD.arg3))) {
-          ZONE_ERROR("target obj not found");
-          break;
+      {
+        bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
+        bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
+        bool passed_room_limits = FALSE;
+
+        obj_to = ObjList.FindObj(ZCMD.arg3);
+
+        if (obj_to && ZCMD.arg2 < -1) {
+          int total_seen_in_room = 0;
+          int desired_total = (ZCMD.arg2 * -1) - 1;
+          for (struct obj_data *obj = obj_to->contains; obj; obj = obj->next_content) {
+            if (GET_OBJ_RNUM(obj) == ZCMD.arg1)
+              total_seen_in_room++;
+          }
+          passed_room_limits = (total_seen_in_room < desired_total);
         }
-        if (obj != obj_to)
-          obj_to_obj(obj, obj_to);
-        if (GET_OBJ_TYPE(obj_to) == ITEM_HOLSTER) {
-          GET_HOLSTER_READY_STATUS(obj_to) = 1;
 
-          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
-            // If it's carried by an NPC, make sure it's loaded.
-            if (GET_WEAPON_MAX_AMMO(obj) > 0) {
-              struct obj_data *outermost = obj;
-              while (outermost && outermost->in_obj) {
-                outermost = outermost->in_obj;
-              }
+        if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
+          if (!obj_to) {
+            ZONE_ERROR("target obj not found");
+            break;
+          }
 
-              struct char_data *temp_ch = NULL;
-              if ((temp_ch = outermost->carried_by) || (temp_ch = outermost->worn_by)) {
-                // Reload from their ammo.
-                for (int index = 0; index < NUM_AMMOTYPES; index++) {
-                  if (GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
-                    reload_weapon_from_bulletpants(temp_ch, obj, npc_ammo_usage_preferences[index]);
-                    break;
+          obj = read_object(ZCMD.arg1, REAL);
+          
+          if (obj != obj_to)
+            obj_to_obj(obj, obj_to);
+          if (GET_OBJ_TYPE(obj_to) == ITEM_HOLSTER) {
+            GET_HOLSTER_READY_STATUS(obj_to) = 1;
+
+            if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
+              // If it's carried by an NPC, make sure it's loaded.
+              if (GET_WEAPON_MAX_AMMO(obj) > 0) {
+                struct obj_data *outermost = obj;
+                while (outermost && outermost->in_obj) {
+                  outermost = outermost->in_obj;
+                }
+
+                struct char_data *temp_ch = NULL;
+                if ((temp_ch = outermost->carried_by) || (temp_ch = outermost->worn_by)) {
+                  // Reload from their ammo.
+                  for (int index = 0; index < NUM_AMMOTYPES; index++) {
+                    if (GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
+                      reload_weapon_from_bulletpants(temp_ch, obj, npc_ammo_usage_preferences[index]);
+                      break;
+                    }
+                  }
+
+                  // If they failed to reload, they have no ammo. Give them some normal and reload with it.
+                  if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
+                    GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+                    reload_weapon_from_bulletpants(temp_ch, obj, AMMO_NORMAL);
+
+                    // Decrement their debris-- we want this reload to not create clutter.
+                    get_ch_in_room(temp_ch)->debris--;
                   }
                 }
+              }
 
-                // If they failed to reload, they have no ammo. Give them some normal and reload with it.
-                if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
-                  GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
-                  reload_weapon_from_bulletpants(temp_ch, obj, AMMO_NORMAL);
-
-                  // Decrement their debris-- we want this reload to not create clutter.
-                  get_ch_in_room(temp_ch)->debris--;
-                }
+              // Set the firemode.
+              if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_BF)) {
+                GET_WEAPON_FIREMODE(obj) = MODE_BF;
+              } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_FA)) {
+                GET_WEAPON_FIREMODE(obj) = MODE_FA;
+                GET_OBJ_TIMER(obj) = 10;
+              } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SA)) {
+                GET_WEAPON_FIREMODE(obj) = MODE_SA;
+              } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SS)) {
+                GET_WEAPON_FIREMODE(obj) = MODE_SS;
               }
             }
-
-            // Set the firemode.
-            if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_BF)) {
-              GET_WEAPON_FIREMODE(obj) = MODE_BF;
-            } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_FA)) {
-              GET_WEAPON_FIREMODE(obj) = MODE_FA;
-              GET_OBJ_TIMER(obj) = 10;
-            } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SA)) {
-              GET_WEAPON_FIREMODE(obj) = MODE_SA;
-            } else if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(obj), 1 << MODE_SS)) {
-              GET_WEAPON_FIREMODE(obj) = MODE_SS;
-            }
           }
-        }
-        if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
-        last_cmd = 1;
-      } else
-        last_cmd = 0;
+          if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
+            GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
+          last_cmd = 1;
+        } else
+          last_cmd = 0;
+      }
       break;
     case 'G':                 /* obj_to_char */
       if (!mob) {
@@ -4747,15 +4829,31 @@ void reset_zone(int zone, int reboot)
           ZONE_ERROR("attempt to give obj to non-existent mob");
         break;
       }
-      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
-        obj = read_object(ZCMD.arg1, REAL);
-        obj_to_char(obj, mob);
-        if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
-        last_cmd = 1;
-      } else
-        last_cmd = 0;
+
+      {
+        bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
+        bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
+        bool passed_room_limits = FALSE;
+
+        if (obj_to && ZCMD.arg2 < -1) {
+          int total_seen_in_room = 0;
+          int desired_total = (ZCMD.arg2 * -1) - 1;
+          for (struct obj_data *obj = mob->carrying; obj; obj = obj->next_content) {
+            if (GET_OBJ_RNUM(obj) == ZCMD.arg1)
+              total_seen_in_room++;
+          }
+          passed_room_limits = (total_seen_in_room < desired_total);
+        }
+
+        if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
+          obj = read_object(ZCMD.arg1, REAL);
+          obj_to_char(obj, mob);
+          if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
+            GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
+          last_cmd = 1;
+        } else
+          last_cmd = 0;
+      }
       break;
     case 'E':                 /* object to equipment list */
       if (!mob) {
@@ -4765,47 +4863,51 @@ void reset_zone(int zone, int reboot)
         }
         break;
       }
-      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
-        if (ZCMD.arg3 < 0 || ZCMD.arg3 >= NUM_WEARS) {
-          ZONE_ERROR("invalid equipment pos number");
-        } else {
-          obj = read_object(ZCMD.arg1, REAL);
-          if (!equip_char(mob, obj, ZCMD.arg3) || GET_EQ(mob, ZCMD.arg3) != obj) {
-            // Equip failure; destroy the object.
-            extract_obj(obj);
-            last_cmd = 0;
+      {
+        bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
+        bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
+        
+        if (passed_global_limits || passed_load_on_reboot) {
+          if (ZCMD.arg3 < 0 || ZCMD.arg3 >= NUM_WEARS) {
+            ZONE_ERROR("invalid equipment pos number");
           } else {
-            if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-              GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
-            last_cmd = 1;
+            obj = read_object(ZCMD.arg1, REAL);
+            if (!equip_char(mob, obj, ZCMD.arg3) || GET_EQ(mob, ZCMD.arg3) != obj) {
+              // Equip failure; destroy the object.
+              extract_obj(obj);
+              last_cmd = 0;
+            } else {
+              if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
+                GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
+              last_cmd = 1;
 
-            // If it's a weapon, reload it.
-            if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
-                && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
-                && GET_WEAPON_MAX_AMMO(obj) != -1) {
+              // If it's a weapon, reload it.
+              if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
+                  && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
+                  && GET_WEAPON_MAX_AMMO(obj) != -1) {
 
-              // Reload from their ammo.
-              for (int index = 0; index < NUM_AMMOTYPES; index++) {
-                if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
-                  reload_weapon_from_bulletpants(mob, obj, npc_ammo_usage_preferences[index]);
-                  break;
+                // Reload from their ammo.
+                for (int index = 0; index < NUM_AMMOTYPES; index++) {
+                  if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
+                    reload_weapon_from_bulletpants(mob, obj, npc_ammo_usage_preferences[index]);
+                    break;
+                  }
                 }
-              }
 
-              // If they failed to reload, they have no ammo. Give them some normal and reload with it.
-              if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
-                GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
-                reload_weapon_from_bulletpants(mob, obj, AMMO_NORMAL);
+                // If they failed to reload, they have no ammo. Give them some normal and reload with it.
+                if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
+                  GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+                  reload_weapon_from_bulletpants(mob, obj, AMMO_NORMAL);
 
-                // Decrement their debris-- we want this reload to not create clutter.
-                get_ch_in_room(mob)->debris--;
+                  // Decrement their debris-- we want this reload to not create clutter.
+                  get_ch_in_room(mob)->debris--;
+                }
               }
             }
           }
-        }
-      } else
-        last_cmd = 0;
+        } else
+          last_cmd = 0;
+      }
       break;
     case 'N':  // give x number of items to a mob
       if (!mob) {

@@ -1986,26 +1986,18 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 {
   int value;
 
-  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP)) {
-    snprintf(buf, sizeof(buf), "You can't %s $p, it must be CURSED!", sname);
-    act(buf, FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
-  }
-  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch)) {
-    snprintf(buf, sizeof(buf), "You'll have to use the KEEP command on $p before you can %s it.", sname);
-    act(buf, FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
-  }
-  if (obj == ch->char_specials.programming)
-  {
-    send_to_char(ch, "You can't %s something you are working on.\r\n", sname);
-    return 0;
-  }
+  struct room_data *in_room = get_ch_in_room(ch);
 
-  if (obj_contains_kept_items(obj) && !IS_SENATOR(ch)) {
-    act("Action blocked: $p contains at least one kept item.", FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
-  }
+  FALSE_CASE(ROOM_FLAGGED(in_room, ROOM_NO_DROP), "The game's administration requests that you do not drop anything here.");
+  FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP), "You can't %s %s, it must be CURSED!", sname, decapitalize_a_an(obj));
+  FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the KEEP command on $p before you can %s it.", sname);
+  FALSE_CASE_PRINTF(obj == ch->char_specials.programming, "You can't %s something you are working on.", sname);
+  FALSE_CASE_PRINTF(obj_contains_kept_items(obj) && !IS_SENATOR(ch), "Action blocked: %s contains at least one kept item.", decapitalize_a_an(obj));
+
+  // We don't allow donation anymore for a variety of reasons, so we convert it to junking.
+  bool mask_junk_messages_as_donate = (mode == SCMD_DONATE);
+  if (mode == SCMD_DONATE)
+    mode = SCMD_JUNK;
 
   // You must be in an apartment or vehicle in order to drop or donate economically-sensitive items.
   if (mode == SCMD_DONATE || (mode != SCMD_JUNK && !((ch->in_room && ch->in_room->apartment) || ch->in_veh))) {
@@ -2032,41 +2024,23 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   }
 
   if (mode == SCMD_DONATE) {
-    if (IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD)) {
-      act("You can't donate $p: It was given to you by staff.", FALSE, ch, obj, 0, TO_CHAR);
-      return 0;
-    }
-
-    if (IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
-      act("You can't donate $p: It's flagged !SELL or !RENT.", FALSE, ch, obj, 0, TO_CHAR);
-      return 0;
-    }
+    // No donating wizloaded or !sell / !rent items.
+    FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD), "You can't donate %s: It was given to you by staff.", decapitalize_a_an(obj));
+    FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT),
+                      "You can't donate %s: It's flagged !SELL or !RENT.", decapitalize_a_an(obj));
 
     // Check contents too.
     for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
-      if (IS_OBJ_STAT(contained, ITEM_EXTRA_WIZLOAD)) {
-        act("You can't donate contained item $p: It was given to you by staff.", FALSE, ch, contained, 0, TO_CHAR);
-        return 0;
-      }
-
-      if (IS_OBJ_STAT(contained, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
-        act("You can't donate contained item $p: It's flagged !SELL or !RENT.", FALSE, ch, contained, 0, TO_CHAR);
-        return 0;
-      }
+      FALSE_CASE_PRINTF(IS_OBJ_STAT(contained, ITEM_EXTRA_WIZLOAD), "You can't donate %s: It was given to you by staff.", decapitalize_a_an(obj));
+      FALSE_CASE_PRINTF(IS_OBJ_STAT(contained, ITEM_EXTRA_NOSELL) || IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT),
+                        "You can't donate %s: It's flagged !SELL or !RENT.", decapitalize_a_an(obj));
     }
   }
 
   // Special handling: Vehicle containers.
   if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER) {
-    if (mode != SCMD_DROP) {
-      send_to_char(ch, "You can't %s vehicles.\r\n", sname);
-      return 0;
-    }
-
-    if (ch->in_veh) {
-      send_to_char("You'll have to step out of your current vehicle to do that.\r\n", ch);
-      return 0;
-    }
+    FALSE_CASE_PRINTF(mode != SCMD_DROP, "You can't %s vehicles.", sname);
+    FALSE_CASE(ch->in_veh, "You'll have to step out of your current vehicle to do that.");
 
     // Find the veh storage room.
     rnum_t vehicle_storage_rnum = real_room(RM_PORTABLE_VEHICLE_STORAGE);
@@ -2241,7 +2215,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   {
     char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "%s %ss: %s", GET_CHAR_NAME(ch),
-            sname,
+            mask_junk_messages_as_donate ? "donate-junk" : sname,
             representation);
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
     delete [] representation;
@@ -2310,6 +2284,7 @@ ACMD(do_drop)
   case SCMD_DONATE:
     sname = "donate";
     mode = SCMD_DONATE;
+/*
     switch (number(0, 2)) {
     case 0:
       random_donation_room = &world[real_room(donation_room_1)];
@@ -2325,6 +2300,7 @@ ACMD(do_drop)
       send_to_char("Sorry, you can't donate anything right now.\r\n", ch);
       return;
     }
+*/
     break;
   default:
     sname = "drop";
@@ -2385,9 +2361,12 @@ ACMD(do_drop)
         amount += perform_drop(ch, obj, mode, sname, random_donation_room);
     }
   }
-  if (amount && (subcmd == SCMD_JUNK) && !PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    send_to_char(ch, "You receive %d nuyen for recycling.\r\n", amount >> 4);
-    gain_nuyen(ch, amount >> 4, NUYEN_INCOME_JUNKING);
+  if (amount && (subcmd == SCMD_JUNK || subcmd == SCMD_DONATE) && !PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    int payout = amount >> 4;
+    if (payout > 0) {
+      send_to_char(ch, "You receive %d nuyen for recycling.\r\n", payout);
+      gain_nuyen(ch, payout, NUYEN_INCOME_JUNKING);
+    }
   }
 }
 

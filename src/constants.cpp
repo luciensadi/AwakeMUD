@@ -271,8 +271,8 @@ const char *room_bits[] =
     "ARENA",
     "STREETLIGHTS",
     "HOUSE",
-    "HCRSH",
-    "ATRIUM",
+    "!DROP",
+    "unused",
     "OLC",
     "*",                          /* BFS MARK */
     "LOW_LIGHT",

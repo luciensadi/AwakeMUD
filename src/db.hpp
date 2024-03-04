@@ -125,6 +125,7 @@ struct reset_com
   long arg1;           /*                                      */
   long arg2;           /* Arguments to the command             */
   long arg3;           /*                                      */
+  long arg4;
   int line;            /* line number this command appears on  */
 
   /*
