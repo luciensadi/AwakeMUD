@@ -3761,54 +3761,6 @@ ACMD(do_asist)
   }
 }
 
-ACMD(do_compact)
-{
-  skip_spaces(&argument);
-  if (!*argument) {
-    send_to_char(ch, "What do you wish to %scompress?\r\n", subcmd ? "de" : "");
-    return;
-  }
-  struct obj_data *mem = NULL, *compact = NULL, *obj = NULL;
-  for (struct obj_data *tmp = ch->cyberware; tmp; tmp = tmp->next_content)
-    if (GET_OBJ_VAL(tmp, 0) == CYB_MEMORY)
-      mem = tmp;
-    else if (GET_OBJ_VAL(tmp, 0) == CYB_DATACOMPACT)
-      compact = tmp;
-  if (!mem || !compact) {
-    send_to_char(ch, "You need headware memory and a data compactor to %scompress data.\r\n", subcmd ? "de" : "");
-    return;
-  }
-  int i = atoi(argument);
-  for (obj = mem->contains; obj; obj = obj->next_content)
-    if (!--i)
-      break;
-  if (!obj) {
-    send_to_char("You don't have that file.\r\n", ch);
-    return;
-  }
-
-  if (GET_CHIP_LINKED(obj))
-    send_to_char("You cannot compress a file that is in use.\r\n", ch);
-  else if (subcmd && !GET_CHIP_COMPRESSION_FACTOR(obj))
-    send_to_char("That file isn't compressed.\r\n", ch);
-  else if (!subcmd && GET_CHIP_COMPRESSION_FACTOR(obj))
-    send_to_char("That file is already compressed.\r\n", ch);
-  else if (subcmd) {
-    if (GET_OBJ_VAL(mem, 3) - GET_OBJ_VAL(mem, 5) - GET_CHIP_COMPRESSION_FACTOR(obj) < 0) {
-      send_to_char("You don't have enough free memory to decompress this.\r\n", ch);
-      return;
-    }
-    send_to_char(ch, "You decompress %s.\r\n", GET_OBJ_NAME(obj));
-    GET_OBJ_VAL(mem, 5) += GET_CHIP_COMPRESSION_FACTOR(obj);
-    GET_CHIP_COMPRESSION_FACTOR(obj) = 0;
-  } else {
-    int size = (int)(((float)GET_OBJ_VAL(obj, 2) / 100) * (GET_OBJ_VAL(compact, 1) * 20));
-    GET_CHIP_COMPRESSION_FACTOR(obj) = size;
-    GET_OBJ_VAL(mem, 5) -= GET_CHIP_COMPRESSION_FACTOR(obj);
-    send_to_char(ch, "You compress %s, saving %d MP of space.\r\n", GET_OBJ_NAME(obj), size);
-  }
-}
-
 // Formats and prints a message to the user about why their custom deck won't work.
 bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) {
   if (GET_CYBERDECK_MPCP(cyberdeck) == 0) {

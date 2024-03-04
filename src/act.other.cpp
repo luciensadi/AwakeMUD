@@ -39,6 +39,7 @@
 #include "quest.hpp"
 #include "lifestyles.hpp"
 #include "moderation.hpp"
+#include "chipjacks.hpp"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -382,9 +383,13 @@ ACMD(do_title)
 
 int perform_group(struct char_data *ch, struct char_data *vict)
 {
-  if (IS_AFFECTED(vict, AFF_GROUP) || !CAN_SEE(ch, vict) || (!IS_SENATOR(ch) &&
-      IS_SENATOR(vict)))
+  if (IS_AFFECTED(vict, AFF_GROUP) || !CAN_SEE(ch, vict) || (!IS_SENATOR(ch) && IS_SENATOR(vict)))
     return 0;
+
+  if (GET_QUEST(ch) && GET_QUEST(ch) == GET_QUEST(vict)) {
+    send_to_char("You can't group with people who are on the same job as you.\r\n", ch);
+    return 1;
+  }
 
   AFF_FLAGS(vict).SetBit(AFF_GROUP);
 
@@ -450,10 +455,7 @@ ACMD(do_group)
     return;
   }
 
-  if (ch->master) {
-    send_to_char("You can not enroll group members without being head of the group.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(ch->master, "You can't enroll group members while following someone.");
 
   if (!str_cmp(buf, "all")) {
     perform_group(ch, ch);
@@ -2388,8 +2390,10 @@ ACMD(do_astral)
   GET_TOTEM(astral) = GET_TOTEM(ch);
   GET_ALIASES(astral) = GET_ALIASES(ch);
 
+  // Copy over skills.
   for (int i = 0; i < MAX_SKILLS; i++)
-    astral->char_specials.saved.skills[i][0] = ch->char_specials.saved.skills[i][0];
+    astral->char_specials.saved.skills[i][SKILLARRAY_LEARNED_VALUE] = ch->char_specials.saved.skills[i][SKILLARRAY_LEARNED_VALUE];
+  // Copy over metamagics.
   for (int i = 0; i < META_MAX; i++)
     SET_METAMAGIC(astral, i, GET_METAMAGIC(ch, i));
   GET_GRADE(astral) = GET_GRADE(ch);
@@ -3506,7 +3510,7 @@ ACMD(do_assense)
         if (vict->cyberware) {
           int locs[] = { 0, 0, 0, 0}, numloc = 0;
           for (struct obj_data *cyber = vict->cyberware; cyber; cyber = cyber->next_content)
-            switch (GET_OBJ_VAL(cyber, 0)) {
+            switch (GET_CYBERWARE_TYPE(cyber)) {
             case CYB_CHIPJACK:
             case CYB_DATAJACK:
             case CYB_DATALOCK:
@@ -3980,196 +3984,6 @@ ACMD(do_packup)
   AFF_FLAGS(ch).SetBit(AFF_PACKING);
 }
 
-ACMD(do_jack)
-{
-  struct obj_data *chip = NULL, *jack;
-  int chipnum = 0;
-  for (jack = ch->cyberware; jack; jack = jack->next_content)
-    if (GET_OBJ_VAL(jack, 0) == CYB_CHIPJACK)
-      break;
-  if (!jack) {
-    send_to_char(ch, "You don't have a chipjack.\r\n");
-    return;
-  }
-  skip_spaces(&argument);
-  for (chip = jack->contains; chip; chip = chip->next_content)
-    chipnum++;
-  if (subcmd) {
-    if (chipnum) {
-      int x = atoi(argument);
-      if (x > chipnum) {
-        send_to_char("You don't have that many chips in there.\r\n", ch);
-        return;
-      }
-      for (chip = jack->contains; chip && --x >= 1; chip = chip->next_content)
-        ;
-      obj_from_obj(chip);
-      obj_to_char(chip, ch);
-      send_to_char(ch, "You remove %s from your chipjack.\r\n", GET_OBJ_NAME(chip));
-      ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = 0;
-      act("$n removes a chip from their chipjack.", TRUE, ch, 0, 0, TO_ROOM);
-    } else
-      send_to_char(ch, "But you don't have anything installed in it.\r\n");
-    return;
-  }
-  if (!*argument) {
-    if (chipnum) {
-      int i = 1;
-      send_to_char(ch, "Currently installed chips:\r\n");
-      for (chip = jack->contains; chip; chip = chip->next_content)
-        send_to_char(ch, "%d) %20s Rating: %d\r\n", i++, GET_OBJ_NAME(chip), GET_OBJ_VAL(chip, 1));
-    } else send_to_char(ch, "Your chipjack is currently empty.\r\n");
-    return;
-  }
-  chip = get_obj_in_list_vis(ch, argument, ch->carrying);
-  if (chipnum >= GET_OBJ_VAL(jack, 3))
-    send_to_char(ch, "You don't have any space left in your chipjack.\r\n");
-  else if (!chip)
-    send_to_char(ch, "But you don't have that chip.\r\n");
-  else if (GET_OBJ_TYPE(chip) != ITEM_CHIP)
-    send_to_char(ch, "But that isn't a chip.\r\n");
-  else {
-    int max = 0;
-    if (skills[GET_OBJ_VAL(chip, 0)].type)
-      max = GET_OBJ_VAL(chip, 1);
-    else
-      for (struct obj_data *wires = ch->cyberware; wires; wires = wires->next_content)
-        if (GET_OBJ_VAL(wires, 0) == CYB_SKILLWIRE) {
-          max = GET_OBJ_VAL(wires, 1);
-          break;
-        }
-    send_to_char(ch, "You slip %s into your chipjack.\r\n", GET_OBJ_NAME(chip));
-    obj_from_char(chip);
-    obj_to_obj(chip, jack);
-    ch->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = MIN(max, GET_OBJ_VAL(chip, 1));
-    act("$n puts a chip into their chipjack.", TRUE, ch, 0, 0, TO_ROOM);
-  }
-}
-
-ACMD(do_chipload)
-{
-  struct obj_data *memory = NULL, *jack = NULL, *chip = NULL;
-  skip_spaces(&argument);
-  if (!*argument) {
-    send_to_char("Which chip do you wish to load into headware memory?\r\n", ch);
-    return;
-  }
-  for (struct obj_data *obj = ch->cyberware; obj && !(memory && jack); obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY)
-      memory = obj;
-    else if (GET_OBJ_VAL(obj, 0) == CYB_CHIPJACK)
-      jack = obj;
-  if (!memory || !jack) {
-    // Check to see if they were just trying to load a gun.
-    struct obj_data *weapon = NULL;
-    if ((weapon = get_obj_in_list_vis(ch, argument, ch->carrying))
-        || ((weapon = GET_EQ(ch, WEAR_WIELD))
-             && (isname(argument, weapon->text.keywords)
-                 || isname(argument, weapon->text.name)
-                 || (weapon->restring && isname(argument, weapon->restring))))) {
-      char cmd_buf[MAX_INPUT_LENGTH + 10];
-      snprintf(cmd_buf, sizeof(cmd_buf), " %s", argument);
-      do_reload(ch, argument, 0, 0);
-      return;
-    }
-
-    send_to_char("You need a chipjack and headware memory to load skillsofts into.\r\n", ch);
-    return;
-  }
-  if ((chip = get_obj_in_list_vis(ch, argument, jack->contains))) {
-    if (GET_OBJ_VAL(chip, 2) > GET_OBJ_VAL(memory, 3) - GET_OBJ_VAL(memory, 5)) {
-      send_to_char("You don't have enough headware memory left.\r\n", ch);
-      return;
-    }
-    struct obj_data *newchip = read_object(GET_OBJ_RNUM(chip), REAL);
-    obj_to_obj(newchip, memory);
-    GET_OBJ_VAL(memory, 5) += GET_OBJ_VAL(chip, 2);
-    send_to_char(ch, "You upload %s to your headware memory.\r\n", GET_OBJ_NAME(chip));
-  } else send_to_char("You don't have any chips in your chipjack.\r\n", ch);
-}
-
-ACMD(do_link)
-{
-  skip_spaces(&argument);
-  if (!*argument) {
-    send_to_char(ch, "Which chip do you wish to %slink?\r\n", subcmd ? "un" : "");
-    return;
-  }
-  int wires = 0;
-  struct obj_data *memory = NULL, *link = NULL;
-  for (struct obj_data *obj = ch->cyberware; obj && !(memory && link && wires); obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY)
-      memory = obj;
-    else if (GET_OBJ_VAL(obj, 0) == CYB_KNOWSOFTLINK)
-      link = obj;
-    else if (GET_OBJ_VAL(obj, 0) == CYB_SKILLWIRE)
-      wires = GET_OBJ_VAL(obj, 1);
-  if (!memory) {
-    send_to_char("You need headware memory to link a skillsoft.\r\n", ch);
-    return;
-  }
-  int x = atoi(argument);
-  struct obj_data *obj = memory->contains;
-  for (; obj; obj = obj->next_content)
-    if (!--x)
-      break;
-  if (!obj)
-    send_to_char("You don't have that many files in your memory.\r\n", ch);
-  else if (GET_OBJ_TYPE(obj) != ITEM_CHIP)
-    send_to_char("That is not a skillsoft.\r\n", ch);
-  else if (skills[GET_OBJ_VAL(obj, 0)].type && !link)
-    send_to_char("You need a knowsoft link to link knowsofts from headware memory.\r\n", ch);
-  else if (!skills[GET_OBJ_VAL(obj, 0)].type && !wires)
-    send_to_char("You need skill wires to link activesofts from headware memory.\r\n", ch);
-  else if (GET_OBJ_VAL(obj, 8))
-    send_to_char("You must decompress this skillsoft before you link it.\r\n", ch);
-  else if ((GET_OBJ_VAL(obj, 9) && !subcmd) || (!GET_OBJ_VAL(obj, 9) && subcmd))
-    send_to_char(ch, "That program is already %slinked.\r\n", subcmd ? "un" : "");
-  else {
-    if (subcmd) {
-      GET_OBJ_VAL(obj, 9) = 0;
-      send_to_char(ch, "You unlink %s.\r\n", GET_OBJ_NAME(obj));
-      ch->char_specials.saved.skills[GET_OBJ_VAL(obj, 0)][1] = 0;
-    } else {
-      GET_OBJ_VAL(obj, 9) = 1;
-      send_to_char(ch, "You link %s to your %s.\r\n", GET_OBJ_NAME(obj), skills[GET_OBJ_VAL(obj, 0)].type ? "knowsoft link" : "skillwires");
-
-      if (!skills[GET_OBJ_VAL(obj, 0)].type)
-        ch->char_specials.saved.skills[GET_OBJ_VAL(obj, 0)][1] = MIN(wires, GET_OBJ_VAL(obj, 1));
-      else ch->char_specials.saved.skills[GET_OBJ_VAL(obj, 0)][1] = GET_OBJ_VAL(obj, 1);
-    }
-  }
-}
-
-ACMD(do_memory)
-{
-  struct obj_data *memory = ch->cyberware;
-  for (; memory; memory = memory->next_content)
-    if (GET_OBJ_VAL(memory, 0) == CYB_MEMORY)
-      break;
-  if (!memory) {
-    send_to_char("You have no headware memory.\r\n", ch);
-    return;
-  }
-  send_to_char(ch, "Headware Memory Contents (%d/%d):\r\n", GET_OBJ_VAL(memory, 3) - GET_OBJ_VAL(memory, 5), GET_OBJ_VAL(memory, 3));
-  if (!memory->contains)
-    send_to_char("  Empty\r\n", ch);
-  else {
-    int i = 0;
-    for (struct obj_data *obj = memory->contains; obj; obj = obj->next_content) {
-      i++;
-      send_to_char(ch, "  %d) %s%-40s^n (%d MP) %s%s\r\n",
-                   i,
-                   GET_CHIP_COMPRESSION_FACTOR(obj) ? "^r" : "",
-                   GET_OBJ_NAME(obj),
-                   GET_CHIP_SIZE(obj) - GET_CHIP_COMPRESSION_FACTOR(obj),
-                   GET_CHIP_LINKED(obj) ? "^Y<LINKED>^N" : "",
-                   GET_CHIP_COMPRESSION_FACTOR(obj) ? "^y<COMPRESSED>^N" : ""
-                 );
-    }
-  }
-}
-
 // Looks for any working cyberdeck in the character's inventory or worn equipment.
 struct obj_data *find_cyberdeck(struct char_data *ch)
 {
@@ -4222,10 +4036,9 @@ ACMD(do_download_headware)
 
   FAILURE_CASE(!obj, "You don't have that many files in your memory.");
   FAILURE_CASE((GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY) || (GET_DECK_ACCESSORY_TYPE(obj) != TYPE_FILE), "You can only download photos and data.");
-  FAILURE_CASE(GET_CHIP_COMPRESSION_FACTOR(obj), "You must decompress this file before downloading.");
 
   obj_from_obj(obj);
-  GET_CYBERWARE_MEMORY_USED(memory) -= GET_CHIP_SIZE(obj);
+  GET_CYBERWARE_MEMORY_USED(memory) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
   obj_to_char(obj, ch);
   send_to_char(ch, "You transfer %s through %s into your hands.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(deck));
 }
@@ -4253,10 +4066,12 @@ ACMD(do_upload_headware)
   obj = get_obj_in_list_vis(ch, argument, ch->carrying);
   FAILURE_CASE(!obj, "You aren't carrying that file.");
   FAILURE_CASE((GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY) || (GET_DECK_ACCESSORY_TYPE(obj) != TYPE_FILE), "You can only upload photos and data.");
-  FAILURE_CASE_PRINTF(GET_CHIP_SIZE(obj) > GET_CYBERWARE_MEMORY_FREE(memory), "The file size (%d Mp) exceeds your free headware memory (%d Mp).", GET_CHIP_SIZE(obj), GET_CYBERWARE_MEMORY_FREE(memory));
+  FAILURE_CASE_PRINTF(GET_DECK_ACCESSORY_FILE_SIZE(obj) > GET_CYBERWARE_MEMORY_FREE(memory),
+                      "The file size (%d Mp) exceeds your free headware memory (%d Mp).",
+                      GET_DECK_ACCESSORY_FILE_SIZE(obj), GET_CYBERWARE_MEMORY_FREE(memory));
 
   obj_from_char(obj);
-  GET_CYBERWARE_MEMORY_USED(memory) += GET_CHIP_SIZE(obj);
+  GET_CYBERWARE_MEMORY_USED(memory) += GET_DECK_ACCESSORY_FILE_SIZE(obj);
   obj_to_obj(obj, memory);
   send_to_char(ch, "You transfer %s through %s into your headware memory.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(deck));
 }
@@ -4265,27 +4080,30 @@ ACMD(do_delete)
 {
   struct obj_data *memory = ch->cyberware;
   for (; memory; memory = memory->next_content)
-    if (GET_OBJ_VAL(memory, 0) == CYB_MEMORY)
+    if (GET_CYBERWARE_TYPE(memory) == CYB_MEMORY)
       break;
-  if (!memory) {
-    send_to_char("You have no headware memory.\r\n", ch);
-    return;
-  }
+  
+  FAILURE_CASE(!memory, "You have no headware memory.");
+  FAILURE_CASE(!memory->contains, "Your headware memory is empty.");
+
   int x = atoi(argument);
+  FAILURE_CASE(x <= 0, "You must select a chip index of 1 or higher.");
+
   struct obj_data *obj = memory->contains;
   for (; obj; obj = obj->next_content)
     if (!--x)
       break;
-  if (!obj)
-    send_to_char("You don't have that many files in your memory.\r\n", ch);
-  else {
-    send_to_char(ch, "You %sdelete %s from your headware memory.\r\n", GET_CHIP_LINKED(obj) ? "unlink and " : "", GET_OBJ_NAME(obj));
-    if (GET_CHIP_LINKED(obj))
-      ch->char_specials.saved.skills[GET_CHIP_SKILL(obj)][1] = 0;
-    obj_from_obj(obj);
-    GET_OBJ_VAL(memory, 5) -= GET_CHIP_SIZE(obj) - GET_CHIP_COMPRESSION_FACTOR(obj);
-    extract_obj(obj);
+  
+  FAILURE_CASE(!obj, "You don't have that many files in your memory.");
+
+  send_to_char(ch, "You %sdelete %s from your headware memory.\r\n", GET_CHIP_LINKED(obj) ? "unlink and " : "", GET_OBJ_NAME(obj));
+  if (GET_CHIP_LINKED(obj)) {
+    deactivate_single_skillsoft(obj, ch, TRUE);
   }
+  obj_from_obj(obj);
+  GET_CYBERWARE_MEMORY_USED(memory) -= GET_CHIP_SIZE(obj) - GET_CHIP_COMPRESSION_FACTOR(obj);
+  extract_obj(obj);
+  return;
 }
 
 ACMD(do_imagelink)
