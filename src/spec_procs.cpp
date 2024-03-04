@@ -439,20 +439,20 @@ int get_skill_price(struct char_data *ch, int i)
     return 1;
 
   if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute)) {
-    if (skills[i].type == SKILL_TYPE_KNOWLEDGE)
+    if (skills[i].is_knowledge_skill == SKILL_TYPE_KNOWLEDGE)
       return GET_SKILL(ch, i) + 1;
     else
       return (int)((GET_SKILL(ch, i) + 1) * 1.5);
   }
 
   if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute) * 2) {
-    if (skills[i].type == SKILL_TYPE_KNOWLEDGE)
+    if (skills[i].is_knowledge_skill == SKILL_TYPE_KNOWLEDGE)
       return (int)((GET_SKILL(ch, i) + 1) * 1.5);
     else
       return (int)((GET_SKILL(ch, i) + 1) * 2);
   }
 
-  if (skills[i].type == SKILL_TYPE_KNOWLEDGE)
+  if (skills[i].is_knowledge_skill == SKILL_TYPE_KNOWLEDGE)
     return (GET_SKILL(ch, i) + 1) * 2;
   else
     return (int)((GET_SKILL(ch, i) + 1) * 2.5);
@@ -4283,12 +4283,35 @@ void process_auth_room(struct char_data *ch) {
       }
     }
 
-  if (real_object(OBJ_NEWBIE_RADIO) > -1) {
-    struct obj_data *radio = read_object(OBJ_NEWBIE_RADIO, VIRTUAL);
-    GET_OBJ_VAL(radio, 0) = 8;
-    obj_to_char(radio, ch);
-    send_to_char(ch, "You have been given a radio.^n\r\n");
+  // Give them a radio and pocket secretary.
+  {
+    rnum_t newbie_radio_rnum = real_object(OBJ_NEWBIE_RADIO);
+    rnum_t newbie_pocsec_rnum = real_object(OBJ_NEWBIE_POCSEC);
+
+    if (newbie_radio_rnum > -1) {
+      struct obj_data *radio = read_object(newbie_radio_rnum, REAL);
+      GET_RADIO_CENTERED_FREQUENCY(radio) = 8;
+      obj_to_char(radio, ch);
+    } else {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Newbie radio %ld does not exist.", OBJ_NEWBIE_RADIO);
+    }
+
+    if (newbie_pocsec_rnum > -1) {
+      struct obj_data *pocsec = read_object(newbie_pocsec_rnum, REAL);
+      obj_to_char(pocsec, ch);
+    } else {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Newbie pocsec %ld does not exist.", OBJ_NEWBIE_POCSEC);
+    }
+
+    if (newbie_radio_rnum > -1 && newbie_pocsec_rnum > -1) {
+      send_to_char("You have been given a radio and a pocket secretary.\r\n", ch);
+    } else if (newbie_radio_rnum > -1) {
+      send_to_char("You have been given a radio.^n\r\n", ch);
+    } else if (newbie_radio_rnum > -1) {
+      send_to_char("You have been given a pocket secretary.^n\r\n", ch);
+    }
   }
+
   // Heal them.
   GET_PHYSICAL(ch) = 1000;
   GET_MENTAL(ch) = 1000;
@@ -4626,13 +4649,13 @@ SPECIAL(quest_debug_scanner)
       strcat(buf, "Not currently on a quest.\r\n");
     }
 
-    send_to_char(ch, "Last %d 'completed' quests (both quit and successful):\r\n", QUEST_TIMER);
+    send_to_char(ch, "Last %d ^c'completed'^n quests (both quit and successful):\r\n", QUEST_TIMER);
     for (int i = 0; i < QUEST_TIMER; i++) {
       if (GET_LQUEST(to, i))
         send_to_char(ch, "%d) %ld\r\n", i, GET_LQUEST(to, i));
     }
 
-    send_to_char(ch, "Last %d successfully completed quests:\r\n", QUEST_TIMER);
+    send_to_char(ch, "Last %d ^csuccessfully completed^n quests:\r\n", QUEST_TIMER);
     for (int i = 0; i < QUEST_TIMER; i++) {
       if (GET_CQUEST(to, i))
         send_to_char(ch, "%d) %ld\r\n", i, GET_CQUEST(to, i));
