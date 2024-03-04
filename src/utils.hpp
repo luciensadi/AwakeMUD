@@ -1485,6 +1485,7 @@ char    *crypt(const char *key, const char *salt);
 #define FAILURE_CASE_PRINTF(condition, ...) { \
   if ((condition)) {                          \
     send_to_char(ch, __VA_ARGS__);            \
+    send_to_char(ch, ""); /*force a newline*/ \
     return;                                   \
   }                                           \
 }                                             \

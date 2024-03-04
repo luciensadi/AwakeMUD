@@ -1206,21 +1206,25 @@ int new_quest(struct char_data *mob, struct char_data *ch)
         continue;
       }
 
-      if (ch->master && GET_QUEST(ch->master) == quest_table[quest_idx].vnum) {
+      if (ch->master && GET_QUEST(ch->master) == quest_idx) {
         if (access_level(ch, LVL_BUILDER)) {
           send_to_char(ch, "[Skipping quest %ld: Your group leader %s already has it.]\r\n", quest_table[quest_idx].vnum, GET_CHAR_NAME(ch->master));
         }
         continue;
       }
 
+      bool follower_has_quest = FALSE;
       for (struct follow_type *fd = ch->followers; fd; fd = fd->next) {
         if (fd->follower && GET_QUEST(fd->follower) == quest_idx) {
           if (access_level(ch, LVL_BUILDER)) {
             send_to_char(ch, "[Skipping quest %ld: Your follower %s already has it.]\r\n", quest_table[quest_idx].vnum, GET_CHAR_NAME(fd->follower));
           }
-          continue;
+          follower_has_quest = TRUE;
+          break;
         }
       }
+      if (follower_has_quest)
+        continue;
 
       bool found = FALSE;
       for (int q = QUEST_TIMER - 1; q >= 0; q--) {

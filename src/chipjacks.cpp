@@ -16,9 +16,7 @@ ACMD_DECLARE(do_reload);
    If you have an unlinked driver and a skill calls for one, auto-link it.
    If you unjack a skill, unlink the driver.
 */
-bool has_expert_driver(struct char_data *ch) {
-
-}
+// bool has_expert_driver(struct char_data *ch) {}
 
 /* Chipjack: Default allows datasoft and knowsoft usage. Add skillwires to use activesofts. One chip per jack, jack count unlimited. */
 
@@ -45,10 +43,9 @@ bool has_expert_driver(struct char_data *ch) {
    - No magic skills (sorcery, conjuring, etc)
 */
 
-/* Skillsoft Jukebox: Essentially a portable computer with numerous ports for slotting skillsofts,
-the jukebox is connect- ed via fiber-optic cable to a datajack or chipjack. Through keypad,
-voice or mental command (the latter via datajack), the user can “switch” between skillsofts.
-Ideal for combat and other situations when switching skillsofts needs to be quick and efficient.
+/* Skillsoft Jukebox:
+   A portable computer that you slot skillsofts into. Connect via cable to datajack/chipjack.
+   Switches between skillsofts quickly (or at least quicker than unjack/rejack).
 */
 
 // Given a character, find their skillwires, chipjacks, and headware memory, then initialize skills from that.
@@ -178,6 +175,8 @@ ACMD(do_jack)
   for (chip = chipjack->contains; chip; chip = chip->next_content)
     chipnum++;
 
+  FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting? That would be a neat trick.");
+
   // Unjack.
   if (subcmd) {
     FAILURE_CASE_PRINTF(!chipnum, "You don't have anything installed in %s.", decapitalize_a_an(chipjack));
@@ -259,6 +258,8 @@ ACMD(do_chipload)
   struct obj_data *chip = get_obj_in_list_vis(ch, argument, chipjack->contains);
   FAILURE_CASE(!chip, "You don't have any chips in your chipjack.");
 
+  FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting? That would be a neat trick.");
+
   FAILURE_CASE_PRINTF(GET_CYBERWARE_MEMORY_FREE(memory) < GET_CHIP_SIZE(chip),
                       "You don't have enough headware memory free. You need at least %d MP.",
                       GET_CHIP_SIZE(chip));
@@ -280,6 +281,7 @@ ACMD(do_link)
 
   FAILURE_CASE(!memory, "You need to have headware memory to link a skillsoft from.");
   FAILURE_CASE(!memory->contains, "Your headware memory is empty.");
+  FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting? That would be a neat trick.");
 
   int x = atoi(argument);
   struct obj_data *obj = memory->contains;
@@ -330,16 +332,17 @@ ACMD(do_memory)
 
 ACMD(do_compact)
 {
-  skip_spaces(&argument);
-
-  FAILURE_CASE_PRINTF(!*argument, "What do you wish to %scompress?", subcmd ? "de" : "");
-
   struct obj_data *mem = find_cyberware(ch, CYB_MEMORY);
   struct obj_data *compact = find_cyberware(ch, CYB_DATACOMPACT);
   struct obj_data *obj;
 
   FAILURE_CASE_PRINTF(!mem || !compact, "You need headware memory and a data compactor to %scompress data.", subcmd ? "de" : "");
+
+  FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting? That would be a neat trick.");
   
+  skip_spaces(&argument);
+  FAILURE_CASE_PRINTF(!*argument, "What do you wish to %scompress?", subcmd ? "de" : "");
+
   int i = atoi(argument);
   for (obj = mem->contains; obj; obj = obj->next_content)
     if (!--i)
