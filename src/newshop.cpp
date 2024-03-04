@@ -20,6 +20,7 @@
 #include "config.hpp"
 #include "newmail.hpp"
 #include "lifestyles.hpp"
+#include "chipjacks.hpp"
 
 extern struct time_info_data time_info;
 extern const char *pc_race_types[];
@@ -274,6 +275,11 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
     return FALSE;
   }
 
+  if (GET_CYBERWARE_TYPE(obj) == CYB_MEMORY && obj->contains) {
+    send_to_char("You can't uninstall headware memory with data in it.\r\n", remover);
+    return FALSE;
+  }
+
   if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE) {
     obj_from_bioware(obj);
     GET_INDEX(victim) -= GET_BIOWARE_ESSENCE_COST(obj);
@@ -315,10 +321,11 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
   }
 
   affect_total(victim);
-  if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_CYBERWARE_TYPE(obj) == CYB_MEMORY)
-    for (struct obj_data *chip = obj->contains; chip; chip = chip->next_content)
-      if (GET_OBJ_VAL(chip, 9))
-        victim->char_specials.saved.skills[GET_OBJ_VAL(chip, 0)][1] = 0;
+
+  // Strip any jacked skills.
+  if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_CYBERWARE_TYPE(obj) == CYB_MEMORY) {
+    deactivate_skillsofts_in_headware_memory(obj, victim, TRUE);
+  }    
 
   return TRUE;
 }
@@ -1524,6 +1531,11 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
     if (GET_CYBERWARE_TYPE(obj) == CYB_CHIPJACK && obj->contains) {
       send_to_char("You can't uninstall a chipjack with chips in it.\r\n", ch);
+      return;
+    }
+
+    if (GET_CYBERWARE_TYPE(obj) == CYB_MEMORY && obj->contains) {
+      send_to_char("You can't uninstall headware memory with data in it.\r\n", ch);
       return;
     }
 
@@ -3440,6 +3452,11 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
 
   if (GET_CYBERWARE_TYPE(obj) == CYB_CHIPJACK && obj->contains) {
     send_to_char("You can't uninstall a chipjack with chips in it.\r\n", ch);
+    return;
+  }
+
+  if (GET_CYBERWARE_TYPE(obj) == CYB_MEMORY && obj->contains) {
+    send_to_char("You can't uninstall headware memory with data in it.\r\n", ch);
     return;
   }
 

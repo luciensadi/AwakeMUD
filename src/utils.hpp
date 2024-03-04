@@ -172,6 +172,8 @@ bool    blocked_by_soulbinding(struct char_data *ch, struct obj_data *obj, bool 
 const char *get_soulbound_name(struct obj_data *obj);
 idnum_t get_soulbound_idnum(struct obj_data *obj);
 bool    soulbind_obj_to_char(struct obj_data *obj, struct char_data *ch, bool including_chargen_binds);
+struct obj_data *find_cyberware(struct char_data *ch, int ware_type);
+struct obj_data *find_bioware(struct char_data *ch, int ware_type);
 
 struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion);
 void    find_or_load_ch_cleanup(struct char_data *ch);
@@ -675,10 +677,13 @@ int get_armor_penalty_grade(struct char_data *ch);
 /* the skills structure was moved to char_specials so that mobs could
  * have access to them also, ie load them up from mob files and use
  * the skills.  Sure love corrupting the p-file! -Flynn */
-#define GET_SKILL(ch, i)        ((ch)->char_specials.saved.skills[i][1] > 0 ? (ch)->char_specials.saved.skills[i][1] : (ch)->char_specials.saved.skills[i][0])
-#define REAL_SKILL(ch, i)       ((ch)->char_specials.saved.skills[i][1] > 0 ? 0 : (ch)->char_specials.saved.skills[i][0])
+#define GET_CHIPJACKED_SKILL(ch, sk_idx)  ((ch)->char_specials.saved.skills[sk_idx][SKILLARRAY_JACKED_VALUE])
+#define GET_RAW_SKILL(ch, i)    ((ch)->char_specials.saved.skills[i][SKILLARRAY_LEARNED_VALUE])
+
+#define GET_SKILL(ch, i)        (GET_CHIPJACKED_SKILL((ch), i) > 0 ? GET_CHIPJACKED_SKILL((ch), i) : GET_RAW_SKILL((ch), i))
+#define REAL_SKILL(ch, i)       (GET_CHIPJACKED_SKILL((ch), i) > 0 ? 0 : GET_RAW_SKILL((ch), i))
 // SET_SKILL is used only in medit.cpp for NPCs. Set char skills with utils.cpp's set_character_skill().
-#define SET_SKILL(ch, i, pct)   {(ch)->char_specials.saved.skills[i][0] = pct; GET_SKILL_DIRTY_BIT((ch)) = TRUE;}
+#define SET_SKILL(ch, i, pct)   {(ch)->char_specials.saved.skills[i][SKILLARRAY_LEARNED_VALUE] = pct; GET_SKILL_DIRTY_BIT((ch)) = TRUE;}
 
 #define GET_POWER(ch, i)	((ch)->char_specials.saved.powers[i][1] ? \
                                  MIN((ch)->char_specials.saved.powers[i][1], (ch)->char_specials.saved.powers[i][0]) : 0)

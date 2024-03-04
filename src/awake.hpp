@@ -2541,6 +2541,7 @@ enum {
 // Objects, to remove the magic numbers from the code.
 #define OBJ_INITIATIVE_TRACKER             6996
 #define OBJ_NEWBIE_RADIO                   60531
+#define OBJ_NEWBIE_POCSEC                  31542
 #define OBJ_MULTNOMAH_VISA                 17513
 #define OBJ_CARIBBEAN_VISA                 62100
 #define OBJ_MAP_OF_SEATTLE                 2041
@@ -3086,6 +3087,10 @@ enum {
 #define BOOTED_FROM_COPYOVER   2
 
 #define HARDENED_ARMOR_NOT_CUSTOMIZED  -1
+
+#define SKILLARRAY_LEARNED_VALUE   0
+#define SKILLARRAY_MODIFIED_VALUE  1
+#define SKILLARRAY_JACKED_VALUE    2
 
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's

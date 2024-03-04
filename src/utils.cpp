@@ -3423,14 +3423,14 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
     return;
   }
 
-  if (new_value == REAL_SKILL(ch, skill_num)) {
+  if (new_value == GET_RAW_SKILL(ch, skill_num)) {
     // This is not an error condition (think restoring an imm and skillsetting everything); just silently fail.
     return;
   }
 
   if (send_message) {
     // Active skill messaging.
-    if (skills[skill_num].type == SKILL_TYPE_ACTIVE) {
+    if (skills[skill_num].is_knowledge_skill == SKILL_TYPE_ACTIVE) {
       if (new_value == 0) {
         send_to_char(ch, "You completely forget your skills in %s.\r\n", skills[skill_num].name);
       } else if (new_value == 1) {
@@ -3501,11 +3501,8 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
     }
   }
 
-  // Update their skill.
-  (ch)->char_specials.saved.skills[skill_num][0] = new_value;
-
-  // Set the dirty bit so we know we need to save their skills.
-  GET_SKILL_DIRTY_BIT((ch)) = TRUE;
+  // Update their skill and set the dirty bit.
+  SET_SKILL(ch, skill_num, new_value);
 }
 
 // Per SR3 core p98-99.
@@ -3545,7 +3542,7 @@ const char *skill_rank_name(int rank, bool knowledge) {
 char *how_good(int skill, int rank)
 {
   static char buf[256];
-  snprintf(buf, sizeof(buf), " (rank ^c%2d^n: %s)", rank, skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE));
+  snprintf(buf, sizeof(buf), " (rank ^c%2d^n: %s)", rank, skill_rank_name(rank, skills[skill].is_knowledge_skill == SKILL_TYPE_KNOWLEDGE));
   return buf;
 }
 
@@ -7200,4 +7197,28 @@ bool transfer_credstick_contents_to_bank(struct obj_data *credstick, struct char
   }
 
   return FALSE;
+}
+
+struct obj_data *_find_ware(struct char_data *ch, int ware_type, bool search_cyberware) {
+  if (search_cyberware) {
+    for (struct obj_data *ware = ch->cyberware; ware; ware = ware->next_content) {
+      if (GET_CYBERWARE_TYPE(ware) == ware_type)
+        return ware;
+    }
+    return NULL;
+  } else {
+    for (struct obj_data *ware = ch->bioware; ware; ware = ware->next_content) {
+      if (GET_BIOWARE_TYPE(ware) == ware_type)
+        return ware;
+    }
+    return NULL;
+  }
+}
+
+struct obj_data *find_cyberware(struct char_data *ch, int ware_type) {
+  return _find_ware(ch, ware_type, TRUE);
+}
+
+struct obj_data *find_bioware(struct char_data *ch, int ware_type) {
+  return _find_ware(ch, ware_type, FALSE);
 }

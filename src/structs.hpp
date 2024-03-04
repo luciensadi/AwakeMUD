@@ -570,7 +570,7 @@ struct char_special_data_saved
   Bitfield act;    /* act flag for NPC's; player flag for PC's */
 
   Bitfield affected_by;        /* Bitvector for spells/skills affected by */
-  byte skills[MAX_SKILLS+1][2];   /* array of skills plus skill 0         */
+  byte skills[MAX_SKILLS+1][3];   /* array of skills plus skill 0. Slot 0 is unaltered, */
   byte powers[ADEPT_NUMPOWER+1][2];
   unsigned char metamagic[META_MAX+1];
   ush_int centeringskill;
@@ -1229,7 +1229,7 @@ struct phone_data
 struct skill_data {
   char name[50];
   sh_int attribute;
-  bool type;
+  bool is_knowledge_skill;
   bool requires_magic;
   sh_int group;
   bool reflex_recorder_compatible;

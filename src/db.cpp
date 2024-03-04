@@ -2042,16 +2042,16 @@ void parse_object(File &fl, long nr)
         }
         break;
       case ITEM_CHIP:
-        GET_OBJ_VAL(obj, 2) = (GET_OBJ_VAL(obj, 1) * GET_OBJ_VAL(obj, 1)) * 3;
+        GET_CHIP_SIZE(obj) = (GET_CHIP_RATING(obj) * GET_CHIP_RATING(obj)) * 3;
         GET_OBJ_AVAILTN(obj) = 6;
         GET_OBJ_AVAILDAY(obj) = 4;
-        if (!skills[GET_OBJ_VAL(obj, 0)].type)
-          GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 100;
-        else if (GET_OBJ_VAL(obj, 0) >= SKILL_ENGLISH) {
-          GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 50;
+        if (!skills[GET_CHIP_SKILL(obj)].is_knowledge_skill)
+          GET_OBJ_COST(obj) = GET_CHIP_SIZE(obj) * 100;
+        else if (GET_CHIP_SKILL(obj) >= SKILL_ENGLISH) {
+          GET_OBJ_COST(obj) = GET_CHIP_SIZE(obj) * 50;
           GET_OBJ_AVAILDAY(obj) = 1.5;
         } else {
-          GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 150;
+          GET_OBJ_COST(obj) = GET_CHIP_SIZE(obj) * 150;
           GET_OBJ_AVAILTN(obj) = 5;
         }
         break;
