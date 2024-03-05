@@ -1786,6 +1786,11 @@ void write_mobs_to_disk(vnum_t zone_num)
   rnum_t znum = real_zone(zone_num);
   int i;
 
+  if (znum < 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received invalid zone_num %ld to write_mobs_to_disk()! Refusing to save world changes.", zone_num);
+    return;
+  }
+
   // ideally, this would just fill a VTable with vals...maybe one day
   char final_file_name[1000];
   snprintf(final_file_name, sizeof(final_file_name), "%s/%d.mob", MOB_PREFIX, zone_table[znum].number);

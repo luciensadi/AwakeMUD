@@ -719,7 +719,7 @@ ACMD(do_debug) {
                        GET_CHAR_NAME(mob),
                        GET_REAL_INT(mob));
           GET_REAL_INT(mob) = max_allowed;
-          write_mobs_to_disk(get_zone_index_number_from_vnum(GET_MOB_VNUM(mob)));
+          write_mobs_to_disk(get_zone_from_vnum(GET_MOB_VNUM(mob))->number);
         }
       }
     }
