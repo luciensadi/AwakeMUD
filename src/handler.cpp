@@ -1005,8 +1005,12 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  // int skill_used = get_skill_num_in_use_for_weapons(ch);
+  int skill_used = get_skill_num_in_use_for_weapons(ch);
   int dice_max = get_skill_dice_in_use_for_weapons(ch);
+
+  if (GET_CHIPJACKED_SKILL(ch, skill_used)) {
+    dice_max = 0;
+  }
 
   GET_DEFENSE(ch) = MIN(GET_DEFENSE(ch), GET_COMBAT(ch));
   GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DEFENSE(ch));

@@ -4390,6 +4390,14 @@ ACMD(do_cpool)
   int skill_num = get_skill_num_in_use_for_weapons(ch);
   int skill_dice = get_skill_dice_in_use_for_weapons(ch);
 
+  if (GET_CHIPJACKED_SKILL(ch, skill_num)) {
+    skill_dice = 0;
+    if (off > 0) {
+      send_to_char("You're using an activesoft, so you can't allocate any dice to your offense pool.\r\n", ch);
+      off = 0;
+    }
+  }
+
   if (off > skill_dice) {
     send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n", skills[skill_num].name, skill_dice);
     off = skill_dice;

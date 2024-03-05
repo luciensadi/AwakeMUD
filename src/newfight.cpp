@@ -711,8 +711,18 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       int prior_tn = att->melee->tn;
       int skill_dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
       int cpool_dice = MIN(skill_dice, GET_OFFENSE(att->ch));
+
+      if (GET_CHIPJACKED_SKILL(att->ch, att->melee->skill)) {
+        cpool_dice = 0;
+      }
+
       att->melee->dice = skill_dice + cpool_dice;
-      snprintf(rbuf, sizeof(rbuf), "Attacker has %d skill (incl %d weap focus), %d pool: rolls %d dice.", skill_dice, att->melee->skill_bonus, cpool_dice, att->melee->dice);
+      snprintf(rbuf, sizeof(rbuf), "Attacker has %d skill (incl %d weap focus), %d pool%s: rolls %d dice.",
+               skill_dice,
+               att->melee->skill_bonus,
+               cpool_dice,
+               GET_CHIPJACKED_SKILL(att->ch, att->melee->skill) ? " (zeroed due to using activesoft)" : "",
+               att->melee->dice);
       if (att->melee->tn != prior_tn) {
         snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nAttacker TN modified in get_skill() from %d to %d.", prior_tn, att->melee->tn);
       }
@@ -723,8 +733,18 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       int prior_tn = def->melee->tn;
       int skill_dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
       int cpool_dice = MIN(skill_dice, GET_OFFENSE(def->ch));
+
+      if (GET_CHIPJACKED_SKILL(def->ch, def->melee->skill)) {
+        cpool_dice = 0;
+      }
+
       def->melee->dice = skill_dice + cpool_dice;
-      snprintf(rbuf, sizeof(rbuf), "Defender has %d skill (incl %d weap focus), %d pool: rolls %d dice.", skill_dice, def->melee->skill_bonus, cpool_dice, def->melee->dice);
+      snprintf(rbuf, sizeof(rbuf), "Defender has %d skill (incl %d weap focus), %d pool%s: rolls %d dice.",
+               skill_dice,
+               def->melee->skill_bonus,
+               cpool_dice,
+               GET_CHIPJACKED_SKILL(def->ch, def->melee->skill) ? " (zeroed due to using activesoft)" : "",
+               def->melee->dice);
       if (def->melee->tn != prior_tn) {
         snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nDefender TN modified in get_skill() from %d to %d.", prior_tn, def->melee->tn);
       }
