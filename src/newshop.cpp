@@ -21,6 +21,7 @@
 #include "newmail.hpp"
 #include "lifestyles.hpp"
 #include "chipjacks.hpp"
+#include "pocketsec.hpp"
 
 extern struct time_info_data time_info;
 extern const char *pc_race_types[];
@@ -28,7 +29,6 @@ extern const char *pc_race_types[];
 extern struct obj_data *get_first_credstick(struct char_data *ch, const char *arg);
 extern void reduce_abilities(struct char_data *vict);
 extern void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop);
-extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern char *short_object(int virt, int where);
 ACMD_DECLARE(do_say);
@@ -3546,7 +3546,7 @@ void save_shop_orders() {
             // This is a thorny one-- this is technically a sink, since we're losing X% of the refunded value, but the PC may not be online.
             // We'll leave this as an invisible sink for now.
             if (repayment_amount > 0)
-              wire_nuyen(NULL, repayment_amount, order->player);
+              wire_nuyen(NULL, repayment_amount, order->player, "expired shop order refund");
           }
 
           // Remove the order from the list, then delete it.

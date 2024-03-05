@@ -530,6 +530,7 @@ struct char_point_data
   ubyte extrapp;
   ubyte sustained[2];     /* total of sustained spells               */
   int extra;
+  int extra2;
   ubyte magic_loss;
   ubyte ess_loss;
   ubyte domain;
@@ -546,8 +547,8 @@ struct char_point_data
 
   char_point_data() :
     mental(0), max_mental(0), physical(0), max_physical(10), nuyen(0), bank(0), karma(0), rep(0),
-    noto(0), tke(0), sig(0), init_dice(0), init_roll(0), grade(0), extrapp(0), extra(0), magic_loss(0),
-    ess_loss(0), domain(0), resistpain(0), lastdamage(0)
+    noto(0), tke(0), sig(0), init_dice(0), init_roll(0), grade(0), extrapp(0), extra(0), extra2(0), 
+    magic_loss(0), ess_loss(0), domain(0), resistpain(0), lastdamage(0)
   {
     ZERO_OUT_ARRAY(ballistic, 3);
     ZERO_OUT_ARRAY(impact, 3);

@@ -734,11 +734,12 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_MOB_MEMORY(ch)    ((ch)->mob_specials.memory)
 #define GET_LASTHIT(ch)	      ((ch)->mob_specials.lasthit)
 
-#define GET_SPARE1(ch)  ((ch)->mob_specials.spare1)
-#define GET_SPARE2(ch)  ((ch)->mob_specials.spare2)
-#define GET_ACTIVE(ch)  ((ch)->mob_specials.active)
-#define GET_EXTRA(ch)	((ch)->points.extra)
-#define GET_MOBALERT(ch)	((ch)->mob_specials.alert)
+#define GET_SPARE1(ch)        ((ch)->mob_specials.spare1)
+#define GET_SPARE2(ch)        ((ch)->mob_specials.spare2)
+#define GET_ACTIVE(ch)        ((ch)->mob_specials.active)
+#define GET_EXTRA(ch)	        ((ch)->points.extra)
+#define GET_EXTRA2(ch)	      ((ch)->points.extra2)
+#define GET_MOBALERT(ch)	    ((ch)->mob_specials.alert)
 #define GET_MOBALERTTIME(ch)	((ch)->mob_specials.alerttime)
 
 #define CAN_CARRY_W(ch)       ((GET_STR(ch) * 10) + 30)

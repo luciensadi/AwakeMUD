@@ -53,7 +53,6 @@ extern void damage_equip(struct char_data *ch, struct char_data *victim, int pow
 extern bool check_adrenaline(struct char_data *, int);
 extern int get_paydata_market_maximum(int host_color);
 extern int get_paydata_market_minimum(int host_color);
-extern void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id);
 extern void save_shop_orders();
 extern bool docwagon(struct char_data *ch);
 

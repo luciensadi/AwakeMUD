@@ -15,16 +15,16 @@
 
 #define CH d->character
 #define SEC d->edit_obj
-#define SEC_MENU		0
-#define SEC_INIT		1
+#define SEC_MENU		    0
+#define SEC_INIT		    1
 #define SEC_MAILMENU		2
 #define SEC_READMAIL		3
-#define SEC_DELMAIL		4
+#define SEC_DELMAIL		  4
 #define SEC_SENDMAIL		5
 #define SEC_READMAIL2		6
 #define SEC_BANKMENU		7
-#define SEC_WIRE1		8
-#define SEC_WIRE2		9
+#define SEC_WIRE1		    8
+#define SEC_WIRE2		    9
 #define SEC_PHONEMENU		10
 #define SEC_PHONEADD1		11
 #define SEC_PHONEADD2		12
@@ -35,8 +35,9 @@
 #define SEC_NOTEREAD2		17
 #define SEC_NOTEADD1		18
 #define SEC_NOTEADD2		19
-#define SEC_NOTEDEL		20
+#define SEC_NOTEDEL		  20
 #define SEC_KEEPMAIL    21
+#define SEC_WIRE3       22
 
 #define POCSEC_FOLDER_MAIL      "Mail"
 #define POCSEC_FOLDER_NOTES     "Notes"
@@ -59,7 +60,7 @@ void initialize_pocket_secretary(struct obj_data *sec) {
   generate_pocket_secretary_folder(sec, POCSEC_FOLDER_FILES);
 }
 
-void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
+void wire_nuyen(struct char_data *ch, int amount, idnum_t character_id, const char *reason)
 {
   // First, scan the game to see if the target character is online.
   struct char_data *targ = NULL;
@@ -88,14 +89,18 @@ void wire_nuyen(struct char_data *ch, int amount, vnum_t character_id)
 
   // Mail it. We don't send mail for NPC shopkeepers refunding you.
   if (ch) {
-    snprintf(query_buf, sizeof(query_buf), "%s has wired %d nuyen to your account.\r\n", ch ? GET_CHAR_NAME(ch) : "Someone", amount);
+    snprintf(query_buf, sizeof(query_buf), "%s has wired %d nuyen to your account with the memo '%s^n'.\r\n", ch ? GET_CHAR_NAME(ch) : "Someone", amount, reason);
     snprintf(name_buf, sizeof(name_buf), "%s (wire transfer)", ch ? GET_CHAR_NAME(ch) : "Someone");
     raw_store_mail(character_id, GET_IDNUM(ch), name_buf, query_buf);
   }
 
   // Log it.
   char *player_name = targ ? NULL : get_player_name(character_id);
-  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s wired %d nuyen to %s.", ch ? GET_CHAR_NAME(ch) : "An NPC", amount, targ ? GET_CHAR_NAME(targ) : player_name);
+  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s wired %d nuyen to %s (memo: %s).",
+                  ch ? GET_CHAR_NAME(ch) : "An NPC",
+                  amount,
+                  targ ? GET_CHAR_NAME(targ) : player_name,
+                  reason);
   DELETE_ARRAY_IF_EXTANT(player_name);
 }
 
@@ -492,17 +497,27 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         else if (x > GET_BANK(CH))
           send_to_char("You do not have that much to transfer. (@ to cancel)\r\n", CH);
         else {
-          name = get_player_name(GET_EXTRA(CH));
-          send_to_char(CH, "You wire %d nuyen to %s's account.\r\n", x, capitalize(name));
-          delete [] name;
-          wire_nuyen(CH, x, GET_EXTRA(CH));
-          pocketsec_bankmenu(d);
+          GET_EXTRA2(CH) = x;
+          send_to_char("Please write a memo / reason for the transfer (e.g. 'for decking supplies'). (@ to cancel)\r\n", CH);
+          d->edit_mode = SEC_WIRE3;
         }
         return;
       }
       pocketsec_bankmenu(d);
       break;
-
+    case SEC_WIRE3:
+      if (*arg != '@') {
+        if (strlen(arg) < 5) {
+          send_to_char("Please write a longer reason for this transfer, or type @ to abort.\r\n", CH);
+        } else {
+          name = get_player_name(GET_EXTRA(CH));
+          send_to_char(CH, "You wire %d nuyen to %s's account.\r\n", GET_EXTRA2(CH), capitalize(name));
+          delete [] name;
+          wire_nuyen(CH, GET_EXTRA2(CH), GET_EXTRA(CH), arg);
+          pocketsec_bankmenu(d);
+        }
+        return;
+      }
     case SEC_MAILMENU:
       switch (LOWER(*arg)) {
         case 'r':

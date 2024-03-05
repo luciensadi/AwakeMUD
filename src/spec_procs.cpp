@@ -27,6 +27,7 @@
 #include "config.hpp"
 #include "transport.hpp"
 #include "newmatrix.hpp"
+#include "pocketsec.hpp"
 
 /*   external vars  */
 ACMD_DECLARE(do_goto);
@@ -51,7 +52,6 @@ extern void reset_zone(int zone, int reboot);
 extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern int find_sight(struct char_data *ch);
 extern bool check_quest_kill(struct char_data *ch, struct char_data *victim);
-extern void wire_nuyen(struct char_data *ch, int amount, vnum_t idnum);
 extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool memory(struct char_data *ch, struct char_data *vict);
 extern void do_probe_veh(struct char_data *ch, struct veh_data * k);
@@ -3592,20 +3592,22 @@ SPECIAL(bank)
   }
 
   else if (CMD_IS("wire")) {
-    any_one_arg(any_one_arg(argument, buf), buf1);
+    const char *reason = two_arguments(argument, buf, buf1);
     if ((amount = atoi(buf)) <= 0)
       send_to_char("How much do you wish to wire?\r\n", ch);
     else if (amount > GET_BANK(ch))
       send_to_char("You don't have that much nuyen.\r\n", ch);
     else if (!*buf1)
       send_to_char("Who do you want to wire funds to?\r\n", ch);
+    else if (!reason || !*reason || strlen(reason) < 5)
+      send_to_char(ch, "Please add a memo to your wire (e.g. WIRE %s %s FOR CYBERDECK PARTS)\r\n", buf, buf1);
     else {
       idnum_t isfile = -1;
       if ((isfile = get_player_id(buf1)) == -1) {
         send_to_char("It won't let you transfer to that account.\r\n", ch);
         return TRUE;
       }
-      wire_nuyen(ch, amount, isfile);
+      wire_nuyen(ch, amount, isfile, reason);
       char *cname = get_player_name(isfile);
       send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, cname);
       delete [] cname;
