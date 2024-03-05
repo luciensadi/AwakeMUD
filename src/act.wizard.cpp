@@ -4864,7 +4864,7 @@ ACMD(do_show)
         bool shop_negotiates = FALSE;
         for (int idx = 0; idx <= top_of_shopt; idx++) {
           if (shop_table[idx].keeper == GET_MOB_VNUM(mob)) {
-            shop_negotiates = shop_table[idx].flags.IsSet(SHOP_WONT_NEGO);
+            shop_negotiates = !shop_table[idx].flags.IsSet(SHOP_WONT_NEGO);
             break;
           }
         }
