@@ -4472,18 +4472,19 @@ const char *get_plaintext_score_stats(struct char_data *ch) {
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You follow %s,", totem_types[GET_TOTEM(ch)]);
         switch (GET_ASPECT(ch)) {
           case ASPECT_FULL:
-            strlcat(buf2, "and are a full shaman.\r\n", sizeof(buf2));
+            strlcat(buf2, ", and are a full shaman.\r\n", sizeof(buf2));
             break;
           case ASPECT_CONJURER:
-            strlcat(buf2, "and are an aspected conjurer.\r\n", sizeof(buf2));
+            strlcat(buf2, ", and are an aspected conjurer.\r\n", sizeof(buf2));
             break;
           case ASPECT_SHAMANIST:
-            strlcat(buf2, "and are an aspected shamanist.\r\n", sizeof(buf2));
+            strlcat(buf2, ", and are an aspected shamanist.\r\n", sizeof(buf2));
             break;
           case ASPECT_SORCERER:
-            strlcat(buf2, "and are an aspected sorcerer.\r\n", sizeof(buf2));
+            strlcat(buf2, ", and are an aspected sorcerer.\r\n", sizeof(buf2));
             break;
           default:
+            strlcat(buf2, ".\r\n", sizeof(buf2));
             mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unrecognized aspect %d in shamanic full score-- update the switch statement.", GET_ASPECT(ch));
             break;
         }
