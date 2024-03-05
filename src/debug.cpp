@@ -695,4 +695,32 @@ ACMD(do_debug) {
       ch->desc->pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt = old_val;
     }
   }
+
+#ifdef IS_BUILDPORT
+  if (access_level(ch, LVL_ADMIN) && !strn_cmp(arg1, "fixshopint", strlen(arg1)) == 0) {
+    send_to_char(ch, "OK, rewriting the following shopkeepers to have a max of 8 int:")
+    for (struct char_data *mob = character_list; mob; mob = mob->next_in_character_list) {
+      int max_allowed = 8;
+      if (MOB_HAS_SPEC(mob, shop_keeper) && GET_REAL_INT(mob) > max_allowed) {
+        // Only show it on shops that negotiate.
+        bool shop_negotiates = FALSE;
+        for (int idx = 0; idx <= top_of_shopt; idx++) {
+          if (shop_table[idx].keeper == GET_MOB_VNUM(mob)) {
+            shop_negotiates = !shop_table[idx].flags.IsSet(SHOP_WONT_NEGO);
+            break;
+          }
+        }
+
+        if (shop_negotiates) {
+          send_to_char(ch, "  [^c%6ld^n] %s (was %d, now 8)\r\n", 
+                       GET_MOB_VNUM(mob),
+                       GET_CHAR_NAME(mob),
+                       GET_REAL_INT(mob));
+          GET_REAL_INT(mob) = max_allowed;
+          write_mobs_to_disk(get_zone_index_number_from_vnum(GET_MOB_VNUM(mob)));
+        }
+      }
+    }
+  }
+#endif
 }
