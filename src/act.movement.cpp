@@ -212,7 +212,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     char rbuf[1000];
     struct room_data *in_room = get_ch_in_room(ch);
 
-    // If you're sneaking, take an open test to determine the TN for the perception test to notice you.
+    // If you're sneaking, make an open test to determine the TN for the perception test to notice you.
     if (IS_AFFECTED(ch, AFF_SNEAK)) {
       // Get the skill dice to roll.
       snprintf(rbuf, sizeof(rbuf), "Sneak perception test: %s vs %s. get_skill: ", GET_CHAR_NAME(tch), GET_CHAR_NAME(ch));
@@ -240,7 +240,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     open_test_result = MAX(open_test_result, 0);
 
     // Vision modifiers, wound penalties, and other distractions.
-    int tn_modifiers = modify_target_rbuf_raw(tch, rbuf, sizeof(rbuf), get_vision_penalty(tch, in_room, rbuf, sizeof(rbuf)), FALSE)
+    int tn_modifiers = modify_target_rbuf_raw(tch, rbuf, sizeof(rbuf), get_vision_penalty(tch, in_room, rbuf, sizeof(rbuf)), FALSE);
 
     // House rule: Stealth/silence spells add a TN penalty to the spotter, up to 4.
     int stealth_spell_tn = get_spell_affected_successes(ch, SPELL_STEALTH);
