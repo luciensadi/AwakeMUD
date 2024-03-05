@@ -282,8 +282,8 @@ void send_npc_newly_alarmed_message(struct char_data *npc, struct char_data *vic
         act("$n^n swivels around with an alarmed chirp.", TRUE, npc, 0, vict, TO_VICT);
       } else {
         act("You scowl as you hear something out of place.^n", TRUE, npc, 0, vict, TO_CHAR);
-        act("$n^n scowls, their eyes sweeping the area with noticeable concern.", TRUE, npc, 0, vict, TO_NOTVICT);
-        act("$n^n scowls, their eyes sweeping the area with noticeable concern.", TRUE, npc, 0, vict, TO_VICT);
+        act("$n^n scowls, their eyes sweeping the area with suspicion.", TRUE, npc, 0, vict, TO_NOTVICT);
+        act("$n^n scowls, their eyes sweeping the area with suspicion.", TRUE, npc, 0, vict, TO_VICT);
       }
     }
   }
