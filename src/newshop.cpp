@@ -1286,7 +1286,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         pheromones = TRUE;
         int delta = GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
         skill += delta;
-        snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (pheremones)", delta);
+        snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (pheromones)", delta);
         break;
       }
     }
