@@ -196,9 +196,15 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
   if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || IS_IGNORING(tch, is_blocking_ic_interaction_from, ch))
     return FALSE;
 
-  // Tuned out doing other things.
-  if (PLR_FLAGGED(tch, PLR_REMOTE) || PLR_FLAGGED(tch, PLR_MATRIX))
+  // If both tch and ch are NPCs, we don't care.
+  if (IS_NPC(tch) && IS_NPC(ch)) {
     return FALSE;
+  }
+
+  // Tuned out doing other things.
+  if (PLR_FLAGGED(tch, PLR_REMOTE) || PLR_FLAGGED(tch, PLR_MATRIX)) {
+    return FALSE;
+  }
 
   // Failed to see from vehicle.
   if (tch->in_veh && (tch->in_veh->cspeed > SPEED_IDLE && success_test(GET_INT(tch), 4) <= 0)) {
