@@ -1,6 +1,7 @@
 #include "structs.hpp"
 #include "awake.hpp"
 #include "newmagic.hpp"
+#include "networth.hpp"
 
 const char *awakemud_version[] =
     {
@@ -3183,11 +3184,21 @@ const char *veh_speeds[] = {
 };
 
 const char *booted_from_string[] =
-  {
-    "nothing (boot tracker is in bugged state - inform Lucien)",
-    "a cold start (a crash, a new server, etc)",
-    "a copyover"
-  };
+{
+  "nothing (boot tracker is in bugged state - inform Lucien)",
+  "a cold start (a crash, a new server, etc)",
+  "a copyover"
+};
+
+const char *networth_modes[NUM_NETWORTH_BITS] = {
+  "All",
+  "Liquid",
+  "Vehicles",
+  "Leases",
+  "ApartmentContents",
+  "OnPC",
+  "Initiations"
+};
 
 struct kosher_weapon_values_struct kosher_weapon_values[MAX_WEAP] = {
 /*                    POWER, DAM CODE, SKILL                  , CONC, AMMO, FM_SS, FM_SA, FM_BF, FM_FA, COMP, BOTTM, BARRL, TOP  , STR+, REACH */

@@ -816,6 +816,20 @@ Apartment::~Apartment() {
   delete [] full_name;
 }
 
+long Apartment::get_cost_of_contents(bool including_vehicles) {
+  long total = 0;
+  for (auto &room : rooms) {
+    total += room->get_cost_of_contents(including_vehicles);
+  }
+  return total;
+}
+
+long Apartment::get_remaining_lease_value() {
+  int days_until_deletion = (get_paid_until() - time(0)) / (60 * 60 * 24);
+  int cost_per_day = nuyen_per_month / 30;
+  return MAX(0, days_until_deletion * cost_per_day);
+}
+
 #define REPLACE_STR(item) {delete [] item; item = str_dup(source->item);}
 #define REPLACE(item) {item = source->item;}
 // Note that we discard and overwrite the room vector here.
@@ -1184,7 +1198,7 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
   // Subtract subsidy card amounts, but only for High or lower.
   for (neophyte_card = ch->carrying; neophyte_card; neophyte_card = neophyte_card->next_content) {
     if (GET_OBJ_VNUM(neophyte_card) == OBJ_NEOPHYTE_SUBSIDY_CARD
-        && GET_OBJ_VAL(neophyte_card, 0) == GET_IDNUM(ch))
+        && GET_SUBSIDY_CARD_OWNER(neophyte_card) == GET_IDNUM(ch))
     {
       // Deny use of card for anything over High.
       if (get_lifestyle() > LIFESTYLE_HIGH) {
@@ -1193,8 +1207,8 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
         break;
       }
 
-      if (cost >= GET_OBJ_VAL(neophyte_card, 1))
-        cost -= GET_OBJ_VAL(neophyte_card, 1);
+      if (cost >= GET_SUBSIDY_CARD_VALUE(neophyte_card))
+        cost -= GET_SUBSIDY_CARD_VALUE(neophyte_card);
       else
         cost = 0;
       break;
@@ -1787,6 +1801,23 @@ ApartmentRoom::~ApartmentRoom() {
     if (it != apartment->rooms.end())
       apartment->rooms.erase(it);
   }
+}
+
+long ApartmentRoom::get_cost_of_contents(bool including_vehicles) {
+  struct room_data *room = &world[real_room(vnum)];
+
+  long total = 0;
+  for (struct obj_data *obj = room->contents; obj; obj = obj->next_content) {
+    total += get_cost_of_obj_and_contents(obj);
+  }
+
+  if (including_vehicles) {
+    for (struct veh_data *veh = room->vehicles; veh; veh = veh->next_veh) {
+      total += get_cost_of_veh_and_contents(veh);
+    }
+  }
+
+  return total;
 }
 
 void ApartmentRoom::regenerate_paths() {

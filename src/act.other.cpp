@@ -4817,6 +4817,7 @@ ACMD(do_syspoints) {
       half_chop(arg, amt, reason, sizeof(reason));
       FAILURE_CASE_PRINTF(!*amt, "You must specify an amount to transfer to %s.", target);
       FAILURE_CASE(!*reason, "You must specify a reason for this transfer.");
+      FAILURE_CASE_PRINTF(strlen(reason) <= 3, "Please describe your transfer reason in more detail. ('%s' is too short)", reason);
 
       // Parse and validate the amount.
       int amount = atoi(amt);

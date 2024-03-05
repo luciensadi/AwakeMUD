@@ -196,7 +196,6 @@ ACMD_DECLARE(do_docwagon);
 ACMD_DECLARE(do_dw_retrieve);
 ACMD_DECLARE(do_eat);
 ACMD_DECLARE(do_echo);
-ACMD_DECLARE(do_new_echo);
 ACMD_DECLARE(do_eject);
 ACMD_DECLARE(do_elemental);
 ACMD_DECLARE(do_enter);
@@ -271,7 +270,8 @@ ACMD_DECLARE(do_mobs);
 ACMD_DECLARE(do_mode);
 ACMD_DECLARE(do_move);
 ACMD_DECLARE(do_mlist);
-ACMD_DECLARE(do_echo);
+ACMD_DECLARE(do_networth);
+ACMD_DECLARE(do_new_echo);
 ACMD_DECLARE(do_not_here);
 ACMD_DECLARE(do_oocdisable);
 ACMD_DECLARE(do_order);
@@ -758,6 +758,7 @@ struct command_info cmd_info[] =
     { "newbie"     , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE, ALLOWS_IDLE_REWARD },
     { "newbies"    , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_NEWBIE, ALLOWS_IDLE_REWARD },
     //{ "news"       , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS, ALLOWS_IDLE_REWARD },
+    { "networth"   , POS_MORTALLYW, do_networth, LVL_ADMIN, 0, ALLOWS_IDLE_REWARD},
     { "notitle"    , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_NOTITLE, BLOCKS_IDLE_REWARD },
 
     { "order"      , POS_LYING   , do_order    , 1, 0, BLOCKS_IDLE_REWARD },

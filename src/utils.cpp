@@ -6473,6 +6473,48 @@ void zero_cost_of_obj_and_contents(struct obj_data *obj) {
   }
 }
 
+long get_cost_of_obj_and_contents(struct obj_data *obj) {
+  long total = GET_OBJ_COST(obj);
+
+  if (GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD) {
+    total += GET_SUBSIDY_CARD_VALUE(obj);
+  } else {
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_MONEY:
+        total += GET_ITEM_MONEY_VALUE(obj);
+        break;
+    }
+  }
+
+  // Recurse.
+  for (obj = obj->contains; obj; obj = obj->next_content) {
+    total += get_cost_of_obj_and_contents(obj);
+  }
+
+  return total;
+}
+
+long get_cost_of_veh_and_contents(struct veh_data *veh) {
+  long total = GET_VEH_COST(veh);
+
+  // Recurse on objects.
+  for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content) {
+    total += get_cost_of_obj_and_contents(obj);
+  }
+
+  // Recurse on carried vehicles.
+  for (struct veh_data *cveh = veh->carriedvehs; cveh; cveh = cveh->next_veh) {
+    total += get_cost_of_veh_and_contents(cveh);
+  }
+
+  // Recurse on towed vehicle.
+  if (veh->towing) {
+    total += get_cost_of_veh_and_contents(veh->towing);
+  }
+
+  return total;
+}
+
 void log_traceback(const char *format, ...) {
   // Compose our context string.
   char context[100000];

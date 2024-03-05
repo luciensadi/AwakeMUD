@@ -228,6 +228,8 @@ class Apartment {
     void load_guests_from_old_house_file(const char *filename);
     int get_days_in_arrears();
     vnum_t get_root_vnum();
+    long get_cost_of_contents(bool including_vehicles);
+    long get_remaining_lease_value();
 
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);
@@ -287,6 +289,7 @@ class ApartmentRoom {
     void regenerate_paths();
     void kick_out_characters();
     void kick_out_vehicles();
+    long get_cost_of_contents(bool including_vehicles);
 
     struct room_data *get_world_room();
 

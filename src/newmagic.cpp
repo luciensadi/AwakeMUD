@@ -6276,16 +6276,18 @@ void disp_meta_menu(struct descriptor_data *d)
   d->edit_mode = INIT_META;
 }
 
+long calculate_init_nuyen_cost(int desired_grade) {
+  if (desired_grade >= 6)
+    return 825000;
+  else
+    return 25000 + (25000 * (1 << (desired_grade - 1)));
+}
+
 bool init_cost(struct char_data *ch, bool spend)
 {
   int desired_grade = GET_GRADE(ch) + 1;
   long karmacost = (desired_grade + 5) * 300;
-  long nuyencost;
-
-  if (desired_grade >= 6)
-    nuyencost = 825000;
-  else
-    nuyencost = 25000 + (25000 * (1 << GET_GRADE(ch)));
+  long nuyencost = calculate_init_nuyen_cost(desired_grade);
 
   if (karmacost < 0) {
     send_to_char("Congratulations, you've hit the ceiling! You can't initiate until the code is fixed to allow someone at your rank to do so.\r\n", ch);

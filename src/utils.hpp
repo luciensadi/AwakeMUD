@@ -174,6 +174,8 @@ idnum_t get_soulbound_idnum(struct obj_data *obj);
 bool    soulbind_obj_to_char(struct obj_data *obj, struct char_data *ch, bool including_chargen_binds);
 struct obj_data *find_cyberware(struct char_data *ch, int ware_type);
 struct obj_data *find_bioware(struct char_data *ch, int ware_type);
+long    get_cost_of_obj_and_contents(struct obj_data *obj);
+long    get_cost_of_veh_and_contents(struct veh_data *veh);
 
 struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion);
 void    find_or_load_ch_cleanup(struct char_data *ch);
@@ -471,6 +473,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_VEH_DESTRUCTION_TIMER(veh) ((veh)->veh_destruction_timer)
 #define GET_VEH_ROOM_DESC(veh) ((veh)->description)
 #define GET_VEH_DEFPOS(veh) ((veh)->defined_position)
+#define GET_VEH_COST(veh) ((veh)->cost)
 #define GET_OBJ_RAW_NAME(obj) ((obj)->text.name)
 #define GET_OBJ_NAME(obj) (!(obj) ? "<null>" : (obj)->restring ? (obj)->restring : GET_OBJ_RAW_NAME(obj))
 #define GET_OBJ_DESC(obj) ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
@@ -1079,6 +1082,9 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_SLOTMACHINE_MONEY_EXTRACTED(obj)      (GET_OBJ_VAL((obj), 9))
 
 #define GET_VISA_OWNER(obj)                       (GET_OBJ_VAL((obj), 0))
+
+#define GET_SUBSIDY_CARD_OWNER(obj)               (GET_OBJ_VAL((obj), 0))
+#define GET_SUBSIDY_CARD_VALUE(obj)               (GET_OBJ_VAL((obj), 1))
 
 // Which vector in the map this deck uses (0 for unallocated)
 #define GET_CARD_VECTOR_IDNUM(obj)                (GET_OBJ_VAL((obj), 0))

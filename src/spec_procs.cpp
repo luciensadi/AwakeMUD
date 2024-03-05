@@ -532,7 +532,7 @@ SPECIAL(metamagic_teacher)
     for (i = 0; i < NUM_TEACHER_SKILLS; i++) {
       if (metamagict[ind].s[i] && can_learn_metamagic(ch, metamagict[ind].s[i])) {
         if (!printed_something) {
-          send_to_char(ch, "%s can teach you the following techniques for %d nuyen each: \r\n", GET_NAME(master), cost);
+          send_to_char(ch, "%s can teach you the following techniques for %d nuyen each (cost scales with initiation level): \r\n", GET_NAME(master), cost);
           printed_something = TRUE;
         }
         switch (GET_METAMAGIC(ch, metamagict[ind].s[i])) {
@@ -5315,10 +5315,10 @@ void add_cash_to_housing_card(struct char_data *ch, int amount, bool message) {
   // Couldn't find it anywhere? Give them a new one.
   if (!card) {
     card = read_object(OBJ_NEOPHYTE_SUBSIDY_CARD, VIRTUAL);
-    GET_OBJ_VAL(card, 0) = GET_IDNUM(ch);
+    GET_SUBSIDY_CARD_OWNER(card) = GET_IDNUM(ch);
     obj_to_char(card, ch);
   }
-  GET_OBJ_VAL(card, 1) += amount;
+  GET_SUBSIDY_CARD_VALUE(card) += amount;
   // We should probably track this one as going out into the game world, but eh.
   GET_NUYEN_RAW(ch) -= amount;
 
