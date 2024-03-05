@@ -4272,7 +4272,8 @@ ACMD(do_show)
                { "ignore",         LVL_EXECUTIVE },
                { "vehicles",       LVL_ADMIN },
                { "dirtyelves",     LVL_BUILDER },
-               { "wareshops",      LVL_BUILDER },
+               { "wareshops",      LVL_CONSPIRATOR },
+               { "smartshops",     LVL_CONSPIRATOR },
                { "\n", 0 }
              };
 
@@ -4851,6 +4852,31 @@ ACMD(do_show)
     for (int idx = 0; idx <= top_of_shopt; idx++) {
       if (shop_table[idx].flags.IsSet(SHOP_DOCTOR) && shop_table[idx].profit_sell != 0.3f) {
         send_to_char(ch, "  [%6ld] %.2f\r\n", shop_table[idx].vnum, shop_table[idx].profit_sell);
+      }
+    }
+    break;
+  case 29:
+    send_to_char("The following shopkeepers have intelligence above their racial maximums:\r\n", ch);
+    for (struct char_data *mob = character_list; mob; mob = mob->next_in_character_list) {
+      int max_allowed = (GET_RACE(mob) <= RACE_UNDEFINED ? 6 : racial_limits[(int) GET_RACE(mob)][RACIAL_LIMITS_NORMAL][INT]);
+      if (MOB_HAS_SPEC(mob, shop_keeper) && GET_REAL_INT(mob) > max_allowed) {
+        // Only show it on shops that negotiate.
+        bool shop_negotiates = FALSE;
+        for (int idx = 0; idx <= top_of_shopt; idx++) {
+          if (shop_table[idx].keeper == GET_MOB_VNUM(mob)) {
+            shop_negotiates = shop_table[idx].flags.IsSet(SHOP_WONT_NEGO);
+            break;
+          }
+        }
+
+        if (shop_negotiates) {
+          send_to_char(ch, "  [^c%6ld^n] %s (%s%d^n > ^c%d^n)\r\n", 
+                       GET_MOB_VNUM(mob),
+                       GET_CHAR_NAME(mob),
+                       GET_REAL_INT(mob) > max_allowed * 1.5 ? "^r" : "^y",
+                       GET_REAL_INT(mob),
+                       max_allowed);
+        }
       }
     }
     break;
