@@ -205,57 +205,52 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     return FALSE;
   }
 
-  // Check for invisibility.
-  if (!can_see_through_invis(tch, ch)) {
-    return FALSE;
-  }
-
   // Check for stealth and other person-to-person modifiers.
-  if (we_care_about_sneaking && IS_AFFECTED(ch, AFF_SNEAK)) {
+  if (we_care_about_sneaking) {
     int dummy_tn = 2;
+    int open_test_result = 0;
     char rbuf[1000];
     struct room_data *in_room = get_ch_in_room(ch);
 
-    // Get the skill dice to roll.
-    snprintf(rbuf, sizeof(rbuf), "Sneak perception test: %s vs %s. get_skill: ", GET_CHAR_NAME(tch), GET_CHAR_NAME(ch));
-    int skill_dice = get_skill(ch, SKILL_STEALTH, dummy_tn);
+    // If you're sneaking, take an open test to determine the TN for the perception test to notice you.
+    if (IS_AFFECTED(ch, AFF_SNEAK)) {
+      // Get the skill dice to roll.
+      snprintf(rbuf, sizeof(rbuf), "Sneak perception test: %s vs %s. get_skill: ", GET_CHAR_NAME(tch), GET_CHAR_NAME(ch));
+      int skill_dice = get_skill(ch, SKILL_STEALTH, dummy_tn);
 
-    // Make an open test to determine the TN for the perception test to notice you.
-    strlcat(rbuf, ". get_vision_penalty: ", sizeof(rbuf));
-    int open_test_result = open_test(skill_dice);
+      // Make the roll.
+      open_test_result = open_test(skill_dice);
 
-    // If we've defaulted, this is reflected by an increased TN-- if the TN went up, cap successes.
-    int defaulting_amount = (dummy_tn - 2);
-    if (defaulting_amount > 0) {
-      if (defaulting_amount <= 2) {
-        // +2 means we defaulted to a linked skill. Mild penalty.
-        open_test_result = MIN(open_test_result - 2, 10);
-        strlcat(rbuf, "(defaulted: OT -2, cap 10!)", sizeof(rbuf));
-      } else {
-        // +4 means we defaulted to an attribute. Harsh penalty.
-        open_test_result = MIN(open_test_result - 4, 6);
-        strlcat(rbuf, "(defaulted: OT -4, cap 6!)", sizeof(rbuf));
+      // If we've defaulted, this is reflected by an increased TN-- if the TN went up, cap successes.
+      int defaulting_amount = (dummy_tn - 2);
+      if (defaulting_amount > 0) {
+        if (defaulting_amount <= 2) {
+          // +2 means we defaulted to a linked skill. Mild penalty.
+          open_test_result = MIN(open_test_result - 2, 10);
+          strlcat(rbuf, "(defaulted: OT -2, cap 10!)", sizeof(rbuf));
+        } else {
+          // +4 means we defaulted to an attribute. Harsh penalty.
+          open_test_result = MIN(open_test_result - 4, 6);
+          strlcat(rbuf, "(defaulted: OT -4, cap 6!)", sizeof(rbuf));
+        }
       }
     }
 
-    int vision_penalty = get_vision_penalty(tch, in_room, rbuf, sizeof(rbuf));
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". TN is %d (OT) + %d (vis)", open_test_result, vision_penalty);
+    // Don't allow negative results.
+    open_test_result = MAX(open_test_result, 0);
 
-    int test_tn = open_test_result + vision_penalty;
+    // Vision modifiers, wound penalties, and other distractions.
+    int tn_modifiers = modify_target_rbuf_raw(tch, rbuf, sizeof(rbuf), get_vision_penalty(tch, in_room, rbuf, sizeof(rbuf)), FALSE)
 
     // House rule: Stealth/silence spells add a TN penalty to the spotter, up to 4.
-    {
-      int stealth_spell_tn = get_spell_affected_successes(ch, SPELL_STEALTH);
-      int silence_tn = in_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0 ? in_room->silence[ROOM_HIGHEST_SPELL_FORCE] : 0;
-      int magic_tn_modifier = MIN(stealth_spell_tn + silence_tn, 4);
+    int stealth_spell_tn = get_spell_affected_successes(ch, SPELL_STEALTH);
+    int silence_tn = in_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0 ? in_room->silence[ROOM_HIGHEST_SPELL_FORCE] : 0;
+    int silence_tn_modifier = MIN(stealth_spell_tn + silence_tn, 4);
 
-      if (magic_tn_modifier > 0) {
-        test_tn += magic_tn_modifier;
-        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " + %d (magic)", magic_tn_modifier);
-      }
-    }
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". TN is %d (OT) + %d (vis/wounds/etc) + %d (silence)", open_test_result, tn_modifiers, silence_tn_modifier);
 
     // Roll the perception test.
+    int test_tn = open_test_result + tn_modifiers + silence_tn_modifier;
     int perception_result = success_test(GET_INT(tch) + GET_POWER(tch, ADEPT_IMPROVED_PERCEPT), test_tn);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Result: %d hits.", perception_result);
     if (GET_INVIS_LEV(tch) <= GET_LEVEL(ch))
@@ -263,19 +258,24 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
 
     bool spotted_movement = perception_result > 0;
 
-    // We rolled at least one hit above our open test TN? NOW we check if we can see them.
-    if (spotted_movement && CAN_SEE(tch, ch)) {
+    // Failed to notice them.
+    if (!spotted_movement) {
+      return FALSE;
+    }
+
+    // They were sneaking but we noticed.
+    if (IS_AFFECTED(ch, AFF_SNEAK) && spotted_movement) {
       // Spotting someone sneaking around puts NPCs on edge.
       if (IS_NPC(tch) && GET_MOBALERT(tch) != MALERT_ALARM) {
         GET_MOBALERT(tch) = MALERT_ALERT;
         GET_MOBALERTTIME(tch) = MAX(GET_MOBALERTTIME(tch), 10);
       }
-      return TRUE;
+
+      // Messaging?
     }
-    return FALSE;
   }
 
-  // If we got here, we can see it.
+  // If we got here, we noticed them.
   return TRUE;
 }
 
