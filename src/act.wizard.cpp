@@ -90,7 +90,6 @@ extern void disp_init_menu(struct descriptor_data *d);
 extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
 
 extern const char *pgroup_print_privileges(Bitfield privileges, bool full);
-extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
 extern void display_pockets_to_char(struct char_data *ch, struct char_data *vict);
 
 extern struct elevator_data *elevator;
@@ -3339,7 +3338,7 @@ ACMD(do_restore)
     restore_character(ch, TRUE);
     clear_all_drug_data_for_char(ch);
 #else
-    nonsensical_reply(ch, NULL, "standard");
+    send_to_char(ch, "You'll need to obtain one of the extremely rare self-heal injectors to use this command.\r\n");
 #endif
     return;
   }

@@ -31,7 +31,6 @@ extern void die(struct char_data *ch);
 extern void damage_equip(struct char_data *ch, struct char_data *vict, int power, int type);
 extern void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
 extern bool would_become_killer(struct char_data * ch, struct char_data * vict);
-extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
 extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
@@ -4354,10 +4353,8 @@ ACMD(do_spells)
 
 ACMD(do_forget)
 {
-  if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || !GET_SPELLS(ch)) {
-    nonsensical_reply(ch, NULL, "standard");
-    return;
-  }
+  FAILURE_CASE(!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED), "You can't forget spells until you leave CharGen.");
+  FAILURE_CASE(!GET_SPELLS(ch), "You don't have any spells to forget.");
   skip_spaces(&argument);
 
   for (struct spell_data *spell = GET_SPELLS(ch); spell; spell = spell->next)
@@ -5710,10 +5707,8 @@ bool deactivate_power(struct char_data *ch, int power)
 
 ACMD(do_powerdown)
 {
-  if (GET_TRADITION(ch) != TRAD_ADEPT) {
-    nonsensical_reply(ch, NULL, "standard");
-    return;
-  }
+  FAILURE_CASE(GET_TRADITION(ch) != TRAD_ADEPT, "You don't have any adept powers to deactivate.");
+
   for (int i = 0; i < ADEPT_NUMPOWER; i++) {
     // This call returns TRUE if they die from it.
     if (deactivate_power(ch, i))
@@ -6348,10 +6343,7 @@ ACMD(do_subpoint)
 
 ACMD(do_initiate)
 {
-  if (GET_TRADITION(ch) == TRAD_MUNDANE) {
-    nonsensical_reply(ch, NULL, "standard");
-    return;
-  }
+  FAILURE_CASE(GET_TRADITION(ch) == TRAD_MUNDANE, "Sorry, initiations are for magic-using characters only.");
 
   skip_spaces(&argument);
 
@@ -6373,10 +6365,7 @@ ACMD(do_initiate)
   }
 
   if (subcmd == SCMD_POWERPOINT) {
-    if (GET_TRADITION(ch) != TRAD_ADEPT) {
-      nonsensical_reply(ch, NULL, "standard");
-      return;
-    }
+    FAILURE_CASE(GET_TRADITION(ch) != TRAD_ADEPT, "Sorry, only adepts can add powerpoints.");
 
     FAILURE_CASE(GET_KARMA(ch) < 2000, "You do not have enough karma to purchase a powerpoint. It costs 20 karma.\r\n");
 
@@ -6505,10 +6494,9 @@ void init_parse(struct descriptor_data *d, char *arg)
 
 ACMD(do_masking)
 {
-  if (GET_METAMAGIC(ch, META_MASKING) < METAMAGIC_STAGE_LEARNED) {
-    nonsensical_reply(ch, NULL, "standard");
-    return;
-  }
+  FAILURE_CASE(GET_TRADITION(ch) == TRAD_MUNDANE || GET_TRADITION(ch) == TRAD_ADEPT, "Sorry, only mages can use the Masking metamagic.");
+  FAILURE_CASE(GET_METAMAGIC(ch, META_MASKING) < METAMAGIC_STAGE_LEARNED, "You don't know enough about the masking metamagic.");
+  
   skip_spaces(&argument);
   if (!*argument) {
     if (!GET_MASKING(ch))
@@ -6552,10 +6540,9 @@ bool _spell_is_sustained_with_no_spirit_or_focus(struct sustain_data *spell) {
 
 ACMD(do_focus)
 {
-  if (GET_TRADITION(ch) != TRAD_ADEPT || !GET_POWER(ch, ADEPT_LIVINGFOCUS)) {
-    nonsensical_reply(ch, NULL, "standard");
-    return;
-  }
+  FAILURE_CASE(GET_TRADITION(ch) != TRAD_ADEPT, "Sorry, only Adepts can be living focuses.");
+  FAILURE_CASE(!GET_POWER(ch, ADEPT_LIVINGFOCUS), "You don't have the Living Focus power.");
+
   skip_spaces(&argument);
   if (!*argument) {
     FAILURE_CASE(GET_SUSTAINED_NUM(ch), "You are already sustaining a spell.");
@@ -6664,10 +6651,8 @@ ACMD(do_cleanse)
     send_to_char(ch, "Done. Proceeding with standard cleanse command logic.\r\n");
   }
 
-  if (GET_METAMAGIC(ch, META_CLEANSING) < METAMAGIC_STAGE_LEARNED) {
-    nonsensical_reply(ch, NULL, "standard");
-    return;
-  }
+  FAILURE_CASE(GET_TRADITION(ch) == TRAD_MUNDANE || GET_TRADITION(ch) == TRAD_ADEPT, "Sorry, only mages can use the Cleansing metamagic.");
+  FAILURE_CASE(GET_METAMAGIC(ch, META_CLEANSING) < METAMAGIC_STAGE_LEARNED, "You don't know enough about the Cleansing metamagic.");
 
   if (!force_perception(ch))
     return;

@@ -1473,37 +1473,6 @@ void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode)
              prepare_quotes(buf3, arg, sizeof(buf3) / sizeof(buf3[0])));
     mysql_wrapper(mysql, buf);
   }
-  /*  Removing the prior 'funny' messages and replacing them with something understandable by MUD newbies.
-  switch (number(1, 9))
-  {
-  case 1:
-    send_to_char(ch, "Huh?!?\r\n");
-    break;
-  case 2:
-    send_to_char(ch, "Your command dissolves into oblivion.\r\n");
-    break;
-  case 3:
-    send_to_char(ch, "Faint laughter can be heard...\r\n");
-    break;
-  case 4:
-    send_to_char(ch, "Just what're you trying to do?!\r\n");
-    break;
-  case 5:
-    send_to_char(ch, "That makes no sense.\r\n", ch);
-    break;
-  case 6:
-    send_to_char(ch, "What?\r\n");
-    break;
-  case 7:
-    send_to_char(ch, "Lemmings run mindlessly around you.\r\n");
-    break;
-  case 8:
-    send_to_char(ch, "Nonsensical gibberish, it is.\r\n");
-    break;
-  case 9:
-    send_to_char(ch, "You can't get ye flask!\r\n");
-  }
-   */
 }
 
 /*

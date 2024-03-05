@@ -3223,11 +3223,9 @@ ACMD(do_photo)
 ACMD(do_boost)
 {
   int suc;
-  extern void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode);
-  if (GET_TRADITION(ch) != TRAD_ADEPT) {
-    nonsensical_reply(ch, NULL, "standard");
-    return;
-  }
+  
+  FAILURE_CASE(GET_TRADITION(ch) != TRAD_ADEPT, "Sorry, boosting is an adept-only feature.");
+
   skip_spaces(&argument);
   if (is_abbrev(argument, "strength")) {
     if (!GET_POWER(ch, ADEPT_BOOST_STR)) {
