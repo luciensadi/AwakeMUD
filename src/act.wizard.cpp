@@ -826,23 +826,17 @@ ACMD(do_goto)
     location = get_veh_in_room(vict->in_veh);
   }
 
+  // Don't bother with the rest of this if you're not moving.
+  FAILURE_CASE(location == ch->in_room, "You're already there.");
+
   // Perform location validity check for room number.
-  if (location->number == 0 || location->number == 1) {
-    send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(location->number == 0 || location->number == 1, "You're not able to GOTO that room. If you need to do something there, use AT.");
 
   // Perform location validity check for level lock.
-  if (location->staff_level_lock > GET_REAL_LEVEL(ch)) {
-    send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.\r\n", location->staff_level_lock);
-    return;
-  }
+  FAILURE_CASE_PRINTF(location->staff_level_lock > GET_REAL_LEVEL(ch), "Sorry, you need to be a level-%d immortal to go there.", location->staff_level_lock);
 
   // Block level-2 goto for anything outside their edit zone.
-  if (builder_cant_go_there(ch, location)) {
-    send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(builder_cant_go_there(ch, location), "Sorry, as a first-level builder you're only able to move to rooms you have edit access for.");
 
 #ifndef IS_BUILDPORT
   {
@@ -885,6 +879,8 @@ ACMD(do_goto)
     act("$n appears with an ear-splitting bang.", TRUE, ch, 0, 0, TO_ROOM);
 
   look_at_room(ch, 0, 0);
+
+  GET_POS(ch) = POS_STANDING;
 }
 
 void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
@@ -2567,8 +2563,7 @@ ACMD(do_purge)
       act("$n disintegrates $N.", FALSE, ch, 0, vict, TO_NOTVICT);
 
       if (!IS_NPC(vict)) {
-        snprintf(buf, sizeof(buf), "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
-        mudlog(buf, ch, LOG_PURGELOG, TRUE);
+        mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
         if (vict->desc) {
           close_socket(vict->desc);
           vict->desc = NULL;
@@ -2582,9 +2577,8 @@ ACMD(do_purge)
     if ((obj = get_obj_in_list_vis(ch, buf, ch->in_veh ? ch->in_veh->contents : ch->in_room->contents))) {
       act("$n destroys $p.", FALSE, ch, obj, 0, TO_ROOM);
       const char *representation = generate_new_loggable_representation(obj);
-      snprintf(buf, sizeof(buf), "%s has purged %s.", GET_CHAR_NAME(ch), representation);
+      mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), representation);
       delete [] representation;
-      mudlog(buf, ch, LOG_PURGELOG, TRUE);
       extract_obj(obj);
       send_to_char(OK, ch);
       return;
@@ -2594,8 +2588,7 @@ ACMD(do_purge)
       // Notify the room.
       snprintf(buf1, sizeof(buf1), "$n purges %s.", GET_VEH_NAME(veh));
       act(buf1, FALSE, ch, NULL, 0, TO_ROOM);
-      snprintf(buf1, sizeof(buf1), "%s purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
-      mudlog(buf1, ch, LOG_WIZLOG, TRUE);
+      mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
 
       // Notify the owner.
       if (veh->owner > 0) {
@@ -2619,8 +2612,7 @@ ACMD(do_purge)
       for (vict = ch->in_veh->people; vict; vict = next_v) {
         next_v = vict->next_in_veh;
         if (IS_NPC(vict) && vict != ch) {
-          snprintf(buf, sizeof(buf), "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
-          mudlog(buf, ch, LOG_PURGELOG, TRUE);
+          mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
           extract_char(vict);
         }
       }
@@ -2628,8 +2620,7 @@ ACMD(do_purge)
       for (obj = ch->in_veh->contents; obj; obj = next_o) {
         next_o = obj->next_content;
         const char *representation = generate_new_loggable_representation(obj);
-        snprintf(buf, sizeof(buf), "%s has purged %s.", GET_CHAR_NAME(ch), representation);
-        mudlog(buf, ch, LOG_PURGELOG, TRUE);
+        mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), representation);
         delete [] representation;
         extract_obj(obj);
       }
@@ -2645,8 +2636,7 @@ ACMD(do_purge)
           store_mail(veh->owner, ch, buf2);
         }
 
-        snprintf(buf1, sizeof(buf1), "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
-        mudlog(buf1, ch, LOG_WIZLOG, TRUE);
+        mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
         purgelog(veh);
         extract_veh(veh);
       }
@@ -2659,8 +2649,7 @@ ACMD(do_purge)
       for (vict = ch->in_room->people; vict; vict = next_v) {
         next_v = vict->next_in_room;
         if (IS_NPC(vict) && vict != ch) {
-          snprintf(buf, sizeof(buf), "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
-          mudlog(buf, ch, LOG_PURGELOG, TRUE);
+          mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
           extract_char(vict);
         }
       }
@@ -2668,16 +2657,14 @@ ACMD(do_purge)
       for (obj = ch->in_room->contents; obj; obj = next_o) {
         next_o = obj->next_content;
         const char *representation = generate_new_loggable_representation(obj);
-        snprintf(buf, sizeof(buf), "%s has purged %s.", GET_CHAR_NAME(ch), representation);
-        mudlog(buf, ch, LOG_PURGELOG, TRUE);
+        mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), representation);
         delete [] representation;
         extract_obj(obj);
       }
 
       for (veh = ch->in_room->vehicles; veh; veh = next_ve) {
         next_ve = veh->next_veh;
-        snprintf(buf1, sizeof(buf1), "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
-        mudlog(buf1, ch, LOG_WIZLOG, TRUE);
+        mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
         purgelog(veh);
 
         // Notify the owner.

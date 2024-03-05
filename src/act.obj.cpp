@@ -490,12 +490,12 @@ ACMD(do_put)
     if (GET_OBJ_TYPE(obj) != ITEM_PROGRAM
         && (GET_OBJ_TYPE(obj) != ITEM_DRUG || (GET_OBJ_VAL(obj, 0) != DRUG_CRAM && GET_OBJ_VAL(obj, 0) != DRUG_PSYCHE))
         && !(IS_MONOWHIP(obj))) {
-      send_to_char(ch, "%s doesn't fit in your fingertip compartment.\r\n", GET_OBJ_NAME(obj));
+      send_to_char(ch, "%s doesn't fit in your fingertip compartment.\r\n", CAP(GET_OBJ_NAME(obj)));
       return;
     }
     obj_from_char(obj);
     obj_to_obj(obj, cont);
-    send_to_char(ch, "You slip %s into your fingertip compartment.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You slip %s into your fingertip compartment.\r\n", decapitalize_a_an(obj));
     act("$n slips $p into $s fingertip compartment.\r\n", TRUE, ch, obj, 0, TO_ROOM);
     return;
   }
@@ -517,12 +517,12 @@ ACMD(do_put)
       return;
     }
     if (GET_OBJ_WEIGHT(obj) > 1) {
-      send_to_char(ch, "%s doesn't fit in your body compartment.\r\n", GET_OBJ_NAME(obj));
+      send_to_char(ch, "%s doesn't fit in your body compartment.\r\n", CAP(GET_OBJ_NAME(obj)));
       return;
     }
     obj_from_char(obj);
     obj_to_obj(obj, cont);
-    send_to_char(ch, "You slip %s into your body compartment.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You slip %s into your body compartment.\r\n", decapitalize_a_an(obj));
     act("$n slips $p into $s body compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
     return;
   }
@@ -553,7 +553,7 @@ ACMD(do_put)
     }
     obj_from_char(obj);
     obj_to_obj(obj, cont);
-    send_to_char(ch, "You slip %s into your tooth compartment.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You slip %s into your tooth compartment.\r\n", decapitalize_a_an(obj));
     act("$n slips $p into a tooth compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
     return;
   }
