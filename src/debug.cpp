@@ -25,6 +25,7 @@
 #include "db.hpp"
 #include "newdb.hpp"
 #include "deck_build.hpp"
+#include "newshop.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
@@ -697,8 +698,9 @@ ACMD(do_debug) {
   }
 
 #ifdef IS_BUILDPORT
-  if (access_level(ch, LVL_ADMIN) && !strn_cmp(arg1, "fixshopint", strlen(arg1)) == 0) {
-    send_to_char(ch, "OK, rewriting the following shopkeepers to have a max of 8 int:")
+  SPECIAL(shop_keeper);
+  if (access_level(ch, LVL_ADMIN) && strn_cmp(arg1, "fixshopint", strlen(arg1)) == 0) {
+    send_to_char(ch, "OK, rewriting the following shopkeepers to have a max of 8 int:\r\n");
     for (struct char_data *mob = character_list; mob; mob = mob->next_in_character_list) {
       int max_allowed = 8;
       if (MOB_HAS_SPEC(mob, shop_keeper) && GET_REAL_INT(mob) > max_allowed) {
