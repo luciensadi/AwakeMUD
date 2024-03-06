@@ -750,6 +750,7 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
           send_to_char("0) Standard\r\n1) Induction\r\nEnter Datajack Type: ", CH);
           break;
         case CYB_CHIPJACK:
+        case CYB_CHIPJACKEXPERT:
           send_to_char("Slots for chips: ", CH);
           break;
         case CYB_MEMORY:
@@ -2623,6 +2624,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               }
               break;
             case CYB_CHIPJACK:
+            case CYB_CHIPJACKEXPERT:
               if (number < 1 || number > 4) {
                 send_to_char("Must have between 1 and 4 slots: ", CH);
                 return;

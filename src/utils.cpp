@@ -55,6 +55,7 @@
 #include "ignore_system.hpp"
 #include "newmatrix.hpp"
 #include "quest.hpp"
+#include "chipjacks.hpp"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -1403,125 +1404,196 @@ int get_metavariant_penalty(struct char_data *ch) {
 }
 #undef METAVARIANT_PENALTY
 
-int negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy, bool include_metavariant_penalty)
+// Given a set of data points about characters, calculates the TN and skill dice for the first character.
+void _get_negotiation_data_testable(
+  int &tn,
+  int &skill_dice,
+  int kinesics_rating,
+  int metavariant_penalty,
+  int opponent_intelligence,
+  int tn_modifier_from_get_skill,
+  int skill_rating,
+  int pheromone_dice
+) {
+//  int original_tn = tn;
+
+  // Preserve whatever was in TN (expected to be the global modifier), then add to it.
+  tn -= kinesics_rating;
+  tn += metavariant_penalty;
+  tn += opponent_intelligence;
+
+  // Clear and set skill_dice.
+  skill_dice = skill_rating;
+  skill_dice += pheromone_dice;
+
+/*
+  log_vfprintf("_g_n_d_t: tn %dg - %dk + %dm + %di + %dz = %d; dice %ds + %dp = %d", 
+               original_tn, kinesics_rating, metavariant_penalty, opponent_intelligence, tn_modifier_from_get_skill, tn,
+               skill_rating, pheromone_dice, skill_dice);
+*/
+
+}
+
+// Given two characters and some extra data, calculates the TN and skill dice for that character with some extra logic.
+void _get_negotiation_data(
+  struct char_data *ch,
+  struct char_data *tch,
+  int &tn,
+  int &skill_dice,
+  bool include_metavariant_penalty,
+  bool negotiation_is_with_data_fence,
+  int target_skill)
 {
-  struct obj_data *bio;
-  int cmod = -GET_POWER(ch, ADEPT_KINESICS);
-  int tmod = -GET_POWER(tch, ADEPT_KINESICS);
-  snprintf(buf3, sizeof(buf3), "ALRIGHT BOIS HERE WE GO. Base global mod is %d. After application of Kinesics bonuses (if any), base modifiers for PC and NPC are %d and %d.", mod, cmod, tmod);
+  char tn_rbuf[2000], skill_rbuf[2000];
 
-  if (include_metavariant_penalty) {
-    if (GET_RACE(ch) != GET_RACE(tch)) {
-      int ch_mod = get_metavariant_penalty(ch);
-      int tch_mod = get_metavariant_penalty(tch);
-      
-      if (ch_mod)
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +%d for PC.", ch_mod);
-      if (tch_mod)
-        snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Metavariant TN penalty +%d for NPC.", tch_mod);
-    }
-  } else {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Skipping any potential metavariant penalties.");
-  }
-  // House rule: Data fence negotiations use raw int in order to make them a little easier to balance.
-  bool negotiation_is_with_data_fence = (IS_NPC(ch) && MOB_HAS_SPEC(ch, fence)) || (IS_NPC(tch) && MOB_HAS_SPEC(ch, fence));
+  int kinesics_rating = 0;
+  int metavariant_penalty = 0;
+  int opponent_intelligence = 0;
+  int skill_rating = 0;
+  int pheromone_dice = 0;
 
-  int ch_int = (negotiation_is_with_data_fence ? GET_REAL_INT(ch) : GET_INT(ch));
-  int tch_int = (negotiation_is_with_data_fence ? GET_REAL_INT(tch) : GET_INT(tch));
+  // Calculate TN info.
+  snprintf(tn_rbuf, sizeof(tn_rbuf), "Negotiation TN data for %s (prior to get_skill()): ", GET_CHAR_NAME(ch));
+  bool wrote_something = FALSE;
 
-  // Plenty of NPCs have no int, so we set these to an average value if found.
-  if (IS_NPC(tch) && tch_int <= 0)
-    tch_int = MAX(tch_int, 3);
-  if (IS_NPC(ch) && ch_int <= 0)
-    ch_int = MAX(ch_int, 3);
-
-  int chtn = mod + cmod + tch_int;
-  int tchtn = mod + tmod + ch_int;
-
-  act("Getting skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
-  int cskill = get_skill(ch, SKILL_NEGOTIATION, chtn);
-  act("Getting skill for NPC...", FALSE, tch, NULL, NULL, TO_ROLLS);
-
-  // Plenty of NPCs also have no negotiation skill set when they should, so we make this an average value as well.
-  int tskill;
-  if (IS_NPC(tch) && GET_SKILL(tch, SKILL_NEGOTIATION) == 0) {
-    int tch_cha = (negotiation_is_with_data_fence ? GET_REAL_CHA(tch) : GET_CHA(tch));
-    tskill = MAX(tch_cha, 3);
-  } else {
-    tskill = get_skill(tch, SKILL_NEGOTIATION, tchtn);
-  }
-
-
-  for (bio = ch->bioware; bio; bio = bio->next_content)
-    if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEROMONES)
-    {
-      int delta = GET_BIOWARE_IS_CULTURED(bio) ? GET_BIOWARE_RATING(bio) * 2 : GET_BIOWARE_RATING(bio);
-      cskill += delta;
-      snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheromone skill buff of %d for PC.", delta);
-      break;
-    }
-
-  for (bio = tch->bioware; bio; bio = bio->next_content)
-    if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEROMONES)
-    {
-      int delta = GET_BIOWARE_IS_CULTURED(bio) ? GET_BIOWARE_RATING(bio) * 2: GET_BIOWARE_RATING(bio);
-      tskill += delta;
-      snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " Pheromone skill buff of %d for NPC.", delta);
-      break;
-    }
-
-  int tchnego = success_test(tskill, tchtn);
-  int chnego = success_test(cskill, chtn);
-
-  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
-           chnego, cskill, chtn, tch_int, mod, cmod);
-  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC negotiation test gave %d successes on %d dice with TN %d (calculated from opponent int (%d) + global mod (%d) + our mod (%d)).",
-           tchnego, tskill, tchtn, ch_int, mod, tmod);
-  if (comp)
+  // Apply Kinesics to negotiation tests.
+  if (target_skill == SKILL_NEGOTIATION
+      && GET_TRADITION(ch) == TRAD_ADEPT
+      && (kinesics_rating = GET_POWER(ch, ADEPT_KINESICS)))
   {
-    chtn = tch_int+mod+cmod;
-    tchtn = ch_int+mod+tmod;
-
-    act("Getting additional skill for PC...", FALSE, ch, NULL, NULL, TO_ROLLS);
-    cskill = get_skill(ch, comp, chtn);
-    act("Getting additional skill for NPC...", FALSE, tch, NULL, NULL, TO_ROLLS);
-    tskill = get_skill(tch, comp, tchtn);
-
-    int ch_delta = success_test(cskill, chtn) / 2;
-    int tch_delta = success_test(tskill, tchtn) / 2;
-
-    chnego += ch_delta;
-    tchnego += tch_delta;
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nAdded additional rolls for %s (%d dice at TN %d vs %d dice at TN %d), so we got an additional %d PC and %d NPC successes.",
-             skills[comp].name,
-             cskill,
-             chtn,
-             tskill,
-             tchtn,
-             ch_delta,
-             tch_delta);
+    snprintf(ENDOF(tn_rbuf), sizeof(tn_rbuf) - strlen(tn_rbuf), "Kinesics -%d", kinesics_rating);
+    wrote_something = TRUE;
   }
-  int num = chnego - tchnego;
-  if (num > 0)
+
+  // Apply metavariant penalty whether or not it's a negotiation test.
+  if (include_metavariant_penalty
+      && GET_RACE(ch) != GET_RACE(tch)
+      && (metavariant_penalty = get_metavariant_penalty(ch)))
   {
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nPC got %d net successes, so basevalue goes from %d", num, basevalue);
+    snprintf(ENDOF(tn_rbuf), sizeof(tn_rbuf) - strlen(tn_rbuf), "%sMetavariant %d", wrote_something ? ", " : "", metavariant_penalty);
+    wrote_something = TRUE;
+  }
+
+  // Apply opponent's intelligence.
+  {
+    opponent_intelligence = (negotiation_is_with_data_fence ? GET_REAL_INT(tch) : GET_INT(tch));
+
+    // Some NPCs have 0 intelligence. Give them an average value.
+    if (IS_MOB(tch) && opponent_intelligence <= 0)
+      opponent_intelligence = 3;
+
+    snprintf(ENDOF(tn_rbuf), sizeof(tn_rbuf) - strlen(tn_rbuf), "%sOppInt %d", wrote_something ? ", " : "", opponent_intelligence);
+    wrote_something = TRUE;
+  }
+
+  // Print TN info so far. This may be modified in get_skill, but we have logging in there for that.
+  act(tn_rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+
+  int tn_modifier_from_get_skill = 0;
+  // Fetch skill info. This prints to rolls as well.
+  if (IS_MOB(ch) && GET_SKILL(ch, target_skill) == 0) {
+    int charisma = (negotiation_is_with_data_fence ? GET_REAL_CHA(ch) : GET_CHA(ch));
+    skill_rating = MAX(charisma, 3);
+    snprintf(skill_rbuf, sizeof(skill_rbuf), "%s has no skill, so using capped charisma value of %d.", GET_CHAR_NAME(ch), skill_rating);
+    act(skill_rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+  } else {
+    int get_skill_tn = tn - kinesics_rating + metavariant_penalty + opponent_intelligence;
+    tn_modifier_from_get_skill = get_skill_tn;
+    skill_rating = get_skill(ch, target_skill, get_skill_tn);
+    tn_modifier_from_get_skill -= get_skill_tn;
+  }
+
+  struct obj_data *pheromones = find_bioware(ch, BIO_TAILOREDPHEROMONES);
+  if (target_skill == SKILL_NEGOTIATION && pheromones) {
+    pheromone_dice = GET_BIOWARE_IS_CULTURED(pheromones) ? GET_BIOWARE_RATING(pheromones) * 2 : GET_BIOWARE_RATING(pheromones);
+    snprintf(skill_rbuf, sizeof(skill_rbuf), "Pheremone skill buff of %d for %s.", pheromone_dice, GET_CHAR_NAME(ch));
+    act(skill_rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+  }
+
+  _get_negotiation_data_testable(tn, skill_dice, kinesics_rating, metavariant_penalty, opponent_intelligence, tn_modifier_from_get_skill, skill_rating, pheromone_dice);
+}
+
+int _get_negotiation_test_result(
+  struct char_data *ch,
+  struct char_data *tch,
+  int base_mod,
+  bool include_metavariant_penalty,
+  bool negotiation_is_with_data_fence,
+  int target_skill)
+{
+  char rbuf[1000];
+
+  // Set base values.
+  int ch_tn = base_mod, ch_skill = 0;
+
+  // Calculate TN and skill.
+  _get_negotiation_data(ch, tch, ch_tn, ch_skill, include_metavariant_penalty, negotiation_is_with_data_fence, target_skill);
+
+  // Run the test.
+  int successes = success_test(ch_skill, ch_tn);
+
+  snprintf(rbuf, sizeof(rbuf), "%s's %s test netted %d successes on %d dice with TN %d.",
+           GET_CHAR_NAME(ch),
+           skills[target_skill].name,
+           successes,
+           ch_skill,
+           ch_tn);
+  act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
+
+  return successes;
+}
+
+int _apply_negotiation_results_to_basevalue(int ch_successes, int t_successes, int basevalue, bool buy, char *rbuf, size_t rbuf_len) {
+  int num = ch_successes - t_successes;
+  if (num > 0) {
+    snprintf(rbuf, rbuf_len, "\r\nPC got %d net successes, so basevalue goes from %d", num, basevalue);
     if (buy)
       basevalue = MAX((int)(basevalue * 3/4), basevalue - (num * (basevalue / 20)));
     else
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
-  } else
-  {
+  } else {
     num *= -1;
-    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\nNPC got %d net successes, so basevalue goes from %d", num, basevalue);
+    snprintf(rbuf, rbuf_len, "\r\nNPC got %d net successes, so basevalue goes from %d", num, basevalue);
     if (buy)
       basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
     else
       basevalue = MAX((int)(basevalue * 3/4), basevalue - (num * (basevalue / 20)));
   }
-  snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " to %d.", basevalue);
-  act(buf3, FALSE, ch, NULL, NULL, TO_ROLLS);
+  snprintf(ENDOF(rbuf), rbuf_len - strlen(rbuf), " to %d.", basevalue);
   return basevalue;
+}
 
+int negotiate(struct char_data *ch,
+              struct char_data *tch,
+              int second_skill_to_roll,
+              int basevalue,
+              int base_mod,
+              bool buy,
+              bool include_metavariant_penalty)
+{
+  snprintf(buf3, sizeof(buf3), "ALRIGHT BOIS HERE WE GO. Base global mod for negotiation test is %d.", base_mod);
+  act(buf3, FALSE, ch, 0, 0, TO_ROLLS);
+
+  bool negotiation_is_with_data_fence = (second_skill_to_roll > 0);
+
+  int ch_successes = _get_negotiation_test_result(ch, tch, base_mod, include_metavariant_penalty, negotiation_is_with_data_fence, SKILL_NEGOTIATION);
+  int t_successes = _get_negotiation_test_result(tch, ch, base_mod, include_metavariant_penalty, negotiation_is_with_data_fence, SKILL_NEGOTIATION);
+
+  if (second_skill_to_roll) {
+    act("Adding halved results of upcoming additional skill roll...", FALSE, ch, 0, 0, TO_ROLLS);
+    int ch_delta = _get_negotiation_test_result(ch, tch, base_mod, include_metavariant_penalty, negotiation_is_with_data_fence, second_skill_to_roll);
+    int t_delta = _get_negotiation_test_result(tch, ch, base_mod, include_metavariant_penalty, negotiation_is_with_data_fence, second_skill_to_roll);
+
+    ch_successes += ch_delta / 2;
+    t_successes += t_delta / 2;
+    snprintf(buf3, sizeof(buf3), "Final successes are %d vs %d.", ch_successes, t_successes);
+    act(buf3, FALSE, ch, 0, 0, TO_ROLLS);
+  }
+
+  basevalue = _apply_negotiation_results_to_basevalue(ch_successes, t_successes, basevalue, buy, buf3, sizeof(buf3));
+  act(buf3, FALSE, ch, 0, 0, TO_ROLLS);
+
+  return basevalue;
 }
 
 // Converts between skill and general version depending on what's available.
@@ -1658,6 +1730,9 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
 
   // Iterate through their cyberware, looking for anything important.
   if (ch->cyberware) {
+    struct obj_data *expert_driver = NULL;
+    struct obj_data *chipjack = NULL;
+
     int expert = 0;
     int chip = 0;
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
@@ -1666,9 +1741,10 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
           mbw = should_gain_physical_boosts ? GET_CYBERWARE_RATING(obj) : 0;
           break;
         case CYB_CHIPJACKEXPERT:
-          expert = GET_CYBERWARE_RATING(obj);
+          expert_driver = obj;
           break;
         case CYB_CHIPJACK:
+          chipjack = obj;
           // Since the chipjack expert driver influences the _chipjack_, we don't account for memory skills here.
           for (struct obj_data *chip_obj = obj->contains; chip_obj; chip_obj = chip_obj->next_content) {
             if (GET_CHIP_SKILL(chip_obj) == skill)
@@ -1680,7 +1756,9 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
 
     // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
     if (chip && expert) {
-      if (chip != GET_SKILL(ch, skill)) {
+      if (!check_chipdriver_and_expert_compat(chipjack, expert_driver)) {
+        strlcat(gskbuf, "Ignored expert driver (slot count mismatch with chipjack). ", sizeof(gskbuf));
+      } else if (chip != GET_SKILL(ch, skill)) {
         strlcat(gskbuf, "Ignored expert driver (ch skill not equal to chip rating). ", sizeof(gskbuf));
       } else if (defaulting_tn == 4) {
         strlcat(gskbuf, "Ignored expert driver (S2A default). ", sizeof(gskbuf));
@@ -1890,6 +1968,18 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
   if (cyber1 && cyber2) {
     if (GET_CYBERWARE_TYPE(cyber1) != CYB_EYES)
       switch (GET_CYBERWARE_TYPE(cyber1)) {
+        case CYB_CHIPJACK:
+          if (!check_chipdriver_and_expert_compat(cyber1, cyber2)) {
+            send_to_char("Your chipjack and expert driver must have the same slot count.\r\n", ch);
+            return FALSE;
+          }
+          break;
+        case CYB_CHIPJACKEXPERT:
+          if (!check_chipdriver_and_expert_compat(cyber2, cyber1)) {
+            send_to_char("Your chipjack and expert driver must have the same slot count.\r\n", ch);
+            return FALSE;
+          }
+          break;
         case CYB_FILTRATION:
           if (GET_CYBERWARE_FLAGS(cyber1) == GET_CYBERWARE_FLAGS(cyber2)) {
             send_to_char("You already have this type of filtration installed.\r\n", ch);

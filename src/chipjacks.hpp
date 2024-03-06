@@ -6,4 +6,6 @@ void set_skill_from_chip(struct char_data *ch, struct obj_data *chip, bool send_
 void initialize_chipjack_and_memory_for_character (struct char_data *ch);
 void deactivate_single_skillsoft(struct obj_data *chip, struct char_data *victim, bool send_message);
 
+bool check_chipdriver_and_expert_compat(struct obj_data *jack, struct obj_data *driver);
+
 #endif // __chipjacks_hpp__

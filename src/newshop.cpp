@@ -1188,7 +1188,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   price = buy_price(obj, shop_nr);
   int bprice = price / 10;
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && can_negotiate_for_item(obj))
-    price = negotiate(ch, keeper, 0, price, 0, TRUE);
+    price = negotiate(ch, keeper, 0, price, 0, TRUE, TRUE);
 
   // Attempt to order the item.
   if (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) > 0)
@@ -1519,7 +1519,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
   int sellprice = sell_price(obj, shop_nr);
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
-    sellprice = negotiate(ch, keeper, 0, sellprice, 0, 0);
+    sellprice = negotiate(ch, keeper, 0, sellprice, 0, FALSE, TRUE);
 
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR) && !obj->in_obj) {
     for (struct obj_data *ware_verifier = ch->carrying; ware_verifier; ware_verifier = ware_verifier->next_content) {

@@ -2790,7 +2790,7 @@ SPECIAL(hacker)
       amount = (int)(GET_ITEM_MONEY_VALUE(obj) / 5);
     else
       amount = (int)(GET_ITEM_MONEY_VALUE(obj) / 3);
-    // nuyen = negotiate(ch, hacker, 0, nuyen, 2, FALSE);
+    // nuyen = negotiate(ch, hacker, 0, nuyen, 2, FALSE, TRUE);
     nuyen = GET_ITEM_MONEY_VALUE(obj) - amount;
     GET_BANK_RAW(hacker) += amount;
 
@@ -2842,7 +2842,7 @@ SPECIAL(fence)
       act("$n says, \"I only buy datafiles, chummer.\"\n", FALSE, fence, 0, ch, TO_VICT);
       return(TRUE);
     }
-    int negotiated_value = negotiate(ch, fence, SKILL_DATA_BROKERAGE, market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)], 2, FALSE);
+    int negotiated_value = negotiate(ch, fence, SKILL_DATA_BROKERAGE, market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)], 2, FALSE, TRUE);
     value = negotiated_value / MAX(1, (time(0) - GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj)) / SECS_PER_MUD_DAY);
     gain_nuyen(ch, value, NUYEN_INCOME_DECKING);
 

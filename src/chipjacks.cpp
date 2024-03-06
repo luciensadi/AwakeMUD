@@ -48,6 +48,19 @@ ACMD_DECLARE(do_reload);
    Switches between skillsofts quickly (or at least quicker than unjack/rejack).
 */
 
+bool check_chipdriver_and_expert_compat(struct obj_data *jack, struct obj_data *driver) {
+  if (!jack || !driver || GET_CYBERWARE_TYPE(jack) != CYB_CHIPJACK || GET_CYBERWARE_TYPE(driver) != CYB_CHIPJACKEXPERT) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Expected a chipjack and expert driver to c_c_a_e_c(), got %s (%ld) and %s (%ld) instead",
+                    GET_OBJ_NAME(jack),
+                    GET_OBJ_VNUM(jack),
+                    GET_OBJ_NAME(driver),
+                    GET_OBJ_VNUM(driver));
+    return FALSE;
+  }
+
+  return GET_CYBERWARE_FLAGS(jack) == GET_CYBERWARE_FLAGS(driver);
+}
+
 // Given a character, find their skillwires, chipjacks, and headware memory, then initialize skills from that.
 void initialize_chipjack_and_memory_for_character(struct char_data *ch) {
   if (!ch) {

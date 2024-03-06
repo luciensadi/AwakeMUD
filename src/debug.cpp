@@ -108,7 +108,18 @@ void do_pgroup_debug(struct char_data *ch, char *argument) {
   }
 }
 
-bool drinks_are_unfucked = FALSE;
+extern void _get_negotiation_data_testable(
+  int &tn,
+  int &skill_dice,
+  int kinesics_rating,
+  int metavariant_penalty,
+  int opponent_intelligence,
+  int tn_modifier_from_get_skill,
+  int skill_rating,
+  int pheromone_dice
+);
+
+bool drinks_are_unfucked = TRUE;
 ACMD(do_debug) {
   static char arg1[MAX_INPUT_LENGTH];
   static char arg2[MAX_INPUT_LENGTH];
@@ -126,6 +137,87 @@ ACMD(do_debug) {
 
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
+
+  if (is_abbrev(arg1, "negotest")) {
+    int num_runs = 1000;
+    send_to_char(ch, "OK, testing negotiation averages with various scenarios.\r\n");
+
+    send_to_char(ch, "First, figuring out the average max successes to cap out negotiation...\r\n");
+    float buy_suc_avg = 0.0, sell_suc_avg = 0.0;
+    {
+      int suc_total = 0, suc_iter = 0;
+      for (int basevalue = 1000; basevalue <= 100000000; basevalue *= 3) {
+        for (int net_suc = 0; net_suc <= 10; net_suc++) {
+          if (basevalue - (net_suc * (basevalue / 20)) <= (int)(basevalue * 3/4)) {
+            // send_to_char(ch, "The most effective negotiation successes you can get at %d is %d.\r\n", basevalue, net_suc);
+            suc_iter++;
+            suc_total += net_suc;
+            break;
+          }
+        }
+      }
+      buy_suc_avg = (float)suc_total / suc_iter;
+    }
+    {
+      int suc_total = 0, suc_iter = 0;
+      for (int basevalue = 1000; basevalue <= 100000000; basevalue *= 3) {
+        for (int net_suc = 0; net_suc <= 10; net_suc++) {
+          if (basevalue + (net_suc * (basevalue / 15)) >= (int)(basevalue * 5/4)) {
+            // send_to_char(ch, "The most effective negotiation successes you can get at %d is %d.\r\n", basevalue, net_suc);
+            suc_iter++;
+            suc_total += net_suc;
+            break;
+          }
+        }
+      }
+      sell_suc_avg = (float)suc_total / suc_iter;
+    }
+    send_to_char(ch, "The average max successes when purchasing is %.2f.\r\n", buy_suc_avg);
+    send_to_char(ch, "The average max successes when selling is %.2f.\r\n", sell_suc_avg);
+
+    // Mages first.
+    for (int ch_int = 8; ch_int <= 20; ch_int++) {
+      if (ch_int != 8 && ch_int != 16 && ch_int != 20)
+        continue;
+
+      for (int t_int = 1; t_int <= 2; t_int++) {
+        int total = 0;
+        for (int iter = 0; iter < num_runs; iter++) {
+          int ch_tn = 0, ch_dice = 0;
+          int t_tn = 0, t_dice = 0;
+
+          _get_negotiation_data_testable(ch_tn, ch_dice, 0, 0, t_int, 0, 8, 4);
+          _get_negotiation_data_testable(t_tn, t_dice, 0, 0, ch_int, 0, 8, 0);
+
+          int ch_s = success_test(ch_dice, ch_tn);
+          int t_s = success_test(t_dice, t_tn);
+
+          int net = ch_s - t_s;
+          total += net;
+        }
+        float avg = ((float) total) / num_runs;
+        send_to_char(ch, "At ch int %d and mob int %d, got %.2f average net successes.", ch_int, t_int, avg, avg >= buy_suc_avg? " (CAP)" : "");
+        if (avg >= buy_suc_avg) {
+          send_to_char(ch, " (Buying: CAP at 25%% discount)");
+        } else {
+          int basevalue = 1000;
+          int discounted_price = basevalue - (avg * (basevalue / 20));
+          float discount_pct = (1 - ((float) discounted_price / basevalue)) * 100;
+          send_to_char(ch, " (Buying: %.0f%% discount)", discount_pct);
+        }
+
+        if (avg >= sell_suc_avg) {
+          send_to_char(ch, " (Selling: CAP at 25%% profit)\r\n");
+        } else {
+          int basevalue = 1000;
+          int increased_price = basevalue + (avg * (basevalue / 15));
+          float discount_pct = (1 - ((float) basevalue / increased_price)) * 100;
+          send_to_char(ch, " (Selling: %.0f%% profit)\r\n", discount_pct);
+        }
+      }
+    }
+    return;
+  }
 
   if (is_abbrev(arg1, "vision_penalties")) {
     send_to_char(ch, "OK, getting vision penalties.\r\n");
