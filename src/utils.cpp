@@ -1446,6 +1446,19 @@ void _get_negotiation_data(
 {
   char tn_rbuf[2000], skill_rbuf[2000];
 
+#ifdef DIES_IRAE
+  // Force the data fence protections on all transactions to limit the decrease-int cheese.
+  // TODO: Add back in cerebral booster.
+  negotiation_is_with_data_fence = TRUE;
+#else
+  // Mundanes are at a massive disadvantage (adepts get -3 TN, mages get -8 TN). Give them a boost.
+  // Calculations via DEBUG NEGOTEST show this change set gives them roughly _half_ of the buying power of a mage/adept.
+  if (!IS_MOB(ch) && GET_TRADITION(ch) == TRAD_MUNDANE) {
+    tn -= 2;
+    skill_dice += 4;
+  }
+#endif
+
   int kinesics_rating = 0;
   int metavariant_penalty = 0;
   int opponent_intelligence = 0;
@@ -1456,7 +1469,8 @@ void _get_negotiation_data(
   snprintf(tn_rbuf, sizeof(tn_rbuf), "Negotiation TN data for %s (prior to get_skill()): ", GET_CHAR_NAME(ch));
   bool wrote_something = FALSE;
 
-  // Apply Kinesics to negotiation tests.
+#ifndef DIES_IRAE
+  // Apply Kinesics to negotiation tests (only if not in Dies Irae mode)
   if (target_skill == SKILL_NEGOTIATION
       && GET_TRADITION(ch) == TRAD_ADEPT
       && (kinesics_rating = GET_POWER(ch, ADEPT_KINESICS)))
@@ -1464,6 +1478,7 @@ void _get_negotiation_data(
     snprintf(ENDOF(tn_rbuf), sizeof(tn_rbuf) - strlen(tn_rbuf), "Kinesics -%d", kinesics_rating);
     wrote_something = TRUE;
   }
+#endif
 
   // Apply metavariant penalty whether or not it's a negotiation test.
   if (include_metavariant_penalty

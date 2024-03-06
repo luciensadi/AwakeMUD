@@ -170,8 +170,15 @@ int max_ability(int i)
   case ADEPT_PENETRATINGSTRIKE:
   case ADEPT_COMBAT_SENSE:
   case ADEPT_REFLEXES:
+    return 3;
+#ifdef DIES_IRAE
+  // Kinesics is too broken.
+  case ADEPT_KINESICS:
+    return 0;
+#else
   case ADEPT_KINESICS:
     return 3;
+#endif
   case ADEPT_KILLING_HANDS:
     return 4;
   case ADEPT_ANIMAL_EMPATHY:
