@@ -6811,8 +6811,8 @@ void price_cyber(struct obj_data *obj)
       return;
     case CYB_CHIPJACK:
       GET_OBJ_VAL(obj, 1) = 0;
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 3) * 1000;
-      GET_CYBERWARE_ESSENCE_COST(obj) = 15 + (GET_OBJ_VAL(obj, 3) * 5);
+      GET_OBJ_COST(obj) = 1000 * GET_CYBERWARE_FLAGS(obj);
+      GET_CYBERWARE_ESSENCE_COST(obj) = 15 + (GET_CYBERWARE_FLAGS(obj) * 5);
       GET_OBJ_AVAILTN(obj) = 3;
       GET_OBJ_AVAILDAY(obj) = 3;
       break;
@@ -7119,14 +7119,17 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 1.5;
       break;
     case CYB_CHIPJACKEXPERT:
-      GET_CYBERWARE_ESSENCE_COST(obj) = 10 * GET_CYBERWARE_RATING(obj);
-      GET_OBJ_COST(obj) = 5000 * GET_CYBERWARE_RATING(obj);
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 2;
+
       if (GET_CYBERWARE_FLAGS(obj) == 0) {
         // All experts are 1-slot by default unless otherwise set.
         GET_CYBERWARE_FLAGS(obj) = 1;
       }
+
+      // Essence and nuyen costs are multiplied by the slots.
+      GET_CYBERWARE_ESSENCE_COST(obj) = 10 * GET_CYBERWARE_RATING(obj) * GET_CYBERWARE_FLAGS(obj);
+      GET_OBJ_COST(obj) = 5000 * GET_CYBERWARE_RATING(obj) * GET_CYBERWARE_FLAGS(obj);
       break;
     case CYB_DATACOMPACT:
       GET_CYBERWARE_ESSENCE_COST(obj) = 5 + (GET_CYBERWARE_RATING(obj) * 5);

@@ -1282,9 +1282,9 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     int skill = get_skill(ch, shop_table[shop_nr].etiquette, target);
     snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", final %d after get_skill(). Base skill %d", target, skill);
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_OBJ_VAL(bio, 0) == BIO_TAILOREDPHEROMONES) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEROMONES) {
         pheromones = TRUE;
-        int delta = GET_OBJ_VAL(bio, 2) ? GET_OBJ_VAL(bio, 1) * 2: GET_OBJ_VAL(bio, 1);
+        int delta = GET_BIOWARE_RATING(bio) * (GET_BIOWARE_IS_CULTURED(bio) ? 2 : 1);
         skill += delta;
         snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (pheromones)", delta);
         break;
