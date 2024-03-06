@@ -7123,6 +7123,10 @@ void price_cyber(struct obj_data *obj)
       GET_OBJ_COST(obj) = 5000 * GET_CYBERWARE_RATING(obj);
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 2;
+      if (GET_CYBERWARE_FLAGS(obj) == 0) {
+        // All experts are 1-slot by default unless otherwise set.
+        GET_CYBERWARE_FLAGS(obj) = 1;
+      }
       break;
     case CYB_DATACOMPACT:
       GET_CYBERWARE_ESSENCE_COST(obj) = 5 + (GET_CYBERWARE_RATING(obj) * 5);
