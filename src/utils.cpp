@@ -1450,13 +1450,6 @@ void _get_negotiation_data(
   // Force the data fence protections on all transactions to limit the decrease-int cheese.
   // TODO: Add back in cerebral booster.
   negotiation_is_with_data_fence = TRUE;
-#else
-  // Mundanes are at a massive disadvantage (adepts get -3 TN, mages get -8 TN). Give them a boost.
-  // Calculations via DEBUG NEGOTEST show this change set gives them roughly _half_ of the buying power of a mage/adept.
-  if (!IS_MOB(ch) && GET_TRADITION(ch) == TRAD_MUNDANE) {
-    tn -= 2;
-    skill_dice += 4;
-  }
 #endif
 
   int kinesics_rating = 0;
@@ -1521,7 +1514,20 @@ void _get_negotiation_data(
   struct obj_data *pheromones = find_bioware(ch, BIO_TAILOREDPHEROMONES);
   if (target_skill == SKILL_NEGOTIATION && pheromones) {
     pheromone_dice = GET_BIOWARE_IS_CULTURED(pheromones) ? GET_BIOWARE_RATING(pheromones) * 2 : GET_BIOWARE_RATING(pheromones);
-    snprintf(skill_rbuf, sizeof(skill_rbuf), "Pheremone skill buff of %d for %s.", pheromone_dice, GET_CHAR_NAME(ch));
+
+#ifndef DIES_IRAE
+    // Mundanes are at a massive disadvantage (adepts get -3 TN, mages get -8 TN). Give them a boost.
+    // Calculations via DEBUG NEGOTEST show this change set gives them roughly _half_ of the buying power of a mage/adept.
+    if (!IS_MOB(ch) && GET_TRADITION(ch) == TRAD_MUNDANE) {
+      tn -= GET_BIOWARE_RATING(pheromones);
+      pheromone_dice *= 2;
+      snprintf(skill_rbuf, sizeof(skill_rbuf), "Mundane pheromone skill buff of %d dice and -%d TN for %s.", pheromone_dice, GET_BIOWARE_RATING(pheromones), GET_CHAR_NAME(ch));
+    } else {
+      snprintf(skill_rbuf, sizeof(skill_rbuf), "Pheromone skill buff of %d for %s.", pheromone_dice, GET_CHAR_NAME(ch));
+    }
+#else
+    snprintf(skill_rbuf, sizeof(skill_rbuf), "Pheromone skill buff of %d for %s.", pheromone_dice, GET_CHAR_NAME(ch));
+#endif
     act(skill_rbuf, FALSE, ch, 0, 0, TO_ROLLS);
   }
 

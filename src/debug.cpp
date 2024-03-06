@@ -132,8 +132,8 @@ struct nego_test_values_struct nego_test_values[] = {
   {"Unbuffed mage", 8, 0, 12, 1, 4},
   {"Adept",    8     , 3, 12, 8, 4},
   {"Mundane",  8     , 0, 12, 8, 4},
-  {"Mundane w/ 4 kin and no phero",  8     , 4, 12, 8, 0},
   {"Mundane w/ 2 kin and more skill",  8     , 2, 12, 8, 8},
+  {"Mundane w/ 4 kin and no phero",  8     , 4, 12, 8, 0},
   {"", 0, 0, 0, 0, 0}
 };
 
