@@ -7057,7 +7057,7 @@ ACMD(do_shopfind)
       }
 
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next) {
-      int real_obj = real_object(sell->vnum);
+      rnum_t real_obj = real_object(sell->vnum);
       if (real_obj < 0) {
         mudlog_vfprintf(NULL, LOG_SYSLOG, "Warning: Shop %ld has invalid item %ld for sale!", shop_table[shop_nr].vnum, sell->vnum);
         continue;
@@ -7065,20 +7065,22 @@ ACMD(do_shopfind)
 
       if (number) {
         if (sell->vnum == number) {
-          send_to_char(ch, "%3d)  Shop %8ld (%s @ %ld)\r\n",
+          send_to_char(ch, "%3d)  Shop %8ld (%s @ %ld) for %.0f nuyen\r\n",
                        ++index,
                        shop_table[shop_nr].vnum,
                        mob_proto[real_mob].player.physical_text.name,
-                       location);
+                       location,
+                       GET_OBJ_COST(&obj_proto[real_obj]) * shop_table[shop_nr].profit_buy);
         }
       } else if (keyword_appears_in_obj(buf2, &obj_proto[real_obj])) {
-        send_to_char(ch, "%3d)  Shop %8ld (%s @ %ld) sells %s (%ld)\r\n",
+        send_to_char(ch, "%3d)  Shop %8ld (%s @ %ld) sells %s (%ld) for %.0f nuyen\r\n",
                      ++index,
                      shop_table[shop_nr].vnum,
                      mob_proto[real_mob].player.physical_text.name,
                      location,
                      GET_OBJ_NAME(&obj_proto[real_obj]),
-                     GET_OBJ_VNUM(&obj_proto[real_obj]));
+                     GET_OBJ_VNUM(&obj_proto[real_obj]),
+                     GET_OBJ_COST(&obj_proto[real_obj]) * shop_table[shop_nr].profit_buy);
       }
     }
   }
