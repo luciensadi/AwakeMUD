@@ -4274,6 +4274,7 @@ ACMD(do_show)
                { "dirtyelves",     LVL_BUILDER },
                { "wareshops",      LVL_CONSPIRATOR },
                { "smartshops",     LVL_CONSPIRATOR },
+               { "powersites",     LVL_VICEPRES },
                { "\n", 0 }
              };
 
@@ -4880,6 +4881,15 @@ ACMD(do_show)
       }
     }
     break;
+  case 30:
+    send_to_char("The following power sites are present in the game:\r\n", ch);
+    for (int idx = 0; idx < top_of_world; idx++) {
+      struct room_data *room = &world[idx];
+      
+      if (GET_BACKGROUND_AURA(room) == AURA_POWERSITE && GET_BACKGROUND_COUNT(room)) {
+        send_to_char(ch, "[^c%6d^n]: Rating ^c%2d^n @ %s^n.\r\n", GET_ROOM_VNUM(room), GET_BACKGROUND_COUNT(room), GET_ROOM_NAME(room));
+      }
+    }
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
     break;
@@ -7362,10 +7372,21 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
-    if (GET_BACKGROUND_COUNT(room) > 5) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Background count: Mana warp (%d > 5).\r\n", GET_BACKGROUND_COUNT(room));
-      issues++;
-      printed = TRUE;
+    if (GET_BACKGROUND_COUNT(room)) {
+      if (GET_BACKGROUND_AURA(room) == AURA_POWERSITE) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Background count: Power site (%d).\r\n", GET_BACKGROUND_COUNT(room));
+        issues++;
+        printed = TRUE;
+      } else if (GET_BACKGROUND_COUNT(room) > 5) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Background count: Mana warp (%d > 5).\r\n", GET_BACKGROUND_COUNT(room));
+        issues++;
+        printed = TRUE;
+      } else if (GET_BACKGROUND_COUNT(room) < 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - Background count: Negative (%d < 0).\r\n", GET_BACKGROUND_COUNT(room));
+        issues++;
+        printed = TRUE;
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: A NEGATIVE background count? (%ld)", GET_ROOM_VNUM(room));
+      }
     }
 
     // Check for issues with flight location.

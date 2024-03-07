@@ -191,13 +191,13 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
       continue;
 
     if (IS_IGNORING(d->character, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, d->character)) {
-      log_vfprintf("playerdoc-upped-debug: %s skipping %s due to ignore state", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      // log_vfprintf("playerdoc-upped-debug: %s skipping %s due to ignore state", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
       continue;
     }
 
     // We didn't message this person.
     if (ch->sent_docwagon_messages_to.find(GET_IDNUM_EVEN_IF_PROJECTING(d->character)) == ch->sent_docwagon_messages_to.end()) {
-      log_vfprintf("playerdoc-upped-debug: %s skipping %s -- not in list", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      // log_vfprintf("playerdoc-upped-debug: %s skipping %s -- not in list", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
       continue;
     }
 
