@@ -2002,20 +2002,19 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   // You must be in an apartment or vehicle in order to drop or donate economically-sensitive items.
   if (mode == SCMD_DONATE || (mode != SCMD_JUNK && !((ch->in_room && ch->in_room->apartment) || ch->in_veh))) {
     bool action_blocked = FALSE;
+    struct room_data *target_room = get_ch_in_room(ch);
 
-    if ((action_blocked |= obj_is_apartment_only_drop_item(obj))) {
-      act("Action blocked: $p is an economically-sensitive item (cyberware, bioware, custom cyberdeck) that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
+    if ((action_blocked |= obj_is_apartment_only_drop_item(obj, target_room))) {
+      act("Action blocked: $p can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
     }
-    else if ((action_blocked |= obj_contains_apartment_only_drop_items(obj))) {
-      act("Action blocked: $p contains at least one economically-sensitive item (cyberware, bioware, custom cyberdeck) that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
+    else if ((action_blocked |= obj_contains_apartment_only_drop_items(obj, target_room))) {
+      act("Action blocked: $p contains at least one item that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
     }
 
-    if (action_blocked) {
-      struct room_data *in_room = get_ch_in_room(ch);
-      
+    if (action_blocked) {      
       // Hardcoded start and end of the Neophyte Guild area. You can drop things you've picked up here, but only as a newbie.
       // Note that bypassing these checks by handing something to a newbie to drop in the donation area is considered exploiting.
-      if (mode == SCMD_DONATE || (GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD && GET_ROOM_VNUM(in_room) >= 60500 && GET_ROOM_VNUM(in_room) <= 60699)) {
+      if (mode == SCMD_DONATE || (GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD && GET_ROOM_VNUM(target_room) >= 60500 && GET_ROOM_VNUM(target_room) <= 60699)) {
         send_to_char(ch, "Please avoid giving newbies free cyberware / bioware / etc! It's a kind gesture, but it undercuts their economic balance and leads to less overall player retention.\r\n");
       }
 

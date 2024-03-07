@@ -698,6 +698,7 @@ void make_corpse(struct char_data * ch)
   } else
   {
 #ifdef DIES_IRAE
+    // On death, you lose a percentage of your carried nuyen. Maybe it's looted, maybe it blows away...
     lose_nuyen(ch, MAX(0, (int) (GET_NUYEN(ch) / DEATH_NUYEN_LOSS_DIVISOR)), NUYEN_OUTFLOW_DEATH_PENALTY);
 #endif
     nuyen = GET_NUYEN(ch);

@@ -1972,6 +1972,10 @@ enum {
 #define SCMD_STANDARD_ROLL  0
 #define SCMD_PRIVATE_ROLL   1
 
+/* do_ignore */
+#define SCMD_IGNORE    0
+#define SCMD_UNIGNORE  1
+
 /* do_cast */
 #define SCMD_STANDARD_CAST  0
 #define SCMD_RITUAL_CAST    1

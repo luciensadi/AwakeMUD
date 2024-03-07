@@ -1568,17 +1568,31 @@ int _apply_negotiation_results_to_basevalue(int ch_successes, int t_successes, i
   int num = ch_successes - t_successes;
   if (num > 0) {
     snprintf(rbuf, rbuf_len, "\r\nPC got %d net successes, so basevalue goes from %d", num, basevalue);
-    if (buy)
-      basevalue = MAX((int)(basevalue * 3/4), basevalue - (num * (basevalue / 20)));
-    else
-      basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
+    if (buy) {
+      int negotiated_price = basevalue - (num * (basevalue / 20));
+      int pct_price_cap = basevalue * 3/4;
+      int absolute_price_cap = basevalue - MAX_NUYEN_DISCOUNT_FROM_NEGOTIATION;
+      basevalue = MAX(negotiated_price, MAX(pct_price_cap, absolute_price_cap));
+    } else {
+      int negotiated_price = basevalue + (num * (basevalue / 15));
+      int pct_price_cap = basevalue * 5/4;
+      int absolute_price_cap = basevalue + MAX_NUYEN_PROFIT_FROM_NEGOTIATION;
+      basevalue = MAX(negotiated_price, MAX(pct_price_cap, absolute_price_cap));
+    }
   } else {
     num *= -1;
     snprintf(rbuf, rbuf_len, "\r\nNPC got %d net successes, so basevalue goes from %d", num, basevalue);
-    if (buy)
-      basevalue = MIN((int)(basevalue * 5/4), basevalue + (num * (basevalue / 15)));
-    else
-      basevalue = MAX((int)(basevalue * 3/4), basevalue - (num * (basevalue / 20)));
+    if (buy) {
+      int negotiated_price = basevalue + (num * (basevalue / 15));
+      int pct_price_cap = basevalue * 5/4;
+      int absolute_price_cap = basevalue + MAX_NUYEN_PROFIT_FROM_NEGOTIATION;
+      basevalue = MAX(negotiated_price, MAX(pct_price_cap, absolute_price_cap));
+    } else {
+      int negotiated_price = basevalue - (num * (basevalue / 20));
+      int pct_price_cap = basevalue * 3/4;
+      int absolute_price_cap = basevalue - MAX_NUYEN_DISCOUNT_FROM_NEGOTIATION;
+      basevalue = MAX(negotiated_price, MAX(pct_price_cap, absolute_price_cap));
+    }
   }
   snprintf(ENDOF(rbuf), rbuf_len - strlen(rbuf), " to %d.", basevalue);
   return basevalue;
@@ -6485,37 +6499,45 @@ int count_objects_on_char(struct char_data *ch, long &cash_value) {
 }
 #undef ITERATE_AND_COUNT
 
-bool obj_is_apartment_only_drop_item(struct obj_data *obj) {
-  if (!obj) {
-    mudlog("SYSERR: Received NULL object to obj_is_apartment_only_drop_item()!", NULL, LOG_SYSLOG, TRUE);
+bool obj_is_apartment_only_drop_item(struct obj_data *obj, struct room_data *dest_room) {
+  if (!obj || !dest_room) {
+    mudlog("SYSERR: Received NULL object or room to obj_is_apartment_only_drop_item()!", NULL, LOG_SYSLOG, TRUE);
     return TRUE;
   }
 
   switch (GET_OBJ_TYPE(obj)) {
     case ITEM_CUSTOM_DECK:
+      // No dropping decks that have any contents.
       return obj->contains;
     case ITEM_CYBERWARE:
     case ITEM_BIOWARE:
-    case ITEM_MAGIC_TOOL:
+      // No dropping cyberware or bioware.
       return TRUE;
+    case ITEM_MAGIC_TOOL:
+      // You can only drop conjuring libraries, and only then at power sites.
+      return GET_MAGIC_TOOL_TYPE(obj) != TYPE_LIBRARY_CONJURE || (dest_room && dest_room->background[CURRENT_BACKGROUND_TYPE] == AURA_POWERSITE);
     case ITEM_DECK_ACCESSORY:
-      return (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PARTS);
+      // You can't drop parts/chips, nor can you drop computers unless they're laptops.
+      return (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PARTS) || (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_COMPUTER && !GET_DECK_ACCESSORY_COMPUTER_IS_LAPTOP(obj));
+    case ITEM_WORKSHOP:
+      // You can only drop vehicle or medical workshops in random places.
+      return GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE || GET_WORKSHOP_TYPE(obj) == TYPE_MEDICAL;
   }
 
   return FALSE;
 }
 
-bool obj_contains_apartment_only_drop_items(struct obj_data *obj) {
+bool obj_contains_apartment_only_drop_items(struct obj_data *obj, struct room_data *target_room) {
   if (!obj) {
     mudlog("SYSERR: Received NULL object to obj_contains_apartment_only_drop_items()!", NULL, LOG_SYSLOG, TRUE);
     return TRUE;
   }
 
   for (struct obj_data *cont = obj->contains; cont; cont = cont->next_content) {
-    if (obj_is_apartment_only_drop_item(cont))
+    if (obj_is_apartment_only_drop_item(cont, target_room))
       return TRUE;
 
-    if (obj_contains_apartment_only_drop_items(cont))
+    if (obj_contains_apartment_only_drop_items(cont, target_room))
       return TRUE;
   }
 

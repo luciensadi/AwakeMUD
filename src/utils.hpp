@@ -180,8 +180,8 @@ long    get_cost_of_veh_and_contents(struct veh_data *veh);
 struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion);
 void    find_or_load_ch_cleanup(struct char_data *ch);
 
-bool obj_is_apartment_only_drop_item(struct obj_data *obj);
-bool obj_contains_apartment_only_drop_items(struct obj_data *obj);
+bool obj_is_apartment_only_drop_item(struct obj_data *obj, struct room_data *target_room);
+bool obj_contains_apartment_only_drop_items(struct obj_data *obj, struct room_data *target_room);
 
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);
@@ -432,7 +432,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define IS_DARK(room)  (light_level((room)) == ITEM_FULLDARK)
 #define IS_LIGHT(room)  (light_level((room)) <= LIGHT_NORMALNOLIT || light_level((room)) == LIGHT_PARTLIGHT)
-#define IS_LOW(room)	(light_level((room)) == LIGHT_MINLIGHT || light_level((room)) == LIGHT_PARTLIGHT)
+#define IS_LOW(room)  (light_level((room)) == LIGHT_MINLIGHT || light_level((room)) == LIGHT_PARTLIGHT)
 
 #define GET_ROOM_NAME(room) (!(room) ? "(null room's name)" : (                            \
   GET_APARTMENT_SUBROOM((room)) && GET_APARTMENT_SUBROOM((room))->get_decorated_name() ?   \
@@ -510,7 +510,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_RACE(ch)          ((ch)->player.race)
 #define GET_TRADITION(ch)       ((ch)->player.tradition)
-#define GET_ASPECT(ch)		((ch)->player.aspect)
+#define GET_ASPECT(ch)    ((ch)->player.aspect)
 #define GET_LASTROOM(ch)          ((ch)->player.last_room)
 #define GET_HEIGHT(ch)        ((ch)->player.height)
 #define GET_WEIGHT(ch)        ((ch)->player.weight)
@@ -531,8 +531,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_INDEX(ch)         ((ch)->real_abils.bod_index)
 #define GET_HIGHEST_INDEX(ch)      ((ch)->real_abils.highestindex)
 #define GET_BIOOVER(ch)       ((int)(GET_INDEX(ch) - (GET_ESS(ch) + 300) + 99) / 100)
-#define GET_TEMP_MAGIC_LOSS(ch)	((ch)->points.magic_loss)
-#define GET_TEMP_ESSLOSS(ch)	((ch)->points.ess_loss)
+#define GET_TEMP_MAGIC_LOSS(ch)  ((ch)->points.magic_loss)
+#define GET_TEMP_ESSLOSS(ch)  ((ch)->points.ess_loss)
 
 #define GET_REAL_ATT(ch, i)        ((ch)->real_abils.attributes[(i)])
 #define GET_REAL_STR(ch)           (GET_REAL_ATT((ch), STR))
@@ -550,7 +550,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_REP(ch)           ((ch)->points.rep)
 #define GET_NOT(ch)           ((ch)->points.noto)
 #define GET_TKE(ch)           ((ch)->points.tke)
-#define GET_SIG(ch)	      ((ch)->points.sig)
+#define GET_SIG(ch)        ((ch)->points.sig)
 
 #define GET_INNATE_BALLISTIC(ch)       ((ch)->points.ballistic[0])
 #define GET_TOTALBAL(ch)               ((ch)->points.ballistic[1])
@@ -561,8 +561,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 int get_armor_penalty_grade(struct char_data *ch);
 
 #define GET_PHYSICAL(ch)        ((ch)->points.physical)
-#define GET_MAX_PHYSICAL(ch)  ((ch)->points.max_physical)
-#define GET_GRADE(ch)   	((ch)->points.grade)
+#define GET_MAX_PHYSICAL(ch)    ((ch)->points.max_physical)
+#define GET_GRADE(ch)           ((ch)->points.grade)
 #define GET_MENTAL(ch)          ((ch)->points.mental)
 #define GET_MAX_MENTAL(ch)      ((ch)->points.max_mental)
 
@@ -579,13 +579,13 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define GET_INIT_DICE(ch)       ((ch)->points.init_dice)
 #define GET_INIT_ROLL(ch)       ((ch)->points.init_roll)
-#define GET_SUSTAINED_NUM(ch)	((ch)->points.sustained[0])
+#define GET_SUSTAINED_NUM(ch)   ((ch)->points.sustained[0])
 #define GET_SUSTAINED_FOCI(ch)  ((ch)->points.sustained[1])
-#define GET_SUSTAINED(ch)	((ch)->sustained)
-#define SPIRIT_SUST(ch)		((ch)->ssust)
+#define GET_SUSTAINED(ch)       ((ch)->sustained)
+#define SPIRIT_SUST(ch)         ((ch)->ssust)
 #define GET_SPELLS(ch)          ((ch)->desc && (ch)->desc->original ? (ch)->desc->original->spells : (ch)->spells)
-#define GET_REACH(ch)		((ch)->points.reach[0])
-#define GET_REACH_USE(ch)	((ch)->points.reach[1])
+#define GET_REACH(ch)           ((ch)->points.reach[0])
+#define GET_REACH_USE(ch)       ((ch)->points.reach[1])
 
 #define GET_POS(ch)             ((ch)->char_specials.position)
 #define GET_DEFPOS(ch)          ((ch)->char_specials.defined_position)
@@ -597,14 +597,14 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define FIGHTING_VEH(ch)        ((ch)->char_specials.fight_veh)
 #define CH_IN_COMBAT(ch)        (FIGHTING(ch) || FIGHTING_VEH(ch))
 #define HUNTING(ch)             ((ch)->char_specials.hunting)
-#define DEPRECATED_IS_NERVE(ch)		((ch)->char_specials.nervestrike)
+#define DEPRECATED_IS_NERVE(ch) ((ch)->char_specials.nervestrike)
 #define IS_NERVE(ch)            (GET_POWER((ch), ADEPT_NERVE_STRIKE) > 0)
-#define GET_TEMP_QUI_LOSS(ch)	((ch)->char_specials.tempquiloss)
-#define GET_COST_BREAKUP(ch)	((ch)->char_specials.cost_breakup)
-#define GET_AVAIL_OFFSET(ch)	((ch)->char_specials.avail_offset)
-#define CHAR_X(ch)		((ch)->char_specials.coord[0])
-#define CHAR_Y(ch)		((ch)->char_specials.coord[1])
-#define CHAR_Z(ch)		((ch)->char_specials.coord[2])
+#define GET_TEMP_QUI_LOSS(ch)   ((ch)->char_specials.tempquiloss)
+#define GET_COST_BREAKUP(ch)    ((ch)->char_specials.cost_breakup)
+#define GET_AVAIL_OFFSET(ch)    ((ch)->char_specials.avail_offset)
+#define CHAR_X(ch)              ((ch)->char_specials.coord[0])
+#define CHAR_Y(ch)              ((ch)->char_specials.coord[1])
+#define CHAR_Z(ch)              ((ch)->char_specials.coord[2])
 
 #define SHOOTING_DIR(ch)        ((ch)->char_specials.shooting_dir)
 
@@ -623,7 +623,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_FREEZE_LEV(ch)      ((ch)->player_specials->saved.freeze_level)
 #define GET_BAD_PWS(ch)         ((ch)->player_specials->saved.bad_pws)
 #define GET_SYSTEM_POINTS(ch)   ((ch)->player_specials->saved.system_points)
-#define GET_WATCH(ch)		        ((ch)->player_specials->watching)
+#define GET_WATCH(ch)           ((ch)->player_specials->watching)
 #define GET_ASTRAL(ch)          ((ch)->aff_abils.astral_pool)
 #define GET_DEFENSE(ch)         ((ch)->aff_abils.defense_pool)
 #define GET_BODY(ch)            ((ch)->aff_abils.body_pool)
@@ -635,47 +635,47 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_MAX_HACKING(ch)     ((ch)->aff_abils.hacking_pool_max)
 #define GET_REM_HACKING(ch)     ((ch)->aff_abils.hacking_pool_remaining)
 #define GET_MAGIC(ch)           ((ch)->aff_abils.magic_pool)
-#define GET_CASTING(ch)		      ((ch)->aff_abils.casting_pool)
-#define GET_DRAIN(ch)	        	((ch)->aff_abils.drain_pool)
-#define GET_SDEFENSE(ch)	      ((ch)->aff_abils.spell_defense_pool)
-#define GET_REFLECT(ch)		      ((ch)->aff_abils.reflection_pool)
+#define GET_CASTING(ch)         ((ch)->aff_abils.casting_pool)
+#define GET_DRAIN(ch)           ((ch)->aff_abils.drain_pool)
+#define GET_SDEFENSE(ch)        ((ch)->aff_abils.spell_defense_pool)
+#define GET_REFLECT(ch)         ((ch)->aff_abils.reflection_pool)
 #define GET_SPIRIT(ch)          ((ch)->char_specials.spirits)
 #define GET_NUM_SPIRITS(ch)     ((ch)->char_specials.num_spirits)
-#define GET_DOMAIN(ch)		      ((ch)->points.domain)
-#define GET_ATT_POINTS(ch)	    ((ch)->player_specials->saved.att_points)
-#define GET_SKILL_POINTS(ch)  	((ch)->player_specials->saved.skill_points)
-#define GET_FORCE_POINTS(ch)	  ((ch)->player_specials->saved.force_points)
-#define GET_RESTRING_POINTS(ch)	((ch)->player_specials->saved.restring_points)
-#define GET_ARCHETYPAL_TYPE(ch)	((ch)->player_specials->saved.archetype)
-#define GET_ARCHETYPAL_MODE(ch)	((ch)->player_specials->saved.archetypal)
+#define GET_DOMAIN(ch)          ((ch)->points.domain)
+#define GET_ATT_POINTS(ch)      ((ch)->player_specials->saved.att_points)
+#define GET_SKILL_POINTS(ch)    ((ch)->player_specials->saved.skill_points)
+#define GET_FORCE_POINTS(ch)    ((ch)->player_specials->saved.force_points)
+#define GET_RESTRING_POINTS(ch) ((ch)->player_specials->saved.restring_points)
+#define GET_ARCHETYPAL_TYPE(ch) ((ch)->player_specials->saved.archetype)
+#define GET_ARCHETYPAL_MODE(ch) ((ch)->player_specials->saved.archetypal)
 #define GET_PRESTIGE_ALT_ID(ch) ((ch)->player_specials->saved.prestige_alt_id)
-#define GET_TARGET_MOD(ch)	    ((ch)->char_specials.target_mod)
-#define GET_CONCENTRATION_TARGET_MOD(ch)	((ch)->char_specials.concentration_target_mod)
-#define LAST_HEAL(ch)		((ch)->char_specials.last_healed)
-#define GET_FOCI(ch)		((ch)->char_specials.foci)
-#define GET_QUEST(ch)		((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->questnum : \
+#define GET_TARGET_MOD(ch)      ((ch)->char_specials.target_mod)
+#define GET_CONCENTRATION_TARGET_MOD(ch)  ((ch)->char_specials.concentration_target_mod)
+#define LAST_HEAL(ch)           ((ch)->char_specials.last_healed)
+#define GET_FOCI(ch)            ((ch)->char_specials.foci)
+#define GET_QUEST(ch)           ((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->questnum : \
                                                                       (ch)->player_specials->questnum)
-#define GET_LQUEST(ch, i)	      ((ch)->player_specials->last_quest[i])
-#define GET_CQUEST(ch, i)	      ((ch)->player_specials->completed_quest[i])
+#define GET_LQUEST(ch, i)       ((ch)->player_specials->last_quest[i])
+#define GET_CQUEST(ch, i)       ((ch)->player_specials->completed_quest[i])
 #define GET_PLAYER_WHERE_COMMANDS(ch) ((ch)->player_specials->wherelist_checks)
 #define POOFIN(ch)              ((ch)->player.poofin)
 #define POOFOUT(ch)             ((ch)->player.poofout)
 #define GET_PROMPT(ch)          ((PLR_FLAGGED((ch), PLR_MATRIX) ? (ch)->player.matrixprompt : (ch)->player.prompt))
 #define GET_ALIASES(ch)         ((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->aliases : (ch)->player_specials->aliases)
 #define GET_PLAYER_MEMORY(ch)   ((ch)->player_specials->remem)
-#define GET_LAST_TELL(ch)	((ch)->player_specials->last_tell)
-#define GET_LAST_DAMAGETIME(ch)	((ch)->points.lastdamage)
-#define HOURS_LEFT_TRACK(ch)	((ch)->points.track[0])
-#define HOURS_SINCE_TRACK(ch)	((ch)->points.track[1])
-#define SHOTS_FIRED(ch)		((ch)->points.extras[0])
-#define SHOTS_TRIGGERED(ch)	((ch)->points.extras[1])
+#define GET_LAST_TELL(ch)       ((ch)->player_specials->last_tell)
+#define GET_LAST_DAMAGETIME(ch) ((ch)->points.lastdamage)
+#define HOURS_LEFT_TRACK(ch)    ((ch)->points.track[0])
+#define HOURS_SINCE_TRACK(ch)   ((ch)->points.track[1])
+#define SHOTS_FIRED(ch)         ((ch)->points.extras[0])
+#define SHOTS_TRIGGERED(ch)     ((ch)->points.extras[1])
 
 #define GET_SPIRIT_OR_ELEMENTAL_SUMMONER(ch)  (GET_ACTIVE(ch))
 #define GET_SPIRIT_OR_ELEMENTAL_TYPE(ch)      (GET_SPARE1(ch))
 #define GET_SPIRIT_OR_ELEMENTAL_FORCE(ch)     (GET_SPARE2(ch))
 
 // Changing this? You probably need to change get_veh_controlled_by_char() as well.
-#define RIG_VEH(ch, veh)	((veh) = ((ch)->char_specials.rigging ? (ch)->char_specials.rigging : (ch)->in_veh));
+#define RIG_VEH(ch, veh)  ((veh) = ((ch)->char_specials.rigging ? (ch)->char_specials.rigging : (ch)->in_veh));
 
 /* the skills structure was moved to char_specials so that mobs could
  * have access to them also, ie load them up from mob files and use
@@ -688,21 +688,21 @@ int get_armor_penalty_grade(struct char_data *ch);
 // SET_SKILL is used only in medit.cpp for NPCs. Set char skills with utils.cpp's set_character_skill().
 #define SET_SKILL(ch, i, pct)   {(ch)->char_specials.saved.skills[i][SKILLARRAY_LEARNED_VALUE] = pct; GET_SKILL_DIRTY_BIT((ch)) = TRUE;}
 
-#define GET_POWER(ch, i)	((ch)->char_specials.saved.powers[i][1] ? \
+#define GET_POWER(ch, i)  ((ch)->char_specials.saved.powers[i][1] ? \
                                  MIN((ch)->char_specials.saved.powers[i][1], (ch)->char_specials.saved.powers[i][0]) : 0)
 
-#define GET_POWER_TOTAL(ch, i)	    ((ch)->char_specials.saved.powers[i][0] != 0 ? (ch)->char_specials.saved.powers[i][0] : 0)
-#define SET_POWER_TOTAL(ch, i, amt)	{(ch)->char_specials.saved.powers[i][0] = amt; GET_ADEPT_POWER_DIRTY_BIT(ch) = TRUE;}
+#define GET_POWER_TOTAL(ch, i)      ((ch)->char_specials.saved.powers[i][0] != 0 ? (ch)->char_specials.saved.powers[i][0] : 0)
+#define SET_POWER_TOTAL(ch, i, amt)  {(ch)->char_specials.saved.powers[i][0] = amt; GET_ADEPT_POWER_DIRTY_BIT(ch) = TRUE;}
 
-#define GET_POWER_ACT(ch, i)	((ch)->char_specials.saved.powers[i][1])
+#define GET_POWER_ACT(ch, i)  ((ch)->char_specials.saved.powers[i][1])
 #define GET_POWER_POINTS(ch)    ((ch)->char_specials.saved.points)
 
 #define GET_METAMAGIC(ch, i)    ((ch)->char_specials.saved.metamagic[i] != 0 ? (ch)->char_specials.saved.metamagic[i] : 0)
 #define SET_METAMAGIC(ch, i, amt)    {(ch)->char_specials.saved.metamagic[i] = amt; GET_METAMAGIC_DIRTY_BIT(ch) = TRUE;}
 
-#define GET_MASKING(ch)		((ch)->char_specials.saved.masking)
-#define GET_CENTERINGSKILL(ch)	((ch)->char_specials.saved.centeringskill)
-#define GET_PP(ch)		((ch)->char_specials.saved.powerpoints)
+#define GET_MASKING(ch)    ((ch)->char_specials.saved.masking)
+#define GET_CENTERINGSKILL(ch)  ((ch)->char_specials.saved.centeringskill)
+#define GET_PP(ch)    ((ch)->char_specials.saved.powerpoints)
 #define BOOST(ch)               ((ch)->char_specials.saved.boosted)
 #define GET_EQ(ch, i)         ((ch)->equipment[i])
 
@@ -732,15 +732,15 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_MOB_WAIT(ch)      ((ch)->mob_specials.wait_state)
 #define GET_DEFAULT_POS(ch)   ((ch)->mob_specials.default_pos)
 #define GET_MOB_MEMORY(ch)    ((ch)->mob_specials.memory)
-#define GET_LASTHIT(ch)	      ((ch)->mob_specials.lasthit)
+#define GET_LASTHIT(ch)        ((ch)->mob_specials.lasthit)
 
 #define GET_SPARE1(ch)        ((ch)->mob_specials.spare1)
 #define GET_SPARE2(ch)        ((ch)->mob_specials.spare2)
 #define GET_ACTIVE(ch)        ((ch)->mob_specials.active)
-#define GET_EXTRA(ch)	        ((ch)->points.extra)
-#define GET_EXTRA2(ch)	      ((ch)->points.extra2)
-#define GET_MOBALERT(ch)	    ((ch)->mob_specials.alert)
-#define GET_MOBALERTTIME(ch)	((ch)->mob_specials.alerttime)
+#define GET_EXTRA(ch)          ((ch)->points.extra)
+#define GET_EXTRA2(ch)        ((ch)->points.extra2)
+#define GET_MOBALERT(ch)      ((ch)->mob_specials.alert)
+#define GET_MOBALERTTIME(ch)  ((ch)->mob_specials.alerttime)
 
 #define CAN_CARRY_W(ch)       ((GET_STR(ch) * 10) + 30)
 #define CAN_CARRY_N(ch)       (8 + GET_QUI(ch) + (GET_REAL_LEVEL(ch)>=LVL_BUILDER?50:0))
@@ -748,7 +748,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define IS_RIGGING(ch)        (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
 #define IS_JACKED_IN(ch)      (IS_RIGGING(ch) || PLR_FLAGGED(ch, PLR_MATRIX))
 #define CAN_SEE_IN_DARK(ch)   (SEES_ASTRAL(ch) || CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT))
-#define GET_BUILDING(ch)	((ch)->char_specials.programming)
+#define GET_BUILDING(ch)  ((ch)->char_specials.programming)
 #define IS_WORKING(ch)        ((AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, AFF_PILOT, AFF_RIG, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT)))
 #define STOP_WORKING(ch)      {AFF_FLAGS((ch)).RemoveBits(BR_TASK_AFF_FLAGS, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT); \
                                GET_BUILDING((ch)) = NULL;}
@@ -788,9 +788,9 @@ int get_armor_penalty_grade(struct char_data *ch);
 
 #define GET_OBJ_AVAILTN(obj)    ((obj)->obj_flags.availtn)
 #define GET_OBJ_AVAILDAY(obj)   ((obj)->obj_flags.availdays)
-#define GET_LEGAL_NUM(obj)	((obj)->obj_flags.legality[0])
-#define GET_LEGAL_CODE(obj)	((obj)->obj_flags.legality[1])
-#define GET_LEGAL_PERMIT(obj)	((obj)->obj_flags.legality[2])
+#define GET_LEGAL_NUM(obj)  ((obj)->obj_flags.legality[0])
+#define GET_LEGAL_CODE(obj)  ((obj)->obj_flags.legality[1])
+#define GET_LEGAL_PERMIT(obj)  ((obj)->obj_flags.legality[2])
 #define GET_OBJ_TYPE(obj)       ((obj)->obj_flags.type_flag)
 #define GET_OBJ_COST(obj)       ((obj)->obj_flags.cost)
 #define GET_OBJ_AFFECT(obj) ((obj)->obj_flags.bitvector)
@@ -1281,6 +1281,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_DECK_ACCESSORY_COMPUTER_ACTIVE_MEMORY(accessory) (GET_OBJ_VAL((accessory), 1))
 #define GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(accessory)    (GET_OBJ_VAL((accessory), 2))
 #define GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(accessory)   (GET_OBJ_VAL((accessory), 3))
+#define GET_DECK_ACCESSORY_COMPUTER_IS_LAPTOP(accessory)     (GET_OBJ_VAL((accessory), 4))
 
 // ITEM_RCDECK convenience defines
 

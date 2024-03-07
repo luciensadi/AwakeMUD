@@ -271,6 +271,14 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // After how many items will the shopkeep start silently destroying old sales?
 #define MAX_ITEMS_IN_SHOP_INVENTORY                            100
+// What is the maximum discount you're allowed to have in terms of nuyen?
+#ifndef DIES_IRAE
+#define MAX_NUYEN_DISCOUNT_FROM_NEGOTIATION                    1000000000
+#define MAX_NUYEN_PROFIT_FROM_NEGOTIATION                      1000000000
+#else
+#define MAX_NUYEN_DISCOUNT_FROM_NEGOTIATION                    50000
+#define MAX_NUYEN_PROFIT_FROM_NEGOTIATION                      50000
+#endif
 
 // What does it cost to begin the guided withdrawal process?
 #define GUIDED_WITHDRAWAL_ATTEMPT_NUYEN_COST_PER_EDGE          2000

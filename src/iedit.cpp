@@ -827,6 +827,9 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
           else
             iedit_disp_menu(d);
           break;
+        case TYPE_COMPUTER:
+          send_to_char("Is this a laptop? (1 yes, 0 no): ", CH);
+          break;
         default:
           iedit_disp_menu(d);
           return;
@@ -2512,6 +2515,12 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_DECK_ACCESSORY:
+          if (GET_DECK_ACCESSORY_TYPE(OBJ) == TYPE_COMPUTER) {
+            if (number != 0 && number != 1) {
+              send_to_char("Invalid choice! Must be either 1 (yes it's a laptop) or 0 (no it's not): ", CH);
+              return;
+            }
+          }
           if (number < 1 || number > 15) {
             send_to_char("MPCP value must be between 1 and 15!\r\nMPCP to enhance: ", CH);
             return;
