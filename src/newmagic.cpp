@@ -1280,6 +1280,11 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
     return FALSE;
   }
 
+  if (IS_PC_CONJURED_ELEMENTAL(vict) && spells[spell].category != COMBAT) {
+    send_to_char("You can't cast spells on elementals.\r\n", ch);
+    return FALSE;
+  }
+
   bool ch_is_astral = IS_ASTRAL(ch);
   bool vict_is_astral = IS_ASTRAL(vict);
 

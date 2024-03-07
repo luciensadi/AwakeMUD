@@ -1154,9 +1154,14 @@ int affected_by_spell(struct char_data * ch, int type)
   if (!GET_SUSTAINED(ch))
     return 0;
 
-  for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next)
+  for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next) {
     if ((hjp->spell == type) && (hjp->caster == FALSE))
       return hjp->force;
+  
+    // Elementals shouldn't have anything cast on them.
+    if (IS_PC_CONJURED_ELEMENTAL(ch))
+      return 0;
+  }
 
   return 0;
 }
@@ -2736,7 +2741,7 @@ void extract_char(struct char_data * ch, bool do_save)
         if (obj->targ == ch)
           obj->targ = NULL;
 
-  /* clear spirit sustained spells */
+  /* clear spirit sustained powers */
   {
     struct spirit_sustained *next;
     if (IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
@@ -2755,28 +2760,28 @@ void extract_char(struct char_data * ch, bool do_save)
     }
   }
 
-  /* continue clearing spirit sustained spells */
-  if (IS_PC_CONJURED_ELEMENTAL(ch) && GET_SUSTAINED_NUM(ch))
-  {
-    for (struct descriptor_data *d = descriptor_list; d; d = d->next)
-      if (d->character && GET_IDNUM(d->character) == GET_ACTIVE(ch)) {
-        for (struct sustain_data *sust = GET_SUSTAINED(d->character); sust; sust = sust->next)
-          if (sust->spirit == ch) {
-            end_sustained_spell(d->character, sust);
-            break;
+  // Clear sustained spells.
+  if (GET_SUSTAINED(ch)) {
+    if (IS_PC_CONJURED_ELEMENTAL(ch)) {
+      for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+        if (d->character && GET_IDNUM(d->character) == GET_ACTIVE(ch)) {
+          for (struct sustain_data *sust = GET_SUSTAINED(d->character); sust; sust = sust->next) {
+            if (sust->spirit == ch) {
+              end_sustained_spell(d->character, sust);
+              break;
+            }
           }
-        break;
+          break;
+        }
       }
-  }
+      GET_SUSTAINED(ch) = NULL;
+    } else {
+      end_all_sustained_spells(ch);
 
-  /* clear any sustained spells (but only if they're not a conjured elemental) */
-  else if (GET_SUSTAINED(ch))
-  {
-    end_all_sustained_spells(ch);
-
-    // Sanity check: They must not have any spells left after this.
-    if (GET_SUSTAINED(ch)) {
-      mudlog("SYSERR: We still have spells after extract_char spell purge!!", ch, LOG_SYSLOG, TRUE);
+      // Sanity check: They must not have any spells left after this.
+      if (GET_SUSTAINED(ch)) {
+        mudlog("SYSERR: We still have spells after extract_char spell purge!!", ch, LOG_SYSLOG, TRUE);
+      }
     }
   }
 
