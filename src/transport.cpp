@@ -150,6 +150,14 @@ struct dest_data seattle_taxi_destinations[] =
     { "rokhalla", "hooligans", "Rokhalla", 32759, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "impulse", "", "Impulse Garage Complex", 25310, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
     { "boneyard", "", "Boneyard Aircraft Parking", 2085, TAXI_DEST_TYPE_OTHER, TRUE },
+    { "rubber", "suit", "The Rubber Suit", 39336, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+    { "gravity", "", "The Gravity Bar", 39207, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+    { "ebeys", "ebey's", "Ebey's Bar", 39272, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+    { "jason", "grill", "Jason's Bar & Grill", 39236, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+    { "downfall", "", "The Downfall", 25330, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+    { "crusher", "495", "Crusher 495", 25364, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+    { "banshee", "", "The Banshee", 25368, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+    { "paine", "snohomish", "Paine Field-Snohomish Airport", 39233, TAXI_DEST_TYPE_TRANSPORTATION, TRUE },
 #endif
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
