@@ -26,6 +26,7 @@
 #include "newdb.hpp"
 #include "deck_build.hpp"
 #include "newshop.hpp"
+#include "bullet_pants.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
@@ -156,7 +157,40 @@ ACMD(do_debug) {
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
 
+  if (is_abbrev(arg1, "fuckingshitballsammotest")) {
+    FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "no");
+    // is it elegant? no.  does it answer questions? maybe.  does it work well? ...also no
+
+    // Figure out the expected cost for various folks to make APDS ammo.
+    int runs = 10000000;
+    int weapon_type = WEAP_HMG;
+    int selected_ammo_type = AMMO_APDS;
+
+    int cost_per_attempted_10_rounds = get_ammo_cost(weapon_type, selected_ammo_type, AMMOBUILD_BATCH_SIZE, NULL);
+    int target = ammo_type[selected_ammo_type].tn;
+
+    send_to_char(ch, "OK, running a series of build tests across varied int levels, spending %d each time.\r\n", 
+                 cost_per_attempted_10_rounds * runs);
+
+    for (int dice = 12; dice <= 16; dice++) {
+      long rounds_made = 0;
+      for (int attempt = 0; attempt < runs; attempt++) {
+        int success = success_test(dice, target);
+        if (success > 0)
+          rounds_made += AMMOBUILD_BATCH_SIZE;
+      }
+      send_to_char(ch, "With %2d dice, it cost us %.2f nuyen per %s.\r\n",
+                   dice,
+                   (float) cost_per_attempted_10_rounds * runs / rounds_made,
+                   get_ammo_representation(weapon_type, selected_ammo_type, 1, NULL));
+    }
+
+    return;
+  }
+
   if (is_abbrev(arg1, "negotest")) {
+    FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "no");
+    
     int num_runs = 10000;
     send_to_char(ch, "OK, testing negotiation averages with various scenarios.\r\n");
     /*
