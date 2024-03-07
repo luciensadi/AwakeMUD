@@ -48,6 +48,7 @@ extern void send_mob_aggression_warnings(struct char_data *pc, struct char_data 
 extern bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict);
 extern struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *ch);
 extern bool precipitation_is_snow(int jurisdiction);
+extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
