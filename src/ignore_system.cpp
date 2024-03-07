@@ -100,15 +100,16 @@ ACMD(do_ignore) {
   // We have both a first and second argument, so treat this as 'ignore <name> <mode>.' We do this in a loop so you can specify many bits at once.
   // Special case: '*' or 'all' applies all blocks.
   if (*second_argument == '*' || !str_cmp(second_argument, "all")) {
-    send_to_char(ch, "Setting all ignore bits for %s.\r\n", capitalize(first_argument));
+    send_to_char(ch, "%s all ignore bits for %s.\r\n", subcmd == SCMD_IGNORE ? "Setting" : "Removing", capitalize(first_argument));
     for (int bit_idx = 0; bit_idx < NUM_IGNORE_BITS; bit_idx++) {
       // If not all bits are set, set all bits.
-      if (!(GET_IGNORE_DATA(ch)->_ignore_bit_is_set_for(bit_idx, vict_idnum))) {
+      bool bit_is_set = GET_IGNORE_DATA(ch)->_ignore_bit_is_set_for(bit_idx, vict_idnum);
+      if ((subcmd == SCMD_IGNORE) ? !bit_is_set : bit_is_set) {
         method_function func = ignore_function_sorted_by_bit[bit_idx];
         (GET_IGNORE_DATA(ch)->*func) (vict_idnum, capitalize(first_argument), MODE_NOT_SILENT);
       }
     }
-    send_to_char("All ignore bits set.\r\n", ch);
+    send_to_char(ch, "All ignore bits %s.\r\n", subcmd == SCMD_IGNORE ? "set" : "removed");
     return;
   }
 
