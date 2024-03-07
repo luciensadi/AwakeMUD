@@ -245,8 +245,11 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     // Don't allow negative results.
     open_test_result = MAX(open_test_result, 0);
 
-    // Vision modifiers, wound penalties, and other distractions.
-    int tn_modifiers = modify_target_rbuf_raw(tch, rbuf, sizeof(rbuf), get_vision_penalty(tch, in_room, rbuf, sizeof(rbuf)), FALSE);
+    // Vision penalties.
+    int vis_tn_modifier = calculate_vision_penalty(tch, ch);
+
+    // Other penalties.
+    int phys_tn_modifier = modify_target_rbuf_raw(tch, rbuf, sizeof(rbuf), vis_tn_modifier, FALSE);
 
     // House rule: Stealth/silence spells add a TN penalty to the spotter, up to 4.
     int stealth_spell_tn = get_spell_affected_successes(ch, SPELL_STEALTH);
@@ -256,10 +259,11 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     // Spirit Conceal power adds to the TN.
     magic_tn_modifier += affected_by_power(ch, CONCEAL); 
 
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". TN is %d (OT) + %d (vis/wounds/etc) + %d (other magic)", open_test_result, tn_modifiers, magic_tn_modifier);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". TN is %d (OT) + %d (vision) + %d (other phys) + %d (other magic)",
+                                                      open_test_result, vis_tn_modifier, phys_tn_modifier, magic_tn_modifier);
 
     // Roll the perception test.
-    int test_tn = open_test_result + tn_modifiers + magic_tn_modifier;
+    int test_tn = open_test_result + vis_tn_modifier + phys_tn_modifier + magic_tn_modifier;
     int perception_result = success_test(GET_INT(tch) + GET_POWER(tch, ADEPT_IMPROVED_PERCEPT), test_tn);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Result: %d hits.", perception_result);
     if (GET_INVIS_LEV(tch) <= GET_LEVEL(ch))
