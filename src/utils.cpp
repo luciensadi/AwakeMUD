@@ -7235,6 +7235,56 @@ idnum_t get_soulbound_idnum(struct obj_data *obj) {
 }
 
 // Returns TRUE on success, FALSE otherwise.
+bool soulbind_obj_to_char_by_idnum(struct obj_data *obj, idnum_t idnum, bool including_chargen_soulbinds) {
+  switch (GET_OBJ_TYPE(obj)) {
+    case ITEM_FOCUS:
+      // Foci are only soulbound when purchased in chargen.
+      if (including_chargen_soulbinds)
+        GET_FOCUS_SOULBOND(obj) = idnum;
+      break;
+    case ITEM_DOCWAGON:
+      // Docwagon modulators are only soulbound when purchased in chargen.
+      if (including_chargen_soulbinds)
+        GET_DOCWAGON_SOULBOND(obj) = idnum;
+      break;
+    case ITEM_BIOWARE:
+      // Bioware is soulbound on installation.
+      GET_BIOWARE_SOULBOND(obj) = idnum;
+      break;
+    case ITEM_CYBERWARE:
+      // Cyberware is soulbound on installation.
+      GET_CYBERWARE_SOULBOND(obj) = idnum;
+      break;
+    case ITEM_WORN:
+      // Hardened armor is soulbound when worn.
+      GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = idnum;
+      break;
+    case ITEM_WEAPON:
+      // Weapon foci are soulbound in chargen.
+      if (including_chargen_soulbinds && !WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_RATING(obj))
+        GET_WEAPON_SOULBOND(obj) = idnum;
+      break;
+    case ITEM_CYBERDECK:
+      // Decks are soulbound in chargen.
+      if (including_chargen_soulbinds)
+        GET_CYBERDECK_SOULBOND(obj) = idnum;
+      break;
+    case ITEM_KEY:
+      GET_KEY_SOULBOND(obj) = idnum;
+      break;
+  }
+
+  // Special case: Vehicle titles.
+  if (obj_is_a_vehicle_title(obj))
+    GET_VEHICLE_TITLE_OWNER(obj) = idnum;
+
+  // Special case: Visas.
+  if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
+    GET_VISA_OWNER(obj) = idnum;
+
+  return TRUE;
+}
+
 bool soulbind_obj_to_char(struct obj_data *obj, struct char_data *ch, bool including_chargen_soulbinds) {
   if (!ch || !obj) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid args to soulbind_obj_to_char(%s, %s)", GET_OBJ_NAME(obj), GET_CHAR_NAME(ch));
@@ -7246,53 +7296,7 @@ bool soulbind_obj_to_char(struct obj_data *obj, struct char_data *ch, bool inclu
     return FALSE;
   }
 
-  switch (GET_OBJ_TYPE(obj)) {
-    case ITEM_FOCUS:
-      // Foci are only soulbound when purchased in chargen.
-      if (including_chargen_soulbinds)
-        GET_FOCUS_SOULBOND(obj) = GET_IDNUM(ch);
-      break;
-    case ITEM_DOCWAGON:
-      // Docwagon modulators are only soulbound when purchased in chargen.
-      if (including_chargen_soulbinds)
-        GET_DOCWAGON_SOULBOND(obj) = GET_IDNUM(ch);
-      break;
-    case ITEM_BIOWARE:
-      // Bioware is soulbound on installation.
-      GET_BIOWARE_SOULBOND(obj) = GET_IDNUM(ch);
-      break;
-    case ITEM_CYBERWARE:
-      // Cyberware is soulbound on installation.
-      GET_CYBERWARE_SOULBOND(obj) = GET_IDNUM(ch);
-      break;
-    case ITEM_WORN:
-      // Hardened armor is soulbound when worn.
-      GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = GET_IDNUM(ch);
-      break;
-    case ITEM_WEAPON:
-      // Weapon foci are soulbound in chargen.
-      if (including_chargen_soulbinds && !WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_RATING(obj))
-        GET_WEAPON_SOULBOND(obj) = GET_IDNUM(ch);
-      break;
-    case ITEM_CYBERDECK:
-      // Decks are soulbound in chargen.
-      if (including_chargen_soulbinds)
-        GET_CYBERDECK_SOULBOND(obj) = GET_IDNUM(ch);
-      break;
-    case ITEM_KEY:
-      GET_KEY_SOULBOND(obj) = GET_IDNUM(ch);
-      break;
-  }
-
-  // Special case: Vehicle titles.
-  if (obj_is_a_vehicle_title(obj))
-    GET_VEHICLE_TITLE_OWNER(obj) = GET_IDNUM(ch);
-
-  // Special case: Visas.
-  if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
-    GET_VISA_OWNER(obj) = GET_IDNUM(ch);
-
-  return TRUE;
+  return soulbind_obj_to_char_by_idnum(obj, GET_IDNUM(ch), including_chargen_soulbinds);
 }
 
 // Returns TRUE if blocked, FALSE otherwise.

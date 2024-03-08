@@ -29,6 +29,7 @@
 #include "ignore_system.hpp"
 #include "lifestyles.hpp"
 #include "chipjacks.hpp"
+#include "quest.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -2260,6 +2261,15 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
 
   // Now that any changes have bubbled up, rectify this object too.
   switch (GET_OBJ_TYPE(obj)) {
+    case ITEM_KEY:
+      // Soulbind any keys that came from quest rewards.
+      for (rnum_t quest_idx = 0; quest_idx <= top_of_questt; quest_idx++) {
+        if (quest_table[quest_idx].reward && quest_table[quest_idx].reward == GET_OBJ_VNUM(obj)) {
+          soulbind_obj_to_char_by_idnum(obj, owner, FALSE);
+          break;
+        }
+      }
+      break;
     case ITEM_DRUG:
       {
         int prior_data;

@@ -4275,6 +4275,7 @@ ACMD(do_show)
                { "wareshops",      LVL_CONSPIRATOR },
                { "smartshops",     LVL_CONSPIRATOR },
                { "powersites",     LVL_VICEPRES },
+               { "fuckykeys",      LVL_ADMIN },
                { "\n", 0 }
              };
 
@@ -4890,6 +4891,36 @@ ACMD(do_show)
         send_to_char(ch, "[^c%6d^n]: Rating ^c%2d^n @ %s^n.\r\n", GET_ROOM_VNUM(room), GET_BACKGROUND_COUNT(room), GET_ROOM_NAME(room));
       }
     }
+  case 31:
+    send_to_char("The following non-key items are used as keys for at least one door in a connected zone:\r\n", ch);
+    {
+      std::unordered_map<vnum_t, bool> seen_items = {};
+
+      for (int idx = 0; idx < top_of_world; idx++) {
+        struct room_data *room = &world[idx];
+
+        if (vnum_from_non_connected_zone(GET_ROOM_VNUM(room)))
+          continue;
+        
+        for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+          if (EXIT2(room, dir) && EXIT2(room, dir)->key && !seen_items[EXIT2(room, dir)->key]) {
+            rnum_t key_rnum = real_object(EXIT2(room, dir)->key);
+            struct obj_data *key_obj = &obj_proto[key_rnum];
+
+            if (key_rnum >= 0 && GET_OBJ_TYPE(key_obj) != ITEM_KEY) {
+              send_to_char(ch, " [%6d] %s (for %ld's %s exit)\r\n",
+                          GET_OBJ_VNUM(key_obj),
+                          GET_OBJ_NAME(key_obj),
+                          GET_ROOM_VNUM(room),
+                          dirs[dir]);
+              
+              seen_items[GET_OBJ_VNUM(key_obj)] = TRUE;
+            }
+          }
+        }
+      }
+    }
+    break;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
     break;

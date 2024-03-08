@@ -172,6 +172,7 @@ bool    blocked_by_soulbinding(struct char_data *ch, struct obj_data *obj, bool 
 const char *get_soulbound_name(struct obj_data *obj);
 idnum_t get_soulbound_idnum(struct obj_data *obj);
 bool    soulbind_obj_to_char(struct obj_data *obj, struct char_data *ch, bool including_chargen_binds);
+bool    soulbind_obj_to_char_by_idnum(struct obj_data *obj, idnum_t idnum, bool including_chargen_soulbinds);
 struct obj_data *find_cyberware(struct char_data *ch, int ware_type);
 struct obj_data *find_bioware(struct char_data *ch, int ware_type);
 long    get_cost_of_obj_and_contents(struct obj_data *obj);
