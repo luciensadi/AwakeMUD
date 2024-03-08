@@ -2677,8 +2677,10 @@ SPECIAL(saeder_guard) {
 
   if (CMD_IS("east") && CAN_SEE(guard, ch) && guard->in_room->number == 4930) {
     for (obj = ch->carrying; obj; obj = obj->next_content)
-      if (GET_OBJ_VNUM(obj) == OBJ_SAEDER_PASS && !blocked_by_soulbinding(ch, obj, TRUE))
+      if (GET_OBJ_VNUM(obj) == OBJ_SAEDER_PASS && !blocked_by_soulbinding(ch, obj, TRUE)) {
+        soulbind_obj_to_char(obj, ch, FALSE);
         found = TRUE;
+      }
 
     if (found)
       perform_move(ch, EAST, LEADER, NULL);
@@ -3298,8 +3300,10 @@ SPECIAL(smiths_bouncer) {
 
   if (CMD_IS("east")) {
     for (obj = ch->carrying; obj; obj = obj->next_content)
-      if (GET_OBJ_VNUM(obj) == OBJ_INVITATION_TO_SMITHS_PUB && !blocked_by_soulbinding(ch, obj, TRUE))
+      if (GET_OBJ_VNUM(obj) == OBJ_INVITATION_TO_SMITHS_PUB && !blocked_by_soulbinding(ch, obj, TRUE)) {
+        soulbind_obj_to_char(obj, ch, FALSE);
         found = TRUE;
+      }
 
     if (found || IS_NPC(ch) || access_level(ch, LVL_ADMIN))
       perform_move(ch, EAST, LEADER, NULL);
@@ -6569,8 +6573,10 @@ SPECIAL(knightcenter_bouncer) {
 
   if (CMD_IS("north")) {
     for (obj = ch->carrying; obj; obj = obj->next_content)
-      if (GET_OBJ_VNUM(obj) == OBJ_ARES_PERSONAL_INVITATION_SLIP && !blocked_by_soulbinding(ch, obj, TRUE))
+      if (GET_OBJ_VNUM(obj) == OBJ_ARES_PERSONAL_INVITATION_SLIP && !blocked_by_soulbinding(ch, obj, TRUE)) {
+        soulbind_obj_to_char(obj, ch, FALSE);
         found = TRUE;
+      }
 
     if (found) {
       act("$n tediously studies the handwriting on the note before waving you through.", FALSE, wendigo, 0, ch, TO_VICT);
