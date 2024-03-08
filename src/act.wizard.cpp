@@ -4908,11 +4908,12 @@ ACMD(do_show)
             struct obj_data *key_obj = &obj_proto[key_rnum];
 
             if (key_rnum >= 0 && GET_OBJ_TYPE(key_obj) != ITEM_KEY) {
-              send_to_char(ch, " [%6d] %s (for %ld's %s exit)\r\n",
+              send_to_char(ch, " [%6d] %s^n (for %ld's %s exit)%s\r\n",
                           GET_OBJ_VNUM(key_obj),
                           GET_OBJ_NAME(key_obj),
                           GET_ROOM_VNUM(room),
-                          dirs[dir]);
+                          dirs[dir],
+                          IS_OBJ_STAT(key_obj, ITEM_EXTRA_NODROP) ? "" : " ^y(droppable)^n");
               
               seen_items[GET_OBJ_VNUM(key_obj)] = TRUE;
             }
