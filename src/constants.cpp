@@ -1892,7 +1892,8 @@ const char *mod_name[NUM_MODS] =
     "Computer3",
     "Phone",
     "Radio",
-    "Mounts"
+    "Mounts",
+    "Manipulator"
   };
 
 const char *engine_types[NUM_ENGINE_TYPES] =
