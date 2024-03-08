@@ -182,7 +182,7 @@ int can_move(struct char_data *ch, int dir, int extra)
   return 1;
 }
 
-bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data *ch, bool we_care_about_sneaking) {
+bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data *ch, bool should_roll_perception) {
   if (!tch) {
     mudlog("SYSERR: Received null tch to s_v_o_s_m_m!", tch, LOG_SYSLOG, TRUE);
     return FALSE;
@@ -219,7 +219,7 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
   }
 
   // Check for stealth and other person-to-person modifiers.
-  if (we_care_about_sneaking) {
+  if (should_roll_perception) {
     int dummy_tn = 2;
     int open_test_result = 0;
     char rbuf[1000];
