@@ -98,8 +98,8 @@ bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_d
 
   // Too big for the grabber
   struct obj_data *grabber = get_veh_grabber(veh);
-  FAILURE_CASE_PRINTF(GET_VEHICLE_MOD_GRABBER_MAX_LOAD(grabber) < GET_OBJ_WEIGHT(obj), "%s is too heavy for %s.",
-                      CAP(GET_OBJ_NAME(obj)), decapitalize_a_an(grabber));
+  FALSE_CASE_PRINTF(GET_VEHICLE_MOD_GRABBER_MAX_LOAD(grabber) < GET_OBJ_WEIGHT(obj), "%s is too heavy for %s.",
+                    CAP(GET_OBJ_NAME(obj)), decapitalize_a_an(grabber));
 
   return TRUE;
 }

@@ -1301,6 +1301,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_VEHICLE_MOD_MOUNT_TYPE(mod)                     (GET_OBJ_VAL((mod), 1))
 #define GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod)            (GET_OBJ_VAL((mod), 1)) // Yes, this is also value 1.
 #define GET_VEHICLE_MOD_RATING(mod)                         (GET_OBJ_VAL((mod), 2))
+#define GET_VEHICLE_MOD_GRABBER_MAX_LOAD(mod)               (GET_VEHICLE_MOD_RATING(mod))
 #define GET_VEHICLE_MOD_RADIO_MAX_CRYPT(mod)                (GET_OBJ_VAL((mod), 3))
 #define GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(mod)             (GET_OBJ_VAL((mod), 4))
 #define GET_VEHICLE_MOD_ENGINE_BITS(mod)                    (GET_OBJ_VAL((mod), 5))

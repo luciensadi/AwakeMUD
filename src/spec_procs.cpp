@@ -2677,7 +2677,7 @@ SPECIAL(saeder_guard) {
 
   if (CMD_IS("east") && CAN_SEE(guard, ch) && guard->in_room->number == 4930) {
     for (obj = ch->carrying; obj; obj = obj->next_content)
-      if (GET_OBJ_VNUM(obj) == 4914)
+      if (GET_OBJ_VNUM(obj) == OBJ_SAEDER_PASS && !blocked_by_soulbinding(ch, obj, TRUE))
         found = TRUE;
 
     if (found)
@@ -3298,7 +3298,7 @@ SPECIAL(smiths_bouncer) {
 
   if (CMD_IS("east")) {
     for (obj = ch->carrying; obj; obj = obj->next_content)
-      if (GET_OBJ_VNUM(obj) == 38094)
+      if (GET_OBJ_VNUM(obj) == OBJ_INVITATION_TO_SMITHS_PUB && !blocked_by_soulbinding(ch, obj, TRUE))
         found = TRUE;
 
     if (found || IS_NPC(ch) || access_level(ch, LVL_ADMIN))
@@ -6569,7 +6569,7 @@ SPECIAL(knightcenter_bouncer) {
 
   if (CMD_IS("north")) {
     for (obj = ch->carrying; obj; obj = obj->next_content)
-      if (GET_OBJ_VNUM(obj) == 19999)
+      if (GET_OBJ_VNUM(obj) == OBJ_ARES_PERSONAL_INVITATION_SLIP && !blocked_by_soulbinding(ch, obj, TRUE))
         found = TRUE;
 
     if (found) {
