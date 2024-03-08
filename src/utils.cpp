@@ -7314,7 +7314,11 @@ bool blocked_by_soulbinding(struct char_data *ch, struct obj_data *obj, bool sen
     return FALSE;
 
   if (send_message) {
-    send_to_char(ch, "You can't use %s: It's a soulbound item from character creation.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    const char *plr_name = get_player_name(soulbound_to);
+    send_to_char(ch, "You can't use %s: It's soulbound to %s.\r\n",
+                 decapitalize_a_an(GET_OBJ_NAME(obj)),
+                 !str_cmp(plr_name, CHARACTER_DELETED_NAME_FOR_SQL) ? "someone else" : plr_name);
+    delete [] plr_name;
   }
   
   return TRUE;
