@@ -32,7 +32,7 @@ int     get_number(char **name, size_t name_len);
 int vnum_from_non_connected_zone(int vnum);
 struct remem *safe_found_mem(struct char_data *rememberer, struct char_data *ch);
 struct remem *unsafe_found_mem(struct remem *mem, struct char_data *ch);
-int recog(struct char_data *ch, struct char_data *i, char *name);
+int recog(struct char_data *ch, struct char_data *i, const char *name);
 void phone_check();
 int find_skill_num(char *name);
 int find_spell_num(char *name);
@@ -69,8 +69,8 @@ void    extract_icon(struct matrix_icon *icon);
 /* ******* characters ********* */
 
 struct char_data *get_char_room(const char *name, struct room_data *room);
-struct char_data *get_char_in_list_vis(struct char_data *ch, char *name, struct char_data *list);
-struct char_data *get_char(char *name);
+struct char_data *get_char_in_list_vis(struct char_data *ch, const char *name, struct char_data *list);
+// struct char_data *get_char(const char *name);
 
 void    char_from_room(struct char_data *ch);
 void    char_to_room(struct char_data *ch, struct room_data *room);
@@ -84,14 +84,14 @@ void	icon_from_host(struct matrix_icon *icon);
 void	icon_to_host(struct matrix_icon *icon, vnum_t to_host);
 
 /* find if character can see */
-struct char_data *get_char_room_vis(struct char_data *ch, char *name);
-struct char_data *get_player_vis(struct char_data *ch, char *name, int inroom);
-struct char_data *get_char_vis(struct char_data *ch, char *name);
-struct char_data *get_char_veh(struct char_data *ch, char *name, struct veh_data *veh);
-struct obj_data *get_obj_in_list_vis(struct char_data *ch, char *name, struct obj_data *list);
-struct obj_data *get_obj_vis(struct char_data *ch, char *name);
+struct char_data *get_char_room_vis(struct char_data *ch, const char *name);
+struct char_data *get_player_vis(struct char_data *ch, const char *name, int inroom);
+struct char_data *get_char_vis(struct char_data *ch, const char *name);
+struct char_data *get_char_veh(struct char_data *ch, const char *name, struct veh_data *veh);
+struct obj_data *get_obj_in_list_vis(struct char_data *ch,const  char *name, struct obj_data *list);
+struct obj_data *get_obj_vis(struct char_data *ch, const char *name);
 struct obj_data *get_object_in_equip_vis(struct char_data *ch,
-          char *arg, struct obj_data *equipment[], int *j);
+          const char *arg, struct obj_data *equipment[], int *j);
 
 struct veh_data *get_veh_list(char *name, struct veh_data *list, struct char_data *ch);
 

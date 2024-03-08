@@ -123,7 +123,7 @@ int     count_color_codes_in_string(const char *str);
 bool    npc_is_protected_by_spec(struct char_data *npc);
 bool    can_damage_vehicle(struct char_data *ch, struct veh_data *veh);
 char *  compose_spell_name(int type, int subtype = -1);
-bool    obj_contains_kept_items(struct obj_data *obj);
+bool    obj_contains_items_with_flag(struct obj_data *obj, int flag);
 void    send_gamewide_annoucement(const char *msg, bool prepend_announcement_string);
 char *  get_printable_mob_unique_id(struct char_data *ch);
 bool    mob_unique_id_matches(mob_unique_id_t id1, mob_unique_id_t id2);
@@ -465,20 +465,21 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_WAS_IN(ch)  ((ch)->was_in_room)
 
-#define GET_VEH_NAME(veh) (veh ? decapitalize_a_an((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE")) : "(null veh)")
-#define GET_VEH_NAME_NOFORMAT(veh) ((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE"))
-#define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
-#define GET_VEH_RNUM(veh) ((veh)->veh_number)
-#define GET_VEH_VNUM(veh) (GET_VEH_RNUM(veh) >= 0 ? veh_index[GET_VEH_RNUM(veh)].vnum : -1)
+#define GET_VEH_NAME(veh)              (veh ? decapitalize_a_an((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE")) : "(null veh)")
+#define GET_VEH_NAME_NOFORMAT(veh)     ((veh)->restring ? (veh)->restring : ((veh)->short_description ? (veh)->short_description : "an ERRONEOUS VEHICLE"))
+#define GET_VEH_DESC(veh)              ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
+#define GET_VEH_RNUM(veh)              ((veh)->veh_number)
+#define GET_VEH_VNUM(veh)              (GET_VEH_RNUM(veh) >= 0 ? veh_index[GET_VEH_RNUM(veh)].vnum : -1)
 #define GET_VEH_DESTRUCTION_TIMER(veh) ((veh)->veh_destruction_timer)
-#define GET_VEH_ROOM_DESC(veh) ((veh)->description)
-#define GET_VEH_DEFPOS(veh) ((veh)->defined_position)
-#define GET_VEH_COST(veh) ((veh)->cost)
-#define GET_OBJ_RAW_NAME(obj) ((obj)->text.name)
-#define GET_OBJ_NAME(obj) (!(obj) ? "<null>" : (obj)->restring ? (obj)->restring : GET_OBJ_RAW_NAME(obj))
-#define GET_OBJ_DESC(obj) ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
-#define GET_KEYWORDS(ch)  ((ch)->player.physical_text.keywords)
-#define GET_NAME(ch)      ((ch)->player.physical_text.name)
+#define GET_VEH_ROOM_DESC(veh)         ((veh)->description)
+#define GET_VEH_DEFPOS(veh)            ((veh)->defined_position)
+#define GET_VEH_COST(veh)              ((veh)->cost)
+#define GET_VEH_IDNUM(veh)             ((veh)->idnum)
+#define GET_OBJ_RAW_NAME(obj)          ((obj)->text.name)
+#define GET_OBJ_NAME(obj)              (!(obj) ? "<null>" : (obj)->restring ? (obj)->restring : GET_OBJ_RAW_NAME(obj))
+#define GET_OBJ_DESC(obj)              ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
+#define GET_KEYWORDS(ch)               ((ch)->player.physical_text.keywords)
+#define GET_NAME(ch)                   ((ch)->player.physical_text.name)
 #define GET_CHAR_NAME(ch) \
   (!(ch) ? "<null>" : \
            ((ch)->desc && (ch)->desc->original) ? (ch)->desc->original->player.char_name : \
@@ -1105,6 +1106,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_DOCWAGON_SOULBOND(focus)                 (GET_OBJ_VAL((focus), 11))
 
 // ITEM_CONTAINER convenience defines
+#define GET_CONTAINER_FLAGS(cont)                 (GET_OBJ_VAL((cont), 1))
 #define GET_CORPSE_IS_PC(corpse)                  (GET_OBJ_VAL((corpse), 4))
 #define GET_CORPSE_IDNUM(corpse)                  (GET_OBJ_VAL((corpse), 5))
 
@@ -1209,6 +1211,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_PROGRAM_ATTACK_DAMAGE(prog)           (GET_OBJ_VAL((prog), 3))
 #define GET_PROGRAM_IS_DEFAULTED(prog)            (GET_OBJ_VAL((prog), 4))
 #define GET_PROGRAM_IS_COOKED(prog)               (GET_OBJ_TIMER((prog)) == 1)
+#define GET_SETTABLE_PROGRAM_IS_COOKED(prog)      (GET_OBJ_TIMER((prog)))
 /* Values 5 through 9 are reserved by the Matrix code too! See GET_DECK_ACCESSORY_FILE_* for details. */
 
 // ITEM_GUN_MAGAZINE convenience defines

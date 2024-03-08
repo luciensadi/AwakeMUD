@@ -2961,7 +2961,7 @@ struct remem *unsafe_found_mem(struct remem *mem, struct char_data *ch)
   return NULL;
 }
 
-int recog(struct char_data *ch, struct char_data *i, char *name)
+int recog(struct char_data *ch, struct char_data *i, const char *name)
 {
   struct remem *mem;
 

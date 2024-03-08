@@ -1569,29 +1569,37 @@ int _apply_negotiation_results_to_basevalue(int ch_successes, int t_successes, i
   if (num > 0) {
     snprintf(rbuf, rbuf_len, "\r\nPC got %d net successes, so basevalue goes from %d", num, basevalue);
     if (buy) {
+      // PC is buying from opponent and rolled well. PC is lowering the price.
       int negotiated_price = basevalue - (num * (basevalue / 20));
       int pct_price_cap = basevalue * 3/4;
       int absolute_price_cap = basevalue - MAX_NUYEN_DISCOUNT_FROM_NEGOTIATION;
-      basevalue = MAX(negotiated_price, MAX(pct_price_cap, absolute_price_cap));
+      // We restrict how low the price can get (MAX)
+      basevalue = MAX(negotiated_price, MIN(pct_price_cap, absolute_price_cap));
     } else {
+      // PC is selling to opponent and rolled well. PC is raising the price.
       int negotiated_price = basevalue + (num * (basevalue / 15));
       int pct_price_cap = basevalue * 5/4;
       int absolute_price_cap = basevalue + MAX_NUYEN_PROFIT_FROM_NEGOTIATION;
-      basevalue = MAX(negotiated_price, MAX(pct_price_cap, absolute_price_cap));
+      // We restrict how high the price can get (MIN)
+      basevalue = MIN(negotiated_price, MIN(pct_price_cap, absolute_price_cap));
     }
   } else {
     num *= -1;
     snprintf(rbuf, rbuf_len, "\r\nNPC got %d net successes, so basevalue goes from %d", num, basevalue);
     if (buy) {
+      // PC is buying from opponent and rolled poorly. Opponent is raising the price.
       int negotiated_price = basevalue + (num * (basevalue / 15));
       int pct_price_cap = basevalue * 5/4;
       int absolute_price_cap = basevalue + MAX_NUYEN_PROFIT_FROM_NEGOTIATION;
-      basevalue = MAX(negotiated_price, MAX(pct_price_cap, absolute_price_cap));
+      // We restrict how high the price can get (MIN)
+      basevalue = MIN(negotiated_price, MIN(pct_price_cap, absolute_price_cap));
     } else {
+      // PC is selling to opponent and rolled poorly. Opponent is lowering the price.
       int negotiated_price = basevalue - (num * (basevalue / 20));
       int pct_price_cap = basevalue * 3/4;
       int absolute_price_cap = basevalue - MAX_NUYEN_DISCOUNT_FROM_NEGOTIATION;
-      basevalue = MAX(negotiated_price, MAX(pct_price_cap, absolute_price_cap));
+      // We restrict how low the price can get (MAX).
+      basevalue = MAX(negotiated_price, MIN(pct_price_cap, absolute_price_cap));
     }
   }
   snprintf(ENDOF(rbuf), rbuf_len - strlen(rbuf), " to %d.", basevalue);
@@ -4866,7 +4874,7 @@ char *compose_spell_name(int type, int subtype) {
   return name_buf;
 }
 
-bool obj_contains_kept_items(struct obj_data *obj) {
+bool obj_contains_items_with_flag(struct obj_data *obj, int flag) {
   if (!obj) {
     mudlog("SYSERR: Received null object to obj_contains_kept_items().", NULL, LOG_SYSLOG, TRUE);
     return FALSE;
@@ -4879,11 +4887,11 @@ bool obj_contains_kept_items(struct obj_data *obj) {
   // Iterate over each item in the content list.
   for (struct obj_data *tmp = obj->contains; tmp; tmp = tmp->next_content) {
     // If this item is kept, return true.
-    if (IS_OBJ_STAT(tmp, ITEM_EXTRA_KEPT))
+    if (IS_OBJ_STAT(tmp, flag))
       return TRUE;
 
     // If this item contains kept items, return true.
-    if (tmp->contains && obj_contains_kept_items(tmp))
+    if (tmp->contains && obj_contains_items_with_flag(tmp, flag))
       return TRUE;
   }
   // We found no kept items- return false.

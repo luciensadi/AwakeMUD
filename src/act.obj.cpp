@@ -433,7 +433,7 @@ ACMD(do_put)
   char arg2[MAX_INPUT_LENGTH];
   struct obj_data *obj, *next_obj, *cont;
   struct char_data *tmp_char;
-  int obj_dotmode, cont_dotmode, found = 0;
+  int obj_dotmode, found = 0;
   bool cyberdeck = FALSE;
   if (IS_WORKING(ch)) {
     send_to_char(TOOBUSY, ch);
@@ -446,8 +446,7 @@ ACMD(do_put)
 
   two_arguments(argument, arg1, arg2);
   obj_dotmode = find_all_dots(arg1, sizeof(arg1));
-  cont_dotmode = find_all_dots(arg2, sizeof(arg2));
-  cont_dotmode++;
+  find_all_dots(arg2, sizeof(arg2));
 
   if (subcmd == SCMD_INSTALL)
     cyberdeck = TRUE;
@@ -1167,27 +1166,13 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
 
   obj_dotmode = find_all_dots(arg, sizeof(arg));
 
-  if (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK)
-  {
-    if (obj_dotmode == FIND_ALL || obj_dotmode == FIND_ALLDOT) {
-      send_to_char("You can't uninstall more than one program at a time!\r\n", ch);
-      return;
-    }
-    obj = get_obj_in_list_vis(ch, arg, cont->contains);
-    if (!obj) {
-      snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s installed in $p.", AN(arg), arg);
-      act(buf, FALSE, ch, cont, 0, TO_CHAR);
-      return;
-    }
-    if (GET_OBJ_TYPE(obj) == ITEM_PART) {
-      if (!confirmed) {
-        send_to_char(ch, "It takes a while to reinstall parts once you've removed them! You'll have to do ^WUNINSTALL <part> <deck> CONFIRM^n to uninstall %s from %s.\r\n",
-                      GET_OBJ_NAME(obj),
-                      GET_OBJ_NAME(cont)
-                    );
-        return;
-      }
-    }
+  if (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK) {
+    FAILURE_CASE(obj_dotmode == FIND_ALL || obj_dotmode == FIND_ALLDOT, "You can't uninstall more than one program at a time.");
+    FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, arg, cont->contains)), "There doesn't seem to be %s %s installed in %s.", AN(arg), arg, decapitalize_a_an(cont));
+    FAILURE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PART && !confirmed, 
+                        "It takes a while to reinstall parts once you've removed them! You'll have to do ^WUNINSTALL <part> <deck> CONFIRM^n to uninstall %s from %s.\r\n",
+                        GET_OBJ_NAME(obj),
+                        GET_OBJ_NAME(cont));
     perform_get_from_container(ch, obj, cont, mode);
     return;
   }
@@ -1203,56 +1188,34 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
       // Staff override.
       send_to_char("You use your staff powers to forcibly complete the encoding process.\r\n", ch);
       GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cont) = 0;
-      GET_OBJ_TIMER(chip) = 1;
+      GET_SETTABLE_PROGRAM_IS_COOKED(chip) = 1;
     }
 
     perform_get_from_container(ch, chip, cont, mode);
     return;
   }
 
-  if ( IS_OBJ_STAT(cont, ITEM_EXTRA_CORPSE) )
-  {
-    if (GET_OBJ_VAL(cont, 4) == 1 && GET_OBJ_VAL(cont, 5) != GET_IDNUM(ch)
-         && !IS_SENATOR(ch)) {
-      send_to_char("You cannot loot this corpse.\r\n",ch);
+  if ( IS_OBJ_STAT(cont, ITEM_EXTRA_CORPSE) ) {
+    FAILURE_CASE_PRINTF(GET_CORPSE_IS_PC(cont) && GET_CORPSE_IDNUM(cont) != GET_IDNUM(ch) && !IS_SENATOR(ch), "You cannot loot %s.", decapitalize_a_an(cont));
+  
+    if (obj_dotmode == FIND_INDIV) {
+      FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, arg, cont->contains)), "There doesn't seem to be %s %s in %s.", AN(arg), arg, decapitalize_a_an(cont));
+      perform_get_from_container(ch, obj, cont, mode);
       return;
-/*    } else if (GET_OBJ_VAL(cont, 4) == 2 && !(PRF_FLAGGED(ch, PRF_PKER)
-               || GET_IDNUM(ch) == GET_OBJ_VAL(cont, 5)) && !IS_SENATOR(ch)) {
-      send_to_char("You cannot loot this corpse.\r\n", ch);
-      return;*/
-    } else {
-      if (obj_dotmode == FIND_INDIV) {
-        if (!(obj = get_obj_in_list_vis(ch, arg, cont->contains))) {
-          snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s in $p.", AN(arg), arg);
-          act(buf, FALSE, ch, cont, 0, TO_CHAR);
-        } else {
-          perform_get_from_container(ch, obj, cont, mode);
-          return;
-        }
-      } else {
-        if (obj_dotmode == FIND_ALLDOT && !*arg) {
-          send_to_char("Get all of what?\r\n", ch);
-          return;
-        }
-        for (obj = cont->contains; obj; obj = next_obj) {
-          next_obj = obj->next_content;
-          if (CAN_SEE_OBJ(ch, obj) &&
-              (obj_dotmode == FIND_ALL || isname(arg, obj->text.keywords))) {
-            found = 1;
-            perform_get_from_container(ch, obj, cont, mode);
-          }
-        }
-        if (!found) {
-          if (obj_dotmode == FIND_ALL)
-            act("$p seems to be empty.", FALSE, ch, cont, 0, TO_CHAR);
-          else {
-            snprintf(buf, sizeof(buf), "You can't seem to find any %ss in $p.", arg);
-            act(buf, FALSE, ch, cont, 0, TO_CHAR);
-          }
-        }
+    } 
+  
+    FAILURE_CASE(obj_dotmode == FIND_ALLDOT && !*arg, "Get all of what?");
+    
+    for (obj = cont->contains; obj; obj = next_obj) {
+      next_obj = obj->next_content;
+      if (CAN_SEE_OBJ(ch, obj) && (obj_dotmode == FIND_ALL || isname(arg, obj->text.keywords))) {
+        found = 1;
+        perform_get_from_container(ch, obj, cont, mode);
       }
-      return;
     }
+
+    FAILURE_CASE_PRINTF(!found && obj_dotmode == FIND_ALL, "%s seems to be empty.", CAP(GET_OBJ_NAME(cont)));
+    FAILURE_CASE_PRINTF(!found && obj_dotmode != FIND_ALL, "You can't seem to find any %s in %s.", arg, decapitalize_a_an(cont));
   }
 
   found = 0;
@@ -1599,7 +1562,6 @@ void get_from_room(struct char_data * ch, char *arg)
   }
 }
 
-#ifdef use_get_while_rigging
 void get_while_rigging(struct char_data *ch, char *argument) {
   struct veh_data *veh;
   char obj_name[MAX_INPUT_LENGTH];
@@ -1609,8 +1571,18 @@ void get_while_rigging(struct char_data *ch, char *argument) {
 
   FAILURE_CASE(!veh, "You must be rigging a vehicle to do that.");
   FAILURE_CASE_PRINTF(!veh_has_grabber(veh), "%s is not equipped with a manipulator arm.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
-  FAILURE_CASE_PRINTF(!veh->in_veh && !veh->in_room, "You have no idea where %s is right now.", GET_VEH_NAME(veh));
   FAILURE_CASE(!*argument, "Get what?");
+
+  if (!veh->in_veh && !veh->in_room) {
+    send_to_char(ch, "You have no idea where %s is right now.", GET_VEH_NAME(veh));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_while_rigging(%s, %s) encountered veh %s (%ld / %ld) with no room or containing veh!",
+                    GET_CHAR_NAME(ch),
+                    argument,
+                    GET_VEH_NAME(veh),
+                    GET_VEH_VNUM(veh),
+                    GET_VEH_IDNUM(veh));
+    return;
+  }
 
   char *remainder = two_arguments(argument, obj_name, container_name);
 
@@ -1627,19 +1599,22 @@ void get_while_rigging(struct char_data *ch, char *argument) {
     if (cont_dotmode == FIND_INDIV) {
       cont = get_obj_in_list_vis(ch, container_name, veh->in_room ? veh->in_room->contents : veh->in_veh->contents);
       FAILURE_CASE_PRINTF(!cont, "You don't see anything named '%s' around your vehicle.", container_name);
-      get_from_container(veh, cont, obj_name, obj_dotmode);
+      FAILURE_CASE_PRINTF(!container_is_vehicle_accessible(cont), "You can't get anything from %s with your manipulator arm.", container_name);
+      // Error messages are sent in veh_get_from_container.
+      veh_get_from_container(veh, cont, obj_name, obj_dotmode, ch);
     } 
     // Otherwise, they want to get from all containers.
     else {
       bool found_containers = FALSE, found_something = FALSE;
       for (struct obj_data *cont = veh->in_room ? veh->in_room->contents : veh->in_veh->contents; cont; cont = cont->next_content) {
-        if (cont_dotmode == FIND_ALL || keyword_appears_in_obj(container_name, cont)) {
+        if ((cont_dotmode == FIND_ALL || keyword_appears_in_obj(container_name, cont)) && container_is_vehicle_accessible(cont)) {
           found_containers = TRUE;
-          found_something |= get_from_container(veh, cont, obj_name, obj_dotmode);
+          // Error messages are sent in veh_get_from_container.
+          found_something |= veh_get_from_container(veh, cont, obj_name, obj_dotmode, ch);
         }
       }
-      FAILURE_CASE(!found_containers, "There's nothing around your vehicle to get something from.");
-      FAILURE_CASE_PRINTF(!found_something, "You don't see anything named '%s' around your vehicle.", obj_name);
+      FAILURE_CASE(!found_containers, "There are no manipulator-accessible containers around your vehicle.");
+      FAILURE_CASE_PRINTF(!found_something, "You don't see anything named '%s' in the manipulator-accessible containers around your vehicle.", obj_name);
     }
     return;
   }
@@ -1648,21 +1623,22 @@ void get_while_rigging(struct char_data *ch, char *argument) {
   if (obj_dotmode == FIND_INDIV) {
     struct obj_data *obj = get_obj_in_list_vis(ch, obj_name, veh->in_room ? veh->in_room->contents : veh->in_veh->contents);
     FAILURE_CASE_PRINTF(!obj, "You don't see anything named '%s' around your vehicle.", obj_name);
-    get_from_room(veh, obj);
+    // Error messages are sent in veh_get_from_room.
+    veh_get_from_room(veh, obj, ch);
   } else {
     bool found_something = FALSE;
     for (struct obj_data *obj = veh->in_room ? veh->in_room->contents : veh->in_veh->contents, *next_obj; obj; obj = next_obj) {
       next_obj = obj->next_content;
-      if (cont_dotmode == FIND_ALL || keyword_appears_in_obj(obj_name, obj)) {
+      if (obj_dotmode == FIND_ALL || keyword_appears_in_obj(obj_name, obj)) {
         found_something = TRUE;
-        get_from_room(veh, obj);
+        // Error messages are sent in veh_get_from_room.
+        veh_get_from_room(veh, obj, ch);
       }
     }
     FAILURE_CASE_PRINTF(!found_something, "You don't see anything named '%s' around your vehicle.", obj_name);
   }
   return;
 }
-#endif
 
 ACMD(do_get)
 {
@@ -1678,12 +1654,10 @@ ACMD(do_get)
 
   FAILURE_CASE(IS_ASTRAL(ch), "You cannot grasp physical objects.");
 
-#ifdef use_get_while_rigging
   if (IS_RIGGING(ch)) {
     get_while_rigging(ch, argument);
     return;
   }
-#endif
 
   const char *remainder = two_arguments(argument, arg1, arg2);
 
@@ -2044,10 +2018,13 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   struct room_data *in_room = get_ch_in_room(ch);
 
   FALSE_CASE(ROOM_FLAGGED(in_room, ROOM_NO_DROP), "The game's administration requests that you do not drop anything here.");
-  FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP), "You can't %s %s, it must be CURSED!", sname, decapitalize_a_an(obj));
+  FALSE_CASE_PRINTF(mode != SCMD_JUNK && IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP), "You can't %s %s, but you can always JUNK it.", sname, decapitalize_a_an(obj));
+  FALSE_CASE_PRINTF(mode != SCMD_JUNK && obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
+                    "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", decapitalize_a_an(obj));
   FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the KEEP command on $p before you can %s it.", sname);
   FALSE_CASE_PRINTF(obj == ch->char_specials.programming, "You can't %s something you are working on.", sname);
-  FALSE_CASE_PRINTF(obj_contains_kept_items(obj) && !IS_SENATOR(ch), "Action blocked: %s contains at least one kept item.", decapitalize_a_an(obj));
+  FALSE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch),
+                    "Action blocked: %s contains at least one kept item. Pull it out and UNKEEP it.", decapitalize_a_an(obj));
 
   // We don't allow donation anymore for a variety of reasons, so we convert it to junking.
   bool mask_junk_messages_as_donate = (mode == SCMD_DONATE);
@@ -2474,24 +2451,14 @@ void _ch_gives_obj_to_vict(struct char_data *ch, struct obj_data *obj, struct ch
 
 bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_data * obj)
 {
-  if (IS_ASTRAL(vict))
-  {
-    act("What use would $E have for $p?!", FALSE, ch, obj, vict, TO_CHAR);
-    return 0;
-  }
-  if (IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP))
-  {
-    act("You can't let go of $p!!  Yeech!", FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
-  }
-  if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch)) {
-    act("You'll have to use the ^WKEEP^n command on $p before you can give it away.", FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
-  }
-  if (obj_contains_kept_items(obj) && !IS_SENATOR(ch)) {
-    act("Action blocked: $p contains at least one kept item.", FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
-  }
+  FALSE_CASE_PRINTF(IS_ASTRAL(vict), "Astral beings can't touch %s.", decapitalize_a_an(obj));
+  FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP), "You can't let go of %s! You can JUNK it if you want to get rid of it.", decapitalize_a_an(obj));
+  FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the ^WKEEP^n command on %s before you can give it away.",
+                    decapitalize_a_an(obj));
+  
+  FALSE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "Action blocked: %s contains at least one kept item.", GET_OBJ_NAME(obj));
+  FALSE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
+                    "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", GET_OBJ_NAME(obj));
 
   if (IS_CARRYING_N(vict) >= CAN_CARRY_N(vict))
   {

@@ -2876,7 +2876,7 @@ void extract_char(struct char_data * ch, bool do_save)
  which incorporate the actual player-data.
  *********************************************************************** */
 
-struct char_data *get_player_vis(struct char_data * ch, char *name, int inroom)
+struct char_data *get_player_vis(struct char_data * ch, const char *name, int inroom)
 {
   std::vector<struct char_data *> pcs = {};
 
@@ -2910,7 +2910,7 @@ struct char_data *get_player_vis(struct char_data * ch, char *name, int inroom)
   return NULL;
 }
 
-struct char_data *get_char_veh(struct char_data * ch, char *name, struct veh_data * veh)
+struct char_data *get_char_veh(struct char_data * ch, const char *name, struct veh_data * veh)
 {
   struct char_data *i;
 
@@ -2926,7 +2926,7 @@ struct char_data *get_char_veh(struct char_data * ch, char *name, struct veh_dat
   return NULL;
 }
 
-struct char_data *get_char_room_vis(struct char_data * ch, char *name)
+struct char_data *get_char_room_vis(struct char_data * ch, const char *name)
 {
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
@@ -2959,7 +2959,7 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
   return NULL;
 }
 
-struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct char_data *list)
+struct char_data *get_char_in_list_vis(struct char_data * ch, const char *name, struct char_data *list)
 {
   int j = 0, number, starting_number;
   char tmpname[MAX_INPUT_LENGTH];
@@ -3000,7 +3000,7 @@ struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct
   return NULL;
 }
 
-struct char_data *get_char_vis(struct char_data * ch, char *name)
+struct char_data *get_char_vis(struct char_data * ch, const char *name)
 {
   struct char_data *i;
   int j = 0, number;
@@ -3036,7 +3036,7 @@ struct char_data *get_char_vis(struct char_data * ch, char *name)
   return NULL;
 }
 
-struct obj_data *get_obj_in_list_vis(struct char_data * ch, char *name, struct obj_data * list)
+struct obj_data *get_obj_in_list_vis(struct char_data * ch, const char *name, struct obj_data * list)
 {
   struct obj_data *i;
   int j = 0, number;
@@ -3063,7 +3063,7 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, char *name, struct o
 }
 
 /* search the entire world for an object, and return a pointer  */
-struct obj_data *get_obj_vis(struct char_data * ch, char *name)
+struct obj_data *get_obj_vis(struct char_data * ch, const char *name)
 {
   struct obj_data *i;
   int number;
@@ -3087,7 +3087,7 @@ struct obj_data *get_obj_vis(struct char_data * ch, char *name)
 }
 
 struct obj_data *get_object_in_equip_vis(struct char_data * ch,
-                                         char *arg, struct obj_data * equipment[], int *j)
+                                         const char *arg, struct obj_data * equipment[], int *j)
 {
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
