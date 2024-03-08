@@ -1576,7 +1576,7 @@ void get_while_rigging(struct char_data *ch, char *argument) {
   RIG_VEH(ch, veh);
 
   FAILURE_CASE(!veh, "You must be rigging a vehicle to do that.");
-  FAILURE_CASE_PRINTF(!veh_has_grabber(veh), "%s is not equipped with a manipulator arm.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+  FAILURE_CASE_PRINTF(!get_veh_grabber(veh), "%s is not equipped with a manipulator arm.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
   FAILURE_CASE(!*argument, "Get what?");
 
   if (!veh->in_veh && !veh->in_room) {

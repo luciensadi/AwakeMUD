@@ -2,13 +2,16 @@
 #include "handler.hpp"
 #include "vehicles.hpp"
 
-bool veh_has_grabber(struct veh_data *veh) {
+bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch);
+bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch, bool from_obj);
+
+struct obj_data *get_veh_grabber(struct veh_data *veh) {
   if (!veh) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Invalid arguments to veh_has_grabber(%s)", GET_VEH_NAME(veh));
-    return FALSE;
+    return NULL;
   }
 
-  return FALSE;
+  return veh->mod[MOD_GRABBER];
 }
 
 bool container_is_vehicle_accessible(struct obj_data *cont) {
@@ -28,34 +31,12 @@ bool veh_can_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_dat
     return FALSE;
   }
 
-  // Failure cases for obj (!TAKE, etc)
-  FALSE_CASE_PRINTF(!CAN_WEAR(obj, ITEM_WEAR_TAKE), "You can't take %s.", decapitalize_a_an(obj));
+  // Error messages sent in function.
+  if (!_can_veh_lift_obj(veh, obj, ch))
+    return FALSE;
 
   // Failure cases for vehicle (too full, etc)
-  // todo
-
-  return TRUE;
-}
-
-// We assume all precondition checking has been done here.
-bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch, bool from_obj) {
-  if (!veh || !obj || !ch) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid arguments to _veh_get_obj(%s, %s, ch)",
-                    GET_VEH_NAME(veh), GET_OBJ_NAME(obj));
-    return FALSE;
-  }
-
-  if (from_obj)
-    obj_from_obj(obj);
-  else
-    obj_from_room(obj);
-
-  obj_to_veh(obj, veh);
-  send_to_char(ch, "You load %s into your vehicle's storage.\r\n", decapitalize_a_an(obj));
-
-  if (veh->people) {
-    send_to_veh("A manipulator arm reaches in and deposits %s.", veh, ch, FALSE, decapitalize_a_an(obj));
-  }
+  FALSE_CASE_PRINTF(veh->usedload + GET_OBJ_WEIGHT(obj) > veh->load, "Your vehicle is too full to hold %s.", decapitalize_a_an(obj));
 
   return TRUE;
 }
@@ -101,4 +82,47 @@ bool veh_get_from_room(struct veh_data *veh, struct obj_data *obj, struct char_d
 
   // Success.
   return _veh_get_obj(veh, obj, ch, FALSE);
+}
+
+/////////// Helper functions and utils.
+
+bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch) {
+  if (!veh || !obj || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid arguments to can_veh_lift_obj(%s, %s, ch)",
+                    GET_VEH_NAME(veh), GET_OBJ_NAME(obj));
+    return FALSE;
+  }
+
+  // Failure cases for obj (!TAKE, etc)
+  FALSE_CASE_PRINTF(!CAN_WEAR(obj, ITEM_WEAR_TAKE), "You can't take %s.", decapitalize_a_an(obj));
+
+  // Too big for the grabber
+  struct obj_data *grabber = get_veh_grabber(veh);
+  FAILURE_CASE_PRINTF(GET_VEHICLE_MOD_GRABBER_MAX_LOAD(grabber) < GET_OBJ_WEIGHT(obj), "%s is too heavy for %s.",
+                      CAP(GET_OBJ_NAME(obj)), decapitalize_a_an(grabber));
+
+  return TRUE;
+}
+
+// We assume all precondition checking has been done here.
+bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch, bool from_obj) {
+  if (!veh || !obj || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid arguments to _veh_get_obj(%s, %s, ch)",
+                    GET_VEH_NAME(veh), GET_OBJ_NAME(obj));
+    return FALSE;
+  }
+
+  if (from_obj)
+    obj_from_obj(obj);
+  else
+    obj_from_room(obj);
+
+  obj_to_veh(obj, veh);
+  send_to_char(ch, "You load %s into your vehicle's storage.\r\n", decapitalize_a_an(obj));
+
+  if (veh->people) {
+    send_to_veh("A manipulator arm reaches in and deposits %s.", veh, ch, FALSE, decapitalize_a_an(obj));
+  }
+
+  return TRUE;
 }
