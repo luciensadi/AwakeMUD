@@ -3460,6 +3460,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("norht", "north"); // this one happened 18 times
   COMMAND_ALIAS("esat", "east"); // this one only 8
   COMMAND_ALIAS("leve", "leave");
+  COMMAND_ALIAS("laeve", "leave");
+  COMMAND_ALIAS("elave", "leave");
   COMMAND_ALIAS("mw", "northwest");
 
   // Common typos and fuckups.
@@ -3496,6 +3498,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("searhc", "search");
   COMMAND_ALIAS("searcch", "search");
   COMMAND_ALIAS("sarch", "search");
+  COMMAND_ALIAS("seach", "search");
   COMMAND_ALIAS("shot", "shoot");
   COMMAND_ALIAS("trian", "train");
   COMMAND_ALIAS("recpa", "recap");
@@ -3517,15 +3520,18 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("senak", "sneak");
   COMMAND_ALIAS("etner", "enter");
   COMMAND_ALIAS("wehre", "where");
+  COMMAND_ALIAS("whre", "where");
   COMMAND_ALIAS("socre", "score");
   COMMAND_ALIAS("dirve", "drive");
   COMMAND_ALIAS("park", "drive");
+  COMMAND_ALIAS("drove", "drive");
   COMMAND_ALIAS("ener", "enter");
   COMMAND_ALIAS("satnd", "stand");
   COMMAND_ALIAS("levae", "leave");
   COMMAND_ALIAS("waer", "wear");
   COMMAND_ALIAS("porbe", "probe");
   COMMAND_ALIAS("lave", "leave");
+  COMMAND_ALIAS("eave", "leave");
   COMMAND_ALIAS("relaod", "reload");
   COMMAND_ALIAS("scpre", "score");
   COMMAND_ALIAS("llook", "look");
@@ -3541,6 +3547,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("stab", "kill");
   COMMAND_ALIAS("unload", "eject");
   COMMAND_ALIAS("fire", "shoot");
+  COMMAND_ALIAS("shoto", "shoot");
 
   // Misc aliases.
   COMMAND_ALIAS("taxi", "hail");
@@ -3586,6 +3593,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unwield", "remove");
   COMMAND_ALIAS("unwear", "remove");
   COMMAND_ALIAS("unequip", "remove");
+  COMMAND_ALIAS("remvoe", "remove");
 
   // Door-unlocking and manipulation commands.
   COMMAND_ALIAS("pick", "bypass");
@@ -3667,6 +3675,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("hepl", "help");
 
   COMMAND_ALIAS("psuh", "push");
+  COMMAND_ALIAS("whpo", "who");
 
   // the weird shit
   COMMAND_ALIAS("whomst've", "who");
