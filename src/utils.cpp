@@ -2378,12 +2378,12 @@ int has_key(struct char_data *ch, int key_vnum)
 
   // Check carried items.
   for (o = ch->carrying; o; o = o->next_content) {
-    if (GET_OBJ_VNUM(o) == key_vnum)
+    if (GET_OBJ_VNUM(o) == key_vnum && !blocked_by_soulbinding(ch, o, TRUE))
       return 1;
 
     if (GET_OBJ_TYPE(o) == ITEM_KEYRING) {
       for (key = o->contains; key; key = key->next_content) {
-        if (GET_OBJ_VNUM(key) == key_vnum)
+        if (GET_OBJ_VNUM(key) == key_vnum && !blocked_by_soulbinding(ch, key, TRUE))
           return 1;
       }
     }
@@ -2396,13 +2396,13 @@ int has_key(struct char_data *ch, int key_vnum)
       continue;
 
     // Direct match?
-    if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum)
+    if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum && !blocked_by_soulbinding(ch, GET_EQ(ch, x), TRUE))
       return 1;
 
     // Keyring match?
     if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_KEYRING) {
       for (key = GET_EQ(ch, x)->contains; key; key = key->next_content) {
-        if (GET_OBJ_VNUM(key) == key_vnum)
+        if (GET_OBJ_VNUM(key) == key_vnum && !blocked_by_soulbinding(ch, key, TRUE))
           return 1;
       }
     }
@@ -7219,6 +7219,8 @@ idnum_t get_soulbound_idnum(struct obj_data *obj) {
       break;
     case ITEM_CYBERDECK:
       return GET_CYBERDECK_SOULBOND(obj);
+    case ITEM_KEY:
+      return GET_KEY_SOULBOND(obj);
   }
 
   // Special case: Vehicle titles.
@@ -7276,6 +7278,9 @@ bool soulbind_obj_to_char(struct obj_data *obj, struct char_data *ch, bool inclu
       // Decks are soulbound in chargen.
       if (including_chargen_soulbinds)
         GET_CYBERDECK_SOULBOND(obj) = GET_IDNUM(ch);
+      break;
+    case ITEM_KEY:
+      GET_KEY_SOULBOND(obj) = GET_IDNUM(ch);
       break;
   }
 

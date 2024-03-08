@@ -122,11 +122,15 @@ bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 
 void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *cont)
 {
-  if (obj == ch->char_specials.programming)
-  {
-    send_to_char(ch, "You can't put something you are working on inside something.\r\n");
-    return;
+  FAILURE_CASE(obj == ch->char_specials.programming, "You can't put something you are working on inside something.");
+
+  if (cont->in_room || cont->in_veh) {
+    FAILURE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
+                        "You can't let go of %s! You can JUNK it if you want to get rid of it.", decapitalize_a_an(obj));
+    FAILURE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
+                        "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", GET_OBJ_NAME(obj));
   }
+  
   if (GET_OBJ_TYPE(cont) == ITEM_WORN)
   {
     if (GET_OBJ_TYPE(obj) == ITEM_SPELL_FORMULA || GET_OBJ_TYPE(obj) == ITEM_DESIGN || GET_OBJ_TYPE(obj) == ITEM_PART)  {
@@ -250,6 +254,8 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       case OBJ_OPTICAL_CHIP_KEY:
       case OBJ_FIBEROPTIC_CRYSTAL:
       case OBJ_UNFINISHED_EQUATION:
+      case OBJ_INVITATION_TO_SMITHS_PUB:
+      case OBJ_ARES_PERSONAL_INVITATION_SLIP:
       case OBJ_SCANEYE:
         send_to_char(ch, "You stare blankly at %s, unable to figure out how to thread it onto a keyring without putting holes in it.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
         return;
@@ -2018,7 +2024,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   struct room_data *in_room = get_ch_in_room(ch);
 
   FALSE_CASE(ROOM_FLAGGED(in_room, ROOM_NO_DROP), "The game's administration requests that you do not drop anything here.");
-  FALSE_CASE_PRINTF(mode != SCMD_JUNK && IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP), "You can't %s %s, but you can always JUNK it.", sname, decapitalize_a_an(obj));
+  FALSE_CASE_PRINTF(mode != SCMD_JUNK && IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch), "You can't %s %s, but you can always JUNK it.", sname, decapitalize_a_an(obj));
   FALSE_CASE_PRINTF(mode != SCMD_JUNK && obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
                     "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", decapitalize_a_an(obj));
   FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the KEEP command on $p before you can %s it.", sname);
@@ -2452,7 +2458,7 @@ void _ch_gives_obj_to_vict(struct char_data *ch, struct obj_data *obj, struct ch
 bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_data * obj)
 {
   FALSE_CASE_PRINTF(IS_ASTRAL(vict), "Astral beings can't touch %s.", decapitalize_a_an(obj));
-  FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP), "You can't let go of %s! You can JUNK it if you want to get rid of it.", decapitalize_a_an(obj));
+  FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch), "You can't let go of %s! You can JUNK it if you want to get rid of it.", decapitalize_a_an(obj));
   FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the ^WKEEP^n command on %s before you can give it away.",
                     decapitalize_a_an(obj));
   

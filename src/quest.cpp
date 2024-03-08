@@ -1084,6 +1084,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
     if (rnum > 0) {
       obj = read_object(rnum, REAL);
       obj_to_char(obj, ch);
+      soulbind_obj_to_char(obj, ch, FALSE);
       act("You give $p to $N.", FALSE, johnson, obj, ch, TO_CHAR);
       act("$n gives you $p.", FALSE, johnson, obj, ch, TO_VICT);
       act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);

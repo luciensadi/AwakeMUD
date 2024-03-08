@@ -1123,6 +1123,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_DRINKCON_POISON_RATING(cont)          (GET_OBJ_VAL((cont), 3))
 
 // ITEM_KEY convenience defines
+#define GET_KEY_SOULBOND(key)                     (GET_OBJ_VAL((key), 3))
 
 // ITEM_FOOD convenience defines
 
