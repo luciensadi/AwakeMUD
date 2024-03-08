@@ -197,8 +197,14 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
   if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || IS_IGNORING(tch, is_blocking_ic_interaction_from, ch))
     return FALSE;
 
-  // If both tch and ch are NPCs, we don't care.
-  if (IS_NPC(tch) && IS_NPC(ch)) {
+  // Ch is astral and not manifest but tch can't see astral
+  if (IS_ASTRAL(ch) && !AFF_FLAGGED(ch, AFF_MANIFEST) && !SEES_ASTRAL(tch)) {
+    return FALSE;
+  }
+
+  // If both tch and ch are NPCs, then we don't care.
+  // Note: player projections are flagged as NPCs.
+  if (IS_NPC(tch) && IS_NPC(ch) && !IS_PROJECT(tch) && !IS_PROJECT(ch)) {
     return FALSE;
   }
 
