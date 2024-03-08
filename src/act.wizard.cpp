@@ -4907,7 +4907,7 @@ ACMD(do_show)
             rnum_t key_rnum = real_object(EXIT2(room, dir)->key);
             struct obj_data *key_obj = &obj_proto[key_rnum];
 
-            if (key_rnum >= 0 && GET_OBJ_TYPE(key_obj) != ITEM_KEY) {
+            if (key_rnum >= 0 && GET_OBJ_TYPE(key_obj) != ITEM_KEY && GET_OBJ_TYPE(key_obj) != ITEM_DECK_ACCESSORY) {
               send_to_char(ch, " [%6d] %s^n (for %ld's %s exit)%s\r\n",
                           GET_OBJ_VNUM(key_obj),
                           GET_OBJ_NAME(key_obj),
