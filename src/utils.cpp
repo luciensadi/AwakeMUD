@@ -1574,7 +1574,7 @@ int _apply_negotiation_results_to_basevalue(int ch_successes, int t_successes, i
       int pct_price_cap = basevalue * 3/4;
       int absolute_price_cap = basevalue - MAX_NUYEN_DISCOUNT_FROM_NEGOTIATION;
       // We restrict how low the price can get (MAX)
-      basevalue = MAX(negotiated_price, MIN(pct_price_cap, absolute_price_cap));
+      basevalue = MAX(negotiated_price, MAX(pct_price_cap, absolute_price_cap));
     } else {
       // PC is selling to opponent and rolled well. PC is raising the price.
       int negotiated_price = basevalue + (num * (basevalue / 15));
@@ -1599,7 +1599,7 @@ int _apply_negotiation_results_to_basevalue(int ch_successes, int t_successes, i
       int pct_price_cap = basevalue * 3/4;
       int absolute_price_cap = basevalue - MAX_NUYEN_DISCOUNT_FROM_NEGOTIATION;
       // We restrict how low the price can get (MAX).
-      basevalue = MAX(negotiated_price, MIN(pct_price_cap, absolute_price_cap));
+      basevalue = MAX(negotiated_price, MAX(pct_price_cap, absolute_price_cap));
     }
   }
   snprintf(ENDOF(rbuf), rbuf_len - strlen(rbuf), " to %d.", basevalue);
