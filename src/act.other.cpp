@@ -2536,6 +2536,11 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
 
 void cedit_parse(struct descriptor_data *d, char *arg)
 {
+  if (check_for_banned_content(arg, CH)) {
+    cedit_disp_menu(d, 0);
+    return;
+  }
+
   char buf3[MAX_STRING_LENGTH*10];
   switch (d->edit_mode)
   {

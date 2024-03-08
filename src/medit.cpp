@@ -921,7 +921,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     break;
 
   case MEDIT_HIGHLIGHT:
-    if (!arg || !*arg) {
+    if (!arg || !*arg || get_string_length_after_color_code_removal(arg, CH) > 0) {
       send_to_char("That's not a valid color code. Leaving it untouched.", CH);
     } else {
       DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(MOB));

@@ -33,6 +33,7 @@
 #include "config.hpp"
 #include "newhouse.hpp"
 #include "creative_works.hpp"
+#include "moderation.hpp"
 
 #define DO_FORMAT_INDENT   1
 #define DONT_FORMAT_INDENT 0
@@ -168,6 +169,7 @@ void format_string(struct descriptor_data *d, int indent)
 void string_add(struct descriptor_data *d, char *str)
 {
   int terminator = 0;
+  bool detected_abort = FALSE;
 
   /* determine if this is the terminal string, and truncate if so */
   /* changed to only accept '@' at the beginning of line - J. Elson 1/17/94 */
@@ -177,54 +179,46 @@ void string_add(struct descriptor_data *d, char *str)
 
   if ((terminator = (*str == '@' && !isalpha(*(str + 1)))))
     *str = '\0';
-  else if (*str == '$')
-  {
-    bool will_abort = !str_cmp(str, "$abort");
-    send_to_char(d->character, "[detected $, str is: '%s' -- will %sabort (str_cmp %s)]",
-                 str,
-                 will_abort ? "" : "NOT ",
-                 !str_cmp(str, "$abort") ? "ok" : "FAIL"
-               );
-    if (will_abort) {
+  else if (*str == '$') {
+    if ((detected_abort = !str_cmp(str, "$abort"))) {
       SEND_TO_Q("Aborted.\r\n", d);
       d->mail_to = 0;
       DELETE_D_STR_IF_EXTANT(d);
-      if (!IS_NPC(d->character))
-        PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_WRITING, ENDBIT);
-      return;
     }
   }
 
-  if (!(*d->str))
-  {
-    if (strlen(str) >= (u_int)d->max_str) {
-      send_to_char("String too long - Truncated.\r\n", d->character);
-      *(str + d->max_str - 1) = '\0';
-      terminator = 1;
-    }
-    *d->str = new char[strlen(str) + 3];
-    strlcpy(*d->str, str, d->max_str);
-  } else
-  {
-    if (strlen(str) + strlen(*d->str) >= (u_int)d->max_str) {
-      send_to_char("String too long.  Last line skipped.\r\n", d->character);
-      terminator = 1;
-    } else {
-      int temp_size = strlen(*d->str) + strlen(str) + 3;
-      char *temp = new char[temp_size];
-      if (!temp) {
-        perror("string_add");
-        shutdown();
-        ;
+  if (!detected_abort) {
+    if (!(*d->str))
+    {
+      if (strlen(str) >= (u_int)d->max_str) {
+        send_to_char("String too long - Truncated.\r\n", d->character);
+        *(str + d->max_str - 1) = '\0';
+        terminator = 1;
       }
-      strlcpy(temp, *d->str, temp_size);
-      strlcat(temp, str, temp_size);
-      delete [] *d->str;
-      *d->str = temp;
+      *d->str = new char[strlen(str) + 3];
+      strlcpy(*d->str, str, d->max_str);
+    } else
+    {
+      if (strlen(str) + strlen(*d->str) >= (u_int)d->max_str) {
+        send_to_char("String too long.  Last line skipped.\r\n", d->character);
+        terminator = 1;
+      } else {
+        int temp_size = strlen(*d->str) + strlen(str) + 3;
+        char *temp = new char[temp_size];
+        if (!temp) {
+          perror("string_add");
+          shutdown();
+          ;
+        }
+        strlcpy(temp, *d->str, temp_size);
+        strlcat(temp, str, temp_size);
+        delete [] *d->str;
+        *d->str = temp;
+      }
     }
   }
 
-  if (terminator)
+  if (terminator || detected_abort)
   {
     extern void iedit_disp_menu(struct descriptor_data *d);
     extern void iedit_disp_extradesc_menu(struct descriptor_data *d);
@@ -245,16 +239,22 @@ void string_add(struct descriptor_data *d, char *str)
 
 // REPLACE_STRING swaps target with d->str if d->str exists (otherwise leaves target alone).
 #define REPLACE_STRING_FORMAT_SPECIFIED(target, format_bit) ({ \
-  if ((d->str)) {                                             \
-    DELETE_ARRAY_IF_EXTANT((target));                         \
-    format_string(d, (format_bit));                           \
-    (target) = str_dup(*d->str);                              \
-    DELETE_D_STR_IF_EXTANT(d);                                \
-  }                                                           \
+  if ((d->str) && !detected_abort) {                           \
+    DELETE_ARRAY_IF_EXTANT((target));                          \
+    format_string(d, (format_bit));                            \
+    (target) = str_dup(*d->str);                               \
+    DELETE_D_STR_IF_EXTANT(d);                                 \
+  }                                                            \
 })
 
 #define REPLACE_STRING(target) (REPLACE_STRING_FORMAT_SPECIFIED(target, DONT_FORMAT_INDENT))
 #define REPLACE_STRING_WITH_INDENTED_FORMATTING(target) (REPLACE_STRING_FORMAT_SPECIFIED(target, DO_FORMAT_INDENT))
+
+
+    if (d->character && d->str && *(d->str) && check_for_banned_content(*(d->str), d->character)) {
+      *(*(d->str)) = '\0';
+      return;
+    }
 
     if (STATE(d) == CON_DECK_CREATE && d->edit_mode == 1) {
       REPLACE_STRING(d->edit_obj->photo);
@@ -266,52 +266,60 @@ void string_add(struct descriptor_data *d, char *str)
       REPLACE_STRING(d->edit_veh->restring_long);
       vehcust_menu(d);
     } else if (STATE(d) == CON_TRIDEO) {
-      (*d->str)[strlen(*d->str)-2] = '\0';
-      snprintf(buf, sizeof(buf), "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str, sizeof(buf2) / sizeof(buf2[0])));
-      mysql_wrapper(mysql, buf);
-      DELETE_D_STR_IF_EXTANT(d);
+      if (!detected_abort) {
+        (*d->str)[strlen(*d->str)-2] = '\0';
+        snprintf(buf, sizeof(buf), "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str, sizeof(buf2) / sizeof(buf2[0])));
+        mysql_wrapper(mysql, buf);
+        DELETE_D_STR_IF_EXTANT(d);
+      }
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_DECORATE_VEH) {
-      if (!d->character->in_veh) {
-        mudlog("SYSERR: Vehicle decoration command completed while not in a vehicle!", d->character, LOG_SYSLOG, TRUE);
-        send_to_char("Sorry, an error has occurred. Your decoration was NOT saved.\r\n", d->character);
-      } else {
-        if (d->character->vfront) {
-          REPLACE_STRING(d->character->in_veh->decorate_front);
+      if (!detected_abort) {
+        if (!d->character->in_veh) {
+          mudlog("SYSERR: Vehicle decoration command completed while not in a vehicle!", d->character, LOG_SYSLOG, TRUE);
+          send_to_char("Sorry, an error has occurred. Your decoration was NOT saved.\r\n", d->character);
         } else {
-          REPLACE_STRING(d->character->in_veh->decorate_rear);
+          if (d->character->vfront) {
+            REPLACE_STRING(d->character->in_veh->decorate_front);
+          } else {
+            REPLACE_STRING(d->character->in_veh->decorate_rear);
+          }
+          DELETE_D_STR_IF_EXTANT(d);
+          send_to_char("OK.\r\n", d->character);
         }
-        DELETE_D_STR_IF_EXTANT(d);
-        send_to_char("OK.\r\n", d->character);
+        save_vehicles(FALSE);
       }
-      save_vehicles(FALSE);
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_DECORATE) {
-      if (!d->character->in_room || !GET_APARTMENT_SUBROOM(d->character->in_room)) {
-        mudlog("SYSERR: Decoration command completed in room without apartment data!", d->character, LOG_SYSLOG, TRUE);
-        send_to_char("Sorry, an error has occurred. Your decoration was NOT saved.\r\n", d->character);
-      } else {
-        GET_APARTMENT_SUBROOM(d->character->in_room)->set_decoration(*d->str);
-        DELETE_D_STR_IF_EXTANT(d);
-        if (!PRF_FLAGGED(d->character, PRF_SCREENREADER)) {
-          look_at_room(d->character, 1, 0);
+      if (!detected_abort) {
+        if (!d->character->in_room || !GET_APARTMENT_SUBROOM(d->character->in_room)) {
+          mudlog("SYSERR: Decoration command completed in room without apartment data!", d->character, LOG_SYSLOG, TRUE);
+          send_to_char("Sorry, an error has occurred. Your decoration was NOT saved.\r\n", d->character);
+        } else {
+          GET_APARTMENT_SUBROOM(d->character->in_room)->set_decoration(*d->str);
+          DELETE_D_STR_IF_EXTANT(d);
+          if (!PRF_FLAGGED(d->character, PRF_SCREENREADER)) {
+            look_at_room(d->character, 1, 0);
+          }
         }
       }
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_TEMPDESC_EDIT) {
-      if (!d->character->in_room) {
-        mudlog("SYSERR: Decoration command completed in non-room!", d->character, LOG_SYSLOG, TRUE);
-        send_to_char("Sorry, an error has occurred. Your decoration was NOT saved.\r\n", d->character);
-      } else {
-        mudlog_vfprintf(d->character, LOG_WIZLOG, "%s set %s (%ld) temp desc to: '''%s^n'''", 
-                        GET_CHAR_NAME(d->character),
-                        GET_ROOM_NAME(d->character->in_room),
-                        GET_ROOM_VNUM(d->character->in_room),
-                        double_up_color_codes(*d->str));
-        set_room_tempdesc(d->character->in_room, *d->str, GET_IDNUM(d->character));
-        DELETE_D_STR_IF_EXTANT(d);
-        if (!PRF_FLAGGED(d->character, PRF_SCREENREADER)) {
-          look_at_room(d->character, 1, 0);
+      if (!detected_abort) {
+        if (!d->character->in_room) {
+          mudlog("SYSERR: Decoration command completed in non-room!", d->character, LOG_SYSLOG, TRUE);
+          send_to_char("Sorry, an error has occurred. Your decoration was NOT saved.\r\n", d->character);
+        } else {
+          mudlog_vfprintf(d->character, LOG_WIZLOG, "%s set %s (%ld) temp desc to: '''%s^n'''", 
+                          GET_CHAR_NAME(d->character),
+                          GET_ROOM_NAME(d->character->in_room),
+                          GET_ROOM_VNUM(d->character->in_room),
+                          double_up_color_codes(*d->str));
+          set_room_tempdesc(d->character->in_room, *d->str, GET_IDNUM(d->character));
+          DELETE_D_STR_IF_EXTANT(d);
+          if (!PRF_FLAGGED(d->character, PRF_SCREENREADER)) {
+            look_at_room(d->character, 1, 0);
+          }
         }
       }
       STATE(d) = CON_PLAYING;
@@ -339,10 +347,12 @@ void string_add(struct descriptor_data *d, char *str)
         medit_disp_menu(d);
         break;
       case MEDIT_REG_DESCR:
-        REPLACE_STRING(d->edit_mob->player.physical_text.room_desc);
-        char candidate = d->edit_mob->player.physical_text.room_desc[MAX(0, strlen(d->edit_mob->player.physical_text.room_desc) - 4)]; // why -4 though?
-        if (!ispunct(candidate))
-          send_to_char(d->character, "^YWARNING: You're missing punctuation at the end of the room desc. (%c is not punctuation)^n\r\n", candidate);
+        if (!detected_abort) {
+          REPLACE_STRING(d->edit_mob->player.physical_text.room_desc);
+          char candidate = d->edit_mob->player.physical_text.room_desc[MAX(0, strlen(d->edit_mob->player.physical_text.room_desc) - 4)]; // why -4 though?
+          if (!ispunct(candidate))
+            send_to_char(d->character, "^YWARNING: You're missing punctuation at the end of the room desc. (%c is not punctuation)^n\r\n", candidate);
+        }
         medit_disp_menu(d);
         break;
       }
@@ -378,11 +388,14 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (STATE(d) == CON_REDIT) {
       switch(d->edit_mode) {
       case REDIT_DESC:
-        format_tabs(d);
-        REPLACE_STRING_WITH_INDENTED_FORMATTING(d->edit_room->description);
+        if (!detected_abort) {
+          format_tabs(d);
+          REPLACE_STRING_WITH_INDENTED_FORMATTING(d->edit_room->description);
+        }
         redit_disp_menu(d);
         break;
       case REDIT_NDESC:
+        if (!detected_abort) {
           format_tabs(d);
           DELETE_ARRAY_IF_EXTANT(d->edit_room->night_desc);
           if (d->str && *d->str) {
@@ -392,6 +405,7 @@ void string_add(struct descriptor_data *d, char *str)
               d->edit_room->night_desc = NULL;
           }
           DELETE_D_STR_IF_EXTANT(d);
+        }
         redit_disp_menu(d);
         break;
       case REDIT_EXTRADESC_DESCRIPTION:
@@ -416,129 +430,141 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (STATE(d) == CON_PCUSTOMIZE || STATE(d) == CON_ACUSTOMIZE || STATE(d) == CON_FCUSTOMIZE) {
       switch(d->edit_mode) {
       case CEDIT_LONG_DESC:
-        if (!d->str || !*d->str || strlen(*d->str) < 2)
-          SEND_TO_Q("Sorry, the minimum length is 2 characters.\r\n", d);
-        else
-          REPLACE_STRING(d->edit_mob->player.physical_text.look_desc);
+        if (!detected_abort) {
+          if (!d->str || !*d->str || strlen(*d->str) < 2)
+            SEND_TO_Q("Sorry, the minimum length is 2 characters.\r\n", d);
+          else
+            REPLACE_STRING(d->edit_mob->player.physical_text.look_desc);
+        }
         cedit_disp_menu(d, 0);
         break;
       case CEDIT_DESC:
-        if (!d->str || !*d->str || strlen(*d->str) < 2)
-          SEND_TO_Q("Sorry, the minimum length is 2 characters.\r\n", d);
-        else
-          REPLACE_STRING(d->edit_mob->player.physical_text.room_desc);
+        if (!detected_abort) {
+          if (!d->str || !*d->str || strlen(*d->str) < 2)
+            SEND_TO_Q("Sorry, the minimum length is 2 characters.\r\n", d);
+          else
+            REPLACE_STRING(d->edit_mob->player.physical_text.room_desc);
+        }
         cedit_disp_menu(d, 0);
         break;
       }
     } else if (STATE(d) == CON_POCKETSEC && d->edit_mode == 19) {
-      struct obj_data *file = NULL;
-      for (file = d->edit_obj->contains; file; file = file->next_content)
-        if (!strcmp(file->restring, "Notes")) {
-          file = file->contains;
-          break;
-        }
-      REPLACE_STRING(file->photo);
+      if (!detected_abort) {
+        struct obj_data *file = NULL;
+        for (file = d->edit_obj->contains; file; file = file->next_content)
+          if (!strcmp(file->restring, "Notes")) {
+            file = file->contains;
+            break;
+          }
+        REPLACE_STRING(file->photo);
+      }
       pocketsec_notemenu(d);
     } else if (PLR_FLAGGED(d->character, PLR_MAILING)) {
-      store_mail(d->mail_to, d->character, *d->str);
-      d->mail_to = 0;
-      DELETE_D_STR_IF_EXTANT(d);
-      SEND_TO_Q("Message sent.\r\n", d);
+        if (!detected_abort) {
+        store_mail(d->mail_to, d->character, *d->str);
+        d->mail_to = 0;
+        DELETE_D_STR_IF_EXTANT(d);
+        SEND_TO_Q("Message sent.\r\n", d);
+      }
       if (!IS_NPC(d->character))
         PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_WRITING, ENDBIT);
       if (STATE(d) == CON_POCKETSEC)
         pocketsec_mailmenu(d);
     }
     if (d->mail_to >= BOARD_MAGIC) {
-      time_t now = time(0);
-      char *tmstr = (char *) asctime(localtime(&now)), tmp[80], time[9];
-      int i, day, month, year;
+      if (!detected_abort) {
+        time_t now = time(0);
+        char *tmstr = (char *) asctime(localtime(&now)), tmp[80], time[9];
+        int i, day, month, year;
 
-      for (i = 0; i < 3; i++)
-        tmp[i] = tmstr[4+i];
-      tmp[3] = '\0';
-      switch (tmp[0]) {
-      case 'A':
-        if (tmp[1] == 'p')
-          month = 4;
+        for (i = 0; i < 3; i++)
+          tmp[i] = tmstr[4+i];
+        tmp[3] = '\0';
+        switch (tmp[0]) {
+        case 'A':
+          if (tmp[1] == 'p')
+            month = 4;
+          else
+            month = 8;
+          break;
+        case 'D':
+          month = 12;
+          break;
+        case 'F':
+          month = 2;
+          break;
+        case 'J':
+          if (tmp[1] == 'a')
+            month = 1;
+          else if (tmp[2] == 'n')
+            month = 6;
+          else
+            month = 7;
+          break;
+        case 'M':
+          if (tmp[2] == 'r')
+            month = 3;
+          else
+            month = 5;
+          break;
+        case 'N':
+          month = 11;
+          break;
+        case 'O':
+          month = 10;
+          break;
+        case 'S':
+          month = 9;
+          break;
+        default:
+          month = 0;
+          break;
+        }
+        for (i = 0; i < 2; i++)
+          tmp[i] = tmstr[8+i];
+        tmp[2] = '\0';
+        day = atoi(tmp);
+        for (i = 0; i < 8; i++)
+          time[i] = tmstr[11+i];
+        time[8] = '\0';
+        for (i = 0; i < 2; i++)
+          tmp[i] = tmstr[22+i];
+        tmp[2] = '\0';
+        year = atoi(tmp);
+
+        if (IS_NPC(d->character))
+          snprintf(tmp, sizeof(tmp), "\r\n--%s (%s/%s%d-%s%d-%s%d)\r\n",
+                  GET_NAME(d->character), time, month < 10 ? "0" : "", month,
+                  day < 10 ? "0" : "", day, year < 10 ? "0" : "", year);
         else
-          month = 8;
-        break;
-      case 'D':
-        month = 12;
-        break;
-      case 'F':
-        month = 2;
-        break;
-      case 'J':
-        if (tmp[1] == 'a')
-          month = 1;
-        else if (tmp[2] == 'n')
-          month = 6;
-        else
-          month = 7;
-        break;
-      case 'M':
-        if (tmp[2] == 'r')
-          month = 3;
-        else
-          month = 5;
-        break;
-      case 'N':
-        month = 11;
-        break;
-      case 'O':
-        month = 10;
-        break;
-      case 'S':
-        month = 9;
-        break;
-      default:
-        month = 0;
-        break;
+          snprintf(tmp, sizeof(tmp), "\r\n--%s (%s/%s%d-%s%d-%s%d)\r\n",
+                  GET_CHAR_NAME(d->character), time, month < 10 ? "0" : "", month,
+                  day < 10 ? "0" : "", day, year < 10 ? "0" : "", year);
+
+        int ptr_length = strlen(*d->str) + strlen(tmp) + 1;
+        char *ptr = new char[ptr_length];
+        if (!ptr) {
+          perror("string_add");
+          shutdown();
+        }
+        strlcpy (ptr, *d->str, ptr_length);
+        strlcat(ptr, tmp, ptr_length);
+        delete [] *d->str;
+        *d->str = ptr;
+        Board_save_board(d->mail_to - BOARD_MAGIC);
+        d->mail_to = 0;
       }
-      for (i = 0; i < 2; i++)
-        tmp[i] = tmstr[8+i];
-      tmp[2] = '\0';
-      day = atoi(tmp);
-      for (i = 0; i < 8; i++)
-        time[i] = tmstr[11+i];
-      time[8] = '\0';
-      for (i = 0; i < 2; i++)
-        tmp[i] = tmstr[22+i];
-      tmp[2] = '\0';
-      year = atoi(tmp);
-
-      if (IS_NPC(d->character))
-        snprintf(tmp, sizeof(tmp), "\r\n--%s (%s/%s%d-%s%d-%s%d)\r\n",
-                GET_NAME(d->character), time, month < 10 ? "0" : "", month,
-                day < 10 ? "0" : "", day, year < 10 ? "0" : "", year);
-      else
-        snprintf(tmp, sizeof(tmp), "\r\n--%s (%s/%s%d-%s%d-%s%d)\r\n",
-                GET_CHAR_NAME(d->character), time, month < 10 ? "0" : "", month,
-                day < 10 ? "0" : "", day, year < 10 ? "0" : "", year);
-
-      int ptr_length = strlen(*d->str) + strlen(tmp) + 1;
-      char *ptr = new char[ptr_length];
-      if (!ptr) {
-        perror("string_add");
-        shutdown();
-      }
-      strlcpy (ptr, *d->str, ptr_length);
-      strlcat(ptr, tmp, ptr_length);
-      delete [] *d->str;
-      *d->str = ptr;
-      Board_save_board(d->mail_to - BOARD_MAGIC);
-      d->mail_to = 0;
     }
     d->str = NULL;
 
     if (!d->connected && d->character && !IS_NPC(d->character))
       PLR_FLAGS(d->character).RemoveBit(PLR_WRITING);
   } else {
-    // Only add a newline if it's not just /**/ with nothing else in it.
-    if (strcmp(*d->str, "/**/") != 0)
-      strlcat(*d->str, "\r\n", d->max_str);
+    if (!detected_abort) {
+      // Only add a newline if it's not just /**/ with nothing else in it.
+      if (strcmp(*d->str, "/**/") != 0)
+        strlcat(*d->str, "\r\n", d->max_str);
+    }
   }
 }
 

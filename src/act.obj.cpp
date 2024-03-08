@@ -30,6 +30,7 @@
 #include "invis_resistance_tests.hpp"
 #include "quest.hpp"
 #include "redit.hpp"
+#include "vehicles.hpp"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -1290,7 +1291,7 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
   }
 }
 
-int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool download)
+int perform_get_from_room(struct char_data * ch, struct obj_data * obj)
 {
   if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY) {
     switch (GET_DECK_ACCESSORY_TYPE(obj)) {
@@ -1415,13 +1416,13 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
   return 1;
 }
 
-void get_from_room(struct char_data * ch, char *arg, bool download)
+void get_from_room(struct char_data * ch, char *arg)
 {
   struct obj_data *obj, *next_obj;
   int dotmode, found = 0;
   dotmode = find_all_dots(arg, sizeof(arg));
 
-  if (dotmode == FIND_INDIV || download)
+  if (dotmode == FIND_INDIV)
   {
     if (ch->in_veh)
       obj = get_obj_in_list_vis(ch, arg, ch->in_veh->contents);
@@ -1556,7 +1557,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
           }
         }
         else {
-          perform_get_from_room(ch, obj, FALSE);
+          perform_get_from_room(ch, obj);
         }
         found = 1;
       }
@@ -1584,7 +1585,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
              && GET_OBJ_VAL(obj, 5) != GET_IDNUM(ch) && !access_level(ch, LVL_FIXER) )
           send_to_char("It's not yours chummer...better leave it be.\r\n",ch);
         else {
-          perform_get_from_room(ch, obj, FALSE);
+          perform_get_from_room(ch, obj);
         }
       }
     }
@@ -1598,6 +1599,71 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
   }
 }
 
+#ifdef use_get_while_rigging
+void get_while_rigging(struct char_data *ch, char *argument) {
+  struct veh_data *veh;
+  char obj_name[MAX_INPUT_LENGTH];
+  char container_name[MAX_INPUT_LENGTH];
+
+  RIG_VEH(ch, veh);
+
+  FAILURE_CASE(!veh, "You must be rigging a vehicle to do that.");
+  FAILURE_CASE_PRINTF(!veh_has_grabber(veh), "%s is not equipped with a manipulator arm.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+  FAILURE_CASE_PRINTF(!veh->in_veh && !veh->in_room, "You have no idea where %s is right now.", GET_VEH_NAME(veh));
+  FAILURE_CASE(!*argument, "Get what?");
+
+  char *remainder = two_arguments(argument, obj_name, container_name);
+
+  FAILURE_CASE(!*obj_name, "Syntax: GET <name>; or GET <name> FROM <container>");
+
+  int obj_dotmode = find_all_dots(obj_name, sizeof(obj_name));
+
+  // GET X [from] Y
+  if (*container_name) {
+    struct obj_data *cont;
+    int cont_dotmode = find_all_dots(container_name, sizeof(container_name));
+
+    // If the mode is FIND_INDIV, they want to get from one contianer, potentially prefixed with a number dot.
+    if (cont_dotmode == FIND_INDIV) {
+      cont = get_obj_in_list_vis(ch, container_name, veh->in_room ? veh->in_room->contents : veh->in_veh->contents);
+      FAILURE_CASE_PRINTF(!cont, "You don't see anything named '%s' around your vehicle.", container_name);
+      get_from_container(veh, cont, obj_name, obj_dotmode);
+    } 
+    // Otherwise, they want to get from all containers.
+    else {
+      bool found_containers = FALSE, found_something = FALSE;
+      for (struct obj_data *cont = veh->in_room ? veh->in_room->contents : veh->in_veh->contents; cont; cont = cont->next_content) {
+        if (cont_dotmode == FIND_ALL || keyword_appears_in_obj(container_name, cont)) {
+          found_containers = TRUE;
+          found_something |= get_from_container(veh, cont, obj_name, obj_dotmode);
+        }
+      }
+      FAILURE_CASE(!found_containers, "There's nothing around your vehicle to get something from.");
+      FAILURE_CASE_PRINTF(!found_something, "You don't see anything named '%s' around your vehicle.", obj_name);
+    }
+    return;
+  }
+
+  // GET X
+  if (obj_dotmode == FIND_INDIV) {
+    struct obj_data *obj = get_obj_in_list_vis(ch, obj_name, veh->in_room ? veh->in_room->contents : veh->in_veh->contents);
+    FAILURE_CASE_PRINTF(!obj, "You don't see anything named '%s' around your vehicle.", obj_name);
+    get_from_room(veh, obj);
+  } else {
+    bool found_something = FALSE;
+    for (struct obj_data *obj = veh->in_room ? veh->in_room->contents : veh->in_veh->contents, *next_obj; obj; obj = next_obj) {
+      next_obj = obj->next_content;
+      if (cont_dotmode == FIND_ALL || keyword_appears_in_obj(obj_name, obj)) {
+        found_something = TRUE;
+        get_from_room(veh, obj);
+      }
+    }
+    FAILURE_CASE_PRINTF(!found_something, "You don't see anything named '%s' around your vehicle.", obj_name);
+  }
+  return;
+}
+#endif
+
 ACMD(do_get)
 {
   char arg1[MAX_INPUT_LENGTH];
@@ -1608,69 +1674,57 @@ ACMD(do_get)
   struct obj_data *cont, *obj, *temp, *shop = NULL;
   struct veh_data *veh = NULL;
   struct char_data *tmp_char;
-  bool cyberdeck = FALSE, download = FALSE;
+  bool cyberdeck = (subcmd == SCMD_UNINSTALL);
 
-  if (IS_ASTRAL(ch)) {
-    send_to_char("You cannot grasp physical objects.\r\n", ch);
+  FAILURE_CASE(IS_ASTRAL(ch), "You cannot grasp physical objects.");
+
+#ifdef use_get_while_rigging
+  if (IS_RIGGING(ch)) {
+    get_while_rigging(ch, argument);
     return;
   }
+#endif
 
-  if (subcmd == SCMD_UNINSTALL)
-    cyberdeck = TRUE;
   const char *remainder = two_arguments(argument, arg1, arg2);
 
-  if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
-    send_to_char("Your arms are already full!\r\n", ch);
-  else if (!*arg1) {
-    send_to_char(ch, "%s what?\r\n", (cyberdeck ? "Uninstall" : (download ? "Download" : "Get")));
-  } else if (!str_cmp(arg1, "tooth")) {
-    for (cont = ch->cyberware; cont; cont = cont->next_content)
-      if (GET_CYBERWARE_TYPE(cont) == CYB_TOOTHCOMPARTMENT)
-        break;
-    if (!cont)
-      send_to_char("You don't have a tooth compartment.\r\n", ch);
-    else if (!cont->contains)
-      send_to_char("There's nothing in there.\r\n", ch);
-    else if (success_test(GET_QUI(ch), 4) <= 0)
-      send_to_char("You can't seem to get it out.\r\n", ch);
-    else {
-      obj = cont->contains;
-      obj_from_obj(obj);
-      obj_to_char(obj, ch);
-      send_to_char(ch, "You remove %s from your tooth compartment.\r\n", GET_OBJ_NAME(obj));
-      act("$n reaches into $s mouth and removes $p.", TRUE, ch, 0, obj, TO_ROOM);
+  FAILURE_CASE(IS_CARRYING_N(ch) >= CAN_CARRY_N(ch), "Your arms are already full! Try putting something in a container first.");
+  FAILURE_CASE_PRINTF(!*arg1, "%s what?", (cyberdeck ? "Uninstall" : "Get"));
+ 
+  // Cyberware compartments.
+  bool is_tooth = !str_cmp(arg1, "tooth");
+  bool is_fingertip = !str_cmp(arg1, "finger");
+  bool is_body = !str_cmp(arg1, "body");
+  if (is_tooth || is_fingertip || is_body) {
+    if (is_tooth) {
+      FAILURE_CASE(!(cont = find_cyberware(ch, CYB_TOOTHCOMPARTMENT)), "You don't have a tooth compartment.");
+      FAILURE_CASE(!cont->contains, "Your tooth compartment is empty.");
+    } else if (is_fingertip) {
+      FAILURE_CASE(!(cont = find_cyberware(ch, CYB_FINGERTIP)), "You don't have a fingertip compartment.");
+      FAILURE_CASE(!cont->contains, "Your fingertip compartment is empty.");
+    } else {
+      FAILURE_CASE(!(cont = find_cyberware(ch, CYB_BODYCOMPART)), "You don't have a body compartment.");
+      FAILURE_CASE(!cont->contains, "Your body compartment is empty.");
     }
-  } else if (!str_cmp(arg1, "finger")) {
-    for (cont = ch->cyberware; cont; cont = cont->next_content)
-      if (GET_CYBERWARE_TYPE(cont) == CYB_FINGERTIP)
-        break;
-    if (!cont)
-      send_to_char("You don't have a fingertip compartment.\r\n", ch);
-    else if (!cont->contains)
-      send_to_char("There's nothing in there.\r\n", ch);
-    else {
-      obj = cont->contains;
-      obj_from_obj(obj);
-      obj_to_char(obj, ch);
-      send_to_char(ch, "You remove %s from your fingertip compartment.\r\n", GET_OBJ_NAME(obj));
-      act("$n removes $P from a fingertip compartment.", TRUE, ch, 0, obj, TO_ROOM);
+
+    obj = cont->contains;
+    obj_from_obj(obj);
+    obj_to_char(obj, ch);
+
+    if (is_tooth) {
+      send_to_char(ch, "You remove %s from your tooth compartment.\r\n", decapitalize_a_an(obj));
+      act("$n reaches into $s mouth and removes $p.", TRUE, ch, obj, obj, TO_ROOM);
+    } else if (is_fingertip) {
+      send_to_char(ch, "You remove %s from your fingertip compartment.\r\n", decapitalize_a_an(obj));
+      act("$n removes $p from a fingertip compartment.", TRUE, ch, obj, obj, TO_ROOM);
+    } else {
+      send_to_char(ch, "You remove %s from your body compartment.\r\n", decapitalize_a_an(obj));
+      act("$n removes $p from a body compartment.", TRUE, ch, obj, obj, TO_ROOM);
     }
-  } else if (!str_cmp(arg1, "body")) {
-    for (cont = ch->cyberware; cont; cont = cont->next_content)
-      if (GET_CYBERWARE_TYPE(cont) == CYB_BODYCOMPART)
-        break;
-    if (!cont)
-      send_to_char("You don't have a body compartment.\r\n", ch);
-    else if (!cont->contains)
-      send_to_char("There's nothing in there.\r\n", ch);
-    else {
-      obj = cont->contains;
-      obj_from_obj(obj);
-      obj_to_char(obj, ch);
-      send_to_char(ch, "You remove %s from your body compartment.\r\n", GET_OBJ_NAME(obj));
-      act("$n removes $p from a body compartment.", TRUE, ch, 0, obj, TO_ROOM);
-    }
-  } else if (!*arg2 || download) {
+    return;
+  }
+  
+  // GET <name>.
+  if (!*arg2) {
     // Prevent ambiguous 'take drug' command.
     if (subcmd == SCMD_TAKE) {
       for (int i = MIN_DRUG; i < NUM_DRUGS; i++) {
@@ -1680,259 +1734,260 @@ ACMD(do_get)
         }
       }
     }
-    get_from_room(ch, arg1, download);
-  } else {
-    cont_dotmode = find_all_dots(arg2, sizeof(arg2));
-    if (cont_dotmode == FIND_INDIV) {
-      mode = generic_find(arg2, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &tmp_char, &cont);
-      if (!ch->in_veh || (ch->in_veh->flags.IsSet(VFLAG_WORKSHOP) && !ch->vfront))
-        veh = get_veh_list(arg2, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
-      if (cyberdeck && veh) {
-        cont = NULL;
-        if (!veh->owner || (veh->locked && veh->owner != GET_IDNUM(ch))) {
-          snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-          act(buf, FALSE, ch, 0, 0, TO_ROOM);
-          send_to_char(buf, ch);
-          return;
-        }
-        if (veh->cspeed > SPEED_OFF) {
-          send_to_char("It's moving a little fast...\r\n", ch);
-          return;
-        }
-        for (found = 0; found < NUM_MODS; found++) {
-          if (GET_MOD(veh, found)) {
-            if (isname(arg1, GET_MOD(veh, found)->text.name)) {
-              cont = GET_MOD(veh, found);
-              break;
-            }
-          }
-        }
-        if (!cont && veh->mount) {
-          for (obj = veh->mount; obj; obj = obj->next_content)
-            if (isname(arg1, obj->text.name)) {
-              cont = obj;
-              cont_dotmode = 1;
-              break;
-            }
-        }
-        if (!cont) {
-          send_to_char(ch, "There doesn't seem to be %s %s installed on %s.\r\n",
-                       (is_abbrev(arg1, "autonav") || is_abbrev(arg1, "gridguide")) ? "an aftermarket" : AN(arg1),
-                       arg1,
-                       GET_VEH_NAME(veh));
-          return;
-        } else {
-          if (!IS_NPC(ch)) {
-            skill = get_br_skill_for_veh(veh);
+    get_from_room(ch, arg1);
+    return;
+  }
 
-            switch (GET_VEHICLE_MOD_TYPE(cont)) {
-            case TYPE_ENGINECUST:
-              target = 6;
-              break;
-            case TYPE_TURBOCHARGER:
-              target = 2 + GET_OBJ_VAL(cont, 2);
-              break;
-            case TYPE_AUTONAV:
-              target = 8 - veh->handling;
-              break;
-            case TYPE_CMC:
-            case TYPE_DRIVEBYWIRE:
-              target = 10 - veh->handling;
-              break;
-            case TYPE_ARMOR:
-            case TYPE_CONCEALEDARMOR:
-              target = (int)(GET_OBJ_VAL(cont, 2) / 3);
-              break;
-            case TYPE_ROLLBARS:
-            case TYPE_TIRES:
-            case TYPE_MISC:
-            case TYPE_POKEYSTICK:
-              target = 3;
-              break;
-            case TYPE_AUTOPILOT:
-              target = 8 - veh->handling;
-              break;
-            default:
-              target = 4;
-              break;
-            }
-            skill = get_skill(ch, skill, target);
-            target += modify_target(ch);
-            kit = has_kit(ch, TYPE_VEHICLE);
-            if ((shop = find_workshop(ch, TYPE_VEHICLE)))
-              kit = GET_OBJ_VAL(shop, 0);
-            if (!kit && !shop) {
-              send_to_char("You don't have any tools here for working on vehicles.\r\n", ch);
-              return;
-            }
-            if (kit < mod_types[GET_OBJ_VAL(cont, 0)].tools) {
-              send_to_char(ch, "You don't have the right tools for that job.\r\n");
-              return;
-            } else if (mod_types[GET_OBJ_VAL(cont, 0)].tools == TYPE_KIT) {
-              if (kit == TYPE_WORKSHOP)
-                target--;
-              else if (kit == TYPE_FACILITY)
-                target -= 3;
-            } else if (mod_types[GET_OBJ_VAL(cont, 0)].tools == TYPE_WORKSHOP && kit == TYPE_FACILITY)
-              target--;
-            if (GET_OBJ_VAL(cont, 0) == TYPE_ENGINECUST)
-              veh->engine = 0;
-            if (success_test(skill, target) < 1) {
-              send_to_char(ch, "You can't figure out how to uninstall %s. \r\n", GET_OBJ_NAME(cont));
-              return;
-            }
-          }
-          if (GET_VEHICLE_MOD_TYPE(cont) == TYPE_MOUNT) {
-            // Check to see if anyone is manning it.
-            if (cont->worn_by) {
-              send_to_char(ch, "Someone is manning %s.\r\n", GET_OBJ_NAME(cont));
-              return;
-            }
-            // Make sure it's empty.
-            if (cont->contains) {
-              send_to_char(ch, "You'll have to remove the weapon from %s first.\r\n", GET_OBJ_NAME(cont));
-              return;
-            }
-          }
-          snprintf(buf, sizeof(buf), "$n goes to work on %s.", GET_VEH_NAME(veh));
-          send_to_char(ch, "You go to work on %s and remove %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(cont));
-          act(buf, TRUE, ch, 0, 0, TO_ROOM);
-          if (found == MOD_SEAT && cont->affected[0].modifier > 1) {
-            cont->affected[0].modifier--;
-            affect_veh(veh, cont->affected[0].location, -1);
-            obj = read_object(GET_OBJ_VNUM(cont), VIRTUAL);
-            cont = obj;
-          } else if (cont_dotmode) {
-            REMOVE_FROM_LIST(cont, veh->mount, next_content)
-            switch (GET_OBJ_VAL(cont, 1)) {
-              case 1:
-                sig = 1;
-                // fall through
-              case 0:
-                bod++;
-                load = 10;
-                break;
-              case 3:
-                sig = 1;
-                // fall through
-              case 2:
-                bod += 2;
-                load = 10;
-                break;
-              case 4:
-                sig = 1;
-                bod += 4;
-                load = 100;
-                break;
-              case 5:
-                sig = 1;
-                bod += 2;
-                load = 25;
-                break;
-            }
-            veh->sig += sig;
-            veh->usedload -= load;
-          } else {
-            if (GET_VEHICLE_MOD_TYPE(cont) == TYPE_AUTONAV) {
-              veh->autonav -= GET_VEHICLE_MOD_RATING(cont);
-            }
-            veh->usedload -= GET_OBJ_VAL(cont, 1);
-            GET_MOD(veh, found) = NULL;
-            int rnum = real_vehicle(GET_VEH_VNUM(veh));
-            if (rnum <= -1)
-              send_to_char(ch, "Bro, your vehicle is _fucked_. Contact staff.\r\n");
-
-            for (found = 0; found < MAX_OBJ_AFFECT; found++) {
-              affect_veh(veh, cont->affected[found].location, -(cont->affected[found].modifier));
-
-              switch (cont->affected[found].location) {
-                case VAFF_SEN:
-                  if (veh->sensor <= 0)
-                    affect_veh(veh, VAFF_SEN, rnum >= 0 ? veh_proto[rnum].sensor : 0);
-                  break;
-                case VAFF_AUTO:
-                  if (veh->autonav <= 0)
-                    affect_veh(veh, VAFF_AUTO, rnum >= 0 ? veh_proto[rnum].autonav : 0);
-                  break;
-                case VAFF_PILOT:
-                  if (veh->pilot <= 0)
-                    affect_veh(veh, VAFF_PILOT, rnum >= 0 ? veh_proto[rnum].pilot : 0);
-                  break;
-              }
-            }
-          }
-          obj_to_char(cont, ch);
-          return;
-        }
-      } else if (!cont) {
-        send_to_char(ch, "You don't have %s %s.\r\n", AN(arg2), arg2);
-      } else if (  (!cyberdeck && !( GET_OBJ_TYPE(cont) == ITEM_CONTAINER 
-                                     || GET_OBJ_TYPE(cont) == ITEM_KEYRING 
-                                     || GET_OBJ_TYPE(cont) == ITEM_QUIVER 
-                                     || GET_OBJ_TYPE(cont) == ITEM_HOLSTER 
-                                     || GET_OBJ_TYPE(cont) == ITEM_WORN)) 
-                 || (cyberdeck && !( GET_OBJ_TYPE(cont) == ITEM_CYBERDECK 
-                                      || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK
-                                      || GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)))
-      {
-        if (!cyberdeck && GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cont) == TYPE_COOKER) {
-          // QOL: Treat it as uninstall.
-          get_from_container(ch, cont, arg1, mode, is_abbrev("confirm", remainder));
-        } else {
-          snprintf(buf, sizeof(buf), "$p is not a %s.", (!cyberdeck ? "container" : "cyberdeck"));
-          act(buf, FALSE, ch, cont, 0, TO_CHAR);
-
-          if (access_level(ch, LVL_ADMIN) && !str_cmp(arg1, "force-all")) {
-            send_to_char("Hoping you know what you're doing, you forcibly remove its contents anyways.\r\n", ch);
-            struct obj_data *next;
-            for (struct obj_data *contained = cont->contains; contained; contained = next) {
-              next = contained->next_content;
-              obj_from_obj(contained);
-              obj_to_char(contained, ch);
-              send_to_char(ch, "You retrieve %s from %s.\r\n", GET_OBJ_NAME(contained), GET_OBJ_NAME(cont));
-            }
-          }
-        }
-      } else {
-        get_from_container(ch, cont, arg1, mode, is_abbrev("confirm", remainder));
-      }
-    } else {
-      if (cont_dotmode == FIND_ALLDOT && !*arg2) {
-        send_to_char("Get from all of what?\r\n", ch);
+  cont_dotmode = find_all_dots(arg2, sizeof(arg2));
+  if (cont_dotmode == FIND_INDIV) {
+    mode = generic_find(arg2, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &tmp_char, &cont);
+    if (!ch->in_veh || (ch->in_veh->flags.IsSet(VFLAG_WORKSHOP) && !ch->vfront))
+      veh = get_veh_list(arg2, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
+    if (cyberdeck && veh) {
+      cont = NULL;
+      if (!veh->owner || (veh->locked && veh->owner != GET_IDNUM(ch))) {
+        snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+        send_to_char(buf, ch);
         return;
       }
-      for (cont = ch->carrying; cont; cont = cont->next_content)
-        if (CAN_SEE_OBJ(ch, cont) &&
-            (cont_dotmode == FIND_ALL || isname(arg2, cont->text.keywords))) {
-          if ((!cyberdeck && (GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING)) ||
-              (cyberdeck && (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK))) {
-            found = 1;
-            get_from_container(ch, cont, arg1, FIND_OBJ_INV);
-          } else if (cont_dotmode == FIND_ALLDOT) {
-            found = 1;
-            snprintf(buf, sizeof(buf), "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
-            act(buf, FALSE, ch, cont, 0, TO_CHAR);
-          }
-        }
-      FOR_ITEMS_AROUND_CH(ch, cont) {
-        if (CAN_SEE_OBJ(ch, cont) &&
-            (cont_dotmode == FIND_ALL || isname(arg2, cont->text.keywords))) {
-          if (GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING) {
-            get_from_container(ch, cont, arg1, FIND_OBJ_ROOM);
-            found = 1;
-          } else if (cont_dotmode == FIND_ALLDOT) {
-            snprintf(buf, sizeof(buf), "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
-            act(buf, FALSE, ch, cont, 0, TO_CHAR);
-            found = 1;
+      if (veh->cspeed > SPEED_OFF) {
+        send_to_char("It's moving a little fast...\r\n", ch);
+        return;
+      }
+      for (found = 0; found < NUM_MODS; found++) {
+        if (GET_MOD(veh, found)) {
+          if (isname(arg1, GET_MOD(veh, found)->text.name)) {
+            cont = GET_MOD(veh, found);
+            break;
           }
         }
       }
-      if (!found) {
-        if (cont_dotmode == FIND_ALL) {
-          send_to_char(ch, "You can't seem to find any %s.\r\n", (!cyberdeck ? "containers" : "cyberdeck"));
-        } else {
-          send_to_char(ch, "You can't seem to find any %ss here.\r\n", arg2);
+      if (!cont && veh->mount) {
+        for (obj = veh->mount; obj; obj = obj->next_content)
+          if (isname(arg1, obj->text.name)) {
+            cont = obj;
+            cont_dotmode = 1;
+            break;
+          }
+      }
+      if (!cont) {
+        send_to_char(ch, "There doesn't seem to be %s %s installed on %s.\r\n",
+                      (is_abbrev(arg1, "autonav") || is_abbrev(arg1, "gridguide")) ? "an aftermarket" : AN(arg1),
+                      arg1,
+                      GET_VEH_NAME(veh));
+        return;
+      } else {
+        if (!IS_NPC(ch)) {
+          skill = get_br_skill_for_veh(veh);
+
+          switch (GET_VEHICLE_MOD_TYPE(cont)) {
+          case TYPE_ENGINECUST:
+            target = 6;
+            break;
+          case TYPE_TURBOCHARGER:
+            target = 2 + GET_OBJ_VAL(cont, 2);
+            break;
+          case TYPE_AUTONAV:
+            target = 8 - veh->handling;
+            break;
+          case TYPE_CMC:
+          case TYPE_DRIVEBYWIRE:
+            target = 10 - veh->handling;
+            break;
+          case TYPE_ARMOR:
+          case TYPE_CONCEALEDARMOR:
+            target = (int)(GET_OBJ_VAL(cont, 2) / 3);
+            break;
+          case TYPE_ROLLBARS:
+          case TYPE_TIRES:
+          case TYPE_MISC:
+          case TYPE_POKEYSTICK:
+            target = 3;
+            break;
+          case TYPE_AUTOPILOT:
+            target = 8 - veh->handling;
+            break;
+          default:
+            target = 4;
+            break;
+          }
+          skill = get_skill(ch, skill, target);
+          target += modify_target(ch);
+          kit = has_kit(ch, TYPE_VEHICLE);
+          if ((shop = find_workshop(ch, TYPE_VEHICLE)))
+            kit = GET_OBJ_VAL(shop, 0);
+          if (!kit && !shop) {
+            send_to_char("You don't have any tools here for working on vehicles.\r\n", ch);
+            return;
+          }
+          if (kit < mod_types[GET_OBJ_VAL(cont, 0)].tools) {
+            send_to_char(ch, "You don't have the right tools for that job.\r\n");
+            return;
+          } else if (mod_types[GET_OBJ_VAL(cont, 0)].tools == TYPE_KIT) {
+            if (kit == TYPE_WORKSHOP)
+              target--;
+            else if (kit == TYPE_FACILITY)
+              target -= 3;
+          } else if (mod_types[GET_OBJ_VAL(cont, 0)].tools == TYPE_WORKSHOP && kit == TYPE_FACILITY)
+            target--;
+          if (GET_OBJ_VAL(cont, 0) == TYPE_ENGINECUST)
+            veh->engine = 0;
+          if (success_test(skill, target) < 1) {
+            send_to_char(ch, "You can't figure out how to uninstall %s. \r\n", GET_OBJ_NAME(cont));
+            return;
+          }
         }
+        if (GET_VEHICLE_MOD_TYPE(cont) == TYPE_MOUNT) {
+          // Check to see if anyone is manning it.
+          if (cont->worn_by) {
+            send_to_char(ch, "Someone is manning %s.\r\n", GET_OBJ_NAME(cont));
+            return;
+          }
+          // Make sure it's empty.
+          if (cont->contains) {
+            send_to_char(ch, "You'll have to remove the weapon from %s first.\r\n", GET_OBJ_NAME(cont));
+            return;
+          }
+        }
+        snprintf(buf, sizeof(buf), "$n goes to work on %s.", GET_VEH_NAME(veh));
+        send_to_char(ch, "You go to work on %s and remove %s.\r\n", GET_VEH_NAME(veh), GET_OBJ_NAME(cont));
+        act(buf, TRUE, ch, 0, 0, TO_ROOM);
+        if (found == MOD_SEAT && cont->affected[0].modifier > 1) {
+          cont->affected[0].modifier--;
+          affect_veh(veh, cont->affected[0].location, -1);
+          obj = read_object(GET_OBJ_VNUM(cont), VIRTUAL);
+          cont = obj;
+        } else if (cont_dotmode) {
+          REMOVE_FROM_LIST(cont, veh->mount, next_content)
+          switch (GET_OBJ_VAL(cont, 1)) {
+            case 1:
+              sig = 1;
+              // fall through
+            case 0:
+              bod++;
+              load = 10;
+              break;
+            case 3:
+              sig = 1;
+              // fall through
+            case 2:
+              bod += 2;
+              load = 10;
+              break;
+            case 4:
+              sig = 1;
+              bod += 4;
+              load = 100;
+              break;
+            case 5:
+              sig = 1;
+              bod += 2;
+              load = 25;
+              break;
+          }
+          veh->sig += sig;
+          veh->usedload -= load;
+        } else {
+          if (GET_VEHICLE_MOD_TYPE(cont) == TYPE_AUTONAV) {
+            veh->autonav -= GET_VEHICLE_MOD_RATING(cont);
+          }
+          veh->usedload -= GET_OBJ_VAL(cont, 1);
+          GET_MOD(veh, found) = NULL;
+          int rnum = real_vehicle(GET_VEH_VNUM(veh));
+          if (rnum <= -1)
+            send_to_char(ch, "Bro, your vehicle is _fucked_. Contact staff.\r\n");
+
+          for (found = 0; found < MAX_OBJ_AFFECT; found++) {
+            affect_veh(veh, cont->affected[found].location, -(cont->affected[found].modifier));
+
+            switch (cont->affected[found].location) {
+              case VAFF_SEN:
+                if (veh->sensor <= 0)
+                  affect_veh(veh, VAFF_SEN, rnum >= 0 ? veh_proto[rnum].sensor : 0);
+                break;
+              case VAFF_AUTO:
+                if (veh->autonav <= 0)
+                  affect_veh(veh, VAFF_AUTO, rnum >= 0 ? veh_proto[rnum].autonav : 0);
+                break;
+              case VAFF_PILOT:
+                if (veh->pilot <= 0)
+                  affect_veh(veh, VAFF_PILOT, rnum >= 0 ? veh_proto[rnum].pilot : 0);
+                break;
+            }
+          }
+        }
+        obj_to_char(cont, ch);
+        return;
+      }
+    } else if (!cont) {
+      send_to_char(ch, "You don't have %s %s.\r\n", AN(arg2), arg2);
+    } else if (  (!cyberdeck && !( GET_OBJ_TYPE(cont) == ITEM_CONTAINER 
+                                    || GET_OBJ_TYPE(cont) == ITEM_KEYRING 
+                                    || GET_OBJ_TYPE(cont) == ITEM_QUIVER 
+                                    || GET_OBJ_TYPE(cont) == ITEM_HOLSTER 
+                                    || GET_OBJ_TYPE(cont) == ITEM_WORN)) 
+                || (cyberdeck && !( GET_OBJ_TYPE(cont) == ITEM_CYBERDECK 
+                                    || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK
+                                    || GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)))
+    {
+      if (!cyberdeck && GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cont) == TYPE_COOKER) {
+        // QOL: Treat it as uninstall.
+        get_from_container(ch, cont, arg1, mode, is_abbrev("confirm", remainder));
+      } else {
+        snprintf(buf, sizeof(buf), "$p is not a %s.", (!cyberdeck ? "container" : "cyberdeck"));
+        act(buf, FALSE, ch, cont, 0, TO_CHAR);
+
+        if (access_level(ch, LVL_ADMIN) && !str_cmp(arg1, "force-all")) {
+          send_to_char("Hoping you know what you're doing, you forcibly remove its contents anyways.\r\n", ch);
+          struct obj_data *next;
+          for (struct obj_data *contained = cont->contains; contained; contained = next) {
+            next = contained->next_content;
+            obj_from_obj(contained);
+            obj_to_char(contained, ch);
+            send_to_char(ch, "You retrieve %s from %s.\r\n", GET_OBJ_NAME(contained), GET_OBJ_NAME(cont));
+          }
+        }
+      }
+    } else {
+      get_from_container(ch, cont, arg1, mode, is_abbrev("confirm", remainder));
+    }
+  } else {
+    if (cont_dotmode == FIND_ALLDOT && !*arg2) {
+      send_to_char("Get from all of what?\r\n", ch);
+      return;
+    }
+    for (cont = ch->carrying; cont; cont = cont->next_content)
+      if (CAN_SEE_OBJ(ch, cont) &&
+          (cont_dotmode == FIND_ALL || isname(arg2, cont->text.keywords))) {
+        if ((!cyberdeck && (GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING)) ||
+            (cyberdeck && (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK))) {
+          found = 1;
+          get_from_container(ch, cont, arg1, FIND_OBJ_INV);
+        } else if (cont_dotmode == FIND_ALLDOT) {
+          found = 1;
+          snprintf(buf, sizeof(buf), "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
+          act(buf, FALSE, ch, cont, 0, TO_CHAR);
+        }
+      }
+    FOR_ITEMS_AROUND_CH(ch, cont) {
+      if (CAN_SEE_OBJ(ch, cont) &&
+          (cont_dotmode == FIND_ALL || isname(arg2, cont->text.keywords))) {
+        if (GET_OBJ_TYPE(cont) == ITEM_CONTAINER || GET_OBJ_TYPE(cont) == ITEM_KEYRING) {
+          get_from_container(ch, cont, arg1, FIND_OBJ_ROOM);
+          found = 1;
+        } else if (cont_dotmode == FIND_ALLDOT) {
+          snprintf(buf, sizeof(buf), "$p is not a %s", (!cyberdeck ? "container" : "cyberdeck"));
+          act(buf, FALSE, ch, cont, 0, TO_CHAR);
+          found = 1;
+        }
+      }
+    }
+    if (!found) {
+      if (cont_dotmode == FIND_ALL) {
+        send_to_char(ch, "You can't seem to find any %s.\r\n", (!cyberdeck ? "containers" : "cyberdeck"));
+      } else {
+        send_to_char(ch, "You can't seem to find any %ss here.\r\n", arg2);
       }
     }
   }

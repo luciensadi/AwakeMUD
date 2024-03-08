@@ -157,7 +157,13 @@ ACMD(do_debug) {
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
 
-  if (is_abbrev(arg1, "fuckingshitballsammotest")) {
+  if (is_abbrev(arg1, "stripcolor")) {
+    const char *colorized = "^ccerulean ^yyellow ^rred^oand^Wwhite^n ^[F123]x^[F124]t^[F125]e^[F543]r^[F210]m";
+    send_to_char(ch, "Stripping color from '%s^n' gives '%s'.\r\n", colorized, get_string_after_color_code_removal(colorized, ch));
+    return;
+  }
+
+  if (is_abbrev(arg1, "ammotest")) {
     FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "no");
     // is it elegant? no.  does it answer questions? maybe.  does it work well? ...also no
 
