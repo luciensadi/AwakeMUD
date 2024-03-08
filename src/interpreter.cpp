@@ -1835,13 +1835,7 @@ ACMD(do_alias)
 
       // TODO: No overwriting any command in any command set. (iterate through each command set looking for lower-case matches, deny if found)
 
-      /* Should cover every possbile case of 'kill', 'hit', and 'murder', but allow through 'killing' from killing hands. */
-      else if ( (str_str(repl, "kill") || str_str(repl, "hit") || str_str(repl, "murder")) && !str_str(repl, "killing") && strlen(arg) < 4 ) {
-        send_to_char(
-          "If your alias contains the 'kill', 'hit', or 'murder' commands,"
-          " it must be accompanied by at least a 4 letter alias.\n\r",ch);
-        return;
-      } else if ( str_str(repl, "quit") ) {
+      else if ( str_str(repl, "quit") ) {
         send_to_char("Aliases cannot contain the 'quit' command.\n\r",ch);
         return;
       }
