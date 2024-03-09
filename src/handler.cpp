@@ -2681,6 +2681,31 @@ void extract_char(struct char_data * ch, bool do_save)
     }
   }
 
+  // Clear sustained spells.
+  if (GET_SUSTAINED(ch)) {
+    if (IS_PC_CONJURED_ELEMENTAL(ch)) {
+      for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+        if (d->character && GET_IDNUM(d->character) == GET_ACTIVE(ch)) {
+          for (struct sustain_data *sust = GET_SUSTAINED(d->character); sust; sust = sust->next) {
+            if (sust->spirit == ch) {
+              end_sustained_spell(d->character, sust);
+              break;
+            }
+          }
+          break;
+        }
+      }
+      GET_SUSTAINED(ch) = NULL;
+    } else {
+      end_all_sustained_spells(ch);
+
+      // Sanity check: They must not have any spells left after this.
+      if (GET_SUSTAINED(ch)) {
+        mudlog("SYSERR: We still have spells after extract_char spell purge!!", ch, LOG_SYSLOG, TRUE);
+      }
+    }
+  }
+
   /* transfer objects to room, if any */
   while (ch->carrying)
   {
@@ -2756,31 +2781,6 @@ void extract_char(struct char_data * ch, bool do_save)
       for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = next) {
         next = ssust->next;
         stop_spirit_power(ssust->target, ssust->type);
-      }
-    }
-  }
-
-  // Clear sustained spells.
-  if (GET_SUSTAINED(ch)) {
-    if (IS_PC_CONJURED_ELEMENTAL(ch)) {
-      for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-        if (d->character && GET_IDNUM(d->character) == GET_ACTIVE(ch)) {
-          for (struct sustain_data *sust = GET_SUSTAINED(d->character); sust; sust = sust->next) {
-            if (sust->spirit == ch) {
-              end_sustained_spell(d->character, sust);
-              break;
-            }
-          }
-          break;
-        }
-      }
-      GET_SUSTAINED(ch) = NULL;
-    } else {
-      end_all_sustained_spells(ch);
-
-      // Sanity check: They must not have any spells left after this.
-      if (GET_SUSTAINED(ch)) {
-        mudlog("SYSERR: We still have spells after extract_char spell purge!!", ch, LOG_SYSLOG, TRUE);
       }
     }
   }

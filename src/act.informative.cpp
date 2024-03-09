@@ -2434,6 +2434,7 @@ void look_in_direction(struct char_data * ch, int dir)
 
 void look_in_obj(struct char_data * ch, char *arg, bool exa)
 {
+  struct char_data *fake_ch_for_rigging = ch;
   struct obj_data *obj = NULL;
   struct char_data *dummy = NULL;
   struct veh_data *veh = NULL;
@@ -2444,12 +2445,32 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
     return;
   }
 
+  if (IS_RIGGING(ch)) {
+    struct veh_data *rigged = NULL;
+    RIG_VEH(ch, rigged);
+
+    if (rigged) {
+      fake_ch_for_rigging = read_mobile(3, VIRTUAL);
+
+      if (rigged->in_room)
+        char_to_room(fake_ch_for_rigging, rigged->in_room);
+      else if (rigged->in_veh) {
+        char_to_veh(rigged->in_veh, fake_ch_for_rigging);
+        fake_ch_for_rigging->vfront = FALSE;
+      }
+      else {
+        send_to_char(ch, "Your vehicle is being towed.\r\n");
+        return;
+      }
+    }
+  }
+
   // Find the specified thing. Vehicle will take priority over object.
-  bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP, ch, &dummy, &obj);
-  if (ch->in_veh) {
-    veh = get_veh_list(arg, ch->in_veh->carriedvehs, ch);
+  bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP, fake_ch_for_rigging, &dummy, &obj);
+  if (fake_ch_for_rigging->in_veh) {
+    veh = get_veh_list(arg, fake_ch_for_rigging->in_veh->carriedvehs, ch);
   } else {
-    veh = get_veh_list(arg, ch->in_room->vehicles, ch);
+    veh = get_veh_list(arg, fake_ch_for_rigging->in_room->vehicles, ch);
   }
 
   if (!bits && !veh) {
@@ -2458,6 +2479,8 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
     } else {
       send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg), arg);
     }
+    if (fake_ch_for_rigging && fake_ch_for_rigging != ch)
+      extract_char(fake_ch_for_rigging);
     return;
   }
 
@@ -2491,6 +2514,9 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
     look_in_veh(ch);
     ch->in_veh = curr_in_veh;
     ch->vfront = curr_vfront;
+
+    if (fake_ch_for_rigging && fake_ch_for_rigging != ch)
+      extract_char(fake_ch_for_rigging);
     return;
   } else if ((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) &&
              (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&
@@ -2509,6 +2535,8 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
       send_to_char(ch, "It contains %d %s.\r\n",
                    GET_AMMOBOX_QUANTITY(obj),
                    get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj), ch));
+      if (fake_ch_for_rigging && fake_ch_for_rigging != ch)
+        extract_char(fake_ch_for_rigging);
       return;
     } else if (GET_OBJ_TYPE(obj) == ITEM_WORN || GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
       send_to_char(GET_OBJ_NAME(obj), ch);
@@ -2532,6 +2560,8 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
                GET_OBJ_TYPE(obj) == ITEM_QUIVER || GET_OBJ_TYPE(obj) == ITEM_KEYRING) {
       if (IS_SET(GET_OBJ_VAL(obj, 1), CONT_CLOSED)) {
         send_to_char("It is closed.\r\n", ch);
+        if (fake_ch_for_rigging && fake_ch_for_rigging != ch)
+          extract_char(fake_ch_for_rigging);
         return;
       } else {
         if (!exa) {
@@ -2562,6 +2592,9 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
       }
     }
   }
+
+  if (fake_ch_for_rigging && fake_ch_for_rigging != ch)
+    extract_char(fake_ch_for_rigging);
 }
 
 char *find_exdesc(char *word, struct extra_descr_data * list)
@@ -4701,7 +4734,7 @@ ACMD(do_score)
               "Accel:%3d\r\n"
               "Sig:%3d\r\n"
               "Sensors:%3d\r\n"
-              "Load (used / total): %.2f / %.2f\r\n",
+              "Load (used / total): %d / %d\r\n",
               GET_VEH_NAME(veh),
               veh->damage,
               (int)(GET_MENTAL(ch) / 100), (int)(GET_MAX_MENTAL(ch) / 100),
@@ -4716,7 +4749,7 @@ ACMD(do_score)
               veh->accel,
               veh->sig,
               veh->sensor,
-              veh->usedload, veh->load);
+              (int) veh->usedload, (int) veh->load);
     } else {
       snprintf(buf, sizeof(buf), "You are rigging %s.\r\n", GET_VEH_NAME(veh));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Damage:^R%3d/10^n      Mental:^B%3d(%2d)^n\r\n"
@@ -4726,12 +4759,13 @@ ACMD(do_score)
               "  Handling:%3d    Speed: %s @ %3d km/h\r\n"
               "     Accel:%3d      Sig:%3d\r\n"
               "   Sensors:%3d\r\n"
-              "      Load:%.2f/%.2f\r\n",
+              "      Load:%d/%d\r\n",
               veh->damage, (int)(GET_MENTAL(ch) / 100),
               (int)(GET_MAX_MENTAL(ch) / 100), GET_REA(ch), GET_INT(ch),
               GET_WIL(ch), veh->body, veh->armor, veh->autonav,
               veh->handling, veh_speeds[veh->cspeed], get_speed(veh), veh->accel, veh->sig,
-              veh->sensor, veh->usedload, veh->load);
+              veh->sensor,
+              (int) veh->usedload, (int) veh->load);
     }
   } else {
     // Switches for the specific score types.

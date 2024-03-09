@@ -7,6 +7,7 @@ extern void list_obj_to_char(struct obj_data * list, struct char_data * ch, int 
 
 bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch);
 bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch, struct obj_data *from_obj);
+bool _veh_can_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch);
 
 struct obj_data *get_veh_grabber(struct veh_data *veh) {
   if (!veh) {
@@ -27,35 +28,10 @@ bool container_is_vehicle_accessible(struct obj_data *cont) {
   return GET_OBJ_TYPE(cont) == ITEM_CONTAINER;
 }
 
-bool veh_can_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch) {
-  if (!veh || !obj || !ch) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid arguments to can_veh_get_obj(%s, %s, ch)",
-                    GET_VEH_NAME(veh), GET_OBJ_NAME(obj));
-    return FALSE;
-  }
-
-  // Error messages sent in function.
-  if (!can_take_obj_from_room(ch, obj))
-    return FALSE;
-
-  // Error messages sent in function.
-  if (!_can_veh_lift_obj(veh, obj, ch))
-    return FALSE;
-
-  // No picking up nuyen.
-  FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_MONEY && !GET_ITEM_MONEY_IS_CREDSTICK(obj),
-             "Your mechanical clampers fumble the loose change and bills, spilling them everywhere.");
-
-  // Failure cases for vehicle (too full, etc)
-  FALSE_CASE_PRINTF(veh->usedload + GET_OBJ_WEIGHT(obj) > veh->load, "Your vehicle is too full to hold %s.", decapitalize_a_an(obj));
-
-  return TRUE;
-}
-
-bool veh_get_from_container(struct veh_data *veh, struct obj_data *cont, const char *obj_name, int dotmode, struct char_data *ch) {
+bool veh_get_from_container(struct veh_data *veh, struct obj_data *cont, const char *obj_name, int obj_dotmode, struct char_data *ch) {
   if (!veh || !cont || !obj_name || !*obj_name || !ch) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid arguments to veh_get_from_container(%s, %s, %s, %d, ch)",
-                    GET_VEH_NAME(veh), GET_OBJ_NAME(cont), obj_name, dotmode);
+                    GET_VEH_NAME(veh), GET_OBJ_NAME(cont), obj_name, obj_dotmode);
     return FALSE;
   }
 
@@ -66,17 +42,34 @@ bool veh_get_from_container(struct veh_data *veh, struct obj_data *cont, const c
   FALSE_CASE_PRINTF(IS_SET(GET_CONTAINER_FLAGS(cont), CONT_CLOSED), "%s is closed.", CAP(GET_OBJ_NAME(cont)));
   FALSE_CASE_PRINTF(!cont->contains, "%s is empty.", CAP(GET_OBJ_NAME(cont)));
 
-  // Obj failure cases (not found, etc)
-  struct obj_data *obj = get_obj_in_list_vis(ch, obj_name, cont->contains);
-  FALSE_CASE_PRINTF(!obj, "You don't see anything named '%s' in %s.", obj_name, decapitalize_a_an(cont));
+  if (obj_dotmode == FIND_INDIV) {
+    // Find the object.
+    struct obj_data *obj = get_obj_in_list_vis(ch, obj_name, cont->contains);
+    FALSE_CASE_PRINTF(!obj, "You don't see anything named '%s' in %s.", obj_name, decapitalize_a_an(cont));
 
-  // Obj / vehicle combined failure cases. Error messages are sent in-function.
-  if (!veh_can_get_obj(veh, obj, ch)) {
-    return FALSE;
+    // Obj / vehicle combined failure cases. Error messages are sent in-function.
+    if (!_veh_can_get_obj(veh, obj, ch)) {
+      return FALSE;
+    }
+
+    // Success.  
+    return _veh_get_obj(veh, obj, ch, cont);
+  } else {
+    bool found_something = FALSE;
+    for (struct obj_data *obj = cont->contains, *next_obj; obj; obj = next_obj) {
+      next_obj = obj->next_content;
+      if (obj_dotmode == FIND_ALL || keyword_appears_in_obj(obj_name, obj)) {
+        found_something = TRUE;
+        // Error messages are sent in _veh_can_get_obj.
+        if (!_veh_can_get_obj(veh, obj, ch))
+          continue;
+          
+        _veh_get_obj(veh, obj, ch, cont);
+      }
+    }
+    FALSE_CASE_PRINTF(!found_something, "You don't see anything named '%s' in %s.", obj_name, decapitalize_a_an(cont));
+    return TRUE;
   }
-
-  // Success.  
-  return _veh_get_obj(veh, obj, ch, cont);
 }
 
 bool veh_get_from_room(struct veh_data *veh, struct obj_data *obj, struct char_data *ch) {
@@ -87,7 +80,7 @@ bool veh_get_from_room(struct veh_data *veh, struct obj_data *obj, struct char_d
   }
 
   // Obj / vehicle combined failure cases. Error messages are sent in-function.
-  if (!veh_can_get_obj(veh, obj, ch)) {
+  if (!_veh_can_get_obj(veh, obj, ch)) {
     return FALSE;
   }
 
@@ -104,9 +97,55 @@ void vehicle_inventory(struct char_data *ch) {
   send_to_char(ch, "%s is carrying:\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
   list_obj_to_char(veh->contents, ch, SHOW_MODE_IN_INVENTORY, TRUE, FALSE);
 
-  for (struct veh_data *carried = veh->carriedvehs; carried; carried = carried->next_veh) {
+  if (veh->carriedvehs) {
+    send_to_char(ch, "\r\n%s is also carrying:\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+    for (struct veh_data *carried = veh->carriedvehs; carried; carried = carried->next_veh) {
     send_to_char(ch, "^y%s%s^n\r\n", GET_VEH_NAME(carried), carried->owner == GET_IDNUM(ch) ? " ^Y(yours)" : "");
   }
+  }
+}
+
+bool veh_drop_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch) {
+  if (!veh || !obj || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid arguments to veh_drop_obj(%s, %s, ch)",
+                    GET_VEH_NAME(veh), GET_OBJ_NAME(obj));
+    return FALSE;
+  }
+  
+  // Error messages sent in function.
+  if (!can_take_obj_from_room(ch, obj))
+    return FALSE;
+
+  // Obj / vehicle combined failure cases. Error messages are sent in-function.
+  if (!_can_veh_lift_obj(veh, obj, ch)) {
+    return FALSE;
+  }
+
+  char msg_buf[1000];
+
+  obj_from_room(obj);
+
+  if (veh->in_room)
+    obj_to_room(obj, veh->in_room);
+  else
+    obj_to_veh(obj, veh->in_veh);
+
+  send_to_char(ch, "You drop %s.\r\n", decapitalize_a_an(obj));
+  
+  // Message others.
+  snprintf(msg_buf, sizeof(msg_buf), "%s's manipulator arm deposits %s here.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)), decapitalize_a_an(obj));
+  if (veh->in_room) {
+    send_to_room(msg_buf, veh->in_room, veh);
+  } else {
+    send_to_veh(msg_buf, veh->in_veh, ch, TRUE);
+  }
+
+  // Message passengers.
+  if (veh->people) {
+    send_to_veh("The manipulator arm reaches in and lifts out %s.", veh, ch, FALSE, decapitalize_a_an(obj));
+  }
+
+  return TRUE;
 }
 
 /////////// Helper functions and utils.
@@ -120,6 +159,10 @@ bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_d
 
   // Failure cases for obj (!TAKE, etc)
   FALSE_CASE_PRINTF(!CAN_WEAR(obj, ITEM_WEAR_TAKE), "You can't take %s.", decapitalize_a_an(obj));
+
+  // No picking up nuyen.
+  FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_MONEY && !GET_ITEM_MONEY_IS_CREDSTICK(obj),
+             "Your mechanical clampers fumble the loose change and bills, spilling them everywhere.");
 
   // Too heavy for your vehicle's body rating
   FALSE_CASE_PRINTF(GET_OBJ_WEIGHT(obj) > veh->body * veh->body * 20, "%s is too heavy for your vehicle's chassis.");
@@ -168,6 +211,27 @@ bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *
   if (veh->people) {
     send_to_veh("The manipulator arm reaches in and deposits %s.", veh, ch, FALSE, decapitalize_a_an(obj));
   }
+
+  return TRUE;
+}
+
+bool _veh_can_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch) {
+  if (!veh || !obj || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid arguments to can_veh_get_obj(%s, %s, ch)",
+                    GET_VEH_NAME(veh), GET_OBJ_NAME(obj));
+    return FALSE;
+  }
+
+  // Error messages sent in function.
+  if (!can_take_obj_from_room(ch, obj))
+    return FALSE;
+
+  // Error messages sent in function.
+  if (!_can_veh_lift_obj(veh, obj, ch))
+    return FALSE;
+
+  // Failure cases for vehicle (too full, etc)
+  FALSE_CASE_PRINTF(veh->usedload + GET_OBJ_WEIGHT(obj) > veh->load, "Your vehicle is too full to hold %s.", decapitalize_a_an(obj));
 
   return TRUE;
 }

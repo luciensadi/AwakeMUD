@@ -1265,11 +1265,15 @@ bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj) {
     switch (GET_DECK_ACCESSORY_TYPE(obj)) {
       case TYPE_COMPUTER:
         // You can only get computers that are not in use.
-        for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
+        for (struct char_data *vict = obj->in_veh ? obj->in_veh->people : obj->in_room->people;
+             vict;
+             vict = vict->in_veh ? vict->next_in_veh : vict->next_in_room)
+        {
           if (vict->char_specials.programming && vict->char_specials.programming->in_obj == obj) {
             FALSE_CASE_PRINTF(vict == ch, "You are using %s already.", decapitalize_a_an(obj));
             FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
           }
+        }
         break;
       case TYPE_COOKER:
         // Cookers can't be cooking.
@@ -1282,19 +1286,27 @@ bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj) {
     switch (GET_MAGIC_TOOL_TYPE(obj)) {
       case TYPE_LIBRARY_SPELL:
         // Nobody can be spelldesigning.
-        for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
+        for (struct char_data *vict = obj->in_veh ? obj->in_veh->people : obj->in_room->people;
+             vict;
+             vict = vict->in_veh ? vict->next_in_veh : vict->next_in_room)
+        {
           if (AFF_FLAGGED(vict, AFF_SPELLDESIGN)) {
             FALSE_CASE_PRINTF(vict == ch, "You are using %s to design your spell.", decapitalize_a_an(obj));
             FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
           }
+        }
         break;
       case TYPE_LIBRARY_CONJURE:
         // Nobody can be conjuring.
-        for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
+        for (struct char_data *vict = obj->in_veh ? obj->in_veh->people : obj->in_room->people;
+             vict;
+             vict = vict->in_veh ? vict->next_in_veh : vict->next_in_room)
+        {
           if (AFF_FLAGGED(vict, AFF_CONJURE)) {
             FALSE_CASE_PRINTF(vict == ch, "You are using %s to conjure.", decapitalize_a_an(obj));
             FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
           }
+        }
         break;
     }
   }
@@ -1306,7 +1318,7 @@ bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj) {
     }
   }
 
-  if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)) && !ch->in_veh) {
+  if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)) && !obj->in_veh) {
     if (access_level(ch, LVL_PRESIDENT)) {
       act("You bypass the !TAKE flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
     } else {
@@ -1606,7 +1618,7 @@ void get_while_rigging(struct char_data *ch, char *argument) {
     return;
   }
 
-  char *remainder = two_arguments(argument, obj_name, container_name);
+  two_arguments(argument, obj_name, container_name);
 
   FAILURE_CASE(!*obj_name, "Syntax: GET <name>; or GET <name> FROM <container>");
 
@@ -1621,7 +1633,8 @@ void get_while_rigging(struct char_data *ch, char *argument) {
     if (cont_dotmode == FIND_INDIV) {
       cont = get_obj_in_list_vis(ch, container_name, veh->in_room ? veh->in_room->contents : veh->in_veh->contents);
       FAILURE_CASE_PRINTF(!cont, "You don't see anything named '%s' around your vehicle.", container_name);
-      FAILURE_CASE_PRINTF(!container_is_vehicle_accessible(cont), "You can't get anything from %s with your manipulator arm.", container_name);
+      FAILURE_CASE_PRINTF(!container_is_vehicle_accessible(cont), "You can't get anything from %s with your manipulator arm.", decapitalize_a_an(cont));
+      FAILURE_CASE_PRINTF(!cont->contains, "%s is empty.", CAP(GET_OBJ_NAME(cont)));
       // Error messages are sent in veh_get_from_container.
       veh_get_from_container(veh, cont, obj_name, obj_dotmode, ch);
     } 
@@ -2311,12 +2324,71 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   return 0;
 }
 
+void drop_while_rigging(struct char_data *ch, char *argument) {
+  struct veh_data *veh;
+  char obj_name[MAX_INPUT_LENGTH];
+
+  RIG_VEH(ch, veh);
+
+  FAILURE_CASE(!veh, "You must be rigging a vehicle to do that.");
+  FAILURE_CASE_PRINTF(!get_veh_grabber(veh), "%s is not equipped with a manipulator arm.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+  FAILURE_CASE(!*argument, "Get what?");
+
+  if (!veh->in_veh && !veh->in_room) {
+    send_to_char(ch, "You have no idea where %s is right now.", GET_VEH_NAME(veh));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_while_rigging(%s, %s) encountered veh %s (%ld / %ld) with no room or containing veh!",
+                    GET_CHAR_NAME(ch),
+                    argument,
+                    GET_VEH_NAME(veh),
+                    GET_VEH_VNUM(veh),
+                    GET_VEH_IDNUM(veh));
+    return;
+  }
+
+  one_argument(argument, obj_name);
+
+  FAILURE_CASE(!*obj_name, "Syntax: DROP <name>");
+
+  int obj_dotmode = find_all_dots(obj_name, sizeof(obj_name));
+
+  // DROP X
+  if (obj_dotmode == FIND_INDIV) {
+    bool old_vfront = ch->vfront;
+    ch->vfront = FALSE;
+
+    struct obj_data *obj = get_obj_in_list_vis(ch, obj_name, veh->contents);
+    FAILURE_CASE_PRINTF(!obj, "You don't see anything named '%s' in your vehicle.", obj_name);
+    // Error messages are sent in veh_drop_obj.
+    veh_drop_obj(veh, obj, ch);
+
+    ch->vfront = old_vfront;
+  } else {
+    FAILURE_CASE(obj_dotmode == FIND_ALL && !veh->contents, "There's nothing in your vehicle.");
+
+    bool found_something = FALSE;
+    for (struct obj_data *obj = veh->contents, *next_obj; obj; obj = next_obj) {
+      next_obj = obj->next_content;
+      if (obj_dotmode == FIND_ALL || keyword_appears_in_obj(obj_name, obj)) {
+        found_something = TRUE;
+        // Error messages are sent in veh_drop_obj.
+        veh_drop_obj(veh, obj, ch);
+      }
+    }
+    FAILURE_CASE_PRINTF(!found_something, "You don't see anything named '%s' in your vehicle.", obj_name);
+  }
+  return;
+}
+
 ACMD(do_drop)
 {
   extern vnum_t donation_room_1;
   extern vnum_t donation_room_2;  /* uncomment if needed! */
   extern vnum_t donation_room_3;  /* uncomment if needed! */
 
+  if (IS_RIGGING(ch)) {
+    drop_while_rigging(ch, argument);
+    return;
+  }
 
   FAILURE_CASE(IS_ASTRAL(ch), "Astral projections can't touch things!");
   FAILURE_CASE(AFF_FLAGGED(ch, AFF_PILOT), "While driving? Now that would be a good trick!");
