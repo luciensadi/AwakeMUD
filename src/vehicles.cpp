@@ -5,7 +5,7 @@
 extern bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj);
 
 bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch);
-bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch, bool from_obj);
+bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch, struct obj_data *from_obj);
 
 struct obj_data *get_veh_grabber(struct veh_data *veh) {
   if (!veh) {
@@ -41,6 +41,10 @@ bool veh_can_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_dat
   if (!_can_veh_lift_obj(veh, obj, ch))
     return FALSE;
 
+  // No picking up nuyen.
+  FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_MONEY && !GET_ITEM_MONEY_IS_CREDSTICK(obj),
+             "Your mechanical clampers fumble the loose change and bills, spilling them everywhere.");
+
   // Failure cases for vehicle (too full, etc)
   FALSE_CASE_PRINTF(veh->usedload + GET_OBJ_WEIGHT(obj) > veh->load, "Your vehicle is too full to hold %s.", decapitalize_a_an(obj));
 
@@ -71,7 +75,7 @@ bool veh_get_from_container(struct veh_data *veh, struct obj_data *cont, const c
   }
 
   // Success.  
-  return _veh_get_obj(veh, obj, ch, TRUE);
+  return _veh_get_obj(veh, obj, ch, cont);
 }
 
 bool veh_get_from_room(struct veh_data *veh, struct obj_data *obj, struct char_data *ch) {
@@ -87,7 +91,7 @@ bool veh_get_from_room(struct veh_data *veh, struct obj_data *obj, struct char_d
   }
 
   // Success.
-  return _veh_get_obj(veh, obj, ch, FALSE);
+  return _veh_get_obj(veh, obj, ch, NULL);
 }
 
 /////////// Helper functions and utils.
@@ -102,6 +106,9 @@ bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_d
   // Failure cases for obj (!TAKE, etc)
   FALSE_CASE_PRINTF(!CAN_WEAR(obj, ITEM_WEAR_TAKE), "You can't take %s.", decapitalize_a_an(obj));
 
+  // Too heavy for your vehicle's body rating
+  FALSE_CASE_PRINTF(GET_OBJ_WEIGHT(obj) > veh->body * veh->body * 20, "%s is too heavy for your vehicle's chassis.");
+
   // Too big for the grabber
   struct obj_data *grabber = get_veh_grabber(veh);
   FALSE_CASE_PRINTF(GET_VEHICLE_MOD_GRABBER_MAX_LOAD(grabber) < GET_OBJ_WEIGHT(obj), "%s is too heavy for %s.",
@@ -111,7 +118,9 @@ bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_d
 }
 
 // We assume all precondition checking has been done here.
-bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch, bool from_obj) {
+bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch, struct obj_data *from_obj) {
+  char msg_buf[1000];
+
   if (!veh || !obj || !ch) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid arguments to _veh_get_obj(%s, %s, ch)",
                     GET_VEH_NAME(veh), GET_OBJ_NAME(obj));
@@ -125,9 +134,24 @@ bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *
 
   obj_to_veh(obj, veh);
   send_to_char(ch, "You load %s into your vehicle's storage.\r\n", decapitalize_a_an(obj));
+  
 
+  if (from_obj) {
+    snprintf(msg_buf, sizeof(msg_buf), "%s's manipulator arm gets %s from %s.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)), decapitalize_a_an(obj), GET_OBJ_NAME(from_obj));
+  } else {
+    snprintf(msg_buf, sizeof(msg_buf), "%s loads %s into its internal storage.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)), decapitalize_a_an(obj));
+  }
+  
+  // Message others.
+  if (veh->in_room) {
+    send_to_room(msg_buf, veh->in_room, veh);
+  } else {
+    send_to_veh(msg_buf, veh->in_veh, ch, TRUE);
+  }
+
+  // Message passengers.
   if (veh->people) {
-    send_to_veh("A manipulator arm reaches in and deposits %s.", veh, ch, FALSE, decapitalize_a_an(obj));
+    send_to_veh("The manipulator arm reaches in and deposits %s.", veh, ch, FALSE, decapitalize_a_an(obj));
   }
 
   return TRUE;
