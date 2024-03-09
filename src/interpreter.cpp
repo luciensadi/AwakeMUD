@@ -1374,6 +1374,7 @@ struct command_info rig_info[] =
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, BLOCKS_IDLE_REWARD },
     { "idea", 0, do_gen_write, 0, SCMD_IDEA, BLOCKS_IDLE_REWARD },
     { "look", 0, do_look, 0, 0, BLOCKS_IDLE_REWARD },
+    { "inventory", 0, do_inventory, 0, 0, BLOCKS_IDLE_REWARD },
     { "index", 0, do_index, 0, 0, BLOCKS_IDLE_REWARD },
     { "items", 0, do_items, 0, 0, BLOCKS_IDLE_REWARD },
     { "languages", 0, do_language, 0, 0, BLOCKS_IDLE_REWARD },

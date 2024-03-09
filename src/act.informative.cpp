@@ -49,6 +49,7 @@
 #include "lifestyles.hpp"
 #include "newhouse.hpp"
 #include "zoomies.hpp"
+#include "vehicles.hpp"
 
 const char *CCHAR;
 
@@ -4699,14 +4700,23 @@ ACMD(do_score)
               "Speed: %s @ %3d km/h\r\n"
               "Accel:%3d\r\n"
               "Sig:%3d\r\n"
-              "Sensors:%3d\r\n",
-              GET_VEH_NAME(veh), veh->damage, (int)(GET_MENTAL(ch) / 100),
-              (int)(GET_MAX_MENTAL(ch) / 100), GET_REA(ch), GET_INT(ch),
-              GET_WIL(ch), veh->body, veh->armor, veh->autonav,
+              "Sensors:%3d\r\n"
+              "Load (used / total): %.2f / %.2f\r\n",
+              GET_VEH_NAME(veh),
+              veh->damage,
+              (int)(GET_MENTAL(ch) / 100), (int)(GET_MAX_MENTAL(ch) / 100),
+              GET_REA(ch),
+              GET_INT(ch),
+              GET_WIL(ch),
+              veh->body,
+              veh->armor,
+              veh->autonav,
               veh->handling,
               veh_speeds[veh->cspeed], get_speed(veh),
-              veh->accel, veh->sig,
-              veh->sensor);
+              veh->accel,
+              veh->sig,
+              veh->sensor,
+              veh->usedload, veh->load);
     } else {
       snprintf(buf, sizeof(buf), "You are rigging %s.\r\n", GET_VEH_NAME(veh));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Damage:^R%3d/10^n      Mental:^B%3d(%2d)^n\r\n"
@@ -4715,12 +4725,13 @@ ACMD(do_score)
               "     Armor:%3d  Autonav:%3d\r\n"
               "  Handling:%3d    Speed: %s @ %3d km/h\r\n"
               "     Accel:%3d      Sig:%3d\r\n"
-              "   Sensors:%3d\r\n",
+              "   Sensors:%3d\r\n"
+              "      Load:%.2f/%.2f\r\n",
               veh->damage, (int)(GET_MENTAL(ch) / 100),
               (int)(GET_MAX_MENTAL(ch) / 100), GET_REA(ch), GET_INT(ch),
               GET_WIL(ch), veh->body, veh->armor, veh->autonav,
               veh->handling, veh_speeds[veh->cspeed], get_speed(veh), veh->accel, veh->sig,
-              veh->sensor);
+              veh->sensor, veh->usedload, veh->load);
     }
   } else {
     // Switches for the specific score types.
@@ -5031,6 +5042,11 @@ ACMD(do_score)
 
 ACMD(do_inventory)
 {
+  if (IS_RIGGING(ch)) {
+    vehicle_inventory(ch);
+    return;
+  }
+
   send_to_char("You are carrying:\r\n", ch);
   list_obj_to_char(ch->carrying, ch, SHOW_MODE_IN_INVENTORY, TRUE, FALSE);
 

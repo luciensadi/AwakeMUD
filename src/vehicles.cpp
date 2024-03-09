@@ -3,6 +3,7 @@
 #include "vehicles.hpp"
 
 extern bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj);
+extern void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode, bool show, bool corpse);
 
 bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch);
 bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch, struct obj_data *from_obj);
@@ -92,6 +93,20 @@ bool veh_get_from_room(struct veh_data *veh, struct obj_data *obj, struct char_d
 
   // Success.
   return _veh_get_obj(veh, obj, ch, NULL);
+}
+
+void vehicle_inventory(struct char_data *ch) {
+  struct veh_data *veh;
+  RIG_VEH(ch, veh);
+
+  FAILURE_CASE(!veh, "You're not rigging a vehicle.");
+
+  send_to_char(ch, "%s is carrying:\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+  list_obj_to_char(veh->contents, ch, SHOW_MODE_IN_INVENTORY, TRUE, FALSE);
+
+  for (struct veh_data *carried = veh->carriedvehs; carried; carried = carried->next_veh) {
+    send_to_char(ch, "^y%s%s^n\r\n", GET_VEH_NAME(carried), carried->owner == GET_IDNUM(ch) ? " ^Y(yours)" : "");
+  }
 }
 
 /////////// Helper functions and utils.
