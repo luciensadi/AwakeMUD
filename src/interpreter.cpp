@@ -1368,6 +1368,7 @@ struct command_info rig_info[] =
     { "enter", 0, do_enter, 0, 0, BLOCKS_IDLE_REWARD },
     { "exits", 0, do_exits, 0, 0, BLOCKS_IDLE_REWARD },
     { "flyto", 0, do_flyto, 0, 0, BLOCKS_IDLE_REWARD },
+    { "get", 0, do_get, 0, 0, BLOCKS_IDLE_REWARD },
     { "gridguide", 0, do_gridguide, 0, 0, BLOCKS_IDLE_REWARD },
     { "help", 0, do_help, 0, 0, BLOCKS_IDLE_REWARD },
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, BLOCKS_IDLE_REWARD },
