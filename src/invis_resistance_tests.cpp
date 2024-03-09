@@ -88,13 +88,13 @@ bool process_spotted_invis(struct char_data *ch, struct char_data *vict) {
       GET_MOBALERT(ch) = MALERT_ALARM;
       send_npc_newly_alarmed_message(ch, vict);
       if (access_level(vict, LVL_PRESIDENT) && PRF_FLAGGED(vict, PRF_ROLLS)) {
-        send_to_char(vict, "^L[%s#%ld has become ^ralarmed^L due to seeing you while you're invis.]\r\n", GET_CHAR_NAME(ch), GET_MOB_UNIQUE_ID(ch));
+        send_to_char(vict, "You have been noticed while invisible! ^L[%s#%ld has become ^ralarmed^L!]\r\n", GET_CHAR_NAME(ch), GET_MOB_UNIQUE_ID(ch));
       }
       return TRUE;
     } else {
       GET_MOBALERT(ch) = MALERT_ALERT;
       if (access_level(vict, LVL_PRESIDENT) && PRF_FLAGGED(vict, PRF_ROLLS)) {
-        send_to_char(vict, "^L[%s#%ld has become ^yalert^L due to seeing you while you're invis.]\r\n", GET_CHAR_NAME(ch), GET_MOB_UNIQUE_ID(ch));
+        send_to_char(vict, "You have been noticed while invisible! ^L[%s#%ld has become ^yalert^L!]\r\n", GET_CHAR_NAME(ch), GET_MOB_UNIQUE_ID(ch));
       }
       return FALSE;
     }
@@ -264,14 +264,27 @@ void send_npc_newly_alarmed_message(struct char_data *npc, struct char_data *vic
   bool passed_check = success_test(GET_INT(vict) + GET_POWER(vict, ADEPT_IMPROVED_PERCEPT), GET_INT(npc)) > 0;
 
   if (passed_check && CAN_SEE(vict, npc) && vict->in_room == npc->in_room) {
-    if (MOB_FLAGGED(npc, MOB_INANIMATE)) {
-      act("You swivel towards $N with an alarmed chirp as your sensors pierce $S invisibility.^n", TRUE, npc, 0, vict, TO_CHAR);
-      act("$n^n swivels towards $N with an alarmed chirp.", TRUE, npc, 0, vict, TO_NOTVICT);
-      act("^y$n^y swivels towards you with an alarmed chirp as its sensors pierce your invisibility.^n", TRUE, npc, 0, vict, TO_VICT);
+    // Its possible to get here despite not actually being able to see the victim
+    if (can_see_through_invis(npc, vict)) {
+      if (MOB_FLAGGED(npc, MOB_INANIMATE)) {
+        act("You swivel towards $N with an alarmed chirp as your sensors pierce $S invisibility.^n", TRUE, npc, 0, vict, TO_CHAR);
+        act("$n^n swivels towards $N with an alarmed chirp.", TRUE, npc, 0, vict, TO_NOTVICT);
+        act("^y$n^y swivels towards you with an alarmed chirp as its sensors pierce your invisibility.^n", TRUE, npc, 0, vict, TO_VICT);
+      } else {
+        act("You scowl at $N as your eyes focus through $S invisibility.^n", TRUE, npc, 0, vict, TO_CHAR);
+        act("$n^n scowls at $N as $s eyes focus through $S invisibility.", TRUE, npc, 0, vict, TO_NOTVICT);
+        act("^y$n^y scowls at you as $s eyes focus through your invisibility.^n", TRUE, npc, 0, vict, TO_VICT);
+      }
     } else {
-      act("You scowl at $N as your eyes focus through $S invisibility.^n", TRUE, npc, 0, vict, TO_CHAR);
-      act("$n^n scowls at $N as $s eyes focus through $S invisibility.", TRUE, npc, 0, vict, TO_NOTVICT);
-      act("^y$n^y scowls at you as $s eyes focus through your invisibility.^n", TRUE, npc, 0, vict, TO_VICT);
+      if (MOB_FLAGGED(npc, MOB_INANIMATE)) {
+        act("You swivel around with an alarmed chirp as your sensors notice something out of place.^n", TRUE, npc, 0, vict, TO_CHAR);
+        act("$n^n swivels around with an alarmed chirp.", TRUE, npc, 0, vict, TO_NOTVICT);
+        act("$n^n swivels around with an alarmed chirp.", TRUE, npc, 0, vict, TO_VICT);
+      } else {
+        act("You scowl as you hear something out of place.^n", TRUE, npc, 0, vict, TO_CHAR);
+        act("$n^n scowls, their eyes sweeping the area with suspicion.", TRUE, npc, 0, vict, TO_NOTVICT);
+        act("$n^n scowls, their eyes sweeping the area with suspicion.", TRUE, npc, 0, vict, TO_VICT);
+      }
     }
   }
   // Otherwise, you have a chance to get a feeling about it.
