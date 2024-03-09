@@ -300,6 +300,10 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define PRESTIGE_RACE_DRAGON_COST 1000
 #define MAX_PRESTIGE_RACE_COST    1000
 
+// If someone's being all sneaky-beaky, how much does that slow them down?
+#define MAX_SNEAKING_WAIT_STATE                                (0.6 RL_SEC)
+#define MIN_SNEAKING_WAIT_STATE                                (0.3 RL_SEC)
+
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER

@@ -773,7 +773,7 @@ int get_armor_penalty_grade(struct char_data *ch);
         }  \
       })
 
-#define CHECK_WAIT(ch)        (((ch)->desc) ? ((ch)->desc->wait > 1) : 0)
+#define CHECK_WAIT(ch)        (((ch)->desc) ? ((ch)->desc->wait >= 1) : 0)
 #define STATE(d)                    ((d)->connected)
 
 #define DESCRIPTOR_CONN_STATE_NOT_PLAYING(x) (((x)->connected >= CON_CLOSE && (x)->connected <= CON_MENU) || ((x)->connected >= CON_CHPWD_GETOLD && (x)->connected <= CON_QDELCONF2) || (x)->connected == CON_ASKNAME)
@@ -1496,13 +1496,13 @@ char    *crypt(const char *key, const char *salt);
   }                                        \
 }                                          \
 
-#define FAILURE_CASE_PRINTF(condition, ...) { \
-  if ((condition)) {                          \
-    send_to_char(ch, __VA_ARGS__);            \
-    send_to_char(ch, ""); /*force a newline*/ \
-    return;                                   \
-  }                                           \
-}                                             \
+#define FAILURE_CASE_PRINTF(condition, ...) {     \
+  if ((condition)) {                              \
+    send_to_char(ch, __VA_ARGS__);                \
+    send_to_char(ch, "\r\n"); /*force a newline*/ \
+    return;                                       \
+  }                                               \
+}                                                 \
 
 #define FALSE_CASE(condition, message) {   \
   if ((condition)) {                       \
@@ -1511,12 +1511,13 @@ char    *crypt(const char *key, const char *salt);
   }                                        \
 }                                          \
 
-#define FALSE_CASE_PRINTF(condition, ...) {   \
-  if ((condition)) {                          \
-    send_to_char(ch, __VA_ARGS__);            \
-    return FALSE;                             \
-  }                                           \
-}                                             \
+#define FALSE_CASE_PRINTF(condition, ...) {       \
+  if ((condition)) {                              \
+    send_to_char(ch, __VA_ARGS__);                \
+    send_to_char(ch, "\r\n"); /*force a newline*/ \
+    return FALSE;                                 \
+  }                                               \
+}                                                 \
 
 #define FOR_ITEMS_AROUND_CH(ch, item_ptr) for ((item_ptr) = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; (item_ptr); (item_ptr) = (item_ptr)->next_content)
 

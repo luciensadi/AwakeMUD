@@ -60,6 +60,8 @@ extern struct elevator_data *elevator;
 ACMD_DECLARE(do_prone);
 ACMD_DECLARE(do_look);
 
+void set_sneaking_wait_state(struct char_data *ch);
+
 #define GET_DOOR_NAME(ch, door) (EXIT(ch, (door))->keyword ? (*(fname(EXIT(ch, (door))->keyword)) ? fname(EXIT(ch, (door))->keyword) : "door") : "door")
 
 /* can_move determines if a character can move in the given direction, and
@@ -182,61 +184,77 @@ int can_move(struct char_data *ch, int dir, int extra)
   return 1;
 }
 
-bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data *ch, bool should_roll_perception) {
-  if (!tch) {
-    mudlog("SYSERR: Received null tch to s_v_o_s_m_m!", tch, LOG_SYSLOG, TRUE);
+/* We expect to see movement messages under the following conditions:
+
+*/
+bool should_tch_see_chs_movement_message(struct char_data *viewer, struct char_data *actor, bool should_roll_perception, bool is_arriving) {
+  if (!viewer) {
+    mudlog("SYSERR: Received null viewer to s_t_s_c_m_m!", viewer, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
-  if (!ch) {
-    mudlog("SYSERR: Received null ch to s_v_o_s_m_m!", tch, LOG_SYSLOG, TRUE);
+  if (!actor) {
+    mudlog("SYSERR: Received null actor to s_t_s_c_m_m!", viewer, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
-  // Absolutely can't see for whatever reason.
-  if (tch == ch || PRF_FLAGGED(tch, PRF_MOVEGAG) || !AWAKE(tch) || IS_IGNORING(tch, is_blocking_ic_interaction_from, ch))
-    return FALSE;
-
-  // Ch is astral and not manifest but tch can't see astral
-  if (IS_ASTRAL(ch) && !AFF_FLAGGED(ch, AFF_MANIFEST) && !SEES_ASTRAL(tch)) {
+  // You can't see your own movement messages, and can't see any if you're not awake.
+  if (viewer == actor || !AWAKE(viewer)) {
     return FALSE;
   }
 
-  // If both tch and ch are NPCs, then we don't care.
+  // Viewer is not allowed to see this movement (staff fiat)
+  if (IS_SENATOR(actor) && !access_level(viewer, GET_INVIS_LEV(actor))) {
+    return FALSE;
+  }
+
+  // Viewer has codedly prevented themselves from seeing this movement.
+  if (PRF_FLAGGED(viewer, PRF_MOVEGAG) || IS_IGNORING(viewer, is_blocking_ic_interaction_from, actor)) {
+    return FALSE;
+  }
+
+  // Actor is astral and not manifest and viewer can't see astral.
+  if (IS_ASTRAL(actor) && !AFF_FLAGGED(actor, AFF_MANIFEST) && !SEES_ASTRAL(viewer)) {
+    return FALSE;
+  }
+
+  // If both viewer and actor are NPCs, then we don't care.
   // Note: player projections are flagged as NPCs.
-  if (IS_NPC(tch) && IS_NPC(ch) && !IS_PROJECT(tch) && !IS_PROJECT(ch)) {
+  if (IS_NPC(viewer) && IS_NPC(actor) && !IS_PROJECT(viewer) && !IS_PROJECT(actor)) {
     return FALSE;
   }
 
   // Tuned out doing other things.
-  if (PLR_FLAGGED(tch, PLR_REMOTE) || PLR_FLAGGED(tch, PLR_MATRIX)) {
+  if (PLR_FLAGGED(viewer, PLR_REMOTE) || PLR_FLAGGED(viewer, PLR_MATRIX)) {
     return FALSE;
   }
 
-  // Failed to see from vehicle.
-  if (tch->in_veh && (tch->in_veh->cspeed > SPEED_IDLE && success_test(GET_INT(tch), 4) <= 0)) {
+  // Failed to see from moving vehicle.
+  if (viewer->in_veh && (viewer->in_veh->cspeed > SPEED_IDLE && success_test(GET_INT(viewer), 4) <= 0)) {
     return FALSE;
   }
 
   // Check for stealth and other person-to-person modifiers.
-  if (should_roll_perception) {
-    int dummy_tn = 2;
+  if (should_roll_perception && (IS_AFFECTED(actor, AFF_SNEAK) || !CAN_SEE(viewer, actor))) {
     int open_test_result = 0;
     char rbuf[1000];
-    struct room_data *in_room = get_ch_in_room(ch);
+    struct room_data *in_room = get_ch_in_room(actor);
 
     // If you're sneaking, make an open test to determine the TN for the perception test to notice you.
-    if (IS_AFFECTED(ch, AFF_SNEAK)) {
+    if (IS_AFFECTED(actor, AFF_SNEAK)) {
+      int dummy_tn = 2, original_dummy_tn = 2;
+
       // Get the skill dice to roll.
-      snprintf(rbuf, sizeof(rbuf), "Sneak perception test: %s vs %s. get_skill: ", GET_CHAR_NAME(tch), GET_CHAR_NAME(ch));
-      int skill_dice = get_skill(ch, SKILL_STEALTH, dummy_tn);
+      snprintf(rbuf, sizeof(rbuf), "Sneak perception test: %s vs %s. get_skill: ", GET_CHAR_NAME(viewer), GET_CHAR_NAME(actor));
+      int skill_dice = get_skill(actor, SKILL_STEALTH, dummy_tn);
 
       // Make the roll.
       open_test_result = open_test(skill_dice);
 
       // If we've defaulted, this is reflected by an increased TN-- if the TN went up, cap successes.
-      int defaulting_amount = (dummy_tn - 2);
-      if (defaulting_amount > 0) {
+      // Only apply to PCs, because builders haven't been setting NPC stealth skills and we don't want to rewrite the world.
+      int defaulting_amount = (dummy_tn - original_dummy_tn);
+      if (defaulting_amount > 0 && (!IS_NPC(viewer) || IS_PROJECT(viewer))) {
         if (defaulting_amount <= 2) {
           // +2 means we defaulted to a linked skill. Mild penalty.
           open_test_result = MIN(open_test_result - 2, 10);
@@ -252,29 +270,44 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
     // Don't allow negative results.
     open_test_result = MAX(open_test_result, 0);
 
-    // Vision penalties.
-    int vis_tn_modifier = calculate_vision_penalty(tch, ch);
+    // Calculate vision TN penalties.
+    int vis_tn_modifier = calculate_vision_penalty(viewer, actor);
 
-    // Other penalties.
-    int phys_tn_modifier = modify_target_rbuf_raw(tch, rbuf, sizeof(rbuf), vis_tn_modifier, FALSE);
+    // Calculate other TN penalties (wounds, lighting, etc), mitigated by existing vision TN penalty.
+    int phys_tn_modifier = modify_target_rbuf_raw(viewer, rbuf, sizeof(rbuf), vis_tn_modifier, FALSE);
 
-    // House rule: Stealth/silence spells add a TN penalty to the spotter, up to 4.
-    int stealth_spell_tn = get_spell_affected_successes(ch, SPELL_STEALTH);
-    int silence_tn = in_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0 ? in_room->silence[ROOM_HIGHEST_SPELL_FORCE] : 0;
-    int magic_tn_modifier = MIN(stealth_spell_tn + silence_tn, 4);
+    int stealth_and_silence_tn_modifier = 0;
+    {
+      // House rule: Stealth/silence spells add a TN penalty to the spotter, up to 4.
+      int stealth_spell_tn = get_spell_affected_successes(actor, SPELL_STEALTH);
+      int silence_tn = in_room->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0 ? in_room->silence[ROOM_HIGHEST_SPELL_FORCE] : 0;
+      stealth_and_silence_tn_modifier = MIN(stealth_spell_tn + silence_tn, 4);
+    }
 
     // Spirit Conceal power adds to the TN.
-    magic_tn_modifier += affected_by_power(ch, CONCEAL); 
+    int spirit_conceal_tn_modifier = affected_by_power(actor, CONCEAL);
 
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". TN is %d (OT) + %d (vision) + %d (other phys) + %d (other magic)",
-                                                      open_test_result, vis_tn_modifier, phys_tn_modifier, magic_tn_modifier);
+    // Calculate TN.
+    int test_tn = open_test_result + vis_tn_modifier + phys_tn_modifier + stealth_and_silence_tn_modifier + spirit_conceal_tn_modifier;
+
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), ". TN is ^C%d^n (^c%d^n OT + ^c%d^n vision + ^c%d^n other phys + ^c%d^n stealth/silence + ^c%d^n conceal). ",
+             test_tn,
+             open_test_result,
+             vis_tn_modifier,
+             phys_tn_modifier,
+             stealth_and_silence_tn_modifier,
+             spirit_conceal_tn_modifier);
 
     // Roll the perception test.
-    int test_tn = open_test_result + vis_tn_modifier + phys_tn_modifier + magic_tn_modifier;
-    int perception_result = success_test(GET_INT(tch) + GET_POWER(tch, ADEPT_IMPROVED_PERCEPT), test_tn);
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Result: %d hits.", perception_result);
-    if (GET_INVIS_LEV(tch) <= GET_LEVEL(ch))
-      act(rbuf, FALSE, tch, 0, 0, TO_STAFF_ROLLS);
+    int perception_result = success_test(GET_INT(viewer) + GET_POWER(viewer, ADEPT_IMPROVED_PERCEPT), test_tn);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Result: ^C%d^n hit%s.\r\n", perception_result, perception_result == 1 ? "" : "s");
+
+    // Print the message, but only to staff, and only if it's not about a higher-level staff.
+    for (struct char_data *staff = get_ch_in_room(viewer)->people; staff; staff = staff->next_in_room) {
+      if (IS_SENATOR(staff) && PRF_FLAGGED(staff, PRF_ROLLS) && (!IS_SENATOR(actor) || access_level(staff, GET_INVIS_LEV(actor)))) {
+        send_to_char(rbuf, staff);
+      }
+    }
 
     bool spotted_movement = perception_result > 0;
 
@@ -283,15 +316,27 @@ bool should_tch_see_chs_movement_message(struct char_data *tch, struct char_data
       return FALSE;
     }
 
-    // They were sneaking but we noticed.
-    if (IS_AFFECTED(ch, AFF_SNEAK) && spotted_movement) {
+    // They were sneaking or invisible but we noticed them enter.
+    if ((IS_AFFECTED(actor, AFF_SNEAK) || !CAN_SEE(viewer, actor))) {
       // Spotting someone sneaking around puts NPCs on edge.
-      if (IS_NPC(tch) && GET_MOBALERT(tch) != MALERT_ALARM) {
-        GET_MOBALERT(tch) = MALERT_ALERT;
-        GET_MOBALERTTIME(tch) = MAX(GET_MOBALERTTIME(tch), 10);
+      if (IS_NPC(viewer) && !IS_PROJECT(viewer)) {
+        // Extend their alert time and ensure they're at least Alert.
+        GET_MOBALERT(viewer) = MAX(GET_MOBALERT(viewer), MALERT_ALERT);
+        GET_MOBALERTTIME(viewer) = MAX(GET_MOBALERTTIME(viewer), 10);
+        
+        // Send messages, but only for the room you're walking into.
+        if (is_arriving) {
+          if (CAN_SEE(viewer, actor)) {
+            act("You notice $N sneaking around.", FALSE, viewer, 0, actor, TO_CHAR);
+            act("^T$N^T scowls at you-- your sneaking around has not gone unnoticed.^n", TRUE, actor, 0, viewer, TO_CHAR);
+            act("$N scowls at $n-- $s sneaking around has not gone unnoticed.", TRUE, actor, 0, viewer, TO_ROOM);
+          } else {
+            act("You startle and look around-- you could have sworn you heard something.", FALSE, viewer, 0, 0, TO_CHAR);
+            act("$N startles and looks in your general direction.", TRUE, actor, 0, viewer, TO_CHAR);
+            act("$N startles and looks in $n's general direction.", TRUE, actor, 0, viewer, TO_ROOM);
+          }
+        }
       }
-
-      // Messaging?
     }
   }
 
@@ -315,6 +360,11 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   struct room_data *was_in = NULL;
   if (!can_move(ch, dir, extra))
     return 0;
+
+  // Sneaking characters incur a slight delay, mitigated by their quickness and athletics.
+  if (AFF_FLAGGED(ch, AFF_SNEAK)) {
+    set_sneaking_wait_state(ch);
+  }
 
   GET_LASTROOM(ch) = ch->in_room->number;
 
@@ -346,24 +396,24 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   // People in the room.
   for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
-    if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE, FALSE))
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
 
   // Vehicle occupants, including riggers.
   for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
     for (tch = tveh->people; tch; tch = tch->next_in_veh) {
-      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      if (should_tch_see_chs_movement_message(tch, ch, TRUE, FALSE))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
 
-    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE, FALSE))
       act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
 
   // Watchers.
   for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching) {
-    if (should_tch_see_chs_movement_message(tch, ch, TRUE)) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE, FALSE)) {
       send_to_char("From a distance, you see:\r\n", tch);
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
@@ -443,7 +493,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   // People in the room.
   for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
-    if (should_tch_see_chs_movement_message(tch, ch, TRUE)) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE, TRUE)) {
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
 
       if (IS_NPC(tch) && !FIGHTING(tch)) {
@@ -476,17 +526,17 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   // Vehicle occupants.
   for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh) {
     for (tch = tveh->people; tch; tch = tch->next_in_veh) {
-      if (should_tch_see_chs_movement_message(tch, ch, TRUE))
+      if (should_tch_see_chs_movement_message(tch, ch, TRUE, TRUE))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
 
-    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE))
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, TRUE, TRUE))
       act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
 
   // Watchers.
   for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching) {
-    if (should_tch_see_chs_movement_message(tch, ch, TRUE)) {
+    if (should_tch_see_chs_movement_message(tch, ch, TRUE, TRUE)) {
       send_to_char("From a distance, you see:\r\n", tch);
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
@@ -835,7 +885,7 @@ void move_vehicle(struct char_data *ch, int dir)
 
   // People in the room.
   for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room) {
-    if (should_tch_see_chs_movement_message(tch, ch, FALSE))
+    if (should_tch_see_chs_movement_message(tch, ch, FALSE, FALSE))
       act(buf1, TRUE, ch, 0, tch, TO_VICT);
   }
 
@@ -845,17 +895,17 @@ void move_vehicle(struct char_data *ch, int dir)
       continue;
     
     for (struct char_data *tch = tveh->people; tch; tch = tch->next_in_veh) {
-      if (should_tch_see_chs_movement_message(tch, ch, FALSE))
+      if (should_tch_see_chs_movement_message(tch, ch, FALSE, FALSE))
         act(buf1, TRUE, ch, 0, tch, TO_VICT);
     }
 
-    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, FALSE))
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, FALSE, FALSE))
       act(buf1, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
 
   // Watchers.
   for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching) {
-    if (should_tch_see_chs_movement_message(tch, ch, FALSE)) {
+    if (should_tch_see_chs_movement_message(tch, ch, FALSE, FALSE)) {
       send_to_char("From a distance, you see:\r\n", tch);
       act(buf1, TRUE, ch, 0, tch, TO_VICT);
     }
@@ -873,7 +923,7 @@ void move_vehicle(struct char_data *ch, int dir)
 
   // People in the room.
   for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room) {
-    if (should_tch_see_chs_movement_message(tch, ch, FALSE))
+    if (should_tch_see_chs_movement_message(tch, ch, FALSE, TRUE))
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
 
@@ -883,17 +933,17 @@ void move_vehicle(struct char_data *ch, int dir)
       continue;
     
     for (struct char_data *tch = tveh->people; tch; tch = tch->next_in_veh) {
-      if (should_tch_see_chs_movement_message(tch, ch, FALSE))
+      if (should_tch_see_chs_movement_message(tch, ch, FALSE, TRUE))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
 
-    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, FALSE))
+    if (tveh->rigger && should_tch_see_chs_movement_message(tveh->rigger, ch, FALSE, TRUE))
       act(buf2, TRUE, ch, 0, tveh->rigger, TO_VICT | TO_REMOTE | TO_SLEEP);
   }
 
   // Watchers.
   for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching) {
-    if (should_tch_see_chs_movement_message(tch, ch, FALSE)) {
+    if (should_tch_see_chs_movement_message(tch, ch, FALSE, TRUE)) {
       send_to_char("From a distance, you see:\r\n", tch);
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
     }
@@ -2647,4 +2697,17 @@ ACMD(do_stuck) {
   char_to_room(ch, &world[mortal_relations_rnum]);
   send_to_char(ch, "Thanks for your error report! You have been teleported to the Mortal Relations Conference Room, and may leave after the ten-second delay passes.\r\n");
   WAIT_STATE(ch, 10 RL_SEC);
+}
+
+void set_sneaking_wait_state(struct char_data *ch) {
+  if (!ch || !AFF_FLAGGED(ch, AFF_SNEAK))
+    return;
+
+  int wait_divisor = MAX(1, (GET_QUI((ch)) + GET_SKILL(ch, SKILL_ATHLETICS)) / 4);
+  float ameliorated_wait_state = (float) MAX_SNEAKING_WAIT_STATE / wait_divisor;
+  float calculated_wait_length = MAX(MIN_SNEAKING_WAIT_STATE, ameliorated_wait_state);
+
+  send_to_char("^[F222]You sneak around.^n\r\n", ch);
+
+  WAIT_STATE(ch, (int) calculated_wait_length);
 }
