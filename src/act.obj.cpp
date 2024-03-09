@@ -2600,7 +2600,7 @@ void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)
     AFF_FLAGS(vict).SetBit(AFF_CHEATLOG_MARK);
   }
 
-  snprintf(buf, sizeof(buf), "$You give $N %d nuyen.", amount);
+  snprintf(buf, sizeof(buf), "You give $N %d nuyen.", amount);
   act(buf, FALSE, ch, 0, vict, TO_CHAR);
   snprintf(buf, sizeof(buf), "$n gives you %d nuyen.", amount);
   act(buf, FALSE, ch, 0, vict, TO_VICT);
