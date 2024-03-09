@@ -6529,7 +6529,7 @@ bool obj_is_apartment_only_drop_item(struct obj_data *obj, struct room_data *des
       return (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PARTS) || (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_COMPUTER && !GET_DECK_ACCESSORY_COMPUTER_IS_LAPTOP(obj));
     case ITEM_WORKSHOP:
       // You can only drop vehicle or medical workshops in random places.
-      return GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE || GET_WORKSHOP_TYPE(obj) == TYPE_MEDICAL;
+      return GET_WORKSHOP_TYPE(obj) != TYPE_VEHICLE && GET_WORKSHOP_TYPE(obj) != TYPE_MEDICAL;
   }
 
   return FALSE;
