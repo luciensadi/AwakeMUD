@@ -1054,10 +1054,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     return 0;
   }
 
-  if (GET_POS(ch) < POS_FIGHTING || (AFF_FLAGGED(ch, AFF_PRONE) && !IS_NPC(ch))) {
-    send_to_char("Maybe you should get on your feet first?\r\n", ch);
-    return 0;
-  }
+  FALSE_CASE(GET_POS(ch) < POS_FIGHTING || (AFF_FLAGGED(ch, AFF_PRONE) && !IS_NPC(ch)), "Maybe you should get on your feet first?");
 
   if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
@@ -1078,18 +1075,23 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     }
   }
 
-  if (!EXIT(ch, dir) || !EXIT(ch, dir)->to_room || EXIT(ch, dir)->to_room == &world[0])
-  {
-    if (!LIGHT_OK(ch))
-      send_to_char("Something seems to be in the way...\r\n", ch);
-    else
-      send_to_char("You cannot go that way...\r\n", ch);
+  // The exit does not exist or does not point to a valid room.
+  if (!EXIT(ch, dir) || !EXIT(ch, dir)->to_room || EXIT(ch, dir)->to_room == &world[0]) {
+    FALSE_CASE(!LIGHT_OK(ch), "Something seems to be in the way...");
+    send_to_char("You cannot go that way...\r\n", ch);
     return 0;
   }
 
-  if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED) &&
-            !((IS_ASTRAL(ch) && !IS_SET(EXIT(ch, dir)->exit_info, EX_ASTRALLY_WARDED)) /* door is astrally passable and char ia astral */
-              || GET_REAL_LEVEL(ch) >= LVL_BUILDER)) /* char is staff */
+  // The exit is hidden and you're not staff.
+  if (IS_SET(EXIT(ch, dir)->exit_info, EX_HIDDEN) && !IS_SENATOR(ch)) {
+    FALSE_CASE(!LIGHT_OK(ch), "Something seems to be in the way...");
+    send_to_char("You cannot go that way...\r\n", ch);
+    return 0;
+  }
+
+  if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)                                  /* The door is closed, and... */
+      && !IS_SENATOR(ch)                                                           /* You're not staff, and... */
+      && (!IS_ASTRAL(ch) || IS_SET(EXIT(ch, dir)->exit_info, EX_ASTRALLY_WARDED))) /* You're either not an astral being, or the door is warded. */
   {
     if (!LIGHT_OK(ch))
       send_to_char("Something seems to be in the way...\r\n", ch);
