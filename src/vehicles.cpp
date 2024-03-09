@@ -2,6 +2,8 @@
 #include "handler.hpp"
 #include "vehicles.hpp"
 
+extern bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj);
+
 bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch);
 bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch, bool from_obj);
 
@@ -30,6 +32,10 @@ bool veh_can_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_dat
                     GET_VEH_NAME(veh), GET_OBJ_NAME(obj));
     return FALSE;
   }
+
+  // Error messages sent in function.
+  if (!can_take_obj_from_room(ch, obj))
+    return FALSE;
 
   // Error messages sent in function.
   if (!_can_veh_lift_obj(veh, obj, ch))

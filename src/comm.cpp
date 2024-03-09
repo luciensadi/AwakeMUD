@@ -1895,12 +1895,14 @@ int new_descriptor(int s)
     return 0;
   }
 
+/*
   if (peer.sin_port == 1194 && _GLOBALLY_BAN_OPENVPN_CONNETIONS_) {
     close(desc);
     mudlog_vfprintf(NULL, LOG_BANLOG, "Connection attempt denied from NON-BANNED site [%s] using VPN origin port 1194", newd->host);
     DELETE_AND_NULL(newd);
     return 0;
   }
+*/
 
   if (nameserver_is_slow) {
     log_vfprintf("DOSLOG: Connection from [%s port %d%s] (slow nameserver mode).",

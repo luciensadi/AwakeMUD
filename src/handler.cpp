@@ -3052,8 +3052,19 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, const char *name, st
     return NULL;
 
   for (i = list; i && (j <= number); i = i->next_content) {
-    if (ch->in_veh && i->in_veh && i->vfront != ch->vfront)
-      continue;
+    if (ch->in_veh && i->in_veh) {
+      // Ch is in a veh which is in i's veh. Matters for grabber code.
+      if (ch->in_veh->in_veh == i->in_veh) {
+        if (i->vfront)
+          continue;
+      }
+      // Ch is in the same veh as i, but not on the same side.
+      else if (ch->in_veh == i->in_veh && ch->vfront != i->vfront)
+        continue;
+      // Ch and i are in separate vehicles.
+      else if (ch->in_veh != i->in_veh)
+        continue;
+    }
     if (keyword_appears_in_obj(tmp, i)) {
       if (++j == number)
         return i;

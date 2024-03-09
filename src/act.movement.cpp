@@ -2700,7 +2700,7 @@ ACMD(do_stuck) {
 }
 
 void set_sneaking_wait_state(struct char_data *ch) {
-  if (!ch || !AFF_FLAGGED(ch, AFF_SNEAK))
+  if (!ch || ch->in_veh || !AFF_FLAGGED(ch, AFF_SNEAK))
     return;
 
   int wait_divisor = MAX(1, (GET_QUI((ch)) + GET_SKILL(ch, SKILL_ATHLETICS)) / 4);

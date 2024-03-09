@@ -64,7 +64,7 @@ extern char *how_good(int skill, int percent);
 extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern void obj_magic(struct char_data * ch, struct obj_data * obj, char *argument);
 extern void end_quest(struct char_data *ch, bool succeeded);
-extern bool can_take_obj(struct char_data *ch, struct obj_data *obj);
+extern bool can_take_obj_from_anywhere(struct char_data *ch, struct obj_data *obj);
 extern char *short_object(int virt, int where);
 extern bool read_extratext(struct char_data * ch);
 extern int return_general(int skill_num);
@@ -2047,7 +2047,7 @@ ACMD(do_unattach)
         return;
       }
 
-      if (can_take_obj(ch, gun)) {
+      if (can_take_obj_from_anywhere(ch, gun)) {
         obj_from_obj(gun);
         obj_to_char(gun, ch);
         send_to_char(ch, "You remove %s from %s.\r\n", GET_OBJ_NAME(gun), GET_OBJ_NAME(item));

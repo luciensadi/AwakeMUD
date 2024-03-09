@@ -804,7 +804,7 @@ ACMD(do_put)
   }
 }
 
-bool can_take_obj(struct char_data * ch, struct obj_data * obj)
+bool can_take_obj_from_anywhere(struct char_data * ch, struct obj_data * obj)
 {
   if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
   {
@@ -964,7 +964,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
   else if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cont, 0) == TYPE_COMPUTER)
     computer = TRUE;
 
-  if (mode == FIND_OBJ_INV || ch == get_obj_possessor(obj) || can_take_obj(ch, obj))
+  if (mode == FIND_OBJ_INV || ch == get_obj_possessor(obj) || can_take_obj_from_anywhere(ch, obj))
   {
     if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
       act("$p: you can't hold any more items.", FALSE, ch, obj, 0, TO_CHAR);
@@ -1260,64 +1260,80 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
   }
 }
 
-int perform_get_from_room(struct char_data * ch, struct obj_data * obj)
-{
+bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj) {
   if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY) {
     switch (GET_DECK_ACCESSORY_TYPE(obj)) {
       case TYPE_COMPUTER:
+        // You can only get computers that are not in use.
         for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
           if (vict->char_specials.programming && vict->char_specials.programming->in_obj == obj) {
-            if (vict == ch)
-              send_to_char(ch, "You are using %s already.\r\n", GET_OBJ_NAME(obj));
-            else
-              act("$N seems to be using $p.", FALSE, ch, obj, vict, TO_CHAR);
-            return FALSE;
+            FALSE_CASE_PRINTF(vict == ch, "You are using %s already.", decapitalize_a_an(obj));
+            FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
           }
         break;
       case TYPE_COOKER:
-        if (GET_OBJ_VAL(obj, 9)) {
-          send_to_char(ch, "%s is in the middle of encoding a chip, leave it alone.\r\n", capitalize(GET_OBJ_NAME(obj)));
-          return FALSE;
-        }
+        // Cookers can't be cooking.
+        FALSE_CASE_PRINTF(GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(obj), "%s is in the middle of encoding a chip, leave it alone.", capitalize(GET_OBJ_NAME(obj)));
         break;
     }
   }
+
   else if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL) {
     switch (GET_MAGIC_TOOL_TYPE(obj)) {
       case TYPE_LIBRARY_SPELL:
-        for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room) {
+        // Nobody can be spelldesigning.
+        for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
           if (AFF_FLAGGED(vict, AFF_SPELLDESIGN)) {
-            if (vict == ch)
-              send_to_char(ch, "You are using %s to design your spell.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-            else
-              act("$N seems to be using $p.", FALSE, ch, obj, vict, TO_CHAR);
-            return FALSE;
+            FALSE_CASE_PRINTF(vict == ch, "You are using %s to design your spell.", decapitalize_a_an(obj));
+            FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
           }
-        }
         break;
       case TYPE_LIBRARY_CONJURE:
-        for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room) {
+        // Nobody can be conjuring.
+        for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
           if (AFF_FLAGGED(vict, AFF_CONJURE)) {
-            if (vict == ch)
-              send_to_char(ch, "You are using %s to conjure.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-            else
-              act("$N seems to be using $p.", FALSE, ch, obj, vict, TO_CHAR);
-            return FALSE;
+            FALSE_CASE_PRINTF(vict == ch, "You are using %s to conjure.", decapitalize_a_an(obj));
+            FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
           }
-        }
         break;
     }
   }
 
-  if (!can_take_obj(ch, obj)) {
-    return FALSE;
+  else if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP) {
+    if (GET_WORKSHOP_GRADE(obj) > TYPE_KIT) {
+      FALSE_CASE_PRINTF(GET_WORKSHOP_IS_SETUP(obj), "You may wish to pack %s up first.", decapitalize_a_an(obj));
+      FALSE_CASE_PRINTF(GET_WORKSHOP_UNPACK_TICKS(obj), "%s is in use right now.", CAP(GET_OBJ_NAME(obj)));
+    }
   }
 
-  if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 1) > 1 && (GET_OBJ_VAL(obj, 2) || GET_OBJ_VAL(obj, 3))) {
-    send_to_char(ch, "You may wish to pack %s up first.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-    return FALSE;
+  if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)) && !ch->in_veh) {
+    if (access_level(ch, LVL_PRESIDENT)) {
+      act("You bypass the !TAKE flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
+    } else {
+      if (GET_OBJ_TYPE(obj) == ITEM_DESTROYABLE) {
+        act("You can't pick $p up, but you're pretty sure you could ##^WDESTROY^n it.", FALSE, ch, obj, 0, TO_CHAR);
+      } else {
+        act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
+      }
+      return FALSE;
+    }
   }
 
+  // If it's quest-protected and you're not the questor...
+  FALSE_CASE_PRINTF(ch_is_blocked_by_quest_protections(ch, obj, FALSE), "%s is someone else's quest item.", CAP(GET_OBJ_NAME(obj)));
+
+  return TRUE;
+}
+
+int perform_get_from_room(struct char_data * ch, struct obj_data * obj)
+{
+  // Error messages sent in function.
+  if (!can_take_obj_from_anywhere(ch, obj))
+    return FALSE;
+
+  // Error messages sent in function.
+  if (!can_take_obj_from_room(ch, obj))
+    return FALSE;
 
   if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP) {
     for (struct char_data *tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)
@@ -2038,7 +2054,8 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     mode = SCMD_JUNK;
 
   // You must be in an apartment or vehicle in order to drop or donate economically-sensitive items.
-  if (mode == SCMD_DONATE || (mode != SCMD_JUNK && !((ch->in_room && ch->in_room->apartment) || ch->in_veh))) {
+  bool is_in_apt_veh_or_storage = ((ch->in_room && (ch->in_room->apartment || ROOM_FLAGGED(ch->in_room, ROOM_STORAGE))) || ch->in_veh);
+  if (mode == SCMD_DONATE || (mode != SCMD_JUNK && !is_in_apt_veh_or_storage)) {
     bool action_blocked = FALSE;
     struct room_data *target_room = get_ch_in_room(ch);
 
@@ -2346,7 +2363,7 @@ ACMD(do_drop)
 
   argument = one_argument(argument, arg);
 
-  FAILURE_CASE_PRINTF(!*arg, "What do you want to %s?\r\n", sname);
+  FAILURE_CASE_PRINTF(!*arg, "What do you want to %s?", sname);
   
   if (is_number(arg)) {
     amount = atoi(arg);

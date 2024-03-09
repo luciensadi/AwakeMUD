@@ -3321,44 +3321,32 @@ bool check_spirit_sector(struct room_data *room, int spirit)
 void circle_build(struct char_data *ch, char *type, int force)
 {
   long cost = force * force;
-  if (IS_WORKING(ch))
-  {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
-  if (GET_TRADITION(ch) != TRAD_HERMETIC || GET_ASPECT(ch) == ASPECT_SORCERER)
-  {
-    send_to_char("Only hermetic mages need to construct a hermetic circle.\r\n", ch);
-    return;
-  }
-  if (ch->in_veh) {
-    send_to_char("You can't build a circle in a vehicle.\r\n", ch);
-     return;
-  }
-  if (GET_NUYEN(ch) < cost)
-  {
-    send_to_char(ch, "You need %d nuyen for the materials needed to construct that circle.\r\n", force * force);
-    return;
-  }
+  
+  FAILURE_CASE(IS_WORKING(ch), "You're too busy.");
+  FAILURE_CASE(GET_TRADITION(ch) != TRAD_HERMETIC, "Only hermetic mages can construct hermetic circles.");
+  FAILURE_CASE(ch->in_veh, "You can't build circles inside vehicles.");
+  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < cost, "You need %d nuyen for the materials needed to construct that circle.", cost);
+  FAILURE_CASE(force > (int) (GET_REAL_MAG(ch) / 100), "You can't build a circle with a force higher than your unmodified magic rating.");
+  
   int element = 0;
   for (;element < NUM_ELEMENTS; element++)
     if (is_abbrev(type, elements[element].name))
       break;
-  if (element == NUM_ELEMENTS)
-  {
-    send_to_char("What element do you wish to dedicate this circle to?\r\n", ch);
-    return;
-  }
+
+  FAILURE_CASE(element == NUM_ELEMENTS, "What element do you wish to dedicate this circle to?");
+  
   lose_nuyen(ch, cost, NUYEN_OUTFLOW_LODGE_AND_CIRCLE);
   struct obj_data *obj = read_object(OBJ_HERMETIC_CIRCLE, VIRTUAL);
   GET_MAGIC_TOOL_RATING(obj) = force;
   GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(obj) = element;
   GET_MAGIC_TOOL_OWNER(obj) = GET_IDNUM(ch);
+
   if (GET_LEVEL(ch) > 1) {
     send_to_char("You use your staff powers to greatly accelerate the artistic process.\r\n", ch);
     GET_MAGIC_TOOL_BUILD_TIME_LEFT(obj) = 1;
   } else
     GET_MAGIC_TOOL_BUILD_TIME_LEFT(obj) = force * 60;
+
   AFF_FLAGS(ch).SetBit(AFF_CIRCLE);
   GET_BUILDING(ch) = obj;
   obj_to_room(obj, ch->in_room);
@@ -3369,26 +3357,13 @@ void circle_build(struct char_data *ch, char *type, int force)
 void lodge_build(struct char_data *ch, int force)
 {
   int cost = force * 500;
-  if (IS_WORKING(ch)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
-  if (GET_TRADITION(ch) != TRAD_SHAMANIC) {
-    send_to_char("Only shamans need to build a lodge.\r\n", ch);
-    return;
-  }
-  if (ch->in_veh) {
-    send_to_char("You can't build a lodge in a vehicle.\r\n", ch);
-     return;
-  }
-  if (GET_NUYEN(ch) < cost) {
-    send_to_char(ch, "You need %d nuyen worth of materials to construct that lodge.\r\n", force * 500);
-    return;
-  }
-  if (force > GET_REAL_MAG(ch) / 100) {
-    send_to_char("You can't create a lodge higher than your magic rating.\r\n", ch);
-    return;
-  }
+
+  FAILURE_CASE(IS_WORKING(ch), "You're too busy.");
+  FAILURE_CASE(GET_TRADITION(ch) != TRAD_SHAMANIC, "Only shamans can build lodges.");
+  FAILURE_CASE(ch->in_veh, "You can't build lodges inside vehicles.");
+  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < cost, "You need %d nuyen for the materials needed to construct that lodge.", cost);
+  FAILURE_CASE(force > (int) (GET_REAL_MAG(ch) / 100), "You can't build a lodge with a force higher than your unmodified magic rating.");
+  
   lose_nuyen(ch, cost, NUYEN_OUTFLOW_LODGE_AND_CIRCLE);
   struct obj_data *obj = read_object(OBJ_SHAMANIC_LODGE, VIRTUAL);
   GET_MAGIC_TOOL_RATING(obj) = force;
@@ -5871,7 +5846,7 @@ ACMD(do_destroy)
   if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_LODGE || GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE)) {
     if (GET_OBJ_VAL(obj, 0) == TYPE_LODGE) {
       send_to_char(ch, "You pull down the supports and pack away the talismans.\r\n");
-      act("$n roughly pulls down $p.", TRUE, ch, obj, 0, TO_ROOM);
+      act("$n pulls down $p.", TRUE, ch, obj, 0, TO_ROOM);
     } else {
       send_to_char(ch, "You rub your feet along the lines making up the hermetic circle, erasing them.\r\n");
       act("$n uses $s feet to rub out $p.", TRUE, ch, obj, 0, TO_ROOM);
