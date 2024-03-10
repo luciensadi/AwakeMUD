@@ -101,6 +101,35 @@ void display_gamba_ledger_leaderboard(struct char_data *ch) {
   }
 }
 
+long payout_slots_testable(long bet) {
+  int rolled = number(0, 12501);
+
+  if (rolled == 1) {
+    // 3 Credstick
+    return bet * 60;
+  } else if (rolled <= 4) {
+    // 3 Nuyen
+    return bet * 40;
+  } else if (rolled <= 40) {
+    // 3 Cherries
+    return bet * 20;
+  } else if (rolled <= 580) {
+    // 3 of Any Other
+    return bet * 10;
+  } else if (rolled <= 1231) {
+    // Any 2 Cherries
+    return bet * 3;
+  } else if (rolled <= 5111) {
+    // Any 1 Cherry
+    return bet;
+  } else if (rolled == 0) {
+    return bet;
+  } else {
+    // No hits, display a random set of non-matching reels.
+    return 0;
+  }
+}
+
 void payout_slots(struct obj_data *slots) {
   if (!slots->in_room) {
     mudlog("SYSERR: Entered payout_slots() with a slot machine that has no room!", NULL, LOG_SYSLOG, TRUE);
@@ -271,7 +300,7 @@ void payout_slots(struct obj_data *slots) {
 }
 
 #define MINIMUM_SLOT_SPEND_AMOUNT 100
-#define MAXIMUM_SLOT_SPEND_AMOUNT 2500000
+#define MAXIMUM_SLOT_SPEND_AMOUNT 150000
 SPECIAL(slot_machine) {
   struct obj_data *slots = (struct obj_data *) me;
   char keyword[MAX_INPUT_LENGTH];

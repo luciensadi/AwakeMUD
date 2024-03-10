@@ -138,6 +138,8 @@ struct nego_test_values_struct nego_test_values[] = {
   {"", 0, 0, 0, 0, 0}
 };
 
+extern long payout_slots_testable(long bet);
+
 bool drinks_are_unfucked = TRUE;
 ACMD(do_debug) {
   static char arg1[MAX_INPUT_LENGTH];
@@ -156,6 +158,32 @@ ACMD(do_debug) {
 
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
+
+  if (is_abbrev(arg1, "gambaodds")) {
+    int starting_amt = 100;
+    int max_bet = 150000;
+
+    int num_profitable_runs = 0;
+    int total_runs = 1000;
+
+    for (int attempt = 0; attempt < total_runs; attempt++) {
+      long net = 0;
+      for (int iter = 0; iter < 30000; iter++) {
+        for (int bet = starting_amt; bet < max_bet; bet *= 1.35) {
+          net -= bet;
+          long win_amt = payout_slots_testable(bet);
+          net += win_amt;
+          if (win_amt >= bet * 3) {
+            break;
+          }
+        }
+      }
+      if (net > 0)
+        num_profitable_runs++;
+    }
+    send_to_char(ch, "Had %d profitable runs out of %d (%.2f)", num_profitable_runs, total_runs, (float) num_profitable_runs / total_runs * 100);
+    return;
+  }
 
   if (is_abbrev(arg1, "stripcolor")) {
     const char *colorized = "^ccerulean ^yyellow ^rred^oand^Wwhite^n ^[F123]x^[F124]t^[F125]e^[F543]r^[F210]m";
