@@ -798,7 +798,7 @@ void assign_mobiles(void)
 
   #ifdef USE_PRIVATE_CE_WORLD
   // Airport painter.
-  ASSIGNMOB(65501), painter);
+  ASSIGNMOB(65501, painter);
   #endif
 
   ASSIGNMOB(17510, multnomah_guard);
