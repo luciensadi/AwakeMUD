@@ -2957,10 +2957,22 @@ void matrix_update()
           }
         }
         // We also need to check surrounding hosts to prevent SANs from re-encrypting.
+        rnum_t adjacent_rnum;
         for (struct exit_data *exit = HOST.exit; exit && !decker; exit = exit->next) {
-          rnum_t host_rnum = real_host(exit->host);
-          if (host_rnum >= 0) {
-            for (struct matrix_icon *icon = matrix[host_rnum].icons; icon; icon = icon->next_in_host) {
+          adjacent_rnum = real_host(exit->host);
+          if (adjacent_rnum >= 0) {
+            for (struct matrix_icon *icon = matrix[adjacent_rnum].icons; icon; icon = icon->next_in_host) {
+              if (!ICON_IS_IC(icon)) {
+                decker = TRUE;
+                break;
+              }
+            }
+          }
+        }
+        // Parent may not have been listed as an exit, but should still be checked.
+        if (!decker && (adjacent_rnum = real_host(HOST.parent))) {
+          if (adjacent_rnum >= 0) {
+            for (struct matrix_icon *icon = matrix[adjacent_rnum].icons; icon; icon = icon->next_in_host) {
               if (!ICON_IS_IC(icon)) {
                 decker = TRUE;
                 break;
