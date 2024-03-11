@@ -6356,7 +6356,7 @@ bool obj_is_a_vehicle_title(struct obj_data *obj) {
   }                                                    \
 }
 
-#define TRUE_CASE(condition) { if ((condition)) { return TRUE; } }
+#define TRUE_CASE_NO_PRINT(condition) { if ((condition)) { return TRUE; } }
 
 bool can_perform_aggressive_action(struct char_data *actor, struct char_data *victim, const char *calling_func_name, bool send_message) {
   if (!actor || !victim) {
@@ -6372,7 +6372,7 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   }
 
   // Like Johnny Cash, you can always hurt yourself.
-  TRUE_CASE(actor == victim);
+  TRUE_CASE_NO_PRINT(actor == victim);
 
   // Trace back projecting NPCs, puppeted characters, etc.
   struct char_data *actor_original = actor->desc && actor->desc->original ? actor->desc->original : actor;
@@ -6431,7 +6431,7 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   }
 
   // Arena flags bypass all PK checks. We do NOT use original here.
-  TRUE_CASE(ROOM_FLAGGED(actor_in_room, ROOM_ARENA) && ROOM_FLAGGED(actor_in_room, ROOM_ARENA));
+  TRUE_CASE_NO_PRINT(ROOM_FLAGGED(actor_in_room, ROOM_ARENA) && ROOM_FLAGGED(actor_in_room, ROOM_ARENA));
 
   // PK flag checks: You must be flagged PK before you can attack anyone outside of an arena.
   FALSE_CASE_ACTOR(!PRF_FLAGGED(actor_original, PRF_PKER), "You must ##^WTOGGLE PK^n before you can do that.\r\n");

@@ -31,6 +31,7 @@
 #include "utils.hpp"
 #include "constants.hpp"
 #include "config.hpp"
+#include "vehicles.hpp"
 
 SPECIAL(call_elevator);
 SPECIAL(elevator_spec);
@@ -1544,18 +1545,101 @@ static void close_elevator_doors(struct room_data *room, int num, int floor)
 // elevator lobby / call-button spec
 // ______________________________
 
+bool find_elevator(struct room_data *in_room, int &elevator_idx, int &floor_idx) {
+  if (!in_room)
+    return FALSE;
+
+  for (elevator_idx = 0; elevator_idx < num_elevators; elevator_idx++) {
+    if (elevator[elevator_idx].room == GET_ROOM_VNUM(in_room)) {
+      floor_idx = -1;
+      return TRUE;
+    }
+
+    for (floor_idx = 0; floor_idx < elevator[elevator_idx].num_floors; floor_idx++) {
+      if (elevator[elevator_idx].floor[floor_idx].vnum == GET_ROOM_VNUM(in_room)) {
+        return TRUE;
+      }
+    }
+  }
+
+  elevator_idx = floor_idx = 0;
+  return FALSE;
+}
+
+bool interact_with_elevator(struct room_data *called_from, int elevator_idx, int floor_idx, struct char_data *ch, const char *argument) {
+  if (ch->in_veh && !IS_RIGGING(ch)) {
+    // Don't block people from pushing vehicles out the back.
+    return FALSE;
+  }
+
+  TRUE_CASE(IS_ASTRAL(ch), "Astral entities can't push buttons.");
+  // todo TRUE_CASE(index < 0 || elevator[elevator_idx].destination, "You press the call button, but the elevator's already headed somewhere else. Try again soon.");
+
+  rnum_t car_rnum = real_room(elevator[elevator_idx].room);
+  TRUE_CASE(car_rnum < 0, "This elevator is broken. Alert staff.");
+
+  if (floor_idx == -1) {
+    // They're in the elevator car. Push a floor button or open/close.
+    // TODO: Implement.
+  } else {
+    // They're at an elevator stop.
+    struct room_direction_data *car_exit = world[car_rnum].dir_option[elevator[elevator_idx].floor[floor_idx].doors];
+    TRUE_CASE(car_exit && car_exit->to_room == called_from && !IS_SET(car_exit->exit_info, EX_CLOSED), "The door is already open!");
+
+    if (IS_RIGGING(ch)) {
+      struct veh_data *veh;
+      RIG_VEH(ch, veh);
+      
+      if (veh) {
+        send_to_char("You extend your manipulator and call the elevator.\r\n", ch);
+        // Idk why, but cannot be assed to compose a separate string right now. Fix later.
+        send_to_room("A nearby vehicle presses the call button.\r\n", called_from, veh);
+      } else {
+        send_to_char("You press the call button, and the small light turns on.\r\n", ch);
+        act("$n presses the call button.", FALSE, ch, 0, 0, TO_ROOM);
+      }
+    } else {
+      send_to_char("You press the call button, and the small light turns on.\r\n", ch);
+      act("$n presses the call button.", FALSE, ch, 0, 0, TO_ROOM);
+    }
+
+    elevator[elevator_idx].destination = GET_ROOM_VNUM(called_from);
+  }
+  return TRUE;
+}
+
+ACMD(do_call_elevator_in_vehicle) {
+  int elevator_idx = 0, floor_idx = 0;
+  
+  skip_spaces(&argument);
+
+  struct veh_data *veh;
+  RIG_VEH(ch, veh);
+  
+  FAILURE_CASE(!veh, "You need to be in a vehicle to do that.");
+  FAILURE_CASE(!get_veh_grabber(veh), "Your vehicle isn't equipped with a manipulator arm.");
+  FAILURE_CASE(!veh->in_room, "Your manipulator arm can't find any elevator buttons from in here.");
+  FAILURE_CASE(!find_elevator(veh->in_room, elevator_idx, floor_idx), "There's nothing here your vehicle can press.");
+
+  interact_with_elevator(veh->in_room, elevator_idx, floor_idx, ch, argument);
+}
+
 SPECIAL(call_elevator)
 {
-  int i = 0, j, index = -1;
+  int elevator_idx = 0, floor_idx = 0;
   long rnum;
   if (!cmd || !ch || !ch->in_room)
     return FALSE;
 
-  for (i = 0; i < num_elevators && index < 0; i++)
-    for (j = 0; j < elevator[i].num_floors && index < 0; j++)
-      if (elevator[i].floor[j].vnum == ch->in_room->number)
-        index = i;
+  // Determine our elevator and floor index.
+  if (!find_elevator(ch->in_room, elevator_idx, floor_idx)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Elevator call button at %s (%ld) could not find associated elevator.",
+                    GET_ROOM_NAME(ch->in_room),
+                    GET_ROOM_VNUM(ch->in_room));
+    return FALSE;
+  }
 
+  // Push button.
   if (CMD_IS("push") || CMD_IS("press")) {
     skip_spaces(&argument);
     if (!*argument || !(!strcasecmp("elevator", argument) ||
@@ -1565,48 +1649,26 @@ SPECIAL(call_elevator)
       // Don't consume the command.
       return FALSE;
     }
-    else {
-      if (ch->in_veh)
-        return FALSE;
-      if (IS_ASTRAL(ch)) {
-        send_to_char("You can't do that in your current state.\r\n", ch);
-        return TRUE;
-      }
-      if (index < 0 || elevator[index].destination) {
-        send_to_char("You press the call button, but the elevator's already headed somewhere else, so nothing happens.\r\n", ch);
-        return TRUE;
-      }
-      rnum = real_room(elevator[index].room);
-      for (i = 0; i < UP; i++)
-        if (world[rnum].dir_option[i] &&
-            world[rnum].dir_option[i]->to_room == ch->in_room &&
-            !IS_SET(world[rnum].dir_option[i]->exit_info, EX_CLOSED)) {
-          send_to_char("The door is already open!\r\n", ch);
-          elevator[index].destination = 0;
-          return TRUE;
-        }
-      send_to_char("You press the call button, and the small light turns on.\r\n", ch);
-      act("$n presses the call button.", FALSE, ch, 0, 0, TO_ROOM);
-      elevator[index].destination = ch->in_room->number;
-    }
-    return TRUE;
+
+    return interact_with_elevator(ch->in_room, elevator_idx, floor_idx, ch, argument);
   }
 
+  // Look at the panel.
   if (CMD_IS("look") || CMD_IS("examine") || CMD_IS("read")) {
     one_argument(argument, arg);
-    if (!*arg || index < 0 ||
+    if (!*arg || elevator_idx < 0 ||
         !(!strn_cmp("panel", arg, strlen(arg)) || !strn_cmp("elevator", arg, strlen(arg))))
       return FALSE;
 
-    rnum = real_room(elevator[index].room);
+    rnum = real_room(elevator[elevator_idx].room);
 
-    i = world[rnum].rating + 1 - elevator[index].num_floors - elevator[index].start_floor;
-    if (i > 0)
-      send_to_char(ch, "The floor indicator shows that the elevator is currently at B%d.\r\n", i);
-    else if (i == 0)
+    int floor = world[rnum].rating + 1 - elevator[elevator_idx].num_floors - elevator[elevator_idx].start_floor;
+    if (floor > 0)
+      send_to_char(ch, "The floor indicator shows that the elevator is currently at B%d.\r\n", floor);
+    else if (floor == 0)
       send_to_char(ch, "The floor indicator shows that the elevator is currently at the ground floor.\r\n");
     else
-      send_to_char(ch, "The floor indicator shows that the elevator is currently at floor %d.\r\n", 0 - i);
+      send_to_char(ch, "The floor indicator shows that the elevator is currently at floor %d.\r\n", 0 - floor);
     return TRUE;
   }
 

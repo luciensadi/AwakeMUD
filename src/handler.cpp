@@ -485,8 +485,11 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
 void affect_total_veh(struct veh_data * veh)
 {
   int i, j;
-  for (i = 0; i < (NUM_MODS - 1); i++)
+  for (i = 0; i < NUM_MODS; i++)
   {
+    if (i == MOD_MOUNT)
+      continue;
+    
     if (GET_MOD(veh, i)) {
       for (j = 0; j < MAX_OBJ_AFFECT; j++) {
         affect_veh(veh, GET_MOD(veh, i)->affected[j].location,
@@ -3033,6 +3036,33 @@ struct char_data *get_char_vis(struct char_data * ch, const char *name)
         return i;
     }
 
+  return NULL;
+}
+
+struct veh_data *get_veh_in_list(struct char_data *ch, const char *name, struct veh_data *list) {
+  int number;
+  char tmpname[MAX_INPUT_LENGTH];
+  char *tmp = tmpname;
+  int j = 0;
+
+  if (!list)
+    return NULL;
+
+  strlcpy(tmp, name, sizeof(tmpname));
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
+    return NULL;
+
+  for (struct veh_data *veh = list; veh && (j <= number); veh = veh->next_veh) {
+    if (ch->in_veh && veh->in_veh) {
+      // Ch and veh are in separate vehicles, and not in nested vehicles.
+      if (ch->in_veh != veh->in_veh && ch->in_veh->in_veh != veh->in_veh)
+        continue;
+    }
+    if (keyword_appears_in_veh(tmp, veh)) {
+      if (++j == number)
+        return veh;
+    }
+  }
   return NULL;
 }
 

@@ -1444,35 +1444,8 @@ void get_from_room(struct char_data * ch, char *arg)
           return;
         }
 
-        // No taking vehicles that are moving.
-        if (veh->cspeed != SPEED_OFF) {
-          send_to_char(ch, "%s needs to be completely powered off before you can lift it.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-          return;
-        }
-
-        // No taking vehicles that are actively rigged.
-        if (veh->rigger) {
-          send_to_char(ch, "%s has someone in control of it, you'd better not.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-          return;
-        }
-
-        // No taking vehicles with people inside.
-        if (veh->people) {
-          send_to_char(ch, "%s has people inside it, you'd better not.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-          return;
-        }
-
-        // No taking vehicles with other vehicles inside.
-        if (veh->carriedvehs) {
-          send_to_char(ch, "%s has another vehicle inside it, there's no way you can carry that much!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-          return;
-        }
-
-        // No taking NPC vehicles or locked, non-destroyed vehicles that belong to someone else.
-        if (!veh->owner || (veh->owner != GET_IDNUM(ch) && (veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED))) {
-          snprintf(buf, sizeof(buf), "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
-          act(buf, FALSE, ch, 0, 0, TO_ROOM);
-          send_to_char(buf, ch);
+        // Error messages sent in function.
+        if (!can_take_veh(ch, veh)) {
           return;
         }
 
@@ -1649,7 +1622,7 @@ void get_while_rigging(struct char_data *ch, char *argument) {
         }
       }
       FAILURE_CASE(!found_containers, "There are no manipulator-accessible containers around your vehicle.");
-      FAILURE_CASE_PRINTF(!found_something, "You don't see anything named '%s' in the manipulator-accessible containers around your vehicle.", obj_name);
+      FAILURE_CASE_PRINTF(!found_something && obj_dotmode != FIND_ALL, "You don't see anything named '%s' in the manipulator-accessible containers around your vehicle.", obj_name);
     }
     return;
   }
@@ -1657,9 +1630,14 @@ void get_while_rigging(struct char_data *ch, char *argument) {
   // GET X
   if (obj_dotmode == FIND_INDIV) {
     struct obj_data *obj = get_obj_in_list_vis(ch, obj_name, veh->in_room ? veh->in_room->contents : veh->in_veh->contents);
-    FAILURE_CASE_PRINTF(!obj, "You don't see anything named '%s' around your vehicle.", obj_name);
-    // Error messages are sent in veh_get_from_room.
-    veh_get_from_room(veh, obj, ch);
+    if (!obj) {
+      struct veh_data *target_veh = get_veh_in_list(ch, obj_name, veh->in_room ? veh->in_room->vehicles : veh->in_veh->carriedvehs);
+      FAILURE_CASE_PRINTF(!target_veh, "You don't see anything named '%s' around your vehicle.", obj_name);
+      veh_get_from_room(veh, target_veh, ch);
+    } else {
+      // Error messages are sent in veh_get_from_room.
+      veh_get_from_room(veh, obj, ch);
+    }
   } else {
     bool found_something = FALSE;
     for (struct obj_data *obj = veh->in_room ? veh->in_room->contents : veh->in_veh->contents, *next_obj; obj; obj = next_obj) {
@@ -1668,6 +1646,17 @@ void get_while_rigging(struct char_data *ch, char *argument) {
         found_something = TRUE;
         // Error messages are sent in veh_get_from_room.
         veh_get_from_room(veh, obj, ch);
+      }
+    }
+    for (struct veh_data *target_veh = veh->in_room ? veh->in_room->vehicles : veh->in_veh->carriedvehs, *next_veh; target_veh; target_veh = next_veh) {
+      next_veh = target_veh->next_veh;
+      if (target_veh == veh)
+        continue;
+
+      if (obj_dotmode == FIND_ALL || keyword_appears_in_veh(obj_name, target_veh)) {
+        found_something = TRUE;
+        // Error messages are sent in veh_get_from_room.
+        veh_get_from_room(veh, target_veh, ch);
       }
     }
     FAILURE_CASE_PRINTF(!found_something, "You don't see anything named '%s' around your vehicle.", obj_name);
@@ -2353,15 +2342,21 @@ void drop_while_rigging(struct char_data *ch, char *argument) {
 
   // DROP X
   if (obj_dotmode == FIND_INDIV) {
+    // Put us in the back of the vehicle, then search it.
     bool old_vfront = ch->vfront;
     ch->vfront = FALSE;
-
     struct obj_data *obj = get_obj_in_list_vis(ch, obj_name, veh->contents);
-    FAILURE_CASE_PRINTF(!obj, "You don't see anything named '%s' in your vehicle.", obj_name);
-    // Error messages are sent in veh_drop_obj.
-    veh_drop_obj(veh, obj, ch);
-
     ch->vfront = old_vfront;
+
+    if (!obj) {
+      struct veh_data *carried_veh = get_veh_in_list(ch, obj_name, veh->carriedvehs);
+      FAILURE_CASE_PRINTF(!carried_veh, "You don't see anything named '%s' in your vehicle.", obj_name);
+      // Error messages are sent in veh_drop_veh.
+      veh_drop_veh(veh, carried_veh, ch);
+    } else {
+      // Error messages are sent in veh_drop_obj.
+      veh_drop_obj(veh, obj, ch);
+    }
   } else {
     FAILURE_CASE(obj_dotmode == FIND_ALL && !veh->contents, "There's nothing in your vehicle.");
 
@@ -2372,6 +2367,17 @@ void drop_while_rigging(struct char_data *ch, char *argument) {
         found_something = TRUE;
         // Error messages are sent in veh_drop_obj.
         veh_drop_obj(veh, obj, ch);
+      }
+    }
+    for (struct veh_data *carried_veh = veh->carriedvehs, *next_veh; carried_veh; carried_veh = next_veh) {
+      next_veh = carried_veh->next_veh;
+      if (carried_veh == veh)
+        continue;
+        
+      if (obj_dotmode == FIND_ALL || keyword_appears_in_veh(obj_name, carried_veh)) {
+        found_something = TRUE;
+        // Error messages are sent in veh_drop_veh.
+        veh_drop_veh(veh, carried_veh, ch);
       }
     }
     FAILURE_CASE_PRINTF(!found_something, "You don't see anything named '%s' in your vehicle.", obj_name);

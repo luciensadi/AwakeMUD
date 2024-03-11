@@ -1503,11 +1503,15 @@ void save_vehicles(bool fromCopyover)
     }
 
     fprintf(fl, "[MODIS]\n");
-    for (int x = 0, v = 0; x < NUM_MODS - 1; x++)
+    for (int x = 0, v = 0; x < NUM_MODS; x++) {
+      if (x == MOD_MOUNT)
+        continue;
+        
       if (GET_MOD(veh, x)) {
         fprintf(fl, "\tMod%d:\t%ld\n", v, GET_OBJ_VNUM(GET_MOD(veh, x)));
         v++;
       }
+    }
     fprintf(fl, "[MOUNTS]\n");
     int m = 0;
     for (obj = veh->mount; obj; obj = obj->next_content, m++) {
