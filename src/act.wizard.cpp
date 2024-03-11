@@ -103,6 +103,8 @@ extern const char *render_door_type_string(struct room_direction_data *door);
 extern void save_shop_orders();
 extern void turn_hardcore_on_for_character(struct char_data *ch);
 extern void turn_hardcore_off_for_character(struct char_data *ch);
+extern void stop_rigging(struct char_data *ch);
+extern void stop_driving(struct char_data *ch);
 
 extern void DBFinalize();
 
@@ -849,6 +851,8 @@ ACMD(do_goto)
   }
 #endif
 
+  stop_driving(ch);
+
   if (POOFOUT(ch))
     act(POOFOUT(ch), TRUE, ch, 0, 0, TO_ROOM);
   else
@@ -870,6 +874,7 @@ ACMD(do_goto)
     char_from_room(ch);
     char_to_room(ch, location);
     GET_POS(ch) = POS_STANDING;
+    update_pos(ch);
   }
 
   if (POOFIN(ch))
@@ -886,9 +891,14 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
   if (!ch || !victim)
     return;
 
+  stop_driving(victim);
+
   act("$n is whisked away by the game's administration.", TRUE, victim, 0, 0, TO_ROOM);
   if (AFF_FLAGGED(victim, AFF_PILOT))
     AFF_FLAGS(victim).ToggleBit(AFF_PILOT);
+  if (victim->char_specials.rigging) {
+    victim->char_specials.rigging->cspeed = SPEED_OFF;
+  }
   char_from_room(victim);
 
   if (ch->in_veh) {
@@ -902,6 +912,8 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
   act("$n arrives from a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
   act("$n has transferred you!", FALSE, ch, 0, victim, TO_VICT);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+  if (GET_POS(victim) == POS_SITTING)
+    GET_POS(victim) = POS_STANDING;
   look_at_room(victim, 0, 0);
 }
 
@@ -1020,10 +1032,10 @@ ACMD(do_teleport)
     char was_in[1000];
     snprintf(was_in, sizeof(was_in), "%s '%s'", victim->in_veh ? "vehicle" : "room", victim->in_veh ? GET_VEH_NAME(victim->in_veh) : GET_ROOM_NAME(victim->in_room));
 
+    stop_driving(victim);
+
     send_to_char(OK, ch);
     act("$n disappears in a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
-    if (AFF_FLAGGED(victim, AFF_PILOT))
-      AFF_FLAGS(victim).ToggleBit(AFF_PILOT);
     char_from_room(victim);
     char_to_room(victim, target);
     act("$n arrives from a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);
@@ -2139,36 +2151,10 @@ ACMD(do_return)
   struct char_data *vict;
 
   if (PLR_FLAGGED(ch, PLR_REMOTE)) {
-    PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
-    ch->char_specials.rigging->rigger = NULL;
-    ch->char_specials.rigging->cspeed = SPEED_OFF;
-    stop_chase(ch->char_specials.rigging);
-    send_to_veh("You slow to a halt.\r\n", ch->char_specials.rigging, NULL, 0);
-    ch->char_specials.rigging = NULL;
-    stop_fighting(ch);
-
-    send_to_char("You return to your senses.\r\n", ch);
-
-    {
-      struct obj_data *jack = get_datajack(ch, TRUE);
-      if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
-        if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
-          if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
-            snprintf(buf, sizeof(buf), "$n slowly removes $s hand from the induction pad.");
-          } else {
-            snprintf(buf, sizeof(buf), "$n carefully removes the jack from $s head.");
-          }
-        } else {
-          snprintf(buf, sizeof(buf), "$n carefully removes the jack from $s eye.");
-        }
-      } else {
-        // We should never see this.
-        snprintf(buf, sizeof(buf), "$n undoes the leads of $s 'trode net.");
-      }
-    }
-    act(buf, TRUE, ch, 0, 0, TO_ROOM);
+    stop_rigging(ch);
     return;
   }
+
   if (ch->desc) {
     if (ch->desc->original) {
       send_to_char("You return to your original body.\r\n", ch);

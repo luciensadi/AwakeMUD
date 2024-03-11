@@ -26,6 +26,9 @@ extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 int move_vehicle(struct char_data *ch, int dir);
 ACMD_CONST(do_return);
 int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
+void stop_vehicle(struct veh_data *veh);
+void stop_rigging(struct char_data *ch);
+void stop_driving(struct char_data *ch);
 
 extern int max_npc_vehicle_lootwreck_time;
 
@@ -313,9 +316,7 @@ ACMD(do_rig)
       send_to_char("But you're not rigging.\r\n", ch);
       return;
     }
-    STOP_DRIVING(ch);
-    if (!VEH->dest)
-      VEH->cspeed = SPEED_OFF;
+    stop_rigging(ch);
     stop_chase(VEH);
     send_to_char("You return to your senses.\r\n", ch);
     snprintf(buf1, sizeof(buf1), "%s returns to their senses.\r\n", capitalize(GET_NAME(ch)));
@@ -1847,7 +1848,7 @@ ACMD(do_gridguide)
     return;
   }
 
-  if (!str_cmp(arg, "stop")) {
+  if (veh->dest && !str_cmp(arg, "stop")) {
     veh->dest = 0;
     send_to_veh("The autonav disengages.\r\n", veh, 0, TRUE);
     if (!AFF_FLAGGED(ch, AFF_PILOT))
@@ -2560,4 +2561,75 @@ int get_vehicle_modifier(struct veh_data *veh, bool include_weather)
   if (include_weather && weather_info.sky >= SKY_RAINING)
     mod++;
   return mod;
+}
+
+// Call when the rigger or driver is no longer available.
+void stop_vehicle(struct veh_data *veh) {
+  // If it's not under autopilot, shut it down.
+  if (!veh->dest && veh->cspeed > SPEED_OFF) {
+    // Message vehicle about it stopping if it's actually moving.
+    if (veh->cspeed > SPEED_IDLE)
+      send_to_veh("You slow to a halt.\r\n", veh, NULL, 0);
+    // Park it.
+    veh->cspeed = SPEED_OFF;
+  }
+
+  // Clear rigger info.
+  veh->rigger = NULL;
+
+  // Clear chasing info.
+  stop_chase(veh);
+}
+
+void stop_rigging(struct char_data *ch) {
+  if (!ch)
+    return;
+
+  struct veh_data *veh = ch->char_specials.rigging ? ch->char_specials.rigging : ch->in_veh;
+
+  if (!veh)
+    return;
+
+  stop_vehicle(veh);
+  stop_fighting(ch);
+
+  ch->char_specials.rigging = NULL;
+  PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
+  AFF_FLAGS(ch).RemoveBit(AFF_RIG);
+
+  send_to_char("You return to your senses.\r\n", ch);
+
+  struct obj_data *jack = get_datajack(ch, TRUE);
+  if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
+    if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
+      if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
+        snprintf(buf, sizeof(buf), "$n slowly removes $s hand from the induction pad%s.", veh == ch->in_veh ? ", relinquishing control" : "");
+      } else {
+        snprintf(buf, sizeof(buf), "$n carefully removes the jack from $s head%s.", veh == ch->in_veh ? ", relinquishing control" : "");
+      }
+    } else {
+      snprintf(buf, sizeof(buf), "$n carefully removes the jack from $s eye%s.", veh == ch->in_veh ? ", relinquishing control" : "");
+    }
+  } else {
+    // We should never see this.
+    snprintf(buf, sizeof(buf), "$n undoes the leads of $s 'trode net%s.", veh == ch->in_veh ? ", relinquishing control" : "");
+  }
+  act(buf, TRUE, ch, 0, 0, TO_ROOM);
+}
+
+// Only call this if you're SURE you want them to stop driving. Check for flight status etc.
+void stop_driving(struct char_data *ch) {
+  if (!ch || !ch->in_veh)
+    return;
+
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    stop_rigging(ch);
+  } else if (AFF_FLAGGED(ch, AFF_PILOT)) {
+    stop_vehicle(ch->in_veh);
+    AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
+    send_to_char("You relinquish the driver's seat.\r\n", ch);
+    snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
+    send_to_veh(buf1, VEH, ch, FALSE);
+  }
+
 }
