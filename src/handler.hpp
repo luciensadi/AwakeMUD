@@ -50,8 +50,6 @@ struct obj_data *get_obj_in_list_num(int num, struct obj_data *list);
 struct obj_data *get_obj(char *name);
 struct obj_data *get_obj_num(int nr);
 
-struct veh_data *get_veh_in_list(struct char_data *ch, const char *name, struct veh_data *list);
-
 void    obj_to_veh(struct obj_data *object, struct veh_data *veh);
 void    obj_to_room(struct obj_data *object, struct room_data *room);
 void    obj_from_room(struct obj_data *object);

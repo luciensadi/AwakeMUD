@@ -2023,7 +2023,7 @@ ACMD(do_enter)
 
     struct veh_data *veh;
     RIG_VEH(ch, veh);
-    if (veh) {
+    if (veh && (AFF_FLAGGED(ch, AFF_PILOT) || IS_RIGGING(ch))) {
       found_veh = get_veh_list(buf, veh->in_veh ? veh->in_veh->carriedvehs : veh->in_room->vehicles, ch);
     } else {
       if (ch->in_veh && !AFF_FLAGGED(ch, AFF_PILOT)) {
@@ -2090,10 +2090,12 @@ void leave_veh(struct char_data *ch)
   struct obj_data *mount = NULL;
   struct room_data *door = NULL;
 
+  /*
   if (AFF_FLAGGED(ch, AFF_RIG)) {
     send_to_char(ch, "Try returning to your senses first.\r\n");
     return;
   }
+  */
 
   RIG_VEH(ch, veh);
 

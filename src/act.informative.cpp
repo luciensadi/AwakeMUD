@@ -2651,9 +2651,7 @@ void look_at_target(struct char_data * ch, char *arg)
   // Look at vehicles, either in the back of a vehicle (look at inside ones) or outside of a vehicle.
   if (!ch->in_veh || (ch->in_veh && !ch->vfront)) {
     found_veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
-  }
-
-  if (ch->in_veh) {
+  } else if (ch->in_veh) {
     // Look at outside vehicles from within a vehicle.
     found_veh = get_veh_list(arg, (get_ch_in_room(ch))->vehicles, ch);
   }

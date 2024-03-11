@@ -1631,7 +1631,7 @@ void get_while_rigging(struct char_data *ch, char *argument) {
   if (obj_dotmode == FIND_INDIV) {
     struct obj_data *obj = get_obj_in_list_vis(ch, obj_name, veh->in_room ? veh->in_room->contents : veh->in_veh->contents);
     if (!obj) {
-      struct veh_data *target_veh = get_veh_in_list(ch, obj_name, veh->in_room ? veh->in_room->vehicles : veh->in_veh->carriedvehs);
+      struct veh_data *target_veh = get_veh_list(obj_name, veh->in_room ? veh->in_room->vehicles : veh->in_veh->carriedvehs, ch);
       FAILURE_CASE_PRINTF(!target_veh, "You don't see anything named '%s' around your vehicle.", obj_name);
       veh_get_from_room(veh, target_veh, ch);
     } else {
@@ -2349,7 +2349,7 @@ void drop_while_rigging(struct char_data *ch, char *argument) {
     ch->vfront = old_vfront;
 
     if (!obj) {
-      struct veh_data *carried_veh = get_veh_in_list(ch, obj_name, veh->carriedvehs);
+      struct veh_data *carried_veh = get_veh_list(obj_name, veh->carriedvehs, ch);
       FAILURE_CASE_PRINTF(!carried_veh, "You don't see anything named '%s' in your vehicle.", obj_name);
       // Error messages are sent in veh_drop_veh.
       veh_drop_veh(veh, carried_veh, ch);
@@ -2373,7 +2373,7 @@ void drop_while_rigging(struct char_data *ch, char *argument) {
       next_veh = carried_veh->next_veh;
       if (carried_veh == veh)
         continue;
-        
+
       if (obj_dotmode == FIND_ALL || keyword_appears_in_veh(obj_name, carried_veh)) {
         found_something = TRUE;
         // Error messages are sent in veh_drop_veh.
