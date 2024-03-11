@@ -170,7 +170,8 @@ bool veh_drop_veh(struct veh_data *veh, struct veh_data *carried_veh, struct cha
 
   // Message passengers.
   if (veh->people) {
-    send_to_veh("The manipulator arm reaches in and lifts out %s.", veh, ch, FALSE, GET_VEH_NAME(carried_veh));
+    snprintf(msg_buf, sizeof(msg_buf), "The manipulator arm reaches in and lifts out %s.\r\n", decapitalize_a_an(carried_veh));
+    send_to_veh(msg_buf, veh, ch, FALSE);
   }
 
   return TRUE;
@@ -213,7 +214,8 @@ bool veh_drop_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *
 
   // Message passengers.
   if (veh->people) {
-    send_to_veh("The manipulator arm reaches in and lifts out %s.", veh, ch, FALSE, decapitalize_a_an(obj));
+    snprintf(msg_buf, sizeof(msg_buf), "The manipulator arm reaches in and lifts out %s.\r\n", decapitalize_a_an(obj));
+    send_to_veh(msg_buf, veh, ch, FALSE);
   }
 
   return TRUE;
@@ -328,7 +330,8 @@ bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *
 
   // Message passengers.
   if (veh->people) {
-    send_to_veh("The manipulator arm reaches in and deposits %s.", veh, ch, FALSE, decapitalize_a_an(obj));
+    snprintf(msg_buf, sizeof(msg_buf), "The manipulator arm reaches in and deposits %s.\r\n", decapitalize_a_an(obj));
+    send_to_veh(msg_buf, veh, ch, FALSE);
   }
 
   return TRUE;
@@ -380,7 +383,8 @@ bool _veh_get_veh(struct veh_data *veh, struct veh_data *target_veh, struct char
 
   // Message passengers.
   if (veh->people) {
-    send_to_veh("The manipulator arm reaches in and deposits %s.", veh, ch, FALSE, decapitalize_a_an(target_veh));
+    snprintf(msg_buf, sizeof(msg_buf), "The manipulator arm reaches in and deposits %s.\r\n", decapitalize_a_an(target_veh));
+    send_to_veh(msg_buf, veh, ch, FALSE);
   }
 
   return TRUE;
