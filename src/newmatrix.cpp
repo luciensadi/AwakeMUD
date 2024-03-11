@@ -2949,6 +2949,7 @@ void matrix_update()
       if (HOST.type == HOST_DATASTORE && HOST.undiscovered_paydata <= 0 && !HOST.payreset) {
         reset_host_paydata(rnum);
       } else {
+        // We don't want to re-encrypt if there's a decker in the area.
         // See if there are any deckers in here.
         for (struct matrix_icon *icon = HOST.icons; icon; icon = icon->next_in_host) {
           if (!ICON_IS_IC(icon)) {
@@ -2956,7 +2957,7 @@ void matrix_update()
             break;
           }
         }
-        // We also need to check surrounding hosts to prevent SANs from re-encrypting.
+        // Check surrounding hosts.
         rnum_t adjacent_rnum;
         for (struct exit_data *exit = HOST.exit; exit && !decker; exit = exit->next) {
           adjacent_rnum = real_host(exit->host);
@@ -2969,7 +2970,7 @@ void matrix_update()
             }
           }
         }
-        // Parent may not have been listed as an exit, but should still be checked.
+        // Parent may not have been included as an exit, so also needs to be checked.
         if (!decker && (adjacent_rnum = real_host(HOST.parent))) {
           if (adjacent_rnum >= 0) {
             for (struct matrix_icon *icon = matrix[adjacent_rnum].icons; icon; icon = icon->next_in_host) {
