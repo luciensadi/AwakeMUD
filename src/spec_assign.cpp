@@ -636,6 +636,7 @@ void assign_mobiles(void)
   SPECIAL(marksmanship_trainer);
   SPECIAL(receptionist_95902);
   SPECIAL(graffiti_cleaner);
+  
 
   ASSIGNMOB(22870, marksmanship_first);
   ASSIGNMOB(4101, marksmanship_second);
@@ -794,6 +795,12 @@ void assign_mobiles(void)
   ASSIGNMOB(5034, Janis_Meet);
   ASSIGNMOB(5030, Janis_Captive);
   ASSIGNMOB(37507, painter);
+
+  #ifdef USE_PRIVATE_CE_WORLD
+  // Airport painter.
+  ASSIGNMOB(65501), painter);
+  #endif
+
   ASSIGNMOB(17510, multnomah_guard);
   ASSIGNMOB(17103, mageskill_herbie);
   ASSIGNMOB(65121, mageskill_anatoly);
@@ -1135,9 +1142,6 @@ void assign_rooms(void)
   ASSIGNROOM(8894, car_dealer);
   ASSIGNROOM(19499, car_dealer);
   ASSIGNROOM(24146, car_dealer);
-
-  // Airport painter.
-  ASSIGNMOB(65501), painter);
 #endif
 
   /* Mitsuhama */
