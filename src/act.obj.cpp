@@ -806,38 +806,27 @@ ACMD(do_put)
 
 bool can_take_obj_from_anywhere(struct char_data * ch, struct obj_data * obj)
 {
-  if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
-  {
-    act("$p: you can't carry that many items.", FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
-  }
+  FALSE_CASE_PRINTF(IS_CARRYING_N(ch) >= CAN_CARRY_N(ch), "%s: you can't carry that many items.", CAP(GET_OBJ_NAME(obj)));
 
-  if ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) {
-    act("$p: you can't carry that much weight.", FALSE, ch, obj, 0, TO_CHAR);
-    if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
-      send_to_char("(You can still grab rounds out of it with ^WPOCKETS ADD <container>^n though!)\r\n", ch);
-    }
-    return 0;
-  }
+  FALSE_CASE_PRINTF((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch), "%s: you can't carry that much weight.%s",
+                    CAP(GET_OBJ_NAME(obj)),
+                    GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO ? "(You can still grab rounds out of it with ^WPOCKETS ADD <container>^n though!)" : "");
 
   if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)) && !ch->in_veh) {
     if (access_level(ch, LVL_PRESIDENT)) {
-      act("You bypass the !TAKE flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
+      send_to_char(ch, "You bypass the !TAKE flag on %s.", decapitalize_a_an(obj));
     } else {
       if (GET_OBJ_TYPE(obj) == ITEM_DESTROYABLE) {
-        act("You can't pick $p up, but you're pretty sure you could ##^WDESTROY^n it.", FALSE, ch, obj, 0, TO_CHAR);
+        send_to_char(ch, "You can't pick %s up%s", decapitalize_a_an(obj), IS_RIGGING(ch) ? "." : ", but you're pretty sure you could ##^WDESTROY^n it.");
       } else {
-        act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
+        send_to_char(ch, "You can't take %s.", decapitalize_a_an(obj));
       }
-      return 0;
+      return FALSE;
     }
   }
 
   // If it's quest-protected and you're not the questor...
-  if (ch_is_blocked_by_quest_protections(ch, obj, FALSE)) {
-    act("$p is someone else's quest item.", FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
-  }
+  FALSE_CASE_PRINTF(ch_is_blocked_by_quest_protections(ch, obj, FALSE), "%s is someone else's quest item.", CAP(GET_OBJ_NAME(obj)));
 
   return 1;
 }
@@ -1320,12 +1309,12 @@ bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj) {
 
   if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)) && !obj->in_veh) {
     if (access_level(ch, LVL_PRESIDENT)) {
-      act("You bypass the !TAKE flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
+      send_to_char(ch, "You bypass the !TAKE flag on %s.", decapitalize_a_an(obj));
     } else {
       if (GET_OBJ_TYPE(obj) == ITEM_DESTROYABLE) {
-        act("You can't pick $p up, but you're pretty sure you could ##^WDESTROY^n it.", FALSE, ch, obj, 0, TO_CHAR);
+        send_to_char(ch, "You can't pick %s up%s", decapitalize_a_an(obj), IS_RIGGING(ch) ? "." : ", but you're pretty sure you could ##^WDESTROY^n it.");
       } else {
-        act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
+        send_to_char(ch, "You can't take %s.", decapitalize_a_an(obj));
       }
       return FALSE;
     }
