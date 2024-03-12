@@ -73,6 +73,7 @@ extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE);
 extern void display_gamba_ledger_leaderboard(struct char_data *ch);
+const char *convert_string_to_html(const char *str);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -5900,140 +5901,11 @@ ACMD(do_who)
 
   if (subcmd) {
     FILE *fl;
-    static char buffer[MAX_STRING_LENGTH*4];
-    char *temp = &buffer[0];
-    const char *color;
-    char *str = str_dup(buf2);
-    char *ptr = str;
-    while(*str) {
-      if (*str == '^') {
-        switch (*++str) {
-          case 'l':
-            color = "<span style=\"color:#000000\">";
-            break; // black
-          case 'r':
-          case 't':
-            color = "<span style=\"color:#990000\">";
-            break; // red / tan
-          case 'g':
-          case 'j':
-          case 'e':
-            color = "<span style=\"color:#336633\">";
-            break; // green / jade / lime
-          case 'y':
-          case 'o':
-            color = "<span style=\"color:#CC9933\">";
-            break; // yellow / orange
-          case 'b':
-          case 'a':
-            color = "<span style=\"color:#3333CC\">";
-            break; // blue / azure
-          case 'm':
-          case 'p':
-          case 'v':
-            color = "<span style=\"color:#663366\">";
-            break; // magenta / pink / violet
-          case 'n':
-            color = "<span style=\"color:#CCCCCC\">";
-            break; // normal
-          case 'c':
-            color = "<span style=\"color:#009999\">";
-            break; // cyan
-          case 'w':
-            color = "<span style=\"color:#CCCCCC\">";
-            break; // white
-          case 'L':
-            color = "<span style=\"color:#666666\">";
-            break; // bold black
-          case 'R':
-          case 'T':
-            color = "<span style=\"color:#FF0000\">";
-            break; // bold red
-          case 'G':
-          case 'J':
-          case 'E':
-            color = "<span style=\"color:#00FF00\">";
-            break; // bold green
-          case 'Y':
-          case 'O':
-            color = "<span style=\"color:#FFFF00\">";
-            break; // bold yellow
-          case 'B':
-          case 'A':
-            color = "<span style=\"color:#0000FF\">";
-            break; // bold blue
-          case 'M':
-          case 'P':
-          case 'V':
-            color = "<span style=\"color:#FF00FF\">";
-            break; // bold magenta
-          case 'N':
-            color = "<span style=\"color:#CCCCCC\">";
-            break;
-          case 'C':
-            color = "<span style=\"color:#00FFFF\">";
-            break; // bold cyan
-          case 'W':
-            color = "<span style=\"color:#FFFFFF\">";
-            break; // bold white
-          case '^':
-            color = "^";
-            break;
-          default:
-            color = NULL;
-            break;
-        }
-        if (color) {
-          while (*color)
-            *temp++ = *color++;
-          ++str;
-        } else {
-          *temp++ = '^';
-          *temp++ = *str++;
-        }
-      }
-      else if (*str == '<') {
-        str++;
-        *temp++ = '&';
-        *temp++ = 'l';
-        *temp++ = 't';
-        *temp++ = ';';
-      }
-      else if (*str == '>') {
-        str++;
-        *temp++ = '&';
-        *temp++ = 'g';
-        *temp++ = 't';
-        *temp++ = ';';
-      }
-      else if (*str == '(') {
-        str++;
-        *temp++ = '&';
-        *temp++ = 'l';
-        *temp++ = 'p';
-        *temp++ = 'a';
-        *temp++ = 'r';
-        *temp++ = ';';
-      }
-      else if (*str == ')') {
-        str++;
-        *temp++ = '&';
-        *temp++ = 'r';
-        *temp++ = 'p';
-        *temp++ = 'a';
-        *temp++ = 'r';
-        *temp++ = ';';
-      }
-      else
-        *temp++ = *str++;
-    }
-    *temp = '\0';
-    DELETE_AND_NULL_ARRAY(ptr);
     if (!(fl = fopen("text/wholist", "w"))) {
       mudlog("SYSERR: Cannot open wholist for write", NULL, LOG_SYSLOG, FALSE);
       return;
     }
-    fprintf(fl, "<HTML><BODY bgcolor=#11191C><PRE>%s</PRE></BODY></HTML>\r\n", &buffer[0]);
+    fprintf(fl, "<HTML><BODY bgcolor=#11191C><PRE>%s</PRE></BODY></HTML>\r\n", convert_string_to_html(buf2));
     fclose(fl);
   } else send_to_char(buf2, ch);
 }

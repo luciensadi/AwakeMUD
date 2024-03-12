@@ -168,6 +168,15 @@ ACMD(do_debug) {
     return;
   }
 
+  if (is_abbrev(arg1, "genwholist")) {
+    send_to_char("OK, generating wholist file.\r\n", ch);
+    ACMD_DECLARE(do_who);
+    char dummy[5];
+    *dummy = 0;
+    do_who(ch, dummy, 1, 1);
+    return;
+  }
+
   if (is_abbrev(arg1, "hashtest")) {
     std::unordered_map<std::string, int> test_map = {};
 
