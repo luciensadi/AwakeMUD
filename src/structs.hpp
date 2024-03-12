@@ -874,6 +874,8 @@ struct veh_data
   struct room_data *flight_target;
   int flight_duration;
 
+  vnum_t desired_in_room_on_load;
+
 #ifdef USE_DEBUG_CANARIES
   int canary;
 #endif
@@ -886,7 +888,8 @@ struct veh_data
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL), defined_position(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
       next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL),
-      leave(NULL), arrive(NULL), next(NULL), flight_target(NULL), flight_duration(0)
+      leave(NULL), arrive(NULL), next(NULL), flight_target(NULL), flight_duration(0),
+      desired_in_room_on_load(0)
   {
     for (int i = 0; i < NUM_MODS; i++)
       mod[i] = NULL;

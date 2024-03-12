@@ -430,7 +430,7 @@ void load_single_veh(const char *filename) {
   File file;
   int veh_version = 0;
   idnum_t owner;
-  vnum_t vnum, veh_room_vnum;
+  vnum_t vnum;
   struct veh_data *veh = NULL;
   struct obj_data *obj, *last_obj = NULL;
   std::vector<nested_obj> contained_obj;
@@ -474,10 +474,10 @@ void load_single_veh(const char *filename) {
   veh->spare2 = data.GetLong("VEHICLE/InVeh", 0);
   veh->locked = TRUE;
   veh->sub = data.GetLong("VEHICLE/Subscribed", 0);
-  veh_room_vnum = data.GetLong("VEHICLE/InRoom", 0);
+  veh->desired_in_room_on_load = data.GetLong("VEHICLE/InRoom", 0);
 
   // Can't get there? Pull your veh out.
-  rnum_t veh_room_rnum = real_room(veh_room_vnum);
+  rnum_t veh_room_rnum = real_room(veh->desired_in_room_on_load);
   if (veh_room_rnum < 0
       || ( veh->owner > 0 
             && world[veh_room_rnum].apartment 
@@ -487,23 +487,23 @@ void load_single_veh(const char *filename) {
                   veh->idnum,
                   veh->owner,
                   veh_room_rnum < 0 ? "non-existent" : "inaccessible",
-                  veh_room_vnum);
+                  veh->desired_in_room_on_load);
 
     if (veh_is_aircraft(veh)) {
-      veh_room_vnum = RM_BONEYARD_INTACT_ROOM_1;
-      veh_room_rnum = real_room(veh_room_vnum);
+      veh->desired_in_room_on_load = RM_BONEYARD_INTACT_ROOM_1;
+      veh_room_rnum = real_room(veh->desired_in_room_on_load);
 
       if (veh_room_rnum < 0) {
-        log_vfprintf("FATAL ERROR: Boneyard room 1 does not exist, cannot send vehicle there. Add a room at %ld or remove all vehicles.", veh_room_vnum);
+        log_vfprintf("FATAL ERROR: Boneyard room 1 does not exist, cannot send vehicle there. Add a room at %ld or remove all vehicles.", veh->desired_in_room_on_load);
         shutdown();
         return;
       }
     } else {
-      veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
-      veh_room_rnum = real_room(veh_room_vnum);
+      veh->desired_in_room_on_load = RM_SEATTLE_PARKING_GARAGE;
+      veh_room_rnum = real_room(veh->desired_in_room_on_load);
 
       if (veh_room_rnum < 0) {
-        log_vfprintf("FATAL ERROR: Seattle parking garage does not exist, cannot send vehicle there. Add a room at %ld or remove all vehicles.", veh_room_vnum);
+        log_vfprintf("FATAL ERROR: Seattle parking garage does not exist, cannot send vehicle there. Add a room at %ld or remove all vehicles.", veh->desired_in_room_on_load);
         shutdown();
         return;
       }
@@ -789,6 +789,10 @@ void load_single_veh(const char *filename) {
 void load_vehicles_for_idnum(idnum_t owner_id) {
   bf::path owner_dir = global_vehicles_dir / vnum_to_string(owner_id);
 
+  // Skip trying to load vehicles for an owner who has none saved.
+  if (!bf::exists(owner_dir))
+    return;
+
   log_vfprintf(" - Loading vehicles from path %s.", owner_dir.c_str());
 
   bf::directory_iterator dir_end_itr; // default construction yields past-the-end
@@ -802,12 +806,48 @@ void load_vehicles_for_idnum(idnum_t owner_id) {
   }
 }
 
+void restore_carried_vehicle_pointers() {
+  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+    if (veh->spare2) {
+      for (struct veh_data *veh2 = veh_list; veh2 && !veh->in_veh; veh2 = veh2->next) {
+        if (veh->spare2 == veh2->idnum) {
+          veh_to_veh(veh, veh2);
+          veh->spare2 = 0;
+          veh->locked = FALSE;
+
+          #ifdef USE_DEBUG_CANARIES
+            assert(veh->canary == CANARY_VALUE);
+            assert(veh2->canary == CANARY_VALUE);
+          #endif
+        }
+      }
+      if (!veh->in_veh) {
+        rnum_t veh_room_rnum = real_room(veh->desired_in_room_on_load);
+        if (veh_room_rnum < 0 || (veh->owner > 0 && world[veh_room_rnum].apartment && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) {
+          veh->desired_in_room_on_load = RM_SEATTLE_PARKING_GARAGE;
+          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no valid room was found! Dumping to Seattle Garage (%ld).\r\n",
+                   veh->name, veh->veh_number, veh->desired_in_room_on_load);
+        } else {
+          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier! Dumping to room %ld.\r\n",
+                  veh->name, veh->veh_number, veh->desired_in_room_on_load);
+        }
+        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+        veh->spare2 = 0;
+        veh_to_room(veh, &world[veh_room_rnum]);
+
+        #ifdef USE_DEBUG_CANARIES
+          assert(veh->canary == CANARY_VALUE);
+        #endif
+      }
+    }
+  }
+}
+
 // aka load_vehs, veh_load, and everything else I keep searching for it by --LS
 void load_saved_veh()
 {
   FILE *fl;
   struct veh_data *veh = NULL, *veh2 = NULL;
-  long veh_room_vnum = 0;
   std::vector<nested_obj> contained_obj;
   struct nested_obj contained_obj_entry;
 
@@ -858,41 +898,6 @@ void load_saved_veh()
   #ifdef USE_DEBUG_CANARIES
     assert(veh->canary == CANARY_VALUE);
   #endif
-
-  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
-    if (veh->spare2) {
-      for (veh2 = veh_list; veh2 && !veh->in_veh; veh2 = veh2->next) {
-        if (veh->spare2 == veh2->idnum) {
-          veh_to_veh(veh, veh2);
-          veh->spare2 = 0;
-          veh->locked = FALSE;
-
-          #ifdef USE_DEBUG_CANARIES
-            assert(veh->canary == CANARY_VALUE);
-            assert(veh2->canary == CANARY_VALUE);
-          #endif
-        }
-      }
-      if (!veh->in_veh) {
-        rnum_t veh_room_rnum = real_room(veh_room_vnum);
-        if (veh_room_rnum < 0 || (veh->owner > 0 && world[veh_room_rnum].apartment && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) {
-          veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
-          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no valid room was found! Dumping to Seattle Garage (%ld).\r\n",
-                   veh->name, veh->veh_number, veh_room_vnum);
-        } else {
-          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier! Dumping to room %ld.\r\n",
-                  veh->name, veh->veh_number, veh_room_vnum);
-        }
-        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-        veh->spare2 = 0;
-        veh_to_room(veh, &world[veh_room_rnum]);
-
-        #ifdef USE_DEBUG_CANARIES
-          assert(veh->canary == CANARY_VALUE);
-        #endif
-      }
-    }
-  }
 }
 
 

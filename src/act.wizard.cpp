@@ -203,9 +203,10 @@ ACMD(do_copyover)
       "\x1B[0;35m[\x1B[0mVile\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This one's probably my fault, too.\"\r\n",
       "\x1B[0;35m[\x1B[0mJank\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This is the perfect time to buy more NERPS!\"\r\n",
       "This is the way the world ends: Not with a bang, but with a copyover.\r\n", // 30
-      "Your vision is briefly encompassed by a ring of ten candles, which extinguish one by one. As the final one darkens, a voice intones, 'These things are true: The world is dark.'\r\n"
+      "Your vision is briefly encompassed by a ring of ten candles, which extinguish one by one. As the final one darkens, a voice intones, 'These things are true: The world is dark.'\r\n",
+      "The throaty rumble of your Super Destroyer's engines is a comforting feel beneath your feet. You clench the grip of your Liberator in anticipation as the PA calls out, \"Helldivers to Hellpods. Repeat, Helldivers, to Hellpods.\"\r\n"
     };
-  int mesnum = number(0, 31);
+  int mesnum = number(0, 32);
 
   fp = fopen (COPYOVER_FILE, "w");
 
