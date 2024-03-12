@@ -4635,7 +4635,7 @@ void reset_zone(int zone, int reboot)
           }
 
           GET_MOD(veh, GET_OBJ_VAL(obj, 0)) = obj;
-          veh->usedload += GET_OBJ_VAL(obj, 1);
+          veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(obj);
           for (int j = 0; j < MAX_OBJ_AFFECT; j++)
             affect_veh(veh, obj->affected[j].location, obj->affected[j].modifier);
         }

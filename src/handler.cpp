@@ -2236,6 +2236,8 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
       IS_CARRYING_W(tmp_obj->carried_by) += GET_OBJ_WEIGHT(obj);
     if (tmp_obj->worn_by)
       IS_CARRYING_W(tmp_obj->worn_by) += GET_OBJ_WEIGHT(obj);
+    if (tmp_obj->in_veh)
+      tmp_obj->in_veh->usedload += GET_OBJ_WEIGHT(obj);
   }
 
   if (tmp_obj && tmp_obj->in_room)

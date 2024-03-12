@@ -130,6 +130,9 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
     FAILURE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
                         "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", GET_OBJ_NAME(obj));
   }
+
+  FAILURE_CASE_PRINTF(cont->in_veh && cont->in_veh->usedload + GET_OBJ_WEIGHT(obj) > cont->in_veh->load,
+                      "%s would overload %s's carrying capacity.", CAP(GET_OBJ_NAME(obj)), decapitalize_a_an(cont->in_veh));
   
   if (GET_OBJ_TYPE(cont) == ITEM_WORN)
   {
@@ -808,7 +811,7 @@ bool can_take_obj_from_anywhere(struct char_data * ch, struct obj_data * obj)
 {
   FALSE_CASE_PRINTF(IS_CARRYING_N(ch) >= CAN_CARRY_N(ch), "%s: you can't carry that many items.", CAP(GET_OBJ_NAME(obj)));
 
-  FALSE_CASE_PRINTF((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch), "%s: you can't carry that much weight.%s",
+  FALSE_CASE_PRINTF(!IS_SENATOR(ch) && (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch), "%s: you can't carry that much weight.%s",
                     CAP(GET_OBJ_NAME(obj)),
                     GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO ? "(You can still grab rounds out of it with ^WPOCKETS ADD <container>^n though!)" : "");
 
