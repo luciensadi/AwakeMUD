@@ -3316,6 +3316,24 @@ SPECIAL(smiths_bouncer) {
   return(FALSE);
 }
 
+#define MAKE_BOUNCER(proc_name, direction_string, direction_int, pass_vnum, failure_speech) SPECIAL(proc_name) { \
+  NO_DRAG_BULLSHIT;                                                                                              \
+  struct char_data *bouncer = (char_data *) me;                                                                  \
+  if (!cmd || !AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING))                                                       \
+    return(FALSE);                                                                                               \
+  if (CMD_IS(direction_string)) {                                                                                \
+    for (struct obj_data *pass = ch->carrying; pass; pass = pass->next_content)                                  \
+      if (GET_OBJ_VNUM(pass) == pass_vnum && !blocked_by_soulbinding(ch, pass, TRUE)) {                          \
+        soulbind_obj_to_char(pass, ch, FALSE);                                                                   \
+        perform_move(ch, direction_int, LEADER, NULL);                                                           \
+        return TRUE;                                                                                             \
+      }                                                                                                          \
+    do_say(bouncer, failure_speech, 0, 0);                                                                       \
+    return TRUE;                                                                                                 \
+  }                                                                                                              \
+}
+
+MAKE_BOUNCER(test_bouncer, "east", EAST, LEADER, NULL);
 
 /* Special procedures for weapons                                    */
 

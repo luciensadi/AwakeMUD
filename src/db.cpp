@@ -1415,6 +1415,11 @@ void parse_room(File &fl, long nr)
       snprintf(field, sizeof(field), "%s/MoreFlags", sect);
       int moreflags = data.GetInt(field, 0);
 
+      if (moreflags >= 8) {
+        moreflags -= 8;
+        dir->exit_info |= EX_STRICT_ABOUT_KEY;
+      }
+
       if (moreflags >= 4) {
         moreflags -= 4;
         dir->exit_info |= EX_CANT_SHOOT_THROUGH;
@@ -7516,25 +7521,35 @@ void price_bio(struct obj_data *obj)
       break;
     case BIO_PHENOTYPIC_BOD:
       GET_OBJ_COST(obj) = 65000;
-      GET_OBJ_VAL(obj, 4) = 50;
+      GET_BIOWARE_ESSENCE_COST(obj) = 50;
       GET_OBJ_AVAILTN(obj) = 5;
       GET_OBJ_AVAILDAY(obj) = 21;
       break;
     case BIO_PHENOTYPIC_QUI:
       GET_OBJ_COST(obj) = 65000;
-      GET_OBJ_VAL(obj, 4) = 50;
+      GET_BIOWARE_ESSENCE_COST(obj) = 50;
       GET_OBJ_AVAILTN(obj) = 5;
       GET_OBJ_AVAILDAY(obj) = 21;
       break;
     case BIO_PHENOTYPIC_STR:
       GET_OBJ_COST(obj) = 65000;
-      GET_OBJ_VAL(obj, 4) = 50;
+      GET_BIOWARE_ESSENCE_COST(obj) = 50;
       GET_OBJ_AVAILTN(obj) = 5;
       GET_OBJ_AVAILDAY(obj) = 21;
       break;
+    case BIO_BIOSCULPTING:
+      GET_OBJ_COST(obj) = 10000;
+      GET_BIOWARE_ESSENCE_COST(obj) = 20;
+      GET_OBJ_AVAILTN(obj) = 4;
+      GET_OBJ_AVAILDAY(obj) = 4;
+      break;
+    default:
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Unknown bioware type %d passed to price_bio(%ld).", GET_BIOWARE_TYPE(obj), GET_OBJ_VNUM(obj));
+      break;
   }
-  // Check for cultured.
-  if (GET_OBJ_VAL(obj, 0) < BIO_CEREBRALBOOSTER && GET_OBJ_VAL(obj, 2)) {
+
+  // Check for cultured. Don't modify the prices of things that are cultured by default (brainware, etc)
+  if ((GET_BIOWARE_TYPE(obj) < BIO_CEREBRALBOOSTER || GET_BIOWARE_TYPE(obj) >= BIO_BIOSCULPTING) && GET_SETTABLE_BIOWARE_IS_CULTURED(obj)) {
     GET_OBJ_COST(obj) *= 4;
     GET_BIOWARE_ESSENCE_COST(obj) = (int) round(GET_BIOWARE_ESSENCE_COST(obj) * .75);
     GET_OBJ_AVAILTN(obj) += 2;

@@ -142,6 +142,8 @@ const char *render_door_type_string(struct room_direction_data *door) {
     snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sBarred", bits_printed++ ? ", " : "");
   if (IS_SET(door->exit_info, EX_CANT_SHOOT_THROUGH))
     snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sNoShoot", bits_printed++ ? ", " : "");
+  if (IS_SET(door->exit_info, EX_STRICT_ABOUT_KEY))
+    snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sStrictKey", bits_printed++ ? ", " : "");
 
   if (bits_printed <= 0) {
     return "Regular door";
@@ -212,12 +214,14 @@ void redit_disp_exit_flag_menu(struct descriptor_data * d)
                    "4) Glass Window (%s)\r\n"
                    "5) Barred Window (%s)\r\n"
                    "6) No Shooting Through (%s)\r\n"
+                   "7) Strict Key Requirement (%s)\r\n"
                    "Enter choice:",
                    DOOR->exit_info & EX_PICKPROOF ? "^con^n" : "off",
                    DOOR->exit_info & EX_ASTRALLY_WARDED ? "^con^n" : "off",
                    DOOR->exit_info & EX_WINDOWED ? "^con^n" : "off",
                    DOOR->exit_info & EX_BARRED_WINDOW ? "^con^n" : "off",
-                   DOOR->exit_info & EX_CANT_SHOOT_THROUGH ? "^con^n" : "off"
+                   DOOR->exit_info & EX_CANT_SHOOT_THROUGH ? "^con^n" : "off",
+                   DOOR->exit_info & EX_STRICT_ABOUT_KEY ? "^con^n" : "off"
                  );
 }
 
@@ -1267,7 +1271,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 
   case REDIT_EXIT_DOORFLAGS:
     number = atoi(arg);
-    if ((number < 0) || (number > 6)) {
+    if ((number < 0) || (number > 7)) {
       send_to_char("That's not a valid choice!\r\n", d->character);
       redit_disp_exit_flag_menu(d);
     } else {
@@ -1300,6 +1304,9 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         } else if (number == 6) {
           // Toggle noshoot.
           DOOR->exit_info ^= EX_CANT_SHOOT_THROUGH;
+        } else if (number == 7) {
+          // Toggle key requirement.
+          DOOR->exit_info ^= EX_STRICT_ABOUT_KEY;
         } else {
           send_to_char("That's not an option.\r\n", CH);
         }
@@ -1527,6 +1534,10 @@ void write_world_to_disk(vnum_t zone_vnum)
 
             if (IS_SET(ptr->exit_info, EX_CANT_SHOOT_THROUGH)) {
               temp_door_flag += 4;
+            }
+
+            if (IS_SET(ptr->exit_info, EX_STRICT_ABOUT_KEY)) {
+              temp_door_flag += 8;
             }
           }
 

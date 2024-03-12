@@ -2371,20 +2371,18 @@ bool has_kit(struct char_data * ch, int type)
   return FALSE;
 }
 
-// Return true if the character has a key of the given number, false otherwise.
-int has_key(struct char_data *ch, int key_vnum)
-{
+struct obj_data *get_carried_vnum(struct char_data *ch, int key_vnum, bool test_for_soulbinding) {
   struct obj_data *o, *key;
 
   // Check carried items.
-  for (o = ch->carrying; o; o = o->next_content) {
-    if (GET_OBJ_VNUM(o) == key_vnum && !blocked_by_soulbinding(ch, o, TRUE))
-      return 1;
+  for (struct obj_data *o = ch->carrying; o; o = o->next_content) {
+    if (GET_OBJ_VNUM(o) == key_vnum && (!test_for_soulbinding || !blocked_by_soulbinding(ch, o, TRUE)))
+      return o;
 
     if (GET_OBJ_TYPE(o) == ITEM_KEYRING) {
-      for (key = o->contains; key; key = key->next_content) {
-        if (GET_OBJ_VNUM(key) == key_vnum && !blocked_by_soulbinding(ch, key, TRUE))
-          return 1;
+      for (struct obj_data *key = o->contains; key; key = key->next_content) {
+        if (GET_OBJ_VNUM(key) == key_vnum && (!test_for_soulbinding || !blocked_by_soulbinding(ch, key, TRUE)))
+          return key;
       }
     }
   }
@@ -2396,20 +2394,26 @@ int has_key(struct char_data *ch, int key_vnum)
       continue;
 
     // Direct match?
-    if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum && !blocked_by_soulbinding(ch, GET_EQ(ch, x), TRUE))
-      return 1;
+    if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum && (!test_for_soulbinding || !blocked_by_soulbinding(ch, GET_EQ(ch, x), TRUE)))
+      return GET_EQ(ch, x);
 
     // Keyring match?
     if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_KEYRING) {
-      for (key = GET_EQ(ch, x)->contains; key; key = key->next_content) {
-        if (GET_OBJ_VNUM(key) == key_vnum && !blocked_by_soulbinding(ch, key, TRUE))
-          return 1;
+      for (struct obj_data *key = GET_EQ(ch, x)->contains; key; key = key->next_content) {
+        if (GET_OBJ_VNUM(key) == key_vnum && (!test_for_soulbinding || !blocked_by_soulbinding(ch, key, TRUE)))
+          return key;
       }
     }
   }
 
-  return 0;
+  return NULL;
 }
+
+// Return true if the character has a key of the given number, false otherwise.
+bool has_key(struct char_data *ch, int key_vnum) {
+  return get_carried_vnum(ch, key_vnum, TRUE);
+}
+
 // Returns a pointer to the best workshop/facility of the requested type.
 struct obj_data *find_workshop(struct char_data * ch, int type)
 {
@@ -6453,6 +6457,30 @@ bool veh_is_aircraft(struct veh_data *veh) {
       return TRUE;
   }
   return FALSE;
+}
+
+#define ITERATE_AND_CHECK(field) for (struct obj_data *temp = field; temp; temp = temp->next_content) { struct obj_data *found = get_contained_vnum_recursively(temp, vnum); if (found) return found; }
+struct obj_data *get_contained_vnum_recursively(struct obj_data *cont, vnum_t vnum) {
+  if (GET_OBJ_VNUM(cont) == vnum)
+    return cont;
+  
+  ITERATE_AND_CHECK(cont->contains);
+}
+
+struct obj_data *get_carried_vnum_recursively(struct char_data *ch, vnum_t vnum) {
+  ITERATE_AND_CHECK(ch->carrying);
+  ITERATE_AND_CHECK(ch->cyberware);
+  ITERATE_AND_CHECK(ch->bioware);
+
+  for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+    if (GET_EQ(ch, wear_idx)) {
+       struct obj_data *found = get_contained_vnum_recursively(GET_EQ(ch, wear_idx), vnum);
+       if (found)
+        return found;
+    }
+  }
+
+  return NULL;
 }
 
 #define ITERATE_AND_COUNT(field) for (struct obj_data *temp = field; temp; temp = temp->next_content) { count += count_object_including_contents(temp, cash_value); }

@@ -970,6 +970,8 @@ struct char_data
   // Some NPCs have pre-cast spells on them. We store those here. PROTO, DON'T DELETE!
   std::vector<sustain_data *> *precast_spells;
 
+  bool is_carrying_vehicle;
+
   /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 #ifdef USE_DEBUG_CANARIES
   int canary;
@@ -981,7 +983,8 @@ struct char_data
       bioware(NULL), next_in_room(NULL), next_in_character_list(NULL), next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL),
       next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
       pgroup_invitations(NULL), congregation_bonus_pool(0), last_loop_rand(0), pc_invis_resistance_test_results(NULL),
-      mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(NULL), precast_spells(NULL)
+      mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(NULL), precast_spells(NULL),
+      is_carrying_vehicle(FALSE)
   {
     ZERO_OUT_ARRAY(equipment, NUM_WEARS);
 

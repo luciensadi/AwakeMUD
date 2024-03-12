@@ -2701,7 +2701,8 @@ const char *bio_types[] = {
   "Calcitonin",
   "Phenotypic Alteration (Bod)",
   "Phenotypic Alteration (Qui)",
-  "Phenotypic Alteration (Str)"
+  "Phenotypic Alteration (Str)",
+  "Biosculpting Treatment"
 };
 
 const char *decap_bio_types[] = {

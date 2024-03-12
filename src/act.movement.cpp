@@ -1110,10 +1110,8 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     return 0;
   }
 
-  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER) {
-    send_to_char("Sorry, that area is for game administration only.\r\n", ch);
-    return 0;
-  }
+  FALSE_CASE(ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER,
+             "Sorry, that area is for game administration only.");
 
   if (EXIT(ch, dir)->to_room->staff_level_lock > GET_REAL_LEVEL(ch)) {
     if (GET_REAL_LEVEL(ch) == 0) {
@@ -1155,34 +1153,24 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     }
   }
 
-  if (get_armor_penalty_grade(ch) == ARMOR_PENALTY_TOTAL) {
-    send_to_char("You are wearing too much armor to move!\r\n", ch);
-    return 0;
-  }
+  FALSE_CASE(ch->is_carrying_vehicle && ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_NOBIKE), "You'll have to drop any vehicles before going there.");
+  FALSE_CASE(get_armor_penalty_grade(ch) == ARMOR_PENALTY_TOTAL, "You're wearing too much armor to move!");
 
   // Flying vehicles can traverse any terrain.
   if (vict_veh && !ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(vict_veh)) {
     // Non-flying vehicles can't pass fall rooms.
-    if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FALL)) {
-      send_to_char(ch, "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
-      return 0;
-    }
+    FALSE_CASE_PRINTF(ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FALL), "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
 
     // Check to see if your vehicle can handle the terrain type you're giving it.
     if (IS_WATER(EXIT(ch, dir)->to_room)) {
-      if (!veh_can_traverse_water(vict_veh)) {
-        send_to_char(ch, "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
-        return 0;
-      }
-    } else {
-      if (!veh_can_traverse_land(vict_veh)) {
-        // Do nothing-- you can put boats on wheels for the purpose of dragging them.
-        /*
-        send_to_char(ch, "You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(vict_veh));
-        return 0;
-        */
-      }
+      FALSE_CASE_PRINTF(!veh_can_traverse_water(vict_veh), "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
+    } 
+    
+    /*  Do nothing-- you can put boats on wheels for the purpose of dragging them.
+    else {
+      FALSE_CASE_PRINTF(!veh_can_traverse_land(vict_veh), "You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(vict_veh));
     }
+    */
   }
 
   if (AFF_FLAGGED(ch, AFF_BINDING)) {
@@ -1195,6 +1183,13 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       send_to_char("You struggle against the bindings at your feet but get nowhere!\r\n", ch);
       return 0;
     }
+  }
+
+  // Strict exits are used for things like invitation passes etc. You must have one to pass, and it gets bound to you on use.
+  if (IS_SET(EXIT(ch, dir)->exit_info, EX_STRICT_ABOUT_KEY)){
+    struct obj_data *key = get_carried_vnum(ch, EXIT(ch, dir)->key, TRUE);
+    FALSE_CASE(!IS_SENATOR(ch) && !key, "You can't go there without having the right key or pass in your inventory.");
+    soulbind_obj_to_char(key, ch, FALSE);
   }
 
   if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)) {

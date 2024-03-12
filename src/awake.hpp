@@ -681,6 +681,7 @@ enum {
 #define EX_WINDOWED             (1 << 8)   /* Exit has a window.        */
 #define EX_BARRED_WINDOW        (1 << 9)   /* Exit has a barred window. */
 #define EX_CANT_SHOOT_THROUGH   (1 << 10)  /* Exit can't be fired through. */
+#define EX_STRICT_ABOUT_KEY     (1 << 11)  /* You must have the key to walk through. */
 #define NUM_EXFLAGS             12
 
 /* spirit powers */
@@ -1611,40 +1612,42 @@ enum {
 #define CYB_HORNS            53
 #define NUM_CYBER            54
 
-#define BIO_ADRENALPUMP    0
-#define BIO_CATSEYES    1
-#define BIO_DIGESTIVEEXPANSION  2
-#define BIO_ENHANCEDARTIC  3
-#define BIO_EXTENDEDVOLUME  4
-#define BIO_METABOLICARRESTER  5
-#define BIO_MUSCLEAUG    6
-#define BIO_MUSCLETONER    7
-#define BIO_NEPHRITICSCREEN  8
-#define BIO_NICTATINGGLAND  9
-#define BIO_ORTHOSKIN    10
-#define BIO_PATHOGENICDEFENSE  11
-#define BIO_PLATELETFACTORY  12
-#define BIO_SUPRATHYROIDGLAND  13
-#define BIO_SYMBIOTES    14
-#define BIO_SYNTHACARDIUM  15
-#define BIO_TAILOREDPHEROMONES  16
-#define BIO_TOXINEXTRACTOR  17
-#define BIO_TRACHEALFILTER  18
-// Everything past this line is assumed to be cultured by default. If you add more that's not cultured, change the cultured check in db.cpp.
-#define BIO_CEREBRALBOOSTER  19
-#define BIO_DAMAGECOMPENSATOR  20
-#define BIO_PAINEDITOR    21
-#define BIO_REFLEXRECORDER  22
+#define BIO_ADRENALPUMP          0
+#define BIO_CATSEYES             1
+#define BIO_DIGESTIVEEXPANSION   2
+#define BIO_ENHANCEDARTIC        3
+#define BIO_EXTENDEDVOLUME       4
+#define BIO_METABOLICARRESTER    5
+#define BIO_MUSCLEAUG            6
+#define BIO_MUSCLETONER          7
+#define BIO_NEPHRITICSCREEN      8
+#define BIO_NICTATINGGLAND       9
+#define BIO_ORTHOSKIN            10
+#define BIO_PATHOGENICDEFENSE    11
+#define BIO_PLATELETFACTORY      12
+#define BIO_SUPRATHYROIDGLAND    13
+#define BIO_SYMBIOTES            14
+#define BIO_SYNTHACARDIUM        15
+#define BIO_TAILOREDPHEROMONES   16
+#define BIO_TOXINEXTRACTOR       17
+#define BIO_TRACHEALFILTER       18
+// Everything between this comment and the next is assumed to be cultured by default. If you add more that's not cultured, change the cultured check in db.cpp.
+#define BIO_CEREBRALBOOSTER      19
+#define BIO_DAMAGECOMPENSATOR    20
+#define BIO_PAINEDITOR           21
+#define BIO_REFLEXRECORDER       22
 #define BIO_SYNAPTICACCELERATOR  23
-#define BIO_THERMOSENSEORGAN  24
-#define BIO_TRAUMADAMPER  25
-#define BIO_CUSTOM_NERPS  26
-#define BIO_ERYTHROPOITIN  27
-#define BIO_CALCITONIN  28
-#define BIO_PHENOTYPIC_BOD  29
-#define BIO_PHENOTYPIC_QUI  30
-#define BIO_PHENOTYPIC_STR  31
-#define NUM_BIOWARE       32
+#define BIO_THERMOSENSEORGAN     24
+#define BIO_TRAUMADAMPER         25
+#define BIO_CUSTOM_NERPS         26
+#define BIO_ERYTHROPOITIN        27
+#define BIO_CALCITONIN           28
+#define BIO_PHENOTYPIC_BOD       29
+#define BIO_PHENOTYPIC_QUI       30
+#define BIO_PHENOTYPIC_STR       31
+// End of auto-cultured items.
+#define BIO_BIOSCULPTING         32
+#define NUM_BIOWARE              33
 
 #define BIOWARE_STANDARD 0
 #define BIOWARE_CULTURED 1

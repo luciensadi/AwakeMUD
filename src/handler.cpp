@@ -1594,6 +1594,10 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
   if (GET_OBJ_TYPE(object) == ITEM_FOCUS) {
     apply_focus_effect(ch, object);
   }
+
+  // If it's a carried vehicle, set their flag to block movement through !BIKE rooms.
+  if (GET_OBJ_VNUM(object) == OBJ_VEHCONTAINER)
+    ch->is_carrying_vehicle = TRUE;
 }
 
 void obj_to_cyberware(struct obj_data * object, struct char_data * ch, bool recalc)
@@ -1732,6 +1736,15 @@ void obj_from_char(struct obj_data * object)
     obj_from_obj(object);
   }
   REMOVE_FROM_LIST(object, object->carried_by->carrying, next_content);
+
+  // If this is the last vehicle you had, unset your carried pointer.
+  if (object->carried_by
+      && object->carried_by->desc
+      && GET_OBJ_VNUM(object) == OBJ_VEHCONTAINER
+      && !get_carried_vnum_recursively(object->carried_by, OBJ_VEHCONTAINER))
+  {
+    object->carried_by->is_carrying_vehicle = FALSE;
+  }
 
   IS_CARRYING_W(object->carried_by) -= GET_OBJ_WEIGHT(object);
   IS_CARRYING_N(object->carried_by)--;
@@ -2238,6 +2251,10 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
       IS_CARRYING_W(tmp_obj->worn_by) += GET_OBJ_WEIGHT(obj);
     if (tmp_obj->in_veh)
       tmp_obj->in_veh->usedload += GET_OBJ_WEIGHT(obj);
+
+    if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER && (tmp_obj->carried_by || tmp_obj->worn_by)) {
+      (tmp_obj->carried_by ? tmp_obj->carried_by : tmp_obj->worn_by)->is_carrying_vehicle = TRUE;
+    }
   }
 
   if (tmp_obj && tmp_obj->in_room)
