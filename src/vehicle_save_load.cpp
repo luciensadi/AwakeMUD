@@ -847,7 +847,6 @@ void restore_carried_vehicle_pointers() {
 void load_saved_veh()
 {
   FILE *fl;
-  struct veh_data *veh = NULL, *veh2 = NULL;
   std::vector<nested_obj> contained_obj;
   struct nested_obj contained_obj_entry;
 
