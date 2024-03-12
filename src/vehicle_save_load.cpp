@@ -893,9 +893,7 @@ void load_saved_veh()
     }
   }
 
-  #ifdef USE_DEBUG_CANARIES
-    assert(veh->canary == CANARY_VALUE);
-  #endif
+  restore_carried_vehicle_pointers();
 }
 
 
