@@ -3320,7 +3320,7 @@ SPECIAL(smiths_bouncer) {
   NO_DRAG_BULLSHIT;                                                                                              \
   struct char_data *bouncer = (char_data *) me;                                                                  \
   if (!cmd || !AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING))                                                       \
-    return(FALSE);                                                                                               \
+    return FALSE;                                                                                                \
   if (CMD_IS(direction_string)) {                                                                                \
     for (struct obj_data *pass = ch->carrying; pass; pass = pass->next_content)                                  \
       if (GET_OBJ_VNUM(pass) == pass_vnum && !blocked_by_soulbinding(ch, pass, TRUE)) {                          \
@@ -3331,6 +3331,7 @@ SPECIAL(smiths_bouncer) {
     do_say(bouncer, failure_speech, 0, 0);                                                                       \
     return TRUE;                                                                                                 \
   }                                                                                                              \
+  return FALSE;                                                                                                  \
 }
 
 MAKE_BOUNCER(test_bouncer, "east", EAST, LEADER, NULL);

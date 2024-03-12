@@ -2372,8 +2372,6 @@ bool has_kit(struct char_data * ch, int type)
 }
 
 struct obj_data *get_carried_vnum(struct char_data *ch, int key_vnum, bool test_for_soulbinding) {
-  struct obj_data *o, *key;
-
   // Check carried items.
   for (struct obj_data *o = ch->carrying; o; o = o->next_content) {
     if (GET_OBJ_VNUM(o) == key_vnum && (!test_for_soulbinding || !blocked_by_soulbinding(ch, o, TRUE)))
@@ -6465,6 +6463,8 @@ struct obj_data *get_contained_vnum_recursively(struct obj_data *cont, vnum_t vn
     return cont;
   
   ITERATE_AND_CHECK(cont->contains);
+
+  return NULL;
 }
 
 struct obj_data *get_carried_vnum_recursively(struct char_data *ch, vnum_t vnum) {
