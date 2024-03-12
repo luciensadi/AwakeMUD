@@ -320,6 +320,7 @@ const char *exit_bits[] =
     "WINDOW",
     "BARRED_WINDOW",
     "CANT_SHOOT_THROUGH",
+    "STRICT_KEY",
     MAX_FLAG_MARKER
   };
 
