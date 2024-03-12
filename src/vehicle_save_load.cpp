@@ -37,7 +37,11 @@ bool veh_is_in_junkyard(struct veh_data *veh);
 bool veh_is_in_crusher_queue(struct veh_data *veh);
 bool should_save_this_vehicle(struct veh_data *veh, char *reason);
 
-const bf::path global_vehicles_dir = bf::system_complete("lib") / "vehicles";
+#ifdef IS_BUILDPORT
+  const bf::path global_vehicles_dir = bf::system_complete("lib") / "buildport-vehicles";
+#else
+  const bf::path global_vehicles_dir = bf::system_complete("lib") / "vehicles";
+#endif
 
 // TODO: extraction
 // TODO: vedit reassignation
@@ -110,11 +114,6 @@ void delete_veh_file(struct veh_data *veh, const char *reason) {
 
 void save_vehicles(bool fromCopyover)
 {
-#ifdef IS_BUILDPORT
-  log_vfprintf("Refusing to save vehicles: We're on the buildport.");
-  return;
-#endif
-
   PERF_PROF_SCOPE(pr_, __func__);
   FILE *fl;
   struct char_data *i;
