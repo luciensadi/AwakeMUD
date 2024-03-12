@@ -319,9 +319,6 @@ ACMD(do_rig)
     }
     stop_rigging(ch);
     stop_chase(VEH);
-    send_to_char("You return to your senses.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s returns to their senses.\r\n", capitalize(GET_NAME(ch)));
-    send_to_veh(buf1, VEH, ch, FALSE);
     stop_fighting(ch);
   }
   return;
@@ -2390,6 +2387,8 @@ ACMD(do_transfer)
     send_to_char("You can't transfer ownership of a vehicle you don't own.\r\n", ch);
   else if (!(targ = get_char_room_vis(ch, buf2)))
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf2);
+  else if (!targ->desc || IS_NPC(targ))
+    send_to_char(ch, "There's nothing going on behind %s's eyes.\r\n", GET_CHAR_NAME(targ));
   else {
     // Unsub it.
     if (veh->sub) {
@@ -2597,6 +2596,7 @@ void stop_rigging(struct char_data *ch) {
   ch->char_specials.rigging = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
   AFF_FLAGS(ch).RemoveBit(AFF_RIG);
+  AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
 
   send_to_char("You return to your senses.\r\n", ch);
 
