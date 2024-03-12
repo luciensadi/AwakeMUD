@@ -4924,6 +4924,7 @@ ACMD(do_show)
         send_to_char(ch, " [%6d] %s^n\r\n", GET_OBJ_VNUM(obj), GET_OBJ_NAME(obj));
       }
     }
+    break;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
     break;
