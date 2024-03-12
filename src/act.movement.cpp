@@ -1189,7 +1189,9 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   if (IS_SET(EXIT(ch, dir)->exit_info, EX_STRICT_ABOUT_KEY)){
     struct obj_data *key = get_carried_vnum(ch, EXIT(ch, dir)->key, TRUE);
     FALSE_CASE(!IS_SENATOR(ch) && !key, "You can't go there without having the right key or pass in your inventory.");
-    soulbind_obj_to_char(key, ch, FALSE);
+    if (key) {
+      soulbind_obj_to_char(key, ch, FALSE);
+    }
   }
 
   if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)) {
