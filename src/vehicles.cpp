@@ -4,6 +4,7 @@
 
 extern bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj);
 extern void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode, bool show, bool corpse);
+extern void delete_veh_file(struct veh_data *veh, const char *reason);
 
 bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch);
 bool _can_veh_lift_veh(struct veh_data *veh, struct veh_data *carried_veh, struct char_data *ch);
@@ -266,6 +267,9 @@ bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_d
   FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_MONEY && !GET_ITEM_MONEY_IS_CREDSTICK(obj),
              "Your mechanical clampers fumble the loose change and bills, spilling them everywhere.");
 
+  // Nor keys.
+  FALSE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_KEY, "Your mechanical clampers can't get a good grip on %s.", decapitalize_a_an(obj));
+
   // Too heavy for your vehicle's body rating
   FALSE_CASE_PRINTF(GET_OBJ_WEIGHT(obj) > veh->body * veh->body * 20, "%s is too heavy for your vehicle's chassis to lift.", CAP(GET_OBJ_NAME(obj)));
 
@@ -285,6 +289,9 @@ bool _can_veh_lift_veh(struct veh_data *veh, struct veh_data *carried_veh, struc
   }
 
   int veh_weight = calculate_vehicle_weight(carried_veh);
+
+  // Drones can't lift other vehicles.
+  FALSE_CASE(veh->type == VEH_DRONE, "Drones don't have the right build to lift other vehicles.");
 
   // Too heavy for your vehicle's body rating
   FALSE_CASE_PRINTF(veh_weight > veh->body * veh->body * 20, "%s is too heavy for your vehicle's chassis to lift.", CAP(GET_VEH_NAME_NOFORMAT(carried_veh)));
@@ -409,4 +416,8 @@ bool _veh_can_get_veh(struct veh_data *veh, struct veh_data *target_veh, struct 
   FALSE_CASE_PRINTF(veh->usedload + calculate_vehicle_weight(target_veh) > veh->load, "Your vehicle is too full to hold %s.", decapitalize_a_an(target_veh));
 
   return TRUE;
+}
+
+void generate_veh_idnum(struct veh_data *veh) {
+  veh->idnum = number(0, 999999);
 }

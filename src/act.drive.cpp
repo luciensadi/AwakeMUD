@@ -18,6 +18,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "zoomies.hpp"
+#include "vehicles.hpp"
 
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
@@ -2410,7 +2411,7 @@ ACMD(do_transfer)
     snprintf(buf2, sizeof(buf2), "$n transfers ownership of %s to you.", GET_VEH_NAME(veh));
     act(buf, 0, ch, 0, targ, TO_CHAR);
     act(buf2, 0, ch, 0, targ, TO_VICT);
-    veh->owner = GET_IDNUM(targ);
+    set_veh_owner(veh, GET_IDNUM(targ));
     veh->sub = FALSE;
 
     if (ch->desc && targ->desc) {

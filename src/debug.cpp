@@ -159,6 +159,28 @@ ACMD(do_debug) {
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
 
+  if (is_abbrev(arg1, "printvehmap")) {
+    extern std::unordered_map<std::string, struct veh_data *> veh_map;
+
+    for (auto& it: veh_map) {
+      send_to_char(ch, "%s: %s\r\n", it.first.c_str(), GET_VEH_NAME(it.second));
+    }
+    return;
+  }
+
+  if (is_abbrev(arg1, "hashtest")) {
+    std::unordered_map<std::string, int> test_map = {};
+
+    char test_str[100];
+    for (int i = 0; i < 10; i++) {
+      snprintf(test_str, sizeof(test_str), "this is %d", i);
+      test_map[std::string(test_str)] = i;
+      send_to_char(ch, "during iteration, at slot %d, we have %d\r\n", i, test_map[test_str]);
+    }
+    send_to_char(ch, "at slot 3, we have: %d\r\n", test_map[std::string("this is 3")]);
+    return;
+  }
+
   if (is_abbrev(arg1, "gambaodds")) {
     int starting_amt = 100;
     int max_bet = 150000;

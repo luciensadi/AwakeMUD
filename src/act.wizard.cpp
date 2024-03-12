@@ -54,6 +54,7 @@
 #include "zoomies.hpp"
 #include "bullet_pants.hpp"
 #include "moderation.hpp"
+#include "vehicles.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -2333,6 +2334,7 @@ ACMD(do_wizload)
       return;
     }
     veh = read_vehicle(r_num, REAL);
+    generate_veh_idnum(veh);
     veh_to_room(veh, get_ch_in_room(ch));
     act("$n makes a quaint, magical gesture with one hand.", TRUE, ch,
         0, 0, TO_ROOM);
@@ -2583,6 +2585,7 @@ ACMD(do_purge)
 
       // Log the purge and finalize extraction.
       purgelog(veh);
+      delete_veh_file(veh, "purged");
       extract_veh(veh);
     } else {
       send_to_char("Nothing here by that name.\r\n", ch);
@@ -4957,9 +4960,10 @@ ACMD(do_vset)
   snprintf(buf, sizeof(buf), "Choose ^rowner^n, ^rlocked^n, or ^rsubscribed^n.\r\n");
 
   if (is_abbrev(field, "owner")) {
+    // Clear out the old save data.
     value = atoi(val_arg);
     int old_owner = veh->owner;
-    veh->owner = value;
+    set_veh_owner(veh, value);
     snprintf(buf, sizeof(buf), "%s's owner field set to %d.\r\n", GET_VEH_NAME(veh), value);
     mudlog_vfprintf(ch, LOG_SYSLOG, "Set %s [%ld]'s owner field from %d to %d.", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), old_owner, value);
   } else if (is_abbrev(field, "locked")) {

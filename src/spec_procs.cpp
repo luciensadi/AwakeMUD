@@ -28,6 +28,7 @@
 #include "transport.hpp"
 #include "newmatrix.hpp"
 #include "pocketsec.hpp"
+#include "vehicles.hpp"
 
 /*   external vars  */
 ACMD_DECLARE(do_goto);
@@ -1948,8 +1949,8 @@ SPECIAL(car_dealer)
     lose_nuyen(ch, veh->cost, NUYEN_OUTFLOW_VEHICLE_PURCHASES);
     newveh = read_vehicle(veh->veh_number, REAL);
     veh_to_room(newveh, ch->in_room);
-    newveh->owner = GET_IDNUM(ch);
-    newveh->idnum = number(0, 1000000);
+    set_veh_owner(newveh, GET_IDNUM(ch));
+    generate_veh_idnum(newveh);
     if (veh->type == VEH_DRONE)
       send_to_char(ch, "You buy %s. It is brought out into the room.\r\n", GET_VEH_NAME(newveh));
     else
@@ -4024,7 +4025,7 @@ SPECIAL(newbie_car)
     }
     veh = read_vehicle(num, VIRTUAL);
     veh->locked = TRUE;
-    veh->owner = GET_IDNUM(ch);
+    set_veh_owner(veh, GET_IDNUM(ch));
     veh_to_room(veh, ch->in_room);
     veh->idnum = number(0, 1000000);  // TODO: why is this not unique
     veh->flags.SetBit(VFLAG_NEWBIE);

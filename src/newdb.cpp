@@ -30,6 +30,7 @@
 #include "lifestyles.hpp"
 #include "chipjacks.hpp"
 #include "quest.hpp"
+#include "vehicles.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -2163,6 +2164,20 @@ time_t get_idledelete_days_left(time_t lastd, int tke, int race) {
 
 
   return days_left;
+}
+
+bool pc_active_in_last_30_days(idnum_t owner_id) {
+  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE lastd >= %ld AND name != '%s';", time(0) - (SECS_PER_REAL_DAY * 30), CHARACTER_DELETED_NAME_FOR_SQL);
+  mysql_wrapper(mysql, buf);
+  MYSQL_RES *res;
+
+  if (!(res = mysql_use_result(mysql)))
+    return FALSE;
+  
+  MYSQL_ROW row = mysql_fetch_row(res);
+  mysql_free_result(res);
+
+  return (row != NULL);
 }
 
 void idle_delete()

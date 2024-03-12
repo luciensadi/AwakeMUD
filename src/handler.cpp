@@ -30,6 +30,7 @@
 #include "playergroups.hpp"
 #include "config.hpp"
 #include "deck_build.hpp"
+#include "vehicles.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
@@ -2467,6 +2468,9 @@ void extract_veh(struct veh_data * veh)
     DELETE_ARRAY_IF_EXTANT(grid->name);
     delete grid;
   }
+
+  // Remove it from our vehicle map.
+  delete_veh_from_map(veh);
 
   // Perform actual vehicle extraction.
   REMOVE_FROM_LIST(veh, veh_list, next);

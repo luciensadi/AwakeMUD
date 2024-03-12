@@ -41,6 +41,7 @@
 #include "newhouse.hpp"
 #include "creative_works.hpp"
 #include "channels.hpp"
+#include "vehicles.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -3045,6 +3046,9 @@ void nanny(struct descriptor_data * d, char *arg)
       if (PRF_FLAGGED(d->character, PRF_COERCE_ANSI) && d->pProtocol) {
         d->pProtocol->do_coerce_ansi_capable_colors_to_ansi = TRUE;
       }
+
+      // Load their vehicles.
+      load_vehicles_for_idnum(GET_IDNUM(d->character));
 
       // Rewrote the entire janky-ass load room tree.
       // First: Frozen characters. They go to the frozen start room.
