@@ -4949,7 +4949,7 @@ ACMD(do_vset)
   char name[MAX_INPUT_LENGTH], field[MAX_INPUT_LENGTH], val_arg[MAX_INPUT_LENGTH];
   half_chop(argument, name, buf, sizeof(buf));
   if (!*name || !*buf) {
-    send_to_char("Usage: vset <victim> <field> <value>\r\n", ch);
+    send_to_char("Usage: vset <vehicle> (owner | locked | subscribed) (idnum | on/off | on/off)\r\n", ch);
     return;
   }
   if (!(veh = get_veh_list(name, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
