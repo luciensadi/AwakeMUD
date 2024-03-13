@@ -347,7 +347,7 @@ bool dumpshock(struct matrix_icon *icon)
   return FALSE;
 }
 
-int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier)
+int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier, bool trapdoor = FALSE)
 {
   int detect = 0;
   struct obj_data *prog = NULL;
@@ -355,7 +355,10 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   char rollbuf[5000];
 
   // You can only successfully run Decrypt and Analyze against encrypted subsystems.
-  if (HOST.stats[type][MTX_STAT_ENCRYPTED] && software != SOFT_DECRYPT && software != SOFT_ANALYZE) {
+  // But you can drop in through a backdoor even if the target host's ACCESS is encrypted.
+  if (trapdoor && software == SOFT_DECEPTION) {
+    send_to_char(ch, "The hole wasn't made for you, but you attempt to squeeze through anyway.\r\n");
+  } else if (HOST.stats[type][MTX_STAT_ENCRYPTED] && software != SOFT_DECRYPT && software != SOFT_ANALYZE) {
     snprintf(rollbuf, sizeof(rollbuf), "Can't perform test against %s with software %s-- subsystem encrypted.", acifs_strings[type], programs[software].name);
     act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
     send_to_char(ch, "The %s subsystem seems to be encrypted.\r\n", mtx_subsystem_names[type]);
@@ -1717,6 +1720,7 @@ ACMD(do_logon)
   }
   skip_spaces(&argument);
   rnum_t target_host = 0;
+  bool trapdoor = FALSE;
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   if (!str_cmp(argument, "LTG")) {
     if (!(target_host = real_host(matrix[PERSONA->in_host].parent))
@@ -1730,24 +1734,29 @@ ACMD(do_logon)
       send_to_icon(PERSONA, "This host is not connected to a RTG.\r\n");
       return;
     }
-  } else if (!str_cmp(argument, "access") && matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_TRAPDOOR])
+  } else if (!str_cmp(argument, "access") && matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_TRAPDOOR]) {
     target_host = real_host(matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_TRAPDOOR]);
-  else if (!str_cmp(argument, "control") && matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_TRAPDOOR])
+    trapdoor = TRUE;
+  } else if (!str_cmp(argument, "control") && matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_TRAPDOOR]) {
     target_host = real_host(matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_TRAPDOOR]);
-  else if (!str_cmp(argument, "index") && matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_TRAPDOOR])
+    trapdoor = TRUE;
+  } else if (!str_cmp(argument, "index") && matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_TRAPDOOR]) {
     target_host = real_host(matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_TRAPDOOR]);
-  else if (!str_cmp(argument, "files") && matrix[PERSONA->in_host].stats[FILES][MTX_STAT_TRAPDOOR])
+    trapdoor = TRUE;
+  } else if (!str_cmp(argument, "files") && matrix[PERSONA->in_host].stats[FILES][MTX_STAT_TRAPDOOR]) {
     target_host = real_host(matrix[PERSONA->in_host].stats[FILES][MTX_STAT_TRAPDOOR]);
-  else if (!str_cmp(argument, "slave") && matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_TRAPDOOR])
+    trapdoor = TRUE;
+  } else if (!str_cmp(argument, "slave") && matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_TRAPDOOR]) {
     target_host = real_host(matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_TRAPDOOR]);
-  else {
+    trapdoor = TRUE;
+  } else {
     for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next)
       if (isname(argument, exit->addresses))
         target_host = real_host(exit->host);
   }
 
   if (target_host > 0 && matrix[target_host].alert <= 2) {
-    int success = system_test(target_host, ch, TEST_ACCESS, SOFT_DECEPTION, 0);
+    int success = system_test(target_host, ch, TEST_ACCESS, SOFT_DECEPTION, 0, trapdoor);
     if (success > 0) {
       if (matrix[target_host].type == HOST_RTG && matrix[PERSONA->in_host].type == HOST_RTG)
         DECKER->tally = 0;
