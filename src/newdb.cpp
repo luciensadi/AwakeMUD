@@ -394,6 +394,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
   if (!str_str(ch->player.astral_text.keywords, GET_CHAR_NAME(ch))) {
     char new_keywords[MAX_INPUT_LENGTH + 100];
     snprintf(new_keywords, sizeof(new_keywords), "%s %s", ch->player.astral_text.keywords, GET_CHAR_NAME(ch));
+    delete [] ch->player.astral_text.keywords;
+    ch->player.astral_text.keywords = str_dup(new_keywords);
   }
   ch->player.astral_text.name = str_dup(row[19]);
   ch->player.astral_text.room_desc = str_dup(row[20]);
