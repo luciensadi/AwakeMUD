@@ -1718,7 +1718,7 @@ void raw_cast_detection_spell(struct char_data *ch, struct char_data *vict, int 
       break;
     case SPELL_NIGHTVISION:
       {
-        if (has_vision(ch, VISION_LOWLIGHT)) {
+        if (has_vision(vict, VISION_LOWLIGHT)) {
           act("$N already has low-light vision.", FALSE, ch, 0, vict, TO_CHAR);
           return;
         }
@@ -1746,7 +1746,7 @@ void raw_cast_detection_spell(struct char_data *ch, struct char_data *vict, int 
       break;
     case SPELL_INFRAVISION:
       {
-        if (has_vision(ch, VISION_THERMOGRAPHIC)) {
+        if (has_vision(vict, VISION_THERMOGRAPHIC)) {
           act("$N already has thermographic vision.", FALSE, ch, 0, vict, TO_CHAR);
           return;
         }
