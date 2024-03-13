@@ -111,6 +111,8 @@ extern const char *get_level_wholist_color(int level);
 extern bool cyber_is_retractable(struct obj_data *cyber);
 extern bool precipitation_is_snow(int jurisdiction);
 
+bool ch_can_see_vict_in_where(struct char_data *ch, struct char_data *vict);
+
 #ifdef USE_PRIVATE_CE_WORLD
   extern void display_secret_info_about_object(struct char_data *ch, struct obj_data *obj);
 #endif
@@ -5766,11 +5768,7 @@ ACMD(do_who)
         continue;
       num_can_see++;
 
-      if (tch->in_room
-          && !IS_SENATOR(tch)
-          && char_is_in_social_room(tch)
-          && CAN_SEE(ch, tch)
-          && !IS_IGNORING(tch, is_blocking_where_visibility_for, ch)) {
+      if (ch_can_see_vict_in_where(ch, tch)) {
         num_in_socialization_rooms++;
       }
 
@@ -6094,6 +6092,30 @@ ACMD(do_gen_ps)
   }
 }
 
+bool ch_can_see_vict_in_where(struct char_data *ch, struct char_data *vict) {
+  // Skip them if they aren't in a social-bonus room.
+  if (!vict || !char_is_in_social_room(vict))
+    return FALSE;
+
+  // Ignore disconnected folks and those who are in the middle of writing something etc.
+  if (!vict->desc || vict->desc->connected)
+    return FALSE;
+
+  // Skip them if you can't see them for various reasons.
+  if (IS_IGNORING(vict, is_blocking_where_visibility_for, ch) || !CAN_SEE(ch, vict))
+    return FALSE;  
+
+  // Don't count staff in social rooms.
+  if (IS_SENATOR(vict))
+    return FALSE;
+
+  // Skip them if they've not acted in the last 30 minutes or are flagged AFK. 
+  if (vict->char_specials.timer >= 30 || PRF_FLAGGED(vict, PRF_AFK))
+    return FALSE;
+
+  return TRUE;
+}
+
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
   // Locating belongings.
@@ -6115,29 +6137,17 @@ void perform_mortal_where(struct char_data * ch, char *arg)
   std::unordered_map<vnum_t, std::vector<struct char_data *>>::iterator room_iterator;
 
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-    if (!d->connected) {
-      struct char_data *i = (d->original ? d->original : d->character);
+    struct char_data *i = (d->original ? d->original : d->character);
 
-      // Skip them if they aren't in a social-bonus room.
-      if (!i || !char_is_in_social_room(i))
-        continue;
+    if (!ch_can_see_vict_in_where(ch, i))
+      continue;
 
-      // Skip them if you can't see them for various reasons.
-      if (IS_IGNORING(i, is_blocking_where_visibility_for, ch) || !CAN_SEE(ch, i))
-        continue;
-
-      // Skip them if they've not acted in the last 30 minutes or are flagged AFK. 
-      // (Note: No need to check descriptor here, we iterated descriptors to find this record.)
-      if (i->char_specials.timer >= 30 || PRF_FLAGGED(i, PRF_AFK))
-        continue;
-
-      // They're a valid target-- emplace them.
-      if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
-        (room_iterator->second).push_back(i);
-      } else {
-        std::vector<struct char_data *> tmp_vec = { i };
-        occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), tmp_vec);
-      }
+    // They're a valid target-- emplace them.
+    if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
+      (room_iterator->second).push_back(i);
+    } else {
+      std::vector<struct char_data *> tmp_vec = { i };
+      occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), tmp_vec);
     }
   }
 
