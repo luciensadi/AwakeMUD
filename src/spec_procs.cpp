@@ -3599,7 +3599,7 @@ SPECIAL(bank)
       GET_BANK_RAW(ch) += amount;
       snprintf(buf, sizeof(buf), "%d nuyen transferred from $p to one of your many accounts.", amount);
     } else if (!str_cmp(buf1, "credstick")) {
-      send_to_char("Your credstick is directly linked to your many accounts, so there's no need to load nueyn onto it.\r\n", ch);
+      send_to_char("Your credstick is directly linked to your many accounts, so there's no need to load nuyen onto it.\r\n", ch);
       /*
       if (!str_cmp(buf,"all") || GET_BANK(ch) < amount) {
         amount = GET_BANK(ch);
