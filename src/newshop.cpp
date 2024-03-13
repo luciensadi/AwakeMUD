@@ -190,7 +190,7 @@ int transaction_amt(char *arg, size_t arg_len)
   return (1);
 }
 
-struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data **obj)
+struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data **obj, struct char_data *ch)
 {
   *obj = NULL;
   struct shop_sell_data *sell = shop_table[shop_nr].selling;
@@ -222,6 +222,12 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
       *obj = read_object(sell->vnum, VIRTUAL);
   } else
   {
+    // Don't allow purchasing numbers.
+    if (atoi(arg) > 0) {
+      send_to_char(ch, "You can't buy just a number. Either 'buy #%s', or 'buy %s <name of something>.\r\n", arg, arg);
+      return NULL;
+    }
+
     for (; sell; sell = sell->next) {
       int real_obj = real_object(sell->vnum);
       if (real_obj >= 0) {
@@ -1115,13 +1121,13 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   }
 
   // Find the item in their list.
-  if (!(sell = find_obj_shop(arg, shop_nr, &obj)))
+  if (!(sell = find_obj_shop(arg, shop_nr, &obj, ch)))
   {
     if (atoi(arg) > 0) {
       // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
       char oopsbuf[strlen(arg) + 2];
       snprintf(oopsbuf, sizeof(oopsbuf), "#%s", arg);
-      sell = find_obj_shop(oopsbuf, shop_nr, &obj);
+      sell = find_obj_shop(oopsbuf, shop_nr, &obj, ch);
     }
     if (!sell) {
       if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
@@ -1921,12 +1927,12 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   if (*arg != '#')
     return FALSE;
 
-  struct shop_sell_data *sell = find_obj_shop(arg, shop_nr, &obj);
+  struct shop_sell_data *sell = find_obj_shop(arg, shop_nr, &obj, ch);
   if (!sell && atoi(arg) > 0) {
     // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
     char oopsbuf[strlen(arg) + 2];
     snprintf(oopsbuf, sizeof(oopsbuf), "#%s", arg);
-    sell = find_obj_shop(oopsbuf, shop_nr, &obj);
+    sell = find_obj_shop(oopsbuf, shop_nr, &obj, ch);
   }
 
   if (!sell || !obj) {
@@ -1954,14 +1960,14 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     return;
   }
 
-  if (!find_obj_shop(arg, shop_nr, &obj))
+  if (!find_obj_shop(arg, shop_nr, &obj, ch))
   {
     bool successful = FALSE;
     if (atoi(arg) > 0) {
       // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
       char oopsbuf[strlen(arg) + 2];
       snprintf(oopsbuf, sizeof(oopsbuf), "#%s", arg);
-      successful = (find_obj_shop(oopsbuf, shop_nr, &obj) != NULL);
+      successful = (find_obj_shop(oopsbuf, shop_nr, &obj, ch) != NULL);
     }
     if (!successful) {
       snprintf(buf, sizeof(buf), "%s I don't have that item.", GET_CHAR_NAME(ch));

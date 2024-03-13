@@ -625,6 +625,7 @@ ACMD(do_patch)
       GET_EQ(vict, WEAR_PATCH) = patch;
       patch->worn_by = vict;
       patch->worn_on = WEAR_PATCH;
+      GET_PATCH_TICKS_LEFT(patch) = INITIAL_PATCH_DURATION;
       break;
     case PATCH_STIM:                          // stim
       if (vict != ch) {
@@ -643,6 +644,7 @@ ACMD(do_patch)
       GET_EQ(vict, WEAR_PATCH) = patch;
       patch->worn_by = vict;
       patch->worn_on = WEAR_PATCH;
+      GET_PATCH_TICKS_LEFT(patch) = INITIAL_PATCH_DURATION;
       break;
     case PATCH_TRANQ:                          // tranq
       if (GET_POS(vict) == POS_FIGHTING) {
@@ -681,6 +683,7 @@ ACMD(do_patch)
       GET_EQ(vict, WEAR_PATCH) = patch;
       patch->worn_by = vict;
       patch->worn_on = WEAR_PATCH;
+      GET_PATCH_TICKS_LEFT(patch) = 0;  // instant effect
       break;
     case PATCH_TRAUMA:                          // trauma
       if (GET_POS(vict) >= POS_STUNNED) {
@@ -693,6 +696,7 @@ ACMD(do_patch)
       GET_EQ(vict, WEAR_PATCH) = patch;
       patch->worn_by = vict;
       patch->worn_on = WEAR_PATCH;
+      GET_PATCH_TICKS_LEFT(patch) = 0; // instant effect
       break;
     default:
       act("$p seems to be defective.", FALSE, ch, patch, 0, TO_CHAR);

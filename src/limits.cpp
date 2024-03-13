@@ -1151,7 +1151,7 @@ void point_update(void)
             LAST_HEAL(i)--;
           else if (LAST_HEAL(i) < 0)
             LAST_HEAL(i)++;
-          if (GET_EQ(i, WEAR_PATCH))
+          if (GET_EQ(i, WEAR_PATCH) && GET_OBJ_TYPE(GET_EQ(i, WEAR_PATCH)) == ITEM_PATCH && --GET_PATCH_TICKS_LEFT(GET_EQ(i, WEAR_PATCH)) <= 0)
             remove_patch(i);
         }
       }

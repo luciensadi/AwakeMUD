@@ -107,7 +107,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How often should congregation bonus points be accrued?
 #define SECONDS_BETWEEN_CONGREGATION_POOL_GAINS                60
 // What is the maximum congregation bonus that can be accrued? If you change this, also take a look at score in act.informative.cpp and make sure the spacing matches up.
-#define MAX_CONGREGATION_BONUS                                 500
+#define MAX_CONGREGATION_BONUS                                 750
 #define CONGREGATION_MULTIPLIER                                1.5
 // Note that these values are in hundredths of karma.
 #define CONGREGATION_MAX_KARMA_GAIN_PER_ACTION                 25
@@ -303,6 +303,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // If someone's being all sneaky-beaky, how much does that slow them down?
 #define MAX_SNEAKING_WAIT_STATE                                (0.6 RL_SEC)
 #define MIN_SNEAKING_WAIT_STATE                                (0.3 RL_SEC)
+
+// How many ticks are patches good for? Each tick is a MUD hour, aka 2 minutes.
+#define INITIAL_PATCH_DURATION                                 6
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES

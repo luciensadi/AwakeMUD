@@ -360,6 +360,9 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       } else {
         strlcat(buf, " ^y(unusable)", sizeof(buf));
       }
+
+      if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
+        strlcat(buf, " ^r(damaged)^n", sizeof(buf));
     } else if (blocked_by_soulbinding(ch, object, FALSE)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object));
     }
@@ -1595,7 +1598,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         strlcat(buf, "YOU!", sizeof(buf));
       else {
         if (i->in_room == FIGHTING(i)->in_room)
-          strlcat(buf, PERS(FIGHTING(i), ch), sizeof(buf));
+          strlcat(buf, decapitalize_a_an(PERS(FIGHTING(i), ch)), sizeof(buf));
         else
           strlcat(buf, "someone in the distance", sizeof(buf));
         strlcat(buf, "!", sizeof(buf));

@@ -1256,6 +1256,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 // ITEM_PATCH convenience defines
 #define GET_PATCH_TYPE(patch)                      (GET_OBJ_VAL((patch), 0))
 #define GET_PATCH_RATING(patch)                    (GET_OBJ_VAL((patch), 1))
+#define GET_PATCH_TICKS_LEFT(patch)                (GET_OBJ_VAL((patch), 2))
 
 // ITEM_CLIMBING convenience defines
 
