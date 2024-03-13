@@ -7446,3 +7446,13 @@ struct obj_data *find_cyberware(struct char_data *ch, int ware_type) {
 struct obj_data *find_bioware(struct char_data *ch, int ware_type) {
   return _find_ware(ch, ware_type, FALSE);
 }
+
+#define IS_SMARTGOGGLE(object) (object && GET_OBJ_TYPE(object) == ITEM_GUN_ACCESSORY && GET_ACCESSORY_TYPE(object) == ACCESS_SMARTGOGGLE)
+struct obj_data *get_smartgoggle(struct char_data *ch) {
+  if (IS_SMARTGOGGLE(GET_EQ(ch, WEAR_EYES)))
+    return GET_EQ(ch, WEAR_EYES);
+  if (IS_SMARTGOGGLE(GET_EQ(ch, WEAR_HEAD)))
+    return GET_EQ(ch, WEAR_HEAD);
+  return NULL;
+}
+#undef IS_SMARTGOGGLE

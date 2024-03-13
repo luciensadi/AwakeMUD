@@ -3041,10 +3041,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
                   // No cyberware?
                   if (cyberware_rating == 0) {
                     // Do they have goggles?
-                    if (GET_EQ(ch, WEAR_EYES)
-                        && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY
-                        && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE)
-                    {
+                    if (get_smartgoggle(ch)) {
                       // Goggles limit you to 1/2 of the SL-1 rating.
                       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s ^yis limited by your use of goggles^n and only provides ^c-1^n to attack difficulty (aka TN; lower is better).",
                                GET_ACCESSORY_RATING(accessory) == 2 ? "-II" : "",

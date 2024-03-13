@@ -3766,9 +3766,7 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
           return SMARTLINK_I_MODIFIER;
         }
       }
-      if (GET_EQ(ch, WEAR_EYES)
-          && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY
-          && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE) {
+      if (get_smartgoggle(ch)) {
         // Smartlink plus goggle found-- half value.
         return 1;
       }
