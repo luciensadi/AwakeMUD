@@ -3050,6 +3050,9 @@ void nanny(struct descriptor_data * d, char *arg)
       // Load their vehicles.
       load_vehicles_for_idnum(GET_IDNUM(d->character));
 
+      // Clear any mistaken / bugged bits.
+      PLR_FLAGS(d->character).RemoveBit(PLR_IS_TEMPORARILY_LOADED);
+
       // Rewrote the entire janky-ass load room tree.
       // First: Frozen characters. They go to the frozen start room.
       if (PLR_FLAGGED(d->character, PLR_FROZEN)) {

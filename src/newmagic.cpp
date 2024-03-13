@@ -1267,21 +1267,30 @@ bool find_duplicate_spell(struct char_data *ch, struct char_data *vict, int spel
   return FALSE;
 }
 
+#ifdef IS_BUILDPORT
+#define CSV_DEBUG(reason) if (!ch->desc) { char msgbuf[1000]; snprintf(msgbuf, sizeof(msgbuf), "Can't cast %s on %s: %s", spells[spell].name, GET_CHAR_NAME(vict), reason); act(msgbuf, FALSE, ch, 0, 0, TO_ROLLS); }
+#else
+#define CSV_DEBUG(reason)
+#endif
+
 bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell, char *buf)
 {
   // If there's no victim, bail out.
   if (!vict) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
+    CSV_DEBUG("No victim");
     return FALSE;
   }
 
   if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
+    CSV_DEBUG("Ignored victim");
     return FALSE;
   }
 
   if (IS_PC_CONJURED_ELEMENTAL(vict) && spells[spell].category != COMBAT) {
     send_to_char("You can't cast spells on elementals.\r\n", ch);
+    CSV_DEBUG("Target is elemental");
     return FALSE;
   }
 
@@ -1291,6 +1300,7 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
   // Don't allow astral characters to cast on beings with no astral presence.
   if (ch_is_astral && !SEES_ASTRAL(vict)) {
     send_to_char(ch, "%s isn't accessible from the astral plane.\r\n", capitalize(GET_CHAR_NAME(vict)));
+    CSV_DEBUG("Target inaccessible from astral");
     return FALSE;
   }
 
@@ -1298,12 +1308,14 @@ bool check_spell_victim(struct char_data *ch, struct char_data *vict, int spell,
   if (vict_is_astral && !SEES_ASTRAL(ch)) {
     mudlog("SYSERR: check_spell_victim received a projecting/astral vict from a char who could not see them!", ch, LOG_SYSLOG, TRUE);
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf);
+    CSV_DEBUG("Target is inaccessible astral?");
     return FALSE;
   }
 
   // Physical spells will have no effect on astral beings, so don't let them cast.
   if (spells[spell].physical && IS_ASTRAL(vict)) {
     send_to_char(ch, "%s has no physical form for that spell to affect.\r\n", capitalize(GET_CHAR_NAME(vict)));
+    CSV_DEBUG("Physical spell vs non-physical target");
     return FALSE;
   }
 
@@ -3223,67 +3235,84 @@ bool mob_magic(struct char_data *ch)
   if (GET_WIL(ch) <= 2)
     force = magic;
   else force = MIN(magic, number(MIN_MOB_COMBAT_MAGIC_FORCE, MAX_MOB_COMBAT_MAGIC_FORCE));
-  while (!spell) {
-    switch (number (0, 26)) { // If you're adding more cases to this switch, increase this number to match!
+
+  // Use different tactics on astral projections: We can't hurt them with physical spells.
+  if (IS_ASTRAL(FIGHTING(ch))) {
+    switch (number(0, 1)) {
       case 0:
+        spell = SPELL_MANABOLT;
+        break;
       case 1:
-      case 2:
-      case 3:
-      case 4:
-      case 5:
-      case 6:
-      case 7:
-        if (GET_BOD(FIGHTING(ch)) <= 6) {
-          spell = SPELL_POWERBOLT;
-        } else if (GET_WIL(FIGHTING(ch)) < 6) {
-          spell = SPELL_MANABOLT;
-        } else {
-          spell = SPELL_STUNBOLT;
-        }
+        spell = SPELL_STUNBOLT;
         break;
-      case 10:
-      case 11:
-      case 12:
-        if (!affected_by_spell(FIGHTING(ch), SPELL_CONFUSION))
-          spell = SPELL_CONFUSION;
-        break;
-      case 13:
-      case 14:
-        spell = SPELL_FLAMETHROWER;
-        break;
-      case 8:
-      case 9:
-      case 15:
-      case 19:
-        spell = SPELL_ACIDSTREAM;
-        break;
-      case 16:
-      case 17:
-        spell = SPELL_LIGHTNINGBOLT;
-        break;
-      case 18:
-        spell = SPELL_CLOUT;
-        break;
-      case 20:
-      case 21:
-      case 22:
-        if (!affected_by_spell(FIGHTING(ch), SPELL_IGNITE) && !GET_CHAR_FIRE_DURATION(FIGHTING(ch)))
-          spell = SPELL_IGNITE;
-        break;
-      case 23:
-        spell = SPELL_LASER;
-        break;
-      case 24:
-        spell = SPELL_STEAM;
-        break;
-      case 25:
-        spell = SPELL_THUNDERBOLT;
-        break;
-      case 26:
-        spell = SPELL_WATERBOLT;
+      default:
+        spell = SPELL_STUNBOLT;
         break;
     }
+  } else {
+    while (!spell) {
+      switch (number (0, 26)) { // If you're adding more cases to this switch, increase this number to match!
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+          if (GET_BOD(FIGHTING(ch)) <= 6) {
+            spell = SPELL_POWERBOLT;
+          } else if (GET_WIL(FIGHTING(ch)) < 6) {
+            spell = SPELL_MANABOLT;
+          } else {
+            spell = SPELL_STUNBOLT;
+          }
+          break;
+        case 10:
+        case 11:
+        case 12:
+          if (!affected_by_spell(FIGHTING(ch), SPELL_CONFUSION))
+            spell = SPELL_CONFUSION;
+          break;
+        case 13:
+        case 14:
+          spell = SPELL_FLAMETHROWER;
+          break;
+        case 8:
+        case 9:
+        case 15:
+        case 19:
+          spell = SPELL_ACIDSTREAM;
+          break;
+        case 16:
+        case 17:
+          spell = SPELL_LIGHTNINGBOLT;
+          break;
+        case 18:
+          spell = SPELL_CLOUT;
+          break;
+        case 20:
+        case 21:
+        case 22:
+          if (!affected_by_spell(FIGHTING(ch), SPELL_IGNITE) && !GET_CHAR_FIRE_DURATION(FIGHTING(ch)))
+            spell = SPELL_IGNITE;
+          break;
+        case 23:
+          spell = SPELL_LASER;
+          break;
+        case 24:
+          spell = SPELL_STEAM;
+          break;
+        case 25:
+          spell = SPELL_THUNDERBOLT;
+          break;
+        case 26:
+          spell = SPELL_WATERBOLT;
+          break;
+      }
+    }
   }
+
   switch (spell) {
     case SPELL_FLAMETHROWER:
     case SPELL_MANABOLT:
@@ -6835,8 +6864,11 @@ void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_d
   total -= SET_POOL_INFO(casting_pool, GET_CASTING(ch), casting);
   total -= SET_POOL_INFO(drain_pool, GET_DRAIN(ch), drain);
   total -= SET_POOL_INFO(spell_defense_pool, GET_SDEFENSE(ch), spell_defense);
-  if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
+  if (GET_METAMAGIC(ch, META_REFLECTING) == 2) {
     total -= SET_POOL_INFO(reflection_pool, GET_REFLECT(ch), reflection);
+  } else {
+    ch->aff_abils.reflection_pool = GET_REFLECT(ch) = 0;
+  }
 
   // Allocate remainder to casting pool.
   if (total > 0)

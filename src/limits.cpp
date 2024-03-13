@@ -1139,8 +1139,11 @@ void point_update(void)
             // Restart the loop: We extracted someone.
             should_loop = TRUE;
             break;
-          } else if (GET_ESS(i) <= 100)
-            send_to_char("You feel memories of your physical body slipping away.\r\n", i);
+          } else if (GET_ESS(i) <= 100) {
+            send_to_char("^RYou feel memories of your physical body slipping away. Better ^WRETURN^R to it soon...^n\r\n", i);
+          } else if (GET_ESS(i) <= 200) {
+            send_to_char("^rYour link to your physical form grows tenuous.\r\n", i);
+          }
         }
 
         if (is_npc || !PLR_FLAGGED(i, PLR_JUST_DIED)) {

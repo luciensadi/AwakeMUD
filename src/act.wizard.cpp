@@ -1710,6 +1710,13 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Hunger: %d, Thirst: %d, Drunk: %d,  Socialization Bonus: ^c%d^n\r\n",
           GET_COND(k, COND_FULL), GET_COND(k, COND_THIRST), GET_COND(k, COND_DRUNK), GET_CONGREGATION_BONUS(k));
 
+  if (k->char_specials.rigging) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Rigging: %s^n (%ld) @ %ld\r\n",
+             CAP(GET_VEH_NAME(k->char_specials.rigging)),
+             GET_VEH_VNUM(k->char_specials.rigging),
+             (k->char_specials.rigging->in_veh || k->char_specials.rigging->in_room) ? GET_ROOM_VNUM(get_veh_in_room(k->char_specials.rigging)) : -1);
+  }
+
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Master is: %s, Followers are:",
           ((k->master) ? GET_CHAR_NAME(k->master) : "<none>"));
 

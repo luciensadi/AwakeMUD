@@ -1194,6 +1194,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   long pgroup_num = 0;
   if (GET_PGROUP_MEMBER_DATA(player) && GET_PGROUP(player))
     pgroup_num = GET_PGROUP(player)->get_idnum();
+  
+  // Remove their temp-load flag if it's set (but set it again after)
+  bool is_temp_load = PLR_FLAGGED(player, PLR_IS_TEMPORARILY_LOADED);
+  PLR_FLAGS(player).RemoveBit(PLR_IS_TEMPORARILY_LOADED);
 
   /* Compose the initial giant update. */
   snprintf(buf, sizeof(buf), "UPDATE pfiles SET AffFlags='%s', PlrFlags='%s', PrfFlags='%s', Bod=%d, "\
@@ -1253,6 +1257,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                prepare_quotes(buf3, get_lifestyle_string(player), sizeof(buf3) / sizeof(char)),
                GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
+
+  if (is_temp_load)
+    PLR_FLAGS(player).SetBit(PLR_IS_TEMPORARILY_LOADED);
 
   /* Re-equip cyberware and bioware. */
   for (temp = player->carrying; temp; temp = next_obj) {

@@ -1047,7 +1047,7 @@ void affect_total(struct char_data * ch)
     // Set magic pools from (int + wil + mag) / 3.
     GET_MAGIC(ch) += (GET_INT(ch) + GET_WIL(ch) + (int)(GET_MAG(ch) / 100))/3;
 
-    if (ch_is_npc) {
+    if (ch_is_npc && !IS_PROJECT(ch)) {
       // For NPCs, we zero all the components of the magic pool, then re-set them.
       GET_REFLECT(ch) = GET_CASTING(ch) = GET_DRAIN(ch) = GET_SDEFENSE(ch) = 0;
 

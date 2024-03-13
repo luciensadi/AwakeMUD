@@ -1704,7 +1704,7 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   for (i = list; i; i = i->next_in_room) {
     // Skip them if they're invisible to us, or if they're us and we're not rigging.
     // TODO: Does this cause double printing if you're inside a nested vehicle and looking out at someone in the containing veh?
-    if (!CAN_SEE(ch, i) || !(ch != i || ch->char_specials.rigging) || (ch->in_veh && i->in_veh == ch->in_veh)) {
+    if (!CAN_SEE(ch, i) || (!ch->char_specials.rigging && ch == i) || (ch->in_veh && i->in_veh == ch->in_veh)) {
       continue;
     }
 
