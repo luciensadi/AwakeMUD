@@ -1047,7 +1047,20 @@ void affect_total(struct char_data * ch)
     // Set magic pools from (int + wil + mag) / 3.
     GET_MAGIC(ch) += (GET_INT(ch) + GET_WIL(ch) + (int)(GET_MAG(ch) / 100))/3;
 
-    if (ch_is_npc && !IS_PROJECT(ch)) {
+    if (IS_PROJECT(ch)) {
+      if (ch->desc && ch->desc->original) {
+        // Note that this uses GET_MAGIC (their magic pool) rather than GET_MAG (their magic attribute).
+        int sdef = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch->desc->original));
+        int drain = MIN(GET_MAGIC(ch), GET_DRAIN(ch->desc->original));
+        int reflect = MIN(GET_MAGIC(ch), GET_REFLECT(ch->desc->original));
+        int casting = MAX(0, GET_MAGIC(ch) - drain - reflect - sdef);
+
+        // It's possible for the casting value to be greater than sorcery right now. This setter resolves that.
+        set_casting_pools(ch, casting, drain, sdef, reflect, FALSE);
+      } else {
+        set_casting_pools(ch, 0, 0, GET_MAGIC(ch), 0, FALSE);
+      }
+    } else if (ch_is_npc) {
       // For NPCs, we zero all the components of the magic pool, then re-set them.
       GET_REFLECT(ch) = GET_CASTING(ch) = GET_DRAIN(ch) = GET_SDEFENSE(ch) = 0;
 

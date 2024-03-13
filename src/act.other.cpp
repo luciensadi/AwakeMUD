@@ -2350,7 +2350,7 @@ ACMD(do_astral)
     return;
   }
 
-  if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
+  if (PLR_FLAGGED(ch, PLR_PERCEIVE) && !(IS_GHOUL(ch) || IS_DRAGON(ch))) {
     PLR_FLAGS(ch).RemoveBit(PLR_PERCEIVE);
     send_to_char("You briefly return your perception to your physical senses.\r\n", ch);
   }
@@ -2360,8 +2360,13 @@ ACMD(do_astral)
     ch->player.astral_text.keywords = str_dup(buf3);
   } if (!ch->player.astral_text.name)
     ch->player.astral_text.name = str_dup("a reflection");
-  if (!ch->player.astral_text.room_desc)
+  if (!ch->player.astral_text.room_desc) {
     ch->player.astral_text.room_desc = str_dup("The reflection of some physical being stands here.\r\n");
+  } else if (!str_str(ch->player.astral_text.room_desc, "\r\n")) {
+    snprintf(buf3, sizeof(buf3), "%s\r\n", ch->player.astral_text.room_desc);
+    delete [] ch->player.astral_text.room_desc;
+    ch->player.astral_text.room_desc = str_dup(buf3);
+  }
 
   GET_POS(ch) = POS_SITTING;
   astral = read_mobile(r_num, REAL);
@@ -2434,6 +2439,9 @@ ACMD(do_astral)
   act("$n leaves $s body behind, entering a deep trance.", TRUE, ch, 0, astral, TO_NOTVICT);
   act("You enter the Astral Plane.", FALSE, astral, 0, 0, TO_CHAR);
   act("$n swirls into view.", TRUE, astral, 0, 0, TO_ROOM);
+
+  // Transfer over casting pools.
+  set_casting_pools(astral, GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch), GET_REFLECT(ch), FALSE);
 
   PLR_FLAGS(ch).SetBit(PLR_PROJECT);
   look_at_room(astral, 1, 0);
