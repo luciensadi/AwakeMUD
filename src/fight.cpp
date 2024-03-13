@@ -3156,7 +3156,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   int comp = 0;
   bool trauma = FALSE, pain = FALSE;
 
-  // We want to pull bioware from their real body-- if they're projecting, find their original.
+  // If they're projecting, find their original.
   struct char_data *real_body = victim;
   if (IS_PROJECT(victim) && victim->desc && victim->desc->original)
     real_body = victim->desc->original;
@@ -3263,6 +3263,14 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   }
   if (!awake && GET_PHYSICAL(victim) <= 0)
     GET_LAST_DAMAGETIME(victim) = time(0);
+
+  // Easy case: Projections snap back on stun or mort.
+  if (IS_PROJECT(victim) && (GET_MENTAL(victim) < 100 || GET_PHYSICAL(victim) < 100)) {
+    send_to_char("^RThere's a tearing sensation as your astral body is disrupted!^n\r\n", victim);
+    act("With a scream, $n splinters and shatters into a haze of dispersing energy.", TRUE, victim, 0, 0, TO_ROOM);
+    extract_char(victim);
+    return TRUE;
+  }
 
   if (update_pos(victim)) {
     // They died. RIP
@@ -6014,9 +6022,10 @@ void perform_violence(void)
         }
         stop_fighting(spirit);
         stop_fighting(mage);
-        update_pos(mage);
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
         AFF_FLAGS(spirit).RemoveBit(AFF_BANISH);
+        if (update_pos(mage))
+          continue;
       }
       continue;
     }
