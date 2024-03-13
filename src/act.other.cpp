@@ -1851,6 +1851,11 @@ ACMD(do_eject)
     return;
   }
 
+  FAILURE_CASE_PRINTF(!IS_SENATOR(ch) && IS_OBJ_STAT(weapon, ITEM_EXTRA_STAFF_ONLY),
+                      "You're not able to eject the ammo from %s.", decapitalize_a_an(weapon));
+  FAILURE_CASE_PRINTF(!IS_SENATOR(ch) && GET_MAGAZINE_AMMO_TYPE(magazine) == AMMO_AV, 
+                      "%s is loaded with special ammo that isn't ready for players to collect yet.", CAP(GET_OBJ_NAME(weapon)));
+
   // Strip out the ammo and put it in your bullet pants, then destroy the mag.
   update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
   obj_from_obj(magazine);

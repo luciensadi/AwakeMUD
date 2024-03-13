@@ -336,8 +336,11 @@ bool is_dissuaded_by_hardened_armor(struct char_data *ch, struct char_data *vict
     if (WEAPON_IS_GUN(weapon)) {
       // Overwrite with weapon power.
       my_power = GET_WEAPON_POWER(weapon);
-      if (weapon->contains && GET_OBJ_TYPE(weapon->contains) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_AMMO_TYPE(weapon->contains) == AMMO_APDS)
+      if (weapon->contains && GET_OBJ_TYPE(weapon->contains) == ITEM_GUN_MAGAZINE 
+          && (GET_MAGAZINE_AMMO_TYPE(weapon->contains) == AMMO_APDS || GET_MAGAZINE_AMMO_TYPE(weapon->contains) == AMMO_AV))
+      {
         my_power *= 2;
+      }
       
       if (get_hardened_ballistic_armor_rating(vict) >= my_power) {
         // Refuse to attack anyone whose armor we can't breach.

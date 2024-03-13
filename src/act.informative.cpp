@@ -2967,6 +2967,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
             case AMMO_APDS:
               strlcat(buf, "pierces through enemy ballistic armor, halving its value.", sizeof(buf));
               break;
+            case AMMO_AV:
+              strlcat(buf, "pierces through enemy ballistic and vehicle armor, halving its value.", sizeof(buf));
+              break;
             case AMMO_EX:
               strlcat(buf, "increases power by two.", sizeof(buf));
               break;
@@ -6415,6 +6418,7 @@ ACMD(do_consider)
         } else if (weapon->contains) {
           switch (GET_MAGAZINE_AMMO_TYPE(weapon->contains)) {
             case AMMO_APDS:
+            case AMMO_AV:
               expected_power -= (int)(GET_BALLISTIC(victim) / 2);
               break;
             case AMMO_EX:
@@ -6480,6 +6484,7 @@ ACMD(do_consider)
         } else if (vict_weapon->contains) {
           switch (GET_MAGAZINE_AMMO_TYPE(vict_weapon->contains)) {
             case AMMO_APDS:
+            case AMMO_AV:
               vict_expected_power -= (int)(GET_BALLISTIC(ch) / 2);
               break;
             case AMMO_EX:

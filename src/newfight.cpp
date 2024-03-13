@@ -577,6 +577,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         att->ranged->power = att->ranged->power_before_armor - (int)(def->standard_impact_rating / 2);
       } else {
         switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
+          case AMMO_AV:
           case AMMO_APDS:
             if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
               // APDS, AV, and other armor-piercing munitions are treated as normal VS spirits/elementals.

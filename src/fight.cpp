@@ -6756,6 +6756,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
 
   int attack_success = 0, attack_resist=0, skill_total = 1;
   int recoil=0, burst=0, recoil_comp=0, newskill, modtarget = 0;
+  bool using_av = FALSE;
 
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
     stop_fighting(ch);
@@ -6828,9 +6829,13 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
       }
     }
 
-    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded)))
+    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded))) {
       power = GET_WEAPON_POWER(wielded) + burst;
-    else
+      // AV does not halve, and we model this by doubling it.
+      if (wielded->contains && GET_MAGAZINE_AMMO_TYPE(wielded->contains) == AMMO_AV) {
+        using_av = TRUE;
+      }
+    } else
       power = GET_STR(ch) + GET_WEAPON_STR_BONUS(wielded);
     damage_total = GET_WEAPON_DAMAGE_CODE(wielded);
   } else
@@ -6858,9 +6863,17 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
       damage_total = MODERATE;
   }
 
-  power = (int)(power / 2);
-  damage_total--;
-  if (power <= veh->armor || !damage_total)
+  int armor_target;
+  if (!using_av) {
+    power = (int)(power / 2);
+    damage_total--;
+    armor_target = veh->armor;
+  } else {
+    power -= (int) (veh->armor / 2);
+    armor_target = (int) (veh->armor / 2);
+  }
+
+  if (power <= armor_target || !damage_total)
   {
     snprintf(buf, sizeof(buf), "$n's %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
     snprintf(buf2, sizeof(buf2), "Your attack ricochets off of %s.", GET_VEH_NAME(veh));
@@ -6869,8 +6882,11 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     snprintf(buf, sizeof(buf), "A %s ricochets off of your ride.\r\n", ammo_type);
     send_to_veh(buf, veh, 0, FALSE);
     return FALSE;
-  } else
-    power -= veh->armor;
+  } else {
+    // For AV rounds, this was subtracted before the armor check.
+    if (!using_av)
+      power -= veh->armor;
+  }
 
   if (wielded)
     recoil_comp = check_recoil(ch, wielded);
