@@ -943,13 +943,14 @@ void calc_weight(struct char_data *ch)
   IS_CARRYING_W(ch) += get_bulletpants_weight(ch);
 }
 
-void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
+// Returns TRUE if container is emptied.
+bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
                                 struct obj_data * cont, int mode)
 {
   bool cyberdeck = FALSE, computer = FALSE;
   if (IS_WORKING(ch)) {
     send_to_char(TOOBUSY, ch);
-    return;
+    return FALSE;
   }
   if (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK)
     cyberdeck = TRUE;
@@ -1036,7 +1037,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           for (struct char_data *vict = ch->in_room->people; vict; vict = vict->next_in_room) {
             if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
               send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
-              return;
+              return FALSE;
             } else if (vict == ch && vict->char_specials.programming == obj) {
               send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
               STOP_WORKING(ch);
@@ -1047,7 +1048,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh) {
             if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
               send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
-              return;
+              return FALSE;
             } else if (vict == ch && vict->char_specials.programming == obj) {
               send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
               STOP_WORKING(ch);
@@ -1063,7 +1064,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       else if (cyberdeck) {
         if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM && (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))) {
           display_cyberdeck_issues(ch, cont);
-          return;
+          return FALSE;
         }
 
         // Subtract program size from storage, but a persona program on a store-bought deck doesn't use storage
@@ -1078,7 +1079,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
               if ((GET_OBJ_TYPE(k) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(k) == TYPE_FILE) ||
                   GET_OBJ_TYPE(k) == ITEM_PROGRAM) {
                 send_to_char(ch, "You cannot uninstall %s while you have files installed.\r\n", GET_OBJ_NAME(obj));
-                return;
+                return FALSE;
               }
             GET_CYBERDECK_USED_STORAGE(cont) = GET_CYBERDECK_TOTAL_STORAGE(cont) = 0;
           }
@@ -1150,9 +1151,12 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         act("$n takes the last of the items from $p.", TRUE, ch, cont, NULL, TO_ROOM);
         act("You take the last of the items from $p.", TRUE, ch, cont, NULL, TO_CHAR);
         extract_obj(cont);
+        return TRUE;
       }
     }
   }
+
+  return FALSE;
 }
 
 
@@ -1208,7 +1212,8 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
       next_obj = obj->next_content;
       if (CAN_SEE_OBJ(ch, obj) && (obj_dotmode == FIND_ALL || isname(arg, obj->text.keywords))) {
         found = 1;
-        perform_get_from_container(ch, obj, cont, mode);
+        if (perform_get_from_container(ch, obj, cont, mode))
+          return;
       }
     }
 
@@ -1226,7 +1231,8 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
       snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s in $p.", AN(arg), arg);
       act(buf, FALSE, ch, cont, 0, TO_CHAR);
     } else
-      perform_get_from_container(ch, obj, cont, mode);
+      if (perform_get_from_container(ch, obj, cont, mode))
+        return;
   } else
   {
     if (obj_dotmode == FIND_ALLDOT && !*arg) {
@@ -1238,7 +1244,8 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
       if (CAN_SEE_OBJ(ch, obj) &&
           (obj_dotmode == FIND_ALL || isname(arg, obj->text.keywords))) {
         found = 1;
-        perform_get_from_container(ch, obj, cont, mode);
+        if (perform_get_from_container(ch, obj, cont, mode))
+          return;
       }
     }
     if (!found) {
