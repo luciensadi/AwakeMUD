@@ -391,6 +391,10 @@ bool load_char(const char *name, char_data *ch, bool logon)
   ch->player.matrix_text.look_desc = str_dup(row[17]);
 
   ch->player.astral_text.keywords = str_dup(row[18]);
+  if (!str_str(ch->player.astral_text.keywords, GET_CHAR_NAME(ch))) {
+    char new_keywords[MAX_INPUT_LENGTH + 100];
+    snprintf(new_keywords, sizeof(new_keywords), "%s %s", ch->player.astral_text.keywords, GET_CHAR_NAME(ch));
+  }
   ch->player.astral_text.name = str_dup(row[19]);
   ch->player.astral_text.room_desc = str_dup(row[20]);
   ch->player.astral_text.look_desc = str_dup(row[21]);

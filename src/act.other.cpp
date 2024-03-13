@@ -2355,9 +2355,10 @@ ACMD(do_astral)
     send_to_char("You briefly return your perception to your physical senses.\r\n", ch);
   }
 
-  if (!ch->player.astral_text.keywords)
-    ch->player.astral_text.keywords = str_dup("reflection");
-  if (!ch->player.astral_text.name)
+  if (!ch->player.astral_text.keywords) {
+    snprintf(buf3, sizeof(buf3), "reflection %s", GET_CHAR_NAME(ch));
+    ch->player.astral_text.keywords = str_dup(buf3);
+  } if (!ch->player.astral_text.name)
     ch->player.astral_text.name = str_dup("a reflection");
   if (!ch->player.astral_text.room_desc)
     ch->player.astral_text.room_desc = str_dup("The reflection of some physical being stands here.\r\n");
@@ -2832,8 +2833,17 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       return;
     }
 
-    DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.keywords);
-    d->edit_mob->player.physical_text.keywords = str_dup(arg);
+    {
+      char buf_with_name[MAX_INPUT_LENGTH + 100];
+      if (!str_str(arg, GET_CHAR_NAME(d->character))) {
+        snprintf(buf_with_name, sizeof(buf_with_name), "%s %s", arg, GET_CHAR_NAME(d->character));
+      } else {
+        strlcpy(buf_with_name, arg, sizeof(buf_with_name));
+      }
+
+      DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.keywords);
+      d->edit_mob->player.physical_text.keywords = str_dup(buf_with_name);
+    }
     cedit_disp_menu(d, 0);
 
     break;
