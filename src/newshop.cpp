@@ -1104,7 +1104,6 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   struct shop_sell_data *sell;
   int price, buynum;
   bool cash = FALSE;
-  char rollbuf[1000];
 
   // Prevent ghouls from being loved by anyone except their own mother.
   if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.AreAnySet(SHOP_YES_GHOUL, SHOP_CHARGEN, ENDBIT) && !MOB_FLAGGED(keeper, MOB_INANIMATE)) {
@@ -1246,66 +1245,22 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       return;
     }
 
-    // Calculate TNs, factoring in settings, powers, and racism.
-    int target = GET_OBJ_AVAILTN(obj);
-    snprintf(rollbuf, sizeof(rollbuf), "Initial TN %d", target);
+    struct obj_data *phero = find_bioware(ch, BIO_TAILOREDPHEROMONES);
 
-    if (GET_AVAIL_OFFSET(ch)) {
-      snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (availoffset)", GET_AVAIL_OFFSET(ch));
-      target -= GET_AVAIL_OFFSET(ch);
-    }
-
-    if (GET_POWER(ch, ADEPT_KINESICS)) {
-      snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (kinesics)", GET_POWER(ch, ADEPT_KINESICS));
-      target -= GET_POWER(ch, ADEPT_KINESICS);
-    }
-    
-    if (GET_RACE(ch) != GET_RACE(keeper)) {
-      int meta_penalty = get_metavariant_penalty(ch);
-
-      if (meta_penalty) {
-        snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (metavariant)", meta_penalty);
-        target += meta_penalty;
-      }
-    }
-
-    // House rule: Give a better TN for high-grade lifestyles.
-    {
-      switch (abs(GET_BEST_LIFESTYLE(ch))) {
-        case LIFESTYLE_HIGH:
-          target -= 1;
-          strlcat(rollbuf, ", -1 (high lifestyle)", sizeof(rollbuf));
-          break;
-        case LIFESTYLE_LUXURY:
-          target -= 2;
-          strlcat(rollbuf, ", -2 (luxury lifestyle)", sizeof(rollbuf));
-          break;
-      }
-    }
-
-    // Calculate their skill level, including bioware.
-    bool pheromones = FALSE;
-    int skill = get_skill(ch, shop_table[shop_nr].etiquette, target);
-    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", final %d after get_skill(). Base skill %d", target, skill);
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEROMONES) {
-        pheromones = TRUE;
-        int delta = GET_BIOWARE_RATING(bio) * (GET_BIOWARE_IS_CULTURED(bio) ? 2 : 1);
-        skill += delta;
-        snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (pheromones)", delta);
-        break;
-      }
-    }
-
-    // Roll up the success test.
-    int success = success_test(skill, target);
-    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ". Rolled %d success%s.", success, success == 1 ? "" : "s");
-    act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
+    int success = get_eti_test_results(ch,
+                                       shop_table[shop_nr].etiquette,
+                                       GET_OBJ_AVAILTN(obj),
+                                       GET_AVAIL_OFFSET(ch),
+                                       GET_POWER(ch, ADEPT_KINESICS),
+                                       GET_RACE(ch) != GET_RACE(keeper) ? get_metavariant_penalty(ch) : 0,
+                                       abs(GET_BEST_LIFESTYLE(ch)),
+                                       phero ? GET_BIOWARE_RATING(phero) * (GET_BIOWARE_IS_CULTURED(phero) ? 2 : 1) : 0,
+                                       0);
 
     // Failure case.
     if (success < 1) {
       if (GET_SKILL(ch, shop_table[shop_nr].etiquette) == 0) {
-        if (pheromones)
+        if (phero)
           snprintf(buf, sizeof(buf), "Not even your tailored pheromones can soothe $N's annoyance at your lack of %s.\r\n",
                    skills[shop_table[shop_nr].etiquette].name);
         else
@@ -1314,7 +1269,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       } else {
         snprintf(buf, sizeof(buf), "You exert every bit of %s you can muster, %sbut $N shakes $S head after calling a few contacts.\r\n",
                  skills[shop_table[shop_nr].etiquette].name,
-                 pheromones ? "aided by your tailored pheromones, " : "");
+                 phero ? "aided by your tailored pheromones, " : "");
       }
       act(buf, FALSE, ch, 0, keeper, TO_CHAR);
 
@@ -1333,11 +1288,11 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     if (GET_SKILL(ch, shop_table[shop_nr].etiquette) == 0) {
       snprintf(buf, sizeof(buf), "$N seems annoyed that you don't even know the basics of %s, but %syou convince $M to call a few contacts anyways.\r\n",
               skills[shop_table[shop_nr].etiquette].name,
-              pheromones ? "aided by your tailored pheromones, " : "");
+              phero ? "aided by your tailored pheromones, " : "");
     } else {
       snprintf(buf, sizeof(buf), "You exert every bit of %s you can muster, %sand $N nods to you after calling a few contacts.\r\n",
                skills[shop_table[shop_nr].etiquette].name,
-               pheromones ? "aided by your tailored pheromones, " : "");
+               phero ? "aided by your tailored pheromones, " : "");
     }
     act(buf, FALSE, ch, 0, keeper, TO_CHAR);
 
@@ -3667,4 +3622,57 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
   }
 
   return TRUE;
+}
+
+int get_eti_test_results(struct char_data *ch, int eti_skill, int availtn, int availoff, int kinesics, int meta_penalty, int lifestyle, int pheromone_dice, int skill_dice) {
+  char rollbuf[10000];
+  
+  // Calculate eti TNs, factoring in settings, powers, and racism.
+  int target = availtn;
+  snprintf(rollbuf, sizeof(rollbuf), "Initial TN %d", target);
+
+  if (availoff) {
+    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (availoffset)", availoff);
+    target -= availoff;
+  }
+
+  if (kinesics) {
+    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (kinesics)", kinesics);
+    target -= kinesics;
+  }
+
+  if (meta_penalty) {
+    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (metavariant)", meta_penalty);
+    target += meta_penalty;
+  }
+
+  // House rule: Give a better TN for high-grade lifestyles.
+  switch (lifestyle) {
+    case LIFESTYLE_HIGH:
+      target -= 1;
+      strlcat(rollbuf, ", -1 (high lifestyle)", sizeof(rollbuf));
+      break;
+    case LIFESTYLE_LUXURY:
+      target -= 2;
+      strlcat(rollbuf, ", -2 (luxury lifestyle)", sizeof(rollbuf));
+      break;
+  }
+
+  // Calculate their skill dice, including from bioware.
+  int skill = skill_dice ? skill_dice : get_skill(ch, eti_skill, target);
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", final %d after get_skill(). Base skill %d", target, skill);
+
+  if (pheromone_dice) {
+    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (pheromones)", pheromone_dice);
+    skill += pheromone_dice;
+  }
+
+  // Roll up the success test.
+  int success = success_test(skill, target);
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ". Rolled %d success%s.", success, success == 1 ? "" : "s");
+  
+  if (ch)
+    act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
+
+  return success;
 }

@@ -70,6 +70,7 @@ extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
+extern int get_max_skill_for_char(struct char_data *ch, int skill, int type);
 
 extern SPECIAL(johnson);
 extern SPECIAL(landlord_spec);
@@ -1778,8 +1779,12 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
 
     int expert_rating = 0;
     int chip_rating = 0;
+    int wires_rating = 0;
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
       switch (GET_CYBERWARE_TYPE(obj)) {
+        case CYB_SKILLWIRE:
+          wires_rating = GET_CYBERWARE_RATING(obj);
+          break;
         case CYB_MOVEBYWIRE:
           mbw = should_gain_physical_boosts ? GET_CYBERWARE_RATING(obj) : 0;
           break;
@@ -1800,20 +1805,35 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
 
     // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
     if (chip_rating && expert_rating) {
-      if (!check_chipdriver_and_expert_compat(chipjack, expert_obj)) {
-        strlcat(gskbuf, "Ignored expert driver (slot count mismatch with chipjack). ", sizeof(gskbuf));
-      } else if (chip_rating != GET_SKILL(ch, skill)) {
-        strlcat(gskbuf, "Ignored expert driver (ch skill not equal to chip rating). ", sizeof(gskbuf));
-      } else if (defaulting_tn == 4) {
-        strlcat(gskbuf, "Ignored expert driver (S2A default). ", sizeof(gskbuf));
-      } else if (defaulting_tn == 2) {
-        increase = (int) (MIN(GET_SKILL(ch, skill), expert_rating) / 2);
-        skill_dice += increase;
-        snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase (S2S default): %d. ", increase);
-      } else {
-        increase = MIN(GET_SKILL(ch, skill), expert_rating);
-        skill_dice += increase;
-        snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase: %d. ", increase);
+      int arch_max = get_max_skill_for_char(ch, skill, GODLY);
+
+      if (chip_rating + expert_rating > arch_max) {
+        expert_rating = arch_max - chip_rating;
+        if (expert_rating <= 0) {
+          strlcat(gskbuf, "Ignored expert driver (skill already at archetype max)", sizeof(gskbuf));
+        } else {
+          snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "(Capped chip + expert driver to archetype max dice of %d)", arch_max);
+        }
+      }
+
+      if (expert_rating) {
+        if (!check_chipdriver_and_expert_compat(chipjack, expert_obj)) {
+          strlcat(gskbuf, "Ignored expert driver (slot count mismatch with chipjack). ", sizeof(gskbuf));
+        } else if (chip_rating != GET_SKILL(ch, skill)) {
+          strlcat(gskbuf, "Ignored expert driver (ch skill not equal to chip rating). ", sizeof(gskbuf));
+        } else if (!skills[skill].is_knowledge_skill && wires_rating < chip_rating) {
+          strlcat(gskbuf, "Ignored expert driver (skillwires not equal to chip rating for activesoft). ", sizeof(gskbuf));
+        } else if (defaulting_tn == 4) {
+          strlcat(gskbuf, "Ignored expert driver (S2A default). ", sizeof(gskbuf));
+        } else if (defaulting_tn == 2) {
+          increase = (int) (MIN(GET_SKILL(ch, skill), expert_rating) / 2);
+          skill_dice += increase;
+          snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase (S2S default): %d. ", increase);
+        } else {
+          increase = MIN(GET_SKILL(ch, skill), expert_rating);
+          skill_dice += increase;
+          snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase: %d. ", increase);
+        }
       }
     } else if (expert_rating) {
       strlcat(gskbuf, "Ignored expert driver (no chip). ", sizeof(gskbuf));

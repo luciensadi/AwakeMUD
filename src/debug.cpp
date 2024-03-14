@@ -129,13 +129,22 @@ struct nego_test_values_struct {
   int pheromones;
 };
 
-struct nego_test_values_struct nego_test_values[] = {
-  {"Unbuffed mage", 8, 0, 12, 1, 4},
-  {"Adept",    8     , 3, 12, 8, 4},
-  {"Mundane",  8     , 0, 12, 8, 4},
-  {"Mundane w/ 2 kin and more skill",  8     , 2, 12, 8, 8},
-  {"Mundane w/ 4 kin and no phero",  8     , 4, 12, 8, 0},
-  {"", 0, 0, 0, 0, 0}
+extern int get_eti_test_results(
+  struct char_data *ch,
+  int eti_skill,
+  int availtn,
+  int availoff,
+  int kinesics,
+  int meta_penalty,
+  int lifestyle,
+  int pheromone_dice,
+  int skill_dice);
+
+struct eti_test_values_struct {
+  const char *name;
+  int skill_dice;
+  int kinesics;
+  int pheromone_dice;
 };
 
 extern long payout_slots_testable(long bet);
@@ -253,6 +262,58 @@ ACMD(do_debug) {
     return;
   }
 
+  if (is_abbrev(arg1, "etitest")) {
+    int orig_num_runs = 15000;
+
+    struct eti_test_values_struct eti_test_values[] =  {
+      // name                        skill_dice  kin  phero_dice
+      {"Arch-Cap Full Mage",                     8 ,       0,    4},
+      {"Arch-Cap Aspected Mage",                 10,       0,    4},
+      {"Uncapped Mage",                          11,       0,    4},
+      {"Arch-Cap Mundane",                       12,       0,    4},
+      {"Arch-Cap Adept",                         10,       3,    4},
+      {"Uncapped Adept",                         11,       3,    4},
+      {"", 0, 0, 0}
+    };
+
+    int lifestyle = LIFESTYLE_LUXURY;
+
+    for (int idx = 0; *eti_test_values[idx].name; idx++) {
+      send_to_char(ch, "%s:\r\n", eti_test_values[idx].name);
+      for (int tn = 12; tn <= 24; tn += 6) {
+        for (int availoff = 0; availoff <= 5; availoff += 5) {
+          int total = 0;
+          int num_runs = orig_num_runs * (tn / 8);
+          for (int iter = 0; iter < num_runs; iter++) {
+            int ch_s = get_eti_test_results(
+              NULL,
+              0,
+              tn,
+              availoff,
+              eti_test_values[idx].kinesics,
+              0,
+              lifestyle,
+              eti_test_values[idx].pheromone_dice,
+              eti_test_values[idx].skill_dice);
+
+            int net = ch_s;
+            total += net;
+          }
+          float avg = ((float) total) / num_runs;
+          send_to_char(ch, "%2d skill, %d kin, %d phero, %d availoff VS TN %d got %2.2f avg net succ (aka %2.2f tries).\r\n",
+                      eti_test_values[idx].skill_dice,
+                      eti_test_values[idx].kinesics,
+                      eti_test_values[idx].pheromone_dice,
+                      availoff,
+                      tn,
+                      avg,
+                      1 / avg);
+        }
+      }
+    }
+    return;
+  }
+
   if (is_abbrev(arg1, "negotest")) {
     FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "no");
     
@@ -294,6 +355,14 @@ ACMD(do_debug) {
     */
 
     // Mage values.
+    struct nego_test_values_struct nego_test_values[] = {
+      // name                            int kin nego shop_int phero_dice
+      {"Unbuffed mage w/ decrease int",    8, 0,  12,      1,   4},
+      {"Adept",                            8, 3,  12,      8,   4},
+      {"Current Mundane",                  8, 0,  12,      8,   4},
+      {"Mundane w/ phero changes",         8, 1,  12,      8,   8},
+      {"", 0, 0, 0, 0, 0}
+    };
 
     for (int idx = 0; *nego_test_values[idx].name; idx++) {
       int total = 0;
