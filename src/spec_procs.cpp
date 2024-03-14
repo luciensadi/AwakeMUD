@@ -1950,6 +1950,7 @@ SPECIAL(car_dealer)
     newveh = read_vehicle(veh->veh_number, REAL);
     veh_to_room(newveh, ch->in_room);
     set_veh_owner(newveh, GET_IDNUM(ch));
+    add_veh_to_map(newveh);
     generate_veh_idnum(newveh);
     if (veh->type == VEH_DRONE)
       send_to_char(ch, "You buy %s. It is brought out into the room.\r\n", GET_VEH_NAME(newveh));
