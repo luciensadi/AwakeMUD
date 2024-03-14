@@ -407,6 +407,8 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
     fprintf(fl, "\t\tRoom:\t%ld\n", grid->room);
   }
   fclose(fl);
+
+  return TRUE;
 }
 
 void save_vehicles(bool fromCopyover)

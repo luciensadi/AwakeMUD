@@ -318,6 +318,8 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
       end_all_caster_records(victim, TRUE);
     }
 
+    GET_WATCH(victim) = NULL;
+
     char cmd_buf[100];
     *cmd_buf = '\0';
 

@@ -385,6 +385,8 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define SEES_ASTRAL(ch) (!IS_RIGGING(ch) && (IS_ASTRAL(ch) || IS_DUAL(ch) || IS_PERCEIVING(ch)))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
 
+#define GET_PROJECTION_ESSLOSS_TICK(ch)  ((ch)->points.projection_ticks)
+
 #define RACE_IS_GHOUL(race)  ((race) >= RACE_GHOUL_HUMAN && (race) <= RACE_GHOUL_TROLL)
 #define RACE_IS_DRAKE(race)  ((race) >= RACE_DRAKE_HUMAN && (race) <= RACE_DRAKE_TROLL)
 #define RACE_IS_DRAGON(race) ((race) >= RACE_WESTERN_DRAGON && (race) <= RACE_FEATHERED_SERPENT)

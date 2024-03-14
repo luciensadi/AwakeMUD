@@ -1135,41 +1135,43 @@ void point_update(void)
             HUNTING(i->desc->original) = NULL;
           }
 
-          GET_ESS(i) -= 100;
-          if (i->desc && i->desc->original) {
-            // Tick up temporary essence loss.
-            GET_TEMP_ESSLOSS(i->desc->original) = GET_ESS(i->desc->original) - GET_ESS(i);
-            affect_total(i->desc->original);
-          }
+          if ((++GET_PROJECTION_ESSLOSS_TICK(i) % PROJECTION_LENGTH_MULTIPLIER) == 0) {
+            GET_ESS(i) -= 100;
+            if (i->desc && i->desc->original) {
+              // Tick up temporary essence loss.
+              GET_TEMP_ESSLOSS(i->desc->original) = GET_ESS(i->desc->original) - GET_ESS(i);
+              affect_total(i->desc->original);
+            }
 
-          if (GET_ESS(i) <= 0) {
-            struct char_data *victim = i->desc->original;
-            send_to_char("As you feel the attachment to your physical body fade, you quickly return. The backlash from the fading connection rips through you...\r\n", i);
-            PLR_FLAGS(i->desc->original).RemoveBit(PLR_PROJECT);
-            i->desc->character = i->desc->original;
-            i->desc->original = NULL;
-            // GET_PHYSICAL(i->desc->character) = -(GET_BOD(i->desc->character) - 1) * 100;
-            // act("$n collapses in a heap.", TRUE, i->desc->character, 0, 0, TO_ROOM);
-            // update_pos(i->desc->character);
-            i->desc->character->desc = i->desc;
-            i->desc = NULL;
-            extract_char(i);
+            if (GET_ESS(i) <= 0) {
+              struct char_data *victim = i->desc->original;
+              send_to_char("As you feel the attachment to your physical body fade, you quickly return. The backlash from the fading connection rips through you...\r\n", i);
+              PLR_FLAGS(i->desc->original).RemoveBit(PLR_PROJECT);
+              i->desc->character = i->desc->original;
+              i->desc->original = NULL;
+              // GET_PHYSICAL(i->desc->character) = -(GET_BOD(i->desc->character) - 1) * 100;
+              // act("$n collapses in a heap.", TRUE, i->desc->character, 0, 0, TO_ROOM);
+              // update_pos(i->desc->character);
+              i->desc->character->desc = i->desc;
+              i->desc = NULL;
+              extract_char(i);
 
-            // First, nuke their health.
-            GET_PHYSICAL(victim) = -50;
-            GET_MENTAL(victim) = 0;
-            // Next, remove their death saves.
-            GET_PC_SALVATION_TICKS(victim) = 0;
-            // Finally, deal them massive damage.
-            damage(victim, victim, 100, TYPE_SUFFERING, TRUE);
+              // First, nuke their health.
+              GET_PHYSICAL(victim) = -50;
+              GET_MENTAL(victim) = 0;
+              // Next, remove their death saves.
+              GET_PC_SALVATION_TICKS(victim) = 0;
+              // Finally, deal them massive damage.
+              damage(victim, victim, 100, TYPE_SUFFERING, TRUE);
 
-            // Restart the loop: We extracted someone.
-            should_loop = TRUE;
-            break;
-          } else if (GET_ESS(i) <= 100) {
-            send_to_char("^RYou feel memories of your physical body slipping away. Better ^WRETURN^R to it soon...^n\r\n", i);
-          } else if (GET_ESS(i) <= 200) {
-            send_to_char("^rYour link to your physical form grows tenuous.\r\n", i);
+              // Restart the loop: We extracted someone.
+              should_loop = TRUE;
+              break;
+            } else if (GET_ESS(i) <= 100) {
+              send_to_char("^RYou feel memories of your physical body slipping away. Better ^WRETURN^R to it soon...^n\r\n", i);
+            } else if (GET_ESS(i) <= 200) {
+              send_to_char("^rYour link to your physical form grows tenuous.\r\n", i);
+            }
           }
         }
 
