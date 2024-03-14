@@ -308,7 +308,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define INITIAL_PATCH_DURATION                                 6
 
 // How much longer should projecting work for than standard?
-#define PROJECTION_LENGTH_MULTIPLIER                           10
+#define PROJECTION_LENGTH_MULTIPLIER                           30
 
 /////////////// OLC permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
