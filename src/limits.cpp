@@ -59,10 +59,18 @@ extern bool docwagon(struct char_data *ch);
 void mental_gain(struct char_data * ch)
 {
   int gain = 0;
-  struct obj_data *bio;
 
-  if (IS_PROJECT(ch))
+  // Not injured? Skip.
+  if (GET_MENTAL(ch) == GET_MAX_MENTAL(ch)) {
     return;
+  }
+
+  bool is_npc = IS_NPC(ch);
+
+  if (is_npc && ch->desc && ch->desc->original && PLR_FLAGS(ch->desc->original).IsSet(PLR_PROJECT) && GET_MOB_VNUM(ch) == 22) {
+    /* aka an optimized IS_PROJECT(ch) */
+    return;
+  }
 
   // Base recovery
   switch (GET_POS(ch))
@@ -87,52 +95,57 @@ void mental_gain(struct char_data * ch)
   }
 
   // Character related bonuses
-  // NPCs recover faster
-  if (IS_NPC(ch))
-    gain *= 2;
+  if (is_npc) {
+    // NPCs get enhanced gain with none of the extra calculations.
+    gain *= 2.5;
+  } else {
+    // For PCs, we have to calculate.
 
-  // Augmentations
-  for (bio = ch->bioware; bio; bio = bio->next_content) {
-    if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
-      switch (GET_BIOWARE_RATING(bio)) {
-        case 1:
-          gain *= 1.1;
-          break;
-        case 2:
-          gain *= 1.4;
-          break;
-        case 3:
-          gain *= 2;
-          break;
+    // Augmentations
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+        switch (GET_BIOWARE_RATING(bio)) {
+          case 1:
+            gain *= 1.1;
+            break;
+          case 2:
+            gain *= 1.4;
+            break;
+          case 3:
+            gain *= 2;
+            break;
+        }
+        break;
       }
-      break;
     }
+
+    // Adept rapid healing increases recovery by +50% per rank
+    if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+      gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+
+    // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
+    gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+
+    // Room related bonuses
+    if (find_workshop(ch, TYPE_MEDICAL))
+      gain *= 1.5;
+
+    if (char_is_in_social_room(ch))
+      gain *= 2;
+
+    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+      gain *= 1.5;
+
+    // Penalties happen last, to avoid the possibility of truncating to zero too early
+    if (PLR_FLAGS(ch).IsSet(PLR_ENABLED_DRUGS)) {
+      // PCs have drug heal multipliers, NPCs don't
+      gain *= get_drug_heal_multiplier(ch);
+    }
+
+    // Biosystem overstress reduces healing rate by 10% per point
+    if (GET_BIOOVER(ch) > 0)
+      gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
   }
-
-  // Adept rapid healing increases recovery by +50% per rank
-  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
-
-  // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
-  gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
-
-  // Room related bonuses
-  if (find_workshop(ch, TYPE_MEDICAL))
-    gain *= 1.5;
-
-  if (char_is_in_social_room(ch))
-    gain *= 2;
-
-  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
-    gain *= 1.5;
-
-  // Penalties happen last, to avoid the possibility of truncating to zero too early
-  // Biosystem overstress reduces healing rate by 10% per point
-  if (GET_BIOOVER(ch) > 0)
-    gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
-
-  // Drug multiplier is a float in range 0.1 ≤ X ≤ 1.0
-  gain *= get_drug_heal_multiplier(ch);
 
 #ifdef ENABLE_HUNGER
   if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
@@ -147,11 +160,18 @@ void mental_gain(struct char_data * ch)
 
 void physical_gain(struct char_data * ch)
 {
-  int gain = 0;
-  struct obj_data *bio;
-
-  if (IS_PROJECT(ch))
+  // Not injured? Skip.
+  if (GET_PHYSICAL(ch) == GET_MAX_PHYSICAL(ch)) {
     return;
+  }
+
+  int gain = 0;
+  bool is_npc = IS_NPC(ch);
+
+  if (is_npc && ch->desc && ch->desc->original && PLR_FLAGS(ch->desc->original).IsSet(PLR_PROJECT) && GET_MOB_VNUM(ch) == 22) {
+    /* aka an optimized IS_PROJECT(ch) */
+    return;
+  }
 
   // Base recovery
   switch (GET_POS(ch))
@@ -178,52 +198,58 @@ void physical_gain(struct char_data * ch)
   }
 
   // Character related bonuses
-  // NPCs recover faster
-  if (IS_NPC(ch))
-    gain *= 2;
 
-  // Augmentations
-  for (bio = ch->bioware; bio; bio = bio->next_content) {
-    if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
-      switch (GET_BIOWARE_RATING(bio)) {
-        case 1:
-          gain *= 1.1;
-          break;
-        case 2:
-          gain *= 1.4;
-          break;
-        case 3:
-          gain *= 2;
-          break;
+  if (is_npc) {
+    // NPCs are easy: boost them by a set amount.
+    gain *= 2.5;
+  } else {
+    // PCs have more checks.
+
+    // Augmentations
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+        switch (GET_BIOWARE_RATING(bio)) {
+          case 1:
+            gain *= 1.1;
+            break;
+          case 2:
+            gain *= 1.4;
+            break;
+          case 3:
+            gain *= 2;
+            break;
+        }
+        break;
       }
-      break;
     }
+
+    // Adept rapid healing increases recovery by +50% per rank
+    if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+      gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+
+    // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
+    gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+      
+    // Room related bonuses
+    if (find_workshop(ch, TYPE_MEDICAL))
+      gain *= 1.8;
+
+    if (char_is_in_social_room(ch))
+      gain *= 2;
+
+    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+      gain *= 1.8;
+
+    // Penalties happen last, to avoid the possibility of truncating to zero too early
+    if (PLR_FLAGS(ch).IsSet(PLR_ENABLED_DRUGS)) {
+      // PCs have drug heal multipliers, NPCs don't
+      gain *= get_drug_heal_multiplier(ch);
+    }
+
+    // Biosystem overstress reduces healing rate by 10% per point
+    if (GET_BIOOVER(ch) > 0)
+      gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
   }
-
-  // Adept rapid healing increases recovery by +50% per rank
-  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
-
-  // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
-  gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
-
-  // Room related bonuses
-  if (find_workshop(ch, TYPE_MEDICAL))
-    gain *= 1.8;
-
-  if (char_is_in_social_room(ch))
-    gain *= 2;
-
-  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
-    gain *= 1.8;
-
-  // Penalties happen last, to avoid the possibility of truncating to zero too early
-  // Biosystem overstress reduces healing rate by 10% per point
-  if (GET_BIOOVER(ch) > 0)
-    gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
-
-  // Drug multiplier is a float in range 0.1 ≤ X ≤ 1.0
-  gain *= get_drug_heal_multiplier(ch);
 
 #ifdef ENABLE_HUNGER
   if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
@@ -804,6 +830,8 @@ void process_regeneration(int half_hour)
       loop_runs++;
 
       for (struct char_data *ch = character_list; ch; ch = ch->next_in_character_list) {
+        bool is_npc = IS_NPC(ch);
+
         if (ch->last_loop_rand == loop_rand) {
           continue;
         } else {
@@ -850,7 +878,7 @@ void process_regeneration(int half_hour)
             }
           }
 
-          if (!IS_NPC(ch) && IS_WATER(ch->in_room) && half_hour) {
+          if (!is_npc && IS_WATER(ch->in_room) && half_hour) {
             if (check_swimming(ch)) {
               // They died. Stop evaluating and start again.
               should_loop = TRUE;
@@ -861,7 +889,7 @@ void process_regeneration(int half_hour)
           if (GET_POS(ch) == POS_STUNNED)
             update_pos(ch);
 
-          if (GET_PHYSICAL(ch) >= GET_MAX_PHYSICAL(ch)) {
+          if (!is_npc && GET_PHYSICAL(ch) >= GET_MAX_PHYSICAL(ch)) {
             if (AFF_FLAGS(ch).IsSet(AFF_HEALED)) {
               AFF_FLAGS(ch).RemoveBit(AFF_HEALED);
               send_to_char("You can now be affected by the Heal spell again.\r\n", ch);
@@ -873,8 +901,7 @@ void process_regeneration(int half_hour)
             }
           }
           if (GET_PHYSICAL(ch) > 0) {
-            if (AFF_FLAGS(ch).IsSet(AFF_STABILIZE))
-              AFF_FLAGS(ch).RemoveBit(AFF_STABILIZE);
+            AFF_FLAGS(ch).RemoveBit(AFF_STABILIZE);
           }
         }
 
@@ -1227,6 +1254,7 @@ void misc_update(void)
       should_loop = FALSE;
 
       for (struct char_data *ch = character_list, *next_ch; ch; ch = next_ch) {
+        bool is_npc = IS_NPC(ch);
         next_ch = ch->next_in_character_list;
         
         if (ch->last_loop_rand == loop_rand) {
@@ -1247,7 +1275,7 @@ void misc_update(void)
           send_to_char("You feel calmer.\r\n", ch);
         }
 
-        if (!CH_IN_COMBAT(ch) && AFF_FLAGGED(ch, AFF_ACID))
+        if (!CH_IN_COMBAT(ch))
           AFF_FLAGS(ch).RemoveBit(AFF_ACID);
 
         if (GET_SUSTAINED_NUM(ch) && !IS_ANY_ELEMENTAL(ch)) {
@@ -1275,7 +1303,7 @@ void misc_update(void)
                   act("$n's body suddenly bursts into flames!\r\n", TRUE, sus->other, 0, 0, TO_ROOM);
                   GET_CHAR_FIRE_DURATION(sus->other) = srdice();
                   GET_CHAR_FIRE_BONUS_DAMAGE(sus->other) = 0;
-                  GET_CHAR_FIRE_CAUSED_BY_PC(sus->other) = !IS_NPC(ch);
+                  GET_CHAR_FIRE_CAUSED_BY_PC(sus->other) = !is_npc;
                 } else {
                   strcpy(buf, spells[sus->spell].name);
                   send_to_char(ch, "The effects of %s become permanent.\r\n", buf);
@@ -1298,52 +1326,67 @@ void misc_update(void)
           }
         }
 
-        if (affected_by_spell(ch, SPELL_CONFUSION) || affected_by_spell(ch, SPELL_CHAOS) || affected_by_power(ch, CONFUSION)) {
-          if ((i = number(1, 15)) >= 5) {
-            switch(i) {
-              case 5:
-                send_to_char("Lovely weather today.\r\n", ch);
-                break;
-              case 6:
-                send_to_char("Is that who I think it is? ...Nah, my mistake.\r\n", ch);
-                break;
-              case 7:
-                send_to_char("Now, where did I leave my car keys...\r\n", ch);
-                break;
-              case 8:
-                send_to_char("Over There!\r\n", ch);
-                break;
-              case 9:
-                send_to_char("x + 2dy divided by 3 is... no wait CARRY THE 1!\r\n", ch);
-                break;
-              case 10:
-                send_to_char("Skibby dibby dibby do-ah.\r\n", ch);
-                break;
-              case 11:
-                if (ch->carrying)
-                  send_to_char(ch, "You stare blankly at %s. What is it? What could it mean?\r\n", GET_OBJ_NAME(ch->carrying));
-                break;
-              case 12:
-                send_to_char("The energies of the chaos spell continue to swirl around you.\r\n", ch);
-                break;
-              case 13:
-                send_to_char("You struggle to concentrate through the haze of the chaos spell.\r\n", ch);
-                break;
-              case 14:
-                send_to_char("The chaos spell drags your attention away from what you're doing.\r\n", ch);
+        if (GET_SUSTAINED(ch)) {
+          bool affected_by_chaos_or_confusion = FALSE;
+
+          // This is an optimized affected_by_spell() call.
+          for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next) {
+            if (hjp->caster == FALSE && (hjp->spell == SPELL_CONFUSION || hjp->spell == SPELL_CHAOS)) {
+              affected_by_chaos_or_confusion = TRUE;
+
+              // Elementals shouldn't have anything cast on them.
+              if (IS_PC_CONJURED_ELEMENTAL(ch))
                 break;
             }
           }
-          if (!number(0, 30)) {
-            end_all_sustained_spells_of_type_affecting_ch(SPELL_CONFUSION, 0, ch);
-            end_all_sustained_spells_of_type_affecting_ch(SPELL_CHAOS, 0, ch);
-            send_to_char("Your head seems to clear.\r\n", ch);
+          
+          if (affected_by_chaos_or_confusion || affected_by_power(ch, CONFUSION)) {
+            if (ch->desc && (i = number(1, 15)) >= 5) {
+              switch(i) {
+                case 5:
+                  send_to_char("Lovely weather today.\r\n", ch);
+                  break;
+                case 6:
+                  send_to_char("Is that who I think it is? ...Nah, my mistake.\r\n", ch);
+                  break;
+                case 7:
+                  send_to_char("Now, where did I leave my car keys...\r\n", ch);
+                  break;
+                case 8:
+                  send_to_char("Over There!\r\n", ch);
+                  break;
+                case 9:
+                  send_to_char("x + 2dy divided by 3 is... no wait CARRY THE 1!\r\n", ch);
+                  break;
+                case 10:
+                  send_to_char("Skibby dibby dibby do-ah.\r\n", ch);
+                  break;
+                case 11:
+                  if (ch->carrying)
+                    send_to_char(ch, "You stare blankly at %s. What is it? What could it mean?\r\n", GET_OBJ_NAME(ch->carrying));
+                  break;
+                case 12:
+                  send_to_char("The energies of the chaos spell continue to swirl around you.\r\n", ch);
+                  break;
+                case 13:
+                  send_to_char("You struggle to concentrate through the haze of the chaos spell.\r\n", ch);
+                  break;
+                case 14:
+                  send_to_char("The chaos spell drags your attention away from what you're doing.\r\n", ch);
+                  break;
+              }
+            }
+            if (!number(0, 30)) {
+              end_all_sustained_spells_of_type_affecting_ch(SPELL_CONFUSION, 0, ch);
+              end_all_sustained_spells_of_type_affecting_ch(SPELL_CHAOS, 0, ch);
+              send_to_char("Your head seems to clear.\r\n", ch);
 
-            // TODO: Make the confusion power wear off.
+              // TODO: Make the confusion power wear off.
+            }
           }
         }
 
-        if (!IS_NPC(ch)) {
+        if (!is_npc) {
           // Burn down adrenaline. This can kill the target, so break out if it returns true.
           if (check_adrenaline(ch, 0)) {
             // They died. Start the loop again.
@@ -1361,6 +1404,7 @@ void misc_update(void)
           affect_total(ch);
         }
         else { // NPC checks.
+          // Clear out unpiloted personas and projections. TODO: What is 21 "a dim reflection" used for?
           if (!ch->desc && GET_MOB_VNUM(ch) >= 20 && GET_MOB_VNUM(ch) <= 22) {
             act("$n dissolves into the background and is no more.",
                 TRUE, ch, 0, 0, TO_ROOM);
@@ -1378,13 +1422,15 @@ void misc_update(void)
             should_loop = TRUE;
             break;
           }
+/* This code feels stale, like it was an old Circle thing for possessing an animal or something.
           else if (!ch->desc && GET_MOB_VNUM(ch) >= 50 && GET_MOB_VNUM(ch) < 70) {
             extract_char(ch);
             // They died or were extracted. Start the loop again.
             should_loop = TRUE;
             break;
           }
-          else if (IS_SPIRIT(ch)) {
+*/
+          else if (GET_RACE(ch) == RACE_SPIRIT) { /* aka an optimized IS_SPIRIT(ch) */
             if (!check_spirit_sector(ch->in_room, GET_SPARE1(ch))) {
               act("Being away from its environment, $n suddenly ceases to exist.", TRUE, ch, 0, 0, TO_ROOM);
               end_spirit_existance(ch, FALSE);
@@ -1429,7 +1475,7 @@ void misc_update(void)
           act("^RYour body is surrounded in flames!", FALSE, ch, 0, 0, TO_CHAR);
 
           // Only damage equipment in PvE scenarios.
-          if (IS_NPC(ch) || !GET_CHAR_FIRE_CAUSED_BY_PC(ch)) {
+          if (is_npc || !GET_CHAR_FIRE_CAUSED_BY_PC(ch)) {
             damage_equip(ch, ch, 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch), TYPE_FIRE);
           }
 

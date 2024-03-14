@@ -1510,7 +1510,7 @@ void get_from_room(struct char_data * ch, char *arg)
         DELETE_ARRAY_IF_EXTANT(owner);
 
         playerDB.SaveChar(ch);
-        save_vehicles(FALSE);
+        save_single_vehicle(veh);
         return;
       }
 
@@ -2159,7 +2159,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         extract_obj(obj);
 
         playerDB.SaveChar(ch);
-        save_vehicles(FALSE);
+        save_single_vehicle(veh);
         return 0;
       }
     }

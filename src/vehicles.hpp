@@ -11,6 +11,7 @@ bool veh_drop_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *
 void vehicle_inventory(struct char_data *ch);
 bool can_take_veh(struct char_data *ch, struct veh_data *veh);
 void generate_veh_idnum(struct veh_data *veh);
+bool save_single_vehicle(struct veh_data *veh, bool fromCopyover=FALSE);
 
 // Protos from vehicle_save_load.cpp
 void set_veh_owner(struct veh_data *veh, idnum_t new_owner);

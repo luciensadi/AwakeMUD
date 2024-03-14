@@ -2429,7 +2429,7 @@ ACMD(do_transfer)
                       GET_VEH_NAME(veh), veh->idnum, GET_CHAR_NAME(targ), GET_IDNUM(targ));
     }
 
-    save_vehicles(FALSE);
+    save_single_vehicle(veh);
   }
 }
 

@@ -1950,13 +1950,13 @@ SPECIAL(car_dealer)
     newveh = read_vehicle(veh->veh_number, REAL);
     veh_to_room(newveh, ch->in_room);
     set_veh_owner(newveh, GET_IDNUM(ch));
-    add_veh_to_map(newveh);
     generate_veh_idnum(newveh);
     if (veh->type == VEH_DRONE)
       send_to_char(ch, "You buy %s. It is brought out into the room.\r\n", GET_VEH_NAME(newveh));
     else
       send_to_char(ch, "You buy %s. It is wheeled out into the yard.\r\n", GET_VEH_NAME(newveh));
-    save_vehicles(FALSE);
+    add_veh_to_map(newveh);
+    save_single_vehicle(newveh);
     return TRUE;
   } else if (CMD_IS("probe") || CMD_IS("info")) {
     argument = one_argument(argument, buf);
@@ -2020,6 +2020,7 @@ SPECIAL(car_dealer)
                  sell_price);
         mudlog(sellbuf, ch, LOG_GRIDLOG, TRUE);
         // Destroy the vehicle.
+        delete_veh_file(veh, "Sold at dealer");
         extract_veh(veh);
       }
     } else {
@@ -3364,6 +3365,9 @@ WSPEC(monowhip)
  ******************************************************************** */
 SPECIAL(vending_machine)
 {
+  if (!cmd)
+    return FALSE;
+
   if (!CMD_IS("buy") && !CMD_IS("list"))
     return FALSE;
 
@@ -3404,11 +3408,14 @@ SPECIAL(vending_machine)
 
 SPECIAL(hand_held_scanner)
 {
+  if (!cmd)
+    return FALSE;
+
   struct char_data *temp;
   struct obj_data *scanner = (struct obj_data *) me;
   int i, dir;
 
-  if (!cmd || !scanner->worn_by || !ch->in_room || number(1, 10) > 4)
+  if (!scanner->worn_by || !ch->in_room || number(1, 10) > 4)
     return FALSE;
 
   if (CMD_IS("north"))
@@ -3452,9 +3459,12 @@ SPECIAL(hand_held_scanner)
 
 SPECIAL(clock)
 {
+  if (!cmd)
+    return FALSE;
+
   struct obj_data *clock = (struct obj_data *) me;
 
-  if (!cmd || !CAN_SEE_OBJ(ch, clock) || !AWAKE(ch))
+  if (!CAN_SEE_OBJ(ch, clock) || !AWAKE(ch))
     return FALSE;
 
   if (CMD_IS("time")) {
@@ -3473,12 +3483,12 @@ SPECIAL(anticoagulant)
 
 SPECIAL(vendtix)
 {
+  if (!cmd)
+    return FALSE;
+
   extern struct obj_data *obj_proto;
   struct obj_data *vendtix = (struct obj_data *) me;
   int ticket, real_obj;
-
-  if (!cmd)
-    return FALSE;
 
   if (zone_table[ch->in_room->zone].number == 30)
     ticket = SEATAC_TICKET;
@@ -3530,6 +3540,9 @@ SPECIAL(bank)
 {
   struct obj_data *credstick;
   int amount;
+
+  if (!cmd)
+    return FALSE;
 
   if ((CMD_IS("balance") || CMD_IS("transfer") || CMD_IS("deposit")
        || CMD_IS("withdraw") || CMD_IS("wire")) && IS_NPC(ch)) {
@@ -3651,6 +3664,9 @@ SPECIAL(bank)
 
 SPECIAL(toggled_invis)
 {
+  if (!cmd)
+    return FALSE;
+    
   struct obj_data *obj = (struct obj_data *) me;
 
   if(!obj->worn_by)
@@ -4053,7 +4069,8 @@ SPECIAL(newbie_car)
     send_to_room(buf, ch->in_room);
     obj_from_char(obj);
     extract_obj(obj);
-    save_vehicles(FALSE);
+    add_veh_to_map(veh);
+    save_single_vehicle(veh);
     return TRUE;
   }
   return FALSE;
@@ -4486,6 +4503,9 @@ SPECIAL(terell_davis)
 
 SPECIAL(desktop)
 {
+  if (!cmd)
+    return FALSE;
+
   struct obj_data *obj = (struct obj_data *) me;
   float completion_percentage;
   bool found_suite = FALSE;
@@ -4615,6 +4635,9 @@ SPECIAL(johnson);
 
 SPECIAL(quest_debug_scanner)
 {
+  if (!cmd)
+    return FALSE;
+
   struct obj_data *obj = (struct obj_data *) me;
   struct char_data *to = NULL;
 
@@ -4865,7 +4888,7 @@ SPECIAL(painter)
         act(buf, FALSE, world[real_room(painter->in_room->number)].people, 0, 0, TO_ROOM);
         act(buf, FALSE, world[real_room(painter->in_room->number)].people, 0, 0, TO_CHAR);
       }
-      save_vehicles(FALSE);
+      save_single_vehicle(veh);
     }
   }
     
@@ -4995,6 +5018,9 @@ SPECIAL(multnomah_guard)
 
 SPECIAL(pocket_sec)
 {
+  if (!cmd)
+    return FALSE;
+
   struct obj_data *sec = (struct obj_data *) me;
   extern void pocketsec_menu(struct descriptor_data *ch);
 
@@ -5653,6 +5679,9 @@ SPECIAL(south_of_chargen_skill_annex) {
 
 SPECIAL(chargen_hopper)
 {
+  if (!cmd)
+    return FALSE;
+
   struct obj_data *hopper = (struct obj_data *) me;
   struct obj_data *modulator = hopper->contains;
   static char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
@@ -7112,6 +7141,9 @@ SPECIAL(floor_usable_radio) {
 
 // Override the 'install' command in the presence of an unpacked medical workshop or facility.
 SPECIAL(medical_workshop) {
+  if (!cmd)
+    return FALSE;
+
   bool mode_is_install = FALSE, mode_is_diagnose = FALSE, mode_is_withdraw = FALSE;
   struct obj_data *workshop = (struct obj_data *) me;
   struct obj_data *ware, *found_obj = NULL;
@@ -7120,7 +7152,7 @@ SPECIAL(medical_workshop) {
   char target_arg[MAX_INPUT_LENGTH];
 
   // No command, no character available, no problem. Skip it.
-  if (!cmd || !ch || !workshop || GET_OBJ_TYPE(workshop) != ITEM_WORKSHOP) {
+  if (!ch || !workshop || GET_OBJ_TYPE(workshop) != ITEM_WORKSHOP) {
     return FALSE;
   }
 

@@ -265,6 +265,9 @@ int process_elevator(struct room_data *room,
 
 // Taxi sign: If you look at it, it prints a dynamic description instead of the hardcoded one.
 SPECIAL(taxi_sign) {
+  if (!cmd)
+    return FALSE;
+    
   struct obj_data *obj = (struct obj_data *) me;
 
   struct obj_data *tmp_object = NULL;

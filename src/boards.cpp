@@ -172,6 +172,9 @@ void BoardInit(void)
 
 SPECIAL(gen_board)
 {
+  if (!cmd)
+    return FALSE;
+    
   int board_type;
   struct obj_data *terminal = NULL;
 

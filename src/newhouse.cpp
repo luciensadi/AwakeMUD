@@ -23,6 +23,7 @@ namespace bf = boost::filesystem;
 #include "newhouse.hpp"
 #include "moderation.hpp"
 #include "redit.hpp"
+#include "vehicles.hpp"
 
 #include "nlohmann/json.hpp"
 using nlohmann::json;
@@ -2216,8 +2217,8 @@ void remove_vehicles_from_apartment(struct room_data *room) {
                     GET_ROOM_NAME(garage), GET_ROOM_VNUM(garage));
     veh_from_room(veh);
     veh_to_room(veh, garage);
+    save_single_vehicle(veh);
   }
-  save_vehicles(FALSE);
 }
 
 // Send warnings about expiring apartments.
