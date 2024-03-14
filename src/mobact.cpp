@@ -1117,57 +1117,67 @@ bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
   return false;
 }
 
+bool mobact_process_single_helper(struct char_data *ch, struct char_data *vict, bool already_did_precondition_checks) {
+  if (!already_did_precondition_checks && (is_escortee(ch) || !IS_NPC(ch) || ch->desc))
+    return FALSE;
+
+  // Ensure we're neither of the fighting parties.
+  if (ch == vict || !FIGHTING(vict) || ch == FIGHTING(vict))
+    return FALSE;
+
+  // If victim is a visible NPC who is fighting a player, and the player can hurt me, assist the NPC.
+  if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, vict) && can_hurt(FIGHTING(vict), ch, 0, TRUE)) {
+    // The player is in my room, so I can fight them up-close.
+    if (FIGHTING(vict)->in_room == ch->in_room) {
+      act("$n jumps to the aid of $N!", FALSE, ch, 0, vict, TO_ROOM);
+      stop_fighting(ch);
+
+      // Close-ranged response.
+      set_fighting(ch, FIGHTING(vict));
+    }
+
+    // The player is not in my room, so I have to do a ranged response.
+    else {
+      // Long-ranged response.
+      if (ranged_response(FIGHTING(vict), ch)) {
+        // TODO: This doesn't fire a message if the NPC is wielding a ranged weapon.
+        act("$n jumps to $N's aid against $S distant attacker!",
+            FALSE, ch, 0, vict, TO_ROOM);
+      }
+    }
+
+    return TRUE;
+  }
+
+  // If the victim is a player who is fighting a visible NPC, and the player can hurt me, assist the NPC.
+  if (!IS_NPC(vict) && IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, FIGHTING(vict)) && can_hurt(vict, ch, 0, TRUE)) {
+    // A player in my area is attacking an NPC.
+    act("$n jumps to the aid of $N!", FALSE, ch, 0, FIGHTING(vict), TO_ROOM);
+    stop_fighting(ch);
+
+    // Close-ranged response.
+    set_fighting(ch, vict);
+
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
 bool mobact_process_helper(struct char_data *ch) {
   struct char_data *vict = NULL;
 
-  if (is_escortee(ch))
+  if (is_escortee(ch) || !IS_NPC(ch) || ch->desc)
     return FALSE;
 
   /* Helper Mobs - guards are always helpers */
   if (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD)) {
     for (vict = ch->in_room->people; vict; vict = vict->next_in_room) {
-      // Ensure we're neither of the fighting parties. This check should be redundant since no fighting NPC can proceed through mobile_activity().
-      if (ch == vict || !FIGHTING(vict) || ch == FIGHTING(vict))
-        continue;
-
-      // If victim is a visible NPC who is fighting a player, and the player can hurt me, assist the NPC.
-      if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, vict) && can_hurt(FIGHTING(vict), ch, 0, TRUE)) {
-        // The player is in my room, so I can fight them up-close.
-        if (FIGHTING(vict)->in_room == ch->in_room) {
-          act("$n jumps to the aid of $N!", FALSE, ch, 0, vict, TO_ROOM);
-          stop_fighting(ch);
-
-          // Close-ranged response.
-          set_fighting(ch, FIGHTING(vict));
-        }
-
-        // The player is not in my room, so I have to do a ranged response.
-        else {
-          // Long-ranged response.
-          if (ranged_response(FIGHTING(vict), ch)) {
-            // TODO: This doesn't fire a message if the NPC is wielding a ranged weapon.
-            act("$n jumps to $N's aid against $S distant attacker!",
-                FALSE, ch, 0, vict, TO_ROOM);
-          }
-        }
-
+      if (mobact_process_single_helper(ch, vict, TRUE))
         return TRUE;
-      }
-
-      // If the victim is a player who is fighting a visible NPC, and the player can hurt me, assist the NPC.
-      if (!IS_NPC(vict) && IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, FIGHTING(vict)) && can_hurt(vict, ch, 0, TRUE)) {
-        // A player in my area is attacking an NPC.
-        act("$n jumps to the aid of $N!", FALSE, ch, 0, FIGHTING(vict), TO_ROOM);
-        stop_fighting(ch);
-
-        // Close-ranged response.
-        set_fighting(ch, vict);
-
-        return true;
-      }
     }
   }
-  return false;
+  return FALSE;
 }
 
 bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t quest_id) {

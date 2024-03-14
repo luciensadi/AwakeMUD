@@ -40,6 +40,8 @@ extern struct message_list fight_messages[MAX_MESSAGES];
 
 extern const char *KILLER_FLAG_MESSAGE;
 
+extern bool mobact_process_single_helper(struct char_data *ch, struct char_data *vict, bool already_did_precondition_checks);
+
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 int find_sight(struct char_data *ch);
@@ -3270,6 +3272,13 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     act("With a scream, $n splinters and shatters into a haze of dispersing energy.", TRUE, victim, 0, 0, TO_ROOM);
     extract_char(victim);
     return TRUE;
+  }
+
+  // If this is an NPC, have their friends help.
+  if (ch != victim && victim->in_room && IS_NPC(victim) && !IS_PROJECT(victim)) {
+    for (struct char_data *helper = victim->in_room->people; helper; helper = helper->next_in_room) {
+      mobact_process_single_helper(helper, victim, FALSE);
+    }
   }
 
   if (update_pos(victim)) {
