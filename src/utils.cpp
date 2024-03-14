@@ -1520,7 +1520,7 @@ void _get_negotiation_data(
     // Mundanes are at a massive disadvantage (adepts get -3 TN, mages get -8 TN). Give them a boost.
     // Calculations via DEBUG NEGOTEST show this change set gives them roughly _half_ of the buying power of a mage/adept.
     if (!IS_MOB(ch) && GET_TRADITION(ch) == TRAD_MUNDANE) {
-      tn -= GET_BIOWARE_RATING(pheromones);
+      tn -= (GET_BIOWARE_RATING(pheromones) - 1);
       pheromone_dice *= 2;
       snprintf(skill_rbuf, sizeof(skill_rbuf), "Mundane pheromone skill buff of %d dice and -%d TN for %s.", pheromone_dice, GET_BIOWARE_RATING(pheromones), GET_CHAR_NAME(ch));
     } else {
@@ -3661,6 +3661,7 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
 
   // Update their skill and set the dirty bit.
   SET_SKILL(ch, skill_num, new_value);
+  playerDB.SaveChar(ch);
 }
 
 // Per SR3 core p98-99.

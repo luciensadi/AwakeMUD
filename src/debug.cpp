@@ -356,11 +356,15 @@ ACMD(do_debug) {
 
     // Mage values.
     struct nego_test_values_struct nego_test_values[] = {
-      // name                            int kin nego shop_int phero_dice
-      {"Unbuffed mage w/ decrease int",    8, 0,  12,      1,   4},
-      {"Adept",                            8, 3,  12,      8,   4},
-      {"Current Mundane",                  8, 0,  12,      8,   4},
-      {"Mundane w/ phero changes",         8, 1,  12,      8,   8},
+      // name                              int kin nego shop_int phero_dice
+      {"Unbuffed mage w/ decrease int",      8, 0,  12,      1,   4},
+      {"Adept",                              8, 3,  12,      8,   4},
+      {"Current Mundane",                    8, 0,  12,      7,   4},
+      {"Mundane w/ phero TN changes",        8, 1,  12,      7,   4},
+      {"Mundane w/ phero dice + TN changes", 8, 1,  12,      7,   8},
+      {"Current Mundane",                    8, 0,  12,      8,   4},
+      {"Mundane w/ phero TN changes",        8, 1,  12,      8,   4},
+      {"Mundane w/ phero dice + TN changes", 8, 1,  12,      8,   8},
       {"", 0, 0, 0, 0, 0}
     };
 
