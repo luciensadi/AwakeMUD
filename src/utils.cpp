@@ -1773,49 +1773,52 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
 
   // Iterate through their cyberware, looking for anything important.
   if (ch->cyberware) {
-    struct obj_data *expert_driver = NULL;
+    struct obj_data *expert_obj = NULL;
     struct obj_data *chipjack = NULL;
 
-    int expert = 0;
-    int chip = 0;
+    int expert_rating = 0;
+    int chip_rating = 0;
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
       switch (GET_CYBERWARE_TYPE(obj)) {
         case CYB_MOVEBYWIRE:
           mbw = should_gain_physical_boosts ? GET_CYBERWARE_RATING(obj) : 0;
           break;
         case CYB_CHIPJACKEXPERT:
-          expert_driver = obj;
+          expert_obj = obj;
+          expert_rating = GET_CYBERWARE_RATING(expert_obj);
           break;
         case CYB_CHIPJACK:
           chipjack = obj;
           // Since the chipjack expert driver influences the _chipjack_, we don't account for memory skills here.
           for (struct obj_data *chip_obj = obj->contains; chip_obj; chip_obj = chip_obj->next_content) {
             if (GET_CHIP_SKILL(chip_obj) == skill)
-              chip = GET_CHIP_RATING(chip_obj);
+              chip_rating = GET_CHIP_RATING(chip_obj);
           }
           break;
       }
     }
 
     // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
-    if (chip && expert) {
-      if (!check_chipdriver_and_expert_compat(chipjack, expert_driver)) {
+    if (chip_rating && expert_rating) {
+      if (!check_chipdriver_and_expert_compat(chipjack, expert_obj)) {
         strlcat(gskbuf, "Ignored expert driver (slot count mismatch with chipjack). ", sizeof(gskbuf));
-      } else if (chip != GET_SKILL(ch, skill)) {
+      } else if (chip_rating != GET_SKILL(ch, skill)) {
         strlcat(gskbuf, "Ignored expert driver (ch skill not equal to chip rating). ", sizeof(gskbuf));
       } else if (defaulting_tn == 4) {
         strlcat(gskbuf, "Ignored expert driver (S2A default). ", sizeof(gskbuf));
       } else if (defaulting_tn == 2) {
-        increase = (int) (MIN(GET_SKILL(ch, skill), expert) / 2);
+        increase = (int) (MIN(GET_SKILL(ch, skill), expert_rating) / 2);
         skill_dice += increase;
         snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase (S2S default): %d. ", increase);
       } else {
-        increase = MIN(GET_SKILL(ch, skill), expert);
+        increase = MIN(GET_SKILL(ch, skill), expert_rating);
         skill_dice += increase;
         snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase: %d. ", increase);
       }
-    } else if (expert) {
+    } else if (expert_rating) {
       strlcat(gskbuf, "Ignored expert driver (no chip). ", sizeof(gskbuf));
+    } else if (expert_obj) {
+      strlcat(gskbuf, "Ignored expert river (no rating)", sizeof(gskbuf));
     }
   }
 
