@@ -3103,6 +3103,10 @@ enum {
 #define SKILLARRAY_MODIFIED_VALUE  1
 #define SKILLARRAY_JACKED_VALUE    2
 
+#define ZONE_RESET_NEVER  0
+#define ZONE_RESET_EMPTY  1
+#define ZONE_RESET_ALWAYS 2
+
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens

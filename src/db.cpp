@@ -4336,18 +4336,17 @@ void zone_update(void)
   /* Alot of good things came from 1992, like my next door neighbour's little sister for example.
      The original version of this function, however, was not one of those things - Che */
   /* jelson 10/22/92 */
-  //   ^-- Retard
 
   if (((++timer * PULSE_ZONE) / PASSES_PER_SEC) >= 60) {
     timer = 0;
     for (i = 0; i <= top_of_zone_table; i++) {
       if (zone_table[i].age < zone_table[i].lifespan &&
-          zone_table[i].reset_mode)
+          zone_table[i].reset_mode != ZONE_RESET_NEVER)
         (zone_table[i].age)++;
 
       if (zone_table[i].age >= MAX(zone_table[i].lifespan,5) &&
           zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode &&
-          (zone_table[i].reset_mode == 2 ||
+          (zone_table[i].reset_mode == ZONE_RESET_ALWAYS ||
            zone_is_empty(i))) {
         reset_zone(i, 0);
       }

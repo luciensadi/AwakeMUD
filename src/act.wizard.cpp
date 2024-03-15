@@ -4281,6 +4281,7 @@ ACMD(do_show)
                { "powersites",     LVL_VICEPRES },
                { "fuckykeys",      LVL_ADMIN },
                { "strongboylifts", LVL_ADMIN },
+               { "longasszones",   LVL_ADMIN },
                { "\n", 0 }
              };
 
@@ -4934,6 +4935,20 @@ ACMD(do_show)
       if (GET_OBJ_WEIGHT(obj) >= 200 && CAN_WEAR(obj, ITEM_WEAR_TAKE)) {
         send_to_char(ch, " [%6d] %s^n\r\n", GET_OBJ_VNUM(obj), GET_OBJ_NAME(obj));
       }
+    }
+    break;
+  case 33:
+    send_to_char("The following connected zones with zone commands have long lifetimes or don't reset:\r\n", ch);
+    for (int idx = 0; idx < top_of_zone_table; idx++) {
+      if (zone_table[idx].connected
+          && zone_table[idx].num_cmds > 0
+          && (zone_table[idx].lifespan > 20 || zone_table[idx].reset_mode == ZONE_RESET_NEVER))
+      {
+        send_to_char(ch, " [%6d] (%3d) %s^n\r\n", 
+                  zone_table[idx].number,
+                  zone_table[idx].reset_mode == ZONE_RESET_NEVER ? -1 : zone_table[idx].lifespan,
+                  zone_table[idx].name);
+      } 
     }
     break;
   default:
