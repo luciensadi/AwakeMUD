@@ -5836,10 +5836,10 @@ ACMD(do_set)
   }
 
   if (fields[l].type == BINARY) {
-    snprintf(buf, sizeof(buf), "%s %s for %s.\r\n", fields[l].cmd, ONOFF(on), GET_NAME(vict));
+    snprintf(buf, sizeof(buf), "%s %s for %s.\r\n", fields[l].cmd, ONOFF(on), GET_CHAR_NAME(vict));
     CAP(buf);
   } else if (fields[l].type == NUMBER) {
-    snprintf(buf, sizeof(buf), "%s's %s set to %d.\r\n", GET_NAME(vict), fields[l].cmd, value);
+    snprintf(buf, sizeof(buf), "%s's %s set to %d.\r\n", GET_CHAR_NAME(vict), fields[l].cmd, value);
   } else
     strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(CAP(buf), ch);
