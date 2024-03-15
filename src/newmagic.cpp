@@ -1179,7 +1179,7 @@ void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
 
   if (GET_BACKGROUND_AURA(in_room) == AURA_POWERSITE) {
     skill += GET_BACKGROUND_COUNT(in_room);
-  } else if (GET_BACKGROUND_COUNT(in_room) > 0){
+  } else if (GET_BACKGROUND_COUNT(in_room) > 1){
     send_to_char("The tainted mana here resists your control.\r\n", ch);
     target += GET_BACKGROUND_COUNT(in_room);
   }
