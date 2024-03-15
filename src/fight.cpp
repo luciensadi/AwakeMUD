@@ -5705,8 +5705,9 @@ void roll_individual_initiative(struct char_data *ch)
 {
   if (AWAKE(ch))
   {
+    // this also applies wound modifiers
     GET_INIT_ROLL(ch) = roll_default_initiative(ch);
-    GET_INIT_ROLL(ch) -= damage_modifier(ch, buf, sizeof(buf));
+
     if (AFF_FLAGGED(ch, AFF_ACTION)) {
       GET_INIT_ROLL(ch) -= 10;
       AFF_FLAGS(ch).RemoveBit(AFF_ACTION);
