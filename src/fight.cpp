@@ -5712,6 +5712,18 @@ void roll_individual_initiative(struct char_data *ch)
       GET_INIT_ROLL(ch) -= 10;
       AFF_FLAGS(ch).RemoveBit(AFF_ACTION);
     }
+
+    // By the book, MBW 3 adds an extra action to their first pass and 4 adds an additional action to their second.
+    // This implementation is mechanically weaker since chars will get the extras at the end of the turn.
+    for (obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_MOVEBYWIRE) {
+        if (GET_CYBERWARE_RATING(cyber) == 3)
+          GET_INIT_ROLL(ch) += 10;
+        else if (GET_CYBERWARE_RATING(cyber) == 4)
+          GET_INIT_ROLL(ch) += 20;
+      }
+    }
+
     if (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch)) {
       if (IS_DUAL(ch))
         GET_INIT_ROLL(ch) += 10;
