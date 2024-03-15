@@ -47,14 +47,6 @@ ACMD(do_push_while_rigging) {
   FAILURE_CASE(!veh->in_room, "Your manipulator arm can't find any elevator buttons from in here.");
   FAILURE_CASE(!find_elevator(veh->in_room, elevator_idx, floor_idx), "There's nothing here your vehicle can press.");
 
-  if (!*argument || !(!strcasecmp("elevator", argument) ||
-                        !strcasecmp("button", argument)   ||
-                        !strcasecmp("call", argument)))
-  {
-    send_to_char("Manipulators can only push elevator buttons right now.\r\n", ch);
-    return;
-  }
-
   push_elevator_button(veh->in_room, elevator_idx, floor_idx, ch, argument);
 }
 
