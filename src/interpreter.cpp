@@ -3486,6 +3486,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("prbe", "probe");
   COMMAND_ALIAS("chekc", "check");
   COMMAND_ALIAS("opend", "open");
+  COMMAND_ALIAS("opene", "open");
+  COMMAND_ALIAS("opwn", "open");
   COMMAND_ALIAS("leaev", "leave");
   COMMAND_ALIAS("leve", "leave");
   COMMAND_ALIAS("swith", "switch");
@@ -3500,6 +3502,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("lisr", "list");
   COMMAND_ALIAS("lost", "list");
   COMMAND_ALIAS("listr", "list");
+  COMMAND_ALIAS("lit", "list");
   COMMAND_ALIAS("slel", "sell");
   COMMAND_ALIAS("ivn", "inventory");
   COMMAND_ALIAS("inc", "inventory");
@@ -3516,6 +3519,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("trian", "train");
   COMMAND_ALIAS("recpa", "recap");
   COMMAND_ALIAS("scoe", "score");
+  COMMAND_ALIAS("core", "score");
   COMMAND_ALIAS("scire", "score");
   COMMAND_ALIAS("scoer", "score");
   COMMAND_ALIAS("sore", "score");
@@ -3549,6 +3553,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("scpre", "score");
   COMMAND_ALIAS("llook", "look");
   COMMAND_ALIAS("sneka", "sneak");
+  COMMAND_ALIAS("ear", "eat");
 
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
@@ -3580,6 +3585,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("bank", "balance");
   COMMAND_ALIAS("recall", "recap");
   COMMAND_ALIAS("summon", "conjure");
+  COMMAND_ALIAS("smash", "destroy");
+  COMMAND_ALIAS("crypt", "radio");
 
   // Toggles.
   COMMAND_ALIAS("settings", "toggle");
@@ -3678,6 +3685,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("sscan", "scan");
   COMMAND_ALIAS("csan", "scan");
   COMMAND_ALIAS("scam", "scan");
+  COMMAND_ALIAS("scasn", "scan");
 
   COMMAND_ALIAS("sya", "say");
 
