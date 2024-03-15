@@ -613,8 +613,13 @@ ACMD(do_upgrade)
     if ((shop = find_workshop(ch, TYPE_VEHICLE)))
       kit = GET_WORKSHOP_GRADE(shop);
     if (!kit && !shop) {
-      send_to_char("You don't have any tools here for working on vehicles.\r\n", ch);
-      return;
+      if (IS_SENATOR(ch)) {
+        send_to_char("You handwave away the tool requirement for working on vehicles.\r\n", ch);
+        kit = TYPE_FACILITY;
+      } else {
+        send_to_char("You don't have any tools here for working on vehicles.\r\n", ch);
+        return;
+      }
     }
 
     // Artificially capping tool type to WORKSHOP, as many upgrades need facilities but they're not in game.

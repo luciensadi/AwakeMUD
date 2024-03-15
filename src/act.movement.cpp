@@ -28,6 +28,7 @@
 #include "newhouse.hpp"
 #include "quest.hpp"
 #include "zoomies.hpp"
+#include "elevators.hpp"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -1971,33 +1972,6 @@ ACMD(do_drag)
     }
     WAIT_STATE(ch, 3 RL_SEC);
     return;
-  }
-}
-
-void try_to_enter_elevator_car(struct char_data *ch) {
-  // Iterate through elevators to find one that contains this shaft.
-  for (int index = 0; index < num_elevators; index++) {
-    int car_rating = world[real_room(elevator[index].room)].rating;
-    // Check for the car being at this floor.
-    if (elevator[index].floor[car_rating].shaft_vnum == ch->in_room->number) {
-      if (IS_ASTRAL(ch)) {
-        send_to_char(ch, "You phase into the %selevator car.\r\n", elevator[index].is_moving ? "moving " : "");
-        char_from_room(ch);
-        char_to_room(ch, &world[real_room(elevator[index].room)]);
-        act("$n phases in through the wall.\r\n", TRUE, ch, NULL, NULL, TO_ROOM);
-      } else {
-        if (elevator[index].is_moving) {
-          send_to_char("You can't enter a moving elevator car!\r\n", ch);
-          return;
-        }
-
-        send_to_char("You jimmy open the access hatch and drop into the elevator car. The hatch locks closed behind you.\r\n", ch);
-        char_from_room(ch);
-        char_to_room(ch, &world[real_room(elevator[index].room)]);
-        act("The access hatch in the ceiling squeaks briefly open and $n drops into the car.", FALSE, ch, NULL, NULL, TO_ROOM);
-      }
-      return;
-    }
   }
 }
 

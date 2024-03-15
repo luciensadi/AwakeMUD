@@ -259,6 +259,7 @@ ACMD_DECLARE(do_leave);
 ACMD_DECLARE(do_lay);
 ACMD_DECLARE(do_link);
 ACMD_DECLARE(do_look);
+ACMD_DECLARE(do_look_while_rigging);
 ACMD_DECLARE(do_logwatch);
 ACMD_DECLARE(do_manifest);
 ACMD_DECLARE(do_map);
@@ -299,6 +300,7 @@ ACMD_DECLARE(do_progress);
 ACMD_DECLARE(do_prone);
 ACMD_DECLARE(do_purge);
 ACMD_DECLARE(do_push);
+ACMD_DECLARE(do_push_while_rigging);
 ACMD_DECLARE(do_put);
 ACMD_DECLARE(do_qedit);
 ACMD_DECLARE(do_qlist);
@@ -1293,6 +1295,7 @@ struct command_info mtx_info[] =
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, BLOCKS_IDLE_REWARD },
     { "idea", 0, do_gen_write, 0, SCMD_IDEA, BLOCKS_IDLE_REWARD },
     { "index", 0, do_index, 0, 0, BLOCKS_IDLE_REWARD },
+    { "jobs", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
     { "look", 0, do_matrix_look, 0, 0, BLOCKS_IDLE_REWARD },
     { "list", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },
     { "load", 0, do_load, 0, SCMD_SWAP, BLOCKS_IDLE_REWARD },
@@ -1368,6 +1371,7 @@ struct command_info rig_info[] =
     { "echo", 0, do_new_echo, 0, SCMD_VEMOTE, BLOCKS_IDLE_REWARD },
     { "emote", 0, do_new_echo, 0, SCMD_VEMOTE, BLOCKS_IDLE_REWARD },
     { "enter", 0, do_enter, 0, 0, BLOCKS_IDLE_REWARD },
+    { "examine", 0, do_look_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "exits", 0, do_exits, 0, 0, BLOCKS_IDLE_REWARD },
     { "flyto", 0, do_flyto, 0, 0, BLOCKS_IDLE_REWARD },
     { "get", 0, do_get, 0, 0, BLOCKS_IDLE_REWARD },
@@ -1376,10 +1380,11 @@ struct command_info rig_info[] =
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, BLOCKS_IDLE_REWARD },
     { "i", 0, do_inventory, 0, 0, BLOCKS_IDLE_REWARD },
     { "idea", 0, do_gen_write, 0, SCMD_IDEA, BLOCKS_IDLE_REWARD },
-    { "look", 0, do_look, 0, 0, BLOCKS_IDLE_REWARD },
+    { "look", 0, do_look_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "inventory", 0, do_inventory, 0, 0, BLOCKS_IDLE_REWARD },
     { "index", 0, do_index, 0, 0, BLOCKS_IDLE_REWARD },
     { "items", 0, do_items, 0, 0, BLOCKS_IDLE_REWARD },
+    { "jobs", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
     { "languages", 0, do_language, 0, 0, BLOCKS_IDLE_REWARD },
     { "leave", 0, do_leave, 0 ,0 , BLOCKS_IDLE_REWARD },
     { "lock", 0, do_gen_door , 0, SCMD_LOCK , BLOCKS_IDLE_REWARD },
@@ -1390,9 +1395,12 @@ struct command_info rig_info[] =
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, BLOCKS_IDLE_REWARD },
     { "osay", 0, do_vehicle_osay, 0, 0, BLOCKS_IDLE_REWARD },
     { "penalties", 0, do_penalties, 0, 0, ALLOWS_IDLE_REWARD },
+    { "press", 0, do_push_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "pools", 0, do_pool, 0, 0 , BLOCKS_IDLE_REWARD },
     { "position", 0, do_position, 0, 0, ALLOWS_IDLE_REWARD },
+    { "push", 0, do_push_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "ram", 0, do_ram, 0, 0, BLOCKS_IDLE_REWARD },
+    { "read", 0, do_look_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "recap", 0, do_recap, 0, 0 , BLOCKS_IDLE_REWARD },
     { "rig", POS_SITTING , do_rig, 0, 0 , BLOCKS_IDLE_REWARD },
     { "return", 0, do_return, 0, 0, BLOCKS_IDLE_REWARD },

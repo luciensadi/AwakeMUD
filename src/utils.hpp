@@ -603,6 +603,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define FIGHTING(ch)            ((ch)->char_specials.fighting)
 #define FIGHTING_VEH(ch)        ((ch)->char_specials.fight_veh)
 #define CH_IN_COMBAT(ch)        (FIGHTING(ch) || FIGHTING_VEH(ch))
+#define VEH_IN_COMBAT(veh)      ((veh)->fighting || (veh)->fight_veh)
 #define HUNTING(ch)             ((ch)->char_specials.hunting)
 #define DEPRECATED_IS_NERVE(ch) ((ch)->char_specials.nervestrike)
 #define IS_NERVE(ch)            (GET_POWER((ch), ADEPT_NERVE_STRIKE) > 0)
