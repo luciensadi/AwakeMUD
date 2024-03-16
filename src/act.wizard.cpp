@@ -5006,10 +5006,10 @@ ACMD(do_show)
     }
     break;
   case 34:
-    send_to_char("The following connected NPCs have magic 12 or higher:\r\n", ch);
+    send_to_char("The following killable, connected NPCs have magic 12 or higher:\r\n", ch);
     for (rnum_t mob_idx = 0; mob_idx < top_of_mobt; mob_idx++) {
       struct char_data *mob = &mob_proto[mob_idx];
-      if (GET_MAG(mob) / 100 < 12 || vnum_from_non_connected_zone(GET_MOB_VNUM(mob)))
+      if (GET_MAG(mob) / 100 < 12 || vnum_from_non_connected_zone(GET_MOB_VNUM(mob)) || MOB_FLAGGED(mob, MOB_NOKILL))
         continue;
       send_to_char(ch, " [^c%6d^n] %s (%2d magic)\r\n", GET_MOB_VNUM(mob), GET_CHAR_NAME(mob), GET_MAG(mob) / 100);
     }
