@@ -507,8 +507,8 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
   if (vict) {
     if (IS_NPC(vict)) {
       // Swap all dice into dodge for this round.
-      GET_DODGE(vict) += GET_BODY(vict) + GET_OFFENSE(vict);
-      GET_BODY(vict) = GET_OFFENSE(vict) = 0;
+      GET_DODGE(vict) += GET_BODY_POOL(vict) + GET_OFFENSE(vict);
+      GET_BODY_POOL(vict) = GET_OFFENSE(vict) = 0;
     }
     int vict_dodge_dice = GET_DODGE(vict) + (GET_TRADITION(vict) == TRAD_ADEPT ? GET_POWER(vict, ADEPT_SIDESTEP) : 0);
     if (vict_dodge_dice > 0) {
@@ -991,10 +991,10 @@ ACMD(do_control)
   veh->cspeed = SPEED_CRUISING;
 
   // Reallocate pools.
-  int max_offense = MIN(GET_SKILL(ch, SKILL_GUNNERY), GET_COMBAT(ch));
-  int remainder = MAX(0, GET_COMBAT(ch) - max_offense);
+  int max_offense = MIN(GET_SKILL(ch, SKILL_GUNNERY), GET_COMBAT_POOL(ch));
+  int remainder = MAX(0, GET_COMBAT_POOL(ch) - max_offense);
   GET_OFFENSE(ch) = max_offense;
-  GET_BODY(ch) = 0;
+  GET_BODY_POOL(ch) = 0;
   GET_DODGE(ch) = remainder;
 }
 

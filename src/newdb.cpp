@@ -1232,7 +1232,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                GET_INDEX(player),
                player->real_abils.highestindex,
                GET_MAX_HACKING(player),
-               GET_BODY(player),
+               GET_BODY_POOL(player),
                GET_DODGE(player),
                GET_NUYEN(player),
                GET_BANK(player),

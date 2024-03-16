@@ -1376,7 +1376,7 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", GET_BALLISTIC(d->character));
               break;
             case 'c':       // combat pool
-              snprintf(str, sizeof(str), "%d", GET_COMBAT(d->character));
+              snprintf(str, sizeof(str), "%d", GET_COMBAT_POOL(d->character));
               break;
             case 'C':       // persona condition
               if (ch->persona)
@@ -1388,7 +1388,7 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", GET_DODGE(d->character));
               break;
             case 'D':
-              snprintf(str, sizeof(str), "%d", GET_BODY(d->character));
+              snprintf(str, sizeof(str), "%d", GET_BODY_POOL(d->character));
               break;
             case 'e':
               if (ch->persona)

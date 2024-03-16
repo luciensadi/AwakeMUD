@@ -206,7 +206,7 @@ void affect_modify(struct char_data * ch,
       break;
 
     case APPLY_COMBAT_POOL:
-      GET_COMBAT(ch) += mod;
+      GET_COMBAT_POOL(ch) += mod;
       break;
 
     case APPLY_HACKING_POOL:
@@ -454,7 +454,7 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
       break;
     case SPELL_COMBATSENSE:
       mod *= MIN(sust->force, sust->success / 2);
-      GET_COMBAT(ch) += mod;
+      GET_COMBAT_POOL(ch) += mod;
       break;
     case SPELL_NIGHTVISION:
       if (mod == 1)
@@ -591,7 +591,7 @@ void affect_total(struct char_data * ch)
 
   /* set the dice pools before equip so that they can be affected */
   /* combat pool is equal to quickness, wil, and int divided by 2 */
-  GET_COMBAT(ch) = 0;
+  GET_COMBAT_POOL(ch) = 0;
   GET_HACKING(ch) = 0;
   GET_ASTRAL(ch) = 0;
   GET_MAGIC_POOL(ch) = 0;
@@ -822,7 +822,7 @@ void affect_total(struct char_data * ch)
       GET_QUI(ch) += BOOST(ch)[QUI][1];
     if (BOOST(ch)[BOD][0] > 0)
       GET_BOD(ch) += BOOST(ch)[BOD][1];
-    GET_COMBAT(ch) += MIN(3, GET_POWER(ch, ADEPT_COMBAT_SENSE));
+    GET_COMBAT_POOL(ch) += MIN(3, GET_POWER(ch, ADEPT_COMBAT_SENSE));
     if (GET_POWER(ch, ADEPT_LOW_LIGHT)) {
       set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_ADEPT_POWER);
     }
@@ -977,13 +977,13 @@ void affect_total(struct char_data * ch)
   // asdf something is wrong - combatsense spell dice?
 
   // Combat pool is derived from current atts, so we calculate it after all att modifiers
-  GET_COMBAT(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
+  GET_COMBAT_POOL(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
   if (GET_TOTALBAL(ch) > GET_QUI(ch))
-    GET_COMBAT(ch) -= (GET_TOTALBAL(ch) - GET_QUI(ch)) / 2;
+    GET_COMBAT_POOL(ch) -= (GET_TOTALBAL(ch) - GET_QUI(ch)) / 2;
   if (GET_TOTALIMP(ch) > GET_QUI(ch))
-    GET_COMBAT(ch) -= (GET_TOTALIMP(ch) - GET_QUI(ch)) / 2;
-  if (GET_COMBAT(ch) < 0)
-    GET_COMBAT(ch) = 0;
+    GET_COMBAT_POOL(ch) -= (GET_TOTALIMP(ch) - GET_QUI(ch)) / 2;
+  if (GET_COMBAT_POOL(ch) < 0)
+    GET_COMBAT_POOL(ch) = 0;
   if (GET_TRADITION(ch) == TRAD_ADEPT)
     GET_IMPACT(ch) += GET_POWER(ch, ADEPT_MYSTIC_ARMOR);
 
@@ -995,7 +995,7 @@ void affect_total(struct char_data * ch)
     for (i = 0; !added_gyro_penalty && i < NUM_WEARS; i++) {
       if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO) {
         added_gyro_penalty = TRUE;
-        GET_COMBAT(ch) /= 2;
+        GET_COMBAT_POOL(ch) /= 2;
       }
     }
 
@@ -1003,7 +1003,7 @@ void affect_total(struct char_data * ch)
       for (struct obj_data *cyb = ch->cyberware; !added_gyro_penalty && cyb; cyb = cyb->next_content) {
         if (GET_CYBERWARE_TYPE(cyb) == CYB_ARMS && IS_SET(GET_CYBERWARE_FLAGS(cyb), ARMS_MOD_GYROMOUNT) && !GET_CYBERWARE_IS_DISABLED(cyb)) {
           added_gyro_penalty = TRUE;
-          GET_COMBAT(ch) /= 2;
+          GET_COMBAT_POOL(ch) /= 2;
         }
       }
     }
@@ -1020,10 +1020,10 @@ void affect_total(struct char_data * ch)
   if (IS_ASTRAL(ch))
     GET_DODGE(ch) = 0;
   else
-    GET_DODGE(ch) = MIN(GET_DODGE(ch), GET_COMBAT(ch));
+    GET_DODGE(ch) = MIN(GET_DODGE(ch), GET_COMBAT_POOL(ch));
 
-  GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DODGE(ch));
-  GET_OFFENSE(ch) = GET_COMBAT(ch) - GET_DODGE(ch) - GET_BODY(ch);
+  GET_BODY_POOL(ch) = MIN(GET_BODY_POOL(ch), GET_COMBAT_POOL(ch) - GET_DODGE(ch));
+  GET_OFFENSE(ch) = GET_COMBAT_POOL(ch) - GET_DODGE(ch) - GET_BODY_POOL(ch);
   if (GET_OFFENSE(ch) > dice_max)
   {
     GET_DODGE(ch) += GET_OFFENSE(ch) - dice_max;
@@ -1034,7 +1034,7 @@ void affect_total(struct char_data * ch)
   // AKA, 'your average wage slave is not going to try to do the Matrix bullet dodge when he sees a gun.'
   if (ch_is_npc) {
     if (GET_DODGE(ch) < 10) {
-      GET_BODY(ch) += GET_DODGE(ch);
+      GET_BODY_POOL(ch) += GET_DODGE(ch);
       GET_DODGE(ch) = 0;
     }
 

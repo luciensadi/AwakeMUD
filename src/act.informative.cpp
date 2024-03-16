@@ -4308,10 +4308,10 @@ ACMD(do_pool)
 
   if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
     snprintf(pools, sizeof(pools), "  Ranged Dodge: %d%s\r\n  Damage Soak: %d\r\n  Offense: %d\r\n  Total Combat Dice: %d\r\n",
-            GET_DODGE(ch), buf, GET_BODY(ch), GET_OFFENSE(ch), GET_COMBAT(ch));
+            GET_DODGE(ch), buf, GET_BODY_POOL(ch), GET_OFFENSE(ch), GET_COMBAT_POOL(ch));
   } else {
     snprintf(pools, sizeof(pools), "  Combat: %d     (Ranged Dodge: %d%s      Damage Soak: %d     Offense: %d)\r\n",
-            GET_COMBAT(ch), GET_DODGE(ch), buf, GET_BODY(ch), GET_OFFENSE(ch));
+            GET_COMBAT_POOL(ch), GET_DODGE(ch), buf, GET_BODY_POOL(ch), GET_OFFENSE(ch));
   }
   if (GET_ASTRAL(ch) > 0)
     snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Astral: %d\r\n", GET_ASTRAL(ch));
@@ -6569,7 +6569,7 @@ ACMD(do_consider)
     }
 
     // Skill / Pool comparisons.
-    int combat_skill_diff = (GET_COMBAT(victim) - GET_COMBAT(ch));
+    int combat_skill_diff = (GET_COMBAT_POOL(victim) - GET_COMBAT_POOL(ch));
 
     if (GET_EQ(victim, WEAR_WIELD)) {
       combat_skill_diff += MAX(GET_SKILL(victim, GET_WEAPON_SKILL(GET_EQ(victim, WEAR_WIELD))), GET_SKILL(victim, SKILL_ARMED_COMBAT));

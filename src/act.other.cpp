@@ -2413,7 +2413,7 @@ ACMD(do_astral)
     SET_METAMAGIC(astral, i, GET_METAMAGIC(ch, i));
   GET_GRADE(astral) = GET_GRADE(ch);
   GET_ASTRAL(astral) = GET_ASTRAL(ch);
-  GET_COMBAT(astral) = GET_ASTRAL(ch);
+  GET_COMBAT_POOL(astral) = GET_ASTRAL(ch);
   GET_MAGIC_POOL(astral) = GET_MAGIC_POOL(ch);
   GET_PLAYER_MEMORY(astral) = GET_PLAYER_MEMORY(ch);
 
@@ -4396,7 +4396,7 @@ ACMD(do_cpool)
   extern int get_skill_num_in_use_for_weapons(struct char_data *ch);
   extern int get_skill_dice_in_use_for_weapons(struct char_data *ch);
 
-  int dodge = 0, bod = 0, off = 0, total = GET_COMBAT(ch);
+  int dodge = 0, bod = 0, off = 0, total = GET_COMBAT_POOL(ch);
 
   if (!*argument) {
     do_pool(ch, argument, 0, 0);
@@ -4421,7 +4421,7 @@ ACMD(do_cpool)
   }
 
   total -= ch->real_abils.defense_pool = GET_DODGE(ch) = MIN(dodge, total);
-  total -= ch->real_abils.body_pool = GET_BODY(ch) = MIN(bod, total);
+  total -= ch->real_abils.body_pool = GET_BODY_POOL(ch) = MIN(bod, total);
 
   int skill_num = get_skill_num_in_use_for_weapons(ch);
   int skill_dice = get_skill_dice_in_use_for_weapons(ch);
@@ -4441,11 +4441,16 @@ ACMD(do_cpool)
 
   total -= ch->real_abils.offense_pool = GET_OFFENSE(ch) = MIN(total, off);
   if (total > 0) {
-    GET_DODGE(ch) += total;
-    send_to_char(ch, "Putting the %d remaining dice in your ranged-attack dodging pool.\r\n", total);
+    if (IS_ASTRAL(ch)) {
+      GET_DODGE(ch) += total;
+      send_to_char(ch, "Putting the %d remaining dice in your ranged-attack dodging pool.\r\n", total);
+    } else {
+      GET_BODY_POOL(ch) += total;
+      send_to_char(ch, "Putting the %d remaining dice in your body pool.\r\n", total);
+    }
   }
 
-  send_to_char(ch, "Pools set as: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", GET_DODGE(ch), GET_BODY(ch), GET_OFFENSE(ch));
+  send_to_char(ch, "Pools set as: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", GET_DODGE(ch), GET_BODY_POOL(ch), GET_OFFENSE(ch));
 }
 
 ACMD(do_spool)

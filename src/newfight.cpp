@@ -1078,10 +1078,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (def->too_tall || att->too_tall) {
     mudlog("SYSERR: Someone is too_tall when USE_SLOUCH_RULES is disabled!", att->ch, LOG_SYSLOG, TRUE);
   }
-  bod_dice += GET_BODY(def->ch);
+  bod_dice += GET_BODY_POOL(def->ch);
 #else
   if (!def->too_tall) {
-    bod_dice += GET_BODY(def->ch);
+    bod_dice += GET_BODY_POOL(def->ch);
   }
 #endif
 
@@ -1257,7 +1257,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       && !AFF_FLAGGED(att->ch, AFF_PRONE))
   {
     int weapon_power = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
-    int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), weapon_power / 2);
+    int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY_POOL(att->ch), weapon_power / 2);
     int staged_dam = stage(-recoil_successes, LIGHT);
     snprintf(rbuf, sizeof(rbuf), "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
     // SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;

@@ -5086,14 +5086,14 @@ bool perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_
   }
 
   // Roll the test.
-  int dice = GET_BOD(ch) + GET_BODY(ch);
+  int dice = GET_BOD(ch) + GET_BODY_POOL(ch);
   int tn = MAX(2, initial_tn + tn_modifiers);
   int successes = success_test(dice, tn);
   snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%s. %d dice (%d + %d) vs TN %d (%d + %d): %d hit%s (goal: %d).",
            tn_modifiers ? "" : "None",
            dice,
            GET_BOD(ch),
-           GET_BODY(ch),
+           GET_BODY_POOL(ch),
            tn,
            initial_tn,
            tn_modifiers,

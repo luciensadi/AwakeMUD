@@ -1689,9 +1689,9 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
           "  Wil: [^c%d^n]  Mag: [^c%d^n]\r\nRea: [^c%d^n]  Ess: [^c%0.2f^n] Ast[^c%d^n]  Com[^c%d^n]  Mag[%d: ^c%d/%d/%d/%d^n]  Hak[^c%d^n] Dod/Bod/Off[^c%d/%d/%d^n]\r\n",
           GET_BOD(k), GET_QUI(k), GET_STR(k), GET_CHA(k), GET_INT(k),
           GET_WIL(k), ((int)GET_MAG(k) / 100), GET_REA(k), ((float)GET_ESS(k) / 100), GET_ASTRAL(k),
-          GET_COMBAT(k),
+          GET_COMBAT_POOL(k),
           GET_MAGIC_POOL(k), GET_CASTING(k), GET_DRAIN(k), GET_SDEFENSE(k), GET_REFLECT(k),
-          GET_HACKING(k), GET_DODGE(k), GET_BODY(k), GET_OFFENSE(k));
+          GET_HACKING(k), GET_DODGE(k), GET_BODY_POOL(k), GET_OFFENSE(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bod: [^B%d^n]  Qui: [^B%d^n]  Str: [^B%d^n]  Cha: [^B%d^n] Int: [^B%d^n]"
           "  Wil: [^B%d^n]  Mag: [^B%d^n]\r\nRea: [^B%d^n]  Ess: [^B%0.2f^n] (Unmodified attributes)\r\n",
@@ -1843,9 +1843,9 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
           "  Wil: [^c%d^n]  Mag: [^c%d^n]\r\nRea: [^c%d^n]  Ess: [^c%0.2f^n] Ast[^c%d^n]  Com[^c%d^n]  Mag[^c%d: %d/%d/%d/%d^n]  Hak[^c%d^n] Dod/Bod/Off[^c%d/%d/%d^n]\r\n",
           GET_BOD(k), GET_QUI(k), GET_STR(k), GET_CHA(k), GET_INT(k),
           GET_WIL(k), ((int)GET_MAG(k) / 100), GET_REA(k), ((float)GET_ESS(k) / 100), GET_ASTRAL(k),
-          GET_COMBAT(k), 
+          GET_COMBAT_POOL(k), 
           GET_MAGIC_POOL(k), GET_CASTING(k), GET_DRAIN(k), GET_SDEFENSE(k), GET_REFLECT(k),
-          GET_HACKING(k), GET_DODGE(k), GET_BODY(k), GET_OFFENSE(k));
+          GET_HACKING(k), GET_DODGE(k), GET_BODY_POOL(k), GET_OFFENSE(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bod: [^B%d^n]  Qui: [^B%d^n]  Str: [^B%d^n]  Cha: [^B%d^n] Int: [^B%d^n]"
           "  Wil: [^B%d^n]  Mag: [^B%d^n]\r\nRea: [^B%d^n]  Ess: [^B%0.2f^n] (Unmodified attributes)\r\n",

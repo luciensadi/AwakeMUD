@@ -1491,7 +1491,7 @@ void misc_update(void)
             damage_equip(ch, ch, 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch), TYPE_FIRE);
           }
 
-          int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch) - GET_IMPACT(ch)), MODERATE));
+          int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY_POOL(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch) - GET_IMPACT(ch)), MODERATE));
           GET_CHAR_FIRE_BONUS_DAMAGE(ch)++;
           if (damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL)) {
             // They died or were extracted. Start the loop again.

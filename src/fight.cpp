@@ -1673,7 +1673,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
         act(buf, FALSE, vict, 0, 0, TO_ROOM);
 
         damage_total = MAX(1, GET_WEAPON_DAMAGE_CODE(weapon));
-        damage_total = convert_damage(stage((2 - success_test(GET_BOD(vict) + GET_BODY(vict), power)), damage_total));
+        damage_total = convert_damage(stage((2 - success_test(GET_BOD(vict) + GET_BODY_POOL(vict), power)), damage_total));
         if (damage(ch, vict, damage_total, TYPE_SCATTERING, PHYSICAL)) {
           // They died!
           return;
@@ -2143,7 +2143,7 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
           default:
             dam = LIGHT;
         }
-        dam = convert_damage(stage(-success_test(GET_BOD(vict) + GET_BODY(vict),
+        dam = convert_damage(stage(-success_test(GET_BOD(vict) + GET_BODY_POOL(vict),
                                                  target), dam));
         damage(vict, vict, dam, TYPE_SCATTERING, TRUE);
         extract_obj(obj);
@@ -2573,7 +2573,7 @@ bool check_adrenaline(struct char_data *ch, int mode)
       GET_BIOWARE_PUMP_ADRENALINE(pump) = -number(60, 90);
       if (!IS_JACKED_IN(ch))
         send_to_char("Your body softens and relaxes as the adrenaline wears off.\r\n", ch);
-      dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch),
+      dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY_POOL(ch),
                                  (int)(GET_BIOWARE_PUMP_TEST_TN(pump) / 2)), DEADLY));
       GET_BIOWARE_PUMP_TEST_TN(pump) = 0;
       if (damage(ch, ch, dam, TYPE_BIOWARE, FALSE)) {
@@ -4045,7 +4045,7 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
   } else if (AFF_FLAGGED(ch, AFF_COUNTER_ATT))
     AFF_FLAGS(ch).RemoveBit(AFF_COUNTER_ATT);
 
-  attack_success -= success_test(GET_BOD(vict) + GET_BODY(vict), power);
+  attack_success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict), power);
 
   dam = convert_damage(stage(attack_success, dam));
 
@@ -5080,12 +5080,12 @@ void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, st
                    DAMOBJ_EXPLODE);
 
     if (IS_NPC(victim) && !CH_IN_COMBAT(victim)) {
-      GET_DODGE(victim) = GET_COMBAT(victim);
+      GET_DODGE(victim) = GET_COMBAT_POOL(victim);
       GET_OFFENSE(victim) = 0;
     }
     damage_total =
     convert_damage(stage((number(1, 3) - success_test(GET_BOD(victim) +
-                                                      GET_BODY(victim), MAX(2, (power -
+                                                      GET_BODY_POOL(victim), MAX(2, (power -
                                                                                 (int)(GET_IMPACT(victim) / 2))) + modify_target(victim))),
                          level));
     if (!ch)
@@ -5285,20 +5285,20 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, struct room_d
                    (int)(GET_WEAPON_POWER(weapon) / 6), DAMOBJ_EXPLODE);
 
     if (IS_NPC(victim) && !CH_IN_COMBAT(victim)) {
-      GET_DODGE(victim) = GET_COMBAT(victim);
+      GET_DODGE(victim) = GET_COMBAT_POOL(victim);
       GET_OFFENSE(victim) = 0;
     }
     if (!mode) {
       if (GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_ROCKET)
-        damage_total = convert_damage(stage((number(3,6) - success_test(GET_BOD(victim) + GET_BODY(victim),
+        damage_total = convert_damage(stage((number(3,6) - success_test(GET_BOD(victim) + GET_BODY_POOL(victim),
                                                                         MAX(2, (GET_WEAPON_POWER(weapon) - (int)(GET_IMPACT(victim) / 2))) +
                                                                         modify_target(victim))), GET_WEAPON_DAMAGE_CODE(weapon)));
       else
-        damage_total = convert_damage(stage((number(2,5) - success_test(GET_BOD(victim) + GET_BODY(victim),
+        damage_total = convert_damage(stage((number(2,5) - success_test(GET_BOD(victim) + GET_BODY_POOL(victim),
                                                                         MAX(2, (GET_WEAPON_POWER(weapon) - (int)(GET_IMPACT(victim) / 2))) +
                                                                         modify_target(victim))), GET_WEAPON_DAMAGE_CODE(weapon)));
     } else
-      damage_total = convert_damage(stage((number(2,5) - success_test(GET_BOD(victim) + GET_BODY(victim),
+      damage_total = convert_damage(stage((number(2,5) - success_test(GET_BOD(victim) + GET_BODY_POOL(victim),
                                                                       MAX(2, (GET_WEAPON_POWER(weapon) - 4 - (int)(GET_IMPACT(victim) / 2))) +
                                                                       modify_target(victim))), GET_WEAPON_DAMAGE_CODE(weapon) - 1));
     damage(ch, victim, damage_total, TYPE_EXPLOSION, PHYSICAL);
@@ -5506,7 +5506,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       act("$n draws $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
       act("You draw $p, aim it at $N and fire!", FALSE, ch, weapon, vict, TO_CHAR);
       if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
-        GET_DODGE(vict) = GET_COMBAT(vict);
+        GET_DODGE(vict) = GET_COMBAT_POOL(vict);
         GET_OFFENSE(vict) = 0;
       }
       if (CH_IN_COMBAT(ch))
@@ -5526,7 +5526,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
       if (has_ammo_no_deduct(ch, weapon)) {
         if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
-          GET_DODGE(vict) = GET_COMBAT(vict);
+          GET_DODGE(vict) = GET_COMBAT_POOL(vict);
           GET_OFFENSE(vict) = 0;
         }
         if (CH_IN_COMBAT(ch))
@@ -5785,15 +5785,15 @@ void decide_combat_pool(void)
 
     if (IS_NPC(ch) && !IS_PROJECT(ch) && FIGHTING(ch)) {
       if (GET_INIT_ROLL(ch) == GET_INIT_ROLL(FIGHTING(ch)))
-        GET_OFFENSE(ch) = GET_COMBAT(ch) >> 1;
+        GET_OFFENSE(ch) = GET_COMBAT_POOL(ch) >> 1;
       else if (GET_INIT_ROLL(ch) > GET_INIT_ROLL(FIGHTING(ch)))
-        GET_OFFENSE(ch) = (int)(GET_COMBAT(ch) * .75);
+        GET_OFFENSE(ch) = (int)(GET_COMBAT_POOL(ch) * .75);
       else
-        GET_OFFENSE(ch) = (int)(GET_COMBAT(ch) / 4);
-      GET_DODGE(ch) = GET_COMBAT(ch) - GET_OFFENSE(ch);
+        GET_OFFENSE(ch) = (int)(GET_COMBAT_POOL(ch) / 4);
+      GET_DODGE(ch) = GET_COMBAT_POOL(ch) - GET_OFFENSE(ch);
       if (GET_IMPACT(ch) > 6 || GET_BALLISTIC(ch) > 6) {
-        GET_BODY(ch) = (int)(GET_DODGE(ch) * .75);
-        GET_DODGE(ch) -= GET_BODY(ch);
+        GET_BODY_POOL(ch) = (int)(GET_DODGE(ch) * .75);
+        GET_DODGE(ch) -= GET_BODY_POOL(ch);
       }
     }
   }
@@ -6676,7 +6676,7 @@ bool vram(struct veh_data * veh, struct char_data * vict, struct veh_data * tveh
       veh_dam = LIGHT;
     }
 
-    vict_resist = 0 - success_test(GET_BOD(vict) + GET_BODY(vict), power);
+    vict_resist = 0 - success_test(GET_BOD(vict) + GET_BODY_POOL(vict), power);
     int staged_damage = stage(vict_resist, damage_total);
     damage_total = convert_damage(staged_damage);
 
