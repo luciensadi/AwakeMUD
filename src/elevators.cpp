@@ -90,6 +90,16 @@ SPECIAL(call_elevator)
   if (!cmd || !ch || !ch->in_room)
     return FALSE;
 
+  // Fall back to our custom vehicle handler.
+  if (IS_RIGGING(ch))
+    return FALSE;
+
+  bool cmd_is_push = CMD_IS("push") || CMD_IS("press");
+  bool cmd_is_look = CMD_IS("look") || CMD_IS("examine") || CMD_IS("read");
+
+  if (!cmd_is_push && !cmd_is_look)
+    return FALSE;
+
   // Determine our elevator and floor index.
   if (!find_elevator(ch->in_room, elevator_idx, floor_idx) || elevator_idx < 0) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Elevator call button at %s (%ld) could not find associated elevator.",
@@ -99,7 +109,7 @@ SPECIAL(call_elevator)
   }
 
   // Push button.
-  if (CMD_IS("push") || CMD_IS("press")) {
+  if (cmd_is_push) {
     skip_spaces(&argument);
     if (!*argument || !(!strcasecmp("elevator", argument) ||
                         !strcasecmp("button", argument)   ||
@@ -113,7 +123,7 @@ SPECIAL(call_elevator)
   }
 
   // Look at the panel.
-  else if (CMD_IS("look") || CMD_IS("examine") || CMD_IS("read")) {
+  else if (cmd_is_look) {
     one_argument(argument, arg);
     if (!*arg || !(!strn_cmp("panel", arg, strlen(arg)) || !strn_cmp("elevator", arg, strlen(arg))))
       return FALSE;
@@ -347,7 +357,7 @@ static bool push_elevator_button(struct room_data *called_from, rnum_t elevator_
 
       if (veh) {
         snprintf(buf, sizeof(buf), "The button for %s lights up as %s pushes it with its manipulator.", floorstring, GET_VEH_NAME(veh));
-        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+        send_to_room(buf, veh->in_room, veh);
         send_to_char(ch, "You push the button for %s with your manipulator, and it lights up.\r\n", floorstring);
       } else {
         snprintf(buf, sizeof(buf), "The button for %s lights up as $n pushes it.", floorstring);

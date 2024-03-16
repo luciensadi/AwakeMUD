@@ -3539,7 +3539,7 @@ void clear_editing_data(struct descriptor_data *d) {
 }
 
 // Sets a character's skill, with bounds. Assumes that you've already deducted the appropriate cost.
-void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message) {
+void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message, bool save_immediately) {
   char msgbuf[500];
 
   if (!ch) {
@@ -3661,7 +3661,9 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
 
   // Update their skill and set the dirty bit.
   SET_SKILL(ch, skill_num, new_value);
-  playerDB.SaveChar(ch);
+
+  if (save_immediately)
+    playerDB.SaveChar(ch);
 }
 
 // Per SR3 core p98-99.

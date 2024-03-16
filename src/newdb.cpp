@@ -629,7 +629,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res)))
-    set_character_skill(ch, atoi(row[1]), atoi(row[2]), FALSE);
+    set_character_skill(ch, atoi(row[1]), atoi(row[2]), FALSE, FALSE);
   mysql_free_result(res);
 
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_alias WHERE idnum=%ld;", GET_IDNUM(ch));

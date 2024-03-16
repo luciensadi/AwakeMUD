@@ -216,7 +216,7 @@ struct veh_data *get_veh_controlled_by_char(struct char_data *ch);
 // Skill-related.
 char *how_good(int skill, int rank);
 const char *skill_rank_name(int rank, bool knowledge);
-void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message);
+void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message, bool save_immediately=TRUE);
 
 // Message history management and manipulation.
 void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);
