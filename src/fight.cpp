@@ -2064,7 +2064,6 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
 
   int rating, half;
   struct char_data *vict = get_obj_possessor(obj);
-  struct obj_data *temp, *next;
 
   // PC corpses are indestructable by normal means
   if ( IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(obj, 4) == 1 ) {
@@ -2232,6 +2231,8 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
     }
 
 #ifdef DESTROY_OBJ_ON_FULL_DAMAGE
+    struct obj_data *temp, *next;
+
     // Log destruction.
     const char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "Destroying %s's %s due to combat damage. Representation: [%s]",
@@ -6521,8 +6522,17 @@ void chkdmg(struct veh_data * veh)
 
     // Write purgelogs for player vehicle kills.
     if (veh->owner) {
-      mudlog_vfprintf(NULL, LOG_WRECKLOG, "Writing player vehicle contents to purgelog (%s)-- destroyed via standard damage.", GET_VEH_NAME(veh));
-      mudlog_vfprintf(NULL, LOG_PURGELOG, "Writing player vehicle contents to purgelog (%s)-- destroyed via standard damage.", GET_VEH_NAME(veh));
+      char *player_name = get_player_name(veh->owner);
+      snprintf(buf, sizeof(buf), "Writing the contents of %s (%ld)'s %s to purgelog-- destroyed via standard damage at %s (%ld).",
+               player_name,
+               veh->owner,
+               get_string_after_color_code_removal(GET_VEH_NAME(veh), NULL),
+               GET_ROOM_NAME(get_veh_in_room(veh)),
+               GET_ROOM_VNUM(get_veh_in_room(veh)));
+      delete [] player_name;
+
+      mudlog_vfprintf(NULL, LOG_WRECKLOG, buf);
+      mudlog_vfprintf(NULL, LOG_PURGELOG, buf);
       purgelog(veh);
     }
 
