@@ -2963,10 +2963,14 @@ SPECIAL(fixer)
     }
 
     if (GET_OBJ_CONDITION(obj) >= GET_OBJ_BARRIER(obj) && !cost) {
-      snprintf(arg, sizeof(arg), "%s %s^n doesn't need to be repaired!",
-              GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
-      do_say(fixer, arg, 0, SCMD_SAYTO);
-      return TRUE;
+      if (IS_SENATOR(ch)) {
+        send_to_char(ch, "You override any protestations about %s being in working order.\r\n", decapitalize_a_an(obj));
+      } else {
+        snprintf(arg, sizeof(arg), "%s %s^n doesn't need to be repaired!",
+                 GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
+        do_say(fixer, arg, 0, SCMD_SAYTO);
+        return TRUE;
+      }
     }
 
     if ((IS_CARRYING_N(fixer) >= CAN_CARRY_N(fixer)) ||
@@ -2978,6 +2982,10 @@ SPECIAL(fixer)
 
     cost += (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) > 0 ? GET_OBJ_BARRIER(obj) : 1)) *
                   (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj))));
+    
+    // Not quite as expensive as buying a new one.
+    cost = MIN(GET_OBJ_COST(obj) * 0.9, cost);
+    cost = MAX(100, cost);
 
     if ((credstick ? GET_BANK(ch) : GET_NUYEN(ch)) < cost) {
       snprintf(arg, sizeof(arg), "%s You can't afford to repair that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);

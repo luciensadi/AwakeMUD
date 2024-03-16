@@ -813,6 +813,7 @@ float get_proto_weight(struct obj_data *obj);
 #define GET_OBJ_RNUM(obj)       ((obj)->item_number)
 #define GET_OBJ_MATERIAL(obj)   ((obj)->obj_flags.material)
 #define GET_OBJ_CONDITION(obj) ((obj)->obj_flags.condition)
+#define OBJ_IS_FULLY_DAMAGED(obj) (GET_OBJ_CONDITION(obj) <= 0)
 #define GET_OBJ_BARRIER(obj)    ((obj)->obj_flags.barrier)
 #define GET_OBJ_VNUM(obj) (VALID_OBJ_RNUM(obj) ? \
     obj_index[GET_OBJ_RNUM(obj)].vnum : NOTHING)

@@ -296,13 +296,15 @@ ACMD(do_copyover)
     }
 
     // Check for repairman items.
+    /*
     for (struct char_data *i = character_list; i; i = i->next_in_character_list) {
-      if (IS_NPC(i) && (GET_MOB_SPEC(i) == fixer || GET_MOB_SPEC2(i) == fixer) && i->carrying) {
+      if (IS_NPC(i) && MOB_HAS_SPEC(i, fixer) && i->carrying) {
         send_to_char("The repairman has unclaimed items.\r\n", ch);
         will_not_copyover = TRUE;
         break;
       }
     }
+    */
 
     // There is no command in this if-statement that allows us to bypass a failed check state.
     if (will_not_copyover) {
@@ -332,6 +334,57 @@ ACMD(do_copyover)
 
   snprintf(buf, sizeof(buf), "Copyover initiated by %s", GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
+
+  log("COPYOVERLOG: Cleaning up repairman.");
+  struct room_data *staff_workroom = &world[real_room(10000)];
+  for (struct char_data *i = character_list; i; i = i->next_in_character_list) {
+    if (IS_NPC(i) && MOB_HAS_SPEC(i, fixer)) {
+      while (i->carrying) {
+        struct obj_data *obj = i->carrying;
+
+        char *representation = generate_new_loggable_representation(obj);
+
+        // No PC, no problem.
+        if (!does_player_exist(GET_OBJ_TIMER(obj))) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "Discarding unowned repairman object: %s", representation);
+          obj_from_char(obj);
+          extract_obj(obj);
+          continue;
+        } else {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "Preserving %ld's repairman object: %s", GET_OBJ_TIMER(obj), representation);
+        }
+
+        delete [] representation;
+
+        // Fully repair item.
+        GET_OBJ_CONDITION(obj) = GET_OBJ_BARRIER(obj);
+
+        // Fully repair MPCP of storebought deck.
+        rnum_t obj_rnum = real_object(GET_OBJ_VNUM(obj));
+        if (obj_rnum >= 0 && GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) {
+          GET_CYBERDECK_MPCP(obj) = GET_CYBERDECK_MPCP(&obj_proto[obj_rnum]);
+        }
+
+        // Box it up for handing off.
+        struct obj_data *container = read_object(OBJ_LARGE_PLASTIBOARD_BOX, VIRTUAL);
+
+        char *player_name = get_player_name(GET_OBJ_TIMER(obj));
+        snprintf(buf, sizeof(buf), "%s's boxed-up repairman item: %s^n", player_name, get_string_after_color_code_removal(GET_OBJ_NAME(obj), NULL));
+        delete [] player_name;
+
+        container->restring = str_dup(buf);
+        container->graffiti = str_dup(buf);
+
+        obj_from_char(obj);
+        obj_to_obj(obj, container);
+
+        // Put it in the staff workroom.
+        obj_to_room(container, staff_workroom);
+        if (staff_workroom->people)
+          act("The repairman's assistant drops off $p for post-copyover distribution.", FALSE, staff_workroom->people, obj, 0, TO_ROOM);
+      }
+    }
+  }
 
 
   log("COPYOVERLOG: Disconnecting players.");

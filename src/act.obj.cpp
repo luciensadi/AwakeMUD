@@ -3453,6 +3453,12 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
                               "You already have a lapel pin.\r\n"
                             };
 
+  if (OBJ_IS_FULLY_DAMAGED(obj)) {
+    if (print_messages)
+      act("You can't use $p: it's almost destroyed! Take it in for repairs.", FALSE, ch, obj, 0, TO_CHAR);
+    return;
+  }
+
   /* first, make sure that the wear position is valid. */
   if (!CAN_WEAR(obj, wear_bitvectors[where])) {
     if (print_messages)
@@ -4434,6 +4440,11 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   if (!contents) {
     // Readied holster was empty: un-ready the holster, but continue looking for a valid ready holster.
     GET_HOLSTER_READY_STATUS(holster) = 0;
+    return 0;
+  }
+
+  if (OBJ_IS_FULLY_DAMAGED(contents)) {
+    act("Draw check: Skipping $p, fully damaged.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
   }
 

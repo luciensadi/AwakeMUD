@@ -2090,7 +2090,7 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
   }
 
   if (vict && GET_TKE(vict) <= NEWBIE_KARMA_THRESHOLD) {
-    send_to_char(vict, "^y(%s would have been damaged, but was shielded by your newbie status!)^n\r\n", CAP(GET_OBJ_NAME(obj)));
+    send_to_char(vict, "^y(%s^y would have been damaged, but was shielded by your new-character status!)^n\r\n", CAP(GET_OBJ_NAME(obj)));
     return;
   }
 
@@ -2212,15 +2212,17 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
   // if the end result is that the object condition rating is 0 or less
   // it is destroyed -- a good reason to keep objects in good repair
   if (GET_OBJ_CONDITION(obj) <= 0) {
+    GET_OBJ_CONDITION(obj) = 0;
+
     if (ch) {
-      send_to_char(ch, "%s%s%s%s has been destroyed!\r\n",
+      send_to_char(ch, "%s%s%s%s has been damaged to the point of uselessness!\r\n",
                    ch == vict ? "^R" : "",
                    CAP(inside_buf),
                    GET_OBJ_NAME(obj),
                    ch == vict ? "^R" : "^n");
     }
     if (vict && vict != ch) {
-      send_to_char(vict, "^R%s%s^R has been destroyed!^n\r\n",
+      send_to_char(vict, "^R%s%s^R has been damaged to the point of uselessness!^n\r\n",
                    CAP(inside_buf),
                    GET_OBJ_NAME(obj));
     }
@@ -2229,6 +2231,7 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
       check_quest_destroy(ch, obj);
     }
 
+#ifdef DESTROY_OBJ_ON_FULL_DAMAGE
     // Log destruction.
     const char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "Destroying %s's %s due to combat damage. Representation: [%s]",
@@ -2270,6 +2273,13 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
     }
 
     extract_obj(obj);
+#else
+    if (obj->worn_by && obj->worn_on) {
+      struct char_data *owner = obj->worn_by;
+      unequip_char(owner, obj->worn_on, TRUE);
+      obj_to_char(obj, owner);
+    }
+#endif
   }
 }
 

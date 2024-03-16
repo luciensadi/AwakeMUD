@@ -362,9 +362,6 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       } else {
         strlcat(buf, " ^y(unusable)", sizeof(buf));
       }
-
-      if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
-        strlcat(buf, " ^r(damaged)^n", sizeof(buf));
     } else if (blocked_by_soulbinding(ch, object, FALSE)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object));
     }
@@ -387,7 +384,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcpy(buf, "You see nothing special..", sizeof(buf));
   }
   else if (mode == SHOW_MODE_CONTAINED_OBJ) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\t\t\t\t%s", GET_OBJ_NAME(object));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\t\t\t\t%s^n", GET_OBJ_NAME(object));
   }
 
   if (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT) {
@@ -395,9 +392,6 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       if (object->contains) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Holding %s^n)", GET_OBJ_NAME(object->contains));
       }
-    }
-    if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100) {
-      strlcat(buf, " (damaged)", sizeof(buf));
     }
   }
   else if (mode == SHOW_MODE_OWN_EQUIPMENT || mode == SHOW_MODE_CONTAINED_OBJ) {
@@ -427,15 +421,17 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
     }
 
-    if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
-      strlcat(buf, " ^r(damaged)^n", sizeof(buf));
-
     if (IS_OBJ_STAT(object, ITEM_EXTRA_KEPT)) {
       strlcat(buf, " ^c(kept)^n", sizeof(buf));
     }
   }
 
   if (mode != 3) {
+    if (OBJ_IS_FULLY_DAMAGED(object)) {
+      strlcat(buf, " ^R(almost destroyed)^n", sizeof(buf));
+    } else if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
+      strlcat(buf, " ^r(damaged)^n", sizeof(buf));
+
     if (IS_OBJ_STAT(object, ITEM_EXTRA_INVISIBLE)) {
       strlcat(buf, " ^B(invisible)", sizeof(buf));
     }
