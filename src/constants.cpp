@@ -566,6 +566,7 @@ const char *player_bits[] =
     "PAID_FOR_VNUMS",
     "DOCWAGON_READY",
     "TEMPORARILY_LOADED",
+    "CDEX_DONE",
     "\n"
   };
 

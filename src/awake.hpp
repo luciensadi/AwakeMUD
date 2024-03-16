@@ -298,57 +298,58 @@ enum {
 #define NUM_WEARS      42
 
 /* player flags: used by char_data.char_specials.act */
-#define PLR_KILLER                          0  /* Player is a player-killer              */
-#define PLR_BLACKLIST                       1  /* Player is banned from runs             */
-#define PLR_FROZEN                          2  /* Player is frozen                       */
-#define PLR_DONTSET                         3  /* Don't EVER set (ISNPC bit)             */
-#define PLR_NEWBIE                          4  /* Player is a newbie still               */
-#define PLR_JUST_DIED                       5  /* Player just died                       */
-#define PLR_VISA                            6  /* Player needs to be crash-saved         */
-#define PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA 7  /* Player has had their cybereye essence cost reset */
-#define PLR_SITEOK                          8  /* Player has been site-cleared           */
-#define PLR_NOSHOUT                         9  /* Player not allowed to shout/goss       */
-#define PLR_NOTITLE                         10 /* Player not allowed to set title        */
-#define PLR_DELETED                         11 /* Player deleted - space reusable        */
-#define PLR_NODELETE                        12 /* Player shouldn't be deleted            */
-#define PLR_NOSTAT                          14 /* Player cannot be statted, etc          */
-#define PLR_IN_CHARGEN                      15 /* Player is currently in chargen         */
-#define PLR_INVSTART                        16 /* Player should enter game wizinvis      */
-#define PLR_OLC                             19 /* Player has access to olc commands      */
-#define PLR_MATRIX                          20 /* Player is in the Matrix                */
-#define PLR_PERCEIVE                        21 /* player is astrally perceiving          */
-#define PLR_PROJECT                         22 /* player is astrally projecting          */
-#define PLR_SWITCHED                        23 /* player is switched to a mob            */
-#define PLR_WRITING                         24 /* Player writing (board/mail/olc)        */
-#define PLR_MAILING                         25 /* Player is writing mail                 */
-#define PLR_EDITING                         26 /* Player is zone editing                 */
-#define PLR_SPELL_CREATE                    27 /* Player is creating a spell             */
-#define PLR_CUSTOMIZE                       28 /* Player is customizing persona          */
-#define PLR_NOSNOOP                         29 /* Player is not snoopable                */
-#define PLR_WANTED                          30 /* Player wanted by the law      */
-#define PLR_NOOOC                           31 /* Player is muted from the OOC channel   */
-#define PLR_NOT_YET_AUTHED                  32 /* Player needs Auth */
-#define PLR_EDCON                           33
-#define PLR_REMOTE                          34
-#define PLR_INITIATE                        35
-#define PLR_DRIVEBY                         36
-#define PLR_RPE                             37
-#define PLR_NO_IDLE_OUT                     38 /* Player will not idle out (morts- for test chars) */
-#define PLR_TELLS_MUTED                     39 /* Remove their ability to send tells. */
-#define PLR_NEWBIE_MUTED                    40 /* Remove their ability to talk on the newbie channel. */
-#define PLR_CYBERDOC                        41 /* Player may act as a cyberdoc. */
-#define PLR_PAID_FOR_CLOSECOMBAT            42
-#define PLR_PAID_FOR_KIPUP                  43
-#define PLR_PAID_FOR_ROLLS                  44
-#define PLR_NO_AUTO_SYSP_AWARDS             45 /* Player abuses typo etc for automatic sysp awards. */
-#define PLR_RADIO_MUTED                     46
-#define PLR_SITE_HIDDEN                     47 /* For staff who really don't want people knowing who their alt is. */
-#define PLR_ENABLED_DRUGS                   48
-#define PLR_SENT_DOCWAGON_PLAYER_ALERT      49
-#define PLR_PAID_FOR_VNUMS                  50
-#define PLR_DOCWAGON_READY                  51 /* Flags if a player has rolled successfully for DocWagon. */
-#define PLR_IS_TEMPORARILY_LOADED           52
-#define PLR_MAX                             53
+#define PLR_KILLER                           0  /* Player is a player-killer              */
+#define PLR_BLACKLIST                        1  /* Player is banned from runs             */
+#define PLR_FROZEN                           2  /* Player is frozen                       */
+#define PLR_DONTSET                          3  /* Don't EVER set (ISNPC bit)             */
+#define PLR_NEWBIE                           4  /* Player is a newbie still               */
+#define PLR_JUST_DIED                        5  /* Player just died                       */
+#define PLR_VISA                             6  /* Player needs to be crash-saved         */
+#define PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA  7  /* Player has had their cybereye essence cost reset */
+#define PLR_SITEOK                           8  /* Player has been site-cleared           */
+#define PLR_NOSHOUT                          9  /* Player not allowed to shout/goss       */
+#define PLR_NOTITLE                          10 /* Player not allowed to set title        */
+#define PLR_DELETED                          11 /* Player deleted - space reusable        */
+#define PLR_NODELETE                         12 /* Player shouldn't be deleted            */
+#define PLR_NOSTAT                           14 /* Player cannot be statted, etc          */
+#define PLR_IN_CHARGEN                       15 /* Player is currently in chargen         */
+#define PLR_INVSTART                         16 /* Player should enter game wizinvis      */
+#define PLR_OLC                              19 /* Player has access to olc commands      */
+#define PLR_MATRIX                           20 /* Player is in the Matrix                */
+#define PLR_PERCEIVE                         21 /* player is astrally perceiving          */
+#define PLR_PROJECT                          22 /* player is astrally projecting          */
+#define PLR_SWITCHED                         23 /* player is switched to a mob            */
+#define PLR_WRITING                          24 /* Player writing (board/mail/olc)        */
+#define PLR_MAILING                          25 /* Player is writing mail                 */
+#define PLR_EDITING                          26 /* Player is zone editing                 */
+#define PLR_SPELL_CREATE                     27 /* Player is creating a spell             */
+#define PLR_CUSTOMIZE                        28 /* Player is customizing persona          */
+#define PLR_NOSNOOP                          29 /* Player is not snoopable                */
+#define PLR_WANTED                           30 /* Player wanted by the law      */
+#define PLR_NOOOC                            31 /* Player is muted from the OOC channel   */
+#define PLR_NOT_YET_AUTHED                   32 /* Player needs Auth */
+#define PLR_EDCON                            33
+#define PLR_REMOTE                           34
+#define PLR_INITIATE                         35
+#define PLR_DRIVEBY                          36
+#define PLR_RPE                              37
+#define PLR_NO_IDLE_OUT                      38 /* Player will not idle out (morts- for test chars) */
+#define PLR_TELLS_MUTED                      39 /* Remove their ability to send tells. */
+#define PLR_NEWBIE_MUTED                     40 /* Remove their ability to talk on the newbie channel. */
+#define PLR_CYBERDOC                         41 /* Player may act as a cyberdoc. */
+#define PLR_PAID_FOR_CLOSECOMBAT             42
+#define PLR_PAID_FOR_KIPUP                   43
+#define PLR_PAID_FOR_ROLLS                   44
+#define PLR_NO_AUTO_SYSP_AWARDS              45 /* Player abuses typo etc for automatic sysp awards. */
+#define PLR_RADIO_MUTED                      46
+#define PLR_SITE_HIDDEN                      47 /* For staff who really don't want people knowing who their alt is. */
+#define PLR_ENABLED_DRUGS                    48
+#define PLR_SENT_DOCWAGON_PLAYER_ALERT       49
+#define PLR_PAID_FOR_VNUMS                   50
+#define PLR_DOCWAGON_READY                   51 /* Flags if a player has rolled successfully for DocWagon. */
+#define PLR_IS_TEMPORARILY_LOADED            52
+#define PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL 53
+#define PLR_MAX                              54
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 

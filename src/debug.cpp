@@ -167,6 +167,18 @@ ACMD(do_debug) {
 
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
+  skip_spaces(&rest_of_argument);
+
+  if (is_abbrev(arg1, "cleardriverflag")) {
+    struct char_data *vict = get_char_vis(ch, rest_of_argument);
+    if (vict) {
+      PLR_FLAGS(vict).RemoveBit(PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL);
+      send_to_char(ch, "OK, removed %s's expert driver conversion bit.\r\n", GET_CHAR_NAME(vict));
+    } else {
+      send_to_char(ch, "You don't see anyone named %s.\r\n", rest_of_argument);
+    }
+    return;
+  }
 
   if (is_abbrev(arg1, "printvehmap")) {
     extern std::unordered_map<std::string, struct veh_data *> veh_map;

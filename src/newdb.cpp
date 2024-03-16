@@ -31,6 +31,7 @@
 #include "chipjacks.hpp"
 #include "quest.hpp"
 #include "vehicles.hpp"
+#include "newmail.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -42,6 +43,7 @@ static const char *const INDEX_FILENAME = "etc/pfiles/index";
 extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *);
 extern Playergroup *loaded_playergroups;
+extern int get_cyberware_install_cost(struct obj_data *ware);
 
 extern void save_bullet_pants(struct char_data *ch);
 extern void load_bullet_pants(struct char_data *ch);
@@ -62,6 +64,7 @@ void save_aliases_to_db(struct char_data *player);
 void save_bioware_to_db(struct char_data *player);
 void save_cyberware_to_db(struct char_data *player);
 void fix_character_essence_after_cybereye_migration(struct char_data *ch);
+void fix_character_essence_after_expert_driver_change(struct char_data *ch);
 
 SPECIAL(weapon_dominator);
 
@@ -1629,9 +1632,16 @@ char_data *CreateChar(char_data *ch)
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
     PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
-    PLR_FLAGS(ch).RemoveBit(PLR_IN_CHARGEN);
     GET_IDNUM(ch) = MAX(playerDB.find_open_id(), highest_idnum_in_use + 1);
   }
+
+  // Ensure we don't run this character through any rectifying functions.
+  PLR_FLAGS(ch).SetBits(PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL,
+                        PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA,
+                        ENDBIT);
+  
+  // They're no longer in the creation menus.
+  PLR_FLAGS(ch).RemoveBit(PLR_IN_CHARGEN);
 
   init_char(ch);
   init_char_strings(ch);
@@ -1713,7 +1723,10 @@ char_data *PCIndex::LoadChar(const char *name, bool logon)
 
   load_char(name, ch, logon);
 
-  fix_character_essence_after_cybereye_migration(ch);
+  fix_character_essence_after_expert_driver_change(ch);
+
+  // At this point, cybereye migration has been done for over a year. Disabled.
+  // fix_character_essence_after_cybereye_migration(ch);
 
   return ch;
 }
@@ -2046,10 +2059,9 @@ void DeleteChar(long idx)
     "pfiles_spirits          ",
     "pfiles_worn             ",
     "pfiles_ignore_v2        ",  // 20. IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
-    "pfiles_drugdata         ",
     "playergroup_invitations "
   };
-  #define NUM_SQL_TABLE_NAMES     23
+  #define NUM_SQL_TABLE_NAMES     22
   #define PFILES_INDEX            0
   #define PFILES_IGNORE_INDEX     8
   #define PFILES_MEMORY_INDEX     13
@@ -2904,6 +2916,142 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
   PLR_FLAGS(ch).SetBit(PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA);
 
   // Finally, save them. TODO: Does saving them in the middle of the load process break things?
+  save_char(ch, GET_LOADROOM(ch));
+}
+
+extern struct obj_data *shop_package_up_ware(struct obj_data *obj);
+void uninstall_and_refund_ware(struct char_data *ch, struct obj_data *ware, char *msg_buf, size_t msg_buf_sz) {
+  if (!ch || !ware)
+    return;
+
+  // We refund their essence / index as well.
+  int essence_cost = (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE ? GET_CYBERWARE_ESSENCE_COST(ware) : GET_BIOWARE_ESSENCE_COST(ware));
+  if (GET_TRADITION(ch) == TRAD_SHAMANIC && GET_TOTEM(ch) == TOTEM_EAGLE)
+    essence_cost *= 2;
+  if (IS_GHOUL(ch) || IS_DRAKE(ch))
+    essence_cost *= 2;
+
+  // And of course, magic.
+  int magic_refund_amount = 0;
+
+  // Remove cyberware.
+  if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE) {
+    obj_from_cyberware(ware);
+
+    // Sanity checks.
+    if (GET_REAL_ESS(ch) + essence_cost > 600) {
+      int delta = GET_REAL_ESS(ch) + essence_cost - 600;
+      essence_cost -= delta;
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: While uninstalling and refunding %s (%ld), we went over the ess limit by %d! Capped essence back down.",
+                      GET_OBJ_NAME(ware),
+                      GET_OBJ_VNUM(ware),
+                      delta);
+    }
+
+    // Refund essence. Leave esshole untouched.
+    GET_REAL_ESS(ch) += essence_cost;
+
+    // Calculate magic refund amount. Cyberware is full magic.
+    magic_refund_amount = essence_cost;
+  } 
+  // Remove bioware.
+  else if (GET_OBJ_TYPE(ware) == ITEM_BIOWARE) {
+    obj_from_bioware(ware);
+
+    // Sanity checks.
+    if (GET_INDEX(ch) + essence_cost > 900) {
+      int delta = GET_INDEX(ch) + essence_cost - 900;
+      essence_cost -= delta;
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: While uninstalling and refunding %s (%ld), we went over the ess limit by %d! Capped essence back down.",
+                      GET_OBJ_NAME(ware),
+                      GET_OBJ_VNUM(ware),
+                      delta);
+    }
+
+    // Refund index and reduce max index.
+    GET_INDEX(ch) -= essence_cost;
+    GET_HIGHEST_INDEX(ch) -= essence_cost;
+
+    // Calculate magic refund amount. Bioware is half magic.
+    magic_refund_amount = essence_cost / 2;
+  }
+
+  // Restore magic and add back lost PP.
+  GET_SETTABLE_REAL_MAG(ch) += magic_refund_amount;
+  if (GET_TRADITION(ch) == TRAD_ADEPT) {
+    GET_PP(ch) += magic_refund_amount;
+  }
+
+  // We want to refund the cost of installation to the character. Currently, that's 10%.
+  int nuyen_refund = get_cyberware_install_cost(ware);
+  GET_NUYEN_RAW(ch) += nuyen_refund;
+    
+  // Hand it off in a package.
+  obj_to_char(shop_package_up_ware(ware), ch);
+
+  // Compose message. Caller to send.
+  snprintf(ENDOF(msg_buf), msg_buf_sz - strlen(buf), " - %s: refunded %.2f %s, %.2f magic%s, and %d nuyen to cover installation fees\r\n", 
+           decapitalize_a_an(ware),
+           (float) essence_cost / 100,
+           GET_OBJ_TYPE(ware) == ITEM_CYBERWARE ? "essence" : "index and highestindex",
+           (float) magic_refund_amount / 100,
+           GET_TRADITION(ch) == TRAD_ADEPT ? " and powerpoints" : "",
+           nuyen_refund);
+
+  // Log it.
+  mudlog_vfprintf(ch, LOG_SYSLOG, "Expert Driver Patch refund: %s^n (%ld) refunds %.2f %s, %.2f magic%s, and %d nuyen",
+           decapitalize_a_an(ware),
+           GET_OBJ_VNUM(ware),
+           (float) essence_cost / 100,
+           GET_OBJ_TYPE(ware) == ITEM_CYBERWARE ? "essence" : "index and highestindex",
+           (float) magic_refund_amount / 100,
+           GET_TRADITION(ch) == TRAD_ADEPT ? " and powerpoints" : "",
+           nuyen_refund);
+}
+
+#define UNINSTALL_ALL_WARE(ware_type) while ((ware = find_cyberware(ch, ware_type))) { uninstall_and_refund_ware(ch, ware, buf, sizeof(buf)); changed_anything = TRUE; }
+/* Because we've changed the essence cost of cybereyes, we need to refund the difference to people. */
+void fix_character_essence_after_expert_driver_change(struct char_data *ch) {
+  // First, check for the flag. If it's set, we already did this-- skip.
+  if (PLR_FLAGGED(ch, PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL))
+    return;
+
+  PLR_FLAGS(ch).SetBit(PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL);
+
+  // Mundanes are not affected by this change.
+  if (GET_TRADITION(ch) == TRAD_MUNDANE) {
+    return;
+  }
+
+  strlcpy(buf, "^WSYSTEM NOTICE:^n The functionality of Chipjack Expert Drivers has been changed,"
+               " making them less valuable in certain builds. To ensure this doesn't break your"
+               " build, we have uninstalled the following 'ware and placed it in your inventory:\r\n", sizeof(buf));
+
+  bool changed_anything = FALSE;
+  struct obj_data *ware = NULL;
+
+  // Remove chipjacks, unjacking in the process.
+  while ((ware = find_cyberware(ch, CYB_CHIPJACK))) {
+    for (struct obj_data *chip = ware->contains, *next_obj; chip; chip = next_obj) {
+      next_obj = chip->next_content;
+      deactivate_single_skillsoft(chip, ch, FALSE);
+      obj_from_obj(chip);
+      obj_to_char(chip, ch);
+    }
+
+    uninstall_and_refund_ware(ch, ware, buf, sizeof(buf));
+    changed_anything = TRUE;
+  }
+
+  // Remove skillwires and expert drivers.
+  UNINSTALL_ALL_WARE(CYB_SKILLWIRE);
+  UNINSTALL_ALL_WARE(CYB_CHIPJACKEXPERT);
+  
+  if (changed_anything) {
+    raw_store_mail(GET_IDNUM(ch), 0, "(OOC System Message)", buf);
+  }
+
+  // Finally, save them.
   save_char(ch, GET_LOADROOM(ch));
 }
 

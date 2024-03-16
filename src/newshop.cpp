@@ -39,6 +39,7 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
 void shop_install(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 struct obj_data *shop_package_up_ware(struct obj_data *obj);
+int get_cyberware_install_cost(struct obj_data *ware);
 
 int cmd_say;
 int cmd_echo;
@@ -409,7 +410,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   // Reject installing magic-incompat 'ware into magic-using characters.
   if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE) {
     int esscost = GET_CYBERWARE_ESSENCE_COST(ware);
-    if (GET_TOTEM(recipient) == TOTEM_EAGLE)
+    if (GET_TRADITION(recipient) == TRAD_SHAMANIC && GET_TOTEM(recipient) == TOTEM_EAGLE)
       esscost *= 2;
     // Ghouls and drakes have doubled cyberware essence costs.
     if (IS_GHOUL(recipient) || IS_DRAKE(recipient))
@@ -1845,7 +1846,7 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
 
     obj = obj->contains;
 
-    int install_cost = MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(obj) / CYBERWARE_INSTALLATION_COST_FACTOR);
+    int install_cost = get_cyberware_install_cost(obj);
 
     snprintf(buf, sizeof(buf), "%s I'd charge %d nuyen to install it, and", GET_CHAR_NAME(ch), install_cost);
   } else {
@@ -3318,7 +3319,7 @@ void shop_install(char *argument, struct char_data *ch, struct char_data *keeper
   obj = obj->contains;
 
   // We charge 1/X of the price of the thing to install it, up to the configured maximum value.
-  int install_cost = MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(obj) / CYBERWARE_INSTALLATION_COST_FACTOR);
+  int install_cost = get_cyberware_install_cost(obj);
 
   // Try to deduct the install cost from their credstick.
   struct obj_data *cred = get_first_credstick(ch, "credstick");
@@ -3398,7 +3399,7 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
   }
 
   // We charge 1/X of the price of the thing to install it, up to the configured maximum value.
-  int uninstall_cost = MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(obj) / CYBERWARE_INSTALLATION_COST_FACTOR);
+  int uninstall_cost = get_cyberware_install_cost(obj);
 
   // Try to deduct the install cost from their credstick.
   struct obj_data *cred = get_first_credstick(ch, "credstick");
@@ -3675,4 +3676,8 @@ int get_eti_test_results(struct char_data *ch, int eti_skill, int availtn, int a
     act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
 
   return success;
+}
+
+int get_cyberware_install_cost(struct obj_data *ware) {
+  return MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(ware) / CYBERWARE_INSTALLATION_COST_FACTOR);
 }
