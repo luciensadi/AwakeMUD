@@ -5755,8 +5755,10 @@ void roll_individual_initiative(struct char_data *ch)
   char rbuf[MAX_STRING_LENGTH];
   snprintf(rbuf, sizeof(rbuf),"Init: %2d %s", GET_INIT_ROLL(ch), GET_NAME(ch));
   act(rbuf,TRUE,ch,NULL,NULL,TO_ROLLS);
-  if (AFF_FLAGGED(ch, AFF_ACID))
+  if (AFF_FLAGGED(ch, AFF_ACID)) {
     AFF_FLAGS(ch).RemoveBit(AFF_ACID);
+    send_to_char(ch, "The choking clouds of acid dissipate.\r\n");
+  }
 }
 
 void decide_combat_pool(void)

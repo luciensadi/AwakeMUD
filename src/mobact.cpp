@@ -1355,6 +1355,12 @@ bool mobact_process_self_buff(struct char_data *ch) {
         return TRUE;
       }
 
+      // And flame aura.
+      if (GET_MAG(ch) >= 6 && !affected_by_spell(ch, SPELL_FLAME_AURA) && !IS_ASTRAL(ch)) {
+        cast_manipulation_spell(ch, SPELL_FLAME_AURA, number(min_force, max_force), NULL, ch);
+        return TRUE;
+      }
+
       if (number(0, 5) == 0) {
         // Apply combat sense to self.
         if (GET_MAG(ch) >= 4 && !affected_by_spell(ch, SPELL_COMBATSENSE)) {

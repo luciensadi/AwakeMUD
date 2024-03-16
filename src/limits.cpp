@@ -1277,8 +1277,18 @@ void misc_update(void)
           send_to_char("You feel calmer.\r\n", ch);
         }
 
-        if (!CH_IN_COMBAT(ch))
-          AFF_FLAGS(ch).RemoveBit(AFF_ACID);
+        if (!CH_IN_COMBAT(ch)) {
+          if (is_npc) {
+            // We just remove the acid with no checking since speed matters for NPCs.
+            AFF_FLAGS(ch).RemoveBit(AFF_ACID);
+          } else {
+            // With PCs, we check for the flag and message about it.
+            if (AFF_FLAGGED(ch, AFF_ACID)) {
+              AFF_FLAGS(ch).RemoveBit(AFF_ACID);
+              send_to_char(ch, "The choking clouds of acid dissipate.\r\n");
+            }
+          }
+        }
 
         if (GET_SUSTAINED_NUM(ch) && !IS_ANY_ELEMENTAL(ch)) {
           struct sustain_data *next, *temp, *nsus;

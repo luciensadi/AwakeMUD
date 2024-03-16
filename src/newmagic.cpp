@@ -2085,6 +2085,10 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
         if (!check_spell_victim(ch, vict, spell, arg))
           return;
 
+        if ((spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) && would_become_killer(ch, vict)) {
+          send_to_char("Casting Decrease Attribute spells is a hostile act! Both you and your target must be toggled PK for that. Alternatively, go to an arena.\r\n", ch);
+          return;
+        }
 
         if (GET_SUSTAINED(vict)) {
           for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
@@ -2653,7 +2657,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           }
 
           if (dam > 0) {
-            if (IS_NPC(ch) || IS_NPC(vict)) {
+            if ((IS_NPC(ch) && number(0, GET_MAG(ch) / 500)) || IS_NPC(vict)) {
               damage_equip(ch, vict, force, TYPE_FIRE);
             }
 
@@ -2712,8 +2716,16 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           act("$n dodges the acid, which evaporates as it passes $m.", FALSE, vict, 0, 0, TO_ROOM);
           send_to_char("You easily dodge the acid!\r\n", vict);
         } else {
+          bool is_nbc_immune = ((GET_EQ(ch, WEAR_ABOUT) && IS_OBJ_STAT(GET_EQ(ch, WEAR_ABOUT), ITEM_EXTRA_NBC_IMMUNE))
+                                || (GET_EQ(ch, WEAR_BODY) && IS_OBJ_STAT(GET_EQ(ch, WEAR_BODY), ITEM_EXTRA_NBC_IMMUNE))
+                                || (GET_EQ(ch, WEAR_UNDER) && IS_OBJ_STAT(GET_EQ(ch, WEAR_UNDER), ITEM_EXTRA_NBC_IMMUNE)));
+          
           success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
           int dam = convert_damage(stage(success, basedamage));
+
+          if (is_nbc_immune)
+            dam = 0;
+
           if (!AWAKE(vict)) {
             act("$n spasms as the acid hits $m.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
@@ -2731,14 +2743,19 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
             send_to_char("The acid splashes against you causing a mild burning sensation.\r\n", vict);
           } else {
             act("The acid splashes on $n, but $e doesn't seem to flinch.", FALSE, vict, 0, ch, TO_ROOM);
-            send_to_char("You are splashed by the acid, but it causes nothing more than a moment's irritation.\r\n", vict);
+            send_to_char(vict, "You are splashed by the acid, but %s\r\n",
+                         is_nbc_immune ? "it just rolls off your chem-sealed suit" : "it causes nothing more than a moment's irritation.");
           }
 
-          if (IS_NPC(ch) || IS_NPC(vict)) {
+          if ((IS_NPC(ch) && number(0, GET_MAG(ch) / 500)) || IS_NPC(vict)) {
             damage_equip(ch, vict, force, TYPE_ACID);
           }
 
-          AFF_FLAGS(vict).SetBit(AFF_ACID);
+          if (!is_nbc_immune) {
+            send_to_char("^rA cloud of choking acid fog rises up around you, making every breath a struggle!^n\r\n", vict);
+            AFF_FLAGS(vict).SetBit(AFF_ACID);
+          }
+
           if (!damage(ch, vict, dam, TYPE_MANIPULATION_SPELL, PHYSICAL)) {
             if (IS_NPC(vict) && !IS_NPC(ch))
               GET_LASTHIT(vict) = GET_IDNUM(ch);
@@ -2804,10 +2821,21 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           }
 
           // Lightning cascades to all electronic/computerized items worn (50% chance of damage for each).
-          for (int i = 0; i < NUM_WEARS; i++) {
-            struct obj_data *eq = GET_EQ(vict, i);
-            if (number(0, 1) && eq && (GET_OBJ_MATERIAL(eq) == MATERIAL_ELECTRONICS || GET_OBJ_MATERIAL(eq) == MATERIAL_COMPUTERS)) {
-              damage_obj(vict, eq, force, DAMOBJ_LIGHTNING);
+          if ((IS_NPC(ch) && number(0, GET_MAG(ch) / 500)) || IS_NPC(vict)) {
+            for (int i = 0; i < NUM_WEARS; i++) {
+              struct obj_data *eq = GET_EQ(vict, i);
+
+              if (!number(0, 1) || !eq)
+                continue;
+
+              if (GET_OBJ_TYPE(eq) == ITEM_CUSTOM_DECK || GET_OBJ_TYPE(eq) == ITEM_CYBERDECK) {
+                send_to_char(vict, "^rThe lightning arcs dangerously close to %s^r!^n Better take it off when fighting.\r\n", decapitalize_a_an(eq));
+                continue;
+              }
+
+              if (GET_OBJ_MATERIAL(eq) == MATERIAL_ELECTRONICS || GET_OBJ_MATERIAL(eq) == MATERIAL_COMPUTERS) {
+                damage_obj(vict, eq, force, DAMOBJ_LIGHTNING);
+              }
             }
           }
 
@@ -3243,6 +3271,7 @@ bool mob_magic(struct char_data *ch)
 
   char buf[MAX_STRING_LENGTH], rbuf[5000];
   int spell = 0, sub = 0, force, magic = GET_MAG(ch) / 100;
+  int wound_level = number(MIN_MOB_COMBAT_MAGIC_WOUND, MAX_MOB_COMBAT_MAGIC_WOUND);
   if (GET_WIL(ch) <= 2)
     force = magic;
   else force = MIN(magic, number(MIN_MOB_COMBAT_MAGIC_FORCE, MAX_MOB_COMBAT_MAGIC_FORCE));
@@ -3260,9 +3289,49 @@ bool mob_magic(struct char_data *ch)
         spell = SPELL_STUNBOLT;
         break;
     }
+  } else if (GET_MAG(ch) >= 12) {
+    // High-tier mage NPCs cast intelligently by prioritizing getting acid stream on the enemy.
+    // We want the +4 enemy TN from acid.
+    if (!AFF_FLAGGED(FIGHTING(ch), AFF_ACID) && !number(1, 3)) {
+      spell = SPELL_ACIDSTREAM;
+
+      // No need to overcast this one.
+      force = MIN(force, 1);
+
+      // Light works just fine.
+      wound_level = LIGHT;
+    }
+    // And from being on fire.
+    else if (GET_CHAR_FIRE_DURATION(FIGHTING(ch)) <= 0 && !number(1, 3)) {
+      spell = SPELL_FLAMETHROWER;
+
+      // Force doesn't matter for hitting.
+      force = MIN(force, 1);
+      
+      // We want the highest chance of igniting them.
+      wound_level = DEADLY;
+    }
+    // And the +TN from confusion.
+    else if (!affected_by_spell(FIGHTING(ch), SPELL_CONFUSION) && !number(1, 3)) {
+      spell = SPELL_CONFUSION;
+
+      // Force matters for Confusion.
+      force = MAX(GET_MAG(ch) / 100, force);
+    }
+    // We're satisfied with our debuffs. Now, we cast a bolt-type spell based on how beefy they look.
+    else {
+      if (GET_BOD(FIGHTING(ch)) <= 6) {
+        spell = SPELL_POWERBOLT;
+      } else if (GET_WIL(FIGHTING(ch)) < 6) {
+        spell = SPELL_MANABOLT;
+      } else {
+        spell = SPELL_STUNBOLT;
+      }
+      wound_level = DEADLY;
+    }
   } else {
     while (!spell) {
-      switch (number (0, 26)) { // If you're adding more cases to this switch, increase this number to match!
+      switch (number (0, 27)) { // If you're adding more cases to this switch, increase this number to match!
         case 0:
         case 1:
         case 2:
@@ -3287,13 +3356,16 @@ bool mob_magic(struct char_data *ch)
           break;
         case 13:
         case 14:
-          spell = SPELL_FLAMETHROWER;
+          if (GET_CHAR_FIRE_DURATION(FIGHTING(ch)) <= 0)
+            spell = SPELL_FLAMETHROWER;
           break;
         case 8:
         case 9:
         case 15:
         case 19:
-          spell = SPELL_ACIDSTREAM;
+        case 27:
+          if (!AFF_FLAGGED(FIGHTING(ch), AFF_ACID))
+            spell = SPELL_ACIDSTREAM;
           break;
         case 16:
         case 17:
@@ -3305,7 +3377,7 @@ bool mob_magic(struct char_data *ch)
         case 20:
         case 21:
         case 22:
-          if (!affected_by_spell(FIGHTING(ch), SPELL_IGNITE) && !GET_CHAR_FIRE_DURATION(FIGHTING(ch)))
+          if (!affected_by_spell(FIGHTING(ch), SPELL_IGNITE) && GET_CHAR_FIRE_DURATION(FIGHTING(ch)) <= 0)
             spell = SPELL_IGNITE;
           break;
         case 23:
@@ -3336,7 +3408,7 @@ bool mob_magic(struct char_data *ch)
     case SPELL_STEAM:
     case SPELL_THUNDERBOLT:
     case SPELL_WATERBOLT:
-      snprintf(buf, sizeof(buf), "%s %s", wound_name[number(MIN_MOB_COMBAT_MAGIC_WOUND, MAX_MOB_COMBAT_MAGIC_WOUND)], GET_CHAR_NAME(FIGHTING(ch)));
+      snprintf(buf, sizeof(buf), "%s %s", wound_name[wound_level], GET_CHAR_NAME(FIGHTING(ch)));
       break;
     default:
       strlcpy(buf, GET_CHAR_NAME(FIGHTING(ch)), sizeof(buf));
