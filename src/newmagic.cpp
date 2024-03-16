@@ -1118,6 +1118,7 @@ bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
               !focus_is_usable_by_ch(temp_focus, ch) ? "^runusable^n" : "usable"
               );
         act(focus_selection_rolls_msg, 0, ch, 0, 0, TO_ROLLS);
+        continue;
       }
 
       // Valid focus.
