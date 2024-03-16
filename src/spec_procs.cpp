@@ -2982,9 +2982,16 @@ SPECIAL(fixer)
 
     cost += (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) > 0 ? GET_OBJ_BARRIER(obj) : 1)) *
                   (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj))));
-    
-    // Not quite as expensive as buying a new one.
-    cost = MIN(GET_OBJ_COST(obj) * 0.9, cost);
+
+    if (OBJ_IS_FULLY_DAMAGED(obj)) {
+      // If you got it completely wrecked, it's about as expensive as buying a new one, but at least you don't have to roll for it.
+      cost = GET_OBJ_COST(obj);
+    } else {
+      // Otherwise, it's not quite as expensive as buying a new one.
+      cost = MIN(GET_OBJ_COST(obj) * 0.9, cost);
+    }
+
+    // Minimum repair cost.
     cost = MAX(100, cost);
 
     if ((credstick ? GET_BANK(ch) : GET_NUYEN(ch)) < cost) {
