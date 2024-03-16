@@ -7483,3 +7483,9 @@ struct obj_data *get_smartgoggle(struct char_data *ch) {
   return NULL;
 }
 #undef IS_SMARTGOGGLE
+
+bool is_ch_immune_to_nbc(struct char_data *ch) {
+  return ((GET_EQ(ch, WEAR_ABOUT) && IS_OBJ_STAT(GET_EQ(ch, WEAR_ABOUT), ITEM_EXTRA_NBC_IMMUNE))
+          || (GET_EQ(ch, WEAR_BODY) && IS_OBJ_STAT(GET_EQ(ch, WEAR_BODY), ITEM_EXTRA_NBC_IMMUNE))
+          || (GET_EQ(ch, WEAR_UNDER) && IS_OBJ_STAT(GET_EQ(ch, WEAR_UNDER), ITEM_EXTRA_NBC_IMMUNE)));
+}

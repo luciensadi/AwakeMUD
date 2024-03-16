@@ -2634,8 +2634,14 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           act("$n dodges the flames, which disperse as they past $m.", FALSE, vict, 0, 0, TO_ROOM);
           send_to_char("You easily dodge the flames!\r\n", vict);
         } else {
+          bool is_nbc_immune = is_ch_immune_to_nbc(vict);
+
           success -= success_test(GET_BOD(vict) + GET_BODY(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
           int dam = convert_damage(stage(success, basedamage));
+
+          if (is_nbc_immune)
+            dam = 0;
+
           if (!AWAKE(vict)) {
             act("$n spasms as the flames hit $m.", TRUE, vict, 0, 0, TO_ROOM);
             send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
@@ -2653,7 +2659,8 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
             send_to_char("The flames burst around you causing you slight pain as it burns some of your hair.\r\n", vict);
           } else {
             act("The flames impact $m, but disperse on impact.", FALSE, vict, 0, 0, TO_ROOM);
-            send_to_char("The flames rapidly disperse around you, causing only mild discomfort.\r\n", vict);
+            send_to_char(vict, "The flames rapidly disperse around you%s.\r\n",
+                         is_nbc_immune ? "r NBC protections" : ", causing only mild discomfort");
           }
 
           if (dam > 0) {
@@ -2716,9 +2723,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           act("$n dodges the acid, which evaporates as it passes $m.", FALSE, vict, 0, 0, TO_ROOM);
           send_to_char("You easily dodge the acid!\r\n", vict);
         } else {
-          bool is_nbc_immune = ((GET_EQ(ch, WEAR_ABOUT) && IS_OBJ_STAT(GET_EQ(ch, WEAR_ABOUT), ITEM_EXTRA_NBC_IMMUNE))
-                                || (GET_EQ(ch, WEAR_BODY) && IS_OBJ_STAT(GET_EQ(ch, WEAR_BODY), ITEM_EXTRA_NBC_IMMUNE))
-                                || (GET_EQ(ch, WEAR_UNDER) && IS_OBJ_STAT(GET_EQ(ch, WEAR_UNDER), ITEM_EXTRA_NBC_IMMUNE)));
+          bool is_nbc_immune = is_ch_immune_to_nbc(vict);
           
           success -= success_test(GET_BOD(vict) + GET_BODY(vict), force - (GET_IMPACT(vict) / 2));
           int dam = convert_damage(stage(success, basedamage));
@@ -3289,47 +3294,54 @@ bool mob_magic(struct char_data *ch)
         spell = SPELL_STUNBOLT;
         break;
     }
-  } else if (GET_MAG(ch) >= 12) {
-    // High-tier mage NPCs cast intelligently by prioritizing getting acid stream on the enemy.
-    // We want the +4 enemy TN from acid.
-    if (!AFF_FLAGGED(FIGHTING(ch), AFF_ACID) && !number(1, 3)) {
-      spell = SPELL_ACIDSTREAM;
-
-      // No need to overcast this one.
-      force = MIN(force, 1);
-
-      // Light works just fine.
-      wound_level = LIGHT;
-    }
-    // And from being on fire.
-    else if (GET_CHAR_FIRE_DURATION(FIGHTING(ch)) <= 0 && !number(1, 3)) {
-      spell = SPELL_FLAMETHROWER;
-
-      // Force doesn't matter for hitting.
-      force = MIN(force, 1);
-      
-      // We want the highest chance of igniting them.
-      wound_level = DEADLY;
-    }
-    // And the +TN from confusion.
-    else if (!affected_by_spell(FIGHTING(ch), SPELL_CONFUSION) && !number(1, 3)) {
-      spell = SPELL_CONFUSION;
-
-      // Force matters for Confusion.
-      force = MAX(GET_MAG(ch) / 100, force);
-    }
-    // We're satisfied with our debuffs. Now, we cast a bolt-type spell based on how beefy they look.
-    else {
-      if (GET_BOD(FIGHTING(ch)) <= 6) {
-        spell = SPELL_POWERBOLT;
-      } else if (GET_WIL(FIGHTING(ch)) < 6) {
-        spell = SPELL_MANABOLT;
-      } else {
-        spell = SPELL_STUNBOLT;
-      }
-      wound_level = DEADLY;
-    }
   } else {
+    if (magic >= 12) {
+      // High-tier mage NPCs cast "intelligently" by prioritizing getting TN penalties on the enemy.
+
+      // We don't want to cast NBC-blocked things as often against an NBC-immune char, but we still do want to
+      // throw them out every once in a while just so they can be satisfied about their protections.
+      bool nbc_immunity_ok = !is_ch_immune_to_nbc(FIGHTING(ch)) || !number(0, 5);
+
+      if (nbc_immunity_ok) {
+        // We want the +4 enemy TN from acid.
+        if (!AFF_FLAGGED(FIGHTING(ch), AFF_ACID) && !number(0, 3)) {
+          spell = SPELL_ACIDSTREAM;
+
+          // No need to overcast this one.
+          force = MIN(force, 1);
+
+          // Light works just fine. We care most about the acid cloud.
+          wound_level = LIGHT;
+        }
+        // And from being on fire.
+        else if (GET_CHAR_FIRE_DURATION(FIGHTING(ch)) <= 0 && !number(0, 3)) {
+          spell = SPELL_FLAMETHROWER;
+
+          // Force doesn't matter for hitting.
+          force = MIN(force, 1);
+          
+          // We want the highest chance of igniting them.
+          wound_level = DEADLY;
+        }
+      }
+
+      // If we didn't select a spell above:
+      if (!spell) {
+        // Make sure they've got a +TN from confusion.
+        if (!affected_by_spell(FIGHTING(ch), SPELL_CONFUSION) && !number(0, 3)) {
+          spell = SPELL_CONFUSION;
+
+          // Force matters for Confusion. We want the highest possible TNs.
+          force = MAX(magic, force);
+        }
+
+        // We're satisfied with our debuffs. Move on to the standard combat casting logic, but with a potential for deadly results.
+        else {
+          wound_level = number(SERIOUS, DEADLY);
+        }
+      }
+    }
+
     while (!spell) {
       switch (number (0, 27)) { // If you're adding more cases to this switch, increase this number to match!
         case 0:

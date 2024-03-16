@@ -180,6 +180,7 @@ struct obj_data *find_bioware(struct char_data *ch, int ware_type);
 long    get_cost_of_obj_and_contents(struct obj_data *obj);
 long    get_cost_of_veh_and_contents(struct veh_data *veh);
 struct  obj_data *get_smartgoggle(struct char_data *ch);
+bool    is_ch_immune_to_nbc(struct char_data *ch);
 
 struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion);
 void    find_or_load_ch_cleanup(struct char_data *ch);
