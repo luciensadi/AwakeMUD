@@ -5747,7 +5747,7 @@ void roll_individual_initiative(struct char_data *ch)
         && !MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)
         && GET_MOBALERT(FIGHTING(ch)) == MALERT_CALM
         && success_test(GET_REA(ch), 4) > success_test(GET_REA(FIGHTING(ch)), 4)) {
-      GET_INIT_ROLL(FIGHTING(ch)) <= 0;
+      GET_INIT_ROLL(FIGHTING(ch)) = 0;
       act("You surprise $n!", TRUE, FIGHTING(ch), 0, ch, TO_VICT);
       AFF_FLAGS(FIGHTING(ch)).SetBit(AFF_SURPRISE);
     }
