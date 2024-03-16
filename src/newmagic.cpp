@@ -3311,7 +3311,7 @@ bool mob_magic(struct char_data *ch)
           spell = SPELL_ACIDSTREAM;
 
           // No need to overcast this one.
-          force = MIN(force, 1);
+          force = MIN(force, 3);
 
           // Light works just fine. We care most about the acid cloud.
           wound_level = LIGHT;
@@ -3321,7 +3321,7 @@ bool mob_magic(struct char_data *ch)
           spell = SPELL_FLAMETHROWER;
 
           // Force doesn't matter for hitting.
-          force = MIN(force, 1);
+          force = MIN(force, 3);
           
           // We want the highest chance of igniting them.
           wound_level = DEADLY;
