@@ -5718,9 +5718,9 @@ void roll_individual_initiative(struct char_data *ch)
     for (obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
       if (GET_CYBERWARE_TYPE(cyber) == CYB_MOVEBYWIRE) {
         if (GET_CYBERWARE_RATING(cyber) == 3)
-          GET_INIT_ROLL(ch) += 10;
+          GET_INIT_ROLL(ch) += 5;
         else if (GET_CYBERWARE_RATING(cyber) == 4)
-          GET_INIT_ROLL(ch) += 20;
+          GET_INIT_ROLL(ch) += 10;
       }
     }
 
