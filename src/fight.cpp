@@ -575,6 +575,8 @@ void make_corpse(struct char_data * ch)
 
   corpse->item_number = NOTHING;
   corpse->in_room = NULL;
+  
+  GET_OBJ_CONDITION(corpse) = GET_OBJ_BARRIER(corpse) = 8;
 
   char color_replaced_name[500];
   {
@@ -635,7 +637,7 @@ void make_corpse(struct char_data * ch)
     GET_CORPSE_IS_PC(corpse) = 1;
     GET_CORPSE_IDNUM(corpse) = GET_IDNUM(ch);
     /* make 'em bullet proof...(anti-twink measure) */
-    GET_OBJ_BARRIER(corpse) = PC_CORPSE_BARRIER;
+    GET_OBJ_CONDITION(corpse) = GET_OBJ_BARRIER(corpse) = PC_CORPSE_BARRIER;
 
     // Drain their pockets of ammo and put it on the corpse.
     for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
