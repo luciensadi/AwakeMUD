@@ -208,7 +208,7 @@ static void init_char_strings(char_data *ch)
   set_pretitle(ch, NULL);
 
   if (GET_RACE(ch) >= MINIMUM_VALID_PLAYER_RACE && GET_RACE(ch) <= MAXIMUM_VALID_PLAYER_RACE) {
-    set_whotitle(ch, pc_race_types[(int)GET_RACE(ch)]);
+    set_whotitle(ch, pc_race_types_for_wholist[(int)GET_RACE(ch)]);
   } else {
     mudlog("No valid race found at set_whotitle in class.cc", NULL, LOG_SYSLOG, TRUE);
     set_whotitle(ch, "New");

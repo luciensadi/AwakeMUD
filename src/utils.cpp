@@ -553,6 +553,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
       base_target += amount;
       buf_mod(rbuf, rbuf_len, "Confused", amount);
       WRITEOUT_MSG("Confusion (Spell)", amount);
+      break;
     }
   }
   if (!(IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch))) {

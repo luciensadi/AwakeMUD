@@ -3032,7 +3032,7 @@ const char *damage_type_names_must_subtract_300_first_and_must_not_be_greater_th
   "Blackic"
 };
 
-const char *pc_race_types[] =
+const char *pc_race_types_for_wholist[] =
   {
     "Undef",
     "Undefined",
@@ -3070,6 +3070,48 @@ const char *pc_race_types[] =
     "Ghoul (T)",
     "Elemental",
     "Spirit",
+    "ConjElem",
+    "\n"
+  };
+
+const char *pc_race_types[] =
+  {
+    "Undef",
+    "Undefined",
+    "Human",
+    "Dwarf",
+    "Elf",
+    "Ork",
+    "Troll",
+    "Cyclops",
+    "Koborokuru",
+    "Fomori",
+    "Menehune",
+    "Hobgoblin",
+    "Giant",
+    "Gnome",
+    "Oni",
+    "Wakyambi",
+    "Ogre",
+    "Minotaur",
+    "Satyr",
+    "Night-One",
+    "Dryad",
+    "person", // W Dragon
+    "person", // E Dragon
+    "person", // F Serpent
+    "Human",
+    "Dwarf",
+    "Elf",
+    "Ork",
+    "Troll",
+    "ghoul", // Human
+    "ghoul", // Dwarf
+    "ghoul", // Elf
+    "ghoul", // Ork
+    "ghoul", // Troll
+    "Elemental",
+    "Spirit",
     "Conjured Elemental",
     "\n"
   };
@@ -3097,9 +3139,9 @@ const char *pc_race_types_decap[] =
     "satyr",
     "night-one",
     "dryad",
-    "dragon",
-    "dragon",
-    "serpent",
+    "person",
+    "person",
+    "person",
     "human",
     "dwarf",
     "elf",
