@@ -733,9 +733,16 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
 
   // No vehicular targets? Check players.
   if (!tveh)
-    for (vict = in_room->people; vict; vict = vict->next_in_room)
-      if (vict_is_valid_guard_target(ch, vict))
-        break;
+    for (vict = in_room->people; vict; vict = vict->next_in_room) {
+      if (vict_is_valid_guard_target(ch, vict)) {
+        // For the newest characters, we potentially give them a small window to react.
+        if (GET_TKE(vict) < NEWBIE_KARMA_THRESHOLD && !IS_PRESTIGE_CH(vict) && number(0, 1)) {
+          // This is a no-op action, but they've received a message.
+        } else {
+          break;
+        }
+      }
+    }
 
   // No targets? Bail out.
   if (!tveh && !vict) {
@@ -862,8 +869,14 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   // No vehicle target found. Check character targets.
   if (!tveh)
     for (vict = in_room->people; vict; vict = vict->next_in_room)
-      if (vict_is_valid_aggro_target(ch, vict))
-        break;
+      if (vict_is_valid_aggro_target(ch, vict)) {
+        // For the newest characters, we potentially give them a small window to react.
+        if (GET_TKE(vict) < NEWBIE_KARMA_THRESHOLD && !IS_PRESTIGE_CH(vict) && number(0, 1)) {
+          send_to_char("You suddenly feel like this is a dangerous place to be.\r\n", vict);
+        } else {
+          break;
+        }
+      }
 
   if (!tveh && !vict) {
 #ifdef MOBACT_DEBUG
@@ -991,10 +1004,15 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
   // If we've gotten here, character is either astral or is not willing to / failed to attack a vehicle.
   for (vict = room->people; vict; vict = vict->next_in_room) {
     if (vict_is_valid_aggro_target(ch, vict)) {
-      stop_fighting(ch);
-      send_mob_aggression_warnings(vict, ch);
-      set_fighting(ch, vict);
-      return TRUE;
+      // For the newest characters, we potentially give them a small window to react.
+      if (GET_TKE(vict) < NEWBIE_KARMA_THRESHOLD && !IS_PRESTIGE_CH(vict) && number(0, 1)) {
+        send_to_char("You suddenly feel like this is a dangerous place to be.\r\n", vict);
+      } else {
+        stop_fighting(ch);
+        send_mob_aggression_warnings(vict, ch);
+        set_fighting(ch, vict);
+        return TRUE;
+      }
     }
   }
 
@@ -1293,10 +1311,16 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
   // Check players.
   for (vict = room->people; vict; vict = vict->next_in_room) {
     if (vict_is_valid_guard_target(ch, vict)) {
-      stop_fighting(ch);
-      send_mob_aggression_warnings(vict, ch);
-      set_fighting(ch, vict);
-      return TRUE;
+      // For the newest characters, we potentially give them a small window to react.
+      if (GET_TKE(vict) < NEWBIE_KARMA_THRESHOLD && !IS_PRESTIGE_CH(vict) && number(0, 1)) {
+        // This is a no-op action, but they've received a message.
+        return FALSE;
+      } else {
+        stop_fighting(ch);
+        send_mob_aggression_warnings(vict, ch);
+        set_fighting(ch, vict);
+        return TRUE;
+      }
     }
   }
 
