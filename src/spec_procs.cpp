@@ -3357,7 +3357,7 @@ WSPEC(monowhip)
     if (success_test(skill, target) <= 0) {
       act("Your whip flails out of control, striking you instead of $N!", FALSE, ch, 0, vict, TO_CHAR);
       act("$n's whip completely misses and recoils to hit $m!", TRUE, ch, 0, 0, TO_ROOM);
-      dam_total = convert_damage(stage(-(success_test(GET_BOD(ch) + GET_DEFENSE(ch),
+      dam_total = convert_damage(stage(-(success_test(GET_BOD(ch) + GET_DODGE(ch),
                                                       GET_OBJ_VAL(weapon, 0))), GET_OBJ_VAL(weapon, 1)));
 
 

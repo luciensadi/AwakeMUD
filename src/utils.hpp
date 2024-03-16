@@ -634,7 +634,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_SYSTEM_POINTS(ch)   ((ch)->player_specials->saved.system_points)
 #define GET_WATCH(ch)           ((ch)->player_specials->watching)
 #define GET_ASTRAL(ch)          ((ch)->aff_abils.astral_pool)
-#define GET_DEFENSE(ch)         ((ch)->aff_abils.defense_pool)
+#define GET_DODGE(ch)         ((ch)->aff_abils.defense_pool)
 #define GET_BODY(ch)            ((ch)->aff_abils.body_pool)
 #define GET_COMBAT(ch)          ((ch)->aff_abils.combat_pool)
 #define GET_OFFENSE(ch)         ((ch)->aff_abils.offense_pool)

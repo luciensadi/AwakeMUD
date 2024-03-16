@@ -4414,7 +4414,13 @@ ACMD(do_cpool)
   bod = atoi(argument);
   off = atoi(arg);
 
-  total -= ch->real_abils.defense_pool = GET_DEFENSE(ch) = MIN(dodge, total);
+  if (dodge > 0 && IS_ASTRAL(ch)) {
+    send_to_char("Astral characters have no need to dodge anything, so your dice have been re-allocated to Body.\r\n", ch);
+    bod += dodge;
+    dodge = 0;
+  }
+
+  total -= ch->real_abils.defense_pool = GET_DODGE(ch) = MIN(dodge, total);
   total -= ch->real_abils.body_pool = GET_BODY(ch) = MIN(bod, total);
 
   int skill_num = get_skill_num_in_use_for_weapons(ch);
@@ -4435,11 +4441,11 @@ ACMD(do_cpool)
 
   total -= ch->real_abils.offense_pool = GET_OFFENSE(ch) = MIN(total, off);
   if (total > 0) {
-    GET_DEFENSE(ch) += total;
+    GET_DODGE(ch) += total;
     send_to_char(ch, "Putting the %d remaining dice in your ranged-attack dodging pool.\r\n", total);
   }
 
-  send_to_char(ch, "Pools set as: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", GET_DEFENSE(ch), GET_BODY(ch), GET_OFFENSE(ch));
+  send_to_char(ch, "Pools set as: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", GET_DODGE(ch), GET_BODY(ch), GET_OFFENSE(ch));
 }
 
 ACMD(do_spool)

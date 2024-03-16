@@ -1385,7 +1385,7 @@ int make_prompt(struct descriptor_data * d)
                 snprintf(str, sizeof(str), "NA");
               break;
             case 'd':       // defense pool
-              snprintf(str, sizeof(str), "%d", GET_DEFENSE(d->character));
+              snprintf(str, sizeof(str), "%d", GET_DODGE(d->character));
               break;
             case 'D':
               snprintf(str, sizeof(str), "%d", GET_BODY(d->character));

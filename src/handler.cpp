@@ -1016,21 +1016,26 @@ void affect_total(struct char_data * ch)
     dice_max = 0;
   }
 
-  GET_DEFENSE(ch) = MIN(GET_DEFENSE(ch), GET_COMBAT(ch));
-  GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DEFENSE(ch));
-  GET_OFFENSE(ch) = GET_COMBAT(ch) - GET_DEFENSE(ch) - GET_BODY(ch);
+  // There's nothing to dodge on the astral plane.
+  if (IS_ASTRAL(ch))
+    GET_DODGE(ch) = 0;
+  else
+    GET_DODGE(ch) = MIN(GET_DODGE(ch), GET_COMBAT(ch));
+
+  GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DODGE(ch));
+  GET_OFFENSE(ch) = GET_COMBAT(ch) - GET_DODGE(ch) - GET_BODY(ch);
   if (GET_OFFENSE(ch) > dice_max)
   {
-    GET_DEFENSE(ch) += GET_OFFENSE(ch) - dice_max;
+    GET_DODGE(ch) += GET_OFFENSE(ch) - dice_max;
     GET_OFFENSE(ch) = dice_max;
   }
 
   // NPCs specialize their defenses: unless they've got crazy dodge dice, they'll want to just soak.
   // AKA, 'your average wage slave is not going to try to do the Matrix bullet dodge when he sees a gun.'
   if (ch_is_npc) {
-    if (GET_DEFENSE(ch) < 10) {
-      GET_BODY(ch) += GET_DEFENSE(ch);
-      GET_DEFENSE(ch) = 0;
+    if (GET_DODGE(ch) < 10) {
+      GET_BODY(ch) += GET_DODGE(ch);
+      GET_DODGE(ch) = 0;
     }
 
     // NPC spirits set their astral pools here as well.

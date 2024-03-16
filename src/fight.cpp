@@ -1652,7 +1652,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
 
       // We do some ghettoized bastardization of the fight code here to make scatterfire a little less OP.
       if (AWAKE(vict) && !AFF_FLAGGED(vict, AFF_SURPRISE) && !AFF_FLAGGED(vict, AFF_PRONE)) {
-        int def_dice = GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP);
+        int def_dice = GET_DODGE(vict) + GET_POWER(vict, ADEPT_SIDESTEP);
         int def_tn = damage_modifier(vict, buf, sizeof(buf));
         int def_successes = MAX(success_test(def_dice, def_tn), 0);
         power -= def_successes;
@@ -5079,7 +5079,7 @@ void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, st
                    DAMOBJ_EXPLODE);
 
     if (IS_NPC(victim) && !CH_IN_COMBAT(victim)) {
-      GET_DEFENSE(victim) = GET_COMBAT(victim);
+      GET_DODGE(victim) = GET_COMBAT(victim);
       GET_OFFENSE(victim) = 0;
     }
     damage_total =
@@ -5284,7 +5284,7 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, struct room_d
                    (int)(GET_WEAPON_POWER(weapon) / 6), DAMOBJ_EXPLODE);
 
     if (IS_NPC(victim) && !CH_IN_COMBAT(victim)) {
-      GET_DEFENSE(victim) = GET_COMBAT(victim);
+      GET_DODGE(victim) = GET_COMBAT(victim);
       GET_OFFENSE(victim) = 0;
     }
     if (!mode) {
@@ -5505,7 +5505,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       act("$n draws $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
       act("You draw $p, aim it at $N and fire!", FALSE, ch, weapon, vict, TO_CHAR);
       if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
-        GET_DEFENSE(vict) = GET_COMBAT(vict);
+        GET_DODGE(vict) = GET_COMBAT(vict);
         GET_OFFENSE(vict) = 0;
       }
       if (CH_IN_COMBAT(ch))
@@ -5525,7 +5525,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
       if (has_ammo_no_deduct(ch, weapon)) {
         if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
-          GET_DEFENSE(vict) = GET_COMBAT(vict);
+          GET_DODGE(vict) = GET_COMBAT(vict);
           GET_OFFENSE(vict) = 0;
         }
         if (CH_IN_COMBAT(ch))
@@ -5789,10 +5789,10 @@ void decide_combat_pool(void)
         GET_OFFENSE(ch) = (int)(GET_COMBAT(ch) * .75);
       else
         GET_OFFENSE(ch) = (int)(GET_COMBAT(ch) / 4);
-      GET_DEFENSE(ch) = GET_COMBAT(ch) - GET_OFFENSE(ch);
+      GET_DODGE(ch) = GET_COMBAT(ch) - GET_OFFENSE(ch);
       if (GET_IMPACT(ch) > 6 || GET_BALLISTIC(ch) > 6) {
-        GET_BODY(ch) = (int)(GET_DEFENSE(ch) * .75);
-        GET_DEFENSE(ch) -= GET_BODY(ch);
+        GET_BODY(ch) = (int)(GET_DODGE(ch) * .75);
+        GET_DODGE(ch) -= GET_BODY(ch);
       }
     }
   }

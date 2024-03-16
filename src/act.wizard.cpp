@@ -1691,7 +1691,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
           GET_WIL(k), ((int)GET_MAG(k) / 100), GET_REA(k), ((float)GET_ESS(k) / 100), GET_ASTRAL(k),
           GET_COMBAT(k),
           GET_MAGIC(k), GET_CASTING(k), GET_DRAIN(k), GET_SDEFENSE(k), GET_REFLECT(k),
-          GET_HACKING(k), GET_DEFENSE(k), GET_BODY(k), GET_OFFENSE(k));
+          GET_HACKING(k), GET_DODGE(k), GET_BODY(k), GET_OFFENSE(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bod: [^B%d^n]  Qui: [^B%d^n]  Str: [^B%d^n]  Cha: [^B%d^n] Int: [^B%d^n]"
           "  Wil: [^B%d^n]  Mag: [^B%d^n]\r\nRea: [^B%d^n]  Ess: [^B%0.2f^n] (Unmodified attributes)\r\n",
@@ -1845,7 +1845,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
           GET_WIL(k), ((int)GET_MAG(k) / 100), GET_REA(k), ((float)GET_ESS(k) / 100), GET_ASTRAL(k),
           GET_COMBAT(k), 
           GET_MAGIC(k), GET_CASTING(k), GET_DRAIN(k), GET_SDEFENSE(k), GET_REFLECT(k),
-          GET_HACKING(k), GET_DEFENSE(k), GET_BODY(k), GET_OFFENSE(k));
+          GET_HACKING(k), GET_DODGE(k), GET_BODY(k), GET_OFFENSE(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bod: [^B%d^n]  Qui: [^B%d^n]  Str: [^B%d^n]  Cha: [^B%d^n] Int: [^B%d^n]"
           "  Wil: [^B%d^n]  Mag: [^B%d^n]\r\nRea: [^B%d^n]  Ess: [^B%0.2f^n] (Unmodified attributes)\r\n",

@@ -499,7 +499,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     {
       // Previous code only allowed you to sidestep if you had also allocated at least one normal dodge die. Why?
       // We use the ranged slots here since we're positive they won't get used in a counterattack.
-      def->ranged->dice = GET_DEFENSE(def->ch) + GET_POWER(def->ch, ADEPT_SIDESTEP);
+      def->ranged->dice = GET_DODGE(def->ch) + GET_POWER(def->ch, ADEPT_SIDESTEP);
 
       // Set up the defender's modifiers.
       def->ranged->modifiers[COMBAT_MOD_OPPONENT_BURST_COUNT] = (int)(att->ranged->burst_count / 3);
@@ -529,7 +529,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
       snprintf(rbuf, sizeof(rbuf), "^eDodge: Dice %d (%d pool + %d sidestep), TN %d, Successes ^c%d^e.  This means attacker's net successes = ^c%d^e.^n",
                def->ranged->dice,
-               GET_DEFENSE(def->ch),
+               GET_DODGE(def->ch),
                GET_POWER(def->ch, ADEPT_SIDESTEP),
                def->ranged->tn,
                def->ranged->successes,
@@ -538,7 +538,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       // Surprised, oversized, unconscious, or prone? No dodge test for you.
       att->ranged->successes = MAX(att->ranged->successes, 0);
       snprintf(rbuf, sizeof(rbuf), "^eOpponent unable to dodge, attacker's successes will remain at ^c%d^e.^n", att->ranged->successes);
-      if (GET_DEFENSE(def->ch) > 0 && AFF_FLAGGED(def->ch, AFF_PRONE) && !IS_JACKED_IN(def->ch))
+      if (GET_DODGE(def->ch) > 0 && AFF_FLAGGED(def->ch, AFF_PRONE) && !IS_JACKED_IN(def->ch))
         send_to_char(def->ch, "^yYou're unable to dodge while prone!^n\r\n");
     }
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
@@ -1209,7 +1209,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           int base_damage = SERIOUS;
           int damage_resist_dice = GET_BOD(attacker);
           if (successes != BOTCHED_ROLL_RESULT) {
-            damage_resist_dice += GET_DEFENSE(attacker);
+            damage_resist_dice += GET_DODGE(attacker);
           }
           int staged_damage = stage(-1 * success_test(damage_resist_dice, 10), base_damage);
           int dam_total = convert_damage(staged_damage);

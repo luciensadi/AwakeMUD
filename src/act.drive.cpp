@@ -507,10 +507,10 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
   if (vict) {
     if (IS_NPC(vict)) {
       // Swap all dice into dodge for this round.
-      GET_DEFENSE(vict) += GET_BODY(vict) + GET_OFFENSE(vict);
+      GET_DODGE(vict) += GET_BODY(vict) + GET_OFFENSE(vict);
       GET_BODY(vict) = GET_OFFENSE(vict) = 0;
     }
-    int vict_dodge_dice = GET_DEFENSE(vict) + (GET_TRADITION(vict) == TRAD_ADEPT ? GET_POWER(vict, ADEPT_SIDESTEP) : 0);
+    int vict_dodge_dice = GET_DODGE(vict) + (GET_TRADITION(vict) == TRAD_ADEPT ? GET_POWER(vict, ADEPT_SIDESTEP) : 0);
     if (vict_dodge_dice > 0) {
       target = 4 + damage_modifier(vict, buf, sizeof(buf));
       int vict_successes = success_test(vict_dodge_dice, target, vict, "do_raw_ram dodge test", ch);
@@ -995,7 +995,7 @@ ACMD(do_control)
   int remainder = MAX(0, GET_COMBAT(ch) - max_offense);
   GET_OFFENSE(ch) = max_offense;
   GET_BODY(ch) = 0;
-  GET_DEFENSE(ch) = remainder;
+  GET_DODGE(ch) = remainder;
 }
 
 
