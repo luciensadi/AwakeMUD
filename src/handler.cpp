@@ -218,7 +218,7 @@ void affect_modify(struct char_data * ch,
       break;
 
     case APPLY_MAGIC_POOL:
-      GET_MAGIC(ch) += mod;   /* GET_MAGIC gets their magic pool, GET_MAG is for attribute*/
+      GET_MAGIC_POOL(ch) += mod;   /* GET_MAGIC gets their magic pool, GET_MAG is for attribute*/
       break;
 
     case APPLY_INITIATIVE_DICE:
@@ -264,7 +264,7 @@ void apply_focus_effect( struct char_data *ch, struct obj_data *object )
   if (GET_FOCUS_TYPE(object) == FOCI_POWER)
   {
     GET_MAG(ch) += GET_OBJ_VAL(object, 1) * 100;
-    GET_MAGIC(ch) += GET_OBJ_VAL(object, 1);
+    GET_MAGIC_POOL(ch) += GET_OBJ_VAL(object, 1);
   }
 }
 
@@ -277,7 +277,7 @@ void remove_focus_effect( struct char_data *ch, struct obj_data *object )
   if (GET_FOCUS_TYPE(object) == FOCI_POWER)
   {
     GET_MAG(ch) -= GET_OBJ_VAL(object, 1) * 100;
-    GET_MAGIC(ch) -= GET_OBJ_VAL(object, 1);
+    GET_MAGIC_POOL(ch) -= GET_OBJ_VAL(object, 1);
   }
 
 }
@@ -594,7 +594,7 @@ void affect_total(struct char_data * ch)
   GET_COMBAT(ch) = 0;
   GET_HACKING(ch) = 0;
   GET_ASTRAL(ch) = 0;
-  GET_MAGIC(ch) = 0;
+  GET_MAGIC_POOL(ch) = 0;
   GET_CONTROL(ch) = 0;
 
   // Set reach, depending on race. Stripped out the 'you only get it at X height' thing since it's not canon and a newbie trap.
@@ -1050,36 +1050,39 @@ void affect_total(struct char_data * ch)
     GET_ASTRAL(ch) += GET_GRADE(ch);
 
     // Set magic pools from (int + wil + mag) / 3.
-    GET_MAGIC(ch) += (GET_INT(ch) + GET_WIL(ch) + (int)(GET_MAG(ch) / 100))/3;
+    GET_MAGIC_POOL(ch) += (GET_INT(ch) + GET_WIL(ch) + (int)(GET_MAG(ch) / 100))/3;
 
     if (IS_PROJECT(ch)) {
       if (ch->desc && ch->desc->original) {
         // Note that this uses GET_MAGIC (their magic pool) rather than GET_MAG (their magic attribute).
-        int sdef = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch->desc->original));
-        int drain = MIN(GET_MAGIC(ch), GET_DRAIN(ch->desc->original));
-        int reflect = MIN(GET_MAGIC(ch), GET_REFLECT(ch->desc->original));
-        int casting = MAX(0, GET_MAGIC(ch) - drain - reflect - sdef);
+        int sdef = MIN(GET_MAGIC_POOL(ch), GET_SDEFENSE(ch->desc->original));
+        int drain = MIN(GET_MAGIC_POOL(ch), GET_DRAIN(ch->desc->original));
+        int reflect = MIN(GET_MAGIC_POOL(ch), GET_REFLECT(ch->desc->original));
+        int casting = MAX(0, GET_MAGIC_POOL(ch) - drain - reflect - sdef);
 
         // It's possible for the casting value to be greater than sorcery right now. This setter resolves that.
         set_casting_pools(ch, casting, drain, sdef, reflect, FALSE);
       } else {
-        set_casting_pools(ch, 0, 0, GET_MAGIC(ch), 0, FALSE);
+        set_casting_pools(ch, 0, 0, GET_MAGIC_POOL(ch), 0, FALSE);
       }
     } else if (ch_is_npc) {
+      // NPC casters get additional dice to make up for the fact that builders aren't setting them with power foci for economic reasons.
+      GET_MAGIC_POOL(ch) *= 1.5;
+
       // For NPCs, we zero all the components of the magic pool, then re-set them.
       GET_REFLECT(ch) = GET_CASTING(ch) = GET_DRAIN(ch) = GET_SDEFENSE(ch) = 0;
 
       // If they plan to cast, they split their dice evenly.
       if (GET_SKILL(ch, SKILL_SORCERY)) {
-        GET_CASTING(ch) = GET_DRAIN(ch) = GET_SDEFENSE(ch) = GET_MAGIC(ch) / 3;
+        GET_CASTING(ch) = GET_DRAIN(ch) = GET_SDEFENSE(ch) = GET_MAGIC_POOL(ch) / 3;
       }
       // Otherwise, they put it all in defense.
       else {
-        GET_SDEFENSE(ch) = GET_MAGIC(ch);
+        GET_SDEFENSE(ch) = GET_MAGIC_POOL(ch);
       }
 
       // High-grade NPC mages get reflect instead of spell defense.
-      if (MAX(GET_SKILL(ch, SKILL_SORCERY), (int) (GET_MAGIC(ch) / 100)) >= 9) {
+      if (MAX(GET_SKILL(ch, SKILL_SORCERY), (int) (GET_MAGIC_POOL(ch) / 100)) >= 9) {
         GET_REFLECT(ch) = GET_SDEFENSE(ch);
         GET_SDEFENSE(ch) = 0;
       }
@@ -1087,15 +1090,15 @@ void affect_total(struct char_data * ch)
       // Only Shamans and Hermetics get these pools.
       if (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) {
         // Note that this uses GET_MAGIC (their magic pool) rather than GET_MAG (their magic attribute).
-        int sdef = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
-        int drain = MIN(GET_MAGIC(ch), GET_DRAIN(ch));
-        int reflect = MIN(GET_MAGIC(ch), GET_REFLECT(ch));
-        int casting = MAX(0, GET_MAGIC(ch) - drain - reflect - sdef);
+        int sdef = MIN(GET_MAGIC_POOL(ch), GET_SDEFENSE(ch));
+        int drain = MIN(GET_MAGIC_POOL(ch), GET_DRAIN(ch));
+        int reflect = MIN(GET_MAGIC_POOL(ch), GET_REFLECT(ch));
+        int casting = MAX(0, GET_MAGIC_POOL(ch) - drain - reflect - sdef);
 
         // It's possible for the casting value to be greater than sorcery right now. This setter resolves that.
         set_casting_pools(ch, casting, drain, sdef, reflect, FALSE);
       } else {
-        GET_CASTING(ch) = GET_MAGIC(ch) = GET_SDEFENSE(ch) = GET_DRAIN(ch) = GET_REFLECT(ch) = 0;
+        GET_CASTING(ch) = GET_MAGIC_POOL(ch) = GET_SDEFENSE(ch) = GET_DRAIN(ch) = GET_REFLECT(ch) = 0;
       }
     }
   }

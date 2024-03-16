@@ -1690,7 +1690,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
           GET_BOD(k), GET_QUI(k), GET_STR(k), GET_CHA(k), GET_INT(k),
           GET_WIL(k), ((int)GET_MAG(k) / 100), GET_REA(k), ((float)GET_ESS(k) / 100), GET_ASTRAL(k),
           GET_COMBAT(k),
-          GET_MAGIC(k), GET_CASTING(k), GET_DRAIN(k), GET_SDEFENSE(k), GET_REFLECT(k),
+          GET_MAGIC_POOL(k), GET_CASTING(k), GET_DRAIN(k), GET_SDEFENSE(k), GET_REFLECT(k),
           GET_HACKING(k), GET_DODGE(k), GET_BODY(k), GET_OFFENSE(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bod: [^B%d^n]  Qui: [^B%d^n]  Str: [^B%d^n]  Cha: [^B%d^n] Int: [^B%d^n]"
@@ -1844,7 +1844,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
           GET_BOD(k), GET_QUI(k), GET_STR(k), GET_CHA(k), GET_INT(k),
           GET_WIL(k), ((int)GET_MAG(k) / 100), GET_REA(k), ((float)GET_ESS(k) / 100), GET_ASTRAL(k),
           GET_COMBAT(k), 
-          GET_MAGIC(k), GET_CASTING(k), GET_DRAIN(k), GET_SDEFENSE(k), GET_REFLECT(k),
+          GET_MAGIC_POOL(k), GET_CASTING(k), GET_DRAIN(k), GET_SDEFENSE(k), GET_REFLECT(k),
           GET_HACKING(k), GET_DODGE(k), GET_BODY(k), GET_OFFENSE(k));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bod: [^B%d^n]  Qui: [^B%d^n]  Str: [^B%d^n]  Cha: [^B%d^n] Int: [^B%d^n]"
@@ -4335,6 +4335,7 @@ ACMD(do_show)
                { "fuckykeys",      LVL_ADMIN },
                { "strongboylifts", LVL_ADMIN },
                { "longasszones",   LVL_ADMIN },
+               { "extramagical",   LVL_ADMIN },
                { "\n", 0 }
              };
 
@@ -5002,6 +5003,15 @@ ACMD(do_show)
                   zone_table[idx].reset_mode == ZONE_RESET_NEVER ? -1 : zone_table[idx].lifespan,
                   zone_table[idx].name);
       } 
+    }
+    break;
+  case 34:
+    send_to_char("The following connected NPCs have magic 12 or higher:\r\n", ch);
+    for (rnum_t mob_idx = 0; mob_idx < top_of_mobt; mob_idx++) {
+      struct char_data *mob = &mob_proto[mob_idx];
+      if (GET_MAG(mob) / 100 < 12 || vnum_from_non_connected_zone(GET_MOB_VNUM(mob)))
+        continue;
+      send_to_char(ch, " [^c%6d^n] %s (%2d magic)\r\n", GET_MOB_VNUM(mob), GET_CHAR_NAME(mob), GET_MAG(mob) / 100);
     }
     break;
   default:

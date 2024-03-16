@@ -3306,7 +3306,7 @@ bool mob_magic(struct char_data *ch)
 
       if (nbc_immunity_ok) {
         // We want the +4 enemy TN from acid.
-        if (!AFF_FLAGGED(FIGHTING(ch), AFF_ACID) && !number(0, 3)) {
+        if (!AFF_FLAGGED(FIGHTING(ch), AFF_ACID) && !number(0, 2)) {
           spell = SPELL_ACIDSTREAM;
 
           // No need to overcast this one.
@@ -3316,7 +3316,7 @@ bool mob_magic(struct char_data *ch)
           wound_level = LIGHT;
         }
         // And from being on fire.
-        else if (GET_CHAR_FIRE_DURATION(FIGHTING(ch)) <= 0 && !number(0, 3)) {
+        else if (GET_CHAR_FIRE_DURATION(FIGHTING(ch)) <= 0 && !number(0, 2)) {
           spell = SPELL_FLAMETHROWER;
 
           // Force doesn't matter for hitting.
@@ -3337,9 +3337,9 @@ bool mob_magic(struct char_data *ch)
           force = MAX(magic, force);
         }
 
-        // We're satisfied with our debuffs. Move on to the standard combat casting logic, but with a potential for deadly results.
+        // We're satisfied with our debuffs. Move on to the standard combat casting logic.
         else {
-          wound_level = number(SERIOUS, DEADLY);
+          wound_level = MAX(wound_level, SERIOUS);
         }
       }
     }
@@ -3811,7 +3811,7 @@ ACMD(do_bond)
       return;
     }
     if (((GET_MAG(ch) * 2) / 100) < GET_WEAPON_FOCUS_RATING(obj)) {
-      send_to_char(ch, "%s is too powerful for you to bond! You need at least %d magic to bond it, and you have %d.\r\n", capitalize(GET_OBJ_NAME(obj)), (int) ((GET_WEAPON_FOCUS_RATING(obj) + 1) / 2), (int) (GET_MAGIC(ch) / 100));
+      send_to_char(ch, "%s is too powerful for you to bond! You need at least %d magic to bond it, and you have %d.\r\n", capitalize(GET_OBJ_NAME(obj)), (int) ((GET_WEAPON_FOCUS_RATING(obj) + 1) / 2), (int) (GET_MAG(ch) / 100));
       return;
     }
 
@@ -6956,7 +6956,7 @@ void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_d
   }
 
   // GET_MAGIC (total dice available) rather than GET_MAG (magic attribute). No need to divide by 100.
-  int total = GET_MAGIC(ch);
+  int total = GET_MAGIC_POOL(ch);
 
   total -= SET_POOL_INFO(casting_pool, GET_CASTING(ch), casting);
   total -= SET_POOL_INFO(drain_pool, GET_DRAIN(ch), drain);

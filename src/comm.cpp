@@ -1540,7 +1540,7 @@ int make_prompt(struct descriptor_data * d)
                 snprintf(str, sizeof(str), "0");
               break;
             case 't':       // magic pool
-              snprintf(str, sizeof(str), "%d", GET_MAGIC(d->character));
+              snprintf(str, sizeof(str), "%d", GET_MAGIC_POOL(d->character));
               break;
             case 'T':
               snprintf(str, sizeof(str), "%d", GET_SUSTAINED_NUM(d->character));

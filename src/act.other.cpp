@@ -2414,7 +2414,7 @@ ACMD(do_astral)
   GET_GRADE(astral) = GET_GRADE(ch);
   GET_ASTRAL(astral) = GET_ASTRAL(ch);
   GET_COMBAT(astral) = GET_ASTRAL(ch);
-  GET_MAGIC(astral) = GET_MAGIC(ch);
+  GET_MAGIC_POOL(astral) = GET_MAGIC_POOL(ch);
   GET_PLAYER_MEMORY(astral) = GET_PLAYER_MEMORY(ch);
 
   if (ch->in_veh)

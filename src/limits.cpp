@@ -488,7 +488,7 @@ void remove_patch(struct char_data *ch)
       act("The effects of $p wear off, leaving you exhausted!", FALSE, ch, patch, 0, TO_CHAR);
       GET_MENTAL(ch) = MAX(0, GET_MENTAL(ch) - (GET_PATCH_RATING(patch) - 1) * 100);
       if ((GET_TRADITION(ch) == TRAD_HERMETIC || GET_TRADITION(ch) == TRAD_SHAMANIC) &&
-          success_test(GET_MAGIC(ch), GET_PATCH_RATING(patch)) < 0) {
+          success_test(GET_MAGIC_POOL(ch), GET_PATCH_RATING(patch)) < 0) {
         magic_loss(ch, 100, TRUE);
         affect_total(ch);
       }
