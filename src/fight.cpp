@@ -5705,18 +5705,37 @@ void roll_individual_initiative(struct char_data *ch)
 {
   if (AWAKE(ch))
   {
+    // this also applies wound modifiers
     GET_INIT_ROLL(ch) = roll_default_initiative(ch);
-    GET_INIT_ROLL(ch) -= damage_modifier(ch, buf, sizeof(buf));
+
     if (AFF_FLAGGED(ch, AFF_ACTION)) {
       GET_INIT_ROLL(ch) -= 10;
       AFF_FLAGS(ch).RemoveBit(AFF_ACTION);
     }
+
+    // By the book, MBW 3 adds an extra action to their first pass and 4 adds an additional action to their second.
+    // This implementation is mechanically weaker since chars will get the extras at the end of the turn.
+    for (obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_MOVEBYWIRE) {
+        if (GET_CYBERWARE_RATING(cyber) == 3)
+          GET_INIT_ROLL(ch) += 5;
+        else if (GET_CYBERWARE_RATING(cyber) == 4)
+          GET_INIT_ROLL(ch) += 10;
+      }
+    }
+
     if (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch)) {
       if (IS_DUAL(ch))
         GET_INIT_ROLL(ch) += 10;
       else
         GET_INIT_ROLL(ch) += 20;
     }
+
+    // If you rolled zero or negative initiative, let it be known
+    if (GET_INIT_ROLL(ch) <= 0) {
+      act("You struggle to act as your wounds limit your actions! [OOC: You rolled an initiative of zero or less]", FALSE, ch, 0, 0, TO_CHAR);
+    }
+
     // Here we set the Surprise flag to our target if conditions are met. Clearing of flag and alert status are handled
     // in hit_with_multi_weapon_toggle() as soon as a suprised NPC gets damaged in combat. Otherwise we can't
     // properly enter the surprise state due to mobs being continously alert. Because we were handling this in
