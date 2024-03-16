@@ -584,7 +584,7 @@ struct char_special_data_saved
     powerpoints(0), left_handed(0), cur_lang(0), centeringskill(0), masking(0), points(0)
   {
     for (int i = 0; i < MAX_SKILLS + 1; i++) {
-      ZERO_OUT_ARRAY(skills[i], 2);
+      ZERO_OUT_ARRAY(skills[i], 3);
     }
 
     for (int i = 0; i < ADEPT_NUMPOWER + 1; i++) {
