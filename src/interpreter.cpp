@@ -3404,6 +3404,8 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     "open", "close", "receive", "buy", "sell",
     "wear", "remove", "draw", "holster",
     "kill", "hit", "shoot", "kick",
+    "progress", "time",
+    "skills", "powers", "spells",
     "\n"
   };
   for (int i = 0; *discard_commands[i] != '\n'; i++)

@@ -1143,6 +1143,10 @@ bool mobact_process_single_helper(struct char_data *ch, struct char_data *vict, 
   if (ch == vict || !FIGHTING(vict) || ch == FIGHTING(vict))
     return FALSE;
 
+  // We're already fighting someone else.
+  if (FIGHTING(ch))
+    return FALSE;
+
   // If victim is a visible NPC who is fighting a player, and the player can hurt me, assist the NPC.
   if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, vict) && can_hurt(FIGHTING(vict), ch, 0, TRUE)) {
     // The player is in my room, so I can fight them up-close.
