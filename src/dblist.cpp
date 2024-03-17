@@ -172,6 +172,7 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
       temp->data->cyberdeck_part_pointer = old.cyberdeck_part_pointer;
       temp->data->dropped_by_char = old.dropped_by_char;
       temp->data->dropped_by_host = old.dropped_by_host;
+      temp->data->idnum = old.idnum;
       if (temp->data->carried_by)
         affect_total(temp->data->carried_by);
       else if (temp->data->worn_by)
@@ -203,6 +204,7 @@ void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_
       temp->data->restring = old.restring;
       temp->data->photo = old.photo;
       temp->data->graffiti = old.graffiti;
+      temp->data->idnum = old.idnum;
       if (temp->data->carried_by)
         affect_total(temp->data->carried_by);
       else if (temp->data->worn_by)

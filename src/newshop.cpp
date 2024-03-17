@@ -305,6 +305,16 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
   if (!IS_NPC(remover)) {
     const char *representation = generate_new_loggable_representation(obj);
     mudlog_vfprintf(remover, LOG_GRIDLOG, "Player Cyberdoc: %s uninstalled %s from %s.", GET_CHAR_NAME(remover), representation, GET_CHAR_NAME(victim));
+
+    if (is_same_host(remover, victim)) {
+      // Log anyone doing this from a multibox host.
+      mudlog_vfprintf(remover, LOG_CHEATLOG, "Player Cyberdoc: %s uninstalled %s from same-host character %s. (%s)", 
+                      GET_CHAR_NAME(remover),
+                      representation,
+                      GET_CHAR_NAME(victim),
+                      GET_LEVEL(remover) < LVL_PRESIDENT ? remover->desc->host : "<obscured>");
+    }
+
     delete [] representation;
   }
 
@@ -639,6 +649,16 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
                     GET_CHAR_NAME(installer), GET_IDNUM(installer),
                     representation,
                     GET_CHAR_NAME(recipient), GET_IDNUM(recipient));
+
+    if (is_same_host(installer, recipient)) {
+      // Log anyone doing this from a multibox host.
+      mudlog_vfprintf(installer, LOG_CHEATLOG, "Player Cyberdoc: %s installed %s in same-host character %s. (%s)", 
+                      GET_CHAR_NAME(installer),
+                      representation,
+                      GET_CHAR_NAME(recipient),
+                      GET_LEVEL(installer) < LVL_PRESIDENT ? installer->desc->host : "<obscured>");
+    }
+
     delete [] representation;
   }
 

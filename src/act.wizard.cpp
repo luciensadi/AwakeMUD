@@ -1369,8 +1369,8 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
       strlcpy(buf2, (obj_index[GET_OBJ_RNUM(j)].func ? "^cExists^n" : "None"), sizeof(buf2));
   } else
     strlcpy(buf2, "None", sizeof(buf2));
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "VNum: [^g%8ld^n], RNum: [%5ld], Type: %s, SpecProc: %s\r\n",
-          virt, GET_OBJ_RNUM(j), buf1, buf2);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "VNum: [^g%8ld^n], RNum: [%5ld], IDnum: [%lu], Type: %s, SpecProc: %s\r\n",
+           virt, GET_OBJ_RNUM(j), j->idnum, buf1, buf2);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "L-Des: %s\r\n",
           ((j->text.look_desc) ? j->text.look_desc : "None"));
 

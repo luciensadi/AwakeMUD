@@ -469,6 +469,12 @@ void boot_world(void)
     exit(ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH);
   }
 
+  if (RAND_MAX < 2147483647) { // aka the maximum value for `long int`
+    log_vfprintf("SERIOUS WARNING: Your platform's RAND_MAX is %lld, which may cause collisions with object and vehicle idnums. Recommend refactoring the code to use a more advanced random generator.", RAND_MAX);
+  } else {
+    log_vfprintf("RAND_MAX is %lld.", RAND_MAX);
+  }
+
   log("Checking to see if you added an ammo type and forgot to add it to npc_ammo_usage_preferences[]...");
   for (int i = 0; i < NUM_AMMOTYPES; i++) {
     assert(npc_ammo_usage_preferences[i] >= AMMO_NORMAL && npc_ammo_usage_preferences[i] < NUM_AMMOTYPES);

@@ -7489,3 +7489,18 @@ bool is_ch_immune_to_nbc(struct char_data *ch) {
           || (GET_EQ(ch, WEAR_BODY) && IS_OBJ_STAT(GET_EQ(ch, WEAR_BODY), ITEM_EXTRA_NBC_IMMUNE))
           || (GET_EQ(ch, WEAR_UNDER) && IS_OBJ_STAT(GET_EQ(ch, WEAR_UNDER), ITEM_EXTRA_NBC_IMMUNE)));
 }
+
+bool is_same_host(struct char_data *first, struct char_data *second) {
+  if (!first || !second) {
+    return FALSE;
+  }
+
+  if (!first->desc || !second->desc) {
+    return FALSE;
+  }
+
+  rectify_desc_host(first->desc);
+  rectify_desc_host(second->desc);
+
+  return !str_cmp(first->desc->host, second->desc->host);
+}

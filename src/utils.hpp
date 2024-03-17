@@ -181,6 +181,7 @@ long    get_cost_of_obj_and_contents(struct obj_data *obj);
 long    get_cost_of_veh_and_contents(struct veh_data *veh);
 struct  obj_data *get_smartgoggle(struct char_data *ch);
 bool    is_ch_immune_to_nbc(struct char_data *ch);
+bool    is_same_host(struct char_data *first, struct char_data *second);
 
 struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion);
 void    find_or_load_ch_cleanup(struct char_data *ch);
@@ -1571,5 +1572,7 @@ struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
 
 #define IS_VALID_POCKET_SEC(obj) ((obj) && GET_OBJ_SPEC((obj)) == pocket_sec && (obj)->contains)
 #define POCKET_SEC_USABLE_BY(obj, ch) ((ch) && (obj) && (!GET_POCKET_SECRETARY_LOCKED_BY((obj)) || GET_POCKET_SECRETARY_LOCKED_BY((obj)) == GET_IDNUM((ch))))
+
+#define ENSURE_OBJ_HAS_IDNUM(obj) if (!(obj)->idnum) { (obj)->idnum = number(0, LONG_MAX); }
 
 #endif

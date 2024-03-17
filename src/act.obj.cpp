@@ -2623,12 +2623,9 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : NULL;
   } else {
     // Log same-host handoffs.
-    if (ch->desc && vict->desc) {
-      rectify_desc_host(ch->desc);
-      rectify_desc_host(vict->desc);
-      
+    if (is_same_host(ch, vict)) {      
       // Log same-host transfers that are not on Grapevine.
-      if (!str_cmp(ch->desc->host, vict->desc->host) && !is_approved_multibox_host(ch->desc->host)) {
+      if (!is_approved_multibox_host(ch->desc->host)) {
         char *representation = generate_new_loggable_representation(obj);
         mudlog_vfprintf(ch, LOG_CHEATLOG, "%s is giving same-host character %s '%s' (host: %s).", 
                         GET_CHAR_NAME(ch),

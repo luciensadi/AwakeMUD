@@ -153,6 +153,8 @@ struct obj_data
   const char *dropped_by_host;
   idnum_t dropped_by_char;
 
+  idnum_t idnum;
+
   // Adding new fields? Add them to dblist's UpdateObjs too to avoid iedit breaking things.
 
 #ifdef USE_DEBUG_CANARIES
@@ -163,7 +165,7 @@ struct obj_data
       restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
       worn_by(NULL), worn_on(0), in_obj(NULL), contains(NULL), next_content(NULL),
       in_host(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL), 
-      dropped_by_host(NULL), dropped_by_char(0)
+      dropped_by_host(NULL), dropped_by_char(0), idnum(0)
   {
     #ifdef USE_DEBUG_CANARIES
       canary = CANARY_VALUE;
@@ -847,7 +849,7 @@ struct veh_data
   struct obj_data *mod[NUM_MODS];
   bool sub;
 
-  long idnum;
+  idnum_t idnum;
   idnum_t owner;
   long spare, spare2;
   bool locked;
