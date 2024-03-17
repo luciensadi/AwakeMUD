@@ -2044,7 +2044,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   FALSE_CASE_PRINTF(mode != SCMD_JUNK && IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch), "You can't %s %s, but you can always JUNK it.", sname, decapitalize_a_an(obj));
   FALSE_CASE_PRINTF(mode != SCMD_JUNK && obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
                     "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", decapitalize_a_an(obj));
-  FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the KEEP command on $p before you can %s it.", sname);
+  FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the KEEP command on %s before you can %s it.", decapitalize_a_an(obj), sname);
   FALSE_CASE_PRINTF(obj == ch->char_specials.programming, "You can't %s something you are working on.", sname);
   FALSE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch),
                     "Action blocked: %s contains at least one kept item. Pull it out and UNKEEP it.", decapitalize_a_an(obj));
