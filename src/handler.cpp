@@ -1019,21 +1019,31 @@ void affect_total(struct char_data * ch)
   // There's nothing to dodge on the astral plane.
   if (IS_ASTRAL(ch))
     GET_DODGE(ch) = 0;
-  else
+  else {
     GET_DODGE(ch) = MIN(GET_DODGE(ch), GET_COMBAT_POOL(ch));
+
+    if (ch_is_npc && AFF_FLAGGED(ch, AFF_PRONE)) {
+      GET_BODY_POOL(ch) += GET_DODGE(ch) / 2;
+      GET_DODGE(ch) = 0;
+      // The remaining points will be assigned to offense in the next stanza.
+    }
+  }
 
   GET_BODY_POOL(ch) = MIN(GET_BODY_POOL(ch), GET_COMBAT_POOL(ch) - GET_DODGE(ch));
   GET_OFFENSE(ch) = GET_COMBAT_POOL(ch) - GET_DODGE(ch) - GET_BODY_POOL(ch);
-  if (GET_OFFENSE(ch) > dice_max)
-  {
-    GET_DODGE(ch) += GET_OFFENSE(ch) - dice_max;
+  if (GET_OFFENSE(ch) > dice_max) {
+    if (ch_is_npc && !IS_ASTRAL(ch) && AFF_FLAGGED(ch, AFF_PRONE)) {
+      GET_BODY_POOL(ch) += GET_OFFENSE(ch) - dice_max;
+    } else {
+      GET_DODGE(ch) += GET_OFFENSE(ch) - dice_max;
+    }
     GET_OFFENSE(ch) = dice_max;
   }
 
   // NPCs specialize their defenses: unless they've got crazy dodge dice, they'll want to just soak.
   // AKA, 'your average wage slave is not going to try to do the Matrix bullet dodge when he sees a gun.'
   if (ch_is_npc) {
-    if (GET_DODGE(ch) < 10) {
+    if (GET_DODGE(ch) < 8) {
       GET_BODY_POOL(ch) += GET_DODGE(ch);
       GET_DODGE(ch) = 0;
     }
