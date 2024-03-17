@@ -1266,6 +1266,9 @@ ACMD(do_gen_comm)
   }
 
   if (subcmd == SCMD_NEWBIE) {
+    // Remove the doubled dollar signs.
+    delete_doubledollar(argument);
+
     if (IS_NPC(ch)) {
       send_to_char("NPCs can't use the newbie channel.\r\n", ch);
       return;
@@ -1297,6 +1300,7 @@ ACMD(do_gen_comm)
 
   // Returning command to handle shout.
   if (subcmd == SCMD_SHOUT) {
+    // Keep the doubled dollar signs.
     struct room_data *was_in = NULL;
     struct char_data *tmp;
 
@@ -1405,10 +1409,12 @@ ACMD(do_gen_comm)
 
   // Returning command to handle OOC.
   if(subcmd == SCMD_OOC) {
+    // Remove the doubled dollar signs.
+    delete_doubledollar(argument);
+
     /* Check for non-switched mobs */
     if ( IS_NPC(ch) && ch->desc == NULL )
       return;
-    delete_doubledollar(argument);
     for ( d = descriptor_list; d != NULL; d = d->next ) {
       // Skip anyone without a descriptor, and any non-NPC that ignored the speaker.
       if (!d->character || IS_IGNORING(d->character, is_blocking_oocs_from, ch))
@@ -1451,18 +1457,27 @@ ACMD(do_gen_comm)
 
   // The commands after this line don't return-- they just set things and follow the loop at the end.
   if (subcmd == SCMD_RPETALK) {
+    // Remove the doubled dollar signs.
+    delete_doubledollar(argument);
+
     snprintf(buf, sizeof(buf), "^W%s [^CRPEtalk^n]^c %s^n\r\n", GET_CHAR_NAME(ch), capitalize(argument));
     send_to_char(buf, ch);
 
     channel = COMM_CHANNEL_RPE;
     store_message_to_history(ch->desc, channel, buf);
   } else if (subcmd == SCMD_HIREDTALK) {
+    // Remove the doubled dollar signs.
+    delete_doubledollar(argument);
+
     snprintf(buf, sizeof(buf), "%s%s ^y[^YHIRED^y]^Y %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
     send_to_char(buf, ch);
 
     channel = COMM_CHANNEL_HIRED;
     store_message_to_history(ch->desc, channel, buf);
   } else {
+    // Remove the doubled dollar signs.
+    delete_doubledollar(argument);
+
     snprintf(buf, sizeof(buf), "%s%s |]newbie[| %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
     send_to_char(buf, ch);
 
