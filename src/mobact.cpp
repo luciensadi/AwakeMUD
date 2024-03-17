@@ -1136,8 +1136,13 @@ bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
 }
 
 bool mobact_process_single_helper(struct char_data *ch, struct char_data *vict, bool already_did_precondition_checks) {
-  if (!already_did_precondition_checks && (is_escortee(ch) || !IS_NPC(ch) || ch->desc))
-    return FALSE;
+  if (!already_did_precondition_checks) {
+    if (is_escortee(ch) || !IS_NPC(ch) || ch->desc)
+      return FALSE;
+
+    if (!MOB_FLAGGED(ch, MOB_HELPER) && !MOB_FLAGGED(ch, MOB_GUARD))
+      return FALSE;
+  }
 
   // Ensure we're neither of the fighting parties.
   if (ch == vict || !FIGHTING(vict) || ch == FIGHTING(vict))
