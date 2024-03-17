@@ -2427,7 +2427,7 @@ ACMD(do_astral)
     if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, i), 2) == GET_IDNUM(ch) &&
         GET_OBJ_VAL(GET_EQ(ch, i), 4)) {
       struct obj_data *obj = read_object(GET_OBJ_VNUM(GET_EQ(ch, i)), VIRTUAL);
-      for (int x = 0; x < NUM_VALUES; x++)
+      for (int x = 0; x < NUM_OBJ_VALUES; x++)
         GET_OBJ_VAL(obj, x) = GET_OBJ_VAL(GET_EQ(ch, i), x);
       if (GET_EQ(ch, i)->restring)
         obj->restring = str_dup(GET_EQ(ch, i)->restring);

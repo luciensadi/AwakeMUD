@@ -2018,7 +2018,7 @@ void parse_object(File &fl, long nr)
   obj->obj_flags.quest_id = 0;
 
   int i;
-  for (i = 0; i < NUM_VALUES; i++) {
+  for (i = 0; i < NUM_OBJ_VALUES; i++) {
     char field[32];
     snprintf(field, sizeof(field), "VALUES/Val%d", i);
 
@@ -4253,6 +4253,7 @@ struct obj_data *read_object(int nr, int type)
   *obj = obj_proto[i];
   ObjList.ADD(obj);
   obj_index[i].number++;
+  RANDOMLY_GENERATE_OBJ_IDNUM(obj);
   if (GET_OBJ_TYPE(obj) == ITEM_PHONE)
   {
     switch (GET_OBJ_VAL(obj, 0)) {
@@ -6185,7 +6186,7 @@ void load_consist(void)
             obj->graffiti = str_dup(data.GetString(buf, NULL));
             snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
             obj->photo = str_dup(data.GetString(buf, NULL));
-            for (int x = 0; x < NUM_VALUES; x++) {
+            for (int x = 0; x < NUM_OBJ_VALUES; x++) {
               snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
               GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
             }

@@ -698,7 +698,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj->restring = str_dup(row[3]);
         if (*row[4])
           obj->photo = str_dup(row[4]);
-        for (int x = 0; x < NUM_VALUES; x++)
+        for (int x = 0; x < NUM_OBJ_VALUES; x++)
           GET_OBJ_VAL(obj, x) = atoi(row[x + 5]);
         if (GET_CYBERWARE_TYPE(obj) == CYB_PHONE && GET_OBJ_VAL(obj, 7))
           add_phone_to_list(obj);
@@ -771,7 +771,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
       vnum = atol(row[1]);
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
         GET_OBJ_COST(obj) = atoi(row[2]);
-        for (int x = 0, y = 3; x < NUM_VALUES; x++, y++) {
+        for (int x = 0, y = 3; x < NUM_OBJ_VALUES; x++, y++) {
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
         }
         if (row[15] && *row[15])
@@ -803,7 +803,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj->restring = str_dup(row[3]);
         if (*row[4])
           obj->photo = str_dup(row[4]);
-        for (int x = 0, y = 5; x < NUM_VALUES; x++, y++)
+        for (int x = 0, y = 5; x < NUM_OBJ_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
         if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_ITEM_PHONE_SWITCHED_ON(obj))
           add_phone_to_list(obj);
@@ -900,7 +900,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj->restring = str_dup(row[3]);
         if (*row[4])
           obj->photo = str_dup(row[4]);
-        for (int x = 0, y = 5; x < NUM_VALUES; x++, y++)
+        for (int x = 0, y = 5; x < NUM_OBJ_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
 
         switch (GET_OBJ_TYPE(obj)) {
@@ -1377,7 +1377,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
                           obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
                           obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
-      for (int x = 0; x < NUM_VALUES; x++)
+      for (int x = 0; x < NUM_OBJ_VALUES; x++)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d, %d, '%s', %d, %d, %d);", level, i, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(),
                           GET_OBJ_ATTEMPT(obj), GET_OBJ_CONDITION(obj), posi++);
@@ -1416,7 +1416,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
                           obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
                           obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
-      for (int x = 0; x < NUM_VALUES; x++)
+      for (int x = 0; x < NUM_OBJ_VALUES; x++)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d, '%s', %d, %d, %d);", level, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(),
                           GET_OBJ_ATTEMPT(obj), GET_OBJ_CONDITION(obj), posi++);
@@ -2364,7 +2364,7 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
       break;
     case ITEM_MOD:
       // Mods don't ever get changed, so we clamp them aggressively.
-      for (int i = 0; i < NUM_VALUES; i++) {
+      for (int i = 0; i < NUM_OBJ_VALUES; i++) {
         FORCE_PROTO_VALUE_INDEXED_BY_I("vehicle mod", GET_OBJ_VAL(obj, i), GET_OBJ_VAL(&obj_proto[rnum], i));
       }
       break;
@@ -2708,7 +2708,7 @@ void save_bioware_to_db(struct char_data *player) {
           strcat(buf, "), (");
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj));
 
-        for (int x = 0; x < NUM_VALUES; x++)
+        for (int x = 0; x < NUM_OBJ_VALUES; x++)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
 
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", '%s'", obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "");
@@ -2750,7 +2750,7 @@ void save_cyberware_to_db(struct char_data *player) {
       } else
         <for loop to iterate over values>
       */
-      for (int x = 0; x < NUM_VALUES; x++)
+      for (int x = 0; x < NUM_OBJ_VALUES; x++)
         snprintf(ENDOF(cyberware_query_str), sizeof(cyberware_query_str) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
 
       // Add our level and position information here, then execute.

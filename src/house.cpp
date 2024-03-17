@@ -86,7 +86,7 @@ bool House_load_storage(struct room_data *world_room, const char *filename)
       obj->graffiti = str_dup(data.GetString(buf, NULL));
       snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
       obj->photo = str_dup(data.GetString(buf, NULL));
-      for (x = 0; x < NUM_VALUES; x++) {
+      for (x = 0; x < NUM_OBJ_VALUES; x++) {
         snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
         GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
       }
@@ -356,7 +356,7 @@ void Storage_save(const char *file_name, struct room_data *room) {
             obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) << "\n";
       }
       else if (GET_OBJ_TYPE(obj) != ITEM_WORN) {
-        for (int x = 0; x < NUM_VALUES; x++) {
+        for (int x = 0; x < NUM_OBJ_VALUES; x++) {
           if (GET_OBJ_VAL(obj, x) != GET_OBJ_VAL(prototype, x)) {
             obj_string_buf << "\t\tValue "<< x <<":\t" << GET_OBJ_VAL(obj, x) <<"\n";
           }

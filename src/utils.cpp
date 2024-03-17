@@ -3848,8 +3848,9 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
     return str_dup(log_string);
   }
 
-  snprintf(log_string, sizeof(log_string), "(obj %ld) %s^g",
+  snprintf(log_string, sizeof(log_string), "(obj %ld-%lu) %s^g",
           GET_OBJ_VNUM(obj),
+          GET_OBJ_IDNUM(obj),
           obj->text.name);
   
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD))

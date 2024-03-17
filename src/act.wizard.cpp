@@ -9312,11 +9312,11 @@ ACMD(do_valset) {
   FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, obj_name, ch->carrying)),
                       "You don't seem to have any %ss in your inventory.", obj_name);
   // Parse the slot.
-  FAILURE_CASE_PRINTF((slot = atoi(slot_arg)) < 0 || slot > NUM_VALUES, 
-                      "You must provide a valid slot between 0 and %d, not %s. (syntax: valset %s <slot> <value>)", NUM_VALUES, slot_arg, obj_name);
+  FAILURE_CASE_PRINTF((slot = atoi(slot_arg)) < 0 || slot > NUM_OBJ_VALUES, 
+                      "You must provide a valid slot between 0 and %d, not %s. (syntax: valset %s <slot> <value>)", NUM_OBJ_VALUES, slot_arg, obj_name);
   // Parse the value to apply.
   FAILURE_CASE_PRINTF((value = atoi(value_arg)) < 0, 
-                      "You must provide a value that is 0 or greater, not %s. (syntax: valset %s %d <value>)", NUM_VALUES, value_arg, obj_name, slot);
+                      "You must provide a value that is 0 or greater, not %s. (syntax: valset %s %d <value>)", NUM_OBJ_VALUES, value_arg, obj_name, slot);
 
   // Log it and notify the character.
   mudlog_vfprintf(ch, LOG_SYSLOG, "Changed object value %d for %s (%ld) from %d to %d.", 

@@ -995,7 +995,6 @@ bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
                 GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
                 representation);
-        
 
         if (same_host_warning) {
           const char *pname = get_player_name(obj->dropped_by_char);

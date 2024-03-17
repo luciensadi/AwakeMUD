@@ -419,5 +419,5 @@ bool _veh_can_get_veh(struct veh_data *veh, struct veh_data *target_veh, struct 
 }
 
 void generate_veh_idnum(struct veh_data *veh) {
-  veh->idnum = number(0, 999999);
+  veh->idnum = number(1, 999999);
 }

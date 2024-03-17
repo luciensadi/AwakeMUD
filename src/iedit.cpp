@@ -1887,7 +1887,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
 
       if (number != 0 && GET_OBJ_TYPE(d->edit_obj) != number) {
         GET_OBJ_TYPE(d->edit_obj) = number;
-        for (int index = 0; index < NUM_VALUES; index++)
+        for (int index = 0; index < NUM_OBJ_VALUES; index++)
           GET_OBJ_VAL(d->edit_obj, index) = 0;
 
         switch (GET_OBJ_TYPE(d->edit_obj)) {
@@ -3192,7 +3192,7 @@ void write_objs_to_disk(vnum_t zonenum)
 
       bool print_vals = false;
       int i;
-      for (i = 0; i < NUM_VALUES; i++)
+      for (i = 0; i < NUM_OBJ_VALUES; i++)
         if (GET_OBJ_VAL(obj, i) != 0) {
           print_vals = true;
           break;
@@ -3200,7 +3200,7 @@ void write_objs_to_disk(vnum_t zonenum)
 
       if (print_vals) {
         fprintf(fp, "[VALUES]\n");
-        for (i = 0; i < NUM_VALUES; i++)
+        for (i = 0; i < NUM_OBJ_VALUES; i++)
           if (GET_OBJ_VAL(obj, i) != 0)
             fprintf(fp, "\tVal%d:\t%d\n", i, GET_OBJ_VAL(obj, i));
       }

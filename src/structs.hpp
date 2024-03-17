@@ -77,7 +77,7 @@ struct text_data
 /* object flags; used in obj_data */
 struct obj_flag_data
 {
-  int value[NUM_VALUES];       /* Values of the item (see list)      */
+  int value[NUM_OBJ_VALUES];       /* Values of the item (see list)      */
   byte type_flag;      /* Type of item                       */
   Bitfield wear_flags;  /* Where you can wear it              */
   Bitfield extra_flags;  /* If it hums, glows, etc.            */
@@ -99,7 +99,7 @@ struct obj_flag_data
     type_flag(0), weight(0), cost(0), timer(0), material(0), barrier(0), condition(0),
     availtn(0), availdays(0), street_index(0), quest_id(0), attempt(0)
   {
-    ZERO_OUT_ARRAY(value, NUM_VALUES);
+    ZERO_OUT_ARRAY(value, NUM_OBJ_VALUES);
     ZERO_OUT_ARRAY(legality, 3);
 
     // No need to do anything with the bitfields-- they auto-clear.
@@ -153,7 +153,7 @@ struct obj_data
   const char *dropped_by_host;
   idnum_t dropped_by_char;
 
-  idnum_t idnum;
+  unsigned long idnum;
 
   // Adding new fields? Add them to dblist's UpdateObjs too to avoid iedit breaking things.
 

@@ -818,6 +818,7 @@ float get_proto_weight(struct obj_data *obj);
 #define GET_OBJ_BARRIER(obj)    ((obj)->obj_flags.barrier)
 #define GET_OBJ_VNUM(obj) (VALID_OBJ_RNUM(obj) ? \
     obj_index[GET_OBJ_RNUM(obj)].vnum : NOTHING)
+#define GET_OBJ_IDNUM(obj) ((obj)->idnum)
 #define GET_OBJ_KEYWORDS(obj)   ((obj)->text.keywords)
 #define IS_OBJ_STAT(obj, stat)  ((obj)->obj_flags.extra_flags.IsSet(stat))
 #define OBJ_VNUM_RNUM(rnum) ((obj_index[rnum]).vnum)
@@ -1573,6 +1574,7 @@ struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
 #define IS_VALID_POCKET_SEC(obj) ((obj) && GET_OBJ_SPEC((obj)) == pocket_sec && (obj)->contains)
 #define POCKET_SEC_USABLE_BY(obj, ch) ((ch) && (obj) && (!GET_POCKET_SECRETARY_LOCKED_BY((obj)) || GET_POCKET_SECRETARY_LOCKED_BY((obj)) == GET_IDNUM((ch))))
 
-#define ENSURE_OBJ_HAS_IDNUM(obj) if (!(obj)->idnum) { (obj)->idnum = number(0, LONG_MAX); }
+#define RANDOMLY_GENERATE_OBJ_IDNUM(obj) { (obj)->idnum = number(1, LONG_MAX); }
+#define ENSURE_OBJ_HAS_IDNUM(obj) if (!GET_OBJ_IDNUM(obj)) { RANDOMLY_GENERATE_OBJ_IDNUM(obj) }
 
 #endif

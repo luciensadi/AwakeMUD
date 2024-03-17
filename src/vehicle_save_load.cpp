@@ -322,7 +322,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
           }
           break;
         default:
-          for (int x = 0; x < NUM_VALUES; x++) {
+          for (int x = 0; x < NUM_OBJ_VALUES; x++) {
             obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) << "\n";
           }
           break;
@@ -395,7 +395,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
       fprintf(fl, "\t\tCondition:\t%d\n", GET_OBJ_CONDITION(gun));
       if (gun->restring)
         fprintf(fl, "\t\tName:\t%s\n", gun->restring);
-      for (int x = 0; x < NUM_VALUES; x++)
+      for (int x = 0; x < NUM_OBJ_VALUES; x++)
         fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(gun, x));
     }
   }
@@ -536,7 +536,7 @@ void load_single_veh(const char *filename) {
     if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
       snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
       inside = data.GetInt(buf, 0);
-      for (int x = 0; x < NUM_VALUES; x++) {
+      for (int x = 0; x < NUM_OBJ_VALUES; x++) {
         snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
         GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
       }
@@ -736,7 +736,7 @@ void load_single_veh(const char *filename) {
       GET_OBJ_CONDITION(weapon) = data.GetInt(buf, GET_OBJ_CONDITION(weapon));
       snprintf(buf, sizeof(buf), "%s/Name", sect_name);
       weapon->restring = str_dup(data.GetString(buf, NULL));
-      for (int x = 0; x < NUM_VALUES; x++) {
+      for (int x = 0; x < NUM_OBJ_VALUES; x++) {
         snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
         GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));
       }
