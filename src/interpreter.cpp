@@ -145,6 +145,7 @@ ACMD_DECLARE(do_brief);
 ACMD_DECLARE(do_cast);
 ACMD_DECLARE(do_charge);
 ACMD_DECLARE(do_changelog);
+ACMD_DECLARE(do_cheatlog);
 ACMD_DECLARE(do_chipload);
 ACMD_DECLARE(do_cleanup);
 ACMD_DECLARE(do_cleanse);
@@ -561,6 +562,7 @@ struct command_info cmd_info[] =
     { "charge"     , POS_DEAD    , do_charge   , LVL_FIXER, 0, BLOCKS_IDLE_REWARD },
     { "changelog"  , POS_LYING   , do_changelog, 0, 0, ALLOWS_IDLE_REWARD },
     { "cheatmark"  , POS_DEAD    , do_cheatmark, LVL_VICEPRES, 0, BLOCKS_IDLE_REWARD },
+    { "cheatlog"   , POS_DEAD    , do_cheatlog , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "cleanup"    , POS_SITTING , do_cleanup  , 0, 0, BLOCKS_IDLE_REWARD },
     { "cleanse"    , POS_LYING   , do_cleanse  , 0, 0, BLOCKS_IDLE_REWARD },
     { "clear"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, ALLOWS_IDLE_REWARD },

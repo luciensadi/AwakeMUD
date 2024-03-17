@@ -9326,3 +9326,9 @@ ACMD(do_valset) {
   // Apply the change.
   GET_OBJ_VAL(obj, slot) = value;
 }
+
+ACMD(do_cheatlog) {
+  skip_spaces(&argument);
+  FAILURE_CASE(!*argument, "Syntax: CHEATLOG <note to write to cheatlog for posterity>\r\n");
+  mudlog_vfprintf(ch, LOG_CHEATLOG, "Note from %s: %s", GET_CHAR_NAME(ch), argument);
+}
