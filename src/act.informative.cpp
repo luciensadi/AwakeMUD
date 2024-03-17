@@ -5907,7 +5907,7 @@ ACMD(do_who)
   } else send_to_char(buf2, ch);
 }
 
-#define USERS_FORMAT "format: users [-n name] [-h host] [-o] [-p]\r\n"
+#define USERS_FORMAT "format: users [-n name] [-h host] [-o] [-p] [-g]\r\n"
 
 ACMD(do_users)
 {
@@ -5919,9 +5919,11 @@ ACMD(do_users)
   struct char_data *tch;
   struct descriptor_data *d;
   int num_can_see = 0;
-  int outlaws = 0, playing = 0, deadweight = 0;
+  int outlaws = 0, playing = 0, deadweight = 0, globbed = 0;
 
   host_search[0] = name_search[0] = '\0';
+
+  std::unordered_map< std::string, std::vector<std::string> > host_map = {};
 
   strlcpy(buf, argument, sizeof(buf));
   while (*buf) {
@@ -5951,6 +5953,14 @@ ACMD(do_users)
           playing = 1;
           half_chop(buf1, host_search, buf, sizeof(buf));
           break;
+        case 'g':
+          if (!access_level(ch, LVL_PRESIDENT)) {
+            send_to_char("Sorry, this mode is for game owners only.\r\n", ch);
+            return;
+          }
+          globbed = 1;
+          strlcpy(buf, buf1, sizeof(buf));
+          break;
         default:
           send_to_char(USERS_FORMAT, ch);
           return;
@@ -5961,9 +5971,14 @@ ACMD(do_users)
       return;
     }
   }                             /* end while (parser) */
-  strlcpy(line, "Num  Name           State           Idle  Login@   Site\r\n", sizeof(line));
-  strlcat(line, "---- -------------- --------------- ----- -------- ---------------------------\r\n", sizeof(line));
-  send_to_char(line, ch);
+
+  if (globbed) {
+    send_to_char(ch, "Host character counts:\r\n");
+  } else {
+    strlcpy(line, "Num  Name           State           Idle  Login@   Site\r\n", sizeof(line));
+    strlcat(line, "---- -------------- --------------- ----- -------- ---------------------------\r\n", sizeof(line));
+    send_to_char(line, ch);
+  }
 
   one_argument(argument, arg);
 
@@ -6033,12 +6048,36 @@ ACMD(do_users)
       strlcpy(line, line2, sizeof(line));
     }
     if ((d->connected && !d->character) || CAN_SEE(ch, d->character)) {
-      send_to_char(line, ch);
+      if (globbed) {
+        try {
+          host_map[std::string(d->host)].push_back(std::string(GET_CHAR_NAME(d->original ? d->original : d->character)));
+        } catch (std::out_of_range) {
+          host_map[std::string(d->host)] = std::vector<std::string>();
+          host_map[std::string(d->host)].push_back(std::string(GET_CHAR_NAME(d->original ? d->original : d->character)));
+        }
+      } else {
+        send_to_char(line, ch);
+      }
       num_can_see++;
     }
   }
 
-  send_to_char(ch, "\r\n%d visible sockets connected.\r\n", num_can_see);
+  if (globbed) {
+    int total_hosts = 0;
+    for (auto &host_it : host_map) {
+      total_hosts++;
+      send_to_char(ch, "^c%s^n: ", host_it.first.c_str());
+
+      int total_pcs = 0;
+      for (auto &pc_it : host_it.second) {
+        send_to_char(ch, "%s%s", total_pcs++ > 0 ? ", " : "", pc_it.c_str());
+      }
+      send_to_char(ch, " (^c%d^n PC%s)\r\n", total_pcs, total_pcs == 1 ? "" : "s");
+    }
+    send_to_char(ch, "\r\n%d visible host%s connected.\r\n", total_hosts, total_hosts == 1 ? "" : "s");
+  } else {
+    send_to_char(ch, "\r\n%d visible socket%s connected.\r\n", num_can_see, num_can_see == 1 ? "" : "s");
+  }
 }
 
 /* Generic page_string function for displaying text */
