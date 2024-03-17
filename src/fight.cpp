@@ -5757,8 +5757,9 @@ void roll_individual_initiative(struct char_data *ch)
     // flag until we process all that.
     if (FIGHTING(ch)
         && IS_NPC(FIGHTING(ch))
-        && !MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)
         && GET_MOBALERT(FIGHTING(ch)) == MALERT_CALM
+        && !MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)
+        && !AFF_FLAGGED(FIGHTING(ch), AFF_SURPRISE)
         && success_test(GET_REA(ch), 4) > success_test(GET_REA(FIGHTING(ch)), 4)) {
       GET_INIT_ROLL(FIGHTING(ch)) = 0;
       act("You surprise $n!", TRUE, FIGHTING(ch), 0, ch, TO_VICT);
