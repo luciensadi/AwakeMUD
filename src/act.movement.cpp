@@ -2061,21 +2061,16 @@ void leave_veh(struct char_data *ch)
   struct obj_data *mount = NULL;
   struct room_data *door = NULL;
 
-  /*
-  if (AFF_FLAGGED(ch, AFF_RIG)) {
-    send_to_char(ch, "Try returning to your senses first.\r\n");
-    return;
-  }
-  */
-
   RIG_VEH(ch, veh);
 
-  if (veh_is_currently_flying(veh)) {
+  bool is_in_control_of_veh = AFF_FLAGGED(ch, AFF_PILOT) || IS_RIGGING(ch);
+
+  if (veh_is_currently_flying(veh) || (is_in_control_of_veh && veh->in_veh && veh_is_currently_flying(veh->in_veh))) {
     send_to_char("You take one look at the far-distant ground and reconsider your plan of action.\r\n", ch);
     return;
   }
 
-  if ((AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) && veh->in_veh) {
+  if (is_in_control_of_veh && veh->in_veh) {
     if (veh->in_veh->in_veh) {
       send_to_char("There is not enough room to drive out of here.\r\n", ch);
       return;
@@ -2093,6 +2088,11 @@ void leave_veh(struct char_data *ch)
       act(buf, 0, veh->in_room->people, 0, 0, TO_ROOM);
       act(buf, 0, veh->in_room->people, 0, 0, TO_CHAR);
     }
+    return;
+  }
+
+  if (IS_RIGGING(ch)) {
+    send_to_char(ch, "%s isn't in a vehicle.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
     return;
   }
 
@@ -2149,7 +2149,7 @@ void leave_veh(struct char_data *ch)
 ACMD(do_leave)
 {
   int door;
-  if (ch->in_veh || (ch->char_specials.rigging && ch->char_specials.rigging->in_veh)) {
+  if (ch->in_veh || IS_RIGGING(ch)) {
     leave_veh(ch);
     return;
   }
