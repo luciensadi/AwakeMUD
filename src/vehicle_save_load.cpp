@@ -735,7 +735,7 @@ void load_single_veh(const char *filename) {
       GET_AMMOBOX_WEAPON(ammo) = data.GetInt(buf, 0);
       
       snprintf(buf, sizeof(buf), "%s/%s", sect_name, FILESTRING_OBJ_IDNUM);
-      GET_OBJ_IDNUM(obj) = data.GetUnsignedLong(buf, 0);
+      GET_OBJ_IDNUM(ammo) = data.GetUnsignedLong(buf, 0);
 
       ammo->restring = str_dup(get_ammobox_default_restring(ammo));
       auto_repair_obj(ammo, veh->owner);
@@ -755,7 +755,7 @@ void load_single_veh(const char *filename) {
       }
 
       snprintf(buf, sizeof(buf), "%s/%s", sect_name, FILESTRING_OBJ_IDNUM);
-      GET_OBJ_IDNUM(obj) = data.GetUnsignedLong(buf, 0);
+      GET_OBJ_IDNUM(weapon) = data.GetUnsignedLong(buf, 0);
 
       auto_repair_obj(weapon, veh->owner);
       obj_to_obj(weapon, obj);

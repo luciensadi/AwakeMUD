@@ -6304,7 +6304,7 @@ SPECIAL(mageskill_hermes)
         if (dq) {
           // Reject people who couldn't pass the quest.
           if (GET_MAG(ch) <= 0 || GET_TRADITION(ch) == TRAD_MUNDANE || GET_SKILL(ch, SKILL_SORCERY) < 8) {
-            snprintf(arg, sizeof(arg), "%s It's nice, isn't it? It's something that only elite wielders of sorcery can obtain.", GET_CHAR_NAME(ch));
+            snprintf(arg, sizeof(arg), "%s It's nice, isn't it? It's something that only elite awakened ones can obtain.", GET_CHAR_NAME(ch));
             do_say(mage, arg, 0, SCMD_SAYTO);
             return TRUE;
           }

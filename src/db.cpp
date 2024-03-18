@@ -576,6 +576,19 @@ void boot_world(void)
   require_that_sql_table_exists("pfiles_named_tags", "SQL/Migrations/add_named_tags.sql");
   require_that_field_exists_in_table("Value14", "pfiles_inv", "SQL/Migrations/obj_idnums_and_vals.sql");
 
+  {
+    const char *object_tables[4] = {
+      "pfiles_inv",
+      "pfiles_worn",
+      "pfiles_bioware",
+      "pfiles_cyberware"
+    };
+    char valbuf[20];
+    snprintf(valbuf, sizeof(valbuf), "Value%d", NUM_OBJ_LOADS);
+    for (int idx = 0; idx < 4; idx++)
+      require_that_field_exists_in_table(valbuf, object_tables[idx], "(meta check: no specific file)");
+  }
+
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
 
