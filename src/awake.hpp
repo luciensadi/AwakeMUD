@@ -20,7 +20,7 @@
 #endif
 
 #define NUM_RESERVED_DESCS      8
-#define NUM_OBJ_VALUES    15
+#define NUM_OBJ_VALUES    18
 # ifdef DEBUG
 # define _STLP_DEBUG 1
 # else
