@@ -2321,6 +2321,7 @@ void docwagon_retrieve(struct char_data *ch) {
     mudlog("SYSERR: Got someone in docwagon_retrieve() who was not DOCWAGON_READY.", ch, LOG_SYSLOG, TRUE);
   }
   PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
+  GET_WATCH(ch) = NULL;
 
   if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
     stop_fighting(FIGHTING(ch));

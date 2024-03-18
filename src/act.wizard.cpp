@@ -9322,8 +9322,8 @@ ACMD(do_valset) {
                       "You must provide a value that is 0 or greater, not %s. (syntax: valset %s %d <value>)", NUM_OBJ_VALUES, value_arg, obj_name, slot);
 
   // Log it and notify the character.
-  mudlog_vfprintf(ch, LOG_SYSLOG, "Changed object value %d for %s (%ld) from %d to %d.", 
-                  slot, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), GET_OBJ_VAL(obj, slot), value);
+  mudlog_vfprintf(ch, LOG_WIZLOG, "Changed object value %d for %s (%ld-%lu) from %d to %d.", 
+                  slot, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), GET_OBJ_IDNUM(obj), GET_OBJ_VAL(obj, slot), value);
   send_to_char(ch, "OK, changed %s's value %d from %d to %d.\r\n", GET_OBJ_NAME(obj), slot, GET_OBJ_VAL(obj, slot), value);
 
   // Apply the change.
