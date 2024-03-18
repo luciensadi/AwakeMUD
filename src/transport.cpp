@@ -33,9 +33,9 @@
 #include "config.hpp"
 #include "vehicles.hpp"
 
-extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
+extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads, const char *origin, struct char_data *caller);
 
-extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
+extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads, const char *call_origin, struct char_data *caller);
 
 ACMD_DECLARE(do_echo);
 struct dest_data *get_dest_data_list_for_zone(int zone_num);
@@ -1088,7 +1088,7 @@ SPECIAL(taxi)
             }
 
           // 2. Pathfind there. Fail if we can't find a path.
-          if (temp_room && find_first_step(real_room(temp_room->number), real_room(dest_vnum), FALSE) < 0) {
+          if (temp_room && find_first_step(real_room(temp_room->number), real_room(dest_vnum), FALSE, "cab request", ch) < 0) {
             strncpy(buf2, " punches a few buttons on the meter to calculate the fare, but it flashes red after a moment.", sizeof(buf2));
             do_echo(driver, buf2, 0, SCMD_EMOTE);
             snprintf(buf2, sizeof(buf2), " The GridGuide network doesn't connect through to there.");
@@ -1160,9 +1160,9 @@ SPECIAL(taxi)
       if (temp_room) {
         int distance_between_rooms;
         if (comm == CMD_TAXI_DEST) {
-          distance_between_rooms = calculate_distance_between_rooms(temp_room->number, destination_list[dest_idx].vnum, FALSE);
+          distance_between_rooms = calculate_distance_between_rooms(temp_room->number, destination_list[dest_idx].vnum, FALSE, "cmd_taxi_dest", ch);
         } else {
-          distance_between_rooms = calculate_distance_between_rooms(temp_room->number, dest_vnum, FALSE);
+          distance_between_rooms = calculate_distance_between_rooms(temp_room->number, dest_vnum, FALSE, "taxi_other", ch);
         }
 
         if (distance_between_rooms < 0)

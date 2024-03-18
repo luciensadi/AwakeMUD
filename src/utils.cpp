@@ -67,7 +67,7 @@ extern void weight_change_object(struct obj_data * obj, float weight);
 extern void calc_weight(struct char_data *ch);
 extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
-extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
+extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads, const char *call_origin, struct char_data *caller);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
 extern int get_max_skill_for_char(struct char_data *ch, int skill, int type);
@@ -4570,7 +4570,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch) {
 
 // Cribbed from taxi code. Eventually, we should replace the taxi distance calculation with this.
 // Returns -1 for not found or error.
-int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads) {
+int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads, const char *origin, struct char_data *caller) {
   struct room_data *temp_room = NULL;
   int dist = 0, x = 0;
   rnum_t start_room_rnum, target_room_rnum;
@@ -4578,13 +4578,15 @@ int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_
   // Ensure the vnums are valid.
   start_room_rnum = real_room(start_room_vnum);
   if (start_room_rnum < 0) {
-    mudlog("SYSERR: Invalid start room vnum passed to calculate_distance_between_rooms().", NULL, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(caller, LOG_SYSLOG, "SYSERR: Invalid start room vnum passed to calculate_distance_between_rooms(%ld, %ld, %s, %s, ch).",
+                    start_room_rnum, target_room_vnum, ignore_roads ? "TRUE" : "FALSE", origin);
     return -1;
   }
 
   target_room_rnum = real_room(target_room_vnum);
   if (target_room_rnum < 0) {
-    mudlog("SYSERR: Invalid target room vnum passed to calculate_distance_between_rooms().", NULL, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(caller, LOG_SYSLOG, "SYSERR: Invalid target room vnum passed to calculate_distance_between_rooms(%ld, %ld, %s, %s, ch).",
+                    start_room_rnum, target_room_vnum, ignore_roads ? "TRUE" : "FALSE", origin);
     return -1;
   }
 
@@ -4592,7 +4594,7 @@ int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_
 
   // Remember that temp room starts as null, so if no exit was found then this is skipped.
   while (temp_room) {
-    x = find_first_step(real_room(temp_room->number), target_room_rnum, ignore_roads);
+    x = find_first_step(real_room(temp_room->number), target_room_rnum, ignore_roads, origin, caller);
 
     // Arrived at target.
     if (x == BFS_ALREADY_THERE)
@@ -7505,4 +7507,28 @@ bool is_same_host(struct char_data *first, struct char_data *second) {
   rectify_desc_host(second->desc);
 
   return !str_cmp(first->desc->host, second->desc->host);
+}
+
+void stop_watching(struct char_data *ch, bool send_message) {
+  struct char_data *temp;
+
+  if (GET_WATCH(ch)) {
+    if (send_message) {
+      send_to_char("You stop scanning into the distance.\r\n", ch);
+    }
+    
+    REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
+    GET_WATCH(ch) = NULL;
+    ch->next_watching = NULL;
+  }
+}
+
+void set_watching(struct char_data *ch, struct room_data *room, int dir) {
+  stop_watching(ch, FALSE);
+
+  GET_WATCH(ch) = room;
+  ch->next_watching = GET_WATCH(ch)->watching;
+  GET_WATCH(ch)->watching = ch;
+
+  send_to_char(ch, "You focus your attention to %s.\r\n", thedirs[dir]);
 }

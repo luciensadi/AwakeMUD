@@ -184,7 +184,7 @@ void show_string(struct descriptor_data * d, char *input);
 extern void update_paydata_market();
 extern void warn_about_apartment_deletion();
 void process_wheres_my_car();
-extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
+extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads, const char *call_origin, struct char_data *caller);
 void set_descriptor_canaries(struct descriptor_data *newd);
 extern void process_flying_vehicles();
 
@@ -3614,7 +3614,7 @@ void process_wheres_my_car() {
           break;
 
         // If they didn't pay enough to find this one, skip it.
-        int distance = calculate_distance_between_rooms(veh_in_room->number, ch_in_room->number, TRUE);
+        int distance = calculate_distance_between_rooms(veh_in_room->number, ch_in_room->number, TRUE, "wheresmycar", d->character);
         if (distance < 0 || distance > max_distance_searched) {
           log_vfprintf("Refusing to find vehicle %s: Distance is %d, vs max %d.", GET_VEH_NAME(veh), distance, max_distance_searched);
           continue;

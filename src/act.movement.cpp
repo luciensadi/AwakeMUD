@@ -1042,13 +1042,10 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   struct room_data *was_in = NULL;
   struct follow_type *k, *next;
 
-  if (GET_WATCH(ch)) {
-    struct char_data *temp;
-    REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
-    GET_WATCH(ch) = NULL;
-  }
   if (ch == NULL || dir < 0 || dir >= NUM_OF_DIRS)
     return 0;
+
+  stop_watching(ch);
 
   if (ch->in_veh || ch->char_specials.rigging) {
     move_vehicle(ch, dir);

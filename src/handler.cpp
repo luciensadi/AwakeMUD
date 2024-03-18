@@ -2685,11 +2685,7 @@ void extract_char(struct char_data * ch, bool do_save)
       veh->cspeed = SPEED_OFF;
   }
 
-  if (GET_WATCH(ch)) {
-    // char_data *temp already exists.
-    REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
-    GET_WATCH(ch) = NULL;
-  }
+  stop_watching(ch);
 
   if (!IS_NPC(ch)) {
     // Terminate the player's quest, if any. Realistically, we shouldn't ever trigger this code, but if it happens we're ready for it.

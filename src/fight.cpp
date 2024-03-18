@@ -318,7 +318,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
       end_all_caster_records(victim, TRUE);
     }
 
-    GET_WATCH(victim) = NULL;
+    stop_watching(victim);
 
     char cmd_buf[100];
     *cmd_buf = '\0';
@@ -2321,7 +2321,8 @@ void docwagon_retrieve(struct char_data *ch) {
     mudlog("SYSERR: Got someone in docwagon_retrieve() who was not DOCWAGON_READY.", ch, LOG_SYSLOG, TRUE);
   }
   PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
-  GET_WATCH(ch) = NULL;
+  
+  stop_watching(ch);
 
   if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
     stop_fighting(FIGHTING(ch));

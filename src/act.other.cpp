@@ -4491,10 +4491,7 @@ ACMD(do_watch)
   }
 
   if (GET_WATCH(ch)) {
-    send_to_char("You stop scanning into the distance.\r\n", ch);
-    struct char_data *temp;
-    REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
-    GET_WATCH(ch) = NULL;
+    stop_watching(ch, TRUE);
     return;
   }
 
@@ -4521,10 +4518,7 @@ ACMD(do_watch)
     }
   }
 
-  GET_WATCH(ch) = EXIT2(ch->in_room, dir)->to_room;
-  ch->next_watching = GET_WATCH(ch)->watching;
-  GET_WATCH(ch)->watching = ch;
-  send_to_char(ch, "You focus your attention to %s.\r\n", thedirs[dir]);
+  set_watching(ch, EXIT2(ch->in_room, dir)->to_room, dir);
 }
 
 ACMD(do_trade)
