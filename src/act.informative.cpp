@@ -1015,7 +1015,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
             strlcat(buf, "^Wbrilliant^n.", sizeof(buf));
           else if (GET_GRADE(i) > 12)
             strlcat(buf, "^Wbright^n.", sizeof(buf));
-          if (GET_GRADE(i) > 8)
+          else if (GET_GRADE(i) > 8)
             strlcat(buf, "^Wa strong glow^n.", sizeof(buf));
           else if (GET_GRADE(i) > 4)
             strlcat(buf, "^Wglowing^n.", sizeof(buf));

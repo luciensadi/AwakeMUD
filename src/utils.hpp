@@ -1574,7 +1574,7 @@ struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
 #define IS_VALID_POCKET_SEC(obj) ((obj) && GET_OBJ_SPEC((obj)) == pocket_sec && (obj)->contains)
 #define POCKET_SEC_USABLE_BY(obj, ch) ((ch) && (obj) && (!GET_POCKET_SECRETARY_LOCKED_BY((obj)) || GET_POCKET_SECRETARY_LOCKED_BY((obj)) == GET_IDNUM((ch))))
 
-#define RANDOMLY_GENERATE_OBJ_IDNUM(obj) { (obj)->idnum = number(1, LONG_MAX); }
+#define RANDOMLY_GENERATE_OBJ_IDNUM(obj) { (obj)->idnum = number(1, RAND_MAX); }
 #define ENSURE_OBJ_HAS_IDNUM(obj) if (!GET_OBJ_IDNUM(obj)) { RANDOMLY_GENERATE_OBJ_IDNUM(obj) }
 
 #endif

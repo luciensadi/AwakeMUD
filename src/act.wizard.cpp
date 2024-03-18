@@ -1369,7 +1369,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
       strlcpy(buf2, (obj_index[GET_OBJ_RNUM(j)].func ? "^cExists^n" : "None"), sizeof(buf2));
   } else
     strlcpy(buf2, "None", sizeof(buf2));
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "VNum: [^g%8ld^n], RNum: [%5ld], IDnum: [%lu], Type: %s, SpecProc: %s\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "VNum: [^g%8ld^n], RNum: [%5ld], IDnum: [^c%lu^n], Type: %s, SpecProc: %s\r\n",
            virt, GET_OBJ_RNUM(j), j->idnum, buf1, buf2);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "L-Des: %s\r\n",
           ((j->text.look_desc) ? j->text.look_desc : "None"));
@@ -1396,8 +1396,8 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
                              extra_bits, MAX_ITEM_EXTRA);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Extra flags   : %s\r\n", buf2);
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Weight: %.2f, Value: %d, Timer: %d, Availability: %d/%.2f Days\r\n",
-          GET_OBJ_WEIGHT(j), GET_OBJ_COST(j), GET_OBJ_TIMER(j), GET_OBJ_AVAILTN(j), GET_OBJ_AVAILDAY(j));
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Weight: %.2f, Value: %d, Timer: %d, Availability: %d/%.2f Days, Attempt %d\r\n",
+          GET_OBJ_WEIGHT(j), GET_OBJ_COST(j), GET_OBJ_TIMER(j), GET_OBJ_AVAILTN(j), GET_OBJ_AVAILDAY(j), GET_OBJ_ATTEMPT(j));
 
   strlcat(buf, "In room: ", sizeof(buf));
   if (!j->in_room)
@@ -1526,11 +1526,14 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     break;
   }
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nValues 0-9: [%d] [%d] [%d] [%d] [%d] [%d] [%d] [%d] [%d] [%d] [%d] [%d]",
-          GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1),
-          GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 3), GET_OBJ_VAL(j, 4),
-          GET_OBJ_VAL(j, 5), GET_OBJ_VAL(j, 6), GET_OBJ_VAL(j, 7),
-          GET_OBJ_VAL(j, 8), GET_OBJ_VAL(j, 9), GET_OBJ_VAL(j, 10), GET_OBJ_VAL(j, 11));
+  rnum_t proto_rnum = real_object(GET_OBJ_VNUM(j));
+  strlcat(buf, "\r\nValues: ", sizeof(buf));
+  for (int x = 0; x < NUM_OBJ_VALUES; x++) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^L%d^n[%s%d^n]",
+             x,
+             proto_rnum >= 0 && GET_OBJ_VAL(j, x) != GET_OBJ_VAL(&obj_proto[proto_rnum], x) ? "^C" : "^c",
+             GET_OBJ_VAL(j, x));
+  }
 
   /*
    * I deleted the "equipment status" code from here because it seemed

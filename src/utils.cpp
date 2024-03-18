@@ -7313,7 +7313,8 @@ bool soulbind_obj_to_char_by_idnum(struct obj_data *obj, idnum_t idnum, bool inc
       break;
     case ITEM_WORN:
       // Hardened armor is soulbound when worn.
-      GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = idnum;
+      if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR))
+        GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = idnum;
       break;
     case ITEM_WEAPON:
       // Weapon foci are soulbound in chargen.

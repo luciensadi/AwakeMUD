@@ -20,7 +20,7 @@
 #endif
 
 #define NUM_RESERVED_DESCS      8
-#define NUM_OBJ_VALUES    14
+#define NUM_OBJ_VALUES    15
 # ifdef DEBUG
 # define _STLP_DEBUG 1
 # else
@@ -3109,6 +3109,8 @@ enum {
 #define ZONE_RESET_NEVER  0
 #define ZONE_RESET_EMPTY  1
 #define ZONE_RESET_ALWAYS 2
+
+#define FILESTRING_OBJ_IDNUM "ObjIdnum"
 
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's

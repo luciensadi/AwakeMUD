@@ -27,6 +27,7 @@ namespace bf = boost::filesystem;
 #include "utils.hpp"
 #include "bullet_pants.hpp"
 #include "vehicles.hpp"
+#include "awake.hpp"
 
 extern char *cleanup(char *dest, const char *src);
 extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
@@ -338,6 +339,10 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
         obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
       if (obj->photo)
         obj_string_buf << "\t\tPhoto:$\n" << cleanup(buf2, obj->photo) << "~\n";
+      if (obj->graffiti)
+        obj_string_buf << "\t\tGraffiti:$\n" << cleanup(buf2, obj->graffiti) << "~\n";
+
+      obj_string_buf << "\t\t" << FILESTRING_OBJ_IDNUM << ":\t" << GET_OBJ_IDNUM(obj);
 
       obj_strings.push_back(obj_string_buf.str());
       obj_string_buf.str(std::string());
@@ -389,6 +394,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
       fprintf(fl, "\t\tAmmo:\t%d\n", GET_AMMOBOX_QUANTITY(ammo));
       fprintf(fl, "\t\tAmmoType:\t%d\n", GET_AMMOBOX_TYPE(ammo));
       fprintf(fl, "\t\tAmmoWeap:\t%d\n", GET_AMMOBOX_WEAPON(ammo));
+      fprintf(fl, "\t\t%s:\t%lu\n", FILESTRING_OBJ_IDNUM, GET_OBJ_IDNUM(ammo));
     }
     if ((gun = get_mount_weapon(obj))) {
       fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(gun));
@@ -397,6 +403,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
         fprintf(fl, "\t\tName:\t%s\n", gun->restring);
       for (int x = 0; x < NUM_OBJ_VALUES; x++)
         fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(gun, x));
+      fprintf(fl, "\t\t%s:\t%lu\n", FILESTRING_OBJ_IDNUM, GET_OBJ_IDNUM(gun));
     }
   }
   fprintf(fl, "[GRIDGUIDE]\n");
@@ -563,6 +570,8 @@ void load_single_veh(const char *filename) {
       obj->graffiti = str_dup(data.GetString(buf, NULL));
       snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
       obj->photo = str_dup(data.GetString(buf, NULL));
+      snprintf(buf, sizeof(buf), "%s/%s", sect_name, FILESTRING_OBJ_IDNUM);
+      GET_OBJ_IDNUM(obj) = data.GetUnsignedLong(buf, 0);
 
       if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
         // Invalid belongings.
@@ -724,6 +733,10 @@ void load_single_veh(const char *filename) {
       GET_AMMOBOX_TYPE(ammo) = data.GetInt(buf, 0);
       snprintf(buf, sizeof(buf), "%s/AmmoWeap", sect_name);
       GET_AMMOBOX_WEAPON(ammo) = data.GetInt(buf, 0);
+      
+      snprintf(buf, sizeof(buf), "%s/%s", sect_name, FILESTRING_OBJ_IDNUM);
+      GET_OBJ_IDNUM(obj) = data.GetUnsignedLong(buf, 0);
+
       ammo->restring = str_dup(get_ammobox_default_restring(ammo));
       auto_repair_obj(ammo, veh->owner);
       obj_to_obj(ammo, obj);
@@ -740,6 +753,10 @@ void load_single_veh(const char *filename) {
         snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
         GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));
       }
+
+      snprintf(buf, sizeof(buf), "%s/%s", sect_name, FILESTRING_OBJ_IDNUM);
+      GET_OBJ_IDNUM(obj) = data.GetUnsignedLong(buf, 0);
+
       auto_repair_obj(weapon, veh->owner);
       obj_to_obj(weapon, obj);
       veh->usedload += GET_OBJ_WEIGHT(weapon);

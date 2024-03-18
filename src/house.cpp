@@ -135,6 +135,10 @@ bool House_load_storage(struct room_data *world_room, const char *filename)
         delete [] player_name;
       }
 
+      snprintf(buf, sizeof(buf), "%s/%s", sect_name, FILESTRING_OBJ_IDNUM);
+      GET_OBJ_IDNUM(obj) = data.GetUnsignedLong(buf, 0);
+      ENSURE_OBJ_HAS_IDNUM(obj);
+
       // Don't auto-repair cyberdecks until they're fully loaded.
       if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK) {
         idnum_t owner_id = world_room->apartment && world_room->apartment->get_owner_id() > 0 ? world_room->apartment->get_owner_id() : 0;
@@ -366,6 +370,8 @@ void Storage_save(const char *file_name, struct room_data *room) {
           obj_string_buf << "\t\tValue "<< WORN_OBJ_HARDENED_ARMOR_SLOT <<":\t" << GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) <<"\n";
         }
       }
+
+      obj_string_buf << "\t\t" << FILESTRING_OBJ_IDNUM << ":\t"<< GET_OBJ_IDNUM(obj) << "\n";
 
       APPEND_IF_CHANGED("\t\tCondition:\t", GET_OBJ_CONDITION(obj), GET_OBJ_CONDITION(prototype));
       APPEND_IF_CHANGED("\t\tTimer:\t", GET_OBJ_TIMER(obj), GET_OBJ_TIMER(prototype));

@@ -574,6 +574,7 @@ void boot_world(void)
   require_that_field_exists_in_table("graffiti", "pfiles_worn", "SQL/Migrations/add_graffiti_field.sql");
   require_that_field_exists_in_table("prestige_alt", "pfiles_chargendata", "SQL/Migrations/prestige_races.sql");
   require_that_sql_table_exists("pfiles_named_tags", "SQL/Migrations/add_named_tags.sql");
+  require_that_field_exists_in_table("Value14", "pfiles_inv", "SQL/Migrations/obj_idnums_and_vals.sql");
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
@@ -6235,6 +6236,10 @@ void load_consist(void)
 
               delete [] player_name;
             }
+
+            snprintf(buf, sizeof(buf), "%s/%s", sect_name, FILESTRING_OBJ_IDNUM);
+            GET_OBJ_IDNUM(obj) = data.GetUnsignedLong(buf, 0);
+            ENSURE_OBJ_HAS_IDNUM(obj);
 
             // Don't auto-repair cyberdecks until they're fully loaded.
             if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)

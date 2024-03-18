@@ -6228,6 +6228,9 @@ ACMD(do_heal)
       send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
       return;
     }
+
+    WAIT_STATE(ch, 3 RL_SEC);
+
     int success = success_test(GET_MAG(ch) / 100, 10 - (GET_ESS(vict) / 100) + modify_target(ch));
     if (success < 1) {
       send_to_char("You fail to channel your energy into that pursuit.\r\n", ch);
@@ -6237,7 +6240,6 @@ ACMD(do_heal)
     success = MIN(GET_MAX_PHYSICAL(vict) - GET_PHYSICAL(vict), success);
     GET_PHYSICAL(vict) += success;
     GET_PHYSICAL(ch) -= success;
-    WAIT_STATE(ch, 3 RL_SEC);
     act("You feel $n place $s hands on you, $s minstration seems to cause your wounds to fade!", FALSE, ch, 0, vict, TO_VICT);
     act("You place your hands on $N, you feel $S pain and suffering transferred to your body!", FALSE, ch, 0, vict, TO_CHAR);
     act("$n places $s hands on $N, seemingly transferring the wound to $mself!", FALSE, ch, 0, vict, TO_NOTVICT);

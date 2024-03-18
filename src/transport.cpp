@@ -2135,6 +2135,9 @@ void swap_pcs_between_transport_and_station(struct room_data *transport, struct 
   for (struct char_data *ch = transport->people, *next_ch; ch; ch = next_ch) {
     next_ch = ch->next_in_room;
 
+    if (!ch->desc)
+      continue;
+
     if (GET_POS(ch) == POS_STANDING) {
       send_to_char("Spotting an opening in the flow of passengers, you make your way out.\r\n", ch);
       char_from_room(ch);
@@ -2147,6 +2150,9 @@ void swap_pcs_between_transport_and_station(struct room_data *transport, struct 
   // Move people from the station to the transport.
   for (struct char_data *ch = station->people, *next_ch; ch; ch = next_ch) {
     next_ch = ch->next_in_room;
+
+    if (!ch->desc)
+      continue;
 
     if (GET_POS(ch) == POS_STANDING) {
       send_to_char("Spotting an opening in the flow of passengers, you make your way inside.\r\n", ch);

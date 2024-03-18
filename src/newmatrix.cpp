@@ -414,6 +414,10 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
            detect);
   act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
+  DECKER->tally += tally;
+  if (DECKER->located)
+    DECKER->tally++;
+
   struct matrix_icon *temp;
   for (struct matrix_icon *ic = HOST.icons; ic; ic = temp)
   {
@@ -427,13 +431,11 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
       else if (prog && (ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 0) {
         // Here's hoping this didn't extract the program they used...
         if (tarbaby(prog, ch, ic))
-          break;
+          return success;
       }
     }
   }
-  DECKER->tally += tally;
-  if (DECKER->located)
-    DECKER->tally++;
+  
   if (DECKER->tally >= 90)
   {
     // House rule: we don't shut down the host per Matrix pg112,
