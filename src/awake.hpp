@@ -2628,7 +2628,7 @@ enum {
 #define OBJ_CHANGELOG_BOARD                10092
 #define OBJ_INVITATION_TO_SMITHS_PUB       38094
 #define OBJ_ARES_PERSONAL_INVITATION_SLIP  19999
-#define OBJ_SAEDER_PASS                    4194
+#define OBJ_SAEDER_PASS                    4914
 #define OBJ_LARGE_PLASTIBOARD_BOX          29326
 
 #define OBJ_TITLE_TO_AMERICAR              891

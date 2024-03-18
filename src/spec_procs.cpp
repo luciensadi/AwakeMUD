@@ -6303,7 +6303,7 @@ SPECIAL(mageskill_hermes)
             dq = TRUE;
         if (dq) {
           // Reject people who couldn't pass the quest.
-          if (GET_MAG(ch) <= 0 || GET_TRADITION(ch) == TRAD_MUNDANE || GET_SKILL(ch, SKILL_SORCERY) < 8) {
+          if (GET_MAG(ch) <= 0 || GET_TRADITION(ch) == TRAD_MUNDANE || (GET_SKILL(ch, SKILL_SORCERY) < 8 && GET_SKILL(ch, SKILL_AURA_READING) < 8)) {
             snprintf(arg, sizeof(arg), "%s It's nice, isn't it? It's something that only elite awakened ones can obtain.", GET_CHAR_NAME(ch));
             do_say(mage, arg, 0, SCMD_SAYTO);
             return TRUE;
@@ -6531,7 +6531,7 @@ SPECIAL(mageskill_nightwing)
 
     for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
       if (d->character
-          && GET_SKILL(d->character, SKILL_SORCERY) >= 8
+          && (GET_SKILL(d->character, SKILL_SORCERY) >= 8 || GET_SKILL(d->character, SKILL_AURA_READING) >= 8)
           && SEES_ASTRAL(d->character)) {
         for (struct obj_data *tmp_obj = d->character->carrying; tmp_obj; tmp_obj = tmp_obj->next_content) {
           if (GET_OBJ_VNUM(tmp_obj) == OBJ_MAGE_LETTER) {
