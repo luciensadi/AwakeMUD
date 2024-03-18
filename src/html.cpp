@@ -5,7 +5,7 @@ const char *color_to_html(const char *color);
 const char *make_char_html_safe(const char c);
 
 const char *convert_string_to_html(const char *str) {
-  static char result[MAX_STRING_LENGTH * 4];
+  static char result[MAX_STRING_LENGTH * 16];
   memset(result, 0, sizeof(result));
 
   for (const char *ptr = str; *ptr; ptr++) {
