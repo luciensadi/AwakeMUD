@@ -369,7 +369,12 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (IS_NPC(ch)) {
     // Prevents you from surprising someone who's attacking you already.
     GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 20);
-    GET_MOBALERT(ch) = MALERT_ALERT;
+    GET_MOBALERT(ch) = MAX(MALERT_ALERT, GET_MOBALERT(ch));
+  }
+
+  if (!AWAKE(ch)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got unconscious/morted char to set_fighting(ch, %s, ...)", GET_CHAR_NAME(vict));
+    return;
   }
 
   if (CH_IN_COMBAT(ch))
