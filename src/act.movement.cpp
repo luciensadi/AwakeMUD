@@ -329,12 +329,12 @@ bool should_tch_see_chs_movement_message(struct char_data *viewer, struct char_d
         if (is_arriving) {
           if (CAN_SEE(viewer, actor)) {
             act("You notice $N sneaking around.", FALSE, viewer, 0, actor, TO_CHAR);
-            act("^T$N^T scowls at you-- your sneaking around has not gone unnoticed.^n", TRUE, actor, 0, viewer, TO_CHAR);
-            act("$N scowls at $n-- $s sneaking around has not gone unnoticed.", TRUE, actor, 0, viewer, TO_ROOM);
+            act("^T$n^T scowls at you-- your sneaking around has not gone unnoticed.^n", TRUE, viewer, 0, actor, TO_VICT);
+            act("$n scowls at $N-- $s sneaking around has not gone unnoticed.", TRUE, viewer, 0, actor, TO_ROOM);
           } else {
             act("You startle and look around-- you could have sworn you heard something.", FALSE, viewer, 0, 0, TO_CHAR);
-            act("$N startles and looks in your general direction.", TRUE, actor, 0, viewer, TO_CHAR);
-            act("$N startles and looks in $n's general direction.", TRUE, actor, 0, viewer, TO_ROOM);
+            act("$n startles and looks in your general direction.", TRUE, viewer, 0, actor, TO_VICT);
+            act("$n startles and looks in $N's general direction.", TRUE, viewer, 0, actor, TO_ROOM);
           }
         }
       }
