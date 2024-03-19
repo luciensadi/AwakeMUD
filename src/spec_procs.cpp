@@ -674,7 +674,7 @@ SPECIAL(nerp_skills_teacher) {
     for (int skill = MIN_SKILLS; skill < MAX_SKILLS; skill++) {
       if (can_teach_skill[skill]) {
         // Mundanes can't learn magic skills.
-        if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[skill].requires_magic)
+        if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[skill].requires_magic && !(skill == SKILL_AURA_READING && (IS_DRAGON(ch) || IS_GHOUL(ch))))
           continue;
 
         if (GET_SKILL_POINTS(ch) > 0) {
@@ -736,7 +736,7 @@ SPECIAL(nerp_skills_teacher) {
   }
 
   // Deny all magic skills to mundane.
-  if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE) {
+  if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE && !(skill_num == SKILL_AURA_READING && (IS_DRAGON(ch) || IS_GHOUL(ch)))) {
     send_to_char(ch, "Without the ability to channel magic, %s would be useless to you.\r\n", skills[skill_num].name);
     return TRUE;
   }
@@ -908,9 +908,12 @@ SPECIAL(teacher)
     bool found_a_skill_already = FALSE;
     for (int i = 0; i < NUM_TEACHER_SKILLS; i++) {
       if (teachers[ind].s[i] > 0) {
-        // Mundanes can't learn magic skills.
-        if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[teachers[ind].s[i]].requires_magic)
+        // Mundanes can't learn magic skills, with the exception of dragons/ghouls who can learn aura reading.
+        if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[teachers[ind].s[i]].requires_magic
+            && !(teachers[ind].s[i] == SKILL_AURA_READING && (IS_DRAGON(ch) || IS_GHOUL(ch))))
+        {
           continue;
+        }
 
         // Adepts can't learn externally-focused skills.
         if (GET_TRADITION(ch) == TRAD_ADEPT && (teachers[ind].s[i] == SKILL_CONJURING
@@ -997,7 +1000,7 @@ SPECIAL(teacher)
   }
 
   // Deny all magic skills to mundane.
-  if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE) {
+  if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE && !(skill_num == SKILL_AURA_READING && (IS_DRAGON(ch) || IS_GHOUL(ch)))) {
     send_to_char(ch, "Without the ability to channel magic, the skill of %s would be useless to you.\r\n", skills[skill_num].name);
     return TRUE;
   }
