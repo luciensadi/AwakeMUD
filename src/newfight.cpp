@@ -63,6 +63,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   struct combat_data attacker_data(attacker, weap);
   struct combat_data defender_data(victim, vict_weap);
 
+  // Since we use this code for riggers attacking others, rigging only counts against the victim.
+  if (IS_RIGGING(victim))
+    defender_data.is_paralyzed_or_insensate = TRUE;
+
   // Allows for switching roles, which can happen during melee counterattacks.
   struct combat_data *att = &attacker_data;
   struct combat_data *def = &defender_data;
@@ -105,6 +109,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (!att->ranged_combat_mode && att->ch->in_room != def->ch->in_room) {
     send_to_char(att->ch, "You relax with the knowledge that your opponent is no longer present.\r\n");
     stop_fighting(att->ch);
+    act("$n unable to fight $N: Melee user vs someone not in same room", TRUE, att->ch, 0, def->ch, TO_ROLLS);
     return FALSE;
   }
 
@@ -168,6 +173,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   // Precondition: If you're asleep or paralyzed, you don't get to fight.
   if (att->is_paralyzed_or_insensate) {
+    act("$n unable to fight $N: Paralyzed or insensate.", TRUE, att->ch, 0, def->ch, TO_ROLLS);
     return FALSE;
   }
 
@@ -185,8 +191,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   }
 
   // Precondition: If you're out of ammo, you don't get to fight.
-  if (att->weapon && !has_ammo_no_deduct(att->ch, att->weapon))
+  if (att->weapon && !has_ammo_no_deduct(att->ch, att->weapon)) {
+    act("$n unable to fight $N: No ammo", TRUE, att->ch, 0, def->ch, TO_ROLLS);
     return FALSE;
+  }
 
   // Remove closing flags if both are melee.
   if ((!att->ranged_combat_mode || AFF_FLAGGED(att->ch, AFF_APPROACH))

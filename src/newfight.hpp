@@ -413,7 +413,7 @@ struct combat_data
     hardened_armor_impact_rating = get_hardened_impact_armor_rating(ch);
 
     // Figure out if they're unable to move at all (paralyzed, asleep, jacked in, etc)
-    is_paralyzed_or_insensate = !AWAKE(ch) || IS_JACKED_IN(ch) || GET_QUI(ch) <= 0;
+    is_paralyzed_or_insensate = !AWAKE(ch) || GET_QUI(ch) <= 0;
   }
 
   ~combat_data() {
