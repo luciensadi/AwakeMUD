@@ -7152,7 +7152,7 @@ ACMD(do_setfind)
 
 ACMD(do_shopfind)
 {
-  int number;
+  vnum_t number;
   vnum_t location;
 
   one_argument(argument, buf2);
@@ -7167,15 +7167,26 @@ ACMD(do_shopfind)
     return;
   }
 
-  if ((number = atoi(buf2)) < 0) {
+  if ((number = atol(buf2)) < 0) {
     send_to_char("A NEGATIVE number??\r\n", ch);
     return;
   }
 
-  if (number)
-    send_to_char(ch, "Shops selling the item with vnum %d:\r\n", number);
-  else
+  if (number) {
+    rnum_t obj_rnum = real_object(number);
+    FAILURE_CASE_PRINTF(obj_rnum < 0, "There is no item with vnum %ld.", number);
+    struct obj_data *obj = &obj_proto[obj_rnum];
+
+#ifndef IS_BUILDPORT
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Ran shopfind for %s (%ld)", GET_OBJ_NAME(obj), number);
+#endif
+    send_to_char(ch, "Shops selling %s (%ld):\r\n", GET_OBJ_NAME(obj), number);
+  } else {
+#ifndef IS_BUILDPORT
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Ran shopfind for keyword '%s'", buf2);
+#endif
     send_to_char(ch, "Shops selling items with keyword %s:\r\n", buf2);
+  }
 
   int index = 0;
   for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
