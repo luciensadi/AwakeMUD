@@ -42,7 +42,7 @@ struct dest_data *get_dest_data_list_for_zone(int zone_num);
 
 bool cab_jurisdiction_matches_destination(vnum_t cab_vnum, vnum_t dest_vnum);
 
-void swap_pcs_between_transport_and_station(struct room_data *from, struct room_data *to);
+void swap_pcs_between_transport_and_station(struct room_data *from, int from_dir, struct room_data *to, int to_dir);
 
 // ----------------------------------------------------------------------------
 
@@ -1432,7 +1432,7 @@ void extend_walkway_st(int ferry, int to, int room, int from)
   send_to_room("The Seattle-Tacoma ferry docks at the pier, and extends its walkway.\r\n", &world[room]);
   send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[ferry]);
 
-  swap_pcs_between_transport_and_station(&world[ferry], &world[room]);
+  swap_pcs_between_transport_and_station(&world[ferry], to, &world[room], from);
 }
 void contract_walkway_st(int ferry, int to, int room, int from)
 {
@@ -1514,7 +1514,7 @@ void open_busdoor(int bus, int to, int room, int from)
   send_to_room("The bus rolls up to the platform, and the door opens.\r\n", &world[room]);
   send_to_room("The bus rolls up to the platform, and the door opens.\r\n", &world[bus]);
 
-  swap_pcs_between_transport_and_station(&world[bus], &world[room]);
+  swap_pcs_between_transport_and_station(&world[bus], to, &world[room], from);
 }
 
 void close_busdoor(int bus, int to, int room, int from)
@@ -1583,7 +1583,7 @@ void camas_extend(int bus, int to, int room, int from)
   send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", &world[room]);
   send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", &world[bus]);
 
-  swap_pcs_between_transport_and_station(&world[bus], &world[room]);
+  swap_pcs_between_transport_and_station(&world[bus], to, &world[room], from);
 }
 
 void camas_retract(int bus, int to, int room, int from)
@@ -1762,7 +1762,7 @@ void extend_walkway(int ferry, int to, int room, int from, const char *ferry_nam
 
   send_to_room("The ferry docks, and the walkway extends.\r\n", &world[ferry]);
 
-  swap_pcs_between_transport_and_station(&world[ferry], &world[room]);
+  swap_pcs_between_transport_and_station(&world[ferry], to, &world[room], from);
 }
 
 void contract_walkway(int ferry, int to, int room, int from, const char *ferry_name)
@@ -1947,7 +1947,7 @@ void grenada_extend(int bus, int to, int room, int from)
   send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins loading passengers.\r\n", &world[room]);
   send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins transferring passengers.\r\n", &world[bus]);
 
-  swap_pcs_between_transport_and_station(&world[bus], &world[room]);
+  swap_pcs_between_transport_and_station(&world[bus], to, &world[room], from);
 }
 
 void grenada_retract(int bus, int to, int room, int from)
@@ -2018,7 +2018,7 @@ void sauteurs_extend(int bus, int to, int room, int from)
   send_to_room("The Lockheed C-260 Transport plane docks with the platform and begins transferring passengers and cargo.\r\n", &world[room]);
   send_to_room("The Lockheed C-260 Transport plane docks with the platform and begins loading passengers and cargo.\r\n", &world[bus]);
 
-  swap_pcs_between_transport_and_station(&world[bus], &world[room]);
+  swap_pcs_between_transport_and_station(&world[bus], to, &world[room], from);
 }
 
 void sauteurs_retract(int bus, int to, int room, int from)
@@ -2128,9 +2128,7 @@ bool cab_jurisdiction_matches_destination(vnum_t cab_vnum, vnum_t dest_vnum) {
   return cab_jurisdiction == zone_table[dest_zone_idx].jurisdiction;
 }
 
-void swap_pcs_between_transport_and_station(struct room_data *transport, struct room_data *station) {
-  std::vector<struct char_data *> current_passengers = {};
-
+void swap_pcs_between_transport_and_station(struct room_data *transport, int transport_exit_dir, struct room_data *station, int station_exit_dir) {
   // Move people from the transport to the holding vector.
   for (struct char_data *ch = transport->people, *next_ch; ch; ch = next_ch) {
     next_ch = ch->next_in_room;
@@ -2139,9 +2137,8 @@ void swap_pcs_between_transport_and_station(struct room_data *transport, struct 
       continue;
 
     if (GET_POS(ch) == POS_STANDING) {
-      send_to_char("Spotting an opening in the flow of passengers, you make your way out.\r\n", ch);
-      char_from_room(ch);
-      current_passengers.push_back(ch);
+      send_to_char("Spotting an opening in the flow of passengers, you head for the exit.\r\n", ch);
+      perform_move(ch, transport_exit_dir, LEADER, NULL);
     } else {
       send_to_char("You spot an opening in the flow of passengers, but you'd have to get up to take it...\r\n", ch);
     }
@@ -2155,20 +2152,10 @@ void swap_pcs_between_transport_and_station(struct room_data *transport, struct 
       continue;
 
     if (GET_POS(ch) == POS_STANDING) {
-      send_to_char("Spotting an opening in the flow of passengers, you make your way inside.\r\n", ch);
-      char_from_room(ch);
-      char_to_room(ch, transport);
-      act("$n climbs in.", TRUE, ch, 0, 0, TO_ROOM);
+      send_to_char("Spotting an opening in the flow of passengers, you head for the door.\r\n", ch);
+      perform_move(ch, station_exit_dir, LEADER, NULL);
     } else {
       send_to_char("You spot an opening in the flow of passengers, but you'd have to get up to take it...\r\n", ch);
     }
-  }
-
-  // Dump the holding vector into the station.
-  while (!current_passengers.empty()) {
-    struct char_data *ch = current_passengers.at(0);
-    char_to_room(ch, station);
-    act("$n climbs out.", TRUE, ch, 0, 0, TO_ROOM);
-    current_passengers.erase(current_passengers.begin());
   }
 }
