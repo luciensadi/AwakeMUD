@@ -2166,25 +2166,35 @@ bool mob_is_aggressive_towards_race(struct char_data *ch, int race) {
     case RACE_WAKYAMBI:
     case RACE_NIGHTONE:
     case RACE_DRYAD:
+    case RACE_GHOUL_ELF:
+    case RACE_DRAKE_ELF:
       return MOB_FLAGGED(ch, MOB_AGGR_ELF);
     case RACE_DWARF:
     case RACE_GNOME:
     case RACE_MENEHUNE:
     case RACE_KOBOROKURU:
+    case RACE_GHOUL_DWARF:
+    case RACE_DRAKE_DWARF:
       return MOB_FLAGGED(ch, MOB_AGGR_DWARF);
     case RACE_HUMAN:
+    case RACE_GHOUL_HUMAN:
+    case RACE_DRAKE_HUMAN:
       return MOB_FLAGGED(ch, MOB_AGGR_HUMAN);
     case RACE_ORK:
     case RACE_HOBGOBLIN:
     case RACE_OGRE:
     case RACE_SATYR:
     case RACE_ONI:
+    case RACE_GHOUL_ORK:
+    case RACE_DRAKE_ORK:
       return MOB_FLAGGED(ch, MOB_AGGR_ORK);
     case RACE_TROLL:
     case RACE_CYCLOPS:
     case RACE_FOMORI:
     case RACE_GIANT:
     case RACE_MINOTAUR:
+    case RACE_GHOUL_TROLL:
+    case RACE_DRAKE_TROLL:
       return MOB_FLAGGED(ch, MOB_AGGR_TROLL);
   }
 
