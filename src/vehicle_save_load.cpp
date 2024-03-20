@@ -342,7 +342,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
       if (obj->graffiti)
         obj_string_buf << "\t\tGraffiti:$\n" << cleanup(buf2, obj->graffiti) << "~\n";
 
-      obj_string_buf << "\t\t" << FILESTRING_OBJ_IDNUM << ":\t" << GET_OBJ_IDNUM(obj);
+      obj_string_buf << "\t\t" << FILESTRING_OBJ_IDNUM << ":\t" << GET_OBJ_IDNUM(obj) << "\n";
 
       obj_strings.push_back(obj_string_buf.str());
       obj_string_buf.str(std::string());
