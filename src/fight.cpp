@@ -6112,6 +6112,13 @@ void perform_violence(void)
       }
     }
 
+    if (!CH_IN_COMBAT(ch)) {
+      mudlog("SYSERR: Character is in the combat list, but isn't fighting anything! (Second block)", ch, LOG_SYSLOG, TRUE);
+      send_to_char("Your mind goes fuzzy for a moment, and you shake your head, then stand down.\r\n", ch);
+      stop_fighting(ch);
+      continue;
+    }
+
     // Passive mode.
     if (PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT)) {
       send_to_char("(You have enabled passive mode and will not attack. ^WTOGGLE PASSIVE^n to disable it.)\r\n", ch);
@@ -6119,7 +6126,7 @@ void perform_violence(void)
     }
 
     // Process melee charging.
-    if (IS_AFFECTED(ch, AFF_APPROACH)) {
+    if (FIGHTING(ch) && IS_AFFECTED(ch, AFF_APPROACH)) {
       /* Complete failure cases, with continue to prevent evaluation:
          - Not in same room (terminate charging)
       */
@@ -6305,7 +6312,7 @@ void perform_violence(void)
     }
 
     // Manning weaponry.
-    if (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch)) {
+    if ((FIGHTING(ch) || FIGHTING_VEH(ch)) && (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch))) {
       struct veh_data *veh = NULL;
       RIG_VEH(ch, veh);
 
@@ -6358,7 +6365,7 @@ void perform_violence(void)
           continue;
       }
     } else {
-      mudlog("SYSERR: Character is in the combat list, but isn't fighting anything! (Second block)", ch, LOG_SYSLOG, TRUE);
+      mudlog("SYSERR: Character is in the combat list, but isn't fighting anything! (Third block)", ch, LOG_SYSLOG, TRUE);
       send_to_char("Your mind goes fuzzy for a moment, and you shake your head, then stand down.\r\n", ch);
       stop_fighting(ch);
       continue;
