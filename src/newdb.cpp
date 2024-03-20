@@ -2471,26 +2471,26 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
             GET_WEAPON_FIREMODE(obj) = MODE_SA;
           }
 
-          int attach_rnum;
+          rnum_t attach_rnum;
 
           if (GET_WEAPON_ATTACH_TOP_VNUM(obj) != 0) {
             attach_rnum = real_object(GET_WEAPON_ATTACH_TOP_VNUM(obj));
             if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
-              FORCE_PROTO_VALUE("weapon", GET_WEAPON_ATTACH_TOP_VNUM(obj), GET_WEAPON_ATTACH_TOP_VNUM(&obj_proto[rnum]));
+              FORCE_PROTO_VALUE("weapon w/ bad attach vnum", GET_WEAPON_ATTACH_TOP_VNUM(obj), GET_WEAPON_ATTACH_TOP_VNUM(&obj_proto[rnum]));
             }
           }
 
           if (GET_WEAPON_ATTACH_BARREL_VNUM(obj) != 0) {
             attach_rnum = real_object(GET_WEAPON_ATTACH_BARREL_VNUM(obj));
             if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
-              FORCE_PROTO_VALUE("weapon", GET_WEAPON_ATTACH_BARREL_VNUM(obj), GET_WEAPON_ATTACH_BARREL_VNUM(&obj_proto[rnum]));
+              FORCE_PROTO_VALUE("weapon w/ bad attach vnum", GET_WEAPON_ATTACH_BARREL_VNUM(obj), GET_WEAPON_ATTACH_BARREL_VNUM(&obj_proto[rnum]));
             }
           }
 
           if (GET_WEAPON_ATTACH_UNDER_VNUM(obj) != 0) {
             attach_rnum = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(obj));
             if (attach_rnum < 0 || GET_OBJ_TYPE(&obj_proto[attach_rnum]) != ITEM_GUN_ACCESSORY) {
-              FORCE_PROTO_VALUE("weapon", GET_WEAPON_ATTACH_UNDER_VNUM(obj), GET_WEAPON_ATTACH_UNDER_VNUM(&obj_proto[rnum]));
+              FORCE_PROTO_VALUE("weapon w/ bad attach vnum", GET_WEAPON_ATTACH_UNDER_VNUM(obj), GET_WEAPON_ATTACH_UNDER_VNUM(&obj_proto[rnum]));
             }
           }
         } else {

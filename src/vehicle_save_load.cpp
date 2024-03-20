@@ -39,9 +39,9 @@ bool veh_is_in_crusher_queue(struct veh_data *veh);
 bool should_save_this_vehicle(struct veh_data *veh, char *reason);
 
 #ifdef IS_BUILDPORT
-  const bf::path global_vehicles_dir = bf::system_complete("lib") / "buildport-vehicles";
+  bf::path global_vehicles_dir = bf::system_complete("lib") / "buildport-vehicles";
 #else
-  const bf::path global_vehicles_dir = bf::system_complete("lib") / "vehicles";
+  bf::path global_vehicles_dir = bf::system_complete("lib") / "vehicles";
 #endif
 
 // TODO: extraction
@@ -474,6 +474,11 @@ void load_single_veh(const char *filename) {
 
   veh = read_vehicle(vnum, VIRTUAL);
 
+  if (!veh) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to load vehicle at file %s, but its vnum %ld does not exist in game!", filename, vnum);
+    return;
+  }
+
 #ifdef USE_DEBUG_CANARIES
   veh->canary = CANARY_VALUE;
   assert(veh->canary == CANARY_VALUE);
@@ -866,11 +871,17 @@ void restore_carried_vehicle_pointers() {
 }
 
 // aka load_vehs, veh_load, and everything else I keep searching for it by --LS
-void load_saved_veh()
+void load_saved_veh(bool purge_existing)
 {
   FILE *fl;
   std::vector<nested_obj> contained_obj;
   struct nested_obj contained_obj_entry;
+
+  if (purge_existing) {
+    while (struct veh_data *veh = veh_list) {
+      extract_veh(veh_list);
+    }
+  }
 
   if (!bf::exists(global_vehicles_dir)) {
     // We've never run our migration. Load the old files.

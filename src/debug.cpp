@@ -8,6 +8,10 @@
 #include <mysql/mysql.h>
 #include <vector>
 
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
+namespace bf = boost::filesystem;
+
 #include "telnet.hpp"
 
 #include "types.hpp"
@@ -148,6 +152,10 @@ struct eti_test_values_struct {
 };
 
 extern long payout_slots_testable(long bet);
+extern void load_saved_veh(bool purge_existing);
+extern void save_vehicles(bool);
+
+extern bf::path global_vehicles_dir;
 
 bool drinks_are_unfucked = TRUE;
 ACMD(do_debug) {
@@ -177,6 +185,16 @@ ACMD(do_debug) {
     } else {
       send_to_char(ch, "You don't see anyone named %s.\r\n", rest_of_argument);
     }
+    return;
+  }
+
+  if (!str_cmp(arg1, "reloadallvehicles")) {
+    bf::path old_path = bf::path(global_vehicles_dir);
+    global_vehicles_dir = bf::system_complete("restore_vehicles");
+    load_saved_veh(TRUE);
+    save_vehicles(FALSE);
+    global_vehicles_dir = bf::path(old_path);
+    send_to_char(ch, "Global vehicles dir is now: %s\r\n", global_vehicles_dir.c_str());
     return;
   }
 

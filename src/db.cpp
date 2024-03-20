@@ -199,7 +199,7 @@ void parse_host(File &fl, long nr);
 void parse_ic(File &fl, long nr);
 void load_zones(File &fl);
 void purge_unowned_vehs();
-void load_saved_veh();
+void load_saved_veh(bool);
 void assign_mobiles(void);
 void assign_objects(void);
 void assign_rooms(void);
@@ -737,7 +737,7 @@ void DBInit()
   boot_time = time(0);
 
   log("Loading saved vehicles.");
-  load_saved_veh();
+  load_saved_veh(FALSE);
 
   log("Purging unowned vehicles.");
   purge_unowned_vehs();
