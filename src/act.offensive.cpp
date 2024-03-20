@@ -201,8 +201,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       return TRUE;
     }
 
-    if (IS_AFFECTED(ch, AFF_CHARM) && IS_SPIRIT(ch) && ch->master &&
-        !IS_NPC(ch->master))
+    if (IS_SPIRIT(ch) && ch->master && !IS_NPC(ch->master))
       GET_ACTIVE(ch)--;
 
     if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON)
@@ -369,22 +368,18 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
     set_fighting(ch, veh);
     return TRUE;
   }
-  if (vict == ch)
-  {
+  if (vict == ch) {
     send_to_char("You hit yourself...OUCH!.\r\n", ch);
     act("$n hits $mself, and says OUCH!", FALSE, ch, 0, vict, TO_ROOM);
-  } else if (IS_AFFECTED(ch, AFF_CHARM) && (ch->master == vict))
-    act("$N is just such a good friend, you simply can't hit $M.",
-        FALSE, ch, 0, vict, TO_CHAR);
-  else
-  {
+  }
+  else {
     if (!can_perform_aggressive_action(ch, vict, "perform_hit", TRUE))
       return TRUE;
 
     if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
       find_and_draw_weapon(ch);
 
-    if (IS_AFFECTED(ch, AFF_CHARM) && IS_SPIRIT(ch) && ch->master && !IS_NPC(ch->master))
+    if (IS_SPIRIT(ch) && ch->master && !IS_NPC(ch->master))
       GET_ACTIVE(ch)--;
     if (!CH_IN_COMBAT(ch)) {
       set_fighting(ch, vict);

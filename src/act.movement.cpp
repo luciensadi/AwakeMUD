@@ -2593,7 +2593,6 @@ ACMD(do_follow)
 
   FAILURE_CASE_PRINTF(ch->master == leader, "You are already following %s.", HMHR(leader));
   FAILURE_CASE(IS_ASTRAL(leader) && !IS_ASTRAL(ch), "Non-astral beings can't follow astral beings.");
-  FAILURE_CASE_PRINTF(IS_AFFECTED(ch, AFF_CHARM) && (ch->master), "But you only feel like following %s!", GET_NAME(ch->master));
   
   // Special case: FOLLOW SELF unfollows anyone else.
   if (leader == ch) {

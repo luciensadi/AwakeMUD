@@ -2940,7 +2940,6 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
           && !access_level(ch, LVL_ADMIN))
         || (IS_NPC(ch)
             && ch->master
-            && AFF_FLAGGED(ch, AFF_CHARM)
             && !IS_NPC(ch->master)
             && IS_SENATOR(ch->master)
             && !access_level(ch->master, LVL_ADMIN)))
@@ -3073,9 +3072,9 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       if (!FIGHTING(ch) && !ch->in_veh)
         set_fighting(ch, victim);
 
-      if (!IS_NPC(ch) && IS_NPC(victim) && victim->master && !number(0, 10) &&
-          IS_AFFECTED(victim, AFF_CHARM) && (victim->master->in_room == ch->in_room) &&
-          !(ch->master && ch->master == victim->master)) {
+      if (!IS_NPC(ch) && IS_NPC(victim) && victim->master && !number(0, 10)
+          && (victim->master->in_room == ch->in_room)
+          && !(ch->master && ch->master == victim->master)) {
         if (CH_IN_COMBAT(ch))
           stop_fighting(ch);
         set_fighting(ch, victim->master);

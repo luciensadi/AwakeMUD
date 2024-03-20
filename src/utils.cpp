@@ -1234,7 +1234,7 @@ void stop_follower(struct char_data * ch)
     delete j;
   }
 
-  AFF_FLAGS(ch).RemoveBits(AFF_CHARM, AFF_GROUP, ENDBIT);
+  AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
   act("You stop following $N.", FALSE, ch, 0, ch->master, TO_CHAR);
   if (get_ch_in_room(ch->master) == get_ch_in_room(ch) && ch->master->in_veh == ch->in_veh) {
     act("$n stops following $N.", TRUE, ch, 0, ch->master, TO_NOTVICT);

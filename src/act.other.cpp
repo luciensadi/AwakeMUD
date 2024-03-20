@@ -510,8 +510,7 @@ ACMD(do_ungroup)
       if (IS_AFFECTED(f->follower, AFF_GROUP)) {
         AFF_FLAGS(f->follower).RemoveBit(AFF_GROUP);
         send_to_char(buf2, f->follower);
-        if (!IS_AFFECTED(f->follower, AFF_CHARM))
-          stop_follower(f->follower);
+        stop_follower(f->follower);
       }
     }
 
@@ -539,8 +538,7 @@ ACMD(do_ungroup)
   act("You have been kicked out of $n's group!", FALSE, ch, 0, tch, TO_VICT);
   act("$N has been kicked out of $n's group!", FALSE, ch, 0, tch, TO_NOTVICT);
 
-  if (!IS_AFFECTED(tch, AFF_CHARM))
-    stop_follower(tch);
+  stop_follower(tch);
 }
 
 ACMD(do_report)
