@@ -920,7 +920,7 @@ void load_saved_veh(bool purge_existing)
           continue;
         
         // Check to make sure this PC is active in the last 30 days. If not, don't load their vehicles until they log in.
-        if (!pc_active_in_last_30_days(owner_id)) {
+        if (!purge_existing && !pc_active_in_last_30_days(owner_id)) {
           log_vfprintf(" - Refusing to load vehicles for idnum %ld: Owner is idle.", owner_id);
           continue;
         }
