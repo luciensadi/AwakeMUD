@@ -827,7 +827,7 @@ void load_vehicles_for_idnum(idnum_t owner_id) {
     // This directory contains owner ID directories.
     if (!is_directory(dir_itr->status())) {
       bf::path filename = dir_itr->path();
-      log_vfprintf(" -- Loading %s.", filename.c_str());
+      // log_vfprintf(" -- Loading %s.", filename.c_str());
       load_single_veh(filename.c_str());
     }
   }

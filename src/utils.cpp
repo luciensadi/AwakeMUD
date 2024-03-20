@@ -961,6 +961,27 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
       strlcpy(location_str, "[NOWHERE]", sizeof(location_str));
     }
 
+    // Append rigging info to location string.
+    if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+      struct veh_data *veh = NULL;
+      RIG_VEH(ch, veh);
+
+      if (veh->in_veh) {
+        snprintf(ENDOF(location_str), sizeof(location_str) - strlen(location_str), "[rigging %ld @ veh %ld%s in %ld]",
+                 GET_VEH_VNUM(veh),
+                 veh->in_veh->idnum,
+                 veh->in_veh->in_veh ? " in other veh in" : "",
+                 GET_ROOM_VNUM(get_veh_in_room(veh)));
+      } else if (veh->in_room) {
+        snprintf(ENDOF(location_str), sizeof(location_str) - strlen(location_str), "[rigging %ld @ %ld]",
+                 GET_VEH_VNUM(veh),
+                 GET_ROOM_VNUM(get_veh_in_room(veh)));
+      } else {
+        snprintf(ENDOF(location_str), sizeof(location_str) - strlen(location_str), "[rigging %ld @ NOWHERE]",
+                 GET_VEH_VNUM(veh));
+      }
+    }
+
     snprintf(buf2, sizeof(buf2), "%s %s ", location_str, char_name_str);
   }
 
