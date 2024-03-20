@@ -3426,6 +3426,10 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
         if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX))
           snprintf(location_buf, sizeof(location_buf), "hitching %s", GET_CHAR_NAME(targ));
     }
+  } else if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+    snprintf(location_buf, sizeof(location_buf), "%ld (rig)", GET_ROOM_VNUM(get_veh_in_room(veh)));
   } else if (ch->in_room)
     snprintf(location_buf, sizeof(location_buf), "%ld", GET_ROOM_VNUM(ch->in_room));
   else if (ch->in_veh)
