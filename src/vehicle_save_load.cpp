@@ -879,6 +879,9 @@ void load_saved_veh(bool purge_existing)
 
   if (purge_existing) {
     while (struct veh_data *veh = veh_list) {
+      while (struct obj_data *contents = veh->contents) {
+        extract_obj(contents);
+      }
       extract_veh(veh_list);
     }
   }
