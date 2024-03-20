@@ -53,7 +53,11 @@ ApartmentComplex *get_complex_headed_by_landlord(vnum_t vnum);
 
 std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
+#ifdef USE_PRIVATE_CE_WORLD
+const bf::path global_housing_dir = bf::system_complete("lib") / "housing2";
+#else
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
+#endif
 
 // EVENTUALTODOs for pgroups:
 // - Write pgroup log when a lease is broken.
