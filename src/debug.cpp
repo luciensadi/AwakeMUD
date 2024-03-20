@@ -189,12 +189,14 @@ ACMD(do_debug) {
   }
 
   if (!str_cmp(arg1, "reloadallvehicles")) {
+    send_to_char("Reloading vehicles...\r\n", ch);
     bf::path old_path = bf::path(global_vehicles_dir);
     global_vehicles_dir = bf::system_complete("restore_vehicles");
     load_saved_veh(TRUE);
-    save_vehicles(FALSE);
     global_vehicles_dir = bf::path(old_path);
-    send_to_char(ch, "Global vehicles dir is now: %s\r\n", global_vehicles_dir.c_str());
+    send_to_char(ch, "Global vehicles dir is now: %s. Saving vehicles.\r\n", global_vehicles_dir.c_str());
+    save_vehicles(FALSE);
+    send_to_char(ch, "Save complete.\r\n");
     return;
   }
 
