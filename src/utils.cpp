@@ -2067,7 +2067,26 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
             send_to_char("Your chipjack and expert driver must have the same slot count.\r\n", ch);
             return FALSE;
           }
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_SKILLWIRE) {
+            int max_total_rating = get_max_skill_for_char(ch, SKILL_PISTOLS, GODLY);
+            if (GET_CYBERWARE_RATING(cyber1) + GET_CYBERWARE_RATING(cyber2) > max_total_rating) {
+              send_to_char(ch, "The total rating for your expert driver and your skillwires is limited to %d."
+                           " Please select a combination of skillwires and expert driver that doesn't exceed this limit.\r\n",
+                           max_total_rating);
+              return FALSE;
+            }
+          }
           break;
+        case CYB_SKILLWIRE:
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_CHIPJACKEXPERT) {
+            int max_total_rating = get_max_skill_for_char(ch, SKILL_PISTOLS, GODLY);
+            if (GET_CYBERWARE_RATING(cyber1) + GET_CYBERWARE_RATING(cyber2) > max_total_rating) {
+              send_to_char(ch, "The total rating for your expert driver and your skillwires is limited to %d."
+                           " Please select a combination of skillwires and expert driver that doesn't exceed this limit.\r\n",
+                           max_total_rating);
+              return FALSE;
+            }
+          }
         case CYB_FILTRATION:
           if (GET_CYBERWARE_FLAGS(cyber1) == GET_CYBERWARE_FLAGS(cyber2)) {
             send_to_char("You already have this type of filtration installed.\r\n", ch);
