@@ -2595,13 +2595,17 @@ void stop_rigging(struct char_data *ch) {
   if (!veh)
     return;
 
+  // Stop their vehicle.
   stop_vehicle(veh);
-  stop_fighting(ch);
 
+  // Clear their pointers and flags.
   ch->char_specials.rigging = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
   AFF_FLAGS(ch).RemoveBit(AFF_RIG);
   AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
+
+  // Take them out of combat (does not depend on above pointers/flags)
+  stop_fighting(ch);
 
   send_to_char("You return to your senses.\r\n", ch);
 
