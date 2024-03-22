@@ -5785,7 +5785,7 @@ ACMD(do_set)
           int existing_ess_loss = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(vict)) - GET_REAL_ESS(vict);
           int new_ess = GET_RACIAL_STARTING_ESSENCE_FOR_RACE(race_idx) - existing_ess_loss;
           if (new_ess <= 0) {
-            send_to_char(ch, "Changing %s's race to %s would put them at %.2f essence!", GET_CHAR_NAME(vict), pc_race_types[race_idx], new_ess / 100);
+            send_to_char(ch, "Changing %s's race to %s would put them at %.2f essence!", GET_CHAR_NAME(vict), pc_race_types[race_idx], (float) new_ess / 100);
             SET_CLEANUP(false);
             return;
           }
