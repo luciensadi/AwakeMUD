@@ -3489,6 +3489,7 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(mob_invis_resistance_test_results);
 
   // Nested data (pointers from included structs)
+  // DO NOT REPLICATE STRINGS. They point to proto strings, and will cause crashes.
   REPLICATE(char_specials.fighting);
   REPLICATE(char_specials.fight_veh);
   REPLICATE(char_specials.hunting);
@@ -3499,7 +3500,6 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(char_specials.rigging);
   REPLICATE(char_specials.mindlink);
   REPLICATE(char_specials.spirits);
-  REPLICATE(char_specials.highlight_color_code);
   REPLICATE(mob_specials.last_direction);
   REPLICATE(mob_specials.memory);
   REPLICATE(mob_specials.wait_state);
