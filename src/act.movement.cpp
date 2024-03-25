@@ -50,6 +50,7 @@ extern bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *v
 extern struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *ch);
 extern bool precipitation_is_snow(int jurisdiction);
 extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
+extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -329,12 +330,16 @@ bool should_tch_see_chs_movement_message(struct char_data *viewer, struct char_d
         if (is_arriving) {
           if (CAN_SEE(viewer, actor)) {
             act("You notice $N sneaking around.", FALSE, viewer, 0, actor, TO_CHAR);
-            act("^T$n^T scowls at you-- your sneaking around has not gone unnoticed.^n", TRUE, viewer, 0, actor, TO_VICT);
-            act("$n scowls at $N-- $s sneaking around has not gone unnoticed.", TRUE, viewer, 0, actor, TO_NOTVICT);
+            if (can_hurt(actor, viewer, 0, TRUE)) {
+              act("^T$n^T scowls at you-- your sneaking around has not gone unnoticed.^n", TRUE, viewer, 0, actor, TO_VICT);
+              act("$n scowls at $N-- $s sneaking around has not gone unnoticed.", TRUE, viewer, 0, actor, TO_NOTVICT);
+            }
           } else {
             act("You startle and look around-- you could have sworn you heard something.", FALSE, viewer, 0, 0, TO_CHAR);
-            act("$n startles and looks in your general direction.", TRUE, viewer, 0, actor, TO_VICT);
-            act("$n startles and looks in $N's general direction.", TRUE, viewer, 0, actor, TO_NOTVICT);
+            if (can_hurt(actor, viewer, 0, TRUE)) {
+              act("$n startles and looks in your general direction.", TRUE, viewer, 0, actor, TO_VICT);
+              act("$n startles and looks in $N's general direction.", TRUE, viewer, 0, actor, TO_NOTVICT);
+            }
           }
         }
       }

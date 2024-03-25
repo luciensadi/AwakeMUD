@@ -57,6 +57,8 @@ ACMD_DECLARE(do_new_echo);
 
 #define DELETE_ENTRY_FROM_VECTOR_PTR(iterator, vector_ptr) {delete [] *(iterator); *(iterator) = NULL; (vector_ptr)->erase((iterator));}
 
+#define LEVEL_REQUIRED_TO_ADD_ITEM_REWARDS  LVL_VICEPRES
+
 const char *obj_loads[] =
   {
     "Do not load",
@@ -2840,13 +2842,11 @@ void qedit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "g) Quest already completed message: %s%s%s\r\n", CCCYN(CH, C_CMP),
                QUEST->done, CCNRM(CH, C_CMP));
 
-  if (access_level(CH, LVL_VICEPRES)) {
-    int real_obj;
-    send_to_char(CH, "h) Item Reward: %s%d%s (%s%s%s)\r\n", CCCYN(CH, C_CMP),
-                 QUEST->reward, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
-                 (real_obj = real_object(QUEST->reward)) <= 0 ? "no item reward" : obj_proto[real_obj].text.name,
-                 CCNRM(CH, C_CMP));
-  }
+  rnum_t real_obj;
+  send_to_char(CH, "h) Item Reward: %s%d%s (%s%s%s)\r\n", CCCYN(CH, C_CMP),
+                QUEST->reward, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
+                (real_obj = real_object(QUEST->reward)) <= 0 ? "no item reward" : obj_proto[real_obj].text.name,
+                CCNRM(CH, C_CMP));
 
   send_to_char(CH, "i) Prerequisite quest: %s%ld%s\r\n", CCCYN(CH, C_CMP), QUEST->prerequisite_quest, CCNRM(CH, C_CMP));
 
@@ -3091,7 +3091,8 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         break;
       case 'h':
       case 'H':
-        if (!access_level(CH, LVL_VICEPRES)) {
+        if (!access_level(CH, LEVEL_REQUIRED_TO_ADD_ITEM_REWARDS)) {
+          send_to_char(CH, "Sorry, you don't have access to set that. Ask someone rank %d or higher.\r\n", LEVEL_REQUIRED_TO_ADD_ITEM_REWARDS);
           qedit_disp_menu(d);
         } else {
           send_to_char("Enter vnum of reward (-1 for nothing): ", CH);
