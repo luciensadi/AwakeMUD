@@ -8049,6 +8049,32 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         break;
     }
 
+    // Flag non-wieldable weapon.
+    if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && !CAN_WEAR(obj, ITEM_WEAR_WIELD)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - unwieldable weapon (mob only?)^n.\r\n");
+      printed = TRUE;
+      issues++;
+    }
+
+    // Flag non-wearable equipment.
+    if (GET_OBJ_TYPE(obj) == ITEM_WORN) {
+      bool are_any_set = FALSE;
+      for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+        if (wear_idx == ITEM_WEAR_TAKE)
+          continue;
+        if (CAN_WEAR(obj, wear_idx)) {
+          are_any_set = TRUE;
+          break;
+        }
+      }
+
+      if (!are_any_set) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - unwearable equipment (mob only?)^n.\r\n");
+        printed = TRUE;
+        issues++;
+      }
+    }
+
     if (!obj->text.name || !*obj->text.name || !strcmp(obj->text.name, STRING_OBJ_SDESC_UNFINISHED)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing name^n.\r\n");
       printed = TRUE;
