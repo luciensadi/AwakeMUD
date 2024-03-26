@@ -132,7 +132,7 @@ int _error_on_invalid_real_obj(rnum_t rnum, int zone_num, char *buf, size_t buf_
 int _error_on_invalid_real_host(rnum_t rnum, int zone_num, char *buf, size_t buf_len);
 int _error_on_invalid_real_veh(rnum_t rnum, int zone_num, char *buf, size_t buf_len);
 bool vnum_is_from_canon_zone(vnum_t vnum);
-void show_host_sheaf_to_ch(struct char_data *ch, struct host_data *host);
+void show_host_sheaf_to_ch(struct char_data *ch, struct host_data *host, bool only_print_on_error);
 
 #define EXE_FILE "bin/awake" /* maybe use argv[0] but it's not reliable */
 
@@ -1304,7 +1304,7 @@ void do_stat_host(struct char_data *ch, struct host_data *host)
   strlcat(buf, "^n\r\n", sizeof(buf));
   send_to_char(buf, ch);
 
-  show_host_sheaf_to_ch(ch, host);
+  show_host_sheaf_to_ch(ch, host, FALSE);
 }
 
 void do_stat_veh(struct char_data *ch, struct veh_data * k)
@@ -8231,7 +8231,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         WARN_ON_NON_KOSHER_VAL(GET_WEAPON_REACH, >, reach);
 
         if (GET_WEAPON_FOCUS_RATING(obj)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is a rating-^c%d^n weapon focus^n.\r\n", GET_WEAPON_FOCUS_RATING(obj));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is a rating-^c%d^n ^Wweapon focus^n.\r\n", GET_WEAPON_FOCUS_RATING(obj));
           printed = TRUE;
           issues++;
         }
@@ -8242,21 +8242,21 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     switch (GET_OBJ_TYPE(obj)) {
       case ITEM_MONEY:
         if (GET_ITEM_MONEY_VALUE(obj)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yis money^n with ^c%d^n value^n.\r\n", GET_ITEM_MONEY_VALUE(obj));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Yis money^n with ^c%d^n value^n.\r\n", GET_ITEM_MONEY_VALUE(obj));
           printed = TRUE;
           issues++;
         }
         break;
       case ITEM_DECK_ACCESSORY:
         if (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PARTS && GET_OBJ_COST(obj)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yis chips/parts^n with ^c%d^n value^n.\r\n", GET_OBJ_COST(obj));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Wis chips/parts^n with ^c%d^n value^n.\r\n", GET_OBJ_COST(obj));
           printed = TRUE;
           issues++;
         }
         break;
       case ITEM_MAGIC_TOOL:
         if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_SUMMONING && GET_OBJ_COST(obj)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yis summoning mats^n with ^c%d^n value^n.\r\n", GET_OBJ_COST(obj));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^Wis summoning mats^n with ^c%d^n value^n.\r\n", GET_OBJ_COST(obj));
           printed = TRUE;
           issues++;
         }
@@ -8740,8 +8740,10 @@ int audit_zone_vehicles_(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
-void show_host_sheaf_to_ch(struct char_data *ch, struct host_data *host) {
-  send_to_char("^gSheaf:^n\r\n", ch);
+void show_host_sheaf_to_ch(struct char_data *ch, struct host_data *host, bool only_print_on_error) {
+  if (!only_print_on_error)
+    send_to_char("^gSheaf:^n\r\n", ch);
+
   bool printed_something = FALSE;
 
   for (struct trigger_step *trig = host->trigger; trig; trig = trig->next) {
@@ -8753,12 +8755,13 @@ void show_host_sheaf_to_ch(struct char_data *ch, struct host_data *host) {
                 trig->ic,
                 ic_rnum >= 0 ? ic_proto[ic_rnum].name : "^rinvalid^n");
     }
-    send_to_char(ch, "%s\r\n", sheafbuf);
+    if (!only_print_on_error)
+      send_to_char(ch, "%s\r\n", sheafbuf);
     printed_something = TRUE;
   }
 
   if (!printed_something)
-    send_to_char(" ^Y<missing - specify trigger steps for host>^n\r\n", ch);
+    send_to_char(" ^Y<Sheaf missing - specify trigger steps for host>^n\r\n", ch);
 }
 
 int audit_zone_hosts_(struct char_data *ch, int zone_num, bool verbose) {
@@ -8776,7 +8779,7 @@ int audit_zone_hosts_(struct char_data *ch, int zone_num, bool verbose) {
 
     send_to_char(ch, "^c[%8ld]^n %s^n\r\n", host->vnum, host->name);
 
-    show_host_sheaf_to_ch(ch, host);
+    show_host_sheaf_to_ch(ch, host, TRUE);
   }
 
   // TODO: Make sure they've got all their strings set.
