@@ -7950,13 +7950,6 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
 
     printed = FALSE;
 
-    // Flag objects with zero cost
-    if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_COST(obj) <= 0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cost %d^n.\r\n", GET_OBJ_COST(obj));
-      printed = TRUE;
-      issues++;
-    }
-
     // Flag objects with odd typing
     if (GET_OBJ_TYPE(obj) < MIN_ITEM || GET_OBJ_TYPE(obj) >= NUM_ITEMS) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yinvalid type %d^n.\r\n", GET_OBJ_TYPE(obj));
@@ -7992,7 +7985,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
-    // Flag objects with zero weight
+    // Flag objects with zero weight or cost
     switch (GET_OBJ_TYPE(obj)) {
       case ITEM_DESTROYABLE:
       case ITEM_FOUNTAIN:
@@ -8018,6 +8011,12 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         // Extremely heavy?
         if (GET_OBJ_WEIGHT(obj) >= 100.0) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f kgs^n.\r\n", GET_OBJ_WEIGHT(obj));
+          printed = TRUE;
+          issues++;
+        }
+        // Flag objects with zero cost
+        if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_COST(obj) <= 0) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cost %d^n.\r\n", GET_OBJ_COST(obj));
           printed = TRUE;
           issues++;
         }
