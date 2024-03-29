@@ -2134,10 +2134,10 @@ void swap_pcs_between_transport_and_station(struct room_data *transport, int tra
   for (struct char_data *ch = transport->people, *next_ch; ch; ch = next_ch) {
     next_ch = ch->next_in_room;
 
-    if (!ch->desc)
+    if (!ch->desc || CH_IN_COMBAT(ch))
       continue;
 
-    if (GET_POS(ch) == POS_STANDING && !AFF_FLAGGED(ch, SAFE_BIT_TO_REUSE_FOR_MOVEMENT_GUARD)) {
+    if (GET_POS(ch) == POS_STANDING) {
       send_to_char("Spotting an opening in the flow of passengers, you head for the exit.\r\n", ch);
       perform_move(ch, transport_exit_dir, LEADER, NULL);
       AFF_FLAGS(ch).SetBit(SAFE_BIT_TO_REUSE_FOR_MOVEMENT_GUARD);
@@ -2150,7 +2150,7 @@ void swap_pcs_between_transport_and_station(struct room_data *transport, int tra
   for (struct char_data *ch = station->people, *next_ch; ch; ch = next_ch) {
     next_ch = ch->next_in_room;
 
-    if (!ch->desc)
+    if (!ch->desc || CH_IN_COMBAT(ch))
       continue;
 
     if (GET_POS(ch) == POS_STANDING) {
@@ -2163,4 +2163,10 @@ void swap_pcs_between_transport_and_station(struct room_data *transport, int tra
       send_to_char("You spot an opening in the flow of passengers, but you'd have to get up to take it...\r\n", ch);
     }
   }
+
+  // Clear the flags from everyone in both rooms.
+  for (struct char_data *ch = transport->people; ch; ch = ch->next_in_room)
+    AFF_FLAGS(ch).RemoveBit(SAFE_BIT_TO_REUSE_FOR_MOVEMENT_GUARD);
+  for (struct char_data *ch = station->people; ch; ch = ch->next_in_room)
+    AFF_FLAGS(ch).RemoveBit(SAFE_BIT_TO_REUSE_FOR_MOVEMENT_GUARD);
 }

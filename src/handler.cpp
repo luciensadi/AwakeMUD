@@ -2324,6 +2324,8 @@ void obj_from_obj(struct obj_data * obj)
       IS_CARRYING_W(temp->carried_by) -= GET_OBJ_WEIGHT(obj);
     if (temp->worn_by)
       IS_CARRYING_W(temp->worn_by) -= GET_OBJ_WEIGHT(obj);
+    if (temp->in_veh)
+      temp->in_veh->usedload -= GET_OBJ_WEIGHT(obj);
   }
 
   obj->in_obj = NULL;

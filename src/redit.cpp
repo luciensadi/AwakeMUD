@@ -34,6 +34,8 @@ extern class memoryClass *Mem;
 #define ROOM d->edit_room
 #define DOOR d->edit_room->dir_option[d->edit_number2]
 
+#define MIN_LEVEL_TO_CONFIGURE_AIRFIELDS  LVL_VICEPRES
+
 extern sh_int r_mortal_start_room;
 extern sh_int r_immort_start_room;
 extern sh_int r_frozen_start_room;
@@ -789,6 +791,11 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       d->edit_mode = REDIT_STAFF_LOCK_LEVEL;
       break;
     case 'o':
+      if (!access_level(CH, MIN_LEVEL_TO_CONFIGURE_AIRFIELDS)) {
+        send_to_char(CH, "Sorry, you can't set flight codes. Ask a staff member level %d or above to do it.\r\n", MIN_LEVEL_TO_CONFIGURE_AIRFIELDS);
+        redit_disp_menu(d);
+        return;
+      }
       send_to_char("Enter three-letter room flight code, like YVR:", d->character);
       d->edit_mode = REDIT_FLIGHT_CODE;
       break;
@@ -962,6 +969,12 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       ROOM->room_flags.RemoveBit(number-1);
       redit_disp_flag_menu(d);
 #endif
+    } else if ((number == ROOM_HELIPAD + 1 || number == ROOM_RUNWAY + 1)
+               && !ROOM->room_flags.IsSet(number-1)
+               && !access_level(CH, MIN_LEVEL_TO_CONFIGURE_AIRFIELDS))
+    {
+      send_to_char(CH, "Sorry, you can't enable flight flags at your level. Ask a staffer level %d or higher to do it.\r\n", MIN_LEVEL_TO_CONFIGURE_AIRFIELDS);
+      redit_disp_flag_menu(d);
     } else {
       if (number == 0)
         /* back out */
