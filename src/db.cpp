@@ -5056,8 +5056,8 @@ void reset_zone(int zone, int reboot)
         if (!opposite_room || !REV_DOOR_STRUCT || (&world[ZCMD.arg1] != REV_DOOR_STRUCT->to_room)) {
           if (!IS_SET(DOOR_STRUCT->exit_info, EX_WINDOWED) && !IS_SET(DOOR_STRUCT->exit_info, EX_BARRED_WINDOW)) {
             snprintf(buf, sizeof(buf), "Note: %s exit from %ld to %ld has no back-linked exit, so zone command to toggle its door will only work on one side. (zone %d, line %d, cmd %d)",
-                    capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number, opposite_room->number, zone_table[zone].number,
-                    ZCMD.line, cmd_no);
+                    capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number, opposite_room->number,
+                    zone_table[zone].number, ZCMD.line, cmd_no);
             mudlog(buf, NULL, LOG_ZONELOG, FALSE);
           }
         } else
