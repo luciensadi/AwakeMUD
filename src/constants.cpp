@@ -793,7 +793,7 @@ const char *affected_bits[] =
     "Sneak",
     "DO NOT USE",
     "Vision x1",
-    "Charm",
+    "DO NOT SET (tempbit)",
     "ACTION",
     "Vision x2",
     "Vision x3",

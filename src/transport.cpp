@@ -2128,7 +2128,6 @@ bool cab_jurisdiction_matches_destination(vnum_t cab_vnum, vnum_t dest_vnum) {
   return cab_jurisdiction == zone_table[dest_zone_idx].jurisdiction;
 }
 
-#define SAFE_BIT_TO_REUSE_FOR_MOVEMENT_GUARD AFF_CHARM
 void swap_pcs_between_transport_and_station(struct room_data *transport, int transport_exit_dir, struct room_data *station, int station_exit_dir) {
   // Move people from the transport to the holding vector.
   for (struct char_data *ch = transport->people, *next_ch; ch; ch = next_ch) {
@@ -2140,7 +2139,7 @@ void swap_pcs_between_transport_and_station(struct room_data *transport, int tra
     if (GET_POS(ch) == POS_STANDING) {
       send_to_char("Spotting an opening in the flow of passengers, you head for the exit.\r\n", ch);
       perform_move(ch, transport_exit_dir, LEADER, NULL);
-      AFF_FLAGS(ch).SetBit(SAFE_BIT_TO_REUSE_FOR_MOVEMENT_GUARD);
+      AFF_FLAGS(ch).SetBit(AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY);
     } else {
       send_to_char("You spot an opening in the flow of passengers, but you'd have to get up to take it...\r\n", ch);
     }
@@ -2156,9 +2155,9 @@ void swap_pcs_between_transport_and_station(struct room_data *transport, int tra
     if (GET_POS(ch) == POS_STANDING) {
       send_to_char("Spotting an opening in the flow of passengers, you head for the door.\r\n", ch);
       perform_move(ch, station_exit_dir, LEADER, NULL);
-    } else if (AFF_FLAGGED(ch, SAFE_BIT_TO_REUSE_FOR_MOVEMENT_GUARD)) {
+    } else if (AFF_FLAGGED(ch, AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY)) {
       // Do nothing: We just moved them.
-      AFF_FLAGS(ch).RemoveBit(SAFE_BIT_TO_REUSE_FOR_MOVEMENT_GUARD);
+      AFF_FLAGS(ch).RemoveBit(AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY);
     } else {
       send_to_char("You spot an opening in the flow of passengers, but you'd have to get up to take it...\r\n", ch);
     }
@@ -2166,7 +2165,7 @@ void swap_pcs_between_transport_and_station(struct room_data *transport, int tra
 
   // Clear the flags from everyone in both rooms.
   for (struct char_data *ch = transport->people; ch; ch = ch->next_in_room)
-    AFF_FLAGS(ch).RemoveBit(SAFE_BIT_TO_REUSE_FOR_MOVEMENT_GUARD);
+    AFF_FLAGS(ch).RemoveBit(AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY);
   for (struct char_data *ch = station->people; ch; ch = ch->next_in_room)
-    AFF_FLAGS(ch).RemoveBit(SAFE_BIT_TO_REUSE_FOR_MOVEMENT_GUARD);
+    AFF_FLAGS(ch).RemoveBit(AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY);
 }

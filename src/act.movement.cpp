@@ -86,12 +86,6 @@ int can_move(struct char_data *ch, int dir, int extra)
       send_to_char("You step cautiously across the ice sheet, keeping yourself from falling.\r\n", ch);
     }
   }
-  if (IS_AFFECTED(ch, AFF_CHARM) && ch->master && ((ch->in_room && (ch->in_room == ch->master->in_room)) || ((ch->in_veh && ch->in_veh == ch->master->in_veh))))
-  {
-    send_to_char("The thought of leaving your master makes you weep.\r\n", ch);
-    act("$n bursts into tears.", FALSE, ch, 0, 0, TO_ROOM);
-    return 0;
-  }
   // Builders are restricted to their zone.
   if (builder_cant_go_there(ch, EXIT(ch, dir)->to_room)) {
     send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
@@ -2505,10 +2499,6 @@ ACMD(do_wake)
 }
 
 void perform_unfollow(struct char_data *ch) {
-  if (IS_AFFECTED(ch, AFF_CHARM) && ch->master) {
-    act("You can't help but follow $n.", FALSE, ch->master, 0, ch, TO_VICT);
-    return;
-  }
   if (ch->master) {
     stop_follower(ch);
     AFF_FLAGS(ch).RemoveBit(AFF_GROUP);

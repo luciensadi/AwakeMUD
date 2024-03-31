@@ -376,6 +376,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   // Unset the cyberdoc flag on load.
   PRF_FLAGS(ch).RemoveBit(PRF_TOUCH_ME_DADDY);
 
+  // Clear temporary bits.
+  AFF_FLAGS(ch).RemoveBit(AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY);
+
   // Warn if we have the chargen flag, then unset it (this is an error case)
   if (PLR_FLAGGED(ch, PLR_IN_CHARGEN)) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s still had the chargen bit on load! Removing it.", GET_CHAR_NAME(ch));

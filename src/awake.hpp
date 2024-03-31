@@ -521,63 +521,63 @@ enum {
 /* affect bits: used in char_data.char_specials.saved.affected_by */
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
 
-#define AFF_RUTHENIUM                           1  /* Char is invisible        */
-#define AFF_BANISH                              2
-#define AFF_ULTRASOUND                          3  /* Char can see invis chars    */
-#define AFF_PRONE                               4
-#define AFF_MANIFEST                            5
-#define AFF_HEALED                              6
-#define AFF_GROUP                               7  /* (R) Char is grouped       */
-#define AFF_DAMAGED                             8
-#define AFF_INFRAVISION                         9  /* Char can see in dark        */
-#define AFF_FEAR                                10
-#define AFF_RESISTPAIN                          11
-#define AFF_DETOX                               12
-#define AFF_LOW_LIGHT                           13 /* Char has low light eyes       */
-#define AFF_LASER_SIGHT                         14 /* Char using laser sight       */
-#define AFF_SNEAK                               15 /* Char can move quietly           */
-#define AFF_DO_NOT_USE_OLD_HIDE_AFF             16 /* Char is hidden                */
-#define AFF_VISION_MAG_1                        17 /* Magnification level 1        */
-#define AFF_CHARM                               18 /* Char is charmed              */
-#define AFF_ACTION                              19 /* Player gets -10 on next init roll     */
-#define AFF_VISION_MAG_2                        20 /* Magnification level 2         */
-#define AFF_VISION_MAG_3                        21 /* Magnification level 3         */
-#define AFF_COUNTER_ATT                         22 /* plr just attacked          */
-#define AFF_STABILIZE                           23 /* player won't die due to phys loss */
-#define AFF_RITUALCAST                          24
-#define AFF_IMP_INVIS                           25 /* char is improved invis         */
-#define AFF_ACID                                26
-#define AFF_APPROACH                            27 /* Character is using melee */
-#define AFF_PILOT                               28 /* Char is piloting a vehicle */
-#define AFF_RIG                                 29
-#define AFF_MANNING                             30 /* Char is in a (mini)turret */
-#define AFF_DESIGN                              31
-#define AFF_PROGRAM                             32
-#define AFF_PART_DESIGN                         33
-#define AFF_PART_BUILD                          34
-#define AFF_WITHDRAWAL_FORCE                    35
-#define AFF_WITHDRAWAL                          36
-#define AFF_BONDING                             37
-#define AFF_CONJURE                             38
-#define AFF_LODGE                               39
-#define AFF_CIRCLE                              40
-#define AFF_PACKING                             41
-#define AFF_SPELLINVIS                          42
-#define AFF_SPELLIMPINVIS                       43
-#define AFF_TRACKING                            44
-#define AFF_TRACKED                             45
-#define AFF_BINDING                             46
-#define AFF_SPELLDESIGN                         47
-#define AFF_SURPRISE                            48
-#define AFF_AMMOBUILD                           49
-#define AFF_CLOSECOMBAT                         50
-#define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
-#define AFF_LEVITATE                            52
-#define AFF_FLAME_AURA                          53
-#define AFF_VOICE_MODULATOR                     54
-#define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER    55
-#define AFF_CHEATLOG_MARK                       56
-#define AFF_MAX                                 57
+#define AFF_RUTHENIUM                               1  /* Char is invisible        */
+#define AFF_BANISH                                  2
+#define AFF_ULTRASOUND                              3  /* Char can see invis chars    */
+#define AFF_PRONE                                   4
+#define AFF_MANIFEST                                5
+#define AFF_HEALED                                  6
+#define AFF_GROUP                                   7  /* (R) Char is grouped       */
+#define AFF_DAMAGED                                 8
+#define AFF_INFRAVISION                             9  /* Char can see in dark        */
+#define AFF_FEAR                                    10
+#define AFF_RESISTPAIN                              11
+#define AFF_DETOX                                   12
+#define AFF_LOW_LIGHT                               13 /* Char has low light eyes       */
+#define AFF_LASER_SIGHT                             14 /* Char using laser sight       */
+#define AFF_SNEAK                                   15 /* Char can move quietly           */
+#define AFF_DO_NOT_USE_OLD_HIDE_AFF                 16 /* Char is hidden                */
+#define AFF_VISION_MAG_1                            17 /* Magnification level 1        */
+#define AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY  18 /* Old charm bit, now temporary mark        */
+#define AFF_ACTION                                  19 /* Player gets -10 on next init roll     */
+#define AFF_VISION_MAG_2                            20 /* Magnification level 2         */
+#define AFF_VISION_MAG_3                            21 /* Magnification level 3         */
+#define AFF_COUNTER_ATT                             22 /* plr just attacked          */
+#define AFF_STABILIZE                               23 /* player won't die due to phys loss */
+#define AFF_RITUALCAST                              24
+#define AFF_IMP_INVIS                               25 /* char is improved invis         */
+#define AFF_ACID                                    26
+#define AFF_APPROACH                                27 /* Character is using melee */
+#define AFF_PILOT                                   28 /* Char is piloting a vehicle */
+#define AFF_RIG                                     29
+#define AFF_MANNING                                 30 /* Char is in a (mini)turret */
+#define AFF_DESIGN                                  31
+#define AFF_PROGRAM                                 32
+#define AFF_PART_DESIGN                             33
+#define AFF_PART_BUILD                              34
+#define AFF_WITHDRAWAL_FORCE                        35
+#define AFF_WITHDRAWAL                              36
+#define AFF_BONDING                                 37
+#define AFF_CONJURE                                 38
+#define AFF_LODGE                                   39
+#define AFF_CIRCLE                                  40
+#define AFF_PACKING                                 41
+#define AFF_SPELLINVIS                              42
+#define AFF_SPELLIMPINVIS                           43
+#define AFF_TRACKING                                44
+#define AFF_TRACKED                                 45
+#define AFF_BINDING                                 46
+#define AFF_SPELLDESIGN                             47
+#define AFF_SURPRISE                                48
+#define AFF_AMMOBUILD                               49
+#define AFF_CLOSECOMBAT                             50
+#define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT      51
+#define AFF_LEVITATE                                52
+#define AFF_FLAME_AURA                              53
+#define AFF_VOICE_MODULATOR                         54
+#define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER        55
+#define AFF_CHEATLOG_MARK                           56
+#define AFF_MAX                                     57
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -2630,6 +2630,7 @@ enum {
 #define OBJ_ARES_PERSONAL_INVITATION_SLIP  19999
 #define OBJ_SAEDER_PASS                    4914
 #define OBJ_LARGE_PLASTIBOARD_BOX          29326
+#define OBJ_SNOWFLAKE_KEY                  3454
 
 #define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_TITLE_TO_SCORPION              892
@@ -2808,6 +2809,8 @@ enum {
 #define VEHICLE_ROTODRONE                  37503
 #define VEHICLE_DALMATION                  37504
 #define VEHICLE_SUPERCOMBI_RV              39205
+
+#define HOST_SNOWFLAKE_KEY_LOCATION        3400
 
 
 // Misc defines from spec_procs.cpp

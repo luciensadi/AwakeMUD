@@ -4723,6 +4723,11 @@ void reset_zone(int zone, int reboot)
           last_cmd = 1;
         } else
           last_cmd = 0;
+
+        // Log annoyingly if this is a bitshifted snowflake key.
+        if (GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]) == OBJ_SNOWFLAKE_KEY && matrix[ZCMD.arg3].vnum != HOST_SNOWFLAKE_KEY_LOCATION) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Bitshift happened! The snowflake key is loading in inappropriate host %ld.", matrix[ZCMD.arg3].vnum);
+        }
       }
       break;
     case 'O':                 /* read an object */

@@ -363,7 +363,7 @@ void zedit_disp_direction_menu(struct descriptor_data *d)
                "^wEnter selection: ", CH);
 }
 
-const char *get_zedit_maximum_info_string(int amount) {
+const char *get_zedit_maximum_info_string(int amount, bool mtx=FALSE) {
   static char result[1000];
 
   if (amount < -1) {
@@ -380,7 +380,7 @@ const char *get_zedit_maximum_info_string(int amount) {
   }
 
   else if (amount > 0) {
-    snprintf(result, sizeof(result), "%d (loads until this many are in game)", amount);
+    snprintf(result, sizeof(result), "%d (loads until this many are in %s)", amount, mtx ? "the host" : "the game");
   }
 
   else {
@@ -445,7 +445,7 @@ void zedit_disp_command_menu(struct descriptor_data *d)
                  obj_proto[COM->arg1].text.name,
                  OBJ(COM->arg1) );
     send_to_char(CH, "^G4^Y) ^WMaximum number in HOST: ^c%s^n\r\n",
-                 get_zedit_maximum_info_string(COM->arg2));
+                 get_zedit_maximum_info_string(COM->arg2, TRUE));
     send_to_char(CH, "^G5^Y) ^WLoad in host: ^c%s ^y(^B%d^y)^n\r\n",
                  matrix[COM->arg3].name, HOST(COM->arg3) );
     break;
