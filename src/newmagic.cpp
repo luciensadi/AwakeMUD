@@ -6603,8 +6603,8 @@ void init_parse(struct descriptor_data *d, char *arg)
 
 ACMD(do_masking)
 {
-  FAILURE_CASE(GET_TRADITION(ch) == TRAD_MUNDANE || GET_TRADITION(ch) == TRAD_ADEPT, "Sorry, only mages can use the Masking metamagic.");
-  FAILURE_CASE(GET_METAMAGIC(ch, META_MASKING) < METAMAGIC_STAGE_LEARNED, "You don't know enough about the masking metamagic.");
+  FAILURE_CASE(GET_TRADITION(ch) == TRAD_MUNDANE, "Sorry, only awakened folks can use the Masking metamagic.");
+  FAILURE_CASE(GET_METAMAGIC(ch, META_MASKING) < METAMAGIC_STAGE_LEARNED, "You don't know enough about the Masking metamagic.");
   
   skip_spaces(&argument);
   if (!*argument) {
