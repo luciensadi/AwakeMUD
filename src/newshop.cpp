@@ -380,29 +380,35 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     case ITEM_BIOWARE:
       for (struct obj_data *bio = recipient->bioware; bio; bio = bio->next_content)
         if (!biocyber_compatibility(ware, bio, recipient)) {
-          send_to_char(installer, "That 'ware isn't compatible with what's already installed.\r\n");
+          send_to_char(installer, "%s isn't compatible with what's already installed.\r\n", CAP(GET_OBJ_NAME(ware)));
           return FALSE;
         }
       for (struct obj_data *cyber = recipient->cyberware; cyber; cyber = cyber->next_content)
         if (!biocyber_compatibility(ware, cyber, recipient)) {
-          send_to_char(installer, "That 'ware isn't compatible with what's already installed.\r\n");
+          send_to_char(installer, "%s isn't compatible with what's already installed.\r\n", CAP(GET_OBJ_NAME(ware)));
           return FALSE;
         }
       break;
     default:
-      snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to install_ware_in_target_character()!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+      snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to install_ware_in_target_character()!", decapitalize_a_an(ware), GET_OBJ_VNUM(ware));
       mudlog(buf3, installer, LOG_SYSLOG, TRUE);
-      send_to_char(installer, "An unexpected error occurred when trying to install %s (code 1).\r\n", GET_OBJ_NAME(ware));
-      send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 1).\r\n", GET_OBJ_NAME(ware));
+      send_to_char(installer, "An unexpected error occurred when trying to install %s (code 1).\r\n", decapitalize_a_an(ware));
+      send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 1).\r\n", decapitalize_a_an(ware));
       return FALSE;
+  }
+
+  if (blocked_by_soulbinding(recipient, ware, FALSE)) {
+    send_to_char(installer, "You can't install %s in %s: it has been customized to fit someone else's biology.\r\n", decapitalize_a_an(ware), GET_CHAR_NAME(recipient));
+    send_to_char(installer, "You can't have %s installed: it has been customized to fit someone else's biology.\r\n", decapitalize_a_an(ware));
+    return FALSE;
   }
 
   // Edge case: We remove the object from its container further down, and we want to make sure this doesn't break anything.
   if (ware->in_obj && GET_OBJ_TYPE(ware->in_obj) != ITEM_SHOPCONTAINER) {
-    snprintf(buf3, sizeof(buf3), "SYSERR: '%s' (%ld) contained in something that's not a shopcontainer!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+    snprintf(buf3, sizeof(buf3), "SYSERR: '%s' (%ld) contained in something that's not a shopcontainer!", decapitalize_a_an(ware), GET_OBJ_VNUM(ware));
     mudlog(buf3, installer, LOG_SYSLOG, TRUE);
-    send_to_char(installer, "An unexpected error occurred when trying to install %s (code 2).\r\n", GET_OBJ_NAME(ware));
-    send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 2).\r\n", GET_OBJ_NAME(ware));
+    send_to_char(installer, "An unexpected error occurred when trying to install %s (code 2).\r\n", decapitalize_a_an(ware));
+    send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 2).\r\n", decapitalize_a_an(ware));
     return FALSE;
   }
 
@@ -412,7 +418,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would eradicate your magic!");
       do_say(installer, buf, cmd_say, SCMD_SAYTO);
     } else {
-      send_to_char(installer, "You can't install %s-- it's not compatible with magic.\r\n", GET_OBJ_NAME(ware));
+      send_to_char(installer, "You can't install %s-- it's not compatible with magic.\r\n", decapitalize_a_an(ware));
     }
     return FALSE;
   }
