@@ -101,6 +101,7 @@ extern SPECIAL(marksmanship_third);
 extern SPECIAL(marksmanship_fourth);
 extern SPECIAL(marksmanship_master);
 extern SPECIAL(pocsec_unlocker);
+extern SPECIAL(soulbound_unbinder);
 extern SPECIAL(bank);
 extern WSPEC(monowhip);
 
@@ -1447,6 +1448,13 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    HSSH(i),
                    already_printed ? " also" : "",
                    SHOULD_SEE_TIPS(ch) ? " Use the ^YUNLOCK^y command to begin." : "");
+          already_printed = TRUE;
+        }
+        if (MOB_HAS_SPEC(i, soulbound_unbinder)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can unbond soulbound keys.%s^n\r\n",
+                   HSSH(i),
+                   already_printed ? " also" : "",
+                   SHOULD_SEE_TIPS(ch) ? " Use the ^YUNBOND^y command to begin." : "");
           already_printed = TRUE;
         }
         if (MOB_HAS_SPEC(i, landlord_spec)) {
@@ -3581,11 +3589,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n focus of force ^c%d^n.",
                foci_type[GET_FOCUS_TYPE(j)],
                GET_FOCUS_FORCE(j));
-      if (blocked_by_soulbinding(ch, j, FALSE)) {
-        strlcat(buf, "It is ^rsoulbound to someone else^n and cannot be used.", sizeof(buf));
-      } else if (get_soulbound_idnum(j) == GET_IDNUM(ch)) {
-        strlcat(buf, "It is soulbound to you and cannot be used by anyone else.", sizeof(buf));
-      }
       break;
     case ITEM_SPELL_FORMULA:
       if (SPELL_HAS_SUBTYPE(GET_SPELLFORMULA_SPELL(j)))
@@ -3851,11 +3854,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       }
       if (GET_OBJ_VNUM(j) == OBJ_SHOPCONTAINER) {
         strlcat(buf, "\r\nIt's a packaged-up bit of cyberware or bioware. See ##^WHELP CYBERDOC^n for what you can do with it.", sizeof(buf));
-        if (j->contains && blocked_by_soulbinding(ch, j->contains, FALSE)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is soulbound to %s and cannot be used by anyone else.\r\n", get_soulbound_name(j->contains));
-        } else if (get_soulbound_idnum(j->contains) == GET_IDNUM(ch)) {
-          strlcat(buf, "\r\nIt is soulbound to you and cannot be used by anyone else.", sizeof(buf));
-        }
         break;
       }
       if (GET_OBJ_VNUM(j) == OBJ_ANTI_DRUG_CHEMS) {
@@ -3919,6 +3917,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
     } else {
       strlcat(buf, " You can't use it-- it belongs to someone else.", sizeof(buf));
     }
+  }
+
+  if (blocked_by_soulbinding(ch, j, FALSE)) {
+    strlcat(buf, "\r\nIt is ^rsoulbound to someone else^n and cannot be used.", sizeof(buf));
+  } else if (get_soulbound_idnum(j) == GET_IDNUM(ch)) {
+    strlcat(buf, "\r\nIt is soulbound to you and cannot be used by anyone else.", sizeof(buf));
   }
 
   if (GET_OBJ_AFFECT(j).IsSet(AFF_LASER_SIGHT) && has_smartlink) {
@@ -4268,7 +4272,7 @@ ACMD(do_examine)
       if (blocked_by_soulbinding(ch, tmp_object, FALSE)) {
         send_to_char("It is ^rsoulbound to someone else^n and cannot be used.\r\n", ch);
       } else if (get_soulbound_idnum(tmp_object) == GET_IDNUM(ch)) {
-        send_to_char("It is soulbound to you and cannot be used by anyone else.\r\n", ch);
+        send_to_char("It is ^csoulbound to you^n and cannot be used by anyone else.\r\n", ch);
       }
     }
 
