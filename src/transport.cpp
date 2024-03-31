@@ -2128,40 +2128,49 @@ bool cab_jurisdiction_matches_destination(vnum_t cab_vnum, vnum_t dest_vnum) {
   return cab_jurisdiction == zone_table[dest_zone_idx].jurisdiction;
 }
 
-void swap_pcs_between_transport_and_station(struct room_data *transport, int transport_exit_dir, struct room_data *station, int station_exit_dir) {
-  // Move people from the transport to the holding vector.
-  for (struct char_data *ch = transport->people, *next_ch; ch; ch = next_ch) {
-    next_ch = ch->next_in_room;
+void _do_the_scoots(struct room_data *room, int exit_dir) {
+  while (room->people) {
+    bool should_loop = FALSE;
+    for (struct char_data *ch = room->people, *next_ch; ch; ch = next_ch) {
+      next_ch = ch->next_in_room;
 
-    if (!ch->desc || CH_IN_COMBAT(ch))
-      continue;
+      if (!ch->desc || CH_IN_COMBAT(ch))
+        continue;
 
-    if (GET_POS(ch) == POS_STANDING) {
-      send_to_char("Spotting an opening in the flow of passengers, you head for the exit.\r\n", ch);
-      perform_move(ch, transport_exit_dir, LEADER, NULL);
+      // Skip anyone we've already processed.
+      if (AFF_FLAGGED(ch, AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY))
+        continue;
+
+      // Mark this character as processed.
       AFF_FLAGS(ch).SetBit(AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY);
-    } else {
-      send_to_char("You spot an opening in the flow of passengers, but you'd have to get up to take it...\r\n", ch);
+
+      if (GET_POS(ch) == POS_STANDING) {
+        send_to_char("Spotting an opening in the flow of passengers, you head for the door.\r\n", ch);
+        perform_move(ch, exit_dir, LEADER, NULL);
+
+        // Mark their followers as processed too.
+        for (struct follow_type *follower = ch->followers; follower; follower = follower->next) {
+          AFF_FLAGS(follower->follower).SetBit(AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY);
+        }
+        
+        // Break here to force it to go again (we could have moved a chunk of followers etc).
+        should_loop = TRUE;
+        break;
+      } else {
+        send_to_char("You spot an opening in the flow of passengers, but you'd have to get up to take it...\r\n", ch);
+      }
     }
+
+    // If we got here, we didn't operate on anyone, and there's nobody left to check.
+    if (!should_loop)
+      break;
   }
+}
 
-  // Move people from the station to the transport.
-  for (struct char_data *ch = station->people, *next_ch; ch; ch = next_ch) {
-    next_ch = ch->next_in_room;
-
-    if (!ch->desc || CH_IN_COMBAT(ch))
-      continue;
-
-    if (GET_POS(ch) == POS_STANDING) {
-      send_to_char("Spotting an opening in the flow of passengers, you head for the door.\r\n", ch);
-      perform_move(ch, station_exit_dir, LEADER, NULL);
-    } else if (AFF_FLAGGED(ch, AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY)) {
-      // Do nothing: We just moved them.
-      AFF_FLAGS(ch).RemoveBit(AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY);
-    } else {
-      send_to_char("You spot an opening in the flow of passengers, but you'd have to get up to take it...\r\n", ch);
-    }
-  }
+void swap_pcs_between_transport_and_station(struct room_data *transport, int transport_exit_dir, struct room_data *station, int station_exit_dir) {
+  // Shift people around.
+  _do_the_scoots(transport, transport_exit_dir);
+  _do_the_scoots(station, station_exit_dir);
 
   // Clear the flags from everyone in both rooms.
   for (struct char_data *ch = transport->people; ch; ch = ch->next_in_room)
