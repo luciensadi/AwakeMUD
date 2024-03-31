@@ -2671,8 +2671,6 @@ SPECIAL(saeder_guard) {
   NO_DRAG_BULLSHIT;
 
   struct char_data *guard = (char_data *) me;
-  struct obj_data *obj;
-  bool found = FALSE;
 
   if (!AWAKE(guard) || (GET_POS(guard) == POS_FIGHTING))
     return(FALSE);
@@ -2682,16 +2680,13 @@ SPECIAL(saeder_guard) {
     return FALSE;
 
   if (CMD_IS("east") && CAN_SEE(guard, ch) && guard->in_room->number == 4930) {
-    for (obj = ch->carrying; obj; obj = obj->next_content)
-      if (GET_OBJ_VNUM(obj) == OBJ_SAEDER_PASS && !blocked_by_soulbinding(ch, obj, TRUE)) {
-        soulbind_obj_to_char(obj, ch, FALSE);
-        found = TRUE;
-      }
-
-    if (found)
+    struct obj_data *pass = ch_has_obj_with_vnum(ch, OBJ_SAEDER_PASS);
+    if (pass && !blocked_by_soulbinding(ch, pass, TRUE)) {
+      soulbind_obj_to_char(pass, ch, FALSE);
       perform_move(ch, EAST, LEADER, NULL);
-    else
+    } else {
       do_say(guard, "No pass, no entry.", 0, 0);
+    }
     return(TRUE);
   }
 
