@@ -7369,7 +7369,9 @@ bool soulbind_obj_to_char_by_idnum(struct obj_data *obj, idnum_t idnum, bool inc
         GET_CYBERDECK_SOULBOND(obj) = idnum;
       break;
     case ITEM_KEY:
-      GET_KEY_SOULBOND(obj) = idnum;
+      // We don't soulbond PGHQ keys.
+      if (!get_zone_from_vnum(GET_OBJ_VNUM(obj))->is_pghq)
+        GET_KEY_SOULBOND(obj) = idnum;
       break;
   }
 

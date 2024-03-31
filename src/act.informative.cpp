@@ -364,10 +364,16 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       }
     } else if (blocked_by_soulbinding(ch, object, FALSE)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object));
+    } else if (get_soulbound_idnum(object) == GET_IDNUM(ch)) {
+      strlcat(buf, " ^L(soulbound)^n", sizeof(buf));
     }
 
-    if (GET_OBJ_VNUM(object) == OBJ_SHOPCONTAINER && object->contains && blocked_by_soulbinding(ch, object->contains, FALSE)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object->contains));
+    if (GET_OBJ_VNUM(object) == OBJ_SHOPCONTAINER && object->contains) {
+      if (blocked_by_soulbinding(ch, object->contains, FALSE)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object->contains));
+      } else if (get_soulbound_idnum(object->contains) == GET_IDNUM(ch)) {
+        strlcat(buf, " ^L(soulbound)^n", sizeof(buf));
+      }
     }
   }
   else if (GET_OBJ_NAME(object) && ((mode == 3) || (mode == 4) || (mode == SHOW_MODE_OWN_EQUIPMENT) || (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT))) {
@@ -3577,6 +3583,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
                GET_FOCUS_FORCE(j));
       if (blocked_by_soulbinding(ch, j, FALSE)) {
         strlcat(buf, "It is ^rsoulbound to someone else^n and cannot be used.", sizeof(buf));
+      } else if (get_soulbound_idnum(j) == GET_IDNUM(ch)) {
+        strlcat(buf, "It is soulbound to you and cannot be used by anyone else.", sizeof(buf));
       }
       break;
     case ITEM_SPELL_FORMULA:
@@ -3845,6 +3853,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
         strlcat(buf, "\r\nIt's a packaged-up bit of cyberware or bioware. See ##^WHELP CYBERDOC^n for what you can do with it.", sizeof(buf));
         if (j->contains && blocked_by_soulbinding(ch, j->contains, FALSE)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is soulbound to %s and cannot be used by anyone else.\r\n", get_soulbound_name(j->contains));
+        } else if (get_soulbound_idnum(j->contains) == GET_IDNUM(ch)) {
+          strlcat(buf, "\r\nIt is soulbound to you and cannot be used by anyone else.", sizeof(buf));
         }
         break;
       }
@@ -4257,6 +4267,8 @@ ACMD(do_examine)
       }
       if (blocked_by_soulbinding(ch, tmp_object, FALSE)) {
         send_to_char("It is ^rsoulbound to someone else^n and cannot be used.\r\n", ch);
+      } else if (get_soulbound_idnum(tmp_object) == GET_IDNUM(ch)) {
+        send_to_char("It is soulbound to you and cannot be used by anyone else.\r\n", ch);
       }
     }
 
