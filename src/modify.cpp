@@ -343,7 +343,35 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (STATE(d) == CON_MEDIT) {
       switch(d->edit_mode) {
       case MEDIT_LONG_DESCR:
-        REPLACE_STRING(d->edit_mob->player.physical_text.look_desc);
+        // REPLACE_STRING(d->edit_mob->player.physical_text.look_desc);
+
+        (({
+          if ((d->str) && !detected_abort) {
+            {
+              if (((d->edit_mob->player.physical_text.look_desc)))
+                delete [] ((d->edit_mob->player.physical_text.look_desc));
+              ((d->edit_mob->player.physical_text.look_desc)) = __null;
+            } 
+            format_string(d, (0));
+            (d->edit_mob->player.physical_text.look_desc) = str_dup(*d->str); {
+              if ((d)) {
+                if ((d)->str) {
+                  {
+                    if ((*((d)->str)))
+                      delete [] (*((d)->str));
+                    (*((d)->str)) = __null;
+                  }; 
+                }
+                {
+                  if (((d)->str))
+                    delete ((d)->str);
+                  ((d)->str) = __null;
+                } 
+              } 
+            }; 
+          } 
+        }));
+
         medit_disp_menu(d);
         break;
       case MEDIT_REG_DESCR:
