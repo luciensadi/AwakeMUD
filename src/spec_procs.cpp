@@ -7702,7 +7702,7 @@ SPECIAL(pocsec_unlocker) {
 
       // Yes, we need this twice, because we stripped out an argument item in cash/credstick checking.
       if (!*argument) {
-        send_to_char("Syntax: REPAIR [cash|credstick] <item>\r\n", ch);
+        send_to_char("Syntax: UNLOCK [cash|credstick] <item>\r\n", ch);
         return TRUE;
       }
     }
@@ -7764,6 +7764,97 @@ SPECIAL(pocsec_unlocker) {
   }
   
   return FALSE;
+}
+
+SPECIAL(soulbound_unbinder) {
+  struct char_data *fixer = (struct char_data *) me;
+  struct obj_data *obj, *credstick = NULL;
+  int cost = 0;
+
+  if (!cmd || !CMD_IS("unbond") || !AWAKE(fixer) || IS_NPC(ch))
+    return FALSE;
+
+  if (!CAN_SEE(fixer, ch)) {
+    do_say(fixer, "I don't deal with someone I can't see!", 0, 0);
+    return TRUE;
+  }
+
+  skip_spaces(&argument);
+
+  if (!*argument) {
+    send_to_char("Syntax: UNBOND [cash|credstick] <item>\r\n", ch);
+    return TRUE;
+  }
+
+  // Pick the first argument, but don't re-index *argument yet.
+  any_one_arg(argument, buf);
+
+  bool force_cash = !str_cmp(buf, "cash");
+  bool force_credstick = !str_cmp(buf, "credstick");
+
+  if (force_cash || force_credstick) {
+    // Actually re-index *argument now.
+    argument = any_one_arg(argument, buf);
+    skip_spaces(&argument);
+
+    // Yes, we need this twice, because we stripped out an argument item in cash/credstick checking.
+    if (!*argument) {
+      send_to_char(ch, "Syntax: UNBOND [%s] <item>\r\n", force_cash ? "CASH" : "CREDSTICK");
+      return TRUE;
+    }
+  }
+
+  // We default to cash-- only look for a credstick if they used the credstick command.
+  if (force_credstick && !(credstick = get_first_credstick(ch, "credstick"))) {
+    send_to_char("You don't have an activated credstick.\r\n", ch);
+    return TRUE;
+  }
+
+  if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
+    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
+    return TRUE;
+  }
+
+  if (GET_OBJ_TYPE(obj) != ITEM_KEY) {
+    snprintf(arg, sizeof(arg), "%s I can only unbond soulbound keys.", GET_CHAR_NAME(ch));
+    do_say(fixer, arg, 0, SCMD_SAYTO);
+    return TRUE;
+  }
+
+  if (GET_KEY_SOULBOND(obj) == 0) {
+    snprintf(arg, sizeof(arg), "%s %s isn't soulbound...", GET_CHAR_NAME(ch), CAP(GET_OBJ_NAME(obj)));
+    do_say(fixer, arg, 0, SCMD_SAYTO);
+    return TRUE;
+  }
+
+  cost = 150000;
+
+  if ((credstick ? GET_BANK(ch) : GET_NUYEN(ch)) < cost) {
+    snprintf(arg, sizeof(arg), "%s You can't afford to unbond that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);
+    do_say(fixer, arg, 0, SCMD_SAYTO);
+    return TRUE;
+  }
+
+  if (credstick)
+    lose_bank(ch, cost, NUYEN_OUTFLOW_REPAIRS);
+  else
+    lose_nuyen(ch, cost, NUYEN_OUTFLOW_REPAIRS);
+
+  // Perform the unbond.
+  act("$n slots $p into a machine and taps a few keys. After a long moment, $e unplugs it and hands it back to $N. \"^cAll set. Thanks for stopping by!^n\"",
+      FALSE, fixer, obj, ch, TO_ROOM);
+  act("You slot $p into a machine and tap a few keys. After a long moment, you unplug it and hand it back to $N. \"^cAll set. Thanks for stopping by!^n\"",
+      FALSE, fixer, obj, ch, TO_CHAR);
+
+  {
+    const char *owner_name = get_player_name(GET_KEY_SOULBOND(obj));
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s unbound key originally soulbound to %s (%ld).", GET_CHAR_NAME(ch), owner_name, GET_KEY_SOULBOND(obj));
+    delete [] owner_name;
+  }
+
+  GET_KEY_SOULBOND(obj) = 0;
+
+  return TRUE;
 }
 
 /*
