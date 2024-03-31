@@ -830,41 +830,19 @@ void move_vehicle(struct char_data *ch, int dir)
   RIG_VEH(ch, veh);
   if (!veh || veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
     return;
-  if (ch && !(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) && !veh->dest)
-  {
-    send_to_char("You're not driving...\r\n", ch);
-    return;
-  }
-  if (veh->cspeed <= SPEED_IDLE)
-  {
-    send_to_char("You might want to speed up a little.\r\n", ch);
-    return;
-  }
-  if (veh->in_veh || !veh->in_room) {
-    send_to_char("You aren't the Kool-Aid Man, so you decide against ramming your way out of here.\r\n", ch);
-    return;
-  }
-  if (!EXIT(veh, dir)
-      || !EXIT(veh, dir)->to_room
-      || EXIT(veh, dir)->to_room == &world[0])
-  {
-      send_to_char(CANNOT_GO_THAT_WAY, ch);
-      return;
-  }
+  
+  FAILURE_CASE(ch && !(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) && !veh->dest, "You're not driving...");
+  FAILURE_CASE(veh->cspeed <= SPEED_IDLE, "You might want to speed up a little.");
+  FAILURE_CASE(veh->in_veh || !veh->in_room, "You aren't the Kool-Aid Man, so you decide against ramming your way out of here.");
+  FAILURE_CASE(!EXIT(veh, dir) || !EXIT(veh, dir)->to_room || EXIT(veh, dir)->to_room == &world[0], "You can't go that way.");
+  FAILURE_CASE(veh_is_currently_flying(veh), "Deviating from your flight plan could have nasty consequences, so you decide to stay the course.");
 
   struct room_data *room = EXIT(veh, dir)->to_room;
 
   if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
     if (GET_APARTMENT(EXIT(veh, dir)->to_room) || GET_APARTMENT(veh->in_room)) {
-      if (IS_SET(EXIT(veh, dir)->exit_info, EX_LOCKED) && !has_key(ch, (EXIT(veh, dir)->key))) {
-        send_to_char("You need the key in your inventory to use the garage door opener.\r\n", ch);
-        return;
-      }
-
-      if (!CH_CAN_ENTER_APARTMENT(EXIT(veh, dir)->to_room, ch)) {
-        send_to_char("That's private property-- no trespassing.\r\n", ch);
-        return;
-      }
+      FAILURE_CASE(IS_SET(EXIT(veh, dir)->exit_info, EX_LOCKED) && !has_key(ch, (EXIT(veh, dir)->key)), "You need the key in your inventory to use the garage door opener.");
+      FAILURE_CASE(!CH_CAN_ENTER_APARTMENT(EXIT(veh, dir)->to_room, ch), "That's private property-- no trespassing.");
 
       send_to_char("The remote on your key beeps, and the door swings open just enough to let you through.\r\n", ch);
       snprintf(buf, sizeof(buf), "A door beeps before briefly opening just enough to allow %s through.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
