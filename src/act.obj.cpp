@@ -2120,7 +2120,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
         // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
         bool can_be_dropped_here = FALSE;
-        if (ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) || ROOM_FLAGGED(ch->in_room, ROOM_ALL_VEHICLE_ACCESS)) {
+        if (ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) || ROOM_FLAGGED(ch->in_room, ROOM_ALL_VEHICLE_ACCESS) || veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
           can_be_dropped_here = TRUE;
         } else if (veh_can_traverse_land(veh) && ROOM_FLAGGED(ch->in_room, ROOM_ROAD)) {
           can_be_dropped_here = TRUE;

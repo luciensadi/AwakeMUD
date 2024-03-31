@@ -1128,7 +1128,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     }
   }
 
-  FALSE_CASE(ch->is_carrying_vehicle && ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_NOBIKE), "You'll have to drop any vehicles before going there.");
+  FALSE_CASE(ch->is_carrying_vehicle && ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_NOBIKE), "You'll have to drop any vehicles before going there. (If you can't drop them and are completely stuck, use the STUCK command.)");
   FALSE_CASE(get_armor_penalty_grade(ch) == ARMOR_PENALTY_TOTAL, "You're wearing too much armor to move!");
 
   // Flying vehicles can traverse any terrain.
