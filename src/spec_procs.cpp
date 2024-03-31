@@ -4319,14 +4319,6 @@ void process_auth_room(struct char_data *ch) {
   // Clear the rest, it can't be kept.
   GET_NUYEN_RAW(ch) = 0;
 
-  zero_cost_of_obj_and_contents(ch->carrying);
-  for (int i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i))
-      zero_cost_of_obj_and_contents(GET_EQ(ch, i));
-  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-    GET_OBJ_COST(obj) = 1;
-  for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
-    GET_OBJ_COST(obj) = 1;
   char_from_room(ch);
   char_to_room(ch, &world[real_room(RM_NEWBIE_LOBBY)]);
   GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
@@ -4373,6 +4365,16 @@ void process_auth_room(struct char_data *ch) {
       send_to_char("You have been given a pocket secretary.^n\r\n", ch);
     }
   }
+
+  // Zero the cost of all their gear.
+  zero_cost_of_obj_and_contents(ch->carrying);
+  for (int i = 0; i < NUM_WEARS; i++)
+    if (GET_EQ(ch, i))
+      zero_cost_of_obj_and_contents(GET_EQ(ch, i));
+  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
+    GET_OBJ_COST(obj) = 1;
+  for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
+    GET_OBJ_COST(obj) = 1;
 
   // Heal them.
   GET_PHYSICAL(ch) = 1000;
