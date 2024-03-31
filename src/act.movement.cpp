@@ -1821,7 +1821,7 @@ ACMD(do_drag)
         return;
       }
 
-      if ((IS_CARRYING_W(ch) + calculate_vehicle_weight(drag_veh)) > CAN_CARRY_W(ch) * 2) {
+      if ((IS_CARRYING_W(ch) + calculate_vehicle_weight(drag_veh)) > CAN_CARRY_W(ch) * 2.5) {
         send_to_char(ch, "%s is too heavy for you to move!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(drag_veh)));
         return;
       }
