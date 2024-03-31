@@ -626,6 +626,7 @@ void assign_mobiles(void)
   SPECIAL(chargen_docwagon_checker);
   SPECIAL(fatcop);
   SPECIAL(pocsec_unlocker);
+  SPECIAL(soulbond_unbinder);
 
 #ifdef USE_PRIVATE_CE_WORLD
   SPECIAL(marksmanship_first);
@@ -646,6 +647,7 @@ void assign_mobiles(void)
   ASSIGNMOB(779, marksmanship_trainer);
   ASSIGNMOB(95902, receptionist_95902);
   ASSIGNMOB(31135, graffiti_cleaner);
+  ASSIGNMOB(6902, soulbond_unbinder);
 #endif
 
   /* trainers */
