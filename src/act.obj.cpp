@@ -573,7 +573,7 @@ ACMD(do_put)
     if (veh) {
       send_to_char(ch, "%s is a vehicle-- you'll have to use the UPGRADE command.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     } else {
-      send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg2), arg2);
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg2);
     }
     return;
   }
@@ -801,7 +801,7 @@ ACMD(do_put)
       if (obj_dotmode == FIND_ALL) {
         send_to_char(ch, "You don't seem to have anything in your inventory to %s in it.\r\n", (cyberdeck ? "install" : "put"));
       } else {
-        send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg1);
+        send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg1);
       }
     }
   }
@@ -1514,7 +1514,7 @@ void get_from_room(struct char_data * ch, char *arg)
       }
 
       // Didn't find a vehicle, either.
-      send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg), arg);
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
     } else {
       if ( CAN_SEE_OBJ(ch, obj) ) {
         if ( IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(obj, 4) == 1 && !IS_SENATOR(ch) ) {
@@ -1561,7 +1561,7 @@ void get_from_room(struct char_data * ch, char *arg)
       if (dotmode == FIND_ALL)
         send_to_char("There doesn't seem to be anything here.\r\n", ch);
       else {
-        send_to_char(ch, "You don't see any %ss here.\r\n", arg);
+        send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
       }
     }
   }
@@ -2481,7 +2481,7 @@ ACMD(do_drop)
         return;
       }
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg);
+        send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg);
       }
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg, obj->next_content);
@@ -2490,7 +2490,7 @@ ACMD(do_drop)
       }
     } else {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
+        send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg);
       } else
         amount += perform_drop(ch, obj, mode, sname, random_donation_room);
     }
@@ -3055,7 +3055,7 @@ ACMD(do_eat)
     return;
   }
   if (!(food = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg);
     return;
   }
   if (subcmd == SCMD_TASTE && ((GET_OBJ_TYPE(food) == ITEM_DRINKCON) ||
@@ -3873,7 +3873,7 @@ ACMD(do_wear)
       return;
     }
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg1);
+      send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg1);
     } else
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg1, obj->next_content);
@@ -3885,7 +3885,7 @@ ACMD(do_wear)
       }
   } else {
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg1), arg1);
+      send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg1);
     } else {
       if ((where = find_eq_pos(ch, obj, arg2)) >= 0)
         perform_wear(ch, obj, where, TRUE);
@@ -3904,7 +3904,7 @@ ACMD(do_wield)
   if (!*arg)
     send_to_char("Wield what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg);
   } else {
     if (!CAN_WEAR(obj, ITEM_WEAR_WIELD))
       send_to_char(ch, "You can't wield %s.\r\n", GET_OBJ_NAME(obj));
@@ -3944,7 +3944,7 @@ ACMD(do_grab)
   if (!*arg)
     send_to_char("Hold what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg);
   } else {
     if (GET_OBJ_TYPE(obj) == ITEM_LIGHT)
       perform_wear(ch, obj, WEAR_LIGHT, TRUE);
@@ -4076,12 +4076,12 @@ ACMD(do_remove)
           found = 1;
         }
       if (!found) {
-        send_to_char(ch, "You don't seem to be using any %ss.\r\n", arg);
+        send_to_char(ch, "You don't seem to be using anything named '%s'.\r\n", arg);
       }
     }
   } else {
     if (!(obj = get_object_in_equip_vis(ch, arg, ch->equipment, &i))) {
-      send_to_char(ch, "You don't seem to be using %s %s.\r\n", AN(arg), arg);
+      send_to_char(ch, "You don't seem to be using anything named '%s'.\r\n", arg);
     } else {
       if (GET_OBJ_TYPE(obj) == ITEM_GYRO) {
         if (GET_EQ(ch, WEAR_WIELD))
@@ -4837,7 +4837,7 @@ ACMD(do_ready)
     obj = finger;
   else {
     if (!(generic_find(buf, FIND_OBJ_EQUIP, ch, &tmp_char, &obj))) {
-      send_to_char(ch, "You don't seem to be using %s %s.\r\n", AN(argument), argument);
+      send_to_char(ch, "You don't seem to be using anything named '%s'.\r\n", argument);
       return;
     }
   }
@@ -4903,7 +4903,7 @@ ACMD(do_draw)
           // problem here is we have to recurse a bit-- worn holsters, and also worn items containing holsters
         }
         */
-        send_to_char(ch, "You don't seem to be using %s %s.\r\n", AN(argument), argument);
+        send_to_char(ch, "You don't seem to be using anything named '%s'.\r\n", argument);
         return;
       }
 
