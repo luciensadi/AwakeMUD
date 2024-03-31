@@ -2985,11 +2985,11 @@ SPECIAL(fixer)
 
     if (OBJ_IS_FULLY_DAMAGED(obj)) {
       // If you got it completely wrecked, it's about as expensive as buying a new one, but at least you don't have to roll for it.
-      cost += GET_OBJ_COST(obj) * 0.9;
+      cost += ((float) GET_OBJ_COST(obj)) * 0.9;
     } else {
       // Otherwise, it's a lower percentage of the cost, moderated by the percentage of damage taken.
-      float damage_percentage = GET_OBJ_CONDITION(obj) / (GET_OBJ_BARRIER(obj) == 0 ? GET_OBJ_CONDITION(obj) : GET_OBJ_BARRIER(obj));
-      cost += (int) ((cost * damage_percentage) * 0.6);
+      float damage_percentage = ((float) GET_OBJ_CONDITION(obj)) / (GET_OBJ_BARRIER(obj) == 0 ? GET_OBJ_CONDITION(obj) : GET_OBJ_BARRIER(obj));
+      cost += (int) (((float) GET_OBJ_COST(obj)) * damage_percentage * 0.6);
     }
 
     // There's a minimum repair cost now.
