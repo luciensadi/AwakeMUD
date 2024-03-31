@@ -6920,6 +6920,11 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
       continue;
     }
 
+    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, list)) {
+      DEBUG_TO_STAFF(ch, "%s: scanner is ignoring\r\n", GET_CHAR_NAME(list));
+      continue;
+    }
+
     // Skip inanimates if you only see with astral.
     if (ch_only_sees_with_astral && MOB_FLAGGED(list, MOB_INANIMATE)) {
       DEBUG_TO_STAFF(ch, "%s: astral-only vs inanimate\r\n", GET_CHAR_NAME(list));
