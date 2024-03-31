@@ -250,7 +250,7 @@ void objList::UpdateCounters(void)
     }
 
     // We use the trideo broadcast tick, because why not.
-    if (trideo_plays && GET_OBJ_SPEC(OBJ) == pocket_sec) {
+    if (trideo_plays && GET_OBJ_SPEC(OBJ) == pocket_sec && !GET_POCKET_SECRETARY_SILENCED(OBJ)) {
       struct char_data *carried_by = get_obj_carried_by_recursive(OBJ);
       struct char_data *worn_by = get_obj_worn_by_recursive(OBJ);
       struct char_data *recipient = carried_by ? carried_by : worn_by;

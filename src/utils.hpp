@@ -1076,6 +1076,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_RITUAL_TICKS_AT_START(components)     (GET_OBJ_VAL((components), 6))
 
 #define GET_POCKET_SECRETARY_LOCKED_BY(obj)       (GET_OBJ_VAL((obj), 1))
+#define GET_POCKET_SECRETARY_SILENCED(obj)        (GET_OBJ_VAL((obj), 2))
 
 #define GET_VEHICLE_TITLE_OWNER(title)            (GET_OBJ_VAL((obj), 0))
 
