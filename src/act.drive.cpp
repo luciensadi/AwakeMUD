@@ -161,58 +161,41 @@ void crash_test(struct char_data *ch)
   }
 }
 
+bool passed_drive_and_rig_precondition_checks(struct char_data *ch) {
+  struct char_data *temp = NULL;
+
+  FALSE_CASE(IS_ASTRAL(ch), "You cannot seem to touch physical objects.");
+  FALSE_CASE(!VEH, "You have to be in a vehicle to do that.");
+  FALSE_CASE(!ch->vfront, "Nobody likes a backseat driver. ##^WSWITCH^n to the front first.");
+  FALSE_CASE(IS_WORKING(ch) && !AFF_FLAGGED(ch, AFF_PILOT), "You're too busy.");
+  FALSE_CASE(!IS_NPC(ch) && GET_SKILL(ch, get_pilot_skill_for_veh(VEH)) == 0 && GET_SKILL(ch, SKILL_PILOT_CAR) == 0 && GET_SKILL(ch, SKILL_PILOT_BIKE) == 0 && GET_SKILL(ch, SKILL_PILOT_TRUCK) == 0,
+             "You have no idea how to drive this thing.");
+  FALSE_CASE(VEH->damage >= VEH_DAM_THRESHOLD_DESTROYED, "This vehicle is too much of a wreck to move!");
+  FALSE_CASE(VEH->rigger || VEH->dest, "You can't seem to take control!");
+  FALSE_CASE((temp = get_driver(VEH)) && temp != ch, "Someone is already in charge!");
+  FALSE_CASE((VEH->type == VEH_BIKE || VEH->type == VEH_MOTORBOAT) && VEH->locked && GET_IDNUM(ch) != VEH->owner,
+             "You can't seem to start it.");
+
+  FALSE_CASE((VEH->cspeed == SPEED_OFF || VEH->dest) && VEH->hood, "You can't drive with the hood up.");
+  
+  return TRUE;
+}
+
 ACMD(do_drive)
 {
-  struct char_data *temp = NULL;
-  if (IS_ASTRAL(ch)) {
-    send_to_char("You cannot seem to touch physical objects.\r\n", ch);
+  // Error messages sent in function.
+  if (!passed_drive_and_rig_precondition_checks(ch))
     return;
-  }
-  if (!VEH) {
-    send_to_char("You have to be in a vehicle to do that.\r\n", ch);
-    return;
-  }
-  if (!ch->vfront) {
-    send_to_char("Nobody likes a backseat driver.\r\n", ch);
-    return;
-  }
-  if (AFF_FLAGGED(ch, AFF_RIG)) {
-    send_to_char("You are already rigging the vehicle.\r\n", ch);
-    return;
-  }
-  if (IS_WORKING(ch) && !AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
-  if(!IS_NPC(ch) && GET_SKILL(ch, SKILL_PILOT_CAR) == 0 && GET_SKILL(ch, SKILL_PILOT_BIKE) == 0 && GET_SKILL(ch, SKILL_PILOT_TRUCK) == 0) {
-    send_to_char("You have no idea how to do that.\r\n", ch);
-    return;
-  }
-  if (VEH->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-    send_to_char("This vehicle is too much of a wreck to move!\r\n", ch);
-    return;
-  }
-  if (VEH->rigger || VEH->dest) {
-    send_to_char("You can't seem to take control!\r\n", ch);
-    return;
-  }
-  if ((temp = get_driver(VEH)) && temp != ch) {
-    send_to_char("Someone is already in charge!\r\n", ch);
-    return;
-  }
-  if ((VEH->type == VEH_BIKE || VEH->type == VEH_MOTORBOAT) && VEH->locked && GET_IDNUM(ch) != VEH->owner) {
-    send_to_char("You can't seem to start it.\r\n", ch);
-    return;
-  }
+  
+  FAILURE_CASE(AFF_FLAGGED(ch, AFF_RIG), "You are already rigging the vehicle.");
+
+  // Start driving.
   if (VEH->cspeed == SPEED_OFF || VEH->dest) {
-    if (VEH->hood) {
-      send_to_char("You can't drive with the hood up.\r\n", ch);
-      return;
-    }
     if (!VEH->locked && VEH->owner == GET_IDNUM(ch)) {
       send_to_veh("The doors click locked.\r\n", VEH, NULL, FALSE);
       VEH->locked = TRUE;
     }
+
     AFF_FLAGS(ch).SetBit(AFF_PILOT);
     VEH->lastin[0] = VEH->in_room;
     stop_manning_weapon_mounts(ch, TRUE);
@@ -227,75 +210,35 @@ ACMD(do_drive)
       VEH->cspeed = SPEED_CRUISING;
     }
     send_to_veh(buf1, VEH, ch, FALSE);
-  } else {
-    if (veh_is_currently_flying(VEH)) {
-      send_to_char("Relinquishing the controls in midair is a great way to crash and die.\r\n", ch);
-      return;
-    }
-
-    AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
-    send_to_char("You relinquish the driver's seat.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
-    send_to_veh(buf1, VEH, ch, FALSE);
-    stop_chase(VEH);
-    if (!VEH->dest)
-      VEH->cspeed = SPEED_OFF;
+    return;
   }
-  return;
+  
+  // Stop driving.
+  FAILURE_CASE(veh_is_currently_flying(VEH), "Relinquishing the controls in midair is a great way to crash and die.");
+
+  AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
+  send_to_char("You relinquish the driver's seat.\r\n", ch);
+  snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
+  send_to_veh(buf1, VEH, ch, FALSE);
+  stop_chase(VEH);
+  if (!VEH->dest)
+    VEH->cspeed = SPEED_OFF;
 }
 
 ACMD(do_rig)
 {
-  struct char_data *temp;
-
-  if (IS_ASTRAL(ch)) {
-    send_to_char("You cannot seem to touch physical objects.\r\n", ch);
+  // Error messages sent in function.
+  if (!passed_drive_and_rig_precondition_checks(ch))
     return;
-  }
-  if (!VEH) {
-    send_to_char("You have to be in a vehicle to do that.\r\n", ch);
-    return;
-  }
-  if (!ch->vfront) {
-    send_to_char("Nobody likes a backseat driver.\r\n", ch);
-    return;
-  }
-  if (IS_WORKING(ch) && !AFF_FLAGGED(ch, AFF_RIG)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
 
   // Error message sent in function.
   if (!get_datajack(ch, TRUE))
     return;
 
-  if (GET_SKILL(ch, SKILL_PILOT_CAR) == 0 && GET_SKILL(ch, SKILL_PILOT_BIKE) == 0 &&
-      GET_SKILL(ch, SKILL_PILOT_TRUCK) == 0) {
-    send_to_char("You have no idea how to do that.\r\n", ch);
-    return;
-  }
-  if (VEH->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-    send_to_char("This vehicle is too much of a wreck to move!\r\n", ch);
-    return;
-  }
-  if (VEH->rigger || VEH->dest) {
-    send_to_char("The system is unresponsive!\r\n", ch);
-    return;
-  }
-  for(temp = VEH->people; temp; temp= temp->next_in_veh)
-    if(ch != temp && AFF_FLAGGED(temp, AFF_PILOT)) {
-      send_to_char("Someone is already in charge!\r\n", ch);
-      return;
-    }
   if(VEH->cspeed == SPEED_OFF || VEH->dest) {
-    if (VEH->type == VEH_BIKE && VEH->locked && GET_IDNUM(ch) != VEH->owner) {
-      send_to_char("You jack in and nothing happens.\r\n", ch);
-      return;
-    }
-
-    if (VEH->hood) {
-      send_to_char("You can't drive with the hood up.\r\n", ch);
-      return;
+    if (!VEH->locked && VEH->owner == GET_IDNUM(ch)) {
+      send_to_veh("The doors click locked.\r\n", VEH, NULL, FALSE);
+      VEH->locked = TRUE;
     }
 
     // No perception while rigging. Specifically only checks player perception.
@@ -309,8 +252,8 @@ ACMD(do_rig)
     VEH->lastin[0] = VEH->in_room;
 
     stop_manning_weapon_mounts(ch, TRUE);
-    send_to_char("As you jack in, your perception shifts.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s jacks into the vehicle control system.\r\n", capitalize(GET_NAME(ch)));
+    send_to_char("You jack in and accelerate to a cruise.\r\n", ch);
+    snprintf(buf1, sizeof(buf1), "%s jacks into the vehicle control system and accelerates to a cruise.\r\n", capitalize(GET_NAME(ch)));
     send_to_veh(buf1, VEH, ch, FALSE);
   } else {
     if (!AFF_FLAGGED(ch, AFF_RIG)) {
