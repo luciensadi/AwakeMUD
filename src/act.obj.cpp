@@ -2689,8 +2689,20 @@ void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)
   FAILURE_CASE((GET_NUYEN(ch) < amount) && (IS_NPC(ch) || (!access_level(ch, LVL_VICEPRES))), "You don't have that much!");
   FAILURE_CASE(IS_SENATOR(ch) && !access_level(ch, LVL_PRESIDENT) && !IS_SENATOR(vict) && !IS_NPC(vict), "Staff must use the PAYOUT command instead.");
   
-  if (IS_NPC(vict)) {
-    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s gave NPC %s %d nuyen.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), amount);
+  bool ch_is_npc = IS_NPC(ch);
+  bool vict_is_npc = IS_NPC(vict);
+
+  mudlog_vfprintf(ch, LOG_CHEATLOG, "%s%s (%ld) gave %s%s%s (%ld) %d nuyen.", 
+                  ch_is_npc ? "NPC " : "",
+                  GET_CHAR_NAME(ch),
+                  ch_is_npc ? GET_MOB_VNUM(ch) : GET_IDNUM(ch),
+                  is_same_host(ch, vict) ? "same-host " : "",
+                  vict_is_npc ? "NPC " : "",
+                  GET_CHAR_NAME(vict),
+                  vict_is_npc ? GET_MOB_VNUM(vict) : GET_IDNUM(vict),
+                  amount);
+
+  if (vict_is_npc) {
     AFF_FLAGS(vict).SetBit(AFF_CHEATLOG_MARK);
   }
 
