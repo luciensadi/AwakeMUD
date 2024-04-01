@@ -462,10 +462,15 @@ void recalculate_vehicle_usedload(struct veh_data *veh) {
 
   veh->usedload = 0;
 
-  // Recalculate mod weights, including for mounts.
+  // Recalculate mod weights.
   for (int mod_idx = 0; mod_idx < NUM_MODS; mod_idx++) {
     if (GET_MOD(veh, mod_idx))
       veh->usedload += get_obj_vehicle_load_usage(GET_MOD(veh, mod_idx), TRUE);
+  }
+
+  // Recalculate mount weights.
+  for (struct obj_data *mount = veh->mount; mount; mount = mount->next_content) {
+    veh->usedload += get_obj_vehicle_load_usage(mount, TRUE);
   }
 
   // Recalculate contained weights.
