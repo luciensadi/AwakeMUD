@@ -2113,67 +2113,73 @@ void stop_snooping(struct char_data * ch)
 {
   if (!ch->desc->snooping)
     send_to_char("You aren't snooping anyone.\r\n", ch);
-  else
-  {
+  else {
     send_to_char("You stop snooping.\r\n", ch);
 
-    if ( ch->desc->snooping->original )
-      snprintf(buf, sizeof(buf),"%s stops snooping %s.",
-              GET_CHAR_NAME(ch), GET_CHAR_NAME((ch->desc->snooping->original)));
-    else
-      snprintf(buf, sizeof(buf),"%s stops snooping %s.",
-              GET_CHAR_NAME(ch),GET_CHAR_NAME((ch->desc->snooping->character)));
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s stops snooping %s.",
+                    GET_CHAR_NAME(ch),
+                    GET_CHAR_NAME(ch->desc->snooping->original ? ch->desc->snooping->original : ch->desc->snooping->character));
+
+    if (GET_LEVEL(ch) < LVL_REQUIRED_FOR_SILENT_SNOOP) {
+      send_to_char(ch->desc->snooping->character, "^WStaff member %s is no longer watching your connection for debugging information.^n Thank you for your help!\r\n", GET_CHAR_NAME(ch));
+    }
 
     ch->desc->snooping->snoop_by = NULL;
     ch->desc->snooping = NULL;
-
-    mudlog(buf, ch, LOG_WIZLOG, FALSE);
   }
 }
 
 ACMD(do_snoop)
 {
-  struct char_data *victim, *tch;
+  struct char_data *victim;
 
   if (!ch->desc)
     return;
 
   one_argument(argument, arg);
 
-  if (!*arg)
+  if (!*arg) {
     stop_snooping(ch);
-  else if (!(victim = get_char_vis(ch, arg)))
-    send_to_char("No such person around.\r\n", ch);
-  else if (!victim->desc)
-    send_to_char("There's no link.. nothing to snoop.\r\n", ch);
-  else if (victim == ch)
+    return;
+  }
+
+  if (GET_LEVEL(ch) < LVL_REQUIRED_FOR_SILENT_SNOOP) {
+    FAILURE_CASE_PRINTF(!(victim = get_char_room_vis(ch, arg)), "You don't see anyone named '%s' here.", arg);
+  } else {
+    FAILURE_CASE_PRINTF(!(victim = get_char_vis(ch, arg)), "You don't see anyone named '%s' in the game.", arg);
+  }
+
+  FAILURE_CASE_PRINTF(!victim->desc, "%s has no link.. nothing to snoop.", GET_CHAR_NAME(victim));
+  
+  if (victim == ch) {
     stop_snooping(ch);
-  else if (victim->desc->snoop_by)
-    send_to_char("Busy already. \r\n", ch);
-  else if (victim->desc->snooping == ch->desc)
-    send_to_char("Don't be stupid.\r\n", ch);
-  else if (!IS_NPC(victim) && PLR_FLAGS(victim).IsSet(PLR_NOSNOOP) )
-    send_to_char("You can't snoop an unsnoopable person.\r\n",ch);
-  else {
-    if (victim->desc->original)
-      tch = victim->desc->original;
-    else
-      tch = victim;
+  }
 
-    if (GET_LEVEL(tch) >= GET_LEVEL(ch)) {
-      send_to_char("You can't.\r\n", ch);
-      return;
-    }
-    send_to_char(OK, ch);
+  if (victim->desc->snoop_by) {
+    FAILURE_CASE_PRINTF(victim->desc->snoop_by->character && GET_LEVEL(victim->desc->snoop_by->character) > GET_LEVEL(ch),
+                        "You don't see anyone named '%s' %s.", arg, GET_LEVEL(ch) < LVL_REQUIRED_FOR_SILENT_SNOOP ? "here" : "in the game");
+    FAILURE_CASE_PRINTF(victim->desc->snoop_by, "%s is already being snooped.", GET_CHAR_NAME(victim));
+  }
+  
+  FAILURE_CASE(victim->desc->snooping == ch->desc, "That would cause a loop.");
+  FAILURE_CASE(!IS_NPC(victim) && PLR_FLAGS(victim).IsSet(PLR_NOSNOOP), "You can't snoop an unsnoopable person.");
+  FAILURE_CASE(GET_LEVEL(victim->desc->original ? victim->desc->original : victim) >= GET_LEVEL(ch), "You can't.");
 
-    if (ch->desc->snooping)
-      ch->desc->snooping->snoop_by = NULL;
+  // Clear old snooping data.
+  if (ch->desc->snooping)
+    ch->desc->snooping->snoop_by = NULL;
 
-    ch->desc->snooping = victim->desc;
-    victim->desc->snoop_by = ch->desc;
-    snprintf(buf, sizeof(buf),"%s now being snooped by %s.",
-            GET_CHAR_NAME(victim),GET_CHAR_NAME(ch));
-    mudlog(buf, ch, LOG_WIZLOG, FALSE);
+  // Set new snooping data.
+  ch->desc->snooping = victim->desc;
+  victim->desc->snoop_by = ch->desc;
+
+  send_to_char(OK, ch);
+
+  if (GET_LEVEL(ch) < LVL_REQUIRED_FOR_SILENT_SNOOP) {
+    send_to_char(victim, "^WStaff member %s is now watching your connection for debugging information.^n This is an audited event.\r\n", GET_CHAR_NAME(ch));
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s now being snooped by %s. Character has been notified.", GET_CHAR_NAME(victim),GET_CHAR_NAME(ch));
+  } else {
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s now being snooped by %s.", GET_CHAR_NAME(victim),GET_CHAR_NAME(ch));
   }
 }
 

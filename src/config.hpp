@@ -310,8 +310,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // How much longer should projecting work for than standard?
 #define PROJECTION_LENGTH_MULTIPLIER                           30
 
-/////////////// OLC permissions configuration /////////////////////////
+/////////////// OLC and staff permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER
+#define LVL_REQUIRED_FOR_SILENT_SNOOP                          LVL_ADMIN
 
 #endif

@@ -901,7 +901,7 @@ struct command_info cmd_info[] =
     { "sleep"      , POS_SLEEPING, do_sleep    , 0, 0, BLOCKS_IDLE_REWARD },
     { "slowns"     , POS_DEAD    , do_slowns   , LVL_DEVELOPER, 0, BLOCKS_IDLE_REWARD },
     { "sneak"      , POS_SITTING, do_sneak    , 1, 0, BLOCKS_IDLE_REWARD },
-    { "snoop"      , POS_DEAD    , do_snoop    , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
+    { "snoop"      , POS_DEAD    , do_snoop    , LVL_CONSPIRATOR, 0, BLOCKS_IDLE_REWARD },
     { "socials"    , POS_DEAD    , do_commands , 0, SCMD_SOCIALS, ALLOWS_IDLE_REWARD },
     { "software"   , POS_LYING   , do_software , 0, 0, ALLOWS_IDLE_REWARD },
     { "spool"      , POS_DEAD    , do_spool    , 0, 0, ALLOWS_IDLE_REWARD },
