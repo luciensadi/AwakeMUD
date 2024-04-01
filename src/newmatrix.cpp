@@ -1139,8 +1139,8 @@ const char *get_plaintext_matrix_score_deck(struct char_data *ch) {
 }
 
 const char *get_plaintext_matrix_score_memory(struct char_data *ch) {
-  snprintf(buf2, sizeof(buf2), "Active Memory: %d\r\n", GET_CYBERDECK_ACTIVE_MEMORY(DECKER->deck));
-  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Storage Memory: %d / %d total\r\n",
+  snprintf(buf2, sizeof(buf2), "Active Memory: %d free of %d total\r\n", DECKER->active, GET_CYBERDECK_ACTIVE_MEMORY(DECKER->deck));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Storage Memory: %d free of %d total\r\n",
           GET_CYBERDECK_FREE_STORAGE(DECKER->deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->deck));
   return buf2;
 }
@@ -1165,25 +1165,25 @@ ACMD(do_matrix_score)
 
     // Find the index of the command the player wants.
     if (!strncmp(argument, "health", strlen(argument))) {
-      strcpy(buf, get_plaintext_matrix_score_health(ch));
+      strlcpy(buf, get_plaintext_matrix_score_health(ch), sizeof(buf));
       send_to_icon(PERSONA, buf);
       return;
     }
 
     if (!strncmp(argument, "stats", strlen(argument))) {
-      strcpy(buf, get_plaintext_matrix_score_stats(ch, detect));
+      strlcpy(buf, get_plaintext_matrix_score_stats(ch, detect), sizeof(buf));
       send_to_icon(PERSONA, buf);
       return;
     }
 
     if (!strncmp(argument, "deck", strlen(argument))) {
-      strcpy(buf, get_plaintext_matrix_score_deck(ch));
+      strlcpy(buf, get_plaintext_matrix_score_deck(ch), sizeof(buf));
       send_to_icon(PERSONA, buf);
       return;
     }
 
     if (!strncmp(argument, "memory", strlen(argument))) {
-      strcpy(buf, get_plaintext_matrix_score_memory(ch));
+      strlcpy(buf, get_plaintext_matrix_score_memory(ch), sizeof(buf));
       send_to_icon(PERSONA, buf);
       return;
     }
@@ -1196,20 +1196,24 @@ ACMD(do_matrix_score)
   snprintf(buf, sizeof(buf), "You are connected to the matrix.\r\n");
 
   if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-    strcat(buf, get_plaintext_matrix_score_health(ch));
-    strcat(buf, get_plaintext_matrix_score_stats(ch, detect));
-    strcat(buf, get_plaintext_matrix_score_deck(ch));
+    strlcat(buf, get_plaintext_matrix_score_health(ch), sizeof(buf));
+    strlcat(buf, get_plaintext_matrix_score_stats(ch, detect), sizeof(buf));
+    strlcat(buf, get_plaintext_matrix_score_deck(ch), sizeof(buf));
+    strlcat(buf, get_plaintext_matrix_score_memory(ch), sizeof(buf));
   } else {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Condition:^B%3d^n       Physical:^R%3d(%2d)^n\r\n"
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), 
+            "  Condition:^B%3d^n           Physical:^R%3d(%2d)^n\r\n"
             "  Detection:^r%3d^n       Hacking Pool:^g%3d/%3d (%2d)^n\r\n"
-            "Persona Programs:\r\n"
-            "       Bod:^g%3d^n       Evasion:^g%3d^n\r\n"
-            "   Masking:^g%3d^n       Sensors:^g%3d^n\r\n"
-            "Deck Status:\r\n"
-            " Hardening:^g%3d^n       MPCP:^g%3d^n\r\n"
-            "  IO Speed:^g%3d^n       Response Increase:^g%3d^n\r\n",
+            "    Storage:^g%4d^n/%4d (^c%d^n MP free)\r\n"
+            "            ^cPersona Programs:^n\r\n"
+            "        Bod:^B%3d^n       Evasion:^B%3d^n\r\n"
+            "    Masking:^B%3d^n       Sensors:^B%3d^n\r\n"
+            "               ^cDeck Status:^n\r\n"
+            "  Hardening:^g%3d^n       MPCP:^g%3d^n\r\n"
+            "   IO Speed:^g%4d^n      Response Increase:^g%3d^n\r\n",
             PERSONA->condition, (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100),
             detect, MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch), GET_MAX_HACKING(ch),
+            GET_CYBERDECK_USED_STORAGE(DECKER->deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->deck), GET_CYBERDECK_FREE_STORAGE(DECKER->deck),
             DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
             DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_CYBERDECK_IO_RATING(DECKER->deck) : 0, DECKER->response);
   }
@@ -1217,6 +1221,8 @@ ACMD(do_matrix_score)
   if (DECKER->io < GET_CYBERDECK_IO_RATING(DECKER->deck)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^yYour I/O rating is restricted to %d by your jackpoint.^n\r\n", DECKER->io * 10);
   }
+
+  strlcat(buf, "\r\n(Switches available: ^WSCORE HEALTH^n, ^WSTATS^n, ^WDECK^n, ^WMEMORY^n.)\r\n", sizeof(buf));
 
   send_to_icon(PERSONA, buf);
 }
@@ -2289,7 +2295,7 @@ ACMD(do_download)
   skip_spaces(&argument);
   // TODO: This might cause conflicts if multiple deckers have paydata on the host.
   if ((soft = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) == PERSONA->idnum) {
-    if (GET_OBJ_VAL(DECKER->deck, 3) - GET_OBJ_VAL(DECKER->deck, 5) < GET_DECK_ACCESSORY_FILE_SIZE(soft)) {
+    if (GET_CYBERDECK_FREE_STORAGE(DECKER->deck) < GET_DECK_ACCESSORY_FILE_SIZE(soft)) {
       send_to_icon(PERSONA, "You don't have enough storage memory to download that file.\r\n");
       return;
     } else {
