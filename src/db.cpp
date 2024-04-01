@@ -69,6 +69,7 @@ namespace bf = boost::filesystem;
 #include "newhouse.hpp"
 #include "zoomies.hpp"
 #include "redit.hpp"
+#include "vehicles.hpp"
 
 ACMD_DECLARE(do_reload);
 
@@ -4448,7 +4449,6 @@ void reset_zone(int zone, int reboot)
 {
   SPECIAL(fixer);
   int cmd_no, last_cmd = 0, found = 0, no_mob = 0;
-  int sig = 0, load = 0;
   static int i;
   struct char_data *mob = NULL;
   struct obj_data *obj, *obj_to, *check;
@@ -4585,30 +4585,8 @@ void reset_zone(int zone, int reboot)
 
         // Special case: Weapon mounts.
         if (GET_OBJ_VAL(obj, 0) == TYPE_MOUNT) {
-          switch (GET_OBJ_VAL(obj, 1)) {
-            case 1:
-              sig = 1;
-              // fall through
-            case 0:
-              load = 10;
-              break;
-            case 3:
-              sig = 1;
-              // fall through
-            case 2:
-              load = 10;
-              break;
-            case 4:
-              sig = 1;
-              load = 100;
-              break;
-            case 5:
-              sig = 1;
-              load = 25;
-              break;
-          }
-          veh->usedload += load;
-          veh->sig -= sig;
+          veh->usedload += get_obj_vehicle_load_usage(obj, TRUE);
+          veh->sig -= get_mount_signature_penalty(obj);
 
           obj->next_content = veh->mount;
           veh->mount = obj;
@@ -4628,7 +4606,7 @@ void reset_zone(int zone, int reboot)
           if (mount) {
             // We found a valid mount; attach the weapon.
             obj_to_obj(obj, mount);
-            veh->usedload += GET_OBJ_WEIGHT(obj);
+            veh->usedload += get_obj_vehicle_load_usage(obj, FALSE);
 
             // Set the obj's firemode to the optimal one.
             if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_BF))
@@ -4653,14 +4631,14 @@ void reset_zone(int zone, int reboot)
                      GET_OBJ_NAME(obj),
                      GET_OBJ_NAME(GET_MOD(veh, GET_OBJ_VAL(obj, 0))));
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-            veh->usedload -= GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(obj, 0)), 1);
+            veh->usedload -= get_obj_vehicle_load_usage(GET_MOD(veh, GET_OBJ_VAL(obj, 0)), TRUE);
             for (int j = 0; j < MAX_OBJ_AFFECT; j++)
               affect_veh(veh, GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].location, -GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].modifier);
             extract_obj(GET_MOD(veh, GET_OBJ_VAL(obj, 0)));
           }
 
           GET_MOD(veh, GET_OBJ_VAL(obj, 0)) = obj;
-          veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(obj);
+          veh->usedload += get_obj_vehicle_load_usage(obj, TRUE);
           for (int j = 0; j < MAX_OBJ_AFFECT; j++)
             affect_veh(veh, obj->affected[j].location, obj->affected[j].modifier);
         }

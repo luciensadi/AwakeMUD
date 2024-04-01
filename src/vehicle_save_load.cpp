@@ -37,6 +37,7 @@ extern void handle_weapon_attachments(struct obj_data *obj);
 bool veh_is_in_junkyard(struct veh_data *veh);
 bool veh_is_in_crusher_queue(struct veh_data *veh);
 bool should_save_this_vehicle(struct veh_data *veh, char *reason);
+int get_obj_vehicle_load_usage(struct obj_data *obj, bool is_installed_mod);
 
 #ifdef IS_BUILDPORT
   bf::path global_vehicles_dir = bf::system_complete("lib") / "buildport-vehicles";
@@ -709,7 +710,7 @@ void load_single_veh(const char *filename) {
       veh->engine = GET_VEHICLE_MOD_RATING(obj);
     if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_AUTONAV)
       veh->autonav += GET_VEHICLE_MOD_RATING(obj);
-    veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(obj);
+    veh->usedload += get_obj_vehicle_load_usage(obj, TRUE);
     for (int l = 0; l < MAX_OBJ_AFFECT; l++)
       affect_veh(veh, obj->affected[l].location, obj->affected[l].modifier);
   }
@@ -764,33 +765,11 @@ void load_single_veh(const char *filename) {
 
       auto_repair_obj(weapon, veh->owner);
       obj_to_obj(weapon, obj);
-      veh->usedload += GET_OBJ_WEIGHT(weapon);
+      veh->usedload += get_obj_vehicle_load_usage(weapon, FALSE);
     }
-    int subbed = 0, damage = 0;
-    switch (GET_OBJ_VAL(obj, 1)) {
-      case 1:
-        subbed = 1;
-        // fall through
-      case 0:
-        damage = 10;
-        break;
-      case 3:
-        subbed = 1;
-        // fall through
-      case 2:
-        damage = 10;
-        break;
-      case 4:
-        subbed = 1;
-        damage = 100;
-        break;
-      case 5:
-        subbed = 1;
-        damage = 25;
-        break;
-    }
-    veh->usedload += damage;
-    veh->sig -= subbed;
+    
+    veh->sig -= get_mount_signature_penalty(obj);
+    veh->usedload += get_obj_vehicle_load_usage(obj, TRUE);
     if (veh->mount)
       obj->next_content = veh->mount;
     veh->mount = obj;

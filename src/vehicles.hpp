@@ -13,6 +13,11 @@ bool can_take_veh(struct char_data *ch, struct veh_data *veh);
 void generate_veh_idnum(struct veh_data *veh);
 bool save_single_vehicle(struct veh_data *veh, bool fromCopyover=FALSE);
 
+int get_obj_vehicle_load_usage(struct obj_data *obj, bool is_installed_mod);
+void recalculate_vehicle_usedload(struct veh_data *veh);
+int calculate_vehicle_entry_load(struct veh_data *veh);
+int get_mount_signature_penalty(struct obj_data *mount);
+
 // Protos from vehicle_save_load.cpp
 void set_veh_owner(struct veh_data *veh, idnum_t new_owner);
 void add_veh_to_map(struct veh_data *veh);

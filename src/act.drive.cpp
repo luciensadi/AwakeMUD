@@ -30,10 +30,13 @@ int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
 void stop_vehicle(struct veh_data *veh);
 void stop_rigging(struct char_data *ch);
 void stop_driving(struct char_data *ch);
+int calculate_vehicle_entry_load(struct veh_data *veh);
 
 extern int max_npc_vehicle_lootwreck_time;
 
 extern void rectify_desc_host(struct descriptor_data *desc);
+extern int get_obj_vehicle_load_usage(struct obj_data *obj, bool is_installed_mod);
+extern void recalculate_vehicle_usedload(struct veh_data *veh);
 
 #define VEH ch->in_veh
 
@@ -478,7 +481,7 @@ ACMD(do_upgrade)
 {
   struct veh_data *veh;
   struct obj_data *mod, *obj, *shop = NULL;
-  int j = 0, skill = 0, target = 0, kit = 0, mod_load_required = 0, mod_signature_change = 0, bod_already_used = 0;
+  int j = 0, skill = 0, target = 0, kit = 0, bod_already_used = 0;
   bool need_extract = FALSE;
 
   half_chop(argument, buf1, buf2, sizeof(buf2));
@@ -636,30 +639,16 @@ ACMD(do_upgrade)
     int bod_required = 0;
     switch (GET_VEHICLE_MOD_MOUNT_TYPE(mod)) {
       case MOUNT_FIRMPOINT_EXTERNAL:
-        mod_signature_change = 1;
-        // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
-        // fall through
       case MOUNT_FIRMPOINT_INTERNAL:
-        bod_required++;
-        mod_load_required = 10;
+        bod_required = 1;
         break;
       case MOUNT_HARDPOINT_EXTERNAL:
-        mod_signature_change = 1;
-        // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
-        // fall through
       case MOUNT_HARDPOINT_INTERNAL:
-        bod_required += 2;
-        mod_load_required = 10;
+      case MOUNT_MINITURRET:
+        bod_required = 2;
         break;
       case MOUNT_TURRET:
-        mod_signature_change = 1;
-        bod_required += 4;
-        mod_load_required = 100;
-        break;
-      case MOUNT_MINITURRET:
-        mod_signature_change = 1;
-        bod_required += 2;
-        mod_load_required = 25;
+        bod_required = 4;
         break;
     }
 
@@ -672,6 +661,7 @@ ACMD(do_upgrade)
       return;
     }
 
+    int mod_load_required = get_obj_vehicle_load_usage(mod, TRUE);
     if ((veh->usedload + mod_load_required) > veh->load) {
         send_to_char(ch, "%s requires %d free load space, and %s only has %d.\r\n",
                      GET_OBJ_NAME(mod),
@@ -682,7 +672,7 @@ ACMD(do_upgrade)
     }
 
     veh->usedload += mod_load_required;
-    veh->sig -= mod_signature_change;
+    veh->sig -= get_mount_signature_penalty(mod);
     obj_from_char(mod);
     if (veh->mount)
       mod->next_content = veh->mount;
@@ -718,7 +708,7 @@ ACMD(do_upgrade)
       else
         affect_veh(veh, mod->affected[0].location, -GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))->affected[0].modifier);
 
-      veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod);
+      veh->usedload += get_obj_vehicle_load_usage(mod, TRUE);
       GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))) = (veh->body * veh->body) * totalarmor * 5;
       mod->affected[0].modifier = totalarmor;
       affect_veh(veh, mod->affected[0].location, mod->affected[0].modifier);
@@ -731,7 +721,7 @@ ACMD(do_upgrade)
         send_to_char(ch, "Try as you might, you just can't fit it in.\r\n");
         return;
       }
-      veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod);
+      veh->usedload += get_obj_vehicle_load_usage(mod, TRUE);
       for (j = 0; j < MAX_OBJ_AFFECT; j++)
         affect_veh(veh, mod->affected[j].location, mod->affected[j].modifier);
 
@@ -2086,6 +2076,21 @@ ACMD(do_pop)
     }
     send_to_char(ch, "You pop the hood of %s.\r\n", GET_VEH_NAME(veh));
     veh->hood = TRUE;
+
+    // Clear the used load and recalculate it.
+    {
+      int old_load = veh->usedload;
+      recalculate_vehicle_usedload(veh);
+
+      if (veh->usedload != old_load) {
+        if (veh->usedload < old_load) {
+          send_to_char("Huh, someone must have stuffed some lead weights in here as a prank. You scoop them out and toss them aside.\r\n", ch);
+        } else {
+          send_to_char("A few helium balloons escape from under the hood...\r\n", ch);
+        }
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Vehicle had unexpected usedload on pop (%d != %d)", old_load, veh->usedload);
+      }
+    }
   }
 }
 
@@ -2379,23 +2384,6 @@ ACMD(do_transfer)
 
     save_single_vehicle(veh);
   }
-}
-
-int calculate_vehicle_entry_load(struct veh_data *veh) {
-  int mult;
-  switch (veh->type) {
-    case VEH_DRONE:
-      mult = 100;
-      break;
-    case VEH_TRUCK:
-      mult = 1500;
-      break;
-    default:
-      mult = 500;
-      break;
-  }
-
-  return veh->body * mult;
 }
 
 ACMD(stop_rigging_first) {

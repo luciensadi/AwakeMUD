@@ -1,10 +1,12 @@
 #include "structs.hpp"
 #include "handler.hpp"
 #include "vehicles.hpp"
+#include "db.hpp"
 
 extern bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj);
 extern void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode, bool show, bool corpse);
 extern void delete_veh_file(struct veh_data *veh, const char *reason);
+int calculate_vehicle_entry_load(struct veh_data *veh);
 
 bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch);
 bool _can_veh_lift_veh(struct veh_data *veh, struct veh_data *carried_veh, struct char_data *ch);
@@ -420,4 +422,98 @@ bool _veh_can_get_veh(struct veh_data *veh, struct veh_data *target_veh, struct 
 
 void generate_veh_idnum(struct veh_data *veh) {
   veh->idnum = number(1, 999999);
+}
+
+int get_obj_vehicle_load_usage(struct obj_data *obj, bool is_installed_mod) {
+  if (is_installed_mod) {
+    // Mounts: Their own weight (calculated by type) plus that of their contents.
+    if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_MOUNT) {
+      int result = 0;
+
+      for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
+        result += get_obj_vehicle_load_usage(contained, FALSE);
+      }
+
+      switch (GET_VEHICLE_MOD_MOUNT_TYPE(obj)) {
+        case MOUNT_TURRET:
+          result += 100;
+          break;
+        case MOUNT_MINITURRET:
+          result += 25;
+          break;
+        default:
+          result += 10;
+          break;
+      }
+
+      return result;
+    }
+
+    // Other mods: Their mod load space requirement.
+    return GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(obj);
+  }
+
+  // Otherwise it's just an item with weight etc.
+  return GET_OBJ_WEIGHT(obj);
+}
+
+void recalculate_vehicle_usedload(struct veh_data *veh) {
+  int old_load = veh->usedload;
+
+  veh->usedload = 0;
+
+  // Recalculate mod weights, including for mounts.
+  for (int mod_idx = 0; mod_idx < NUM_MODS; mod_idx++) {
+    if (GET_MOD(veh, mod_idx))
+      veh->usedload += get_obj_vehicle_load_usage(GET_MOD(veh, mod_idx), TRUE);
+  }
+
+  // Recalculate contained weights.
+  for (struct obj_data *contained = veh->contents; contained; contained = contained->next_content) {
+    veh->usedload += get_obj_vehicle_load_usage(contained, FALSE);
+  }
+
+  // Recalculate carried vehicle weights.
+  for (struct veh_data *carried = veh->carriedvehs; carried; carried = carried->next_veh) {
+    veh->usedload += calculate_vehicle_entry_load(carried);
+  }
+  
+  if (veh->usedload != old_load) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Vehicle %s (%ld-%ld) @ %ld had unexpected usedload (%d != %d)",
+                    GET_VEH_NAME(veh),
+                    GET_VEH_VNUM(veh),
+                    GET_VEH_IDNUM(veh),
+                    GET_ROOM_NAME(get_veh_in_room(veh)),
+                    old_load,
+                    veh->usedload);
+  }
+}
+
+int calculate_vehicle_entry_load(struct veh_data *veh) {
+  int mult;
+  switch (veh->type) {
+    case VEH_DRONE:
+      mult = 100;
+      break;
+    case VEH_TRUCK:
+      mult = 1500;
+      break;
+    default:
+      mult = 500;
+      break;
+  }
+
+  return veh->body * mult;
+}
+
+int get_mount_signature_penalty(struct obj_data *mount) {
+  switch (GET_VEHICLE_MOD_MOUNT_TYPE(mount)) {
+    case MOUNT_FIRMPOINT_EXTERNAL:
+    case MOUNT_HARDPOINT_EXTERNAL:
+    case MOUNT_TURRET:
+    case MOUNT_MINITURRET:
+      return 1;
+  }
+
+  return 0;
 }

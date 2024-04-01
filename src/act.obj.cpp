@@ -1668,7 +1668,6 @@ ACMD(do_get)
   char arg2[MAX_INPUT_LENGTH];
 
   int cont_dotmode, found = 0, mode, skill = 0, target = 0, kit = 0;
-  sh_int bod = 0, load = 0, sig = 0;
   struct obj_data *cont, *obj, *temp, *shop = NULL;
   struct veh_data *veh = NULL;
   struct char_data *tmp_char;
@@ -1856,39 +1855,13 @@ ACMD(do_get)
           cont = obj;
         } else if (cont_dotmode) {
           REMOVE_FROM_LIST(cont, veh->mount, next_content)
-          switch (GET_OBJ_VAL(cont, 1)) {
-            case 1:
-              sig = 1;
-              // fall through
-            case 0:
-              bod++;
-              load = 10;
-              break;
-            case 3:
-              sig = 1;
-              // fall through
-            case 2:
-              bod += 2;
-              load = 10;
-              break;
-            case 4:
-              sig = 1;
-              bod += 4;
-              load = 100;
-              break;
-            case 5:
-              sig = 1;
-              bod += 2;
-              load = 25;
-              break;
-          }
-          veh->sig += sig;
-          veh->usedload -= load;
+          veh->sig += get_mount_signature_penalty(cont);
+          veh->usedload -= get_obj_vehicle_load_usage(cont, TRUE);
         } else {
           if (GET_VEHICLE_MOD_TYPE(cont) == TYPE_AUTONAV) {
             veh->autonav -= GET_VEHICLE_MOD_RATING(cont);
           }
-          veh->usedload -= GET_OBJ_VAL(cont, 1);
+          veh->usedload -= get_obj_vehicle_load_usage(cont, TRUE);
           GET_MOD(veh, found) = NULL;
           int rnum = real_vehicle(GET_VEH_VNUM(veh));
           if (rnum <= -1)

@@ -657,6 +657,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     case 'Y':
       DELETE_IF_EXTANT(COM);
       COM = new reset_com;
+      memset(COM, 0, sizeof(reset_com));
       COM->command = '*';
       zedit_disp_command_menu(d);
       break;
@@ -677,6 +678,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     case 'Y':
       DELETE_IF_EXTANT(COM);
       COM = new reset_com;
+      memset(COM, 0, sizeof(reset_com));
       COM->command = '*';
       // so it knows to insert if they decide to save
       d->edit_number2 = TRUE;
@@ -699,6 +701,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     case 'Y':
       DELETE_IF_EXTANT(COM);
       COM = new reset_com;
+      memset(COM, 0, sizeof(reset_com));
       *COM = zone_table[real_zone(ZONENUM)].cmd[d->edit_number];
       zedit_disp_command_menu(d);
       break;

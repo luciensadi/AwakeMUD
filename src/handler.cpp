@@ -1221,19 +1221,7 @@ void veh_from_room(struct veh_data * veh)
   }
   if (veh->in_veh) {
     REMOVE_FROM_LIST(veh, veh->in_veh->carriedvehs, next_veh);
-    int mult;
-    switch (veh->type) {
-      case VEH_DRONE:
-        mult = 100;
-        break;
-      case VEH_TRUCK:
-        mult = 1500;
-        break;
-      default:
-        mult = 500;
-        break;
-    }
-    veh->in_veh->usedload -= veh->body * mult;
+    veh->in_veh->usedload -= calculate_vehicle_entry_load(veh);
   } else {
     REMOVE_FROM_LIST(veh, veh->in_room->vehicles, next_veh);
     recalculate_room_light(veh->in_room);
@@ -2087,7 +2075,7 @@ void obj_to_veh(struct obj_data * object, struct veh_data * veh)
     veh->contents = object;
   }
 
-  veh->usedload += GET_OBJ_WEIGHT(object);
+  veh->usedload += get_obj_vehicle_load_usage(object, FALSE);
   object->in_veh = veh;
   object->in_room = NULL;
   object->carried_by = NULL;
@@ -2152,7 +2140,7 @@ void obj_from_room(struct obj_data * object)
   }
 
   if (object->in_veh) {
-    object->in_veh->usedload -= GET_OBJ_WEIGHT(object);
+    object->in_veh->usedload -= get_obj_vehicle_load_usage(object, FALSE);
     REMOVE_FROM_LIST(object, object->in_veh->contents, next_content);
   }
 
@@ -2281,7 +2269,7 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
     if (tmp_obj->worn_by)
       IS_CARRYING_W(tmp_obj->worn_by) += GET_OBJ_WEIGHT(obj);
     if (tmp_obj->in_veh)
-      tmp_obj->in_veh->usedload += GET_OBJ_WEIGHT(obj);
+      tmp_obj->in_veh->usedload += get_obj_vehicle_load_usage(obj, FALSE);
 
     if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER && (tmp_obj->carried_by || tmp_obj->worn_by)) {
       (tmp_obj->carried_by ? tmp_obj->carried_by : tmp_obj->worn_by)->is_carrying_vehicle = TRUE;
@@ -2325,7 +2313,7 @@ void obj_from_obj(struct obj_data * obj)
     if (temp->worn_by)
       IS_CARRYING_W(temp->worn_by) -= GET_OBJ_WEIGHT(obj);
     if (temp->in_veh)
-      temp->in_veh->usedload -= GET_OBJ_WEIGHT(obj);
+      temp->in_veh->usedload -= get_obj_vehicle_load_usage(obj, FALSE);
   }
 
   obj->in_obj = NULL;
