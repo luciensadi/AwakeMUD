@@ -2983,8 +2983,8 @@ SPECIAL(fixer)
       cost += ((float) GET_OBJ_COST(obj)) * 0.9;
     } else {
       // Otherwise, it's a lower percentage of the cost, moderated by the percentage of damage taken.
-      float damage_percentage = ((float) GET_OBJ_CONDITION(obj)) / (GET_OBJ_BARRIER(obj) == 0 ? GET_OBJ_CONDITION(obj) : GET_OBJ_BARRIER(obj));
-      cost += (int) (((float) GET_OBJ_COST(obj)) * damage_percentage * 0.6);
+      float condition_percentage = ((float) GET_OBJ_CONDITION(obj)) / (GET_OBJ_BARRIER(obj) == 0 ? GET_OBJ_CONDITION(obj) : GET_OBJ_BARRIER(obj));
+      cost += (int) (((float) GET_OBJ_COST(obj)) * (1.0 - condition_percentage) * 0.6);
     }
 
     // There's a minimum repair cost now.
