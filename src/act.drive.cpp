@@ -1100,9 +1100,9 @@ ACMD(do_repair)
     return;
   }
 
-  skill = get_skill(ch, get_br_skill_for_veh(veh), target);
   target += (veh->damage - 2) / 2;
   target += modify_target(ch);
+  skill = get_skill(ch, get_br_skill_for_veh(veh), target);
 
   if (!access_level(ch, LVL_ADMIN)) {
     kit = has_kit(ch, TYPE_VEHICLE);
