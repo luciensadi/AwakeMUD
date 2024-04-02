@@ -299,8 +299,8 @@ void payout_slots(struct obj_data *slots) {
   }
 }
 
-#define MINIMUM_SLOT_SPEND_AMOUNT 100
-#define MAXIMUM_SLOT_SPEND_AMOUNT 150000
+#define MINIMUM_SLOT_SPEND_AMOUNT 250
+#define MAXIMUM_SLOT_SPEND_AMOUNT 20000
 SPECIAL(slot_machine) {
   struct obj_data *slots = (struct obj_data *) me;
   char keyword[MAX_INPUT_LENGTH];
