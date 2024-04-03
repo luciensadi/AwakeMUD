@@ -151,7 +151,7 @@ void payout_slots(struct obj_data *slots) {
     // 3 Cherries
     payout_multiplier = 20;
     snprintf(buf, sizeof(buf), "%s chimes a cheery melody, showing a rare set of three ^PCherries^n!\r\n", CAP(GET_OBJ_NAME(slots)));
-  } else if (rolled <= 580) {
+  } else if (rolled <= 540) {
     // 3 of Any Other
     payout_multiplier = 10;
     int slot_idx = number(RESERVED_SLOT_END, NUM_SLOT_ICONS - 1);
@@ -203,7 +203,7 @@ void payout_slots(struct obj_data *slots) {
                  slot_icons[number(0, NUM_SLOT_ICONS - 1)]);
         break;
     }
-  } else if (rolled == 0) {
+  } else if (rolled <= 5121) {
     // 3 9mms, hehe
     payout_multiplier = 1;
     snprintf(buf, sizeof(buf), "With an ominous sting of music, %s lights up red, revealing three ^L9mm bullets^n lined up on the screen.\r\n"
@@ -236,7 +236,7 @@ void payout_slots(struct obj_data *slots) {
   // Find the person to pay.
   for (struct char_data *ch = slots->in_room->people; ch; ch = ch->next_in_room) {
     if (GET_IDNUM(ch) == GET_SLOTMACHINE_PLAYER_ID(slots)) {
-      if (rolled == 0) {
+      if (rolled > 5111 && rolled <= 5121) {
         send_to_char("^RThe pistol barks, sending a sharp pain ripping through you!^n\r\nAs you stagger back, the machine closes back up and spits out your original bet.\r\n", ch);
         act("^RThe pistol barks!^n As $n staggers back, the machine closes up and spits out $s original bet.", FALSE, ch, 0, 0, TO_ROOM);
         gain_nuyen(ch, amount_to_pay, NUYEN_INCOME_GAMBLING);
@@ -252,8 +252,8 @@ void payout_slots(struct obj_data *slots) {
                           GET_OBJ_NAME(slots),
                           total_amount_removed_from_economy_by_slots);
 
-        // No dodge or soak, mostly because this is moderate damage done for the memes.
-        damage(ch, ch, MODERATE, TYPE_PISTOL, TRUE);
+        // No dodge or soak, mostly because this is done for the memes.
+        damage(ch, ch, SERIOUS, TYPE_PISTOL, TRUE);
         return;
       }
 

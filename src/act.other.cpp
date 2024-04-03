@@ -385,11 +385,8 @@ int perform_group(struct char_data *ch, struct char_data *vict)
 {
   if (IS_AFFECTED(vict, AFF_GROUP) || !CAN_SEE(ch, vict) || (!IS_SENATOR(ch) && IS_SENATOR(vict)))
     return 0;
-
-  if (ch == vict)
-    return TRUE;
-
-  if (GET_QUEST(ch) && GET_QUEST(ch) == GET_QUEST(vict)) {
+  
+  if (ch != vict && GET_QUEST(ch) && GET_QUEST(ch) == GET_QUEST(vict)) {
     send_to_char("You can't group with people who are on the same job as you.\r\n", ch);
     return 1;
   }
