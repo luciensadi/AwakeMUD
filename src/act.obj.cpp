@@ -2536,6 +2536,8 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   FALSE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
                     "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", GET_OBJ_NAME(obj));
 
+  FALSE_CASE_PRINTF(!IS_NPC(vict) && ch_is_blocked_by_quest_protections(vict, obj, FALSE), "%s isn't participating in your job.", GET_CHAR_NAME(vict));
+
   if (IS_CARRYING_N(vict) >= CAN_CARRY_N(vict))
   {
     act("$N seems to have $S hands full.", FALSE, ch, 0, vict, TO_CHAR);

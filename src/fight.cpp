@@ -611,8 +611,8 @@ void make_corpse(struct char_data * ch)
       snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", color_replaced_name);
       strlcpy(buf3, "What once was living is no longer. Poor sap.\r\n", sizeof(buf3));
     }
-  } else
-  {
+    corpse->obj_flags.quest_id = ch->mob_specials.quest_id;
+  } else {
     snprintf(buf, sizeof(buf), "belongings %s", ch->player.physical_text.keywords);
     snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", color_replaced_name);
     snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", color_replaced_name);

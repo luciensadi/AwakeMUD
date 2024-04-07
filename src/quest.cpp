@@ -234,7 +234,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
       mob->mob_specials.quest_id = GET_IDNUM(ch);
       mob->mob_loaded_in_room = GET_ROOM_VNUM(&world[room]);
       char_to_room(mob, &world[room]);
-      act("$n has arrived.", FALSE, mob, 0, 0, TO_ROOM);
+      act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
       if(quest_table[num].mob[i].objective == QMO_LOCATION)
         add_follower(mob, ch);
       for (j = 0; j < quest_table[num].num_objs; j++)
@@ -318,7 +318,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
       mob->mob_specials.quest_id = GET_IDNUM(ch);
       mob->mob_loaded_in_room = GET_ROOM_VNUM(ch->in_room);
       char_to_room(mob, ch->in_room);
-      act("$n has arrived.", FALSE, mob, 0, 0, TO_ROOM);
+      act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
       for (j = 0; j < quest_table[num].num_objs; j++)
         if (quest_table[num].obj[j].l_data == i &&
             (rnum = real_object(quest_table[num].obj[j].vnum)) > -1) {

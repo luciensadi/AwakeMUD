@@ -3094,6 +3094,7 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, const char *name, st
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
+  bool staff_bit = IS_SENATOR(ch);
 
   // No list, no worries.
   if (!list)
@@ -3117,6 +3118,11 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, const char *name, st
       else if (ch->in_veh != i->in_veh)
         continue;
     }
+    
+    // Invisible to you: Blocked by quest protections.
+    if (!staff_bit && ch_is_blocked_by_quest_protections(ch, i, FALSE))
+      continue;
+
     if (keyword_appears_in_obj(tmp, i)) {
       if (++j == number)
         return i;
