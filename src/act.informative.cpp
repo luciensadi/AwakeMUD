@@ -5765,7 +5765,7 @@ ACMD(do_who)
         continue;
       if (ooc && (PRF_FLAGGED(tch, PRF_NOOOC) || PLR_FLAGGED(tch, PLR_NOT_YET_AUTHED)))
         continue;
-      if (newbie && !PLR_FLAGGED(tch, PLR_NEWBIE))
+      if (newbie && (!PLR_FLAGGED(tch, PLR_NEWBIE) || IS_PRESTIGE_CH(tch)))
         continue;
       if (drugs && !PLR_FLAGGED(tch, PLR_ENABLED_DRUGS))
         continue;
