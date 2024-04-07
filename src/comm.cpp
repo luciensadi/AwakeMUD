@@ -2343,11 +2343,20 @@ void close_socket(struct descriptor_data *d)
   if (d->snooping)
     d->snooping->snoop_by = NULL;
 
-  if (d->snoop_by)
-  {
+  if (d->snoop_by) {
     SEND_TO_Q("Your victim is no longer among us.\r\n", d->snoop_by);
     d->snoop_by->snooping = NULL;
   }
+
+  /* Forget watching */
+  if (d->watching)
+    d->watching->watcher = NULL;
+
+  if (d->watcher) {
+    SEND_TO_Q("Your watch target is no longer among us.\r\n", d->watcher);
+    d->watcher->watching = NULL;
+  }
+
   if (d->character)
   {
     // Log our metrics.

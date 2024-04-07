@@ -65,6 +65,7 @@ void save_bioware_to_db(struct char_data *player);
 void save_cyberware_to_db(struct char_data *player);
 void fix_character_essence_after_cybereye_migration(struct char_data *ch);
 void fix_character_essence_after_expert_driver_change(struct char_data *ch);
+void recalculate_character_magic_rating(struct char_data *ch);
 
 SPECIAL(weapon_dominator);
 
@@ -1801,6 +1802,8 @@ char_data *PCIndex::LoadChar(const char *name, bool logon)
 
   fix_character_essence_after_expert_driver_change(ch);
 
+  recalculate_character_magic_rating(ch);
+
   // At this point, cybereye migration has been done for over a year. Disabled.
   // fix_character_essence_after_cybereye_migration(ch);
 
@@ -3194,4 +3197,19 @@ void remove_db_tag(idnum_t idnum, const char *tag_name) {
            prepare_quotes(prepare_quotes_buf, tag_name, sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])));
   
   mysql_wrapper(mysql, query_buf);
+}
+
+void recalculate_character_magic_rating(struct char_data *ch) {
+  if (GET_SETTABLE_REAL_MAG(ch) <= 0)
+    return;
+
+  // todo: set it to their race's base mag
+
+  // remove any mag loss from installed cyberware
+
+  // remove any mag loss from essence hole
+
+  // remove any mag loss from bioware
+
+  // remove any mag loss from bio hole
 }

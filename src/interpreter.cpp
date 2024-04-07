@@ -1722,6 +1722,14 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     if (cmd_info[cmd].should_not_block_idle_reward) {
       ch->char_specials.timer = ch->char_specials.last_timer;
     }
+    // Otherwise, notify any staff waiting for them that they've returned.
+    else {
+      if (ch->desc && ch->desc->watcher) {
+        char msg_buf[1000];
+        snprintf(msg_buf, sizeof(msg_buf), "%s is active again. You will receive this message with every command until you type ##^WWATCH %s^n again.\r\n", CAP(GET_CHAR_NAME(ch)), GET_CHAR_NAME(ch));
+        SEND_TO_Q(msg_buf, ch->desc->watcher);
+      }
+    }
 
     if (GET_POS(ch) < cmd_info[cmd].minimum_position) {
       switch (GET_POS(ch)) {

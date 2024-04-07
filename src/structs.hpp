@@ -1076,6 +1076,8 @@ struct descriptor_data
   struct descriptor_data *snooping; /* Who is this char snooping        */
   struct descriptor_data *snoop_by; /* And who is snooping this char    */
   struct descriptor_data *next; /* link to next descriptor              */
+  struct descriptor_data *watching; /* Who is this char snooping        */
+  struct descriptor_data *watcher; /* And who is snooping this char    */
   struct ccreate_t ccr;
   int invalid_command_counter;
   char last_sprayed[MAX_INPUT_LENGTH];
@@ -1124,7 +1126,7 @@ struct descriptor_data
   descriptor_data() :
       showstr_head(NULL), showstr_point(NULL), str(NULL),
       output(NULL), output_canary(CANARY_VALUE), large_outbuf(NULL), input_and_character_canary(CANARY_VALUE),
-      character(NULL), original(NULL), snooping(NULL), snoop_by(NULL), next(NULL),
+      character(NULL), original(NULL), snooping(NULL), snoop_by(NULL), next(NULL), watching(NULL), watcher(NULL),
       invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),

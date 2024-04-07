@@ -2376,7 +2376,7 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
   if (GET_TRADITION(ch) == TRAD_MUNDANE)
     return;
 
-  GET_SETTABLE_REAL_MAG(ch) = MAX(0, GET_REAL_MAG(ch) - magic);
+  GET_SETTABLE_REAL_MAG(ch) = MAX(0, GET_SETTABLE_REAL_MAG(ch) - magic);
 
   if (GET_REAL_MAG(ch) < 100) {
     send_to_char(ch, "You feel the last of your magic leave your body.\r\n", ch);
@@ -4310,6 +4310,12 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
   if (subj == obj)
     return TRUE;
+
+  // You can't see questies, and they can't see you.
+  if (!IS_SENATOR(subj)) {
+    if (ch_is_blocked_by_quest_protections(subj, obj) || ch_is_blocked_by_quest_protections(obj, subj))
+      return FALSE;
+  }
 
   // Does the viewee have an astral state that makes them invisible to subj?
   if (IS_ASTRAL(obj) && !SEES_ASTRAL(subj)) {

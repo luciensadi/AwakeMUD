@@ -4493,7 +4493,26 @@ ACMD(do_watch)
   int dir;
   skip_spaces(&argument);
   if ((dir = search_block(argument, lookdirs, FALSE)) == -1 && (dir = search_block(argument, fulllookdirs, FALSE)) == -1) {
-    send_to_char("What direction?\r\n", ch);
+    FAILURE_CASE(!access_level(ch, LVL_VICEPRES), "Syntax: WATCH <direction to watch>");
+    
+    struct char_data *vict = get_player_vis(ch, argument, FALSE);
+    FAILURE_CASE_PRINTF(!vict, "You don't see anyone named %s in game, and it's not a direction either.", argument);
+    FAILURE_CASE_PRINTF(!vict->desc, "%s has no desc -- nothing to watch.", GET_CHAR_NAME(vict));
+
+    // Stop watching.
+    if (vict->desc->watcher == ch->desc) {
+      vict->desc->watcher = NULL;
+      ch->desc->watching = NULL;
+      send_to_char(ch, "You will no longer be notified every time %s uses a command that resets their idle timer.\r\n", GET_CHAR_NAME(vict));
+      return;
+    }
+
+    FAILURE_CASE_PRINTF(vict->desc->watcher, "%s is already being watched by someone else.", GET_CHAR_NAME(vict));
+
+    vict->desc->watcher = ch->desc;
+    ch->desc->watching = vict->desc;
+    send_to_char(ch, "You will now be notified every time %s uses a command that resets their idle timer.\r\n", GET_CHAR_NAME(vict));
+    
     return;
   }
   dir = convert_look[dir];

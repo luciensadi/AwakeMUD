@@ -2722,6 +2722,15 @@ void extract_char(struct char_data * ch, bool do_save)
       ch->desc->snoop_by->snooping = NULL;
       ch->desc->snoop_by = NULL;
     }
+    if (ch->desc->watching) {
+      ch->desc->watching->watcher = NULL;
+      ch->desc->watching = NULL;
+    }
+    if (ch->desc->watcher) {
+      SEND_TO_Q("Your watch target is no longer among us.\r\n", ch->desc->watcher);
+      ch->desc->watcher->watching = NULL;
+      ch->desc->watcher = NULL;
+    }
   }
 
   // Clear sustained spells.
