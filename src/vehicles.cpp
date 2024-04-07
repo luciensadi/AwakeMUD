@@ -6,8 +6,9 @@
 extern bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj);
 extern void list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode, bool show, bool corpse);
 extern void delete_veh_file(struct veh_data *veh, const char *reason);
-int calculate_vehicle_entry_load(struct veh_data *veh);
+extern bool check_quest_delivery(struct char_data *ch, struct obj_data *obj);
 
+int calculate_vehicle_entry_load(struct veh_data *veh);
 bool _can_veh_lift_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch);
 bool _can_veh_lift_veh(struct veh_data *veh, struct veh_data *carried_veh, struct char_data *ch);
 bool _veh_get_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *ch, struct obj_data *from_obj);
@@ -206,6 +207,7 @@ bool veh_drop_obj(struct veh_data *veh, struct obj_data *obj, struct char_data *
     obj_to_veh(obj, veh->in_veh);
 
   send_to_char(ch, "You drop %s.\r\n", decapitalize_a_an(obj));
+  check_quest_delivery(ch, obj);
   
   // Message others.
   snprintf(msg_buf, sizeof(msg_buf), "%s's manipulator arm deposits %s here.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)), decapitalize_a_an(obj));

@@ -579,7 +579,7 @@ bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct ob
 }
 
 // Checks if this successfully completed a quest step. Note the lack of false returns in the loop, this is on purpose to allow for multiple quest objectives to have the same object vnum!
-bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj, bool commit_changes=TRUE) {
+bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj, struct room_data *in_room, bool commit_changes=TRUE) {
   if (!GET_QUEST(ch))
     return FALSE;
 
@@ -589,7 +589,7 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj, bool 
 
     // QOO_LOCATION, in right location? True.
     if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_LOCATION) {
-      if (ch->in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data) {
+      if (in_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data) {
         if (commit_changes)
           ch->player_specials->obj_complete[i] = 1;
         return TRUE;
@@ -608,12 +608,15 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct obj_data *obj, bool 
   return FALSE;
 }
 
-bool _could_quest_deliver(struct char_data *ch, struct obj_data *obj) {
-  return _raw_check_quest_delivery(ch, obj, FALSE);
+bool _could_quest_deliver(struct char_data *ch, struct obj_data *obj, struct room_data *in_room) {
+  return _raw_check_quest_delivery(ch, obj, in_room, FALSE);
 }
 
 bool check_quest_delivery(struct char_data *ch, struct obj_data *obj)
 {
+  struct veh_data *veh;
+  struct room_data *in_room;
+
   if (!ch || !obj) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received (%s, %s) to non-nullable check_quest_delivery()!",
                     ch ? GET_CHAR_NAME(ch) : "NULL",
@@ -624,12 +627,20 @@ bool check_quest_delivery(struct char_data *ch, struct obj_data *obj)
   if (IS_NPC(ch))
     return FALSE;
 
-  if (!ch->in_room) {
+  RIG_VEH(ch, veh);
+
+  if (veh) {
+    in_room = veh->in_room;
+  } else {
+    in_room = ch->in_room;
+  }
+
+  if (!in_room) {
     // You can't complete a quest objective from a vehicle.
     return FALSE;
   }
 
-  if (_raw_check_quest_delivery(ch, obj))
+  if (_raw_check_quest_delivery(ch, obj, in_room))
     return TRUE;
 
   if (AFF_FLAGGED(ch, AFF_GROUP)) {
@@ -639,15 +650,15 @@ bool check_quest_delivery(struct char_data *ch, struct obj_data *obj)
         continue;
 
       // If they're not going to benefit from a quest delivery, skip.
-      if (!_could_quest_deliver(f->follower, obj))
+      if (!_could_quest_deliver(f->follower, obj, in_room))
         continue;
 
-      if (f->follower->in_room != ch->in_room) {
+      if (f->follower->in_room != in_room) {
         send_to_char(ch, "%s must be present for this delivery.\r\n", GET_CHAR_NAME(f->follower));
         return FALSE;
       }
 
-      if (_raw_check_quest_delivery(f->follower, obj)) {
+      if (_raw_check_quest_delivery(f->follower, obj, in_room)) {
         return TRUE;
       } else {
         mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Sanity check failed in check_quest_delivery(%s, %s)!", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
@@ -655,7 +666,7 @@ bool check_quest_delivery(struct char_data *ch, struct obj_data *obj)
     }
 
     // Master
-    if (ch->master && !IS_NPC(ch->master) && _raw_check_quest_delivery(ch->master, obj)) {
+    if (ch->master && !IS_NPC(ch->master) && _raw_check_quest_delivery(ch->master, obj, in_room)) {
       return TRUE;
     }
   }

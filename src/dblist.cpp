@@ -156,23 +156,38 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
     if (temp->data->item_number == rnum) {
       old = *temp->data;
       *temp->data = *proto;
-      temp->data->in_room = old.in_room;
+
       temp->data->item_number = rnum;
-      temp->data->carried_by = old.carried_by;
-      temp->data->worn_by = old.worn_by;
-      temp->data->worn_on = old.worn_on;
-      temp->data->in_obj = old.in_obj;
-      temp->data->contains = old.contains;
-      temp->data->next_content = old.next_content;
+
+      temp->data->in_room = old.in_room;
+      temp->data->in_veh = old.in_veh;
+
+      temp->data->obj_flags.quest_id = old.obj_flags.quest_id;
       temp->data->obj_flags.condition = old.obj_flags.condition;
+
       temp->data->restring = old.restring;
       temp->data->photo = old.photo;
       temp->data->graffiti = old.graffiti;
-      temp->data->obj_flags.quest_id = old.obj_flags.quest_id;
+
+      temp->data->carried_by = old.carried_by;
+      temp->data->worn_by = old.worn_by;
+      temp->data->worn_on = old.worn_on;
+      
+      temp->data->in_obj = old.in_obj;
+      temp->data->contains = old.contains;
+      temp->data->next_content = old.next_content;
+      temp->data->in_host = old.in_host;
+
       temp->data->cyberdeck_part_pointer = old.cyberdeck_part_pointer;
+
+      temp->data->targ = old.targ;
+      temp->data->tveh = old.tveh;
+
       temp->data->dropped_by_char = old.dropped_by_char;
       temp->data->dropped_by_host = old.dropped_by_host;
+
       temp->data->idnum = old.idnum;
+
       if (temp->data->carried_by)
         affect_total(temp->data->carried_by);
       else if (temp->data->worn_by)
@@ -181,6 +196,7 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
   }
 }
 
+// TODO: Why is this a different function? Can it be collapsed into the above?
 void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_rnum)
 {
   PERF_PROF_SCOPE(pr_, __func__);
