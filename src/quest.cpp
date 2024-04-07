@@ -1064,7 +1064,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
 
   // Check mob objectives.
   for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
-    if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_NO_OBJECTIVE)
+    if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_NO_OBJECTIVE || quest_table[GET_QUEST(ch)].mob[i].objective == QMO_KILL_ESCORTEE)
       continue;
 
     if (ch->player_specials->mob_complete[i]) {
@@ -1807,6 +1807,9 @@ SPECIAL(johnson)
     case CMD_JOB_NO:
       // Precondition: If I'm not talking right now, don't react.
       if (GET_SPARE1(johnson) == -1) {
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "Johnson won't react-- GET_SPARE1 is -1.\r\n");
+        }
         return TRUE;
       }
 
@@ -3887,4 +3890,164 @@ unsigned int get_johnson_overall_min_rep(struct char_data *johnson) {
   }
 
   return min_rep;
+}
+
+// TODO: Have quests able to disable this printout (mystery quests etc)
+void display_quest_goals_to_ch(struct char_data *ch) {
+  rnum_t johnson_rnum = real_mobile(quest_table[GET_QUEST(ch)].johnson);
+  struct char_data *johnson = (johnson_rnum >= 0 ? &mob_proto[johnson_rnum] : NULL);
+
+  send_to_char("\r\nObjectives:\r\n", ch);
+
+  // Check mob objectives.
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
+    if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_NO_OBJECTIVE || quest_table[GET_QUEST(ch)].mob[i].objective == QMO_KILL_ESCORTEE)
+      continue;
+
+    // ch->player_specials->mob_complete[i]
+    rnum_t mob_rnum = real_mobile(quest_table[GET_QUEST(ch)].mob[i].vnum);
+    struct char_data *mob = (mob_rnum >= 0 ? &mob_proto[mob_rnum] : NULL);
+
+    rnum_t target_rnum = -1;
+    if (quest_table[GET_QUEST(ch)].mob[i].o_data < 0
+        || quest_table[GET_QUEST(ch)].mob[i].o_data >= quest_table[GET_QUEST(ch)].num_mobs
+        || (target_rnum = real_mobile(quest_table[GET_QUEST(ch)].mob[quest_table[GET_QUEST(ch)].mob[i].o_data].vnum)) < 0)
+    {
+      target_rnum = real_mobile(quest_table[GET_QUEST(ch)].mob[i].o_data);
+    }
+    struct char_data *target = (target_rnum >= 0 ? &mob_proto[target_rnum] : NULL);
+
+    rnum_t room_rnum = real_room(quest_table[GET_QUEST(ch)].mob[i].o_data);
+    struct room_data *room = room_rnum >= 0 ? &world[room_rnum] : NULL;
+
+    switch (quest_table[GET_QUEST(ch)].mob[i].objective) {
+      case QUEST_NONE:
+      case QMO_KILL_ESCORTEE:
+        continue;
+      case QMO_LOCATION:
+        send_to_char(ch, " - Escort %s to %s (%s)\r\n", GET_CHAR_NAME(mob), GET_ROOM_NAME(room), ch->player_specials->mob_complete[i] ? "done" : "incomplete");
+        break;
+      case QMO_KILL_ONE:
+        send_to_char(ch, " - Kill %s (%s)\r\n", GET_CHAR_NAME(target), ch->player_specials->mob_complete[i] ? "done" : "incomplete");
+        break;
+      case QMO_KILL_MANY:
+        send_to_char(ch, " - Kill as many %s as you can (%d killed)\r\n", GET_CHAR_NAME(target), ch->player_specials->mob_complete[i]);
+        break;
+      case QMO_DONT_KILL:
+        send_to_char(ch, " - Ensure %s survives (%s)\r\n", GET_CHAR_NAME(mob), ch->player_specials->mob_complete[i] == -1 ? "^rFAILED^n" : "so far, so good");
+        break;
+      default:
+        continue;
+    }
+
+  }
+
+  // Check object objectives.
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
+    if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_NO_OBJECTIVE)
+      continue;
+
+    // 1. Find and deliver 'an envelope with weird insignias on it' to Ricky Skeezeball (done)
+    // 2. Kill as many 'a bodyguard' as you can (14 killed)
+    // 3. Deliver 'an electronics kit' to Janine Reyes (incomplete)
+    // 4. Destroy 'the occupant's sense of safety' (done)
+    // 5. Upload 'a virus' to the matrix host 'In the Dojo' (incomplete)
+    // 6. Don't kill 'a postal worker' (failed)
+
+    // ch->player_specials->obj_complete[i]
+
+    strlcpy(buf, " - ", sizeof(buf));
+
+    rnum_t obj_rnum = real_object(quest_table[GET_QUEST(ch)].obj[i].vnum);
+    struct obj_data *obj = (obj_rnum >= 0 ? &obj_proto[obj_rnum] : NULL);
+
+    switch (quest_table[GET_QUEST(ch)].obj[i].load) {
+      case QUEST_NONE:
+      case QOL_TARMOB_C:
+        break;
+      case QOL_JOHNSON:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Take '%s' ", GET_OBJ_NAME(obj));
+        break;
+      case QOL_TARMOB_I:
+      case QOL_TARMOB_E:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Retrieve '%s' ", GET_OBJ_NAME(obj));
+        break;
+      case QOL_HOST:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Download '%s' ", GET_OBJ_NAME(obj));
+        break;
+      case QOL_LOCATION:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Locate '%s' ", GET_OBJ_NAME(obj));
+        break;
+      default:
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Obtain '%s' ", GET_OBJ_NAME(obj));
+        break;
+    }
+
+    {
+      // These are derived from o_data, which is not used in the first stanza.
+      rnum_t mob_rnum = -1;
+      if (quest_table[GET_QUEST(ch)].obj[i].o_data < 0 || quest_table[GET_QUEST(ch)].obj[i].o_data >= quest_table[GET_QUEST(ch)].num_mobs || (mob_rnum = real_mobile(quest_table[GET_QUEST(ch)].mob[quest_table[GET_QUEST(ch)].obj[i].o_data].vnum)) < 0) {
+        mob_rnum = real_mobile(quest_table[GET_QUEST(ch)].obj[i].o_data);
+      }
+      struct char_data *mob = (mob_rnum >= 0 ? &mob_proto[mob_rnum] : NULL);
+
+      rnum_t room_rnum = real_room(quest_table[GET_QUEST(ch)].obj[i].o_data);
+      struct room_data *room = (room_rnum >= 0 ? &world[room_rnum] : NULL);
+
+      rnum_t host_rnum = real_host(quest_table[GET_QUEST(ch)].obj[i].o_data);
+      struct host_data *host = (host_rnum >= 0 ? &matrix[host_rnum] : NULL);
+      
+      switch (quest_table[GET_QUEST(ch)].obj[i].objective) {
+        case QUEST_NONE:
+          break;
+        case QOO_JOHNSON:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and deliver it to %s (%s)", GET_CHAR_NAME(johnson), ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+          break;
+        case QOO_TAR_MOB:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and deliver it to %s (%s)", GET_CHAR_NAME(mob), ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+          break;
+        case QOO_LOCATION:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and deliver it to %s (%s)", GET_ROOM_NAME(room), ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+          break;
+        case QOO_DSTRY_ONE:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and destroy it (%s)", ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+          break;
+        case QOO_DSTRY_MANY:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and destroy as many as you can (%d destroyed)", ch->player_specials->obj_complete[i]);
+          break;
+        case QOO_UPLOAD:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and upload it to '%s' (%s)", host ? host->name : "NULL", ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+          break;
+        case QOO_RETURN_PAY:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Deliver paydata from host %s to %s (%s)",
+                   host ? host->name : "NULL",
+                   GET_CHAR_NAME(johnson),
+                   ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+          break;
+      }
+    }
+  
+    send_to_char(ch, "%s\r\n", buf);
+  }
+}
+
+ACMD(do_recap)
+{
+  if (!GET_QUEST(ch))
+    send_to_char(ch, "You're not currently on a run.\r\n");
+  else {
+#ifdef USE_QUEST_LOCATION_CODE
+    if (quest_table[GET_QUEST(ch)].location)
+      snprintf(buf, sizeof(buf), "At %s, %s told you: \r\n%s", quest_table[GET_QUEST(ch)].location, GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
+              quest_table[GET_QUEST(ch)].info);
+    else
+#endif
+      snprintf(buf, sizeof(buf), "%s told you: \r\n%s", GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
+              quest_table[GET_QUEST(ch)].info);
+    send_to_char(buf, ch);
+
+#ifdef IS_BUILDPORT
+    display_quest_goals_to_ch(ch);
+#endif
+  }
 }
