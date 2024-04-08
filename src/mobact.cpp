@@ -245,7 +245,7 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
     }
 
     // Is this NPC protected by spec?
-    if (npc_is_protected_by_spec(vict) || MOB_FLAGGED(vict, MOB_NOKILL) || vict->mob_specials.quest_id) {
+    if (npc_is_protected_by_spec(vict) || MOB_FLAGGED(vict, MOB_NOKILL) || GET_MOB_QUEST_CHAR_ID(vict)) {
       #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf3), "vict_is_valid_target: NPC %s is not a valid target (protected by spec, !kill, or quest flag).", GET_CHAR_NAME(vict));
         do_say(ch, buf3, 0, 0);
@@ -713,14 +713,12 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
       if (tveh == ch->in_veh)
         continue;
 
-      // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
-      if (tveh->type != VEH_DRONE && !area_has_pc_occupants && !tveh->people && !tveh->rigger)
+      // If a mob attacks in a forest and nobody's around to see it happen, did it really happen?
+      if (!area_has_pc_occupants && !tveh->people && !tveh->rigger)
         continue;
 
       // Check for our usual conditions.
-      if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM, ch->mob_specials.quest_id) 
-          && (!GET_MOB_QUEST_CHAR_ID(ch) || !tveh->owner || tveh->owner == GET_MOB_QUEST_CHAR_ID(ch)))
-      {
+      if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM, GET_MOB_QUEST_CHAR_ID(ch))) {
         // Found a target, stop processing vehicles.
 #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf), "m_p_i_v_g: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
@@ -849,13 +847,11 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
       if (tveh == ch->in_veh)
         continue;
 
-      // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
-      if (tveh->type != VEH_DRONE && !area_has_pc_occupants && !tveh->people && !tveh->rigger)
+      // If nobody's in the room or in the vehicle, you can't attack.
+      if (!area_has_pc_occupants && !tveh->people && !tveh->rigger)
         continue;
 
-      if (vehicle_is_valid_mob_target(tveh, TRUE, ch->mob_specials.quest_id) 
-          && (!GET_MOB_QUEST_CHAR_ID(ch) || !tveh->owner || tveh->owner == GET_MOB_QUEST_CHAR_ID(ch)))
-      {
+      if (vehicle_is_valid_mob_target(tveh, TRUE, GET_MOB_QUEST_CHAR_ID(ch))) {
         // Found a valid target, stop looking.
 #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf), "m_p_i_v_a: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
@@ -969,14 +965,12 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
         area_has_pc_occupants = !IS_NPC(check_ch);
 
       for (veh = room->vehicles; veh; veh = veh->next_veh) {
-        // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
-        if (veh->type != VEH_DRONE && !area_has_pc_occupants && !veh->people && !veh->rigger)
+        // If nobody's in the room or in the vehicle, you can't attack.
+        if (!area_has_pc_occupants && !veh->people && !veh->rigger)
           continue;
 
         // Aggros don't care about road/garage status, so they act as if always alarmed.
-        if (vehicle_is_valid_mob_target(veh, TRUE, ch->mob_specials.quest_id) 
-            && (!GET_MOB_QUEST_CHAR_ID(ch) || !veh->owner || veh->owner == GET_MOB_QUEST_CHAR_ID(ch))) 
-        {
+        if (vehicle_is_valid_mob_target(veh, TRUE, GET_MOB_QUEST_CHAR_ID(ch))) {
           stop_fighting(ch);
 
           if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
@@ -1207,6 +1201,27 @@ bool mobact_process_helper(struct char_data *ch) {
   return FALSE;
 }
 
+bool npc_vs_vehicle_blocked_by_quest_protection(idnum_t quest_id, struct veh_data *veh) {
+  if (!quest_id)
+    return FALSE;
+
+  // We attack questor-owned vehicles, no matter who's in them.
+  if (!veh->owner || veh->owner == quest_id)
+    return FALSE;
+
+  // We attack questor-rigged vehicles, no matter who's in them.
+  if (veh->rigger && GET_IDNUM(veh->rigger) == quest_id)
+    return FALSE;
+
+  // We attack questor-occupied vehicles, no matter who owns them.
+  for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
+    if (!IS_NPC(vict) && GET_IDNUM(vict) == quest_id)
+      return FALSE;
+
+  // We don't attack any other vehicles.
+  return TRUE;
+}
+
 bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t quest_id) {
   struct room_data *room = veh->in_room;
 
@@ -1226,23 +1241,9 @@ bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t que
   if (!alarmed && (ROOM_FLAGGED(room, ROOM_ROAD) || ROOM_FLAGGED(room, ROOM_GARAGE)))
     return FALSE;
 
-  if (quest_id) {
-    // We attack questor-owned vehicles, no matter who's in them.
-    if (veh->owner == quest_id)
-      return TRUE;
-
-    // We attack questor-rigged vehicles, no matter who's in them.
-    if (veh->rigger && GET_IDNUM(veh->rigger) == quest_id)
-      return TRUE;
-
-    // We attack questor-occupied vehicles, no matter who owns them.
-    for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
-      if (!IS_NPC(vict) && GET_IDNUM(vict) == quest_id)
-        return TRUE;
-
-    // Otherwise, no go.
+  // Check for quest protections.
+  if (npc_vs_vehicle_blocked_by_quest_protection(quest_id, veh))
     return FALSE;
-  }
 
   // We attack player-owned vehicles, no matter who's in them.
   if (veh->owner > 0)
@@ -1250,7 +1251,7 @@ bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t que
 
   // We attack player-occupied vehicles.
   for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
-    if (!IS_NPC(vict))
+    if (vict->desc && vict->desc->idle_ticks < 10)
       return TRUE;
   
   // Otherwise, no good.
@@ -1287,8 +1288,8 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
       area_has_pc_occupants = !IS_NPC(check_ch);
 
     for (veh = room->vehicles; veh; veh = veh->next_veh) {
-      // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
-      if (veh->type != VEH_DRONE && !area_has_pc_occupants && !veh->people && !veh->rigger)
+      // If nobody's in the room or in the vehicle, you can't attack.
+      if (!area_has_pc_occupants && !veh->people && !veh->rigger)
         continue;
 
       // If the room we're in is neither a road nor a garage, attack any vehicles we see. Never attack vehicles in a garage.

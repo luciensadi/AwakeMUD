@@ -101,6 +101,7 @@ extern char *get_player_name(vnum_t id);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool check_sentinel_snap_back(struct char_data *ch);
 extern void end_quest(struct char_data *ch, bool succeeded);
+extern bool npc_vs_vehicle_blocked_by_quest_protection(idnum_t quest_id, struct veh_data *veh);
 
 // Corpse saving externs.
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
@@ -468,6 +469,11 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
 
   if (CH_IN_COMBAT(ch))
     return;
+
+  if (IS_NPNPC(ch) && npc_vs_vehicle_blocked_by_quest_protection(GET_MOB_QUEST_CHAR_ID(ch), vict)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Entered set_fighting(%s, %s) with quest mob vs non-quest veh!", GET_CHAR_NAME(ch), GET_VEH_NAME(vict));
+    return;
+  }
 
   // Check to see if they're already in the combat list.
   bool already_there = FALSE;
