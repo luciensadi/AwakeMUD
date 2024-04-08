@@ -6270,20 +6270,6 @@ void perform_violence(void)
         if (defender_footanchor)
           defender_attribute /= 2;
 
-        // Penalty from too-tall.
-#ifdef USE_SLOUCH_RULES
-        if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-          if (GET_HEIGHT(ch) > ch->in_room->z*100) {
-            if (GET_HEIGHT(ch) > ch->in_room->z * 200) {
-              send_to_char(ch, "You're bent over double in here, there's no way you'll close the distance like this!\r\n");
-              act("$n looks like $e would really like to hit $N, but $e can't get close enough.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
-              continue;
-            }
-            else quickness /= 2;
-          }
-        }
-#endif
-
         // Add spirit movement powers.
         target -= affected_by_power(ch, MOVEMENTUP) - affected_by_power(ch, MOVEMENTDOWN);
         target += affected_by_power(FIGHTING(ch), MOVEMENTUP) - affected_by_power(FIGHTING(ch), MOVEMENTDOWN);
@@ -6294,7 +6280,7 @@ void perform_violence(void)
         target = MAX(MINIMUM_TN_FOR_CLOSING_CHECK, MIN(target, MAXIMUM_TN_FOR_CLOSING_CHECK));
 
         // Strike.
-        if (quickness > 0 && success_test(quickness, target) > 0) {
+        if (!AWAKE(FIGHTING(ch)) || (quickness > 0 && success_test(quickness, target) > 0)) {
           send_to_char(ch, "You close the distance and strike!\r\n");
           act("$n closes the distance and strikes.", TRUE, ch, 0, 0, TO_ROOM);
           AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);

@@ -7485,7 +7485,7 @@ bool transfer_credstick_contents_to_bank(struct obj_data *credstick, struct char
                  GET_ITEM_MONEY_VALUE(credstick));
 
     // Log it.
-    mudlog_vfprintf(ch, LOG_SYSLOG, "Auto-transferring credstick contents from %s (%ld) to bank (%ld -> %ld)",
+    mudlog_vfprintf(ch, LOG_GRIDLOG, "Auto-transferring credstick contents from %s (%ld) to bank (%ld -> %ld)",
                     GET_OBJ_NAME(credstick),
                     GET_OBJ_VNUM(credstick),
                     GET_BANK(ch),
