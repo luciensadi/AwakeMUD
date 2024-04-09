@@ -51,6 +51,7 @@ extern struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char
 extern bool precipitation_is_snow(int jurisdiction);
 extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
+extern bool npc_vs_vehicle_blocked_by_quest_protection(idnum_t quest_id, struct veh_data *veh);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -998,7 +999,7 @@ void move_vehicle(struct char_data *ch, int dir)
     look_at_room(ch, 0, 0);
   for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room)
     if (IS_NPC(tch) && AWAKE(tch) && MOB_FLAGGED(tch, MOB_AGGRESSIVE) &&
-        !CH_IN_COMBAT(tch) && !IS_ASTRAL(tch))
+        !CH_IN_COMBAT(tch) && !IS_ASTRAL(tch) && !npc_vs_vehicle_blocked_by_quest_protection(GET_MOB_QUEST_CHAR_ID(tch), veh))
       set_fighting(tch, veh);
   if (PLR_FLAGGED(ch, PLR_REMOTE))
     ch->in_room = was_in;

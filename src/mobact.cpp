@@ -1295,7 +1295,7 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
       // If the room we're in is neither a road nor a garage, attack any vehicles we see. Never attack vehicles in a garage.
       if (vehicle_is_valid_mob_target(veh, 
                                       GET_MOBALERT(ch) == MALERT_ALARM && !ROOM_FLAGGED(room, ROOM_GARAGE) && !MOB_FLAGGED(ch, MOB_WIMPY), 
-                                      ch->mob_specials.quest_id)) 
+                                      GET_MOB_QUEST_CHAR_ID(ch))) 
       {
         stop_fighting(ch);
 

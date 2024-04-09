@@ -43,6 +43,7 @@ extern void write_mobs_to_disk(vnum_t zonenum);
 extern void weather_change();
 extern bool ranged_response(struct char_data *combatant, struct char_data *ch);
 extern void docwagon_retrieve(struct char_data *ch);
+extern void convert_and_write_string_to_file(const char *str, const char *path);
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
 extern void verify_every_pointer_we_can_think_of();
@@ -185,6 +186,15 @@ ACMD(do_debug) {
     } else {
       send_to_char(ch, "You don't see anyone named %s.\r\n", rest_of_argument);
     }
+    return;
+  }
+
+  if (!str_cmp(arg1, "wholistprint")) {
+    buf2[0] = '\0';
+    for (int i = 0; i < 250; i++) {
+      strlcat(buf2, "^F[123]A^y l^bi^Cn^ye ^F[155]w^mi^yt^mh ^ct^oo^ln^Ws ^yo^Yf ^Rc^bo^Ml^eo^Rr^n\r\n", sizeof(buf2));
+    }
+    convert_and_write_string_to_file(buf2, "text/wholist");
     return;
   }
 
