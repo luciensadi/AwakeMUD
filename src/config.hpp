@@ -244,7 +244,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // What's the maximum difficulty allowable for a closing-the-distance check?
 // Repo default is 10, which is a 20% chance of success at 10 dice. Most high-level PCs have 18+, giving ~45% success.
-#define MAXIMUM_TN_FOR_CLOSING_CHECK                           10
+#define MAXIMUM_TN_FOR_CLOSING_CHECK                           9
 #define MINIMUM_TN_FOR_CLOSING_CHECK                           4
 
 // 1:X grenades are defective and won't detonate. Define X below.
