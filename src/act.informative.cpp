@@ -73,7 +73,7 @@ extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE);
 extern void display_gamba_ledger_leaderboard(struct char_data *ch);
-const char *convert_string_to_html(const char *str);
+const char *convert_and_write_string_to_file(const char *str, const char *path);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -5913,13 +5913,7 @@ ACMD(do_who)
   }
 
   if (subcmd) {
-    FILE *fl;
-    if (!(fl = fopen("text/wholist", "w"))) {
-      mudlog("SYSERR: Cannot open wholist for write", NULL, LOG_SYSLOG, FALSE);
-      return;
-    }
-    fprintf(fl, "<HTML><BODY bgcolor=#11191C><PRE>%s</PRE></BODY></HTML>\r\n", convert_string_to_html(buf2));
-    fclose(fl);
+    convert_and_write_string_to_file(buf2, "text/wholist");
   } else send_to_char(buf2, ch);
 }
 

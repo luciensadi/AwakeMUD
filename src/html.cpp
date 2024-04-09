@@ -4,9 +4,17 @@
 const char *color_to_html(const char *color);
 const char *make_char_html_safe(const char c);
 
-const char *convert_string_to_html(const char *str) {
-  static char result[MAX_STRING_LENGTH * 16];
-  memset(result, 0, sizeof(result));
+void convert_and_write_string_to_file(const char *str, const char *path) {
+  FILE *fl;
+  if (!(fl = fopen(path, "w"))) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Cannot open file %s for write", path);
+    return;
+  }
+
+  fprintf(fl, "<HTML><BODY bgcolor=#11191C><PRE>");
+  // convert lines here
+
+  char result[MAX_STRING_LENGTH] = { '\0' };
 
   for (const char *ptr = str; *ptr; ptr++) {
     // It's a color. Pull it out.
@@ -26,8 +34,22 @@ const char *convert_string_to_html(const char *str) {
       strlcat(result, color_to_html(color), sizeof(result));
     } else {
       strlcat(result, make_char_html_safe(*ptr), sizeof(result));
+      if (*ptr == '\n') {
+        fprintf(fl, "%s", result);
+        result[0] = '\0';
+      }
     }
   }
+
+  fprintf(fl, "</PRE></BODY></HTML>\r\n");
+  fclose(fl);
+}
+
+const char *convert_string_to_html(const char *str) {
+  static char result[MAX_STRING_LENGTH * 64];
+  memset(result, 0, sizeof(result));
+
+  
 
   return result;
 }
