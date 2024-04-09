@@ -2093,13 +2093,19 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
         // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
         bool can_be_dropped_here = FALSE;
-        if (ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) || ROOM_FLAGGED(ch->in_room, ROOM_ALL_VEHICLE_ACCESS) || veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+        if (ch->in_veh) {
+          if (ch->in_veh->usedload + calculate_vehicle_entry_load(veh) > ch->in_veh->load) {
+            send_to_char(ch, "%s won't fit in here.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+            return 0;
+          }
           can_be_dropped_here = TRUE;
-        } else if (veh_can_traverse_land(veh) && ROOM_FLAGGED(ch->in_room, ROOM_ROAD)) {
+        } else if (ROOM_FLAGGED(in_room, ROOM_GARAGE) || ROOM_FLAGGED(in_room, ROOM_ALL_VEHICLE_ACCESS) || veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
           can_be_dropped_here = TRUE;
-        } else if (veh_can_traverse_water(veh) && IS_WATER(ch->in_room)) {
+        } else if (veh_can_traverse_land(veh) && ROOM_FLAGGED(in_room, ROOM_ROAD)) {
           can_be_dropped_here = TRUE;
-        } else if (veh_can_traverse_air(veh) && (ROOM_FLAGGED(ch->in_room, ROOM_AIRCRAFT_CAN_DRIVE_HERE) || GET_ROOM_FLIGHT_CODE(ch->in_room))) {
+        } else if (veh_can_traverse_water(veh) && IS_WATER(in_room)) {
+          can_be_dropped_here = TRUE;
+        } else if (veh_can_traverse_air(veh) && (ROOM_FLAGGED(in_room, ROOM_AIRCRAFT_CAN_DRIVE_HERE) || GET_ROOM_FLIGHT_CODE(in_room))) {
           can_be_dropped_here = TRUE;
         }
 
