@@ -3562,7 +3562,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       break;
   }
 
-  if (GET_MENTAL(victim) < 100 || GET_PHYSICAL(victim) < 0)
+  if (GET_MENTAL(victim) < 100 || GET_PHYSICAL(victim) < 1)
     if (FIGHTING(ch) == victim)
       if (GET_POS(victim) == POS_DEAD || !IS_NPC(victim) || PRF_FLAGGED(ch, PRF_NOAUTOKILL)) {
         stop_fighting(ch);
