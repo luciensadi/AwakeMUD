@@ -277,6 +277,9 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           host_num = real_host(d->edit_number);
         }
 
+        // Since host memory locations or exits may have changed
+        collate_host_entrances();
+
         {
           #define UPDATE_VALUE(value) {(value) = ((value) >= host_num ? (value) + 1 : (value));}
           for (int zone = 0; zone <= top_of_zone_table; zone++) {

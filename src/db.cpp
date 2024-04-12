@@ -235,6 +235,7 @@ void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
 void set_elemental_races();
+void collate_host_entrances();
 
 /* external vars */
 extern int no_specials;
@@ -604,6 +605,9 @@ void boot_world(void)
 
   log("Loading Matrix Hosts.");
   index_boot(DB_BOOT_MTX);
+
+  log("Collating Matrix Host Entrances.");
+  collate_host_entrances();
 
   log("Loading IC.");
   index_boot(DB_BOOT_IC);
@@ -5453,6 +5457,22 @@ void free_host(struct host_data * host)
     host->trigger = NULL;
   }
 
+  { // Clean up associated entrances.
+    rnum_t dest_rnum;
+    for (struct exit_data *exit = host->exit; exit; exit = exit->next) {
+      dest_rnum = real_host(exit->host);
+      if (dest_rnum >= 0) {
+        struct entrance_data *entrance;
+        for (entrance = matrix[dest_rnum].entrance; entrance; entrance = entrance->next) {
+          if (entrance->host == host->vnum)
+            break;
+        }
+        REMOVE_FROM_LIST(entrance, matrix[dest_rnum].entrance, next);
+        DELETE_AND_NULL(entrance);
+      }
+    }
+  }
+
   { // Clean up the exits.
     struct exit_data *exit = NULL, *next = NULL;
     for (exit = host->exit; exit; exit = next) {
@@ -7944,5 +7964,47 @@ void set_elemental_races() {
       exit(ERROR_MISSING_ELEMENTALS);
     }
     GET_RACE(&mob_proto[rnum]) = RACE_PC_CONJURED_ELEMENTAL;
+  }
+}
+
+// We want a way to traverse all entrances to a host, but with one-way passages, we can't use exits
+// This function resets and populates entrance lists for each host
+// Duplicate entries can exist where there's more than one way to get from host A to host B
+void collate_host_entrances() {
+
+  // Clear existing entrance lists
+  for (rnum_t source_rnum = 0; source_rnum <= top_of_matrix; source_rnum++) {
+    struct entrance_data *entrance = NULL, *next = NULL;
+    for (entrance = matrix[source_rnum].entrance; entrance; entrance = next) {
+      next = entrance->next;
+      delete entrance;
+    }
+    matrix[source_rnum].entrance = NULL;
+  }
+
+  // Find exits and add to respective entrance lists
+  rnum_t dest_rnum = -1;
+  struct entrance_data *entrance = NULL;
+  for (rnum_t source_rnum = 0; source_rnum <= top_of_matrix; source_rnum++) {
+    for (struct exit_data *exit = matrix[source_rnum].exit; exit; exit = exit->next) {
+      dest_rnum = real_host(exit->host);
+      if (dest_rnum >= 0) {
+        entrance = new entrance_data;
+        entrance->host = &matrix[source_rnum];
+        entrance->next = matrix[dest_rnum].entrance;
+        matrix[dest_rnum].entrance = entrance;
+      }
+    }
+
+    // Subsystem trapdoors are also entrances
+    for (int sub = 0; sub < NUM_OF_SUBSYSTEMS; i++) {
+      dest_rnum = real_host(matrix[source_rnum].stats[sub][MTX_STAT_TRAPDOOR]);
+      if (dest_rnum >= 0) {
+        entrance = new entrance_data;
+        entrance->host = &matrix[source_rnum];
+        entrance->next = matrix[dest_rnum].entrance;
+        matrix[dest_rnum].entrance = entrance;
+      }
+    }
   }
 }

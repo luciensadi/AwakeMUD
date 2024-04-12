@@ -8,6 +8,7 @@
 #define INDEX	2
 #define FILES	3
 #define SLAVE	4
+#define NUM_OF_SUBSYSTEMS 5
 
 #define MAX_CUSTOM_MPCP_RATING 12
 
@@ -84,6 +85,7 @@ struct host_data {
   struct matrix_icon *icons;
   struct matrix_icon *fighting;
   struct exit_data *exit;
+  struct entrance_data *entrance;
   struct obj_data *file;
   host_data():
     name(NULL), keywords(NULL), desc(NULL), shutdown_start(NULL), shutdown_stop(NULL),
@@ -115,6 +117,15 @@ struct exit_data {
     canary = CANARY_VALUE;
 #endif
   }
+};
+
+struct entrance_data {
+  struct host_data *host;
+  struct entrance_data *next;
+
+  entrance_data():
+    host(NULL), next(NULL)
+  {}
 };
 
 struct trigger_step {

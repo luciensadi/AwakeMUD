@@ -2967,11 +2967,10 @@ void matrix_update()
           }
         }
         // Check surrounding hosts.
-        rnum_t adjacent_rnum;
-        for (struct exit_data *exit = HOST.exit; exit && !decker; exit = exit->next) {
-          adjacent_rnum = real_host(exit->host);
-          if (adjacent_rnum >= 0) {
-            for (struct matrix_icon *icon = matrix[adjacent_rnum].icons; icon; icon = icon->next_in_host) {
+        struct host_data *adjacent_host = NULL;
+        for (struct entrance_data *entrance = HOST.entrance; entrance && !decker; entrance = entrance->next) {
+          if (adjacent_host = entrance.host) {
+            for (struct matrix_icon *icon = adjacent_host.icons; icon; icon = icon->next_in_host) {
               if (!ICON_IS_IC(icon)) {
                 decker = TRUE;
                 break;
@@ -2979,17 +2978,7 @@ void matrix_update()
             }
           }
         }
-        // Parent may not have been included as an exit, so also needs to be checked.
-        if (!decker && (adjacent_rnum = real_host(HOST.parent))) {
-          if (adjacent_rnum >= 0) {
-            for (struct matrix_icon *icon = matrix[adjacent_rnum].icons; icon; icon = icon->next_in_host) {
-              if (!ICON_IS_IC(icon)) {
-                decker = TRUE;
-                break;
-              }
-            }
-          }
-        }
+
         // We only reset subsystem encryption ratings if there are no deckers.
         if (!decker) {
           for (int x = 0; x < 5; x++) {
