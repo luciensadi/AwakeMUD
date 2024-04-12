@@ -140,6 +140,7 @@ public:
 
   int GetInt(const char *where, int defawlt);
   long GetLong(const char *where, long defawlt);
+  unsigned long GetUnsignedLong(const char *where, long defawlt);
 
   // assumes lookup_tab is "\n"-terminated, returns index of string in tab
   int LookupInt(const char *where, const char **lookup_tab, int defawlt);

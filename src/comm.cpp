@@ -184,7 +184,7 @@ void show_string(struct descriptor_data * d, char *input);
 extern void update_paydata_market();
 extern void warn_about_apartment_deletion();
 void process_wheres_my_car();
-extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads);
+extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads, const char *call_origin, struct char_data *caller);
 void set_descriptor_canaries(struct descriptor_data *newd);
 extern void process_flying_vehicles();
 
@@ -1376,7 +1376,7 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", GET_BALLISTIC(d->character));
               break;
             case 'c':       // combat pool
-              snprintf(str, sizeof(str), "%d", GET_COMBAT(d->character));
+              snprintf(str, sizeof(str), "%d", GET_COMBAT_POOL(d->character));
               break;
             case 'C':       // persona condition
               if (ch->persona)
@@ -1385,10 +1385,10 @@ int make_prompt(struct descriptor_data * d)
                 snprintf(str, sizeof(str), "NA");
               break;
             case 'd':       // defense pool
-              snprintf(str, sizeof(str), "%d", GET_DEFENSE(d->character));
+              snprintf(str, sizeof(str), "%d", GET_DODGE(d->character));
               break;
             case 'D':
-              snprintf(str, sizeof(str), "%d", GET_BODY(d->character));
+              snprintf(str, sizeof(str), "%d", GET_BODY_POOL(d->character));
               break;
             case 'e':
               if (ch->persona)
@@ -1540,7 +1540,7 @@ int make_prompt(struct descriptor_data * d)
                 snprintf(str, sizeof(str), "0");
               break;
             case 't':       // magic pool
-              snprintf(str, sizeof(str), "%d", GET_MAGIC(d->character));
+              snprintf(str, sizeof(str), "%d", GET_MAGIC_POOL(d->character));
               break;
             case 'T':
               snprintf(str, sizeof(str), "%d", GET_SUSTAINED_NUM(d->character));
@@ -2343,11 +2343,20 @@ void close_socket(struct descriptor_data *d)
   if (d->snooping)
     d->snooping->snoop_by = NULL;
 
-  if (d->snoop_by)
-  {
+  if (d->snoop_by) {
     SEND_TO_Q("Your victim is no longer among us.\r\n", d->snoop_by);
     d->snoop_by->snooping = NULL;
   }
+
+  /* Forget watching */
+  if (d->watching)
+    d->watching->watcher = NULL;
+
+  if (d->watcher) {
+    SEND_TO_Q("Your watch target is no longer among us.\r\n", d->watcher);
+    d->watcher->watching = NULL;
+  }
+
   if (d->character)
   {
     // Log our metrics.
@@ -3614,7 +3623,7 @@ void process_wheres_my_car() {
           break;
 
         // If they didn't pay enough to find this one, skip it.
-        int distance = calculate_distance_between_rooms(veh_in_room->number, ch_in_room->number, TRUE);
+        int distance = calculate_distance_between_rooms(veh_in_room->number, ch_in_room->number, TRUE, "wheresmycar", d->character);
         if (distance < 0 || distance > max_distance_searched) {
           log_vfprintf("Refusing to find vehicle %s: Distance is %d, vs max %d.", GET_VEH_NAME(veh), distance, max_distance_searched);
           continue;

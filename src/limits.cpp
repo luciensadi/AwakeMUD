@@ -59,10 +59,18 @@ extern bool docwagon(struct char_data *ch);
 void mental_gain(struct char_data * ch)
 {
   int gain = 0;
-  struct obj_data *bio;
 
-  if (IS_PROJECT(ch))
+  // Not injured? Skip.
+  if (GET_MENTAL(ch) == GET_MAX_MENTAL(ch)) {
     return;
+  }
+
+  bool is_npc = IS_NPC(ch);
+
+  if (is_npc && ch->desc && ch->desc->original && PLR_FLAGS(ch->desc->original).IsSet(PLR_PROJECT) && GET_MOB_VNUM(ch) == 22) {
+    /* aka an optimized IS_PROJECT(ch) */
+    return;
+  }
 
   // Base recovery
   switch (GET_POS(ch))
@@ -87,52 +95,57 @@ void mental_gain(struct char_data * ch)
   }
 
   // Character related bonuses
-  // NPCs recover faster
-  if (IS_NPC(ch))
-    gain *= 2;
+  if (is_npc) {
+    // NPCs get enhanced gain with none of the extra calculations.
+    gain *= 2.5;
+  } else {
+    // For PCs, we have to calculate.
 
-  // Augmentations
-  for (bio = ch->bioware; bio; bio = bio->next_content) {
-    if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
-      switch (GET_BIOWARE_RATING(bio)) {
-        case 1:
-          gain *= 1.1;
-          break;
-        case 2:
-          gain *= 1.4;
-          break;
-        case 3:
-          gain *= 2;
-          break;
+    // Augmentations
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+        switch (GET_BIOWARE_RATING(bio)) {
+          case 1:
+            gain *= 1.1;
+            break;
+          case 2:
+            gain *= 1.4;
+            break;
+          case 3:
+            gain *= 2;
+            break;
+        }
+        break;
       }
-      break;
     }
+
+    // Adept rapid healing increases recovery by +50% per rank
+    if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+      gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+
+    // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
+    gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+
+    // Room related bonuses
+    if (find_workshop(ch, TYPE_MEDICAL))
+      gain *= 1.5;
+
+    if (char_is_in_social_room(ch))
+      gain *= 2;
+
+    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+      gain *= 1.5;
+
+    // Penalties happen last, to avoid the possibility of truncating to zero too early
+    if (PLR_FLAGS(ch).IsSet(PLR_ENABLED_DRUGS)) {
+      // PCs have drug heal multipliers, NPCs don't
+      gain *= get_drug_heal_multiplier(ch);
+    }
+
+    // Biosystem overstress reduces healing rate by 10% per point
+    if (GET_BIOOVER(ch) > 0)
+      gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
   }
-
-  // Adept rapid healing increases recovery by +50% per rank
-  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
-
-  // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
-  gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
-
-  // Room related bonuses
-  if (find_workshop(ch, TYPE_MEDICAL))
-    gain *= 1.5;
-
-  if (char_is_in_social_room(ch))
-    gain *= 2;
-
-  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
-    gain *= 1.5;
-
-  // Penalties happen last, to avoid the possibility of truncating to zero too early
-  // Biosystem overstress reduces healing rate by 10% per point
-  if (GET_BIOOVER(ch) > 0)
-    gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
-
-  // Drug multiplier is a float in range 0.1 ≤ X ≤ 1.0
-  gain *= get_drug_heal_multiplier(ch);
 
 #ifdef ENABLE_HUNGER
   if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
@@ -147,11 +160,18 @@ void mental_gain(struct char_data * ch)
 
 void physical_gain(struct char_data * ch)
 {
-  int gain = 0;
-  struct obj_data *bio;
-
-  if (IS_PROJECT(ch))
+  // Not injured? Skip.
+  if (GET_PHYSICAL(ch) == GET_MAX_PHYSICAL(ch)) {
     return;
+  }
+
+  int gain = 0;
+  bool is_npc = IS_NPC(ch);
+
+  if (is_npc && ch->desc && ch->desc->original && PLR_FLAGS(ch->desc->original).IsSet(PLR_PROJECT) && GET_MOB_VNUM(ch) == 22) {
+    /* aka an optimized IS_PROJECT(ch) */
+    return;
+  }
 
   // Base recovery
   switch (GET_POS(ch))
@@ -178,52 +198,58 @@ void physical_gain(struct char_data * ch)
   }
 
   // Character related bonuses
-  // NPCs recover faster
-  if (IS_NPC(ch))
-    gain *= 2;
 
-  // Augmentations
-  for (bio = ch->bioware; bio; bio = bio->next_content) {
-    if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
-      switch (GET_BIOWARE_RATING(bio)) {
-        case 1:
-          gain *= 1.1;
-          break;
-        case 2:
-          gain *= 1.4;
-          break;
-        case 3:
-          gain *= 2;
-          break;
+  if (is_npc) {
+    // NPCs are easy: boost them by a set amount.
+    gain *= 2.5;
+  } else {
+    // PCs have more checks.
+
+    // Augmentations
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+        switch (GET_BIOWARE_RATING(bio)) {
+          case 1:
+            gain *= 1.1;
+            break;
+          case 2:
+            gain *= 1.4;
+            break;
+          case 3:
+            gain *= 2;
+            break;
+        }
+        break;
       }
-      break;
     }
+
+    // Adept rapid healing increases recovery by +50% per rank
+    if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+      gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+
+    // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
+    gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+      
+    // Room related bonuses
+    if (find_workshop(ch, TYPE_MEDICAL))
+      gain *= 1.8;
+
+    if (char_is_in_social_room(ch))
+      gain *= 2;
+
+    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+      gain *= 1.8;
+
+    // Penalties happen last, to avoid the possibility of truncating to zero too early
+    if (PLR_FLAGS(ch).IsSet(PLR_ENABLED_DRUGS)) {
+      // PCs have drug heal multipliers, NPCs don't
+      gain *= get_drug_heal_multiplier(ch);
+    }
+
+    // Biosystem overstress reduces healing rate by 10% per point
+    if (GET_BIOOVER(ch) > 0)
+      gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
   }
-
-  // Adept rapid healing increases recovery by +50% per rank
-  if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-    gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
-
-  // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
-  gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
-
-  // Room related bonuses
-  if (find_workshop(ch, TYPE_MEDICAL))
-    gain *= 1.8;
-
-  if (char_is_in_social_room(ch))
-    gain *= 2;
-
-  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
-    gain *= 1.8;
-
-  // Penalties happen last, to avoid the possibility of truncating to zero too early
-  // Biosystem overstress reduces healing rate by 10% per point
-  if (GET_BIOOVER(ch) > 0)
-    gain *= MIN(1.0, MAX(0.1, 1 - (0.1 * GET_BIOOVER(ch))));
-
-  // Drug multiplier is a float in range 0.1 ≤ X ≤ 1.0
-  gain *= get_drug_heal_multiplier(ch);
 
 #ifdef ENABLE_HUNGER
   if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
@@ -462,7 +488,7 @@ void remove_patch(struct char_data *ch)
       act("The effects of $p wear off, leaving you exhausted!", FALSE, ch, patch, 0, TO_CHAR);
       GET_MENTAL(ch) = MAX(0, GET_MENTAL(ch) - (GET_PATCH_RATING(patch) - 1) * 100);
       if ((GET_TRADITION(ch) == TRAD_HERMETIC || GET_TRADITION(ch) == TRAD_SHAMANIC) &&
-          success_test(GET_MAGIC(ch), GET_PATCH_RATING(patch)) < 0) {
+          success_test(GET_MAGIC_POOL(ch), GET_PATCH_RATING(patch)) < 0) {
         magic_loss(ch, 100, TRUE);
         affect_total(ch);
       }
@@ -804,6 +830,8 @@ void process_regeneration(int half_hour)
       loop_runs++;
 
       for (struct char_data *ch = character_list; ch; ch = ch->next_in_character_list) {
+        bool is_npc = IS_NPC(ch);
+
         if (ch->last_loop_rand == loop_rand) {
           continue;
         } else {
@@ -850,7 +878,7 @@ void process_regeneration(int half_hour)
             }
           }
 
-          if (!IS_NPC(ch) && IS_WATER(ch->in_room) && half_hour) {
+          if (!is_npc && IS_WATER(ch->in_room) && half_hour) {
             if (check_swimming(ch)) {
               // They died. Stop evaluating and start again.
               should_loop = TRUE;
@@ -861,7 +889,7 @@ void process_regeneration(int half_hour)
           if (GET_POS(ch) == POS_STUNNED)
             update_pos(ch);
 
-          if (GET_PHYSICAL(ch) >= GET_MAX_PHYSICAL(ch)) {
+          if (!is_npc && GET_PHYSICAL(ch) >= GET_MAX_PHYSICAL(ch)) {
             if (AFF_FLAGS(ch).IsSet(AFF_HEALED)) {
               AFF_FLAGS(ch).RemoveBit(AFF_HEALED);
               send_to_char("You can now be affected by the Heal spell again.\r\n", ch);
@@ -873,8 +901,7 @@ void process_regeneration(int half_hour)
             }
           }
           if (GET_PHYSICAL(ch) > 0) {
-            if (AFF_FLAGS(ch).IsSet(AFF_STABILIZE))
-              AFF_FLAGS(ch).RemoveBit(AFF_STABILIZE);
+            AFF_FLAGS(ch).RemoveBit(AFF_STABILIZE);
           }
         }
 
@@ -1108,39 +1135,44 @@ void point_update(void)
             HUNTING(i->desc->original) = NULL;
           }
 
-          GET_ESS(i) -= 100;
-          if (i->desc && i->desc->original) {
-            // Tick up temporary essence loss.
-            GET_TEMP_ESSLOSS(i->desc->original) = GET_ESS(i->desc->original) - GET_ESS(i);
-            affect_total(i->desc->original);
+          if ((++GET_PROJECTION_ESSLOSS_TICK(i) % PROJECTION_LENGTH_MULTIPLIER) == 0) {
+            GET_ESS(i) -= 100;
+            if (i->desc && i->desc->original) {
+              // Tick up temporary essence loss.
+              GET_TEMP_ESSLOSS(i->desc->original) = GET_ESS(i->desc->original) - GET_ESS(i);
+              affect_total(i->desc->original);
+            }
+
+            if (GET_ESS(i) <= 0) {
+              struct char_data *victim = i->desc->original;
+              send_to_char("As you feel the attachment to your physical body fade, you quickly return. The backlash from the fading connection rips through you...\r\n", i);
+              PLR_FLAGS(i->desc->original).RemoveBit(PLR_PROJECT);
+              i->desc->character = i->desc->original;
+              i->desc->original = NULL;
+              // GET_PHYSICAL(i->desc->character) = -(GET_BOD(i->desc->character) - 1) * 100;
+              // act("$n collapses in a heap.", TRUE, i->desc->character, 0, 0, TO_ROOM);
+              // update_pos(i->desc->character);
+              i->desc->character->desc = i->desc;
+              i->desc = NULL;
+              extract_char(i);
+
+              // First, nuke their health.
+              GET_PHYSICAL(victim) = -50;
+              GET_MENTAL(victim) = 0;
+              // Next, remove their death saves.
+              GET_PC_SALVATION_TICKS(victim) = 0;
+              // Finally, deal them massive damage.
+              damage(victim, victim, 100, TYPE_SUFFERING, TRUE);
+
+              // Restart the loop: We extracted someone.
+              should_loop = TRUE;
+              break;
+            } else if (GET_ESS(i) <= 100) {
+              send_to_char("^RYou feel memories of your physical body slipping away. Better ^WRETURN^R to it soon...^n\r\n", i);
+            } else if (GET_ESS(i) <= 200) {
+              send_to_char("^rYour link to your physical form grows tenuous.\r\n", i);
+            }
           }
-
-          if (GET_ESS(i) <= 0) {
-            struct char_data *victim = i->desc->original;
-            send_to_char("As you feel the attachment to your physical body fade, you quickly return. The backlash from the fading connection rips through you...\r\n", i);
-            PLR_FLAGS(i->desc->original).RemoveBit(PLR_PROJECT);
-            i->desc->character = i->desc->original;
-            i->desc->original = NULL;
-            // GET_PHYSICAL(i->desc->character) = -(GET_BOD(i->desc->character) - 1) * 100;
-            // act("$n collapses in a heap.", TRUE, i->desc->character, 0, 0, TO_ROOM);
-            // update_pos(i->desc->character);
-            i->desc->character->desc = i->desc;
-            i->desc = NULL;
-            extract_char(i);
-
-            // First, nuke their health.
-            GET_PHYSICAL(victim) = -50;
-            GET_MENTAL(victim) = 0;
-            // Next, remove their death saves.
-            GET_PC_SALVATION_TICKS(victim) = 0;
-            // Finally, deal them massive damage.
-            damage(victim, victim, 100, TYPE_SUFFERING, TRUE);
-
-            // Restart the loop: We extracted someone.
-            should_loop = TRUE;
-            break;
-          } else if (GET_ESS(i) <= 100)
-            send_to_char("You feel memories of your physical body slipping away.\r\n", i);
         }
 
         if (is_npc || !PLR_FLAGGED(i, PLR_JUST_DIED)) {
@@ -1148,7 +1180,7 @@ void point_update(void)
             LAST_HEAL(i)--;
           else if (LAST_HEAL(i) < 0)
             LAST_HEAL(i)++;
-          if (GET_EQ(i, WEAR_PATCH))
+          if (GET_EQ(i, WEAR_PATCH) && GET_OBJ_TYPE(GET_EQ(i, WEAR_PATCH)) == ITEM_PATCH && --GET_PATCH_TICKS_LEFT(GET_EQ(i, WEAR_PATCH)) <= 0)
             remove_patch(i);
         }
       }
@@ -1165,392 +1197,6 @@ void point_update(void)
 
   /* update object counters */
   ObjList.UpdateCounters();
-}
-
-vnum_t junkyard_room_numbers[] = {
-  RM_JUNKYARD_GATES, // Just Inside the Gates
-  RM_JUNKYARD_PARTS, // Rounding a Tottering Pile of Drone Parts
-  RM_JUNKYARD_GLASS, // Beside a Mound of Glass
-  RM_JUNKYARD_APPLI, // Amidst Aging Appliances
-  RM_JUNKYARD_ELECT  // The Electronics Scrapheap
-};
-
-vnum_t boneyard_room_numbers[] = {
-  RM_BONEYARD_WRECK_ROOM
-};
-
-// Returns TRUE if vehicle is in one of the Junkyard vehicle-depositing rooms, FALSE otherwise.
-bool veh_is_in_junkyard(struct veh_data *veh) {
-  if (!veh || !veh->in_room)
-    return FALSE;
-
-  // Aircraft end up in the Boneyard instead of the Junkyard.
-  if (veh_is_aircraft(veh)) {
-    for (int index = 0; index < NUM_BONEYARD_ROOMS; index++)
-      if (veh->in_room->number == boneyard_room_numbers[index])
-        return TRUE;
-  } else {
-    for (int index = 0; index < NUM_JUNKYARD_ROOMS; index++)
-      if (veh->in_room->number == junkyard_room_numbers[index])
-        return TRUE;
-  }
-
-  return FALSE;
-}
-
-bool veh_is_in_crusher_queue(struct veh_data *veh) {
-  if (!veh || !veh->in_room)
-    return FALSE;
-
-  return GET_ROOM_VNUM(veh->in_room) == RM_VEHICLE_CRUSHER;
-}
-
-bool should_save_this_vehicle(struct veh_data *veh) {
-  // Must be a PC vehicle. We specifically don't check for PC exist-- that's handled in LOADING, not saving.
-  if (veh->owner <= 0)
-    return FALSE;
-
-  /* log_vfprintf("Evaluating save info for PC veh '%s' at '%ld' (damage %d/10)",
-               GET_VEH_NAME(veh), get_veh_in_room(veh) ? get_veh_in_room(veh)->number : -1, veh->damage); */
-
-  // If it's thrashed, it must be in the proper location.
-  if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-    // It was in the crusher queue and nobody came to fix it.
-    if (veh_is_in_crusher_queue(veh))
-      return FALSE;
-
-    // It's being taken care of.
-    if (veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))
-      return TRUE;
-
-    // It's towed.
-    if (!veh->in_veh && !veh->in_room)
-      return TRUE;
-
-    // We don't preserve damaged watercraft, mostly because we don't have a water version of the junkyard yet.
-    switch (veh->type) {
-      case VEH_CAR:
-      case VEH_BIKE:
-      case VEH_DRONE:
-      case VEH_TRUCK:
-        return TRUE;
-      default:
-        return veh_is_aircraft(veh);
-    }
-  }
-
-  return TRUE;
-}
-
-void save_vehicles(bool fromCopyover)
-{
-#ifdef IS_BUILDPORT
-  log_vfprintf("Refusing to save vehicles: We're on the buildport.");
-  return;
-#endif
-
-  PERF_PROF_SCOPE(pr_, __func__);
-  struct veh_data *veh;
-  FILE *fl;
-  struct char_data *i;
-  int v;
-  struct room_data *temp_room = NULL;
-  struct obj_data *obj;
-  int num_veh = 0;
-
-  for (veh = veh_list, v = 0; veh; veh = veh->next) {
-    // Skip disqualified vehicles.
-    if (!should_save_this_vehicle(veh)) {
-      // mudlog_vfprintf(NULL, LOG_GRIDLOG, "Refusing to save vehicle %s: Not a candidate for saving.", GET_VEH_NAME(veh));
-      continue;
-    }
-
-    // Previously, ownerless vehicles were saved, allowing them to disgorge contents on next load. This is bad for the economy. Instead, we just drop them.
-    if (veh->owner > 0 && !does_player_exist(veh->owner)) {
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Vehicle '%s' no longer has a valid owner (was %ld). Locking it and refusing to save it.", GET_VEH_NAME(veh), veh->owner);
-      // Auto-lock the doors to prevent cheese.
-      veh->locked = TRUE;
-      // Clear the owner. This vehicle will be DQ'd in should_save_this_vehicle() henceforth.
-      veh->owner = 0;
-      continue;
-    }
-
-    // This must come AFTER all disqualifications.
-    num_veh++;
-
-    snprintf(buf, sizeof(buf), "veh/%07d", v);
-    v++;
-    if (!(fl = fopen(buf, "w"))) {
-      mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, FALSE);
-      return;
-    }
-
-    if (veh->sub)
-      for (i = character_list; i; i = i->next_in_character_list)
-        if (GET_IDNUM(i) == veh->owner) {
-          struct veh_data *f = NULL;
-          for (f = i->char_specials.subscribe; f; f = f->next_sub)
-            if (f == veh)
-              break;
-          if (!f) {
-            veh->next_sub = i->char_specials.subscribe;
-
-            // Doubly link it into the list.
-            if (i->char_specials.subscribe)
-              i->char_specials.subscribe->prev_sub = veh;
-
-            i->char_specials.subscribe = veh;
-          }
-          break;
-        }
-
-    // Any vehicle that's destroyed and not being actively tended to (in a vehicle, in a garage) gets sent to either the junkyard or the crusher.
-    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(veh->in_veh || (veh->in_room && ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
-      int junkyard_number;
-
-      // If it's already in the junkyard, move it to the crusher, but only on crashes.
-      // Vehicles in the crusher will not be saved, effectively destroying them.
-      if (!fromCopyover && veh_is_in_junkyard(veh)) {
-        junkyard_number = RM_VEHICLE_CRUSHER;
-      } else {
-        // Pick a spot and put the vehicle there. Sort roughly based on type.
-        if (veh_is_aircraft(veh)) {
-          junkyard_number = RM_BONEYARD_WRECK_ROOM;
-        } else {
-          switch (veh->type) {
-            case VEH_DRONE:
-              // Drones in the drone spot.
-              junkyard_number = RM_JUNKYARD_PARTS;
-              break;
-            case VEH_BIKE:
-              // Bikes in the bike spot.
-              junkyard_number = RM_JUNKYARD_BIKES;
-              break;
-            case VEH_CAR:
-            case VEH_TRUCK:
-              // Standard vehicles just inside the gates.
-              junkyard_number = RM_JUNKYARD_GATES;
-              break;
-            default:
-              // Pick a random one to scatter them about.
-              junkyard_number = junkyard_room_numbers[number(0, NUM_JUNKYARD_ROOMS - 1)];
-              break;
-          }
-        }
-      }
-      
-      temp_room = &world[real_room(junkyard_number)];
-    } else {
-      // If veh is not in a garage (or the owner is not allowed to enter the house anymore), send it to a garage.
-      temp_room = get_veh_in_room(veh);
-
-      // No temp room means it's towed. Yolo it into the Seattle garage.
-      if (!temp_room) {
-        // snprintf(buf, sizeof(buf), "Falling back to Seattle garage for non-veh, non-room veh %s.", GET_VEH_NAME(veh));
-        // log(buf);
-        if (veh_is_aircraft(veh)) {
-          temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_1)];
-        } else {
-          temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
-        }
-      } else {
-        // Otherwise, derive the garage from its location.
-        bool room_is_valid_garage = IDNUM_CAN_ENTER_APARTMENT(temp_room, veh->owner);
-        if (veh_is_aircraft(veh)) {
-          room_is_valid_garage &= ROOM_FLAGGED(temp_room, ROOM_RUNWAY) || ROOM_FLAGGED(temp_room, ROOM_HELIPAD) || ROOM_FLAGGED(temp_room, ROOM_GARAGE);
-        } else {
-          room_is_valid_garage &= ROOM_FLAGGED(temp_room, ROOM_GARAGE);
-        }
-        
-        if (!fromCopyover && !room_is_valid_garage) {
-          /* snprintf(buf, sizeof(buf), "Falling back to a garage for non-garage-room veh %s (in '%s' %ld).",
-                      GET_VEH_NAME(veh), GET_ROOM_NAME(temp_room), GET_ROOM_VNUM(temp_room));
-          log(buf); */
-          if (veh_is_aircraft(veh)) {
-            if (dice(1, 2) == 1) {
-              temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_1)];
-            } else {
-              temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_2)];
-            }
-          } else {
-            switch (GET_JURISDICTION(temp_room)) {
-              case ZONE_SEATTLE:
-                temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
-                break;
-              case ZONE_CARIB:
-                temp_room = &world[real_room(RM_CARIB_PARKING_GARAGE)];
-                break;
-              case ZONE_OCEAN:
-                temp_room = &world[real_room(RM_OCEAN_PARKING_GARAGE)];
-                break;
-              case ZONE_PORTLAND:
-  #ifdef USE_PRIVATE_CE_WORLD
-                switch (number(0, 2)) {
-                  case 0:
-                    temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE1)];
-                    break;
-                  case 1:
-                    temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE2)];
-                    break;
-                  case 2:
-                    temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE3)];
-                    break;
-                }
-  #else
-                temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
-  #endif
-                break;
-            }
-          }
-        }
-      }
-    }
-    fprintf(fl, "[METADATA]\n");
-    fprintf(fl, "\tVersion:\t%d\n", VERSION_VEH_FILE);
-    fprintf(fl, "[VEHICLE]\n");
-    fprintf(fl, "\tVnum:\t%ld\n", veh_index[veh->veh_number].vnum);
-    fprintf(fl, "\tOwner:\t%ld\n", veh->owner);
-    fprintf(fl, "\tInRoom:\t%ld\n", temp_room->number);
-    fprintf(fl, "\tSubscribed:\t%d\n", veh->sub);
-    fprintf(fl, "\tDamage:\t%d\n", veh->damage);
-    fprintf(fl, "\tSpare:\t%ld\n", veh->spare);
-    fprintf(fl, "\tIdnum:\t%ld\n", veh->idnum);
-
-    rnum_t rnum = real_vehicle(GET_VEH_VNUM(veh));
-    if (rnum < 0 || veh->flags != veh_proto[rnum].flags)
-      fprintf(fl, "\tFlags:\t%s\n", veh->flags.ToString());
-    if (veh->in_veh)
-      fprintf(fl, "\tInVeh:\t%ld\n", veh->in_veh->idnum);
-    if (veh->restring)
-      fprintf(fl, "\tVRestring:\t%s\n", veh->restring);
-    if (veh->restring_long)
-      fprintf(fl, "\tVRestringLong:$\n%s~\n", cleanup(buf2, veh->restring_long));
-    if (veh->decorate_front)
-      fprintf(fl, "\tVDecorateFront:$\n%s~\n", cleanup(buf2, veh->decorate_front));
-    if (veh->decorate_rear)
-      fprintf(fl, "\tVDecorateRear:$\n%s~\n", cleanup(buf2, veh->decorate_rear));
-    fprintf(fl, "[CONTENTS]\n");
-    int o = 0, level = 0;
-    std::vector<std::string> obj_strings;
-    std::stringstream obj_string_buf;
-    for (obj = veh->contents;obj;) {
-      if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
-        obj_string_buf << "\t\tVnum:\t" << GET_OBJ_VNUM(obj) << "\n";
-        obj_string_buf << "\t\tInside:\t" << level << "\n";
-
-        switch (GET_OBJ_TYPE(obj)) {
-          case ITEM_PHONE:
-            for (int x = 0; x < 4; x++) {
-              obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) <<"\n";
-            }
-            break;
-          case ITEM_WORN:
-            // The only thing we save is the hardened armor bond status.
-            if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
-              obj_string_buf << "\t\tValue " << WORN_OBJ_HARDENED_ARMOR_SLOT << ":\t" << GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) << "\n";
-            } else if (GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj)) {
-              mudlog_vfprintf(obj->worn_by, LOG_SYSLOG, "SYSERR: Worn item %s (%ld) has the customized armor value set to %d, but it's not hardened armor! Saving anyways.",
-                              GET_OBJ_NAME(obj),
-                              GET_OBJ_VNUM(obj),
-                              GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj));
-              obj_string_buf << "\t\tValue " << WORN_OBJ_HARDENED_ARMOR_SLOT << ":\t" << GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) << "\n";
-            }
-            break;
-          default:
-            for (int x = 0; x < NUM_VALUES; x++) {
-              obj_string_buf << "\t\tValue " << x << ":\t" << GET_OBJ_VAL(obj, x) << "\n";
-            }
-            break;
-        }
-        
-        obj_string_buf << "\t\tCondition:\t" << (int) GET_OBJ_CONDITION(obj) << "\n";
-        obj_string_buf << "\t\tCost:\t" << GET_OBJ_COST(obj) << "\n";
-        obj_string_buf << "\t\tTimer:\t" << GET_OBJ_TIMER(obj) << "\n";
-        obj_string_buf << "\t\tAttempt:\t" << GET_OBJ_ATTEMPT(obj) << "\n";
-        obj_string_buf << "\t\tExtraFlags:\t" << GET_OBJ_EXTRA(obj).ToString() << "\n";
-        obj_string_buf <<  "\t\tFront:\t" << obj->vfront << "\n";
-        if (obj->restring)
-          obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
-        if (obj->photo)
-          obj_string_buf << "\t\tPhoto:$\n" << cleanup(buf2, obj->photo) << "~\n";
-
-        obj_strings.push_back(obj_string_buf.str());
-        obj_string_buf.str(std::string());
-      }
-
-      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
-        obj = obj->contains;
-        level++;
-        continue;
-      } else if (!obj->next_content && obj->in_obj)
-        while (obj && !obj->next_content && level >= 0) {
-          obj = obj->in_obj;
-          level--;
-        }
-
-      if (obj)
-        obj = obj->next_content;
-    }
-
-    if (!obj_strings.empty()) {
-      int i = 0;
-      for(std::vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
-        fprintf(fl, "\t[Object %d]\n", i);
-        fprintf(fl, "%s", rit->c_str());
-        i++;
-      }
-      obj_strings.clear();
-    }
-
-    fprintf(fl, "[MODIS]\n");
-    for (int x = 0, v = 0; x < NUM_MODS; x++) {
-      if (x == MOD_MOUNT)
-        continue;
-        
-      if (GET_MOD(veh, x)) {
-        fprintf(fl, "\tMod%d:\t%ld\n", v, GET_OBJ_VNUM(GET_MOD(veh, x)));
-        v++;
-      }
-    }
-    fprintf(fl, "[MOUNTS]\n");
-    int m = 0;
-    for (obj = veh->mount; obj; obj = obj->next_content, m++) {
-      struct obj_data *ammo = NULL;
-      struct obj_data *gun = NULL;
-
-      fprintf(fl, "\t[Mount %d]\n", m);
-      fprintf(fl, "\t\tMountNum:\t%ld\n", GET_OBJ_VNUM(obj));
-      if ((ammo = get_mount_ammo(obj)) && GET_AMMOBOX_QUANTITY(ammo) > 0) {
-        fprintf(fl, "\t\tAmmo:\t%d\n", GET_AMMOBOX_QUANTITY(ammo));
-        fprintf(fl, "\t\tAmmoType:\t%d\n", GET_AMMOBOX_TYPE(ammo));
-        fprintf(fl, "\t\tAmmoWeap:\t%d\n", GET_AMMOBOX_WEAPON(ammo));
-      }
-      if ((gun = get_mount_weapon(obj))) {
-        fprintf(fl, "\t\tVnum:\t%ld\n", GET_OBJ_VNUM(gun));
-        fprintf(fl, "\t\tCondition:\t%d\n", GET_OBJ_CONDITION(gun));
-        if (gun->restring)
-          fprintf(fl, "\t\tName:\t%s\n", gun->restring);
-        for (int x = 0; x < NUM_VALUES; x++)
-          fprintf(fl, "\t\tValue %d:\t%d\n", x, GET_OBJ_VAL(gun, x));
-      }
-    }
-    fprintf(fl, "[GRIDGUIDE]\n");
-    o = 0;
-    for (struct grid_data *grid = veh->grid; grid; grid = grid->next) {
-      fprintf(fl, "\t[GRID %d]\n", o++);
-      fprintf(fl, "\t\tName:\t%s\n", grid->name);
-      fprintf(fl, "\t\tRoom:\t%ld\n", grid->room);
-    }
-    fclose(fl);
-  }
-
-  // Write the count of vehicles to the file.
-  if (!(fl = fopen("veh/vfile", "w"))) {
-    mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, FALSE);
-    return;
-  }
-  fprintf(fl, "%d\n", num_veh);
-  fclose(fl);
 }
 
 void update_paydata_market() {
@@ -1610,6 +1256,7 @@ void misc_update(void)
       should_loop = FALSE;
 
       for (struct char_data *ch = character_list, *next_ch; ch; ch = next_ch) {
+        bool is_npc = IS_NPC(ch);
         next_ch = ch->next_in_character_list;
         
         if (ch->last_loop_rand == loop_rand) {
@@ -1630,8 +1277,18 @@ void misc_update(void)
           send_to_char("You feel calmer.\r\n", ch);
         }
 
-        if (!CH_IN_COMBAT(ch) && AFF_FLAGGED(ch, AFF_ACID))
-          AFF_FLAGS(ch).RemoveBit(AFF_ACID);
+        if (!CH_IN_COMBAT(ch)) {
+          if (is_npc) {
+            // We just remove the acid with no checking since speed matters for NPCs.
+            AFF_FLAGS(ch).RemoveBit(AFF_ACID);
+          } else {
+            // With PCs, we check for the flag and message about it.
+            if (AFF_FLAGGED(ch, AFF_ACID)) {
+              AFF_FLAGS(ch).RemoveBit(AFF_ACID);
+              send_to_char(ch, "The choking clouds of acid dissipate.\r\n");
+            }
+          }
+        }
 
         if (GET_SUSTAINED_NUM(ch) && !IS_ANY_ELEMENTAL(ch)) {
           struct sustain_data *next, *temp, *nsus;
@@ -1658,7 +1315,7 @@ void misc_update(void)
                   act("$n's body suddenly bursts into flames!\r\n", TRUE, sus->other, 0, 0, TO_ROOM);
                   GET_CHAR_FIRE_DURATION(sus->other) = srdice();
                   GET_CHAR_FIRE_BONUS_DAMAGE(sus->other) = 0;
-                  GET_CHAR_FIRE_CAUSED_BY_PC(sus->other) = !IS_NPC(ch);
+                  GET_CHAR_FIRE_CAUSED_BY_PC(sus->other) = !is_npc;
                 } else {
                   strcpy(buf, spells[sus->spell].name);
                   send_to_char(ch, "The effects of %s become permanent.\r\n", buf);
@@ -1681,52 +1338,67 @@ void misc_update(void)
           }
         }
 
-        if (affected_by_spell(ch, SPELL_CONFUSION) || affected_by_spell(ch, SPELL_CHAOS) || affected_by_power(ch, CONFUSION)) {
-          if ((i = number(1, 15)) >= 5) {
-            switch(i) {
-              case 5:
-                send_to_char("Lovely weather today.\r\n", ch);
-                break;
-              case 6:
-                send_to_char("Is that who I think it is? ...Nah, my mistake.\r\n", ch);
-                break;
-              case 7:
-                send_to_char("Now, where did I leave my car keys...\r\n", ch);
-                break;
-              case 8:
-                send_to_char("Over There!\r\n", ch);
-                break;
-              case 9:
-                send_to_char("x + 2dy divided by 3 is... no wait CARRY THE 1!\r\n", ch);
-                break;
-              case 10:
-                send_to_char("Skibby dibby dibby do-ah.\r\n", ch);
-                break;
-              case 11:
-                if (ch->carrying)
-                  send_to_char(ch, "You stare blankly at %s. What is it? What could it mean?\r\n", GET_OBJ_NAME(ch->carrying));
-                break;
-              case 12:
-                send_to_char("The energies of the chaos spell continue to swirl around you.\r\n", ch);
-                break;
-              case 13:
-                send_to_char("You struggle to concentrate through the haze of the chaos spell.\r\n", ch);
-                break;
-              case 14:
-                send_to_char("The chaos spell drags your attention away from what you're doing.\r\n", ch);
+        if (GET_SUSTAINED(ch)) {
+          bool affected_by_chaos_or_confusion = FALSE;
+
+          // This is an optimized affected_by_spell() call.
+          for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next) {
+            if (hjp->caster == FALSE && (hjp->spell == SPELL_CONFUSION || hjp->spell == SPELL_CHAOS)) {
+              affected_by_chaos_or_confusion = TRUE;
+
+              // Elementals shouldn't have anything cast on them.
+              if (IS_PC_CONJURED_ELEMENTAL(ch))
                 break;
             }
           }
-          if (!number(0, 30)) {
-            end_all_sustained_spells_of_type_affecting_ch(SPELL_CONFUSION, 0, ch);
-            end_all_sustained_spells_of_type_affecting_ch(SPELL_CHAOS, 0, ch);
-            send_to_char("Your head seems to clear.\r\n", ch);
+          
+          if (affected_by_chaos_or_confusion || affected_by_power(ch, CONFUSION)) {
+            if (ch->desc && (i = number(1, 15)) >= 5) {
+              switch(i) {
+                case 5:
+                  send_to_char("Lovely weather today.\r\n", ch);
+                  break;
+                case 6:
+                  send_to_char("Is that who I think it is? ...Nah, my mistake.\r\n", ch);
+                  break;
+                case 7:
+                  send_to_char("Now, where did I leave my car keys...\r\n", ch);
+                  break;
+                case 8:
+                  send_to_char("Over There!\r\n", ch);
+                  break;
+                case 9:
+                  send_to_char("x + 2dy divided by 3 is... no wait CARRY THE 1!\r\n", ch);
+                  break;
+                case 10:
+                  send_to_char("Skibby dibby dibby do-ah.\r\n", ch);
+                  break;
+                case 11:
+                  if (ch->carrying)
+                    send_to_char(ch, "You stare blankly at %s. What is it? What could it mean?\r\n", GET_OBJ_NAME(ch->carrying));
+                  break;
+                case 12:
+                  send_to_char("The energies of the chaos spell continue to swirl around you.\r\n", ch);
+                  break;
+                case 13:
+                  send_to_char("You struggle to concentrate through the haze of the chaos spell.\r\n", ch);
+                  break;
+                case 14:
+                  send_to_char("The chaos spell drags your attention away from what you're doing.\r\n", ch);
+                  break;
+              }
+            }
+            if (!number(0, 30)) {
+              end_all_sustained_spells_of_type_affecting_ch(SPELL_CONFUSION, 0, ch);
+              end_all_sustained_spells_of_type_affecting_ch(SPELL_CHAOS, 0, ch);
+              send_to_char("Your head seems to clear.\r\n", ch);
 
-            // TODO: Make the confusion power wear off.
+              // TODO: Make the confusion power wear off.
+            }
           }
         }
 
-        if (!IS_NPC(ch)) {
+        if (!is_npc) {
           // Burn down adrenaline. This can kill the target, so break out if it returns true.
           if (check_adrenaline(ch, 0)) {
             // They died. Start the loop again.
@@ -1744,6 +1416,7 @@ void misc_update(void)
           affect_total(ch);
         }
         else { // NPC checks.
+          // Clear out unpiloted personas and projections. TODO: What is 21 "a dim reflection" used for?
           if (!ch->desc && GET_MOB_VNUM(ch) >= 20 && GET_MOB_VNUM(ch) <= 22) {
             act("$n dissolves into the background and is no more.",
                 TRUE, ch, 0, 0, TO_ROOM);
@@ -1761,13 +1434,15 @@ void misc_update(void)
             should_loop = TRUE;
             break;
           }
+/* This code feels stale, like it was an old Circle thing for possessing an animal or something.
           else if (!ch->desc && GET_MOB_VNUM(ch) >= 50 && GET_MOB_VNUM(ch) < 70) {
             extract_char(ch);
             // They died or were extracted. Start the loop again.
             should_loop = TRUE;
             break;
           }
-          else if (IS_SPIRIT(ch)) {
+*/
+          else if (GET_RACE(ch) == RACE_SPIRIT) { /* aka an optimized IS_SPIRIT(ch) */
             if (!check_spirit_sector(ch->in_room, GET_SPARE1(ch))) {
               act("Being away from its environment, $n suddenly ceases to exist.", TRUE, ch, 0, 0, TO_ROOM);
               end_spirit_existance(ch, FALSE);
@@ -1812,11 +1487,11 @@ void misc_update(void)
           act("^RYour body is surrounded in flames!", FALSE, ch, 0, 0, TO_CHAR);
 
           // Only damage equipment in PvE scenarios.
-          if (IS_NPC(ch) || !GET_CHAR_FIRE_CAUSED_BY_PC(ch)) {
+          if (is_npc || !GET_CHAR_FIRE_CAUSED_BY_PC(ch)) {
             damage_equip(ch, ch, 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch), TYPE_FIRE);
           }
 
-          int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch) - GET_IMPACT(ch)), MODERATE));
+          int dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY_POOL(ch) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), 6 + GET_CHAR_FIRE_BONUS_DAMAGE(ch) - GET_IMPACT(ch)), MODERATE));
           GET_CHAR_FIRE_BONUS_DAMAGE(ch)++;
           if (damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL)) {
             // They died or were extracted. Start the loop again.

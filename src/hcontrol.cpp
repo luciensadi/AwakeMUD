@@ -31,21 +31,23 @@ const char *get_crap_count_string(int crap_count, const char *default_color = "^
   if (crap_count > 750) {
     crap_count_color = "^R";
     if (screenreader)
-      default_color = " (excessive)";
+      default_color = " (excessive amount, please prune)";
   } else if (crap_count > 600) {
     crap_count_color = "^r";
     if (screenreader)
-      default_color = " (very high)";
+      default_color = " (very high amount)";
   } else if (crap_count > 450) {
     crap_count_color = "^Y";
     if (screenreader)
-      default_color = " (high)";
+      default_color = " (high amount)";
   } else if (crap_count > 300) {
     crap_count_color = "^y";
     if (screenreader)
-      default_color = " (moderate)";
+      default_color = " (moderate amount)";
   } else {
     crap_count_color = "^n";
+    if (screenreader)
+      default_color = " (normal amount)";
   }
 
   snprintf(crap_count_string, sizeof(crap_count_string), "%s%d%s item%s",

@@ -69,6 +69,7 @@ namespace bf = boost::filesystem;
 #include "newhouse.hpp"
 #include "zoomies.hpp"
 #include "redit.hpp"
+#include "vehicles.hpp"
 
 ACMD_DECLARE(do_reload);
 
@@ -199,7 +200,7 @@ void parse_host(File &fl, long nr);
 void parse_ic(File &fl, long nr);
 void load_zones(File &fl);
 void purge_unowned_vehs();
-void load_saved_veh();
+void load_saved_veh(bool);
 void assign_mobiles(void);
 void assign_objects(void);
 void assign_rooms(void);
@@ -470,6 +471,12 @@ void boot_world(void)
     exit(ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH);
   }
 
+  if (RAND_MAX < 2147483647) { // aka the maximum value for `long int`
+    log_vfprintf("SERIOUS WARNING: Your platform's RAND_MAX is %lld, which may cause collisions with object and vehicle idnums. Recommend refactoring the code to use a more advanced random generator.", RAND_MAX);
+  } else {
+    log_vfprintf("RAND_MAX is %lld.", RAND_MAX);
+  }
+
   log("Checking to see if you added an ammo type and forgot to add it to npc_ammo_usage_preferences[]...");
   for (int i = 0; i < NUM_AMMOTYPES; i++) {
     assert(npc_ammo_usage_preferences[i] >= AMMO_NORMAL && npc_ammo_usage_preferences[i] < NUM_AMMOTYPES);
@@ -569,6 +576,20 @@ void boot_world(void)
   require_that_field_exists_in_table("graffiti", "pfiles_worn", "SQL/Migrations/add_graffiti_field.sql");
   require_that_field_exists_in_table("prestige_alt", "pfiles_chargendata", "SQL/Migrations/prestige_races.sql");
   require_that_sql_table_exists("pfiles_named_tags", "SQL/Migrations/add_named_tags.sql");
+  require_that_field_exists_in_table("Value14", "pfiles_inv", "SQL/Migrations/obj_idnums_and_vals.sql");
+
+  {
+    const char *object_tables[4] = {
+      "pfiles_inv",
+      "pfiles_worn",
+      "pfiles_bioware",
+      "pfiles_cyberware"
+    };
+    char valbuf[20];
+    snprintf(valbuf, sizeof(valbuf), "Value%d", NUM_OBJ_LOADS);
+    for (int idx = 0; idx < 4; idx++)
+      require_that_field_exists_in_table(valbuf, object_tables[idx], "(meta check: no specific file)");
+  }
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
@@ -721,7 +742,7 @@ void DBInit()
   boot_time = time(0);
 
   log("Loading saved vehicles.");
-  load_saved_veh();
+  load_saved_veh(FALSE);
 
   log("Purging unowned vehicles.");
   purge_unowned_vehs();
@@ -1419,6 +1440,11 @@ void parse_room(File &fl, long nr)
       snprintf(field, sizeof(field), "%s/MoreFlags", sect);
       int moreflags = data.GetInt(field, 0);
 
+      if (moreflags >= 8) {
+        moreflags -= 8;
+        dir->exit_info |= EX_STRICT_ABOUT_KEY;
+      }
+
       if (moreflags >= 4) {
         moreflags -= 4;
         dir->exit_info |= EX_CANT_SHOOT_THROUGH;
@@ -2011,7 +2037,7 @@ void parse_object(File &fl, long nr)
   obj->obj_flags.quest_id = 0;
 
   int i;
-  for (i = 0; i < NUM_VALUES; i++) {
+  for (i = 0; i < NUM_OBJ_VALUES; i++) {
     char field[32];
     snprintf(field, sizeof(field), "VALUES/Val%d", i);
 
@@ -4246,6 +4272,7 @@ struct obj_data *read_object(int nr, int type)
   *obj = obj_proto[i];
   ObjList.ADD(obj);
   obj_index[i].number++;
+  RANDOMLY_GENERATE_OBJ_IDNUM(obj);
   if (GET_OBJ_TYPE(obj) == ITEM_PHONE)
   {
     switch (GET_OBJ_VAL(obj, 0)) {
@@ -4335,18 +4362,17 @@ void zone_update(void)
   /* Alot of good things came from 1992, like my next door neighbour's little sister for example.
      The original version of this function, however, was not one of those things - Che */
   /* jelson 10/22/92 */
-  //   ^-- Retard
 
   if (((++timer * PULSE_ZONE) / PASSES_PER_SEC) >= 60) {
     timer = 0;
     for (i = 0; i <= top_of_zone_table; i++) {
       if (zone_table[i].age < zone_table[i].lifespan &&
-          zone_table[i].reset_mode)
+          zone_table[i].reset_mode != ZONE_RESET_NEVER)
         (zone_table[i].age)++;
 
       if (zone_table[i].age >= MAX(zone_table[i].lifespan,5) &&
           zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode &&
-          (zone_table[i].reset_mode == 2 ||
+          (zone_table[i].reset_mode == ZONE_RESET_ALWAYS ||
            zone_is_empty(i))) {
         reset_zone(i, 0);
       }
@@ -4427,7 +4453,6 @@ void reset_zone(int zone, int reboot)
 {
   SPECIAL(fixer);
   int cmd_no, last_cmd = 0, found = 0, no_mob = 0;
-  int sig = 0, load = 0;
   static int i;
   struct char_data *mob = NULL;
   struct obj_data *obj, *obj_to, *check;
@@ -4564,30 +4589,8 @@ void reset_zone(int zone, int reboot)
 
         // Special case: Weapon mounts.
         if (GET_OBJ_VAL(obj, 0) == TYPE_MOUNT) {
-          switch (GET_OBJ_VAL(obj, 1)) {
-            case 1:
-              sig = 1;
-              // fall through
-            case 0:
-              load = 10;
-              break;
-            case 3:
-              sig = 1;
-              // fall through
-            case 2:
-              load = 10;
-              break;
-            case 4:
-              sig = 1;
-              load = 100;
-              break;
-            case 5:
-              sig = 1;
-              load = 25;
-              break;
-          }
-          veh->usedload += load;
-          veh->sig -= sig;
+          veh->usedload += get_obj_vehicle_load_usage(obj, TRUE);
+          veh->sig -= get_mount_signature_penalty(obj);
 
           obj->next_content = veh->mount;
           veh->mount = obj;
@@ -4607,7 +4610,7 @@ void reset_zone(int zone, int reboot)
           if (mount) {
             // We found a valid mount; attach the weapon.
             obj_to_obj(obj, mount);
-            veh->usedload += GET_OBJ_WEIGHT(obj);
+            veh->usedload += get_obj_vehicle_load_usage(obj, FALSE);
 
             // Set the obj's firemode to the optimal one.
             if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_BF))
@@ -4632,14 +4635,14 @@ void reset_zone(int zone, int reboot)
                      GET_OBJ_NAME(obj),
                      GET_OBJ_NAME(GET_MOD(veh, GET_OBJ_VAL(obj, 0))));
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-            veh->usedload -= GET_OBJ_VAL(GET_MOD(veh, GET_OBJ_VAL(obj, 0)), 1);
+            veh->usedload -= get_obj_vehicle_load_usage(GET_MOD(veh, GET_OBJ_VAL(obj, 0)), TRUE);
             for (int j = 0; j < MAX_OBJ_AFFECT; j++)
               affect_veh(veh, GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].location, -GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].modifier);
             extract_obj(GET_MOD(veh, GET_OBJ_VAL(obj, 0)));
           }
 
           GET_MOD(veh, GET_OBJ_VAL(obj, 0)) = obj;
-          veh->usedload += GET_OBJ_VAL(obj, 1);
+          veh->usedload += get_obj_vehicle_load_usage(obj, TRUE);
           for (int j = 0; j < MAX_OBJ_AFFECT; j++)
             affect_veh(veh, obj->affected[j].location, obj->affected[j].modifier);
         }
@@ -4690,6 +4693,16 @@ void reset_zone(int zone, int reboot)
     case 'H':                 /* loads a Matrix file into a host */
       // Count the existing items in this host
       {
+        // Log annoyingly if this is a bitshifted snowflake key.
+        if (GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]) == OBJ_SNOWFLAKE_KEY && matrix[ZCMD.arg3].vnum != HOST_SNOWFLAKE_KEY_LOCATION) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Bitshift happened! The snowflake key is attempting to load in inappropriate host %ld. Redirecting to proper host.", matrix[ZCMD.arg3].vnum);
+          rnum_t actual_snowhost_rnum = real_host(HOST_SNOWFLAKE_KEY_LOCATION);
+          if (actual_snowhost_rnum >= 0)
+            ZCMD.arg3 = actual_snowhost_rnum;
+          else
+            mudlog("SYSERR: Never mind, proper host doesn't exist, guess we'll just gargle donkey balls today", NULL, LOG_SYSLOG, TRUE);
+        }
+
         int already_there = 0;
         for (struct obj_data *contents = matrix[ZCMD.arg3].file; contents; contents = contents->next_content) {
           if (GET_OBJ_VNUM(contents) == GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]))
@@ -5025,8 +5038,8 @@ void reset_zone(int zone, int reboot)
         if (!opposite_room || !REV_DOOR_STRUCT || (&world[ZCMD.arg1] != REV_DOOR_STRUCT->to_room)) {
           if (!IS_SET(DOOR_STRUCT->exit_info, EX_WINDOWED) && !IS_SET(DOOR_STRUCT->exit_info, EX_BARRED_WINDOW)) {
             snprintf(buf, sizeof(buf), "Note: %s exit from %ld to %ld has no back-linked exit, so zone command to toggle its door will only work on one side. (zone %d, line %d, cmd %d)",
-                    capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number, opposite_room->number, zone_table[zone].number,
-                    ZCMD.line, cmd_no);
+                    capitalize(dirs[ZCMD.arg2]), world[ZCMD.arg1].number, opposite_room->number,
+                    zone_table[zone].number, ZCMD.line, cmd_no);
             mudlog(buf, NULL, LOG_ZONELOG, FALSE);
           }
         } else
@@ -6122,400 +6135,6 @@ void purge_unowned_vehs() {
   }
 }
 
-// aka load_vehs, veh_load, and everything else I keep searching for it by --LS
-void load_saved_veh()
-{
-  FILE *fl;
-  struct veh_data *veh = NULL, *veh2 = NULL;
-  long vnum, owner;
-  struct obj_data *obj, *last_obj = NULL;
-  long veh_room_vnum = 0;
-  int veh_version = 0;
-  std::vector<nested_obj> contained_obj;
-  struct nested_obj contained_obj_entry;
-
-  if (!(fl = fopen("veh/vfile", "r"))) {
-    log("SYSERR: Could not open vfile for reading.");
-    return;
-  }
-
-  if (!get_line(fl, buf)) {
-    log("SYSERR: Invalid Entry In Vfile.");
-    return;
-  }
-  fclose(fl);
-  int num_veh = atoi(buf);
-  for (int i = 0; i < num_veh; i++) {
-    File file;
-    snprintf(buf, sizeof(buf), "veh/%07d", i);
-    log_vfprintf("Loading vehicle file %s.", buf);
-    if (!(file.Open(buf, "r"))) {
-      log_vfprintf("Warning: Unable to open vehfile %s for reading. Skipping.", buf);
-      continue;
-    }
-
-    VTable data;
-    data.Parse(&file);
-    file.Close();
-
-    veh_version = data.GetInt("METADATA/Version", 0);
-    owner = data.GetLong("VEHICLE/Owner", 0);
-
-    if ((vnum = data.GetLong("VEHICLE/Vnum", 0)))
-      veh = read_vehicle(vnum, VIRTUAL);
-    else
-      continue;
-
-#ifdef USE_DEBUG_CANARIES
-    veh->canary = CANARY_VALUE;
-    assert(veh->canary == CANARY_VALUE);
-#endif
-
-    veh->damage = data.GetInt("VEHICLE/Damage", 0);
-    veh->owner = owner;
-    veh->idnum = data.GetLong("VEHICLE/Idnum", number(0, INT_MAX));
-    veh->spare = data.GetLong("VEHICLE/Spare", 0);
-    veh->spare2 = data.GetLong("VEHICLE/InVeh", 0);
-    veh->locked = TRUE;
-    veh->sub = data.GetLong("VEHICLE/Subscribed", 0);
-    veh_room_vnum = data.GetLong("VEHICLE/InRoom", 0);
-
-    // Can't get there? Pull your veh out.
-    rnum_t veh_room_rnum = real_room(veh_room_vnum);
-    if (veh_room_rnum < 0
-        || ( veh->owner > 0 
-             && world[veh_room_rnum].apartment 
-             && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) 
-    {
-      log_vfprintf("Vehicle %ld owned by %ld would have loaded in %s room %ld, sending it to a parking spot.",
-                   veh->idnum,
-                   veh->owner,
-                   veh_room_rnum < 0 ? "non-existent" : "inaccessible",
-                   veh_room_vnum);
-
-      if (veh_is_aircraft(veh)) {
-        veh_room_vnum = RM_BONEYARD_INTACT_ROOM_1;
-        veh_room_rnum = real_room(veh_room_vnum);
-
-        if (veh_room_rnum < 0) {
-          log_vfprintf("FATAL ERROR: Boneyard room 1 does not exist, cannot send vehicle there. Add a room at %ld or remove all vehicles.", veh_room_vnum);
-          shutdown();
-          return;
-        }
-      } else {
-        veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
-        veh_room_rnum = real_room(veh_room_vnum);
-
-        if (veh_room_rnum < 0) {
-          log_vfprintf("FATAL ERROR: Seattle parking garage does not exist, cannot send vehicle there. Add a room at %ld or remove all vehicles.", veh_room_vnum);
-          shutdown();
-          return;
-        }
-      }
-    }
-
-    const char *veh_flag_string = data.GetString("VEHICLE/Flags", NULL);
-    if (veh_flag_string)
-      veh->flags.FromString(veh_flag_string);
-
-    if (!veh->spare2)
-      veh_to_room(veh, &world[veh_room_rnum]);
-    veh->restring = str_dup(data.GetString("VEHICLE/VRestring", NULL));
-    veh->restring_long = str_dup(data.GetString("VEHICLE/VRestringLong", NULL));
-    veh->decorate_front = str_dup(data.GetString("VEHICLE/VDecorateFront", NULL));
-    veh->decorate_rear = str_dup(data.GetString("VEHICLE/VDecorateRear", NULL));
-    int inside = 0, last_inside = 0;
-    int num_objs = data.NumSubsections("CONTENTS");
-
-    snprintf(buf3, sizeof(buf3), "veh-load %ld owned by %ld", veh->idnum, veh->owner);
-    for (int i = 0; i < num_objs; i++) {
-      const char *sect_name = data.GetIndexSection("CONTENTS", i);
-      snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
-      vnum = data.GetLong(buf, 0);
-      if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
-        snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
-        inside = data.GetInt(buf, 0);
-        for (int x = 0; x < NUM_VALUES; x++) {
-          snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
-          GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
-        }
-        if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_ITEM_PHONE_SWITCHED_ON(obj))
-          add_phone_to_list(obj);
-        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
-          handle_weapon_attachments(obj);
-        }
-        snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
-        GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
-        snprintf(buf, sizeof(buf), "%s/Cost", sect_name);
-        GET_OBJ_COST(obj) = data.GetInt(buf, 0);
-        snprintf(buf, sizeof(buf), "%s/Timer", sect_name);
-        GET_OBJ_TIMER(obj) = data.GetInt(buf, TRUE);
-        snprintf(buf, sizeof(buf), "%s/Attempt", sect_name);
-        GET_OBJ_ATTEMPT(obj) = data.GetInt(buf, 0);
-        snprintf(buf, sizeof(buf), "%s/ExtraFlags", sect_name);
-        GET_OBJ_EXTRA(obj).FromString(data.GetString(buf, "0"));
-        snprintf(buf, sizeof(buf), "%s/Front", sect_name);
-        obj->vfront = data.GetInt(buf, TRUE);
-        snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-        obj->restring = str_dup(data.GetString(buf, NULL));
-        snprintf(buf, sizeof(buf), "%s/Graffiti", sect_name);
-        obj->graffiti = str_dup(data.GetString(buf, NULL));
-        snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
-        obj->photo = str_dup(data.GetString(buf, NULL));
-
-        if (GET_OBJ_VNUM(obj) == OBJ_SPECIAL_PC_CORPSE) {
-          // Invalid belongings.
-          if (GET_OBJ_VAL(obj, 5) <= 0) {
-            extract_obj(obj);
-            continue;
-          }
-
-          const char *player_name = get_player_name(GET_OBJ_VAL(obj, 5));
-          if (!player_name || !str_cmp(player_name, "deleted")) {
-            // Whoops, it belongs to a deleted character. RIP.
-            extract_obj(obj);
-            continue;
-          }
-
-          // Set up special corpse values. This will probably cause a memory leak. We use name instead of desc.
-          snprintf(buf, sizeof(buf), "belongings %s", player_name);
-          snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", decapitalize_a_an(player_name));
-          snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", player_name);
-          strlcpy(buf3, "Looks like the DocWagon trauma team wasn't able to bring this stuff along.\r\n", sizeof(buf3));
-          obj->text.keywords = str_dup(buf);
-          obj->text.room_desc = str_dup(buf1);
-          obj->text.name = str_dup(buf2);
-          obj->text.look_desc = str_dup(buf3);
-
-          GET_OBJ_VAL(obj, 4) = 1;
-          GET_OBJ_BARRIER(obj) = PC_CORPSE_BARRIER;
-          GET_OBJ_CONDITION(obj) = 100;
-
-          delete [] player_name;
-        }
-
-        // Don't auto-repair cyberdecks until they're fully loaded.
-        if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
-          auto_repair_obj(obj, veh->owner);
-
-        if (veh_version == VERSION_VEH_FILE) {
-          // Since we're now saved the obj linked lists  in reverse order, in order to fix the stupid reordering on
-          // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
-          // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
-          // objects at deeper nesting level in between our list, we save all pointers to objects along with their
-          // nesting level in a vector container and once we found the next container (inside < last_inside) we
-          // move the objects with higher nesting level to container and proceed. This works for any nesting depth.
-          if (inside > 0 || (inside == 0 && inside < last_inside)) {
-            //Found our container?
-            if (inside < last_inside) {
-              if (inside == 0)
-                obj_to_veh(obj, veh);
-
-              auto it = std::find_if(contained_obj.begin(), contained_obj.end(), find_level(inside+1));
-              while (it != contained_obj.end()) {
-                obj_to_obj(it->obj, obj);
-                it = contained_obj.erase(it);
-              }
-
-              if (inside > 0) {
-                contained_obj_entry.level = inside;
-                contained_obj_entry.obj = obj;
-                contained_obj.push_back(contained_obj_entry);
-              }
-            }
-            else {
-              contained_obj_entry.level = inside;
-              contained_obj_entry.obj = obj;
-              contained_obj.push_back(contained_obj_entry);
-            }
-            last_inside = inside;
-          } else
-            obj_to_veh(obj, veh);
-
-          last_inside = inside;
-        }
-        // This handles loading old house file format prior to introduction of version number in the file.
-        // Version number will always be 0 for this format.
-        else if (!veh_version) {
-          if (inside > 0) {
-            if (inside == last_inside)
-              last_obj = last_obj->in_obj;
-            else if (inside < last_inside) {
-              while (inside <= last_inside && last_obj) {
-                if (!last_obj) {
-                  snprintf(buf2, sizeof(buf2), "Load error: Nested-item load failed for %s. Disgorging to vehicle.", GET_OBJ_NAME(obj));
-                  mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
-                  break;
-                }
-                last_obj = last_obj->in_obj;
-                last_inside--;
-              }
-            }
-
-            if (last_obj)
-              obj_to_obj(obj, last_obj);
-            else
-              obj_to_veh(obj, veh);
-          } else
-            obj_to_veh(obj, veh);
-          last_inside = inside;
-          last_obj = obj;
-        }
-        else {
-          snprintf(buf2, sizeof(buf2), "Load ERROR: Unknown file format for vehicle ID: %ld. Dumping valid objects to vehicle.", veh->idnum);
-          mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
-          obj_to_veh(obj, veh);
-        }
-      }
-    }
-
-    if (veh_version == VERSION_VEH_FILE) {
-      // Failsafe. If something went wrong and we still have objects stored in the vector, dump them in the room.
-      if (!contained_obj.empty()) {
-        for (auto it : contained_obj)
-          obj_to_veh(it.obj, veh);
-
-        contained_obj.clear();
-      }
-    }
-
-    int num_mods = data.NumFields("MODIS");
-    for (int i = 0; i < num_mods; i++) {
-      snprintf(buf, sizeof(buf), "MODIS/Mod%d", i);
-      vnum_t vnum = data.GetLong(buf, 0);
-
-      if (!(obj = read_object(vnum, VIRTUAL))) {
-        log_vfprintf("ERROR: Unknown vnum %ld in veh file! Skipping.", vnum);
-        continue;
-      }
-
-      GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(obj)) = obj;
-      if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_ENGINECUST)
-        veh->engine = GET_VEHICLE_MOD_RATING(obj);
-      if (GET_VEHICLE_MOD_TYPE(obj) == TYPE_AUTONAV)
-        veh->autonav += GET_VEHICLE_MOD_RATING(obj);
-      veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(obj);
-      for (int l = 0; l < MAX_OBJ_AFFECT; l++)
-        affect_veh(veh, obj->affected[l].location, obj->affected[l].modifier);
-    }
-    num_mods = data.NumSubsections("GRIDGUIDE");
-    for (int i = 0; i < num_mods; i++) {
-      struct grid_data *grid = new grid_data;
-      const char *sect_name = data.GetIndexSection("GRIDGUIDE", i);
-      snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-      grid->name = str_dup(data.GetString(buf, NULL));
-      snprintf(buf, sizeof(buf), "%s/Room", sect_name);
-      grid->room = data.GetLong(buf, 0);
-      grid->next = veh->grid;
-      veh->grid = grid;
-    }
-    num_mods = data.NumSubsections("MOUNTS");
-    for (int i = 0; i < num_mods; i++) {
-      const char *sect_name = data.GetIndexSection("MOUNTS", i);
-      snprintf(buf, sizeof(buf), "%s/MountNum", sect_name);
-      obj = read_object(data.GetLong(buf, 0), VIRTUAL);
-      snprintf(buf, sizeof(buf), "%s/Ammo", sect_name);
-      int ammo_qty = data.GetInt(buf, 0);
-      if (ammo_qty > 0) {
-        struct obj_data *ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
-        GET_AMMOBOX_QUANTITY(ammo) = ammo_qty;
-        snprintf(buf, sizeof(buf), "%s/AmmoType", sect_name);
-        GET_AMMOBOX_TYPE(ammo) = data.GetInt(buf, 0);
-        snprintf(buf, sizeof(buf), "%s/AmmoWeap", sect_name);
-        GET_AMMOBOX_WEAPON(ammo) = data.GetInt(buf, 0);
-        ammo->restring = str_dup(get_ammobox_default_restring(ammo));
-        auto_repair_obj(ammo, veh->owner);
-        obj_to_obj(ammo, obj);
-      }
-      snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
-      int gun = data.GetLong(buf, 0);
-      struct obj_data *weapon;
-      if (gun && (weapon = read_object(gun, VIRTUAL))) {
-        snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
-        GET_OBJ_CONDITION(weapon) = data.GetInt(buf, GET_OBJ_CONDITION(weapon));
-        snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-        weapon->restring = str_dup(data.GetString(buf, NULL));
-        for (int x = 0; x < NUM_VALUES; x++) {
-          snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
-          GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));
-        }
-        auto_repair_obj(weapon, veh->owner);
-        obj_to_obj(weapon, obj);
-        veh->usedload += GET_OBJ_WEIGHT(weapon);
-      }
-      int subbed = 0, damage = 0;
-      switch (GET_OBJ_VAL(obj, 1)) {
-        case 1:
-          subbed = 1;
-          // fall through
-        case 0:
-          damage = 10;
-          break;
-        case 3:
-          subbed = 1;
-          // fall through
-        case 2:
-          damage = 10;
-          break;
-        case 4:
-          subbed = 1;
-          damage = 100;
-          break;
-        case 5:
-          subbed = 1;
-          damage = 25;
-          break;
-      }
-      veh->usedload += damage;
-      veh->sig -= subbed;
-      if (veh->mount)
-        obj->next_content = veh->mount;
-      veh->mount = obj;
-    }
-  }
-
-  #ifdef USE_DEBUG_CANARIES
-    assert(veh->canary == CANARY_VALUE);
-  #endif
-
-  for (veh = veh_list; veh; veh = veh->next) {
-    if (veh->spare2) {
-      for (veh2 = veh_list; veh2 && !veh->in_veh; veh2 = veh2->next) {
-        if (veh->spare2 == veh2->idnum) {
-          veh_to_veh(veh, veh2);
-          veh->spare2 = 0;
-          veh->locked = FALSE;
-
-          #ifdef USE_DEBUG_CANARIES
-            assert(veh->canary == CANARY_VALUE);
-            assert(veh2->canary == CANARY_VALUE);
-          #endif
-        }
-      }
-      if (!veh->in_veh) {
-        rnum_t veh_room_rnum = real_room(veh_room_vnum);
-        if (veh_room_rnum < 0 || (veh->owner > 0 && world[veh_room_rnum].apartment && !world[veh_room_rnum].apartment->can_enter_by_idnum(veh->owner))) {
-          veh_room_vnum = RM_SEATTLE_PARKING_GARAGE;
-          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier, and no valid room was found! Dumping to Seattle Garage (%ld).\r\n",
-                   veh->name, veh->veh_number, veh_room_vnum);
-        } else {
-          snprintf(buf, sizeof(buf), "SYSERR: Attempted to restore vehicle %s (%ld) inside nonexistent carrier! Dumping to room %ld.\r\n",
-                  veh->name, veh->veh_number, veh_room_vnum);
-        }
-        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-        veh->spare2 = 0;
-        veh_to_room(veh, &world[veh_room_rnum]);
-
-        #ifdef USE_DEBUG_CANARIES
-          assert(veh->canary == CANARY_VALUE);
-        #endif
-      }
-    }
-  }
-}
-
-
-
 void load_consist(void)
 {
   File file;
@@ -6589,7 +6208,7 @@ void load_consist(void)
             obj->graffiti = str_dup(data.GetString(buf, NULL));
             snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
             obj->photo = str_dup(data.GetString(buf, NULL));
-            for (int x = 0; x < NUM_VALUES; x++) {
+            for (int x = 0; x < NUM_OBJ_VALUES; x++) {
               snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
               GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
             }
@@ -6638,6 +6257,10 @@ void load_consist(void)
 
               delete [] player_name;
             }
+
+            snprintf(buf, sizeof(buf), "%s/%s", sect_name, FILESTRING_OBJ_IDNUM);
+            GET_OBJ_IDNUM(obj) = data.GetUnsignedLong(buf, 0);
+            ENSURE_OBJ_HAS_IDNUM(obj);
 
             // Don't auto-repair cyberdecks until they're fully loaded.
             if (GET_OBJ_TYPE(obj) != ITEM_CYBERDECK)
@@ -7930,25 +7553,35 @@ void price_bio(struct obj_data *obj)
       break;
     case BIO_PHENOTYPIC_BOD:
       GET_OBJ_COST(obj) = 65000;
-      GET_OBJ_VAL(obj, 4) = 50;
+      GET_BIOWARE_ESSENCE_COST(obj) = 50;
       GET_OBJ_AVAILTN(obj) = 5;
       GET_OBJ_AVAILDAY(obj) = 21;
       break;
     case BIO_PHENOTYPIC_QUI:
       GET_OBJ_COST(obj) = 65000;
-      GET_OBJ_VAL(obj, 4) = 50;
+      GET_BIOWARE_ESSENCE_COST(obj) = 50;
       GET_OBJ_AVAILTN(obj) = 5;
       GET_OBJ_AVAILDAY(obj) = 21;
       break;
     case BIO_PHENOTYPIC_STR:
       GET_OBJ_COST(obj) = 65000;
-      GET_OBJ_VAL(obj, 4) = 50;
+      GET_BIOWARE_ESSENCE_COST(obj) = 50;
       GET_OBJ_AVAILTN(obj) = 5;
       GET_OBJ_AVAILDAY(obj) = 21;
       break;
+    case BIO_BIOSCULPTING:
+      GET_OBJ_COST(obj) = 10000;
+      GET_BIOWARE_ESSENCE_COST(obj) = 20;
+      GET_OBJ_AVAILTN(obj) = 4;
+      GET_OBJ_AVAILDAY(obj) = 4;
+      break;
+    default:
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Unknown bioware type %d passed to price_bio(%ld).", GET_BIOWARE_TYPE(obj), GET_OBJ_VNUM(obj));
+      break;
   }
-  // Check for cultured.
-  if (GET_OBJ_VAL(obj, 0) < BIO_CEREBRALBOOSTER && GET_OBJ_VAL(obj, 2)) {
+
+  // Check for cultured. Don't modify the prices of things that are cultured by default (brainware, etc)
+  if ((GET_BIOWARE_TYPE(obj) < BIO_CEREBRALBOOSTER || GET_BIOWARE_TYPE(obj) >= BIO_BIOSCULPTING) && GET_SETTABLE_BIOWARE_IS_CULTURED(obj)) {
     GET_OBJ_COST(obj) *= 4;
     GET_BIOWARE_ESSENCE_COST(obj) = (int) round(GET_BIOWARE_ESSENCE_COST(obj) * .75);
     GET_OBJ_AVAILTN(obj) += 2;

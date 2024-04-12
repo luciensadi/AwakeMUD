@@ -67,9 +67,10 @@ extern void weight_change_object(struct obj_data * obj, float weight);
 extern void calc_weight(struct char_data *ch);
 extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
-extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
+extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads, const char *call_origin, struct char_data *caller);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
+extern int get_max_skill_for_char(struct char_data *ch, int skill, int type);
 
 extern SPECIAL(johnson);
 extern SPECIAL(landlord_spec);
@@ -552,6 +553,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
       base_target += amount;
       buf_mod(rbuf, rbuf_len, "Confused", amount);
       WRITEOUT_MSG("Confusion (Spell)", amount);
+      break;
     }
   }
   if (!(IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch))) {
@@ -959,6 +961,27 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
       strlcpy(location_str, "[NOWHERE]", sizeof(location_str));
     }
 
+    // Append rigging info to location string.
+    if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+      struct veh_data *veh = NULL;
+      RIG_VEH(ch, veh);
+
+      if (veh->in_veh) {
+        snprintf(ENDOF(location_str), sizeof(location_str) - strlen(location_str), "[rigging %ld @ veh %ld%s in %ld]",
+                 GET_VEH_VNUM(veh),
+                 veh->in_veh->idnum,
+                 veh->in_veh->in_veh ? " in other veh in" : "",
+                 GET_ROOM_VNUM(get_veh_in_room(veh)));
+      } else if (veh->in_room) {
+        snprintf(ENDOF(location_str), sizeof(location_str) - strlen(location_str), "[rigging %ld @ %ld]",
+                 GET_VEH_VNUM(veh),
+                 GET_ROOM_VNUM(get_veh_in_room(veh)));
+      } else {
+        snprintf(ENDOF(location_str), sizeof(location_str) - strlen(location_str), "[rigging %ld @ NOWHERE]",
+                 GET_VEH_VNUM(veh));
+      }
+    }
+
     snprintf(buf2, sizeof(buf2), "%s %s ", location_str, char_name_str);
   }
 
@@ -1232,7 +1255,7 @@ void stop_follower(struct char_data * ch)
     delete j;
   }
 
-  AFF_FLAGS(ch).RemoveBits(AFF_CHARM, AFF_GROUP, ENDBIT);
+  AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
   act("You stop following $N.", FALSE, ch, 0, ch->master, TO_CHAR);
   if (get_ch_in_room(ch->master) == get_ch_in_room(ch) && ch->master->in_veh == ch->in_veh) {
     act("$n stops following $N.", TRUE, ch, 0, ch->master, TO_NOTVICT);
@@ -1519,7 +1542,7 @@ void _get_negotiation_data(
     // Mundanes are at a massive disadvantage (adepts get -3 TN, mages get -8 TN). Give them a boost.
     // Calculations via DEBUG NEGOTEST show this change set gives them roughly _half_ of the buying power of a mage/adept.
     if (!IS_MOB(ch) && GET_TRADITION(ch) == TRAD_MUNDANE) {
-      tn -= GET_BIOWARE_RATING(pheromones);
+      tn -= (GET_BIOWARE_RATING(pheromones) - 1);
       pheromone_dice *= 2;
       snprintf(skill_rbuf, sizeof(skill_rbuf), "Mundane pheromone skill buff of %d dice and -%d TN for %s.", pheromone_dice, GET_BIOWARE_RATING(pheromones), GET_CHAR_NAME(ch));
     } else {
@@ -1773,49 +1796,71 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
 
   // Iterate through their cyberware, looking for anything important.
   if (ch->cyberware) {
-    struct obj_data *expert_driver = NULL;
+    struct obj_data *expert_obj = NULL;
     struct obj_data *chipjack = NULL;
 
-    int expert = 0;
-    int chip = 0;
+    int expert_rating = 0;
+    int chip_rating = 0;
+    int wires_rating = 0;
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
       switch (GET_CYBERWARE_TYPE(obj)) {
+        case CYB_SKILLWIRE:
+          wires_rating = GET_CYBERWARE_RATING(obj);
+          break;
         case CYB_MOVEBYWIRE:
           mbw = should_gain_physical_boosts ? GET_CYBERWARE_RATING(obj) : 0;
           break;
         case CYB_CHIPJACKEXPERT:
-          expert_driver = obj;
+          expert_obj = obj;
+          expert_rating = GET_CYBERWARE_RATING(expert_obj);
           break;
         case CYB_CHIPJACK:
           chipjack = obj;
           // Since the chipjack expert driver influences the _chipjack_, we don't account for memory skills here.
           for (struct obj_data *chip_obj = obj->contains; chip_obj; chip_obj = chip_obj->next_content) {
             if (GET_CHIP_SKILL(chip_obj) == skill)
-              chip = GET_CHIP_RATING(chip_obj);
+              chip_rating = GET_CHIP_RATING(chip_obj);
           }
           break;
       }
     }
 
     // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
-    if (chip && expert) {
-      if (!check_chipdriver_and_expert_compat(chipjack, expert_driver)) {
-        strlcat(gskbuf, "Ignored expert driver (slot count mismatch with chipjack). ", sizeof(gskbuf));
-      } else if (chip != GET_SKILL(ch, skill)) {
-        strlcat(gskbuf, "Ignored expert driver (ch skill not equal to chip rating). ", sizeof(gskbuf));
-      } else if (defaulting_tn == 4) {
-        strlcat(gskbuf, "Ignored expert driver (S2A default). ", sizeof(gskbuf));
-      } else if (defaulting_tn == 2) {
-        increase = (int) (MIN(GET_SKILL(ch, skill), expert) / 2);
-        skill_dice += increase;
-        snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase (S2S default): %d. ", increase);
-      } else {
-        increase = MIN(GET_SKILL(ch, skill), expert);
-        skill_dice += increase;
-        snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase: %d. ", increase);
+    if (chip_rating && expert_rating) {
+      int arch_max = get_max_skill_for_char(ch, skill, GODLY);
+
+      if (chip_rating + expert_rating > arch_max) {
+        expert_rating = arch_max - chip_rating;
+        if (expert_rating <= 0) {
+          strlcat(gskbuf, "Ignored expert driver (skill already at archetype max)", sizeof(gskbuf));
+        } else {
+          snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "(Capped chip + expert driver to archetype max dice of %d)", arch_max);
+        }
       }
-    } else if (expert) {
+
+      if (expert_rating) {
+        if (!check_chipdriver_and_expert_compat(chipjack, expert_obj)) {
+          strlcat(gskbuf, "Ignored expert driver (slot count mismatch with chipjack). ", sizeof(gskbuf));
+        } else if (chip_rating != GET_SKILL(ch, skill)) {
+          strlcat(gskbuf, "Ignored expert driver (ch skill not equal to chip rating). ", sizeof(gskbuf));
+        } else if (!skills[skill].is_knowledge_skill && wires_rating < chip_rating) {
+          strlcat(gskbuf, "Ignored expert driver (skillwires not equal to chip rating for activesoft). ", sizeof(gskbuf));
+        } else if (defaulting_tn == 4) {
+          strlcat(gskbuf, "Ignored expert driver (S2A default). ", sizeof(gskbuf));
+        } else if (defaulting_tn == 2) {
+          increase = (int) (MIN(GET_SKILL(ch, skill), expert_rating) / 2);
+          skill_dice += increase;
+          snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase (S2S default): %d. ", increase);
+        } else {
+          increase = MIN(GET_SKILL(ch, skill), expert_rating);
+          skill_dice += increase;
+          snprintf(ENDOF(gskbuf), sizeof(gskbuf) - strlen(gskbuf), "Chip & Expert Skill Increase: %d. ", increase);
+        }
+      }
+    } else if (expert_rating) {
       strlcat(gskbuf, "Ignored expert driver (no chip). ", sizeof(gskbuf));
+    } else if (expert_obj) {
+      strlcat(gskbuf, "Ignored expert river (no rating)", sizeof(gskbuf));
     }
   }
 
@@ -2022,7 +2067,26 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
             send_to_char("Your chipjack and expert driver must have the same slot count.\r\n", ch);
             return FALSE;
           }
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_SKILLWIRE) {
+            int max_total_rating = get_max_skill_for_char(ch, SKILL_PISTOLS, GODLY);
+            if (GET_CYBERWARE_RATING(cyber1) + GET_CYBERWARE_RATING(cyber2) > max_total_rating) {
+              send_to_char(ch, "The total rating for your expert driver and your skillwires is limited to %d."
+                           " Please select a combination of skillwires and expert driver that doesn't exceed this limit.\r\n",
+                           max_total_rating);
+              return FALSE;
+            }
+          }
           break;
+        case CYB_SKILLWIRE:
+          if (GET_CYBERWARE_TYPE(cyber2) == CYB_CHIPJACKEXPERT) {
+            int max_total_rating = get_max_skill_for_char(ch, SKILL_PISTOLS, GODLY);
+            if (GET_CYBERWARE_RATING(cyber1) + GET_CYBERWARE_RATING(cyber2) > max_total_rating) {
+              send_to_char(ch, "The total rating for your expert driver and your skillwires is limited to %d."
+                           " Please select a combination of skillwires and expert driver that doesn't exceed this limit.\r\n",
+                           max_total_rating);
+              return FALSE;
+            }
+          }
         case CYB_FILTRATION:
           if (GET_CYBERWARE_FLAGS(cyber1) == GET_CYBERWARE_FLAGS(cyber2)) {
             send_to_char("You already have this type of filtration installed.\r\n", ch);
@@ -2312,7 +2376,7 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
   if (GET_TRADITION(ch) == TRAD_MUNDANE)
     return;
 
-  GET_SETTABLE_REAL_MAG(ch) = MAX(0, GET_REAL_MAG(ch) - magic);
+  GET_SETTABLE_REAL_MAG(ch) = MAX(0, GET_SETTABLE_REAL_MAG(ch) - magic);
 
   if (GET_REAL_MAG(ch) < 100) {
     send_to_char(ch, "You feel the last of your magic leave your body.\r\n", ch);
@@ -2371,20 +2435,16 @@ bool has_kit(struct char_data * ch, int type)
   return FALSE;
 }
 
-// Return true if the character has a key of the given number, false otherwise.
-int has_key(struct char_data *ch, int key_vnum)
-{
-  struct obj_data *o, *key;
-
+struct obj_data *get_carried_vnum(struct char_data *ch, int key_vnum, bool test_for_soulbinding) {
   // Check carried items.
-  for (o = ch->carrying; o; o = o->next_content) {
-    if (GET_OBJ_VNUM(o) == key_vnum && !blocked_by_soulbinding(ch, o, TRUE))
-      return 1;
+  for (struct obj_data *o = ch->carrying; o; o = o->next_content) {
+    if (GET_OBJ_VNUM(o) == key_vnum && (!test_for_soulbinding || !blocked_by_soulbinding(ch, o, TRUE)))
+      return o;
 
     if (GET_OBJ_TYPE(o) == ITEM_KEYRING) {
-      for (key = o->contains; key; key = key->next_content) {
-        if (GET_OBJ_VNUM(key) == key_vnum && !blocked_by_soulbinding(ch, key, TRUE))
-          return 1;
+      for (struct obj_data *key = o->contains; key; key = key->next_content) {
+        if (GET_OBJ_VNUM(key) == key_vnum && (!test_for_soulbinding || !blocked_by_soulbinding(ch, key, TRUE)))
+          return key;
       }
     }
   }
@@ -2396,20 +2456,26 @@ int has_key(struct char_data *ch, int key_vnum)
       continue;
 
     // Direct match?
-    if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum && !blocked_by_soulbinding(ch, GET_EQ(ch, x), TRUE))
-      return 1;
+    if (GET_OBJ_VNUM(GET_EQ(ch, x)) == key_vnum && (!test_for_soulbinding || !blocked_by_soulbinding(ch, GET_EQ(ch, x), TRUE)))
+      return GET_EQ(ch, x);
 
     // Keyring match?
     if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_KEYRING) {
-      for (key = GET_EQ(ch, x)->contains; key; key = key->next_content) {
-        if (GET_OBJ_VNUM(key) == key_vnum && !blocked_by_soulbinding(ch, key, TRUE))
-          return 1;
+      for (struct obj_data *key = GET_EQ(ch, x)->contains; key; key = key->next_content) {
+        if (GET_OBJ_VNUM(key) == key_vnum && (!test_for_soulbinding || !blocked_by_soulbinding(ch, key, TRUE)))
+          return key;
       }
     }
   }
 
-  return 0;
+  return NULL;
 }
+
+// Return true if the character has a key of the given number, false otherwise.
+bool has_key(struct char_data *ch, int key_vnum) {
+  return get_carried_vnum(ch, key_vnum, TRUE);
+}
+
 // Returns a pointer to the best workshop/facility of the requested type.
 struct obj_data *find_workshop(struct char_data * ch, int type)
 {
@@ -3423,6 +3489,7 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(mob_invis_resistance_test_results);
 
   // Nested data (pointers from included structs)
+  // DO NOT REPLICATE STRINGS. They point to proto strings, and will cause crashes.
   REPLICATE(char_specials.fighting);
   REPLICATE(char_specials.fight_veh);
   REPLICATE(char_specials.hunting);
@@ -3433,7 +3500,6 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(char_specials.rigging);
   REPLICATE(char_specials.mindlink);
   REPLICATE(char_specials.spirits);
-  REPLICATE(char_specials.highlight_color_code);
   REPLICATE(mob_specials.last_direction);
   REPLICATE(mob_specials.memory);
   REPLICATE(mob_specials.wait_state);
@@ -3514,7 +3580,7 @@ void clear_editing_data(struct descriptor_data *d) {
 }
 
 // Sets a character's skill, with bounds. Assumes that you've already deducted the appropriate cost.
-void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message) {
+void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message, bool save_immediately) {
   char msgbuf[500];
 
   if (!ch) {
@@ -3636,6 +3702,9 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
 
   // Update their skill and set the dirty bit.
   SET_SKILL(ch, skill_num, new_value);
+
+  if (save_immediately)
+    playerDB.SaveChar(ch);
 }
 
 // Per SR3 core p98-99.
@@ -3819,8 +3888,9 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
     return str_dup(log_string);
   }
 
-  snprintf(log_string, sizeof(log_string), "(obj %ld) %s^g",
+  snprintf(log_string, sizeof(log_string), "(obj %ld-%lu) %s^g",
           GET_OBJ_VNUM(obj),
+          GET_OBJ_IDNUM(obj),
           obj->text.name);
   
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD))
@@ -4241,6 +4311,12 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
   if (subj == obj)
     return TRUE;
 
+  // You can't see questies, and they can't see you.
+  if (!IS_SENATOR(subj)) {
+    if (ch_is_blocked_by_quest_protections(subj, obj) || ch_is_blocked_by_quest_protections(obj, subj))
+      return FALSE;
+  }
+
   // Does the viewee have an astral state that makes them invisible to subj?
   if (IS_ASTRAL(obj) && !SEES_ASTRAL(subj)) {
     // You will only see them if they've manifested.
@@ -4540,7 +4616,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch) {
 
 // Cribbed from taxi code. Eventually, we should replace the taxi distance calculation with this.
 // Returns -1 for not found or error.
-int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads) {
+int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads, const char *origin, struct char_data *caller) {
   struct room_data *temp_room = NULL;
   int dist = 0, x = 0;
   rnum_t start_room_rnum, target_room_rnum;
@@ -4548,13 +4624,15 @@ int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_
   // Ensure the vnums are valid.
   start_room_rnum = real_room(start_room_vnum);
   if (start_room_rnum < 0) {
-    mudlog("SYSERR: Invalid start room vnum passed to calculate_distance_between_rooms().", NULL, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(caller, LOG_SYSLOG, "SYSERR: Invalid start room vnum passed to calculate_distance_between_rooms(%ld, %ld, %s, %s, ch).",
+                    start_room_rnum, target_room_vnum, ignore_roads ? "TRUE" : "FALSE", origin);
     return -1;
   }
 
   target_room_rnum = real_room(target_room_vnum);
   if (target_room_rnum < 0) {
-    mudlog("SYSERR: Invalid target room vnum passed to calculate_distance_between_rooms().", NULL, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(caller, LOG_SYSLOG, "SYSERR: Invalid target room vnum passed to calculate_distance_between_rooms(%ld, %ld, %s, %s, ch).",
+                    start_room_rnum, target_room_vnum, ignore_roads ? "TRUE" : "FALSE", origin);
     return -1;
   }
 
@@ -4562,7 +4640,7 @@ int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_
 
   // Remember that temp room starts as null, so if no exit was found then this is skipped.
   while (temp_room) {
-    x = find_first_step(real_room(temp_room->number), target_room_rnum, ignore_roads);
+    x = find_first_step(real_room(temp_room->number), target_room_rnum, ignore_roads, origin, caller);
 
     // Arrived at target.
     if (x == BFS_ALREADY_THERE)
@@ -5057,14 +5135,14 @@ bool perform_knockdown_test(struct char_data *ch, int initial_tn, int successes_
   }
 
   // Roll the test.
-  int dice = GET_BOD(ch) + GET_BODY(ch);
+  int dice = GET_BOD(ch) + GET_BODY_POOL(ch);
   int tn = MAX(2, initial_tn + tn_modifiers);
   int successes = success_test(dice, tn);
   snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%s. %d dice (%d + %d) vs TN %d (%d + %d): %d hit%s (goal: %d).",
            tn_modifiers ? "" : "None",
            dice,
            GET_BOD(ch),
-           GET_BODY(ch),
+           GET_BODY_POOL(ch),
            tn,
            initial_tn,
            tn_modifiers,
@@ -6455,6 +6533,32 @@ bool veh_is_aircraft(struct veh_data *veh) {
   return FALSE;
 }
 
+#define ITERATE_AND_CHECK(field) for (struct obj_data *temp = field; temp; temp = temp->next_content) { struct obj_data *found = get_contained_vnum_recursively(temp, vnum); if (found) return found; }
+struct obj_data *get_contained_vnum_recursively(struct obj_data *cont, vnum_t vnum) {
+  if (GET_OBJ_VNUM(cont) == vnum)
+    return cont;
+  
+  ITERATE_AND_CHECK(cont->contains);
+
+  return NULL;
+}
+
+struct obj_data *get_carried_vnum_recursively(struct char_data *ch, vnum_t vnum) {
+  ITERATE_AND_CHECK(ch->carrying);
+  ITERATE_AND_CHECK(ch->cyberware);
+  ITERATE_AND_CHECK(ch->bioware);
+
+  for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+    if (GET_EQ(ch, wear_idx)) {
+       struct obj_data *found = get_contained_vnum_recursively(GET_EQ(ch, wear_idx), vnum);
+       if (found)
+        return found;
+    }
+  }
+
+  return NULL;
+}
+
 #define ITERATE_AND_COUNT(field) for (struct obj_data *temp = field; temp; temp = temp->next_content) { count += count_object_including_contents(temp, cash_value); }
 // Recursively count this object and its contents.
 int count_object_including_contents(struct obj_data *obj, long &cash_value) {
@@ -7257,7 +7361,8 @@ bool soulbind_obj_to_char_by_idnum(struct obj_data *obj, idnum_t idnum, bool inc
       break;
     case ITEM_WORN:
       // Hardened armor is soulbound when worn.
-      GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = idnum;
+      if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR))
+        GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = idnum;
       break;
     case ITEM_WEAPON:
       // Weapon foci are soulbound in chargen.
@@ -7270,7 +7375,9 @@ bool soulbind_obj_to_char_by_idnum(struct obj_data *obj, idnum_t idnum, bool inc
         GET_CYBERDECK_SOULBOND(obj) = idnum;
       break;
     case ITEM_KEY:
-      GET_KEY_SOULBOND(obj) = idnum;
+      // We don't soulbond PGHQ keys.
+      if (!get_zone_from_vnum(GET_OBJ_VNUM(obj))->is_pghq)
+        GET_KEY_SOULBOND(obj) = idnum;
       break;
   }
 
@@ -7378,7 +7485,7 @@ bool transfer_credstick_contents_to_bank(struct obj_data *credstick, struct char
                  GET_ITEM_MONEY_VALUE(credstick));
 
     // Log it.
-    mudlog_vfprintf(ch, LOG_SYSLOG, "Auto-transferring credstick contents from %s (%ld) to bank (%ld -> %ld)",
+    mudlog_vfprintf(ch, LOG_GRIDLOG, "Auto-transferring credstick contents from %s (%ld) to bank (%ld -> %ld)",
                     GET_OBJ_NAME(credstick),
                     GET_OBJ_VNUM(credstick),
                     GET_BANK(ch),
@@ -7417,4 +7524,59 @@ struct obj_data *find_cyberware(struct char_data *ch, int ware_type) {
 
 struct obj_data *find_bioware(struct char_data *ch, int ware_type) {
   return _find_ware(ch, ware_type, FALSE);
+}
+
+#define IS_SMARTGOGGLE(object) (object && GET_OBJ_TYPE(object) == ITEM_GUN_ACCESSORY && GET_ACCESSORY_TYPE(object) == ACCESS_SMARTGOGGLE)
+struct obj_data *get_smartgoggle(struct char_data *ch) {
+  if (IS_SMARTGOGGLE(GET_EQ(ch, WEAR_EYES)))
+    return GET_EQ(ch, WEAR_EYES);
+  if (IS_SMARTGOGGLE(GET_EQ(ch, WEAR_HEAD)))
+    return GET_EQ(ch, WEAR_HEAD);
+  return NULL;
+}
+#undef IS_SMARTGOGGLE
+
+bool is_ch_immune_to_nbc(struct char_data *ch) {
+  return ((GET_EQ(ch, WEAR_ABOUT) && IS_OBJ_STAT(GET_EQ(ch, WEAR_ABOUT), ITEM_EXTRA_NBC_IMMUNE))
+          || (GET_EQ(ch, WEAR_BODY) && IS_OBJ_STAT(GET_EQ(ch, WEAR_BODY), ITEM_EXTRA_NBC_IMMUNE))
+          || (GET_EQ(ch, WEAR_UNDER) && IS_OBJ_STAT(GET_EQ(ch, WEAR_UNDER), ITEM_EXTRA_NBC_IMMUNE)));
+}
+
+bool is_same_host(struct char_data *first, struct char_data *second) {
+  if (!first || !second) {
+    return FALSE;
+  }
+
+  if (!first->desc || !second->desc) {
+    return FALSE;
+  }
+
+  rectify_desc_host(first->desc);
+  rectify_desc_host(second->desc);
+
+  return !str_cmp(first->desc->host, second->desc->host);
+}
+
+void stop_watching(struct char_data *ch, bool send_message) {
+  struct char_data *temp;
+
+  if (GET_WATCH(ch)) {
+    if (send_message) {
+      send_to_char("You stop scanning into the distance.\r\n", ch);
+    }
+    
+    REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
+    GET_WATCH(ch) = NULL;
+    ch->next_watching = NULL;
+  }
+}
+
+void set_watching(struct char_data *ch, struct room_data *room, int dir) {
+  stop_watching(ch, FALSE);
+
+  GET_WATCH(ch) = room;
+  ch->next_watching = GET_WATCH(ch)->watching;
+  GET_WATCH(ch)->watching = ch;
+
+  send_to_char(ch, "You focus your attention to %s.\r\n", thedirs[dir]);
 }

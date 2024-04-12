@@ -28,6 +28,7 @@
 #include "newhouse.hpp"
 #include "quest.hpp"
 #include "zoomies.hpp"
+#include "elevators.hpp"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -49,6 +50,7 @@ extern bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *v
 extern struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *ch);
 extern bool precipitation_is_snow(int jurisdiction);
 extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
+extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -83,12 +85,6 @@ int can_move(struct char_data *ch, int dir, int extra)
     } else {
       send_to_char("You step cautiously across the ice sheet, keeping yourself from falling.\r\n", ch);
     }
-  }
-  if (IS_AFFECTED(ch, AFF_CHARM) && ch->master && ((ch->in_room && (ch->in_room == ch->master->in_room)) || ((ch->in_veh && ch->in_veh == ch->master->in_veh))))
-  {
-    send_to_char("The thought of leaving your master makes you weep.\r\n", ch);
-    act("$n bursts into tears.", FALSE, ch, 0, 0, TO_ROOM);
-    return 0;
   }
   // Builders are restricted to their zone.
   if (builder_cant_go_there(ch, EXIT(ch, dir)->to_room)) {
@@ -328,12 +324,16 @@ bool should_tch_see_chs_movement_message(struct char_data *viewer, struct char_d
         if (is_arriving) {
           if (CAN_SEE(viewer, actor)) {
             act("You notice $N sneaking around.", FALSE, viewer, 0, actor, TO_CHAR);
-            act("^T$N^T scowls at you-- your sneaking around has not gone unnoticed.^n", TRUE, actor, 0, viewer, TO_CHAR);
-            act("$N scowls at $n-- $s sneaking around has not gone unnoticed.", TRUE, actor, 0, viewer, TO_ROOM);
+            if (can_hurt(actor, viewer, 0, TRUE)) {
+              act("^T$n^T scowls at you-- your sneaking around has not gone unnoticed.^n", TRUE, viewer, 0, actor, TO_VICT);
+              act("$n scowls at $N-- $s sneaking around has not gone unnoticed.", TRUE, viewer, 0, actor, TO_NOTVICT);
+            }
           } else {
             act("You startle and look around-- you could have sworn you heard something.", FALSE, viewer, 0, 0, TO_CHAR);
-            act("$N startles and looks in your general direction.", TRUE, actor, 0, viewer, TO_CHAR);
-            act("$N startles and looks in $n's general direction.", TRUE, actor, 0, viewer, TO_ROOM);
+            if (can_hurt(actor, viewer, 0, TRUE)) {
+              act("$n startles and looks in your general direction.", TRUE, viewer, 0, actor, TO_VICT);
+              act("$n startles and looks in $N's general direction.", TRUE, viewer, 0, actor, TO_NOTVICT);
+            }
           }
         }
       }
@@ -824,41 +824,19 @@ void move_vehicle(struct char_data *ch, int dir)
   RIG_VEH(ch, veh);
   if (!veh || veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
     return;
-  if (ch && !(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) && !veh->dest)
-  {
-    send_to_char("You're not driving...\r\n", ch);
-    return;
-  }
-  if (veh->cspeed <= SPEED_IDLE)
-  {
-    send_to_char("You might want to speed up a little.\r\n", ch);
-    return;
-  }
-  if (veh->in_veh || !veh->in_room) {
-    send_to_char("You aren't the Kool-Aid Man, so you decide against ramming your way out of here.\r\n", ch);
-    return;
-  }
-  if (!EXIT(veh, dir)
-      || !EXIT(veh, dir)->to_room
-      || EXIT(veh, dir)->to_room == &world[0])
-  {
-      send_to_char(CANNOT_GO_THAT_WAY, ch);
-      return;
-  }
+  
+  FAILURE_CASE(ch && !(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) && !veh->dest, "You're not driving...");
+  FAILURE_CASE(veh->cspeed <= SPEED_IDLE, "You might want to speed up a little.");
+  FAILURE_CASE(veh->in_veh || !veh->in_room, "You aren't the Kool-Aid Man, so you decide against ramming your way out of here.");
+  FAILURE_CASE(!EXIT(veh, dir) || !EXIT(veh, dir)->to_room || EXIT(veh, dir)->to_room == &world[0], "You can't go that way.");
+  FAILURE_CASE(veh_is_currently_flying(veh), "Deviating from your flight plan could have nasty consequences, so you decide to stay the course.");
 
   struct room_data *room = EXIT(veh, dir)->to_room;
 
   if (IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)) {
     if (GET_APARTMENT(EXIT(veh, dir)->to_room) || GET_APARTMENT(veh->in_room)) {
-      if (IS_SET(EXIT(veh, dir)->exit_info, EX_LOCKED) && !has_key(ch, (EXIT(veh, dir)->key))) {
-        send_to_char("You need the key in your inventory to use the garage door opener.\r\n", ch);
-        return;
-      }
-
-      if (!CH_CAN_ENTER_APARTMENT(EXIT(veh, dir)->to_room, ch)) {
-        send_to_char("That's private property-- no trespassing.\r\n", ch);
-        return;
-      }
+      FAILURE_CASE(IS_SET(EXIT(veh, dir)->exit_info, EX_LOCKED) && !has_key(ch, (EXIT(veh, dir)->key)), "You need the key in your inventory to use the garage door opener.");
+      FAILURE_CASE(!CH_CAN_ENTER_APARTMENT(EXIT(veh, dir)->to_room, ch), "That's private property-- no trespassing.");
 
       send_to_char("The remote on your key beeps, and the door swings open just enough to let you through.\r\n", ch);
       snprintf(buf, sizeof(buf), "A door beeps before briefly opening just enough to allow %s through.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
@@ -1041,13 +1019,10 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   struct room_data *was_in = NULL;
   struct follow_type *k, *next;
 
-  if (GET_WATCH(ch)) {
-    struct char_data *temp;
-    REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
-    GET_WATCH(ch) = NULL;
-  }
   if (ch == NULL || dir < 0 || dir >= NUM_OF_DIRS)
     return 0;
+
+  stop_watching(ch);
 
   if (ch->in_veh || ch->char_specials.rigging) {
     move_vehicle(ch, dir);
@@ -1110,10 +1085,8 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     return 0;
   }
 
-  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER) {
-    send_to_char("Sorry, that area is for game administration only.\r\n", ch);
-    return 0;
-  }
+  FALSE_CASE(ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER,
+             "Sorry, that area is for game administration only.");
 
   if (EXIT(ch, dir)->to_room->staff_level_lock > GET_REAL_LEVEL(ch)) {
     if (GET_REAL_LEVEL(ch) == 0) {
@@ -1155,34 +1128,24 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     }
   }
 
-  if (get_armor_penalty_grade(ch) == ARMOR_PENALTY_TOTAL) {
-    send_to_char("You are wearing too much armor to move!\r\n", ch);
-    return 0;
-  }
+  FALSE_CASE(ch->is_carrying_vehicle && ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_NOBIKE), "You'll have to drop any vehicles before going there. (If you can't drop them and are completely stuck, use the STUCK command.)");
+  FALSE_CASE(get_armor_penalty_grade(ch) == ARMOR_PENALTY_TOTAL, "You're wearing too much armor to move!");
 
   // Flying vehicles can traverse any terrain.
   if (vict_veh && !ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_ALL_VEHICLE_ACCESS) && !veh_can_traverse_air(vict_veh)) {
     // Non-flying vehicles can't pass fall rooms.
-    if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FALL)) {
-      send_to_char(ch, "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
-      return 0;
-    }
+    FALSE_CASE_PRINTF(ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FALL), "%s would plunge to its destruction!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
 
     // Check to see if your vehicle can handle the terrain type you're giving it.
     if (IS_WATER(EXIT(ch, dir)->to_room)) {
-      if (!veh_can_traverse_water(vict_veh)) {
-        send_to_char(ch, "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
-        return 0;
-      }
-    } else {
-      if (!veh_can_traverse_land(vict_veh)) {
-        // Do nothing-- you can put boats on wheels for the purpose of dragging them.
-        /*
-        send_to_char(ch, "You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(vict_veh));
-        return 0;
-        */
-      }
+      FALSE_CASE_PRINTF(!veh_can_traverse_water(vict_veh), "%s would sink!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(vict_veh)));
+    } 
+    
+    /*  Do nothing-- you can put boats on wheels for the purpose of dragging them.
+    else {
+      FALSE_CASE_PRINTF(!veh_can_traverse_land(vict_veh), "You'll have a hard time getting %s on land.\r\n", GET_VEH_NAME(vict_veh));
     }
+    */
   }
 
   if (AFF_FLAGGED(ch, AFF_BINDING)) {
@@ -1194,6 +1157,15 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       act("$n struggles against the bindings at $s feet, but can't seem to break them.", TRUE, ch, 0, 0, TO_ROOM);
       send_to_char("You struggle against the bindings at your feet but get nowhere!\r\n", ch);
       return 0;
+    }
+  }
+
+  // Strict exits are used for things like invitation passes etc. You must have one to pass, and it gets bound to you on use.
+  if (IS_SET(EXIT(ch, dir)->exit_info, EX_STRICT_ABOUT_KEY)){
+    struct obj_data *key = get_carried_vnum(ch, EXIT(ch, dir)->key, TRUE);
+    FALSE_CASE(!IS_SENATOR(ch) && !key, "You can't go there without having the right key or pass in your inventory.");
+    if (key) {
+      soulbind_obj_to_char(key, ch, FALSE);
     }
   }
 
@@ -1849,7 +1821,7 @@ ACMD(do_drag)
         return;
       }
 
-      if ((IS_CARRYING_W(ch) + calculate_vehicle_weight(drag_veh)) > CAN_CARRY_W(ch) * 2) {
+      if ((IS_CARRYING_W(ch) + calculate_vehicle_weight(drag_veh)) > CAN_CARRY_W(ch) * 2.5) {
         send_to_char(ch, "%s is too heavy for you to move!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(drag_veh)));
         return;
       }
@@ -1977,33 +1949,6 @@ ACMD(do_drag)
   }
 }
 
-void try_to_enter_elevator_car(struct char_data *ch) {
-  // Iterate through elevators to find one that contains this shaft.
-  for (int index = 0; index < num_elevators; index++) {
-    int car_rating = world[real_room(elevator[index].room)].rating;
-    // Check for the car being at this floor.
-    if (elevator[index].floor[car_rating].shaft_vnum == ch->in_room->number) {
-      if (IS_ASTRAL(ch)) {
-        send_to_char(ch, "You phase into the %selevator car.\r\n", elevator[index].is_moving ? "moving " : "");
-        char_from_room(ch);
-        char_to_room(ch, &world[real_room(elevator[index].room)]);
-        act("$n phases in through the wall.\r\n", TRUE, ch, NULL, NULL, TO_ROOM);
-      } else {
-        if (elevator[index].is_moving) {
-          send_to_char("You can't enter a moving elevator car!\r\n", ch);
-          return;
-        }
-
-        send_to_char("You jimmy open the access hatch and drop into the elevator car. The hatch locks closed behind you.\r\n", ch);
-        char_from_room(ch);
-        char_to_room(ch, &world[real_room(elevator[index].room)]);
-        act("The access hatch in the ceiling squeaks briefly open and $n drops into the car.", FALSE, ch, NULL, NULL, TO_ROOM);
-      }
-      return;
-    }
-  }
-}
-
 ACMD(do_enter)
 {
   int door;
@@ -2090,21 +2035,16 @@ void leave_veh(struct char_data *ch)
   struct obj_data *mount = NULL;
   struct room_data *door = NULL;
 
-  /*
-  if (AFF_FLAGGED(ch, AFF_RIG)) {
-    send_to_char(ch, "Try returning to your senses first.\r\n");
-    return;
-  }
-  */
-
   RIG_VEH(ch, veh);
 
-  if (veh_is_currently_flying(veh)) {
+  bool is_in_control_of_veh = AFF_FLAGGED(ch, AFF_PILOT) || IS_RIGGING(ch);
+
+  if (veh_is_currently_flying(veh) || (is_in_control_of_veh && veh->in_veh && veh_is_currently_flying(veh->in_veh))) {
     send_to_char("You take one look at the far-distant ground and reconsider your plan of action.\r\n", ch);
     return;
   }
 
-  if ((AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) && veh->in_veh) {
+  if (is_in_control_of_veh && veh->in_veh) {
     if (veh->in_veh->in_veh) {
       send_to_char("There is not enough room to drive out of here.\r\n", ch);
       return;
@@ -2122,6 +2062,11 @@ void leave_veh(struct char_data *ch)
       act(buf, 0, veh->in_room->people, 0, 0, TO_ROOM);
       act(buf, 0, veh->in_room->people, 0, 0, TO_CHAR);
     }
+    return;
+  }
+
+  if (IS_RIGGING(ch)) {
+    send_to_char(ch, "%s isn't in a vehicle.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
     return;
   }
 
@@ -2178,7 +2123,7 @@ void leave_veh(struct char_data *ch)
 ACMD(do_leave)
 {
   int door;
-  if (ch->in_veh || (ch->char_specials.rigging && ch->char_specials.rigging->in_veh)) {
+  if (ch->in_veh || IS_RIGGING(ch)) {
     leave_veh(ch);
     return;
   }
@@ -2554,10 +2499,6 @@ ACMD(do_wake)
 }
 
 void perform_unfollow(struct char_data *ch) {
-  if (IS_AFFECTED(ch, AFF_CHARM) && ch->master) {
-    act("You can't help but follow $n.", FALSE, ch->master, 0, ch, TO_VICT);
-    return;
-  }
   if (ch->master) {
     stop_follower(ch);
     AFF_FLAGS(ch).RemoveBit(AFF_GROUP);
@@ -2625,7 +2566,6 @@ ACMD(do_follow)
 
   FAILURE_CASE_PRINTF(ch->master == leader, "You are already following %s.", HMHR(leader));
   FAILURE_CASE(IS_ASTRAL(leader) && !IS_ASTRAL(ch), "Non-astral beings can't follow astral beings.");
-  FAILURE_CASE_PRINTF(IS_AFFECTED(ch, AFF_CHARM) && (ch->master), "But you only feel like following %s!", GET_NAME(ch->master));
   
   // Special case: FOLLOW SELF unfollows anyone else.
   if (leader == ch) {

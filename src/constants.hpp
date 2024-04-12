@@ -112,6 +112,7 @@ extern const char *decap_bio_types[];
 extern const char *metamagic[];
 extern const char *pc_race_types[];
 extern const char *pc_race_types_decap[];
+extern const char *pc_race_types_for_wholist[];
 extern const char *legality_codes[][2];
 extern const char *background_types[];
 extern const char *fire_mode[];
@@ -136,8 +137,6 @@ extern struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_
 extern const char *aspect_names[];
 extern const char *tradition_names[];
 extern const char *damage_type_names_must_subtract_300_first_and_must_not_be_greater_than_blackic[];
-
-extern const char *pc_race_types[];
 
 extern const char *mtx_subsystem_names[];
 extern const char *veh_speeds[];

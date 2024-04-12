@@ -651,7 +651,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
     // No specified ammotype means 'reload with whatever's in the gun'. In this case, nothing was there, so we go with whatever we have available.
     if (ammotype == -1) {
       // Set the fallback value for if we have no ammo available.
-      GET_MAGAZINE_AMMO_TYPE(magazine) = AMMO_NORMAL;
+      GET_MAGAZINE_AMMO_TYPE(magazine) = (GET_WEAPON_SKILL(weapon) == SKILL_ASSAULT_CANNON ? AMMO_EXPLOSIVE : AMMO_NORMAL);
 
       // Iterate through all ammo types and stop on the first one we have.
       for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {

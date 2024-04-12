@@ -34,6 +34,7 @@
 #include "newhouse.hpp"
 #include "creative_works.hpp"
 #include "moderation.hpp"
+#include "vehicles.hpp"
 
 #define DO_FORMAT_INDENT   1
 #define DONT_FORMAT_INDENT 0
@@ -43,7 +44,6 @@ void qedit_disp_menu(struct descriptor_data *d);
 void format_tabs(struct descriptor_data *d);
 
 extern void insert_or_append_emote_at_position(struct descriptor_data *d, char *string);
-extern void save_vehicles(bool fromCopyover);
 extern void set_room_tempdesc(struct room_data *room, const char *desc, idnum_t idnum);
 
 /* ************************************************************************
@@ -174,10 +174,11 @@ void string_add(struct descriptor_data *d, char *str)
   /* determine if this is the terminal string, and truncate if so */
   /* changed to only accept '@' at the beginning of line - J. Elson 1/17/94 */
   /* changed further to only accept it if the character after it is not alphabetical - LS 2022 */
+  /* now alnum '24 */
 
   delete_doubledollar(str);
 
-  if ((terminator = (*str == '@' && !isalpha(*(str + 1)))))
+  if ((terminator = (*str == '@' && !isalnum(*(str + 1)))))
     *str = '\0';
   else if (*str == '$') {
     if ((detected_abort = !str_cmp(str, "$abort"))) {
@@ -286,8 +287,8 @@ void string_add(struct descriptor_data *d, char *str)
           }
           DELETE_D_STR_IF_EXTANT(d);
           send_to_char("OK.\r\n", d->character);
+          save_single_vehicle(d->character->in_veh);
         }
-        save_vehicles(FALSE);
       }
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_DECORATE) {
@@ -349,7 +350,7 @@ void string_add(struct descriptor_data *d, char *str)
       case MEDIT_REG_DESCR:
         if (!detected_abort) {
           REPLACE_STRING(d->edit_mob->player.physical_text.room_desc);
-          char candidate = d->edit_mob->player.physical_text.room_desc[MAX(0, strlen(d->edit_mob->player.physical_text.room_desc) - 4)]; // why -4 though?
+          char candidate = d->edit_mob->player.physical_text.room_desc[MAX(0, strlen(d->edit_mob->player.physical_text.room_desc)) - 1];
           if (!ispunct(candidate))
             send_to_char(d->character, "^YWARNING: You're missing punctuation at the end of the room desc. (%c is not punctuation)^n\r\n", candidate);
         }

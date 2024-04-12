@@ -28,6 +28,7 @@
 #include "transport.hpp"
 #include "newmatrix.hpp"
 #include "pocketsec.hpp"
+#include "vehicles.hpp"
 
 /*   external vars  */
 ACMD_DECLARE(do_goto);
@@ -673,7 +674,7 @@ SPECIAL(nerp_skills_teacher) {
     for (int skill = MIN_SKILLS; skill < MAX_SKILLS; skill++) {
       if (can_teach_skill[skill]) {
         // Mundanes can't learn magic skills.
-        if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[skill].requires_magic)
+        if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[skill].requires_magic && !(skill == SKILL_AURA_READING && (IS_DRAGON(ch) || IS_GHOUL(ch))))
           continue;
 
         if (GET_SKILL_POINTS(ch) > 0) {
@@ -735,7 +736,7 @@ SPECIAL(nerp_skills_teacher) {
   }
 
   // Deny all magic skills to mundane.
-  if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE) {
+  if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE && !(skill_num == SKILL_AURA_READING && (IS_DRAGON(ch) || IS_GHOUL(ch)))) {
     send_to_char(ch, "Without the ability to channel magic, %s would be useless to you.\r\n", skills[skill_num].name);
     return TRUE;
   }
@@ -907,9 +908,12 @@ SPECIAL(teacher)
     bool found_a_skill_already = FALSE;
     for (int i = 0; i < NUM_TEACHER_SKILLS; i++) {
       if (teachers[ind].s[i] > 0) {
-        // Mundanes can't learn magic skills.
-        if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[teachers[ind].s[i]].requires_magic)
+        // Mundanes can't learn magic skills, with the exception of dragons/ghouls who can learn aura reading.
+        if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[teachers[ind].s[i]].requires_magic
+            && !(teachers[ind].s[i] == SKILL_AURA_READING && (IS_DRAGON(ch) || IS_GHOUL(ch))))
+        {
           continue;
+        }
 
         // Adepts can't learn externally-focused skills.
         if (GET_TRADITION(ch) == TRAD_ADEPT && (teachers[ind].s[i] == SKILL_CONJURING
@@ -996,7 +1000,7 @@ SPECIAL(teacher)
   }
 
   // Deny all magic skills to mundane.
-  if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE) {
+  if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE && !(skill_num == SKILL_AURA_READING && (IS_DRAGON(ch) || IS_GHOUL(ch)))) {
     send_to_char(ch, "Without the ability to channel magic, the skill of %s would be useless to you.\r\n", skills[skill_num].name);
     return TRUE;
   }
@@ -1948,13 +1952,14 @@ SPECIAL(car_dealer)
     lose_nuyen(ch, veh->cost, NUYEN_OUTFLOW_VEHICLE_PURCHASES);
     newveh = read_vehicle(veh->veh_number, REAL);
     veh_to_room(newveh, ch->in_room);
-    newveh->owner = GET_IDNUM(ch);
-    newveh->idnum = number(0, 1000000);
+    set_veh_owner(newveh, GET_IDNUM(ch));
+    generate_veh_idnum(newveh);
     if (veh->type == VEH_DRONE)
       send_to_char(ch, "You buy %s. It is brought out into the room.\r\n", GET_VEH_NAME(newveh));
     else
       send_to_char(ch, "You buy %s. It is wheeled out into the yard.\r\n", GET_VEH_NAME(newveh));
-    save_vehicles(FALSE);
+    add_veh_to_map(newveh);
+    save_single_vehicle(newveh);
     return TRUE;
   } else if (CMD_IS("probe") || CMD_IS("info")) {
     argument = one_argument(argument, buf);
@@ -2018,6 +2023,7 @@ SPECIAL(car_dealer)
                  sell_price);
         mudlog(sellbuf, ch, LOG_GRIDLOG, TRUE);
         // Destroy the vehicle.
+        delete_veh_file(veh, "Sold at dealer");
         extract_veh(veh);
       }
     } else {
@@ -2665,8 +2671,6 @@ SPECIAL(saeder_guard) {
   NO_DRAG_BULLSHIT;
 
   struct char_data *guard = (char_data *) me;
-  struct obj_data *obj;
-  bool found = FALSE;
 
   if (!AWAKE(guard) || (GET_POS(guard) == POS_FIGHTING))
     return(FALSE);
@@ -2676,16 +2680,13 @@ SPECIAL(saeder_guard) {
     return FALSE;
 
   if (CMD_IS("east") && CAN_SEE(guard, ch) && guard->in_room->number == 4930) {
-    for (obj = ch->carrying; obj; obj = obj->next_content)
-      if (GET_OBJ_VNUM(obj) == OBJ_SAEDER_PASS && !blocked_by_soulbinding(ch, obj, TRUE)) {
-        soulbind_obj_to_char(obj, ch, FALSE);
-        found = TRUE;
-      }
-
-    if (found)
+    struct obj_data *pass = ch_has_obj_with_vnum(ch, OBJ_SAEDER_PASS);
+    if (pass && !blocked_by_soulbinding(ch, pass, TRUE)) {
+      soulbind_obj_to_char(pass, ch, FALSE);
       perform_move(ch, EAST, LEADER, NULL);
-    else
+    } else {
       do_say(guard, "No pass, no entry.", 0, 0);
+    }
     return(TRUE);
   }
 
@@ -2960,10 +2961,14 @@ SPECIAL(fixer)
     }
 
     if (GET_OBJ_CONDITION(obj) >= GET_OBJ_BARRIER(obj) && !cost) {
-      snprintf(arg, sizeof(arg), "%s %s^n doesn't need to be repaired!",
-              GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
-      do_say(fixer, arg, 0, SCMD_SAYTO);
-      return TRUE;
+      if (IS_SENATOR(ch)) {
+        send_to_char(ch, "You override any protestations about %s being in working order.\r\n", decapitalize_a_an(obj));
+      } else {
+        snprintf(arg, sizeof(arg), "%s %s^n doesn't need to be repaired!",
+                 GET_CHAR_NAME(ch), GET_OBJ_NAME(obj));
+        do_say(fixer, arg, 0, SCMD_SAYTO);
+        return TRUE;
+      }
     }
 
     if ((IS_CARRYING_N(fixer) >= CAN_CARRY_N(fixer)) ||
@@ -2973,8 +2978,17 @@ SPECIAL(fixer)
       return TRUE;
     }
 
-    cost += (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) > 0 ? GET_OBJ_BARRIER(obj) : 1)) *
-                  (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj))));
+    if (OBJ_IS_FULLY_DAMAGED(obj)) {
+      // If you got it completely wrecked, it's about as expensive as buying a new one, but at least you don't have to roll for it.
+      cost += ((float) GET_OBJ_COST(obj)) * 0.9;
+    } else {
+      // Otherwise, it's a lower percentage of the cost, moderated by the percentage of damage taken.
+      float condition_percentage = ((float) GET_OBJ_CONDITION(obj)) / (GET_OBJ_BARRIER(obj) == 0 ? GET_OBJ_CONDITION(obj) : GET_OBJ_BARRIER(obj));
+      cost += (int) (((float) GET_OBJ_COST(obj)) * (1.0 - condition_percentage) * 0.6);
+    }
+
+    // There's a minimum repair cost now.
+    cost = MAX(100, cost);
 
     if ((credstick ? GET_BANK(ch) : GET_NUYEN(ch)) < cost) {
       snprintf(arg, sizeof(arg), "%s You can't afford to repair that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);
@@ -3315,6 +3329,25 @@ SPECIAL(smiths_bouncer) {
   return(FALSE);
 }
 
+#define MAKE_BOUNCER(proc_name, direction_string, direction_int, pass_vnum, failure_speech) SPECIAL(proc_name) { \
+  NO_DRAG_BULLSHIT;                                                                                              \
+  struct char_data *bouncer = (char_data *) me;                                                                  \
+  if (!cmd || !AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING))                                                       \
+    return FALSE;                                                                                                \
+  if (CMD_IS(direction_string)) {                                                                                \
+    for (struct obj_data *pass = ch->carrying; pass; pass = pass->next_content)                                  \
+      if (GET_OBJ_VNUM(pass) == pass_vnum && !blocked_by_soulbinding(ch, pass, TRUE)) {                          \
+        soulbind_obj_to_char(pass, ch, FALSE);                                                                   \
+        perform_move(ch, direction_int, LEADER, NULL);                                                           \
+        return TRUE;                                                                                             \
+      }                                                                                                          \
+    do_say(bouncer, failure_speech, 0, 0);                                                                       \
+    return TRUE;                                                                                                 \
+  }                                                                                                              \
+  return FALSE;                                                                                                  \
+}
+
+MAKE_BOUNCER(test_bouncer, "east", EAST, LEADER, NULL);
 
 /* Special procedures for weapons                                    */
 
@@ -3327,7 +3360,7 @@ WSPEC(monowhip)
     if (success_test(skill, target) <= 0) {
       act("Your whip flails out of control, striking you instead of $N!", FALSE, ch, 0, vict, TO_CHAR);
       act("$n's whip completely misses and recoils to hit $m!", TRUE, ch, 0, 0, TO_ROOM);
-      dam_total = convert_damage(stage(-(success_test(GET_BOD(ch) + GET_DEFENSE(ch),
+      dam_total = convert_damage(stage(-(success_test(GET_BOD(ch) + GET_DODGE(ch),
                                                       GET_OBJ_VAL(weapon, 0))), GET_OBJ_VAL(weapon, 1)));
 
 
@@ -3343,6 +3376,9 @@ WSPEC(monowhip)
  ******************************************************************** */
 SPECIAL(vending_machine)
 {
+  if (!cmd)
+    return FALSE;
+
   if (!CMD_IS("buy") && !CMD_IS("list"))
     return FALSE;
 
@@ -3383,11 +3419,14 @@ SPECIAL(vending_machine)
 
 SPECIAL(hand_held_scanner)
 {
+  if (!cmd)
+    return FALSE;
+
   struct char_data *temp;
   struct obj_data *scanner = (struct obj_data *) me;
   int i, dir;
 
-  if (!cmd || !scanner->worn_by || !ch->in_room || number(1, 10) > 4)
+  if (!scanner->worn_by || !ch->in_room || number(1, 10) > 4)
     return FALSE;
 
   if (CMD_IS("north"))
@@ -3431,9 +3470,12 @@ SPECIAL(hand_held_scanner)
 
 SPECIAL(clock)
 {
+  if (!cmd)
+    return FALSE;
+
   struct obj_data *clock = (struct obj_data *) me;
 
-  if (!cmd || !CAN_SEE_OBJ(ch, clock) || !AWAKE(ch))
+  if (!CAN_SEE_OBJ(ch, clock) || !AWAKE(ch))
     return FALSE;
 
   if (CMD_IS("time")) {
@@ -3452,12 +3494,12 @@ SPECIAL(anticoagulant)
 
 SPECIAL(vendtix)
 {
+  if (!cmd)
+    return FALSE;
+
   extern struct obj_data *obj_proto;
   struct obj_data *vendtix = (struct obj_data *) me;
   int ticket, real_obj;
-
-  if (!cmd)
-    return FALSE;
 
   if (zone_table[ch->in_room->zone].number == 30)
     ticket = SEATAC_TICKET;
@@ -3510,6 +3552,9 @@ SPECIAL(bank)
   struct obj_data *credstick;
   int amount;
 
+  if (!cmd)
+    return FALSE;
+
   if ((CMD_IS("balance") || CMD_IS("transfer") || CMD_IS("deposit")
        || CMD_IS("withdraw") || CMD_IS("wire")) && IS_NPC(ch)) {
     send_to_char(ch, "What use do you have for a bank account?\r\n", ch);
@@ -3518,9 +3563,9 @@ SPECIAL(bank)
 
   if (CMD_IS("balance")) {
     if (GET_BANK(ch) > 0)
-      send_to_char(ch, "Your balance across your various numbered accounts and aliases is %ld nuyen.\r\n", GET_BANK(ch));
+      send_to_char(ch, "Your balance across your various numbered accounts and aliases is %ld nuyen, and you're carrying %d more.\r\n", GET_BANK(ch), GET_NUYEN(ch));
     else
-      send_to_char("You have no cash squirreled away!\r\n", ch);
+      send_to_char(ch, "You have no cash squirreled away, but you're carrying %d nuyen.\r\n", GET_NUYEN(ch));
     return 1;
   }
 
@@ -3579,7 +3624,7 @@ SPECIAL(bank)
       GET_BANK_RAW(ch) += amount;
       snprintf(buf, sizeof(buf), "%d nuyen transferred from $p to one of your many accounts.", amount);
     } else if (!str_cmp(buf1, "credstick")) {
-      send_to_char("Your credstick is directly linked to your many accounts, so there's no need to load nueyn onto it.\r\n", ch);
+      send_to_char("Your credstick is directly linked to your many accounts, so there's no need to load nuyen onto it.\r\n", ch);
       /*
       if (!str_cmp(buf,"all") || GET_BANK(ch) < amount) {
         amount = GET_BANK(ch);
@@ -3630,6 +3675,9 @@ SPECIAL(bank)
 
 SPECIAL(toggled_invis)
 {
+  if (!cmd)
+    return FALSE;
+    
   struct obj_data *obj = (struct obj_data *) me;
 
   if(!obj->worn_by)
@@ -4024,7 +4072,7 @@ SPECIAL(newbie_car)
     }
     veh = read_vehicle(num, VIRTUAL);
     veh->locked = TRUE;
-    veh->owner = GET_IDNUM(ch);
+    set_veh_owner(veh, GET_IDNUM(ch));
     veh_to_room(veh, ch->in_room);
     veh->idnum = number(0, 1000000);  // TODO: why is this not unique
     veh->flags.SetBit(VFLAG_NEWBIE);
@@ -4032,7 +4080,8 @@ SPECIAL(newbie_car)
     send_to_room(buf, ch->in_room);
     obj_from_char(obj);
     extract_obj(obj);
-    save_vehicles(FALSE);
+    add_veh_to_map(veh);
+    save_single_vehicle(veh);
     return TRUE;
   }
   return FALSE;
@@ -4270,14 +4319,6 @@ void process_auth_room(struct char_data *ch) {
   // Clear the rest, it can't be kept.
   GET_NUYEN_RAW(ch) = 0;
 
-  zero_cost_of_obj_and_contents(ch->carrying);
-  for (int i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i))
-      zero_cost_of_obj_and_contents(GET_EQ(ch, i));
-  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-    GET_OBJ_COST(obj) = 1;
-  for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
-    GET_OBJ_COST(obj) = 1;
   char_from_room(ch);
   char_to_room(ch, &world[real_room(RM_NEWBIE_LOBBY)]);
   GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
@@ -4324,6 +4365,16 @@ void process_auth_room(struct char_data *ch) {
       send_to_char("You have been given a pocket secretary.^n\r\n", ch);
     }
   }
+
+  // Zero the cost of all their gear.
+  zero_cost_of_obj_and_contents(ch->carrying);
+  for (int i = 0; i < NUM_WEARS; i++)
+    if (GET_EQ(ch, i))
+      zero_cost_of_obj_and_contents(GET_EQ(ch, i));
+  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
+    GET_OBJ_COST(obj) = 1;
+  for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
+    GET_OBJ_COST(obj) = 1;
 
   // Heal them.
   GET_PHYSICAL(ch) = 1000;
@@ -4465,6 +4516,9 @@ SPECIAL(terell_davis)
 
 SPECIAL(desktop)
 {
+  if (!cmd)
+    return FALSE;
+
   struct obj_data *obj = (struct obj_data *) me;
   float completion_percentage;
   bool found_suite = FALSE;
@@ -4594,6 +4648,9 @@ SPECIAL(johnson);
 
 SPECIAL(quest_debug_scanner)
 {
+  if (!cmd)
+    return FALSE;
+
   struct obj_data *obj = (struct obj_data *) me;
   struct char_data *to = NULL;
 
@@ -4844,7 +4901,7 @@ SPECIAL(painter)
         act(buf, FALSE, world[real_room(painter->in_room->number)].people, 0, 0, TO_ROOM);
         act(buf, FALSE, world[real_room(painter->in_room->number)].people, 0, 0, TO_CHAR);
       }
-      save_vehicles(FALSE);
+      save_single_vehicle(veh);
     }
   }
     
@@ -4974,6 +5031,9 @@ SPECIAL(multnomah_guard)
 
 SPECIAL(pocket_sec)
 {
+  if (!cmd)
+    return FALSE;
+
   struct obj_data *sec = (struct obj_data *) me;
   extern void pocketsec_menu(struct descriptor_data *ch);
 
@@ -5632,6 +5692,9 @@ SPECIAL(south_of_chargen_skill_annex) {
 
 SPECIAL(chargen_hopper)
 {
+  if (!cmd)
+    return FALSE;
+
   struct obj_data *hopper = (struct obj_data *) me;
   struct obj_data *modulator = hopper->contains;
   static char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
@@ -6240,8 +6303,8 @@ SPECIAL(mageskill_hermes)
             dq = TRUE;
         if (dq) {
           // Reject people who couldn't pass the quest.
-          if (GET_MAG(ch) <= 0 || GET_TRADITION(ch) == TRAD_MUNDANE || GET_TRADITION(ch) == TRAD_ADEPT) {
-            snprintf(arg, sizeof(arg), "%s It's nice, isn't it? It's something that only elite mages and shamans can obtain.", GET_CHAR_NAME(ch));
+          if (GET_MAG(ch) <= 0 || GET_TRADITION(ch) == TRAD_MUNDANE || (GET_SKILL(ch, SKILL_SORCERY) < 8 && GET_SKILL(ch, SKILL_AURA_READING) < 8)) {
+            snprintf(arg, sizeof(arg), "%s It's nice, isn't it? It's something that only elite awakened ones can obtain.", GET_CHAR_NAME(ch));
             do_say(mage, arg, 0, SCMD_SAYTO);
             return TRUE;
           }
@@ -6467,9 +6530,8 @@ SPECIAL(mageskill_nightwing)
     GET_SPARE1(mage) = 1;
 
     for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-      if (d->character 
-          && (GET_TRADITION(d->character) == TRAD_SHAMANIC || GET_TRADITION(d->character) == TRAD_HERMETIC) 
-          && GET_SKILL(d->character, SKILL_SORCERY) >= 8
+      if (d->character
+          && (GET_SKILL(d->character, SKILL_SORCERY) >= 8 || GET_SKILL(d->character, SKILL_AURA_READING) >= 8)
           && SEES_ASTRAL(d->character)) {
         for (struct obj_data *tmp_obj = d->character->carrying; tmp_obj; tmp_obj = tmp_obj->next_content) {
           if (GET_OBJ_VNUM(tmp_obj) == OBJ_MAGE_LETTER) {
@@ -6941,9 +7003,9 @@ SPECIAL(troll_barrier) {
     return FALSE;
 
   if (CMD_IS("west") || CMD_IS("w")) {
-    if (!(GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_MINOTAUR)) {
+    if (!(GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_GIANT || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_GHOUL_TROLL || GET_RACE(ch) == RACE_DRAKE_TROLL)) {
       send_to_char("A massive troll blocks the way and keeps you from going any further.\r\n", ch);
-      act("$n stumbles into the immovable brick wall of a troll guard with an oof.", FALSE, ch, 0, 0, TO_ROOM);
+      act("$n stumbles into the immovable brick wall of a troll guard with an 'oof'.", FALSE, ch, 0, 0, TO_ROOM);
       return TRUE;
     }
   }
@@ -7091,6 +7153,9 @@ SPECIAL(floor_usable_radio) {
 
 // Override the 'install' command in the presence of an unpacked medical workshop or facility.
 SPECIAL(medical_workshop) {
+  if (!cmd)
+    return FALSE;
+
   bool mode_is_install = FALSE, mode_is_diagnose = FALSE, mode_is_withdraw = FALSE;
   struct obj_data *workshop = (struct obj_data *) me;
   struct obj_data *ware, *found_obj = NULL;
@@ -7099,7 +7164,7 @@ SPECIAL(medical_workshop) {
   char target_arg[MAX_INPUT_LENGTH];
 
   // No command, no character available, no problem. Skip it.
-  if (!cmd || !ch || !workshop || GET_OBJ_TYPE(workshop) != ITEM_WORKSHOP) {
+  if (!ch || !workshop || GET_OBJ_TYPE(workshop) != ITEM_WORKSHOP) {
     return FALSE;
   }
 
@@ -7634,7 +7699,7 @@ SPECIAL(pocsec_unlocker) {
 
       // Yes, we need this twice, because we stripped out an argument item in cash/credstick checking.
       if (!*argument) {
-        send_to_char("Syntax: REPAIR [cash|credstick] <item>\r\n", ch);
+        send_to_char("Syntax: UNLOCK [cash|credstick] <item>\r\n", ch);
         return TRUE;
       }
     }
@@ -7696,6 +7761,97 @@ SPECIAL(pocsec_unlocker) {
   }
   
   return FALSE;
+}
+
+SPECIAL(soulbound_unbinder) {
+  struct char_data *fixer = (struct char_data *) me;
+  struct obj_data *obj, *credstick = NULL;
+  int cost = 0;
+
+  if (!cmd || !CMD_IS("unbond") || !AWAKE(fixer) || IS_NPC(ch))
+    return FALSE;
+
+  if (!CAN_SEE(fixer, ch)) {
+    do_say(fixer, "I don't deal with someone I can't see!", 0, 0);
+    return TRUE;
+  }
+
+  skip_spaces(&argument);
+
+  if (!*argument) {
+    send_to_char("Syntax: UNBOND [cash|credstick] <item>\r\n", ch);
+    return TRUE;
+  }
+
+  // Pick the first argument, but don't re-index *argument yet.
+  any_one_arg(argument, buf);
+
+  bool force_cash = !str_cmp(buf, "cash");
+  bool force_credstick = !str_cmp(buf, "credstick");
+
+  if (force_cash || force_credstick) {
+    // Actually re-index *argument now.
+    argument = any_one_arg(argument, buf);
+    skip_spaces(&argument);
+
+    // Yes, we need this twice, because we stripped out an argument item in cash/credstick checking.
+    if (!*argument) {
+      send_to_char(ch, "Syntax: UNBOND [%s] <item>\r\n", force_cash ? "CASH" : "CREDSTICK");
+      return TRUE;
+    }
+  }
+
+  // We default to cash-- only look for a credstick if they used the credstick command.
+  if (force_credstick && !(credstick = get_first_credstick(ch, "credstick"))) {
+    send_to_char("You don't have an activated credstick.\r\n", ch);
+    return TRUE;
+  }
+
+  if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
+    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(argument), argument);
+    return TRUE;
+  }
+
+  if (GET_OBJ_TYPE(obj) != ITEM_KEY) {
+    snprintf(arg, sizeof(arg), "%s I can only unbond soulbound keys.", GET_CHAR_NAME(ch));
+    do_say(fixer, arg, 0, SCMD_SAYTO);
+    return TRUE;
+  }
+
+  if (GET_KEY_SOULBOND(obj) == 0) {
+    snprintf(arg, sizeof(arg), "%s %s isn't soulbound...", GET_CHAR_NAME(ch), CAP(GET_OBJ_NAME(obj)));
+    do_say(fixer, arg, 0, SCMD_SAYTO);
+    return TRUE;
+  }
+
+  cost = 150000;
+
+  if ((credstick ? GET_BANK(ch) : GET_NUYEN(ch)) < cost) {
+    snprintf(arg, sizeof(arg), "%s You can't afford to unbond that! It'll cost %d nuyen.", GET_CHAR_NAME(ch), cost);
+    do_say(fixer, arg, 0, SCMD_SAYTO);
+    return TRUE;
+  }
+
+  if (credstick)
+    lose_bank(ch, cost, NUYEN_OUTFLOW_REPAIRS);
+  else
+    lose_nuyen(ch, cost, NUYEN_OUTFLOW_REPAIRS);
+
+  // Perform the unbond.
+  act("$n slots $p into a machine and taps a few keys. After a long moment, $e unplugs it and hands it back to $N. \"^cAll set. Thanks for stopping by!^n\"",
+      FALSE, fixer, obj, ch, TO_ROOM);
+  act("You slot $p into a machine and tap a few keys. After a long moment, you unplug it and hand it back to $N. \"^cAll set. Thanks for stopping by!^n\"",
+      FALSE, fixer, obj, ch, TO_CHAR);
+
+  {
+    const char *owner_name = get_player_name(GET_KEY_SOULBOND(obj));
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s unbound key originally soulbound to %s (%ld).", GET_CHAR_NAME(ch), owner_name, GET_KEY_SOULBOND(obj));
+    delete [] owner_name;
+  }
+
+  GET_KEY_SOULBOND(obj) = 0;
+
+  return TRUE;
 }
 
 /*

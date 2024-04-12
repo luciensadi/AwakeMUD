@@ -238,6 +238,21 @@ long VTable::GetLong(const char *where, long defawlt)
   return atol(ptr->line);
 }
 
+unsigned long VTable::GetUnsignedLong(const char *where, long defawlt)
+{
+  field *ptr = find_field(where);
+
+  if (!ptr) {
+    #ifdef DEBUG_VTABLE
+    log_vfprintf("Failed to find LONG entry %s, using default %ld.", where, defawlt);
+    #endif
+
+    return defawlt;
+  }
+
+  return std::strtoul(ptr->line, NULL, 0);
+}
+
 int  VTable::LookupInt(const char *where,
                        const char **lookup_tab, int defawlt)
 {

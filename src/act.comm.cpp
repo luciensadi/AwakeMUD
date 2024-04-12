@@ -988,9 +988,9 @@ ACMD(do_broadcast)
 
   if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF)) {
     for (d = descriptor_list; d; d = d->next) {
-      if (!d->connected && d != ch->desc && d->character &&
-          !PLR_FLAGS(d->character).AreAnySet(PLR_EDITING,
-                                             PLR_MATRIX, ENDBIT)
+      if (d != ch->desc && d->character && 
+          (IS_VALID_STATE_TO_RECEIVE_COMMS(d->connected) && !(d->connected != CON_PLAYING && PRF_FLAGGED(d->character, PRF_MENUGAG)))
+          && !PLR_FLAGGED(d->character, PLR_MATRIX)
           && !IS_PROJECT(d->character) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SOUNDPROOF) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT))
@@ -1112,7 +1112,8 @@ ACMD(do_broadcast)
   }
 
   for (d = descriptor_list; d; d = d->next)
-    if (!d->connected &&
+    if (IS_VALID_STATE_TO_RECEIVE_COMMS(d->connected) &&
+        !(d->connected != CON_PLAYING && PRF_FLAGGED(d->character, PRF_MENUGAG)) &&
         d->character &&
         ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT))
       ROOM_FLAGS(get_ch_in_room(d->character)).RemoveBit(ROOM_SENT);
@@ -1265,6 +1266,9 @@ ACMD(do_gen_comm)
   }
 
   if (subcmd == SCMD_NEWBIE) {
+    // Remove the doubled dollar signs.
+    delete_doubledollar(argument);
+
     if (IS_NPC(ch)) {
       send_to_char("NPCs can't use the newbie channel.\r\n", ch);
       return;
@@ -1296,6 +1300,7 @@ ACMD(do_gen_comm)
 
   // Returning command to handle shout.
   if (subcmd == SCMD_SHOUT) {
+    // Keep the doubled dollar signs.
     struct room_data *was_in = NULL;
     struct char_data *tmp;
 
@@ -1404,10 +1409,12 @@ ACMD(do_gen_comm)
 
   // Returning command to handle OOC.
   if(subcmd == SCMD_OOC) {
+    // Remove the doubled dollar signs.
+    delete_doubledollar(argument);
+
     /* Check for non-switched mobs */
     if ( IS_NPC(ch) && ch->desc == NULL )
       return;
-    delete_doubledollar(argument);
     for ( d = descriptor_list; d != NULL; d = d->next ) {
       // Skip anyone without a descriptor, and any non-NPC that ignored the speaker.
       if (!d->character || IS_IGNORING(d->character, is_blocking_oocs_from, ch))
@@ -1418,7 +1425,7 @@ ACMD(do_gen_comm)
         continue;
 
       // Skip anyone in the login menus.
-      if (d->connected > CON_PLAYING && d->connected <= CON_QDELCONF2 && d->connected != CON_PART_CREATE)
+      if (!IS_VALID_STATE_TO_RECEIVE_COMMS(d->connected))
         continue;
 
       // Skip anyone who's opted out of OOC.
@@ -1450,18 +1457,27 @@ ACMD(do_gen_comm)
 
   // The commands after this line don't return-- they just set things and follow the loop at the end.
   if (subcmd == SCMD_RPETALK) {
+    // Remove the doubled dollar signs.
+    delete_doubledollar(argument);
+
     snprintf(buf, sizeof(buf), "^W%s [^CRPEtalk^n]^c %s^n\r\n", GET_CHAR_NAME(ch), capitalize(argument));
     send_to_char(buf, ch);
 
     channel = COMM_CHANNEL_RPE;
     store_message_to_history(ch->desc, channel, buf);
   } else if (subcmd == SCMD_HIREDTALK) {
+    // Remove the doubled dollar signs.
+    delete_doubledollar(argument);
+
     snprintf(buf, sizeof(buf), "%s%s ^y[^YHIRED^y]^Y %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
     send_to_char(buf, ch);
 
     channel = COMM_CHANNEL_HIRED;
     store_message_to_history(ch->desc, channel, buf);
   } else {
+    // Remove the doubled dollar signs.
+    delete_doubledollar(argument);
+
     snprintf(buf, sizeof(buf), "%s%s |]newbie[| %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
     send_to_char(buf, ch);
 

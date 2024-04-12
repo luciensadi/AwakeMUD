@@ -130,6 +130,9 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
     FAILURE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
                         "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", GET_OBJ_NAME(obj));
   }
+
+  FAILURE_CASE_PRINTF(cont->in_veh && cont->in_veh->usedload + GET_OBJ_WEIGHT(obj) > cont->in_veh->load,
+                      "%s would overload %s's carrying capacity.", CAP(GET_OBJ_NAME(obj)), decapitalize_a_an(cont->in_veh));
   
   if (GET_OBJ_TYPE(cont) == ITEM_WORN)
   {
@@ -570,7 +573,7 @@ ACMD(do_put)
     if (veh) {
       send_to_char(ch, "%s is a vehicle-- you'll have to use the UPGRADE command.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     } else {
-      send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg2), arg2);
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg2);
     }
     return;
   }
@@ -798,7 +801,7 @@ ACMD(do_put)
       if (obj_dotmode == FIND_ALL) {
         send_to_char(ch, "You don't seem to have anything in your inventory to %s in it.\r\n", (cyberdeck ? "install" : "put"));
       } else {
-        send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg1);
+        send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg1);
       }
     }
   }
@@ -806,38 +809,27 @@ ACMD(do_put)
 
 bool can_take_obj_from_anywhere(struct char_data * ch, struct obj_data * obj)
 {
-  if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
-  {
-    act("$p: you can't carry that many items.", FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
-  }
+  FALSE_CASE_PRINTF(IS_CARRYING_N(ch) >= CAN_CARRY_N(ch), "%s: you can't carry that many items.", CAP(GET_OBJ_NAME(obj)));
 
-  if ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) {
-    act("$p: you can't carry that much weight.", FALSE, ch, obj, 0, TO_CHAR);
-    if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
-      send_to_char("(You can still grab rounds out of it with ^WPOCKETS ADD <container>^n though!)\r\n", ch);
-    }
-    return 0;
-  }
+  FALSE_CASE_PRINTF(!IS_SENATOR(ch) && (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch), "%s: you can't carry that much weight.%s",
+                    CAP(GET_OBJ_NAME(obj)),
+                    GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO ? "(You can still grab rounds out of it with ^WPOCKETS ADD <container>^n though!)" : "");
 
   if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)) && !ch->in_veh) {
     if (access_level(ch, LVL_PRESIDENT)) {
-      act("You bypass the !TAKE flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
+      send_to_char(ch, "You bypass the !TAKE flag on %s.", decapitalize_a_an(obj));
     } else {
       if (GET_OBJ_TYPE(obj) == ITEM_DESTROYABLE) {
-        act("You can't pick $p up, but you're pretty sure you could ##^WDESTROY^n it.", FALSE, ch, obj, 0, TO_CHAR);
+        send_to_char(ch, "You can't pick %s up%s", decapitalize_a_an(obj), IS_RIGGING(ch) ? "." : ", but you're pretty sure you could ##^WDESTROY^n it.");
       } else {
-        act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
+        send_to_char(ch, "You can't take %s.", decapitalize_a_an(obj));
       }
-      return 0;
+      return FALSE;
     }
   }
 
   // If it's quest-protected and you're not the questor...
-  if (ch_is_blocked_by_quest_protections(ch, obj, FALSE)) {
-    act("$p is someone else's quest item.", FALSE, ch, obj, 0, TO_CHAR);
-    return 0;
-  }
+  FALSE_CASE_PRINTF(ch_is_blocked_by_quest_protections(ch, obj, FALSE), "%s is someone else's quest item.", CAP(GET_OBJ_NAME(obj)));
 
   return 1;
 }
@@ -951,13 +943,14 @@ void calc_weight(struct char_data *ch)
   IS_CARRYING_W(ch) += get_bulletpants_weight(ch);
 }
 
-void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
+// Returns TRUE if container is emptied.
+bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
                                 struct obj_data * cont, int mode)
 {
   bool cyberdeck = FALSE, computer = FALSE;
   if (IS_WORKING(ch)) {
     send_to_char(TOOBUSY, ch);
-    return;
+    return FALSE;
   }
   if (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK)
     cyberdeck = TRUE;
@@ -1002,7 +995,6 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
                 GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
                 representation);
-        
 
         if (same_host_warning) {
           const char *pname = get_player_name(obj->dropped_by_char);
@@ -1044,7 +1036,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           for (struct char_data *vict = ch->in_room->people; vict; vict = vict->next_in_room) {
             if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
               send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
-              return;
+              return FALSE;
             } else if (vict == ch && vict->char_specials.programming == obj) {
               send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
               STOP_WORKING(ch);
@@ -1055,7 +1047,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh) {
             if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
               send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
-              return;
+              return FALSE;
             } else if (vict == ch && vict->char_specials.programming == obj) {
               send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
               STOP_WORKING(ch);
@@ -1071,7 +1063,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
       else if (cyberdeck) {
         if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM && (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))) {
           display_cyberdeck_issues(ch, cont);
-          return;
+          return FALSE;
         }
 
         // Subtract program size from storage, but a persona program on a store-bought deck doesn't use storage
@@ -1086,7 +1078,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
               if ((GET_OBJ_TYPE(k) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(k) == TYPE_FILE) ||
                   GET_OBJ_TYPE(k) == ITEM_PROGRAM) {
                 send_to_char(ch, "You cannot uninstall %s while you have files installed.\r\n", GET_OBJ_NAME(obj));
-                return;
+                return FALSE;
               }
             GET_CYBERDECK_USED_STORAGE(cont) = GET_CYBERDECK_TOTAL_STORAGE(cont) = 0;
           }
@@ -1158,9 +1150,12 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         act("$n takes the last of the items from $p.", TRUE, ch, cont, NULL, TO_ROOM);
         act("You take the last of the items from $p.", TRUE, ch, cont, NULL, TO_CHAR);
         extract_obj(cont);
+        return TRUE;
       }
     }
   }
+
+  return FALSE;
 }
 
 
@@ -1216,7 +1211,8 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
       next_obj = obj->next_content;
       if (CAN_SEE_OBJ(ch, obj) && (obj_dotmode == FIND_ALL || isname(arg, obj->text.keywords))) {
         found = 1;
-        perform_get_from_container(ch, obj, cont, mode);
+        if (perform_get_from_container(ch, obj, cont, mode))
+          return;
       }
     }
 
@@ -1234,7 +1230,8 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
       snprintf(buf, sizeof(buf), "There doesn't seem to be %s %s in $p.", AN(arg), arg);
       act(buf, FALSE, ch, cont, 0, TO_CHAR);
     } else
-      perform_get_from_container(ch, obj, cont, mode);
+      if (perform_get_from_container(ch, obj, cont, mode))
+        return;
   } else
   {
     if (obj_dotmode == FIND_ALLDOT && !*arg) {
@@ -1246,7 +1243,8 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
       if (CAN_SEE_OBJ(ch, obj) &&
           (obj_dotmode == FIND_ALL || isname(arg, obj->text.keywords))) {
         found = 1;
-        perform_get_from_container(ch, obj, cont, mode);
+        if (perform_get_from_container(ch, obj, cont, mode))
+          return;
       }
     }
     if (!found) {
@@ -1320,12 +1318,12 @@ bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj) {
 
   if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)) && !obj->in_veh) {
     if (access_level(ch, LVL_PRESIDENT)) {
-      act("You bypass the !TAKE flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
+      send_to_char(ch, "You bypass the !TAKE flag on %s.", decapitalize_a_an(obj));
     } else {
       if (GET_OBJ_TYPE(obj) == ITEM_DESTROYABLE) {
-        act("You can't pick $p up, but you're pretty sure you could ##^WDESTROY^n it.", FALSE, ch, obj, 0, TO_CHAR);
+        send_to_char(ch, "You can't pick %s up%s", decapitalize_a_an(obj), IS_RIGGING(ch) ? "." : ", but you're pretty sure you could ##^WDESTROY^n it.");
       } else {
-        act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
+        send_to_char(ch, "You can't take %s.", decapitalize_a_an(obj));
       }
       return FALSE;
     }
@@ -1511,12 +1509,12 @@ void get_from_room(struct char_data * ch, char *arg)
         DELETE_ARRAY_IF_EXTANT(owner);
 
         playerDB.SaveChar(ch);
-        save_vehicles(FALSE);
+        save_single_vehicle(veh);
         return;
       }
 
       // Didn't find a vehicle, either.
-      send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg), arg);
+      send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
     } else {
       if ( CAN_SEE_OBJ(ch, obj) ) {
         if ( IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(obj, 4) == 1 && !IS_SENATOR(ch) ) {
@@ -1563,7 +1561,7 @@ void get_from_room(struct char_data * ch, char *arg)
       if (dotmode == FIND_ALL)
         send_to_char("There doesn't seem to be anything here.\r\n", ch);
       else {
-        send_to_char(ch, "You don't see any %ss here.\r\n", arg);
+        send_to_char(ch, "You don't see anything named '%s' here.\r\n", arg);
       }
     }
   }
@@ -1670,7 +1668,6 @@ ACMD(do_get)
   char arg2[MAX_INPUT_LENGTH];
 
   int cont_dotmode, found = 0, mode, skill = 0, target = 0, kit = 0;
-  sh_int bod = 0, load = 0, sig = 0;
   struct obj_data *cont, *obj, *temp, *shop = NULL;
   struct veh_data *veh = NULL;
   struct char_data *tmp_char;
@@ -1858,39 +1855,13 @@ ACMD(do_get)
           cont = obj;
         } else if (cont_dotmode) {
           REMOVE_FROM_LIST(cont, veh->mount, next_content)
-          switch (GET_OBJ_VAL(cont, 1)) {
-            case 1:
-              sig = 1;
-              // fall through
-            case 0:
-              bod++;
-              load = 10;
-              break;
-            case 3:
-              sig = 1;
-              // fall through
-            case 2:
-              bod += 2;
-              load = 10;
-              break;
-            case 4:
-              sig = 1;
-              bod += 4;
-              load = 100;
-              break;
-            case 5:
-              sig = 1;
-              bod += 2;
-              load = 25;
-              break;
-          }
-          veh->sig += sig;
-          veh->usedload -= load;
+          veh->sig += get_mount_signature_penalty(cont);
+          veh->usedload -= get_obj_vehicle_load_usage(cont, TRUE);
         } else {
           if (GET_VEHICLE_MOD_TYPE(cont) == TYPE_AUTONAV) {
             veh->autonav -= GET_VEHICLE_MOD_RATING(cont);
           }
-          veh->usedload -= GET_OBJ_VAL(cont, 1);
+          veh->usedload -= get_obj_vehicle_load_usage(cont, TRUE);
           GET_MOD(veh, found) = NULL;
           int rnum = real_vehicle(GET_VEH_VNUM(veh));
           if (rnum <= -1)
@@ -2045,7 +2016,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   FALSE_CASE_PRINTF(mode != SCMD_JUNK && IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch), "You can't %s %s, but you can always JUNK it.", sname, decapitalize_a_an(obj));
   FALSE_CASE_PRINTF(mode != SCMD_JUNK && obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
                     "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", decapitalize_a_an(obj));
-  FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the KEEP command on $p before you can %s it.", sname);
+  FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the KEEP command on %s before you can %s it.", decapitalize_a_an(obj), sname);
   FALSE_CASE_PRINTF(obj == ch->char_specials.programming, "You can't %s something you are working on.", sname);
   FALSE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch),
                     "Action blocked: %s contains at least one kept item. Pull it out and UNKEEP it.", decapitalize_a_an(obj));
@@ -2068,14 +2039,18 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       act("Action blocked: $p contains at least one item that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
     }
 
-    if (action_blocked) {      
-      // Hardcoded start and end of the Neophyte Guild area. You can drop things you've picked up here, but only as a newbie.
-      // Note that bypassing these checks by handing something to a newbie to drop in the donation area is considered exploiting.
-      if (mode == SCMD_DONATE || (GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD && GET_ROOM_VNUM(target_room) >= 60500 && GET_ROOM_VNUM(target_room) <= 60699)) {
-        send_to_char(ch, "Please avoid giving newbies free cyberware / bioware / etc! It's a kind gesture, but it undercuts their economic balance and leads to less overall player retention.\r\n");
-      }
+    if (action_blocked) {   
+      if (IS_SENATOR(ch)) {
+        send_to_char("...As staff, you bypass the restriction and it anyways.\r\n", ch);
+      } else {
+        // Hardcoded start and end of the Neophyte Guild area. You can drop things you've picked up here, but only as a newbie.
+        // Note that bypassing these checks by handing something to a newbie to drop in the donation area is considered exploiting.
+        if (mode == SCMD_DONATE || (GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD && GET_ROOM_VNUM(target_room) >= 60500 && GET_ROOM_VNUM(target_room) <= 60699)) {
+          send_to_char(ch, "Please avoid giving newbies free cyberware / bioware / etc! It's a kind gesture, but it undercuts their economic balance and leads to less overall player retention.\r\n");
+        }
 
-      return 0;
+        return 0;
+      }
     }
   }
 
@@ -2118,7 +2093,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
         // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
         bool can_be_dropped_here = FALSE;
-        if (ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) || ROOM_FLAGGED(ch->in_room, ROOM_ALL_VEHICLE_ACCESS)) {
+        if (ROOM_FLAGGED(ch->in_room, ROOM_GARAGE) || ROOM_FLAGGED(ch->in_room, ROOM_ALL_VEHICLE_ACCESS) || veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
           can_be_dropped_here = TRUE;
         } else if (veh_can_traverse_land(veh) && ROOM_FLAGGED(ch->in_room, ROOM_ROAD)) {
           can_be_dropped_here = TRUE;
@@ -2160,7 +2135,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
         extract_obj(obj);
 
         playerDB.SaveChar(ch);
-        save_vehicles(FALSE);
+        save_single_vehicle(veh);
         return 0;
       }
     }
@@ -2479,7 +2454,7 @@ ACMD(do_drop)
         return;
       }
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg);
+        send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg);
       }
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg, obj->next_content);
@@ -2488,7 +2463,7 @@ ACMD(do_drop)
       }
     } else {
       if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-        send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
+        send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg);
       } else
         amount += perform_drop(ch, obj, mode, sname, random_donation_room);
     }
@@ -2561,6 +2536,8 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   FALSE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
                     "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", GET_OBJ_NAME(obj));
 
+  FALSE_CASE_PRINTF(!IS_NPC(vict) && ch_is_blocked_by_quest_protections(vict, obj, FALSE), "%s isn't participating in your job.", GET_CHAR_NAME(vict));
+
   if (IS_CARRYING_N(vict) >= CAN_CARRY_N(vict))
   {
     act("$N seems to have $S hands full.", FALSE, ch, 0, vict, TO_CHAR);
@@ -2624,12 +2601,9 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : NULL;
   } else {
     // Log same-host handoffs.
-    if (ch->desc && vict->desc) {
-      rectify_desc_host(ch->desc);
-      rectify_desc_host(vict->desc);
-      
+    if (is_same_host(ch, vict)) {      
       // Log same-host transfers that are not on Grapevine.
-      if (!str_cmp(ch->desc->host, vict->desc->host) && !is_approved_multibox_host(ch->desc->host)) {
+      if (!is_approved_multibox_host(ch->desc->host)) {
         char *representation = generate_new_loggable_representation(obj);
         mudlog_vfprintf(ch, LOG_CHEATLOG, "%s is giving same-host character %s '%s' (host: %s).", 
                         GET_CHAR_NAME(ch),
@@ -2690,8 +2664,20 @@ void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)
   FAILURE_CASE((GET_NUYEN(ch) < amount) && (IS_NPC(ch) || (!access_level(ch, LVL_VICEPRES))), "You don't have that much!");
   FAILURE_CASE(IS_SENATOR(ch) && !access_level(ch, LVL_PRESIDENT) && !IS_SENATOR(vict) && !IS_NPC(vict), "Staff must use the PAYOUT command instead.");
   
-  if (IS_NPC(vict)) {
-    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s gave NPC %s %d nuyen.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), amount);
+  bool ch_is_npc = IS_NPC(ch);
+  bool vict_is_npc = IS_NPC(vict);
+
+  mudlog_vfprintf(ch, LOG_CHEATLOG, "%s%s (%ld) gave %s%s%s (%ld) %d nuyen.", 
+                  ch_is_npc ? "NPC " : "",
+                  GET_CHAR_NAME(ch),
+                  ch_is_npc ? GET_MOB_VNUM(ch) : GET_IDNUM(ch),
+                  is_same_host(ch, vict) ? "same-host " : "",
+                  vict_is_npc ? "NPC " : "",
+                  GET_CHAR_NAME(vict),
+                  vict_is_npc ? GET_MOB_VNUM(vict) : GET_IDNUM(vict),
+                  amount);
+
+  if (vict_is_npc) {
     AFF_FLAGS(vict).SetBit(AFF_CHEATLOG_MARK);
   }
 
@@ -3044,7 +3030,7 @@ ACMD(do_eat)
     return;
   }
   if (!(food = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg);
     return;
   }
   if (subcmd == SCMD_TASTE && ((GET_OBJ_TYPE(food) == ITEM_DRINKCON) ||
@@ -3454,6 +3440,12 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
                               "You already have a lapel pin.\r\n"
                             };
 
+  if (OBJ_IS_FULLY_DAMAGED(obj)) {
+    if (print_messages)
+      act("You can't use $p: it's almost destroyed! Take it in for repairs.", FALSE, ch, obj, 0, TO_CHAR);
+    return;
+  }
+
   /* first, make sure that the wear position is valid. */
   if (!CAN_WEAR(obj, wear_bitvectors[where])) {
     if (print_messages)
@@ -3856,7 +3848,7 @@ ACMD(do_wear)
       return;
     }
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You don't seem to have any %ss in your inventory.\r\n", arg1);
+      send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg1);
     } else
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg1, obj->next_content);
@@ -3868,7 +3860,7 @@ ACMD(do_wear)
       }
   } else {
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg1), arg1);
+      send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg1);
     } else {
       if ((where = find_eq_pos(ch, obj, arg2)) >= 0)
         perform_wear(ch, obj, where, TRUE);
@@ -3887,7 +3879,7 @@ ACMD(do_wield)
   if (!*arg)
     send_to_char("Wield what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg);
   } else {
     if (!CAN_WEAR(obj, ITEM_WEAR_WIELD))
       send_to_char(ch, "You can't wield %s.\r\n", GET_OBJ_NAME(obj));
@@ -3927,7 +3919,7 @@ ACMD(do_grab)
   if (!*arg)
     send_to_char("Hold what?\r\n", ch);
   else if (!(obj = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    send_to_char(ch, "You don't seem to have %s %s in your inventory.\r\n", AN(arg), arg);
+    send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg);
   } else {
     if (GET_OBJ_TYPE(obj) == ITEM_LIGHT)
       perform_wear(ch, obj, WEAR_LIGHT, TRUE);
@@ -4059,12 +4051,12 @@ ACMD(do_remove)
           found = 1;
         }
       if (!found) {
-        send_to_char(ch, "You don't seem to be using any %ss.\r\n", arg);
+        send_to_char(ch, "You don't seem to be using anything named '%s'.\r\n", arg);
       }
     }
   } else {
     if (!(obj = get_object_in_equip_vis(ch, arg, ch->equipment, &i))) {
-      send_to_char(ch, "You don't seem to be using %s %s.\r\n", AN(arg), arg);
+      send_to_char(ch, "You don't seem to be using anything named '%s'.\r\n", arg);
     } else {
       if (GET_OBJ_TYPE(obj) == ITEM_GYRO) {
         if (GET_EQ(ch, WEAR_WIELD))
@@ -4435,6 +4427,11 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
   if (!contents) {
     // Readied holster was empty: un-ready the holster, but continue looking for a valid ready holster.
     GET_HOLSTER_READY_STATUS(holster) = 0;
+    return 0;
+  }
+
+  if (OBJ_IS_FULLY_DAMAGED(contents)) {
+    act("Draw check: Skipping $p, fully damaged.", FALSE, ch, contents, 0, TO_ROLLS);
     return 0;
   }
 
@@ -4815,7 +4812,7 @@ ACMD(do_ready)
     obj = finger;
   else {
     if (!(generic_find(buf, FIND_OBJ_EQUIP, ch, &tmp_char, &obj))) {
-      send_to_char(ch, "You don't seem to be using %s %s.\r\n", AN(argument), argument);
+      send_to_char(ch, "You don't seem to be using anything named '%s'.\r\n", argument);
       return;
     }
   }
@@ -4881,7 +4878,7 @@ ACMD(do_draw)
           // problem here is we have to recurse a bit-- worn holsters, and also worn items containing holsters
         }
         */
-        send_to_char(ch, "You don't seem to be using %s %s.\r\n", AN(argument), argument);
+        send_to_char(ch, "You don't seem to be using anything named '%s'.\r\n", argument);
         return;
       }
 

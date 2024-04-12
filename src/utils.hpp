@@ -82,7 +82,8 @@ int     light_level(struct room_data *room);
 bool    biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch);
 void    magic_loss(struct char_data *ch, int magic, bool msg);
 bool    has_kit(struct char_data *ch, int type);
-int     has_key(struct char_data *ch, int key_vnum);
+struct  obj_data *get_carried_vnum(struct char_data *ch, int key_vnum, bool test_for_soulbinding);
+bool    has_key(struct char_data *ch, int key_vnum);
 struct  obj_data *find_workshop(struct char_data *ch, int type);
 void    add_workshop_to_room(struct obj_data *obj);
 void    remove_workshop_from_room(struct obj_data *obj);
@@ -152,6 +153,7 @@ bool    string_is_valid_for_paths(const char *str);
 bool    obj_is_a_vehicle_title(struct obj_data *obj);
 bool    can_perform_aggressive_action(struct char_data *actor, struct char_data *victim, const char *calling_func_name, bool send_message);
 bool    veh_is_aircraft(struct veh_data *veh);
+struct  obj_data *get_carried_vnum_recursively(struct char_data *ch, vnum_t vnum);
 int     count_object_including_contents(struct obj_data *obj, long &cash_value);
 int     count_objects_in_room(struct room_data *room, long &cash_value);
 int     count_objects_in_veh(struct veh_data *veh, long &cash_value);
@@ -177,6 +179,11 @@ struct obj_data *find_cyberware(struct char_data *ch, int ware_type);
 struct obj_data *find_bioware(struct char_data *ch, int ware_type);
 long    get_cost_of_obj_and_contents(struct obj_data *obj);
 long    get_cost_of_veh_and_contents(struct veh_data *veh);
+struct  obj_data *get_smartgoggle(struct char_data *ch);
+bool    is_ch_immune_to_nbc(struct char_data *ch);
+bool    is_same_host(struct char_data *first, struct char_data *second);
+void    stop_watching(struct char_data *ch, bool send_message=FALSE);
+void    set_watching(struct char_data *ch, struct room_data *room, int dir);
 
 struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion);
 void    find_or_load_ch_cleanup(struct char_data *ch);
@@ -213,7 +220,7 @@ struct veh_data *get_veh_controlled_by_char(struct char_data *ch);
 // Skill-related.
 char *how_good(int skill, int rank);
 const char *skill_rank_name(int rank, bool knowledge);
-void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message);
+void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message, bool save_immediately=TRUE);
 
 // Message history management and manipulation.
 void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);
@@ -381,6 +388,8 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define IS_PERCEIVING(ch) (MOB_FLAGGED(ch, MOB_PERCEIVING) || PLR_FLAGGED(ch, PLR_PERCEIVE))
 #define SEES_ASTRAL(ch) (!IS_RIGGING(ch) && (IS_ASTRAL(ch) || IS_DUAL(ch) || IS_PERCEIVING(ch)))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
+
+#define GET_PROJECTION_ESSLOSS_TICK(ch)  ((ch)->points.projection_ticks)
 
 #define RACE_IS_GHOUL(race)  ((race) >= RACE_GHOUL_HUMAN && (race) <= RACE_GHOUL_TROLL)
 #define RACE_IS_DRAKE(race)  ((race) >= RACE_DRAKE_HUMAN && (race) <= RACE_DRAKE_TROLL)
@@ -598,6 +607,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define FIGHTING(ch)            ((ch)->char_specials.fighting)
 #define FIGHTING_VEH(ch)        ((ch)->char_specials.fight_veh)
 #define CH_IN_COMBAT(ch)        (FIGHTING(ch) || FIGHTING_VEH(ch))
+#define VEH_IN_COMBAT(veh)      ((veh)->fighting || (veh)->fight_veh)
 #define HUNTING(ch)             ((ch)->char_specials.hunting)
 #define DEPRECATED_IS_NERVE(ch) ((ch)->char_specials.nervestrike)
 #define IS_NERVE(ch)            (GET_POWER((ch), ADEPT_NERVE_STRIKE) > 0)
@@ -627,16 +637,16 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_SYSTEM_POINTS(ch)   ((ch)->player_specials->saved.system_points)
 #define GET_WATCH(ch)           ((ch)->player_specials->watching)
 #define GET_ASTRAL(ch)          ((ch)->aff_abils.astral_pool)
-#define GET_DEFENSE(ch)         ((ch)->aff_abils.defense_pool)
-#define GET_BODY(ch)            ((ch)->aff_abils.body_pool)
-#define GET_COMBAT(ch)          ((ch)->aff_abils.combat_pool)
+#define GET_DODGE(ch)           ((ch)->aff_abils.defense_pool)
+#define GET_BODY_POOL(ch)       ((ch)->aff_abils.body_pool)
+#define GET_COMBAT_POOL(ch)     ((ch)->aff_abils.combat_pool)
 #define GET_OFFENSE(ch)         ((ch)->aff_abils.offense_pool)
 #define GET_TASK_POOL(ch, attr) ((ch)->aff_abils.task_pool[attr])
 #define GET_CONTROL(ch)         ((ch)->aff_abils.control_pool)
 #define GET_HACKING(ch)         ((ch)->aff_abils.hacking_pool)
 #define GET_MAX_HACKING(ch)     ((ch)->aff_abils.hacking_pool_max)
 #define GET_REM_HACKING(ch)     ((ch)->aff_abils.hacking_pool_remaining)
-#define GET_MAGIC(ch)           ((ch)->aff_abils.magic_pool)
+#define GET_MAGIC_POOL(ch)      ((ch)->aff_abils.magic_pool)
 #define GET_CASTING(ch)         ((ch)->aff_abils.casting_pool)
 #define GET_DRAIN(ch)           ((ch)->aff_abils.drain_pool)
 #define GET_SDEFENSE(ch)        ((ch)->aff_abils.spell_defense_pool)
@@ -806,9 +816,11 @@ float get_proto_weight(struct obj_data *obj);
 #define GET_OBJ_RNUM(obj)       ((obj)->item_number)
 #define GET_OBJ_MATERIAL(obj)   ((obj)->obj_flags.material)
 #define GET_OBJ_CONDITION(obj) ((obj)->obj_flags.condition)
+#define OBJ_IS_FULLY_DAMAGED(obj) (GET_OBJ_CONDITION(obj) <= 0)
 #define GET_OBJ_BARRIER(obj)    ((obj)->obj_flags.barrier)
 #define GET_OBJ_VNUM(obj) (VALID_OBJ_RNUM(obj) ? \
     obj_index[GET_OBJ_RNUM(obj)].vnum : NOTHING)
+#define GET_OBJ_IDNUM(obj) ((obj)->idnum)
 #define GET_OBJ_KEYWORDS(obj)   ((obj)->text.keywords)
 #define IS_OBJ_STAT(obj, stat)  ((obj)->obj_flags.extra_flags.IsSet(stat))
 #define OBJ_VNUM_RNUM(rnum) ((obj_index[rnum]).vnum)
@@ -861,8 +873,11 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 #define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (ch != vict && (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(SEES_ASTRAL(ch)))
 
-#define INVIS_OK_OBJ(sub, obj) (!IS_OBJ_STAT((obj), ITEM_EXTRA_INVISIBLE) || \
-   has_vision(sub, VISION_ULTRASONIC) || SEES_ASTRAL(sub) || HOLYLIGHT_OK(sub))
+#define INVIS_OK_OBJ(sub, obj) (!ch_is_blocked_by_quest_protections(sub, obj, FALSE)  \
+                                && (!IS_OBJ_STAT((obj), ITEM_EXTRA_INVISIBLE)         \
+                                    || has_vision(sub, VISION_ULTRASONIC)             \
+                                    || SEES_ASTRAL(sub)                               \
+                                    || HOLYLIGHT_OK(sub)))
 
 #define CAN_SEE_CARRIER(sub, obj) \
    ((!(obj)->carried_by || CAN_SEE((sub), (obj)->carried_by)) || (!(obj)->worn_by || CAN_SEE((sub), (obj)->worn_by)))
@@ -1064,6 +1079,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_RITUAL_TICKS_AT_START(components)     (GET_OBJ_VAL((components), 6))
 
 #define GET_POCKET_SECRETARY_LOCKED_BY(obj)       (GET_OBJ_VAL((obj), 1))
+#define GET_POCKET_SECRETARY_SILENCED(obj)        (GET_OBJ_VAL((obj), 2))
 
 #define GET_VEHICLE_TITLE_OWNER(title)            (GET_OBJ_VAL((obj), 0))
 
@@ -1254,6 +1270,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 // ITEM_PATCH convenience defines
 #define GET_PATCH_TYPE(patch)                      (GET_OBJ_VAL((patch), 0))
 #define GET_PATCH_RATING(patch)                    (GET_OBJ_VAL((patch), 1))
+#define GET_PATCH_TICKS_LEFT(patch)                (GET_OBJ_VAL((patch), 2))
 
 // ITEM_CLIMBING convenience defines
 
@@ -1562,5 +1579,8 @@ struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
 
 #define IS_VALID_POCKET_SEC(obj) ((obj) && GET_OBJ_SPEC((obj)) == pocket_sec && (obj)->contains)
 #define POCKET_SEC_USABLE_BY(obj, ch) ((ch) && (obj) && (!GET_POCKET_SECRETARY_LOCKED_BY((obj)) || GET_POCKET_SECRETARY_LOCKED_BY((obj)) == GET_IDNUM((ch))))
+
+#define RANDOMLY_GENERATE_OBJ_IDNUM(obj) { (obj)->idnum = number(1, RAND_MAX); }
+#define ENSURE_OBJ_HAS_IDNUM(obj) if (!GET_OBJ_IDNUM(obj)) { RANDOMLY_GENERATE_OBJ_IDNUM(obj) }
 
 #endif
