@@ -39,6 +39,7 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
 void shop_install(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 struct obj_data *shop_package_up_ware(struct obj_data *obj);
+int get_cyberware_install_cost(struct obj_data *ware);
 
 int cmd_say;
 int cmd_echo;
@@ -190,7 +191,7 @@ int transaction_amt(char *arg, size_t arg_len)
   return (1);
 }
 
-struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data **obj)
+struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data **obj, struct char_data *ch)
 {
   *obj = NULL;
   struct shop_sell_data *sell = shop_table[shop_nr].selling;
@@ -222,6 +223,12 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
       *obj = read_object(sell->vnum, VIRTUAL);
   } else
   {
+    // Don't allow purchasing numbers.
+    if (atoi(arg) > 0) {
+      send_to_char(ch, "You can't buy just a number. Either 'buy #%s', or 'buy %s <name of something>.\r\n", arg, arg);
+      return NULL;
+    }
+
     for (; sell; sell = sell->next) {
       int real_obj = real_object(sell->vnum);
       if (real_obj >= 0) {
@@ -298,6 +305,16 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
   if (!IS_NPC(remover)) {
     const char *representation = generate_new_loggable_representation(obj);
     mudlog_vfprintf(remover, LOG_GRIDLOG, "Player Cyberdoc: %s uninstalled %s from %s.", GET_CHAR_NAME(remover), representation, GET_CHAR_NAME(victim));
+
+    if (is_same_host(remover, victim)) {
+      // Log anyone doing this from a multibox host.
+      mudlog_vfprintf(remover, LOG_CHEATLOG, "Player Cyberdoc: %s uninstalled %s from same-host character %s. (%s)", 
+                      GET_CHAR_NAME(remover),
+                      representation,
+                      GET_CHAR_NAME(victim),
+                      GET_LEVEL(remover) < LVL_PRESIDENT ? remover->desc->host : "<obscured>");
+    }
+
     delete [] representation;
   }
 
@@ -363,29 +380,35 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
     case ITEM_BIOWARE:
       for (struct obj_data *bio = recipient->bioware; bio; bio = bio->next_content)
         if (!biocyber_compatibility(ware, bio, recipient)) {
-          send_to_char(installer, "That 'ware isn't compatible with what's already installed.\r\n");
+          send_to_char(installer, "%s isn't compatible with what's already installed.\r\n", CAP(GET_OBJ_NAME(ware)));
           return FALSE;
         }
       for (struct obj_data *cyber = recipient->cyberware; cyber; cyber = cyber->next_content)
         if (!biocyber_compatibility(ware, cyber, recipient)) {
-          send_to_char(installer, "That 'ware isn't compatible with what's already installed.\r\n");
+          send_to_char(installer, "%s isn't compatible with what's already installed.\r\n", CAP(GET_OBJ_NAME(ware)));
           return FALSE;
         }
       break;
     default:
-      snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to install_ware_in_target_character()!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+      snprintf(buf3, sizeof(buf3), "SYSERR: Non-ware object '%s' (%ld) passed to install_ware_in_target_character()!", decapitalize_a_an(ware), GET_OBJ_VNUM(ware));
       mudlog(buf3, installer, LOG_SYSLOG, TRUE);
-      send_to_char(installer, "An unexpected error occurred when trying to install %s (code 1).\r\n", GET_OBJ_NAME(ware));
-      send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 1).\r\n", GET_OBJ_NAME(ware));
+      send_to_char(installer, "An unexpected error occurred when trying to install %s (code 1).\r\n", decapitalize_a_an(ware));
+      send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 1).\r\n", decapitalize_a_an(ware));
       return FALSE;
+  }
+
+  if (blocked_by_soulbinding(recipient, ware, FALSE)) {
+    send_to_char(installer, "You can't install %s in %s: it has been customized to fit someone else's biology.\r\n", decapitalize_a_an(ware), GET_CHAR_NAME(recipient));
+    send_to_char(installer, "You can't have %s installed: it has been customized to fit someone else's biology.\r\n", decapitalize_a_an(ware));
+    return FALSE;
   }
 
   // Edge case: We remove the object from its container further down, and we want to make sure this doesn't break anything.
   if (ware->in_obj && GET_OBJ_TYPE(ware->in_obj) != ITEM_SHOPCONTAINER) {
-    snprintf(buf3, sizeof(buf3), "SYSERR: '%s' (%ld) contained in something that's not a shopcontainer!", GET_OBJ_NAME(ware), GET_OBJ_VNUM(ware));
+    snprintf(buf3, sizeof(buf3), "SYSERR: '%s' (%ld) contained in something that's not a shopcontainer!", decapitalize_a_an(ware), GET_OBJ_VNUM(ware));
     mudlog(buf3, installer, LOG_SYSLOG, TRUE);
-    send_to_char(installer, "An unexpected error occurred when trying to install %s (code 2).\r\n", GET_OBJ_NAME(ware));
-    send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 2).\r\n", GET_OBJ_NAME(ware));
+    send_to_char(installer, "An unexpected error occurred when trying to install %s (code 2).\r\n", decapitalize_a_an(ware));
+    send_to_char(recipient, "An unexpected error occurred when trying to install %s (code 2).\r\n", decapitalize_a_an(ware));
     return FALSE;
   }
 
@@ -395,7 +418,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " That operation would eradicate your magic!");
       do_say(installer, buf, cmd_say, SCMD_SAYTO);
     } else {
-      send_to_char(installer, "You can't install %s-- it's not compatible with magic.\r\n", GET_OBJ_NAME(ware));
+      send_to_char(installer, "You can't install %s-- it's not compatible with magic.\r\n", decapitalize_a_an(ware));
     }
     return FALSE;
   }
@@ -403,7 +426,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   // Reject installing magic-incompat 'ware into magic-using characters.
   if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE) {
     int esscost = GET_CYBERWARE_ESSENCE_COST(ware);
-    if (GET_TOTEM(recipient) == TOTEM_EAGLE)
+    if (GET_TRADITION(recipient) == TRAD_SHAMANIC && GET_TOTEM(recipient) == TOTEM_EAGLE)
       esscost *= 2;
     // Ghouls and drakes have doubled cyberware essence costs.
     if (IS_GHOUL(recipient) || IS_DRAKE(recipient))
@@ -632,6 +655,16 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
                     GET_CHAR_NAME(installer), GET_IDNUM(installer),
                     representation,
                     GET_CHAR_NAME(recipient), GET_IDNUM(recipient));
+
+    if (is_same_host(installer, recipient)) {
+      // Log anyone doing this from a multibox host.
+      mudlog_vfprintf(installer, LOG_CHEATLOG, "Player Cyberdoc: %s installed %s in same-host character %s. (%s)", 
+                      GET_CHAR_NAME(installer),
+                      representation,
+                      GET_CHAR_NAME(recipient),
+                      GET_LEVEL(installer) < LVL_PRESIDENT ? installer->desc->host : "<obscured>");
+    }
+
     delete [] representation;
   }
 
@@ -1098,7 +1131,6 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   struct shop_sell_data *sell;
   int price, buynum;
   bool cash = FALSE;
-  char rollbuf[1000];
 
   // Prevent ghouls from being loved by anyone except their own mother.
   if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.AreAnySet(SHOP_YES_GHOUL, SHOP_CHARGEN, ENDBIT) && !MOB_FLAGGED(keeper, MOB_INANIMATE)) {
@@ -1115,13 +1147,13 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   }
 
   // Find the item in their list.
-  if (!(sell = find_obj_shop(arg, shop_nr, &obj)))
+  if (!(sell = find_obj_shop(arg, shop_nr, &obj, ch)))
   {
     if (atoi(arg) > 0) {
       // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
       char oopsbuf[strlen(arg) + 2];
       snprintf(oopsbuf, sizeof(oopsbuf), "#%s", arg);
-      sell = find_obj_shop(oopsbuf, shop_nr, &obj);
+      sell = find_obj_shop(oopsbuf, shop_nr, &obj, ch);
     }
     if (!sell) {
       if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
@@ -1240,66 +1272,22 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       return;
     }
 
-    // Calculate TNs, factoring in settings, powers, and racism.
-    int target = GET_OBJ_AVAILTN(obj);
-    snprintf(rollbuf, sizeof(rollbuf), "Initial TN %d", target);
+    struct obj_data *phero = find_bioware(ch, BIO_TAILOREDPHEROMONES);
 
-    if (GET_AVAIL_OFFSET(ch)) {
-      snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (availoffset)", GET_AVAIL_OFFSET(ch));
-      target -= GET_AVAIL_OFFSET(ch);
-    }
-
-    if (GET_POWER(ch, ADEPT_KINESICS)) {
-      snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (kinesics)", GET_POWER(ch, ADEPT_KINESICS));
-      target -= GET_POWER(ch, ADEPT_KINESICS);
-    }
-    
-    if (GET_RACE(ch) != GET_RACE(keeper)) {
-      int meta_penalty = get_metavariant_penalty(ch);
-
-      if (meta_penalty) {
-        snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (metavariant)", meta_penalty);
-        target += meta_penalty;
-      }
-    }
-
-    // House rule: Give a better TN for high-grade lifestyles.
-    {
-      switch (abs(GET_BEST_LIFESTYLE(ch))) {
-        case LIFESTYLE_HIGH:
-          target -= 1;
-          strlcat(rollbuf, ", -1 (high lifestyle)", sizeof(rollbuf));
-          break;
-        case LIFESTYLE_LUXURY:
-          target -= 2;
-          strlcat(rollbuf, ", -2 (luxury lifestyle)", sizeof(rollbuf));
-          break;
-      }
-    }
-
-    // Calculate their skill level, including bioware.
-    bool pheromones = FALSE;
-    int skill = get_skill(ch, shop_table[shop_nr].etiquette, target);
-    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", final %d after get_skill(). Base skill %d", target, skill);
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_BIOWARE_TYPE(bio) == BIO_TAILOREDPHEROMONES) {
-        pheromones = TRUE;
-        int delta = GET_BIOWARE_RATING(bio) * (GET_BIOWARE_IS_CULTURED(bio) ? 2 : 1);
-        skill += delta;
-        snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (pheromones)", delta);
-        break;
-      }
-    }
-
-    // Roll up the success test.
-    int success = success_test(skill, target);
-    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ". Rolled %d success%s.", success, success == 1 ? "" : "s");
-    act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
+    int success = get_eti_test_results(ch,
+                                       shop_table[shop_nr].etiquette,
+                                       GET_OBJ_AVAILTN(obj),
+                                       GET_AVAIL_OFFSET(ch),
+                                       GET_POWER(ch, ADEPT_KINESICS),
+                                       GET_RACE(ch) != GET_RACE(keeper) ? get_metavariant_penalty(ch) : 0,
+                                       abs(GET_BEST_LIFESTYLE(ch)),
+                                       phero ? GET_BIOWARE_RATING(phero) * (GET_BIOWARE_IS_CULTURED(phero) ? 2 : 1) : 0,
+                                       0);
 
     // Failure case.
     if (success < 1) {
       if (GET_SKILL(ch, shop_table[shop_nr].etiquette) == 0) {
-        if (pheromones)
+        if (phero)
           snprintf(buf, sizeof(buf), "Not even your tailored pheromones can soothe $N's annoyance at your lack of %s.\r\n",
                    skills[shop_table[shop_nr].etiquette].name);
         else
@@ -1308,7 +1296,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       } else {
         snprintf(buf, sizeof(buf), "You exert every bit of %s you can muster, %sbut $N shakes $S head after calling a few contacts.\r\n",
                  skills[shop_table[shop_nr].etiquette].name,
-                 pheromones ? "aided by your tailored pheromones, " : "");
+                 phero ? "aided by your tailored pheromones, " : "");
       }
       act(buf, FALSE, ch, 0, keeper, TO_CHAR);
 
@@ -1327,11 +1315,11 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     if (GET_SKILL(ch, shop_table[shop_nr].etiquette) == 0) {
       snprintf(buf, sizeof(buf), "$N seems annoyed that you don't even know the basics of %s, but %syou convince $M to call a few contacts anyways.\r\n",
               skills[shop_table[shop_nr].etiquette].name,
-              pheromones ? "aided by your tailored pheromones, " : "");
+              phero ? "aided by your tailored pheromones, " : "");
     } else {
       snprintf(buf, sizeof(buf), "You exert every bit of %s you can muster, %sand $N nods to you after calling a few contacts.\r\n",
                skills[shop_table[shop_nr].etiquette].name,
-               pheromones ? "aided by your tailored pheromones, " : "");
+               phero ? "aided by your tailored pheromones, " : "");
     }
     act(buf, FALSE, ch, 0, keeper, TO_CHAR);
 
@@ -1884,7 +1872,7 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
 
     obj = obj->contains;
 
-    int install_cost = MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(obj) / CYBERWARE_INSTALLATION_COST_FACTOR);
+    int install_cost = get_cyberware_install_cost(obj);
 
     snprintf(buf, sizeof(buf), "%s I'd charge %d nuyen to install it, and", GET_CHAR_NAME(ch), install_cost);
   } else {
@@ -1921,12 +1909,12 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   if (*arg != '#')
     return FALSE;
 
-  struct shop_sell_data *sell = find_obj_shop(arg, shop_nr, &obj);
+  struct shop_sell_data *sell = find_obj_shop(arg, shop_nr, &obj, ch);
   if (!sell && atoi(arg) > 0) {
     // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
     char oopsbuf[strlen(arg) + 2];
     snprintf(oopsbuf, sizeof(oopsbuf), "#%s", arg);
-    sell = find_obj_shop(oopsbuf, shop_nr, &obj);
+    sell = find_obj_shop(oopsbuf, shop_nr, &obj, ch);
   }
 
   if (!sell || !obj) {
@@ -1954,14 +1942,14 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     return;
   }
 
-  if (!find_obj_shop(arg, shop_nr, &obj))
+  if (!find_obj_shop(arg, shop_nr, &obj, ch))
   {
     bool successful = FALSE;
     if (atoi(arg) > 0) {
       // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
       char oopsbuf[strlen(arg) + 2];
       snprintf(oopsbuf, sizeof(oopsbuf), "#%s", arg);
-      successful = (find_obj_shop(oopsbuf, shop_nr, &obj) != NULL);
+      successful = (find_obj_shop(oopsbuf, shop_nr, &obj, ch) != NULL);
     }
     if (!successful) {
       snprintf(buf, sizeof(buf), "%s I don't have that item.", GET_CHAR_NAME(ch));
@@ -2558,7 +2546,7 @@ SPECIAL(shop_keeper)
     return shop_probe(argument, ch, keeper, shop_nr);
   else if (CMD_IS("install") && shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
     shop_install(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("uninstall"))
+  else if (CMD_IS("uninstall") && shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
     shop_uninstall(argument, ch, keeper, shop_nr);
   else
     return FALSE;
@@ -3357,7 +3345,7 @@ void shop_install(char *argument, struct char_data *ch, struct char_data *keeper
   obj = obj->contains;
 
   // We charge 1/X of the price of the thing to install it, up to the configured maximum value.
-  int install_cost = MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(obj) / CYBERWARE_INSTALLATION_COST_FACTOR);
+  int install_cost = get_cyberware_install_cost(obj);
 
   // Try to deduct the install cost from their credstick.
   struct obj_data *cred = get_first_credstick(ch, "credstick");
@@ -3437,7 +3425,7 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
   }
 
   // We charge 1/X of the price of the thing to install it, up to the configured maximum value.
-  int uninstall_cost = MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(obj) / CYBERWARE_INSTALLATION_COST_FACTOR);
+  int uninstall_cost = get_cyberware_install_cost(obj);
 
   // Try to deduct the install cost from their credstick.
   struct obj_data *cred = get_first_credstick(ch, "credstick");
@@ -3661,4 +3649,61 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
   }
 
   return TRUE;
+}
+
+int get_eti_test_results(struct char_data *ch, int eti_skill, int availtn, int availoff, int kinesics, int meta_penalty, int lifestyle, int pheromone_dice, int skill_dice) {
+  char rollbuf[10000];
+  
+  // Calculate eti TNs, factoring in settings, powers, and racism.
+  int target = availtn;
+  snprintf(rollbuf, sizeof(rollbuf), "Initial TN %d", target);
+
+  if (availoff) {
+    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (availoffset)", availoff);
+    target -= availoff;
+  }
+
+  if (kinesics) {
+    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (kinesics)", kinesics);
+    target -= kinesics;
+  }
+
+  if (meta_penalty) {
+    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (metavariant)", meta_penalty);
+    target += meta_penalty;
+  }
+
+  // House rule: Give a better TN for high-grade lifestyles.
+  switch (lifestyle) {
+    case LIFESTYLE_HIGH:
+      target -= 1;
+      strlcat(rollbuf, ", -1 (high lifestyle)", sizeof(rollbuf));
+      break;
+    case LIFESTYLE_LUXURY:
+      target -= 2;
+      strlcat(rollbuf, ", -2 (luxury lifestyle)", sizeof(rollbuf));
+      break;
+  }
+
+  // Calculate their skill dice, including from bioware.
+  int skill = skill_dice ? skill_dice : get_skill(ch, eti_skill, target);
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", final %d after get_skill(). Base skill %d", target, skill);
+
+  if (pheromone_dice) {
+    snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", +%d (pheromones)", pheromone_dice);
+    skill += pheromone_dice;
+  }
+
+  // Roll up the success test.
+  int success = success_test(skill, target);
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ". Rolled %d success%s.", success, success == 1 ? "" : "s");
+  
+  if (ch)
+    act(rollbuf, TRUE, ch, 0, 0, TO_ROLLS);
+
+  return success;
+}
+
+int get_cyberware_install_cost(struct obj_data *ware) {
+  return MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(ware) / CYBERWARE_INSTALLATION_COST_FACTOR);
 }

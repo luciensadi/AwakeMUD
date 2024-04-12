@@ -139,6 +139,7 @@ extern char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bo
 extern bool get_plr_flag_is_set_by_idnum(int flag, vnum_t id);
 extern bool get_prf_flag_is_set_by_idnum(int flag, vnum_t id);
 extern bool get_aff_flag_is_set_by_idnum(int flag, vnum_t id);
+extern bool pc_active_in_last_30_days(idnum_t owner_id);
 
 // DB tag functions, for when you need to persist data but don't want to write a new table for it.
 bool player_has_db_tag(idnum_t idnum, const char *tag_name);

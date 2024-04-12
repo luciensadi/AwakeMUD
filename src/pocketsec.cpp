@@ -164,10 +164,12 @@ void pocketsec_menu(struct descriptor_data *d)
                  "   [^c4^n] ^cFiles^n\r\n"
                  "   [^c5^n] ^cBanking^n\r\n"
                  "   [^c6^n] ^c%sock^n\r\n"
+                 "   [^c7^n] ^c%s^n\r\n"
                  "   [^c0^n] ^cQuit^n\r\n",
                  amount_of_mail_waiting(CH) > 0 ? " ^R" : " ",
                  amount_of_mail_waiting(CH) > 0 ? " (new messages)" : "",
-                 GET_POCKET_SECRETARY_LOCKED_BY(SEC) ? "Unl" : "L");
+                 GET_POCKET_SECRETARY_LOCKED_BY(SEC) ? "Unl" : "L",
+                 GET_POCKET_SECRETARY_SILENCED(SEC) ? "Unsilence" : "Silence");
     d->edit_mode = SEC_MENU;
   }
 }
@@ -273,6 +275,10 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           if (!GET_POCKET_SECRETARY_LOCKED_BY(SEC))
             GET_POCKET_SECRETARY_LOCKED_BY(SEC) = GET_IDNUM(CH);
           else GET_POCKET_SECRETARY_LOCKED_BY(SEC) = 0;
+          pocketsec_menu(d);
+          break;
+        case 7:
+          GET_POCKET_SECRETARY_SILENCED(SEC) = !GET_POCKET_SECRETARY_SILENCED(SEC);
           pocketsec_menu(d);
           break;
       }

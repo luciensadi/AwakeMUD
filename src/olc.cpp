@@ -1251,10 +1251,7 @@ ACMD(do_medit)
   int counter;
 
   // they must be flagged with olc to edit
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
-    return;
-  }
+  FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
 
   if (!is_olc_available(ch)) {
     return;
@@ -1262,33 +1259,21 @@ ACMD(do_medit)
 
   one_argument (argument, arg1);
 
-  // if no argument return
-  if (!*argument) {
-    send_to_char ("Specify a mob number to edit.\r\n", ch);
-    return;
-  }
-  // is argument a number?
-  if (!isdigit (*arg1)) {
-    send_to_char ("Please supply a valid number.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!*argument, "Specify a mob number to edit. (e.g. medit 123)");
+  FAILURE_CASE(!isdigit (*arg1), "Please supply a valid number. (e.g. medit 123)");
 
   number = atoi (arg1);
   // check if number already exists
   mob_num = real_mobile(number);
 
   //check zone numbers
-  if ((counter = get_zone_index_number_from_vnum(number)) < 0) {
-    send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE((counter = get_zone_index_number_from_vnum(number)) < 0, "Sorry, that number is not part of any zone.");
 
   // only allow them to edit their zone
   REQUIRE_ZONE_EDIT_ACCESS(counter);
 
   ch->desc->edit_zone = counter;
   ch->player_specials->saved.zonenum = zone_table[counter].number;
-
 
   // put person into editing mode
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
@@ -1312,24 +1297,21 @@ ACMD(do_medit)
 
     // copy all strings over
     if (mob_proto[mob_num].player.physical_text.keywords)
-      mob->player.physical_text.keywords =
-        str_dup(mob_proto[mob_num].player.physical_text.keywords);
+      mob->player.physical_text.keywords = str_dup(mob_proto[mob_num].player.physical_text.keywords);
     if (mob_proto[mob_num].player.physical_text.name)
-      mob->player.physical_text.name =
-        str_dup(mob_proto[mob_num].player.physical_text.name);
+      mob->player.physical_text.name = str_dup(mob_proto[mob_num].player.physical_text.name);
     if (mob_proto[mob_num].player.physical_text.room_desc)
-      mob->player.physical_text.room_desc =
-        str_dup(mob_proto[mob_num].player.physical_text.room_desc);
+      mob->player.physical_text.room_desc = str_dup(mob_proto[mob_num].player.physical_text.room_desc);
     if (mob_proto[mob_num].player.physical_text.look_desc)
-      mob->player.physical_text.look_desc =
-        str_dup(mob_proto[mob_num].player.physical_text.look_desc);
+      mob->player.physical_text.look_desc = str_dup(mob_proto[mob_num].player.physical_text.look_desc);
 
     if (mob_proto[mob_num].char_specials.arrive)
       mob->char_specials.arrive = str_dup(mob_proto[mob_num].char_specials.arrive);
     if (mob_proto[mob_num].char_specials.leave)
       mob->char_specials.leave = str_dup(mob_proto[mob_num].char_specials.leave);
-    if (SETTABLE_CHAR_COLOR_HIGHLIGHT(&mob_proto[mob_num]))
-      SETTABLE_CHAR_COLOR_HIGHLIGHT(mob) = str_dup(SETTABLE_CHAR_COLOR_HIGHLIGHT(&mob_proto[mob_num]));
+    if (mob_proto[mob_num].char_specials.highlight_color_code)
+      mob->char_specials.highlight_color_code = str_dup(mob_proto[mob_num].char_specials.highlight_color_code);
+
     if (mob_proto[mob_num].player_specials)
       mob->player_specials = &dummy_mob;
 
@@ -1388,6 +1370,7 @@ ACMD(do_medit)
     d->edit_mob->player.title = NULL;
     d->edit_mob->char_specials.arrive = str_dup("arrives from");
     d->edit_mob->char_specials.leave = str_dup("leaves");
+    d->edit_mob->char_specials.highlight_color_code = NULL;
 
     d->edit_mob->desc = NULL;
 
@@ -1480,8 +1463,8 @@ ACMD(do_mclone)
     mob->char_specials.arrive = str_dup(mob_proto[mob_num1].char_specials.arrive);
   if (mob_proto[mob_num1].char_specials.leave)
     mob->char_specials.leave = str_dup(mob_proto[mob_num1].char_specials.leave);
-  if (mob_proto[mob_num1].char_specials.highlight_color_code)
-    mob->char_specials.highlight_color_code = str_dup(mob_proto[mob_num1].char_specials.highlight_color_code);
+  if (GET_CHAR_COLOR_HIGHLIGHT(&mob_proto[mob_num1]))
+    SETTABLE_CHAR_COLOR_HIGHLIGHT(mob) = str_dup(GET_CHAR_COLOR_HIGHLIGHT(&mob_proto[mob_num1]));
 
   if (mob_proto[mob_num1].player_specials)
     mob->player_specials = &dummy_mob;

@@ -8,6 +8,10 @@
 #include <mysql/mysql.h>
 #include <vector>
 
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
+namespace bf = boost::filesystem;
+
 #include "telnet.hpp"
 
 #include "types.hpp"
@@ -129,16 +133,29 @@ struct nego_test_values_struct {
   int pheromones;
 };
 
-struct nego_test_values_struct nego_test_values[] = {
-  {"Unbuffed mage", 8, 0, 12, 1, 4},
-  {"Adept",    8     , 3, 12, 8, 4},
-  {"Mundane",  8     , 0, 12, 8, 4},
-  {"Mundane w/ 2 kin and more skill",  8     , 2, 12, 8, 8},
-  {"Mundane w/ 4 kin and no phero",  8     , 4, 12, 8, 0},
-  {"", 0, 0, 0, 0, 0}
+extern int get_eti_test_results(
+  struct char_data *ch,
+  int eti_skill,
+  int availtn,
+  int availoff,
+  int kinesics,
+  int meta_penalty,
+  int lifestyle,
+  int pheromone_dice,
+  int skill_dice);
+
+struct eti_test_values_struct {
+  const char *name;
+  int skill_dice;
+  int kinesics;
+  int pheromone_dice;
 };
 
 extern long payout_slots_testable(long bet);
+extern void load_saved_veh(bool purge_existing);
+extern void save_vehicles(bool);
+
+extern bf::path global_vehicles_dir;
 
 bool drinks_are_unfucked = TRUE;
 ACMD(do_debug) {
@@ -158,6 +175,61 @@ ACMD(do_debug) {
 
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
+  skip_spaces(&rest_of_argument);
+
+  if (is_abbrev(arg1, "cleardriverflag")) {
+    struct char_data *vict = get_char_vis(ch, rest_of_argument);
+    if (vict) {
+      PLR_FLAGS(vict).RemoveBit(PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL);
+      send_to_char(ch, "OK, removed %s's expert driver conversion bit.\r\n", GET_CHAR_NAME(vict));
+    } else {
+      send_to_char(ch, "You don't see anyone named %s.\r\n", rest_of_argument);
+    }
+    return;
+  }
+
+  if (!str_cmp(arg1, "reloadallvehicles")) {
+    send_to_char("Reloading vehicles...\r\n", ch);
+    bf::path old_path = bf::path(global_vehicles_dir);
+    global_vehicles_dir = bf::system_complete("restore_vehicles");
+    load_saved_veh(TRUE);
+    global_vehicles_dir = bf::path(old_path);
+    send_to_char(ch, "Global vehicles dir is now: %s. Saving vehicles.\r\n", global_vehicles_dir.c_str());
+    save_vehicles(FALSE);
+    send_to_char(ch, "Save complete.\r\n");
+    return;
+  }
+
+  if (is_abbrev(arg1, "printvehmap")) {
+    extern std::unordered_map<std::string, struct veh_data *> veh_map;
+
+    for (auto& it: veh_map) {
+      send_to_char(ch, "%s: %s\r\n", it.first.c_str(), GET_VEH_NAME(it.second));
+    }
+    return;
+  }
+
+  if (is_abbrev(arg1, "genwholist")) {
+    send_to_char("OK, generating wholist file.\r\n", ch);
+    ACMD_DECLARE(do_who);
+    char dummy[5];
+    *dummy = 0;
+    do_who(ch, dummy, 1, 1);
+    return;
+  }
+
+  if (is_abbrev(arg1, "hashtest")) {
+    std::unordered_map<std::string, int> test_map = {};
+
+    char test_str[100];
+    for (int i = 0; i < 10; i++) {
+      snprintf(test_str, sizeof(test_str), "this is %d", i);
+      test_map[std::string(test_str)] = i;
+      send_to_char(ch, "during iteration, at slot %d, we have %d\r\n", i, test_map[test_str]);
+    }
+    send_to_char(ch, "at slot 3, we have: %d\r\n", test_map[std::string("this is 3")]);
+    return;
+  }
 
   if (is_abbrev(arg1, "gambaodds")) {
     int starting_amt = 100;
@@ -222,6 +294,58 @@ ACMD(do_debug) {
     return;
   }
 
+  if (is_abbrev(arg1, "etitest")) {
+    int orig_num_runs = 15000;
+
+    struct eti_test_values_struct eti_test_values[] =  {
+      // name                        skill_dice  kin  phero_dice
+      {"Arch-Cap Full Mage",                     8 ,       0,    4},
+      {"Arch-Cap Aspected Mage",                 10,       0,    4},
+      {"Uncapped Mage",                          11,       0,    4},
+      {"Arch-Cap Mundane",                       12,       0,    4},
+      {"Arch-Cap Adept",                         10,       3,    4},
+      {"Uncapped Adept",                         11,       3,    4},
+      {"", 0, 0, 0}
+    };
+
+    int lifestyle = LIFESTYLE_LUXURY;
+
+    for (int idx = 0; *eti_test_values[idx].name; idx++) {
+      send_to_char(ch, "%s:\r\n", eti_test_values[idx].name);
+      for (int tn = 12; tn <= 24; tn += 6) {
+        for (int availoff = 0; availoff <= 5; availoff += 5) {
+          int total = 0;
+          int num_runs = orig_num_runs * (tn / 8);
+          for (int iter = 0; iter < num_runs; iter++) {
+            int ch_s = get_eti_test_results(
+              NULL,
+              0,
+              tn,
+              availoff,
+              eti_test_values[idx].kinesics,
+              0,
+              lifestyle,
+              eti_test_values[idx].pheromone_dice,
+              eti_test_values[idx].skill_dice);
+
+            int net = ch_s;
+            total += net;
+          }
+          float avg = ((float) total) / num_runs;
+          send_to_char(ch, "%2d skill, %d kin, %d phero, %d availoff VS TN %d got %2.2f avg net succ (aka %2.2f tries).\r\n",
+                      eti_test_values[idx].skill_dice,
+                      eti_test_values[idx].kinesics,
+                      eti_test_values[idx].pheromone_dice,
+                      availoff,
+                      tn,
+                      avg,
+                      1 / avg);
+        }
+      }
+    }
+    return;
+  }
+
   if (is_abbrev(arg1, "negotest")) {
     FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "no");
     
@@ -263,6 +387,18 @@ ACMD(do_debug) {
     */
 
     // Mage values.
+    struct nego_test_values_struct nego_test_values[] = {
+      // name                              int kin nego shop_int phero_dice
+      {"Unbuffed mage w/ decrease int",      8, 0,  12,      1,   4},
+      {"Adept",                              8, 3,  12,      8,   4},
+      {"Current Mundane",                    8, 0,  12,      7,   4},
+      {"Mundane w/ phero TN changes",        8, 1,  12,      7,   4},
+      {"Mundane w/ phero dice + TN changes", 8, 1,  12,      7,   8},
+      {"Current Mundane",                    8, 0,  12,      8,   4},
+      {"Mundane w/ phero TN changes",        8, 1,  12,      8,   4},
+      {"Mundane w/ phero dice + TN changes", 8, 1,  12,      8,   8},
+      {"", 0, 0, 0, 0, 0}
+    };
 
     for (int idx = 0; *nego_test_values[idx].name; idx++) {
       int total = 0;

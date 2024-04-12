@@ -93,15 +93,15 @@ void bfs_clear_queue(void)
  tracking another mob or a PC.  Or, a 'track' skill for PCs.
  */
 
-int find_first_step(vnum_t src, vnum_t target, bool ignore_roads)
+int find_first_step(vnum_t src, vnum_t target, bool ignore_roads, const char *call_origin, struct char_data *caller)
 {
   int curr_dir;
   vnum_t curr_room;
 
   if (src < 0 || src > top_of_world || target < 0 || target > top_of_world) {
-    snprintf(buf3, sizeof(buf3), "Illegal value passed to find_first_step (graph.c). Expected constraints: 0 <= src %ld <= %ld; 0 <= target %ld <= %ld.",
-            src, top_of_world, target, top_of_world);
-    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(caller, LOG_SYSLOG, "Illegal value passed to find_first_step (graph.c) during %s."
+                    "Expected constraints: 0 <= src %ld <= %ld; 0 <= target %ld <= %ld.",
+                    call_origin, src, top_of_world, target, top_of_world);
     return BFS_ERROR;
   }
   if (src == target) {

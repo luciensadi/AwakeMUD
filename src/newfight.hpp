@@ -4,7 +4,6 @@
 extern int get_weapon_damage_type(struct obj_data* weapon);
 extern int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount=FALSE);
 extern int check_smartlink(struct char_data *ch, struct obj_data *weapon);
-extern bool is_char_too_tall(struct char_data *ch);
 
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);
@@ -366,28 +365,33 @@ struct combat_data
   struct melee_combat_data *melee;
 
   // Generic combat data.
-  bool too_tall;
   int standard_ballistic_rating;
   int standard_impact_rating;
   int hardened_armor_ballistic_rating;
   int hardened_armor_impact_rating;
+  bool is_paralyzed_or_insensate;
+  bool is_surprised;
+
+  // Pool data for the things that can be temporarily overwritten mid-fight.
+  int dodge_pool;
+  int body_pool;
 
   combat_data(struct char_data *character, struct obj_data *weap) :
     ch(NULL),
     veh(NULL),
     weapon(NULL),
     ranged_combat_mode(FALSE),
-    too_tall(FALSE),
     standard_ballistic_rating(GET_BALLISTIC(character)),
     standard_impact_rating(GET_IMPACT(character)),
     hardened_armor_ballistic_rating(0),
-    hardened_armor_impact_rating(0)
+    hardened_armor_impact_rating(0),
+    is_surprised(AFF_FLAGGED(character, AFF_SURPRISE)),
+    dodge_pool(GET_DODGE(character)),
+    body_pool(GET_BODY_POOL(character))
   {
     ch = character;
 
     assert(ch != NULL);
-
-    too_tall = is_char_too_tall(ch);
 
     weapon = weap;
 
@@ -407,6 +411,9 @@ struct combat_data
     // Calculate hardened armor ratings, if any. We add all hardened items together (e.g. armor + helm)
     hardened_armor_ballistic_rating = get_hardened_ballistic_armor_rating(ch);
     hardened_armor_impact_rating = get_hardened_impact_armor_rating(ch);
+
+    // Figure out if they're unable to move at all (paralyzed, asleep, jacked in, etc)
+    is_paralyzed_or_insensate = !AWAKE(ch) || GET_QUI(ch) <= 0;
   }
 
   ~combat_data() {

@@ -385,8 +385,8 @@ int perform_group(struct char_data *ch, struct char_data *vict)
 {
   if (IS_AFFECTED(vict, AFF_GROUP) || !CAN_SEE(ch, vict) || (!IS_SENATOR(ch) && IS_SENATOR(vict)))
     return 0;
-
-  if (GET_QUEST(ch) && GET_QUEST(ch) == GET_QUEST(vict)) {
+  
+  if (ch != vict && GET_QUEST(ch) && GET_QUEST(ch) == GET_QUEST(vict)) {
     send_to_char("You can't group with people who are on the same job as you.\r\n", ch);
     return 1;
   }
@@ -507,8 +507,7 @@ ACMD(do_ungroup)
       if (IS_AFFECTED(f->follower, AFF_GROUP)) {
         AFF_FLAGS(f->follower).RemoveBit(AFF_GROUP);
         send_to_char(buf2, f->follower);
-        if (!IS_AFFECTED(f->follower, AFF_CHARM))
-          stop_follower(f->follower);
+        stop_follower(f->follower);
       }
     }
 
@@ -536,8 +535,7 @@ ACMD(do_ungroup)
   act("You have been kicked out of $n's group!", FALSE, ch, 0, tch, TO_VICT);
   act("$N has been kicked out of $n's group!", FALSE, ch, 0, tch, TO_NOTVICT);
 
-  if (!IS_AFFECTED(tch, AFF_CHARM))
-    stop_follower(tch);
+  stop_follower(tch);
 }
 
 ACMD(do_report)
@@ -625,6 +623,7 @@ ACMD(do_patch)
       GET_EQ(vict, WEAR_PATCH) = patch;
       patch->worn_by = vict;
       patch->worn_on = WEAR_PATCH;
+      GET_PATCH_TICKS_LEFT(patch) = INITIAL_PATCH_DURATION;
       break;
     case PATCH_STIM:                          // stim
       if (vict != ch) {
@@ -643,6 +642,7 @@ ACMD(do_patch)
       GET_EQ(vict, WEAR_PATCH) = patch;
       patch->worn_by = vict;
       patch->worn_on = WEAR_PATCH;
+      GET_PATCH_TICKS_LEFT(patch) = INITIAL_PATCH_DURATION;
       break;
     case PATCH_TRANQ:                          // tranq
       if (GET_POS(vict) == POS_FIGHTING) {
@@ -681,6 +681,7 @@ ACMD(do_patch)
       GET_EQ(vict, WEAR_PATCH) = patch;
       patch->worn_by = vict;
       patch->worn_on = WEAR_PATCH;
+      GET_PATCH_TICKS_LEFT(patch) = 0;  // instant effect
       break;
     case PATCH_TRAUMA:                          // trauma
       if (GET_POS(vict) >= POS_STUNNED) {
@@ -693,6 +694,7 @@ ACMD(do_patch)
       GET_EQ(vict, WEAR_PATCH) = patch;
       patch->worn_by = vict;
       patch->worn_on = WEAR_PATCH;
+      GET_PATCH_TICKS_LEFT(patch) = 0; // instant effect
       break;
     default:
       act("$p seems to be defective.", FALSE, ch, patch, 0, TO_CHAR);
@@ -1851,6 +1853,11 @@ ACMD(do_eject)
     return;
   }
 
+  FAILURE_CASE_PRINTF(!IS_SENATOR(ch) && IS_OBJ_STAT(weapon, ITEM_EXTRA_STAFF_ONLY),
+                      "You're not able to eject the ammo from %s.", decapitalize_a_an(weapon));
+  FAILURE_CASE_PRINTF(!IS_SENATOR(ch) && GET_MAGAZINE_AMMO_TYPE(magazine) == AMMO_AV, 
+                      "%s is loaded with special ammo that isn't ready for players to collect yet.", CAP(GET_OBJ_NAME(weapon)));
+
   // Strip out the ammo and put it in your bullet pants, then destroy the mag.
   update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
   obj_from_obj(magazine);
@@ -2345,17 +2352,23 @@ ACMD(do_astral)
     return;
   }
 
-  if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
+  if (PLR_FLAGGED(ch, PLR_PERCEIVE) && !(IS_GHOUL(ch) || IS_DRAGON(ch))) {
     PLR_FLAGS(ch).RemoveBit(PLR_PERCEIVE);
     send_to_char("You briefly return your perception to your physical senses.\r\n", ch);
   }
 
-  if (!ch->player.astral_text.keywords)
-    ch->player.astral_text.keywords = str_dup("reflection");
-  if (!ch->player.astral_text.name)
+  if (!ch->player.astral_text.keywords) {
+    snprintf(buf3, sizeof(buf3), "reflection %s", GET_CHAR_NAME(ch));
+    ch->player.astral_text.keywords = str_dup(buf3);
+  } if (!ch->player.astral_text.name)
     ch->player.astral_text.name = str_dup("a reflection");
-  if (!ch->player.astral_text.room_desc)
+  if (!ch->player.astral_text.room_desc) {
     ch->player.astral_text.room_desc = str_dup("The reflection of some physical being stands here.\r\n");
+  } else if (!str_str(ch->player.astral_text.room_desc, "\r\n")) {
+    snprintf(buf3, sizeof(buf3), "%s\r\n", ch->player.astral_text.room_desc);
+    delete [] ch->player.astral_text.room_desc;
+    ch->player.astral_text.room_desc = str_dup(buf3);
+  }
 
   GET_POS(ch) = POS_SITTING;
   astral = read_mobile(r_num, REAL);
@@ -2398,8 +2411,8 @@ ACMD(do_astral)
     SET_METAMAGIC(astral, i, GET_METAMAGIC(ch, i));
   GET_GRADE(astral) = GET_GRADE(ch);
   GET_ASTRAL(astral) = GET_ASTRAL(ch);
-  GET_COMBAT(astral) = GET_ASTRAL(ch);
-  GET_MAGIC(astral) = GET_MAGIC(ch);
+  GET_COMBAT_POOL(astral) = GET_ASTRAL(ch);
+  GET_MAGIC_POOL(astral) = GET_MAGIC_POOL(ch);
   GET_PLAYER_MEMORY(astral) = GET_PLAYER_MEMORY(ch);
 
   if (ch->in_veh)
@@ -2412,7 +2425,7 @@ ACMD(do_astral)
     if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, i), 2) == GET_IDNUM(ch) &&
         GET_OBJ_VAL(GET_EQ(ch, i), 4)) {
       struct obj_data *obj = read_object(GET_OBJ_VNUM(GET_EQ(ch, i)), VIRTUAL);
-      for (int x = 0; x < NUM_VALUES; x++)
+      for (int x = 0; x < NUM_OBJ_VALUES; x++)
         GET_OBJ_VAL(obj, x) = GET_OBJ_VAL(GET_EQ(ch, i), x);
       if (GET_EQ(ch, i)->restring)
         obj->restring = str_dup(GET_EQ(ch, i)->restring);
@@ -2428,6 +2441,9 @@ ACMD(do_astral)
   act("$n leaves $s body behind, entering a deep trance.", TRUE, ch, 0, astral, TO_NOTVICT);
   act("You enter the Astral Plane.", FALSE, astral, 0, 0, TO_CHAR);
   act("$n swirls into view.", TRUE, astral, 0, 0, TO_ROOM);
+
+  // Transfer over casting pools.
+  set_casting_pools(astral, GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch), GET_REFLECT(ch), FALSE);
 
   PLR_FLAGS(ch).SetBit(PLR_PROJECT);
   look_at_room(astral, 1, 0);
@@ -2827,8 +2843,17 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       return;
     }
 
-    DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.keywords);
-    d->edit_mob->player.physical_text.keywords = str_dup(arg);
+    {
+      char buf_with_name[MAX_INPUT_LENGTH + 100];
+      if (!str_str(arg, GET_CHAR_NAME(d->character))) {
+        snprintf(buf_with_name, sizeof(buf_with_name), "%s %s", arg, GET_CHAR_NAME(d->character));
+      } else {
+        strlcpy(buf_with_name, arg, sizeof(buf_with_name));
+      }
+
+      DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.keywords);
+      d->edit_mob->player.physical_text.keywords = str_dup(buf_with_name);
+    }
     cedit_disp_menu(d, 0);
 
     break;
@@ -4369,7 +4394,7 @@ ACMD(do_cpool)
   extern int get_skill_num_in_use_for_weapons(struct char_data *ch);
   extern int get_skill_dice_in_use_for_weapons(struct char_data *ch);
 
-  int dodge = 0, bod = 0, off = 0, total = GET_COMBAT(ch);
+  int dodge = 0, bod = 0, off = 0, total = GET_COMBAT_POOL(ch);
 
   if (!*argument) {
     do_pool(ch, argument, 0, 0);
@@ -4387,8 +4412,14 @@ ACMD(do_cpool)
   bod = atoi(argument);
   off = atoi(arg);
 
-  total -= ch->real_abils.defense_pool = GET_DEFENSE(ch) = MIN(dodge, total);
-  total -= ch->real_abils.body_pool = GET_BODY(ch) = MIN(bod, total);
+  if (dodge > 0 && IS_ASTRAL(ch)) {
+    send_to_char("Astral characters have no need to dodge anything, so your dice have been re-allocated to Body.\r\n", ch);
+    bod += dodge;
+    dodge = 0;
+  }
+
+  total -= ch->real_abils.defense_pool = GET_DODGE(ch) = MIN(dodge, total);
+  total -= ch->real_abils.body_pool = GET_BODY_POOL(ch) = MIN(bod, total);
 
   int skill_num = get_skill_num_in_use_for_weapons(ch);
   int skill_dice = get_skill_dice_in_use_for_weapons(ch);
@@ -4408,11 +4439,16 @@ ACMD(do_cpool)
 
   total -= ch->real_abils.offense_pool = GET_OFFENSE(ch) = MIN(total, off);
   if (total > 0) {
-    GET_DEFENSE(ch) += total;
-    send_to_char(ch, "Putting the %d remaining dice in your ranged-attack dodging pool.\r\n", total);
+    if (IS_ASTRAL(ch)) {
+      GET_DODGE(ch) += total;
+      send_to_char(ch, "Putting the %d remaining dice in your ranged-attack dodging pool.\r\n", total);
+    } else {
+      GET_BODY_POOL(ch) += total;
+      send_to_char(ch, "Putting the %d remaining dice in your body pool.\r\n", total);
+    }
   }
 
-  send_to_char(ch, "Pools set as: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", GET_DEFENSE(ch), GET_BODY(ch), GET_OFFENSE(ch));
+  send_to_char(ch, "Pools set as: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", GET_DODGE(ch), GET_BODY_POOL(ch), GET_OFFENSE(ch));
 }
 
 ACMD(do_spool)
@@ -4450,17 +4486,33 @@ ACMD(do_watch)
   }
 
   if (GET_WATCH(ch)) {
-    send_to_char("You stop scanning into the distance.\r\n", ch);
-    struct char_data *temp;
-    REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
-    GET_WATCH(ch) = NULL;
+    stop_watching(ch, TRUE);
     return;
   }
 
   int dir;
   skip_spaces(&argument);
   if ((dir = search_block(argument, lookdirs, FALSE)) == -1 && (dir = search_block(argument, fulllookdirs, FALSE)) == -1) {
-    send_to_char("What direction?\r\n", ch);
+    FAILURE_CASE(!access_level(ch, LVL_VICEPRES), "Syntax: WATCH <direction to watch>");
+    
+    struct char_data *vict = get_player_vis(ch, argument, FALSE);
+    FAILURE_CASE_PRINTF(!vict, "You don't see anyone named %s in game, and it's not a direction either.", argument);
+    FAILURE_CASE_PRINTF(!vict->desc, "%s has no desc -- nothing to watch.", GET_CHAR_NAME(vict));
+
+    // Stop watching.
+    if (vict->desc->watcher == ch->desc) {
+      vict->desc->watcher = NULL;
+      ch->desc->watching = NULL;
+      send_to_char(ch, "You will no longer be notified every time %s uses a command that resets their idle timer.\r\n", GET_CHAR_NAME(vict));
+      return;
+    }
+
+    FAILURE_CASE_PRINTF(vict->desc->watcher, "%s is already being watched by someone else.", GET_CHAR_NAME(vict));
+
+    vict->desc->watcher = ch->desc;
+    ch->desc->watching = vict->desc;
+    send_to_char(ch, "You will now be notified every time %s uses a command that resets their idle timer.\r\n", GET_CHAR_NAME(vict));
+    
     return;
   }
   dir = convert_look[dir];
@@ -4480,10 +4532,7 @@ ACMD(do_watch)
     }
   }
 
-  GET_WATCH(ch) = EXIT2(ch->in_room, dir)->to_room;
-  ch->next_watching = GET_WATCH(ch)->watching;
-  GET_WATCH(ch)->watching = ch;
-  send_to_char(ch, "You focus your attention to %s.\r\n", thedirs[dir]);
+  set_watching(ch, EXIT2(ch->in_room, dir)->to_room, dir);
 }
 
 ACMD(do_trade)

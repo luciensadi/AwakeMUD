@@ -741,14 +741,10 @@ void attempt_safe_withdrawal(struct char_data *ch, const char *target_arg) {
   return;
 }
 
-// The more drugs you're on, the slower your healing.
+// The more drugs you're on, the slower your healing. Assumes you've passed all precondition checks (!NPC, drugs enabled, etc)
 float get_drug_heal_multiplier(struct char_data *ch) {
   char oopsbuf[500];
   int divisor = 1;
-
-  if (!PLR_FLAGGED(ch, PLR_ENABLED_DRUGS)) {
-    return 1;
-  }
 
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
     switch (GET_DRUG_STAGE(ch, drug_id)) {
@@ -769,7 +765,7 @@ float get_drug_heal_multiplier(struct char_data *ch) {
       default:
         snprintf(oopsbuf, sizeof(oopsbuf), "SYSERR: Unknown drug state %d to get_drug_heal_multiplier()!", GET_DRUG_STAGE(ch, drug_id));
         mudlog(oopsbuf, ch, LOG_SYSLOG, TRUE);
-        return 1.0;
+        break;
     }
   }
 

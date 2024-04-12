@@ -320,6 +320,7 @@ const char *exit_bits[] =
     "WINDOW",
     "BARRED_WINDOW",
     "CANT_SHOOT_THROUGH",
+    "STRICT_KEY",
     MAX_FLAG_MARKER
   };
 
@@ -565,6 +566,7 @@ const char *player_bits[] =
     "PAID_FOR_VNUMS",
     "DOCWAGON_READY",
     "TEMPORARILY_LOADED",
+    "CDEX_DONE",
     "\n"
   };
 
@@ -791,7 +793,7 @@ const char *affected_bits[] =
     "Sneak",
     "DO NOT USE",
     "Vision x1",
-    "Charm",
+    "DO NOT SET (tempbit)",
     "ACTION",
     "Vision x2",
     "Vision x3",
@@ -1859,7 +1861,7 @@ struct mod_data mod_types[NUM_MODTYPES] =
     { "Tires", TYPE_KIT },
     { "Other", TYPE_KIT },
     { "Ammo Bin", TYPE_KIT },
-    { "Pokeystick", TYPE_WORKSHOP },
+    { "Manipulator", TYPE_WORKSHOP },
     { "Autopilot", TYPE_WORKSHOP }
 
   };
@@ -2276,7 +2278,7 @@ struct spell_types spells[] =
     { "Thunderclap", TRUE, MANIPULATION, AREA, -1, INSTANT, 1, PACK_VARIABLE_DRAIN_DAMAGE(2) },
     { "Waterbolt", TRUE, MANIPULATION, SINGLE, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(0) }, // Target: Wastelands, pg 124
     { "Splash", TRUE, MANIPULATION, AREA, -1, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(2) },  // 65
-    { "Nightvision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
+    { "Nightvision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, LIGHT },
     { "Infravision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
     { "Levitate", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE },
     { "Flame Aura", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE }
@@ -2701,7 +2703,8 @@ const char *bio_types[] = {
   "Calcitonin",
   "Phenotypic Alteration (Bod)",
   "Phenotypic Alteration (Qui)",
-  "Phenotypic Alteration (Str)"
+  "Phenotypic Alteration (Str)",
+  "Biosculpting Treatment"
 };
 
 const char *decap_bio_types[] = {
@@ -3029,7 +3032,7 @@ const char *damage_type_names_must_subtract_300_first_and_must_not_be_greater_th
   "Blackic"
 };
 
-const char *pc_race_types[] =
+const char *pc_race_types_for_wholist[] =
   {
     "Undef",
     "Undefined",
@@ -3067,6 +3070,48 @@ const char *pc_race_types[] =
     "Ghoul (T)",
     "Elemental",
     "Spirit",
+    "ConjElem",
+    "\n"
+  };
+
+const char *pc_race_types[] =
+  {
+    "Undef",
+    "Undefined",
+    "Human",
+    "Dwarf",
+    "Elf",
+    "Ork",
+    "Troll",
+    "Cyclops",
+    "Koborokuru",
+    "Fomori",
+    "Menehune",
+    "Hobgoblin",
+    "Giant",
+    "Gnome",
+    "Oni",
+    "Wakyambi",
+    "Ogre",
+    "Minotaur",
+    "Satyr",
+    "Night-One",
+    "Dryad",
+    "person", // W Dragon
+    "person", // E Dragon
+    "person", // F Serpent
+    "Human",
+    "Dwarf",
+    "Elf",
+    "Ork",
+    "Troll",
+    "ghoul", // Human
+    "ghoul", // Dwarf
+    "ghoul", // Elf
+    "ghoul", // Ork
+    "ghoul", // Troll
+    "Elemental",
+    "Spirit",
     "Conjured Elemental",
     "\n"
   };
@@ -3094,9 +3139,9 @@ const char *pc_race_types_decap[] =
     "satyr",
     "night-one",
     "dryad",
-    "dragon",
-    "dragon",
-    "serpent",
+    "person",
+    "person",
+    "person",
     "human",
     "dwarf",
     "elf",

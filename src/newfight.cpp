@@ -32,7 +32,6 @@ extern void combat_message(struct char_data *ch, struct char_data *victim, struc
 extern int check_smartlink(struct char_data *ch, struct obj_data *weapon);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern int get_weapon_damage_type(struct obj_data* weapon);
-extern bool is_char_too_tall(struct char_data *ch);
 extern bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 extern bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 
@@ -64,6 +63,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   struct combat_data attacker_data(attacker, weap);
   struct combat_data defender_data(victim, vict_weap);
 
+  // Since we use this code for riggers attacking others, rigging only counts against the victim.
+  if (IS_RIGGING(victim))
+    defender_data.is_paralyzed_or_insensate = TRUE;
+
   // Allows for switching roles, which can happen during melee counterattacks.
   struct combat_data *att = &attacker_data;
   struct combat_data *def = &defender_data;
@@ -73,6 +76,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   snprintf(rbuf, sizeof(rbuf), ">> ^cCombat eval: %s vs %s.", GET_CHAR_NAME(attacker), GET_CHAR_NAME(victim));
   SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+
+  // Remove the surprised bit since it's been consumed during the combat_data initialization above.
+  if (def->is_surprised)
+    AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
 
   // Precondition: If your foe is astral (ex: a non-manifested projection, a dematerialized spirit), you don't belong here.
   if (IS_ASTRAL(def->ch)) {
@@ -102,6 +109,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (!att->ranged_combat_mode && att->ch->in_room != def->ch->in_room) {
     send_to_char(att->ch, "You relax with the knowledge that your opponent is no longer present.\r\n");
     stop_fighting(att->ch);
+    act("$n unable to fight $N: Melee user vs someone not in same room", TRUE, att->ch, 0, def->ch, TO_ROLLS);
     return FALSE;
   }
 
@@ -163,31 +171,30 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     def->melee->modifiers[COMBAT_MOD_WIELDING_A_NON_WEAPON] = 2;
   }
 
-  // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent closes immediately.
-  if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0) {
-    AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
-    AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
-
-    if (AWAKE(att->ch)) {
-      send_to_char("You can't react-- you're paralyzed!\r\n", att->ch);
-    }
+  // Precondition: If you're asleep or paralyzed, you don't get to fight.
+  if (att->is_paralyzed_or_insensate) {
+    act("$n unable to fight $N: Paralyzed or insensate.", TRUE, att->ch, 0, def->ch, TO_ROLLS);
     return FALSE;
   }
 
-  // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent closes immediately.
-  if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0) {
-    AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
-    AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
-
-    if (AWAKE(att->ch)) {
-      send_to_char("You can't react-- you're paralyzed!\r\n", att->ch);
+  // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent sets combat to their desired range.
+  if (def->is_paralyzed_or_insensate) {
+    if (att->ranged_combat_mode) {
+      AFF_FLAGS(def->ch).SetBit(AFF_APPROACH);
+    } else {
+      AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
     }
-    return FALSE;
+
+    if (AWAKE(def->ch)) {
+      send_to_char("You can't react-- you're paralyzed!\r\n", def->ch);
+    }
   }
 
   // Precondition: If you're out of ammo, you don't get to fight.
-  if (att->weapon && !has_ammo_no_deduct(att->ch, att->weapon))
+  if (att->weapon && !has_ammo_no_deduct(att->ch, att->weapon)) {
+    act("$n unable to fight $N: No ammo", TRUE, att->ch, 0, def->ch, TO_ROLLS);
     return FALSE;
+  }
 
   // Remove closing flags if both are melee.
   if ((!att->ranged_combat_mode || AFF_FLAGGED(att->ch, AFF_APPROACH))
@@ -224,11 +231,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (att->weapon && att->ranged_combat_mode) {
     // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro. CC p99
     if (!IS_NPC(att->ch)
+        && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)
         && !att->ranged->using_mounted_gun
         && !att->ranged->gyro
         && (!att->cyber->cyberarm_gyromount || !GUN_IS_CYBER_GYRO_MOUNTABLE(att->weapon))
         && (att->ranged->skill >= SKILL_MACHINE_GUNS && att->ranged->skill <= SKILL_ARTILLERY)
-        && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)
         && !(AFF_FLAGGED(att->ch, AFF_PRONE)))
     {
       send_to_char(att->ch, "You can't lift the barrel high enough to fire! You'll have to go ##^WPRONE^n to use %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
@@ -236,7 +243,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Setup: Limit the burst of the weapon to the available ammo. Ammo is deducted later.
-    // Emplaced mobs have unlimited ammo and no recoil.
+    // Emplaced mobs (turrets, etc) have unlimited ammo and no recoil.
     if (!MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
       if (att->ranged->burst_count) {
         if (weap_ammo || att->ranged->magazine) {
@@ -291,7 +298,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
-    if (!AWAKE(def->ch) || IS_JACKED_IN(def->ch))
+    if (def->is_paralyzed_or_insensate)
       att->ranged->modifiers[COMBAT_MOD_POSITION] -= 6;
     else if (AFF_FLAGGED(def->ch, AFF_PRONE)) {
       // Prone next to you is a bigger / easier target, prone far away is a smaller / harder one.
@@ -355,10 +362,12 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Setup: If your attacker is closing the distance (running), take a penalty per Core p112.
-    if (AFF_FLAGGED(def->ch, AFF_APPROACH))
-      att->ranged->modifiers[COMBAT_MOD_DEFENDER_MOVING] += 2;
-    else if (!def->ranged_combat_mode && def->ch->in_room == att->ch->in_room && !IS_JACKED_IN(def->ch))
-      att->ranged->modifiers[COMBAT_MOD_IN_MELEE_COMBAT] += 2; // technically supposed to be +2 per attacker, but ehhhh.
+    if (!def->is_paralyzed_or_insensate) {
+      if (AFF_FLAGGED(def->ch, AFF_APPROACH))
+        att->ranged->modifiers[COMBAT_MOD_DEFENDER_MOVING] += 2;
+      else if (!def->ranged_combat_mode && def->ch->in_room == att->ch->in_room && !IS_JACKED_IN(def->ch))
+        att->ranged->modifiers[COMBAT_MOD_IN_MELEE_COMBAT] += 2; // technically supposed to be +2 per attacker, but ehhhh.
+    }
 
     // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
     if (!att->ranged->using_mounted_gun) {
@@ -421,9 +430,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
         //Handle suprise attack/alertness here -- spirits ranged.
         if (!target_died && IS_NPC(def->ch)) {
-          if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
-            AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
-
           GET_MOBALERT(def->ch) = MALERT_ALARM;
           GET_MOBALERTTIME(def->ch) = 30;
         }
@@ -472,74 +478,69 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     snprintf(rbuf, sizeof(rbuf), "^jAfter get_skill(), attacker's ranged attack roll TN is ^c%d^n.", att->ranged->tn);
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
-    int bonus_if_not_too_tall = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
-#ifdef USE_SLOUCH_RULES
-    // Height penalty.
-    if (!att->too_tall) {
-      snprintf(rbuf, sizeof(rbuf), "Not too tall, so will roll %d + %d dice... ", att->ranged->dice, bonus_if_not_too_tall);
-      att->ranged->dice += bonus_if_not_too_tall;
-    } else {
-      snprintf(rbuf, sizeof(rbuf), "Too tall, so will roll just %d dice... ", att->ranged->dice);
-    }
-#else
-    snprintf(rbuf, sizeof(rbuf), "^JAttack: Rolling %d + %d dice VS TN %d... ", att->ranged->dice, bonus_if_not_too_tall, att->ranged->tn);
-    att->ranged->dice += bonus_if_not_too_tall;
-#endif
+    int bonus_from_offense_pool = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
+    snprintf(rbuf, sizeof(rbuf), "^JAttack: Rolling %d + %d dice VS TN %d... ", att->ranged->dice, bonus_from_offense_pool, att->ranged->tn);
+    att->ranged->dice += bonus_from_offense_pool;
 
     att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^c%d^J successes.^n", att->ranged->successes);
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
-    // Dodge test.
-    if (AWAKE(def->ch)
-        && !IS_JACKED_IN(def->ch)
-        && !AFF_FLAGGED(def->ch, AFF_SURPRISE)
-        && !def->too_tall
-        && !AFF_FLAGGED(def->ch, AFF_PRONE))
-    {
-      // Previous code only allowed you to sidestep if you had also allocated at least one normal dodge die. Why?
-      // We use the ranged slots here since we're positive they won't get used in a counterattack.
-      def->ranged->dice = GET_DEFENSE(def->ch) + GET_POWER(def->ch, ADEPT_SIDESTEP);
+    // If you can't dodge, you're presumably not using your dice on your dodge pool, so shift those this round.
+    if (def->dodge_pool > 0) {
+      if (def->is_paralyzed_or_insensate || AFF_FLAGGED(def->ch, AFF_PRONE) || def->is_surprised) {
+        def->body_pool += def->dodge_pool;
+        def->dodge_pool = 0;
+        act("Temporarily shifting $n's dodge pool to body pool: Can't dodge.", TRUE, def->ch, 0, 0, TO_ROLLS);
 
-      // Set up the defender's modifiers.
-      def->ranged->modifiers[COMBAT_MOD_OPPONENT_BURST_COUNT] = (int)(att->ranged->burst_count / 3);
-      def->ranged->modifiers[COMBAT_MOD_FOOTANCHORS] = def->cyber->footanchors;
+        // Surprised, oversized, unconscious, or prone? No dodge test for you.
+        att->ranged->successes = MAX(att->ranged->successes, 0);
+        snprintf(rbuf, sizeof(rbuf), "^eOpponent unable to dodge, attacker's successes will remain at ^c%d^e.^n", att->ranged->successes);
+        if (AFF_FLAGGED(def->ch, AFF_PRONE) && !IS_JACKED_IN(def->ch))
+          send_to_char(def->ch, "^yYou're unable to dodge while prone!^n\r\n");
+      } else {
+        // You can move, perform the dodge test.
 
-      // Set up the defender's TN. Apply their modifiers.
-      strlcpy(rbuf, "^eDefender's dodge roll modifiers: ", sizeof(rbuf));
-      def->ranged->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
-      for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-        switch (mod_index) {
-          case COMBAT_MOD_OPPONENT_BURST_COUNT:
-          case COMBAT_MOD_FOOTANCHORS:
-            buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->ranged->modifiers[mod_index]);
-            def->ranged->tn += def->ranged->modifiers[mod_index];
-            break;
+        // Previous code only allowed you to sidestep if you had also allocated at least one normal dodge die. Why?
+        // We use the ranged slots here since we're positive they won't get used in a counterattack.
+        def->ranged->dice = def->dodge_pool + GET_POWER(def->ch, ADEPT_SIDESTEP);
+
+        // Set up the defender's modifiers.
+        def->ranged->modifiers[COMBAT_MOD_OPPONENT_BURST_COUNT] = (int)(att->ranged->burst_count / 3);
+        def->ranged->modifiers[COMBAT_MOD_FOOTANCHORS] = def->cyber->footanchors;
+
+        // Set up the defender's TN. Apply their modifiers.
+        strlcpy(rbuf, "^eDefender's dodge roll modifiers: ", sizeof(rbuf));
+        def->ranged->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
+        for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+          switch (mod_index) {
+            case COMBAT_MOD_OPPONENT_BURST_COUNT:
+            case COMBAT_MOD_FOOTANCHORS:
+              buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->ranged->modifiers[mod_index]);
+              def->ranged->tn += def->ranged->modifiers[mod_index];
+              break;
+          }
         }
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+
+        // Minimum TN is 2.
+        def->ranged->tn = MAX(def->ranged->tn, 2);
+
+        // No, you CANNOT collapse these two lines into MAX(0, s_t()), because it calls s_t() twice.
+        def->ranged->successes = success_test(def->ranged->dice, def->ranged->tn);
+        def->ranged->successes = MAX(0, def->ranged->successes);
+        att->ranged->successes -= def->ranged->successes;
+
+        snprintf(rbuf, sizeof(rbuf), "^eDodge: Dice %d (%d pool + %d sidestep), TN %d, Successes ^c%d^e.  This means attacker's net successes = ^c%d^e.^n",
+                def->ranged->dice,
+                def->dodge_pool,
+                GET_POWER(def->ch, ADEPT_SIDESTEP),
+                def->ranged->tn,
+                def->ranged->successes,
+                att->ranged->successes);
       }
-      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-
-      // Minimum TN is 2.
-      def->ranged->tn = MAX(def->ranged->tn, 2);
-
-      // No, you CANNOT collapse these two lines into MAX(0, s_t()), because it calls s_t() twice.
-      def->ranged->successes = success_test(def->ranged->dice, def->ranged->tn);
-      def->ranged->successes = MAX(0, def->ranged->successes);
-      att->ranged->successes -= def->ranged->successes;
-
-      snprintf(rbuf, sizeof(rbuf), "^eDodge: Dice %d (%d pool + %d sidestep), TN %d, Successes ^c%d^e.  This means attacker's net successes = ^c%d^e.^n",
-               def->ranged->dice,
-               GET_DEFENSE(def->ch),
-               GET_POWER(def->ch, ADEPT_SIDESTEP),
-               def->ranged->tn,
-               def->ranged->successes,
-               att->ranged->successes);
     } else {
-      // Surprised, oversized, unconscious, or prone? No dodge test for you.
-      att->ranged->successes = MAX(att->ranged->successes, 0);
-      snprintf(rbuf, sizeof(rbuf), "^eOpponent unable to dodge, attacker's successes will remain at ^c%d^e.^n", att->ranged->successes);
-      if (GET_DEFENSE(def->ch) > 0 && AFF_FLAGGED(def->ch, AFF_PRONE) && !IS_JACKED_IN(def->ch))
-        send_to_char(def->ch, "^yYou're unable to dodge while prone!^n\r\n");
+      strlcpy(rbuf, "Defender doesn't dodge.", sizeof(rbuf));
     }
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
@@ -554,9 +555,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
       //Handle suprise attack/alertness here -- ranged attack failed.
       if (!target_died && IS_NPC(def->ch)) {
-        if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
-          AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
-
         GET_MOBALERT(def->ch) = MALERT_ALARM;
         GET_MOBALERTTIME(def->ch) = 30;
       }
@@ -577,6 +575,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         att->ranged->power = att->ranged->power_before_armor - (int)(def->standard_impact_rating / 2);
       } else {
         switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
+          case AMMO_AV:
           case AMMO_APDS:
             if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
               // APDS, AV, and other armor-piercing munitions are treated as normal VS spirits/elementals.
@@ -682,8 +681,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       att->melee->modifiers[COMBAT_MOD_POSITION] += 2;
     }
 
-    // Treat unconscious as being a position mod of -6 (reflects ease of coup de grace)
-    if (!AWAKE(def->ch))
+    // Treat unconscious/paralyzed/etc as being a position mod of -6 (reflects ease of coup de grace)
+    if (def->is_paralyzed_or_insensate)
       att->melee->modifiers[COMBAT_MOD_POSITION] -= 6;
     else if (AFF_FLAGGED(def->ch, AFF_PRONE))
       att->melee->modifiers[COMBAT_MOD_POSITION] -= 2;
@@ -864,7 +863,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Calculate the clash, unless there's some surprise involved (hitting someone unconscious is technically surprising for them)
-    if (AWAKE(def->ch) && !AFF_FLAGGED(def->ch, AFF_SURPRISE)) {
+    if (!def->is_paralyzed_or_insensate && !def->is_surprised) {
       att->melee->successes = success_test(att->melee->dice, att->melee->tn);
       def->melee->successes = success_test(def->melee->dice, def->melee->tn);
     } else {
@@ -1023,9 +1022,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
           //Handle suprise attack/alertness here -- spirits melee.
           if (!target_died && IS_NPNPC(def->ch)) {
-            if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
-              AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
-
             GET_MOBALERT(def->ch) = MALERT_ALARM;
             GET_MOBALERTTIME(def->ch) = 30;
 
@@ -1070,22 +1066,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   // End melee-only calculations. Code beyond here is unified for both ranged and melee.
 
   // Perform body test for damage resistance.
-  int bod_success = 0, bod_dice = 0;
-
-  // Put your body dice pool in, if applicable.
-#ifndef USE_SLOUCH_RULES
-  if (def->too_tall || att->too_tall) {
-    mudlog("SYSERR: Someone is too_tall when USE_SLOUCH_RULES is disabled!", att->ch, LOG_SYSLOG, TRUE);
-  }
-  bod_dice += GET_BODY(def->ch);
-#else
-  if (!def->too_tall) {
-    bod_dice += GET_BODY(def->ch);
-  }
-#endif
+  int bod_success = 0;
+  int bod_dice = def->body_pool;
 
   // Unconscious? No pool dice for you.
-  if (!AWAKE(def->ch))
+  if (def->is_paralyzed_or_insensate)
     bod_dice = 0;
 
   // Add your attribute.
@@ -1208,17 +1193,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           int base_damage = SERIOUS;
           int damage_resist_dice = GET_BOD(attacker);
           if (successes != BOTCHED_ROLL_RESULT) {
-            damage_resist_dice += GET_DEFENSE(attacker);
+            damage_resist_dice += GET_DODGE(attacker);
           }
           int staged_damage = stage(-1 * success_test(damage_resist_dice, 10), base_damage);
           int dam_total = convert_damage(staged_damage);
 
-          //Handle suprise attack/alertness here -- attacker can die here, we remove the surprise flag anyhow
-          //prior to handling the damage and we don't alter alert state at all because if defender is a quest target
-          //they will be extracted. If the attacker actually dies and it's a normal mob, they won't be surprised anymore
-          //and alertness will trickle down on its own with update cycles.
-          if (IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
-            AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
           // If the attacker dies from backlash, bail out.
           if (damage(attacker, attacker, dam_total, TYPE_RECOIL, PHYSICAL))
             return TRUE;
@@ -1226,9 +1205,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       }
       //Handle suprise attack/alertness here -- defender didn't die.
       if (IS_NPC(def->ch)) {
-        if (AFF_FLAGGED(def->ch, AFF_SURPRISE))
-          AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
-
         GET_MOBALERT(def->ch) = MALERT_ALERT;
         GET_MOBALERTTIME(def->ch) = 20;
       }
@@ -1256,18 +1232,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       && !AFF_FLAGGED(att->ch, AFF_PRONE))
   {
     int weapon_power = GET_WEAPON_POWER(att->weapon) + att->ranged->burst_count;
-    int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), weapon_power / 2);
+    int recoil_successes = success_test(GET_BOD(att->ch) + att->body_pool, weapon_power / 2);
     int staged_dam = stage(-recoil_successes, LIGHT);
     snprintf(rbuf, sizeof(rbuf), "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
     // SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
-
-    //Handle suprise attack/alertness here -- attacker can die here, we remove the surprise flag anyhow
-    //prior to handling the damage and we don't alter alert state at all because if defender is a quest target
-    //they will be extracted. If the attacker actually dies and it's a normal mob, they won't be surprised anymore
-    //and alertness will trickle down on its own with update cycles.
-    if (!defender_died && IS_NPC(def->ch) && AFF_FLAGGED(def->ch, AFF_SURPRISE))
-      AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
 
     // If the attacker dies from recoil, bail out.
     if (damage(att->ch, att->ch, convert_damage(staged_dam), TYPE_HIT, FALSE))
@@ -1531,13 +1500,9 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
     }
   }
 
-  if (!att->too_tall) {
-    int bonus = MIN(GET_SKILL(att->ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(att->ch));
-    snprintf(rbuf, rbuf_len, "Attacker is rolling %d + %d dice", att->melee->dice, bonus);
-    att->melee->dice += bonus;
-  } else {
-    snprintf(rbuf, rbuf_len, "Attacker is rolling %d dice (no bonus: too tall)", att->melee->dice);
-  }
+  int bonus = MIN(GET_SKILL(att->ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(att->ch));
+  snprintf(rbuf, rbuf_len, "Attacker is rolling %d + %d dice", att->melee->dice, bonus);
+  att->melee->dice += bonus;
 
   att->melee->successes = success_test(att->melee->dice, att->melee->tn);
   int temp_qui_loss = (int) (att->melee->successes / 2);

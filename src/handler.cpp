@@ -30,6 +30,7 @@
 #include "playergroups.hpp"
 #include "config.hpp"
 #include "deck_build.hpp"
+#include "vehicles.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
@@ -205,7 +206,7 @@ void affect_modify(struct char_data * ch,
       break;
 
     case APPLY_COMBAT_POOL:
-      GET_COMBAT(ch) += mod;
+      GET_COMBAT_POOL(ch) += mod;
       break;
 
     case APPLY_HACKING_POOL:
@@ -217,7 +218,7 @@ void affect_modify(struct char_data * ch,
       break;
 
     case APPLY_MAGIC_POOL:
-      GET_MAGIC(ch) += mod;   /* GET_MAGIC gets their magic pool, GET_MAG is for attribute*/
+      GET_MAGIC_POOL(ch) += mod;   /* GET_MAGIC gets their magic pool, GET_MAG is for attribute*/
       break;
 
     case APPLY_INITIATIVE_DICE:
@@ -263,7 +264,7 @@ void apply_focus_effect( struct char_data *ch, struct obj_data *object )
   if (GET_FOCUS_TYPE(object) == FOCI_POWER)
   {
     GET_MAG(ch) += GET_OBJ_VAL(object, 1) * 100;
-    GET_MAGIC(ch) += GET_OBJ_VAL(object, 1);
+    GET_MAGIC_POOL(ch) += GET_OBJ_VAL(object, 1);
   }
 }
 
@@ -276,7 +277,7 @@ void remove_focus_effect( struct char_data *ch, struct obj_data *object )
   if (GET_FOCUS_TYPE(object) == FOCI_POWER)
   {
     GET_MAG(ch) -= GET_OBJ_VAL(object, 1) * 100;
-    GET_MAGIC(ch) -= GET_OBJ_VAL(object, 1);
+    GET_MAGIC_POOL(ch) -= GET_OBJ_VAL(object, 1);
   }
 
 }
@@ -453,7 +454,7 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
       break;
     case SPELL_COMBATSENSE:
       mod *= MIN(sust->force, sust->success / 2);
-      GET_COMBAT(ch) += mod;
+      GET_COMBAT_POOL(ch) += mod;
       break;
     case SPELL_NIGHTVISION:
       if (mod == 1)
@@ -590,10 +591,10 @@ void affect_total(struct char_data * ch)
 
   /* set the dice pools before equip so that they can be affected */
   /* combat pool is equal to quickness, wil, and int divided by 2 */
-  GET_COMBAT(ch) = 0;
+  GET_COMBAT_POOL(ch) = 0;
   GET_HACKING(ch) = 0;
   GET_ASTRAL(ch) = 0;
-  GET_MAGIC(ch) = 0;
+  GET_MAGIC_POOL(ch) = 0;
   GET_CONTROL(ch) = 0;
 
   // Set reach, depending on race. Stripped out the 'you only get it at X height' thing since it's not canon and a newbie trap.
@@ -821,7 +822,7 @@ void affect_total(struct char_data * ch)
       GET_QUI(ch) += BOOST(ch)[QUI][1];
     if (BOOST(ch)[BOD][0] > 0)
       GET_BOD(ch) += BOOST(ch)[BOD][1];
-    GET_COMBAT(ch) += MIN(3, GET_POWER(ch, ADEPT_COMBAT_SENSE));
+    GET_COMBAT_POOL(ch) += MIN(3, GET_POWER(ch, ADEPT_COMBAT_SENSE));
     if (GET_POWER(ch, ADEPT_LOW_LIGHT)) {
       set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_ADEPT_POWER);
     }
@@ -976,13 +977,13 @@ void affect_total(struct char_data * ch)
   // asdf something is wrong - combatsense spell dice?
 
   // Combat pool is derived from current atts, so we calculate it after all att modifiers
-  GET_COMBAT(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
+  GET_COMBAT_POOL(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
   if (GET_TOTALBAL(ch) > GET_QUI(ch))
-    GET_COMBAT(ch) -= (GET_TOTALBAL(ch) - GET_QUI(ch)) / 2;
+    GET_COMBAT_POOL(ch) -= (GET_TOTALBAL(ch) - GET_QUI(ch)) / 2;
   if (GET_TOTALIMP(ch) > GET_QUI(ch))
-    GET_COMBAT(ch) -= (GET_TOTALIMP(ch) - GET_QUI(ch)) / 2;
-  if (GET_COMBAT(ch) < 0)
-    GET_COMBAT(ch) = 0;
+    GET_COMBAT_POOL(ch) -= (GET_TOTALIMP(ch) - GET_QUI(ch)) / 2;
+  if (GET_COMBAT_POOL(ch) < 0)
+    GET_COMBAT_POOL(ch) = 0;
   if (GET_TRADITION(ch) == TRAD_ADEPT)
     GET_IMPACT(ch) += GET_POWER(ch, ADEPT_MYSTIC_ARMOR);
 
@@ -994,7 +995,7 @@ void affect_total(struct char_data * ch)
     for (i = 0; !added_gyro_penalty && i < NUM_WEARS; i++) {
       if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO) {
         added_gyro_penalty = TRUE;
-        GET_COMBAT(ch) /= 2;
+        GET_COMBAT_POOL(ch) /= 2;
       }
     }
 
@@ -1002,7 +1003,7 @@ void affect_total(struct char_data * ch)
       for (struct obj_data *cyb = ch->cyberware; !added_gyro_penalty && cyb; cyb = cyb->next_content) {
         if (GET_CYBERWARE_TYPE(cyb) == CYB_ARMS && IS_SET(GET_CYBERWARE_FLAGS(cyb), ARMS_MOD_GYROMOUNT) && !GET_CYBERWARE_IS_DISABLED(cyb)) {
           added_gyro_penalty = TRUE;
-          GET_COMBAT(ch) /= 2;
+          GET_COMBAT_POOL(ch) /= 2;
         }
       }
     }
@@ -1015,21 +1016,36 @@ void affect_total(struct char_data * ch)
     dice_max = 0;
   }
 
-  GET_DEFENSE(ch) = MIN(GET_DEFENSE(ch), GET_COMBAT(ch));
-  GET_BODY(ch) = MIN(GET_BODY(ch), GET_COMBAT(ch) - GET_DEFENSE(ch));
-  GET_OFFENSE(ch) = GET_COMBAT(ch) - GET_DEFENSE(ch) - GET_BODY(ch);
-  if (GET_OFFENSE(ch) > dice_max)
-  {
-    GET_DEFENSE(ch) += GET_OFFENSE(ch) - dice_max;
+  // There's nothing to dodge on the astral plane.
+  if (IS_ASTRAL(ch))
+    GET_DODGE(ch) = 0;
+  else {
+    GET_DODGE(ch) = MIN(GET_DODGE(ch), GET_COMBAT_POOL(ch));
+
+    if (ch_is_npc && AFF_FLAGGED(ch, AFF_PRONE)) {
+      GET_BODY_POOL(ch) += GET_DODGE(ch) / 2;
+      GET_DODGE(ch) = 0;
+      // The remaining points will be assigned to offense in the next stanza.
+    }
+  }
+
+  GET_BODY_POOL(ch) = MIN(GET_BODY_POOL(ch), GET_COMBAT_POOL(ch) - GET_DODGE(ch));
+  GET_OFFENSE(ch) = GET_COMBAT_POOL(ch) - GET_DODGE(ch) - GET_BODY_POOL(ch);
+  if (GET_OFFENSE(ch) > dice_max) {
+    if (ch_is_npc && !IS_ASTRAL(ch) && AFF_FLAGGED(ch, AFF_PRONE)) {
+      GET_BODY_POOL(ch) += GET_OFFENSE(ch) - dice_max;
+    } else {
+      GET_DODGE(ch) += GET_OFFENSE(ch) - dice_max;
+    }
     GET_OFFENSE(ch) = dice_max;
   }
 
   // NPCs specialize their defenses: unless they've got crazy dodge dice, they'll want to just soak.
   // AKA, 'your average wage slave is not going to try to do the Matrix bullet dodge when he sees a gun.'
   if (ch_is_npc) {
-    if (GET_DEFENSE(ch) < 10) {
-      GET_BODY(ch) += GET_DEFENSE(ch);
-      GET_DEFENSE(ch) = 0;
+    if (GET_DODGE(ch) < 8) {
+      GET_BODY_POOL(ch) += GET_DODGE(ch);
+      GET_DODGE(ch) = 0;
     }
 
     // NPC spirits set their astral pools here as well.
@@ -1044,23 +1060,39 @@ void affect_total(struct char_data * ch)
     GET_ASTRAL(ch) += GET_GRADE(ch);
 
     // Set magic pools from (int + wil + mag) / 3.
-    GET_MAGIC(ch) += (GET_INT(ch) + GET_WIL(ch) + (int)(GET_MAG(ch) / 100))/3;
+    GET_MAGIC_POOL(ch) += (GET_INT(ch) + GET_WIL(ch) + (int)(GET_MAG(ch) / 100))/3;
 
-    if (ch_is_npc) {
+    if (IS_PROJECT(ch)) {
+      if (ch->desc && ch->desc->original) {
+        // Note that this uses GET_MAGIC (their magic pool) rather than GET_MAG (their magic attribute).
+        int sdef = MIN(GET_MAGIC_POOL(ch), GET_SDEFENSE(ch->desc->original));
+        int drain = MIN(GET_MAGIC_POOL(ch), GET_DRAIN(ch->desc->original));
+        int reflect = MIN(GET_MAGIC_POOL(ch), GET_REFLECT(ch->desc->original));
+        int casting = MAX(0, GET_MAGIC_POOL(ch) - drain - reflect - sdef);
+
+        // It's possible for the casting value to be greater than sorcery right now. This setter resolves that.
+        set_casting_pools(ch, casting, drain, sdef, reflect, FALSE);
+      } else {
+        set_casting_pools(ch, 0, 0, GET_MAGIC_POOL(ch), 0, FALSE);
+      }
+    } else if (ch_is_npc) {
+      // NPC casters get additional dice to make up for the fact that builders aren't setting them with power foci for economic reasons.
+      GET_MAGIC_POOL(ch) *= 1.5;
+
       // For NPCs, we zero all the components of the magic pool, then re-set them.
       GET_REFLECT(ch) = GET_CASTING(ch) = GET_DRAIN(ch) = GET_SDEFENSE(ch) = 0;
 
       // If they plan to cast, they split their dice evenly.
       if (GET_SKILL(ch, SKILL_SORCERY)) {
-        GET_CASTING(ch) = GET_DRAIN(ch) = GET_SDEFENSE(ch) = GET_MAGIC(ch) / 3;
+        GET_CASTING(ch) = GET_DRAIN(ch) = GET_SDEFENSE(ch) = GET_MAGIC_POOL(ch) / 3;
       }
       // Otherwise, they put it all in defense.
       else {
-        GET_SDEFENSE(ch) = GET_MAGIC(ch);
+        GET_SDEFENSE(ch) = GET_MAGIC_POOL(ch);
       }
 
       // High-grade NPC mages get reflect instead of spell defense.
-      if (MAX(GET_SKILL(ch, SKILL_SORCERY), (int) (GET_MAGIC(ch) / 100)) >= 9) {
+      if (MAX(GET_SKILL(ch, SKILL_SORCERY), (int) (GET_MAGIC_POOL(ch) / 100)) >= 9) {
         GET_REFLECT(ch) = GET_SDEFENSE(ch);
         GET_SDEFENSE(ch) = 0;
       }
@@ -1068,15 +1100,15 @@ void affect_total(struct char_data * ch)
       // Only Shamans and Hermetics get these pools.
       if (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) {
         // Note that this uses GET_MAGIC (their magic pool) rather than GET_MAG (their magic attribute).
-        int sdef = MIN(GET_MAGIC(ch), GET_SDEFENSE(ch));
-        int drain = MIN(GET_MAGIC(ch), GET_DRAIN(ch));
-        int reflect = MIN(GET_MAGIC(ch), GET_REFLECT(ch));
-        int casting = MAX(0, GET_MAGIC(ch) - drain - reflect - sdef);
+        int sdef = MIN(GET_MAGIC_POOL(ch), GET_SDEFENSE(ch));
+        int drain = MIN(GET_MAGIC_POOL(ch), GET_DRAIN(ch));
+        int reflect = MIN(GET_MAGIC_POOL(ch), GET_REFLECT(ch));
+        int casting = MAX(0, GET_MAGIC_POOL(ch) - drain - reflect - sdef);
 
         // It's possible for the casting value to be greater than sorcery right now. This setter resolves that.
         set_casting_pools(ch, casting, drain, sdef, reflect, FALSE);
       } else {
-        GET_CASTING(ch) = GET_MAGIC(ch) = GET_SDEFENSE(ch) = GET_DRAIN(ch) = GET_REFLECT(ch) = 0;
+        GET_CASTING(ch) = GET_MAGIC_POOL(ch) = GET_SDEFENSE(ch) = GET_DRAIN(ch) = GET_REFLECT(ch) = 0;
       }
     }
   }
@@ -1189,19 +1221,7 @@ void veh_from_room(struct veh_data * veh)
   }
   if (veh->in_veh) {
     REMOVE_FROM_LIST(veh, veh->in_veh->carriedvehs, next_veh);
-    int mult;
-    switch (veh->type) {
-      case VEH_DRONE:
-        mult = 100;
-        break;
-      case VEH_TRUCK:
-        mult = 1500;
-        break;
-      default:
-        mult = 500;
-        break;
-    }
-    veh->in_veh->usedload -= veh->body * mult;
+    veh->in_veh->usedload -= calculate_vehicle_entry_load(veh);
   } else {
     REMOVE_FROM_LIST(veh, veh->in_room->vehicles, next_veh);
     recalculate_room_light(veh->in_room);
@@ -1593,6 +1613,10 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
   if (GET_OBJ_TYPE(object) == ITEM_FOCUS) {
     apply_focus_effect(ch, object);
   }
+
+  // If it's a carried vehicle, set their flag to block movement through !BIKE rooms.
+  if (GET_OBJ_VNUM(object) == OBJ_VEHCONTAINER)
+    ch->is_carrying_vehicle = TRUE;
 }
 
 void obj_to_cyberware(struct obj_data * object, struct char_data * ch, bool recalc)
@@ -1624,7 +1648,7 @@ void obj_to_cyberware(struct obj_data * object, struct char_data * ch, bool reca
   }
 
   // Soulbind it to this character.
-  if (!IS_MOB(ch))
+  if (!IS_MOB(ch) && GET_IDNUM(ch) > 0)
     soulbind_obj_to_char(object, ch, FALSE);
 }
 
@@ -1666,7 +1690,7 @@ void obj_to_bioware(struct obj_data * object, struct char_data * ch, bool recalc
   }
 
   // Soulbind it to this character.
-  if (!IS_MOB(ch))
+  if (!IS_MOB(ch) && GET_IDNUM(ch) > 0)
     soulbind_obj_to_char(object, ch, FALSE);
 }
 
@@ -1731,6 +1755,15 @@ void obj_from_char(struct obj_data * object)
     obj_from_obj(object);
   }
   REMOVE_FROM_LIST(object, object->carried_by->carrying, next_content);
+
+  // If this is the last vehicle you had, unset your carried pointer.
+  if (object->carried_by
+      && object->carried_by->desc
+      && GET_OBJ_VNUM(object) == OBJ_VEHCONTAINER
+      && !get_carried_vnum_recursively(object->carried_by, OBJ_VEHCONTAINER))
+  {
+    object->carried_by->is_carrying_vehicle = FALSE;
+  }
 
   IS_CARRYING_W(object->carried_by) -= GET_OBJ_WEIGHT(object);
   IS_CARRYING_N(object->carried_by)--;
@@ -2042,7 +2075,7 @@ void obj_to_veh(struct obj_data * object, struct veh_data * veh)
     veh->contents = object;
   }
 
-  veh->usedload += GET_OBJ_WEIGHT(object);
+  veh->usedload += get_obj_vehicle_load_usage(object, FALSE);
   object->in_veh = veh;
   object->in_room = NULL;
   object->carried_by = NULL;
@@ -2107,7 +2140,7 @@ void obj_from_room(struct obj_data * object)
   }
 
   if (object->in_veh) {
-    object->in_veh->usedload -= GET_OBJ_WEIGHT(object);
+    object->in_veh->usedload -= get_obj_vehicle_load_usage(object, FALSE);
     REMOVE_FROM_LIST(object, object->in_veh->contents, next_content);
   }
 
@@ -2235,6 +2268,12 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
       IS_CARRYING_W(tmp_obj->carried_by) += GET_OBJ_WEIGHT(obj);
     if (tmp_obj->worn_by)
       IS_CARRYING_W(tmp_obj->worn_by) += GET_OBJ_WEIGHT(obj);
+    if (tmp_obj->in_veh)
+      tmp_obj->in_veh->usedload += get_obj_vehicle_load_usage(obj, FALSE);
+
+    if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER && (tmp_obj->carried_by || tmp_obj->worn_by)) {
+      (tmp_obj->carried_by ? tmp_obj->carried_by : tmp_obj->worn_by)->is_carrying_vehicle = TRUE;
+    }
   }
 
   if (tmp_obj && tmp_obj->in_room)
@@ -2273,6 +2312,8 @@ void obj_from_obj(struct obj_data * obj)
       IS_CARRYING_W(temp->carried_by) -= GET_OBJ_WEIGHT(obj);
     if (temp->worn_by)
       IS_CARRYING_W(temp->worn_by) -= GET_OBJ_WEIGHT(obj);
+    if (temp->in_veh)
+      temp->in_veh->usedload -= get_obj_vehicle_load_usage(obj, FALSE);
   }
 
   obj->in_obj = NULL;
@@ -2468,6 +2509,9 @@ void extract_veh(struct veh_data * veh)
     delete grid;
   }
 
+  // Remove it from our vehicle map.
+  delete_veh_from_map(veh);
+
   // Perform actual vehicle extraction.
   REMOVE_FROM_LIST(veh, veh_list, next);
   if (veh->in_room || veh->in_veh)
@@ -2631,11 +2675,7 @@ void extract_char(struct char_data * ch, bool do_save)
       veh->cspeed = SPEED_OFF;
   }
 
-  if (GET_WATCH(ch)) {
-    // char_data *temp already exists.
-    REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
-    GET_WATCH(ch) = NULL;
-  }
+  stop_watching(ch);
 
   if (!IS_NPC(ch)) {
     // Terminate the player's quest, if any. Realistically, we shouldn't ever trigger this code, but if it happens we're ready for it.
@@ -2681,6 +2721,15 @@ void extract_char(struct char_data * ch, bool do_save)
       SEND_TO_Q("Your victim is no longer among us.\r\n", ch->desc->snoop_by);
       ch->desc->snoop_by->snooping = NULL;
       ch->desc->snoop_by = NULL;
+    }
+    if (ch->desc->watching) {
+      ch->desc->watching->watcher = NULL;
+      ch->desc->watching = NULL;
+    }
+    if (ch->desc->watcher) {
+      SEND_TO_Q("Your watch target is no longer among us.\r\n", ch->desc->watcher);
+      ch->desc->watcher->watching = NULL;
+      ch->desc->watcher = NULL;
     }
   }
 
@@ -3045,6 +3094,7 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, const char *name, st
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
+  bool staff_bit = IS_SENATOR(ch);
 
   // No list, no worries.
   if (!list)
@@ -3068,6 +3118,11 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, const char *name, st
       else if (ch->in_veh != i->in_veh)
         continue;
     }
+    
+    // Invisible to you: Blocked by quest protections.
+    if (!staff_bit && ch_is_blocked_by_quest_protections(ch, i, FALSE))
+      continue;
+
     if (keyword_appears_in_obj(tmp, i)) {
       if (++j == number)
         return i;

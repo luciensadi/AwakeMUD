@@ -245,7 +245,7 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
     }
 
     // Is this NPC protected by spec?
-    if (npc_is_protected_by_spec(vict) || MOB_FLAGGED(vict, MOB_NOKILL) || vict->mob_specials.quest_id) {
+    if (npc_is_protected_by_spec(vict) || MOB_FLAGGED(vict, MOB_NOKILL) || GET_MOB_QUEST_CHAR_ID(vict)) {
       #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf3), "vict_is_valid_target: NPC %s is not a valid target (protected by spec, !kill, or quest flag).", GET_CHAR_NAME(vict));
         do_say(ch, buf3, 0, 0);
@@ -336,8 +336,11 @@ bool is_dissuaded_by_hardened_armor(struct char_data *ch, struct char_data *vict
     if (WEAPON_IS_GUN(weapon)) {
       // Overwrite with weapon power.
       my_power = GET_WEAPON_POWER(weapon);
-      if (weapon->contains && GET_OBJ_TYPE(weapon->contains) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_AMMO_TYPE(weapon->contains) == AMMO_APDS)
+      if (weapon->contains && GET_OBJ_TYPE(weapon->contains) == ITEM_GUN_MAGAZINE 
+          && (GET_MAGAZINE_AMMO_TYPE(weapon->contains) == AMMO_APDS || GET_MAGAZINE_AMMO_TYPE(weapon->contains) == AMMO_AV))
+      {
         my_power *= 2;
+      }
       
       if (get_hardened_ballistic_armor_rating(vict) >= my_power) {
         // Refuse to attack anyone whose armor we can't breach.
@@ -710,14 +713,12 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
       if (tveh == ch->in_veh)
         continue;
 
-      // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
-      if (tveh->type != VEH_DRONE && !area_has_pc_occupants && !tveh->people && !tveh->rigger)
+      // If a mob attacks in a forest and nobody's around to see it happen, did it really happen?
+      if (!area_has_pc_occupants && !tveh->people && !tveh->rigger)
         continue;
 
       // Check for our usual conditions.
-      if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM, ch->mob_specials.quest_id) 
-          && (!GET_MOB_QUEST_CHAR_ID(ch) || !tveh->owner || tveh->owner == GET_MOB_QUEST_CHAR_ID(ch)))
-      {
+      if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM, GET_MOB_QUEST_CHAR_ID(ch))) {
         // Found a target, stop processing vehicles.
 #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf), "m_p_i_v_g: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
@@ -730,9 +731,16 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
 
   // No vehicular targets? Check players.
   if (!tveh)
-    for (vict = in_room->people; vict; vict = vict->next_in_room)
-      if (vict_is_valid_guard_target(ch, vict))
-        break;
+    for (vict = in_room->people; vict; vict = vict->next_in_room) {
+      if (vict_is_valid_guard_target(ch, vict)) {
+        // For the newest characters, we potentially give them a small window to react.
+        if (GET_TKE(vict) < NEWBIE_KARMA_THRESHOLD && !IS_PRESTIGE_CH(vict) && number(0, 1)) {
+          // This is a no-op action, but they've received a message.
+        } else {
+          break;
+        }
+      }
+    }
 
   // No targets? Bail out.
   if (!tveh && !vict) {
@@ -839,13 +847,11 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
       if (tveh == ch->in_veh)
         continue;
 
-      // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
-      if (tveh->type != VEH_DRONE && !area_has_pc_occupants && !tveh->people && !tveh->rigger)
+      // If nobody's in the room or in the vehicle, you can't attack.
+      if (!area_has_pc_occupants && !tveh->people && !tveh->rigger)
         continue;
 
-      if (vehicle_is_valid_mob_target(tveh, TRUE, ch->mob_specials.quest_id) 
-          && (!GET_MOB_QUEST_CHAR_ID(ch) || !tveh->owner || tveh->owner == GET_MOB_QUEST_CHAR_ID(ch)))
-      {
+      if (vehicle_is_valid_mob_target(tveh, TRUE, GET_MOB_QUEST_CHAR_ID(ch))) {
         // Found a valid target, stop looking.
 #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf), "m_p_i_v_a: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
@@ -859,8 +865,14 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   // No vehicle target found. Check character targets.
   if (!tveh)
     for (vict = in_room->people; vict; vict = vict->next_in_room)
-      if (vict_is_valid_aggro_target(ch, vict))
-        break;
+      if (vict_is_valid_aggro_target(ch, vict)) {
+        // For the newest characters, we potentially give them a small window to react.
+        if (GET_TKE(vict) < NEWBIE_KARMA_THRESHOLD && !IS_PRESTIGE_CH(vict) && number(0, 1)) {
+          send_to_char("You suddenly feel like this is a dangerous place to be.\r\n", vict);
+        } else {
+          break;
+        }
+      }
 
   if (!tveh && !vict) {
 #ifdef MOBACT_DEBUG
@@ -953,14 +965,12 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
         area_has_pc_occupants = !IS_NPC(check_ch);
 
       for (veh = room->vehicles; veh; veh = veh->next_veh) {
-        // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
-        if (veh->type != VEH_DRONE && !area_has_pc_occupants && !veh->people && !veh->rigger)
+        // If nobody's in the room or in the vehicle, you can't attack.
+        if (!area_has_pc_occupants && !veh->people && !veh->rigger)
           continue;
 
         // Aggros don't care about road/garage status, so they act as if always alarmed.
-        if (vehicle_is_valid_mob_target(veh, TRUE, ch->mob_specials.quest_id) 
-            && (!GET_MOB_QUEST_CHAR_ID(ch) || !veh->owner || veh->owner == GET_MOB_QUEST_CHAR_ID(ch))) 
-        {
+        if (vehicle_is_valid_mob_target(veh, TRUE, GET_MOB_QUEST_CHAR_ID(ch))) {
           stop_fighting(ch);
 
           if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
@@ -988,10 +998,15 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
   // If we've gotten here, character is either astral or is not willing to / failed to attack a vehicle.
   for (vict = room->people; vict; vict = vict->next_in_room) {
     if (vict_is_valid_aggro_target(ch, vict)) {
-      stop_fighting(ch);
-      send_mob_aggression_warnings(vict, ch);
-      set_fighting(ch, vict);
-      return TRUE;
+      // For the newest characters, we potentially give them a small window to react.
+      if (GET_TKE(vict) < NEWBIE_KARMA_THRESHOLD && !IS_PRESTIGE_CH(vict) && number(0, 1)) {
+        send_to_char("You suddenly feel like this is a dangerous place to be.\r\n", vict);
+      } else {
+        stop_fighting(ch);
+        send_mob_aggression_warnings(vict, ch);
+        set_fighting(ch, vict);
+        return TRUE;
+      }
     }
   }
 
@@ -1114,57 +1129,97 @@ bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
   return false;
 }
 
+bool mobact_process_single_helper(struct char_data *ch, struct char_data *vict, bool already_did_precondition_checks) {
+  if (!already_did_precondition_checks) {
+    if (ch->desc || is_escortee(ch) || !AWAKE(ch) || !IS_NPC(ch))
+      return FALSE;
+
+    if (!MOB_FLAGS(ch).AreAnySet(MOB_HELPER, MOB_GUARD, ENDBIT))
+      return FALSE;
+  }
+
+  // Ensure we're neither of the fighting parties.
+  if (ch == vict || !FIGHTING(vict) || ch == FIGHTING(vict))
+    return FALSE;
+
+  // We're already fighting someone else.
+  if (FIGHTING(ch))
+    return FALSE;
+
+  // If victim is a visible NPC who is fighting a player, and the player can hurt me, assist the NPC.
+  if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, vict) && can_hurt(FIGHTING(vict), ch, 0, TRUE)) {
+    // The player is in my room, so I can fight them up-close.
+    if (FIGHTING(vict)->in_room == ch->in_room) {
+      act("$n jumps to the aid of $N!", FALSE, ch, 0, vict, TO_ROOM);
+      stop_fighting(ch);
+
+      // Close-ranged response.
+      set_fighting(ch, FIGHTING(vict));
+    }
+
+    // The player is not in my room, so I have to do a ranged response.
+    else {
+      // Long-ranged response.
+      if (ranged_response(FIGHTING(vict), ch)) {
+        // TODO: This doesn't fire a message if the NPC is wielding a ranged weapon.
+        act("$n jumps to $N's aid against $S distant attacker!",
+            FALSE, ch, 0, vict, TO_ROOM);
+      }
+    }
+
+    return TRUE;
+  }
+
+  // If the victim is a player who is fighting a visible NPC, and the player can hurt me, assist the NPC.
+  if (!IS_NPC(vict) && IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, FIGHTING(vict)) && can_hurt(vict, ch, 0, TRUE)) {
+    // A player in my area is attacking an NPC.
+    act("$n jumps to the aid of $N!", FALSE, ch, 0, FIGHTING(vict), TO_ROOM);
+    stop_fighting(ch);
+
+    // Close-ranged response.
+    set_fighting(ch, vict);
+
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
 bool mobact_process_helper(struct char_data *ch) {
   struct char_data *vict = NULL;
 
-  if (is_escortee(ch))
+  if (is_escortee(ch) || !IS_NPC(ch) || ch->desc)
     return FALSE;
 
   /* Helper Mobs - guards are always helpers */
   if (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD)) {
     for (vict = ch->in_room->people; vict; vict = vict->next_in_room) {
-      // Ensure we're neither of the fighting parties. This check should be redundant since no fighting NPC can proceed through mobile_activity().
-      if (ch == vict || !FIGHTING(vict) || ch == FIGHTING(vict))
-        continue;
-
-      // If victim is a visible NPC who is fighting a player, and the player can hurt me, assist the NPC.
-      if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, vict) && can_hurt(FIGHTING(vict), ch, 0, TRUE)) {
-        // The player is in my room, so I can fight them up-close.
-        if (FIGHTING(vict)->in_room == ch->in_room) {
-          act("$n jumps to the aid of $N!", FALSE, ch, 0, vict, TO_ROOM);
-          stop_fighting(ch);
-
-          // Close-ranged response.
-          set_fighting(ch, FIGHTING(vict));
-        }
-
-        // The player is not in my room, so I have to do a ranged response.
-        else {
-          // Long-ranged response.
-          if (ranged_response(FIGHTING(vict), ch)) {
-            // TODO: This doesn't fire a message if the NPC is wielding a ranged weapon.
-            act("$n jumps to $N's aid against $S distant attacker!",
-                FALSE, ch, 0, vict, TO_ROOM);
-          }
-        }
-
+      if (mobact_process_single_helper(ch, vict, TRUE))
         return TRUE;
-      }
-
-      // If the victim is a player who is fighting a visible NPC, and the player can hurt me, assist the NPC.
-      if (!IS_NPC(vict) && IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, FIGHTING(vict)) && can_hurt(vict, ch, 0, TRUE)) {
-        // A player in my area is attacking an NPC.
-        act("$n jumps to the aid of $N!", FALSE, ch, 0, FIGHTING(vict), TO_ROOM);
-        stop_fighting(ch);
-
-        // Close-ranged response.
-        set_fighting(ch, vict);
-
-        return true;
-      }
     }
   }
-  return false;
+  return FALSE;
+}
+
+bool npc_vs_vehicle_blocked_by_quest_protection(idnum_t quest_id, struct veh_data *veh) {
+  if (!quest_id)
+    return FALSE;
+
+  // We attack questor-owned vehicles, no matter who's in them.
+  if (!veh->owner || veh->owner == quest_id)
+    return FALSE;
+
+  // We attack questor-rigged vehicles, no matter who's in them.
+  if (veh->rigger && GET_IDNUM(veh->rigger) == quest_id)
+    return FALSE;
+
+  // We attack questor-occupied vehicles, no matter who owns them.
+  for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
+    if (!IS_NPC(vict) && GET_IDNUM(vict) == quest_id)
+      return FALSE;
+
+  // We don't attack any other vehicles.
+  return TRUE;
 }
 
 bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t quest_id) {
@@ -1186,23 +1241,9 @@ bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t que
   if (!alarmed && (ROOM_FLAGGED(room, ROOM_ROAD) || ROOM_FLAGGED(room, ROOM_GARAGE)))
     return FALSE;
 
-  if (quest_id) {
-    // We attack questor-owned vehicles, no matter who's in them.
-    if (veh->owner == quest_id)
-      return TRUE;
-
-    // We attack questor-rigged vehicles, no matter who's in them.
-    if (veh->rigger && GET_IDNUM(veh->rigger) == quest_id)
-      return TRUE;
-
-    // We attack questor-occupied vehicles, no matter who owns them.
-    for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
-      if (!IS_NPC(vict) && GET_IDNUM(vict) == quest_id)
-        return TRUE;
-
-    // Otherwise, no go.
+  // Check for quest protections.
+  if (npc_vs_vehicle_blocked_by_quest_protection(quest_id, veh))
     return FALSE;
-  }
 
   // We attack player-owned vehicles, no matter who's in them.
   if (veh->owner > 0)
@@ -1210,7 +1251,7 @@ bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t que
 
   // We attack player-occupied vehicles.
   for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
-    if (!IS_NPC(vict))
+    if (vict->desc && vict->desc->idle_ticks < 10)
       return TRUE;
   
   // Otherwise, no good.
@@ -1247,8 +1288,8 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
       area_has_pc_occupants = !IS_NPC(check_ch);
 
     for (veh = room->vehicles; veh; veh = veh->next_veh) {
-      // If nobody's in the room or in the vehicle, you can't attack unless it's a drone.
-      if (veh->type != VEH_DRONE && !area_has_pc_occupants && !veh->people && !veh->rigger)
+      // If nobody's in the room or in the vehicle, you can't attack.
+      if (!area_has_pc_occupants && !veh->people && !veh->rigger)
         continue;
 
       // If the room we're in is neither a road nor a garage, attack any vehicles we see. Never attack vehicles in a garage.
@@ -1280,10 +1321,16 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
   // Check players.
   for (vict = room->people; vict; vict = vict->next_in_room) {
     if (vict_is_valid_guard_target(ch, vict)) {
-      stop_fighting(ch);
-      send_mob_aggression_warnings(vict, ch);
-      set_fighting(ch, vict);
-      return TRUE;
+      // For the newest characters, we potentially give them a small window to react.
+      if (GET_TKE(vict) < NEWBIE_KARMA_THRESHOLD && !IS_PRESTIGE_CH(vict) && number(0, 1)) {
+        // This is a no-op action, but they've received a message.
+        return FALSE;
+      } else {
+        stop_fighting(ch);
+        send_mob_aggression_warnings(vict, ch);
+        set_fighting(ch, vict);
+        return TRUE;
+      }
     }
   }
 
@@ -1339,6 +1386,12 @@ bool mobact_process_self_buff(struct char_data *ch) {
       // Apply armor to self.
       if (!affected_by_spell(ch, SPELL_ARMOR) && !IS_ASTRAL(ch)) {
         cast_manipulation_spell(ch, SPELL_ARMOR, number(min_force, max_force), NULL, ch);
+        return TRUE;
+      }
+
+      // And flame aura.
+      if (GET_MAG(ch) >= 6 && !affected_by_spell(ch, SPELL_FLAME_AURA) && !IS_ASTRAL(ch)) {
+        cast_manipulation_spell(ch, SPELL_FLAME_AURA, number(min_force, max_force), NULL, ch);
         return TRUE;
       }
 
@@ -2114,25 +2167,35 @@ bool mob_is_aggressive_towards_race(struct char_data *ch, int race) {
     case RACE_WAKYAMBI:
     case RACE_NIGHTONE:
     case RACE_DRYAD:
+    case RACE_GHOUL_ELF:
+    case RACE_DRAKE_ELF:
       return MOB_FLAGGED(ch, MOB_AGGR_ELF);
     case RACE_DWARF:
     case RACE_GNOME:
     case RACE_MENEHUNE:
     case RACE_KOBOROKURU:
+    case RACE_GHOUL_DWARF:
+    case RACE_DRAKE_DWARF:
       return MOB_FLAGGED(ch, MOB_AGGR_DWARF);
     case RACE_HUMAN:
+    case RACE_GHOUL_HUMAN:
+    case RACE_DRAKE_HUMAN:
       return MOB_FLAGGED(ch, MOB_AGGR_HUMAN);
     case RACE_ORK:
     case RACE_HOBGOBLIN:
     case RACE_OGRE:
     case RACE_SATYR:
     case RACE_ONI:
+    case RACE_GHOUL_ORK:
+    case RACE_DRAKE_ORK:
       return MOB_FLAGGED(ch, MOB_AGGR_ORK);
     case RACE_TROLL:
     case RACE_CYCLOPS:
     case RACE_FOMORI:
     case RACE_GIANT:
     case RACE_MINOTAUR:
+    case RACE_GHOUL_TROLL:
+    case RACE_DRAKE_TROLL:
       return MOB_FLAGGED(ch, MOB_AGGR_TROLL);
   }
 

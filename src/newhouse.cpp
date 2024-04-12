@@ -23,6 +23,7 @@ namespace bf = boost::filesystem;
 #include "newhouse.hpp"
 #include "moderation.hpp"
 #include "redit.hpp"
+#include "vehicles.hpp"
 
 #include "nlohmann/json.hpp"
 using nlohmann::json;
@@ -52,7 +53,11 @@ ApartmentComplex *get_complex_headed_by_landlord(vnum_t vnum);
 
 std::vector<ApartmentComplex*> global_apartment_complexes = {};
 
+#ifdef USE_PRIVATE_CE_WORLD
+const bf::path global_housing_dir = bf::system_complete("lib") / "housing2";
+#else
 const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
+#endif
 
 // EVENTUALTODOs for pgroups:
 // - Write pgroup log when a lease is broken.
@@ -2216,8 +2221,8 @@ void remove_vehicles_from_apartment(struct room_data *room) {
                     GET_ROOM_NAME(garage), GET_ROOM_VNUM(garage));
     veh_from_room(veh);
     veh_to_room(veh, garage);
+    save_single_vehicle(veh);
   }
-  save_vehicles(FALSE);
 }
 
 // Send warnings about expiring apartments.

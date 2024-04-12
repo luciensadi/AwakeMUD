@@ -422,9 +422,8 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   // Give them a set of default gear.
   {
-    #define NUM_ARCH_GEAR_ENTRIES  5
+    #define NUM_ARCH_GEAR_ENTRIES  4
     vnum_t default_arch_gear[NUM_ARCH_GEAR_ENTRIES] = {
-      OBJ_POCKET_SECRETARY,
       OBJ_NEOPHYTE_DUFFELBAG,
       OBJ_CELL_PHONE,
       OBJ_ELECTRONICS_KIT,

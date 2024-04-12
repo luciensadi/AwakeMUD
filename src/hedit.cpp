@@ -239,15 +239,14 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           free_host(matrix + host_num);
           matrix[host_num] = *d->edit_host;
         } else {
-          int             counter;
-          int             counter2;
-          int             found = 0;
-          for (counter = 0; counter <= top_of_matrix; counter++) {
+          int found = 0;
+
+          for (int counter = 0; counter <= top_of_matrix; counter++) {
             /* check if current virtual is bigger than our virtual */
             if (matrix[counter].vnum > d->edit_number) {
               // now, zoom backwards through the list copying over
               // TODO: Okay, but what if top_of_matrix == top_of_matrix_array - 1? SIGSEGV right? -LS
-              for (counter2 = top_of_matrix + 1; counter2 > counter; counter2--) {
+              for (int counter2 = top_of_matrix + 1; counter2 > counter; counter2--) {
                 matrix[counter2] = matrix[counter2 - 1];
 
                 // Update icon backlinks (they work on rnum indexes)
@@ -275,20 +274,18 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           }
           top_of_matrix++;
           host_num = real_host(d->edit_number);
-        }
 
-        {
-          #define UPDATE_VALUE(value) {(value) = ((value) >= host_num ? (value) + 1 : (value));}
+          // Update zcmds that point to the table.
           for (int zone = 0; zone <= top_of_zone_table; zone++) {
             for (int cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
               switch (ZCMD.command) {
                 case 'H':
-                  UPDATE_VALUE(ZCMD.arg3);
+                  if (ZCMD.arg3 >= host_num)
+                    ZCMD.arg3++;
                   break;
               }
             }
           }
-          #undef UPDATE_VALUE
         }
 
         send_to_char("Writing host to disk.\r\n", d->character);

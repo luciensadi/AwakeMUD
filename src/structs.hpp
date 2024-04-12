@@ -77,7 +77,7 @@ struct text_data
 /* object flags; used in obj_data */
 struct obj_flag_data
 {
-  int value[NUM_VALUES];       /* Values of the item (see list)      */
+  int value[NUM_OBJ_VALUES];       /* Values of the item (see list)      */
   byte type_flag;      /* Type of item                       */
   Bitfield wear_flags;  /* Where you can wear it              */
   Bitfield extra_flags;  /* If it hums, glows, etc.            */
@@ -99,7 +99,7 @@ struct obj_flag_data
     type_flag(0), weight(0), cost(0), timer(0), material(0), barrier(0), condition(0),
     availtn(0), availdays(0), street_index(0), quest_id(0), attempt(0)
   {
-    ZERO_OUT_ARRAY(value, NUM_VALUES);
+    ZERO_OUT_ARRAY(value, NUM_OBJ_VALUES);
     ZERO_OUT_ARRAY(legality, 3);
 
     // No need to do anything with the bitfields-- they auto-clear.
@@ -153,6 +153,8 @@ struct obj_data
   const char *dropped_by_host;
   idnum_t dropped_by_char;
 
+  unsigned long idnum;
+
   // Adding new fields? Add them to dblist's UpdateObjs too to avoid iedit breaking things.
 
 #ifdef USE_DEBUG_CANARIES
@@ -163,7 +165,7 @@ struct obj_data
       restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
       worn_by(NULL), worn_on(0), in_obj(NULL), contains(NULL), next_content(NULL),
       in_host(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL), 
-      dropped_by_host(NULL), dropped_by_char(0)
+      dropped_by_host(NULL), dropped_by_char(0), idnum(0)
   {
     #ifdef USE_DEBUG_CANARIES
       canary = CANARY_VALUE;
@@ -542,13 +544,14 @@ struct char_point_data
   ubyte binding;
   ubyte reach[2];
   int extras[2];
+  sh_int projection_ticks;
 
   /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
   char_point_data() :
     mental(0), max_mental(0), physical(0), max_physical(10), nuyen(0), bank(0), karma(0), rep(0),
     noto(0), tke(0), sig(0), init_dice(0), init_roll(0), grade(0), extrapp(0), extra(0), extra2(0), 
-    magic_loss(0), ess_loss(0), domain(0), resistpain(0), lastdamage(0)
+    magic_loss(0), ess_loss(0), domain(0), resistpain(0), lastdamage(0), projection_ticks(0)
   {
     ZERO_OUT_ARRAY(ballistic, 3);
     ZERO_OUT_ARRAY(impact, 3);
@@ -583,7 +586,7 @@ struct char_special_data_saved
     powerpoints(0), left_handed(0), cur_lang(0), centeringskill(0), masking(0), points(0)
   {
     for (int i = 0; i < MAX_SKILLS + 1; i++) {
-      ZERO_OUT_ARRAY(skills[i], 2);
+      ZERO_OUT_ARRAY(skills[i], 3);
     }
 
     for (int i = 0; i < ADEPT_NUMPOWER + 1; i++) {
@@ -846,7 +849,7 @@ struct veh_data
   struct obj_data *mod[NUM_MODS];
   bool sub;
 
-  long idnum;
+  idnum_t idnum;
   idnum_t owner;
   long spare, spare2;
   bool locked;
@@ -874,6 +877,8 @@ struct veh_data
   struct room_data *flight_target;
   int flight_duration;
 
+  vnum_t desired_in_room_on_load;
+
 #ifdef USE_DEBUG_CANARIES
   int canary;
 #endif
@@ -886,7 +891,8 @@ struct veh_data
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL), defined_position(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
       next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL),
-      leave(NULL), arrive(NULL), next(NULL), flight_target(NULL), flight_duration(0)
+      leave(NULL), arrive(NULL), next(NULL), flight_target(NULL), flight_duration(0),
+      desired_in_room_on_load(0)
   {
     for (int i = 0; i < NUM_MODS; i++)
       mod[i] = NULL;
@@ -967,6 +973,8 @@ struct char_data
   // Some NPCs have pre-cast spells on them. We store those here. PROTO, DON'T DELETE!
   std::vector<sustain_data *> *precast_spells;
 
+  bool is_carrying_vehicle;
+
   /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 #ifdef USE_DEBUG_CANARIES
   int canary;
@@ -978,7 +986,8 @@ struct char_data
       bioware(NULL), next_in_room(NULL), next_in_character_list(NULL), next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL),
       next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
       pgroup_invitations(NULL), congregation_bonus_pool(0), last_loop_rand(0), pc_invis_resistance_test_results(NULL),
-      mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(NULL), precast_spells(NULL)
+      mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(NULL), precast_spells(NULL),
+      is_carrying_vehicle(FALSE)
   {
     ZERO_OUT_ARRAY(equipment, NUM_WEARS);
 
@@ -1067,6 +1076,8 @@ struct descriptor_data
   struct descriptor_data *snooping; /* Who is this char snooping        */
   struct descriptor_data *snoop_by; /* And who is snooping this char    */
   struct descriptor_data *next; /* link to next descriptor              */
+  struct descriptor_data *watching; /* Who is this char snooping        */
+  struct descriptor_data *watcher; /* And who is snooping this char    */
   struct ccreate_t ccr;
   int invalid_command_counter;
   char last_sprayed[MAX_INPUT_LENGTH];
@@ -1115,7 +1126,7 @@ struct descriptor_data
   descriptor_data() :
       showstr_head(NULL), showstr_point(NULL), str(NULL),
       output(NULL), output_canary(CANARY_VALUE), large_outbuf(NULL), input_and_character_canary(CANARY_VALUE),
-      character(NULL), original(NULL), snooping(NULL), snoop_by(NULL), next(NULL),
+      character(NULL), original(NULL), snooping(NULL), snoop_by(NULL), next(NULL), watching(NULL), watcher(NULL),
       invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),

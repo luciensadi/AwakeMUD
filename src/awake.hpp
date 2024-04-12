@@ -20,7 +20,7 @@
 #endif
 
 #define NUM_RESERVED_DESCS      8
-#define NUM_VALUES    12
+#define NUM_OBJ_VALUES    18
 # ifdef DEBUG
 # define _STLP_DEBUG 1
 # else
@@ -298,57 +298,58 @@ enum {
 #define NUM_WEARS      42
 
 /* player flags: used by char_data.char_specials.act */
-#define PLR_KILLER                          0  /* Player is a player-killer              */
-#define PLR_BLACKLIST                       1  /* Player is banned from runs             */
-#define PLR_FROZEN                          2  /* Player is frozen                       */
-#define PLR_DONTSET                         3  /* Don't EVER set (ISNPC bit)             */
-#define PLR_NEWBIE                          4  /* Player is a newbie still               */
-#define PLR_JUST_DIED                       5  /* Player just died                       */
-#define PLR_VISA                            6  /* Player needs to be crash-saved         */
-#define PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA 7  /* Player has had their cybereye essence cost reset */
-#define PLR_SITEOK                          8  /* Player has been site-cleared           */
-#define PLR_NOSHOUT                         9  /* Player not allowed to shout/goss       */
-#define PLR_NOTITLE                         10 /* Player not allowed to set title        */
-#define PLR_DELETED                         11 /* Player deleted - space reusable        */
-#define PLR_NODELETE                        12 /* Player shouldn't be deleted            */
-#define PLR_NOSTAT                          14 /* Player cannot be statted, etc          */
-#define PLR_IN_CHARGEN                      15 /* Player is currently in chargen         */
-#define PLR_INVSTART                        16 /* Player should enter game wizinvis      */
-#define PLR_OLC                             19 /* Player has access to olc commands      */
-#define PLR_MATRIX                          20 /* Player is in the Matrix                */
-#define PLR_PERCEIVE                        21 /* player is astrally perceiving          */
-#define PLR_PROJECT                         22 /* player is astrally projecting          */
-#define PLR_SWITCHED                        23 /* player is switched to a mob            */
-#define PLR_WRITING                         24 /* Player writing (board/mail/olc)        */
-#define PLR_MAILING                         25 /* Player is writing mail                 */
-#define PLR_EDITING                         26 /* Player is zone editing                 */
-#define PLR_SPELL_CREATE                    27 /* Player is creating a spell             */
-#define PLR_CUSTOMIZE                       28 /* Player is customizing persona          */
-#define PLR_NOSNOOP                         29 /* Player is not snoopable                */
-#define PLR_WANTED                          30 /* Player wanted by the law      */
-#define PLR_NOOOC                           31 /* Player is muted from the OOC channel   */
-#define PLR_NOT_YET_AUTHED                  32 /* Player needs Auth */
-#define PLR_EDCON                           33
-#define PLR_REMOTE                          34
-#define PLR_INITIATE                        35
-#define PLR_DRIVEBY                         36
-#define PLR_RPE                             37
-#define PLR_NO_IDLE_OUT                     38 /* Player will not idle out (morts- for test chars) */
-#define PLR_TELLS_MUTED                     39 /* Remove their ability to send tells. */
-#define PLR_NEWBIE_MUTED                    40 /* Remove their ability to talk on the newbie channel. */
-#define PLR_CYBERDOC                        41 /* Player may act as a cyberdoc. */
-#define PLR_PAID_FOR_CLOSECOMBAT            42
-#define PLR_PAID_FOR_KIPUP                  43
-#define PLR_PAID_FOR_ROLLS                  44
-#define PLR_NO_AUTO_SYSP_AWARDS             45 /* Player abuses typo etc for automatic sysp awards. */
-#define PLR_RADIO_MUTED                     46
-#define PLR_SITE_HIDDEN                     47 /* For staff who really don't want people knowing who their alt is. */
-#define PLR_ENABLED_DRUGS                   48
-#define PLR_SENT_DOCWAGON_PLAYER_ALERT      49
-#define PLR_PAID_FOR_VNUMS                  50
-#define PLR_DOCWAGON_READY                  51 /* Flags if a player has rolled successfully for DocWagon. */
-#define PLR_IS_TEMPORARILY_LOADED           52
-#define PLR_MAX                             53
+#define PLR_KILLER                           0  /* Player is a player-killer              */
+#define PLR_BLACKLIST                        1  /* Player is banned from runs             */
+#define PLR_FROZEN                           2  /* Player is frozen                       */
+#define PLR_DONTSET                          3  /* Don't EVER set (ISNPC bit)             */
+#define PLR_NEWBIE                           4  /* Player is a newbie still               */
+#define PLR_JUST_DIED                        5  /* Player just died                       */
+#define PLR_VISA                             6  /* Player needs to be crash-saved         */
+#define PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA  7  /* Player has had their cybereye essence cost reset */
+#define PLR_SITEOK                           8  /* Player has been site-cleared           */
+#define PLR_NOSHOUT                          9  /* Player not allowed to shout/goss       */
+#define PLR_NOTITLE                          10 /* Player not allowed to set title        */
+#define PLR_DELETED                          11 /* Player deleted - space reusable        */
+#define PLR_NODELETE                         12 /* Player shouldn't be deleted            */
+#define PLR_NOSTAT                           14 /* Player cannot be statted, etc          */
+#define PLR_IN_CHARGEN                       15 /* Player is currently in chargen         */
+#define PLR_INVSTART                         16 /* Player should enter game wizinvis      */
+#define PLR_OLC                              19 /* Player has access to olc commands      */
+#define PLR_MATRIX                           20 /* Player is in the Matrix                */
+#define PLR_PERCEIVE                         21 /* player is astrally perceiving          */
+#define PLR_PROJECT                          22 /* player is astrally projecting          */
+#define PLR_SWITCHED                         23 /* player is switched to a mob            */
+#define PLR_WRITING                          24 /* Player writing (board/mail/olc)        */
+#define PLR_MAILING                          25 /* Player is writing mail                 */
+#define PLR_EDITING                          26 /* Player is zone editing                 */
+#define PLR_SPELL_CREATE                     27 /* Player is creating a spell             */
+#define PLR_CUSTOMIZE                        28 /* Player is customizing persona          */
+#define PLR_NOSNOOP                          29 /* Player is not snoopable                */
+#define PLR_WANTED                           30 /* Player wanted by the law      */
+#define PLR_NOOOC                            31 /* Player is muted from the OOC channel   */
+#define PLR_NOT_YET_AUTHED                   32 /* Player needs Auth */
+#define PLR_EDCON                            33
+#define PLR_REMOTE                           34
+#define PLR_INITIATE                         35
+#define PLR_DRIVEBY                          36
+#define PLR_RPE                              37
+#define PLR_NO_IDLE_OUT                      38 /* Player will not idle out (morts- for test chars) */
+#define PLR_TELLS_MUTED                      39 /* Remove their ability to send tells. */
+#define PLR_NEWBIE_MUTED                     40 /* Remove their ability to talk on the newbie channel. */
+#define PLR_CYBERDOC                         41 /* Player may act as a cyberdoc. */
+#define PLR_PAID_FOR_CLOSECOMBAT             42
+#define PLR_PAID_FOR_KIPUP                   43
+#define PLR_PAID_FOR_ROLLS                   44
+#define PLR_NO_AUTO_SYSP_AWARDS              45 /* Player abuses typo etc for automatic sysp awards. */
+#define PLR_RADIO_MUTED                      46
+#define PLR_SITE_HIDDEN                      47 /* For staff who really don't want people knowing who their alt is. */
+#define PLR_ENABLED_DRUGS                    48
+#define PLR_SENT_DOCWAGON_PLAYER_ALERT       49
+#define PLR_PAID_FOR_VNUMS                   50
+#define PLR_DOCWAGON_READY                   51 /* Flags if a player has rolled successfully for DocWagon. */
+#define PLR_IS_TEMPORARILY_LOADED            52
+#define PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL 53
+#define PLR_MAX                              54
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 
@@ -520,63 +521,63 @@ enum {
 /* affect bits: used in char_data.char_specials.saved.affected_by */
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
 
-#define AFF_RUTHENIUM                           1  /* Char is invisible        */
-#define AFF_BANISH                              2
-#define AFF_ULTRASOUND                          3  /* Char can see invis chars    */
-#define AFF_PRONE                               4
-#define AFF_MANIFEST                            5
-#define AFF_HEALED                              6
-#define AFF_GROUP                               7  /* (R) Char is grouped       */
-#define AFF_DAMAGED                             8
-#define AFF_INFRAVISION                         9  /* Char can see in dark        */
-#define AFF_FEAR                                10
-#define AFF_RESISTPAIN                          11
-#define AFF_DETOX                               12
-#define AFF_LOW_LIGHT                           13 /* Char has low light eyes       */
-#define AFF_LASER_SIGHT                         14 /* Char using laser sight       */
-#define AFF_SNEAK                               15 /* Char can move quietly           */
-#define AFF_DO_NOT_USE_OLD_HIDE_AFF             16 /* Char is hidden                */
-#define AFF_VISION_MAG_1                        17 /* Magnification level 1        */
-#define AFF_CHARM                               18 /* Char is charmed              */
-#define AFF_ACTION                              19 /* Player gets -10 on next init roll     */
-#define AFF_VISION_MAG_2                        20 /* Magnification level 2         */
-#define AFF_VISION_MAG_3                        21 /* Magnification level 3         */
-#define AFF_COUNTER_ATT                         22 /* plr just attacked          */
-#define AFF_STABILIZE                           23 /* player won't die due to phys loss */
-#define AFF_RITUALCAST                          24
-#define AFF_IMP_INVIS                           25 /* char is improved invis         */
-#define AFF_ACID                                26
-#define AFF_APPROACH                            27 /* Character is using melee */
-#define AFF_PILOT                               28 /* Char is piloting a vehicle */
-#define AFF_RIG                                 29
-#define AFF_MANNING                             30 /* Char is in a (mini)turret */
-#define AFF_DESIGN                              31
-#define AFF_PROGRAM                             32
-#define AFF_PART_DESIGN                         33
-#define AFF_PART_BUILD                          34
-#define AFF_WITHDRAWAL_FORCE                    35
-#define AFF_WITHDRAWAL                          36
-#define AFF_BONDING                             37
-#define AFF_CONJURE                             38
-#define AFF_LODGE                               39
-#define AFF_CIRCLE                              40
-#define AFF_PACKING                             41
-#define AFF_SPELLINVIS                          42
-#define AFF_SPELLIMPINVIS                       43
-#define AFF_TRACKING                            44
-#define AFF_TRACKED                             45
-#define AFF_BINDING                             46
-#define AFF_SPELLDESIGN                         47
-#define AFF_SURPRISE                            48
-#define AFF_AMMOBUILD                           49
-#define AFF_CLOSECOMBAT                         50
-#define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT  51
-#define AFF_LEVITATE                            52
-#define AFF_FLAME_AURA                          53
-#define AFF_VOICE_MODULATOR                     54
-#define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER    55
-#define AFF_CHEATLOG_MARK                       56
-#define AFF_MAX                                 57
+#define AFF_RUTHENIUM                               1  /* Char is invisible        */
+#define AFF_BANISH                                  2
+#define AFF_ULTRASOUND                              3  /* Char can see invis chars    */
+#define AFF_PRONE                                   4
+#define AFF_MANIFEST                                5
+#define AFF_HEALED                                  6
+#define AFF_GROUP                                   7  /* (R) Char is grouped       */
+#define AFF_DAMAGED                                 8
+#define AFF_INFRAVISION                             9  /* Char can see in dark        */
+#define AFF_FEAR                                    10
+#define AFF_RESISTPAIN                              11
+#define AFF_DETOX                                   12
+#define AFF_LOW_LIGHT                               13 /* Char has low light eyes       */
+#define AFF_LASER_SIGHT                             14 /* Char using laser sight       */
+#define AFF_SNEAK                                   15 /* Char can move quietly           */
+#define AFF_DO_NOT_USE_OLD_HIDE_AFF                 16 /* Char is hidden                */
+#define AFF_VISION_MAG_1                            17 /* Magnification level 1        */
+#define AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY  18 /* Old charm bit, now temporary mark        */
+#define AFF_ACTION                                  19 /* Player gets -10 on next init roll     */
+#define AFF_VISION_MAG_2                            20 /* Magnification level 2         */
+#define AFF_VISION_MAG_3                            21 /* Magnification level 3         */
+#define AFF_COUNTER_ATT                             22 /* plr just attacked          */
+#define AFF_STABILIZE                               23 /* player won't die due to phys loss */
+#define AFF_RITUALCAST                              24
+#define AFF_IMP_INVIS                               25 /* char is improved invis         */
+#define AFF_ACID                                    26
+#define AFF_APPROACH                                27 /* Character is using melee */
+#define AFF_PILOT                                   28 /* Char is piloting a vehicle */
+#define AFF_RIG                                     29
+#define AFF_MANNING                                 30 /* Char is in a (mini)turret */
+#define AFF_DESIGN                                  31
+#define AFF_PROGRAM                                 32
+#define AFF_PART_DESIGN                             33
+#define AFF_PART_BUILD                              34
+#define AFF_WITHDRAWAL_FORCE                        35
+#define AFF_WITHDRAWAL                              36
+#define AFF_BONDING                                 37
+#define AFF_CONJURE                                 38
+#define AFF_LODGE                                   39
+#define AFF_CIRCLE                                  40
+#define AFF_PACKING                                 41
+#define AFF_SPELLINVIS                              42
+#define AFF_SPELLIMPINVIS                           43
+#define AFF_TRACKING                                44
+#define AFF_TRACKED                                 45
+#define AFF_BINDING                                 46
+#define AFF_SPELLDESIGN                             47
+#define AFF_SURPRISE                                48
+#define AFF_AMMOBUILD                               49
+#define AFF_CLOSECOMBAT                             50
+#define AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT      51
+#define AFF_LEVITATE                                52
+#define AFF_FLAME_AURA                              53
+#define AFF_VOICE_MODULATOR                         54
+#define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER        55
+#define AFF_CHEATLOG_MARK                           56
+#define AFF_MAX                                     57
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -681,6 +682,7 @@ enum {
 #define EX_WINDOWED             (1 << 8)   /* Exit has a window.        */
 #define EX_BARRED_WINDOW        (1 << 9)   /* Exit has a barred window. */
 #define EX_CANT_SHOOT_THROUGH   (1 << 10)  /* Exit can't be fired through. */
+#define EX_STRICT_ABOUT_KEY     (1 << 11)  /* You must have the key to walk through. */
 #define NUM_EXFLAGS             12
 
 /* spirit powers */
@@ -1611,40 +1613,42 @@ enum {
 #define CYB_HORNS            53
 #define NUM_CYBER            54
 
-#define BIO_ADRENALPUMP    0
-#define BIO_CATSEYES    1
-#define BIO_DIGESTIVEEXPANSION  2
-#define BIO_ENHANCEDARTIC  3
-#define BIO_EXTENDEDVOLUME  4
-#define BIO_METABOLICARRESTER  5
-#define BIO_MUSCLEAUG    6
-#define BIO_MUSCLETONER    7
-#define BIO_NEPHRITICSCREEN  8
-#define BIO_NICTATINGGLAND  9
-#define BIO_ORTHOSKIN    10
-#define BIO_PATHOGENICDEFENSE  11
-#define BIO_PLATELETFACTORY  12
-#define BIO_SUPRATHYROIDGLAND  13
-#define BIO_SYMBIOTES    14
-#define BIO_SYNTHACARDIUM  15
-#define BIO_TAILOREDPHEROMONES  16
-#define BIO_TOXINEXTRACTOR  17
-#define BIO_TRACHEALFILTER  18
-// Everything past this line is assumed to be cultured by default. If you add more that's not cultured, change the cultured check in db.cpp.
-#define BIO_CEREBRALBOOSTER  19
-#define BIO_DAMAGECOMPENSATOR  20
-#define BIO_PAINEDITOR    21
-#define BIO_REFLEXRECORDER  22
+#define BIO_ADRENALPUMP          0
+#define BIO_CATSEYES             1
+#define BIO_DIGESTIVEEXPANSION   2
+#define BIO_ENHANCEDARTIC        3
+#define BIO_EXTENDEDVOLUME       4
+#define BIO_METABOLICARRESTER    5
+#define BIO_MUSCLEAUG            6
+#define BIO_MUSCLETONER          7
+#define BIO_NEPHRITICSCREEN      8
+#define BIO_NICTATINGGLAND       9
+#define BIO_ORTHOSKIN            10
+#define BIO_PATHOGENICDEFENSE    11
+#define BIO_PLATELETFACTORY      12
+#define BIO_SUPRATHYROIDGLAND    13
+#define BIO_SYMBIOTES            14
+#define BIO_SYNTHACARDIUM        15
+#define BIO_TAILOREDPHEROMONES   16
+#define BIO_TOXINEXTRACTOR       17
+#define BIO_TRACHEALFILTER       18
+// Everything between this comment and the next is assumed to be cultured by default. If you add more that's not cultured, change the cultured check in db.cpp.
+#define BIO_CEREBRALBOOSTER      19
+#define BIO_DAMAGECOMPENSATOR    20
+#define BIO_PAINEDITOR           21
+#define BIO_REFLEXRECORDER       22
 #define BIO_SYNAPTICACCELERATOR  23
-#define BIO_THERMOSENSEORGAN  24
-#define BIO_TRAUMADAMPER  25
-#define BIO_CUSTOM_NERPS  26
-#define BIO_ERYTHROPOITIN  27
-#define BIO_CALCITONIN  28
-#define BIO_PHENOTYPIC_BOD  29
-#define BIO_PHENOTYPIC_QUI  30
-#define BIO_PHENOTYPIC_STR  31
-#define NUM_BIOWARE       32
+#define BIO_THERMOSENSEORGAN     24
+#define BIO_TRAUMADAMPER         25
+#define BIO_CUSTOM_NERPS         26
+#define BIO_ERYTHROPOITIN        27
+#define BIO_CALCITONIN           28
+#define BIO_PHENOTYPIC_BOD       29
+#define BIO_PHENOTYPIC_QUI       30
+#define BIO_PHENOTYPIC_STR       31
+// End of auto-cultured items.
+#define BIO_BIOSCULPTING         32
+#define NUM_BIOWARE              33
 
 #define BIOWARE_STANDARD 0
 #define BIOWARE_CULTURED 1
@@ -2253,6 +2257,7 @@ enum {
 #define CON_ART_CREATE          52
 #define CON_ACCOUNT_PARSE       53
 #define CON_MAX                 53
+#define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
 
@@ -2623,7 +2628,9 @@ enum {
 #define OBJ_CHANGELOG_BOARD                10092
 #define OBJ_INVITATION_TO_SMITHS_PUB       38094
 #define OBJ_ARES_PERSONAL_INVITATION_SLIP  19999
-#define OBJ_SAEDER_PASS                    4194
+#define OBJ_SAEDER_PASS                    4914
+#define OBJ_LARGE_PLASTIBOARD_BOX          29326
+#define OBJ_SNOWFLAKE_KEY                  3454
 
 #define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_TITLE_TO_SCORPION              892
@@ -2802,6 +2809,8 @@ enum {
 #define VEHICLE_ROTODRONE                  37503
 #define VEHICLE_DALMATION                  37504
 #define VEHICLE_SUPERCOMBI_RV              39205
+
+#define HOST_SNOWFLAKE_KEY_LOCATION        3400
 
 
 // Misc defines from spec_procs.cpp
@@ -3099,6 +3108,12 @@ enum {
 #define SKILLARRAY_LEARNED_VALUE   0
 #define SKILLARRAY_MODIFIED_VALUE  1
 #define SKILLARRAY_JACKED_VALUE    2
+
+#define ZONE_RESET_NEVER  0
+#define ZONE_RESET_EMPTY  1
+#define ZONE_RESET_ALWAYS 2
+
+#define FILESTRING_OBJ_IDNUM "ObjIdnum"
 
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's

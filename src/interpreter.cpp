@@ -41,6 +41,7 @@
 #include "newhouse.hpp"
 #include "creative_works.hpp"
 #include "channels.hpp"
+#include "vehicles.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -144,6 +145,7 @@ ACMD_DECLARE(do_brief);
 ACMD_DECLARE(do_cast);
 ACMD_DECLARE(do_charge);
 ACMD_DECLARE(do_changelog);
+ACMD_DECLARE(do_cheatlog);
 ACMD_DECLARE(do_chipload);
 ACMD_DECLARE(do_cleanup);
 ACMD_DECLARE(do_cleanse);
@@ -258,6 +260,7 @@ ACMD_DECLARE(do_leave);
 ACMD_DECLARE(do_lay);
 ACMD_DECLARE(do_link);
 ACMD_DECLARE(do_look);
+ACMD_DECLARE(do_look_while_rigging);
 ACMD_DECLARE(do_logwatch);
 ACMD_DECLARE(do_manifest);
 ACMD_DECLARE(do_map);
@@ -298,6 +301,7 @@ ACMD_DECLARE(do_progress);
 ACMD_DECLARE(do_prone);
 ACMD_DECLARE(do_purge);
 ACMD_DECLARE(do_push);
+ACMD_DECLARE(do_push_while_rigging);
 ACMD_DECLARE(do_put);
 ACMD_DECLARE(do_qedit);
 ACMD_DECLARE(do_qlist);
@@ -558,6 +562,7 @@ struct command_info cmd_info[] =
     { "charge"     , POS_DEAD    , do_charge   , LVL_FIXER, 0, BLOCKS_IDLE_REWARD },
     { "changelog"  , POS_LYING   , do_changelog, 0, 0, ALLOWS_IDLE_REWARD },
     { "cheatmark"  , POS_DEAD    , do_cheatmark, LVL_VICEPRES, 0, BLOCKS_IDLE_REWARD },
+    { "cheatlog"   , POS_DEAD    , do_cheatlog , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "cleanup"    , POS_SITTING , do_cleanup  , 0, 0, BLOCKS_IDLE_REWARD },
     { "cleanse"    , POS_LYING   , do_cleanse  , 0, 0, BLOCKS_IDLE_REWARD },
     { "clear"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, ALLOWS_IDLE_REWARD },
@@ -896,7 +901,7 @@ struct command_info cmd_info[] =
     { "sleep"      , POS_SLEEPING, do_sleep    , 0, 0, BLOCKS_IDLE_REWARD },
     { "slowns"     , POS_DEAD    , do_slowns   , LVL_DEVELOPER, 0, BLOCKS_IDLE_REWARD },
     { "sneak"      , POS_SITTING, do_sneak    , 1, 0, BLOCKS_IDLE_REWARD },
-    { "snoop"      , POS_DEAD    , do_snoop    , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
+    { "snoop"      , POS_DEAD    , do_snoop    , LVL_CONSPIRATOR, 0, BLOCKS_IDLE_REWARD },
     { "socials"    , POS_DEAD    , do_commands , 0, SCMD_SOCIALS, ALLOWS_IDLE_REWARD },
     { "software"   , POS_LYING   , do_software , 0, 0, ALLOWS_IDLE_REWARD },
     { "spool"      , POS_DEAD    , do_spool    , 0, 0, ALLOWS_IDLE_REWARD },
@@ -965,7 +970,7 @@ struct command_info cmd_info[] =
     { "upgrade"    , POS_SITTING , do_upgrade  , 0 , 0, BLOCKS_IDLE_REWARD },
     { "upload"     , POS_RESTING , do_upload_headware, 0, 0, BLOCKS_IDLE_REWARD },
     { "uptime"     , POS_DEAD    , do_date     , 0, SCMD_UPTIME, ALLOWS_IDLE_REWARD },
-    { "use"        , POS_SITTING , do_use      , 1, SCMD_USE, BLOCKS_IDLE_REWARD },
+    { "use"        , POS_LYING   , do_use      , 1, SCMD_USE, BLOCKS_IDLE_REWARD },
     { "usenerps"   , POS_LYING   , do_usenerps , 1, 0, BLOCKS_IDLE_REWARD },
     { "users"      , POS_DEAD    , do_users    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
 
@@ -1292,6 +1297,7 @@ struct command_info mtx_info[] =
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, BLOCKS_IDLE_REWARD },
     { "idea", 0, do_gen_write, 0, SCMD_IDEA, BLOCKS_IDLE_REWARD },
     { "index", 0, do_index, 0, 0, BLOCKS_IDLE_REWARD },
+    { "jobs", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
     { "look", 0, do_matrix_look, 0, 0, BLOCKS_IDLE_REWARD },
     { "list", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },
     { "load", 0, do_load, 0, SCMD_SWAP, BLOCKS_IDLE_REWARD },
@@ -1367,6 +1373,7 @@ struct command_info rig_info[] =
     { "echo", 0, do_new_echo, 0, SCMD_VEMOTE, BLOCKS_IDLE_REWARD },
     { "emote", 0, do_new_echo, 0, SCMD_VEMOTE, BLOCKS_IDLE_REWARD },
     { "enter", 0, do_enter, 0, 0, BLOCKS_IDLE_REWARD },
+    { "examine", 0, do_look_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "exits", 0, do_exits, 0, 0, BLOCKS_IDLE_REWARD },
     { "flyto", 0, do_flyto, 0, 0, BLOCKS_IDLE_REWARD },
     { "get", 0, do_get, 0, 0, BLOCKS_IDLE_REWARD },
@@ -1375,10 +1382,11 @@ struct command_info rig_info[] =
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, BLOCKS_IDLE_REWARD },
     { "i", 0, do_inventory, 0, 0, BLOCKS_IDLE_REWARD },
     { "idea", 0, do_gen_write, 0, SCMD_IDEA, BLOCKS_IDLE_REWARD },
-    { "look", 0, do_look, 0, 0, BLOCKS_IDLE_REWARD },
+    { "look", 0, do_look_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "inventory", 0, do_inventory, 0, 0, BLOCKS_IDLE_REWARD },
     { "index", 0, do_index, 0, 0, BLOCKS_IDLE_REWARD },
     { "items", 0, do_items, 0, 0, BLOCKS_IDLE_REWARD },
+    { "jobs", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
     { "languages", 0, do_language, 0, 0, BLOCKS_IDLE_REWARD },
     { "leave", 0, do_leave, 0 ,0 , BLOCKS_IDLE_REWARD },
     { "lock", 0, do_gen_door , 0, SCMD_LOCK , BLOCKS_IDLE_REWARD },
@@ -1389,9 +1397,12 @@ struct command_info rig_info[] =
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, BLOCKS_IDLE_REWARD },
     { "osay", 0, do_vehicle_osay, 0, 0, BLOCKS_IDLE_REWARD },
     { "penalties", 0, do_penalties, 0, 0, ALLOWS_IDLE_REWARD },
+    { "press", 0, do_push_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "pools", 0, do_pool, 0, 0 , BLOCKS_IDLE_REWARD },
     { "position", 0, do_position, 0, 0, ALLOWS_IDLE_REWARD },
+    { "push", 0, do_push_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "ram", 0, do_ram, 0, 0, BLOCKS_IDLE_REWARD },
+    { "read", 0, do_look_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "recap", 0, do_recap, 0, 0 , BLOCKS_IDLE_REWARD },
     { "rig", POS_SITTING , do_rig, 0, 0 , BLOCKS_IDLE_REWARD },
     { "return", 0, do_return, 0, 0, BLOCKS_IDLE_REWARD },
@@ -1710,6 +1721,14 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     // Restore the idle timer for the idle nuyen bonus.
     if (cmd_info[cmd].should_not_block_idle_reward) {
       ch->char_specials.timer = ch->char_specials.last_timer;
+    }
+    // Otherwise, notify any staff waiting for them that they've returned.
+    else {
+      if (ch->desc && ch->desc->watcher) {
+        char msg_buf[1000];
+        snprintf(msg_buf, sizeof(msg_buf), "%s is active again. You will receive this message with every command until you type ##^WWATCH %s^n again.\r\n", CAP(GET_CHAR_NAME(ch)), GET_CHAR_NAME(ch));
+        SEND_TO_Q(msg_buf, ch->desc->watcher);
+      }
     }
 
     if (GET_POS(ch) < cmd_info[cmd].minimum_position) {
@@ -3046,6 +3065,12 @@ void nanny(struct descriptor_data * d, char *arg)
         d->pProtocol->do_coerce_ansi_capable_colors_to_ansi = TRUE;
       }
 
+      // Load their vehicles.
+      load_vehicles_for_idnum(GET_IDNUM(d->character));
+
+      // Clear any mistaken / bugged bits.
+      PLR_FLAGS(d->character).RemoveBit(PLR_IS_TEMPORARILY_LOADED);
+
       // Rewrote the entire janky-ass load room tree.
       // First: Frozen characters. They go to the frozen start room.
       if (PLR_FLAGGED(d->character, PLR_FROZEN)) {
@@ -3389,6 +3414,8 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     "open", "close", "receive", "buy", "sell",
     "wear", "remove", "draw", "holster",
     "kill", "hit", "shoot", "kick",
+    "progress", "time",
+    "skills", "powers", "spells",
     "\n"
   };
   for (int i = 0; *discard_commands[i] != '\n'; i++)
@@ -3407,6 +3434,10 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
         if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX))
           snprintf(location_buf, sizeof(location_buf), "hitching %s", GET_CHAR_NAME(targ));
     }
+  } else if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+    snprintf(location_buf, sizeof(location_buf), "%ld (rig)", GET_ROOM_VNUM(get_veh_in_room(veh)));
   } else if (ch->in_room)
     snprintf(location_buf, sizeof(location_buf), "%ld", GET_ROOM_VNUM(ch->in_room));
   else if (ch->in_veh)
@@ -3471,6 +3502,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("prbe", "probe");
   COMMAND_ALIAS("chekc", "check");
   COMMAND_ALIAS("opend", "open");
+  COMMAND_ALIAS("opene", "open");
+  COMMAND_ALIAS("opwn", "open");
   COMMAND_ALIAS("leaev", "leave");
   COMMAND_ALIAS("leve", "leave");
   COMMAND_ALIAS("swith", "switch");
@@ -3485,6 +3518,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("lisr", "list");
   COMMAND_ALIAS("lost", "list");
   COMMAND_ALIAS("listr", "list");
+  COMMAND_ALIAS("lit", "list");
   COMMAND_ALIAS("slel", "sell");
   COMMAND_ALIAS("ivn", "inventory");
   COMMAND_ALIAS("inc", "inventory");
@@ -3501,6 +3535,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("trian", "train");
   COMMAND_ALIAS("recpa", "recap");
   COMMAND_ALIAS("scoe", "score");
+  COMMAND_ALIAS("core", "score");
   COMMAND_ALIAS("scire", "score");
   COMMAND_ALIAS("scoer", "score");
   COMMAND_ALIAS("sore", "score");
@@ -3534,6 +3569,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("scpre", "score");
   COMMAND_ALIAS("llook", "look");
   COMMAND_ALIAS("sneka", "sneak");
+  COMMAND_ALIAS("ear", "eat");
 
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
@@ -3565,6 +3601,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("bank", "balance");
   COMMAND_ALIAS("recall", "recap");
   COMMAND_ALIAS("summon", "conjure");
+  COMMAND_ALIAS("smash", "destroy");
+  COMMAND_ALIAS("crypt", "radio");
 
   // Toggles.
   COMMAND_ALIAS("settings", "toggle");
@@ -3663,6 +3701,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("sscan", "scan");
   COMMAND_ALIAS("csan", "scan");
   COMMAND_ALIAS("scam", "scan");
+  COMMAND_ALIAS("scasn", "scan");
 
   COMMAND_ALIAS("sya", "say");
 

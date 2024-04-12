@@ -34,6 +34,8 @@ extern class memoryClass *Mem;
 #define ROOM d->edit_room
 #define DOOR d->edit_room->dir_option[d->edit_number2]
 
+#define MIN_LEVEL_TO_CONFIGURE_AIRFIELDS  LVL_VICEPRES
+
 extern sh_int r_mortal_start_room;
 extern sh_int r_immort_start_room;
 extern sh_int r_frozen_start_room;
@@ -142,6 +144,8 @@ const char *render_door_type_string(struct room_direction_data *door) {
     snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sBarred", bits_printed++ ? ", " : "");
   if (IS_SET(door->exit_info, EX_CANT_SHOOT_THROUGH))
     snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sNoShoot", bits_printed++ ? ", " : "");
+  if (IS_SET(door->exit_info, EX_STRICT_ABOUT_KEY))
+    snprintf(ENDOF(desc_buf), sizeof(desc_buf) - strlen(desc_buf), "%sStrictKey", bits_printed++ ? ", " : "");
 
   if (bits_printed <= 0) {
     return "Regular door";
@@ -212,12 +216,14 @@ void redit_disp_exit_flag_menu(struct descriptor_data * d)
                    "4) Glass Window (%s)\r\n"
                    "5) Barred Window (%s)\r\n"
                    "6) No Shooting Through (%s)\r\n"
+                   "7) Strict Key Requirement (%s)\r\n"
                    "Enter choice:",
                    DOOR->exit_info & EX_PICKPROOF ? "^con^n" : "off",
                    DOOR->exit_info & EX_ASTRALLY_WARDED ? "^con^n" : "off",
                    DOOR->exit_info & EX_WINDOWED ? "^con^n" : "off",
                    DOOR->exit_info & EX_BARRED_WINDOW ? "^con^n" : "off",
-                   DOOR->exit_info & EX_CANT_SHOOT_THROUGH ? "^con^n" : "off"
+                   DOOR->exit_info & EX_CANT_SHOOT_THROUGH ? "^con^n" : "off",
+                   DOOR->exit_info & EX_STRICT_ABOUT_KEY ? "^con^n" : "off"
                  );
 }
 
@@ -785,6 +791,11 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       d->edit_mode = REDIT_STAFF_LOCK_LEVEL;
       break;
     case 'o':
+      if (!access_level(CH, MIN_LEVEL_TO_CONFIGURE_AIRFIELDS)) {
+        send_to_char(CH, "Sorry, you can't set flight codes. Ask a staff member level %d or above to do it.\r\n", MIN_LEVEL_TO_CONFIGURE_AIRFIELDS);
+        redit_disp_menu(d);
+        return;
+      }
       send_to_char("Enter three-letter room flight code, like YVR:", d->character);
       d->edit_mode = REDIT_FLIGHT_CODE;
       break;
@@ -958,6 +969,12 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       ROOM->room_flags.RemoveBit(number-1);
       redit_disp_flag_menu(d);
 #endif
+    } else if ((number == ROOM_HELIPAD + 1 || number == ROOM_RUNWAY + 1)
+               && !ROOM->room_flags.IsSet(number-1)
+               && !access_level(CH, MIN_LEVEL_TO_CONFIGURE_AIRFIELDS))
+    {
+      send_to_char(CH, "Sorry, you can't enable flight flags at your level. Ask a staffer level %d or higher to do it.\r\n", MIN_LEVEL_TO_CONFIGURE_AIRFIELDS);
+      redit_disp_flag_menu(d);
     } else {
       if (number == 0)
         /* back out */
@@ -1267,7 +1284,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 
   case REDIT_EXIT_DOORFLAGS:
     number = atoi(arg);
-    if ((number < 0) || (number > 6)) {
+    if ((number < 0) || (number > 7)) {
       send_to_char("That's not a valid choice!\r\n", d->character);
       redit_disp_exit_flag_menu(d);
     } else {
@@ -1300,6 +1317,9 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         } else if (number == 6) {
           // Toggle noshoot.
           DOOR->exit_info ^= EX_CANT_SHOOT_THROUGH;
+        } else if (number == 7) {
+          // Toggle key requirement.
+          DOOR->exit_info ^= EX_STRICT_ABOUT_KEY;
         } else {
           send_to_char("That's not an option.\r\n", CH);
         }
@@ -1527,6 +1547,10 @@ void write_world_to_disk(vnum_t zone_vnum)
 
             if (IS_SET(ptr->exit_info, EX_CANT_SHOOT_THROUGH)) {
               temp_door_flag += 4;
+            }
+
+            if (IS_SET(ptr->exit_info, EX_STRICT_ABOUT_KEY)) {
+              temp_door_flag += 8;
             }
           }
 

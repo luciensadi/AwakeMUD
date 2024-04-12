@@ -40,6 +40,8 @@ extern struct message_list fight_messages[MAX_MESSAGES];
 
 extern const char *KILLER_FLAG_MESSAGE;
 
+extern bool mobact_process_single_helper(struct char_data *ch, struct char_data *vict, bool already_did_precondition_checks);
+
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 
 int find_sight(struct char_data *ch);
@@ -99,6 +101,7 @@ extern char *get_player_name(vnum_t id);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool check_sentinel_snap_back(struct char_data *ch);
 extern void end_quest(struct char_data *ch, bool succeeded);
+extern bool npc_vs_vehicle_blocked_by_quest_protection(idnum_t quest_id, struct veh_data *veh);
 
 // Corpse saving externs.
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
@@ -316,6 +319,8 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
       end_all_caster_records(victim, TRUE);
     }
 
+    stop_watching(victim);
+
     char cmd_buf[100];
     *cmd_buf = '\0';
 
@@ -365,7 +370,12 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (IS_NPC(ch)) {
     // Prevents you from surprising someone who's attacking you already.
     GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 20);
-    GET_MOBALERT(ch) = MALERT_ALERT;
+    GET_MOBALERT(ch) = MAX(MALERT_ALERT, GET_MOBALERT(ch));
+  }
+
+  if (!AWAKE(ch)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got unconscious/morted char to set_fighting(ch, %s, ...)", GET_CHAR_NAME(vict));
+    return;
   }
 
   if (CH_IN_COMBAT(ch))
@@ -459,6 +469,11 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
 
   if (CH_IN_COMBAT(ch))
     return;
+
+  if (IS_NPNPC(ch) && npc_vs_vehicle_blocked_by_quest_protection(GET_MOB_QUEST_CHAR_ID(ch), vict)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Entered set_fighting(%s, %s) with quest mob vs non-quest veh!", GET_CHAR_NAME(ch), GET_VEH_NAME(vict));
+    return;
+  }
 
   // Check to see if they're already in the combat list.
   bool already_there = FALSE;
@@ -571,6 +586,8 @@ void make_corpse(struct char_data * ch)
 
   corpse->item_number = NOTHING;
   corpse->in_room = NULL;
+  
+  GET_OBJ_CONDITION(corpse) = GET_OBJ_BARRIER(corpse) = 8;
 
   char color_replaced_name[500];
   {
@@ -600,8 +617,8 @@ void make_corpse(struct char_data * ch)
       snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", color_replaced_name);
       strlcpy(buf3, "What once was living is no longer. Poor sap.\r\n", sizeof(buf3));
     }
-  } else
-  {
+    corpse->obj_flags.quest_id = ch->mob_specials.quest_id;
+  } else {
     snprintf(buf, sizeof(buf), "belongings %s", ch->player.physical_text.keywords);
     snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", color_replaced_name);
     snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", color_replaced_name);
@@ -631,7 +648,7 @@ void make_corpse(struct char_data * ch)
     GET_CORPSE_IS_PC(corpse) = 1;
     GET_CORPSE_IDNUM(corpse) = GET_IDNUM(ch);
     /* make 'em bullet proof...(anti-twink measure) */
-    GET_OBJ_BARRIER(corpse) = PC_CORPSE_BARRIER;
+    GET_OBJ_CONDITION(corpse) = GET_OBJ_BARRIER(corpse) = PC_CORPSE_BARRIER;
 
     // Drain their pockets of ammo and put it on the corpse.
     for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
@@ -1648,7 +1665,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
 
       // We do some ghettoized bastardization of the fight code here to make scatterfire a little less OP.
       if (AWAKE(vict) && !AFF_FLAGGED(vict, AFF_SURPRISE) && !AFF_FLAGGED(vict, AFF_PRONE)) {
-        int def_dice = GET_DEFENSE(vict) + GET_POWER(vict, ADEPT_SIDESTEP);
+        int def_dice = GET_DODGE(vict) + GET_POWER(vict, ADEPT_SIDESTEP);
         int def_tn = damage_modifier(vict, buf, sizeof(buf));
         int def_successes = MAX(success_test(def_dice, def_tn), 0);
         power -= def_successes;
@@ -1669,7 +1686,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
         act(buf, FALSE, vict, 0, 0, TO_ROOM);
 
         damage_total = MAX(1, GET_WEAPON_DAMAGE_CODE(weapon));
-        damage_total = convert_damage(stage((2 - success_test(GET_BOD(vict) + GET_BODY(vict), power)), damage_total));
+        damage_total = convert_damage(stage((2 - success_test(GET_BOD(vict) + GET_BODY_POOL(vict), power)), damage_total));
         if (damage(ch, vict, damage_total, TYPE_SCATTERING, PHYSICAL)) {
           // They died!
           return;
@@ -2060,7 +2077,6 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
 
   int rating, half;
   struct char_data *vict = get_obj_possessor(obj);
-  struct obj_data *temp, *next;
 
   // PC corpses are indestructable by normal means
   if ( IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(obj, 4) == 1 ) {
@@ -2086,7 +2102,7 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
   }
 
   if (vict && GET_TKE(vict) <= NEWBIE_KARMA_THRESHOLD) {
-    send_to_char(vict, "^y(%s would have been damaged, but was shielded by your newbie status!)^n\r\n", CAP(GET_OBJ_NAME(obj)));
+    send_to_char(vict, "^y(%s^y would have been damaged, but was shielded by your new-character status!)^n\r\n", CAP(GET_OBJ_NAME(obj)));
     return;
   }
 
@@ -2140,7 +2156,7 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
           default:
             dam = LIGHT;
         }
-        dam = convert_damage(stage(-success_test(GET_BOD(vict) + GET_BODY(vict),
+        dam = convert_damage(stage(-success_test(GET_BOD(vict) + GET_BODY_POOL(vict),
                                                  target), dam));
         damage(vict, vict, dam, TYPE_SCATTERING, TRUE);
         extract_obj(obj);
@@ -2208,15 +2224,17 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
   // if the end result is that the object condition rating is 0 or less
   // it is destroyed -- a good reason to keep objects in good repair
   if (GET_OBJ_CONDITION(obj) <= 0) {
+    GET_OBJ_CONDITION(obj) = 0;
+
     if (ch) {
-      send_to_char(ch, "%s%s%s%s has been destroyed!\r\n",
+      send_to_char(ch, "%s%s%s%s has been damaged to the point of uselessness!\r\n",
                    ch == vict ? "^R" : "",
                    CAP(inside_buf),
                    GET_OBJ_NAME(obj),
                    ch == vict ? "^R" : "^n");
     }
     if (vict && vict != ch) {
-      send_to_char(vict, "^R%s%s^R has been destroyed!^n\r\n",
+      send_to_char(vict, "^R%s%s^R has been damaged to the point of uselessness!^n\r\n",
                    CAP(inside_buf),
                    GET_OBJ_NAME(obj));
     }
@@ -2224,6 +2242,9 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
     if (COULD_BE_ON_QUEST(ch)) {
       check_quest_destroy(ch, obj);
     }
+
+#ifdef DESTROY_OBJ_ON_FULL_DAMAGE
+    struct obj_data *temp, *next;
 
     // Log destruction.
     const char *representation = generate_new_loggable_representation(obj);
@@ -2266,6 +2287,13 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
     }
 
     extract_obj(obj);
+#else
+    if (obj->worn_by && obj->worn_on) {
+      struct char_data *owner = obj->worn_by;
+      unequip_char(owner, obj->worn_on, TRUE);
+      obj_to_char(obj, owner);
+    }
+#endif
   }
 }
 
@@ -2304,6 +2332,8 @@ void docwagon_retrieve(struct char_data *ch) {
     mudlog("SYSERR: Got someone in docwagon_retrieve() who was not DOCWAGON_READY.", ch, LOG_SYSLOG, TRUE);
   }
   PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
+  
+  stop_watching(ch);
 
   if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
     stop_fighting(FIGHTING(ch));
@@ -2558,7 +2588,7 @@ bool check_adrenaline(struct char_data *ch, int mode)
       GET_BIOWARE_PUMP_ADRENALINE(pump) = -number(60, 90);
       if (!IS_JACKED_IN(ch))
         send_to_char("Your body softens and relaxes as the adrenaline wears off.\r\n", ch);
-      dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch),
+      dam = convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY_POOL(ch),
                                  (int)(GET_BIOWARE_PUMP_TEST_TN(pump) / 2)), DEADLY));
       GET_BIOWARE_PUMP_TEST_TN(pump) = 0;
       if (damage(ch, ch, dam, TYPE_BIOWARE, FALSE)) {
@@ -2916,7 +2946,6 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
           && !access_level(ch, LVL_ADMIN))
         || (IS_NPC(ch)
             && ch->master
-            && AFF_FLAGGED(ch, AFF_CHARM)
             && !IS_NPC(ch->master)
             && IS_SENATOR(ch->master)
             && !access_level(ch->master, LVL_ADMIN)))
@@ -3049,9 +3078,9 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       if (!FIGHTING(ch) && !ch->in_veh)
         set_fighting(ch, victim);
 
-      if (!IS_NPC(ch) && IS_NPC(victim) && victim->master && !number(0, 10) &&
-          IS_AFFECTED(victim, AFF_CHARM) && (victim->master->in_room == ch->in_room) &&
-          !(ch->master && ch->master == victim->master)) {
+      if (!IS_NPC(ch) && IS_NPC(victim) && victim->master && !number(0, 10)
+          && (victim->master->in_room == ch->in_room)
+          && !(ch->master && ch->master == victim->master)) {
         if (CH_IN_COMBAT(ch))
           stop_fighting(ch);
         set_fighting(ch, victim->master);
@@ -3156,7 +3185,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   int comp = 0;
   bool trauma = FALSE, pain = FALSE;
 
-  // We want to pull bioware from their real body-- if they're projecting, find their original.
+  // If they're projecting, find their original.
   struct char_data *real_body = victim;
   if (IS_PROJECT(victim) && victim->desc && victim->desc->original)
     real_body = victim->desc->original;
@@ -3263,6 +3292,21 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   }
   if (!awake && GET_PHYSICAL(victim) <= 0)
     GET_LAST_DAMAGETIME(victim) = time(0);
+
+  // Easy case: Projections snap back on stun or mort.
+  if (IS_PROJECT(victim) && (GET_MENTAL(victim) < 100 || GET_PHYSICAL(victim) < 100)) {
+    send_to_char("^RThere's a tearing sensation as your astral body is disrupted!^n\r\n", victim);
+    act("With a scream, $n splinters and shatters into a haze of dispersing energy.", TRUE, victim, 0, 0, TO_ROOM);
+    extract_char(victim);
+    return TRUE;
+  }
+
+  // If this is an NPC, have their friends help.
+  if (ch != victim && victim->in_room && IS_NPC(victim) && !IS_PROJECT(victim)) {
+    for (struct char_data *helper = victim->in_room->people; helper; helper = helper->next_in_room) {
+      mobact_process_single_helper(helper, victim, FALSE);
+    }
+  }
 
   if (update_pos(victim)) {
     // They died. RIP
@@ -3758,9 +3802,7 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
           return SMARTLINK_I_MODIFIER;
         }
       }
-      if (GET_EQ(ch, WEAR_EYES)
-          && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY
-          && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE) {
+      if (get_smartgoggle(ch)) {
         // Smartlink plus goggle found-- half value.
         return 1;
       }
@@ -4017,7 +4059,7 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
   } else if (AFF_FLAGGED(ch, AFF_COUNTER_ATT))
     AFF_FLAGS(ch).RemoveBit(AFF_COUNTER_ATT);
 
-  attack_success -= success_test(GET_BOD(vict) + GET_BODY(vict), power);
+  attack_success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict), power);
 
   dam = convert_damage(stage(attack_success, dam));
 
@@ -5052,12 +5094,12 @@ void explode_explosive_grenade(struct char_data *ch, struct obj_data *weapon, st
                    DAMOBJ_EXPLODE);
 
     if (IS_NPC(victim) && !CH_IN_COMBAT(victim)) {
-      GET_DEFENSE(victim) = GET_COMBAT(victim);
+      GET_DODGE(victim) = GET_COMBAT_POOL(victim);
       GET_OFFENSE(victim) = 0;
     }
     damage_total =
     convert_damage(stage((number(1, 3) - success_test(GET_BOD(victim) +
-                                                      GET_BODY(victim), MAX(2, (power -
+                                                      GET_BODY_POOL(victim), MAX(2, (power -
                                                                                 (int)(GET_IMPACT(victim) / 2))) + modify_target(victim))),
                          level));
     if (!ch)
@@ -5257,20 +5299,20 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, struct room_d
                    (int)(GET_WEAPON_POWER(weapon) / 6), DAMOBJ_EXPLODE);
 
     if (IS_NPC(victim) && !CH_IN_COMBAT(victim)) {
-      GET_DEFENSE(victim) = GET_COMBAT(victim);
+      GET_DODGE(victim) = GET_COMBAT_POOL(victim);
       GET_OFFENSE(victim) = 0;
     }
     if (!mode) {
       if (GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_ROCKET)
-        damage_total = convert_damage(stage((number(3,6) - success_test(GET_BOD(victim) + GET_BODY(victim),
+        damage_total = convert_damage(stage((number(3,6) - success_test(GET_BOD(victim) + GET_BODY_POOL(victim),
                                                                         MAX(2, (GET_WEAPON_POWER(weapon) - (int)(GET_IMPACT(victim) / 2))) +
                                                                         modify_target(victim))), GET_WEAPON_DAMAGE_CODE(weapon)));
       else
-        damage_total = convert_damage(stage((number(2,5) - success_test(GET_BOD(victim) + GET_BODY(victim),
+        damage_total = convert_damage(stage((number(2,5) - success_test(GET_BOD(victim) + GET_BODY_POOL(victim),
                                                                         MAX(2, (GET_WEAPON_POWER(weapon) - (int)(GET_IMPACT(victim) / 2))) +
                                                                         modify_target(victim))), GET_WEAPON_DAMAGE_CODE(weapon)));
     } else
-      damage_total = convert_damage(stage((number(2,5) - success_test(GET_BOD(victim) + GET_BODY(victim),
+      damage_total = convert_damage(stage((number(2,5) - success_test(GET_BOD(victim) + GET_BODY_POOL(victim),
                                                                       MAX(2, (GET_WEAPON_POWER(weapon) - 4 - (int)(GET_IMPACT(victim) / 2))) +
                                                                       modify_target(victim))), GET_WEAPON_DAMAGE_CODE(weapon) - 1));
     damage(ch, victim, damage_total, TYPE_EXPLOSION, PHYSICAL);
@@ -5478,7 +5520,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       act("$n draws $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
       act("You draw $p, aim it at $N and fire!", FALSE, ch, weapon, vict, TO_CHAR);
       if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
-        GET_DEFENSE(vict) = GET_COMBAT(vict);
+        GET_DODGE(vict) = GET_COMBAT_POOL(vict);
         GET_OFFENSE(vict) = 0;
       }
       if (CH_IN_COMBAT(ch))
@@ -5498,7 +5540,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
       if (has_ammo_no_deduct(ch, weapon)) {
         if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
-          GET_DEFENSE(vict) = GET_COMBAT(vict);
+          GET_DODGE(vict) = GET_COMBAT_POOL(vict);
           GET_OFFENSE(vict) = 0;
         }
         if (CH_IN_COMBAT(ch))
@@ -5688,18 +5730,37 @@ void roll_individual_initiative(struct char_data *ch)
 {
   if (AWAKE(ch))
   {
+    // this also applies wound modifiers
     GET_INIT_ROLL(ch) = roll_default_initiative(ch);
-    GET_INIT_ROLL(ch) -= damage_modifier(ch, buf, sizeof(buf));
+
     if (AFF_FLAGGED(ch, AFF_ACTION)) {
       GET_INIT_ROLL(ch) -= 10;
       AFF_FLAGS(ch).RemoveBit(AFF_ACTION);
     }
+
+    // By the book, MBW 3 adds an extra action to their first pass and 4 adds an additional action to their second.
+    // This implementation is mechanically weaker since chars will get the extras at the end of the turn.
+    for (obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_MOVEBYWIRE) {
+        if (GET_CYBERWARE_RATING(cyber) == 3)
+          GET_INIT_ROLL(ch) += 5;
+        else if (GET_CYBERWARE_RATING(cyber) == 4)
+          GET_INIT_ROLL(ch) += 10;
+      }
+    }
+
     if (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch)) {
       if (IS_DUAL(ch))
         GET_INIT_ROLL(ch) += 10;
       else
         GET_INIT_ROLL(ch) += 20;
     }
+
+    // If you rolled zero or negative initiative, let it be known
+    if (GET_INIT_ROLL(ch) <= 0) {
+      act("You struggle to act as your wounds limit your actions! [OOC: You rolled an initiative of zero or less]", FALSE, ch, 0, 0, TO_CHAR);
+    }
+
     // Here we set the Surprise flag to our target if conditions are met. Clearing of flag and alert status are handled
     // in hit_with_multi_weapon_toggle() as soon as a suprised NPC gets damaged in combat. Otherwise we can't
     // properly enter the surprise state due to mobs being continously alert. Because we were handling this in
@@ -5708,8 +5769,9 @@ void roll_individual_initiative(struct char_data *ch)
     // flag until we process all that.
     if (FIGHTING(ch)
         && IS_NPC(FIGHTING(ch))
-        && !MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)
         && GET_MOBALERT(FIGHTING(ch)) == MALERT_CALM
+        && !MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)
+        && !AFF_FLAGGED(FIGHTING(ch), AFF_SURPRISE)
         && success_test(GET_REA(ch), 4) > success_test(GET_REA(FIGHTING(ch)), 4)) {
       GET_INIT_ROLL(FIGHTING(ch)) = 0;
       act("You surprise $n!", TRUE, FIGHTING(ch), 0, ch, TO_VICT);
@@ -5719,8 +5781,10 @@ void roll_individual_initiative(struct char_data *ch)
   char rbuf[MAX_STRING_LENGTH];
   snprintf(rbuf, sizeof(rbuf),"Init: %2d %s", GET_INIT_ROLL(ch), GET_NAME(ch));
   act(rbuf,TRUE,ch,NULL,NULL,TO_ROLLS);
-  if (AFF_FLAGGED(ch, AFF_ACID))
+  if (AFF_FLAGGED(ch, AFF_ACID)) {
     AFF_FLAGS(ch).RemoveBit(AFF_ACID);
+    send_to_char(ch, "The choking clouds of acid dissipate.\r\n");
+  }
 }
 
 void decide_combat_pool(void)
@@ -5736,15 +5800,15 @@ void decide_combat_pool(void)
 
     if (IS_NPC(ch) && !IS_PROJECT(ch) && FIGHTING(ch)) {
       if (GET_INIT_ROLL(ch) == GET_INIT_ROLL(FIGHTING(ch)))
-        GET_OFFENSE(ch) = GET_COMBAT(ch) >> 1;
+        GET_OFFENSE(ch) = GET_COMBAT_POOL(ch) >> 1;
       else if (GET_INIT_ROLL(ch) > GET_INIT_ROLL(FIGHTING(ch)))
-        GET_OFFENSE(ch) = (int)(GET_COMBAT(ch) * .75);
+        GET_OFFENSE(ch) = (int)(GET_COMBAT_POOL(ch) * .75);
       else
-        GET_OFFENSE(ch) = (int)(GET_COMBAT(ch) / 4);
-      GET_DEFENSE(ch) = GET_COMBAT(ch) - GET_OFFENSE(ch);
+        GET_OFFENSE(ch) = (int)(GET_COMBAT_POOL(ch) / 4);
+      GET_DODGE(ch) = GET_COMBAT_POOL(ch) - GET_OFFENSE(ch);
       if (GET_IMPACT(ch) > 6 || GET_BALLISTIC(ch) > 6) {
-        GET_BODY(ch) = (int)(GET_DEFENSE(ch) * .75);
-        GET_DEFENSE(ch) -= GET_BODY(ch);
+        GET_BODY_POOL(ch) = (int)(GET_DODGE(ch) * .75);
+        GET_DODGE(ch) -= GET_BODY_POOL(ch);
       }
     }
   }
@@ -6014,9 +6078,10 @@ void perform_violence(void)
         }
         stop_fighting(spirit);
         stop_fighting(mage);
-        update_pos(mage);
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
         AFF_FLAGS(spirit).RemoveBit(AFF_BANISH);
+        if (update_pos(mage))
+          continue;
       }
       continue;
     }
@@ -6053,6 +6118,13 @@ void perform_violence(void)
       }
     }
 
+    if (!CH_IN_COMBAT(ch)) {
+      mudlog("SYSERR: Character is in the combat list, but isn't fighting anything! (Second block)", ch, LOG_SYSLOG, TRUE);
+      send_to_char("Your mind goes fuzzy for a moment, and you shake your head, then stand down.\r\n", ch);
+      stop_fighting(ch);
+      continue;
+    }
+
     // Passive mode.
     if (PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT)) {
       send_to_char("(You have enabled passive mode and will not attack. ^WTOGGLE PASSIVE^n to disable it.)\r\n", ch);
@@ -6060,7 +6132,7 @@ void perform_violence(void)
     }
 
     // Process melee charging.
-    if (IS_AFFECTED(ch, AFF_APPROACH)) {
+    if (FIGHTING(ch) && IS_AFFECTED(ch, AFF_APPROACH)) {
       /* Complete failure cases, with continue to prevent evaluation:
          - Not in same room (terminate charging)
       */
@@ -6204,20 +6276,6 @@ void perform_violence(void)
         if (defender_footanchor)
           defender_attribute /= 2;
 
-        // Penalty from too-tall.
-#ifdef USE_SLOUCH_RULES
-        if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-          if (GET_HEIGHT(ch) > ch->in_room->z*100) {
-            if (GET_HEIGHT(ch) > ch->in_room->z * 200) {
-              send_to_char(ch, "You're bent over double in here, there's no way you'll close the distance like this!\r\n");
-              act("$n looks like $e would really like to hit $N, but $e can't get close enough.", FALSE, ch, 0, FIGHTING(ch), TO_ROOM);
-              continue;
-            }
-            else quickness /= 2;
-          }
-        }
-#endif
-
         // Add spirit movement powers.
         target -= affected_by_power(ch, MOVEMENTUP) - affected_by_power(ch, MOVEMENTDOWN);
         target += affected_by_power(FIGHTING(ch), MOVEMENTUP) - affected_by_power(FIGHTING(ch), MOVEMENTDOWN);
@@ -6225,10 +6283,10 @@ void perform_violence(void)
         // Set the target from the defender's attribute.
         target += defender_attribute;
         // Lock the target to a range. Nobody enjoys rolling TN 14 to close with high-level invis mages.
-        target = MIN(MINIMUM_TN_FOR_CLOSING_CHECK, MAX(target, MAXIMUM_TN_FOR_CLOSING_CHECK));
+        target = MAX(MINIMUM_TN_FOR_CLOSING_CHECK, MIN(target, MAXIMUM_TN_FOR_CLOSING_CHECK));
 
         // Strike.
-        if (quickness > 0 && success_test(quickness, target) > 1) {
+        if (!AWAKE(FIGHTING(ch)) || (quickness > 0 && success_test(quickness, target) > 0)) {
           send_to_char(ch, "You close the distance and strike!\r\n");
           act("$n closes the distance and strikes.", TRUE, ch, 0, 0, TO_ROOM);
           AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
@@ -6246,7 +6304,7 @@ void perform_violence(void)
     }
 
     // Manning weaponry.
-    if (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch)) {
+    if ((FIGHTING(ch) || FIGHTING_VEH(ch)) && (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch))) {
       struct veh_data *veh = NULL;
       RIG_VEH(ch, veh);
 
@@ -6299,7 +6357,7 @@ void perform_violence(void)
           continue;
       }
     } else {
-      mudlog("SYSERR: Character is in the combat list, but isn't fighting anything! (Second block)", ch, LOG_SYSLOG, TRUE);
+      mudlog("SYSERR: Character is in the combat list, but isn't fighting anything! (Third block)", ch, LOG_SYSLOG, TRUE);
       send_to_char("Your mind goes fuzzy for a moment, and you shake your head, then stand down.\r\n", ch);
       stop_fighting(ch);
       continue;
@@ -6472,8 +6530,17 @@ void chkdmg(struct veh_data * veh)
 
     // Write purgelogs for player vehicle kills.
     if (veh->owner) {
-      mudlog_vfprintf(NULL, LOG_WRECKLOG, "Writing player vehicle contents to purgelog (%s)-- destroyed via standard damage.", GET_VEH_NAME(veh));
-      mudlog_vfprintf(NULL, LOG_PURGELOG, "Writing player vehicle contents to purgelog (%s)-- destroyed via standard damage.", GET_VEH_NAME(veh));
+      char *player_name = get_player_name(veh->owner);
+      snprintf(buf, sizeof(buf), "Writing the contents of %s (%ld)'s %s to purgelog-- destroyed via standard damage at %s (%ld).",
+               player_name,
+               veh->owner,
+               get_string_after_color_code_removal(GET_VEH_NAME(veh), NULL),
+               GET_ROOM_NAME(get_veh_in_room(veh)),
+               GET_ROOM_VNUM(get_veh_in_room(veh)));
+      delete [] player_name;
+
+      mudlog_vfprintf(NULL, LOG_WRECKLOG, buf);
+      mudlog_vfprintf(NULL, LOG_PURGELOG, buf);
       purgelog(veh);
     }
 
@@ -6617,7 +6684,7 @@ bool vram(struct veh_data * veh, struct char_data * vict, struct veh_data * tveh
       veh_dam = LIGHT;
     }
 
-    vict_resist = 0 - success_test(GET_BOD(vict) + GET_BODY(vict), power);
+    vict_resist = 0 - success_test(GET_BOD(vict) + GET_BODY_POOL(vict), power);
     int staged_damage = stage(vict_resist, damage_total);
     damage_total = convert_damage(staged_damage);
 
@@ -6756,6 +6823,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
 
   int attack_success = 0, attack_resist=0, skill_total = 1;
   int recoil=0, burst=0, recoil_comp=0, newskill, modtarget = 0;
+  bool using_av = FALSE;
 
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
     stop_fighting(ch);
@@ -6828,9 +6896,13 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
       }
     }
 
-    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded)))
+    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded))) {
       power = GET_WEAPON_POWER(wielded) + burst;
-    else
+      // AV does not halve, and we model this by doubling it.
+      if (wielded->contains && GET_MAGAZINE_AMMO_TYPE(wielded->contains) == AMMO_AV) {
+        using_av = TRUE;
+      }
+    } else
       power = GET_STR(ch) + GET_WEAPON_STR_BONUS(wielded);
     damage_total = GET_WEAPON_DAMAGE_CODE(wielded);
   } else
@@ -6858,9 +6930,17 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
       damage_total = MODERATE;
   }
 
-  power = (int)(power / 2);
-  damage_total--;
-  if (power <= veh->armor || !damage_total)
+  int armor_target;
+  if (!using_av) {
+    power = (int)(power / 2);
+    damage_total--;
+    armor_target = veh->armor;
+  } else {
+    power -= (int) (veh->armor / 2);
+    armor_target = (int) (veh->armor / 2);
+  }
+
+  if (power <= armor_target || !damage_total)
   {
     snprintf(buf, sizeof(buf), "$n's %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
     snprintf(buf2, sizeof(buf2), "Your attack ricochets off of %s.", GET_VEH_NAME(veh));
@@ -6869,8 +6949,11 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     snprintf(buf, sizeof(buf), "A %s ricochets off of your ride.\r\n", ammo_type);
     send_to_veh(buf, veh, 0, FALSE);
     return FALSE;
-  } else
-    power -= veh->armor;
+  } else {
+    // For AV rounds, this was subtracted before the armor check.
+    if (!using_av)
+      power -= veh->armor;
+  }
 
   if (wielded)
     recoil_comp = check_recoil(ch, wielded);

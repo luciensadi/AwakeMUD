@@ -73,6 +73,7 @@ extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE);
 extern void display_gamba_ledger_leaderboard(struct char_data *ch);
+const char *convert_string_to_html(const char *str);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -100,6 +101,7 @@ extern SPECIAL(marksmanship_third);
 extern SPECIAL(marksmanship_fourth);
 extern SPECIAL(marksmanship_master);
 extern SPECIAL(pocsec_unlocker);
+extern SPECIAL(soulbound_unbinder);
 extern SPECIAL(bank);
 extern WSPEC(monowhip);
 
@@ -109,6 +111,8 @@ extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attackt
 extern const char *get_level_wholist_color(int level);
 extern bool cyber_is_retractable(struct obj_data *cyber);
 extern bool precipitation_is_snow(int jurisdiction);
+
+bool ch_can_see_vict_in_where(struct char_data *ch, struct char_data *vict);
 
 #ifdef USE_PRIVATE_CE_WORLD
   extern void display_secret_info_about_object(struct char_data *ch, struct obj_data *obj);
@@ -361,10 +365,16 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       }
     } else if (blocked_by_soulbinding(ch, object, FALSE)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object));
+    } else if (get_soulbound_idnum(object) == GET_IDNUM(ch)) {
+      strlcat(buf, " ^L(soulbound)^n", sizeof(buf));
     }
 
-    if (GET_OBJ_VNUM(object) == OBJ_SHOPCONTAINER && object->contains && blocked_by_soulbinding(ch, object->contains, FALSE)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object->contains));
+    if (GET_OBJ_VNUM(object) == OBJ_SHOPCONTAINER && object->contains) {
+      if (blocked_by_soulbinding(ch, object->contains, FALSE)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object->contains));
+      } else if (get_soulbound_idnum(object->contains) == GET_IDNUM(ch)) {
+        strlcat(buf, " ^L(soulbound)^n", sizeof(buf));
+      }
     }
   }
   else if (GET_OBJ_NAME(object) && ((mode == 3) || (mode == 4) || (mode == SHOW_MODE_OWN_EQUIPMENT) || (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT))) {
@@ -381,7 +391,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcpy(buf, "You see nothing special..", sizeof(buf));
   }
   else if (mode == SHOW_MODE_CONTAINED_OBJ) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\t\t\t\t%s", GET_OBJ_NAME(object));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\t\t\t\t%s^n", GET_OBJ_NAME(object));
   }
 
   if (mode == SHOW_MODE_SOMEONE_ELSES_EQUIPMENT) {
@@ -389,9 +399,6 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       if (object->contains) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Holding %s^n)", GET_OBJ_NAME(object->contains));
       }
-    }
-    if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100) {
-      strlcat(buf, " (damaged)", sizeof(buf));
     }
   }
   else if (mode == SHOW_MODE_OWN_EQUIPMENT || mode == SHOW_MODE_CONTAINED_OBJ) {
@@ -421,15 +428,17 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         strlcat(buf, " ^m(Activated Focus)^n", sizeof(buf));
     }
 
-    if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
-      strlcat(buf, " ^r(damaged)^n", sizeof(buf));
-
     if (IS_OBJ_STAT(object, ITEM_EXTRA_KEPT)) {
       strlcat(buf, " ^c(kept)^n", sizeof(buf));
     }
   }
 
   if (mode != 3) {
+    if (OBJ_IS_FULLY_DAMAGED(object)) {
+      strlcat(buf, " ^R(almost destroyed)^n", sizeof(buf));
+    } else if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
+      strlcat(buf, " ^r(damaged)^n", sizeof(buf));
+
     if (IS_OBJ_STAT(object, ITEM_EXTRA_INVISIBLE)) {
       strlcat(buf, " ^B(invisible)", sizeof(buf));
     }
@@ -447,7 +456,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " ^c(humming)", sizeof(buf));
     }
 
-    if (object->obj_flags.quest_id) {
+    if (object->obj_flags.quest_id && !IS_OBJ_STAT(object, ITEM_EXTRA_CORPSE)) {
       if (object->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
         strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
       else if (!ch_is_blocked_by_quest_protections(ch, object, FALSE))
@@ -1013,7 +1022,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
             strlcat(buf, "^Wbrilliant^n.", sizeof(buf));
           else if (GET_GRADE(i) > 12)
             strlcat(buf, "^Wbright^n.", sizeof(buf));
-          if (GET_GRADE(i) > 8)
+          else if (GET_GRADE(i) > 8)
             strlcat(buf, "^Wa strong glow^n.", sizeof(buf));
           else if (GET_GRADE(i) > 4)
             strlcat(buf, "^Wglowing^n.", sizeof(buf));
@@ -1441,6 +1450,13 @@ void list_one_char(struct char_data * i, struct char_data * ch)
                    SHOULD_SEE_TIPS(ch) ? " Use the ^YUNLOCK^y command to begin." : "");
           already_printed = TRUE;
         }
+        if (MOB_HAS_SPEC(i, soulbound_unbinder)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s can unbond soulbound keys.%s^n\r\n",
+                   HSSH(i),
+                   already_printed ? " also" : "",
+                   SHOULD_SEE_TIPS(ch) ? " Use the ^YUNBOND^y command to begin." : "");
+          already_printed = TRUE;
+        }
         if (MOB_HAS_SPEC(i, landlord_spec)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have some rooms for lease.%s^n\r\n",
                    HSSH(i),
@@ -1594,7 +1610,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         strlcat(buf, "YOU!", sizeof(buf));
       else {
         if (i->in_room == FIGHTING(i)->in_room)
-          strlcat(buf, PERS(FIGHTING(i), ch), sizeof(buf));
+          strlcat(buf, decapitalize_a_an(PERS(FIGHTING(i), ch)), sizeof(buf));
         else
           strlcat(buf, "someone in the distance", sizeof(buf));
         strlcat(buf, "!", sizeof(buf));
@@ -1703,7 +1719,7 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   for (i = list; i; i = i->next_in_room) {
     // Skip them if they're invisible to us, or if they're us and we're not rigging.
     // TODO: Does this cause double printing if you're inside a nested vehicle and looking out at someone in the containing veh?
-    if (!CAN_SEE(ch, i) || !(ch != i || ch->char_specials.rigging) || (ch->in_veh && i->in_veh == ch->in_veh)) {
+    if (!CAN_SEE(ch, i) || (!ch->char_specials.rigging && ch == i) || (ch->in_veh && i->in_veh == ch->in_veh)) {
       continue;
     }
 
@@ -2966,6 +2982,9 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
             case AMMO_APDS:
               strlcat(buf, "pierces through enemy ballistic armor, halving its value.", sizeof(buf));
               break;
+            case AMMO_AV:
+              strlcat(buf, "pierces through enemy ballistic and vehicle armor, halving its value.", sizeof(buf));
+              break;
             case AMMO_EX:
               strlcat(buf, "increases power by two.", sizeof(buf));
               break;
@@ -3032,10 +3051,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
                   // No cyberware?
                   if (cyberware_rating == 0) {
                     // Do they have goggles?
-                    if (GET_EQ(ch, WEAR_EYES)
-                        && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY
-                        && GET_ACCESSORY_TYPE(GET_EQ(ch, WEAR_EYES)) == ACCESS_SMARTGOGGLE)
-                    {
+                    if (get_smartgoggle(ch)) {
                       // Goggles limit you to 1/2 of the SL-1 rating.
                       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nThe Smartlink%s attached to the %s ^yis limited by your use of goggles^n and only provides ^c-1^n to attack difficulty (aka TN; lower is better).",
                                GET_ACCESSORY_RATING(accessory) == 2 ? "-II" : "",
@@ -3573,9 +3589,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n focus of force ^c%d^n.",
                foci_type[GET_FOCUS_TYPE(j)],
                GET_FOCUS_FORCE(j));
-      if (blocked_by_soulbinding(ch, j, FALSE)) {
-        strlcat(buf, "It is ^rsoulbound to someone else^n and cannot be used.", sizeof(buf));
-      }
       break;
     case ITEM_SPELL_FORMULA:
       if (SPELL_HAS_SUBTYPE(GET_SPELLFORMULA_SPELL(j)))
@@ -3841,9 +3854,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       }
       if (GET_OBJ_VNUM(j) == OBJ_SHOPCONTAINER) {
         strlcat(buf, "\r\nIt's a packaged-up bit of cyberware or bioware. See ##^WHELP CYBERDOC^n for what you can do with it.", sizeof(buf));
-        if (j->contains && blocked_by_soulbinding(ch, j->contains, FALSE)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is soulbound to %s and cannot be used by anyone else.\r\n", get_soulbound_name(j->contains));
-        }
         break;
       }
       if (GET_OBJ_VNUM(j) == OBJ_ANTI_DRUG_CHEMS) {
@@ -3907,6 +3917,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
     } else {
       strlcat(buf, " You can't use it-- it belongs to someone else.", sizeof(buf));
     }
+  }
+
+  if (blocked_by_soulbinding(ch, j, FALSE)) {
+    strlcat(buf, "\r\nIt is ^rsoulbound to someone else^n and cannot be used.", sizeof(buf));
+  } else if (get_soulbound_idnum(j) == GET_IDNUM(ch)) {
+    strlcat(buf, "\r\nIt is soulbound to you and cannot be used by anyone else.", sizeof(buf));
   }
 
   if (GET_OBJ_AFFECT(j).IsSet(AFF_LASER_SIGHT) && has_smartlink) {
@@ -4255,6 +4271,8 @@ ACMD(do_examine)
       }
       if (blocked_by_soulbinding(ch, tmp_object, FALSE)) {
         send_to_char("It is ^rsoulbound to someone else^n and cannot be used.\r\n", ch);
+      } else if (get_soulbound_idnum(tmp_object) == GET_IDNUM(ch)) {
+        send_to_char("It is ^csoulbound to you^n and cannot be used by anyone else.\r\n", ch);
       }
     }
 
@@ -4306,21 +4324,21 @@ ACMD(do_pool)
 
   if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
     snprintf(pools, sizeof(pools), "  Ranged Dodge: %d%s\r\n  Damage Soak: %d\r\n  Offense: %d\r\n  Total Combat Dice: %d\r\n",
-            GET_DEFENSE(ch), buf, GET_BODY(ch), GET_OFFENSE(ch), GET_COMBAT(ch));
+            GET_DODGE(ch), buf, GET_BODY_POOL(ch), GET_OFFENSE(ch), GET_COMBAT_POOL(ch));
   } else {
     snprintf(pools, sizeof(pools), "  Combat: %d     (Ranged Dodge: %d%s      Damage Soak: %d     Offense: %d)\r\n",
-            GET_COMBAT(ch), GET_DEFENSE(ch), buf, GET_BODY(ch), GET_OFFENSE(ch));
+            GET_COMBAT_POOL(ch), GET_DODGE(ch), buf, GET_BODY_POOL(ch), GET_OFFENSE(ch));
   }
   if (GET_ASTRAL(ch) > 0)
     snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Astral: %d\r\n", GET_ASTRAL(ch));
   if (GET_HACKING(ch) > 0)
     snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Hacking: %d\r\n", GET_HACKING(ch));
-  if (GET_MAGIC(ch) > 0) {
+  if (GET_MAGIC_POOL(ch) > 0) {
     bool over_spellpool_limit = GET_CASTING(ch) > GET_SKILL(ch, SKILL_SORCERY);
 
     if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
       snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Spell: %d\r\n  Casting: %d%s\r\n  Drain: %d\r\n  Defense: %d\r\n",
-               GET_MAGIC(ch),
+               GET_MAGIC_POOL(ch),
                GET_CASTING(ch),
                over_spellpool_limit ? " (warning: exceeds sorcery skill!)" : "",
                GET_DRAIN(ch),
@@ -4329,7 +4347,7 @@ ACMD(do_pool)
         snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Reflecting: %d\r\n", GET_REFLECT(ch));
     } else {
       snprintf(ENDOF(pools), sizeof(pools) - strlen(pools), "  Spell: %d      (Casting: %d %s   Drain: %d    Defense: %d",
-               GET_MAGIC(ch),
+               GET_MAGIC_POOL(ch),
                GET_CASTING(ch),
                over_spellpool_limit ? " (warning: exceeds sorcery skill!)" : "",
                GET_DRAIN(ch),
@@ -5747,7 +5765,7 @@ ACMD(do_who)
         continue;
       if (ooc && (PRF_FLAGGED(tch, PRF_NOOOC) || PLR_FLAGGED(tch, PLR_NOT_YET_AUTHED)))
         continue;
-      if (newbie && !PLR_FLAGGED(tch, PLR_NEWBIE))
+      if (newbie && (!PLR_FLAGGED(tch, PLR_NEWBIE) || IS_PRESTIGE_CH(tch)))
         continue;
       if (drugs && !PLR_FLAGGED(tch, PLR_ENABLED_DRUGS))
         continue;
@@ -5759,11 +5777,7 @@ ACMD(do_who)
         continue;
       num_can_see++;
 
-      if (tch->in_room
-          && !IS_SENATOR(tch)
-          && char_is_in_social_room(tch)
-          && CAN_SEE(ch, tch)
-          && !IS_IGNORING(tch, is_blocking_where_visibility_for, ch)) {
+      if (ch_can_see_vict_in_where(ch, tch)) {
         num_in_socialization_rooms++;
       }
 
@@ -5900,145 +5914,16 @@ ACMD(do_who)
 
   if (subcmd) {
     FILE *fl;
-    static char buffer[MAX_STRING_LENGTH*4];
-    char *temp = &buffer[0];
-    const char *color;
-    char *str = str_dup(buf2);
-    char *ptr = str;
-    while(*str) {
-      if (*str == '^') {
-        switch (*++str) {
-          case 'l':
-            color = "<span style=\"color:#000000\">";
-            break; // black
-          case 'r':
-          case 't':
-            color = "<span style=\"color:#990000\">";
-            break; // red / tan
-          case 'g':
-          case 'j':
-          case 'e':
-            color = "<span style=\"color:#336633\">";
-            break; // green / jade / lime
-          case 'y':
-          case 'o':
-            color = "<span style=\"color:#CC9933\">";
-            break; // yellow / orange
-          case 'b':
-          case 'a':
-            color = "<span style=\"color:#3333CC\">";
-            break; // blue / azure
-          case 'm':
-          case 'p':
-          case 'v':
-            color = "<span style=\"color:#663366\">";
-            break; // magenta / pink / violet
-          case 'n':
-            color = "<span style=\"color:#CCCCCC\">";
-            break; // normal
-          case 'c':
-            color = "<span style=\"color:#009999\">";
-            break; // cyan
-          case 'w':
-            color = "<span style=\"color:#CCCCCC\">";
-            break; // white
-          case 'L':
-            color = "<span style=\"color:#666666\">";
-            break; // bold black
-          case 'R':
-          case 'T':
-            color = "<span style=\"color:#FF0000\">";
-            break; // bold red
-          case 'G':
-          case 'J':
-          case 'E':
-            color = "<span style=\"color:#00FF00\">";
-            break; // bold green
-          case 'Y':
-          case 'O':
-            color = "<span style=\"color:#FFFF00\">";
-            break; // bold yellow
-          case 'B':
-          case 'A':
-            color = "<span style=\"color:#0000FF\">";
-            break; // bold blue
-          case 'M':
-          case 'P':
-          case 'V':
-            color = "<span style=\"color:#FF00FF\">";
-            break; // bold magenta
-          case 'N':
-            color = "<span style=\"color:#CCCCCC\">";
-            break;
-          case 'C':
-            color = "<span style=\"color:#00FFFF\">";
-            break; // bold cyan
-          case 'W':
-            color = "<span style=\"color:#FFFFFF\">";
-            break; // bold white
-          case '^':
-            color = "^";
-            break;
-          default:
-            color = NULL;
-            break;
-        }
-        if (color) {
-          while (*color)
-            *temp++ = *color++;
-          ++str;
-        } else {
-          *temp++ = '^';
-          *temp++ = *str++;
-        }
-      }
-      else if (*str == '<') {
-        str++;
-        *temp++ = '&';
-        *temp++ = 'l';
-        *temp++ = 't';
-        *temp++ = ';';
-      }
-      else if (*str == '>') {
-        str++;
-        *temp++ = '&';
-        *temp++ = 'g';
-        *temp++ = 't';
-        *temp++ = ';';
-      }
-      else if (*str == '(') {
-        str++;
-        *temp++ = '&';
-        *temp++ = 'l';
-        *temp++ = 'p';
-        *temp++ = 'a';
-        *temp++ = 'r';
-        *temp++ = ';';
-      }
-      else if (*str == ')') {
-        str++;
-        *temp++ = '&';
-        *temp++ = 'r';
-        *temp++ = 'p';
-        *temp++ = 'a';
-        *temp++ = 'r';
-        *temp++ = ';';
-      }
-      else
-        *temp++ = *str++;
-    }
-    *temp = '\0';
-    DELETE_AND_NULL_ARRAY(ptr);
     if (!(fl = fopen("text/wholist", "w"))) {
       mudlog("SYSERR: Cannot open wholist for write", NULL, LOG_SYSLOG, FALSE);
       return;
     }
-    fprintf(fl, "<HTML><BODY bgcolor=#11191C><PRE>%s</PRE></BODY></HTML>\r\n", &buffer[0]);
+    fprintf(fl, "<HTML><BODY bgcolor=#11191C><PRE>%s</PRE></BODY></HTML>\r\n", convert_string_to_html(buf2));
     fclose(fl);
   } else send_to_char(buf2, ch);
 }
 
-#define USERS_FORMAT "format: users [-n name] [-h host] [-o] [-p]\r\n"
+#define USERS_FORMAT "format: users [-n name] [-h host] [-o] [-p] [-g]\r\n"
 
 ACMD(do_users)
 {
@@ -6050,9 +5935,11 @@ ACMD(do_users)
   struct char_data *tch;
   struct descriptor_data *d;
   int num_can_see = 0;
-  int outlaws = 0, playing = 0, deadweight = 0;
+  int outlaws = 0, playing = 0, deadweight = 0, globbed = 0;
 
   host_search[0] = name_search[0] = '\0';
+
+  std::unordered_map< std::string, std::vector<std::string> > host_map = {};
 
   strlcpy(buf, argument, sizeof(buf));
   while (*buf) {
@@ -6082,6 +5969,14 @@ ACMD(do_users)
           playing = 1;
           half_chop(buf1, host_search, buf, sizeof(buf));
           break;
+        case 'g':
+          if (!access_level(ch, LVL_PRESIDENT)) {
+            send_to_char("Sorry, this mode is for game owners only.\r\n", ch);
+            return;
+          }
+          globbed = 1;
+          strlcpy(buf, buf1, sizeof(buf));
+          break;
         default:
           send_to_char(USERS_FORMAT, ch);
           return;
@@ -6092,9 +5987,14 @@ ACMD(do_users)
       return;
     }
   }                             /* end while (parser) */
-  strlcpy(line, "Num  Name           State           Idle  Login@   Site\r\n", sizeof(line));
-  strlcat(line, "---- -------------- --------------- ----- -------- ---------------------------\r\n", sizeof(line));
-  send_to_char(line, ch);
+
+  if (globbed) {
+    send_to_char(ch, "Host character counts:\r\n");
+  } else {
+    strlcpy(line, "Num  Name           State           Idle  Login@   Site\r\n", sizeof(line));
+    strlcat(line, "---- -------------- --------------- ----- -------- ---------------------------\r\n", sizeof(line));
+    send_to_char(line, ch);
+  }
 
   one_argument(argument, arg);
 
@@ -6164,12 +6064,36 @@ ACMD(do_users)
       strlcpy(line, line2, sizeof(line));
     }
     if ((d->connected && !d->character) || CAN_SEE(ch, d->character)) {
-      send_to_char(line, ch);
+      if (globbed) {
+        try {
+          host_map[std::string(d->host)].push_back(std::string(GET_CHAR_NAME(d->original ? d->original : d->character)));
+        } catch (std::out_of_range) {
+          host_map[std::string(d->host)] = std::vector<std::string>();
+          host_map[std::string(d->host)].push_back(std::string(GET_CHAR_NAME(d->original ? d->original : d->character)));
+        }
+      } else {
+        send_to_char(line, ch);
+      }
       num_can_see++;
     }
   }
 
-  send_to_char(ch, "\r\n%d visible sockets connected.\r\n", num_can_see);
+  if (globbed) {
+    int total_hosts = 0;
+    for (auto &host_it : host_map) {
+      total_hosts++;
+      send_to_char(ch, "^c%s^n: ", host_it.first.c_str());
+
+      int total_pcs = 0;
+      for (auto &pc_it : host_it.second) {
+        send_to_char(ch, "%s%s", total_pcs++ > 0 ? ", " : "", pc_it.c_str());
+      }
+      send_to_char(ch, " (^c%d^n PC%s)\r\n", total_pcs, total_pcs == 1 ? "" : "s");
+    }
+    send_to_char(ch, "\r\n%d visible host%s connected.\r\n", total_hosts, total_hosts == 1 ? "" : "s");
+  } else {
+    send_to_char(ch, "\r\n%d visible socket%s connected.\r\n", num_can_see, num_can_see == 1 ? "" : "s");
+  }
 }
 
 /* Generic page_string function for displaying text */
@@ -6216,6 +6140,30 @@ ACMD(do_gen_ps)
   }
 }
 
+bool ch_can_see_vict_in_where(struct char_data *ch, struct char_data *vict) {
+  // Skip them if they aren't in a social-bonus room.
+  if (!vict || !char_is_in_social_room(vict))
+    return FALSE;
+
+  // Ignore disconnected folks and those who are in the middle of writing something etc.
+  if (!vict->desc || vict->desc->connected)
+    return FALSE;
+
+  // Skip them if you can't see them for various reasons.
+  if (IS_IGNORING(vict, is_blocking_where_visibility_for, ch) || !CAN_SEE(ch, vict))
+    return FALSE;  
+
+  // Don't count staff in social rooms.
+  if (IS_SENATOR(vict))
+    return FALSE;
+
+  // Skip them if they've not acted in the last 30 minutes or are flagged AFK. 
+  if (vict->char_specials.timer >= 30 || PRF_FLAGGED(vict, PRF_AFK))
+    return FALSE;
+
+  return TRUE;
+}
+
 void perform_mortal_where(struct char_data * ch, char *arg)
 {
   // Locating belongings.
@@ -6237,29 +6185,17 @@ void perform_mortal_where(struct char_data * ch, char *arg)
   std::unordered_map<vnum_t, std::vector<struct char_data *>>::iterator room_iterator;
 
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-    if (!d->connected) {
-      struct char_data *i = (d->original ? d->original : d->character);
+    struct char_data *i = (d->original ? d->original : d->character);
 
-      // Skip them if they aren't in a social-bonus room.
-      if (!i || !char_is_in_social_room(i))
-        continue;
+    if (!ch_can_see_vict_in_where(ch, i))
+      continue;
 
-      // Skip them if you can't see them for various reasons.
-      if (IS_IGNORING(i, is_blocking_where_visibility_for, ch) || !CAN_SEE(ch, i))
-        continue;
-
-      // Skip them if they've not acted in the last 30 minutes or are flagged AFK. 
-      // (Note: No need to check descriptor here, we iterated descriptors to find this record.)
-      if (i->char_specials.timer >= 30 || PRF_FLAGGED(i, PRF_AFK))
-        continue;
-
-      // They're a valid target-- emplace them.
-      if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
-        (room_iterator->second).push_back(i);
-      } else {
-        std::vector<struct char_data *> tmp_vec = { i };
-        occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), tmp_vec);
-      }
+    // They're a valid target-- emplace them.
+    if ((room_iterator = occupied_rooms.find(GET_ROOM_VNUM(i->in_room))) != occupied_rooms.end()) {
+      (room_iterator->second).push_back(i);
+    } else {
+      std::vector<struct char_data *> tmp_vec = { i };
+      occupied_rooms.emplace(GET_ROOM_VNUM(i->in_room), tmp_vec);
     }
   }
 
@@ -6543,6 +6479,7 @@ ACMD(do_consider)
         } else if (weapon->contains) {
           switch (GET_MAGAZINE_AMMO_TYPE(weapon->contains)) {
             case AMMO_APDS:
+            case AMMO_AV:
               expected_power -= (int)(GET_BALLISTIC(victim) / 2);
               break;
             case AMMO_EX:
@@ -6608,6 +6545,7 @@ ACMD(do_consider)
         } else if (vict_weapon->contains) {
           switch (GET_MAGAZINE_AMMO_TYPE(vict_weapon->contains)) {
             case AMMO_APDS:
+            case AMMO_AV:
               vict_expected_power -= (int)(GET_BALLISTIC(ch) / 2);
               break;
             case AMMO_EX:
@@ -6686,7 +6624,7 @@ ACMD(do_consider)
     }
 
     // Skill / Pool comparisons.
-    int combat_skill_diff = (GET_COMBAT(victim) - GET_COMBAT(ch));
+    int combat_skill_diff = (GET_COMBAT_POOL(victim) - GET_COMBAT_POOL(ch));
 
     if (GET_EQ(victim, WEAR_WIELD)) {
       combat_skill_diff += MAX(GET_SKILL(victim, GET_WEAPON_SKILL(GET_EQ(victim, WEAR_WIELD))), GET_SKILL(victim, SKILL_ARMED_COMBAT));
@@ -6995,6 +6933,11 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
     // Always skip invisible people.
     if (!CAN_SEE(ch, list)) {
       DEBUG_TO_STAFF(ch, "%s: can't see\r\n", GET_CHAR_NAME(list));
+      continue;
+    }
+
+    if (IS_IGNORING(ch, is_blocking_ic_interaction_from, list)) {
+      DEBUG_TO_STAFF(ch, "%s: scanner is ignoring\r\n", GET_CHAR_NAME(list));
       continue;
     }
 
@@ -7483,23 +7426,6 @@ ACMD(do_status)
 
   if (GET_LEVEL(ch) > LVL_MORTAL) {
     render_drug_info_for_targ(ch, targ);
-  }
-}
-
-ACMD(do_recap)
-{
-  if (!GET_QUEST(ch))
-    send_to_char(ch, "You're not currently on a run.\r\n");
-  else {
-#ifdef USE_QUEST_LOCATION_CODE
-    if (quest_table[GET_QUEST(ch)].location)
-      snprintf(buf, sizeof(buf), "At %s, %s told you: \r\n%s", quest_table[GET_QUEST(ch)].location, GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
-              quest_table[GET_QUEST(ch)].info);
-    else
-#endif
-      snprintf(buf, sizeof(buf), "%s told you: \r\n%s", GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
-              quest_table[GET_QUEST(ch)].info);
-    send_to_char(buf, ch);
   }
 }
 

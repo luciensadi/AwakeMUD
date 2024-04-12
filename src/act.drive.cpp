@@ -18,18 +18,25 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "zoomies.hpp"
+#include "vehicles.hpp"
 
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
 void order_list(struct char_data *start);
-extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads);
+extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads, const char *call_origin, struct char_data *caller);
 int move_vehicle(struct char_data *ch, int dir);
 ACMD_CONST(do_return);
 int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
+void stop_vehicle(struct veh_data *veh);
+void stop_rigging(struct char_data *ch);
+void stop_driving(struct char_data *ch);
+int calculate_vehicle_entry_load(struct veh_data *veh);
 
 extern int max_npc_vehicle_lootwreck_time;
 
 extern void rectify_desc_host(struct descriptor_data *desc);
+extern int get_obj_vehicle_load_usage(struct obj_data *obj, bool is_installed_mod);
+extern void recalculate_vehicle_usedload(struct veh_data *veh);
 
 #define VEH ch->in_veh
 
@@ -157,58 +164,41 @@ void crash_test(struct char_data *ch)
   }
 }
 
+bool passed_drive_and_rig_precondition_checks(struct char_data *ch) {
+  struct char_data *temp = NULL;
+
+  FALSE_CASE(IS_ASTRAL(ch), "You cannot seem to touch physical objects.");
+  FALSE_CASE(!VEH, "You have to be in a vehicle to do that.");
+  FALSE_CASE(!ch->vfront, "Nobody likes a backseat driver. ##^WSWITCH^n to the front first.");
+  FALSE_CASE(IS_WORKING(ch) && !AFF_FLAGGED(ch, AFF_PILOT), "You're too busy.");
+  FALSE_CASE(!IS_NPC(ch) && GET_SKILL(ch, get_pilot_skill_for_veh(VEH)) == 0 && GET_SKILL(ch, SKILL_PILOT_CAR) == 0 && GET_SKILL(ch, SKILL_PILOT_BIKE) == 0 && GET_SKILL(ch, SKILL_PILOT_TRUCK) == 0,
+             "You have no idea how to drive this thing.");
+  FALSE_CASE(VEH->damage >= VEH_DAM_THRESHOLD_DESTROYED, "This vehicle is too much of a wreck to move!");
+  FALSE_CASE(VEH->rigger || VEH->dest, "You can't seem to take control!");
+  FALSE_CASE((temp = get_driver(VEH)) && temp != ch, "Someone is already in charge!");
+  FALSE_CASE((VEH->type == VEH_BIKE || VEH->type == VEH_MOTORBOAT) && VEH->locked && GET_IDNUM(ch) != VEH->owner,
+             "You can't seem to start it.");
+
+  FALSE_CASE((VEH->cspeed == SPEED_OFF || VEH->dest) && VEH->hood, "You can't drive with the hood up.");
+  
+  return TRUE;
+}
+
 ACMD(do_drive)
 {
-  struct char_data *temp = NULL;
-  if (IS_ASTRAL(ch)) {
-    send_to_char("You cannot seem to touch physical objects.\r\n", ch);
+  // Error messages sent in function.
+  if (!passed_drive_and_rig_precondition_checks(ch))
     return;
-  }
-  if (!VEH) {
-    send_to_char("You have to be in a vehicle to do that.\r\n", ch);
-    return;
-  }
-  if (!ch->vfront) {
-    send_to_char("Nobody likes a backseat driver.\r\n", ch);
-    return;
-  }
-  if (AFF_FLAGGED(ch, AFF_RIG)) {
-    send_to_char("You are already rigging the vehicle.\r\n", ch);
-    return;
-  }
-  if (IS_WORKING(ch) && !AFF_FLAGGED(ch, AFF_PILOT)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
-  if(!IS_NPC(ch) && GET_SKILL(ch, SKILL_PILOT_CAR) == 0 && GET_SKILL(ch, SKILL_PILOT_BIKE) == 0 && GET_SKILL(ch, SKILL_PILOT_TRUCK) == 0) {
-    send_to_char("You have no idea how to do that.\r\n", ch);
-    return;
-  }
-  if (VEH->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-    send_to_char("This vehicle is too much of a wreck to move!\r\n", ch);
-    return;
-  }
-  if (VEH->rigger || VEH->dest) {
-    send_to_char("You can't seem to take control!\r\n", ch);
-    return;
-  }
-  if ((temp = get_driver(VEH)) && temp != ch) {
-    send_to_char("Someone is already in charge!\r\n", ch);
-    return;
-  }
-  if ((VEH->type == VEH_BIKE || VEH->type == VEH_MOTORBOAT) && VEH->locked && GET_IDNUM(ch) != VEH->owner) {
-    send_to_char("You can't seem to start it.\r\n", ch);
-    return;
-  }
+  
+  FAILURE_CASE(AFF_FLAGGED(ch, AFF_RIG), "You are already rigging the vehicle.");
+
+  // Start driving.
   if (VEH->cspeed == SPEED_OFF || VEH->dest) {
-    if (VEH->hood) {
-      send_to_char("You can't drive with the hood up.\r\n", ch);
-      return;
-    }
     if (!VEH->locked && VEH->owner == GET_IDNUM(ch)) {
       send_to_veh("The doors click locked.\r\n", VEH, NULL, FALSE);
       VEH->locked = TRUE;
     }
+
     AFF_FLAGS(ch).SetBit(AFF_PILOT);
     VEH->lastin[0] = VEH->in_room;
     stop_manning_weapon_mounts(ch, TRUE);
@@ -223,75 +213,35 @@ ACMD(do_drive)
       VEH->cspeed = SPEED_CRUISING;
     }
     send_to_veh(buf1, VEH, ch, FALSE);
-  } else {
-    if (veh_is_currently_flying(VEH)) {
-      send_to_char("Relinquishing the controls in midair is a great way to crash and die.\r\n", ch);
-      return;
-    }
-
-    AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
-    send_to_char("You relinquish the driver's seat.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
-    send_to_veh(buf1, VEH, ch, FALSE);
-    stop_chase(VEH);
-    if (!VEH->dest)
-      VEH->cspeed = SPEED_OFF;
+    return;
   }
-  return;
+  
+  // Stop driving.
+  FAILURE_CASE(veh_is_currently_flying(VEH), "Relinquishing the controls in midair is a great way to crash and die.");
+
+  AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
+  send_to_char("You relinquish the driver's seat.\r\n", ch);
+  snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
+  send_to_veh(buf1, VEH, ch, FALSE);
+  stop_chase(VEH);
+  if (!VEH->dest)
+    VEH->cspeed = SPEED_OFF;
 }
 
 ACMD(do_rig)
 {
-  struct char_data *temp;
-
-  if (IS_ASTRAL(ch)) {
-    send_to_char("You cannot seem to touch physical objects.\r\n", ch);
+  // Error messages sent in function.
+  if (!passed_drive_and_rig_precondition_checks(ch))
     return;
-  }
-  if (!VEH) {
-    send_to_char("You have to be in a vehicle to do that.\r\n", ch);
-    return;
-  }
-  if (!ch->vfront) {
-    send_to_char("Nobody likes a backseat driver.\r\n", ch);
-    return;
-  }
-  if (IS_WORKING(ch) && !AFF_FLAGGED(ch, AFF_RIG)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
 
   // Error message sent in function.
   if (!get_datajack(ch, TRUE))
     return;
 
-  if (GET_SKILL(ch, SKILL_PILOT_CAR) == 0 && GET_SKILL(ch, SKILL_PILOT_BIKE) == 0 &&
-      GET_SKILL(ch, SKILL_PILOT_TRUCK) == 0) {
-    send_to_char("You have no idea how to do that.\r\n", ch);
-    return;
-  }
-  if (VEH->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-    send_to_char("This vehicle is too much of a wreck to move!\r\n", ch);
-    return;
-  }
-  if (VEH->rigger || VEH->dest) {
-    send_to_char("The system is unresponsive!\r\n", ch);
-    return;
-  }
-  for(temp = VEH->people; temp; temp= temp->next_in_veh)
-    if(ch != temp && AFF_FLAGGED(temp, AFF_PILOT)) {
-      send_to_char("Someone is already in charge!\r\n", ch);
-      return;
-    }
   if(VEH->cspeed == SPEED_OFF || VEH->dest) {
-    if (VEH->type == VEH_BIKE && VEH->locked && GET_IDNUM(ch) != VEH->owner) {
-      send_to_char("You jack in and nothing happens.\r\n", ch);
-      return;
-    }
-
-    if (VEH->hood) {
-      send_to_char("You can't drive with the hood up.\r\n", ch);
-      return;
+    if (!VEH->locked && VEH->owner == GET_IDNUM(ch)) {
+      send_to_veh("The doors click locked.\r\n", VEH, NULL, FALSE);
+      VEH->locked = TRUE;
     }
 
     // No perception while rigging. Specifically only checks player perception.
@@ -305,21 +255,16 @@ ACMD(do_rig)
     VEH->lastin[0] = VEH->in_room;
 
     stop_manning_weapon_mounts(ch, TRUE);
-    send_to_char("As you jack in, your perception shifts.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s jacks into the vehicle control system.\r\n", capitalize(GET_NAME(ch)));
+    send_to_char("You jack in and accelerate to a cruise.\r\n", ch);
+    snprintf(buf1, sizeof(buf1), "%s jacks into the vehicle control system and accelerates to a cruise.\r\n", capitalize(GET_NAME(ch)));
     send_to_veh(buf1, VEH, ch, FALSE);
   } else {
     if (!AFF_FLAGGED(ch, AFF_RIG)) {
       send_to_char("But you're not rigging.\r\n", ch);
       return;
     }
-    STOP_DRIVING(ch);
-    if (!VEH->dest)
-      VEH->cspeed = SPEED_OFF;
+    stop_rigging(ch);
     stop_chase(VEH);
-    send_to_char("You return to your senses.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s returns to their senses.\r\n", capitalize(GET_NAME(ch)));
-    send_to_veh(buf1, VEH, ch, FALSE);
     stop_fighting(ch);
   }
   return;
@@ -508,10 +453,10 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
   if (vict) {
     if (IS_NPC(vict)) {
       // Swap all dice into dodge for this round.
-      GET_DEFENSE(vict) += GET_BODY(vict) + GET_OFFENSE(vict);
-      GET_BODY(vict) = GET_OFFENSE(vict) = 0;
+      GET_DODGE(vict) += GET_BODY_POOL(vict) + GET_OFFENSE(vict);
+      GET_BODY_POOL(vict) = GET_OFFENSE(vict) = 0;
     }
-    int vict_dodge_dice = GET_DEFENSE(vict) + (GET_TRADITION(vict) == TRAD_ADEPT ? GET_POWER(vict, ADEPT_SIDESTEP) : 0);
+    int vict_dodge_dice = GET_DODGE(vict) + (GET_TRADITION(vict) == TRAD_ADEPT ? GET_POWER(vict, ADEPT_SIDESTEP) : 0);
     if (vict_dodge_dice > 0) {
       target = 4 + damage_modifier(vict, buf, sizeof(buf));
       int vict_successes = success_test(vict_dodge_dice, target, vict, "do_raw_ram dodge test", ch);
@@ -536,7 +481,7 @@ ACMD(do_upgrade)
 {
   struct veh_data *veh;
   struct obj_data *mod, *obj, *shop = NULL;
-  int j = 0, skill = 0, target = 0, kit = 0, mod_load_required = 0, mod_signature_change = 0, bod_already_used = 0;
+  int j = 0, skill = 0, target = 0, kit = 0, bod_already_used = 0;
   bool need_extract = FALSE;
 
   half_chop(argument, buf1, buf2, sizeof(buf2));
@@ -614,8 +559,13 @@ ACMD(do_upgrade)
     if ((shop = find_workshop(ch, TYPE_VEHICLE)))
       kit = GET_WORKSHOP_GRADE(shop);
     if (!kit && !shop) {
-      send_to_char("You don't have any tools here for working on vehicles.\r\n", ch);
-      return;
+      if (IS_SENATOR(ch)) {
+        send_to_char("You handwave away the tool requirement for working on vehicles.\r\n", ch);
+        kit = TYPE_FACILITY;
+      } else {
+        send_to_char("You don't have any tools here for working on vehicles.\r\n", ch);
+        return;
+      }
     }
 
     // Artificially capping tool type to WORKSHOP, as many upgrades need facilities but they're not in game.
@@ -689,30 +639,16 @@ ACMD(do_upgrade)
     int bod_required = 0;
     switch (GET_VEHICLE_MOD_MOUNT_TYPE(mod)) {
       case MOUNT_FIRMPOINT_EXTERNAL:
-        mod_signature_change = 1;
-        // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
-        // fall through
       case MOUNT_FIRMPOINT_INTERNAL:
-        bod_required++;
-        mod_load_required = 10;
+        bod_required = 1;
         break;
       case MOUNT_HARDPOINT_EXTERNAL:
-        mod_signature_change = 1;
-        // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
-        // fall through
       case MOUNT_HARDPOINT_INTERNAL:
-        bod_required += 2;
-        mod_load_required = 10;
+      case MOUNT_MINITURRET:
+        bod_required = 2;
         break;
       case MOUNT_TURRET:
-        mod_signature_change = 1;
-        bod_required += 4;
-        mod_load_required = 100;
-        break;
-      case MOUNT_MINITURRET:
-        mod_signature_change = 1;
-        bod_required += 2;
-        mod_load_required = 25;
+        bod_required = 4;
         break;
     }
 
@@ -725,6 +661,7 @@ ACMD(do_upgrade)
       return;
     }
 
+    int mod_load_required = get_obj_vehicle_load_usage(mod, TRUE);
     if ((veh->usedload + mod_load_required) > veh->load) {
         send_to_char(ch, "%s requires %d free load space, and %s only has %d.\r\n",
                      GET_OBJ_NAME(mod),
@@ -735,7 +672,7 @@ ACMD(do_upgrade)
     }
 
     veh->usedload += mod_load_required;
-    veh->sig -= mod_signature_change;
+    veh->sig -= get_mount_signature_penalty(mod);
     obj_from_char(mod);
     if (veh->mount)
       mod->next_content = veh->mount;
@@ -771,7 +708,7 @@ ACMD(do_upgrade)
       else
         affect_veh(veh, mod->affected[0].location, -GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))->affected[0].modifier);
 
-      veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod);
+      veh->usedload += get_obj_vehicle_load_usage(mod, TRUE);
       GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(GET_MOD(veh, GET_VEHICLE_MOD_LOCATION(mod))) = (veh->body * veh->body) * totalarmor * 5;
       mod->affected[0].modifier = totalarmor;
       affect_veh(veh, mod->affected[0].location, mod->affected[0].modifier);
@@ -784,7 +721,7 @@ ACMD(do_upgrade)
         send_to_char(ch, "Try as you might, you just can't fit it in.\r\n");
         return;
       }
-      veh->usedload += GET_VEHICLE_MOD_LOAD_SPACE_REQUIRED(mod);
+      veh->usedload += get_obj_vehicle_load_usage(mod, TRUE);
       for (j = 0; j < MAX_OBJ_AFFECT; j++)
         affect_veh(veh, mod->affected[j].location, mod->affected[j].modifier);
 
@@ -987,11 +924,11 @@ ACMD(do_control)
   veh->cspeed = SPEED_CRUISING;
 
   // Reallocate pools.
-  int max_offense = MIN(GET_SKILL(ch, SKILL_GUNNERY), GET_COMBAT(ch));
-  int remainder = MAX(0, GET_COMBAT(ch) - max_offense);
+  int max_offense = MIN(GET_SKILL(ch, SKILL_GUNNERY), GET_COMBAT_POOL(ch));
+  int remainder = MAX(0, GET_COMBAT_POOL(ch) - max_offense);
   GET_OFFENSE(ch) = max_offense;
-  GET_BODY(ch) = 0;
-  GET_DEFENSE(ch) = remainder;
+  GET_BODY_POOL(ch) = 0;
+  GET_DODGE(ch) = remainder;
 }
 
 
@@ -1163,9 +1100,9 @@ ACMD(do_repair)
     return;
   }
 
-  skill = get_skill(ch, get_br_skill_for_veh(veh), target);
   target += (veh->damage - 2) / 2;
   target += modify_target(ch);
+  skill = get_skill(ch, get_br_skill_for_veh(veh), target);
 
   if (!access_level(ch, LVL_ADMIN)) {
     kit = has_kit(ch, TYPE_VEHICLE);
@@ -1830,7 +1767,7 @@ ACMD(do_gridguide)
     send_to_char("The following destinations are available:\r\n", ch);
     for (grid = veh->grid; grid; grid = grid->next) {
       i++;
-      if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room), FALSE) < 0)
+      if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room), FALSE, "do_gridguide", ch) < 0)
         snprintf(buf, sizeof(buf), "^r%-20s [%-6ld, %-6ld](Unavailable)\r\n", CAP(grid->name),
                  get_room_gridguide_x(grid->room), get_room_gridguide_y(grid->room));
       else
@@ -1847,7 +1784,7 @@ ACMD(do_gridguide)
     return;
   }
 
-  if (!str_cmp(arg, "stop")) {
+  if (veh->dest && !str_cmp(arg, "stop")) {
     veh->dest = 0;
     send_to_veh("The autonav disengages.\r\n", veh, 0, TRUE);
     if (!AFF_FLAGGED(ch, AFF_PILOT))
@@ -1909,7 +1846,7 @@ ACMD(do_gridguide)
       }
     }
 
-    if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(target_room), FALSE) < 0) {
+    if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(target_room), FALSE, "do_gridguide pt 2", ch) < 0) {
       send_to_char("That destination is currently unavailable.\r\n", ch);
       return;
     }
@@ -2024,7 +1961,7 @@ void process_autonav(void)
 
       int dir = 0;
       for (int x = MIN(MAX((int)get_speed(veh) / 10, 1), MAX_GRIDGUIDE_ROOMS_PER_PULSE); x && dir >= 0 && veh->dest; x--) {
-        dir = find_first_step(real_room(veh->in_room->number), real_room(veh->dest->number), FALSE);
+        dir = find_first_step(real_room(veh->in_room->number), real_room(veh->dest->number), FALSE, "process_autonav", veh->people);
         if (dir >= 0) {
           veh_moved = TRUE;
           move_vehicle(ch, dir);
@@ -2139,6 +2076,21 @@ ACMD(do_pop)
     }
     send_to_char(ch, "You pop the hood of %s.\r\n", GET_VEH_NAME(veh));
     veh->hood = TRUE;
+
+    // Clear the used load and recalculate it.
+    {
+      int old_load = veh->usedload;
+      recalculate_vehicle_usedload(veh);
+
+      if (veh->usedload != old_load) {
+        if (veh->usedload < old_load) {
+          send_to_char("Huh, someone must have stuffed some lead weights in here as a prank. You scoop them out and toss them aside.\r\n", ch);
+        } else {
+          send_to_char("A few helium balloons escape from under the hood...\r\n", ch);
+        }
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Vehicle had unexpected usedload on pop (%d != %d)", old_load, veh->usedload);
+      }
+    }
   }
 }
 
@@ -2388,6 +2340,8 @@ ACMD(do_transfer)
     send_to_char("You can't transfer ownership of a vehicle you don't own.\r\n", ch);
   else if (!(targ = get_char_room_vis(ch, buf2)))
     send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf2);
+  else if (!targ->desc || IS_NPC(targ))
+    send_to_char(ch, "There's nothing going on behind %s's eyes.\r\n", GET_CHAR_NAME(targ));
   else {
     // Unsub it.
     if (veh->sub) {
@@ -2409,7 +2363,7 @@ ACMD(do_transfer)
     snprintf(buf2, sizeof(buf2), "$n transfers ownership of %s to you.", GET_VEH_NAME(veh));
     act(buf, 0, ch, 0, targ, TO_CHAR);
     act(buf2, 0, ch, 0, targ, TO_VICT);
-    veh->owner = GET_IDNUM(targ);
+    set_veh_owner(veh, GET_IDNUM(targ));
     veh->sub = FALSE;
 
     if (ch->desc && targ->desc) {
@@ -2428,25 +2382,8 @@ ACMD(do_transfer)
                       GET_VEH_NAME(veh), veh->idnum, GET_CHAR_NAME(targ), GET_IDNUM(targ));
     }
 
-    save_vehicles(FALSE);
+    save_single_vehicle(veh);
   }
-}
-
-int calculate_vehicle_entry_load(struct veh_data *veh) {
-  int mult;
-  switch (veh->type) {
-    case VEH_DRONE:
-      mult = 100;
-      break;
-    case VEH_TRUCK:
-      mult = 1500;
-      break;
-    default:
-      mult = 500;
-      break;
-  }
-
-  return veh->body * mult;
 }
 
 ACMD(stop_rigging_first) {
@@ -2560,4 +2497,80 @@ int get_vehicle_modifier(struct veh_data *veh, bool include_weather)
   if (include_weather && weather_info.sky >= SKY_RAINING)
     mod++;
   return mod;
+}
+
+// Call when the rigger or driver is no longer available.
+void stop_vehicle(struct veh_data *veh) {
+  // If it's not under autopilot, shut it down.
+  if (!veh->dest && veh->cspeed > SPEED_OFF) {
+    // Message vehicle about it stopping if it's actually moving.
+    if (veh->cspeed > SPEED_IDLE)
+      send_to_veh("You slow to a halt.\r\n", veh, NULL, 0);
+    // Park it.
+    veh->cspeed = SPEED_OFF;
+  }
+
+  // Clear rigger info.
+  veh->rigger = NULL;
+
+  // Clear chasing info.
+  stop_chase(veh);
+}
+
+void stop_rigging(struct char_data *ch) {
+  if (!ch)
+    return;
+
+  struct veh_data *veh = ch->char_specials.rigging ? ch->char_specials.rigging : ch->in_veh;
+
+  if (!veh)
+    return;
+
+  // Stop their vehicle.
+  stop_vehicle(veh);
+
+  // Clear their pointers and flags.
+  ch->char_specials.rigging = NULL;
+  PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
+  AFF_FLAGS(ch).RemoveBit(AFF_RIG);
+  AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
+
+  // Take them out of combat (does not depend on above pointers/flags)
+  stop_fighting(ch);
+
+  send_to_char("You return to your senses.\r\n", ch);
+
+  struct obj_data *jack = get_datajack(ch, TRUE);
+  if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
+    if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
+      if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
+        snprintf(buf, sizeof(buf), "$n slowly removes $s hand from the induction pad%s.", veh == ch->in_veh ? ", relinquishing control" : "");
+      } else {
+        snprintf(buf, sizeof(buf), "$n carefully removes the jack from $s head%s.", veh == ch->in_veh ? ", relinquishing control" : "");
+      }
+    } else {
+      snprintf(buf, sizeof(buf), "$n carefully removes the jack from $s eye%s.", veh == ch->in_veh ? ", relinquishing control" : "");
+    }
+  } else {
+    // We should never see this.
+    snprintf(buf, sizeof(buf), "$n undoes the leads of $s 'trode net%s.", veh == ch->in_veh ? ", relinquishing control" : "");
+  }
+  act(buf, TRUE, ch, 0, 0, TO_ROOM);
+}
+
+// Only call this if you're SURE you want them to stop driving. Check for flight status etc.
+void stop_driving(struct char_data *ch) {
+  if (!ch || !ch->in_veh)
+    return;
+
+  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    stop_rigging(ch);
+  } else if (AFF_FLAGGED(ch, AFF_PILOT)) {
+    stop_vehicle(ch->in_veh);
+    AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
+    send_to_char("You relinquish the driver's seat.\r\n", ch);
+    snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
+    send_to_veh(buf1, VEH, ch, FALSE);
+  }
+
 }
