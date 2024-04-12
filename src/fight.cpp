@@ -381,6 +381,11 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (CH_IN_COMBAT(ch))
     return;
 
+  if (ch_is_blocked_by_quest_protections(vict, ch)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got quest-blocked vict to set_fighting(ch, %s, ...)", GET_CHAR_NAME(vict));
+    return;
+  }
+
   char warnbuf[5000];
   if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
     snprintf(warnbuf, sizeof(warnbuf), "WARNING: Entered set_fighting with vict %s ignoring attacker %s!", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
