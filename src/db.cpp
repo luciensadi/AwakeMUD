@@ -5477,7 +5477,7 @@ void free_host(struct host_data * host)
       if (dest_rnum >= 0) {
         struct entrance_data *entrance, *temp;
         for (entrance = matrix[dest_rnum].entrance; entrance; entrance = entrance->next) {
-          if (entrance->host == host->vnum)
+          if (entrance->host == host)
             break;
         }
         REMOVE_FROM_LIST(entrance, matrix[dest_rnum].entrance, next);
