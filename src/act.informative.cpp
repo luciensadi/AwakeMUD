@@ -4523,7 +4523,7 @@ const char *get_plaintext_score_stats(struct char_data *ch) {
 
     switch (GET_TRADITION(ch)) {
       case TRAD_SHAMANIC:
-        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You follow %s,", totem_types[GET_TOTEM(ch)]);
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "You follow %s", totem_types[GET_TOTEM(ch)]);
         switch (GET_ASPECT(ch)) {
           case ASPECT_FULL:
             strlcat(buf2, ", and are a full shaman.\r\n", sizeof(buf2));
@@ -6439,7 +6439,7 @@ ACMD(do_consider)
     // Armor comparisons.
     int armor_diff = (GET_BALLISTIC(victim) - GET_BALLISTIC(ch)) + (GET_IMPACT(victim) - GET_IMPACT(ch));
     if (armor_diff < -8) {
-      act("-  much less protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
+      act("- much less protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
     } else if (armor_diff < -6) {
       act("- less protected than you are.", FALSE, ch, 0, victim, TO_CHAR);
     } else if (armor_diff < -4) {
