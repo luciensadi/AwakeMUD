@@ -112,9 +112,11 @@ void clear_icon(struct matrix_icon *icon);
 long real_ic(long virt);
 struct matrix_icon *read_ic(int nr, int type);
 
-long     real_shop(long virt);
-long     real_quest(long virt);
-long  real_zone(long virt);
+long real_shop(long virt);
+long real_quest(long virt);
+long real_zone(long virt);
+
+void collate_host_entrances();
 
 /* structure for the reset commands */
 struct reset_com

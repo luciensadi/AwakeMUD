@@ -236,7 +236,6 @@ void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
 void set_elemental_races();
-void collate_host_entrances();
 
 /* external vars */
 extern int no_specials;
