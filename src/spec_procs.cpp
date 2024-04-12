@@ -3823,26 +3823,6 @@ SPECIAL(oceansounds)
   return FALSE;
 }
 
-SPECIAL(neophyte_salvation_army) {
-  NO_DRAG_BULLSHIT;
-
-  if (!cmd)
-    return FALSE;
-
-  if ((CMD_IS("southwest") || CMD_IS("sw")) && !PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    if (IS_SENATOR(ch)) {
-      send_to_char("You bypass the bouncer with a nod.\r\n", ch);
-      return FALSE;
-    } else {
-      send_to_char("A ripped Neophyte Guild bouncer prevents you from entering the Salvation Army.\r\n", ch);
-      send_to_char(ch, "(^mOOC^n: You may only visit the donation area until you have received %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD);
-      act("$n is refused entry to the Salvation Army.", FALSE, ch, 0, 0, TO_ROOM);
-      return TRUE;
-    }
-  }
-  return FALSE;
-}
-
 SPECIAL(simulate_bar_fight)
 {
   struct room_data *room = (struct room_data *) me;
