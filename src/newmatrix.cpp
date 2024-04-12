@@ -2975,8 +2975,8 @@ void matrix_update()
         // Check surrounding hosts.
         struct host_data *adjacent_host = NULL;
         for (struct entrance_data *entrance = HOST.entrance; entrance && !decker; entrance = entrance->next) {
-          if (adjacent_host = entrance->host) {
-            for (struct matrix_icon *icon = adjacent_host.icons; icon; icon = icon->next_in_host) {
+          if ((adjacent_host = entrance->host)) {
+            for (struct matrix_icon *icon = adjacent_host->icons; icon; icon = icon->next_in_host) {
               if (!ICON_IS_IC(icon)) {
                 decker = TRUE;
                 break;
