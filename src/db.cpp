@@ -5475,7 +5475,7 @@ void free_host(struct host_data * host)
     for (struct exit_data *exit = host->exit; exit; exit = exit->next) {
       dest_rnum = real_host(exit->host);
       if (dest_rnum >= 0) {
-        struct entrance_data *entrance;
+        struct entrance_data *entrance, *temp;
         for (entrance = matrix[dest_rnum].entrance; entrance; entrance = entrance->next) {
           if (entrance->host == host->vnum)
             break;
@@ -7630,7 +7630,7 @@ void collate_host_entrances() {
     }
 
     // Subsystem trapdoors are also entrances
-    for (int sub = 0; sub < NUM_OF_SUBSYSTEMS; i++) {
+    for (int sub = 0; sub < NUM_OF_SUBSYSTEMS; sub++) {
       dest_rnum = real_host(matrix[source_rnum].stats[sub][MTX_STAT_TRAPDOOR]);
       if (dest_rnum >= 0) {
         entrance = new entrance_data;
