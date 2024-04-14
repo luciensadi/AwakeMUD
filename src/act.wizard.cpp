@@ -1246,6 +1246,8 @@ void do_stat_room(struct char_data * ch)
       send_to_char(buf, ch);
     }
   }
+  if (rm->dirty_bit)
+    send_to_char("Dirty bit is set.\r\n", ch);
 
   {
     bool printed_workshop_yet = FALSE;
@@ -2650,6 +2652,11 @@ ACMD(do_purge)
       delete [] representation;
       extract_obj(obj);
       send_to_char(OK, ch);
+
+      if (ch->in_room)
+        ch->in_room->dirty_bit = TRUE;
+      if (ch->in_veh)
+        save_single_vehicle(ch->in_veh);
       return;
     }
 
@@ -2711,7 +2718,8 @@ ACMD(do_purge)
         extract_veh(veh);
       }
 
-      send_to_veh("The world seems a little cleaner.\r\n", ch->in_veh, NULL, FALSE);
+      send_to_veh("The vehicle seems a little cleaner.\r\n", ch->in_veh, NULL, FALSE);
+      save_single_vehicle(ch->in_veh);
     }
     else {
       act("$n gestures... You are surrounded by scorching flames!", FALSE, ch, 0, 0, TO_ROOM);
@@ -2747,6 +2755,7 @@ ACMD(do_purge)
       }
 
       send_to_room("The world seems a little cleaner.\r\n", ch->in_room);
+      ch->in_room->dirty_bit = TRUE;
     }
   }
 }
