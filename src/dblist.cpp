@@ -77,14 +77,14 @@ void objList::CheckPointers()
 {
   extern void verify_obj_validity(struct obj_data *obj, bool go_deep=FALSE);
 
-  std::unordered_map<obj_data **, bool> obj_ptrs = {};
+  std::unordered_map<obj_data *, bool> obj_ptrs = {};
 
   for (nodeStruct<struct obj_data *> *temp = head; temp; temp = temp->next) {
     verify_obj_validity(temp->data, TRUE);
 
     // Assert we have no duplicates in the list, then mark this as being in the list.
-    assert(obj_ptrs.find(std::addressof(temp->data)) == obj_ptrs.end());
-    obj_ptrs[std::addressof(temp->data)] = TRUE;
+    assert(obj_ptrs.find(temp->data) == obj_ptrs.end());
+    obj_ptrs[temp->data] = TRUE;
   }
 }
 #endif
