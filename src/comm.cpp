@@ -3764,6 +3764,8 @@ void verify_obj_validity(struct obj_data *obj, bool go_deep) {
 
   assert(obj->canary == CANARY_VALUE);
 
+  assert(obj->worn_on >= 0 && obj->worn_on < NUM_WEARS);
+
   if (!go_deep)
     return;
 
@@ -3781,6 +3783,9 @@ void verify_obj_validity(struct obj_data *obj, bool go_deep) {
 
   // verify_host_validity(obj->in_host);
 
+  verify_obj_validity(obj->cyberdeck_part_pointer);
+
+  verify_character_validity(obj->targ);
   verify_vehicle_validity(obj->tveh);
 }
 
