@@ -48,7 +48,6 @@
 extern class objList ObjList;
 extern int modify_target(struct char_data *ch);
 extern void end_quest(struct char_data *ch, bool succeeded);
-extern char *cleanup(char *dest, const char *src);
 extern void damage_equip(struct char_data *ch, struct char_data *victim, int power, int type);
 extern bool check_adrenaline(struct char_data *, int);
 extern int get_paydata_market_maximum(int host_color);

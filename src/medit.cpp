@@ -35,7 +35,7 @@ extern const char *genders[];
 extern const char *attack_types[];
 
 // extern funcs
-extern char *cleanup(char *dest, const char *src);
+extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
 extern const char *get_spell_name(int spell, int subtype);
 
 // mem func
@@ -1817,14 +1817,12 @@ void write_mobs_to_disk(vnum_t zone_num)
               "Keywords:\t%s\n"
               "Name:\t%s\n"
               "RoomDesc:$\n%s\n~\n",
-              mob->player.physical_text.keywords?
-              mob->player.physical_text.keywords : "mob unnamed",
-              mob->player.physical_text.name?
-              mob->player.physical_text.name : "An unnamed mob",
-              cleanup(buf2, mob->player.physical_text.room_desc?
+              mob->player.physical_text.keywords ? mob->player.physical_text.keywords : "mob unnamed",
+              mob->player.physical_text.name ? mob->player.physical_text.name : "An unnamed mob",
+              prep_string_for_writing_to_savefile(buf2, mob->player.physical_text.room_desc ?
                       mob->player.physical_text.room_desc : "An unnamed mob is here."));
       fprintf(fp, "LookDesc:$\n%s~\n",
-              cleanup(buf2,
+              prep_string_for_writing_to_savefile(buf2,
                       mob->player.physical_text.look_desc?
                       mob->player.physical_text.look_desc
                       : "An unnamed mob is here."));

@@ -29,7 +29,7 @@ namespace bf = boost::filesystem;
 #include "vehicles.hpp"
 #include "awake.hpp"
 
-extern char *cleanup(char *dest, const char *src);
+extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
 extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 extern void add_phone_to_list(struct obj_data *);
 extern void handle_weapon_attachments(struct obj_data *obj);
@@ -291,11 +291,11 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
   if (veh->restring)
     fprintf(fl, "\tVRestring:\t%s\n", veh->restring);
   if (veh->restring_long)
-    fprintf(fl, "\tVRestringLong:$\n%s~\n", cleanup(buf2, veh->restring_long));
+    fprintf(fl, "\tVRestringLong:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, veh->restring_long));
   if (veh->decorate_front)
-    fprintf(fl, "\tVDecorateFront:$\n%s~\n", cleanup(buf2, veh->decorate_front));
+    fprintf(fl, "\tVDecorateFront:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, veh->decorate_front));
   if (veh->decorate_rear)
-    fprintf(fl, "\tVDecorateRear:$\n%s~\n", cleanup(buf2, veh->decorate_rear));
+    fprintf(fl, "\tVDecorateRear:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, veh->decorate_rear));
   fprintf(fl, "[CONTENTS]\n");
   int o = 0, level = 0;
   std::vector<std::string> obj_strings;
@@ -339,9 +339,9 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
       if (obj->restring)
         obj_string_buf << "\t\tName:\t" << obj->restring << "\n";
       if (obj->photo)
-        obj_string_buf << "\t\tPhoto:$\n" << cleanup(buf2, obj->photo) << "~\n";
+        obj_string_buf << "\t\tPhoto:$\n" << prep_string_for_writing_to_savefile(buf2, obj->photo) << "~\n";
       if (obj->graffiti)
-        obj_string_buf << "\t\tGraffiti:$\n" << cleanup(buf2, obj->graffiti) << "~\n";
+        obj_string_buf << "\t\tGraffiti:$\n" << prep_string_for_writing_to_savefile(buf2, obj->graffiti) << "~\n";
 
       obj_string_buf << "\t\t" << FILESTRING_OBJ_IDNUM << ":\t" << GET_OBJ_IDNUM(obj) << "\n";
 

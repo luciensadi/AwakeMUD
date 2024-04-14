@@ -30,7 +30,7 @@
 #include "limits.hpp"
 #include "newhouse.hpp"
 
-extern char *cleanup(char *dest, const char *src);
+extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *obj);
 extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 extern void handle_weapon_attachments(struct obj_data *obj);
@@ -385,7 +385,7 @@ void Storage_save(const char *file_name, struct room_data *room) {
       if (obj->graffiti)
         obj_string_buf << "\t\tGraffiti:\t" << obj->graffiti << "\n";
       if (obj->photo)
-        obj_string_buf << "\t\tPhoto:$\n" << cleanup(buf2, obj->photo) << "~\n";
+        obj_string_buf << "\t\tPhoto:$\n" << prep_string_for_writing_to_savefile(buf2, obj->photo) << "~\n";
 
       obj_strings.push_back(obj_string_buf.str());
       obj_string_buf.str(std::string());

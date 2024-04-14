@@ -45,6 +45,9 @@ const char *reset_mode[] =
 
 #define ZONE zone_table[zonenum]
 #define Zcmd zone_table[zonenum].cmd[i]
+
+extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
+
 void write_zone_to_disk(int vnum)
 {
 
@@ -68,7 +71,7 @@ void write_zone_to_disk(int vnum)
 
   // write it out!
   fprintf(fp, "#%d\n", vnum);
-  fprintf(fp, "%s~\n", ZONE.name);
+  fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, ZONE.name));
   fprintf(fp, "%d %d %d %d %d %d %d\n", ZONE.top, ZONE.lifespan, ZONE.reset_mode, ZONE.security, ZONE.connected, ZONE.jurisdiction, ZONE.is_pghq);
   fprintf(fp, "%d %d %d %d %d\n", ZONE.editor_ids[0], ZONE.editor_ids[1],
           ZONE.editor_ids[2], ZONE.editor_ids[3], ZONE.editor_ids[4]);

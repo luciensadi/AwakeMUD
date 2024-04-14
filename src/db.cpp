@@ -76,7 +76,6 @@ ACMD_DECLARE(do_reload);
 extern void calc_weight(struct char_data *ch);
 extern void read_spells(struct char_data *ch);
 extern struct obj_data *find_obj(int num);
-extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *);
 extern void idle_delete();
 extern void clearMemory(struct char_data * ch);

@@ -40,7 +40,6 @@
 extern void kill_ems(char *);
 extern void init_char_sql(struct char_data *ch);
 static const char *const INDEX_FILENAME = "etc/pfiles/index";
-extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *);
 extern Playergroup *loaded_playergroups;
 extern int get_cyberware_install_cost(struct obj_data *ware);

@@ -115,14 +115,14 @@ bool File::GetLine(char *buf, size_t buf_size, bool blank)
 char *File::ReadString(const char* section)
 {
   char buf[MAX_STRING_LENGTH+8];
-  char line[512+8];
+  char line[2048+8];
   size_t buf_len = 0;
   bool skip_to_end = false, done = false;
 
   memset(buf, 0, MAX_STRING_LENGTH+8);
 
   while (!done) {
-    if (!GetLine(line, 512, FALSE)) {
+    if (!GetLine(line, 2048, FALSE)) {
       log_vfprintf("FATAL ERROR: format error in %s, line %d: expecting ~-terminated string for section '%s'.",
           Filename(), LineNumber(), section);
       exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
@@ -178,6 +178,11 @@ char *File::ReadString(const char* section)
     size_t res_sz = buf_len+1;
     char *res = new char[res_sz];
     strlcpy(res, buf, res_sz);
+
+    // Replace bells with tildes.
+    for (char *ptr = res; *ptr; ptr++)
+      if (*ptr == '\7')
+        *ptr = '~';
 
     return res;
   }

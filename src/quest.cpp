@@ -40,7 +40,7 @@ extern bool perform_give(struct char_data *ch, struct char_data *vict,
 extern void add_follower(struct char_data *ch, struct char_data *leader);
 extern void free_quest(struct quest_data *quest);
 extern bool resize_qst_array(void);
-extern char *cleanup(char *, const char *);
+extern char *prep_string_for_writing_to_savefile(char *, const char *);
 extern int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
                         const char *sname, struct room_data *random_donation_room);
 
@@ -2303,31 +2303,31 @@ int write_quests_to_disk(int zone) {
                 quest_table[i].mob[j].l_data2,
                 quest_table[i].mob[j].o_data);
 
-#define WRITE_EMOTES_TO_DISK(type) if (quest_table[i].type##_emotes) {for (auto a: *(quest_table[i].type##_emotes)) { fprintf(fp, "%s~\r\n", cleanup(buf2, a)); }}
+#define WRITE_EMOTES_TO_DISK(type) if (quest_table[i].type##_emotes) {for (auto a: *(quest_table[i].type##_emotes)) { fprintf(fp, "%s~\r\n", prep_string_for_writing_to_savefile(buf2, a)); }}
 
       if (quest_table[i].intro_emote)
-        fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].intro_emote));
+        fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].intro_emote));
       if (quest_table[i].decline_emote)
-        fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].decline_emote));
+        fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].decline_emote));
       if (quest_table[i].quit_emote)
-        fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].quit_emote));
+        fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].quit_emote));
       if (quest_table[i].finish_emote)
-        fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].finish_emote));
+        fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].finish_emote));
 
       WRITE_EMOTES_TO_DISK(info);
 
 #undef WRITE_EMOTES_TO_DISK
 
-      fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].intro));
-      fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].decline));
-      fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].quit));
-      fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].finish));
-      fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].info));
-      fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].s_string));
-      fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].e_string));
-      fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].done));
+      fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].intro));
+      fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].decline));
+      fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].quit));
+      fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].finish));
+      fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].info));
+      fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].s_string));
+      fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].e_string));
+      fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].done));
 #ifdef USE_QUEST_LOCATION_CODE
-      fprintf(fp, "%s~\n", cleanup(buf2, quest_table[i].location));
+      fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].location));
 #endif
     }
   }

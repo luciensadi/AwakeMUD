@@ -37,7 +37,7 @@ void write_objs_to_disk(vnum_t zone);
 extern int max_weapon_focus_rating;
 
 // extern funcs
-extern char *cleanup(char *dest, const char *src);
+extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
 
 #define NUM_WEAPON_TYPES        27
 #define NUM_SKILL_TYPES         20
@@ -3164,9 +3164,9 @@ void write_objs_to_disk(vnum_t zonenum)
               "LookDesc:$\n%s~\n",
               obj->text.keywords? obj->text.keywords : "unnamed",
               obj->text.name? obj->text.name : "an unnamed object",
-              obj->text.room_desc? obj->text.room_desc
+              obj->text.room_desc ? prep_string_for_writing_to_savefile(buf2, obj->text.room_desc)
               : "An unnamed object sits here",
-              obj->text.look_desc? cleanup(buf2, obj->text.look_desc)
+              obj->text.look_desc? prep_string_for_writing_to_savefile(buf2, obj->text.look_desc)
               : "You see an uncreative object.\n");
 
       fprintf(fp, "Type:\t%s\n", item_types[(int)GET_OBJ_TYPE(obj)]);
@@ -3214,7 +3214,7 @@ void write_objs_to_disk(vnum_t zonenum)
                     "[EXTRADESC %d]\n"
                     "\tKeywords:\t%s\n"
                     "\tDesc:$\n%s~\n", count,
-                    ex_desc->keyword, cleanup(buf2, ex_desc->description));
+                    ex_desc->keyword, prep_string_for_writing_to_savefile(buf2, ex_desc->description));
             count++;
           }
         }

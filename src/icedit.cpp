@@ -15,7 +15,7 @@
 #include "memory.hpp"
 
 #define IC d->edit_icon
-extern char *cleanup(char *dest, const char *src);
+extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
 
 const char *crippler[4] =
   {
@@ -58,7 +58,7 @@ void write_ic_to_disk(int vnum)
       fprintf(fl, "#%ld\n", ic_index[ICON.rnum].vnum);
       fprintf(fl, "Name:\t%s\n", ICON.name);
       fprintf(fl, "LongDesc:\t%s\n", ICON.look_desc);
-      fprintf(fl, "Description:$\n%s~\n", cleanup(buf2, ICON.long_desc));
+      fprintf(fl, "Description:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, ICON.long_desc));
       fprintf(fl, "Rating:\t%d\n", ICON.ic.rating);
       fprintf(fl, "Type:\t%s\n", ic_type[ICON.ic.type]);
       fprintf(fl, "Subtype:\t%d\n", ICON.ic.subtype);

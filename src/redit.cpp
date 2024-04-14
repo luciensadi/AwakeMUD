@@ -45,7 +45,7 @@ extern void char_to_room(struct char_data * ch, int room);
 
 
 // extern funcs
-extern char *cleanup(char *dest, const char *src);
+extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
 extern bool resize_world_array();
 
 /* function protos */
@@ -1447,10 +1447,10 @@ void write_world_to_disk(vnum_t zone_vnum)
       fprintf(fp, "Name:\t%s\n",
               RM.name ? RM.name : STRING_ROOM_TITLE_UNFINISHED);
       fprintf(fp, "Desc:$\n%s~\n",
-              cleanup(buf2, RM.description ? RM.description :
+              prep_string_for_writing_to_savefile(buf2, RM.description ? RM.description :
                       STRING_ROOM_DESC_UNFINISHED));
       if (RM.night_desc)
-        fprintf(fp, "NightDesc:$\n%s~\n", cleanup(buf2, RM.night_desc));
+        fprintf(fp, "NightDesc:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, RM.night_desc));
 
       fprintf(fp, "Flags:\t%s\n", RM.room_flags.ToString());
 
@@ -1515,7 +1515,7 @@ void write_world_to_disk(vnum_t zone_vnum)
 
           if (ptr->general_description)
             fprintf(fp, "\tDesc:$\n%s~\n",
-                    cleanup(buf2, ptr->general_description));
+                    prep_string_for_writing_to_savefile(buf2, ptr->general_description));
 
           /* door flags need special handling, unfortunately. argh! */
           temp_door_flag = 0;
@@ -1572,9 +1572,9 @@ void write_world_to_disk(vnum_t zone_vnum)
             fprintf(fp, "\tHiddenRating:\t%d\n", MIN(ptr->hidden, MAX_EXIT_HIDDEN_RATING));
 
           // Add the new custom entry / exit strings.
-          PRINT_TO_FILE_IF_TRUE("\tGoIntoSecondPerson:$\n%s~\n", ptr->go_into_secondperson);
-          PRINT_TO_FILE_IF_TRUE("\tGoIntoThirdPerson:$\n%s~\n", ptr->go_into_thirdperson);
-          PRINT_TO_FILE_IF_TRUE("\tComeOutOfThirdPerson:$\n%s~\n", ptr->come_out_of_thirdperson);
+          PRINT_TO_FILE_IF_TRUE("\tGoIntoSecondPerson:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, ptr->go_into_secondperson));
+          PRINT_TO_FILE_IF_TRUE("\tGoIntoThirdPerson:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, ptr->go_into_thirdperson));
+          PRINT_TO_FILE_IF_TRUE("\tComeOutOfThirdPerson:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, ptr->come_out_of_thirdperson));
         }
       }
       if (RM.ex_description) {
@@ -1586,7 +1586,7 @@ void write_world_to_disk(vnum_t zone_vnum)
                     "\tKeywords:\t%s\n"
                     "\tDesc:$\n%s~\n",
                     y, ex_desc->keyword,
-                    cleanup(buf2, ex_desc->description));
+                    prep_string_for_writing_to_savefile(buf2, ex_desc->description));
           }
           y++;
         }

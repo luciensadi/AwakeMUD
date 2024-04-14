@@ -795,17 +795,27 @@ char *get_token(char *str, char *token)
   return temp;
 }
 
-/* strips \r's from line -- Chris*/
-char *cleanup(char *dest, const char *src)
+/* Strips \r and replaces ~ with a safe character. */
+char *prep_string_for_writing_to_savefile(char *dest, const char *src)
 {
   if (!src) // this is because sometimes a null gets sent to src
     return NULL;
 
   char *temp = &dest[0];
 
-  for (; *src; src++)
-    if (*src != '\r')
+  for (; *src; src++) {
+    // Ignore \r characters entirely.
+    if (*src == '\r')
+      continue;
+
+    if (*src == '~') {
+      // Swap out ~ characters, which indicate ends of strings in savefiles.
+      *temp++ = '\7';
+    } else {
+      // Copy the line untouched.
       *temp++ = *src;
+    }
+  }
 
   *temp = '\0';
   return dest;

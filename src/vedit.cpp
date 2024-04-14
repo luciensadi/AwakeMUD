@@ -29,7 +29,7 @@ extern class memoryClass *Mem;
 void write_vehs_to_disk(int zone);
 
 // extern funcs
-extern char *cleanup(char *dest, const char *src);
+extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
 
 /* display main menu */
 void vedit_disp_menu(struct descriptor_data * d)
@@ -734,11 +734,11 @@ void write_vehs_to_disk(int zone)
       fprintf(fp, "Name:\t%s\n", veh->name ? veh->name : "unnamed");
       fprintf(fp, "ShortDesc:\t%s\n", veh->short_description ? veh->short_description : "an unnamed vehicle");
       fprintf(fp, "RoomDesc:\t%s\n", veh->description ? veh->description : "An unnamed vehicle sits here");
-      fprintf(fp, "LongDesc:$\n%s~\n", cleanup(buf2, veh->long_description ? veh->long_description : "You see an uncreative vehicle."));
-      fprintf(fp, "Inside:$\n%s~\n", cleanup(buf2, veh->inside_description ? veh->inside_description: "You see an uncreative vehicle."));
-      fprintf(fp, "InsideRear:$\n%s~\n", cleanup(buf2, veh->rear_description ? veh->rear_description: "You see an uncreative vehicle."));
-      fprintf(fp, "Leaving:\t%s\n", cleanup(buf2, veh->leave ? veh->leave : "leaves"));
-      fprintf(fp, "Arriving:\t%s\n", cleanup(buf2, veh->arrive ? veh->arrive : "arrives"));
+      fprintf(fp, "LongDesc:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, veh->long_description ? veh->long_description : "You see an uncreative vehicle."));
+      fprintf(fp, "Inside:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, veh->inside_description ? veh->inside_description: "You see an uncreative vehicle."));
+      fprintf(fp, "InsideRear:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, veh->rear_description ? veh->rear_description: "You see an uncreative vehicle."));
+      fprintf(fp, "Leaving:\t%s\n", prep_string_for_writing_to_savefile(buf2, veh->leave ? veh->leave : "leaves"));
+      fprintf(fp, "Arriving:\t%s\n", prep_string_for_writing_to_savefile(buf2, veh->arrive ? veh->arrive : "arrives"));
       fprintf(fp, "Handling:\t%d\n"
               "Speed:\t%d\n"
               "Accel:\t%d\n"

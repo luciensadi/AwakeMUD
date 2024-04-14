@@ -18,7 +18,7 @@
 #define HOST d->edit_host
 #define NUM_OF_HOST_TYPES 6
 extern int vnum_from_non_connected_zone(int vnum);
-extern char *cleanup(char *dest, const char *src);
+extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
 
 #define HT matrix[realcounter]
 void write_host_to_disk(int vnum)
@@ -48,7 +48,7 @@ void write_host_to_disk(int vnum)
       fprintf(fl, "#%ld\n", HT.vnum);
       fprintf(fl, "Name:\t%s\n", HT.name);
       fprintf(fl, "Keywords:\t%s\n", HT.keywords);
-      fprintf(fl, "Description:$\n%s~\n", cleanup(buf2, HT.desc));
+      fprintf(fl, "Description:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, HT.desc));
       fprintf(fl, "ShutdownStart:\t%s\n", HT.shutdown_start);
       fprintf(fl, "ShutdownStop:\t%s\n", HT.shutdown_stop);
       fprintf(fl, "Parent:\t%ld\n", HT.parent);
