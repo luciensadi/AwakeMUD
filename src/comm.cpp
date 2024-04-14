@@ -3810,7 +3810,7 @@ void verify_character_validity(struct char_data *ch, bool go_deep) {
     verify_obj_validity(ch->equipment[i]);
 
   verify_character_validity(ch->next_in_room);
-  verify_character_validity(ch->next);
+  verify_character_validity(ch->next_in_character_list);
   verify_character_validity(ch->next_fighting);
   verify_character_validity(ch->next_in_zone);
   verify_character_validity(ch->next_in_veh);
@@ -3851,7 +3851,7 @@ void verify_every_pointer_we_can_think_of() {
   ObjList.CheckPointers();
 
   // Next, characters.
-  for (struct char_data *ptr = character_list; ptr; ptr = ptr->next) {
+  for (struct char_data *ptr = character_list; ptr; ptr = ptr->next_in_character_list) {
     verify_character_validity(ptr, TRUE);
   }
 
