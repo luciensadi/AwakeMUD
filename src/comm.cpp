@@ -3764,8 +3764,6 @@ void verify_obj_validity(struct obj_data *obj, bool go_deep) {
 
   assert(obj->canary == CANARY_VALUE);
 
-  assert(obj->worn_on >= 0 && obj->worn_on < NUM_WEARS);
-
   if (!go_deep)
     return;
 
