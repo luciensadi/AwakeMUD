@@ -24,8 +24,8 @@ public:
   void UpdateNums(int num);
   void Traverse(void (*func)(struct obj_data *));
   void CallSpec();
-  void RemoveObjNum(int num);
-  void RemoveQuestObjs(int id);
+  void RemoveObjNum(rnum_t rnum);
+  void RemoveQuestObjs(idnum_t idnum);
   void BuzzPocsecs(void);
 
   #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE

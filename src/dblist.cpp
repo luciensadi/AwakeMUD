@@ -77,8 +77,15 @@ void objList::CheckPointers()
 {
   extern void verify_obj_validity(struct obj_data *obj, bool go_deep=FALSE);
 
-  for (nodeStruct<struct obj_data *> *temp = head; temp; temp = temp->next)
+  std::unordered_map<obj_data **, bool> obj_ptrs = {};
+
+  for (nodeStruct<struct obj_data *> *temp = head; temp; temp = temp->next) {
     verify_obj_validity(temp->data, TRUE);
+
+    // Assert we have no duplicates in the list, then mark this as being in the list.
+    assert(obj_ptrs.find(std::addressof(temp->data)) == obj_ptrs.end());
+    obj_ptrs[std::addressof(temp->data)] = TRUE;
+  }
 }
 #endif
 
@@ -521,27 +528,27 @@ void _remove_obj_from_world(struct obj_data *obj) {
   extract_obj(obj);
 }
 
-void objList::RemoveObjNum(int num)
+void objList::RemoveObjNum(rnum_t rnum)
 {
   nodeStruct<struct obj_data *> *temp, *next;
 
   for (temp = head; temp; temp = next) {
     next = temp->next;
 
-    if (GET_OBJ_RNUM(temp->data) == num) {
+    if (GET_OBJ_RNUM(temp->data) == rnum) {
       _remove_obj_from_world(temp->data);
     }
   }
 }
 
-void objList::RemoveQuestObjs(int id)
+void objList::RemoveQuestObjs(idnum_t questor_idnum)
 {
   nodeStruct<struct obj_data *> *temp, *next;
 
   for (temp = head; temp; temp = next) {
     next = temp->next;
 
-    if (temp->data->obj_flags.quest_id == id) {
+    if (temp->data->obj_flags.quest_id == questor_idnum) {
       _remove_obj_from_world(temp->data);
     }
   }

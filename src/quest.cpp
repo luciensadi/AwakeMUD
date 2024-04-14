@@ -400,7 +400,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
       }
 }
 
-void extract_quest_targets(int num)
+void extract_quest_targets(idnum_t questor_idnum)
 {
   struct obj_data *obj, *next_obj;
   int i;
@@ -421,7 +421,7 @@ void extract_quest_targets(int num)
           mob->last_loop_rand = loop_rand;
         }
 
-        if (IS_NPC(mob) && mob->mob_specials.quest_id == num) {
+        if (IS_NPC(mob) && mob->mob_specials.quest_id == questor_idnum) {
           for (obj = mob->carrying; obj; obj = next_obj) {
             next_obj = obj->next_content;
             extract_obj(obj);
@@ -444,7 +444,7 @@ void extract_quest_targets(int num)
     }
   }
 
-  ObjList.RemoveQuestObjs(num);
+  ObjList.RemoveQuestObjs(questor_idnum);
 }
 
 bool is_escortee(struct char_data *mob)

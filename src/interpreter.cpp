@@ -1550,6 +1550,7 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
   if (ch->points.fire[0] > 0 && success_test(GET_WIL(ch), 6) < 1)
   {
     send_to_char("^RThe flames cause you to panic!^n\r\n", ch);
+    WAIT_STATE(ch, 1 RL_SEC);
     return;
   }
 
@@ -1630,7 +1631,7 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
       if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
         // Attempt to send it as a custom channel message. If that doesn't work, nonsensical reply.
         if (!send_command_as_custom_channel_message(ch, arg)) {
-          nonsensical_reply(ch, arg, "matrix");
+          nonsensical_reply(ch, arg, "rigging");
         }
         return;
       }
@@ -1676,7 +1677,7 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
             || ((cmd_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, cmd_info[cmd].minimum_level)))) {
       // Attempt to send it as a custom channel message. If that doesn't work, nonsensical reply.
       if (!send_command_as_custom_channel_message(ch, arg)) {
-        nonsensical_reply(ch, arg, "matrix");
+        nonsensical_reply(ch, arg, "standard");
       }
       return;
     } else {
