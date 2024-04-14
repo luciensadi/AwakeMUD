@@ -5831,7 +5831,7 @@ ACMD(do_deactivate)
   struct obj_data *obj;
   int i;
 
-  if (GET_TRADITION(ch) == TRAD_ADEPT && !str_str(argument, "pain editor") && !str_str(argument, "voice modulator")) {
+  if (GET_TRADITION(ch) == TRAD_ADEPT && !str_str(argument, "pain editor") && !str_str(argument, "editor") && !str_str(argument, "voice modulator")) {
     char name[120], tokens[MAX_STRING_LENGTH], *s;
     extern int ability_cost(int abil, int level);
     strncpy(tokens, argument, sizeof(tokens) - 1);
@@ -5880,7 +5880,7 @@ ACMD(do_deactivate)
   }
   skip_spaces(&argument);
 
-  if (is_abbrev(argument, "pain editor")) {
+  if (is_abbrev(argument, "pain editor") || is_abbrev(argument, "editor")) {
     for (obj = ch->bioware; obj; obj = obj->next_content)
       if (GET_OBJ_VAL(obj, 0) == BIO_PAINEDITOR) {
         if (!GET_OBJ_VAL(obj, 3))
