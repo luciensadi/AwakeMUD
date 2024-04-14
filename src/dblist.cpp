@@ -532,11 +532,18 @@ void objList::RemoveObjNum(rnum_t rnum)
 {
   nodeStruct<struct obj_data *> *temp, *next;
 
+  if (rnum < 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid rnum to RemoveObjNum(%ld)!", rnum);
+    return;
+  }
+
   for (temp = head; temp; temp = next) {
     next = temp->next;
 
     if (GET_OBJ_RNUM(temp->data) == rnum) {
       _remove_obj_from_world(temp->data);
+      // We've potentially invalidated our next pointer, so start iterating again.
+      next = head;
     }
   }
 }
@@ -545,11 +552,18 @@ void objList::RemoveQuestObjs(idnum_t questor_idnum)
 {
   nodeStruct<struct obj_data *> *temp, *next;
 
+  if (questor_idnum <= 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid questor_idnum to RemoveQuestObjs(%ld)!", questor_idnum);
+    return;
+  }
+
   for (temp = head; temp; temp = next) {
     next = temp->next;
 
     if (temp->data->obj_flags.quest_id == questor_idnum) {
       _remove_obj_from_world(temp->data);
+      // We've potentially invalidated our next pointer, so start iterating again.
+      next = head;
     }
   }
 }
