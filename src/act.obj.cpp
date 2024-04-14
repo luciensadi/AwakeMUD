@@ -4085,7 +4085,7 @@ ACMD(do_activate)
     return;
   }
 
-  if (GET_TRADITION(ch) == TRAD_ADEPT && !str_str(argument, "Pain editor") && !str_str(argument, "voice modulator")) {
+  if (GET_TRADITION(ch) == TRAD_ADEPT && !str_str(argument, "pain editor") && !str_str(argument, "editor") && !str_str(argument, "voice modulator")) {
     char name[120], tokens[MAX_STRING_LENGTH], *s;
     extern int ability_cost(int abil, int level);
     int desired_level;
@@ -4166,7 +4166,7 @@ ACMD(do_activate)
 
   any_one_arg(argument, arg);
 
-  if (is_abbrev(arg, "pain editor")) {
+  if (is_abbrev(arg, "pain editor") || is_abbrev(arg, "editor")) {
     for (obj = ch->bioware; obj; obj = obj->next_content)
       if (GET_BIOWARE_TYPE(obj) == BIO_PAINEDITOR) {
         if (GET_BIOWARE_IS_ACTIVATED(obj))
