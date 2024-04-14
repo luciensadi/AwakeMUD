@@ -817,12 +817,12 @@ bool can_take_obj_from_anywhere(struct char_data * ch, struct obj_data * obj)
 
   if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)) && !ch->in_veh) {
     if (access_level(ch, LVL_PRESIDENT)) {
-      send_to_char(ch, "You bypass the !TAKE flag on %s.", decapitalize_a_an(obj));
+      send_to_char(ch, "You bypass the !TAKE flag on %s.\r\n", decapitalize_a_an(obj));
     } else {
       if (GET_OBJ_TYPE(obj) == ITEM_DESTROYABLE) {
-        send_to_char(ch, "You can't pick %s up%s", decapitalize_a_an(obj), IS_RIGGING(ch) ? "." : ", but you're pretty sure you could ##^WDESTROY^n it.");
+        send_to_char(ch, "You can't pick %s up%s\r\n", decapitalize_a_an(obj), IS_RIGGING(ch) ? "." : ", but you're pretty sure you could ##^WDESTROY^n it.");
       } else {
-        send_to_char(ch, "You can't take %s.", decapitalize_a_an(obj));
+        send_to_char(ch, "You can't take %s.\r\n", decapitalize_a_an(obj));
       }
       return FALSE;
     }
