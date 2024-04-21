@@ -2410,6 +2410,24 @@ void extract_veh(struct veh_data * veh)
     }
   }
 
+  // Stop anyone from trying to keep fighting this vehicle.
+  if (veh->in_room) {
+    for (struct char_data *ch = veh->in_room->people; ch; ch = ch->next_in_room) {
+      if (FIGHTING_VEH(ch) == veh)
+        FIGHTING_VEH(ch) = NULL;
+    }
+
+    for (struct veh_data *tveh = veh->in_room->vehicles; tveh; tveh = tveh->next_veh) {
+      if (tveh->fight_veh == veh)
+        tveh->fight_veh = NULL;
+      
+      for (struct obj_data *mount = tveh->mount; mount; mount = mount->next_content) {
+        if (mount->tveh)
+          mount->tveh = NULL;
+      }
+    }
+  }
+
   // Find the online owner of the vehicle for future modifications and notifications.
 
 
