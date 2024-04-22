@@ -263,7 +263,7 @@ ACMD(do_steal)
   else if (!IS_SENATOR(ch) && !IS_NPC(vict) && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)))
     send_to_char(ch, "Both you and %s need to be toggled PK for that.\r\n", GET_NAME(vict));
   else {
-    if (!(obj = get_obj_in_list_vis(vict, obj_name, vict->carrying))) {
+    if (!(obj = get_obj_in_list_vis(ch, obj_name, vict->carrying))) {
       if (!IS_SENATOR(ch)) {
         send_to_char(ch, "You don't see '%s' in their inventory.\r\n", obj_name);
         return;
