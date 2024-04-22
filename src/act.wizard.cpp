@@ -106,6 +106,7 @@ extern void turn_hardcore_on_for_character(struct char_data *ch);
 extern void turn_hardcore_off_for_character(struct char_data *ch);
 extern void stop_rigging(struct char_data *ch);
 extern void stop_driving(struct char_data *ch);
+extern void write_zone_to_disk(int vnum);
 
 extern void DBFinalize();
 
@@ -9018,6 +9019,38 @@ ACMD(do_audit) {
     return;
   }
 
+  // Third form: `audit submit <confirm>`
+  if (is_abbrev(arg1, "submit")) {
+    FAILURE_CASE(!*remainder || !str_cmp(remainder, "confirm"), "To submit your zone for review, use AUDIT SUBMIT CONFIRM while standing"
+                                                                " anywhere in the zone you want to submit. This will remove your ability"
+                                                                " to edit the zone and notify staff that it is ready for review.");
+    
+    // Get the zone they're in.
+    struct room_data *in_room = get_ch_in_room(ch);
+    FAILURE_CASE(!in_room, "idk how you did it but you broke it, notify staff");
+    rnum_t zone_rnum = get_zone_index_number_from_vnum(GET_ROOM_VNUM(in_room));
+
+    // Check the zone for editors.
+    for (int editor_idx = 0; editor_idx < NUM_ZONE_EDITOR_IDS; editor_idx++) {
+      // If this editor ID is theirs, remove it and post a wizlog about it.
+      if (zone_table[zone_rnum].editor_ids[editor_idx] == GET_IDNUM(ch)) {
+        zone_table[zone_rnum].editor_ids[editor_idx] = 0;
+        write_zone_to_disk(zone_table[zone_rnum].number);
+
+        mudlog_vfprintf(ch, LOG_WIZLOG, "^W%s^W has flagged zone %ld (%s^W) as ready for auditing.^n",
+                        GET_CHAR_NAME(ch),
+                        zone_table[zone_rnum].number,
+                        zone_table[zone_rnum].name);
+        send_to_char(ch, "OK. Your ability to edit %s^n has been removed, and staff have been notified it's ready for review.\r\n", zone_table[zone_rnum].name);
+        return;
+      }
+    }
+
+    // If we got here, they don't have edit privs on this zone.
+    send_to_char("You don't seem to be an editor for the zone you're standing in.\r\n", ch);
+    return;
+  }
+
   // Third form: `audit (rooms|mobs|objects|quests|shops...) [zonenum]`
   if (*remainder) {
     number = atoi(remainder);
@@ -9046,7 +9079,10 @@ ACMD(do_audit) {
     return;
   }
 
-  send_to_char(ch, "Invalid command syntax. Expected: AUDIT <zonenum> | AUDIT (rooms|mobs|objects|...) [zonenum] | AUDIT ALL\r\n");
+  send_to_char(ch, "Invalid command syntax. Expected one of the following:\r\n"
+                   " AUDIT <zonenum>\r\n"
+                   " AUDIT (rooms|mobs|objects|...) [zonenum]\r\n"
+                   " AUDIT SUBMIT\r\n");
   return;
 }
 
