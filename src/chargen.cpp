@@ -505,7 +505,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   d->character->player.host = str_dup(d->host);
 
-  set_character_skill(d->character, SKILL_ENGLISH, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
+  set_character_skill(d->character, SKILL_ENGLISH, STARTING_LANGUAGE_SKILL_LEVEL, FALSE, FALSE);
   GET_LANGUAGE(d->character) = SKILL_ENGLISH;
   GET_RESTRING_POINTS(d->character) = STARTING_RESTRING_POINTS;
   GET_LOADROOM(d->character) = archetypes[i]->start_room;
