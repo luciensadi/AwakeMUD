@@ -525,7 +525,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Set skills. Has to be after CreateChar so they don't get wiped.
   for (int skill = 0; skill < MAX_SKILLS; skill++)
     if (archetypes[i]->skills[skill])
-      set_character_skill(CH, skill, archetypes[i]->skills[skill], FALSE);
+      set_character_skill(CH, skill, archetypes[i]->skills[skill], FALSE, FALSE);
 
   // Grant subsidy card (bonded to ID). Has to be after CreateChar so the idnum doesn't change.
   temp_obj = read_object(OBJ_NEOPHYTE_SUBSIDY_CARD, VIRTUAL);
