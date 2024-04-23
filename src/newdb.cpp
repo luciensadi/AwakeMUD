@@ -1608,8 +1608,8 @@ bool PCIndex::Save()
 
 // You motherfuckers better sanitize your queries that you pass to this, because it's going in RAW.
 // Only used for idnums right now, so -1 is the error code.
-vnum_t get_one_number_from_query(const char *query) {
-  vnum_t value = -1;
+idnum_t get_one_number_from_query(const char *query) {
+  idnum_t value = -1;
 
   char buf[MAX_STRING_LENGTH];
   strcpy(buf, query);
@@ -1624,9 +1624,9 @@ vnum_t get_one_number_from_query(const char *query) {
   return value;
 }
 
-vnum_t get_highest_idnum_in_use() {
+idnum_t get_highest_idnum_in_use() {
   char buf[MAX_STRING_LENGTH];
-  vnum_t new_number = 0;
+  idnum_t new_number = 0;
 
   const char *tables[] = {
     "pfiles_adeptpowers",
@@ -1642,6 +1642,7 @@ vnum_t get_highest_idnum_in_use() {
     "pfiles_magic",
     "pfiles_memory",
     "pfiles_metamagic",
+    "pfiles_named_tags",
     "pfiles_playergroups",
     "pfiles_quests",
     "pfiles_skills",
@@ -1651,10 +1652,12 @@ vnum_t get_highest_idnum_in_use() {
     "you-deleted-something-and-didn't-change-the-table-length-dumbass" // must be last for obvious reasons
   };
 
-  #define NUM_IDNUM_TABLES 19
+  #define NUM_IDNUM_TABLES 20
 
-  vnum_t highest_pfiles_idnum = get_one_number_from_query("SELECT idnum FROM pfiles ORDER BY idnum DESC LIMIT 1;");
+  // Get the pfiles idnum. This SHOULD be the only one we need.
+  idnum_t highest_pfiles_idnum = get_one_number_from_query("SELECT idnum FROM pfiles ORDER BY idnum DESC LIMIT 1;");
 
+  // Check for idnums in standard tables.
   for (int i = 0; i < NUM_IDNUM_TABLES; i++) {
     snprintf(buf, sizeof(buf), "SELECT idnum FROM %s ORDER BY idnum DESC LIMIT 1;", tables[i]);
     new_number = get_one_number_from_query(buf);
@@ -1665,28 +1668,40 @@ vnum_t get_highest_idnum_in_use() {
     }
   }
 
-  strlcpy(buf, "SELECT sender_id FROM pfiles_mail ORDER BY idnum DESC LIMIT 1;", sizeof(buf));
-  new_number = get_one_number_from_query(buf);
+  // Check for both senders and recipients in mail.
+  new_number = get_one_number_from_query("SELECT sender_id FROM pfiles_mail ORDER BY idnum DESC LIMIT 1;");
   if (highest_pfiles_idnum < new_number) {
     snprintf(buf3, sizeof(buf3), "^RSYSERR: SQL database corruption (pfiles idnum %ld lower than pfiles_mail sender_id %ld). Auto-correcting.^g", highest_pfiles_idnum, new_number);
     mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
     highest_pfiles_idnum = new_number;
   }
 
-  strlcpy(buf, "SELECT recipient FROM pfiles_mail ORDER BY idnum DESC LIMIT 1;", sizeof(buf));
-  new_number = get_one_number_from_query(buf);
+  new_number = get_one_number_from_query("SELECT recipient FROM pfiles_mail ORDER BY idnum DESC LIMIT 1;");
   if (highest_pfiles_idnum < new_number) {
     snprintf(buf3, sizeof(buf3), "^RSYSERR: SQL database corruption (pfiles idnum %ld lower than pfiles_mail recipient %ld). Auto-correcting.^g", highest_pfiles_idnum, new_number);
     mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
     highest_pfiles_idnum = new_number;
   }
 
+  // Finally, scan through the online characters.
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    if (d->character && GET_IDNUM(d->character) > highest_pfiles_idnum) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Multiple simultaneous chargen detected, fixing idnum.");
+      highest_pfiles_idnum = GET_IDNUM(d->character);
+    }
+    if (d->original && GET_IDNUM(d->original) > highest_pfiles_idnum) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Multiple simultaneous chargen detected, fixing idnum.");
+      highest_pfiles_idnum = GET_IDNUM(d->original);
+    }
+  }
+
+  // Send it on home.
   return highest_pfiles_idnum;
 }
 
 char_data *CreateChar(char_data *ch)
 {
-  vnum_t highest_idnum_in_use = get_highest_idnum_in_use();
+  idnum_t highest_idnum_in_use = get_highest_idnum_in_use();
 
   if (highest_idnum_in_use <= -1) {
     log_vfprintf("%s promoted to %s by virtue of first-come, first-serve.",
