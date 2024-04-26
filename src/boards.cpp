@@ -261,14 +261,21 @@ void Board_write_message(int board_type, struct obj_data *terminal,
     return;
   }
   ct = time(0);
-  tmstr = (char *) asctime(localtime(&ct));
+  struct tm *timeinfo = localtime(&ct);
+
+  char formatted_time[200];
+  memset(formatted_time, 0, sizeof(formatted_time));
+  strftime(formatted_time, sizeof(formatted_time), "%F @ %H:%M", timeinfo);
+
+  tmstr = (char *) asctime(timeinfo);
   *(tmstr + strlen(tmstr) - 1) = '\0';
 
   if (IS_NPC(ch))
     snprintf(buf2, sizeof(buf2), "(%s)", GET_NAME(ch));
   else
     snprintf(buf2, sizeof(buf2), "(%s)", GET_CHAR_NAME(ch));
-  snprintf(buf, sizeof(buf), "%6.10s %-12s :: %s", tmstr, buf2, arg);
+  // snprintf(buf, sizeof(buf), "%6.10s %-12s :: %s", tmstr, buf2, arg);
+  snprintf(buf, sizeof(buf), "%s %-12s :: %s", formatted_time, buf2, arg);
   len = strlen(buf) + 1;
   if (!(NEW_MSG_INDEX(board_type).heading = new char[len]))
   {
