@@ -663,51 +663,27 @@ void Board_delete_msg(int board_type, int ind)
 int Board_remove_msg(int board_type, struct obj_data *terminal,
                      struct char_data * ch, char *arg)
 {
-  int ind, msg;
+  int msg;
   char number[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH];
   struct descriptor_data *d;
 
-  one_argument(arg, number);
+  any_one_arg(arg, number);
 
-  if (!*number || !isdigit(*number))
+  if (!*number || !(msg = atoi(number)))
     return 0;
-  if (!(msg = atoi(number)))
-    return (0);
 
-  for (ind = 0; *(number+ind); ind++)
-    if (!isdigit(*(number+ind)))
-      return 0;
+  TRUE_CASE_PRINTF(!num_of_msgs[board_type], "The %s is empty!", fname(terminal->text.keywords));
+  TRUE_CASE_PRINTF(msg < 1 || msg > num_of_msgs[board_type], "File %d exists only in your imagination.", msg);
 
-  if (!num_of_msgs[board_type])
-  {
-    send_to_char(ch, "The %s is empty!\r\n",
-                 fname(terminal->text.keywords));
-    return 1;
-  }
-  if (msg < 1 || msg > num_of_msgs[board_type])
-  {
-    send_to_char("That file exists only in your imagination.\r\n", ch);
-    return 1;
-  }
-  ind = msg - 1;
-  if (!MSG_HEADING(board_type, ind))
-  {
-    send_to_char("That file appears to be screwed up.\r\n", ch);
-    return 1;
-  }
+  int ind = msg - 1;
+  TRUE_CASE_PRINTF(!MSG_HEADING(board_type, ind), "File %d appears to be screwed up.", msg);
+  
   snprintf(buf, sizeof(buf), "(%s)", GET_CHAR_NAME(ch));
-  if (!access_level(ch, REMOVE_LVL(board_type))
-      && !(strstr((const char *)MSG_HEADING(board_type, ind), buf)))
-  {
-    send_to_char("You do not have the correct qualifications to remove other people's files.\r\n", ch);
-    return 1;
-  }
-  if (!access_level(ch, MSG_LEVEL(board_type, ind))
-      && !access_level(ch, LVL_VICEPRES))
-  {
-    send_to_char("You cannot remove this file without proper authorization.\r\n", ch);
-    return 1;
-  }
+  TRUE_CASE(!access_level(ch, REMOVE_LVL(board_type)) && !(strstr((const char *)MSG_HEADING(board_type, ind), buf)),
+            "You do not have the correct qualifications to remove other people's files.");
+            
+  TRUE_CASE(!access_level(ch, MSG_LEVEL(board_type, ind)) && !access_level(ch, LVL_VICEPRES),
+            "You cannot remove this file without proper authorization.");
 
   if (MSG_SLOTNUM(board_type, ind) < 0 || MSG_SLOTNUM(board_type, ind) >= INDEX_SIZE)
   {
@@ -715,12 +691,14 @@ int Board_remove_msg(int board_type, struct obj_data *terminal,
     send_to_char("That file is majorly screwed up.\r\n", ch);
     return 1;
   }
+
   for (d = descriptor_list; d; d = d->next)
-    if (!d->connected && d->str == &(msg_storage[MSG_SLOTNUM(board_type, ind)]))
-    {
+    if (!d->connected && d->str == &(msg_storage[MSG_SLOTNUM(board_type, ind)])) {
       send_to_char("At least wait until the author is finished before removing it!\r\n", ch);
       return 1;
     }
+  
+  mudlog_vfprintf(ch, LOG_GRIDLOG, "Deleting file %d (%s) from %s.", msg, MSG_HEADING(board_type, ind), GET_OBJ_NAME(terminal));
 
   Board_delete_msg(board_type, ind);
 
