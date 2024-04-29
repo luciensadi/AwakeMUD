@@ -1665,6 +1665,8 @@ ACMD(do_reload)
       ammotype = ammo ? GET_AMMOBOX_TYPE(ammo) : AMMO_NORMAL;
       int max = GET_WEAPON_MAX_AMMO(gun) * MOUNTED_GUN_AMMO_CAPACITY_MULTIPLIER;
 
+      FAILURE_CASE(ammo && GET_AMMOBOX_TYPE(ammo) == AMMO_AV, "You can't reload weapons that contain AV ammo.");
+
       if (ammo_type_ptr && *ammo_type_ptr) {
         for (int i = NUM_AMMOTYPES - 1; i >= AMMO_NORMAL ; i--) {
           if (str_str(ammo_type[i].name, ammo_type_ptr)) {
