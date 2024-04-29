@@ -458,7 +458,7 @@ ACMD(do_docwagon) {
         return;
       }
       send_to_char("You anonymously notify them that you're on the way.\r\n", ch);
-      send_to_char(d->character, "Your DocWagon modulator buzzes-- someone with the DocWagon ID %5d has acknowledged your request for assistance and is on their way!\r\n", get_docwagon_faux_id(ch));
+      send_to_char(d->character, "Your DocWagon modulator buzzes-- a player with the DocWagon ID %5d has acknowledged your request for assistance and is on their way!\r\n", get_docwagon_faux_id(ch));
       d->character->received_docwagon_ack_from.insert(std::make_pair(GET_IDNUM_EVEN_IF_PROJECTING(ch), TRUE));
       mudlog_vfprintf(ch, LOG_SYSLOG, "%s has accepted %s's DocWagon contract.", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
       return;
@@ -470,7 +470,7 @@ ACMD(do_docwagon) {
         return;
       }
       send_to_char("You anonymously notify them that you're no longer on the way.\r\n", ch);
-      send_to_char(d->character, "Your DocWagon modulator buzzes-- someone with the DocWagon ID %5d is no longer able to respond to your contract.\r\n", get_docwagon_faux_id(ch));
+      send_to_char(d->character, "Your DocWagon modulator buzzes-- a player with the DocWagon ID %5d is no longer able to respond to your contract.\r\n", get_docwagon_faux_id(ch));
       d->character->received_docwagon_ack_from.erase(d->character->received_docwagon_ack_from.find(GET_IDNUM_EVEN_IF_PROJECTING(ch)));
       mudlog_vfprintf(ch, LOG_SYSLOG, "%s has dropped %s's DocWagon contract (command).", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
       return;
