@@ -35,6 +35,8 @@
  The following section is for Diku/Merc derivatives.  Replace as needed.
  ******************************************************************************/
 
+#define PROTO_DEBUG_MSG(...) log_vfprintf(__VA_ARGS__);
+// #define PROTO_DEBUG_MSG(...)
 
 static void Write( descriptor_t *apDescriptor, const char *apData )
 {
@@ -214,7 +216,7 @@ static time_t s_Uptime  = 0;
 
 static void Negotiate          ( descriptor_t *apDescriptor );
 static void PerformHandshake      ( descriptor_t *apDescriptor, char aCmd, char aProtocol );
-static void PerformSubnegotiation  ( descriptor_t *apDescriptor, char aCmd, char *apData, int aSize );
+static void PerformSubnegotiation  ( descriptor_t *apDescriptor, char aCmd, char *apData, size_t aSize );
 static void SendNegotiationSequence ( descriptor_t *apDescriptor, char aCmd, char aProtocol );
 static bool ConfirmNegotiation   ( descriptor_t *apDescriptor, negotiated_t aProtocol, bool abWillDo, bool abSendReply );
 
@@ -1787,6 +1789,7 @@ void UnicodeAdd( char **apString, int aValue )
 
 static void Negotiate( descriptor_t *apDescriptor )
 {
+  PROTO_DEBUG_MSG("Entering Negotiate(*)");
   protocol_t *pProtocol = apDescriptor->pProtocol;
 
   if ( pProtocol->bNegotiated )
@@ -1806,11 +1809,14 @@ static void Negotiate( descriptor_t *apDescriptor )
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MSP, TRUE, TRUE);
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MXP, TRUE, TRUE);
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MCCP, TRUE, TRUE);
+    
+    Write(apDescriptor, (char[]) { (char)IAC, (char)DO, TELOPT_NEW_ENVIRON, '\0' });
   }
 }
 
 static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProtocol )
 {
+  PROTO_DEBUG_MSG("Entering PerformHandshake(*, %d, %d)", aCmd, aProtocol);
   protocol_t *pProtocol = apDescriptor->pProtocol;
 
   switch ( aProtocol )
@@ -2034,6 +2040,26 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
       }
       break;
 
+    case (char)TELOPT_NEW_ENVIRON:
+      if ( aCmd == (char)WILL )
+      {
+        PROTO_DEBUG_MSG("Received IAC WILL NEW-ENVIRON from client, requesting IPADDRESS.");
+        // IAC SB NEW-ENVIRON SEND VAR "IPADDRESS" IAC SE
+        Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, SEND, NEW_ENV_VAR, '\0' });
+        Write(apDescriptor, "IPADDRESS");
+        Write(apDescriptor, (char[]) { (char)IAC, (char)SE, '\0' });
+      }
+      else if ( aCmd == (char)WONT )
+      {
+        // Not supported. Ignore.
+        PROTO_DEBUG_MSG("Received IAC WONT NEW-ENVIRON from client, leaving it be.");
+      }
+      else {
+        // Invalid mode. Ignore.
+        log_vfprintf("Received invalid IAC %s NEW-ENVIRON from client, ignoring.", aCmd == (char)DO ? "DO" : "DONT");
+      }
+      break;
+
     case (char)TELOPT_MXP:
       if ( aCmd == (char)WILL || aCmd == (char)DO )
       {
@@ -2134,12 +2160,41 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
   }
 }
 
-static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *apData, int aSize )
+static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *apData, size_t aSize )
 {
   protocol_t *pProtocol = apDescriptor->pProtocol;
 
   switch ( aCmd )
   {
+    case (char)TELOPT_NEW_ENVIRON:
+      {
+        PROTO_DEBUG_MSG("Entering PerformSubnegotiation's TELOPT_NEW_ENVIRON case.");
+        // We care about the very specific response message of (IAC SB NEW-ENVIRON IS VAR "IPADDRESS" VAL "the ip" IAC SE).
+        // We receive it to this switch case as (IS VAR "IPADDRESS" VAL "the ip").
+        size_t required_min_len = 3 /* telnet flags */ + 9 /* strlen("IPADDRESS") */ + 7 /* strlen of absolute smallest IP, 1.1.1.1 */;
+        if (aSize >= required_min_len) {
+          if (apData[0] == (char)NEW_ENV_IS && apData[1] == (char)NEW_ENV_VAR) {
+            // Require that they've sent (IS VAR "IPADDRESS" VAL)
+            char expected_input[] = { 'I', 'P', 'A', 'D', 'D', 'R', 'E', 'S', 'S', (char)NEW_ENV_VALUE, '\0' };
+            if (!strncmp(apData, expected_input, strlen(expected_input))) {
+              // Capture the value.
+              char ipAddr[1000];
+              memset(ipAddr, 0, sizeof(ipAddr));
+              for (size_t idx = 12; idx < sizeof(ipAddr) - 1 && apData[idx] && apData[idx] != (char)IAC; idx++)
+                ipAddr[idx - 12] = apData[idx];
+              // Print it to logs.
+              PROTO_DEBUG_MSG("Received IP of '%s' from TELOPT_NEW_ENVIRON.", ipAddr);
+            } else {
+              PROTO_DEBUG_MSG("- Bailing out: Does not start with IS VAR 'IPADDRESS' VAL.");
+            }
+          } else {
+            PROTO_DEBUG_MSG("- Bailing out: Does not start with IS VAR.");
+          }
+        } else {
+          PROTO_DEBUG_MSG("- Bailing out: Size %d is less than required.", aSize);
+        }
+      }
+      break;
     case (char)TELOPT_TTYPE:
       if ( pProtocol->bTTYPE )
       {

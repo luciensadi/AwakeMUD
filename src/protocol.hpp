@@ -72,7 +72,10 @@ typedef struct descriptor_data descriptor_t;
 #define ACCEPTED                       2
 #define REJECTED                       3
 
+#ifndef TELOPT_CHARSET
 #define TELOPT_CHARSET                 ((const unsigned char) 42)
+#endif
+
 #define TELOPT_MSDP                    ((const unsigned char) 69)
 #define TELOPT_MSSP                    ((const unsigned char) 70)
 #define TELOPT_MCCP                    ((const unsigned char) 86) /* This is MCCP version 2 */
@@ -572,5 +575,10 @@ char *UnicodeGet( int aValue );
  * string, without adding a NUL character at the end.
  */
 void UnicodeAdd( char **apString, int aValue );
+
+// Extra defines for NEW-ENVIRON that aren't in telnet.h.
+#define NEW_ENV_IS   0
+#define NEW_ENV_SEND 1
+#define NEW_ENV_INFO 2
 
 #endif /* PROTOCOL_H */
