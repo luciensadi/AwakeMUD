@@ -113,6 +113,7 @@ extern bool cyber_is_retractable(struct obj_data *cyber);
 extern bool precipitation_is_snow(int jurisdiction);
 
 bool ch_can_see_vict_in_where(struct char_data *ch, struct char_data *vict);
+void write_gsgp_file(int player_count, const char *path);
 
 #ifdef USE_PRIVATE_CE_WORLD
   extern void display_secret_info_about_object(struct char_data *ch, struct obj_data *obj);
@@ -5914,6 +5915,7 @@ ACMD(do_who)
 
   if (subcmd) {
     convert_and_write_string_to_file(buf2, "text/wholist");
+    write_gsgp_file(num_can_see, "text/gsgp");
   } else send_to_char(buf2, ch);
 }
 
@@ -8201,4 +8203,20 @@ ACMD(do_count) {
   }
 
   send_to_char("\r\nIf any of this seems high, note that each individual pocket secretary mail is an item. Deleting old mail etc will help.\r\n", ch);
+}
+
+void write_gsgp_file(int player_count, const char *path) {
+  FILE *fl;
+  if (!(fl = fopen(path, "w"))) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Cannot open file %s for write", path);
+    return;
+  }
+
+  // Write our GSGP file per https://game-scry.online/about?goto=gsgp
+  fprintf(fl, "{\r\n");
+  fprintf(fl, "    \"name\": \"AwakeMUD CE\",\r\n");
+  fprintf(fl, "    \"active_players\": %d\r\n", player_count);
+  fprintf(fl, "}");
+
+  fclose(fl);
 }
