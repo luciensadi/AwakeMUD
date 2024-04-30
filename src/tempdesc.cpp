@@ -5,6 +5,8 @@
 #include "comm.hpp"
 #include "db.hpp"
 
+extern void write_world_to_disk(vnum_t vnum);
+
 void set_room_tempdesc(struct room_data *room, const char *desc, idnum_t idnum) {
   DELETE_AND_NULL_ARRAY(room->temp_desc);
   room->temp_desc = str_dup(desc);
@@ -14,6 +16,25 @@ void set_room_tempdesc(struct room_data *room, const char *desc, idnum_t idnum) 
   if (room->people) {
     send_to_room("You blink and your surroundings look a little different.\r\n", room);
   }
+}
+
+void overwrite_room_desc_with_temp_desc(struct room_data *room, struct char_data *ch) {
+  FAILURE_CASE(!room, "You're not in a room.");
+  FAILURE_CASE(!room->temp_desc, "There is no temp desc set here.");
+
+  // Overwrite the desc.
+  delete [] room->description;
+  room->description = str_dup(room->temp_desc);
+
+  mudlog_vfprintf(ch, LOG_WIZLOG, "Overwrote room desc with tempdesc.");
+  
+  // Clear remaining data.
+  DELETE_AND_NULL_ARRAY(room->temp_desc);
+  room->temp_desc_timeout = 0;
+  room->temp_desc_author_idnum = 0;
+
+  // Save.
+  write_world_to_disk(get_zone_from_vnum(GET_ROOM_VNUM(room))->number);
 }
 
 void clear_temp_desc(struct room_data *room, struct char_data *clearer) {
@@ -49,9 +70,15 @@ void tick_down_room_tempdesc_expiries() {
 ACMD(do_tempdesc) {
   int minutes_to_expiry = 480;
 
-  FAILURE_CASE(!PLR_FLAGGED(ch, PLR_RPE), "You can't use this command. Speak to RP staff if you want to apply for the ability to do so.");
   FAILURE_CASE(IS_NPC(ch), "NPCs can't set tempdescs.");
   FAILURE_CASE(!ch->in_room, "You must be standing in a room to do that.");
+
+#ifdef IS_BUILDPORT
+  FAILURE_CASE(!ACCESS_LEVEL(ch, LVL_BUILDER), "Only staff can use this command on the buildport.");
+  FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC), "You must have OLC enabled to set a tempdesc on the buildport.");
+#else
+  FAILURE_CASE(!PLR_FLAGGED(ch, PLR_RPE), "You can't use this command. Speak to RP staff if you want to apply for the ability to do so.");
+#endif
 
   // tempdesc <time in minutes>: Set a temporary room description that expires in X IRL minutes.
   skip_spaces(&argument);
@@ -60,6 +87,14 @@ ACMD(do_tempdesc) {
       clear_temp_desc(ch->in_room, ch);
       return;
     }
+
+#ifdef IS_BUILDPORT
+    if (!str_cmp(argument, "commit")) {
+      FAILURE_CASE(!ACCESS_LEVEL(ch, LVL_ADMIN), "You must be an admin or higher to do that.");
+      overwrite_room_desc_with_temp_desc(ch->in_room, ch);
+      return;
+    }
+#endif
 
     minutes_to_expiry = atoi(argument);
   }
