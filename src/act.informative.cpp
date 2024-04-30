@@ -7870,13 +7870,13 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
       APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
       APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
       if (in_room->flight_code && (ROOM_FLAGGED(in_room, ROOM_HELIPAD) || ROOM_FLAGGED(in_room, ROOM_RUNWAY))) {
-        snprintf(ENDOF(room_title_buf), sizeof(room_title_buf), " (%s: %3s)", 
+        snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s: %3s)", 
                 ROOM_FLAGGED(in_room, ROOM_RUNWAY) ? "Runway" : "Helipad",
                 in_room->flight_code);
       }
       // Add apartment info.
       if (GET_APARTMENT(in_room)) {
-        snprintf(ENDOF(room_title_buf), sizeof(room_title_buf), "\r\n ^c(%sApartment - %s^c%s)",
+        snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), "\r\n ^c(%sApartment - %s^c%s)",
                     GET_APARTMENT(in_room)->get_paid_until() > 0 ? "Leased " : "",
                     GET_APARTMENT(in_room)->get_full_name(),
                     GET_APARTMENT_DECORATION(in_room) ? " [decorated]" : "");
@@ -7884,7 +7884,7 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
       // Add tempdesc info.
       if (in_room->temp_desc && in_room->temp_desc_timeout > 0) {
         const char *author_name = get_player_name(in_room->temp_desc_author_idnum);
-        snprintf(room_title_buf, sizeof(room_title_buf), "\r\n ^c(Temp Desc by %s (%ld) for next %d minute%s)", 
+        snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), "\r\n ^c(Temp Desc by %s (%ld) for next %d minute%s)", 
                     author_name,
                     in_room->temp_desc_author_idnum,
                     in_room->temp_desc_timeout,
