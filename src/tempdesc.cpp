@@ -76,6 +76,7 @@ ACMD(do_tempdesc) {
 #ifdef IS_BUILDPORT
   FAILURE_CASE(!access_level(ch, LVL_BUILDER), "Only staff can use this command on the buildport.");
   FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC), "You must have OLC enabled to set a tempdesc on the buildport.");
+  minutes_to_expiry = 100000;
 #else
   FAILURE_CASE(!PLR_FLAGGED(ch, PLR_RPE), "You can't use this command. Speak to RP staff if you want to apply for the ability to do so.");
 #endif
@@ -97,6 +98,8 @@ ACMD(do_tempdesc) {
 #endif
 
     minutes_to_expiry = atoi(argument);
+
+    FAILURE_CASE(minutes_to_expiry <= 0, "Syntax: TEMPDESC; or TEMPDESC CLEAR; or TEMPDESC <number of minutes to set desc>");
   }
 
   ch->in_room->temp_desc_timeout = minutes_to_expiry;
