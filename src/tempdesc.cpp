@@ -74,7 +74,7 @@ ACMD(do_tempdesc) {
   FAILURE_CASE(!ch->in_room, "You must be standing in a room to do that.");
 
 #ifdef IS_BUILDPORT
-  FAILURE_CASE(!ACCESS_LEVEL(ch, LVL_BUILDER), "Only staff can use this command on the buildport.");
+  FAILURE_CASE(!access_level(ch, LVL_BUILDER), "Only staff can use this command on the buildport.");
   FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC), "You must have OLC enabled to set a tempdesc on the buildport.");
 #else
   FAILURE_CASE(!PLR_FLAGGED(ch, PLR_RPE), "You can't use this command. Speak to RP staff if you want to apply for the ability to do so.");
@@ -90,7 +90,7 @@ ACMD(do_tempdesc) {
 
 #ifdef IS_BUILDPORT
     if (!str_cmp(argument, "commit")) {
-      FAILURE_CASE(!ACCESS_LEVEL(ch, LVL_ADMIN), "You must be an admin or higher to do that.");
+      FAILURE_CASE(!access_level(ch, LVL_ADMIN), "You must be an admin or higher to do that.");
       overwrite_room_desc_with_temp_desc(ch->in_room, ch);
       return;
     }
