@@ -288,7 +288,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           }
         }
 
-        // Since host memory locations or exits may have changed
+        // Since host memory locations or exits may have changed, redo entrance lists
         collate_host_entrances();
         
         send_to_char("Writing host to disk.\r\n", d->character);

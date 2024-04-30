@@ -120,6 +120,8 @@ struct exit_data {
 };
 
 struct entrance_data {
+  // Since this points to the actual host, this MUST be reset/repopulated
+  // any time host memory locations can change (on boot, after hedit, ?).
   struct host_data *host;
   struct entrance_data *next;
 

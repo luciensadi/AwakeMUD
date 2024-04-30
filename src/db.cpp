@@ -5472,6 +5472,7 @@ void free_host(struct host_data * host)
   { // Clean up associated entrances.
     rnum_t dest_rnum;
     for (struct exit_data *exit = host->exit; exit; exit = exit->next) {
+      // Find the exit's matching entrance in the destination host.
       dest_rnum = real_host(exit->host);
       if (dest_rnum >= 0) {
         struct entrance_data *entrance, *temp;
@@ -5479,6 +5480,7 @@ void free_host(struct host_data * host)
           if (entrance->host == host)
             break;
         }
+        // Remove that entrance.
         REMOVE_FROM_LIST(entrance, matrix[dest_rnum].entrance, next);
         DELETE_AND_NULL(entrance);
       }
