@@ -4360,6 +4360,7 @@ ACMD(do_show)
                { "strongboylifts", LVL_ADMIN },
                { "longasszones",   LVL_ADMIN },
                { "extramagical",   LVL_ADMIN },
+               { "tempdescs",      LVL_BUILDER },
                { "\n", 0 }
              };
 
@@ -5036,6 +5037,13 @@ ACMD(do_show)
       if (GET_MAG(mob) / 100 < 12 || vnum_from_non_connected_zone(GET_MOB_VNUM(mob)) || MOB_FLAGGED(mob, MOB_NOKILL))
         continue;
       send_to_char(ch, " [^c%6d^n] %s (%2d magic)\r\n", GET_MOB_VNUM(mob), GET_CHAR_NAME(mob), GET_MAG(mob) / 100);
+    }
+    break;
+  case 35:
+    send_to_char("The following rooms have tempdescs set:\r\n", ch);
+    for (rnum_t world_idx = 0; world_idx < top_of_world; world_idx++) {
+      if (world[world_idx].temp_desc)
+        send_to_char(ch, " [^c%6d^n] %s^n\r\n", GET_ROOM_VNUM(&world[world_idx]), GET_ROOM_NAME(&world[world_idx]));
     }
     break;
   default:
