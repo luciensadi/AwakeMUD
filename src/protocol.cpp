@@ -2185,7 +2185,12 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
               // Print it to logs.
               PROTO_DEBUG_MSG("Received IP of '%s' from TELOPT_NEW_ENVIRON.", ipAddr);
             } else {
-              PROTO_DEBUG_MSG("- Bailing out: Does not start with IS VAR 'IPADDRESS' VAL.");
+              // Copy it out and ensure it's zero-terminated.
+              char writable[1000];
+              memset(writable, 0, sizeof(writable));
+              for (size_t idx = 2; idx < sizeof(writable) - 1 && apData[idx]; idx++)
+                writable[idx - 2] = apData[idx];
+              PROTO_DEBUG_MSG("- Bailing out: Does not continue with 'IPADDRESS' VAL, instead is '%s'", writable);
             }
           } else {
             PROTO_DEBUG_MSG("- Bailing out: Does not start with IS VAR.");
