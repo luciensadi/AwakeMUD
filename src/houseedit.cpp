@@ -223,7 +223,7 @@ void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave, s
   // Failure case: The file does not exist.
   if (!(fl = fopen(HCONTROL_FILE, "r+b"))) {
     log("House control file does not exist.");
-    send_to_char(ch, "Operation failed: Old house control file does not exist at %s." HCONTROL_FILE);
+    send_to_char(ch, "Operation failed: Old house control file does not exist at %s.", HCONTROL_FILE);
     return;
   }
 
@@ -401,7 +401,7 @@ void houseedit_trueup_lifestyles_to_rent(struct char_data *ch) {
       for (int lifestyle = NUM_LIFESTYLES - 1; lifestyle >= 0; lifestyle--) {
         if (apartment->get_rent_cost() >= lifestyles[lifestyle].monthly_cost_min) {
           if (apartment->get_lifestyle() != lifestyle) {
-            mudlog_vfprintf(ch, LOG_SYSLOG, "Updating lifestyle of %s from %s to %s (rent: %d).",
+            mudlog_vfprintf(ch, LOG_SYSLOG, "Updating lifestyle of %s from %s to %s (rent: %ld).",
                             apartment->get_full_name(),
                             lifestyles[apartment->get_lifestyle()].name,
                             lifestyles[lifestyle].name,

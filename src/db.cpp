@@ -720,7 +720,7 @@ void DBInit()
   log("Initializing transportation system");
   TransportInit();
 
-  log_vfprintf("Resetting %d zones.", top_of_zone_table + 1);
+  log_vfprintf("Resetting %ld zones.", top_of_zone_table + 1);
   for (i = 0; i <= top_of_zone_table; i++) {
     log_vfprintf("Resetting %s (rooms %d-%d).", zone_table[i].name,
         (i ? (zone_table[i - 1].top + 1) : 0), zone_table[i].top);
@@ -1166,12 +1166,12 @@ void parse_host(File &fl, long nr)
   static DBIndex::rnum_t rnum = 0, zone = 0;
   char field[64];
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
-    log_vfprintf("FATAL ERROR: Host #%d is below zone %d.\n", nr, zone_table[zone].number);
+    log_vfprintf("FATAL ERROR: Host #%ld is below zone %ld.\n", nr, zone_table[zone].number);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   while (nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
-      log_vfprintf("FATAL ERROR: Host %d is outside of any zone.\n", nr);
+      log_vfprintf("FATAL ERROR: Host %ld is outside of any zone.\n", nr);
       exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
   host_data *host = matrix+rnum;
@@ -1279,12 +1279,12 @@ void parse_ic(File &fl, long nr)
   ic->vnum = nr;
 
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
-    log_vfprintf("FATAL ERROR: IC #%d is below zone %d.\n", nr, zone);
+    log_vfprintf("FATAL ERROR: IC #%ld is below zone %ld.\n", nr, zone);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   while (nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
-      log_vfprintf("FATAL ERROR: IC%d is outside of any zone.\n", nr);
+      log_vfprintf("FATAL ERROR: IC%ld is outside of any zone.\n", nr);
       exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
 
@@ -1317,12 +1317,12 @@ void parse_room(File &fl, long nr)
   static DBIndex::rnum_t rnum = 0, zone = 0;
 
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
-    log_vfprintf("FATAL ERROR: Room #%d is below zone %d.\n", nr, zone_table[zone].number);
+    log_vfprintf("FATAL ERROR: Room #%ld is below zone %d.\n", nr, zone_table[zone].number);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   while (nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
-      log_vfprintf("FATAL ERROR: Room %d is outside of any zone.\n", nr);
+      log_vfprintf("FATAL ERROR: Room %ld is outside of any zone.\n", nr);
       exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
 
@@ -1401,7 +1401,7 @@ void parse_room(File &fl, long nr)
           || (to_vnum >= FIRST_PORTLAND_CAB && to_vnum <= LAST_PORTLAND_CAB)
           || (to_vnum >= FIRST_CARIBBEAN_CAB && to_vnum <= LAST_CARIBBEAN_CAB))
       {
-        log_vfprintf("Room #%d's %s exit had invalid destination -- skipping",
+        log_vfprintf("Room #%ld's %s exit had invalid destination -- skipping",
             nr, fulldirs[i]);
         continue;
       }
@@ -1499,7 +1499,7 @@ void parse_room(File &fl, long nr)
       char *keywords = str_dup(data.GetString(field, NULL));
 
       if (!*keywords) {
-        log_vfprintf("Room #%d's extra description #%d had no keywords -- skipping",
+        log_vfprintf("Room #%ld's extra description #%d had no keywords -- skipping",
             nr, i);
         DELETE_ARRAY_IF_EXTANT(keywords);
         continue;
@@ -2359,7 +2359,7 @@ void parse_object(File &fl, long nr)
       int loc = data.LookupInt(field, apply_types, APPLY_NONE);
 
       if (loc == APPLY_NONE) {
-        log_vfprintf("Item #%d's affect #%d had no location -- skipping", nr, i);
+        log_vfprintf("Item #%ld's affect #%d had no location -- skipping", nr, i);
         continue;
       }
 
@@ -2387,7 +2387,7 @@ void parse_object(File &fl, long nr)
       char *keywords = str_dup(data.GetString(field, NULL));
 
       if (!keywords) {
-        log_vfprintf("Item #%d's extra description #%d had no keywords -- skipping",
+        log_vfprintf("Item #%ld's extra description #%d had no keywords -- skipping",
             nr, i);
         continue;
       }
@@ -2553,12 +2553,12 @@ void parse_shop(File &fl, long virtual_nr)
   static DBIndex::rnum_t rnum = 0, zone = 0;
   char field[64];
   if (virtual_nr <= (zone ? zone_table[zone - 1].top : -1)) {
-    log_vfprintf("FATAL ERROR: Shop #%d is below zone %d.\n", virtual_nr, zone_table[zone].number);
+    log_vfprintf("FATAL ERROR: Shop #%ld is below zone %d.\n", virtual_nr, zone_table[zone].number);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   while (virtual_nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
-      log_vfprintf("FATAL ERROR: Shop %d is outside of any zone.\n", virtual_nr);
+      log_vfprintf("FATAL ERROR: Shop %ld is outside of any zone.\n", virtual_nr);
       exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
   shop_data *shop = shop_table+rnum;
@@ -2566,7 +2566,7 @@ void parse_shop(File &fl, long virtual_nr)
   VTable data;
   data.Parse(&fl);
 
-  shop->keeper = data.GetInt("Keeper", -1);
+  shop->keeper = data.GetLong("Keeper", -1);
   shop->profit_buy = data.GetFloat("ProfitBuy", 0);
   shop->profit_sell = data.GetFloat("ProfitSell", 0);
   shop->random_amount = data.GetInt("Random", 0);

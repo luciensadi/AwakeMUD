@@ -434,7 +434,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       if ((temp_obj = read_object(default_arch_gear[idx], VIRTUAL)))
         obj_to_char(temp_obj, CH);
       else {
-        mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: Invalid item %ld specified for default archetype gear set.", idx);
+        mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: Invalid item %ld specified at index %d for default archetype gear set.", default_arch_gear[idx], idx);
       }
     }
     #undef NUM_ARCH_GEAR_ENTRIES

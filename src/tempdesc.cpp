@@ -105,7 +105,7 @@ ACMD(do_tempdesc) {
   ch->in_room->temp_desc_timeout = minutes_to_expiry;
 
   PLR_FLAGS(ch).SetBit(PLR_WRITING);
-  send_to_char(ch, "Welcome to the temporary description editor! Enter your new room description. It will expire after %ld minutes.\r\n"
+  send_to_char(ch, "Welcome to the temporary description editor! Enter your new room description. It will expire after %d minutes.\r\n"
                "Terminate with @ on an empty line. You can also just enter @ right now to remove any existing decoration.\r\n"
                "Note that no formatting will be applied here, so indent as/if desired! (MUD-standard indent is 3 spaces.)\r\n", minutes_to_expiry);
   act("$n starts to move things around the room.", TRUE, ch, 0, 0, TO_ROOM);

@@ -494,7 +494,7 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
                     lifestyles[apartment->get_lifestyle()].name,
                     apartment->rooms.size(),
                     apartment->rooms.size() == 1 ? "" : "s",
-                    apartment->garages,
+                    (unsigned long) apartment->garages,
                     apartment->garages == 1 ? "is a garage" : "are garages",
                     apartment->get_rent_cost());
       } else {
@@ -504,7 +504,7 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
                     color_toggle ? "^W" : "^w",
                     lifestyles[apartment->get_lifestyle()].name,
                     non_garage,
-                    apartment->garages,
+                    (unsigned long) apartment->garages,
                     apartment->get_rent_cost());
       }
       color_toggle = !color_toggle;

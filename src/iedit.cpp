@@ -1363,7 +1363,7 @@ void iedit_disp_menu(struct descriptor_data * d)
   if (IS_OBJ_STAT(OBJ, ITEM_EXTRA_DONT_TOUCH)) {
     send_to_char(CH, "^RThis is a templated object. You are unable to edit it while the game is running.\r\n");
   }
-  send_to_char(CH, "Item number: ^c%d^n\r\n", d->edit_number);
+  send_to_char(CH, "Item number: ^c%ld^n\r\n", d->edit_number);
   send_to_char(CH, "1) Item keywords: ^c%s^n\r\n", d->edit_obj->text.keywords);
   send_to_char(CH, "2) Item name: ^c%s^n\r\n", d->edit_obj->text.name);
   send_to_char(CH, "3) Room description (terminal color code unnecessary):\r\n^g%s^n\r\n", d->edit_obj->text.room_desc);

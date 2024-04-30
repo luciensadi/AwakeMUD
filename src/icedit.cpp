@@ -93,7 +93,7 @@ void icedit_disp_option_menu(struct descriptor_data *d)
 void icedit_disp_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  send_to_char(CH, "^WIC: ^c%d^n\r\n", d->edit_number);
+  send_to_char(CH, "^WIC: ^c%ld^n\r\n", d->edit_number);
   send_to_char(CH, "^G1^Y) ^WName: ^c%s^n\r\n", IC->name);
   send_to_char(CH, "^G2^Y) ^WRoomDesc: ^c%s^n\r\n", IC->look_desc);
   send_to_char(CH, "^G3^Y) ^WDescription: ^c%s^n\r\n", IC->long_desc);

@@ -663,7 +663,7 @@ ACMD(do_upgrade)
 
     int mod_load_required = get_obj_vehicle_load_usage(mod, TRUE);
     if ((veh->usedload + mod_load_required) > veh->load) {
-        send_to_char(ch, "%s requires %d free load space, and %s only has %d.\r\n",
+        send_to_char(ch, "%s requires %d free load space, and %s only has %.2f.\r\n",
                      GET_OBJ_NAME(mod),
                      mod_load_required,
                      GET_VEH_NAME(veh),
@@ -2088,7 +2088,7 @@ ACMD(do_pop)
         } else {
           send_to_char("A few helium balloons escape from under the hood...\r\n", ch);
         }
-        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Vehicle had unexpected usedload on pop (%d != %d)", old_load, veh->usedload);
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Vehicle had unexpected usedload on pop (%d != %.2f)", old_load, veh->usedload);
       }
     }
   }

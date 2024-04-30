@@ -64,13 +64,13 @@ void houseedit_show_apartment(struct char_data *ch, char *arg) {
     int days = hours / 24;
 
     if (days > 0) {
-      send_to_char(ch, "For the next:   %ld day%s\r\n", days, days == 1 ? "" : "s");
+      send_to_char(ch, "For the next:   %d day%s\r\n", days, days == 1 ? "" : "s");
     } else if (hours > 0) {
-      send_to_char(ch, "For the next:   %ld hour%s\r\n", hours, hours == 1 ? "" : "s");
+      send_to_char(ch, "For the next:   %d hour%s\r\n", hours, hours == 1 ? "" : "s");
     } else if (minutes > 0) {
-      send_to_char(ch, "For the next:   %ld minute%s\r\n", minutes, minutes == 1 ? "" : "s");
+      send_to_char(ch, "For the next:   %d minute%s\r\n", minutes, minutes == 1 ? "" : "s");
     } else {
-      send_to_char(ch, "For the next:   %ld second%s\r\n", seconds, seconds == 1 ? "" : "s");
+      send_to_char(ch, "For the next:   %d second%s\r\n", seconds, seconds == 1 ? "" : "s");
     }
 
     delete [] owner_name;
@@ -236,9 +236,9 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           break;
         case '5': // rent
           if (APT->get_lifestyle() < NUM_LIFESTYLES - 1) {
-            send_to_char(CH, "Enter the new rent amount per month (%d - %d): ", lifestyles[APT->get_lifestyle()].monthly_cost_min, lifestyles[APT->get_lifestyle() + 1].monthly_cost_min);
+            send_to_char(CH, "Enter the new rent amount per month (%ld - %ld): ", lifestyles[APT->get_lifestyle()].monthly_cost_min, lifestyles[APT->get_lifestyle() + 1].monthly_cost_min);
           } else {
-            send_to_char(CH, "Enter the new rent amount per month (%d minimum): ", lifestyles[APT->get_lifestyle()].monthly_cost_min);
+            send_to_char(CH, "Enter the new rent amount per month (%ld minimum): ", lifestyles[APT->get_lifestyle()].monthly_cost_min);
           }
           d->edit_mode = HOUSEEDIT_APARTMENT_RENT;
           break;
@@ -599,7 +599,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
         if (real_zonenum < 0 || real_zonenum > top_of_zone_table) {
           send_to_char(CH, "%ld is not part of any zone.\r\n", vnum);
         } else if (!can_edit_zone(CH, real_zonenum)) {
-          send_to_char(CH, "Sorry, you don't have access to edit zone %ld.\r\n", zone_table[(real_zonenum)].number);
+          send_to_char(CH, "Sorry, you don't have access to edit zone %d.\r\n", zone_table[(real_zonenum)].number);
         } else if (zone_table[(real_zonenum)].connected && !(access_level(CH, LVL_EXECUTIVE) || PLR_FLAGGED(CH, PLR_EDCON))) {
           send_to_char(CH, "Sorry, zone %d is marked as connected to the game world, so you can't edit it.\r\n", zone_table[(real_zonenum)].number);
         }

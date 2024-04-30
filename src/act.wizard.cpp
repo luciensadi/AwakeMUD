@@ -2029,14 +2029,14 @@ ACMD(do_stat)
     if (!*buf2)
       send_to_char("Stats on which player?\r\n", ch);
     else {
-      vnum_t idnum;
+      idnum_t idnum;
       if ((idnum = atoi(buf2)) > 0) {
         const char *char_name = get_player_name(idnum);
         if (char_name) {
           strlcpy(buf2, char_name, sizeof(buf2));
           delete [] char_name;
         } else {
-          send_to_char(ch, "Idnum %d does not correspond to any existing PC.\r\n", idnum);
+          send_to_char(ch, "Idnum %ld does not correspond to any existing PC.\r\n", idnum);
           return;
         }
       }
@@ -9045,7 +9045,7 @@ ACMD(do_audit) {
         zone_table[zone_rnum].editor_ids[editor_idx] = 0;
         write_zone_to_disk(zone_table[zone_rnum].number);
 
-        mudlog_vfprintf(ch, LOG_WIZLOG, "^W%s^W has flagged zone %ld (%s^W) as ready for auditing.^n",
+        mudlog_vfprintf(ch, LOG_WIZLOG, "^W%s^W has flagged zone %d (%s^W) as ready for auditing.^n",
                         GET_CHAR_NAME(ch),
                         zone_table[zone_rnum].number,
                         zone_table[zone_rnum].name);

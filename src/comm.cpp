@@ -1020,7 +1020,7 @@ void game_loop(int mother_desc)
         struct char_data *last_tch = veh->people;
         for (struct char_data *tch = last_tch->next_in_veh; tch; tch = tch->next_in_veh) {
           if (tch->in_veh != veh) {
-            mudlog_vfprintf(tch, LOG_SYSLOG, "SYSERR: %s is in '%s's people list, but not in that vehicle. Putting them back in it.", GET_CHAR_NAME(tch));
+            mudlog_vfprintf(tch, LOG_SYSLOG, "SYSERR: %s is in '%s's people list, but not in that vehicle. Putting them back in it.", GET_CHAR_NAME(tch), GET_VEH_NAME(veh));
             send_to_char(tch, "[Note: Your character has been automatically returned to %s. Please use the BUG command to tell staff what you did in the last ~2 minutes.]\r\n", GET_VEH_NAME(veh));
             tch->in_veh = veh;
           }
@@ -2502,7 +2502,7 @@ void close_socket(struct descriptor_data *d)
   // Clean up message history lists.
   delete_message_history(d);
 
-  delete d;
+  free(d);
 }
 
 void check_idle_passwords(void)

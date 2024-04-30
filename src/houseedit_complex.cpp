@@ -281,7 +281,7 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
             rnum_t rnum = real_mobile(COMPLEX->get_landlord_vnum());
             if (rnum >= 0) {
               if (mob_index[rnum].sfunc) {
-                log_vfprintf("SYSERR: Assigning too many specs to mob #%d. Losing one.", COMPLEX->get_landlord_vnum());
+                log_vfprintf("SYSERR: Assigning too many specs to mob #%ld. Losing one.", COMPLEX->get_landlord_vnum());
               }
               mob_index[rnum].sfunc = mob_index[rnum].func;
               mob_index[rnum].func = landlord_spec;

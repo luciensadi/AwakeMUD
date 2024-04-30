@@ -694,7 +694,7 @@ ACMD(do_debug) {
     seen_names.emplace(str_b, TRUE);
     seen_names.emplace(second, TRUE);
 
-    send_to_char(ch, "After emplacement, map has %d elements. first_a is%s in it, first_b is%s in it, second is%s in it.\r\n",
+    send_to_char(ch, "After emplacement, map has %ld elements. first_a is%s in it, first_b is%s in it, second is%s in it.\r\n",
                      seen_names.size(),
                      seen_names.find(first_a) == seen_names.end() ? " NOT" : "",
                      seen_names.find(first_b) == seen_names.end() ? " NOT" : "",
