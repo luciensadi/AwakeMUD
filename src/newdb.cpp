@@ -1963,7 +1963,7 @@ void PCIndex::sorted_insert(const entry *info)
 
   tab[i] = *info;
 
-  log_vfprintf("--Inserting %s's (id#%d) entry into position %d",
+  log_vfprintf("--Inserting %s's (id#%ld) entry into position %d",
       info->name, info->id, i);
 
   // update entry_cnt, and we're done

@@ -397,7 +397,7 @@ const char *get_zedit_maximum_info_string(int amount, bool mtx=FALSE) {
 void zedit_disp_command_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  send_to_char(CH, "^WCommand: ^c%d^n\r\n", d->edit_number );
+  send_to_char(CH, "^WCommand: ^c%ld^n\r\n", d->edit_number );
   send_to_char(CH, "^G1^Y) ^WType: ^c%s^n\r\n", get_type(COM->command) );
   send_to_char(CH, "^G2^Y) ^WConditional: ^c%s^n\r\n",
                (!COM->if_flag ? "Always execute this command (aka: Always)" : "Only execute this command if previous command succeeds (aka: If Last)") );
@@ -493,7 +493,7 @@ void zedit_disp_command_menu(struct descriptor_data *d)
                  OBJ(COM->arg1));
     send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%s^n\r\n",
                  get_zedit_maximum_info_string(COM->arg2));
-    send_to_char(CH, "^G5^Y) ^WTotal number to give: ^c%d^n\r\n",
+    send_to_char(CH, "^G5^Y) ^WTotal number to give: ^c%ld^n\r\n",
                  COM->arg3);
     break;
   case 'R':

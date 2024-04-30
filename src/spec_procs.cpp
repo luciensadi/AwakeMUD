@@ -4640,7 +4640,7 @@ SPECIAL(quest_debug_scanner)
 
   // Reject mortals, violently.
   if (GET_LEVEL(ch) <= 1) {
-    send_to_char(ch, "%s arcs violently in your hands!\r\n");
+    send_to_char(ch, "%s arcs violently in your hands!\r\n", GET_OBJ_NAME(obj));
     damage(ch, ch, 10, TYPE_TASER, TRUE);
     return TRUE;
   }
@@ -5379,7 +5379,7 @@ void add_cash_to_housing_card(struct char_data *ch, int amount, bool message) {
     if (card->carried_by == ch)
         send_to_char(ch, "You place your card into the machine and add an extra %d nuyen.", amount);
       else
-        send_to_char(ch, "You dig your card out and put it in the machine, adding %d extra nuyen.");
+        send_to_char(ch, "You dig your card out and put it in the machine, adding %d extra nuyen.", amount);
 
       send_to_char(ch, " The value is currently at %d nuyen.\r\n", GET_OBJ_VAL(card, 1));
   }
@@ -7425,7 +7425,7 @@ SPECIAL(medical_workshop) {
 
   // Botch!
   if (successes < 0) {
-    send_to_char(ch, "You fumble your attempt to %sinstall %s!", mode_is_install ? "" : "un");
+    send_to_char(ch, "You fumble your attempt to %sinstall %s!", mode_is_install ? "" : "un", GET_OBJ_NAME(ware));
     snprintf(buf, sizeof(buf), "$n fumbles $s attempt to %sinstall $o, wounding $N!", mode_is_install ? "" : "un");
     act(buf, FALSE, ch, ware, found_char, TO_ROOM);
 

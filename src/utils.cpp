@@ -6023,6 +6023,7 @@ const char * keyword_appears_in_obj(const char *keyword, struct obj_data *obj, b
   return NULL;
 }
 
+// TODO: This does not take memory into account.
 const char * keyword_appears_in_char(const char *keyword, struct char_data *ch, bool search_keywords, bool search_name, bool search_desc) {
   if (!keyword || !*keyword) {
     return NULL;

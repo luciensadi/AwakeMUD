@@ -489,7 +489,7 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
       int non_garage = apartment->rooms.size() - apartment->garages;
 
       if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-        send_to_char(ch, "%s (lifestyle %s, %ld room%s, of which %d %s): %ld nuyen.\r\n",
+        send_to_char(ch, "%s (lifestyle %s, %ld room%s, of which %u %s): %ld nuyen.\r\n",
                     apartment->name,
                     lifestyles[apartment->get_lifestyle()].name,
                     apartment->rooms.size(),
@@ -498,7 +498,7 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
                     apartment->garages == 1 ? "is a garage" : "are garages",
                     apartment->get_rent_cost());
       } else {
-        send_to_char(ch, "%s%-28s%s   %-12s   %-5d   %-7d  %ld\r\n",
+        send_to_char(ch, "%s%-28s%s   %-12s   %-5d   %-7u  %ld\r\n",
                     color_toggle ? "^W" : "^w",
                     apartment->name,
                     color_toggle ? "^W" : "^w",
@@ -566,7 +566,7 @@ void ApartmentComplex::clone_from(ApartmentComplex *source) {
     if (source->landlord_vnum > 0 && (rnum = real_mobile(source->landlord_vnum)) >= 0) {
       if (mob_index[rnum].sfunc != landlord_spec && mob_index[rnum].func != landlord_spec) {
         if (mob_index[rnum].sfunc) {
-          log_vfprintf("SYSERR: Assigning too many specs to mob #%d. Losing one.", source->landlord_vnum);
+          log_vfprintf("SYSERR: Assigning too many specs to mob #%ld. Losing one.", source->landlord_vnum);
         }
         mob_index[rnum].sfunc = mob_index[rnum].func;
         mob_index[rnum].func = landlord_spec;
@@ -1484,7 +1484,7 @@ void Apartment::clamp_rent(struct char_data *ch) {
   long maximum = lifestyle < NUM_LIFESTYLES - 1 ? lifestyles[lifestyle + 1].monthly_cost_min : UINT_MAX;
   if (nuyen_per_month < minimum || nuyen_per_month > maximum) {
     if (ch)
-      send_to_char(ch, "Your selected lifestyle's rent band is %d - %d nuyen. Clamped your apartment's rent to match.\r\n", minimum, maximum);
+      send_to_char(ch, "Your selected lifestyle's rent band is %ld - %ld nuyen. Clamped your apartment's rent to match.\r\n", minimum, maximum);
     nuyen_per_month = MIN(maximum, MAX(minimum, nuyen_per_month));
   }
 }
@@ -1736,7 +1736,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
 
   rnum_t rnum = real_room(vnum);
   if (vnum < 0 || rnum < 0) {
-    log_vfprintf("SYSERR: Invalid vnum %ld specified in %s.", filename.c_str());
+    log_vfprintf("SYSERR: Invalid vnum %ld specified in %s.", vnum, filename.c_str());
     exit(1);
   }
 

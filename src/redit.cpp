@@ -171,12 +171,12 @@ void redit_disp_exit_menu(struct descriptor_data * d)
     DOOR->material = 5;
   }
 
-  send_to_char(CH,      "1) Exit to: %s%d%s\r\n"
+  send_to_char(CH,      "1) Exit to: %s%ld%s\r\n"
                "2) Description: %s\r\n",
                CCCYN(CH, C_CMP), DOOR->to_room_vnum, CCNRM(CH, C_CMP),
                (DOOR->general_description ? DOUBLE_UP_COLOR_CODES_IF_NEEDED(DOOR->general_description) : "(None)"));
   send_to_char(CH,      "3) Door keywords (first one is its name too): %s%s%s\r\n"
-               "4) Key vnum: %s%d%s\r\n"
+               "4) Key vnum: %s%ld%s\r\n"
                "5) Door flags: %s%s%s\r\n",
                CCCYN(CH, C_CMP), (DOOR->keyword ? DOOR->keyword : "(none)"),
                CCNRM(CH, C_CMP), CCCYN(CH, C_CMP), DOOR->key, CCNRM(CH, C_CMP),
@@ -287,7 +287,7 @@ void redit_disp_menu(struct descriptor_data * d)
 
   CLS(CH);
   d->edit_mode = REDIT_MAIN_MENU;
-  send_to_char(CH, "Room number: %s%d%s\r\n"
+  send_to_char(CH, "Room number: %s%ld%s\r\n"
                "1) Room name: %s%s%s\r\n",
                CCCYN(CH, C_CMP), d->edit_number, CCNRM(CH, C_CMP),
                CCCYN(CH, C_CMP), DOUBLE_UP_COLOR_CODES_IF_NEEDED(d->edit_room->name),
@@ -307,52 +307,52 @@ void redit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "5) Domain type: %s%s%s\r\n",CCCYN(CH, C_CMP), buf2, CCNRM(CH, C_CMP));
 
   if (d->edit_room->dir_option[NORTH])
-    send_to_char(CH, "6) Exit north to:     %s%d%s\r\n", CCCYN(CH, C_CMP),
+    send_to_char(CH, "6) Exit north to:     %s%ld%s\r\n", CCCYN(CH, C_CMP),
                  d->edit_room->dir_option[NORTH]->to_room_vnum, CCNRM(CH, C_CMP));
   else
     send_to_char(    "6) Exit north to:     (none)\r\n", CH);
   if (d->edit_room->dir_option[NORTHEAST])
-    send_to_char(CH, "7) Exit northeast to: %s%d%s\r\n", CCCYN(CH, C_CMP),
+    send_to_char(CH, "7) Exit northeast to: %s%ld%s\r\n", CCCYN(CH, C_CMP),
                  d->edit_room->dir_option[NORTHEAST]->to_room_vnum, CCNRM(CH, C_CMP));
   else
     send_to_char(    "7) Exit northeast to: (none)\r\n", CH);
   if (d->edit_room->dir_option[EAST])
-    send_to_char(CH, "8) Exit east to:      %s%d%s\r\n", CCCYN(CH, C_CMP),
+    send_to_char(CH, "8) Exit east to:      %s%ld%s\r\n", CCCYN(CH, C_CMP),
                  d->edit_room->dir_option[EAST]->to_room_vnum, CCNRM(CH, C_CMP));
   else
     send_to_char(    "8) Exit east to:      (none)\r\n", CH);
   if (d->edit_room->dir_option[SOUTHEAST])
-    send_to_char(CH, "9) Exit southeast to: %s%d%s\r\n", CCCYN(CH, C_CMP),
+    send_to_char(CH, "9) Exit southeast to: %s%ld%s\r\n", CCCYN(CH, C_CMP),
                  d->edit_room->dir_option[SOUTHEAST]->to_room_vnum, CCNRM(CH, C_CMP));
   else
     send_to_char(    "9) Exit southeast to: (none)\r\n", CH);
   if (d->edit_room->dir_option[SOUTH])
-    send_to_char(CH, "a) Exit south to:     %s%d%s\r\n", CCCYN(CH, C_CMP),
+    send_to_char(CH, "a) Exit south to:     %s%ld%s\r\n", CCCYN(CH, C_CMP),
                  d->edit_room->dir_option[SOUTH]->to_room_vnum, CCNRM(CH, C_CMP));
   else
     send_to_char(    "a) Exit south to:     (none)\r\n", CH);
   if (d->edit_room->dir_option[SOUTHWEST])
-    send_to_char(CH, "b) Exit southwest to: %s%d%s\r\n", CCCYN(CH, C_CMP),
+    send_to_char(CH, "b) Exit southwest to: %s%ld%s\r\n", CCCYN(CH, C_CMP),
                  d->edit_room->dir_option[SOUTHWEST]->to_room_vnum, CCNRM(CH, C_CMP));
   else
     send_to_char(    "b) Exit southwest to: (none)\r\n", CH);
   if (d->edit_room->dir_option[WEST])
-    send_to_char(CH, "c) Exit west to:      %s%d%s\r\n", CCCYN(CH, C_CMP),
+    send_to_char(CH, "c) Exit west to:      %s%ld%s\r\n", CCCYN(CH, C_CMP),
                  d->edit_room->dir_option[WEST]->to_room_vnum, CCNRM(CH, C_CMP));
   else
     send_to_char(    "c) Exit west to:      (none)\r\n", CH);
   if (d->edit_room->dir_option[NORTHWEST])
-    send_to_char(CH, "d) Exit northwest to: %s%d%s\r\n", CCCYN(CH, C_CMP),
+    send_to_char(CH, "d) Exit northwest to: %s%ld%s\r\n", CCCYN(CH, C_CMP),
                  d->edit_room->dir_option[NORTHWEST]->to_room_vnum, CCNRM(CH, C_CMP));
   else
     send_to_char(    "d) Exit northwest to: (none)\r\n", CH);
   if (d->edit_room->dir_option[UP])
-    send_to_char(CH, "e) Exit up to:        %s%d%s\r\n", CCCYN(CH, C_CMP),
+    send_to_char(CH, "e) Exit up to:        %s%ld%s\r\n", CCCYN(CH, C_CMP),
                  d->edit_room->dir_option[UP]->to_room_vnum, CCNRM(CH, C_CMP));
   else
     send_to_char(    "e) Exit up to:        (none)\r\n", CH);
   if (d->edit_room->dir_option[DOWN])
-    send_to_char(CH, "f) Exit down to:      %s%d%s\r\n", CCCYN(CH, C_CMP),
+    send_to_char(CH, "f) Exit down to:      %s%ld%s\r\n", CCCYN(CH, C_CMP),
                  d->edit_room->dir_option[DOWN]->to_room_vnum, CCNRM(CH, C_CMP));
   else
     send_to_char(    "f) Exit down to:      (none)\r\n", CH);

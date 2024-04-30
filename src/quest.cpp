@@ -1265,7 +1265,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
 
         if (!found) {
           if (access_level(ch, LVL_BUILDER)) {
-            send_to_char(ch, "[Skipping quest %ld: You need to have done prerequisite quest %ld first.]\r\n", quest_table[quest_idx].prerequisite_quest);
+            send_to_char(ch, "[Skipping quest %ld: You need to have done prerequisite quest %ld first.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].prerequisite_quest);
           }
           continue;
         }
@@ -1301,7 +1301,7 @@ void display_emotes_for_quest(struct char_data *johnson, emote_vector_t *vec, st
   int pos = GET_SPARE1(johnson);
 
   if (pos >= (int) vec->size()) {
-    mudlog_vfprintf(target, LOG_SYSLOG, "SYSERR: Received invalid pos %d which is greater than johnson emote vec size %d!", pos, vec->size());
+    mudlog_vfprintf(target, LOG_SYSLOG, "SYSERR: Received invalid pos %d which is greater than johnson emote vec size %u!", pos, vec->size());
     send_to_char("(Whoops, something went wrong! Please see ^WRECAP^n for your quest details.)\r\n", target);
     return;
   }
@@ -1943,7 +1943,7 @@ void assign_johnsons(void)
 
   for (i = 0; i <= top_of_questt; i++) {
     if ((rnum = real_mobile(quest_table[i].johnson)) < 0)
-      log_vfprintf("Johnson #%d does not exist (quest #%d)",
+      log_vfprintf("Johnson #%ld does not exist (quest #%ld)",
           quest_table[i].johnson, quest_table[i].vnum);
     else if (mob_index[rnum].func != johnson && mob_index[rnum].sfunc != johnson) {
       mob_index[rnum].sfunc = mob_index[rnum].func;
@@ -2642,7 +2642,7 @@ void qedit_disp_emote_menu(struct descriptor_data *d, int mode)
 void insert_or_append_emote_at_position(struct descriptor_data *d, const char *string) {
   emote_vector_t *emote_vector;
 
-  log_vfprintf("Entered insert_or_append_emote_at_position with '%s', edit_number2 = %d, edit_number3 = %d.",
+  log_vfprintf("Entered insert_or_append_emote_at_position with '%s', edit_number2 = %ld, edit_number3 = %ld.",
                string,
                d->edit_number2,
                d->edit_number3);
@@ -2673,7 +2673,7 @@ void insert_or_append_emote_at_position(struct descriptor_data *d, const char *s
   }
 
   // If we got here, we found nothing to replace.
-  log_vfprintf("Pushing back (fallthrough case). edit_number2: %d", d->edit_number2);
+  log_vfprintf("Pushing back (fallthrough case). edit_number2: %ld", d->edit_number2);
   emote_vector->push_back(str_dup(string));
 }
 
@@ -2778,9 +2778,9 @@ void qedit_disp_menu(struct descriptor_data *d)
   char s_time[10], e_time[10];
 
   CLS(CH);
-  send_to_char(CH, "Quest number: %s%d%s\r\n", CCCYN(CH, C_CMP),
+  send_to_char(CH, "Quest number: %s%ld%s\r\n", CCCYN(CH, C_CMP),
                d->edit_number, CCNRM(CH, C_CMP));
-  send_to_char(CH, "1) Johnson: %s%d%s (%s%s%s)\r\n", CCCYN(CH, C_CMP),
+  send_to_char(CH, "1) Johnson: %s%ld%s (%s%s%s)\r\n", CCCYN(CH, C_CMP),
                QUEST->johnson, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
                real_mobile(QUEST->johnson) < 0 ? "null" :
                GET_NAME(mob_proto+real_mobile(QUEST->johnson)),
@@ -3450,7 +3450,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         qedit_disp_emote_menu(d, d->edit_number3);
       }
       else if (number < 1 || number > (int) emote_vector->size()) {
-        send_to_char(CH, "Invalid number. Enter emote between 1-%d, or 0 to abort: ", emote_vector->size());
+        send_to_char(CH, "Invalid number. Enter emote between 1-%ld, or 0 to abort: ", emote_vector->size());
       } else {
         if (number == 0) {
           d->edit_number2 = 0;

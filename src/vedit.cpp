@@ -35,7 +35,7 @@ extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
 void vedit_disp_menu(struct descriptor_data * d)
 {
   CLS(CH);
-  send_to_char(CH, "Vehicle number: %s%d%s\r\n", CCCYN(CH, C_CMP), d->edit_number,
+  send_to_char(CH, "Vehicle number: %s%ld%s\r\n", CCCYN(CH, C_CMP), d->edit_number,
                CCNRM(CH, C_CMP));
   send_to_char(CH, "1) Vehicle namelist: %s%s%s\r\n", CCCYN(CH, C_CMP),
                d->edit_veh->name, CCNRM(CH, C_CMP));

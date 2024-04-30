@@ -499,11 +499,11 @@ void ASSIGNMOB(long mob, SPECIAL(fname))
 
   if ((rnum = real_mobile(mob)) >= 0) {
     if (mob_index[rnum].sfunc)
-      log_vfprintf("SYSERR: Assigning too many specs to mob #%d.", mob);
+      log_vfprintf("SYSERR: Assigning too many specs to mob #%ld.", mob);
     mob_index[rnum].sfunc = mob_index[rnum].func;
     mob_index[rnum].func = fname;
   } else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existent mob #%d", mob);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent mob #%ld", mob);
 }
 
 void ASSIGNOBJ(long obj, SPECIAL(fname))
@@ -512,7 +512,7 @@ void ASSIGNOBJ(long obj, SPECIAL(fname))
   if ((real_obj = real_object(obj)) >= 0)
     obj_index[real_obj].func = fname;
   else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existent obj #%d", obj);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent obj #%ld", obj);
 }
 
 void ASSIGNWEAPON(long weapon, WSPEC(fname))
@@ -521,7 +521,7 @@ void ASSIGNWEAPON(long weapon, WSPEC(fname))
   if ((real_obj = real_object(weapon)) >= 0)
     obj_index[real_obj].wfunc = fname;
   else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existent weapon #%d", weapon);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent weapon #%ld", weapon);
 }
 
 void ASSIGNROOM(long room, SPECIAL(fname))
@@ -530,7 +530,7 @@ void ASSIGNROOM(long room, SPECIAL(fname))
   if ((real_rm = real_room(room)) >= 0)
     world[real_rm].func = fname;
   else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existent rm. #%d", room);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent rm. #%ld", room);
 }
 
 

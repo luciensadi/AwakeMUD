@@ -14,7 +14,7 @@ class Playergroup {
   const char *tag;
   const char *name;
   const char *alias;
-  int pghq_zone;
+  vnum_t pghq_zone;
 
   Bitfield settings;
 public:
@@ -77,7 +77,7 @@ public:
 
   // Zone ownership management.
   void set_zone(unsigned long znum);
-  int get_zone() { return pghq_zone; }
+  vnum_t get_zone() { return pghq_zone; }
   bool controls_room(struct room_data *room);
 };
 

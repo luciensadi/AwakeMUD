@@ -326,7 +326,9 @@ ACMD(do_rclone)
     return;
   }
 
-  int arg1, arg2, num1, num2, counter, zone1 = -1, zone2 = -1;
+  vnum_t arg1, arg2;
+  rnum_t zone1 = -1, zone2 = -1;
+  int  counter;
 
   two_arguments(argument, buf, buf1);
 
@@ -335,8 +337,8 @@ ACMD(do_rclone)
     return;
   }
 
-  arg1 = atoi(buf);
-  arg2 = atoi(buf1);
+  arg1 = atol(buf);
+  arg2 = atol(buf1);
 
   if ((zone1 = get_zone_index_number_from_vnum(arg1)) < 0) {
     send_to_char(ch, "%ld is not part of any zone.\r\n", arg1);
@@ -355,8 +357,8 @@ ACMD(do_rclone)
 
   REQUIRE_ZONE_EDIT_ACCESS(zone2);
 
-  num1 = real_room(arg1);
-  num2 = real_room(arg2);
+  rnum_t num1 = real_room(arg1);
+  rnum_t num2 = real_room(arg2);
 
   if (num1 < 0) {
     send_to_char("Invalid room number.\r\n", ch);
@@ -1896,7 +1898,7 @@ ACMD(do_zswitch)
     send_to_char("Switching to non-existent zone.\r\n", ch);
   } else {
     if (!can_edit_zone(ch, (real_zonenum))) {
-      send_to_char(ch, "Sorry, you don't have access to edit zone %ld.\r\n", zone_table[(real_zonenum)].number);
+      send_to_char(ch, "Sorry, you don't have access to edit zone %d.\r\n", zone_table[(real_zonenum)].number);
       return;
     }
 

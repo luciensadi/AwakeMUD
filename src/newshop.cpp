@@ -695,7 +695,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
 
 // Yes, it's a monstrosity. No, I don't want to hear about it. YOU refactor it.
 bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int buynum, bool cash,
-                  struct shop_sell_data *sell, struct obj_data *obj, struct obj_data *cred, int price,
+                  struct shop_sell_data *sell, struct obj_data *obj, struct obj_data *cred, long price,
                   vnum_t shop_nr, struct shop_order_data *order)
 {
   char buf[MAX_STRING_LENGTH], buf2[MAX_STRING_LENGTH];
@@ -757,7 +757,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       lose_nuyen(ch, price, NUYEN_OUTFLOW_SHOP_PURCHASES);
 
     // Log it.
-    snprintf(buf, sizeof(buf), "Purchased cyber/bio '%s' (%ld) for %d nuyen.", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price + (order ? order->paid : 0));
+    snprintf(buf, sizeof(buf), "Purchased cyber/bio '%s' (%ld) for %ld nuyen.", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), price + (order ? order->paid : 0));
     mudlog(buf, ch, LOG_GRIDLOG, TRUE);
 
     if (sell) {
@@ -1067,7 +1067,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   }
   // Write the nuyen cost to buf3 and the current buy-string to arg.
   char price_buf[100], tmp[MAX_INPUT_LENGTH * 2];
-  snprintf(price_buf, sizeof(price_buf), "%d", bought * price);
+  snprintf(price_buf, sizeof(price_buf), "%ld", price * bought);
   strlcpy(tmp, shop_table[shop_nr].buy, sizeof(tmp));
 
   // Use our new replace_substring() function to swap out all %d's in arg with the nuyen string.
@@ -1249,7 +1249,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     }
 
     // Prevent trying to pre-order something if you don't have the scratch. Calculated using the flat price, not the negotiated one.
-    int preorder_cost_for_one_object = GET_OBJ_COST(obj) / PREORDER_COST_DIVISOR;
+    long preorder_cost_for_one_object = GET_OBJ_COST(obj) / PREORDER_COST_DIVISOR;
 
     if (!cred || shop_table[shop_nr].type == SHOP_BLACK) {
       cash = TRUE;
@@ -1263,10 +1263,11 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       return;
     }
 
-    if ((cash && GET_NUYEN(ch) < preorder_cost_for_one_object * buynum)
-        || (cred && GET_BANK(ch) < preorder_cost_for_one_object * buynum))
+    long calculated_cost = preorder_cost_for_one_object * buynum;
+    if ((cash && GET_NUYEN(ch) < calculated_cost)
+        || (cred && GET_BANK(ch) < calculated_cost))
     {
-      snprintf(buf, sizeof(buf), "%s It'll cost you %d nuyen to place that order. Come back when you've got the funds.", GET_CHAR_NAME(ch), preorder_cost_for_one_object * buynum);
+      snprintf(buf, sizeof(buf), "%s It'll cost you %ld nuyen to place that order. Come back when you've got the funds.", GET_CHAR_NAME(ch), calculated_cost);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       extract_obj(obj);
       return;
@@ -1333,11 +1334,11 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
 
     // Pay the preorder cost.
     if (cash) {
-      lose_nuyen(ch, preorder_cost_for_one_object * buynum, NUYEN_OUTFLOW_SHOP_PURCHASES);
+      lose_nuyen(ch, calculated_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
     } else {
-      lose_bank(ch, preorder_cost_for_one_object * buynum, NUYEN_OUTFLOW_SHOP_PURCHASES);
+      lose_bank(ch, calculated_cost, NUYEN_OUTFLOW_SHOP_PURCHASES);
     }
-    send_to_char(ch, "You put down a %d nuyen deposit on your order.\r\n", preorder_cost_for_one_object * buynum);
+    send_to_char(ch, "You put down a %ld nuyen deposit on your order.\r\n", calculated_cost);
 
     if (MOB_FLAGGED(keeper, MOB_INANIMATE)) {
       if (totaltime < 1) {
@@ -2562,7 +2563,7 @@ void assign_shopkeepers(void)
     if (shop_table[index].keeper <= 0)
       continue;
     if ((rnum = real_mobile(shop_table[index].keeper)) < 0)
-      log_vfprintf("Shopkeeper #%d does not exist (shop #%d)",
+      log_vfprintf("Shopkeeper #%ld does not exist (shop #%ld)",
           shop_table[index].keeper, shop_table[index].vnum);
     else if (mob_index[rnum].func != shop_keeper && shop_table[index].keeper != 1151) {
       mob_index[rnum].sfunc = mob_index[rnum].func;

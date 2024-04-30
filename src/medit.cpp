@@ -51,7 +51,7 @@ void medit_disp_menu(struct descriptor_data *d)
   int base = calc_karma(NULL, MOB);
 
   CLS(CH);
-  send_to_char(CH, "Mob number: %s%d%s\r\n", CCCYN(CH, C_CMP), d->edit_number,
+  send_to_char(CH, "Mob number: %s%ld%s\r\n", CCCYN(CH, C_CMP), d->edit_number,
                CCNRM(CH, C_CMP));
   send_to_char(CH, "1) Keywords: %s%s%s\r\n", CCCYN(CH, C_CMP),
                MOB->player.physical_text.keywords, CCNRM(CH, C_CMP));
@@ -1564,7 +1564,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     if (SPELL_HAS_SUBTYPE(number)) {
       // Get the subtype.
       for (int attr_idx = 0; attr_idx < NUM_ATTRIBUTES; attr_idx++) {
-        send_to_char(CH, "%d) %s\r\n", attributes[attr_idx]);
+        send_to_char(CH, "%d) %s\r\n", attr_idx, attributes[attr_idx]);
       }
       send_to_char(CH, "Which attribute will this spell affect?\r\n");
       d->edit_mode = MEDIT_ADD_PRECAST_SPELL_WITH_SUBTYPE;

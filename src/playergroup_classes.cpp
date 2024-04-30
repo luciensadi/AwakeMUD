@@ -337,13 +337,13 @@ bool Playergroup::save_pgroup_to_db() {
   }
 
   snprintf(querybuf, sizeof(querybuf), pgroup_save_query_format,
-          idnum,
-          prepare_quotes(quotedname, name, sizeof(quotedname) / sizeof(quotedname[0])),
-          prepare_quotes(quotedalias, alias, sizeof(quotedalias) / sizeof(quotedalias[0])),
-          prepare_quotes(quotedtag, tag, sizeof(quotedtag) / sizeof(quotedtag[0])),
-          prepare_quotes(quotedsettings, settings.ToString(), sizeof(quotedsettings) / sizeof(quotedsettings[0])),
-          bank,
-          pghq_zone);
+           idnum,
+           prepare_quotes(quotedname, name, sizeof(quotedname) / sizeof(quotedname[0])),
+           prepare_quotes(quotedalias, alias, sizeof(quotedalias) / sizeof(quotedalias[0])),
+           prepare_quotes(quotedtag, tag, sizeof(quotedtag) / sizeof(quotedtag[0])),
+           prepare_quotes(quotedsettings, settings.ToString(), sizeof(quotedsettings) / sizeof(quotedsettings[0])),
+           bank,
+           pghq_zone);
   mysql_wrapper(mysql, querybuf);
 
   return mysql_errno(mysql) != 0;

@@ -1816,7 +1816,7 @@ static void Negotiate( descriptor_t *apDescriptor )
 
 static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProtocol )
 {
-  PROTO_DEBUG_MSG("Entering PerformHandshake(*, %d, %d)", aCmd, aProtocol);
+  PROTO_DEBUG_MSG("Entering PerformHandshake(*, %d, %d)", (unsigned char)aCmd, (unsigned char)aProtocol);
   protocol_t *pProtocol = apDescriptor->pProtocol;
 
   switch ( aProtocol )

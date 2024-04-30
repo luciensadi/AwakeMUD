@@ -3447,7 +3447,7 @@ bool check_spirit_sector(struct room_data *room, int spirit)
 
 void circle_build(struct char_data *ch, char *type, int force)
 {
-  long cost = force * force;
+  long cost = ((long) force) * force;
   
   FAILURE_CASE(IS_WORKING(ch), "You're too busy.");
   FAILURE_CASE(GET_TRADITION(ch) != TRAD_HERMETIC, "Only hermetic mages can construct hermetic circles.");
@@ -6401,11 +6401,11 @@ bool init_cost(struct char_data *ch, bool spend)
 
   long tke = 0;
   if (karmacost > GET_KARMA(ch) || (GET_KARMA(ch) - karmacost) > GET_KARMA(ch)) {
-    send_to_char(ch, "You do not have enough karma to initiate. It will cost you %d karma.\r\n", (int) (karmacost / 100));
+    send_to_char(ch, "You do not have enough karma to initiate. It will cost you %.2f karma.\r\n", ((float) karmacost / 100));
     return FALSE;
   }
   if (nuyencost > GET_NUYEN(ch) || (GET_NUYEN(ch) - nuyencost) > GET_NUYEN(ch)) {
-    send_to_char(ch, "You do not have enough nuyen to initiate. It will cost you %d nuyen.\r\n", nuyencost);
+    send_to_char(ch, "You do not have enough nuyen to initiate. It will cost you %ld nuyen.\r\n", nuyencost);
     return FALSE;
   }
 
@@ -6424,7 +6424,7 @@ bool init_cost(struct char_data *ch, bool spend)
       break;
   }
   if (tke > GET_TKE(ch)) {
-    send_to_char(ch, "You do not have high enough TKE to initiate. You need %d TKE.\r\n", tke);
+    send_to_char(ch, "You do not have high enough TKE to initiate. You need %ld TKE.\r\n", tke);
     return FALSE;
   }
   if (spend) {
