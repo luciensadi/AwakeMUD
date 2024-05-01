@@ -1166,7 +1166,7 @@ void parse_host(File &fl, long nr)
   static DBIndex::rnum_t rnum = 0, zone = 0;
   char field[64];
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
-    log_vfprintf("FATAL ERROR: Host #%ld is below zone %ld.\n", nr, zone_table[zone].number);
+    log_vfprintf("FATAL ERROR: Host #%ld is below zone %d.\n", nr, zone_table[zone].number);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
   while (nr > zone_table[zone].top)

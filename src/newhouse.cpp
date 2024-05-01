@@ -489,22 +489,22 @@ void ApartmentComplex::display_room_list_to_character(struct char_data *ch) {
       int non_garage = apartment->rooms.size() - apartment->garages;
 
       if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-        send_to_char(ch, "%s (lifestyle %s, %ld room%s, of which %u %s): %ld nuyen.\r\n",
+        send_to_char(ch, "%s (lifestyle %s, %ld room%s, of which %lu %s): %ld nuyen.\r\n",
                     apartment->name,
                     lifestyles[apartment->get_lifestyle()].name,
                     apartment->rooms.size(),
                     apartment->rooms.size() == 1 ? "" : "s",
-                    (unsigned long) apartment->garages,
+                    apartment->garages,
                     apartment->garages == 1 ? "is a garage" : "are garages",
                     apartment->get_rent_cost());
       } else {
-        send_to_char(ch, "%s%-28s%s   %-12s   %-5d   %-7u  %ld\r\n",
+        send_to_char(ch, "%s%-28s%s   %-12s   %-5d   %-7lu  %ld\r\n",
                     color_toggle ? "^W" : "^w",
                     apartment->name,
                     color_toggle ? "^W" : "^w",
                     lifestyles[apartment->get_lifestyle()].name,
                     non_garage,
-                    (unsigned long) apartment->garages,
+                    apartment->garages,
                     apartment->get_rent_cost());
       }
       color_toggle = !color_toggle;
