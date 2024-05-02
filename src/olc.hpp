@@ -316,6 +316,7 @@ extern void write_index_file(const char *suffix);
 #define QEDIT_FINISH_EMOTE                           49
 #define QEDIT_EMOTE_MENU__INFO_EMOTES                50
 #define QEDIT_PREREQUISITE                           51
+#define QEDIT_DISQUALIFYING                          52
 
 // zone defines
 #define ZEDIT_CONFIRM_EDIT_DATA         0

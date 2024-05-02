@@ -1254,16 +1254,25 @@ int new_quest(struct char_data *mob, struct char_data *ch)
         continue;
       }
 
-      if (quest_table[quest_idx].prerequisite_quest) {
-        bool found = FALSE;
+      if (quest_table[quest_idx].prerequisite_quest || quest_table[quest_idx].disqualifying_quest) {
+        bool prereq_found = FALSE, dq_found = FALSE;
         for (int q = QUEST_TIMER - 1; q >= 0; q--) {
           if (GET_CQUEST(ch, q) == quest_table[quest_idx].prerequisite_quest) {
-            found = TRUE;
-            break;
+            prereq_found = TRUE;
+          }
+          if (GET_CQUEST(ch, q) == quest_table[quest_idx].disqualifying_quest) {
+            dq_found = TRUE;
           }
         }
 
-        if (!found) {
+        if (!prereq_found) {
+          if (access_level(ch, LVL_BUILDER)) {
+            send_to_char(ch, "[Skipping quest %ld: You need to have done prerequisite quest %lu first.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].prerequisite_quest);
+          }
+          continue;
+        }
+
+        if (!dq_found) {
           if (access_level(ch, LVL_BUILDER)) {
             send_to_char(ch, "[Skipping quest %ld: You need to have done prerequisite quest %lu first.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].prerequisite_quest);
           }
@@ -2053,6 +2062,7 @@ void boot_one_quest(struct quest_data *quest)
   quest_table[quest_nr].karma = quest->karma;
   quest_table[quest_nr].reward = quest->reward;
   quest_table[quest_nr].prerequisite_quest = quest->prerequisite_quest;
+  quest_table[quest_nr].disqualifying_quest = quest->disqualifying_quest;
 
   quest_table[quest_nr].num_objs = quest->num_objs;
   if (quest_table[quest_nr].num_objs > 0)
@@ -2143,6 +2153,7 @@ void reboot_quest(int rnum, struct quest_data *quest)
   quest_table[rnum].karma = quest->karma;
   quest_table[rnum].reward = quest->reward;
   quest_table[rnum].prerequisite_quest = quest->prerequisite_quest;
+  quest_table[rnum].disqualifying_quest = quest->disqualifying_quest;
 
   if (quest_table[rnum].obj)
     delete [] quest_table[rnum].obj;
@@ -2266,7 +2277,7 @@ int write_quests_to_disk(int zone) {
     if ((i = real_quest(counter)) > -1) {
       wrote_something = TRUE;
       fprintf(fp, "#%ld\n", quest_table[i].vnum);
-      fprintf(fp, "%ld %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %ld %ld\n", quest_table[i].johnson,
+      fprintf(fp, "%ld %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %ld %ld %ld\n", quest_table[i].johnson,
               quest_table[i].time, quest_table[i].min_rep,
               quest_table[i].max_rep, quest_table[i].nuyen,
               quest_table[i].karma, quest_table[i].reward,
@@ -2278,7 +2289,8 @@ int write_quests_to_disk(int zone) {
               quest_table[i].quit_emote ? 1 : 0,
               quest_table[i].finish_emote ? 1 : 0,
               quest_table[i].info_emotes ? quest_table[i].info_emotes->size() : 0,
-              quest_table[i].prerequisite_quest
+              quest_table[i].prerequisite_quest,
+              quest_table[i].disqualifying_quest
             );
 
       for (j = 0; j < quest_table[i].num_objs; j++)
@@ -2863,6 +2875,7 @@ void qedit_disp_menu(struct descriptor_data *d)
                 CCNRM(CH, C_CMP));
 
   send_to_char(CH, "i) Prerequisite quest: %s%ld%s\r\n", CCCYN(CH, C_CMP), QUEST->prerequisite_quest, CCNRM(CH, C_CMP));
+  send_to_char(CH, "j) Disqualifying quest: %s%ld%s\r\n", CCCYN(CH, C_CMP), QUEST->disqualifying_quest, CCNRM(CH, C_CMP));
 
   send_to_char("q) Quit and save\r\n", CH);
   send_to_char("x) Exit and abort\r\n", CH);
@@ -3118,6 +3131,11 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         send_to_char("Enter the vnum of the quest that must be done before this (0 for no prerequisite):\r\n", CH);
         d->edit_mode = QEDIT_PREREQUISITE;
         break;
+      case 'j':
+      case 'J':
+        send_to_char("Enter the vnum of the quest that disqualifies you from this quest if complete (0 for no DQ):\r\n", CH);
+        d->edit_mode = QEDIT_DISQUALIFYING;
+        break;
       default:
         qedit_disp_menu(d);
         break;
@@ -3137,6 +3155,15 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     number = atoi(arg);
     if (number == 0 || real_quest(number) >= 0) {
       QUEST->prerequisite_quest = number;
+      qedit_disp_menu(d);
+    } else {
+      send_to_char("That's not a valid quest vnum. Enter a vnum, or 0 for no quest: ", CH);
+    }
+    return;
+  case QEDIT_DISQUALIFYING:
+    number = atoi(arg);
+    if (number == 0 || real_quest(number) >= 0) {
+      QUEST->disqualifying_quest = number;
       qedit_disp_menu(d);
     } else {
       send_to_char("That's not a valid quest vnum. Enter a vnum, or 0 for no quest: ", CH);

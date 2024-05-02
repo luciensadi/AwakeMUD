@@ -2417,10 +2417,10 @@ void parse_quest(File &fl, long virtual_nr)
   quest_table[quest_nr].vnum = virtual_nr;
 
   fl.GetLine(line, 256, FALSE);
-  if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",
+  if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",
              t, t + 1, t + 2, t + 3, t + 4, t + 5,
-             t + 6, t + 7, t + 8, t + 9, t + 10, t + 11, t+12, t+13, t+14, t+15, t+16, t+17) < 12) {
-    fprintf(stderr, "FATAL ERROR: Format error in quest #%ld, expecting 12-15 numbers like '# # # # # # # # # # # #'. Got '%s' instead.\n",
+             t + 6, t + 7, t + 8, t + 9, t + 10, t + 11, t+12, t+13, t+14, t+15, t+16, t+17, t+18) < 12) {
+    fprintf(stderr, "FATAL ERROR: Format error in quest #%ld, expecting 12-19 numbers like '# # # # # # # # # # # #'. Got '%s' instead.\n",
             virtual_nr, line);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
@@ -2444,6 +2444,7 @@ void parse_quest(File &fl, long virtual_nr)
   int num_info_emotes = t[16];
   
   quest_table[quest_nr].prerequisite_quest = t[17];
+  quest_table[quest_nr].disqualifying_quest = t[18];
 
   if (quest_table[quest_nr].num_objs > 0) {
     quest_table[quest_nr].obj = new quest_om_data[quest_table[quest_nr].num_objs];
