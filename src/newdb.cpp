@@ -2433,7 +2433,8 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
                 break;
             }
           }
-          if (GET_OBJ_TYPE(installed) == ITEM_PROGRAM) {
+          // Personas don't take up storage in store-bought decks (personas are not programs in custom decks)
+          if ((GET_OBJ_TYPE(installed) == ITEM_PROGRAM) && !((GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(installed) <= SOFT_SENSOR))) {
             GET_CYBERDECK_USED_STORAGE(obj) += GET_PROGRAM_SIZE(installed);
           }
         }
