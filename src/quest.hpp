@@ -48,7 +48,7 @@ typedef  std::vector<emote_t>   emote_vector_t;
 #define QMAX_OBJS          25
 #define QMAX_MOBS          25
 
-#define COULD_BE_ON_QUEST(ch) (ch && !IS_NPC(ch) && (GET_QUEST(ch) || AFF_FLAGGED(ch, AFF_GROUP)))
+#define COULD_BE_ON_QUEST(ch) (ch && AFF_FLAGGED(ch, AFF_GROUP) && (IS_NPC(ch) || GET_QUEST(ch)))
 
 struct quest_om_data
 {

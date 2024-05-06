@@ -791,6 +791,12 @@ bool check_quest_destroy(struct char_data *ch, struct obj_data *obj) {
   return FALSE;
 }
 
+#ifdef IS_BUILDPORT
+#define QUEST_DEBUG(msg) act(msg, FALSE, ch, 0, victim, TO_ROLLS);
+#else
+#define QUEST_DEBUG(msg)
+#endif
+
 bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
   if (!GET_QUEST(ch) || !ch->player_specials)
     return FALSE;
@@ -806,23 +812,18 @@ bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
       {
       case QMO_KILL_ONE:
       case QMO_KILL_MANY:
-#ifdef IS_BUILDPORT
-        act("_raw_check_quest_kill($n, $N): +1", FALSE, ch, 0, victim, TO_ROLLS);
-#endif
+        QUEST_DEBUG("_raw_check_quest_kill($n, $N): +1");
         ch->player_specials->mob_complete[i]++;
         return TRUE;
       case QMO_DONT_KILL:
-#ifdef IS_BUILDPORT
-        act("_raw_check_quest_kill($n, $N): qmo_dont_kill, failed quest", FALSE, ch, 0, victim, TO_ROLLS);
-#endif
+        QUEST_DEBUG("_raw_check_quest_kill($n, $N): qmo_dont_kill, failed quest");
         ch->player_specials->mob_complete[i] = -1;
         send_to_char(ch, "^rJust a moment too late, you remember that you weren't supposed to kill %s^r...^n\r\n", GET_CHAR_NAME(victim));
+        return FALSE;
       }
     }
   }
-#ifdef IS_BUILDPORT
-  act("_raw_check_quest_kill($n, $N): didn't count for quest", FALSE, ch, 0, victim, TO_ROLLS);
-#endif
+  QUEST_DEBUG("_raw_check_quest_kill($n, $N): didn't count for quest");
   return FALSE;
 }
 
