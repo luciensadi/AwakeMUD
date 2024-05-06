@@ -6579,7 +6579,7 @@ void init_parse(struct descriptor_data *d, char *arg)
       if (!number) {
         STATE(d) = CON_PLAYING;
         send_to_char("Initiation cancelled.\r\n", CH);
-      } else if (number > META_MAX) {
+      } else if (number >= META_MAX) {
         send_to_char("Invalid Response. Select another metamagic to unlock: ", CH);
       } else if (GET_METAMAGIC(CH, number) >= METAMAGIC_STAGE_UNLOCKED && !(number == META_CENTERING && GET_TRADITION(CH) == TRAD_ADEPT)) {
         send_to_char(CH, "You've already unlocked %s. Select another metamagic to unlock: ", metamagic[number]);
