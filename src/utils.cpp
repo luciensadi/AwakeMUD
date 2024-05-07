@@ -5041,7 +5041,7 @@ void knockdown_character(struct char_data *ch) {
   // Getting knocked down staggers your commands.
   WAIT_STATE(ch, 1 RL_SEC);
 
-  bool eligible_for_kipup = PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP) || (IS_NPC(ch) && (GET_QUI(ch) >= 10 && GET_SKILL(ch, SKILL_UNARMED_COMBAT) >= 6)) && !IS_JACKED_IN(ch);
+  bool eligible_for_kipup = (PLR_FLAGGED(ch, PLR_PAID_FOR_KIPUP) || (IS_NPC(ch) && (GET_QUI(ch) >= 10 && GET_SKILL(ch, SKILL_UNARMED_COMBAT) >= 6))) && !IS_JACKED_IN(ch);
 
   if (eligible_for_kipup && PRF_FLAGGED(ch, PRF_AUTOKIPUP)) {
     // Successfully kipping up gets you back on your feet with no penalty.
