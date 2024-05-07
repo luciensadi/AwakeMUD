@@ -6369,7 +6369,7 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *o
 
       if (access_level(ch, LVL_VICEPRES)) {
         if (send_messages) {
-          send_to_char(ch, "...but you bypass the location restriction on %s.", GET_OBJ_NAME(obj));
+          send_to_char(ch, "...but you bypass the location restriction on %s.\r\n", GET_OBJ_NAME(obj));
         }
         return FALSE;
       }
@@ -6382,7 +6382,7 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *o
   // Staff bypass.
   if (access_level(ch, LVL_VICEPRES)) {
     if (send_messages) {
-      send_to_char(ch, "You bypass the quest flag on %s.", GET_OBJ_NAME(obj));
+      send_to_char(ch, "You bypass the quest flag on %s.\r\n", GET_OBJ_NAME(obj));
     }
     return FALSE;
   }
