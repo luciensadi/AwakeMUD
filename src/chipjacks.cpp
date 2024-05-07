@@ -313,7 +313,7 @@ ACMD(do_link)
   FAILURE_CASE(skills[GET_CHIP_SKILL(obj)].is_knowledge_skill && !link, "You need a knowsoft link to link knowsofts from headware memory.");
   FAILURE_CASE(!skills[GET_CHIP_SKILL(obj)].is_knowledge_skill && !skillwires, "You need skillwires to link activesofts from headware memory.");
   FAILURE_CASE(GET_CHIP_COMPRESSION_FACTOR(obj), "You must decompress this skillsoft before you link it.");
-  FAILURE_CASE_PRINTF((GET_CHIP_LINKED(obj) && !subcmd) || (!GET_OBJ_VAL(obj, 9) && subcmd), "That program is already %slinked.\r\n", subcmd ? "un" : "");
+  FAILURE_CASE_PRINTF((GET_CHIP_LINKED(obj) && !subcmd) || (!GET_CHIP_LINKED(obj) && subcmd), "That program is already %slinked.\r\n", subcmd ? "un" : "");
 
   if (subcmd) {
     GET_CHIP_LINKED(obj) = 0;
@@ -321,8 +321,8 @@ ACMD(do_link)
     deactivate_single_skillsoft(obj, ch, TRUE);
   } else {
     GET_CHIP_LINKED(obj) = 1;
-    send_to_char(ch, "You link %s to your %s.\r\n", GET_OBJ_NAME(obj), skills[GET_OBJ_VAL(obj, 0)].is_knowledge_skill ? "knowsoft link" : "skillwires");
-    set_skill_from_chip(ch, obj, TRUE, GET_CYBERWARE_RATING(skillwires));
+    send_to_char(ch, "You link %s to your %s.\r\n", GET_OBJ_NAME(obj), skills[GET_CHIP_SKILL(obj)].is_knowledge_skill ? "knowsoft link" : "skillwires");
+    set_skill_from_chip(ch, obj, TRUE, skillwires ? GET_CYBERWARE_RATING(skillwires) : 0);
   }
 }
 
