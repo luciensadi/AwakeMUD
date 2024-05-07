@@ -4723,7 +4723,7 @@ ACMD(do_cleanup)
     return;
   }
 
-  if (ch_is_blocked_by_quest_protections(ch, target_obj, TRUE)) {
+  if (ch_is_blocked_by_quest_protections(ch, target_obj, TRUE, TRUE)) {
     send_to_char(ch, "%s isn't yours-- better leave it be.\r\n", capitalize(GET_OBJ_NAME(target_obj)));
     return;
   }

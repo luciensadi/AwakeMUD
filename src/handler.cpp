@@ -3138,7 +3138,7 @@ struct obj_data *get_obj_in_list_vis(struct char_data * ch, const char *name, st
     }
     
     // Invisible to you: Blocked by quest protections.
-    if (!staff_bit && ch_is_blocked_by_quest_protections(ch, i, FALSE))
+    if (!staff_bit && ch_is_blocked_by_quest_protections(ch, i, FALSE, FALSE))
       continue;
 
     if (keyword_appears_in_obj(tmp, i)) {

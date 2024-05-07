@@ -191,7 +191,7 @@ void    find_or_load_ch_cleanup(struct char_data *ch);
 bool obj_is_apartment_only_drop_item(struct obj_data *obj, struct room_data *target_room);
 bool obj_contains_apartment_only_drop_items(struct obj_data *obj, struct room_data *target_room);
 
-bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor);
+bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor, bool send_messages);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);
 
 const char * keyword_appears_in_obj(const char *keyword, struct obj_data *obj, bool search_keywords=1, bool search_name=1, bool search_desc=0);
@@ -873,7 +873,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 #define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (ch != vict && (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(SEES_ASTRAL(ch)))
 
-#define INVIS_OK_OBJ(sub, obj) (!ch_is_blocked_by_quest_protections(sub, obj, FALSE)  \
+#define INVIS_OK_OBJ(sub, obj) (!ch_is_blocked_by_quest_protections(sub, obj, FALSE, FALSE)  \
                                 && (!IS_OBJ_STAT((obj), ITEM_EXTRA_INVISIBLE)         \
                                     || has_vision(sub, VISION_ULTRASONIC)             \
                                     || SEES_ASTRAL(sub)                               \

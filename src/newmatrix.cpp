@@ -1303,7 +1303,7 @@ ACMD(do_locate)
             continue;
 
           // Skip anything that you can't touch for quest reasons.
-          if (ch_is_blocked_by_quest_protections(ch, obj, FALSE))
+          if (ch_is_blocked_by_quest_protections(ch, obj, FALSE, TRUE))
             continue;
 
           // If it has been found by someone else:

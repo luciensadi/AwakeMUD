@@ -460,7 +460,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (object->obj_flags.quest_id && !IS_OBJ_STAT(object, ITEM_EXTRA_CORPSE)) {
       if (object->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
         strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
-      else if (!ch_is_blocked_by_quest_protections(ch, object, FALSE))
+      else if (!ch_is_blocked_by_quest_protections(ch, object, FALSE, TRUE))
         strlcat(buf, " ^Y(Group Quest)^n", sizeof(buf));
       else
         strlcat(buf, " ^m(Protected)^n", sizeof(buf));

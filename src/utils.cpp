@@ -6348,7 +6348,7 @@ struct char_data *ch_is_grouped_with_idnum(struct char_data *ch, idnum_t idnum) 
   return NULL;
 }
 
-bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor) {
+bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor, bool send_messages) {
   struct char_data *questor;
   
   // Not quest-protected.
@@ -6363,10 +6363,14 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *o
   if ((questor = ch_is_grouped_with_idnum(ch, obj->obj_flags.quest_id))) {
     // If you're grouped with them but aren't in the same room for a location-locked quest, you're blocked.
     if (requires_ch_to_be_in_same_room_as_questor && !chars_are_in_same_location(ch, questor)) {
-      send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(questor));
+      if (send_messages) {
+        send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(questor));
+      }
 
       if (access_level(ch, LVL_PRESIDENT)) {
-        act("...but you bypass the location restriction on $p.", FALSE, ch, obj, 0, TO_CHAR);
+        if (send_messages) {
+          send_to_char(ch, "...but you bypass the location restriction on %s.", GET_OBJ_NAME(obj));
+        }
         return FALSE;
       }
       return TRUE;
@@ -6377,7 +6381,9 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *o
 
   // Staff bypass.
   if (access_level(ch, LVL_PRESIDENT)) {
-    act("You bypass the quest flag on $p.", FALSE, ch, obj, 0, TO_CHAR);
+    if (send_messages) {
+      send_to_char(ch, "You bypass the quest flag on %s.", GET_OBJ_NAME(obj));
+    }
     return FALSE;
   }
 
