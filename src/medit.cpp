@@ -1813,19 +1813,12 @@ void write_mobs_to_disk(vnum_t zone_num)
         continue;
       fprintf(fp, "#%ld\n", GET_MOB_VNUM(mob));
 
-      fprintf(fp,
-              "Keywords:\t%s\n"
-              "Name:\t%s\n"
-              "RoomDesc:$\n%s\n~\n",
-              mob->player.physical_text.keywords ? mob->player.physical_text.keywords : "mob unnamed",
-              mob->player.physical_text.name ? mob->player.physical_text.name : "An unnamed mob",
-              prep_string_for_writing_to_savefile(buf2, mob->player.physical_text.room_desc ?
-                      mob->player.physical_text.room_desc : "An unnamed mob is here."));
+      fprintf(fp, "Keywords:\t%s\n", mob->player.physical_text.keywords ? mob->player.physical_text.keywords : "mob unnamed");
+      fprintf(fp, "Name:\t%s\n", mob->player.physical_text.name ? mob->player.physical_text.name : "An unnamed mob");
+      fprintf(fp, "RoomDesc:$\n%s\n~\n",
+              prep_string_for_writing_to_savefile(buf2, mob->player.physical_text.room_desc ? mob->player.physical_text.room_desc : "An unnamed mob is here."));
       fprintf(fp, "LookDesc:$\n%s~\n",
-              prep_string_for_writing_to_savefile(buf2,
-                      mob->player.physical_text.look_desc?
-                      mob->player.physical_text.look_desc
-                      : "An unnamed mob is here."));
+              prep_string_for_writing_to_savefile(buf2, mob->player.physical_text.look_desc ? mob->player.physical_text.look_desc : "An unnamed mob is here."));
 
       if (mob->char_specials.arrive)
         fprintf(fp, "ArriveMsg:\t%s\n", mob->char_specials.arrive);

@@ -3157,17 +3157,10 @@ void write_objs_to_disk(vnum_t zonenum)
 
       fprintf(fp, "#%ld\n", GET_OBJ_VNUM(obj));
 
-      fprintf(fp,
-              "Keywords:\t%s\n"
-              "Name:\t%s\n"
-              "RoomDesc:$\n%s~\n"
-              "LookDesc:$\n%s~\n",
-              obj->text.keywords? obj->text.keywords : "unnamed",
-              obj->text.name? obj->text.name : "an unnamed object",
-              obj->text.room_desc ? prep_string_for_writing_to_savefile(buf2, obj->text.room_desc)
-              : "An unnamed object sits here",
-              obj->text.look_desc? prep_string_for_writing_to_savefile(buf2, obj->text.look_desc)
-              : "You see an uncreative object.\n");
+      fprintf(fp, "Keywords:\t%s\n", obj->text.keywords? obj->text.keywords : "unnamed");
+      fprintf(fp, "Name:\t%s\n", obj->text.name? obj->text.name : "an unnamed object");
+      fprintf(fp, "RoomDesc:$\n%s~\n", obj->text.room_desc ? prep_string_for_writing_to_savefile(buf2, obj->text.room_desc) : "An unnamed object sits here");
+      fprintf(fp, "LookDesc:$\n%s~\n", obj->text.look_desc ? prep_string_for_writing_to_savefile(buf2, obj->text.look_desc) : "You see an uncreative object.\n");
 
       fprintf(fp, "Type:\t%s\n", item_types[(int)GET_OBJ_TYPE(obj)]);
 
