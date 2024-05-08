@@ -4361,6 +4361,7 @@ ACMD(do_show)
                { "longasszones",   LVL_ADMIN },
                { "extramagical",   LVL_ADMIN },
                { "tempdescs",      LVL_BUILDER },
+               { "sameroomandlook", LVL_BUILDER },
                { "\n", 0 }
              };
 
@@ -5044,6 +5045,15 @@ ACMD(do_show)
     for (rnum_t world_idx = 0; world_idx < top_of_world; world_idx++) {
       if (world[world_idx].temp_desc)
         send_to_char(ch, " [^c%6d^n] %s^n\r\n", GET_ROOM_VNUM(&world[world_idx]), GET_ROOM_NAME(&world[world_idx]));
+    }
+    break;
+  case 36:
+    send_to_char("The following items have the same roomdesc and lookdesc:\r\n", ch);
+    for (int idx = 0; idx < top_of_objt; idx++) {
+      struct obj_data *obj = &obj_proto[idx];
+      if (!strcmp(obj->text.room_desc, obj->text.look_desc)) {
+        send_to_char(ch, " [%6d] %s^n\r\n", GET_OBJ_VNUM(obj), GET_OBJ_NAME(obj));
+      }
     }
     break;
   default:
