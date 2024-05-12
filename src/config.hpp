@@ -23,6 +23,8 @@ extern const char *DEFAULT_POOFOUT_STRING;
 extern const char *CANNOT_GO_THAT_WAY;
 extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
+#define STAFF_CONTACT_EMAIL "<insert_staff_email_here>"
+
 // What karma / nuyen multipliers do you want your game to have? This effects grind length, higher is faster.
 #define KARMA_GAIN_MULTIPLIER                                  2.0
 #define NUYEN_GAIN_MULTIPLIER                                  2.0

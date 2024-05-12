@@ -52,9 +52,8 @@ const char *QMENU =
   "\r\n"
   "   Make your choice: ";
 
-const char *GREETINGS =
-  "\r\n"
-  "Administration Email: luciensadi@gmail.com\r\n"
+const char *GREETINGS = "\r\n"
+  "Administration Email: " STAFF_CONTACT_EMAIL "\r\n"
   "Credit to Jeremy Elson, Hans Henrik Staerfeldt, Katja Nyboe, Tom Madsen,\r\n"
   "Michael Seifert, and Sebastian Hammer for their work on predecessor games.\r\n"
   "Forked from AwakeMUD 0.8.20 BETA, by Flynn, Fastjack, Rift, Washu, and Che.\r\n"

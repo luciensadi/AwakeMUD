@@ -4120,6 +4120,7 @@ int find_hotel_cost(struct char_data *ch)
       cost = 6.0;
       break;
     case 62820:
+    case 30500:
       cost = 2.0;
       break;
     default:

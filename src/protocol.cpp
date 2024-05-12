@@ -30,6 +30,7 @@
 #include "constants.hpp"
 #include "comm.hpp"
 #include "protocol.hpp"
+#include "config.hpp"
 
 /******************************************************************************
  The following section is for Diku/Merc derivatives.  Replace as needed.
@@ -2848,7 +2849,7 @@ static void SendMSSP( descriptor_t *apDescriptor )
     { "HOSTNAME",        "awakemud.com", NULL },
     { "PORT",          "4000", NULL },
     { "CODEBASE",        *awakemud_version, NULL },
-    { "CONTACT",        "luciensadi@gmail.com", NULL },
+    { "CONTACT",        STAFF_CONTACT_EMAIL, NULL },
     { "CREATED",        "2016", NULL },
 //    { "ICON",          "" },
 //    { "IP",            "" },

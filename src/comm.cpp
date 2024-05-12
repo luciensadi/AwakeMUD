@@ -1885,7 +1885,9 @@ int new_descriptor(int s)
   /* determine if the site is banned */
   if (isbanned(newd->host) == BAN_ALL) {
 #ifdef USE_PRIVATE_CE_WORLD
-    write_to_descriptor(desc, "Sorry, this IP address has been banned. If you believe this to be in error, contact luciensadi@gmail.com.\r\n");
+    write_to_descriptor(desc, "Sorry, this IP address has been banned. If you believe this to be in error, contact ");
+    write_to_descriptor(desc, STAFF_CONTACT_EMAIL);
+    write_to_descriptor(desc, "\r\n");
 #else
     write_to_descriptor(desc, "Sorry, this IP address has been banned.\r\n");
 #endif

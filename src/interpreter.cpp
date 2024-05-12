@@ -1692,7 +1692,7 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
 
     if (PLR_FLAGGED(ch, PLR_FROZEN)) {
       if (!access_level(ch, LVL_PRESIDENT)) {
-        send_to_char("Sorry, this character has been frozen by staff and is unable to take any input. If you're seeing this message, it usually means that you've connected to a character that is pending review or has been banned.\r\n", ch);
+        send_to_char(ch, "Sorry, this character has been frozen by staff and is unable to take any input. If you're seeing this message, it usually means that you've connected to a character that is pending review or has been banned. If you believe that this has been done in error, reach out to %s for next steps.\r\n", STAFF_CONTACT_EMAIL);
         return;
       } else
         send_to_char("The ice covering you crackles alarmingly as you slam your sovereign will through it.\r\n", ch);
