@@ -2732,13 +2732,13 @@ void nanny(struct descriptor_data * d, char *arg)
       if (isbanned(d->host) >= BAN_NEW) {
         snprintf(buf, sizeof(buf), "Request for new char %s denied from [%s] (siteban)", GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_BANLOG, TRUE);
-        SEND_TO_Q("Sorry, new characters are not allowed from your site.\r\n", d);
+        SEND_TO_Q("Sorry, new characters are not allowed from your site. Please connect to an existing character, or reach out to " STAFF_CONTACT_EMAIL " for next steps.\r\n", d);
         STATE(d) = CON_CLOSE;
         return;
       }
       if (restrict_mud) {
         if (restrict_mud == LVL_MAX)
-          SEND_TO_Q("The mud is being reconfigured.  Try again a bit later.\r\n", d);
+          SEND_TO_Q("The MUD is being reconfigured and is not accepting connections.  Try again a bit later.\r\n", d);
         else {
           SEND_TO_Q(WIZLOCK_MSG, d);
         }
@@ -2841,7 +2841,7 @@ void nanny(struct descriptor_data * d, char *arg)
       }
       if (!access_level(d->character, restrict_mud)) {
         if (restrict_mud == LVL_MAX)
-          SEND_TO_Q("The mud is about to reboot. Please try again in a few minutes.\r\n", d);
+          SEND_TO_Q("The MUD is about to reboot. Please try again in a few minutes.\r\n", d);
         else
           SEND_TO_Q("The game is temporarily restricted.. try again later.\r\n", d);
         STATE(d) = CON_CLOSE;

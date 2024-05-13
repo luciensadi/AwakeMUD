@@ -5741,10 +5741,14 @@ ACMD(do_who)
   *buf = '\0';
   output_header = 1;
 
+  std::unordered_map<std::string, bool> unique_connections = {};
+
   for (; sort != 0; sort > 0 ? sort-- : sort++) {
     if ( sort == 1 )
       output_header = 1;
     for (d = descriptor_list; d; d = d->next) {
+      unique_connections[std::string(d->host)] = TRUE;
+
       if (DESCRIPTOR_CONN_STATE_NOT_PLAYING(d))
         continue;
 
@@ -5898,19 +5902,26 @@ ACMD(do_who)
       snprintf(buf2, sizeof(buf2), "%s\r\nOne lonely chummer displayed... thank you for keeping the faith.\r\n", buf);
     }
   } else {
-    if (num_in_socialization_rooms > 0) {
-      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed%s, of which %d %s listed in ##^WWHERE^n.\r\n",
-               buf,
-               num_can_see,
-               num_can_see == 69 ? " (nice)" : "",
-               num_in_socialization_rooms,
-               num_in_socialization_rooms == 1 ? "is" : "are");
-    } else {
-      snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed%s.\r\n",
+    snprintf(buf2, sizeof(buf2), "%s\r\n%d chummers displayed%s",
                buf,
                num_can_see,
                num_can_see == 69 ? " (nice)" : "");
+
+    // We only show unique connections at 50+ PCs to ensure that folks have a harder time correlating alts.
+    if (num_can_see >= 50) {
+      // We also drop between 0-2 displayed connections to make alt correlation harder.
+      size_t displayed_size = (unique_connections.size() / 3) * 3;
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " across ~%ld unique connection%s",
+               displayed_size,
+               displayed_size == 1 ? "" : "s");
     }
+
+    if (num_in_socialization_rooms > 0) {
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", with %d listed in ##^WWHERE^n",
+               num_in_socialization_rooms);
+    }
+
+    strlcat(buf2, ".\r\n", sizeof(buf2));
   }
 
   if (subcmd) {
