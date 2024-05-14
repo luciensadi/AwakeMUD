@@ -4535,8 +4535,9 @@ ACMD(do_learn)
         break;
       }
     }
-  if (GET_KARMA(ch) < (force  - oldforce) * 100) {
-    send_to_char(ch, "You don't have enough karma to learn this spell at that force! You need %d.\r\n", force);
+  int required_karma = (force  - oldforce) * 100;
+  if (GET_KARMA(ch) < required_karma) {
+    send_to_char(ch, "You don't have enough karma to learn this spell at that force! You need %d.\r\n", required_karma);
     return;
   }
   if ((GET_ASPECT(ch) == ASPECT_ELEMFIRE && spells[GET_OBJ_VAL(obj, 1)].category != COMBAT) ||
@@ -4647,7 +4648,7 @@ ACMD(do_learn)
     delete spell;
     spell = NULL;
   }
-  GET_KARMA(ch) -= (force - oldforce) * 100;
+  GET_KARMA(ch) -= required_karma;
   spell = new spell_data;
   spell->name = str_dup(compose_spell_name(GET_SPELLFORMULA_SPELL(obj), GET_SPELLFORMULA_SUBTYPE(obj)));
   spell->type = GET_SPELLFORMULA_SPELL(obj);
@@ -4655,7 +4656,7 @@ ACMD(do_learn)
   spell->force = force;
   spell->next = GET_SPELLS(ch);
   GET_SPELLS(ch) = spell;
-  send_to_char(ch, "You spend %d karma and learn %s.\r\n", force - oldforce, spell->name);
+  send_to_char(ch, "You spend %d karma and learn %s.\r\n", required_karma, spell->name);
   extract_obj(obj);
   GET_SPELLS_DIRTY_BIT(ch) = TRUE;
 }
