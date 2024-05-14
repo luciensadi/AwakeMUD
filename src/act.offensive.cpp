@@ -772,13 +772,14 @@ ACMD(do_kick)
     } else {
       act("You sneak up behind $N and kick $M straight in the ass!",
           FALSE, ch, 0, vict, TO_CHAR);
+      act("$n sneaks up behind $N and gives $M a swift kick in the ass!",
+          TRUE, ch, 0, vict, TO_NOTVICT);
       if (!IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
         act("$n sneaks up behind you and kicks you in the ass!\r\n"
             "That's gonna leave a mark...", FALSE, ch, 0, vict, TO_VICT);
+      } else {
         log_attempt_to_bypass_ic_ignore(ch, vict, "kick");
       }
-      act("$n sneaks up behind $N and gives $M a swift kick in the ass!",
-          TRUE, ch, 0, vict, TO_NOTVICT);
     }
     return;
   }
