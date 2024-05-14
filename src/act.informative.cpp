@@ -4091,9 +4091,11 @@ ACMD(do_examine)
         GET_OBJ_TYPE(tmp_object) == ITEM_KEYRING ||
         GET_OBJ_TYPE(tmp_object) == ITEM_QUIVER ||
         (GET_OBJ_TYPE(tmp_object) == ITEM_WORN && tmp_object->contains)) {
-      if (!tmp_object->contains)
+      if (GET_OBJ_TYPE(tmp_object) == ITEM_CONTAINER && IS_SET(GET_CONTAINER_FLAGS(tmp_object), CONT_CLOSED)) {
+        send_to_char("It is closed.\r\n", ch);
+      } else if (!tmp_object->contains) {
         send_to_char("Looking inside reveals it to be empty.\r\n", ch);
-      else {
+      } else {
         if (GET_OBJ_TYPE(tmp_object) == ITEM_KEYRING) {
           send_to_char("Attached to the keyring is:\r\n", ch);
         } else {

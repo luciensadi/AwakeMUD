@@ -1777,14 +1777,20 @@ ACMD(do_gridguide)
     }
     send_to_char(ch, "%d Entries remaining.\r\n", GET_VEH_MAX_AUTONAV_SLOTS(veh) - i);
     if (veh->in_room) {
-      send_to_char(ch, "You are currently located at %ld, %ld.\r\n",
+      if (ROOM_FLAGS(veh->in_room).AreAnySet(ROOM_INDOORS, ROOM_NOGRID, ROOM_FALL, ROOM_NOBIKE, ENDBIT)) {
+        send_to_char("You are not in a valid GridGuide location.\r\n", ch);
+      } else {
+        send_to_char(ch, "You are currently located at %ld, %ld.\r\n",
                    get_room_gridguide_x(GET_ROOM_VNUM(veh->in_room)),
                    get_room_gridguide_y(GET_ROOM_VNUM(veh->in_room)));
+      }
     }
     return;
   }
 
-  if (veh->dest && !str_cmp(arg, "stop")) {
+  if (!str_cmp(arg, "stop")) {
+    FAILURE_CASE(!veh->dest, "The autonav is already disengaged.");
+
     veh->dest = 0;
     send_to_veh("The autonav disengages.\r\n", veh, 0, TRUE);
     if (!AFF_FLAGGED(ch, AFF_PILOT))
