@@ -7166,6 +7166,10 @@ SPECIAL(medical_workshop) {
   // Preliminary skill check.
   if (!mode_is_withdraw) {
     if (!PLR_FLAGGED(ch, PLR_CYBERDOC) && !access_level(ch, LVL_ADMIN)) {
+      // Fall back to standard diagnose.
+      if (mode_is_diagnose)
+        return FALSE;
+
       send_to_char("The cyberdoc role is currently application-only. Please contact staff to request the ability to be a cyberdoc.\r\n", ch);
       return TRUE;
     }

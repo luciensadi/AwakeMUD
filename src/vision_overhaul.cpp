@@ -185,7 +185,7 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
       if (has_natural_thermographic_vision) {
         TH_PENALTY("FullDark[TH-N]", 2);
       } else {
-        TH_PENALTY("FullDark[TH-U]", 4);
+        TH_PENALTY("FullDark[TH-A]", 4);
       }
 
       LL_PENALTY("FullDark[LL]", 8);
@@ -196,13 +196,13 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
       if (has_natural_thermographic_vision) {
         TH_PENALTY("MinLight[TH-N]", 2);
       } else {
-        TH_PENALTY("MinLight[TH-U]", 4);
+        TH_PENALTY("MinLight[TH-A]", 4);
       }
 
       if (has_natural_lowlight_vision) {
         LL_PENALTY("MinLight[LL-N]", 2);
       } else {
-        LL_PENALTY("MinLight[LL-U]", 4);
+        LL_PENALTY("MinLight[LL-A]", 4);
       }
 
       NM_PENALTY("MinLight[NM]", 6);
@@ -211,11 +211,11 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
       if (has_natural_thermographic_vision) {
         TH_PENALTY("PartLight[TH-N]", 1);
       } else {
-        TH_PENALTY("PartLight[TH-U]", 2);
+        TH_PENALTY("PartLight[TH-A]", 2);
       }
 
       if (!has_natural_lowlight_vision) {
-        LL_PENALTY("PartLight[LL-U]", 1);
+        LL_PENALTY("PartLight[LL-A]", 1);
       }
 
       NM_PENALTY("PartLight[NM]", 2);
@@ -227,13 +227,13 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
         if (has_natural_thermographic_vision) {
           TH_PENALTY("Glare[TH-N]", 2);
         } else {
-          TH_PENALTY("Glare[TH-U]", 4);
+          TH_PENALTY("Glare[TH-A]", 4);
         }
 
         if (has_natural_lowlight_vision) {
           LL_PENALTY("Glare[LL-N]", 2);
         } else {
-          LL_PENALTY("Glare[LL-U]", 4);
+          LL_PENALTY("Glare[LL-A]", 4);
         }
 
         NM_PENALTY("Glare[NM]", 2);
@@ -273,7 +273,7 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
 
   if (temp_room->vision[1] == LIGHT_MIST) {
     if (!has_natural_lowlight_vision) {
-      LL_PENALTY("Mist[LL-U]", 2);
+      LL_PENALTY("Mist[LL-A]", 2);
     }
 
     NM_PENALTY("Mist[NM]", 2);
@@ -285,7 +285,7 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
     if (has_natural_lowlight_vision) {
       LL_PENALTY("LSmoke/LRain[LL-N]", 2);
     } else {
-      LL_PENALTY("LSmoke/LRain[LL-U]", 4);
+      LL_PENALTY("LSmoke/LRain[LL-A]", 4);
     }
 
     NM_PENALTY("LSmoke/LRain[NM]", 4);
@@ -295,13 +295,13 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
       || (weather_info.sky == SKY_LIGHTNING && !ROOM_FLAGGED(temp_room, ROOM_INDOORS)))
   {
     if (!has_natural_thermographic_vision) {
-      TH_PENALTY("HSmoke/HRain[TH-U]", 1);
+      TH_PENALTY("HSmoke/HRain[TH-A]", 1);
     }
 
     if (has_natural_lowlight_vision) {
       LL_PENALTY("HSmoke/HRain[LL-N]", 4);
     } else {
-      LL_PENALTY("HSmoke/HRain[LL-U]", 6);
+      LL_PENALTY("HSmoke/HRain[LL-A]", 6);
     }
 
     NM_PENALTY("HSmoke/HRain[NM]", 6);
@@ -311,7 +311,7 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
     if (has_natural_thermographic_vision) {
       TH_PENALTY("TSmoke[TH-N]", 6);
     } else {
-      TH_PENALTY("TSmoke[TH-U]", 8);
+      TH_PENALTY("TSmoke[TH-A]", 8);
     }
 
     LL_PENALTY("TSmoke[LL]", 4);

@@ -497,24 +497,32 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
   }
   // If we're within the allowed amount, calculate the remaining vision penalty, capping at 8.
   else {
-    int visibility_penalty = get_vision_penalty(ch, temp_room, rbuf, rbuf_len);
+    char vision_rbuf[10000] = { '\0' };
+
+    int visibility_penalty = get_vision_penalty(ch, temp_room, vision_rbuf, sizeof(vision_rbuf));
 
     if (visibility_penalty > (MAX_VISIBILITY_PENALTY - current_visibility_penalty)) {
       // We already printed all their modifiers, so we need to apply a negative modifier to clamp them back to 8.
       int new_visibility_penalty = MAX_VISIBILITY_PENALTY - current_visibility_penalty;
-      buf_mod(rbuf, rbuf_len, "VisPenaltyMax8", new_visibility_penalty);
+      buf_mod(vision_rbuf, sizeof(vision_rbuf), "VisPenaltyMax8", new_visibility_penalty);
       visibility_penalty = new_visibility_penalty;
     }
 
     if (visibility_penalty != 0) {
-      WRITEOUT_MSG("Visibility Penalty", visibility_penalty);
+      if (writeout_buffer) {
+        snprintf(((writeout_buffer) + strlen(writeout_buffer)), writeout_buffer_size - strlen(writeout_buffer), "  Visibility Penalty: ^c%d^n (^L%s^n)\r\n", visibility_penalty, vision_rbuf);
+      }
       base_target += visibility_penalty;
     }
+
+    strlcat(rbuf, vision_rbuf, rbuf_len);
   }
 
-  base_target += GET_TARGET_MOD(ch);
-  buf_mod(rbuf, rbuf_len, "GET_TARGET_MOD", GET_TARGET_MOD(ch) );
-  WRITEOUT_MSG("Innate Target Mod", GET_TARGET_MOD(ch));
+  if (GET_TARGET_MOD(ch)) {
+    base_target += GET_TARGET_MOD(ch);
+    buf_mod(rbuf, rbuf_len, "GET_TARGET_MOD", GET_TARGET_MOD(ch) );
+    WRITEOUT_MSG("Innate Target Mod", GET_TARGET_MOD(ch));
+  }
 
   if ((GET_RACE(ch) == RACE_NIGHTONE || IS_GHOUL(ch)) && ((time_info.hours > 6) && (time_info.hours < 19)) && OUTSIDE(ch) && weather_info.sky < SKY_RAINING)
   {
@@ -1359,18 +1367,25 @@ bool PLR_TOG_CHK(char_data *ch, dword offset)
 
 char * buf_mod(char *rbuf, size_t rbuf_len, const char *name, int bonus)
 {
+  bool prepend_comma = FALSE;
+
   if ( !rbuf )
     return rbuf;
   if ( bonus == 0 )
     return rbuf;
 
-  rbuf_len -= strlen(rbuf);
-  rbuf += strlen(rbuf);
+  size_t used_len = strlen(rbuf);
+
+  rbuf_len -= used_len;
+  rbuf += used_len;
+
+  if (used_len > 0)
+    prepend_comma = isdigit(*(rbuf-1));
 
   if ( bonus > 0 )
-    snprintf(rbuf, rbuf_len, "%s +%d, ", name, bonus);
+    snprintf(rbuf, rbuf_len, "%s%s +%d", prepend_comma ? ", " : "", name, bonus);
   else
-    snprintf(rbuf, rbuf_len, "%s %d, ", name, bonus);
+    snprintf(rbuf, rbuf_len, "%s%s %d", prepend_comma ? ", " : "", name, bonus);
   rbuf += strlen(rbuf);
   return rbuf;
 }

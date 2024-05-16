@@ -8032,7 +8032,7 @@ ACMD(do_penalties) {
                vict == ch ? "are" : "is");
   
   total_damage_modifier = damage_modifier(vict, dummy_rbuf, sizeof(dummy_rbuf), msg_buffer, sizeof(msg_buffer));
-  if (*msg_buffer) {
+  if (*msg_buffer && total_damage_modifier) {
     send_to_char(ch, "Damage penalties (subtotal ^c%d^n):\r\n%s", total_damage_modifier, msg_buffer);
   } else {
     send_to_char("No damage penalties.\r\n", ch);
@@ -8041,25 +8041,25 @@ ACMD(do_penalties) {
 
   if (GET_MAG(vict) > 0) {
     total_sustain_modifier = sustain_modifier(vict, dummy_rbuf, sizeof(dummy_rbuf), FALSE, msg_buffer, sizeof(msg_buffer));
-    if (*msg_buffer) {
+    if (*msg_buffer && total_sustain_modifier) {
       send_to_char(ch, "\r\nSpell sustaining penalties (subtotal ^c%d^n):\r\n%s", total_sustain_modifier, msg_buffer);
     } else {
       send_to_char("\r\nNo spell sustaining penalties.\r\n", ch);
     }
     *msg_buffer = '\0';
 
-    send_to_char(ch, "\r\nThe following general penalties apply when performing magical actions:\r\n");
+    send_to_char(ch, "\r\nThe following general penalties apply when performing ^cmagical^n actions:\r\n");
     total_modify_target_magical_action = modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, TRUE, msg_buffer, sizeof(msg_buffer));
-    if (*msg_buffer) {
+    if (*msg_buffer && total_modify_target_magical_action) {
       send_to_char(ch, " General penalties (subtotal ^c%d^n):\r\n%s", total_modify_target_magical_action, msg_buffer);
     } else {
       send_to_char(" No general penalties.\r\n", ch);
     }
     *msg_buffer = '\0';
 
-    send_to_char(ch, "\r\nThe following general penalties apply when performing mundane actions:\r\n");
+    send_to_char(ch, "\r\nThe following general penalties apply when performing ^cmundane^n actions:\r\n");
     total_modify_target_mundane_action = modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, FALSE, msg_buffer, sizeof(msg_buffer));
-    if (*msg_buffer) {
+    if (*msg_buffer && total_modify_target_mundane_action) {
       send_to_char(ch, " General penalties (subtotal ^c%d^n):\r\n%s", total_modify_target_mundane_action, msg_buffer);
     } else {
       send_to_char(" No general penalties.\r\n", ch);
@@ -8071,7 +8071,7 @@ ACMD(do_penalties) {
                  total_damage_modifier + total_sustain_modifier + total_modify_target_mundane_action);
   } else {
     total_modify_target_mundane_action = modify_target_rbuf_raw(vict, dummy_rbuf, sizeof(dummy_rbuf), 0, FALSE, msg_buffer, sizeof(msg_buffer));
-    if (*msg_buffer) {
+    if (*msg_buffer && total_modify_target_mundane_action) {
       send_to_char(ch, "\r\nGeneral penalties (subtotal ^c%d^n):\r\n%s", total_modify_target_mundane_action, msg_buffer);
     } else {
       send_to_char("\r\nNo general penalties.\r\n", ch);
