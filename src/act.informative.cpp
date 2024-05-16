@@ -8018,9 +8018,10 @@ ACMD(do_penalties) {
       return;
     }
 
-    send_to_char(ch, "%s will roll ^c%d^n dice and take ^c%d^n in TN penalties when using %s:\r\n%s", 
+    send_to_char(ch, "%s will roll ^c%d^n dice and take ^c%s%d^n in TN penalties when using %s:\r\n%s", 
                  vict == ch ? "You" : GET_CHAR_NAME(vict),
                  total_skill,
+                 total_penalty > 0 ? "+" : "",
                  total_penalty,
                  skills[skill_idx].name,
                  msg_buffer);
