@@ -2054,6 +2054,10 @@ void parse_object(File &fl, long nr)
     int mult;
     const char *type_as_string = NULL;
     switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_KEY:
+        // Remove the default soulbind bug.
+        GET_KEY_SOULBOND(obj) = 0;
+        break;
       case ITEM_DOCWAGON:
         GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_NODONATE);
         break;
