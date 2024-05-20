@@ -451,8 +451,7 @@ bool is_escortee(struct char_data *mob)
 {
   int i;
 
-  if (!IS_NPC(mob) || !mob->master || IS_NPC(mob->master) ||
-      !GET_QUEST(mob->master))
+  if (!IS_NPC(mob) || !mob->master || IS_NPC(mob->master) || !GET_QUEST(mob->master))
     return FALSE;
 
   for (i = 0; i < quest_table[GET_QUEST(mob->master)].num_mobs; i++)
@@ -1205,6 +1204,8 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   // done or max_rep is below character rep. We include those with min_rep
   // higher than character rep because we want johnsons to hint to available
   // runs at higher character rep.
+  bool skipped_from_dq = FALSE;
+  bool skipped_from_missing_prereq = FALSE;
   for (int quest_idx = 0; quest_idx <= top_of_questt; quest_idx++) {
     if (quest_table[quest_idx].johnson == GET_MOB_VNUM(mob)) {
       if (!allow_disconnected && vnum_from_non_connected_zone(quest_table[quest_idx].vnum)) {
@@ -1270,6 +1271,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
           if (access_level(ch, LVL_BUILDER)) {
             send_to_char(ch, "[Skipping quest %ld: You need to have done prerequisite quest %lu first.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].prerequisite_quest);
           }
+          skipped_from_missing_prereq = TRUE;
           continue;
         }
 
@@ -1277,6 +1279,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
           if (access_level(ch, LVL_BUILDER)) {
             send_to_char(ch, "[Skipping quest %ld: You completed disqualifying quest %lu.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].disqualifying_quest);
           }
+          skipped_from_dq = TRUE;
           continue;
         }
       }
@@ -1290,6 +1293,9 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   if (!qlist.empty()) {
     sort(qlist.begin(), qlist.end(), compareRep);
     return qlist[0].index;
+  } else {
+    if (skipped_from_dq || skipped_from_missing_prereq)
+      send_to_char("^L(OOC: You've either not completed the prerequisite jobs or have done a disqualifying job recently. Do some more jobs in the area, then come back and try again!)^n\r\n", ch);
   }
   return 0;
 }

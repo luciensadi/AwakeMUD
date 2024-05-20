@@ -125,8 +125,13 @@ bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression) {
 #endif
 
   // Escortees can never be aggressive.
-  if (is_escortee(ch))
+  if (is_escortee(ch)) {
+    #ifdef MOBACT_DEBUG
+      strncpy(buf3, "m_i_a: I am an escortee and will not be aggressive.", sizeof(buf));
+      do_say(ch, buf3, 0, 0);
+    #endif
     return FALSE;
+  }
 
   // If we're aggressive by nature, and the check calls for it, return true.
   if (include_base_aggression && MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE))
@@ -1106,8 +1111,13 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
 bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
 
-  if (is_escortee(ch))
+  if (is_escortee(ch)) {
+    #ifdef MOBACT_DEBUG
+      strncpy(buf3, "m_p_m: I am an escortee and cannot have memory.", sizeof(buf));
+      do_say(ch, buf3, 0, 0);
+    #endif
     return FALSE;
+  }
 
   /* Mob Memory */
   if (MOB_FLAGGED(ch, MOB_MEMORY) && GET_MOB_MEMORY(ch)) {
@@ -1262,8 +1272,13 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   struct veh_data *veh = NULL;
 
-  if (is_escortee(ch))
+  if (is_escortee(ch)) {
+    #ifdef MOBACT_DEBUG
+      strncpy(buf3, "m_p_g: I am an escortee and will not guard.", sizeof(buf));
+      do_say(ch, buf3, 0, 0);
+    #endif
     return FALSE;
+  }
 
   // Vehicle code is separate.
   if (ch->in_veh) {
@@ -1549,8 +1564,9 @@ bool check_sentinel_snap_back(struct char_data *ch) {
 bool mobact_process_movement(struct char_data *ch) {
   int door;
 
-  if (is_escortee(ch))
+  if (is_escortee(ch)) {
     return FALSE;
+  }
 
   // If you can't move for a variety of reasons, bail out.
   if (CH_IN_COMBAT(ch) || AFF_FLAGGED(ch, AFF_PRONE))
@@ -2155,8 +2171,9 @@ bool mob_cannot_be_aggressive(struct char_data *ch) {
     return TRUE;
 
   // Escortees don't hit first.
-  if (is_escortee(ch))
+  if (is_escortee(ch)) {
     return TRUE;
+  }
 
   return FALSE;
 }
