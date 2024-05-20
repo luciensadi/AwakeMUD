@@ -638,8 +638,8 @@ struct command_info cmd_info[] =
     { "emote"      , POS_LYING   , do_new_echo , 0, SCMD_EMOTE, BLOCKS_IDLE_REWARD },
     { ":"          , POS_LYING   , do_new_echo , 0, SCMD_EMOTE, BLOCKS_IDLE_REWARD },
     { "enter"      , POS_SITTING , do_enter    , 0, 0, BLOCKS_IDLE_REWARD },
-    { "endru"      , POS_RESTING , do_not_here , 0, 0, ALLOWS_IDLE_REWARD }, // You must type the whole command.
-    { "endrun"     , POS_RESTING , do_endrun   , 0, 0, BLOCKS_IDLE_REWARD },
+    { "endru"      , POS_RESTING , do_endrun , 0, SCMD_QUI, ALLOWS_IDLE_REWARD }, // You must type the whole command.
+    { "endrun"     , POS_RESTING , do_endrun   , 0, SCMD_QUIT, BLOCKS_IDLE_REWARD },
     { "equipment"  , POS_MORTALLYW, do_equipment, 0, 0, ALLOWS_IDLE_REWARD },
     { "exits"      , POS_LYING   , do_exits    , 0, SCMD_LONGEXITS, ALLOWS_IDLE_REWARD },
     { "examine"    , POS_RESTING , do_examine  , 0, SCMD_EXAMINE, ALLOWS_IDLE_REWARD },

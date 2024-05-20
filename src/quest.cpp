@@ -3847,6 +3847,9 @@ ACMD(do_endrun) {
   // Must be on a quest.
   FAILURE_CASE(!GET_QUEST(ch), "But you're not on a run.");
 
+  // Must type the whole command.
+  FAILURE_CASE(subcmd == SCMD_QUI, "You must type the whole ^WENDRUN^n command to quit your job.");
+
   // Must have a phone.
   for (phone = ch->carrying; phone; phone = phone->next_content)
     if (GET_OBJ_TYPE(phone) == ITEM_PHONE)
