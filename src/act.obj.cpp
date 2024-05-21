@@ -310,7 +310,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
   if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)
   {
     if (GET_DECK_ACCESSORY_TYPE(cont) != TYPE_COMPUTER) {
-      send_to_char(ch, "You can't install anything into %s.\r\n", GET_OBJ_NAME(cont));
+      send_to_char(ch, "You can't install anything into %s^n.\r\n", GET_OBJ_NAME(cont));
       return;
     }
 
@@ -345,7 +345,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
 
     obj_from_char(obj);
     obj_to_obj(obj, cont);
-    send_to_char(ch, "You install %s onto %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+    send_to_char(ch, "You install %s^n onto %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
     act("$n installs $p on $P.", TRUE, ch, obj, cont, TO_ROOM);
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY)
@@ -353,7 +353,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     switch (GET_DECK_ACCESSORY_TYPE(obj)) {
       case TYPE_FILE:
         if (GET_OBJ_VAL(cont, 5) + GET_DECK_ACCESSORY_FILE_SIZE(obj) > GET_OBJ_VAL(cont, 3)) {
-          act("$p takes up too much memory to be uploaded into $P.", FALSE, ch, obj, cont, TO_CHAR);
+          act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
           return;
         }
         obj_from_char(obj);
@@ -363,15 +363,15 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
         return;
       case TYPE_UPGRADE:
         if (GET_OBJ_VAL(obj, 1) != 3) {
-          send_to_char(ch, "You can't seem to fit %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+          send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
           return;
         }
         obj_from_char(obj);
         obj_to_obj(obj, cont);
-        act("You fit $p into a FUP in $P.", FALSE, ch, obj, cont, TO_CHAR);
+        act("You fit $p^n into a FUP in $P^n.", FALSE, ch, obj, cont, TO_CHAR);
         return;
       default:
-        send_to_char(ch, "You can't seem to fit %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+        send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
         return;
     }
   }
@@ -391,9 +391,9 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
       case SOFT_REALITY:
       case SOFT_RESPONSE:
         if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
-          send_to_char(ch, "%s is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", CAP(GET_OBJ_NAME(obj)));
+          send_to_char(ch, "%s^n is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", CAP(GET_OBJ_NAME(obj)));
         } else {
-          send_to_char(ch, "%s is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n", CAP(GET_OBJ_NAME(obj)));
+          send_to_char(ch, "%s^n is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n", CAP(GET_OBJ_NAME(obj)));
         }
         return;
     }
@@ -416,7 +416,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
 
     // Check to make sure there's room
     if (GET_CYBERDECK_USED_STORAGE(cont) + space_required > GET_CYBERDECK_TOTAL_STORAGE(cont)) {
-      act("$p takes up too much memory to be installed into $P.", FALSE, ch, obj, cont, TO_CHAR);
+      act("$p^n takes up too much memory to be installed into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
     } else {
       obj_from_char(obj);
       obj_to_obj(obj, cont);
@@ -504,8 +504,8 @@ ACMD(do_put)
     }
     obj_from_char(obj);
     obj_to_obj(obj, cont);
-    send_to_char(ch, "You slip %s into your fingertip compartment.\r\n", decapitalize_a_an(obj));
-    act("$n slips $p into $s fingertip compartment.\r\n", TRUE, ch, obj, 0, TO_ROOM);
+    send_to_char(ch, "You slip %s^n into your fingertip compartment.\r\n", decapitalize_a_an(obj));
+    act("$n slips $p^n into $s fingertip compartment.\r\n", TRUE, ch, obj, 0, TO_ROOM);
     return;
   }
 
@@ -531,8 +531,8 @@ ACMD(do_put)
     }
     obj_from_char(obj);
     obj_to_obj(obj, cont);
-    send_to_char(ch, "You slip %s into your body compartment.\r\n", decapitalize_a_an(obj));
-    act("$n slips $p into $s body compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
+    send_to_char(ch, "You slip %s^n into your body compartment.\r\n", decapitalize_a_an(obj));
+    act("$n slips $p^n into $s body compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
     return;
   }
 
@@ -562,8 +562,8 @@ ACMD(do_put)
     }
     obj_from_char(obj);
     obj_to_obj(obj, cont);
-    send_to_char(ch, "You slip %s into your tooth compartment.\r\n", decapitalize_a_an(obj));
-    act("$n slips $p into a tooth compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
+    send_to_char(ch, "You slip %s^n into your tooth compartment.\r\n", decapitalize_a_an(obj));
+    act("$n slips $p^n into a tooth compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
     return;
   }
 
@@ -631,7 +631,7 @@ ACMD(do_put)
 
     // Restriction: You can't wombo-combo non-ammo into ammo.
     if (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO) {
-      send_to_char(ch, "%s will only accept the contents of other ammo boxes, and %s doesn't qualify.\r\n",
+      send_to_char(ch, "%s will only accept the contents of other ammo boxes, and %s^n doesn't qualify.\r\n",
         GET_OBJ_NAME(cont),
         GET_OBJ_NAME(obj)
       );
@@ -704,7 +704,7 @@ ACMD(do_put)
     
     // All preconditions passed: Add value, then extract.
     GET_OBJ_COST(cont) += GET_OBJ_COST(obj);
-    send_to_char(ch, "You dump the contents of %s into %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+    send_to_char(ch, "You dump the contents of %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
     extract_obj(obj);
     return;
   }
@@ -733,25 +733,25 @@ ACMD(do_put)
     }
 
     if (GET_OBJ_VNUM(obj) == OBJ_VEHCONTAINER) {
-      send_to_char(ch, "You'd better drop %s if you want to free up your hands.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+      send_to_char(ch, "You'd better drop %s^n if you want to free up your hands.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
       return;
     }
 
     if ((obj == cont) && !cyberdeck) {
-      send_to_char(ch, "You attempt to fold %s into itself, but fail.\r\n", GET_OBJ_NAME(obj));
+      send_to_char(ch, "You attempt to fold %s^n into itself, but fail.\r\n", GET_OBJ_NAME(obj));
       return;
     }
 
     if (cyberdeck) {
       // Better messaging for parts.
       if (GET_OBJ_TYPE(obj) == ITEM_PART) {
-        send_to_char(ch, "Parts aren't plug-and-play; you'll have to BUILD %s into your deck instead.\r\n", GET_OBJ_NAME(obj));
+        send_to_char(ch, "Parts aren't plug-and-play; you'll have to BUILD %s^n into your deck instead.\r\n", GET_OBJ_NAME(obj));
         return;
       }
 
       // You can only install programs, parts, and designs.
       if (GET_OBJ_TYPE(obj) != ITEM_PROGRAM && GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(obj) != ITEM_DESIGN) {
-        send_to_char(ch, "You can't install %s into a cyberdeck.\r\n", GET_OBJ_NAME(obj));
+        send_to_char(ch, "You can't install %s^n into a cyberdeck.\r\n", GET_OBJ_NAME(obj));
         return;
       }
 
@@ -1707,7 +1707,7 @@ ACMD(do_get)
 
     if (is_tooth) {
       send_to_char(ch, "You remove %s from your tooth compartment.\r\n", decapitalize_a_an(obj));
-      act("$n reaches into $s mouth and removes $p.", TRUE, ch, obj, obj, TO_ROOM);
+      act("$n reaches into $s mouth and removes $p^n.", TRUE, ch, obj, obj, TO_ROOM);
     } else if (is_fingertip) {
       send_to_char(ch, "You remove %s from your fingertip compartment.\r\n", decapitalize_a_an(obj));
       act("$n removes $p from a fingertip compartment.", TRUE, ch, obj, obj, TO_ROOM);
@@ -3166,7 +3166,7 @@ ACMD(do_pour)
     }
     if ((GET_OBJ_TYPE(to_obj) != ITEM_DRINKCON) &&
         (GET_OBJ_TYPE(to_obj) != ITEM_FOUNTAIN)) {
-      act("You can't pour anything into $p.", FALSE, ch, to_obj, 0, TO_CHAR);
+      act("You can't pour anything into $p^n.", FALSE, ch, to_obj, 0, TO_CHAR);
       return;
     }
   }
@@ -3184,7 +3184,7 @@ ACMD(do_pour)
     return;
   }
   if (subcmd == SCMD_POUR) {
-    snprintf(buf, sizeof(buf), "You pour the %s into the %s.",
+    snprintf(buf, sizeof(buf), "You pour the %s into the %s^n.",
             drinknames[GET_OBJ_VAL(from_obj, 2)], arg2);
     send_to_char(buf, ch);
   }
@@ -4339,7 +4339,7 @@ ACMD(do_type)
     }
 
   if (GET_OBJ_TYPE(obj) != ITEM_MONEY || !GET_OBJ_VAL(obj, 1) || GET_OBJ_VAL(obj, 2) != 1) {
-    send_to_char(ch, "You can't type a code into %s.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "You can't type a code into %s^n.\r\n", GET_OBJ_NAME(obj));
     return;
   }
 
@@ -4789,7 +4789,7 @@ ACMD(do_holster)
   else
     obj_from_char(obj);
   obj_to_obj(obj, cont);
-  send_to_char(ch, "You slip %s into %s and ready it for a quick draw.\r\n", GET_OBJ_NAME(obj), decapitalize_a_an(GET_OBJ_NAME(cont)));
+  send_to_char(ch, "You slip %s^n into %s^n and ready it for a quick draw.\r\n", GET_OBJ_NAME(obj), decapitalize_a_an(GET_OBJ_NAME(cont)));
   act("$n slips $p into $P.", FALSE, ch, obj, cont, TO_ROOM);
   GET_HOLSTER_READY_STATUS(cont) = 1;
 
