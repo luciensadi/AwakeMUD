@@ -1259,10 +1259,10 @@ int new_quest(struct char_data *mob, struct char_data *ch)
       if (quest_table[quest_idx].prerequisite_quest || quest_table[quest_idx].disqualifying_quest) {
         bool prereq_found = FALSE, dq_found = FALSE;
         for (int q = QUEST_TIMER - 1; q >= 0; q--) {
-          if (GET_CQUEST(ch, q) == quest_table[quest_idx].prerequisite_quest) {
+          if (quest_table[quest_idx].prerequisite_quest && GET_CQUEST(ch, q) == quest_table[quest_idx].prerequisite_quest) {
             prereq_found = TRUE;
           }
-          if (GET_CQUEST(ch, q) == quest_table[quest_idx].disqualifying_quest) {
+          if (quest_table[quest_idx].disqualifying_quest && GET_CQUEST(ch, q) == quest_table[quest_idx].disqualifying_quest) {
             dq_found = TRUE;
           }
         }
