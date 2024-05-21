@@ -5488,7 +5488,12 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
   }
 
   // Second strategy: Search for possible like-matches where words start with the entered text.
-  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name REGEXP '.*" REGEX_SEP_START "%s.*' ORDER BY name ASC", prepared_for_like);
+  #ifdef USE_MYSQL_8
+  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name REGEXP '.*\\\\b%s.*' ORDER BY name ASC", prepared_for_like);
+  #else
+  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name REGEXP '.*[[:<:]]%s.*' ORDER BY name ASC", prepared_for_like);
+  #endif
+
   if (mysql_wrapper(mysql, query)) {
     // If we don't find it here either, we know the file doesn't exist-- failure condition.
     snprintf(help, help_len, "No such help file exists (error case).\r\n");
