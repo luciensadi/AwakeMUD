@@ -3003,6 +3003,7 @@ int recog(struct char_data *ch, struct char_data *i, const char *name)
 
 }
 
+#define IS_INVIS_ON_CAMERA(vict) (AFF_FLAGGED(vict, AFF_IMP_INVIS) || AFF_FLAGGED(vict, AFF_SPELLIMPINVIS) || GET_INVIS_LEV(vict) > 1 || affected_by_spell(vict, SPELL_IMP_INVIS))
 ACMD(do_photo)
 {
   struct obj_data *camera = NULL, *photo, *mem = NULL, *temp;
@@ -3017,25 +3018,18 @@ ACMD(do_photo)
   // Check for a cyberware camera.
   if (!camera) {
     for (temp = ch->cyberware; temp; temp = temp->next_content)
-      if (GET_OBJ_VAL(temp, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(temp, 3), EYE_CAMERA))
+      if (GET_CYBERWARE_TYPE(temp) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(temp), EYE_CAMERA))
         camera = temp;
-      else if (GET_OBJ_VAL(temp, 0) == CYB_MEMORY)
+      else if (GET_CYBERWARE_TYPE(temp) == CYB_MEMORY)
         mem = temp;
     if (camera) {
-      if (!mem) {
-        send_to_char("You need headware memory to take a picture with an eye camera.\r\n", ch);
-        return;
-      }
-      if (GET_OBJ_VAL(mem, 3) - GET_OBJ_VAL(mem, 5) < 1) {
-        send_to_char("You don't have enough headware memory to take a photo now.\r\n", ch);
-        return;
-      }
+      FAILURE_CASE(!mem, "You need headware memory to take a picture with an eye camera.");
+      FAILURE_CASE(GET_CYBERWARE_MEMORY_FREE(mem) < 1, "You don't have enough headware memory to take a photo now.");
     }
   }
-  if (!camera) {
-    send_to_char("You need to be holding a camera to take photos.\r\n", ch);
-    return;
-  }
+  
+  FAILURE_CASE(!camera, "You need to be holding a camera to take photos.");
+
   skip_spaces(&argument);
   if (*argument) {
     bool found = FALSE;
@@ -3154,37 +3148,45 @@ ACMD(do_photo)
       ch->in_room = get_ch_in_room(ch);
     snprintf(buf2, sizeof(buf2), "a photo of %s", GET_ROOM_NAME(ch->in_room));
     snprintf(buf, sizeof(buf), "^c%s^n\r\n%s", GET_ROOM_NAME(ch->in_room), get_room_desc(ch->in_room));
-    for (struct char_data *tch = ch->in_room->people; tch; tch = tch->next_in_room)
-      if (tch != ch && !(AFF_FLAGGED(tch, AFF_IMP_INVIS) || AFF_FLAGGED(tch, AFF_SPELLIMPINVIS)) && GET_INVIS_LEV(tch) < 2) {
-        if (IS_NPC(tch) && tch->player.physical_text.room_desc &&
-            GET_POS(tch) == GET_DEFAULT_POS(tch)) {
+
+    // People.
+    for (struct char_data *tch = ch->in_room->people; tch; tch = tch->next_in_room) {
+      if (tch != ch && !IS_INVIS_ON_CAMERA(tch)) {
+        // NPCs get to print their default position strings as long as they're not fighting etc.
+        if (IS_NPC(tch) && tch->player.physical_text.room_desc && GET_POS(tch) == GET_DEFAULT_POS(tch)) {
           strlcat(buf, tch->player.physical_text.room_desc, sizeof(buf));
           continue;
         }
+
+        // Everyone else gets a composed position.
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", make_desc(ch, tch, buf3, 2, FALSE, sizeof(buf3)));
         if (CH_IN_COMBAT(tch)) {
           strlcat(buf, " is here, fighting ", sizeof(buf));
-          if (FIGHTING(tch) == ch)
+
+          if (FIGHTING(tch) == ch) {
             strlcat(buf, "the photographer", sizeof(buf));
-          else if (FIGHTING_VEH(tch)) {
+          } else if (FIGHTING_VEH(tch)) {
             strlcat(buf, GET_VEH_NAME(FIGHTING_VEH(tch)), sizeof(buf));
           } else {
             if (tch->in_room == FIGHTING(tch)->in_room)
-              if (AFF_FLAGGED(FIGHTING(tch), AFF_IMP_INVIS)) {
+              if (IS_INVIS_ON_CAMERA(FIGHTING(tch))) {
                 strlcat(buf, "someone", sizeof(buf));
               } else
                 strlcat(buf, GET_NAME(FIGHTING(tch)), sizeof(buf));
             else
               strlcat(buf, "someone in the distance", sizeof(buf));
           }
+
           strlcat(buf, "!\r\n", sizeof(buf));
         } else {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", positions[(int)GET_POS(tch)]);
           if (GET_DEFPOS(tch))
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %s", GET_DEFPOS(tch));
-          strlcat(buf, ".\r\n", sizeof(buf));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_DEFPOS(tch));
+          else
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s.\r\n", positions[(int)GET_POS(tch)]);
         }
       }
+    }
+
     struct obj_data *obj;
     FOR_ITEMS_AROUND_CH(ch, obj) {
       int num = 0;
