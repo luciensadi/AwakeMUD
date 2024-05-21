@@ -561,13 +561,19 @@ void boot_world(void)
   require_that_field_exists_in_table("Restring", "pfiles_bioware", "SQL/Migrations/bioware_restrings.sql");
   require_that_field_meets_constraints("Prompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
   require_that_field_meets_constraints("MatrixPrompt", "pfiles", "SQL/Migrations/prompt_expansion.sql", 2001, "varchar");
+  #ifdef USE_MYSQL_8
+  require_that_field_meets_constraints("Attempt", "pfiles_inv", "SQL/Migrations/attempt_value_fix.sql", 0, "mediumint");
+  require_that_field_meets_constraints("Attempt", "pfiles_worn", "SQL/Migrations/attempt_value_fix.sql", 0, "mediumint");
+  require_that_field_meets_constraints("LastFix", "pfiles_drugs", "SQL/Migrations/lastfix_bigint.sql", 0, "bigint", TRUE);
+  #else
   require_that_field_meets_constraints("Attempt", "pfiles_inv", "SQL/Migrations/attempt_value_fix.sql", 6, "mediumint");
   require_that_field_meets_constraints("Attempt", "pfiles_worn", "SQL/Migrations/attempt_value_fix.sql", 6, "mediumint");
+  require_that_field_meets_constraints("LastFix", "pfiles_drugs", "SQL/Migrations/lastfix_bigint.sql", 12, "bigint", TRUE);
+  #endif
   require_that_sql_table_exists("pfiles_ignore_v2", "SQL/ignore_system_v2.sql");
   require_that_field_exists_in_table("harmless", "pfiles_ammo", "SQL/Migrations/add_harmless_and_anti_vehicle.sql");
   require_that_field_exists_in_table("anti-vehicle", "pfiles_ammo", "SQL/Migrations/add_harmless_and_anti_vehicle.sql");
   require_that_field_exists_in_table("Duration", "pfiles_drugs", "SQL/Migrations/drug_overhaul.sql");
-  require_that_field_meets_constraints("LastFix", "pfiles_drugs", "SQL/Migrations/lastfix_bigint.sql", 12, "bigint", TRUE);
   require_that_field_exists_in_table("lifestyle_string", "pfiles", "SQL/Migrations/lifestyles.sql");
   require_that_field_exists_in_table("zone", "playergroups", "SQL/Migrations/playergroup_zone_ownership.sql");
   require_that_field_exists_in_table("completed", "pfiles_quests", "SQL/Migrations/quest_completed_fix.sql");
