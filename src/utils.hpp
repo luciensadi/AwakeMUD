@@ -1330,6 +1330,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 // ITEM_HOLSTER convenience defines
 #define GET_HOLSTER_TYPE(holster)                           (GET_OBJ_VAL((holster), 0))
 #define GET_HOLSTER_READY_STATUS(holster)                   (GET_OBJ_VAL((holster), 3))
+#define GET_HOLSTER_MOST_RECENT_FLAG(holster)               (GET_OBJ_VAL((holster), 4))
 
 // ITEM_DESIGN convenience defines
 #define GET_DESIGN_PROGRAM(prog)                            (GET_OBJ_VAL((prog), 0))

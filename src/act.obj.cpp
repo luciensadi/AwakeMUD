@@ -4612,16 +4612,22 @@ int find_and_draw_weapon(struct char_data *ch)
       i += draw_from_readied_holster(ch, potential_holster);
 
   // Go through all the wearslots, provided that the character is not already wielding & holding things.
-  for (int x = 0; x < NUM_WEARS && (!GET_EQ(ch, WEAR_WIELD) || !GET_EQ(ch, WEAR_HOLD)); x++) {
-    if ((potential_holster = GET_EQ(ch, x))) {
-      if (GET_OBJ_TYPE(potential_holster) == ITEM_HOLSTER && GET_HOLSTER_READY_STATUS(potential_holster)) {
-        i += draw_from_readied_holster(ch, potential_holster);
-      }
+  for (int draw_only_if_most_recent = 1; draw_only_if_most_recent >= 0; draw_only_if_most_recent--) {
+    for (int x = 0; x < NUM_WEARS && (!GET_EQ(ch, WEAR_WIELD) || !GET_EQ(ch, WEAR_HOLD)); x++) {
+      if ((potential_holster = GET_EQ(ch, x))) {
+        if (GET_OBJ_TYPE(potential_holster) == ITEM_HOLSTER) {
+          if (GET_HOLSTER_READY_STATUS(potential_holster) && (!draw_only_if_most_recent || GET_HOLSTER_MOST_RECENT_FLAG(potential_holster))) {
+            i += draw_from_readied_holster(ch, potential_holster);
+          }
+        }
 
-      else if (GET_OBJ_TYPE(potential_holster) == ITEM_WORN) {
-        for (obj = potential_holster->contains; obj; obj = obj->next_content) {
-          if (GET_OBJ_TYPE(obj) == ITEM_HOLSTER && GET_HOLSTER_READY_STATUS(obj)) {
-            i += draw_from_readied_holster(ch, obj);
+        else if (GET_OBJ_TYPE(potential_holster) == ITEM_WORN) {
+          for (obj = potential_holster->contains; obj; obj = obj->next_content) {
+            if (GET_OBJ_TYPE(obj) == ITEM_HOLSTER && GET_HOLSTER_READY_STATUS(obj) 
+                && (!draw_only_if_most_recent || GET_HOLSTER_MOST_RECENT_FLAG(potential_holster)))
+            {
+              i += draw_from_readied_holster(ch, obj);
+            }
           }
         }
       }
@@ -4741,26 +4747,17 @@ ACMD(do_holster)
 
 
 
-  if (!cont) {
-    send_to_char(ch, "You don't have any empty %s that will fit %s.\r\n", !IS_GUN(GET_OBJ_VAL(obj, 3)) ? "sheaths" : "holsters", decapitalize_a_an(GET_OBJ_NAME(obj)));
-    return;
-  }
-  if (cont == obj) {
-    send_to_char(ch, "You can't put %s inside itself.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-    return;
-  }
-  if (GET_OBJ_TYPE(obj) != ITEM_WEAPON) {
-    send_to_char(ch, "%s is not a holsterable weapon.\r\n", capitalize(GET_OBJ_NAME(obj)));
-    return;
-  }
-  if (GET_OBJ_TYPE(cont) != ITEM_HOLSTER && (GET_OBJ_TYPE(cont) != ITEM_CYBERWARE || GET_CYBERWARE_TYPE(cont) != CYB_FINGERTIP)) {
-    send_to_char(ch, "%s is not a holster.\r\n", capitalize(GET_OBJ_NAME(cont)));
-    return;
-  }
-  if (cont->contains) {
-    send_to_char(ch, "There's already something in %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(cont)));
-    return;
-  }
+  FAILURE_CASE_PRINTF(!cont, "You don't have any empty %s that will fit %s.", 
+                      !IS_GUN(GET_OBJ_VAL(obj, 3)) ? "sheaths" : "holsters", decapitalize_a_an(GET_OBJ_NAME(obj)));
+  
+  FAILURE_CASE_PRINTF(cont == obj, "You can't put %s inside itself.", decapitalize_a_an(GET_OBJ_NAME(obj)));
+
+  FAILURE_CASE_PRINTF(GET_OBJ_TYPE(obj) != ITEM_WEAPON, "%s is not a holsterable weapon.", capitalize(GET_OBJ_NAME(obj)));
+  
+  FAILURE_CASE_PRINTF(GET_OBJ_TYPE(cont) != ITEM_HOLSTER && (GET_OBJ_TYPE(cont) != ITEM_CYBERWARE || GET_CYBERWARE_TYPE(cont) != CYB_FINGERTIP),  
+                      "%s is not a holster.", capitalize(GET_OBJ_NAME(cont)));
+
+  FAILURE_CASE_PRINTF(cont->contains, "There's already something in %s.", decapitalize_a_an(GET_OBJ_NAME(cont)));
 
   const char *madefor = "<error, report to staff>";
 
@@ -4778,10 +4775,9 @@ ACMD(do_holster)
         madefor = "rifles and other longarms";
         break;
     }
-    if (dontfit) {
-      send_to_char(ch, "%s is made for %s, so %s won't fit in it.\r\n", capitalize(GET_OBJ_NAME(cont)), madefor, decapitalize_a_an(GET_OBJ_NAME(obj)));
-      return;
-    }
+    
+    FAILURE_CASE_PRINTF(dontfit, "%s is made for %s, so %s won't fit in it.",
+                        capitalize(GET_OBJ_NAME(cont)), madefor, decapitalize_a_an(GET_OBJ_NAME(obj)));
   }
 
   if (GET_OBJ_SPEC(obj) == weapon_dominator) {
@@ -4796,6 +4792,27 @@ ACMD(do_holster)
   send_to_char(ch, "You slip %s into %s and ready it for a quick draw.\r\n", GET_OBJ_NAME(obj), decapitalize_a_an(GET_OBJ_NAME(cont)));
   act("$n slips $p into $P.", FALSE, ch, obj, cont, TO_ROOM);
   GET_HOLSTER_READY_STATUS(cont) = 1;
+
+  // Remove last-holstered flag from all holsters.
+  for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+    struct obj_data *temp_holst = GET_EQ(ch, wear_idx);
+
+    if (!temp_holst)
+      continue;
+
+    if (GET_OBJ_TYPE(temp_holst) == ITEM_HOLSTER) {
+      GET_HOLSTER_MOST_RECENT_FLAG(temp_holst) = FALSE;
+    } else if (GET_OBJ_TYPE(temp_holst) == ITEM_WORN) {
+      for (struct obj_data *holst_contents = temp_holst->contains; holst_contents; holst_contents = holst_contents->next_content) {
+        if (GET_OBJ_TYPE(holst_contents) == ITEM_HOLSTER) {
+          GET_HOLSTER_MOST_RECENT_FLAG(holst_contents) = FALSE;
+        }
+      }
+    }
+  }
+
+  // Set last-holstered flag on this holster.
+  GET_HOLSTER_MOST_RECENT_FLAG(cont) = TRUE;
   return;
 }
 
@@ -4901,6 +4918,8 @@ ACMD(do_draw)
 
     if (!draw_from_readied_holster(ch, holster)) {
       send_to_char(ch, "%s isn't compatible with your current loadout.\r\n", CAP(GET_OBJ_NAME(holster->contains)));
+    } else {
+      GET_HOLSTER_MOST_RECENT_FLAG(holster) = FALSE;
     }
     return;
   }
