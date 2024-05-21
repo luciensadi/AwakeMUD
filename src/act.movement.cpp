@@ -623,8 +623,8 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
   }
 
   dice = get_skill(ch, SKILL_ATHLETICS, base_target);
-  snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), "Athletics check: Rolling %d + %d dice against a final TN of %d results in ", dice, GET_REA(ch), base_target);
-  dice += GET_REA(ch);
+  snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), "Athletics check: Rolling %d dice against a final TN of %d results in ", dice, base_target);
+  // dice += GET_REA(ch);
   success = success_test(dice, base_target) + autosucc;
   snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), "^c%d^n success%s.", success, success == 1 ? "" : "es");
   act(roll_buf, FALSE, ch, 0, 0, TO_ROLLS);
