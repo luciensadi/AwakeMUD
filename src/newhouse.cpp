@@ -1533,7 +1533,7 @@ bool Apartment::delete_guest(idnum_t idnum) {
 }
 
 void Apartment::add_guest(idnum_t idnum) {
-  if (idnum != 0 && !is_guest(idnum)) {
+  if (idnum != 0 && does_player_exist(idnum) && !is_guest(idnum)) {
     guests.push_back(idnum);
     save_lease();
   }
