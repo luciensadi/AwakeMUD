@@ -3,12 +3,12 @@
 
 #include "bitfield.hpp"
 
-#define ACCESS	0
-#define CONTROL	1
-#define INDEX	2
-#define FILES	3
-#define SLAVE	4
-#define NUM_OF_SUBSYSTEMS 5
+#define ACIFS_ACCESS	0
+#define ACIFS_CONTROL	1
+#define ACIFS_INDEX	2
+#define ACIFS_FILES	3
+#define ACIFS_SLAVE	4
+#define NUM_ACIFS 5
 
 #define MAX_CUSTOM_MPCP_RATING 12
 

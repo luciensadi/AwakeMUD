@@ -55,19 +55,19 @@ void write_host_to_disk(int vnum)
       fprintf(fl, "Colour:\t%d\n", HT.color);
       fprintf(fl, "Security:\t%d\n", HT.security);
       fprintf(fl, "Difficulty:\t%d\n", HT.intrusion);
-      fprintf(fl, "Access:\t%ld\n", HT.stats[ACCESS][0]);
-      fprintf(fl, "AccessScramble:\t%ld\n", HT.stats[ACCESS][2]);
-      fprintf(fl, "AccessTrapdoor:\t%ld\n", HT.stats[ACCESS][5]);
-      fprintf(fl, "Control:\t%ld\n", HT.stats[CONTROL][0]);
-      fprintf(fl, "ControlTrapdoor:\t%ld\n", HT.stats[CONTROL][5]);
-      fprintf(fl, "Index:\t%ld\n", HT.stats[INDEX][0]);
-      fprintf(fl, "IndexTrapdoor:\t%ld\n", HT.stats[INDEX][5]);
-      fprintf(fl, "Files:\t%ld\n", HT.stats[FILES][0]);
-      fprintf(fl, "FilesScramble:\t%ld\n", HT.stats[FILES][2]);
-      fprintf(fl, "FilesTrapdoor:\t%ld\n", HT.stats[FILES][5]);
-      fprintf(fl, "Slave:\t%ld\n", HT.stats[SLAVE][0]);
-      fprintf(fl, "SlaveScramble:\t%ld\n", HT.stats[SLAVE][2]);
-      fprintf(fl, "SlaveTrapdoor:\t%ld\n", HT.stats[SLAVE][5]);
+      fprintf(fl, "Access:\t%ld\n", HT.stats[ACIFS_ACCESS][0]);
+      fprintf(fl, "AccessScramble:\t%ld\n", HT.stats[ACIFS_ACCESS][2]);
+      fprintf(fl, "AccessTrapdoor:\t%ld\n", HT.stats[ACIFS_ACCESS][5]);
+      fprintf(fl, "Control:\t%ld\n", HT.stats[ACIFS_CONTROL][0]);
+      fprintf(fl, "ControlTrapdoor:\t%ld\n", HT.stats[ACIFS_CONTROL][5]);
+      fprintf(fl, "Index:\t%ld\n", HT.stats[ACIFS_INDEX][0]);
+      fprintf(fl, "IndexTrapdoor:\t%ld\n", HT.stats[ACIFS_INDEX][5]);
+      fprintf(fl, "Files:\t%ld\n", HT.stats[ACIFS_FILES][0]);
+      fprintf(fl, "FilesScramble:\t%ld\n", HT.stats[ACIFS_FILES][2]);
+      fprintf(fl, "FilesTrapdoor:\t%ld\n", HT.stats[ACIFS_FILES][5]);
+      fprintf(fl, "Slave:\t%ld\n", HT.stats[ACIFS_SLAVE][0]);
+      fprintf(fl, "SlaveScramble:\t%ld\n", HT.stats[ACIFS_SLAVE][2]);
+      fprintf(fl, "SlaveTrapdoor:\t%ld\n", HT.stats[ACIFS_SLAVE][5]);
 
       fprintf(fl, "Type:\t%s\n", host_type[HT.type]);
       if (HT.exit) {
@@ -119,8 +119,8 @@ void hedit_disp_data_menu(struct descriptor_data *d)
                intrusion[HOST->intrusion]);
   send_to_char(CH, "^G6^Y) ^WType: ^c%s^n\r\n", host_type[HOST->type]);
   send_to_char(CH, "^G7^Y) ^WRatings: A(^c%d^N) C(^c%d^N) I(^c%d^N) F(^c%d^N) S(^c%d^N)\r\n",
-               HOST->stats[ACCESS][0], HOST->stats[CONTROL][0], HOST->stats[INDEX][0],
-               HOST->stats[FILES][0], HOST->stats[SLAVE][0]);
+               HOST->stats[ACIFS_ACCESS][0], HOST->stats[ACIFS_CONTROL][0], HOST->stats[ACIFS_INDEX][0],
+               HOST->stats[ACIFS_FILES][0], HOST->stats[ACIFS_SLAVE][0]);
   send_to_char(CH, "^G8^Y) ^WSubsystem Extras\r\n");
   send_to_char(CH, "^G9^Y) ^WTrigger Steps^n\r\n");
   send_to_char(CH, "^G0^Y) ^WExits^n\r\n");
@@ -132,11 +132,11 @@ void hedit_disp_data_menu(struct descriptor_data *d)
 
 void hedit_disp_subsystem_extras(struct descriptor_data *d)
 {
-  send_to_char(CH, "^G1^Y) ^WAccess Scramble Rating: %2ld Access Trapdoor: %ld\r\n", HOST->stats[ACCESS][2], HOST->stats[ACCESS][5]);
-  send_to_char(CH, "^G2^Y) ^WControl Trapdoor: %ld\r\n", HOST->stats[CONTROL][5]);
-  send_to_char(CH, "^G3^Y) ^WIndex Trapdoor: %ld\r\n", HOST->stats[INDEX][5]);
-  send_to_char(CH, "^G4^Y) ^WFiles Scramble Rating: %2ld Files Trapdoor: %ld\r\n", HOST->stats[FILES][2], HOST->stats[FILES][5]);
-  send_to_char(CH, "^G5^Y) ^WSlave Scramble Rating: %2ld Slave Trapdoor: %ld\r\n", HOST->stats[SLAVE][2], HOST->stats[SLAVE][5]);
+  send_to_char(CH, "^G1^Y) ^WAccess Scramble Rating: %2ld Access Trapdoor: %ld\r\n", HOST->stats[ACIFS_ACCESS][2], HOST->stats[ACIFS_ACCESS][5]);
+  send_to_char(CH, "^G2^Y) ^WControl Trapdoor: %ld\r\n", HOST->stats[ACIFS_CONTROL][5]);
+  send_to_char(CH, "^G3^Y) ^WIndex Trapdoor: %ld\r\n", HOST->stats[ACIFS_INDEX][5]);
+  send_to_char(CH, "^G4^Y) ^WFiles Scramble Rating: %2ld Files Trapdoor: %ld\r\n", HOST->stats[ACIFS_FILES][2], HOST->stats[ACIFS_FILES][5]);
+  send_to_char(CH, "^G5^Y) ^WSlave Scramble Rating: %2ld Slave Trapdoor: %ld\r\n", HOST->stats[ACIFS_SLAVE][2], HOST->stats[ACIFS_SLAVE][5]);
   send_to_char(CH, "^Gq^Y) ^WQuit\r\n^wEnter selection: ");
   d->edit_mode = HEDIT_EXTRA_MENU;
 }
@@ -186,7 +186,12 @@ void hedit_disp_rating_menu(struct descriptor_data *d)
                "^G4^Y) ^WFiles: ^c%d^n\r\n"
                "^G5^Y) ^WSlave: ^c%d^n\r\n"
                "^Gq^Y) ^WReturn to main^n\r\n"
-               "^wEnter selection: ", HOST->stats[ACCESS][0], HOST->stats[CONTROL][0], HOST->stats[INDEX][0], HOST->stats[FILES][0], HOST->stats[SLAVE][0]);
+               "^wEnter selection: ",
+               HOST->stats[ACIFS_ACCESS][0],
+               HOST->stats[ACIFS_CONTROL][0],
+               HOST->stats[ACIFS_INDEX][0],
+               HOST->stats[ACIFS_FILES][0],
+               HOST->stats[ACIFS_SLAVE][0]);
 
   d->edit_mode = HEDIT_RATINGS;
 }
@@ -500,38 +505,38 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case HEDIT_EXTRA_ACCESS:
-    HOST->stats[ACCESS][2] = atoi(arg);
+    HOST->stats[ACIFS_ACCESS][2] = atoi(arg);
     send_to_char(CH, "Trapdoor to which host (0 for none): ");
     d->edit_mode = HEDIT_EXTRA_ACCESS2;
     break;
   case HEDIT_EXTRA_ACCESS2:
-    HOST->stats[ACCESS][5] = atoi(arg);
+    HOST->stats[ACIFS_ACCESS][5] = atoi(arg);
     hedit_disp_subsystem_extras(d);
     break;
   case HEDIT_EXTRA_CONTROL:
-    HOST->stats[CONTROL][5] = atoi(arg);
+    HOST->stats[ACIFS_CONTROL][5] = atoi(arg);
     hedit_disp_subsystem_extras(d);
     break;
   case HEDIT_EXTRA_INDEX:
-    HOST->stats[INDEX][5] = atoi(arg);
+    HOST->stats[ACIFS_INDEX][5] = atoi(arg);
     hedit_disp_subsystem_extras(d);
     break;
   case HEDIT_EXTRA_FILES:
-    HOST->stats[FILES][2] = atoi(arg);
+    HOST->stats[ACIFS_FILES][2] = atoi(arg);
     send_to_char(CH, "Trapdoor to which host (0 for none): ");
     d->edit_mode = HEDIT_EXTRA_FILES2;
     break;
   case HEDIT_EXTRA_FILES2:
-    HOST->stats[FILES][5] = atoi(arg);
+    HOST->stats[ACIFS_FILES][5] = atoi(arg);
     hedit_disp_subsystem_extras(d);
     break;
   case HEDIT_EXTRA_SLAVE:
-    HOST->stats[SLAVE][2] = atoi(arg);
+    HOST->stats[ACIFS_SLAVE][2] = atoi(arg);
     send_to_char(CH, "Trapdoor to which host (0 for none): ");
     d->edit_mode = HEDIT_EXTRA_SLAVE2;
     break;
   case HEDIT_EXTRA_SLAVE2:
-    HOST->stats[SLAVE][5] = atoi(arg);
+    HOST->stats[ACIFS_SLAVE][5] = atoi(arg);
     hedit_disp_subsystem_extras(d);
     break;
 
@@ -617,7 +622,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
       send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Access rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
-      d->edit_host->stats[ACCESS][0] = number;
+      d->edit_host->stats[ACIFS_ACCESS][0] = number;
       hedit_disp_rating_menu(d);
     }
     break;
@@ -628,7 +633,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
       send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Control rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
-      d->edit_host->stats[CONTROL][0] = number;
+      d->edit_host->stats[ACIFS_CONTROL][0] = number;
       hedit_disp_rating_menu(d);
     }
     break;
@@ -639,7 +644,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
       send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Index rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
-      d->edit_host->stats[INDEX][0] = number;
+      d->edit_host->stats[ACIFS_INDEX][0] = number;
       hedit_disp_rating_menu(d);
     }
     break;
@@ -650,7 +655,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
       send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Files rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
-      d->edit_host->stats[FILES][0] = number;
+      d->edit_host->stats[ACIFS_FILES][0] = number;
       hedit_disp_rating_menu(d);
     }
     break;
@@ -661,7 +666,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     } else if (number > host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]) {
       send_to_char(CH, "The maximum rating for this system in %s hosts is %d. Enter Slave rating: ", intrusion[d->edit_host->intrusion], host_subsystem_acceptable_ratings[d->edit_host->intrusion][IDX_MTX_ACCEPTABLE_RATING_MAXIMUM]);
     } else {
-      d->edit_host->stats[SLAVE][0] = number;
+      d->edit_host->stats[ACIFS_SLAVE][0] = number;
       hedit_disp_rating_menu(d);
     }
     break;

@@ -1194,25 +1194,25 @@ void parse_host(File &fl, long nr)
   host->color = data.GetInt("Colour", 0);
   host->security = data.GetInt("Security", 0);
   host->intrusion = data.GetInt("Difficulty", 0);
-  host->stats[ACCESS][0] = data.GetLong("Access", 0);
-  host->stats[ACCESS][2] = data.GetLong("AccessScramble", 0);
-  host->stats[ACCESS][5] = data.GetLong("AccessTrapdoor", 0);
-  if (host->stats[ACCESS][2])
-    host->stats[ACCESS][1] = 1;
-  host->stats[CONTROL][0] = data.GetLong("Control", 0);
-  host->stats[CONTROL][5] = data.GetLong("ControlTrapdoor", 0);
-  host->stats[INDEX][0] = data.GetLong("Index", 0);
-  host->stats[INDEX][5] = data.GetLong("IndexTrapdoor", 0);
-  host->stats[FILES][0] = data.GetLong("Files", 0);
-  host->stats[FILES][2] = data.GetLong("FilesScramble", 0);
-  host->stats[FILES][5] = data.GetLong("FilesTrapdoor", 0);
-  if (host->stats[FILES][2])
-    host->stats[FILES][1] = 1;
-  host->stats[SLAVE][0] = data.GetLong("Slave", 0);
-  host->stats[SLAVE][2] = data.GetLong("SlaveScramble", 0);
-  host->stats[SLAVE][5] = data.GetLong("SlaveTrapdoor", 0);
-  if (host->stats[SLAVE][2])
-    host->stats[SLAVE][1] = 1;
+  host->stats[ACIFS_ACCESS][0] = data.GetLong("Access", 0);
+  host->stats[ACIFS_ACCESS][2] = data.GetLong("AccessScramble", 0);
+  host->stats[ACIFS_ACCESS][5] = data.GetLong("AccessTrapdoor", 0);
+  if (host->stats[ACIFS_ACCESS][2])
+    host->stats[ACIFS_ACCESS][1] = 1;
+  host->stats[ACIFS_CONTROL][0] = data.GetLong("Control", 0);
+  host->stats[ACIFS_CONTROL][5] = data.GetLong("ControlTrapdoor", 0);
+  host->stats[ACIFS_INDEX][0] = data.GetLong("Index", 0);
+  host->stats[ACIFS_INDEX][5] = data.GetLong("IndexTrapdoor", 0);
+  host->stats[ACIFS_FILES][0] = data.GetLong("Files", 0);
+  host->stats[ACIFS_FILES][2] = data.GetLong("FilesScramble", 0);
+  host->stats[ACIFS_FILES][5] = data.GetLong("FilesTrapdoor", 0);
+  if (host->stats[ACIFS_FILES][2])
+    host->stats[ACIFS_FILES][1] = 1;
+  host->stats[ACIFS_SLAVE][0] = data.GetLong("Slave", 0);
+  host->stats[ACIFS_SLAVE][2] = data.GetLong("SlaveScramble", 0);
+  host->stats[ACIFS_SLAVE][5] = data.GetLong("SlaveTrapdoor", 0);
+  if (host->stats[ACIFS_SLAVE][2])
+    host->stats[ACIFS_SLAVE][1] = 1;
   host->type = data.LookupInt("Type", host_type, 0);
   int num_fields = data.NumSubsections("EXITS");
   for (int x = 0; x < num_fields; x++) {
@@ -7640,7 +7640,7 @@ void collate_host_entrances() {
     }
 
     // Subsystem trapdoors are also entrances
-    for (int sub = ACCESS; sub < NUM_OF_SUBSYSTEMS; sub++) {
+    for (int sub = ACIFS_ACCESS; sub < NUM_ACIFS; sub++) {
       dest_rnum = real_host(matrix[source_rnum].stats[sub][MTX_STAT_TRAPDOOR]);
       if (dest_rnum >= 0) {
         entrance = new entrance_data;
