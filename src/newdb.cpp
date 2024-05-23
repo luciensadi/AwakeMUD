@@ -2044,7 +2044,7 @@ idnum_t get_player_id(const char *name)
 
 int get_player_rank(long idnum) {
   char buf[MAX_STRING_LENGTH];
-  snprintf(buf, sizeof(buf), "SELECT rank FROM pfiles WHERE idnum=%ld;", idnum);
+  snprintf(buf, sizeof(buf), "SELECT `rank` FROM pfiles WHERE idnum=%ld;", idnum);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
