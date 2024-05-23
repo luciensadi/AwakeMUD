@@ -3149,6 +3149,20 @@ ACMD(do_photo)
     snprintf(buf2, sizeof(buf2), "a photo of %s", GET_ROOM_NAME(ch->in_room));
     snprintf(buf, sizeof(buf), "^c%s^n\r\n%s", GET_ROOM_NAME(ch->in_room), get_room_desc(ch->in_room));
 
+    struct obj_data *obj;
+    FOR_ITEMS_AROUND_CH(ch, obj) {
+      int num = 0;
+      while (obj->next_content) {
+        if (obj->item_number != obj->next_content->item_number || obj->restring)
+          break;
+        num++;
+        obj = obj->next_content;
+      }
+      if (num > 1)
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%d) ", num);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^g%s^n\r\n", obj->graffiti ? obj->graffiti : obj->text.room_desc);
+    }
+
     // People.
     for (struct char_data *tch = ch->in_room->people; tch; tch = tch->next_in_room) {
       if (tch != ch && !IS_INVIS_ON_CAMERA(tch)) {
@@ -3182,23 +3196,9 @@ ACMD(do_photo)
           if (GET_DEFPOS(tch))
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_DEFPOS(tch));
           else
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s.\r\n", positions[(int)GET_POS(tch)]);
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s.\r\n", positions[(int)GET_POS(tch)]);
         }
       }
-    }
-
-    struct obj_data *obj;
-    FOR_ITEMS_AROUND_CH(ch, obj) {
-      int num = 0;
-      while (obj->next_content) {
-        if (obj->item_number != obj->next_content->item_number || obj->restring)
-          break;
-        num++;
-        obj = obj->next_content;
-      }
-      if (num > 1)
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "(%d) ", num);
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^g%s^n\r\n", obj->graffiti ? obj->graffiti : obj->text.room_desc);
     }
 
     for (struct veh_data *vehicle = ch->in_room->vehicles; vehicle; vehicle = vehicle->next_veh) {
