@@ -2937,7 +2937,6 @@ void reset_host_paydata(rnum_t rnum) {
       HOST.ic_bound_paydata = 0;
   }
   // mudlog_vfprintf(NULL, LOG_SYSLOG, "PD:%ld-%s: %d UD, %d IC-B", host.vnum, host_color[host.color], host.undiscovered_paydata, host.ic_bound_paydata);
-  HOST.payreset = TRUE;
 }
 
 void matrix_update()
@@ -2953,54 +2952,6 @@ void matrix_update()
         HOST.alert = 0;
       else
         continue;
-    }
-    if (time_info.hours == 2 && HOST.payreset)
-      HOST.payreset = FALSE;
-    if (time_info.hours == 0) {
-      if (HOST.type == HOST_DATASTORE && HOST.undiscovered_paydata <= 0 && !HOST.payreset) {
-        reset_host_paydata(rnum);
-      } else {
-        // We don't want to re-encrypt if there's a decker in the area.
-        // See if there are any deckers in here.
-        for (struct matrix_icon *icon = HOST.icons; icon; icon = icon->next_in_host) {
-          if (!ICON_IS_IC(icon)) {
-            decker = TRUE;
-            break;
-          }
-        }
-        // Check surrounding hosts.
-        struct host_data *adjacent_host = NULL;
-        for (struct entrance_data *entrance = HOST.entrance; entrance && !decker; entrance = entrance->next) {
-          if ((adjacent_host = entrance->host)) {
-            for (struct matrix_icon *icon = adjacent_host->icons; icon; icon = icon->next_in_host) {
-              if (!ICON_IS_IC(icon)) {
-                decker = TRUE;
-                break;
-              }
-            }
-          }
-        }
-
-        // We only reset subsystem encryption ratings if there are no deckers.
-        if (!decker) {
-          for (int x = ACCESS; x < NUM_OF_SUBSYSTEMS; x++) {
-            if (HOST.stats[x][MTX_STAT_ENCRYPTED] != 0 && HOST.stats[x][MTX_STAT_ENCRYPTED] != 1) {
-              char warnbuf[1000];
-              snprintf(warnbuf, sizeof(warnbuf), "WARNING: %s mtx_stat_encrypted on %ld is %ld (must be 1 or 0)!",
-                       acifs_strings[x],
-                       HOST.vnum,
-                       HOST.stats[x][MTX_STAT_ENCRYPTED]);
-              mudlog(warnbuf, NULL, LOG_SYSLOG, TRUE);
-              HOST.stats[x][MTX_STAT_ENCRYPTED] = 0;
-            }
-
-            if (HOST.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && HOST.stats[x][MTX_STAT_ENCRYPTED] == 0) {
-              mudlog_vfprintf(NULL, LOG_GRIDLOG, "Host %ld's %s-subsystem has scramble-%ld and is not encrypted: re-encrypting.", HOST.vnum, mtx_subsystem_names[x], HOST.stats[x][MTX_STAT_SCRAMBLE_IC_RATING]);
-              HOST.stats[x][MTX_STAT_ENCRYPTED] = 1;
-            }
-          }
-        }
-      }
     }
     if (HOST.shutdown) {
       if (success_test(HOST.security, HOST.shutdown_mpcp) > 0) {
@@ -3108,6 +3059,75 @@ void matrix_update()
               GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
               GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+// For things that should happen no more than once an hour.
+void matrix_hour_update()
+{
+  PERF_PROF_SCOPE(pr_, __func__);
+  rnum_t rnum = 1;
+  extern struct time_info_data time_info;
+  for (;rnum <= top_of_matrix; rnum++) {
+    bool decker = FALSE;
+
+    // Paydara resets at midnight
+    if (time_info.hours == 0) {
+      if (HOST.type == HOST_DATASTORE && HOST.undiscovered_paydata <= 0) {
+        reset_host_paydata(rnum);
+      }
+    }
+
+    // Host alert state and subsystem encryption reviewed every 2 hours.
+    // But only if no deckers in the area.
+    if (time_info.hours % 2 == 0) {
+      // Check the current host.
+      for (struct matrix_icon *icon = HOST.icons; icon; icon = icon->next_in_host) {
+        if (!ICON_IS_IC(icon)) {
+          decker = TRUE;
+          break;
+        }
+      }
+      // Check surrounding hosts.
+      struct host_data *adjacent_host = NULL;
+      for (struct entrance_data *entrance = HOST.entrance; entrance && !decker; entrance = entrance->next) {
+        if ((adjacent_host = entrance->host)) {
+          for (struct matrix_icon *icon = adjacent_host->icons; icon; icon = icon->next_in_host) {
+            if (!ICON_IS_IC(icon)) {
+              decker = TRUE;
+              break;
+            }
+          }
+        }
+      }
+
+      // No deckers? Do the things.
+      if (!decker) {
+        // Alert active(2) to passive(1), passive to none(0).
+        // Note: alert = 3 means host has been shut down, handled in matrix_update.
+        if ((HOST.alert > 0) && (HOST.alert < 3)) {
+          HOST.alert--;
+        }
+
+        // Re-encrypt subsystems.
+        for (int x = ACCESS; x < NUM_OF_SUBSYSTEMS; x++) {
+          if (HOST.stats[x][MTX_STAT_ENCRYPTED] != 0 && HOST.stats[x][MTX_STAT_ENCRYPTED] != 1) {
+            char warnbuf[1000];
+            snprintf(warnbuf, sizeof(warnbuf), "WARNING: %s mtx_stat_encrypted on %ld is %ld (must be 1 or 0)!",
+                      acifs_strings[x],
+                      HOST.vnum,
+                      HOST.stats[x][MTX_STAT_ENCRYPTED]);
+            mudlog(warnbuf, NULL, LOG_SYSLOG, TRUE);
+            HOST.stats[x][MTX_STAT_ENCRYPTED] = 0;
+          }
+
+          if (HOST.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && HOST.stats[x][MTX_STAT_ENCRYPTED] == 0) {
+            mudlog_vfprintf(NULL, LOG_GRIDLOG, "Host %ld's %s-subsystem has scramble-%ld and is not encrypted: re-encrypting.", HOST.vnum, mtx_subsystem_names[x], HOST.stats[x][MTX_STAT_SCRAMBLE_IC_RATING]);
+            HOST.stats[x][MTX_STAT_ENCRYPTED] = 1;
           }
         }
       }

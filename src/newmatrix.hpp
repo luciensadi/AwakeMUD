@@ -75,7 +75,6 @@ struct host_data {
   int shutdown;
   int shutdown_success;
   int shutdown_mpcp;
-  bool payreset;
 
 #ifdef USE_DEBUG_CANARIES
   int canary;
@@ -90,7 +89,7 @@ struct host_data {
   host_data():
     name(NULL), keywords(NULL), desc(NULL), shutdown_start(NULL), shutdown_stop(NULL),
     type(0), reset(0), undiscovered_paydata(0), ic_bound_paydata(0), alert(0), pass(0),
-    shutdown(0), shutdown_success(0), shutdown_mpcp(0), payreset(TRUE), trigger(NULL),
+    shutdown(0), shutdown_success(0), shutdown_mpcp(0), trigger(NULL),
     icons(NULL), fighting(NULL), exit(NULL), entrance(NULL), file(NULL)
   {
 #ifdef USE_DEBUG_CANARIES
