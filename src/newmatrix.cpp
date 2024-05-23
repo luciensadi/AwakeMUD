@@ -2943,7 +2943,6 @@ void matrix_update()
 {
   PERF_PROF_SCOPE(pr_, __func__);
   rnum_t rnum = 1;
-  extern struct time_info_data time_info;
   for (;rnum <= top_of_matrix; rnum++) {
     bool decker = FALSE;
     struct matrix_icon *nexticon;
