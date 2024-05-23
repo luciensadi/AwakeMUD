@@ -347,7 +347,7 @@ bool dumpshock(struct matrix_icon *icon)
   return FALSE;
 }
 
-int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier, rnum_t trapdoor_host = -1)
+int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier)
 {
   int detect = 0;
   struct obj_data *prog = NULL;
@@ -360,13 +360,6 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
     act(rollbuf, FALSE, ch, 0, 0, TO_ROLLS);
     send_to_char(ch, "The %s subsystem seems to be encrypted.\r\n", mtx_subsystem_names[type]);
     return 0;
-  }
-
-  // Logging into a trapdoor means targeting a different host
-  // It's a backdoor, so we don't care if the target host's ACCESS is encrypted.
-  if ((trapdoor_host >= 0) && (software == SOFT_DECEPTION)) {
-    host = trapdoor_host;
-    send_to_char(ch, "The hole wasn't made for you, but you attempt to squeeze through anyway.\r\n");
   }
 
   int target = HOST.stats[type][MTX_STAT_RATING];
@@ -1732,6 +1725,8 @@ ACMD(do_logon)
   }
   skip_spaces(&argument);
   rnum_t target_host = -1, trapdoor_host = -1;
+  int subsystem = ACCESS;  // Logon usually targets ACCESS 
+
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   if (!str_cmp(argument, "LTG")) {
     if (!(target_host = real_host(matrix[PERSONA->in_host].parent))
@@ -1745,24 +1740,23 @@ ACMD(do_logon)
       send_to_icon(PERSONA, "This host is not connected to a RTG.\r\n");
       return;
     }
-  } else if (!str_cmp(argument, "access") && matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_TRAPDOOR]) {
-    trapdoor_host = real_host(matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_TRAPDOOR]);
-  } else if (!str_cmp(argument, "control") && matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_TRAPDOOR]) {
-    trapdoor_host = real_host(matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_TRAPDOOR]);
-  } else if (!str_cmp(argument, "index") && matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_TRAPDOOR]) {
-    trapdoor_host = real_host(matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_TRAPDOOR]);
-  } else if (!str_cmp(argument, "files") && matrix[PERSONA->in_host].stats[FILES][MTX_STAT_TRAPDOOR]) {
-    trapdoor_host = real_host(matrix[PERSONA->in_host].stats[FILES][MTX_STAT_TRAPDOOR]);
-  } else if (!str_cmp(argument, "slave") && matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_TRAPDOOR]) {
-    trapdoor_host = real_host(matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_TRAPDOOR]);
   } else {
-    for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next)
+    // Subsystem trap door? Test against the local subsystem
+    for (int sub = ACCESS; (target_host < 0) && (sub < NUM_OF_SUBSYSTEMS); sub++) {
+      if (!str_cmp(argument, mtx_subsystem_names[sub]) && matrix[PERSONA->in_host].stats[sub][MTX_STAT_TRAPDOOR]) {
+        target_host = PERSONA->in_host;
+        subsystem = sub;
+        trapdoor_host = real_host(matrix[PERSONA->in_host].stats[sub][MTX_STAT_TRAPDOOR]);
+      }
+    }
+    // Normal exits
+    for (struct exit_data *exit = matrix[PERSONA->in_host].exit; (target_host < 0) && exit; exit = exit->next)
       if (isname(argument, exit->addresses))
         target_host = real_host(exit->host);
   }
 
   if (target_host > 0 && matrix[target_host].alert <= 2) {
-    int success = system_test(target_host, ch, TEST_ACCESS, SOFT_DECEPTION, 0, trapdoor_host);
+    int success = system_test(target_host, ch, subsystem, SOFT_DECEPTION, 0);
     if (success > 0) {
       if (matrix[target_host].type == HOST_RTG && matrix[PERSONA->in_host].type == HOST_RTG)
         DECKER->tally = 0;
@@ -1770,9 +1764,16 @@ ACMD(do_logon)
       DECKER->located = FALSE;
       snprintf(buf, sizeof(buf), "%s connects to a different host and vanishes from this one.\r\n", CAP(PERSONA->name));
       send_to_host(PERSONA->in_host, buf, PERSONA, TRUE);
-      send_to_icon(PERSONA, "You connect to %s.\r\n", matrix[target_host].name);
       icon_from_host(PERSONA);
-      icon_to_host(PERSONA, target_host);
+
+      // Send decker to appropriate destination
+      if (trapdoor_host > 0) {
+        send_to_char(ch, "This hole wasn't made for you, but you squeeze through anyway.\r\n");
+        icon_to_host(PERSONA, trapdoor_host);
+      } else {
+        send_to_icon(PERSONA, "You connect to %s.\r\n", matrix[target_host].name);
+        icon_to_host(PERSONA, target_host);
+      }
       do_matrix_look(ch, NULL, 0, 0);
       return;
     } else {
@@ -2987,7 +2988,7 @@ void matrix_update()
 
         // We only reset subsystem encryption ratings if there are no deckers.
         if (!decker) {
-          for (int x = 0; x < 5; x++) {
+          for (int x = ACCESS; x < NUM_OF_SUBSYSTEMS; x++) {
             if (HOST.stats[x][MTX_STAT_ENCRYPTED] != 0 && HOST.stats[x][MTX_STAT_ENCRYPTED] != 1) {
               char warnbuf[1000];
               snprintf(warnbuf, sizeof(warnbuf), "WARNING: %s mtx_stat_encrypted on %ld is %ld (must be 1 or 0)!",
