@@ -3194,7 +3194,7 @@ ACMD(do_photo)
           strlcat(buf, "!\r\n", sizeof(buf));
         } else {
           if (GET_DEFPOS(tch))
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", GET_DEFPOS(tch));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s\r\n", GET_DEFPOS(tch));
           else
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s.\r\n", positions[(int)GET_POS(tch)]);
         }
