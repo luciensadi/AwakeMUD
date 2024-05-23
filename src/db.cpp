@@ -7630,8 +7630,17 @@ void collate_host_entrances() {
       }
     }
 
+    // Parent is also an entrance
+    dest_rnum = real_host(matrix[source_rnum].parent);
+    if (dest_rnum >= 0) {
+      entrance = new entrance_data;
+      entrance->host = &matrix[source_rnum];
+      entrance->next = matrix[dest_rnum].entrance;
+      matrix[dest_rnum].entrance = entrance;
+    }
+
     // Subsystem trapdoors are also entrances
-    for (int sub = 0; sub < NUM_OF_SUBSYSTEMS; sub++) {
+    for (int sub = ACCESS; sub < NUM_OF_SUBSYSTEMS; sub++) {
       dest_rnum = real_host(matrix[source_rnum].stats[sub][MTX_STAT_TRAPDOOR]);
       if (dest_rnum >= 0) {
         entrance = new entrance_data;
