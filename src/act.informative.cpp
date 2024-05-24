@@ -1782,7 +1782,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
       if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
         snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s%s%s\r\n", dirs[door],
                  EXIT(ch, door)->to_room->number,
-                 EXIT(ch, door)->to_room->name,
+                 replace_neutral_color_codes(EXIT(ch, door)->to_room->name, autom ? "^c" : "^n"),
                  IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED) ? " (locked)" : ((IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) ? " (closed)" : ""),
                  IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) ? " (hidden)" : "",
                  (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch, FALSE)) ? " (impassible)" : ""
@@ -1810,7 +1810,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
             else
               snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "A closed %s", *(fname(EXIT(ch, door)->keyword)) ? fname(EXIT(ch, door)->keyword) : "door");
           } else
-            strlcat(buf2, EXIT(ch, door)->to_room->name, sizeof(buf2));
+            strlcat(buf2, replace_neutral_color_codes(EXIT(ch, door)->to_room->name, autom ? "^c" : "^n"), sizeof(buf2));
           strlcat(buf2, "\r\n", sizeof(buf2));
         }
         if (autom)
@@ -7870,10 +7870,14 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
   }
 
   const char *room_name = GET_ROOM_NAME(in_room);
+  bool name_decorated = FALSE;
 
   if (GET_APARTMENT_SUBROOM(in_room) && GET_APARTMENT_SUBROOM(in_room)->get_decorated_name()) {
     room_name = GET_APARTMENT_SUBROOM(in_room)->get_decorated_name();
+    name_decorated = TRUE;
   }
+
+  room_name = replace_neutral_color_codes(room_name, "^C");
 
   {
     #define APPEND_ROOM_FLAG(check, flagname) { if ((check)) {strlcat(room_title_buf, flagname, sizeof(room_title_buf));} }
@@ -7885,7 +7889,7 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
       snprintf(room_title_buf, sizeof(room_title_buf), "^C[%5ld] %s^n%s [ %s ]^n", 
                   GET_ROOM_VNUM(in_room), 
                   room_name,
-                  room_name != GET_ROOM_NAME(in_room) ? " ^L(name-dec'd)^n" : "",
+                  name_decorated ? " ^L(name-dec'd)^n" : "",
                   buf);
       // Append things that don't show up in bits.
       APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");

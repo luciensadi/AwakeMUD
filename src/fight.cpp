@@ -864,7 +864,7 @@ void death_cry(struct char_data * ch)
 void raw_kill(struct char_data * ch)
 {
   struct obj_data *bio, *obj, *o;
-  long i;
+  struct room_data *dest_room;
 
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
@@ -885,9 +885,9 @@ void raw_kill(struct char_data * ch)
   if (IS_ASTRAL(ch))
   {
     act("$n vanishes.", FALSE, ch, 0, 0, TO_ROOM);
-    for (i = 0; i < NUM_WEARS; i++)
-      if (GET_EQ(ch, i))
-        extract_obj(GET_EQ(ch, i));
+    for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++)
+      if (GET_EQ(ch, wear_idx))
+        extract_obj(GET_EQ(ch, wear_idx));
     for (obj = ch->carrying; obj; obj = o) {
       o = obj->next_content;
       extract_obj(obj);
@@ -906,10 +906,10 @@ void raw_kill(struct char_data * ch)
         switch (GET_BIOWARE_TYPE(bio)) {
           case BIO_ADRENALPUMP:
             if (GET_OBJ_VAL(bio, 5) > 0) {
-              for (i = 0; i < MAX_OBJ_AFFECT; i++)
+              for (int affect_idx = 0; affect_idx < MAX_OBJ_AFFECT; affect_idx++)
                 affect_modify(ch,
-                              bio->affected[i].location,
-                              bio->affected[i].modifier,
+                              bio->affected[affect_idx].location,
+                              bio->affected[affect_idx].modifier,
                               bio->obj_flags.bitvector, FALSE);
               GET_OBJ_VAL(bio, 5) = 0;
             }
@@ -925,30 +925,9 @@ void raw_kill(struct char_data * ch)
       GET_COND(ch, COND_DRUNK) = 0;
 
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-        i = real_room(RM_CHARGEN_START_ROOM);
+        dest_room = &world[real_room(RM_CHARGEN_START_ROOM)];
       } else {
-        switch (GET_JURISDICTION(in_room)) {
-          case ZONE_SEATTLE:
-            i = real_room(RM_SEATTLE_DOCWAGON);
-            break;
-          case ZONE_PORTLAND:
-            i = real_room(RM_PORTLAND_DOCWAGON);
-            break;
-          case ZONE_CARIB:
-            i = real_room(RM_CARIB_DOCWAGON);
-            break;
-          case ZONE_OCEAN:
-            i = real_room(RM_OCEAN_DOCWAGON);
-            break;
-          default:
-            snprintf(buf, sizeof(buf), "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld). Sending to Dante's entrance.",
-                    GET_JURISDICTION(in_room),
-                    in_room->number,
-                    GET_CHAR_NAME(ch), GET_IDNUM(ch));
-            mudlog(buf, ch, LOG_SYSLOG, TRUE);
-            i = real_room(RM_ENTRANCE_TO_DANTES);
-            break;
-        }
+        dest_room = get_jurisdiction_docwagon_room(GET_JURISDICTION(in_room));
       }
 
       if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
@@ -979,7 +958,7 @@ void raw_kill(struct char_data * ch)
       }
 
       char_from_room(ch);
-      char_to_room(ch, &world[i]);
+      char_to_room(ch, dest_room);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
       PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
       GET_LAST_IN(ch) = GET_ROOM_VNUM(ch->in_room);
@@ -2391,36 +2370,8 @@ void docwagon_retrieve(struct char_data *ch) {
   ch->points.fire[0] = 0;
 
   send_to_char("\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n", ch);
-  {
-    rnum_t recovery_room = 0;
-
-    switch (GET_JURISDICTION(room)) {
-      case ZONE_SEATTLE:
-        recovery_room = real_room(RM_SEATTLE_DOCWAGON);
-        break;
-      case ZONE_PORTLAND:
-        recovery_room = real_room(RM_PORTLAND_DOCWAGON);
-        break;
-      case ZONE_CARIB:
-        recovery_room = real_room(RM_CARIB_DOCWAGON);
-        break;
-      case ZONE_OCEAN:
-        recovery_room = real_room(RM_OCEAN_DOCWAGON);
-        break;
-      default:
-        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown jurisdiction %d encountered in docwagon_retrieve()! %s being sent to Dante's.", GET_JURISDICTION(room), GET_CHAR_NAME(ch));
-        recovery_room = real_room(RM_ENTRANCE_TO_DANTES);
-        break;
-    }
-
-    if (recovery_room < 0) {
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid docwagon room specified for jurisdiction %d! %s being sent to A Bright Light.", GET_JURISDICTION(room), GET_CHAR_NAME(ch));
-      recovery_room = 0;
-    }
-
-    char_from_room(ch);
-    char_to_room(ch, &world[recovery_room]);
-  }
+  char_from_room(ch);
+  char_to_room(ch, get_jurisdiction_docwagon_room(GET_JURISDICTION(room)));
 
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || PLR_FLAGGED(ch, PLR_NEWBIE)) {
     send_to_char("Your DocWagon rescue is free due to your newbie status, and you've been restored to full health.\r\n", ch);

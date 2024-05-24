@@ -7612,3 +7612,102 @@ void set_watching(struct char_data *ch, struct room_data *room, int dir) {
 
   send_to_char(ch, "You focus your attention to %s.\r\n", thedirs[dir]);
 }
+
+struct room_data *get_jurisdiction_docwagon_room(int jurisdiction) {
+  if (jurisdiction < 0 || jurisdiction >= NUM_JURISDICTIONS) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid jurisdiction %d to get_jurisdiction_docwagon_rnum. Using Seattle.", jurisdiction);
+    jurisdiction = JURISDICTION_SEATTLE;
+  }
+
+  vnum_t vnum = 0;
+  
+  switch (jurisdiction) {
+    case JURISDICTION_SEATTLE:
+      vnum = RM_SEATTLE_DOCWAGON;
+      break;
+    case JURISDICTION_PORTLAND:
+      vnum = RM_PORTLAND_DOCWAGON;
+      break;
+    case JURISDICTION_CARIBBEAN:
+      vnum = RM_CARIB_DOCWAGON;
+      break;
+    case JURISDICTION_OCEAN:
+      vnum = RM_OCEAN_DOCWAGON;
+      break;
+    case JURISDICTION_CAS:
+      vnum = RM_CAS_DOCWAGON;
+      break;
+    default:
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: You forgot to add your new jurisdiciton %d to the get_jurisdiction_docwagon_rnum() function. Using Seattle's Docwagon.", jurisdiction);
+      vnum = RM_SEATTLE_DOCWAGON;
+      break;
+  }
+
+  rnum_t rnum = real_room(vnum);
+
+  if (rnum < 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Invalid or missing vnum %ld for jurisdiction %d's docwagon! Using room 0 (A Bright Light).", vnum, jurisdiction);
+    rnum = 0;
+  }
+
+  return &world[rnum];
+}
+
+struct room_data *get_jurisdiction_garage_room(int jurisdiction) {
+  if (jurisdiction < 0 || jurisdiction >= NUM_JURISDICTIONS) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid jurisdiction %d to get_jurisdiction_garage_rnum. Using Seattle.", jurisdiction);
+    jurisdiction = JURISDICTION_SEATTLE;
+  }
+
+  vnum_t vnum = 0;
+
+  switch (jurisdiction) {
+    case JURISDICTION_SEATTLE:
+      vnum = RM_SEATTLE_PARKING_GARAGE;
+      break;
+    case JURISDICTION_PORTLAND:
+#ifdef USE_PRIVATE_CE_WORLD
+      switch (number(0, 2)) {
+        case 0:
+          vnum = RM_PORTLAND_PARKING_GARAGE1;
+          break;
+        case 1:
+          vnum = RM_PORTLAND_PARKING_GARAGE2;
+          break;
+        case 2:
+          vnum = RM_PORTLAND_PARKING_GARAGE3;
+          break;
+      }
+#else
+      vnum = RM_PORTLAND_PARKING_GARAGE;
+#endif
+      break;
+    case JURISDICTION_CARIBBEAN:
+      vnum = RM_CARIB_PARKING_GARAGE;
+      break;
+    case JURISDICTION_OCEAN:
+      vnum = RM_OCEAN_PARKING_GARAGE;
+      break;
+    case JURISDICTION_CAS:
+      vnum = RM_CAS_PARKING_GARAGE;
+      break;
+    default:
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: You forgot to add your new jurisdiciton %d to the get_jurisdiction_garage_room() function. Using Seattle's garage.", jurisdiction);
+      vnum = RM_SEATTLE_PARKING_GARAGE;
+      break;
+  }
+
+  rnum_t rnum = real_room(vnum);
+
+  if (rnum < 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Invalid or missing vnum %ld for jurisdiction %d's garage! Using room %ld (Dante's garage).", vnum, jurisdiction, RM_DANTES_GARAGE);
+    rnum = real_room(RM_DANTES_GARAGE);
+
+    if (rnum < 0) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SUPER SYSERR: Dante's garage also fucked. Sending to room 0.");
+      rnum = 0;
+    }
+  }
+
+  return &world[rnum];
+}

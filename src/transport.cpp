@@ -2070,6 +2070,81 @@ void process_sauteurs_plane(void)
   where++;
 }
 
+#ifdef USE_PRIVATE_CE_WORLD
+#define RM_CAS_PLANE             8892
+#define RM_NORFOLK_INTL_AIRPORT  98000
+#define RM_PAINE_TO_CAS_AIRFIELD 8825
+#else
+#define RM_CAS_PLANE             15
+#define RM_NORFOLK_INTL_AIRPORT  8897
+#define RM_PAINE_TO_CAS_AIRFIELD 8825
+#endif
+
+struct transport_type cas[2] =
+  {
+    { 8892, NORTH, RM_NORFOLK_INTL_AIRPORT, SOUTH },
+    { 8892, NORTH, RM_PAINE_TO_CAS_AIRFIELD, SOUTH },
+  };
+
+void cas_extend(int bus, int to, int room, int from)
+{
+  create_linked_exit(bus, to, room, from, "cas_extend");
+
+  send_to_room("The Lockheed C-260 Transport plane docks with the platform and begins transferring passengers and cargo.\r\n", &world[room]);
+  send_to_room("The Lockheed C-260 Transport plane docks with the platform and begins loading passengers and cargo.\r\n", &world[bus]);
+
+  swap_pcs_between_transport_and_station(&world[bus], to, &world[room], from);
+}
+
+void cas_retract(int bus, int to, int room, int from)
+{
+  delete_linked_exit(bus, to, room, from, "cas_retract");
+
+  send_to_room("The transport plane taxis into position on the runway before throttling up and taking off.\r\n", &world[room]);
+  send_to_room("The transport plane taxis into position on the runway before throttling up and taking off.\r\n", &world[bus]);
+}
+
+void process_cas_plane(void)
+{
+  static int where = 0;
+  int bus, stop, ind;
+
+  if (where >= 168)
+    where = 0;
+
+  ind = (where >= 84 ? 1 : 0);
+
+  bus = real_room(cas[ind].transport);
+  stop = real_room(cas[ind].room);
+
+  if (bus < 0 || stop < 0)
+    return;
+
+  switch (where) {
+  case 0:
+  case 84:
+    send_to_room("A Lockheed C-260 Transport plane lands on the auxiliary runway and moves towards the cargo dock.\r\n", &world[stop]);
+    break;
+  case 4:
+  case 92:
+    sauteurs_extend(bus, cas[ind].to, stop, cas[ind].from);
+    break;
+  case 32:
+  case 112:
+    sauteurs_retract(bus, cas[ind].to, stop, cas[ind].from);
+    break;
+  case 72:
+    send_to_room("The gruff voice of the pilot speaks over the intercom, "
+                 "\"Thanks for flying with us. We'll be landing in Everett shortly.\"\r\n", &world[bus]);
+    break;
+  case 152:
+    send_to_room("The gruff voice of the pilot speaks over the intercom, "
+                 "\"Thanks for flying with us. We'll be landing at Norfolk International shortly.\"\r\n", &world[bus]);
+    break;
+  }
+  where++;
+}
+
 // ______________________________
 //
 // external interface funcs

@@ -2357,11 +2357,6 @@ enum {
 #define IC_SHIFT        6
 #define IC_TRAP          7
 
-#define ZONE_SEATTLE    0
-#define ZONE_PORTLAND    1
-#define ZONE_CARIB      2
-#define ZONE_OCEAN      3
-
 /* MOB Alert Levels */
 #define MALERT_CALM      0
 #define MALERT_ALERT    1
@@ -2445,7 +2440,8 @@ enum {
 #define JURISDICTION_PORTLAND  1
 #define JURISDICTION_CARIBBEAN 2
 #define JURISDICTION_OCEAN     3
-#define NUM_JURISDICTIONS      4
+#define JURISDICTION_CAS       4
+#define NUM_JURISDICTIONS      5
 
 // Locations, to remove the magic numbers from the code.
 #define RM_CHARGEN_START_ROOM        60500
@@ -2468,6 +2464,7 @@ enum {
 #define RM_PORTLAND_DOCWAGON         14709
 #define RM_CARIB_DOCWAGON            62300
 #define RM_OCEAN_DOCWAGON            62502
+#define RM_CAS_DOCWAGON              98017
 #define RM_NERPCORPOLIS_RECEPTIONIST 6900
 #define RM_NERPCORPOLIS_LOBBY        6901
 #define RM_PORTLAND_PARKING_GARAGE1  2751 + number(0, 2)
@@ -2476,11 +2473,13 @@ enum {
 #define RM_SEATTLE_PARKING_GARAGE    22670 + number(0, 16)
 #define RM_CARIB_PARKING_GARAGE      62334
 #define RM_OCEAN_PARKING_GARAGE      62504
+#define RM_CAS_PARKING_GARAGE        98079
 #else
 #define RM_SEATTLE_DOCWAGON          RM_ENTRANCE_TO_DANTES
 #define RM_PORTLAND_DOCWAGON         RM_ENTRANCE_TO_DANTES
 #define RM_CARIB_DOCWAGON            RM_ENTRANCE_TO_DANTES
 #define RM_OCEAN_DOCWAGON            RM_ENTRANCE_TO_DANTES
+#define RM_CAS_DOCWAGON            RM_ENTRANCE_TO_DANTES
 // Adding a new DocWagon room? Add it to do_die's exclusion list!
 #define RM_NERPCORPOLIS_RECEPTIONIST RM_ENTRANCE_TO_DANTES
 #define RM_NERPCORPOLIS_LOBBY        RM_ENTRANCE_TO_DANTES
@@ -2488,6 +2487,7 @@ enum {
 #define RM_SEATTLE_PARKING_GARAGE    RM_DANTES_GARAGE
 #define RM_CARIB_PARKING_GARAGE      RM_DANTES_GARAGE
 #define RM_OCEAN_PARKING_GARAGE      RM_DANTES_GARAGE
+#define RM_CAS_PARKING_GARAGE      RM_DANTES_GARAGE
 #endif
 #define RM_PAINTER_LOT               37518
 #define RM_MULTNOMAH_GATE_NORTH      17598

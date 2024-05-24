@@ -240,34 +240,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
             temp_room = &world[real_room(RM_BONEYARD_INTACT_ROOM_2)];
           }
         } else {
-          switch (GET_JURISDICTION(temp_room)) {
-            case ZONE_SEATTLE:
-              temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
-              break;
-            case ZONE_CARIB:
-              temp_room = &world[real_room(RM_CARIB_PARKING_GARAGE)];
-              break;
-            case ZONE_OCEAN:
-              temp_room = &world[real_room(RM_OCEAN_PARKING_GARAGE)];
-              break;
-            case ZONE_PORTLAND:
-#ifdef USE_PRIVATE_CE_WORLD
-              switch (number(0, 2)) {
-                case 0:
-                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE1)];
-                  break;
-                case 1:
-                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE2)];
-                  break;
-                case 2:
-                  temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE3)];
-                  break;
-              }
-#else
-              temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
-#endif
-              break;
-          }
+          temp_room = get_jurisdiction_garage_room(GET_JURISDICTION(temp_room));
         }
       }
     }

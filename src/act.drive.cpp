@@ -1816,15 +1816,15 @@ ACMD(do_gridguide)
       const char *location_string = "";
 
       switch (GET_JURISDICTION(veh->in_room)) {
-        case ZONE_SEATTLE:
+        case JURISDICTION_SEATTLE:
           destination_list = seattle_taxi_destinations;
           location_string = " or the Seattle gridguide system";
           break;
-        case ZONE_CARIB:
+        case JURISDICTION_CARIBBEAN:
           destination_list = caribbean_taxi_destinations;
           location_string = " or the Caribbean gridguide system";
           break;
-        case ZONE_PORTLAND:
+        case JURISDICTION_PORTLAND:
           destination_list = portland_taxi_destinations;
           location_string = " or the Portland gridguide system";
           break;
