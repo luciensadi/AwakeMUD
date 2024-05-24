@@ -631,6 +631,9 @@ void boot_world(void)
   log("Loading Matrix Hosts.");
   index_boot(DB_BOOT_MTX);
 
+  log("Collating Matrix Host Entrances.");
+  collate_host_entrances();
+
   log("Loading IC.");
   index_boot(DB_BOOT_IC);
 
@@ -1196,25 +1199,25 @@ void parse_host(File &fl, long nr)
   host->color = data.GetInt("Colour", 0);
   host->security = data.GetInt("Security", 0);
   host->intrusion = data.GetInt("Difficulty", 0);
-  host->stats[ACCESS][0] = data.GetLong("Access", 0);
-  host->stats[ACCESS][2] = data.GetLong("AccessScramble", 0);
-  host->stats[ACCESS][5] = data.GetLong("AccessTrapdoor", 0);
-  if (host->stats[ACCESS][2])
-    host->stats[ACCESS][1] = 1;
-  host->stats[CONTROL][0] = data.GetLong("Control", 0);
-  host->stats[CONTROL][5] = data.GetLong("ControlTrapdoor", 0);
-  host->stats[INDEX][0] = data.GetLong("Index", 0);
-  host->stats[INDEX][5] = data.GetLong("IndexTrapdoor", 0);
-  host->stats[FILES][0] = data.GetLong("Files", 0);
-  host->stats[FILES][2] = data.GetLong("FilesScramble", 0);
-  host->stats[FILES][5] = data.GetLong("FilesTrapdoor", 0);
-  if (host->stats[FILES][2])
-    host->stats[FILES][1] = 1;
-  host->stats[SLAVE][0] = data.GetLong("Slave", 0);
-  host->stats[SLAVE][2] = data.GetLong("SlaveScramble", 0);
-  host->stats[SLAVE][5] = data.GetLong("SlaveTrapdoor", 0);
-  if (host->stats[SLAVE][2])
-    host->stats[SLAVE][1] = 1;
+  host->stats[ACIFS_ACCESS][0] = data.GetLong("Access", 0);
+  host->stats[ACIFS_ACCESS][2] = data.GetLong("AccessScramble", 0);
+  host->stats[ACIFS_ACCESS][5] = data.GetLong("AccessTrapdoor", 0);
+  if (host->stats[ACIFS_ACCESS][2])
+    host->stats[ACIFS_ACCESS][1] = 1;
+  host->stats[ACIFS_CONTROL][0] = data.GetLong("Control", 0);
+  host->stats[ACIFS_CONTROL][5] = data.GetLong("ControlTrapdoor", 0);
+  host->stats[ACIFS_INDEX][0] = data.GetLong("Index", 0);
+  host->stats[ACIFS_INDEX][5] = data.GetLong("IndexTrapdoor", 0);
+  host->stats[ACIFS_FILES][0] = data.GetLong("Files", 0);
+  host->stats[ACIFS_FILES][2] = data.GetLong("FilesScramble", 0);
+  host->stats[ACIFS_FILES][5] = data.GetLong("FilesTrapdoor", 0);
+  if (host->stats[ACIFS_FILES][2])
+    host->stats[ACIFS_FILES][1] = 1;
+  host->stats[ACIFS_SLAVE][0] = data.GetLong("Slave", 0);
+  host->stats[ACIFS_SLAVE][2] = data.GetLong("SlaveScramble", 0);
+  host->stats[ACIFS_SLAVE][5] = data.GetLong("SlaveTrapdoor", 0);
+  if (host->stats[ACIFS_SLAVE][2])
+    host->stats[ACIFS_SLAVE][1] = 1;
   host->type = data.LookupInt("Type", host_type, 0);
   int num_fields = data.NumSubsections("EXITS");
   for (int x = 0; x < num_fields; x++) {
@@ -5476,6 +5479,24 @@ void free_host(struct host_data * host)
     host->trigger = NULL;
   }
 
+  { // Clean up associated entrances.
+    rnum_t dest_rnum;
+    for (struct exit_data *exit = host->exit; exit; exit = exit->next) {
+      // Find the exit's matching entrance in the destination host.
+      dest_rnum = real_host(exit->host);
+      if (dest_rnum >= 0) {
+        struct entrance_data *entrance, *temp;
+        for (entrance = matrix[dest_rnum].entrance; entrance; entrance = entrance->next) {
+          if (entrance->host == host)
+            break;
+        }
+        // Remove that entrance.
+        REMOVE_FROM_LIST(entrance, matrix[dest_rnum].entrance, next);
+        DELETE_AND_NULL(entrance);
+      }
+    }
+  }
+
   { // Clean up the exits.
     struct exit_data *exit = NULL, *next = NULL;
     for (exit = host->exit; exit; exit = next) {
@@ -7588,4 +7609,49 @@ void set_elemental_races() {
     }
     GET_RACE(&mob_proto[rnum]) = RACE_PC_CONJURED_ELEMENTAL;
   }
+}
+
+// We want a way to traverse all entrances to a host, but with one-way passages, we can't use exits
+// This function resets and populates entrance lists for each host
+// Duplicate entries can exist where there's more than one way to get from host A to host B
+void collate_host_entrances() {
+
+  // Clear existing entrance lists
+  for (rnum_t source_rnum = 0; source_rnum <= top_of_matrix; source_rnum++) {
+    struct entrance_data *entrance = NULL, *next = NULL;
+    for (entrance = matrix[source_rnum].entrance; entrance; entrance = next) {
+      next = entrance->next;
+      delete entrance;
+    }
+    matrix[source_rnum].entrance = NULL;
+  }
+
+  // Find exits and add to respective entrance lists
+  rnum_t dest_rnum = -1;
+
+  // The real host "source" will be added as an entrance to "dest" (if dest is real)
+  #define ADD_NEW_ENTRANCE_IF_EXISTS(dest_vnum, source_rnum) { \
+    if ((dest_rnum = real_host(dest_vnum)) >= 0) { \
+      struct entrance_data *entrance = new entrance_data; \
+      entrance->host = &matrix[source_rnum]; \
+      entrance->next = matrix[dest_rnum].entrance; \
+      matrix[dest_rnum].entrance = entrance; \
+    } \
+  }
+
+  for (rnum_t source_rnum = 0; source_rnum <= top_of_matrix; source_rnum++) {
+    // Source is an entrance to its exit destination(s)
+    for (struct exit_data *exit = matrix[source_rnum].exit; exit; exit = exit->next) {
+      ADD_NEW_ENTRANCE_IF_EXISTS(exit->host, source_rnum);
+    }
+
+    // Source is also an entrance to its parent (e.g., logon LTG)
+    ADD_NEW_ENTRANCE_IF_EXISTS(matrix[source_rnum].parent, source_rnum);
+
+    // Source is also an entrance to its trapdoor destination(s)
+    for (int sub = ACIFS_ACCESS; sub < NUM_ACIFS; sub++) {
+      ADD_NEW_ENTRANCE_IF_EXISTS(matrix[source_rnum].stats[sub][MTX_STAT_TRAPDOOR], source_rnum);
+    }
+  }
+  #undef ADD_NEW_ENTRANCE_IF_EXISTS
 }

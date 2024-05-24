@@ -18,11 +18,6 @@
 
 #define PERSONA ch->persona
 #define DECKER PERSONA->decker
-#define TEST_ACCESS 0
-#define TEST_CONTROL 1
-#define TEST_INDEX 2
-#define TEST_FILES 3
-#define TEST_SLAVE 4
 struct ic_info dummy_ic;
 
 #define ICON_IS_IC(icon) (!(icon)->decker)
@@ -748,6 +743,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening);
         fry_mpcp(icon, targ, success);
       }
+      // Damage was done to the attribute, so reduce the attribute
       switch (icon->ic.subtype) {
       case 0:
         targ->decker->bod = bod;
@@ -766,15 +762,19 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         dumpshock(targ);
       return;
     }
+
+    // Not a crippler/ripper, so do a normal attack
     send_to_icon(targ, "%s runs an attack program against you.\r\n", CAP(icon->name));
     if (icon->ic.type >= IC_LETHAL_BLACK)
       power -= targ->decker->hardening;
     else
       for (soft = targ->decker->software; soft; soft = soft->next_content)
-        if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR)
+        if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR) {
           power -= GET_OBJ_VAL(soft, 1);
+          break;
+        }
     bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
-    GET_REM_HACKING(targ->decker->ch) = bod - targ->decker->bod;
+    GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
     if (!targ->decker->ras)
       power += 4;
   } else
@@ -1237,7 +1237,7 @@ ACMD(do_locate)
   two_arguments(argument, buf, arg);
   int success, i = 0;
   if (is_abbrev(buf, "hosts")) {
-    success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_BROWSE, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_BROWSE, 0);
     int x = 0;
     char *name = arg;
     while (*name) {
@@ -1263,7 +1263,7 @@ ACMD(do_locate)
     }
     return;
   } else if (is_abbrev(buf, "ics")) {
-    success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_ANALYZE, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_ANALYZE, 0);
     if (success > 0) {
       for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
         if (ICON_IS_IC(icon)) {
@@ -1292,7 +1292,7 @@ ACMD(do_locate)
       send_to_icon(PERSONA, "Your search returns %d useless matches. Try a longer search string.\r\n", number(1000, 30000));
       return;
     }
-    success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_BROWSE, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_BROWSE, 0);
     if (success <= 0)
       send_to_icon(PERSONA, "You fumble your attempt to locate files.\r\n");
     else {
@@ -1338,7 +1338,7 @@ ACMD(do_locate)
     }
     return;
   } else if (is_abbrev(buf, "deckers")) {
-    success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_SCANNER, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_SCANNER, 0);
     if (success > 0) {
       int sensor = 0;
       for (int r = DECKER->sensor;r > 0; r--) {
@@ -1371,7 +1371,7 @@ ACMD(do_locate)
       // We use in_host here because system_test can result in you getting booted from the Matrix.
       rnum_t in_host = PERSONA->in_host;
 
-      success = system_test(in_host, ch, TEST_INDEX, SOFT_EVALUATE, 0);
+      success = system_test(in_host, ch, ACIFS_INDEX, SOFT_EVALUATE, 0);
       if (success <= 0) {
         send_to_icon(PERSONA, "You fumble your attempt to locate paydata.\r\n");
 
@@ -1576,7 +1576,7 @@ ACMD(do_analyze)
   int success;
   one_argument(argument, arg);
   if (is_abbrev(arg, "host")) {
-    success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0);
     if (success > 0) {
       snprintf(buf, sizeof(buf), "You analyze the ^W%s^n host.\r\n", host_type[matrix[PERSONA->in_host].type]);
       send_to_icon(PERSONA, buf);
@@ -1607,42 +1607,42 @@ ACMD(do_analyze)
           strcat(buf, "? ");
         // Access
         if (found[2])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_RATING]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[ACIFS_ACCESS][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
         // Control
         if (found[3])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_RATING]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[ACIFS_CONTROL][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
         // Index
         if (found[4])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_RATING]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[ACIFS_INDEX][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
         // Files
         if (found[5])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[FILES][MTX_STAT_RATING]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld/", matrix[PERSONA->in_host].stats[ACIFS_FILES][MTX_STAT_RATING]);
         else
           strcat(buf, "0/");
         // Slave
         if (found[6])
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld", matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_RATING]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld", matrix[PERSONA->in_host].stats[ACIFS_SLAVE][MTX_STAT_RATING]);
         else
           strcat(buf, "0");
 
         strcat(buf, "\r\n");
       } else
         snprintf(buf, sizeof(buf), "%s-%d %ld/%ld/%ld/%ld/%ld\r\n", host_color[matrix[PERSONA->in_host].color],
-                matrix[PERSONA->in_host].security, matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_RATING],
-                matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_RATING], matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_RATING],
-                matrix[PERSONA->in_host].stats[FILES][MTX_STAT_RATING], matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_RATING]);
+                matrix[PERSONA->in_host].security, matrix[PERSONA->in_host].stats[ACIFS_ACCESS][MTX_STAT_RATING],
+                matrix[PERSONA->in_host].stats[ACIFS_CONTROL][MTX_STAT_RATING], matrix[PERSONA->in_host].stats[ACIFS_INDEX][MTX_STAT_RATING],
+                matrix[PERSONA->in_host].stats[ACIFS_FILES][MTX_STAT_RATING], matrix[PERSONA->in_host].stats[ACIFS_SLAVE][MTX_STAT_RATING]);
       send_to_char(buf, ch);
     } else
       send_to_icon(PERSONA, "Your program fails to run.\r\n");
     return;
   } else if (is_abbrev(arg, "security")) {
-    success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0);
     if (success > 0) {
       send_to_icon(PERSONA, "You analyze the security of the host.\r\n");
       snprintf(buf, sizeof(buf), "%s-%d Tally: %d Alert: %s\r\n", host_color[matrix[PERSONA->in_host].color],
@@ -1655,15 +1655,15 @@ ACMD(do_analyze)
   } else if (is_abbrev(arg, "access") || is_abbrev(arg, "control") || is_abbrev(arg, "index") || is_abbrev(arg, "files")  || is_abbrev(arg, "slave")) {
     int mode = 0;
     if (is_abbrev(arg, "access"))
-      mode = TEST_ACCESS;
+      mode = ACIFS_ACCESS;
     else if (is_abbrev(arg, "control"))
-      mode = TEST_CONTROL;
+      mode = ACIFS_CONTROL;
     else if (is_abbrev(arg, "index"))
-      mode = TEST_INDEX;
+      mode = ACIFS_INDEX;
     else if (is_abbrev(arg, "files"))
-      mode = TEST_FILES;
+      mode = ACIFS_FILES;
     else if (is_abbrev(arg, "slave"))
-      mode = TEST_SLAVE;
+      mode = ACIFS_SLAVE;
     int success = system_test(PERSONA->in_host, ch, mode, SOFT_ANALYZE, 0);
     if (success > 0) {
       if (matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED] || matrix[PERSONA->in_host].stats[mode][MTX_STAT_TRAPDOOR]) {
@@ -1677,7 +1677,7 @@ ACMD(do_analyze)
   } else {
     struct obj_data *obj = NULL;
     if ((obj = get_obj_in_list_vis(ch, arg, matrix[PERSONA->in_host].file)) && GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum) {
-      int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
+      int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0);
       if (success > 0) {
         send_to_icon(PERSONA, "You analyze the file:\r\n");
         if (GET_OBJ_VAL(obj, 3)) {
@@ -1696,7 +1696,7 @@ ACMD(do_analyze)
     }
     for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = ic->next_in_host)
       if ((isname(arg, ic->look_desc) || isname(arg, ic->name)) && has_spotted(PERSONA, ic)) {
-        int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_ANALYZE, 0);
+        int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0);
         if (success > 0 ) {
           show_icon_to_persona(PERSONA, ic);
           if (ICON_IS_IC(ic)) {
@@ -1724,38 +1724,44 @@ ACMD(do_logon)
     return;
   }
   skip_spaces(&argument);
-  rnum_t target_host = 0;
+  rnum_t target_host = -1, trapdoor_host = -1;
+  int subsystem = ACIFS_ACCESS;  // Most logons target ACCESS 
+
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   if (!str_cmp(argument, "LTG")) {
-    if (!(target_host = real_host(matrix[PERSONA->in_host].parent))
+    // Parent is not real, or parent is not LTG/PLTG
+    // BUG: && should be ||, but fixing this may prevent backing out of hosts
+    // I.e., fixing this would mean we also have to audit every host for backlinks
+    if ( ((target_host = real_host(matrix[PERSONA->in_host].parent)) <= 0)
         && !(matrix[target_host].type == HOST_LTG || matrix[target_host].type == HOST_PLTG)) {
       send_to_icon(PERSONA, "This host is not connected to a LTG.\r\n");
       return;
     }
   } else if (!str_cmp(argument, "RTG")) {
+    // Current host is not a LTG, or parent is not real
     if (matrix[PERSONA->in_host].type != HOST_LTG ||
-        !(target_host = real_host(matrix[PERSONA->in_host].parent))) {
+        ((target_host = real_host(matrix[PERSONA->in_host].parent)) <= 0) ) {
       send_to_icon(PERSONA, "This host is not connected to a RTG.\r\n");
       return;
     }
-  } else if (!str_cmp(argument, "access") && matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_TRAPDOOR])
-    target_host = real_host(matrix[PERSONA->in_host].stats[ACCESS][MTX_STAT_TRAPDOOR]);
-  else if (!str_cmp(argument, "control") && matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_TRAPDOOR])
-    target_host = real_host(matrix[PERSONA->in_host].stats[CONTROL][MTX_STAT_TRAPDOOR]);
-  else if (!str_cmp(argument, "index") && matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_TRAPDOOR])
-    target_host = real_host(matrix[PERSONA->in_host].stats[INDEX][MTX_STAT_TRAPDOOR]);
-  else if (!str_cmp(argument, "files") && matrix[PERSONA->in_host].stats[FILES][MTX_STAT_TRAPDOOR])
-    target_host = real_host(matrix[PERSONA->in_host].stats[FILES][MTX_STAT_TRAPDOOR]);
-  else if (!str_cmp(argument, "slave") && matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_TRAPDOOR])
-    target_host = real_host(matrix[PERSONA->in_host].stats[SLAVE][MTX_STAT_TRAPDOOR]);
-  else {
-    for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next)
+  } else {
+    // Subsystem trap door? Test against the local subsystem instead of destination ACCESS
+    for (int sub = ACIFS_ACCESS; sub < NUM_ACIFS; sub++) {
+      if (!str_cmp(argument, mtx_subsystem_names[sub]) && matrix[PERSONA->in_host].stats[sub][MTX_STAT_TRAPDOOR]) {
+        target_host = PERSONA->in_host;
+        subsystem = sub;
+        trapdoor_host = real_host(matrix[PERSONA->in_host].stats[sub][MTX_STAT_TRAPDOOR]);
+        break;
+      }
+    }
+    // Check normal exits (if we haven't already found a target)
+    for (struct exit_data *exit = matrix[PERSONA->in_host].exit; (target_host <= 0) && exit; exit = exit->next)
       if (isname(argument, exit->addresses))
         target_host = real_host(exit->host);
   }
 
   if (target_host > 0 && matrix[target_host].alert <= 2) {
-    int success = system_test(target_host, ch, TEST_ACCESS, SOFT_DECEPTION, 0);
+    int success = system_test(target_host, ch, subsystem, SOFT_DECEPTION, 0);
     if (success > 0) {
       if (matrix[target_host].type == HOST_RTG && matrix[PERSONA->in_host].type == HOST_RTG)
         DECKER->tally = 0;
@@ -1763,9 +1769,16 @@ ACMD(do_logon)
       DECKER->located = FALSE;
       snprintf(buf, sizeof(buf), "%s connects to a different host and vanishes from this one.\r\n", CAP(PERSONA->name));
       send_to_host(PERSONA->in_host, buf, PERSONA, TRUE);
-      send_to_icon(PERSONA, "You connect to %s.\r\n", matrix[target_host].name);
       icon_from_host(PERSONA);
-      icon_to_host(PERSONA, target_host);
+
+      // Send decker to appropriate destination
+      if (trapdoor_host > 0) {
+        send_to_char(ch, "This hole wasn't made for you, but you squeeze through anyway.\r\n");
+        icon_to_host(PERSONA, trapdoor_host);
+      } else {
+        send_to_icon(PERSONA, "You connect to %s.\r\n", matrix[target_host].name);
+        icon_to_host(PERSONA, target_host);
+      }
       do_matrix_look(ch, NULL, 0, 0);
       return;
     } else {
@@ -1805,7 +1818,7 @@ ACMD(do_logoff)
         send_to_icon(PERSONA, "You can't log off gracefully while fighting a black IC!\r\n");
         return;
       }
-    int success = system_test(PERSONA->in_host, ch, TEST_ACCESS, SOFT_DECEPTION, 0);
+    int success = system_test(PERSONA->in_host, ch, ACIFS_ACCESS, SOFT_DECEPTION, 0);
     if (success <= 0) {
       WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
       send_to_icon(PERSONA, "The matrix host's automated procedures detect and block your logoff attempt.\r\n");
@@ -2223,7 +2236,7 @@ ACMD(do_load)
             return;
           }
 
-          success = system_test(PERSONA->in_host, ch, TEST_FILES, SOFT_READ, 0);
+          success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_READ, 0);
         }
         if (success > 0) {
           // TODO: This is accurately transcribed, but feels like a bug.
@@ -2258,7 +2271,7 @@ ACMD(do_redirect)
     return;
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_CAMO, 0);
+  int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_CAMO, 0);
   if (success > 0) {
     for (int x = 0; x < DECKER->redirect; x++)
       if (DECKER->redirectedon[x] == PERSONA->in_host) {
@@ -2299,7 +2312,7 @@ ACMD(do_download)
       send_to_icon(PERSONA, "You don't have enough storage memory to download that file.\r\n");
       return;
     } else {
-      int success = system_test(PERSONA->in_host, ch, TEST_FILES, SOFT_READ, 0);
+      int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_READ, 0);
       if (GET_OBJ_VAL(soft, 5) == 4)
         success -= GET_OBJ_VAL(soft, 6);
       if (success > 0) {
@@ -2442,7 +2455,11 @@ ACMD(do_run)
             targ = 5;
           else if (PERSONA->condition < 9)
             targ = 4;
-          int success = success_test(GET_OBJ_VAL(soft, 1), targ);
+
+          int skill = GET_OBJ_VAL(soft, 1) + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
+          int success = success_test(skill, targ);
+          GET_REM_HACKING(ch) -= skill - GET_OBJ_VAL(soft, 1);
+
           if (success < 1)
             send_to_icon(PERSONA, "It fails to execute.\r\n");
           else {
@@ -2468,12 +2485,12 @@ void _decrypt_host_access(struct char_data *ch, rnum_t host_rnum) {
   icon_from_host(PERSONA);
   icon_to_host(PERSONA, host_rnum);
 
-  int success = system_test(PERSONA->in_host, ch, TEST_ACCESS, SOFT_DECRYPT, 0);
+  int success = system_test(PERSONA->in_host, ch, ACIFS_ACCESS, SOFT_DECRYPT, 0);
 
   if (success > 0) {
-    if (matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED]) {
+    if (matrix[host_rnum].stats[ACIFS_ACCESS][MTX_STAT_ENCRYPTED]) {
       send_to_icon(PERSONA, "You successfully decrypt that SAN.\r\n");
-      matrix[host_rnum].stats[ACCESS][MTX_STAT_ENCRYPTED] = 0;
+      matrix[host_rnum].stats[ACIFS_ACCESS][MTX_STAT_ENCRYPTED] = 0;
     } else {
       send_to_icon(PERSONA, "It doesn't appear to be encrypted.\r\n");
     }
@@ -2507,7 +2524,7 @@ ACMD(do_decrypt)
         send_to_icon(PERSONA, "There is no need to %s that file.\r\n", subcmd ? "disarm" : "decrypt");
         return;
       }
-      int success = system_test(PERSONA->in_host, ch, TEST_FILES, subcmd ? SOFT_DEFUSE : SOFT_DECRYPT, 0);
+      int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, subcmd ? SOFT_DEFUSE : SOFT_DECRYPT, 0);
       if (success > 0) {
         send_to_icon(PERSONA, "You successfully %s the file.\r\n", subcmd ? "disarm" : "decrypt");
         GET_OBJ_VAL(obj, 5) = 0;
@@ -2525,11 +2542,11 @@ ACMD(do_decrypt)
   if (is_abbrev(argument, "slave") || is_abbrev(argument, "files") || is_abbrev(argument, "access")) {
     int mode = 0;
     if (is_abbrev(argument, "access"))
-      mode = ACCESS;
+      mode = ACIFS_ACCESS;
     else if (is_abbrev(argument, "files"))
-      mode = FILES;
+      mode = ACIFS_FILES;
     else if (is_abbrev(argument, "slave"))
-      mode = SLAVE;
+      mode = ACIFS_SLAVE;
 
     // If there's nothing to decrypt, there's nothing to succeed at.
     if (!matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED]) {
@@ -2543,7 +2560,7 @@ ACMD(do_decrypt)
       send_to_icon(PERSONA, "You successfully decrypt the %s subsystem.\r\n", mtx_subsystem_names[mode]);
     } else {
       send_to_icon(PERSONA, "You fail to decrypt the %s subsystem.\r\n", mtx_subsystem_names[mode]);
-      if (mode == FILES && PERSONA && PERSONA->decker && PERSONA->decker->ch) {
+      if (mode == ACIFS_FILES && PERSONA && PERSONA->decker && PERSONA->decker->ch) {
         // Paydata is destroyed on failed tests per SR3 p228.
         if (success_test(matrix[PERSONA->in_host].stats[mode][MTX_STAT_RATING], GET_SKILL(PERSONA->decker->ch, SKILL_COMPUTER)) > 0) {
           send_to_host(PERSONA->in_host, "A wash of static sweeps over the host, tearing away at potential paydata!\r\n", NULL, FALSE);
@@ -2934,15 +2951,12 @@ void reset_host_paydata(rnum_t rnum) {
       HOST.ic_bound_paydata = 0;
   }
   // mudlog_vfprintf(NULL, LOG_SYSLOG, "PD:%ld-%s: %d UD, %d IC-B", host.vnum, host_color[host.color], host.undiscovered_paydata, host.ic_bound_paydata);
-  HOST.payreset = TRUE;
 }
 
 void matrix_update()
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  rnum_t rnum = 1;
-  extern struct time_info_data time_info;
-  for (;rnum <= top_of_matrix; rnum++) {
+  for (rnum_t rnum = 1; rnum <= top_of_matrix; rnum++) {
     bool decker = FALSE;
     struct matrix_icon *nexticon;
     if (HOST.reset) {
@@ -2950,52 +2964,6 @@ void matrix_update()
         HOST.alert = 0;
       else
         continue;
-    }
-    if (time_info.hours == 2 && HOST.payreset)
-      HOST.payreset = FALSE;
-    if (time_info.hours == 0) {
-      if (HOST.type == HOST_DATASTORE && HOST.undiscovered_paydata <= 0 && !HOST.payreset) {
-        reset_host_paydata(rnum);
-      } else {
-        // See if there are any deckers in here.
-        for (struct matrix_icon *icon = HOST.icons; icon; icon = icon->next_in_host) {
-          if (!ICON_IS_IC(icon)) {
-            decker = TRUE;
-            break;
-          }
-        }
-        // We also need to check surrounding hosts to prevent SANs from re-encrypting.
-        for (struct exit_data *exit = HOST.exit; exit && !decker; exit = exit->next) {
-          rnum_t host_rnum = real_host(exit->host);
-          if (host_rnum >= 0) {
-            for (struct matrix_icon *icon = matrix[host_rnum].icons; icon; icon = icon->next_in_host) {
-              if (!ICON_IS_IC(icon)) {
-                decker = TRUE;
-                break;
-              }
-            }
-          }
-        }
-        // We only reset subsystem encryption ratings if there are no deckers.
-        if (!decker) {
-          for (int x = 0; x < 5; x++) {
-            if (HOST.stats[x][MTX_STAT_ENCRYPTED] != 0 && HOST.stats[x][MTX_STAT_ENCRYPTED] != 1) {
-              char warnbuf[1000];
-              snprintf(warnbuf, sizeof(warnbuf), "WARNING: %s mtx_stat_encrypted on %ld is %ld (must be 1 or 0)!",
-                       acifs_strings[x],
-                       HOST.vnum,
-                       HOST.stats[x][MTX_STAT_ENCRYPTED]);
-              mudlog(warnbuf, NULL, LOG_SYSLOG, TRUE);
-              HOST.stats[x][MTX_STAT_ENCRYPTED] = 0;
-            }
-
-            if (HOST.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && HOST.stats[x][MTX_STAT_ENCRYPTED] == 0) {
-              mudlog_vfprintf(NULL, LOG_GRIDLOG, "Host %ld's %s-subsystem has scramble-%ld and is not encrypted: re-encrypting.", HOST.vnum, mtx_subsystem_names[x], HOST.stats[x][MTX_STAT_SCRAMBLE_IC_RATING]);
-              HOST.stats[x][MTX_STAT_ENCRYPTED] = 1;
-            }
-          }
-        }
-      }
     }
     if (HOST.shutdown) {
       if (success_test(HOST.security, HOST.shutdown_mpcp) > 0) {
@@ -3110,6 +3078,74 @@ void matrix_update()
   }
 }
 
+// For things that should happen no more than once an hour.
+void matrix_hour_update()
+{
+  PERF_PROF_SCOPE(pr_, __func__);
+  extern struct time_info_data time_info;
+  for (rnum_t rnum = 1; rnum <= top_of_matrix; rnum++) {
+    bool decker = FALSE;
+
+    // Paydara resets at midnight
+    if (time_info.hours == 0) {
+      if (HOST.type == HOST_DATASTORE && HOST.undiscovered_paydata <= 0) {
+        reset_host_paydata(rnum);
+      }
+    }
+
+    // Host alert state and subsystem encryption reviewed every 2 hours.
+    // But only if no deckers in the area.
+    if (time_info.hours % 2 == 0) {
+      // Check the current host.
+      for (struct matrix_icon *icon = HOST.icons; icon; icon = icon->next_in_host) {
+        if (!ICON_IS_IC(icon)) {
+          decker = TRUE;
+          break;
+        }
+      }
+      // Check surrounding hosts.
+      struct host_data *adjacent_host = NULL;
+      for (struct entrance_data *entrance = HOST.entrance; entrance && !decker; entrance = entrance->next) {
+        if ((adjacent_host = entrance->host)) {
+          for (struct matrix_icon *icon = adjacent_host->icons; icon; icon = icon->next_in_host) {
+            if (!ICON_IS_IC(icon)) {
+              decker = TRUE;
+              break;
+            }
+          }
+        }
+      }
+
+      // No deckers? Do the things.
+      if (!decker) {
+        // Alert active(2) to passive(1), passive to none(0).
+        // Note: alert = 3 means host has been shut down, handled in matrix_update.
+        if ((HOST.alert > 0) && (HOST.alert < 3)) {
+          HOST.alert--;
+        }
+
+        // Re-encrypt subsystems.
+        for (int x = ACIFS_ACCESS; x < NUM_ACIFS; x++) {
+          if (HOST.stats[x][MTX_STAT_ENCRYPTED] != 0 && HOST.stats[x][MTX_STAT_ENCRYPTED] != 1) {
+            char warnbuf[1000];
+            snprintf(warnbuf, sizeof(warnbuf), "WARNING: %s mtx_stat_encrypted on %ld is %ld (must be 1 or 0)!",
+                      acifs_strings[x],
+                      HOST.vnum,
+                      HOST.stats[x][MTX_STAT_ENCRYPTED]);
+            mudlog(warnbuf, NULL, LOG_SYSLOG, TRUE);
+            HOST.stats[x][MTX_STAT_ENCRYPTED] = 0;
+          }
+
+          if (HOST.stats[x][MTX_STAT_SCRAMBLE_IC_RATING] && HOST.stats[x][MTX_STAT_ENCRYPTED] == 0) {
+            mudlog_vfprintf(NULL, LOG_GRIDLOG, "Host %ld's %s-subsystem has scramble-%ld and is not encrypted: re-encrypting.", HOST.vnum, mtx_subsystem_names[x], HOST.stats[x][MTX_STAT_SCRAMBLE_IC_RATING]);
+            HOST.stats[x][MTX_STAT_ENCRYPTED] = 1;
+          }
+        }
+      }
+    }
+  }
+}
+
 void matrix_violence()
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -3176,7 +3212,7 @@ ACMD(do_crash)
     return;
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_CRASH, 0);
+  int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_CRASH, 0);
   if (success > 0) {
     matrix[PERSONA->in_host].shutdown_success = success;
     matrix[PERSONA->in_host].shutdown_mpcp = DECKER->mpcp;
@@ -3295,7 +3331,7 @@ ACMD(do_abort)
     return;
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  int success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_SWERVE, 0);
+  int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_SWERVE, 0);
   success /= 2;
   if (success > matrix[PERSONA->in_host].shutdown_success) {
     send_to_host(PERSONA->in_host, matrix[PERSONA->in_host].shutdown_stop, NULL, FALSE);
@@ -3457,7 +3493,7 @@ ACMD(do_comcall)
         send_to_icon(PERSONA, "You can't seem to find that commcode.\r\n");
         return;
       }
-      int success = system_test(PERSONA->in_host, ch, TEST_FILES, SOFT_COMMLINK, 0);
+      int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_COMMLINK, 0);
       if (success > 0) {
         if (k->dest) {
           send_to_icon(PERSONA, "That line is already busy.\r\n");
@@ -3544,7 +3580,7 @@ ACMD(do_restrict)
   detect /= 2;
 
   if (is_abbrev(buf, "detection")) {
-    success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_VALIDATE, detect);
+    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_VALIDATE, detect);
     if (success > 0) {
       targ->decker->res_det += success;
       send_to_icon(PERSONA, "You successfully restrict their detection factor.\r\n");
@@ -3552,7 +3588,7 @@ ACMD(do_restrict)
       send_to_icon(PERSONA, "You fail to restrict their detection factor.\r\n");
     }
   } else if (is_abbrev(buf, "tests")) {
-    success = system_test(PERSONA->in_host, ch, TEST_CONTROL, SOFT_VALIDATE, detect);
+    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_VALIDATE, detect);
     if (success > 0) {
       targ->decker->res_test += success;
       send_to_icon(PERSONA, "You successfully restrict their system tests.\r\n");
@@ -3576,7 +3612,7 @@ ACMD(do_trace)
     send_to_icon(PERSONA, "You can only perform this action on an LTG.\r\n");
   else {
     WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-    int success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_BROWSE, 0);
+    int success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_BROWSE, 0);
     if (success > 0) {
       for (struct matrix_icon *icon = icon_list; icon; icon = icon->next) {
         if (icon->decker && icon->decker->mxp == addr) {
