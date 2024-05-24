@@ -743,6 +743,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening);
         fry_mpcp(icon, targ, success);
       }
+      // Damage was done to the attribute, so reduce the attribute
       switch (icon->ic.subtype) {
       case 0:
         targ->decker->bod = bod;
@@ -761,6 +762,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         dumpshock(targ);
       return;
     }
+
+    // Not a crippler/ripper, so do a normal attack
     send_to_icon(targ, "%s runs an attack program against you.\r\n", CAP(icon->name));
     if (icon->ic.type >= IC_LETHAL_BLACK)
       power -= targ->decker->hardening;
@@ -769,7 +772,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR)
           power -= GET_OBJ_VAL(soft, 1);
     bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
-    GET_REM_HACKING(targ->decker->ch) = bod - targ->decker->bod;
+    GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
     if (!targ->decker->ras)
       power += 4;
   } else
