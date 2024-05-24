@@ -5,6 +5,8 @@
 #include "db.hpp"
 #include "config.hpp"
 
+extern bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
+
 void send_npc_newly_alarmed_message(struct char_data *npc, struct char_data *vict);
 
 // Helper function for remove_ch_from_pc_invis_resistance_records().
@@ -210,6 +212,21 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
     if (GET_POWER(ch, ADEPT_MAGIC_RESISTANCE)) {
       dice += GET_POWER(ch, ADEPT_MAGIC_RESISTANCE);
       buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "MagicResist", GET_POWER(ch, ADEPT_MAGIC_RESISTANCE));
+    }
+  }
+
+  if (GET_FOCI(ch) > 0) {
+    for (int wearslot = 0; wearslot < NUM_WEARS; wearslot++) {
+      struct obj_data *eq = GET_EQ(ch, wearslot);
+      if (eq
+          && GET_OBJ_TYPE(eq) == ITEM_FOCUS
+          && GET_FOCUS_TYPE(eq) == FOCI_SPELL_DEFENSE)
+      {
+        if (focus_is_usable_by_ch(eq, ch) && GET_FOCUS_ACTIVATED(eq)) {
+          dice += GET_FOCUS_FORCE(eq);
+          buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "FocusDefense", GET_FOCUS_FORCE(eq));
+        }
+      }
     }
   }
 
