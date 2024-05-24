@@ -6659,7 +6659,7 @@ bool obj_is_apartment_only_drop_item(struct obj_data *obj, struct room_data *des
       return TRUE;
     case ITEM_MAGIC_TOOL:
       // You can only drop conjuring libraries, and only then at power sites.
-      return GET_MAGIC_TOOL_TYPE(obj) != TYPE_LIBRARY_CONJURE || (dest_room && dest_room->background[CURRENT_BACKGROUND_TYPE] == AURA_POWERSITE);
+      return GET_MAGIC_TOOL_TYPE(obj) != TYPE_LIBRARY_CONJURE || (dest_room && dest_room->background[CURRENT_BACKGROUND_TYPE] != AURA_POWERSITE);
     case ITEM_DECK_ACCESSORY:
       // You can't drop parts/chips, nor can you drop computers unless they're laptops.
       return (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PARTS) || (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_COMPUTER && !GET_DECK_ACCESSORY_COMPUTER_IS_LAPTOP(obj));
