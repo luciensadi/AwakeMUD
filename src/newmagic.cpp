@@ -5660,11 +5660,15 @@ ACMD(do_order)
     }
     if (spirit->services < 1 && order != SERV_LEAVE) {
       send_to_char(ch, "The %s no longer listens to you.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+      send_to_char(ch, "^[F222](OOC: You should RELEASE your %s since they don't owe you any more services.)^n\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
     }
     ((*services[order].func) (ch, mob, spirit, buf2));
-    if (order != SERV_LEAVE)
-      elemental_fulfilled_services(ch, mob, spirit);
+
+    // This also extracts nature spirits and thus immediately ends open ended powers such as conceal, confusion, etc.
+    // Easier to just require the conjurer to manually release an elemental/spirit that has 0 services remaining.
+    // if (order != SERV_LEAVE)
+    //   elemental_fulfilled_services(ch, mob, spirit);
   }
 }
 
