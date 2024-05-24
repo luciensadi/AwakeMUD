@@ -2453,7 +2453,11 @@ ACMD(do_run)
             targ = 5;
           else if (PERSONA->condition < 9)
             targ = 4;
-          int success = success_test(GET_OBJ_VAL(soft, 1), targ);
+
+          int skill = GET_OBJ_VAL(soft, 1) + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
+          int success = success_test(skill, targ);
+          GET_REM_HACKING(ch) -= skill - GET_OBJ_VAL(soft, 1);
+
           if (success < 1)
             send_to_icon(PERSONA, "It fails to execute.\r\n");
           else {
