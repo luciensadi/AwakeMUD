@@ -1724,28 +1724,33 @@ ACMD(do_logon)
 
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   if (!str_cmp(argument, "LTG")) {
-    if (!(target_host = real_host(matrix[PERSONA->in_host].parent))
+    // Parent is not real, or parent is not LTG/RTG
+    // BUG: && should be ||, but fixing this may prevent backing out of hosts
+    // I.e., fixing this would mean we also have to audit every host for backlinks
+    if ( ((target_host = real_host(matrix[PERSONA->in_host].parent)) <= 0)
         && !(matrix[target_host].type == HOST_LTG || matrix[target_host].type == HOST_PLTG)) {
       send_to_icon(PERSONA, "This host is not connected to a LTG.\r\n");
       return;
     }
   } else if (!str_cmp(argument, "RTG")) {
+    // Current host is not a LTG, or parent is not real
     if (matrix[PERSONA->in_host].type != HOST_LTG ||
-        !(target_host = real_host(matrix[PERSONA->in_host].parent))) {
+        ((target_host = real_host(matrix[PERSONA->in_host].parent)) <= 0) ) {
       send_to_icon(PERSONA, "This host is not connected to a RTG.\r\n");
       return;
     }
   } else {
     // Subsystem trap door? Test against the local subsystem instead of destination ACCESS
-    for (int sub = ACIFS_ACCESS; (target_host < 0) && (sub < NUM_ACIFS); sub++) {
+    for (int sub = ACIFS_ACCESS; sub < NUM_ACIFS; sub++) {
       if (!str_cmp(argument, mtx_subsystem_names[sub]) && matrix[PERSONA->in_host].stats[sub][MTX_STAT_TRAPDOOR]) {
         target_host = PERSONA->in_host;
         subsystem = sub;
         trapdoor_host = real_host(matrix[PERSONA->in_host].stats[sub][MTX_STAT_TRAPDOOR]);
+        break;
       }
     }
-    // Normal exits
-    for (struct exit_data *exit = matrix[PERSONA->in_host].exit; (target_host < 0) && exit; exit = exit->next)
+    // Check normal exits (if we haven't already found a target)
+    for (struct exit_data *exit = matrix[PERSONA->in_host].exit; (target_host <= 0) && exit; exit = exit->next)
       if (isname(argument, exit->addresses))
         target_host = real_host(exit->host);
   }
@@ -2942,8 +2947,7 @@ void reset_host_paydata(rnum_t rnum) {
 void matrix_update()
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  rnum_t rnum = 1;
-  for (;rnum <= top_of_matrix; rnum++) {
+  for (rnum_t rnum = 1 ;rnum <= top_of_matrix; rnum++) {
     bool decker = FALSE;
     struct matrix_icon *nexticon;
     if (HOST.reset) {
@@ -3069,9 +3073,8 @@ void matrix_update()
 void matrix_hour_update()
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  rnum_t rnum = 1;
   extern struct time_info_data time_info;
-  for (;rnum <= top_of_matrix; rnum++) {
+  for (rnum_t rnum = 1 ;rnum <= top_of_matrix; rnum++) {
     bool decker = FALSE;
 
     // Paydara resets at midnight

@@ -7618,36 +7618,30 @@ void collate_host_entrances() {
 
   // Find exits and add to respective entrance lists
   rnum_t dest_rnum = -1;
-  struct entrance_data *entrance = NULL;
+
+  // The real host "source" will be added as an entrance to "dest" (if dest is real)
+  #define ADD_NEW_ENTRANCE_IF_EXISTS(dest_vnum, source_rnum) { \
+    if ((dest_rnum = real_host(dest_vnum)) >= 0) { \
+      struct entrance_data *entrance = new entrance_data; \
+      entrance->host = &matrix[source_rnum]; \
+      entrance->next = matrix[dest_rnum].entrance; \
+      matrix[dest_rnum].entrance = entrance; \
+    } \
+  }
+
   for (rnum_t source_rnum = 0; source_rnum <= top_of_matrix; source_rnum++) {
+    // Source is an entrance to its exit destination(s)
     for (struct exit_data *exit = matrix[source_rnum].exit; exit; exit = exit->next) {
-      dest_rnum = real_host(exit->host);
-      if (dest_rnum >= 0) {
-        entrance = new entrance_data;
-        entrance->host = &matrix[source_rnum];
-        entrance->next = matrix[dest_rnum].entrance;
-        matrix[dest_rnum].entrance = entrance;
-      }
+      ADD_NEW_ENTRANCE_IF_EXISTS(exit->host, source_rnum);
     }
 
-    // Parent is also an entrance
-    dest_rnum = real_host(matrix[source_rnum].parent);
-    if (dest_rnum >= 0) {
-      entrance = new entrance_data;
-      entrance->host = &matrix[source_rnum];
-      entrance->next = matrix[dest_rnum].entrance;
-      matrix[dest_rnum].entrance = entrance;
-    }
+    // Source is also an entrance to its parent (e.g., logon LTG)
+    ADD_NEW_ENTRANCE_IF_EXISTS(matrix[source_rnum].parent, source_rnum);
 
-    // Subsystem trapdoors are also entrances
+    // Source is also an entrance to its trapdoor destination(s)
     for (int sub = ACIFS_ACCESS; sub < NUM_ACIFS; sub++) {
-      dest_rnum = real_host(matrix[source_rnum].stats[sub][MTX_STAT_TRAPDOOR]);
-      if (dest_rnum >= 0) {
-        entrance = new entrance_data;
-        entrance->host = &matrix[source_rnum];
-        entrance->next = matrix[dest_rnum].entrance;
-        matrix[dest_rnum].entrance = entrance;
-      }
+      ADD_NEW_ENTRANCE_IF_EXISTS(matrix[source_rnum].stats[sub][MTX_STAT_TRAPDOOR], source_rnum);
     }
   }
+  #undef ADD_NEW_ENTRANCE_IF_EXISTS
 }
