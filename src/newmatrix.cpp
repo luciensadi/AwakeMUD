@@ -1729,7 +1729,7 @@ ACMD(do_logon)
 
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   if (!str_cmp(argument, "LTG")) {
-    // Parent is not real, or parent is not LTG/RTG
+    // Parent is not real, or parent is not LTG/PLTG
     // BUG: && should be ||, but fixing this may prevent backing out of hosts
     // I.e., fixing this would mean we also have to audit every host for backlinks
     if ( ((target_host = real_host(matrix[PERSONA->in_host].parent)) <= 0)
@@ -2956,7 +2956,7 @@ void reset_host_paydata(rnum_t rnum) {
 void matrix_update()
 {
   PERF_PROF_SCOPE(pr_, __func__);
-  for (rnum_t rnum = 1 ;rnum <= top_of_matrix; rnum++) {
+  for (rnum_t rnum = 1; rnum <= top_of_matrix; rnum++) {
     bool decker = FALSE;
     struct matrix_icon *nexticon;
     if (HOST.reset) {
@@ -3083,7 +3083,7 @@ void matrix_hour_update()
 {
   PERF_PROF_SCOPE(pr_, __func__);
   extern struct time_info_data time_info;
-  for (rnum_t rnum = 1 ;rnum <= top_of_matrix; rnum++) {
+  for (rnum_t rnum = 1; rnum <= top_of_matrix; rnum++) {
     bool decker = FALSE;
 
     // Paydara resets at midnight
