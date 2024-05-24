@@ -769,8 +769,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       power -= targ->decker->hardening;
     else
       for (soft = targ->decker->software; soft; soft = soft->next_content)
-        if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR)
+        if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR) {
           power -= GET_OBJ_VAL(soft, 1);
+          break;
+        }
     bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
     GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
     if (!targ->decker->ras)
