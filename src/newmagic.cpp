@@ -1416,6 +1416,7 @@ int resist_spell(struct char_data *ch, int spell, int force, int sub)
   }
 
   if (GET_FOCI(ch) > 0) {
+    int max_spell_def = 0;    
     for (int wearslot = 0; wearslot < NUM_WEARS; wearslot++) {
       struct obj_data *eq = GET_EQ(ch, wearslot);
       if (eq
@@ -1423,12 +1424,11 @@ int resist_spell(struct char_data *ch, int spell, int force, int sub)
           && GET_FOCUS_TYPE(eq) == FOCI_SPELL_DEFENSE)
       {
         if (focus_is_usable_by_ch(eq, ch) && GET_FOCUS_ACTIVATED(eq)) {
-          skill += GET_FOCUS_FORCE(eq);
-          snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Using spell defense focus %s (%ld) for +%d skill.\r\n",
+          max_spell_def = MAX(max_spell_def, GET_FOCUS_FORCE(eq));
+          snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Found spell defense focus %s (%ld) with rating +%d.\r\n",
                    GET_OBJ_NAME(eq),
                    GET_OBJ_VNUM(eq),
                    GET_FOCUS_FORCE(eq));
-          break;
         } else {
           snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Skipping spell defense focus %s (%ld): %s, %s\r\n",
                    GET_OBJ_NAME(eq),
@@ -1439,6 +1439,9 @@ int resist_spell(struct char_data *ch, int spell, int force, int sub)
         }
       }
     }
+    skill += max_spell_def;
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Using best spell defense focus for +%d skill.\r\n",
+             max_spell_def);
   }
 
   skill += GET_SDEFENSE(ch);
