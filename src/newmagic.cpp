@@ -1954,7 +1954,8 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
       // fall through
     case SPELL_HEAL:
       {
-        if (AFF_FLAGGED(vict, AFF_HEALED)) {
+        // House rule: don't limit heals if the victim is still mortally wounded.
+        if (AFF_FLAGGED(vict, AFF_HEALED) && GET_PHYSICAL(vict) >= 100) {
           send_to_char(ch, "%s has been healed too recently for this spell.\r\n", GET_NAME(vict));
           return;
         }
