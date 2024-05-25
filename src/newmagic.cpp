@@ -249,7 +249,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
   } else if (GET_TOTEM(ch) == TOTEM_SCORPION && (time_info.hours > 6 && time_info.hours < 19)) {
     target += 2;
   } else if (GET_TOTEM(ch) == TOTEM_SPIDER && OUTSIDE(ch)) {
-    target += 2;
+    target += 1;  // MitS 157: +2 in the open, away from immediate shelter (which we can't check for)
   }
 
   if (action == SPELLCASTING)
