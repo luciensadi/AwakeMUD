@@ -1428,6 +1428,7 @@ int resist_spell(struct char_data *ch, int spell, int force, int sub)
                    GET_OBJ_NAME(eq),
                    GET_OBJ_VNUM(eq),
                    GET_FOCUS_FORCE(eq));
+          break;
         } else {
           snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Skipping spell defense focus %s (%ld): %s, %s\r\n",
                    GET_OBJ_NAME(eq),

@@ -225,6 +225,7 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
         if (focus_is_usable_by_ch(eq, ch) && GET_FOCUS_ACTIVATED(eq)) {
           dice += GET_FOCUS_FORCE(eq);
           buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "FocusDefense", GET_FOCUS_FORCE(eq));
+          break;
         }
       }
     }
