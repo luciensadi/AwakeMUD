@@ -2430,23 +2430,31 @@ void extract_veh(struct veh_data * veh)
 
   // Find the online owner of the vehicle for future modifications and notifications.
 
-
-  if (veh->prev_sub) {
-    // If there is a prior entry in the subscriber doubly-linked list, just strip us out.
+  // If there is a prior entry in the subscriber doubly-linked list, just strip us out.
+  if (veh->prev_sub)
     veh->prev_sub->next_sub = veh->next_sub;
-  } else {
-    // Veh is the list head. Look for an online owner– they need their list's head updated to point to our next_sub value.
-    for (struct char_data *owner = character_list; owner; owner = owner->next_in_character_list) {
-      if (owner->char_specials.subscribe == veh) {
-        owner->char_specials.subscribe = veh->next_sub;
-        break;
-      }
-    }
-  }
 
   // If there's a vehicle after us in the list, make sure its prev reflects our prev.
   if (veh->next_sub)
     veh->next_sub->prev_sub = veh->prev_sub;
+
+  // Look for an online owner– they need their list's head updated to point to our next_sub value.
+  if (veh->owner) {
+    bool removed_sub = FALSE;
+    for (struct char_data *owner = character_list; owner; owner = owner->next_in_character_list) {
+      if (owner->char_specials.subscribe == veh) {
+        if (veh->prev_sub) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Found veh with prev_sub that was the head of a character's subscriber linked list!");
+        }
+
+        if (removed_sub) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Found veh in more than one character's subscriber linked list!");
+        }
+        owner->char_specials.subscribe = veh->next_sub;
+        removed_sub = TRUE;
+      }
+    }
+  }
 
   // If any vehicles are inside, drop them where the vehicle is.
   struct veh_data *temp = NULL;
