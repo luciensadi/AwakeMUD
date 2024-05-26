@@ -182,6 +182,10 @@ void string_add(struct descriptor_data *d, char *str)
     *str = '\0';
   else if (*str == '$') {
     if ((detected_abort = !str_cmp(str, "$abort"))) {
+      if (d->mail_to >= BOARD_MAGIC) {
+        SEND_TO_Q("Sorry, board posts can't be aborted.\r\n", d);
+        return;
+      }
       SEND_TO_Q("Aborted.\r\n", d);
       d->mail_to = 0;
       DELETE_D_STR_IF_EXTANT(d);

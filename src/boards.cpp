@@ -216,50 +216,47 @@ void Board_write_message(int board_type, struct obj_data *terminal,
   time_t ct;
   char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
 
-  if (!access_level(ch, WRITE_LVL(board_type)))
-  {
-    send_to_char(ch, "You do not have the qualifications to post on the %s.\r\n",
-                 fname(terminal->text.keywords));
-    return;
-  }
-  /* Prevent Astral beings from writing to boards */
-  if( IS_ASTRAL(ch))
-  {
-    send_to_char("An astral being cannot use mundane items.\n\r",ch);
-    return;
-  }
-  if (num_of_msgs[board_type] >= MAX_BOARD_MESSAGES)
-    for (i = 0; i < num_of_msgs[board_type]; i++)
+  // Level restriction.
+  FAILURE_CASE_PRINTF(!access_level(ch, WRITE_LVL(board_type)), "You do not have the qualifications to post on the %s.", fname(terminal->text.keywords));
+  
+  // Prevent Astral beings from writing to boards
+  FAILURE_CASE(IS_ASTRAL(ch), "Your fingers phase right through the keys.");
+
+  // NPCs too, I haven't tested them and don't want to spend the brainpower.
+  FAILURE_CASE(IS_NPC(ch), "NPCs can't write on boards.");
+
+  // Auto-trim board messages that exceed the max, targeting ones by non-staff first.
+  if (num_of_msgs[board_type] >= MAX_BOARD_MESSAGES) {
+    for (i = 0; i < num_of_msgs[board_type]; i++) {
       if (MSG_LEVEL(board_type, i) < LVL_BUILDER)
       { /* <-- fixes annoyance. --Py */
         Board_delete_msg(board_type, i);
         break;
       }
+    }
+  }
 
-  if ((NEW_MSG_INDEX(board_type).slot_num = find_slot()) == -1)
-  {
-    send_to_char(ch, "The %s is malfunctioning - sorry.\r\n",
-                 fname(terminal->text.keywords));
-    log("SYSERR: Board: failed to find empty slot on write.");
+  // No slot found (when does this happen?)
+  if ((NEW_MSG_INDEX(board_type).slot_num = find_slot()) == -1) {
+    send_to_char(ch, "The %s is malfunctioning - sorry. ^L(stanza 1)^n\r\n", fname(terminal->text.keywords));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Board %s: failed to find empty slot on write.", GET_OBJ_NAME(terminal));
     return;
   }
 
-  if (num_of_msgs[board_type] >= MAX_BOARD_MESSAGES)
-  {
-    send_to_char(ch, "The %s is full right now.\r\n",
-                 fname(terminal->text.keywords));
+  // Board is full.
+  if (num_of_msgs[board_type] >= MAX_BOARD_MESSAGES) {
+    send_to_char(ch, "The %s is full right now.\r\n", fname(terminal->text.keywords));
     msg_storage_taken[NEW_MSG_INDEX(board_type).slot_num] = 0;
     return;
   }
+
   /* skip blanks */
   skip_spaces(&arg);
   delete_doubledollar(arg);
 
-  if (!*arg)
-  {
-    send_to_char("We must have a headline!\r\n", ch);
-    return;
-  }
+  // Correct lack of title.
+  FAILURE_CASE(!*arg, "Syntax: ^WWRITE <the title of your post>^n");
+
   ct = time(0);
   struct tm *timeinfo = localtime(&ct);
 
@@ -270,27 +267,27 @@ void Board_write_message(int board_type, struct obj_data *terminal,
   tmstr = (char *) asctime(timeinfo);
   *(tmstr + strlen(tmstr) - 1) = '\0';
 
+  // Compose the name. This lets us force it to maintain spacing later without making the parens weird.
   if (IS_NPC(ch))
     snprintf(buf2, sizeof(buf2), "(%s)", GET_NAME(ch));
   else
     snprintf(buf2, sizeof(buf2), "(%s)", GET_CHAR_NAME(ch));
-  // snprintf(buf, sizeof(buf), "%6.10s %-12s :: %s", tmstr, buf2, arg);
   snprintf(buf, sizeof(buf), "%s %-12s :: %s", formatted_time, buf2, arg);
   len = strlen(buf) + 1;
-  if (!(NEW_MSG_INDEX(board_type).heading = new char[len]))
-  {
-    send_to_char(ch, "The %s is malfunctioning - sorry.\r\n",
-                 fname(terminal->text.keywords));
+
+  if (!(NEW_MSG_INDEX(board_type).heading = new char[len])) {
+    send_to_char(ch, "The %s is malfunctioning - sorry. ^L(stanza 2)^n\r\n", fname(terminal->text.keywords));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Board %s: failed to allocate new char[] for heading.", GET_OBJ_NAME(terminal));
     msg_storage_taken[NEW_MSG_INDEX(board_type).slot_num] = 0;
     return;
   }
+
   strlcpy(NEW_MSG_INDEX(board_type).heading, buf, len);
   NEW_MSG_INDEX(board_type).heading[len - 1] = '\0';
   NEW_MSG_INDEX(board_type).level = GET_LEVEL(ch);
 
   send_to_char("Type your message.  Terminate with a @ on a new line.\r\n\r\n", ch);
-  snprintf(buf2, sizeof(buf2), "$n starts to type a file into the %s.",
-          fname(terminal->text.keywords));
+  snprintf(buf2, sizeof(buf2), "$n starts to type a file into the %s.", fname(terminal->text.keywords));
   act(buf2, TRUE, ch, 0, 0, TO_ROOM);
 
   if (!IS_NPC(ch))
