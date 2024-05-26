@@ -2073,7 +2073,7 @@ void process_sauteurs_plane(void)
 #ifdef USE_PRIVATE_CE_WORLD
 #define RM_CAS_PLANE             8892
 #define RM_NORFOLK_INTL_AIRPORT  98000
-#define RM_PAINE_TO_CAS_AIRFIELD 8825
+#define RM_PAINE_TO_CAS_AIRFIELD 8898
 #else
 #define RM_CAS_PLANE             15
 #define RM_NORFOLK_INTL_AIRPORT  8897
