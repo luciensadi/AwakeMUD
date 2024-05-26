@@ -581,4 +581,9 @@ void UnicodeAdd( char **apString, int aValue );
 #define NEW_ENV_SEND 1
 #define NEW_ENV_INFO 2
 
+#define NEW_ENV_VAR     0
+#define NEW_ENV_VALUE   1
+#define NEW_ENV_ESC     2
+#define NEW_ENV_USERVAR 3
+
 #endif /* PROTOCOL_H */

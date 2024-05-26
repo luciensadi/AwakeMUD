@@ -2046,7 +2046,7 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
       {
         PROTO_DEBUG_MSG("Received IAC WILL NEW-ENVIRON from client, requesting IPADDRESS.");
         // IAC SB NEW-ENVIRON SEND VAR "IPADDRESS" IAC SE
-        Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, SEND, NEW_ENV_VAR, 'I', 'P', 'A', 'D', 'D', 'R', 'E', 'S', 'S', (char)IAC, (char)SE });
+        Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, NEW_ENV_USERVAR, 'I', 'P', 'A', 'D', 'D', 'R', 'E', 'S', 'S', (char)IAC, (char)SE, 0 });
       }
       else if ( aCmd == (char)WONT )
       {
