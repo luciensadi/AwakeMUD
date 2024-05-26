@@ -1983,12 +1983,12 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
           if (success < 1) {
             send_to_char(FAILED_CAST, ch);
           } else {
-            if (!IS_NPC(vict))
-              AFF_FLAGS(vict).SetBit(AFF_HEALED);
             send_to_char("A warm feeling floods your body.\r\n", vict);
             act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
             direct_sustain = create_sustained(ch, vict, spell, force, 0, boxes_healed, drain);
             update_pos(vict);
+            if (!IS_NPC(vict) && GET_POS(vict) > POS_MORTALLYW)
+              AFF_FLAGS(vict).SetBit(AFF_HEALED);
           }
         }
 
