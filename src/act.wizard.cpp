@@ -4977,6 +4977,7 @@ ACMD(do_show)
         send_to_char(ch, "[^c%6d^n]: Rating ^c%2d^n @ %s^n.\r\n", GET_ROOM_VNUM(room), GET_BACKGROUND_COUNT(room), GET_ROOM_NAME(room));
       }
     }
+    break;
   case 31:
     send_to_char("The following non-key items are used as keys for at least one door in a connected zone:\r\n", ch);
     {
