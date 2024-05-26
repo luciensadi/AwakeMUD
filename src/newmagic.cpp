@@ -249,7 +249,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
   } else if (GET_TOTEM(ch) == TOTEM_SCORPION && (time_info.hours > 6 && time_info.hours < 19)) {
     target += 2;
   } else if (GET_TOTEM(ch) == TOTEM_SPIDER && OUTSIDE(ch)) {
-    target++;
+    target += 1;  // MitS 157: +2 in the open, away from immediate shelter (which we can't check for)
   }
 
   if (action == SPELLCASTING)
@@ -1416,6 +1416,7 @@ int resist_spell(struct char_data *ch, int spell, int force, int sub)
   }
 
   if (GET_FOCI(ch) > 0) {
+    int max_spell_def = 0;    
     for (int wearslot = 0; wearslot < NUM_WEARS; wearslot++) {
       struct obj_data *eq = GET_EQ(ch, wearslot);
       if (eq
@@ -1423,8 +1424,8 @@ int resist_spell(struct char_data *ch, int spell, int force, int sub)
           && GET_FOCUS_TYPE(eq) == FOCI_SPELL_DEFENSE)
       {
         if (focus_is_usable_by_ch(eq, ch) && GET_FOCUS_ACTIVATED(eq)) {
-          skill += GET_FOCUS_FORCE(eq);
-          snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Using spell defense focus %s (%ld) for +%d skill.\r\n",
+          max_spell_def = MAX(max_spell_def, GET_FOCUS_FORCE(eq));
+          snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Found spell defense focus %s (%ld) with rating +%d.\r\n",
                    GET_OBJ_NAME(eq),
                    GET_OBJ_VNUM(eq),
                    GET_FOCUS_FORCE(eq));
@@ -1438,6 +1439,9 @@ int resist_spell(struct char_data *ch, int spell, int force, int sub)
         }
       }
     }
+    skill += max_spell_def;
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " - Using best spell defense focus for +%d skill.\r\n",
+             max_spell_def);
   }
 
   skill += GET_SDEFENSE(ch);
@@ -1950,7 +1954,8 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
       // fall through
     case SPELL_HEAL:
       {
-        if (AFF_FLAGGED(vict, AFF_HEALED)) {
+        // House rule: don't limit heals if the victim is still mortally wounded.
+        if (AFF_FLAGGED(vict, AFF_HEALED) && GET_PHYSICAL(vict) >= 100) {
           send_to_char(ch, "%s has been healed too recently for this spell.\r\n", GET_NAME(vict));
           return;
         }
@@ -5660,11 +5665,15 @@ ACMD(do_order)
     }
     if (spirit->services < 1 && order != SERV_LEAVE) {
       send_to_char(ch, "The %s no longer listens to you.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+      send_to_char(ch, "^[F222](OOC: You should RELEASE your %s since they don't owe you any more services.)^n\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
     }
     ((*services[order].func) (ch, mob, spirit, buf2));
-    if (order != SERV_LEAVE)
-      elemental_fulfilled_services(ch, mob, spirit);
+
+    // This also extracts nature spirits and thus immediately ends open ended powers such as conceal, confusion, etc.
+    // Easier to just require the conjurer to manually release an elemental/spirit that has 0 services remaining.
+    // if (order != SERV_LEAVE)
+    //   elemental_fulfilled_services(ch, mob, spirit);
   }
 }
 

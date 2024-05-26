@@ -5,6 +5,8 @@
 #include "db.hpp"
 #include "config.hpp"
 
+extern bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
+
 void send_npc_newly_alarmed_message(struct char_data *npc, struct char_data *vict);
 
 // Helper function for remove_ch_from_pc_invis_resistance_records().
@@ -211,6 +213,23 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
       dice += GET_POWER(ch, ADEPT_MAGIC_RESISTANCE);
       buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "MagicResist", GET_POWER(ch, ADEPT_MAGIC_RESISTANCE));
     }
+  }
+
+  if (GET_FOCI(ch) > 0) {
+    int max_spell_def = 0;
+    for (int wearslot = 0; wearslot < NUM_WEARS; wearslot++) {
+      struct obj_data *eq = GET_EQ(ch, wearslot);
+      if (eq
+          && GET_OBJ_TYPE(eq) == ITEM_FOCUS
+          && GET_FOCUS_TYPE(eq) == FOCI_SPELL_DEFENSE)
+      {
+        if (focus_is_usable_by_ch(eq, ch) && GET_FOCUS_ACTIVATED(eq)) {
+          max_spell_def = MAX(max_spell_def, GET_FOCUS_FORCE(eq));
+        }
+      }
+    }
+    dice += max_spell_def;
+    buf_mod(resistance_test_rbuf, sizeof(resistance_test_rbuf), "FocusDefense", max_spell_def);
   }
 
   int magic_pool_dice = GET_SDEFENSE(ch) + GET_REFLECT(ch);
