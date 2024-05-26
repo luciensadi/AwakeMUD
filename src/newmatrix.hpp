@@ -3,11 +3,12 @@
 
 #include "bitfield.hpp"
 
-#define ACCESS	0
-#define CONTROL	1
-#define INDEX	2
-#define FILES	3
-#define SLAVE	4
+#define ACIFS_ACCESS	0
+#define ACIFS_CONTROL	1
+#define ACIFS_INDEX	2
+#define ACIFS_FILES	3
+#define ACIFS_SLAVE	4
+#define NUM_ACIFS 5
 
 #define MAX_CUSTOM_MPCP_RATING 12
 
@@ -74,7 +75,6 @@ struct host_data {
   int shutdown;
   int shutdown_success;
   int shutdown_mpcp;
-  bool payreset;
 
 #ifdef USE_DEBUG_CANARIES
   int canary;
@@ -84,12 +84,13 @@ struct host_data {
   struct matrix_icon *icons;
   struct matrix_icon *fighting;
   struct exit_data *exit;
+  struct entrance_data *entrance;
   struct obj_data *file;
   host_data():
     name(NULL), keywords(NULL), desc(NULL), shutdown_start(NULL), shutdown_stop(NULL),
     type(0), reset(0), undiscovered_paydata(0), ic_bound_paydata(0), alert(0), pass(0),
-    shutdown(0), shutdown_success(0), shutdown_mpcp(0), payreset(TRUE), trigger(NULL),
-    icons(NULL), fighting(NULL), exit(NULL), file(NULL)
+    shutdown(0), shutdown_success(0), shutdown_mpcp(0), trigger(NULL),
+    icons(NULL), fighting(NULL), exit(NULL), entrance(NULL), file(NULL)
   {
 #ifdef USE_DEBUG_CANARIES
     canary = CANARY_VALUE;
@@ -115,6 +116,17 @@ struct exit_data {
     canary = CANARY_VALUE;
 #endif
   }
+};
+
+struct entrance_data {
+  // Since this points to the actual host, this MUST be reset/repopulated
+  // any time host memory locations can change (on boot, after hedit, ?).
+  struct host_data *host;
+  struct entrance_data *next;
+
+  entrance_data():
+    host(NULL), next(NULL)
+  {}
 };
 
 struct trigger_step {

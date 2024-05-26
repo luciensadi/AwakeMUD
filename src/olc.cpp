@@ -2243,7 +2243,7 @@ ACMD(do_hedit)
     d->edit_host->shutdown_stop = str_dup("A deep echoing voice announces the shutdown has been aborted.\r\n");
 
     // Clamp stats to minimums.
-    for (int i = ACCESS; i <= SLAVE; i++)
+    for (int i = ACIFS_ACCESS; i < NUM_ACIFS; i++)
       d->edit_host->stats[i][0] = 8;
 
     d->edit_host->security = MTX_SECURITY_NOTSET;

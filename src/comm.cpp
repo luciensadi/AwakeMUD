@@ -163,6 +163,7 @@ void decide_combat_pool(void);
 int isbanned(char *hostname);
 void matrix_violence(void);
 void matrix_update(void);
+void matrix_hour_update(void);
 void another_minute(void);
 void weather_change(void);
 void process_regeneration(int half_hour);
@@ -1043,6 +1044,7 @@ void game_loop(int mother_desc)
 
     // Every MUD hour
     if (!(pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC))) {
+      matrix_hour_update();
       point_update();
       weather_change();
       if (time_info.hours == 17) {

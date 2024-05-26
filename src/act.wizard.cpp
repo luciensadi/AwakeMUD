@@ -1295,7 +1295,7 @@ void do_stat_host(struct char_data *ch, struct host_data *host)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Shutdown: [%2d] Successes: [%2d] MPCP: [%2d]\r\n", host->shutdown,
                host->shutdown_success, host->shutdown_mpcp);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Access: [^B%2ld^n] Control: [^B%2ld^n] Index: [^B%2ld^n] Files: [^B%2ld^n] Slave: [^B%2ld^n]\r\n",
-               host->stats[ACCESS][0], host->stats[CONTROL][0], host->stats[INDEX][0], host->stats[FILES][0], host->stats[SLAVE][0]);
+               host->stats[ACIFS_ACCESS][0], host->stats[ACIFS_CONTROL][0], host->stats[ACIFS_INDEX][0], host->stats[ACIFS_FILES][0], host->stats[ACIFS_SLAVE][0]);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Deckers Present: ^y");
   bool prev = FALSE;
   for (struct matrix_icon *icon = host->icons; icon; icon = icon->next_in_host)
