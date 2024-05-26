@@ -429,6 +429,7 @@ ACMD_DECLARE(do_wizwho);
 ACMD_DECLARE(do_wizutil);
 ACMD_DECLARE(do_zreset);
 ACMD_DECLARE(do_zone);
+ACMD_DECLARE(do_vclone);
 ACMD_DECLARE(do_vedit);
 ACMD_DECLARE(do_iedit);
 ACMD_DECLARE(do_iclone);
@@ -975,6 +976,7 @@ struct command_info cmd_info[] =
     { "users"      , POS_DEAD    , do_users    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
 
     { "valset"     , POS_DEAD    , do_valset   , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
+    { "vclone"     , POS_DEAD    , do_vclone   , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "vedit"      , POS_DEAD    , do_vedit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "version"    , POS_DEAD    , do_gen_ps   , 0, SCMD_VERSION, ALLOWS_IDLE_REWARD },
     { "vemote"     , POS_SLEEPING, do_new_echo , 0 , SCMD_VEMOTE, BLOCKS_IDLE_REWARD }, // was do_vemote

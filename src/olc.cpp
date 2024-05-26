@@ -766,6 +766,80 @@ ACMD(do_rdelete)
   send_to_char("Done.\r\n", ch);
 }
 
+ACMD(do_vclone)
+{
+
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+    return;
+  }
+
+  int arg1, arg2, veh_num1, veh_num2, counter, zone1 = -1, zone2 = -1;
+
+  two_arguments(argument, buf, buf1);
+
+  if (!*buf || !*buf1) {
+    send_to_char("Usage: vclone <old veh vnum> <new veh vnum>\r\n", ch);
+    return;
+  }
+  arg1 = atoi(buf);
+  arg2 = atoi(buf1);
+
+  veh_num1 = real_vehicle(arg1);
+  veh_num2 = real_vehicle(arg2);
+
+  if (veh_num1 < 0) {
+    send_to_char("Invalid vehicle number.\r\n", ch);
+    return;
+  }
+  if (veh_num2 > -1) {
+    send_to_char("You cannot clone over existing vehicles.\r\n", ch);
+    return;
+  }
+
+  for (counter = 0; counter <= top_of_zone_table; counter++) {
+    if (arg1 >= (zone_table[counter].number * 100) && arg1 <= zone_table[counter].top)
+      zone1 = counter;
+    if (arg2 >= (zone_table[counter].number * 100) && arg2 <= zone_table[counter].top)
+      zone2 = counter;
+  }
+
+  if (zone1 < 0 || zone2 < 0) {
+    send_to_char("That number is not part of any zone.\r\n", ch);
+    return;
+  }
+
+  REQUIRE_ZONE_EDIT_ACCESS(zone2);
+
+  // now for the fun part
+  // first duplicate the veh
+  struct veh_data *veh;
+  veh = Mem->GetVehicle();
+  //clear_vehect (veh);
+  *veh = veh_proto[veh_num1];
+
+  // copy the strings over
+  #define REPLICATE_STRING(stringname) if (veh_proto[veh_num1].stringname) { veh->stringname = str_dup(veh_proto[veh_num1].stringname); }
+  REPLICATE_STRING(name);
+  REPLICATE_STRING(description);
+  REPLICATE_STRING(short_description);
+  REPLICATE_STRING(long_description);
+  REPLICATE_STRING(inside_description);
+  REPLICATE_STRING(rear_description);
+  REPLICATE_STRING(defined_position);
+  REPLICATE_STRING(leave);
+  REPLICATE_STRING(arrive);
+  #undef REPLICATE_STRING
+
+  // now send em into editing mode real quick and confirm their action
+  STATE(ch->desc) = CON_VEDIT;
+  PLR_FLAGS(ch).SetBit(PLR_EDITING);
+  send_to_char("Are you sure you want to clone that vehicle?\r\n", ch);
+  ch->desc->edit_number = arg2; // the vnum
+  ch->desc->edit_veh = veh;
+  ch->desc->edit_mode = VEDIT_CONFIRM_SAVESTRING;
+}
+
 /*
  * the vedit ACMD function
  */
@@ -1103,7 +1177,6 @@ ACMD(do_iclone)
   ch->desc->edit_number = arg2; // the vnum
   ch->desc->edit_obj = obj;
   ch->desc->edit_mode = IEDIT_CONFIRM_SAVESTRING;
-
 }
 
 ACMD(do_idelete)
