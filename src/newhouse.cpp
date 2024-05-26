@@ -763,9 +763,14 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
     } else {
       owned_by_player = owner;
 #ifndef IS_BUILDPORT
+      // Owner can no longer hold a lease.
       if (!does_player_exist(owner) || player_is_dead_hardcore(owner)) {
-        // Unit's not valid.
         log_vfprintf(" ----- Owner %ld is not valid: Breaking lease. ", owner);
+        break_lease();
+      }
+      // Lease is expired.
+      else if (get_paid_until() < time(0)) {
+        log_vfprintf(" ----- Lease by %ld is not paid: Breaking lease. ", owner);
         break_lease();
       }
 #endif
@@ -1212,6 +1217,12 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
         break;
       }
 
+      if (owned_by_player != GET_IDNUM(ch)) {
+        send_to_char(ch, "Sorry, you can only use subsidy cards to pay for apartments you directly own. Trying with cash...\r\n", ch);
+        neophyte_card = NULL;
+        break;
+      }
+
       if (cost >= GET_SUBSIDY_CARD_VALUE(neophyte_card))
         cost -= GET_SUBSIDY_CARD_VALUE(neophyte_card);
       else
@@ -1223,7 +1234,7 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
   // If they can't cover it in cash, draw from bank.
   if (GET_NUYEN(ch) < cost) {
     if (GET_BANK(ch) >= cost) {
-      send_to_char("You arrange for a bank transfer to cover what you can't pay from your cash on hand.\r\n", ch);
+      send_to_char("You arrange for a bank transfer.\r\n", ch);
       lose_bank(ch, cost, NUYEN_OUTFLOW_HOUSING);
     } else {
       send_to_char(ch, "You don't have the %d nuyen required.\r\n", displayed_cost);
@@ -1245,14 +1256,37 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
   }
 
   if (!has_owner()) {
-    owned_by_player = GET_IDNUM(ch);
-    paid_until = time(0) + (SECS_PER_REAL_DAY*30);
-
     // We expect that there were no existing guests.
     if (!guests.empty()) {
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Newly-rented apartment %s already had guests! Wiping the list.", full_name);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Newly-rented apartment %s already had guests! Running break_lease().", full_name);
       guests.clear();
+      break_lease();
     }
+    else {
+      // We expect that it is empty.
+      for (auto &apt_room : rooms) {
+        struct room_data *room = apt_room->get_world_room();
+
+        if (!room) {
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s's %ld has no world room!", get_full_name(), apt_room->vnum);
+          continue;
+        }
+
+        if (room->people || room->contents || room->vehicles) {
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s did not have break_lease() run on it correctly! Running break_lease(). (ppl %s, obj %s, veh %s)",
+                          get_full_name(),
+                          room->people ? "Y" : "N",
+                          room->contents ? "Y" : "N",
+                          room->vehicles ? "Y" : "N");
+          // Run break_lease to clean it out and wipe everything.
+          break_lease();
+          break;
+        }
+      }
+    }
+
+    owned_by_player = GET_IDNUM(ch);
+    paid_until = time(0) + (SECS_PER_REAL_DAY*30);
   } 
   // Arrears extension requires setting a new lease timeout.
   else if (get_days_in_arrears() > 0) {
@@ -1728,28 +1762,15 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
 
   vnum = base_info["vnum"].get<vnum_t>();
 
-  if (base_info.find("decorated_name") != base_info.end()) {
-    decorated_name = str_dup(base_info["decorated_name"].get<std::string>().c_str());
-  } else {
-    decorated_name = NULL;
-  }
-
   rnum_t rnum = real_room(vnum);
   if (vnum < 0 || rnum < 0) {
     log_vfprintf("SYSERR: Invalid vnum %ld specified in %s.", vnum, filename.c_str());
     exit(1);
   }
 
-  // Read decoration from standalone file.
-  bf::ifstream ifs(base_path / "decoration.txt");
-  std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
-  ifs.close();
-  decoration = *(content.c_str()) ? str_dup(content.c_str()) : NULL;
-
-  log_vfprintf(" ----- Applying changes from %s to world...", filename.filename().c_str());
-
   struct room_data *room = &world[rnum];
 
+  // Sanity check for double apartment load.
   if (GET_APARTMENT(room) || GET_APARTMENT_SUBROOM(room)) {
     log_vfprintf("ERROR: Room %ld already had an apartment entry! Terminating.", GET_ROOM_VNUM(room));
     exit(1);
@@ -1760,11 +1781,28 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   room->apartment = apartment;
   storage_path = filename / "storage";
 
-  // If we have a valid lease, load storage contents.
-  if (apartment->get_paid_until() > time(0)) {
+  if (apartment->get_paid_until() >= time(0)) {
+    // Load decorated name.
+    if (base_info.find("decorated_name") != base_info.end()) {
+      decorated_name = str_dup(base_info["decorated_name"].get<std::string>().c_str());
+    } else {
+      decorated_name = NULL;
+    }
+
+    // Read decoration from standalone file.
+    bf::ifstream ifs(base_path / "decoration.txt");
+    std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+    ifs.close();
+    decoration = *(content.c_str()) ? str_dup(content.c_str()) : NULL;
+
+    log_vfprintf(" ----- Applying changes from %s to world...", filename.filename().c_str());
+
+    // Load storage.
     load_storage();
-  } else {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to load storage for %ld: Lease is expired.", GET_ROOM_VNUM(room));
+  }
+  else {
+    // Lease isn't valid, bail out.
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to load decoration and storage for %ld: Lease is expired.", GET_ROOM_VNUM(room));
     delete [] decoration;
     decoration = NULL;
     delete [] decorated_name;
