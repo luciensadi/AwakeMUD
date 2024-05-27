@@ -8099,12 +8099,14 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
 
   // On their person.
   int total_crap = count_objects_on_char(victim, total_value_of_money_items);
-  if (IS_SENATOR(viewer)) {
-    send_to_char(viewer, "%15s - Carrying / equipped / cyberware / bioware (%ld nuyen contents)\r\n",
-                 get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
-                 total_value_of_money_items);
-  } else {
-    send_to_char(viewer, "%15s - Carrying / equipped / cyberware / bioware\r\n", get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)));
+  if (viewer) {
+    if (IS_SENATOR(viewer)) {
+      send_to_char(viewer, "%15s - Carrying / equipped / cyberware / bioware (%ld nuyen contents)\r\n",
+                  get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                  total_value_of_money_items);
+    } else {
+      send_to_char(viewer, "%15s - Carrying / equipped / cyberware / bioware\r\n", get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)));
+    }
   }
 
   // Apartments.
@@ -8118,16 +8120,18 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
           crap_count += count_objects_in_room(room->get_world_room(), cash_value);
         }
 
-        if (IS_SENATOR(viewer)) {
-          send_to_char(viewer, "%15s - %s (vnum %ld, nuyen contents %ld)\r\n",
-                       get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
-                       apartment->get_full_name(),
-                       apartment->get_root_vnum(),
-                       cash_value);
-        } else {
-          send_to_char(viewer, "%15s - %s\r\n",
-                       get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
-                       apartment->get_full_name());
+        if (viewer) {
+          if (IS_SENATOR(viewer)) {
+            send_to_char(viewer, "%15s - %s (vnum %ld, nuyen contents %ld)\r\n",
+                        get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                        apartment->get_full_name(),
+                        apartment->get_root_vnum(),
+                        cash_value);
+          } else {
+            send_to_char(viewer, "%15s - %s\r\n",
+                        get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                        apartment->get_full_name());
+          }
         }
         
         total_crap += crap_count;
@@ -8143,16 +8147,18 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
     if (veh->owner == GET_IDNUM_EVEN_IF_PROJECTING(victim)) {
       int crap_count = count_objects_in_veh(veh, cash_value);
 
-      if (IS_SENATOR(viewer)) {
-        send_to_char(viewer, "%15s - %s (at %ld, nuyen contents %ld)\r\n",
-                     get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
-                     GET_VEH_NAME(veh),
-                     get_veh_in_room(veh) ? GET_ROOM_VNUM(get_veh_in_room(veh)) : -1,
-                     cash_value);
-      } else {
-        send_to_char(viewer, "%15s - %s\r\n",
-                     get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
-                     GET_VEH_NAME(veh));
+      if (viewer) {
+        if (IS_SENATOR(viewer)) {
+          send_to_char(viewer, "%15s - %s (at %ld, nuyen contents %ld)\r\n",
+                      get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                      GET_VEH_NAME(veh),
+                      get_veh_in_room(veh) ? GET_ROOM_VNUM(get_veh_in_room(veh)) : -1,
+                      cash_value);
+        } else {
+          send_to_char(viewer, "%15s - %s\r\n",
+                      get_crap_count_string(crap_count, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                      GET_VEH_NAME(veh));
+        }
       }
       
       total_crap += crap_count;
@@ -8161,15 +8167,37 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
   }
 
   // Total.
-  if (IS_SENATOR(viewer)) {
-    send_to_char(viewer, "Total: %s (%ld nuyen stored in credsticks etc).\r\n", 
-                 get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
-                 total_value_of_money_items);
-  } else {
-    send_to_char(viewer, "Total: %s.\r\n", get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)));
+  if (viewer) {
+    if (IS_SENATOR(viewer)) {
+      send_to_char(viewer, "Total: %s (%ld nuyen stored in credsticks etc).\r\n", 
+                  get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)),
+                  total_value_of_money_items);
+    } else {
+      send_to_char(viewer, "Total: %s.\r\n", get_crap_count_string(total_crap, "^n", PRF_FLAGGED(viewer, PRF_SCREENREADER)));
+    }
   }
 
   return total_crap;
+}
+
+// Iterate through all active connections and warn them if their crapcount is high.
+void send_crapcount_warnings() {
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    struct char_data *vict = d->original ? d->original : d->character;
+    if (d->idle_ticks < 60 && vict) {
+      int crap_count = crapcount_target(vict, NULL);
+
+      if (crap_count >= CRAP_COUNT_EXTREME) {
+        send_to_char(vict, "(OOC note): ^RYour total item count is excessively high at %d.^n\r\n"
+                           "Please sell or junk unwanted items. If you are unable to do so, staff will assist in reducing your item count.\r\n", crap_count);
+      } else if (crap_count >= CRAP_COUNT_VERY_HIGH) {
+        send_to_char(vict, "(OOC note): ^rYour total item count is very high at ^R%d^r.^n\r\n",
+                           "Please sell or junk unwanted items. If you'd like, staff can assist in reducing your item count.\r\n", crap_count);
+      } else if (crap_count >= CRAP_COUNT_HIGH) {
+        send_to_char(vict, "(OOC note): Your total item count is high at %d. Please consider selling or junking unwanted items to reduce game load.\r\n", crap_count);
+      }
+    }
+  }
 }
 
 ACMD(do_count) {
@@ -8181,7 +8209,8 @@ ACMD(do_count) {
                  "        ^WCOUNT ALL^n  (to count all your stuff across the game.)\r\n", ch);
     
     if (IS_SENATOR(ch)) {
-      send_to_char("        ^WCOUNT <online target>\r\n", ch);
+      send_to_char("        ^WCOUNT <online target>^n (count that target's things)\r\n", ch);
+      send_to_char("        ^WCOUNT *^n               (get aggregate counts for everyone online [SLOW])\r\n", ch);
     }
 
     return;
@@ -8197,6 +8226,24 @@ ACMD(do_count) {
 
   // Staff can run a count on a single person as well.
   if (IS_SENATOR(ch)) {
+    if (*argument == '*') {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "Sorry, for load reasons this is only available to game owners.");
+
+      int total_count = 0;
+
+      for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+        struct char_data *vict = d->original ? d->original : d->character;
+        if (vict) {
+          int crapcount_amt = crapcount_target(vict, NULL);
+          total_count += crapcount_amt;
+          send_to_char(ch, "%-24s: %s\r\n", GET_CHAR_NAME(vict), get_crap_count_string(crapcount_amt));
+        }
+      }
+      
+      send_to_char(ch, "Total count across all online PCs: %d\r\n", get_crap_count_string(total_count));
+      return;
+    }
+
     struct char_data *vict = get_player_vis(ch, argument, FALSE);
     if (vict) {
       send_to_char(ch, "Counting all of %s's stuff across the game...\r\n", GET_CHAR_NAME(vict));

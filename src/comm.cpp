@@ -1110,6 +1110,13 @@ void game_loop(int mother_desc)
       }
     }
 
+    // Every IRL hour.
+#ifdef SEND_CRAPCOUNT_WARNINGS
+    if (!(pulse % (PASSES_PER_SEC * SECS_PER_REAL_HOUR))) {
+      send_crapcount_warnings();
+    }
+#endif
+
     // By default, every IRL hour, but configurable in config.h.
     if (!(pulse % (PASSES_PER_SEC * SECS_PER_REAL_MIN * IDLE_NUYEN_MINUTES_BETWEEN_AWARDS))) {
       send_nuyen_rewards_to_pcs();
@@ -1119,21 +1126,15 @@ void game_loop(int mother_desc)
     if (!(pulse % (PASSES_PER_SEC * SECS_PER_REAL_DAY))) {
       warn_about_apartment_deletion();
 
-      /* Check if the MySQL connection is active, and if not, recreate it. */
-#ifdef DEBUG
-      unsigned long oldthread = mysql_thread_id(mysql);
-#endif
+      /* Check if the MySQL connection is active, and if not, recreate it. Only matters for long uptimes with no active players. */
       {
         PERF_PROF_SCOPE( pr_mysql_ping_, "mysql_ping");
+        unsigned long oldthread = mysql_thread_id(mysql);
         mysql_ping(mysql);
+        if (oldthread != mysql_thread_id(mysql)) {
+          log("MySQL connection was recreated by ping.");
+        }
       }
-#ifdef DEBUG
-      unsigned long newthread = mysql_thread_id(mysql);
-      if (oldthread != newthread) {
-        log("MySQL connection was recreated by ping.");
-      }
-#endif
-      /* End MySQL keepalive ping section. */
     }
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
@@ -2723,7 +2724,7 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
 
 void send_to_char(struct char_data * ch, const char * const messg, ...)
 {
-  if (!ch->desc || !messg)
+  if (!ch || !ch->desc || !messg)
     return;
 
   char internal_buffer[MAX_STRING_LENGTH];
@@ -2738,7 +2739,7 @@ void send_to_char(struct char_data * ch, const char * const messg, ...)
 
 void send_to_char(const char *messg, struct char_data *ch)
 {
-  if (ch->desc && messg)
+  if (ch && ch->desc && messg)
     SEND_TO_Q(messg, ch->desc);
 }
 
