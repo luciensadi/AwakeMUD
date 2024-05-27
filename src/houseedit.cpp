@@ -32,6 +32,11 @@ ACMD(do_houseedit) {
     FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
     FAILURE_CASE(str_cmp(func, "hurtmedaddy"), "To ^RBLOW AWAY ALL EXISTING APARTMENT COMPLEXES^n and create them fresh from old files, type HOUSEEDIT NUKEANDPAVE HURTMEDADDY.");
 
+#ifndef IS_BUILDPORT
+    send_to_char(ch, "This destructive command can only be done on the buildport.\r\n");
+    return;
+#endif
+
     houseedit_import_from_old_files(ch, HED_NUKEANDPAVE, NULL);
     return;
   }
@@ -39,6 +44,11 @@ ACMD(do_houseedit) {
   if (is_abbrev(mode, "import")) {
     // Destroy current room contents, then assign owners and storage contents from old files. You probably want to run this on the live port.
     FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
+
+#ifndef IS_BUILDPORT
+    send_to_char(ch, "This destructive command can only be done on the buildport. Did you mean HOUSEEDIT RELOAD to restore storage files only?\r\n");
+    return;
+#endif
 
     if (!str_cmp(func, "confirm")) {
       houseedit_import_from_old_files(ch, HED_IMPORT, NULL);
@@ -63,7 +73,7 @@ ACMD(do_houseedit) {
 
   if (is_abbrev(mode, "reload")) {
     // Reload the storage for the subroom you're currently standing in.
-    FAILURE_CASE(GET_LEVEL(ch) < LVL_EXECUTIVE, "You're not erudite enough to do that.");
+    FAILURE_CASE(GET_LEVEL(ch) < LVL_PRESIDENT, "You're not erudite enough to do that.");
     FAILURE_CASE(!ch->in_room || !GET_APARTMENT_SUBROOM(ch->in_room), "You must be standing in an apartment for that.");
 
     houseedit_reload(ch, func);
@@ -82,6 +92,10 @@ ACMD(do_houseedit) {
       houseedit_show_complex(ch, func_remainder);
       return;
     }
+
+#ifndef IS_BUILDPORT
+    send_to_char(ch, "^RWARNING: THIS IS NOT THE BUILDPORT. USE EXTREME CAUTION.^n\r\n");
+#endif
 
     // Create a new complex.
     if (is_abbrev(func, "create")) {
@@ -125,6 +139,28 @@ ACMD(do_houseedit) {
       return;
     }
 
+    // Set apartment lease info.
+    if (is_abbrev(func, "daysleft")) {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "Sorry, that function is owner-only.");
+
+      // Parse out the days. This comes before the apartment name.
+      char num[MAX_INPUT_LENGTH];
+      char *num_remainder = one_argument(func_remainder, num);
+
+      int parsed_num = atoi(num);
+
+      FAILURE_CASE(parsed_num == 0, "Syntax: HOUSEEDIT APARTMENT DAYSLEFT <days> <apartment name> (positive days: days, negative days: seconds [abs]) 0 is not a valid days quantity.");
+
+      time_t secs = (parsed_num < 0 ? abs(parsed_num) : parsed_num * SECS_PER_REAL_DAY);
+
+      houseedit_set_apartment_lease_length(ch, secs, num_remainder);
+      return;
+    }
+
+#ifndef IS_BUILDPORT
+    send_to_char(ch, "^RWARNING: THIS IS NOT THE BUILDPORT. USE EXTREME CAUTION.^n\r\n");
+#endif
+
     // Create a new apartment in the complex you're standing in, or the named one provided
     if (is_abbrev(func, "create")) {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
@@ -150,25 +186,7 @@ ACMD(do_houseedit) {
       return;
     }
 
-    // Set apartment lease info.
-    if (is_abbrev(func, "daysleft")) {
-      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "Sorry, that function is owner-only.");
-
-      // Parse out the days. This comes before the apartment name.
-      char num[MAX_INPUT_LENGTH];
-      char *num_remainder = one_argument(func_remainder, num);
-
-      int parsed_num = atoi(num);
-
-      FAILURE_CASE(parsed_num == 0, "Syntax: HOUSEEDIT APARTMENT DAYSLEFT <days> <apartment name> (positive days: days, negative days: seconds [abs]) 0 is not a valid days quantity.");
-
-      time_t secs = (parsed_num < 0 ? abs(parsed_num) : parsed_num * SECS_PER_REAL_DAY);
-
-      houseedit_set_apartment_lease_length(ch, secs, num_remainder);
-      return;
-    }
-
-    send_to_char("Valid modes are APARTMENT LIST / CREATE / DELETE / EDIT.\r\n", ch);
+    send_to_char("Valid modes are APARTMENT LIST / CREATE / DELETE / EDIT / DAYSLEFT.\r\n", ch);
     return;
   }
 
@@ -190,12 +208,14 @@ void houseedit_reload(struct char_data *ch, const char *filename) {
   if (!exists(new_path)) {
     send_to_char(ch, "There is no file at path '%s'.\r\n", new_path.string().c_str());
     return;
+  } else {
+    send_to_char(ch, "OK, using the file at path %s.\r\n", new_path.string().c_str());
   }
 
   // Log and load.
-  mudlog_vfprintf(ch, LOG_SYSLOG, "House reload for %s started by %s.", GET_APARTMENT_SUBROOM(ch->in_room)->get_full_name(), GET_CHAR_NAME(ch));
+  mudlog_vfprintf(ch, LOG_WIZLOG, "House reload for %s started by %s.", GET_APARTMENT_SUBROOM(ch->in_room)->get_full_name(), GET_CHAR_NAME(ch));
   GET_APARTMENT_SUBROOM(ch->in_room)->load_storage_from_specified_path(new_path);
-  mudlog("House reload completed.", ch, LOG_SYSLOG, TRUE);
+  mudlog_vfprintf(ch, LOG_WIZLOG, "House reload for %s completed.", GET_APARTMENT_SUBROOM(ch->in_room)->get_full_name());
 }
 
 // Load old house files, parse, and transfer to new format.
