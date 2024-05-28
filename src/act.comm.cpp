@@ -1209,12 +1209,12 @@ ACMD(do_gen_comm)
 
   // off/on toggles
   if (subcmd == SCMD_NEWBIE || subcmd == SCMD_OOC) {
-    if (!str_cmp(argument, "off")) {
+    if (!str_cmp(argument, "off") || !str_cmp(argument, "disable") || !str_cmp(argument, "mute")) {
       send_to_char(ch, "OK, your %s channel is now disabled. You can re-enable it with ^W%s ON^n.\r\n", com_msgs[subcmd][5], com_msgs[subcmd][6]);
       PRF_FLAGS(ch).SetBit(channels[subcmd]);
       return;
     }
-    else if (!str_cmp(argument, "on")) {
+    else if (!str_cmp(argument, "on") || !str_cmp(argument, "enable") || !str_cmp(argument, "unmute")) {
       send_to_char(ch, "OK, your %s channel is now enabled. You can disable it again with ^W%s OFF^n.\r\n", com_msgs[subcmd][5], com_msgs[subcmd][6]);
       PRF_FLAGS(ch).RemoveBit(channels[subcmd]);
       return;
