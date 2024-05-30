@@ -2659,6 +2659,11 @@ void load_zones(File &fl)
   while (fl.GetLine(buf, 256, FALSE) && *buf != '$')
     Z.num_cmds++;
 
+  if (Z.num_cmds < 4) {
+    fprintf(stderr, "FATAL ERROR: Zone file %s is malformed and missing the initial four lines required of a zone file.", fl.Filename());
+    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
+  }
+
   // subtract the first 4 lines
   Z.num_cmds -= 4;
 
