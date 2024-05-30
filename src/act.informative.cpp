@@ -8191,7 +8191,7 @@ void send_crapcount_warnings() {
         send_to_char(vict, "(OOC note): ^RYour total item count is excessively high at %d.^n\r\n"
                            "Please sell or junk unwanted items. If you are unable to do so, staff will assist in reducing your item count.\r\n", crap_count);
       } else if (crap_count >= CRAP_COUNT_VERY_HIGH) {
-        send_to_char(vict, "(OOC note): ^rYour total item count is very high at ^R%d^r.^n\r\n",
+        send_to_char(vict, "(OOC note): ^rYour total item count is very high at ^R%d^r.^n\r\n"
                            "Please sell or junk unwanted items. If you'd like, staff can assist in reducing your item count.\r\n", crap_count);
       } else if (crap_count >= CRAP_COUNT_HIGH) {
         send_to_char(vict, "(OOC note): Your total item count is high at %d. Please consider selling or junking unwanted items to reduce game load.\r\n", crap_count);
