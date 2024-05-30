@@ -960,6 +960,7 @@ ACMD(do_subscribe)
     return;
   }
   if (subcmd == SCMD_UNSUB) {
+    skip_spaces(&argument);
     if (!*argument || !isdigit(*argument)) {
       send_to_char("You need to supply a number from your subscriber list (e.g. ^WUNSUB 3^n).\r\n", ch);
       return;
