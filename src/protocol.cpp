@@ -2172,7 +2172,7 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
         // We receive it to this switch case as (IS VAR "IPADDRESS" VAL "the ip").
         size_t required_min_len = 3 /* telnet flags */ + 9 /* strlen("IPADDRESS") */ + 7 /* strlen of absolute smallest IP, 1.1.1.1 */;
         if (aSize >= required_min_len) {
-          if (apData[0] == (char)NEW_ENV_IS && apData[1] == (char)NEW_ENV_VAR) {
+          if (apData[0] == (char)NEW_ENV_IS && (apData[1] == (char)NEW_ENV_VAR || apData[1] == (char)NEW_ENV_USERVAR)) {
             // Require that they've sent (IS VAR "IPADDRESS" VAL)
             char expected_input[] = { 'I', 'P', 'A', 'D', 'D', 'R', 'E', 'S', 'S', (char)NEW_ENV_VALUE, '\0' };
             if (!strncmp(apData, expected_input, strlen(expected_input))) {
@@ -2192,7 +2192,7 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
               PROTO_DEBUG_MSG("- Bailing out: Does not continue with 'IPADDRESS' VAL, instead is '%s'", writable);
             }
           } else {
-            PROTO_DEBUG_MSG("- Bailing out: Does not start with IS VAR.");
+            PROTO_DEBUG_MSG("- Bailing out: Does not start with IS (VAR|USERVAR), instead is %d %d", (int) apData[0], (int) apData[1]);
           }
         } else {
           PROTO_DEBUG_MSG("- Bailing out: Size %d is less than required.", aSize);
