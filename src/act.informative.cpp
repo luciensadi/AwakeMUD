@@ -8240,7 +8240,7 @@ ACMD(do_count) {
         }
       }
       
-      send_to_char(ch, "Total count across all online PCs: %d\r\n", get_crap_count_string(total_count));
+      send_to_char(ch, "Total count across all online PCs: %s\r\n", get_crap_count_string(total_count));
       return;
     }
 
