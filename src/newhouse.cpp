@@ -1026,15 +1026,22 @@ void Apartment::save_rooms() {
 
 /* Write lease data to <apartment name>/lease. */
 void Apartment::save_lease() {
-  json lease_data;
+  if (get_owner_id() == 0) {
+    if (bf::exists(base_directory / LEASE_INFO_FILE_NAME)) {
+      log_vfprintf("save_lease() called on empty apartment %s, so removing file", get_full_name());
+      bf::remove(base_directory / LEASE_INFO_FILE_NAME);
+    }
+  } else {
+    json lease_data;
 
-  lease_data["owner"] = get_owner_id();
-  lease_data["paid_until"] = paid_until;
-  lease_data["guests"] = guests;
+    lease_data["owner"] = get_owner_id();
+    lease_data["paid_until"] = paid_until;
+    lease_data["guests"] = guests;
 
-  bf::ofstream o(base_directory / LEASE_INFO_FILE_NAME);
-  o << std::setw(4) << lease_data << std::endl;
-  o.close();
+    bf::ofstream o(base_directory / LEASE_INFO_FILE_NAME);
+    o << std::setw(4) << lease_data << std::endl;
+    o.close();
+  }
 }
 
 /* Removes all characters from the apartment and dumps them in the atrium. */
