@@ -749,31 +749,36 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
 
   // Load lease info from <name>/lease.
   if (bf::exists(base_directory / LEASE_INFO_FILE_NAME)) {
-    log_vfprintf(" ---- Loading apartment lease data for %s.", name);
-    json base_info;
-    _json_parse_from_file(base_directory / LEASE_INFO_FILE_NAME, base_info);
-
-    paid_until = base_info["paid_until"].get<time_t>();
-    guests = base_info["guests"].get<std::vector<idnum_t>>();
-
-    idnum_t owner = base_info["owner"].get<idnum_t>();
-    if (owner < 0) {
-      // Negative numbers indicate pgroup ownership
-      owned_by_pgroup = Playergroup::find_pgroup(-1 * owner);
+    if (bf::file_size(base_directory / LEASE_INFO_FILE_NAME) == 0) {
+      log_vfprintf(" ---- Apartment lease file for %s exists but is empty. Removing.", name);
+      bf::remove(base_directory / LEASE_INFO_FILE_NAME);
     } else {
-      owned_by_player = owner;
-#ifndef IS_BUILDPORT
-      // Owner can no longer hold a lease.
-      if (!does_player_exist(owner) || player_is_dead_hardcore(owner)) {
-        log_vfprintf(" ----- Owner %ld is not valid: Breaking lease. ", owner);
-        break_lease();
+      log_vfprintf(" ---- Loading apartment lease data for %s.", name);
+      json base_info;
+      _json_parse_from_file(base_directory / LEASE_INFO_FILE_NAME, base_info);
+
+      paid_until = base_info["paid_until"].get<time_t>();
+      guests = base_info["guests"].get<std::vector<idnum_t>>();
+
+      idnum_t owner = base_info["owner"].get<idnum_t>();
+      if (owner < 0) {
+        // Negative numbers indicate pgroup ownership
+        owned_by_pgroup = Playergroup::find_pgroup(-1 * owner);
+      } else {
+        owned_by_player = owner;
+  #ifndef IS_BUILDPORT
+        // Owner can no longer hold a lease.
+        if (!does_player_exist(owner) || player_is_dead_hardcore(owner)) {
+          log_vfprintf(" ----- Owner %ld is not valid: Breaking lease. ", owner);
+          break_lease();
+        }
+        // Lease is expired.
+        else if (get_paid_until() < time(0)) {
+          log_vfprintf(" ----- Lease by %ld is not paid: Breaking lease. ", owner);
+          break_lease();
+        }
+  #endif
       }
-      // Lease is expired.
-      else if (get_paid_until() < time(0)) {
-        log_vfprintf(" ----- Lease by %ld is not paid: Breaking lease. ", owner);
-        break_lease();
-      }
-#endif
     }
   }
 
