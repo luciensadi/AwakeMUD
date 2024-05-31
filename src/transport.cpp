@@ -2082,8 +2082,8 @@ void process_sauteurs_plane(void)
 
 struct transport_type cas[2] =
   {
-    { 8892, NORTH, RM_NORFOLK_INTL_AIRPORT, SOUTH },
-    { 8892, NORTH, RM_PAINE_TO_CAS_AIRFIELD, SOUTH },
+    { RM_CAS_PLANE, NORTH, RM_NORFOLK_INTL_AIRPORT, SOUTH },
+    { RM_CAS_PLANE, NORTH, RM_PAINE_TO_CAS_AIRFIELD, SOUTH },
   };
 
 void cas_extend(int bus, int to, int room, int from)
@@ -2170,6 +2170,7 @@ void MonorailProcess(void)
   process_victoria_ferry();
   process_sugarloaf_ferry();
   process_sauteurs_plane();
+  process_cas_plane();
 }
 
 bool room_is_a_taxicab(vnum_t vnum) {

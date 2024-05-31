@@ -973,6 +973,7 @@ void assign_objects(void)
   ASSIGNOBJ(26104, toggled_voice_modulator);
   ASSIGNOBJ(14799, bank);
   ASSIGNOBJ(95839, trideo);
+  ASSIGNOBJ(98002, bank); // CAS ATM
 
   // Pluto's assigns
   ASSIGNOBJ(96521, pocket_sec);
