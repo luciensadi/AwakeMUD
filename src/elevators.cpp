@@ -265,6 +265,12 @@ void try_to_enter_elevator_car(struct char_data *ch) {
 
 // Pushes a call button, or pushes a panel button if you're inside.
 static bool push_elevator_button(struct room_data *called_from, rnum_t elevator_idx, rnum_t floor_idx, struct char_data *ch, const char *argument) {  
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received call to push_elevator_button(%s, %ld, %ld, NULL, %s) with NULL ch!",
+                    GET_ROOM_NAME(called_from), elevator_idx, floor_idx, argument);
+    return FALSE;
+  }
+
   if (ch->in_veh && !IS_RIGGING(ch)) {
     // Don't block people from pushing vehicles out the back.
     return FALSE;

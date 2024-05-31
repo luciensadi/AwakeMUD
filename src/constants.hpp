@@ -62,7 +62,7 @@ extern const char *short_where[];
 extern const char *veh_types[];
 extern struct mod_data mod_types[NUM_MODTYPES];
 extern const char *mod_name[NUM_MODS];
-extern const char *engine_types[6];
+extern const char *engine_types[NUM_ENGINE_TYPES];
 extern const char *veh_aff[];
 extern const char *veh_flag[];
 extern const char *jurisdictions[];

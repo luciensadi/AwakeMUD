@@ -799,11 +799,12 @@ ACMD(do_debug) {
 
       if (GET_OBJ_TYPE(obj) == ITEM_DRINKCON || GET_OBJ_TYPE(obj) == ITEM_FOUNTAIN) {
         if (GET_DRINKCON_LIQ_TYPE(obj) >= LIQ_EVERCLEAR) {
+          int old_liq_type = GET_DRINKCON_LIQ_TYPE(obj)++;
           snprintf(buf, sizeof(buf), "Converted '%s^g' (%ld) from %s to %s.",
                    GET_OBJ_NAME(obj),
                    GET_OBJ_VNUM(obj),
-                   drinks[GET_DRINKCON_LIQ_TYPE(obj)],
-                   drinks[++GET_DRINKCON_LIQ_TYPE(obj)]);
+                   drinks[old_liq_type],
+                   drinks[GET_DRINKCON_LIQ_TYPE(obj)]);
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
         }
       }

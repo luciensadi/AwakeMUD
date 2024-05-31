@@ -395,7 +395,7 @@ ACMD(do_tell)
 
 ACMD(do_reply)
 {
-  struct char_data *tch;
+  struct char_data *tch = NULL;
 
   skip_spaces(&argument);
 
