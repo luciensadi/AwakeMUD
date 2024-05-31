@@ -527,6 +527,13 @@ void boot_world(void)
     }
   }
 
+  for (int i = 0; i < NUM_JURISDICTIONS; i++) {
+    if (str_str(jurisdictions[i], MAX_FLAG_MARKER)) {
+      log("Error: You added another jurisdiction but didn't add it to jurisdictions in constants.cpp (or forgot a comma)!");
+      exit(ERROR_FLAG_CONSTANT_MISSING);
+    }
+  }
+
 #ifndef NOCRYPT
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {

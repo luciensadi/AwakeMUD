@@ -1943,6 +1943,7 @@ const char *jurisdictions[] =
     "Portland",
     "Caribbean",
     "Ocean",
+    "CAS",
     "\n"
   };
 

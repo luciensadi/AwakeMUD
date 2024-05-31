@@ -1283,7 +1283,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case ZEDIT_JURISDICTIONS:
     number = atoi(arg);
-    if (number < 0 || number > 3) {
+    if (number < 0 || number >= NUM_JURISDICTIONS) {
       send_to_char("Invalid choice.  Please enter from 0 to 1.\r\n", CH);
       send_to_char("Enter Jurisdiction: ", CH);
       return;
