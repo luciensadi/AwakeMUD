@@ -752,11 +752,10 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = ZEDIT_SECURITY;
       break;
     case '6':
-      send_to_char("0) Seattle\r\n"
-                   "1) Portland\r\n"
-                   "2) Caribbean\r\n"
-                   "3) Ocean\r\n"
-                   "Enter jurisdiction: ", CH);
+      for (int juri_idx = 0; juri_idx < NUM_JURISDICTIONS; juri_idx++) {
+        send_to_char(CH, "%d) %s\r\n", juri_idx, jurisdictions[juri_idx]);
+      }
+      send_to_char("Enter jurisdiction: ", CH);
       d->edit_mode = ZEDIT_JURISDICTIONS;
       break;
     case '7':
