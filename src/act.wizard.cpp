@@ -1362,6 +1362,10 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Source Book: '%s'\r\n", j->source_info);
   }
 
+  if (access_level(ch, LVL_PRESIDENT) && (j->dropped_by_char || j->dropped_by_host)) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Dropped by char %ld at host %s\r\n", j->dropped_by_char, j->dropped_by_host);
+  }
+
   sprinttype(GET_OBJ_TYPE(j), item_types, buf1, sizeof(buf1));
 
   if (GET_OBJ_RNUM(j) >= 0)
