@@ -2580,6 +2580,7 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
     clear_cyberdeck_part_pointer(obj);
   }
 
+  obj->dropped_by_char = 0;
   delete [] obj->dropped_by_host;
   obj->dropped_by_host = NULL;
 

@@ -7711,3 +7711,20 @@ struct room_data *get_jurisdiction_garage_room(int jurisdiction) {
 
   return &world[rnum];
 }
+
+void set_dropped_by_info(struct obj_data *obj, struct char_data *ch) {
+    if (!obj) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL obj to set_dropped_by_info(NULL, %s)", GET_CHAR_NAME(ch));
+      return;
+    }
+
+    if (!ch) {
+      obj->dropped_by_char = 0;
+      delete [] obj->dropped_by_host;
+      obj->dropped_by_host = NULL;
+    } else {
+      obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
+      delete [] obj->dropped_by_host;
+      obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : str_dup("<no desc>");
+    }
+  }

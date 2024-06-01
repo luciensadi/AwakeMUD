@@ -105,77 +105,75 @@ bool can_edit_zone(struct char_data *ch, rnum_t real_zone) {
 
 void write_index_file(const char *suffix)
 {
-  FILE *fp;
-  int i, found, j;
-
   if (*suffix == 'h')
     snprintf(buf, sizeof(buf), "world/mtx/index");
   else if ( *suffix == 'i')
     snprintf(buf, sizeof(buf), "world/mtx/index.ic");
   else
     snprintf(buf, sizeof(buf), "world/%s/index", suffix);
-  fp = fopen(buf, "w+");
 
-  for (i = 0; i <= top_of_zone_table; i++) {
-    found = 0;
+  FILE *fp = fopen(buf, "w+");
+
+  #define VNUM_IN_ZONE(vnum) (vnum >= (zone_table[zone_idx].number * 100) && vnum <= zone_table[zone_idx].top)
+  for (rnum_t zone_idx = 0; zone_idx <= top_of_zone_table; zone_idx++) {
     switch (*suffix) {
-    case 'm':
-      for (j = 0; !found && j <= top_of_mobt; j++)
-        if (MOB_VNUM_RNUM(j) >= (zone_table[i].number * 100) && MOB_VNUM_RNUM(j) <= zone_table[i].top) {
-          found = 1;
-          fprintf(fp, "%d.%s\n", zone_table[i].number, suffix);
-        }
-      break;
-    case 'v':
-      for (j = 0; !found && j <= top_of_veht; j++)
-        if (veh_index[j].vnum >= (zone_table[i].number * 100) && veh_index[j].vnum <= zone_table[i].top) {
-          found = 1;
-          fprintf(fp, "%d.%s\n", zone_table[i].number, suffix);
-        }
-      break;
-    case 'o':
-      for (j = 0; !found && j <= top_of_objt; j++)
-        if (OBJ_VNUM_RNUM(j) >= (zone_table[i].number * 100) && OBJ_VNUM_RNUM(j) <= zone_table[i].top) {
-          found = 1;
-          fprintf(fp, "%d.%s\n", zone_table[i].number, suffix);
-        }
-      break;
-    case 'w':
-      for (j = 0; !found && j <= top_of_world; j++)
-        if (world[j].number >= (zone_table[i].number * 100) && world[j].number <= zone_table[i].top) {
-          found = 1;
-          fprintf(fp, "%d.%s\n", zone_table[i].number, suffix);
-        }
-      break;
-    case 'h':
-      for (j = 0; !found && j <= top_of_matrix; j++)
-        if (matrix[j].vnum >= (zone_table[i].number * 100) && matrix[j].vnum <= zone_table[i].top) {
-          found = 1;
-          fprintf(fp, "%d.%s\n", zone_table[i].number, suffix);
-        }
-      break;
-    case 'i':
-      for (j = 0; !found && j <= top_of_ic; j++)
-        if (ic_index[j].vnum >= (zone_table[i].number * 100) && ic_index[j].vnum <= zone_table[i].top) {
-          found = 1;
-          fprintf(fp, "%d.%s\n", zone_table[i].number, suffix);
-        }
-      break;
-    case 's':
-      for (j = 0; !found && j <= top_of_shopt; j++)
-        if (shop_table[j].vnum >= (zone_table[i].number * 100) && shop_table[j].vnum <= zone_table[i].top) {
-          found = 1;
-          fprintf(fp, "%d.%s\n", zone_table[i].number, suffix);
-        }
-      break;
-    case 'z':
-      fprintf(fp, "%d.%s\n", zone_table[i].number, suffix);
-      break;
-    default:
-      mudlog("Incorrect suffix sent to write_index_file.", NULL, LOG_SYSLOG, TRUE);
-      fprintf(fp, "$\n");
-      fclose(fp);
-      return;
+      case 'm':
+        for (rnum_t tmp_idx = 0; tmp_idx <= top_of_mobt; tmp_idx++)
+          if (VNUM_IN_ZONE(mob_index[tmp_idx].vnum)) {
+            fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
+            break;
+          }
+        break;
+      case 'v':
+        for (rnum_t tmp_idx = 0; tmp_idx <= top_of_veht; tmp_idx++)
+          if (VNUM_IN_ZONE(veh_index[tmp_idx].vnum)) {
+            fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
+            break;
+          }
+        break;
+      case 'o':
+        for (rnum_t tmp_idx = 0; tmp_idx <= top_of_objt; tmp_idx++)
+          if (VNUM_IN_ZONE(obj_index[tmp_idx].vnum)) {
+            fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
+            break;
+          }
+        break;
+      case 'w':
+        for (rnum_t tmp_idx = 0; tmp_idx <= top_of_world; tmp_idx++)
+          if (VNUM_IN_ZONE(world[tmp_idx].number)) {
+            fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
+            break;
+          }
+        break;
+      case 'h':
+        for (rnum_t tmp_idx = 0; tmp_idx <= top_of_matrix; tmp_idx++)
+          if (VNUM_IN_ZONE(matrix[tmp_idx].vnum)) {
+            fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
+            break;
+          }
+        break;
+      case 'i':
+        for (rnum_t tmp_idx = 0; tmp_idx <= top_of_ic; tmp_idx++)
+          if (VNUM_IN_ZONE(ic_index[tmp_idx].vnum)) {
+            fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
+            break;
+          }
+        break;
+      case 's':
+        for (rnum_t tmp_idx = 0; tmp_idx <= top_of_shopt; tmp_idx++)
+          if (VNUM_IN_ZONE(shop_table[tmp_idx].vnum)) {
+            fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
+            break;
+          }
+        break;
+      case 'z':
+        fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
+        break;
+      default:
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "Incorrect suffix '%s' sent to write_index_file.", suffix);
+        fprintf(fp, "$\n");
+        fclose(fp);
+        return;
     }
   }
 

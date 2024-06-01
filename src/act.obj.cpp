@@ -209,8 +209,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
     act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
     act("$n puts $p in $P.", FALSE, ch, obj, cont, TO_ROOM);
 
-    obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
-    obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : str_dup("<no desc>");
+    set_dropped_by_info(obj, ch);
     return;
   }
 
@@ -239,8 +238,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
         delete [] representation;
       }
 
-      obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
-      obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : str_dup("<no desc>");
+      set_dropped_by_info(obj, ch);
     }
     return;
   }
@@ -298,8 +296,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
     delete [] representation;
   }
 
-  obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
-  obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : str_dup("<no desc>");
+  set_dropped_by_info(obj, ch);
 }
 
 void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
@@ -1016,16 +1013,9 @@ bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           mudlog(buf, ch, LOG_GRIDLOG, TRUE);
         }
         delete [] representation;
-
-        if (same_host_warning) {
-          obj->dropped_by_char = 0;
-
-          if (obj->dropped_by_host) {
-            delete [] obj->dropped_by_host;
-            obj->dropped_by_host = NULL;
-          }
-        }
       }
+
+      set_dropped_by_info(obj, NULL);
 
       if (GET_OBJ_TYPE(cont) == ITEM_QUIVER)
         GET_OBJ_VAL(cont, 2) = MAX(0, GET_OBJ_VAL(cont, 2) - 1);
@@ -1379,13 +1369,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj)
                         pname, 
                         obj->dropped_by_char,
                         GET_LEVEL(ch) < LVL_PRESIDENT ? obj->dropped_by_host : "<obscured>");
-        obj->dropped_by_char = 0;
         delete [] pname;
-      }
-
-      if (obj->dropped_by_host) {
-        delete [] obj->dropped_by_host;
-        obj->dropped_by_host = NULL;
       }
     } else if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
               || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) 
@@ -1395,6 +1379,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj)
       mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
     }
 
+    set_dropped_by_info(obj, NULL);
     delete [] representation;
   }  
 
@@ -1987,8 +1972,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
   act("$n drops $p.", TRUE, ch, obj, 0, TO_ROOM);
   affect_total(ch);
 
-  obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
-  obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : str_dup("<no desc>");
+  set_dropped_by_info(obj, ch);
 
   if (ch->in_veh)
   {
@@ -2258,8 +2242,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     delete [] representation;
   }
 
-  obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
-  obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : str_dup("<no desc>");
+  set_dropped_by_info(obj, ch);
 
   switch (mode)
   {
@@ -2603,8 +2586,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     else
       obj_to_veh(obj, vict->in_veh);
 
-    obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
-    obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : str_dup("<no desc>");
+    set_dropped_by_info(obj, ch);
   } else {
     // Log same-host handoffs.
     if (is_same_host(ch, vict)) {      
@@ -4793,8 +4775,7 @@ ACMD(do_holster)
   act("$n slips $p into $P.", FALSE, ch, obj, cont, TO_ROOM);
   GET_HOLSTER_READY_STATUS(cont) = 1;
 
-  obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
-  obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : str_dup("<no desc>");
+  set_dropped_by_info(obj, ch);
 
   // Remove last-holstered flag from all holsters.
   for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
