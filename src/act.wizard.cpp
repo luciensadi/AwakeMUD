@@ -336,6 +336,19 @@ ACMD(do_copyover)
   snprintf(buf, sizeof(buf), "Copyover initiated by %s", GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
+  log("COPYOVERLOG: Shifting flying folks to a runway.");
+  struct room_data *boneyard = &world[real_room(65505)];
+  struct room_data *airborne = &world[real_room(RM_AIRBORNE)];
+  if (boneyard && airborne) {
+    for (struct veh_data *aircraft = airborne->vehicles, *next_veh; aircraft; aircraft = next_veh) {
+      next_veh = aircraft->next_veh;
+      mudlog_vfprintf(aircraft->people, LOG_SYSLOG, "Transferring '%s' to Boneyard for copyover.", GET_VEH_NAME(aircraft));
+      veh_from_room(aircraft);
+      veh_to_room(aircraft, boneyard);
+      send_to_veh("Your vehicle has been safely transferred to the Boneyard.\r\n", aircraft, NULL, TRUE);
+    }
+  }
+
   log("COPYOVERLOG: Cleaning up repairman.");
   struct room_data *staff_workroom = &world[real_room(10000)];
   for (struct char_data *i = character_list; i; i = i->next_in_character_list) {

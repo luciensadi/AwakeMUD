@@ -2102,13 +2102,17 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   }
 
   if (!ch->in_room) {
-    send_to_char("Your mind is blasted by the eldritch horrors of the unknown void you're drifting in.\r\n", ch);
-    snprintf(buf, sizeof(buf), "SYSERR: %s tried to look at their room but is nowhere!", GET_CHAR_NAME(ch));
-    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    // They're neither in a vehicle nor room, whoops.
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s tried to look at their room but is nowhere! Sending to 0.", GET_CHAR_NAME(ch));
 
     // Emergency rescue attempt.
     char_to_room(ch, &world[0]);
-    return;
+    
+    if (!ch->in_room) {
+      // Something SERIOUSLY fucked up.
+      send_to_char("Your mind is blasted by the eldritch horrors of the unknown void you're drifting in.\r\n", ch);
+      return;
+    }
   }
 
   // Room title.
