@@ -188,6 +188,14 @@ struct room_data *get_jurisdiction_docwagon_room(int jurisdiction);
 struct room_data *get_jurisdiction_garage_room(int jurisdiction);
 void   set_dropped_by_info(struct obj_data *obj, struct char_data *ch);
 
+// Edit lock funcs.
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct zone_data *zone);
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct room_data *room);
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct obj_data *target);
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct veh_data *target);
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct host_data *target);
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct char_data *target);
+
 struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *caller, struct char_data *match_exclusion);
 void    find_or_load_ch_cleanup(struct char_data *ch);
 

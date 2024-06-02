@@ -72,7 +72,7 @@ void write_zone_to_disk(int vnum)
   // write it out!
   fprintf(fp, "#%d\n", vnum);
   fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, ZONE.name));
-  fprintf(fp, "%d %d %d %d %d %d %d\n", ZONE.top, ZONE.lifespan, ZONE.reset_mode, ZONE.security, ZONE.connected, ZONE.jurisdiction, ZONE.is_pghq);
+  fprintf(fp, "%d %d %d %d %d %d %d %d\n", ZONE.top, ZONE.lifespan, ZONE.reset_mode, ZONE.security, ZONE.connected, ZONE.jurisdiction, ZONE.is_pghq, ZONE.locked_to_non_editors);
   fprintf(fp, "%d %d %d %d %d\n", ZONE.editor_ids[0], ZONE.editor_ids[1],
           ZONE.editor_ids[2], ZONE.editor_ids[3], ZONE.editor_ids[4]);
   for (i = 0; i < ZONE.num_cmds; ++i) {
@@ -244,6 +244,9 @@ void zedit_disp_data_menu(struct descriptor_data *d)
     send_to_char(CH, "^G8^Y) ^WConnected: ^c%d^n\r\n", ZON->connected);
   }
   send_to_char(CH, "^G9^Y) ^WIs PGHQ: ^c%s^n\r\n", ZON->is_pghq ? "yes" : "no");
+  if (access_level(CH, LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS)) {
+    send_to_char(CH, "^GL^Y) ^WLocked to Non-Editors: ^c%s^n\r\n", ZON->locked_to_non_editors ? "TRUE" : "FALSE");
+  }
 
   send_to_char("^Gq^Y) ^WQuit\r\n^wEnter selection: ", CH);
 
@@ -777,6 +780,16 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     case '9':
       send_to_char("Zone is a PGHQ (1 - yes, 0 - no): ", CH);
       d->edit_mode = ZEDIT_PGHQ;
+      break;
+    case 'L':
+    case 'l':
+      if (!access_level(CH, LVL_FOR_SETTING_ZONE_CONNECTED_STATUS)) {
+        send_to_char("That's not a valid choice.\r\n", CH);
+        return;
+      }
+      send_to_char("OK, toggled.\r\n", CH);
+      ZON->locked_to_non_editors = !ZON->locked_to_non_editors;
+      zedit_disp_data_menu(d);
       break;
     default:
       send_to_char("That's not a valid choice.\r\n", CH);

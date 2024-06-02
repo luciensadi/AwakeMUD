@@ -67,6 +67,7 @@ extern void weight_change_object(struct obj_data * obj, float weight);
 extern void calc_weight(struct char_data *ch);
 extern const char *get_ammobox_default_restring(struct obj_data *ammobox);
 extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
+extern bool can_edit_zone(struct char_data *ch, struct zone_data *zone);
 extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads, const char *call_origin, struct char_data *caller);
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
@@ -7719,18 +7720,67 @@ struct room_data *get_jurisdiction_garage_room(int jurisdiction) {
 }
 
 void set_dropped_by_info(struct obj_data *obj, struct char_data *ch) {
-    if (!obj) {
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL obj to set_dropped_by_info(NULL, %s)", GET_CHAR_NAME(ch));
-      return;
-    }
-
-    if (!ch) {
-      obj->dropped_by_char = 0;
-      delete [] obj->dropped_by_host;
-      obj->dropped_by_host = NULL;
-    } else {
-      obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
-      delete [] obj->dropped_by_host;
-      obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : str_dup("<no desc>");
-    }
+  if (!obj) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL obj to set_dropped_by_info(NULL, %s)", GET_CHAR_NAME(ch));
+    return;
   }
+
+  if (!ch) {
+    obj->dropped_by_char = 0;
+    delete [] obj->dropped_by_host;
+    obj->dropped_by_host = NULL;
+  } else {
+    obj->dropped_by_char = MAX(0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
+    delete [] obj->dropped_by_host;
+    obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : str_dup("<no desc>");
+  }
+}
+
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct zone_data *zone) {
+  return zone->connected || !zone->locked_to_non_editors || can_edit_zone(ch, zone);
+}
+
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct room_data *room) {
+  if (!room || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: null room or ch to ch_can_bypass_edit_lock(%s, %s)", GET_CHAR_NAME(ch), GET_ROOM_NAME(room));
+    return FALSE;
+  }
+
+  return ch_can_bypass_edit_lock(ch, get_zone_from_vnum(GET_ROOM_VNUM(room)));
+}
+
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct obj_data *target) {
+  if (!target || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: null obj or ch to ch_can_bypass_edit_lock(%s, %s)", GET_CHAR_NAME(ch), GET_OBJ_NAME(target));
+    return FALSE;
+  }
+
+  return ch_can_bypass_edit_lock(ch, get_zone_from_vnum(GET_OBJ_VNUM(target)));
+}
+
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct veh_data *target) {
+  if (!target || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: null veh or ch to ch_can_bypass_edit_lock(%s, %s)", GET_CHAR_NAME(ch), GET_VEH_NAME(target));
+    return FALSE;
+  }
+
+  return ch_can_bypass_edit_lock(ch, get_zone_from_vnum(GET_VEH_VNUM(target)));
+}
+
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct host_data *target) {
+  if (!target || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: null host or ch to ch_can_bypass_edit_lock(%s, %s)", GET_CHAR_NAME(ch), target->name);
+    return FALSE;
+  }
+
+  return ch_can_bypass_edit_lock(ch, get_zone_from_vnum(target->vnum));
+}
+
+bool ch_can_bypass_edit_lock(struct char_data *ch, struct char_data *target) {
+  if (!target || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: null mobile or ch to ch_can_bypass_edit_lock(%s, %s)", GET_CHAR_NAME(ch), GET_CHAR_NAME(target));
+    return FALSE;
+  }
+
+  return ch_can_bypass_edit_lock(ch, get_zone_from_vnum(GET_MOB_VNUM(target)));
+}

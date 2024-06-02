@@ -810,12 +810,7 @@ ACMD(do_at)
   else
     original_loc = ch->in_room;
 
-  {
-    struct room_data *target_room = (veh ? get_veh_in_room(veh) : location);
-    FAILURE_CASE(!target_room, "Sorry, that's not a valid room.");
-    struct zone_data *target_zone = get_zone_from_vnum(GET_ROOM_VNUM(target_room));
-    FAILURE_CASE(!target_zone || (target_zone->locked_to_non_editors && !can_edit_zone(ch, target_zone)), "Sorry, that zone is locked to non-editors.");
-  }
+  FAILURE_CASE(!ch_can_bypass_edit_lock(ch, veh ? get_veh_in_room(veh) : location), "Sorry, that zone is locked to non-editors.");
 
   if (veh)
     char_to_veh(veh, ch);
@@ -920,10 +915,8 @@ ACMD(do_goto)
   // Block level-2 goto for anything outside their edit zone.
   FAILURE_CASE(builder_cant_go_there(ch, location), "Sorry, as a first-level builder you're only able to move to rooms you have edit access for.");
 
-  {
-    struct zone_data *target_zone = get_zone_from_vnum(GET_ROOM_VNUM(location));
-    FAILURE_CASE(target_zone->locked_to_non_editors && !can_edit_zone(ch, target_zone), "Sorry, that zone is locked to non-editors.");
-  }
+  // Edit lock.
+  FAILURE_CASE(!ch_can_bypass_edit_lock(ch, location), "Sorry, that zone is locked to non-editors.");
 
 #ifndef IS_BUILDPORT
   if (!access_level(ch, LVL_ADMIN)) {
@@ -1171,10 +1164,12 @@ ACMD(do_vnum)
 void do_stat_room(struct char_data * ch)
 {
   struct extra_descr_data *desc;
-  struct room_data *rm = ch->in_room;
+  struct room_data *rm = get_ch_in_room(ch);
   int i, found = 0;
   struct obj_data *j = 0;
   struct char_data *k = 0;
+
+  FAILURE_CASE(!ch_can_bypass_edit_lock(ch, rm), "Sorry, you can't stat that due to a zone edit lock.");
 
   send_to_char(ch, "Room name: ^c%s\r\n", rm->name);
 
@@ -1314,6 +1309,8 @@ void do_stat_room(struct char_data * ch)
 
 void do_stat_host(struct char_data *ch, struct host_data *host)
 {
+  FAILURE_CASE(!ch_can_bypass_edit_lock(ch, host), "Sorry, you can't stat that due to a zone edit lock.");
+
   snprintf(buf, sizeof(buf), "Name: '^y%s^n', Keywords: %s\r\n", host->name, host->keywords);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Vnum: [^g%8ld^n] Rnum: [%5ld] Parent: [%8ld]\r\n",
                host->vnum, real_host(host->vnum), host->parent);
@@ -1339,6 +1336,8 @@ void do_stat_host(struct char_data *ch, struct host_data *host)
 
 void do_stat_veh(struct char_data *ch, struct veh_data * k)
 {
+  FAILURE_CASE(!ch_can_bypass_edit_lock(ch, k), "Sorry, you can't stat that due to a zone edit lock.");
+
   long virt;
   virt = veh_index[k->veh_number].vnum;
   snprintf(buf, sizeof(buf), "Name: '^y%s^n', Aliases: %s\r\n",
@@ -1371,6 +1370,8 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
 
 void do_stat_object(struct char_data * ch, struct obj_data * j)
 {
+  FAILURE_CASE(!ch_can_bypass_edit_lock(ch, j), "Sorry, you can't stat that due to a zone edit lock.");
+
   long virt;
   int i, found;
   struct obj_data *j2;
@@ -1831,6 +1832,8 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     send_to_char("You can't.\r\n", ch);
     return;
   }
+
+  FAILURE_CASE(!ch_can_bypass_edit_lock(ch, k), "Sorry, you can't stat that due to a zone edit lock.");
 
   int i, i2, found = 0, base;
   struct obj_data *j;
@@ -2441,8 +2444,7 @@ ACMD(do_wizload)
   }
 
   // Precondition: Staff member must have access to the zone the item is in.
-  struct zone_data *zone = get_zone_from_vnum(numb);
-  FAILURE_CASE(zone->locked_to_non_editors && !can_edit_zone(ch, zone), "Sorry, you don't have access to that zone.");
+  FAILURE_CASE(!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(numb)), "Sorry, you don't have access to that zone.");
 
   if (is_abbrev(buf, "veh")) {
     if ((r_num = real_vehicle(numb)) < 0 ) {
@@ -6471,8 +6473,7 @@ ACMD(do_mlist)
     if (MOB_VNUM_RNUM(nr) < first)
       continue;
 
-    struct zone_data *zone = get_zone_from_vnum(MOB_VNUM_RNUM(nr));
-    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(MOB_VNUM_RNUM(nr))))
       continue;
     
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s\r\n", ++found,
@@ -6526,8 +6527,7 @@ ACMD(do_ilist)
     if (OBJ_VNUM_RNUM(nr) < first)
       continue;
     
-    struct zone_data *zone = get_zone_from_vnum(OBJ_VNUM_RNUM(nr));
-    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(OBJ_VNUM_RNUM(nr))))
       continue;
     
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld x%4d] %s%s\r\n", ++found,
@@ -6579,8 +6579,7 @@ ACMD(do_vlist)
     if (VEH_VNUM_RNUM(nr) < first)
       continue;
     
-    struct zone_data *zone = get_zone_from_vnum(VEH_VNUM_RNUM(nr));
-    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(VEH_VNUM_RNUM(nr))))
       continue;
 
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s\r\n", ++found,
@@ -6630,8 +6629,7 @@ ACMD(do_qlist)
     if (quest_table[nr].vnum < first)
       continue;
 
-    struct zone_data *zone = get_zone_from_vnum(quest_table[nr].vnum);
-    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(quest_table[nr].vnum)))
       continue;
     
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5ld. [%8ld] %s (%ld)\r\n",
@@ -6696,8 +6694,7 @@ ACMD(do_rlist)
     if (world[nr].number < first)
       continue;
     
-    struct zone_data *zone = get_zone_from_vnum(world[nr].number);
-    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(world[nr].number)))
       continue;
 
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] (%3d) %s\r\n", ++found,
@@ -6752,8 +6749,7 @@ ACMD(do_hlist)
     if (matrix[nr].vnum < first)
       continue;
     
-    struct zone_data *zone = get_zone_from_vnum(matrix[nr].vnum);
-    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(matrix[nr].vnum)))
       continue;
 
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s\r\n", ++found,
@@ -6807,8 +6803,7 @@ ACMD(do_iclist)
     if (ic_index[nr].vnum < first)
       continue;
 
-    struct zone_data *zone = get_zone_from_vnum(ic_index[nr].vnum);
-    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(ic_index[nr].vnum)))
       continue;
 
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %-50s [%s-%d]\r\n", ++found,
@@ -6857,8 +6852,7 @@ ACMD(do_slist)
     if (shop_table[nr].vnum >= first)
       continue;
     
-    struct zone_data *zone = get_zone_from_vnum(shop_table[nr].vnum);
-    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(shop_table[nr].vnum)))
       continue;
 
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s %s (%ld)\r\n", ++found,

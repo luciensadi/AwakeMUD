@@ -92,6 +92,8 @@ int can_move(struct char_data *ch, int dir, int extra)
     send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
     return 0;
   }
+  // Everyone is restricted from edit-locked zones that aren't connected.
+  FALSE_CASE(!ch_can_bypass_edit_lock(ch, EXIT(ch, dir)->to_room), "Sorry, that zone is locked.");
 
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FREEWAY) && !IS_PROJECT(ch)) {
     if (GET_LEVEL(ch) > 1) {
