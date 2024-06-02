@@ -808,6 +808,7 @@ ACMD(do_vclone)
   }
 
   REQUIRE_ZONE_EDIT_ACCESS(zone2);
+  ch->player_specials->saved.zonenum = zone_table[zone2].number;
 
   // now for the fun part
   // first duplicate the veh
@@ -1129,6 +1130,7 @@ ACMD(do_iclone)
   }
 
   REQUIRE_ZONE_EDIT_ACCESS(zone2);
+  ch->player_specials->saved.zonenum = zone_table[zone2].number;
 
   // now for the fun part
   // first duplicate the obj
@@ -1208,6 +1210,7 @@ ACMD(do_idelete)
   }
 
   REQUIRE_ZONE_EDIT_ACCESS(counter);
+  ch->player_specials->saved.zonenum = zone_table[counter].number;
 
   rnum = real_object(vnum);
 
@@ -1502,6 +1505,7 @@ ACMD(do_mclone)
   }
 
   REQUIRE_ZONE_EDIT_ACCESS(zone2);
+  ch->player_specials->saved.zonenum = zone_table[zone2].number;
 
   mob_num1 = real_mobile(arg1);
   mob_num2 = real_mobile(arg2);
@@ -1560,7 +1564,7 @@ ACMD(do_mclone)
   // put guy into editing mode
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
   STATE (ch->desc) = CON_MEDIT;
-  send_to_char("Do you wish to clone this mob?\r\n", ch);
+  send_to_char(ch, "Do you wish to clone mob %ld (%s) to %ld?\r\n", MOB_VNUM_RNUM(mob_num1), GET_CHAR_NAME(mob), arg2);
   ch->desc->edit_number = arg2;
   ch->desc->edit_mob = mob;
   ch->desc->edit_mode = MEDIT_CONFIRM_SAVESTRING;
