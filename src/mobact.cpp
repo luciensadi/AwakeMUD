@@ -1480,7 +1480,7 @@ bool mobact_process_scavenger(struct char_data *ch) {
           continue;
 
         // No scavenging people's quest items.
-        if (obj->obj_flags.quest_id)
+        if (GET_OBJ_QUEST_CHAR_ID(obj))
           continue;
 
         // Only grab things we can actually get.

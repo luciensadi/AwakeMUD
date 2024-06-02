@@ -1815,7 +1815,7 @@ SPECIAL(janitor)
     return 0;
 
   FOR_ITEMS_AROUND_CH(jan, i) {
-    if (!CAN_WEAR(i, ITEM_WEAR_TAKE) || IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE) || i->obj_flags.quest_id)
+    if (!CAN_WEAR(i, ITEM_WEAR_TAKE) || IS_OBJ_STAT(i, ITEM_EXTRA_CORPSE) || GET_OBJ_QUEST_CHAR_ID(i))
       continue;
     switch (GET_MOB_VNUM(jan)) {
       case 2022:

@@ -2561,7 +2561,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
       }
       
       // If it's a quest item, refuse to hand it off.
-      if (obj->obj_flags.quest_id) {
+      if (GET_OBJ_QUEST_CHAR_ID(obj)) {
         send_to_char("You're pretty sure your Johnson wouldn't be happy with you if you did that.\r\n", ch);
         return 0;
       }

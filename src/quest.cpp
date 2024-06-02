@@ -243,7 +243,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           switch (quest_table[num].obj[j].load) {
           case QOL_TARMOB_I:
             obj = read_object(rnum, REAL);
-            obj->obj_flags.quest_id = GET_IDNUM(ch);
+            GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
             obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             obj_to_char(obj, mob);
             break;
@@ -252,7 +252,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
             if (pos >= 0 && pos < NUM_WEARS && (!GET_EQ(mob, pos) ||
                                                 (pos == WEAR_WIELD && !GET_EQ(mob, WEAR_HOLD)))) {
               obj = read_object(rnum, REAL);
-              obj->obj_flags.quest_id = GET_IDNUM(ch);
+              GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
               obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
               equip_char(mob, obj, pos);
 
@@ -295,7 +295,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
             break;
           case QOL_TARMOB_C:
             obj = read_object(rnum, REAL);
-            obj->obj_flags.quest_id = GET_IDNUM(ch);
+            GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
             obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE &&
                 GET_ESS(mob) > GET_OBJ_VAL(obj, 1)) {
@@ -325,7 +325,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           switch (quest_table[num].obj[j].load) {
           case QOL_TARMOB_I:
             obj = read_object(rnum, REAL);
-            obj->obj_flags.quest_id = GET_IDNUM(ch);
+            GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
             obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             obj_to_char(obj, mob);
             break;
@@ -334,14 +334,14 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
             if (pos >= 0 && pos < NUM_WEARS && (!GET_EQ(mob, pos) ||
                                                 (pos == WEAR_WIELD && !GET_EQ(mob, WEAR_HOLD)))) {
               obj = read_object(rnum, REAL);
-              obj->obj_flags.quest_id = GET_IDNUM(ch);
+              GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
               obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
               equip_char(mob, obj, pos);
             }
             break;
           case QOL_TARMOB_C:
             obj = read_object(rnum, REAL);
-            obj->obj_flags.quest_id = GET_IDNUM(ch);
+            GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
             obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE &&
                 GET_ESS(mob) > GET_OBJ_VAL(obj, 1)) {
@@ -367,7 +367,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
       case QOL_LOCATION:
         if ((room = real_room(quest_table[num].obj[i].l_data)) > -1) {
           obj = read_object(rnum, REAL);
-          obj->obj_flags.quest_id = GET_IDNUM(ch);
+          GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
           obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
           obj_to_room(obj, &world[room]);
         }
@@ -376,7 +376,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
       case QOL_HOST:
         if ((room = real_host(quest_table[num].obj[i].l_data)) > -1) {
           obj = read_object(rnum, REAL);
-          obj->obj_flags.quest_id = GET_IDNUM(ch);
+          GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
           obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
           GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = GET_IDNUM(ch);
           GET_DECK_ACCESSORY_FILE_REMAINING(obj) = 1;
@@ -386,7 +386,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         break;
       case QOL_JOHNSON:
         obj = read_object(rnum, REAL);
-        obj->obj_flags.quest_id = GET_IDNUM(ch);
+        GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
         obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
         obj_to_char(obj, johnson);
         if (!perform_give(johnson, ch, obj)) {

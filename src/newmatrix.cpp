@@ -1309,11 +1309,11 @@ ACMD(do_locate)
           // If it has been found by someone else:
           if (GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) != PERSONA->idnum) {
             // You can only overwrite claims for quest objects that you're grouped with the questor for. No quest? Skip.
-            if (!obj->obj_flags.quest_id)
+            if (!GET_OBJ_QUEST_CHAR_ID(obj))
               continue;
               
             // Skip it if you're not grouped with the person whose quest it is.
-            if (!ch_is_grouped_with_idnum(ch, obj->obj_flags.quest_id))
+            if (!ch_is_grouped_with_idnum(ch, GET_OBJ_QUEST_CHAR_ID(obj)))
               continue;
 
             // Otherwise, you can still potentially find it.
@@ -1550,7 +1550,7 @@ ACMD(do_matrix_look)
       } else {
         send_to_icon(PERSONA, "^yA file named %s floats here.%s^n\r\n", 
                      GET_OBJ_NAME(obj),
-                     obj->obj_flags.quest_id ? (ch_is_grouped_with_idnum(ch, obj->obj_flags.quest_id) ? " ^Y(Quest)" : " ^m(Protected)") : "");
+                     GET_OBJ_QUEST_CHAR_ID(obj) ? (ch_is_grouped_with_idnum(ch, GET_OBJ_QUEST_CHAR_ID(obj)) ? " ^Y(Quest)" : " ^m(Protected)") : "");
       }
     }
 
@@ -2839,9 +2839,9 @@ void process_upload(struct matrix_icon *persona)
           struct char_data *questor = NULL;
 
           // Quest object?
-          if (soft->obj_flags.quest_id && GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft)) {
+          if (GET_OBJ_QUEST_CHAR_ID(soft) && GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft)) {
             // You must be grouped with the questor for the upload to complete.
-            if (!(questor = ch_is_grouped_with_idnum(persona->decker->ch, soft->obj_flags.quest_id)) || GET_QUEST(questor) < 0) {
+            if (!(questor = ch_is_grouped_with_idnum(persona->decker->ch, GET_OBJ_QUEST_CHAR_ID(soft))) || GET_QUEST(questor) < 0) {
               send_to_icon(persona, "%s failed to upload to the host: You're not grouped with the questor.\r\n", CAP(GET_OBJ_NAME(soft)));
               GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
               return;

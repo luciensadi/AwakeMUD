@@ -2045,7 +2045,7 @@ void parse_object(File &fl, long nr)
 
   GET_OBJ_COST(obj) = data.GetInt("POINTS/Cost", 0);
 
-  obj->obj_flags.quest_id = 0;
+  GET_OBJ_QUEST_CHAR_ID(obj) = 0;
 
   int i;
   for (i = 0; i < NUM_OBJ_VALUES; i++) {

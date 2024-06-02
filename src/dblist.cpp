@@ -169,7 +169,7 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
       temp->data->in_room = old.in_room;
       temp->data->in_veh = old.in_veh;
 
-      temp->data->obj_flags.quest_id = old.obj_flags.quest_id;
+      GET_OBJ_QUEST_CHAR_ID(temp->data) = old.obj_flags.quest_id;
       temp->data->obj_flags.condition = old.obj_flags.condition;
 
       temp->data->restring = old.restring;
@@ -405,7 +405,7 @@ void objList::UpdateCounters(void)
     */
 
     // Time out objects that end up on the floor a lot (magazines, cash, etc).
-    if (OBJ->in_room && !OBJ->in_obj && !OBJ->carried_by && !OBJ->obj_flags.quest_id &&
+    if (OBJ->in_room && !OBJ->in_obj && !OBJ->carried_by && !GET_OBJ_QUEST_CHAR_ID(OBJ) &&
        ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_MAGAZINE && !GET_MAGAZINE_AMMO_COUNT(OBJ)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0)))
         && ++GET_OBJ_TIMER(OBJ) == 3) {
         act("$p is lost on the ground.", TRUE, temp->data->in_room->people,
@@ -471,10 +471,18 @@ void objList::UpdateCounters(void)
           }
         }
         // here we make sure to remove all items from the object
-        struct obj_data *next_thing, *temp2;
-        for (temp2 = temp->data->contains; temp2; temp2 = next_thing) {
-          next_thing = temp2->next_content;     /*Next in inventory */
-          extract_obj(temp2);
+        struct room_data *in_room = get_obj_in_room(temp->data);
+        for (struct obj_data *contents = temp->data->contains, *next_thing; contents; contents = next_thing) {
+          next_thing = contents->next_content;     /*Next in inventory */
+
+          if (GET_OBJ_QUEST_CHAR_ID(contents) && in_room) {
+            // If it's a quest item, and we have somewhere to drop it, do so.
+            obj_from_obj(contents);
+            obj_to_room(contents, in_room);
+          } else {
+            // Otherwise, extract it.
+            extract_obj(contents);
+          }
         }
         next = temp->next;
         extract_obj(temp->data);
@@ -560,7 +568,7 @@ void objList::RemoveQuestObjs(idnum_t questor_idnum)
   for (temp = head; temp; temp = next) {
     next = temp->next;
 
-    if (temp->data->obj_flags.quest_id == questor_idnum) {
+    if (GET_OBJ_QUEST_CHAR_ID(temp->data) == questor_idnum) {
       _remove_obj_from_world(temp->data);
       // We've potentially invalidated our next pointer, so start iterating again.
       next = head;

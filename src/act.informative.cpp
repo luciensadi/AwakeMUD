@@ -458,8 +458,8 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strlcat(buf, " ^c(humming)", sizeof(buf));
     }
 
-    if (object->obj_flags.quest_id && !IS_OBJ_STAT(object, ITEM_EXTRA_CORPSE)) {
-      if (object->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
+    if (GET_OBJ_QUEST_CHAR_ID(object) && !IS_OBJ_STAT(object, ITEM_EXTRA_CORPSE)) {
+      if (GET_OBJ_QUEST_CHAR_ID(object) == GET_IDNUM_EVEN_IF_PROJECTING(ch))
         strlcat(buf, " ^Y(Quest)^n", sizeof(buf));
       else if (!ch_is_blocked_by_quest_protections(ch, object, FALSE, TRUE))
         strlcat(buf, " ^Y(Group Quest)^n", sizeof(buf));
@@ -609,7 +609,7 @@ bool items_are_visually_similar(struct obj_data *first, struct obj_data *second)
     return FALSE;
 
   // Quest items don't visually stack.
-  if (first->obj_flags.quest_id != second->obj_flags.quest_id)
+  if (GET_OBJ_QUEST_CHAR_ID(first) != GET_OBJ_QUEST_CHAR_ID(second))
     return FALSE;
 
   // Kept state must match.

@@ -2089,7 +2089,7 @@ ACMD(do_unattach)
     return;
   }
 
-  if (IS_OBJ_STAT(gun, ITEM_EXTRA_STAFF_ONLY) || gun->obj_flags.quest_id) {
+  if (IS_OBJ_STAT(gun, ITEM_EXTRA_STAFF_ONLY) || GET_OBJ_QUEST_CHAR_ID(gun)) {
     send_to_char(ch, "You're not able to modify %s.\r\n", GET_OBJ_NAME(gun));
     return;
   }

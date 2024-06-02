@@ -6367,15 +6367,15 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *o
   struct char_data *questor;
   
   // Not quest-protected.
-  if (!obj->obj_flags.quest_id)
+  if (!GET_OBJ_QUEST_CHAR_ID(obj))
     return FALSE;
 
   // Character is the questor, so won't be blocked.
-  if (obj->obj_flags.quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
+  if (GET_OBJ_QUEST_CHAR_ID(obj) == GET_IDNUM_EVEN_IF_PROJECTING(ch))
     return FALSE;
 
   // Are you grouped with the questor?
-  if ((questor = ch_is_grouped_with_idnum(ch, obj->obj_flags.quest_id))) {
+  if ((questor = ch_is_grouped_with_idnum(ch, GET_OBJ_QUEST_CHAR_ID(obj)))) {
     // If you're grouped with them but aren't in the same room for a location-locked quest, you're blocked.
     if (requires_ch_to_be_in_same_room_as_questor && !chars_are_in_same_location(ch, questor)) {
       if (send_messages) {

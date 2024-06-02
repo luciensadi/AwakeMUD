@@ -739,6 +739,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define MOB_VNUM_RNUM(rnum)           ((mob_index[rnum]).vnum)
 #define GET_MOB_UNIQUE_ID(mob)        ((mob)->unique_id)
 #define GET_MOB_QUEST_CHAR_ID(mob)    ((mob)->mob_specials.quest_id)
+#define GET_OBJ_QUEST_CHAR_ID(obj)    ((obj)->obj_flags.quest_id)
 
 #define GET_MOB_SPEC(ch)       (IS_MOB(ch) ? (mob_index[GET_MOB_RNUM((ch))].func) : NULL)
 #define GET_MOB_SPEC2(ch)      (IS_MOB(ch) ? (mob_index[GET_MOB_RNUM((ch))].sfunc) : NULL)
