@@ -7727,11 +7727,33 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
   if (verbose)
     send_to_char(ch, "\r\n^WAuditing mobs for zone %d...^n\r\n", zone_table[zone_num].number);
 
+  int pronoun_split[NUM_PRONOUNS];
+  memset(pronoun_split, 0, NUM_PRONOUNS * sizeof(*pronoun_split));
+
+  // Get a count of number of mobs currently loaded by vnum.
+  std::unordered_map<vnum_t, int> active_counts = {};
+  for (struct char_data *mob = character_list; mob; mob = mob->next_in_character_list) {
+    if (IS_NPC(mob)) {
+      auto it = active_counts.find(GET_MOB_VNUM(mob));
+      if( it != active_counts.end() ) {
+        it->second++;
+      } else {
+        active_counts.insert(std::make_pair(GET_MOB_VNUM(mob), 1));
+      }
+    }
+  }
+
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     if ((real_mob = real_mobile(i)) < 0)
       continue;
 
     struct char_data *mob = &mob_proto[real_mob];
+
+    // Track pronoun count that are currently loaded.
+    auto it = active_counts.find(GET_MOB_VNUM(mob));
+    if( it != active_counts.end() ) {
+      pronoun_split[(int) GET_PRONOUNS(mob)] += it->second;
+    }
 
     // Check stats, etc
     total_stats = 0;
@@ -7976,6 +7998,11 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       send_to_char(ch, "%s\r\n", buf);
     }
   }
+
+  send_to_char("Informative: This zone has ", ch);
+  for (int pron_idx = 0; pron_idx < NUM_PRONOUNS; pron_idx++)
+    send_to_char(ch, "%s^c%d^n %s", pron_idx > 0 ? ", " : "", pronoun_split[pron_idx], genders_decap[pron_idx]);
+  send_to_char(" mobs loaded.\r\n", ch);
 
   return issues;
 }

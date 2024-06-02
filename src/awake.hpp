@@ -33,10 +33,12 @@
 #define VIRTUAL 1
 
 /* gender */
-
+// I don't envy you adding more pronouns because they're tightly integrated and badly too.
+// If you're doing it anyways, don't forget to expand the genders[] and genders_decap[] constants.
 #define PRONOUNS_NEUTRAL    0
 #define PRONOUNS_MASCULINE  1
 #define PRONOUNS_FEMININE   2
+#define NUM_PRONOUNS        3
 
 /* positions */
 
