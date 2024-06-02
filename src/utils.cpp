@@ -7737,7 +7737,12 @@ void set_dropped_by_info(struct obj_data *obj, struct char_data *ch) {
 }
 
 bool ch_can_bypass_edit_lock(struct char_data *ch, struct zone_data *zone) {
-  return zone->connected || !zone->locked_to_non_editors || can_edit_zone(ch, zone);
+#ifdef IS_BUILDPORT
+  return !zone->locked_to_non_editors || can_edit_zone(ch, zone);
+#else
+  // Edit locks don't function on the main port.
+  return TRUE;
+#endif
 }
 
 bool ch_can_bypass_edit_lock(struct char_data *ch, struct room_data *room) {

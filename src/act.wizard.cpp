@@ -4647,7 +4647,7 @@ ACMD(do_show)
 
       char io_color[3];
       for (i = 0, j = 0; i <= top_of_world; i++) {
-        if (world[i].matrix > 0) {
+        if (world[i].matrix > 0 && ch_can_bypass_edit_lock(ch, &world[i])) {
           if (world[i].io > 0) {
             if (world[i].io < 50)
               strlcpy(io_color, "^R", sizeof(io_color));
@@ -4884,9 +4884,8 @@ ACMD(do_show)
       for (i = 0; i < ROOM_MAX; i++) {
         if (str_str(room_bits[i], value)) {
           send_to_char(ch, "Rooms with flag %s set:\r\n", room_bits[i]);
-          strlcpy(buf, "Exitless Rooms\r\n-----------\r\n", sizeof(buf));
           for (k = 0, j = 0; k <= top_of_world; k++)
-            if (ROOM_FLAGGED(&world[k], i))
+            if (ROOM_FLAGGED(&world[k], i) && ch_can_bypass_edit_lock(ch, &world[k]))
               send_to_char(ch, "%4d: [%8ld] %s %s\r\n", ++j,
                            world[k].number,
                            vnum_from_non_connected_zone(world[k].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
@@ -4981,6 +4980,9 @@ ACMD(do_show)
     send_to_char("The following cyberdoc shops have a player-selling-to-shop profit percentage != 30%:\r\n", ch);
     for (int idx = 0; idx <= top_of_shopt; idx++) {
       if (shop_table[idx].flags.IsSet(SHOP_DOCTOR) && shop_table[idx].profit_sell != 0.3f) {
+        if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(shop_table[idx].vnum)))
+          continue;
+
         send_to_char(ch, "  [%6ld] %.2f\r\n", shop_table[idx].vnum, shop_table[idx].profit_sell);
       }
     }
@@ -4994,6 +4996,8 @@ ACMD(do_show)
         bool shop_negotiates = FALSE;
         for (int idx = 0; idx <= top_of_shopt; idx++) {
           if (shop_table[idx].keeper == GET_MOB_VNUM(mob)) {
+            if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(shop_table[idx].vnum)))
+              continue;
             shop_negotiates = !shop_table[idx].flags.IsSet(SHOP_WONT_NEGO);
             break;
           }
@@ -5015,7 +5019,7 @@ ACMD(do_show)
     for (int idx = 0; idx < top_of_world; idx++) {
       struct room_data *room = &world[idx];
       
-      if (GET_BACKGROUND_AURA(room) == AURA_POWERSITE && GET_BACKGROUND_COUNT(room)) {
+      if (GET_BACKGROUND_AURA(room) == AURA_POWERSITE && GET_BACKGROUND_COUNT(room) && ch_can_bypass_edit_lock(ch, room)) {
         send_to_char(ch, "[^c%6d^n]: Rating ^c%2d^n @ %s^n.\r\n", GET_ROOM_VNUM(room), GET_BACKGROUND_COUNT(room), GET_ROOM_NAME(room));
       }
     }
@@ -5063,6 +5067,9 @@ ACMD(do_show)
   case 33:
     send_to_char("The following connected zones with zone commands have long lifetimes or don't reset:\r\n", ch);
     for (int idx = 0; idx < top_of_zone_table; idx++) {
+      if (!ch_can_bypass_edit_lock(ch, &zone_table[idx]))
+        continue;
+
       if (zone_table[idx].connected
           && zone_table[idx].num_cmds > 0
           && (zone_table[idx].lifespan > 20 || zone_table[idx].reset_mode == ZONE_RESET_NEVER))
@@ -5079,6 +5086,8 @@ ACMD(do_show)
     for (rnum_t mob_idx = 0; mob_idx < top_of_mobt; mob_idx++) {
       struct char_data *mob = &mob_proto[mob_idx];
       if (GET_MAG(mob) / 100 < 12 || vnum_from_non_connected_zone(GET_MOB_VNUM(mob)) || MOB_FLAGGED(mob, MOB_NOKILL))
+        continue;
+      if (!ch_can_bypass_edit_lock(ch, mob))
         continue;
       send_to_char(ch, " [^c%6d^n] %s (%2d magic)\r\n", GET_MOB_VNUM(mob), GET_CHAR_NAME(mob), GET_MAG(mob) / 100);
     }
