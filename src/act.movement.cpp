@@ -96,6 +96,8 @@ int can_move(struct char_data *ch, int dir, int extra)
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FREEWAY) && !IS_PROJECT(ch)) {
     if (GET_LEVEL(ch) > 1) {
       send_to_char("You abuse your staff powers to part traffic around you.\r\n", ch);
+    } else if (IS_NPNPC(ch) && !ch->desc) {
+      send_to_char("You abuse your NPC powers to part traffic around you.\r\n", ch);
     } else {
       bool has_vehicle_to_go_to = FALSE;
 
