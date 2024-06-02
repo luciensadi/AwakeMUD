@@ -87,9 +87,9 @@ bool is_olc_available(struct char_data *ch) {
   return olc_state;
 }
 
-bool can_edit_zone(struct char_data *ch, rnum_t real_zone) {
-  if (real_zone > top_of_zone_table) {
-    mudlog("SYSERR: Received zone above top of zone table in can_edit_zone()!", ch, LOG_SYSLOG, TRUE);
+bool can_edit_zone(struct char_data *ch, struct zone_data *zone) {
+  if (!zone) {
+    mudlog("SYSERR: Received NULL zone to can_edit_zone()!", ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
@@ -97,10 +97,19 @@ bool can_edit_zone(struct char_data *ch, rnum_t real_zone) {
     return TRUE;
 
   for (int i = 0; i < NUM_ZONE_EDITOR_IDS; i++)
-    if (zone_table[real_zone].editor_ids[i] == GET_IDNUM(ch))
+    if (zone->editor_ids[i] == GET_IDNUM(ch))
       return TRUE;
 
   return FALSE;
+}
+
+bool can_edit_zone(struct char_data *ch, rnum_t real_zone) {
+  if (real_zone > top_of_zone_table) {
+    mudlog("SYSERR: Received zone above top of zone table in can_edit_zone()!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  return can_edit_zone(ch, &zone_table[real_zone]);
 }
 
 void write_index_file(const char *suffix)

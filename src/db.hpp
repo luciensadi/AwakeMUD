@@ -158,6 +158,7 @@ struct zone_data
   int editor_ids[NUM_ZONE_EDITOR_IDS];       // array of zone editors
   int jurisdiction;       // Abstract zone this zone belongs to
   int is_pghq;
+  int locked_to_non_editors;
   struct reset_com *cmd;   /* command table for reset            */
 
   /*

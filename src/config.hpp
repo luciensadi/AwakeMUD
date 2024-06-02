@@ -261,6 +261,14 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // Don't @ me about how long this name is, this is what we call self-documenting code.
 #define NUMBER_OF_TKE_POINTS_PER_REAL_DAY_OF_EXTRA_IDLE_DELETE_GRACE_PERIOD  10
+#define IDLE_DELETE_BASE_DAYS_FOR_PRESTIGE                                   365
+#define IDLE_DELETE_BASE_DAYS_FOR_PCS                                        50
+
+#ifdef IS_BUILDPORT
+#define IDLE_DELETE_BASE_DAYS_FOR_STAFF                                      365
+#else
+#define IDLE_DELETE_BASE_DAYS_FOR_STAFF                                      180
+#endif
 
 // If you think sniper rifles should have a +TN penalty for shooting in the same room.
 #define SAME_ROOM_SNIPER_RIFLE_PENALTY                         0

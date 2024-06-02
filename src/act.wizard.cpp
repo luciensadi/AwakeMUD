@@ -100,6 +100,7 @@ extern int write_quests_to_disk(int zone);
 extern void write_objs_to_disk(vnum_t zone);
 extern void alarm_handler(int signal);
 extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
+extern bool can_edit_zone(struct char_data *ch, struct zone_data *zone);
 extern const char *render_door_type_string(struct room_direction_data *door);
 extern void save_shop_orders();
 extern void turn_hardcore_on_for_character(struct char_data *ch);
@@ -808,6 +809,14 @@ ACMD(do_at)
     oveh = ch->in_veh;
   else
     original_loc = ch->in_room;
+
+  {
+    struct room_data *target_room = (veh ? get_veh_in_room(veh) : location);
+    FAILURE_CASE(!target_room, "Sorry, that's not a valid room.");
+    struct zone_data *target_zone = get_zone_from_vnum(GET_ROOM_VNUM(target_room));
+    FAILURE_CASE(!target_zone || (target_zone->locked_to_non_editors && !can_edit_zone(ch, target_zone)), "Sorry, that zone is locked to non-editors.");
+  }
+
   if (veh)
     char_to_veh(veh, ch);
   else {
@@ -911,8 +920,13 @@ ACMD(do_goto)
   // Block level-2 goto for anything outside their edit zone.
   FAILURE_CASE(builder_cant_go_there(ch, location), "Sorry, as a first-level builder you're only able to move to rooms you have edit access for.");
 
-#ifndef IS_BUILDPORT
   {
+    struct zone_data *target_zone = get_zone_from_vnum(GET_ROOM_VNUM(location));
+    FAILURE_CASE(target_zone->locked_to_non_editors && !can_edit_zone(ch, target_zone), "Sorry, that zone is locked to non-editors.");
+  }
+
+#ifndef IS_BUILDPORT
+  if (!access_level(ch, LVL_ADMIN)) {
     struct room_data *ch_in_room = get_ch_in_room(ch);
     mudlog_vfprintf(ch, LOG_WIZLOG, "%s goto'd from '%s^g' (%ld) to '%s^g' (%ld)",
                     GET_CHAR_NAME(ch),
@@ -2347,7 +2361,7 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   }
 
   // Precondition: Staff member must have access to the zone the item is in.
-  if (!access_level(ch, LVL_DEVELOPER)) {
+  if (!access_level(ch, LVL_DEVELOPER) || (zone_table[counter].locked_to_non_editors && !can_edit_zone(ch, &zone_table[counter]))) {
     for (i = 0; i < NUM_ZONE_EDITOR_IDS; i++) {
       if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
         break;
@@ -2425,11 +2439,17 @@ ACMD(do_wizload)
     send_to_char("A NEGATIVE number??\r\n", ch);
     return;
   }
+
+  // Precondition: Staff member must have access to the zone the item is in.
+  struct zone_data *zone = get_zone_from_vnum(numb);
+  FAILURE_CASE(zone->locked_to_non_editors && !can_edit_zone(ch, zone), "Sorry, you don't have access to that zone.");
+
   if (is_abbrev(buf, "veh")) {
     if ((r_num = real_vehicle(numb)) < 0 ) {
       send_to_char("There is no vehicle with that number.\r\n", ch);
       return;
     }
+
     veh = read_vehicle(r_num, REAL);
     generate_veh_idnum(veh);
     veh_to_room(veh, get_ch_in_room(ch));
@@ -2444,6 +2464,7 @@ ACMD(do_wizload)
       send_to_char("There is no monster with that number.\r\n", ch);
       return;
     }
+
     mob = read_mobile(r_num, REAL);
     mob->mob_loaded_in_room = GET_ROOM_VNUM(get_ch_in_room(ch));
     char_to_room(mob, get_ch_in_room(ch));
@@ -6299,6 +6320,9 @@ ACMD(do_zlist)
     send_to_char("Zone: Non existent.\r\n", ch);
     return;
   }
+
+  FAILURE_CASE(zone_table[zonenum].locked_to_non_editors && !can_edit_zone(ch, zonenum), "Sorry, that zone is locked to non-editors.");
+
   snprintf(buf, sizeof(buf), "Zone: %d (%d); Cmds: %d\r\n",
           zone_table[zonenum].number, zonenum,
           zone_table[zonenum].num_cmds);
@@ -6443,10 +6467,17 @@ ACMD(do_mlist)
   snprintf(buf, sizeof(buf), "Mobiles, %d to %d:\r\n", first, last);
 
   for (nr = MAX(0, real_mobile(first)); nr <= top_of_mobt &&
-       (MOB_VNUM_RNUM(nr) <= last); nr++)
-    if (MOB_VNUM_RNUM(nr) >= first)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s\r\n", ++found,
-              MOB_VNUM_RNUM(nr), mob_proto[nr].player.physical_text.name);
+       (MOB_VNUM_RNUM(nr) <= last); nr++) {
+    if (MOB_VNUM_RNUM(nr) < first)
+      continue;
+
+    struct zone_data *zone = get_zone_from_vnum(MOB_VNUM_RNUM(nr));
+    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+      continue;
+    
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s\r\n", ++found,
+            MOB_VNUM_RNUM(nr), mob_proto[nr].player.physical_text.name);
+  }
 
   if (!found)
     send_to_char("No mobiles were found in those parameters.\r\n", ch);
@@ -6492,13 +6523,18 @@ ACMD(do_ilist)
   snprintf(buf, sizeof(buf), "Objects, %d to %d:\r\n", first, last);
 
   for (nr = MAX(0, real_object(first)); nr <= top_of_objt && (OBJ_VNUM_RNUM(nr) <= last); nr++) {
-    if (OBJ_VNUM_RNUM(nr) >= first) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld x%4d] %s%s\r\n", ++found,
-      OBJ_VNUM_RNUM(nr),
-      ObjList.CountObj(nr),
-      obj_proto[nr].text.name,
-      obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
-    }
+    if (OBJ_VNUM_RNUM(nr) < first)
+      continue;
+    
+    struct zone_data *zone = get_zone_from_vnum(OBJ_VNUM_RNUM(nr));
+    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+      continue;
+    
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld x%4d] %s%s\r\n", ++found,
+    OBJ_VNUM_RNUM(nr),
+    ObjList.CountObj(nr),
+    obj_proto[nr].text.name,
+    obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
   }
 
   if (!found)
@@ -6539,10 +6575,17 @@ ACMD(do_vlist)
   snprintf(buf, sizeof(buf), "Vehicles, %d to %d:\r\n", first, last);
 
   for (nr = MAX(0, real_vehicle(first)); nr <= top_of_veht &&
-       (VEH_VNUM_RNUM(nr) <= last); nr++)
-    if (VEH_VNUM_RNUM(nr) >= first)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s\r\n", ++found,
-              VEH_VNUM_RNUM(nr), veh_proto[nr].short_description);
+       (VEH_VNUM_RNUM(nr) <= last); nr++) {
+    if (VEH_VNUM_RNUM(nr) < first)
+      continue;
+    
+    struct zone_data *zone = get_zone_from_vnum(VEH_VNUM_RNUM(nr));
+    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+      continue;
+
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s\r\n", ++found,
+            VEH_VNUM_RNUM(nr), veh_proto[nr].short_description);
+  }
 
   if (!found)
     send_to_char("No vehicles were found in those parameters.\r\n", ch);
@@ -6583,12 +6626,19 @@ ACMD(do_qlist)
 
   int real_mob;
   for (nr = MAX(0, real_quest(first)); nr <= top_of_questt &&
-       (quest_table[nr].vnum <= last); nr++)
-    if (quest_table[nr].vnum >= first)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5ld. [%8ld] %s (%ld)\r\n",
-              ++found, quest_table[nr].vnum,
-              (real_mob = real_mobile(quest_table[nr].johnson)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]),
-              quest_table[nr].johnson);
+       (quest_table[nr].vnum <= last); nr++) {
+    if (quest_table[nr].vnum < first)
+      continue;
+
+    struct zone_data *zone = get_zone_from_vnum(quest_table[nr].vnum);
+    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+      continue;
+    
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5ld. [%8ld] %s (%ld)\r\n",
+            ++found, quest_table[nr].vnum,
+            (real_mob = real_mobile(quest_table[nr].johnson)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]),
+            quest_table[nr].johnson);
+  }
 
   if (!found)
     send_to_char("No quests were found in those parameters.\r\n", ch);
@@ -6643,9 +6693,15 @@ ACMD(do_rlist)
   snprintf(buf, sizeof(buf), "Rooms, %d to %d:\r\n", first, last);
 
   for (nr = MAX(0, real_room(first)); debug_bounds_check_rlist(nr, last); nr++) {
-    if (world[nr].number >= first)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] (%3d) %s\r\n", ++found,
-              world[nr].number, world[nr].zone, world[nr].name);
+    if (world[nr].number < first)
+      continue;
+    
+    struct zone_data *zone = get_zone_from_vnum(world[nr].number);
+    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+      continue;
+
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] (%3d) %s\r\n", ++found,
+            world[nr].number, world[nr].zone, world[nr].name);
   }
 
   if (!found)
@@ -6692,10 +6748,17 @@ ACMD(do_hlist)
   snprintf(buf, sizeof(buf), "Hosts, %d to %d:\r\n", first, last);
 
   for (nr = MAX(0, real_host(first)); nr <= top_of_matrix &&
-       (matrix[nr].vnum <= last); nr++)
-    if (matrix[nr].vnum >= first)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s\r\n", ++found,
-              matrix[nr].vnum, matrix[nr].name);
+       (matrix[nr].vnum <= last); nr++) {
+    if (matrix[nr].vnum < first)
+      continue;
+    
+    struct zone_data *zone = get_zone_from_vnum(matrix[nr].vnum);
+    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+      continue;
+
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s\r\n", ++found,
+            matrix[nr].vnum, matrix[nr].name);
+  }
 
   if (!found)
     send_to_char("No hosts were found in those parameters.\r\n", ch);
@@ -6740,11 +6803,17 @@ ACMD(do_iclist)
 
   snprintf(buf, sizeof(buf), "IC, %d to %d:\r\n", first, last);
 
-  for (nr = MAX(0, real_ic(first)); nr <= top_of_ic &&
-       (ic_index[nr].vnum <= last); nr++)
-    if (ic_index[nr].vnum >= first)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %-50s [%s-%d]\r\n", ++found,
-              ic_index[nr].vnum, ic_proto[nr].name, ic_type[ic_proto[nr].ic.type], ic_proto[nr].ic.rating);
+  for (nr = MAX(0, real_ic(first)); nr <= top_of_ic && (ic_index[nr].vnum <= last); nr++) {
+    if (ic_index[nr].vnum < first)
+      continue;
+
+    struct zone_data *zone = get_zone_from_vnum(ic_index[nr].vnum);
+    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+      continue;
+
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %-50s [%s-%d]\r\n", ++found,
+            ic_index[nr].vnum, ic_proto[nr].name, ic_type[ic_proto[nr].ic.type], ic_proto[nr].ic.rating);
+  }
 
   if (!found)
     send_to_char("No IC were found in those parameters.\r\n", ch);
@@ -6784,13 +6853,20 @@ ACMD(do_slist)
   snprintf(buf, sizeof(buf), "Shops, %d to %d:\r\n", first, last);
 
   int real_mob;
-  for (nr = MAX(0, real_shop(first)); nr <= top_of_shopt && (shop_table[nr].vnum <= last); nr++)
+  for (nr = MAX(0, real_shop(first)); nr <= top_of_shopt && (shop_table[nr].vnum <= last); nr++) {
     if (shop_table[nr].vnum >= first)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s %s (%ld)\r\n", ++found,
-              shop_table[nr].vnum,
-              vnum_from_non_connected_zone(shop_table[nr].keeper) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
-              (real_mob = real_mobile(shop_table[nr].keeper)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]),
-              shop_table[nr].keeper);
+      continue;
+    
+    struct zone_data *zone = get_zone_from_vnum(shop_table[nr].vnum);
+    if (zone->locked_to_non_editors && !can_edit_zone(ch, zone))
+      continue;
+
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s %s (%ld)\r\n", ++found,
+            shop_table[nr].vnum,
+            vnum_from_non_connected_zone(shop_table[nr].keeper) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+            (real_mob = real_mobile(shop_table[nr].keeper)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]),
+            shop_table[nr].keeper);
+  }
 
   if (!found)
     send_to_char("No shops were found in those parameters.\r\n", ch);

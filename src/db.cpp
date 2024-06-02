@@ -2697,9 +2697,9 @@ void load_zones(File &fl)
 
   fl.GetLine(buf, 256, FALSE);
   // Attempt to read the new PGHQ flag from the line.
-  if (sscanf(buf, " %d %d %d %d %d %d %d",
+  if (sscanf(buf, " %d %d %d %d %d %d %d %d",
              &Z.top, &Z.lifespan, &Z.reset_mode,
-             &Z.security, &Z.connected, &Z.jurisdiction, &Z.is_pghq) < 6)
+             &Z.security, &Z.connected, &Z.jurisdiction, &Z.is_pghq, &Z.locked_to_non_editors) < 6)
   {
     // Fallback: Instead, read out the old format. Assume we'll save PGHQ data later.
     if (sscanf(buf, " %d %d %d %d %d %d",
