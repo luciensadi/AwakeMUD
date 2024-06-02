@@ -4231,9 +4231,18 @@ ACMD(do_wizutil)
 /* single zone printing fn used by "show zone" so it's not repeated in the
    code 3 times ... -je, 4/6/93 */
 
-void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed)
+void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed, struct char_data *ch)
 {
   int i, color = 0;
+
+  if (!ch_can_bypass_edit_lock(ch, &zone_table[zone])) {
+    snprintf(bufptr, buf_size - strlen(bufptr), "%4d %-30.30s^n %s (<redacted>) Age: ???; Res: ??? (?); Top: %6d; Sec: ??\r\n",
+             zone_table[zone].number,
+             "<redacted>",
+             zone_table[zone].connected ? "* " : "  ",
+             zone_table[zone].top);
+    return;
+  }
 
   for (i = 0; zone_table[zone].name[i]; i++)
     if (zone_table[zone].name[i] == '^' && (i < 1 || zone_table[zone].name[i-1] != '^') &&
@@ -4257,11 +4266,11 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed)
     }
 
   if (!detailed) {
-    snprintf(bufptr, buf_size - strlen(bufptr), "%3d %-30.30s^n ", zone_table[zone].number,
+    snprintf(bufptr, buf_size - strlen(bufptr), "%4d %-30.30s^n ", zone_table[zone].number,
             zone_table[zone].name);
     for (i = 0; i < color; i++)
       strlcat(bufptr, " ", buf_size);
-    snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s (%20s) Age: %3d; Res: %3d (%1d); Top: %5d; Sec: %2d\r\n",
+    snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s (%20s) Age: %3d; Res: %3d (%1d); Top: %6d; Sec: %2d\r\n",
             zone_table[zone].connected ? "* " : "  ",
             jurisdictions[zone_table[zone].jurisdiction],
             zone_table[zone].age, zone_table[zone].lifespan,
@@ -4436,9 +4445,9 @@ ACMD(do_show)
     /* tightened up by JE 4/6/93 */
     if (self) {
       if (access_level(ch, LVL_ADMIN))
-        print_zone_to_buf(buf, sizeof(buf), ch->in_room->zone, 1);
+        print_zone_to_buf(buf, sizeof(buf), ch->in_room->zone, 1, ch);
       else
-        print_zone_to_buf(buf, sizeof(buf), ch->in_room->zone, 0);
+        print_zone_to_buf(buf, sizeof(buf), ch->in_room->zone, 0, ch);
     }
 
     else if (*value && is_number(value)) {
@@ -4446,9 +4455,9 @@ ACMD(do_show)
         ;
       if (i <= top_of_zone_table) {
         if (access_level(ch, LVL_ADMIN))
-          print_zone_to_buf(buf, sizeof(buf), i, 1);
+          print_zone_to_buf(buf, sizeof(buf), i, 1, ch);
         else
-          print_zone_to_buf(buf, sizeof(buf), i, 0);
+          print_zone_to_buf(buf, sizeof(buf), i, 0, ch);
       } else {
         send_to_char("That is not a valid zone.\r\n", ch);
         return;
@@ -4464,7 +4473,7 @@ ACMD(do_show)
           int end_vnum = bottom - 1;
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(gap: ^Y%4d^y rooms between %d - %d)^n\r\n", end_vnum - start_vnum, start_vnum, end_vnum);
         }
-        print_zone_to_buf(ENDOF(buf), sizeof(buf) - strlen(buf), i, 0);
+        print_zone_to_buf(ENDOF(buf), sizeof(buf) - strlen(buf), i, 0, ch);
         last_seen_top = zone_table[i].top;
       }
     }
