@@ -2443,7 +2443,14 @@ enum {
 #define JURISDICTION_CARIBBEAN 2
 #define JURISDICTION_OCEAN     3
 #define JURISDICTION_CAS       4
-#define NUM_JURISDICTIONS      5
+#define JURISDICTION_SECRET    5
+#define NUM_JURISDICTIONS      6
+// Adding a new jurisdiction? You'll need:
+// - A new Docwagon room (utils.cpp's get_jurisdiction_docwagon_room())
+// - A parking garage (utils.cpp's get_jurisdiction_garage_room())
+// - potentially a new set of cab rooms etc (transport.cpp)
+// - if you add a cab, add it to jurisdiction gridguide (act.drive.cpp)
+// - add to constants.cpp's jurisdictions[]
 
 // Locations, to remove the magic numbers from the code.
 #define RM_CHARGEN_START_ROOM        60500
@@ -2460,6 +2467,8 @@ enum {
 #define RM_MASSAGE_PARLOR            7226
 #define RM_ABANDONED_CLOTHING_STORE  4985
 #define RM_CAIROS_APARTMENT          96100
+#define RM_SECRET_PARKING_GARAGE     RM_ENTRANCE_TO_DANTES
+#define RM_SECRET_DOCWAGON           RM_ENTRANCE_TO_DANTES
 #ifdef USE_PRIVATE_CE_WORLD
 #define RM_TEMPORARY_DOCWAGON        10097
 #define RM_SEATTLE_DOCWAGON          16295

@@ -4437,7 +4437,9 @@ ACMD(do_show)
       for (i = 0; i <= top_of_zone_table; i++) {
         int bottom = zone_table[i].number * 100;
         if (GET_LEVEL(ch) >= LVL_PRESIDENT && bottom > last_seen_top + 1) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(gap: %d - %d)^n\r\n", last_seen_top + 1, bottom - 1);
+          int start_vnum = last_seen_top + 1;
+          int end_vnum = bottom - 1;
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(gap: ^Y%4d^y rooms between %d - %d)^n\r\n", end_vnum - start_vnum, start_vnum, end_vnum);
         }
         print_zone_to_buf(ENDOF(buf), sizeof(buf) - strlen(buf), i, 0);
         last_seen_top = zone_table[i].top;

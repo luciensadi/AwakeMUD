@@ -7637,6 +7637,9 @@ struct room_data *get_jurisdiction_docwagon_room(int jurisdiction) {
     case JURISDICTION_CAS:
       vnum = RM_CAS_DOCWAGON;
       break;
+    case JURISDICTION_SECRET:
+      vnum = RM_SECRET_DOCWAGON;
+      break;
     default:
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: You forgot to add your new jurisdiciton %d to the get_jurisdiction_docwagon_rnum() function. Using Seattle's Docwagon.", jurisdiction);
       vnum = RM_SEATTLE_DOCWAGON;
@@ -7690,6 +7693,9 @@ struct room_data *get_jurisdiction_garage_room(int jurisdiction) {
       break;
     case JURISDICTION_CAS:
       vnum = RM_CAS_PARKING_GARAGE;
+      break;
+    case JURISDICTION_SECRET:
+      vnum = RM_SECRET_PARKING_GARAGE;
       break;
     default:
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: You forgot to add your new jurisdiciton %d to the get_jurisdiction_garage_room() function. Using Seattle's garage.", jurisdiction);

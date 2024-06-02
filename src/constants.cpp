@@ -1944,6 +1944,7 @@ const char *jurisdictions[] =
     "Caribbean",
     "Ocean",
     "CAS",
+    "Secret (do not set)",
     "\n"
   };
 
