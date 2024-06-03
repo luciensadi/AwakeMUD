@@ -7542,6 +7542,8 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
   std::unordered_map<std::string, int> rooms = {};
 
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    int old_issues = issues;
+
     if ((real_rm = real_room(i)) < 0)
       continue;
 
@@ -7796,7 +7798,8 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
         }
       }
     }
-    if (issues > 0) {
+    
+    if (old_issues != issues) {
       send_to_char(ch, "%s\r\n", buf);
     }
   }
@@ -7828,6 +7831,8 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
   }
 
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    int old_issues = issues;
+
     if ((real_mob = real_mobile(i)) < 0)
       continue;
 
@@ -8078,7 +8083,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
-    if (issues > 0) {
+    if (old_issues != issues) {
       send_to_char(ch, "%s\r\n", buf);
     }
   }
@@ -8100,6 +8105,8 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
     send_to_char(ch, "\r\n^WAuditing objects for zone %d...^n\r\n", zone_table[zone_num].number);
 
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    int old_issues = issues;
+
     if ((real_obj = real_object(i)) < 0)
       continue;
 
@@ -8516,7 +8523,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
-    if (issues > 0) {
+    if (old_issues != issues) {
       send_to_char(ch, "%s\r\n", buf);
     }
   }
@@ -8535,6 +8542,8 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
     send_to_char(ch, "\r\n^WAuditing quests for zone %d...^n\r\n", zone_table[zone_num].number);
 
   for (int zone_vnum = zone_table[zone_num].number * 100; zone_vnum <= zone_table[zone_num].top; zone_vnum++) {
+    int old_issues = issues;
+
     if ((real_qst = real_quest(zone_vnum)) < 0)
       continue;
 
@@ -8763,7 +8772,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
     }
 #endif
 
-    if (issues > 0) {
+    if (old_issues != issues) {
       send_to_char(ch, "%s\r\n", buf);
     }
   }
@@ -8779,6 +8788,8 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
     send_to_char(ch, "\r\n^WAuditing shops for zone %d...^n\r\n", zone_table[zone_num].number);
 
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    int old_issues = issues;
+
     if ((real_shp = real_shop(i)) < 0)
       continue;
 
@@ -8840,7 +8851,7 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
-    if (issues > 0) {
+    if (old_issues != issues) {
       send_to_char(ch, "%s\r\n", buf);
     }
   }
@@ -8858,6 +8869,8 @@ int audit_zone_vehicles_(struct char_data *ch, int zone_num, bool verbose) {
     send_to_char(ch, "\r\n^WAuditing vehicles for zone %d...^n\r\n", zone_table[zone_num].number);
 
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    int old_issues = issues;
+
     if ((real_veh = real_vehicle(i)) < 0)
       continue;
 
@@ -8881,7 +8894,7 @@ int audit_zone_vehicles_(struct char_data *ch, int zone_num, bool verbose) {
     }
     */
 
-    if (issues > 0) {
+    if (old_issues != issues) {
       send_to_char(ch, "%s\r\n", buf);
     }
   }
@@ -8946,6 +8959,8 @@ int audit_zone_ics_(struct char_data *ch, int zone_num, bool verbose) {
     send_to_char(ch, "\r\n^WAuditing ICs for zone %d...^n\r\n", zone_table[zone_num].number);
 
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
+    int old_issues = issues;
+    
     if ((real_num = real_ic(i)) < 0)
       continue;
 
@@ -8969,7 +8984,7 @@ int audit_zone_ics_(struct char_data *ch, int zone_num, bool verbose) {
     }
     */
 
-    if (issues > 0) {
+    if (old_issues != issues) {
       send_to_char(ch, "%s\r\n", buf);
     }
   }

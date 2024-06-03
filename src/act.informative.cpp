@@ -5398,6 +5398,8 @@ ACMD(do_weather)
     return;
   }
 
+  int current_sky = GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? MAX(weather_info.sky, SKY_CLOUDY) : weather_info.sky;
+
   if (precipitation_is_snow(GET_JURISDICTION(ch->in_room))) {
     static const char *sky_look[] =
     {
@@ -5408,7 +5410,7 @@ ACMD(do_weather)
     };
 
     send_to_char(ch, "The sky is %s and %s.\r\n",
-                 sky_look[weather_info.sky],
+                 sky_look[current_sky],
                  (weather_info.change >= 0 ? "you feel a cool breeze from north" : "the cold seeps into your bones"));
   }
   else {
@@ -5421,7 +5423,7 @@ ACMD(do_weather)
     };
 
     send_to_char(ch, "The sky is %s and %s.\r\n",
-                 sky_look[weather_info.sky],
+                 sky_look[current_sky],
                  (weather_info.change >= 0 ? "you feel a warm wind from south" : "your foot tells you bad weather is due"));
   }
 
