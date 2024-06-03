@@ -4029,19 +4029,13 @@ ACMD(do_zreset)
     i = real_zone(atoi(arg));
   if (i >= 0 && i <= top_of_zone_table) {
     if ((!access_level(ch, LVL_ADMIN)) && (zone_table[i].number != ch->player_specials->saved.zonenum)) {
-      send_to_char("You can only zreset your zone.\r\n", ch);
+      send_to_char("You can only zreset zones you've zswitched to first.\r\n", ch);
       return;
     }
     reset_zone(i, 0);
-    snprintf(buf, sizeof(buf), "Reset zone %d (#%d): %s.\r\n", i,
-            zone_table[i].number,
-            zone_table[i].name);
-    send_to_char(buf, ch);
-    snprintf(buf, sizeof(buf), "%s reset zone %d (#%d): %s",
-            GET_CHAR_NAME(ch), i,
-            zone_table[i].number,
-            zone_table[i].name);
-    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    send_to_char(ch, "Reset zone %d (#%d): %s.\r\n", i, zone_table[i].number, zone_table[i].name);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s reset zone %d (#%d): %s", GET_CHAR_NAME(ch), i, zone_table[i].number, 
+                    zone_table[i].locked_to_non_editors ? "<redacted>" : zone_table[i].name);
   } else
     send_to_char("Invalid zone number.\r\n", ch);
 }

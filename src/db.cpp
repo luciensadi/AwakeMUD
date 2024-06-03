@@ -1532,6 +1532,12 @@ void parse_room(File &fl, long nr)
       break;
   }
 
+  // Set background count.
+  if (GET_JURISDICTION(room) == JURISDICTION_SECRET && GET_BACKGROUND_COUNT(room) == 0) {
+    room->background[1] = AURA_DEATH;
+    room->background[0] = 1;
+  }
+
   top_of_world = rnum++;
   if (top_of_world >= top_of_world_array) {
     snprintf(buf, sizeof(buf), "WARNING: top_of_world >= top_of_world_array at %ld / %d.", top_of_world, top_of_world_array);
