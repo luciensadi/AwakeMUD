@@ -2816,7 +2816,7 @@ void send_to_outdoor(const char *messg, bool is_weather, bool to_special_jurisdi
           continue;
         }
         struct room_data *in_room = get_ch_in_room(i->character);
-        if (in_room && ((to_special_jurisdiction && GET_JURISDICTION(in_room) == JURISDICTION_SECRET) || (!to_special_jurisdiction && GET_JURISDICTION(in_room) != JURISDICTION_SECRET))) {
+        if (in_room && ((to_special_jurisdiction && GET_JURISDICTION(in_room) != JURISDICTION_SECRET) || (!to_special_jurisdiction && GET_JURISDICTION(in_room) == JURISDICTION_SECRET))) {
           continue;
         }
       }

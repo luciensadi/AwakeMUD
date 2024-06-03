@@ -3788,12 +3788,35 @@ const char *traffic_messages[] = {
 };
 #define NUM_TRAFFIC_MESSAGES 43
 
+const char *depressing_traffic_messages[] = {
+  "A crumpled plastic bag slips past on an eddy of wind.\r\n", // 0
+  "A long string of automatic fire echoes off of the concrete jungle.\r\n",
+  "A high-pitched screech warbles somewhere in the distance.\r\n",
+  "A flickering shadow zips above you, too high up to make out any details.\r\n",
+  "The sound of squealing tires echoes from somewhere in the distance.\r\n",
+  "The moldering scent of rot wafts by on the breeze.\r\n", // 5
+  "The stench of rotten eggs floats up from the river.\r\n",
+  "A fishy smell sneaks its way in from somewhere.\r\n",
+  "There's an ominous mutter from somewhere nearby, but it fades too fast for you to trace it.\r\n",
+  "A quiet chittering filters up from somewhere beneath you.\r\n",
+  "The skitter of too many legs sounds from somewhere nearby.\r\n", // 10
+  "A crumbling bit of masonry clatters to the ground.\r\n",
+  "Dust sifts down from somewhere overhead.\r\n",
+  "The groan of straining metal echoes through the streets.\r\n" // 13
+};
+#define NUM_DEPRESSING_MESSAGES 13
+
 SPECIAL(traffic)
 {
   struct room_data *room = (struct room_data *) me;
 
-  if (!cmd && room->people)
-    send_to_room(traffic_messages[number(0, NUM_TRAFFIC_MESSAGES - 1)], room);
+  if (!cmd && room->people) {
+    if (GET_JURISDICTION(room) == JURISDICTION_SECRET) {
+      send_to_room(depressing_traffic_messages[number(0, NUM_DEPRESSING_MESSAGES - 1)], room);
+    } else {
+      send_to_room(traffic_messages[number(0, NUM_TRAFFIC_MESSAGES - 1)], room);
+    }
+  }
 
   return FALSE;
 }
