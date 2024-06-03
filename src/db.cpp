@@ -1533,9 +1533,17 @@ void parse_room(File &fl, long nr)
   }
 
   // Set background count.
-  if (GET_JURISDICTION(room) == JURISDICTION_SECRET && GET_BACKGROUND_COUNT(room) == 0) {
-    room->background[1] = AURA_DEATH;
-    room->background[0] = 1;
+  if (GET_JURISDICTION(room) == JURISDICTION_SECRET) {
+    if (!ROOM_FLAGGED(room, ROOM_INDOORS)) {
+      if (GET_BACKGROUND_COUNT(room) == 0) {
+        room->background[CURRENT_BACKGROUND_COUNT] = room->background[PERMANENT_BACKGROUND_COUNT] = 1;
+        room->background[CURRENT_BACKGROUND_TYPE] = room->background[PERMANENT_BACKGROUND_TYPE] = AURA_DEATH;
+      }
+
+      if (room->sector_type == SPIRIT_HEARTH) {
+        room->sector_type = SPIRIT_CITY;
+      }
+    }
   }
 
   top_of_world = rnum++;

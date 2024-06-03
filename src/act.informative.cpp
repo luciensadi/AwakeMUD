@@ -1780,12 +1780,13 @@ void disp_long_exits(struct char_data *ch, bool autom)
   {
     if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
       if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
-        snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s%s%s\r\n", dirs[door],
+        snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s%s%s%s\r\n", dirs[door],
                  EXIT(ch, door)->to_room->number,
                  replace_neutral_color_codes(EXIT(ch, door)->to_room->name, autom ? "^c" : "^n"),
                  IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED) ? " (locked)" : ((IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) ? " (closed)" : ""),
                  IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) ? " (hidden)" : "",
-                 (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch, FALSE)) ? " (impassible)" : ""
+                 (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch, FALSE)) ? " (impassible)" : "",
+                 IS_WATER(EXIT(ch, door)->to_room) ? " (flooded)" : ""
                 );
         if (autom)
           strlcat(buf, "^c", sizeof(buf));
@@ -1809,8 +1810,11 @@ void disp_long_exits(struct char_data *ch, bool autom)
             }
             else
               snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "A closed %s", *(fname(EXIT(ch, door)->keyword)) ? fname(EXIT(ch, door)->keyword) : "door");
-          } else
+          } else {
             strlcat(buf2, replace_neutral_color_codes(EXIT(ch, door)->to_room->name, autom ? "^c" : "^n"), sizeof(buf2));
+            if (IS_WATER(EXIT(ch, door)->to_room))
+              strlcat(buf2, " (flooded)", sizeof(buf2));
+          }
           strlcat(buf2, "\r\n", sizeof(buf2));
         }
         if (autom)
@@ -2233,7 +2237,19 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     // Display lighting info.
     bool is_nighttime = (time_info.hours <= 6 || time_info.hours >= 19) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS);
     if (is_nighttime && ROOM_FLAGGED(ch->in_room, ROOM_STREETLIGHTS)) {
-      send_to_char("^LStreetlights drive back the nighttime darkness.^n\r\n", ch);
+      if (ROOM_FLAGS(ch->in_room).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE)) {
+        send_to_char("^LBright lights drive back the nighttime darkness.^n\r\n", ch);
+      } else if (GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET) {
+        if (ROOM_FLAGGED(ch->in_room, ROOM_ROAD)) {
+          send_to_char("^LFlickering streetlights struggle amidst the nighttime darkness.^n\r\n", ch);
+        } else {
+          send_to_char("^LFlickering lights barely make a dent in the gloom.^n\r\n", ch);
+        }
+      } else if (ROOM_FLAGGED(ch->in_room, ROOM_ROAD)) {
+        send_to_char("^LStreetlights drive back the nighttime darkness.^n\r\n", ch);
+      } else {
+        send_to_char("^LLights push back the nighttime darkness.^n\r\n", ch);
+      }
     } else if (is_nighttime && ch->in_room->sector_type == SPIRIT_CITY) {
       send_to_char("^LStreaks of light pollution soften the shadows.^n\r\n", ch);
     } else if (is_nighttime || (ch->in_room->vision[0] > LIGHT_NORMAL && ch->in_room->vision[0] <= LIGHT_PARTLIGHT)) {
