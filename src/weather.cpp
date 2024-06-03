@@ -62,7 +62,9 @@ void another_hour(void)
     else
       temp = "^L";
     snprintf(buf, sizeof(buf), "%sThe sun rises in the east.^n\r\n", temp);
-    send_to_outdoor(buf, TRUE);
+    send_to_outdoor(buf, TRUE, FALSE);
+    snprintf(buf, sizeof(buf), "%sThe murky light of the sun dawns behind the clouds.^n\r\n", temp);
+    send_to_outdoor(buf, TRUE, TRUE);
 
     weaken_or_terminate_spirits(TRUE);
     
@@ -85,7 +87,11 @@ void another_hour(void)
       break;
     }
     snprintf(buf, sizeof(buf), "%sThe day has begun.^n\r\n", temp);
-    send_to_outdoor(buf, TRUE);
+    send_to_outdoor(buf, TRUE, FALSE);
+    if (weather_info.sky < SKY_CLOUDY || weather_info.sky > SKY_LIGHTNING)
+      temp = "^o";
+    snprintf(buf, sizeof(buf), "%sThe day has begun.^n\r\n", temp);
+    send_to_outdoor(buf, TRUE, TRUE);
     break;
   case 18:
     weather_info.sunlight = SUN_SET;
@@ -107,7 +113,9 @@ void another_hour(void)
       break;
     }
     snprintf(buf, sizeof(buf), "%sThe sun slowly disappears in the west.^n\r\n", temp);
-    send_to_outdoor(buf, TRUE);
+    send_to_outdoor(buf, TRUE, FALSE);
+    snprintf(buf, sizeof(buf), "%sThe sun sullenly sinks into the west.^n\r\n", temp);
+    send_to_outdoor(buf, TRUE, TRUE);
 
     weaken_or_terminate_spirits(FALSE);
     
@@ -119,7 +127,8 @@ void another_hour(void)
     else
       snprintf(buf, sizeof(buf), "^LThe night has begun.^n\r\n");
 
-    send_to_outdoor(buf, TRUE);
+    send_to_outdoor(buf, TRUE, FALSE);
+    send_to_outdoor(buf, TRUE, TRUE);
     break;
   }
 
@@ -236,12 +245,14 @@ void weather_change(void)
   }
 
   if (change == 1) {
-    send_to_outdoor("^LThe sky starts to get cloudy.^n\r\n", TRUE);
+    send_to_outdoor("^LThe sky starts to get cloudy.^n\r\n", TRUE, FALSE);
+    send_to_outdoor("^LThe clouds start to thicken.^n\r\n", TRUE, TRUE);
     weather_info.sky = SKY_CLOUDY;
   }
 
   if (change == 3) {
-    send_to_outdoor("^CThe clouds disappear.^n\r\n", TRUE);
+    send_to_outdoor("^CThe clouds disappear.^n\r\n", TRUE, FALSE);
+    send_to_outdoor("^CThe clouds start to thin.^n\r\n", TRUE, TRUE);
     weather_info.sky = SKY_CLOUDLESS;
   }
 
@@ -262,17 +273,22 @@ void weather_change(void)
           continue;
         }
 
+        int jurisdiction = GET_JURISDICTION(get_ch_in_room(i->character));
         switch (change) {
           case 2:
-            if (precipitation_is_snow(GET_JURISDICTION(get_ch_in_room(i->character)))) {
+            if (precipitation_is_snow(jurisdiction)) {
               SEND_TO_Q("^WIt starts to snow.^n\r\n", i);
             } else {
-              SEND_TO_Q("^BIt starts to rain.^n\r\n", i);
+              if (jurisdiction == JURISDICTION_SECRET) {
+                SEND_TO_Q("^BDrops of bitter rain start to fall around you.^n\r\n", i);
+              } else {
+                SEND_TO_Q("^BIt starts to rain.^n\r\n", i);
+              }
             }
             weather_info.sky = SKY_RAINING;
             break;
           case 4:
-            if (precipitation_is_snow(GET_JURISDICTION(get_ch_in_room(i->character)))) {
+            if (precipitation_is_snow(jurisdiction)) {
               SEND_TO_Q("^WThe snow intensifies.^n\r\n", i);
             } else {
               SEND_TO_Q("^WLightning^L starts to show in the sky.^n\r\n", i);
@@ -280,16 +296,20 @@ void weather_change(void)
             weather_info.sky = SKY_LIGHTNING;
             break;
           case 5:
-            if (precipitation_is_snow(GET_JURISDICTION(get_ch_in_room(i->character)))) {
+            if (precipitation_is_snow(jurisdiction)) {
               SEND_TO_Q("^cThe snow stops.^n\r\n", i);
             } else {
-              SEND_TO_Q("^cThe rain stops.^n\r\n", i);
+              if (jurisdiction == JURISDICTION_SECRET) {
+                SEND_TO_Q("^cThe acrid rain peters out.^n\r\n", i);
+              } else {
+                SEND_TO_Q("^cThe rain stops.^n\r\n", i);
+              }
             }
             weather_info.sky = SKY_CLOUDY;
             weather_info.lastrain = 0;
             break;
           case 6:
-            if (precipitation_is_snow(GET_JURISDICTION(get_ch_in_room(i->character)))) {
+            if (precipitation_is_snow(jurisdiction)) {
               SEND_TO_Q("^WThe heavy snow slackens to light flurries now and then.^n\r\n", i);
             } else {
               SEND_TO_Q("^cThe ^Wlightning^c stops.^n\r\n", i);

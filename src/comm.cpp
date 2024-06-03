@@ -1049,15 +1049,35 @@ void game_loop(int mother_desc)
       weather_change();
       if (time_info.hours == 17) {
         for (i = 0; i <= top_of_world; i++) {
-          if (ROOM_FLAGGED(&world[i], ROOM_STREETLIGHTS)) {
+          if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE)) {
+            send_to_room("Ground-illuminating lights snap on as darkness falls.\r\n", &world[i]);
+          } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
+            if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
+              send_to_room("A battered streetlight starts to flicker on.\r\n", &world[i]);
+            } else {
+              send_to_room("A light flickers weakly against the darkness.\r\n", &world[i]);
+            }
+          } else if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
             send_to_room("A streetlight hums faintly, flickers, and turns on.\r\n", &world[i]);
+          } else {
+            send_to_room("A nearby light hums faintly, flickers, and turns on.\r\n", &world[i]);
           }
         }
       }
       if (time_info.hours == 7) {
         for (i = 0; i <= top_of_world; i++) {
-          if (ROOM_FLAGGED(&world[i], ROOM_STREETLIGHTS)) {
+          if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE)) {
+            send_to_room("The ground-illuminating lights shut off.\r\n", &world[i]);
+          } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
+            if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
+              send_to_room("The streetlight sputters out one last photon, then quits.\r\n", &world[i]);
+            } else {
+              send_to_room("The flickering light yields to the dawn.\r\n", &world[i]);
+            }
+          } else if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
             send_to_room("A streetlight flickers and goes out.\r\n", &world[i]);
+          } else {
+            send_to_room("A nearby light flickers and goes out.\r\n", &world[i]);
           }
         }
       }
@@ -2775,7 +2795,7 @@ void send_to_all(const char *messg)
       }
 }
 
-void send_to_outdoor(const char *messg, bool is_weather)
+void send_to_outdoor(const char *messg, bool is_weather, bool to_special_jurisdiction)
 {
   struct descriptor_data *i;
 
@@ -2791,11 +2811,14 @@ void send_to_outdoor(const char *messg, bool is_weather)
           PLR_FLAGGED(i->character, PLR_REMOTE)) &&
         OUTSIDE(i->character)) {
 
-      if (is_weather &&
-          (PRF_FLAGGED(i->character, PRF_NO_WEATHER) ||
-           (i->original && PRF_FLAGGED(i->original, PRF_NO_WEATHER))))
-      {
-        continue;
+      if (is_weather) {
+        if (PRF_FLAGGED(i->character, PRF_NO_WEATHER) || (i->original && PRF_FLAGGED(i->original, PRF_NO_WEATHER))) {
+          continue;
+        }
+        struct room_data *in_room = get_ch_in_room(i->character);
+        if (in_room && ((to_special_jurisdiction && GET_JURISDICTION(in_room) == JURISDICTION_SECRET) || (!to_special_jurisdiction && GET_JURISDICTION(in_room) != JURISDICTION_SECRET))) {
+          continue;
+        }
       }
 
       SEND_TO_Q(messg, i);

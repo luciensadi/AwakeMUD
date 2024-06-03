@@ -31,7 +31,7 @@ void    send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, b
 void    send_to_icon(struct matrix_icon *icon, const char * const messg, ...);
 void    send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...);
 void    send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig);
-void    send_to_outdoor(const char *messg, bool is_weather);
+void    send_to_outdoor(const char *messg, bool is_weather, bool to_special_jurisdiction);
 void    free_editing_structs(struct descriptor_data *d, int state);
 void    close_socket(struct descriptor_data *d);
 // int     gettimeofday(struct timeval *t, struct timezone *dummy);

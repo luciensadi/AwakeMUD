@@ -2250,7 +2250,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
       } else {
         send_to_char("^LLights push back the nighttime darkness.^n\r\n", ch);
       }
-    } else if (is_nighttime && ch->in_room->sector_type == SPIRIT_CITY) {
+    } else if (is_nighttime && ch->in_room->sector_type == SPIRIT_CITY && GET_JURISDICTION(ch->in_room) != JURISDICTION_SECRET) {
       send_to_char("^LStreaks of light pollution soften the shadows.^n\r\n", ch);
     } else if (is_nighttime || (ch->in_room->vision[0] > LIGHT_NORMAL && ch->in_room->vision[0] <= LIGHT_PARTLIGHT)) {
       if (ch->in_room->light[ROOM_HIGHEST_SPELL_FORCE]) {
@@ -2279,13 +2279,13 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
           if (should_be_snowy) {
             send_to_char(ch, "^WThe snow swirls about you as you swim.^n\r\n");
           } else {
-            send_to_char(ch, "^cThe rain gets in your eyes as you swim.^n\r\n");
+            send_to_char(ch, "^cThe %srain gets in your eyes as you swim.^n\r\n", GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? "acrid " : "");
           }
         } else if (weather_info.sky == SKY_LIGHTNING) {
           if (should_be_snowy) {
             send_to_char(ch, "^WHeavy snowfall makes the water treacherous.^n\r\n");
           } else {
-            send_to_char(ch, "^cThe water is made treacherous by the pounding rain.^n\r\n");
+            send_to_char(ch, "^cThe %swater is made treacherous by the pounding rain.^n\r\n", GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? "polluted " : "");
           }
         }
       } else {
@@ -2295,20 +2295,20 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
               if (should_be_snowy) {
                 send_to_char(ch, "^WSnowflakes tumble and fall about your bike.^n\r\n");
               } else {
-                send_to_char(ch, "^cRain ricochets off your shoulders and splashes about the bike.^n\r\n");
+                send_to_char(ch, "^c%s ricochets off your shoulders and splashes about the bike.^n\r\n", GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? "Stinking rain" : "Rain");
               }
             } else {
               if (should_be_snowy) {
                 send_to_char(ch, "^WSnowflakes linger briefly on your windows.^n\r\n");
               } else {
-                send_to_char(ch, "^cRain glides down your windows, wipers brushing them clear with patient motion.^n\r\n");
+                send_to_char(ch, "^c%s glides down your windows, wipers brushing it away with patient motion.^n\r\n", GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? "Oily rain" : "Rain");
               }
             }
           } else {
             if (should_be_snowy) {
               send_to_char(ch, "^WSnow drifts from the sky.^n\r\n");
             } else {
-              send_to_char(ch, "^cRain splashes into the puddles around your feet.^n\r\n");
+              send_to_char(ch, "^c%s splashes into the puddles around your feet.^n\r\n", GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? "Acrid rain" : "Rain");
             }
           }
         }
@@ -2318,20 +2318,20 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
               if (should_be_snowy) {
                 send_to_char(ch, "^WHeavy snow whips roughly around you, clinging to your bike.^n\r\n");
               } else {
-                send_to_char(ch, "^cHeavy rain pounds down around you, running in rivulets off of your bike.^n\r\n");
+                send_to_char(ch, "^cHeavy rain %s you, running in rivulets off of your bike.^n\r\n", GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? "rips at" : "pounds down around");
               }
             } else {
               if (should_be_snowy) {
                 send_to_char(ch, "^WHeavy snow flurries against your windows, making it hard to see.^n\r\n");
               } else {
-                send_to_char(ch, "^cHeavy rain pounds against your windows, making it hard to see.^n\r\n");
+                send_to_char(ch, "^cHeavy rain %s against your windows, making it hard to see.^n\r\n", GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? "slams" : "pounds");
               }
             }
           } else {
             if (should_be_snowy) {
               send_to_char(ch, "^WYou struggle to see through the heavy snowfall.^n\r\n");
             } else {
-              send_to_char(ch, "^cYou struggle to see through the heavy rain that pounds down from the sky.^n\r\n");
+              send_to_char(ch, "^cYou struggle to see through the heavy rain that %s down from the sky.^n\r\n", GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? "pounds" : "sheets");
             }
           }
         }
@@ -2339,11 +2339,11 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
           if (should_be_snowy) {
             send_to_char(ch, "^WSnow has accumulated in small drifts here and there.^n\r\n");
           } else {
-            send_to_char(ch, "^cThe ground is wet, it must have rained recently.^n\r\n");
+            send_to_char(ch, "^cThe ground is wet%s, it must have rained recently.^n\r\n", GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? " and slightly cleaner" : "");
           }
         }
         else if (weather_info.lastrain < 10 && should_be_snowy) {
-          send_to_char(ch, "^WSlushy snow clings stubbornly in the shadows.^n\r\n");
+          send_to_char(ch, "^W%s snow clings stubbornly in the shadows.^n\r\n", GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? "Dirty" : "Slushy");
         }
       }
     }

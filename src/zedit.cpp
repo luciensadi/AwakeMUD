@@ -245,7 +245,7 @@ void zedit_disp_data_menu(struct descriptor_data *d)
   }
   send_to_char(CH, "^G9^Y) ^WIs PGHQ: ^c%s^n\r\n", ZON->is_pghq ? "yes" : "no");
   if (access_level(CH, LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS)) {
-    send_to_char(CH, "^GL^Y) ^WLocked to Non-Editors: ^c%s^n\r\n", ZON->locked_to_non_editors ? "TRUE" : "FALSE");
+    send_to_char(CH, "^GL^Y) ^WSecret Squirrel (Inaccessible to Non-Editors): ^c%s^n\r\n", ZON->locked_to_non_editors ? "TRUE" : "FALSE");
   }
 
   send_to_char("^Gq^Y) ^WQuit\r\n^wEnter selection: ", CH);

@@ -455,7 +455,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     snprintf(buf, sizeof(buf), "You step out into the %s%s. ", should_be_snowy ? "cool " : "", time_of_day[weather_info.sunlight]);
 
     if (!PRF_FLAGGED(ch, PRF_NO_WEATHER)) {
-      if (weather_info.sunlight == SUN_DARK && weather_info.sky == SKY_CLOUDLESS)
+      if (weather_info.sunlight == SUN_DARK && weather_info.sky == SKY_CLOUDLESS && GET_JURISDICTION(ch->in_room) != JURISDICTION_SECRET)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You see the %s moon in the cloudless sky.\r\n", moon[weather_info.moonphase]);
       else {
         if (should_be_snowy) {
