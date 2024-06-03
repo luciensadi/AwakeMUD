@@ -1049,7 +1049,7 @@ void game_loop(int mother_desc)
       weather_change();
       if (time_info.hours == 17) {
         for (i = 0; i <= top_of_world; i++) {
-          if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE)) {
+          if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE, ENDBIT)) {
             send_to_room("Ground-illuminating lights snap on as darkness falls.\r\n", &world[i]);
           } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
             if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
@@ -1066,7 +1066,7 @@ void game_loop(int mother_desc)
       }
       if (time_info.hours == 7) {
         for (i = 0; i <= top_of_world; i++) {
-          if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE)) {
+          if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE, ENDBIT)) {
             send_to_room("The ground-illuminating lights shut off.\r\n", &world[i]);
           } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
             if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {

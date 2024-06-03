@@ -2237,7 +2237,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
     // Display lighting info.
     bool is_nighttime = (time_info.hours <= 6 || time_info.hours >= 19) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS);
     if (is_nighttime && ROOM_FLAGGED(ch->in_room, ROOM_STREETLIGHTS)) {
-      if (ROOM_FLAGS(ch->in_room).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE)) {
+      if (ROOM_FLAGS(ch->in_room).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE, ENDBIT)) {
         send_to_char("^LBright lights drive back the nighttime darkness.^n\r\n", ch);
       } else if (GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET) {
         if (ROOM_FLAGGED(ch->in_room, ROOM_ROAD)) {
@@ -7641,6 +7641,8 @@ ACMD(do_search) {
   bool found_something = FALSE;
   bool has_secrets = FALSE;
 
+  FAILURE_CASE(!ch->in_room, "You must be standing in a room to do that.");
+
   act("$n searches the area.", TRUE, ch, 0, 0, TO_ROOM);
 
   for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
@@ -7659,7 +7661,7 @@ ACMD(do_search) {
   if (!found_something) {
     send_to_char("You search the area for secrets, but fail to turn anything up.\r\n", ch);
 
-    if (has_secrets && success_test(GET_INT(ch), 4))
+    if (has_secrets && success_test(GET_INT(ch), GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET ? 10 : 4))
       send_to_char("You feel like there's still something to uncover here...\r\n", ch);
   }
 }
