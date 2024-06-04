@@ -1035,35 +1035,39 @@ void game_loop(int mother_desc)
       weather_change();
       if (time_info.hours == 17) {
         for (i = 0; i <= top_of_world; i++) {
-          if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE, ENDBIT)) {
-            send_to_room("Ground-illuminating lights snap on as darkness falls.\r\n", &world[i]);
-          } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
-            if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
-              send_to_room("A battered streetlight starts to flicker on.\r\n", &world[i]);
+          if (ROOM_FLAGGED(&world[i], ROOM_STREETLIGHTS)) {
+            if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE, ENDBIT)) {
+              send_to_room("Ground-illuminating lights snap on as darkness falls.\r\n", &world[i]);
+            } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
+              if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
+                send_to_room("A battered streetlight starts to flicker on.\r\n", &world[i]);
+              } else {
+                send_to_room("A light flickers weakly against the darkness.\r\n", &world[i]);
+              }
+            } else if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
+              send_to_room("A streetlight hums faintly, flickers, and turns on.\r\n", &world[i]);
             } else {
-              send_to_room("A light flickers weakly against the darkness.\r\n", &world[i]);
+              send_to_room("A nearby light hums faintly, flickers, and turns on.\r\n", &world[i]);
             }
-          } else if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
-            send_to_room("A streetlight hums faintly, flickers, and turns on.\r\n", &world[i]);
-          } else {
-            send_to_room("A nearby light hums faintly, flickers, and turns on.\r\n", &world[i]);
           }
         }
       }
       if (time_info.hours == 7) {
         for (i = 0; i <= top_of_world; i++) {
-          if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE, ENDBIT)) {
-            send_to_room("The ground-illuminating lights shut off.\r\n", &world[i]);
-          } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
-            if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
-              send_to_room("The streetlight sputters out one last photon, then quits.\r\n", &world[i]);
+          if (ROOM_FLAGGED(&world[i], ROOM_STREETLIGHTS)) {
+            if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE, ENDBIT)) {
+              send_to_room("The ground-illuminating lights shut off.\r\n", &world[i]);
+            } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
+              if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
+                send_to_room("The streetlight sputters out one last photon, then quits.\r\n", &world[i]);
+              } else {
+                send_to_room("The flickering light yields to the dawn.\r\n", &world[i]);
+              }
+            } else if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
+              send_to_room("A streetlight flickers and goes out.\r\n", &world[i]);
             } else {
-              send_to_room("The flickering light yields to the dawn.\r\n", &world[i]);
+              send_to_room("A nearby light flickers and goes out.\r\n", &world[i]);
             }
-          } else if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
-            send_to_room("A streetlight flickers and goes out.\r\n", &world[i]);
-          } else {
-            send_to_room("A nearby light flickers and goes out.\r\n", &world[i]);
           }
         }
       }
