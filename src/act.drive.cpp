@@ -955,38 +955,26 @@ ACMD(do_subscribe)
         has_deck = TRUE;
   }
 
-  if (!has_deck) {
-    send_to_char("You need a Remote Control Deck to do that.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!has_deck, "You need a Remote Control Deck to do that.");
+
   if (subcmd == SCMD_UNSUB) {
     skip_spaces(&argument);
-    if (!*argument || !isdigit(*argument)) {
-      send_to_char("You need to supply a number from your subscriber list (e.g. ^WUNSUB 3^n).\r\n", ch);
-      return;
-    }
+    
+    FAILURE_CASE(!*argument || !isdigit(*argument), "You need to supply a number from your subscriber list (e.g. ^WUNSUB 3^n).");
+
     num = atoi(argument);
     for (veh = ch->char_specials.subscribe; veh; veh = veh->next_sub)
       if (--num < 0)
         break;
-    if (!veh) {
-      send_to_char("Your subscriber list isn't that big.\r\n", ch);
-      return;
+    
+    FAILURE_CASE(!veh, "Your subscriber list isn't that big.");
+
+    if (remove_veh_from_chs_subscriber_list(veh, ch, "do_subscribe")) {
+      send_to_char(ch, "You remove %s from your subscriber list.\r\n", GET_VEH_NAME(veh));
+      veh->sub_rank = 0;
+    } else {
+      send_to_char(ch, "You attempt to remove %s from your subscriber list, but something glitches out.\r\n", GET_VEH_NAME(veh));
     }
-    // It's a doubly-linked list now, so we have to do both next and prev subs.
-    if (veh->prev_sub)
-      veh->prev_sub->next_sub = veh->next_sub;
-    else
-      ch->char_specials.subscribe = veh->next_sub;
-
-    if (veh->next_sub)
-      veh->next_sub->prev_sub = veh->prev_sub;
-
-    // Now that we've removed it from the list, wipe the sub data from this vehicle.
-    veh->sub = FALSE;
-    veh->next_sub = NULL;
-    veh->prev_sub = NULL;
-    send_to_char(ch, "You remove %s from your subscriber list.\r\n", GET_VEH_NAME(veh));
     return;
   }
 
@@ -1025,6 +1013,14 @@ ACMD(do_subscribe)
                        room_name_with_coords
           );
         }
+
+        if (access_level(ch, LVL_PRESIDENT)) {
+          send_to_char(ch, "^^-- rank %d%s, prev_sub %s, next_sub %s\r\n",
+                       veh->sub_rank,
+                       veh->sub ? "" : ", ^RNOT SUBBED^n",
+                       GET_VEH_NAME(veh->prev_sub),
+                       GET_VEH_NAME(veh->next_sub));
+        }
       }
     } else
       send_to_char("Your subscriber list is empty.\r\n", ch);
@@ -1042,32 +1038,16 @@ ACMD(do_subscribe)
     }
   } else
     veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch);
-  if (!veh) {
-    send_to_char(ch, "You don't see any vehicles named '%s' here.\r\n", buf);
-    return;
-  }
-  if (veh->owner != GET_IDNUM(ch)) {
-    send_to_char("That's not yours.\r\n", ch);
-    return;
-  }
-  if (veh->sub) {
-    send_to_char("That is already part of your subscriber list.\r\n", ch);
-    return;
-  }
-  for (struct veh_data *sveh = ch->char_specials.subscribe; sveh; sveh = sveh->next_sub)
-    if (sveh == veh) {
-      send_to_char("That is already part of your subscriber list.\r\n", ch);
-      sveh->sub = TRUE;
-      mudlog("SYSERR: Almost-successful attempt to add duplicate vehicle to subscriber list.", ch, LOG_SYSLOG, TRUE);
-      return;
-    }
 
-  veh->sub = TRUE;
-  veh->next_sub = ch->char_specials.subscribe;
-  if (ch->char_specials.subscribe)
-    ch->char_specials.subscribe->prev_sub = veh;
-  ch->char_specials.subscribe = veh;
-  send_to_char(ch, "You add %s to your subscriber list.\r\n", GET_VEH_NAME(veh));
+  FAILURE_CASE_PRINTF(!veh, "You don't see any vehicles named '%s' here.", buf);
+  FAILURE_CASE_PRINTF(veh->owner != GET_IDNUM(ch), "%s isn't yours.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+  FAILURE_CASE_PRINTF(veh->sub, "%s is already part of your subscriber list.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+
+  if (add_veh_to_chs_subscriber_list(veh, ch, "do_subscribe", FALSE)) {
+    send_to_char(ch, "You add %s to your subscriber list.\r\n", GET_VEH_NAME(veh));
+  } else {
+    send_to_char(ch, "You attempt to add %s to your subscriber list, but something glitches out.\r\n", GET_VEH_NAME(veh));
+  }
 }
 
 ACMD(do_repair)
@@ -2352,18 +2332,9 @@ ACMD(do_transfer)
   else {
     // Unsub it.
     if (veh->sub) {
-      if (veh->prev_sub)
-        veh->prev_sub->next_sub = veh->next_sub;
-      else
-        ch->char_specials.subscribe = veh->next_sub;
-
-      if (veh->next_sub)
-        veh->next_sub->prev_sub = veh->prev_sub;
-
-      // Now that we've removed it from the list, wipe the sub data from this vehicle.
+      remove_veh_from_chs_subscriber_list(veh, ch, "do_transfer");
+      // r_v_f_c_s_l() tries to avoid clobbering things so may not guarantee veh->sub is unset. Let's ensure it.
       veh->sub = FALSE;
-      veh->next_sub = NULL;
-      veh->prev_sub = NULL;
     }
 
     snprintf(buf, sizeof(buf), "You transfer ownership of %s to $N.", GET_VEH_NAME(veh));
@@ -2372,6 +2343,7 @@ ACMD(do_transfer)
     act(buf2, 0, ch, 0, targ, TO_VICT);
     set_veh_owner(veh, GET_IDNUM(targ));
     veh->sub = FALSE;
+    veh->sub_rank = 0;
 
     if (ch->desc && targ->desc) {
       rectify_desc_host(ch->desc);

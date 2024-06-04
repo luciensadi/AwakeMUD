@@ -188,6 +188,11 @@ struct room_data *get_jurisdiction_docwagon_room(int jurisdiction);
 struct room_data *get_jurisdiction_garage_room(int jurisdiction);
 void   set_dropped_by_info(struct obj_data *obj, struct char_data *ch);
 
+// RCD subscription functions.
+bool   add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller, bool ignore_veh_sub_marker, bool mute_duplication_alarm=FALSE);
+bool   remove_veh_from_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller);
+void   regenerate_subscriber_list_rankings(struct char_data *ch);
+
 // Edit lock funcs.
 bool ch_can_bypass_edit_lock(struct char_data *ch, struct zone_data *zone);
 bool ch_can_bypass_edit_lock(struct char_data *ch, struct room_data *room);

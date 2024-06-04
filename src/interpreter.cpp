@@ -3228,22 +3228,10 @@ void nanny(struct descriptor_data * d, char *arg)
       // Regenerate their subscriber list.
       for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
         if (veh->sub && GET_IDNUM(d->character) == veh->owner) {
-          struct veh_data *f = NULL;
-          for (f = d->character->char_specials.subscribe; f; f = f->next_sub) {
-            if (f == veh)
-              break;
-          }
-          if (!f) {
-            veh->next_sub = d->character->char_specials.subscribe;
-
-            // Doubly link it into the list.
-            if (d->character->char_specials.subscribe)
-              d->character->char_specials.subscribe->prev_sub = veh;
-
-            d->character->char_specials.subscribe = veh;
-          }
+          add_veh_to_chs_subscriber_list(veh, d->character, "login sub regen", TRUE);
         }
       }
+      regenerate_subscriber_list_rankings(d->character);
 
       break;
 

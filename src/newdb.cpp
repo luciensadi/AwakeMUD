@@ -1831,6 +1831,9 @@ bool PCIndex::SaveChar(char_data *ch, vnum_t loadroom, bool fromCopyover)
 
   bool ret = save_char(ch, loadroom, fromCopyover);
 
+  // Also regenerate their subscriber list rankings while you're at it.
+  regenerate_subscriber_list_rankings(ch);
+
   return ret;
 }
 

@@ -1366,6 +1366,10 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
                driver ? GET_CHAR_NAME(driver) : "nobody",
                rigger ? GET_CHAR_NAME(rigger) : "nobody",
                k->rigger ? GET_CHAR_NAME(k->rigger) : "nobody");
+  
+  if (GET_LEVEL(ch) == LVL_PRESIDENT && k->sub) {
+    send_to_char(ch, "Sub rank: %d, next %s, prev %s\r\n", k->sub_rank, GET_VEH_NAME(k->next_sub), GET_VEH_NAME(k->prev_sub));
+  }
 }
 
 void do_stat_object(struct char_data * ch, struct obj_data * j)

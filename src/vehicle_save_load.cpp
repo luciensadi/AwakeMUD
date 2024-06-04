@@ -153,19 +153,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
   if (veh->sub) {
     for (i = character_list; i; i = i->next_in_character_list) {
       if (GET_IDNUM(i) == veh->owner) {
-        struct veh_data *f = NULL;
-        for (f = i->char_specials.subscribe; f; f = f->next_sub)
-          if (f == veh)
-            break;
-        if (!f) {
-          veh->next_sub = i->char_specials.subscribe;
-
-          // Doubly link it into the list.
-          if (i->char_specials.subscribe)
-            i->char_specials.subscribe->prev_sub = veh;
-
-          i->char_specials.subscribe = veh;
-        }
+        add_veh_to_chs_subscriber_list(veh, i, "save_single_vehicle just-in-case sub regen", TRUE, TRUE);
         break;
       }
     }
@@ -252,6 +240,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
   fprintf(fl, "\tOwner:\t%ld\n", veh->owner);
   fprintf(fl, "\tInRoom:\t%ld\n", temp_room->number);
   fprintf(fl, "\tSubscribed:\t%d\n", veh->sub);
+  fprintf(fl, "\tSubRank:\t%d\n", veh->sub_rank);
   fprintf(fl, "\tDamage:\t%d\n", veh->damage);
   fprintf(fl, "\tSpare:\t%ld\n", veh->spare);
   fprintf(fl, "\tIdnum:\t%ld\n", veh->idnum);
@@ -398,6 +387,14 @@ void save_vehicles(bool fromCopyover)
   FILE *fl;
   int num_veh = 0;
 
+  // Update all character subscriber list rankings so we can save them accurately.
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    struct char_data *ch = d->original ? d->original : d->character;
+    if (ch) {
+      regenerate_subscriber_list_rankings(ch);
+    }
+  }
+
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     if (save_single_vehicle(veh, fromCopyover))
       num_veh++;
@@ -465,6 +462,7 @@ void load_single_veh(const char *filename) {
   veh->spare2 = data.GetLong("VEHICLE/InVeh", 0);
   veh->locked = TRUE;
   veh->sub = data.GetLong("VEHICLE/Subscribed", 0);
+  veh->sub_rank = data.GetInt("VEHICLE/SubRank", 0);
   veh->desired_in_room_on_load = data.GetLong("VEHICLE/InRoom", 0);
 
   // Can't get there? Pull your veh out.

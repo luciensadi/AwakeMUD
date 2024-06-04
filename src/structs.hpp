@@ -848,6 +848,7 @@ struct veh_data
   struct obj_data *mount;
   struct obj_data *mod[NUM_MODS];
   bool sub;
+  int sub_rank;
 
   idnum_t idnum;
   idnum_t owner;
@@ -887,7 +888,7 @@ struct veh_data
       in_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
       long_description(NULL), restring_long(NULL), decorate_front(NULL), decorate_rear(NULL),
       inside_description(NULL), rear_description(NULL), veh_destruction_timer(0), 
-      followers(NULL), following(NULL), followch(NULL), mount(NULL),
+      followers(NULL), following(NULL), followch(NULL), mount(NULL), sub(FALSE), sub_rank(0),
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL), defined_position(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
       next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL),
