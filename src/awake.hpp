@@ -816,8 +816,9 @@ enum {
 #define AURA_CONFUSION     12
 #define AURA_POWERSITE     13
 #define AURA_BLOOD_MAGIC   14
-#define AURA_PLAYERCOMBAT   15
-#define AURA_PLAYERDEATH   16
+#define AURA_WRONGNESS     15
+#define AURA_PLAYERCOMBAT  16
+#define AURA_PLAYERDEATH   17
 
 #define COMBAT      1
 #define DETECTION    2
@@ -2258,7 +2259,8 @@ enum {
 #define CON_TEMPDESC_EDIT       51
 #define CON_ART_CREATE          52
 #define CON_ACCOUNT_PARSE       53
-#define CON_MAX                 53
+#define CON_FACTION_EDIT        54
+#define CON_MAX                 54
 #define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.

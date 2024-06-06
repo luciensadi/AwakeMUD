@@ -6868,8 +6868,11 @@ ACMD(do_slist)
     if (shop_table[nr].vnum >= first)
       continue;
     
-    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(shop_table[nr].vnum)))
+    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(shop_table[nr].vnum))) {
+      if (GET_LEVEL(ch) == LVL_PRESIDENT)
+        send_to_char(ch, "------ [%8ld] %s <hidden>\r\n", shop_table[nr].vnum, (real_mob = real_mobile(shop_table[nr].keeper)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]));
       continue;
+    }
 
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s %s (%ld)\r\n", ++found,
             shop_table[nr].vnum,

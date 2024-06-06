@@ -892,6 +892,7 @@ const char *connected_types[] =
     "Tempdesc Editing",
     "Creating Art",
     "Account Editing",
+    "Faction Editing",
     "\n"
   };
 
@@ -2801,7 +2802,8 @@ const char *background_types[] =
   "confusion",
   "power site",
   "blood magic",
-  "violence",                   // 15
+  "wrongness",               // 15
+  "violence",
   "death",
   "ERROR"
 };
@@ -3246,6 +3248,16 @@ const char *networth_modes[NUM_NETWORTH_BITS] = {
   "ApartmentContents",
   "OnPC",
   "Initiations"
+};
+
+const char *faction_status_names[] = {
+  "Hostile",
+  "Cautious",
+  "Neutral",
+  "Cooperative",
+  "Friendly",
+  "Neighborly",
+  "Ally"
 };
 
 struct kosher_weapon_values_struct kosher_weapon_values[MAX_WEAP] = {

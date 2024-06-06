@@ -73,6 +73,7 @@
 #include "dblist.hpp"
 #include "moderation.hpp"
 #include "newhouse.hpp"
+#include "factions.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -2338,6 +2339,11 @@ void free_editing_structs(descriptor_data *d, int state)
   if (d->edit_icon) {
     Mem->DeleteIcon(d->edit_icon);
     d->edit_icon = NULL;
+  }
+
+  if (d->edit_faction) {
+    delete d->edit_faction;
+    d->edit_faction = NULL;
   }
 
 #define DELETE_EDITING_INFO(field) { if ((field)) { delete (field); (field) = NULL; }}

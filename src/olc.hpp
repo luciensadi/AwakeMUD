@@ -406,4 +406,9 @@ extern void write_index_file(const char *suffix);
 #define HOUSEEDIT_APARTMENT_ROOMS           8
 #define HOUSEEDIT_APARTMENT_GARAGE_OVERRIDE 9
 
+#define FACTION_EDIT_MAIN_MENU              0
+#define FACTION_EDIT_NAME                   1
+#define FACTION_EDIT_DESC                   2
+#define FACTION_EDIT_DEFAULT_STATUS         3
+
 #endif

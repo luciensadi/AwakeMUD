@@ -5306,7 +5306,7 @@ struct zone_data *get_zone_from_vnum(vnum_t vnum) {
   return NULL;
 }
 
-#define SEND_MESSAGE(...) { if (send_message) { send_to_char(ch, __VA_ARGS__); } }
+#define SEND_MESSAGE(...) { if (send_message) { send_to_char(ch, ##__VA_ARGS__); } }
 bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch, bool send_message) {
   if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE)) {
     SEND_MESSAGE(CANNOT_GO_THAT_WAY);
@@ -7830,7 +7830,7 @@ bool add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, 
     veh->next_sub = NULL;
     veh->prev_sub = NULL;
     veh->sub = TRUE;
-    mudlog_vfprintf(ch, LOG_SYSLOG, "Successful completion of add_veh_to_chs_subscriber_list(%s-%ld, %s, %s) (new list).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+    // mudlog_vfprintf(ch, LOG_SYSLOG, "Successful completion of add_veh_to_chs_subscriber_list(%s-%ld, %s, %s) (new list).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
     return TRUE;
   } else {
     // Next, we search the existing list.
@@ -7850,6 +7850,7 @@ bool add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, 
 
         subbed->prev_sub = veh;
         veh->sub = TRUE;
+        /*
         mudlog_vfprintf(ch, LOG_SYSLOG, "Successful completion of add_veh_to_chs_subscriber_list(%s-%ld, %s, %s) (sub inserted at %srank %d).", 
                         GET_VEH_NAME(veh), 
                         GET_VEH_IDNUM(veh), 
@@ -7857,6 +7858,7 @@ bool add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, 
                         caller, 
                         ch->char_specials.subscribe == veh ? "head at " : "",
                         veh->sub_rank);
+        */
         return TRUE;
       }
 
@@ -7865,7 +7867,7 @@ bool add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, 
         subbed->next_sub = veh;
         veh->prev_sub = subbed;
         veh->sub = TRUE;
-        mudlog_vfprintf(ch, LOG_SYSLOG, "Successful completion of add_veh_to_chs_subscriber_list(%s-%ld, %s, %s) (sub appended at rank %d).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller, veh->sub_rank);
+        // mudlog_vfprintf(ch, LOG_SYSLOG, "Successful completion of add_veh_to_chs_subscriber_list(%s-%ld, %s, %s) (sub appended at rank %d).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller, veh->sub_rank);
         return TRUE;
       }
     }
@@ -7923,7 +7925,7 @@ bool remove_veh_from_chs_subscriber_list(struct veh_data *veh, struct char_data 
   veh->prev_sub = NULL;
   veh->next_sub = NULL;
 
-  mudlog_vfprintf(ch, LOG_SYSLOG, "Successful completion of remove_veh_from_chs_subscriber_list(%s-%ld, %s, %s).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+  // mudlog_vfprintf(ch, LOG_SYSLOG, "Successful completion of remove_veh_from_chs_subscriber_list(%s-%ld, %s, %s).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
   return TRUE;
 }
 
