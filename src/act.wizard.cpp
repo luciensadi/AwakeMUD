@@ -6865,8 +6865,10 @@ ACMD(do_slist)
 
   int real_mob;
   for (nr = MAX(0, real_shop(first)); nr <= top_of_shopt && (shop_table[nr].vnum <= last); nr++) {
-    if (shop_table[nr].vnum >= first)
+    if (shop_table[nr].vnum < first || shop_table[nr].vnum >= last) {
+      // send_to_char(ch, "Skipping shop %ld: Not in range %d ≤ X ≤ %d.\r\n", shop_table[nr].vnum, first, last);
       continue;
+    }
     
     if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(shop_table[nr].vnum))) {
       if (GET_LEVEL(ch) == LVL_PRESIDENT)
@@ -6882,7 +6884,7 @@ ACMD(do_slist)
   }
 
   if (!found)
-    send_to_char("No shops were found in those parameters.\r\n", ch);
+    send_to_char(ch, "No shops were found between %d and %d.\r\n", first, last);
   else
     page_string(ch->desc, buf, 1);
 }
