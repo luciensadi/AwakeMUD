@@ -400,6 +400,11 @@ void set_natural_vision_for_race(struct char_data *ch) {
       set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_NATURAL);
       set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_NATURAL);
       break;
+    case RACE_FLESHFORM:
+      set_vision_bit(ch, VISION_THERMOGRAPHIC, VISION_BIT_IS_NATURAL);
+      set_vision_bit(ch, VISION_LOWLIGHT, VISION_BIT_IS_NATURAL);
+      set_vision_bit(ch, VISION_ULTRASONIC, VISION_BIT_IS_NATURAL);
+      break;
   }
 }
 

@@ -228,7 +228,10 @@
 #define RACE_ELEMENTAL             34
 #define RACE_SPIRIT                35
 #define RACE_PC_CONJURED_ELEMENTAL 36
-#define NUM_RACES                  36  /* This must be the NUMBER of races */
+#define RACE_FLESHFORM             37
+#define RACE_ANIMAL                38
+#define RACE_PARACRITTER           39
+#define NUM_RACES                  39  /* This must be the NUMBER of races */
 
 #define MINIMUM_VALID_PLAYER_RACE  2
 #define MAXIMUM_VALID_PLAYER_RACE  33
@@ -395,7 +398,8 @@ enum {
 #define MOB_RACIAL_AGGR_VS_MOBS  34 /* Will trigger racial aggro vs other NPCs */
 #define MOB_NO_NUYEN_LOOT_DROPS  35 /* Will never drop nuyen on death. */
 #define MOB_PERCEIVING           36 /* Astrally perceiving */
-#define MOB_MAX                  37
+#define MOB_LIKES_FLESHFORM      37 /* doesn't attack fleshform */
+#define MOB_MAX                  38
 
 /* preference flags: used by char_data.player_specials.pref */
 

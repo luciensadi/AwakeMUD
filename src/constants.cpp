@@ -610,6 +610,7 @@ const char *action_bits[] =
     "RACE_AGGR_VS_MOBS",
     "BROKE_ASS",
     "PERCEIVING",
+    "LIKES_FLESHFORM",
     MAX_FLAG_MARKER
   };
 
@@ -2146,7 +2147,10 @@ int racial_limits[][2][6] = {
                               {{ 13, 5, 11, 3, 3, 6 },{ 19, 8, 17, 5, 5, 9 }}, // ghoul (troll)
                               {{ 0, 0, 0, 0, 0, 0 },{ 0, 0, 0, 0, 0, 0 }}, // elemental
                               {{ 0, 0, 0, 0, 0, 0 },{ 0, 0, 0, 0, 0, 0 }}, // spirit
-                              {{ 0, 0, 0, 0, 0, 0 },{ 0, 0, 0, 0, 0, 0 }} // PC conjured elemental
+                              {{ 0, 0, 0, 0, 0, 0 },{ 0, 0, 0, 0, 0, 0 }}, // PC conjured elemental
+                              {{ 15,15,15,15,15,15},{50,50,50,50,50,50 }}, // fleshform
+                              {{ 15,15,15,15,15,15},{50,50,50,50,50,50 }}, // animal
+                              {{ 15,15,15,15,15,15},{50,50,50,50,50,50 }}  // paracritter
                             };
 
 int racial_attribute_modifiers[][6] = {
@@ -2187,7 +2191,10 @@ int racial_attribute_modifiers[][6] = {
   {  7, -1,  5, -3, -3,  1  }, // troll (ghoul)
   {  0,  0,  0,  0,  0,  0  }, // elemental
   {  0,  0,  0,  0,  0,  0  }, // spirit
-  {  0,  0,  0,  0,  0,  0  } // PC conjured elemental
+  {  0,  0,  0,  0,  0,  0  }, // PC conjured elemental
+  {  0,  0,  0,  0,  0,  0  }, // fleshform
+  {  0,  0,  0,  0,  0,  0  }, // animal
+  {  0,  0,  0,  0,  0,  0  }  // paracritter
 };
 
 const char *attributes[] =
@@ -3075,6 +3082,9 @@ const char *pc_race_types_for_wholist[] =
     "Elemental",
     "Spirit",
     "ConjElem",
+    "Fleshform",
+    "Animal",
+    "Paracritr",
     "\n"
   };
 
@@ -3117,6 +3127,9 @@ const char *pc_race_types[] =
     "Elemental",
     "Spirit",
     "Conjured Elemental",
+    "Fleshform",
+    "Animal",
+    "Paracritter",
     "\n"
   };
 
@@ -3159,6 +3172,9 @@ const char *pc_race_types_decap[] =
     "elemental",
     "spirit",
     "conjured elemental",
+    "fleshform",
+    "animal",
+    "paracritter",
     "\n"
   };
 
