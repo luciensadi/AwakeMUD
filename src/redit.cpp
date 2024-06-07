@@ -374,6 +374,9 @@ void redit_disp_menu(struct descriptor_data * d)
   else if (d->edit_room->room_flags.IsSet(ROOM_RADIATION)) {
     send_to_char(CH, "m) Radiation power: %s%d%s\r\n", CCCYN(CH, C_CMP), ROOM->rating, CCNRM(CH, C_CMP));
   }
+  else if (d->edit_room->room_flags.AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ENDBIT)) {
+    send_to_char(CH, "m) Flight test difficulty: %s%d%s\r\n", CCCYN(CH, C_CMP), ROOM->rating, CCNRM(CH, C_CMP));
+  }
   send_to_char(CH, "n) Staff Level Required to Enter: %s%d%s\r\n", CCCYN(CH, C_CMP), ROOM->staff_level_lock, CCNRM(CH, C_CMP));
   if (ROOM_FLAGGED(ROOM, ROOM_HELIPAD) || ROOM_FLAGGED(ROOM, ROOM_RUNWAY)) {
     send_to_char(CH, "o) Flight destination code: %s%s%s\r\n", CCCYN(CH, C_CMP), ROOM->flight_code, CCNRM(CH, C_CMP));
@@ -773,7 +776,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       break;
       // new stuff here
     case 'm':
-      if (ROOM->sector_type == SPIRIT_LAKE || ROOM->sector_type == SPIRIT_SEA || ROOM->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.AreAnySet(ROOM_FALL, ROOM_RADIATION, ENDBIT)) {
+      if (ROOM->sector_type == SPIRIT_LAKE || ROOM->sector_type == SPIRIT_SEA || ROOM->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.AreAnySet(ROOM_FALL, ROOM_RADIATION, ROOM_RUNWAY, ROOM_HELIPAD, ENDBIT)) {
         send_to_char("Enter environmental difficulty rating (TN) (1 to 20): ", CH);
         d->edit_mode = REDIT_LIBRARY_RATING;
       } else {

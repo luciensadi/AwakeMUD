@@ -201,7 +201,7 @@ ACMD(do_flyto) {
     send_to_char("You abort your takeoff at the last moment, narrowly avoiding disaster.\r\n", ch);
     snprintf(buf, sizeof(buf), "%s aborts its takeoff at the last moment.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
     send_to_room(buf, veh->in_room, veh);
-    send_to_veh("Your vehicle aborts its takeoff at the last moment.\r\n", veh, ch, TRUE);
+    send_to_veh("Your aircraft aborts its takeoff at the last moment.\r\n", veh, ch, TRUE);
     int refund = fuel_cost - MIN(fuel_cost, 100);
     
     if (refund > 0) {
@@ -277,7 +277,7 @@ bool check_for_valid_launch_location(struct char_data *ch, struct veh_data *veh,
   // Must be in a room.
   if (!veh->in_room) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Somehow %s (piloted by %s) ended up with no containing vehicle or room!", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
-    send_to_char("Something went wrong, your vehicle seems lost. Contact staff for assistance.\r\n", ch);
+    send_to_char("Something went wrong, your aircraft seems lost. Contact staff for assistance.\r\n", ch);
     return FALSE;
   }
 
@@ -452,17 +452,22 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
   // Apply weather modifiers.
   switch (weather_info.sky) {
     case SKY_CLOUDY:
-      strlcat(rbuf, "Cloudy(+1)", sizeof(rbuf));
+      strlcat(rbuf, "Cloudy(+1) ", sizeof(rbuf));
       tn += 1;
       break;
     case SKY_RAINING:
-      strlcat(rbuf, "Raining(+2)", sizeof(rbuf));
+      strlcat(rbuf, "Raining(+2) ", sizeof(rbuf));
       tn += 2;
       break;
     case SKY_LIGHTNING:
-      strlcat(rbuf, "Storming(+3)", sizeof(rbuf));
+      strlcat(rbuf, "Storming(+3) ", sizeof(rbuf));
       tn += 3;
       break;
+  }
+
+  struct room_data *room = get_veh_in_room(veh);
+  if (room->rating) {
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "RunwayRating(+%d)", room->rating);
   }
   
   int dice = get_skill(ch, skill_num, tn, rbuf, sizeof(rbuf));
@@ -591,7 +596,7 @@ void process_flying_vehicles() {
 
     // Nobody's at the controls? Crash it.
     if (!controller) {
-      send_to_veh("Your stomach drops as your uncontrolled vehicle plunges towards the ground!\r\n", veh, controller, TRUE);
+      send_to_veh("Your stomach drops as your uncontrolled aircraft plunges towards the ground!\r\n", veh, controller, TRUE);
       crash_flying_vehicle(veh);
       continue;
     }
@@ -602,7 +607,7 @@ void process_flying_vehicles() {
                       GET_VEH_NAME(veh),
                       GET_CHAR_NAME(controller));
       send_to_char(controller, "With the flight surfaces destroyed, %s plummets to the ground!\r\n", GET_VEH_NAME(veh));
-      send_to_veh("Your stomach drops as your vehicle goes into an uncontrolled descent!\r\n", veh, controller, TRUE);
+      send_to_veh("Your stomach drops as your aircraft goes into an uncontrolled descent!\r\n", veh, controller, TRUE);
       crash_flying_vehicle(veh);
       continue;
     }
@@ -613,7 +618,7 @@ void process_flying_vehicles() {
                       GET_VEH_NAME(veh),
                       GET_CHAR_NAME(controller));
       send_to_char("You get turned around in the clouds, and by the time you realize what's happening, you're on a collision course with the ground!\r\n", controller);
-      send_to_veh("Your stomach drops as your vehicle goes into an uncontrolled descent!\r\n", veh, controller, TRUE);
+      send_to_veh("Your stomach drops as your aircraft goes into an uncontrolled descent!\r\n", veh, controller, TRUE);
       crash_flying_vehicle(veh);
       continue;
     }
@@ -623,7 +628,7 @@ void process_flying_vehicles() {
     if (result < 0) {
       // Botch? Ground.
       send_to_char(controller, "You fumble at the controls, accidentally putting %s into a steep dive towards the ground!\r\n", GET_VEH_NAME(veh));
-      send_to_veh("Your stomach drops as your vehicle goes into an uncontrolled descent!\r\n", veh, controller, FALSE);
+      send_to_veh("Your stomach drops as your aircraft goes into an uncontrolled descent!\r\n", veh, controller, FALSE);
       crash_flying_vehicle(veh);
       continue;
     } else if (result == 0) {
@@ -660,15 +665,15 @@ void process_flying_vehicles() {
         result = flight_test(controller, veh);
         if (result < 0) {
           // Botched landing: Crash.
-          send_to_char("You fuck up the landing, sending your vehicle straight into the ground!\r\n", controller);
+          send_to_char("You fuck up the landing, sending your aircraft straight into the ground!\r\n", controller);
           send_to_veh("You scream as a botched landing sends you hurtling towards the ground!\r\n", veh, controller, FALSE);
           snprintf(buf, sizeof(buf), "%s comes hurtling in on a deadly collision course!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
           send_to_room(buf, veh->in_room, veh);
           crash_flying_vehicle(veh);
         } else if (result == 0) {
           // Zero successes: Land with damage.
-          send_to_char("You fuck up the landing, slamming your vehicle into the ground painfully!\r\n", controller);
-          send_to_veh("There's an almighty BANG as your vehicle slams into the ground!\r\n", veh, controller, FALSE);
+          send_to_char("You fuck up the landing, slamming your aircraft into the ground with a bang!\r\n", controller);
+          send_to_veh("There's an almighty BANG as your aircraft slams into the ground!\r\n", veh, controller, FALSE);
           snprintf(buf, sizeof(buf), "%s comes hurtling in on a collision course!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
           send_to_room(buf, veh->in_room, veh);
           veh->damage += 5;
@@ -681,7 +686,7 @@ void process_flying_vehicles() {
           send_to_room(buf, veh->in_room, veh);
         }
       } else {
-        switch (number(1, 4)) {
+        switch (number(1, 8)) {
           case 1:
             send_to_char(controller, "Clouds roll by in a pillowy expanse as you soar towards your destination.\r\n");
             break;
@@ -693,6 +698,18 @@ void process_flying_vehicles() {
             break;
           case 4:
             send_to_char(controller, "The landscape below is picture-perfect, a sprawling patchwork of color and light.\r\n");
+            break;
+          case 5:
+            send_to_char(controller, "You wish you had a packet of airline peanuts to enjoy the view with.\r\n");
+            break;
+          case 6:
+            send_to_char(controller, "There's an odd shimmy in your controls, but it straightens out after a moment. Nothing to worry about.\r\n");
+            break;
+          case 7:
+            send_to_char(controller, "Sure is nice up here.\r\n");
+            break;
+          case 8:
+            send_to_char(controller, "The life of a private pilot is so glamorous, isn't it?\r\n");
             break;
         }
       }
