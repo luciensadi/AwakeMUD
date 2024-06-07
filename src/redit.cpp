@@ -777,7 +777,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       // new stuff here
     case 'm':
       if (ROOM->sector_type == SPIRIT_LAKE || ROOM->sector_type == SPIRIT_SEA || ROOM->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.AreAnySet(ROOM_FALL, ROOM_RADIATION, ROOM_RUNWAY, ROOM_HELIPAD, ENDBIT)) {
-        send_to_char("Enter environmental difficulty rating (TN) (1 to 20): ", CH);
+        send_to_char("Enter environmental difficulty rating (TN) (0 to 50): ", CH);
         d->edit_mode = REDIT_LIBRARY_RATING;
       } else {
         redit_disp_menu(d);
@@ -1263,8 +1263,8 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 
   case REDIT_LIBRARY_RATING:
     number = atoi(arg);
-    if ((number < 0) || (number > 20)) {
-      send_to_char("Value must be between 0 and 20.\r\n", CH);
+    if ((number < 0) || (number > 50)) {
+      send_to_char("Value must be between 0 and 50.\r\n", CH);
       send_to_char("Enter current rating: ", CH);
     } else {
       ROOM->rating = number;
