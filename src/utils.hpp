@@ -405,6 +405,8 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define SEES_ASTRAL(ch) (!IS_RIGGING(ch) && (IS_ASTRAL(ch) || IS_DUAL(ch) || IS_PERCEIVING(ch)))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
 
+#define GET_MOB_FACTION_IDNUM(mob) ((mob)->char_specials.npc_faction_membership)
+
 #define GET_PROJECTION_ESSLOSS_TICK(ch)  ((ch)->points.projection_ticks)
 
 #define RACE_IS_GHOUL(race)  ((race) >= RACE_GHOUL_HUMAN && (race) <= RACE_GHOUL_TROLL)

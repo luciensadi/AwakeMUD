@@ -35,6 +35,7 @@
 #include "creative_works.hpp"
 #include "moderation.hpp"
 #include "vehicles.hpp"
+#include "factions.hpp"
 
 #define DO_FORMAT_INDENT   1
 #define DONT_FORMAT_INDENT 0
@@ -45,6 +46,7 @@ void format_tabs(struct descriptor_data *d);
 
 extern void insert_or_append_emote_at_position(struct descriptor_data *d, char *string);
 extern void set_room_tempdesc(struct room_data *room, const char *desc, idnum_t idnum);
+extern void faction_edit_main_menu(struct descriptor_data * d);
 
 /* ************************************************************************
 *  modification of new'ed strings                                      *
@@ -334,6 +336,13 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (STATE(d) == CON_HELPEDIT) {
       REPLACE_STRING(d->edit_helpfile->body);
       helpedit_disp_menu(d);
+    } else if (STATE(d) == CON_FACTION_EDIT) {
+      if ((d->str) && !detected_abort) {
+        format_string(d, DO_FORMAT_INDENT);
+        d->edit_faction->set_description(*d->str);
+        DELETE_D_STR_IF_EXTANT(d);
+      }
+      faction_edit_main_menu(d);
     } else if (STATE(d) == CON_IEDIT) {
       switch(d->edit_mode) {
         case IEDIT_EXTRADESC_DESCRIPTION:

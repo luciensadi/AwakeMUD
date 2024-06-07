@@ -262,6 +262,7 @@ extern void write_index_file(const char *suffix);
 #define MEDIT_DELETE_PRECAST_SPELL            63
 #define MEDIT_ADD_PRECAST_SPELL_WITH_SUBTYPE  64
 #define MEDIT_EDIT_EXISTING_SPELL             65
+#define MEDIT_FACTION_AFFILIATION             66
 
 // quest defines
 #define QEDIT_CONFIRM_EDIT                            0
@@ -410,5 +411,6 @@ extern void write_index_file(const char *suffix);
 #define FACTION_EDIT_NAME                   1
 #define FACTION_EDIT_DESC                   2
 #define FACTION_EDIT_DEFAULT_STATUS         3
+#define FACTION_EDIT_EDITORS                4
 
 #endif

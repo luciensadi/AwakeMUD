@@ -21,6 +21,7 @@
 #include "handler.hpp"
 #include "constants.hpp"
 #include "bullet_pants.hpp"
+#include "factions.hpp"
 
 void write_mobs_to_disk(vnum_t zone);
 void list_mob_precast_spells_to_ch(struct char_data *mob, struct char_data *ch);
@@ -133,6 +134,7 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "t) Edit Equipment (%d piece%s)\r\n", eq_total, eq_total == 1 ? "" : "s");
 
   send_to_char(CH, "u) Speech Highlight: \"%s%s^n\"\r\n", GET_CHAR_COLOR_HIGHLIGHT(MOB), SETTABLE_CHAR_COLOR_HIGHLIGHT(MOB) ? "Example speech." : "<not set>");
+  send_to_char(CH, "v) Faction: ^c%s^n\r\n", GET_MOB_FACTION_IDNUM(MOB) ? get_faction_name(GET_MOB_FACTION_IDNUM(MOB), CH) : "<not set>");
 
   send_to_char("q) Quit and save\r\n", CH);
   send_to_char("x) Exit and abort\r\n", CH);
@@ -890,6 +892,10 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Enter speech highlight: ", CH);
       d->edit_mode = MEDIT_HIGHLIGHT;
       break;
+    case 'v':
+      list_factions_to_char(CH, FALSE);
+      send_to_char("Select the faction this mob belongs to:", CH);
+      d->edit_mode = MEDIT_FACTION_AFFILIATION;
     default:
       medit_disp_menu(d);
       break;
@@ -967,10 +973,23 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
 
+  case MEDIT_FACTION_AFFILIATION:
+    number = atoi(arg);
+    {
+      Faction *faction = get_faction(number);
+      if (!faction || !faction->ch_can_edit_faction(CH)) {
+        send_to_char("That's not a faction you can assign. Try again, or enter 0 to clear: \r\n", CH);
+        return;
+      }
+      GET_MOB_FACTION_IDNUM(MOB) = faction->get_idnum();
+      medit_disp_menu(d);
+    }
+    break;
+
   case MEDIT_NUYEN:
     number = atoi(arg);
-    if ((number < 0) || (number > 999999)) {
-      send_to_char("Value must range between 0 and 999999.\r\n", CH);
+    if ((number < 0) || (number > 9999)) {
+      send_to_char("Value must range between 0 and 9999.\r\n", CH);
       send_to_char("Enter average nuyen: ", CH);
     } else {
       GET_NUYEN_RAW(MOB) = number;
@@ -981,8 +1000,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
   case MEDIT_CREDSTICK:
     number = atoi(arg);
-    if ((number < 0) || (number > 999999)) {
-      send_to_char("Value must range between 0 and 999999.\r\n", CH);
+    if ((number < 0) || (number > 9999)) {
+      send_to_char("Value must range between 0 and 9999.\r\n", CH);
       send_to_char("Enter average credstick value: ", CH);
     } else {
       GET_BANK_RAW(MOB) = number;
@@ -1882,6 +1901,8 @@ void write_mobs_to_disk(vnum_t zone_num)
         fprintf(fp, "\tBank:\t%ld\n", GET_BANK(mob));
       if (GET_KARMA(mob) > 0)
         fprintf(fp, "\tKarma:\t%d\n", GET_KARMA(mob));
+      if (GET_MOB_FACTION_IDNUM(mob) > 0)
+        fprintf(fp, "\tFaction:\t%ld\n", GET_MOB_FACTION_IDNUM(mob));
 
 
       bool printed_skills_yet = FALSE;

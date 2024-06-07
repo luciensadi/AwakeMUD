@@ -87,6 +87,7 @@ void free_quest(struct quest_data *quest);
 void init_parse(struct descriptor_data *d, char *arg);
 void vehcust_parse(struct descriptor_data *d, char *arg);
 void pocketsec_parse(struct descriptor_data *d, char *arg);
+void faction_edit_parse(struct descriptor_data *d, const char *arg);
 int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info);
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
@@ -2591,6 +2592,9 @@ void nanny(struct descriptor_data * d, char *arg)
     // this sends control to the various on-line creation systems
   case CON_POCKETSEC:
     pocketsec_parse(d, arg);
+    break;
+  case CON_FACTION_EDIT:
+    faction_edit_parse(d, arg);
     break;
   case CON_REDIT:
     redit_parse(d, arg);

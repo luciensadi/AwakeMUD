@@ -1,16 +1,17 @@
 /* prototype / design: NPCs belong to factions, which matter to players because you can accrue rep with factions.
-   - [p] if a faction NPC sees you help their cause, you gain rep
-     - killing their enemies can only take you up to Cooperative so folks don't murder-hobo their way into Ally with everyone
+   - [f] if a faction NPC sees you help their cause, you gain rep
+     - [f] killing their enemies can only take you up to Cooperative so folks don't murder-hobo their way into Ally with everyone
      - quests can be flagged as 'ally-worthy', if not flagged as such they can only take you up to Friendly. No being an ally by endlessly running packages
 
-   - [p] if a faction NPC sees you attack someone on their side, you lose rep
-     - this can take you all the way to Hostile
+   - [f] if a faction NPC sees you attack / kill someone on their side, you lose rep
 
-   - if you're disguised somehow (figure this out), they don't report in unless they see through the disguise
-     (perception check?)
+   - [f] if they can't see you (invis etc, or firing from outside of their vision range), they don't report in about you
 
-   - if they can't see you (invis etc, or firing from outside of their vision range), they don't report in about you
-     - this will increase pressure on me to write ranged magic... ugh
+   - [√] FACTION LIST
+   - [√] FACTION SHOW x
+   - [√] FACTION EDIT x
+   - [√] FACTION CREATE
+   - [p] FACTION SETREP x y
 
   Why this matters to players:
   - [p] Low rep gets you attacked on sight by faction guards and puts faction non-guard NPCs on alert when they see you
@@ -23,6 +24,7 @@
   - Attacking the leader is bad and gets you a big rep penalty.
   - You can buy faction rep up to Friendly by paying the leader. No, you can't get your money back by then killing the leader.
   - High rep ratings get you occasional upnods and recognition in passing. Low ones get you scowls and threatening moves from non-wimpy chars.
+  - if you're disguised somehow (figure this out), NPCs don't report in unless they see through the disguise (perception check?)
 
   SUPER STRETCH:
   - Figure out a way for players to see which faction an NPC belongs to that doesn't completely break immersion
@@ -32,23 +34,28 @@
 
 KEY: 
 - p: prototyped
-- i: implemented
+- f: implemented in faction code, but not rolled out to rest of codebase
+- i: implemented in whole codebase / ready for testing
 - √: tested / done
 */
 
-// TODO: Staff can set someone's faction rep
+// √ Figure out how to show builders factions in their zones when they haven't met them yet. [staff must set rep? Or editor list]
+// √ If editor list, then: FACTION CREATE makes you an editor of it; you always have view permissions for it.
+// √ Save/load mob faction affiliation.
+
+// TODO: Staff can set PC's faction rep
 // TODO: Non-editors of protected zones can't see factions from protected zones
 // STRETCH: Allow lower-level builders to edit them
 // STRETCH: Jobs can have faction rep impacts on other factions (e.g. "steal this thing from Mitsuhama", giver is pleased, mitsu is not)
 
-#include <unordered_map>
+#include <map>
 #include <boost/filesystem.hpp>
 
 #include "structs.hpp"
 
 extern char *str_dup(const char *source);
 
-#define LVL_REQUIRED_FOR_FACTION_EDIT LVL_ADMIN
+#define LVL_REQUIRED_FOR_GLOBAL_FACTION_EDIT LVL_ADMIN
 
 #define WITNESSED_NPC_ATTACKED   1
 #define WITNESSED_NPC_KILLED     2
@@ -66,6 +73,10 @@ enum faction_statuses {
 };
 
 #define FACTION_IDNUM_UNDEFINED 0
+
+int get_faction_status_min_rep(int status);
+int get_faction_status_max_rep(int status);
+int get_faction_status_avg_rep(int status);
 
 class Faction {
   idnum_t idnum = FACTION_IDNUM_UNDEFINED;  // 123
@@ -90,32 +101,44 @@ public:
   Faction(boost::filesystem::path filename);
 
   // Creates a new empty faction for editing.
-  Faction() {};
+  Faction() :
+    full_name(str_dup("<unnamed faction>")), description(str_dup("<not yet described>"))
+  {};
 
   ~Faction() {
     delete full_name;
     delete description;
   }
 
+  void save();
+
   idnum_t get_idnum()           { return idnum; }
   const char *get_full_name()   { if (full_name)   return full_name;   return "<unnamed faction>"; }
   const char *get_description() { if (description) return description; return "<not yet described>"; }
   int get_default_status()      { return default_status; }
+  int get_default_rep()         { return (default_status == faction_statuses::NEUTRAL ? 0 : get_faction_status_avg_rep(default_status)); }
 
   void set_full_name(const char *str)   { delete [] full_name;   full_name   = str_dup(str); }
   void set_description(const char *str) { delete [] description; description = str_dup(str); }
   bool set_default_status(int status);
+  void set_idnum(idnum_t new_idnum)     { idnum = new_idnum; }
 
   // Test for if a builder can work with this faction or not.
   bool ch_can_edit_faction(struct char_data *ch) { return GET_LEVEL(ch) == LVL_PRESIDENT; }
+  bool ch_can_list_faction(struct char_data *ch);
+  const char *list_editors();
 
   // Returns a faction status string (Friendly etc)
   const char *render_faction_status(struct char_data *ch);
 
-  bool ch_can_list_faction(struct char_data *ch);
+  // Add or remove editors.
+  bool is_editor(idnum_t idnum) { for (auto v_id : editors) { if (idnum == v_id) return TRUE; } return FALSE; }
+  bool add_editor(idnum_t idnum);
+  void remove_editor(idnum_t idnum);
+  std::vector<idnum_t> *get_editors() { return &editors; }
 };
 
-extern std::unordered_map<idnum_t, Faction *> global_faction_map;
+extern std::map<idnum_t, Faction *> global_faction_map;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -143,11 +166,11 @@ int faction_rep_to_status(int rep);
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // Can you shop here?
-bool faction_shop_will_deal_with_player(struct shop_data *shop, struct char_data *ch);
+bool faction_shop_will_deal_with_player(idnum_t faction_idnum, struct char_data *ch);
 
 // Gets a multiplier for prices
-float get_shop_faction_buy_from_player_multiplier(struct shop_data *shop, struct char_data *ch);
-float get_shop_faction_sell_to_player_multiplier(struct shop_data *shop, struct char_data *ch);
+float get_shop_faction_buy_from_player_multiplier(idnum_t faction_idnum, struct char_data *ch);
+float get_shop_faction_sell_to_player_multiplier(idnum_t faction_idnum, struct char_data *ch);
 
 // Faction hostility check. Don't @ me about the name.
 bool faction_leader_says_geef_ze_maar_een_pak_slaag_voor_papa(struct char_data *klapper, struct char_data *klappee);
@@ -167,8 +190,6 @@ void load_player_faction_info(struct char_data *ch);
 
 /* File save/load for factions themselves. */
 void parse_factions();
-void save_individual_faction(Faction *faction);
-void save_factions();
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // OLC
@@ -177,5 +198,9 @@ void save_factions();
 // TODO: If faction idnum is not set on 'Y', set it before saving.
 void faction_edit_parse(struct descriptor_data * d, const char *arg);
 
-/////////// Convenience defines
-#define GET_MOB_FACTION_IDNUM(mob) (mob)->char_specials.npc_faction_membership
+///// utility
+Faction *get_faction(idnum_t idnum);
+
+const char *get_faction_name(idnum_t idnum, struct char_data *viewer);
+
+void list_factions_to_char(struct char_data *ch, bool show_rep=TRUE);

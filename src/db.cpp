@@ -86,6 +86,7 @@ extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data
 extern void reset_host_paydata(rnum_t rnum);
 extern bool player_is_dead_hardcore(long id);
 extern void load_apartment_complexes();
+extern void parse_factions();
 
 extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
@@ -588,6 +589,7 @@ void boot_world(void)
   require_that_field_exists_in_table("prestige_alt", "pfiles_chargendata", "SQL/Migrations/prestige_races.sql");
   require_that_sql_table_exists("pfiles_named_tags", "SQL/Migrations/add_named_tags.sql");
   require_that_field_exists_in_table("Value14", "pfiles_inv", "SQL/Migrations/obj_idnums_and_vals.sql");
+  require_that_sql_table_exists("pfiles_factions", "SQL/Migrations/add_factions.sql");
 
   {
     const char *object_tables[4] = {
@@ -607,6 +609,9 @@ void boot_world(void)
 
   log("Handling idle deletion.");
   idle_delete();
+
+  log("Loading factions.");
+  parse_factions();
 
   log("Loading zone table.");
   index_boot(DB_BOOT_ZON);
@@ -1847,6 +1852,7 @@ void parse_mobile(File &in, long nr)
   GET_NUYEN_RAW(mob) = data.GetInt("POINTS/Cash", 0);
   GET_BANK_RAW(mob) = data.GetInt("POINTS/Bank", 0);
   GET_KARMA(mob) = data.GetInt("POINTS/Karma", 0);
+  GET_MOB_FACTION_IDNUM(mob) = data.GetLong("POINTS/Faction", 0);
 
   GET_PHYSICAL(mob) = GET_MAX_PHYSICAL(mob);
   GET_MENTAL(mob) = GET_MAX_MENTAL(mob);
