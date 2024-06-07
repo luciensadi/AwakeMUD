@@ -2386,18 +2386,21 @@ void docwagon_retrieve(struct char_data *ch) {
       int dw_random_cost = number(8, 12) * 500 / MAX(1, GET_DOCWAGON_CONTRACT_GRADE(docwagon));
       int creds = MAX(dw_random_cost, (int)(GET_NUYEN(ch) / 10));
 
-      send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
+      send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", dw_random_cost);
 
       if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
         send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
         extract_obj(docwagon);
       }
-      else if (GET_BANK(ch) < creds) {
-        lose_nuyen(ch, creds - GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
-        lose_bank(ch, GET_BANK(ch), NUYEN_OUTFLOW_DOCWAGON);
+      else if (GET_NUYEN(ch) < creds) {
+        lose_bank(ch, creds - GET_NUYEN(ch), NUYEN_OUTFLOW_DOCWAGON);
+        lose_nuyen(ch, GET_NUYEN(ch), NUYEN_OUTFLOW_DOCWAGON);
       }
       else {
-        lose_bank(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
+        lose_nuyen(ch, creds, NUYEN_OUTFLOW_DOCWAGON);
+        if (creds > dw_random_cost) {
+          send_to_char(ch, "It seems that an additional %d nuyen has vanished from your cash-stuffed pockets.\r\n", creds - dw_random_cost);
+        }
       }
     } else {
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Could not find modulator after DW rescue of %s.", GET_CHAR_NAME(ch));
