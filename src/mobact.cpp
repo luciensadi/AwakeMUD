@@ -262,7 +262,7 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
     // Is this an astral projection?
     if (!IS_PROJECT(vict)) {
       // Nope. Is this a race I'm aggressive towards?
-      if (!MOB_FLAGGED(ch, MOB_RACIAL_AGGR_VS_MOBS) || !mob_is_aggressive_towards_race(ch, GET_RACE(vict))) {
+      if (!mob_is_aggressive_towards_race(ch, GET_RACE(vict)) || !(GET_RACE(vict) == RACE_FLESHFORM || MOB_FLAGGED(ch, MOB_RACIAL_AGGR_VS_MOBS))) {
         #ifdef MOBACT_DEBUG
               snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping NPC %s - not hunted escortee, projection, or racial target.", GET_CHAR_NAME(vict));
               do_say(ch, buf3, 0, 0);

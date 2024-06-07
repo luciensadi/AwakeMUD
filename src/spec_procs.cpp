@@ -3814,18 +3814,18 @@ const char *depressing_traffic_messages[] = {
   "A crumbling bit of masonry clatters to the ground.\r\n",
   "Dust sifts down from somewhere overhead.\r\n",
   "The groan of straining metal echoes through the streets.\r\n",
-  "The distant wail of a siren rises and falls, unanswered.\r\n",
+  "The distant wail of an alarm rises and falls, unanswered.\r\n",
   "A broken window pane creaks as it sways in the wind.\r\n", // 15
   "Leaves rustle across the cracked pavement, driven by sporadic gusts.\r\n",
   "The faint smell of burnt rubber hangs in the air.\r\n",
   "A rusty signpost squeaks as it swings.\r\n",
-  "A distant rumble hints at something collapsing far away.\r\n",
+  "A muted rumble hints at something collapsing far away.\r\n",
   "A brief, bright flash of light illuminates the horizon before darkness returns.\r\n", // 20
   "A metallic clinking sound echoes, like a loose chain swaying in the breeze.\r\n",
   "The persistent drip of water echoes through a nearby alley.\r\n",
   "A stray screamsheet flutters by, its pages torn and yellowed.\r\n",
   "A single light bulb flickers erratically in an otherwise darkened window.\r\n",
-  "A distant plume of smoke rises in the distance.\r\n", // 25
+  "A plume of black smoke rises in the distance.\r\n", // 25
   "A lone bird circles high above, its cries lost in the empty sky.\r\n",
   "An old billboard, faded and peeling, advertises long-forgotten luxuries.\r\n",
   "The acrid smell of smoke lingers in the air, a remnant of recent fires.\r\n",
@@ -3836,20 +3836,21 @@ const char *depressing_traffic_messages[] = {
   "The stench of spoiled food assaults your nostrils.\r\n",
   "The faint, sweet smell of decomposing vegetation rises from a neglected bit of green space.\r\n",
   "The heavy, oily scent of stagnant water flows past you.\r\n", // 35
-  "The distant clang of metal on metal echoes from an unseen alley.\r\n",
+  "The clang of metal on metal echoes from an unseen alley.\r\n",
   "A hollow rattle comes from an empty soda can rolling down the street.\r\n",
   "A flight of pigeons startles from a nearby rooftop.\r\n",
   "There's an eerie howl as the wind whips through shattered windows.\r\n",
   "The sudden crash of a collapsing fire escape reverberates through the silence.\r\n", // 40
-  "The distant clatter of falling debris echoes down the empty streets.\r\n",
+  "The clatter of falling debris echoes down the empty streets.\r\n",
   "A muffled explosion booms from somewhere in the city.\r\n",
   "The shrill cry of a seagull pierces the silence.\r\n",
-  "The distant bark of a stray dog reverberates through the emptiness.\r\n",
-  "You become aware of a rustling noise-- probably unseen rats scurrying through the garbage.\r\n", // 45
+  "The distant bark of a stray dog reverberates amidst the concrete jungle.\r\n",
+  "You become aware of a rustling noise-- probably rats scurrying through the garbage.\r\n", // 45
   "There's a sharp crack as glass breaks somewhere nearby.\r\n",
-  "From a high-up window, you hear the distant murmur of an emergency broadcast repeating endlessly.\r\n"
+  "From a high-up window, you hear the mechanical murmur of an emergency broadcast repeating endlessly.\r\n",
+  "The rotten smell of stagnant water blows through on a cold breeze.\r\n"
 };
-#define NUM_DEPRESSING_MESSAGES 47
+#define NUM_DEPRESSING_MESSAGES 48
 
 SPECIAL(traffic)
 {
