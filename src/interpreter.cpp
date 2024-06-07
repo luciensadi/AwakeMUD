@@ -624,7 +624,7 @@ struct command_info cmd_info[] =
     { "domain"     , POS_LYING   , do_domain   , 0, 0, BLOCKS_IDLE_REWARD },
     { "download"   , POS_RESTING , do_download_headware, 0, 0, BLOCKS_IDLE_REWARD },
     { "donate"     , POS_RESTING , do_drop     , 0, SCMD_DONATE, BLOCKS_IDLE_REWARD },
-    { "drag"       , POS_STANDING, do_drag     , 0, 0, BLOCKS_IDLE_REWARD },
+    { "drag"       , POS_SITTING , do_drag     , 0, 0, BLOCKS_IDLE_REWARD },
     { "drink"      , POS_RESTING , do_drink    , 0, SCMD_DRINK, BLOCKS_IDLE_REWARD },
     { "drive"      , POS_SITTING , do_drive    , 0, 0, BLOCKS_IDLE_REWARD },
     { "drop"       , POS_LYING   , do_drop     , 0, SCMD_DROP, BLOCKS_IDLE_REWARD },
