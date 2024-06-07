@@ -597,6 +597,14 @@ void affect_total(struct char_data * ch)
   GET_MAGIC_POOL(ch) = 0;
   GET_CONTROL(ch) = 0;
 
+  // These should also be set before other effects (like drugs) are applied
+  GET_MAX_MENTAL(ch) = 1000;
+  GET_MAX_PHYSICAL(ch) = 1000;
+  GET_TARGET_MOD(ch) = 0;
+  GET_CONCENTRATION_TARGET_MOD(ch) = 0;
+  GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
+  GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
+
   // Set reach, depending on race. Stripped out the 'you only get it at X height' thing since it's not canon and a newbie trap.
   if ((GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_GIANT ||
        GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_GHOUL_TROLL || GET_RACE(ch) == RACE_DRAKE_TROLL) /* && GET_HEIGHT(ch) > 260 */)
@@ -912,12 +920,6 @@ void affect_total(struct char_data * ch)
     }
   }
 #endif
-  GET_MAX_MENTAL(ch) = 1000;
-  GET_MAX_PHYSICAL(ch) = 1000;
-  GET_TARGET_MOD(ch) = 0;
-  GET_CONCENTRATION_TARGET_MOD(ch) = 0;
-  GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
-  GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
 
   // Here so that other modifiers can't make the char immune to disabling via nerve strike
   if (GET_TEMP_QUI_LOSS(ch))
