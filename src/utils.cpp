@@ -72,6 +72,7 @@ extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads, const c
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
 extern int get_max_skill_for_char(struct char_data *ch, int skill, int type);
+extern int find_sight(struct char_data *ch);
 
 extern SPECIAL(johnson);
 extern SPECIAL(landlord_spec);
@@ -7939,4 +7940,53 @@ void regenerate_subscriber_list_rankings(struct char_data *ch) {
   for (struct veh_data *subbed = ch->char_specials.subscribe; subbed; subbed = subbed->next_sub) {
     subbed->sub_rank = counter++;
   }
+}
+
+// Shoots a straight line from viewer out each cardinal direction. If it hits ch's room within sight range, returns true.
+bool ch_is_in_viewers_visual_range(struct char_data *ch, struct char_data *viewer) {
+  if (!viewer || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Null char or viewer to ch_is_in_viewers_visual_range");
+    return FALSE;
+  }
+
+  struct room_data *ch_in_room = get_ch_in_room(ch);
+  struct room_data *viewer_in_room = get_ch_in_room(viewer);
+
+  if (ch_in_room == viewer_in_room)
+    return TRUE;
+
+  int sight_range = find_sight(viewer);
+  if (sight_range < 1)
+    return FALSE;
+
+  for (int dir_idx = 0; dir_idx < NUM_OF_DIRS; dir_idx++) {
+    if (!EXIT2(viewer_in_room, dir_idx))
+      continue;
+    
+    struct room_data *looking_in_room = EXIT2(viewer_in_room, dir_idx)->to_room;
+
+    // Just.... just don't. I know it's shit with code reuse but I'm too tired to fix it. Submit a PR if you want.
+    // Sight 1
+    if (ch_in_room == looking_in_room)
+      return TRUE;
+    // Sight 2
+    if (sight_range < 2 || !EXIT2(looking_in_room, dir_idx)->to_room)
+      continue;
+    looking_in_room = EXIT2(looking_in_room, dir_idx)->to_room;
+    if (ch_in_room == looking_in_room)
+      return TRUE;
+    // Sight 3
+    if (sight_range < 3 || !EXIT2(looking_in_room, dir_idx)->to_room)
+      continue;
+    looking_in_room = EXIT2(looking_in_room, dir_idx)->to_room;
+    if (ch_in_room == looking_in_room)
+      return TRUE;
+    // Sight 4
+    if (sight_range < 4 || !EXIT2(looking_in_room, dir_idx)->to_room)
+      continue;
+    looking_in_room = EXIT2(looking_in_room, dir_idx)->to_room;
+    if (ch_in_room == looking_in_room)
+      return TRUE;
+  }
+  return FALSE;
 }

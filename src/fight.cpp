@@ -103,6 +103,7 @@ extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression
 extern bool check_sentinel_snap_back(struct char_data *ch);
 extern void end_quest(struct char_data *ch, bool succeeded);
 extern bool npc_vs_vehicle_blocked_by_quest_protection(idnum_t quest_id, struct veh_data *veh);
+extern bool ch_is_in_viewers_visual_range(struct char_data *ch, struct char_data *viewer);
 
 // Corpse saving externs.
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
@@ -3037,7 +3038,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     }
 
     // Process faction attack.
-    if (IS_NPC(victim) && GET_MOB_FACTION_IDNUM(victim) && (FIGHTING(victim) != ch && GET_POS(victim) > POS_STUNNED)) {
+    if (ch != victim && IS_NPC(victim) && GET_MOB_FACTION_IDNUM(victim) && (FIGHTING(victim) != ch && GET_POS(victim) > POS_STUNNED)) {
       // Look around for anyone who saw it happen.
       for (struct char_data *witness = victim->in_room ? victim->in_room->people : victim->in_veh->people;
            witness;
@@ -3045,6 +3046,10 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       {
         // Can't witness or snitch on yourself.
         if (witness == victim || witness == ch)
+          continue;
+
+        // Skip anyone who can't see you.
+        if (!CAN_SEE(witness, ch) || !ch_is_in_viewers_visual_range(ch, witness))
           continue;
 
         if (GET_MOB_FACTION_IDNUM(witness) == GET_MOB_FACTION_IDNUM(victim)) {
@@ -3623,9 +3628,17 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       if (ch != victim && GET_MOB_FACTION_IDNUM(victim)) {
         // Look around for anyone who saw it happen.
         for (struct char_data *witness = victim->in_room ? victim->in_room->people : victim->in_veh->people;
-             witness;
-             witness = witness->in_room ? witness->next_in_room : witness->next_in_veh)
+            witness;
+            witness = witness->in_room ? witness->next_in_room : witness->next_in_veh)
         {
+          // Can't witness or snitch on yourself.
+          if (witness == victim || witness == ch)
+            continue;
+
+          // Skip anyone who can't see you.
+          if (!CAN_SEE(witness, ch) || !ch_is_in_viewers_visual_range(ch, witness))
+            continue;
+
           if (GET_MOB_FACTION_IDNUM(witness) == GET_MOB_FACTION_IDNUM(victim)) {
             // You only take this penalty once instead of once per witness in the room.
             faction_witness_saw_ch_do_action_with_optional_victim(witness, ch, WITNESSED_NPC_KILLED, victim);

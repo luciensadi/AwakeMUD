@@ -4,7 +4,7 @@
      - quests can be flagged as 'ally-worthy', if not flagged as such they can only take you up to Friendly. No being an ally by endlessly running packages
 
    - [i] if a faction NPC sees you attack / kill someone on their side, you lose rep
-   - TODO: if they can't see you (invis etc, or firing from outside of their vision range), they don't report in about you
+   - [i] if they can't see you (invis etc, or firing from outside of their vision range), they don't report in about you
 
    - [√] FACTION LIST
    -    [i] as a low-level builder who can't see them all
@@ -17,8 +17,8 @@
   Why this matters to players:
   - [i] Low rep gets you attacked on sight by faction guards and puts faction non-guard NPCs on alert when they see you
   - [i] Discount / surcharge that scales on rep with the store owner's faction, refusal to sell on Hostile
+  - [√] Bouncers that don't let you pass without certain faction status ratings.
   - High rep gets you access to more jobs with them?
-  - Bouncers that don't let you pass without certain faction status ratings.
 
   STRETCH:
   - Factions have leaders. When a leader NPC is killed, they don't leave a corpse, and instead are "docwagoned" like a PC using zone-appropriate messaging before being extracted to enable respawn.
