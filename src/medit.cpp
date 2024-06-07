@@ -111,7 +111,7 @@ void medit_disp_menu(struct descriptor_data *d)
                CCNRM(CH, C_CMP));
   send_to_char(CH, "k) Height: %s%d%s\r\n", CCCYN(CH, C_CMP), GET_HEIGHT(MOB),
                CCNRM(CH, C_CMP));
-  send_to_char(CH, "l) Race: ^c%s^n\r\n", pc_race_types[(int)GET_RACE(MOB)]);
+  send_to_char(CH, "l) Race: ^c%s^n\r\n", pc_race_types_for_wholist[(int)GET_RACE(MOB)]);
   // gotta subtract TYPE_HIT to make it work properly
   sprinttype(!(MOB->mob_specials.attack_type) ? 0 :
              (MOB->mob_specials.attack_type - TYPE_HIT), attack_types, buf1, sizeof(buf1));
@@ -312,15 +312,15 @@ void medit_disp_class_menu(struct descriptor_data *d)
 {
   CLS(CH);
   for (int c = 1; c <= NUM_RACES; c++) {
-    if (c == RACE_PC_CONJURED_ELEMENTAL) {
+    if (c == RACE_PC_CONJURED_ELEMENTAL || (c == RACE_FLESHFORM && !access_level(CH, LVL_ADMIN))) {
       send_to_char(CH, "%2d) ^Llocked^n\r\n", c);
     } else {
-      send_to_char(CH, "%2d) %-20s\r\n", c, pc_race_types[c]);
+      send_to_char(CH, "%2d) %-20s\r\n", c, pc_race_types_for_wholist[c]);
     }
   }
 
   send_to_char(CH, "Mob race: ^c%s^n\r\n"
-               "Enter mob race, 0 to quit: ", pc_race_types[(int)GET_RACE(MOB)]);
+               "Enter mob race, 0 to quit: ", pc_race_types_for_wholist[(int)GET_RACE(MOB)]);
 }
 
 void medit_disp_att_menu(struct descriptor_data *d)
@@ -1439,7 +1439,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
   case MEDIT_CLASS:
     number = atoi(arg);
-    if ((number < 0) || (number > NUM_RACES) || number == RACE_PC_CONJURED_ELEMENTAL)
+    if ((number < 0) || (number > NUM_RACES) || number == RACE_PC_CONJURED_ELEMENTAL || (number == RACE_FLESHFORM && !access_level(CH, LVL_ADMIN)))
       medit_disp_class_menu(d);
     else {
       if (number != 0) {
@@ -1856,7 +1856,7 @@ void write_mobs_to_disk(vnum_t zone_num)
               "Gender:\t%s\n",
               MOB_FLAGS(mob).ToString(),
               AFF_FLAGS(mob).ToString(),
-              pc_race_types[(int)mob->player.race],
+              pc_race_types_for_wholist[(int)mob->player.race],
               genders[(int)mob->player.pronouns]);
 
       if (mob->char_specials.position != POS_STANDING)
