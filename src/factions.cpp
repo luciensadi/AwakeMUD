@@ -102,6 +102,9 @@ ACMD(do_factions) {
       FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC), "You need OLC for that.");
       FAILURE_CASE(!olc_state && access_level(ch, LVL_PRESIDENT), "OLC is globally disabled.");
 
+      // TODO: Remove this condition when we're ready to go.
+      FAILURE_CASE(!access_level(ch, LVL_ADMIN), "The faction code isn't quite ready for general builder use. Talk to Vile or Lucien if you need factions in your zone.");
+
       // Create a new blank faction, then set them to editing it.
       START_EDITING_FACTION(Faction());
       return;

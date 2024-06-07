@@ -8,6 +8,7 @@
    - [f] if they can't see you (invis etc, or firing from outside of their vision range), they don't report in about you
 
    - [√] FACTION LIST
+   -    [i] as a low-level builder who can't see them all
    - [√] FACTION SHOW x
    - [√] FACTION EDIT x
    - [√] FACTION CREATE
@@ -25,6 +26,7 @@
   - You can buy faction rep up to Friendly by paying the leader. No, you can't get your money back by then killing the leader.
   - High rep ratings get you occasional upnods and recognition in passing. Low ones get you scowls and threatening moves from non-wimpy chars.
   - if you're disguised somehow (figure this out), NPCs don't report in unless they see through the disguise (perception check?)
+  - Hosts belong to factions, and if they trace you back, you lose a lot of rep.
 
   SUPER STRETCH:
   - Figure out a way for players to see which faction an NPC belongs to that doesn't completely break immersion

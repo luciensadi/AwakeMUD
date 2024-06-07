@@ -228,8 +228,12 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       GET_OBJ_VAL(cont, 2)++;
       act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
       act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
-      if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-           || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)) {
+
+      // Cheatlog it for staffers, or for wizloaded or cheatlog-marked items, as long as it's not inv-to-inv.
+      if ( ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
+            || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
+          && !(cont->carried_by == ch || cont->worn_by == ch))
+      {
         char *representation = generate_new_loggable_representation(obj);
         snprintf(buf, sizeof(buf), "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
@@ -286,8 +290,11 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
 
   act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
   act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
-  if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
-       || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK)) {
+  // Cheatlog it for staffers, or for wizloaded or cheatlog-marked items, as long as it's not inv-to-inv.
+  if ( ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
+        || IS_OBJ_STAT( obj, ITEM_EXTRA_WIZLOAD) || IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK))
+      && !(cont->carried_by == ch || cont->worn_by == ch))
+  {
     char *representation = generate_new_loggable_representation(obj);
     snprintf(buf, sizeof(buf), "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
             GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
@@ -984,7 +991,7 @@ bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         }
       }
 
-      if (should_wizlog || should_cheatlog || should_gridlog) {
+      if ((should_wizlog || should_cheatlog || should_gridlog) && !(cont->carried_by == ch || cont->worn_by == ch)) {
         char *representation = generate_new_loggable_representation(obj);
 
         // Compose our log line.
