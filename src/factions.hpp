@@ -3,20 +3,20 @@
      - [f] killing their enemies can only take you up to Cooperative so folks don't murder-hobo their way into Ally with everyone
      - quests can be flagged as 'ally-worthy', if not flagged as such they can only take you up to Friendly. No being an ally by endlessly running packages
 
-   - [f] if a faction NPC sees you attack / kill someone on their side, you lose rep
-
-   - [f] if they can't see you (invis etc, or firing from outside of their vision range), they don't report in about you
+   - [i] if a faction NPC sees you attack / kill someone on their side, you lose rep
+   - TODO: if they can't see you (invis etc, or firing from outside of their vision range), they don't report in about you
 
    - [√] FACTION LIST
    -    [i] as a low-level builder who can't see them all
    - [√] FACTION SHOW x
    - [√] FACTION EDIT x
    - [√] FACTION CREATE
-   - [p] FACTION SETREP x y
+   - [p] FACTION SETREP ch x y
+   - [p] FACTION DELETE x
 
   Why this matters to players:
-  - [p] Low rep gets you attacked on sight by faction guards and puts faction non-guard NPCs on alert when they see you
-  - [p] Discount / surcharge that scales on rep with the store owner's faction, refusal to sell on Hostile
+  - [i] Low rep gets you attacked on sight by faction guards and puts faction non-guard NPCs on alert when they see you
+  - [i] Discount / surcharge that scales on rep with the store owner's faction, refusal to sell on Hostile
   - High rep gets you access to more jobs with them?
   - Bouncers that don't let you pass without certain faction status ratings.
 
@@ -27,12 +27,14 @@
   - High rep ratings get you occasional upnods and recognition in passing. Low ones get you scowls and threatening moves from non-wimpy chars.
   - if you're disguised somehow (figure this out), NPCs don't report in unless they see through the disguise (perception check?)
   - Hosts belong to factions, and if they trace you back, you lose a lot of rep.
+  - Failing a quest loses rep
 
   SUPER STRETCH:
   - Figure out a way for players to see which faction an NPC belongs to that doesn't completely break immersion
   - Faction shops can have goods available at different rep levels (no buying X until ally)
   - Wimpy faction mobs flee when a hostile-rep player shows up.
   - Rooms can be flagged as no-trespassing with a severity rating. If you're caught in one, you get a faction rep penalty (w/ cooldown) and may be attacked.
+  - Doing harmful quests can lower the opposing faction's view of you (e.g. raid Mitsu on a job, Mitsu's rep goes down)
 
 KEY: 
 - p: prototyped
@@ -50,10 +52,21 @@ KEY:
 // STRETCH: Allow lower-level builders to edit them
 // STRETCH: Jobs can have faction rep impacts on other factions (e.g. "steal this thing from Mitsuhama", giver is pleased, mitsu is not)
 
+// TODO: Ensure that you only get the witness penalty from hitting someone once per combat
+
 #include <map>
 #include <boost/filesystem.hpp>
 
 #include "structs.hpp"
+
+//////////// Configurables
+#define FACTION_REP_DELTA_NPC_ATTACKED  -3
+#define FACTION_REP_DELTA_NPC_KILLED    -20
+// TODO below this line
+#define FACTION_REP_DELTA_NPC_HELPED    1
+#define FACTION_REP_DELTA_JOB_COMPLETED 2
+#define FACTION_REP_DELTA_JOB_FAILED    -1
+//////////////////////////
 
 extern char *str_dup(const char *source);
 
@@ -63,6 +76,7 @@ extern char *str_dup(const char *source);
 #define WITNESSED_NPC_KILLED     2
 #define WITNESSED_NPC_HELPED     3
 #define WITNESSED_JOB_COMPLETION 4
+#define WITNESSED_JOB_FAILURE    5
 
 enum faction_statuses {
   HOSTILE = 0,
@@ -194,10 +208,9 @@ void load_player_faction_info(struct char_data *ch);
 void parse_factions();
 
 ///////////////////////////////////////////////////////////////////////////////////////
-// OLC
+// OLC / utility
 ///////////////////////////////////////////////////////////////////////////////////////
 
-// TODO: If faction idnum is not set on 'Y', set it before saving.
 void faction_edit_parse(struct descriptor_data * d, const char *arg);
 
 ///// utility

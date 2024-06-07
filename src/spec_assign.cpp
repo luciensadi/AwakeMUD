@@ -628,6 +628,9 @@ void assign_mobiles(void)
   SPECIAL(pocsec_unlocker);
   SPECIAL(soulbound_unbinder);
 
+  SPECIAL(test_bouncer);
+  ASSIGNMOB(10000, test_bouncer);
+
 #ifdef USE_PRIVATE_CE_WORLD
   SPECIAL(marksmanship_first);
   SPECIAL(marksmanship_second);

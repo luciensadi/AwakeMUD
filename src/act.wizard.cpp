@@ -80,6 +80,7 @@ extern int last;
 extern int max_ability(int i);
 extern int count_objects(struct obj_data *obj);
 extern void list_mob_precast_spells_to_ch(struct char_data *mob, struct char_data *ch);
+extern const char *get_faction_name(idnum_t idnum, struct char_data *viewer);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
@@ -1872,6 +1873,10 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     snprintf(buf2, sizeof(buf2), ", In room [%8ld]", k->in_room->number);
   else if (k->in_veh)
     snprintf(buf2, sizeof(buf2), ", In veh [%s]", GET_VEH_NAME(k->in_veh));
+
+  if (GET_MOB_FACTION_IDNUM(k)) {
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ". Faction: %s (%ld)", get_faction_name(GET_MOB_FACTION_IDNUM(k), ch), GET_MOB_FACTION_IDNUM(k));
+  }
 
   // Append to existing buf with newline.
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", buf2);

@@ -22,6 +22,7 @@
 #include "lifestyles.hpp"
 #include "chipjacks.hpp"
 #include "pocketsec.hpp"
+#include "factions.hpp"
 
 extern struct time_info_data time_info;
 extern const char *pc_race_types[];
@@ -136,7 +137,7 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
 }
 
 // Player buying from shop.
-int buy_price(struct obj_data *obj, vnum_t shop_nr)
+int buy_price(struct obj_data *obj, vnum_t shop_nr, idnum_t faction_idnum, struct char_data *ch)
 {
   // Base cost.
   int cost = GET_OBJ_COST(obj);
@@ -147,6 +148,10 @@ int buy_price(struct obj_data *obj, vnum_t shop_nr)
   // If the shop is black or grey market, multiply base cost by the item's street index.
   if (shop_table[shop_nr].type != SHOP_LEGAL && GET_OBJ_STREET_INDEX(obj) > 0)
     cost = (int) round(cost * GET_OBJ_STREET_INDEX(obj));
+
+  // If it's a faction shop, multiply by the faction rep multiplier.
+  if (faction_idnum)
+    cost *= get_shop_faction_sell_to_player_multiplier(faction_idnum, ch);
 
   // Add the random multiplier to the cost.
   cost += (int) round((cost * shop_table[shop_nr].random_current) / 100);
@@ -160,7 +165,7 @@ int buy_price(struct obj_data *obj, vnum_t shop_nr)
 }
 
 // Player selling to shop.
-int sell_price(struct obj_data *obj, vnum_t shop_nr)
+int sell_price(struct obj_data *obj, vnum_t shop_nr, idnum_t faction_idnum, struct char_data *ch)
 {
   // Base cost.
   int cost = (int) round(GET_OBJ_COST(obj) * shop_table[shop_nr].profit_sell);
@@ -169,6 +174,10 @@ int sell_price(struct obj_data *obj, vnum_t shop_nr)
   // This fixes an exploit where someone could buy a discounted thing at a black/grey shop and sell to a legal one for a profit.
   if (GET_OBJ_STREET_INDEX(obj) > 0 && GET_OBJ_STREET_INDEX(obj) < 1)
     cost = (int) round(cost * GET_OBJ_STREET_INDEX(obj));
+
+  // If it's a faction shop, multiply by the faction rep multiplier.
+  if (faction_idnum)
+    cost *= get_shop_faction_buy_from_player_multiplier(faction_idnum, ch);
 
   // Add the random multiplier to the cost.
   cost += (int) round((cost * shop_table[shop_nr].random_current) / 100);
@@ -1217,7 +1226,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   }
 
   // Calculate the price.
-  price = buy_price(obj, shop_nr);
+  price = buy_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch);
   int bprice = price / 10;
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && can_negotiate_for_item(obj))
     price = negotiate(ch, keeper, 0, price, 0, TRUE, TRUE);
@@ -1506,7 +1515,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     return;
   }
 
-  int sellprice = sell_price(obj, shop_nr);
+  int sellprice = sell_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch);
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
     sellprice = negotiate(ch, keeper, 0, sellprice, 0, FALSE, TRUE);
 
@@ -1644,7 +1653,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       }
 
       // List the item to the player.
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Item #%d: %s for %d nuyen", i, GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Item #%d: %s for %d nuyen", i, GET_OBJ_NAME(obj), buy_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch));
 
       // Doctorshop? Tack on bioware / cyberware info.
       if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
@@ -1749,7 +1758,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         snprintf(formatstr, sizeof(formatstr), "%s%s%s", "^Y(N)^n %-", paddingnumberstr, "s^n %-6s%2s   %0.2f%c  %9d\r\n");
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
-                GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
+                GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch));
       } else {
         //Format string: "%-62s^n %-6s%2s   %0.2f%c  %9d\r\n"
         //We apply padding for color codes here.
@@ -1757,7 +1766,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s^n %-6s%2s   %0.2f%c  %9d\r\n");
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
-                GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
+                GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch));
       }
       extract_obj(obj);
       obj = NULL;
@@ -1804,14 +1813,14 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         //We apply padding for color codes here.
         snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 71 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
         snprintf(formatstr, sizeof(formatstr), "%s%s%s", "^Y(N)^n %-", paddingnumberstr, "s^n %7d\r\n");
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj), buy_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch));
       } else {
         //Format string for reference: "%-48s^n %6d\r\n"
         //We apply padding for color codes here.
         snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 75 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
         snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s^n %7d\r\n");
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), formatstr, GET_OBJ_NAME(obj),
-                  buy_price(obj, shop_nr));
+                  buy_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch));
       }
       send_to_char(buf, ch);
       extract_obj(obj);
@@ -1884,7 +1893,7 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   if (!shop_will_buy_item_from_ch(shop_nr, obj, ch))
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I wouldn't buy %s off of you.", GET_OBJ_NAME(obj));
   else
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I would be able to give you around %d nuyen for %s.", sell_price(obj, shop_nr), GET_OBJ_NAME(obj));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " I would be able to give you around %d nuyen for %s.", sell_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch), GET_OBJ_NAME(obj));
 
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
 }
@@ -2307,7 +2316,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   if (GET_OBJ_WEIGHT(obj) < 1) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d grams", (int)(GET_OBJ_WEIGHT(obj) * 1000));
   } else snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%.0f kilogram%s", GET_OBJ_WEIGHT(obj), (GET_OBJ_WEIGHT(obj) >= 2 ? "s" : ""));
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and I couldn't let it go for less than %d nuyen.", buy_price(obj, shop_nr));
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and I couldn't let it go for less than %d nuyen.", buy_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch));
 
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_NERPS)) {
     strlcat(buf, " ^Y(OOC: It has no special coded effects.)^n", sizeof(buf));
@@ -2516,6 +2525,7 @@ SPECIAL(shop_keeper)
 {
   struct char_data *keeper = (struct char_data *) me;
   vnum_t shop_nr;
+
   if (!cmd)
     return FALSE;
   for (shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++)
@@ -2524,30 +2534,54 @@ SPECIAL(shop_keeper)
   if (shop_nr > top_of_shopt)
     return FALSE;
 
+  bool cmd_is_buy = CMD_IS("buy");
+  bool cmd_is_sell = CMD_IS("sell");
+  bool cmd_is_list = CMD_IS("list");
+  bool cmd_is_info = CMD_IS("info");
+  bool cmd_is_value = CMD_IS("value");
+  bool cmd_is_check = CMD_IS("check");
+  bool cmd_is_receive = CMD_IS("receive") || CMD_IS("recieve");
+  bool cmd_is_hours = CMD_IS("hours");
+  bool cmd_is_cancel = CMD_IS("cancel");
+  bool cmd_is_probe = CMD_IS("probe");
+  bool cmd_is_install = CMD_IS("install");
+  bool cmd_is_uninstall = CMD_IS("uninstall");
+
+  if (!(cmd_is_buy || cmd_is_sell || cmd_is_list || cmd_is_info || cmd_is_value || cmd_is_check || cmd_is_receive || cmd_is_hours || cmd_is_cancel || cmd_is_probe || cmd_is_install || cmd_is_uninstall))
+    return FALSE;
+
+  if (GET_MOB_FACTION_IDNUM(keeper) && !faction_shop_will_deal_with_player(GET_MOB_FACTION_IDNUM(keeper), ch)) {
+    send_to_char(ch, "%s is loyal and won't deal with you until you improve your reputation with %s.\r\n",
+                 CAP(GET_CHAR_NAME(keeper)),
+                 decapitalize_a_an(get_faction_name(GET_MOB_FACTION_IDNUM(keeper), ch)));
+    return TRUE;
+  }
+
   skip_spaces(&argument);
-  if (CMD_IS("buy"))
+
+  if (cmd_is_buy)
     shop_buy(argument, strlen(argument), ch, keeper, shop_nr);
-  else if (CMD_IS("sell"))
+  else if (cmd_is_sell)
     shop_sell(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("list"))
+  else if (cmd_is_list)
     shop_list(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("info"))
+  else if (cmd_is_info)
     shop_info(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("value"))
+  else if (cmd_is_value)
     shop_value(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("check"))
+  else if (cmd_is_check)
     shop_check(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("receive") || CMD_IS("recieve"))
+  else if (cmd_is_receive)
     shop_rec(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("hours"))
+  else if (cmd_is_hours)
     shop_hours(ch, shop_nr);
-  else if (CMD_IS("cancel"))
+  else if (cmd_is_cancel)
     shop_cancel(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("probe"))
+  else if (cmd_is_probe)
     return shop_probe(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("install") && shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
+  else if (cmd_is_install && shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
     shop_install(argument, ch, keeper, shop_nr);
-  else if (CMD_IS("uninstall") && shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
+  else if (cmd_is_uninstall && shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
     shop_uninstall(argument, ch, keeper, shop_nr);
   else
     return FALSE;

@@ -79,7 +79,6 @@ ACMD(do_factions) {
   faction_edit_main_menu(ch->desc);                       \
 }
 
-
   if (IS_SENATOR(ch)) {
     // factions edit <idnum>: Enter OLC for a faction.
     if (str_str(mode, "edit")) {
@@ -109,6 +108,8 @@ ACMD(do_factions) {
       START_EDITING_FACTION(Faction());
       return;
     }
+
+#undef START_EDITING_FACTION
 
     // factions delete: Remove a faction. Will have large knock-on effects.
     if (str_str(mode, "delete")) {
@@ -261,6 +262,10 @@ int _get_raw_faction_rep(struct char_data *ch, idnum_t faction_id) {
     return get_faction_status_avg_rep(faction_statuses::NEUTRAL);
   }
 
+  // Trace back to the origin.
+  if (ch->desc && ch->desc->original)
+    ch = ch->desc->original;
+
   auto faction_itr = ch->faction_rep.find(faction_id);
 
   // They have no rep with the faction. Try to give the default value.
@@ -280,7 +285,6 @@ int _get_raw_faction_rep(struct char_data *ch, idnum_t faction_id) {
   return faction_itr->second;
 }
 
-// TODO: Should we trace back reflections to real bodies for rep-granting purposes? Probably.
 // Alters faction status for PC. (Should we save faction status immediately on change, or wait for save tick?)
 void change_faction_points(struct char_data *ch, idnum_t faction_id, int delta, int limit_to_status) {
   Faction *faction;
@@ -299,11 +303,15 @@ void change_faction_points(struct char_data *ch, idnum_t faction_id, int delta, 
     return;
   }
 
+  // Trace back to the origin.
+  if (ch->desc && ch->desc->original)
+    ch = ch->desc->original;
+
   auto faction_itr = ch->faction_rep.find(faction_id);
   if (faction_itr == ch->faction_rep.end()) {
     int default_rep = faction->get_default_rep();
     ch->faction_rep[faction_id] = delta + default_rep;
-    FACTION_DEBUG(ch, "Your rep with faction %ld (%s) has been initialized at %d (%d + %d).\r\n", 
+    FACTION_DEBUG(ch, "^L[Your rep with faction %ld (%s) has been initialized at %d (%d + %d).]^n\r\n", 
                   faction_id,
                   faction->get_full_name(),
                   ch->faction_rep[faction_id],
@@ -318,7 +326,7 @@ void change_faction_points(struct char_data *ch, idnum_t faction_id, int delta, 
 
     // Maxed out.
     if (ch->faction_rep[faction_id] >= max_rep) {
-      FACTION_DEBUG(ch, "Your rep with faction %ld (%s) is unchanged (status limit %s / %d, you're at %s / %d)",
+      FACTION_DEBUG(ch, "^L[Your rep with faction %ld (%s) is unchanged (status limit %s / %d, you're at %s / %d).]^n\r\n",
                     faction_id,
                     faction->get_full_name(),
                     faction_status_names[limit_to_status],
@@ -342,9 +350,9 @@ void change_faction_points(struct char_data *ch, idnum_t faction_id, int delta, 
     // Below max. Fall through
   }
 
-  FACTION_DEBUG(ch, "Your rep with faction %ld (%s) has changed from %d", faction_id, faction->get_full_name(), ch->faction_rep[faction_id]);
+  FACTION_DEBUG(ch, "^L[Your rep with faction %ld (%s) has changed from %d", faction_id, faction->get_full_name(), ch->faction_rep[faction_id]);
   ch->faction_rep[faction_id] += delta;
-  FACTION_DEBUG(ch, "to %d.\r\n", ch->faction_rep[faction_id]);
+  FACTION_DEBUG(ch, " to %d.]^n\r\n", ch->faction_rep[faction_id]);
 }
 
 /* Methods for NPCs to call on witnessing events. */
@@ -364,23 +372,32 @@ void faction_witness_saw_ch_do_action_with_optional_victim(struct char_data *wit
     return;
   }
 
+  // Trace back to the origin.
+  if (ch->desc && ch->desc->original)
+    ch = ch->desc->original;
+
   // Modify their faction points based on our alignment.
   switch (action_type) {
     case WITNESSED_NPC_ATTACKED:
       if (GET_MOB_FACTION_IDNUM(witness) == GET_MOB_FACTION_IDNUM(victim))
-        change_faction_points(ch, GET_MOB_FACTION_IDNUM(witness), -5);
+        change_faction_points(ch, GET_MOB_FACTION_IDNUM(witness), FACTION_REP_DELTA_NPC_ATTACKED);
       break;
     case WITNESSED_NPC_KILLED:
       if (GET_MOB_FACTION_IDNUM(witness) == GET_MOB_FACTION_IDNUM(victim))
-        change_faction_points(ch, GET_MOB_FACTION_IDNUM(witness), -20);
+        change_faction_points(ch, GET_MOB_FACTION_IDNUM(witness), FACTION_REP_DELTA_NPC_KILLED);
       break;
     case WITNESSED_NPC_HELPED:
       if (GET_MOB_FACTION_IDNUM(witness) == GET_MOB_FACTION_IDNUM(victim))
-        change_faction_points(ch, GET_MOB_FACTION_IDNUM(witness), 3, faction_statuses::NEIGHBORLY);
+        change_faction_points(ch, GET_MOB_FACTION_IDNUM(witness), FACTION_REP_DELTA_NPC_HELPED, faction_statuses::NEIGHBORLY);
       break;
     case WITNESSED_JOB_COMPLETION:
+      // TODO: If it's a very important job for the faction, it can take you up to higher statuses
       if (GET_MOB_FACTION_IDNUM(witness) == GET_MOB_FACTION_IDNUM(victim))
-        change_faction_points(ch, GET_MOB_FACTION_IDNUM(witness), 2, faction_statuses::FRIENDLY);
+        change_faction_points(ch, GET_MOB_FACTION_IDNUM(witness), FACTION_REP_DELTA_JOB_COMPLETED, faction_statuses::FRIENDLY);
+      break;
+    case WITNESSED_JOB_FAILURE:
+      if (GET_MOB_FACTION_IDNUM(witness) == GET_MOB_FACTION_IDNUM(victim))
+        change_faction_points(ch, GET_MOB_FACTION_IDNUM(witness), FACTION_REP_DELTA_JOB_FAILED);
       break;
     default:
       mudlog_vfprintf(victim, LOG_SYSLOG, "SYSERR: Received unknown action type %d to faction_witness(%s, %s, %d, %s)",
@@ -435,11 +452,11 @@ float get_shop_faction_buy_from_player_multiplier(idnum_t faction_idnum, struct 
     case faction_statuses::NEUTRAL:
       return 1.0f;
     case faction_statuses::FRIENDLY:
-      return 1.02f;
+      return 1.01f;
     case faction_statuses::NEIGHBORLY:
-      return 1.04f;
+      return 1.02f;
     case faction_statuses::ALLY:
-      return 1.06f;
+      return 1.04f;
     default:
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid faction status %d to get_shop_faction_sell_to_player_multiplier(%ld, %s)!", status, faction_idnum, ch);
       return 1.0f;
@@ -462,11 +479,11 @@ float get_shop_faction_sell_to_player_multiplier(idnum_t faction_idnum, struct c
     case faction_statuses::NEUTRAL:
       return 1.0f;
     case faction_statuses::FRIENDLY:
-      return 0.98f;
+      return 0.99f;
     case faction_statuses::NEIGHBORLY:
-      return 0.96f;
+      return 0.98f;
     case faction_statuses::ALLY:
-      return 0.94f;
+      return 0.96f;
     default:
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid faction status %d to get_shop_faction_buy_from_player_multiplier(%ld, %s)!", status, faction_idnum, ch);
       return 1.0f;
@@ -516,7 +533,7 @@ void save_player_faction_info(struct char_data *ch) {
   }
 
   if (printed_anything) {
-    strlcat(query_buf, ");", sizeof(query_buf));
+    strlcat(query_buf, ") ON DUPLICATE KEY UPDATE `rep` = VALUES(`rep`);", sizeof(query_buf));
     mysql_wrapper(mysql, query_buf);
   }
 }
@@ -553,6 +570,11 @@ Faction::Faction(bf::path file_path) {
   description = str_dup(faction_file["description"].get<std::string>().c_str());
   default_status = (int) faction_file["default_status"].get<int>();
   editors = faction_file["editors"].get<std::vector<idnum_t>>();
+
+  if (idnum == FACTION_IDNUM_UNDEFINED) {
+    log_vfprintf("Malformed faction! Got idnum %d from path %s, which will cause bugs. Shutting down so you can fix your world files.", idnum, file_path.c_str());
+    shutdown();
+  }
 }
 
 void Faction::save() {

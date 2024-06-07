@@ -134,7 +134,9 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "t) Edit Equipment (%d piece%s)\r\n", eq_total, eq_total == 1 ? "" : "s");
 
   send_to_char(CH, "u) Speech Highlight: \"%s%s^n\"\r\n", GET_CHAR_COLOR_HIGHLIGHT(MOB), SETTABLE_CHAR_COLOR_HIGHLIGHT(MOB) ? "Example speech." : "<not set>");
-  send_to_char(CH, "v) Faction: ^c%s^n\r\n", GET_MOB_FACTION_IDNUM(MOB) ? get_faction_name(GET_MOB_FACTION_IDNUM(MOB), CH) : "<not set>");
+  send_to_char(CH, "v) Faction: ^c%s^n (%ld)\r\n",
+               GET_MOB_FACTION_IDNUM(MOB) ? get_faction_name(GET_MOB_FACTION_IDNUM(MOB), CH) : "<not set>",
+               GET_MOB_FACTION_IDNUM(MOB));
 
   send_to_char("q) Quit and save\r\n", CH);
   send_to_char("x) Exit and abort\r\n", CH);
@@ -896,6 +898,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       list_factions_to_char(CH, FALSE);
       send_to_char("Select the faction this mob belongs to:", CH);
       d->edit_mode = MEDIT_FACTION_AFFILIATION;
+      break;
     default:
       medit_disp_menu(d);
       break;

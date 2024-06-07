@@ -65,6 +65,8 @@ void save_cyberware_to_db(struct char_data *player);
 void fix_character_essence_after_cybereye_migration(struct char_data *ch);
 void fix_character_essence_after_expert_driver_change(struct char_data *ch);
 void recalculate_character_magic_rating(struct char_data *ch);
+void save_player_faction_info(struct char_data *player);
+void load_player_faction_info(struct char_data *player);
 
 SPECIAL(weapon_dominator);
 
@@ -668,6 +670,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
     GET_PLAYER_MEMORY(ch) = a;
   }
   mysql_free_result(res);
+
+  load_player_faction_info(ch);
 
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_quests WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
@@ -1467,6 +1471,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     else
       obj = obj->next_content;
   }
+
+  save_player_faction_info(player);
 
   snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
