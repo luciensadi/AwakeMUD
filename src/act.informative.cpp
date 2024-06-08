@@ -5484,12 +5484,18 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
   MYSQL_ROW row;
   *help = '\0';
 
-  // Pre-process our prepare_quotes.
-  prepare_quotes(prepared_standard, arg, sizeof(prepared_standard) / sizeof(prepared_standard[0]));
-  prepare_quotes(prepared_for_like, arg, sizeof(prepared_for_like) / sizeof(prepared_for_like[0]), FALSE, TRUE);
+  if (!str_cmp(arg, "random")) {
+    send_to_char(ch, "Looking up a random help topic...\r\n");
+    strlcpy(query, "SELECT * FROM help_topic ORDER BY RAND() LIMIT 1;", sizeof(query));
+  } else {
+    // Pre-process our prepare_quotes.
+    prepare_quotes(prepared_standard, arg, sizeof(prepared_standard) / sizeof(prepared_standard[0]));
+    prepare_quotes(prepared_for_like, arg, sizeof(prepared_for_like) / sizeof(prepared_for_like[0]), FALSE, TRUE);
 
-  // First strategy: Look for an exact match.
-  snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name='%s'", prepared_standard);
+    // First strategy: Look for an exact match.
+    snprintf(query, sizeof(query), "SELECT * FROM help_topic WHERE name='%s'", prepared_standard);
+  }
+
   if (mysql_wrapper(mysql, query)) {
     // We got a SQL error-- bail.
     snprintf(help, help_len, "The help system is temporarily unavailable.\r\n");
