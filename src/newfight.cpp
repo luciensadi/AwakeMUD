@@ -20,6 +20,7 @@
 #include "memory.hpp"
 #include "bullet_pants.hpp"
 #include "newfight.hpp"
+#include "metrics.hpp"
 
 extern void die(struct char_data * ch);
 extern bool astral_fight(struct char_data *ch, struct char_data *vict);
@@ -393,9 +394,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           if (weap_ammo) {
             if (!IS_NPC(att->ch)) {
               update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count), "newfight burst deduction");
+              AMMOTRACK(att->ch, GET_AMMOBOX_WEAPON(weap_ammo), GET_AMMOBOX_TYPE(weap_ammo), AMMOTRACK_COMBAT, -(att->ranged->burst_count));
             }
           } else {
             GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
+            AMMOTRACK(att->ch, GET_MAGAZINE_BONDED_ATTACKTYPE(att->ranged->magazine), GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine), AMMOTRACK_COMBAT, -(att->ranged->burst_count));
           }
         }
       }
@@ -403,8 +406,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       else {
         if (weap_ammo) {
           GET_AMMOBOX_QUANTITY(weap_ammo)--;
+          AMMOTRACK(att->ch, GET_AMMOBOX_WEAPON(weap_ammo), GET_AMMOBOX_TYPE(weap_ammo), AMMOTRACK_COMBAT, -1);
         } else if (att->ranged->magazine) {
           GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine)--;
+          AMMOTRACK(att->ch, GET_MAGAZINE_BONDED_ATTACKTYPE(att->ranged->magazine), GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine), AMMOTRACK_COMBAT, -1);
         }
       }
     }

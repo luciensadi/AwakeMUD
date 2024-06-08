@@ -271,6 +271,7 @@ ACMD_DECLARE(do_makenerps);
 ACMD_DECLARE(do_memory);
 ACMD_DECLARE(do_message_history);
 ACMD_DECLARE(do_metamagic);
+ACMD_DECLARE(do_metrics);
 ACMD_DECLARE(do_mobs);
 ACMD_DECLARE(do_mode);
 ACMD_DECLARE(do_move);
@@ -749,6 +750,7 @@ struct command_info cmd_info[] =
     { "map"        , POS_DEAD    , do_map      , 0, 0, BLOCKS_IDLE_REWARD },
     { "memory"     , POS_SLEEPING, do_memory   , 0, 0, ALLOWS_IDLE_REWARD },
     { "metamagic"  , POS_DEAD    , do_metamagic, 0, 0, ALLOWS_IDLE_REWARD },
+    { "metrics"    , POS_DEAD    , do_metrics  , LVL_PRESIDENT, 0, ALLOWS_IDLE_REWARD },
     { "mclone"     , POS_DEAD    , do_mclone   , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "mdelete"    , POS_DEAD    , do_mdelete  , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "medit"      , POS_DEAD    , do_medit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },

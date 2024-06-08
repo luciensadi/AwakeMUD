@@ -19,6 +19,7 @@
 #include "archetypes.hpp"
 #include "bullet_pants.hpp"
 #include "security.hpp"
+#include "metrics.hpp"
 
 #define CH d->character
 
@@ -322,8 +323,10 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       ATTACH_IF_EXISTS(archetypes[i]->weapon_under, ACCESS_ACCESSORY_LOCATION_UNDER);
 
       // Fill pockets.
-      if (archetypes[i]->ammo_q)
+      if (archetypes[i]->ammo_q) {
         update_bulletpants_ammo_quantity(CH, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL, archetypes[i]->ammo_q);
+        AMMOTRACK(CH, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL, AMMOTRACK_CHARGEN, archetypes[i]->ammo_q);
+      }
 
       // Put the weapon in their inventory.
       obj_to_char(weapon, CH);

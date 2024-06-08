@@ -17,6 +17,7 @@
 #include "memory.hpp"
 #include "deck_build.hpp"
 #include "ritualcast.hpp"
+#include "metrics.hpp"
 
 #define CH d->character
 #define PEDIT_MENU 0
@@ -824,6 +825,7 @@ void update_buildrepair(void)
         else {
           send_to_char("You have completed a batch of ammo.\r\n", CH);
           GET_AMMOBOX_QUANTITY(PROG) += AMMOBUILD_BATCH_SIZE;
+          AMMOTRACK_OK(GET_AMMOBOX_WEAPON(PROG), GET_AMMOBOX_TYPE(PROG), AMMOTRACK_CRAFTING, AMMOBUILD_BATCH_SIZE);
 
           // Add the weight of the completed ammo to the box. Due to some ammo having miniscule weight, we must fully re-calc every time.
           weight_change_object(PROG, -GET_OBJ_WEIGHT(PROG));

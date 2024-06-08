@@ -24,6 +24,7 @@
 #include "deck_build.hpp"
 #include "redit.hpp"
 #include "newmail.hpp"
+#include "metrics.hpp"
 
 // extern vars
 extern class helpList Help;
@@ -480,7 +481,10 @@ void objList::UpdateCounters(void)
             obj_from_obj(contents);
             obj_to_room(contents, in_room);
           } else {
-            // Otherwise, extract it.
+            // Otherwise, extract it. We know it's an NPC corpse because PC corpses never decay.
+            if (GET_OBJ_TYPE(contents) == ITEM_WEAPON && WEAPON_IS_GUN(contents) && contents->contains && GET_OBJ_TYPE(contents->contains) == ITEM_GUN_MAGAZINE) {
+              AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(contents->contains), GET_MAGAZINE_AMMO_TYPE(contents->contains), AMMOTRACK_NPC_SPAWNED, -GET_MAGAZINE_AMMO_COUNT(contents->contains));
+            }
             extract_obj(contents);
           }
         }

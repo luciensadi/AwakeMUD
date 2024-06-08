@@ -23,6 +23,7 @@
 #include "chipjacks.hpp"
 #include "pocketsec.hpp"
 #include "factions.hpp"
+#include "metrics.hpp"
 
 extern struct time_info_data time_info;
 extern const char *pc_race_types[];
@@ -1619,8 +1620,12 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     sell->stock++;
   }
 
- extract_obj(obj);
- obj = NULL;
+  // Track ammo sold.
+  if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_GUN(obj) && obj->contains && GET_OBJ_TYPE(obj->contains) == ITEM_GUN_MAGAZINE)
+    AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(obj->contains), GET_MAGAZINE_AMMO_TYPE(obj->contains), AMMOTRACK_NPC_SPAWNED, -GET_MAGAZINE_AMMO_COUNT(obj->contains));
+
+  extract_obj(obj);
+  obj = NULL;
 }
 
 void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)

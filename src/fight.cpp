@@ -29,6 +29,7 @@
 #include "quest.hpp"
 #include "redit.hpp"
 #include "factions.hpp"
+#include "metrics.hpp"
 
 int initiative_until_global_reroll = 0;
 
@@ -684,6 +685,11 @@ void make_corpse(struct char_data * ch)
       else {
         obj_to_obj(o, corpse);
         corpse_value += GET_OBJ_COST( o );
+
+        // If it's a gun from an NPC, track it in ammo metrics.
+        if (IS_NPC(ch) && GET_OBJ_TYPE(o) == ITEM_WEAPON && WEAPON_IS_GUN(o) && o->contains && GET_OBJ_TYPE(o->contains) == ITEM_GUN_MAGAZINE) {
+          AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(o->contains), GET_MAGAZINE_AMMO_TYPE(o->contains), AMMOTRACK_NPC_SPAWNED, GET_MAGAZINE_AMMO_COUNT(o->contains));
+        }
       }
     }
   }
@@ -695,7 +701,15 @@ void make_corpse(struct char_data * ch)
       if (IS_OBJ_STAT(ch->equipment[i], ITEM_EXTRA_PURGE_ON_DEATH)) {
         extract_obj(unequip_char(ch, i, TRUE));
       } else {
-        corpse_value += GET_OBJ_COST( ch->equipment[i] );
+        struct obj_data *o = ch->equipment[i];
+
+        corpse_value += GET_OBJ_COST(o);
+
+        // If it's a gun from an NPC, track it in ammo metrics.
+        if (IS_NPC(ch) && GET_OBJ_TYPE(o) == ITEM_WEAPON && WEAPON_IS_GUN(o) && o->contains && GET_OBJ_TYPE(o->contains) == ITEM_GUN_MAGAZINE) {
+          AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(o->contains), GET_MAGAZINE_AMMO_TYPE(o->contains), AMMOTRACK_NPC_SPAWNED, GET_MAGAZINE_AMMO_COUNT(o->contains));
+        }
+
         obj_to_obj(unequip_char(ch, i, TRUE), corpse);
       }
     }
@@ -3734,8 +3748,10 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
       // It's a player. Look through their gun and locate any ammo boxes in there.
       struct obj_data *ammobox = get_mount_ammo(wielded->in_obj);
       if (ammobox && GET_AMMOBOX_QUANTITY(ammobox) > 0) {
-        if (deduct_one_round)
+        if (deduct_one_round) {
           update_ammobox_ammo_quantity(ammobox, -1, "combat round deduction");
+          AMMOTRACK(ch, GET_AMMOBOX_WEAPON(ammobox), GET_AMMOBOX_TYPE(ammobox), AMMOTRACK_COMBAT, -1);
+        }
         return TRUE;
       }
 
@@ -3753,8 +3769,10 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
       // Loaded? Good to go.
       if (GET_MAGAZINE_AMMO_COUNT(wielded->contains)) {
         // Deduct one round if required.
-        if (deduct_one_round)
+        if (deduct_one_round) {
           GET_MAGAZINE_AMMO_COUNT(wielded->contains)--;
+          AMMOTRACK(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(wielded->contains), GET_MAGAZINE_AMMO_TYPE(wielded->contains), AMMOTRACK_COMBAT, -1);
+        }
         return TRUE;
       }
 
@@ -6912,9 +6930,11 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
       if (GET_MAGAZINE_AMMO_COUNT(wielded->contains) >= 2) {
         burst = 3;
         GET_MAGAZINE_AMMO_COUNT(wielded->contains) -= 2;
+        AMMOTRACK(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(wielded->contains), GET_MAGAZINE_AMMO_TYPE(wielded->contains), AMMOTRACK_COMBAT, -2);
       } else if (GET_MAGAZINE_AMMO_COUNT(wielded->contains) == 1) {
         burst = 2;
         GET_MAGAZINE_AMMO_COUNT(wielded->contains)--;
+        AMMOTRACK(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(wielded->contains), GET_MAGAZINE_AMMO_TYPE(wielded->contains), AMMOTRACK_COMBAT, -1);
       } else {
         burst = 0;
       }

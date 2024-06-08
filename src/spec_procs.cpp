@@ -3820,7 +3820,7 @@ const char *depressing_traffic_messages[] = {
   "The faint smell of burnt rubber hangs in the air.\r\n",
   "A rusty signpost squeaks as it swings.\r\n",
   "A muted rumble hints at something collapsing far away.\r\n",
-  "A brief, bright flash of light illuminates the horizon before darkness returns.\r\n", // 20
+  "A brief, bright flash of light illuminates the horizon.\r\n", // 20
   "A metallic clinking sound echoes, like a loose chain swaying in the breeze.\r\n",
   "The persistent drip of water echoes through a nearby alley.\r\n",
   "A stray screamsheet flutters by, its pages torn and yellowed.\r\n",
