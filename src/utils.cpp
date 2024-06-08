@@ -7343,23 +7343,26 @@ idnum_t get_soulbound_idnum(struct obj_data *obj) {
 
   switch (GET_OBJ_TYPE(obj)) {
     case ITEM_FOCUS:
-      return GET_FOCUS_SOULBOND(obj);
+      return GET_FOCUS_SOULBOND(obj) ? GET_FOCUS_SOULBOND(obj) : SB_CODE_OBJ_CANT_BE_SOULBOUND;
     case ITEM_DOCWAGON:
-      return GET_DOCWAGON_SOULBOND(obj);
+      return GET_DOCWAGON_SOULBOND(obj) ? GET_DOCWAGON_SOULBOND(obj) : SB_CODE_OBJ_CANT_BE_SOULBOUND;
     case ITEM_BIOWARE:
       return GET_BIOWARE_SOULBOND(obj);
     case ITEM_CYBERWARE:
       return GET_CYBERWARE_SOULBOND(obj);
     case ITEM_WORN:
-      return GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj);
+      if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+        return GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj);
+      }
+      return SB_CODE_OBJ_CANT_BE_SOULBOUND;
     case ITEM_WEAPON:
       if (!WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_RATING(obj))
-        return GET_WEAPON_SOULBOND(obj);
+        return GET_WEAPON_SOULBOND(obj) ? GET_WEAPON_SOULBOND(obj) : SB_CODE_OBJ_CANT_BE_SOULBOUND;
       return SB_CODE_OBJ_CANT_BE_SOULBOUND;
     case ITEM_CYBERDECK:
-      return GET_CYBERDECK_SOULBOND(obj);
+      return GET_CYBERDECK_SOULBOND(obj) ? GET_CYBERDECK_SOULBOND(obj) : SB_CODE_OBJ_CANT_BE_SOULBOUND;
     case ITEM_KEY:
-      return GET_KEY_SOULBOND(obj);
+      return GET_KEY_SOULBOND(obj) ? GET_KEY_SOULBOND(obj) : SB_CODE_OBJ_CANT_BE_SOULBOUND;
   }
 
   // Special case: Vehicle titles.
