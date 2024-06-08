@@ -1908,7 +1908,7 @@ ACMD(do_drag)
 
     if (dir == -1 && veh) {
       // Does this veh fit in there?
-      if (veh->usedload + calculate_vehicle_entry_load(veh) > veh->load) {
+      if (veh->usedload + calculate_vehicle_entry_load(drag_veh) > veh->load) {
         send_to_char(ch, "%s won't fit in %s!", CAP(GET_VEH_NAME_NOFORMAT(drag_veh)), GET_VEH_NAME(veh));
         return;
       }
