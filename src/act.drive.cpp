@@ -1113,6 +1113,9 @@ ACMD(do_repair)
     target = 1;
   }
 
+  if (!IS_SENATOR(ch))
+    WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
+
   if ((success = (GET_LEVEL(ch) > LVL_MORTAL ? 50 : success_test(skill, target, ch, "do_repair"))) < 1) {
     if (success < 0) {
       send_to_char(ch, "You fuck it up and make things worse.\r\n");
@@ -1128,9 +1131,6 @@ ACMD(do_repair)
     veh->damage = 0;
   } else
     send_to_char(ch, "You go to work and repair part of the damage.\r\n");
-
-  if (!IS_SENATOR(ch))
-    WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
 }
 
 ACMD(do_driveby)
