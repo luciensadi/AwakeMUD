@@ -978,7 +978,10 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
   case MEDIT_FACTION_AFFILIATION:
     number = atoi(arg);
-    {
+    if (number == 0) {
+      medit_disp_menu(d);
+      return;
+    } else {
       Faction *faction = get_faction(number);
       if (!faction || !faction->ch_can_edit_faction(CH)) {
         send_to_char("That's not a faction you can assign. Try again, or enter 0 to clear: \r\n", CH);
