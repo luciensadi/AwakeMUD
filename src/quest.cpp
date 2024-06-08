@@ -2494,7 +2494,7 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
           strlcat(buf, "returning item to Johnson\r\n", sizeof(buf));
           break;
         case QOO_TAR_MOB:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item %ld (%s) to %s%ld (%s)",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "delivering item %ld (%s) to %s%ld (%s)\r\n",
                   QUEST->obj[i].vnum,
                   obj ? GET_OBJ_NAME(obj) : "N/A",
                   target_is_listed_mob ? "M" : "vnum ",
