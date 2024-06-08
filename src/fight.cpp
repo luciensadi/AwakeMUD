@@ -2475,8 +2475,8 @@ bool docwagon(struct char_data *ch)
   }
 
   if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
-    send_to_char(ch, "%s^n buzzes contentedly: the automated DocWagon trauma team remains en route.\r\n", CAP(GET_OBJ_NAME(docwagon)));
-    send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^wCOMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
+    send_to_char(ch, "%s^n buzzes contentedly: the trauma team remains en route.\r\n", CAP(GET_OBJ_NAME(docwagon)));
+    send_to_char(ch, "^L[OOC: Your automated rescue is ready! You can type ^wCOMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
   } else {
     int docwagon_tn = MAX(GET_SECURITY_LEVEL(room), 4);
     int docwagon_dice = GET_DOCWAGON_CONTRACT_GRADE(docwagon) + 1;
@@ -2493,11 +2493,11 @@ bool docwagon(struct char_data *ch)
     // In an area with 4 or less security level: Basic has a 75% chance of rescue, Gold has 87.5% rescue, Plat has 93.8% chance.
     if (successes > 0)
     {
-      send_to_char(ch, "%s^n chirps cheerily: an automated DocWagon trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
+      send_to_char(ch, "%s^n chirps cheerily: a trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
       if (GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
-        send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^w##COMEGETME^L at any time for pickup.]\r\n");
+        send_to_char(ch, "^L[OOC: Your automated rescue is ready! You can type ^w##COMEGETME^L at any time for pickup.]\r\n");
       } else {
-        send_to_char(ch, "^L[OOC: Your DocWagon pickup is ready! You can type ^w##COMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
+        send_to_char(ch, "^L[OOC: Your automated rescue is ready! You can type ^w##COMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
       }
       PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
     } else {

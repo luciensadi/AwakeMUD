@@ -3826,7 +3826,7 @@ const char *depressing_traffic_messages[] = {
   "A stray screamsheet flutters by, its pages torn and yellowed.\r\n",
   "A single light bulb flickers erratically in an otherwise darkened window.\r\n",
   "A plume of black smoke rises in the distance.\r\n", // 25
-  "A lone bird circles high above, its cries lost in the empty sky.\r\n",
+  "A lone bird circles high above, its cries lost in the clouded sky.\r\n",
   "An old billboard, faded and peeling, advertises long-forgotten luxuries.\r\n",
   "The acrid smell of smoke lingers in the air, a remnant of recent fires.\r\n",
   "The pungent odor of old gasoline seeps from somewhere nearby.\r\n",
@@ -3848,9 +3848,18 @@ const char *depressing_traffic_messages[] = {
   "You become aware of a rustling noise-- probably rats scurrying through the garbage.\r\n", // 45
   "There's a sharp crack as glass breaks somewhere nearby.\r\n",
   "From a high-up window, you hear the mechanical murmur of an emergency broadcast repeating endlessly.\r\n",
-  "The rotten smell of stagnant water blows through on a cold breeze.\r\n"
+  "The rotten smell of stagnant water blows through on a cold breeze.\r\n",
+  "A sudden flurry of ash swirls through the air, settling like snow on the abandoned street.\r\n",
+  "The muffled thump of something heavy falling nearby sends a tremor through the ground.\r\n", // 50
+  "A ragged piece of paper flutters down from above, its edges browned and brittle.\r\n",
+  "A flickering neon sign buzzes weakly, casting erratic shadows across the pavement.\r\n",
+  "A tangled mess of wires dangles from a broken streetlamp, swaying gently.\r\n",
+  "You spot movement as a large rat drags a chunk of carcass out of sight.\r\n",
+  "A faint, acidic smell lingers in the air, hinting at something chemical.\r\n", // 55
+  "A string of broken fairy lights hangs from a balcony, some bulbs still flickering sporadically.\r\n",
+  "The dull thud of something hitting the water echoes from the lake's edge.\r\n"
 };
-#define NUM_DEPRESSING_MESSAGES 48
+#define NUM_DEPRESSING_MESSAGES 57
 
 SPECIAL(traffic)
 {
