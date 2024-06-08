@@ -2286,26 +2286,31 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
 void docwagon_message(struct char_data *ch)
 {
   char buf[MAX_STRING_LENGTH];
+  struct room_data *in_room = get_ch_in_room(ch);
 
-  switch (SECT(get_ch_in_room(ch)))
-  {
-    case SPIRIT_HEARTH:
-      snprintf(buf, sizeof(buf),"A DocWagon employee suddenly appears, transports %s's body to\r\nsafety, and rushes away.", GET_NAME(ch));
-      act(buf,FALSE, ch, 0, 0, TO_ROOM);
-      snprintf(buf, sizeof(buf),"A DocWagon employee suddenly appears, transports %s's body to\r\nsafety, and rushes away.", GET_CHAR_NAME(ch));
-      break;
-    case SPIRIT_LAKE:
-    case SPIRIT_RIVER:
-    case SPIRIT_SEA:
-      snprintf(buf, sizeof(buf),"A DocWagon armored speedboat arrives, loading %s's body on\r\nboard before leaving.", GET_NAME(ch));
-      act(buf, FALSE, ch, 0, 0, TO_ROOM);
-      snprintf(buf, sizeof(buf),"A DocWagon armored speedboat arrives, loading %s's body on\r\nboard before leaving.", GET_CHAR_NAME(ch));
-      break;
-    default:
-      snprintf(buf, sizeof(buf),"A DocWagon helicopter flies in, taking %s's body to safety.", GET_NAME(ch));
-      act(buf, FALSE, ch, 0, 0, TO_ROOM);
-      snprintf(buf, sizeof(buf),"A DocWagon helicopter flies in, taking %s's body to safety.", GET_CHAR_NAME(ch));
-      break;
+  if (GET_JURISDICTION(in_room) == JURISDICTION_SECRET) {
+    snprintf(buf, sizeof(buf),"A daring passerby grabs %s and drags them off to safety.", GET_NAME(ch));
+    act(buf,FALSE, ch, 0, 0, TO_ROOM);
+    snprintf(buf, sizeof(buf),"A daring passerby grabs %s and drags them off to safety.", GET_CHAR_NAME(ch));
+  } else if (ROOM_FLAGGED(in_room, ROOM_INDOORS) || SECT(in_room) == SPIRIT_HEARTH) {
+    snprintf(buf, sizeof(buf),"A DocWagon employee suddenly appears, transports %s's body to safety, and rushes away.", GET_NAME(ch));
+    act(buf,FALSE, ch, 0, 0, TO_ROOM);
+    snprintf(buf, sizeof(buf),"A DocWagon employee suddenly appears, transports %s's body to safety, and rushes away.", GET_CHAR_NAME(ch));
+  } else {
+    switch (SECT(in_room)) {
+      case SPIRIT_LAKE:
+      case SPIRIT_RIVER:
+      case SPIRIT_SEA:
+        snprintf(buf, sizeof(buf),"A DocWagon armored speedboat arrives, loading %s's body on board before leaving.", GET_NAME(ch));
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+        snprintf(buf, sizeof(buf),"A DocWagon armored speedboat arrives, loading %s's body on board before leaving.", GET_CHAR_NAME(ch));
+        break;
+      default:
+        snprintf(buf, sizeof(buf),"A DocWagon helicopter flies in, taking %s's body to safety.", GET_NAME(ch));
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+        snprintf(buf, sizeof(buf),"A DocWagon helicopter flies in, taking %s's body to safety.", GET_CHAR_NAME(ch));
+        break;
+    }
   }
 
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
@@ -2371,12 +2376,13 @@ void docwagon_retrieve(struct char_data *ch) {
   // Extinguish their fire, if any.
   ch->points.fire[0] = 0;
 
-  send_to_char("\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n", ch);
+  send_to_char(ch, "\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n",
+               GET_JURISDICTION(room) == JURISDICTION_SECRET ? "helpful passerby" : "DocWagon");
   char_from_room(ch);
   char_to_room(ch, get_jurisdiction_docwagon_room(GET_JURISDICTION(room)));
 
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    send_to_char("Your DocWagon rescue is free due to your newbie status, and you've been restored to full health.\r\n", ch);
+    send_to_char("Your rescue is free due to your newbie status, and you've been restored to full health.\r\n", ch);
     GET_PHYSICAL(ch) = 1000;
     GET_MENTAL(ch) = 1000;
     GET_POS(ch) = POS_STANDING;
@@ -2388,10 +2394,12 @@ void docwagon_retrieve(struct char_data *ch) {
       int dw_random_cost = number(8, 12) * 500 / MAX(1, GET_DOCWAGON_CONTRACT_GRADE(docwagon));
       int creds = MAX(dw_random_cost, (int)(GET_NUYEN(ch) / 10));
 
-      send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", dw_random_cost);
+      send_to_char(ch, "%s demands %d nuyen for your rescue.\r\n",
+                   GET_JURISDICTION(room) == JURISDICTION_SECRET ? "Medical Services" : "DocWagon",
+                   dw_random_cost);
 
       if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
-        send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
+        send_to_char("Not finding sufficient payment, your DocWagon modulator has been seized.\r\n", ch);
         extract_obj(docwagon);
       }
       else if (GET_NUYEN(ch) < creds) {

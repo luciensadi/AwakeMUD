@@ -2393,7 +2393,7 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   act("$n has created $p!", TRUE, ch, obj, 0, TO_ROOM);
   act("You create $p.", FALSE, ch, obj, 0, TO_CHAR);
   snprintf(buf, sizeof(buf), "%s wizloaded object #%d (%s).",
-          GET_CHAR_NAME(ch), vnum, GET_OBJ_NAME(obj));
+          GET_CHAR_NAME(ch), vnum, get_zone_from_vnum(GET_OBJ_VNUM(obj))->locked_to_non_editors ? "<redacted>" : GET_OBJ_NAME(obj));
   mudlog(buf, ch, LOG_CHEATLOG, TRUE);
 
   // Make staff-loaded hardened armor wearable.
@@ -2492,7 +2492,7 @@ ACMD(do_wizload)
         0, 0, TO_ROOM);
     act("$n has created $N!", TRUE, ch, 0, mob, TO_ROOM);
     act("You create $N.", FALSE, ch, 0, mob, TO_CHAR);
-    snprintf(buf, sizeof(buf), "%s wizloaded mob #%d (%s).", GET_CHAR_NAME(ch), numb, GET_NAME(mob));
+    snprintf(buf, sizeof(buf), "%s wizloaded mob #%d (%s).", GET_CHAR_NAME(ch), numb, get_zone_from_vnum(numb)->locked_to_non_editors ? "<redacted>" : GET_CHAR_NAME(mob));
     mudlog(buf, ch, LOG_CHEATLOG, TRUE);
   } else if (is_abbrev(buf, "obj")) {
     perform_wizload_object(ch, numb);

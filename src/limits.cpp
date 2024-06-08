@@ -377,12 +377,40 @@ void _raw_gain_nuyen(struct char_data *ch, long amount, int category, bool bank,
     GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, category) += abs(amount);
 
   // Apply the change
-  if (credstick)
+  if (credstick) {
     GET_ITEM_MONEY_VALUE(credstick) += amount;
-  else if (bank)
+    if (GET_ITEM_MONEY_VALUE(credstick) < 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Deducted more from credstick than it had on it! _raw_gain_nuyen(%s, %ld, %d, %s, %s)",
+                      GET_CHAR_NAME(ch),
+                      amount,
+                      category,
+                      bank ? "BANK" : "F",
+                      GET_OBJ_NAME(credstick));
+      GET_ITEM_MONEY_VALUE(credstick) = 0;
+    }
+  } else if (bank) {
     GET_BANK_RAW(ch) += amount;
-  else
+    if (GET_BANK_RAW(ch) < 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Deducted more from bank than was available! _raw_gain_nuyen(%s, %ld, %d, %s, %s)",
+                      GET_CHAR_NAME(ch),
+                      amount,
+                      category,
+                      bank ? "BANK" : "F",
+                      GET_OBJ_NAME(credstick));
+      GET_BANK_RAW(ch) = 0;
+    }
+  } else {
     GET_NUYEN_RAW(ch) += amount;
+    if (GET_NUYEN_RAW(ch) < 0) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Deducted more from carried cash than was available! _raw_gain_nuyen(%s, %ld, %d, %s, %s)",
+                      GET_CHAR_NAME(ch),
+                      amount,
+                      category,
+                      bank ? "BANK" : "F",
+                      GET_OBJ_NAME(credstick));
+      GET_NUYEN_RAW(ch) = 0;
+    }
+  }
 }
 
 void gain_nuyen(struct char_data *ch, long amount, int category) {

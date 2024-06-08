@@ -1172,6 +1172,8 @@ bool mobact_process_single_helper(struct char_data *ch, struct char_data *vict, 
   if (FIGHTING(ch))
     return FALSE;
 
+  // TODO: FIGHTING(vict) is someone we won't help fight players (racial constraints, etc) -- should we join in against them instead?
+
   // If victim is a visible NPC who is fighting a player, and the player can hurt me, assist the NPC.
   if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, vict) && can_hurt(FIGHTING(vict), ch, 0, TRUE)) {
     // The player is in my room, so I can fight them up-close.
@@ -2247,7 +2249,11 @@ bool mob_is_aggressive_towards_race(struct char_data *ch, int race) {
     case RACE_DRAKE_TROLL:
       return MOB_FLAGGED(ch, MOB_AGGR_TROLL);
     case RACE_FLESHFORM:
-      return !MOB_FLAGGED(ch, MOB_LIKES_FLESHFORM) && MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_HUMAN, MOB_AGGR_ORK, MOB_AGGR_TROLL, MOB_GUARD, MOB_HELPER, ENDBIT);
+      if (GET_RACE(ch) == RACE_FLESHFORM)
+        return FALSE;
+      if (MOB_FLAGGED(ch, MOB_LIKES_FLESHFORM))
+        return FALSE;
+      return MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_HUMAN, MOB_AGGR_ORK, MOB_AGGR_TROLL, MOB_GUARD, MOB_HELPER, ENDBIT);
   }
 
   return FALSE;

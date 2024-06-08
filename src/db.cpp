@@ -3454,7 +3454,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
             continue;
 
           ++found;
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%2d%s ^y+%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n)%s\r\n",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] ^c%2d%s ^y+%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n%s)%s\r\n",
                   OBJ_VNUM_RNUM(nr),
                   ObjList.CountObj(nr),
                   GET_OBJ_VAL(&obj_proto[nr], 0),
@@ -3467,6 +3467,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
                   WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
                   WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) ? " BF" : "",
                   WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA) ? " FA" : "",
+                  CAN_WEAR(&obj_proto[nr], ITEM_WEAR_WIELD) ? ", ^yWieldable^n" : "",
                   obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
         }
       }
@@ -3527,7 +3528,7 @@ int vnum_object_weapons_fa_pro(char *searchname, struct char_data * ch)
         continue;
 
       ++found;
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n)%s\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n%s)%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
               GET_WEAPON_POWER(&obj_proto[nr]),
@@ -3540,6 +3541,7 @@ int vnum_object_weapons_fa_pro(char *searchname, struct char_data * ch)
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) ? " BF" : "",
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA) ? " FA" : "",
+              CAN_WEAR(&obj_proto[nr], ITEM_WEAR_WIELD) ? ", ^yWieldable^n" : "",
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
     }
   }
@@ -3581,7 +3583,7 @@ int vnum_object_weapons_by_type(char *searchname, struct char_data * ch)
           found_of_type++;
 
           if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n)%s\r\n",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n%s)%s\r\n",
                     OBJ_VNUM_RNUM(nr),
                     ObjList.CountObj(nr),
                     GET_WEAPON_POWER(weapon),
@@ -3594,9 +3596,10 @@ int vnum_object_weapons_by_type(char *searchname, struct char_data * ch)
                     WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA) ? " SA" : "",
                     WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF) ? " BF" : "",
                     WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA) ? " FA" : "",
+                    CAN_WEAR(weapon, ITEM_WEAR_WIELD) ? ", ^yWieldable^n" : "",
                     obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
           } else {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^cSTR+%d %s^n ^%sRCH:%2d^n %s (^W%s, focus rating %d^n)%s\r\n",
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^cSTR+%d %s^n ^%sRCH:%2d^n %s (^W%s, focus rating %d^n%s)%s\r\n",
                     OBJ_VNUM_RNUM(nr),
                     ObjList.CountObj(nr),
                     GET_WEAPON_STR_BONUS(weapon),
@@ -3606,6 +3609,7 @@ int vnum_object_weapons_by_type(char *searchname, struct char_data * ch)
                     obj_proto[nr].text.name,
                     weapon_types[GET_WEAPON_ATTACK_TYPE(weapon)],
                     GET_WEAPON_FOCUS_RATING(weapon),
+                    CAN_WEAR(weapon, ITEM_WEAR_WIELD) ? ", ^yWieldable^n" : "",
                     obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
           }
         }
