@@ -1017,6 +1017,11 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         // ID-lock anything that needs locking.
         soulbind_obj_to_char(obj, ch, shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED));
 
+        /* Visa defense: Unlock visas so they can be fixed for folks.
+        if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
+          GET_VISA_OWNER(obj) = 0
+        */
+
         // Hardened armor is not ID-locked on purchase, but IS on first wear. This unlocks it after the above statement.
         if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR))
           GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = -1;

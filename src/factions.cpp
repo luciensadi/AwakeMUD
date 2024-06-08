@@ -352,9 +352,21 @@ void change_faction_points(struct char_data *ch, idnum_t faction_id, int delta, 
     // Below max. Fall through
   }
 
+  int old_status = faction_rep_to_status(ch->faction_rep[faction_id]);
+
   FACTION_DEBUG(ch, "^L[Your rep with faction %ld (%s) has changed from %d", faction_id, faction->get_full_name(), ch->faction_rep[faction_id]);
   ch->faction_rep[faction_id] += delta;
   FACTION_DEBUG(ch, " to %d.]^n\r\n", ch->faction_rep[faction_id]);
+
+  int new_status = faction_rep_to_status(ch->faction_rep[faction_id]);
+
+  // Notify them of major changes.
+  if (old_status != new_status) {
+    send_to_char(ch, "^L[Your reputation with %s^L has %s to %s.]\r\n",
+                 decapitalize_a_an(faction->get_full_name()),
+                 old_status > new_status ? "decreased" : "increased",
+                 faction_status_names[new_status]);
+  }
 }
 
 /* Methods for NPCs to call on witnessing events. */

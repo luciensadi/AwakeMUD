@@ -35,6 +35,7 @@
   - Wimpy faction mobs flee when a hostile-rep player shows up.
   - Rooms can be flagged as no-trespassing with a severity rating. If you're caught in one, you get a faction rep penalty (w/ cooldown) and may be attacked.
   - Doing harmful quests can lower the opposing faction's view of you (e.g. raid Mitsu on a job, Mitsu's rep goes down)
+  - Jobs can have faction rep impacts on other factions (e.g. "steal this thing from Mitsuhama", giver is pleased, mitsu is not)
 
 KEY: 
 - p: prototyped
@@ -47,10 +48,9 @@ KEY:
 // √ If editor list, then: FACTION CREATE makes you an editor of it; you always have view permissions for it.
 // √ Save/load mob faction affiliation.
 
+// TODO: Figure out a way for players to see each rep change if desired, or alternatively to mute that
+// TODO: Add faction content to builder's guide
 // TODO: Staff can set PC's faction rep
-// TODO: Non-editors of protected zones can't see factions from protected zones
-// STRETCH: Allow lower-level builders to edit them
-// STRETCH: Jobs can have faction rep impacts on other factions (e.g. "steal this thing from Mitsuhama", giver is pleased, mitsu is not)
 
 // TODO: Ensure that you only get the witness penalty from hitting someone once per combat
 

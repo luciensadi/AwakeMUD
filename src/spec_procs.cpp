@@ -5065,13 +5065,16 @@ SPECIAL(multnomah_guard)
     struct char_data *guard = (struct char_data *) me;
     struct obj_data *visa = get_obj_in_list_vis(ch, buf2, ch->carrying);
     if (visa && GET_OBJ_VNUM(visa) == OBJ_MULTNOMAH_VISA) {
-      if (GET_VISA_OWNER(visa) == GET_IDNUM(ch)) {
+      if (!blocked_by_soulbinding(ch, visa, FALSE)) {
+        if (soulbind_obj_to_char(visa, ch, FALSE)) {
+          // Message to inform them it's just been bound.
+          send_to_char("You take a brief moment to confirm the visa really was made out to you at the shop.\r\n", ch);
+        }
         PLR_FLAGS(ch).SetBit(PLR_VISA);
         snprintf(arg, sizeof(arg), "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
         do_say(guard, arg, 0, SCMD_SAYTO);
       } else {
         snprintf(arg, sizeof(arg), "%s That's not your visa. Get out of here before we arrest you.", GET_CHAR_NAME(ch));
-        // extract_obj(visa);  -- why do this? Punishing people for having the wrong visa is no bueno.
         do_say(guard, arg, 0, SCMD_SAYTO);
       }
       return TRUE;
@@ -6864,13 +6867,16 @@ SPECIAL(airport_guard)
     one_argument(argument, buf);
     struct obj_data *visa = get_obj_in_list_vis(ch, buf, ch->carrying);
     if (visa && GET_OBJ_VNUM(visa) == OBJ_CARIBBEAN_VISA) {
-      if (GET_VISA_OWNER(visa) == GET_IDNUM(ch)) {
+      if (!blocked_by_soulbinding(ch, visa, FALSE)) {
+        if (soulbind_obj_to_char(visa, ch, FALSE)) {
+          // Message to inform them it's just been bound.
+          send_to_char("You take a brief moment to confirm the visa really was made out to you at the shop.\r\n", ch);
+        }
         PLR_FLAGS(ch).SetBit(PLR_VISA);
         snprintf(arg, sizeof(arg), "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
         do_say(guard, arg, 0, SCMD_SAYTO);
       } else {
-        snprintf(arg, sizeof(arg), "%s Get out of here, before we arrest you.", GET_CHAR_NAME(ch));
-        extract_obj(visa);
+        snprintf(arg, sizeof(arg), "%s That's not your visa. Get out of here before we arrest you.", GET_CHAR_NAME(ch));
         do_say(guard, arg, 0, SCMD_SAYTO);
       }
       return TRUE;
