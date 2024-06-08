@@ -3302,7 +3302,19 @@ bool mob_magic(struct char_data *ch)
         spell = SPELL_STUNBOLT;
         break;
     }
-  } else {
+  }
+  // For stunned / morted folks, we don't want to unnecessarily wreck their gear, so we just hit them with pure damage.
+  else if (GET_POS(FIGHTING(ch)) <= POS_STUNNED) {
+    if (GET_BOD(FIGHTING(ch)) <= 6) {
+      spell = SPELL_POWERBOLT;
+    } else if (GET_WIL(FIGHTING(ch)) < 6) {
+      spell = SPELL_MANABOLT;
+    } else {
+      spell = SPELL_STUNBOLT;
+    }
+  }
+  // Normal combat.
+  else {
     if (magic >= 12) {
       // High-tier mage NPCs cast "intelligently" by prioritizing getting TN penalties on the enemy.
 
