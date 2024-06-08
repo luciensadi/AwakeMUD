@@ -1603,4 +1603,5 @@ struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
 #define RANDOMLY_GENERATE_OBJ_IDNUM(obj) { (obj)->idnum = number(1, RAND_MAX); }
 #define ENSURE_OBJ_HAS_IDNUM(obj) if (!GET_OBJ_IDNUM(obj)) { RANDOMLY_GENERATE_OBJ_IDNUM(obj) }
 
+#define SB_CODE_OBJ_CANT_BE_SOULBOUND -2
 #endif

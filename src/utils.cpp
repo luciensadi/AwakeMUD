@@ -7334,10 +7334,11 @@ vnum_t get_authoritative_vnum_for_item(vnum_t vnum) {
 }
 #undef PAIR
 
+// Returns idnum, or 0/-1 if bindable but not bound (-1 for hardened armor), or -2 if it can't be bound.
 idnum_t get_soulbound_idnum(struct obj_data *obj) {
   if (!obj) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Invalid args to get_soulbound_idnum(%s)", GET_OBJ_NAME(obj));
-    return 1;
+    return 1; // Game owner idnum.
   }
 
   switch (GET_OBJ_TYPE(obj)) {
@@ -7354,7 +7355,7 @@ idnum_t get_soulbound_idnum(struct obj_data *obj) {
     case ITEM_WEAPON:
       if (!WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_RATING(obj))
         return GET_WEAPON_SOULBOND(obj);
-      break;
+      return SB_CODE_OBJ_CANT_BE_SOULBOUND;
     case ITEM_CYBERDECK:
       return GET_CYBERDECK_SOULBOND(obj);
     case ITEM_KEY:
@@ -7365,65 +7366,89 @@ idnum_t get_soulbound_idnum(struct obj_data *obj) {
   if (obj_is_a_vehicle_title(obj))
     return GET_VEHICLE_TITLE_OWNER(obj);
 
-  // Special case: Visas.
+  // Special case: Visas. If you update this, update newshop's visa defense as well.
   if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
     return GET_VISA_OWNER(obj);
 
-  return 0;
+  return SB_CODE_OBJ_CANT_BE_SOULBOUND;
 }
 
-// Returns TRUE on success, FALSE otherwise.
+// Returns TRUE on binding change, FALSE otherwise.
+#define BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(field) { if ((field) != idnum) { (field) = idnum; return TRUE; } }
 bool soulbind_obj_to_char_by_idnum(struct obj_data *obj, idnum_t idnum, bool including_chargen_soulbinds) {
+  idnum_t already_soulbound_to = get_soulbound_idnum(obj);
+
+  // Log error condition if it occurs.
+  if (already_soulbound_to
+      && already_soulbound_to != idnum
+      && already_soulbound_to != SB_CODE_OBJ_CANT_BE_SOULBOUND
+      && !(GET_OBJ_TYPE(obj) == ITEM_WORN && IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR) && already_soulbound_to != -1))
+  {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got already-soulbound item to soulbind_obj_to_char_by_idnum(%s, %ld, %s)! Was bound to %ld, allowing rebind.",
+                    GET_OBJ_NAME(obj),
+                    idnum,
+                    including_chargen_soulbinds ? "CG" : "F",
+                    already_soulbound_to);
+  }
+
   switch (GET_OBJ_TYPE(obj)) {
     case ITEM_FOCUS:
       // Foci are only soulbound when purchased in chargen.
-      if (including_chargen_soulbinds)
-        GET_FOCUS_SOULBOND(obj) = idnum;
+      if (including_chargen_soulbinds) {
+        BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_FOCUS_SOULBOND(obj));
+      }
       break;
     case ITEM_DOCWAGON:
       // Docwagon modulators are only soulbound when purchased in chargen.
-      if (including_chargen_soulbinds)
-        GET_DOCWAGON_SOULBOND(obj) = idnum;
+      if (including_chargen_soulbinds) {
+        BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_DOCWAGON_SOULBOND(obj));
+      }
       break;
     case ITEM_BIOWARE:
       // Bioware is soulbound on installation.
-      GET_BIOWARE_SOULBOND(obj) = idnum;
+      BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_BIOWARE_SOULBOND(obj));
       break;
     case ITEM_CYBERWARE:
       // Cyberware is soulbound on installation.
-      GET_CYBERWARE_SOULBOND(obj) = idnum;
+      BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_CYBERWARE_SOULBOND(obj));
       break;
     case ITEM_WORN:
       // Hardened armor is soulbound when worn.
-      if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR))
-        GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj) = idnum;
+      if (IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+        BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_WORN_HARDENED_ARMOR_CUSTOMIZED_FOR(obj));
+      }
       break;
     case ITEM_WEAPON:
       // Weapon foci are soulbound in chargen.
-      if (including_chargen_soulbinds && !WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_RATING(obj))
-        GET_WEAPON_SOULBOND(obj) = idnum;
+      if (including_chargen_soulbinds && !WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_RATING(obj)) {
+        BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_WEAPON_SOULBOND(obj));
+      }
       break;
     case ITEM_CYBERDECK:
       // Decks are soulbound in chargen.
-      if (including_chargen_soulbinds)
-        GET_CYBERDECK_SOULBOND(obj) = idnum;
+      if (including_chargen_soulbinds) {
+        BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_CYBERDECK_SOULBOND(obj));
+      }
       break;
     case ITEM_KEY:
       // We don't soulbond PGHQ keys.
-      if (!get_zone_from_vnum(GET_OBJ_VNUM(obj))->is_pghq)
-        GET_KEY_SOULBOND(obj) = idnum;
+      if (!get_zone_from_vnum(GET_OBJ_VNUM(obj))->is_pghq) {
+        BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_KEY_SOULBOND(obj));
+      }
       break;
   }
 
   // Special case: Vehicle titles.
-  if (obj_is_a_vehicle_title(obj))
-    GET_VEHICLE_TITLE_OWNER(obj) = idnum;
+  if (obj_is_a_vehicle_title(obj)) {
+    BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_VEHICLE_TITLE_OWNER(obj));
+  }
 
-  // Special case: Visas.
-  if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
-    GET_VISA_OWNER(obj) = idnum;
+  // Special case: Visas. If you update this, update newshop's visa defense as well.
+  if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA) {
+    BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_VISA_OWNER(obj));
+  }
 
-  return TRUE;
+  return FALSE;
 }
 
 bool soulbind_obj_to_char(struct obj_data *obj, struct char_data *ch, bool including_chargen_soulbinds) {
@@ -7449,7 +7474,7 @@ bool blocked_by_soulbinding(struct char_data *ch, struct obj_data *obj, bool sen
 
   idnum_t soulbound_to = get_soulbound_idnum(obj);
 
-  if (!soulbound_to)
+  if (!soulbound_to || soulbound_to == SB_CODE_OBJ_CANT_BE_SOULBOUND)
     return FALSE;
 
   if (soulbound_to == GET_IDNUM(ch))
@@ -7480,6 +7505,11 @@ const char *get_soulbound_name(struct obj_data *obj) {
   }
 
   idnum_t soulbound_to = get_soulbound_idnum(obj);
+
+  if (soulbound_to == SB_CODE_OBJ_CANT_BE_SOULBOUND) {
+    // Not a bindable object.
+    return soulbound_name;
+  }
 
   if (soulbound_to < 0) {
     // It's an internal code like -1 for hardened armor not being bound yet. This is an error case.

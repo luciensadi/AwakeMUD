@@ -369,6 +369,8 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object));
     } else if (get_soulbound_idnum(object) == GET_IDNUM(ch)) {
       strlcat(buf, " ^L(soulbound)^n", sizeof(buf));
+    } else if (get_soulbound_idnum(object) != SB_CODE_OBJ_CANT_BE_SOULBOUND) {
+      strlcat(buf, " ^L(not yet bound)^n", sizeof(buf));
     }
 
     if (GET_OBJ_VNUM(object) == OBJ_SHOPCONTAINER && object->contains) {
@@ -376,6 +378,8 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^r(soulbound to %s)", get_soulbound_name(object->contains));
       } else if (get_soulbound_idnum(object->contains) == GET_IDNUM(ch)) {
         strlcat(buf, " ^L(soulbound)^n", sizeof(buf));
+      } else if (get_soulbound_idnum(object) == SB_CODE_OBJ_CANT_BE_SOULBOUND) {
+        strlcat(buf, " ^L(not yet bound)^n", sizeof(buf));
       }
     }
   }
@@ -3908,10 +3912,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
   }
 
   if (GET_OBJ_VNUM(j) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(j) == OBJ_CARIBBEAN_VISA) {
-    if (GET_OBJ_VAL(j, 0) == GET_IDNUM(ch)) {
+    idnum_t bound_to = get_soulbound_idnum(j);
+    if (bound_to == GET_IDNUM(ch)) {
       strlcat(buf, " It has your picture on it.", sizeof(buf));
-    } else {
+    } else if (bound_to) {
       strlcat(buf, " It has someone else's picture on it.", sizeof(buf));
+    } else {
+      strlcat(buf, " The picture has been covered with a peel-off film. Could be anyone's.", sizeof(buf));
     }
   }
 
