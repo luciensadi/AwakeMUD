@@ -506,7 +506,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
     if (visibility_penalty > (MAX_VISIBILITY_PENALTY - current_visibility_penalty)) {
       // We already printed all their modifiers, so we need to apply a negative modifier to clamp them back to 8.
       int new_visibility_penalty = MAX_VISIBILITY_PENALTY - current_visibility_penalty;
-      buf_mod(vision_rbuf, sizeof(vision_rbuf), "VisPenaltyMax8", new_visibility_penalty);
+      buf_mod(vision_rbuf, sizeof(vision_rbuf), "VisPenaltyMax8 overwites prior to", new_visibility_penalty);
       visibility_penalty = new_visibility_penalty;
     }
 
