@@ -6340,7 +6340,7 @@ void perform_immort_where(struct char_data * ch, char *arg)
           snprintf(buf1, sizeof(buf1), "%-20s - [%6ld] %s^n%s",
                     GET_CHAR_NAME(primary_char),
                     GET_ROOM_VNUM(room),
-                    GET_ROOM_NAME(room),
+                    ch_can_bypass_edit_lock(ch, room) ? GET_ROOM_NAME(room) : "<redacted>",
                     ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION) ? " ^c(social room)^n" : ""
                   );
 

@@ -228,7 +228,10 @@
 #define RACE_ELEMENTAL             34
 #define RACE_SPIRIT                35
 #define RACE_PC_CONJURED_ELEMENTAL 36
-#define NUM_RACES                  36  /* This must be the NUMBER of races */
+#define RACE_FLESHFORM             37
+#define RACE_ANIMAL                38
+#define RACE_PARACRITTER           39
+#define NUM_RACES                  39  /* This must be the NUMBER of races */
 
 #define MINIMUM_VALID_PLAYER_RACE  2
 #define MAXIMUM_VALID_PLAYER_RACE  33
@@ -395,7 +398,8 @@ enum {
 #define MOB_RACIAL_AGGR_VS_MOBS  34 /* Will trigger racial aggro vs other NPCs */
 #define MOB_NO_NUYEN_LOOT_DROPS  35 /* Will never drop nuyen on death. */
 #define MOB_PERCEIVING           36 /* Astrally perceiving */
-#define MOB_MAX                  37
+#define MOB_LIKES_FLESHFORM      37 /* doesn't attack fleshform */
+#define MOB_MAX                  38
 
 /* preference flags: used by char_data.player_specials.pref */
 
@@ -816,8 +820,9 @@ enum {
 #define AURA_CONFUSION     12
 #define AURA_POWERSITE     13
 #define AURA_BLOOD_MAGIC   14
-#define AURA_PLAYERCOMBAT   15
-#define AURA_PLAYERDEATH   16
+#define AURA_WRONGNESS     15
+#define AURA_PLAYERCOMBAT  16
+#define AURA_PLAYERDEATH   17
 
 #define COMBAT      1
 #define DETECTION    2
@@ -2258,7 +2263,8 @@ enum {
 #define CON_TEMPDESC_EDIT       51
 #define CON_ART_CREATE          52
 #define CON_ACCOUNT_PARSE       53
-#define CON_MAX                 53
+#define CON_FACTION_EDIT        54
+#define CON_MAX                 54
 #define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.

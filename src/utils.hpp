@@ -188,6 +188,11 @@ struct room_data *get_jurisdiction_docwagon_room(int jurisdiction);
 struct room_data *get_jurisdiction_garage_room(int jurisdiction);
 void   set_dropped_by_info(struct obj_data *obj, struct char_data *ch);
 
+// RCD subscription functions.
+bool   add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller, bool ignore_veh_sub_marker, bool mute_duplication_alarm=FALSE);
+bool   remove_veh_from_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller);
+void   regenerate_subscriber_list_rankings(struct char_data *ch);
+
 // Edit lock funcs.
 bool ch_can_bypass_edit_lock(struct char_data *ch, struct zone_data *zone);
 bool ch_can_bypass_edit_lock(struct char_data *ch, struct room_data *room);
@@ -399,6 +404,8 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define IS_PERCEIVING(ch) (MOB_FLAGGED(ch, MOB_PERCEIVING) || PLR_FLAGGED(ch, PLR_PERCEIVE))
 #define SEES_ASTRAL(ch) (!IS_RIGGING(ch) && (IS_ASTRAL(ch) || IS_DUAL(ch) || IS_PERCEIVING(ch)))
 #define IS_SENATOR(ch) (access_level((ch), LVL_BUILDER))
+
+#define GET_MOB_FACTION_IDNUM(mob) ((mob)->char_specials.npc_faction_membership)
 
 #define GET_PROJECTION_ESSLOSS_TICK(ch)  ((ch)->points.projection_ticks)
 

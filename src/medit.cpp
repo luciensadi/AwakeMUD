@@ -21,6 +21,7 @@
 #include "handler.hpp"
 #include "constants.hpp"
 #include "bullet_pants.hpp"
+#include "factions.hpp"
 
 void write_mobs_to_disk(vnum_t zone);
 void list_mob_precast_spells_to_ch(struct char_data *mob, struct char_data *ch);
@@ -110,7 +111,7 @@ void medit_disp_menu(struct descriptor_data *d)
                CCNRM(CH, C_CMP));
   send_to_char(CH, "k) Height: %s%d%s\r\n", CCCYN(CH, C_CMP), GET_HEIGHT(MOB),
                CCNRM(CH, C_CMP));
-  send_to_char(CH, "l) Race: ^c%s^n\r\n", pc_race_types[(int)GET_RACE(MOB)]);
+  send_to_char(CH, "l) Race: ^c%s^n\r\n", pc_race_types_for_wholist[(int)GET_RACE(MOB)]);
   // gotta subtract TYPE_HIT to make it work properly
   sprinttype(!(MOB->mob_specials.attack_type) ? 0 :
              (MOB->mob_specials.attack_type - TYPE_HIT), attack_types, buf1, sizeof(buf1));
@@ -133,6 +134,9 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "t) Edit Equipment (%d piece%s)\r\n", eq_total, eq_total == 1 ? "" : "s");
 
   send_to_char(CH, "u) Speech Highlight: \"%s%s^n\"\r\n", GET_CHAR_COLOR_HIGHLIGHT(MOB), SETTABLE_CHAR_COLOR_HIGHLIGHT(MOB) ? "Example speech." : "<not set>");
+  send_to_char(CH, "v) Faction: ^c%s^n (%ld)\r\n",
+               GET_MOB_FACTION_IDNUM(MOB) ? get_faction_name(GET_MOB_FACTION_IDNUM(MOB), CH) : "<not set>",
+               GET_MOB_FACTION_IDNUM(MOB));
 
   send_to_char("q) Quit and save\r\n", CH);
   send_to_char("x) Exit and abort\r\n", CH);
@@ -308,15 +312,15 @@ void medit_disp_class_menu(struct descriptor_data *d)
 {
   CLS(CH);
   for (int c = 1; c <= NUM_RACES; c++) {
-    if (c == RACE_PC_CONJURED_ELEMENTAL) {
+    if (c == RACE_PC_CONJURED_ELEMENTAL || (c == RACE_FLESHFORM && !access_level(CH, LVL_ADMIN))) {
       send_to_char(CH, "%2d) ^Llocked^n\r\n", c);
     } else {
-      send_to_char(CH, "%2d) %-20s\r\n", c, pc_race_types[c]);
+      send_to_char(CH, "%2d) %-20s\r\n", c, pc_race_types_for_wholist[c]);
     }
   }
 
   send_to_char(CH, "Mob race: ^c%s^n\r\n"
-               "Enter mob race, 0 to quit: ", pc_race_types[(int)GET_RACE(MOB)]);
+               "Enter mob race, 0 to quit: ", pc_race_types_for_wholist[(int)GET_RACE(MOB)]);
 }
 
 void medit_disp_att_menu(struct descriptor_data *d)
@@ -890,6 +894,11 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Enter speech highlight: ", CH);
       d->edit_mode = MEDIT_HIGHLIGHT;
       break;
+    case 'v':
+      list_factions_to_char(CH, FALSE);
+      send_to_char("Select the faction this mob belongs to:", CH);
+      d->edit_mode = MEDIT_FACTION_AFFILIATION;
+      break;
     default:
       medit_disp_menu(d);
       break;
@@ -967,10 +976,23 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
 
+  case MEDIT_FACTION_AFFILIATION:
+    number = atoi(arg);
+    {
+      Faction *faction = get_faction(number);
+      if (!faction || !faction->ch_can_edit_faction(CH)) {
+        send_to_char("That's not a faction you can assign. Try again, or enter 0 to clear: \r\n", CH);
+        return;
+      }
+      GET_MOB_FACTION_IDNUM(MOB) = faction->get_idnum();
+      medit_disp_menu(d);
+    }
+    break;
+
   case MEDIT_NUYEN:
     number = atoi(arg);
-    if ((number < 0) || (number > 999999)) {
-      send_to_char("Value must range between 0 and 999999.\r\n", CH);
+    if ((number < 0) || (number > 9999)) {
+      send_to_char("Value must range between 0 and 9999.\r\n", CH);
       send_to_char("Enter average nuyen: ", CH);
     } else {
       GET_NUYEN_RAW(MOB) = number;
@@ -981,8 +1003,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
   case MEDIT_CREDSTICK:
     number = atoi(arg);
-    if ((number < 0) || (number > 999999)) {
-      send_to_char("Value must range between 0 and 999999.\r\n", CH);
+    if ((number < 0) || (number > 9999)) {
+      send_to_char("Value must range between 0 and 9999.\r\n", CH);
       send_to_char("Enter average credstick value: ", CH);
     } else {
       GET_BANK_RAW(MOB) = number;
@@ -1417,7 +1439,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
   case MEDIT_CLASS:
     number = atoi(arg);
-    if ((number < 0) || (number > NUM_RACES) || number == RACE_PC_CONJURED_ELEMENTAL)
+    if ((number < 0) || (number > NUM_RACES) || number == RACE_PC_CONJURED_ELEMENTAL || (number == RACE_FLESHFORM && !access_level(CH, LVL_ADMIN)))
       medit_disp_class_menu(d);
     else {
       if (number != 0) {
@@ -1834,7 +1856,7 @@ void write_mobs_to_disk(vnum_t zone_num)
               "Gender:\t%s\n",
               MOB_FLAGS(mob).ToString(),
               AFF_FLAGS(mob).ToString(),
-              pc_race_types[(int)mob->player.race],
+              pc_race_types_for_wholist[(int)mob->player.race],
               genders[(int)mob->player.pronouns]);
 
       if (mob->char_specials.position != POS_STANDING)
@@ -1882,6 +1904,8 @@ void write_mobs_to_disk(vnum_t zone_num)
         fprintf(fp, "\tBank:\t%ld\n", GET_BANK(mob));
       if (GET_KARMA(mob) > 0)
         fprintf(fp, "\tKarma:\t%d\n", GET_KARMA(mob));
+      if (GET_MOB_FACTION_IDNUM(mob) > 0)
+        fprintf(fp, "\tFaction:\t%ld\n", GET_MOB_FACTION_IDNUM(mob));
 
 
       bool printed_skills_yet = FALSE;

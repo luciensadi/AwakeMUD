@@ -25,6 +25,7 @@
 #include "bullet_pants.hpp"
 #include "bitfield.hpp"
 #include "config.hpp"
+#include "factions.hpp"
 
 ACMD_DECLARE(do_say);
 ACMD_DECLARE(do_prone);
@@ -261,7 +262,7 @@ bool vict_is_valid_target(struct char_data *ch, struct char_data *vict) {
     // Is this an astral projection?
     if (!IS_PROJECT(vict)) {
       // Nope. Is this a race I'm aggressive towards?
-      if (!MOB_FLAGGED(ch, MOB_RACIAL_AGGR_VS_MOBS) || !mob_is_aggressive_towards_race(ch, GET_RACE(vict))) {
+      if (!mob_is_aggressive_towards_race(ch, GET_RACE(vict)) || !(GET_RACE(vict) == RACE_FLESHFORM || MOB_FLAGGED(ch, MOB_RACIAL_AGGR_VS_MOBS))) {
         #ifdef MOBACT_DEBUG
               snprintf(buf3, sizeof(buf3), "vict_is_valid_target: Skipping NPC %s - not hunted escortee, projection, or racial target.", GET_CHAR_NAME(vict));
               do_say(ch, buf3, 0, 0);
@@ -374,14 +375,16 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
   bool is_alarmed_guard = MOB_FLAGGED(ch, MOB_GUARD) && GET_MOBALERT(ch) == MALERT_ALARM;
   bool is_alarmed_racist = mob_is_aggressive(ch, FALSE) && GET_MOBALERT(ch) == MALERT_ALARM;
   bool is_racially_motivated = mob_is_aggressive_towards_race(ch, GET_RACE(vict));
+  bool is_faction_motivated = faction_leader_says_geef_ze_maar_een_pak_slaag_voor_papa(ch, vict) && (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD) || is_aggressive);
 
-  if (is_aggressive || is_alarmed_guard || is_alarmed_racist || is_racially_motivated) {
+  if (is_aggressive || is_alarmed_guard || is_alarmed_racist || is_racially_motivated || is_faction_motivated) {
 #ifdef MOBACT_DEBUG
-    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: Target found (conditions: %s/%s/%s/%s): %s.",
-             is_aggressive ? "base aggro" : "",
-             is_alarmed_guard ? "alarmed guard" : "",
-             is_alarmed_racist ? "alarmed racist" : "",
-             is_racially_motivated ? "racial violence" : "",
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: Target found (conditions: %s/%s/%s/%s/%s): %s.",
+             is_aggressive ? "base aggro" : "!ba",
+             is_alarmed_guard ? "alarmed guard" : "!ag",
+             is_alarmed_racist ? "alarmed racist" : "!ar",
+             is_racially_motivated ? "racial violence" : "!rv",
+             is_faction_motivated ? "faction" : "!f",
              GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);
 #endif
@@ -447,8 +450,21 @@ bool vict_is_valid_guard_target(struct char_data *ch, struct char_data *vict) {
   // We're zero-indexed, so this is the max string index above plus one.
   #define NUM_GUARD_MESSAGES 26
 
-  if (!vict_is_valid_target(ch, vict) || is_dissuaded_by_hardened_armor(ch, vict))
+  if (!vict_is_valid_target(ch, vict))
     return FALSE;
+
+  if (is_dissuaded_by_hardened_armor(ch, vict)) {
+#ifdef MOBACT_DEBUG
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_guard_target: %s is not a valid target due to hardened armor.", GET_CHAR_NAME(vict));
+    do_say(ch, buf3, 0, 0);
+#endif
+    return FALSE;
+  }
+
+  // Guards act on faction enemy status.
+  if (faction_leader_says_geef_ze_maar_een_pak_slaag_voor_papa(ch, vict)) {
+    return TRUE;
+  }
 
   int security_level = GET_SECURITY_LEVEL(get_ch_in_room(ch));
   for (int i = 0; i < NUM_WEARS; i++) {
@@ -1837,6 +1853,19 @@ void mobile_activity(void)
 
     // All these aggressive checks require the character to not be in a peaceful room.
     if (!current_room->peaceful) {
+      // Ensure faction mobs are alerted if an enemy is nearby.
+      if (GET_MOB_FACTION_IDNUM(ch)) {
+        for (struct char_data *occupant = current_room->people; occupant; occupant = occupant->next_in_room) {
+          if (!IS_NPNPC(occupant)) {
+            if (get_faction_status(occupant, GET_MOB_FACTION_IDNUM(ch)) <= faction_statuses::CAUTIOUS) {
+              GET_MOBALERT(ch) = MAX(GET_MOBALERT(ch), MALERT_ALERT);
+              GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 15);
+              break;
+            }
+          }
+        }
+      }
+
       // Handle aggressive mobs.
       if (mobact_process_aggro(ch, current_room)) {
         continue;
@@ -2214,6 +2243,8 @@ bool mob_is_aggressive_towards_race(struct char_data *ch, int race) {
     case RACE_GHOUL_TROLL:
     case RACE_DRAKE_TROLL:
       return MOB_FLAGGED(ch, MOB_AGGR_TROLL);
+    case RACE_FLESHFORM:
+      return !MOB_FLAGGED(ch, MOB_LIKES_FLESHFORM) && MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_HUMAN, MOB_AGGR_ORK, MOB_AGGR_TROLL, MOB_GUARD, MOB_HELPER, ENDBIT);
   }
 
   return FALSE;

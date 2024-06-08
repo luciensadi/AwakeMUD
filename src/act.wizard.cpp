@@ -80,6 +80,7 @@ extern int last;
 extern int max_ability(int i);
 extern int count_objects(struct obj_data *obj);
 extern void list_mob_precast_spells_to_ch(struct char_data *mob, struct char_data *ch);
+extern const char *get_faction_name(idnum_t idnum, struct char_data *viewer);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
@@ -1366,6 +1367,10 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
                driver ? GET_CHAR_NAME(driver) : "nobody",
                rigger ? GET_CHAR_NAME(rigger) : "nobody",
                k->rigger ? GET_CHAR_NAME(k->rigger) : "nobody");
+  
+  if (GET_LEVEL(ch) == LVL_PRESIDENT && k->sub) {
+    send_to_char(ch, "Sub rank: %d, next %s, prev %s\r\n", k->sub_rank, GET_VEH_NAME(k->next_sub), GET_VEH_NAME(k->prev_sub));
+  }
 }
 
 void do_stat_object(struct char_data * ch, struct obj_data * j)
@@ -1868,6 +1873,10 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     snprintf(buf2, sizeof(buf2), ", In room [%8ld]", k->in_room->number);
   else if (k->in_veh)
     snprintf(buf2, sizeof(buf2), ", In veh [%s]", GET_VEH_NAME(k->in_veh));
+
+  if (GET_MOB_FACTION_IDNUM(k)) {
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ". Faction: %s (%ld)", get_faction_name(GET_MOB_FACTION_IDNUM(k), ch), GET_MOB_FACTION_IDNUM(k));
+  }
 
   // Append to existing buf with newline.
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s\r\n", buf2);
@@ -6861,11 +6870,16 @@ ACMD(do_slist)
 
   int real_mob;
   for (nr = MAX(0, real_shop(first)); nr <= top_of_shopt && (shop_table[nr].vnum <= last); nr++) {
-    if (shop_table[nr].vnum >= first)
+    if (shop_table[nr].vnum < first || shop_table[nr].vnum >= last) {
+      // send_to_char(ch, "Skipping shop %ld: Not in range %d ≤ X ≤ %d.\r\n", shop_table[nr].vnum, first, last);
       continue;
+    }
     
-    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(shop_table[nr].vnum)))
+    if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(shop_table[nr].vnum))) {
+      if (GET_LEVEL(ch) == LVL_PRESIDENT)
+        send_to_char(ch, "------ [%8ld] %s <hidden>\r\n", shop_table[nr].vnum, (real_mob = real_mobile(shop_table[nr].keeper)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]));
       continue;
+    }
 
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s %s (%ld)\r\n", ++found,
             shop_table[nr].vnum,
@@ -6875,7 +6889,7 @@ ACMD(do_slist)
   }
 
   if (!found)
-    send_to_char("No shops were found in those parameters.\r\n", ch);
+    send_to_char(ch, "No shops were found between %d and %d.\r\n", first, last);
   else
     page_string(ch->desc, buf, 1);
 }

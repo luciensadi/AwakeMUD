@@ -73,6 +73,7 @@
 #include "dblist.hpp"
 #include "moderation.hpp"
 #include "newhouse.hpp"
+#include "factions.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -429,21 +430,7 @@ void copyover_recover()
       if (operative_character && GET_IDNUM(operative_character) != veh->owner)
         continue;
 
-      struct veh_data *f = NULL;
-      for (f = operative_character->char_specials.subscribe; f; f = f->next_sub)
-        if (f == veh)
-          break;
-
-      if (!f) {
-        veh->next_sub = operative_character->char_specials.subscribe;
-
-        // Doubly link it into the list.
-        if (operative_character->char_specials.subscribe)
-          operative_character->char_specials.subscribe->prev_sub = veh;
-
-        operative_character->char_specials.subscribe = veh;
-      }
-
+      add_veh_to_chs_subscriber_list(veh, operative_character, "copyover regen", TRUE);
       break;
     }
   }
@@ -1049,35 +1036,39 @@ void game_loop(int mother_desc)
       weather_change();
       if (time_info.hours == 17) {
         for (i = 0; i <= top_of_world; i++) {
-          if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE, ENDBIT)) {
-            send_to_room("Ground-illuminating lights snap on as darkness falls.\r\n", &world[i]);
-          } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
-            if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
-              send_to_room("A battered streetlight starts to flicker on.\r\n", &world[i]);
+          if (ROOM_FLAGGED(&world[i], ROOM_STREETLIGHTS)) {
+            if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE, ENDBIT)) {
+              send_to_room("Ground-illuminating lights snap on as darkness falls.\r\n", &world[i]);
+            } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
+              if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
+                send_to_room("A battered streetlight starts to flicker on.\r\n", &world[i]);
+              } else {
+                send_to_room("A light flickers weakly against the darkness.\r\n", &world[i]);
+              }
+            } else if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
+              send_to_room("A streetlight hums faintly, flickers, and turns on.\r\n", &world[i]);
             } else {
-              send_to_room("A light flickers weakly against the darkness.\r\n", &world[i]);
+              send_to_room("A nearby light hums faintly, flickers, and turns on.\r\n", &world[i]);
             }
-          } else if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
-            send_to_room("A streetlight hums faintly, flickers, and turns on.\r\n", &world[i]);
-          } else {
-            send_to_room("A nearby light hums faintly, flickers, and turns on.\r\n", &world[i]);
           }
         }
       }
       if (time_info.hours == 7) {
         for (i = 0; i <= top_of_world; i++) {
-          if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE, ENDBIT)) {
-            send_to_room("The ground-illuminating lights shut off.\r\n", &world[i]);
-          } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
-            if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
-              send_to_room("The streetlight sputters out one last photon, then quits.\r\n", &world[i]);
+          if (ROOM_FLAGGED(&world[i], ROOM_STREETLIGHTS)) {
+            if (ROOM_FLAGS(&world[i]).AreAnySet(ROOM_RUNWAY, ROOM_HELIPAD, ROOM_AIRCRAFT_CAN_DRIVE_HERE, ENDBIT)) {
+              send_to_room("The ground-illuminating lights shut off.\r\n", &world[i]);
+            } else if (GET_JURISDICTION(&world[i]) == JURISDICTION_SECRET) {
+              if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
+                send_to_room("The streetlight sputters out one last photon, then quits.\r\n", &world[i]);
+              } else {
+                send_to_room("The flickering light yields to the dawn.\r\n", &world[i]);
+              }
+            } else if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
+              send_to_room("A streetlight flickers and goes out.\r\n", &world[i]);
             } else {
-              send_to_room("The flickering light yields to the dawn.\r\n", &world[i]);
+              send_to_room("A nearby light flickers and goes out.\r\n", &world[i]);
             }
-          } else if (ROOM_FLAGGED(&world[i], ROOM_ROAD)) {
-            send_to_room("A streetlight flickers and goes out.\r\n", &world[i]);
-          } else {
-            send_to_room("A nearby light flickers and goes out.\r\n", &world[i]);
           }
         }
       }
@@ -2348,6 +2339,11 @@ void free_editing_structs(descriptor_data *d, int state)
   if (d->edit_icon) {
     Mem->DeleteIcon(d->edit_icon);
     d->edit_icon = NULL;
+  }
+
+  if (d->edit_faction) {
+    delete d->edit_faction;
+    d->edit_faction = NULL;
   }
 
 #define DELETE_EDITING_INFO(field) { if ((field)) { delete (field); (field) = NULL; }}

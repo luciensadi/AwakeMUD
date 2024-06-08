@@ -956,8 +956,17 @@ void process_regeneration(int half_hour)
         world[i].icesheet[0] = 0;
 
     // Decrement player combat and player death auras.
-    if (world[i].background[CURRENT_BACKGROUND_COUNT] && world[i].background[CURRENT_BACKGROUND_TYPE] >= AURA_BLOOD_MAGIC)
+    if (world[i].background[CURRENT_BACKGROUND_COUNT] && world[i].background[CURRENT_BACKGROUND_TYPE] >= AURA_PLAYERCOMBAT)
       world[i].background[CURRENT_BACKGROUND_COUNT]--;
+
+    // Re-increment standard auras, but only if there are no player auras in place.
+    if (world[i].background[CURRENT_BACKGROUND_TYPE] != AURA_POWERSITE
+        && (world[i].background[CURRENT_BACKGROUND_TYPE] < AURA_PLAYERCOMBAT || world[i].background[CURRENT_BACKGROUND_COUNT] <= 0))
+    {
+      if (world[i].background[CURRENT_BACKGROUND_COUNT] < world[i].background[PERMANENT_BACKGROUND_COUNT])
+        world[i].background[CURRENT_BACKGROUND_COUNT]++;
+      world[i].background[CURRENT_BACKGROUND_TYPE] = world[i].background[PERMANENT_BACKGROUND_TYPE];
+    }
   }
 }
 

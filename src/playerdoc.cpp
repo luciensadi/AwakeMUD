@@ -361,7 +361,7 @@ ACMD(do_docwagon) {
   char output[MAX_STRING_LENGTH] = { 0 };
 
   // This only works for people with receivers.
-  FAILURE_CASE(!AFF_FLAGGED(ch, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER), "You need to be wearing a DocWagon receiver to use this command-- modulators don't work here.");
+  FAILURE_CASE(!AFF_FLAGGED(ch, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER), "You need to be wearing a DocWagon receiver to use this command-- modulators aren't sufficient for this command. Did you mean ^WCOMEGETME^n?");
 
   skip_spaces(&argument);
   char *name = one_argument(argument, mode_switch);

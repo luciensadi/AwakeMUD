@@ -29,6 +29,7 @@
 #include "newmatrix.hpp"
 #include "pocketsec.hpp"
 #include "vehicles.hpp"
+#include "factions.hpp"
 
 /*   external vars  */
 ACMD_DECLARE(do_goto);
@@ -3329,25 +3330,35 @@ SPECIAL(smiths_bouncer) {
   return(FALSE);
 }
 
-#define MAKE_BOUNCER(proc_name, direction_string, direction_int, pass_vnum, failure_speech) SPECIAL(proc_name) { \
-  NO_DRAG_BULLSHIT;                                                                                              \
-  struct char_data *bouncer = (char_data *) me;                                                                  \
-  if (!cmd || !AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING))                                                       \
-    return FALSE;                                                                                                \
-  if (CMD_IS(direction_string)) {                                                                                \
-    for (struct obj_data *pass = ch->carrying; pass; pass = pass->next_content)                                  \
-      if (GET_OBJ_VNUM(pass) == pass_vnum && !blocked_by_soulbinding(ch, pass, TRUE)) {                          \
-        soulbind_obj_to_char(pass, ch, FALSE);                                                                   \
-        perform_move(ch, direction_int, LEADER, NULL);                                                           \
-        return TRUE;                                                                                             \
-      }                                                                                                          \
-    do_say(bouncer, failure_speech, 0, 0);                                                                       \
-    return TRUE;                                                                                                 \
-  }                                                                                                              \
-  return FALSE;                                                                                                  \
+#define MAKE_BOUNCER(proc_name, direction_string, direction_int, pass_vnum, failure_speech)             \
+SPECIAL(proc_name) {                                                                                    \
+  NO_DRAG_BULLSHIT;                                                                                     \
+  struct char_data *bouncer = (char_data *) me;                                                         \
+  if (!cmd || !AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING))                                              \
+    return FALSE;                                                                                       \
+  if (CMD_IS(direction_string)) {                                                                       \
+    bool pass_ok = pass_vnum <= 0;                                                                      \
+    bool faction_ok = GET_MOB_FACTION_IDNUM(bouncer) <= FACTION_IDNUM_UNDEFINED;                        \
+    if (!pass_ok) {                                                                                     \
+      for (struct obj_data *pass = ch->carrying; pass; pass = pass->next_content) {                     \
+        if (GET_OBJ_VNUM(pass) == pass_vnum && !blocked_by_soulbinding(ch, pass, TRUE)) {               \
+          soulbind_obj_to_char(pass, ch, FALSE);                                                        \
+          pass_ok = TRUE;                                                                               \
+        }                                                                                               \
+      }                                                                                                 \
+    }                                                                                                   \
+    if (!faction_ok) {                                                                                  \
+      faction_ok = get_faction_status(ch, GET_MOB_FACTION_IDNUM(bouncer)) >= faction_statuses::NEUTRAL; \
+    }                                                                                                   \
+    if (!pass_ok || !faction_ok) {                                                                      \
+      do_say(bouncer, failure_speech, 0, 0);                                                            \
+      return TRUE;                                                                                      \
+    }                                                                                                   \
+  }                                                                                                     \
+  return FALSE;                                                                                         \
 }
 
-MAKE_BOUNCER(test_bouncer, "east", EAST, LEADER, NULL);
+MAKE_BOUNCER(test_bouncer, "east", EAST, 10000, "Not this time, chummer.");
 
 /* Special procedures for weapons                                    */
 
@@ -3789,7 +3800,7 @@ const char *traffic_messages[] = {
 #define NUM_TRAFFIC_MESSAGES 43
 
 const char *depressing_traffic_messages[] = {
-  "A crumpled plastic bag slips past on an eddy of wind.\r\n", // 0
+  "A crumpled plastic bag slips past on an eddy of wind.\r\n",  // 0
   "A long string of automatic fire echoes off of the concrete jungle.\r\n",
   "A high-pitched screech warbles somewhere in the distance.\r\n",
   "A flickering shadow zips above you, too high up to make out any details.\r\n",
@@ -3802,9 +3813,44 @@ const char *depressing_traffic_messages[] = {
   "The skitter of too many legs sounds from somewhere nearby.\r\n", // 10
   "A crumbling bit of masonry clatters to the ground.\r\n",
   "Dust sifts down from somewhere overhead.\r\n",
-  "The groan of straining metal echoes through the streets.\r\n" // 13
+  "The groan of straining metal echoes through the streets.\r\n",
+  "The distant wail of an alarm rises and falls, unanswered.\r\n",
+  "A broken window pane creaks as it sways in the wind.\r\n", // 15
+  "Leaves rustle across the cracked pavement, driven by sporadic gusts.\r\n",
+  "The faint smell of burnt rubber hangs in the air.\r\n",
+  "A rusty signpost squeaks as it swings.\r\n",
+  "A muted rumble hints at something collapsing far away.\r\n",
+  "A brief, bright flash of light illuminates the horizon before darkness returns.\r\n", // 20
+  "A metallic clinking sound echoes, like a loose chain swaying in the breeze.\r\n",
+  "The persistent drip of water echoes through a nearby alley.\r\n",
+  "A stray screamsheet flutters by, its pages torn and yellowed.\r\n",
+  "A single light bulb flickers erratically in an otherwise darkened window.\r\n",
+  "A plume of black smoke rises in the distance.\r\n", // 25
+  "A lone bird circles high above, its cries lost in the empty sky.\r\n",
+  "An old billboard, faded and peeling, advertises long-forgotten luxuries.\r\n",
+  "The acrid smell of smoke lingers in the air, a remnant of recent fires.\r\n",
+  "The pungent odor of old gasoline seeps from somewhere nearby.\r\n",
+  "A whiff of charred wood drifts by on the breeze.\r\n", // 30
+  "The scent of mildew and dampness wafts from an abandoned subway entrance.\r\n",
+  "The sharp tang of rust suddenly permeates the air.\r\n",
+  "The stench of spoiled food assaults your nostrils.\r\n",
+  "The faint, sweet smell of decomposing vegetation rises from a neglected bit of green space.\r\n",
+  "The heavy, oily scent of stagnant water flows past you.\r\n", // 35
+  "The clang of metal on metal echoes from an unseen alley.\r\n",
+  "A hollow rattle comes from an empty soda can rolling down the street.\r\n",
+  "A flight of pigeons startles from a nearby rooftop.\r\n",
+  "There's an eerie howl as the wind whips through shattered windows.\r\n",
+  "The sudden crash of a collapsing fire escape reverberates through the silence.\r\n", // 40
+  "The clatter of falling debris echoes down the empty streets.\r\n",
+  "A muffled explosion booms from somewhere in the city.\r\n",
+  "The shrill cry of a seagull pierces the silence.\r\n",
+  "The distant bark of a stray dog reverberates amidst the concrete jungle.\r\n",
+  "You become aware of a rustling noise-- probably rats scurrying through the garbage.\r\n", // 45
+  "There's a sharp crack as glass breaks somewhere nearby.\r\n",
+  "From a high-up window, you hear the mechanical murmur of an emergency broadcast repeating endlessly.\r\n",
+  "The rotten smell of stagnant water blows through on a cold breeze.\r\n"
 };
-#define NUM_DEPRESSING_MESSAGES 13
+#define NUM_DEPRESSING_MESSAGES 48
 
 SPECIAL(traffic)
 {

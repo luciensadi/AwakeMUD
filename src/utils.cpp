@@ -72,6 +72,7 @@ extern int find_first_step(vnum_t src, vnum_t target, bool ignore_roads, const c
 extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression);
 extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
 extern int get_max_skill_for_char(struct char_data *ch, int skill, int type);
+extern int find_sight(struct char_data *ch);
 
 extern SPECIAL(johnson);
 extern SPECIAL(landlord_spec);
@@ -5306,7 +5307,7 @@ struct zone_data *get_zone_from_vnum(vnum_t vnum) {
   return NULL;
 }
 
-#define SEND_MESSAGE(...) { if (send_message) { send_to_char(ch, __VA_ARGS__); } }
+#define SEND_MESSAGE(...) { if (send_message) { send_to_char(ch, ##__VA_ARGS__); } }
 bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh_data *veh, struct char_data *ch, bool send_message) {
   if (veh->type == VEH_BIKE && ROOM_FLAGGED(room, ROOM_NOBIKE)) {
     SEND_MESSAGE(CANNOT_GO_THAT_WAY);
@@ -7788,4 +7789,204 @@ bool ch_can_bypass_edit_lock(struct char_data *ch, struct char_data *target) {
   }
 
   return ch_can_bypass_edit_lock(ch, get_zone_from_vnum(GET_MOB_VNUM(target)));
+}
+
+// Add a vehicle to a character's subscriber list. TRUE on success, FALSE otherwise.
+bool add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller, bool resubscribing_vehicle, bool mute_duplication_alarm) {
+  if (!ch || !veh) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid parameter to add_veh_to_chs_subscriber_list(%s-%ld, %s, %s).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+    return FALSE;
+  }
+
+  // Resubscribing_vehicle is true whenever we're restoring a character's sub lists (first load, copyover recovery, etc.)
+  if (!resubscribing_vehicle) {
+    // We're adding it to their list for the first time. Check for error conditions.
+
+    // If we're subbing for the first time, veh->sub should not be set.
+    if (veh->sub) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got already-subscribed vehicle to add_veh_to_chs_subscriber_list(%s-%ld, %s, %s). Continuing anwyays just to sanity-check.", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+      // Continue anyways just in case it's in there.
+    }
+
+    // If we're subbing for the first time, veh should not already be part of a sub list.
+    if (veh->prev_sub || veh->next_sub) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to subscribe a vehicle that has already been subbed! (%s-%ld, %s, %s).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+      return FALSE;
+    }
+  }
+
+  // Search for it.
+  for (struct veh_data *subbed = ch->char_specials.subscribe; subbed; subbed = subbed->next_sub) {
+    if (subbed == veh) {
+      if (!mute_duplication_alarm)
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempting to duplicate vehicle in subscriber list! (%s-%ld, %s, %s).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+      return FALSE;
+    }
+  }
+
+  // Add it to the list in ranked order.
+  if (!ch->char_specials.subscribe) {
+    // First, easy case: No list.
+    ch->char_specials.subscribe = veh;
+    veh->next_sub = NULL;
+    veh->prev_sub = NULL;
+    veh->sub = TRUE;
+    // mudlog_vfprintf(ch, LOG_SYSLOG, "Successful completion of add_veh_to_chs_subscriber_list(%s-%ld, %s, %s) (new list).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+    return TRUE;
+  } else {
+    // Next, we search the existing list.
+    for (struct veh_data *subbed = ch->char_specials.subscribe; subbed; subbed = subbed->next_sub) {
+      // If we're supposed to come right before subbed, insert us there.
+      if (subbed->sub_rank >= veh->sub_rank) {
+        veh->prev_sub = subbed->prev_sub;
+        veh->next_sub = subbed;
+
+        if (subbed->prev_sub) {
+          // Insert it into an existing list.
+          subbed->prev_sub->next_sub = veh;
+        } else {
+          // Insert at head of list.
+          ch->char_specials.subscribe = veh;
+        }
+
+        subbed->prev_sub = veh;
+        veh->sub = TRUE;
+        /*
+        mudlog_vfprintf(ch, LOG_SYSLOG, "Successful completion of add_veh_to_chs_subscriber_list(%s-%ld, %s, %s) (sub inserted at %srank %d).", 
+                        GET_VEH_NAME(veh), 
+                        GET_VEH_IDNUM(veh), 
+                        GET_CHAR_NAME(ch), 
+                        caller, 
+                        ch->char_specials.subscribe == veh ? "head at " : "",
+                        veh->sub_rank);
+        */
+        return TRUE;
+      }
+
+      // Append to end of list.
+      if (!subbed->next_sub) {
+        subbed->next_sub = veh;
+        veh->prev_sub = subbed;
+        veh->sub = TRUE;
+        // mudlog_vfprintf(ch, LOG_SYSLOG, "Successful completion of add_veh_to_chs_subscriber_list(%s-%ld, %s, %s) (sub appended at rank %d).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller, veh->sub_rank);
+        return TRUE;
+      }
+    }
+  }
+  
+  // We should never get here.
+  mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unexpectedly reached end of add_veh_to_chs_subscriber_list(%s-%ld, %s, %s).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+  return FALSE;
+}
+
+// Remove a vehicle from a character's subscriber list. TRUE on success, FALSE otherwise.
+bool remove_veh_from_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller) {
+  if (!ch || !veh) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid parameter to remove_veh_from_chs_subscriber_list(%s-%ld, %s, %s).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+    return FALSE;
+  }
+
+  if (!veh->sub) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got non-subscribed vehicle to remove_veh_from_chs_subscriber_list(%s-%ld, %s, %s). Continuing anyways just to sanity-check.", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+    // Continue anyways just in case it's in there.
+  }
+
+  // Search for it. Check the whole list just to be sure there's no error case.
+  bool found_already = FALSE;
+  for (struct veh_data *subbed = ch->char_specials.subscribe, *next_sub; subbed; subbed = next_sub) {
+    next_sub = subbed->next_sub;
+
+    if (subbed == veh) {
+      // Strip us out of the list.
+      if (subbed->prev_sub)
+        subbed->prev_sub->next_sub = subbed->next_sub;
+      if (subbed->next_sub)
+        subbed->next_sub->prev_sub = subbed->prev_sub;
+      
+      // If we were the head of the list, change that pointer.
+      if (ch->char_specials.subscribe == subbed) {
+        ch->char_specials.subscribe = subbed->next_sub;
+      }
+
+      if (found_already) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Found duplicate subscribed vehicle in list while removing! Continuing. (%s-%ld, %s, %s).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+      }
+
+      found_already = TRUE;
+    }
+  }
+
+  if (!found_already) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempted to remove vehicle from subscriber list, but it wasn't on it! (%s-%ld, %s, %s).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+    return FALSE;
+  }
+
+  // Remove it.
+  veh->sub = FALSE;
+  veh->prev_sub = NULL;
+  veh->next_sub = NULL;
+
+  // mudlog_vfprintf(ch, LOG_SYSLOG, "Successful completion of remove_veh_from_chs_subscriber_list(%s-%ld, %s, %s).", GET_VEH_NAME(veh), GET_VEH_IDNUM(veh), GET_CHAR_NAME(ch), caller);
+  return TRUE;
+}
+
+void regenerate_subscriber_list_rankings(struct char_data *ch) {
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Null char to regenerate_subscriber_list_rankings");
+    return;
+  }
+
+  int counter = 0;
+  for (struct veh_data *subbed = ch->char_specials.subscribe; subbed; subbed = subbed->next_sub) {
+    subbed->sub_rank = counter++;
+  }
+}
+
+// Shoots a straight line from viewer out each cardinal direction. If it hits ch's room within sight range, returns true.
+bool ch_is_in_viewers_visual_range(struct char_data *ch, struct char_data *viewer) {
+  if (!viewer || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Null char or viewer to ch_is_in_viewers_visual_range");
+    return FALSE;
+  }
+
+  struct room_data *ch_in_room = get_ch_in_room(ch);
+  struct room_data *viewer_in_room = get_ch_in_room(viewer);
+
+  if (ch_in_room == viewer_in_room)
+    return TRUE;
+
+  int sight_range = find_sight(viewer);
+  if (sight_range < 1)
+    return FALSE;
+
+  for (int dir_idx = 0; dir_idx < NUM_OF_DIRS; dir_idx++) {
+    if (!EXIT2(viewer_in_room, dir_idx))
+      continue;
+    
+    struct room_data *looking_in_room = EXIT2(viewer_in_room, dir_idx)->to_room;
+
+    // Just.... just don't. I know it's shit with code reuse but I'm too tired to fix it. Submit a PR if you want.
+    // Sight 1
+    if (ch_in_room == looking_in_room)
+      return TRUE;
+    // Sight 2
+    if (sight_range < 2 || !EXIT2(looking_in_room, dir_idx)->to_room)
+      continue;
+    looking_in_room = EXIT2(looking_in_room, dir_idx)->to_room;
+    if (ch_in_room == looking_in_room)
+      return TRUE;
+    // Sight 3
+    if (sight_range < 3 || !EXIT2(looking_in_room, dir_idx)->to_room)
+      continue;
+    looking_in_room = EXIT2(looking_in_room, dir_idx)->to_room;
+    if (ch_in_room == looking_in_room)
+      return TRUE;
+    // Sight 4
+    if (sight_range < 4 || !EXIT2(looking_in_room, dir_idx)->to_room)
+      continue;
+    looking_in_room = EXIT2(looking_in_room, dir_idx)->to_room;
+    if (ch_in_room == looking_in_room)
+      return TRUE;
+  }
+  return FALSE;
 }

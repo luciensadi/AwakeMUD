@@ -6793,10 +6793,10 @@ ACMD(do_cleanse)
     else {
       GET_SETTABLE_BACKGROUND_COUNT(ch->in_room) = MAX(0, GET_BACKGROUND_COUNT(ch->in_room) - success);
       if (!GET_BACKGROUND_COUNT(ch->in_room)) {
-        send_to_char("You successfully remove all astral disturbances from the area.\r\n", ch);
+        send_to_char("You temporarily remove all astral disturbances from the area.\r\n", ch);
         snprintf(buf, sizeof(buf), "The astral disturbances in this area completely vanish.\r\n");
       } else {
-        send_to_char("You succeed in lowering the astral disturbances in the area.\r\n", ch);
+        send_to_char("You temporarily lower the astral disturbances in the area.\r\n", ch);
         snprintf(buf, sizeof(buf), "The astral disturbances in the are seem to diminish slightly.\r\n");
       }
       for (struct char_data *targ = ch->in_room->people; targ; targ = targ->next_in_room)

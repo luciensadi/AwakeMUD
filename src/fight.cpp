@@ -28,6 +28,7 @@
 #include "newhouse.hpp"
 #include "quest.hpp"
 #include "redit.hpp"
+#include "factions.hpp"
 
 int initiative_until_global_reroll = 0;
 
@@ -102,6 +103,7 @@ extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression
 extern bool check_sentinel_snap_back(struct char_data *ch);
 extern void end_quest(struct char_data *ch, bool succeeded);
 extern bool npc_vs_vehicle_blocked_by_quest_protection(idnum_t quest_id, struct veh_data *veh);
+extern bool ch_is_in_viewers_visual_range(struct char_data *ch, struct char_data *viewer);
 
 // Corpse saving externs.
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
@@ -2968,17 +2970,25 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   ACMD_DECLARE(do_disconnect);
   ACMD_CONST(do_return);
 
-  if (!ch) {
-    mudlog("SYSERR: NULL ch passed to damage()! Aborting call, nobody takes damage this time.", victim, LOG_SYSLOG, TRUE);
-    return FALSE;
-  }
-  if (!victim) {
-    mudlog("SYSERR: NULL victim passed to damage()! Aborting call, nobody takes damage this time.", ch, LOG_SYSLOG, TRUE);
+  if (!ch || !victim) {
+    mudlog_vfprintf(victim, LOG_SYSLOG, "SYSERR: Invalid parameters passed to damage(%s, %s, %d, %d, %s, %s)! Aborting call, nobody takes damage this time.",
+                    GET_CHAR_NAME(ch),
+                    GET_CHAR_NAME(victim),
+                    dam,
+                    attacktype,
+                    is_physical ? "phys" : "ment",
+                    send_message ? "msg" : "sil");
     return FALSE;
   }
 
   if (GET_POS(victim) == POS_DEAD) {
-    mudlog("SYSERR: Refusing to damage an already-dead victim!", victim, LOG_SYSLOG, TRUE);
+    mudlog_vfprintf(victim, LOG_SYSLOG, "SYSERR: Refusing to damage an already-dead victim in damage(%s, %s, %d, %d, %s, %s)!",
+                    GET_CHAR_NAME(ch),
+                    GET_CHAR_NAME(victim),
+                    dam,
+                    attacktype,
+                    is_physical ? "phys" : "ment",
+                    send_message ? "msg" : "sil");
     return TRUE;
   }
 
@@ -3028,6 +3038,29 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
                       "%s ch, %s victim, %d dam, %d attacktype, %d is_physical, %d send_message.",
                       GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), dam, attacktype, is_physical, send_message);
       return 0;
+    }
+
+    // Process faction attack.
+    if (ch != victim && IS_NPC(victim) && GET_MOB_FACTION_IDNUM(victim) && (FIGHTING(victim) != ch && GET_POS(victim) > POS_STUNNED)) {
+      // Look around for anyone who saw it happen.
+      for (struct char_data *witness = victim->in_room ? victim->in_room->people : victim->in_veh->people;
+           witness;
+           witness = witness->in_room ? witness->next_in_room : witness->next_in_veh)
+      {
+        // Can't witness or snitch on yourself.
+        if (witness == victim || witness == ch)
+          continue;
+
+        // Skip anyone who can't see you.
+        if (!CAN_SEE(witness, ch) || !ch_is_in_viewers_visual_range(ch, witness))
+          continue;
+
+        if (GET_MOB_FACTION_IDNUM(witness) == GET_MOB_FACTION_IDNUM(victim)) {
+          // You only take this penalty once instead of once per witness in the room.
+          faction_witness_saw_ch_do_action_with_optional_victim(witness, ch, WITNESSED_NPC_ATTACKED, victim);
+          break;
+        }
+      }
     }
 
     if (GET_POS(ch) > POS_STUNNED
@@ -3588,10 +3621,34 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         }
       }
     }
+
     if (!IS_NPC(victim)) {
       gen_death_msg(ch, victim, attacktype);
       if (MOB_FLAGGED(ch, MOB_MEMORY) && !IS_NPC(victim))
         forget(ch, victim);
+    } else {
+      // Process faction death.
+      if (ch != victim && GET_MOB_FACTION_IDNUM(victim)) {
+        // Look around for anyone who saw it happen.
+        for (struct char_data *witness = victim->in_room ? victim->in_room->people : victim->in_veh->people;
+            witness;
+            witness = witness->in_room ? witness->next_in_room : witness->next_in_veh)
+        {
+          // Can't witness or snitch on yourself.
+          if (witness == victim || witness == ch)
+            continue;
+
+          // Skip anyone who can't see you.
+          if (!CAN_SEE(witness, ch) || !ch_is_in_viewers_visual_range(ch, witness))
+            continue;
+
+          if (GET_MOB_FACTION_IDNUM(witness) == GET_MOB_FACTION_IDNUM(victim)) {
+            // You only take this penalty once instead of once per witness in the room.
+            faction_witness_saw_ch_do_action_with_optional_victim(witness, ch, WITNESSED_NPC_KILLED, victim);
+            break;
+          }
+        }
+      }
     }
     die(victim);
     return TRUE;

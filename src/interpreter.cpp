@@ -87,6 +87,7 @@ void free_quest(struct quest_data *quest);
 void init_parse(struct descriptor_data *d, char *arg);
 void vehcust_parse(struct descriptor_data *d, char *arg);
 void pocketsec_parse(struct descriptor_data *d, char *arg);
+void faction_edit_parse(struct descriptor_data *d, const char *arg);
 int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info);
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
@@ -206,6 +207,7 @@ ACMD_DECLARE(do_equipment);
 ACMD_DECLARE(do_examine);
 ACMD_DECLARE(do_exit);
 ACMD_DECLARE(do_exits);
+ACMD_DECLARE(do_factions);
 ACMD_DECLARE(do_flee);
 ACMD_DECLARE(do_flip);
 ACMD_DECLARE(do_flyto);
@@ -647,6 +649,8 @@ struct command_info cmd_info[] =
     { "exclaim"    , POS_LYING   , do_exclaim  , 0, 0, BLOCKS_IDLE_REWARD },
     { "extend"     , POS_SITTING , do_retract  , 0, 0, BLOCKS_IDLE_REWARD },
 
+    // TODO: Make this a rigging and matrix command too
+    { "factions"   , POS_MORTALLYW, do_factions, LVL_PRESIDENT, 0, ALLOWS_IDLE_REWARD },
     { "force"      , POS_SLEEPING, do_force    , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
     { "forceget"   , POS_SLEEPING, do_forceget , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "forceput"   , POS_SLEEPING, do_forceput , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
@@ -2589,6 +2593,9 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_POCKETSEC:
     pocketsec_parse(d, arg);
     break;
+  case CON_FACTION_EDIT:
+    faction_edit_parse(d, arg);
+    break;
   case CON_REDIT:
     redit_parse(d, arg);
     break;
@@ -3228,22 +3235,10 @@ void nanny(struct descriptor_data * d, char *arg)
       // Regenerate their subscriber list.
       for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
         if (veh->sub && GET_IDNUM(d->character) == veh->owner) {
-          struct veh_data *f = NULL;
-          for (f = d->character->char_specials.subscribe; f; f = f->next_sub) {
-            if (f == veh)
-              break;
-          }
-          if (!f) {
-            veh->next_sub = d->character->char_specials.subscribe;
-
-            // Doubly link it into the list.
-            if (d->character->char_specials.subscribe)
-              d->character->char_specials.subscribe->prev_sub = veh;
-
-            d->character->char_specials.subscribe = veh;
-          }
+          add_veh_to_chs_subscriber_list(veh, d->character, "login sub regen", TRUE);
         }
       }
+      regenerate_subscriber_list_rankings(d->character);
 
       break;
 

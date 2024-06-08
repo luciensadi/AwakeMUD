@@ -33,6 +33,7 @@
 #include "vision_overhaul.hpp"
 #include "drugs.hpp"
 
+class Faction;
 class ApartmentComplex;
 class Apartment;
 class ApartmentRoom;
@@ -642,6 +643,8 @@ struct char_special_data
 
   struct char_special_data_saved saved; /* constants saved in plrfile  */
 
+  idnum_t npc_faction_membership;
+
   const char *highlight_color_code;
   /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
   // Touch olc's mclone, medit etc if it's a string.
@@ -652,7 +655,7 @@ struct char_special_data
       position(POS_STANDING), defined_position(NULL), leave(NULL), arrive(NULL), target_mod(0),
       concentration_target_mod(0), carry_weight(0), carry_items(0), foci(0), last_healed(0), timer(0),
       last_timer(0), last_social_action(0), actions(0), subscribe(NULL), rigging(NULL),
-      mindlink(NULL), spirits(NULL), highlight_color_code(NULL)
+      mindlink(NULL), spirits(NULL), npc_faction_membership(0), highlight_color_code(NULL)
   {
     ZERO_OUT_ARRAY(conjure, 4);
     ZERO_OUT_ARRAY(coord, 3);
@@ -848,6 +851,7 @@ struct veh_data
   struct obj_data *mount;
   struct obj_data *mod[NUM_MODS];
   bool sub;
+  int sub_rank;
 
   idnum_t idnum;
   idnum_t owner;
@@ -887,7 +891,7 @@ struct veh_data
       in_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
       long_description(NULL), restring_long(NULL), decorate_front(NULL), decorate_rear(NULL),
       inside_description(NULL), rear_description(NULL), veh_destruction_timer(0), 
-      followers(NULL), following(NULL), followch(NULL), mount(NULL),
+      followers(NULL), following(NULL), followch(NULL), mount(NULL), sub(FALSE), sub_rank(0),
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL), defined_position(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
       next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL),
@@ -956,12 +960,15 @@ struct char_data
   int last_loop_rand;
 
   // See invis_resistance_tests.cpp for details.
-  std::unordered_map<idnum_t, bool> *pc_invis_resistance_test_results;
-  std::unordered_map<idnum_t, bool> *mob_invis_resistance_test_results;
+  std::unordered_map<idnum_t, bool> *pc_invis_resistance_test_results = {};
+  std::unordered_map<idnum_t, bool> *mob_invis_resistance_test_results = {};
 
   // Another unordered map to track who we've sent docwagon alerts to.
   std::unordered_map<idnum_t, bool> sent_docwagon_messages_to = {};
   std::unordered_map<idnum_t, bool> received_docwagon_ack_from = {};
+
+  // Track faction reputation points.
+  std::unordered_map<idnum_t, int> faction_rep = {};
 
   bool alias_dirty_bit;
 
@@ -1113,6 +1120,7 @@ struct descriptor_data
   Apartment *edit_apartment_original;
   ApartmentRoom *edit_apartment_room;
   ApartmentRoom *edit_apartment_room_original;
+  Faction *edit_faction;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   Playergroup *edit_pgroup; /* playergroups */
@@ -1132,7 +1140,7 @@ struct descriptor_data
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
       edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
-      edit_apartment_room_original(NULL), edit_pgroup(NULL), canary(CANARY_VALUE), pProtocol(NULL)
+      edit_apartment_room_original(NULL), edit_faction(NULL), edit_pgroup(NULL), canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
