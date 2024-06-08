@@ -4542,7 +4542,7 @@ ACMD(do_learn)
     }
   int required_karma = (force  - oldforce) * 100;
   if (GET_KARMA(ch) < required_karma) {
-    send_to_char(ch, "You don't have enough karma to learn this spell at that force! You need %.2f.\r\n", required_karma / 100);
+    send_to_char(ch, "You don't have enough karma to learn this spell at that force! You need %.2f.\r\n", ((float) required_karma) / 100);
     return;
   }
   if ((GET_ASPECT(ch) == ASPECT_ELEMFIRE && spells[GET_OBJ_VAL(obj, 1)].category != COMBAT) ||
@@ -4661,7 +4661,7 @@ ACMD(do_learn)
   spell->force = force;
   spell->next = GET_SPELLS(ch);
   GET_SPELLS(ch) = spell;
-  send_to_char(ch, "You spend %.2f karma and learn %s.\r\n", required_karma / 100, spell->name);
+  send_to_char(ch, "You spend %.2f karma and learn %s.\r\n", ((float) required_karma) / 100, spell->name);
   extract_obj(obj);
   GET_SPELLS_DIRTY_BIT(ch) = TRUE;
 }

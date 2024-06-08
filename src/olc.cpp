@@ -1573,7 +1573,7 @@ ACMD(do_mclone)
   // put guy into editing mode
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
   STATE (ch->desc) = CON_MEDIT;
-  send_to_char(ch, "Do you wish to clone mob %ld (%s) to %ld?\r\n", MOB_VNUM_RNUM(mob_num1), GET_CHAR_NAME(mob), arg2);
+  send_to_char(ch, "Do you wish to clone mob %ld (%s) to %d?\r\n", MOB_VNUM_RNUM(mob_num1), GET_CHAR_NAME(mob), arg2);
   ch->desc->edit_number = arg2;
   ch->desc->edit_mob = mob;
   ch->desc->edit_mode = MEDIT_CONFIRM_SAVESTRING;

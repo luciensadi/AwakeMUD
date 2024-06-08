@@ -330,6 +330,7 @@ void change_faction_points(struct char_data *ch, idnum_t faction_id, int delta, 
                     faction_id,
                     faction->get_full_name(),
                     faction_status_names[limit_to_status],
+                    get_faction_status_max_rep(limit_to_status),
                     max_rep,
                     faction_status_names[faction_rep_to_status(ch->faction_rep[faction_id])]);
       return;
@@ -342,6 +343,7 @@ void change_faction_points(struct char_data *ch, idnum_t faction_id, int delta, 
                     faction_id,
                     faction->get_full_name(),
                     faction_status_names[limit_to_status],
+                    get_faction_status_max_rep(limit_to_status),
                     max_rep,
                     faction_status_names[faction_rep_to_status(ch->faction_rep[faction_id])]);
       // Delta is changed to bring us to max. Fall through.
@@ -400,7 +402,7 @@ void faction_witness_saw_ch_do_action_with_optional_victim(struct char_data *wit
         change_faction_points(ch, GET_MOB_FACTION_IDNUM(witness), FACTION_REP_DELTA_JOB_FAILED);
       break;
     default:
-      mudlog_vfprintf(victim, LOG_SYSLOG, "SYSERR: Received unknown action type %d to faction_witness(%s, %s, %d, %s)",
+      mudlog_vfprintf(victim, LOG_SYSLOG, "SYSERR: Received unknown action type to faction_witness(%s, %s, %d, %s)",
                       GET_CHAR_NAME(witness),
                       GET_CHAR_NAME(ch),
                       action_type,
@@ -428,7 +430,7 @@ int faction_rep_to_status(int rep) {
 // Can you shop here?
 bool faction_shop_will_deal_with_player(idnum_t faction_idnum, struct char_data *ch) {
   if (!ch || faction_idnum < 0) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid params to faction_shop_will_deal_with_player(%ld, %s)!", faction_idnum, ch);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid params to faction_shop_will_deal_with_player(%ld, %s)!", faction_idnum, GET_CHAR_NAME(ch));
     return FALSE;
   }
   
@@ -438,7 +440,7 @@ bool faction_shop_will_deal_with_player(idnum_t faction_idnum, struct char_data 
 // Gets a multiplier for prices
 float get_shop_faction_buy_from_player_multiplier(idnum_t faction_idnum, struct char_data *ch) {
   if (!ch || faction_idnum < 0) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid params to get_shop_faction_buy_from_player_multiplier(%ld, %s)!", faction_idnum, ch);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid params to get_shop_faction_buy_from_player_multiplier(%ld, %s)!", faction_idnum, GET_CHAR_NAME(ch));
     return 0.0f;
   }
 
@@ -458,14 +460,14 @@ float get_shop_faction_buy_from_player_multiplier(idnum_t faction_idnum, struct 
     case faction_statuses::ALLY:
       return 1.04f;
     default:
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid faction status %d to get_shop_faction_sell_to_player_multiplier(%ld, %s)!", status, faction_idnum, ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid faction status %d to get_shop_faction_sell_to_player_multiplier(%ld, %s)!", status, faction_idnum, GET_CHAR_NAME(ch));
       return 1.0f;
   }
 }
 
 float get_shop_faction_sell_to_player_multiplier(idnum_t faction_idnum, struct char_data *ch) {
   if (!ch || faction_idnum < 0) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid params to get_shop_faction_buy_from_player_multiplier(%ld, %s)!", faction_idnum, ch);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid params to get_shop_faction_buy_from_player_multiplier(%ld, %s)!", faction_idnum, GET_CHAR_NAME(ch));
     return 100.0f;
   }
 
@@ -485,7 +487,7 @@ float get_shop_faction_sell_to_player_multiplier(idnum_t faction_idnum, struct c
     case faction_statuses::ALLY:
       return 0.96f;
     default:
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid faction status %d to get_shop_faction_buy_from_player_multiplier(%ld, %s)!", status, faction_idnum, ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid faction status %d to get_shop_faction_buy_from_player_multiplier(%ld, %s)!", status, faction_idnum, GET_CHAR_NAME(ch));
       return 1.0f;
   }
 }
@@ -572,7 +574,7 @@ Faction::Faction(bf::path file_path) {
   editors = faction_file["editors"].get<std::vector<idnum_t>>();
 
   if (idnum == FACTION_IDNUM_UNDEFINED) {
-    log_vfprintf("Malformed faction! Got idnum %d from path %s, which will cause bugs. Shutting down so you can fix your world files.", idnum, file_path.c_str());
+    log_vfprintf("Malformed faction! Got idnum %ld from path %s, which will cause bugs. Shutting down so you can fix your world files.", idnum, file_path.c_str());
     shutdown();
   }
 }
