@@ -1423,7 +1423,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
       }
 
       // And flame aura.
-      if (GET_MAG(ch) >= 8 && (GET_MAG(ch) >= 10 || GET_MOB_UNIQUE_ID(ch) % 2 == 0) && !affected_by_spell(ch, SPELL_FLAME_AURA) && !IS_ASTRAL(ch)) {
+      if (GET_MAG(ch) >= 8 && (GET_MAG(ch) >= 12 || GET_MOB_UNIQUE_ID(ch) % 2 == 0) && !affected_by_spell(ch, SPELL_FLAME_AURA) && !IS_ASTRAL(ch)) {
         cast_manipulation_spell(ch, SPELL_FLAME_AURA, number(min_force, max_force), NULL, ch);
         return TRUE;
       }
