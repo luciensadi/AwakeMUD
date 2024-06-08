@@ -371,9 +371,9 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
   if (!vict_is_valid_target(ch, vict))
     return FALSE;
 
-  bool is_aggressive = MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE);
+  bool is_aggressive = MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) && !(IS_GHOUL(ch) && IS_GHOUL(vict));
   bool is_alarmed_guard = MOB_FLAGGED(ch, MOB_GUARD) && GET_MOBALERT(ch) == MALERT_ALARM;
-  bool is_alarmed_racist = mob_is_aggressive(ch, FALSE) && GET_MOBALERT(ch) == MALERT_ALARM;
+  bool is_alarmed_racist = mob_is_aggressive(ch, FALSE) && GET_MOBALERT(ch) == MALERT_ALARM && !(IS_GHOUL(ch) && IS_GHOUL(vict));
   bool is_racially_motivated = mob_is_aggressive_towards_race(ch, GET_RACE(vict));
   bool is_faction_motivated = faction_leader_says_geef_ze_maar_een_pak_slaag_voor_papa(ch, vict) && (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD) || is_aggressive);
 
@@ -2208,6 +2208,9 @@ bool mob_cannot_be_aggressive(struct char_data *ch) {
 }
 
 bool mob_is_aggressive_towards_race(struct char_data *ch, int race) {
+  if (RACE_IS_GHOUL(race) && IS_GHOUL(ch))
+    return FALSE;
+
   switch (race) {
     case RACE_ELF:
     case RACE_WAKYAMBI:
