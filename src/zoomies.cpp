@@ -466,8 +466,9 @@ int flight_test(struct char_data *ch, struct veh_data *veh) {
   }
 
   struct room_data *room = get_veh_in_room(veh);
-  if (room->rating) {
+  if (room->rating && GET_ROOM_VNUM(room) != RM_AIRBORNE) {
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "RunwayRating(+%d)", room->rating);
+    tn += room->rating;
   }
   
   int dice = get_skill(ch, skill_num, tn, rbuf, sizeof(rbuf));
