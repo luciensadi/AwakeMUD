@@ -1094,16 +1094,20 @@ ACMD(do_repair)
         return;
       }
       target += 2;
-    }
-
-    if (shop) {
+    } else {
       if (GET_WORKSHOP_GRADE(shop) == TYPE_FACILITY) {
         target -= 2;
       } // if TYPE_WORKSHOP, no target modifier
-    } else if (kit) {
-      target += 2;
-    } else {
-      target += 4;
+
+      if (kit) {
+        target += 2;
+      } else {
+        if (veh->damage >= 2) {
+          send_to_char("You'll need at least a vehicle repair kit to do more than polish up scratches.\r\n", ch);
+          return;
+        }
+        target += 4;
+      }
     }
   } else {
     target = 1;
