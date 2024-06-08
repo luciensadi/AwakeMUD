@@ -2784,7 +2784,7 @@ void save_skills_to_db(struct char_data *player) {
     if (GET_RAW_SKILL(player, i)) {
       if (q)
         strcat(buf, "), (");
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, REAL_SKILL(player, i));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, GET_RAW_SKILL(player, i));
       q = 1;
     }
   }

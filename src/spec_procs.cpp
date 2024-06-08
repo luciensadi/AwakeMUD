@@ -4378,9 +4378,10 @@ void process_auth_room(struct char_data *ch) {
     if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY) {
       if (obj->contains) {
         while (obj->contains) {
-          GET_OBJ_VAL(obj, 5) -= GET_OBJ_VAL(obj->contains, 2) + GET_OBJ_VAL(obj->contains, 8);
-          if (GET_OBJ_VAL(obj->contains, 9))
-            ch->char_specials.saved.skills[GET_OBJ_VAL(obj->contains, 0)][1] = 0;
+          GET_CYBERWARE_MEMORY_USED(obj) -= GET_CHIP_SIZE(obj->contains) + GET_CHIP_COMPRESSION_FACTOR(obj->contains);
+          if (GET_CHIP_LINKED(obj->contains)) {
+            GET_CHIPJACKED_SKILL(ch, GET_CHIP_SKILL(obj->contains)) = 0;
+          }
           extract_obj(obj->contains);
         }
         send_to_char(ch, "A brief tingle runs through you as %s is wiped clean.\r\n", GET_OBJ_NAME(obj));
