@@ -32,10 +32,10 @@ ACMD(do_metrics) {
   Current ammo net amounts:
   1239 APDS assault rifle rounds (-1000 loading, +2239 crafting)
   */
-  for (int _weap_idx = START_OF_AMMO_USING_WEAPONS; _weap_idx <= END_OF_AMMO_USING_WEAPONS; _weap_idx++) {
-    int weap_idx = _weap_idx - START_OF_AMMO_USING_WEAPONS;
+  for (int ammo_idx = 0; ammo_idx < NUM_AMMOTYPES; ammo_idx++) {
+    for (int _weap_idx = START_OF_AMMO_USING_WEAPONS; _weap_idx <= END_OF_AMMO_USING_WEAPONS; _weap_idx++) {
+      int weap_idx = _weap_idx - START_OF_AMMO_USING_WEAPONS;
 
-    for (int ammo_idx = 0; ammo_idx < NUM_AMMOTYPES; ammo_idx++) {
       // First, calculate to see if we have a net change.
       long net_change = 0;
       bool any_change = false;
