@@ -1423,7 +1423,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
       }
 
       // And flame aura.
-      if (GET_MAG(ch) >= 8 && (GET_MAG(ch) >= 12 || GET_MOB_UNIQUE_ID(ch) % 2 == 0) && !affected_by_spell(ch, SPELL_FLAME_AURA) && !IS_ASTRAL(ch)) {
+      if (GET_MAG(ch) >= 800 && (GET_MAG(ch) >= 100 || GET_MOB_UNIQUE_ID(ch) % 2 == 0) && !affected_by_spell(ch, SPELL_FLAME_AURA) && !IS_ASTRAL(ch)) {
         cast_manipulation_spell(ch, SPELL_FLAME_AURA, number(min_force, max_force), NULL, ch);
         return TRUE;
       }
@@ -1437,15 +1437,15 @@ bool mobact_process_self_buff(struct char_data *ch) {
 
         // Apply the appropriate increased reflexes spell.
         if (!affected_by_spell(ch, SPELL_INCREF3) && !affected_by_spell(ch, SPELL_INCREF2) && !affected_by_spell(ch, SPELL_INCREF1)) {
-          if (GET_MAG(ch) >= 8) {
+          if (GET_MAG(ch) >= 800) {
             cast_health_spell(ch, SPELL_INCREF3, 0, number(min_force, max_force), NULL, ch);
             return TRUE;
           }
-          else if (GET_MAG(ch) >= 6) {
+          else if (GET_MAG(ch) >= 600) {
             cast_health_spell(ch, SPELL_INCREF2, 0, number(min_force, max_force), NULL, ch);
             return TRUE;
           }
-          else if (GET_MAG(ch) >= 4) {
+          else if (GET_MAG(ch) >= 400) {
             cast_health_spell(ch, SPELL_INCREF1, 0, number(min_force, max_force), NULL, ch);
             return TRUE;
           }
