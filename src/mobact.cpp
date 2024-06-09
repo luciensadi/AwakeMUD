@@ -1261,6 +1261,15 @@ bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t que
   if (!veh->people && !veh->rigger)
     return FALSE;
 
+  // We skip vehicles where all the people inside don't have descriptors (linkdead, etc)
+  if (veh->people && !veh->rigger) {
+    bool has_at_least_one_descriptor = FALSE;
+    for (struct char_data *vict = veh->people; vict && !has_at_least_one_descriptor; vict = vict->next_in_veh)
+      has_at_least_one_descriptor = vict->desc;
+    if (!has_at_least_one_descriptor)
+      return FALSE;
+  }
+
   // We don't attack destroyed vehicles.
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
     return FALSE;

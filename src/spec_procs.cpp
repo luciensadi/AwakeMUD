@@ -3359,6 +3359,7 @@ SPECIAL(proc_name) {                                                            
 }
 
 MAKE_BOUNCER(test_bouncer, "east", EAST, 10000, "Not this time, chummer.");
+MAKE_BOUNCER(peaceful_bones_bouncer, "south", SOUTH, 0, "Nope. You're not welcome here, not until you shape up a bit.");
 
 /* Special procedures for weapons                                    */
 

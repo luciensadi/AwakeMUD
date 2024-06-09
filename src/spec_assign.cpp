@@ -806,6 +806,10 @@ void assign_mobiles(void)
   #ifdef USE_PRIVATE_CE_WORLD
   // Airport painter.
   ASSIGNMOB(65501, painter);
+
+  // Secret area fixer.
+  ASSIGNMOB(33802, fixer);
+  ASSIGNMOB(33804, peaceful_bones_bouncer);
   #endif
 
   ASSIGNMOB(17510, multnomah_guard);
