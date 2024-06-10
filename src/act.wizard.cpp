@@ -9476,7 +9476,7 @@ ACMD(do_makenerps) {
 }
 
 bool vnum_is_from_zone(vnum_t vnum, int zone_num) {
-  return vnum >= zone_table[zone_num].number * 100 && vnum < zone_table[zone_num].top;
+  return vnum >= zone_table[zone_num].number * 100 && vnum <= zone_table[zone_num].top;
 }
 
 bool vnum_is_from_canon_zone(vnum_t vnum) {
