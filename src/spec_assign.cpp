@@ -627,6 +627,7 @@ void assign_mobiles(void)
   SPECIAL(fatcop);
   SPECIAL(pocsec_unlocker);
   SPECIAL(soulbound_unbinder);
+  SPECIAL(peaceful_bones_bouncer);
 
   SPECIAL(test_bouncer);
   ASSIGNMOB(10000, test_bouncer);
