@@ -7978,14 +7978,16 @@ SPECIAL(oppressive_atmosphere) {
         you_shall_not_pass = TRUE;
       }
       snprintf(ENDOF(check_failure_message), sizeof(check_failure_message) - strlen(check_failure_message), 
-               " - [%s^n] You must have at least combat skill at %d+ to enter.\r\n",
+               " - [%s^n] You must have at least one combat skill at ^c%d+^n to enter.\r\n",
                !has_combat_skill ? "^RFAIL" : "^g OK ",
                OA_COMBAT_SKILL_REQ);
     }
   }
 
   if (you_shall_not_pass) {
-    send_to_char(ch, "A creeping feeling of unease comes over you, dragging your steps to a halt.\r\n%s", check_failure_message);
+    send_to_char(ch, "A creeping feeling of unease comes over you, dragging your steps to a halt.\r\n"
+                     "^rThis is a dangerous endgame zone.^n\r\n"
+                     "%s", check_failure_message);
     return TRUE;
   }
 
