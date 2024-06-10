@@ -3676,7 +3676,7 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
       } else if (new_value == 12) {
         send_to_char(ch, "^GYour talents at %s are considered world-class.^n\r\n", skills[skill_num].name);
       } else {
-        send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
+        send_to_char(ch, "^GYou keep working towards mastery.^n\r\n");
       }
     }
     // Language messaging.
@@ -3698,7 +3698,7 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
       } else if (new_value == 12) {
         send_to_char(ch, "^GYou have achieved doctorate-degree-level fluency.^n\r\n");
       } else {
-        send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
+        send_to_char(ch, "^GYou keep working towards mastery.^n\r\n");
       }
     }
     // Knowledge skill messaging.
@@ -3722,7 +3722,7 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
       } else if (new_value == 12) {
         send_to_char(ch, "^GYour knowledge of %s is genius-level.^n\r\n", skills[skill_num].name);
       } else {
-        send_to_char(ch, "^GYou further hone your knowledge towards perfection.^n\r\n");
+        send_to_char(ch, "^GYou keep working towards mastery.^n\r\n");
       }
     }
   }
