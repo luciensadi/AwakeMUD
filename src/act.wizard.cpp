@@ -8068,7 +8068,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
             if (!vnum_is_from_zone(vnum, zone_num) && !vnum_is_from_canon_zone(vnum)) {
               rnum_t obj_rnum = real_object(vnum);
 
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is equipped with %sexternal item %ld (%s).\r\n", // *immature giggle*
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is equipped with %sexternal non-canon-zone item %ld (%s).\r\n", // *immature giggle*
                        vnum_from_non_connected_zone(vnum) ? "^ynon-connected^n " : "",
                        vnum,
                        obj_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[obj_rnum]) : "(does not exist)");
