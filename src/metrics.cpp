@@ -7,11 +7,11 @@
 long global_ammotrack[(END_OF_AMMO_USING_WEAPONS + 1) - START_OF_AMMO_USING_WEAPONS][NUM_AMMOTYPES][NUM_AMMOTRACKS] = {{{0}}};
 
 const char *ammotrack_names[NUM_AMMOTRACKS] = {
-  "crafting",
-  "purchase",
-  "looted",
+  "^ycrafting^n",
+  "^gpurchase^n",
+  "^rlooted^n",
   "chargen",
-  "combat"
+  "^Lcombat^n"
 };
 
 // TODO: You're tracking at the wrong point. Instead of doing it on load/unload, track creation.
@@ -40,6 +40,10 @@ ACMD(do_metrics) {
       long net_change = 0;
       bool any_change = false;
       for (int track_idx = 0; track_idx < NUM_AMMOTRACKS; track_idx++) {
+        // Skip chargen ammo.
+        if (track_idx == AMMOTRACK_CHARGEN)
+          continue;
+
         if (global_ammotrack[weap_idx][ammo_idx][track_idx] != 0)
           any_change = true;
         net_change += global_ammotrack[weap_idx][ammo_idx][track_idx];
@@ -49,6 +53,10 @@ ACMD(do_metrics) {
       if (any_change) {
         send_to_char(ch, " %6ld %s ( ", net_change, get_ammo_representation(_weap_idx, ammo_idx, net_change == 1 ? 1 : 0, ch));
         for (int track_idx = 0; track_idx < NUM_AMMOTRACKS; track_idx++) {
+          // Skip chargen ammo.
+          if (track_idx == AMMOTRACK_CHARGEN)
+            continue;
+
           if (global_ammotrack[weap_idx][ammo_idx][track_idx] != 0) {
             send_to_char(ch, "%s[%ld] ", ammotrack_names[track_idx], global_ammotrack[weap_idx][ammo_idx][track_idx]);
           }

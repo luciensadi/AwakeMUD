@@ -653,11 +653,7 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
   }
 
   // Soulbind it. In case there's a need to make this chargen-only later on: "PLR_FLAGGED(recipient, PLR_NOT_YET_AUTHED)"
-  if (!soulbind_obj_to_char(ware, recipient, TRUE)) {
-    send_to_char(installer, "An error has occurred and the operation has been aborted. (2)\r\n");
-    send_to_char(recipient, "An error has occurred and the operation has been aborted. (2)\r\n");
-    return FALSE;
-  }
+  soulbind_obj_to_char(ware, recipient, TRUE);
 
   if (!IS_NPC(installer)) {
     const char *representation = generate_new_loggable_representation(ware);
