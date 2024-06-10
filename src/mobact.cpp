@@ -1282,6 +1282,8 @@ bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t que
   if (npc_vs_vehicle_blocked_by_quest_protection(quest_id, veh))
     return FALSE;
 
+  // TODO: Should we skip vehicles we can't harm?
+
   // We attack player-owned vehicles, no matter who's in them.
   if (veh->owner > 0)
     return TRUE;

@@ -1066,6 +1066,7 @@ void assign_rooms(void)
   SPECIAL(troll_barrier);
   SPECIAL(chargen_points_check);
   SPECIAL(purge_prevented);
+  SPECIAL(oppressive_atmosphere);
 
   /* Limbo/God Rooms */
   ASSIGNROOM(8, oceansounds);
@@ -1182,6 +1183,12 @@ void assign_rooms(void)
 
   // Purge prevention for the veh storage room.
   ASSIGNROOM(RM_PORTABLE_VEHICLE_STORAGE, purge_prevented);
+
+#ifdef USE_PRIVATE_CE_WORLD
+  ASSIGNROOM(33803, oppressive_atmosphere);
+#else
+  ASSIGNROOM(10001, oppressive_atmosphere);
+#endif
 
 #ifdef USE_PRIVATE_CE_WORLD
   // Nerpcorpolis

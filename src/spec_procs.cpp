@@ -7925,6 +7925,74 @@ SPECIAL(soulbound_unbinder) {
   return TRUE;
 }
 
+// Warn someone if they're proceeding into this area that they are very likely to get rekt unless they're built extremely well.
+#define OA_TKE_REQUIREMENT 500
+#define OA_COMBAT_SKILL_REQ  8
+SPECIAL(oppressive_atmosphere) {
+  NO_DRAG_BULLSHIT;
+
+  if (!cmd)
+    return FALSE;
+
+  bool you_shall_not_pass = FALSE;
+  char check_failure_message[MAX_STRING_LENGTH] = { 0 };
+
+  if (CMD_IS("west") || CMD_IS("w")) {
+    snprintf(ENDOF(check_failure_message), sizeof(check_failure_message) - strlen(check_failure_message), " - [%6s^n] You must have at least ^c%d^n TKE to enter.\r\n",
+             (you_shall_not_pass |= (GET_TKE(ch) < OA_TKE_REQUIREMENT)) ? "^RFAIL" : "^g OK ",
+             OA_TKE_REQUIREMENT);
+
+    
+
+    // Evaluate their stats. You must be at racial maximum in all stats to proceed.
+    {
+      bool stats_ok = TRUE;
+
+      for (int stat_idx = BOD; stat_idx <= WIL; stat_idx++) {
+        // We don't care if you've maxed Charisma.
+        if (stat_idx == CHA)
+          continue;
+
+        // Turn folks away who are under spec.
+        if (GET_REAL_ATT(ch, stat_idx) < racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][stat_idx]) {
+          stats_ok = FALSE;
+          you_shall_not_pass = TRUE;
+          break;
+        }
+      }
+
+      snprintf(ENDOF(check_failure_message), sizeof(check_failure_message) - strlen(check_failure_message), 
+               " - [%s^n] You must have trained all stats except Charisma to their racial maximums.\r\n",
+               !stats_ok ? "^RFAIL" : "^g OK ");
+    }
+    
+
+    // You must have at least one combat skill at 8.
+    {
+      bool has_combat_skill = GET_SKILL(ch, SKILL_SORCERY) >= OA_COMBAT_SKILL_REQ;
+      for (int weap_idx = WEAP_EDGED; !has_combat_skill && weap_idx < MAX_WEAP; weap_idx++) {
+        if (GET_SKILL(ch, kosher_weapon_values[weap_idx].skill) >= OA_COMBAT_SKILL_REQ)
+          has_combat_skill = TRUE;
+      }
+      if (!has_combat_skill) {
+        you_shall_not_pass = TRUE;
+      }
+      snprintf(ENDOF(check_failure_message), sizeof(check_failure_message) - strlen(check_failure_message), 
+               " - [%s^n] You must have at least combat skill at %d+ to enter.\r\n",
+               !has_combat_skill ? "^RFAIL" : "^g OK ",
+               OA_COMBAT_SKILL_REQ);
+    }
+  }
+
+  if (you_shall_not_pass) {
+    send_to_char(ch, "A creeping feeling of unease comes over you, dragging your steps to a halt.\r\n%s", check_failure_message);
+    return TRUE;
+  }
+
+  // Clear to proceed.
+  return FALSE;
+}
+
 /*
 SPECIAL(business_card_printer) {
   struct obj_data *printer = (struct obj_data *) me;
