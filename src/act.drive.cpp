@@ -1093,11 +1093,6 @@ ACMD(do_repair)
         send_to_char("You'll need a garage with a vehicle workshop unpacked in it to fix this much damage.\r\n", ch);
         return;
       }
-      target += 2;
-    } else {
-      if (GET_WORKSHOP_GRADE(shop) == TYPE_FACILITY) {
-        target -= 2;
-      } // if TYPE_WORKSHOP, no target modifier
 
       if (kit) {
         target += 2;
@@ -1108,6 +1103,10 @@ ACMD(do_repair)
         }
         target += 4;
       }
+    } else {
+      if (GET_WORKSHOP_GRADE(shop) == TYPE_FACILITY) {
+        target -= 2;
+      } // if TYPE_WORKSHOP, no target modifier
     }
   } else {
     target = 1;

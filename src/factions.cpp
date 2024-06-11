@@ -521,7 +521,12 @@ bool faction_leader_says_geef_ze_maar_een_pak_slaag_voor_papa(struct char_data *
     return FALSE;
   }
 
-  return get_faction_status(klappee, GET_MOB_FACTION_IDNUM(klapper)) <= faction_statuses::HOSTILE;
+  bool will_attack = get_faction_status(klappee, GET_MOB_FACTION_IDNUM(klapper)) <= faction_statuses::HOSTILE;
+
+  if (will_attack)
+    FACTION_DEBUG(klappee, "^L[You are being targeted due to faction rep.]^n");
+
+  return will_attack;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
