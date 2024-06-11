@@ -1119,6 +1119,8 @@ ACMD(do_repair)
     if (success < 0) {
       send_to_char(ch, "You fuck it up and make things worse.\r\n");
       mudlog_vfprintf(ch, LOG_GRIDLOG, "Damaged %s (%ld-%ld) with botched repair.", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), GET_VEH_IDNUM(veh));
+      veh->damage++;
+      chkdmg(veh);
     } else {
       send_to_char(ch, "You tinker with it a bit, but don't make much headway.\r\n");
     }
