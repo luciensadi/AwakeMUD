@@ -1229,7 +1229,7 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
         break;
       }
 
-      if (owned_by_player != GET_IDNUM(ch)) {
+      if (owned_by_player && owned_by_player != GET_IDNUM(ch)) {
         send_to_char(ch, "Sorry, you can only use subsidy cards to pay for apartments you directly own. Trying with cash...\r\n", ch);
         neophyte_card = NULL;
         break;
