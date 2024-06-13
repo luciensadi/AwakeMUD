@@ -22,7 +22,7 @@ CREATE TABLE `pfiles` (
   `Astral_RoomDesc` varchar(200) default 'A reflection hovers here.',
   `Astral_LookDesc` text NOT NULL,
   `LeaveMsg` varchar(200) default 'leaves',
-  `EnterMsg` varchar(200) default 'enters',
+  `EnterMsg` varchar(200) default 'enters from',
   `Title` varchar(48) default '^y(Newbie)^n',
   `Pretitle` varchar(48) default '',
   `Whotitle` varchar(10),
