@@ -683,6 +683,14 @@ void make_corpse(struct char_data * ch)
       else if (IS_OBJ_STAT(o, ITEM_EXTRA_PURGE_ON_DEATH))
         extract_obj(o);
       else {
+        // If it's a gun and has a magazine in it, reduce the ammo count in that magazine.
+        if (GET_OBJ_TYPE(o) == ITEM_WEAPON && WEAPON_IS_GUN(o) && o->contains) {
+          if (GET_OBJ_TYPE(o->contains) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_BONDED_MAXAMMO(o->contains) > 0) {
+            GET_MAGAZINE_AMMO_COUNT(o->contains) = 0;
+          }
+        }
+
+        // Put the item in the corpse.
         obj_to_obj(o, corpse);
         corpse_value += GET_OBJ_COST( o );
 
