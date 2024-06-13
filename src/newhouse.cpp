@@ -1793,7 +1793,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   room->apartment = apartment;
   storage_path = filename / "storage";
 
-  if (apartment->get_paid_until() >= time(0)) {
+  if (apartment->get_paid_until() >= time(0) && apartment->has_owner() && apartment->owner_is_valid()) {
     // Load decorated name.
     if (base_info.find("decorated_name") != base_info.end()) {
       decorated_name = str_dup(base_info["decorated_name"].get<std::string>().c_str());
@@ -1814,7 +1814,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   }
   else {
     // Lease isn't valid, bail out.
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to load decoration and storage for %ld: Lease is expired.", GET_ROOM_VNUM(room));
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to load decoration and storage for %ld: Lease is expired, or owner does not exist.", GET_ROOM_VNUM(room));
     delete [] decoration;
     decoration = NULL;
     delete [] decorated_name;
