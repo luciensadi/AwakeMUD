@@ -78,12 +78,13 @@ void write_zone_to_disk(int vnum)
   for (i = 0; i < ZONE.num_cmds; ++i) {
     switch (ZONE.cmd[i].command) {
     case 'M':
-      fprintf(fp, "%c %d %ld %ld %ld\n",
+      fprintf(fp, "%c %d %ld %ld %ld %ld\n",
               Zcmd.command,
               Zcmd.if_flag,
               MOB(Zcmd.arg1),
               Zcmd.arg2,
-              ROOM(Zcmd.arg3));
+              ROOM(Zcmd.arg3),
+              Zcmd.arg4);
       break;
     case 'V':
       fprintf(fp, "%c %d %ld %ld %ld\n",
@@ -415,6 +416,8 @@ void zedit_disp_command_menu(struct descriptor_data *d)
     send_to_char(CH, "^G5^Y) ^WLoad in room: ^c%s ^y(^B%d^y)^n\r\n",
                  world[COM->arg3].name,
                  ROOM(COM->arg3) );
+    send_to_char(CH, "^G6^Y) ^WNumber of times to repeat this command: ^c%d^n\r\n",
+                 COM->arg4 <= 1 ? 1 : COM->arg4);
     break;
   case 'S':
     send_to_char(CH, "^G3^Y) ^WLoad mob: ^c%s ^y(^B%d)^n\r\n",
@@ -910,6 +913,16 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
         break;
       }
       break;
+    case '6':
+      switch (COM->command) {
+        case 'M':
+          send_to_char("Enter the quantity to spawn at once (DOES NOT multi-apply subsequent If-Last commands!): ", CH);
+          d->edit_mode = ZEDIT_ARG4;
+          break;
+        default:
+          zedit_disp_command_menu(d);
+          break;
+      }
     }
     break;
 
@@ -1034,6 +1047,16 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     case 'N':
       COM->arg3 = MIN(25, MAX(0, number));
       break;
+    }
+    zedit_disp_command_menu(d);
+    break;
+  
+  case ZEDIT_ARG4:
+    number = abs(atoi(arg));
+    switch (COM->command) {
+      case 'M':
+        COM->arg4 = MAX(1, number);
+        break;
     }
     zedit_disp_command_menu(d);
     break;

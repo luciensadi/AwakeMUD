@@ -2756,13 +2756,30 @@ void load_zones(File &fl)
 
     ptr++;
 
+    // 'L' is the old way of writing 'E'. Adapt for it being in the file.
+    if (ZCMD.command == 'L') {
+      ZCMD.command = 'E';
+    }
+
     error = 0;
-    if (strchr("MVOENPDHL", ZCMD.command) == NULL) { /* a 3-arg command */
+    if (strchr("M", ZCMD.command)) { // 4-arg command.
+      if (sscanf(ptr, " %d %ld %ld %ld %ld ", &tmp, &ZCMD.arg1, &ZCMD.arg2, &ZCMD.arg3, &ZCMD.arg4) != 5) {
+        // There's a chance that we just haven't written this one out as a 5-arg yet. Assume a quantity of 1 and try again.
+        if (sscanf(ptr, " %d %ld %ld %ld ", &tmp, &ZCMD.arg1, &ZCMD.arg2, &ZCMD.arg3) != 4) {
+          error = 1;
+        } else {
+          ZCMD.arg4 = 1;
+        }
+      }
+    } else if (strchr("VOHPDEN", ZCMD.command)) { // 3-arg.
+      if (sscanf(ptr, " %d %ld %ld %ld ", &tmp, &ZCMD.arg1, &ZCMD.arg2, &ZCMD.arg3) != 4)
+        error = 1;
+    } else if (strchr("SUIGCR", ZCMD.command)) { // 2-arg.
       if (sscanf(ptr, " %d %ld %ld ", &tmp, &ZCMD.arg1, &ZCMD.arg2) != 3)
         error = 1;
     } else {
-      if (sscanf(ptr, " %d %ld %ld %ld ", &tmp, &ZCMD.arg1, &ZCMD.arg2, &ZCMD.arg3) != 4)
-        error = 1;
+      fprintf(stderr, "Format error in %s - unrecognized zone command %c during load.\n", fl.Filename(), ZCMD.command);
+      exit(ERROR_ZONEREAD_FORMAT_ERROR);
     }
 
     ZCMD.if_flag = tmp;
@@ -2771,9 +2788,6 @@ void load_zones(File &fl)
       fprintf(stderr, "FATAL ERROR: Format error in %s, line %d: '%s'\n",
               fl.Filename(), fl.LineNumber(), buf);
       exit(ERROR_ZONEREAD_FORMAT_ERROR);
-    }
-    if (ZCMD.command == 'L') {
-      ZCMD.command = 'E';
     }
     ZCMD.line = fl.LineNumber();
     cmd_no++;
@@ -4497,7 +4511,7 @@ void zcmd_repair_door(struct room_data *room, int dir) {
 void reset_zone(int zone, int reboot)
 {
   SPECIAL(fixer);
-  int cmd_no, last_cmd = 0, found = 0, no_mob = 0;
+  int cmd_no, last_cmd = 0, found = 0, no_mob = 0, temp_qty = 0;
   static int i;
   struct char_data *mob = NULL;
   struct obj_data *obj, *obj_to, *check;
@@ -4520,7 +4534,8 @@ void reset_zone(int zone, int reboot)
       last_cmd = 0;
       break;
     case 'M':                 /* read a mobile */
-      {
+      temp_qty = ZCMD.arg4;
+      do {
         bool passed_global_limits = (mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -4557,7 +4572,7 @@ void reset_zone(int zone, int reboot)
           last_cmd = 0;
           mob = NULL;
         }
-      }
+      } while (last_cmd && --temp_qty > 0);
       break;
     case 'S':                 /* read a mobile into a vehicle */
       if (!veh)
