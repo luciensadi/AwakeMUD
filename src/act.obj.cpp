@@ -2562,7 +2562,11 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
       if (check_quest_delivery(ch, vict, obj)) {
         // Give it to them now.
         _ch_gives_obj_to_vict(ch, obj, vict);
-        act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
+        if (MOB_FLAGGED(vict, MOB_INANIMATE)) {
+          act("$n beeps at $N and retains $p.", TRUE, vict, obj, ch, TO_ROOM);
+        } else {
+          act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
+        }
         extract_obj(obj);
         return 1;
       }
@@ -2586,7 +2590,11 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     }
 
     // NPC doesn't want it: Drop the thing.
-    act("$n glances at $p, then lets it fall from $s hand.", TRUE, vict, obj, 0, TO_ROOM);
+    if (MOB_FLAGGED(vict, MOB_INANIMATE)) {
+      act("$n blats at $N and ejects $p.", TRUE, vict, obj, ch, TO_ROOM);
+    } else {
+      act("$n glances at $p, then lets it fall from $s hand.", TRUE, vict, obj, 0, TO_ROOM);
+    }
     obj_from_char(obj);
     if (vict->in_room)
       obj_to_room(obj, vict->in_room);
