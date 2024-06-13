@@ -695,7 +695,7 @@ void make_corpse(struct char_data * ch)
         corpse_value += GET_OBJ_COST( o );
 
         // If it's a gun from an NPC, track it in ammo metrics.
-        if (IS_NPC(ch) && GET_OBJ_TYPE(o) == ITEM_WEAPON && WEAPON_IS_GUN(o) && o->contains && GET_OBJ_TYPE(o->contains) == ITEM_GUN_MAGAZINE) {
+        if (IS_NPC(ch) && GET_OBJ_TYPE(o) == ITEM_WEAPON && WEAPON_IS_GUN(o) && o->contains && GET_OBJ_TYPE(o->contains) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_AMMO_COUNT(o->contains) > 0) {
           AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(o->contains), GET_MAGAZINE_AMMO_TYPE(o->contains), AMMOTRACK_NPC_SPAWNED, GET_MAGAZINE_AMMO_COUNT(o->contains));
         }
       }
@@ -714,7 +714,7 @@ void make_corpse(struct char_data * ch)
         corpse_value += GET_OBJ_COST(o);
 
         // If it's a gun from an NPC, track it in ammo metrics.
-        if (IS_NPC(ch) && GET_OBJ_TYPE(o) == ITEM_WEAPON && WEAPON_IS_GUN(o) && o->contains && GET_OBJ_TYPE(o->contains) == ITEM_GUN_MAGAZINE) {
+        if (IS_NPC(ch) && GET_OBJ_TYPE(o) == ITEM_WEAPON && WEAPON_IS_GUN(o) && o->contains && GET_OBJ_TYPE(o->contains) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_AMMO_COUNT(o->contains) > 0) {
           AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(o->contains), GET_MAGAZINE_AMMO_TYPE(o->contains), AMMOTRACK_NPC_SPAWNED, GET_MAGAZINE_AMMO_COUNT(o->contains));
         }
 
