@@ -87,6 +87,7 @@ extern void reset_host_paydata(rnum_t rnum);
 extern bool player_is_dead_hardcore(long id);
 extern void load_apartment_complexes();
 extern void parse_factions();
+extern void initialize_policy_tree();
 
 extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
@@ -609,6 +610,9 @@ void boot_world(void)
 
   log("Handling idle deletion.");
   idle_delete();
+
+  log("Loading policies.");
+  initialize_policy_tree();
 
   log("Loading factions.");
   parse_factions();

@@ -292,6 +292,7 @@ ACMD_DECLARE(do_pgset);
 ACMD_DECLARE(do_photo);
 ACMD_DECLARE(do_playerrolls);
 ACMD_DECLARE(do_pockets);
+ACMD_DECLARE(do_policy);
 ACMD_DECLARE(do_poofset);
 ACMD_DECLARE(do_pour);
 ACMD_DECLARE(do_pool);
@@ -801,7 +802,8 @@ struct command_info cmd_info[] =
     { "photo"      , POS_RESTING , do_photo    , 0, 0, BLOCKS_IDLE_REWARD },
     { "pockets"    , POS_RESTING , do_pockets  , 0, 0, ALLOWS_IDLE_REWARD },
     { "pop"        , POS_SITTING , do_pop      , 0, 0, BLOCKS_IDLE_REWARD },
-    { "policy"     , POS_DEAD    , do_gen_ps   , 0, SCMD_POLICIES, ALLOWS_IDLE_REWARD },
+   // { "policy"     , POS_DEAD    , do_gen_ps   , 0, SCMD_POLICIES, ALLOWS_IDLE_REWARD },
+    { "policy"     , POS_DEAD    , do_policy   , 0, SCMD_POLICIES, ALLOWS_IDLE_REWARD },
     { "poofin"     , POS_DEAD    , do_poofset  , LVL_BUILDER, SCMD_POOFIN, BLOCKS_IDLE_REWARD },
     { "poofout"    , POS_DEAD    , do_poofset  , LVL_BUILDER, SCMD_POOFOUT, BLOCKS_IDLE_REWARD },
     { "pools"      , POS_DEAD    , do_pool     , 0, 0, ALLOWS_IDLE_REWARD },
