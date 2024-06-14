@@ -255,13 +255,10 @@ ACMD(do_steal)
     send_to_char("Come on now, that's rather stupid!\r\n", ch);
   else if (!IS_NPC(vict) && GET_LEVEL(ch) < GET_LEVEL(vict))
     send_to_char("You can't steal from someone that powerful.\r\n", ch);
-  else if (!IS_SENATOR(ch) && IS_NPC(vict) && (mob_index[GET_MOB_RNUM(vict)].func == shop_keeper
-                                               || mob_index[GET_MOB_RNUM(vict)].sfunc == shop_keeper))
-    send_to_char(ch, "%s slaps your hand away.\r\n", CAP(GET_NAME(vict)));
+  else if (!IS_SENATOR(ch) && !IS_NPC(vict))
+    send_to_char("You can only steal from NPCs.\r\n", ch);
   else if (!IS_SENATOR(ch) && (AWAKE(vict) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)))
     send_to_char("That would be quite a feat.\r\n", ch);
-  else if (!IS_SENATOR(ch) && !IS_NPC(vict) && (!PRF_FLAGGED(ch, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)))
-    send_to_char(ch, "Both you and %s need to be toggled PK for that.\r\n", GET_NAME(vict));
   else {
     if (!(obj = get_obj_in_list_vis(ch, obj_name, vict->carrying))) {
       if (!IS_SENATOR(ch)) {
@@ -1328,6 +1325,10 @@ ACMD(do_toggle)
       result = PRF_TOG_CHK(ch, PRF_MENUGAG);
       mode = 25;
     } else if (is_abbrev(argument, "pk")) {
+#ifndef ENABLE_PK
+      send_to_char("Sorry, the PK system has been disabled.\r\n", ch);
+      return;
+#endif
       if (PLR_FLAGGED(ch, PLR_NEWBIE)) {
         send_to_char("You are not yet able to become a pk'er.\r\n", ch);
         return;

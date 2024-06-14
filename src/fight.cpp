@@ -2891,10 +2891,12 @@ bool would_become_killer(struct char_data * ch, struct char_data * vict)
     return FALSE;
   }
 
+#ifdef ENABLE_PK
   // You can always fight a PKer if you're a PKer as well.
   if (PRF_FLAGGED(attacker, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER)) {
     return FALSE;
   }
+#endif
 
   // Staff can attack anyone. Hopefully they have good reason for it.
   if (IS_SENATOR(attacker)) {

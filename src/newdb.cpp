@@ -378,6 +378,11 @@ bool load_char(const char *name, char_data *ch, bool logon)
   // Unset the cyberdoc flag on load.
   PRF_FLAGS(ch).RemoveBit(PRF_TOUCH_ME_DADDY);
 
+  // Remove the PK flag if that system is disabled.
+#ifndef ENABLE_PK
+  PRF_FLAGS(ch).RemoveBit(PRF_PKER);
+#endif
+
   // Clear temporary bits.
   AFF_FLAGS(ch).RemoveBit(AFF_TEMPORARY_MARK_DO_NOT_SET_PERSISTENTLY);
 

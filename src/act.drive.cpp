@@ -344,10 +344,17 @@ ACMD(do_ram)
       return;
     }
 
+#ifdef ENABLE_PK
     if (!IS_NPC(vict) && !(IS_NPC(ch) || (PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER)))) {
       send_to_char("You have to be flagged PK to attack another player.\r\n", ch);
       return;
     }
+#else
+    if (!IS_NPC(vict) && !IS_NPC(ch) && !IS_SENATOR(ch)) {
+      send_to_char("You can't ram player characters.\r\n", ch);
+      return;
+    }
+#endif
 
     if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch)) {
       send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
@@ -1204,10 +1211,18 @@ ACMD(do_driveby)
       send_to_char(ch, "You can only do a driveby with a pistol or SMG.\r\n");
       return;
     }
+
+#ifdef ENABLE_PK
     if (!IS_NPC(vict) && !PRF_FLAGGED(ch, PRF_PKER) && !PRF_FLAGGED(vict, PRF_PKER)) {
       send_to_char(ch, "You have to be flagged PK to attack another player.\r\n");
       return;
     }
+#else
+    if (!IS_NPC(vict) && !IS_SENATOR(ch)) {
+      send_to_char(ch, "You can't perform drivebys on player characters.\r\n");
+      return;
+    }
+#endif
 
     send_to_char(ch, "You point %s towards %s and open fire!\r\n", GET_OBJ_NAME(wielded), GET_NAME(vict));
     snprintf(buf, sizeof(buf), "%s aims %s towards %s and opens fire!\r\n", GET_NAME(ch), GET_OBJ_NAME(wielded), GET_NAME(vict));
@@ -1225,8 +1240,13 @@ ACMD(do_driveby)
     if (pass != ch) {
       if (PLR_FLAGGED(pass, PLR_DRIVEBY) && AWAKE(pass) && GET_EQ(pass, WEAR_WIELD) &&
           GET_OBJ_VAL(GET_EQ(pass, WEAR_WIELD),4) >= SKILL_FIREARMS) {
+#ifdef ENABLE_PK
         if (!IS_NPC(vict) && !PRF_FLAGGED(pass, PRF_PKER) && !PRF_FLAGGED(vict, PRF_PKER))
           continue;
+#else
+        if (!IS_NPC(vict))
+          continue;
+#endif
         send_to_char(pass, "You follow %s lead and take aim.\r\n", HSHR(ch));
         PLR_FLAGS(pass).RemoveBit(PLR_DRIVEBY);
         pass->next_fighting = list;
@@ -1562,10 +1582,17 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
 
   // Reject PvP.
   if (vict) {
+#ifdef ENABLE_PK
     if (!IS_NPC(vict) && !IS_NPC(ch) && !(PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER))) {
       send_to_char("You and your opponent both need to be flagged PK for that.\r\n", ch);
       return;
     }
+#else
+    if (!IS_NPC(vict) && !IS_NPC(ch) && !IS_SENATOR(ch)) {
+      send_to_char("You can't target PCs.\r\n", ch);
+      return;
+    }
+#endif
   }
 
   if (tveh) {

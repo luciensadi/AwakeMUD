@@ -209,7 +209,7 @@ void initialize_policy_tree() {
     section_root->add_child("^yThis is a very strict rule.^n Please don't even hint about going around it or ask sly questions about Google search terms etc-- it's legitimately purchased copies or nothing.");
   }
 
-#ifndef ENABLE_PK
+#ifdef ENABLE_PK
   // Player Killing / CvC.
   {
     PolicyNode *section_root = new PolicyNode(

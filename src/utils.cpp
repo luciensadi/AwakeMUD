@@ -4939,6 +4939,11 @@ bool npc_can_see_in_any_situation(struct char_data *npc) {
 
 bool can_damage_vehicle(struct char_data *ch, struct veh_data *veh) {
   if (veh->owner && GET_IDNUM(ch) != veh->owner) {
+#ifndef ENABLE_PK
+    send_to_char("That's a player-owned vehicle. Better leave it alone.\r\n", ch);
+    return FALSE;
+#endif
+
     bool has_valid_vict = FALSE;
     for (struct char_data *killer_check = veh->people; killer_check; killer_check = killer_check->next_in_veh) {
       if ((PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(killer_check, PRF_PKER)) || PLR_FLAGGED(killer_check, PLR_KILLER)) {
@@ -6545,13 +6550,19 @@ bool can_perform_aggressive_action(struct char_data *actor, struct char_data *vi
   // Arena flags bypass all PK checks. We do NOT use original here.
   TRUE_CASE_NO_PRINT(ROOM_FLAGGED(actor_in_room, ROOM_ARENA) && ROOM_FLAGGED(actor_in_room, ROOM_ARENA));
 
+#ifdef ENABLE_PK
   // PK flag checks: You must be flagged PK before you can attack anyone outside of an arena.
-  FALSE_CASE_ACTOR(!PRF_FLAGGED(actor_original, PRF_PKER), "You must ##^WTOGGLE PK^n before you can do that.\r\n");
+  FALSE_CASE_ACTOR(!PRF_FLAGGED(actor_original, PRF_PKER), "You must ##^WTOGGLE PK^n before you can do that.\r\n")
 
   // A victim is valid if they are a PKer or a KILLER (note that you must now be PKer yourself to attack a killer).
   FALSE_CASE_ACTOR(!PRF_FLAGGED(victim_original, PRF_PKER) && !PRF_FLAGGED(victim_original, PLR_KILLER), "Your victim must ##^WTOGGLE PK^n before you can do that.\r\n");
 
+  // Everyone's flagged PK, go for it.
   return TRUE;
+#else
+  // PK not allowed.
+  return FALSE;
+#endif
 }
 
 bool veh_is_aircraft(struct veh_data *veh) {

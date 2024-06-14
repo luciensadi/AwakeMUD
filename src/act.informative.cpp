@@ -5756,8 +5756,14 @@ ACMD(do_who)
       sort = LVL_MAX;
     else if (is_abbrev(arg, "questor"))
       quest = 1;
-    else if (is_abbrev(arg, "pker"))
+    else if (is_abbrev(arg, "pker")) {
+#ifdef ENABLE_PK
       pker = 1;
+#else
+      send_to_char("PK is not enabled for this port.\r\n", ch);
+      return;
+#endif
+    }
     else if (is_abbrev(arg, "immortal"))
       immort = 1;
     else if (is_abbrev(arg, "mortal"))
