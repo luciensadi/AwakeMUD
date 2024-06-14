@@ -6367,8 +6367,8 @@ SPECIAL(mageskill_hermes)
             dq = TRUE;
         if (dq) {
           // Reject people who couldn't pass the quest.
-          if (GET_MAG(ch) <= 0 || GET_TRADITION(ch) == TRAD_MUNDANE || (GET_SKILL(ch, SKILL_SORCERY) < 8 && GET_SKILL(ch, SKILL_AURA_READING) < 8)) {
-            snprintf(arg, sizeof(arg), "%s It's nice, isn't it? It's something that only elite awakened ones can obtain.", GET_CHAR_NAME(ch));
+          if (GET_MAG(ch) <= 0 || GET_TRADITION(ch) == TRAD_MUNDANE || (GET_SKILL(ch, SKILL_SORCERY) < 8 && GET_SKILL(ch, SKILL_CONJURING) < 8 && GET_SKILL(ch, SKILL_AURA_READING) < 8)) {
+            snprintf(arg, sizeof(arg), "%s It's nice, isn't it? It's something that only highly skilled awakened practitioners can obtain.", GET_CHAR_NAME(ch));
             do_say(mage, arg, 0, SCMD_SAYTO);
             return TRUE;
           }
