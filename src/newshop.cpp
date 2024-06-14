@@ -1618,7 +1618,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
   // Track ammo sold.
   if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_GUN(obj) && obj->contains && GET_OBJ_TYPE(obj->contains) == ITEM_GUN_MAGAZINE)
-    AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(obj->contains), GET_MAGAZINE_AMMO_TYPE(obj->contains), AMMOTRACK_NPC_SPAWNED, -GET_MAGAZINE_AMMO_COUNT(obj->contains));
+    AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(obj->contains), GET_MAGAZINE_AMMO_TYPE(obj->contains), AMMOTRACK_SOLD, -GET_MAGAZINE_AMMO_COUNT(obj->contains));
 
   extract_obj(obj);
   obj = NULL;

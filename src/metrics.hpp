@@ -9,7 +9,8 @@
 #define AMMOTRACK_NPC_SPAWNED    2
 #define AMMOTRACK_CHARGEN        3
 #define AMMOTRACK_COMBAT         4
-#define NUM_AMMOTRACKS           5
+#define AMMOTRACK_SOLD           5
+#define NUM_AMMOTRACKS           6
 
 extern long global_ammotrack[(END_OF_AMMO_USING_WEAPONS + 1) - START_OF_AMMO_USING_WEAPONS][NUM_AMMOTYPES][NUM_AMMOTRACKS];
 

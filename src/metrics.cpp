@@ -11,7 +11,8 @@ const char *ammotrack_names[NUM_AMMOTRACKS] = {
   "^gpurchase^n",
   "^rlooted^n",
   "chargen",
-  "^Lcombat^n"
+  "^Lcombat^n",
+  "^msold-in-gun^n",
 };
 
 // TODO: You're tracking at the wrong point. Instead of doing it on load/unload, track creation.
