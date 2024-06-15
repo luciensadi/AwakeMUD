@@ -397,6 +397,7 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define IS_SPIRIT(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_SPIRIT)
 #define IS_PC_CONJURED_SPIRIT(ch) (IS_SPIRIT((ch)) && GET_ACTIVE((ch)))
 #define IS_ANY_ELEMENTAL(ch) (IS_NPC(ch) && (GET_RACE(ch) == RACE_ELEMENTAL || GET_RACE(ch) == RACE_PC_CONJURED_ELEMENTAL))
+#define IS_ANY_ELEMENTAL_NO_ISNPC(ch) ((GET_RACE(ch) == RACE_ELEMENTAL || GET_RACE(ch) == RACE_PC_CONJURED_ELEMENTAL))
 #define IS_WILD_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_ELEMENTAL)
 #define IS_PC_CONJURED_ELEMENTAL(ch) (IS_NPC(ch) && GET_RACE(ch) == RACE_PC_CONJURED_ELEMENTAL)
 #define IS_ASTRAL(ch) (MOB_FLAGGED(ch, MOB_ASTRAL) || IS_PROJECT(ch))
@@ -1247,6 +1248,8 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_PROGRAM_SIZE(prog)                    (GET_OBJ_VAL((prog), 2))
 #define GET_PROGRAM_ATTACK_DAMAGE(prog)           (GET_OBJ_VAL((prog), 3))
 #define GET_PROGRAM_IS_DEFAULTED(prog)            (GET_OBJ_VAL((prog), 4))
+#define GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(prog) (GET_OBJ_VAL((prog), 5))
+#define GET_PROGRAM_EVALUATE_CREATION_TIME(prog)   (GET_OBJ_VAL((prog), 6))
 #define GET_PROGRAM_IS_COOKED(prog)               (GET_OBJ_TIMER((prog)) == 1)
 #define GET_SETTABLE_PROGRAM_IS_COOKED(prog)      (GET_OBJ_TIMER((prog)))
 /* Values 5 through 9 are reserved by the Matrix code too! See GET_DECK_ACCESSORY_FILE_* for details. */

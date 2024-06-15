@@ -273,27 +273,41 @@ void objList::UpdateCounters(void)
       continue;
     }
 
-    // We use the trideo broadcast tick, because why not.
-    if (trideo_plays && GET_OBJ_SPEC(OBJ) == pocket_sec && !GET_POCKET_SECRETARY_SILENCED(OBJ)) {
-      struct char_data *carried_by = get_obj_carried_by_recursive(OBJ);
-      struct char_data *worn_by = get_obj_worn_by_recursive(OBJ);
-      struct char_data *recipient = carried_by ? carried_by : worn_by;
+    // We use the trideo broadcast tick for a variety of timed things.
+    if (trideo_plays) {
+      // Pocket secretary beep tick.
+      if (GET_OBJ_SPEC(OBJ) == pocket_sec && !GET_POCKET_SECRETARY_SILENCED(OBJ)) {
+        // Skip secs that couldn't be being carried. Saves two function invocations.
+        if (OBJ->in_veh || OBJ->in_room)
+          continue;
 
-      if (recipient && amount_of_mail_waiting(recipient) > 0) {
-        send_to_char(recipient, "%s buzzes quietly, reminding you that you have mail waiting.\r\n", CAP(GET_OBJ_NAME(OBJ)));
+        struct char_data *carried_by = get_obj_carried_by_recursive(OBJ);
+        struct char_data *worn_by = get_obj_worn_by_recursive(OBJ);
+        struct char_data *recipient = carried_by ? carried_by : worn_by;
+
+        if (recipient && amount_of_mail_waiting(recipient) > 0) {
+          send_to_char(recipient, "%s buzzes quietly, reminding you that you have mail waiting.\r\n", CAP(GET_OBJ_NAME(OBJ)));
+        }
+        continue;
       }
-    }
-
+      // Trideo message tick. 
+      else if (GET_OBJ_SPEC(OBJ) == trideo && GET_OBJ_VAL(OBJ, 0) && (OBJ->in_room || OBJ->in_veh)) {
+        snprintf(buf, sizeof(buf), "$p broadcasts, \"%s\"", trid);
+        act(buf, TRUE, 0, OBJ, 0, TO_ROOM);
+        continue;
+      }
+    } 
+    
     // Decay evaluate programs. This only fires when they're completed, as non-finished software is ITEM_DESIGN instead.
     if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_PROGRAM_TYPE(OBJ) == SOFT_EVALUATE) {
-      if (!GET_OBJ_VAL(OBJ, 5)) {
-        GET_OBJ_VAL(OBJ, 5) = current_time;
-        GET_OBJ_VAL(OBJ, 6) = GET_OBJ_VAL(OBJ, 5);
+      if (!GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ)) {
+        GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ) = current_time;
+        GET_PROGRAM_EVALUATE_CREATION_TIME(OBJ) = GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ);
       }
       // Decay Evaluate program ratings by one every two IRL days.
-      else if (GET_OBJ_VAL(OBJ, 5) < current_time - (SECS_PER_REAL_DAY * 2) && !(OBJ->carried_by && IS_NPC(OBJ->carried_by))) {
+      else if (GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ) < current_time - (SECS_PER_REAL_DAY * 2) && !(OBJ->carried_by && IS_NPC(OBJ->carried_by))) {
         GET_PROGRAM_RATING(OBJ)--;
-        GET_OBJ_VAL(OBJ, 5) = current_time;
+        GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ) = current_time;
         if (GET_PROGRAM_RATING(OBJ) < 0)
           GET_PROGRAM_RATING(OBJ) = 0;
       }
@@ -304,13 +318,6 @@ void objList::UpdateCounters(void)
     if (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && GET_OBJ_ATTEMPT(OBJ) > 0)
       GET_OBJ_ATTEMPT(OBJ)--;
 
-    // Send out the trideo messages. We assume anything that is a trideo box is not anything else.
-    if (trideo_plays && GET_OBJ_SPEC(OBJ) == trideo && GET_OBJ_VAL(OBJ, 0) && (OBJ->in_room || OBJ->in_veh)) {
-      snprintf(buf, sizeof(buf), "$p broadcasts, \"%s\"", trid);
-      act(buf, TRUE, 0, OBJ, 0, TO_ROOM);
-      continue;
-    }
-
     // Packing / unpacking of workshops.
     if (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_WORKSHOP_UNPACK_TICKS(OBJ)) {
       struct char_data *ch;
@@ -320,9 +327,10 @@ void objList::UpdateCounters(void)
       }
 
       for (ch = OBJ->in_veh ? OBJ->in_veh->people : OBJ->in_room->people;
-            ch;
+           ch;
            ch = OBJ->in_veh ? ch->next_in_veh : ch->next_in_room) {
-        if (AFF_FLAGGED(ch, AFF_PACKING)) {
+        if (AFF_FLAGGED(ch, AFF_PACKING))
+      {
           if (!--GET_WORKSHOP_UNPACK_TICKS(OBJ)) {
             if (GET_WORKSHOP_IS_SETUP(OBJ)) {
               send_to_char(ch, "You finish packing up %s.\r\n", GET_OBJ_NAME(OBJ));
@@ -370,7 +378,7 @@ void objList::UpdateCounters(void)
 
     // Cook chips.
     if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY
-        && GET_OBJ_VAL(OBJ, 0) == TYPE_COOKER
+        && GET_DECK_ACCESSORY_TYPE(OBJ) == TYPE_COOKER
         && OBJ->contains
         && GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) > 0)
     {
@@ -395,6 +403,8 @@ void objList::UpdateCounters(void)
         continue;
       }
     }
+
+    // TODO: Stopped here on optimizing code. Continue below.
 
     // In-game this is a UCAS dress shirt. I suspect the files haven't been updated.
     /*

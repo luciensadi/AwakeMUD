@@ -7782,6 +7782,11 @@ void set_dropped_by_info(struct obj_data *obj, struct char_data *ch) {
 }
 
 bool ch_can_bypass_edit_lock(struct char_data *ch, struct zone_data *zone) {
+  if (!ch || !zone) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received NULL parameter to ch_can_bypass_edit_lock(%s, %s)!", GET_CHAR_NAME(ch), zone ? zone->name : "NULL");
+    return TRUE;
+  }
+
 #ifdef IS_BUILDPORT
   return !zone->locked_to_non_editors || can_edit_zone(ch, zone);
 #else

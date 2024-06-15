@@ -1075,9 +1075,7 @@ void point_update(void)
     #endif
 
           if (IS_GHOUL(i) || IS_DRAGON(i))
-            if (!PLR_FLAGGED(i, PLR_PERCEIVE)) {
-              PLR_FLAGS(i).SetBit(PLR_PERCEIVE);
-          }
+            PLR_FLAGS(i).SetBit(PLR_PERCEIVE);
 
           // Temp magic loss (banishing) regains 1/hour, SR3 pg 189
           if (GET_TEMP_MAGIC_LOSS(i) > 0) {
@@ -1292,7 +1290,6 @@ void misc_update(void)
       should_loop = FALSE;
 
       for (struct char_data *ch = character_list, *next_ch; ch; ch = next_ch) {
-        bool is_npc = IS_NPC(ch);
         next_ch = ch->next_in_character_list;
         
         if (ch->last_loop_rand == loop_rand) {
@@ -1301,6 +1298,8 @@ void misc_update(void)
         } else {
           ch->last_loop_rand = loop_rand;
         }
+        
+        bool is_npc = IS_NPC(ch);
         
         if (AFF_FLAGGED(ch, AFF_FEAR)) {
           if (!number(0, 2)) {
@@ -1326,7 +1325,7 @@ void misc_update(void)
           }
         }
 
-        if (GET_SUSTAINED_NUM(ch) && !IS_ANY_ELEMENTAL(ch)) {
+        if (GET_SUSTAINED_NUM(ch) && !IS_ANY_ELEMENTAL_NO_ISNPC(ch)) {
           struct sustain_data *next, *temp, *nsus;
           for (struct sustain_data *sus = GET_SUSTAINED(ch); sus; sus = next) {
             next = sus->next;
@@ -1381,10 +1380,11 @@ void misc_update(void)
           for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next) {
             if (hjp->caster == FALSE && (hjp->spell == SPELL_CONFUSION || hjp->spell == SPELL_CHAOS)) {
               affected_by_chaos_or_confusion = TRUE;
+              break;
 
               // Elementals shouldn't have anything cast on them.
-              if (IS_PC_CONJURED_ELEMENTAL(ch))
-                break;
+              // if (IS_PC_CONJURED_ELEMENTAL(ch))
+              //  break;
             }
           }
           
@@ -1454,8 +1454,7 @@ void misc_update(void)
         else { // NPC checks.
           // Clear out unpiloted personas and projections. TODO: What is 21 "a dim reflection" used for?
           if (!ch->desc && GET_MOB_VNUM(ch) >= 20 && GET_MOB_VNUM(ch) <= 22) {
-            act("$n dissolves into the background and is no more.",
-                TRUE, ch, 0, 0, TO_ROOM);
+            act("$n dissolves into the background and is no more.", TRUE, ch, 0, 0, TO_ROOM);
             for (i = 0; i < NUM_WEARS; i++)
               if (ch->equipment[i])
                 extract_obj(ch->equipment[i]);
