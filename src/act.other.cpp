@@ -931,6 +931,9 @@ ACMD(do_gen_write)
     send_to_char("That must be a mistake...\r\n", ch);
     return;
   }
+
+  FAILURE_CASE(subcmd == SCMD_TYPO && (str_str(argument, "chernobyl") || str_str(argument, "chornobyl")), "Thanks for the report, but we use the Ukrainian spelling of Chornobyl here.");
+
   snprintf(buf, sizeof(buf), "%s %s: %s", (ch->desc->original ? GET_CHAR_NAME(ch->desc->original) : GET_CHAR_NAME(ch)),
           cmd_name, argument);
   mudlog(buf, ch, LOG_MISCLOG, FALSE);

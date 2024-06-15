@@ -63,7 +63,7 @@ const char *traffic_messages[] = {
   "A crumpled-up plastic bag skitters past, carried by the wind.\r\n",
   "A poised and confident executive strides past, talking on her phone.\r\n",
   "A subdued-looking teen on a scooter whizzes by on his way to class.\r\n",
-  "A billboard nearby flickers with an ad for ^RChernobyl Vodka^n.\r\n", // 40
+  "A billboard nearby flickers with an ad for ^RChornobyl Vodka^n.\r\n", // 40
   "A billboard nearby displays an ad for ^rBrimstone ^RRed^n Ale^n.\r\n",
   "The greasy scent of fast food is carried to you on the breeze.\r\n"
 };
@@ -88,7 +88,7 @@ const char *depressing_traffic_messages[] = {
   "A broken window pane creaks as it sways in the wind.\r\n", // 15
   "Leaves rustle across the cracked pavement, driven by sporadic gusts.\r\n",
   "The faint smell of burnt rubber hangs in the air.\r\n",
-  "A rusty signpost squeaks as it swings.\r\n",
+  "A rusty signpost squeaks in the breeze.\r\n",
   "A muted rumble hints at something collapsing far away.\r\n",
   "A brief, bright flash of light illuminates the horizon.\r\n", // 20
   "A metallic clinking sound echoes, like a loose chain swaying in the breeze.\r\n",
@@ -127,9 +127,12 @@ const char *depressing_traffic_messages[] = {
   "You spot movement as a large rat drags a chunk of carcass out of sight.\r\n",
   "A faint, acidic smell lingers in the air, hinting at something chemical.\r\n", // 55
   "A string of broken fairy lights hangs from a balcony, some bulbs still flickering sporadically.\r\n",
-  "The dull thud of something hitting the water echoes from the lake's edge.\r\n"
+  "The dull thud of something hitting the water echoes from the lake's edge.\r\n",
+  "The sharp crack of high-powered rifle fire echoes from somewhere in the distance.\r\n",
+  "A shrill scream rises up before abruptly being silenced.\r\n",
+  "The sickly-sweet smell of decomposing flesh assaults your nostrils.\r\n", // 60
 };
-#define NUM_DEPRESSING_MESSAGES 57
+#define NUM_DEPRESSING_MESSAGES 60
 
 void regenerate_traffic_msgs() {
   for (int which = 0; which < NUM_TRAFFIC_MESSAGE_TYPES; which++) {
