@@ -88,6 +88,7 @@ extern bool player_is_dead_hardcore(long id);
 extern void load_apartment_complexes();
 extern void parse_factions();
 extern void initialize_policy_tree();
+extern void initialize_traffic_msgs();
 
 extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
@@ -706,6 +707,7 @@ void DBInit()
 
   log("Booting world.");
   boot_world();
+  initialize_traffic_msgs();
 
   log("Loading social messages.");
   boot_social_messages();
@@ -4381,6 +4383,8 @@ struct obj_data *read_object(int nr, int type)
 }
 
 SPECIAL(traffic);
+extern void regenerate_traffic_msgs();
+int traffic_infrequency_tick = -1;
 void spec_update(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
@@ -4388,7 +4392,11 @@ void spec_update(void)
   char empty_argument = '\0';
 
   // Instead of calculating the random number for every traffic room, just calc once.
-  bool will_traffic = (number(0, TRAFFIC_INFREQUENCY_CONTROL) == 0);
+  bool will_traffic = (++traffic_infrequency_tick % TRAFFIC_INFREQUENCY_CONTROL == 0);
+  if (will_traffic) {
+    regenerate_traffic_msgs();
+    traffic_infrequency_tick = 0;
+  }
 
   for (i = 0; i <= top_of_world; i++) {
     if (world[i].func == NULL)

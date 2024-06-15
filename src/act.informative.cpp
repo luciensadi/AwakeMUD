@@ -2194,7 +2194,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
           break;
       }
     } else if (GET_BACKGROUND_COUNT(ch->in_room) < 6) {
-      strncpy(buf, "^cA", sizeof(buf));
+      snprintf(buf, sizeof(buf), "%sA", GET_BACKGROUND_AURA(ch->in_room) == AURA_WRONGNESS ? "^o" : "^c");
       switch (GET_BACKGROUND_COUNT(ch->in_room)) {
         case 1:
           strlcat(buf, " distracting", sizeof(buf));
