@@ -277,7 +277,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define GET_VEH_MAX_AUTONAV_SLOTS(veh)                         (veh->autonav * 10)
 
 // Approximately how often should we see traffic messages? 1:(N+1) spec ticks where N is this number.
-#define TRAFFIC_INFREQUENCY_CONTROL                            6
+#define TRAFFIC_INFREQUENCY_CONTROL                            10
 
 // After how many items will the shopkeep start silently destroying old sales?
 #define MAX_ITEMS_IN_SHOP_INVENTORY                            100

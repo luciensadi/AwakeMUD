@@ -383,7 +383,7 @@ void copyover_recover()
     } else /* ok! */
     {
       long load_room, last_room;
-      write_to_descriptor (desc, "\n\rCopyover recovery complete. Welcome back!\n\r");
+      write_to_descriptor (desc, "\n\rYour character has been successfully restored! Restoring everyone else...\n\r");
       d->connected = CON_PLAYING;
       reset_char(d->character);
       add_ch_to_character_list(d->character, "copyover recovery");
@@ -438,6 +438,7 @@ void copyover_recover()
   // Force all player characters to look now that everyone's properly loaded.
   log("COPYOVERLOG: Forcing look.");
   for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    write_to_descriptor (desc, "\n\rCopyover recovery complete. Welcome back!\n\r");
     if (d->character && !PRF_FLAGGED(d->character, PRF_SCREENREADER))
       look_at_room(d->character, 0, 0);
   }
