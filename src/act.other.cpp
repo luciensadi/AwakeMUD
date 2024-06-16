@@ -5328,8 +5328,7 @@ ACMD(do_save) {
 }
 
 ACMD(do_afk) {
-  char cmd_buf[50];
-  strncpy(cmd_buf, "afk", sizeof(cmd_buf) - 1);
+  char cmd_buf[50] = { 'a', 'f', 'k', 0 };
   do_toggle(ch, cmd_buf, 0, 0);
 }
 

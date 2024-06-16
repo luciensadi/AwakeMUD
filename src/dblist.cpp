@@ -404,8 +404,6 @@ void objList::UpdateCounters(void)
       }
     }
 
-    // TODO: Stopped here on optimizing code. Continue below.
-
     // In-game this is a UCAS dress shirt. I suspect the files haven't been updated.
     /*
     if (GET_OBJ_VNUM(OBJ) == 120 && ++GET_OBJ_TIMER(OBJ) >= 72) {
@@ -416,6 +414,8 @@ void objList::UpdateCounters(void)
     */
 
     // Time out objects that end up on the floor a lot (magazines, cash, etc).
+    // Removed -- magazines aren't discrete objects anymore, and credsticks can't be zeroed like this.
+    /*
     if (OBJ->in_room && !OBJ->in_obj && !OBJ->carried_by && !GET_OBJ_QUEST_CHAR_ID(OBJ) &&
        ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_MAGAZINE && !GET_MAGAZINE_AMMO_COUNT(OBJ)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0)))
         && ++GET_OBJ_TIMER(OBJ) == 3) {
@@ -425,13 +425,15 @@ void objList::UpdateCounters(void)
       extract_obj(OBJ);
       continue;
     }
+    */
 
-    /* anti-twink measure...no decay until there's no eq in it */
-    if ( IS_OBJ_STAT(OBJ, ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(OBJ, 4) && OBJ->contains != NULL )
-      continue;
+    // Corpses either have no vnum or are 43 (belongings).
+    if (GET_OBJ_VNUM(OBJ) < 0 || GET_OBJ_VNUM(OBJ) == 43) {
+      // Don't touch PC belongings that have contents.
+      if (GET_CORPSE_IS_PC(OBJ) && OBJ->contains != NULL)
+        continue;
 
-    // Corpse decay.
-    if (IS_OBJ_STAT(OBJ, ITEM_EXTRA_CORPSE)) {
+      // Corpse decay.
       if (GET_OBJ_TIMER(OBJ) > 1) {
         GET_OBJ_TIMER(OBJ)--;
       } else {

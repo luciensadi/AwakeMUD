@@ -55,6 +55,10 @@ bool check_for_banned_content(const char *raw_msg, struct char_data *speaker) {
     return FALSE;
   }
 
+  // We don't care about messages from non-puppeted NPCs. Presumably, they've been vetted.
+  if (!speaker->desc)
+    return FALSE;
+
   // Strip color codes from content.
   const char *msg = get_string_after_color_code_removal(raw_msg, NULL);
 

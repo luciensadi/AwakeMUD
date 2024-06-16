@@ -706,6 +706,12 @@ ACMD(do_debug) {
     return;
   }
 
+  if (str_str(arg1, "invalidate_cache")) {
+    global_existing_player_cache.clear();
+    send_to_char(ch, "OK, invalidated the global character cache. Characters will be looked up again.");
+    return;
+  }
+
   if (strn_cmp(arg1, "set-perception", strlen(arg1)) == 0) {
     send_to_char(ch, "Alright, setting perception flag on every magical mob that's not a spirit or elemental.\r\n");
     for (rnum_t rnum = 0; rnum <= top_of_mobt; rnum++) {
