@@ -5542,25 +5542,14 @@ void free_host(struct host_data * host)
     host->trigger = NULL;
   }
 
-  { // Clean up associated entrances.
-    for (struct exit_data *exit = host->exit; exit; exit = exit->next) {
-      // Find the exit's matching entrance in the destination host.
-      rnum_t dest_rnum = real_host(exit->host);
-      if (dest_rnum >= 0) {
-        struct entrance_data *entrance = NULL, *temp;
-        for (entrance = matrix[dest_rnum].entrance; entrance; entrance = entrance->next) {
-          if (entrance->host == host)
-            break;
-        }
-        // Remove that entrance.
-        if (entrance) {
-          REMOVE_FROM_LIST(entrance, matrix[dest_rnum].entrance, next);
-          DELETE_AND_NULL(entrance);
-        } else {
-          log("SYSERR: Found no associated entrance in free_host()! ('x' option during hedit?)");
-        }
-      }
+  { // Clean up entrances in this host that lead to other hosts.
+    // Entrances in other hosts that lead to this host are rebuilt by collate_host_entrances().
+    struct entrance_data *entrance = NULL, *next = NULL;
+    for (entrance = host->entrance; entrance; entrance = next) {
+      next = entrance->next;
+      delete entrance;
     }
+    host->entrance = NULL;
   }
 
   { // Clean up the exits.

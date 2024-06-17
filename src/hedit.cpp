@@ -213,12 +213,6 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     case 'N':
       STATE(d) = CON_PLAYING;
       if (d->edit_host) {
-        // Drop our exits, they have no pair to remove so no further cleanup is needed.
-        for (struct entrance_data *entrance = d->edit_host->entrance, *next; entrance; entrance = next) {
-          next = entrance->next;
-          delete entrance;
-        }
-        d->edit_host->entrance = NULL;
         Mem->DeleteHost(d->edit_host);
       }
       d->edit_host = NULL;
@@ -307,8 +301,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
         send_to_char("Writing host to disk.\r\n", d->character);
         write_host_to_disk(d->character->player_specials->saved.zonenum);
         send_to_char("Saved.\r\n", CH);
-        clear_host(d->edit_host);
-        delete d->edit_host;
+        Mem->DeleteHost(d->edit_host);
         d->edit_host = NULL;
         PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
         STATE(d) = CON_PLAYING;
@@ -320,12 +313,6 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Host not saved, aborting.\r\n", d->character);
       STATE(d) = CON_PLAYING;
       if (d->edit_host) {
-        // Drop our exits, they have no pair to remove so no further cleanup is needed.
-        for (struct entrance_data *entrance = d->edit_host->entrance, *next; entrance; entrance = next) {
-          next = entrance->next;
-          delete entrance;
-        }
-        d->edit_host->entrance = NULL;
         Mem->DeleteHost(d->edit_host);
       }
       d->edit_host = NULL;

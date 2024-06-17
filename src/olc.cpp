@@ -2208,6 +2208,9 @@ ACMD(do_hedit)
       }
     }
 
+    // Don't duplicate entrances, since we rebuild them after changes are saved
+    host->entrance = NULL;
+
     d->edit_host = host;
 #ifdef CONFIRM_EXISTING
 
