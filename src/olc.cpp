@@ -2183,21 +2183,27 @@ ACMD(do_hedit)
 
     // Duplicate the exits.
     if (matrix[host_num].exit) {
-      struct exit_data *This, *temp, *temp2;
+      struct exit_data *temp;
 
       temp = new exit_data;
       host->exit = temp;
-      for (This = matrix[host_num].exit; This; This = This->next) {
-        *temp = *This;
-        if (This->addresses)
-          temp->addresses = str_dup(This->addresses);
-        if (This->roomstring)
-          temp->roomstring = str_dup(This->roomstring);
-        if (This->next) {
-          temp2 = new exit_data;
-          temp->next = temp2;
-          temp = temp2;
-        } else
+      for (struct exit_data *exit_ptr = matrix[host_num].exit; exit_ptr; exit_ptr = exit_ptr->next) {
+        // overwrite temp's values with the ones from exit_ptr
+        *temp = *exit_ptr;
+
+        // str_dup any strings
+        if (exit_ptr->addresses)
+          temp->addresses = str_dup(exit_ptr->addresses);
+        if (exit_ptr->roomstring)
+          temp->roomstring = str_dup(exit_ptr->roomstring);
+
+        // if there's supposed to be an exit after this in the chain, create a new one
+        if (exit_ptr->next) {
+          temp->next = new exit_data;
+          temp = temp->next;
+        } 
+        // otherwise, make sure it's marked as null
+        else
           temp->next = NULL;
       }
     }
