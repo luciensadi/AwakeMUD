@@ -262,7 +262,9 @@ typedef struct
    int       ScreenHeight;     /* The client's screen height */
    char     *pMXPVersion;      /* The version of MXP supported */
    char     *pLastTTYPE;       /* Used for the cyclic TTYPE check */
+#ifdef USE_DEBUG_CANARIES
    int       canary;
+#endif
    MSDP_t  **pVariables;       /* The MSDP variables */
 } protocol_t;
 
