@@ -1739,8 +1739,10 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
     log_vfprintf("Have enough space in t->bufspace (%d >= %d). Writing cooked content into t->output, which is starting at ''%s''.", t->bufspace, size, txt, t->output);
     #endif
     strlcpy(t->output + t->bufptr, txt, t->bufspace);
+#ifdef USE_DEBUG_CANARIES
     assert(t->small_outbuf_canary == 31337);
     assert(t->output_canary == 31337);
+#endif
     t->bufspace -= size;
     t->bufptr += size;
     #ifdef PROTO_DEBUG
@@ -1781,7 +1783,9 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
   strlcpy(t->large_outbuf->text, t->output, LARGE_BUFSIZE);     /* copy to big buffer */
   t->output = t->large_outbuf->text;    /* make big buffer primary */
   strlcat(t->output, txt, LARGE_BUFSIZE);       /* now add new text */
+#ifdef USE_DEBUG_CANARIES
   assert(t->small_outbuf_canary == 31337);
+#endif
 
   /* calculate how much space is left in the buffer */
   t->bufspace = LARGE_BUFSIZE - 1 - strlen(t->output);
@@ -1799,12 +1803,14 @@ void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
  ****************************************************************** */
 
 void set_descriptor_canaries(struct descriptor_data *newd) {
+#ifdef USE_DEBUG_CANARIES
   newd->canary = 31337;
   newd->small_outbuf_canary = 31337;
   newd->inbuf_canary = 31337;
   newd->output_canary = 31337;
   newd->last_input_canary = 31337;
   newd->input_and_character_canary = 31337;
+#endif
 }
 
 void init_descriptor (struct descriptor_data *newd, int desc)
@@ -1943,10 +1949,12 @@ int new_descriptor(int s)
   descriptor_list = newd;
 
   // Ensure all the canaries are functional before negotiating the protocol.
+#ifdef USE_DEBUG_CANARIES
   assert(newd->small_outbuf_canary == 31337);
   assert(newd->output_canary == 31337);
   assert(newd->input_and_character_canary == 31337);
   assert(newd->inbuf_canary == 31337);
+#endif
 
   // Once the descriptor has been fully created and added to any lists, it's time to negotiate:
   ProtocolNegotiate(newd);
@@ -2112,7 +2120,9 @@ int process_input(struct descriptor_data *t) {
 
     // Push the data for processing through KaVir's protocol code. Resize bytes_read to account for the stripped control chars.
     ProtocolInput(t, temporary_buffer, bytes_read, t->inbuf, MAX_RAW_INPUT_LENGTH);
+#ifdef USE_DEBUG_CANARIES
     assert(t->inbuf_canary == 31337);
+#endif
 #ifdef DEBUG_PROTOCOL
     log_vfprintf("Parsed '%s' to '%s', changing length from %d to %lu.",
                  temporary_buffer, t->inbuf + buf_length, bytes_read, strlen(t->inbuf + buf_length));
@@ -2130,7 +2140,9 @@ int process_input(struct descriptor_data *t) {
 
     read_point += bytes_read;
     space_left -= bytes_read;
+#ifdef USE_DEBUG_CANARIES
     assert(t->inbuf_canary == 31337);
+#endif
 
     /*
      * on some systems such as AIX, POSIX-standard nonblocking I/O is broken,
@@ -2208,7 +2220,9 @@ int process_input(struct descriptor_data *t) {
       strlcpy(tmp, t->last_input, sizeof(tmp));
     else
       strlcpy(t->last_input, tmp, MAX_INPUT_LENGTH);
+#ifdef USE_DEBUG_CANARIES
     assert(t->last_input_canary == 31337);
+#endif
 
     if (!failed_subst)
       write_to_q(tmp, &t->input, 0);
@@ -2230,7 +2244,9 @@ int process_input(struct descriptor_data *t) {
     *(write_point++) = *(read_point++);
   *write_point = '\0';
 
+#ifdef USE_DEBUG_CANARIES
   assert(t->inbuf_canary == 31337);
+#endif
 
   return 1;
 }
@@ -3705,7 +3721,9 @@ void verify_vehicle_validity(struct veh_data *veh, bool go_deep) {
   if (veh == NULL)
     return;
 
+#ifdef USE_DEBUG_CANARIES
   assert(veh->canary == CANARY_VALUE);
+#endif
 
   if (!go_deep)
     return;
@@ -3749,11 +3767,14 @@ void verify_room_validity(struct room_data *room, bool go_deep) {
   if (room == NULL)
     return;
 
+#ifdef USE_DEBUG_CANARIES
   assert(room->canary == CANARY_VALUE);
+#endif
 
   if (!go_deep)
     return;
 
+#ifdef USE_DEBUG_CANARIES
   for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
     if ((room)->dir_option[dir]) {
       assert((room)->dir_option[dir]->canary == CANARY_VALUE);
@@ -3762,6 +3783,7 @@ void verify_room_validity(struct room_data *room, bool go_deep) {
       assert((room)->temporary_stored_exit[dir]->canary == CANARY_VALUE);
     }
   }
+#endif
 
   for (struct obj_data *obj = room->contents; obj; obj = obj->next_content) {
     verify_obj_validity(obj);
@@ -3787,7 +3809,9 @@ void verify_obj_validity(struct obj_data *obj, bool go_deep) {
   if (obj == NULL)
     return;
 
+#ifdef USE_DEBUG_CANARIES
   assert(obj->canary == CANARY_VALUE);
+#endif
 
   if (!go_deep)
     return;
@@ -3816,7 +3840,9 @@ void verify_character_validity(struct char_data *ch, bool go_deep) {
   if (ch == NULL)
     return;
 
+#ifdef USE_DEBUG_CANARIES
   assert(ch->canary == CANARY_VALUE);
+#endif
 
   if (!go_deep)
     return;
