@@ -10,6 +10,7 @@
 #include "newhouse.hpp"
 #include "houseedit_complex.hpp"
 #include "houseedit_apartment.hpp"
+#include "olc.hpp"
 
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 
@@ -99,7 +100,10 @@ ACMD(do_houseedit) {
 
     // Create a new complex.
     if (is_abbrev(func, "create")) {
-      FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC) && !access_level(ch, LVL_PRESIDENT), YOU_NEED_OLC_FOR_THAT);
+      // Message sent in function.
+      if (!is_olc_available(ch)) {
+        return;
+      }
 
       houseedit_create_complex(ch);
       return;
@@ -107,7 +111,11 @@ ACMD(do_houseedit) {
 
     // Delete an existing empty complex.
     if (is_abbrev(func, "delete")) {
-      FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC) && !access_level(ch, LVL_PRESIDENT), YOU_NEED_OLC_FOR_THAT);
+      // Message sent in function.
+      if (!is_olc_available(ch)) {
+        return;
+      }
+      
       FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
 
       houseedit_delete_complex(ch, func_remainder);
@@ -116,7 +124,10 @@ ACMD(do_houseedit) {
 
     // Edit an existing complex.
     if (is_abbrev(func, "edit")) {
-      FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC) && !access_level(ch, LVL_PRESIDENT), YOU_NEED_OLC_FOR_THAT);
+      // Message sent in function.
+      if (!is_olc_available(ch)) {
+        return;
+      }
 
       houseedit_edit_existing_complex(ch, func_remainder);
       return;
@@ -163,7 +174,10 @@ ACMD(do_houseedit) {
 
     // Create a new apartment in the complex you're standing in, or the named one provided
     if (is_abbrev(func, "create")) {
-      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
+      // Message sent in function.
+      if (!is_olc_available(ch)) {
+        return;
+      }
 
       houseedit_create_apartment(ch, func_remainder);
       return;
@@ -171,7 +185,10 @@ ACMD(do_houseedit) {
 
     // Delete an empty, non-leased apartment you're standing in, or one matching the full name provided.
     if (is_abbrev(func, "delete")) {
-      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
+      // Message sent in function.
+      if (!is_olc_available(ch)) {
+        return;
+      }
       FAILURE_CASE(GET_LEVEL(ch) < LVL_ADMIN, "You're not erudite enough to do that.");
 
       houseedit_delete_apartment(ch, func_remainder);
@@ -180,7 +197,10 @@ ACMD(do_houseedit) {
 
     // Edit the apartment you're standing in, or one matching the full name provided.
     if (is_abbrev(func, "edit")) {
-      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
+      // Message sent in function.
+      if (!is_olc_available(ch)) {
+        return;
+      }
 
       houseedit_edit_apartment(ch, func_remainder);
       return;

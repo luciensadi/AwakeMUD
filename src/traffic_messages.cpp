@@ -120,9 +120,9 @@ const char *depressing_traffic_messages[] = {
   "From a high-up window, you hear the mechanical murmur of an emergency broadcast repeating endlessly.\r\n",
   "The rotten smell of stagnant water blows through on a cold breeze.\r\n",
   "A sudden flurry of ash swirls through the air, settling like snow on the abandoned street.\r\n",
-  "The muffled thump of something heavy falling nearby sends a tremor through the ground.\r\n", // 50
-  "A ragged piece of paper flutters down from above, its edges browned and brittle.\r\n",
-  "A flickering neon sign buzzes weakly, casting erratic shadows across the pavement.\r\n",
+  "The muffled thud of something heavy falling nearby sends a tremor through the ground.\r\n", // 50
+  "A ragged piece of paper flutters past, its edges browned and brittle.\r\n",
+  "A flickering neon sign buzzes weakly, casting erratic blots of color across the pavement.\r\n",
   "A tangled mess of wires dangles from a broken streetlamp, swaying gently.\r\n",
   "You spot movement as a large rat drags a chunk of carcass out of sight.\r\n",
   "A faint, acidic smell lingers in the air, hinting at something chemical.\r\n", // 55

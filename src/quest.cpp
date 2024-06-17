@@ -810,8 +810,15 @@ bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
       switch (quest_table[GET_QUEST(ch)].mob[i].objective)
       {
       case QMO_KILL_ONE:
+        QUEST_DEBUG("_raw_check_quest_kill($n, $N): +1 (only one)");
+        // If we've already completed this objective, continue.
+        if (ch->player_specials->mob_complete[i] >= 1)
+          continue;
+        // Otherwise, mark it as done.
+        ch->player_specials->mob_complete[i]++;
+        return TRUE;
       case QMO_KILL_MANY:
-        QUEST_DEBUG("_raw_check_quest_kill($n, $N): +1");
+        QUEST_DEBUG("_raw_check_quest_kill($n, $N): +1 (many)");
         ch->player_specials->mob_complete[i]++;
         return TRUE;
       case QMO_DONT_KILL:

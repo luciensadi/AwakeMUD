@@ -7788,7 +7788,7 @@ bool ch_can_bypass_edit_lock(struct char_data *ch, struct zone_data *zone) {
   }
 
 #ifdef IS_BUILDPORT
-  return !zone->locked_to_non_editors || can_edit_zone(ch, zone);
+  return access_level(ch, LVL_ADMIN) || (!zone->locked_to_non_editors || can_edit_zone(ch, zone));
 #else
   // Edit locks don't function on the main port.
   return TRUE;

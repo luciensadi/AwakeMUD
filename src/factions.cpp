@@ -82,8 +82,10 @@ ACMD(do_factions) {
   if (IS_SENATOR(ch)) {
     // factions edit <idnum>: Enter OLC for a faction.
     if (str_str(mode, "edit")) {
-      FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC), "You need OLC for that.");
-      FAILURE_CASE(!olc_state && access_level(ch, LVL_PRESIDENT), "OLC is globally disabled.");
+      // Message sent in function.
+      if (!is_olc_available(ch)) {
+        return;
+      }
 
       idnum_t idnum = atol(remainder);
       FAILURE_CASE(idnum <= 0, "Syntax: ^WFACTIONS EDIT <idnum from FACTIONS LIST>^n");
@@ -98,8 +100,10 @@ ACMD(do_factions) {
 
     // factions create: Enter OLC for a new faction.
     if (str_str(mode, "create")) {
-      FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC), "You need OLC for that.");
-      FAILURE_CASE(!olc_state && access_level(ch, LVL_PRESIDENT), "OLC is globally disabled.");
+      // Message sent in function.
+      if (!is_olc_available(ch)) {
+        return;
+      }
 
       // TODO: Remove this condition when we're ready to go.
       FAILURE_CASE(!access_level(ch, LVL_ADMIN), "The faction code isn't quite ready for general builder use. Talk to Vile or Lucien if you need factions in your zone.");
@@ -114,8 +118,10 @@ ACMD(do_factions) {
     // factions delete: Remove a faction. Will have large knock-on effects.
     if (str_str(mode, "delete")) {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "You must be the game owner to do that.");
-      FAILURE_CASE(!PLR_FLAGGED(ch, PLR_OLC), "You need OLC for that.");
-      FAILURE_CASE(!olc_state && access_level(ch, LVL_PRESIDENT), "OLC is globally disabled.");
+      // Message sent in function.
+      if (!is_olc_available(ch)) {
+        return;
+      }
 
       idnum_t idnum = atol(remainder);
       FAILURE_CASE(idnum <= 0, "Syntax: ^WFACTIONS DELETE <idnum from FACTIONS LIST>^n");

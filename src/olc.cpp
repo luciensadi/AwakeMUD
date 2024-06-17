@@ -82,6 +82,12 @@ bool is_olc_available(struct char_data *ch) {
     } else {
       send_to_char("OLC has been disabled. Ask a higher-level staff member to re-enable it with their OLC command.\r\n", ch);
     }
+    return FALSE;
+  }
+
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+    return FALSE;
   }
 
   return olc_state;
@@ -93,7 +99,7 @@ bool can_edit_zone(struct char_data *ch, struct zone_data *zone) {
     return FALSE;
   }
 
-  if (access_level(ch, LVL_ADMIN))
+  if (access_level(ch, LVL_ADMIN) && !zone->locked_to_non_editors)
     return TRUE;
 
   for (int i = 0; i < NUM_ZONE_EDITOR_IDS; i++)
@@ -202,11 +208,6 @@ ACMD (do_redit)
   char arg1[MAX_INPUT_LENGTH];
   struct room_data *room;
   int counter;
-
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
-    return;
-  }
 
   if (!is_olc_available(ch)) {
     return;
@@ -328,8 +329,8 @@ ACMD (do_redit)
 
 ACMD(do_rclone)
 {
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -452,8 +453,8 @@ ACMD(do_dig)
 
   any_one_arg(any_one_arg(argument, arg), buf);
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -619,8 +620,8 @@ ACMD(do_rdelete)
 {
   int num, counter;
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -775,9 +776,8 @@ ACMD(do_rdelete)
 
 ACMD(do_vclone)
 {
-
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -859,11 +859,8 @@ ACMD (do_vedit)
   char arg1[MAX_INPUT_LENGTH];
   struct veh_data *veh;
   int counter;
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
-    return;
-  }
-
+  
+  // Message sent in function.
   if (!is_olc_available(ch)) {
     return;
   }
@@ -971,11 +968,7 @@ ACMD (do_iedit)
   struct obj_data *obj;
   int counter;
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
-    return;
-  }
-
+  // Message sent in function.
   if (!is_olc_available(ch)) {
     return;
   }
@@ -1097,9 +1090,8 @@ ACMD (do_iedit)
 
 ACMD(do_iclone)
 {
-
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -1194,8 +1186,8 @@ ACMD(do_idelete)
   rnum_t rnum;
   int counter;
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -1335,9 +1327,7 @@ ACMD(do_medit)
   struct char_data *mob;
   int counter;
 
-  // they must be flagged with olc to edit
-  FAILURE_CASE(!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC), YOU_NEED_OLC_FOR_THAT);
-
+  // Message sent in function.
   if (!is_olc_available(ch)) {
     return;
   }
@@ -1485,8 +1475,8 @@ ACMD(do_medit)
 ACMD(do_mclone)
 {
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -1587,8 +1577,8 @@ ACMD(do_mdelete)
 
   one_argument(argument, buf);
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -1711,11 +1701,7 @@ ACMD(do_qedit)
   struct descriptor_data *d;
   struct quest_data *qst;
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
-    return;
-  }
-
+  // Message sent in function.
   if (!is_olc_available(ch)) {
     return;
   }
@@ -1839,11 +1825,7 @@ ACMD(do_shedit)
   struct shop_data *shop = NULL;
   struct descriptor_data *d;
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
-    return;
-  }
-
+  // Message sent in function.
   if (!is_olc_available(ch)) {
     return;
   }
@@ -1959,12 +1941,7 @@ ACMD(do_zswitch)
 {
   char arg1[MAX_INPUT_LENGTH];
 
-  // they must be flagged with olc to zswitch
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
-    return;
-  }
-
+  // Message sent in function.
   if (!is_olc_available(ch)) {
     return;
   }
@@ -2008,12 +1985,7 @@ ACMD(do_zedit)
 
   d = ch->desc;
 
-  // they must be flagged with olc to edit
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
-    return;
-  }
-
+  // Message sent in function.
   if (!is_olc_available(ch)) {
     return;
   }
@@ -2141,11 +2113,8 @@ ACMD(do_hedit)
   struct host_data *host;
   int counter;
   long host_num, number;
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
-    return;
-  }
-
+  
+  // Message sent in function.
   if (!is_olc_available(ch)) {
     return;
   }
@@ -2271,11 +2240,8 @@ ACMD(do_icedit)
   struct matrix_icon *icon;
   int counter;
   long ic_num, number;
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
-    return;
-  }
-
+  
+  // Message sent in function.
   if (!is_olc_available(ch)) {
     return;
   }

@@ -55,6 +55,7 @@
 #include "bullet_pants.hpp"
 #include "moderation.hpp"
 #include "vehicles.hpp"
+#include "olc.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -2417,8 +2418,8 @@ ACMD(do_iload)
 
   one_argument(argument, buf2);
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -6304,7 +6305,6 @@ ACMD(do_logwatch)
   return;
 }
 
-#define ZCMD zone_table[zonenum].cmd[nr]
 #define MOB(rnum) MOB_VNUM_RNUM(rnum)
 #define OBJ(rnum) OBJ_VNUM_RNUM(rnum)
 #define ROOM(rnum) world[rnum].number
@@ -6312,51 +6312,51 @@ ACMD(do_logwatch)
 #define HOST(rnum) matrix[rnum].vnum
 ACMD(do_zlist)
 {
-  int first, last, nr, zonenum = 0;
+  int first, last, cmd_no, zone = 0;
   char buf[MAX_STRING_LENGTH*10];
   two_arguments(argument, buf, buf1);
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
   if (!*buf && !*buf1) {
-    zonenum = real_zone(ch->player_specials->saved.zonenum);
-    FAILURE_CASE(zonenum < 0, "You need to ZSWITCH to a valid zone first.");
+    zone = real_zone(ch->player_specials->saved.zonenum);
+    FAILURE_CASE(zone < 0, "You need to ZSWITCH to a valid zone first.");
     first = 0;
-    last = zone_table[zonenum].num_cmds;
+    last = zone_table[zone].num_cmds;
   } else if (*buf && !*buf1) {     // if there is not a second argument, then the
-    zonenum = real_zone(atoi(buf));  // is considered the zone number
-    FAILURE_CASE(zonenum < 0, "You need to ZSWITCH to a valid zone first.");
+    zone = real_zone(atoi(buf));  // is considered the zone number
+    FAILURE_CASE(zone < 0, "You need to ZSWITCH to a valid zone first.");
     first = 0;
-    last = zone_table[zonenum].num_cmds;
+    last = zone_table[zone].num_cmds;
   } else {
-    zonenum = real_zone(ch->player_specials->saved.zonenum);
-    FAILURE_CASE(zonenum < 0, "You need to ZSWITCH to a valid zone first.");
-    first = MAX(0, MIN(atoi(buf), zone_table[zonenum].num_cmds));
-    last = MIN(atoi(buf1), zone_table[zonenum].num_cmds);
+    zone = real_zone(ch->player_specials->saved.zonenum);
+    FAILURE_CASE(zone < 0, "You need to ZSWITCH to a valid zone first.");
+    first = MAX(0, MIN(atoi(buf), zone_table[zone].num_cmds));
+    last = MIN(atoi(buf1), zone_table[zone].num_cmds);
   }
 
   // return if it us a non-existent zone
-  if (zonenum < 0) {
+  if (zone < 0) {
     send_to_char("Zone: Non existent.\r\n", ch);
     return;
   }
 
-  FAILURE_CASE(zone_table[zonenum].locked_to_non_editors && !can_edit_zone(ch, zonenum), "Sorry, that zone is locked to non-editors.");
+  FAILURE_CASE(zone_table[zone].locked_to_non_editors && !can_edit_zone(ch, zone), "Sorry, that zone is locked to non-editors.");
 
   snprintf(buf, sizeof(buf), "Zone: %d (%d); Cmds: %d\r\n",
-          zone_table[zonenum].number, zonenum,
-          zone_table[zonenum].num_cmds);
+          zone_table[zone].number, zone,
+          zone_table[zone].num_cmds);
 
   int last_mob = 0, last_veh = 0;
 
-  for (nr = first; nr < last; nr++) {
+  for (cmd_no = first; cmd_no < last; cmd_no++) {
     if (ZCMD.if_flag)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%3d) (if last)", nr);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%3d) (if last)", cmd_no);
     else
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%3d) (always) ", nr);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%3d) (always) ", cmd_no);
 
     switch (ZCMD.command) {
     default:
@@ -6455,8 +6455,8 @@ ACMD(do_zlist)
 
 ACMD(do_mlist)
 {
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -6509,8 +6509,8 @@ ACMD(do_mlist)
 
 ACMD(do_ilist)
 {
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -6566,8 +6566,8 @@ ACMD(do_ilist)
 
 ACMD(do_vlist)
 {
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -6615,8 +6615,8 @@ ACMD(do_vlist)
 
 ACMD(do_qlist)
 {
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -6676,8 +6676,8 @@ bool debug_bounds_check_rlist(int nr, int last) {
 
 ACMD(do_rlist)
 {
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -6730,8 +6730,8 @@ ACMD(do_rlist)
 
 ACMD(do_hlist)
 {
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -6785,8 +6785,8 @@ ACMD(do_hlist)
 
 ACMD(do_iclist)
 {
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -6839,8 +6839,8 @@ ACMD(do_iclist)
 
 ACMD(do_slist)
 {
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -7264,8 +7264,8 @@ ACMD(do_setfind)
 
   one_argument(argument, buf2);
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -7312,8 +7312,8 @@ ACMD(do_shopfind)
 
   one_argument(argument, buf2);
 
-  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
+  // Message sent in function.
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -9145,6 +9145,210 @@ if (!strcmp(arg1, compare_string)) {                           \
   return;                                                      \
 }
 
+void spider_connected_hosts_for_reward_func(struct host_data *host,
+                                            std::unordered_map<vnum_t, struct host_data *> connected_hosts,
+                                            std::unordered_map<vnum_t, struct matrix_icon *> connected_ics) {
+  try {
+    // No-op: Already there.
+    if (connected_hosts[host->vnum]) {
+      return;
+    }
+  } catch (std::out_of_range) {
+    // Add it to the map.
+    connected_hosts[host->vnum] = host;
+  }
+
+  struct zone_data *host_zone = get_zone_from_vnum(host->vnum);
+
+  // Spider all outgoing exits, unless in a different zone than this host.
+  {
+    if (host->parent) {
+      rnum_t targ_host_rnum = real_host(host->parent);
+      if (targ_host_rnum >= 0 && get_zone_from_vnum(host->parent) == host_zone)
+        spider_connected_hosts_for_reward_func(&matrix[targ_host_rnum], connected_hosts, connected_ics);
+    }
+
+    for (int sub = ACIFS_ACCESS; sub < NUM_ACIFS; sub++) {
+      if (host->stats[sub][MTX_STAT_TRAPDOOR]) {
+        rnum_t targ_host_rnum = real_host(host->stats[sub][MTX_STAT_TRAPDOOR]);
+        if (targ_host_rnum >= 0 && get_zone_from_vnum(host->stats[sub][MTX_STAT_TRAPDOOR]) == host_zone)
+          spider_connected_hosts_for_reward_func(&matrix[targ_host_rnum], connected_hosts, connected_ics);
+      }
+    }
+
+    for (struct exit_data *exit = host->exit; exit; exit = exit->next) {
+      rnum_t targ_host_rnum = real_host(exit->host);
+        if (targ_host_rnum >= 0 && get_zone_from_vnum(exit->host) == host_zone)
+          spider_connected_hosts_for_reward_func(&matrix[targ_host_rnum], connected_hosts, connected_ics);
+    }
+  }
+
+  // todo: spider all ICs in the trigger list and add those to the seen list
+}
+
+void spider_connected_rooms_for_reward_func(struct room_data *room,
+                                            std::unordered_map<vnum_t, struct room_data *> connected_rooms,
+                                            std::unordered_map<vnum_t, struct host_data *> connected_hosts,
+                                            std::unordered_map<vnum_t, struct matrix_icon *> connected_ics) {
+  try {
+    // No-op: Already there.
+    if (connected_rooms[GET_ROOM_VNUM(room)]) {
+      return;
+    }
+  } catch (std::out_of_range) {}
+  
+  // Add it to the map.
+  connected_rooms[GET_ROOM_VNUM(room)] = room;
+  
+  // TODO: reward 'optional' content like exdescs and night descs
+
+  // TODO: Scale reward based on room desc length
+  
+  if (room->matrix > 0) {
+    // It has a jacked host vnum listed. Make sure it's valid, then spider it and add all those hosts as connected to the world.
+    rnum_t host_rnum = real_host(room->matrix);
+
+    if (host_rnum >= 0) {
+      spider_connected_hosts_for_reward_func(&matrix[host_rnum], connected_hosts, connected_ics);
+    }
+  }
+  
+  // Ensure all surrounding same-zone rooms are added to the list.
+  for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+    struct zone_data *seen_zone;
+    if (EXIT2(room, dir)
+        && EXIT2(room, dir)->to_room
+        && get_zone_from_vnum(GET_ROOM_VNUM(EXIT2(room, dir)->to_room)) != get_zone_from_vnum(GET_ROOM_VNUM(room)))
+    {
+      spider_connected_rooms_for_reward_func(EXIT2(room, dir)->to_room, connected_rooms, connected_hosts, connected_ics);
+    }
+  }
+}
+
+void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
+  std::unordered_map<vnum_t, struct room_data *> connected_rooms = {};
+  std::unordered_map<vnum_t, bool> connected_mobs = {};
+  std::unordered_map<vnum_t, bool> connected_objs = {};
+  std::unordered_map<vnum_t, struct host_data *> connected_hosts = {};
+  std::unordered_map<vnum_t, bool> connected_vehs = {};
+  std::unordered_map<vnum_t, struct matrix_icon *> connected_ics = {};
+
+  // Look for rooms that connect to a separate, connected zone.
+  for (vnum_t vnum = zone_table[zone_rnum].number * 100; vnum <= zone_table[zone_rnum].top; vnum++) {
+    rnum_t temp_rnum;
+
+    if ((temp_rnum = real_room(vnum)) > 0) {
+      struct room_data *room = &world[temp_rnum];
+
+      // We want to see at least one link to another zone in here.
+      for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+        struct zone_data *seen_zone;
+        if (EXIT2(room, dir)
+            && EXIT2(room, dir)->to_room
+            && (seen_zone = get_zone_from_vnum(GET_ROOM_VNUM(EXIT2(room, dir)->to_room)))
+            && seen_zone != &zone_table[zone_rnum]
+            && seen_zone->connected)
+        {
+          // We know this room is connected. Add all its exits etc to our map.
+          spider_connected_rooms_for_reward_func(room, connected_rooms, connected_hosts, connected_ics);
+          break;
+        }
+      }     
+    }
+  }
+
+  // TODO: Count quest-related things.
+  for (vnum_t vnum = zone_table[zone_rnum].number * 100; vnum <= zone_table[zone_rnum].top; vnum++) {
+    rnum_t temp_rnum;
+
+    if ((temp_rnum = real_quest(vnum)) > 0) {
+      if (quest_table[temp_rnum].johnson > 0 && real_mobile(quest_table[temp_rnum].johnson) > 0) {
+        // todo: count quest objective mobs (only if spawning in connected room)
+        // todo: count quest reward obj (only if spawning in connected room)
+        // todo: count quest objective obj (only if spawning in connected room)
+      }
+    }
+  }
+
+  // Iterate zcmds using our connected_x maps from above.
+  #define ZONECMD zone_table[zone_rnum].cmd[cmd_idx]
+  for (int cmd_idx = 0; cmd_idx < zone_table[zone_rnum].num_cmds; cmd_idx++) {
+    switch (ZONECMD.command) {
+      case 'M':
+        // If room (rnum arg3) is connected, reward
+        try {
+          if (connected_rooms[world[ZONECMD.arg3].number]) {
+            connected_mobs[ZONECMD.arg2] = TRUE;
+          }
+        } catch (std::out_of_range) {}
+        break;
+      case 'O':
+        // If room (rnum arg3) is connected, reward
+        try {
+          if (connected_rooms[world[ZONECMD.arg3].number]) {
+            connected_objs[ZONECMD.arg2] = TRUE;
+          }
+        } catch (std::out_of_range) {}
+        break;
+      case 'H':
+        // If host (rnum arg3) is connected, reward
+        try {
+          if (connected_hosts[matrix[ZONECMD.arg3].vnum]) {
+            connected_objs[ZONECMD.arg2] = TRUE;
+          }
+        } catch (std::out_of_range) {}
+        break;
+      case 'V':
+        // If room (rnum arg3) is connected, reward
+        try {
+          if (connected_rooms[world[ZONECMD.arg3].number])
+            connected_vehs[ZONECMD.arg2] = TRUE;
+        } catch (std::out_of_range) {}
+        break;
+      case 'S':
+        // We assume the veh is connected. If someone games the system with these, they'll just get banned.
+        connected_mobs[ZONECMD.arg2] = TRUE;
+        break;
+      case 'U':
+      case 'I':
+      case 'P':
+        // We assume the veh/obj is connected. If someone games the system with these, they'll just get banned.
+        connected_objs[ZONECMD.arg2] = TRUE;
+        break;
+      case 'R': // no good way to track (don't reward)
+      case 'G': // item to inventory (obsolete, don't reward)
+      case 'E': // item to equipment (obsolete, don't reward)
+      case 'C': // item to cyberware (obsolete, don't reward)
+      case 'N': // item with qty to mob (obsolete, don't reward)
+      case 'D': // close door (don't reward)
+        break;
+    }
+  }
+  #undef ZONECMD
+
+  // Post-condition checks, which require that associated vnums are already anchored to the grid somehow.
+  for (vnum_t vnum = zone_table[zone_rnum].number * 100; vnum <= zone_table[zone_rnum].top; vnum++) {
+    rnum_t temp_rnum;
+    if ((temp_rnum = real_shop(vnum)) > 0) {
+      if (shop_table[temp_rnum].keeper > 0 && real_mobile(shop_table[temp_rnum].keeper) > 0) {
+        // require that the keeper is on grid
+        try {
+          if (connected_mobs[shop_table[temp_rnum].keeper]) { /* no-op, just looking for membership */ }
+        } catch (std::out_of_range) {
+          continue;
+        }
+
+        // todo: count for-sale items
+      }
+    }
+  }
+
+  // todo: for each connected mob, count 'ware/equipment
+  // todo: for each connected mob, scale reward based on description length
+
+  // todo: for each connected obj, count attachments etc
+}
+
 ACMD(do_audit) {
   char arg1[MAX_INPUT_LENGTH];
   rnum_t zonenum;
@@ -9178,6 +9382,10 @@ ACMD(do_audit) {
 
     send_to_char(ch, "\r\nDone. Found a total of %d potential issue%s. Note that something being in this list does not disqualify the zone from approval-- it just requires extra scrutiny. Conversely, something not being flagged here doesn't mean it's kosher, it just means we didn't write a coded check for it yet.\r\n",
                  issues, issues != 1 ? "s" : "");
+
+    if (access_level(ch, LVL_PRESIDENT)) {
+      calculate_zone_payout(ch, zonenum);
+    }
     return;
   }
 

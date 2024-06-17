@@ -9,6 +9,10 @@
 
 // extern functions
 extern void write_index_file(const char *suffix);
+extern bool can_edit_zone(struct char_data *ch, struct zone_data *zone);
+
+// Message sent in function.
+extern bool is_olc_available(struct char_data *ch);
 
 #define CH              d->character
 #ifdef NO_CLS
