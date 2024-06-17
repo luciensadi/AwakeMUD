@@ -312,8 +312,15 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Host not saved, aborting.\r\n", d->character);
       STATE(d) = CON_PLAYING;
       PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
-      if (d->edit_host)
+      if (d->edit_host) {
+        // Drop our exits, they have no pair to remove so no further cleanup is needed.
+        for (struct entrance_data *entrance = d->edit_host->entrance, *next; entrance; entrance = next) {
+          next = entrance->next;
+          delete entrance;
+        }
+        d->edit_host->entrance = NULL;
         Mem->DeleteHost(d->edit_host);
+      }
       d->edit_host = NULL;
       d->edit_number = 0;
       break;

@@ -5548,14 +5548,18 @@ void free_host(struct host_data * host)
       // Find the exit's matching entrance in the destination host.
       dest_rnum = real_host(exit->host);
       if (dest_rnum >= 0) {
-        struct entrance_data *entrance, *temp;
+        struct entrance_data *entrance = NULL, *temp;
         for (entrance = matrix[dest_rnum].entrance; entrance; entrance = entrance->next) {
           if (entrance->host == host)
             break;
         }
         // Remove that entrance.
-        REMOVE_FROM_LIST(entrance, matrix[dest_rnum].entrance, next);
-        DELETE_AND_NULL(entrance);
+        if (entrance) {
+          REMOVE_FROM_LIST(entrance, matrix[dest_rnum].entrance, next);
+          DELETE_AND_NULL(entrance);
+        } else {
+          log_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Found no associated entrance in free_host()! ('x' option during hedit?)");
+        }
       }
     }
   }
