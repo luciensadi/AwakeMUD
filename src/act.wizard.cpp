@@ -9145,18 +9145,25 @@ if (!strcmp(arg1, compare_string)) {                           \
   return;                                                      \
 }
 
-void spider_connected_hosts_for_reward_func(struct host_data *host,
-                                            std::unordered_map<vnum_t, struct host_data *> connected_hosts,
-                                            std::unordered_map<vnum_t, struct matrix_icon *> connected_ics) {
+float spider_connected_hosts_for_reward_func(struct host_data *host,
+                                             std::unordered_map<vnum_t, struct host_data *> connected_hosts,
+                                             std::unordered_map<vnum_t, struct matrix_icon *> connected_ics) {
+  if (!host) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Null host to spider func");
+    return 0;
+  }
+  
   try {
     // No-op: Already there.
     if (connected_hosts[host->vnum]) {
-      return;
+      return 0;
     }
   } catch (std::out_of_range) {
     // Add it to the map.
     connected_hosts[host->vnum] = host;
   }
+
+  float return_value = 1;
 
   struct zone_data *host_zone = get_zone_from_vnum(host->vnum);
 
@@ -9165,73 +9172,99 @@ void spider_connected_hosts_for_reward_func(struct host_data *host,
     if (host->parent) {
       rnum_t targ_host_rnum = real_host(host->parent);
       if (targ_host_rnum >= 0 && get_zone_from_vnum(host->parent) == host_zone)
-        spider_connected_hosts_for_reward_func(&matrix[targ_host_rnum], connected_hosts, connected_ics);
+        return_value += spider_connected_hosts_for_reward_func(&matrix[targ_host_rnum], connected_hosts, connected_ics);
     }
 
     for (int sub = ACIFS_ACCESS; sub < NUM_ACIFS; sub++) {
       if (host->stats[sub][MTX_STAT_TRAPDOOR]) {
         rnum_t targ_host_rnum = real_host(host->stats[sub][MTX_STAT_TRAPDOOR]);
         if (targ_host_rnum >= 0 && get_zone_from_vnum(host->stats[sub][MTX_STAT_TRAPDOOR]) == host_zone)
-          spider_connected_hosts_for_reward_func(&matrix[targ_host_rnum], connected_hosts, connected_ics);
+          return_value += spider_connected_hosts_for_reward_func(&matrix[targ_host_rnum], connected_hosts, connected_ics);
       }
     }
 
     for (struct exit_data *exit = host->exit; exit; exit = exit->next) {
       rnum_t targ_host_rnum = real_host(exit->host);
-        if (targ_host_rnum >= 0 && get_zone_from_vnum(exit->host) == host_zone)
-          spider_connected_hosts_for_reward_func(&matrix[targ_host_rnum], connected_hosts, connected_ics);
+      if (targ_host_rnum >= 0 && get_zone_from_vnum(exit->host) == host_zone)
+        return_value += spider_connected_hosts_for_reward_func(&matrix[targ_host_rnum], connected_hosts, connected_ics);
     }
   }
 
   // todo: spider all ICs in the trigger list and add those to the seen list
+
+  return return_value;
 }
 
-void spider_connected_rooms_for_reward_func(struct room_data *room,
-                                            std::unordered_map<vnum_t, struct room_data *> connected_rooms,
-                                            std::unordered_map<vnum_t, struct host_data *> connected_hosts,
-                                            std::unordered_map<vnum_t, struct matrix_icon *> connected_ics) {
+float spider_connected_rooms_for_reward_func(struct room_data *room,
+                                             std::unordered_map<vnum_t, struct room_data *> connected_rooms,
+                                             std::unordered_map<vnum_t, struct host_data *> connected_hosts,
+                                             std::unordered_map<vnum_t, struct matrix_icon *> connected_ics)
+{
+  if (!room) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Null room to spider func");
+    return 0;
+  }
+  
   try {
     // No-op: Already there.
     if (connected_rooms[GET_ROOM_VNUM(room)]) {
-      return;
+      return 0;
     }
   } catch (std::out_of_range) {}
+
+  float return_value = 1;
   
   // Add it to the map.
   connected_rooms[GET_ROOM_VNUM(room)] = room;
-  
-  // TODO: reward 'optional' content like exdescs and night descs
 
-  // TODO: Scale reward based on room desc length
+  // Reward room desc.
+  if (room->description && *room->description) {
+    return_value += MIN(0.5, (float) strlen(room->description) * 0.0025);
+  }
+  
+  // Reward night desc.
+  if (room->night_desc && *room->night_desc) {
+    return_value += MIN(0.5, (float) strlen(room->night_desc) * 0.0025);
+  }
+
+  // Reward exdescs.
+  int num_exdescs = 0;
+  for (struct extra_descr_data *exdesc = room->ex_description; exdesc; exdesc = exdesc->next) {
+    num_exdescs++;
+  }
+  return_value += MIN(0.5, (float) num_exdescs * 0.1);
   
   if (room->matrix > 0) {
     // It has a jacked host vnum listed. Make sure it's valid, then spider it and add all those hosts as connected to the world.
     rnum_t host_rnum = real_host(room->matrix);
 
     if (host_rnum >= 0) {
-      spider_connected_hosts_for_reward_func(&matrix[host_rnum], connected_hosts, connected_ics);
+      return_value += spider_connected_hosts_for_reward_func(&matrix[host_rnum], connected_hosts, connected_ics);
     }
   }
   
   // Ensure all surrounding same-zone rooms are added to the list.
   for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
-    struct zone_data *seen_zone;
     if (EXIT2(room, dir)
         && EXIT2(room, dir)->to_room
-        && get_zone_from_vnum(GET_ROOM_VNUM(EXIT2(room, dir)->to_room)) != get_zone_from_vnum(GET_ROOM_VNUM(room)))
+        && get_zone_from_vnum(GET_ROOM_VNUM(EXIT2(room, dir)->to_room)) == get_zone_from_vnum(GET_ROOM_VNUM(room)))
     {
-      spider_connected_rooms_for_reward_func(EXIT2(room, dir)->to_room, connected_rooms, connected_hosts, connected_ics);
+      return_value += spider_connected_rooms_for_reward_func(EXIT2(room, dir)->to_room, connected_rooms, connected_hosts, connected_ics);
     }
   }
+  
+  return return_value;
 }
 
 void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
   std::unordered_map<vnum_t, struct room_data *> connected_rooms = {};
-  std::unordered_map<vnum_t, bool> connected_mobs = {};
-  std::unordered_map<vnum_t, bool> connected_objs = {};
+  std::unordered_map<vnum_t, struct char_data *> connected_mobs = {};
+  std::unordered_map<vnum_t, struct obj_data *> connected_objs = {};
   std::unordered_map<vnum_t, struct host_data *> connected_hosts = {};
-  std::unordered_map<vnum_t, bool> connected_vehs = {};
+  std::unordered_map<vnum_t, struct veh_data *> connected_vehs = {};
   std::unordered_map<vnum_t, struct matrix_icon *> connected_ics = {};
+
+  float reward_value = 1;
 
   // Look for rooms that connect to a separate, connected zone.
   for (vnum_t vnum = zone_table[zone_rnum].number * 100; vnum <= zone_table[zone_rnum].top; vnum++) {
@@ -9250,7 +9283,7 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
             && seen_zone->connected)
         {
           // We know this room is connected. Add all its exits etc to our map.
-          spider_connected_rooms_for_reward_func(room, connected_rooms, connected_hosts, connected_ics);
+          reward_value += spider_connected_rooms_for_reward_func(room, connected_rooms, connected_hosts, connected_ics);
           break;
         }
       }     
@@ -9278,7 +9311,7 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
         // If room (rnum arg3) is connected, reward
         try {
           if (connected_rooms[world[ZONECMD.arg3].number]) {
-            connected_mobs[ZONECMD.arg2] = TRUE;
+            connected_mobs[ZONECMD.arg2] = &mob_proto[ZONECMD.arg1];
           }
         } catch (std::out_of_range) {}
         break;
@@ -9286,7 +9319,7 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
         // If room (rnum arg3) is connected, reward
         try {
           if (connected_rooms[world[ZONECMD.arg3].number]) {
-            connected_objs[ZONECMD.arg2] = TRUE;
+            connected_objs[ZONECMD.arg2] = &obj_proto[ZONECMD.arg1];
           }
         } catch (std::out_of_range) {}
         break;
@@ -9294,7 +9327,7 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
         // If host (rnum arg3) is connected, reward
         try {
           if (connected_hosts[matrix[ZONECMD.arg3].vnum]) {
-            connected_objs[ZONECMD.arg2] = TRUE;
+            connected_objs[ZONECMD.arg2] = &obj_proto[ZONECMD.arg1];
           }
         } catch (std::out_of_range) {}
         break;
@@ -9302,18 +9335,18 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
         // If room (rnum arg3) is connected, reward
         try {
           if (connected_rooms[world[ZONECMD.arg3].number])
-            connected_vehs[ZONECMD.arg2] = TRUE;
+            connected_vehs[ZONECMD.arg2] = &veh_proto[ZONECMD.arg1];
         } catch (std::out_of_range) {}
         break;
       case 'S':
         // We assume the veh is connected. If someone games the system with these, they'll just get banned.
-        connected_mobs[ZONECMD.arg2] = TRUE;
+        connected_mobs[ZONECMD.arg2] = &mob_proto[ZONECMD.arg1];
         break;
       case 'U':
       case 'I':
       case 'P':
         // We assume the veh/obj is connected. If someone games the system with these, they'll just get banned.
-        connected_objs[ZONECMD.arg2] = TRUE;
+        connected_objs[ZONECMD.arg2] = &obj_proto[ZONECMD.arg1];
         break;
       case 'R': // no good way to track (don't reward)
       case 'G': // item to inventory (obsolete, don't reward)
@@ -9347,6 +9380,10 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
   // todo: for each connected mob, scale reward based on description length
 
   // todo: for each connected obj, count attachments etc
+
+  // todo: iterate all the connected things and add them to the reward_value var
+
+  send_to_char(ch, "Calculated payout with current formula: %.2f syspoints.\r\n", reward_value);
 }
 
 ACMD(do_audit) {
@@ -9384,7 +9421,7 @@ ACMD(do_audit) {
                  issues, issues != 1 ? "s" : "");
 
     if (access_level(ch, LVL_PRESIDENT)) {
-      calculate_zone_payout(ch, zonenum);
+      // calculate_zone_payout(ch, zonenum);
     }
     return;
   }

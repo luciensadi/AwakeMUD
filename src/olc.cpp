@@ -99,7 +99,7 @@ bool can_edit_zone(struct char_data *ch, struct zone_data *zone) {
     return FALSE;
   }
 
-  if (access_level(ch, LVL_ADMIN) && !zone->locked_to_non_editors)
+  if (access_level(ch, LVL_ADMIN))
     return TRUE;
 
   for (int i = 0; i < NUM_ZONE_EDITOR_IDS; i++)
