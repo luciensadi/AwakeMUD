@@ -2164,6 +2164,8 @@ ACMD(do_hedit)
       host->shutdown_start = str_dup(matrix[host_num].shutdown_start);
     if (matrix[host_num].shutdown_stop)
       host->shutdown_stop = str_dup(matrix[host_num].shutdown_stop);
+    
+    // Duplicate trigger steps.
     if (matrix[host_num].trigger) {
       struct trigger_step *This, *temp, *temp2;
 
@@ -2181,21 +2183,38 @@ ACMD(do_hedit)
       }
     }
 
+    // Duplicate the entrances.
+    if (matrix[host_num].entrance) {
+      host->entrance = new entrance_data;
+      struct entrance_data *temp = host->entrance;
+      for (struct entrance_data *ent_ptr = matrix[host_num].entrance; ent_ptr; ent_ptr = ent_ptr->next) {
+        // overwrite temp's values with the ones from ent_ptr
+        *temp = *ent_ptr;
+
+        // if there's supposed to be an entrance after this in the chain, create a new one
+        if (ent_ptr->next) {
+          temp->next = new entrance_data;
+          temp = temp->next;
+        }
+        // otherwise, make sure it's marked as null
+        else {
+          temp->next = NULL;
+          break;
+        }
+      }
+    }
+
     // Duplicate the exits.
     if (matrix[host_num].exit) {
-      struct exit_data *temp;
-
-      temp = new exit_data;
-      host->exit = temp;
+      host->exit = new exit_data;
+      struct exit_data *temp = host->exit;
       for (struct exit_data *exit_ptr = matrix[host_num].exit; exit_ptr; exit_ptr = exit_ptr->next) {
         // overwrite temp's values with the ones from exit_ptr
         *temp = *exit_ptr;
 
         // str_dup any strings
-        if (exit_ptr->addresses)
-          temp->addresses = str_dup(exit_ptr->addresses);
-        if (exit_ptr->roomstring)
-          temp->roomstring = str_dup(exit_ptr->roomstring);
+        temp->addresses = (exit_ptr->addresses ? str_dup(exit_ptr->addresses) : NULL);
+        temp->roomstring = (exit_ptr->roomstring ? str_dup(exit_ptr->roomstring) : NULL);
 
         // if there's supposed to be an exit after this in the chain, create a new one
         if (exit_ptr->next) {
@@ -2203,8 +2222,10 @@ ACMD(do_hedit)
           temp = temp->next;
         } 
         // otherwise, make sure it's marked as null
-        else
+        else {
           temp->next = NULL;
+          break;
+        }
       }
     }
 
