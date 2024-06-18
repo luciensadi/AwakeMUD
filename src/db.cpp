@@ -5557,7 +5557,8 @@ void free_host(struct host_data * host)
           REMOVE_FROM_LIST(entrance, matrix[dest_rnum].entrance, next);
           DELETE_AND_NULL(entrance);
         } else {
-          log("SYSERR: Found no associated entrance in free_host()! ('x' option during hedit?)");
+          // Not an error condition. We exited hedit and are just cleaning up dangling entrances.
+          // log("SYSERR: Found no associated entrance in free_host()! ('x' option during hedit?)");
         }
       }
     }
