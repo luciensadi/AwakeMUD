@@ -354,7 +354,8 @@ enum {
 #define PLR_DOCWAGON_READY                   51 /* Flags if a player has rolled successfully for DocWagon. */
 #define PLR_IS_TEMPORARILY_LOADED            52
 #define PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL 53
-#define PLR_MAX                              54
+#define PLR_OLD_MAN_YELLS_AT_CLOUDS          54
+#define PLR_MAX                              55
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 

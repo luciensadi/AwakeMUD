@@ -251,8 +251,14 @@ void redit_disp_flag_menu(struct descriptor_data * d)
   int             counter = 1;
 
   CLS(CH);
-  for (auto itr : room_flag_map) {
-    send_to_char(CH, "%2d) ^c%-17s^n (%s)\r\n", counter++, itr.first.c_str(), room_flag_explanations[itr.second]);
+  if (!PLR_FLAGGED(CH, PLR_OLD_MAN_YELLS_AT_CLOUDS)) {
+    for (auto itr : room_flag_map) {
+      send_to_char(CH, "%2d) ^c%-17s^n (%s)\r\n", counter++, itr.first.c_str(), room_flag_explanations[itr.second]);
+    }
+  } else {
+    for (int idx = 0; idx < ROOM_MAX; idx++) {
+      send_to_char(CH, "%2d) ^c%-17s^n (%s)\r\n", idx + 1, room_bits[idx], room_flag_explanations[idx]);
+    }
   }
 
   ROOM->room_flags.PrintBits(buf1, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
@@ -962,7 +968,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     break;
   case REDIT_FLAGS:
     number = 0;
-    {
+    if (!PLR_FLAGGED(CH, PLR_OLD_MAN_YELLS_AT_CLOUDS)) {
       int counter = 1;
       int entry = atoi(arg);
       for (auto itr : room_flag_map) {
@@ -971,6 +977,8 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           break;
         }
       }
+    } else {
+      number = atoi(arg);
     }
     if ((number < 0) || (number > ROOM_MAX)) {
       send_to_char("That's not a valid choice!\r\n", d->character);

@@ -910,6 +910,18 @@ ACMD(do_new_echo) {
       send_echo_to_char(ch, viewer, (const char *) emote_buf, must_echo_with_name, subcmd, FALSE);
     }
   }
+
+#ifndef IS_BUILDPORT
+  if (IS_SENATOR(ch) && str_str(emote_buf, "yells at a cloud")) {
+    if (PLR_FLAGGED(ch, PLR_OLD_MAN_YELLS_AT_CLOUDS)) {
+      send_to_char(ch, "The cloud doesn't have to keep taking this shit from you! It changes you back to the new room flags.\r\n");
+      PLR_FLAGS(ch).RemoveBit(PLR_OLD_MAN_YELLS_AT_CLOUDS);
+    } else {
+      send_to_char(ch, "The cloud bends to your will and gives you back the old room flags.\r\n");
+      PLR_FLAGS(ch).SetBit(PLR_OLD_MAN_YELLS_AT_CLOUDS);
+    }
+  }
+#endif
 }
 
 bool has_required_language_ability_for_sentence(struct char_data *ch, const char *message, int language_skill) {

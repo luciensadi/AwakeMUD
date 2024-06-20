@@ -614,6 +614,7 @@ const char *player_bits[] =
     "DOCWAGON_READY",
     "TEMPORARILY_LOADED",
     "CDEX_DONE",
+    "CLOUD_HATER",
     "\n"
   };
 
