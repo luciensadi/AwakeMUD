@@ -911,7 +911,7 @@ ACMD(do_new_echo) {
     }
   }
 
-#ifndef IS_BUILDPORT
+#ifdef IS_BUILDPORT
   if (IS_SENATOR(ch) && str_str(emote_buf, "yells at a cloud")) {
     if (PLR_FLAGGED(ch, PLR_OLD_MAN_YELLS_AT_CLOUDS)) {
       send_to_char(ch, "The cloud doesn't have to keep taking this shit from you! It changes you back to the new room flags.\r\n");
