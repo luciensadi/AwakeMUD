@@ -4378,43 +4378,46 @@ ACMD(do_show)
     char level;
   }
   fields[] = {
-               { "nothing",        0  },/* 0 */
-               { "zones",          LVL_BUILDER },
-               { "player",         LVL_BUILDER },
-               { "rent",           LVL_BUILDER },
-               { "stats",          LVL_ADMIN },
-               { "errors",         LVL_ADMIN },
-               { "deathrooms",     LVL_ADMIN },
-               { "godrooms",       LVL_ADMIN },
-               { "skills",         LVL_BUILDER },
-               { "spells",         LVL_BUILDER },
-               { "prompt",         LVL_CONSPIRATOR },
-               { "lodges",         LVL_ADMIN },
-               { "library",        LVL_ADMIN },
-               { "jackpoints",     LVL_BUILDER },
-               { "abilities",      LVL_BUILDER },
-               { "aliases",        LVL_CONSPIRATOR },
-               { "metamagic",      LVL_BUILDER },
-               { "noexits",        LVL_BUILDER },
-               { "traps",          LVL_BUILDER },
-               { "ammo",           LVL_CONSPIRATOR },
-               { "storage",        LVL_BUILDER },
-               { "anomalies",      LVL_BUILDER },
-               { "roomflag",       LVL_BUILDER },
-               { "markets",        LVL_VICEPRES },
-               { "weight",         LVL_PRESIDENT },
-               { "ignore",         LVL_EXECUTIVE },
-               { "vehicles",       LVL_ADMIN },
-               { "dirtyelves",     LVL_BUILDER },
-               { "wareshops",      LVL_CONSPIRATOR },
-               { "smartshops",     LVL_CONSPIRATOR },
-               { "powersites",     LVL_VICEPRES },
-               { "fuckykeys",      LVL_ADMIN },
-               { "strongboylifts", LVL_ADMIN },
-               { "longasszones",   LVL_ADMIN },
-               { "extramagical",   LVL_ADMIN },
-               { "tempdescs",      LVL_BUILDER },
+               { "nothing",         0  },/* 0 */
+               { "zones",           LVL_BUILDER },
+               { "player",          LVL_BUILDER },
+               { "rent",            LVL_BUILDER },
+               { "stats",           LVL_ADMIN },
+               { "errors",          LVL_ADMIN },
+               { "deathrooms",      LVL_ADMIN },
+               { "godrooms",        LVL_ADMIN },
+               { "skills",          LVL_BUILDER },
+               { "spells",          LVL_BUILDER },
+               { "prompt",          LVL_CONSPIRATOR },
+               { "lodges",          LVL_ADMIN },
+               { "library",         LVL_ADMIN },
+               { "jackpoints",      LVL_BUILDER },
+               { "abilities",       LVL_BUILDER },
+               { "aliases",         LVL_CONSPIRATOR },
+               { "metamagic",       LVL_BUILDER },
+               { "noexits",         LVL_BUILDER },
+               { "traps",           LVL_BUILDER },
+               { "ammo",            LVL_CONSPIRATOR },
+               { "storage",         LVL_BUILDER },
+               { "anomalies",       LVL_BUILDER },
+               { "roomflag",        LVL_BUILDER },
+               { "markets",         LVL_VICEPRES },
+               { "weight",          LVL_PRESIDENT },
+               { "ignore",          LVL_EXECUTIVE },
+               { "vehicles",        LVL_ADMIN },
+               { "dirtyelves",      LVL_BUILDER },
+               { "wareshops",       LVL_CONSPIRATOR },
+               { "smartshops",      LVL_CONSPIRATOR },
+               { "powersites",      LVL_VICEPRES },
+               { "fuckykeys",       LVL_ADMIN },
+               { "strongboylifts",  LVL_ADMIN },
+               { "longasszones",    LVL_ADMIN },
+               { "extramagical",    LVL_ADMIN },
+               { "tempdescs",       LVL_BUILDER },
                { "sameroomandlook", LVL_BUILDER },
+               { "extraflag",       LVL_BUILDER },
+               { "affflag",         LVL_BUILDER },
+               { "mobflag",         LVL_BUILDER },
                { "\n", 0 }
              };
 
@@ -5121,6 +5124,79 @@ ACMD(do_show)
       }
     }
     break;
+  case 37:
+    // extraflag
+    if (*value) {
+      for (i = 0; i < MAX_ITEM_EXTRA; i++) {
+        if (str_str(extra_bits[i], value)) {
+          snprintf(buf, sizeof(buf), "Objects with flag %s set:\r\n", extra_bits[i]);
+          for (k = 0, j = 0; k <= top_of_objt; k++)
+            if (IS_OBJ_STAT(&obj_proto[k], i) && ch_can_bypass_edit_lock(ch, &obj_proto[k]))
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%6d: [%8ld] %s %s\r\n", ++j,
+                       GET_OBJ_VNUM(&obj_proto[k]),
+                       vnum_from_non_connected_zone(GET_OBJ_VNUM(&obj_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                       GET_OBJ_NAME(&obj_proto[k]));
+          page_string(ch->desc, buf, 1);
+          return;
+        }
+      }
+    }
+
+    send_to_char("Please specify a single extra flag from the following list:\r\n", ch);
+    for (i = 0; i < MAX_ITEM_EXTRA; i++)
+      send_to_char(ch, "  %s\r\n", extra_bits[i]);
+    return;
+  case 38:
+    // affflag
+    if (*value) {
+      for (i = 0; i < MAX_AFFECT; i++) {
+        if (str_str(affected_bits[i], value)) {
+          snprintf(buf, sizeof(buf), "Objects with affflag %s set:\r\n", affected_bits[i]);
+          for (k = 0, j = 0; k <= top_of_objt; k++)
+            if (GET_OBJ_AFFECT(&obj_proto[k]).IsSet(i) && ch_can_bypass_edit_lock(ch, &obj_proto[k]))
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%6d: [%8ld] %s %s\r\n", ++j,
+                       GET_OBJ_VNUM(&obj_proto[k]),
+                       vnum_from_non_connected_zone(GET_OBJ_VNUM(&obj_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                       GET_OBJ_NAME(&obj_proto[k]));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nMobs with affflag %s set:\r\n", affected_bits[i]);
+          for (k = 0, j = 0; k <= top_of_mobt; k++)
+            if (AFF_FLAGGED(&mob_proto[k], i) && ch_can_bypass_edit_lock(ch, &mob_proto[k]))
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%6d: [%8ld] %s %s\r\n", ++j,
+                       GET_MOB_VNUM(&mob_proto[k]),
+                       vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                       GET_CHAR_NAME(&mob_proto[k]));
+          page_string(ch->desc, buf, 1);
+          return;
+        }
+      }
+    }
+
+    send_to_char("Please specify a single affflag from the following list:\r\n", ch);
+    for (i = 0; i < MAX_AFFECT; i++)
+      send_to_char(ch, "  %s\r\n", affected_bits[i]);
+    return;
+  case 39:
+    // mobflag
+    if (*value) {
+      for (i = 0; i < MOB_MAX; i++) {
+        if (str_str(action_bits[i], value)) {
+          snprintf(buf, sizeof(buf), "\r\nMobs with mobflag %s set:\r\n", action_bits[i]);
+          for (k = 0, j = 0; k <= top_of_mobt; k++)
+            if (MOB_FLAGGED(&mob_proto[k], i) && ch_can_bypass_edit_lock(ch, &mob_proto[k]))
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%6d: [%8ld] %s %s\r\n", ++j,
+                       GET_MOB_VNUM(&mob_proto[k]),
+                       vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                       GET_CHAR_NAME(&mob_proto[k]));
+          page_string(ch->desc, buf, 1);
+          return;
+        }
+      }
+    }
+
+    send_to_char("Please specify a single mobflag from the following list:\r\n", ch);
+    for (i = 0; i < MOB_MAX; i++)
+      send_to_char(ch, "  %s\r\n", action_bits[i]);
+    return;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
     break;
