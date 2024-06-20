@@ -1833,12 +1833,6 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
 
 void do_stat_mobile(struct char_data * ch, struct char_data * k)
 {
-  if (MOB_FLAGGED(k, MOB_PRIVATE) && !access_level(ch, LVL_FIXER))
-  {
-    send_to_char("You can't.\r\n", ch);
-    return;
-  }
-
   FAILURE_CASE(!ch_can_bypass_edit_lock(ch, k), "Sorry, you can't stat that due to a zone edit lock.");
 
   int i, i2, found = 0, base;

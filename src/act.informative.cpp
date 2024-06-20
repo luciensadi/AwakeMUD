@@ -445,10 +445,6 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     } else if (GET_OBJ_CONDITION(object) * 100 / MAX(1, GET_OBJ_BARRIER(object)) < 100)
       strlcat(buf, " ^r(damaged)^n", sizeof(buf));
 
-    if (IS_OBJ_STAT(object, ITEM_EXTRA_INVISIBLE)) {
-      strlcat(buf, " ^B(invisible)", sizeof(buf));
-    }
-
     if ((GET_OBJ_TYPE(object) == ITEM_FOCUS || IS_OBJ_STAT(object, ITEM_EXTRA_MAGIC))
         && SEES_ASTRAL(ch)) {
       strlcat(buf, " ^Y(magic aura)", sizeof(buf));
@@ -600,8 +596,6 @@ void list_veh_to_char(struct veh_data * list, struct char_data * ch)
   }
 }
 
-#define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_EXTRA_INVISIBLE)
-
 bool items_are_visually_similar(struct obj_data *first, struct obj_data *second) {
   if (!first || !second) {
     mudlog("SYSERR: Received null object to items_are_visually_similar.", NULL, LOG_SYSLOG, TRUE);
@@ -622,10 +616,6 @@ bool items_are_visually_similar(struct obj_data *first, struct obj_data *second)
 
   // If the names don't match, they're not similar.
   if (strcmp(first->text.name, second->text.name))
-    return FALSE;
-
-  // If their invis statuses don't match...
-  if (IS_INVIS(first) != IS_INVIS(second))
     return FALSE;
 
   // If their restrings don't match...
@@ -5957,6 +5947,8 @@ ACMD(do_who)
                num_can_see == 69 ? " (nice)" : "");
 
     // We only show unique connections at 50+ PCs to ensure that folks have a harder time correlating alts.
+    // Disabled this due to concerns from players.
+#ifdef SHOW_UNIQUE_CONNECTION_COUNT
     if (num_can_see >= 50) {
       // We also drop between 0-2 displayed connections to make alt correlation harder.
       size_t displayed_size = (unique_connections.size() / 3) * 3;
@@ -5964,6 +5956,7 @@ ACMD(do_who)
                displayed_size,
                displayed_size == 1 ? "" : "s");
     }
+#endif
 
     if (num_in_socialization_rooms > 0) {
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", with %d listed in ##^WWHERE^n",

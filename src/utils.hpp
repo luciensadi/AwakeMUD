@@ -893,11 +893,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 
 #define CHAR_ONLY_SEES_VICT_WITH_ULTRASOUND(ch, vict) (ch != vict && (IS_AFFECTED((vict), AFF_IMP_INVIS) || IS_AFFECTED((vict), AFF_SPELLIMPINVIS)) && !(SEES_ASTRAL(ch)))
 
-#define INVIS_OK_OBJ(sub, obj) (!ch_is_blocked_by_quest_protections(sub, obj, FALSE, FALSE)  \
-                                && (!IS_OBJ_STAT((obj), ITEM_EXTRA_INVISIBLE)         \
-                                    || has_vision(sub, VISION_ULTRASONIC)             \
-                                    || SEES_ASTRAL(sub)                               \
-                                    || HOLYLIGHT_OK(sub)))
+#define INVIS_OK_OBJ(sub, obj) (!ch_is_blocked_by_quest_protections(sub, obj, FALSE, FALSE))
 
 #define CAN_SEE_CARRIER(sub, obj) \
    ((!(obj)->carried_by || CAN_SEE((sub), (obj)->carried_by)) || (!(obj)->worn_by || CAN_SEE((sub), (obj)->worn_by)))

@@ -1471,8 +1471,6 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   _char_with_spell_to_room(ch, SPELL_POLTERGEIST, ch->in_room->poltergeist);
 }
 
-#define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_EXTRA_INVISIBLE)
-
 // Checks obj_to_x preconditions for common errors. Overwrites buf3. Returns TRUE for kosher, FALSE otherwise.
 bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch) {
   if (!object) {
@@ -2059,8 +2057,7 @@ void obj_to_veh(struct obj_data * object, struct veh_data * veh)
 
   for (i = veh->contents; i; i = i->next_content) {
     if (i->item_number == object->item_number &&
-        !strcmp(i->text.room_desc, object->text.room_desc) &&
-        IS_INVIS(i) == IS_INVIS(object))
+        !strcmp(i->text.room_desc, object->text.room_desc))
       break;
 
     op = i;
@@ -2101,8 +2098,7 @@ void obj_to_room(struct obj_data * object, struct room_data *room)
 
   for (i = room->contents; i; i = i->next_content) {
     if (i->item_number == object->item_number &&
-        !strcmp(i->text.room_desc, object->text.room_desc) &&
-        IS_INVIS(i) == IS_INVIS(object))
+        !strcmp(i->text.room_desc, object->text.room_desc))
       break;
 
     op = i;
@@ -2229,8 +2225,7 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
   for (i = obj_to->contains; i; i = i->next_content)
   {
     if (i->item_number == obj->item_number &&
-        !strcmp(i->text.room_desc, obj->text.room_desc) &&
-        IS_INVIS(i) == IS_INVIS(obj))
+        !strcmp(i->text.room_desc, obj->text.room_desc))
       break;
     // op points to the last thing we saw-- if a match is found, op is the thing immediately before it. Otherwise, op is the last thing in the list.
     op=i;

@@ -178,6 +178,16 @@ ACMD(do_debug) {
   rest_of_argument = any_one_arg(argument, arg1);
   skip_spaces(&rest_of_argument);
 
+  if (!str_cmp(arg1, "assignrenraku")) {
+    for (rnum_t rnum = 0; rnum < top_of_mobt; rnum++) {
+      if (MOB_FLAGGED(&mob_proto[rnum], 29)) {
+        GET_MOB_FACTION_IDNUM(&mob_proto[rnum]) = 4; // hardcoded from buildport
+        send_to_char(ch, "Changed %6ld (%s)\r\n", GET_MOB_VNUM(&mob_proto[rnum]), GET_CHAR_NAME(&mob_proto[rnum]));
+      }
+    }
+    send_to_char(ch, "OK, set all Renraku-flagged mobs to Renraku faction. Make sure to save.\r\n");
+  }
+
   if (is_abbrev(arg1, "cleardriverflag")) {
     struct char_data *vict = get_char_vis(ch, rest_of_argument);
     if (vict) {

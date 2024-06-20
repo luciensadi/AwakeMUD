@@ -4926,8 +4926,6 @@ void reset_zone(int zone, int reboot)
               }
             }
           }
-          if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-            GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
           last_cmd = 1;
         } else
           last_cmd = 0;
@@ -4958,8 +4956,6 @@ void reset_zone(int zone, int reboot)
         if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
           obj = read_object(ZCMD.arg1, REAL);
           obj_to_char(obj, mob);
-          if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-            GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
           last_cmd = 1;
         } else
           last_cmd = 0;
@@ -4987,8 +4983,6 @@ void reset_zone(int zone, int reboot)
               extract_obj(obj);
               last_cmd = 0;
             } else {
-              if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-                GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
               last_cmd = 1;
 
               // If it's a weapon, reload it.
@@ -5030,8 +5024,6 @@ void reset_zone(int zone, int reboot)
                                       (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)); ++i) {
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_char(obj, mob);
-        if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-          GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_VOLATILE);
         last_cmd = 1;
       }
       break;
@@ -7749,18 +7741,52 @@ void initialize_and_alphabetize_room_flags() {
   for (int idx = 0; idx < ROOM_MAX; idx++) {
     switch(idx) {
       // Named flags.
+      case ROOM_DARK:
       case ROOM_DEATH:
       case 6:
+      case 8:
       case 11:
       case 13:
       case 14:
       case ROOM_BFS_MARK:
+      case ROOM_LOW_LIGHT:
+      case 17:
       case 26:
       case 27:
-      case ROOM_CORPSE_SAVE_HACK:
       case ROOM_ELEVATOR_SHAFT:
+      case ROOM_CORPSE_SAVE_HACK:
         continue;
     }
     room_flag_map[std::string(room_bits[idx])] = idx;
+  }
+}
+
+std::map<std::string, int> item_extra_flag_map = {};
+void initialize_and_alphabetize_item_extra_flags() {
+  for (int idx = 0; idx < ROOM_MAX; idx++) {
+    switch(idx) {
+      case 4:
+      case 5:
+      case 14:
+      case 22:
+        continue;
+    }
+    item_extra_flag_map[std::string(extra_bits[idx])] = idx;
+  }
+}
+
+std::map<std::string, int> mob_flag_map = {};
+void initialize_and_alphabetize_mob_flags() {
+  for (int idx = 0; idx < ROOM_MAX; idx++) {
+    switch(idx) {
+      case 4:
+      case 17:
+      case 22:
+      case 23:
+      case 28:
+      case 29:
+        continue;
+    }
+    mob_flag_map[std::string(action_bits[idx])] = idx;
   }
 }

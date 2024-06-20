@@ -366,7 +366,7 @@ enum {
 #define MOB_SENTINEL             1  /* Mob should not move                    */
 #define MOB_SCAVENGER            2  /* Mob picks up stuff on the ground       */
 #define MOB_ISNPC                3  /* (R) Automatically set on all Mobs      */
-#define MOB_AWARE                4  /* Mob can't be backstabbed               */
+// unused, must remove, was aware  4
 #define MOB_AGGRESSIVE           5  /* Mob hits players in the room           */
 #define MOB_STAY_ZONE            6  /* Mob shouldn't wander out of zone       */
 #define MOB_WIMPY                7  /* Mob flees if severely injured          */
@@ -375,26 +375,26 @@ enum {
 #define MOB_AGGR_DWARF           10 /* auto attack dwarf PC's                 */
 #define MOB_MEMORY               11 /* remember attackers if attacked         */
 #define MOB_HELPER               12 /* attack PCs fighting other NPCs         */
-#define MOB_NORAM                13 /* Mob can't be charmed                   */
+#define MOB_NORAM                13 /* Mob can't be rammed                    */
 #define MOB_DUAL_NATURE          14 /* mob is dual-natured                    */
 #define MOB_IMMEXPLODE           15 /* mob is immune to explosions            */
 #define MOB_AGGR_TROLL           16 /* auto attack troll PC's                 */
-#define MOB_NOBLIND              17 /* Mob can't be blinded                   */
+// unused, must remove, was noblind  17
 #define MOB_ASTRAL               18 /* Mob is solely in the astral plane      */
 #define MOB_GUARD                19 /* mob carries out security               */
 #define MOB_AGGR_HUMAN           20 /* auto attack human PC's                 */
 #define MOB_SNIPER               21 /* mob searches area for PCs              */
-#define MOB_PRIVATE              22 /* mob cannot be statted                  */
-#define MOB_TRACK                23 /* (R) for security routines              */
+// unused, must remove, was private  22
+// unused, must remove, was track    23
 #define MOB_FLAMEAURA            24
 #define MOB_SPIRITGUARD          25
 #define MOB_STUDY                26 /* Saeder Krupp*/
 #define MOB_AIDSORCERY           27
-#define MOB_AZTECHNOLOGY         28 /* Azzies                                 */
-#define MOB_RENRAKU              29 /* Renraku   */
+// unused, must remove, was aztech   28
+// unused, must remove, was renraku  29
 #define MOB_NOKILL               30 /* Unkillable mob */
-#define MOB_TOTALINVIS           31 /* auto attack dragon PCs                 */
-#define MOB_INANIMATE            32
+#define MOB_TOTALINVIS           31 // can only be seen by staff
+#define MOB_INANIMATE            32 // no flesh or blood
 #define MOB_EMPLACED             33 /* Won't close distance, can't be knocked down, has no recoil penalties, has unlimited ammo. Think emplaced turret. */
 #define MOB_RACIAL_AGGR_VS_MOBS  34 /* Will trigger racial aggro vs other NPCs */
 #define MOB_NO_NUYEN_LOOT_DROPS  35 /* Will never drop nuyen on death. */
@@ -1364,8 +1364,8 @@ enum {
 #define ITEM_EXTRA_HUM                1     /* Item is humming              */
 #define ITEM_EXTRA_NORENT             2     /* Item cannot be rented        */
 #define ITEM_EXTRA_NODONATE           3     /* Item cannot be donated       */
-#define ITEM_EXTRA_NOINVIS            4     /* Item cannot be made invis    */
-#define ITEM_EXTRA_INVISIBLE          5     /* Item is invisible            */
+// unused, must remove, was !invis    4
+// unused, must remove, was invisible 5
 #define ITEM_EXTRA_MAGIC              6     /* Item is magical              */
 #define ITEM_EXTRA_NODROP             7     /* Item is cursed: can't drop   */
 #define ITEM_EXTRA_FORMFIT            8     /* Item is blessed              */
@@ -1374,7 +1374,7 @@ enum {
 #define ITEM_EXTRA_STAFF_ONLY         11    /* Only a god may use this item */
 #define ITEM_EXTRA_TWOHANDS           12    /* weapon takes 2 hands to use */
 #define ITEM_EXTRA_COMPBURST          13    /* Weapon requires complex action to use burst fire */
-#define ITEM_EXTRA_VOLATILE           14    /* connected item loaded in ip zone */
+// unused, must remove, was volatile  14
 #define ITEM_EXTRA_WIZLOAD            15    /* item was loaded by an immortal */
 #define ITEM_EXTRA_NOTROLL            16
 #define ITEM_EXTRA_NOELF              17
