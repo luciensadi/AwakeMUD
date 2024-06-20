@@ -979,7 +979,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
   case MEDIT_FACTION_AFFILIATION:
     number = atoi(arg);
     if (number == 0) {
-      medit_disp_menu(d);
+      send_to_char("OK, cleared faction.\r\n", CH);
+      GET_MOB_FACTION_IDNUM(MOB) = 0;
       return;
     } else {
       Faction *faction = get_faction(number);
@@ -988,8 +989,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         return;
       }
       GET_MOB_FACTION_IDNUM(MOB) = faction->get_idnum();
-      medit_disp_menu(d);
     }
+    medit_disp_menu(d);
     break;
 
   case MEDIT_NUYEN:
