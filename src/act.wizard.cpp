@@ -7482,7 +7482,7 @@ ACMD(do_rewrite_world) {
   signal(SIGALRM, SIG_IGN);
 
   // Perform any rectification needed.
-  if (TRUE) {
+  if (FALSE) {
     bool all_flags_are_2_or_less = TRUE;
 
     for (int rnum = 0; rnum <= top_of_objt; rnum++) {
@@ -7532,6 +7532,15 @@ ACMD(do_rewrite_world) {
   for (int i = 0; i <= top_of_zone_table; i++) {
     snprintf(buf, sizeof(buf), "Writing zone %d...\r\n", zone_table[i].number);
     write_to_descriptor(ch->desc->descriptor, buf);
+
+      // Purge all stale flags from all rooms.
+    for (vnum_t vnum = zone_table[i].number * 100; vnum <= zone_table[i].top; vnum++) {
+      rnum_t rnum = real_room(vnum);
+      if (rnum >= 0)
+        ROOM_FLAGS(&world[rnum]).RemoveBits(ROOM_DARK, 6, 11, 13, ROOM_LOW_LIGHT, 17, ENDBIT);
+    }
+    
+    // Save it.
     write_world_to_disk(zone_table[i].number);
     write_quests_to_disk(zone_table[i].number);
     write_objs_to_disk(zone_table[i].number);
@@ -7624,12 +7633,6 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
     // Staff-only is allowed in the staff HQ area. Otherwise, flag it.
     if ((GET_ROOM_VNUM(room) < 10000 || GET_ROOM_VNUM(room) > 10099) && ROOM_FLAGGED(room, ROOM_STAFF_ONLY)) {
       strlcat(buf, "  - ^yStaff-only flag is set.^n\r\n", sizeof(buf));
-      issues++;
-      
-    }
-
-    if (ROOM_FLAGS(room).AreAnySet(ROOM_BFS_MARK, ROOM_OLC, ROOM_ASTRAL, ENDBIT)) {
-      strlcat(buf, "  - ^ySystem-controlled or unimplemented flags are set.^n\r\n", sizeof(buf));
       issues++;
       
     }

@@ -993,7 +993,7 @@ ACMD(do_broadcast)
           && !PLR_FLAGGED(d->character, PLR_MATRIX)
           && !IS_PROJECT(d->character) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SOUNDPROOF) &&
-          !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT))
+          !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_BFS_MARK))
       {
         if (!IS_NPC(d->character) && (!access_level(d->character, LVL_FIXER) || PRF_FLAGGED(d->character, PRF_SUPPRESS_STAFF_RADIO))) {
           if (!(radio = find_radio(d->character, &cyberware, &vehicle, TRUE)))
@@ -1115,8 +1115,8 @@ ACMD(do_broadcast)
     if (IS_VALID_STATE_TO_RECEIVE_COMMS(d->connected) &&
         !(d->connected != CON_PLAYING && PRF_FLAGGED(d->character, PRF_MENUGAG)) &&
         d->character &&
-        ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT))
-      ROOM_FLAGS(get_ch_in_room(d->character)).RemoveBit(ROOM_SENT);
+        ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_BFS_MARK))
+      ROOM_FLAGS(get_ch_in_room(d->character)).RemoveBit(ROOM_BFS_MARK);
 }
 
 /**********************************************************************

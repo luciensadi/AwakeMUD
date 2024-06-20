@@ -616,23 +616,24 @@ enum {
 /* Room flags: used in room_data.room_flags */
 
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
-#define ROOM_DARK                       0   /* Dark                      */
+#define ROOM_DARK                       0   /* Sets room light level to dark levels on boot */
 #define ROOM_DEATH                      1   /* Death trap                */
 #define ROOM_NOMOB                      2   /* MOBs not allowed          */
 #define ROOM_INDOORS                    3   /* Indoors                   */
 #define ROOM_PEACEFUL                   4   /* Violence not allowed      */
 #define ROOM_SOUNDPROOF                 5   /* Shouts, gossip blocked    */
-#define ROOM_NOTRACK                    6   /* Track won't go through    */
+// UNUSED SLOT         was notrack, you need to clear it
 #define ROOM_NOMAGIC                    7   /* Magic not allowed         */
 #define ROOM_TUNNEL                     8   /* room for only 1 pers      */
 #define ROOM_ARENA                      9   /* Can't teleport in         */
 #define ROOM_STREETLIGHTS               10  /* Room has a streetlight    */
-#define ROOM_HOUSE                      11  /* (R) Room is a house       */
+// UNUSED SLOT         was house, you need to clear it
 #define ROOM_NO_DROP                    12  /* You can't drop things here. */
-// UNUSED SLOT                          13
-#define ROOM_OLC                        14  /* (R) Modifyable/!compress  */
-#define ROOM_BFS_MARK                   15  /* (R) breath-first srch mrk */
-#define ROOM_LOW_LIGHT                  16  /* Room viewable with ll-eyes */
+// UNUSED SLOT         was (unused), need to clear it
+// UNUSED SLOT         ok, no clear necessary
+#define ROOM_BFS_MARK                   15  /* (R) breadth-first srch mrk */
+#define ROOM_LOW_LIGHT                  16  /* Sets room light level to lowlight levels on boot */
+// UNUSED SLOT         was !used
 #define ROOM_NO_RADIO                   18  /* Radio is sketchy and phones dont work */
 #define ROOM_NOBIKE                     19  // Room blocks bikes from passing through it.
 #define ROOM_FREEWAY                    20  /* Room cannot be walked across. */
@@ -641,8 +642,8 @@ enum {
 #define ROOM_GARAGE                     23  // Room stores cars.
 #define ROOM_STAFF_ONLY                 24  // Room does not allow mortals to walk into it.
 #define ROOM_NOQUIT                     25  // Room does not allow quitting in it.
-#define ROOM_SENT                       26
-#define ROOM_ASTRAL                     27 // Astral room
+// UNUSED SLOT         ok, no clear necessary
+// UNUSED SLOT         ok, no clear necessary
 #define ROOM_NOGRID                     28 // Room blocks gridguide.
 #define ROOM_STORAGE                    29 // Room stores items dropped in it.
 #define ROOM_NO_TRAFFIC                 30 // Prevents display of traffic atmospheric messages.

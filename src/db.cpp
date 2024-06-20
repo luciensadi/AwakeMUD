@@ -22,6 +22,8 @@
 #include <vector>
 #include <algorithm>
 #include <mysql/mysql.h>
+#include <map>
+#include <algorithm>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <process.h>
@@ -238,6 +240,7 @@ void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
 void set_elemental_races();
+void initialize_and_alphabetize_room_flags();
 
 /* external vars */
 extern int no_specials;
@@ -467,6 +470,11 @@ void boot_world(void)
     exit(ERROR_BITFIELD_SIZE_EXCEEDED);
   }
 
+  if (Bitfield::TotalWidth() < ROOM_MAX) {
+    log("Error: You have more ROOM flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
+    exit(ERROR_BITFIELD_SIZE_EXCEEDED);
+  }
+
   if (MAX_PROTOCOL_BUFFER > MAX_RAW_INPUT_LENGTH) {
     log("Error: Your maximum protocol buffer exceeds your input length buffer, so there's a risk of overflow.");
     exit(ERROR_PROTOCOL_BUFFER_EXCEEDS_INPUT_LENGTH);
@@ -515,6 +523,18 @@ void boot_world(void)
   for (int i = 0; i < CON_MAX; i++) {
     if (str_str(connected_types[i], MAX_FLAG_MARKER)) {
       log("Error: You added a connection type but didn't add it to connected_types in constants.cpp (or forgot a comma)!");
+      exit(ERROR_FLAG_CONSTANT_MISSING);
+    }
+  }
+
+  for (int i = 0; i < ROOM_MAX; i++) {
+    if (str_str(room_bits[i], MAX_FLAG_MARKER)) {
+      log("Error: You added a room flag but didn't add it to room_bits in constants.cpp (or forgot a comma)!");
+      exit(ERROR_FLAG_CONSTANT_MISSING);
+    }
+
+    if (str_str(room_flag_explanations[i], MAX_FLAG_MARKER)) {
+      log("Error: You added a room flag but didn't add it to room_flag_explanations in constants.cpp (or forgot a comma)!");
       exit(ERROR_FLAG_CONSTANT_MISSING);
     }
   }
@@ -708,6 +728,7 @@ void DBInit()
   log("Booting world.");
   boot_world();
   initialize_traffic_msgs();
+  initialize_and_alphabetize_room_flags();
 
   log("Loading social messages.");
   boot_social_messages();
@@ -7721,4 +7742,25 @@ void collate_host_entrances() {
     }
   }
   #undef ADD_NEW_ENTRANCE_IF_EXISTS
+}
+
+std::map<std::string, int> room_flag_map = {};
+void initialize_and_alphabetize_room_flags() {
+  for (int idx = 0; idx < ROOM_MAX; idx++) {
+    switch(idx) {
+      // Named flags.
+      case ROOM_DEATH:
+      case 6:
+      case 11:
+      case 13:
+      case 14:
+      case ROOM_BFS_MARK:
+      case 26:
+      case 27:
+      case ROOM_CORPSE_SAVE_HACK:
+      case ROOM_ELEVATOR_SHAFT:
+        continue;
+    }
+    room_flag_map[std::string(room_bits[idx])] = idx;
+  }
 }

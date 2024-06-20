@@ -12,6 +12,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <map>
 
 #include "structs.hpp"
 #include "awake.hpp"
@@ -30,6 +31,7 @@
 #include "newhouse.hpp"
 
 extern class memoryClass *Mem;
+extern std::map<std::string, int> room_flag_map;
 
 #define ROOM d->edit_room
 #define DOOR d->edit_room->dir_option[d->edit_number2]
@@ -246,18 +248,15 @@ void redit_disp_mtx_menu(struct descriptor_data * d)
 /* For room flags */
 void redit_disp_flag_menu(struct descriptor_data * d)
 {
-  int             counter;
+  int             counter = 1;
 
   CLS(CH);
-  for (counter = 0; counter < ROOM_MAX; counter += 2)
-  {
-    send_to_char(CH, "%2d) %-14s    %2d) %-12s\r\n",
-                 counter + 1, room_bits[counter],
-                 counter + 2, counter + 1 < ROOM_MAX ?
-                 room_bits[counter + 1] : "");
+  for (auto itr : room_flag_map) {
+    send_to_char(CH, "%2d) ^c%-17s^n (%s)\r\n", counter++, itr.first.c_str(), room_flag_explanations[itr.second]);
   }
+
   ROOM->room_flags.PrintBits(buf1, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-  send_to_char(CH, "Room flags: %s%s%s\r\n"
+  send_to_char(CH, "\r\nCurrently set: %s%s%s\r\n"
                "Enter room flags, 0 to quit:", CCCYN(CH, C_CMP),
                buf1, CCNRM(CH, C_CMP));
   d->edit_mode = REDIT_FLAGS;
@@ -962,7 +961,17 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     /* we will NEVER get here */
     break;
   case REDIT_FLAGS:
-    number = atoi(arg);
+    number = 0;
+    {
+      int counter = 1;
+      int entry = atoi(arg);
+      for (auto itr : room_flag_map) {
+        if (entry == counter++) {
+          number = itr.second + 1;
+          break;
+        }
+      }
+    }
     if ((number < 0) || (number > ROOM_MAX)) {
       send_to_char("That's not a valid choice!\r\n", d->character);
       redit_disp_flag_menu(d);

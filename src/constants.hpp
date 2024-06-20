@@ -19,6 +19,7 @@ extern struct preference_bit_struct preference_bits_v2[];
 extern const char *preference_bits[];
 extern const char *affected_bits[];
 extern const char *room_bits[];
+extern const char *room_flag_explanations[];
 extern const char *wear_bits[];
 extern const char *extra_bits[];
 extern const char *pc_readable_extra_bits[];

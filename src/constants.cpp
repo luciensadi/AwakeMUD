@@ -305,6 +305,53 @@ const char *room_bits[] =
     MAX_FLAG_MARKER
   };
 
+const char *room_flag_explanations[] =
+{
+  "unused - dark",
+  "Death room ^y[don't set]^n",
+  "Mobs can't enter",
+  "Room is indoors / covered",
+  "No combat allowed",
+  "Sound won't carry",
+  "unused - !track",
+  "No magic ^y[don't set]^n",
+  "Two occupant max",
+  "PvP combat allowed",
+  "Has streetlights",
+  "unused - house",
+  "Can't drop things here",
+  "unused",
+  "unused - olc",
+  "BFS mark ^y[don't set]^n", /* BFS MARK */
+  "unused - low light",
+  "unused - !used", // Empty slot.
+  "Radio is staticky",
+  "No motorcycles",
+  "Freeway, no walking",
+  "Characters fall down",
+  "Cars allowed",
+  "Vehicles save here",
+  "Only staff can enter ^y[don't set]^n",
+  "Quitting blocked ^y[don't set]^n",
+  "unused - sent",
+  "unused - astral",
+  "Gridguide won't route through",
+  "Storage room ^y[don't set]^n",
+  "Suppress traffic messages",
+  "Elevator shaft ^y[don't set]^n",
+  "Social Bonus Room",
+  "Corpse save hack ^y[don't set]^n",
+  "Better medical outcomes",
+  "Characters can't enter",
+  "Room has radiation ^y[don't set]^n",
+  "ANY vehicle can enter",
+  "Has a helipad ^y[don't set]^n",
+  "Has a runway ^y[don't set]^n",
+  "Aircraft can drive here",
+  "Aircraft can crash into here",
+  MAX_FLAG_MARKER
+};
+
 
 /* EX_x */
 const char *exit_bits[] =
