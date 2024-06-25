@@ -71,7 +71,7 @@ void initialize_policy_tree() {
     root_policy_document.push_back(section_root);
 
     section_root->add_child("You may have multiple characters online simultaneously, but only one can be active at once-- the others must be idling or engaged in build/repair tasks. Brief stints of dual activity are fine in limited cases (ex: running to buy something, helping out another player, bantering on the radio, etc).");
-    section_root->add_child("Your characters may never benefit each other in any way. This includes, but is not limited to, transferring items or nuyen between them or having them share vehicles or apartments. When in doubt, ask staff!");
+    section_root->add_child("Your characters may never benefit each other in any way. This includes, but is not limited to, transferring items or nuyen between them or having them share vehicles or apartments. This also includes dropping gear, deleting your char, recreating, and getting that gear again. When in doubt, ask staff!");
     section_root->add_child("You may not have multiple characters in the same player group (pgroup). You may also not have characters split across opposing or conflicting groups.");
     section_root->add_child("Wherever possible, your alts should not acknowledge each other's existence. Be noncommittal when alt A is asked about alt B, don't have A and B talk to each other on the radio, etc.");
   }
@@ -93,7 +93,7 @@ void initialize_policy_tree() {
   {
     PolicyNode *section_root = new PolicyNode(
       "No Underage Players",
-      "All PLAYERS must be aged 18 or older."
+      "All PLAYERS must be aged 18 or older, and must present as such."
     );
     root_policy_document.push_back(section_root);
 
@@ -109,8 +109,7 @@ void initialize_policy_tree() {
     );
     root_policy_document.push_back(section_root);
 
-    section_root->add_child("This codebase has been under continual development since the early 1990s, and is guaranteed to have unintentional bugs and loopholes in it that can be used for personal gain. Using these bugs and loopholes, aka 'exploiting', is not allowed.");
-    section_root->add_child("Instead, report the bug/loophole/exploit, either via the ^WBUG^n command or through a support ticket in Discord, and you'll be rewarded.");
+    section_root->add_child("This codebase has been under continual development since the early 1990s, and is guaranteed to have unintentional bugs and loopholes in it that can be used for personal gain. Using these bugs and loopholes, aka 'exploiting', is not allowed. Instead, report the bug/loophole/exploit, either via the ^WBUG^n command or through a support ticket in Discord, and you'll be rewarded.");
   }
 
   // Botting.
@@ -148,7 +147,7 @@ void initialize_policy_tree() {
     );
     root_policy_document.push_back(section_root);
 
-    section_root->add_child("Using the ^WCUSTOMIZE^n command to impersonate someone else; posing as them; emoting with them taking actions; etc are all not allowed.");
+    section_root->add_child("Using the ^WCUSTOMIZE^n command to impersonate someone else, posing as them, emoting with them taking actions, etc are all not allowed.");
     section_root->add_child("We want our players, staff, and NPCs to act under their own agency without being impersonated or convincingly mimicked.");
   }
 
@@ -276,7 +275,7 @@ ACMD(do_policy) {
 
   // POLICY on its own gives you a summarized list of all the policies.
   if (!*argument) {
-    send_to_char("The current policies are:\r\n", ch);
+    send_to_char("The ^Wshort versions^n of the current policies are:\r\n", ch);
     for (auto &node : root_policy_document) {
       send_to_char(ch, "^W%3d)^c %s^n: %s\r\n", policy_idx++, node->title, node->summary);
     }
