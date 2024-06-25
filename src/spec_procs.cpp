@@ -620,6 +620,7 @@ SPECIAL(metamagic_teacher)
 }
 
 // Teaches every skill that isn't in the other teachers' train lists. The assumption is that if it exists in code but isn't taught anywhere, it's not implemented.
+#define IS_FULLMAGE(ch) (GET_ASPECT(ch) == ASPECT_FULL || GET_ASPECT(ch) == ASPECT_EARTHMAGE || GET_ASPECT(ch) == ASPECT_AIRMAGE || GET_ASPECT(ch) == ASPECT_FIREMAGE || GET_ASPECT(ch) == ASPECT_WATERMAGE)
 SPECIAL(nerp_skills_teacher) {
   struct char_data *master = (struct char_data *) me;
   int max = (master->in_room && GET_ROOM_VNUM(master->in_room) == 60662 ? NEWBIE_SKILL : NORMAL_MAX_SKILL);
@@ -830,19 +831,15 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
         case SKILL_ARCANELANGUAGE:
         case SKILL_CENTERING:
         case SKILL_ENCHANTING:
-#ifdef DIES_IRAE
           // Full mages get full magic skills.
-          if (GET_ASPECT(ch) == ASPECT_FULL || GET_ASPECT(ch) == ASPECT_EARTHMAGE || GET_ASPECT(ch) == ASPECT_AIRMAGE || GET_ASPECT(ch) == ASPECT_FIREMAGE || GET_ASPECT(ch) == ASPECT_WATERMAGE)
+          if (IS_FULLMAGE(ch))
             return MIN(max, 12);
 
           // Aspected mages get 10 magic skills to compensate for their 10 mundane skills.
           return MIN(max, 10);
-#else
-          return MIN(max, 12);
-#endif
         default:
           // Full mages get their non-magic skills capped to 8 to compensate for their 12 magic.
-          if (GET_ASPECT(ch) == ASPECT_FULL || GET_ASPECT(ch) == ASPECT_EARTHMAGE || GET_ASPECT(ch) == ASPECT_AIRMAGE || GET_ASPECT(ch) == ASPECT_FIREMAGE || GET_ASPECT(ch) == ASPECT_WATERMAGE)
+          if (IS_FULLMAGE(ch))
             return MIN(max, 8);
 
           // Aspected mages get them to 10 like adepts.
@@ -850,6 +847,7 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
       }
   }
 }
+#undef IS_FULLMAGE
 
 SPECIAL(teacher)
 {
