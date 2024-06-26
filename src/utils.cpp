@@ -1008,7 +1008,11 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
   if (file)
     fprintf(stderr, "%-19.19s :: %s: %s%s\n", tmp, log_types[log], buf2, str);
 
-  snprintf(buf, sizeof(buf), "^g[%s: %s%s^g]^n\r\n", log_types[log], buf2, str);
+  char with_neutral_codes[MAX_STRING_LENGTH];
+  snprintf(with_neutral_codes, sizeof(with_neutral_codes), "^g[%s: %s%s^g]", log_types[log], buf2, str);
+
+  // Finally, convert any color codes and append the neutral code and newline.
+  snprintf(buf, sizeof(buf), "%s^n\r\n", replace_neutral_color_codes(with_neutral_codes, "^g"));
 
   for (i = descriptor_list; i; i = i->next)
     if (!i->connected)
