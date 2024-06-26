@@ -322,14 +322,14 @@ bool Playergroup::save_pgroup_to_db() {
   char quotedsettings[settings.TotalWidth()];
 
   const char * pgroup_save_query_format =
-  "INSERT INTO playergroups (idnum, Name, Alias, Tag, Settings, bank, zone) VALUES ('%ld', '%s', '%s', '%s', '%s', '%lu', '%lu')"
+  "INSERT INTO playergroups (`idnum`, `Name`, `Alias`, `Tag`, `Settings`, `bank`, `zone`) VALUES ('%ld', '%s', '%s', '%s', '%s', '%lu', '%lu')"
   " ON DUPLICATE KEY UPDATE"
-  "   Name = VALUES(Name),"
-  "   Alias = VALUES(Alias),"
-  "   Tag = VALUES(Tag),"
-  "   Settings = VALUES(Settings),"
-  "   bank = VALUES(bank),"
-  "   zone = VALUES(zone)";
+  "   Name = VALUES(`Name`),"
+  "   Alias = VALUES(`Alias`),"
+  "   Tag = VALUES(`Tag`),"
+  "   Settings = VALUES(`Settings`),"
+  "   bank = VALUES(`bank`),"
+  "   zone = VALUES(`zone`)";
 
   if (!idnum) {
     // We've never saved this group before. Give it a new idnum.

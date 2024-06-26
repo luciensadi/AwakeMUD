@@ -34,10 +34,10 @@ extern void do_start(struct char_data * ch, bool wipe_skills);
 
 SPECIAL(pocket_sec);
 
-static void start_game(descriptor_data *d);
+static void start_game(descriptor_data *d, const char *origin);
 
 int get_minimum_attribute_points_for_race(int race);
-void init_char_sql(struct char_data *ch);
+void init_char_sql(struct char_data *ch, const char *origin);
 void init_create_vars(struct descriptor_data *d);
 
 ACMD_DECLARE(do_help);
@@ -515,7 +515,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   GET_ARCHETYPAL_MODE(d->character) = TRUE;
   GET_ARCHETYPAL_TYPE(d->character) = i;
-  init_char_sql(d->character);
+  init_char_sql(d->character, "archetype_selection_parse()");
 
   GET_CHAR_MULTIPLIER(d->character) = 100;
   snprintf(buf, sizeof(buf), "%s new character (archetypal %s).", GET_CHAR_NAME(d->character), archetypes[i]->name);
@@ -1026,12 +1026,13 @@ void priority_menu(struct descriptor_data *d)
   SEND_TO_Q("\r\nChoose a priority (A-E) to set (? for help, p to continue): ", d);
 }
 
-void init_char_sql(struct char_data *ch)
+void init_char_sql(struct char_data *ch, const char *call_origin)
 {
+  log_vfprintf("init_char_sql(%s, %s)", GET_CHAR_NAME(ch), call_origin);
   char buf2[MAX_STRING_LENGTH];
-  snprintf(buf, sizeof(buf), "INSERT INTO pfiles (idnum, name, password, race, gender, `Rank`, Voice,"\
-               "Physical_Keywords, Physical_Name, Whotitle, Height, Weight, Host,"\
-               "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc, LastD, multiplier) VALUES ('%ld', '%s', '%s', %d, '%d',"\
+  snprintf(buf, sizeof(buf), "INSERT INTO pfiles (`idnum`, `name`, `password`, `race`, `gender`, `Rank`, `Voice`,"\
+               "`Physical_Keywords`, `Physical_Name`, `Whotitle`, `Height`, `Weight`, `Host`,"\
+               "`Tradition`, `Born`, `Background`, `Physical_LookDesc`, `Matrix_LookDesc`, `Astral_LookDesc`, `LastD`, `multiplier`) VALUES ('%ld', '%s', '%s', %d, '%d',"\
                "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s', %ld, 100);", GET_IDNUM(ch),
                GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_PRONOUNS(ch), MAX(1, GET_LEVEL(ch)),
                prepare_quotes(buf2, ch->player.physical_text.room_desc, sizeof(buf2) / sizeof(buf2[0])), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
@@ -1039,18 +1040,18 @@ void init_char_sql(struct char_data *ch)
                "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints, archetypal, archetype, prestige_alt) VALUES"\
+    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (`idnum`, `AttPoints`, `SkillPoints`, `ForcePoints`, `archetypal`, `archetype`, `prestige_alt`) VALUES"\
                "('%ld', '%d', '%d', '%d', '%d', '%d', '%ld');", 
                GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch), GET_ARCHETYPAL_MODE(ch) ? 1 : 0, GET_ARCHETYPAL_TYPE(ch), GET_PRESTIGE_ALT_ID(ch));
     mysql_wrapper(mysql, buf);
   }
   if (GET_TRADITION(ch) != TRAD_MUNDANE) {
-    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_magic (idnum, Totem, TotemSpirit, Aspect) VALUES"\
+    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_magic (`idnum`, `Totem`, `TotemSpirit`, `Aspect`) VALUES"\
                "('%ld', '%d', '%d', '%d');", GET_IDNUM(ch), GET_TOTEM(ch), GET_TOTEMSPIRIT(ch), GET_ASPECT(ch));
     mysql_wrapper(mysql, buf);
   }
   if (GET_LEVEL(ch) > 0) {
-    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber, Poofin, Poofout) VALUES ("\
+    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_immortdata (`idnum`, `InvisLevel`, `IncogLevel`, `Zonenumber`, `Poofin`, `Poofout`) VALUES ("\
                  "%ld, %d, %d, %d, '%s', '%s');",
                  GET_IDNUM(ch), GET_INVIS_LEV(ch), GET_INCOG_LEV(ch), ch->player_specials->saved.zonenum,
                 (POOFIN(ch) ? POOFIN(ch) : DEFAULT_POOFIN_STRING),
@@ -1059,8 +1060,9 @@ void init_char_sql(struct char_data *ch)
   }
 }
 
-static void start_game(descriptor_data *d)
+static void start_game(descriptor_data *d, const char *origin)
 {
+  log_vfprintf("start_game(%s, %s)", GET_CHAR_NAME(d->character), origin);
   CreateChar(d->character);
   d->character->player.host = str_dup(d->host);
 
@@ -1074,7 +1076,7 @@ static void start_game(descriptor_data *d)
     GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
   }
 
-  init_char_sql(d->character);
+  init_char_sql(d->character, "start_game()");
   GET_CHAR_MULTIPLIER(d->character) = 100;
   if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED)) {
     snprintf(buf, sizeof(buf), "%s new character.",
@@ -1104,7 +1106,7 @@ void ccr_totem_menu(struct descriptor_data *d)
 {
   if (GET_RACE(CH) == RACE_DRYAD) {
     GET_TOTEM(CH) = TOTEM_FATHERTREE;
-    start_game(d);
+    start_game(d, "ccr_totem_menu");
     return;
   }
   
@@ -1406,7 +1408,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
           } else if (d->ccr.pr[PO_MAGIC] == CCR_MAGIC_ADEPT) {
             GET_TRADITION(CH) = TRAD_ADEPT;
             GET_PP(CH) = (IS_GHOUL(CH) ? 500 : (IS_DRAGON(CH) ? 700 : 600));
-            start_game(d);
+            start_game(d, "create_parse trad_adept");
           } else {
             d->ccr.mode = CCR_TRADITION;
             SEND_TO_Q("\r\nFollow [h]ermetic or [s]hamanic magical tradition? (enter ? for help) ", d);
@@ -1414,7 +1416,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         } else {
           GET_TRADITION(CH) = TRAD_MUNDANE;
           set_attributes(CH, 0);
-          start_game(d);
+          start_game(d, "create_parse trad_mundane");
         }
       break;
     }
@@ -1809,7 +1811,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         GET_TOTEM(CH) == TOTEM_GOOSE || GET_TOTEM(CH) == TOTEM_HORSE || GET_TOTEM(CH) == TOTEM_LIZARD || GET_TOTEM(CH) == TOTEM_OTTER)
       ccr_totem_spirit_menu(d);
     else
-      start_game(d);
+      start_game(d, "create_parse totem-else");
     break;
   case CCR_TOTEM2:
     switch (GET_TOTEM(CH)) {
@@ -2003,7 +2005,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       }
       break;
     }
-    start_game(d);
+    start_game(d, "create_parse after totem_otter");
     break;
   case CCR_PRIORITY:
     switch (LOWER(*arg)) {
@@ -2048,7 +2050,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
             return;
         } else
           GET_TRADITION(d->character) = TRAD_MUNDANE;
-        start_game(d);
+        start_game(d, "create_parse 'p'");
       } else {
         send_to_char("You need to finish setting your priorities first.\r\n", CH);
         priority_menu(d);
@@ -2109,7 +2111,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case 'a':
         GET_TRADITION(d->character) = TRAD_ADEPT;
         GET_PP(CH) = (IS_GHOUL(CH) ? 500 : (IS_DRAGON(CH) ? 700 : 600));
-        start_game(d);
+        start_game(d, "create_parse 'a'");
         break;
       default:
         SEND_TO_Q(TRADITION_HELP_STRING, d);
@@ -2140,7 +2142,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         return;
       }
     }
-    start_game(d);
+    start_game(d, "create_parse ccr_mage aspect select");
     break;
   case CCR_ASPECT:
     if (GET_TRADITION(d->character) == TRAD_SHAMANIC) {
@@ -2184,7 +2186,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         SEND_TO_Q("\r\nConjurers focus on conjuring spirits, but cannot cast spells. Sorcerers are the opposite of this. Elemental aspects are restricted to working with elementals of that flavor and certain classes of spells (Earth is Manipulation, Air is Detection, Fire is Combat, Water is Illusion).\r\n\r\nSelect your aspect (1 for Conjurer, 2 for Sorcerer, 3-6 for Earth, Air, Fire, Water.) ", d);
         return;
       }
-    start_game(d);
+    start_game(d, "create_parse aspect select");
     break;
   }
 }

@@ -7546,12 +7546,13 @@ ACMD(do_leaderboard) {
   if (!strncmp(argument, "hardcore", strlen(argument))) {
     mysql_wrapper(mysql, "SELECT name, tke FROM pfiles "
                          "  WHERE tke > 0 "
-                         "  AND rank = 1 "
+                         "  AND `rank` = 1 "
                          "  AND hardcore = 1 "
                          "  AND name != 'deleted' "
                          "ORDER BY tke DESC LIMIT 10;");
 
     if (!(res = mysql_use_result(mysql))) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unable to look up hardcore leaderboard.");
       send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
       return;
     }
@@ -7604,6 +7605,7 @@ ACMD(do_leaderboard) {
                            "  GROUP BY vict_idnum"
                            "  ORDER BY `value_occurrence` DESC LIMIT 10;");
       if (!(res = mysql_use_result(mysql))) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unable to look up blocks/ignores leaderboard.");
         send_to_char(ch, "Sorry, the leaderboard system is offline at the moment.\r\n");
         return;
       }
@@ -7628,7 +7630,7 @@ ACMD(do_leaderboard) {
   // Sanitization not required here-- they're constant strings.
   snprintf(buf, sizeof(buf), "SELECT name, %s FROM pfiles "
                              "  WHERE %s > 0 "
-                             "  AND rank = 1 "
+                             "  AND `rank` = 1 "
                              "  AND TKE > 0 "
                              "  AND name != 'deleted' "
                              "ORDER BY %s DESC LIMIT 10;",

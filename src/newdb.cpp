@@ -38,7 +38,7 @@
 #include "mysql_config.hpp"
 
 extern void kill_ems(char *);
-extern void init_char_sql(struct char_data *ch);
+extern void init_char_sql(struct char_data *ch, const char *origin);
 static const char *const INDEX_FILENAME = "etc/pfiles/index";
 extern void add_phone_to_list(struct obj_data *);
 extern Playergroup *loaded_playergroups;
@@ -1181,12 +1181,12 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
   MYSQL_RES *res;
   MYSQL_ROW row;
-  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE idnum=%ld;", GET_IDNUM(player));
+  snprintf(buf, sizeof(buf), "SELECT `idnum` FROM pfiles WHERE `idnum`=%ld;", GET_IDNUM(player));
   if (!mysql_wrapper(mysql, buf)) {
     res = mysql_use_result(mysql);
     row = mysql_fetch_row(res);
     if (!row && mysql_field_count(mysql))
-      init_char_sql(player);
+      init_char_sql(player, "save_char");
     mysql_free_result(res);
   }
 
