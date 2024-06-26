@@ -146,7 +146,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
   bf::path veh_file_path = global_vehicles_dir / get_veh_save_key(veh);
 
   if (!(fl = fopen(veh_file_path.c_str(), "w"))) {
-    mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, FALSE);
+    mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
@@ -402,7 +402,7 @@ void save_vehicles(bool fromCopyover)
 
   // Write the count of vehicles to the file.
   if (!(fl = fopen("veh/vfile", "w"))) {
-    mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, FALSE);
+    mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, TRUE);
     return;
   }
   fprintf(fl, "%d\n", num_veh);

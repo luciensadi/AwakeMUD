@@ -696,7 +696,7 @@ ACMD(do_patch)
     default:
       act("$p seems to be defective.", FALSE, ch, patch, 0, TO_CHAR);
       snprintf(buf, sizeof(buf), "Illegal patch type - object #%ld", GET_OBJ_VNUM(patch));
-      mudlog(buf, ch, LOG_SYSLOG, FALSE);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
       break;
   }
 }

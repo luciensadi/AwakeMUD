@@ -1238,7 +1238,7 @@ void update_paydata_market() {
 
   // Update paydata markets.
   if (!(fl = fopen("etc/consist", "w"))) {
-    mudlog("SYSERR: Can't Open Consistency File For Write.", NULL, LOG_SYSLOG, FALSE);
+    mudlog("SYSERR: Can't Open Consistency File For Write.", NULL, LOG_SYSLOG, TRUE);
     return;
   }
 

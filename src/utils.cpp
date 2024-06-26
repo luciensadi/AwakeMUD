@@ -1006,7 +1006,7 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
   }
 
   if (file)
-    fprintf(stderr, "%-19.19s :: %s: %s%s\n", tmp, log_types[log], buf2, str);
+    fprintf(stderr, "%-19.19s :: %s: %s%s\n", tmp, log_types[log], buf2, get_string_after_color_code_removal(str, NULL));
 
   char with_neutral_codes[MAX_STRING_LENGTH];
   snprintf(with_neutral_codes, sizeof(with_neutral_codes), "^g[%s: %s%s^g]", log_types[log], buf2, str);
