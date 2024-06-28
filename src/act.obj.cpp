@@ -995,10 +995,11 @@ bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         char *representation = generate_new_loggable_representation(obj);
 
         // Compose our log line.
-        snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s",
+        snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s (cost %d)",
                 GET_CHAR_NAME(ch),
                 GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
-                representation);
+                representation,
+                GET_OBJ_COST(obj));
 
         if (same_host_warning) {
           const char *pname = get_player_name(obj->dropped_by_char);
@@ -1370,9 +1371,10 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj)
 
         // Log anyone doing this from a multibox host.
         const char *pname = get_player_name(obj->dropped_by_char);
-        mudlog_vfprintf(ch, LOG_CHEATLOG, "%s getting from room: %s, which was dropped/donated by %s (%ld) at their same host (%s)!", 
+        mudlog_vfprintf(ch, LOG_CHEATLOG, "%s getting from room: %s (cost %d), which was dropped/donated by %s (%ld) at their same host (%s)!", 
                         GET_CHAR_NAME(ch), 
-                        representation, 
+                        representation,
+                        GET_OBJ_COST(obj),
                         pname, 
                         obj->dropped_by_char,
                         GET_LEVEL(ch) < LVL_PRESIDENT ? obj->dropped_by_host : "<obscured>");
@@ -4900,7 +4902,7 @@ ACMD(do_draw)
           // problem here is we have to recurse a bit-- worn holsters, and also worn items containing holsters
         }
         */
-        send_to_char(ch, "You don't seem to be using anything named '%s'.\r\n", argument);
+        send_to_char(ch, "You don't seem to be wearing a holster named '%s'.\r\n", argument);
         return;
       }
 
