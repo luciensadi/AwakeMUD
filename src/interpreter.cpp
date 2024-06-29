@@ -783,6 +783,7 @@ struct command_info cmd_info[] =
     { "osay"       , POS_LYING   , do_say      , 0, SCMD_OSAY, ALLOWS_IDLE_REWARD },
     { "osays"      , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_OSAYS, ALLOWS_IDLE_REWARD },
     { "out"        , POS_SITTING , do_leave    , 0, 0, BLOCKS_IDLE_REWARD },
+    { "oneway"     , POS_RESTING , do_dig      , LVL_BUILDER, SCMD_ONEWAY, BLOCKS_IDLE_REWARD },
     { "."          , POS_LYING   , do_say      , 0, SCMD_OSAY, ALLOWS_IDLE_REWARD },
 
     { "put"        , POS_RESTING , do_put      , 0, 0, BLOCKS_IDLE_REWARD },

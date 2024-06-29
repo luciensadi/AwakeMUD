@@ -461,8 +461,8 @@ ACMD(do_dig)
     return;
   }
 
-  if (subcmd == SCMD_DIG && (!*arg || !*buf)) {
-    send_to_char("Usage: dig <direction> <vnum>\r\n", ch);
+  if ((subcmd == SCMD_DIG || subcmd == SCMD_ONEWAY) && (!*arg || !*buf)) {
+    send_to_char(ch, "Usage: %s <direction> <vnum>\r\n", subcmd == SCMD_DIG ? "dig" : "oneway");
     return;
   }
   else if (subcmd == SCMD_UNDIG && !*arg) {
@@ -482,7 +482,7 @@ ACMD(do_dig)
     return;
   }
 
-  if (subcmd == SCMD_DIG) {
+  if (subcmd == SCMD_DIG || subcmd == SCMD_ONEWAY) {
     int atoi_buf = atoi(buf);
     if (!atoi_buf) {
       send_to_char("Please enter a room vnum.\r\n", ch);
@@ -572,38 +572,32 @@ ACMD(do_dig)
     world[room].dir_option[rev_dir[dir]] ? world[room].dir_option[rev_dir[dir]]->to_room->number : -1
   ); */
 
-  if (subcmd == SCMD_DIG && (in_room->dir_option[dir] || world[room].dir_option[rev_dir[dir]])) {
-    send_to_char("You can't dig over an existing exit.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE((subcmd == SCMD_DIG || subcmd == SCMD_ONEWAY) && in_room->dir_option[dir], "You can't dig over an existing exit.");
+  FAILURE_CASE(subcmd == SCMD_DIG && world[room].dir_option[rev_dir[dir]], "You can't dig over the other room's existing exit.");
 
-  if (subcmd == SCMD_UNDIG && !in_room->dir_option[dir]){
-    send_to_char("There's no exit in that direction to undig.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(subcmd == SCMD_UNDIG && !in_room->dir_option[dir], "There's no exit in that direction to undig.");
 
-  if (subcmd == SCMD_DIG) {
+  if (subcmd == SCMD_DIG || subcmd == SCMD_ONEWAY) {
     in_room->dir_option[dir] = new room_direction_data;
     in_room->dir_option[dir]->to_room = &world[room];
     in_room->dir_option[dir]->barrier = 4;
-    in_room->dir_option[dir]->material = 5;
+    in_room->dir_option[dir]->material = MATERIAL_BRICK;
     in_room->dir_option[dir]->exit_info = 0;
     in_room->dir_option[dir]->to_room_vnum = world[room].number;
 
     dir = rev_dir[dir];
-    world[room].dir_option[dir] = new room_direction_data;
-    world[room].dir_option[dir]->to_room = in_room;
-    world[room].dir_option[dir]->barrier = 4;
-    world[room].dir_option[dir]->material = 5;
-    world[room].dir_option[dir]->exit_info = 0;
-    world[room].dir_option[dir]->to_room_vnum = in_room->number;
-
-    if (zone1 == zone2)
-      write_world_to_disk(zone_table[zone1].number);
-    else {
-      write_world_to_disk(zone_table[zone1].number);
-      write_world_to_disk(zone_table[zone2].number);
+    if (subcmd == SCMD_DIG) {
+      world[room].dir_option[dir] = new room_direction_data;
+      world[room].dir_option[dir]->to_room = in_room;
+      world[room].dir_option[dir]->barrier = 4;
+      world[room].dir_option[dir]->material = MATERIAL_BRICK;
+      world[room].dir_option[dir]->exit_info = 0;
+      world[room].dir_option[dir]->to_room_vnum = in_room->number;
     }
+
+    write_world_to_disk(zone_table[zone1].number);
+    if (zone1 != zone2 && subcmd != SCMD_ONEWAY)
+      write_world_to_disk(zone_table[zone2].number);
   } else {
     // Delete the reverse exit, if it exists.
     if (in_room->dir_option[dir]->to_room && in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]]) {

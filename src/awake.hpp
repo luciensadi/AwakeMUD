@@ -2002,6 +2002,7 @@ enum {
 /* do_dig */
 #define SCMD_DIG        0
 #define SCMD_UNDIG      1
+#define SCMD_ONEWAY     2
 
 /* directions */
 #define SCMD_NORTH      1
