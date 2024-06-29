@@ -7926,11 +7926,12 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
     if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
       // Write the room title with bits after it.
       ROOM_FLAGS(in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-      snprintf(room_title_buf, sizeof(room_title_buf), "^C[%5ld] %s^n%s [ %s ]^n", 
+      snprintf(room_title_buf, sizeof(room_title_buf), "^C[%5ld] %s^n%s [ %s ] {%s}^n",
                   GET_ROOM_VNUM(in_room), 
                   room_name,
                   name_decorated ? " ^L(name-dec'd)^n" : "",
-                  buf);
+                  buf,
+                  spirit_name_with_hearth[SECT(in_room)]);
       // Append things that don't show up in bits.
       APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
       APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
