@@ -322,8 +322,8 @@ ACMD (do_redit)
       ++i;
     if (i <= top_of_zone_table) {
       d->edit_room->zone = i;
-      GET_SETTABLE_BACKGROUND_AURA(d->edit_room) = zone_table[i].default_aura_type;
-      GET_SETTABLE_BACKGROUND_COUNT(d->edit_room) = zone_table[i].default_aura_force;
+      d->edit_room->background[CURRENT_BACKGROUND_COUNT] = d->edit_room->background[PERMANENT_BACKGROUND_COUNT] = zone_table[i].default_aura_force;
+      d->edit_room->background[CURRENT_BACKGROUND_TYPE] = d->edit_room->background[PERMANENT_BACKGROUND_TYPE] = zone_table[i].default_aura_type;
     }
     d->edit_mode = REDIT_CONFIRM_EDIT;
     return;
@@ -517,8 +517,8 @@ ACMD(do_dig)
         ++i;
       if (i <= top_of_zone_table) {
         ch->desc->edit_room->zone = i;
-        GET_SETTABLE_BACKGROUND_AURA(ch->desc->edit_room) = zone_table[i].default_aura_type;
-        GET_SETTABLE_BACKGROUND_COUNT(ch->desc->edit_room) = zone_table[i].default_aura_force;
+        ch->desc->edit_room->background[CURRENT_BACKGROUND_COUNT] = ch->desc->edit_room->background[PERMANENT_BACKGROUND_COUNT] = zone_table[i].default_aura_force;
+        ch->desc->edit_room->background[CURRENT_BACKGROUND_TYPE] = ch->desc->edit_room->background[PERMANENT_BACKGROUND_TYPE] = zone_table[i].default_aura_type;
       }
 
       // Then save it right away. This undoes the boilerplate above.
