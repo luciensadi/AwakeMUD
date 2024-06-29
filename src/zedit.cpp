@@ -72,7 +72,7 @@ void write_zone_to_disk(int vnum)
   // write it out!
   fprintf(fp, "#%d\n", vnum);
   fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, ZONE.name));
-  fprintf(fp, "%d %d %d %d %d %d %d %d\n", ZONE.top, ZONE.lifespan, ZONE.reset_mode, ZONE.security, ZONE.connected, ZONE.jurisdiction, ZONE.is_pghq, ZONE.locked_to_non_editors);
+  fprintf(fp, "%d %d %d %d %d %d %d %d %d %d\n", ZONE.top, ZONE.lifespan, ZONE.reset_mode, ZONE.security, ZONE.connected, ZONE.jurisdiction, ZONE.is_pghq, ZONE.locked_to_non_editors, ZONE.default_aura_type, ZONE.default_aura_force);
   fprintf(fp, "%d %d %d %d %d\n", ZONE.editor_ids[0], ZONE.editor_ids[1],
           ZONE.editor_ids[2], ZONE.editor_ids[3], ZONE.editor_ids[4]);
   for (i = 0; i < ZONE.num_cmds; ++i) {
@@ -245,6 +245,12 @@ void zedit_disp_data_menu(struct descriptor_data *d)
     send_to_char(CH, "^G8^Y) ^WConnected: ^c%d^n\r\n", ZON->connected);
   }
   send_to_char(CH, "^G9^Y) ^WIs PGHQ: ^c%s^n\r\n", ZON->is_pghq ? "yes" : "no");
+  send_to_char(CH, "^GD^Y) ^WDefault Background Count: ^c");
+  if (ZON->default_aura_force) {
+    send_to_char(CH, "%s^n @ ^c%d^n\r\n", background_types[ZON->default_aura_type], ZON->default_aura_force);
+  } else {
+    send_to_char(CH, "<not set>^n\r\n");
+  }
   if (access_level(CH, LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS)) {
     send_to_char(CH, "^GL^Y) ^WSecret Squirrel (Inaccessible to Non-Editors): ^c%s^n\r\n", ZON->locked_to_non_editors ? "TRUE" : "FALSE");
   }
@@ -784,6 +790,16 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Zone is a PGHQ (1 - yes, 0 - no): ", CH);
       d->edit_mode = ZEDIT_PGHQ;
       break;
+    case 'D':
+    case 'd':
+      send_to_char("What background should be set by default ^Wwhen creating a room in this zone^n?\r\n", CH);
+      send_to_char(CH, " 0) No default background\r\n");
+      for (int idx = 0; idx < NUM_AURAS; idx++) {
+        send_to_char(CH, "%2d) %s%s%s^n\r\n", idx + 1, idx == AURA_POWERSITE ? "^L" : "^n", background_types[idx], idx == AURA_POWERSITE ? " (do not set)" : "");
+      }
+      send_to_char(CH, "\r\nSelect a number: ");
+      d->edit_mode = ZEDIT_AURA_TYPE;
+      break;
     case 'L':
     case 'l':
       if (!access_level(CH, LVL_FOR_SETTING_ZONE_CONNECTED_STATUS)) {
@@ -1319,11 +1335,42 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
   case ZEDIT_JURISDICTIONS:
     number = atoi(arg);
     if (number < 0 || number >= NUM_JURISDICTIONS) {
-      send_to_char("Invalid choice.  Please enter from 0 to 1.\r\n", CH);
+      send_to_char(CH, "Invalid choice.  Please enter from 0 to %d.\r\n", NUM_JURISDICTIONS - 1);
       send_to_char("Enter Jurisdiction: ", CH);
       return;
     } else
       ZON->jurisdiction = number;
+    zedit_disp_data_menu(d);
+    break;
+  case ZEDIT_AURA_TYPE:
+    number = atoi(arg);
+    if (number < 0 || number > NUM_AURAS) { // yes > not >=, aura index is incremented by 1
+      send_to_char(CH, "Invalid choice. Please enter from 1 to %d, or 0 for no aura: ", NUM_AURAS - 1);
+      return;
+    }
+    // 0 to clear.
+    if (number == 0) {
+      ZON->default_aura_type = ZON->default_aura_force = 0;
+      zedit_disp_data_menu(d);
+      return;
+    }
+    // Otherwise, set aura. Decrement to the actual aura value.
+    number -= 1;
+    if (number == AURA_POWERSITE) {
+      send_to_char(CH, "Sorry, you can't set powersite as the default. Please enter from 1 to %d, or 0 for no aura: ", NUM_AURAS - 1);
+      return;
+    }
+    ZON->default_aura_type = number;
+    send_to_char(CH, "What force should the default %s background be at? (ref MitS p84)\r\n", background_types[ZON->default_aura_type]);
+    d->edit_mode = ZEDIT_AURA_FORCE;
+    break;
+  case ZEDIT_AURA_FORCE:
+    number = atoi(arg);
+    if (number < 0 || number > NUM_AURAS) {
+      send_to_char(CH, "You must set a force between 0 (no background) and 10 (outer space). Anything above 5 is a dangerous mana warp. Try again: ");
+      return;
+    }
+    ZON->default_aura_force = number;
     zedit_disp_data_menu(d);
     break;
   case ZEDIT_PGHQ:

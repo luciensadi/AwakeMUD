@@ -2743,17 +2743,30 @@ void load_zones(File &fl)
   Z.name = str_dup(buf);
 
   fl.GetLine(buf, 256, FALSE);
-  // Attempt to read the new PGHQ flag from the line.
-  if (sscanf(buf, " %d %d %d %d %d %d %d %d",
+  // Attempt to read background count from the line.
+  if (sscanf(buf, " %d %d %d %d %d %d %d %d %d %d",
              &Z.top, &Z.lifespan, &Z.reset_mode,
-             &Z.security, &Z.connected, &Z.jurisdiction, &Z.is_pghq, &Z.locked_to_non_editors) < 6)
+             &Z.security, &Z.connected, &Z.jurisdiction, &Z.is_pghq, &Z.locked_to_non_editors,
+             &Z.default_aura_type, &Z.default_aura_force) < 10)
   {
-    // Fallback: Instead, read out the old format. Assume we'll save PGHQ data later.
-    if (sscanf(buf, " %d %d %d %d %d %d",
-               &Z.top, &Z.lifespan, &Z.reset_mode,
-               &Z.security, &Z.connected, &Z.jurisdiction) < 5) {
-      fprintf(stderr, "FATAL ERROR: Format error in 6-constant line of %s: Expected six numbers like ' # # # # # #'.", fl.Filename());
-      exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
+    // Attempt to read the locked flag from the line.
+    if (sscanf(buf, " %d %d %d %d %d %d %d %d",
+              &Z.top, &Z.lifespan, &Z.reset_mode,
+              &Z.security, &Z.connected, &Z.jurisdiction, &Z.is_pghq, &Z.locked_to_non_editors) < 8)
+    {
+      // Attempt to read the new PGHQ flag from the line.
+      if (sscanf(buf, " %d %d %d %d %d %d %d",
+                &Z.top, &Z.lifespan, &Z.reset_mode,
+                &Z.security, &Z.connected, &Z.jurisdiction, &Z.is_pghq) < 7)
+      {
+        // Fallback: Instead, read out the old format. Assume we'll save PGHQ data later.
+        if (sscanf(buf, " %d %d %d %d %d %d",
+                  &Z.top, &Z.lifespan, &Z.reset_mode,
+                  &Z.security, &Z.connected, &Z.jurisdiction) < 5) {
+          fprintf(stderr, "FATAL ERROR: Format error in 6-constant line of %s: Expected six numbers like ' # # # # # #'.", fl.Filename());
+          exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
+        }
+      }
     }
   }
 

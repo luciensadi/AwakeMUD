@@ -353,6 +353,8 @@ extern bool is_olc_available(struct char_data *ch);
 #define ZEDIT_JURISDICTIONS             26
 #define ZEDIT_PGHQ                      27
 #define ZEDIT_ARG4                      28
+#define ZEDIT_AURA_TYPE                 29
+#define ZEDIT_AURA_FORCE                30
 
 #define CEDIT_CONFIRM_EDIT        0
 #define CEDIT_MAIN_MENU           1

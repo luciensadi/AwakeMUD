@@ -320,8 +320,11 @@ ACMD (do_redit)
     int i = 0;
     while ((d->edit_number > zone_table[i].top) && (i < top_of_zone_table))
       ++i;
-    if (i <= top_of_zone_table)
+    if (i <= top_of_zone_table) {
       d->edit_room->zone = i;
+      GET_SETTABLE_BACKGROUND_AURA(d->edit_room) = zone_table[i].default_aura_type;
+      GET_SETTABLE_BACKGROUND_COUNT(d->edit_room) = zone_table[i].default_aura_force;
+    }
     d->edit_mode = REDIT_CONFIRM_EDIT;
     return;
   }
@@ -512,8 +515,11 @@ ACMD(do_dig)
       int i = 0;
       while ((ch->desc->edit_number > zone_table[i].top) && (i < top_of_zone_table))
         ++i;
-      if (i <= top_of_zone_table)
+      if (i <= top_of_zone_table) {
         ch->desc->edit_room->zone = i;
+        GET_SETTABLE_BACKGROUND_AURA(ch->desc->edit_room) = zone_table[i].default_aura_type;
+        GET_SETTABLE_BACKGROUND_COUNT(ch->desc->edit_room) = zone_table[i].default_aura_force;
+      }
 
       // Then save it right away. This undoes the boilerplate above.
       ch->desc->edit_mode = REDIT_CONFIRM_SAVESTRING;

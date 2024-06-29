@@ -159,6 +159,10 @@ struct zone_data
   int jurisdiction;       // Abstract zone this zone belongs to
   int is_pghq;
   int locked_to_non_editors;
+
+  int default_aura_type = 0;
+  int default_aura_force = 0;
+
   struct reset_com *cmd;   /* command table for reset            */
 
   /*

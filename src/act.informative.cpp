@@ -2259,7 +2259,10 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
           send_to_char(ch, "^LSeveral beams of light highlight the %sshadows.^n\r\n", is_nighttime ? "nighttime " : "");
         }
       } else {
-        send_to_char(ch, "^LDarkness cloaks the area.^n\r\n");
+        if (GET_JURISDICTION(ch->in_room) == JURISDICTION_SECRET)
+          send_to_char(ch, "^LStygian darkness shrouds the area.^n\r\n");
+        else
+          send_to_char(ch, "^LDarkness cloaks the area.^n\r\n");
       }
     }
 

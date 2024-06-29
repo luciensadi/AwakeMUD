@@ -825,6 +825,7 @@ enum {
 #define AURA_WRONGNESS     15
 #define AURA_PLAYERCOMBAT  16
 #define AURA_PLAYERDEATH   17
+#define NUM_AURAS          18
 
 #define COMBAT      1
 #define DETECTION    2
