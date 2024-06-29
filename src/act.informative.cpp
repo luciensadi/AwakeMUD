@@ -2184,28 +2184,27 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
           break;
       }
     } else if (GET_BACKGROUND_COUNT(ch->in_room) < 6) {
-      snprintf(buf, sizeof(buf), "%sA", GET_BACKGROUND_AURA(ch->in_room) == AURA_WRONGNESS ? "^o" : "^c");
       switch (GET_BACKGROUND_COUNT(ch->in_room)) {
         case 1:
-          strlcat(buf, " distracting", sizeof(buf));
+          snprintf(buf, sizeof(buf), "%sA distracting", GET_BACKGROUND_AURA(ch->in_room) == AURA_WRONGNESS ? "^[F211]" : "^t");
           break;
         case 2:
-          strlcat(buf, " light", sizeof(buf));
+          snprintf(buf, sizeof(buf), "%sA light", GET_BACKGROUND_AURA(ch->in_room) == AURA_WRONGNESS ? "^[F212]" : "^T");
           break;
         case 3:
-          strlcat(buf, " heavy", sizeof(buf));
+          snprintf(buf, sizeof(buf), "%sA heavy", GET_BACKGROUND_AURA(ch->in_room) == AURA_WRONGNESS ? "^[F213]" : "^o");
           break;
         case 4:
-          strlcat(buf, "n almost overwhelming", sizeof(buf));
+          snprintf(buf, sizeof(buf), "%sAn almost overwhelming", GET_BACKGROUND_AURA(ch->in_room) == AURA_WRONGNESS ? "^[F214]" : "^O");
           break;
         case 5:
-          strlcat(buf, "n overwhelming", sizeof(buf));
+          snprintf(buf, sizeof(buf), "%sAn overwhelming", GET_BACKGROUND_AURA(ch->in_room) == AURA_WRONGNESS ? "^[F215]" : "^r");
           break;
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " aura of %s pervades the area.^n\r\n", background_types[GET_BACKGROUND_AURA(ch->in_room)]);
       send_to_char(buf, ch);
     } else {
-      send_to_char("^RThe mana is warping here!^n\r\n", ch);
+      send_to_char(ch, "^RThe mana is warped by %s here!^n\r\n", background_types[GET_BACKGROUND_AURA(ch->in_room)]);
     }
   }
 
