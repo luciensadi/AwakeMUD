@@ -1284,6 +1284,7 @@ struct command_info mtx_info[] =
     { "RESERVED", 0, 0, 0, 0
     , BLOCKS_IDLE_REWARD },
     { "abort", 0, do_abort, 0, 0, BLOCKS_IDLE_REWARD },
+    { "afk", 0, do_afk, 0, 0, ALLOWS_IDLE_REWARD },
     { "alias", 0, do_alias, 0, 0, BLOCKS_IDLE_REWARD },
     { "analyze", 0, do_analyze, 0, 0, BLOCKS_IDLE_REWARD },
     { "answer", 0, do_comcall, 0, SCMD_ANSWER, BLOCKS_IDLE_REWARD },
