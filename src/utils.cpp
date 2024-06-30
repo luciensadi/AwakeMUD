@@ -3008,6 +3008,12 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
 bool char_can_make_noise(struct char_data *ch, const char *message) {
   bool is_stealth = affected_by_spell(ch, SPELL_STEALTH);
   bool is_silence = get_ch_in_room(ch)->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0;
+
+  if (is_silence && ch->desc) {
+    // The silence spell only affects players if they're the caster or are grouped with them.
+    is_silence = spell_affecting_ch_is_cast_by_ch_or_group_member(ch, SPELL_SILENCE);
+  }
+
   if (is_stealth || is_silence) {
     // Can't make noise.
     if (message) {

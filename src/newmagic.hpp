@@ -28,6 +28,7 @@ extern void end_all_spells_matching_function(struct char_data *ch, bool (*should
 extern void end_all_caster_records(struct char_data *ch, bool keep_sustained_by_other);
 extern void end_all_spells_of_type_cast_by_ch(int spell, int subtype, struct char_data *ch);
 extern void end_all_sustained_spells(struct char_data *ch);
+extern bool spell_affecting_ch_is_cast_by_ch_or_group_member(struct char_data *ch, int spell_type);
 
 #define DAMOBJ_NONE                     0
 #define DAMOBJ_ACID                     1

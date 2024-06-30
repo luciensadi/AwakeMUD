@@ -6875,6 +6875,25 @@ int get_spell_affected_successes(struct char_data * ch, int type)
   return FALSE;
 }
 
+#define CHECK_FOR_CANDIDATE_SPELL(ch_to_check) \
+  if (ch_to_check && (ch == ch_to_check || AFF_FLAGGED(ch_to_check, AFF_GROUP))) { \
+    for (struct sustain_data *hjp = GET_SUSTAINED(ch_to_check); hjp; hjp = hjp->next) { if ((hjp->spell == spell_type) && (hjp->caster == TRUE)) { return TRUE; }} \
+  }
+bool spell_affecting_ch_is_cast_by_ch_or_group_member(struct char_data *ch, int spell_type) {
+  CHECK_FOR_CANDIDATE_SPELL(ch);
+
+  if (AFF_FLAGGED(ch, AFF_GROUP)) {
+    CHECK_FOR_CANDIDATE_SPELL(ch->master);
+
+    for (struct follow_type *f = ch->followers; f; f = f->next) {
+      CHECK_FOR_CANDIDATE_SPELL(f->follower);
+    }
+  }
+
+  return FALSE;
+}
+#undef CHECK_FOR_CANDIDATE_SPELL
+
 bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch) {
   // Focus or character does not exist.
   if (!focus || !ch)
