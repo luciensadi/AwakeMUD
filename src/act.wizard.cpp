@@ -8270,7 +8270,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
 
         // Flag objects with zero cost
         if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_COST(obj) <= 0 && !IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cost %d^n.\r\n", GET_OBJ_COST(obj));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cost %d without !SELL set^n.\r\n", GET_OBJ_COST(obj));
           issues++;
         }
         break;
