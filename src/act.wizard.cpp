@@ -7671,13 +7671,11 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
       if (real_host(room->matrix) < 1) {
         strlcat(buf, "  - ^yInvalid Matrix host specified.^n\r\n", sizeof(buf));
         issues++;
-        
       }
 
       if (!strcmp(room->address, STRING_ROOM_JACKPOINT_NO_ADDR)) {
-        strlcat(buf, "  - ^yDefault jackpoint address used.^n\r\n", sizeof(buf));
+        strlcat(buf, "  - ^yDefault jackpoint physical address used.^n\r\n", sizeof(buf));
         issues++;
-        
       }
     }
 
@@ -7952,7 +7950,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
 
     // Flag mobs with no stats
     if (total_stats == 0) {
-      strlcat(buf, "  - has not had its attributes set yet.\r\n", sizeof(buf));
+      strlcat(buf, "  - ^yhas not had its attributes set yet.^n\r\n", sizeof(buf));
       
       issues++;
     }
@@ -8256,22 +8254,23 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         }
         // Fall through
       default:
-        // Weightless?
-        if (GET_OBJ_WEIGHT(obj) <= 0) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no or negative weight^n.\r\n");
-          
-          issues++;
+        // Don't complain about weight for files.
+        if (GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY || GET_DECK_ACCESSORY_TYPE(obj) != TYPE_FILE) {
+          // Weightless?
+          if (GET_OBJ_WEIGHT(obj) <= 0) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - no or negative weight^n.\r\n");
+            issues++;
+          }
+          // Extremely heavy?
+          if (GET_OBJ_WEIGHT(obj) >= 100.0) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f kgs^n%s\r\n", GET_OBJ_WEIGHT(obj), GET_OBJ_WEIGHT(obj) > 500 ? " (should this be Fountain / Loaded Decoration?)" : ".");
+            issues++;
+          }
         }
-        // Extremely heavy?
-        if (GET_OBJ_WEIGHT(obj) >= 100.0) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high weight %0.2f kgs^n.\r\n", GET_OBJ_WEIGHT(obj));
-          
-          issues++;
-        }
+
         // Flag objects with zero cost
-        if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_COST(obj) <= 0) {
+        if (GET_OBJ_TYPE(obj) != ITEM_OTHER && GET_OBJ_COST(obj) <= 0 && !IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL)) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - cost %d^n.\r\n", GET_OBJ_COST(obj));
-          
           issues++;
         }
         break;
