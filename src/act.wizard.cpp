@@ -8621,7 +8621,6 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
     // Flag invalid Johnsons
     if (quest->johnson <= 0 || johnson_rnum <= 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yinvalid Johnson %ld^n.\r\n", quest->johnson);
-      
       issues++;
     }
 
@@ -8633,7 +8632,6 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       // invalid object
       if (real_object(quest->obj[obj_idx].vnum) <= -1) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: ^yinvalid object %ld^n.\r\n", obj_idx, quest->obj[obj_idx].vnum);
-        
         issues++;
       }
 
@@ -8646,7 +8644,6 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
               || quest->obj[obj_idx].l_data >= quest->num_mobs
               || real_mobile(quest->mob[quest->obj[obj_idx].l_data].vnum) <= -1) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: ^yinvalid load mobile M%ld^n.\r\n", obj_idx, quest->obj[obj_idx].l_data);
-            
             issues++;
           }
           break;
@@ -8659,14 +8656,12 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
               && real_mobile(quest->obj[obj_idx].o_data) <= -1)
           {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: ^yinvalid dest mobile M%ld^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
-            
             issues++;
           }
           break;
         case QOO_LOCATION:
           if (real_room(quest->obj[obj_idx].o_data) <= -1) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: ^yinvalid room %ld^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
-            
             issues++;
           }
           break;
@@ -8674,7 +8669,6 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
         case QOO_UPLOAD:
           if (real_host(quest->obj[obj_idx].o_data) <= -1) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: ^yinvalid host %ld^n.\r\n", obj_idx, quest->obj[obj_idx].o_data);
-            
             issues++;
           }
 
@@ -8682,7 +8676,6 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
             struct obj_data *loaded = read_object(quest->obj[obj_idx].vnum, VIRTUAL);
             if (GET_OBJ_TYPE(loaded) != ITEM_DECK_ACCESSORY) {
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: obj %ld is not a deck accessory ^y(it can't be uploaded)^n.\r\n", obj_idx, quest->obj[obj_idx].vnum);
-              
               issues++;
             }
             extract_obj(loaded);
@@ -8699,7 +8692,6 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       // Check for invalid mob.
       if (real_mobile(quest->mob[mob_idx].vnum) <= -1) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: ^yinvalid mobile %ld^n.\r\n", mob_idx, quest->mob[mob_idx].vnum);
-        
         issues++;
       }
 
@@ -8708,7 +8700,6 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
         case QML_LOCATION:
           if (real_room(quest->mob[mob_idx].l_data) <= -1) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: ^yinvalid load room %ld^n.\r\n", mob_idx, quest->mob[mob_idx].l_data);
-            
             issues++;
           }
           break;
@@ -8718,14 +8709,12 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
         case QMO_LOCATION:
           if (real_room(quest->mob[mob_idx].o_data) <= -1) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: ^yinvalid destination room %ld^n.\r\n", mob_idx, quest->mob[mob_idx].o_data);
-            
             issues++;
           }
           break;
         case QMO_KILL_ESCORTEE:
           if (real_room(quest->mob[mob_idx].o_data) <= -1) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - mob objective #%d: ^yinvalid escortee %ld^n.\r\n", mob_idx, quest->mob[mob_idx].o_data);
-            
             issues++;
           }
           break;
@@ -8736,7 +8725,6 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
     payout_karma *= KARMA_GAIN_MULTIPLIER;
     if (payout_karma > 600) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - karma payout after multiplier is at least ^c%.2f^n.\r\n", ((float) payout_karma) / 100);
-      
       issues++;
     }
 
@@ -8744,7 +8732,13 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
     payout_nuyen *= NUYEN_GAIN_MULTIPLIER;
     if (payout_nuyen > 10000) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - nuyen payout after multiplier is at least ^c%d^n.\r\n", payout_nuyen);
-      
+      issues++;
+    }
+
+    // Flag item rewards.
+    if (quest->reward > 0){
+      rnum_t quest_reward_rnum = real_object(quest->reward);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yitem reward^n ^c%ld^n (%s^n).\r\n", quest->reward, quest_reward_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[quest_reward_rnum]) : "<invalid>");
       issues++;
     }
 
@@ -8756,7 +8750,6 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
     } else {
       if (!ispunct(get_final_character_from_string(quest->intro))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yintro string does not end in punctuation^n.\r\n");
-        
         issues++;
       }
     }
@@ -8768,7 +8761,6 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
     } else {
       if (!ispunct(get_final_character_from_string(quest->decline))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ydecline string does not end in punctuation^n.\r\n");
-        
         issues++;
       }
     }
@@ -8780,7 +8772,6 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
     } else {
       if (!ispunct(get_final_character_from_string(quest->finish))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yfinish string does not end in punctuation^n.\r\n");
-        
         issues++;
       }
     }

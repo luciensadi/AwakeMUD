@@ -57,7 +57,7 @@ ACMD_DECLARE(do_new_echo);
 
 #define DELETE_ENTRY_FROM_VECTOR_PTR(iterator, vector_ptr) {delete [] *(iterator); *(iterator) = NULL; (vector_ptr)->erase((iterator));}
 
-#define LEVEL_REQUIRED_TO_ADD_ITEM_REWARDS  LVL_VICEPRES
+#define LEVEL_REQUIRED_TO_ADD_ITEM_REWARDS  LVL_BUILDER
 
 const char *obj_loads[] =
   {
@@ -1105,9 +1105,15 @@ void reward(struct char_data *ch, struct char_data *johnson)
       obj = read_object(rnum, REAL);
       obj_to_char(obj, ch);
       soulbind_obj_to_char(obj, ch, FALSE);
-      act("You give $p to $N.", FALSE, johnson, obj, ch, TO_CHAR);
-      act("$n gives you $p.", FALSE, johnson, obj, ch, TO_VICT);
-      act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
+      if (MOB_FLAGGED(johnson, MOB_INANIMATE)) {
+        act("You dispense $p for $N.", FALSE, johnson, obj, ch, TO_CHAR);
+        act("$n dispenses $p, and you pick it up.", FALSE, johnson, obj, ch, TO_VICT);
+        act("$n dispenses $p for $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
+      } else {
+        act("You give $p to $N.", FALSE, johnson, obj, ch, TO_CHAR);
+        act("$n gives you $p.", FALSE, johnson, obj, ch, TO_VICT);
+        act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
+      }
     }
   } else {
 #ifdef IS_BUILDPORT
@@ -1998,13 +2004,16 @@ void list_detailed_quest(struct char_data *ch, long rnum)
           "Maximum reputation: [^c%d^n]\r\n", quest_table[rnum].time,
           quest_table[rnum].min_rep, quest_table[rnum].max_rep);
 
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bonus nuyen: [^c%d^n (%d)], Bonus Karma: [^c%0.2f^n (%0.2f)], "
-          "Reward: [^c%d^n]\r\n",
-          (int) (quest_table[rnum].nuyen * NUYEN_GAIN_MULTIPLIER),
-          quest_table[rnum].nuyen,
-          ((float)quest_table[rnum].karma / 100) * KARMA_GAIN_MULTIPLIER,
-          ((float)quest_table[rnum].karma / 100),
-          quest_table[rnum].reward);
+
+  rnum_t quest_reward_rnum = real_object(quest_table[rnum].reward);
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Bonus nuyen: [^c%d^n (%d)], Bonus Karma: [^c%0.2f^n (%0.2f)], "
+           "Reward: [^c%ld (%s)^n]\r\n",
+           (int) (quest_table[rnum].nuyen * NUYEN_GAIN_MULTIPLIER),
+           quest_table[rnum].nuyen,
+           ((float)quest_table[rnum].karma / 100) * KARMA_GAIN_MULTIPLIER,
+           ((float)quest_table[rnum].karma / 100),
+           quest_table[rnum].reward,
+           quest_reward_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[quest_reward_rnum]) : "<invalid>");
 
   for (i = 0; i < quest_table[rnum].num_mobs; i++) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^mM^n%2d) ^c%d^n (%d) nuyen/^c%0.2f^n (%0.2f) karma: vnum %ld; %s (%ld); %s (%ld)\r\n",
@@ -2291,7 +2300,7 @@ int write_quests_to_disk(int zone) {
     if ((i = real_quest(counter)) > -1) {
       wrote_something = TRUE;
       fprintf(fp, "#%ld\n", quest_table[i].vnum);
-      fprintf(fp, "%ld %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %ld %ld %ld\n", quest_table[i].johnson,
+      fprintf(fp, "%ld %d %d %d %d %d %ld %d %d %d %d %d %d %d %d %d %ld %ld %ld\n", quest_table[i].johnson,
               quest_table[i].time, quest_table[i].min_rep,
               quest_table[i].max_rep, quest_table[i].nuyen,
               quest_table[i].karma, quest_table[i].reward,

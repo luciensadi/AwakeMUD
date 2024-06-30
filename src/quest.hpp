@@ -72,7 +72,8 @@ struct quest_data
   unsigned int min_rep, max_rep;
   vnum_t prerequisite_quest;
   vnum_t disqualifying_quest;
-  int nuyen, karma, reward;
+  int nuyen, karma;
+  vnum_t reward;
   struct quest_om_data *obj;
   struct quest_om_data *mob;
   char *intro;
