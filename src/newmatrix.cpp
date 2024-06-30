@@ -1493,9 +1493,7 @@ ACMD(do_matrix_look)
 
     // Find the icon they're looking at.
     for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host) {
-      if (!has_spotted(PERSONA, icon))
-        continue;
-      if (isname(arg, icon->name) || isname(arg, icon->look_desc)) {
+      if (has_spotted(PERSONA, icon) && keyword_appears_in_icon(arg, icon, TRUE, FALSE)) {
         show_icon_to_persona(PERSONA, icon);
         return;
       }
@@ -1695,7 +1693,7 @@ ACMD(do_analyze)
       return;
     }
     for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = ic->next_in_host)
-      if ((isname(arg, ic->look_desc) || isname(arg, ic->name)) && has_spotted(PERSONA, ic)) {
+      if (has_spotted(PERSONA, ic) && keyword_appears_in_icon(arg, ic, TRUE, FALSE)) {
         int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0);
         if (success > 0 ) {
           show_icon_to_persona(PERSONA, ic);
@@ -2388,7 +2386,7 @@ ACMD(do_run)
           }
 
           for (icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
-            if ((isname(arg, icon->name) || isname(arg, icon->look_desc)) && has_spotted(PERSONA, icon))
+            if (has_spotted(PERSONA, icon) && keyword_appears_in_icon(arg, icon, TRUE, FALSE))
               break;
 
           if (!icon) {
@@ -3246,8 +3244,7 @@ ACMD(do_matrix_scan)
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = ic->next_in_host)
-    if ((isname(argument, ic->look_desc) || isname(argument, ic->name)) && has_spotted(PERSONA, ic) &&
-        ic->decker) {
+    if (ic->decker && has_spotted(PERSONA, ic) && keyword_appears_in_icon(argument, ic, TRUE, FALSE)) {
       struct obj_data *obj;
       int target = ic->decker->masking;
       for (obj = ic->decker->software; obj; obj = obj->next_content)
@@ -3568,7 +3565,7 @@ ACMD(do_restrict)
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   int success, detect = 0;
   for (targ = matrix[PERSONA->in_host].icons; targ; targ = targ->next_in_host)
-    if (targ->decker && isname(arg, targ->name) && has_spotted(PERSONA, targ))
+    if (targ->decker && has_spotted(PERSONA, targ) && keyword_appears_in_icon(arg, targ, TRUE, FALSE))
       break;
   if (!targ) {
     send_to_icon(PERSONA, "You can't find that icon here.\r\n");

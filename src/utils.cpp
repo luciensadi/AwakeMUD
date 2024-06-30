@@ -6254,11 +6254,11 @@ const char * keyword_appears_in_icon(const char *keyword, struct matrix_icon *ic
 
   if (search_name) {
     CHECK_KEYWORD(icon->name, "name");
+    CHECK_KEYWORD(icon->look_desc, "look desc");
   }
 
   if (search_descs) {
     CHECK_KEYWORD(icon->long_desc, "long desc");
-    CHECK_KEYWORD(icon->look_desc, "look desc");
   }
 
   return NULL;
