@@ -120,6 +120,7 @@ ACMD_DECLARE(do_goto);
 
 SPECIAL(fixer);
 SPECIAL(shop_keeper);
+SPECIAL(johnson);
 
 /* Copyover Code, ported to Awake by Harlequin *
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> */
@@ -2476,11 +2477,8 @@ ACMD(do_wizload)
     char_to_room(mob, get_ch_in_room(ch));
 
     // Reset questgivers so they talk to you faster.
-    {
-      SPECIAL(johnson);
-      if (CHECK_FUNC_AND_SFUNC_FOR(mob, johnson)) {
-        GET_SPARE1(mob) = -1;
-      }
+    if (CHECK_FUNC_AND_SFUNC_FOR(mob, johnson)) {
+      GET_SPARE1(mob) = -1;
     }
 
     act("$n makes a quaint, magical gesture with one hand.", TRUE, ch,
@@ -7922,6 +7920,9 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       continue;
 
     struct char_data *mob = &mob_proto[real_mob];
+    bool is_shopkeeper = CHECK_FUNC_AND_SFUNC_FOR(mob, shop_keeper);
+    bool is_johnson = CHECK_FUNC_AND_SFUNC_FOR(mob, johnson);
+
 
     // Track pronoun count that are currently loaded.
     auto it = active_counts.find(GET_MOB_VNUM(mob));
@@ -7940,7 +7941,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
              GET_CHAR_NAME(mob));
 
     // Flag mobs with crazy stats
-    if (total_stats > ANOMALOUS_TOTAL_STATS_THRESHOLD) {
+    if (!(is_johnson || is_shopkeeper) && !MOB_FLAGGED(mob, MOB_NOKILL) && total_stats > ANOMALOUS_TOTAL_STATS_THRESHOLD) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has total attributes %d > %d^n.\r\n",
                total_stats,
                ANOMALOUS_TOTAL_STATS_THRESHOLD);
@@ -7949,7 +7950,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     }
 
     // Flag mobs with no stats
-    if (total_stats == 0) {
+    if (!(is_johnson || is_shopkeeper) && total_stats == 0) {
       strlcat(buf, "  - ^yhas not had its attributes set yet.^n\r\n", sizeof(buf));
       
       issues++;
@@ -7967,16 +7968,14 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       }
 
     // Flag shopkeepers with no negotiation or low int
-    if (CHECK_FUNC_AND_SFUNC_FOR(mob, shop_keeper)) {
+    if (is_shopkeeper || is_johnson) {
       if (GET_SKILL(mob, SKILL_NEGOTIATION) == 0) {
-        strlcat(buf, "  - is a ^yshopkeeper with no negotiation skill.^n\r\n", sizeof(buf));
-        
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is a ^y%s with no negotiation skill.^n\r\n", is_shopkeeper ? "shopkeeper" : "Johnson");
         issues++;
       }
 
       if (GET_INT(mob) <= 4) {
-        strlcat(buf, "  - is a ^yshopkeeper with low int (<= 4).^n\r\n", sizeof(buf));
-        
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is a ^y%s with low int (%d<=4).^n\r\n", is_shopkeeper ? "shopkeeper" : "Johnson", GET_INT(mob));
         issues++;
       }
     }
