@@ -182,10 +182,10 @@ bool spawn_ic(struct matrix_icon *target, vnum_t ic_vnum, int triggerstep) {
           tn -= 2;
         int success = success_test(icon->decker->sensor, tn);
         if (success >= 3) {
-          send_to_icon(icon, "%s is triggered.\r\n", CAP(ic->name));
+          send_to_icon(icon, "%s^n is triggered.\r\n", CAP(ic->name));
           make_seen(icon, ic->idnum);
         } else if (success == 2)
-          send_to_icon(icon, "%s is triggered, but it slips out of view almost immediately.\r\n", CAP(ic->name));
+          send_to_icon(icon, "%s^n is triggered, but it slips out of view almost immediately.\r\n", CAP(ic->name));
         else if (success == 1)
           send_to_icon(icon, "An IC has entered the host.\r\n");
       }
@@ -257,7 +257,7 @@ bool tarbaby(struct obj_data *prog, struct char_data *ch, struct matrix_icon *ic
   if (suc < 0)
   {
     struct obj_data *temp;
-    send_to_icon(PERSONA, "%s crashes your %s!\r\n", CAP(ic->name), GET_OBJ_NAME(prog));
+    send_to_icon(PERSONA, "%s^n crashes your %s^n!\r\n", CAP(ic->name), GET_OBJ_NAME(prog));
     DECKER->active += GET_OBJ_VAL(prog, 2);
     REMOVE_FROM_LIST(prog, DECKER->software, next_content);
     if (ic->ic.type == IC_TARPIT && success_test(target, DECKER->mpcp + DECKER->hardening) > 0)
@@ -281,7 +281,7 @@ bool dumpshock(struct matrix_icon *icon)
   if (icon->decker && icon->decker->ch)
   {
     send_to_char(icon->decker->ch, "You are dumped from the matrix!\r\n");
-    snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", CAP(icon->name));
+    snprintf(buf, sizeof(buf), "%s^n depixelates and vanishes from the host.\r\n", CAP(icon->name));
     send_to_host(icon->in_host, buf, icon, FALSE);
 
     // Clean up their uploads.
@@ -463,7 +463,7 @@ void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
       send_to_icon(targ, "(OOC message: Be careful with these enemies; your deck would have taken permanent damage if you weren't a newbie!)");
       return;
     }
-    snprintf(buf, sizeof(buf), "%s uses the opportunity to fry your MPCP!\r\n", CAP(icon->name));
+    snprintf(buf, sizeof(buf), "%s^n uses the opportunity to fry your MPCP!\r\n", CAP(icon->name));
     send_to_icon(targ, buf);
     while (success >= 2 && targ->decker->mpcp > 0) {
       success -= 2;
@@ -536,17 +536,17 @@ void evade_detection(struct matrix_icon *icon)
   {
     int success = maneuver_test(icon);
     if (success > 0) {
-      send_to_icon(icon, "You maneuver away from %s.\r\n", decapitalize_a_an(icon->fighting->name));
+      send_to_icon(icon, "You maneuver away from %s^n.\r\n", decapitalize_a_an(icon->fighting->name));
       icon->evasion = success;
       icon->parry = 0;
       icon->fighting->parry = 0;
       if (icon->fighting->decker) {
-        send_to_icon(icon->fighting, "%s vanishes from your sight.\r\n", CAP(icon->name));
+        send_to_icon(icon->fighting, "%s^n vanishes from your sight.\r\n", CAP(icon->name));
       } else {
         icon->fighting->ic.targ_evasion = success;
       }
     } else
-      send_to_icon(icon, "You fail to evade %s.\r\n", decapitalize_a_an(icon->fighting->name));
+      send_to_icon(icon, "You fail to evade %s^n.\r\n", decapitalize_a_an(icon->fighting->name));
     return;
   }
   send_to_icon(icon, "But you're not fighting anyone.\r\n");
@@ -586,13 +586,13 @@ void position_attack(struct matrix_icon *icon)
     if (success > 0) {
       send_to_icon(icon, "You maneuver yourself to attack!\r\n");
       if (!icon->evasion)
-        send_to_icon(icon->fighting, "%s maneuver's themselves into a better position!\r\n", CAP(icon->name));
+        send_to_icon(icon->fighting, "%s^n maneuvers themselves into a better position!\r\n", CAP(icon->name));
       icon->position = success;
       icon->fighting->position = 0;
     } else if (success < 0) {
       send_to_icon(icon, "You manage to put yourself in a worse position than before!\r\n");
       if (!icon->evasion)
-        send_to_icon(icon->fighting, "%s tries to maneuver into a better position but ends up right in your sights!\r\n", CAP(icon->name));
+        send_to_icon(icon->fighting, "%s^n tries to maneuver into a better position but ends up right in your sights!\r\n", CAP(icon->name));
       icon->position = 0;
       icon->fighting->position = -success;
     } else
@@ -707,7 +707,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (!targ->decker->deck)
         return;
       extern const char *crippler[4];
-      send_to_icon(targ, "%s takes a shot at your %s program!\r\n", CAP(icon->name), crippler[icon->ic.subtype]);
+      send_to_icon(targ, "%s^n takes a shot at your %s^n program!\r\n", CAP(icon->name), crippler[icon->ic.subtype]);
       switch (icon->ic.subtype) {
       case 0:
         bod = targ->decker->bod;
@@ -764,7 +764,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     }
 
     // Not a crippler/ripper, so do a normal attack
-    send_to_icon(targ, "%s runs an attack program against you.\r\n", CAP(icon->name));
+    send_to_icon(targ, "%s^n runs an attack program against you.\r\n", CAP(icon->name));
     if (icon->ic.type >= IC_LETHAL_BLACK)
       power -= targ->decker->hardening;
     else
@@ -799,7 +799,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   if (success <= 0)
   {
     send_to_icon(icon, "Your program fails to run.\r\n");
-    send_to_icon(targ, "%s's program fails to run.\r\n", CAP(icon->name));
+    send_to_icon(targ, "%s^n's program fails to run.\r\n", CAP(icon->name));
     if (!icon->decker && icon->ic.options.IsSet(IC_CASCADE))
       cascade(icon);
     return;
@@ -810,7 +810,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     if (icon->ic.type == IC_SCOUT)
     {
       if (success && targ->decker->scout < iconrating) {
-        send_to_icon(targ, "%s locates your memory address.\r\n", CAP(icon->name));
+        send_to_icon(targ, "%s^n locates your memory address.\r\n", CAP(icon->name));
         targ->decker->scout += success;
         if (targ->decker->scout > iconrating)
           targ->decker->scout = iconrating;
@@ -828,7 +828,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           }
         icon->ic.subtype += targ->decker->ch->in_room->trace;
         icon->ic.subtype /= success;
-        send_to_icon(targ, "%s locks onto your datatrail and vanishes from sight.\r\n", CAP(icon->name));
+        send_to_icon(targ, "%s^n locks onto your datatrail and vanishes from sight.\r\n", CAP(icon->name));
         {
           struct matrix_icon *temp;
           icon->fighting = NULL;
@@ -845,7 +845,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
             break;
           }
       } else
-        send_to_icon(targ, "You manage to avoid %s's attack.\r\n", decapitalize_a_an(icon->name));
+        send_to_icon(targ, "You manage to avoid %s^n's attack.\r\n", decapitalize_a_an(icon->name));
       return;
     }
   }
@@ -853,26 +853,26 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   switch(dam)
   {
   case 0:
-    send_to_icon(targ, "%s's attack reflects off you harmlessly!\r\n", CAP(icon->name));
-    send_to_icon(icon, "%s manages to block your attack.\r\n", CAP(targ->name));
+    send_to_icon(targ, "%s^n's attack reflects off you harmlessly!\r\n", CAP(icon->name));
+    send_to_icon(icon, "%s^n manages to block your attack.\r\n", CAP(targ->name));
     if (!icon->decker && icon->ic.options.IsSet(IC_CASCADE))
       cascade(icon);
     break;
   case 1:
-    send_to_icon(targ, "%s's attack skims off you.\r\n", CAP(icon->name));
-    send_to_icon(icon, "Your attack skims off of %s.\r\n", decapitalize_a_an(targ->name));
+    send_to_icon(targ, "%s^n's attack skims off you.\r\n", CAP(icon->name));
+    send_to_icon(icon, "Your attack skims off of %s^n.\r\n", decapitalize_a_an(targ->name));
     break;
   case 3:
-    send_to_icon(targ, "%s's attack sends parts of you flying.\r\n", CAP(icon->name));
-    send_to_icon(icon, "Parts fly off of %s from your attack.\r\n", decapitalize_a_an(targ->name));
+    send_to_icon(targ, "%s^n's attack sends parts of you flying.\r\n", CAP(icon->name));
+    send_to_icon(icon, "Parts fly off of %s^n from your attack.\r\n", decapitalize_a_an(targ->name));
     break;
   case 6:
-    send_to_icon(targ, "%s's attack leaves you reeling.\r\n", CAP(icon->name));
-    send_to_icon(icon, "Your attack leaves %s reeling.\r\n", decapitalize_a_an(targ->name));
+    send_to_icon(targ, "%s^n's attack leaves you reeling.\r\n", CAP(icon->name));
+    send_to_icon(icon, "Your attack leaves %s^n reeling.\r\n", decapitalize_a_an(targ->name));
     break;
   default:
-    send_to_icon(targ, "%s's attack completely obliterates you!\r\n", CAP(icon->name));
-    send_to_icon(icon, "You obliterate %s.\r\n", decapitalize_a_an(targ->name));
+    send_to_icon(targ, "%s^n's attack completely obliterates you!\r\n", CAP(icon->name));
+    send_to_icon(icon, "You obliterate %s^n.\r\n", decapitalize_a_an(targ->name));
     break;
   }
   if (dam > 0 && targ->decker)
@@ -952,7 +952,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (ICON_IS_IC(icon)) {
         switch (icon->ic.type) {
         case IC_SPARKY:
-          send_to_icon(targ, "%s sends jolts of electricity into your deck!\r\n", CAP(icon->name));
+          send_to_icon(targ, "%s^n sends jolts of electricity into your deck!\r\n", CAP(icon->name));
           success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening + 2);
           fry_mpcp(icon, targ, success);
           success = success - success_test(GET_BOD(targ->decker->ch), iconrating - targ->decker->hardening);
@@ -973,7 +973,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       icon->decker->tally += iconrating;
       if (icon->decker->located)
         icon->decker->tally++;
-      snprintf(buf, sizeof(buf), "%s shatters into a million pieces and vanishes from the node.\r\n", CAP(targ->name));
+      snprintf(buf, sizeof(buf), "%s^n shatters into a million pieces and vanishes from the node.\r\n", CAP(targ->name));
       send_to_host(icon->in_host, buf, targ, TRUE);
       gain_matrix_karma(icon, targ);
       if (targ->ic.options.IsSet(IC_TRAP) && real_ic(targ->ic.trap) > 0) {
@@ -986,7 +986,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         if (!(number(0, MAX(0, matrix[icon->in_host].color - HOST_COLOR_ORANGE)))) {
           matrix[icon->in_host].ic_bound_paydata--;
           struct obj_data *paydata = spawn_paydata(icon);
-          send_to_icon(icon, "A mote labeled '%s' drifts away from your kill.\r\n", GET_OBJ_NAME(paydata));
+          send_to_icon(icon, "A mote labeled '%s^n' drifts away from your kill.\r\n", GET_OBJ_NAME(paydata));
         } else  {
           send_to_icon(icon, "The paydata you thought your kill was guarding turns out to have been junk.\r\n");
         }
@@ -1253,7 +1253,7 @@ ACMD(do_locate)
         if (real_host(exit->host) > 0
             && isname(arg, matrix[real_host(exit->host)].keywords)
             && matrix[real_host(exit->host)].alert <= 2) {
-          send_to_icon(PERSONA, "Your search returns the address %s.\r\n", fname_allchars(exit->addresses));
+          send_to_icon(PERSONA, "Your search returns the address %s^n.\r\n", fname_allchars(exit->addresses));
           i++;
         }
       if (!i)
@@ -1411,7 +1411,7 @@ ACMD(do_locate)
 
         // Log spam defense: Have a chance of dumping them.
         send_to_icon(PERSONA, "The node fuzzes around you as it tries to load further defenses-- something's gone wrong, and it's destabilizing! Your connection closes abruptly.\r\n");
-        snprintf(buf, sizeof(buf), "%s abruptly shatters into digital static.\r\n", CAP(PERSONA->name));
+        snprintf(buf, sizeof(buf), "%s^n abruptly shatters into digital static.\r\n", CAP(PERSONA->name));
         send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
 
         // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
@@ -1456,7 +1456,7 @@ void show_icon_to_persona(struct matrix_icon *ch, struct matrix_icon *icon) {
   }
 
   // Start with description.
-  snprintf(buf, sizeof(buf), "%s\r\n%s is ", icon->long_desc, CAP(icon->name));
+  snprintf(buf, sizeof(buf), "%s^n\r\n%s^n is ", icon->long_desc, CAP(icon->name));
 
   // Generate condition.
   if (icon->condition < 2) {
@@ -1505,9 +1505,9 @@ ACMD(do_matrix_look)
   }
 
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
-    snprintf(buf, sizeof(buf), "^C[%ld]^n %s^n\r\n%s", matrix[PERSONA->in_host].vnum, matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
+    snprintf(buf, sizeof(buf), "^C[%ld]^n %s^n\r\n%s^n", matrix[PERSONA->in_host].vnum, matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
   } else {
-    snprintf(buf, sizeof(buf), "^C%s^n\r\n%s", matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
+    snprintf(buf, sizeof(buf), "^C%s^n\r\n%s^n", matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
   }
   send_to_icon(PERSONA, buf);
 
@@ -1545,10 +1545,10 @@ ACMD(do_matrix_look)
     {
       if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) {
         int percent_complete = (int) (100 * ((float) GET_DECK_ACCESSORY_FILE_SIZE(obj) - GET_DECK_ACCESSORY_FILE_REMAINING(obj)) / MAX(1, GET_DECK_ACCESSORY_FILE_SIZE(obj)));
-        send_to_icon(PERSONA, "^yA file named %s floats here (Downloading - %d%%).^n\r\n",
+        send_to_icon(PERSONA, "^yA file named %s^y floats here (Downloading - %d%%).^n\r\n",
                      GET_OBJ_NAME(obj), percent_complete);
       } else {
-        send_to_icon(PERSONA, "^yA file named %s floats here.%s^n\r\n", 
+        send_to_icon(PERSONA, "^yA file named %s^y floats here.%s^n\r\n", 
                      GET_OBJ_NAME(obj),
                      GET_OBJ_QUEST_CHAR_ID(obj) ? (ch_is_grouped_with_idnum(ch, GET_OBJ_QUEST_CHAR_ID(obj)) ? " ^Y(Quest)" : " ^m(Protected)") : "");
       }
@@ -1687,7 +1687,7 @@ ACMD(do_analyze)
                          GET_OBJ_VAL(obj, 5) == 2 ? "Data Bomb" : "Pavlov", GET_OBJ_VAL(obj, 6));
           }
         } else {
-          send_to_icon(PERSONA, "%s - %dMp\r\n", GET_OBJ_NAME(obj), GET_OBJ_VAL(obj, 2));
+          send_to_icon(PERSONA, "%s^n - %dMp\r\n", GET_OBJ_NAME(obj), GET_OBJ_VAL(obj, 2));
           send_to_icon(PERSONA, obj->photo ? obj->photo : obj->text.look_desc);
         }
       } else
@@ -1700,7 +1700,7 @@ ACMD(do_analyze)
         if (success > 0 ) {
           show_icon_to_persona(PERSONA, ic);
           if (ICON_IS_IC(ic)) {
-            send_to_icon(PERSONA, "%s is a %s-%d\r\n", CAP(ic->name), ic_type[ic->ic.type],
+            send_to_icon(PERSONA, "%s^n is a %s-%d\r\n", CAP(ic->name), ic_type[ic->ic.type],
                          matrix[PERSONA->in_host].shutdown ? ic->ic.rating - 2 : ic->ic.rating);
             if (ic->ic.options.AreAnySet(IC_ARMOR, IC_CASCADE, IC_EX_OFFENSE, IC_EX_DEFENSE, IC_TRAP, IC_SHIELD, IC_SHIFT, ENDBIT)) {
               ic->ic.options.PrintBits(buf1, MAX_STRING_LENGTH, ic_option_long, IC_TRAP + 1);
@@ -1767,7 +1767,7 @@ ACMD(do_logon)
         DECKER->tally = 0;
       DECKER->last_trigger = 0;
       DECKER->located = FALSE;
-      snprintf(buf, sizeof(buf), "%s connects to a different host and vanishes from this one.\r\n", CAP(PERSONA->name));
+      snprintf(buf, sizeof(buf), "%s^n connects to a different host and vanishes from this one.\r\n", CAP(PERSONA->name));
       send_to_host(PERSONA->in_host, buf, PERSONA, TRUE);
       icon_from_host(PERSONA);
 
@@ -1776,7 +1776,7 @@ ACMD(do_logon)
         send_to_char(ch, "This hole wasn't made for you, but you squeeze through anyway.\r\n");
         icon_to_host(PERSONA, trapdoor_host);
       } else {
-        send_to_icon(PERSONA, "You connect to %s.\r\n", matrix[target_host].name);
+        send_to_icon(PERSONA, "You connect to %s^n.\r\n", matrix[target_host].name);
         icon_to_host(PERSONA, target_host);
       }
       do_matrix_look(ch, NULL, 0, 0);
@@ -1827,7 +1827,7 @@ ACMD(do_logoff)
     send_to_icon(PERSONA, "You gracefully log off from the matrix and return to the real world.\r\n");
     WAIT_STATE(ch, (int) (0.5 RL_SEC));
   }
-  snprintf(buf, sizeof(buf), "%s depixelates and vanishes from the host.\r\n", CAP(PERSONA->name));
+  snprintf(buf, sizeof(buf), "%s^n depixelates and vanishes from the host.\r\n", CAP(PERSONA->name));
   send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
 
   // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
@@ -2054,11 +2054,11 @@ ACMD(do_connect)
       }
       if (GET_OBJ_VAL(soft, 4)) {
         if (GET_OBJ_VAL(soft, 2) > DECKER->active) {
-          send_to_char(ch, "%s would exceed your deck's active memory, so it failed to load.\r\n", GET_OBJ_NAME(soft));
+          send_to_char(ch, "%s^n would exceed your deck's active memory, so it failed to load.\r\n", GET_OBJ_NAME(soft));
           continue;
         }
         if (GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
-          send_to_char(ch, "%s is too advanced for your deck's MPCP rating, so it failed to load.\r\n", GET_OBJ_NAME(soft));
+          send_to_char(ch, "%s^n is too advanced for your deck's MPCP rating, so it failed to load.\r\n", GET_OBJ_NAME(soft));
           continue;
         }
         struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL);
@@ -2176,7 +2176,7 @@ ACMD(do_load)
     struct obj_data *temp = NULL;
     for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
       if (keyword_appears_in_obj(argument, soft)) {
-        send_to_icon(PERSONA, "You erase %s from active memory.\r\n", GET_OBJ_NAME(soft));
+        send_to_icon(PERSONA, "You erase %s^n from active memory.\r\n", GET_OBJ_NAME(soft));
         if (temp)
           temp->next_content = soft->next_content;
         else
@@ -2200,24 +2200,24 @@ ACMD(do_load)
 
       if (subcmd == SCMD_UPLOAD) {
         if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR || GET_PROGRAM_TYPE(soft) == SOFT_EVALUATE)) {
-          send_to_icon(PERSONA, "You can't upload %s.\r\n", GET_OBJ_NAME(soft));
+          send_to_icon(PERSONA, "You can't upload %s^n.\r\n", GET_OBJ_NAME(soft));
           return;
         }
 
         if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY) {
           if (GET_DECK_ACCESSORY_TYPE(soft) != TYPE_FILE) {
-            send_to_icon(PERSONA, "You can't upload %s.\r\n", GET_OBJ_NAME(soft));
+            send_to_icon(PERSONA, "You can't upload %s^n.\r\n", GET_OBJ_NAME(soft));
             return;
           }
 
           if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft)) {
-            send_to_icon(PERSONA, "Action aborted: Re-uploading paydata like %s would be a great way to get caught with it!\r\n", GET_OBJ_NAME(soft));
+            send_to_icon(PERSONA, "Action aborted: Re-uploading paydata like %s^n would be a great way to get caught with it!\r\n", GET_OBJ_NAME(soft));
             return;
           }
         }
       } else {
         if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY) {
-          send_to_icon(PERSONA, "You can't upload %s to your icon.\r\n", GET_OBJ_NAME(soft));
+          send_to_icon(PERSONA, "You can't upload %s^n to your icon.\r\n", GET_OBJ_NAME(soft));
           return;
         }
       }
@@ -2232,7 +2232,7 @@ ACMD(do_load)
         int success = 1;
         if (subcmd == SCMD_UPLOAD) {
           if (GET_OBJ_VAL(soft, 8)) {
-            send_to_char(ch, "%s is already being uploaded.\r\n", GET_OBJ_NAME(soft));
+            send_to_char(ch, "%s^n is already being uploaded.\r\n", GET_OBJ_NAME(soft));
             return;
           }
 
@@ -2246,7 +2246,7 @@ ACMD(do_load)
             GET_OBJ_ATTEMPT(soft) = matrix[PERSONA->in_host].vnum;
           } else
             DECKER->active -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
-          send_to_icon(PERSONA, "You begin to upload %s to %s.\r\n", GET_OBJ_NAME(soft), (subcmd ? "the host" : "your icon"));
+          send_to_icon(PERSONA, "You begin to upload %s^n to %s.\r\n", GET_OBJ_NAME(soft), (subcmd ? "the host" : "your icon"));
           if (IS_SENATOR(ch)) {
             send_to_icon(PERSONA, "(Upload will take %d ticks.)", GET_DECK_ACCESSORY_FILE_REMAINING(soft));
           }
@@ -2319,7 +2319,7 @@ ACMD(do_download)
         if (GET_DECK_ACCESSORY_FILE_PROTECTION(soft) == FILE_PROTECTION_SCRAMBLED
             && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
         {
-          send_to_icon(PERSONA, "A Scramble IC blocks your attempts to download %s. You'll have to decrypt it first!\r\n", GET_OBJ_NAME(soft));
+          send_to_icon(PERSONA, "A Scramble IC blocks your attempts to download %s^n. You'll have to decrypt it first!\r\n", GET_OBJ_NAME(soft));
         } else if (GET_OBJ_VAL(soft, 5) > FILE_PROTECTION_SCRAMBLED // file bomb
                    && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
         {
@@ -2353,7 +2353,7 @@ ACMD(do_download)
         } else {
           GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_SIZE(soft);
           GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) = PERSONA->idnum;
-          send_to_icon(PERSONA, "You begin to download %s.\r\n", GET_OBJ_NAME(soft));
+          send_to_icon(PERSONA, "You begin to download %s^n.\r\n", GET_OBJ_NAME(soft));
         }
       } else
         send_to_icon(PERSONA, "The file fails to download.\r\n");
@@ -2408,7 +2408,7 @@ ACMD(do_run)
           }
 #endif
 
-          send_to_icon(PERSONA, "You start running %s against %s.\r\n", GET_OBJ_NAME(soft), decapitalize_a_an(icon->name));
+          send_to_icon(PERSONA, "You start running %s^n against %s^n.\r\n", GET_OBJ_NAME(soft), decapitalize_a_an(icon->name));
           if (!PERSONA->fighting) {
             PERSONA->next_fighting = matrix[icon->in_host].fighting;
             matrix[icon->in_host].fighting = PERSONA;
@@ -2424,12 +2424,12 @@ ACMD(do_run)
           }
 
           order_list(matrix[icon->in_host].fighting);
-          send_to_icon(icon, "%s begins to run an attack program aimed at you.\r\n", CAP(PERSONA->name));
+          send_to_icon(icon, "%s^n begins to run an attack program aimed at you.\r\n", CAP(PERSONA->name));
 
           for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = temp) {
             temp = ic->next_in_host;
             if ((ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 1) {
-              send_to_icon(PERSONA, "%s's surface ripples and yawns open, reaching towards you!\r\n", CAP(ic->name));
+              send_to_icon(PERSONA, "%s^n's surface ripples and yawns open, reaching towards you!\r\n", CAP(ic->name));
               // We return after tarbaby succeeds, as it might delete the program we're using.
               if (tarbaby(soft, ch, ic))
                 return;
@@ -2446,7 +2446,7 @@ ACMD(do_run)
           for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = temp) {
             temp = ic->next_in_host;
             if ((ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 1) {
-              send_to_icon(PERSONA, "%s's surface ripples and yawns open, reaching towards you!\r\n", CAP(ic->name));
+              send_to_icon(PERSONA, "%s^n's surface ripples and yawns open, reaching towards you!\r\n", CAP(ic->name));
               // We return after tarbaby succeeds, as it might delete the program we're using.
               if (tarbaby(soft, ch, ic)) {
                 send_to_icon(PERSONA, "You break off your medic run to regroup.\r\n");
@@ -2478,7 +2478,7 @@ ACMD(do_run)
         }
         return;
     default:
-      send_to_icon(PERSONA, "You don't need to manually run %s.\r\n", GET_OBJ_NAME(soft));
+      send_to_icon(PERSONA, "You don't need to manually run %s^n.\r\n", GET_OBJ_NAME(soft));
       break;
     }
   }
@@ -2774,12 +2774,12 @@ ACMD(do_software)
         }
       } else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(soft) == TYPE_FILE) {
         has_other_software = TRUE;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s (%4d MP)^n\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^n (%4d MP)^n\r\n",
                  GET_OBJ_NAME(soft),
                  GET_PROGRAM_SIZE(soft));
       } else if (GET_OBJ_TYPE(soft) == ITEM_PART) {
         has_components = TRUE;
-        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s Type: ^c%-24s^n (rating ^c%d^n)\r\n",
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s^n Type: ^c%-24s^n (rating ^c%d^n)\r\n",
                 get_obj_name_with_padding(soft, 40),
                 parts[GET_PART_TYPE(soft)].name,
                 GET_PART_RATING(soft));
@@ -2821,7 +2821,7 @@ void process_upload(struct matrix_icon *persona)
       {
         // Require that we're on the same host as we started the upload on.
         if (GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) == 1 && GET_OBJ_ATTEMPT(soft) != matrix[persona->in_host].vnum) {
-          send_to_icon(persona, "Your connection to the host was interrupted, so %s fails to upload.\r\n", GET_OBJ_NAME(soft));
+          send_to_icon(persona, "Your connection to the host was interrupted, so %s^n fails to upload.\r\n", GET_OBJ_NAME(soft));
           GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
           return;
         }
@@ -2830,7 +2830,7 @@ void process_upload(struct matrix_icon *persona)
         if (GET_DECK_ACCESSORY_FILE_REMAINING(soft) <= 0) {
           // Easy finish: Uploading to active memory.
           if (!GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft)) {
-            send_to_icon(persona, "%s has finished uploading to active memory.\r\n", CAP(GET_OBJ_NAME(soft)));
+            send_to_icon(persona, "%s^n has finished uploading to active memory.\r\n", CAP(GET_OBJ_NAME(soft)));
             struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL);
             if (soft->restring)
               active->restring = str_dup(soft->restring);
@@ -2849,14 +2849,14 @@ void process_upload(struct matrix_icon *persona)
           if (GET_OBJ_QUEST_CHAR_ID(soft) && GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft)) {
             // You must be grouped with the questor for the upload to complete.
             if (!(questor = ch_is_grouped_with_idnum(persona->decker->ch, GET_OBJ_QUEST_CHAR_ID(soft))) || GET_QUEST(questor) < 0) {
-              send_to_icon(persona, "%s failed to upload to the host: You're not grouped with the questor.\r\n", CAP(GET_OBJ_NAME(soft)));
+              send_to_icon(persona, "%s^n failed to upload to the host: You're not grouped with the questor.\r\n", CAP(GET_OBJ_NAME(soft)));
               GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
               return;
             }
           }
 
           // Send the success message.
-          send_to_icon(persona, "%s has finished uploading to the host.\r\n", CAP(GET_OBJ_NAME(soft)));
+          send_to_icon(persona, "%s^n has finished uploading to the host.\r\n", CAP(GET_OBJ_NAME(soft)));
 
           // Move it onto the host.
           obj_from_obj(soft);
@@ -2879,7 +2879,7 @@ void process_upload(struct matrix_icon *persona)
                 continue;
 
               if (matrix[persona->in_host].vnum == quest_table[GET_QUEST(questor)].obj[i].o_data) {
-                send_to_icon(persona, "You feel a small bit of satisfaction at having completed this part of %s%s job.\r\n",
+                send_to_icon(persona, "You feel a small bit of satisfaction at having completed this part of %s%s^n job.\r\n",
                              questor == persona->decker->ch ? "your" : GET_CHAR_NAME(questor),
                              questor == persona->decker->ch ? "" : "'s");
                 questor->player_specials->obj_complete[i] = 1;
@@ -3019,7 +3019,7 @@ void matrix_update()
               if (icon->ic.type == IC_TRACE && icon->ic.subtype > 0) {
                 if (!--icon->ic.subtype) {
                   icon2->decker->located = TRUE;
-                  send_to_icon(icon2, "Alarms start to ring in your head as %s finds your location.\r\n", decapitalize_a_an(icon->name));
+                  send_to_icon(icon2, "Alarms start to ring in your head as %s^n finds your location.\r\n", decapitalize_a_an(icon->name));
                   snprintf(buf, sizeof(buf), "%s located by Trace IC in host %ld (%s^g).", GET_CHAR_NAME(icon2->decker->ch), matrix[icon->in_host].vnum, matrix[icon->in_host].name);
                   mudlog(buf, icon2->decker->ch, LOG_GRIDLOG, TRUE);
                 }
@@ -3064,7 +3064,7 @@ void matrix_update()
             if (GET_DECK_ACCESSORY_FILE_REMAINING(file) <= 0) {
               // Out of space? Inform them, reset the file, bail.
               if (GET_OBJ_VAL(persona->decker->deck, 3) - GET_OBJ_VAL(persona->decker->deck, 5) < GET_DECK_ACCESSORY_FILE_SIZE(file)) {
-                send_to_icon(persona, "%s failed to download-- your deck is out of space.\r\n", CAP(GET_OBJ_NAME(file)));
+                send_to_icon(persona, "%s^n failed to download-- your deck is out of space.\r\n", CAP(GET_OBJ_NAME(file)));
                 GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
                 GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
                 return;
@@ -3072,7 +3072,7 @@ void matrix_update()
 
               obj_from_host(file);
               obj_to_obj(file, persona->decker->deck);
-              send_to_icon(persona, "%s has finished downloading to your deck.\r\n", CAP(GET_OBJ_NAME(file)));
+              send_to_icon(persona, "%s^n has finished downloading to your deck.\r\n", CAP(GET_OBJ_NAME(file)));
               GET_OBJ_VAL(persona->decker->deck, 5) += GET_DECK_ACCESSORY_FILE_SIZE(file);
               GET_DECK_ACCESSORY_FILE_FOUND_BY(file) = 0;
               GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
@@ -3539,7 +3539,7 @@ ACMD(do_comcall)
                 send_to_char("You feel your phone ring.\r\n", tch);
             }
           } else {
-            snprintf(buf, sizeof(buf), "%s rings.", GET_OBJ_NAME(k->phone));
+            snprintf(buf, sizeof(buf), "%s^n rings.", GET_OBJ_NAME(k->phone));
             send_to_room(buf, k->phone->in_room);
           }
         }
@@ -3684,10 +3684,10 @@ ACMD(do_default)
   }
   if (GET_OBJ_VAL(soft, 4)) {
     GET_OBJ_VAL(soft, 4)--;
-    send_to_char(ch, "%s will no longer load upon connection.\r\n", CAP(GET_OBJ_NAME(soft)));
+    send_to_char(ch, "%s^n will no longer load upon connection.\r\n", CAP(GET_OBJ_NAME(soft)));
   } else {
     GET_OBJ_VAL(soft, 4)++;
-    send_to_char(ch, "%s will now load upon connection.\r\n", CAP(GET_OBJ_NAME(soft)));
+    send_to_char(ch, "%s^n will now load upon connection.\r\n", CAP(GET_OBJ_NAME(soft)));
   }
 }
 
@@ -3700,7 +3700,7 @@ ACMD(do_reveal)
     for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
       if (icon != PERSONA && icon->decker && !has_spotted(icon, PERSONA)) {
         make_seen(icon, PERSONA->idnum);
-        send_to_icon(icon, "%s fades into the host.\r\n", CAP(PERSONA->name));
+        send_to_icon(icon, "%s^n fades into the host.\r\n", CAP(PERSONA->name));
       }
   }
 }
@@ -3822,7 +3822,7 @@ ACMD(do_asist)
 // Formats and prints a message to the user about why their custom deck won't work.
 bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) {
   if (GET_CYBERDECK_MPCP(cyberdeck) == 0) {
-    send_to_char(ch, "The faint smell of burned MPCP tells you that %s is going to need some repairs first.\r\n", GET_OBJ_NAME(cyberdeck));
+    send_to_char(ch, "The faint smell of burned MPCP tells you that %s^n is going to need some repairs first.\r\n", GET_OBJ_NAME(cyberdeck));
     return FALSE;
   }
 
@@ -3837,7 +3837,7 @@ bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) 
       has_interface |= (GET_PART_TYPE(part) == PART_MATRIX_INTERFACE);
     }
     bool first = TRUE;
-    snprintf(buf, sizeof(buf), "%s isn't in working condition, so it won't power on. It needs ", capitalize(GET_OBJ_NAME(cyberdeck)));
+    snprintf(buf, sizeof(buf), "%s^n isn't in working condition, so it won't power on. It needs ", capitalize(GET_OBJ_NAME(cyberdeck)));
     if (!has_mpcp) {
       strcat(buf, "an MPCP chip");
       first = FALSE;
@@ -3865,11 +3865,11 @@ bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) 
 
     // If we get here and haven't sent anything, something is wrong.
     if (first) {
-      snprintf(buf2, sizeof(buf2), "SYSERR: Cyberdeck '%s' held by '%s' identifies itself as being incomplete, but has all necessary parts. Autofixing.",
+      snprintf(buf2, sizeof(buf2), "SYSERR: Cyberdeck '%s^n' held by '%s' identifies itself as being incomplete, but has all necessary parts. Autofixing.",
               GET_OBJ_NAME(cyberdeck), GET_CHAR_NAME(ch));
       mudlog(buf2, ch, LOG_SYSLOG, TRUE);
       GET_CYBERDECK_IS_INCOMPLETE(cyberdeck) = 0;
-      send_to_char(ch, "You smack the side of %s a few times. It sparks, then powers on.\r\n", GET_OBJ_NAME(cyberdeck));
+      send_to_char(ch, "You smack the side of %s^n a few times. It sparks, then powers on.\r\n", GET_OBJ_NAME(cyberdeck));
       return TRUE;
     }
 
