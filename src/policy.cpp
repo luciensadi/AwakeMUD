@@ -90,6 +90,7 @@ void initialize_policy_tree() {
   }
 
   // Underage players.
+#ifdef POLICY_REQUIRES_18_OR_OLDER
   {
     PolicyNode *section_root = new PolicyNode(
       "No Underage Players",
@@ -100,6 +101,7 @@ void initialize_policy_tree() {
     section_root->add_child("For legal reasons, we require that all players are 18+ (the age of majority where this server is located).");
     section_root->add_child("We sympathize with folks looking for a MUD to play in before they reach 18 years of age, but for legal reasons we cannot accommodate them here. Our hands are tied, and we will remove anyone found to be underage.");
   }
+#endif
 
   // Cheating.
   {
@@ -161,7 +163,7 @@ void initialize_policy_tree() {
 
     section_root->add_child("^cRoleplaying is encouraged, but not required.^n You may opt out of roleplaying if you so choose. However, even if you opt out, we ask that you refrain from discussing OOC concepts in IC mediums such as on the radio.");
     section_root->add_child("^cRoleplaying is consent-based.^n All players involved must consent to a scene. While assumed consent holds for ordinary scenes, anything with conflict, spying, adult situations, aggressive actions or speech, etc needs to be pre-approved by participants. ^WWe recommend using the TELL command to obtain consent so that it can be proven.^n");
-    section_root->add_child("^cActive consent required.^n If at any time a player becomes uncomfortable and makes this known (via the ^WCONSENT^n command, osays, tells, or any other in-game medium), the scene must immediately fade to black. Scenes that fade to black still happen unless overruled by staff; if you cannot reach a consensus with your roleplay partner(s) about the outcome of a scene, contact RP staff for assistance.");
+    section_root->add_child("^cActive consent required.^n If at any time a player becomes uncomfortable and makes this known (via the ^WCONSENT^n command, osays, tells, or any other in-game medium), the scene must immediately be stopped. If you cannot reach a consensus with your roleplay partner(s) about the outcome of a scene, contact RP staff for assistance.");
     section_root->add_child("^cCertain topics are forbidden.^n Players may not enact scenes featuring suicide or sexual assault. GMs MAY request staff approval for topic inclusion in tabletop runs on a case-by-case basis, but will need to include content warnings if approved.");
     section_root->add_child("^cRoleplaying is supposed to be fun.^n If you're not having fun, step back and send a message (via osays or tells) to figure out what's going on and how you can steer the scene so you're all enjoying yourselves.");
     section_root->add_child("^cIRL racism/prejudices forbidden.^n Your character can have problems with metatypes (dwarves, elves, etc), but you may not roleplay prejudices that appear IRL, specifically including but not limited to racism, sexism, homophobia, etc.");
@@ -204,7 +206,7 @@ void initialize_policy_tree() {
     );
     root_policy_document.push_back(section_root);
 
-    section_root->add_child("Although we are a 100%% cash-free game and we make no claims to any trademarks or copyrights, we still exist at the mercy of the rightsholders. As such, we require that any used PDFs are purchased from authorized retailers (e.g. DriveThruRPG) instead of shared.");
+    section_root->add_child("Although we are a 100% cash-free game and we make no claims to any trademarks or copyrights, we still exist at the mercy of the rightsholders. As such, we require that any used PDFs are purchased from authorized retailers (e.g. DriveThruRPG) instead of shared.");
     section_root->add_child("^yThis is a very strict rule.^n Please don't even hint about going around it or ask sly questions about Google search terms etc-- it's legitimately purchased copies or nothing.");
   }
 

@@ -7979,7 +7979,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
 
     // Flag mobs with no weight or height.
     if (GET_HEIGHT(mob) == 0 || GET_WEIGHT(mob) == 0.0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing vital statistics (weight %d, height %d)^n.\r\n", GET_HEIGHT(mob), GET_WEIGHT(mob));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing vital statistics^n (weight %d, height %d)^n.\r\n", GET_HEIGHT(mob), GET_WEIGHT(mob));
       issues++;
     }
 
@@ -8988,14 +8988,14 @@ void show_host_sheaf_to_ch(struct char_data *ch, struct host_data *host, bool on
   }
 
   if (!printed_something)
-    send_to_char(" ^Y<Sheaf missing - specify trigger steps for host>^n\r\n", ch);
+    send_to_char(ch, " ^Y<Sheaf missing - specify trigger steps for host %ld (%s^Y)>^n\r\n", host->vnum, host->name);
 }
 
 int audit_zone_hosts_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0;
 
   if (verbose)
-    send_to_char(ch, "\r\n^WAuditing hosts for zone %d...^n\r\n", zone_table[zone_num].number);
+    send_to_char(ch, "\r\n^WAuditing hosts for zone %d... ^L(normal hosts no longer listed, use hlist)^n\r\n", zone_table[zone_num].number);
 
   for (int i = zone_table[zone_num].number * 100; i <= zone_table[zone_num].top; i++) {
     rnum_t real_hst;
@@ -9004,7 +9004,7 @@ int audit_zone_hosts_(struct char_data *ch, int zone_num, bool verbose) {
 
     struct host_data *host = &matrix[real_hst];
 
-    send_to_char(ch, "^c[%8ld]^n %s^n\r\n", host->vnum, host->name);
+    // send_to_char(ch, "^c[%8ld]^n %s^n\r\n", host->vnum, host->name);
 
     show_host_sheaf_to_ch(ch, host, TRUE);
   }
