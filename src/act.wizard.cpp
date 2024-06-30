@@ -7945,14 +7945,12 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has total attributes %d > %d^n.\r\n",
                total_stats,
                ANOMALOUS_TOTAL_STATS_THRESHOLD);
-      
       issues++;
     }
 
     // Flag mobs with no stats
     if (!(is_johnson || is_shopkeeper) && total_stats == 0) {
       strlcat(buf, "  - ^yhas not had its attributes set yet.^n\r\n", sizeof(buf));
-      
       issues++;
     }
 
@@ -7963,7 +7961,6 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
                  skills[k].name,
                  GET_SKILL(mob, k),
                  ANOMALOUS_SKILL_THRESHOLD);
-        
         issues++;
       }
 
@@ -7983,7 +7980,6 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     // Flag mobs with no weight or height.
     if (GET_HEIGHT(mob) == 0 || GET_WEIGHT(mob) == 0.0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing vital statistics (weight %d, height %d)^n.\r\n", GET_HEIGHT(mob), GET_WEIGHT(mob));
-      
       issues++;
     }
 
@@ -7991,7 +7987,6 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
         || (GET_RACE(mob) != RACE_ELEMENTAL && keyword_appears_in_char("elemental", mob)))
     {
       strlcat(buf, "  - spirit or elemental keyword with ^ymismatched race.^n\r\n", sizeof(buf));
-      
       issues++;
     }
 
@@ -7999,13 +7994,11 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     if (GET_RACE(mob) == RACE_ELEMENTAL || GET_RACE(mob) == RACE_SPIRIT || MOB_FLAGGED(mob, MOB_INANIMATE)) {
       if (GET_PRONOUNS(mob) != PRONOUNS_NEUTRAL) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is a spirit/elemental/machine with a gender (is this intentional?).\r\n");
-        
         issues++;
       }
     } else {
       if (GET_PRONOUNS(mob) == PRONOUNS_NEUTRAL) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - neutral (default) gender (is this intentional?).\r\n");
-        
         issues++;
       }
     }
@@ -8013,14 +8006,12 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     // Flag emplaced mobs that aren't inanimate.
     if (MOB_FLAGGED(mob, MOB_EMPLACED) && !MOB_FLAGGED(mob, MOB_INANIMATE)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is ^yemplaced, but not inanimate.^n\r\n");
-      
       issues++;
     }
 
     // Flag mobs with weird races.
     if (GET_RACE(mob) <= RACE_UNDEFINED || GET_RACE(mob) >= NUM_RACES) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - undefined or unknown race^n.\r\n");
-      
       issues++;
     }
 
@@ -8032,38 +8023,32 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     } else {
       if (is_invalid_ending_punct((candidate = get_final_character_from_string(mob->player.physical_text.name)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ending in punctuation (%c)^n.\r\n", candidate);
-        
         issues++;
       }
     }
 
     if (!mob->player.physical_text.keywords || !*mob->player.physical_text.keywords || !strcmp(mob->player.physical_text.keywords, STRING_MOB_KEYWORDS_UNFINISHED)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing keywords^n.\r\n");
-      
       issues++;
     }
 
     if (!mob->player.physical_text.look_desc || !*mob->player.physical_text.look_desc || !strcmp(mob->player.physical_text.look_desc, STRING_MOB_LDESC_UNFINISHED)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing look desc^n.\r\n");
-      
       issues++;
     }
 
     if (!mob->player.physical_text.room_desc || !*mob->player.physical_text.room_desc || !strcmp(mob->player.physical_text.room_desc, STRING_MOB_RDESC_UNFINISHED)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing room desc^n.\r\n");
-      
       issues++;
     } else {
       if (!ispunct((candidate = get_final_character_from_string(mob->player.physical_text.room_desc)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yroom desc not ending in punctuation (%c)^n.\r\n", candidate);
-        
         issues++;
       }
     }
 
     if (IS_PC_CONJURED_ELEMENTAL(mob)) {
       strlcat(buf, "  - ^yis a PC Conjured Elemental (change the race!)\r\n", sizeof(buf));
-      
       issues++;
     }
 
@@ -8073,14 +8058,12 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has high armor ratings %db / %di^n.\r\n",
                  GET_BALLISTIC(mob),
                  GET_IMPACT(mob));
-        
         issues++;
       }
 
       // Flag mobs with high nuyen.
       if (GET_NUYEN(mob) >= 200 || GET_BANK(mob) >= 200) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - high grinding rewards (%ld/%ld)^n.\r\n", GET_NUYEN(mob), GET_BANK(mob));
-        
         issues++;
       }
 
@@ -8093,21 +8076,18 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^RNEGATIVE^n %d %s^n.\r\n",
                      ammo_qty,
                      get_ammo_representation(weapon_idx, ammo_idx, ammo_qty, mob));
-            
             issues++;
           }
           else if (ammo_qty > 200) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^ylarge amount^n of %s (%d > 200)^n.\r\n",
                      get_ammo_representation(weapon_idx, ammo_idx, ammo_qty, mob),
                      ammo_qty);
-            
             issues++;
           } 
           else if (ammo_qty > 0 && ammo_idx != AMMO_NORMAL) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %d %s^n.\r\n",
                      ammo_qty,
                      get_ammo_representation(weapon_idx, ammo_idx, ammo_qty, mob));
-            
             issues++;
           }
         }
@@ -8116,7 +8096,6 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
 
       if (mob->cyberware || mob->bioware) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has cyberware / bioware.\r\n");
-        
         issues++;
       }
 
@@ -8161,7 +8140,6 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
 
         if (total_items > 0) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %d piece%s of equipment (total sellable value: ^c%d^n).\r\n", total_items, total_items == 1 ? "" : "s", total_value);
-          
           issues++;
         }
       }
@@ -9039,6 +9017,7 @@ int audit_zone_hosts_(struct char_data *ch, int zone_num, bool verbose) {
 int audit_zone_ics_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_num;
   struct matrix_icon *ic;
+  char candidate;
 
   if (verbose)
     send_to_char(ch, "\r\n^WAuditing ICs for zone %d...^n\r\n", zone_table[zone_num].number);
@@ -9052,6 +9031,16 @@ int audit_zone_ics_(struct char_data *ch, int zone_num, bool verbose) {
     ic = &ic_proto[real_num];
 
     snprintf(buf, sizeof(buf), "^c[%8d]^n (%s^n)\r\n", ic->idnum, ic->name);
+
+    if (ic->name && *(ic->name) != toupper(*(ic->name))) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yroom desc not capitalized (%c)^n.\r\n", *(ic->name));
+      issues++;
+    }
+
+    if (!ispunct((candidate = get_final_character_from_string(ic->look_desc)))) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yroom desc not ending in punctuation (%c)^n.\r\n", candidate);
+      issues++;
+    }
 
     /*
     // Flag invalid sell multipliers
