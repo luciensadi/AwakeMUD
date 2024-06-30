@@ -952,6 +952,9 @@ ACMD(do_broadcast)
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
 
+  // Forbid usage of common smilies.
+  FAILURE_CASE(str_str(argument, ":)") || str_str(argument, ":D") || str_str(argument, ":("), "The radio is for in-character voice comms. Please refrain from using smilies etc.");
+
   int language = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);
   if (!has_required_language_ability_for_sentence(ch, argument, language))
     return;
