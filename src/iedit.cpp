@@ -1883,6 +1883,10 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           send_to_char("Sorry, gun magazines are for code use only and can't be created.\r\n", d->character);
           iedit_disp_type_menu(d);
           return;
+        case ITEM_QUEST__DO_NOT_USE:
+          send_to_char("The QUEST item type is deprecated. Use ITEM_OTHER or whatever else is appropriate.\r\n", d->character);
+          iedit_disp_type_menu(d);
+          return;
       }
 
       if (number != 0 && GET_OBJ_TYPE(d->edit_obj) != number) {

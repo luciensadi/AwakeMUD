@@ -2072,6 +2072,8 @@ void parse_object(File &fl, long nr)
     str_dup(data.GetString("LookDesc", "It looks pretty unfinished.\n"));
 
   GET_OBJ_TYPE(obj) = data.LookupInt("Type", item_types, ITEM_OTHER);
+  if (GET_OBJ_TYPE(obj) == ITEM_QUEST__DO_NOT_USE)
+    GET_OBJ_TYPE(obj) = ITEM_OTHER;
   GET_OBJ_WEAR(obj).FromString(data.GetString("WearFlags", "0"));
   GET_OBJ_EXTRA(obj).FromString(data.GetString("ExtraFlags", "0"));
   GET_OBJ_AFFECT(obj).FromString(data.GetString("AffFlags", "0"));
