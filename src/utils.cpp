@@ -309,8 +309,8 @@ int light_level(struct room_data *room)
   if (ROOM_FLAGGED(room, ROOM_INDOORS))
     return candidate_light_level;
 
-  // Outdoor city rooms (roads, etc) are impacted by ambient light.
-  if (room->sector_type == SPIRIT_CITY) {
+  // Outdoor city rooms (roads, etc) are impacted by ambient light, as long as you're not in the secret jurisdiction.
+  if (room->sector_type == SPIRIT_CITY && GET_JURISDICTION(room) != JURISDICTION_SECRET) {
     // It's daytime. No changes.
     if ((time_info.hours > 6 && time_info.hours < 19)) {
       return candidate_light_level;
