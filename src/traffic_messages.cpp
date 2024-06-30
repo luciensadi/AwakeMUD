@@ -158,7 +158,10 @@ void regenerate_traffic_msgs() {
         queue.push_back(messages[msg_idx]);
 
       // Shuffle it.
-      std::random_shuffle(queue.begin(), queue.end());
+      std::random_device rd;
+      std::mt19937 g(rd());
+
+      std::shuffle(queue.begin(), queue.end(), g);
     }
 
     // Assign this loop's traffic message.
