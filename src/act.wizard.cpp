@@ -7974,8 +7974,8 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
 
-      if (GET_INT(mob) <= 4) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is a ^y%s with low int (%d<=4).^n\r\n", is_shopkeeper ? "shopkeeper" : "Johnson", GET_INT(mob));
+      if (GET_REAL_INT(mob) <= 4) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is a ^y%s with low int (%d<=4).^n\r\n", is_shopkeeper ? "shopkeeper" : "Johnson", GET_REAL_INT(mob));
         issues++;
       }
     }
