@@ -4943,12 +4943,25 @@ ACMD(do_break)
   if (is_abbrev(argument, "mindlink")) {
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
       if (sust->spell == SPELL_MINDLINK) {
-        send_to_char("You dissolve your mindlink.\r\n", ch);
-        end_sustained_spell(ch, sust);
+        send_to_char("You dissolve any mindlinks cast on you.\r\n", ch);
+        end_all_sustained_spells_of_type_affecting_ch(SPELL_MINDLINK, 0, ch);
         return;
       }
     }
     send_to_char("You are not currently under a mindlink.\r\n", ch);
+    return;
+  }
+
+  // Stealth.
+  if (is_abbrev(argument, "silence") || is_abbrev(argument, "stealth")) {
+    for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
+      if (sust->spell == SPELL_STEALTH) {
+        send_to_char("You reject any stealth spells cast on you.\r\n", ch);
+        end_all_sustained_spells_of_type_affecting_ch(SPELL_STEALTH, 0, ch);
+        return;
+      }
+    }
+    send_to_char("You are not currently under a stealth spell.\r\n", ch);
     return;
   }
 

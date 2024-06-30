@@ -3009,18 +3009,22 @@ bool char_can_make_noise(struct char_data *ch, const char *message) {
   bool is_stealth = affected_by_spell(ch, SPELL_STEALTH);
   bool is_silence = get_ch_in_room(ch)->silence[ROOM_NUM_SPELLS_OF_TYPE] > 0;
 
-  if (is_silence && ch->desc) {
+  if (!ch->desc)
+    return is_stealth || is_silence;
+
+  if (is_silence) {
     // The silence spell only affects players if they're the caster or are grouped with them.
-    is_silence = spell_affecting_ch_is_cast_by_ch_or_group_member(ch, SPELL_SILENCE);
+    if (spell_affecting_ch_is_cast_by_ch_or_group_member(ch, SPELL_SILENCE)) {
+      send_to_char(message, ch);
+      send_to_char("(OOC: You're in a silent room.)", ch);
+      return FALSE;
+    }
+    // fall through: spell was cast by non group member.
   }
 
-  if (is_stealth || is_silence) {
-    // Can't make noise.
-    if (message) {
-      send_to_char(message, ch);
-      send_to_char(ch, "(OOC: You're %s.)\r\n", is_stealth ? "under a stealth spell" : "in a silent room");
-    }
-
+  if (is_stealth) {
+    // reject: spell was cast directly on char, and they've been given instructions on breaking it.
+    send_to_char(ch, "(OOC: You're affected by a stealth spell. You can end it with ^WBREAK STEALTH^n.)");
     return FALSE;
   }
 

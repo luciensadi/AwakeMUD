@@ -93,7 +93,7 @@ struct  obj_data *get_mount_ammo(struct obj_data *mount);
 struct  obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message);
 struct  obj_data *get_mount_manned_by_ch(struct char_data *ch);
 void    terminate_mud_process_with_message(const char *message, int error_code);
-bool    char_can_make_noise(struct char_data *ch, const char *message = NULL);
+bool    char_can_make_noise(struct char_data *ch, const char *message);
 struct  char_data *get_driver(struct veh_data *veh);
 struct  obj_data *find_matching_obj_in_container(struct obj_data *container, vnum_t vnum);
 bool    attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch, int location, bool override=0);

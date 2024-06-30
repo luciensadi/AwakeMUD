@@ -724,7 +724,8 @@ ACMD(do_new_echo) {
     return;
 
   // Can't speak? No emote speech for you. NOTE: Wrapping your speech in single quotes to avoid this is a punishable exploit.
-  FAILURE_CASE(strchr(argument, '"') != NULL && !char_can_make_noise(ch), "You can't seem to make any noise.\r\n");
+  if (strchr(argument, '"') != NULL && !char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
+    return;
 
   // Double up percentages. This is necessary to prevent unexpected insertion of data during format runs.
   char *pct_reader = argument;
