@@ -1157,10 +1157,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
     GET_COND(ch, COND_FULL) = -1;
     GET_COND(ch, COND_THIRST) = -1;
     GET_COND(ch, COND_DRUNK) = -1;
-  }
-
-  // Clamp skills to maximums and refund them.
-  {
+  } else {
+    // Clamp skills to maximums and refund them.
     bool need_save = FALSE;
 
     for (int skill_idx = 0; skill_idx < MAX_SKILLS; skill_idx++) {
