@@ -701,6 +701,12 @@ char *string_to_uppercase(const char *source) {
 char *string_to_lowercase(const char *source) {
   static char dest[MAX_STRING_LENGTH];
 
+  if (!source) {
+    mudlog("SYSERR: Received NULL string to string_to_lowercase()!", NULL, LOG_SYSLOG, TRUE);
+    strlcpy(dest, "", sizeof(dest));
+    return dest;
+  }
+
   int i = 0, x = strlen(source);
   for (i = 0; i < x; i++){
     if (isalpha(source[i])){
