@@ -152,9 +152,9 @@ void remove_vision_bit(struct char_data *ch, int type, int bit) {
 /////////////////// Utilities and helpers for other files //////////////////////
 
 // Local defines to make the get_vision_penalty code easier to handle.
-#define TH_PENALTY(str, pen) { thermo_penalties.emplace(str, pen); tn_with_thermo += pen; }
-#define LL_PENALTY(str, pen) { lowlight_penalties.emplace(str, pen); tn_with_ll += pen; }
-#define NM_PENALTY(str, pen) { normal_penalties.emplace(str, pen); tn_with_none += pen; }
+#define TH_PENALTY(name_str, pen) { thermo_penalties.emplace(std::string(name_str), pen); tn_with_thermo += pen; }
+#define LL_PENALTY(name_str, pen) { lowlight_penalties.emplace(std::string(name_str), pen); tn_with_ll += pen; }
+#define NM_PENALTY(name_str, pen) { normal_penalties.emplace(std::string(name_str), pen); tn_with_none += pen; }
 int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *rbuf, size_t rbuf_size) {
   if (!ch || !temp_room || !rbuf) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_vision_penalty(%s, %s, %s, %ld) called with invalid parameters! Returning insane vision penalty.",
@@ -176,9 +176,9 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
 
   // each vision mode has a vector that we tack things onto along with a running total
   // at the end, we pick the one with the fewest penalties, and output the vector to rolls
-  std::map<const char *, int> thermo_penalties = {};
-  std::map<const char *, int> lowlight_penalties = {};
-  std::map<const char *, int> normal_penalties = {};
+  std::map<std::string, int> thermo_penalties = {};
+  std::map<std::string, int> lowlight_penalties = {};
+  std::map<std::string, int> normal_penalties = {};
 
   switch (light_level(temp_room)) {
     case LIGHT_FULLDARK:
@@ -320,7 +320,7 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
   }
 
   // We've reached the end of all the penalties. We'll hand back the lowest.
-  std::map<const char *, int> *penalty_vector;
+  std::map<std::string, int> *penalty_vector;
   int penalty_chosen;
 
   bool has_thermographic = is_rigging || has_vision(ch, VISION_THERMOGRAPHIC);
@@ -349,7 +349,7 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
   }
 
   for (auto it : *penalty_vector) {
-    buf_mod(rbuf, rbuf_size, it.first, it.second);
+    buf_mod(rbuf, rbuf_size, it.first.c_str(), it.second);
   }
 
   if (penalty_chosen > 8) {

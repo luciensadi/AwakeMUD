@@ -147,7 +147,7 @@ void set_db_tag(idnum_t idnum, const char *tag_name);
 void remove_db_tag(idnum_t idnum, const char *tag_name);
 
 extern MYSQL *mysql;
-extern std::unordered_map<const char *, bool> global_existing_player_cache;
+extern std::unordered_map<std::string, bool> global_existing_player_cache;
 
 extern int mysql_wrapper(MYSQL *mysql, const char *query);
 #endif // ifndef __newdb_h__

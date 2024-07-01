@@ -2057,33 +2057,34 @@ DBIndex::vnum_t PCIndex::find_open_id()
   return (tab[entry_cnt-1].id+1);
 }
 
-std::unordered_map<const char *, bool> global_existing_player_cache = {};
+std::unordered_map<std::string, bool> global_existing_player_cache = {};
 bool does_player_exist(const char *unknown_case_name)
 {
-  const char *name = string_to_lowercase(unknown_case_name);
+  const char *composed_name = string_to_lowercase(unknown_case_name);
+  std::string string_name(composed_name);
 
   // Look them up in our cache.
   try {
-    return global_existing_player_cache.at(name);
+    return global_existing_player_cache.at(string_name);
   } catch (std::out_of_range) {
-    log_vfprintf("Failed to find player '%s' in does_player_exist()'s global cache, falling back to database.", name);
+    log_vfprintf("Failed to find player '%s' in does_player_exist()'s global cache, falling back to database.", composed_name);
   }
 
   char buf[MAX_STRING_LENGTH];
   char prepare_quotes_buf[250];
-  if (!name || !*name || !str_cmp(name, CHARACTER_DELETED_NAME_FOR_SQL))
+  if (!composed_name || !*composed_name || !str_cmp(composed_name, CHARACTER_DELETED_NAME_FOR_SQL))
     return FALSE;
-  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE Name='%s' LIMIT 1;", prepare_quotes(prepare_quotes_buf, name, 250));
+  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE `Name`='%s' LIMIT 1;", prepare_quotes(prepare_quotes_buf, composed_name, 250));
   if (mysql_wrapper(mysql, buf))
     return FALSE;
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
   if (!row && mysql_field_count(mysql)) {
     mysql_free_result(res);
-    return (global_existing_player_cache[name] = FALSE);
+    return (global_existing_player_cache[string_name] = FALSE);
   }
   mysql_free_result(res);
-  return (global_existing_player_cache[name] = TRUE);
+  return (global_existing_player_cache[string_name] = TRUE);
 }
 
 bool does_player_exist(long id)
