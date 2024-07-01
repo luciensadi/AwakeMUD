@@ -990,12 +990,12 @@ ACMD(do_broadcast)
     if (crypt_lvl)
       snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[language].name, crypt_lvl, capitalized_and_punctuated);
     else
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](Encrypted): %s^N", voice, frequency, skills[language].name, capitalized_and_punctuated);
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s]: %s^N", voice, frequency, skills[language].name, capitalized_and_punctuated);
   } else {
     if (crypt_lvl)
       snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[language].name, crypt_lvl, capitalized_and_punctuated);
     else
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](Encrypted): %s^N", voice, skills[language].name, capitalized_and_punctuated);
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s]: %s^N", voice, skills[language].name, capitalized_and_punctuated);
   }
 
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
@@ -1112,8 +1112,6 @@ ACMD(do_broadcast)
           // Append crypt info to radio string (if any).
           if (crypt_lvl) {
             snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "(CRYPTO-%d)", crypt_lvl);
-          } else {
-            strlcat(radio_string, "(Encrypted)", sizeof(radio_string));
           }
 
           // If we have bad reception, add the static modifier.
