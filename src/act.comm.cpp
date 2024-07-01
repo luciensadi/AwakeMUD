@@ -732,21 +732,29 @@ ACMD(do_radio)
   any_one_arg(any_one_arg(argument, one), two);
 
   int *freq;
-  int *crypt_rating;
-  int max_crypt = 0;
   if (cyberware) {
     freq = &GET_CYBERWARE_RADIO_FREQ(radio);
+  } else if (vehicle) {
+    freq = &GET_VEHICLE_MOD_RADIO_FREQ(radio);
+  } else {
+    freq = &GET_RADIO_CENTERED_FREQUENCY(radio);
+  }
+
+#ifdef ENABLE_RADIO_CRYPT
+  int *crypt_rating;
+  int max_crypt = 0;
+
+  if (cyberware) {
     crypt_rating = &GET_CYBERWARE_RADIO_CRYPT(radio);
     max_crypt = GET_CYBERWARE_RADIO_MAX_CRYPT(radio);
   } else if (vehicle) {
-    freq = &GET_VEHICLE_MOD_RADIO_FREQ(radio);
     crypt_rating = &GET_VEHICLE_MOD_RADIO_CRYPT(radio);
     max_crypt = GET_VEHICLE_MOD_RADIO_MAX_CRYPT(radio);
   } else {
-    freq = &GET_RADIO_CENTERED_FREQUENCY(radio);
     crypt_rating = &GET_RADIO_CURRENT_CRYPT(radio);
     max_crypt = GET_RADIO_MAX_CRYPT(radio);
   }
+#endif
 
   if (!*one) {
     act("$p:", FALSE, ch, radio, 0, TO_CHAR);
@@ -757,11 +765,13 @@ ACMD(do_radio)
     else
       send_to_char(ch, "  Mode: center @ %d MHz\r\n", *freq);
 
+#ifdef ENABLE_RADIO_CRYPT
     if (*crypt_rating)
       send_to_char(ch, "  Crypt (max %d): on (level %d)\r\n", max_crypt, *crypt_rating);
     else
       send_to_char(ch, "  Crypt (max %d): off\r\n", max_crypt);
     return;
+#endif
   } else if (!str_cmp(one, "off")) {
     act("You turn $p off.", FALSE, ch, radio, 0, TO_CHAR);
     *freq = 0;
@@ -785,6 +795,7 @@ ACMD(do_radio)
       *freq = i;
       WAIT_STATE(ch, 16); /* Takes time to adjust */
     }
+#ifdef ENABLE_RADIO_CRYPT
   } else if (!str_cmp(one, "crypt")) {
     if ((i = atoi(two))) {
       if (i > max_crypt) {
@@ -808,6 +819,7 @@ ACMD(do_radio)
         *crypt_rating = 0;
       }
     }
+#endif // radio crypt
   } else if (!str_cmp(one, "mode")) {
     if (*freq == -1)
       send_to_char(ch, "Your radio is currently scanning all frequencies. You can change the mode with ^WRADIO CENTER <frequency>, or turn it off with ^WRADIO OFF^n^n.\r\n");
@@ -816,8 +828,13 @@ ACMD(do_radio)
     else
       send_to_char(ch, "Your radio is currently centered at %d MHz. You can change the mode with ^WRADIO SCAN^n, or turn it off with ^WRADIO OFF^n.\r\n",
                    *freq);
-  } else
+  } else {
+#ifdef ENABLE_RADIO_CRYPT
     send_to_char("Valid commands are ^WRADIO OFF^n, ^WRADIO SCAN^n, ^WRADIO CENTER <frequency>^n, ^WRADIO CRYPT <level>^n, and ^WRADIO MODE^n. See ^WHELP RADIO^n for more.\r\n", ch);
+#else
+    send_to_char("Valid commands are ^WRADIO OFF^n, ^WRADIO SCAN^n, ^WRADIO CENTER <frequency>^n, and ^WRADIO MODE^n. See ^WHELP RADIO^n for more.\r\n", ch);
+#endif
+  }
 }
 
 struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_vehicular, bool must_be_on=FALSE) {
@@ -952,6 +969,11 @@ ACMD(do_broadcast)
   if (!char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
 
+#ifndef ENABLE_RADIO_CRYPT
+  // Disable crypt.
+  crypt_lvl = 0;
+#endif
+
   // Forbid usage of common smilies.
   FAILURE_CASE(str_str(argument, ":)") || str_str(argument, ":D") || str_str(argument, ":("), "The radio is for in-character voice comms. Please refrain from using smilies etc.");
 
@@ -966,12 +988,12 @@ ACMD(do_broadcast)
     if (crypt_lvl)
       snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](CRYPTO-%d): %s^N", voice, frequency, skills[language].name, crypt_lvl, capitalized_and_punctuated);
     else
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s]: %s^N", voice, frequency, skills[language].name, capitalized_and_punctuated);
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[%d MHz, %s](Encrypted): %s^N", voice, frequency, skills[language].name, capitalized_and_punctuated);
   } else {
     if (crypt_lvl)
       snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[language].name, crypt_lvl, capitalized_and_punctuated);
     else
-      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s]: %s^N", voice, skills[language].name, capitalized_and_punctuated);
+      snprintf(untouched_message, sizeof(untouched_message), "^y\\%s^y/[All Frequencies, %s](Encrypted): %s^N", voice, skills[language].name, capitalized_and_punctuated);
   }
 
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
@@ -1088,6 +1110,8 @@ ACMD(do_broadcast)
           // Append crypt info to radio string (if any).
           if (crypt_lvl) {
             snprintf(ENDOF(radio_string), sizeof(radio_string) - strlen(radio_string), "(CRYPTO-%d)", crypt_lvl);
+          } else {
+            strlcat(radio_string, "(Encrypted)", sizeof(radio_string));
           }
 
           // If we have bad reception, add the static modifier.

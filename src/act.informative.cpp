@@ -3703,8 +3703,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-^c%d %s^n.", GET_OBJ_VAL(j, 1), magic_tool_types[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_RADIO:
+#ifdef ENABLE_RADIO_CRYPT
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
-              GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2));
+               GET_RADIO_FREQ_RANGE(j), GET_RADIO_MAX_CRYPT(j));
+#else
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It has a ^c%d/5^n range.",
+               GET_RADIO_FREQ_RANGE(j));
+#endif
       break;
     case ITEM_GUN_ACCESSORY:
       if (GET_ACCESSORY_TYPE(j) == ACCESS_SMARTGOGGLE) { /* pass */ }
@@ -3817,9 +3822,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
                  engine_types[GET_VEHICLE_MOD_RATING(j)]);
       } else if (GET_VEHICLE_MOD_TYPE(j) == MOD_RADIO) {
         // radio range 0-5
+#ifdef ENABLE_RADIO_CRYPT
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
                  GET_VEHICLE_MOD_RATING(j),
                  GET_VEHICLE_MOD_RADIO_MAX_CRYPT(j));
+#else
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a ^c%d/5^n range.",
+                 GET_VEHICLE_MOD_RATING(j));
+#endif
       } else if (GET_VEHICLE_MOD_LOCATION(j) == MOD_GRABBER) {
         // grabber arm
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a lifting capacity of ^c%d^n kilograms.", GET_VEHICLE_MOD_RATING(j));
