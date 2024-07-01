@@ -1899,6 +1899,9 @@ bool PCIndex::SaveChar(char_data *ch, vnum_t loadroom, bool fromCopyover)
   // Also regenerate their subscriber list rankings while you're at it.
   regenerate_subscriber_list_rankings(ch);
 
+  // Make sure they're marked as existing in our global cache.
+  global_existing_player_cache[std::string(string_to_lowercase(GET_CHAR_NAME(ch)))] = TRUE;
+
   return ret;
 }
 
