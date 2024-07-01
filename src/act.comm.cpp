@@ -795,8 +795,8 @@ ACMD(do_radio)
       *freq = i;
       WAIT_STATE(ch, 16); /* Takes time to adjust */
     }
-#ifdef ENABLE_RADIO_CRYPT
   } else if (!str_cmp(one, "crypt")) {
+#ifdef ENABLE_RADIO_CRYPT
     if ((i = atoi(two))) {
       if (i > max_crypt) {
         snprintf(buf, sizeof(buf), "$p's max crypt rating is %d.", max_crypt);
@@ -819,6 +819,8 @@ ACMD(do_radio)
         *crypt_rating = 0;
       }
     }
+#else
+    send_to_char(ch, "Your broadcasts are encrypted by default with secure Shadowlands protocols. There's no need to configure them anymore.");
 #endif // radio crypt
   } else if (!str_cmp(one, "mode")) {
     if (*freq == -1)
