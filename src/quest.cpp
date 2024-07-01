@@ -2892,7 +2892,7 @@ void qedit_disp_menu(struct descriptor_data *d)
                QUEST->done, CCNRM(CH, C_CMP));
 
   rnum_t real_obj;
-  send_to_char(CH, "h) Item Reward: %s%d%s (%s%s%s)\r\n", CCCYN(CH, C_CMP),
+  send_to_char(CH, "h) Item Reward: %s%ld%s (%s%s%s)\r\n", CCCYN(CH, C_CMP),
                 QUEST->reward, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
                 (real_obj = real_object(QUEST->reward)) <= 0 ? "no item reward" : obj_proto[real_obj].text.name,
                 CCNRM(CH, C_CMP));
