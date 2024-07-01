@@ -945,8 +945,10 @@ SPECIAL(teacher)
             found_a_skill_already = TRUE;
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma, %d nuyen)\r\n", skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
-                  MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 5000)));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (%d karma, %d nuyen)\r\n",
+                   skills[teachers[ind].s[i]].name,
+                   get_skill_price(ch, teachers[ind].s[i]),
+                   MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 5000)));
         }
       }
     }

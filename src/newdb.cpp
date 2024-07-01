@@ -49,6 +49,8 @@ extern void load_bullet_pants(struct char_data *ch);
 extern void handle_weapon_attachments(struct obj_data *obj);
 extern int get_deprecated_cybereye_essence_cost(struct obj_data *obj);
 extern void price_cyber(struct obj_data *obj);
+extern int get_skill_price(struct char_data *ch, int i);
+extern int get_max_skill_for_char(struct char_data *ch, int skill, int type);
 
 void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
@@ -1155,6 +1157,60 @@ bool load_char(const char *name, char_data *ch, bool logon)
     GET_COND(ch, COND_FULL) = -1;
     GET_COND(ch, COND_THIRST) = -1;
     GET_COND(ch, COND_DRUNK) = -1;
+  }
+
+  // Clamp skills to maximums and refund them.
+  {
+    bool need_save = FALSE;
+
+    for (int skill_idx = 0; skill_idx < MAX_SKILLS; skill_idx++) {
+      int max_skill_level = get_max_skill_for_char(ch, skill_idx, IS_SENATOR(ch) ? GODLY : ADVANCED);
+      if (GET_RAW_SKILL(ch, skill_idx) > max_skill_level) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "%s's %s is %d, which exceeds their max of %d. Capping and refunding...",
+                        GET_CHAR_NAME(ch),
+                        skills[skill_idx].name,
+                        GET_RAW_SKILL(ch, skill_idx),
+                        max_skill_level);
+        
+        int old_too_high_skill_level = GET_RAW_SKILL(ch, skill_idx);
+
+        // Count up the refund.
+        int skill_karma_price = 0;
+        int skill_nuyen_price = 0;
+        for (int idx = 0; idx < (old_too_high_skill_level - max_skill_level); idx++) {
+          GET_RAW_SKILL(ch, skill_idx) = max_skill_level + idx;
+          skill_karma_price += get_skill_price(ch, skill_idx);
+          skill_nuyen_price += GET_RAW_SKILL(ch, skill_idx) * 5000;
+        }
+
+        // Cap the skill.
+        set_character_skill(ch, skill_idx, max_skill_level, FALSE);
+
+        // Issue the refund.
+        GET_KARMA(ch) += skill_karma_price * 100;
+        GET_NUYEN_RAW(ch) += skill_nuyen_price;
+        GET_SYSTEM_POINTS(ch) += 5;
+        mudlog_vfprintf(ch, LOG_SYSLOG, "Refunded %s %d karma, %d nuyen; added 5 syspoints (%d -> %d).",
+                        GET_CHAR_NAME(ch),
+                        skill_karma_price,
+                        skill_nuyen_price,
+                        GET_SYSTEM_POINTS(ch) - 5,
+                        GET_SYSTEM_POINTS(ch));
+
+        snprintf(buf, sizeof(buf), "Due to balance changes, your skill in %s has been automatically set to the new cap of ^c%d^n. You have been refunded ^c%d^n karma and ^c%d^n nuyen to compensate for your training costs, and have received ^c5^n syspoints as a bonus.^n\r\n",
+                 skills[skill_idx].name,
+                 max_skill_level,
+                 skill_karma_price,
+                 skill_nuyen_price);
+        raw_store_mail(GET_IDNUM(ch), 0, "(OOC System Message)", buf);
+
+        need_save = TRUE;
+      }
+    }
+
+    if (need_save) {
+      playerDB.SaveChar(ch);
+    }
   }
 
   return true;
