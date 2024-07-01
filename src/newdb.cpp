@@ -1182,7 +1182,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
         }
 
         // Cap the skill.
-        set_character_skill(ch, skill_idx, max_skill_level, FALSE);
+        set_character_skill(ch, skill_idx, max_skill_level, FALSE, FALSE);
 
         // Issue the refund.
         GET_KARMA(ch) += skill_karma_price * 100;
