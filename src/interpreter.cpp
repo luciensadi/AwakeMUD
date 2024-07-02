@@ -3335,7 +3335,6 @@ void nanny(struct descriptor_data * d, char *arg)
 
       DeleteChar(GET_IDNUM(d->character));
 
-      global_existing_player_cache[std::string(string_to_lowercase(GET_CHAR_NAME(d->character)))] = FALSE;
       snprintf(buf, sizeof(buf), "Character '%s' deleted!\r\nGoodbye.\r\n",
               GET_CHAR_NAME(d->character));
       SEND_TO_Q(buf, d);
