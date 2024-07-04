@@ -2617,28 +2617,24 @@ ACMD(do_stuck) {
 
   if (!ch->in_room && !ch->in_veh) {
     send_to_char(ch, "Wow, you really ARE stuck, aren't you?\r\n");
-    snprintf(buf, sizeof(buf), "STUCK COMMAND USED: %s ended up with no vehicle or room! Rationale given is '%s'. Will teleport to Mortal Relations.",
-             GET_CHAR_NAME(ch),
-             reason
-           );
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "STUCK COMMAND USED: %s ended up with no vehicle or room! Rationale given is '%s'. Will teleport to Mortal Relations.",
+                    GET_CHAR_NAME(ch),
+                    reason);
   } else {
     struct room_data *room = get_ch_in_room(ch);
-    snprintf(buf, sizeof(buf), "STUCK COMMAND USED: %s claims to be stuck in %s'%s'^g (%ld). Rationale given is '%s'. Will teleport to Mortal Relations.",
-             GET_CHAR_NAME(ch),
-             ch->in_veh ? "a vehicle in " : "",
-             GET_ROOM_NAME(room),
-             GET_ROOM_VNUM(room),
-             reason
-           );
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "STUCK COMMAND USED: %s claims to be stuck in %s'%s'^g (%ld). Rationale given is '%s'. Will teleport to Mortal Relations.",
+                    GET_CHAR_NAME(ch),
+                    ch->in_veh ? "a vehicle in " : "",
+                    GET_ROOM_NAME(room),
+                    GET_ROOM_VNUM(room),
+                    reason);
   }
-
-  mudlog(buf, ch, LOG_CHEATLOG, TRUE);
 
   rnum_t mortal_relations_rnum = real_room(RM_MORTAL_RELATIONS_CONFERENCE_ROOM);
 
   if (mortal_relations_rnum == NOWHERE) {
-    mudlog("SYSERR: Mortal Relations conference room not defined! You must build it before the stuck command can be used.", ch, LOG_SYSLOG, TRUE);
-    return;
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Mortal Relations conference room %ld not defined! Sending %s to 0.", RM_MORTAL_RELATIONS_CONFERENCE_ROOM, GET_CHAR_NAME(ch));
+    mortal_relations_rnum = 0;
   }
 
   if (ch->in_room || ch->in_veh)
