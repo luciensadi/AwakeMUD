@@ -4334,6 +4334,7 @@ ACMD(do_examine)
       if (targ <= 0)
         strlcat(buf, "is completely legal", sizeof(buf));
       else {
+#ifdef ROLL_POLICE_PROCEDURES
         int skill = get_skill(ch, SKILL_POLICE_PROCEDURES, targ), suc = success_test(skill, targ);
         if (suc <= 0)
           strlcat(buf, "is completely legal", sizeof(buf));
@@ -4344,6 +4345,13 @@ ACMD(do_examine)
             strlcat(buf, "is illegal", sizeof(buf));
           else strlcat(buf, "could be considered illegal", sizeof(buf));
         }
+#else // ROLL_POLICE_PROCEDURES
+        if (GET_LEGAL_NUM(tmp_object) <= 3)
+          strlcat(buf, "is highly illegal", sizeof(buf));
+        else if (GET_LEGAL_NUM(tmp_object) <= 6)
+          strlcat(buf, "is illegal", sizeof(buf));
+        else strlcat(buf, "could be considered illegal", sizeof(buf));
+#endif // ROLL_POLICE_PROCEDURES
       }
       send_to_char(ch, "%s.\r\n", buf);
     }
