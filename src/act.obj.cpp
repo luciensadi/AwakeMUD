@@ -1981,8 +1981,6 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
   act("$n drops $p.", TRUE, ch, obj, 0, TO_ROOM);
   affect_total(ch);
 
-  set_dropped_by_info(obj, ch);
-
   if (ch->in_veh)
   {
     obj_to_veh(obj, ch->in_veh);
@@ -1992,6 +1990,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
 
   snprintf(buf, sizeof(buf), "%s drops: %d nuyen *", GET_CHAR_NAME(ch), amount);
   mudlog(buf, ch, amount > 5 ? LOG_CHEATLOG : LOG_GRIDLOG, TRUE);
+  set_dropped_by_info(obj, ch);
 
   return;
 }
@@ -2251,37 +2250,36 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     delete [] representation;
   }
 
-  set_dropped_by_info(obj, ch);
-
-  switch (mode)
-  {
-  case SCMD_DROP:
-    if (ch->in_veh) {
-      obj_to_veh(obj, ch->in_veh);
-      obj->vfront = ch->vfront;
-    } else
-      obj_to_room(obj, ch->in_room);
-    if (COULD_BE_ON_QUEST(ch))
-      check_quest_delivery(ch, obj);
-    return 0;
-  case SCMD_DONATE:
-    // Wipe its value with the make_newbie() function to prevent reselling.
-    zero_cost_of_obj_and_contents(obj);
-    // Move it to the donation room.
-    obj_to_room(obj, random_donation_room);
-    if (random_donation_room->people)
-      act("You notice $p exposed beneath the junk.", FALSE, random_donation_room->people, obj, 0, TO_ROOM);
-    return 0;
-  case SCMD_JUNK:
-    value = MAX(1, MIN(200, GET_OBJ_COST(obj) >> 4));
-    if (COULD_BE_ON_QUEST(ch))
-      check_quest_destroy(ch, obj);
-    extract_obj(obj);
-    return value;
-  default:
-    log("SYSERR: Incorrect argument passed to perform_drop");
-    break;
+  switch (mode) {
+    case SCMD_DROP:
+      if (ch->in_veh) {
+        obj_to_veh(obj, ch->in_veh);
+        obj->vfront = ch->vfront;
+      } else
+        obj_to_room(obj, ch->in_room);
+      if (COULD_BE_ON_QUEST(ch))
+        check_quest_delivery(ch, obj);
+      break;
+    case SCMD_DONATE:
+      // Wipe its value with the make_newbie() function to prevent reselling.
+      zero_cost_of_obj_and_contents(obj);
+      // Move it to the donation room.
+      obj_to_room(obj, random_donation_room);
+      if (random_donation_room->people)
+        act("You notice $p exposed beneath the junk.", FALSE, random_donation_room->people, obj, 0, TO_ROOM);
+      break;
+    case SCMD_JUNK:
+      value = MAX(1, MIN(200, GET_OBJ_COST(obj) >> 4));
+      if (COULD_BE_ON_QUEST(ch))
+        check_quest_destroy(ch, obj);
+      extract_obj(obj);
+      return value;
+    default:
+      log("SYSERR: Incorrect argument passed to perform_drop");
+      break;
   }
+
+  set_dropped_by_info(obj, ch);
 
   return 0;
 }

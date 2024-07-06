@@ -2164,6 +2164,9 @@ void obj_from_room(struct obj_data * object)
   object->in_veh = NULL;
   object->in_room = NULL;
   object->next_content = NULL;
+
+  // Clear expiration info.
+  GET_OBJ_EXPIRATION_TIMESTAMP(object) = 0;
 }
 
 /* Put an object in a Matrix host. */

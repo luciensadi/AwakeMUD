@@ -249,6 +249,7 @@ void objList::UpdateCounters(void)
   MYSQL_ROW row;
   char *trid = NULL;
   static nodeStruct<struct obj_data *> *temp, *next;
+  time_t timestamp_now = time(0);
 
   bool trideo_plays = (trideo_ticks++ % TRIDEO_TICK_DELAY == 0);
 
@@ -413,19 +414,21 @@ void objList::UpdateCounters(void)
     }
     */
 
-    // Time out objects that end up on the floor a lot (magazines, cash, etc).
-    // Removed -- magazines aren't discrete objects anymore, and credsticks can't be zeroed like this.
-    /*
-    if (OBJ->in_room && !OBJ->in_obj && !OBJ->carried_by && !GET_OBJ_QUEST_CHAR_ID(OBJ) &&
-       ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_MAGAZINE && !GET_MAGAZINE_AMMO_COUNT(OBJ)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0)))
-        && ++GET_OBJ_TIMER(OBJ) == 3) {
-        act("$p is lost on the ground.", TRUE, temp->data->in_room->people,
-                OBJ, 0, TO_CHAR);
+    // Time out things that have been abandoned outside of storage etc rooms (qualifier checked when setting timeout)
+    // TODO: Maybe put it in a vector of expiring objects rather than making this check be part of every item?
+    if (OBJ->in_room && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) > 0 && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) >= timestamp_now) {
+#ifndef EXPIRE_STRAY_ITEMS
+      const char *representation = generate_new_loggable_representation(OBJ);
+      log_vfprintf("Item %s @ %s (%ld) would have been cleaned up by expiration logic.", representation, GET_ROOM_NAME(OBJ->in_room), GET_ROOM_VNUM(OBJ->in_room));
+      delete [] representation;
+      GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) = 0;
+#else
+      act("$p is lost on the ground.", TRUE, temp->data->in_room->people, OBJ, 0, TO_CHAR);
       next = temp->next;
       extract_obj(OBJ);
       continue;
+#endif
     }
-    */
 
     // Corpses either have no vnum or are 43 (belongings).
     if (GET_OBJ_VNUM(OBJ) < 0 || GET_OBJ_VNUM(OBJ) == 43) {

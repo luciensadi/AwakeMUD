@@ -85,6 +85,7 @@ struct obj_flag_data
   float weight;          /* Weigt what else                    */
   int cost;            /* Value when sold (gp.)              */
   int timer;           /* Timer for object                   */
+  time_t expiration_timestamp; /* Expiration for things left on the ground. Not saved. */
   Bitfield bitvector;       /* To set chars bits                  */
   byte material;       /* Type of material item is made from */
   byte barrier;        // barrier rating of object if any
@@ -97,7 +98,7 @@ struct obj_flag_data
   int attempt;  // ITEM_MONEY: Number of failed cracks. ITEM_WEAPON: Built-in recoil comp.
 
   obj_flag_data() :
-    type_flag(0), weight(0), cost(0), timer(0), material(0), barrier(0), condition(0),
+    type_flag(0), weight(0), cost(0), timer(0), expiration_timestamp(0), material(0), barrier(0), condition(0),
     availtn(0), availdays(0), street_index(0), quest_id(0), attempt(0)
   {
     ZERO_OUT_ARRAY(value, NUM_OBJ_VALUES);

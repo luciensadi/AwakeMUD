@@ -76,6 +76,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
 bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message);
 void docwagon_retrieve(struct char_data *ch);
+void zero_out_magazine_counts(struct obj_data *obj);
 
 SPECIAL(weapon_dominator);
 SPECIAL(pocket_sec);
@@ -683,21 +684,12 @@ void make_corpse(struct char_data * ch)
       else if (IS_OBJ_STAT(o, ITEM_EXTRA_PURGE_ON_DEATH))
         extract_obj(o);
       else {
-        // If it's a gun and has a magazine in it, reduce the ammo count in that magazine.
-        if (GET_OBJ_TYPE(o) == ITEM_WEAPON && WEAPON_IS_GUN(o) && o->contains) {
-          if (GET_OBJ_TYPE(o->contains) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_BONDED_MAXAMMO(o->contains) > 0) {
-            GET_MAGAZINE_AMMO_COUNT(o->contains) = 0;
-          }
-        }
+        // Zero out magazines from this and everything it contains.
+        zero_out_magazine_counts(o);
 
         // Put the item in the corpse.
         obj_to_obj(o, corpse);
         corpse_value += GET_OBJ_COST( o );
-
-        // If it's a gun from an NPC, track it in ammo metrics.
-        if (IS_NPC(ch) && GET_OBJ_TYPE(o) == ITEM_WEAPON && WEAPON_IS_GUN(o) && o->contains && GET_OBJ_TYPE(o->contains) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_AMMO_COUNT(o->contains) > 0) {
-          AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(o->contains), GET_MAGAZINE_AMMO_TYPE(o->contains), AMMOTRACK_NPC_SPAWNED, GET_MAGAZINE_AMMO_COUNT(o->contains));
-        }
       }
     }
   }

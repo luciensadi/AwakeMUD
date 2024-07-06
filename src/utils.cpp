@@ -7799,6 +7799,13 @@ void set_dropped_by_info(struct obj_data *obj, struct char_data *ch) {
     delete [] obj->dropped_by_host;
     obj->dropped_by_host = ch->desc ? str_dup(ch->desc->host) : str_dup("<no desc>");
   }
+
+  // Also set the drop timestamp, provided that it's dropped in a non-storage, non-apartment room; isn't a quest item or workshop; and doesn't have contents (weapons exempt)
+  if (obj->in_room && !obj->in_obj && !obj->carried_by && !GET_APARTMENT(obj->in_room) && !ROOM_FLAGGED(obj->in_room, ROOM_STORAGE)) {
+    if (!GET_OBJ_QUEST_CHAR_ID(obj) && GET_OBJ_TYPE(obj) != ITEM_WORKSHOP && (GET_OBJ_TYPE(obj) != ITEM_WEAPON || !obj->contains)) {
+      GET_OBJ_EXPIRATION_TIMESTAMP(obj) = time(0) + (2 * SECS_PER_REAL_HOUR);
+    }
+  }
 }
 
 bool ch_can_bypass_edit_lock(struct char_data *ch, struct zone_data *zone) {
@@ -8058,4 +8065,18 @@ bool ch_is_in_viewers_visual_range(struct char_data *ch, struct char_data *viewe
       return TRUE;
   }
   return FALSE;
+}
+
+void zero_out_magazine_counts(struct obj_data *obj) {
+  if (!obj) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got NULL object to zero_out_magazine_counts().");
+    return;
+  }
+
+  if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE)
+    GET_MAGAZINE_AMMO_COUNT(obj) = 0;
+
+  for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
+    zero_out_magazine_counts(obj);
+  }
 }

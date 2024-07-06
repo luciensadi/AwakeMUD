@@ -832,6 +832,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_OBJ_WEIGHT(obj)     ((obj)->obj_flags.weight)
 float get_proto_weight(struct obj_data *obj);
 #define GET_OBJ_TIMER(obj)      ((obj)->obj_flags.timer)
+#define GET_OBJ_EXPIRATION_TIMESTAMP(obj)      ((obj)->obj_flags.expiration_timestamp)
 #define GET_OBJ_ATTEMPT(obj)    ((obj)->obj_flags.attempt)
 #define GET_OBJ_RNUM(obj)       ((obj)->item_number)
 #define GET_OBJ_MATERIAL(obj)   ((obj)->obj_flags.material)
