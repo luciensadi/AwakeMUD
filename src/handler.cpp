@@ -45,6 +45,7 @@ extern int max_ability(int i);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern void end_quest(struct char_data *ch, bool succeeded);
 extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
+extern void calc_weight(struct char_data *);
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch);
 int get_skill_dice_in_use_for_weapons(struct char_data *ch);
@@ -1645,6 +1646,7 @@ void obj_to_cyberware(struct obj_data * object, struct char_data * ch, bool reca
 
   if (recalc) {
     affect_total(ch);
+    calc_weight(ch);
   }
 
   // Soulbind it to this character.
@@ -1687,6 +1689,7 @@ void obj_to_bioware(struct obj_data * object, struct char_data * ch, bool recalc
 
   if (recalc) {
     affect_total(ch);
+    calc_weight(ch);
   }
 
   // Soulbind it to this character.
@@ -1729,6 +1732,7 @@ void obj_from_bioware(struct obj_data *bio, bool recalc)
 
   if (recalc) {
     affect_total(ch);
+    calc_weight(ch);
   }
 }
 
@@ -1803,6 +1807,7 @@ void obj_from_cyberware(struct obj_data * cyber, bool recalc)
 
   if (recalc) {
     affect_total(ch);
+    calc_weight(ch);
   }
 }
 
