@@ -1397,8 +1397,19 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Source Book: '%s'\r\n", j->source_info);
   }
 
-  if (access_level(ch, LVL_PRESIDENT) && (j->dropped_by_char || j->dropped_by_host)) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Dropped by char %ld at host %s\r\n", j->dropped_by_char, j->dropped_by_host);
+  if (j->dropped_by_char || j->dropped_by_host || GET_OBJ_EXPIRATION_TIMESTAMP(j) > 0) {
+    if (j->dropped_by_char || j->dropped_by_host) {
+      const char *name = get_player_name(j->dropped_by_char);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Dropped by '%s'(%ld)@'%s', expires in %ld seconds\r\n",
+               access_level(ch, LVL_VICEPRES) ? name : "<redacted>",
+               access_level(ch, LVL_VICEPRES) ? j->dropped_by_char : -1,
+               access_level(ch, LVL_VICEPRES) ? j->dropped_by_host : "<redacted>",
+               GET_OBJ_EXPIRATION_TIMESTAMP(j) - time(0));
+      delete [] name;
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Dropped by an unknown force (NPC?), expires in %ld seconds\r\n",
+               GET_OBJ_EXPIRATION_TIMESTAMP(j) - time(0));
+    }
   }
 
   sprinttype(GET_OBJ_TYPE(j), item_types, buf1, sizeof(buf1));

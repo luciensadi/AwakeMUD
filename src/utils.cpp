@@ -7803,7 +7803,7 @@ void set_dropped_by_info(struct obj_data *obj, struct char_data *ch) {
   // Also set the drop timestamp, provided that it's dropped in a non-storage, non-apartment room; isn't a quest item or workshop; and doesn't have contents (weapons exempt)
   if (obj->in_room && !obj->in_obj && !obj->carried_by && !GET_APARTMENT(obj->in_room) && !ROOM_FLAGGED(obj->in_room, ROOM_STORAGE)) {
     if (!GET_OBJ_QUEST_CHAR_ID(obj) && GET_OBJ_TYPE(obj) != ITEM_WORKSHOP && (GET_OBJ_TYPE(obj) != ITEM_WEAPON || !obj->contains)) {
-      GET_OBJ_EXPIRATION_TIMESTAMP(obj) = time(0) + (2 * SECS_PER_REAL_HOUR);
+      GET_OBJ_EXPIRATION_TIMESTAMP(obj) = time(0) + DROPPED_OBJ_EXPIRATION_TIME_IN_SECONDS;
     }
   }
 }

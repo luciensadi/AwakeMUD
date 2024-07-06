@@ -326,6 +326,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define CRAP_COUNT_HIGH       450
 #define CRAP_COUNT_MODERATE   300
 
+// When do things expire on the ground?
+#define DROPPED_OBJ_EXPIRATION_TIME_IN_SECONDS  (2 * SECS_PER_REAL_HOUR)
+
 /////////////// OLC and staff permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER
