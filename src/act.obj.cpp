@@ -4255,7 +4255,7 @@ ACMD(do_activate)
     send_to_char(ch, "There's no need to activate or deactivate %s. Just ^WWIELD^n it when you want to use it.\r\n", GET_OBJ_NAME(obj));
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_LIGHT) {
-    send_to_char(ch, "There's no need to activate or deactivate %s. Just ^WWEAR^n it when you want to use it.\r\n", GET_OBJ_NAME(obj));
+    send_to_char(ch, "There's no need to activate or deactivate %s. Just ^WHOLD^n it when you want to use it.\r\n", GET_OBJ_NAME(obj));
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_DOCWAGON) {
     bool bonded = (GET_DOCWAGON_BONDED_IDNUM(obj) == GET_IDNUM(ch));
