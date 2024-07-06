@@ -70,7 +70,7 @@ struct dest_data seattle_taxi_destinations[] =
   { "council", "island", "Council Island", 9149, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "hospital", "", "Council Island Hospital", 9161, TAXI_DEST_TYPE_HOSPITALS, TRUE },
   { "dante", "dante's", "Dante's Inferno", 32661, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
-  { "diver", "easy", "Easy Diver Coffin Hotel", 32644, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
+  { "diver", "easy", "Easy Diver Coffin Hotel", 32644, TAXI_DEST_TYPE_HOTELS_MOTELS, TRUE },
   { "evergreen", "", "Evergreen Complex", 2201, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
   { "everett", "", "Everett", 39263, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "epicenter", "", "The Epicenter", 2418, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
@@ -112,7 +112,7 @@ struct dest_data seattle_taxi_destinations[] =
   { "syberspace", "", "SyberSpace", 30612, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
   { "tarislar", "", "Tarislar", 4965, TAXI_DEST_TYPE_AREA_OF_TOWN , TRUE },
   { "tacoma", "", "Tacoma", 2000, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
-  { "coffin", "motel", "Tacoma Coffin Motel", 2045, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
+  { "coffin", "motel", "Tacoma Coffin Motel", 2045, TAXI_DEST_TYPE_HOTELS_MOTELS, TRUE },
   { "mall", "", "Tacoma Mall", 2093, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "TWE", "", "Tacoma Weapons Emporium", 2514, TAXI_DEST_TYPE_SHOPPING, TRUE },
   { "afterlife", "", "The Afterlife", 2072, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
@@ -151,6 +151,7 @@ struct dest_data seattle_taxi_destinations[] =
     { "crusher", "495", "Crusher 495", 25364, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "banshee", "", "The Banshee", 25368, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "paine", "snohomish", "Paine Field-Snohomish Airport", 39233, TAXI_DEST_TYPE_TRANSPORTATION, TRUE },
+    { "villas", "lucianos", "Villa de Lucianos", 98501, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
 #endif
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
@@ -210,7 +211,8 @@ struct taxi_dest_type taxi_dest_type_info[] = {
   { "^rTransportation", "^R" },
   { "^mRestaurants and Nightclubs", "^M" },
   { "^bShopping", "^B" },
-  { "^gAccommodation", "^G" },
+  { "^gHotels / Motels", "^g" },
+  { "^gApartments and Housing", "^G" },
   { "^rHospitals", "^R" },
   { "^WEverything Else", "^W" },
   { "^MOOC Areas", "^W"},
