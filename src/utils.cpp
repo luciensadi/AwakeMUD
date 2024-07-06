@@ -8077,6 +8077,6 @@ void zero_out_magazine_counts(struct obj_data *obj) {
     GET_MAGAZINE_AMMO_COUNT(obj) = 0;
 
   for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
-    zero_out_magazine_counts(obj);
+    zero_out_magazine_counts(contained);
   }
 }

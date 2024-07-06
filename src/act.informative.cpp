@@ -4104,15 +4104,33 @@ ACMD(do_examine)
 
     if (tmp_object) {
       do_probe_object(ch, tmp_object, FALSE);
-    } else {
-      send_to_char("You're not wearing or carrying any such object, and there are no vehicles like that here.\r\n", ch);
+      return;
+    }
 
-      if (ch->in_room) {
-        for (struct char_data *tmp_ch = ch->in_room->people; tmp_ch; tmp_ch = tmp_ch->next_in_room) {
-          if (IS_NPC(tmp_ch) && MOB_HAS_SPEC(tmp_ch, shop_keeper)) {
-            send_to_char("(To probe a shop's item, use the item's list index, like ^WPROBE #1^n.)\r\n", ch);
-            break;
-          }
+    // Search cyber/bioware.
+    for (struct obj_data *ware = ch->cyberware; ware; ware = ware->next_content) {
+      if (keyword_appears_in_obj(arg, ware)) {
+        send_to_char("^L(Probing your installed cyberware.)^n\r\n", ch);
+        do_probe_object(ch, ware, FALSE);
+        return;
+      }
+    }
+    for (struct obj_data *ware = ch->bioware; ware; ware = ware->next_content) {
+      if (keyword_appears_in_obj(arg, ware)) {
+        send_to_char("^L(Probing your installed bioware.)^n\r\n", ch);
+        do_probe_object(ch, ware, FALSE);
+        return;
+      }
+    }
+
+    // Found nothing.
+    send_to_char("You're not wearing or carrying any such object, and there are no vehicles like that here.\r\n", ch);
+
+    if (ch->in_room) {
+      for (struct char_data *tmp_ch = ch->in_room->people; tmp_ch; tmp_ch = tmp_ch->next_in_room) {
+        if (IS_NPC(tmp_ch) && MOB_HAS_SPEC(tmp_ch, shop_keeper)) {
+          send_to_char("(To probe a shop's item, use the item's list index, like ^WPROBE #1^n.)\r\n", ch);
+          break;
         }
       }
     }
