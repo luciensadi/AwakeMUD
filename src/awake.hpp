@@ -1427,6 +1427,13 @@ enum {
 #define TYPE_PARTS       3
 #define TYPE_COOKER       4
 
+#define DUPGRADE_REPLACEMENT_MPCP  0
+#define DUPGRADE_ACTIVE_MEMORY     1
+#define DUPGRADE_STORAGE_MEMORY    2
+#define DUPGRADE_HITCHER_JACK      3
+#define DUPGRADE_IO_SPEED          4
+#define DUPGRADE_REACTION_INCREASE 5
+
 /* vehicle types table */
 #define VEH_DRONE         0
 #define VEH_BIKE          1

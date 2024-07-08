@@ -694,7 +694,7 @@ ACMD(do_put)
     // Must match subtypes.
     switch (GET_OBJ_TYPE(obj)) {
       case ITEM_DECK_ACCESSORY:
-        FAILURE_CASE_PRINTF(GET_DECK_ACCESSORY_TYPE(obj) != GET_DECK_ACCESSORY_TYPE(cont) || GET_DECK_ACCESSORY_IS_CHIPS(obj) != GET_DECK_ACCESSORY_IS_CHIPS(cont), 
+        FAILURE_CASE_PRINTF(GET_DECK_ACCESSORY_TYPE(obj) != GET_DECK_ACCESSORY_TYPE(cont) || GET_DECK_ACCESSORY_PARTS_IS_CHIPS(obj) != GET_DECK_ACCESSORY_PARTS_IS_CHIPS(cont), 
                             "You cannot combine %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
         break;
       case ITEM_MAGIC_TOOL:

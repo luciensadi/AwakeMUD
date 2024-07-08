@@ -1299,7 +1299,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_DECK_ACCESSORY_TYPE(accessory)                   (GET_OBJ_VAL((accessory), 0))
 
 // ITEM_DECK_ACCESSORY TYPE_PARTS convenience defines
-#define GET_DECK_ACCESSORY_IS_CHIPS(accessory)               (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_PARTS_IS_CHIPS(accessory)               (GET_OBJ_VAL((accessory), 1))
 
 // ITEM_DECK_ACCESSORY TYPE_FILE convenience defines
 #define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory)        (GET_OBJ_VAL((accessory), 1))
@@ -1323,6 +1323,12 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(accessory)    (GET_OBJ_VAL((accessory), 2))
 #define GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(accessory)   (GET_OBJ_VAL((accessory), 3))
 #define GET_DECK_ACCESSORY_COMPUTER_IS_LAPTOP(accessory)     (GET_OBJ_VAL((accessory), 4))
+
+// ITEM_DECK_ACCESSORY TYPE_UPGRADE convenience defines
+#define GET_DECK_ACCESSORY_UPGRADE_COMPONENT(accessory)      (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_UPGRADE_RATING(accessory)         (GET_OBJ_VAL((accessory), 2))
+#define GET_DECK_ACCESSORY_UPGRADE_TARGET_MPCP(accessory)    (GET_OBJ_VAL((accessory), 3))
+
 
 // ITEM_RCDECK convenience defines
 
