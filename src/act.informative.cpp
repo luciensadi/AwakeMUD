@@ -3779,29 +3779,38 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is designed for a ^c%s^n.", holster_types[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_DECK_ACCESSORY:
-      if (GET_OBJ_VAL(j, 0) == TYPE_FILE) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This file requires ^c%d^n units of space.", GET_DECK_ACCESSORY_FILE_SIZE(j));
-      } else if (GET_OBJ_VAL(j, 0) == TYPE_UPGRADE) {
-        if (GET_OBJ_VAL(j, 1) == 3) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This cyberdeck upgrade affects ^c%s^n with a rating of ^c%d^n.",
-                  deck_accessory_upgrade_types[GET_OBJ_VAL(j, 1)], GET_OBJ_VAL(j, 2));
-          if (GET_OBJ_VAL(j, 1) == 5) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is designed for MPCP rating ^c%d^n.", GET_OBJ_VAL(j, 3));
+      switch (GET_DECK_ACCESSORY_TYPE(j)) {
+        case TYPE_FILE:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This file requires ^c%d^n units of space.", GET_DECK_ACCESSORY_FILE_SIZE(j));
+          break;
+        case TYPE_UPGRADE:
+          if (GET_DECK_ACCESSORY_UPGRADE_COMPONENT(j) == DUPGRADE_HITCHER_JACK) {
+            strlcat(buf, "This cyberdeck upgrade adds a ^chitcher jack^n.", sizeof(buf));
+          } else {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This cyberdeck upgrade affects ^c%s^n with a rating of ^c%d^n.",
+                     deck_accessory_upgrade_types[GET_DECK_ACCESSORY_UPGRADE_COMPONENT(j)],
+                     GET_DECK_ACCESSORY_UPGRADE_RATING(j));
+            if (GET_DECK_ACCESSORY_UPGRADE_COMPONENT(j) == DUPGRADE_REPLACEMENT_MPCP) {
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is designed for MPCP rating ^c%d^n.", GET_DECK_ACCESSORY_UPGRADE_TARGET_MPCP(j));
+            }
           }
-        } else {
-          strlcat(buf, "This cyberdeck upgrade adds a ^chitcher jack^n.", sizeof(buf));
-        }
-      } else if (GET_OBJ_VAL(j, 0) == TYPE_COMPUTER) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This computer has ^c%d^n units of active memory and ^c%d^n units of storage memory.",
-                GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2));
-      } else if (GET_OBJ_VAL(j, 0) == TYPE_PARTS) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This pack of parts contains ^c%d^n units of ^c%s^n.",
-                GET_OBJ_COST(j), GET_OBJ_VAL(j, 1) == 0 ? "general parts" : "memory chips");
-      } else if (GET_OBJ_VAL(j, 0) == TYPE_COOKER) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This chip cooker is rating ^c%d^n.", GET_OBJ_VAL(j, 1));
-      } else {
-        snprintf(buf2, sizeof(buf2), "Error: Unknown ITEM_DECK_ACCESSORY type %d passed to probe command.", GET_OBJ_VAL(j, 0));
-        log(buf2);
+          break;
+        case TYPE_COMPUTER:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This computer has ^c%d^n units of active memory and ^c%d^n units of storage memory.",
+                   GET_DECK_ACCESSORY_COMPUTER_ACTIVE_MEMORY(j),
+                   GET_DECK_ACCESSORY_COMPUTER_STORAGE_MEMORY(j));
+          break;
+        case TYPE_PARTS:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This pack of parts contains ^c%d^n units of ^c%s^n.",
+                   GET_OBJ_COST(j),
+                   GET_DECK_ACCESSORY_PARTS_IS_CHIPS(j) == 0 ? "deckbuilding parts" : "memory chips, which are use for both deckbuilding and cooking programs");
+          break;
+        case TYPE_COOKER:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a rating-^c%d^n chip cooker, used to burn completed programs to physical chips for use in cyberdecks.", GET_OBJ_VAL(j, 1));
+          break;
+        default:
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown ITEM_DECK_ACCESSORY type %d passed to probe command.", GET_DECK_ACCESSORY_TYPE(j));
+          break;
       }
       break;
     case ITEM_MOD:
@@ -5200,21 +5209,21 @@ ACMD(do_cyberware)
     return;
   }
 
-  send_to_char("You have the following cyberware:\r\n", ch);
+  send_to_char("^cYou have the following cyberware:^n\r\n", ch);
   for (obj = ch->cyberware; obj != NULL; obj = obj->next_content) {
     if (GET_CYBERWARE_TYPE(obj) == CYB_FINGERTIP) {
       if (obj->contains && GET_OBJ_TYPE(obj->contains) == ITEM_WEAPON && GET_HOLSTER_READY_STATUS(obj) ) {
-        snprintf(buf, sizeof(buf), "%-32s ^Y(W) (R)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
+        snprintf(buf, sizeof(buf), "%-32s ^Y(W) (R)^n Essence: ^c%0.2f^n\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
         send_to_char(buf, ch);
         continue;
       }
       else if (obj->contains && GET_OBJ_TYPE(obj->contains) == ITEM_WEAPON && !GET_HOLSTER_READY_STATUS(obj)) {
-        snprintf(buf, sizeof(buf), "%-36s ^Y(W)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
+        snprintf(buf, sizeof(buf), "%-36s ^Y(W)^n Essence: ^c%0.2f^n\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
         send_to_char(buf, ch);
         continue;
       }
       else if (obj->contains) {
-        snprintf(buf, sizeof(buf), "%-36s ^Y(F)^n Essence: %0.2f\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
+        snprintf(buf, sizeof(buf), "%-36s ^Y(F)^n Essence: ^c%0.2f^n\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
         send_to_char(buf, ch);
         continue;
       }
@@ -5237,7 +5246,7 @@ ACMD(do_cyberware)
       strlcpy(retraction_string, "", sizeof(retraction_string));
     }
 
-    snprintf(buf, sizeof(buf), "%-40s Essence: %0.2f%s\r\n",
+    snprintf(buf, sizeof(buf), "%-40s Essence: ^c%0.2f^n\r\n",
              GET_OBJ_NAME(obj),
              ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1),
              retraction_string
@@ -7802,7 +7811,7 @@ const char *get_command_hints_for_obj(struct obj_data *obj) {
     strlcat(hint_string, "\r\nIt can be used even while on the ground.\r\n", sizeof(hint_string));
   }
   else if (GET_OBJ_SPEC(obj) == pocket_sec) {
-    strlcat(hint_string, "\r\nIt's a pocket secretary-- you can ^WUSE^n it.\r\n", sizeof(hint_string));
+    strlcat(hint_string, "\r\nIt's basically a smartphone that can't make calls. ^WUSE SECRETARY^n to start.\r\n", sizeof(hint_string));
   }
   else if (GET_OBJ_SPEC(obj) == portable_gridguide) {
     strlcat(hint_string, "\r\nIt lets you use the ^WGRID^n command while holding it.\r\n", sizeof(hint_string));
