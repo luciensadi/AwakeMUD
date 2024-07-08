@@ -2070,7 +2070,7 @@ bool does_player_exist(const char *unknown_case_name)
 
   // Look them up in our cache.
   try {
-    log_vfprintf("does_player_exist(%s): cache = %s", global_existing_player_cache.at(string_name) ? "TRUE" : "FALSE");
+    log_vfprintf("does_player_exist(%s -> %s): cache = %s", unknown_case_name, composed_name, global_existing_player_cache.at(string_name) ? "TRUE" : "FALSE");
     // return global_existing_player_cache.at(string_name);
   } catch (std::out_of_range) {
     log_vfprintf("Failed to find player '%s' in does_player_exist()'s global cache, falling back to database.", composed_name);
