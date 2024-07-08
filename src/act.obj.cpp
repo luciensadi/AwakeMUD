@@ -2033,12 +2033,12 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 
     if (action_blocked) {   
       if (IS_SENATOR(ch)) {
-        send_to_char("...As staff, you bypass the restriction and it anyways.\r\n", ch);
+        send_to_char("...As staff, you bypass the restriction and drop it anyways.\r\n", ch);
       } else {
         // Hardcoded start and end of the Neophyte Guild area. You can drop things you've picked up here, but only as a newbie.
         // Note that bypassing these checks by handing something to a newbie to drop in the donation area is considered exploiting.
         if (mode == SCMD_DONATE || (GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD && GET_ROOM_VNUM(target_room) >= 60500 && GET_ROOM_VNUM(target_room) <= 60699)) {
-          send_to_char(ch, "Please avoid giving newbies free cyberware / bioware / etc! It's a kind gesture, but it undercuts their economic balance and leads to less overall player retention.\r\n");
+          send_to_char(ch, "^L(OOC note: Please avoid giving newbies free cyberware / bioware / etc! It's a kind gesture, but it undercuts their economic balance and leads to less overall player retention.)^n\r\n");
         }
 
         return 0;
