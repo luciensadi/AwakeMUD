@@ -902,7 +902,7 @@ ACMD(do_broadcast)
   bool cyberware = FALSE, vehicle = FALSE;
 
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    send_to_char("You must be Authorized to do that. Until then, you can use the ^WNEWBIE^n channel if you need help.\r\n", ch);
+    send_to_char("You must be Authorized to do that. Until then, you can use the ^WQUESTION^n channel if you need help.\r\n", ch);
     return;
   }
 
@@ -1186,13 +1186,13 @@ ACMD(do_gen_comm)
                                         B_YELLOW
                                        },
 
-                                       {"You can't use the newbie channel!\r\n",
-                                        "newbie",
+                                       {"You can't use the question channel!\r\n",
+                                        "question",
                                         "You've turned that channel off!\r\n",
                                         "^G",
                                         B_GREEN,
-                                        "newbie",
-                                        "NEWBIE"
+                                        "question",
+                                        "Question"
                                        },
 
                                        {"You can't use the OOC channel!\r\n",
@@ -1222,7 +1222,7 @@ ACMD(do_gen_comm)
     return;
 
   if(PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && subcmd != SCMD_NEWBIE) {
-    send_to_char(ch, "You must be Authorized to use that command. Until then, you can use the ^WNEWBIE^n channel if you need help.\r\n");
+    send_to_char(ch, "You must be Authorized to use that command. Until then, you can use the ^WQUESTION^n channel if you need help.\r\n");
     return;
   }
 
@@ -1297,7 +1297,7 @@ ACMD(do_gen_comm)
     delete_doubledollar(argument);
 
     if (IS_NPC(ch)) {
-      send_to_char("NPCs can't use the newbie channel.\r\n", ch);
+      send_to_char("NPCs can't use the Q&A channel.\r\n", ch);
       return;
     }
     else if (PLR_FLAGGED(ch, PLR_NEWBIE_MUTED)) {
@@ -1505,7 +1505,7 @@ ACMD(do_gen_comm)
     // Remove the doubled dollar signs.
     delete_doubledollar(argument);
 
-    snprintf(buf, sizeof(buf), "%s%s |]newbie[| %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
+    snprintf(buf, sizeof(buf), "%s%s |]Question[| %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
     send_to_char(buf, ch);
 
     channel = COMM_CHANNEL_NEWBIE;
@@ -2131,7 +2131,7 @@ void raw_message_history(struct char_data *ch, int channel, int quantity) {
       send_message_history_to_descriptor(ch->desc, channel, quantity, "heard over the Hired Talk channel");
       break;
     case COMM_CHANNEL_NEWBIE:
-      send_message_history_to_descriptor(ch->desc, channel, quantity, "seen on the Newbie channel");
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "seen on the Question channel");
       break;
     case COMM_CHANNEL_OOC:
       send_message_history_to_descriptor(ch->desc, channel, quantity, "seen on the OOC channel");

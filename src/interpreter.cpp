@@ -765,11 +765,11 @@ struct command_info cmd_info[] =
     { "mute"       , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCH, ALLOWS_IDLE_REWARD },
     { "muteooc"    , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCHOOC, ALLOWS_IDLE_REWARD },
     { "mutetells"  , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCHTELLS, ALLOWS_IDLE_REWARD },
-    { "mutenewbie" , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_MUTE_NEWBIE, ALLOWS_IDLE_REWARD },
+    { "mutequestions", POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_MUTE_NEWBIE, ALLOWS_IDLE_REWARD },
     { "murder"     , POS_FIGHTING, do_hit      , 0, SCMD_MURDER, BLOCKS_IDLE_REWARD },
 
-    { "newbie"     , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE, ALLOWS_IDLE_REWARD },
-    { "newbies"    , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_NEWBIE, ALLOWS_IDLE_REWARD },
+    { "question"     , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE, ALLOWS_IDLE_REWARD },
+    { "questions"    , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_NEWBIE, ALLOWS_IDLE_REWARD },
     //{ "news"       , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS, ALLOWS_IDLE_REWARD },
     { "networth"   , POS_MORTALLYW, do_networth, LVL_ADMIN, 0, ALLOWS_IDLE_REWARD},
     { "notitle"    , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_NOTITLE, BLOCKS_IDLE_REWARD },
@@ -1318,7 +1318,6 @@ struct command_info mtx_info[] =
     { "logout", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
     { "logon", 0, do_logon, 0, 0, BLOCKS_IDLE_REWARD },
     { "max", 0, do_matrix_max, 0, 0, BLOCKS_IDLE_REWARD },
-    { "newbie", 0, do_gen_comm, 0, SCMD_NEWBIE, BLOCKS_IDLE_REWARD },
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, BLOCKS_IDLE_REWARD },
     { "parry", 0, do_parry, 0, 0, BLOCKS_IDLE_REWARD },
     { "phone", 0, do_comcall, 0, 0, BLOCKS_IDLE_REWARD },
@@ -1349,6 +1348,7 @@ struct command_info mtx_info[] =
     { "typo", 0, do_gen_write, 0, SCMD_TYPO, BLOCKS_IDLE_REWARD },
     { "unload", 0, do_load, 0, SCMD_UNLOAD, BLOCKS_IDLE_REWARD },
     { "upload", 0, do_load, 0, SCMD_UPLOAD, BLOCKS_IDLE_REWARD },
+    { "question", 0, do_gen_comm, 0, SCMD_NEWBIE, BLOCKS_IDLE_REWARD },
     { "recap", 0, do_recap, 0, 0 , BLOCKS_IDLE_REWARD },
     { "software", 0, do_software, 0, 0, BLOCKS_IDLE_REWARD },
     { "who", 0, do_who, 0, 0, BLOCKS_IDLE_REWARD },
@@ -1406,7 +1406,6 @@ struct command_info rig_info[] =
     { "mobs", 0, do_mobs, 0, 0, BLOCKS_IDLE_REWARD },
     { "mode", 0, do_mode, 0, 0, BLOCKS_IDLE_REWARD },
     { "mount", 0, do_mount, 0, 0, BLOCKS_IDLE_REWARD },
-    { "newbie", 0, do_gen_comm, 0, SCMD_NEWBIE, BLOCKS_IDLE_REWARD },
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, BLOCKS_IDLE_REWARD },
     { "osay", 0, do_vehicle_osay, 0, 0, BLOCKS_IDLE_REWARD },
     { "penalties", 0, do_penalties, 0, 0, ALLOWS_IDLE_REWARD },
@@ -1414,6 +1413,7 @@ struct command_info rig_info[] =
     { "pools", 0, do_pool, 0, 0 , BLOCKS_IDLE_REWARD },
     { "position", 0, do_position, 0, 0, ALLOWS_IDLE_REWARD },
     { "push", 0, do_push_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
+    { "question", 0, do_gen_comm, 0, SCMD_NEWBIE, BLOCKS_IDLE_REWARD },
     { "ram", 0, do_ram, 0, 0, BLOCKS_IDLE_REWARD },
     { "read", 0, do_look_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "recap", 0, do_recap, 0, 0 , BLOCKS_IDLE_REWARD },
@@ -1476,10 +1476,10 @@ void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode)
 {
   send_to_char(ch, "'%s' is not a valid command.\r\n", arg);
   if (ch->desc && ++ch->desc->invalid_command_counter >= 5) {
-    send_to_char(ch, "^GStuck? Need help? Feel free to ask on the %s channel! (%s%s <message>)^n\r\n",
-                 PLR_FLAGGED(ch, PLR_NEWBIE) ? "newbie" : "OOC",
+    send_to_char(ch, "^GStuck? Need help? Feel free to ask on the ^W%s^G channel! (%s^W%s <message>^G)^n\r\n",
+                 PLR_FLAGGED(ch, PLR_NEWBIE) ? "QUESTION" : "OOC",
                  PRF_FLAGGED(ch, PRF_SCREENREADER) ? "type " : "",
-                 PLR_FLAGGED(ch, PLR_NEWBIE) ? "NEWBIE" : "OOC");
+                 PLR_FLAGGED(ch, PLR_NEWBIE) ? "QUESTION" : "OOC");
     ch->desc->invalid_command_counter = 0;
   }
   // There must be an arg, and it must not be a number.
@@ -3733,6 +3733,10 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
 
   COMMAND_ALIAS("psuh", "push");
   COMMAND_ALIAS("whpo", "who");
+
+  COMMAND_ALIAS("newbie", "question");
+  COMMAND_ALIAS("newbies", "questions");
+  COMMAND_ALIAS("mutenewbie", "mutequestions");
 
   // regional spellings
   COMMAND_ALIAS("practise", "practice");
