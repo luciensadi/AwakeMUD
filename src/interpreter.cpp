@@ -3536,6 +3536,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("searcch", "search");
   COMMAND_ALIAS("sarch", "search");
   COMMAND_ALIAS("seach", "search");
+  COMMAND_ALIAS("earch", "search");
   COMMAND_ALIAS("shot", "shoot");
   COMMAND_ALIAS("trian", "train");
   COMMAND_ALIAS("recpa", "recap");
@@ -3571,10 +3572,13 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("lave", "leave");
   COMMAND_ALIAS("eave", "leave");
   COMMAND_ALIAS("relaod", "reload");
+  COMMAND_ALIAS("relod", "reload");
   COMMAND_ALIAS("scpre", "score");
   COMMAND_ALIAS("llook", "look");
   COMMAND_ALIAS("sneka", "sneak");
   COMMAND_ALIAS("ear", "eat");
+  COMMAND_ALIAS("holser", "holster");
+  COMMAND_ALIAS("pugh", "push");
 
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
@@ -3604,6 +3608,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("armor", "equipment");
   COMMAND_ALIAS("programs", "software");
   COMMAND_ALIAS("bank", "balance");
+  COMMAND_ALIAS("atm", "balance");
   COMMAND_ALIAS("recall", "recap");
   COMMAND_ALIAS("summon", "conjure");
   COMMAND_ALIAS("smash", "destroy");
@@ -3647,7 +3652,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   // Must be after 'pick'
   COMMAND_ALIAS("pickup", "get");
 
-  // Commands from other games.
+  // Commands from other games and misc.
   COMMAND_ALIAS("bamfin", "poofin");
   COMMAND_ALIAS("bamfout", "poofout");
   COMMAND_ALIAS("sacrifice", "junk");
@@ -3678,6 +3683,16 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("privateroll", "privatedice");
   COMMAND_ALIAS("otell", "tell");
   COMMAND_ALIAS("all", "items");
+  COMMAND_ALIAS("claim", "collect");
+  COMMAND_ALIAS("chip", "jack");
+  COMMAND_ALIAS("slot", "jack");
+  COMMAND_ALIAS("unchip", "unjack");
+  COMMAND_ALIAS("unslot", "unjack");
+  COMMAND_ALIAS("lie", "lay");
+  COMMAND_ALIAS("whereismycar", "wheresmycar");
+  COMMAND_ALIAS("store", "put");
+  COMMAND_ALIAS("swap", "switch");
+  COMMAND_ALIAS("stow", "holster");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
@@ -3718,6 +3733,10 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
 
   COMMAND_ALIAS("psuh", "push");
   COMMAND_ALIAS("whpo", "who");
+
+  // regional spellings
+  COMMAND_ALIAS("practise", "practice");
+  COMMAND_ALIAS("unpractise", "unpractice");
 
   // the weird shit
   COMMAND_ALIAS("whomst've", "who");
