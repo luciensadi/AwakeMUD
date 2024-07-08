@@ -3798,7 +3798,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
         case TYPE_COMPUTER:
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This computer has ^c%d^n units of active memory and ^c%d^n units of storage memory.",
                    GET_DECK_ACCESSORY_COMPUTER_ACTIVE_MEMORY(j),
-                   GET_DECK_ACCESSORY_COMPUTER_STORAGE_MEMORY(j));
+                   GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(j));
           break;
         case TYPE_PARTS:
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This pack of parts contains ^c%d^n units of ^c%s^n.",
@@ -5246,7 +5246,7 @@ ACMD(do_cyberware)
       strlcpy(retraction_string, "", sizeof(retraction_string));
     }
 
-    snprintf(buf, sizeof(buf), "%-40s Essence: ^c%0.2f^n\r\n",
+    snprintf(buf, sizeof(buf), "%-40s Essence: ^c%0.2f^n%s\r\n",
              GET_OBJ_NAME(obj),
              ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1),
              retraction_string
