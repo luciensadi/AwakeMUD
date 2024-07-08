@@ -3575,9 +3575,11 @@ SPECIAL(bank)
 
   if (CMD_IS("balance")) {
     if (GET_BANK(ch) > 0)
-      send_to_char(ch, "Your balance across your various numbered accounts and aliases is %ld nuyen, and you're carrying %d more.\r\n", GET_BANK(ch), GET_NUYEN(ch));
+      send_to_char(ch, "Your balance across your various numbered accounts and aliases is %ld nuyen, and you're carrying %d in cash.\r\n", GET_BANK(ch), GET_NUYEN(ch));
     else
       send_to_char(ch, "You have no cash squirreled away, but you're carrying %d nuyen.\r\n", GET_NUYEN(ch));
+    if (PRF_FLAGGED(ch, PRF_SEE_TIPS))
+      send_to_char("^L(OOC: This is an ATM. See HELP BANK for ways to move money into and out of your account.)\r\n", ch);
     return 1;
   }
 
