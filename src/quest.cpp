@@ -48,6 +48,10 @@ unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
 void display_single_emote_for_quest(struct char_data *johnson, emote_t emote_to_display, struct char_data *target);
 
+rnum_t translate_quest_mob_entry_to_rnum(struct quest_data *qst, int mob_idx);
+struct char_data * fetch_quest_mob_target_mob_proto(struct quest_data *qst, int mob_idx);
+struct char_data * fetch_quest_mob_actual_mob_proto(struct quest_data *qst, int mob_idx);
+
 ACMD_CONST(do_say);
 ACMD_DECLARE(do_action);
 SPECIAL(johnson);
@@ -806,11 +810,11 @@ bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
       return FALSE;
     }
 
-    if (GET_MOB_VNUM(victim) == quest_table[GET_QUEST(ch)].mob[i].vnum) {
+    if (GET_MOB_VNUM(victim) == GET_MOB_VNUM(fetch_quest_mob_actual_mob_proto(&quest_table[GET_QUEST(ch)], i))) {
       switch (quest_table[GET_QUEST(ch)].mob[i].objective)
       {
       case QMO_KILL_ONE:
-        QUEST_DEBUG("_raw_check_quest_kill($n, $N): +1 (only one)");
+        QUEST_DEBUG("^L_raw_check_quest_kill($n, $N): +1 (only one)^n");
         // If we've already completed this objective, continue.
         if (ch->player_specials->mob_complete[i] >= 1)
           continue;
@@ -818,18 +822,18 @@ bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
         ch->player_specials->mob_complete[i]++;
         return TRUE;
       case QMO_KILL_MANY:
-        QUEST_DEBUG("_raw_check_quest_kill($n, $N): +1 (many)");
+        QUEST_DEBUG("^L_raw_check_quest_kill($n, $N): +1 (many)^n");
         ch->player_specials->mob_complete[i]++;
         return TRUE;
       case QMO_DONT_KILL:
-        QUEST_DEBUG("_raw_check_quest_kill($n, $N): qmo_dont_kill, failed quest");
+        QUEST_DEBUG("^L_raw_check_quest_kill($n, $N): qmo_dont_kill, failed quest^n");
         ch->player_specials->mob_complete[i] = -1;
         send_to_char(ch, "^rJust a moment too late, you remember that you weren't supposed to kill %s^r...^n\r\n", GET_CHAR_NAME(victim));
         return FALSE;
       }
     }
   }
-  QUEST_DEBUG("_raw_check_quest_kill($n, $N): didn't count for quest");
+  QUEST_DEBUG("^L_raw_check_quest_kill($n, $N): didn't count for quest^n");
   return FALSE;
 }
 
@@ -1059,10 +1063,11 @@ void reward(struct char_data *ch, struct char_data *johnson)
       karma += quest_table[GET_QUEST(ch)].obj[i].karma * multiplier;
     } else {
 #ifdef IS_BUILDPORT
-      if (1 == 1) {
+      if (1 == 1)
 #else
-      if (IS_SENATOR(ch)) {
+      if (IS_SENATOR(ch))
 #endif
+      {
         send_to_char(ch, "-- Quest turnin: Did not complete obj objective %d.\r\n", i);
       }
       completed_all_objectives = FALSE;
@@ -1084,10 +1089,11 @@ void reward(struct char_data *ch, struct char_data *johnson)
       karma += quest_table[GET_QUEST(ch)].mob[i].karma * multiplier;
     } else {
 #ifdef IS_BUILDPORT
-      if (1 == 1) {
+      if (1 == 1)
 #else
-      if (IS_SENATOR(ch)) {
+      if (IS_SENATOR(ch))
 #endif
+      {
         send_to_char(ch, "-- Quest turnin: Did not complete mob objective %d.\r\n", i);
       }
       completed_all_objectives = FALSE;
@@ -2549,10 +2555,8 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
 
   *buf = '\0';
 
-  for (int i = 0; i < QUEST->num_mobs; i++)
-  {
-    rnum_t mob_rnum = real_mobile(QUEST->mob[i].vnum);
-    struct char_data *mob = (mob_rnum >= 0 ? &mob_proto[mob_rnum] : NULL);
+  for (int i = 0; i < QUEST->num_mobs; i++) {
+    struct char_data *mob_ptr = fetch_quest_mob_actual_mob_proto(QUEST, i);
     
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) ", i);
 
@@ -2563,29 +2567,25 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
       case QML_LOCATION:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) at room %ld (%s)",
                  QUEST->mob[i].vnum,
-                 mob ? GET_NAME(mob) : "null",
+                 GET_CHAR_NAME(mob_ptr),
                  QUEST->mob[i].l_data,
                  real_room(QUEST->mob[i].l_data) >= 0 ? GET_ROOM_NAME(&world[real_room(QUEST->mob[i].l_data)]) : "NULL");
         break;
       case QML_FOLQUESTER:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) and follow quester",
                  QUEST->mob[i].vnum,
-                 mob ? GET_NAME(mob) : "null");
+                 GET_CHAR_NAME(mob_ptr));
         break;
       default:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n - Unknown QML %d\r\n", QUEST->mob[i].load);
         break;
     }
 
-    rnum_t target_rnum;
-    bool target_is_listed_mob;
-    if (QUEST->mob[i].o_data < 0 || QUEST->mob[i].o_data >= QUEST->num_mobs || (target_rnum = real_mobile(QUEST->mob[QUEST->mob[i].o_data].vnum)) < 0) {
-      target_rnum = real_mobile(QUEST->mob[i].o_data);
+    bool target_is_listed_mob = TRUE;
+    if (QUEST->mob[i].o_data >= 0 && (QUEST->mob[i].o_data >= QUEST->num_mobs || real_mobile(QUEST->mob[QUEST->mob[i].o_data].vnum) < 0)) {
       target_is_listed_mob = FALSE;
-    } else {
-      target_is_listed_mob = TRUE;
     }
-    struct char_data *target = (target_rnum >= 0 ? &mob_proto[target_rnum] : NULL);
+    struct char_data *target_ptr = fetch_quest_mob_target_mob_proto(QUEST, i);
 
     switch (QUEST->mob[i].objective) {
       case QUEST_NONE:
@@ -2604,22 +2604,23 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "escorting target to room %ld\r\n", QUEST->mob[i].o_data);
         } else if (QUEST->mob[i].objective == QMO_KILL_ONE) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "killing target '%s' (%ld)\r\n",
-                   mob ? GET_NAME(mob) : "NULL",
+                   GET_CHAR_NAME(mob_ptr),
                    QUEST->mob[i].vnum);
         } else if (QUEST->mob[i].objective == QMO_KILL_MANY) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "each target '%s' (%ld) killed\r\n",
-                   mob ? GET_NAME(mob) : "NULL",
+                   GET_CHAR_NAME(mob_ptr),
                    QUEST->mob[i].vnum);
         }
+        break;
       case QMO_KILL_ESCORTEE:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Target hunts %s%ld (%s)\r\n", 
                  target_is_listed_mob ? "M" : "vnum ",
                  QUEST->mob[i].o_data,
-                 target ? GET_NAME(target) : "NULL");
+                 GET_CHAR_NAME(target_ptr));
         break;
       case QMO_DONT_KILL:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n    Fail quest if target '%s' (%ld) is killed.\r\n",
-                 mob ? GET_NAME(mob) : "NULL",
+                 GET_CHAR_NAME(mob_ptr),
                  QUEST->mob[i].vnum);
         break;
       default:
@@ -3953,41 +3954,30 @@ void display_quest_goals_to_ch(struct char_data *ch) {
   send_to_char("\r\nObjectives:\r\n", ch);
 
   // Check mob objectives.
-  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++) {
-    if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_NO_OBJECTIVE || quest_table[GET_QUEST(ch)].mob[i].objective == QMO_KILL_ESCORTEE)
+  for (int objective_idx = 0; objective_idx < quest_table[GET_QUEST(ch)].num_mobs; objective_idx++) {
+    if (quest_table[GET_QUEST(ch)].mob[objective_idx].objective == QMO_NO_OBJECTIVE || quest_table[GET_QUEST(ch)].mob[objective_idx].objective == QMO_KILL_ESCORTEE)
       continue;
 
-    // ch->player_specials->mob_complete[i]
-    rnum_t mob_rnum = real_mobile(quest_table[GET_QUEST(ch)].mob[i].vnum);
-    struct char_data *mob = (mob_rnum >= 0 ? &mob_proto[mob_rnum] : NULL);
+    struct char_data *mob = fetch_quest_mob_actual_mob_proto(&quest_table[GET_QUEST(ch)], objective_idx);
 
-    rnum_t target_rnum = -1;
-    if (quest_table[GET_QUEST(ch)].mob[i].o_data < 0
-        || quest_table[GET_QUEST(ch)].mob[i].o_data >= quest_table[GET_QUEST(ch)].num_mobs
-        || (target_rnum = real_mobile(quest_table[GET_QUEST(ch)].mob[quest_table[GET_QUEST(ch)].mob[i].o_data].vnum)) < 0)
-    {
-      target_rnum = real_mobile(quest_table[GET_QUEST(ch)].mob[i].o_data);
-    }
-    struct char_data *target = (target_rnum >= 0 ? &mob_proto[target_rnum] : NULL);
-
-    rnum_t room_rnum = real_room(quest_table[GET_QUEST(ch)].mob[i].o_data);
+    rnum_t room_rnum = real_room(quest_table[GET_QUEST(ch)].mob[objective_idx].o_data);
     struct room_data *room = room_rnum >= 0 ? &world[room_rnum] : NULL;
 
-    switch (quest_table[GET_QUEST(ch)].mob[i].objective) {
+    switch (quest_table[GET_QUEST(ch)].mob[objective_idx].objective) {
       case QUEST_NONE:
       case QMO_KILL_ESCORTEE:
         continue;
       case QMO_LOCATION:
-        send_to_char(ch, " - Escort %s to %s (%s)\r\n", GET_CHAR_NAME(mob), GET_ROOM_NAME(room), ch->player_specials->mob_complete[i] ? "done" : "incomplete");
+        send_to_char(ch, " - Escort %s to %s (%s)\r\n", GET_CHAR_NAME(mob), GET_ROOM_NAME(room), ch->player_specials->mob_complete[objective_idx] ? "^gdone^n" : "incomplete");
         break;
       case QMO_KILL_ONE:
-        send_to_char(ch, " - Kill %s (%s)\r\n", GET_CHAR_NAME(target), ch->player_specials->mob_complete[i] ? "done" : "incomplete");
+        send_to_char(ch, " - Kill %s (%s)\r\n", GET_CHAR_NAME(mob), ch->player_specials->mob_complete[objective_idx] ? "^gdone^n" : "incomplete");
         break;
       case QMO_KILL_MANY:
-        send_to_char(ch, " - Kill as many %s as you can (%d killed)\r\n", GET_CHAR_NAME(target), ch->player_specials->mob_complete[i]);
+        send_to_char(ch, " - Kill as many %s as you can (^c%d^n killed)\r\n", GET_CHAR_NAME(mob), ch->player_specials->mob_complete[objective_idx]);
         break;
       case QMO_DONT_KILL:
-        send_to_char(ch, " - Ensure %s survives (%s)\r\n", GET_CHAR_NAME(mob), ch->player_specials->mob_complete[i] == -1 ? "^rFAILED^n" : "so far, so good");
+        send_to_char(ch, " - Ensure %s survives (%s)\r\n", GET_CHAR_NAME(mob), ch->player_specials->mob_complete[objective_idx] == -1 ? "^rFAILED^n" : "^gso far, so good^n");
         break;
       default:
         continue;
@@ -3996,8 +3986,8 @@ void display_quest_goals_to_ch(struct char_data *ch) {
   }
 
   // Check object objectives.
-  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
-    if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_NO_OBJECTIVE)
+  for (int objective_idx = 0; objective_idx < quest_table[GET_QUEST(ch)].num_objs; objective_idx++) {
+    if (quest_table[GET_QUEST(ch)].obj[objective_idx].objective == QOO_NO_OBJECTIVE)
       continue;
 
     // 1. Find and deliver 'an envelope with weird insignias on it' to Ricky Skeezeball (done)
@@ -4007,14 +3997,14 @@ void display_quest_goals_to_ch(struct char_data *ch) {
     // 5. Upload 'a virus' to the matrix host 'In the Dojo' (incomplete)
     // 6. Don't kill 'a postal worker' (failed)
 
-    // ch->player_specials->obj_complete[i]
+    // ch->player_specials->obj_complete[objective_idx]
 
     strlcpy(buf, " - ", sizeof(buf));
 
-    rnum_t obj_rnum = real_object(quest_table[GET_QUEST(ch)].obj[i].vnum);
+    rnum_t obj_rnum = real_object(quest_table[GET_QUEST(ch)].obj[objective_idx].vnum);
     struct obj_data *obj = (obj_rnum >= 0 ? &obj_proto[obj_rnum] : NULL);
 
-    switch (quest_table[GET_QUEST(ch)].obj[i].load) {
+    switch (quest_table[GET_QUEST(ch)].obj[objective_idx].load) {
       case QUEST_NONE:
       case QOL_TARMOB_C:
         break;
@@ -4039,43 +4029,46 @@ void display_quest_goals_to_ch(struct char_data *ch) {
     {
       // These are derived from o_data, which is not used in the first stanza.
       rnum_t mob_rnum = -1;
-      if (quest_table[GET_QUEST(ch)].obj[i].o_data < 0 || quest_table[GET_QUEST(ch)].obj[i].o_data >= quest_table[GET_QUEST(ch)].num_mobs || (mob_rnum = real_mobile(quest_table[GET_QUEST(ch)].mob[quest_table[GET_QUEST(ch)].obj[i].o_data].vnum)) < 0) {
-        mob_rnum = real_mobile(quest_table[GET_QUEST(ch)].obj[i].o_data);
+      if (quest_table[GET_QUEST(ch)].obj[objective_idx].o_data >= 0
+          && (quest_table[GET_QUEST(ch)].obj[objective_idx].o_data >= quest_table[GET_QUEST(ch)].num_mobs
+              || (mob_rnum = real_mobile(quest_table[GET_QUEST(ch)].mob[quest_table[GET_QUEST(ch)].obj[objective_idx].o_data].vnum)) < 0))
+      {
+        mob_rnum = real_mobile(quest_table[GET_QUEST(ch)].obj[objective_idx].o_data);
       }
       struct char_data *mob = (mob_rnum >= 0 ? &mob_proto[mob_rnum] : NULL);
 
-      rnum_t room_rnum = real_room(quest_table[GET_QUEST(ch)].obj[i].o_data);
+      rnum_t room_rnum = real_room(quest_table[GET_QUEST(ch)].obj[objective_idx].o_data);
       struct room_data *room = (room_rnum >= 0 ? &world[room_rnum] : NULL);
 
-      rnum_t host_rnum = real_host(quest_table[GET_QUEST(ch)].obj[i].o_data);
+      rnum_t host_rnum = real_host(quest_table[GET_QUEST(ch)].obj[objective_idx].o_data);
       struct host_data *host = (host_rnum >= 0 ? &matrix[host_rnum] : NULL);
       
-      switch (quest_table[GET_QUEST(ch)].obj[i].objective) {
+      switch (quest_table[GET_QUEST(ch)].obj[objective_idx].objective) {
         case QUEST_NONE:
           break;
         case QOO_JOHNSON:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and deliver it to %s (%s)", GET_CHAR_NAME(johnson), ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and deliver it to %s (%s)", GET_CHAR_NAME(johnson), ch->player_specials->obj_complete[objective_idx] ? "done" : "incomplete");
           break;
         case QOO_TAR_MOB:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and deliver it to %s (%s)", GET_CHAR_NAME(mob), ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and deliver it to %s (%s)", GET_CHAR_NAME(mob), ch->player_specials->obj_complete[objective_idx] ? "done" : "incomplete");
           break;
         case QOO_LOCATION:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and deliver it to %s (%s)", GET_ROOM_NAME(room), ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and deliver it to %s (%s)", GET_ROOM_NAME(room), ch->player_specials->obj_complete[objective_idx] ? "done" : "incomplete");
           break;
         case QOO_DSTRY_ONE:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and destroy it (%s)", ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and destroy it (%s)", ch->player_specials->obj_complete[objective_idx] ? "done" : "incomplete");
           break;
         case QOO_DSTRY_MANY:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and destroy as many as you can (%d destroyed)", ch->player_specials->obj_complete[i]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and destroy as many as you can (%d destroyed)", ch->player_specials->obj_complete[objective_idx]);
           break;
         case QOO_UPLOAD:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and upload it to '%s' (%s)", host ? host->name : "NULL", ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and upload it to '%s' (%s)", host ? host->name : "NULL", ch->player_specials->obj_complete[objective_idx] ? "done" : "incomplete");
           break;
         case QOO_RETURN_PAY:
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Deliver paydata from host %s to %s (%s)",
                    host ? host->name : "NULL",
                    GET_CHAR_NAME(johnson),
-                   ch->player_specials->obj_complete[i] ? "done" : "incomplete");
+                   ch->player_specials->obj_complete[objective_idx] ? "done" : "incomplete");
           break;
       }
     }
@@ -4103,4 +4096,33 @@ ACMD(do_recap)
     display_quest_goals_to_ch(ch);
 #endif
   }
+}
+
+rnum_t translate_quest_mob_target_to_rnum(struct quest_data *qst, int mob_idx) {
+  if (qst->mob[mob_idx].o_data < 0)
+    return -1;
+  
+  rnum_t result = -1;
+  if (qst->mob[mob_idx].o_data >= qst->num_mobs || (result = real_mobile(qst->mob[qst->mob[mob_idx].o_data].vnum)) < 0)
+    result = real_mobile(qst->mob[mob_idx].o_data);
+
+  return result;
+}
+
+struct char_data * fetch_quest_mob_target_mob_proto(struct quest_data *qst, int mob_idx) {
+  rnum_t derived_rnum = translate_quest_mob_target_to_rnum(qst, mob_idx);
+
+  if (derived_rnum < 0)
+    return NULL;
+  
+  return &mob_proto[derived_rnum];
+}
+
+struct char_data * fetch_quest_mob_actual_mob_proto(struct quest_data *qst, int mob_idx) {
+  rnum_t mob_rnum = real_mobile(qst->mob[mob_idx].vnum);
+
+  if (mob_rnum < 0)
+    return NULL;
+  
+  return &mob_proto[mob_rnum];
 }
