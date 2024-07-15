@@ -5538,7 +5538,10 @@ ACMD(do_index)
 }
 
 void display_help(char *help, int help_len, const char *arg, struct char_data *ch) {
-  char query[MAX_STRING_LENGTH], prepared_standard[MAX_STRING_LENGTH], prepared_for_like[MAX_STRING_LENGTH];
+  char query[MAX_STRING_LENGTH] = { 0 };
+  char prepared_standard[MAX_STRING_LENGTH] = { 0 };
+  char prepared_for_like[MAX_STRING_LENGTH] = { 0 };
+
   MYSQL_RES *res;
   MYSQL_ROW row;
   *help = '\0';

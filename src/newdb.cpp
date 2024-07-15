@@ -250,8 +250,11 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool incl
       *temp++ = '\\';
     }
     // Special case handling: % has special meaning in LIKE statements.
-    if (is_like && *str == '%') {
-      *temp++ = '\\';
+    if (is_like) {
+      if (*str == '%' || *str == '?' || *str == '.' || *str == '*' || *str == '+' || *str == '(' || *str == ')' || *str == '[' || *str == ']') {
+        *temp++ = '\\';
+        *temp++ = '\\';
+      }
     }
     *temp++ = *str++;
   }
