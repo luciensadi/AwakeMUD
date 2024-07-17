@@ -738,7 +738,7 @@ ACMD(do_new_echo) {
   }
 
   // Can't speak? No emote speech for you. NOTE: Wrapping your speech in single quotes to avoid this is a punishable exploit.
-  if (strchr(argument, '"') != NULL && !char_can_make_noise(ch, "You can't seem to make any noise.\r\n")) {
+  if (ch->desc && strchr(argument, '"') != NULL && !char_can_make_noise(ch, "You can't seem to make any noise.\r\n")) {
     NEW_ECHO_DEBUG("Bailed out: Can't make noise.");
     return;
   }

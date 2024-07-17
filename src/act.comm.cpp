@@ -65,7 +65,7 @@ ACMD(do_say)
   if (check_for_banned_content(argument, ch))
     return;
 
-  if (subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && !IS_NPC(ch) && !char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
+  if (ch->desc && subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && !char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
     return;
 
   FAILURE_CASE(IS_RIGGING(ch), "You have no mouth.");
