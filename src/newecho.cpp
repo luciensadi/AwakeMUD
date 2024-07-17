@@ -30,6 +30,18 @@ char storage_string[MAX_STRING_LENGTH];
 // #define PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, ...) send_to_char((ch), ##__VA_ARGS__)
 #define PSEUDOLANGUAGE_REPLACEMENT_DEBUG(ch, ...)
 
+#ifdef IS_BUILDPORT
+#define NEW_ECHO_DEBUG(...) { \
+  for (struct char_data *asdf = ch->in_veh ? ch->in_veh->people : ch->in_room->people; asdf; asdf = ch->in_veh ? asdf->next_in_veh : asdf->next_in_room) { \
+    if (asdf->desc && GET_LEVEL(asdf) >= 2 && PRF_FLAGGED(asdf, PRF_ROLLS)) { \
+      send_to_char(asdf, "%s\r\n", ##__VA_ARGS__); \
+    } \
+  } \
+}
+#else
+#define NEW_ECHO_DEBUG(...)
+#endif
+
 struct char_data *find_target_character_for_emote(struct char_data *actor, const char *tag_check_string, bool require_exact_match, struct room_data *in_room, struct veh_data *in_veh);
 struct veh_data *find_target_vehicle_for_emote(struct char_data *actor, const char *tag_check_string, struct room_data *in_room, struct veh_data *in_veh);
 
@@ -720,12 +732,16 @@ ACMD(do_new_echo) {
   FAILURE_CASE(!*argument, "Yes... but what?\r\n");
 
   // If they trigger automod with this, bail out.
-  if (check_for_banned_content(buf2, ch))
+  if (check_for_banned_content(buf2, ch)) {
+    NEW_ECHO_DEBUG("Bailed out: Banned content.");
     return;
+  }
 
   // Can't speak? No emote speech for you. NOTE: Wrapping your speech in single quotes to avoid this is a punishable exploit.
-  if (strchr(argument, '"') != NULL && !char_can_make_noise(ch, "You can't seem to make any noise.\r\n"))
+  if (strchr(argument, '"') != NULL && !char_can_make_noise(ch, "You can't seem to make any noise.\r\n")) {
+    NEW_ECHO_DEBUG("Bailed out: Can't make noise.");
     return;
+  }
 
   // Double up percentages. This is necessary to prevent unexpected insertion of data during format runs.
   char *pct_reader = argument;
@@ -737,7 +753,10 @@ ACMD(do_new_echo) {
   }
 
   // Reject lines that would overflow the buffer.
-  FAILURE_CASE((pct_writer - storage_buf) >= (int) sizeof(storage_buf) - 1, "Sorry, your emote was too long. Please shorten it.\r\n");
+  if ((pct_writer - storage_buf) >= (int) sizeof(storage_buf) - 1) {
+    send_to_char("Sorry, your emote was too long. Please shorten it.\r\n", ch);
+    NEW_ECHO_DEBUG("Bailed out: Emote too long.");
+  }
 
   // Null-terminate the buffer.
   *pct_writer = '\0';
@@ -754,11 +773,15 @@ ACMD(do_new_echo) {
   }
 
   // Require that we have an even number of quotes.
-  FAILURE_CASE(quotes % 2 != 0, "There's an error in your emote: You need to close a quote.\r\n");
+  if (quotes % 2 != 0) {
+    send_to_char("There's an error in your emote: You need to close a quote.\r\n", ch);
+    NEW_ECHO_DEBUG("Bailed out: Unclosed quote.");
+  }
 
   // Require that we have an equal number of open and close parens.
   if (parens != 0) {
     send_to_char(ch, "There's an error in your emote: %s.\r\n", parens < 0 ? "You have too many close-parens." : "You need to close a parenthetical");
+    NEW_ECHO_DEBUG(parens < 0 ? "Bailed out: Too many close-parens." : "Bailed out: Missing close-parens.");
     return;
   }
 
@@ -773,6 +796,7 @@ ACMD(do_new_echo) {
 
     if (isdigit(*ptr)) {
       send_to_char(ch, "The first word of your emote cannot contain a digit.\r\n");
+      NEW_ECHO_DEBUG("Bailed out: First word contained digit.");
       return;
     }
 
@@ -785,7 +809,10 @@ ACMD(do_new_echo) {
   }
 
   // If we didn't find any valid first-word content after anti-forgery processing, bail out.
-  FAILURE_CASE(!has_valid_content, "You can't begin your emote with blank space.\r\n");
+  if (!has_valid_content) {
+    send_to_char("You can't begin your emote with blank space.\r\n", ch);
+    NEW_ECHO_DEBUG("Bailed out: Begins with blank space.");
+  }
 
   // Scan the emote for language values. You can only use languages you know, and only up to certain word lengths.
   if (!IS_NPC(ch)) {
@@ -866,6 +893,7 @@ ACMD(do_new_echo) {
     // Make sure we're not at the end of the block.
     if (!*(++at_reader)) {
       send_to_char("Emotes can't end with the @ symbol.\r\n", ch);
+      NEW_ECHO_DEBUG("Bailed out: Ended with @.");
       return;
     }
 
@@ -880,6 +908,7 @@ ACMD(do_new_echo) {
     if (!find_target_character_for_emote(ch, at_tag, FALSE, in_room, in_veh)
         && !find_target_vehicle_for_emote(ch, at_tag, in_room, in_veh)) {
       send_to_char(ch, "No valid target was found for tag '%s', please revise your emote.\r\n", at_tag);
+      NEW_ECHO_DEBUG("Bailed out: Invalid tag.");
       return;
     }
   }

@@ -1330,7 +1330,7 @@ int make_prompt(struct descriptor_data * d)
     data = " Press [return] to continue, [q] to quit ";
   else if (D_PRF_FLAGGED(d, PRF_NOPROMPT)) {
 #ifdef SEND_IAC_GA
-    // Send IAC GA.
+    // Send IAC GA. Before you turn this on, make sure EVERY prompt has IAC GA, including editing prompts etc.
     const char iac_ga[] = { (char) IAC, (char) GA, '\0' };
     if (write_to_descriptor(d->descriptor, iac_ga) < 0) {
       mudlog("Error writing post-prompt GA to descriptor, aborting.", d->character, LOG_SYSLOG, TRUE);
@@ -1641,7 +1641,7 @@ int make_prompt(struct descriptor_data * d)
       return -1;
     }
 #ifdef SEND_IAC_GA
-    // Append IAC GA.
+    // Append IAC GA. Before you turn this on, make sure EVERY prompt has IAC GA, including editing prompts etc.
     const char iac_ga[] = { (char) IAC, (char) GA, '\0' };
     if (write_to_descriptor(d->descriptor, iac_ga) < 0) {
       mudlog("Error writing post-prompt GA to descriptor, aborting.", d->character, LOG_SYSLOG, TRUE);
