@@ -5,7 +5,8 @@
 
 #define AUTOMOD_FREEZE_THRESHOLD  2
 
-#define GET_AUTOMOD_COUNTER(ch)  (((ch) && (ch)->player_specials) ? (ch)->player_specials.automod_counter : 0)
+#define GET_AUTOMOD_COUNTER(ch)  (((ch) && (ch)->player_specials) ? (ch)->player_specials->saved.automod_counter : 0)
+#define GET_SETTABLE_AUTOMOD_COUNTER(ch) ((ch)->player_specials->saved.automod_counter)
 
 class automod_entry {
 public:

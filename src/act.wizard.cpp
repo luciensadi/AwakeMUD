@@ -5389,6 +5389,7 @@ ACMD(do_set)
                { "sitehidden",  LVL_PRESIDENT, PC, BINARY },
                { "lifestyle",  LVL_PRESIDENT, PC, MISC },
                { "highestindex", LVL_ADMIN, BOTH, NUMBER },
+               { "strikes", LVL_FIXER, PC, NUMBER }, // 89
                { "\n", 0, BOTH, MISC }
              };
 
@@ -6094,6 +6095,14 @@ ACMD(do_set)
     snprintf(buf, sizeof(buf),"%s changed %s's highest bioware index from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), GET_HIGHEST_INDEX(vict), value);
     GET_HIGHEST_INDEX(vict) = value;
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
+  case 89: /* strikes */
+    {
+      RANGE(0, 3);
+      int old_val = GET_AUTOMOD_COUNTER(vict);
+      GET_SETTABLE_AUTOMOD_COUNTER(vict) = value;
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s's auto-moderator strikes from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), old_val, value);
+    }
+    break;
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");
     break;
