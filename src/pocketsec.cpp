@@ -44,6 +44,8 @@
 #define POCSEC_FOLDER_PHONEBOOK "Phonebook"
 #define POCSEC_FOLDER_FILES     "Files"
 
+extern bool is_approved_multibox_host(const char *host);
+
 ACMD_DECLARE(do_phone);
 
 struct obj_data *generate_pocket_secretary_folder(struct obj_data *sec, const char *string) {
@@ -96,11 +98,20 @@ void wire_nuyen(struct char_data *ch, int amount, idnum_t character_id, const ch
 
   // Log it.
   char *player_name = targ ? NULL : get_player_name(character_id);
-  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s wired %d nuyen to %s (memo: %s).",
-                  ch ? GET_CHAR_NAME(ch) : "An NPC",
-                  amount,
-                  targ ? GET_CHAR_NAME(targ) : player_name,
-                  reason);
+  if ((targ ? is_same_host(ch, targ) : is_same_host(ch, character_id)) && !is_approved_multibox_host(ch->desc->host)) {
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s wired %d nuyen to %s (memo: %s) [SAME-HOST @ %s]",
+                    ch ? GET_CHAR_NAME(ch) : "An NPC",
+                    amount,
+                    targ ? GET_CHAR_NAME(targ) : player_name,
+                    reason,
+                    ch->desc->host);
+  } else {
+    mudlog_vfprintf(ch, LOG_GRIDLOG, "%s wired %d nuyen to %s (memo: %s).",
+                    ch ? GET_CHAR_NAME(ch) : "An NPC",
+                    amount,
+                    targ ? GET_CHAR_NAME(targ) : player_name,
+                    reason);
+  }
   DELETE_ARRAY_IF_EXTANT(player_name);
 }
 

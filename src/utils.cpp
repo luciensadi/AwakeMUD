@@ -23,6 +23,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <mysql/mysql.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
@@ -56,6 +57,7 @@
 #include "newmatrix.hpp"
 #include "quest.hpp"
 #include "chipjacks.hpp"
+#include "newdb.hpp"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -7657,6 +7659,43 @@ bool is_same_host(struct char_data *first, struct char_data *second) {
   rectify_desc_host(second->desc);
 
   return !str_cmp(first->desc->host, second->desc->host);
+}
+
+// Lets you compare host data between an online and offline character.
+bool is_same_host(struct char_data *first, idnum_t second_idnum) {
+  char second_host[MAX_STRING_LENGTH];
+
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
+  if (!first || second_idnum <= 0 || !does_player_exist(second_idnum)) {
+    return FALSE;
+  }
+
+  if (!first->desc) {
+    return FALSE;
+  }
+
+  // Load up second's last host information.
+  {
+    snprintf(buf, sizeof(buf), "SELECT Host FROM pfiles WHERE idnum=%ld;", second_idnum);
+    if (mysql_wrapper(mysql, buf))
+      return FALSE;
+    if (!(res = mysql_use_result(mysql)))
+      return FALSE;
+    row = mysql_fetch_row(res);
+    if (!row && mysql_field_count(mysql)) {
+      mysql_free_result(res);
+      return FALSE;
+    }
+    strlcpy(second_host, row[0], sizeof(second_host));
+    mysql_free_result(res);
+  }
+
+  rectify_desc_host(first->desc);
+  const char *final_host = resolve_hostname_from_ip_str(second_host);
+
+  return !str_cmp(first->desc->host, final_host);
 }
 
 void stop_watching(struct char_data *ch, bool send_message) {

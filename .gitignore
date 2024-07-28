@@ -53,6 +53,9 @@ lib/text/wholist
 lib/order
 syslog
 
+wip-files
+wip-files/**
+
 # Development reference materials
 references/
 

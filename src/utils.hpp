@@ -182,6 +182,7 @@ long    get_cost_of_veh_and_contents(struct veh_data *veh);
 struct  obj_data *get_smartgoggle(struct char_data *ch);
 bool    is_ch_immune_to_nbc(struct char_data *ch);
 bool    is_same_host(struct char_data *first, struct char_data *second);
+bool    is_same_host(struct char_data *first, idnum_t second_idnum);
 void    stop_watching(struct char_data *ch, bool send_message=FALSE);
 void    set_watching(struct char_data *ch, struct room_data *room, int dir);
 struct room_data *get_jurisdiction_docwagon_room(int jurisdiction);
