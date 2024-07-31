@@ -1365,6 +1365,7 @@ ACMD(do_medit)
     mob = Mem->GetCh();
 
     *mob = mob_proto[mob_num]; // the RNUM
+    mob->load_origin = PC_LOAD_REASON_MEDIT_ALLOCATION;
 
 #ifdef USE_DEBUG_CANARIES
     mob->canary = CANARY_VALUE;
@@ -1433,6 +1434,7 @@ ACMD(do_medit)
     send_to_char("That mobile does not exist, create it?\r\n", ch);
     // create a dummy mobile
     d->edit_mob = Mem->GetCh();
+    d->edit_mob->load_origin = PC_LOAD_REASON_MEDIT_CREATION;
 
     d->edit_mob->player_specials = &dummy_mob;
 
@@ -1525,6 +1527,7 @@ ACMD(do_mclone)
   mob = Mem->GetCh();
 
   *mob = mob_proto[mob_num1]; // the RNUM
+  mob->load_origin = PC_LOAD_REASON_MCLONE;
 
   // copy all strings over
   if (mob_proto[mob_num1].player.physical_text.keywords)
@@ -1642,6 +1645,7 @@ ACMD(do_mdelete)
       if (IS_NPC(j) && j->nr == counter) {
         temp = Mem->GetCh();
         *temp = *j;
+        temp->load_origin = PC_LOAD_REASON_MDELETE;
         *j = mob_proto[counter];
         j->nr = counter;
         copy_over_necessary_info(temp, j);

@@ -430,6 +430,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
             // alloc a temp mobile
             temp = Mem->GetCh();
             *temp = *i;
+            temp->load_origin = PC_LOAD_REASON_MEDIT_SAVE_UPDATE;
 
             struct obj_data *mount = get_mount_manned_by_ch(i);
 

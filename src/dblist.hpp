@@ -27,6 +27,7 @@ public:
   void RemoveObjNum(rnum_t rnum);
   void RemoveQuestObjs(idnum_t idnum);
   void BuzzPocsecs(void);
+  void CheckForDeletedCharacterFuckery(struct char_data *ch, const char *name, idnum_t idnum);
 
   #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   void CheckPointers();

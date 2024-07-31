@@ -3324,6 +3324,31 @@ const char *faction_status_names[] = {
   "Ally"
 };
 
+const char *pc_load_reasons[] = {
+  "NONE",
+  "FIND_OR_LOAD_CHAR",
+  "MAIN_MENU_1",
+  "ENTER_PASSWORD",
+  "CON_QVERIFYPW",
+  "OFFLINE_WIZSTAT",
+  "OFFLINE_ADVANCE",
+  "OFFLINE_SET",
+  "PGROUP_ABDICATION_LEADER_LOAD",
+  "PGROUP_OFFLINE_OUTCAST",
+  "PGROUP_OFFLINE_GRANT_REVOKE",
+  "PGROUP_OFFLINE_PROMOTE_DEMOTE",
+  "PGROUP_OFFLINE_PGSET_LEADER",
+  "READ_MOBILE",
+  "MEDIT_SAVE_UPDATE",
+  "CHARACTER_CREATION",
+  "MEDIT_ALLOCATION",
+  "MEDIT_CREATION",
+  "MCLONE",
+  "MDELETE",
+  "OFFLINE_WATCH",
+  "COPYOVER_RECOVERY"
+};
+
 struct kosher_weapon_values_struct kosher_weapon_values[MAX_WEAP] = {
 /*                    POWER, DAM CODE, SKILL                  , CONC, AMMO, FM_SS, FM_SA, FM_BF, FM_FA, COMP, BOTTM, BARRL, TOP  , STR+, REACH */
 /* EDGED          */ {  0  , SERIOUS , SKILL_EDGED_WEAPONS    , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 3   , 1    }, // WEAP_EDGED          

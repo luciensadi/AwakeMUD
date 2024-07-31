@@ -42,6 +42,7 @@
 #include "creative_works.hpp"
 #include "channels.hpp"
 #include "vehicles.hpp"
+#include "dblist.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -2706,7 +2707,7 @@ void nanny(struct descriptor_data * d, char *arg)
         return;
       }
       if (does_player_exist(tmp_name)) {
-        d->character = playerDB.LoadChar(tmp_name, TRUE);
+        d->character = playerDB.LoadChar(tmp_name, TRUE, PC_LOAD_REASON_ENTER_PASSWORD);
         d->character->desc = d;
 
         snprintf(buf, sizeof(buf), "Welcome back. Enter your password. Not %s? Enter 'abort' to try a different name. ", CAP(tmp_name));
@@ -2723,6 +2724,7 @@ void nanny(struct descriptor_data * d, char *arg)
           }
         if (d->character == NULL) {
           d->character = Mem->GetCh();
+          d->character->load_origin = PC_LOAD_REASON_CHARACTER_CREATION;
 
           // Create and zero out their player_specials.
           DELETE_IF_EXTANT(d->character->player_specials);
@@ -2957,7 +2959,7 @@ void nanny(struct descriptor_data * d, char *arg)
       ccr_pronoun_menu(d);
     } else {
       if (STATE(d) != CON_CHPWD_VRFY)
-        d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), TRUE);
+        d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), TRUE, PC_LOAD_REASON_CON_QVERIFYPW);
       SEND_TO_Q("\r\nDone.\r\n", d);
       if (PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED)) {
         playerDB.SaveChar(d->character);
@@ -3032,7 +3034,7 @@ void nanny(struct descriptor_data * d, char *arg)
         free_char(d->character);
         delete d->character;
 
-        d->character = playerDB.LoadChar(char_name, false);
+        d->character = playerDB.LoadChar(char_name, false, PC_LOAD_REASON_MAIN_MENU_1);
         d->character->desc = d;
         PLR_FLAGS(d->character).RemoveBits(PLR_JUST_DIED, PLR_DOCWAGON_READY, ENDBIT);
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
@@ -3335,14 +3337,18 @@ void nanny(struct descriptor_data * d, char *arg)
 
       DeleteChar(GET_IDNUM(d->character));
 
-      snprintf(buf, sizeof(buf), "Character '%s' deleted!\r\nGoodbye.\r\n",
-              GET_CHAR_NAME(d->character));
+      snprintf(buf, sizeof(buf), "Character '%s' deleted!\r\nGoodbye.\r\n", GET_CHAR_NAME(d->character));
       SEND_TO_Q(buf, d);
-      snprintf(buf, sizeof(buf), "%s (lev %d) has self-deleted.",
-              GET_CHAR_NAME(d->character), GET_LEVEL(d->character));
-      mudlog(buf, d->character, LOG_MISCLOG, TRUE);
+      mudlog_vfprintf(d->character, LOG_MISCLOG, "%s (lev %d) has self-deleted.", GET_CHAR_NAME(d->character), GET_LEVEL(d->character));
 
+
+      const char *char_name = str_dup(GET_CHAR_NAME(d->character));
+      idnum_t idnum = GET_IDNUM(d->character);
       extract_char(d->character);
+
+      // Validate that there are no objects left in the game that point to this character in any way.
+      ObjList.CheckForDeletedCharacterFuckery(d->character, char_name, idnum);
+      delete [] char_name;
 
       d->character = NULL;
       STATE(d) = CON_CLOSE;

@@ -81,7 +81,6 @@ void    zone_update(void);
 long     real_room(long virt);
 char    *fread_string(FILE *fl, char *error);
 long    get_id_by_name(char *name);
-int  load_char(char *name, struct char_data *ch);
 struct char_data *read_mobile(int nr, int type);
 struct veh_data *read_vehicle(int nr, int type);
 long     real_mobile(long virt);

@@ -594,3 +594,55 @@ void objList::RemoveQuestObjs(idnum_t questor_idnum)
     }
   }
 }
+
+void objList::CheckForDeletedCharacterFuckery(struct char_data *ch, const char *their_name, idnum_t idnum)
+{
+  static nodeStruct<struct obj_data *> *temp, *next;
+  bool found_something = FALSE;
+
+  if (!ch) {
+    mudlog("SYSERR: CheckForDeletedCharacterFuckery got a NULL char.", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  // Iterate through the list.
+  for (temp = head; temp; temp = next) {
+    next = temp->next;
+
+    // Precondition: The object being examined must exist.
+    if (!OBJ) {
+      mudlog("SYSERR: CheckForDeletedCharacterFuckery encountered a non-existent object.", NULL, LOG_SYSLOG, TRUE);
+      continue;
+    }
+
+    struct char_data *owner = OBJ->carried_by ? OBJ->carried_by : OBJ->worn_by;
+
+    if (owner) {
+      if (owner == ch) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: CheckForDeletedCharacterFuckery FOUND object %s (%ld) in objList after character deletion (pointer match)!", GET_OBJ_NAME(OBJ), GET_OBJ_VNUM(OBJ));
+        found_something = TRUE;
+        continue;
+      }
+
+      if (!str_cmp(GET_CHAR_NAME(owner), their_name)) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: CheckForDeletedCharacterFuckery FOUND object %s (%ld) in objList after character deletion (name match)!", GET_OBJ_NAME(OBJ), GET_OBJ_VNUM(OBJ));
+        found_something = TRUE;
+        continue;
+      }
+
+      if (GET_IDNUM(owner) == idnum) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: CheckForDeletedCharacterFuckery FOUND object %s (%ld) in objList after character deletion (idnum match)!", GET_OBJ_NAME(OBJ), GET_OBJ_VNUM(OBJ));
+        found_something = TRUE;
+        continue;
+      }
+    }
+
+    if (GET_OBJ_VNUM(OBJ) == 10025) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Found pocsec carried by %s", GET_CHAR_NAME(owner));
+    }
+  }
+
+  if (!found_something) {
+    mudlog("CheckForDeletedCharacterFuckery cleared successfully.", NULL, LOG_SYSLOG, TRUE);
+  }
+}

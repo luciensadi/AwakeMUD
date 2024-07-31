@@ -3143,6 +3143,29 @@ enum {
 
 #define FILESTRING_OBJ_IDNUM "ObjIdnum"
 
+#define PC_LOAD_REASON_NONE                          0
+#define PC_LOAD_REASON_FIND_OR_LOAD_CHAR             1
+#define PC_LOAD_REASON_MAIN_MENU_1                   2
+#define PC_LOAD_REASON_ENTER_PASSWORD                3
+#define PC_LOAD_REASON_CON_QVERIFYPW                 4
+#define PC_LOAD_REASON_OFFLINE_WIZSTAT               5
+#define PC_LOAD_REASON_OFFLINE_ADVANCE               6
+#define PC_LOAD_REASON_OFFLINE_SET                   7
+#define PC_LOAD_REASON_PGROUP_ABDICATION_LEADER_LOAD 8
+#define PC_LOAD_REASON_PGROUP_OFFLINE_OUTCAST        9
+#define PC_LOAD_REASON_PGROUP_OFFLINE_GRANT_REVOKE   10
+#define PC_LOAD_REASON_PGROUP_OFFLINE_PROMOTE_DEMOTE 11
+#define PC_LOAD_REASON_PGROUP_OFFLINE_PGSET_LEADER   12
+#define PC_LOAD_REASON_READ_MOBILE                   13
+#define PC_LOAD_REASON_MEDIT_SAVE_UPDATE             14
+#define PC_LOAD_REASON_CHARACTER_CREATION            15
+#define PC_LOAD_REASON_MEDIT_ALLOCATION              16
+#define PC_LOAD_REASON_MEDIT_CREATION                17
+#define PC_LOAD_REASON_MCLONE                        18
+#define PC_LOAD_REASON_MDELETE                       19
+#define PC_LOAD_REASON_OFFLINE_WATCH                 20
+#define PC_LOAD_REASON_COPYOVER_RECOVERY             21
+
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's
 // unused. This is the same way Q_UNUSED is used in Qt. -- Nodens

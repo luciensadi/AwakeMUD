@@ -366,7 +366,7 @@ void copyover_recover()
 
     /* Now, find the pfile */
 
-    if ((d->character = playerDB.LoadChar(name, FALSE))) {
+    if ((d->character = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_COPYOVER_RECOVERY))) {
       d->character->desc = d;
       if (!PLR_FLAGGED(d->character, PLR_DELETED))
         PLR_FLAGS(d->character).RemoveBits(PLR_WRITING, PLR_MAILING, ENDBIT);

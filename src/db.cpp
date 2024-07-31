@@ -4266,6 +4266,7 @@ struct char_data *read_mobile(int nr, int type)
 
   mob = Mem->GetCh();
   *mob = mob_proto[i];
+  mob->load_origin = PC_LOAD_REASON_READ_MOBILE;
   add_ch_to_character_list(mob, "read_mobile");
 
   mob->points.physical = mob->points.max_physical;

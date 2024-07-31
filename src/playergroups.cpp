@@ -463,7 +463,7 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   // If they weren't online, attempt to load them from the DB.
   if (!new_leader) {
     new_leader_is_logged_in = FALSE;
-    if (!(new_leader = playerDB.LoadChar(name, false))) {
+    if (!(new_leader = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_ABDICATION_LEADER_LOAD))) {
       // We were unable to find them online or load them from DB-- fail out.
       mudlog("SYSERR: Failed to fetch PC from DB for pgroup abdication.", ch, LOG_SYSLOG, TRUE);
       send_to_char("Sorry, an error has occurred. Abdication aborted.\r\n", ch);
@@ -903,7 +903,7 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   // If they weren't online, attempt to load them from the DB.
   if (!vict) {
     vict_is_logged_in = FALSE;
-    if (!(vict = playerDB.LoadChar(name, false))) {
+    if (!(vict = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_OUTCAST))) {
       // We were unable to find them online or load them from DB-- fail out.
       send_to_char("There is no such player.\r\n", ch);
       return;
@@ -1510,7 +1510,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // If they weren't online, attempt to load them from the DB.
   if (!vict) {
     vict_is_logged_in = FALSE;
-    if (!(vict = playerDB.LoadChar(name, false))) {
+    if (!(vict = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_GRANT_REVOKE))) {
       // We were unable to find them online or load them from DB-- fail out.
       send_to_char("There is no such player.\r\n", ch);
       return;
@@ -1625,7 +1625,7 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   // If they weren't online, attempt to load them from the DB.
   if (!vict) {
     vict_is_logged_in = FALSE;
-    if (!(vict = playerDB.LoadChar(name, false))) {
+    if (!(vict = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_PROMOTE_DEMOTE))) {
       // We were unable to find them online or load them from DB-- fail out.
       send_to_char("There is no such player.\r\n", ch);
       return;
@@ -1884,7 +1884,7 @@ ACMD(do_pgset) {
     if (!target) {
       from_file = TRUE;
       const char *name = get_player_name(idnum);
-      target = playerDB.LoadChar(name, FALSE);
+      target = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_PGSET_LEADER);
       delete [] name;
     }
 

@@ -6917,7 +6917,7 @@ struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *c
     load_name = get_player_name(idnum);
   }
 
-  struct char_data *loaded = playerDB.LoadChar(load_name, FALSE);
+  struct char_data *loaded = playerDB.LoadChar(load_name, FALSE, PC_LOAD_REASON_FIND_OR_LOAD_CHAR);
 
   if (!loaded) {
     mudlog_vfprintf(match_exclusion, LOG_SYSLOG, "SYSERR: Something went wrong-- attempted to load %s (%ld) from DB for find_or_load_ch(), but it failed.", load_name, idnum);

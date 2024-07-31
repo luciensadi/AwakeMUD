@@ -1873,12 +1873,14 @@ char_data *PCIndex::CreateChar(char_data *ch)
 }
 */
 
-char_data *PCIndex::LoadChar(const char *name, bool logon)
+char_data *PCIndex::LoadChar(const char *name, bool logon, int load_origin)
 {
   // load the character data
   char_data *ch = Mem->GetCh();
 
   ch->player_specials = new player_special_data;
+  ch->load_origin = load_origin;
+  ch->load_time = time(0);
 
   load_char(name, ch, logon);
 

@@ -918,6 +918,10 @@ struct char_data
   struct room_data *in_room;                     /* Location */
   struct room_data *was_in_room;                 /* location for linkdead people  */
 
+  // Debug fields
+  int load_origin;                               /* Identifies what loaded this. */
+  time_t load_time;                              /* Used to track when this was loaded. */
+
   struct char_player_data player;       /* Normal data                   */
   struct char_ability_data real_abils;  /* Abilities without modifiers   */
   struct char_ability_data aff_abils;   /* Abils with spells/stones/etc  */
@@ -989,7 +993,7 @@ struct char_data
 #endif
 
   char_data() :
-      nr(0), unique_id(0), in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), vfront(FALSE),
+      nr(0), unique_id(0), in_room(NULL), was_in_room(NULL), load_origin(0), load_time(time(0)), player_specials(NULL), in_veh(NULL), vfront(FALSE),
       persona(NULL), squeue(NULL), sustained(NULL), ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL),
       bioware(NULL), next_in_room(NULL), next_in_character_list(NULL), next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL),
       next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),

@@ -23,6 +23,7 @@ extern const char *room_flag_explanations[];
 extern const char *wear_bits[];
 extern const char *extra_bits[];
 extern const char *pc_readable_extra_bits[];
+extern const char *pc_load_reasons[];
 
 extern const char *connected_types[];
 extern const char *wear_where[];

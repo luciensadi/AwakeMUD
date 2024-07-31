@@ -1676,6 +1676,10 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
             pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(k)->privileges, FALSE));
   }
 
+  if (GET_LEVEL(ch) == LVL_PRESIDENT) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Loaded by '^c%s^n' @ ^c%ld^n\r\n", pc_load_reasons[k->load_origin], k->load_time);
+  }
+
   if (!IS_NPC(k)) {
     if (access_level(ch, LVL_PRESIDENT) && GET_CHAR_MULTIPLIER(k) != 100) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Multiplier: ^c%.2f^n\r\n", (float) GET_CHAR_MULTIPLIER(k) / 100);
@@ -1883,6 +1887,10 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
 
   if (GET_MOB_FACTION_IDNUM(k)) {
     snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ". Faction: %s (%ld)", get_faction_name(GET_MOB_FACTION_IDNUM(k), ch), GET_MOB_FACTION_IDNUM(k));
+  }
+
+  if (GET_LEVEL(ch) == LVL_PRESIDENT) {
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ".  Loaded by '^c%s^n' @ ^c%ld^n", pc_load_reasons[k->load_origin], k->load_time);
   }
 
   // Append to existing buf with newline.
@@ -2093,7 +2101,7 @@ ACMD(do_stat)
       if (!(does_player_exist(buf2)))
         send_to_char(ch, "Couldn't find any PC named '%s'.\r\n", buf2);
       else {
-        victim = playerDB.LoadChar(buf2, TRUE);
+        victim = playerDB.LoadChar(buf2, TRUE, PC_LOAD_REASON_OFFLINE_WIZSTAT);
         do_stat_character(ch, victim);
         extract_char(victim);
       }
@@ -2846,7 +2854,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
       }
 
       is_file = TRUE;
-      victim = playerDB.LoadChar(name, false);
+      victim = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_OFFLINE_ADVANCE);
     } else if (!(victim = get_char_vis(ch, name))) {
       send_to_char("That player is not here.\r\n", ch);
       return;
@@ -5445,7 +5453,7 @@ ACMD(do_set)
       return;
     }
 
-    vict = playerDB.LoadChar(name, false);
+    vict = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_OFFLINE_SET);
 
     if (vict) {
       if (!access_level(ch, GET_LEVEL(vict)+1)) {

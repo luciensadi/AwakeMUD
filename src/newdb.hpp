@@ -102,7 +102,7 @@ public:
 
   // loads the character and syncs IDs, returns the main struct
   // if logon is true, then the last logon time is set.
-  char_data *LoadChar(const char *name, bool logon);
+  char_data *LoadChar(const char *name, bool logon, int load_origin);
 
   // just saves the character
   bool SaveChar(char_data *ch, vnum_t loadroom = NOWHERE, bool fromCopyover = FALSE);
@@ -131,7 +131,6 @@ extern bool does_player_exist(vnum_t idnum);
 extern bool does_player_exist(const char *name);
 extern char_data *CreateChar(struct char_data *ch);
 extern void DeleteChar(vnum_t idnum);
-extern bool load_char(const char *name, struct char_data *ch, bool logon);
 extern idnum_t get_player_id(const char *name);
 extern int get_player_rank(long idnum);
 extern char *get_player_name(vnum_t id);
