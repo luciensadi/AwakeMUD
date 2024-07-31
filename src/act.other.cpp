@@ -4502,8 +4502,9 @@ ACMD(do_watch)
   int dir;
   skip_spaces(&argument);
   if ((dir = search_block(argument, lookdirs, FALSE)) == -1 && (dir = search_block(argument, fulllookdirs, FALSE)) == -1) {
-    FAILURE_CASE(!access_level(ch, LVL_VICEPRES), "Syntax: WATCH <direction to watch>");
-    
+    // Non-staff are bounced here.
+    FAILURE_CASE(!access_level(ch, LVL_EXECUTIVE), "Syntax: WATCH <direction to watch>");
+
     struct char_data *vict = get_player_vis(ch, argument, FALSE);
     FAILURE_CASE_PRINTF(!vict, "You don't see anyone named %s in game, and it's not a direction either.", argument);
     FAILURE_CASE_PRINTF(!vict->desc, "%s has no desc -- nothing to watch.", GET_CHAR_NAME(vict));
@@ -4513,6 +4514,7 @@ ACMD(do_watch)
       vict->desc->watcher = NULL;
       ch->desc->watching = NULL;
       send_to_char(ch, "You will no longer be notified every time %s uses a command that resets their idle timer.\r\n", GET_CHAR_NAME(vict));
+      mudlog_vfprintf(ch, LOG_WIZLOG, "No longer watching %s (%ld) for activity.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
       return;
     }
 
@@ -4521,7 +4523,7 @@ ACMD(do_watch)
     vict->desc->watcher = ch->desc;
     ch->desc->watching = vict->desc;
     send_to_char(ch, "You will now be notified every time %s uses a command that resets their idle timer.\r\n", GET_CHAR_NAME(vict));
-    
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Watching %s (%ld) for activity.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
     return;
   }
   dir = convert_look[dir];
