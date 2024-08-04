@@ -807,6 +807,10 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
 
   // Calculate any derived data.
   regenerate_full_name();
+
+  // Drop any expired guests.
+  guests.erase(std::remove_if(guests.begin(), guests.end(),
+               [](idnum_t i) { return !does_player_exist(i); }), guests.end());
 }
 
 Apartment::~Apartment() {
