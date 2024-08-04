@@ -1245,6 +1245,8 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       if (ch_can_see_all_ware || tmp_obj->restring || success_test(GET_INT(ch), targ) > 0) {
         ware_is_internal = FALSE;
       }
+    } else if (GET_BIOWARE_TYPE(tmp_obj) == BIO_CATSEYES) {
+      ware_is_internal = FALSE;
     } else if (GET_BIOWARE_TYPE(tmp_obj) == BIO_CUSTOM_NERPS && IS_SET(GET_BIOWARE_FLAGS(tmp_obj), NERPS_WARE_VISIBLE)) {
       ware_is_internal = FALSE;
       force_full_name = TRUE;
