@@ -172,7 +172,7 @@ void pocketsec_menu(struct descriptor_data *d)
                  "   [^c1^n]^c%sMail%s^n\r\n"
                  "   [^c2^n] ^cNotes^n\r\n"
                  "   [^c3^n] ^cPhonebook^n\r\n"
-                 "   [^c4^n] ^cFiles^n\r\n"
+                 // "   [^c4^n] ^cFiles^n\r\n"
                  "   [^c5^n] ^cBanking^n\r\n"
                  "   [^c6^n] ^c%sock^n\r\n"
                  "   [^c7^n] ^c%s^n\r\n"
@@ -278,6 +278,9 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           break;
         case 3:
           pocketsec_phonemenu(d);
+          break;
+        case 4:
+          send_to_char(d->character, "The files functionality has been disabled.\r\n");
           break;
         case 5:
           pocketsec_bankmenu(d);
