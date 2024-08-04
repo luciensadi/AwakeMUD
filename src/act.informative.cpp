@@ -2547,7 +2547,7 @@ void look_in_obj(struct char_data * ch, struct obj_data *obj, bool exa, int bits
       }
       break;
     default:
-      send_to_char(ch, "There's nothing inside %s!\r\n", obj);
+      send_to_char(ch, "There's nothing inside %s!\r\n", GET_OBJ_NAME(obj));
       break;
   }
 }
