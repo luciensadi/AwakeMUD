@@ -641,12 +641,14 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
     return FALSE;
   }
 
+  int weapon_attack_type = GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(weapon);
+
   // Ensure it has a magazine.
   if (!(magazine = weapon->contains)) {
     magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
     // Set the max ammo and weapon type here.
     GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(weapon);
-    GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(weapon);
+    GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = weapon_attack_type;
 
     // No specified ammotype means 'reload with whatever's in the gun'. In this case, nothing was there, so we go with whatever we have available.
     if (ammotype == -1) {
@@ -655,7 +657,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
 
       // Iterate through all ammo types and stop on the first one we have.
       for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
-        if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0) {
+        if (GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon_attack_type, am) > 0) {
           GET_MAGAZINE_AMMO_TYPE(magazine) = am;
           break;
         }
@@ -685,7 +687,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
   if (ammotype == -1)
     ammotype = GET_MAGAZINE_AMMO_TYPE(magazine);
 
-  int weapontype = GET_WEAPON_ATTACK_TYPE(weapon);
+  int weapontype = GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_MACHINE_PISTOL;
 
   int have_ammo_quantity = GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype);
 

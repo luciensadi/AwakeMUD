@@ -4908,11 +4908,13 @@ void reset_zone(int zone, int reboot)
                   outermost = outermost->in_obj;
                 }
 
+                int weapon_attack_type = GET_WEAPON_ATTACK_TYPE(obj) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(obj);
+
                 struct char_data *temp_ch = NULL;
                 if ((temp_ch = outermost->carried_by) || (temp_ch = outermost->worn_by)) {
                   // Reload from their ammo.
                   for (int index = 0; index < NUM_AMMOTYPES; index++) {
-                    if (GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
+                    if (GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, weapon_attack_type, npc_ammo_usage_preferences[index]) > 0) {
                       reload_weapon_from_bulletpants(temp_ch, obj, npc_ammo_usage_preferences[index]);
                       break;
                     }
@@ -4920,7 +4922,7 @@ void reset_zone(int zone, int reboot)
 
                   // If they failed to reload, they have no ammo. Give them some normal and reload with it.
                   if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
-                    GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+                    GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, weapon_attack_type, AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
                     reload_weapon_from_bulletpants(temp_ch, obj, AMMO_NORMAL);
 
                     // Decrement their debris-- we want this reload to not create clutter.
@@ -5005,10 +5007,11 @@ void reset_zone(int zone, int reboot)
               if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
                   && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
                   && GET_WEAPON_MAX_AMMO(obj) != -1) {
+                int weapon_attack_type = GET_WEAPON_ATTACK_TYPE(obj) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(obj);
 
                 // Reload from their ammo.
                 for (int index = 0; index < NUM_AMMOTYPES; index++) {
-                  if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
+                  if (GET_BULLETPANTS_AMMO_AMOUNT(mob, weapon_attack_type, npc_ammo_usage_preferences[index]) > 0) {
                     reload_weapon_from_bulletpants(mob, obj, npc_ammo_usage_preferences[index]);
                     break;
                   }
@@ -5016,7 +5019,7 @@ void reset_zone(int zone, int reboot)
 
                 // If they failed to reload, they have no ammo. Give them some normal and reload with it.
                 if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
-                  GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+                  GET_BULLETPANTS_AMMO_AMOUNT(mob, weapon_attack_type, AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
                   reload_weapon_from_bulletpants(mob, obj, AMMO_NORMAL);
 
                   // Decrement their debris-- we want this reload to not create clutter.

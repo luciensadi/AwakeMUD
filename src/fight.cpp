@@ -1193,8 +1193,9 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
 
     if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
       int rnum = real_mobile(GET_MOB_VNUM(vict));
+      int weapon_attack_type = GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(weapon);
       for (int index = 0; index < NUM_AMMOTYPES; index++) {
-        if (GET_BULLETPANTS_AMMO_AMOUNT(&mob_proto[rnum], GET_WEAPON_ATTACK_TYPE(weapon), npc_ammo_usage_preferences[index]) > 0) {
+        if (GET_BULLETPANTS_AMMO_AMOUNT(&mob_proto[rnum], weapon_attack_type, npc_ammo_usage_preferences[index]) > 0) {
           int ammo_value = NPC_AMMO_USAGE_PREFERENCES_AMMO_NORMAL_INDEX - index; // APDS = 3, EX = 2, Explosive = 1, Normal = 0, Gel -1, Flechette -2... see bullet_pants.cpp
           base += ammo_value * 10;
         }
@@ -4944,12 +4945,12 @@ int find_weapon_range(struct char_data *ch, struct obj_data *weapon)
     case WEAP_MINIGUN:
     case WEAP_ASSAULT_RIFLE:
     case WEAP_SPORT_RIFLE:
-      return 3;
     case WEAP_LMG:
     case WEAP_MMG:
     case WEAP_HMG:
-    case WEAP_SNIPER_RIFLE:
     case WEAP_CANNON:
+      return 3;
+    case WEAP_SNIPER_RIFLE:
     case WEAP_MISS_LAUNCHER:
       return 4;
     default:
@@ -6923,6 +6924,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
       case WEAP_LMG:
       case WEAP_MMG:
       case WEAP_HMG:
+      case WEAP_MACHINE_PISTOL:
         snprintf(ammo_type, sizeof(ammo_type), "stream of bullets");
         break;
       case WEAP_CANNON:

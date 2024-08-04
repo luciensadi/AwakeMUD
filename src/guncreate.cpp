@@ -54,10 +54,11 @@ void aedit_disp_weapon_menu(struct descriptor_data *d)
 
     index++;
 
-    send_to_char(CH, "  %2d) %-18s%s",
+    send_to_char(CH, "  %2d) %-18s%s%s",
                  index,
                  weapon_types[counter],
-                 index % 2 == 0 || PRF_FLAGGED(CH, PRF_SCREENREADER) ? "\r\n" : ""
+                 index % 2 == 0 || PRF_FLAGGED(CH, PRF_SCREENREADER) ? "\r\n" : "",
+                 counter == WEAP_MACHINE_PISTOL ? "^L (aka Light Pistol)^n" : ""
                );
   }
   send_to_char("Weapon type: ", d->character);
@@ -127,6 +128,9 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
         if (++index == number)
           break;
       }
+
+      if (selected_weapon == WEAP_MACHINE_PISTOL)
+        selected_weapon = WEAP_LIGHT_PISTOL;
 
       if (number > index || selected_weapon >= MAX_WEAP)
         send_to_char("Invalid selection.\r\nWeapon Type: ", CH);
