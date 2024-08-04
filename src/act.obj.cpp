@@ -815,8 +815,9 @@ bool can_take_obj_from_anywhere(struct char_data * ch, struct obj_data * obj)
 {
   FALSE_CASE_PRINTF(IS_CARRYING_N(ch) >= CAN_CARRY_N(ch), "%s: you can't carry that many items.", CAP(GET_OBJ_NAME(obj)));
 
-  FALSE_CASE_PRINTF(!IS_SENATOR(ch) && (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch), "%s: you can't carry that much weight.%s",
+  FALSE_CASE_PRINTF(!IS_SENATOR(ch) && (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch), "%s: you can't carry another %.2f kilos.%s",
                     CAP(GET_OBJ_NAME(obj)),
+                    GET_OBJ_WEIGHT(obj),
                     GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO ? "(You can still grab rounds out of it with ^WPOCKETS ADD <container>^n though!)" : "");
 
   if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE)) && !ch->in_veh) {
