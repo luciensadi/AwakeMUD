@@ -2482,6 +2482,74 @@ void look_in_direction(struct char_data * ch, int dir)
     send_to_char("You see nothing special.\r\n", ch);
 }
 
+void _send_obj_contents_info_to_char(struct obj_data *obj, struct char_data *ch, int bits) {
+  send_to_char(GET_OBJ_NAME(obj), ch);
+  switch (bits) {
+    case FIND_OBJ_INV:
+      send_to_char(" (carried): ", ch);
+      break;
+    case FIND_OBJ_ROOM:
+      send_to_char(" (here): ", ch);
+      break;
+    case FIND_OBJ_EQUIP:
+      send_to_char(" (used): ", ch);
+      break;
+  }
+  if (obj->contains) {
+    list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
+  } else {
+    send_to_char("  Nothing.\r\n", ch);
+  }
+}
+
+void look_in_obj(struct char_data * ch, struct obj_data *obj, bool exa, int bits) {
+  if (!obj) {
+    send_to_char("Look in what?\r\n", ch);
+    return;
+  }
+
+  switch (GET_OBJ_TYPE(obj)) {
+    case ITEM_GUN_AMMO:
+      send_to_char(ch, "It contains %d %s.\r\n",
+                   GET_AMMOBOX_QUANTITY(obj),
+                   get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj), ch));
+      break;
+    case ITEM_WORN:
+    case ITEM_SHOPCONTAINER:
+      _send_obj_contents_info_to_char(obj, ch, bits);
+      break;
+    case ITEM_CONTAINER:
+    case ITEM_HOLSTER:
+    case ITEM_QUIVER:
+    case ITEM_KEYRING:
+      if (IS_SET(GET_CONTAINER_FLAGS(obj), CONT_CLOSED)) {
+        send_to_char("It is closed.\r\n", ch);
+      } else {
+        if (!exa) {
+          _send_obj_contents_info_to_char(obj, ch, bits);
+        } else {
+          list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
+        }
+      }
+      break;
+    case ITEM_FOUNTAIN:
+    case ITEM_DRINKCON:
+      if (GET_DRINKCON_AMOUNT(obj) <= 0) {
+        send_to_char("It is empty.\r\n", ch);
+      } else {
+        float full_ratio = GET_DRINKCON_AMOUNT(obj) / (MAX(1, GET_DRINKCON_MAX_AMOUNT(obj)));
+        int amt = MIN(3, MAX(0, 3 * full_ratio));
+        snprintf(buf, sizeof(buf), "It's %sfull of a %s liquid.\r\n", fullness[amt],
+                color_liquid[GET_DRINKCON_LIQ_TYPE(obj)]);
+        send_to_char(buf, ch);
+      }
+      break;
+    default:
+      send_to_char(ch, "There's nothing inside %s!\r\n", obj);
+      break;
+  }
+}
+
 void look_in_obj(struct char_data * ch, char *arg, bool exa)
 {
   struct char_data *fake_ch_for_rigging = ch;
@@ -2568,79 +2636,8 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
     if (fake_ch_for_rigging && fake_ch_for_rigging != ch)
       extract_char(fake_ch_for_rigging);
     return;
-  } else if ((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) &&
-             (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&
-             (GET_OBJ_TYPE(obj) != ITEM_CONTAINER) &&
-             (GET_OBJ_TYPE(obj) != ITEM_QUIVER) &&
-             (GET_OBJ_TYPE(obj) != ITEM_HOLSTER) &&
-             (GET_OBJ_TYPE(obj) != ITEM_WORN) &&
-             (GET_OBJ_TYPE(obj) != ITEM_KEYRING) &&
-             (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO) &&
-             (GET_OBJ_TYPE(obj) != ITEM_SHOPCONTAINER)
-           ) {
-    send_to_char("There's nothing inside that!\r\n", ch);
-  } else
-  {
-    if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
-      send_to_char(ch, "It contains %d %s.\r\n",
-                   GET_AMMOBOX_QUANTITY(obj),
-                   get_ammo_representation(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), GET_AMMOBOX_QUANTITY(obj), ch));
-      if (fake_ch_for_rigging && fake_ch_for_rigging != ch)
-        extract_char(fake_ch_for_rigging);
-      return;
-    } else if (GET_OBJ_TYPE(obj) == ITEM_WORN || GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER) {
-      send_to_char(GET_OBJ_NAME(obj), ch);
-      switch (bits) {
-        case FIND_OBJ_INV:
-          send_to_char(" (carried): \r\n", ch);
-          break;
-        case FIND_OBJ_ROOM:
-          send_to_char(" (here): \r\n", ch);
-          break;
-        case FIND_OBJ_EQUIP:
-          send_to_char(" (used): \r\n", ch);
-          break;
-      }
-      if (obj->contains) {
-        list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
-      } else {
-        send_to_char("  Nothing.\r\n", ch);
-      }
-    } else if (GET_OBJ_TYPE(obj) == ITEM_CONTAINER || GET_OBJ_TYPE(obj) == ITEM_HOLSTER ||
-               GET_OBJ_TYPE(obj) == ITEM_QUIVER || GET_OBJ_TYPE(obj) == ITEM_KEYRING) {
-      if (IS_SET(GET_OBJ_VAL(obj, 1), CONT_CLOSED)) {
-        send_to_char("It is closed.\r\n", ch);
-        if (fake_ch_for_rigging && fake_ch_for_rigging != ch)
-          extract_char(fake_ch_for_rigging);
-        return;
-      } else {
-        if (!exa) {
-          send_to_char(GET_OBJ_NAME(obj), ch);
-          switch (bits) {
-            case FIND_OBJ_INV:
-              send_to_char(" (carried): \r\n", ch);
-              break;
-            case FIND_OBJ_ROOM:
-              send_to_char(" (here): \r\n", ch);
-              break;
-            case FIND_OBJ_EQUIP:
-              send_to_char(" (used): \r\n", ch);
-              break;
-          }
-        }
-        list_obj_to_char(obj->contains, ch, SHOW_MODE_INSIDE_CONTAINER, TRUE, FALSE);
-      }
-    } else {            /* item must be a fountain or drink container */
-      if (GET_DRINKCON_AMOUNT(obj) <= 0)
-        send_to_char("It is empty.\r\n", ch);
-      else {
-        float full_ratio = GET_DRINKCON_AMOUNT(obj) / (MAX(1, GET_DRINKCON_MAX_AMOUNT(obj)));
-        int amt = MIN(3, MAX(0, 3 * full_ratio));
-        snprintf(buf, sizeof(buf), "It's %sfull of a %s liquid.\r\n", fullness[amt],
-                color_liquid[GET_DRINKCON_LIQ_TYPE(obj)]);
-        send_to_char(buf, ch);
-      }
-    }
+  } else {
+    look_in_obj(ch, obj, exa, bits);
   }
 
   if (fake_ch_for_rigging && fake_ch_for_rigging != ch)
@@ -4183,7 +4180,7 @@ ACMD(do_examine)
           send_to_char("When you look inside, you see:\r\n", ch);
         }
 
-        look_in_obj(ch, arg, TRUE);
+        look_in_obj(ch, tmp_object, TRUE, 0);
         send_to_char("\r\n", ch);
       }
     } else if ((GET_OBJ_TYPE(tmp_object) == ITEM_WEAPON) &&
