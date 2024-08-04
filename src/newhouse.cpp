@@ -147,6 +147,9 @@ ACMD(do_house) {
   }
 
   if (!*arg) {
+    // Drop any expired guests.
+    GET_APARTMENT(ch->in_room)->cleanup_deleted_guests();
+
     GET_APARTMENT(ch->in_room)->list_guests_to_char(ch);
     return;
   }
@@ -809,8 +812,7 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
   regenerate_full_name();
 
   // Drop any expired guests.
-  guests.erase(std::remove_if(guests.begin(), guests.end(),
-               [](idnum_t i) { return !does_player_exist(i); }), guests.end());
+  cleanup_deleted_guests();
 }
 
 Apartment::~Apartment() {
@@ -833,6 +835,12 @@ Apartment::~Apartment() {
   delete [] shortname;
   delete [] name;
   delete [] full_name;
+}
+
+void Apartment::cleanup_deleted_guests() {
+  // Drop any expired guests.
+  guests.erase(std::remove_if(guests.begin(), guests.end(),
+               [](idnum_t i) { return !does_player_exist(i); }), guests.end());
 }
 
 long Apartment::get_cost_of_contents(bool including_vehicles) {

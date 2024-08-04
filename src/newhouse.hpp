@@ -176,6 +176,7 @@ class Apartment {
     int get_lifestyle() { return lifestyle >= LIFESTYLE_STREETS ? lifestyle : complex->get_lifestyle(); }
     bool get_garage_override() { return garage_override; }
     std::vector<const char *> *get_custom_lifestyle_strings(struct char_data *ch);
+    void cleanup_deleted_guests();
 
     // Mutators
     void set_owner(idnum_t);
