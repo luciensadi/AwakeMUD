@@ -4353,6 +4353,8 @@ ACMD(do_examine)
 
     if (GET_OBJ_TYPE(tmp_object) == ITEM_CREATIVE_EFFORT) {
       send_to_char(ch, "^L(OOC: It's a custom object with no coded effect.)^n\r\n");
+    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_DESTROYABLE) {
+      send_to_char(ch, "^L(OOC: You're able to ##^WDESTROY^L it.)^n\r\n");
     } else if (GET_OBJ_VNUM(tmp_object) > 1) {
       snprintf(buf, sizeof(buf), "You %s that %s ",
                GET_SKILL(ch, SKILL_POLICE_PROCEDURES) <= 0 ? "have no training in Police Procedures, but you guess" : "think",
@@ -4372,7 +4374,7 @@ ACMD(do_examine)
             strlcat(buf, "is illegal", sizeof(buf));
           else strlcat(buf, "could be considered illegal", sizeof(buf));
         }
-#else // ROLL_POLICE_PROCEDURES
+#else // ROLL_POLICE_PROCEDURES is not defined
         if (GET_LEGAL_NUM(tmp_object) <= 3)
           strlcat(buf, "is highly illegal", sizeof(buf));
         else if (GET_LEGAL_NUM(tmp_object) <= 6)
