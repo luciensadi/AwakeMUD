@@ -4633,29 +4633,31 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
       snprintf(rbuf, sizeof(rbuf), "%s: Vision penalty capped to %d by Blind Fighting", GET_CHAR_NAME(ch), modifier);
 
-      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+      act(rbuf, 1, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
-        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+        act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
     }
 
     snprintf(rbuf, sizeof(rbuf), "%s: Cannot see target due to light level, so final char-to-char visibility TN is ^c%d^n.", GET_CHAR_NAME(ch), modifier);
-    act(rbuf, 0, victim, 0, ch, TO_ROLLS);
+    act(rbuf, 1, ch, 0, 0, TO_ROLLS);
+    if (ch->in_room != victim->in_room)
+      act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
     return modifier;
   }
 
   // If they're in an invis staffer above your level, you done goofed by fighting them. Return special code so we know what caused this in rolls.
   if (!IS_NPC(victim) && GET_INVIS_LEV(victim) > 0 && (IS_NPC(ch) || !access_level(ch, GET_INVIS_LEV(victim)))) {
-    act("$n: Maximum penalty- fighting invis staff.", 0, ch, 0, 0, TO_ROLLS);
+    act("$n: Maximum penalty- fighting invis staff.", 1, ch, 0, 0, TO_ROLLS);
     if (ch->in_room != victim->in_room)
-      act("$N: Maximum penalty- fighting invis staff.", 0, victim, 0, ch, TO_ROLLS);
+      act("$N: Maximum penalty- fighting invis staff.", 0, victim, 0, ch, TO_STAFF_ROLLS);
     return INVIS_CODE_STAFF;
   }
 
   // If they're flagged totalinvis (library mobs etc), you shouldn't be fighting them anyways.
   if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_TOTALINVIS)) {
-    act("$n: Maximum penalty- fighting total-invis mob.", 0, ch, 0, 0, TO_ROLLS);
+    act("$n: Maximum penalty- fighting total-invis mob.", 1, ch, 0, 0, TO_ROLLS);
     if (ch->in_room != victim->in_room)
-      act("$N: Maximum penalty- fighting total-invis mob.", 0, victim, 0, ch, TO_ROLLS);
+      act("$N: Maximum penalty- fighting total-invis mob.", 0, victim, 0, ch, TO_STAFF_ROLLS);
     return INVIS_CODE_TOTALINVIS;
   }
 
@@ -4688,7 +4690,9 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   if ((access_level(ch, LVL_PRESIDENT) || access_level(victim, LVL_PRESIDENT)) && (PRF_FLAGGED(ch, PRF_ROLLS) || PRF_FLAGGED(victim, PRF_ROLLS))) {
     snprintf(rbuf, sizeof(rbuf), "^b[c_v_p for $n: UL=%d, TH=%d, AS=%d; for $N: IMP(aff)=%d, STD(aff)=%d]",
              ch_has_ultrasound, ch_has_thermographic, ch_sees_astral, vict_is_imp_invis, vict_is_just_invis);
-    act(rbuf, FALSE, ch, 0, victim, TO_ROLLS);
+    act(rbuf, 1, ch, 0, 0, TO_ROLLS);
+    if (ch->in_room != victim->in_room)
+      act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
   }
 
   // This checks to see if we've resisted their spell (if any). If we haven't, add on their spell invis.
@@ -4697,7 +4701,9 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     vict_is_just_invis |= IS_AFFECTED(victim, AFF_SPELLINVIS);
     if ((access_level(ch, LVL_PRESIDENT) || access_level(victim, LVL_PRESIDENT))  && (PRF_FLAGGED(ch, PRF_ROLLS) || PRF_FLAGGED(victim, PRF_ROLLS))) {
       snprintf(rbuf, sizeof(rbuf), "^b[c_v_p after adding spells: IMP=%d, STD=%d]", vict_is_imp_invis, vict_is_just_invis);
-      act(rbuf, FALSE, ch, 0, victim, TO_ROLLS);
+      act(rbuf, 1, ch, 0, 0, TO_ROLLS);
+      if (ch->in_room != victim->in_room)
+        act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
     }
   }
 
@@ -4712,10 +4718,14 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       snprintf(rbuf, sizeof(rbuf), "$n: %s vs living target, so final char-to-char visibility TN is ^c%d^n.",
                MOB_FLAGGED(ch, MOB_DUAL_NATURE) ? "Dual-natured" : "Perceiving",
                modifier);
-      act(rbuf, 0, ch, 0, victim, TO_ROLLS);
+      act(rbuf, 1, ch, 0, 0, TO_ROLLS);
+      if (ch->in_room != victim->in_room)
+        act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
       return modifier;
     } else {
-      act("$n: Astral sight ignored-- inanimate, non-spelled target.", 0, ch, 0, victim, TO_ROLLS);
+      act("$n: Astral sight ignored-- inanimate, non-spelled target.", 1, ch, 0, 0, TO_ROLLS);
+      if (ch->in_room != victim->in_room)
+        act("$n: Astral sight ignored-- inanimate, non-spelled target.", 0, victim, 0, 0, TO_STAFF_ROLLS);
     }
     // Otherwise, fall through.
   }
@@ -4733,12 +4743,14 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       snprintf(rbuf, sizeof(rbuf), "%s: Non-perceiving character fighting non-manifested astral: %d", GET_CHAR_NAME(ch), modifier);
     }
 
-    act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+    act(rbuf, 1, ch, 0, 0, TO_ROLLS);
     if (ch->in_room != victim->in_room)
-      act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+      act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
 
     snprintf(rbuf, sizeof(rbuf), "$n: In bugged case, final char-to-char visibility TN is ^c%d^n.", modifier);
-    act(rbuf, 0, victim, 0, ch, TO_ROLLS);
+    act(rbuf, 1, ch, 0, 0, TO_ROLLS);
+    if (ch->in_room != victim->in_room)
+      act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
 
     return modifier;
   }
@@ -4781,9 +4793,9 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
       ultrasound_modifier = (ultrasound_modifier + 1) / 2;
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "; /2 (round up) = %d", ultrasound_modifier);
 
-      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+      act(rbuf, 1, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
-        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+        act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
     }
   }
 
@@ -4806,9 +4818,9 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     }
 
     if (thermographic_modifier > 0) {
-      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+      act(rbuf, 1, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
-        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+        act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
     }
   }
 
@@ -4820,9 +4832,9 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
     snprintf(rbuf, sizeof(rbuf), "%s: Low-light or standard vision fighting invis: %d", GET_CHAR_NAME(ch), MIN(low_light_modifier, normal_modifier));
 
-    act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+    act(rbuf, 1, ch, 0, 0, TO_ROLLS);
     if (ch->in_room != victim->in_room)
-      act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+      act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
   }
 
   // Select the best modifier.
@@ -4836,9 +4848,9 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
       snprintf(rbuf, sizeof(rbuf), "%s: Vision penalty capped to %d by Blind Fighting", GET_CHAR_NAME(ch), best_modifier);
 
-      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+      act(rbuf, 1, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
-        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+        act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
     }
   } else {
     if (best_modifier > BLIND_FIRE_PENALTY) {
@@ -4846,9 +4858,9 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
       snprintf(rbuf, sizeof(rbuf), "%s: Capped to %d", GET_CHAR_NAME(ch), best_modifier);
 
-      act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+      act(rbuf, 1, ch, 0, 0, TO_ROLLS);
       if (ch->in_room != victim->in_room)
-        act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+        act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
     }
   }
 
@@ -4863,9 +4875,9 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 
   snprintf(rbuf, sizeof(rbuf), "%s: Final char-to-char visibility TN: ^c%d^n", GET_CHAR_NAME(ch), best_modifier);
 
-  act(rbuf, 0, ch, 0, 0, TO_ROLLS);
+  act(rbuf, 1, ch, 0, 0, TO_ROLLS);
   if (ch->in_room != victim->in_room)
-    act(rbuf, 0, victim, 0, 0, TO_ROLLS);
+    act(rbuf, 0, victim, 0, 0, TO_STAFF_ROLLS);
 
   return best_modifier;
 }

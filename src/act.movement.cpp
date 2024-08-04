@@ -238,7 +238,7 @@ bool should_tch_see_chs_movement_message(struct char_data *viewer, struct char_d
   // Check for stealth and other person-to-person modifiers.
   if (should_roll_perception && (IS_AFFECTED(actor, AFF_SNEAK) || !CAN_SEE(viewer, actor))) {
     int open_test_result = 0;
-    char rbuf[1000];
+    char rbuf[1000] = { '\0' };
     struct room_data *in_room = get_ch_in_room(actor);
 
     // If you're sneaking, make an open test to determine the TN for the perception test to notice you.
@@ -266,6 +266,8 @@ bool should_tch_see_chs_movement_message(struct char_data *viewer, struct char_d
           strlcat(rbuf, "(defaulted: OT -4, cap 6!)", sizeof(rbuf));
         }
       }
+    } else {
+      snprintf(rbuf, sizeof(rbuf), "Non-sneak perception test: %s vs %s", GET_CHAR_NAME(viewer), GET_CHAR_NAME(actor));
     }
 
     // Don't allow negative results.
