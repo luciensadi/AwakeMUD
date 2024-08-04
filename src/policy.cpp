@@ -85,12 +85,11 @@ void initialize_policy_tree() {
     root_policy_document.push_back(section_root);
 
     section_root->add_child("Because we don't forbid adult roleplay here, we require that all characters are 18+, and that they present as such.");
-    section_root->add_child("It is a violation of this policy to have a character who appears underage.");
+    section_root->add_child("It is a violation of this policy to have a character who IS, APPEARS, or IDENTIFIES AS underage.");
     section_root->add_child("Additionally, anyone who engages in adult scenes with a character in violation of this policy will also be banned.");
   }
 
   // Underage players.
-#ifdef POLICY_REQUIRES_18_OR_OLDER
   {
     PolicyNode *section_root = new PolicyNode(
       "No Underage Players",
@@ -98,10 +97,9 @@ void initialize_policy_tree() {
     );
     root_policy_document.push_back(section_root);
 
-    section_root->add_child("For legal reasons, we require that all players are 18+ (the age of majority where this server is located).");
+    section_root->add_child("For legal reasons, we require that all players are aged 18 or older.");
     section_root->add_child("We sympathize with folks looking for a MUD to play in before they reach 18 years of age, but for legal reasons we cannot accommodate them here. Our hands are tied, and we will remove anyone found to be underage.");
   }
-#endif
 
   // Cheating.
   {
