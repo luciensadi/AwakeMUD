@@ -373,7 +373,7 @@ ACMD(do_docwagon) {
                  "  ^WDOCWAGON ACCEPT <name>^n    (to accept a pickup request)\r\n"
                  "  ^WDOCWAGON WITHDRAW <name>^n  (to withdraw your acceptance)\r\n"
                  "  ^WDOCWAGON LOCATE <name>^n    (to see where they are)\r\n"
-                 "  ^WDOCWAGON CHAT <message>^n   (to coordinate with other Docwagon retrievers)\r\n", ch);
+                 "  ^WDOCWAGON OOC <message>^n    (to coordinate with other Docwagon retrievers)\r\n", ch);
     return;
   }
 
@@ -393,8 +393,8 @@ ACMD(do_docwagon) {
     handle_player_docwagon_track(ch, name);
     return;
   }
-  else if (is_abbrev(mode_switch, "chat") || is_abbrev(mode_switch, "say") || is_abbrev(mode_switch, "message") || is_abbrev(mode_switch, "communicate")) {
-    FAILURE_CASE(!*name, "Syntax: DOCWAGON CHAT <message>");
+  else if (is_abbrev(mode_switch, "chat") || is_abbrev(mode_switch, "say") || is_abbrev(mode_switch, "message") || is_abbrev(mode_switch, "communicate") || is_abbrev(mode_switch, "ooc")) {
+    FAILURE_CASE(!*name, "Syntax: DOCWAGON OOC <message>");
     send_docwagon_chat_message(ch, name, TRUE);
     return;
   }
@@ -518,7 +518,7 @@ void send_docwagon_chat_message(struct char_data *ch, const char *message, bool 
       continue;
 
     char message_buf[MAX_INPUT * 2];
-    strlcpy(message_buf, "^R[^WDocwagon Responders (OOC)^R]^n: ", sizeof(message_buf));
+    strlcpy(message_buf, "^R[^WDocwagon OOC^R]^n: ", sizeof(message_buf));
 
     if (is_chat) {
       char final_character = get_final_character_from_string(message);
