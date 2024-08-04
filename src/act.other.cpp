@@ -1312,8 +1312,8 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "nohassle") && IS_SENATOR(ch)) {
       result = PRF_TOG_CHK(ch, PRF_NOHASSLE);
       mode = 8;
-    } else if (is_abbrev(argument, "nonewbie") || is_abbrev(argument, "newbie")) {
-      result = PRF_TOG_CHK(ch, PRF_NONEWBIE);
+    } else if (is_abbrev(argument, "nonewbie") || is_abbrev(argument, "newbie") || is_abbrev(argument, "questions") || is_abbrev(argument, "noquestions")) {
+      result = PRF_TOG_CHK(ch, PRF_NOQUESTIONS);
       mode = 9;
     } else if (is_abbrev(argument, "noshout") || is_abbrev(argument, "shout") || is_abbrev(argument, "deaf")) {
       result = PRF_TOG_CHK(ch, PRF_DEAF);

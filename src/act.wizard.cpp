@@ -4227,8 +4227,8 @@ ACMD(do_wizutil)
         send_to_char("Thawed.\r\n", ch);
         break;
       case SCMD_MUTE_NEWBIE:
-        result = PLR_TOG_CHK(vict, PLR_NEWBIE_MUTED);
-        snprintf(buf, sizeof(buf), "Newbie muted %s for %s by %s.", ONOFF(result),
+        result = PLR_TOG_CHK(vict, PLR_QUESTIONS_MUTED);
+        snprintf(buf, sizeof(buf), "Questions muted %s for %s by %s.", ONOFF(result),
                 GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_WIZLOG, TRUE);
         strlcat(buf, "\r\n", sizeof(buf));

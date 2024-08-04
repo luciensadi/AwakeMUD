@@ -340,7 +340,7 @@ enum {
 #define PLR_RPE                              37
 #define PLR_NO_IDLE_OUT                      38 /* Player will not idle out (morts- for test chars) */
 #define PLR_TELLS_MUTED                      39 /* Remove their ability to send tells. */
-#define PLR_NEWBIE_MUTED                     40 /* Remove their ability to talk on the newbie channel. */
+#define PLR_QUESTIONS_MUTED                  40 /* Remove their ability to talk on the questions/newbie channel. */
 #define PLR_CYBERDOC                         41 /* Player may act as a cyberdoc. */
 #define PLR_PAID_FOR_CLOSECOMBAT             42
 #define PLR_PAID_FOR_KIPUP                   43
@@ -413,7 +413,7 @@ enum {
 #define PRF_DEAF                               5  /* Can't hear shouts     */
 #define PRF_NOTELL                             6  /* Can't receive tells     */
 #define PRF_NORADIO                            7  /* Can't hear radio frequencies     */
-#define PRF_NONEWBIE                           8  /* Can't hear newbie channel    */
+#define PRF_NOQUESTIONS                        8  /* Can't hear questions/newbie channel    */
 #define PRF_NOREPEAT                           9  /* No repetition of comm commands  */
 #define PRF_HARDCORE                           10
 #define PRF_PKER                               11 /* is able to pk/be pked        */

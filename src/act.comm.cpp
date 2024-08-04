@@ -1166,7 +1166,7 @@ ACMD(do_gen_comm)
 
   static int channels[] = {
                             PRF_DEAF,
-                            PRF_NONEWBIE,
+                            PRF_NOQUESTIONS,
                             PRF_NOOOC,
                             PRF_NORPE,
                             PRF_NOHIRED
@@ -1300,7 +1300,7 @@ ACMD(do_gen_comm)
       send_to_char("NPCs can't use the Q&A channel.\r\n", ch);
       return;
     }
-    else if (PLR_FLAGGED(ch, PLR_NEWBIE_MUTED)) {
+    else if (PLR_FLAGGED(ch, PLR_QUESTIONS_MUTED)) {
       send_to_char("You can't talk on that channel.\r\n", ch);
       return;
     }
@@ -1540,7 +1540,7 @@ ACMD(do_gen_comm)
         break;
       case SCMD_NEWBIE:
         // Newbie can be disabled or muted.
-        if (PRF_FLAGGED(i->character, PRF_NONEWBIE) || PLR_FLAGGED(i->character, PLR_NEWBIE_MUTED))
+        if (PRF_FLAGGED(i->character, PRF_NOQUESTIONS) || PLR_FLAGGED(i->character, PLR_QUESTIONS_MUTED))
           continue;
 
         // Skip anyone who's ignored the speaker.
