@@ -3012,7 +3012,8 @@ const char *message_history_channels[] = {
   "Emotes",
   "Local",
   "Roleplay",
-  "All"
+  "All",
+  "Docwagon"
 };
 
 const char *pgroup_settings[] = {

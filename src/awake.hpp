@@ -2873,8 +2873,9 @@ enum {
 #define COMM_CHANNEL_LOCAL         13
 #define COMM_CHANNEL_ROLEPLAY      14
 #define COMM_CHANNEL_ALL           15
+#define COMM_CHANNEL_DOCWAGON_CHAT 16
 
-#define NUM_COMMUNICATION_CHANNELS 16
+#define NUM_COMMUNICATION_CHANNELS 17
 
 
 /* Exit / error codes. */

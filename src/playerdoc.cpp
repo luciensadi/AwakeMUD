@@ -16,6 +16,7 @@ extern void disp_long_exits(struct char_data *ch, bool autom);
 extern int isname(const char *str, const char *namelist);
 
 const char *get_char_representation_for_docwagon(struct char_data *vict, struct char_data *viewer);
+void send_docwagon_chat_message(struct char_data *ch, const char *message, bool is_chat);
 
 #define IS_VALID_POTENTIAL_RESCUER(plr) (GET_LEVEL(plr) == LVL_MORTAL && plr->char_specials.timer < 5 && !PRF_FLAGGED(plr, PRF_AFK) && !PRF_FLAGGED(plr, PRF_QUEST))
 
@@ -367,7 +368,12 @@ ACMD(do_docwagon) {
   char *name = one_argument(argument, mode_switch);
 
   if (!*arg || !*mode_switch) {
-    send_to_char("Syntax: ^WDOCWAGON ACCEPT <name>^n, ^WDOCWAGON WITHDRAW <name>^n, ^WDOCWAGON LIST^n, or ^WDOCWAGON LOCATE <name>^n.\r\n", ch);
+    send_to_char("Syntax:\r\n"
+                 "  ^WDOCWAGON LIST^n             (to see who all needs help)\r\n"
+                 "  ^WDOCWAGON ACCEPT <name>^n    (to accept a pickup request)\r\n"
+                 "  ^WDOCWAGON WITHDRAW <name>^n  (to withdraw your acceptance)\r\n"
+                 "  ^WDOCWAGON LOCATE <name>^n    (to see where they are)\r\n"
+                 "  ^WDOCWAGON CHAT <message>^n   (to coordinate with other Docwagon retrievers)\r\n", ch);
     return;
   }
 
@@ -385,6 +391,11 @@ ACMD(do_docwagon) {
   else if (is_abbrev(mode_switch, "show") || is_abbrev(mode_switch, "locate") || is_abbrev(mode_switch, "track")) {
     FAILURE_CASE(!*name, "Syntax: DOCWAGON LOCATE <name>");
     handle_player_docwagon_track(ch, name);
+    return;
+  }
+  else if (is_abbrev(mode_switch, "chat") || is_abbrev(mode_switch, "say") || is_abbrev(mode_switch, "message") || is_abbrev(mode_switch, "communicate")) {
+    FAILURE_CASE(!*name, "Syntax: DOCWAGON CHAT <message>");
+    send_docwagon_chat_message(ch, name, TRUE);
     return;
   }
   else {
@@ -459,8 +470,10 @@ ACMD(do_docwagon) {
       }
       send_to_char("You anonymously notify them that you're on the way.\r\n", ch);
       send_to_char(d->character, "Your DocWagon modulator buzzes-- a player with the DocWagon ID %5d has acknowledged your request for assistance and is on their way!\r\n", get_docwagon_faux_id(ch));
+      snprintf(buf3, sizeof(buf3), "%s has accepted %s's contract.", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      send_docwagon_chat_message(ch, buf3, FALSE);
       d->character->received_docwagon_ack_from.insert(std::make_pair(GET_IDNUM_EVEN_IF_PROJECTING(ch), TRUE));
-      mudlog_vfprintf(ch, LOG_SYSLOG, "%s has accepted %s's DocWagon contract.", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      mudlog_vfprintf(ch, LOG_SYSLOG, "%s has ^gaccepted^n %s's DocWagon contract.", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
       return;
     }
     // They have already received a message. WITHDRAW is valid, ACCEPT is not.
@@ -471,6 +484,8 @@ ACMD(do_docwagon) {
       }
       send_to_char("You anonymously notify them that you're no longer on the way.\r\n", ch);
       send_to_char(d->character, "Your DocWagon modulator buzzes-- a player with the DocWagon ID %5d is no longer able to respond to your contract.\r\n", get_docwagon_faux_id(ch));
+      snprintf(buf3, sizeof(buf3), "%s has ^rwithdrawn^n from %s's contract.", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
+      send_docwagon_chat_message(ch, buf3, FALSE);
       d->character->received_docwagon_ack_from.erase(d->character->received_docwagon_ack_from.find(GET_IDNUM_EVEN_IF_PROJECTING(ch)));
       mudlog_vfprintf(ch, LOG_SYSLOG, "%s has dropped %s's DocWagon contract (command).", GET_CHAR_NAME(ch), GET_CHAR_NAME(d->character));
       return;
@@ -487,4 +502,36 @@ ACMD(do_docwagon) {
   }
 
   send_to_char(ch, "Your DocWagon receiver can't find anyone in need of assistance named '%s^n'.\r\n", name);
+}
+
+void send_docwagon_chat_message(struct char_data *ch, const char *message, bool is_chat) {
+  for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next) {
+    struct char_data *plr = desc->original ? desc->original : desc->character;
+
+    if (!plr || IS_NPC(plr) || !plr->desc)
+      continue;
+
+    if (!AFF_FLAGGED(plr, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER) || !AWAKE(plr))
+      continue;
+
+    if (IS_IGNORING(plr, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, plr))
+      continue;
+
+    char message_buf[MAX_INPUT * 2];
+    strlcpy(message_buf, "^R[^WDocwagon Responders (OOC)^R]^n: ", sizeof(message_buf));
+
+    if (is_chat) {
+      char final_character = get_final_character_from_string(message);
+      snprintf(ENDOF(message_buf), sizeof(message_buf) - strlen(message_buf),
+               "%s sends, \"%s%s^n\"\r\n",
+               GET_CHAR_NAME(ch),
+               capitalize(message),
+               ispunct(final_character) ? (final_character == '^' ? "^." : "") : ".");
+    } else {
+      snprintf(ENDOF(message_buf), sizeof(message_buf) - strlen(message_buf), "%s^n\r\n", message);
+    }
+
+    send_to_char(message_buf, plr);
+    store_message_to_history(desc, COMM_CHANNEL_DOCWAGON_CHAT, str_dup(message_buf));
+  }
 }

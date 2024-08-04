@@ -2175,6 +2175,9 @@ void raw_message_history(struct char_data *ch, int channel, int quantity) {
     case COMM_CHANNEL_ALL:
       send_message_history_to_descriptor(ch->desc, channel, quantity, "seen across all channels");
       break;
+    case COMM_CHANNEL_DOCWAGON_CHAT:
+      send_message_history_to_descriptor(ch->desc, channel, quantity, "seen on the OOC Docwagon Chat channel");
+      break;
     default:
       snprintf(buf, sizeof(buf), "SYSERR: Unrecognized channel/subcmd %d provided to raw_message_history's channel switch.", channel);
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
