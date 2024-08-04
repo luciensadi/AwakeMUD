@@ -517,7 +517,7 @@ void send_docwagon_chat_message(struct char_data *ch, const char *message, bool 
     if (IS_IGNORING(plr, is_blocking_ic_interaction_from, ch) || IS_IGNORING(ch, is_blocking_ic_interaction_from, plr))
       continue;
 
-    char message_buf[MAX_INPUT * 2];
+    char message_buf[MAX_INPUT_LENGTH * 2];
     strlcpy(message_buf, "^R[^WDocwagon OOC^R]^n: ", sizeof(message_buf));
 
     if (is_chat) {
