@@ -33,10 +33,26 @@ bool has_vision(struct char_data *ch, int type, bool staff_override) {
   if (!_vision_prereqs_are_valid(ch, type, __func__))
     return FALSE;
 
-  // Riggers get thermo and low-light while rigging.
-  bool is_rigging = (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE));
-  if (is_rigging && (type == VISION_LOWLIGHT || type == VISION_THERMOGRAPHIC))
+  if (staff_override)
     return TRUE;
+
+  // Handle riggers.
+  struct veh_data *veh = ch->char_specials.rigging;
+  if (veh && (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))) {
+    switch (type) {
+      case VISION_NORMAL:
+      case VISION_LOWLIGHT:
+      case VISION_THERMOGRAPHIC:
+        // Vehicles have these sensors by default.
+        return TRUE;
+      case VISION_ULTRASONIC:
+        // Vehicles only have this if they have an ultrasonic module installed.
+        return veh->flags.IsSet(VFLAG_ULTRASOUND);
+      default:
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received unrecognized vision type to has_vision(%s, %d, %s).", GET_CHAR_NAME(ch), type, staff_override ? "T" : "F");
+        return FALSE;
+    }
+  }
 
   return ch->points.vision[type].HasAnythingSetAtAll();
 }
