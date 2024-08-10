@@ -4477,7 +4477,45 @@ ACMD(do_spells)
 
 ACMD(do_forget)
 {
-  FAILURE_CASE(!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED), "You can't forget spells until you leave CharGen.");
+  FAILURE_CASE(IS_NPC(ch), "NPCs can't use this command.");
+
+  if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    FAILURE_CASE(!GET_PLAYER_MEMORY(ch), "You haven't remembered any PCs yet.");
+
+    skip_spaces(&argument);
+
+    // Opposite of REMEMBER command.
+    for (struct remem *temp = GET_PLAYER_MEMORY(ch), *prev = NULL; temp; temp = temp->next) {
+      if (!str_cmp(argument, temp->mem)) {
+        send_to_char(ch, "You forget %s.\r\n", temp->mem);
+
+        // Remove entry from the list.
+        if (prev) {
+          prev->next = temp->next;
+        } else {
+          GET_PLAYER_MEMORY(ch) = temp->next;
+        }
+
+        // Purge the memory contents.
+        DELETE_AND_NULL_ARRAY(temp->mem);
+
+        // Delete the entry itself.
+        delete [] temp;
+
+        GET_MEMORY_DIRTY_BIT(ch) = TRUE;
+        return;
+      }
+
+      prev = temp;
+    }
+    send_to_char("Syntax: FORGET <full remembered name of PC>\r\n", ch);
+    send_to_char("You have memory of the following PCs:\r\n", ch);
+    for (struct remem *temp = GET_PLAYER_MEMORY(ch); temp; temp = temp->next)
+      send_to_char(ch, " %s^n\r\n", temp->mem);
+    return;
+  }
+
+  // In chargen, this lets you forget spells and refund the points.
   FAILURE_CASE(!GET_SPELLS(ch), "You don't have any spells to forget.");
   skip_spaces(&argument);
 
@@ -4485,7 +4523,7 @@ ACMD(do_forget)
    if (is_abbrev(argument, spell->name)) {
      struct spell_data *temp;
 
-     send_to_char(ch, "You forget %s.\r\n", spell->name);
+     send_to_char(ch, "You forget %s and receive a refund of %d force points.\r\n", spell->name, spell->force);
      GET_FORCE_POINTS(ch) += spell->force;
 
      REMOVE_FROM_LIST(spell, GET_SPELLS(ch), next);
