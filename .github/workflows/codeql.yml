@@ -81,6 +81,7 @@ jobs:
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
     - if: matrix.build-mode == 'manual'
       run: |
+        sudo apt update
         sudo apt install -y libboost-filesystem-dev libcurl4-openssl-dev 
         cd src
         echo 'const char *mysql_host =     "host"; \
