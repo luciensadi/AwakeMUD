@@ -3088,7 +3088,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict), force - (GET_IMPACT(vict) / 2));
           int dam = convert_damage(stage(success, basedamage));
           if (!AWAKE(vict)) {
-            act("$n's stumbles as they're splashed with water.", FALSE, vict, 0, 0, TO_ROOM);
+            act("$n stumbles as they're splashed with water.", FALSE, vict, 0, 0, TO_ROOM);
             send_to_char("You stumble back as the bolt of water connects.\r\n", vict);
           } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
             act("$n is knocked to the ground from the force of the rushing water.", FALSE, vict, 0, 0, TO_ROOM);

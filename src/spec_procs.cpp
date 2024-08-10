@@ -6190,7 +6190,8 @@ SPECIAL(Janis_Captive)
 {
   struct char_data *mob = (struct char_data *) me;
   if (CMD_IS("light") || CMD_IS("burn")) {
-    act("As $N brings the lighter close to $n the fumes from the petrol catch alight, quickly spreading around $n's body.", FALSE, mob, 0, ch, TO_ROOM);
+    act("As you bring the lighter close to $n the fumes from the petrol catch alight, quickly spreading around $n's body.", FALSE, mob, 0, ch, TO_VICT);
+    act("As $N brings the lighter close to $n the fumes from the petrol catch alight, quickly spreading around $n's body.", FALSE, mob, 0, ch, TO_NOTVICT);
     act("The girl at the back of the warehouse begins to giggle with glee as the captive's screams are quickly stopped as he succumbs to the flames.", FALSE, mob, 0, 0, TO_ROOM);
     check_quest_kill(ch, mob);
     obj_to_room(read_object(5034, VIRTUAL), mob->in_room);

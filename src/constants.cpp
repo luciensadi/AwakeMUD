@@ -2757,7 +2757,7 @@ const char *bio_types[] = {
   "Thermosense Organs",
   "Trauma Damper",
   "Custom NERPS Bioware",
-  "Erythropoitin",
+  "Erythropoietin",
   "Calcitonin",
   "Phenotypic Alteration (Bod)",
   "Phenotypic Alteration (Qui)",
