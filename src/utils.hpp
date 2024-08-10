@@ -1020,40 +1020,41 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_PART_BUILD_SUCCESSES_ROLLED(part)  (GET_OBJ_TIMER((part)))
 
 // ITEM_WEAPON convenience defines
-#define GET_WEAPON_POWER(weapon)               (GET_OBJ_VAL((weapon), 0))
-#define GET_WEAPON_DAMAGE_CODE(weapon)         (GET_OBJ_VAL((weapon), 1))
-#define GET_WEAPON_STR_BONUS(weapon)           (GET_OBJ_VAL((weapon), 2))
-#define GET_WEAPON_ATTACK_TYPE(weapon)         (GET_OBJ_VAL((weapon), 3))
-#define GET_WEAPON_SKILL(weapon)               (GET_OBJ_VAL((weapon), 4))
-#define GET_WEAPON_MAX_AMMO(weapon)            (GET_OBJ_VAL((weapon), 5))
-#define GET_WEAPON_REACH(weapon)               (GET_OBJ_VAL((weapon), 6))
-#define GET_WEAPON_ATTACH_TOP_VNUM(weapon)     (GET_OBJ_VAL((weapon), 7))
-#define GET_WEAPON_FOCUS_RATING(weapon)        (GET_OBJ_VAL((weapon), 7)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
-#define GET_WEAPON_GRENADE_TYPE(weapon)        (GET_OBJ_VAL((weapon), 7)) /* Grenades can't take attachments, so reusing attach is OK. */
-#define GET_WEAPON_ATTACH_BARREL_VNUM(weapon)  (GET_OBJ_VAL((weapon), 8))
-#define GET_WEAPON_FOCUS_BOND_STATUS(weapon)   (GET_OBJ_VAL((weapon), 8)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
-#define GET_WEAPON_ATTACH_UNDER_VNUM(weapon)   (GET_OBJ_VAL((weapon), 9))
-#define GET_WEAPON_FOCUS_BONDED_BY(weapon)     (GET_OBJ_VAL((weapon), 9)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
-#define GET_WEAPON_POSSIBLE_FIREMODES(weapon)  (GET_OBJ_VAL((weapon), 10))
-#define GET_WEAPON_FOCUS_GEAS(weapon)          (GET_OBJ_VAL((weapon), 10)) /* Only melee weapons can be weapon foci, same slot as GET_FOCUS_GEAS */
-#define GET_WEAPON_FIREMODE(weapon)            (GET_OBJ_VAL((weapon), 11))
-#define GET_WEAPON_SOULBOND(weapon)            (GET_OBJ_VAL((weapon), 11)) /* Only melee weapon foci can be soulbound */
-#define GET_WEAPON_INTEGRAL_RECOIL_COMP(weap)  (GET_OBJ_ATTEMPT((weap)))
-#define GET_WEAPON_FULL_AUTO_COUNT(weapon)     (GET_OBJ_TIMER((weapon)))
-#define GET_WEAPON_ATTACH_LOC(weapon, loc)     (((loc) >= ACCESS_LOCATION_TOP && (loc) <= ACCESS_LOCATION_UNDER) ? \
-                                                    GET_OBJ_VAL((weapon), (loc)) : 0)
+#define GET_WEAPON_POWER(weapon)                 (GET_OBJ_VAL((weapon), 0))
+#define GET_WEAPON_DAMAGE_CODE(weapon)           (GET_OBJ_VAL((weapon), 1))
+#define GET_WEAPON_STR_BONUS(weapon)             (GET_OBJ_VAL((weapon), 2))
+#define GET_WEAPON_ATTACK_TYPE(weapon)           (GET_OBJ_VAL((weapon), 3) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_OBJ_VAL((weapon), 3))
+#define GET_WEAPON_ATTACK_TYPE_SETTABLE(weapon)  (GET_OBJ_VAL((weapon), 3))
+#define GET_WEAPON_SKILL(weapon)                 (GET_OBJ_VAL((weapon), 4))
+#define GET_WEAPON_MAX_AMMO(weapon)              (GET_OBJ_VAL((weapon), 5))
+#define GET_WEAPON_REACH(weapon)                 (GET_OBJ_VAL((weapon), 6))
+#define GET_WEAPON_ATTACH_TOP_VNUM(weapon)       (GET_OBJ_VAL((weapon), 7))
+#define GET_WEAPON_FOCUS_RATING(weapon)          (GET_OBJ_VAL((weapon), 7)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
+#define GET_WEAPON_GRENADE_TYPE(weapon)          (GET_OBJ_VAL((weapon), 7)) /* Grenades can't take attachments, so reusing attach is OK. */
+#define GET_WEAPON_ATTACH_BARREL_VNUM(weapon)    (GET_OBJ_VAL((weapon), 8))
+#define GET_WEAPON_FOCUS_BOND_STATUS(weapon)     (GET_OBJ_VAL((weapon), 8)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
+#define GET_WEAPON_ATTACH_UNDER_VNUM(weapon)     (GET_OBJ_VAL((weapon), 9))
+#define GET_WEAPON_FOCUS_BONDED_BY(weapon)       (GET_OBJ_VAL((weapon), 9)) /* Only melee weapons can be weapon foci, so reusing attach is OK. */
+#define GET_WEAPON_POSSIBLE_FIREMODES(weapon)    (GET_OBJ_VAL((weapon), 10))
+#define GET_WEAPON_FOCUS_GEAS(weapon)            (GET_OBJ_VAL((weapon), 10)) /* Only melee weapons can be weapon foci, same slot as GET_FOCUS_GEAS */
+#define GET_WEAPON_FIREMODE(weapon)              (GET_OBJ_VAL((weapon), 11))
+#define GET_WEAPON_SOULBOND(weapon)              (GET_OBJ_VAL((weapon), 11)) /* Only melee weapon foci can be soulbound */
+#define GET_WEAPON_INTEGRAL_RECOIL_COMP(weap)    (GET_OBJ_ATTEMPT((weap)))
+#define GET_WEAPON_FULL_AUTO_COUNT(weapon)       (GET_OBJ_TIMER((weapon)))
+#define GET_WEAPON_ATTACH_LOC(weapon, loc)       (((loc) >= ACCESS_LOCATION_TOP && (loc) <= ACCESS_LOCATION_UNDER) ? \
+                                                      GET_OBJ_VAL((weapon), (loc)) : 0)
 
-#define GUN_IS_CYBER_GYRO_MOUNTABLE(gun)       (GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_MMG && GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_HMG && GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_CANNON)
-#define GUN_IS_HEAVY_WEAPON(gun)               (GET_WEAPON_SKILL((gun)) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL((gun)) <= SKILL_ARTILLERY)
+#define GUN_IS_CYBER_GYRO_MOUNTABLE(gun)         (GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_MMG && GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_HMG && GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_CANNON)
+#define GUN_IS_HEAVY_WEAPON(gun)                 (GET_WEAPON_SKILL((gun)) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL((gun)) <= SKILL_ARTILLERY)
 
-#define WEAPON_IS_FOCUS(obj)                   (GET_OBJ_TYPE((obj)) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE((obj))) && GET_WEAPON_FOCUS_RATING((obj)) > 0)
+#define WEAPON_IS_FOCUS(obj)                     (GET_OBJ_TYPE((obj)) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE((obj))) && GET_WEAPON_FOCUS_RATING((obj)) > 0)
 bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 
-#define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << (mode)))
-#define WEAPON_IS_SS(eq)  (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_SS)
-#define WEAPON_IS_SA(eq)    (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_SA)
-#define WEAPON_IS_BF(eq)   (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_BF)
-#define WEAPON_IS_FA(eq)    (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_FA)
+#define WEAPON_CAN_USE_FIREMODE(weapon, mode)    (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << (mode)))
+#define WEAPON_IS_SS(eq)                         (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_SS)
+#define WEAPON_IS_SA(eq)                         (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_SA)
+#define WEAPON_IS_BF(eq)                         (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_BF)
+#define WEAPON_IS_FA(eq)                         (GET_OBJ_TYPE(eq) == ITEM_WEAPON && GET_OBJ_VAL(eq, 11) == MODE_FA)
 
 // ITEM_FIREWEAPON convenience defines
 

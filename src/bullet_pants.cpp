@@ -500,17 +500,28 @@ const char *get_ammo_representation(int weapon, int ammotype, int quantity, stru
   static char results_buf[500];
 
   if (weapon < START_OF_AMMO_USING_WEAPONS || weapon > END_OF_AMMO_USING_WEAPONS) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_ammo_representation: %d is out of bounds for weapon type.", weapon);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_ammo_representation(%d, %d, %d, ch): %d is out of bounds for weapon type (expected %d <= X <= %d).",
+                    weapon, ammotype, quantity,
+                    weapon,
+                    START_OF_AMMO_USING_WEAPONS,
+                    END_OF_AMMO_USING_WEAPONS);
     return "ERROR_BAD_WEAPON_TYPE";
   }
 
-  if (ammotype < 0 || ammotype >= NUM_AMMOTYPES) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_ammo_representation: %d is out of bounds for ammo type.", ammotype);
+  if (ammotype < AMMO_NORMAL || ammotype >= NUM_AMMOTYPES) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_ammo_representation(%d, %d, %d, ch): %d is out of bounds for ammo type (expected %d <= X < %d).",
+                    weapon, ammotype, quantity,
+                    ammotype,
+                    AMMO_NORMAL,
+                    NUM_AMMOTYPES);
     return "ERROR_BAD_AMMO_TYPE";
   }
 
   if (quantity < 0 || quantity > MAX_NUMBER_OF_BULLETS_IN_PANTS) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_ammo_representation: %d is out of bounds for quantity.", quantity);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: get_ammo_representation(%d, %d, %d, ch): %d is out of bounds for quantity (expected 0 <= X <= %d)",
+                    weapon, ammotype, quantity,
+                    quantity,
+                    MAX_NUMBER_OF_BULLETS_IN_PANTS);
     return "ERROR_TOO_MANY";
   }
 
@@ -629,6 +640,11 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
     return FALSE;
   }
 
+  if (!weapon || GET_OBJ_TYPE(weapon) != ITEM_WEAPON) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Non-weapon %s passed to reload_weapon_from_bulletpants(ch, obj, %d)", GET_OBJ_NAME(weapon), ammotype);
+    return FALSE;
+  }
+
   if ((ammotype < AMMO_NORMAL || ammotype >= NUM_AMMOTYPES) && ammotype != -1) {
     snprintf(buf, sizeof(buf), "SYSERR: Ammotype %d out of bounds in reload_weapon_from_bulletpants.", ammotype);
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
@@ -641,14 +657,12 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
     return FALSE;
   }
 
-  int weapon_attack_type = GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(weapon);
-
   // Ensure it has a magazine.
   if (!(magazine = weapon->contains)) {
     magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
     // Set the max ammo and weapon type here.
     GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(weapon);
-    GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = weapon_attack_type;
+    GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(weapon);
 
     // No specified ammotype means 'reload with whatever's in the gun'. In this case, nothing was there, so we go with whatever we have available.
     if (ammotype == -1) {
@@ -657,7 +671,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
 
       // Iterate through all ammo types and stop on the first one we have.
       for (int am = AMMO_NORMAL; am < NUM_AMMOTYPES; am++) {
-        if (GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon_attack_type, am) > 0) {
+        if (GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), am) > 0) {
           GET_MAGAZINE_AMMO_TYPE(magazine) = am;
           break;
         }
@@ -687,7 +701,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
   if (ammotype == -1)
     ammotype = GET_MAGAZINE_AMMO_TYPE(magazine);
 
-  int weapontype = GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_MACHINE_PISTOL;
+  int weapontype = GET_WEAPON_ATTACK_TYPE(weapon);
 
   int have_ammo_quantity = GET_BULLETPANTS_AMMO_AMOUNT(ch, weapontype, ammotype);
 

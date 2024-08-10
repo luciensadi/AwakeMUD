@@ -1665,7 +1665,7 @@ ACMD(do_reload)
 
       ammo = get_mount_ammo(m);
 
-      int weapontype = GET_WEAPON_ATTACK_TYPE(gun) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(gun);
+      int weapontype = GET_WEAPON_ATTACK_TYPE(gun);
       ammotype = ammo ? GET_AMMOBOX_TYPE(ammo) : AMMO_NORMAL;
       int max = GET_WEAPON_MAX_AMMO(gun) * MOUNTED_GUN_AMMO_CAPACITY_MULTIPLIER;
 
@@ -1797,7 +1797,8 @@ ACMD(do_reload)
 
   if (GET_OBJ_TYPE(gun) != ITEM_WEAPON
       || !IS_GUN(GET_WEAPON_ATTACK_TYPE(gun))
-      || GET_WEAPON_MAX_AMMO(gun) <= 0) {
+      || GET_WEAPON_MAX_AMMO(gun) <= 0)
+  {
     send_to_char(ch, "%s is not a reloadable weapon!\r\n", capitalize(GET_OBJ_NAME(gun)));
     return;
   }
@@ -4801,7 +4802,7 @@ ACMD(do_ammo) {
       send_to_char(ch, "Primary: %d / %d %s.\r\n",
                    MIN(GET_WEAPON_MAX_AMMO(primary), GET_MAGAZINE_AMMO_COUNT(primary->contains)),
                    GET_OBJ_VAL(primary, 5),
-                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(primary) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(primary),
+                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(primary),
                                            GET_MAGAZINE_AMMO_TYPE(primary->contains),
                                            GET_MAGAZINE_AMMO_COUNT(primary->contains), ch)
                  );
@@ -4819,7 +4820,7 @@ ACMD(do_ammo) {
       send_to_char(ch, "Secondary: %d / %d %s.\r\n",
                    MIN(GET_WEAPON_MAX_AMMO(secondary), GET_OBJ_VAL(secondary->contains, 9)),
                    GET_WEAPON_MAX_AMMO(secondary),
-                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(secondary) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(secondary),
+                   get_ammo_representation(GET_WEAPON_ATTACK_TYPE(secondary),
                                            GET_MAGAZINE_AMMO_TYPE(secondary->contains),
                                            GET_MAGAZINE_AMMO_COUNT(secondary->contains), ch)
                  );

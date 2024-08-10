@@ -2330,54 +2330,54 @@ void parse_object(File &fl, long nr)
         if (GET_WEAPON_ATTACK_TYPE(obj) > MAX_WEAP)
           switch (GET_WEAPON_SKILL(obj)) {
             case SKILL_EDGED_WEAPONS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_EDGED;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_EDGED;
               is_melee = TRUE;
               break;
             case SKILL_POLE_ARMS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_POLEARM;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_POLEARM;
               is_melee = TRUE;
               break;
             case SKILL_WHIPS_FLAILS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_WHIP;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_WHIP;
               is_melee = TRUE;
               break;
             case SKILL_CLUBS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CLUB;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_CLUB;
               is_melee = TRUE;
               break;
             case SKILL_UNARMED_COMBAT:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_GLOVE;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_GLOVE;
               is_melee = TRUE;
               break;
             case SKILL_PISTOLS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_HEAVY_PISTOL;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_HEAVY_PISTOL;
               break;
             case SKILL_RIFLES:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SPORT_RIFLE;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_SPORT_RIFLE;
               break;
             case SKILL_SHOTGUNS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SHOTGUN;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_SHOTGUN;
               break;
             case SKILL_ASSAULT_RIFLES:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_ASSAULT_RIFLE;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_ASSAULT_RIFLE;
               break;
             case SKILL_SMG:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_SMG;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_SMG;
               break;
             case SKILL_GRENADE_LAUNCHERS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_GREN_LAUNCHER;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_GREN_LAUNCHER;
               break;
             case SKILL_MISSILE_LAUNCHERS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_MISS_LAUNCHER;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_MISS_LAUNCHER;
               break;
             case SKILL_TASERS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_TASER;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_TASER;
               break;
             case SKILL_MACHINE_GUNS:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_LMG;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_LMG;
               break;
             case SKILL_ASSAULT_CANNON:
-              GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CANNON;
+              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_CANNON;
               break;
           }
 
@@ -4908,13 +4908,11 @@ void reset_zone(int zone, int reboot)
                   outermost = outermost->in_obj;
                 }
 
-                int weapon_attack_type = GET_WEAPON_ATTACK_TYPE(obj) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(obj);
-
                 struct char_data *temp_ch = NULL;
                 if ((temp_ch = outermost->carried_by) || (temp_ch = outermost->worn_by)) {
                   // Reload from their ammo.
                   for (int index = 0; index < NUM_AMMOTYPES; index++) {
-                    if (GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, weapon_attack_type, npc_ammo_usage_preferences[index]) > 0) {
+                    if (GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
                       reload_weapon_from_bulletpants(temp_ch, obj, npc_ammo_usage_preferences[index]);
                       break;
                     }
@@ -4922,7 +4920,7 @@ void reset_zone(int zone, int reboot)
 
                   // If they failed to reload, they have no ammo. Give them some normal and reload with it.
                   if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
-                    GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, weapon_attack_type, AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+                    GET_BULLETPANTS_AMMO_AMOUNT(temp_ch, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
                     reload_weapon_from_bulletpants(temp_ch, obj, AMMO_NORMAL);
 
                     // Decrement their debris-- we want this reload to not create clutter.
@@ -5006,12 +5004,11 @@ void reset_zone(int zone, int reboot)
               // If it's a weapon, reload it.
               if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
                   && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
-                  && GET_WEAPON_MAX_AMMO(obj) != -1) {
-                int weapon_attack_type = GET_WEAPON_ATTACK_TYPE(obj) == WEAP_MACHINE_PISTOL ? WEAP_LIGHT_PISTOL : GET_WEAPON_ATTACK_TYPE(obj);
-
+                  && GET_WEAPON_MAX_AMMO(obj) != -1) 
+              {
                 // Reload from their ammo.
                 for (int index = 0; index < NUM_AMMOTYPES; index++) {
-                  if (GET_BULLETPANTS_AMMO_AMOUNT(mob, weapon_attack_type, npc_ammo_usage_preferences[index]) > 0) {
+                  if (GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), npc_ammo_usage_preferences[index]) > 0) {
                     reload_weapon_from_bulletpants(mob, obj, npc_ammo_usage_preferences[index]);
                     break;
                   }
@@ -5019,7 +5016,7 @@ void reset_zone(int zone, int reboot)
 
                 // If they failed to reload, they have no ammo. Give them some normal and reload with it.
                 if (!obj->contains || GET_MAGAZINE_AMMO_COUNT(obj->contains) == 0) {
-                  GET_BULLETPANTS_AMMO_AMOUNT(mob, weapon_attack_type, AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
+                  GET_BULLETPANTS_AMMO_AMOUNT(mob, GET_WEAPON_ATTACK_TYPE(obj), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(obj) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
                   reload_weapon_from_bulletpants(mob, obj, AMMO_NORMAL);
 
                   // Decrement their debris-- we want this reload to not create clutter.

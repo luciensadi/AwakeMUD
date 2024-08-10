@@ -5796,7 +5796,7 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
 
       send_to_char(ch, "\r\nA dispassionate female voice states, \"^cEnforcement mode: Non-Lethal Paralyzer. Please aim calmly and subdue the target.^n\"\r\n");
       GET_OBJ_TYPE(obj) = ITEM_WEAPON;
-      GET_WEAPON_ATTACK_TYPE(obj) = WEAP_TASER;
+      GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_TASER;
       GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
       GET_WEAPON_POWER(obj) = 50;
       break;
@@ -5815,7 +5815,7 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
 
       send_to_char(ch, "\r\nA dispassionate female voice states, \"^cEnforcement mode: Lethal Eliminator. Please aim carefully and eliminate the target.^n\"\r\n");
       GET_OBJ_TYPE(obj) = ITEM_WEAPON;
-      GET_WEAPON_ATTACK_TYPE(obj) = WEAP_HEAVY_PISTOL;
+      GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_HEAVY_PISTOL;
       GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
       GET_WEAPON_POWER(obj) = 100;
       break;
@@ -5830,7 +5830,7 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
 
       send_to_char(ch, "\r\nA dispassionate female voice states, \"^cEnforcement mode: Destroy Decomposer. Target will be completely annihilated. Please proceed with maximum caution.^n\"\r\n");
       GET_OBJ_TYPE(obj) = ITEM_WEAPON;
-      GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CANNON;
+      GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_CANNON;
       GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
       GET_WEAPON_POWER(obj) = 100;
       break;
