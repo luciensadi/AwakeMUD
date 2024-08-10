@@ -6926,7 +6926,7 @@ void price_cyber(struct obj_data *obj)
     case CYB_FIN:
       GET_CYBERWARE_RATING(obj) = 0;
       GET_CYBERWARE_ESSENCE_COST(obj) = 30;
-      GET_OBJ_COST(obj) = 105000;
+      GET_OBJ_COST(obj) = 10500;
       GET_OBJ_AVAILTN(obj) = 5;
       GET_OBJ_AVAILDAY(obj) = 2;
       break;
