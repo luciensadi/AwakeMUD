@@ -3319,7 +3319,9 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
 
   // If this is an NPC, have their friends help.
   if (ch != victim && victim->in_room && IS_NPC(victim) && !IS_PROJECT(victim)) {
-    for (struct char_data *helper = victim->in_room->people; helper; helper = helper->next_in_room) {
+    for (struct char_data *helper = victim->in_room->people, *next_helper = NULL; helper; helper = next_helper) {
+      // Prevent infinite flee storms from a wimpy running into a room with another wimpy, etc.
+      next_helper = helper->next_in_room;
       mobact_process_single_helper(helper, victim, FALSE);
     }
   }
