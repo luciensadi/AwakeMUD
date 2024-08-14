@@ -2390,8 +2390,31 @@ void docwagon_retrieve(struct char_data *ch) {
   // Extinguish their fire, if any.
   ch->points.fire[0] = 0;
 
+  if (PLR_FLAGGED(ch, PLR_IN_CHARGEN)) {
+    // Restore them to full health exactly where they're standing.
+    send_to_char(ch, "A DocWagon employee hustles in and gets you patched up in no time. You can continue with character generation now.\r\n");
+    GET_PHYSICAL(ch) = 1000;
+    GET_MENTAL(ch) = 1000;
+    GET_POS(ch) = POS_STANDING;
+
+    for (struct char_data *tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people; tmp; tmp = ch->in_room ? ch->in_room->people : ch->in_veh->people) {
+      if (FIGHTING(tmp) == ch) {
+        stop_fighting(tmp);
+      }
+      if (IS_NPC(tmp)) {
+        GET_MOBALERT(tmp) = MALERT_CALM;
+        GET_MOBALERTTIME(tmp) = 0;
+      }
+    }
+
+    return;
+  }
+
+  // Not in chargen? Send them to a recovery room.
+
   send_to_char(ch, "\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n",
                GET_JURISDICTION(room) == JURISDICTION_SECRET ? "helpful passerby" : "DocWagon");
+
   char_from_room(ch);
   char_to_room(ch, get_jurisdiction_docwagon_room(GET_JURISDICTION(room)));
 
