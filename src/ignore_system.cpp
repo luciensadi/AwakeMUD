@@ -153,7 +153,7 @@ bool IgnoreData::toggle_blocking_oocs(long vict_idnum, const char *vict_name, in
     _remove_ignore_bit_for(IGNORE_BIT_OOC_CHANNELS, vict_idnum);
     return FALSE;
   } else {
-    SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer see OOC channel messages (ex: ooc, newbie, etc) from %s.", vict_name);
+    SEND_TO_CH_IF_NOT_SILENT(ch, "You will no longer see OOC channel messages (ex: ooc, questions, etc) from %s.", vict_name);
     if (!is_blocking_osays_from(vict_idnum)) {
       SEND_TO_CH_IF_NOT_SILENT(ch, " If you also want to block perception of their OSAYs, use 'ignore %s osays'.", vict_name);
     }

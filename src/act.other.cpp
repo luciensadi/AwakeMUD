@@ -1120,8 +1120,8 @@ const char *tog_messages[][2] = {
                              "You are now deaf to radio communications.\r\n"},
                             {"Nohassle disabled.\r\n",
                              "Nohassle enabled.\r\n"},                          // 10
-                            {"You can now hear the newbie channel again.\r\n",
-                             "You are now deaf to the newbie channel.\r\n"},
+                            {"You can now hear the questions channel again.\r\n",
+                             "You are now deaf to the questions channel.\r\n"},
                             {"You can now hear shouts.\r\n",
                              "You are now deaf to shouts.\r\n"},
                             {"You can now hear tells.\r\n",
@@ -1345,7 +1345,7 @@ ACMD(do_toggle)
       mode = 13;
       result = 1;
     } else if (is_abbrev(argument, "hired") || is_abbrev(argument, "quest")) {
-      result = PRF_TOG_CHK(ch, PRF_QUEST);
+      result = PRF_TOG_CHK(ch, PRF_HIRED);
       mode = 14;
     } else if (is_abbrev(argument, "rolls") && (IS_SENATOR(ch) || _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ || PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS))) {
       result = PRF_TOG_CHK(ch, PRF_ROLLS);

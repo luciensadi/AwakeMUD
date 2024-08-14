@@ -2286,7 +2286,8 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
            * identify it from the mud - everything prior to 1.1 claims
            * to be version 1.0, so we just don't know.
            */
-          pProtocol->b256Support = eSOMETIMES;
+          pProtocol->b256Support = eYES;
+          pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt = 1;
 
           if ( strlen(pClientName) > 7 )
           {
@@ -2295,13 +2296,6 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
             pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString = AllocString(pClientName);
             delete [] pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString;
             pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString = AllocString(pClientName+7);
-
-            /* Mudlet 1.1 and later supports 256 colours. */
-            if ( strcmp(pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString, "1.1") >= 0 )
-            {
-              pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt = 1;
-              pProtocol->b256Support = eYES;
-            }
           }
         }
         else if ( MatchString(pClientName, "EMACS-RINZAI") )

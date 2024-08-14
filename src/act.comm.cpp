@@ -1221,7 +1221,7 @@ ACMD(do_gen_comm)
   if (!ch->desc && !MOB_FLAGGED(ch, MOB_SPEC))
     return;
 
-  if(PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && subcmd != SCMD_NEWBIE) {
+  if(PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && subcmd != SCMD_QUESTION) {
     send_to_char(ch, "You must be Authorized to use that command. Until then, you can use the ^WQUESTION^n channel if you need help.\r\n");
     return;
   }
@@ -1235,7 +1235,7 @@ ACMD(do_gen_comm)
   }
 
   // off/on toggles
-  if (subcmd == SCMD_NEWBIE || subcmd == SCMD_OOC) {
+  if (subcmd == SCMD_QUESTION || subcmd == SCMD_OOC) {
     if (!str_cmp(argument, "off") || !str_cmp(argument, "disable") || !str_cmp(argument, "mute")) {
       send_to_char(ch, "OK, your %s channel is now disabled. You can re-enable it with ^W%s ON^n.\r\n", com_msgs[subcmd][5], com_msgs[subcmd][6]);
       PRF_FLAGS(ch).SetBit(channels[subcmd]);
@@ -1275,7 +1275,7 @@ ACMD(do_gen_comm)
 
   if ((subcmd == SCMD_OOC && PLR_FLAGGED(ch, PLR_NOOOC))
        || (subcmd == SCMD_RPETALK && !(PLR_FLAGGED(ch, PLR_RPE) || IS_SENATOR(ch)))
-       || (subcmd == SCMD_HIREDTALK && !(PRF_FLAGGED(ch, PRF_QUEST) || IS_SENATOR(ch)))) {
+       || (subcmd == SCMD_HIREDTALK && !(PRF_FLAGGED(ch, PRF_HIRED) || IS_SENATOR(ch)))) {
     send_to_char(com_msgs[subcmd][0], ch);
     return;
   }
@@ -1292,7 +1292,7 @@ ACMD(do_gen_comm)
     return;
   }
 
-  if (subcmd == SCMD_NEWBIE) {
+  if (subcmd == SCMD_QUESTION) {
     // Remove the doubled dollar signs.
     delete_doubledollar(argument);
 
@@ -1508,7 +1508,7 @@ ACMD(do_gen_comm)
     snprintf(buf, sizeof(buf), "%s%s |]Question[| %s^n\r\n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), capitalize(argument));
     send_to_char(buf, ch);
 
-    channel = COMM_CHANNEL_NEWBIE;
+    channel = COMM_CHANNEL_QUESTIONS;
     store_message_to_history(ch->desc, channel, buf);
   }
 
@@ -1538,7 +1538,7 @@ ACMD(do_gen_comm)
           continue;
 
         break;
-      case SCMD_NEWBIE:
+      case SCMD_QUESTION:
         // Newbie can be disabled or muted.
         if (PRF_FLAGGED(i->character, PRF_NOQUESTIONS) || PLR_FLAGGED(i->character, PLR_QUESTIONS_MUTED))
           continue;
@@ -1560,7 +1560,7 @@ ACMD(do_gen_comm)
         break;
       case SCMD_HIREDTALK:
         // Hired talk only shows up to hired members.
-        if (!(PRF_FLAGGED(i->character, PRF_QUEST) || IS_SENATOR(i->character)))
+        if (!(PRF_FLAGGED(i->character, PRF_HIRED) || IS_SENATOR(i->character)))
           continue;
 
         // Skip anyone who's ignored the speaker.
@@ -1585,13 +1585,13 @@ ACMD(do_gen_comm)
         !PLR_FLAGS(i->character).AreAnySet(PLR_EDITING, ENDBIT) &&
         !IS_PROJECT(i->character) &&
         !(ROOM_FLAGGED(get_ch_in_room(i->character), ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT)) {
-      if (subcmd == SCMD_NEWBIE && !(PLR_FLAGGED(i->character, PLR_NEWBIE) ||
+      if (subcmd == SCMD_QUESTION && !(PLR_FLAGGED(i->character, PLR_NEWBIE) ||
                                      IS_SENATOR(i->character) || PRF_FLAGGED(i->character, PRF_NEWBIEHELPER)))
         continue;
       else if (subcmd == SCMD_RPETALK && !(PLR_FLAGGED(i->character, PLR_RPE) ||
                                            IS_SENATOR(i->character)))
         continue;
-      else if (subcmd == SCMD_HIREDTALK && !(PRF_FLAGGED(i->character, PRF_QUEST) ||
+      else if (subcmd == SCMD_HIREDTALK && !(PRF_FLAGGED(i->character, PRF_HIRED) ||
                                              IS_SENATOR(i->character)))
         continue;
       else {
@@ -2130,7 +2130,7 @@ void raw_message_history(struct char_data *ch, int channel, int quantity) {
     case COMM_CHANNEL_HIRED:
       send_message_history_to_descriptor(ch->desc, channel, quantity, "heard over the Hired Talk channel");
       break;
-    case COMM_CHANNEL_NEWBIE:
+    case COMM_CHANNEL_QUESTIONS:
       send_message_history_to_descriptor(ch->desc, channel, quantity, "seen on the Question channel");
       break;
     case COMM_CHANNEL_OOC:

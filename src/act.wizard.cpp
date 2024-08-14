@@ -1685,7 +1685,10 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Multiplier: ^c%.2f^n\r\n", (float) GET_CHAR_MULTIPLIER(k) / 100);
     }
     if (access_level(ch, LVL_VICEPRES)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n\r\n", GET_EMAIL(k));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n", GET_EMAIL(k));
+      if (ch->desc && ch->desc->pProtocol && ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID] && ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; Current Client: ^c%s^n\r\n", ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString);
+      }
     }
     if (access_level(ch, LVL_FIXER)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "ShotsFired: ^c%d^n, ShotsTriggered: ^c%d^n\r\n", SHOTS_FIRED(k), SHOTS_TRIGGERED(k));
@@ -5937,7 +5940,7 @@ ACMD(do_set)
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_RPE);
     break;
   case 64:
-    SET_OR_REMOVE(PRF_FLAGS(vict), PRF_QUEST);
+    SET_OR_REMOVE(PRF_FLAGS(vict), PRF_HIRED);
     break;
   case 65:
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_QUESTOR);

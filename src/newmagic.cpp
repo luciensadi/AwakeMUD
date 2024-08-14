@@ -916,7 +916,7 @@ void magic_perception(struct char_data *ch, int force, int spell)
         act("You notice $n manipulating the astral plane.", FALSE, ch, 0, vict, TO_VICT);
       else act("You notice $n performing magic.", TRUE, ch, 0, vict, TO_VICT);
 
-      if (IS_NPC(vict) && !IS_NPC(ch)) {
+      if (IS_NPNPC(vict) && !IS_NPC(ch)) {
         int alert_threshold = GET_SECURITY_LEVEL(get_ch_in_room(vict)) * 5;
 
         if (mob_is_aggressive(vict, TRUE) || MOB_FLAGGED(vict, MOB_GUARD)) {
@@ -6884,7 +6884,7 @@ ACMD(do_think)
       if (viewer == ch || !AWAKE(viewer))
         continue;
 
-      if (access_level(viewer, LVL_FIXER) || (PRF_FLAGGED(viewer, PRF_QUESTOR) && PRF_FLAGGED(ch, PRF_QUEST))) {
+      if (access_level(viewer, LVL_FIXER) || (PRF_FLAGGED(viewer, PRF_QUESTOR) && PRF_FLAGGED(ch, PRF_HIRED))) {
         send_to_char(viewer, "^LOOC Info: %s thinks to %s, \"%s^n\"^n\r\n",
                      GET_CHAR_NAME(ch),
                      GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL ? "themselves" : (GET_PRONOUNS(ch) == PRONOUNS_MASCULINE ? "himself" : "herself"),

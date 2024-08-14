@@ -1548,8 +1548,8 @@ SPECIAL(johnson)
     return FALSE;
   }
 
-  if (PRF_FLAGGED(ch, PRF_QUEST)) {
-    send_to_char("You can't take autoruns while questing-- TOGGLE QUEST to disable your questing flag, then try again.\r\n", ch);
+  if (PRF_FLAGGED(ch, PRF_HIRED)) {
+    send_to_char("You can't take autoruns while hired for a player run-- TOGGLE HIRED to disable your hired flag, then try again.\r\n", ch);
     return FALSE;
   }
 

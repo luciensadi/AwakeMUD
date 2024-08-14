@@ -18,7 +18,7 @@ extern int isname(const char *str, const char *namelist);
 const char *get_char_representation_for_docwagon(struct char_data *vict, struct char_data *viewer);
 void send_docwagon_chat_message(struct char_data *ch, const char *message, bool is_chat);
 
-#define IS_VALID_POTENTIAL_RESCUER(plr) (GET_LEVEL(plr) == LVL_MORTAL && plr->char_specials.timer < 5 && !PRF_FLAGGED(plr, PRF_AFK) && !PRF_FLAGGED(plr, PRF_QUEST))
+#define IS_VALID_POTENTIAL_RESCUER(plr) (GET_LEVEL(plr) == LVL_MORTAL && plr->char_specials.timer < 5 && !PRF_FLAGGED(plr, PRF_AFK) && !PRF_FLAGGED(plr, PRF_HIRED))
 
 // Returns a 5-digit faux ID to help tell characters apart in anonymous messages.
 int get_docwagon_faux_id(struct char_data *ch) {

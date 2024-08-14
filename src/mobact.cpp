@@ -1039,18 +1039,22 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   int mob_stealth_dice = get_skill(mob, SKILL_STEALTH, mob_tn);
   int mob_stealth_successes = success_test(mob_stealth_dice, mob_tn);
 
-  if (!pc) {
-    mudlog("SYSERR: Received null PC to send_mob_aggression_warnings().", mob, LOG_SYSLOG, TRUE);
+  if (!pc || !mob) {
+    mudlog_vfprintf(mob, LOG_SYSLOG, "SYSERR: Received invalid parameters to send_mob_aggression_warnings(%s, %s).", GET_CHAR_NAME(pc), GET_CHAR_NAME(mob));
     return;
   }
 
-  if (!mob) {
-    mudlog("SYSERR: Received null mob to send_mob_aggression_warnings().", pc, LOG_SYSLOG, TRUE);
-    return;
-  }
+  bool is_mob = IS_MOB(mob);
+  bool is_npc = IS_NPC(mob);
+  bool is_npnpc = IS_NPNPC(mob);
 
-  if (!IS_MOB(mob)) {
-    mudlog_vfprintf(pc, LOG_SYSLOG, "SYSERR: Received non-mob mob to send_mob_aggression_warnings(%s, %s)!", GET_CHAR_NAME(pc), GET_CHAR_NAME(mob));
+  if (!is_mob || !is_npc || !is_npnpc) {
+    mudlog_vfprintf(pc, LOG_SYSLOG, "SYSERR: Received invalid mob to send_mob_aggression_warnings(%s, %s)! (mob: %s, npc: %s, npnpc: %s)",
+                    GET_CHAR_NAME(pc),
+                    GET_CHAR_NAME(mob),
+                    is_mob ? "T" : "F",
+                    is_npc ? "T" : "F",
+                    is_npnpc ? "T" : "F");
     return;
   }
 

@@ -1136,7 +1136,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
   *internal_ware = '\0';
   *visible_ware = '\0';
 
-  bool ch_can_see_all_ware = (access_level(ch, LVL_FIXER) || (PRF_FLAGGED(i, PRF_QUEST) && PRF_FLAGGED(ch, PRF_QUESTOR)));
+  bool ch_can_see_all_ware = (access_level(ch, LVL_FIXER) || (PRF_FLAGGED(i, PRF_HIRED) && PRF_FLAGGED(ch, PRF_QUESTOR)));
 
   for (tmp_obj = i->cyberware; tmp_obj; tmp_obj = tmp_obj->next_content) {
     bool ware_is_internal = TRUE, force_full_name = FALSE;
@@ -5865,7 +5865,7 @@ ACMD(do_who)
       if ((mortal && IS_SENATOR(tch)) ||
           (immort && !IS_SENATOR(tch)))
         continue;
-      if (quest && !PRF_FLAGGED(tch, PRF_QUEST))
+      if (quest && !PRF_FLAGGED(tch, PRF_HIRED))
         continue;
       if (pker && !PRF_FLAGGED(tch, PRF_PKER))
         continue;
@@ -5977,7 +5977,7 @@ ACMD(do_who)
         }
       }
 
-      if (!quest && PRF_FLAGGED(tch, PRF_QUEST))
+      if (!quest && PRF_FLAGGED(tch, PRF_HIRED))
         strlcat(buf1, " ^Y(hired)^n", sizeof(buf1));
       if (PRF_FLAGGED(tch, PRF_NOTELL))
         strlcat(buf1, " (!tell)", sizeof(buf1));

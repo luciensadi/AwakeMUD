@@ -417,7 +417,7 @@ enum {
 #define PRF_NOREPEAT                           9  /* No repetition of comm commands  */
 #define PRF_HARDCORE                           10
 #define PRF_PKER                               11 /* is able to pk/be pked        */
-#define PRF_QUEST                              12 /* On quest        */
+#define PRF_HIRED                              12 /* Participating in a prun */
 #define PRF_AFK                                13 /* Afk   */
 #define PRF_SUPPRESS_STAFF_RADIO               14 /* EMPTY SPACE, FILL ME! */
 #define PRF_UNUSED2_PLS_REPLACE                15 /* EMPTY SPACE, FILL ME!        15 */
@@ -2062,10 +2062,10 @@ enum {
 
 /* do_gen_com */
 #define SCMD_SHOUT      0
-#define SCMD_NEWBIE     1
+#define SCMD_QUESTION   1
 #define SCMD_OOC        2
-#define SCMD_RPETALK 3
-#define SCMD_HIREDTALK 4
+#define SCMD_RPETALK    3
+#define SCMD_HIREDTALK  4
 
 /* do_last */
 #define SCMD_LAST     0
@@ -2858,7 +2858,7 @@ enum {
 #define NUM_MESSAGES_TO_RETAIN     100
 
 #define COMM_CHANNEL_HIRED         0
-#define COMM_CHANNEL_NEWBIE        1
+#define COMM_CHANNEL_QUESTIONS     1
 #define COMM_CHANNEL_OOC           2
 #define COMM_CHANNEL_OSAYS         3
 #define COMM_CHANNEL_PAGES         4

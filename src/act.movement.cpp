@@ -503,7 +503,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     if (should_tch_see_chs_movement_message(tch, ch, TRUE, TRUE)) {
       act(buf2, TRUE, ch, 0, tch, TO_VICT);
 
-      if (IS_NPC(tch) && !FIGHTING(tch)) {
+      if (IS_NPNPC(tch) && !FIGHTING(tch)) {
         if (hunting_escortee(tch, ch)) {
           set_fighting(tch, ch);
         } else {
