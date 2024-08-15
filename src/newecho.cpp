@@ -756,6 +756,7 @@ ACMD(do_new_echo) {
   if ((pct_writer - storage_buf) >= (int) sizeof(storage_buf) - 1) {
     send_to_char("Sorry, your emote was too long. Please shorten it.\r\n", ch);
     NEW_ECHO_DEBUG("Bailed out: Emote too long.");
+    return;
   }
 
   // Null-terminate the buffer.
@@ -776,6 +777,7 @@ ACMD(do_new_echo) {
   if (quotes % 2 != 0) {
     send_to_char("There's an error in your emote: You need to close a quote.\r\n", ch);
     NEW_ECHO_DEBUG("Bailed out: Unclosed quote.");
+    return;
   }
 
   // Require that we have an equal number of open and close parens.
@@ -812,6 +814,7 @@ ACMD(do_new_echo) {
   if (!has_valid_content) {
     send_to_char("You can't begin your emote with blank space.\r\n", ch);
     NEW_ECHO_DEBUG("Bailed out: Begins with blank space.");
+    return;
   }
 
   // Scan the emote for language values. You can only use languages you know, and only up to certain word lengths.
