@@ -2470,13 +2470,11 @@ ACMD(do_customize)
 
   skip_spaces(&argument);
   if (!*argument) {
-     send_to_char(ch, "Usage: customize <persona/physical%s%s/background>, e.g. CUSTOMIZE PHYSICAL\r\n", 
-                  (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) && GET_ASPECT(ch) == ASPECT_FULL ? "/reflection" : "",
-                  GET_TRADITION(ch) == TRAD_HERMETIC || GET_TRADITION(ch) == TRAD_SHAMANIC ? "/magic" : "");
+     send_to_char(ch, "Usage: customize <persona/physical%s/background>, e.g. CUSTOMIZE PHYSICAL\r\n", 
+                  (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) && GET_ASPECT(ch) == ASPECT_FULL ? "/reflection" : "");
     return;
   }
-  if (is_abbrev(argument, "magic")) {}
-  else if (is_abbrev(argument, "physical"))
+  if (is_abbrev(argument, "physical"))
     STATE(ch->desc) = CON_FCUSTOMIZE;
   else if (is_abbrev(argument, "persona")) {
     // Error messages sent during call.
@@ -2487,14 +2485,15 @@ ACMD(do_customize)
   } else if (is_abbrev(argument, "reflection")) {
     if (!IS_SENATOR(ch) && GET_TRADITION(ch) != TRAD_SHAMANIC &&
         GET_TRADITION(ch) != TRAD_HERMETIC) {
-      send_to_char("And just why would you need to do that?!\r\n", ch);
+      send_to_char("Only awakened characters can customize their astral reflection.\r\n", ch);
       return;
     }
     STATE(ch->desc) = CON_ACUSTOMIZE;
   } else if (is_abbrev(argument, "background"))
     STATE(ch->desc) = CON_BCUSTOMIZE;
   else {
-    send_to_char("Usage: customize <persona/reflection/physical/background>\r\n", ch);
+    send_to_char(ch, "Usage: customize <persona/physical%s/background>, e.g. CUSTOMIZE PHYSICAL\r\n", 
+                 (GET_TRADITION(ch) == TRAD_SHAMANIC || GET_TRADITION(ch) == TRAD_HERMETIC) && GET_ASPECT(ch) == ASPECT_FULL ? "/reflection" : "");
     return;
   }
 
