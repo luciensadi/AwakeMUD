@@ -26,7 +26,7 @@ Previously tested on (it worked there in the past, but is not guaranteed to now)
 
 ## Installation (Ubuntu commands in parentheses)
 - Install [MySQL 5.7](https://dev.mysql.com/doc/refman/5.7/en/installing.html), including its development headers (ensure `mysql/mysql.h` exists in your path).
-- Install automake, make, gcc, g++, clang, libtool, autoconf, zlib1g-dev, libcurl4-openssl-dev, and libmysqlclient-dev if they're not already present (`sudo apt-get install automake make gcc g++ clang libtool autoconf zlib1g-dev libcurl4-openssl-dev libmysqlclient-dev`)
+- Install automake, make, gcc, g++, clang, libtool, autoconf, zlib1g-dev, libcurl4-openssl-dev, libmysqlclient-dev, and libboost if they're not already present (`sudo apt-get install automake make gcc g++ clang libtool autoconf zlib1g-dev libcurl4-openssl-dev libmysqlclient-dev libboost-all-dev`)
 - Install [libsodium](https://github.com/jedisct1/libsodium/releases) per their [installation instructions](https://download.libsodium.org/doc/installation). Version 1.0.16 is known to work, but higher versions should work as well.
 - Set your server's timezone to the West Coast to enable RP time to work correctly (`sudo timedatectl set-timezone America/Los_Angeles`)
 - Clone this repository to your machine. (`git clone https://github.com/luciensadi/AwakeMUD.git`)
@@ -41,7 +41,7 @@ Previously tested on (it worked there in the past, but is not guaranteed to now)
 
 ### Additional Cygwin Installation Notes
 - AwakeCE can run in Windows under Cygwin.
-- To build it, you need Cygwin (64bit) and Cygwin apps/libraries: clang, make, automake, mysql-server, mysql-client, libmariadb-devel, dos2unix, g++, libcrypt, libsodium, gcc, gdb. You'll want the debugs too. If it fails to install one of these, retry, or try another mirror; manual install is possible but not recommended.
+- To build it, you need Cygwin (64bit) and Cygwin apps/libraries: clang, make, automake, mysql-server, mysql-client, libmariadb-devel, dos2unix, g++, libcrypt, libsodium, gcc, gdb, Boost including filesystem. You'll want the debugs too. If it fails to install one of these, retry, or try another mirror; manual install is possible but not recommended.
 - In src/Makefile, comment out the OSX config, and uncomment the Cygwin config.
 - Make sure to initialize the DB with `mysql_install_db` if you haven't done so already. Start it with `mysqld_safe &`, then `mysql_secure_installation` and accept all the options.
 - You may need to `dos2unix gensql.sh` to get it to read properly before executing with `bash ./gensql.sh -s`.
