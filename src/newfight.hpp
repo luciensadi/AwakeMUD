@@ -36,18 +36,7 @@ struct cyberware_data {
     // Populate the data.
     for (struct obj_data *ware = ch->cyberware; ware; ware = ware->next_content) {
       if (GET_CYBERWARE_TYPE(ware) == CYB_BONELACING) {
-        switch (GET_CYBERWARE_LACING_TYPE(ware)) {
-          case BONE_PLASTIC:
-            bone_lacing_power = MAX(bone_lacing_power, 2);
-            break;
-          case BONE_ALUMINIUM:
-          case BONE_CERAMIC:
-            bone_lacing_power = MAX(bone_lacing_power, 3);
-            break;
-          case BONE_TITANIUM:
-            bone_lacing_power = MAX(bone_lacing_power, 4);
-            break;
-        }
+        bone_lacing_power = MAX(bone_lacing_power, bone_lacing_power_lookup[GET_CYBERWARE_LACING_TYPE(ware)]);
       } else if (GET_CYBERWARE_TYPE(ware) == CYB_ARMS) {
         cyberarms = TRUE;
         if (IS_SET(GET_CYBERWARE_FLAGS(ware), ARMS_MOD_GYROMOUNT) && !GET_CYBERWARE_IS_DISABLED(ware)) {
@@ -186,6 +175,7 @@ struct melee_combat_data {
   int tn;
   int dice;
   int successes;
+  int reach_modifier;
   bool is_monowhip;
   struct obj_data *riot_shield;
 
@@ -193,7 +183,7 @@ struct melee_combat_data {
 
   melee_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode, struct cyberware_data *cyber) :
     skill(0), skill_bonus(0), power(0), power_before_armor(0), dam_type(0), damage_level(0), is_physical(FALSE), tn(4), 
-    dice(0), successes(0), is_monowhip(FALSE), riot_shield(NULL)
+    dice(0), successes(0), reach_modifier(0), is_monowhip(FALSE), riot_shield(NULL)
   {
     assert(ch != NULL);
 
@@ -300,11 +290,13 @@ struct melee_combat_data {
         damage_level = LIGHT;
         dam_type = TYPE_BITE;
         is_physical = TRUE;
+        reach_modifier = -1;
       }
       else if (cyber->cyberhorns) {
         damage_level = MODERATE;
         dam_type = TYPE_GORE;
         is_physical = TRUE;
+        reach_modifier = -1;
       }
       else {
         snprintf(buf, sizeof(buf), "SYSERR in hit(): num_cyberweapons %d but no weapons found.", cyber->num_cyberweapons);

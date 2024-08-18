@@ -776,7 +776,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
     // Calculate the net reach.
-    int net_reach = GET_REACH(att->ch) - GET_REACH(def->ch);
+    int net_reach = (GET_REACH(att->ch) + att->melee->reach_modifier) - (GET_REACH(def->ch) + def->melee->reach_modifier);
 
     // Skilled NPCs get to switch to close combat mode at this time (those cheating bastards.)
     engage_close_combat_if_appropriate(att, def, net_reach);
@@ -818,7 +818,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         def->melee->modifiers[COMBAT_MOD_RIOT_SHIELD] += shield_tn_penalty;
       } else {
         // Otherwise, you only take a penalty if you have less than 2 reach.
-        if (GET_REACH(def->ch) < 2) {
+        if ((GET_REACH(def->ch) + def->melee->reach_modifier) < 2) {
           def->melee->modifiers[COMBAT_MOD_RIOT_SHIELD] += shield_tn_penalty;
         } 
         // 2+ reach? You get to ignore the shield, including its armor value.
@@ -826,7 +826,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
           remove_riot_shield_bonuses(att, def);
         }
 
-        if (GET_REACH(att->ch) < 2) {
+        if ((GET_REACH(att->ch) + att->melee->reach_modifier) < 2) {
           att->melee->modifiers[COMBAT_MOD_RIOT_SHIELD] += shield_tn_penalty;
         } else if (def->melee->riot_shield) {
           remove_riot_shield_bonuses(def, att);

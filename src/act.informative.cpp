@@ -3464,11 +3464,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
             strlcpy(flag_parse, " standard", sizeof(flag_parse));
           break;
         case CYB_TOOTHCOMPARTMENT:
-        if (GET_CYBERWARE_FLAGS(j))
-          strlcpy(flag_parse, " breakable", sizeof(flag_parse));
-        else
-          strlcpy(flag_parse, " storage", sizeof(flag_parse));
-        break;
+          if (GET_CYBERWARE_FLAGS(j))
+            strlcpy(flag_parse, " breakable", sizeof(flag_parse));
+          else
+            strlcpy(flag_parse, " storage", sizeof(flag_parse));
+          break;
         case CYB_HANDSPUR:
         case CYB_HANDBLADE:
         case CYB_FANGS:
@@ -3588,6 +3588,32 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
               flag_parse,
               decap_cyber_types[GET_CYBERWARE_TYPE(j)],
               ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
+      
+      switch (GET_CYBERWARE_TYPE(j)) {
+        case CYB_HANDRAZOR:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a damage code of ^c(STR%s)L^n.", IS_SET(GET_CYBERWARE_FLAGS(j), 1 << CYBERWEAPON_IMPROVED) ? "+2" : "");
+          break;
+        case CYB_FIN:
+        case CYB_CLIMBINGCLAWS:
+        case CYB_FOOTANCHOR:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a damage code of ^c(STR-1)L^n.");
+          break;
+        case CYB_FANGS:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a damage code of ^c(STR+1)L^n and ^c-1 reach^n.");
+          break;
+        case CYB_HORNS:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a damage code of ^c(STR+1)M^n and ^c-1 reach^n.");
+          break;
+        case CYB_HANDBLADE:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a damage code of ^c(STR+3)L^n.");
+          break;
+        case CYB_HANDSPUR:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt has a damage code of ^c(STR)M^n.");
+          break;
+        case CYB_BONELACING:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt converts your unarmed attacks to deal ^c(STR+%d)M^n damage.", bone_lacing_power_lookup[GET_CYBERWARE_LACING_TYPE(j)]);
+          break;
+      }
 
       if (GET_CYBERWARE_TYPE(j) == CYB_EYES) {
         char eye_bits[1000];
