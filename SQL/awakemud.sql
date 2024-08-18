@@ -198,8 +198,15 @@ CREATE TABLE `pfiles_bioware` (
   `Value9` int(2) default '0',
   `Value10` int(2) default '0',
   `Value11` int(2) default '0',
+  `Value12` int(2) default '0',
+  `Value13` int(2) default '0',
+  `Value14` int(2) default '0',
+  `Value15` int(2) default '0',
+  `Value16` int(2) default '0',
+  `Value17` int(2) default '0',
   `Restring` varchar(256),
   `graffiti` varchar(256),
+  `obj_idnum` bigint(5) unsigned default '0',
   KEY(`idnum`)
 );
 
@@ -221,9 +228,16 @@ CREATE TABLE `pfiles_cyberware` (
   `Value9` int(2) default '0',
   `Value10` int(2) default '0',
   `Value11` int(2) default '0',
+  `Value12` int(2) default '0',
+  `Value13` int(2) default '0',
+  `Value14` int(2) default '0',
+  `Value15` int(2) default '0',
+  `Value16` int(2) default '0',
+  `Value17` int(2) default '0',
   `Level` tinyint(1) unsigned default '0',
   `posi` smallint(1) unsigned default '0',
   `graffiti` varchar(256),
+  `obj_idnum` bigint(5) unsigned default '0',
   KEY(`idnum`)
 );
 
@@ -245,6 +259,12 @@ CREATE TABLE `pfiles_inv` (
   `Value9` int(2) default '0',
   `Value10` int(2) default '0',
   `Value11` int(2) default '0',
+  `Value12` int(2) default '0',
+  `Value13` int(2) default '0',
+  `Value14` int(2) default '0',
+  `Value15` int(2) default '0',
+  `Value16` int(2) default '0',
+  `Value17` int(2) default '0',
   `Inside` tinyint(1) unsigned default '0',
   `Timer` mediumint(1) default '0',
   `ExtraFlags` varchar(128) default '0',
@@ -252,6 +272,7 @@ CREATE TABLE `pfiles_inv` (
   `Cond` tinyint(1) unsigned default '0',
   `posi` smallint(1) unsigned default '0',
   `graffiti` varchar(256),
+  `obj_idnum` bigint(5) unsigned default '0',
   KEY(`idnum`)
 );
 
@@ -273,6 +294,12 @@ CREATE TABLE `pfiles_worn` (
   `Value9` int(2) default '0',
   `Value10` int(2) default '0',
   `Value11` int(2) default '0',
+  `Value12` int(2) default '0',
+  `Value13` int(2) default '0',
+  `Value14` int(2) default '0',
+  `Value15` int(2) default '0',
+  `Value16` int(2) default '0',
+  `Value17` int(2) default '0',
   `Inside` tinyint(1) unsigned default '0',
   `Position` tinyint(1) unsigned default '0',
   `Timer` mediumint(1) default '0',
@@ -281,6 +308,7 @@ CREATE TABLE `pfiles_worn` (
   `Cond` tinyint(1) unsigned default '0',
   `posi` smallint(1) unsigned default '0',
   `graffiti` varchar(256),
+  `obj_idnum` bigint(5) unsigned default '0',
   KEY(`idnum`)
 );
 
@@ -334,6 +362,13 @@ CREATE TABLE `pfiles_named_tags` (
   `idnum` mediumint(5) unsigned default '0',
   `tag_name` varchar(256) NOT NULL,
   PRIMARY KEY (`idnum`, `tag_name`)
+);
+
+CREATE TABLE `pfiles_factions` (
+  `idnum` mediumint(5) unsigned default '0',
+  `faction` mediumint(5) unsigned NOT NULL,
+  `rep` smallint(5) NOT NULL,
+  PRIMARY KEY (`idnum`, `faction`)
 );
 
 INSERT INTO `help_category` VALUES (0,'Combat'),(2,'General'),(1,'Magic'),(3,'Maps'),(4,'Matrix'),(5,'Rigging');
