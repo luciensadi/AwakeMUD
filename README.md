@@ -78,6 +78,8 @@ If you get errors like `/home/ubuntu/AwakeMUD/src/act.other.cpp:954: undefined r
 
 If you get an error like `structs.h:8:10: fatal error: sodium.h: No such file or directory`, it means you need to install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; (sudo) make install`).
 
+If you see `houseedit.cpp:487:46: error: no member named 'copy_options' in namespace`, you need to add -DUSE_OLD_BOOST to your compiler flags in `Makefile`.
+
 ## Runtime Troubleshooting
 
 If you get an error like `MYSQLERROR: Data too long for column 'Password' at row X` when running the game, you need to update your database's pfile table to use the longer password-column capacity. Go into your database and execute the command in `SQL/migration-libsodium.sql`.
