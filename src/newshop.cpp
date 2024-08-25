@@ -1838,8 +1838,11 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   if (SHOULD_SEE_TIPS(ch))
     send_to_char("\r\nUse ^WPROBE^n for more details.\r\n", ch);
 
-  if (has_availtns)
+  if (has_availtns) {
     send_to_char(ch, "This shop uses %s for difficult purchases.\r\n", skills[shop_table[shop_nr].etiquette].name);
+    if (SHOULD_SEE_TIPS(ch) && get_metavariant_penalty)
+      send_to_char("\r\n^wMetavariants^n may suffer etiquette/negotiation penalties.\r\n", ch);
+  }
 }
 
 void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
