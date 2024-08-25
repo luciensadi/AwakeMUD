@@ -952,6 +952,10 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     else {
       if (number == 0) // 0 = quit
         medit_disp_menu(d);
+      else if ((number - 1) == MOB_ISNPC) {
+        send_to_char(CH, "You can't clear the IS_NPC bit.\r\n");
+        medit_disp_menu(d);
+      }
       else {
         MOB_FLAGS(MOB).ToggleBit(number-1);
         medit_disp_mobflags_menu(d);
