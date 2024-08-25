@@ -29,6 +29,7 @@
 #include "handler.hpp"
 #include "config.hpp"
 #include "newhouse.hpp"
+#include "zoomies.hpp"
 
 extern class memoryClass *Mem;
 extern std::map<std::string, int> room_flag_map;
@@ -1525,7 +1526,10 @@ void write_world_to_disk(vnum_t zone_vnum)
 
       PRINT_TO_FILE_IF_TRUE("\tStaffLockLevel:\t%d\n", RM.staff_level_lock);
 
-      PRINT_TO_FILE_IF_TRUE("\tFlightCode:\t%s\n", RM.flight_code);
+      if (RM.flight_code && !str_cmp(RM.flight_code, INVALID_FLIGHT_CODE)) {
+        PRINT_TO_FILE_IF_TRUE("\tFlightCode:\t%s\n", RM.flight_code);
+      }
+
       PRINT_TO_FILE_IF_TRUE("\tLatitude:\t%f\n", RM.latitude);
       PRINT_TO_FILE_IF_TRUE("\tLongitude:\t%f\n", RM.longitude);
 
