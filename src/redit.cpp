@@ -45,6 +45,8 @@ extern vnum_t r_newbie_start_room;
 extern int olc_state;
 extern void char_to_room(struct char_data * ch, int room);
 
+extern SPECIAL(elevator_spec);
+
 
 // extern funcs
 extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
@@ -1505,7 +1507,11 @@ void write_world_to_disk(vnum_t zone_vnum)
 
       fprintf(fp, "[POINTS]\n");
 
-      PRINT_TO_FILE_IF_TRUE("\tRating:\t%d\n", RM.rating);
+      // Save rating only if this isn't an elevator.
+      if (RM.func != elevator_spec || (ROOM_FLAGS(&RM).AreAnySet(ROOM_FALL, ROOM_RADIATION, ENDBIT) || IS_WATER(&RM))) {
+        PRINT_TO_FILE_IF_TRUE("\tRating:\t%d\n", RM.rating);
+      }
+
       PRINT_TO_FILE_IF_TRUE("\tSpecIdx:\t%d\n", RM.spec);
       PRINT_TO_FILE_IF_TRUE("\tLight:\t%d\n", RM.vision[0]);
       PRINT_TO_FILE_IF_TRUE("\tSmoke:\t%d\n", RM.vision[1]);
