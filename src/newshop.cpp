@@ -1291,7 +1291,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
                                        GET_OBJ_AVAILTN(obj),
                                        GET_AVAIL_OFFSET(ch),
                                        GET_POWER(ch, ADEPT_KINESICS),
-                                       GET_RACE(ch) != GET_RACE(keeper) ? get_metavariant_penalty(ch) : 0,
+                                       ((GET_RACE(ch) != GET_RACE(keeper)) && !MOB_FLAGGED(keeper, MOB_INANIMATE)) ? get_metavariant_penalty(ch) : 0,
                                        abs(GET_BEST_LIFESTYLE(ch)),
                                        phero ? GET_BIOWARE_RATING(phero) * (GET_BIOWARE_IS_CULTURED(phero) ? 2 : 1) : 0,
                                        0);

@@ -1536,8 +1536,10 @@ void _get_negotiation_data(
 #endif
 
   // Apply metavariant penalty whether or not it's a negotiation test.
+  // Vending machines don't care what you look like.
   if (include_metavariant_penalty
       && GET_RACE(ch) != GET_RACE(tch)
+      && !MOB_FLAGGED(tch, MOB_INANIMATE)
       && (metavariant_penalty = get_metavariant_penalty(ch)))
   {
     snprintf(ENDOF(tn_rbuf), sizeof(tn_rbuf) - strlen(tn_rbuf), "%sMetavariant %d", wrote_something ? ", " : "", metavariant_penalty);
