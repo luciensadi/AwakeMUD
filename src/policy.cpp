@@ -20,7 +20,11 @@ public:
     title(str_dup(title)), summary(str_dup(summary))
   {}
 
-  ~PolicyNode() { delete[] title; delete[] summary; }
+  ~PolicyNode() {
+    delete[] title;
+    delete[] summary;
+    children.clear();
+  }
 
   void add_child(const char *child) { children.push_back(str_dup(child)); }
 };
