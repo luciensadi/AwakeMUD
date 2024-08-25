@@ -15,6 +15,12 @@ public:
     regex_t *compiled_regex;
 
     void compile();
+
+    ~automod_entry() {
+        if (compiled_regex) {
+            regfree(compiled_regex);
+        }
+    }
 };
 
 // This is only run once in comm.cpp at boot.

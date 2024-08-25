@@ -1206,7 +1206,7 @@ void parse_host(File &fl, long nr)
   if (last_seen == -1) {
     last_seen = nr;
   } else if (last_seen >= nr) {
-    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR in parse_host(%s, %ld): last_seen %ld >= nr %ld.", fl.Filename(), nr, last_seen, nr);
     log(buf);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
@@ -1311,7 +1311,7 @@ void parse_ic(File &fl, long nr)
   if (last_seen == -1) {
     last_seen = nr;
   } else if (last_seen >= nr) {
-    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR in parse_ic(%s, %ld): last_seen %ld >= nr %ld.", fl.Filename(), nr, last_seen, nr);
     log(buf);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
@@ -1357,7 +1357,7 @@ void parse_room(File &fl, long nr)
   if (last_seen == -1) {
     last_seen = nr;
   } else if (last_seen >= nr) {
-    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR in parse_room(%s, %ld): last_seen %ld >= nr %ld.", fl.Filename(), nr, last_seen, nr);
     log(buf);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
@@ -1792,7 +1792,7 @@ void parse_mobile(File &in, long nr)
   if (last_seen == -1) {
     last_seen = nr;
   } else if (last_seen >= nr) {
-    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR in parse_mobile(%s, %ld): last_seen %ld >= nr %ld.", in.Filename(), nr, last_seen, nr);
     log(buf);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
@@ -2039,7 +2039,7 @@ void parse_object(File &fl, long nr)
   if (last_seen == -1) {
     last_seen = nr;
   } else if (last_seen >= nr) {
-    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= nr %ld.", last_seen, nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR in parse_object(%s, %ld): last_seen %ld >= nr %ld.", fl.Filename(), nr, last_seen, nr);
     log(buf);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
@@ -2615,7 +2615,7 @@ void parse_shop(File &fl, long virtual_nr)
   if (last_seen == -1) {
     last_seen = virtual_nr;
   } else if (last_seen >= virtual_nr) {
-    snprintf(buf, sizeof(buf), "FATAL ERROR: last_seen %ld >= virtual_nr %ld.", last_seen, virtual_nr);
+    snprintf(buf, sizeof(buf), "FATAL ERROR in parse_shop(%s, %ld): last_seen %ld >= nr %ld.", fl.Filename(), virtual_nr, last_seen, virtual_nr);
     log(buf);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
