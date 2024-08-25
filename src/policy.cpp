@@ -31,6 +31,10 @@ public:
 
 std::vector<PolicyNode *> root_policy_document = {};
 
+void cleanup_policy_tree() {
+  root_policy_document.clear();
+}
+
 void initialize_policy_tree() {
   // Policy 0: Don't be a dick.
   {

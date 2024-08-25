@@ -189,6 +189,7 @@ void process_wheres_my_car();
 extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t target_room_vnum, bool ignore_roads, const char *call_origin, struct char_data *caller);
 void set_descriptor_canaries(struct descriptor_data *newd);
 extern void process_flying_vehicles();
+extern void cleanup_policy_tree();
 
 extern void save_all_apartments_and_storage_rooms();
 
@@ -1175,6 +1176,9 @@ void cleanup_things_valgrind_complains_about() {
     next_veh = veh->next;
     extract_veh(veh);
   }
+
+  // Clean up policy.
+  cleanup_policy_tree();
 }
 
 
