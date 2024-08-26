@@ -1841,7 +1841,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   if (has_availtns) {
     send_to_char(ch, "This shop uses %s for difficult purchases.\r\n", skills[shop_table[shop_nr].etiquette].name);
     if (SHOULD_SEE_TIPS(ch) && get_metavariant_penalty(ch, keeper))
-      send_to_char(ch, "NOTE: %s ^w%s^n will suffer penalties to etiquette/negotiation tests here.\r\n",
+      send_to_char(ch, "NOTE: %s ^W%s^n will suffer penalties to etiquette/negotiation tests here.\r\n",
                    AN(pc_race_types_decap[(int)GET_RACE(ch)]), pc_race_types_decap[(int)GET_RACE(ch)]);
   }
 }
