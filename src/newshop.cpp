@@ -1646,6 +1646,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   struct obj_data *obj;
   int i = 1;
   bool has_availtns = FALSE;
+  bool has_negotiatable = FALSE;
 
   if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
     snprintf(buf, sizeof(buf), "%s has the following items available for sale:\r\n", GET_NAME(keeper));
@@ -1657,6 +1658,8 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         i--;
         continue;
       }
+
+      has_negotiatable |= can_negotiate_for_item(obj);
 
       // List the item to the player.
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Item #%d: %s for %d nuyen", i, GET_OBJ_NAME(obj), buy_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch));
@@ -1707,6 +1710,19 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     if (has_availtns)
       snprintf(ENDOF(buf), sizeof(buf), "This shop uses %s for difficult purchases.\r\n", skills[shop_table[shop_nr].etiquette].name);
 
+    if (shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
+      has_negotiatable = FALSE;
+
+    // Add info about metavariant penalties.
+    if (SHOULD_SEE_TIPS(ch) && get_metavariant_penalty(ch, keeper) && (has_availtns || has_negotiatable)) {
+      snprintf(ENDOF(buf), sizeof(buf), "As %s %s, you have a penalty on%s%s%s tests here.\r\n",
+               AN(pc_race_types_decap[(int)GET_RACE(ch)]),
+               pc_race_types_decap[(int)GET_RACE(ch)],
+               has_availtns ? " etiquette" : "",
+               has_availtns && has_negotiatable ? " and" : "",
+               has_negotiatable ? " negotiation");
+    }
+
     page_string(ch->desc, buf, 1);
     return;
   }
@@ -1722,6 +1738,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         i--;
         continue;
       }
+      has_negotiatable |= can_negotiate_for_item(obj);
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %3d)  ", i);
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) == 0))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Yes      ");
@@ -1788,6 +1805,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         i--;
         continue;
       }
+      has_negotiatable |= can_negotiate_for_item(obj);
       snprintf(buf, sizeof(buf), " %2d)  ", i);
       if (sell->type == SELL_ALWAYS || (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) == 0))
         strlcat(buf, "Yes      ", sizeof(buf));
@@ -1838,11 +1856,22 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   if (SHOULD_SEE_TIPS(ch))
     send_to_char("\r\nUse ^WPROBE^n for more details.\r\n", ch);
 
+  // Inform about the etti type used here.
   if (has_availtns) {
     send_to_char(ch, "This shop uses %s for difficult purchases.\r\n", skills[shop_table[shop_nr].etiquette].name);
-    if (SHOULD_SEE_TIPS(ch) && get_metavariant_penalty(ch, keeper))
-      send_to_char(ch, "NOTE: %s ^W%s^n will suffer penalties to etiquette/negotiation tests here.\r\n",
-                   AN(pc_race_types_decap[(int)GET_RACE(ch)]), pc_race_types_decap[(int)GET_RACE(ch)]);
+  }
+
+  if (shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
+    has_negotiatable = FALSE;
+
+  // Add info about metavariant penalties.
+  if (SHOULD_SEE_TIPS(ch) && get_metavariant_penalty(ch, keeper) && (has_availtns || has_negotiatable)) {
+    send_to_char(ch, "As %s %s, you have a penalty on%s%s%s tests here.\r\n",
+                 AN(pc_race_types_decap[(int)GET_RACE(ch)]),
+                 pc_race_types_decap[(int)GET_RACE(ch)],
+                 has_availtns ? " etiquette" : "",
+                 has_availtns && has_negotiatable ? " and" : "",
+                 has_negotiatable ? " negotiation");
   }
 }
 
