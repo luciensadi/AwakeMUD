@@ -1291,7 +1291,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
                                        GET_OBJ_AVAILTN(obj),
                                        GET_AVAIL_OFFSET(ch),
                                        GET_POWER(ch, ADEPT_KINESICS),
-                                       ((GET_RACE(ch) != GET_RACE(keeper)) && !MOB_FLAGGED(keeper, MOB_INANIMATE)) ? get_metavariant_penalty(ch) : 0,
+                                       get_metavariant_penalty(ch, keeper),
                                        abs(GET_BEST_LIFESTYLE(ch)),
                                        phero ? GET_BIOWARE_RATING(phero) * (GET_BIOWARE_IS_CULTURED(phero) ? 2 : 1) : 0,
                                        0);
@@ -1840,8 +1840,9 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
   if (has_availtns) {
     send_to_char(ch, "This shop uses %s for difficult purchases.\r\n", skills[shop_table[shop_nr].etiquette].name);
-    if (SHOULD_SEE_TIPS(ch) && get_metavariant_penalty)
-      send_to_char("\r\n^wMetavariants^n may suffer etiquette/negotiation penalties.\r\n", ch);
+    if (SHOULD_SEE_TIPS(ch) && get_metavariant_penalty(ch, keeper))
+      send_to_char(ch, "NOTE: %s ^w%s^n will suffer penalties to etiquette/negotiation tests here.\r\n",
+                   AN(pc_race_types_decap[(int)GET_RACE(ch)]), pc_race_types_decap[(int)GET_RACE(ch)]);
   }
 }
 
