@@ -1448,7 +1448,7 @@ int get_speed(struct veh_data *veh)
 }
 
 #define METAVARIANT_PENALTY 4
-int get_metavariant_penalty(struct char_data *ch) {
+int get_metavariant_penalty(struct char_data *ch, struct char_data *tch) {
   // Base races take no penalties.
   if (GET_RACE(ch) >= RACE_HUMAN && GET_RACE(ch) <= RACE_TROLL)
     return 0;
@@ -1459,6 +1459,14 @@ int get_metavariant_penalty(struct char_data *ch) {
 
   // Ghouls take no penalties (they look like messed-up base races, and only can shop at ghoul-friendly establishments to begin with)
   if (IS_GHOUL(ch))
+    return 0;
+
+  // No penalties when interacting with same race.
+  if (GET_RACE(ch) == GET_RACE(tch))
+    return 0;
+
+  // No penalties when interacting with vending machines.
+  if (MOB_FLAGGED(tch, MOB_INANIMATE))
     return 0;
 
   // Everyone else takes a +4, including metaform dragons (houserule: they're alien enough in nature that they flub social things)
@@ -1537,8 +1545,7 @@ void _get_negotiation_data(
 
   // Apply metavariant penalty whether or not it's a negotiation test.
   if (include_metavariant_penalty
-      && GET_RACE(ch) != GET_RACE(tch)
-      && (metavariant_penalty = get_metavariant_penalty(ch)))
+      && (metavariant_penalty = get_metavariant_penalty(ch, tch)))
   {
     snprintf(ENDOF(tn_rbuf), sizeof(tn_rbuf) - strlen(tn_rbuf), "%sMetavariant %d", wrote_something ? ", " : "", metavariant_penalty);
     wrote_something = TRUE;
