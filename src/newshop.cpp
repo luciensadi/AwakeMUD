@@ -1412,6 +1412,10 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     // Clean up.
     extract_obj(obj);
     obj = NULL;
+
+    // New characters get reminded how to obtain their order.
+    if (SHOULD_SEE_TIPS(ch))
+      send_to_char("\r\nYou can ^WCHECK^n the status of your order and ^RECEIVE^n it when it's here.\r\n", ch);
   } else
   {
     // Give them the thing without fanfare.

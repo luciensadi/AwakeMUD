@@ -3022,6 +3022,11 @@ SPECIAL(fixer)
     do_say(fixer, arg, 0, SCMD_SAYTO);
     GET_OBJ_TIMER(obj) = GET_IDNUM(ch);
     fixers_need_save = 1;
+
+    // New characters get reminded how to get their item back.
+    if (SHOULD_SEE_TIPS(ch))
+      send_to_char("\r\nYou can ^WLIST^n item(s) that are being repaired here and ^RECEIVE^n them when they're done.\r\n", ch);
+
     return TRUE;
   } else if (CMD_IS("list")) {
     bool found = FALSE;
