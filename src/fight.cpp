@@ -686,7 +686,7 @@ void make_corpse(struct char_data * ch)
       else {
         // Zero out magazines from this and everything it contains.
         // Leave a round in NPC firearms so characters get some indication of what ammo was being used against them
-        zero_out_magazine_counts(o, IS_NPC(ch));
+        zero_out_magazine_counts(o, IS_NPC(ch) ? 1 : 0);
 
         // Put the item in the corpse.
         obj_to_obj(o, corpse);
