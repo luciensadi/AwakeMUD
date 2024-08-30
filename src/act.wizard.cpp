@@ -7112,25 +7112,11 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
     return FALSE;
   }
 
-  if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY && GET_ACCESSORY_TYPE(obj) != ACCESS_SMARTGOGGLE) {
-    send_to_char("Sorry, gun attachments can't be restrung.\r\n", ch);
-    return FALSE;
-  }
-
-  if (GET_OBJ_TYPE(obj) == ITEM_MOD || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
-    send_to_char("Sorry, vehicle mods and ammo containers can't be restrung.\r\n", ch);
-    return FALSE;
-  }
-
-  if (GET_OBJ_TYPE(obj) == ITEM_CLIMBING && GET_OBJ_VAL(obj, 1) == CLIMBING_TYPE_WATER_WINGS) {
-    send_to_char("No amount of cosmetic changes could hide the garishness of water wings.\r\n", ch);
-    return FALSE;
-  }
-
-  if (GET_OBJ_TYPE(obj) == ITEM_VEHCONTAINER) {
-    send_to_char("Sorry, vehicle containers can't be restrung.\r\n", ch);
-    return FALSE;
-  }
+  FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY && GET_ACCESSORY_TYPE(obj) != ACCESS_SMARTGOGGLE, "Sorry, gun attachments can't be restrung.");
+  FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_MOD || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO, "Sorry, vehicle mods and ammo containers can't be restrung.");
+  FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_CLIMBING && GET_OBJ_VAL(obj, 1) == CLIMBING_TYPE_WATER_WINGS, "No amount of cosmetic changes could hide the garishness of water wings.");
+  FALSE_CASE(GET_OBJ_VNUM(obj) == OBJ_EYEBALL_KEY, "You're pretty sure that trying to alter the eyeball would ruin it.");
+  FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_VEHCONTAINER, "Sorry, vehicle containers can't be restrung.");
 
   // Ensure we don't contain any forbidden phrases. Error messages are shown in-function.
   if (check_for_banned_content(buf, ch)) {
