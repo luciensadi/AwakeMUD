@@ -1720,7 +1720,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                pc_race_types_decap[(int)GET_RACE(ch)],
                has_availtns ? " etiquette" : "",
                has_availtns && has_negotiatable ? " and" : "",
-               has_negotiatable ? " negotiation");
+               has_negotiatable ? " negotiation" : "");
     }
 
     page_string(ch->desc, buf, 1);
@@ -1871,7 +1871,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                  pc_race_types_decap[(int)GET_RACE(ch)],
                  has_availtns ? " etiquette" : "",
                  has_availtns && has_negotiatable ? " and" : "",
-                 has_negotiatable ? " negotiation");
+                 has_negotiatable ? " negotiation" : "");
   }
 }
 

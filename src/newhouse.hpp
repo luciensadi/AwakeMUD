@@ -108,6 +108,7 @@ class ApartmentComplex {
     void mark_as_deleted();
     int get_crap_count();
     void list_owned_apartments_to_ch(struct char_data *ch);
+    void ensure_base_directory_exists();
 };
 
 /* An Apartment is composed of N ApartmentRooms, and has tracking data for the lease etc. */
@@ -231,6 +232,7 @@ class Apartment {
     vnum_t get_root_vnum();
     long get_cost_of_contents(bool including_vehicles);
     long get_remaining_lease_value();
+    void ensure_base_directory_exists();
 
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);

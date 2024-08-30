@@ -359,11 +359,16 @@ ApartmentComplex::~ApartmentComplex() {
   delete [] display_name;
 }
 
-void ApartmentComplex::save() {
-  // Ensure our base directory exists.
+void ApartmentComplex::ensure_base_directory_exists() {
   if (!bf::exists(base_directory)) {
+    log_vfprintf("apartmentcomplex::ensure_base_directory_exists(): Not found. Creating base directory %s.", base_directory.c_str());
     bf::create_directory(base_directory);
   }
+}
+
+void ApartmentComplex::save() {
+  // Ensure our base directory exists.
+  ensure_base_directory_exists();
 
   // Compose the info file.
   json base_info;
@@ -837,6 +842,14 @@ Apartment::~Apartment() {
   delete [] full_name;
 }
 
+void Apartment::ensure_base_directory_exists() {
+  if (!bf::exists(base_directory)) {
+    log_vfprintf("apartmentcomplex::ensure_base_directory_exists(): Not found. Creating base directory %s.", base_directory.c_str());
+    bf::create_directory(base_directory);
+  }
+}
+
+
 void Apartment::cleanup_deleted_guests() {
   // Drop any expired guests.
   guests.erase(std::remove_if(guests.begin(), guests.end(),
@@ -948,6 +961,7 @@ void Apartment::set_base_directory(bf::path new_base) {
   }
 }
 
+
 void Apartment::save_base_info() {
   if (base_directory.empty()) {
     if (!complex) {
@@ -962,6 +976,7 @@ void Apartment::save_base_info() {
   log_vfprintf("apartment::save_base_info(): Checking for base directory %s...", base_directory.c_str());
   if (!bf::exists(base_directory)) {
     log_vfprintf("apartment::save_base_info(): Not found. Creating base directory %s.", base_directory.c_str());
+    complex->ensure_base_directory_exists();
     bf::create_directory(base_directory);
   }
 
@@ -1904,6 +1919,7 @@ void ApartmentRoom::save_info() {
 
   // We can't guarantee our base path exists at this point, so we ensure it does here.
   if (!bf::exists(base_path)) {
+    apartment->ensure_base_directory_exists();
     bf::create_directory(base_path);
   }
 
