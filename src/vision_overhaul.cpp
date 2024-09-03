@@ -351,11 +351,11 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
     }
   }
 
-  if (has_thermographic && tn_with_thermo <= tn_with_ll && tn_with_thermo <= tn_with_none) {
+  if (has_thermographic && (!has_lowlight || (tn_with_thermo <= tn_with_ll)) && tn_with_thermo <= tn_with_none) {
     penalty_vector = &thermo_penalties;
     penalty_chosen = tn_with_thermo;
   }
-  else if (has_lowlight && tn_with_ll <= tn_with_thermo && tn_with_ll <= tn_with_none) {
+  else if (has_lowlight && (!has_thermographic || (tn_with_ll <= tn_with_thermo)) && tn_with_ll <= tn_with_none) {
     penalty_vector = &lowlight_penalties;
     penalty_chosen = tn_with_ll;
   }
