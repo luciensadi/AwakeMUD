@@ -8130,16 +8130,16 @@ bool ch_is_in_viewers_visual_range(struct char_data *ch, struct char_data *viewe
   return FALSE;
 }
 
-void zero_out_magazine_counts(struct obj_data *obj) {
+void zero_out_magazine_counts(struct obj_data *obj, int max_ammo_remaining = 0) {
   if (!obj) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got NULL object to zero_out_magazine_counts().");
     return;
   }
 
-  if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE)
-    GET_MAGAZINE_AMMO_COUNT(obj) = 0;
+  if ((GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) && (GET_MAGAZINE_AMMO_COUNT(obj) > max_ammo_remaining))
+    GET_MAGAZINE_AMMO_COUNT(obj) = max_ammo_remaining;
 
   for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
-    zero_out_magazine_counts(contained);
+    zero_out_magazine_counts(contained, max_ammo_remaining);
   }
 }

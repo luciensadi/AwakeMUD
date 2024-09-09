@@ -76,7 +76,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
 bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message);
 void docwagon_retrieve(struct char_data *ch);
-void zero_out_magazine_counts(struct obj_data *obj);
+void zero_out_magazine_counts(struct obj_data *obj, int max_ammo_remaining = 0);
 
 SPECIAL(weapon_dominator);
 SPECIAL(pocket_sec);
@@ -685,7 +685,8 @@ void make_corpse(struct char_data * ch)
         extract_obj(o);
       else {
         // Zero out magazines from this and everything it contains.
-        zero_out_magazine_counts(o);
+        // Leave a round in NPC firearms so characters get some indication of what ammo was being used against them
+        zero_out_magazine_counts(o, IS_NPC(ch) ? 1 : 0);
 
         // Put the item in the corpse.
         obj_to_obj(o, corpse);
