@@ -7808,7 +7808,20 @@ struct room_data *get_jurisdiction_garage_room(int jurisdiction) {
       vnum = RM_OCEAN_PARKING_GARAGE;
       break;
     case JURISDICTION_CAS:
-      vnum = RM_CAS_PARKING_GARAGE;
+#ifdef USE_PRIVATE_CE_WORLD
+      switch (number(0, 2)) {
+        case 0:
+          vnum = RM_CAS_PARKING_GARAGE1;
+          break;
+        case 1:
+          vnum = RM_CAS_PARKING_GARAGE2;
+          break;
+        case 2:
+          vnum = RM_CAS_PARKING_GARAGE3;
+          break;
+      }
+#else
+      vnum = RM_SEATTLE_PARKING_GARAGE;
       break;
     case JURISDICTION_SECRET:
       vnum = RM_SECRET_PARKING_GARAGE;
