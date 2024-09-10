@@ -844,6 +844,8 @@ char *prep_string_for_writing_to_savefile(char *dest, const char *src)
 /* scan 'till found different or end of both                 */
 int str_cmp(const char *one, const char *two)
 {
+  if (!one || !two)
+    return 1;
   if (!*one || !*two)
     return 1;
   for (; *one; one++, two++) {

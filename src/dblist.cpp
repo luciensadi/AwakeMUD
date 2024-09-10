@@ -624,7 +624,7 @@ void objList::CheckForDeletedCharacterFuckery(struct char_data *ch, const char *
         continue;
       }
 
-      if (!str_cmp(GET_CHAR_NAME(owner), their_name)) {
+      if (GET_CHAR_NAME(owner) && !str_cmp(GET_CHAR_NAME(owner), their_name)) {
         mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: CheckForDeletedCharacterFuckery FOUND object %s (%ld) in objList after character deletion (name match)!", GET_OBJ_NAME(OBJ), GET_OBJ_VNUM(OBJ));
         found_something = TRUE;
         continue;
