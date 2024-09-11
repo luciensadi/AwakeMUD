@@ -1156,7 +1156,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
 
   // initialization for imms
-  if(IS_SENATOR(ch)) {
+  if (GET_LEVEL(ch) >= LVL_BUILDER) {
     GET_COND(ch, COND_FULL) = -1;
     GET_COND(ch, COND_THIRST) = -1;
     GET_COND(ch, COND_DRUNK) = -1;
@@ -1164,8 +1164,17 @@ bool load_char(const char *name, char_data *ch, bool logon)
     // Clamp skills to maximums and refund them.
     bool need_save = FALSE;
 
+    int godly_level = get_max_skill_for_char(ch, SKILL_EDGED_WEAPONS, GODLY);
+
     for (int skill_idx = 0; skill_idx < MAX_SKILLS; skill_idx++) {
       int max_skill_level = get_max_skill_for_char(ch, skill_idx, IS_SENATOR(ch) ? GODLY : ADVANCED);
+
+      if (GET_RAW_SKILL(ch, skill_idx) == godly_level) {
+        // Error case, we shouldn't be here with someone with staff skills.
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got a staff-grade character to the mortal stanza of resetting skills.");
+        break;
+      }
+
       if (GET_RAW_SKILL(ch, skill_idx) > max_skill_level) {
         mudlog_vfprintf(ch, LOG_SYSLOG, "%s's %s is %d, which exceeds their max of %d. Capping and refunding...",
                         GET_CHAR_NAME(ch),
@@ -2242,9 +2251,10 @@ void DeleteChar(long idx)
     "pfiles_spirits          ",
     "pfiles_worn             ",
     "pfiles_ignore_v2        ",  // 20. IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
-    "playergroup_invitations "
+    "playergroup_invitations ",
+    "pfiles_exdescs          "
   };
-  #define NUM_SQL_TABLE_NAMES     22
+  #define NUM_SQL_TABLE_NAMES     23
   #define PFILES_INDEX            0
   #define PFILES_IGNORE_INDEX     8
   #define PFILES_MEMORY_INDEX     13
