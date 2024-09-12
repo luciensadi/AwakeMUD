@@ -3025,7 +3025,7 @@ SPECIAL(fixer)
 
     // New characters get reminded how to get their item back.
     if (SHOULD_SEE_TIPS(ch))
-      send_to_char("\r\nYou can ^WLIST^n item(s) that are being repaired here and ^RECEIVE^n them when they're done.\r\n", ch);
+      send_to_char("\r\nYou can ^WLIST^n item(s) that are being repaired here and ^WRECEIVE^n them when they're done.\r\n", ch);
 
     return TRUE;
   } else if (CMD_IS("list")) {
