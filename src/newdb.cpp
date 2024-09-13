@@ -2251,10 +2251,10 @@ void DeleteChar(long idx)
     "pfiles_spirits          ",
     "pfiles_worn             ",
     "pfiles_ignore_v2        ",  // 20. IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
-    "playergroup_invitations ",
-    "pfiles_exdescs          "
+    "playergroup_invitations "
+    // TODO: pfiles_exdescs
   };
-  #define NUM_SQL_TABLE_NAMES     23
+  #define NUM_SQL_TABLE_NAMES     22
   #define PFILES_INDEX            0
   #define PFILES_IGNORE_INDEX     8
   #define PFILES_MEMORY_INDEX     13
