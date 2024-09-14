@@ -1657,8 +1657,6 @@ ACMD(do_mdelete)
   // Wipe out the top entry of the table (it's not needed), then shrink the table.
   delete &mob_proto[top_of_mobt];
   delete &mob_index[top_of_mobt];
-  // memset(&mob_proto[top_of_mobt], 0, sizeof(struct char_data));
-  // memset(&mob_index[top_of_mobt], 0, sizeof(struct index_data));
   top_of_mobt--;
 
   // update the zones by decrementing numbers if >= number deleted

@@ -186,6 +186,7 @@ ACMD(do_debug) {
       }
     }
     send_to_char(ch, "OK, set all Renraku-flagged mobs to Renraku faction. Make sure to save.\r\n");
+    return;
   }
 
   if (is_abbrev(arg1, "cleardriverflag")) {

@@ -88,7 +88,7 @@ ACMD(do_quit)
     send_to_char("You have to type quit - no less, to quit!\r\n", ch);
     return;
   }
-  void die(struct char_data * ch);
+  void die(struct char_data * ch, idnum_t cause_of_death);
   struct descriptor_data *d, *next_d;
 
   if (IS_NPC(ch) || !ch->desc)
@@ -114,7 +114,7 @@ ACMD(do_quit)
   if (GET_POS(ch) <= POS_STUNNED) {
     send_to_char("You die before your time...\r\n", ch);
     act("$n gives up the struggle to live...", TRUE, ch, 0, 0, TO_ROOM);
-    die(ch);
+    die(ch, 0);
   } else {
     GET_LAST_IN(ch) = GET_ROOM_VNUM(ch->in_room);
     struct room_data *save_room = ch->in_room;

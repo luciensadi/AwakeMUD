@@ -986,8 +986,7 @@ void index_boot(int mode)
   case DB_BOOT_MOB:
     // here I am booting with 100 extra slots for creation
     mob_proto = new struct char_data[rec_count + mob_chunk_size];
-    memset((char *) mob_proto, 0, (sizeof(struct char_data) *
-                                   (rec_count + mob_chunk_size)));
+    // memset((char *) mob_proto, 0, (sizeof(struct char_data) * (rec_count + mob_chunk_size)));
 
 #ifdef USE_DEBUG_CANARIES
   for (int i = 0; i < rec_count + mob_chunk_size; i++)

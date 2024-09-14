@@ -51,6 +51,7 @@
 #include "zoomies.hpp"
 #include "vehicles.hpp"
 #include "moderation.hpp"
+#include "player_exdescs.hpp"
 
 const char *CCHAR;
 
@@ -942,13 +943,13 @@ const char *render_ware_for_viewer(struct obj_data *ware, bool privileged, bool 
   return render_buf;
 }
 
-void look_at_char(struct char_data * i, struct char_data * ch)
+void look_at_char(struct char_data * i, struct char_data * ch, const char *used_keyword)
 {
   int j, found, weight;
   float height;
   struct obj_data *tmp_obj;
 
-
+#ifdef USE_JANKY_EQUIPMENT_CONCEAL_SYSTEM
   if (((GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1) ||
        (GET_EQ(i, WEAR_FACE) && GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) > 1)) &&
       success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT),
@@ -966,6 +967,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
     else if (GET_EQ(i, WEAR_UNDER))
       send_to_char(ch, GET_EQ(i, WEAR_UNDER)->text.look_desc);
   } else
+#endif
   {
     if (i->player.physical_text.look_desc)
       send_to_char(i->player.physical_text.look_desc, ch);
@@ -975,6 +977,17 @@ void look_at_char(struct char_data * i, struct char_data * ch)
     if (!IS_NPC(i) && GET_LEVEL(ch) >= GET_LEVEL(i)) {
       act(get_lifestyle_string(i), FALSE, i, 0, ch, TO_VICT | SKIP_YOU_STANZAS);
       send_to_char("", ch);
+    }
+
+    if (CHAR_HAS_EXDESCS(i) && used_keyword && *used_keyword) {
+      char uppercase[strlen(used_keyword) + 1];
+      for (size_t idx = 0; idx < strlen(used_keyword); idx++) { uppercase[idx] = toupper(used_keyword[idx]); }
+      uppercase[strlen(used_keyword)] = '\0';
+
+      send_to_char(ch, "%s %s extra descriptions set. Use ^WLOOK %s EXDESCS^n for more.\r\n",
+                   CAP(HSSH(i)),
+                   HASHAVE(i),
+                   uppercase);
     }
 
     if (i != ch && GET_HEIGHT(i) > 0 && GET_WEIGHT(i) > 0) {
@@ -1328,7 +1341,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       }
     }
 
-    if (GET_MOBALERT(i) == MALERT_ALARM && (MOB_FLAGGED(i, MOB_HELPER) || MOB_FLAGGED(i, MOB_GUARD))) {
+    if (mob_is_alarmed_by_ch(i, ch) && (MOB_FLAGGED(i, MOB_HELPER) || MOB_FLAGGED(i, MOB_GUARD))) {
       strlcat(buf, "^r(alarmed)^n ", sizeof(buf));
     }
 
@@ -1538,7 +1551,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     }
   }
 
-  if (GET_MOBALERT(i) == MALERT_ALARM && (MOB_FLAGGED(i, MOB_HELPER) || MOB_FLAGGED(i, MOB_GUARD))) {
+  if (mob_is_alarmed_by_ch(i, ch) && (MOB_FLAGGED(i, MOB_HELPER) || MOB_FLAGGED(i, MOB_GUARD))) {
     strlcat(buf, " ^r(alarmed)^n", sizeof(buf));
   }
 
@@ -2715,7 +2728,10 @@ void look_at_target(struct char_data * ch, char *arg)
   /* Is the target a character? */
   if (found_char != NULL)
   {
-    look_at_char(found_char, ch);
+    // If this isn't an exdesc invocation, look at the character.
+    if (!look_at_exdescs(ch, found_char, arg)) {
+      look_at_char(found_char, ch, arg);
+    }
     /*
     if (ch != found_char && !ch->char_specials.rigging) {
       if (CAN_SEE(found_char, ch))
@@ -2729,7 +2745,11 @@ void look_at_target(struct char_data * ch, char *arg)
   {
     found_char = get_char_veh(ch, arg, ch->in_veh);
     if (found_char) {
-      look_at_char(found_char, ch);
+      // If this isn't an exdesc invocation, look at the character.
+      if (!look_at_exdescs(ch, found_char, arg)) {
+        look_at_char(found_char, ch, arg);
+      }
+      /*
       if (ch != found_char) {
         if (CAN_SEE(found_char, ch)) {
           send_to_char(found_char, "%s looks at you.\r\n", GET_NAME(ch));
@@ -2737,6 +2757,7 @@ void look_at_target(struct char_data * ch, char *arg)
         snprintf(buf, sizeof(buf), "%s looks at %s.\r\n", GET_NAME(ch), GET_NAME(found_char));
         send_to_veh(buf, ch->in_veh, ch, found_char, FALSE);
       }
+      */
       ch->in_room = was_in;
       return;
     }
@@ -7132,7 +7153,7 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
       snprintf(ENDOF(results), sizeof(results) - strlen(results), "  %s%s^n%s\r\n",
                flag_line,
                their_name,
-               FIGHTING(list) == ch ? " ^R(fighting you!)^n" : (GET_MOBALERT(list) == MALERT_ALARM && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD)) ? " ^r(alarmed)^n" : ""));
+               FIGHTING(list) == ch ? " ^R(fighting you!)^n" : (mob_is_alarmed_by_ch(list, ch) && (MOB_FLAGGED(list, MOB_HELPER) || MOB_FLAGGED(list, MOB_GUARD)) ? " ^r(alarmed)^n" : ""));
     }
   }
 

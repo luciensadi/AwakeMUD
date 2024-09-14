@@ -37,6 +37,7 @@ class Faction;
 class ApartmentComplex;
 class Apartment;
 class ApartmentRoom;
+class PCExDesc;
 
 /***********************************************************************
  * Structures                                                          *
@@ -698,6 +699,8 @@ struct player_special_data_saved
   int best_lifestyle;
   const char *lifestyle_string;
 
+  std::vector<PCExDesc *> exdescs;
+
   player_special_data_saved() :
     wimp_level(0), freeze_level(0), invis_level(0), incog_level(0), load_room(NOWHERE),
     last_in(0), last_veh(NOTHING), bad_pws(0), automod_counter(0), totem(0), totemspirit(0),
@@ -760,18 +763,17 @@ struct mob_special_data
   ush_int value_death_items;
   ush_int value_death_karma;
   ush_int count_death;
-  byte alert;
-  int alerttime;
   vnum_t spare1, spare2;
   long lasthit;
+
+  std::unordered_map<idnum_t, time_t> alarm_map = {};
 
   /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
   mob_special_data() :
     last_direction(NORTH), attack_type(0), default_pos(POS_STANDING),
     active(0), memory(NULL), wait_state(0), quest_id(0), value_death_nuyen(0),
-    value_death_items(0), value_death_karma(0), count_death(0),
-    alert(0), alerttime(0), spare1(0), spare2(0), lasthit(0)
+    value_death_items(0), value_death_karma(0), count_death(0), spare1(0), spare2(0), lasthit(0)
   {
     ZERO_OUT_ARRAY(mob_skills, 10);
   }

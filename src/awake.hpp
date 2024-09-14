@@ -2376,11 +2376,6 @@ enum {
 #define IC_SHIFT        6
 #define IC_TRAP          7
 
-/* MOB Alert Levels */
-#define MALERT_CALM      0
-#define MALERT_ALERT    1
-#define MALERT_ALARM    2
-
 #define LIGHT           1
 #define MODERATE        2
 #define SERIOUS         3

@@ -106,8 +106,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
           act("$n's DocWagon receiver emits a shrill alarm.", TRUE, plr, 0, 0, TO_ROOM);
           for (struct char_data *mob = plr->in_room->people; mob; mob = mob->next_in_room) {
             if (IS_NPC(mob) && !mob->desc) {
-              GET_MOBALERT(mob) = MAX(GET_MOBALERT(mob), MALERT_ALERT);
-              GET_MOBALERTTIME(mob) = MAX(GET_MOBALERTTIME(mob), 20);
+              set_mob_alert(mob, 20);
             }
           }
         } else if (plr->in_veh) {
@@ -128,8 +127,7 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
           act("$n's DocWagon receiver beeps loudly.", TRUE, plr, 0, 0, TO_ROOM);
           for (struct char_data *mob = plr->in_room->people; mob; mob = mob->next_in_room) {
             if (IS_NPC(mob) && !mob->desc) {
-              GET_MOBALERT(mob) = MAX(GET_MOBALERT(mob), MALERT_ALERT);
-              GET_MOBALERTTIME(mob) = MAX(GET_MOBALERTTIME(mob), 20);
+              set_mob_alert(mob, 20);
             }
           }
         } else if (plr->in_veh) {

@@ -373,8 +373,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
 
   if (IS_NPC(ch)) {
     // Prevents you from surprising someone who's attacking you already.
-    GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 20);
-    GET_MOBALERT(ch) = MAX(MALERT_ALERT, GET_MOBALERT(ch));
+    set_mob_alarm(ch, vict, 20);
   }
 
   if (!AWAKE(ch)) {
@@ -831,7 +830,7 @@ void make_corpse(struct char_data * ch)
   }
 }
 
-void death_cry(struct char_data * ch)
+void death_cry(struct char_data * ch, idnum_t cause_of_death_idnum)
 {
   bool should_make_mechanical_noise_instead_of_scream = IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE);
 
@@ -851,10 +850,7 @@ void death_cry(struct char_data * ch)
   }
 
   for (struct char_data *listener = get_ch_in_room(ch)->people; listener; listener = listener->next_in_room) {
-    if (IS_NPC(listener)) {
-      GET_MOBALERTTIME(listener) = 30;
-      GET_MOBALERT(listener) = MALERT_ALARM;
-    }
+    set_mob_alarm(listener, cause_of_death_idnum, 30);
   }
 
   struct room_data *was_in = ch->in_room;
@@ -868,17 +864,15 @@ void death_cry(struct char_data * ch)
         act("Somewhere close, you hear someone's death cry!", FALSE, ch, 0, 0, TO_ROOM);
       }
       // This specific use of in_room is okay since it's set above and guaranteed to exist.
-      for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room)
-        if (IS_NPC(listener)) {
-          GET_MOBALERTTIME(listener) = 30;
-          GET_MOBALERT(listener) = MALERT_ALERT;
-        }
+      for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room) {
+        set_mob_alarm(listener, cause_of_death_idnum, 30);
+      }
       ch->in_room = was_in;
     }
   }
 }
 
-void raw_kill(struct char_data * ch)
+void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
 {
   struct obj_data *bio, *obj, *o;
   struct room_data *dest_room;
@@ -913,7 +907,7 @@ void raw_kill(struct char_data * ch)
   {
     struct room_data *in_room = get_ch_in_room(ch);
 
-    death_cry(ch);
+    death_cry(ch, cause_of_death_idnum);
 
     if (!(IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch)))
       make_corpse(ch);
@@ -1035,7 +1029,7 @@ void death_penalty(struct char_data *ch)
   }
 }
 
-void die(struct char_data * ch)
+void die(struct char_data * ch, idnum_t cause_of_death_idnum)
 {
   // If they're ready for docwagon retrieval, save them.
   if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
@@ -1070,7 +1064,7 @@ void die(struct char_data * ch)
 
   AFF_FLAGS(ch).RemoveBit(AFF_HEALED);
 
-  raw_kill(ch);
+  raw_kill(ch, cause_of_death_idnum);
 }
 
 ACMD(do_dw_retrieve)
@@ -1141,7 +1135,7 @@ ACMD(do_die)
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 
   /* Now we just kill them, MuHahAhAhahhaAHhaAHaA!!...or something */
-  die(ch);
+  die(ch, 0);
 
   return;
 }
@@ -2402,10 +2396,7 @@ void docwagon_retrieve(struct char_data *ch) {
       if (FIGHTING(tmp) == ch) {
         stop_fighting(tmp);
       }
-      if (IS_NPC(tmp)) {
-        GET_MOBALERT(tmp) = MALERT_CALM;
-        GET_MOBALERTTIME(tmp) = 0;
-      }
+      clear_mob_alarm(tmp, ch);
     }
 
     return;
@@ -3700,7 +3691,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         }
       }
     }
-    die(victim);
+    die(victim, GET_IDNUM(ch));
     return TRUE;
   }
   return did_docwagon;
@@ -4171,8 +4162,7 @@ void remove_throwing(struct char_data *ch)
 void combat_message_process_single_ranged_response(struct char_data *ch, struct char_data *tch) {
   if (IS_NPC(tch)) {
     // Everyone ends up on edge when they hear gunfire nearby.
-    GET_MOBALERTTIME(tch) = 20;
-    GET_MOBALERT(tch) = MALERT_ALERT;
+    set_mob_alert(tch, 20);
 
     // Only guards and helpers who are not in combat can participate.
     if (CH_IN_COMBAT(tch) || !(MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER)))
@@ -4181,8 +4171,7 @@ void combat_message_process_single_ranged_response(struct char_data *ch, struct 
     // Guards and helpers will actively try to fire on a player using a gun.
     if (!IS_NPC(ch) && (!FIGHTING(ch) || IS_NPC(FIGHTING(ch)))) {
       if (number(0, 6) >= 2) {
-        GET_MOBALERTTIME(tch) = 30;
-        GET_MOBALERT(tch) = MALERT_ALARM;
+        set_mob_alarm(tch, ch, 30);
         struct room_data *was_in = tch->in_room;
         if (ranged_response(ch, tch) && tch->in_room == was_in) {
           act("$n aims $s weapon at a distant threat!",
@@ -4230,8 +4219,7 @@ void combat_message_process_single_ranged_response(struct char_data *ch, struct 
           return;
 
         // Line of sight established, fire.
-        GET_MOBALERTTIME(tch) = 30;
-        GET_MOBALERT(tch) = MALERT_ALARM;
+        set_mob_alarm(tch, FIGHTING(ch), 30);
         struct room_data *was_in = tch->in_room;
         if (ranged_response(FIGHTING(ch), tch) && tch->in_room == was_in) {
           act("$n aims $s weapon at a distant threat!",
@@ -4451,11 +4439,9 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   for (struct char_data *listener = ch_room->people; listener; listener = listener->next_in_room) {
     if (IS_NPC(listener)) {
       if (veh || CAN_SEE(listener, ch)) {
-        GET_MOBALERTTIME(listener) = 30;
-        GET_MOBALERT(listener) = MALERT_ALARM;
+        set_mob_alarm(listener, ch, 30);
       } else {
-        GET_MOBALERTTIME(listener) = 20;
-        GET_MOBALERT(listener) = MALERT_ALERT;
+        set_mob_alert(listener, 20);
       }
     }
   }
@@ -5472,8 +5458,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         if (CAN_SEE(vict, ch)) {
           ranged_response(ch, vict);
         } else {
-          GET_MOBALERT(vict) = MALERT_ALARM;
-          GET_MOBALERTTIME(vict) = MAX(GET_MOBALERTTIME(vict), 30);
+          set_mob_alert(vict, 30);
         }
       }
 
@@ -5851,7 +5836,7 @@ void roll_individual_initiative(struct char_data *ch)
     // flag until we process all that.
     if (FIGHTING(ch)
         && IS_NPC(FIGHTING(ch))
-        && GET_MOBALERT(FIGHTING(ch)) == MALERT_CALM
+        && !mob_is_alert(FIGHTING(ch))
         && !MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)
         && !AFF_FLAGGED(FIGHTING(ch), AFF_SURPRISE)
         && success_test(GET_REA(ch), 4) > success_test(GET_REA(FIGHTING(ch)), 4)) {
@@ -6685,12 +6670,15 @@ void chkdmg(struct veh_data * veh)
 
     // Dump out and destroy objects.
     for (struct obj_data *obj = veh->contents, *nextobj; obj; obj = nextobj) {
+      const char *repr = generate_new_loggable_representation(obj);
+
       nextobj = obj->next_content;
       switch(number(0, 2)) {
-          /* case 0: the item stays in the vehicle */
         case 0:
+          // Item stays in vehicle, no-op.
           break;
         case 1:
+          // Item is disgorged to room.
           obj_from_room(obj);
           if (veh->in_room) {
             obj_to_room(obj, veh->in_room);
@@ -6700,16 +6688,17 @@ void chkdmg(struct veh_data * veh)
             mudlog("SYSERR: Destroyed veh had no in_room or in_veh! Disgorging object to Dante's.", NULL, LOG_SYSLOG, TRUE);
             obj_to_room(obj, &world[real_room(RM_DANTES_GARAGE)]);
           }
+          mudlog_vfprintf(NULL, LOG_WRECKLOG, "Disgorged vehicle-held ''%s'' to %s: Wreck dump", repr, obj->in_veh ? GET_VEH_NAME(obj->in_veh) : GET_ROOM_NAME(obj->in_room));
           break;
         case 2:
         {
-          char purgebuf[500];
-          snprintf(purgebuf, sizeof(purgebuf), "Destroying vehicle-held %s (%ld): Wreck loss", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
-          mudlog(purgebuf, NULL, LOG_WRECKLOG, TRUE);
+          mudlog_vfprintf(NULL, LOG_WRECKLOG, "Destroying vehicle-held ''%s'': Wreck loss", repr);
         }
           extract_obj(obj);
           break;
       }
+
+      delete [] repr;
     }
   }
   return;
@@ -6720,26 +6709,19 @@ bool vram(struct veh_data * veh, struct char_data * vict, struct veh_data * tveh
   int power, damage_total = 0, veh_dam = 0;
   int veh_resist = 0, vict_resist = 0, modbod = 0;
 
-  // Alarm all NPCs inside the ramming vehicle.
+  // Alert all NPCs inside the ramming vehicle.
   for (struct char_data *npc = veh->people; npc; npc = npc->next_in_veh) {
-    if (IS_NPC(npc)) {
-      GET_MOBALERT(npc) = MALERT_ALARM;
-      GET_MOBALERTTIME(npc) = 30;
-    }
+    set_mob_alert(npc, 30);
   }
 
   if (vict && IS_NPC(vict)) {
-    GET_MOBALERT(vict) = MALERT_ALARM;
-    GET_MOBALERTTIME(vict) = 30;
+    set_mob_alarm(vict, veh->owner, 30);
   }
 
   // Alarm all NPCs inside the target vehicle.
   if (tveh) {
     for (struct char_data *npc = tveh->people; npc; npc = npc->next_in_veh) {
-      if (IS_NPC(npc)) {
-        GET_MOBALERT(npc) = MALERT_ALARM;
-        GET_MOBALERTTIME(npc) = 30;
-      }
+      set_mob_alarm(npc, veh->owner, 30);
     }
   }
 

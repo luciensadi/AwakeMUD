@@ -1965,10 +1965,18 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   MOB_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, action_bits, MOB_MAX);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "NPC flags: ^c%s^n\r\n", buf2);
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alert status: ^c%s^n with ^c%d^n ticks cooldown.\r\n",
-           GET_MOBALERT(k) == MALERT_ALARM ? "^rAlarm^n" : (GET_MOBALERT(k) == MALERT_ALERT ? "^yAlert^n" : "^gCalm^n"),
-           GET_MOBALERTTIME(k)
-         );
+  if (mob_is_alert(k)) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alarmed at ^c%ld^n characters: ", GET_MOB_ALARM_MAP(k).size());
+    for (auto itr : GET_MOB_ALARM_MAP(k)) {
+      if (itr.first == 0) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "<alert %lds>", itr.second - time(0));
+      } else {
+        const char *ch_name = get_player_name(itr.first);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %lds>", ch_name, itr.second - time(0));
+        delete [] ch_name;
+      }
+    }
+  }
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Height: %d cm, Weight: %d kg\r\n", GET_HEIGHT(k), GET_WEIGHT(k));
 

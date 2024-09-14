@@ -3564,8 +3564,7 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(mob_specials.memory);
   REPLICATE(mob_specials.wait_state);
   REPLICATE(mob_specials.quest_id);
-  REPLICATE(mob_specials.alert);
-  REPLICATE(mob_specials.alerttime);
+  GET_MOB_ALARM_MAP(clone).insert(GET_MOB_ALARM_MAP(original).begin(), GET_MOB_ALARM_MAP(original).end());
   REPLICATE(mob_specials.spare1);
   REPLICATE(mob_specials.spare2);
   REPLICATE(points.mental);

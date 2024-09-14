@@ -930,11 +930,9 @@ void magic_perception(struct char_data *ch, int force, int spell)
 
         // Alert/alarm NPCs when they see casting around them.
         if (alert_state_should_be_alarm) {
-          GET_MOBALERT(vict) = MAX(MALERT_ALARM, GET_MOBALERT(vict));
-          GET_MOBALERTTIME(vict) = MAX(GET_MOBALERTTIME(vict), 20);
+          extend_mob_alarm_time(vict, ch, 20);
         } else {
-          GET_MOBALERT(vict) = MAX(MALERT_ALERT, GET_MOBALERT(vict));
-          GET_MOBALERTTIME(vict) = MAX(GET_MOBALERTTIME(vict), 10);
+          set_mob_alert(vict, 15);
         }
 
 #ifdef GUARDS_ATTACK_MAGES
@@ -943,7 +941,7 @@ void magic_perception(struct char_data *ch, int force, int spell)
           continue;
 
         // Guards and fighters don't like people casting magic around them.
-        if (GET_MOBALERT(vict) == MALERT_ALARM || MOB_FLAGGED(vict, MOB_GUARD) || mob_is_aggressive(vict, TRUE)) {
+        if (mob_is_alarmed_by_ch(vict, ch) || MOB_FLAGGED(vict, MOB_GUARD) || mob_is_aggressive(vict, TRUE)) {
           send_mob_aggression_warnings(ch, vict);
           set_fighting(vict, ch);
         }

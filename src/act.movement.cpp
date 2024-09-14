@@ -32,7 +32,7 @@
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
-void death_cry(struct char_data * ch);
+void death_cry(struct char_data * ch, idnum_t cause_of_death_idnum);
 bool perform_fall(struct char_data *);
 bool check_fall(struct char_data *, int, bool need_to_send_fall_message);
 extern int modify_target(struct char_data *);
@@ -324,8 +324,7 @@ bool should_tch_see_chs_movement_message(struct char_data *viewer, struct char_d
       // Spotting someone sneaking around puts NPCs on edge.
       if (IS_NPC(viewer) && !IS_PROJECT(viewer)) {
         // Extend their alert time and ensure they're at least Alert.
-        GET_MOBALERT(viewer) = MAX(GET_MOBALERT(viewer), MALERT_ALERT);
-        GET_MOBALERTTIME(viewer) = MAX(GET_MOBALERTTIME(viewer), 10);
+        extend_mob_alarm_time(viewer, actor, 10);
         
         // Send messages, but only for the room you're walking into.
         if (is_arriving) {
@@ -552,7 +551,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 #ifdef DEATH_FLAGS
   if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) && !IS_SENATOR(ch)) {
     send_to_char("You feel the world slip into darkness, you better hope a wandering DocWagon finds you.\r\n", ch);
-    death_cry(ch);
+    death_cry(ch, 0);
     act("$n vanishes into thin air.", FALSE, ch, 0, 0, TO_ROOM);
     death_penalty(ch);
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
@@ -703,7 +702,7 @@ bool perform_fall(struct char_data *ch)
     if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) &&
         !IS_SENATOR(ch)) {
       send_to_char("You feel the world slip into darkness, you better hope a wandering DocWagon finds you.\r\n", ch);
-      death_cry(ch);
+      death_cry(ch, 0);
       act("$n vanishes into thin air.", FALSE, ch, 0, 0, TO_ROOM);
       death_penalty(ch);
       for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)

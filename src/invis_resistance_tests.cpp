@@ -73,9 +73,9 @@ bool process_spotted_invis(struct char_data *ch, struct char_data *vict) {
     return FALSE;
 
   // Refresh alert time to 20 since we're seeing a PC being shady.
-  GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 20);
+  extend_mob_alarm_time(ch, vict, 20);
 
-  if (GET_MOBALERT(ch) != MALERT_ALARM) {
+  if (mob_is_alert(ch)) {
     // The more secure an area is, the twitchier the guards are. This evaluates TRUE if a given guard is twitchy.
     int alert_threshold = GET_SECURITY_LEVEL(get_ch_in_room(ch)) * 5;
     if (MOB_FLAGS(ch).AreAnySet(MOB_GUARD, MOB_AGGRESSIVE, MOB_AGGR_ELF, MOB_AGGR_ORK, MOB_AGGR_DWARF, MOB_AGGR_HUMAN, MOB_AGGR_TROLL, ENDBIT)) {
@@ -87,14 +87,14 @@ bool process_spotted_invis(struct char_data *ch, struct char_data *vict) {
 
     // Seeing someone walking around invis alarms you, or alerts you if you're not twitchy.
     if (alert_state_should_be_alarm) {
-      GET_MOBALERT(ch) = MALERT_ALARM;
+      set_mob_alarm(ch, vict, 10);
       send_npc_newly_alarmed_message(ch, vict);
       if (access_level(vict, LVL_PRESIDENT) && PRF_FLAGGED(vict, PRF_ROLLS)) {
         send_to_char(vict, "You have been noticed while invisible! ^L[%s#%ld has become ^ralarmed^L!]\r\n", GET_CHAR_NAME(ch), GET_MOB_UNIQUE_ID(ch));
       }
       return TRUE;
     } else {
-      GET_MOBALERT(ch) = MALERT_ALERT;
+      set_mob_alarm(ch, NULL, 10);
       if (access_level(vict, LVL_PRESIDENT) && PRF_FLAGGED(vict, PRF_ROLLS)) {
         send_to_char(vict, "You have been noticed while invisible! ^L[%s#%ld has become ^yalert^L!]\r\n", GET_CHAR_NAME(ch), GET_MOB_UNIQUE_ID(ch));
       }
@@ -132,14 +132,18 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
   if ((found = map_to_operate_on->find(idnum)) != map_to_operate_on->end()) {
     // Anti-cheese: Prevents someone running in and out again, waiting for them to lose memory of us, and then going in while they're calm.
     if (IS_NPC(ch) && !IS_NPC(vict) && found->second) {
-      if (GET_MOBALERT(ch) == MALERT_CALM) {
+      if (!mob_is_alert(ch)) {
         // They timed out, so let's run the whole spotted check again.
         if (process_spotted_invis(ch, vict)) {
           send_npc_newly_alarmed_message(ch, vict);
         }
       } else {
         // Just refresh their existing alert time.
-        GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 20);
+        if (mob_is_alarmed_by_ch(ch, vict)) {
+          set_mob_alarm(ch, vict, 20);
+        } else {
+          set_mob_alarm(ch, NULL, 20);
+        }
       }
     }
 
@@ -269,9 +273,8 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
       }
     }
     else if (GET_EQ(vict, WEAR_LIGHT) && IS_NPC(ch)) {
-      // You can't see them, but their flashlight beam is still visible.
-      GET_MOBALERT(ch) = MALERT_ALERT;
-      GET_MOBALERTTIME(ch) = 20;
+      // You can't see them, but their flashlight beam is still visible. Set to Alert at minimum.
+      set_mob_alarm(ch, NULL, 20);
     }
   }
 

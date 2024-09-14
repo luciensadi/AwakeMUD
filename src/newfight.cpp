@@ -22,7 +22,7 @@
 #include "newfight.hpp"
 #include "metrics.hpp"
 
-extern void die(struct char_data * ch);
+extern void die(struct char_data * ch, idnum_t cause_of_death);
 extern bool astral_fight(struct char_data *ch, struct char_data *vict);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
@@ -135,14 +135,14 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A ball of coherent light leaps from your Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_CHAR);
         act("A ball of coherent light leaps from $n's Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A ball of coherent light leaps from $n's Dominator, tearing into you! A horrible rending sensation tears through you as your vision fades.", FALSE, att->ch, 0, def->ch, TO_VICT);
-        die(def->ch);
+        die(def->ch, GET_IDNUM(att->ch));
         return TRUE;
       case WEAP_CANNON:
         // Decomposer? Don't just kill your target-- if they're a player, disconnect them.
         act("A roaring column of force explodes from your Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_CHAR);
         act("A roaring column of force explodes from $n's Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A roaring column of force explodes from $n's Dominator, erasing you from existence!", FALSE, att->ch, 0, def->ch, TO_VICT);
-        die(def->ch);
+        die(def->ch, GET_IDNUM(att->ch));
         if (def->ch->desc) {
           STATE(def->ch->desc) = CON_CLOSE;
           close_socket(def->ch->desc);
@@ -435,8 +435,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
         //Handle suprise attack/alertness here -- spirits ranged.
         if (!target_died && IS_NPC(def->ch)) {
-          GET_MOBALERT(def->ch) = MALERT_ALARM;
-          GET_MOBALERTTIME(def->ch) = 30;
+          set_mob_alarm(def->ch, att->ch, 30);
         }
         return target_died;
       }
@@ -560,8 +559,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
       //Handle suprise attack/alertness here -- ranged attack failed.
       if (!target_died && IS_NPC(def->ch)) {
-        GET_MOBALERT(def->ch) = MALERT_ALARM;
-        GET_MOBALERTTIME(def->ch) = 30;
+        set_mob_alarm(def->ch, att->ch, 30);
       }
       return target_died;
     }
@@ -1027,8 +1025,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
           //Handle suprise attack/alertness here -- spirits melee.
           if (!target_died && IS_NPNPC(def->ch)) {
-            GET_MOBALERT(def->ch) = MALERT_ALARM;
-            GET_MOBALERTTIME(def->ch) = 30;
+            set_mob_alarm(def->ch, att->ch, 30);
 
             // Process flame aura here since the spirit will otherwise end combat evaluation here.
             handle_flame_aura(att, def);
@@ -1210,8 +1207,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       }
       //Handle suprise attack/alertness here -- defender didn't die.
       if (IS_NPC(def->ch)) {
-        GET_MOBALERT(def->ch) = MALERT_ALERT;
-        GET_MOBALERTTIME(def->ch) = 20;
+        set_mob_alert(def->ch, 20);
       }
     }
   }

@@ -772,8 +772,19 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_ACTIVE(ch)        ((ch)->mob_specials.active)
 #define GET_EXTRA(ch)          ((ch)->points.extra)
 #define GET_EXTRA2(ch)        ((ch)->points.extra2)
-#define GET_MOBALERT(ch)      ((ch)->mob_specials.alert)
-#define GET_MOBALERTTIME(ch)  ((ch)->mob_specials.alerttime)
+
+#define GET_MOB_ALARM_MAP(npc)          ((npc)->mob_specials.alarm_map)
+void set_mob_alarm(struct char_data *npc, idnum_t vict_idnum, int seconds_to_alarm);
+void set_mob_alarm(struct char_data *npc, struct char_data *ch, int seconds_to_alarm);
+void set_mob_alert(struct char_data *npc, int seconds_to_alarm);
+void extend_mob_alarm_time(struct char_data *npc, struct char_data *ch, int seconds_to_alarm);
+bool mob_is_alarmed_by_ch(struct char_data *npc, struct char_data *ch);
+bool mob_is_alarmed_by_ch(struct char_data *npc, idnum_t vict_idnum);
+bool mob_is_alert(struct char_data *npc);
+void clear_mob_alarm(struct char_data *npc, struct char_data *ch);
+// Underline variants are for when you've already guaranteed they're an NPNPC and don't want to spend cycles checking that.
+bool _mob_is_alarmed_by_ch(struct char_data *npc, idnum_t vict_idnum);
+bool _mob_is_alert(struct char_data *npc);
 
 #define CAN_CARRY_W(ch)       ((GET_STR(ch) * 10) + 30)
 #define CAN_CARRY_N(ch)       (8 + GET_QUI(ch) + (GET_REAL_LEVEL(ch)>=LVL_BUILDER?50:0))

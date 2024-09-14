@@ -45,6 +45,14 @@ ACMD_DECLARE(do_help);
 void echo_on(struct descriptor_data * d);
 void echo_off(struct descriptor_data * d);
 
+int get_ccr_race_point_cost(int race_int);
+
+#define PRIORITY_E 4
+#define PRIORITY_D 3
+#define PRIORITY_C 2
+#define PRIORITY_B 1
+#define PRIORITY_A 0
+
 /*********
 EXPECTED FLOW:
 - name
@@ -1439,55 +1447,8 @@ void create_parse(struct descriptor_data *d, const char *arg)
         d->ccr.pr[PO_MAGIC] = CCR_MAGIC_NONE;
 
         // Assign racial costs and subtract them from the point value.
-        switch (GET_RACE(CH)) {
-          case RACE_HUMAN:
-            d->ccr.pr[PO_RACE] = 0;
-            break;
-          case RACE_DWARF:
-          case RACE_ORK:
-            d->ccr.pr[PO_RACE] = 5;
-            break;
-          case RACE_OGRE:
-          case RACE_HOBGOBLIN:
-          case RACE_GNOME:
-          case RACE_ONI:
-          case RACE_SATYR:
-          case RACE_KOBOROKURU:
-          case RACE_TROLL:
-          case RACE_ELF:
-          case RACE_MENEHUNE:
-            d->ccr.pr[PO_RACE] = 10;
-            break;
-          case RACE_CYCLOPS:
-          case RACE_FOMORI:
-          case RACE_GIANT:
-          case RACE_MINOTAUR:
-          case RACE_NIGHTONE:
-          case RACE_WAKYAMBI:
-          case RACE_GHOUL_DWARF:
-          case RACE_GHOUL_ORK:
-          case RACE_DRAKE_HUMAN:
-            d->ccr.pr[PO_RACE] = 15;
-            break;
-          case RACE_DRYAD:
-            d->ccr.pr[PO_RACE] = 15;
-            break;
-          case RACE_GHOUL_ELF:
-          case RACE_GHOUL_TROLL:
-          case RACE_DRAKE_DWARF:
-          case RACE_DRAKE_ORK:
-            d->ccr.pr[PO_RACE] = 20;
-            break;
-          case RACE_DRAKE_ELF:
-          case RACE_DRAKE_TROLL:
-            d->ccr.pr[PO_RACE] = 25;
-            break;
-          case RACE_WESTERN_DRAGON:
-          case RACE_EASTERN_DRAGON:
-          case RACE_FEATHERED_SERPENT:
-            d->ccr.pr[PO_RACE] = 30;
-            break;
-        }
+        d->ccr.pr[PO_RACE] = get_ccr_race_point_cost(GET_RACE(CH));
+      
         d->ccr.points -= d->ccr.pr[PO_RACE];
         d->ccr.pr[5] = -1;
 
@@ -1658,47 +1619,49 @@ void create_parse(struct descriptor_data *d, const char *arg)
       return;
     // fall through
   case CCR_PRESTIGE_RACE_PAID_FOR:
-    if (GET_RACE(d->character) == RACE_HUMAN)
-      d->ccr.pr[4] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_DWARF)
-      d->ccr.pr[3] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_ORK)
-      d->ccr.pr[3] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_TROLL)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_ELF)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_CYCLOPS)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_KOBOROKURU)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_FOMORI)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_MENEHUNE)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_HOBGOBLIN)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_GIANT)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_GNOME)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_ONI)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_WAKYAMBI)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_OGRE)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_MINOTAUR)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_SATYR)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_NIGHTONE)
-      d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) >= RACE_DRYAD && GET_RACE(d->character) <= RACE_GHOUL_TROLL) {
-      if (GET_RACE(d->character) == RACE_GHOUL_HUMAN)
-        d->ccr.pr[2] = PR_RACE;
-      else
-        d->ccr.pr[1] = PR_RACE;
+    {
+      switch (GET_RACE(CH)) {
+        case RACE_HUMAN:
+          d->ccr.pr[4] = PR_RACE;
+          break;
+        case RACE_DWARF:
+        case RACE_ORK:
+          d->ccr.pr[3] = PR_RACE;
+          break;
+        case RACE_OGRE:
+        case RACE_HOBGOBLIN:
+        case RACE_GNOME:
+        case RACE_ONI:
+        case RACE_SATYR:
+        case RACE_KOBOROKURU:
+        case RACE_TROLL:
+        case RACE_ELF:
+        case RACE_MENEHUNE:
+          d->ccr.pr[2] = PR_RACE;
+          break;
+        case RACE_CYCLOPS:
+        case RACE_FOMORI:
+        case RACE_GIANT:
+        case RACE_MINOTAUR:
+        case RACE_NIGHTONE:
+        case RACE_WAKYAMBI:
+        case RACE_GHOUL_DWARF:
+        case RACE_GHOUL_ORK:
+        case RACE_DRAKE_HUMAN:
+        case RACE_DRYAD:
+        case RACE_GHOUL_ELF:
+        case RACE_GHOUL_TROLL:
+        case RACE_DRAKE_DWARF:
+        case RACE_DRAKE_ORK:
+        case RACE_DRAKE_ELF:
+        case RACE_DRAKE_TROLL:
+        case RACE_WESTERN_DRAGON:
+        case RACE_EASTERN_DRAGON:
+        case RACE_FEATHERED_SERPENT:
+        default:
+          d->ccr.pr[1] = PR_RACE;
+          break;
+      }
     }
 
     if (real_object(OBJ_MAP_OF_SEATTLE) > -1)
@@ -2240,4 +2203,66 @@ void refund_chargen_prestige_syspoints_if_needed(struct char_data *ch) {
   SEND_TO_Q(buf, ch->desc);
 
   find_or_load_ch_cleanup(payer);
+}
+
+int get_ccr_race_priority(int race_int) {
+  switch (get_ccr_race_point_cost(race_int)) {
+    case 0:
+      return PRIORITY_E;
+    case 5:
+      return PRIORITY_D;
+    case 10:
+      return PRIORITY_C;
+    case 15:
+      return PRIORITY_B;
+    default:
+      return PRIORITY_A;
+  }
+}
+
+int get_ccr_race_point_cost(int race_int) {
+  switch (race_int) {
+    case RACE_HUMAN:
+      return 0;
+    case RACE_DWARF:
+    case RACE_ORK:
+      return 5;
+    case RACE_OGRE:
+    case RACE_HOBGOBLIN:
+    case RACE_GNOME:
+    case RACE_ONI:
+    case RACE_SATYR:
+    case RACE_KOBOROKURU:
+    case RACE_TROLL:
+    case RACE_ELF:
+    case RACE_MENEHUNE:
+    case RACE_GHOUL_HUMAN:
+      return 10;
+    case RACE_CYCLOPS:
+    case RACE_FOMORI:
+    case RACE_GIANT:
+    case RACE_MINOTAUR:
+    case RACE_NIGHTONE:
+    case RACE_WAKYAMBI:
+    case RACE_GHOUL_DWARF:
+    case RACE_GHOUL_ORK:
+    case RACE_DRAKE_HUMAN:
+    case RACE_DRYAD:
+      return 15;
+    case RACE_GHOUL_ELF:
+    case RACE_GHOUL_TROLL:
+    case RACE_DRAKE_DWARF:
+    case RACE_DRAKE_ORK:
+      return 20;
+    case RACE_DRAKE_ELF:
+    case RACE_DRAKE_TROLL:
+      return 25;
+    case RACE_WESTERN_DRAGON:
+    case RACE_EASTERN_DRAGON:
+    case RACE_FEATHERED_SERPENT:
+      return 30;
+    default:
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Race %d has no point value in chargen.", race_int);
+      return 50;
+  }
 }

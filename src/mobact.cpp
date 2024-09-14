@@ -64,7 +64,7 @@ extern int process_elevator(struct room_data *room, struct char_data *ch, int cm
 bool memory(struct char_data *ch, struct char_data *vict);
 int violates_zsp(int security, struct char_data *ch, int pos, struct char_data *mob);
 bool attempt_reload(struct char_data *mob, int pos);
-bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t quest_id);
+bool vehicle_is_valid_mob_target(struct veh_data *veh, struct char_data *npc, idnum_t quest_id);
 void switch_weapons(struct char_data *mob, int pos);
 void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 bool mob_cannot_be_aggressive(struct char_data *ch);
@@ -372,39 +372,21 @@ bool vict_is_valid_aggro_target(struct char_data *ch, struct char_data *vict) {
     return FALSE;
 
   bool is_aggressive = MOB_FLAGS(ch).IsSet(MOB_AGGRESSIVE) && !(IS_GHOUL(ch) && IS_GHOUL(vict));
-  bool is_alarmed_guard = MOB_FLAGGED(ch, MOB_GUARD) && GET_MOBALERT(ch) == MALERT_ALARM;
-  bool is_alarmed_racist = mob_is_aggressive(ch, FALSE) && GET_MOBALERT(ch) == MALERT_ALARM && !(IS_GHOUL(ch) && IS_GHOUL(vict));
+  bool is_alarmed = _mob_is_alarmed_by_ch(ch, GET_IDNUM(vict));
   bool is_racially_motivated = mob_is_aggressive_towards_race(ch, GET_RACE(vict));
   bool is_faction_motivated = faction_leader_says_geef_ze_maar_een_pak_slaag_voor_papa(ch, vict) && (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD) || is_aggressive);
 
-  if (is_aggressive || is_alarmed_guard || is_alarmed_racist || is_racially_motivated || is_faction_motivated) {
+  if (is_aggressive || is_alarmed || is_racially_motivated || is_faction_motivated) {
 #ifdef MOBACT_DEBUG
-    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: Target found (conditions: %s/%s/%s/%s/%s): %s.",
+    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: Target found (conditions: %s/%s/%s/%s): %s.",
              is_aggressive ? "base aggro" : "!ba",
-             is_alarmed_guard ? "alarmed guard" : "!ag",
-             is_alarmed_racist ? "alarmed racist" : "!ar",
+             is_alarmed ? "alarmed" : "!alm",
              is_racially_motivated ? "racial violence" : "!rv",
              is_faction_motivated ? "faction" : "!f",
              GET_CHAR_NAME(vict));
     do_say(ch, buf3, 0, 0);
 #endif
 
-    if (is_dissuaded_by_hardened_armor(ch, vict)) {
-#ifdef MOBACT_DEBUG
-      strlcpy(buf3, "...But I'm refusing to attack due to hardened armor.", sizeof(buf3));
-      do_say(ch, buf3, 0, 0);
-#endif
-      return FALSE;
-    }
-    return TRUE;
-  }
-
-  // We allow alarmed, non-aggro NPCs to attack, but only if the victim could otherwise hurt them, and only if they're otherwise aggressive (guard, helper, etc)
-  if (GET_MOBALERT(ch) == MALERT_ALARM && (MOB_FLAGGED(ch, MOB_HELPER) || MOB_FLAGGED(ch, MOB_GUARD))) {
-#ifdef MOBACT_DEBUG
-    snprintf(buf3, sizeof(buf3), "vict_is_valid_aggro_target: I am alarmed, so %s is a valid aggro target.", GET_CHAR_NAME(vict));
-    do_say(ch, buf3, 0, 0);
-#endif
     if (is_dissuaded_by_hardened_armor(ch, vict)) {
 #ifdef MOBACT_DEBUG
       strlcpy(buf3, "...But I'm refusing to attack due to hardened armor.", sizeof(buf3));
@@ -552,7 +534,7 @@ void mobact_change_firemode(struct char_data *ch) {
     proning_desire = -1000;
 
   // We're inclined to stand up if we're not in combat or are in combat with someone in our same room.
-  if ((GET_MOBALERT(ch) == MALERT_CALM && !FIGHTING(ch)) || (FIGHTING(ch) && FIGHTING(ch)->in_room == ch->in_room)) {
+  if ((!mob_is_alert(ch) && !FIGHTING(ch)) || (FIGHTING(ch) && FIGHTING(ch)->in_room == ch->in_room)) {
     // Note the -3 here-- someone with FA and a tripod will stay prone.
     proning_desire -= 3;
   }
@@ -739,7 +721,7 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
         continue;
 
       // Check for our usual conditions.
-      if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM, GET_MOB_QUEST_CHAR_ID(ch))) {
+      if (vehicle_is_valid_mob_target(tveh, ch, GET_MOB_QUEST_CHAR_ID(ch))) {
         // Found a target, stop processing vehicles.
 #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf), "m_p_i_v_g: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
@@ -849,30 +831,22 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
     return FALSE;
   }
 
-  if (!mob_is_aggressive(ch, TRUE) && GET_MOBALERT(ch) != MALERT_ALARM) {
+  if (!mob_is_aggressive(ch, TRUE) && mob_is_alert(ch)) {
 #ifdef MOBACT_DEBUG
-    strncpy(buf3, "m_p_i_v_a: I am neither aggressive nor alarmed.", sizeof(buf));
+    strncpy(buf3, "m_p_i_v_a: I am neither aggressive nor alert.", sizeof(buf));
     do_say(ch, buf3, 0, 0);
 #endif
     return FALSE;
   }
 
   // Attack vehicles (but not for aggr-to-race)
-  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || (GET_MOBALERT(ch) == MALERT_ALARM && !MOB_FLAGGED(ch, MOB_WIMPY))) {
-    bool area_has_pc_occupants = FALSE;
-    for (struct char_data *check_ch = in_room->people; !area_has_pc_occupants && check_ch; check_ch = check_ch->next_in_room)
-      area_has_pc_occupants = !IS_NPC(check_ch);
-
+  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || (mob_is_alert(ch) && !MOB_FLAGGED(ch, MOB_WIMPY))) {
     for (tveh = in_room->vehicles; tveh; tveh = tveh->next_veh) {
       // No attacking your own vehicle.
       if (tveh == ch->in_veh)
         continue;
 
-      // If nobody's in the room or in the vehicle, you can't attack.
-      if (!area_has_pc_occupants && !tveh->people && !tveh->rigger)
-        continue;
-
-      if (vehicle_is_valid_mob_target(tveh, TRUE, GET_MOB_QUEST_CHAR_ID(ch))) {
+      if (vehicle_is_valid_mob_target(tveh, ch, GET_MOB_QUEST_CHAR_ID(ch))) {
         // Found a valid target, stop looking.
 #ifdef MOBACT_DEBUG
         snprintf(buf3, sizeof(buf), "m_p_i_v_a: Target found, attacking veh %s.", GET_VEH_NAME(tveh));
@@ -968,42 +942,32 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
     return FALSE;
   }
 
-  if (!mob_is_aggressive(ch, TRUE) && GET_MOBALERT(ch) != MALERT_ALARM) {
+  if (!mob_is_aggressive(ch, TRUE) && mob_is_alert(ch)) {
 #ifdef MOBACT_DEBUG
-    strncpy(buf3, "m_p_a: I am neither aggressive nor alarmed.", sizeof(buf));
+    strncpy(buf3, "m_p_a: I am neither aggressive nor alert.", sizeof(buf));
     do_say(ch, buf3, 0, 0);
 #endif
     return FALSE;
   }
 
   // Attack vehicles (but not for aggr-to-race)
-  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || (GET_MOBALERT(ch) == MALERT_ALARM && !MOB_FLAGGED(ch, MOB_WIMPY))) {
+  if (MOB_FLAGGED(ch, MOB_AGGRESSIVE) || (mob_is_alert(ch) && !MOB_FLAGGED(ch, MOB_WIMPY))) {
     // If I am not astral, am in the same room, and am willing to attack a vehicle this round (coin flip), pick a fight with a vehicle.
     if (ch->in_room->number == room->number && !IS_ASTRAL(ch) && number(0, 1)) {
-      bool area_has_pc_occupants = FALSE;
-
-      for (struct char_data *check_ch = room->people; !area_has_pc_occupants && check_ch; check_ch = check_ch->next_in_room)
-        area_has_pc_occupants = !IS_NPC(check_ch);
-
       for (veh = room->vehicles; veh; veh = veh->next_veh) {
-        // If nobody's in the room or in the vehicle, you can't attack.
-        if (!area_has_pc_occupants && !veh->people && !veh->rigger)
-          continue;
-
         // Aggros don't care about road/garage status, so they act as if always alarmed.
-        if (vehicle_is_valid_mob_target(veh, TRUE, GET_MOB_QUEST_CHAR_ID(ch))) {
+        if (vehicle_is_valid_mob_target(veh, ch, GET_MOB_QUEST_CHAR_ID(ch))) {
           stop_fighting(ch);
 
           if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
-            snprintf(buf, sizeof(buf), "%s$n swivels aggressively towards %s!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
-            snprintf(buf2, sizeof(buf2), "%s%s swivels aggressively towards your vehicle!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
+            snprintf(buf, sizeof(buf), "$n swivels aggressively towards %s!", GET_VEH_NAME(veh));
+            snprintf(buf2, sizeof(buf2), "%s swivels aggressively towards your vehicle!\r\n", CAP(GET_CHAR_NAME(ch)));
             send_to_char(ch, "You prepare to attack %s!\r\n", GET_VEH_NAME(veh));
           } else {
-            snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
-            snprintf(buf2, sizeof(buf2), "%s%s glares at your vehicle, preparing to attack!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "" , GET_CHAR_NAME(ch));
+            snprintf(buf, sizeof(buf), "$n glares at %s, preparing to attack it!", GET_VEH_NAME(veh));
+            snprintf(buf2, sizeof(buf2), "%s glares at your vehicle, preparing to attack!\r\n", CAP(GET_CHAR_NAME(ch)));
             send_to_char(ch, "You prepare to attack %s!\r\n", GET_VEH_NAME(veh));
           }
-
 
           act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
           send_to_veh(buf2, veh, NULL, TRUE);
@@ -1089,9 +1053,9 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
   if (net_succ > 0) {
     if (pc->in_room == mob->in_room) {
       if (MOB_FLAGGED(mob, MOB_INANIMATE)) {
-        snprintf(buf, sizeof(buf), "^y%s$n swivels towards you threateningly!^n", GET_MOBALERT(mob) == MALERT_ALARM ? "Searching for more aggressors, " : "");
+        strlcpy(buf, "^y$n swivels towards you threateningly!^n", sizeof(buf));
       } else {
-        snprintf(buf, sizeof(buf), "^y%s$n glares at you, preparing to attack!^n", GET_MOBALERT(mob) == MALERT_ALARM ? "Searching for more aggressors, " : "");
+        strlcpy(buf, "^y$n glares at you, preparing to attack!^n", sizeof(buf));
       }
       act(buf, TRUE, mob, NULL, pc, TO_VICT);
     } else {
@@ -1254,7 +1218,7 @@ bool npc_vs_vehicle_blocked_by_quest_protection(idnum_t quest_id, struct veh_dat
   return TRUE;
 }
 
-bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t quest_id) {
+bool vehicle_is_valid_mob_target(struct veh_data *veh, struct char_data *npc, idnum_t quest_id) {
   struct room_data *room = veh->in_room;
 
   // Vehicle's not in a room? Skip.
@@ -1278,23 +1242,27 @@ bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed, idnum_t que
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
     return FALSE;
 
-  // We don't attack vehicles in their proper places-- unless we're alarmed.
-  if (!alarmed && (ROOM_FLAGGED(room, ROOM_ROAD) || ROOM_FLAGGED(room, ROOM_GARAGE)))
-    return FALSE;
-
   // Check for quest protections.
   if (npc_vs_vehicle_blocked_by_quest_protection(quest_id, veh))
     return FALSE;
 
   // TODO: Should we skip vehicles we can't harm?
 
-  // We attack player-owned vehicles, no matter who's in them.
-  if (veh->owner > 0)
+  // If we're aggro, we'll fight anything. We'll fight God if we have to.
+  if (mob_is_aggressive(npc, TRUE))
     return TRUE;
 
-  // We attack player-occupied vehicles.
+  // We attack vehicles owned by people we're alarmed at.
+  if (_mob_is_alarmed_by_ch(npc, veh->owner))
+    return TRUE;
+
+  // We attack vehicles rigged by people we're alarmed at.
+  if (veh->rigger && _mob_is_alarmed_by_ch(npc, GET_IDNUM(veh->rigger)))
+    return TRUE;
+
+  // We attack vehicles occupied by players we're alarmed at.
   for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
-    if (vict->desc && vict->desc->idle_ticks < 10)
+    if (vict->desc && vict->desc->idle_ticks < 10 && _mob_is_alarmed_by_ch(npc, GET_IDNUM(vict)))
       return TRUE;
   
   // Otherwise, no good.
@@ -1341,19 +1309,16 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
         continue;
 
       // If the room we're in is neither a road nor a garage, attack any vehicles we see. Never attack vehicles in a garage.
-      if (vehicle_is_valid_mob_target(veh, 
-                                      GET_MOBALERT(ch) == MALERT_ALARM && !ROOM_FLAGGED(room, ROOM_GARAGE) && !MOB_FLAGGED(ch, MOB_WIMPY), 
-                                      GET_MOB_QUEST_CHAR_ID(ch))) 
-      {
+      if (vehicle_is_valid_mob_target(veh, ch, GET_MOB_QUEST_CHAR_ID(ch))) {
         stop_fighting(ch);
 
         if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
-          snprintf(buf, sizeof(buf), "%s$n swivels threateningly towards %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
-          snprintf(buf2, sizeof(buf2), "%s%s swivels threateningly towards your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
+          snprintf(buf, sizeof(buf), "$n swivels threateningly towards %s, preparing to attack it for security infractions!", GET_VEH_NAME(veh));
+          snprintf(buf2, sizeof(buf2), "%s swivels threateningly towards your vehicle, preparing to attack over security infractions!\r\n", GET_CHAR_NAME(ch));
           send_to_char(ch, "You prepare to attack %s for security infractions!\r\n", GET_VEH_NAME(veh));
         } else {
-          snprintf(buf, sizeof(buf), "%s$n glares at %s, preparing to attack it for security infractions!", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_VEH_NAME(veh));
-          snprintf(buf2, sizeof(buf2), "%s%s glares at your vehicle, preparing to attack over security infractions!\r\n", GET_MOBALERT(ch) == MALERT_ALARM ? "Searching for more aggressors, " : "", GET_CHAR_NAME(ch));
+          snprintf(buf, sizeof(buf), "$n glares at %s, preparing to attack it for security infractions!", GET_VEH_NAME(veh));
+          snprintf(buf2, sizeof(buf2), "%s glares at your vehicle, preparing to attack over security infractions!\r\n", GET_CHAR_NAME(ch));
           send_to_char(ch, "You prepare to attack %s for security infractions!\r\n", GET_VEH_NAME(veh));
         }
 
@@ -1403,7 +1368,7 @@ bool mobact_process_self_buff(struct char_data *ch) {
   }
 
   // Buff self, but only act one out of every 11 ticks (on average), and only if we're not going to put ourselves in a drain death loop.
-  if (GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000 && GET_MOBALERT(ch) != MALERT_ALARM) {
+  if (GET_MENTAL(ch) >= 1000 && GET_PHYSICAL(ch) >= 1000 && !mob_is_alert(ch)) {
     bool imp_invis = IS_AFFECTED(ch, AFF_SPELLIMPINVIS) || affected_by_spell(ch, SPELL_IMP_INVIS);
     bool std_invis = IS_AFFECTED(ch, AFF_SPELLINVIS) || affected_by_spell(ch, SPELL_INVIS);
     int max_force = MIN(12, GET_MAG(ch) / 100);
@@ -1785,10 +1750,8 @@ void mobile_activity(void)
     if (FIGHTING(ch) || FIGHTING_VEH(ch))
       continue;
 
-    // Cool down mob alert status.
-    if (GET_MOBALERT(ch) > MALERT_CALM && --GET_MOBALERTTIME(ch) <= 0) {
-      GET_MOBALERT(ch) = MALERT_CALM;
-
+    // Cool down mob alert status. This is a hack-- !empty() means anything in map, then !mob_is_alert means nothing in map after expiration of contents.
+    if (!GET_MOB_ALARM_MAP(ch).empty() && !mob_is_alert(ch)) {
       // If you just entered calm state and have a weapon, you get your ammo back.
       // check if they have ammo in proto-- if so, paste in proto ammo, if not, give max * 3 normal ammo
       // real_mobile is guaranteed to resolve here since we're referencing a vnum from an existing NPC
@@ -1796,22 +1759,29 @@ void mobile_activity(void)
 
       // Copy over their ammo data. We scan the whole thing instead of just their weapon to prevent someone
       // giving them a holdout pistol so they never regain their ammo stores.
-      for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
-        for (int am = 0; am < NUM_AMMOTYPES; am++)
+      for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++) {
+        for (int am = 0; am < NUM_AMMOTYPES; am++) {
           GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) = GET_BULLETPANTS_AMMO_AMOUNT(proto_mob, wp, am);
+        }
+      }
 
       // Carried weapons.
-      for (struct obj_data *weapon = ch->carrying; weapon; weapon = weapon->next_content)
-        if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) && GET_WEAPON_MAX_AMMO(weapon) > 0)
+      for (struct obj_data *weapon = ch->carrying; weapon; weapon = weapon->next_content) {
+        if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) && GET_WEAPON_MAX_AMMO(weapon) > 0) {
           ensure_mob_has_ammo_for_weapon(ch, weapon);
+        }
+      }
 
       // Wielded weapons.
-      for (int index = 0; index < NUM_WEARS; index++)
+      for (int index = 0; index < NUM_WEARS; index++) {
         if (GET_EQ(ch, index)
             && GET_OBJ_TYPE(GET_EQ(ch, index)) == ITEM_WEAPON
             && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, index)))
             && GET_WEAPON_MAX_AMMO(GET_EQ(ch, index)) > 0)
+        {
           ensure_mob_has_ammo_for_weapon(ch, GET_EQ(ch, index));
+        }
+      }
     }
 
     // Confirm we have the skills to wield our current weapon, otherwise ditch it.
@@ -1875,8 +1845,7 @@ void mobile_activity(void)
         for (struct char_data *occupant = current_room->people; occupant; occupant = occupant->next_in_room) {
           if (!IS_NPNPC(occupant)) {
             if (get_faction_status(occupant, GET_MOB_FACTION_IDNUM(ch)) <= faction_statuses::CAUTIOUS) {
-              GET_MOBALERT(ch) = MAX(GET_MOBALERT(ch), MALERT_ALERT);
-              GET_MOBALERTTIME(ch) = MAX(GET_MOBALERTTIME(ch), 15);
+              extend_mob_alarm_time(ch, occupant, 15);
               break;
             }
           }
@@ -2272,4 +2241,97 @@ bool mob_is_aggressive_towards_race(struct char_data *ch, int race) {
   }
 
   return FALSE;
+}
+
+// Make them mad at a specific idnum.
+void set_mob_alarm(struct char_data *npc, idnum_t vict_idnum, int seconds_to_alarm) {
+  if (!IS_NPNPC(npc))
+    return;
+
+  // If already alarmed, set alarm time to the MAX of this and the other.
+  if (GET_MOB_ALARM_MAP(npc).find(vict_idnum) != GET_MOB_ALARM_MAP(npc).end()) {
+    GET_MOB_ALARM_MAP(npc)[vict_idnum] = MAX(GET_MOB_ALARM_MAP(npc)[vict_idnum], time(0) + seconds_to_alarm);
+  }
+  // Otherwise, just set it to the new value.
+  else {
+    GET_MOB_ALARM_MAP(npc)[vict_idnum] = time(0) + seconds_to_alarm;
+  }
+}
+
+// Make them mad at a specific target. Pass NULL to set alert instead.
+void set_mob_alarm(struct char_data *npc, struct char_data *ch, int seconds_to_alarm) {  
+  // We allow for a NULL ch in order to specify that a mob is alert but not alarmed by anyone in particular.
+  idnum_t vict_idnum = (ch ? GET_IDNUM(ch) : 0);
+
+  set_mob_alarm(npc, vict_idnum, seconds_to_alarm);
+}
+
+// Wrapper for set_mob_alarm with NULL PC.
+void set_mob_alert(struct char_data *npc, int seconds_to_alarm) {
+  set_mob_alarm(npc, NULL, seconds_to_alarm);
+}
+
+// If they're already mad at ch, extend time, otherwise alert them for that time.
+void extend_mob_alarm_time(struct char_data *npc, struct char_data *ch, int seconds_to_alarm) {
+  if (!IS_NPNPC(npc))
+    return;
+
+  if (mob_is_alarmed_by_ch(npc, ch)) {
+    set_mob_alarm(npc, ch, seconds_to_alarm);
+  } else {
+    set_mob_alert(npc, seconds_to_alarm);
+  }
+}
+
+bool mob_is_alarmed_by_ch(struct char_data *npc, struct char_data *ch) {
+  if (!IS_NPNPC(npc))
+    return FALSE;
+
+  return _mob_is_alarmed_by_ch(npc, GET_IDNUM(ch));
+}
+
+bool mob_is_alarmed_by_ch(struct char_data *npc, idnum_t vict_idnum) {
+  if (!IS_NPNPC(npc))
+    return FALSE;
+
+  return _mob_is_alarmed_by_ch(npc, vict_idnum);
+}
+
+bool _mob_is_alarmed_by_ch(struct char_data *npc, idnum_t vict_idnum) {
+  if (GET_MOB_ALARM_MAP(npc).find(vict_idnum) == GET_MOB_ALARM_MAP(npc).end())
+    return FALSE;
+
+  if (GET_MOB_ALARM_MAP(npc)[vict_idnum] < time(0)) {
+    GET_MOB_ALARM_MAP(npc).erase(vict_idnum);
+    return FALSE;
+  }
+  
+  return TRUE;
+}
+
+bool mob_is_alert(struct char_data *npc) {
+  if (!IS_NPNPC(npc))
+    return FALSE;
+
+  return _mob_is_alert(npc);
+}
+
+bool _mob_is_alert(struct char_data *npc) {
+  // Iterate through all entries in the map, erasing ones that have passed.
+  for (auto it = GET_MOB_ALARM_MAP(npc).cbegin(); it != GET_MOB_ALARM_MAP(npc).cend() /* not hoisted */; /* no increment */) {
+    if (it->second < time(0)) {
+      it = GET_MOB_ALARM_MAP(npc).erase(it);
+    } else {
+      ++it;
+    }
+  }
+
+  // If there are entries in the map, they're alert.
+  return !GET_MOB_ALARM_MAP(npc).empty();
+}
+
+void clear_mob_alarm(struct char_data *npc, struct char_data *ch) {
+  if (GET_MOB_ALARM_MAP(npc).find(GET_IDNUM(ch)) != GET_MOB_ALARM_MAP(npc).end()) {
+    GET_MOB_ALARM_MAP(npc).erase(GET_MOB_ALARM_MAP(npc).find(GET_IDNUM(ch)));
+  }
 }

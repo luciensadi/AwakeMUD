@@ -44,7 +44,7 @@ extern struct spell_trainer spelltrainers[];
 /* extern functions */
 void add_follower(struct char_data * ch, struct char_data * leader);
 extern void docwagon(struct char_data *ch);
-extern void die(struct char_data * ch);
+extern void die(struct char_data * ch, idnum_t cause_of_death);
 extern void affect_total(struct char_data * ch);
 extern struct obj_data *get_first_credstick(struct char_data *ch, const char *arg);
 extern struct char_data *give_find_vict(struct char_data * ch, char *arg);
@@ -3873,7 +3873,7 @@ SPECIAL(circulation_fan) {
               ch->in_room->name, ch->in_room->number );
       mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 
-      die(ch);
+      die(ch, 0);
 
       return true;
     } else if (!cmd) {
