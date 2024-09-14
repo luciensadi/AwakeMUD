@@ -1969,13 +1969,14 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alarmed at ^c%ld^n characters: ", GET_MOB_ALARM_MAP(k).size());
     for (auto itr : GET_MOB_ALARM_MAP(k)) {
       if (itr.first == 0) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "<alert %lds>", itr.second - time(0));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "<^calert^n %lds>; ", itr.second - time(0));
       } else {
         const char *ch_name = get_player_name(itr.first);
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %lds>", ch_name, itr.second - time(0));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^c%s^n %lds; ", ch_name, itr.second - time(0));
         delete [] ch_name;
       }
     }
+    strlcat(buf, "\r\n", sizeof(buf));
   }
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Height: %d cm, Weight: %d kg\r\n", GET_HEIGHT(k), GET_WEIGHT(k));
