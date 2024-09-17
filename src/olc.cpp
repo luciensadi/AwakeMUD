@@ -1366,6 +1366,7 @@ ACMD(do_medit)
 
     *mob = mob_proto[mob_num]; // the RNUM
     mob->load_origin = PC_LOAD_REASON_MEDIT_ALLOCATION;
+    mob->load_time = time(0);
 
 #ifdef USE_DEBUG_CANARIES
     mob->canary = CANARY_VALUE;
@@ -1394,13 +1395,13 @@ ACMD(do_medit)
     // Clone in cyberware.
     mob->cyberware = NULL;
     for (struct obj_data *obj = mob_proto[mob_num].cyberware; obj; obj = obj->next_content) {
-      obj_to_cyberware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+      obj_to_cyberware(read_object(GET_OBJ_VNUM(obj), VIRTUAL, OBJ_LOAD_REASON_EDITING_CLONE), mob);
     }
 
     // Same for bioware.
     mob->bioware = NULL;
     for (struct obj_data *obj = mob_proto[mob_num].bioware; obj; obj = obj->next_content) {
-      obj_to_bioware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+      obj_to_bioware(read_object(GET_OBJ_VNUM(obj), VIRTUAL, OBJ_LOAD_REASON_EDITING_CLONE), mob);
     }
 
     // Blank out the equipment (it stays on the proto, so this is not a leak).
@@ -1414,7 +1415,7 @@ ACMD(do_medit)
     struct obj_data *eq;
     for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
       if ((eq = GET_EQ(&mob_proto[mob_num], wearloc))) {
-        equip_char(mob, read_object(GET_OBJ_VNUM(eq), VIRTUAL), wearloc);
+        equip_char(mob, read_object(GET_OBJ_VNUM(eq), VIRTUAL, OBJ_LOAD_REASON_EDITING_CLONE), wearloc);
       }
     }
 
@@ -1435,6 +1436,7 @@ ACMD(do_medit)
     // create a dummy mobile
     d->edit_mob = Mem->GetCh();
     d->edit_mob->load_origin = PC_LOAD_REASON_MEDIT_CREATION;
+    d->edit_mob->load_time = time(0);
 
     d->edit_mob->player_specials = &dummy_mob;
 
@@ -1528,6 +1530,7 @@ ACMD(do_mclone)
 
   *mob = mob_proto[mob_num1]; // the RNUM
   mob->load_origin = PC_LOAD_REASON_MCLONE;
+  mob->load_time = time(0);
 
   // copy all strings over
   if (mob_proto[mob_num1].player.physical_text.keywords)
@@ -1551,17 +1554,17 @@ ACMD(do_mclone)
   // Drop all references to the mob_proto's equipment etc and make a new set.
   mob->cyberware = NULL;
   for (struct obj_data *ware = mob_proto[mob_num1].cyberware; ware; ware = ware->next_content) {
-    obj_to_cyberware(read_object(GET_OBJ_VNUM(ware), VIRTUAL), mob);
+    obj_to_cyberware(read_object(GET_OBJ_VNUM(ware), VIRTUAL, OBJ_LOAD_REASON_EDITING_CLONE), mob);
   }
 
   mob->bioware = NULL;
   for (struct obj_data *ware = mob_proto[mob_num1].bioware; ware; ware = ware->next_content) {
-    obj_to_bioware(read_object(GET_OBJ_VNUM(ware), VIRTUAL), mob);
+    obj_to_bioware(read_object(GET_OBJ_VNUM(ware), VIRTUAL, OBJ_LOAD_REASON_EDITING_CLONE), mob);
   }
 
   for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++)
     if (GET_EQ(mob, wear_idx))
-      GET_EQ(mob, wear_idx) = read_object(GET_OBJ_VNUM(GET_EQ(mob, wear_idx)), VIRTUAL);
+      GET_EQ(mob, wear_idx) = read_object(GET_OBJ_VNUM(GET_EQ(mob, wear_idx)), VIRTUAL, OBJ_LOAD_REASON_EDITING_CLONE);
 
   // put guy into editing mode
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
@@ -1646,6 +1649,7 @@ ACMD(do_mdelete)
         temp = Mem->GetCh();
         *temp = *j;
         temp->load_origin = PC_LOAD_REASON_MDELETE;
+        temp->load_time = time(0);
         *j = mob_proto[counter];
         j->nr = counter;
         copy_over_necessary_info(temp, j);

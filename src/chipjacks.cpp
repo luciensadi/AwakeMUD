@@ -283,7 +283,7 @@ ACMD(do_chipload)
                       "You don't have enough headware memory free. You need at least %d MP.",
                       GET_CHIP_SIZE(chip));
 
-  struct obj_data *newchip = read_object(GET_OBJ_RNUM(chip), REAL);
+  struct obj_data *newchip = read_object(GET_OBJ_RNUM(chip), REAL, OBJ_LOAD_REASON_CHIPLOAD);
   obj_to_obj(newchip, memory);
   GET_CYBERWARE_MEMORY_USED(memory) += GET_CHIP_SIZE(chip);
   send_to_char(ch, "You upload %s to your headware memory.\r\n", decapitalize_a_an(chip));

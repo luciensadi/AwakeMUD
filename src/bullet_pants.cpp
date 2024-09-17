@@ -659,7 +659,7 @@ bool reload_weapon_from_bulletpants(struct char_data *ch, struct obj_data *weapo
 
   // Ensure it has a magazine.
   if (!(magazine = weapon->contains)) {
-    magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL);
+    magazine = read_object(OBJ_BLANK_MAGAZINE, VIRTUAL, OBJ_LOAD_REASON_BULLETPANTS_RELOAD);
     // Set the max ammo and weapon type here.
     GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(weapon);
     GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(weapon);
@@ -833,7 +833,7 @@ struct obj_data *generate_ammobox_from_pockets(struct char_data *ch, int weapont
   if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
     return NULL;
 
-  struct obj_data *ammobox = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
+  struct obj_data *ammobox = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL, OBJ_LOAD_REASON_BULLETPANTS_MAKE_BOX);
   GET_AMMOBOX_WEAPON(ammobox) = weapontype;
   GET_AMMOBOX_TYPE(ammobox) = ammotype;
 

@@ -1952,7 +1952,7 @@ void parse_mobile(File &in, long nr)
       snprintf(field, sizeof(field), "%s/Vnum", name);
       vnum = data.GetLong(field, -1);
 
-      if (vnum < 1 || !(ware = read_object(vnum, VIRTUAL))) {
+      if (vnum < 1 || !(ware = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_MOB_PROTO_EQ))) {
         log_vfprintf("MOB FILE ERROR: Mob %ld referenced cyberware vnum %ld (entry %d) which does not exist.", nr, vnum, x);
         continue;
       } else {
@@ -1979,7 +1979,7 @@ void parse_mobile(File &in, long nr)
       snprintf(field, sizeof(field), "%s/Vnum", name);
       vnum = data.GetLong(field, -1);
 
-      if (vnum == -1 || !(ware = read_object(vnum, VIRTUAL))) {
+      if (vnum == -1 || !(ware = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_MOB_PROTO_EQ))) {
         log_vfprintf("MOB FILE ERROR: Mob %ld referenced bioware vnum %ld (entry %d) which does not exist.", nr, vnum, x);
         continue;
       } else {
@@ -2007,7 +2007,7 @@ void parse_mobile(File &in, long nr)
       snprintf(field, sizeof(field), "%s/Wearloc", name);
       wearloc = data.GetLong(field, -1);
 
-      if (!(eq = read_object(vnum, VIRTUAL))) {
+      if (!(eq = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_MOB_PROTO_EQ))) {
         log_vfprintf("MOB FILE ERROR: Mob %ld referenced equipment vnum %ld (entry %d) which does not exist.", nr, vnum, x);
         continue;
       }
@@ -4266,6 +4266,7 @@ struct char_data *read_mobile(int nr, int type)
   mob = Mem->GetCh();
   *mob = mob_proto[i];
   mob->load_origin = PC_LOAD_REASON_READ_MOBILE;
+  mob->load_time = time(0);
   add_ch_to_character_list(mob, "read_mobile");
 
   mob->points.physical = mob->points.max_physical;
@@ -4287,13 +4288,13 @@ struct char_data *read_mobile(int nr, int type)
   // Copy off their cyberware from prototype.
   mob->cyberware = NULL;
   for (struct obj_data *obj = mob_proto[i].cyberware; obj; obj = obj->next_content) {
-    obj_to_cyberware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+    obj_to_cyberware(read_object(GET_OBJ_VNUM(obj), VIRTUAL, OBJ_LOAD_REASON_MOB_DEFAULT_GEAR), mob);
   }
 
   // Same for bioware.
   mob->bioware = NULL;
   for (struct obj_data *obj = mob_proto[i].bioware; obj; obj = obj->next_content) {
-    obj_to_bioware(read_object(GET_OBJ_VNUM(obj), VIRTUAL), mob);
+    obj_to_bioware(read_object(GET_OBJ_VNUM(obj), VIRTUAL, OBJ_LOAD_REASON_MOB_DEFAULT_GEAR), mob);
   }
 
   // And then equipment.
@@ -4301,7 +4302,7 @@ struct char_data *read_mobile(int nr, int type)
   for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
     GET_EQ(mob, wearloc) = NULL;
     if ((eq = GET_EQ(&mob_proto[i], wearloc))) {
-      equip_char(mob, read_object(GET_OBJ_VNUM(eq), VIRTUAL), wearloc);
+      equip_char(mob, read_object(GET_OBJ_VNUM(eq), VIRTUAL, OBJ_LOAD_REASON_MOB_DEFAULT_GEAR), wearloc);
     }
   }
 
@@ -4350,7 +4351,7 @@ struct obj_data *create_obj(void)
 }
 
 /* create a new object from a prototype */
-struct obj_data *read_object(int nr, int type)
+struct obj_data *read_object(int nr, int type, int load_origin, int pc_load_origin, idnum_t pc_load_idnum)
 {
   struct obj_data *obj;
   int i;
@@ -4374,6 +4375,10 @@ struct obj_data *read_object(int nr, int type)
   ObjList.ADD(obj);
   obj_index[i].number++;
   RANDOMLY_GENERATE_OBJ_IDNUM(obj);
+  obj->load_origin = load_origin;
+  obj->load_time = time(0);
+  obj->pc_load_origin = pc_load_origin;
+  obj->pc_load_idnum = pc_load_idnum;
   if (GET_OBJ_TYPE(obj) == ITEM_PHONE)
   {
     switch (GET_OBJ_VAL(obj, 0)) {
@@ -4693,7 +4698,7 @@ void reset_zone(int zone, int reboot)
       if (!veh)
         break;
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
-        obj = read_object(ZCMD.arg1, REAL);
+        obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
 
         // Special case: Weapon mounts.
         if (GET_OBJ_VAL(obj, 0) == TYPE_MOUNT) {
@@ -4746,7 +4751,11 @@ void reset_zone(int zone, int reboot)
             veh->usedload -= get_obj_vehicle_load_usage(GET_MOD(veh, GET_OBJ_VAL(obj, 0)), TRUE);
             for (int j = 0; j < MAX_OBJ_AFFECT; j++)
               affect_veh(veh, GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].location, -GET_MOD(veh, GET_OBJ_VAL(obj, 0))->affected[j].modifier);
-            extract_obj(GET_MOD(veh, GET_OBJ_VAL(obj, 0)));
+            
+            // Remove the obj from the vehicle before extracting it so we don't crash during pointer verification.
+            struct obj_data *extraction_ptr = GET_MOD(veh, GET_OBJ_VAL(obj, 0));
+            GET_MOD(veh, GET_OBJ_VAL(obj, 0)) = NULL;
+            extract_obj(extraction_ptr);
           }
 
           GET_MOD(veh, GET_OBJ_VAL(obj, 0)) = obj;
@@ -4766,7 +4775,7 @@ void reset_zone(int zone, int reboot)
         break;
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
-        obj = read_object(ZCMD.arg1, REAL);
+        obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
         obj_to_veh(obj, veh);
         last_cmd = 1;
       } else
@@ -4819,7 +4828,7 @@ void reset_zone(int zone, int reboot)
 
         if ((already_there < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
             (ZCMD.arg2 == 0 && reboot)) {
-          obj_to_host(read_object(ZCMD.arg1, REAL), &matrix[ZCMD.arg3]);
+          obj_to_host(read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD), &matrix[ZCMD.arg3]);
           last_cmd = 1;
         } else
           last_cmd = 0;
@@ -4842,7 +4851,7 @@ void reset_zone(int zone, int reboot)
         }
 
         if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
-          obj = read_object(ZCMD.arg1, REAL);
+          obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
           obj_to_room(obj, &world[ZCMD.arg3]);
 
           act("You blink and realize that $p must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
@@ -4892,7 +4901,7 @@ void reset_zone(int zone, int reboot)
             break;
           }
 
-          obj = read_object(ZCMD.arg1, REAL);
+          obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
           
           if (obj != obj_to)
             obj_to_obj(obj, obj_to);
@@ -4969,7 +4978,7 @@ void reset_zone(int zone, int reboot)
         }
 
         if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
-          obj = read_object(ZCMD.arg1, REAL);
+          obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
           obj_to_char(obj, mob);
           last_cmd = 1;
         } else
@@ -4992,7 +5001,7 @@ void reset_zone(int zone, int reboot)
           if (ZCMD.arg3 < 0 || ZCMD.arg3 >= NUM_WEARS) {
             ZONE_ERROR("invalid equipment pos number");
           } else {
-            obj = read_object(ZCMD.arg1, REAL);
+            obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
             if (!equip_char(mob, obj, ZCMD.arg3) || GET_EQ(mob, ZCMD.arg3) != obj) {
               // Equip failure; destroy the object.
               extract_obj(obj);
@@ -5037,7 +5046,7 @@ void reset_zone(int zone, int reboot)
       last_cmd = 0;
       for (i = 0; (i < ZCMD.arg3) && ((obj_index[ZCMD.arg1].number < ZCMD.arg2) ||
                                       (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)); ++i) {
-        obj = read_object(ZCMD.arg1, REAL);
+        obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
         obj_to_char(obj, mob);
         last_cmd = 1;
       }
@@ -5048,7 +5057,7 @@ void reset_zone(int zone, int reboot)
           ZONE_ERROR("attempt to give obj to non-existent mob");
         break;
       }
-      obj = read_object(ZCMD.arg1, REAL);
+      obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
       if (!ZCMD.arg2) {
         if (GET_OBJ_TYPE(obj) != ITEM_CYBERWARE) {
           ZONE_ERROR("attempt to install non-cyberware to mob");
@@ -6307,7 +6316,7 @@ void load_consist(void)
           const char *sect_name = data.GetIndexSection("HOUSE", i);
           snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
           vnum = data.GetLong(buf, 0);
-          if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
+          if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_ROOM_STORAGE_LOAD))) {
             snprintf(buf, sizeof(buf), "%s/Name", sect_name);
             obj->restring = str_dup(data.GetString(buf, NULL));
             snprintf(buf, sizeof(buf), "%s/Graffiti", sect_name);

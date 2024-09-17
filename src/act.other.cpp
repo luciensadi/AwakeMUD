@@ -40,6 +40,7 @@
 #include "lifestyles.hpp"
 #include "moderation.hpp"
 #include "chipjacks.hpp"
+#include "player_exdescs.hpp"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -1730,7 +1731,7 @@ ACMD(do_reload)
 
       // No ammo box found-- make a new one.
       max = MIN(max, pocket_quantity);
-      ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
+      ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL, OBJ_LOAD_REASON_MOUNT_BIN_RELOAD);
       GET_AMMOBOX_WEAPON(ammo) = weapontype;
       GET_AMMOBOX_TYPE(ammo) = ammotype;
       GET_AMMOBOX_QUANTITY(ammo) = 0;
@@ -2431,7 +2432,7 @@ ACMD(do_astral)
   for (; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(ch, i), 2) == GET_IDNUM(ch) &&
         GET_OBJ_VAL(GET_EQ(ch, i), 4)) {
-      struct obj_data *obj = read_object(GET_OBJ_VNUM(GET_EQ(ch, i)), VIRTUAL);
+      struct obj_data *obj = read_object(GET_OBJ_VNUM(GET_EQ(ch, i)), VIRTUAL, OBJ_LOAD_REASON_ASTRAL_PROJECTION);
       for (int x = 0; x < NUM_OBJ_VALUES; x++)
         GET_OBJ_VAL(obj, x) = GET_OBJ_VAL(GET_EQ(ch, i), x);
       if (GET_EQ(ch, i)->restring)
@@ -3245,7 +3246,7 @@ ACMD(do_photo)
     if (ch->in_veh)
       ch->in_room = NULL;
   }
-  photo = read_object(OBJ_BLANK_PHOTO, VIRTUAL);
+  photo = read_object(OBJ_BLANK_PHOTO, VIRTUAL, OBJ_LOAD_REASON_PHOTO);
   if (!mem)
     act("$n takes a photo with $p.", TRUE, ch, camera, NULL, TO_ROOM);
   send_to_char(ch, "You take a photo.\r\n");
@@ -4683,7 +4684,7 @@ ACMD(do_spray)
         }
       }
 
-      struct obj_data *paint = read_object(OBJ_DYNAMIC_GRAFFITI, VIRTUAL);
+      struct obj_data *paint = read_object(OBJ_DYNAMIC_GRAFFITI, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
       snprintf(buf, sizeof(buf), "a piece of graffiti that says \"%s^n\"", argument);
       paint->restring = str_dup(buf);
       snprintf(buf, sizeof(buf), "   ^n%s^n", argument);
@@ -4861,6 +4862,9 @@ ACMD(do_syspoints) {
       send_to_char(ch, " - You %s^n purchased NODELETE.\r\n", PLR_FLAGGED(ch, PLR_NODELETE) ? "^ghave" : "^yhave not yet");
       send_to_char(ch, " - You %s^n purchased the ability to see ROLLS output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
       send_to_char(ch, " - You %s^n purchased the ability to see VNUMS in your prompt.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS) ? "^ghave" : "^yhave not yet");
+#ifdef PLAYER_EXDESCS
+      send_to_char(ch, " - You have purchased %d EXDESC slots.\r\n", get_purchased_exdesc_max(ch));
+#endif
       return;
     }
 
@@ -5125,6 +5129,13 @@ ACMD(do_syspoints) {
       return;
 #undef ANALYZE_COST
     }
+
+#ifdef PLAYER_EXDESCS
+    if (is_abbrev(arg, "exdescs") || is_abbrev(arg, "extra descriptions")) {
+      syspoints_purchase_exdescs(ch);
+      return;
+    }
+#endif
 
     send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
     return;

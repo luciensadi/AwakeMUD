@@ -480,7 +480,7 @@ void dbuild_parse(struct descriptor_data *d, const char *arg) {
     }
 }
 void create_part(struct char_data *ch) {
-    struct obj_data *part = read_object(OBJ_BLANK_PART_DESIGN, VIRTUAL);
+    struct obj_data *part = read_object(OBJ_BLANK_PART_DESIGN, VIRTUAL, OBJ_LOAD_REASON_CREATE_PART);
     STATE(ch->desc) = CON_PART_CREATE;
     part->restring = str_dup("An empty part design");
     ch->desc->edit_obj = part;
@@ -488,7 +488,7 @@ void create_part(struct char_data *ch) {
 }
 
 void create_deck(struct char_data *ch) {
-    struct obj_data *deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL);
+    struct obj_data *deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL, OBJ_LOAD_REASON_CREATE_DECK);
     STATE(ch->desc) = CON_DECK_CREATE;
     ch->desc->edit_obj = deck;
     deckbuild_main_menu(ch->desc);
@@ -561,7 +561,7 @@ ACMD(do_cook) {
 
       /* Instead of removing the software from the machine, we copy it instead if it's a cookable copyable thing. */
       if (program_can_be_copied(chip)) {
-        struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
+        struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_COOK_PROGRAM);
         newp->restring = str_dup(GET_OBJ_NAME(chip));
         GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(chip, 0);
         GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(chip, 1);

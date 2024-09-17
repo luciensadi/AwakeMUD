@@ -1623,4 +1623,9 @@ struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
 #define ENSURE_OBJ_HAS_IDNUM(obj) if (!GET_OBJ_IDNUM(obj)) { RANDOMLY_GENERATE_OBJ_IDNUM(obj) }
 
 #define SB_CODE_OBJ_CANT_BE_SOULBOUND -2
+
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+extern void verify_every_pointer_we_can_think_of();
+#endif
+
 #endif

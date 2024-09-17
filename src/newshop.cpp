@@ -215,7 +215,7 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
 
       if (real_obj >= 0) {
         // Can't sell it? Don't have it show up here.
-        struct obj_data *temp_obj = read_object(real_obj, REAL);
+        struct obj_data *temp_obj = read_object(real_obj, REAL, OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP);
         if (!shop_can_sell_object(temp_obj, NULL, shop_nr)) {
           num++;
           continue;
@@ -230,7 +230,7 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
       }
     }
     if (sell)
-      *obj = read_object(sell->vnum, VIRTUAL);
+      *obj = read_object(sell->vnum, VIRTUAL, OBJ_LOAD_REASON_FIND_OBJ_SHOP);
   } else
   {
     // Don't allow purchasing numbers.
@@ -245,7 +245,7 @@ struct shop_sell_data *find_obj_shop(char *arg, vnum_t shop_nr, struct obj_data 
         if (obj_proto[real_obj].obj_flags.cost &&
             (isname(arg, obj_proto[real_obj].text.name) ||
              isname(arg, obj_proto[real_obj].text.keywords))) {
-          *obj = read_object(sell->vnum, VIRTUAL);
+          *obj = read_object(sell->vnum, VIRTUAL, OBJ_LOAD_REASON_FIND_OBJ_SHOP);
           break;
         }
       }
@@ -1035,19 +1035,19 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
                 REMOVE_FROM_LIST(sell, shop_table[shop_nr].selling, next);
                 DELETE_AND_NULL(sell);
               } else
-                obj = read_object(sell->vnum, VIRTUAL);
+                obj = read_object(sell->vnum, VIRTUAL, OBJ_LOAD_REASON_SHOP_RECEIVE);
               break;
             case SELL_STOCK:
               sell->stock--;
               if (sell->stock > 0)
-                obj = read_object(sell->vnum, VIRTUAL);
+                obj = read_object(sell->vnum, VIRTUAL, OBJ_LOAD_REASON_SHOP_RECEIVE);
               break;
             default:
-              obj = read_object(sell->vnum, VIRTUAL);
+              obj = read_object(sell->vnum, VIRTUAL, OBJ_LOAD_REASON_SHOP_RECEIVE);
               break;
           }
         } else {
-          obj = read_object(obj->item_number, REAL);
+          obj = read_object(obj->item_number, REAL, OBJ_LOAD_REASON_SHOP_RECEIVE);
         }
 
         // Deduct the cost.
@@ -1657,7 +1657,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
 
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       // Read the object; however, if it's an invalid vnum or has no sale cost, skip it.
-      obj = read_object(sell->vnum, VIRTUAL);
+      obj = read_object(sell->vnum, VIRTUAL, OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP);
       if (!shop_can_sell_object(obj, keeper, shop_nr)) {
         i--;
         continue;
@@ -1737,7 +1737,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                  "----------------------------------------------------------------------------------------------------\r\n", sizeof(buf));
 
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
-      obj = read_object(sell->vnum, VIRTUAL);
+      obj = read_object(sell->vnum, VIRTUAL, OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP);
       if (!shop_can_sell_object(obj, keeper, shop_nr)) {
         i--;
         continue;
@@ -1804,7 +1804,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     send_to_char(ch, " **   Avail    Item                                                                          Price\r\n"
                      "----------------------------------------------------------------------------------------------------\r\n");
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
-      obj = read_object(sell->vnum, VIRTUAL);
+      obj = read_object(sell->vnum, VIRTUAL, OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP);
       if (!shop_can_sell_object(obj, keeper, shop_nr)) {
         i--;
         continue;
@@ -2462,7 +2462,7 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next) {
     if (order->player == GET_IDNUM(ch) && order->timeavail < time(0) && !--number)
     {
-      struct obj_data *obj = read_object(order->item, VIRTUAL), *cred = get_first_credstick(ch, "credstick");
+      struct obj_data *obj = read_object(order->item, VIRTUAL, OBJ_LOAD_REASON_SHOP_RECEIVE), *cred = get_first_credstick(ch, "credstick");
       if (!cred && shop_table[shop_nr].type == SHOP_LEGAL) {
         if (access_level(ch, LVL_ADMIN)) {
           send_to_char(ch, "You stare unblinkingly at %s until %s makes an exception to the no-credstick, no-sale policy.\r\n",
@@ -3553,7 +3553,7 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
 }
 
 struct obj_data *shop_package_up_ware(struct obj_data *obj) {
-  struct obj_data *shop_container = read_object(OBJ_SHOPCONTAINER, VIRTUAL);
+  struct obj_data *shop_container = read_object(OBJ_SHOPCONTAINER, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
   GET_OBJ_BARRIER(shop_container) = 32;
   GET_OBJ_MATERIAL(shop_container) = MATERIAL_ADV_PLASTICS;
   GET_OBJ_COST(shop_container) = 0;

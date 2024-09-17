@@ -199,7 +199,7 @@ void ccr_confirm_switch_to_custom_parse(struct descriptor_data *d, const char *a
 
 #define ATTACH_IF_EXISTS(vnum, location) \
 if ((vnum) > 0) { \
-  if ((temp_obj = read_object((vnum), VIRTUAL))) { \
+  if ((temp_obj = read_object((vnum), VIRTUAL, OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP))) { \
     attach_attachment_to_weapon(temp_obj, weapon, NULL, (location), TRUE); \
     extract_obj(temp_obj); \
   } else { \
@@ -320,7 +320,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   // Equip weapon.
   if (archetypes[i]->weapon > 0) {
-    struct obj_data *weapon = read_object(archetypes[i]->weapon, VIRTUAL);
+    struct obj_data *weapon = read_object(archetypes[i]->weapon, VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE);
 
     if (weapon) {
       // snprintf(buf, sizeof(buf), "Attempting to attach %lu %lu %lu...", archetypes[i]->weapon_top, archetypes[i]->weapon_barrel, archetypes[i]->weapon_under);
@@ -345,7 +345,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   // Grant modulator (unbonded, unworn).
   if (archetypes[i]->modulator > 0) {
-    if ((temp_obj = read_object(archetypes[i]->modulator, VIRTUAL))) {
+    if ((temp_obj = read_object(archetypes[i]->modulator, VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
       obj_to_char(temp_obj, CH);
     } else {
       snprintf(buf, sizeof(buf), "SYSERR: Invalid modulator %ld specified for archetype %s.", archetypes[i]->modulator, archetypes[i]->name);
@@ -357,7 +357,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Equip worn items.
   for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++)
     if (archetypes[i]->worn[wearloc] > 0) {
-      if ((temp_obj = read_object(archetypes[i]->worn[wearloc], VIRTUAL))) {
+      if ((temp_obj = read_object(archetypes[i]->worn[wearloc], VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
         equip_char(CH, temp_obj, wearloc);
       } else {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid worn item %ld specified for archetype %s's wearloc %s (%d).",
@@ -369,7 +369,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Give carried items.
   for (int carried = 0; carried < NUM_ARCHETYPE_CARRIED; carried++)
     if (archetypes[i]->carried[carried] > 0) {
-      if ((temp_obj = read_object(archetypes[i]->carried[carried], VIRTUAL))) {
+      if ((temp_obj = read_object(archetypes[i]->carried[carried], VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
         // Set up carried items, if needed.
         if (GET_OBJ_SPEC(temp_obj) == pocket_sec)
           initialize_pocket_secretary(temp_obj);
@@ -389,7 +389,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
   // Give cyberdeck with software installed.
   if (archetypes[i]->cyberdeck > 0) {
-    if ((temp_obj = read_object(archetypes[i]->cyberdeck, VIRTUAL))) {
+    if ((temp_obj = read_object(archetypes[i]->cyberdeck, VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
       obj_to_char(temp_obj, CH);
     } else {
       snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberdeck %ld specified for archetype %s.",
@@ -399,7 +399,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
 
     for (int j = 0; j < NUM_ARCHETYPE_SOFTWARE; j++) {
       struct obj_data *program;
-      if ((program = read_object(archetypes[i]->software[j], VIRTUAL))) {
+      if ((program = read_object(archetypes[i]->software[j], VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
         // Default the program, but only if it's not bod/sens/mask/evas.
         switch (GET_OBJ_VAL(program, 0)) {
           case SOFT_BOD:
@@ -442,7 +442,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
     };
 
     for (int idx = 0; idx < NUM_ARCH_GEAR_ENTRIES; idx++) {
-      if ((temp_obj = read_object(default_arch_gear[idx], VIRTUAL)))
+      if ((temp_obj = read_object(default_arch_gear[idx], VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE)))
         obj_to_char(temp_obj, CH);
       else {
         mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: Invalid item %ld specified at index %d for default archetype gear set.", default_arch_gear[idx], idx);
@@ -458,7 +458,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Equip cyberware (deduct essence and modify stats as appropriate)
   for (int cyb = 0; cyb < NUM_ARCHETYPE_CYBERWARE; cyb++) {
     if (archetypes[i]->cyberware[cyb]) {
-      if (!(temp_obj = read_object(archetypes[i]->cyberware[cyb], VIRTUAL))) {
+      if (!(temp_obj = read_object(archetypes[i]->cyberware[cyb], VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberware item %ld specified for archetype %s.",
                  archetypes[i]->cyberware[cyb], archetypes[i]->name);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
@@ -485,7 +485,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Equip bioware (deduct essence and modify stats as appropriate)
   for (int bio = 0; bio < NUM_ARCHETYPE_BIOWARE; bio++) {
     if (archetypes[i]->bioware[bio]) {
-      if (!(temp_obj = read_object(archetypes[i]->bioware[bio], VIRTUAL))) {
+      if (!(temp_obj = read_object(archetypes[i]->bioware[bio], VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid bioware item %ld specified for archetype %s.",
                  archetypes[i]->bioware[bio], archetypes[i]->name);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
@@ -539,7 +539,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       set_character_skill(CH, skill, archetypes[i]->skills[skill], FALSE, FALSE);
 
   // Grant subsidy card (bonded to ID). Has to be after CreateChar so the idnum doesn't change.
-  temp_obj = read_object(OBJ_NEOPHYTE_SUBSIDY_CARD, VIRTUAL);
+  temp_obj = read_object(OBJ_NEOPHYTE_SUBSIDY_CARD, VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE);
   GET_OBJ_VAL(temp_obj, 0) = GET_IDNUM(CH);
   GET_OBJ_VAL(temp_obj, 1) = archetypes[i]->subsidy_card;
   obj_to_char(temp_obj, CH);
@@ -547,7 +547,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Bond and equip foci. Has to be after CreateChar so the idnum doesn't change.
   for (int focus = 0; focus < NUM_ARCHETYPE_FOCI; focus++) {
     if (archetypes[i]->foci[focus][0] > 0) {
-      if ((temp_obj = read_object(archetypes[i]->foci[focus][0], VIRTUAL))) {
+      if ((temp_obj = read_object(archetypes[i]->foci[focus][0], VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
         GET_OBJ_VAL(temp_obj, 2) = GET_IDNUM(CH);
         GET_OBJ_VAL(temp_obj, 3) = (int) archetypes[i]->foci[focus][1];
         GET_OBJ_VAL(temp_obj, 5) = GET_TRADITION(CH) == TRAD_HERMETIC ? 1 : 0;
@@ -1665,10 +1665,10 @@ void create_parse(struct descriptor_data *d, const char *arg)
     }
 
     if (real_object(OBJ_MAP_OF_SEATTLE) > -1)
-      obj_to_char(read_object(OBJ_MAP_OF_SEATTLE, VIRTUAL), d->character);
-    GET_EQ(d->character, WEAR_BODY) = read_object(shirts[number(0, 4)], VIRTUAL);
-    GET_EQ(d->character, WEAR_LEGS) = read_object(pants[number(0, 4)], VIRTUAL);
-    GET_EQ(d->character, WEAR_FEET) = read_object(shoes[number(0, 4)], VIRTUAL);
+      obj_to_char(read_object(OBJ_MAP_OF_SEATTLE, VIRTUAL, OBJ_LOAD_REASON_CHARGEN_CLOTHES), d->character);
+    GET_EQ(d->character, WEAR_BODY) = read_object(shirts[number(0, 4)], VIRTUAL, OBJ_LOAD_REASON_CHARGEN_CLOTHES);
+    GET_EQ(d->character, WEAR_LEGS) = read_object(pants[number(0, 4)], VIRTUAL, OBJ_LOAD_REASON_CHARGEN_CLOTHES);
+    GET_EQ(d->character, WEAR_FEET) = read_object(shoes[number(0, 4)], VIRTUAL, OBJ_LOAD_REASON_CHARGEN_CLOTHES);
     ccr_type_menu(d);
     break;
   case CCR_TOTEM:

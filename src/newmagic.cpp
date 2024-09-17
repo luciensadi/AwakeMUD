@@ -3478,7 +3478,7 @@ void circle_build(struct char_data *ch, char *type, int force)
   FAILURE_CASE(element == NUM_ELEMENTS, "What element do you wish to dedicate this circle to?");
   
   lose_nuyen(ch, cost, NUYEN_OUTFLOW_LODGE_AND_CIRCLE);
-  struct obj_data *obj = read_object(OBJ_HERMETIC_CIRCLE, VIRTUAL);
+  struct obj_data *obj = read_object(OBJ_HERMETIC_CIRCLE, VIRTUAL, OBJ_LOAD_REASON_MAGIC_BUILD);
   GET_MAGIC_TOOL_RATING(obj) = force;
   GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(obj) = element;
   GET_MAGIC_TOOL_OWNER(obj) = GET_IDNUM(ch);
@@ -3507,7 +3507,7 @@ void lodge_build(struct char_data *ch, int force)
   FAILURE_CASE(force > (int) (GET_REAL_MAG(ch) / 100), "You can't build a lodge with a force higher than your unmodified magic rating.");
   
   lose_nuyen(ch, cost, NUYEN_OUTFLOW_LODGE_AND_CIRCLE);
-  struct obj_data *obj = read_object(OBJ_SHAMANIC_LODGE, VIRTUAL);
+  struct obj_data *obj = read_object(OBJ_SHAMANIC_LODGE, VIRTUAL, OBJ_LOAD_REASON_MAGIC_BUILD);
   GET_MAGIC_TOOL_RATING(obj) = force;
   GET_MAGIC_TOOL_TOTEM_OR_ELEMENT(obj) = GET_TOTEM(ch);
   GET_MAGIC_TOOL_OWNER(obj) = GET_IDNUM(ch);

@@ -71,3 +71,9 @@ public:
 };
 
 bool look_at_exdescs(struct char_data *viewer, struct char_data *vict, char *arg);
+
+void syspoints_purchase_exdescs(struct char_data *ch);
+
+int get_purchased_exdesc_max(struct char_data *ch);
+
+void load_exdescs_from_db(struct char_data *ch);

@@ -246,7 +246,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
             (rnum = real_object(quest_table[num].obj[j].vnum)) > -1) {
           switch (quest_table[num].obj[j].load) {
           case QOL_TARMOB_I:
-            obj = read_object(rnum, REAL);
+            obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_I);
             GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
             obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             obj_to_char(obj, mob);
@@ -255,7 +255,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
             pos = quest_table[num].obj[j].l_data2;
             if (pos >= 0 && pos < NUM_WEARS && (!GET_EQ(mob, pos) ||
                                                 (pos == WEAR_WIELD && !GET_EQ(mob, WEAR_HOLD)))) {
-              obj = read_object(rnum, REAL);
+              obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_E);
               GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
               obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
               equip_char(mob, obj, pos);
@@ -298,7 +298,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
             }
             break;
           case QOL_TARMOB_C:
-            obj = read_object(rnum, REAL);
+            obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_C);
             GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
             obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE &&
@@ -328,7 +328,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
             (rnum = real_object(quest_table[num].obj[j].vnum)) > -1) {
           switch (quest_table[num].obj[j].load) {
           case QOL_TARMOB_I:
-            obj = read_object(rnum, REAL);
+            obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_I);
             GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
             obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             obj_to_char(obj, mob);
@@ -337,14 +337,14 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
             pos = quest_table[num].obj[j].l_data2;
             if (pos >= 0 && pos < NUM_WEARS && (!GET_EQ(mob, pos) ||
                                                 (pos == WEAR_WIELD && !GET_EQ(mob, WEAR_HOLD)))) {
-              obj = read_object(rnum, REAL);
+              obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_E);
               GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
               obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
               equip_char(mob, obj, pos);
             }
             break;
           case QOL_TARMOB_C:
-            obj = read_object(rnum, REAL);
+            obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_C);
             GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
             obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
             if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE &&
@@ -370,7 +370,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
       {
       case QOL_LOCATION:
         if ((room = real_room(quest_table[num].obj[i].l_data)) > -1) {
-          obj = read_object(rnum, REAL);
+          obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_LOCATION);
           GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
           obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
           obj_to_room(obj, &world[room]);
@@ -379,7 +379,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         break;
       case QOL_HOST:
         if ((room = real_host(quest_table[num].obj[i].l_data)) > -1) {
-          obj = read_object(rnum, REAL);
+          obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_HOST);
           GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
           obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
           GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = GET_IDNUM(ch);
@@ -389,7 +389,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         obj = NULL;
         break;
       case QOL_JOHNSON:
-        obj = read_object(rnum, REAL);
+        obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_JOHNSON);
         GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
         obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
         obj_to_char(obj, johnson);
@@ -1108,7 +1108,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
     // You also only get the object reward for completing all objectives.
     rnum_t rnum = real_object(quest_table[GET_QUEST(ch)].reward);
     if (rnum > 0) {
-      obj = read_object(rnum, REAL);
+      obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_REWARD);
       obj_to_char(obj, ch);
       soulbind_obj_to_char(obj, ch, FALSE);
       if (MOB_FLAGGED(johnson, MOB_INANIMATE)) {

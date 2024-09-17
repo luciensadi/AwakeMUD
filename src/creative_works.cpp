@@ -97,7 +97,7 @@ void create_art(struct char_data *ch) {
   FAILURE_CASE_PRINTF(GET_NUYEN(ch) < CREATE_ART_COST, "It will cost you %d nuyen in supplies to create a work of art.", CREATE_ART_COST);
   lose_nuyen(ch, CREATE_ART_COST, NUYEN_OUTFLOW_DECORATING);
 
-  struct obj_data *art = read_object(OBJ_CUSTOM_ART, VIRTUAL);
+  struct obj_data *art = read_object(OBJ_CUSTOM_ART, VIRTUAL, OBJ_LOAD_REASON_CREATE_ART);
   GET_ART_AUTHOR_IDNUM(art) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
 
   ch->desc->edit_obj = art;

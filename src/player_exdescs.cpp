@@ -16,7 +16,7 @@
     We want folks to pay syspoints for exdesc usage, when does that happen? Pay sysp to increse your exdesc quota
 
   // TODO: Write hooks in customize physical for exdescs.
-
+  // TODO: Editing flow. Do we allow changes of keywords, which are primary keys?
 
 
   table: pfiles_exdescs
@@ -88,4 +88,14 @@ bool look_at_exdescs(struct char_data *viewer, struct char_data *vict, char *arg
   send_to_char(viewer, "'%s' isn't a valid exdesc. You can pick one from the following list.\r\n", keyword);
   list_exdescs(viewer, vict);
   return TRUE;
+}
+
+// Saving happens here. Requires pc_idnum and keyword to be set. Invoke during editing.
+void PCExDesc::save_to_db() {
+
+}
+
+// Call this to delete this entry. Requires pc_idnum and keyword to be set. Invoke during editing when char chooses to delete.
+void PCExDesc::delete_from_db() {
+
 }

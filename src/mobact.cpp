@@ -2261,7 +2261,7 @@ void set_mob_alarm(struct char_data *npc, idnum_t vict_idnum, int seconds_to_ala
 // Make them mad at a specific target. Pass NULL to set alert instead.
 void set_mob_alarm(struct char_data *npc, struct char_data *ch, int seconds_to_alarm) {  
   // We allow for a NULL ch in order to specify that a mob is alert but not alarmed by anyone in particular.
-  idnum_t vict_idnum = (ch ? GET_IDNUM(ch) : 0);
+  idnum_t vict_idnum = (ch ? GET_IDNUM(ch) : IDNUM_FOR_MOB_ALERT_STATE);
 
   set_mob_alarm(npc, vict_idnum, seconds_to_alarm);
 }

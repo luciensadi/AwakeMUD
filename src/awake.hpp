@@ -2846,6 +2846,7 @@ enum {
 #define NEWBIE_SKILL    6
 #define NORMAL_MAX_SKILL  8
 #define LEARNED_LEVEL    12
+#define GODLY_MAX_SKILL  100
 #define RENT_FACTOR 1
 
 // Definitions for message history.
@@ -3166,6 +3167,66 @@ enum {
 #define PC_LOAD_REASON_MDELETE                       19
 #define PC_LOAD_REASON_OFFLINE_WATCH                 20
 #define PC_LOAD_REASON_COPYOVER_RECOVERY             21
+
+#define OBJ_LOAD_REASON_ZONECMD                  1
+#define OBJ_LOAD_REASON_MOB_DEFAULT_GEAR         2
+#define OBJ_LOAD_REASON_ROOM_STORAGE_LOAD        3
+#define OBJ_LOAD_REASON_MOB_PROTO_EQ             4
+#define OBJ_LOAD_REASON_UNATTACHED_FROM_WEAPON   5
+#define OBJ_LOAD_REASON_STAFF_DECK               6
+#define OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP 7
+#define OBJ_LOAD_REASON_MEDIT_EQUIPMENT          8
+#define OBJ_LOAD_REASON_CREATE_PROGRAM           9
+#define OBJ_LOAD_REASON_COPY_PROGRAM             10
+#define OBJ_LOAD_REASON_COMPLETED_PROGRAMMING    11
+#define OBJ_LOAD_REASON_SHAMEFUL_NUDITY          12
+#define OBJ_LOAD_REASON_SPECPROC                 13
+#define OBJ_LOAD_REASON_POCSEC_FOLDER_GENERATION 14
+#define OBJ_LOAD_REASON_MAIL_RECEIVE             15
+#define OBJ_LOAD_REASON_POCSEC_PHONEADD          16
+#define OBJ_LOAD_REASON_POCSEC_NOTEADD           17
+#define OBJ_LOAD_REASON_MOB_LOOT                 18
+#define OBJ_LOAD_REASON_QUEST_TARMOB_I           19
+#define OBJ_LOAD_REASON_QUEST_TARMOB_E           20
+#define OBJ_LOAD_REASON_QUEST_TARMOB_C           21
+#define OBJ_LOAD_REASON_QUEST_LOCATION           22
+#define OBJ_LOAD_REASON_QUEST_HOST               23
+#define OBJ_LOAD_REASON_QUEST_JOHNSON            24
+#define OBJ_LOAD_REASON_QUEST_REWARD             25
+#define OBJ_LOAD_REASON_APARTMENT_KEY_ISSUE      26
+#define OBJ_LOAD_REASON_CREATE_AMMO              27
+#define OBJ_LOAD_REASON_CREATE_ART               28
+#define OBJ_LOAD_REASON_MOUNT_BIN_RELOAD         29
+#define OBJ_LOAD_REASON_PHOTO                    30
+#define OBJ_LOAD_REASON_FROM_DB                  31
+#define OBJ_LOAD_REASON_ASTRAL_PROJECTION        32
+#define OBJ_LOAD_REASON_HOLIDAY_GIFT             33
+#define OBJ_LOAD_REASON_ARCHETYPE                34
+#define OBJ_LOAD_REASON_CHARGEN_CLOTHES          35
+#define OBJ_LOAD_REASON_STORAGE                  36
+#define OBJ_LOAD_REASON_CHIPLOAD                 37
+#define OBJ_LOAD_REASON_CREATE_PART              38
+#define OBJ_LOAD_REASON_CREATE_DECK              39
+#define OBJ_LOAD_REASON_COOK_PROGRAM             40
+#define OBJ_LOAD_REASON_CREATE_SPELL             42
+#define OBJ_LOAD_REASON_SPAWN_PAYDATA            43
+#define OBJ_LOAD_REASON_MTX_CONNECT              44
+#define OBJ_LOAD_REASON_MTX_FINISHED_UPLOAD      45
+#define OBJ_LOAD_REASON_VEH_CONTENTS             46
+#define OBJ_LOAD_REASON_VEH_MODS                 47
+#define OBJ_LOAD_REASON_VEH_MOUNTS               48
+#define OBJ_LOAD_REASON_WIZLOAD                  49
+#define OBJ_LOAD_REASON_EDITING_CLONE            50
+#define OBJ_LOAD_REASON_VEHCONT                  51
+#define OBJ_LOAD_REASON_UNINSTALL                52
+#define OBJ_LOAD_REASON_DROP_GOLD                53
+#define OBJ_LOAD_REASON_MAGIC_BUILD              54
+#define OBJ_LOAD_REASON_BULLETPANTS_RELOAD       55
+#define OBJ_LOAD_REASON_BULLETPANTS_MAKE_BOX     56
+#define OBJ_LOAD_REASON_FIND_OBJ_SHOP            57
+#define OBJ_LOAD_REASON_SHOP_RECEIVE             58
+
+#define IDNUM_FOR_MOB_ALERT_STATE  -1
 
 // This is to flag variables used eg in macros so that the compiler won't complain about unused variables
 // when they're actually used. Casting to void does nothing but the compiler will stop thinking it's

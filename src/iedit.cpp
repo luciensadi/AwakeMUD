@@ -2807,7 +2807,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case ITEM_WEAPON:
           if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
             if (number != -1) {
-              struct obj_data *accessory = read_object(number, VIRTUAL);
+              struct obj_data *accessory = read_object(number, VIRTUAL, OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP);
               if (!accessory) {
                 send_to_char("Invalid vnum.\r\n", CH);
                 iedit_disp_val8_menu(d);
@@ -2851,7 +2851,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case ITEM_WEAPON:
           {
             if (number != -1) {
-              struct obj_data *accessory = read_object(number, VIRTUAL);
+              struct obj_data *accessory = read_object(number, VIRTUAL, OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP);
               if (!accessory) {
                 send_to_char("Invalid vnum.\r\n", CH);
                 iedit_disp_val9_menu(d);
@@ -2883,7 +2883,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case ITEM_WEAPON:
           {
             if (number != -1) {
-              struct obj_data *accessory = read_object(number, VIRTUAL);
+              struct obj_data *accessory = read_object(number, VIRTUAL, OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP);
               if (!accessory) {
                 send_to_char("Invalid vnum.\r\n", CH);
                 iedit_disp_val10_menu(d);

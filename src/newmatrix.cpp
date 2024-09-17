@@ -53,7 +53,7 @@ void make_seen(struct matrix_icon *icon, int idnum)
 }
 
 struct obj_data * spawn_paydata(struct matrix_icon *icon) {
-  struct obj_data *obj = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL);
+  struct obj_data *obj = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, OBJ_LOAD_REASON_SPAWN_PAYDATA);
   GET_DECK_ACCESSORY_TYPE(obj) = TYPE_FILE;
   GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj) = time(0);
   GET_DECK_ACCESSORY_FILE_SIZE(obj) = (number(1, 6) + number(1, 6)) * MAX(5, (20 - (5 * matrix[icon->in_host].color)));
@@ -2059,7 +2059,7 @@ ACMD(do_connect)
           send_to_char(ch, "%s^n is too advanced for your deck's MPCP rating, so it failed to load.\r\n", GET_OBJ_NAME(soft));
           continue;
         }
-        struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL);
+        struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL, OBJ_LOAD_REASON_MTX_CONNECT);
         if (soft->restring)
           active->restring = str_dup(soft->restring);
         for (int x = 0; x < 10; x++)
@@ -2829,7 +2829,7 @@ void process_upload(struct matrix_icon *persona)
           // Easy finish: Uploading to active memory.
           if (!GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft)) {
             send_to_icon(persona, "%s^n has finished uploading to active memory.\r\n", CAP(GET_OBJ_NAME(soft)));
-            struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL);
+            struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL, OBJ_LOAD_REASON_MTX_FINISHED_UPLOAD);
             if (soft->restring)
               active->restring = str_dup(soft->restring);
             for (int x = 0; x < 10; x++)

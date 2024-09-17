@@ -210,7 +210,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
 
 void create_program(struct char_data *ch)
 {
-  struct obj_data *design = read_object(OBJ_BLANK_PROGRAM_DESIGN, VIRTUAL);
+  struct obj_data *design = read_object(OBJ_BLANK_PROGRAM_DESIGN, VIRTUAL, OBJ_LOAD_REASON_CREATE_PROGRAM);
   STATE(ch->desc) = CON_PRO_CREATE;
   design->restring = str_dup("a blank program");
   ch->desc->edit_obj = design;
@@ -495,7 +495,7 @@ ACMD(do_copy)
   GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(comp) += GET_PROGRAM_SIZE(prog);
 
   // Create the new program.
-  struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
+  struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_COPY_PROGRAM);
   newp->restring = str_dup(GET_OBJ_NAME(prog));
   GET_PROGRAM_TYPE(newp) = GET_PROGRAM_TYPE(prog);
   GET_PROGRAM_RATING(newp) = GET_PROGRAM_RATING(prog);
@@ -659,7 +659,7 @@ void update_buildrepair(void)
             }
           else {
             send_to_char(desc->character, "You complete programming %s.\r\n", GET_OBJ_NAME(PROG));
-            struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
+            struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_COMPLETED_PROGRAMMING);
             newp->restring = str_dup(GET_OBJ_NAME(PROG));
             GET_PROGRAM_TYPE(newp) = GET_DESIGN_PROGRAM(PROG);
             GET_PROGRAM_RATING(newp) = GET_DESIGN_RATING(PROG);

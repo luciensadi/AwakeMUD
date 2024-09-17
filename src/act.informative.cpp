@@ -910,7 +910,7 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
     if (LAST_HEAL(i) > 0) {
       send_to_char(ch, "%s%s received recent treatment, so further treatments will be more difficult (TN +%d).",
                        CAP(HSSH(i)),
-                       !HSSH_SHOULD_PLURAL(i) ? "'ve'" : "'s",
+                       !HSSH_SHOULD_PLURAL(i) ? "'ve" : "'s",
                        MIN(LAST_HEAL(i) * 3/2, 8));
     }
   }
@@ -2728,8 +2728,12 @@ void look_at_target(struct char_data * ch, char *arg)
   /* Is the target a character? */
   if (found_char != NULL)
   {
+#ifdef PLAYER_EXDESCS
     // If this isn't an exdesc invocation, look at the character.
     if (!look_at_exdescs(ch, found_char, arg)) {
+#else
+    {
+#endif
       look_at_char(found_char, ch, arg);
     }
     /*
@@ -2745,8 +2749,12 @@ void look_at_target(struct char_data * ch, char *arg)
   {
     found_char = get_char_veh(ch, arg, ch->in_veh);
     if (found_char) {
+#ifdef PLAYER_EXDESCS
       // If this isn't an exdesc invocation, look at the character.
       if (!look_at_exdescs(ch, found_char, arg)) {
+#else
+      {
+#endif
         look_at_char(found_char, ch, arg);
       }
       /*

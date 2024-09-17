@@ -128,6 +128,12 @@ struct obj_data
   struct veh_data *in_veh;
   bool vfront;
 
+  // Debug fields
+  char load_origin;                              /* Identifies what loaded this. */
+  time_t load_time;                              /* Used to track when this was loaded. */
+  char pc_load_origin;                           /* If this was loaded alongside a PC, stores their load reason. */
+  idnum_t pc_load_idnum;                         /* If this was loaded alongside a PC, stores their idnum. */
+
   struct obj_flag_data obj_flags; /* Object information                 */
   struct obj_affected_type affected[MAX_OBJ_AFFECT];  /* affects */
 
@@ -164,8 +170,8 @@ struct obj_data
   int canary;
 #endif
   obj_data() :
-      item_number(0), in_room(NULL), in_veh(NULL), vfront(FALSE), ex_description(NULL),
-      restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
+      item_number(0), in_room(NULL), in_veh(NULL), vfront(FALSE), load_origin(0), load_time(0), pc_load_origin(0), pc_load_idnum(0),
+      ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
       worn_by(NULL), worn_on(0), in_obj(NULL), contains(NULL), next_content(NULL),
       in_host(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL), 
       dropped_by_host(NULL), dropped_by_char(0), idnum(0)

@@ -517,7 +517,7 @@ void load_single_veh(const char *filename) {
     const char *sect_name = data.GetIndexSection("CONTENTS", i);
     snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
     vnum = data.GetLong(buf, 0);
-    if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
+    if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_VEH_CONTENTS))) {
       snprintf(buf, sizeof(buf), "%s/Inside", sect_name);
       inside = data.GetInt(buf, 0);
       for (int x = 0; x < NUM_OBJ_VALUES; x++) {
@@ -671,7 +671,7 @@ void load_single_veh(const char *filename) {
     snprintf(buf, sizeof(buf), "MODIS/Mod%d", i);
     vnum_t vnum = data.GetLong(buf, 0);
 
-    if (!(obj = read_object(vnum, VIRTUAL))) {
+    if (!(obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_VEH_MODS))) {
       log_vfprintf("ERROR: Unknown vnum %ld in veh file! Skipping.", vnum);
       continue;
     }
@@ -700,11 +700,11 @@ void load_single_veh(const char *filename) {
   for (int i = 0; i < num_mods; i++) {
     const char *sect_name = data.GetIndexSection("MOUNTS", i);
     snprintf(buf, sizeof(buf), "%s/MountNum", sect_name);
-    obj = read_object(data.GetLong(buf, 0), VIRTUAL);
+    obj = read_object(data.GetLong(buf, 0), VIRTUAL, OBJ_LOAD_REASON_VEH_MOUNTS);
     snprintf(buf, sizeof(buf), "%s/Ammo", sect_name);
     int ammo_qty = data.GetInt(buf, 0);
     if (ammo_qty > 0) {
-      struct obj_data *ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
+      struct obj_data *ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL, OBJ_LOAD_REASON_VEH_MOUNTS);
       GET_AMMOBOX_QUANTITY(ammo) = ammo_qty;
       snprintf(buf, sizeof(buf), "%s/AmmoType", sect_name);
       GET_AMMOBOX_TYPE(ammo) = data.GetInt(buf, 0);
@@ -721,7 +721,7 @@ void load_single_veh(const char *filename) {
     snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
     int gun = data.GetLong(buf, 0);
     struct obj_data *weapon;
-    if (gun && (weapon = read_object(gun, VIRTUAL))) {
+    if (gun && (weapon = read_object(gun, VIRTUAL, OBJ_LOAD_REASON_VEH_MOUNTS))) {
       snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
       GET_OBJ_CONDITION(weapon) = data.GetInt(buf, GET_OBJ_CONDITION(weapon));
       snprintf(buf, sizeof(buf), "%s/Name", sect_name);

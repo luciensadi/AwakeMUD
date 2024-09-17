@@ -88,7 +88,7 @@ bool holiday_entry::is_eligible(struct char_data *ch) {
 
 void holiday_entry::award_gift(struct char_data *ch) {
   // Create a gift based on the specified name and desc.
-  struct obj_data *present = read_object(OBJ_HOLIDAY_GIFT, VIRTUAL);
+  struct obj_data *present = read_object(OBJ_HOLIDAY_GIFT, VIRTUAL, OBJ_LOAD_REASON_HOLIDAY_GIFT);
   present->restring = str_dup(present_restring);
   present->photo = str_dup(present_photo);
   GET_HOLIDAY_GIFT_ISSUED_TO(present) = GET_IDNUM(ch);
@@ -100,7 +100,7 @@ void holiday_entry::award_gift(struct char_data *ch) {
   GET_HOLIDAY_GIFT_ONE_SHOT_HEALS(present) = 3;
 
   // Add a cool(?) item.
-  struct obj_data *gift = read_object(gift_vnum, VIRTUAL);
+  struct obj_data *gift = read_object(gift_vnum, VIRTUAL, OBJ_LOAD_REASON_HOLIDAY_GIFT);
   obj_to_obj(gift, present);
 
   // Hand off gift to char with message.
@@ -180,7 +180,7 @@ SPECIAL(holiday_gift) {
 
       // Hand off.
       while (GET_HOLIDAY_GIFT_DECKBUILD_TOKENS(obj)-- > 0) {
-        struct obj_data *token = read_object(OBJ_STAFF_REBATE_FOR_CRAFTING, VIRTUAL);
+        struct obj_data *token = read_object(OBJ_STAFF_REBATE_FOR_CRAFTING, VIRTUAL, OBJ_LOAD_REASON_HOLIDAY_GIFT);
         GET_CRAFTING_TOKEN_ISSUED_BY(obj) = -1;
         obj_to_char(token, ch);
       }
@@ -205,7 +205,7 @@ SPECIAL(holiday_gift) {
 
       // Hand off.
       while (GET_HOLIDAY_GIFT_ONE_SHOT_HEALS(obj)-- > 0) {
-        struct obj_data *injector = read_object(OBJ_ONE_SHOT_HEALING_INJECTOR, VIRTUAL);
+        struct obj_data *injector = read_object(OBJ_ONE_SHOT_HEALING_INJECTOR, VIRTUAL, OBJ_LOAD_REASON_HOLIDAY_GIFT);
         GET_HEALING_INJECTOR_ISSUED_BY(injector) = -1;
         obj_to_char(injector, ch);
       }

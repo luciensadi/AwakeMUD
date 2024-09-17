@@ -431,6 +431,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
             temp = Mem->GetCh();
             *temp = *i;
             temp->load_origin = PC_LOAD_REASON_MEDIT_SAVE_UPDATE;
+            temp->load_time = time(0);
 
             struct obj_data *mount = get_mount_manned_by_ch(i);
 
@@ -1495,7 +1496,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
   case MEDIT_SELECT_EQUIPMENT_VNUM:
     number = atoi(arg);
     {
-      struct obj_data *equipment = read_object(number, VIRTUAL);
+      struct obj_data *equipment = read_object(number, VIRTUAL, OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP);
       if (!equipment) {
         send_to_char("\r\nInvalid vnum.\r\n", CH);
         medit_display_equipment_menu(d);
@@ -1526,7 +1527,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         send_to_char("\r\nInvalid wearloc. Enter the numeric index of the wearloc: ", CH);
         break;
       }
-      equip_char(MOB, read_object(d->edit_number2, VIRTUAL), number);
+      equip_char(MOB, read_object(d->edit_number2, VIRTUAL, OBJ_LOAD_REASON_MEDIT_EQUIPMENT), number);
       d->edit_number2 = 0;
       medit_display_equipment_menu(d);
     }
@@ -1663,7 +1664,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
   case MEDIT_ADD_CYBERWARE:
     number = atoi(arg);
     {
-      struct obj_data *ware = read_object(number, VIRTUAL);
+      struct obj_data *ware = read_object(number, VIRTUAL, OBJ_LOAD_REASON_MEDIT_EQUIPMENT);
       if (!ware) {
         send_to_char("\r\nInvalid vnum.\r\n", CH);
       } else {

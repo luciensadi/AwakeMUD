@@ -294,7 +294,7 @@ void postmaster_receive_mail(struct char_data * ch, struct char_data *mailman, i
 
   while (amount_of_mail_waiting(ch) > 0)
   {
-    obj = read_object(OBJ_PIECE_OF_MAIL, VIRTUAL);
+    obj = read_object(OBJ_PIECE_OF_MAIL, VIRTUAL, OBJ_LOAD_REASON_MAIL_RECEIVE);
     obj->photo = str_dup(get_and_delete_one_message(ch, sender));
 
     if (obj->photo == NULL || *obj->photo == '\0')

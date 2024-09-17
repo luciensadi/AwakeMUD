@@ -32,6 +32,7 @@
 #include "quest.hpp"
 #include "vehicles.hpp"
 #include "newmail.hpp"
+#include "player_exdescs.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -342,7 +343,7 @@ void advance_level(struct char_data * ch)
   mudlog(buf, ch, LOG_MISCLOG, TRUE);
 }
 
-bool load_char(const char *name, char_data *ch, bool logon)
+bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
 {
   init_char(ch);
   for (int i = MIN_SKILLS; i < MAX_SKILLS; i++)
@@ -719,7 +720,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(PFILES_CYBERWARE_VNUM);
-      if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
+      if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
         GET_OBJ_COST(obj) = atoi(PFILES_CYBERWARE_COST);
         if (*PFILES_CYBERWARE_RESTRING)
           obj->restring = str_dup(PFILES_CYBERWARE_RESTRING);
@@ -805,7 +806,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(PFILES_BIOWARE_VNUM);
-      if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
+      if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
         GET_OBJ_COST(obj) = atoi(PFILES_BIOWARE_COST);
         for (int x = 0, y = 3; x < NUM_OBJ_VALUES; x++, y++) {
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
@@ -850,7 +851,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(PFILES_WORN_VNUM);
-      if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
+      if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
         GET_OBJ_COST(obj) = atoi(PFILES_WORN_COST);
         if (*PFILES_WORN_RESTRING)
           obj->restring = str_dup(PFILES_WORN_RESTRING);
@@ -964,7 +965,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     res = mysql_use_result(mysql);
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(PFILES_INV_VNUM);
-      if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
+      if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
         GET_OBJ_COST(obj) = atoi(PFILES_INV_COST);
         if (*PFILES_INV_RESTRING)
           obj->restring = str_dup(PFILES_INV_RESTRING);
@@ -1117,6 +1118,11 @@ bool load_char(const char *name, char_data *ch, bool logon)
   // Load their ignore data (the structure was already initialized in init_char().)
   GET_IGNORE_DATA(ch)->load_from_db();
 
+#ifdef PLAYER_EXDESCS
+  // Load their exdescs.
+  load_exdescs_from_db(ch);
+#endif
+
   STOP_WORKING(ch);
   AFF_FLAGS(ch).RemoveBits(AFF_MANNING, AFF_RIG, AFF_PILOT, AFF_BANISH, AFF_FEAR, AFF_STABILIZE, AFF_SPELLINVIS, AFF_SPELLIMPINVIS, AFF_DETOX, AFF_RESISTPAIN, AFF_TRACKING, AFF_TRACKED, AFF_PRONE, ENDBIT);
   PLR_FLAGS(ch).RemoveBits(PLR_REMOTE, PLR_SWITCHED, PLR_MATRIX, PLR_PROJECT, PLR_EDITING, PLR_WRITING, PLR_PERCEIVE, PLR_VISA, ENDBIT);
@@ -1164,14 +1170,15 @@ bool load_char(const char *name, char_data *ch, bool logon)
     // Clamp skills to maximums and refund them.
     bool need_save = FALSE;
 
-    int godly_level = get_max_skill_for_char(ch, SKILL_EDGED_WEAPONS, GODLY);
-
     for (int skill_idx = 0; skill_idx < MAX_SKILLS; skill_idx++) {
       int max_skill_level = get_max_skill_for_char(ch, skill_idx, IS_SENATOR(ch) ? GODLY : ADVANCED);
 
-      if (GET_RAW_SKILL(ch, skill_idx) == godly_level) {
+      if (GET_RAW_SKILL(ch, skill_idx) > LEARNED_LEVEL) {
         // Error case, we shouldn't be here with someone with staff skills.
-        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got a staff-grade character to the mortal stanza of resetting skills.");
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got a staff-grade character to the mortal stanza of resetting skills: %s's %s = %d",
+                        GET_CHAR_NAME(ch),
+                        skills[skill_idx].name,
+                        GET_RAW_SKILL(ch, skill_idx));
         break;
       }
 
@@ -1626,6 +1633,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     mysql_wrapper(mysql, buf);
   }
 
+  // Exdescs are not saved here, and are instead only saved when updated.
+
   return TRUE;
 }
 
@@ -1891,7 +1900,7 @@ char_data *PCIndex::LoadChar(const char *name, bool logon, int load_origin)
   ch->load_origin = load_origin;
   ch->load_time = time(0);
 
-  load_char(name, ch, logon);
+  load_char(name, ch, logon, load_origin);
 
   fix_character_essence_after_expert_driver_change(ch);
 
@@ -2251,10 +2260,16 @@ void DeleteChar(long idx)
     "pfiles_spirits          ",
     "pfiles_worn             ",
     "pfiles_ignore_v2        ",  // 20. IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
+#ifdef PLAYER_EXDESCS
+    "playergroup_invitations ",
+    "pfiles_exdescs          "
+  };
+  #define NUM_SQL_TABLE_NAMES     23
+#else
     "playergroup_invitations "
-    // TODO: pfiles_exdescs
   };
   #define NUM_SQL_TABLE_NAMES     22
+#endif
   #define PFILES_INDEX            0
   #define PFILES_IGNORE_INDEX     8
   #define PFILES_MEMORY_INDEX     13

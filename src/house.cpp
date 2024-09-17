@@ -76,7 +76,7 @@ bool House_load_storage(struct room_data *world_room, const char *filename)
     const char *sect_name = data.GetIndexSection("HOUSE", i);
     snprintf(buf, sizeof(buf), "%s/Vnum", sect_name);
     vnum_t vnum = data.GetLong(buf, 0);
-    if ((obj = read_object(vnum, VIRTUAL))) {
+    if ((obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_STORAGE))) {
       // Wipe its cost-- we're restoring from the saved value.
       GET_OBJ_COST(obj) = 0;
 

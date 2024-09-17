@@ -178,6 +178,12 @@ ACMD(do_debug) {
   rest_of_argument = any_one_arg(argument, arg1);
   skip_spaces(&rest_of_argument);
 
+  if (!str_cmp(arg1, "pointers")) {
+    send_to_char(ch, "OK, validating every pointer we can think of.\r\n");
+    verify_every_pointer_we_can_think_of();
+    return;
+  }
+
   if (!str_cmp(arg1, "assignrenraku")) {
     for (rnum_t rnum = 0; rnum < top_of_mobt; rnum++) {
       if (MOB_FLAGGED(&mob_proto[rnum], 29)) {

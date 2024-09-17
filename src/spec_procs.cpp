@@ -792,7 +792,7 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
   else if (type == ADVANCED)
     max = LEARNED_LEVEL;
   else if (type == GODLY)
-    max = 100;
+    max = GODLY_MAX_SKILL;
   else if (type == LIBRARY)
     max = LIBRARY_SKILL;
   else {
@@ -1362,7 +1362,7 @@ SPECIAL(spell_trainer)
             if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_MAGIC_TOOL_TYPE(obj) == TYPE_SUMMONING)
               break;
           if (!obj) {
-            obj = read_object(OBJ_CONJURING_MATERIALS, VIRTUAL);
+            obj = read_object(OBJ_CONJURING_MATERIALS, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
             // We zero it out since it's got an existing value when spawned new.
             GET_OBJ_COST(obj) = 0;
             obj_to_char(obj, ch);
@@ -3423,7 +3423,7 @@ SPECIAL(vending_machine)
           return TRUE;
         }
         lose_nuyen(ch, GET_OBJ_COST(temp), NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
-        temp = read_object(GET_OBJ_RNUM(temp), REAL);
+        temp = read_object(GET_OBJ_RNUM(temp), REAL, OBJ_LOAD_REASON_SPECPROC);
         obj_to_char(temp, ch);
         act("$n buys $p from $P.", FALSE, ch, temp, obj, TO_ROOM);
         act("You now have $p.", FALSE, ch, temp, 0, TO_CHAR);
@@ -3547,7 +3547,7 @@ SPECIAL(vendtix)
       return TRUE;
     }
 
-    struct obj_data *tobj = read_object(ticket, VIRTUAL);
+    struct obj_data *tobj = read_object(ticket, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
     if (!tobj) {
       mudlog("No ticket for the Vend-Tix machine!", ch, LOG_SYSLOG, TRUE);
       send_to_char("The machine whirrs for a moment, then returns your nuyen.\r\n", ch);
@@ -4287,7 +4287,7 @@ void process_auth_room(struct char_data *ch) {
     rnum_t newbie_pocsec_rnum = real_object(OBJ_NEWBIE_POCSEC);
 
     if (newbie_radio_rnum > -1) {
-      struct obj_data *radio = read_object(newbie_radio_rnum, REAL);
+      struct obj_data *radio = read_object(newbie_radio_rnum, REAL, OBJ_LOAD_REASON_SPECPROC);
       GET_RADIO_CENTERED_FREQUENCY(radio) = 8;
       obj_to_char(radio, ch);
     } else {
@@ -4295,7 +4295,7 @@ void process_auth_room(struct char_data *ch) {
     }
 
     if (newbie_pocsec_rnum > -1) {
-      struct obj_data *pocsec = read_object(newbie_pocsec_rnum, REAL);
+      struct obj_data *pocsec = read_object(newbie_pocsec_rnum, REAL, OBJ_LOAD_REASON_SPECPROC);
       obj_to_char(pocsec, ch);
     } else {
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Newbie pocsec %ld does not exist.", OBJ_NEWBIE_POCSEC);
@@ -4331,7 +4331,7 @@ void process_auth_room(struct char_data *ch) {
   GET_NUYEN_RAW(ch) = 5000000;
 
   if (real_object(OBJ_MORTAL_RESTORATION_BUTTON) > -1) {
-    struct obj_data *button = read_object(OBJ_MORTAL_RESTORATION_BUTTON, VIRTUAL);
+    struct obj_data *button = read_object(OBJ_MORTAL_RESTORATION_BUTTON, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
     obj_to_char(button, ch);
     send_to_char("You have been given a restoration button for buildport testing. LOOK at it for instructions.\r\n", ch);
   }
@@ -4579,7 +4579,7 @@ SPECIAL(matchsticks)
       else
         act("$n nods once then digs briefly behind the bar, bringing out a small card and handing it to $N, smirking.", TRUE, carl, 0, ch, TO_ROOM);
 
-      struct obj_data *obj = read_object(31714, VIRTUAL);
+      struct obj_data *obj = read_object(31714, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
       obj_to_char(obj, ch);
       lose_nuyen(ch, amount, NUYEN_OUTFLOW_GENERIC_SPEC_PROC);
       return TRUE;
@@ -5334,7 +5334,7 @@ void add_cash_to_housing_card(struct char_data *ch, int amount, bool message) {
 
   // Couldn't find it anywhere? Give them a new one.
   if (!card) {
-    card = read_object(OBJ_NEOPHYTE_SUBSIDY_CARD, VIRTUAL);
+    card = read_object(OBJ_NEOPHYTE_SUBSIDY_CARD, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
     GET_SUBSIDY_CARD_OWNER(card) = GET_IDNUM(ch);
     obj_to_char(card, ch);
   }
@@ -5661,7 +5661,7 @@ SPECIAL(chargen_hopper)
       return FALSE;
     }
 
-    modulator = read_object(modulator_rnum, REAL);
+    modulator = read_object(modulator_rnum, REAL, OBJ_LOAD_REASON_SPECPROC);
     zero_cost_of_obj_and_contents(modulator);
     obj_to_obj(modulator, hopper);
     //mudlog("DEBUG: Loaded hopper with modulator.", NULL, LOG_SYSLOG, TRUE);
@@ -6180,7 +6180,7 @@ SPECIAL(Janis_Meet)
         act("$n turns and starts running towards the road, quickly vanishing into the crowd.", FALSE, mob, 0, 0, TO_ROOM);
       } else {
         do_say(mob, "Ah, so you're the one they sent, here's the parcel. I've already collected payment.", 0, 0);
-        struct obj_data *parcel = read_object(5033, VIRTUAL);
+        struct obj_data *parcel = read_object(5033, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
         obj_to_char(parcel, ch);
         act("$n hands $N the parcel, then turns and vanishes into the crowd of dockworkers.", FALSE, mob, 0, ch, TO_ROOM);
       }
@@ -6199,7 +6199,7 @@ SPECIAL(Janis_Captive)
     act("As $N brings the lighter close to $n the fumes from the petrol catch alight, quickly spreading around $n's body.", FALSE, mob, 0, ch, TO_NOTVICT);
     act("The girl at the back of the warehouse begins to giggle with glee as the captive's screams are quickly stopped as he succumbs to the flames.", FALSE, mob, 0, 0, TO_ROOM);
     check_quest_kill(ch, mob);
-    obj_to_room(read_object(5034, VIRTUAL), mob->in_room);
+    obj_to_room(read_object(5034, VIRTUAL, OBJ_LOAD_REASON_SPECPROC), mob->in_room);
     extract_char(mob);
     return TRUE;
   }
@@ -6232,7 +6232,7 @@ SPECIAL(mageskill_hermes)
         snprintf(arg, sizeof(arg), "%s So you have the recommendation from the other four. I guess that only leaves me. You put in the effort to get the other recommendations so you have mine.", GET_CHAR_NAME(ch));
         do_say(mage, arg, 0, SCMD_SAYTO);
         extract_obj(recom);
-        recom = read_object(OBJ_MAGEBLING, VIRTUAL);
+        recom = read_object(OBJ_MAGEBLING, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
         obj_to_char(recom, ch);
         GET_OBJ_VAL(recom, 0) = GET_IDNUM(ch);
         act("$N hands you $p.", TRUE, ch, recom, mage, TO_CHAR);
@@ -6263,7 +6263,7 @@ SPECIAL(mageskill_hermes)
           do_say(mage, arg, 0, SCMD_SAYTO);
           snprintf(arg, sizeof(arg), "%s Seek out the other four senior members and ask them for their recommendations. Have them record them in this letter. Once you've gotten them, return to me and let me know.", GET_CHAR_NAME(ch));
           do_say(mage, arg, 0, SCMD_SAYTO);
-          recom = read_object(OBJ_MAGE_LETTER, VIRTUAL);
+          recom = read_object(OBJ_MAGE_LETTER, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
           GET_OBJ_VAL(recom, 0) = GET_IDNUM(ch);
           obj_to_char(recom, ch);
           act("$N hands you $p.", TRUE, ch, recom, mage, TO_CHAR);
@@ -7473,7 +7473,7 @@ SPECIAL(nerpcorpolis_spawn_tracker) {
     }
 
     if (!tracker) {
-      tracker = read_object(OBJ_INITIATIVE_TRACKER, VIRTUAL);
+      tracker = read_object(OBJ_INITIATIVE_TRACKER, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
       obj_to_room(tracker, room);
 
       if (room->people)

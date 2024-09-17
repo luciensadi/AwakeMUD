@@ -3337,7 +3337,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   }
 
   // Get a pointer to the attachment so that we can reference it.
-  struct obj_data *attachment = read_object(GET_WEAPON_ATTACH_LOC(weapon, location), VIRTUAL);
+  struct obj_data *attachment = read_object(GET_WEAPON_ATTACH_LOC(weapon, location), VIRTUAL, OBJ_LOAD_REASON_UNATTACHED_FROM_WEAPON);
 
   // If the attachment was un-loadable, bail out.
   if (!attachment) {
@@ -5679,7 +5679,7 @@ void remove_vehicle_brain(struct veh_data *veh) {
 }
 
 struct obj_data *make_new_finished_part(int part_type, int mpcp, int rating=0) {
-  struct obj_data *part = read_object(OBJ_BLANK_PART_DESIGN, VIRTUAL);
+  struct obj_data *part = read_object(OBJ_BLANK_PART_DESIGN, VIRTUAL, OBJ_LOAD_REASON_STAFF_DECK);
   GET_PART_TYPE(part) = part_type;
   GET_PART_DESIGN_COMPLETION(part) = 0;
   GET_PART_TARGET_MPCP(part) = mpcp;
@@ -5704,7 +5704,7 @@ struct obj_data *make_new_finished_part(int part_type, int mpcp, int rating=0) {
 }
 
 struct obj_data *make_new_finished_program(int part_type, int mpcp, int rating=0) {
-  struct obj_data *prog = read_object(OBJ_BLANK_PROGRAM, VIRTUAL);
+  struct obj_data *prog = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_STAFF_DECK);
 
   GET_PROGRAM_TYPE(prog) = part_type;
   GET_PROGRAM_SIZE(prog) = 1;
@@ -5729,7 +5729,7 @@ struct obj_data *make_new_finished_program(int part_type, int mpcp, int rating=0
 }
 
 struct obj_data *make_staff_deck_target_mpcp(int mpcp) {
-  struct obj_data *new_deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL);
+  struct obj_data *new_deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL, OBJ_LOAD_REASON_STAFF_DECK);
 
   // Add parts.
   obj_to_obj(make_new_finished_part(PART_MPCP, mpcp, mpcp), new_deck);

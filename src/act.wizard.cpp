@@ -384,7 +384,7 @@ ACMD(do_copyover)
         }
 
         // Box it up for handing off.
-        struct obj_data *container = read_object(OBJ_LARGE_PLASTIBOARD_BOX, VIRTUAL);
+        struct obj_data *container = read_object(OBJ_LARGE_PLASTIBOARD_BOX, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
 
         char *player_name = get_player_name(GET_OBJ_TIMER(obj));
         snprintf(buf, sizeof(buf), "%s's boxed-up repairman item: %s^n", player_name, get_string_after_color_code_removal(GET_OBJ_NAME(obj), NULL));
@@ -1397,6 +1397,23 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Source Book: '%s'\r\n", j->source_info);
   }
 
+  if (GET_LEVEL(ch) == LVL_PRESIDENT) {
+    if (j->pc_load_origin) {
+      const char *pc_name = get_player_name(j->pc_load_idnum);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Loaded with '^c%s^n' during PC load '^c%s^n' for ^c%s^n (^c%ld)^n @ ^c%ld^n\r\n",
+             obj_load_reasons[(int) j->load_origin],
+             pc_load_reasons[(int) j->pc_load_origin],
+             pc_name,
+             j->pc_load_idnum,
+             j->load_time);
+      delete [] pc_name;
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Loaded with '^c%s^n' @ epoch ^c%ld^n\r\n",
+             obj_load_reasons[(int) j->load_origin],
+             j->load_time);
+    }
+  }
+
   if (j->dropped_by_char || j->dropped_by_host || GET_OBJ_EXPIRATION_TIMESTAMP(j) > 0) {
     if (j->dropped_by_char || j->dropped_by_host) {
       const char *name = get_player_name(j->dropped_by_char);
@@ -1966,9 +1983,9 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "NPC flags: ^c%s^n\r\n", buf2);
 
   if (mob_is_alert(k)) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alarmed at ^c%ld^n characters: ", GET_MOB_ALARM_MAP(k).size());
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Alarmed with ^c%ld^n entries: ", GET_MOB_ALARM_MAP(k).size());
     for (auto itr : GET_MOB_ALARM_MAP(k)) {
-      if (itr.first == 0) {
+      if (itr.first == IDNUM_FOR_MOB_ALERT_STATE) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "<^calert^n %lds>; ", itr.second - time(0));
       } else {
         const char *ch_name = get_player_name(itr.first);
@@ -2412,7 +2429,7 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
     }
   }
 
-  obj = read_object(real_num, REAL);
+  obj = read_object(real_num, REAL, OBJ_LOAD_REASON_WIZLOAD);
   obj_to_char(obj, ch);
   GET_OBJ_TIMER(obj) = 2;
   obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
@@ -2659,7 +2676,7 @@ ACMD(do_vstat)
       send_to_char("There is no object with that number.\r\n", ch);
       return;
     }
-    obj = read_object(r_num, REAL);
+    obj = read_object(r_num, REAL, OBJ_LOAD_REASON_WIZLOAD);
     do_stat_object(ch, obj);
     extract_obj(obj);
   } else if (is_abbrev(buf, "qst")) {
@@ -8699,7 +8716,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
           }
 
           {
-            struct obj_data *loaded = read_object(quest->obj[obj_idx].vnum, VIRTUAL);
+            struct obj_data *loaded = read_object(quest->obj[obj_idx].vnum, VIRTUAL, OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP);
             if (GET_OBJ_TYPE(loaded) != ITEM_DECK_ACCESSORY) {
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: obj %ld is not a deck accessory ^y(it can't be uploaded)^n.\r\n", obj_idx, quest->obj[obj_idx].vnum);
               issues++;
@@ -9749,14 +9766,14 @@ ACMD(do_makenerps) {
   }
 
   if (is_abbrev(buf, "cyberware")) {
-    ware = read_object(OBJ_CUSTOM_NERPS_CYBERWARE, VIRTUAL);
+    ware = read_object(OBJ_CUSTOM_NERPS_CYBERWARE, VIRTUAL, OBJ_LOAD_REASON_WIZLOAD);
     GET_CYBERWARE_ESSENCE_COST(ware) = (int) (essence_cost * 100);
 
     if (is_visible)
       SET_BIT(GET_CYBERWARE_FLAGS(ware), NERPS_WARE_VISIBLE);
   }
   else if (is_abbrev(buf, "bioware")) {
-    ware = read_object(OBJ_CUSTOM_NERPS_BIOWARE, VIRTUAL);
+    ware = read_object(OBJ_CUSTOM_NERPS_BIOWARE, VIRTUAL, OBJ_LOAD_REASON_WIZLOAD);
     GET_BIOWARE_ESSENCE_COST(ware) = (int) (essence_cost * 100);
 
     if (is_visible)

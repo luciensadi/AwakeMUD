@@ -1446,7 +1446,7 @@ void get_from_room(struct char_data * ch, char *arg)
         // a special room and giving you an item with enough values to point to it conclusively.
 
         // Initialize the vehicle container.
-        struct obj_data *container = read_object(OBJ_VEHCONTAINER, VIRTUAL);
+        struct obj_data *container = read_object(OBJ_VEHCONTAINER, VIRTUAL, OBJ_LOAD_REASON_VEHCONT);
 
         if (!container) {
           send_to_char("Something went wrong! Don't worry, the vehicle is untouched. Please use the BUG command and tell us about what happened here.\r\n", ch);
@@ -1846,7 +1846,7 @@ ACMD(do_get)
         if (found == MOD_SEAT && cont->affected[0].modifier > 1) {
           cont->affected[0].modifier--;
           affect_veh(veh, cont->affected[0].location, -1);
-          obj = read_object(GET_OBJ_VNUM(cont), VIRTUAL);
+          obj = read_object(GET_OBJ_VNUM(cont), VIRTUAL, OBJ_LOAD_REASON_UNINSTALL);
           cont = obj;
         } else if (cont_dotmode) {
           REMOVE_FROM_LIST(cont, veh->mount, next_content)
@@ -1967,7 +1967,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
   FAILURE_CASE(GET_LEVEL(ch) > LVL_MORTAL && !access_level(ch, LVL_PRESIDENT),
                "Staff can't drop nuyen. Use the PAYOUT command to award a character.");
 
-  obj = read_object(OBJ_ROLL_OF_NUYEN, VIRTUAL);
+  obj = read_object(OBJ_ROLL_OF_NUYEN, VIRTUAL, OBJ_LOAD_REASON_DROP_GOLD);
   GET_OBJ_VAL(obj, 0) = amount;
 
   if ( !IS_NPC(ch) && (access_level(ch, LVL_BUILDER)

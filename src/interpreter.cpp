@@ -1524,8 +1524,12 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
 
   /* just drop to next line for hitting CR */
   skip_spaces(&argument);
-  if (!*argument)
+  if (!*argument) {
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+    verify_every_pointer_we_can_think_of();
+#endif
     return;
+  }
 
   // They entered something? KaVir's protocol snippet says to clear their WriteOOB.
   if (ch->desc)
@@ -1546,8 +1550,12 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     if (*argument == '@' || *argument == '+' || *argument == '/' || *argument == '#') {
       argument[0] = ' ';
       skip_spaces(&argument);
-      if (!*argument)
+      if (!*argument) {
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
+      }
       line = any_one_arg(argument, arg);
     } else {
       arg[0] = argument[0];
@@ -1559,12 +1567,18 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
   if (AFF_FLAGGED(ch, AFF_FEAR))
   {
     send_to_char("You are crazy with fear!\r\n", ch);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+    verify_every_pointer_we_can_think_of();
+#endif
     return;
   }
   if (ch->points.fire[0] > 0 && success_test(GET_WIL(ch), 6) < 1)
   {
     send_to_char("^RThe flames cause you to panic!^n\r\n", ch);
     WAIT_STATE(ch, 1 RL_SEC);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+    verify_every_pointer_we_can_think_of();
+#endif
     return;
   }
 
@@ -1595,6 +1609,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
         if (!send_command_as_custom_channel_message(ch, arg)) {
           nonsensical_reply(ch, arg, "matrix");
         }
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       }
 
@@ -1609,6 +1626,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
       if ((mtx_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, mtx_info[cmd].minimum_level)) {
         send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
         mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only matrix command %s!", GET_CHAR_NAME(ch), mtx_info[cmd].command);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       }
 
@@ -1647,6 +1667,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
         if (!send_command_as_custom_channel_message(ch, arg)) {
           nonsensical_reply(ch, arg, "rigging");
         }
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       }
 
@@ -1660,6 +1683,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
       if ((rig_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, rig_info[cmd].minimum_level)) {
         send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
         mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only rigging command %s!", GET_CHAR_NAME(ch), rig_info[cmd].command);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       }
 
@@ -1693,6 +1719,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
       if (!send_command_as_custom_channel_message(ch, arg)) {
         nonsensical_reply(ch, arg, "standard");
       }
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+      verify_every_pointer_we_can_think_of();
+#endif
       return;
     } else {
       if (ch->desc)
@@ -1701,12 +1730,18 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
 
     if (IS_PROJECT(ch) && ch->desc && ch->desc->original && AFF_FLAGGED(ch->desc->original, AFF_TRACKING) && cmd != find_command("track")) {
       send_to_char("You are too busy astrally tracking someone...\r\n", ch);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+      verify_every_pointer_we_can_think_of();
+#endif
       return;
     }
 
     if (PLR_FLAGGED(ch, PLR_FROZEN)) {
       if (!access_level(ch, LVL_PRESIDENT)) {
         send_to_char(ch, "Sorry, this character has been frozen by staff and is unable to take any input. If you're seeing this message, it usually means that you've connected to a character that is pending review or has been banned. If you believe that this has been done in error, reach out to %s for next steps.\r\n", STAFF_CONTACT_EMAIL);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       } else
         send_to_char("The ice covering you crackles alarmingly as you slam your sovereign will through it.\r\n", ch);
@@ -1714,12 +1749,18 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
 
     if (cmd_info[cmd].command_pointer == NULL) {
       send_to_char("Sorry, that command hasn't been implemented yet.\r\n", ch);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+      verify_every_pointer_we_can_think_of();
+#endif
       return;
     }
 
     if (affected_by_power(ch, ENGULF) && cmd_info[cmd].minimum_position != POS_DEAD) {
       if (!access_level(ch, LVL_VICEPRES)) {
         send_to_char("You are currently being engulfed!\r\n", ch);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       } else
         send_to_char("Administrative power roars through your veins as you muscle through your engulfment.\r\n", ch);
@@ -1728,6 +1769,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     if (GET_QUI(ch) <= 0 && cmd_info[cmd].minimum_position != POS_DEAD) {
       if (!access_level(ch, LVL_VICEPRES)) {
         send_to_char("You are paralyzed!\r\n", ch);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       } else
         send_to_char("You draw upon your mantle of administrative power and push through your paralysis.\r\n", ch);
@@ -1780,6 +1824,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
         send_to_char("No way!  You're fighting for your life!\r\n", ch);
         break;
       }
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+      verify_every_pointer_we_can_think_of();
+#endif
       return;
     }
 
@@ -1787,6 +1834,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     if ((cmd_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, cmd_info[cmd].minimum_level)) {
       send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only command %s!", GET_CHAR_NAME(ch), cmd_info[cmd].command);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+      verify_every_pointer_we_can_think_of();
+#endif
       return;
     }
 
@@ -1801,7 +1851,12 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
     verify_every_pointer_we_can_think_of();
 #endif
+    return;
   }
+
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+  verify_every_pointer_we_can_think_of();
+#endif
 }
 
 /**************************************************************************
@@ -2685,6 +2740,9 @@ void nanny(struct descriptor_data * d, char *arg)
         close_socket(d);
       else {
         SEND_TO_Q("\r\nWhat name do you wish to be called by? ", d);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       }
     } else {
@@ -2698,12 +2756,17 @@ void nanny(struct descriptor_data * d, char *arg)
           SEND_TO_Q("Names must be standard letters with no spaces, numbers, or punctuation, and cannot be a reserved word.\r\nName: ", d);
         }
 
-
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       }
       // Drop the HELP crawler.
       if (strcmp(buf, "HELP") == 0) {
         close_socket(d);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       }
       if (does_player_exist(tmp_name)) {
@@ -2720,6 +2783,9 @@ void nanny(struct descriptor_data * d, char *arg)
         for (struct descriptor_data *k = descriptor_list; k; k = k->next)
           if (k->character && k->character->player.char_name && !str_cmp(k->character->player.char_name, tmp_name)) {
             SEND_TO_Q("There is already someone creating a character with that name.\r\nName: ", d);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+            verify_every_pointer_we_can_think_of();
+#endif
             return;
           }
         if (d->character == NULL) {
@@ -2752,6 +2818,9 @@ void nanny(struct descriptor_data * d, char *arg)
         mudlog(buf, d->character, LOG_BANLOG, TRUE);
         SEND_TO_Q("Sorry, new characters are not allowed from your site. Please connect to an existing character, or reach out to " STAFF_CONTACT_EMAIL " for next steps.\r\n", d);
         STATE(d) = CON_CLOSE;
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       }
       if (restrict_mud) {
@@ -2763,6 +2832,9 @@ void nanny(struct descriptor_data * d, char *arg)
         snprintf(buf, sizeof(buf), "Request for new char %s denied from %s (wizlock)", GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         STATE(d) = CON_CLOSE;
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+        verify_every_pointer_we_can_think_of();
+#endif
         return;
       }
       SEND_TO_Q("New character.\r\n", d);
@@ -2795,6 +2867,9 @@ void nanny(struct descriptor_data * d, char *arg)
 
     if (!*arg) {
       close_socket(d);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+      verify_every_pointer_we_can_think_of();
+#endif
       return;
     }
 
@@ -2808,6 +2883,9 @@ void nanny(struct descriptor_data * d, char *arg)
 
       SEND_TO_Q("OK, let's try a different name.\r\n\r\nWhat's your handle, chummer? ", d);
       STATE(d) = CON_GET_NAME;
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+      verify_every_pointer_we_can_think_of();
+#endif
       return;
     } else {
       if (!validate_and_update_password(arg, GET_PASSWD(d->character))) {
@@ -3054,7 +3132,7 @@ void nanny(struct descriptor_data * d, char *arg)
           }
           // If they are, give them a hospital gown.
           if (eq_idx >= NUM_WEARS) {
-            struct obj_data *paper_gown = read_object(OBJ_DOCWAGON_PAPER_GOWN, VIRTUAL);
+            struct obj_data *paper_gown = read_object(OBJ_DOCWAGON_PAPER_GOWN, VIRTUAL, OBJ_LOAD_REASON_SHAMEFUL_NUDITY);
             if (paper_gown) {
               equip_char(d->character, paper_gown, WEAR_BODY);
             } else {
@@ -3699,6 +3777,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("store", "put");
   COMMAND_ALIAS("swap", "switch");
   COMMAND_ALIAS("stow", "holster");
+  COMMAND_ALIAS("unconceal", "reveal");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");

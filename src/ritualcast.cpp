@@ -95,7 +95,7 @@ void set_up_ritualcast(struct char_data *ch, struct room_data *in_room, struct s
 
   // Load the ritual casting tracking object.
   AFF_FLAGS(ch).SetBit(AFF_RITUALCAST);
-  struct obj_data *components = read_object(OBJ_RITUAL_SPELL_COMPONENTS, VIRTUAL);
+  struct obj_data *components = read_object(OBJ_RITUAL_SPELL_COMPONENTS, VIRTUAL, OBJ_LOAD_REASON_MAGIC_BUILD);
 
   GET_RITUAL_COMPONENT_CASTER(components) = GET_IDNUM(ch);
   GET_RITUAL_COMPONENT_SPELL(components) = spell->type;

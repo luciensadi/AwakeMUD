@@ -2404,6 +2404,10 @@ void extract_icon(struct matrix_icon * icon)
 
   REMOVE_FROM_LIST(icon, icon_list, next);
   Mem->DeleteIcon(icon);
+
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+  verify_every_pointer_we_can_think_of();
+#endif
 }
 
 void extract_veh(struct veh_data * veh)
@@ -2553,6 +2557,10 @@ void extract_veh(struct veh_data * veh)
     veh_from_room(veh);
   veh_index[veh->veh_number].number--;
   Mem->DeleteVehicle(veh);
+
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+  verify_every_pointer_we_can_think_of();
+#endif
 }
 
 /* Extract an object from the world */
@@ -2681,6 +2689,10 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
     (obj_index[GET_OBJ_RNUM(obj)].number)--;
 
   Mem->DeleteObject(obj);
+
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+  verify_every_pointer_we_can_think_of();
+#endif
 }
 
 /* Extract a ch completely from the world, and leave his stuff behind */
@@ -2697,6 +2709,10 @@ void extract_char(struct char_data * ch, bool do_save)
   void die_follower(struct char_data * ch);
 
   ACMD_CONST(do_return);
+
+  if (ch->desc || GET_IDNUM(ch) > 0) {
+    log_vfprintf("Extracting PC %s (%ld).", GET_CHAR_NAME(ch), GET_IDNUM(ch));
+  }
 
   if (ch->in_room)
     ch->in_room->dirty_bit = TRUE;
@@ -2716,7 +2732,7 @@ void extract_char(struct char_data * ch, bool do_save)
   if (!IS_NPC(ch)) {
     // Terminate the player's quest, if any. Realistically, we shouldn't ever trigger this code, but if it happens we're ready for it.
     if (GET_QUEST(ch)) {
-      mudlog("Warning: extract_char received PC with quest still active.", ch, LOG_SYSLOG, TRUE);
+      // mudlog("Warning: extract_char received PC with quest still active.", ch, LOG_SYSLOG, TRUE);
       end_quest(ch, FALSE);
     }
 
@@ -2957,6 +2973,10 @@ void extract_char(struct char_data * ch, bool do_save)
       mob_index[GET_MOB_RNUM(ch)].number--;
     Mem->DeleteCh(ch);
   }
+
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+  verify_every_pointer_we_can_think_of();
+#endif
 }
 
 /* ***********************************************************************
@@ -3280,7 +3300,7 @@ struct obj_data *create_credstick(struct char_data *ch, int amount)
   else
     num = 105;  // emerald credstick
 
-  obj = read_object(num, VIRTUAL);
+  obj = read_object(num, VIRTUAL, OBJ_LOAD_REASON_MOB_LOOT);
 
   GET_OBJ_VAL(obj, 0) = amount;
   GET_OBJ_VAL(obj, 3) = 0;
@@ -3302,7 +3322,7 @@ struct obj_data *create_nuyen(int amount)
     log("SYSLOG: Try to create negative or 0 nuyen.");
     return NULL;
   }
-  obj = read_object(110, VIRTUAL);
+  obj = read_object(110, VIRTUAL, OBJ_LOAD_REASON_MOB_LOOT);
 
   GET_OBJ_VAL(obj, 0) = amount;
 

@@ -1352,7 +1352,7 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
 }
 
 bool Apartment::issue_key(struct char_data *ch) {
-  struct obj_data *key = read_object(key_vnum, VIRTUAL);
+  struct obj_data *key = read_object(key_vnum, VIRTUAL, OBJ_LOAD_REASON_APARTMENT_KEY_ISSUE);
 
   if (!key) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Apartment entry for %s specifies key vnum %ld, but it does not exist!", full_name, key_vnum);

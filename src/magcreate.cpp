@@ -53,7 +53,7 @@ void spedit_disp_spell_type(struct descriptor_data *d)
 
 void create_spell(struct char_data *ch)
 {
-  struct obj_data *design = read_object(OBJ_BLANK_SPELL_FORMULA, VIRTUAL);
+  struct obj_data *design = read_object(OBJ_BLANK_SPELL_FORMULA, VIRTUAL, OBJ_LOAD_REASON_CREATE_SPELL);
   STATE(ch->desc) = CON_SPELL_CREATE;
   GET_OBJ_TIMER(design) = -2;
   GET_SPELLFORMULA_FORCE(design) = 1;

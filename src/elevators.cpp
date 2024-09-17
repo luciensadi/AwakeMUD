@@ -470,7 +470,7 @@ void init_elevators(void)
       world[rnum].rating = 0;
       if (real_panel >= 0) {
         // Add decorative elevator control panel to elevator car.
-        obj = read_object(real_panel, REAL);
+        obj = read_object(real_panel, REAL, OBJ_LOAD_REASON_SPECPROC);
         obj_to_room(obj, &world[rnum]);
       }
     } else {
@@ -507,7 +507,7 @@ void init_elevators(void)
           world[rnum].func = call_elevator;
           if (real_button >= 0) {
             // Add decorative elevator call button to landing.
-            obj = read_object(real_button, REAL);
+            obj = read_object(real_button, REAL, OBJ_LOAD_REASON_SPECPROC);
             obj_to_room(obj, &world[rnum]);
           }
 

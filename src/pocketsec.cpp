@@ -49,7 +49,7 @@ extern bool is_approved_multibox_host(const char *host);
 ACMD_DECLARE(do_phone);
 
 struct obj_data *generate_pocket_secretary_folder(struct obj_data *sec, const char *string) {
-  struct obj_data *folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
+  struct obj_data *folder = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL, OBJ_LOAD_REASON_POCSEC_FOLDER_GENERATION);
   folder->restring = str_dup(string);
   obj_to_obj(folder, sec);
   return folder;
@@ -201,7 +201,7 @@ void pocketsec_mailmenu(struct descriptor_data *d)
   }
 
   while (amount_of_mail_waiting(CH) > 0) {
-    mail = read_object(OBJ_PIECE_OF_MAIL, VIRTUAL);
+    mail = read_object(OBJ_PIECE_OF_MAIL, VIRTUAL, OBJ_LOAD_REASON_MAIL_RECEIVE);
     mail->photo = str_dup(get_and_delete_one_message(CH, sender));
 
     if (*sender)
@@ -349,7 +349,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
       }
 
-      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
+      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL, OBJ_LOAD_REASON_POCSEC_PHONEADD);
       obj_to_obj(file, folder);
       file->restring = str_dup(arg);
       send_to_char("Enter Number: ", CH);
@@ -449,7 +449,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_NOTES);
       }
 
-      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL);
+      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL, OBJ_LOAD_REASON_POCSEC_NOTEADD);
       obj_to_obj(file, folder);
       file->restring = str_dup(arg);
       send_to_char("Write note body. Use @ on a new line to finish.\r\n", CH);

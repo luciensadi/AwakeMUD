@@ -2110,9 +2110,10 @@ int process_input(struct descriptor_data *t) {
 
   do {
     if (space_left <= 0) {
-      if (t->character)
+      if (t->character) {
+        log_vfprintf("process_input: about to close connection: input overflow from %s (%ld)", GET_CHAR_NAME(t->character), GET_IDNUM(t->character));
         extract_char(t->character);
-      log("process_input: about to close connection: input overflow");
+      }
       return -1;
     }
 
@@ -2124,7 +2125,15 @@ int process_input(struct descriptor_data *t) {
 #endif
 
       if (errno != EAGAIN) {
-        perror("process_input: about to lose connection");
+        if (t->character) {
+          char errbuf[1000];
+          snprintf(errbuf, sizeof(errbuf), "process_input: about to lose connection from %s (%ld)", GET_CHAR_NAME(t->character), GET_IDNUM(t->character));
+          perror(errbuf);
+          extract_char(t->character);
+        } else {
+          perror("process_input: about to lose connection");
+        }
+
         return -1;              /* some error condition was encountered on
                                  * read */
       } else
@@ -3863,6 +3872,10 @@ void verify_character_validity(struct char_data *ch, bool go_deep) {
 #ifdef USE_DEBUG_CANARIES
   assert(ch->canary == CANARY_VALUE);
 #endif
+
+  // We have to do _something_ to verify a character in go_deep false mode.
+  char verify_buf[1000];
+  strlcpy(verify_buf, GET_CHAR_NAME(ch), sizeof(verify_buf));
 
   if (!go_deep)
     return;
