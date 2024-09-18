@@ -139,6 +139,10 @@ void memoryClass::DeleteCh(struct char_data *ch)
   free_char(ch);
   delete ch;
   // Ch->Push(ch);
+
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+  verify_every_pointer_we_can_think_of();
+#endif
 }
 
 void memoryClass::DeleteRoom(struct room_data *room)

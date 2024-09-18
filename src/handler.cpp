@@ -2973,10 +2973,6 @@ void extract_char(struct char_data * ch, bool do_save)
       mob_index[GET_MOB_RNUM(ch)].number--;
     Mem->DeleteCh(ch);
   }
-
-#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
-  verify_every_pointer_we_can_think_of();
-#endif
 }
 
 /* ***********************************************************************
