@@ -3109,8 +3109,7 @@ void nanny(struct descriptor_data * d, char *arg)
         size_t char_name_sz = strlen(GET_CHAR_NAME(d->character))+1;
         char char_name[char_name_sz];
         strlcpy(char_name, GET_CHAR_NAME(d->character), char_name_sz);
-        free_char(d->character);
-        delete d->character;
+        extract_char(d->character);
 
         d->character = playerDB.LoadChar(char_name, false, PC_LOAD_REASON_MAIN_MENU_1);
         d->character->desc = d;

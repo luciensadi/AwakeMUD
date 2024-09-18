@@ -27,6 +27,7 @@
 #include "newmatrix.hpp"
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
+#include "dblist.hpp"
 
 memoryClass::memoryClass()
 {}
@@ -135,6 +136,12 @@ void memoryClass::DeleteCh(struct char_data *ch)
   // Delete their invis resistance data, then remove them from all other PC's invis resistance records.
   purge_invis_invis_resistance_records(ch);
   remove_ch_from_pc_invis_resistance_records(ch);
+
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+  if (GET_IDNUM(ch) > 0) {
+    ObjList.CheckForDeletedCharacterFuckery(ch, GET_CHAR_NAME(ch), GET_IDNUM(ch));
+  }
+#endif
 
   free_char(ch);
   delete ch;
