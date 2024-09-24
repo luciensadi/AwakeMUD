@@ -1044,6 +1044,11 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
       switch (log) {
         case LOG_CONNLOG:
           check_log = PRF_CONNLOG;
+#ifdef IS_BUILDPORT
+          // We require that you are a VP on the buildport to see connlogs.
+          if (!access_level(tch, LVL_VICEPRES))
+            continue;
+#endif
           break;
         case LOG_DEATHLOG:
           check_log = PRF_DEATHLOG;

@@ -444,7 +444,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
               mount->worn_by = i;
             }
 
-            // Clean up.
+            // Clean up. We specifically don't extract because temp is just a holder for i's data, and still has pointers to valid data at this time.
             clear_char(temp);
             delete temp;
           } // end if statement
