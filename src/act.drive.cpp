@@ -2173,8 +2173,8 @@ ACMD(do_tow)
     send_to_char("The vehicle has to be off for you to tow it.\r\n", ch);
   else if (veh->type == VEH_DRONE && tveh->type != VEH_DRONE)
     send_to_char("Drones can only tow other drones.\r\n", ch);
-  else if (veh->type == VEH_DRONE && veh->load <= tveh->load)
-    send_to_char("Drones can only tow drones that are lighter than them.\r\n", ch);
+  else if (veh->type == VEH_DRONE && ((veh->load - veh->usedload) * 2.5) <= calculate_vehicle_weight(tveh))
+    send_to_char("That drone is too heavy for your drone to tow.\r\n", ch);
   else if (veh->towing)
     send_to_char("Towing a vehicle that's towing another vehicle isn't very safe!\r\n", ch);
   else {
