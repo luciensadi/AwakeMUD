@@ -186,51 +186,11 @@ int gunsmith_skill(int weapon_type)
 
 bool ammo_test(struct char_data *ch, struct obj_data *obj)
 {
-  if (GET_NUYEN(ch) <= get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), AMMOBUILD_BATCH_SIZE, ch)) {
-    send_to_char(ch, "You don't have enough nuyen for the materials to create %s.\r\n",
-                 GET_OBJ_NAME(obj));
-    if (IS_WORKING(ch))
-      STOP_WORKING(ch);
-    return FALSE;
-  }
-  int skillnum = gunsmith_skill(GET_AMMOBOX_WEAPON(obj)), target = ammo_type[GET_AMMOBOX_TYPE(obj)].tn;
-  int skill = get_skill(ch, skillnum, target);
-  int success = success_test(skill, target);
-  int csuccess = MIN((int)(success * ((float)GET_COST_BREAKUP(ch) / 100)), 10);
-  if (csuccess == success)
-    csuccess--;
-  snprintf(buf, sizeof(buf), "AmmoTest: Skill %d, Target %d, Success %d(c%d/t%d)", skill, target, success, csuccess, success - csuccess);
-  act(buf, FALSE, ch, NULL, NULL, TO_STAFF_ROLLS);
-  if (success > 0) {
-    GET_AMMOBOX_TIME_TO_COMPLETION(obj) = (int)((ammo_type[GET_AMMOBOX_TYPE(obj)].time / MAX(success - csuccess, 1)) * 60);
-    if (IS_SENATOR(ch)) {
-      send_to_char(ch, "You use your staff powers to greatly accelerate the build time (was %d).\r\n", GET_AMMOBOX_TIME_TO_COMPLETION(obj));
-      GET_AMMOBOX_TIME_TO_COMPLETION(obj) = 1;
-    }
-  } else
-    GET_AMMOBOX_TIME_TO_COMPLETION(obj) = -1;
-  lose_nuyen(ch, (int)((get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), AMMOBUILD_BATCH_SIZE, ch)) * (1 - (csuccess * .05))), NUYEN_OUTFLOW_AMMO_BUILDING);
-  GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(obj) = GET_AMMOBOX_TIME_TO_COMPLETION(obj);
-  return TRUE;
-}
-
-void ammo_build(struct char_data *ch, struct obj_data *obj)
-{
-  if (GET_AMMOBOX_CREATOR(obj) != GET_IDNUM(ch)) {
-    send_to_char(ch, "Looks like someone else already started on %s; they'll have to pick up where they left off.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-    return;
-  }
-
-  if (GET_AMMOBOX_INTENDED_QUANTITY(obj) <= 0) {
-    send_to_char(ch, "%s has already been completed.", capitalize(GET_OBJ_NAME(obj)));
-    return;
-  }
-
   // Find a deployed workshop in the room.
   struct obj_data *workshop = find_workshop(ch, TYPE_AMMO);
   bool kitwarn = FALSE;
 
-  // No workshop existed: Search for a kit in their inventory.
+  // No workshop present, search for a kit in their inventory.
   if (!workshop) {
     for (workshop = ch->carrying; workshop; workshop = workshop->next_content) {
       if (GET_OBJ_TYPE(workshop) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(workshop) == TYPE_AMMO &&
@@ -260,11 +220,58 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
         send_to_char("You need to be standing next to an unpacked ammunition workshop or to be carrying an ammunition kit.\r\n", ch);
       }
     }
-    return;
+    return FALSE;
   }
 
   if (GET_WORKSHOP_GRADE(workshop) == TYPE_KIT && GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON) {
     send_to_char("You need an ammunition workshop to create assault cannon rounds.\r\n", ch);
+    return FALSE;
+  }
+
+  if (GET_NUYEN(ch) <= get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), AMMOBUILD_BATCH_SIZE, ch)) {
+    send_to_char(ch, "You don't have enough nuyen for the materials to create %s.\r\n",
+                 GET_OBJ_NAME(obj));
+    if (IS_WORKING(ch))
+      STOP_WORKING(ch);
+    return FALSE;
+  }
+
+  int skillnum = gunsmith_skill(GET_AMMOBOX_WEAPON(obj)), target = ammo_type[GET_AMMOBOX_TYPE(obj)].tn;
+  int skill = get_skill(ch, skillnum, target);
+
+  // Houserule: shop provides +2 dice so that there's some benefit over collecting kits
+  if (GET_WORKSHOP_GRADE(workshop) == TYPE_WORKSHOP) {
+    skill += 2;
+  }
+
+  int success = success_test(skill, target);
+  int csuccess = MIN((int)(success * ((float)GET_COST_BREAKUP(ch) / 100)), 10);
+  if (csuccess == success)
+    csuccess--;
+  snprintf(buf, sizeof(buf), "AmmoTest: Skill %d, Target %d, Success %d(c%d/t%d)", skill, target, success, csuccess, success - csuccess);
+  act(buf, FALSE, ch, NULL, NULL, TO_STAFF_ROLLS);
+  if (success > 0) {
+    GET_AMMOBOX_TIME_TO_COMPLETION(obj) = (int)((ammo_type[GET_AMMOBOX_TYPE(obj)].time / MAX(success - csuccess, 1)) * 60);
+    if (IS_SENATOR(ch)) {
+      send_to_char(ch, "You use your staff powers to greatly accelerate the build time (was %d).\r\n", GET_AMMOBOX_TIME_TO_COMPLETION(obj));
+      GET_AMMOBOX_TIME_TO_COMPLETION(obj) = 1;
+    }
+  } else
+    GET_AMMOBOX_TIME_TO_COMPLETION(obj) = -1;
+  lose_nuyen(ch, (int)((get_ammo_cost(GET_AMMOBOX_WEAPON(obj), GET_AMMOBOX_TYPE(obj), AMMOBUILD_BATCH_SIZE, ch)) * (1 - (csuccess * .05))), NUYEN_OUTFLOW_AMMO_BUILDING);
+  GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(obj) = GET_AMMOBOX_TIME_TO_COMPLETION(obj);
+  return TRUE;
+}
+
+void ammo_build(struct char_data *ch, struct obj_data *obj)
+{
+  if (GET_AMMOBOX_CREATOR(obj) != GET_IDNUM(ch)) {
+    send_to_char(ch, "Looks like someone else already started on %s; they'll have to pick up where they left off.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+    return;
+  }
+
+  if (GET_AMMOBOX_INTENDED_QUANTITY(obj) <= 0) {
+    send_to_char(ch, "%s has already been completed.", capitalize(GET_OBJ_NAME(obj)));
     return;
   }
 
