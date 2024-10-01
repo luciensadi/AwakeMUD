@@ -179,7 +179,7 @@ bool process_drug_point_update_tick(struct char_data *ch) {
       GET_DRUG_STAGE(ch, drug_id) = DRUG_STAGE_COMEDOWN;
 
       // Apply comedown durations and instant effects (damage etc).
-      int bod_for_success_test = GET_REAL_BOD(ch) - ((GET_BIOOVER(ch) + 1) / 2);
+      int bod_for_success_test = GET_REAL_BOD(ch) + (GET_RACE(ch) == RACE_DWARF ? 2 : 0) - ((GET_BIOOVER(ch) + 1) / 2);
       switch (drug_id) {
         case DRUG_JAZZ:
           GET_DRUG_DURATION(ch, drug_id) = 100 * dice(1,6);
@@ -271,14 +271,19 @@ bool process_drug_point_update_tick(struct char_data *ch) {
           damage_level++;
         }
 
+        int toxin_extractor_rating = 0;
+        for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
+          if (GET_BIOWARE_TYPE(obj) == BIO_TOXINEXTRACTOR)
+            toxin_extractor_rating = MAX(toxin_extractor_rating, GET_BIOWARE_RATING(obj));
+
         // The power of the damage is specified by the drug, and influenced by the doses taken.
-        int power = drug_types[drug_id].power;
+        int power = drug_types[drug_id].power - toxin_extractor_rating;
         if (GET_DRUG_DOSE(ch, drug_id) > 2) {
           power += GET_DRUG_DOSE(ch, drug_id) - 2;
         }
 
         // How many successes did we roll to stage down the damage?
-        int resist_test_successes = success_test(GET_REAL_BOD(ch) - ((GET_BIOOVER(ch) + 1) / 2), power, ch, "onset damage resist");
+        int resist_test_successes = success_test(GET_REAL_BOD(ch) + (GET_RACE(ch) == RACE_DWARF ? 2 : 0) - ((GET_BIOOVER(ch) + 1) / 2), power, ch, "onset damage resist");
 
         // Calculate the boxes of damage to apply.
         damage_boxes = convert_damage(stage(-resist_test_successes, damage_level));
