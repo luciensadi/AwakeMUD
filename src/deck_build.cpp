@@ -617,7 +617,13 @@ void part_design(struct char_data *ch, struct obj_data *part) {
     } else {
         int target = GET_PART_TARGET_MPCP(part)/2, skill = get_skill(ch, SKILL_CYBERTERM_DESIGN, target);
         GET_PART_DESIGN_COMPLETION(part) = GET_PART_TARGET_MPCP(part) * 2;
+#ifdef DIES_IRAE
+        // Matrix pg 55, half of design successes are used to reduce the build TN
+        GET_PART_DESIGN_SUCCESSES(part) = success_test(skill, target) >> 1;
+#else
+        // Since classic, we've been doubling design successes instead
         GET_PART_DESIGN_SUCCESSES(part) = success_test(skill, target) << 1;
+#endif
         GET_PART_BUILDER_IDNUM(part) = GET_IDNUM(ch);
         /* Disabled on design tests by player request.
         if (get_and_deduct_one_crafting_token_from_char(ch)) {
