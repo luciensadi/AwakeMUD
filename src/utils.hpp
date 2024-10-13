@@ -35,8 +35,10 @@ char *  str_dup(const char *source);
 char *  str_str(const char *string, const char *keyword);
 int     str_cmp(const char *arg1, const char *arg2);
 int     strn_cmp(const char *arg1, const char *arg2, int n);
+#ifdef REIMPLEMENT_STRLCPY_STRLCAT
 size_t  strlcpy(char *buf, const char *src, size_t bufsz);
 size_t  strlcat(char *buf, const char *src, size_t bufsz);
+#endif
 void    log(const char *str);
 void    log_vfprintf(const char *format, ...);
 void    mudlog(const char *str, struct char_data *ch, int log, bool file);

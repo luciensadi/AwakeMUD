@@ -3812,6 +3812,7 @@ char *how_good(int skill, int rank)
   return buf;
 }
 
+#ifdef REIMPLEMENT_STRLCPY_STRLCAT
 /*
 Returns total length of the string that would have been created.
 */
@@ -3860,6 +3861,7 @@ size_t strlcat(char *buf, const char *src, size_t bufsz)
 
     return rtn;
 }
+#endif
 
 // Un-nests contained objects until it figures out who's actually carrying the object (if anyone).
 struct char_data *get_obj_carried_by_recursive(struct obj_data *obj) {
