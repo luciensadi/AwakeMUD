@@ -1315,6 +1315,10 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
   if (att->ranged_combat_mode || att->weapon)
     return FALSE;
 
+  // no-op: adept distance strike
+  if (GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE))
+    return FALSE;
+
   int force = -1;
 
   // Flameaura-flagged NPCs just use the larger of half their magic or their own full level as the force.
