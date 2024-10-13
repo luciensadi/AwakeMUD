@@ -31,7 +31,7 @@ BOOST_FLAGS = -lboost_filesystem
 
 # You probably want to comment this out: This is the makefile specification for the GitHub runner.
 LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lnsl -lcurl
-MYFLAGS = -DNOCRYPT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+MYFLAGS = -DNOCRYPT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11
 
 # OSX? Uncomment these:
 #LIBS = -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lsodium -lcurl
@@ -39,12 +39,12 @@ MYFLAGS = -DNOCRYPT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-par
 
 # Linux / others? Uncomment these:
 #LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lsodium -lcurl
-#MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS
+#MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS -std=c++11
 # If you want GitHub integration, add -DGITHUB_INTEGRATION to the above and fill out your basic auth credentials in github_config.cpp.
 
 # Cygwin:
 #LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lsodium -lcrypt
-#MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DWIN32 -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS
+#MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DWIN32 -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS -std=c++11
 
 CPPFLAGS = $(MYFLAGS) $(PROFILE)
 
