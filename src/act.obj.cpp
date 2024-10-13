@@ -4133,6 +4133,9 @@ ACMD(do_activate)
       send_to_char("Penetrating strike is not compatible with distance strike.\r\n", ch);
       return;
     }
+    // Improved reflexes isn't checked/blocked here. Its incompatibility (as written in
+    // SR3, pg 169) can be interpreted as "does not stack" and so highest applies.
+    // This is also how its handled in handler.cpp: affect_total(struct char_data * ch)
 
     if (i < ADEPT_NUMPOWER) {
       if (desired_level == 0)
