@@ -780,7 +780,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     engage_close_combat_if_appropriate(att, def, net_reach);
     engage_close_combat_if_appropriate(def, att, -net_reach);
 
-    if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+    if (GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
       // MitS 149: Ignore reach modifiers.
       net_reach = 0;
     }
@@ -920,7 +920,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
     if (net_successes < 0) {
-      if (!GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+      if (GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
         // MitS 149: You cannot be counterstriked while using distance strike.
         return FALSE;
       }
@@ -1313,6 +1313,10 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
 
   // no-op: you have a weapon
   if (att->ranged_combat_mode || att->weapon)
+    return FALSE;
+
+  // no-op: adept distance strike
+  if (GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE))
     return FALSE;
 
   int force = -1;
