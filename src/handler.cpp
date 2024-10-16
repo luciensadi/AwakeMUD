@@ -954,11 +954,6 @@ void affect_total(struct char_data * ch)
 
     // also adds to initiative dice
     rigger_init_dice += has_rig;
-
-    // but reduces hacking pool, unless disabled via reflex trigger (Matrix, pg 28)
-    // assume trigger is attached to vcr and that a rigger in the matrix will have done so
-    if (!has_trigger)
-      GET_HACKING(ch) -= has_rig;
   } else {
     // direct control with a datajack and no VCR (SR3 pg 140)
     rigger_rea += 1;
@@ -1120,10 +1115,12 @@ void affect_total(struct char_data * ch)
     int mpcp = 0;
     if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->persona) {
       GET_HACKING(ch) += (int)((GET_INT(ch) + ch->persona->decker->mpcp) / 3);
-      // decking with a VCR applies a 1 TN penalty, unless disabled via reflex trigger (Matrix, pg 28)
-      // assume trigger is attached to vcr and that a rigger in the matrix will have done so
-      if (has_rig && !has_trigger)
+      // a VCR applies a 1 TN penalty to decking and -rating hacking pool, unless disabled via reflex trigger (Matrix, pg 28)
+      // assume trigger is attached to VCR and that a rigger will always disable their VCR when decking
+      if (has_rig && !has_trigger) {
         GET_TARGET_MOD(ch) += 1;
+        GET_HACKING(ch) -= has_rig;
+      }
     } else {
       for (struct obj_data *deck = ch->carrying; deck; deck = deck->next_content)
         if (GET_OBJ_TYPE(deck) == ITEM_CYBERDECK || GET_OBJ_TYPE(deck) == ITEM_CUSTOM_DECK) {
