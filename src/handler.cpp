@@ -955,10 +955,10 @@ void affect_total(struct char_data * ch)
     // also adds to initiative dice
     rigger_init_dice += has_rig;
 
-    // but reduces hacking pool
-    GET_HACKING(ch) -= has_rig;
-    if (GET_HACKING(ch) < 0)
-      GET_HACKING(ch) = 0;
+    // but reduces hacking pool, unless disabled via reflex trigger (Matrix, pg 28)
+    // assume trigger is attached to vcr and that a rigger in the matrix will have done so
+    if (!has_trigger)
+      GET_HACKING(ch) -= has_rig;
   } else {
     // direct control with a datajack and no VCR (SR3 pg 140)
     rigger_rea += 1;
@@ -977,9 +977,8 @@ void affect_total(struct char_data * ch)
     GET_REA(ch) /= 2;
   }
 
-  // asdf something is wrong - combatsense spell dice?
-
   // Combat pool is derived from current atts, so we calculate it after all att modifiers
+  // The combat sense spell and adept power were applied earlier (look above for spell_modify and GET_POWER)
   GET_COMBAT_POOL(ch) += (GET_QUI(ch) + GET_WIL(ch) + GET_INT(ch)) / 2;
   if (GET_TOTALBAL(ch) > GET_QUI(ch))
     GET_COMBAT_POOL(ch) -= (GET_TOTALBAL(ch) - GET_QUI(ch)) / 2;
@@ -1121,6 +1120,10 @@ void affect_total(struct char_data * ch)
     int mpcp = 0;
     if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->persona) {
       GET_HACKING(ch) += (int)((GET_INT(ch) + ch->persona->decker->mpcp) / 3);
+      // decking with a VCR applies a 1 TN penalty, unless disabled via reflex trigger (Matrix, pg 28)
+      // assume trigger is attached to vcr and that a rigger in the matrix will have done so
+      if (has_rig && !has_trigger)
+        GET_TARGET_MOD(ch) += 1;
     } else {
       for (struct obj_data *deck = ch->carrying; deck; deck = deck->next_content)
         if (GET_OBJ_TYPE(deck) == ITEM_CYBERDECK || GET_OBJ_TYPE(deck) == ITEM_CUSTOM_DECK) {
@@ -1131,6 +1134,7 @@ void affect_total(struct char_data * ch)
       GET_HACKING(ch) += (int)(mpcp / 3);
     }
   }
+  GET_HACKING(ch) = MAX(0, GET_HACKING(ch));
 
   // Restore their max_hacking and rem_hacking, which were wiped out in the earlier aff_abils = real_abils.
   GET_REM_HACKING(ch) = MIN(old_rem_hacking, GET_HACKING(ch));
