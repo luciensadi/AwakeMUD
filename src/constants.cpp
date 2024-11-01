@@ -3414,8 +3414,8 @@ const char *obj_load_reasons[] {
 int bone_lacing_power_lookup[] = {
   2, // plastic
   3, // aluminum
-  0, // kevlar
   4, // titanium
+  0, // kevlar
   3, // ceramic
 };
 
