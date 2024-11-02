@@ -3127,7 +3127,7 @@ ACMD(do_pour)
       act("What do you want to fill $p from?", FALSE, ch, to_obj, 0, TO_CHAR);
       return;
     }
-    if (!(from_obj = get_obj_in_list_vis(ch, arg2, ch->in_room->contents))) {
+    if (!(from_obj = get_obj_in_list_vis(ch, arg2, ch->in_veh ? ch->in_veh->contents : ch->in_room->contents))) {
       send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg2), arg2);
       return;
     }
