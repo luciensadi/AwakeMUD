@@ -8460,7 +8460,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
           const char *attach_loc = gun_accessory_locations[idx - ACCESS_LOCATION_TOP];
           bool should_be_able_to_take_attachment = FALSE;
 
-          if (attach_vnum == -1)
+          if (attach_vnum <= -1)
             continue;
 
           switch (idx) {
