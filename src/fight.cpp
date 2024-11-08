@@ -850,7 +850,15 @@ void death_cry(struct char_data * ch, idnum_t cause_of_death_idnum)
   }
 
   for (struct char_data *listener = get_ch_in_room(ch)->people; listener; listener = listener->next_in_room) {
-    set_mob_alarm(listener, cause_of_death_idnum, 30);
+    // Willing combatants look for targets, others rubberneck, wimpy non-sentinels flee
+    if (MOB_FLAGGED(listener, MOB_HELPER) || MOB_FLAGGED(listener, MOB_GUARD)) {
+      set_mob_alarm(listener, cause_of_death_idnum, 30);
+    } else {
+      set_mob_alert(listener, 30);
+      if (MOB_FLAGGED(listener, MOB_WIMPY) && !MOB_FLAGGED(listener, MOB_SENTINEL)) {
+        do_flee(listener, "", 0, 0);
+      }
+    }
   }
 
   struct room_data *was_in = ch->in_room;
@@ -865,7 +873,12 @@ void death_cry(struct char_data * ch, idnum_t cause_of_death_idnum)
       }
       // This specific use of in_room is okay since it's set above and guaranteed to exist.
       for (struct char_data *listener = ch->in_room->people; listener; listener = listener->next_in_room) {
-        set_mob_alarm(listener, cause_of_death_idnum, 30);
+        // Willing combatants look for enemies, others rubberneck
+        if (MOB_FLAGGED(listener, MOB_HELPER) || MOB_FLAGGED(listener, MOB_GUARD)) {
+          set_mob_alarm(listener, cause_of_death_idnum, 30);
+        } else {
+          set_mob_alert(listener, 30);
+        }
       }
       ch->in_room = was_in;
     }
