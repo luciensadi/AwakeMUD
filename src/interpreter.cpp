@@ -3777,6 +3777,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("swap", "switch");
   COMMAND_ALIAS("stow", "holster");
   COMMAND_ALIAS("unconceal", "reveal");
+  COMMAND_ALIAS("snipe", "shoot");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
