@@ -660,32 +660,44 @@ bool check_bioware(struct char_data *ch)
     return FALSE;
   }
 
-  struct obj_data *bio;
+  struct obj_data *bio = NULL, *platelets = NULL;
+  int synthacardium = 0;
   for (bio = ch->bioware; bio; bio = bio->next_content) {
-    if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY)
-    {
-      if (--GET_BIOWARE_PLATELETFACTORY_DATA(bio) < 1) {
-        GET_BIOWARE_PLATELETFACTORY_DATA(bio) = 12;
-        if (success_test(GET_REAL_BOD(ch), 3 + GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio)) < 1) {
-          send_to_char("Your blood seems to erupt.\r\n", ch);
-          act("$n collapses to the floor, twitching.", TRUE, ch, 0, 0, TO_ROOM);
-          if (damage(ch, ch, 10, TYPE_BIOWARE, PHYSICAL))
-            return TRUE;
-        } else {
-          send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
-        }
-        GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio)++;
-      }
-      if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 4)
-        send_to_char("You kinda feel like you should be taking some aspirin.\r\n", ch);
-      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 3)
-        send_to_char("You could definitely go for some aspirin right now.\r\n", ch);
-      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) <= 2)
-        send_to_char("You really feel like you need to take some aspirin.\r\n", ch);
-      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 1)
-        send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
-      break;
+    // Find the 'ware we care about
+    if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY) {
+      platelets = bio;
+    } else if (GET_BIOWARE_TYPE(bio) == BIO_SYNTHACARDIUM) {
+      synthacardium = GET_BIOWARE_RATING(bio);
     }
+
+    if (platelets && synthacardium)
+      break;
+  }
+
+  if (platelets) {
+    // Embolism
+    if (--GET_BIOWARE_PLATELETFACTORY_DATA(platelets) < 1) {
+      GET_BIOWARE_PLATELETFACTORY_DATA(platelets) = 12;
+      if (success_test(GET_REAL_BOD(ch) + synthacardium, 3 + GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(platelets)) < 1) {
+        send_to_char("Your blood seems to erupt.\r\n", ch);
+        act("$n collapses to the floor, twitching.", TRUE, ch, 0, 0, TO_ROOM);
+        if (damage(ch, ch, 10, TYPE_BIOWARE, PHYSICAL))
+          return TRUE;
+      } else {
+        send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
+      }
+      GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(platelets)++;
+    }
+
+    // Warning messages start 4 mud hours out
+    if (GET_BIOWARE_PLATELETFACTORY_DATA(platelets) == 4)
+      send_to_char("You kinda feel like you should be taking some aspirin.\r\n", ch);
+    else if (GET_BIOWARE_PLATELETFACTORY_DATA(platelets) == 3)
+      send_to_char("You could definitely go for some aspirin right now.\r\n", ch);
+    else if (GET_BIOWARE_PLATELETFACTORY_DATA(platelets) == 2)
+      send_to_char("You really feel like you need to take some aspirin.\r\n", ch);
+    else if (GET_BIOWARE_PLATELETFACTORY_DATA(platelets) == 1)
+      send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
   }
   return FALSE;
 }
