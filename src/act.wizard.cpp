@@ -2695,6 +2695,88 @@ ACMD(do_vstat)
     send_to_char("That'll have to be either 'mob', 'obj', 'qst', or 'shp'.\r\n", ch);
 }
 
+bool staff_purge_character(struct char_data *staff, struct char_data *vict, bool single_purge) {
+  if (vict == staff) {
+    if (single_purge)
+      send_to_char(staff, "You can't purge yourself.\r\n");
+    return FALSE;
+  }
+
+  // Prevent purging someone over your level.
+  if (!IS_NPC(vict) && GET_LEVEL(staff) < GET_LEVEL(vict) && !access_level(staff, LVL_EXECUTIVE)) {
+    if (single_purge)
+      send_to_char(staff, "You can't purge %s: They're a higher-level staff than you.\r\n", GET_CHAR_NAME(staff));
+    return FALSE;
+  }
+
+  if (single_purge)
+    act("$n disintegrates $N.", FALSE, staff, 0, vict, TO_NOTVICT);
+
+  // Disconnect purged player.
+  if (!IS_NPC(vict)) {
+    mudlog_vfprintf(staff, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(staff), GET_NAME(vict));
+    if (vict->desc) {
+      close_socket(vict->desc);
+      vict->desc = NULL;
+    }
+  }
+
+  extract_char(vict);
+
+  if (single_purge)
+    send_to_char(OK, staff);
+  
+  return TRUE;
+}
+
+bool staff_purge_object(struct char_data *staff, struct obj_data *obj, bool single_purge) {
+  if (single_purge)
+    act("$n destroys $p.", FALSE, staff, obj, 0, TO_ROOM);
+
+  const char *representation = generate_new_loggable_representation(obj);
+  mudlog_vfprintf(staff, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(staff), representation);
+  delete [] representation;
+  extract_obj(obj);
+
+  if (single_purge)
+    send_to_char(OK, staff);
+
+  if (staff->in_room)
+    staff->in_room->dirty_bit = TRUE;
+  if (staff->in_veh && single_purge)
+    save_single_vehicle(staff->in_veh);
+  
+  return TRUE;
+}
+
+bool staff_purge_vehicle(struct char_data *staff, struct veh_data *veh, bool single_purge) {
+  // Notify the room.
+  if (single_purge) {
+    snprintf(buf1, sizeof(buf1), "$n purges %s.", GET_VEH_NAME(veh));
+    act(buf1, FALSE, staff, NULL, 0, TO_ROOM);
+  }
+
+  const char *representation = generate_new_loggable_representation(veh);
+  mudlog_vfprintf(staff, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(staff), representation);
+  delete [] representation;
+
+  // Notify the owner.
+  if (veh->owner > 0) {
+    snprintf(buf2, sizeof(buf2), "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(staff));
+    store_mail(veh->owner, staff, buf2);
+  }
+
+  // Log the purge and finalize extraction.
+  purgelog(veh);
+  delete_veh_file(veh, "purged");
+  extract_veh(veh);
+
+  if (single_purge)
+    send_to_char(OK, staff);
+  
+  return TRUE;
+}
+
 /* clean a room of all mobiles and objects */
 ACMD(do_purge)
 {
@@ -2716,57 +2798,17 @@ ACMD(do_purge)
 
   if (*buf) {                   /* argument supplied. destroy single object, character, or vehicle. */
     if ((vict = get_char_room_vis(ch, buf))) {
-      if (!IS_NPC(vict) &&
-          ((GET_LEVEL(ch) <= GET_LEVEL(vict)) ||
-           (!access_level(ch, LVL_EXECUTIVE)))) {
-        send_to_char("Fuuuuuuuuu!\r\n", ch);
-        return;
-      }
-      act("$n disintegrates $N.", FALSE, ch, 0, vict, TO_NOTVICT);
-
-      if (!IS_NPC(vict)) {
-        mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
-        if (vict->desc) {
-          close_socket(vict->desc);
-          vict->desc = NULL;
-        }
-      }
-      extract_char(vict);
-      send_to_char(OK, ch);
+      staff_purge_character(ch, vict, TRUE);
       return;
     }
 
     if ((obj = get_obj_in_list_vis(ch, buf, ch->in_veh ? ch->in_veh->contents : ch->in_room->contents))) {
-      act("$n destroys $p.", FALSE, ch, obj, 0, TO_ROOM);
-      const char *representation = generate_new_loggable_representation(obj);
-      mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), representation);
-      delete [] representation;
-      extract_obj(obj);
-      send_to_char(OK, ch);
-
-      if (ch->in_room)
-        ch->in_room->dirty_bit = TRUE;
-      if (ch->in_veh)
-        save_single_vehicle(ch->in_veh);
+      staff_purge_object(ch, obj, TRUE);
       return;
     }
 
     if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
-      // Notify the room.
-      snprintf(buf1, sizeof(buf1), "$n purges %s.", GET_VEH_NAME(veh));
-      act(buf1, FALSE, ch, NULL, 0, TO_ROOM);
-      mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
-
-      // Notify the owner.
-      if (veh->owner > 0) {
-        snprintf(buf2, sizeof(buf2), "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
-        store_mail(veh->owner, ch, buf2);
-      }
-
-      // Log the purge and finalize extraction.
-      purgelog(veh);
-      delete_veh_file(veh, "purged");
-      extract_veh(veh);
+      staff_purge_vehicle(ch, veh, TRUE);
     } else {
       send_to_char("Nothing here by that name.\r\n", ch);
       return;
@@ -2780,33 +2822,23 @@ ACMD(do_purge)
       for (vict = ch->in_veh->people; vict; vict = next_v) {
         next_v = vict->next_in_veh;
         if (IS_NPC(vict) && vict != ch) {
-          mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
-          extract_char(vict);
+          staff_purge_character(ch, vict, FALSE);
         }
       }
 
       for (obj = ch->in_veh->contents; obj; obj = next_o) {
         next_o = obj->next_content;
-        const char *representation = generate_new_loggable_representation(obj);
-        mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), representation);
-        delete [] representation;
-        extract_obj(obj);
+        staff_purge_object(ch, obj, FALSE);
       }
 
       for (veh = ch->in_veh->carriedvehs; veh; veh = next_ve) {
         next_ve = veh->next;
-        if (veh == ch->in_veh)
+        if (veh == ch->in_veh) {
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Found recursively nested vehicle when purging carried vehicles!");
           continue;
-
-        // Notify the owner.
-        if (veh->owner > 0) {
-          snprintf(buf2, sizeof(buf2), "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
-          store_mail(veh->owner, ch, buf2);
         }
 
-        mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
-        purgelog(veh);
-        extract_veh(veh);
+        staff_purge_vehicle(ch, veh, FALSE);
       }
 
       send_to_veh("The vehicle seems a little cleaner.\r\n", ch->in_veh, NULL, FALSE);
@@ -2818,31 +2850,18 @@ ACMD(do_purge)
       for (vict = ch->in_room->people; vict; vict = next_v) {
         next_v = vict->next_in_room;
         if (IS_NPC(vict) && vict != ch) {
-          mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
-          extract_char(vict);
+          staff_purge_character(ch, vict, FALSE);
         }
       }
 
       for (obj = ch->in_room->contents; obj; obj = next_o) {
         next_o = obj->next_content;
-        const char *representation = generate_new_loggable_representation(obj);
-        mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), representation);
-        delete [] representation;
-        extract_obj(obj);
+        staff_purge_object(ch, obj, FALSE);
       }
 
       for (veh = ch->in_room->vehicles; veh; veh = next_ve) {
         next_ve = veh->next_veh;
-        mudlog_vfprintf(ch, LOG_PURGELOG, "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
-        purgelog(veh);
-
-        // Notify the owner.
-        if (veh->owner > 0) {
-          snprintf(buf2, sizeof(buf2), "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
-          store_mail(veh->owner, ch, buf2);
-        }
-
-        extract_veh(veh);
+        staff_purge_vehicle(ch, veh, FALSE);
       }
 
       send_to_room("The world seems a little cleaner.\r\n", ch->in_room);
