@@ -3040,7 +3040,7 @@ ACMD(do_payout) {
     return;
   }
 
-  if (!(vict = get_char_vis(ch, arg))) {
+  if (!(vict = get_player_vis(ch, arg, FALSE))) {
     snprintf(buf, sizeof(buf), "SELECT idnum, cash FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])));
     if (mysql_wrapper(mysql, buf)) {
       send_to_char("An unexpected error occurred (query failed).\r\n", ch);
