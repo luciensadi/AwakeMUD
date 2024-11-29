@@ -3127,7 +3127,7 @@ ACMD(do_pour)
       act("What do you want to fill $p from?", FALSE, ch, to_obj, 0, TO_CHAR);
       return;
     }
-    if (!(from_obj = get_obj_in_list_vis(ch, arg2, ch->in_room->contents))) {
+    if (!(from_obj = get_obj_in_list_vis(ch, arg2, ch->in_veh ? ch->in_veh->contents : ch->in_room->contents))) {
       send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(arg2), arg2);
       return;
     }
@@ -4122,6 +4122,20 @@ ACMD(do_activate)
             send_to_char(ch, "You haven't learned the %s power yet.\r\n", adept_powers[i]);
             return;
           }
+
+    // Prevent activation of incompatible powers.
+    // Penetrating strike can't be conbined with distance strike (SotA 2064, pg 67).
+    if ((i == ADEPT_DISTANCE_STRIKE) && GET_POWER(ch, ADEPT_PENETRATINGSTRIKE)) {
+      send_to_char("Distance strike is not compatible with penetrating strike.\r\n", ch);
+      return;
+    }
+    if ((i == ADEPT_PENETRATINGSTRIKE) && GET_POWER(ch, ADEPT_DISTANCE_STRIKE)) {
+      send_to_char("Penetrating strike is not compatible with distance strike.\r\n", ch);
+      return;
+    }
+    // Improved reflexes isn't checked/blocked here. Its incompatibility (as written in
+    // SR3, pg 169) can be interpreted as "does not stack" and so highest applies.
+    // This is also how its handled in handler.cpp: affect_total(struct char_data * ch)
 
     if (i < ADEPT_NUMPOWER) {
       if (desired_level == 0)
