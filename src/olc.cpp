@@ -2053,6 +2053,10 @@ ACMD(do_zedit)
 
       d->edit_cmd = new reset_com;
       d->edit_cmd->command = '*';
+      d->edit_cmd->arg1 = 0;
+      d->edit_cmd->arg2 = 0;
+      d->edit_cmd->arg3 = 0;
+      d->edit_cmd->arg4 = 0;
       zedit_disp_command_menu(d);
 #endif
 
