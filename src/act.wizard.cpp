@@ -6995,7 +6995,7 @@ ACMD(do_slist)
 
   int real_mob;
   for (nr = MAX(0, real_shop(first)); nr <= top_of_shopt && (shop_table[nr].vnum <= last); nr++) {
-    if (shop_table[nr].vnum < first || shop_table[nr].vnum >= last) {
+    if (shop_table[nr].vnum < first || shop_table[nr].vnum > last) {
       // send_to_char(ch, "Skipping shop %ld: Not in range %d ≤ X ≤ %d.\r\n", shop_table[nr].vnum, first, last);
       continue;
     }
