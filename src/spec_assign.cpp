@@ -106,6 +106,8 @@ struct teach_data teachers[] = {
     "You spend a long time learning how to make small talk and directing conversations.\r\n", ADVANCED },
   { 790, { SKILL_ATHLETICS, SKILL_BIOTECH, SKILL_POLICE_PROCEDURES, SKILL_STEALTH, SKILL_MEDICINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n.", ADVANCED },
+  { 100976, { SKILL_ATHLETICS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n.", ADVANCED },
 #endif
 
                        { 2508, { SKILL_BIOTECH, SKILL_MEDICINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of medical research and instruction, you begin "
