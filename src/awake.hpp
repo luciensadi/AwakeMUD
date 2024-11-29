@@ -948,7 +948,7 @@ enum {
 #define SKILL_DATA_BROKERAGE         54
 #define SKILL_AURA_READING           55
 #define SKILL_STEALTH                56
-#define SKILL_STEAL                  57
+// unused
 #define SKILL_TRACK                  58
 #define SKILL_UNUSED_WAS_CLIMBING    59
 #define SKILL_PILOT_BIKE             60
