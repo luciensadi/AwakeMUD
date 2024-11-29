@@ -1355,6 +1355,21 @@ struct command_info mtx_info[] =
     { "who", 0, do_who, 0, 0, BLOCKS_IDLE_REWARD },
     { "write", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },
     { "wtell", 0, do_wiztell, LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+
+    // Channel history commands.
+    { "history"    , 0, do_message_history, 0, 0, ALLOWS_IDLE_REWARD },
+    { "hts"        , 0, do_switched_message_history, 0, COMM_CHANNEL_HIRED, ALLOWS_IDLE_REWARD },
+    { "questions"  , 0, do_switched_message_history, 0, COMM_CHANNEL_QUESTIONS, ALLOWS_IDLE_REWARD },
+    { "oocs"       , 0, do_switched_message_history, 0, COMM_CHANNEL_OOC, ALLOWS_IDLE_REWARD },
+    { "osays"      , 0, do_switched_message_history, 0, COMM_CHANNEL_OSAYS, ALLOWS_IDLE_REWARD },
+    { "pages"      , 0, do_switched_message_history, LVL_ARCHITECT, COMM_CHANNEL_PAGES, ALLOWS_IDLE_REWARD },
+    { "rts"        , 0, do_switched_message_history, 0, COMM_CHANNEL_RPE, ALLOWS_IDLE_REWARD },
+    { "says"       , 0, do_switched_message_history, 0, COMM_CHANNEL_SAYS, ALLOWS_IDLE_REWARD },
+    { "shouts"     , 0, do_switched_message_history, 0, COMM_CHANNEL_SHOUTS, ALLOWS_IDLE_REWARD },
+    { "tells"      , 0, do_switched_message_history, 0, COMM_CHANNEL_TELLS, ALLOWS_IDLE_REWARD },
+    { "wtells"     , 0, do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS, ALLOWS_IDLE_REWARD },
+    { "wts"        , 0, do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS, ALLOWS_IDLE_REWARD },
+
     { "\n", 0, 0, 0, 0, FALSE  }
   };
 
@@ -1441,6 +1456,21 @@ struct command_info rig_info[] =
     { "where", 0, do_where, 0, 0, BLOCKS_IDLE_REWARD },
     { "who", 0, do_who, 0, 0, BLOCKS_IDLE_REWARD },
     { "wtell", 0, do_wiztell, LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+
+    // Channel history commands.
+    { "history"    , 0, do_message_history, 0, 0, ALLOWS_IDLE_REWARD },
+    { "hts"        , 0, do_switched_message_history, 0, COMM_CHANNEL_HIRED, ALLOWS_IDLE_REWARD },
+    { "questions"  , 0, do_switched_message_history, 0, COMM_CHANNEL_QUESTIONS, ALLOWS_IDLE_REWARD },
+    { "oocs"       , 0, do_switched_message_history, 0, COMM_CHANNEL_OOC, ALLOWS_IDLE_REWARD },
+    { "osays"      , 0, do_switched_message_history, 0, COMM_CHANNEL_OSAYS, ALLOWS_IDLE_REWARD },
+    { "pages"      , 0, do_switched_message_history, LVL_ARCHITECT, COMM_CHANNEL_PAGES, ALLOWS_IDLE_REWARD },
+    { "rts"        , 0, do_switched_message_history, 0, COMM_CHANNEL_RPE, ALLOWS_IDLE_REWARD },
+    { "says"       , 0, do_switched_message_history, 0, COMM_CHANNEL_SAYS, ALLOWS_IDLE_REWARD },
+    { "shouts"     , 0, do_switched_message_history, 0, COMM_CHANNEL_SHOUTS, ALLOWS_IDLE_REWARD },
+    { "tells"      , 0, do_switched_message_history, 0, COMM_CHANNEL_TELLS, ALLOWS_IDLE_REWARD },
+    { "wtells"     , 0, do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS, ALLOWS_IDLE_REWARD },
+    { "wts"        , 0, do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS, ALLOWS_IDLE_REWARD },
+
     { "\n", 0, 0, 0, 0, BLOCKS_IDLE_REWARD }
   };
 
