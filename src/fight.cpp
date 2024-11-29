@@ -317,7 +317,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 
   GET_INIT_ROLL(victim) = 0;
 
-  if (!PLR_FLAGGED(victim, PLR_NOT_YET_AUTHED)) {
+  if (!IS_NPC(victim) && !PLR_FLAGGED(victim, PLR_NOT_YET_AUTHED)) {
     // Chargen character, restore them to full.
     GET_POS(victim) = POS_STANDING;
     GET_PHYSICAL(victim) = GET_MAX_PHYSICAL(victim) * 100;
