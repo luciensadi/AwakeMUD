@@ -416,7 +416,16 @@ void objList::UpdateCounters(void)
 
     // Time out things that have been abandoned outside of storage etc rooms (qualifier checked when setting timeout)
     // TODO: Maybe put it in a vector of expiring objects rather than making this check be part of every item?
-    if (OBJ->in_room && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) > 0 && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) <= timestamp_now) {
+    if (OBJ->in_room
+        && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) > 0 && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) <= timestamp_now
+        && !(zone_table[OBJ->in_room->zone].is_pghq
+             || GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY
+             || GET_OBJ_TYPE(OBJ) == ITEM_CUSTOM_DECK
+             || GET_OBJ_TYPE(OBJ) == ITEM_MAGIC_TOOL
+             || GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP
+             || GET_OBJ_TYPE(OBJ) == ITEM_SHOPCONTAINER
+            )
+        ) {
 #ifndef EXPIRE_STRAY_ITEMS
       const char *representation = generate_new_loggable_representation(OBJ);
       mudlog_vfprintf(NULL, LOG_MISCLOG, "Item %s @ %s (%ld) would have been cleaned up by expiration logic.", representation, GET_ROOM_NAME(OBJ->in_room), GET_ROOM_VNUM(OBJ->in_room));
