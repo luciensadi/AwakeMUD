@@ -2998,7 +2998,7 @@ const char *deck_accessory_upgrade_types[] = {
 
 const char *message_history_channels[] = {
   "Hired",
-  "Newbie",
+  "Questions",
   "OOC",
   "OSays",
   "Pages",
