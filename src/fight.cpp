@@ -6550,11 +6550,23 @@ void order_list(struct matrix_icon *start)
 void chkdmg(struct veh_data * veh)
 {
   if (veh->damage <= VEH_DAM_THRESHOLD_LIGHT) {
-    send_to_veh("A scratch appears on the paintwork.\r\n", veh, NULL, TRUE);
+    if (veh_is_aircraft(veh)) {
+      send_to_veh("You estimate you'll need just a few touch-ups to get back into pristine shape.\r\n", veh, NULL, TRUE);
+    } else {
+      send_to_veh("A scratch appears on the paintwork.\r\n", veh, NULL, TRUE);
+    }
   } else if (veh->damage <= VEH_DAM_THRESHOLD_MODERATE) {
-    send_to_veh("You see some dings and scratches appear on the paintwork.\r\n", veh, NULL, TRUE);
+    if (veh_is_aircraft(veh)) {
+      send_to_veh("You figure it's about time for some preventive repairs.\r\n", veh, NULL, TRUE);
+    } else {
+      send_to_veh("You see some dings and scratches appear on the paintwork.\r\n", veh, NULL, TRUE);
+    }
   } else if (veh->damage <= VEH_DAM_THRESHOLD_SEVERE) {
-    send_to_veh("The windshield shatters and the bumper falls off.\r\n", veh, NULL, TRUE);
+    if (veh_is_aircraft(veh)) {
+      send_to_veh("You realize you should definitely do some engine maintenance before taking off again.\r\n", veh, NULL, TRUE);
+    } else {
+      send_to_veh("The windshield shatters and the bumper falls off.\r\n", veh, NULL, TRUE);
+    }
   } else if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
     send_to_veh("The engine starts spewing smoke and flames.\r\n", veh, NULL, TRUE);
   } else {
