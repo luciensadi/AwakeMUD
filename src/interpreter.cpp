@@ -3782,6 +3782,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
+  COMMAND_ALIAS("effects", "affects");
 
   // Common staff goofs.
   COMMAND_ALIAS("odelete", "idelete");
