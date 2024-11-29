@@ -8152,15 +8152,14 @@ void zero_out_magazine_counts(struct obj_data *obj, int max_ammo_remaining = 0) 
   }
 }
 
+extern void restore_character(struct char_data *vict, bool reset_staff_stats);
 bool restore_to_full_health_if_still_in_chargen(struct char_data *victim) {
   // Cannot be an NPC, must still be unauthed (aka in chargen)
   if (IS_NPC(victim) || !PLR_FLAGGED(victim, PLR_NOT_YET_AUTHED))
     return FALSE;
 
   // Chargen character, restore them to full.
-  GET_POS(victim) = POS_STANDING;
-  GET_PHYSICAL(victim) = GET_MAX_PHYSICAL(victim) * 100;
-  GET_MENTAL(victim) = GET_MAX_MENTAL(victim) * 100;
+  restore_character(victim, FALSE);
   send_to_char(victim, "As you're still in character generation, you have been restored to full health by staff edict.\r\n");
   mudlog_vfprintf(victim, LOG_CHEATLOG, "Restoring %s to full health (stunned/morted in chargen).", GET_CHAR_NAME(victim));
 
