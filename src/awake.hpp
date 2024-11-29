@@ -2659,6 +2659,7 @@ enum {
 #define OBJ_SAEDER_PASS                    4914
 #define OBJ_LARGE_PLASTIBOARD_BOX          29326
 #define OBJ_SNOWFLAKE_KEY                  3454
+#define OBJ_ANNIVERSARY_2025_GIFT          195
 
 #define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_TITLE_TO_SCORPION              892

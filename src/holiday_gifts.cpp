@@ -25,12 +25,18 @@ std::vector<class holiday_entry> holiday_entries = {
      "a festive present with 'Happy Holidays!' emblazoned on the tag",
      "Done up in shiny wrapping paper and finished with a neat bow, this holiday present is sure to please. Why not ^WOPEN^n it now?",
      OBJ_VINTAGE_UGLY_CHRISTMAS_SWEATER},
-  // Hopefully I'll be able to come back in 2024 and rewrite the below, but it's here just in case.
   {"Christmas '24", 1734944400, 1735549200, // 12/23/24 to 12/30/24
      "A puff of peppermint-scented air distracts you, and before you know it, there's a festive present in your hands.\r\n",
      "a festive present with 'Happy Holidays!' emblazoned on the tag",
      "Done up in shiny wrapping paper and finished with a neat bow, this holiday present is sure to please. Why not ^WOPEN^n it now?",
-     OBJ_CHRISTMAS_2024_GIFT}
+     OBJ_CHRISTMAS_2024_GIFT},
+  // Initial commit was May 19, 2017, and we opened to the public on Jan 15, 2021. We celebrate the latter.
+  {"Anniversary '25", 1705276800, 1705363199, // Midnight to 2359.59 on Jan 15.
+     "[OOC]: It's our anniversary! Here's to another great year -- and here's a gift for you!",
+     "a present fuzzing with digital static",
+     "Shrouded in fragments of code, this present looks to be a decidedly out-of-character item. Why not ^WOPEN^n it and see what it contains?",
+     OBJ_ANNIVERSARY_2025_GIFT
+  }
 };
 
 void award_holiday_gifts() {
