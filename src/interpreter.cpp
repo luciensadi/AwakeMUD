@@ -1790,7 +1790,8 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
       }
     }
 
-    if (GET_POS(ch) < cmd_info[cmd].minimum_position) {
+    // Make sure they're conscious / not morted / etc. Restore chargen chars if that's where they're at right now.
+    if (GET_POS(ch) < cmd_info[cmd].minimum_position && (restore_to_full_health_if_still_in_chargen(ch) ? GET_POS(ch) < cmd_info[cmd].minimum_position : TRUE)) {
       switch (GET_POS(ch)) {
       case POS_DEAD:
         // send_to_char("Lie still; you are DEAD!!! :-(\r\n", ch);

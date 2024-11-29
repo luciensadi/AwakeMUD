@@ -317,13 +317,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 
   GET_INIT_ROLL(victim) = 0;
 
-  if (!IS_NPC(victim) && !PLR_FLAGGED(victim, PLR_NOT_YET_AUTHED)) {
-    // Chargen character, restore them to full.
-    GET_POS(victim) = POS_STANDING;
-    GET_PHYSICAL(victim) = GET_MAX_PHYSICAL(victim) * 100;
-    GET_MENTAL(victim) = GET_MAX_MENTAL(victim) * 100;
-    send_to_char(victim, "As you're still in character generation, you have been restored to full health by staff edict.\r\n");
-    mudlog_vfprintf(victim, LOG_CHEATLOG, "Restoring %s to full health (stunned/morted in chargen).", GET_CHAR_NAME(victim));
+  if (restore_to_full_health_if_still_in_chargen(victim)) {
     return FALSE;
   }
 

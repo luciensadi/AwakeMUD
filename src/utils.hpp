@@ -190,6 +190,7 @@ void    set_watching(struct char_data *ch, struct room_data *room, int dir);
 struct room_data *get_jurisdiction_docwagon_room(int jurisdiction);
 struct room_data *get_jurisdiction_garage_room(int jurisdiction);
 void   set_dropped_by_info(struct obj_data *obj, struct char_data *ch);
+bool   restore_to_full_health_if_still_in_chargen(struct char_data *victim);
 
 // RCD subscription functions.
 bool   add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller, bool ignore_veh_sub_marker, bool mute_duplication_alarm=FALSE);
