@@ -7162,6 +7162,7 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_CLIMBING && GET_OBJ_VAL(obj, 1) == CLIMBING_TYPE_WATER_WINGS, "No amount of cosmetic changes could hide the garishness of water wings.");
   FALSE_CASE(GET_OBJ_VNUM(obj) == OBJ_EYEBALL_KEY, "You're pretty sure that trying to alter the eyeball would ruin it.");
   FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_VEHCONTAINER, "Sorry, vehicle containers can't be restrung.");
+  FALSE_CASE(obj_is_a_vehicle_title(obj), "Vehicle titles are consumable, so they can't be restrung.");
 
   // Ensure we don't contain any forbidden phrases. Error messages are shown in-function.
   if (check_for_banned_content(buf, ch)) {
