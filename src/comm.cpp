@@ -1460,7 +1460,10 @@ int make_prompt(struct descriptor_data * d)
                 snprintf(str, sizeof(str), "%d", GET_HACKING(d->character));
               break;
             case 'H':
-              snprintf(str, sizeof(str), "%d%cM", (time_info.hours % 12 == 0 ? 12 : time_info.hours % 12), (time_info.hours >= 12 ? 'P' : 'A'));
+              snprintf(str, sizeof(str), "%s%d%cM", 
+                       (time_info.hours % 12 == 0 || time_info.hours >= 10 ? "" : " "),  // Pad it out to always be 2 characters.
+                       (time_info.hours % 12 == 0 ? 12 : time_info.hours % 12),
+                       (time_info.hours >= 12 ? 'P' : 'A'));
               break;
             case 'i':       // impact
               snprintf(str, sizeof(str), "%d", GET_IMPACT(d->character));
