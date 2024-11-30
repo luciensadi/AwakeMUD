@@ -3010,8 +3010,12 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
 
     // No radio names mode means just give the voice desc.
     if (!PRF_FLAGGED(listener, PRF_NO_RADIO_NAMES)) {
+      // If you're allowing names, you see (you) after your own voice.
+      if (listener == speaker)
+        strlcat(voice_buf, "(you)", sizeof(voice_buf) - strlen(voice_buf));
+
       // Otherwise, staff see speaker's name.
-      if (IS_SENATOR(listener))
+      else if (IS_SENATOR(listener))
         snprintf(ENDOF(voice_buf), sizeof(voice_buf) - strlen(voice_buf), "(%s)", GET_CHAR_NAME(speaker));
 
       // Non-staff, but remembered the speaker? You see their remembered name.
