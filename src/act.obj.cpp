@@ -452,10 +452,8 @@ ACMD(do_put)
     send_to_char(TOOBUSY, ch);
     return;
   }
-  if (IS_ASTRAL(ch)) {
-    send_to_char("Astral beings can't touch things!\r\n", ch);
-    return;
-  }
+  
+  FAILURE_CASE(IS_ASTRAL(ch), "Astral beings can't touch things!");
 
   two_arguments(argument, arg1, arg2);
   obj_dotmode = find_all_dots(arg1, sizeof(arg1));
@@ -464,48 +462,22 @@ ACMD(do_put)
   if (subcmd == SCMD_INSTALL)
     cyberdeck = TRUE;
 
-  if (!*arg1) {
-    send_to_char(ch, "%s what in what?\r\n", (cyberdeck ? "Install" : "Put"));
-    return;
-  }
-
-  if (obj_dotmode != FIND_INDIV) {
-    snprintf(buf, sizeof(buf), "You can only %s %s into one %s at a time.\r\n",
-            (cyberdeck ? "install" : "put"), (cyberdeck ? "programs" : "things"),
-            (cyberdeck ? "cyberdeck" : "container"));
-    send_to_char(buf, ch);
-    return;
-  }
-
-  if (!*arg2) {
-    snprintf(buf, sizeof(buf), "What do you want to %s %s in?\r\n", (cyberdeck ? "install" : "put"),
-            ((obj_dotmode == FIND_INDIV) ? "it" : "them"));
-    send_to_char(buf, ch);
-    return;
-  }
+  FAILURE_CASE_PRINTF(!*arg1, "%s what in what?", (cyberdeck ? "Install" : "Put"));
+  FAILURE_CASE_PRINTF(obj_dotmode != FIND_INDIV, "You can only %s at a time.", (cyberdeck ? "install programs into one cyberdeck" : "put things into one container"));
+  FAILURE_CASE_PRINTF(!*arg2, "What do you want to %s %s in?", (cyberdeck ? "install" : "put"), ((obj_dotmode == FIND_INDIV) ? "it" : "them"));
 
   if (!str_cmp(arg2, "finger")) {
-    for (cont = ch->cyberware; cont; cont = cont->next_content)
-      if (GET_CYBERWARE_TYPE(cont) == CYB_FINGERTIP)
-        break;
-    if (!cont) {
-      send_to_char("You don't have a fingertip compartment.\r\n", ch);
-      return;
-    }
-    if (cont->contains) {
-      send_to_char("Your fingertip compartment is already full.\r\n", ch);
-      return;
-    }
-    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
-      return;
-    }
+    FAILURE_CASE(!(cont = find_cyberware(ch, CYB_FINGERTIP)), "You don't have a fingertip compartment.");
+    FAILURE_CASE(cont->contains, "Your fingertip compartment is already full.");
+    FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)), "You aren't carrying %s %s.", AN(arg1), arg1);
+
     if (GET_OBJ_TYPE(obj) != ITEM_PROGRAM
-        && (GET_OBJ_TYPE(obj) != ITEM_DRUG || (GET_OBJ_VAL(obj, 0) != DRUG_CRAM && GET_OBJ_VAL(obj, 0) != DRUG_PSYCHE))
+        && (GET_OBJ_TYPE(obj) != ITEM_DRUG || (GET_OBJ_DRUG_TYPE(obj) != DRUG_CRAM && GET_OBJ_DRUG_TYPE(obj) != DRUG_PSYCHE))
         && !(IS_MONOWHIP(obj))) {
       send_to_char(ch, "%s doesn't fit in your fingertip compartment.\r\n", CAP(GET_OBJ_NAME(obj)));
       return;
     }
+
     obj_from_char(obj);
     obj_to_obj(obj, cont);
     send_to_char(ch, "You slip %s^n into your fingertip compartment.\r\n", decapitalize_a_an(obj));
@@ -514,25 +486,11 @@ ACMD(do_put)
   }
 
   if (!str_cmp(arg2, "body")) {
-    for (cont = ch->cyberware; cont; cont = cont->next_content)
-      if (GET_OBJ_VAL(cont, 0) == CYB_BODYCOMPART)
-        break;
-    if (!cont) {
-      send_to_char("You don't have a body compartment.\r\n", ch);
-      return;
-    }
-    if (cont->contains) {
-      send_to_char("Your body compartment is already full.\r\n", ch);
-      return;
-    }
-    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
-      return;
-    }
-    if (GET_OBJ_WEIGHT(obj) > 1) {
-      send_to_char(ch, "%s doesn't fit in your body compartment.\r\n", CAP(GET_OBJ_NAME(obj)));
-      return;
-    }
+    FAILURE_CASE(!(cont = find_cyberware(ch, CYB_BODYCOMPART)), "You don't have a body compartment.");
+    FAILURE_CASE(cont->contains, "Your body compartment is already full.");
+    FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)), "You aren't carrying %s %s.", AN(arg1), arg1);
+    FAILURE_CASE_PRINTF(GET_OBJ_WEIGHT(obj) > 1, "%s doesn't fit in your body compartment.", CAP(GET_OBJ_NAME(obj)));
+
     obj_from_char(obj);
     obj_to_obj(obj, cont);
     send_to_char(ch, "You slip %s^n into your body compartment.\r\n", decapitalize_a_an(obj));
@@ -541,29 +499,19 @@ ACMD(do_put)
   }
 
   if (!str_cmp(arg2, "tooth")) {
-    for (cont = ch->cyberware; cont; cont = cont->next_content)
-      if (GET_OBJ_VAL(cont, 0) == CYB_TOOTHCOMPARTMENT)
-        break;
-    if (!cont) {
-      send_to_char("You don't have a tooth compartment.\r\n", ch);
-      return;
+    FAILURE_CASE(!(cont = find_cyberware(ch, CYB_TOOTHCOMPARTMENT)), "You don't have a tooth compartment.");
+    FAILURE_CASE(cont->contains, "Your tooth compartment is already full.");
+    FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)), "You aren't carrying %s %s.", AN(arg1), arg1);
+
+    // You can always fit Cram and Psyche in a compartment. We only evaluate the logic in this block if it's neither of these things.
+    if (GET_OBJ_TYPE(obj) != ITEM_DRUG || GET_OBJ_DRUG_TYPE(obj) != DRUG_CRAM || GET_OBJ_DRUG_TYPE(obj) != DRUG_PSYCHE) {
+      // Breakables can only take Cram/Psyche.
+      FAILURE_CASE(GET_CYBERWARE_FLAGS(cont), "You can only put the drugs Cram and Psyche in breakable tooth compartments.");
+
+      // Non-breakables can also take programs.
+      FAILURE_CASE(GET_OBJ_TYPE(obj) != ITEM_PROGRAM, "You can only fit optical chips and the drugs Cram and Psyche in non-breakable tooth compartments.");
     }
-    if (cont->contains) {
-      send_to_char("Your tooth compartment is already full.\r\n", ch);
-      return;
-    }
-    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
-      return;
-    }
-    if ((GET_OBJ_VAL(cont, 3) && GET_OBJ_TYPE(obj) != ITEM_DRUG) || (GET_OBJ_VAL(obj, 0) != DRUG_CRAM && GET_OBJ_VAL(obj, 0) != DRUG_PSYCHE)) {
-      send_to_char("You can only put the drugs cram or psyche in a breakable tooth compartment.\r\n", ch);
-      return;
-    } else if (!GET_OBJ_VAL(cont, 3) && GET_OBJ_TYPE(obj) != ITEM_PROGRAM && (GET_OBJ_TYPE(obj) == ITEM_DRUG &&
-               GET_OBJ_VAL(obj, 0) != DRUG_CRAM && GET_OBJ_VAL(obj, 0) != DRUG_PSYCHE)) {
-      send_to_char("You can only fit optical chips in a tooth compartment.\r\n", ch);
-      return;
-    }
+
     obj_from_char(obj);
     obj_to_obj(obj, cont);
     send_to_char(ch, "You slip %s^n into your tooth compartment.\r\n", decapitalize_a_an(obj));
@@ -584,38 +532,28 @@ ACMD(do_put)
 
   // Combine drugs.
   if (GET_OBJ_TYPE(cont) == ITEM_DRUG || GET_OBJ_VNUM(cont) == OBJ_ANTI_DRUG_CHEMS) {
-    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
-      return;
-    }
+    FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)), "You aren't carrying %s %s.", AN(arg1), arg1);
+    FAILURE_CASE_PRINTF(obj == cont, "You can't combine %s with itself.", GET_OBJ_NAME(obj));
 
-    if (obj == cont) {
-      send_to_char(ch, "You cannot combine %s with itself.\r\n", GET_OBJ_NAME(obj));
-      return;
-    }
-
+    // Combining chems.
     if (GET_OBJ_VNUM(cont) == OBJ_ANTI_DRUG_CHEMS) {
-      if (GET_OBJ_VNUM(obj) != OBJ_ANTI_DRUG_CHEMS) {
-        send_to_char("You can only combine chems with other chems.\r\n", ch);
-        return;
-      }
+      FAILURE_CASE(GET_OBJ_VNUM(obj) != OBJ_ANTI_DRUG_CHEMS, "You can only combine chems with other chems.");
 
       send_to_char("You combine the chems.\r\n", ch);
       GET_CHEMS_QTY(cont) += GET_CHEMS_QTY(obj);
       GET_CHEMS_QTY(obj) = 0;
-      // TODO: Update weight as well.
+      GET_OBJ_WEIGHT(cont) += GET_OBJ_WEIGHT(obj);
       extract_obj(obj);
       return;
-    } else {
-      if (GET_OBJ_TYPE(obj) != ITEM_DRUG || GET_OBJ_DRUG_TYPE(obj) != GET_OBJ_DRUG_TYPE(cont)) {
-        send_to_char(ch, "You can only combine %s with other doses of %s, and %s doesn't qualify.\r\n",
-          decapitalize_a_an(GET_OBJ_NAME(cont)),
-          drug_types[GET_OBJ_DRUG_TYPE(cont)].name,
-          GET_OBJ_NAME(obj)
-        );
-        return;
-      }
     }
+
+    // Combining mismatching drugs.
+    FAILURE_CASE_PRINTF(GET_OBJ_TYPE(obj) != ITEM_DRUG || GET_OBJ_DRUG_TYPE(obj) != GET_OBJ_DRUG_TYPE(cont), 
+      "You can only combine %s with other doses of %s, and %s doesn't qualify.",
+      decapitalize_a_an(GET_OBJ_NAME(cont)),
+      drug_types[GET_OBJ_DRUG_TYPE(cont)].name,
+      GET_OBJ_NAME(obj)
+    );
 
     combine_drugs(ch, obj, cont, TRUE);
     return;
@@ -623,57 +561,36 @@ ACMD(do_put)
 
   // Combine ammo boxes.
   if (GET_OBJ_TYPE(cont) == ITEM_GUN_AMMO) {
-    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
-      return;
-    }
-
-    if (obj == cont) {
-      send_to_char(ch, "You cannot combine %s with itself.\r\n", GET_OBJ_NAME(obj));
-      return;
-    }
+    FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)), "You aren't carrying %s %s.", AN(arg1), arg1);
+    FAILURE_CASE_PRINTF(obj == cont, "You cannot combine %s with itself.", decapitalize_a_an(GET_OBJ_NAME(cont)));
 
     // Restriction: You can't wombo-combo non-ammo into ammo.
-    if (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO) {
-      send_to_char(ch, "%s will only accept the contents of other ammo boxes, and %s^n doesn't qualify.\r\n",
-        GET_OBJ_NAME(cont),
-        GET_OBJ_NAME(obj)
-      );
-      return;
-    }
+    FAILURE_CASE_PRINTF(GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO, "%s will only accept the contents of other ammo boxes, and %s^n doesn't qualify.",
+      CAP(GET_OBJ_NAME(cont)),
+      decapitalize_a_an(GET_OBJ_NAME(obj))
+    );
 
     // If it's got a creator set, it's not done yet.
-    if (GET_AMMOBOX_INTENDED_QUANTITY(cont) > 0) {
-      send_to_char(ch, "%s still has disassembled rounds in it. It needs to be completed first.\r\n", GET_OBJ_NAME(cont));
-      return;
-    }
-
-    if (GET_AMMOBOX_INTENDED_QUANTITY(obj) > 0) {
-      send_to_char(ch, "%s still has disassembled rounds in it. It needs to be completed first.\r\n", GET_OBJ_NAME(obj));
-      return;
-    }
+    FAILURE_CASE_PRINTF(GET_AMMOBOX_INTENDED_QUANTITY(cont) > 0, "Your target (%s) still has disassembled rounds in it. It needs to be completed first.", decapitalize_a_an(GET_OBJ_NAME(cont)));
+    FAILURE_CASE_PRINTF(GET_AMMOBOX_INTENDED_QUANTITY(obj) > 0, "Your source (%s) still has disassembled rounds in it. It needs to be completed first.", decapitalize_a_an(GET_OBJ_NAME(obj)));
 
     // If the weapons don't match, no good.
-    if (GET_AMMOBOX_WEAPON(cont) != GET_AMMOBOX_WEAPON(obj)) {
-      send_to_char(ch, "You can't combine %s ammo with %s ammo.\r\n",
-        weapon_types[GET_AMMOBOX_WEAPON(cont)],
-        weapon_types[GET_AMMOBOX_WEAPON(obj)]
-      );
-      return;
-    }
+    FAILURE_CASE_PRINTF(GET_AMMOBOX_WEAPON(cont) != GET_AMMOBOX_WEAPON(obj),
+      "You can't combine %s ammo with %s ammo.",
+      weapon_types[GET_AMMOBOX_WEAPON(cont)],
+      weapon_types[GET_AMMOBOX_WEAPON(obj)]
+    );
 
     // If the ammo types don't match, no good.
-    if (GET_AMMOBOX_TYPE(cont) != GET_AMMOBOX_TYPE(obj)) {
-      send_to_char(ch, "You can't combine %s ammo with %s ammo.\r\n",
-        ammo_type[GET_AMMOBOX_TYPE(cont)].name,
-        ammo_type[GET_AMMOBOX_TYPE(obj)].name
-      );
-      return;
-    }
+    FAILURE_CASE_PRINTF(GET_AMMOBOX_TYPE(cont) != GET_AMMOBOX_TYPE(obj),
+      "You can't combine %s ammo with %s ammo.",
+      ammo_type[GET_AMMOBOX_TYPE(cont)].name,
+      ammo_type[GET_AMMOBOX_TYPE(obj)].name
+    );
 
     // Combine them. This handles junking of empties, restringing, etc.
     if (!combine_ammo_boxes(ch, obj, cont, TRUE)) {
-      send_to_char("Something went wrong. Please reach out to the staff.\r\n", ch);
+      send_to_char("Something went wrong. Please reach out to staff.\r\n", ch);
     }
     return;
   }
