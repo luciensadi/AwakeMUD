@@ -1048,8 +1048,14 @@ enum {
 #define SKILL_PILOT_WALKER              151
 #define SKILL_MANDARIN                  152
 #define SKILL_HAITIAN_CREOLE            153
+// otaku-specific skills
+#define SKILL_CHANNEL_ACCESS            154
+#define SKILL_CHANNEL_CONTROL           155
+#define SKILL_CHANNEL_INDEX             156
+#define SKILL_CHANNEL_FILES             157
+#define SKILL_CHANNEL_SLAVE             158
 
-#define MAX_SKILLS                      154
+#define MAX_SKILLS                      159
 // Adding a pilot skill? Update utils.cpp's pilot_skills[].
 
 // Skill type definitions.
@@ -1397,7 +1403,8 @@ enum {
 #define ITEM_EXTRA_CHEATLOG_MARK      33
 #define ITEM_EXTRA_CONCEALED_IN_EQ    34    // Doesn't show up when someone looks at you.
 #define ITEM_EXTRA_TRODE_NET          35
-#define MAX_ITEM_EXTRA                36
+#define ITEM_EXTRA_OTAKU_BS           36    // This is related to Otaku nonsense
+#define MAX_ITEM_EXTRA                37
 
 /* Ammo types */
 #define AMMO_NORMAL     0
@@ -3226,6 +3233,7 @@ enum {
 #define OBJ_LOAD_REASON_BULLETPANTS_MAKE_BOX     56
 #define OBJ_LOAD_REASON_FIND_OBJ_SHOP            57
 #define OBJ_LOAD_REASON_SHOP_RECEIVE             58
+#define OBJ_LOAD_REASON_OTAKU_BS                 59
 
 #define IDNUM_FOR_MOB_ALERT_STATE  -1
 

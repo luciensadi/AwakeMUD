@@ -1813,6 +1813,11 @@ struct skill_data skills[] =
     {"Piloting Walkers",                        REA, SKILL_TYPE_ACTIVE,    FALSE,    11,  FALSE,  FALSE },
     {"Mandarin",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Haitian Creole",                          INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
+    {"Channel Access",                          WIL, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
+    {"Channel Control",                         WIL, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
+    {"Channel Index",                           WIL, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
+    {"Channel Files",                           WIL, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
+    {"Channel Slave",                           WIL, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
   };
 
 int rev_dir[] =

@@ -1797,6 +1797,10 @@ ACMD(do_logoff)
         send_to_char("Your hitcher has disconnected.\r\n", ch);
         temp->persona->decker->hitcher = NULL;
       }
+     // Clear the deck if this is an otaku
+    if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+      extract_obj(PERSONA->decker->deck);
+    }
     return;
   }
   if (subcmd) {
@@ -1829,10 +1833,14 @@ ACMD(do_logoff)
   send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
 
   // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
-
   extract_icon(PERSONA);
   PERSONA = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+
+  // Clear the deck if this is an otaku
+  if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+    extract_obj(PERSONA->decker->deck);
+  }
 
   // Make 'em look if they're not screenreaders.
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
@@ -1903,6 +1911,9 @@ ACMD(do_connect)
       cyberdeck = make_staff_deck_target_mpcp(12);
       obj_to_char(cyberdeck, ch);
       send_to_char(ch, "You pull a deck out of thin air to connect with.\r\n");
+    } else if (IS_OTAKU(ch)) {
+      extern struct obj_data *make_otaku_deck(struct char_data *ch);
+      cyberdeck = make_otaku_deck(ch);
     } else {
       send_to_char(ch, "I don't recommend trying to do that without a cyberdeck.\r\n");
       return;
@@ -1943,7 +1954,8 @@ ACMD(do_connect)
 
   if (GET_POS(ch) != POS_SITTING) {
     GET_POS(ch) = POS_SITTING;
-    send_to_char(ch, "You find a place to sit and work with your deck.\r\n");
+    if (IS_OTAKU(ch)) send_to_char(ch, "You find a place to sit down and commune with the matrix.\r\n");
+    else send_to_char(ch, "You find a place to sit and work with your deck.\r\n");
   }
 
   icon = Mem->GetIcon();
@@ -2139,12 +2151,15 @@ ACMD(do_connect)
   if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
     if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
       if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
-        snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to $s cyberdeck.");
+        snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to %s.",
+          cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
       } else {
-        snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into $s cyberdeck.");
+        snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into %s.",
+          cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
       }
     } else {
-      snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides $s cyberdeck cable into $s eye datajack.");
+      snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides %s cable into $s eye datajack.",
+        cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
     }
   } else {
     snprintf(buf, sizeof(buf), "$n plugs the leads of $s 'trode net into $s cyberdeck.");

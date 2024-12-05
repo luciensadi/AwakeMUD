@@ -340,6 +340,18 @@ struct room_data
 
 /* char-related structures ************************************************/
 
+struct complex_form_data
+{
+  char *name;
+  ubyte type;
+  ubyte rating;
+  struct complex_form_data *next;       // point to next form in list
+
+  complex_form_data() :
+      name(NULL), type(0), rating(0), next(NULL)
+  {}
+};
+
 struct spell_data
 {
   char *name;                           // spell name
@@ -468,6 +480,7 @@ struct char_player_data
   ush_int height;              /* PC / NPC's height                    */
   byte race;                 /* PC / NPC's race                      */
   byte tradition;            /* PC / NPC's tradition                       */
+  byte otaku_path;           /* PC / NPC's otaku path */
   ubyte aspect;
   char *host;   /* player host    */
 
@@ -962,6 +975,7 @@ struct char_data
   struct follow_type *followers;        /* List of chars followers       */
   struct char_data *master;             /* Who is char following?        */
   struct spell_data *spells;                     /* linked list of spells          */
+  struct complex_form_data *forms;      /* linked list of complex forms */
 
   IgnoreData *ignore_data;
 

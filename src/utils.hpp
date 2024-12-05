@@ -426,6 +426,8 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define IS_PRESTIGE_RACE(race) (RACE_IS_DRAGON(race) || RACE_IS_DRAKE(race) || RACE_IS_GHOUL(race) || race == RACE_DRYAD)
 #define IS_PRESTIGE_CH(ch) (IS_PRESTIGE_RACE(GET_RACE(ch)))
 
+#define IS_OTAKU(ch) (GET_OTAKU_PATH(ch) > 0)
+
 #define GET_RACIAL_STARTING_ESSENCE_FOR_RACE(race)  (RACE_IS_GHOUL(race) ? 500 : (RACE_IS_DRAGON(race) ? 700 : 600))
 
 // ONLY for use on non-Bitfield bitvectors:
@@ -544,12 +546,13 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_DESC_LEVEL(d)  ((d)->original ? GET_LEVEL((d)->original) : ((d)->character ? GET_LEVEL((d)->character) : 0))
 
 #define GET_RACE(ch)          ((ch)->player.race)
-#define GET_TRADITION(ch)       ((ch)->player.tradition)
-#define GET_ASPECT(ch)    ((ch)->player.aspect)
-#define GET_LASTROOM(ch)          ((ch)->player.last_room)
+#define GET_OTAKU_PATH(ch)    ((ch)->player.otaku_path)
+#define GET_TRADITION(ch)     ((ch)->player.tradition)
+#define GET_ASPECT(ch)        ((ch)->player.aspect)
+#define GET_LASTROOM(ch)      ((ch)->player.last_room)
 #define GET_HEIGHT(ch)        ((ch)->player.height)
 #define GET_WEIGHT(ch)        ((ch)->player.weight)
-#define GET_PRONOUNS(ch)           ((ch)->player.pronouns)
+#define GET_PRONOUNS(ch)      ((ch)->player.pronouns)
 
 #define GET_ATT(ch, i)        ((ch)->aff_abils.attributes[(i)])
 #define GET_REAL_ATT(ch, i)   ((ch)->real_abils.attributes[(i)])
