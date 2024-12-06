@@ -2717,10 +2717,12 @@ enum {
 #define OBJ_TRANSYS_SCRIBE                 1141
 #define OBJ_TRANSYS_RIFFLE                 1140
 #define OBJ_RENRAKU_BYPASS                 6109
-#define OBJ_FOXFIRE_KITSUNE                1966
+#define OBJ_FOXFIRE_KITSUNE_ANALYZE        1966
+#define OBJ_FOXFIRE_KITSUNE_DECRYPT        1967
 #define OBJ_TRANSYS_ARMOR                  1139
 #define OBJ_MATRIX_SWORD                   387
 #define OBJ_NOVATECH_R5_SLEAZE             1160
+#define OBJ_NOVATECH_R5_ARMOR              1162
 
 #ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_CYB_CERAMIC_BONE_LACING        85066

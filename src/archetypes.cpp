@@ -442,7 +442,6 @@ struct archetype_data *generate_decker() {
   arch->worn[WEAR_FEET] = OBJ_PAIR_OF_WHITE_TRAINERS;
 
   i = 0;
-  arch->carried[i++] = OBJ_CYBERDECK_REPAIR_KIT;
   arch->carried[i++] = OBJ_MEDKIT;
   arch->carried[i++] = OBJ_MITSUHAMA_Z4;
   arch->carried[i++] = OBJ_NOVATECH_BURNER;
@@ -460,8 +459,9 @@ struct archetype_data *generate_decker() {
   arch->software[i++] = OBJ_TRANSYS_SCRIBE; // r6 read/write
   arch->software[i++] = OBJ_TRANSYS_RIFFLE; // r6 browse
   arch->software[i++] = OBJ_RENRAKU_BYPASS; // r6 deception
-  arch->software[i++] = OBJ_FOXFIRE_KITSUNE; // r6 analyze
-  arch->software[i++] = OBJ_TRANSYS_ARMOR; // r6 armor
+  arch->software[i++] = OBJ_FOXFIRE_KITSUNE_ANALYZE; // r6 analyze
+  arch->software[i++] = OBJ_FOXFIRE_KITSUNE_DECRYPT; // r6 decrypt
+  arch->software[i++] = OBJ_NOVATECH_R5_ARMOR; // r5 armor
   arch->software[i++] = OBJ_MATRIX_SWORD; //  r4 attack
   assert(i < NUM_ARCHETYPE_SOFTWARE);
 
