@@ -117,6 +117,7 @@ extern void enable_xterm_256(descriptor_t *apDescriptor);
 ACMD_DECLARE(do_olcon);
 ACMD_DECLARE(do_abilityset);
 ACMD_DECLARE(do_accept);
+ACMD_DECLARE(do_account);
 ACMD_DECLARE(do_action);
 ACMD_DECLARE(do_activate);
 ACMD_DECLARE(do_advance);
@@ -513,6 +514,9 @@ struct command_info cmd_info[] =
     { "activate"   , POS_LYING   , do_activate , 0, 0, BLOCKS_IDLE_REWARD },
     { "aecho"      , POS_SLEEPING, do_new_echo , LVL_ARCHITECT, SCMD_AECHO, BLOCKS_IDLE_REWARD },
     { "accept"     , POS_LYING   , do_accept   , 0, 0, BLOCKS_IDLE_REWARD },
+#ifdef IS_BUILDPORT
+    { "account"    , POS_DEAD    , do_account  , 0, 0, ALLOWS_IDLE_REWARD },
+#endif
 
 #ifdef DIES_IRAE
     /* The power point for Karma rule was specifically included for players who do not use the advanced magic (initiation) rules.
