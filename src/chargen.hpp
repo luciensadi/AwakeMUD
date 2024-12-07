@@ -24,6 +24,7 @@
 #define CCR_PRESTIGE_PAYMENT_GET_NAME 18
 #define CCR_PRESTIGE_PAYMENT_GET_PASS 19
 #define CCR_PRESTIGE_RACE_PAID_FOR    20
+#define CCR_OTAKU_PATH                21
 
 #define PO_RACE		0
 #define PO_ATTR		1
@@ -40,6 +41,9 @@
 #define PR_RACE         5
 
 #define NUM_CCR_PR_POINTS 6
+
+/* Special value for Otaku assignment */
+#define PR_OTAKU        6
 
 void refund_chargen_prestige_syspoints_if_needed(struct char_data *ch);
 #endif

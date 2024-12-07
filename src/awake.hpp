@@ -86,6 +86,12 @@
 
 /* char and mob related defines */
 
+/* otaku paths */
+
+#define OTAKU_PATH_NORMIE     0
+#define OTAKU_PATH_CYBERADEPT 1
+#define OTAKU_PATH_TECHNOSHAM 2
+
 /* magical traditions */
 
 #define TRAD_HERMETIC   0

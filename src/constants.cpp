@@ -1183,6 +1183,7 @@ const char *extra_bits[] =
     "CHEATLOG_MARK",
     "CONCEALED_IN_EQ",
     "TRODE_NET",
+    "OTAKU_BS",
     MAX_FLAG_MARKER
   };
 
@@ -1224,6 +1225,7 @@ const char *pc_readable_extra_bits[] =
     "Doesn't Save", // Deliberate -- concealing cheatlog mark
     "Concealed in Equipment",
     "Is Electrode Net",
+    "Is Virtual Otaku Item",
     MAX_FLAG_MARKER
   };
 

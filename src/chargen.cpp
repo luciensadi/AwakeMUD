@@ -76,7 +76,7 @@ void ccr_pronoun_menu(struct descriptor_data *d) {
 void display_prestige_race_menu(struct descriptor_data *d) {
   char msg_buf[10000];
   snprintf(msg_buf, sizeof(msg_buf), 
-            "\r\nPrestige races cost system points, which you will draw from an existing character."
+            "\r\nPrestige races and classes cost system points, which you will draw from an existing character."
             "\r\n"
             "\r\nThe following races are available:"
             "\r\n"
@@ -109,8 +109,14 @@ void display_prestige_race_menu(struct descriptor_data *d) {
             "\r\n^c--- Dragons can't use 'ware, but have high stat caps. ---^n"
             "\r\n B) Western Dragon    (%4d sysp, 30 build points / slot B)"
             "\r\n C) Eastern Dragon    (%4d sysp, 30 build points / slot B)"
-            "\r\n D) Feathered Serpent (%4d sysp, 30 build points / slot B)",
-            PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST);
+            "\r\n D) Feathered Serpent (%4d sysp, 30 build points / slot B)"
+            "\r\n"
+            "\r\nThe following classes are available (Toggle only one):"
+            "\r\n"
+            "\r\n--- Otaku are a magic variant of Deckers. ---"
+            "\r\n O) Otaku [%s]        (%4d sys, 30 build points / slot A)",
+            PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST,
+            d->ccr.is_otaku ? "^g ON^n" : "^rOFF^n", PRESTIGE_CLASS_OTAKU_COST);
 
   strlcat(msg_buf, 
             "\r\n"
@@ -825,6 +831,11 @@ int parse_prestige_race(struct descriptor_data *d, const char *arg)
   case 'd':
   case 'D':
     return RACE_FEATHERED_SERPENT;
+  case 'o':
+  case 'O':
+    d->ccr.is_otaku = !d->ccr.is_otaku;
+    ccr_race_menu(d);
+    return RETURN_HELP;
   case 'X':
   case 'x':
   case 'Q':
@@ -916,6 +927,13 @@ int parse_assign(struct descriptor_data *d, const char *arg)
   if (d->ccr.pr[lowest_kosher_magic_slot] == PR_RACE)
     lowest_kosher_magic_slot--;
 
+  // Except for otaku who are always mundane lol
+  if (*arg == 2 && d->ccr.is_otaku && d->ccr.temp <= 1) {
+    snprintf(buf2, sizeof(buf2), "Magic cannot be assigned on Otaku characters, they are always mundane.");
+    SEND_TO_Q(buf2, d);
+    return 0;
+  }
+
   if (*arg == '2' && (d->ccr.temp > 1 && d->ccr.temp != lowest_kosher_magic_slot)) {
     char kosher_slot = 'A' + lowest_kosher_magic_slot;
     snprintf(buf2, sizeof(buf2), "Magic can only fit in slots A, B, or %c for %s characters.",
@@ -957,7 +975,7 @@ int parse_assign(struct descriptor_data *d, const char *arg)
     case PR_MAGIC:
       break;
     case PR_RESOURCE:
-      GET_NUYEN_RAW(d->character) = nuyen_vals[d->ccr.temp];
+      GET_NUYEN_RAW(d->character) = MIN(nuyen_vals[d->ccr.temp], d->ccr.is_otaku ? 5000 : nuyen_vals[0]);
       d->ccr.force_points = force_vals[d->ccr.temp];
       break;
     case PR_SKILL:
@@ -993,6 +1011,9 @@ void priority_menu(struct descriptor_data *d)
     case PR_RACE:
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%-11s -            -         -\r\n", pc_race_types[(int) GET_RACE(d->character)]);
       break;
+    case PR_OTAKU:
+      strlcat(buf2, "Otaku       -            -         -\r\n", sizeof(buf2));
+      break;
     case PR_MAGIC:
       if ( i == 0 ) {
         if (GET_RACE(CH) == RACE_GNOME || GET_RACE(CH) == RACE_DRYAD) {
@@ -1024,7 +1045,7 @@ void priority_menu(struct descriptor_data *d)
     case PR_RESOURCE:
       snprintf(buf3, sizeof(buf3), "%sResources   -            -         %d nuyen / %d\r\n",
                buf2,
-               nuyen_vals[i],
+               MIN(nuyen_vals[i], d->ccr.is_otaku ? 5000 : nuyen_vals[0]),
                force_vals[i]);
       strlcpy(buf2, buf3, sizeof(buf2));
       break;
@@ -1040,11 +1061,11 @@ void init_char_sql(struct char_data *ch, const char *call_origin)
   char buf2[MAX_STRING_LENGTH];
   snprintf(buf, sizeof(buf), "INSERT INTO pfiles (`idnum`, `name`, `password`, `race`, `gender`, `Rank`, `Voice`,"\
                "`Physical_Keywords`, `Physical_Name`, `Whotitle`, `Height`, `Weight`, `Host`,"\
-               "`Tradition`, `Born`, `Background`, `Physical_LookDesc`, `Matrix_LookDesc`, `Astral_LookDesc`, `LastD`, `multiplier`) VALUES ('%ld', '%s', '%s', %d, '%d',"\
-               "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s', %ld, 100);", GET_IDNUM(ch),
+               "`Tradition`, `Otaku_Path`, `Born`, `Background`, `Physical_LookDesc`, `Matrix_LookDesc`, `Astral_LookDesc`, `LastD`, `multiplier`) VALUES ('%ld', '%s', '%s', %d, '%d',"\
+               "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%d', '%ld', '%s', '%s', '%s', '%s', %ld, 100);", GET_IDNUM(ch),
                GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_PRONOUNS(ch), MAX(1, GET_LEVEL(ch)),
                prepare_quotes(buf2, ch->player.physical_text.room_desc, sizeof(buf2) / sizeof(buf2[0])), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
-               GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), ch->player.time.birth, "A blank slate.",
+               GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), GET_OTAKU_PATH(ch), ch->player.time.birth, "A blank slate.",
                "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
@@ -1082,6 +1103,24 @@ static void start_game(descriptor_data *d, const char *origin)
     GET_LOADROOM(d->character) = archetypes[GET_ARCHETYPAL_TYPE(CH)]->start_room;
   } else {
     GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
+  }
+
+  // Otaku get some starting gear, so assign that here
+  if (d->ccr.is_otaku) {
+    // add asist
+    obj_data *temp_obj = read_object(CYB_ASIST, VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE);
+    int esscost = GET_CYBERWARE_ESSENCE_COST(temp_obj);
+    if (IS_GHOUL(CH) || IS_DRAKE(CH))
+      esscost *= 2;
+    GET_REAL_ESS(CH) -= esscost;
+    obj_to_cyberware(temp_obj, d->character);
+    // add jack
+    temp_obj = read_object(CYB_DATAJACK, VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE);
+    esscost = GET_CYBERWARE_ESSENCE_COST(temp_obj);
+    if (IS_GHOUL(CH) || IS_DRAKE(CH))
+      esscost *= 2;
+    GET_REAL_ESS(CH) -= esscost;
+    obj_to_cyberware(temp_obj, d->character);
   }
 
   init_char_sql(d->character, "start_game()");
@@ -1526,6 +1565,9 @@ void create_parse(struct descriptor_data *d, const char *arg)
         return;
     }
 
+    // TODO: disabled for testing
+    // if (d->ccr.is_otaku) d->ccr.prestige_cost += PRESTIGE_CLASS_OTAKU_COST;
+
     SEND_TO_Q("Enter the name of the character to deduct syspoints from: ", d);
     d->ccr.mode = CCR_PRESTIGE_PAYMENT_GET_NAME;
     break;
@@ -1589,7 +1631,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       GET_SYSTEM_POINTS(victim) -= d->ccr.prestige_cost;
       
       if (victim->desc)
-        send_to_char(victim, "^RYou've just spent %d system points on a prestige race. If this is not correct, change your password and notify staff immediately.^n\r\n", d->ccr.prestige_cost);
+        send_to_char(victim, "^RYou've just spent %d system points on a prestige race/class. If this is not correct, change your password and notify staff immediately.^n\r\n", d->ccr.prestige_cost);
 
       mudlog_vfprintf(d->character, LOG_CHEATLOG, "%s/%s spent %d of %s's syspoints to become a %s.", 
                       d->host,
@@ -1620,6 +1662,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
     // fall through
   case CCR_PRESTIGE_RACE_PAID_FOR:
     {
+      if (d->ccr.is_otaku) d->ccr.pr[0] = PR_OTAKU;
       switch (GET_RACE(CH)) {
         case RACE_HUMAN:
           d->ccr.pr[4] = PR_RACE;
@@ -1973,6 +2016,11 @@ void create_parse(struct descriptor_data *d, const char *arg)
   case CCR_PRIORITY:
     switch (LOWER(*arg)) {
     case 'a':
+      if (d->ccr.is_otaku) {
+        send_to_char(CH, "Sorry, you cannot change this due to code limitations. If you need to change it, please reconnect and restart creation.\r\n");
+        priority_menu(d);
+        break;
+      }
     case 'b':
     case 'c':
     case 'd':
@@ -1996,6 +2044,11 @@ void create_parse(struct descriptor_data *d, const char *arg)
           set_attributes(d->character, 1);
         else
           set_attributes(d->character, 0);
+        if (d->ccr.is_otaku) {
+          d->ccr.mode = CCR_OTAKU_PATH;
+          SEND_TO_Q("\r\nFollow the [c]yberadept, or [t]echnoshaman path?  Enter '?' for help. ", d);
+          return;
+        }
         if (d->ccr.pr[0] == PR_MAGIC || d->ccr.pr[1] == PR_MAGIC) {
           if (GET_RACE(d->character) == RACE_GNOME || GET_RACE(CH) == RACE_DRYAD) {
             GET_TRADITION(d->character) = TRAD_SHAMANIC;
@@ -2010,7 +2063,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
             d->ccr.mode = CCR_TRADITION;
             SEND_TO_Q("\r\nFollow [h]ermetic, [s]hamanic or som[a]tic (Adept) magical tradition?  Enter '?' for help. ", d);
           }
-            return;
+          return;
         } else
           GET_TRADITION(d->character) = TRAD_MUNDANE;
         start_game(d, "create_parse 'p'");
@@ -2035,6 +2088,33 @@ void create_parse(struct descriptor_data *d, const char *arg)
       SEND_TO_Q("\r\nThat's not a valid priority!\r\nPriority to assign (c to clear): ", d);
     else
       priority_menu(d);
+    break;
+
+  case CCR_OTAKU_PATH:
+  #define PATH_HELP_STRING "\r\nCyberadepts express their connection to the matrix in a formulaic and rational way. Their complex forms are more potent." \
+            "\r\n" \
+            "\r\nTechnoshamans commune with the matrix in a more magical way. The natural way in which they interact with the matrix makes it easier to channel and command." \
+            "\r\n" \
+            "\r\nEnter C to select Cyberadept, or T to select Technoshaman: "
+    if (isalpha(*arg) && isalpha(*(arg+1))) {
+      snprintf(buf, sizeof(buf), "\r\nARG: '%s'\r\n", arg);
+      SEND_TO_Q(buf, d);
+      SEND_TO_Q(PATH_HELP_STRING, d);
+    } else {
+      switch (LOWER(*arg)) {
+        case 'c':
+          GET_OTAKU_PATH(d->character) = OTAKU_PATH_CYBERADEPT;
+          start_game(d, "create_parse otaku_path 'c'");
+          break;
+        case 't':
+          GET_OTAKU_PATH(d->character) = OTAKU_PATH_TECHNOSHAM;
+          start_game(d, "create_parse otaku_path 't'");
+          break;
+        default:
+          SEND_TO_Q(PATH_HELP_STRING, d);
+          break;
+      }
+    }
     break;
 
   case CCR_TRADITION:
@@ -2164,6 +2244,8 @@ void refund_chargen_prestige_syspoints_if_needed(struct char_data *ch) {
     refund_amount = PRESTIGE_RACE_DRAGON_COST;
   } else if (GET_RACE(ch) == RACE_DRYAD) {
     refund_amount = PRESTIGE_RACE_DRYAD_COST;
+  } else if (IS_OTAKU(ch)) {
+    refund_amount = PRESTIGE_CLASS_OTAKU_COST;
   }
 
   if (!refund_amount)

@@ -302,9 +302,10 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define COST_TO_DECORATE_APT                                   5000
 #define COST_TO_DECORATE_VEH                                   1500
 
-// Prestige race costs.
+// Prestige race/class costs.
 #define MIN_PRESTIGE_RACE_COST    25
 #define PRESTIGE_RACE_GHOUL_COST  25
+#define PRESTIGE_CLASS_OTAKU_COST 30
 #define PRESTIGE_RACE_DRYAD_COST  50
 #define PRESTIGE_RACE_DRAKE_COST  500
 #define PRESTIGE_RACE_DRAGON_COST 1000

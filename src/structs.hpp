@@ -479,8 +479,8 @@ struct char_player_data
   ush_int weight;              /* PC / NPC's weight                    */
   ush_int height;              /* PC / NPC's height                    */
   byte race;                 /* PC / NPC's race                      */
+  byte otaku_path;            /* PC / NPC's otaku status                       */
   byte tradition;            /* PC / NPC's tradition                       */
-  byte otaku_path;           /* PC / NPC's otaku path */
   ubyte aspect;
   char *host;   /* player host    */
 
@@ -488,7 +488,7 @@ struct char_player_data
       char_name(NULL), background(NULL), title(NULL), pretitle(NULL), whotitle(NULL),
       prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL), email(NULL),
       multiplier(0), salvation_ticks(5), pronouns(PRONOUNS_NEUTRAL), level(0), last_room(NOWHERE),
-      weight(0), height(0), race(0), tradition(TRAD_MUNDANE), aspect(0), host(NULL)
+      weight(0), height(0), race(0), otaku_path(OTAKU_PATH_NORMIE), tradition(TRAD_MUNDANE), aspect(0), host(NULL)
   {
     memset(passwd, 0, sizeof(passwd));
   }
@@ -1072,6 +1072,7 @@ struct ccreate_t
   sh_int prestige_race;
   idnum_t prestige_bagholder;
   int prestige_cost;
+  bool is_otaku;
 };
 
 struct descriptor_data
