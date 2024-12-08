@@ -29,6 +29,7 @@ extern void create_deck(struct char_data *ch);
 extern void create_spell(struct char_data *ch);
 extern void create_ammo(struct char_data *ch);
 extern void create_art(struct char_data *ch);
+extern void create_complex_form(struct char_data *ch);
 
 ACMD_DECLARE(do_look);
 
@@ -3737,7 +3738,16 @@ ACMD(do_create)
   }
   argument = any_one_arg(argument, buf1);
 
-  if (is_abbrev(buf1, "program")) {
+  if (is_abbrev(buf1, "complex form"))
+  {
+    if (!IS_OTAKU(ch)) {
+      send_to_char("Everyone knows that otaku aren't real, chummer.\r\n", ch);
+      return;
+    }
+    create_complex_form(ch);
+  }
+
+  else if (is_abbrev(buf1, "program")) {
     if (!GET_SKILL(ch, SKILL_COMPUTER)) {
       send_to_char("You must learn computer skills to create programs.\r\n", ch);
       return;
@@ -3786,7 +3796,7 @@ ACMD(do_create)
   }
 
   else {
-    send_to_char("You can only create programs, parts, decks, ammunition, spells, and art.\r\n", ch);
+    send_to_char("You can only create programs, parts, decks, ammunition, spells, complex forms, and art.\r\n", ch);
     return;
   }
 }

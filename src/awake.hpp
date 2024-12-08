@@ -590,7 +590,8 @@ enum {
 #define AFF_VOICE_MODULATOR                         54
 #define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER        55
 #define AFF_CHEATLOG_MARK                           56
-#define AFF_MAX                                     57
+#define AFF_COMPLEX_FORM_PROGRAM                    57
+#define AFF_MAX                                     58
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -1324,7 +1325,8 @@ enum {
 #define ITEM_DESTROYABLE        47
 #define ITEM_LOADED_DECORATION  48
 #define ITEM_CREATIVE_EFFORT    49
-#define NUM_ITEMS               50
+#define ITEM_COMPLEX_FORM       50       /* otaku complex form               */
+#define NUM_ITEMS               51
 // Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
 #define PATCH_ANTIDOTE          0
@@ -2288,7 +2290,8 @@ enum {
 #define CON_ART_CREATE          52
 #define CON_ACCOUNT_PARSE       53
 #define CON_FACTION_EDIT        54
-#define CON_MAX                 54
+#define CON_CF_CREATE           55
+#define CON_MAX                 55
 #define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
@@ -2821,7 +2824,8 @@ enum {
 #define OBJ_CUSTOM_ART                     125
 #define OBJ_HOLIDAY_GIFT                   126
 #define OBJ_BLANK_MAGAZINE                 127
-#define TOP_OF_TEMPLATE_ITEMS              127
+#define OBJ_BLANK_COMPLEX_FORM             128
+#define TOP_OF_TEMPLATE_ITEMS              128
 
 #define OBJ_DOCWAGON_PAPER_GOWN            16201
 #define OBJ_ANTI_DRUG_CHEMS                44
@@ -3240,6 +3244,7 @@ enum {
 #define OBJ_LOAD_REASON_FIND_OBJ_SHOP            57
 #define OBJ_LOAD_REASON_SHOP_RECEIVE             58
 #define OBJ_LOAD_REASON_OTAKU_BS                 59
+#define OBJ_LOAD_REASON_CREATE_COMPLEX_FORM      60
 
 #define IDNUM_FOR_MOB_ALERT_STATE  -1
 
