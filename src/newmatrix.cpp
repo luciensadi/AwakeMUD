@@ -359,6 +359,28 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   }
 
   int target = HOST.stats[type][MTX_STAT_RATING];
+  if (PERSONA->type == ICON_LIVING_PERSONA) {
+    // We lower the TN by the channel rating
+    int channel_rating = GET_OTAKU_PATH(ch) == OTAKU_PATH_TECHNOSHAM ? 1 : 0;
+    switch(type) {
+      case ACIFS_ACCESS:
+        channel_rating += GET_SKILL(ch, SKILL_CHANNEL_ACCESS);
+        break;
+      case ACIFS_CONTROL:
+        channel_rating += GET_SKILL(ch, SKILL_CHANNEL_CONTROL);
+        break;
+      case ACIFS_FILES:
+        channel_rating += GET_SKILL(ch, SKILL_CHANNEL_FILES);
+        break;
+      case ACIFS_INDEX:
+        channel_rating += GET_SKILL(ch, SKILL_CHANNEL_INDEX);
+        break;
+      case ACIFS_SLAVE:
+        channel_rating += GET_SKILL(ch, SKILL_CHANNEL_SLAVE);
+        break;
+    }
+    target = MAX(2, target - channel_rating);
+  }
   snprintf(rollbuf, sizeof(rollbuf), "System test against %s with software %s: Starting TN %d", acifs_strings[type], programs[software].name, target);
 
   int skill = get_skill(ch, SKILL_COMPUTER, target) + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
@@ -392,6 +414,7 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   detect += DECKER->masking + 1; // +1 because we round up
   detect = detect / 2;
   detect -= DECKER->res_det;
+  if  (PERSONA->type == ICON_LIVING_PERSONA) detect += 1; // Otaku always get +1 DF
 
   int tally = MAX(0, success_test(HOST.security, detect));
   target = MAX(target, 2);
