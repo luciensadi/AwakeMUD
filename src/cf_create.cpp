@@ -21,6 +21,34 @@
 
 extern int get_program_skill(char_data *ch, obj_data *prog, int target);
 
+#define COMPLEX_FORM_TYPES 23
+
+int complex_form_programs[COMPLEX_FORM_TYPES] = {
+  6, // Attack
+  7, // Slow
+  8, // Medic
+  11, // Compressor
+  12, // Analyze
+  13, // Decrypt
+  14, // Deception
+  15, // Relocate
+  16, // Sleaze
+  17, // Scanner
+  18, // Browse
+  19, // Read/Write
+  20, // Track
+  21, // Armor
+  22, // Camo
+  23, // Crash
+  24, // Defuse
+  25, // Evaluate
+  26, // Validate
+  27, // Swerve
+  29, // Commlink
+  30, // Cloak
+  31, // Lock-On
+};
+
 void cfedit_disp_menu(struct descriptor_data *d)
 {
   CLS(CH);
@@ -50,15 +78,15 @@ void cfedit_disp_program_menu(struct descriptor_data *d)
   strncpy(buf, "", sizeof(buf) - 1);
 
   bool screenreader_mode = PRF_FLAGGED(d->character, PRF_SCREENREADER);
-  for (int counter = 1; counter < NUM_PROGRAMS; counter++)
+  for (int counter = 1; counter < COMPLEX_FORM_TYPES; counter++)
   {
     if (screenreader_mode)
-      send_to_char(d->character, "%d) %s\r\n", counter, programs[counter].name);
+      send_to_char(d->character, "%d) %s\r\n", counter, programs[complex_form_programs[counter]].name);
     else {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%2d) %-22s%s",
               counter % 3 == 1 ? "  " : "",
               counter,
-              programs[counter].name,
+              programs[complex_form_programs[counter]].name,
               counter % 3 == 0 ? "\r\n" : "");
     }
   }
@@ -128,8 +156,13 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case CFEDIT_RATING:
-    GET_DESIGN_RATING(d->edit_obj) = number;
-    cfedit_disp_menu(d);
+    if (number > GET_SKILL(CH, SKILL_COMPUTER)) {
+      send_to_char(CH, "You can't create a program of a higher rating than your computer skill.\r\n"
+                   "Enter Rating: ");
+    } else {
+      GET_DESIGN_RATING(d->edit_obj) = number;
+      cfedit_disp_menu(d);
+    }
     break;
   case CFEDIT_NAME:
   {
@@ -166,10 +199,10 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case CFEDIT_TYPE:
-    if (number < 1 || number >= NUM_PROGRAMS)
+    if (number < 1 || number >= COMPLEX_FORM_TYPES)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      GET_DESIGN_PROGRAM(d->edit_obj) = number;
+      GET_DESIGN_PROGRAM(d->edit_obj) = complex_form_programs[number];
       GET_DESIGN_RATING(d->edit_obj) = 1;
 
       if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {

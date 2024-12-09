@@ -5834,8 +5834,28 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_CONCEALED_IN_EQ);
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_BS);
 
+  for (struct obj_data *form = ch->carrying; form; form = form->next_content) {
+    if (GET_OBJ_TYPE(form) != ITEM_COMPLEX_FORM) continue;
+    struct obj_data *active = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_OTAKU_BS);
+    GET_PROGRAM_TYPE(active) = GET_PROGRAM_TYPE(form);
+    GET_PROGRAM_SIZE(active) = 1;
+    GET_PROGRAM_ATTACK_DAMAGE(active) = GET_PROGRAM_ATTACK_DAMAGE(form);
+    GET_PROGRAM_IS_DEFAULTED(active) = TRUE;
+    GET_OBJ_TIMER(active) = 1;
+
+    GET_PROGRAM_RATING(active) = GET_PROGRAM_RATING(form);
+
+    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_BS);
+    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+
+    char restring[500];
+    snprintf(restring, sizeof(restring), "a rating-%d %s complex form", GET_PROGRAM_RATING(form), programs[GET_PROGRAM_TYPE(form)].name);
+    active->restring = str_dup(restring);
+    obj_to_obj(active, new_deck);
+  }
+
   char restring[500];
-  snprintf(restring, sizeof(restring), "a living persona cyberdeck", mpcp);
+  snprintf(restring, sizeof(restring), "a living persona cyberdeck");
   new_deck->restring = str_dup(restring);
 
   return new_deck;

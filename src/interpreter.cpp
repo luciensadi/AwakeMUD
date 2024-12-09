@@ -77,6 +77,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg);
 void hedit_parse(struct descriptor_data *d, const char *arg);
 void icedit_parse(struct descriptor_data *d, const char *arg);
 void pedit_parse(struct descriptor_data *d, const char *arg);
+void cfedit_parse(struct descriptor_data *d, const char *arg);
 void dbuild_parse(struct descriptor_data *d, const char *arg);
 void pbuild_parse(struct descriptor_data *d, const char *arg);
 void spedit_parse(struct descriptor_data *d, const char *arg);
@@ -2725,6 +2726,9 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_PRO_CREATE:
     pedit_parse(d, arg);
+    break;
+  case CON_CF_CREATE:
+    cfedit_parse(d, arg);
     break;
   case CON_PART_CREATE:
     pbuild_parse(d, arg);

@@ -881,6 +881,7 @@ const char *affected_bits[] =
     "Voice Modulator",
     "Wearing DocWagon Receiver",
     "Cheatlog Mark",
+    "Complex Form Design",
     MAX_FLAG_MARKER
   };
 
@@ -942,6 +943,7 @@ const char *connected_types[] =
     "Creating Art",
     "Account Editing",
     "Faction Editing",
+    "Creating Complex Form"
     "\n"
   };
 
@@ -1107,6 +1109,7 @@ const char *item_types[] =
     "Destroyable",
     "Loaded Decoration",
     "Art",
+    "Complex Form",
     "\n"
   };
 
