@@ -2065,7 +2065,8 @@ ACMD(do_connect)
   // IO is then divided by 10. I've set it to be a minimum of 1 here.
   DECKER->io = MAX(1, (int)(DECKER->io / 10));
 
-  if (GET_OBJ_VNUM(cyberdeck) != OBJ_CUSTOM_CYBERDECK_SHELL) {
+  if (GET_OBJ_VNUM(cyberdeck) != OBJ_CUSTOM_CYBERDECK_SHELL 
+    && !cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
     DECKER->asist[1] = 0;
     DECKER->asist[0] = 0;
     GET_MAX_HACKING(ch) = 0;
@@ -2091,7 +2092,7 @@ ACMD(do_connect)
         }
       }
       if (GET_OBJ_VAL(soft, 4)) {
-        if (GET_OBJ_VAL(soft, 2) > DECKER->active) {
+        if (GET_OBJ_VAL(soft, 2) > DECKER->active && !soft->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
           send_to_char(ch, "%s^n would exceed your deck's active memory, so it failed to load.\r\n", GET_OBJ_NAME(soft));
           continue;
         }
@@ -2151,7 +2152,7 @@ ACMD(do_connect)
     PERSONA->next = icon_list;
   icon_list = PERSONA;
   icon_to_host(PERSONA, host);
-  if (DECKER->bod + DECKER->sensor + DECKER->evasion + DECKER->masking > DECKER->mpcp * 3) {
+  if (PERSONA->type != ICON_LIVING_PERSONA && (DECKER->bod + DECKER->sensor + DECKER->evasion + DECKER->masking > DECKER->mpcp * 3)) {
     send_to_char(ch, "Your deck overloads on persona programs and crashes. You'll have to keep the combined bod, sensor, evasion, and masking rating less than or equal to %d.\r\n", DECKER->mpcp * 3);
     extract_icon(PERSONA);
     PERSONA = NULL;
@@ -2214,6 +2215,10 @@ ACMD(do_load)
   }
   skip_spaces(&argument);
   if (subcmd == SCMD_UNLOAD) {
+    if (PERSONA->type == ICON_LIVING_PERSONA) {
+      send_to_icon(PERSONA, "You don't have active memory to erase things from.\r\n");
+      return;
+    }
     struct obj_data *temp = NULL;
     for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
       if (keyword_appears_in_obj(argument, soft)) {
@@ -2240,7 +2245,8 @@ ACMD(do_load)
         continue;
 
       if (subcmd == SCMD_UPLOAD) {
-        if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR || GET_PROGRAM_TYPE(soft) == SOFT_EVALUATE)) {
+        if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR || GET_PROGRAM_TYPE(soft) == SOFT_EVALUATE 
+        || soft->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS))) {
           send_to_icon(PERSONA, "You can't upload %s^n.\r\n", GET_OBJ_NAME(soft));
           return;
         }
