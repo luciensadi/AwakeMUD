@@ -5814,6 +5814,9 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
 
   // Add parts.
   int mpcp = (GET_REAL_INT(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3; // adding 2 always ensures a round up
+  if (GET_ECHO(ch, ECHO_IMPROVED_MPCP)) {
+    mpcp = MIN(GET_REAL_INT(ch) * 2, mpcp + GET_ECHO(ch, ECHO_IMPROVED_MPCP));
+  }
   obj_to_obj(make_new_finished_part(PART_MPCP, mpcp, mpcp), new_deck);
   obj_to_obj(make_new_finished_part(PART_BOD, mpcp, GET_REAL_WIL(ch)), new_deck);
   obj_to_obj(make_new_finished_part(PART_EVASION, mpcp, GET_REAL_INT(ch)), new_deck);
@@ -5823,11 +5826,11 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
   obj_to_obj(make_new_finished_part(PART_RAS_OVERRIDE, mpcp), new_deck);
 
   GET_CYBERDECK_MPCP(new_deck) = mpcp;
-  GET_CYBERDECK_HARDENING(new_deck) = GET_REAL_WIL(ch) / 2;
+  GET_CYBERDECK_HARDENING(new_deck) = MIN(GET_REAL_WIL(ch), GET_REAL_WIL(ch) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD));
   GET_CYBERDECK_ACTIVE_MEMORY(new_deck) = 999999;
   GET_CYBERDECK_TOTAL_STORAGE(new_deck) = 0;
-  GET_CYBERDECK_RESPONSE_INCREASE(new_deck) = GET_REAL_REA(ch);
-  GET_CYBERDECK_IO_RATING(new_deck) = GET_REAL_INT(ch) * 100;
+  GET_CYBERDECK_RESPONSE_INCREASE(new_deck) = MIN(mpcp * 1.5, GET_REAL_REA(ch) + GET_ECHO(ch, ECHO_IMPROVED_REA));
+  GET_CYBERDECK_IO_RATING(new_deck) = MIN(GET_REAL_INT(ch) * 200, (GET_REAL_INT(ch) * 100) + (GET_ECHO(ch, ECHO_IMPROVED_IO) * 100));
   GET_CYBERDECK_IS_INCOMPLETE(new_deck) = FALSE;
 
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);

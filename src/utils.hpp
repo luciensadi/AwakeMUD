@@ -546,7 +546,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_DESC_LEVEL(d)  ((d)->original ? GET_LEVEL((d)->original) : ((d)->character ? GET_LEVEL((d)->character) : 0))
 
 #define GET_RACE(ch)          ((ch)->player.race)
-#define GET_OTAKU_PATH(ch)        ((ch)->player.otaku_path)
+#define GET_OTAKU_PATH(ch)    ((ch)->player.otaku_path)
 #define GET_TRADITION(ch)     ((ch)->player.tradition)
 #define GET_ASPECT(ch)        ((ch)->player.aspect)
 #define GET_LASTROOM(ch)      ((ch)->player.last_room)

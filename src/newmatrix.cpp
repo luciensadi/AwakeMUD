@@ -2115,15 +2115,19 @@ ACMD(do_connect)
       switch (GET_OBJ_VAL(soft, 0)) {
       case PART_BOD:
         DECKER->bod = GET_OBJ_VAL(soft, 1);
+        if (PERSONA->type == ICON_LIVING_PERSONA) DECKER->bod = MIN(DECKER->mpcp*1.5, DECKER->bod + GET_ECHO(ch, ECHO_PERSONA_BOD));
         break;
       case PART_SENSOR:
         DECKER->sensor = GET_OBJ_VAL(soft, 1);
+        if (PERSONA->type == ICON_LIVING_PERSONA) DECKER->sensor = MIN(DECKER->mpcp*1.5, DECKER->sensor + GET_ECHO(ch, ECHO_PERSONA_SENS));
         break;
       case PART_MASKING:
         DECKER->masking = GET_OBJ_VAL(soft, 1);
+        if (PERSONA->type == ICON_LIVING_PERSONA) DECKER->masking = MIN(DECKER->mpcp*1.5, DECKER->masking + GET_ECHO(ch, ECHO_PERSONA_MASK));
         break;
       case PART_EVASION:
         DECKER->evasion = GET_OBJ_VAL(soft, 1);
+        if (PERSONA->type == ICON_LIVING_PERSONA) DECKER->evasion = MIN(DECKER->mpcp*1.5, DECKER->evasion + GET_ECHO(ch, ECHO_PERSONA_EVAS));
         break;
       case PART_ASIST_HOT:
         DECKER->asist[1] = 1;
