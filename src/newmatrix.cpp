@@ -414,7 +414,9 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   detect += DECKER->masking + 1; // +1 because we round up
   detect = detect / 2;
   detect -= DECKER->res_det;
-  if  (PERSONA->type == ICON_LIVING_PERSONA) detect += 1; // Otaku always get +1 DF
+  if  (PERSONA->type == ICON_LIVING_PERSONA) {
+    detect -= 1 + GET_ECHO(ch, ECHO_GHOSTING); // Otaku always get +1 DF
+  }
 
   int tally = MAX(0, success_test(HOST.security, detect));
   target = MAX(target, 2);
