@@ -2,6 +2,7 @@
 #include "awake.hpp"
 #include "newmagic.hpp"
 #include "networth.hpp"
+#include "otaku.hpp"
 
 const char *awakemud_version[] =
     {
@@ -615,6 +616,7 @@ const char *player_bits[] =
     "TEMPORARILY_LOADED",
     "CDEX_DONE",
     "CLOUD_HATER",
+    "SUBMERSION",
     "\n"
   };
 
@@ -881,6 +883,7 @@ const char *affected_bits[] =
     "Voice Modulator",
     "Wearing DocWagon Receiver",
     "Cheatlog Mark",
+    "Complex Form Design",
     MAX_FLAG_MARKER
   };
 
@@ -942,6 +945,8 @@ const char *connected_types[] =
     "Creating Art",
     "Account Editing",
     "Faction Editing",
+    "Creating Complex Form",
+    "Increasing Submersion",
     "\n"
   };
 
@@ -1107,6 +1112,7 @@ const char *item_types[] =
     "Destroyable",
     "Loaded Decoration",
     "Art",
+    "Complex Form",
     "\n"
   };
 
@@ -1183,6 +1189,7 @@ const char *extra_bits[] =
     "CHEATLOG_MARK",
     "CONCEALED_IN_EQ",
     "TRODE_NET",
+    "OTAKU_BS",
     MAX_FLAG_MARKER
   };
 
@@ -1224,6 +1231,7 @@ const char *pc_readable_extra_bits[] =
     "Doesn't Save", // Deliberate -- concealing cheatlog mark
     "Concealed in Equipment",
     "Is Electrode Net",
+    "Is Virtual Otaku Item",
     MAX_FLAG_MARKER
   };
 
@@ -1813,6 +1821,11 @@ struct skill_data skills[] =
     {"Piloting Walkers",                        REA, SKILL_TYPE_ACTIVE,    FALSE,    11,  FALSE,  FALSE },
     {"Mandarin",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
     {"Haitian Creole",                          INT, SKILL_TYPE_KNOWLEDGE, FALSE,    99,  FALSE,  FALSE },
+    {"Channel Access",                          WIL, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
+    {"Channel Control",                         WIL, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
+    {"Channel Index",                           WIL, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
+    {"Channel Files",                           WIL, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
+    {"Channel Slave",                           WIL, SKILL_TYPE_ACTIVE,    FALSE,    99,  FALSE,  FALSE },
   };
 
 int rev_dir[] =
@@ -2811,6 +2824,21 @@ const char *metamagic[] = {
   "Reflecting",
   "Shielding",
   "Anchoring"
+};
+
+struct otaku_echo echoes[] = {
+  {"UNDEF", FALSE},
+  {"Improved I/O Speed", TRUE},
+  {"Improved Hardening", TRUE},
+  {"Improved MPCP", TRUE},
+  {"Improved Persona Bod", TRUE},
+  {"Improved Persona Evasion", TRUE},
+  {"Improved Persona Masking", TRUE},
+  {"Improved Persona Sensor", TRUE},
+  {"Improved Reaction", TRUE},
+  {"Ghosting", FALSE},
+  {"Neurofilter", FALSE},
+  {"Overclock", FALSE}
 };
 
 const char *legality_codes[][2] = {
