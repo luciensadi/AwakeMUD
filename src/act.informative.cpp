@@ -5151,7 +5151,8 @@ ACMD(do_score)
         strlcat(mage_string, "Physical Adept", sizeof(mage_string));
         break;
       default:
-        strlcat(mage_string, "Mundane", sizeof(mage_string));
+        if (IS_OTAKU(ch)) strlcat(mage_string, "Otaku", sizeof(mage_string));
+        else strlcat(mage_string, "Mundane", sizeof(mage_string));
         break;
     }
 
