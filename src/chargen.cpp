@@ -631,6 +631,14 @@ int magic_cost[4] = { 0, 30, 25, 25 };
 const char *magic_table[4] = { "None", "Full Magician", "Aspected Magician", "Adept" };
 const char *gnome_magic_table[4] = { "None", "Full Shaman", "Aspected Shaman", "ERROR" };
 
+int cg_nuyen(struct descriptor_data *d, int x)
+{
+  int starting_nuyen = resource_table[0][x];
+  if (d->ccr.is_otaku)
+    return MIN(5000, starting_nuyen);
+  return starting_nuyen;
+}
+
 void set_attributes(struct char_data *ch, int magic)
 {
   // Everyone starts with 0 bioware index and max natural essence.
@@ -1273,11 +1281,13 @@ void points_menu(struct descriptor_data *d)
                "  3) Resources : ^c%15d^n (^c%3d^n Points)\r\n"
                "  4) Magic     : ^c%15s^n (^c%3d^n Points)\r\n"
                "     Race      : ^c%15s^n (^c%3d^n Points)\r\n"
+               "     Class     : ^c%15s^n (^c%3d^n Points)\r\n"
                "  Points Remaining: ^c%d^n\r\n"
                "Choose an area to change points on(p to continue): ", d->ccr.pr[PO_ATTR]/2, d->ccr.pr[PO_ATTR],
-               d->ccr.pr[PO_SKILL], d->ccr.pr[PO_SKILL], resource_table[0][d->ccr.pr[PO_RESOURCES]],
+               d->ccr.pr[PO_SKILL], d->ccr.pr[PO_SKILL], cg_nuyen(d, d->ccr.pr[PO_RESOURCES]),
                resource_table[1][d->ccr.pr[PO_RESOURCES]], magic_table_ptr[d->ccr.pr[PO_MAGIC]],
-               magic_cost[d->ccr.pr[PO_MAGIC]], pc_race_types[(int)GET_RACE(d->character)], d->ccr.pr[PO_RACE], d->ccr.points);
+               magic_cost[d->ccr.pr[PO_MAGIC]], pc_race_types[(int)GET_RACE(d->character)], d->ccr.pr[PO_RACE], 
+               d->ccr.is_otaku ? "Otaku" : "None", d->ccr.is_otaku ? 30 : 0, d->ccr.points);
   SEND_TO_Q(buf, d);
 }
 
@@ -1401,12 +1411,18 @@ void create_parse(struct descriptor_data *d, const char *arg)
         d->ccr.points += resource_table[1][d->ccr.pr[PO_RESOURCES]];
         snprintf(buf, sizeof(buf), " ");
         for (int x = 0; x < 8; x++)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %8d nuyen   (%2d points)\r\n ", x+1, resource_table[0][x], resource_table[1][x]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %8d nuyen   (%2d points)\r\n ", x+1, cg_nuyen(d, x), resource_table[1][x]);
+        if (d->ccr.is_otaku)
+          send_to_char(CH, "^wNOTE:^n Otaku are always limited to 5000 nuyen on start.\r\n ");
         SEND_TO_Q(buf, d);
         send_to_char(CH, "Enter desired amount of nuyen points (^c%d^n available): ", d->ccr.points);
         d->ccr.mode = CCR_PO_RESOURCES;
         break;
       case '4':
+        if (d->ccr.is_otaku) {
+          send_to_char(CH, "Otaku are always considered mundane.\r\n");
+          break;
+        }
         d->ccr.points += magic_cost[d->ccr.pr[PO_MAGIC]];
         snprintf(buf, sizeof(buf), " ");
         if (GET_RACE(CH) == RACE_GNOME || GET_RACE(CH) == RACE_DRYAD) {
@@ -1438,10 +1454,14 @@ void create_parse(struct descriptor_data *d, const char *arg)
           break;
         }
 
-        GET_NUYEN_RAW(CH) = resource_table[0][d->ccr.pr[PO_RESOURCES]];
+        GET_NUYEN_RAW(CH) = cg_nuyen(d, d->ccr.pr[PO_RESOURCES]);
         GET_SKILL_POINTS(CH) = d->ccr.pr[PO_SKILL];
         GET_ATT_POINTS(CH) = d->ccr.pr[PO_ATTR]/2;
-        if (d->ccr.pr[PO_MAGIC] > CCR_MAGIC_NONE) {
+
+        if (d->ccr.is_otaku) {
+          d->ccr.mode = CCR_OTAKU_PATH;
+          SEND_TO_Q("\r\nFollow the [c]yberadept, or [t]echnoshaman path?  Enter '?' for help. ", d);
+        } else if (d->ccr.pr[PO_MAGIC] > CCR_MAGIC_NONE) {
           set_attributes(CH, 1);
           if (GET_RACE(CH) == RACE_GNOME || GET_RACE(CH) == RACE_DRYAD) {
             GET_TRADITION(CH) = TRAD_SHAMANIC;
@@ -1490,6 +1510,9 @@ void create_parse(struct descriptor_data *d, const char *arg)
       
         d->ccr.points -= d->ccr.pr[PO_RACE];
         d->ccr.pr[5] = -1;
+
+        // Otaku hardcode removing points
+        if (d->ccr.is_otaku) d->ccr.points -= 30;
 
         points_menu(d);
         break;
