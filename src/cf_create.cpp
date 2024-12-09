@@ -28,14 +28,9 @@ int complex_form_programs[COMPLEX_FORM_TYPES] = {
   7, // Slow
   8, // Medic
   11, // Compressor
-  12, // Analyze
   13, // Decrypt
-  14, // Deception
   15, // Relocate
   16, // Sleaze
-  17, // Scanner
-  18, // Browse
-  19, // Read/Write
   20, // Track
   21, // Armor
   22, // Camo
@@ -44,7 +39,6 @@ int complex_form_programs[COMPLEX_FORM_TYPES] = {
   25, // Evaluate
   26, // Validate
   27, // Swerve
-  29, // Commlink
   30, // Cloak
   31, // Lock-On
 };
