@@ -14,6 +14,9 @@
 
 #define FILE_PROTECTION_SCRAMBLED 1
 
+#define ICON_MATRIX         0  // This is just a normal persona or icon
+#define ICON_LIVING_PERSONA 1  // Weird otaku BS living persona
+
 #define IC_CRIPPLER         0  // Destroys programs.
 #define IC_KILLER           1  // NERP
 #define IC_PROBE            2  // NERP
@@ -229,6 +232,7 @@ struct matrix_icon {
   char *long_desc;
   char *look_desc;
 
+  byte type;
   int idnum;
   rnum_t rnum;
   vnum_t vnum;
@@ -250,8 +254,8 @@ struct matrix_icon {
 #endif
 
   matrix_icon():
-    name(NULL), long_desc(NULL), look_desc(NULL), idnum(0), rnum(0), vnum(0),
-    condition(10), initiative(0), parry(0), evasion(0), position(0),
+    name(NULL), long_desc(NULL), look_desc(NULL), type(ICON_MATRIX), idnum(0), rnum(0),
+    vnum(0), condition(10), initiative(0), parry(0), evasion(0), position(0),
     decker(NULL), fighting(NULL), next(NULL), next_in_host(NULL), next_fighting(NULL)
   {
 #ifdef USE_DEBUG_CANARIES

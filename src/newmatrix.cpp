@@ -1973,6 +1973,10 @@ ACMD(do_connect)
     icon->long_desc = str_dup(ch->player.matrix_text.look_desc);
   else
     icon->long_desc = str_dup("A nondescript persona stands idly here.\r\n");
+  // If this is an Otaku GhostDeck, then this is a living persona
+  if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+    icon->type = ICON_LIVING_PERSONA;
+  }
 
   if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK && GET_CYBERDECK_IS_INCOMPLETE(cyberdeck)) {
     send_to_char(ch, "That deck is missing some components.\r\n");
@@ -3826,6 +3830,8 @@ ACMD(do_asist)
 {
   if (!PERSONA)
     send_to_char("You can't do that while hitching.\r\n", ch);
+  else if (PERSONA->type == ICON_LIVING_PERSONA)
+    send_to_char("You can't switch ASIST modes while using a living persona.\r\n", ch);
   else if (!DECKER->asist[1])
     send_to_char("You can't switch ASIST modes with a cold ASIST interface.\r\n", ch);
   else if (DECKER->asist[0]) {
