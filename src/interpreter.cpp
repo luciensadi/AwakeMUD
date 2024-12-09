@@ -247,6 +247,7 @@ ACMD_DECLARE(do_iload);
 ACMD_DECLARE(do_imagelink);
 ACMD_DECLARE(do_info);
 ACMD_DECLARE(do_initiate);
+ACMD_DECLARE(do_submerse);
 ACMD_DECLARE(do_insult);
 ACMD_DECLARE(do_inventory);
 ACMD_DECLARE(do_invis);

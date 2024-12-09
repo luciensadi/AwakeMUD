@@ -210,6 +210,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define FAILED_SPELL_LEARNING_WAIT_STATE                       (0.25 RL_SEC)
 
 #define INITIATION_CAP                                         50
+#define SUBMERSION_CAP                                         50
 
 #define RITUAL_SPELL_BASE_TIME                                 3
 #define RITUAL_SPELL_COMPONENT_COST                            500

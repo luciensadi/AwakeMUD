@@ -739,6 +739,9 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_METAMAGIC(ch, i)    ((ch)->char_specials.saved.metamagic[i] != 0 ? (ch)->char_specials.saved.metamagic[i] : 0)
 #define SET_METAMAGIC(ch, i, amt)    {(ch)->char_specials.saved.metamagic[i] = amt; GET_METAMAGIC_DIRTY_BIT(ch) = TRUE;}
 
+#define GET_ECHO(ch, i)         ((ch)->char_specials.saved.echoes[i] != 0 ? (ch)->char_specials.saved.echoes[i] : 0)
+#define SET_ECHO(ch, i, amt)    {(ch)->char_specials.saved.echoes[i] = amt; GET_ECHOES_DIRTY_BIT(ch) = TRUE;} 
+
 #define GET_MASKING(ch)    ((ch)->char_specials.saved.masking)
 #define GET_CENTERINGSKILL(ch)  ((ch)->char_specials.saved.centeringskill)
 #define GET_PP(ch)    ((ch)->char_specials.saved.powerpoints)
@@ -752,6 +755,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_SPELLS_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_SPELLS])
 #define GET_METAMAGIC_DIRTY_BIT(ch)     ((ch)->char_specials.dirty_bits[DIRTY_BIT_METAMAGIC])
 #define GET_ELEMENTALS_DIRTY_BIT(ch)    ((ch)->char_specials.dirty_bits[DIRTY_BIT_ELEMENTALS])
+#define GET_ECHOES_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_ECHOES])
 #define GET_MEMORY_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_MEMORY])
 #define GET_ALIAS_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_ALIAS])
 

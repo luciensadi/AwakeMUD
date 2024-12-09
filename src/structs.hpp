@@ -587,6 +587,7 @@ struct char_special_data_saved
   byte skills[MAX_SKILLS+1][3];   /* array of skills plus skill 0. Slot 0 is unaltered, */
   byte powers[ADEPT_NUMPOWER+1][2];
   unsigned char metamagic[META_MAX+1];
+  unsigned char echoes[ECHO_MAX+1];
   ush_int centeringskill;
   ush_int boosted[3][2];           /* str/qui/bod timeleft/amount		*/
   ubyte masking;
@@ -604,6 +605,7 @@ struct char_special_data_saved
     }
 
     ZERO_OUT_ARRAY(metamagic, META_MAX + 1);
+    ZERO_OUT_ARRAY(echoes, ECHO_MAX + 1);
 
     for (int i = 0; i < 3; i++) {
       ZERO_OUT_ARRAY(boosted[i], 2);

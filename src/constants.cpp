@@ -2,6 +2,7 @@
 #include "awake.hpp"
 #include "newmagic.hpp"
 #include "networth.hpp"
+#include "otaku.hpp"
 
 const char *awakemud_version[] =
     {
@@ -615,6 +616,7 @@ const char *player_bits[] =
     "TEMPORARILY_LOADED",
     "CDEX_DONE",
     "CLOUD_HATER",
+    "SUBMERSION",
     "\n"
   };
 
@@ -943,7 +945,8 @@ const char *connected_types[] =
     "Creating Art",
     "Account Editing",
     "Faction Editing",
-    "Creating Complex Form"
+    "Creating Complex Form",
+    "Increasing Submersion",
     "\n"
   };
 
@@ -2821,6 +2824,21 @@ const char *metamagic[] = {
   "Reflecting",
   "Shielding",
   "Anchoring"
+};
+
+struct otaku_echo echoes[] = {
+  {"UNDEF", FALSE},
+  {"Improved I/O Speed", TRUE},
+  {"Improved Hardening", TRUE},
+  {"Improved MPCP", TRUE},
+  {"Improved Persona Bod", TRUE},
+  {"Improved Persona Evasion", TRUE},
+  {"Improved Persona Masking", TRUE},
+  {"Improved Persona Sensor", TRUE},
+  {"Improved Reaction", TRUE},
+  {"Ghosting", FALSE},
+  {"Neurofilter", FALSE},
+  {"Overclock", FALSE}
 };
 
 const char *legality_codes[][2] = {

@@ -361,7 +361,8 @@ enum {
 #define PLR_IS_TEMPORARILY_LOADED            52
 #define PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL 53
 #define PLR_OLD_MAN_YELLS_AT_CLOUDS          54
-#define PLR_MAX                              55
+#define PLR_SUBMERSION                       55
+#define PLR_MAX                              56
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 
@@ -813,6 +814,20 @@ enum {
 #define MASK_INIT    (1 << 1)
 #define MASK_DUAL    (1 << 2)
 #define MASK_COMPLETE    (1 << 3)
+
+#define ECHO_UNDEFINED     0
+#define ECHO_IMPROVED_IO   1
+#define ECHO_IMPROVED_HARD 2
+#define ECHO_IMPROVED_MPCP 3
+#define ECHO_PERSONA_BOD   4
+#define ECHO_PERSONA_EVAS  5
+#define ECHO_PERSONA_MASK  6
+#define ECHO_PERSONA_SENS  7
+#define ECHO_IMPROVED_REA  8
+#define ECHO_GHOSTING      9
+#define ECHO_NEUROFILTER   10
+#define ECHO_OVERCLOCK     11
+#define ECHO_MAX           12
 
 #define AURA_VIOLENCE      0
 #define AURA_TORTURE       1
@@ -2065,6 +2080,7 @@ enum {
 #define SCMD_AUTHORIZE    10
 #define SCMD_SQUELCHTELLS 11
 #define SCMD_MUTE_NEWBIE  12
+#define SCMD_SUBMERSE     13
 
 /* do_say */
 #define SCMD_SAY        0
@@ -2291,7 +2307,8 @@ enum {
 #define CON_ACCOUNT_PARSE       53
 #define CON_FACTION_EDIT        54
 #define CON_CF_CREATE           55
-#define CON_MAX                 55
+#define CON_SUBMERSION          56
+#define CON_MAX                 56
 #define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
@@ -3104,7 +3121,8 @@ enum {
 #define DIRTY_BIT_MEMORY      5
 #define DIRTY_BIT_DRUG        6
 #define DIRTY_BIT_ALIAS       7
-#define NUM_DIRTY_BITS        8
+#define DIRTY_BIT_ECHOES      8
+#define NUM_DIRTY_BITS        9
 
 
 #define SMARTLINK_II_MODIFIER 3
