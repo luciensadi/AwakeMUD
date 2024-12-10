@@ -858,7 +858,7 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
 SPECIAL(teacher)
 {
   struct char_data *master = (struct char_data *) me;
-  int i, ind, max, skill_num;
+  int i, ind, max, skill_num, channel_points;
 
   if (!(CMD_IS("practice")))
     return FALSE;
@@ -909,8 +909,16 @@ SPECIAL(teacher)
     return TRUE;
   }
 
+  if (IS_OTAKU(ch)) {
+    // Otaku get free skill points to spend on JUST channels based on the avg of these stats, round up
+    channel_points = (GET_REAL_INT(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3;
+    channel_points -= GET_SKILL(ch, SKILL_CHANNEL_ACCESS) + GET_SKILL(ch, SKILL_CHANNEL_CONTROL)
+      + GET_SKILL(ch, SKILL_CHANNEL_FILES) + GET_SKILL(ch, SKILL_CHANNEL_INDEX) + GET_SKILL(ch, SKILL_CHANNEL_SLAVE);
+  }
+
   if (!*argument) {
     bool found_a_skill_already = FALSE;
+    bool channel_skills_found = FALSE;
     for (int i = 0; i < NUM_TEACHER_SKILLS; i++) {
       if (teachers[ind].s[i] > 0) {
         // Mundanes can't learn magic skills, with the exception of dragons/ghouls who can learn aura reading.
@@ -940,7 +948,16 @@ SPECIAL(teacher)
         if ((max = get_max_skill_for_char(ch, teachers[ind].s[i], teachers[ind].type)) < 0)
           return FALSE;
 
-        if (GET_SKILL_POINTS(ch) > 0) {
+        if (skills[teachers[ind].s[i]].requires_resonance && channel_points > 0 && PLR_FLAGGED(ch, PLR_NEWBIE)) {
+          // Channel skills are a bit unique for otaku
+          if (!found_a_skill_already) {
+            found_a_skill_already = TRUE;
+            snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
+          }
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (1 channel point)\r\n",
+                   skills[teachers[ind].s[i]].name);
+          channel_skills_found = TRUE;
+        } else if (GET_SKILL_POINTS(ch) > 0) {
           // Add conditional messaging.
           if (!found_a_skill_already) {
             found_a_skill_already = TRUE;
@@ -968,7 +985,11 @@ SPECIAL(teacher)
       return TRUE;
     }
 
-    if (GET_SKILL_POINTS(ch) > 0)
+    if (channel_skills_found && channel_points > 0)
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %d channel point%s to use specifically for otaku skills, and %d skill point%s.\r\n",
+              channel_points, channel_points > 1 ? "s" : "",
+              GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
+    else if (GET_SKILL_POINTS(ch) > 0)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %d point%s to use for skills.\r\n",
               GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
     else
@@ -1058,7 +1079,21 @@ SPECIAL(teacher)
     }
     lose_nuyen(ch, skill_nuyen_cost, NUYEN_OUTFLOW_SKILL_TRAINING);
   }
-  if (GET_SKILL_POINTS(ch) > 0)
+  if (PLR_FLAGGED(ch, PLR_NEWBIE) && skills[skill_num].requires_resonance && channel_points > 0) {
+    // Check this wouldn't put us above our newbie limits.
+    if (REAL_SKILL(ch, skill_num) + 1 > 3) {
+      // Check we don't have any other channel skills at the same value.
+      for (int ci=154; i < 159;i++) {
+        if (REAL_SKILL(ch, ci) == REAL_SKILL(ch, skill_num) + 1) {
+          // Break.
+          send_to_char(ch, "When buying channel skills with freebies you can only have one channel skill at %d, and %s is already at that value.",
+            REAL_SKILL(ch, skill_num) + 1, skills[ci].name);
+          return FALSE;
+        }
+      }
+    }
+    // No points to detect; it's all calculated on the fly. Leave blank.
+  } else if (GET_SKILL_POINTS(ch) > 0)
     GET_SKILL_POINTS(ch)--;
   else
     GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
