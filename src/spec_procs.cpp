@@ -785,8 +785,10 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
   }
 
   // Scope maximums based on teacher type.
-  if (type == NEWBIE)
+  if (type == NEWBIE) {
     max = NEWBIE_SKILL;
+    if (skill == SKILL_COMPUTER && IS_OTAKU(ch)) max = 8; // Otakus can start with computers 8
+  }
   else if (type == AMATEUR)
     max = NORMAL_MAX_SKILL;
   else if (type == ADVANCED)
@@ -917,6 +919,10 @@ SPECIAL(teacher)
         {
           continue;
         }
+
+        // Non-otaku cannot learn otaku channel skills.
+        if (skills[teachers[ind].s[i]].requires_resonance && !IS_OTAKU(ch))
+          continue;
 
         // Adepts can't learn externally-focused skills.
         if (GET_TRADITION(ch) == TRAD_ADEPT && (teachers[ind].s[i] == SKILL_CONJURING

@@ -152,6 +152,11 @@ struct teach_data teachers[] = {
   { 60501, { SKILL_CONJURING, SKILL_SORCERY, SKILL_SPELLDESIGN, SKILL_AURA_READING,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
+  
+  // Newbie otaku teacher
+  { 60692, {  SKILL_CHANNEL_ACCESS, SKILL_CHANNEL_CONTROL, SKILL_CHANNEL_INDEX, SKILL_CHANNEL_FILES, SKILL_CHANNEL_SLAVE,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
 
   { 60502, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_DATA_BROKERAGE, SKILL_CYBERTERM_DESIGN, SKILL_ELECTRONICS,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },

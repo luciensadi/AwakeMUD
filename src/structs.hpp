@@ -1268,6 +1268,7 @@ struct skill_data {
   sh_int attribute;
   bool is_knowledge_skill;
   bool requires_magic;
+  bool requires_resonance;
   sh_int group;
   bool reflex_recorder_compatible;
   bool no_defaulting_allowed;
