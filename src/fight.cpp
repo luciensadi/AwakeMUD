@@ -853,7 +853,9 @@ void death_cry(struct char_data * ch, idnum_t cause_of_death_idnum)
     return;
   }
 
-  for (struct char_data *listener = get_ch_in_room(ch)->people; listener; listener = listener->next_in_room) {
+  for (struct char_data *listener = get_ch_in_room(ch)->people, *next_listener; listener; listener = next_listener) {
+    next_listener = listener->next_in_room;
+    
     // Willing combatants look for targets, others rubberneck, wimpy non-sentinels flee
     if (MOB_FLAGGED(listener, MOB_HELPER) || MOB_FLAGGED(listener, MOB_GUARD)) {
       set_mob_alarm(listener, cause_of_death_idnum, 30);
