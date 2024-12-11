@@ -87,13 +87,17 @@ int can_move(struct char_data *ch, int dir, int extra)
       send_to_char("You step cautiously across the ice sheet, keeping yourself from falling.\r\n", ch);
     }
   }
-  // Builders are restricted to their zone.
-  if (builder_cant_go_there(ch, EXIT(ch, dir)->to_room)) {
-    send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
-    return 0;
+
+  // Prevent PCs from doing wonky things.
+  if (ch->desc) {
+    // Builders are restricted to their zone.
+    if (builder_cant_go_there(ch, EXIT(ch, dir)->to_room)) {
+      send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
+      return 0;
+    }
+    // Everyone is restricted from edit-locked zones that aren't connected.
+    FALSE_CASE(!ch_can_bypass_edit_lock(ch, EXIT(ch, dir)->to_room), "Sorry, that zone is locked.");
   }
-  // Everyone is restricted from edit-locked zones that aren't connected.
-  FALSE_CASE(!ch_can_bypass_edit_lock(ch, EXIT(ch, dir)->to_room), "Sorry, that zone is locked.");
 
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FREEWAY) && !IS_PROJECT(ch)) {
     if (GET_LEVEL(ch) > 1) {
@@ -122,6 +126,7 @@ int can_move(struct char_data *ch, int dir, int extra)
     send_to_char("That's private property -- no trespassing!\r\n", ch);
     return 0;
   }
+  
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch)) {
     int num_occupants = 0;
     for (struct char_data *in_room_ptr = EXIT(ch, dir)->to_room->people; in_room_ptr && num_occupants < 2; in_room_ptr = in_room_ptr->next_in_room) {
@@ -137,6 +142,7 @@ int can_move(struct char_data *ch, int dir, int extra)
       }
     }
   }
+
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && !IS_ASTRAL(ch)) {
     if (access_level(ch, LVL_BUILDER)) {
       send_to_char("You use your staff powers to bypass the cramped-space restriction.\r\n", ch);
