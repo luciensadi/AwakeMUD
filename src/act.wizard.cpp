@@ -210,7 +210,7 @@ ACMD(do_copyover)
       "This is the way the world ends: Not with a bang, but with a copyover.\r\n", // 30
       "Your vision is briefly encompassed by a ring of ten candles, which extinguish one by one. As the final one darkens, a voice intones, 'These things are true: The world is dark.'\r\n",
       "The throaty rumble of your Super Destroyer's engines is a comforting feel beneath your feet. You clench the grip of your Liberator in anticipation as the PA calls out, \"Helldivers to Hellpods. Repeat, Helldivers, to Hellpods.\"\r\n",
-      "Off in the distance, you can faintly make out the unearthy form of Vile standing atop a cliff. He's got his arms towards the sky in some sort of anime-esque power pose, and as he contorts his face with effort, an ominous blue glow starts to shine through the clouds above...\r\n",
+      "Off in the distance, you can faintly make out the unearthly form of Vile standing atop a cliff. He's got his arms towards the sky in some sort of anime-esque power pose, and as he contorts his face with effort, an ominous blue glow starts to shine through the clouds above...\r\n",
       "Suddenly, your arm flops bonelessly to your side-- rather literally, I'm afraid. Damn you, Lockhart!\r\n",
       "Without warning, a raging torrent of red light crashes down on the city! This is it! The end times! The--\r\n" // 35
     };
