@@ -29,6 +29,7 @@ extern void create_deck(struct char_data *ch);
 extern void create_spell(struct char_data *ch);
 extern void create_ammo(struct char_data *ch);
 extern void create_art(struct char_data *ch);
+extern void create_complex_form(struct char_data *ch);
 
 ACMD_DECLARE(do_look);
 
@@ -205,6 +206,10 @@ void roll_matrix_init(struct matrix_icon *icon)
     // Matrix pg 18 & 24, available bonuses are response increase, reality filter, and hot asist
     init_dice += GET_INIT_DICE(icon->decker->ch) + icon->decker->response + (icon->decker->reality ? 1 : 0) + (icon->decker->asist[0] ? 1 : 0);
 
+    if (icon->type == ICON_LIVING_PERSONA) {
+      init_dice = MIN(5, init_dice + GET_ECHO(icon->decker->ch, ECHO_OVERCLOCK));
+    }
+
     // Apply Matrix 'trode net cap (max init dice 2d6)
     if (GET_EQ(icon->decker->ch, WEAR_HEAD) && IS_OBJ_STAT(GET_EQ(icon->decker->ch, WEAR_HEAD), ITEM_EXTRA_TRODE_NET)) {
       init_dice = MIN(init_dice, 2);
@@ -358,6 +363,28 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   }
 
   int target = HOST.stats[type][MTX_STAT_RATING];
+  if (PERSONA->type == ICON_LIVING_PERSONA) {
+    // We lower the TN by the channel rating
+    int channel_rating = GET_OTAKU_PATH(ch) == OTAKU_PATH_TECHNOSHAM ? 1 : 0;
+    switch(type) {
+      case ACIFS_ACCESS:
+        channel_rating += GET_SKILL(ch, SKILL_CHANNEL_ACCESS);
+        break;
+      case ACIFS_CONTROL:
+        channel_rating += GET_SKILL(ch, SKILL_CHANNEL_CONTROL);
+        break;
+      case ACIFS_FILES:
+        channel_rating += GET_SKILL(ch, SKILL_CHANNEL_FILES);
+        break;
+      case ACIFS_INDEX:
+        channel_rating += GET_SKILL(ch, SKILL_CHANNEL_INDEX);
+        break;
+      case ACIFS_SLAVE:
+        channel_rating += GET_SKILL(ch, SKILL_CHANNEL_SLAVE);
+        break;
+    }
+    target = MAX(2, target - channel_rating);
+  }
   snprintf(rollbuf, sizeof(rollbuf), "System test against %s with software %s: Starting TN %d", acifs_strings[type], programs[software].name, target);
 
   int skill = get_skill(ch, SKILL_COMPUTER, target) + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
@@ -391,6 +418,9 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   detect += DECKER->masking + 1; // +1 because we round up
   detect = detect / 2;
   detect -= DECKER->res_det;
+  if  (PERSONA->type == ICON_LIVING_PERSONA) {
+    detect -= 1 + GET_ECHO(ch, ECHO_GHOSTING); // Otaku always get +1 DF
+  }
 
   int tally = MAX(0, success_test(HOST.security, detect));
   target = MAX(target, 2);
@@ -1797,6 +1827,10 @@ ACMD(do_logoff)
         send_to_char("Your hitcher has disconnected.\r\n", ch);
         temp->persona->decker->hitcher = NULL;
       }
+     // Clear the deck if this is an otaku
+    if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+      extract_obj(PERSONA->decker->deck);
+    }
     return;
   }
   if (subcmd) {
@@ -1829,10 +1863,14 @@ ACMD(do_logoff)
   send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
 
   // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
-
   extract_icon(PERSONA);
   PERSONA = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+
+  // Clear the deck if this is an otaku
+  if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+    extract_obj(PERSONA->decker->deck);
+  }
 
   // Make 'em look if they're not screenreaders.
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
@@ -1903,6 +1941,9 @@ ACMD(do_connect)
       cyberdeck = make_staff_deck_target_mpcp(12);
       obj_to_char(cyberdeck, ch);
       send_to_char(ch, "You pull a deck out of thin air to connect with.\r\n");
+    } else if (IS_OTAKU(ch)) {
+      extern struct obj_data *make_otaku_deck(struct char_data *ch);
+      cyberdeck = make_otaku_deck(ch);
     } else {
       send_to_char(ch, "I don't recommend trying to do that without a cyberdeck.\r\n");
       return;
@@ -1943,7 +1984,8 @@ ACMD(do_connect)
 
   if (GET_POS(ch) != POS_SITTING) {
     GET_POS(ch) = POS_SITTING;
-    send_to_char(ch, "You find a place to sit and work with your deck.\r\n");
+    if (IS_OTAKU(ch)) send_to_char(ch, "You find a place to sit down and commune with the matrix.\r\n");
+    else send_to_char(ch, "You find a place to sit and work with your deck.\r\n");
   }
 
   icon = Mem->GetIcon();
@@ -1960,6 +2002,10 @@ ACMD(do_connect)
     icon->long_desc = str_dup(ch->player.matrix_text.look_desc);
   else
     icon->long_desc = str_dup("A nondescript persona stands idly here.\r\n");
+  // If this is an Otaku GhostDeck, then this is a living persona
+  if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+    icon->type = ICON_LIVING_PERSONA;
+  }
 
   if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK && GET_CYBERDECK_IS_INCOMPLETE(cyberdeck)) {
     send_to_char(ch, "That deck is missing some components.\r\n");
@@ -2025,7 +2071,8 @@ ACMD(do_connect)
   // IO is then divided by 10. I've set it to be a minimum of 1 here.
   DECKER->io = MAX(1, (int)(DECKER->io / 10));
 
-  if (GET_OBJ_VNUM(cyberdeck) != OBJ_CUSTOM_CYBERDECK_SHELL) {
+  if (GET_OBJ_VNUM(cyberdeck) != OBJ_CUSTOM_CYBERDECK_SHELL 
+    && !cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
     DECKER->asist[1] = 0;
     DECKER->asist[0] = 0;
     GET_MAX_HACKING(ch) = 0;
@@ -2051,7 +2098,7 @@ ACMD(do_connect)
         }
       }
       if (GET_OBJ_VAL(soft, 4)) {
-        if (GET_OBJ_VAL(soft, 2) > DECKER->active) {
+        if (GET_OBJ_VAL(soft, 2) > DECKER->active && !soft->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
           send_to_char(ch, "%s^n would exceed your deck's active memory, so it failed to load.\r\n", GET_OBJ_NAME(soft));
           continue;
         }
@@ -2074,15 +2121,19 @@ ACMD(do_connect)
       switch (GET_OBJ_VAL(soft, 0)) {
       case PART_BOD:
         DECKER->bod = GET_OBJ_VAL(soft, 1);
+        if (PERSONA->type == ICON_LIVING_PERSONA) DECKER->bod = MIN(DECKER->mpcp*1.5, DECKER->bod + GET_ECHO(ch, ECHO_PERSONA_BOD));
         break;
       case PART_SENSOR:
         DECKER->sensor = GET_OBJ_VAL(soft, 1);
+        if (PERSONA->type == ICON_LIVING_PERSONA) DECKER->sensor = MIN(DECKER->mpcp*1.5, DECKER->sensor + GET_ECHO(ch, ECHO_PERSONA_SENS));
         break;
       case PART_MASKING:
         DECKER->masking = GET_OBJ_VAL(soft, 1);
+        if (PERSONA->type == ICON_LIVING_PERSONA) DECKER->masking = MIN(DECKER->mpcp*1.5, DECKER->masking + GET_ECHO(ch, ECHO_PERSONA_MASK));
         break;
       case PART_EVASION:
         DECKER->evasion = GET_OBJ_VAL(soft, 1);
+        if (PERSONA->type == ICON_LIVING_PERSONA) DECKER->evasion = MIN(DECKER->mpcp*1.5, DECKER->evasion + GET_ECHO(ch, ECHO_PERSONA_EVAS));
         break;
       case PART_ASIST_HOT:
         DECKER->asist[1] = 1;
@@ -2111,7 +2162,7 @@ ACMD(do_connect)
     PERSONA->next = icon_list;
   icon_list = PERSONA;
   icon_to_host(PERSONA, host);
-  if (DECKER->bod + DECKER->sensor + DECKER->evasion + DECKER->masking > DECKER->mpcp * 3) {
+  if (PERSONA->type != ICON_LIVING_PERSONA && (DECKER->bod + DECKER->sensor + DECKER->evasion + DECKER->masking > DECKER->mpcp * 3)) {
     send_to_char(ch, "Your deck overloads on persona programs and crashes. You'll have to keep the combined bod, sensor, evasion, and masking rating less than or equal to %d.\r\n", DECKER->mpcp * 3);
     extract_icon(PERSONA);
     PERSONA = NULL;
@@ -2139,12 +2190,15 @@ ACMD(do_connect)
   if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
     if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
       if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
-        snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to $s cyberdeck.");
+        snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to %s.",
+          cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
       } else {
-        snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into $s cyberdeck.");
+        snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into %s.",
+          cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
       }
     } else {
-      snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides $s cyberdeck cable into $s eye datajack.");
+      snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides %s cable into $s eye datajack.",
+        cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
     }
   } else {
     snprintf(buf, sizeof(buf), "$n plugs the leads of $s 'trode net into $s cyberdeck.");
@@ -2171,6 +2225,10 @@ ACMD(do_load)
   }
   skip_spaces(&argument);
   if (subcmd == SCMD_UNLOAD) {
+    if (PERSONA->type == ICON_LIVING_PERSONA) {
+      send_to_icon(PERSONA, "You don't have active memory to erase things from.\r\n");
+      return;
+    }
     struct obj_data *temp = NULL;
     for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
       if (keyword_appears_in_obj(argument, soft)) {
@@ -2197,7 +2255,8 @@ ACMD(do_load)
         continue;
 
       if (subcmd == SCMD_UPLOAD) {
-        if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR || GET_PROGRAM_TYPE(soft) == SOFT_EVALUATE)) {
+        if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR || GET_PROGRAM_TYPE(soft) == SOFT_EVALUATE 
+        || soft->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS))) {
           send_to_icon(PERSONA, "You can't upload %s^n.\r\n", GET_OBJ_NAME(soft));
           return;
         }
@@ -3722,7 +3781,16 @@ ACMD(do_create)
   }
   argument = any_one_arg(argument, buf1);
 
-  if (is_abbrev(buf1, "program")) {
+  if (is_abbrev(buf1, "complex form"))
+  {
+    if (!IS_OTAKU(ch)) {
+      send_to_char("Everyone knows that otaku aren't real, chummer.\r\n", ch);
+      return;
+    }
+    create_complex_form(ch);
+  }
+
+  else if (is_abbrev(buf1, "program")) {
     if (!GET_SKILL(ch, SKILL_COMPUTER)) {
       send_to_char("You must learn computer skills to create programs.\r\n", ch);
       return;
@@ -3771,7 +3839,7 @@ ACMD(do_create)
   }
 
   else {
-    send_to_char("You can only create programs, parts, decks, ammunition, spells, and art.\r\n", ch);
+    send_to_char("You can only create programs, parts, decks, ammunition, spells, complex forms, and art.\r\n", ch);
     return;
   }
 }
@@ -3801,6 +3869,8 @@ ACMD(do_asist)
 {
   if (!PERSONA)
     send_to_char("You can't do that while hitching.\r\n", ch);
+  else if (PERSONA->type == ICON_LIVING_PERSONA)
+    send_to_char("You can't switch ASIST modes while using a living persona.\r\n", ch);
   else if (!DECKER->asist[1])
     send_to_char("You can't switch ASIST modes with a cold ASIST interface.\r\n", ch);
   else if (DECKER->asist[0]) {
