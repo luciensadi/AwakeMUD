@@ -770,10 +770,10 @@ void affect_total(struct char_data * ch)
                     cyber->obj_flags.bitvector, TRUE);
     }
   }
+
+  // has_trigger was initialized to -1, why not initialize to 0 and not check for has_trigger?
   if (has_wired && has_trigger) {
-    if (has_trigger == -1)
-      has_trigger = 3;
-    has_wired = MIN(has_wired, has_trigger);
+    has_wired = MIN(has_wired, has_trigger == -1 ? 3 : has_trigger);
     GET_INIT_DICE(ch) += has_wired;
     GET_REA(ch) += has_wired * 2;
   }
@@ -1117,7 +1117,7 @@ void affect_total(struct char_data * ch)
       GET_HACKING(ch) += (int)((GET_INT(ch) + ch->persona->decker->mpcp) / 3);
       // a VCR applies a 1 TN penalty to decking and -rating hacking pool, unless disabled via reflex trigger (Matrix, pg 28)
       // assume trigger is attached to VCR and that a rigger will always disable their VCR when decking
-      if (has_rig && !has_trigger) {
+      if (has_rig && (has_trigger == -1)) {
         GET_TARGET_MOD(ch) += 1;
         GET_HACKING(ch) -= has_rig;
       }
