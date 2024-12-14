@@ -2638,6 +2638,21 @@ ACMD(do_vstat)
   // Require that they have access to edit the zone they're statting.
   for (int counter = 0; counter <= top_of_zone_table; counter++) {
     if ((number >= (zone_table[counter].number * 100)) && (number <= (zone_table[counter].top))) {
+      // Allow vstatting in template zones. Right now these are hardcoded, eventually you should make them zone flags.
+      if (// Item template zones.
+          ((zone_table[counter].number >= 800 && zone_table[counter].number <= 807)
+            || (zone_table[counter].number >= 850 && zone_table[counter].number <= 860)
+            || zone_table[counter].number == 65
+            || zone_table[counter].number == 68
+            || zone_table[counter].number == 70) ||
+          // Mob template zones.
+          (zone_table[counter].number == 128)
+        )
+      {
+        // Break out without doing anything, otherwise check for edit capabilities.
+        break;
+      }
+
       if (!can_edit_zone(ch, counter)) {
         send_to_char("Sorry, you don't have access to edit that zone.\r\n", ch);
         return;

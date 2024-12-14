@@ -3018,7 +3018,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = SHEDIT_TYPE;
       break;
     case '3':
-      send_to_char(CH, "Enter multiplier for buy command: ");
+      send_to_char(CH, "Enter multiplier for buy command (1.0 or higher): ");
       d->edit_mode = SHEDIT_PROFIT_BUY;
       break;
     case '4':
