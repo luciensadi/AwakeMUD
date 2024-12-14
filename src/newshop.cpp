@@ -3022,7 +3022,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = SHEDIT_PROFIT_BUY;
       break;
     case '4':
-      send_to_char(CH, "Enter multiplier for sell command: ");
+      send_to_char(CH, "Enter multiplier for sell command (should be 0.1 unless you have special approval): ");
       d->edit_mode = SHEDIT_PROFIT_SELL;
       break;
     case '5':
