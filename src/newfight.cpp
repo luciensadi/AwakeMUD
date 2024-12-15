@@ -363,7 +363,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Setup: If your attacker is closing the distance (running), take a penalty per Core p112.
-    if (!def->is_paralyzed_or_insensate) {
+    // We can't avoid setting AFF_APPROACH in set_fighting for surprised targets since it also
+    // indicates not-in-melee-range, so make an exception since they're probably not moving yet.
+    if (!def->is_paralyzed_or_insensate && !def->is_surprised) {
       if (AFF_FLAGGED(def->ch, AFF_APPROACH))
         att->ranged->modifiers[COMBAT_MOD_DEFENDER_MOVING] += 2;
       else if (!def->ranged_combat_mode && def->ch->in_room == att->ch->in_room && !IS_JACKED_IN(def->ch))
