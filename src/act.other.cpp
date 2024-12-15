@@ -761,10 +761,10 @@ ACMD(do_use)
     if (do_drug_take(ch, obj))
       return;
   } else if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == anticoagulant) {
-    for (struct obj_data *cyber = ch->bioware; cyber; cyber = cyber->next_content) {
-      if (GET_OBJ_VAL(cyber, 0) == BIO_PLATELETFACTORY) {
-        GET_OBJ_VAL(cyber, 5) = 36;
-        GET_OBJ_VAL(cyber, 6) = 0;
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY) {
+        GET_BIOWARE_PLATELETFACTORY_DATA(bio) = 36;
+        GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio) = 0;
         break;
       }
     }

@@ -887,7 +887,7 @@ void death_cry(struct char_data * ch, idnum_t cause_of_death_idnum)
 
 void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
 {
-  struct obj_data *bio, *obj, *o;
+  struct obj_data *obj, *o;
   struct room_data *dest_room;
 
   if (CH_IN_COMBAT(ch))
@@ -926,20 +926,25 @@ void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
       make_corpse(ch);
 
     if (!IS_NPC(ch)) {
-      for (bio = ch->bioware; bio; bio = bio->next_content) {
+      // Disable bioware etc that resets on death.
+      for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
         switch (GET_BIOWARE_TYPE(bio)) {
           case BIO_ADRENALPUMP:
-            if (GET_OBJ_VAL(bio, 5) > 0) {
+            if (GET_BIOWARE_PUMP_ADRENALINE(bio) > 0) {
               for (int affect_idx = 0; affect_idx < MAX_OBJ_AFFECT; affect_idx++)
                 affect_modify(ch,
                               bio->affected[affect_idx].location,
                               bio->affected[affect_idx].modifier,
                               bio->obj_flags.bitvector, FALSE);
-              GET_OBJ_VAL(bio, 5) = 0;
+              GET_BIOWARE_PUMP_ADRENALINE(bio) = 0;
             }
             break;
           case BIO_PAINEDITOR:
             GET_BIOWARE_IS_ACTIVATED(bio) = 0;
+            break;
+          case BIO_PLATELETFACTORY:
+            GET_BIOWARE_PLATELETFACTORY_DATA(bio) = 36;
+            GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio) = 0;
             break;
         }
       }
@@ -2392,17 +2397,21 @@ void docwagon_retrieve(struct char_data *ch) {
   for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
     switch (GET_BIOWARE_TYPE(bio)) {
       case BIO_ADRENALPUMP:
-        if (GET_OBJ_VAL(bio, 5) > 0) {
-          for (int i = 0; i < MAX_OBJ_AFFECT; i++)
+        if (GET_BIOWARE_PUMP_ADRENALINE(bio) > 0) {
+          for (int affect_idx = 0; affect_idx < MAX_OBJ_AFFECT; affect_idx++)
             affect_modify(ch,
-                          bio->affected[i].location,
-                          bio->affected[i].modifier,
+                          bio->affected[affect_idx].location,
+                          bio->affected[affect_idx].modifier,
                           bio->obj_flags.bitvector, FALSE);
-          GET_OBJ_VAL(bio, 5) = 0;
+          GET_BIOWARE_PUMP_ADRENALINE(bio) = 0;
         }
         break;
       case BIO_PAINEDITOR:
         GET_BIOWARE_IS_ACTIVATED(bio) = 0;
+        break;
+      case BIO_PLATELETFACTORY:
+        GET_BIOWARE_PLATELETFACTORY_DATA(bio) = 36;
+        GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio) = 0;
         break;
     }
   }
