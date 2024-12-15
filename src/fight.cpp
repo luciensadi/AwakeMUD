@@ -2353,6 +2353,18 @@ void docwagon_retrieve(struct char_data *ch) {
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
 
+  // Stop their vehicle
+  if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+    struct veh_data *veh;
+    RIG_VEH(ch, veh);
+
+    send_to_veh("Now driverless, the vehicle slows to a stop.\r\n", veh, ch, FALSE);
+    AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+    stop_chase(veh);
+    if (!veh->dest)
+      veh->cspeed = SPEED_OFF;
+  }
+
   // Stop all their sustained spells as if they died.
   if (GET_SUSTAINED(ch)) {
     end_all_sustained_spells(ch);
