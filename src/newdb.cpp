@@ -480,6 +480,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   SETTABLE_EMAIL(ch) = str_dup(row[80]);
   GET_CHAR_MULTIPLIER(ch) = atoi(row[81]);
   const char *lifestyle_string = str_dup(row[82]);
+  GET_OTAKU_PATH(ch) = atoi(row[83]);
   mysql_free_result(res);
 
   // Update lifestyle information.
