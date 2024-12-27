@@ -19,6 +19,7 @@
 #include "interpreter.hpp"
 #include "holiday_gifts.hpp"
 
+// Note that the name of the holiday is used to see if someone has redeemed it yet. Don't change during the holiday's validity window, or else folks will get awarded again.
 std::vector<class holiday_entry> holiday_entries = {
   {"Christmas '23", 1703322000, 1706574891, // 12/23/23 to 1/30/24. Extended due to errors
      "A puff of peppermint-scented air distracts you, and before you know it, there's a festive present in your hands.\r\n",
@@ -73,7 +74,7 @@ bool holiday_entry::is_eligible(struct char_data *ch) {
     return FALSE;
 
   // Still in chargen or very new to the game? No-go.
-  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || GET_TKE(ch) < 10)
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || GET_TKE(ch) < 30)
     return FALSE;
 
   // Not in playing state? Nope.
