@@ -5809,6 +5809,61 @@ struct obj_data *make_new_finished_program(int part_type, int mpcp, int rating=0
   return prog;
 }
 
+struct obj_data *make_otaku_deck(struct char_data *ch) {
+  struct obj_data *new_deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL, OBJ_LOAD_REASON_OTAKU_BS);
+
+  // Add parts.
+  int mpcp = (GET_REAL_INT(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3; // adding 2 always ensures a round up
+  if (GET_ECHO(ch, ECHO_IMPROVED_MPCP)) {
+    mpcp = MIN(GET_REAL_INT(ch) * 2, mpcp + GET_ECHO(ch, ECHO_IMPROVED_MPCP));
+  }
+  obj_to_obj(make_new_finished_part(PART_MPCP, mpcp, mpcp), new_deck);
+  obj_to_obj(make_new_finished_part(PART_BOD, mpcp, GET_REAL_WIL(ch)), new_deck);
+  obj_to_obj(make_new_finished_part(PART_EVASION, mpcp, GET_REAL_INT(ch)), new_deck);
+  obj_to_obj(make_new_finished_part(PART_SENSOR, mpcp, GET_REAL_INT(ch)), new_deck);
+  obj_to_obj(make_new_finished_part(PART_MASKING, mpcp, (GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 1) / 2), new_deck);
+  obj_to_obj(make_new_finished_part(PART_ASIST_HOT, mpcp), new_deck);
+  obj_to_obj(make_new_finished_part(PART_RAS_OVERRIDE, mpcp), new_deck);
+
+  GET_CYBERDECK_MPCP(new_deck) = mpcp;
+  GET_CYBERDECK_HARDENING(new_deck) = MIN(GET_REAL_WIL(ch), GET_REAL_WIL(ch) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD));
+  GET_CYBERDECK_ACTIVE_MEMORY(new_deck) = 999999;
+  GET_CYBERDECK_TOTAL_STORAGE(new_deck) = 0;
+  GET_CYBERDECK_RESPONSE_INCREASE(new_deck) = MIN(mpcp * 1.5, GET_REAL_REA(ch) + GET_ECHO(ch, ECHO_IMPROVED_REA));
+  GET_CYBERDECK_IO_RATING(new_deck) = MIN(GET_REAL_INT(ch) * 200, (GET_REAL_INT(ch) * 100) + (GET_ECHO(ch, ECHO_IMPROVED_IO) * 100));
+  GET_CYBERDECK_IS_INCOMPLETE(new_deck) = FALSE;
+
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_CONCEALED_IN_EQ);
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_BS);
+
+  for (struct obj_data *form = ch->carrying; form; form = form->next_content) {
+    if (GET_OBJ_TYPE(form) != ITEM_COMPLEX_FORM) continue;
+    struct obj_data *active = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_OTAKU_BS);
+    GET_PROGRAM_TYPE(active) = GET_PROGRAM_TYPE(form);
+    GET_PROGRAM_SIZE(active) = 1;
+    GET_PROGRAM_ATTACK_DAMAGE(active) = GET_PROGRAM_ATTACK_DAMAGE(form);
+    GET_PROGRAM_IS_DEFAULTED(active) = TRUE;
+    GET_OBJ_TIMER(active) = 1;
+
+    GET_PROGRAM_RATING(active) = GET_PROGRAM_RATING(form);
+
+    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_BS);
+    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+
+    char restring[500];
+    snprintf(restring, sizeof(restring), "a rating-%d %s complex form", GET_PROGRAM_RATING(form), programs[GET_PROGRAM_TYPE(form)].name);
+    active->restring = str_dup(restring);
+    obj_to_obj(active, new_deck);
+  }
+
+  char restring[500];
+  snprintf(restring, sizeof(restring), "a living persona cyberdeck");
+  new_deck->restring = str_dup(restring);
+
+  return new_deck;
+}
+
 struct obj_data *make_staff_deck_target_mpcp(int mpcp) {
   struct obj_data *new_deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL, OBJ_LOAD_REASON_STAFF_DECK);
 
