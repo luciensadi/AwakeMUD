@@ -82,7 +82,7 @@ jobs:
     - if: matrix.build-mode == 'manual'
       run: |
         sudo apt update
-        sudo apt install -y libboost-filesystem-dev libcurl4-openssl-dev 
+        sudo apt install -y libboost-filesystem-dev libcurl4-openssl-dev libnsl-dev
         cd src
         echo 'const char *mysql_host =     "host"; \
           const char *mysql_password = "pass";       \
