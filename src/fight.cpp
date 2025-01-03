@@ -106,6 +106,7 @@ extern bool check_sentinel_snap_back(struct char_data *ch);
 extern void end_quest(struct char_data *ch, bool succeeded);
 extern bool npc_vs_vehicle_blocked_by_quest_protection(idnum_t quest_id, struct veh_data *veh);
 extern bool ch_is_in_viewers_visual_range(struct char_data *ch, struct char_data *viewer);
+extern void stop_driving(struct char_data *ch, bool is_involuntary);
 
 // Corpse saving externs.
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
@@ -963,17 +964,6 @@ void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
         dest_room = &world[real_room(RM_CHARGEN_START_ROOM)];
       } else {
         dest_room = get_jurisdiction_docwagon_room(GET_JURISDICTION(in_room));
-      }
-
-      if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-        struct veh_data *veh;
-        RIG_VEH(ch, veh);
-
-        send_to_veh("Now driverless, the vehicle slows to a stop.\r\n", veh, ch, FALSE);
-        AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
-        stop_chase(veh);
-        if (!veh->dest)
-          veh->cspeed = SPEED_OFF;
       }
 
       if (ch->persona) {
@@ -2364,18 +2354,6 @@ void docwagon_retrieve(struct char_data *ch) {
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
 
-  // Stop their vehicle
-  if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    struct veh_data *veh;
-    RIG_VEH(ch, veh);
-
-    send_to_veh("Now driverless, the vehicle slows to a stop.\r\n", veh, ch, FALSE);
-    AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
-    stop_chase(veh);
-    if (!veh->dest)
-      veh->cspeed = SPEED_OFF;
-  }
-
   // Stop all their sustained spells as if they died.
   if (GET_SUSTAINED(ch)) {
     end_all_sustained_spells(ch);
@@ -3535,6 +3513,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   switch (GET_POS(victim))
   {
     case POS_MORTALLYW:
+      stop_driving(ch, TRUE);
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
         act("$n is critically damaged, and will fail soon, if not aided.",
             TRUE, victim, 0, 0, TO_ROOM);
@@ -3558,6 +3537,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       }
       break;
     case POS_STUNNED:
+      stop_driving(ch, TRUE);
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
         act("$n is rebooting from heavy damage.",
             TRUE, victim, 0, 0, TO_ROOM);
@@ -3571,6 +3551,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       }
       break;
     case POS_DEAD:
+      stop_driving(ch, TRUE);
       if (IS_NPC(victim)) {
         if (MOB_FLAGGED(victim, MOB_INANIMATE)) {
           act("$n terminally fails in a shower of sparks!", FALSE, victim, 0, 0, TO_ROOM);
