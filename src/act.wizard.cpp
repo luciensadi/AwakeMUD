@@ -108,7 +108,7 @@ extern void save_shop_orders();
 extern void turn_hardcore_on_for_character(struct char_data *ch);
 extern void turn_hardcore_off_for_character(struct char_data *ch);
 extern void stop_rigging(struct char_data *ch);
-extern void stop_driving(struct char_data *ch);
+extern void stop_driving(struct char_data *ch, bool is_involuntary);
 extern void write_zone_to_disk(int vnum);
 
 extern void DBFinalize();
@@ -933,7 +933,7 @@ ACMD(do_goto)
   }
 #endif
 
-  stop_driving(ch);
+  stop_driving(ch, FALSE);
 
   if (POOFOUT(ch))
     act(POOFOUT(ch), TRUE, ch, 0, 0, TO_ROOM);
@@ -973,7 +973,7 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
   if (!ch || !victim)
     return;
 
-  stop_driving(victim);
+  stop_driving(victim, FALSE);
 
   act("$n is whisked away by the game's administration.", TRUE, victim, 0, 0, TO_ROOM);
   if (AFF_FLAGGED(victim, AFF_PILOT))
@@ -1114,7 +1114,7 @@ ACMD(do_teleport)
     char was_in[1000];
     snprintf(was_in, sizeof(was_in), "%s '%s'", victim->in_veh ? "vehicle" : "room", victim->in_veh ? GET_VEH_NAME(victim->in_veh) : GET_ROOM_NAME(victim->in_room));
 
-    stop_driving(victim);
+    stop_driving(victim, FALSE);
 
     send_to_char(OK, ch);
     act("$n disappears in a puff of smoke.", TRUE, victim, 0, 0, TO_ROOM);

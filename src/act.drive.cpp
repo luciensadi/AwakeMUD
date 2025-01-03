@@ -104,7 +104,7 @@ void stop_chase(struct veh_data *veh)
   veh->following = NULL;
 }
 
-void crash_test(struct char_data *ch)
+void crash_test(struct char_data *ch, bool force_zero_successes)
 {
   int target = 0, skill = 0;
   int power, attack_resist = 0, damage_total = SERIOUS;
@@ -121,7 +121,7 @@ void crash_test(struct char_data *ch)
 
   skill = veh_skill(ch, veh, &target) + veh->autonav;
 
-  if (success_test(skill, target, ch, "crash_test vehicle skill test") > 0)
+  if (!force_zero_successes && success_test(skill, target, ch, "crash_test vehicle skill test") > 0)
   {
     snprintf(crash_buf, sizeof(crash_buf), "^y%s shimmies sickeningly under you, but you manage to keep control.^n\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     send_to_veh(crash_buf, veh, NULL, TRUE);
@@ -129,6 +129,7 @@ void crash_test(struct char_data *ch)
       send_to_char("^YYou don't have the skills to be driving like this!^n\r\n", ch);
     return;
   }
+  
   if (veh->in_room && IS_WATER(veh->in_room)) {
     snprintf(crash_buf, sizeof(crash_buf), "^r%s shimmies sickeningly under you, then bounces hard before flipping over!^n\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     snprintf(buf, sizeof(buf), "%s plows into a wave and flips!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
@@ -473,7 +474,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
       vram(veh, NULL, tveh);
   }
   else {
-    crash_test(ch);
+    crash_test(ch, FALSE);
     chkdmg(veh);
   }
 }
@@ -2569,7 +2570,7 @@ void stop_rigging(struct char_data *ch) {
 }
 
 // Only call this if you're SURE you want them to stop driving. Check for flight status etc.
-void stop_driving(struct char_data *ch) {
+void stop_driving(struct char_data *ch, bool is_involuntary) {
   if (!ch || !ch->in_veh)
     return;
 
@@ -2578,9 +2579,21 @@ void stop_driving(struct char_data *ch) {
   } else if (AFF_FLAGGED(ch, AFF_PILOT)) {
     stop_vehicle(ch->in_veh);
     AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
-    send_to_char("You relinquish the driver's seat.\r\n", ch);
-    snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
-    send_to_veh(buf1, VEH, ch, FALSE);
+
+    if (is_involuntary) {
+      send_to_char("The controls slip from your unresponsive fingers.\r\n", ch);
+      snprintf(buf1, sizeof(buf1), "%s slumps, the controls slipping from %s fingers.\r\n", capitalize(GET_NAME(ch)), HSHR(ch));
+      send_to_veh(buf1, VEH, ch, FALSE);
+      
+      if (ch->in_veh->cspeed > SPEED_IDLE) {
+        // Crash test with zero successes-- they've gone unconscious or something.
+        crash_test(ch, TRUE);
+      }
+    } else {
+      send_to_char("You relinquish the driver's seat.\r\n", ch);
+      snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
+      send_to_veh(buf1, VEH, ch, FALSE);
+    }
   }
 
 }

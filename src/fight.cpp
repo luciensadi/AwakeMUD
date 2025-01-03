@@ -96,7 +96,7 @@ extern struct zone_data *zone_table;
 extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern void find_and_draw_weapon(struct char_data *);
-extern void crash_test(struct char_data *ch);
+extern void crash_test(struct char_data *ch, bool force_zero_successes);
 extern int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
 extern bool mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
@@ -6866,11 +6866,11 @@ bool vram(struct veh_data * veh, struct char_data * vict, struct veh_data * tveh
         case SERIOUS:
           tveh->cspeed = SPEED_CRUISING;
           if (tveh->rigger)
-            crash_test(tveh->rigger);
+            crash_test(tveh->rigger, FALSE);
           else
             for (struct char_data *pilot = tveh->people; pilot; pilot = pilot->next_in_veh)
               if (AFF_FLAGGED(pilot, AFF_PILOT))
-                crash_test(pilot);
+                crash_test(pilot, FALSE);
           break;
       }
     chkdmg(tveh);
@@ -6898,11 +6898,11 @@ bool vram(struct veh_data * veh, struct char_data * vict, struct veh_data * tveh
         case SERIOUS:
           veh->cspeed = SPEED_CRUISING;
           if (veh->rigger)
-            crash_test(veh->rigger);
+            crash_test(veh->rigger, FALSE);
           else
             for (struct char_data *pilot = veh->people; pilot; pilot = pilot->next_in_veh)
               if (AFF_FLAGGED(pilot, AFF_PILOT))
-                crash_test(pilot);
+                crash_test(pilot, FALSE);
           break;
       }
     chkdmg(veh);

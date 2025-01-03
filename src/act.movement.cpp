@@ -830,7 +830,7 @@ void move_vehicle(struct char_data *ch, int dir)
   struct room_data *was_in = NULL;
   struct veh_data *veh;
   struct veh_follow *v, *nextv;
-  extern void crash_test(struct char_data *);
+  extern void crash_test(struct char_data *, bool);
   char empty_argument = '\0';
 
   RIG_VEH(ch, veh);
@@ -998,7 +998,7 @@ void move_vehicle(struct char_data *ch, int dir)
     }
     if ((get_speed(v->follower) > 80 && SECT(v->follower->in_room) == SPIRIT_CITY) || v->follower->in_room->icesheet[0] || SECT(v->follower->in_room) == SPIRIT_HEARTH)
     {
-      crash_test(pilot);
+      crash_test(pilot, FALSE);
       chkdmg(v->follower);
     }
   }
@@ -1019,7 +1019,7 @@ void move_vehicle(struct char_data *ch, int dir)
 
   if ((get_speed(veh) > 80 && SECT(veh->in_room) == SPIRIT_CITY) || veh->in_room->icesheet[0])
   {
-    crash_test(ch);
+    crash_test(ch, FALSE);
     chkdmg(veh);
     if (!veh->people)
       load_vehicle_brain(veh);
