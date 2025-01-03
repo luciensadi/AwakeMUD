@@ -773,7 +773,7 @@ void affect_total(struct char_data * ch)
 
   // has_trigger was initialized to -1, why not initialize to 0 and not check for has_trigger?
   if (has_wired && has_trigger) {
-    has_wired = MIN(has_wired, has_trigger == -1 ? 3 : has_trigger);
+    has_wired = MIN(has_wired, (has_trigger == -1 ? 3 : has_trigger));
     GET_INIT_DICE(ch) += has_wired;
     GET_REA(ch) += has_wired * 2;
   }
