@@ -108,6 +108,7 @@ struct  char_data *get_obj_worn_by_recursive(struct obj_data *obj);
 struct  char_data *get_obj_possessor(struct obj_data *obj);
 char *  get_obj_name_with_padding(struct obj_data *obj, int padding);
 char *  generate_new_loggable_representation(struct obj_data *obj);
+char *  generate_new_loggable_representation(struct veh_data *veh);
 void    purgelog(struct veh_data *veh);
 char *  replace_substring(const char *source, char *dest, const char *replace_target, const char *replacement);
 bool    combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages);
@@ -190,6 +191,7 @@ void    set_watching(struct char_data *ch, struct room_data *room, int dir);
 struct room_data *get_jurisdiction_docwagon_room(int jurisdiction);
 struct room_data *get_jurisdiction_garage_room(int jurisdiction);
 void   set_dropped_by_info(struct obj_data *obj, struct char_data *ch);
+bool   restore_to_full_health_if_still_in_chargen(struct char_data *victim);
 
 // RCD subscription functions.
 bool   add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller, bool ignore_veh_sub_marker, bool mute_duplication_alarm=FALSE);

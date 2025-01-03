@@ -1230,7 +1230,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   // Calculate the price.
   price = buy_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch);
   int bprice = price / 10;
-  if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && can_negotiate_for_item(obj))
+  if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && !MOB_FLAGGED(keeper, MOB_INANIMATE) && can_negotiate_for_item(obj))
     price = negotiate(ch, keeper, 0, price, 0, TRUE, TRUE);
 
   // Attempt to order the item.
@@ -1522,7 +1522,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   }
 
   int sellprice = sell_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch);
-  if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
+  if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && !MOB_FLAGGED(keeper, MOB_INANIMATE))
     sellprice = negotiate(ch, keeper, 0, sellprice, 0, FALSE, TRUE);
 
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR) && !obj->in_obj) {
@@ -1714,7 +1714,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     if (has_availtns)
       snprintf(ENDOF(buf), sizeof(buf), "This shop uses %s for difficult purchases.\r\n", skills[shop_table[shop_nr].etiquette].name);
 
-    if (shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
+    if (shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) || MOB_FLAGGED(keeper, MOB_INANIMATE))
       has_negotiatable = FALSE;
 
     // Add info about metavariant penalties.
@@ -1865,7 +1865,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     send_to_char(ch, "This shop uses %s for difficult purchases.\r\n", skills[shop_table[shop_nr].etiquette].name);
   }
 
-  if (shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO))
+  if (shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) || MOB_FLAGGED(keeper, MOB_INANIMATE))
     has_negotiatable = FALSE;
 
   // Add info about metavariant penalties.
@@ -3018,11 +3018,11 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = SHEDIT_TYPE;
       break;
     case '3':
-      send_to_char(CH, "Enter multiplier for buy command: ");
+      send_to_char(CH, "Enter multiplier for buy command (1.0 or higher): ");
       d->edit_mode = SHEDIT_PROFIT_BUY;
       break;
     case '4':
-      send_to_char(CH, "Enter multiplier for sell command: ");
+      send_to_char(CH, "Enter multiplier for sell command (should be 0.1 unless you have special approval): ");
       d->edit_mode = SHEDIT_PROFIT_SELL;
       break;
     case '5':

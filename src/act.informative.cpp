@@ -7501,6 +7501,20 @@ ACMD(do_status)
     }
   }
 
+  struct obj_data *patch = GET_EQ(targ, WEAR_PATCH);
+  if (patch) {
+    if (GET_OBJ_TYPE(patch) != ITEM_PATCH) {
+      const char *representation = generate_new_loggable_representation(patch);
+      mudlog_vfprintf(targ, LOG_SYSLOG, "SYSERR: Non-patch item %s being worn on patch location!", representation);
+      delete [] representation;
+    } else {
+      snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "  %s %s patch (rating ^c%d^n, ^c%d^n ticks left)\r\n",
+              AN(patch_names[GET_PATCH_TYPE(patch)]),
+              patch_names[GET_PATCH_TYPE(patch)],
+              GET_PATCH_RATING(patch),
+              GET_PATCH_TICKS_LEFT(patch));
+    }
+  }
 
   for (struct obj_data *bio = targ->bioware; bio; bio = bio->next_content) {
     if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
@@ -7529,7 +7543,7 @@ ACMD(do_status)
   }
 
   if (GET_SUSTAINED_NUM(targ)) {
-    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%s %s sustaining:\r\n", ch == targ ? "You" : GET_CHAR_NAME(targ), ch == targ ? "are" : "is");
+    snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "\r\n%s %s sustaining:\r\n", ch == targ ? "You" : GET_CHAR_NAME(targ), ch == targ ? "are" : "is");
     int i = 1;
     for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
       if (sust->caster || sust->spirit == targ) {

@@ -1925,8 +1925,8 @@ ACMD(do_shedit)
     d->edit_shop = new shop_data;
     memset((char *) d->edit_shop, 0, sizeof(struct shop_data));
     d->edit_shop->vnum = d->edit_number;
-    d->edit_shop->profit_buy = 1.0;
-    d->edit_shop->profit_sell = 1.0;
+    d->edit_shop->profit_buy = 1.1;
+    d->edit_shop->profit_sell = 0.1;
     d->edit_shop->buytypes = 0;
     d->edit_shop->no_such_itemk = str_dup("Sorry, we don't have that.");
     d->edit_shop->no_such_itemp = str_dup("You don't seem to have that.");
@@ -2053,6 +2053,10 @@ ACMD(do_zedit)
 
       d->edit_cmd = new reset_com;
       d->edit_cmd->command = '*';
+      d->edit_cmd->arg1 = 0;
+      d->edit_cmd->arg2 = 0;
+      d->edit_cmd->arg3 = 0;
+      d->edit_cmd->arg4 = 0;
       zedit_disp_command_menu(d);
 #endif
 

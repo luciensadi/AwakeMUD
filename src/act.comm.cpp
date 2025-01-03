@@ -2218,7 +2218,7 @@ ACMD(do_message_history) {
 
   // Find the channel referenced in first parameter.
   for (channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
-    if (is_abbrev(buf, message_history_channels[channel]))
+    if (is_abbrev(buf, message_history_channels[channel]) || (channel == COMM_CHANNEL_QUESTIONS && is_abbrev(buf, "newbie")))
       break;
 
   // No channel found? Fail.

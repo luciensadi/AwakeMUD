@@ -416,18 +416,36 @@ void objList::UpdateCounters(void)
 
     // Time out things that have been abandoned outside of storage etc rooms (qualifier checked when setting timeout)
     // TODO: Maybe put it in a vector of expiring objects rather than making this check be part of every item?
-    if (OBJ->in_room && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) > 0 && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) <= timestamp_now) {
-#ifndef EXPIRE_STRAY_ITEMS
+    if (OBJ->in_room
+        && (GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) > 0 && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) <= timestamp_now)
+        && !OBJ->contains // it's just a headache trying to figure out what to skip over with this
+        && !(zone_table[OBJ->in_room->zone].is_pghq
+             || ((OBJ->restring || OBJ->photo) && GET_OBJ_TYPE(OBJ) != ITEM_GUN_AMMO) // No customized objects.
+             || GET_OBJ_TYPE(OBJ) == ITEM_CREATIVE_EFFORT // No art.
+             || GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY // No cookers, computers, etc.
+             // || GET_OBJ_TYPE(OBJ) == ITEM_CUSTOM_DECK // No custom decks (only matters if !OBJ->contains condition is removed)
+             || GET_OBJ_TYPE(OBJ) == ITEM_MAGIC_TOOL
+             || (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(OBJ) > TYPE_KIT) // No workshops or facilities.
+             // || GET_OBJ_TYPE(OBJ) == ITEM_SHOPCONTAINER // No shopcontainers (only matters if !OBJ->contains condition is removed)
+             || (GET_OBJ_TYPE(OBJ) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(OBJ) > 0) // No bonded normal foci.
+             || (GET_OBJ_TYPE(OBJ) == ITEM_WEAPON && !WEAPON_IS_GUN(OBJ) && GET_WEAPON_FOCUS_BONDED_BY(OBJ) > 0) // No bonded weapon foci.
+            )
+        )
+    {
       const char *representation = generate_new_loggable_representation(OBJ);
-      mudlog_vfprintf(NULL, LOG_MISCLOG, "Item %s @ %s (%ld) would have been cleaned up by expiration logic.", representation, GET_ROOM_NAME(OBJ->in_room), GET_ROOM_VNUM(OBJ->in_room));
-      delete [] representation;
+#ifndef EXPIRE_STRAY_ITEMS
+      mudlog_vfprintf(NULL, LOG_MISCLOG, "Item %s @ %s (%ld) WOULD HAVE been cleaned up by expiration logic.", representation, GET_ROOM_NAME(OBJ->in_room), GET_ROOM_VNUM(OBJ->in_room));
       GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) = 0;
 #else
-      act("$p is lost on the ground.", TRUE, temp->data->in_room->people, OBJ, 0, TO_CHAR);
+      mudlog_vfprintf(NULL, LOG_MISCLOG, "Item %s @ %s (%ld) HAS been cleaned up by expiration logic.", representation, GET_ROOM_NAME(OBJ->in_room), GET_ROOM_VNUM(OBJ->in_room));
+      if (OBJ->in_room->people) {
+        act("$p is lost on the ground.", TRUE, OBJ->in_room->people, OBJ, 0, TO_CHAR);
+      }
       next = temp->next;
       extract_obj(OBJ);
-      continue;
 #endif
+      delete [] representation;
+      continue;
     }
 
     // Corpses either have no vnum or are 43 (belongings).

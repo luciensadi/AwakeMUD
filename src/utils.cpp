@@ -1975,7 +1975,6 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
       case SKILL_DIVING:
       case SKILL_PARACHUTING:
       case SKILL_STEALTH:
-      case SKILL_STEAL:
       case SKILL_DANCING:
       case SKILL_INSTRUMENT:
       case SKILL_LOCK_PICKING:
@@ -3941,6 +3940,81 @@ struct obj_data *ch_has_obj_with_vnum(struct char_data *ch, vnum_t vnum) {
   }
 
   return NULL;
+}
+
+#define MEGA_CHONKER_STRING 1048576
+char *generate_new_loggable_representation(struct veh_data *veh) {
+  char log_string[MEGA_CHONKER_STRING];
+  memset(log_string, 0, sizeof(char) * MEGA_CHONKER_STRING);
+
+  if (!veh) {
+    strcpy(log_string, "SYSERR: Null vehicle passed to generate_loggable_representation().");
+    mudlog(log_string, NULL, LOG_SYSLOG, TRUE);
+    return str_dup(log_string);
+  }
+
+  snprintf(log_string, sizeof(log_string), "(veh %ld-%lu owned by %ld) %s^g",
+          GET_VEH_VNUM(veh),
+          GET_VEH_IDNUM(veh),
+          veh->owner,
+          GET_VEH_NAME(veh));
+
+  if (veh->restring) {
+    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), " [restring: %s^g]", veh->restring);
+  }
+
+  // Log modifications
+  snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", with mods: [");
+  bool printed_mod = FALSE;
+  for (int mod_idx = 0; mod_idx < NUM_MODS; mod_idx++) {      
+    struct obj_data *temp = GET_MOD(veh, mod_idx);
+    if (temp) {
+      char *representation = generate_new_loggable_representation(temp);
+      snprintf(buf3, sizeof(buf3), " %s%s^g%s",
+              (!temp->next_content && printed_mod) ? "and " : "",
+              representation,
+              temp->next_content ? ";" : "");
+      strlcat(log_string, buf3, MAX_STRING_LENGTH);
+      delete [] representation;
+      printed_mod = TRUE;
+    }
+  }
+  strlcat(log_string, " ]", MAX_STRING_LENGTH);
+
+  // Log contained objects
+  snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing objs: [");
+  for (struct obj_data *temp = veh->contents; temp; temp = temp->next_content) {
+    char *representation = generate_new_loggable_representation(temp);
+    snprintf(buf3, sizeof(buf3), " %s%s^g%s",
+            (!temp->next_content && temp != veh->contents) ? "and " : "",
+            representation,
+            temp->next_content ? ";" : "");
+    strlcat(log_string, buf3, MAX_STRING_LENGTH);
+    delete [] representation;
+  }
+  strlcat(log_string, " ]", MAX_STRING_LENGTH);
+
+  // Log contained vehs
+  snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", containing vehs: {{");
+  for (struct veh_data *temp_v = veh->carriedvehs; temp_v; temp_v = temp_v->next_veh) {
+    char *representation = generate_new_loggable_representation(temp_v);
+    snprintf(buf3, sizeof(buf3), " %s%s^g%s",
+            (!temp_v->next_veh && temp_v != veh->carriedvehs) ? "and " : "",
+            representation,
+            temp_v->next_veh ? ";" : "");
+    strlcat(log_string, buf3, MAX_STRING_LENGTH);
+    delete [] representation;
+  }
+  strlcat(log_string, "}}", MAX_STRING_LENGTH);
+
+  // Log towed veh
+  if (veh->towing) {
+    char *representation = generate_new_loggable_representation(veh->towing);
+    snprintf(ENDOF(log_string), sizeof(log_string) - strlen(log_string), ", towing veh: {{%s}}", representation);
+    delete [] representation;
+  }
+
+  return str_dup(log_string);
 }
 
 // Creates a NEW loggable string from an object. YOU MUST DELETE [] THE OUTPUT OF THIS.
@@ -8151,4 +8225,18 @@ void zero_out_magazine_counts(struct obj_data *obj, int max_ammo_remaining = 0) 
   for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
     zero_out_magazine_counts(contained, max_ammo_remaining);
   }
+}
+
+extern void restore_character(struct char_data *vict, bool reset_staff_stats);
+bool restore_to_full_health_if_still_in_chargen(struct char_data *victim) {
+  // Cannot be an NPC, must still be unauthed (aka in chargen)
+  if (IS_NPC(victim) || !PLR_FLAGGED(victim, PLR_NOT_YET_AUTHED))
+    return FALSE;
+
+  // Chargen character, restore them to full.
+  restore_character(victim, FALSE);
+  send_to_char(victim, "As you're still in character generation, you have been restored to full health by staff edict.\r\n");
+  mudlog_vfprintf(victim, LOG_CHEATLOG, "Restoring %s to full health (stunned/morted in chargen).", GET_CHAR_NAME(victim));
+
+  return TRUE;
 }

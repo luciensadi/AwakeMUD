@@ -801,6 +801,10 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
     return -1;
   }
 
+  // Override: Staff get all skills to 100.
+  if (IS_SENATOR(ch))
+    return GODLY_MAX_SKILL;
+
   // Override: All language skills can be learned to the maximum from any trainer.
   //  This does remove a tiny bit of flavor (no learning Japanese to level 2 max
   //  from the guy in line at the shop), but it simplifies a lot of stuff.

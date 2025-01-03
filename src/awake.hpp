@@ -948,7 +948,7 @@ enum {
 #define SKILL_DATA_BROKERAGE         54
 #define SKILL_AURA_READING           55
 #define SKILL_STEALTH                56
-#define SKILL_STEAL                  57
+// unused
 #define SKILL_TRACK                  58
 #define SKILL_UNUSED_WAS_CLIMBING    59
 #define SKILL_PILOT_BIKE             60
@@ -2659,6 +2659,7 @@ enum {
 #define OBJ_SAEDER_PASS                    4914
 #define OBJ_LARGE_PLASTIBOARD_BOX          29326
 #define OBJ_SNOWFLAKE_KEY                  3454
+#define OBJ_ANNIVERSARY_2025_GIFT          195
 
 #define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_TITLE_TO_SCORPION              892
@@ -2716,10 +2717,12 @@ enum {
 #define OBJ_TRANSYS_SCRIBE                 1141
 #define OBJ_TRANSYS_RIFFLE                 1140
 #define OBJ_RENRAKU_BYPASS                 6109
-#define OBJ_FOXFIRE_KITSUNE                1966
+#define OBJ_FOXFIRE_KITSUNE_ANALYZE        1966
+#define OBJ_FOXFIRE_KITSUNE_DECRYPT        1967
 #define OBJ_TRANSYS_ARMOR                  1139
 #define OBJ_MATRIX_SWORD                   387
 #define OBJ_NOVATECH_R5_SLEAZE             1160
+#define OBJ_NOVATECH_R5_ARMOR              1162
 
 #ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_CYB_CERAMIC_BONE_LACING        85066

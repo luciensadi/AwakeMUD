@@ -485,6 +485,7 @@ ACMD(do_shoot)
   int dir, i, pos = 0, range = -1;
 
   FAILURE_CASE(PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT), "You can't do that while in passive combat mode. ^WTOGGLE PASSIVE^n to disable it.");
+  FAILURE_CASE(ch->in_veh, "You can't shoot between rooms from a vehicle. Step out first.");
 
   if (!(GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) &&
       !(GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON)) {

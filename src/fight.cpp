@@ -96,7 +96,7 @@ extern struct zone_data *zone_table;
 extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern void find_and_draw_weapon(struct char_data *);
-extern void crash_test(struct char_data *ch);
+extern void crash_test(struct char_data *ch, bool force_zero_successes);
 extern int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
 extern bool mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
@@ -316,6 +316,10 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
   // To get here, you're stunned or morted.
 
   GET_INIT_ROLL(victim) = 0;
+
+  if (restore_to_full_health_if_still_in_chargen(victim)) {
+    return FALSE;
+  }
 
   // SR3 p178
   if (GET_POS(victim) <= POS_SLEEPING) {
@@ -849,7 +853,9 @@ void death_cry(struct char_data * ch, idnum_t cause_of_death_idnum)
     return;
   }
 
-  for (struct char_data *listener = get_ch_in_room(ch)->people; listener; listener = listener->next_in_room) {
+  for (struct char_data *listener = get_ch_in_room(ch)->people, *next_listener; listener; listener = next_listener) {
+    next_listener = listener->next_in_room;
+    
     // Willing combatants look for targets, others rubberneck, wimpy non-sentinels flee
     if (MOB_FLAGGED(listener, MOB_HELPER) || MOB_FLAGGED(listener, MOB_GUARD)) {
       set_mob_alarm(listener, cause_of_death_idnum, 30);
@@ -6567,11 +6573,23 @@ void order_list(struct matrix_icon *start)
 void chkdmg(struct veh_data * veh)
 {
   if (veh->damage <= VEH_DAM_THRESHOLD_LIGHT) {
-    send_to_veh("A scratch appears on the paintwork.\r\n", veh, NULL, TRUE);
+    if (veh_is_aircraft(veh)) {
+      send_to_veh("You estimate you'll need just a few touch-ups to get back into pristine shape.\r\n", veh, NULL, TRUE);
+    } else {
+      send_to_veh("A scratch appears on the paintwork.\r\n", veh, NULL, TRUE);
+    }
   } else if (veh->damage <= VEH_DAM_THRESHOLD_MODERATE) {
-    send_to_veh("You see some dings and scratches appear on the paintwork.\r\n", veh, NULL, TRUE);
+    if (veh_is_aircraft(veh)) {
+      send_to_veh("You figure it's about time for some preventive repairs.\r\n", veh, NULL, TRUE);
+    } else {
+      send_to_veh("You see some dings and scratches appear on the paintwork.\r\n", veh, NULL, TRUE);
+    }
   } else if (veh->damage <= VEH_DAM_THRESHOLD_SEVERE) {
-    send_to_veh("The windshield shatters and the bumper falls off.\r\n", veh, NULL, TRUE);
+    if (veh_is_aircraft(veh)) {
+      send_to_veh("You realize you should definitely do some engine maintenance before taking off again.\r\n", veh, NULL, TRUE);
+    } else {
+      send_to_veh("The windshield shatters and the bumper falls off.\r\n", veh, NULL, TRUE);
+    }
   } else if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
     send_to_veh("The engine starts spewing smoke and flames.\r\n", veh, NULL, TRUE);
   } else {
@@ -6869,11 +6887,11 @@ bool vram(struct veh_data * veh, struct char_data * vict, struct veh_data * tveh
         case SERIOUS:
           tveh->cspeed = SPEED_CRUISING;
           if (tveh->rigger)
-            crash_test(tveh->rigger);
+            crash_test(tveh->rigger, FALSE);
           else
             for (struct char_data *pilot = tveh->people; pilot; pilot = pilot->next_in_veh)
               if (AFF_FLAGGED(pilot, AFF_PILOT))
-                crash_test(pilot);
+                crash_test(pilot, FALSE);
           break;
       }
     chkdmg(tveh);
@@ -6901,11 +6919,11 @@ bool vram(struct veh_data * veh, struct char_data * vict, struct veh_data * tveh
         case SERIOUS:
           veh->cspeed = SPEED_CRUISING;
           if (veh->rigger)
-            crash_test(veh->rigger);
+            crash_test(veh->rigger, FALSE);
           else
             for (struct char_data *pilot = veh->people; pilot; pilot = pilot->next_in_veh)
               if (AFF_FLAGGED(pilot, AFF_PILOT))
-                crash_test(pilot);
+                crash_test(pilot, FALSE);
           break;
       }
     chkdmg(veh);

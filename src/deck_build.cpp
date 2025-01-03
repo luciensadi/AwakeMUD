@@ -286,6 +286,10 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
             send_to_char(CH, "Design Saved!\r\n");
             break;
         case '4':
+            if (GET_PART_TARGET_MPCP(PART) <= 0) {
+              send_to_char(CH, "You must specify the MPCP rating first.\r\n");
+              return;
+            }
             if (part_can_have_its_rating_set(PART)) {
               switch (GET_PART_TYPE(PART)) {
                 case PART_IO:
