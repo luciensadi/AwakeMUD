@@ -4863,7 +4863,7 @@ ACMD(do_syspoints) {
       send_to_char(ch, " - You %s^n purchased the ability to see ROLLS output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
       send_to_char(ch, " - You %s^n purchased the ability to see VNUMS in your prompt.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS) ? "^ghave" : "^yhave not yet");
 #ifdef PLAYER_EXDESCS
-      send_to_char(ch, " - You have purchased %d EXDESC slots.\r\n", get_purchased_exdesc_max(ch));
+      send_to_char(ch, " - You have purchased %d EXDESC slots.\r\n", get_exdesc_max(ch));
 #endif
       return;
     }

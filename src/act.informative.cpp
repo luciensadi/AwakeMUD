@@ -979,6 +979,7 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
       send_to_char("", ch);
     }
 
+#ifdef PLAYER_EXDESCS
     if (CHAR_HAS_EXDESCS(i) && used_keyword && *used_keyword) {
       char uppercase[strlen(used_keyword) + 1];
       for (size_t idx = 0; idx < strlen(used_keyword); idx++) { uppercase[idx] = toupper(used_keyword[idx]); }
@@ -989,6 +990,7 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
                    HASHAVE(i),
                    uppercase);
     }
+#endif
 
     if (i != ch && GET_HEIGHT(i) > 0 && GET_WEIGHT(i) > 0) {
       if ((GET_HEIGHT(i) % 10) < 5)
@@ -2675,7 +2677,7 @@ char *find_exdesc(char *word, struct extra_descr_data * list)
  * matches the target.  First, see if there is another char in the room
  * with the name.  Then check local objs for exdescs.
  */
-void look_at_target(struct char_data * ch, char *arg)
+void look_at_target(struct char_data * ch, char *arg, char *extra_args)
 {
   int bits, found = 0, j;
   struct room_data *was_in = ch->in_room;
@@ -2730,7 +2732,7 @@ void look_at_target(struct char_data * ch, char *arg)
   {
 #ifdef PLAYER_EXDESCS
     // If this isn't an exdesc invocation, look at the character.
-    if (!look_at_exdescs(ch, found_char, arg)) {
+    if (!look_at_exdescs(ch, found_char, extra_args)) {
 #else
     {
 #endif
@@ -2843,7 +2845,6 @@ ACMD_CONST(do_look) {
 
 ACMD(do_look)
 {
-  static char arg2[MAX_INPUT_LENGTH];
   int look_type;
 
   if (!ch->desc)
@@ -2854,28 +2855,31 @@ ACMD(do_look)
   else if (!LIGHT_OK(ch)) {
     send_to_char("It is pitch black...\r\n", ch);
   } else {
-    half_chop(argument, arg, arg2, sizeof(arg2));
+    char *remainder = any_one_arg(argument, arg);
+    skip_spaces(&remainder);
 
     if (subcmd == SCMD_READ) {
       if (!*arg)
         send_to_char("Read what?\r\n", ch);
-      else
-        look_at_target(ch, arg);
+      else {
+        skip_spaces(&remainder);
+        look_at_target(ch, arg, remainder);
+      }
       return;
     }
     if (!*arg)                  /* "look" alone, without an argument at all */
       look_at_room(ch, 1, subcmd == SCMD_QUICKLOOK);
     else if (is_abbrev(arg, "in"))
-      look_in_obj(ch, arg2, FALSE);
+      look_in_obj(ch, remainder, FALSE);
     /* did the char type 'look <direction>?' */
     else if ((look_type = search_block(arg, lookdirs, FALSE)) >= 0 || (look_type = search_block(arg, fulllookdirs, FALSE)) >= 0)
       look_in_direction(ch, convert_look[look_type]);
     else if (is_abbrev(arg, "at"))
-      do_examine(ch, arg2, 0, SCMD_EXAMINE);
+      do_examine(ch, remainder, 0, SCMD_EXAMINE);
     else
-      do_examine(ch, arg, 0, SCMD_EXAMINE);
+      do_examine(ch, argument, 0, SCMD_EXAMINE);
     /* else if (is_abbrev(arg, "at"))
-      look_at_target(ch, arg2);
+      look_at_target(ch, remainder); // todo split remainder again to get token
     else
       look_at_target(ch, arg);
       */
@@ -4103,14 +4107,25 @@ ACMD(do_examine)
   struct char_data *tmp_char;
   struct obj_data *tmp_object;
   struct veh_data *found_veh = NULL;
-  one_argument(argument, arg);
+
+  if (IS_SENATOR(ch)) {
+    send_to_char(ch, "Entering do_examine with argument '%s'\r\n", argument);
+  }
+  
+  char *remainder = any_one_arg(argument, arg);
+
+  if (IS_SENATOR(ch)) {
+    send_to_char(ch, "Now at '%s' w/ remainder '%s'\r\n", arg, remainder);
+  }
 
   if (!*arg) {
     send_to_char("Examine what?\r\n", ch);
     return;
   }
-  if (subcmd == SCMD_EXAMINE)
-    look_at_target(ch, arg);
+  if (subcmd == SCMD_EXAMINE) {
+    skip_spaces(&remainder);
+    look_at_target(ch, arg, remainder);
+  }
 
   if (!ch->in_veh || (ch->in_veh && !ch->vfront))
     found_veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
