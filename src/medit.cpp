@@ -1409,6 +1409,9 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     } else {
       GET_MAX_PHYSICAL(MOB) = number * 100;
       GET_PHYSICAL(MOB) = number * 100;
+      if (GET_MAX_PHYSICAL(MOB) <= 0) {
+        GET_DEFAULT_POS(MOB) = MIN(GET_DEFAULT_POS(MOB), POS_MORTALLYW);
+      }
       medit_disp_menu(d);
     }
     break;
@@ -1421,6 +1424,9 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     } else {
       GET_MAX_MENTAL(MOB) = number * 100;
       GET_MENTAL(MOB) = number * 100;
+      if (GET_MAX_MENTAL(MOB) <= 0) {
+        GET_DEFAULT_POS(MOB) = MIN(GET_DEFAULT_POS(MOB), POS_STUNNED);
+      }
       medit_disp_menu(d);
     }
     break;
@@ -1781,6 +1787,12 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       medit_disp_pos_menu(d);
     } else {
       GET_DEFAULT_POS(MOB) = GET_POS(MOB) = number;
+      if (GET_DEFAULT_POS(MOB) <= POS_MORTALLYW) {
+        GET_MAX_PHYSICAL(MOB) = GET_PHYSICAL(MOB) = 0;
+        GET_MAX_MENTAL(MOB) = GET_MENTAL(MOB) = 0;
+      } else if (GET_DEFAULT_POS(MOB) <= POS_STUNNED) {
+        GET_MAX_MENTAL(MOB) = GET_MENTAL(MOB) = 0;
+      }
       medit_disp_menu(d);
     }
     break;
