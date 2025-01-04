@@ -3572,9 +3572,7 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(mob_specials.spare1);
   REPLICATE(mob_specials.spare2);
   REPLICATE(points.mental);
-  REPLICATE(points.max_mental);
   REPLICATE(points.physical);
-  REPLICATE(points.max_physical);
   REPLICATE(points.init_roll);
   REPLICATE(points.sustained[0]);
   REPLICATE(points.sustained[1]);
