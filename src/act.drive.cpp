@@ -2585,7 +2585,8 @@ void stop_driving(struct char_data *ch, bool is_involuntary) {
       snprintf(buf1, sizeof(buf1), "%s slumps, the controls slipping from %s fingers.\r\n", capitalize(GET_NAME(ch)), HSHR(ch));
       send_to_veh(buf1, VEH, ch, FALSE);
       
-      if (ch->in_veh->cspeed > SPEED_IDLE) {
+      // If it's moving and not under gridguide:
+      if (ch->in_veh->cspeed > SPEED_IDLE && !ch->in_veh->dest) {
         // Crash test with zero successes-- they've gone unconscious or something.
         crash_test(ch, TRUE);
       }
@@ -2595,5 +2596,4 @@ void stop_driving(struct char_data *ch, bool is_involuntary) {
       send_to_veh(buf1, VEH, ch, FALSE);
     }
   }
-
 }
