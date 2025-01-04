@@ -4107,16 +4107,8 @@ ACMD(do_examine)
   struct char_data *tmp_char;
   struct obj_data *tmp_object;
   struct veh_data *found_veh = NULL;
-
-  if (IS_SENATOR(ch)) {
-    send_to_char(ch, "Entering do_examine with argument '%s'\r\n", argument);
-  }
   
   char *remainder = any_one_arg(argument, arg);
-
-  if (IS_SENATOR(ch)) {
-    send_to_char(ch, "Now at '%s' w/ remainder '%s'\r\n", arg, remainder);
-  }
 
   if (!*arg) {
     send_to_char("Examine what?\r\n", ch);
