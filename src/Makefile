@@ -31,7 +31,7 @@ BOOST_FLAGS = -lboost_filesystem
 
 # You probably want to comment this out: This is the makefile specification for the GitHub runner.
 LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lnsl -lcurl
-MYFLAGS = -DNOCRYPT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11
+MYFLAGS = -DNOCRYPT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -Wno-vla -std=c++11
 
 # OSX? Uncomment these:
 #LIBS = -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lsodium -lcurl
