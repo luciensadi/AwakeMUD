@@ -4277,6 +4277,7 @@ struct char_data *read_mobile(int nr, int type)
   mob->player.time.logon = time(0);
   mob->player.tradition = mob->player.aspect = 0;
   mob->char_specials.saved.left_handed = (!number(0, 9) ? 1 : 0);
+  GET_POS(mob) = (GET_DEFAULT_POS(mob) > 0 ? GET_DEFAULT_POS(mob) : POS_STANDING);
 
   mob_index[i].number++;
 

@@ -1806,7 +1806,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   strlcat(buf, "\r\n", sizeof(buf));
 
   strlcat(buf, "Default position: ", sizeof(buf));
-  sprinttype((k->mob_specials.default_pos), position_types, buf2, sizeof(buf2));
+  sprinttype(GET_DEFAULT_POS(k), position_types, buf2, sizeof(buf2));
   strlcat(buf, buf2, sizeof(buf));
 
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Idle Timer: [%d], Emote Timer: [%d]\r\n", k->char_specials.timer, k->char_specials.last_social_action);
@@ -1962,7 +1962,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
 
 
   strlcat(buf, "Default position: ", sizeof(buf));
-  sprinttype((k->mob_specials.default_pos), position_types, buf2, sizeof(buf2));
+  sprinttype(GET_DEFAULT_POS(k), position_types, buf2, sizeof(buf2));
   strlcat(buf, buf2, sizeof(buf));
   strlcat(buf, "     Mob Spec-Proc: ", sizeof(buf));
   if (mob_index[GET_MOB_RNUM(k)].func || mob_index[GET_MOB_RNUM(k)].sfunc)
