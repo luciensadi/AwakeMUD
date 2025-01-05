@@ -1871,8 +1871,8 @@ void parse_mobile(File &in, long nr)
   GET_HEIGHT(mob) = data.GetInt("POINTS/Height", 100);
   GET_WEIGHT(mob) = data.GetInt("POINTS/Weight", 5);
   GET_LEVEL(mob) = data.GetInt("POINTS/Level", 0);
-  GET_MAX_PHYSICAL(mob) = data.GetInt("POINTS/MaxPhys", 10*100);
-  GET_MAX_MENTAL(mob) = data.GetInt("POINTS/MaxMent", 10*100);
+  GET_MAX_PHYSICAL(mob) = data.GetInt("POINTS/MaxPhys", 10) * 100;
+  GET_MAX_MENTAL(mob) = data.GetInt("POINTS/MaxMent", 10) * 100;
   int innate_ballistic = data.GetInt("POINTS/Ballistic", 0);
   int innate_impact = data.GetInt("POINTS/Impact", 0);
   GET_NUYEN_RAW(mob) = data.GetInt("POINTS/Cash", 0);
