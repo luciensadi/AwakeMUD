@@ -7895,29 +7895,20 @@ SPECIAL(grenada_gatekeeper)
   switch (GET_MOB_VNUM(mob)) {
     case 101310:
       if (CMD_IS("north")) {
-        if (EXIT(ch, NORTH) && !IS_SET(EXIT(ch, NORTH)->exit_info, EX_CLOSED)) {
-          send_to_char(ch, "The door slides shut as you approach it.\r\n");
-          SET_BIT(EXIT(ch, NORTH)->exit_info, EX_CLOSED);
-          return TRUE;
-        }
+        act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
+        return TRUE;
       }
       break;
     case 101311:
       if (CMD_IS("west")) {
-        if (EXIT(ch, WEST) && !IS_SET(EXIT(ch, WEST)->exit_info, EX_CLOSED)) {
-          send_to_char(ch, "The door slides shut as you approach it.\r\n");
-          SET_BIT(EXIT(ch, WEST)->exit_info, EX_CLOSED);
-          return TRUE;
-        }
+        act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
+        return TRUE;
       }
       break;
     case 101312:
       if (CMD_IS("east")) {
-        if (EXIT(ch, EAST) && !IS_SET(EXIT(ch, EAST)->exit_info, EX_CLOSED)) {
-          send_to_char(ch, "The door slides shut as you approach it.\r\n");
-          SET_BIT(EXIT(ch, EAST)->exit_info, EX_CLOSED);
-          return TRUE;
-        }
+        act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
+        return TRUE;
       }
       break;
     default:
