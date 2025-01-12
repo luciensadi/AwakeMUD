@@ -7894,19 +7894,19 @@ SPECIAL(grenada_gatekeeper)
 
   switch (GET_MOB_VNUM(mob)) {
     case 101310:
-      if (CMD_IS("north")) {
+      if (CMD_IS("north") && !IS_SENATOR(ch)) {
         act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
         return TRUE;
       }
       break;
     case 101311:
-      if (CMD_IS("west")) {
+      if (CMD_IS("west") && !IS_SENATOR(ch)) {
         act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
         return TRUE;
       }
       break;
     case 101312:
-      if (CMD_IS("east")) {
+      if (CMD_IS("east") && !IS_SENATOR(ch)) {
         act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
         return TRUE;
       }
