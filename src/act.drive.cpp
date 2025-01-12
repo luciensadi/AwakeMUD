@@ -2574,26 +2574,25 @@ void stop_driving(struct char_data *ch, bool is_involuntary) {
   if (!ch || !ch->in_veh)
     return;
 
+  if (is_involuntary) {
+    send_to_char("The controls slip from your unresponsive fingers.\r\n", ch);
+    snprintf(buf1, sizeof(buf1), "%s slumps, the controls slipping from %s fingers.\r\n", capitalize(GET_NAME(ch)), HSHR(ch));
+    send_to_veh(buf1, VEH, ch, FALSE);
+    
+    if (ch->in_veh->cspeed > SPEED_IDLE) {
+      // Crash test with no driver -- they've gone unconscious or something.
+      crash_test(ch, TRUE);
+    }
+  } else {
+    send_to_char("You relinquish the driver's seat.\r\n", ch);
+    snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
+    send_to_veh(buf1, VEH, ch, FALSE);
+  }
+
   if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     stop_rigging(ch);
   } else if (AFF_FLAGGED(ch, AFF_PILOT)) {
     stop_vehicle(ch->in_veh);
     AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
-
-    if (is_involuntary) {
-      send_to_char("The controls slip from your unresponsive fingers.\r\n", ch);
-      snprintf(buf1, sizeof(buf1), "%s slumps, the controls slipping from %s fingers.\r\n", capitalize(GET_NAME(ch)), HSHR(ch));
-      send_to_veh(buf1, VEH, ch, FALSE);
-      
-      if (ch->in_veh->cspeed > SPEED_IDLE) {
-        // Crash test with no driver -- they've gone unconscious or something.
-        crash_test(ch, TRUE);
-      }
-    } else {
-      send_to_char("You relinquish the driver's seat.\r\n", ch);
-      snprintf(buf1, sizeof(buf1), "%s relinquishes the driver's seat.\r\n", capitalize(GET_NAME(ch)));
-      send_to_veh(buf1, VEH, ch, FALSE);
-    }
   }
-
 }
