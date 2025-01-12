@@ -2154,7 +2154,7 @@ SPECIAL(jeff) {
       act("$n looks at $N suspiciously.", FALSE, jeff, 0, ch, TO_NOTVICT);
       act("You look at $N suspiciously.", FALSE, jeff, 0, ch, TO_CHAR);
       act("$n looks at you suspiciously.", FALSE, jeff, 0, ch, TO_VICT);
-      if (jeff->in_room->number != 2326) {
+      if (GET_ROOM_VNUM(jeff->in_room) != 2326) {
         do_say(jeff, "Where the frag am I?", 0, 0);
       } else {
         if (IS_SET(EXIT(jeff, EAST)->exit_info, EX_CLOSED)) {
@@ -2169,7 +2169,7 @@ SPECIAL(jeff) {
       return TRUE;
     }
   } else if (CMD_IS("east")) {
-    if (perform_move(ch, EAST, LEADER, NULL) && jeff->in_room->number == 2326) {
+    if (perform_move(ch, EAST, LEADER, NULL) && GET_ROOM_VNUM(jeff->in_room) == 2326) {
       if (!IS_SET(EXIT(jeff, EAST)->exit_info, EX_CLOSED))
         do_gen_door(jeff, "roadblock", 0, SCMD_CLOSE);
     }
@@ -2180,8 +2180,25 @@ SPECIAL(jeff) {
     if (!strcasecmp("roadblock", args))
       do_say(jeff, "Slot off, it's 10 creds to pass chummer.", 0, 0);
     return TRUE;
-  } else if (number(0, 50) == 11)
-    do_say(jeff, "10 creds to pass through the roadblock chummer.", 0, 0);
+  } else {
+    switch (number(0, 500)) {
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+      case 10:
+        do_say(jeff, "10 creds to pass through the roadblock chummer.", 0, 0);
+        break;
+      case 11:
+        do_say(jeff, "Gaslight, gatekeep, guyboss.", 0, 0);
+        break;
+    }
+  }
 
   return FALSE;
 }
