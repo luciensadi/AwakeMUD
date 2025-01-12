@@ -123,10 +123,12 @@ void crash_test(struct char_data *ch, bool no_driver)
 
   if (success_test(skill, target, ch, "crash_test vehicle skill test") > 0)
   {
-    snprintf(crash_buf, sizeof(crash_buf), "^y%s shimmies sickeningly under you, but you manage to keep control.^n\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+    snprintf(crash_buf, sizeof(crash_buf), "^y%s shimmies sickeningly under you, but remains under control.^n\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     send_to_veh(crash_buf, veh, NULL, TRUE);
-    if (!number(0, 10))
-      send_to_char("^YYou don't have the skills to be driving like this!^n\r\n", ch);
+
+    // we didn't crash, so we *do* have the skills to be driving like this? - Khai
+    // if (!number(0, 10))
+    //   send_to_char("^YYou don't have the skills to be driving like this!^n\r\n", ch);
     return;
   }
   
@@ -156,11 +158,17 @@ void crash_test(struct char_data *ch, bool no_driver)
       char_to_room(tch, get_veh_in_room(veh));
       damage_total = convert_damage(stage(0 - success_test(GET_BOD(tch), power, tch, "crash_test damage resist"), MODERATE));
       send_to_char(tch, "You are thrown from the %s!\r\n", veh->type == VEH_BIKE ? "bike" : "boat");
-      if (damage(tch, tch, damage_total, TYPE_CRASH, PHYSICAL)) {
-        continue;
-      }
-      AFF_FLAGS(tch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+      damage(tch, tch, damage_total, TYPE_CRASH, PHYSICAL);
     }
+    AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+    veh->cspeed = SPEED_OFF;
+    return;
+  }
+
+  // Can't drive wrecked vehicles
+  if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+    send_to_veh("You slam against your straps as you jerk to a sudden stop.\r\n", veh, 0, TRUE);
+    AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
     veh->cspeed = SPEED_OFF;
   }
 }
