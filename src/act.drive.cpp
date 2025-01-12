@@ -104,7 +104,7 @@ void stop_chase(struct veh_data *veh)
   veh->following = NULL;
 }
 
-void crash_test(struct char_data *ch, bool force_zero_successes)
+void crash_test(struct char_data *ch, bool no_driver)
 {
   int target = 0, skill = 0;
   int power, attack_resist = 0, damage_total = SERIOUS;
@@ -119,9 +119,9 @@ void crash_test(struct char_data *ch, bool force_zero_successes)
   snprintf(buf, sizeof(buf), "%s begins to lose control!\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
   send_to_room(buf, get_veh_in_room(veh), veh);
 
-  skill = veh_skill(ch, veh, &target) + veh->autonav;
+  skill = (no_driver ? 0 : veh_skill(ch, veh, &target)) + veh->autonav;
 
-  if (!force_zero_successes && success_test(skill, target, ch, "crash_test vehicle skill test") > 0)
+  if (success_test(skill, target, ch, "crash_test vehicle skill test") > 0)
   {
     snprintf(crash_buf, sizeof(crash_buf), "^y%s shimmies sickeningly under you, but you manage to keep control.^n\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
     send_to_veh(crash_buf, veh, NULL, TRUE);
@@ -2586,7 +2586,7 @@ void stop_driving(struct char_data *ch, bool is_involuntary) {
       send_to_veh(buf1, VEH, ch, FALSE);
       
       if (ch->in_veh->cspeed > SPEED_IDLE) {
-        // Crash test with zero successes-- they've gone unconscious or something.
+        // Crash test with no driver -- they've gone unconscious or something.
         crash_test(ch, TRUE);
       }
     } else {
