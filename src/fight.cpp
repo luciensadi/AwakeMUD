@@ -966,6 +966,8 @@ void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
         dest_room = get_jurisdiction_docwagon_room(GET_JURISDICTION(in_room));
       }
 
+      stop_driving(ch, TRUE);
+
       if (ch->persona) {
         if (access_level(ch, LVL_PRESIDENT))
           send_to_char(ch, "^YExtracted icon from host.\r\n");
@@ -2358,6 +2360,8 @@ void docwagon_retrieve(struct char_data *ch) {
   if (GET_SUSTAINED(ch)) {
     end_all_sustained_spells(ch);
   }
+
+  stop_driving(ch, TRUE);
 
   // Remove them from the Matrix.
   if (ch->persona) {
