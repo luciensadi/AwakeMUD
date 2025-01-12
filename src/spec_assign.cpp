@@ -657,9 +657,9 @@ void assign_mobiles(void)
 
   SPECIAL(grenada_gatekeeper);
 
-  ASSIGNMOB(101310, grenada_gatekeeper)
-  ASSIGNMOB(101311, grenada_gatekeeper)
-  ASSIGNMOB(101312, grenada_gatekeeper)
+  ASSIGNMOB(101310, grenada_gatekeeper);
+  ASSIGNMOB(101311, grenada_gatekeeper);
+  ASSIGNMOB(101312, grenada_gatekeeper);
 #else
   ASSIGNMOB(10011, soulbound_unbinder);
 #endif
