@@ -7950,7 +7950,7 @@ SPECIAL(grenada_gatekeeper)
     if (said_passphrase) {
       act("$N glances around, then ushers you towards the sliding door.", FALSE, ch, NULL, mob, TO_CHAR);
       act("$N glances around, then ushers $n towards the sliding door.", TRUE, ch, NULL, mob, TO_NOTVICT);
-      act("You glance around, then usher $N towards the sliding door.", FALSE, ch, NULL, mob, TO_CHAR);
+      act("You glance around, then usher $N towards the sliding door.", FALSE, ch, NULL, mob, TO_VICT);
 
       rnum_t to_room = real_room(to_room_vnum);
       if (to_room < 0) {
@@ -7962,6 +7962,10 @@ SPECIAL(grenada_gatekeeper)
       char_to_room(ch, &world[to_room]);
 
       act("$n is ushered in.", FALSE, ch, NULL, mob, TO_ROOM);
+
+      if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+        look_at_room(ch, 0, 0);
+      }
       return TRUE;
     }
   }
