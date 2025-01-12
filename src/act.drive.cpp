@@ -29,7 +29,7 @@ ACMD_CONST(do_return);
 int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
 void stop_vehicle(struct veh_data *veh);
 void stop_rigging(struct char_data *ch);
-void stop_driving(struct char_data *ch);
+void stop_driving(struct char_data *ch, bool is_involuntary);
 int calculate_vehicle_entry_load(struct veh_data *veh);
 
 extern int max_npc_vehicle_lootwreck_time;
