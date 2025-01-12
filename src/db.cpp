@@ -1871,8 +1871,8 @@ void parse_mobile(File &in, long nr)
   GET_HEIGHT(mob) = data.GetInt("POINTS/Height", 100);
   GET_WEIGHT(mob) = data.GetInt("POINTS/Weight", 5);
   GET_LEVEL(mob) = data.GetInt("POINTS/Level", 0);
-  GET_MAX_PHYSICAL(mob) = data.GetInt("POINTS/MaxPhys", 10*100);
-  GET_MAX_MENTAL(mob) = data.GetInt("POINTS/MaxMent", 10*100);
+  GET_MAX_PHYSICAL(mob) = data.GetInt("POINTS/MaxPhys", 10) * 100;
+  GET_MAX_MENTAL(mob) = data.GetInt("POINTS/MaxMent", 10) * 100;
   int innate_ballistic = data.GetInt("POINTS/Ballistic", 0);
   int innate_impact = data.GetInt("POINTS/Impact", 0);
   GET_NUYEN_RAW(mob) = data.GetInt("POINTS/Cash", 0);
@@ -4308,6 +4308,15 @@ struct char_data *read_mobile(int nr, int type)
 
   affect_total(mob);
 
+  GET_POS(mob) = (GET_DEFAULT_POS(mob) > 0 ? GET_DEFAULT_POS(mob) : POS_STANDING);
+
+  if (GET_POS(mob) == POS_STUNNED) {
+    GET_MENTAL(mob) = -10 * 100;
+  } else if (GET_POS(mob) == POS_MORTALLYW) {
+    GET_PHYSICAL(mob) = 0;
+    GET_MENTAL(mob) = 0;
+  }
+
   if ((GET_MOB_SPEC(mob) || GET_MOB_SPEC2(mob)) && !MOB_FLAGGED(mob, MOB_SPEC))
     MOB_FLAGS(mob).SetBit(MOB_SPEC);
 
@@ -5770,8 +5779,8 @@ void reset_char(struct char_data * ch)
   ch->next_fighting = NULL;
   ch->next_in_room = NULL;
   FIGHTING(ch) = NULL;
-  ch->char_specials.position = POS_STANDING;
-  ch->mob_specials.default_pos = POS_STANDING;
+  GET_POS(ch) = POS_STANDING;
+  GET_DEFAULT_POS(ch) = POS_STANDING;
   calc_weight(ch);
 
   if (GET_PHYSICAL(ch) < 100)

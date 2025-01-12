@@ -64,6 +64,11 @@ void mental_gain(struct char_data * ch)
     return;
   }
 
+  // Can't regenerate? Skip.
+  if (IS_NPC(ch) && GET_DEFAULT_POS(ch) <= POS_STUNNED) {
+    return;
+  }
+
   bool is_npc = IS_NPC(ch);
 
   if (is_npc && ch->desc && ch->desc->original && PLR_FLAGS(ch->desc->original).IsSet(PLR_PROJECT) && GET_MOB_VNUM(ch) == 22) {
@@ -161,6 +166,11 @@ void physical_gain(struct char_data * ch)
 {
   // Not injured? Skip.
   if (GET_PHYSICAL(ch) == GET_MAX_PHYSICAL(ch)) {
+    return;
+  }
+
+  // Can't regenerate? Skip.
+  if (IS_NPC(ch) && GET_DEFAULT_POS(ch) == POS_MORTALLYW) {
     return;
   }
 

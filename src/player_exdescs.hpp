@@ -49,13 +49,13 @@ public:
   void set_pc_idnum(idnum_t new_id) { pc_idnum = new_id; }
 
   const char *get_keyword() { return keyword; }
-  void set_keyword(const char *new_keyword) { keyword = new_keyword; }
+  void set_keyword(const char *new_keyword) { delete [] keyword; keyword = str_dup(new_keyword); }
 
   const char *get_name() { return name; }
-  void set_name(const char *new_name) { name = new_name; }
+  void set_name(const char *new_name) { delete [] name; name = str_dup(new_name); }
 
   const char *get_desc() { return desc; }
-  void set_desc(const char *new_desc) { desc = new_desc; }
+  void set_desc(const char *new_desc) { delete [] desc; desc = str_dup(new_desc); }
 
   Bitfield get_wear_slots() { return wear_slots; }
   void set_wear_slots(const char *new_string) { wear_slots.FromString(new_string); }
@@ -72,8 +72,9 @@ public:
 
 bool look_at_exdescs(struct char_data *viewer, struct char_data *vict, char *arg);
 
-void syspoints_purchase_exdescs(struct char_data *ch);
+void syspoints_purchase_exdescs(struct char_data *ch, char *buf, bool is_confirmed);
 
-int get_purchased_exdesc_max(struct char_data *ch);
+void set_exdesc_max(struct char_data *ch, int amount, bool save_to_db);
+int get_exdesc_max(struct char_data *ch);
 
 void load_exdescs_from_db(struct char_data *ch);

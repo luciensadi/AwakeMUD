@@ -4863,7 +4863,7 @@ ACMD(do_syspoints) {
       send_to_char(ch, " - You %s^n purchased the ability to see ROLLS output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
       send_to_char(ch, " - You %s^n purchased the ability to see VNUMS in your prompt.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS) ? "^ghave" : "^yhave not yet");
 #ifdef PLAYER_EXDESCS
-      send_to_char(ch, " - You have purchased %d EXDESC slots.\r\n", get_purchased_exdesc_max(ch));
+      send_to_char(ch, " - You have purchased %d EXDESC slots.\r\n", get_exdesc_max(ch));
 #endif
       return;
     }
@@ -5093,14 +5093,19 @@ ACMD(do_syspoints) {
       mudlog_vfprintf(ch, LOG_GRIDLOG, "%s traded %d nuyen for one syspoint (now has %d)", GET_CHAR_NAME(ch), SYSP_NUYEN_PURCHASE_COST, GET_SYSTEM_POINTS(ch));
       playerDB.SaveChar(ch);
 
+      send_to_char(ch, "You trade %d nuyen for a syspoint, bringing your syspoint total to %d.\r\n",
+                   SYSP_NUYEN_PURCHASE_COST,
+                   GET_SYSTEM_POINTS(ch));
+
       return;
     }
 
     if (is_abbrev(arg, "analyze")) {
 #define ANALYZE_COST 2
       FAILURE_CASE_PRINTF(!*buf,
-                          "This will spend %d syspoints to tell you the min-max rep range and number of jobs available from a given Johnson.\r\nSyntax: SYSPOINTS ANALYZE <target Johnson>\r\n",
-                          ANALYZE_COST);
+                          "This will spend %d syspoint%s to tell you the min-max rep range and number of jobs available from a given Johnson.\r\nSyntax: SYSPOINTS ANALYZE <target Johnson>\r\n",
+                          ANALYZE_COST,
+                          ANALYZE_COST == 1 ? "" : "s");
 
       struct char_data *to = ch->in_veh ? get_char_veh(ch, buf, ch->in_veh) : to = get_char_room_vis(ch, buf);
 
@@ -5111,7 +5116,7 @@ ACMD(do_syspoints) {
         send_to_char(ch, "You spend %d syspoint%s.\r\n", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
         GET_SYSTEM_POINTS(ch) -= ANALYZE_COST;
       } else {
-        send_to_char(ch, "You can't afford that: SYSPOINTS ANALYZE costs %d syspoint%s.", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
+        send_to_char(ch, "You can't afford that: SYSPOINTS ANALYZE costs %d syspoint%s.\r\n", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
         return;
       }
 
@@ -5132,7 +5137,7 @@ ACMD(do_syspoints) {
 
 #ifdef PLAYER_EXDESCS
     if (is_abbrev(arg, "exdescs") || is_abbrev(arg, "extra descriptions")) {
-      syspoints_purchase_exdescs(ch);
+      syspoints_purchase_exdescs(ch, buf, FALSE);
       return;
     }
 #endif

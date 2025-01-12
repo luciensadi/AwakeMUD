@@ -7883,6 +7883,96 @@ SPECIAL(oppressive_atmosphere) {
   return FALSE;
 }
 
+#define GATEKEEPER_A_CODEWORD "the game is more fun if you don't try to look things up like this"
+#define GATEKEEPER_B_CODEWORD "the game is more fun if you don't try to look things up like this"
+#define GATEKEEPER_C_CODEWORD "the game is more fun if you don't try to look things up like this"
+SPECIAL(grenada_gatekeeper)
+{
+  struct char_data *mob = (struct char_data *) me;
+  if (!AWAKE(mob))
+    return FALSE;
+
+  switch (GET_MOB_VNUM(mob)) {
+    case 101310:
+      if (CMD_IS("north") && !IS_SENATOR(ch)) {
+        act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
+        return TRUE;
+      }
+      break;
+    case 101311:
+      if (CMD_IS("west") && !IS_SENATOR(ch)) {
+        act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
+        return TRUE;
+      }
+      break;
+    case 101312:
+      if (CMD_IS("east") && !IS_SENATOR(ch)) {
+        act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
+        return TRUE;
+      }
+      break;
+    default:
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got mob vnum %ld to grenada_gatekeeper spec!", GET_MOB_VNUM(mob));
+      return FALSE;
+  }
+
+  if ((CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto")) && !IS_ASTRAL(ch) && *argument) {
+    skip_spaces(&argument);
+
+    if (CMD_IS("sayto")) {
+      char sayto_target[MAX_INPUT_LENGTH];
+      one_argument(argument, sayto_target);
+      // Eventually we should verify the sayto target, but for now, we skip it. This block just serves to allow the next to identify the blue-eyes string.
+    }
+
+    // Switch based on the mob's vnum.
+    bool said_passphrase = FALSE;
+    vnum_t to_room_vnum;
+
+    switch (GET_MOB_VNUM(mob)) {
+      case 101310:
+        said_passphrase = str_str(argument, GATEKEEPER_A_CODEWORD);
+        to_room_vnum = 101302;
+        break;
+      case 101311:
+        said_passphrase = str_str(argument, GATEKEEPER_B_CODEWORD);
+        to_room_vnum = 101311;
+        break;
+      case 101312:
+        said_passphrase = str_str(argument, GATEKEEPER_C_CODEWORD);
+        to_room_vnum = 101321;
+        break;
+      default:
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got mob vnum %ld to grenada_gatekeeper spec!", GET_MOB_VNUM(mob));
+        return FALSE;
+    }
+
+    if (said_passphrase) {
+      act("$N glances around, then ushers you towards the sliding door.", FALSE, ch, NULL, mob, TO_CHAR);
+      act("$N glances around, then ushers $n towards the sliding door.", TRUE, ch, NULL, mob, TO_NOTVICT);
+      act("You glance around, then usher $N towards the sliding door.", FALSE, ch, NULL, mob, TO_VICT);
+
+      rnum_t to_room = real_room(to_room_vnum);
+      if (to_room < 0) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Missing room %ld for gatekeeper_a proc. Sending to Dante's.", to_room_vnum);
+        to_room = real_room(RM_ENTRANCE_TO_DANTES);
+      }
+
+      char_from_room(ch);
+      char_to_room(ch, &world[to_room]);
+
+      act("$n is ushered in.", FALSE, ch, NULL, mob, TO_ROOM);
+
+      if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+        look_at_room(ch, 0, 0);
+      }
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
 /*
 SPECIAL(business_card_printer) {
   struct obj_data *printer = (struct obj_data *) me;

@@ -599,12 +599,15 @@ void affect_total(struct char_data * ch)
   GET_CONTROL(ch) = 0;
 
   // These should also be set before other effects (like drugs) are applied
-  GET_MAX_MENTAL(ch) = 1000;
-  GET_MAX_PHYSICAL(ch) = 1000;
+  if (!IS_NPC(ch)) {
+    GET_MAX_MENTAL(ch) = 1000;
+    GET_MAX_PHYSICAL(ch) = 1000;
+    GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
+    GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
+  }
+
   GET_TARGET_MOD(ch) = 0;
   GET_CONCENTRATION_TARGET_MOD(ch) = 0;
-  GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
-  GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
 
   // Set reach, depending on race. Stripped out the 'you only get it at X height' thing since it's not canon and a newbie trap.
   if ((GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_GIANT ||

@@ -518,6 +518,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         for (struct obj_data *obj = mob_proto[mob_number].bioware; obj; obj = obj->next_content)
           obj->carried_by = &mob_proto[mob_number];
 
+        // Diagnostic catch for mortallyw not sticking.
+        assert(GET_DEFAULT_POS(&mob_proto[mob_number]) == GET_DEFAULT_POS(d->edit_mob));
       } else {  // if not, we need to make a new spot in the list
         int             counter;
         int             found = FALSE;
@@ -1409,6 +1411,10 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     } else {
       GET_MAX_PHYSICAL(MOB) = number * 100;
       GET_PHYSICAL(MOB) = number * 100;
+      if (GET_MAX_PHYSICAL(MOB) <= 0) {
+        send_to_char("^RAt 0 max phys, this mob will never be treatable and will always be mortally wounded.^n\r\n", CH);
+        GET_DEFAULT_POS(MOB) = MIN(GET_DEFAULT_POS(MOB), POS_MORTALLYW);
+      }
       medit_disp_menu(d);
     }
     break;
@@ -1421,6 +1427,10 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     } else {
       GET_MAX_MENTAL(MOB) = number * 100;
       GET_MENTAL(MOB) = number * 100;
+      if (GET_MAX_MENTAL(MOB) <= 0) {
+        send_to_char("^RAt 0 max ment, this mob will never be conscious and will always be stunned.^n\r\n", CH);
+        GET_DEFAULT_POS(MOB) = MIN(GET_DEFAULT_POS(MOB), POS_STUNNED);
+      }
       medit_disp_menu(d);
     }
     break;
@@ -1869,12 +1879,12 @@ void write_mobs_to_disk(vnum_t zone_num)
               pc_race_types_for_wholist[(int)mob->player.race],
               genders[(int)mob->player.pronouns]);
 
-      if (mob->char_specials.position != POS_STANDING)
+      if (GET_POS(mob) != POS_STANDING)
         fprintf(fp, "Position:\t%s\n",
-                position_types[(int)mob->char_specials.position]);
-      if (mob->mob_specials.default_pos)
+                position_types[(int)GET_POS(mob)]);
+      if (GET_DEFAULT_POS(mob) != POS_STANDING && GET_DEFAULT_POS(mob) != POS_DEAD)
         fprintf(fp, "DefaultPos:\t%s\n",
-                position_types[(int)mob->mob_specials.default_pos]);
+                position_types[(int)GET_DEFAULT_POS(mob)]);
 
       if (mob->mob_specials.attack_type != TYPE_HIT)
         fprintf(fp, "AttackType:\t%s\n",
