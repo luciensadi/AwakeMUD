@@ -518,6 +518,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         for (struct obj_data *obj = mob_proto[mob_number].bioware; obj; obj = obj->next_content)
           obj->carried_by = &mob_proto[mob_number];
 
+        // Diagnostic catch for mortallyw not sticking.
+        assert(GET_DEFAULT_POS(&mob_proto[mob_number]) == GET_DEFAULT_POS(d->edit_mob));
       } else {  // if not, we need to make a new spot in the list
         int             counter;
         int             found = FALSE;
@@ -1880,7 +1882,7 @@ void write_mobs_to_disk(vnum_t zone_num)
       if (GET_POS(mob) != POS_STANDING)
         fprintf(fp, "Position:\t%s\n",
                 position_types[(int)GET_POS(mob)]);
-      if (GET_DEFAULT_POS(mob))
+      if (GET_DEFAULT_POS(mob) != POS_STANDING && GET_DEFAULT_POS(mob) != POS_DEAD)
         fprintf(fp, "DefaultPos:\t%s\n",
                 position_types[(int)GET_DEFAULT_POS(mob)]);
 

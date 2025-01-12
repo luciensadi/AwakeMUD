@@ -4277,7 +4277,6 @@ struct char_data *read_mobile(int nr, int type)
   mob->player.time.logon = time(0);
   mob->player.tradition = mob->player.aspect = 0;
   mob->char_specials.saved.left_handed = (!number(0, 9) ? 1 : 0);
-  GET_POS(mob) = (GET_DEFAULT_POS(mob) > 0 ? GET_DEFAULT_POS(mob) : POS_STANDING);
 
   mob_index[i].number++;
 
@@ -4308,6 +4307,15 @@ struct char_data *read_mobile(int nr, int type)
   }
 
   affect_total(mob);
+
+  GET_POS(mob) = (GET_DEFAULT_POS(mob) > 0 ? GET_DEFAULT_POS(mob) : POS_STANDING);
+
+  if (GET_POS(mob) == POS_STUNNED) {
+    GET_MENTAL(mob) = -10 * 100;
+  } else if (GET_POS(mob) == POS_MORTALLYW) {
+    GET_PHYSICAL(mob) = 0;
+    GET_MENTAL(mob) = 0;
+  }
 
   if ((GET_MOB_SPEC(mob) || GET_MOB_SPEC2(mob)) && !MOB_FLAGGED(mob, MOB_SPEC))
     MOB_FLAGS(mob).SetBit(MOB_SPEC);
@@ -5771,8 +5779,8 @@ void reset_char(struct char_data * ch)
   ch->next_fighting = NULL;
   ch->next_in_room = NULL;
   FIGHTING(ch) = NULL;
-  ch->char_specials.position = POS_STANDING;
-  ch->mob_specials.default_pos = POS_STANDING;
+  GET_POS(ch) = POS_STANDING;
+  GET_DEFAULT_POS(ch) = POS_STANDING;
   calc_weight(ch);
 
   if (GET_PHYSICAL(ch) < 100)
