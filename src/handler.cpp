@@ -774,7 +774,7 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  // has_trigger was initialized to -1, why not initialize to 0 and not check for has_trigger?
+  // has_trigger is -1 when trigger doesn't exist, or else 0-3 depending on setting
   if (has_wired && has_trigger) {
     has_wired = MIN(has_wired, (has_trigger == -1 ? 3 : has_trigger));
     GET_INIT_DICE(ch) += has_wired;
@@ -1115,14 +1115,18 @@ void affect_total(struct char_data * ch)
 
   if (REAL_SKILL(ch, SKILL_COMPUTER) > 0)
   {
+    // a VCR applies a -rating hacking pool, unless disabled via reflex trigger (Matrix, pg 28)
+    // assume trigger is attached to VCR and that a rigger will always disable their VCR when decking
+    if (has_rig && (has_trigger == -1)) {
+      GET_HACKING(ch) -= has_rig;
+    }
+
     int mpcp = 0;
     if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->persona) {
       GET_HACKING(ch) += (int)((GET_INT(ch) + ch->persona->decker->mpcp) / 3);
-      // a VCR applies a 1 TN penalty to decking and -rating hacking pool, unless disabled via reflex trigger (Matrix, pg 28)
-      // assume trigger is attached to VCR and that a rigger will always disable their VCR when decking
+      // when in the matrix, a VCR also applies a 1 TN penalty, unless disabled via reflex trigger (Matrix, pg 28)
       if (has_rig && (has_trigger == -1)) {
         GET_TARGET_MOD(ch) += 1;
-        GET_HACKING(ch) -= has_rig;
       }
     } else {
       for (struct obj_data *deck = ch->carrying; deck; deck = deck->next_content)
