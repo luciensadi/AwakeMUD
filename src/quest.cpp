@@ -48,7 +48,8 @@ unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
 void display_single_emote_for_quest(struct char_data *johnson, emote_t emote_to_display, struct char_data *target);
 
-rnum_t translate_quest_mob_entry_to_rnum(struct quest_data *qst, int mob_idx);
+rnum_t translate_quest_mob_identifier_to_rnum(vnum_t identifier, struct quest_data *quest);
+vnum_t translate_quest_mob_identifier_to_vnum(vnum_t identifier, struct quest_data *quest);
 struct char_data * fetch_quest_mob_target_mob_proto(struct quest_data *qst, int mob_idx);
 struct char_data * fetch_quest_mob_actual_mob_proto(struct quest_data *qst, int mob_idx);
 
@@ -506,10 +507,13 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, stru
           }
           break;
         case QOO_TAR_MOB:
-          if (quest_table[GET_QUEST(ch)].obj[i].o_data == GET_MOB_VNUM(mob)) {
-            if (commit_changes)
-              ch->player_specials->obj_complete[i] = 1;
-            return TRUE;
+          {
+            vnum_t vnum = translate_quest_mob_identifier_to_vnum(quest_table[GET_QUEST(ch)].obj[i].o_data, &quest_table[GET_QUEST(ch)]);
+            if (vnum == GET_MOB_VNUM(mob)) {
+              if (commit_changes)
+                ch->player_specials->obj_complete[i] = 1;
+              return TRUE;
+            }
           }
           break;
         case QOO_RETURN_PAY:
@@ -3392,8 +3396,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         qedit_list_mob_objectives(d);
         send_to_char(CH, "Enter M# of mob to hunt ('l' to list, 'q' to quit): ");
       } else if (number < 0 || number >= QUEST->num_mobs)
-        send_to_char(CH, "Invalid response.  "
-                     "Enter M# of mob to hunt ('l' to list, 'q' to quit): ");
+        send_to_char(CH, "Invalid response. Enter M# of mob to hunt ('l' to list, 'q' to quit): ");
       else {
         QUEST->mob[d->edit_number2].o_data = number;
         CLS(CH);
@@ -3588,18 +3591,15 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       switch (QUEST->obj[d->edit_number2].load) {
       case QOL_TARMOB_I:
         d->edit_mode = QEDIT_O_LDATA;
-        send_to_char(CH, "Enter M# of mob to give item to: "
-                     "('l' to list, 'q' to quit): ");
+        send_to_char(CH, "Enter M# of mob to give item to: ('l' to list, 'q' to quit): ");
         break;
       case QOL_TARMOB_E:
         d->edit_mode = QEDIT_O_LDATA;
-        send_to_char(CH, "Enter M# of mob to equip item on: "
-                     "('l' to list, 'q' to quit): ");
+        send_to_char(CH, "Enter M# of mob to equip item on: ('l' to list, 'q' to quit): ");
         break;
       case QOL_TARMOB_C:
         d->edit_mode = QEDIT_O_LDATA;
-        send_to_char(CH, "Enter M# of mob to install item in: "
-                     "('l' to list, 'q' to quit): ");
+        send_to_char(CH, "Enter M# of mob to install item in: ('l' to list, 'q' to quit): ");
         break;
       case QOL_HOST:
         d->edit_mode = QEDIT_O_LDATA;
@@ -3624,8 +3624,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       switch (QUEST->obj[d->edit_number2].objective) {
       case QOO_TAR_MOB:
         d->edit_mode = QEDIT_O_ODATA;
-        send_to_char(CH, "Enter M# of mob item must be delivered to "
-                     "('l' to list, 'q' to quit): ");
+        send_to_char(CH, "Enter M# of mob item must be delivered to ('l' to list, 'q' to quit): ");
         break;
       case QOO_LOCATION:
         d->edit_mode = QEDIT_O_ODATA;
@@ -3651,11 +3650,9 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     case QOL_TARMOB_I:
       if (*arg == 'l' || *arg == 'L') {
         qedit_list_mob_objectives(d);
-        send_to_char(CH, "Enter M# of mob to give item to: "
-                     "('l' to list, 'q' to quit): ");
-      } else if (number < 0 || number >= top_of_mobt)
-        send_to_char(CH, "Enter M# of mob to give item to: "
-                     "('l' to list, 'q' to quit): ");
+        send_to_char(CH, "Enter M# of mob to put item in inventory of: ('l' to list, 'q' to quit): ");
+      } else if (number < 0 || number >= QUEST->num_mobs)
+        send_to_char(CH, "Invalid response. Enter M# of mob to put item in inventory of: ('l' to list, 'q' to quit): ");
       else {
         QUEST->obj[d->edit_number2].l_data = number;
         qedit_disp_obj_objectives(d);
@@ -3664,11 +3661,9 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     case QOL_TARMOB_E:
       if (*arg == 'l' || *arg == 'L') {
         qedit_list_mob_objectives(d);
-        send_to_char(CH, "Enter M# of mob to equip item on: "
-                     "('l' to list, 'q' to quit): ");
-      } else if (number < 0 || number >= top_of_mobt)
-        send_to_char(CH, "Enter M# of mob to equip item on: "
-                     "('l' to list, 'q' to quit): ");
+        send_to_char(CH, "Enter M# of mob to equip item on: ('l' to list, 'q' to quit): ");
+      } else if (number < 0 || number >= QUEST->num_mobs)
+        send_to_char(CH, "Invalid response. Enter M# of mob to equip item on: ('l' to list, 'q' to quit): ");
       else {
         QUEST->obj[d->edit_number2].l_data = number;
         qedit_disp_locations(d);
@@ -3677,11 +3672,9 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     case QOL_TARMOB_C:
       if (*arg == 'l' || *arg == 'L') {
         qedit_list_mob_objectives(d);
-        send_to_char(CH, "Enter M# of mob to install item in: "
-                     "('l' to list, 'q' to quit): ");
-      } else  if (number < 0 || number >= top_of_mobt)
-        send_to_char(CH, "Enter M# of mob to install item in: "
-                     "('l' to list, 'q' to quit): ");
+        send_to_char(CH, "Enter M# of mob to install item in: ('l' to list, 'q' to quit): ");
+      } else  if (number < 0 || number >= QUEST->num_mobs)
+        send_to_char(CH, "Invalid response. Enter M# of mob to install item in: ('l' to list, 'q' to quit): ");
       else {
         QUEST->obj[d->edit_number2].l_data = number;
         qedit_disp_obj_objectives(d);
@@ -3724,11 +3717,9 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         qedit_disp_obj_menu(d);
       } else if (*arg == 'l' || *arg == 'L') {
         qedit_list_mob_objectives(d);
-        send_to_char(CH, "Enter M# of mob item must be delivered to: "
-                     "('l' to list, 'q' to quit): ");
-      } else if (real_mobile(number) < 0)
-        send_to_char(CH, "Enter M# of mob item must be delivered to: "
-                     "('l' to list, 'q' to quit): ");
+        send_to_char(CH, "Enter M# or vnum of the mob the item must be delivered to: ('l' to list, 'q' to quit): ");
+      } else if (number < 0 || translate_quest_mob_identifier_to_rnum(number, QUEST) < 0)
+        send_to_char(CH, "Invalid response. Enter M# or vnum of the mob the item must be delivered to: ('l' to list, 'q' to quit): ");
       else {
         QUEST->obj[d->edit_number2].o_data = number;
         CLS(CH);
@@ -4098,19 +4089,8 @@ ACMD(do_recap)
   }
 }
 
-rnum_t translate_quest_mob_target_to_rnum(struct quest_data *qst, int mob_idx) {
-  if (qst->mob[mob_idx].o_data < 0)
-    return -1;
-  
-  rnum_t result = -1;
-  if (qst->mob[mob_idx].o_data >= qst->num_mobs || (result = real_mobile(qst->mob[qst->mob[mob_idx].o_data].vnum)) < 0)
-    result = real_mobile(qst->mob[mob_idx].o_data);
-
-  return result;
-}
-
 struct char_data * fetch_quest_mob_target_mob_proto(struct quest_data *qst, int mob_idx) {
-  rnum_t derived_rnum = translate_quest_mob_target_to_rnum(qst, mob_idx);
+  rnum_t derived_rnum = translate_quest_mob_identifier_to_rnum(mob_idx, qst);
 
   if (derived_rnum < 0)
     return NULL;
@@ -4125,4 +4105,38 @@ struct char_data * fetch_quest_mob_actual_mob_proto(struct quest_data *qst, int 
     return NULL;
   
   return &mob_proto[mob_rnum];
+}
+
+rnum_t translate_quest_mob_identifier_to_rnum(vnum_t identifier, struct quest_data *quest) {
+  // Invalid vnum? Don't look it up.
+  if (identifier < 0)
+    return -1;
+  
+  // Not on the quest mob table? Assume it's a direct vnum reference and return the rnum of that.
+  if (identifier >= quest->num_mobs || (quest->mob[identifier].vnum <= 0)) {
+    return real_mobile(identifier);
+  }
+
+  // It's on the mob table. Check to see if the associated vnum actually exists.
+  rnum_t rnum = real_mobile(quest->mob[identifier].vnum);
+  if (rnum < 0) {
+    // Called-out quest mob didn't exist, so treat it as a direct vnum reference.
+    return real_mobile(identifier);
+  }
+
+  // Existed, return its rnum.
+  return rnum;
+}
+
+vnum_t translate_quest_mob_identifier_to_vnum(vnum_t identifier, struct quest_data *quest) {
+  // This is technically inefficient since this goes vnum -> rnum -> vnum, but we call this very infrequently.
+  rnum_t rnum = translate_quest_mob_identifier_to_rnum(identifier, quest);
+
+  // Impossible to parse into a valid mob, return it as written.
+  if (rnum < 0) {
+    return identifier;
+  }
+
+  // Return the vnum of the mob.
+  return mob_index[rnum].vnum;
 }

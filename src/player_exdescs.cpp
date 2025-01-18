@@ -20,8 +20,10 @@
   To answer:
     We want folks to pay syspoints for exdesc usage, when does that happen? Pay sysp to increse your exdesc quota
 
+  // TODO: Database functions (see end of file)
   // TODO: Write hooks in customize physical for exdescs.
-  // TODO: Editing flow. Do we allow changes of keywords, which are primary keys?
+  // TODO: Prevent writing an exdesc with the same keyword as one you already have to prevent DB collisions
+  // TODO: Editing flow. Do we allow changes of keywords, which are primary keys? (yes, just drop and re-add if needed)
   // TODO: Add visibility filters for looking at someone with descs, listing them, etc: if covered, don't show
   // TODO STRETCH: Alter wear/remove to add reveal/hide for exdescs.
 
@@ -40,6 +42,7 @@
 // Prototypes.
 void list_exdescs(struct char_data *viewer, struct char_data *vict);
 class PCExDesc *find_exdesc_by_keyword(struct char_data *ch, const char *keyword);
+void save_pc_exdesc_max(struct char_data *ch);
 
 /*
  * Staff DO_EXDESC command.
@@ -194,7 +197,7 @@ void syspoints_purchase_exdescs(struct char_data *ch, char *buf, bool is_confirm
                       SYSP_EXDESC_MAX_PURCHASE_COST, SYSP_EXDESC_MAX_PURCHASE_GETS_YOU_X_SLOTS);
 
   // Do it.
-  int existing_max = get_exdesc_max(ch);
+  int existing_max = GET_CHAR_MAX_EXDESCS(ch);
   set_exdesc_max(ch, existing_max + SYSP_EXDESC_MAX_PURCHASE_GETS_YOU_X_SLOTS, TRUE);
 
   GET_SYSTEM_POINTS(ch) -= SYSP_EXDESC_MAX_PURCHASE_COST;
@@ -203,25 +206,29 @@ void syspoints_purchase_exdescs(struct char_data *ch, char *buf, bool is_confirm
                   GET_CHAR_NAME(ch),
                   SYSP_EXDESC_MAX_PURCHASE_COST,
                   existing_max,
-                  get_exdesc_max(ch),
+                  GET_CHAR_MAX_EXDESCS(ch),
                   GET_SYSTEM_POINTS(ch));
   
   playerDB.SaveChar(ch);
 
   send_to_char(ch, "OK, your exdesc maximum has increased from %d to %d. You have %d syspoints remaining.",
                existing_max,
-               get_exdesc_max(ch),
+               GET_CHAR_MAX_EXDESCS(ch),
                GET_SYSTEM_POINTS(ch));
 }
 
 // Given a character and an amount, set their exdesc maximum to that amount. save_to_db is only false when loading from DB.
 void set_exdesc_max(struct char_data *ch, int amount, bool save_to_db) {
-  // TODO
-}
+  if (!ch || IS_NPC(ch)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Attempted to set_exdesc_max on invalid char %s.", GET_CHAR_NAME(ch));
+    return;
+  }
 
-int get_exdesc_max(struct char_data *ch) {
-  // TODO
-  return 100;
+  GET_CHAR_MAX_EXDESCS(ch) = amount;
+
+  if (save_to_db) {
+    save_pc_exdesc_max(ch);
+  }
 }
 
 /*
@@ -324,14 +331,18 @@ bool look_at_exdescs(struct char_data *viewer, struct char_data *vict, char *key
 
 // Saving happens here. Requires pc_idnum and keyword to be set. Invoke during editing.
 void PCExDesc::save_to_db() {
-
+  // TODO
 }
 
 // Call this to delete this entry. Requires pc_idnum and keyword to be set. Invoke during editing when char chooses to delete.
 void PCExDesc::delete_from_db() {
-
+  // TODO
 }
 
 void load_exdescs_from_db(struct char_data *ch) {
+  // TODO
+}
+
+void save_pc_exdesc_max(struct char_data *ch) {
   // TODO
 }

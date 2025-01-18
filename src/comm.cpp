@@ -2632,6 +2632,9 @@ void shutdown(int code)
 {
   circle_shutdown = true;
   exit_code = code;
+
+  log("Received SHUTDOWN command: Clearing alarm handler.");
+  signal(SIGALRM, SIG_IGN);
 }
 
 /* ******************************************************************

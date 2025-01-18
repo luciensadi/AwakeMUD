@@ -3,6 +3,7 @@
 #include "utils.hpp"
 
 #define GET_CHAR_EXDESCS(ch) ((ch)->player_specials->saved.exdescs)
+#define GET_CHAR_MAX_EXDESCS(ch) ((ch)->player_specials->max_exdescs)
 #define CHAR_HAS_EXDESCS(ch) (!(ch)->player_specials->saved.exdescs.empty())
 
 class PCExDesc {
@@ -75,6 +76,5 @@ bool look_at_exdescs(struct char_data *viewer, struct char_data *vict, char *arg
 void syspoints_purchase_exdescs(struct char_data *ch, char *buf, bool is_confirmed);
 
 void set_exdesc_max(struct char_data *ch, int amount, bool save_to_db);
-int get_exdesc_max(struct char_data *ch);
 
 void load_exdescs_from_db(struct char_data *ch);
