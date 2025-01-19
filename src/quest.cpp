@@ -494,10 +494,10 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, stru
   if (!GET_QUEST(ch))
     return FALSE;
 
-  int vnum = GET_OBJ_VNUM(obj);
-
+  // Scan through all defined objects with objectives in this quest.
   for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
-    if (quest_table[GET_QUEST(ch)].obj[i].vnum == vnum) {
+    // Check to see if this specific object objective matches the item's vnum.
+    if (quest_table[GET_QUEST(ch)].obj[i].vnum == GET_OBJ_VNUM(obj)) {
       switch (quest_table[GET_QUEST(ch)].obj[i].objective) {
         case QOO_JOHNSON:
           if (GET_MOB_SPEC(mob) && (GET_MOB_SPEC(mob) == johnson || GET_MOB_SPEC2(mob) == johnson) && memory(mob, ch)) {
@@ -508,8 +508,8 @@ bool _raw_check_quest_delivery(struct char_data *ch, struct char_data *mob, stru
           break;
         case QOO_TAR_MOB:
           {
-            vnum_t vnum = translate_quest_mob_identifier_to_vnum(quest_table[GET_QUEST(ch)].obj[i].o_data, &quest_table[GET_QUEST(ch)]);
-            if (vnum == GET_MOB_VNUM(mob)) {
+            vnum_t mob_vnum = translate_quest_mob_identifier_to_vnum(quest_table[GET_QUEST(ch)].obj[i].o_data, &quest_table[GET_QUEST(ch)]);
+            if (mob_vnum == GET_MOB_VNUM(mob)) {
               if (commit_changes)
                 ch->player_specials->obj_complete[i] = 1;
               return TRUE;
