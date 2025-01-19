@@ -21,6 +21,7 @@
     We want folks to pay syspoints for exdesc usage, when does that happen? Pay sysp to increse your exdesc quota
 
   // TODO: Database functions (see end of file)
+  // TODO: Exdescs to file and purged on idledelete
   // TODO: Write hooks in customize physical for exdescs.
   // TODO: Prevent writing an exdesc with the same keyword as one you already have to prevent DB collisions
   // TODO: Editing flow. Do we allow changes of keywords, which are primary keys? (yes, just drop and re-add if needed)
@@ -38,6 +39,8 @@
 
 #define SYSP_EXDESC_MAX_PURCHASE_COST 10
 #define SYSP_EXDESC_MAX_PURCHASE_GETS_YOU_X_SLOTS 5
+
+extern MYSQL *mysql;
 
 // Prototypes.
 void list_exdescs(struct char_data *viewer, struct char_data *vict);
@@ -331,16 +334,59 @@ bool look_at_exdescs(struct char_data *viewer, struct char_data *vict, char *key
 
 // Saving happens here. Requires pc_idnum and keyword to be set. Invoke during editing.
 void PCExDesc::save_to_db() {
-  // TODO
+  char query_buf[MAX_STRING_LENGTH];
+  char keyword_buf[MAX_STRING_LENGTH];
+  char name_buf[MAX_STRING_LENGTH];
+  char desc_buf[MAX_STRING_LENGTH];
+
+  snprintf(query_buf, sizeof(query_buf),
+           "INSERT INTO pfiles_exdescs (`idnum`, `keyword`, `name`, `desc`, `wearslots`)" /* continues to next line*/
+           "\n VALUES (%ld, '%s', '%s', '%s', '%s')" /* continues to next line*/
+           "\n ON DUPLICATE KEY UPDATE;",
+           pc_idnum,
+           prepare_quotes(keyword_buf, keyword, sizeof(keyword_buf)),
+           prepare_quotes(name_buf, name, sizeof(name_buf)),
+           prepare_quotes(desc_buf, desc, sizeof(desc_buf)),
+           wear_slots.ToString());
+
+  mysql_wrapper(mysql, query_buf);
 }
 
 // Call this to delete this entry. Requires pc_idnum and keyword to be set. Invoke during editing when char chooses to delete.
 void PCExDesc::delete_from_db() {
-  // TODO
+  char query_buf[MAX_STRING_LENGTH];
+  char keyword_buf[MAX_STRING_LENGTH];
+
+  snprintf(query_buf, sizeof(query_buf),
+           "DELETE FROM pfiles_exdescs WHERE `idnum`=%ld, `keyword`='%s';",
+           pc_idnum,
+           prepare_quotes(keyword_buf, keyword, sizeof(keyword_buf)));
+
+  mysql_wrapper(mysql, query_buf);
 }
 
 void load_exdescs_from_db(struct char_data *ch) {
-  // TODO
+  char query_buf[MAX_STRING_LENGTH];
+
+  snprintf(query_buf, sizeof(query_buf), "SELECT * FROM pfiles_exdescs WHERE idnum=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, query_buf);
+
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row;
+
+  while ((row = mysql_fetch_row(res))) {
+    PCExDesc *desc = new PCExDesc(
+      GET_IDNUM(ch),
+      row[1],
+      row[2],
+      row[3],
+      row[4]
+    );
+
+    GET_CHAR_EXDESCS(ch).push_back(desc);
+  }
+
+  mysql_free_result(res);
 }
 
 void save_pc_exdesc_max(struct char_data *ch) {
