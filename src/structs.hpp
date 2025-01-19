@@ -1268,6 +1268,7 @@ struct skill_data {
   sh_int group;
   bool reflex_recorder_compatible;
   bool no_defaulting_allowed;
+  bool is_nerps;
 };
 
 struct part_data {

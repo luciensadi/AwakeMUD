@@ -15,6 +15,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <algorithm>
 
 #include "structs.hpp"
 #include "utils.hpp"
@@ -1522,57 +1523,109 @@ ACMD(do_slowns)
     send_to_char("Nameserver_is_slow changed to NO; IP addresses will now be resolved.\r\n", ch);
 }
 
+#define _SKILL_MODE_GENERAL 0
+#define _SKILL_MODE_COMBAT 1
+#define _SKILL_MODE_SOCIAL 2
+#define _SKILL_MODE_VEHICLE_RELATED 3
+#define _SKILL_MODE_DECKING 4
+#define _SKILL_MODE_MAGICAL 5
+#define _SKILL_MODE_LANGUAGES 6
+#define _SKILL_MODE_NERPS 7
+#define _NUM_SKILL_MODES 8
+
+const char *_skill_modes[] = {
+  "general skills",
+  "combat skills",
+  "social skills",
+  "vehicle-related skills",
+  "decking skills",
+  "magical skills",
+  "languages",
+  "non-implemented (NERP) skills"
+};
+
+void _send_alphabetized_skills_to_ch(struct char_data *ch, const char *arg, int mode) {
+  std::vector<std::string> vec;
+
+  // Pull all their skills into a vector. This function catgeorizes them for better display.
+  for (int i = MIN_SKILLS; i < MAX_SKILLS; i++) {
+    switch (mode) {
+      case _SKILL_MODE_GENERAL:
+        if (SKILL_IS_LANGUAGE(i) || SKILL_IS_VEHICLE_RELATED(i) || SKILL_IS_DECKING(i) || SKILL_IS_MAGICAL(i) || SKILL_IS_NERPS(i) || SKILL_IS_COMBAT(i) || SKILL_IS_SOCIAL(i))
+          continue;
+        break;
+      case _SKILL_MODE_VEHICLE_RELATED:
+        if (!SKILL_IS_VEHICLE_RELATED(i))
+          continue;
+        break;
+      case _SKILL_MODE_COMBAT:
+        if (!SKILL_IS_COMBAT(i))
+          continue;
+        break;
+      case _SKILL_MODE_DECKING:
+        if (!SKILL_IS_DECKING(i))
+          continue;
+        break;
+      case _SKILL_MODE_MAGICAL:
+        if (!SKILL_IS_MAGICAL(i))
+          continue;
+        break;
+      case _SKILL_MODE_LANGUAGES:
+        if (!SKILL_IS_LANGUAGE(i))
+          continue;
+        break;
+      case _SKILL_MODE_NERPS:
+        if (!SKILL_IS_NERPS(i))
+          continue;
+        break;
+      case _SKILL_MODE_SOCIAL:
+        if (!SKILL_IS_SOCIAL(i))
+          continue;
+        break;
+    }
+
+    if (*arg && !is_abbrev(arg, skills[i].name))
+      continue;
+
+    if ((GET_SKILL(ch, i)) > 0) {
+      snprintf(buf2, sizeof(buf2), "%-40s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
+      vec.push_back(std::string(buf2));
+    }
+  }
+
+  // Only print if they have skills in this category.
+  if (!vec.empty()) {
+    std::sort(vec.begin(), vec.end());
+
+    if (*arg) {
+      send_to_char(ch, "%sYou know the following ^c%s^n that start with '%s':\r\n", mode ? "\r\n" : "", _skill_modes[mode], arg);
+    } else {
+      send_to_char(ch, "%sYou know the following ^c%s^n:\r\n", mode ? "\r\n" : "", _skill_modes[mode]);
+    }
+
+    for (auto str : vec) {
+      send_to_char(str.c_str(), ch);
+    }
+  }
+}
+
 /* Assumes that *argument does start with first letter of chopped string */
 ACMD(do_skills)
 {
-  int i;
-  bool mode_all = FALSE;
-
   one_argument(argument, arg);
 
-  if (!*arg) {
-    snprintf(buf, sizeof(buf), "You know the following %s:\r\n", subcmd == SCMD_SKILLS ? "skills" : "abilities");
-    mode_all = TRUE;
-  } else {
-    snprintf(buf, sizeof(buf), "You know the following %s that start with '%s':\r\n", subcmd == SCMD_SKILLS ? "skills" : "abilities", arg);
-    mode_all = FALSE;
-  }
-
   if (subcmd == SCMD_SKILLS) {
-    // Append skills.
-    for (i = MIN_SKILLS; i < MAX_SKILLS; i++) {
-      if (SKILL_IS_LANGUAGE(i))
-        continue;
-
-      if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
-        continue;
-
-      if ((GET_SKILL(ch, i)) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-40s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
-        strlcat(buf, buf2, sizeof(buf));
-      }
+    // Send skills from each mode.
+    for (int mode_idx = 0; mode_idx < _NUM_SKILL_MODES; mode_idx++) {
+      _send_alphabetized_skills_to_ch(ch, arg, mode_idx);
     }
-
-    // Append languages.
-    if (!*arg)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n\r\nYou know the following languages:\r\n");
-    else
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n\r\nYou know the following languages that start with '%s':\r\n", arg);
-
-    for (i = SKILL_ENGLISH; i < MAX_SKILLS; i++) {
-      if (!SKILL_IS_LANGUAGE(i))
-        continue;
-
-      if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
-        continue;
-
-      if ((GET_SKILL(ch, i)) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-40s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
-        strlcat(buf, buf2, sizeof(buf));
-      }
-    }
-    send_to_char(buf, ch);
   } else if (subcmd == SCMD_ABILITIES) {
+    if (*arg) {
+      send_to_char(ch, "You know the following abilities that start with '%s':\r\n", arg);
+    } else {
+      send_to_char(ch, "You know the following abilities:\r\n");
+    }
+    
     render_targets_abilities_to_viewer(ch, ch);
   } else {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown subcmd %d to do_skills!", subcmd);

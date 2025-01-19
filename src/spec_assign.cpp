@@ -69,7 +69,7 @@ struct teach_data teachers[] = {
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do "
                          "your job safer.\r\n", ADVANCED },
                        { 1006, { SKILL_INTIMIDATION, SKILL_INTERROGATION, SKILL_LEADERSHIP, SKILL_SURVIVAL, SKILL_LEGERDEMAIN,
-                         SKILL_TRACK, SKILL_DISGUISE, SKILL_SMALL_UNIT_TACTICS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you "
+                         SKILL_DISGUISE, SKILL_SMALL_UNIT_TACTICS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you "
                          "feel you can now do your job safer.\r\n", ADVANCED },
                        { 1007, { SKILL_ANIMAL_HANDLING, SKILL_ANIMAL_TAMING, SKILL_CHEMISTRY, SKILL_PHARMA,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After about an hour of shuffling slides you feel you can now do your job safer.\r\n", ADVANCED },

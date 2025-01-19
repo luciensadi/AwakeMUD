@@ -82,8 +82,18 @@ CREATE TABLE `pfiles` (
   `email` varchar(200),
   `multiplier` smallint(5) unsigned default 100,
   `lifestyle_string` varchar(200) default 'The metallic scent of the Neophyte Guild clings to $m.',
+  `exdesc_max` smallint(5) unsigned default 0,
   PRIMARY KEY (`idnum`),
   KEY (`name`)
+);
+
+CREATE TABLE `pfiles_exdescs` (
+  `idnum` mediumint(5) unsigned NOT NULL,
+  `keyword` varchar(100) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `desc` text NOT NULL,
+  `wearslots` varchar(100) NOT NULL,
+  PRIMARY KEY (`idnum`, `keyword`)
 );
 
 CREATE TABLE `pfiles_immortdata` (

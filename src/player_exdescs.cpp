@@ -20,8 +20,6 @@
   To answer:
     We want folks to pay syspoints for exdesc usage, when does that happen? Pay sysp to increse your exdesc quota
 
-  // TODO: Database functions (see end of file)
-  // TODO: Exdescs to file and purged on idledelete
   // TODO: Write hooks in customize physical for exdescs.
   // TODO: Prevent writing an exdesc with the same keyword as one you already have to prevent DB collisions
   // TODO: Editing flow. Do we allow changes of keywords, which are primary keys? (yes, just drop and re-add if needed)
