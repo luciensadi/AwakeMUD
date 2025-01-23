@@ -97,7 +97,7 @@ const char *_vehicle_types__ride_on[] = {
   "crotch rocket",
   "gas-powered skateboard",
   "delivery bike",
-  "unicycle",
+  "motorized unicycle",
   "escaped roomba", // 26
 };
 #define _NUM_VEHICLE_TYPES__RIDE_ON 27
@@ -296,8 +296,8 @@ const char *generate_dynamic_traffic_message__returns_new() {
       break;
   }
 
-  // Sometimes, add a person as the occupant.
-  if (!number(0, 4)) {
+  // Sometimes, add a person as the occupant. Always for ridden vehicles, sometimes for occupied ones.
+  if (on_vs_in || !number(0, 4)) {
     char person_buf[1000] = { '\0' };
 
     if (number(0, 3)) {
