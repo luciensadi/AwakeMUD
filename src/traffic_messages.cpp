@@ -22,52 +22,382 @@ void initialize_traffic_msgs() {
   regenerate_traffic_msgs();
 }
 
+const char *_vehicle_adjectives[] = {
+  "oversized",
+  "shiny",
+  "banged-up",
+  "slightly-on-fire",
+  "pristine",
+  "lifted",
+  "modded",
+  "sticker-covered",
+  "graffitied",
+  "stolen",
+  "rusted-out",
+  "clapped-out",
+  "annoyingly loud",
+  "candy-painted",
+  "chromed-out",
+  "armored",
+  "bullet-hole riddled",
+  "sticky-looking",
+  "greasy",
+  "decked-out"
+};
+#define _NUM_VEHICLE_ADJECTIVES 20
+
+const char *_vehicle_colors[] = {
+  "^Wbright white",
+  "^Wwhite",
+  "^Wwhite",
+  "^Wwhite",
+  "^wgrey",
+  "^Lmatte-black",
+  "^Ldeep black",
+  "^Lblack",
+  "^bdark blue",
+  "^Bblue",
+  "^gdark green",
+  "^gforest green",
+  "^Ggreen",
+  "^mpurple",
+  "^Mmagenta",
+  "^rred",
+  "^rred",
+  "^Rcherry red",
+  "^yyellow",
+  "^Ybright yellow",
+  "^Rr^Oa^Yi^Gn^Bb^[F225]o^Vw^n-painted"
+};
+#define _NUM_VEHICLE_COLORS 21
+
+const char *_vehicle_types__ride_on[] = {
+  "Dodge Scoot", // 0
+  "Dodge Scoot",
+  "Dodge Scoot",
+  "Honda Viking",
+  "Honda Viking",
+  "Suzuki Aurora",
+  "Suzuki Aurora",
+  "Yamaha Katana",
+  "Yamaha Katana",
+  "BMW Blitzen",
+  "BMW Blitzen", // 10
+  "Rhiati Kender scooter",
+  "Rhiati Kender scooter",
+  "E.S. Papoose scooter",
+  "E.S. Papoose scooter",
+  "Yamaha Rapier",
+  "Rhiati Arrow",
+  "Rhiati Razor",
+  "racing bike",
+  "moped",
+  "moped", // 20
+  "road hog",
+  "crotch rocket",
+  "gas-powered skateboard",
+  "delivery bike",
+  "unicycle",
+  "escaped roomba", // 26
+};
+#define _NUM_VEHICLE_TYPES__RIDE_ON 27
+
+const char *_vehicle_types__ride_in[] = {
+  "Ford Americar",
+  "Ford Americar",
+  "Ford Americar",
+  "Jackrabbit",
+  "Jackrabbit",
+  "Eurocar Westwind",
+  "Eurocar Westwind",
+  "Ford-Canada Bison",
+  "Ford-Canada Bison",
+  "GMC Bulldog",
+  "GMC Bulldog",
+  "Toyota Gopher pickup",
+  "Toyota Gopher pickup",
+  "taxi cab",
+  "taxi cab",
+  "Volkswagen Elektro",
+  "Rolls-Royce Prairie Cat",
+  "Ford Mustang",
+  "Rolls-Royce Phaeton limousine",
+  "Toyota Elite",
+  "Land Rover Model 2046",
+  "Ares RoadMaster",
+  "Leyland-Rover Transport pickup",
+  "Leyland-Rover Transport minibus",
+  "Rhiati Destion limousine",
+  "GMC Bulldog Security",
+  "Impala",
+  "Sikorsky-Bell Red Ranger hovercraft",
+  "GMC-Nissan hovertruck",
+  "Gaz-Willys Nomad SUV",
+  "Nissan-Holden Brumby SUV",
+  "Honda-GM 3220 sports car",
+  "Leyland-Zil Tsarina",
+  "Conestoga Trailblazer",
+  "ambulance",
+  "fire truck",
+  "APC"
+};
+#define _NUM_VEHICLE_TYPES__RIDE_IN 37
+
+const char *_vehicle_speeds[] = {
+  "putters by", // 0
+  "splutters on through",
+  "backfires as it passes",
+  "idles past",
+  "speeds past",
+  "speeds past you",
+  "races past",
+  "races past you",
+  "drives by",
+  "drives by you",
+  "drives by slowly", // 10
+  "slowly drives by",
+  "limps through",
+  "tears past",
+  "screeches by",
+  "absolutely howls through",
+  "flies past you" // 16
+};
+#define _NUM_VEHICLE_SPEEDS 17
+
+const char *_vehicle_addendums[] = {
+  "splashing mud on you",
+  "splashing mud on you",
+  "splashing mud on you",
+  "splashing mud on you",
+  "splashing mud on you",
+  "splashing mud on you",
+  "narrowly missing you",
+  "narrowly missing you",
+  "narrowly missing you",
+  "narrowly missing you",
+  "narrowly missing you",
+  "blasting music",
+  "blasting music",
+  "blasting music",
+  "overloaded with way too many passengers",
+  "sounding like it's on its last gasp",
+  "followed closely by the sound of gunfire",
+  "chased by a puffing Lone Star officer",
+  "trailing debris",
+  "dripping with something truly awful",
+  "leaving a heavy stench of weed in the air",
+  "dangling an unsecured load",
+  "causing problems",
+};
+#define _NUM_VEHICLE_ADDENDUMS 23
+
+const char *_person_adjectives[] = {
+  "hulking",
+  "roided-up",
+  "diminutive",
+  "petite",
+  "broad-shouldered",
+  "slope-shouldered",
+  "beetle-browed",
+  "lanky",
+  "emaciated",
+  "rotund",
+  "one-eyed",
+  "beat-up",
+  "bearded",
+  "long-haired",
+  "heavily perfumed",
+  "rank",
+  "fragrant",
+  "tiny",
+  "average",
+  "huge",
+  "placid-looking",
+  "muttering",
+  "scowling",
+  "maniacally grinning",
+  "inebriated",
+  "hopped-up",
+  "haunted-looking",
+  "agitated",
+  "grinning",
+  "lab-coat-wearing",
+  "leather-clad",
+  "well-dressed",
+  "slovenly",
+  "cheery",
+  "rugged-looking",
+  "bleary-eyed"
+};
+#define _NUM_PERSON_ADJECTIVES 36
+
+const char *_person_shortdescs[] = {
+  "troll",
+  "elf",
+  "dwarf",
+  "man",
+  "woman",
+  "enby",
+  "blond",
+  "blonde",
+  "brunette",
+  "dude",
+  "person",
+  "merc",
+  "wage slave",
+  "rocker",
+  "techie",
+  "ganger",
+  "drifter",
+  "wastrel",
+  "'runner",
+  "figure that's definitely not several raccoons stacked on top of each other in a trench coat",
+};
+#define _NUM_PERSON_SHORTDESCS 20
+
+const char *generate_dynamic_traffic_message__returns_new() {
+  char msg_buf[1000] = { '\0' };
+  char out_buf[1000];
+  bool on_vs_in = !number(0, 3); //25% chance of "on"
+
+  switch (number(0, 0)) {
+    case 0:
+      // "<A/An><maybe adjective> <tag><color>^n <vehicle> <speed>> by<maybe addendum, like splashing mud on you>.\r\n",
+      // Add a random adjective 25% of the time.
+      if (!number(0, 3)) {
+        snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), "%s^n ", _vehicle_adjectives[number(0, _NUM_VEHICLE_ADJECTIVES - 1)]);
+      }
+
+      // Add a color 40% of the time.
+      if (number(0, 9) < 4) {
+        snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), "%s^n ", _vehicle_colors[number(0, _NUM_VEHICLE_COLORS - 1)]);
+      }
+
+      // Add a vehicle type.
+      {
+        const char *selected_vehicle;
+
+        if (on_vs_in) {
+          selected_vehicle = _vehicle_types__ride_on[number(0, _NUM_VEHICLE_TYPES__RIDE_ON - 1)];
+        } else {
+          selected_vehicle = _vehicle_types__ride_in[number(0, _NUM_VEHICLE_TYPES__RIDE_IN - 1)];
+        }
+
+        snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), "%s^n ", selected_vehicle);
+      }
+      
+      // Add a speed.
+      snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), "%s^n", _vehicle_speeds[number(0, _NUM_VEHICLE_SPEEDS - 1)]);
+
+      // Add a random addendum 10% of the time.
+      if (!number(0, 9)) {
+        snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), ", %s^n", _vehicle_addendums[number(0, _NUM_VEHICLE_ADDENDUMS - 1)]);
+      }
+      break;
+  }
+
+  // Sometimes, add a person as the occupant.
+  if (!number(0, 4)) {
+    char person_buf[1000] = { '\0' };
+
+    if (number(0, 3)) {
+      snprintf(ENDOF(person_buf), sizeof(person_buf) - strlen(person_buf), "%s^n ", _person_adjectives[number(0, _NUM_PERSON_ADJECTIVES - 1)]);
+    }
+    snprintf(ENDOF(person_buf), sizeof(person_buf) - strlen(person_buf), "%s^n", _person_shortdescs[number(0, _NUM_PERSON_SHORTDESCS - 1)]);
+
+    // stitch it togther
+    snprintf(out_buf, sizeof(out_buf), "%s %s %s %s %s.\r\n", CAP(AN(person_buf)), person_buf, on_vs_in ? "on" : "in", AN(msg_buf), msg_buf);
+  } else {
+    // Otherwise, just prepend A/An.
+    snprintf(out_buf, sizeof(out_buf), "%s %s.\r\n", CAP(AN(msg_buf)), msg_buf);
+  }
+
+  // Finally, return it as a str_dup string.
+  return str_dup(out_buf);
+}
+
 const char *traffic_messages[] = {
-  "A man on a Yamaha Rapier zips by.\r\n", // 0
-  "A Mitsuhama Nightsky limousine slowly drives by.\r\n",
-  "A Ford Bison drives through here, splashing mud on you.\r\n",
-  "A Lone Star squad car drives by, sirens blaring loudly.\r\n",
-  "An orkish woman drives through here on her Harley Scorpion.\r\n",
-  "An elf drives through here on his decked-out Yamaha Rapier.\r\n", // 5
-  "A ^rred^n Chrysler-Nissan Jackrabbit cruises by.\r\n",
-  "A ^yyellow^n Chrysler-Nissan Jackrabbit cruises by.\r\n",
-  "A ^Wwhite^n Chrysler-Nissan Jackrabbit cruises by.\r\n",
-  "A ^rred^n Ford Americar cruises by.\r\n",
-  "A ^yyellow^n Ford Americar cruises by.\r\n", // 10
-  "A ^Wwhite^n Ford Americar cruises by.\r\n",
-  "A ^Bblue^n Ford Americar cruises by.\r\n",
-  "A ^Bblue^n Chrysler-Nissan Jackrabbit cruises by.\r\n",
-  "A ^Rcherry red^n Eurocar Westwind 2000 flies past you.\r\n",
-  "A ^Wwhite^n Mitsubishi Runabout drives by slowly.\r\n", // 15
-  "A ^bblue^n Mitsuhama Runabout drives by slowly.\r\n",
-  "An elven woman on a Dodge Scoot passes through here.\r\n",
-  "A ^Ybright yellow^n Volkswagen Electra passes by silently.\r\n",
-  "A huge troll rides by on a modified BMW Blitzen 2050.\r\n",
-  "A large, ^Wwhite^n GMC Bulldog van drives through here.\r\n", // 20
+  "A Lone Star squad car drives by, sirens blaring loudly.\r\n", // 0
   "A DocWagon ambulance speeds past, its lights flashing brightly.\r\n",
   "The deep thrum of a helicopter passes swiftly overhead.\r\n",
-  "A rugged-looking dwarf on a Rhiati Razor howls past.\r\n",
   "A MTC-Nissan roto-drone floats quietly on by.\r\n",
-  "A souped-up Saab Dynamit 778 TI purrs past you.\r\n", // 25
-  "A bleary-eyed wage slave putters past on an underpowered moped.\r\n",
   "An overloaded GMC Bulldog Security with open gun ports rumbles past.\r\n",
-  "The sound of squealing tires echoes from somewhere in the distance.\r\n",
+  "The sound of squealing tires echoes from somewhere in the distance.\r\n", // 5
   "A troll on a rusted bicycle pedals squeakily by.\r\n",
-  "A badly doppler-shifted track from The Elementals follows a truck speeding by.\r\n", // 30
+  "A badly doppler-shifted track from The Elementals follows a truck speeding by.\r\n",
   "A ^Lmatte-black^n LAV-93 roars through, narrowly missing you.\r\n",
   "A few sporadic pops of gunfire sound from somewhere in the distance.\r\n",
-  "The stench of garbage wafts from somewhere nearby.\r\n",
+  "The stench of garbage wafts from somewhere nearby.\r\n", // 10
   "A harried-looking salaryman hurries by.\r\n",
-  "A backfiring Ford-Canada Bison splutters past.\r\n", // 35
+  "A backfiring Ford-Canada Bison splutters past.\r\n",
   "A sleek ^rred^n roto-drone zips past.\r\n",
   "A crumpled-up plastic bag skitters past, carried by the wind.\r\n",
-  "A poised and confident executive strides past, talking on her phone.\r\n",
+  "A poised and confident executive strides past, talking on her phone.\r\n", // 15
   "A subdued-looking teen on a scooter whizzes by on his way to class.\r\n",
-  "A billboard nearby flickers with an ad for ^RChornobyl Vodka^n.\r\n", // 40
+  "A billboard nearby flickers with an ad for ^RChornobyl Vodka^n.\r\n",
   "A billboard nearby displays an ad for ^rBrimstone ^RRed^n Ale^n.\r\n",
-  "The greasy scent of fast food is carried to you on the breeze.\r\n"
+  "The greasy scent of fast food is carried to you on the breeze.\r\n",
+  "A drone hums low overhead, its red lights scanning the dark streets for any sign of trouble.\r\n", // 20
+  "The aroma of charred synthmeat lingers from a nearby street vendor.\r\n",
+  "A group of high-end mercs with heavy chrome stalk by, scanning every corner.\r\n",
+  "A garbage truck rumbles by, its hydraulics squealing as it collects the day’s refuse, leaving a trail of oil and plastic scraps behind.\r\n",
+  "A muffled explosion in the distance makes the ground vibrate.\r\n",
+  "A street sweeper hums lazily by, its brush scraping against the gritty pavement, stirring up dust and forgotten debris.\r\n", // 25
+  "A steady drip of water echoes from a broken pipe overhead, its rhythm syncopated by the occasional hiss of steam from an overheated vent.\r\n",
+  "The scent of stale booze lingers in the air as a group of drunks stumbles past.\r\n",
+  "The sharp scent of ozone stings your nostrils.\r\n",
+  "A trace of someone's perfume drifts past, synthetic and cloying.\r\n",
+  "The acrid tang of burnt garbage clings to the cracked pavement.\r\n", // 30
+  "Sizzling meat and frying oil fill the air from somewhere nearby, greasy and inviting.\r\n",
+  "The stench of burnt rubber lingers in the air.\r\n",
+  "A gnarly mix of damp leather, cigarette smoke, and stale whiskey wafts in on the breeze.\r\n",
+  "A sharp, antiseptic scent is carried by on the wind.\r\n",
+  "A crackling speaker blares a distorted ad in the distance.\r\n", // 35
+  "A siren wails in the distance, its pitch rising and falling slowly.\r\n",
+  "The hiss of steam escapes from a broken valve nearby.\r\n",
+  "The soft buzz of a hovering drone is barely audible overhead.\r\n",
+  "A dog’s frantic barking echoes off the walls of the narrow street.\r\n",
+  "A dwarf kid on a bicycle zooms past, nearly knocking you over.\r\n", // 40
+  "A gaggle of rowdy teenagers shout and shove each other as they make their way down the street.\r\n",
+  "A garbage truck crawls its way down the street with an occasional thud and clatter as bags are thrown in.\r\n",
+  "A rat sticks its nose out of a drain, sniffs the air a moment, then decides it smells better in the sewers.\r\n",
+  "You see the movement of a tiny shadow as a mangy rat crosses a nearby alleyway.\r\n",
+  "You hear the roar of a souped-up engine in the distance.\r\n", // 45
+  "You hear the distant sound of someone vomiting in an alleyway.\r\n",
+  "A company man walks by and flicks a toothpick at you.\r\n",
+  "A flock of pigeons startles into the air from a nearby power line.\r\n",
+  "A seagull swoops down and steals a bit of food from a passerby.\r\n",
+  "A swarm of flies bumps into you, buzzing in your ears.\r\n", // 50
+  "A stray cat darts across your field of vision.\r\n",
+  "The sound of a couple arguing comes from a nearby window.\r\n",
+  "A firetruck blazes through with sirens blaring, heading to someone unknown destination.\r\n",
+  "An overworked garbage truck comes through collecting refuse.\r\n",
+  "A group of gangers drive by slowly in a vintage muscle car.\r\n", // 55
+  "Two opposing motorcycle gangs fly by at breakneck speed, their battle sending stray rounds cracking off the pavement.\r\n",
+  "A beat-up junker of a car putt-putts by, its muffler scraping the ground.\r\n",
+  "You catch the vague movement of a shadowy figure leaping between rooftops, but they're gone when you take a closer look.\r\n",
+  "A city bus drives by with a billboard on the side advertising some local politican.\r\n",
+  "An ad for the latest Novatech cyberdeck flashes on a billboard nearby.\r\n", // 60
+  "An advertisement hologram depicting a nuclear fission power station comes to life nearby, followed by the sentence \"Shiawase: Advancing Life\".\r\n",
+  "A cheap neon light illuminates graffiti over an old poster depicting Renraku's latest Plant Research.\r\n",
+  "A taxi drives by with a billboard on top depicting Saeder-Krupp's latest aerospace endeavours.\r\n",
+  "A bus drives by with a side poster showcasing Maria Mercurial's upcoming concert.\r\n",
+  "A group of Mitsuhama executives walk by, their bodyguards shoving people aside.\r\n", // 65
+  "A crouched junkie drools as he jacks into the latest BTL, right underneath a poster advertising Yamatetsu's latest bioware advancements.\r\n",
+  "An electronic billboard flickers to life with the message \"Kitsune in concert, presented by Manasonic!\"\r\n",
+  "A girl on a skateboard hooks a grapple onto a passing truck and zips away.\r\n",
+  "A drunk vomits noisily into the gutter somewhere nearby.\r\n",
+  "A chromed-up samurai strides past, acting like he's hot drek.\r\n", // 70
+  "A trio of Knight Errant security vehicles cut through the streets like sharks.\r\n",
+  "A street vendor wanders past, loudly hawking his authentic Meat-In-A-Bun.\r\n",
+  "A dead-eyed wage slave stares blankly at nothing for a long time, then wanders off.\r\n",
+  "A litter of ork children run past in a screaming gaggle.\r\n",
+  "A strange smell wafts out of a dark alley, reminding you of... No, it's nothing.\r\n", // 75
+  "There's a loud CRASH as two vehicles are involved in a minor accident. The shouting and gesticulating go on for quite a while.\r\n",
+  "A stray dog pisses on a fire hydrant, then wanders off happily.\r\n",
+  "A street magician does a few parlor tricks on the corner before heading off. He was pretty good.\r\n" // 78
 };
-#define NUM_TRAFFIC_MESSAGES 43
+#define NUM_TRAFFIC_MESSAGES 79
 
 const char *depressing_traffic_messages[] = {
   "A crumpled plastic bag slips past on an eddy of wind.\r\n",  // 0
@@ -131,11 +461,13 @@ const char *depressing_traffic_messages[] = {
   "The sharp crack of high-powered rifle fire echoes from somewhere in the distance.\r\n",
   "A shrill scream rises up before abruptly being silenced.\r\n",
   "The sickly-sweet smell of decomposing flesh assaults your nostrils.\r\n", // 60
+  "The sound of a collapsing billboard echoes through the streets, the squeal of failing metal cutting through the air.\r\n",
 };
-#define NUM_DEPRESSING_MESSAGES 60
+#define NUM_DEPRESSING_MESSAGES 62
 
 void regenerate_traffic_msgs() {
   for (int which = 0; which < NUM_TRAFFIC_MESSAGE_TYPES; which++) {
+    int qty = (which == TRAFFIC_MESSAGES_NORMAL ? NUM_TRAFFIC_MESSAGES : NUM_DEPRESSING_MESSAGES);
     auto queue = random_message_queue[which];
     const char **messages = traffic_messages;
 
@@ -153,9 +485,13 @@ void regenerate_traffic_msgs() {
 
     // Regenerate the queue if needed.
     if (queue.empty()) {
-      // Add traffic messages to the queue.
-      for (int msg_idx = 0; msg_idx < (which == 0 ? NUM_TRAFFIC_MESSAGES : NUM_DEPRESSING_MESSAGES); msg_idx++)
-        queue.push_back(messages[msg_idx]);
+      // Add canned traffic messages to the queue.
+      for (int msg_idx = 0; msg_idx < qty; msg_idx++)
+        queue.push_back(str_dup(messages[msg_idx]));
+
+      // Add dynamic traffic messages to the queue.
+      for (int dyn_idx = 0; dyn_idx < (int) (qty * 2); dyn_idx++)
+        queue.push_back(generate_dynamic_traffic_message__returns_new());
 
       // Shuffle it.
       std::random_device rd;
@@ -165,6 +501,7 @@ void regenerate_traffic_msgs() {
     }
 
     // Assign this loop's traffic message.
+    delete [] current_traffic_msg[which];
     current_traffic_msg[which] = queue.back();
     queue.pop_back();
   }
