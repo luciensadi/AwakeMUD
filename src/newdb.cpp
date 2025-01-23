@@ -480,6 +480,8 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   SETTABLE_EMAIL(ch) = str_dup(row[80]);
   GET_CHAR_MULTIPLIER(ch) = atoi(row[81]);
   const char *lifestyle_string = str_dup(row[82]);
+  set_exdesc_max(ch, atoi(row[83]), FALSE);
+  
   mysql_free_result(res);
 
   // Update lifestyle information.
@@ -1118,10 +1120,8 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   // Load their ignore data (the structure was already initialized in init_char().)
   GET_IGNORE_DATA(ch)->load_from_db();
 
-#ifdef PLAYER_EXDESCS
   // Load their exdescs.
   load_exdescs_from_db(ch);
-#endif
 
   STOP_WORKING(ch);
   AFF_FLAGS(ch).RemoveBits(AFF_MANNING, AFF_RIG, AFF_PILOT, AFF_BANISH, AFF_FEAR, AFF_STABILIZE, AFF_SPELLINVIS, AFF_SPELLIMPINVIS, AFF_DETOX, AFF_RESISTPAIN, AFF_TRACKING, AFF_TRACKED, AFF_PRONE, ENDBIT);

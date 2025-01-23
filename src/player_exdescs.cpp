@@ -32,6 +32,7 @@
   keyword
   name
   desc
+  wearslots
   pk: idnum, keyword; idnum is an indexed column
 */
 
@@ -356,7 +357,7 @@ void PCExDesc::delete_from_db() {
   char keyword_buf[MAX_STRING_LENGTH];
 
   snprintf(query_buf, sizeof(query_buf),
-           "DELETE FROM pfiles_exdescs WHERE `idnum`=%ld, `keyword`='%s';",
+           "DELETE FROM pfiles_exdescs WHERE `idnum`=%ld AND `keyword`='%s';",
            pc_idnum,
            prepare_quotes(keyword_buf, keyword, sizeof(keyword_buf)));
 
@@ -366,7 +367,7 @@ void PCExDesc::delete_from_db() {
 void load_exdescs_from_db(struct char_data *ch) {
   char query_buf[MAX_STRING_LENGTH];
 
-  snprintf(query_buf, sizeof(query_buf), "SELECT * FROM pfiles_exdescs WHERE idnum=%ld;", GET_IDNUM(ch));
+  snprintf(query_buf, sizeof(query_buf), "SELECT * FROM pfiles_exdescs WHERE `idnum`=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, query_buf);
 
   MYSQL_RES *res = mysql_use_result(mysql);
@@ -388,5 +389,7 @@ void load_exdescs_from_db(struct char_data *ch) {
 }
 
 void save_pc_exdesc_max(struct char_data *ch) {
-  // TODO
+  char query_buf[1000];
+  snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET `exdesc_max`=%d' WHERE `idnum`=%ld", GET_CHAR_MAX_EXDESCS(ch), GET_IDNUM(ch));
+  mysql_wrapper(mysql, query_buf);
 }
