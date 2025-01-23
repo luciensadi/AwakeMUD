@@ -340,7 +340,7 @@ const char *traffic_messages[] = {
   "A drone hums low overhead, its red lights scanning the dark streets for any sign of trouble.\r\n", // 20
   "The aroma of charred synthmeat lingers from a nearby street vendor.\r\n",
   "A group of high-end mercs with heavy chrome stalk by, scanning every corner.\r\n",
-  "A garbage truck rumbles by, its hydraulics squealing as it collects the day’s refuse, leaving a trail of oil and plastic scraps behind.\r\n",
+  "A garbage truck rumbles by, its hydraulics squealing as it collects the day's refuse, leaving a trail of oil and plastic scraps behind.\r\n",
   "A muffled explosion in the distance makes the ground vibrate.\r\n",
   "A street sweeper hums lazily by, its brush scraping against the gritty pavement, stirring up dust and forgotten debris.\r\n", // 25
   "A steady drip of water echoes from a broken pipe overhead, its rhythm syncopated by the occasional hiss of steam from an overheated vent.\r\n",
@@ -356,7 +356,7 @@ const char *traffic_messages[] = {
   "A siren wails in the distance, its pitch rising and falling slowly.\r\n",
   "The hiss of steam escapes from a broken valve nearby.\r\n",
   "The soft buzz of a hovering drone is barely audible overhead.\r\n",
-  "A dog’s frantic barking echoes off the walls of the narrow street.\r\n",
+  "A dog's frantic barking echoes off the walls of the narrow street.\r\n",
   "A dwarf kid on a bicycle zooms past, nearly knocking you over.\r\n", // 40
   "A gaggle of rowdy teenagers shout and shove each other as they make their way down the street.\r\n",
   "A garbage truck crawls its way down the street with an occasional thud and clatter as bags are thrown in.\r\n",
