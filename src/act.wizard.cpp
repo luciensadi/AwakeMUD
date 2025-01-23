@@ -4309,6 +4309,7 @@ ACMD(do_wizutil)
 /* single zone printing fn used by "show zone" so it's not repeated in the
    code 3 times ... -je, 4/6/93 */
 
+extern const char *render_zone_editor_ids(struct zone_data *zon, char *string_to_write_to, size_t str_sz);
 void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed, struct char_data *ch)
 {
   int i, color = 0;
@@ -4343,18 +4344,35 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed, struc
       }
     }
 
-  if (!detailed) {
-    snprintf(bufptr, buf_size - strlen(bufptr), "%4d %-30.30s^n ", zone_table[zone].number,
+  if (detailed == 0 || detailed == 2) {
+    snprintf(bufptr, buf_size - strlen(bufptr), "^c%5d^n %-40.40s^n ", zone_table[zone].number,
             zone_table[zone].name);
     for (i = 0; i < color; i++)
       strlcat(bufptr, " ", buf_size);
-    snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s (%20s) Age: %3d; Res: %3d (%1d); Top: %6d; Sec: %2d\r\n",
+
+    if (detailed == 2) {
+      // Completed zones. We want info on the editors and the name of the first room.
+      char editor_writeout[1000];
+      rnum_t first_room_rnum = real_room(zone_table[zone].number * 100);
+      snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "(%s): %s^n\r\n",
+               render_zone_editor_ids(&zone_table[zone], editor_writeout, sizeof(editor_writeout)),
+               first_room_rnum >= 0 ? GET_ROOM_NAME(&world[first_room_rnum]) : "<no room at 00>");
+    } else {
+      // All zones.
+      const char *sec_color = "^n";
+      if (zone_table[zone].security >= 10)
+        sec_color = "^r";
+      else if (zone_table[zone].security >= 7)
+        sec_color = "^y";
+
+      snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s (%-3.3s) Age: %3d; Res: %3d (%1d); Top: ^c%6d^n; Sec: %s%2d^n\r\n",
             zone_table[zone].connected ? "* " : "  ",
             jurisdictions[zone_table[zone].jurisdiction],
             zone_table[zone].age, zone_table[zone].lifespan,
             zone_table[zone].reset_mode, zone_table[zone].top,
-            zone_table[zone].security);
-  } else {
+            sec_color, zone_table[zone].security);
+    }
+  } else if (detailed == 1) {
     int rooms = 0, objs = 0, mobs = 0, shops = 0, vehs = 0;
     for (i = 0; i <= top_of_world && world[i].number <= zone_table[zone].top; i++)
       if (world[i].number >= (zone_table[zone].number * 100))
@@ -4375,7 +4393,7 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed, struc
     snprintf(bufptr, buf_size, "Zone %d (%d): %s^n\r\n"
             "Age: %d, Commands: %d, Reset: %d (%d), Top: %d\r\n"
             "Rooms: %d, Mobiles: %d, Objects: %d, Shops: %d, Vehicles: %d\r\n"
-            "Security: %d, Status: %s^n\r\nJurisdiction: %s^n, Editors: ",
+            "Security: %d, Status: %s^n\r\nJurisdiction: %s^n, Editors: <not implemented>",
             zone_table[zone].number, zone, zone_table[zone].name,
             zone_table[zone].age, zone_table[zone].num_cmds,
             zone_table[zone].lifespan, zone_table[zone].reset_mode,
@@ -4492,6 +4510,7 @@ ACMD(do_show)
                { "extraflag",       LVL_BUILDER },
                { "affflag",         LVL_BUILDER },
                { "mobflag",         LVL_BUILDER },
+               { "finishedzones",   LVL_BUILDER },
                { "\n", 0 }
              };
 
@@ -5270,6 +5289,284 @@ ACMD(do_show)
     send_to_char("Please specify a single mobflag from the following list:\r\n", ch);
     for (i = 0; i < MOB_MAX; i++)
       send_to_char(ch, "  %s\r\n", action_bits[i]);
+    return;
+  case 40:
+    // finishedzones
+    {
+      *buf = '\0';
+
+      for (i = 0; i <= top_of_zone_table; i++) {
+        // Skip anything that's not marked as completed.
+        if (!zone_table[i].connected) {
+          continue;
+        }
+
+        // Skip zones that were part of Che's release.
+        switch (zone_table[i].number) {
+          case 0:
+          case 2:
+          case 3:
+          case 5:
+          case 6:
+          case 7:
+          case 10:
+          case 11:
+          case 12:
+          case 13:
+          case 14:
+          case 15:
+          case 16:
+          case 18:
+          case 20:
+          case 21:
+          case 22:
+          case 23:
+          case 24:
+          case 25:
+          case 26:
+          case 27:
+          case 29:
+          case 30:
+          case 31:
+          case 32:
+          case 33:
+          case 34:
+          case 35:
+          case 36:
+          case 37:
+          case 38:
+          case 40:
+          case 41:
+          case 42:
+          case 46:
+          case 47:
+          case 48:
+          case 49:
+          case 50:
+          case 51:
+          case 52:
+          case 54:
+          case 55:
+          case 56:
+          case 57:
+          case 58:
+          case 59:
+          case 60:
+          case 61:
+          case 62:
+          case 64:
+          case 65:
+          case 67:
+          case 69:
+          case 70:
+          case 72:
+          case 74:
+          case 77:
+          case 78:
+          case 79:
+          case 80:
+          case 81:
+          case 83:
+          case 84:
+          case 88:
+          case 91:
+          case 95:
+          case 96:
+          case 98:
+          case 99:
+          case 100:
+          case 101:
+          case 102:
+          case 103:
+          case 105:
+          case 106:
+          case 108:
+          case 112:
+          case 113:
+          case 114:
+          case 115:
+          case 120:
+          case 123:
+          case 124:
+          case 125:
+          case 127:
+          case 128:
+          case 130:
+          case 134:
+          case 143:
+          case 145:
+          case 146:
+          case 148:
+          case 150:
+          case 151:
+          case 156:
+          case 157:
+          case 158:
+          case 160:
+          case 162:
+          case 164:
+          case 171:
+          case 172:
+          case 175:
+          case 176:
+          case 179:
+          case 181:
+          case 183:
+          case 184:
+          case 188:
+          case 194:
+          case 196:
+          case 197:
+          case 198:
+          case 203:
+          case 206:
+          case 208:
+          case 210:
+          case 217:
+          case 219:
+          case 220:
+          case 221:
+          case 222:
+          case 224:
+          case 226:
+          case 228:
+          case 229:
+          case 231:
+          case 232:
+          case 233:
+          case 235:
+          case 236:
+          case 237:
+          case 241:
+          case 243:
+          case 245:
+          case 248:
+          case 249:
+          case 250:
+          case 253:
+          case 254:
+          case 261:
+          case 262:
+          case 264:
+          case 267:
+          case 268:
+          case 269:
+          case 274:
+          case 276:
+          case 278:
+          case 279:
+          case 280:
+          case 284:
+          case 286:
+          case 287:
+          case 288:
+          case 289:
+          case 290:
+          case 291:
+          case 293:
+          case 294:
+          case 297:
+          case 298:
+          case 299:
+          case 301:
+          case 302:
+          case 305:
+          case 309:
+          case 310:
+          case 311:
+          case 312:
+          case 315:
+          case 316:
+          case 317:
+          case 318:
+          case 320:
+          case 321:
+          case 322:
+          case 323:
+          case 325:
+          case 328:
+          case 329:
+          case 330:
+          case 332:
+          case 333:
+          case 350:
+          case 352:
+          case 353:
+          case 355:
+          case 357:
+          case 360:
+          case 375:
+          case 380:
+          case 382:
+          case 384:
+          case 392:
+          case 394:
+          case 396:
+          case 398:
+          case 400:
+          case 402:
+          case 403:
+          case 404:
+          case 405:
+          case 406:
+          case 407:
+          case 408:
+          case 410:
+          case 411:
+          case 420:
+          case 421:
+          case 450:
+          case 452:
+          case 500:
+          case 503:
+          case 600:
+          case 602:
+          case 603:
+          case 605:
+          case 607:
+          case 608:
+          case 610:
+          case 615:
+          case 620:
+          case 621:
+          case 622:
+          case 623:
+          case 624:
+          case 625:
+          case 649:
+          case 650:
+          case 651:
+          case 652:
+          case 654:
+          case 700:
+          case 701:
+          case 702:
+          case 703:
+          case 704:
+          case 705:
+          case 710:
+          case 711:
+          case 720:
+          case 721:
+          case 807:
+          case 850:
+          case 852:
+          case 854:
+          case 856:
+          case 858:
+          case 859:
+          case 860:
+          case 1000:
+          case 7000:
+          case 7050:
+          case 7060:
+            continue;
+        }
+
+        print_zone_to_buf(ENDOF(buf), sizeof(buf) - strlen(buf), i, 2, ch);
+      }
+    }
+    page_string(ch->desc, buf, 1);
     return;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);

@@ -210,6 +210,31 @@ void zedit_disp_state_menu(struct descriptor_data *d)
                "^G0^Y) ^WQuit\r\n^wEnter a selection: ", CH);
 }
 
+const char *render_zone_editor_ids(struct zone_data *zon, char *string_to_write_to, size_t str_sz) {
+  string_to_write_to[0] = '\0';
+
+  for (int i = 0; i <= 4; i++) {
+    if (zon->editor_ids[i] > 0) {
+      const char *plr_name = get_player_name(zon->editor_ids[i]);
+
+      if (plr_name) {
+        snprintf(ENDOF(string_to_write_to), str_sz - strlen(string_to_write_to), "%s^c%s ^n(^c%d^n)",
+                 *string_to_write_to ? ", ": "",
+                 plr_name,
+                 zon->editor_ids[i]);
+      }
+
+      delete [] plr_name;
+    }
+  }
+
+  if (!*string_to_write_to) {
+    strlcpy(string_to_write_to, "nobody", str_sz);
+  }
+
+  return string_to_write_to;
+}
+
 void zedit_disp_data_menu(struct descriptor_data *d)
 {
   CLS(CH);
@@ -221,25 +246,7 @@ void zedit_disp_data_menu(struct descriptor_data *d)
   send_to_char(CH, "^G5^Y) ^WSecurity level (1-%d): ^c%d^n\r\n", MAX_ZONE_SECURITY_RATING, ZON->security );
   send_to_char(CH, "^G6^Y) ^WJurisdiction: ^c%s^n\r\n", jurisdictions[ZON->jurisdiction]);
   if (access_level(CH, LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS)) {
-    send_to_char("^G7^Y) ^WEditors: ", CH);
-    bool printed_something = FALSE;
-    for (int i = 0; i <= 4; i++) {
-      if (ZON->editor_ids[i] > 0) {
-        const char *plr_name = get_player_name(ZON->editor_ids[i]);
-        if (plr_name && str_cmp(plr_name, CHARACTER_DELETED_NAME_FOR_SQL)) {
-          send_to_char(CH, "%s^c%s ^n(^c%ld^n)", printed_something ? ", ": "", plr_name, ZON->editor_ids[i]);
-          printed_something = TRUE;
-        } else {
-          ZON->editor_ids[i] = 0;
-        }
-        delete [] plr_name;
-      }
-    }
-    if (!printed_something) {
-      send_to_char("^cNobody.^n\r\n", CH);
-    } else {
-      send_to_char("\r\n", CH);
-    }
+    send_to_char(CH, "^G7^Y) ^WEditors: %s\r\n", render_zone_editor_ids(ZON, buf, sizeof(buf)));
   }
   if (access_level(CH, LVL_FOR_SETTING_ZONE_CONNECTED_STATUS)) {
     send_to_char(CH, "^G8^Y) ^WConnected: ^c%d^n\r\n", ZON->connected);
