@@ -2899,7 +2899,7 @@ void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool
   }
 }
 
-void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...)
+void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, bool is_ignorable_spam, ...)
 {
   struct char_data *i;
 
@@ -2922,7 +2922,7 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
   }
 }
 
-void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig)
+void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig, bool is_ignorable_spam)
 {
   struct char_data *i;
 
@@ -2937,15 +2937,15 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
   {
     for (i = veh->people; i; i = i->next_in_veh)
       if (i != ch && i != cha && i->desc) {
-        if (!(!torig && AFF_FLAGGED(i, AFF_RIG)))
+        if (!(is_ignorable_spam && PRF_FLAGGED(i, PRF_NOTRAFFIC)) && !(!torig && AFF_FLAGGED(i, AFF_RIG)))
           SEND_TO_Q(messg, i->desc);
       }
-    if (torig && veh->rigger && veh->rigger->desc)
+    if (torig && veh->rigger && veh->rigger->desc && !(is_ignorable_spam && PRF_FLAGGED(veh->rigger, PRF_NOTRAFFIC)))
       SEND_TO_Q(messg, veh->rigger->desc);
   }
 }
 
-void send_to_room(const char *messg, struct room_data *room, struct veh_data *exclude_veh)
+void send_to_room(const char *messg, struct room_data *room, struct veh_data *exclude_veh, bool is_ignorable_spam)
 {
   struct char_data *i;
   struct veh_data *v;
@@ -2953,7 +2953,7 @@ void send_to_room(const char *messg, struct room_data *room, struct veh_data *ex
   if (messg && room) {
     for (i = room->people; i; i = i->next_in_room) {
       if (i->desc)
-        if (!(PLR_FLAGGED(i, PLR_REMOTE) || PLR_FLAGGED(i, PLR_MATRIX)) && AWAKE(i))
+        if (!(is_ignorable_spam && PRF_FLAGGED(i, PRF_NOTRAFFIC)) && !(PLR_FLAGGED(i, PLR_REMOTE) || PLR_FLAGGED(i, PLR_MATRIX)) && AWAKE(i))
           SEND_TO_Q(messg, i->desc);
 
       if (i == i->next_in_room) {

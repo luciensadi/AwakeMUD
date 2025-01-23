@@ -513,9 +513,9 @@ SPECIAL(traffic)
 
   if (!cmd && room->people) {
     if (GET_JURISDICTION(room) == JURISDICTION_SECRET) {
-      send_to_room(current_traffic_msg[TRAFFIC_MESSAGES_DEPRESSING], room);
+      send_to_room(current_traffic_msg[TRAFFIC_MESSAGES_DEPRESSING], room, NULL, TRUE);
     } else {
-      send_to_room(current_traffic_msg[TRAFFIC_MESSAGES_NORMAL], room);
+      send_to_room(current_traffic_msg[TRAFFIC_MESSAGES_NORMAL], room, NULL, TRUE);
     }
   }
 

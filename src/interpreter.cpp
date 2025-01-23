@@ -611,7 +611,11 @@ struct command_info cmd_info[] =
     { "date"       , POS_DEAD    , do_date     , 0, SCMD_DATE, ALLOWS_IDLE_REWARD },
     { "dc"         , POS_DEAD    , do_dc       , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
     { "deactivate" , POS_LYING   , do_deactivate, 0, 0, BLOCKS_IDLE_REWARD },
+#ifdef IS_BUILDPORT
+    { "debug"      , POS_DEAD    , do_debug    , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
+#else
     { "debug"      , POS_DEAD    , do_debug    , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
+#endif
     { "decline"    , POS_LYING   , do_decline  , 0, 0, BLOCKS_IDLE_REWARD },
     { "decompress" , POS_LYING   , do_compact  , 0, 1, BLOCKS_IDLE_REWARD },
     { "decorate"   , POS_DEAD    , do_decorate , 0, 0, ALLOWS_IDLE_REWARD },

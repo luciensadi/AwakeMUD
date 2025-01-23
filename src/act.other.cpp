@@ -1162,8 +1162,8 @@ const char *tog_messages[][2] = {
                              "You will now display your playergroup affiliation in the wholist.\r\n"},
                             {"You will no longer receive the keepalive pulses from the MUD.\r\n",
                              "You will now receive keepalive pulses from the MUD.\r\n"},
-                            {"Screenreader mode disabled. Your TOGGLE NOCOLOR, TOGGLE NOPROMPT, and TOGGLE NOPSEUDOLANGUAGE settings have not been altered.\r\n",
-                             "Screenreader mode enabled. Extraneous text will be reduced. Color, prompts, and pseudolanguage strings have been disabled for you, you may TOGGLE NOCOLOR, TOGGLE NOPROMPT, and TOGGLE NOPSEUDOLANGUAGE respectively to restore them.\r\n"},
+                            {"Screenreader mode disabled. Your TOGGLE NOCOLOR, TOGGLE NOPROMPT, TOGGLE NOPSEUDOLANGUAGE, and TOGGLE NOTRAFFIC settings have not been altered.\r\n",
+                             "Screenreader mode enabled. Extraneous text will be reduced. Color, prompts, pseudolanguage strings, and traffic ambiance messages have been disabled for you, you may TOGGLE NOCOLOR, TOGGLE NOPROMPT, TOGGLE NOPSEUDOLANGUAGE, and TOGGLE NOTRAFFIC respectively to restore them.\r\n"},
                             {"You will now receive ANSI color codes again.\r\n",
                              "You will no longer receive ANSI color codes.\r\n"},
                             {"You will now receive prompts.\r\n",
@@ -1207,7 +1207,9 @@ const char *tog_messages[][2] = {
                             {"You will now see your prompt displayed when you change it.\r\n",
                              "OK, your prompt will no longer display when you change it.\r\n"},
                             {"You will now participate in combat again.\r\n",
-                             "OK, you will no longer be able to initiate combat or fight back.\r\n"}
+                             "OK, you will no longer be able to initiate combat or fight back.\r\n"},
+                            {"You will now see ambiance messages and environmental echoes about traffic.\r\n",
+                             "You will no longer see ambiance messages and environmental echoes about traffic.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1227,9 +1229,9 @@ ACMD(do_toggle)
       int printed = 0;
     for (int i = 0; i < PRF_MAX; i++) {
       // Skip the unused holes in our preferences.
-      if (i == PRF_UNUSED2_PLS_REPLACE) {
+/*    if (i == PRF_UNUSED2_PLS_REPLACE) {
         continue;
-      }
+      }*/
 
       // Skip the things that morts should not see.
       if (!IS_SENATOR(ch) && preference_bits_v2[i].staff_only) {
@@ -1410,6 +1412,7 @@ ACMD(do_toggle)
         PRF_FLAGS(ch).SetBit(PRF_NOCOLOR);
         PRF_FLAGS(ch).SetBit(PRF_NOPROMPT);
         PRF_FLAGS(ch).SetBit(PRF_NOPSEUDOLANGUAGE);
+        PRF_FLAGS(ch).SetBit(PRF_NOTRAFFIC);
       }
       mode = 29;
     } else if (is_abbrev(argument, "nocolors") || is_abbrev(argument, "colors") || is_abbrev(argument, "colours")) {
@@ -1494,6 +1497,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "passive combat")) {
       result = PRF_TOG_CHK(ch, PRF_PASSIVE_IN_COMBAT);
       mode = 51;
+    } else if (is_abbrev(argument, "traffic") || is_abbrev(argument, "notraffic") || is_abbrev(argument, "no traffic")) {
+      result = PRF_TOG_CHK(ch, PRF_NOTRAFFIC);
+      mode = 52;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

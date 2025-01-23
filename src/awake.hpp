@@ -419,8 +419,8 @@ enum {
 #define PRF_PKER                               11 /* is able to pk/be pked        */
 #define PRF_HIRED                              12 /* Participating in a prun */
 #define PRF_AFK                                13 /* Afk   */
-#define PRF_SUPPRESS_STAFF_RADIO               14 /* EMPTY SPACE, FILL ME! */
-#define PRF_UNUSED2_PLS_REPLACE                15 /* EMPTY SPACE, FILL ME!        15 */
+#define PRF_SUPPRESS_STAFF_RADIO               14 /* Ignore staff radio. */
+#define PRF_NOTRAFFIC                          15 /* Ignore traffic messages. */
 #define PRF_NOHASSLE                           16 /* Aggr mobs won't attack  */
 #define PRF_ROOMFLAGS                          17 /* Can see room flags (ROOM_x) */
 #define PRF_HOLYLIGHT                          18 /* Can see in dark   */
