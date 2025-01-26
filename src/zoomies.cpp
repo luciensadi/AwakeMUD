@@ -162,6 +162,12 @@ ACMD(do_flyto) {
   FAILURE_CASE_PRINTF(!target_room, "You're not aware of any place called %s.", argument);
   FAILURE_CASE(target_room == veh->in_room, "You're already there.");
 
+  // Short-circuit: No going to restricted zones until you're ready for them.
+  #define JURISDICTION_SECRET_TKE_REQUIREMENT_TO_ENTER 250
+  FAILURE_CASE_PRINTF(GET_JURISDICTION(target_room) == JURISDICTION_SECRET && GET_TKE(ch) < JURISDICTION_SECRET_TKE_REQUIREMENT_TO_ENTER,
+                      "You've heard rumors about that place. Best not head that way until you've got a little more experience under your belt.\r\n(OOC: You need at least %d TKE to go there.)",
+                      JURISDICTION_SECRET_TKE_REQUIREMENT_TO_ENTER);
+
   // Valid destination. Calculate fuel cost.
   float distance = get_flight_distance_to_room(veh->in_room, target_room);
   int fuel_cost = calculate_flight_cost(veh, distance);
