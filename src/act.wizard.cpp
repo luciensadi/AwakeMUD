@@ -1164,6 +1164,7 @@ ACMD(do_vnum)
 }
 #undef VNUM_USAGE_STRING
 
+SPECIAL(traffic);
 void do_stat_room(struct char_data * ch)
 {
   struct extra_descr_data *desc;
@@ -1177,14 +1178,22 @@ void do_stat_room(struct char_data * ch)
   send_to_char(ch, "Room name: ^c%s\r\n", rm->name);
 
   sprinttype(rm->sector_type, spirit_name, buf2, sizeof(buf2));
-  snprintf(buf, sizeof(buf), "Zone: [%d (%d)], VNum: [^g%8ld^n], RNum: [%5ld], Rating: [%2d], Type: %s\r\n",
-          zone_table[rm->zone].number, rm->zone, rm->number, real_room(rm->number), rm->rating, buf2);
-  send_to_char(buf, ch);
+  send_to_char(ch, "Zone: [%d (%d)], VNum: [^g%8ld^n], RNum: [%5ld], Rating: [%2d], Type: %s\r\n",
+               zone_table[rm->zone].number,
+               rm->zone,
+               rm->number,
+               real_room(rm->number),
+               rm->rating,
+               buf2);
 
   rm->room_flags.PrintBits(buf2, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-  snprintf(buf, sizeof(buf), "Extra: [%4d], SpecProc: %s, Flags: %s Light: %s Smoke: %s\r\n", rm->spec,
-          (rm->func == NULL) ? "None" : "^CExists^n", buf2, light_levels[light_level(rm)], light_levels[rm->vision[1]]);
-  send_to_char(buf, ch);
+  send_to_char(ch, "Extra: [%4d], SpecProc: %s, Flags: %s Light: %s Smoke: %s, jurisdiction %s\r\n",
+               rm->spec,
+               (rm->func == NULL) ? "None" : (rm->func == traffic ? "^CTraffic^n" : "^CExists^n"),
+               buf2,
+               light_levels[light_level(rm)],
+               light_levels[rm->vision[1]],
+               GET_JURISDICTION(rm));
 
   send_to_char(ch, "Effects: light[^c%d^n][^c%d^n][^c%d^n], peaceful[^c%d^n], poltergeist[^c%d^n][^c%d^n], icesheet[^c%d^n][^c%d^n], shadow[^c%d^n][^c%d^n], silence[^c%d^n][^c%d^n]\r\n",
                rm->light[0],
