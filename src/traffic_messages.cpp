@@ -490,8 +490,10 @@ void regenerate_traffic_msgs() {
         queue.push_back(str_dup(messages[msg_idx]));
 
       // Add dynamic traffic messages to the queue.
-      for (int dyn_idx = 0; dyn_idx < (int) (qty * 2); dyn_idx++)
-        queue.push_back(generate_dynamic_traffic_message__returns_new());
+      if (which != TRAFFIC_MESSAGES_DEPRESSING) {
+        for (int dyn_idx = 0; dyn_idx < (int) (qty * 2); dyn_idx++)
+          queue.push_back(generate_dynamic_traffic_message__returns_new());
+      }
 
       // Shuffle it.
       std::random_device rd;
