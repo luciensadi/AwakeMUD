@@ -1193,7 +1193,7 @@ void do_stat_room(struct char_data * ch)
                buf2,
                light_levels[light_level(rm)],
                light_levels[rm->vision[1]],
-               GET_JURISDICTION(rm));
+               jurisdictions[GET_JURISDICTION(rm)]);
 
   send_to_char(ch, "Effects: light[^c%d^n][^c%d^n][^c%d^n], peaceful[^c%d^n], poltergeist[^c%d^n][^c%d^n], icesheet[^c%d^n][^c%d^n], shadow[^c%d^n][^c%d^n], silence[^c%d^n][^c%d^n]\r\n",
                rm->light[0],
