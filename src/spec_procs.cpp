@@ -3051,6 +3051,8 @@ SPECIAL(fixer)
     return TRUE;
   } else if (CMD_IS("list")) {
     bool found = FALSE;
+    char formatstr[MAX_STRING_LENGTH] = { '\0' };
+
     for (obj = fixer->carrying; obj; obj = obj->next_content)
       if (GET_OBJ_TIMER(obj) == GET_IDNUM(ch)) {
         if (!found) {
@@ -3075,10 +3077,12 @@ SPECIAL(fixer)
           }
         }
 
+        snprintf(formatstr, sizeof(formatstr), "%%-%ds^n  Status: ", 59 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+        send_to_char(ch, formatstr, GET_OBJ_NAME(obj));
         if (hour > 0) {
-          send_to_char(ch, "%-59s Status: %d hour%s\r\n", obj->text.name, hour, hour == 1 ? "" : "s");
+          send_to_char(ch, "%d hour%s\r\n", hour, hour == 1 ? "" : "s");
         } else {
-          send_to_char(ch, "%-59s Status: Ready\r\n", obj->text.name);
+          send_to_char("^gReady^n\r\n", ch);
         }
       }
     if (!found) {
