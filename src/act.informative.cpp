@@ -979,7 +979,6 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
       send_to_char("", ch);
     }
 
-#ifdef PLAYER_EXDESCS
     if (CHAR_HAS_EXDESCS(i) && used_keyword && *used_keyword) {
       char uppercase[strlen(used_keyword) + 1];
       for (size_t idx = 0; idx < strlen(used_keyword); idx++) { uppercase[idx] = toupper(used_keyword[idx]); }
@@ -990,7 +989,6 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
                    HASHAVE(i),
                    uppercase);
     }
-#endif
 
     if (i != ch && GET_HEIGHT(i) > 0 && GET_WEIGHT(i) > 0) {
       if ((GET_HEIGHT(i) % 10) < 5)
@@ -2503,13 +2501,13 @@ void _send_obj_contents_info_to_char(struct obj_data *obj, struct char_data *ch,
   send_to_char(GET_OBJ_NAME(obj), ch);
   switch (bits) {
     case FIND_OBJ_INV:
-      send_to_char(" (carried): ", ch);
+      send_to_char(" (carried): \r\n", ch);
       break;
     case FIND_OBJ_ROOM:
-      send_to_char(" (here): ", ch);
+      send_to_char(" (here): \r\n", ch);
       break;
     case FIND_OBJ_EQUIP:
-      send_to_char(" (used): ", ch);
+      send_to_char(" (used): \r\n", ch);
       break;
   }
   if (obj->contains) {
@@ -2730,12 +2728,8 @@ void look_at_target(struct char_data * ch, char *arg, char *extra_args)
   /* Is the target a character? */
   if (found_char != NULL)
   {
-#ifdef PLAYER_EXDESCS
     // If this isn't an exdesc invocation, look at the character.
     if (!look_at_exdescs(ch, found_char, extra_args)) {
-#else
-    {
-#endif
       look_at_char(found_char, ch, arg);
     }
     /*
@@ -2751,12 +2745,8 @@ void look_at_target(struct char_data * ch, char *arg, char *extra_args)
   {
     found_char = get_char_veh(ch, arg, ch->in_veh);
     if (found_char) {
-#ifdef PLAYER_EXDESCS
       // If this isn't an exdesc invocation, look at the character.
       if (!look_at_exdescs(ch, found_char, arg)) {
-#else
-      {
-#endif
         look_at_char(found_char, ch, arg);
       }
       /*
@@ -5994,11 +5984,11 @@ ACMD(do_who)
       }
 
       if (GET_TKE(tch) <= NEWBIE_KARMA_THRESHOLD && !IS_SENATOR(tch) && !IS_PRESTIGE_CH(tch)) {
-        strlcat(buf1, " ^y(Newbie)^n", sizeof(buf1));
+        strlcat(buf1, GET_TITLE(tch) ? " ^y(Newbie)^n" : "^y(Newbie)^n", sizeof(buf1));
       }
 
       if (AFF_FLAGS(tch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT))
-        strlcat(buf1, " (B/R)", sizeof(buf1));
+        strlcat(buf1, GET_TITLE(tch) ? " (B/R)" : "(B/R)", sizeof(buf1));
       if (PRF_FLAGGED(tch, PRF_AFK))
         strlcat(buf1, " (AFK)", sizeof(buf1));
       if (PLR_FLAGGED(tch, PLR_RPE) && (level > LVL_MORTAL || PLR_FLAGGED(ch, PLR_RPE)))
