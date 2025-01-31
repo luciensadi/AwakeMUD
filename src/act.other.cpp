@@ -4782,7 +4782,7 @@ ACMD(do_cleanup)
   generic_find(argument, FIND_OBJ_ROOM, ch, &tmp_char, &target_obj);
 
   if (!target_obj) {
-    send_to_char(ch, "You don't see anything called '%s' here.\r\n", argument);
+    send_to_char(ch, "You don't see any graffiti called '%s' here.\r\n", argument);
     return;
   }
 
@@ -4810,15 +4810,23 @@ ACMD(do_cleanup)
     }
 
     // Decrement contents.
-    if ((--GET_DRINKCON_AMOUNT(cleaner)) <= 0) {
+    if ((GET_DRINKCON_AMOUNT(cleaner) -= 2) <= 0) {
       send_to_char(ch, "You spray the last of the cleaner from %s over the graffiti.\r\n", decapitalize_a_an(GET_OBJ_NAME(cleaner)));
     }
   }
 
-  send_to_char(ch, "You spend a few moments scrubbing away at %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
-  act("$n spends a few moments scrubbing away at $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
+  if (GET_OBJ_QUEST_CHAR_ID(target_obj)) {
+    send_to_char(ch, "You spend a few moments scrubbing away at %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
+    act("$n spends a few moments scrubbing away at $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
 
-  WAIT_STATE(ch, 3 RL_SEC);
+    WAIT_STATE(ch, 1 RL_SEC);
+  } else {
+    send_to_char(ch, "You spend a few minutes scrubbing away at %s. It must have really offended you.\r\n", GET_OBJ_NAME(target_obj));
+    send_to_char(ch, "(OOC: Please remember to only clean up offensive or harmful graffiti!)\r\n");
+    act("$n spends a few minutes scrubbing away at $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
+
+    WAIT_STATE(ch, 6 RL_SEC);
+  }
 
   // Log it, but only if it's player-generated content.
   if (GET_OBJ_VNUM(target_obj) == OBJ_DYNAMIC_GRAFFITI) {
@@ -4914,16 +4922,19 @@ ACMD(do_syspoints) {
   // Morts can only view their own system points.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
     if (!*argument) {
-      send_to_char(ch, "You have %d system point%s. See ^WHELP SYSPOINTS^n for how to use them.\r\n",
+      send_to_char(ch, "You have ^c%d^n system point%s. See ^WHELP SYSPOINTS^n for how to use them.\r\n",
                     GET_SYSTEM_POINTS(ch),
                     GET_SYSTEM_POINTS(ch) == 1 ? "" : "s"
                   );
-      send_to_char(ch, " - You %s^n purchased NODELETE.\r\n", PLR_FLAGGED(ch, PLR_NODELETE) ? "^ghave" : "^yhave not yet");
-      send_to_char(ch, " - You %s^n purchased the ability to see ROLLS output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
-      send_to_char(ch, " - You %s^n purchased the ability to see VNUMS in your prompt.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS) ? "^ghave" : "^yhave not yet");
-#ifdef PLAYER_EXDESCS
-      send_to_char(ch, " - You have purchased %d EXDESC slots.\r\n", get_exdesc_max(ch));
-#endif
+      send_to_char(ch, " - You %s^n purchased ^WNODELETE^n.\r\n", PLR_FLAGGED(ch, PLR_NODELETE) ? "^ghave" : "^yhave not yet");
+      send_to_char(ch, " - You %s^n purchased the ability to see ^WROLLS^n output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
+      send_to_char(ch, " - You %s^n purchased the ability to see ^WVNUMS^n in your prompt.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS) ? "^ghave" : "^yhave not yet");
+
+      if (GET_CHAR_MAX_EXDESCS(ch) <= 0) {
+        send_to_char(" - You ^yhave not yet^n purchased any ^WEXDESC^n slots.\r\n", ch);
+      } else {
+        send_to_char(ch, " - You have purchased ^g%d^n ^WEXDESC^n slots.\r\n", GET_CHAR_MAX_EXDESCS(ch));
+      }
       return;
     }
 
@@ -5194,12 +5205,10 @@ ACMD(do_syspoints) {
 #undef ANALYZE_COST
     }
 
-#ifdef PLAYER_EXDESCS
     if (is_abbrev(arg, "exdescs") || is_abbrev(arg, "extra descriptions")) {
       syspoints_purchase_exdescs(ch, buf, FALSE);
       return;
     }
-#endif
 
     send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
     return;
