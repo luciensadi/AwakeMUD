@@ -6,45 +6,52 @@ enter, leave, sleep, wake, rest, sit, stand, lock, unlock, open, close,
 rig, drive, follow, scan, exits
 
 ^yCommunication^n: say, shout, yell, tell, reply, ask, whisper, mail,
-exclaim, receive, check, radio, ooc, osay, newbie
+exclaim, receive, check, radio, ooc, osay, newbie, question, pocket secretary,
+call, talk
 
-^yInformation^n: score, help, info, who, news, time, weather,
+^yInformation^n: score, help, info, who, where, time, weather,
 consider, wizlist, credits, policy, toggle, flags, status, software,
-subscribe, abilities, gname, skills, pools, spells, vehicles, display,
-finger, balance, cyberware, bioware, affects, recap
+subscribe, abilities, survey, skills, pools, spells, vehicles, display,
+finger, balance, cyberware, bioware, affects, recap, penalties
 
-^yObjects^n: get, drop, junk, donate, put, give, wear, wield,
+^yObjects^n: get, drop, junk, donate, put, give, wear, wield, hold,
 grab, inventory, equipment, remove, examine, eat, drink, taste, sip, pour
 
-^yCombat^n: kill, shoot, throw, flee, retreat, assist, hit, cast,
-ram, holster, sheath, ready, reload
+^yCombat^n: kill, shoot, throw, flee, assist, hit, cast, cpool, combat pool,
+holster, sheath, ready, draw, reload, drugs, damage code, damage level, soak
 
 ^yFinancial^n: activate, balance, credsticks, withdraw, deposit, transfer,
 availoffset, trade
 
-^yUtility^n: !, bug, idea, typo, quit, rent, brief, title,
-commands, socials, drag, buy, sell, hail, repair, house
+^yUtility^n: !, bug, idea, typo, quit, rent, brief, title, create,
+commands, socials, drag, buy, sell, hail, repair, house, receive, watch,
+prefix, practice, train, skills
 
-^yRoleplay^n: rp, osay, ooc, description, background, law,
-customize, remember, emote, vemote, shadowruns, jobs, johnsons
+^yRoleplay^n: rp, rpe, osay, ooc, description, background, law, highlight,
+customize, remember, emote, vemote, shadowruns, jobs, johnsons, position
 
 ^yMagic^n: cast, status, bond, project, perceive, spells, addpoint,
-initiation, abilities, return, release, order, spool, banish
+initiation, abilities, return, release, order, spool, banish, conjure,
+domain, services, magic loss, order, metamagics, cleanse, spool, spell pool,
+hermetic, mages, shamans, elementals, nature spirits, aspected, adepts,
+libraries
 
-^yDecking^n: cyberdecks, matrix, software, install, uninstall,
+^yDecking^n: cyberdecks, matrix, software, install, uninstall, list,
 load, run, bod, evasion, masking, sensors, attack, sleaze, decrypt, medic,
-shield, deception, programs, shutdown, datajacks, cancel, persona
-programs, unload, IC, alerts, intrusion countermeasures
+shield, deception, utilities, shutdown, datajacks, stop, persona, cook,
+upload, IC, alerts, intrusion countermeasures, max, hacking, subsystems,
+creat, design, program, progress, analyze, locate, assist, cloak, evade,
+parry, position, download, restrict, disarm, evaluate, paydata, data brokerage
 
 ^yRigging and Driving^n: remote control decks, vehicle control rigs,
 datajacks, rig, subscribe, control, return, ram, drones, vehicles,
-upgrade, drive, unsubscribe
+upgrade, drive, unsubscribe, vemote, lock, gridguide, fly, land
 
 ^yAttributes^n: body, quickness, strength, charisma, intelligence,
 willpower, essence, magic, reaction, bio index, initiative dice, condition
-monitor, wound levels
+monitor, wound levels, train
 
 ^yElectronics^n: bypass, crack
 
-^yCharacter Generation and Archetype Info^n: priorities, priority table,
-archetypes
+^yCharacter Generation and Archetype Info^n: priorities, archetypes, maximums,
+races, street samurai, deckers, adepts, mages, shamans, riggers, fixers
