@@ -96,7 +96,7 @@ extern struct zone_data *zone_table;
 extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern void find_and_draw_weapon(struct char_data *);
-extern void crash_test(struct char_data *ch, bool force_zero_successes);
+extern void crash_test(struct char_data *ch, bool no_driver);
 extern int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
 extern bool mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
@@ -106,6 +106,7 @@ extern bool check_sentinel_snap_back(struct char_data *ch);
 extern void end_quest(struct char_data *ch, bool succeeded);
 extern bool npc_vs_vehicle_blocked_by_quest_protection(idnum_t quest_id, struct veh_data *veh);
 extern bool ch_is_in_viewers_visual_range(struct char_data *ch, struct char_data *viewer);
+extern void stop_driving(struct char_data *ch, bool is_involuntary);
 
 // Corpse saving externs.
 extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size);
@@ -893,7 +894,7 @@ void death_cry(struct char_data * ch, idnum_t cause_of_death_idnum)
 
 void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
 {
-  struct obj_data *bio, *obj, *o;
+  struct obj_data *obj, *o;
   struct room_data *dest_room;
 
   if (CH_IN_COMBAT(ch))
@@ -932,20 +933,25 @@ void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
       make_corpse(ch);
 
     if (!IS_NPC(ch)) {
-      for (bio = ch->bioware; bio; bio = bio->next_content) {
+      // Disable bioware etc that resets on death.
+      for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
         switch (GET_BIOWARE_TYPE(bio)) {
           case BIO_ADRENALPUMP:
-            if (GET_OBJ_VAL(bio, 5) > 0) {
+            if (GET_BIOWARE_PUMP_ADRENALINE(bio) > 0) {
               for (int affect_idx = 0; affect_idx < MAX_OBJ_AFFECT; affect_idx++)
                 affect_modify(ch,
                               bio->affected[affect_idx].location,
                               bio->affected[affect_idx].modifier,
                               bio->obj_flags.bitvector, FALSE);
-              GET_OBJ_VAL(bio, 5) = 0;
+              GET_BIOWARE_PUMP_ADRENALINE(bio) = 0;
             }
             break;
           case BIO_PAINEDITOR:
             GET_BIOWARE_IS_ACTIVATED(bio) = 0;
+            break;
+          case BIO_PLATELETFACTORY:
+            GET_BIOWARE_PLATELETFACTORY_DATA(bio) = 36;
+            GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio) = 0;
             break;
         }
       }
@@ -960,16 +966,7 @@ void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
         dest_room = get_jurisdiction_docwagon_room(GET_JURISDICTION(in_room));
       }
 
-      if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-        struct veh_data *veh;
-        RIG_VEH(ch, veh);
-
-        send_to_veh("Now driverless, the vehicle slows to a stop.\r\n", veh, ch, FALSE);
-        AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
-        stop_chase(veh);
-        if (!veh->dest)
-          veh->cspeed = SPEED_OFF;
-      }
+      stop_driving(ch, TRUE);
 
       if (ch->persona) {
         if (access_level(ch, LVL_PRESIDENT))
@@ -2364,6 +2361,8 @@ void docwagon_retrieve(struct char_data *ch) {
     end_all_sustained_spells(ch);
   }
 
+  stop_driving(ch, TRUE);
+
   // Remove them from the Matrix.
   if (ch->persona) {
     snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", CAP(ch->persona->name));
@@ -2386,17 +2385,21 @@ void docwagon_retrieve(struct char_data *ch) {
   for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
     switch (GET_BIOWARE_TYPE(bio)) {
       case BIO_ADRENALPUMP:
-        if (GET_OBJ_VAL(bio, 5) > 0) {
-          for (int i = 0; i < MAX_OBJ_AFFECT; i++)
+        if (GET_BIOWARE_PUMP_ADRENALINE(bio) > 0) {
+          for (int affect_idx = 0; affect_idx < MAX_OBJ_AFFECT; affect_idx++)
             affect_modify(ch,
-                          bio->affected[i].location,
-                          bio->affected[i].modifier,
+                          bio->affected[affect_idx].location,
+                          bio->affected[affect_idx].modifier,
                           bio->obj_flags.bitvector, FALSE);
-          GET_OBJ_VAL(bio, 5) = 0;
+          GET_BIOWARE_PUMP_ADRENALINE(bio) = 0;
         }
         break;
       case BIO_PAINEDITOR:
         GET_BIOWARE_IS_ACTIVATED(bio) = 0;
+        break;
+      case BIO_PLATELETFACTORY:
+        GET_BIOWARE_PLATELETFACTORY_DATA(bio) = 36;
+        GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio) = 0;
         break;
     }
   }
@@ -3514,6 +3517,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   switch (GET_POS(victim))
   {
     case POS_MORTALLYW:
+      stop_driving(ch, TRUE);
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
         act("$n is critically damaged, and will fail soon, if not aided.",
             TRUE, victim, 0, 0, TO_ROOM);
@@ -3537,6 +3541,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       }
       break;
     case POS_STUNNED:
+      stop_driving(ch, TRUE);
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
         act("$n is rebooting from heavy damage.",
             TRUE, victim, 0, 0, TO_ROOM);
@@ -3550,6 +3555,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       }
       break;
     case POS_DEAD:
+      stop_driving(ch, TRUE);
       if (IS_NPC(victim)) {
         if (MOB_FLAGGED(victim, MOB_INANIMATE)) {
           act("$n terminally fails in a shower of sparks!", FALSE, victim, 0, 0, TO_ROOM);
