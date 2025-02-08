@@ -830,7 +830,7 @@ void move_vehicle(struct char_data *ch, int dir)
   struct room_data *was_in = NULL;
   struct veh_data *veh;
   struct veh_follow *v, *nextv;
-  extern void crash_test(struct char_data *, bool);
+  extern void crash_test(struct char_data *, bool no_driver);
   char empty_argument = '\0';
 
   RIG_VEH(ch, veh);
