@@ -204,6 +204,50 @@ struct dest_data caribbean_taxi_destinations[] =
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
 
+  struct dest_data cas_taxi_destinations[] =
+  {
+    { "norfolk", "", "Norfolk", 100204, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
+    { "tide", "water", "Tide Water", 98010, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE}, 
+    { "virginia", "beach", "Virginia Beach", 98096, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE}, 
+    { "eastern", "shore", "Eastern Shore", 98044, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
+    { "nasa", "wallops", "Ares Nasa Wallops Island", 98057, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE}, 
+    { "universal", "omnitech", "Universal Omnitech", 100928, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE}, 
+    { "sport", "rotorcraft", "VA Beach Sport Rotorcraft", 100927, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE}, 
+    { "ford", "motor", "Ford Motor Company", 100944, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE}, 
+    { "cdc", "", "Center for Disease Control", 100942, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE}, 
+    { "meridional", "agronomic", "Meridional Agronomics", 101292, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE},
+    { "foundation", "atlantean", "The Atlantean Foundation", 100937, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE},
+    { "pier", "", "Virginia Beach Pier", 100910, TAXI_DEST_TYPE_TOURIST_ATTRACTION, TRUE}, 
+    { "museum", "marine", "Marine Science Museum", 100953, TAXI_DEST_TYPE_TOURIST_ATTRACTION, TRUE}, 
+    { "club", "country", "Salieri Country Club", 100958, TAXI_DEST_TYPE_TOURIST_ATTRACTION, TRUE}, 
+    { "track", "race", "Race Track", 100956, TAXI_DEST_TYPE_TOURIST_ATTRACTION, TRUE},
+    { "mcfarlane", "mansion", "McFarlane Mansion", 100215, TAXI_DEST_TYPE_TOURIST_ATTRACTION, TRUE},
+    { "airport", "international", "Norfolk International Airport", 98002, TAXI_DEST_TYPE_TRANSPORTATION, TRUE},
+    { "shack", "stuffer", "Stuffer Shack", 98015, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE}, 
+    { "diego's", "pizza", "Diego's Pizza and Gyros", 98021, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE}, 
+    { "stingray's", "", "Stingray's", 98045, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE}, 
+    { "creamery", "chincoteague", " Chincoteague Island Creamery", 98060, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE}, 
+    { "tea", "shoppe", "The Tea Shoppe", 100931, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
+    { "june's", "mama", "Mama June's", 100265, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
+    { "moe's", "pub", "Moe's Pub", 100214, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
+    { "kelley's", "", "Kelley's Bar", 100246, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
+    { "steakhouse", "carolina", "Carolina Steakhouse", 100208, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
+    { "captain", "seafood", "Captain T's Seafood Restaurant", 100210, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
+    { "rosco's", "", "Rosco's Bar", 100935, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
+    { "beerman's", "elder", "Elder Beerman's", 101228, TAXI_DEST_TYPE_SHOPPING, TRUE}, 
+    { "guns", "big", "Big Bore Guns & Ammo", 98048, TAXI_DEST_TYPE_SHOPPING, TRUE}, 
+    { "phil's", "garage", "Phil’s Garage", 98079, TAXI_DEST_TYPE_SHOPPING, TRUE}, 
+    { "fausto's", "surf", "Fausto’s Surf Shop", 100933, TAXI_DEST_TYPE_SHOPPING, TRUE}, 
+    { "pro", "", "The Pro Shop", 100957, TAXI_DEST_TYPE_SHOPPING, TRUE}, 
+    { "carlos'", "cars", "Carlos’ Used Cars", 100201, TAXI_DEST_TYPE_SHOPPING, TRUE},
+    { "taxidermy", "stevenson's", "Irwin Stevenson's Taxidermy & Hunting", 100256, TAXI_DEST_TYPE_SHOPPING, TRUE},
+    { "rotorcraft", "sport", "Virginia Beach Sport Rotorcraft", 100927, TAXI_DEST_TYPE_SHOPPING, TRUE},
+    { "motorlodge", "scott's", "Scott’s Motorlodge", 98082, TAXI_DEST_TYPE_HOTELS_MOTELS, TRUE},
+    { "bayview", "apartments", "Bayview Apartments", 98011, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE},
+    { "docwagon", "wagon", "DocWagon", 98010, TAXI_DEST_TYPE_HOSPITALS, TRUE}, 
+    { "cart", "crash", "Crash Cart", 100945, TAXI_DEST_TYPE_HOSPITALS, TRUE}
+  };
+
 struct taxi_dest_type taxi_dest_type_info[] = {
   { "^yAreas of Town", "^Y" },
   { "^cCorporate Parks", "^C" },
@@ -298,6 +342,9 @@ SPECIAL(taxi_sign) {
       break;
     case OBJ_CARIBBEAN_TAXI_SIGN:
       dest_data_list = caribbean_taxi_destinations;
+      break;
+    case OBJ_CAS_TAXI_SIGN:
+      dest_data_list = cas_taxi_destinations;
       break;
     default:
       snprintf(buf, sizeof(buf), "Warning: taxi_sign spec given to object %s (%ld) that had no matching definition in transport.cpp!",
@@ -559,8 +606,11 @@ void raw_taxi_leaves(rnum_t real_room_num) {
           snprintf(buf, sizeof(buf), "The taxi door slams shut as its wheels churn up a cloud of smoke.");
         else if (real_room_num >= real_room(FIRST_PORTLAND_CAB) && real_room_num <= real_room(LAST_PORTLAND_CAB))
           snprintf(buf, sizeof(buf), "The taxi doors slide shut and it pulls off from the curb.");
-        else // if (real_room_num >= real_room(FIRST_CARIBBEAN_CAB) || real_room_num <= real_room(LAST_CARIBBEAN_CAB))
+        else if (real_room_num >= real_room(FIRST_CARIBBEAN_CAB) || real_room_num <= real_room(LAST_CARIBBEAN_CAB))
           snprintf(buf, sizeof(buf), "The truck's doors close and it pulls away from the curb.");
+        else
+          snprintf(buf, sizeof(buf), "The taxi door slams shut as its wheels churn up a cloud of smoke.");
+
 
         act(buf, FALSE, to->people, 0, 0, TO_ROOM);
         act(buf, FALSE, to->people, 0, 0, TO_CHAR);
@@ -607,8 +657,13 @@ void taxi_leaves(void)
   }
 
 #ifdef USE_PRIVATE_CE_WORLD
-  int rr_last_caribean_cab = real_room(LAST_CARIBBEAN_CAB);
-  for (int j = real_room(FIRST_CARIBBEAN_CAB); j <= rr_last_caribean_cab; j++) {
+  int rr_last_caribbean_cab = real_room(LAST_CARIBBEAN_CAB);
+  for (int j = real_room(FIRST_CARIBBEAN_CAB); j <= rr_last_caribbean_cab; j++) {
+    do_taxi_leaves(j);
+  }
+
+  int rr_last_cas_cab = real_room(LAST_CAS_CAB);
+  for (int j = real_room(FIRST_CAS_CAB); j <= rr_last_cas_cab; j++) {
     do_taxi_leaves(j);
   }
 #endif
@@ -657,8 +712,11 @@ ACMD(do_hail)
     } else if (*argument && !strncmp(argument, "caribbean", strlen(argument))){
       send_to_char("Caribbean cab network selected.\r\n", ch);
       dest_data_list = caribbean_taxi_destinations;
+    } else if (*argument && !strncmp(argument, "cas", strlen(argument))){
+      send_to_char("CAS cab network selected.\r\n", ch);
+      dest_data_list = cas_taxi_destinations;
     } else {
-      send_to_char("Seattle (default) cab network selected. Use 'hail portland' or 'hail caribbean' for others.\r\n", ch);
+      send_to_char("Seattle (default) cab network selected. Use 'hail portland', 'hail caribbean', or 'hail CAS' for others.\r\n", ch);
       dest_data_list = seattle_taxi_destinations;
     }
   }
@@ -707,6 +765,9 @@ ACMD(do_hail)
   } else if (dest_data_list == caribbean_taxi_destinations) {
     first = real_room(FIRST_CARIBBEAN_CAB);
     last = real_room(LAST_CARIBBEAN_CAB);
+  } else if (dest_data_list == cas_taxi_destinations) {
+    first = real_room(FIRST_CAS_CAB);
+    last = real_room(LAST_CAS_CAB);
   } else {
     first = real_room(FIRST_SEATTLE_CAB);
     last = real_room(LAST_SEATTLE_CAB);
@@ -731,9 +792,10 @@ ACMD(do_hail)
   if (!found) {
     send_to_char("Hail as you might, no cab answers.\r\n", ch);
     snprintf(buf, sizeof(buf), "Warning: No cab available in %s-- are all in use?",
-             dest_data_list == seattle_taxi_destinations ? "Seattle" :
+              dest_data_list == seattle_taxi_destinations ? "Seattle" :
                (dest_data_list == portland_taxi_destinations ? "Portland" :
-                 (dest_data_list == caribbean_taxi_destinations ? "the Caribbean" : "ERROR")));
+                (dest_data_list == cas_taxi_destinations ? "CAS" :
+                 (dest_data_list == caribbean_taxi_destinations ? "the Caribbean" : "ERROR"))));
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return;
   }
@@ -747,6 +809,9 @@ ACMD(do_hail)
       else if (dest_data_list == caribbean_taxi_destinations)
         snprintf(buf, sizeof(buf), "A small, compact truck with a retrofitted cab putters up to the curb, "
                  "and its door opens to the %s.", fulldirs[dir]);
+      else if (dest_data_list == cas_taxi_destinations)
+        snprintf(buf, sizeof(buf), "A sleek hovertaxi glides up curb, "
+                "and its door opens to the %s.", fulldirs[dir]);
       else
         snprintf(buf, sizeof(buf), "A beat-up yellow cab screeches to a halt, "
                  "and its door opens to the %s.", fulldirs[dir]);
@@ -822,6 +887,14 @@ struct dest_data *get_dest_data_list_for_zone(int zone_num) {
     case 623:
     case 958:
       return caribbean_taxi_destinations;
+    case 980:
+    case 1002:
+    case 1005:
+    case 1009:
+    case 1011:
+    case 1012:
+    case 1016:
+      return cas_taxi_destinations;
   }
 
   // Destination not found.
@@ -837,6 +910,8 @@ struct dest_data *get_dest_data_list_from_driver_vnum(vnum_t vnum) {
       return portland_taxi_destinations;
     case 640:
       return caribbean_taxi_destinations;
+    case 101600:
+      return cas_taxi_destinations;
   }
 
   // Destination not found.
@@ -886,6 +961,9 @@ SPECIAL(taxi)
           else if (destination_list == caribbean_taxi_destinations)
             snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
                      get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
+          else if (destination_list == cas_taxi_destinations)
+            snprintf(say, sizeof(say), "%s?  Fee will be %d nuyen, say YES to accept charges.",
+                    get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
           else
             snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
                      get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
@@ -907,6 +985,9 @@ SPECIAL(taxi)
             else if (destination_list == caribbean_taxi_destinations)
               snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
                        caribbean_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+            else if (destination_list == cas_taxi_destinations)
+              snprintf(say, sizeof(say), "%s?  Fee will be %d nuyen, say YES to accept charges.",
+                       cas_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
             else
               snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
                       seattle_taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
@@ -2178,7 +2259,8 @@ void MonorailProcess(void)
 bool room_is_a_taxicab(vnum_t vnum) {
   return ((vnum >= FIRST_SEATTLE_CAB && vnum <= LAST_SEATTLE_CAB)
           || (vnum >= FIRST_PORTLAND_CAB && vnum <= LAST_PORTLAND_CAB)
-          || (vnum >= FIRST_CARIBBEAN_CAB && vnum <= LAST_CARIBBEAN_CAB));
+          || (vnum >= FIRST_CARIBBEAN_CAB && vnum <= LAST_CARIBBEAN_CAB)
+          || (vnum >= FIRST_CAS_CAB && vnum <= LAST_CAS_CAB));
 }
 
 bool cab_jurisdiction_matches_destination(vnum_t cab_vnum, vnum_t dest_vnum) {
@@ -2194,6 +2276,10 @@ bool cab_jurisdiction_matches_destination(vnum_t cab_vnum, vnum_t dest_vnum) {
 
   else if (cab_vnum >= FIRST_CARIBBEAN_CAB && cab_vnum <= LAST_CARIBBEAN_CAB) {
     cab_jurisdiction = JURISDICTION_CARIBBEAN;
+  }
+
+  else if (cab_vnum >= FIRST_CAS_CAB && cab_vnum <= LAST_CAS_CAB) {
+    cab_jurisdiction = JURISDICTION_CAS;
   }
 
   else {

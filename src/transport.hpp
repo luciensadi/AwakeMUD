@@ -14,6 +14,8 @@
 #define LAST_PORTLAND_CAB     660
 #define FIRST_CARIBBEAN_CAB   640
 #define LAST_CARIBBEAN_CAB    649
+#define FIRST_CAS_CAB         101601
+#define LAST_CAS_CAB          101610
 
 #define ROOM_VNUM_IS_CAB(room) (((room) >= FIRST_SEATTLE_CAB && (room) <= LAST_SEATTLE_CAB) || ((room) >= FIRST_PORTLAND_CAB && (room) <= LAST_PORTLAND_CAB) || ((room) >= FIRST_CARIBBEAN_CAB && (room) <= LAST_CARIBBEAN_CAB))
 
