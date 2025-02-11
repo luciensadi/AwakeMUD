@@ -739,6 +739,8 @@ struct player_special_data
   int wherelist_checks;
   sh_int max_exdescs;
 
+  Bitfield covered_wearlocs;
+
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL),
       mob_complete(NULL), mental_loss(0), physical_loss(0),
@@ -751,6 +753,8 @@ struct player_special_data
     for (int i = 0; i < NUM_DRUGS; i++) {
       ZERO_OUT_ARRAY(drugs[i], NUM_DRUG_PLAYER_SPECIAL_FIELDS);
     }
+
+    covered_wearlocs.FromString("0");
   }
 }
 ;

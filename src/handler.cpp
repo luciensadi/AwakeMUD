@@ -31,6 +31,7 @@
 #include "config.hpp"
 #include "deck_build.hpp"
 #include "vehicles.hpp"
+#include "player_exdescs.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
@@ -1878,6 +1879,12 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool reca
   if (recalc) {
     affect_total(ch);
   }
+
+  // Equipping is easy, just shadow it all.
+  if (ch->player_specials) {
+    GET_CHAR_COVERED_WEARLOCS(ch).SetAll(obj->obj_flags.wear_flags);
+  }
+  
   calc_weight(ch);
   return TRUE;
 }
@@ -1938,6 +1945,18 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
   if (recalc) {
     affect_total(ch);
   }
+
+  // Unequipping sucks. We have to essentially clear the shadowed bits, then re-apply everything else.
+  if (ch->player_specials) {
+    GET_CHAR_COVERED_WEARLOCS(ch).Clear();
+
+    for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+      if (GET_EQ(ch, wear_idx)) {
+        GET_CHAR_COVERED_WEARLOCS(ch).SetAll(GET_EQ(ch, wear_idx)->obj_flags.wear_flags);
+      }
+    }
+  }
+
   calc_weight(ch);
   return (obj);
 }
