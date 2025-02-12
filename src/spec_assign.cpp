@@ -1010,6 +1010,7 @@ void assign_objects(void)
 
 #ifdef IS_BUILDPORT
   ASSIGNOBJ(OBJ_MORTAL_RESTORATION_BUTTON, restoration_button);
+  ASSIGNOBJ(OBJ_CAS_TAXI_SIGN, taxi_sign);
 #endif
 
   ASSIGNOBJ(OBJ_SEATTLE_TAXI_SIGN, taxi_sign);
