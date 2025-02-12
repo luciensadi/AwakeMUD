@@ -693,6 +693,7 @@ void assign_mobiles(void)
   ASSIGNMOB(650, taxi);
   #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNMOB(640, taxi);
+  ASSIGNMOB(101600, taxi);
   #endif
 
   /* Immortal HQ */
