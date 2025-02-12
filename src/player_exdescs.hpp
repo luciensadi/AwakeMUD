@@ -6,6 +6,8 @@
 #define GET_CHAR_MAX_EXDESCS(ch) ((ch)->player_specials->max_exdescs)
 #define CHAR_HAS_EXDESCS(ch) (!(ch)->player_specials->saved.exdescs.empty())
 
+#define GET_CHAR_COVERED_WEARLOCS(ch) ((ch)->player_specials->covered_wearlocs)
+
 class PCExDesc {
   idnum_t pc_idnum = 0;
   const char *keyword = NULL;
