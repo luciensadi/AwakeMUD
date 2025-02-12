@@ -245,7 +245,8 @@ struct dest_data caribbean_taxi_destinations[] =
     { "motorlodge", "scott's", "Scott’s Motorlodge", 98082, TAXI_DEST_TYPE_HOTELS_MOTELS, TRUE},
     { "bayview", "apartments", "Bayview Apartments", 98011, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE},
     { "docwagon", "wagon", "DocWagon", 98010, TAXI_DEST_TYPE_HOSPITALS, TRUE}, 
-    { "cart", "crash", "Crash Cart", 100945, TAXI_DEST_TYPE_HOSPITALS, TRUE}
+    { "cart", "crash", "Crash Cart", 100945, TAXI_DEST_TYPE_HOSPITALS, TRUE},
+    { "\n", "", "", 0, 0, 0 } // this MUST be last, or the game will crash, you have been warned
   };
 
 struct taxi_dest_type taxi_dest_type_info[] = {
