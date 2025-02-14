@@ -660,9 +660,7 @@ struct command_info cmd_info[] =
     { "examine"    , POS_RESTING , do_examine  , 0, SCMD_EXAMINE, ALLOWS_IDLE_REWARD },
     { "exclaim"    , POS_LYING   , do_exclaim  , 0, 0, BLOCKS_IDLE_REWARD },
     { "extend"     , POS_SITTING , do_retract  , 0, 0, BLOCKS_IDLE_REWARD },
-#ifdef PLAYER_EXDESCS
     { "exdescs"    , POS_RESTING , do_exdesc   , LVL_CONSPIRATOR, SCMD_EXAMINE, ALLOWS_IDLE_REWARD },
-#endif
 
     // TODO: Make this a rigging and matrix command too
     { "factions"   , POS_MORTALLYW, do_factions, LVL_PRESIDENT, 0, ALLOWS_IDLE_REWARD },

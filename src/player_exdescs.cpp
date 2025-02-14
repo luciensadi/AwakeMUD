@@ -18,7 +18,7 @@
   - (stretch) When you reveal a wear slot that reveals an exdesc, add "This reveals <exdesc>"
 
   To answer:
-    We want folks to pay syspoints for exdesc usage, when does that happen? Pay sysp to increse your exdesc quota
+    We want folks to pay syspoints for exdesc usage, when does that happen? Pay sysp to increase your exdesc quota
 
   // TODO: Write hooks in customize physical for exdescs.
   // TODO: Prevent writing an exdesc with the same keyword as one you already have to prevent DB collisions
@@ -84,7 +84,7 @@ ACMD(do_exdesc) {
     // No keyword
     if (!*keyword || *keyword == '*' || !str_cmp(keyword, "all")) {
       list_exdescs(ch, vict);
-      send_to_char(ch, "\r\nTo inspect a specific one, use ^WEXDESC SHOW %s <desc>^n\r\n", GET_CHAR_NAME(vict));
+      send_to_char(ch, "\r\nTo inspect a specific one, use ^WEXDESC SHOW %s <keyword>^n\r\n", GET_CHAR_NAME(vict));
       return;
     }
 
@@ -143,7 +143,7 @@ ACMD(do_exdesc) {
 
       exdesc->save_to_db();
 
-      GET_CHAR_EXDESCS(ch).push_back(exdesc);
+      GET_CHAR_EXDESCS(vict).push_back(exdesc);
     }
     // It did exist, so edit it instead.
     else {
@@ -236,25 +236,40 @@ void set_exdesc_max(struct char_data *ch, int amount, bool save_to_db) {
 /*
  * Code for display of exdescs.
  */
+bool can_see_exdesc(struct char_data *viewer, struct char_data *vict, PCExDesc *exdesc) {
+  if (!vict->player_specials)
+    return FALSE;
+
+  Bitfield comparison_field;
+  comparison_field.SetAll(exdesc->get_wear_slots());
+  comparison_field.RemoveAll(GET_CHAR_COVERED_WEARLOCS(vict));
+  return comparison_field.HasAnythingSetAtAll();
+}
 
 void list_exdescs(struct char_data *viewer, struct char_data *vict) {
-  if (GET_CHAR_EXDESCS(vict).empty()) {
+  bool printed_header = FALSE;
+
+  for (auto &exdesc : GET_CHAR_EXDESCS(vict)) {
+    bool can_see = can_see_exdesc(viewer, vict, exdesc);
+    if (can_see || access_level(viewer, LVL_BUILDER)) {
+      if (!printed_header) {
+        if (vict == viewer) {
+          send_to_char("You have the following extra descriptions:\r\n", viewer);
+        } else {
+          act("$N has the following extra descriptions:\r\n", FALSE, viewer, NULL, vict, TO_CHAR);
+        }
+        printed_header = TRUE;
+      }
+      send_to_char(viewer, "%s^n (^W%s^n)%s\r\n", exdesc->get_name(), exdesc->get_keyword(), !can_see ? " (concealed; staff view only)" : "");
+    }
+  }
+
+  if (!printed_header) {
     if (vict == viewer) {
       send_to_char("You have no extra descriptions set.\r\n", viewer);
     } else {
       act("$N has no extra descriptions set.", FALSE, viewer, NULL, vict, TO_CHAR);
     }
-    return;
-  }
-
-  if (vict == viewer) {
-    send_to_char("You have the following extra descriptions:\r\n", viewer);
-  } else {
-    act("$N has the following extra descriptions:\r\n", FALSE, viewer, NULL, vict, TO_CHAR);
-  }
-
-  for (auto &exdesc : GET_CHAR_EXDESCS(vict)) {
-    send_to_char(viewer, "%s^n (^W%s^n)\r\n", exdesc->get_name(), exdesc->get_keyword());
   }
 }
 
