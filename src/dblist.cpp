@@ -419,6 +419,7 @@ void objList::UpdateCounters(void)
     if (OBJ->in_room
         && (GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) > 0 && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) <= timestamp_now)
         && !OBJ->contains // it's just a headache trying to figure out what to skip over with this
+        && !GET_OBJ_QUEST_CHAR_ID(OBJ)
         && !(zone_table[OBJ->in_room->zone].is_pghq
              || ((OBJ->restring || OBJ->photo) && GET_OBJ_TYPE(OBJ) != ITEM_GUN_AMMO) // No customized objects.
              || GET_OBJ_TYPE(OBJ) == ITEM_CREATIVE_EFFORT // No art.
