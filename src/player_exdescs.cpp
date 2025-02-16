@@ -256,6 +256,15 @@ bool can_see_exdesc(struct char_data *viewer, struct char_data *vict, PCExDesc *
   return comparison_field.HasAnythingSetAtAll();
 }
 
+bool viewer_can_see_at_least_one_exdesc_on_vict(struct char_data *viewer, struct char_data *victim) {
+  for (auto &exdesc : GET_CHAR_EXDESCS(victim)) {
+    if (can_see_exdesc(viewer, victim, exdesc))
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
 void list_exdescs(struct char_data *viewer, struct char_data *vict, bool list_is_for_editing) {
   bool printed_header = list_is_for_editing;
 
@@ -508,9 +517,6 @@ void _pc_exdesc_edit_wear_menu(struct descriptor_data *d) {
 
   char exdesc_wear_bits[1000];
   d->edit_exdesc->get_wear_slots()->PrintBits(exdesc_wear_bits, sizeof(exdesc_wear_bits), wear_bits, ITEM_WEAR_MAX);
-  if (IS_SENATOR(CH)) {
-    send_to_char(CH, " - staff debug: wear bits renders as '%s'\r\n", d->edit_exdesc->get_wear_slots()->ToString());
-  }
   send_to_char(CH, "This desc is visible on: ^c%s^n\r\nSelect a wear location to toggle, or enter 'q' to quit:", exdesc_wear_bits);
 
   d->edit_mode = PC_EXDESC_EDIT_OLC_WEAR_MENU;
@@ -777,9 +783,6 @@ void clone_exdesc_vector_to_edit_mob_for_editing(struct descriptor_data *d) {
     GET_CHAR_EXDESCS(d->edit_mob).push_back(new PCExDesc(exdesc));
   }
   assert(GET_CHAR_EXDESCS(d->edit_mob).size() == GET_CHAR_EXDESCS(d->original ? d->original : d->character).size());
-  
-  if (IS_SENATOR(d->character))
-    send_to_char(d->character, " debug: You have ld exdescs set out of %ld.\r\n", GET_CHAR_EXDESCS(d->edit_mob).size(), GET_CHAR_MAX_EXDESCS(d->character));
 }
 
 void overwrite_pc_exdescs_with_edit_mob_exdescs_and_then_save_to_db(struct descriptor_data *d) {

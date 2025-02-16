@@ -2608,8 +2608,13 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
         d->edit_mob->in_room = error_suppressor;
       }
 
-      if (IS_SENATOR(CH))
+#ifdef IS_BUILDPORT
+      if (TRUE) {
+#else
+      if (IS_SENATOR(CH)) {
+#endif
         send_to_char(CH, "A) Optional Extra Descriptions (^c%d^n/^c%d^n set)\r\n", GET_CHAR_EXDESCS(d->edit_mob).size(), GET_CHAR_MAX_EXDESCS(CH));
+      }
     }
   }
   if (mode)
@@ -2899,7 +2904,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       break;
     case 'a':
     case 'A':
+#ifdef IS_BUILDPORT
+      if (TRUE) {
+#else
       if (IS_SENATOR(CH)) {
+#endif
         if (GET_CHAR_MAX_EXDESCS(d->original ? d->original : d->character) <= 0) {
           send_to_char(d->character, "You don't have the ability to set exdescs. You'll need to purchase them first, see HELP SYSPOINTS.\r\n");
           return;
