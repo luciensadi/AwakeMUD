@@ -1434,7 +1434,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           }
         }
         if (MOB_HAS_SPEC(i, johnson)) {
-          int max_rep = get_johnson_overall_max_rep(i);
+          unsigned int max_rep = get_johnson_overall_max_rep(i);
           if (max_rep >= GET_REP(ch) || max_rep >= 10000) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
                      HSSH(i),

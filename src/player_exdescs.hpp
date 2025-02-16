@@ -8,6 +8,10 @@
 
 #define GET_CHAR_COVERED_WEARLOCS(ch) ((ch)->player_specials->covered_wearlocs)
 
+#define PC_EXDESC_EDIT_MAIN_MENU     0
+#define PC_EXDESC_EDIT_CREATION_MENU 1
+#define PC_EXDESC_EDIT_EDIT_MENU     2
+
 class PCExDesc {
   idnum_t pc_idnum = 0;
   const char *keyword = NULL;
@@ -80,3 +84,5 @@ void syspoints_purchase_exdescs(struct char_data *ch, char *buf, bool is_confirm
 void set_exdesc_max(struct char_data *ch, int amount, bool save_to_db);
 
 void load_exdescs_from_db(struct char_data *ch);
+
+void pc_exdesc_edit_initialize(struct descriptor_data *d);

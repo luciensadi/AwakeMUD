@@ -21,8 +21,8 @@
     We want folks to pay syspoints for exdesc usage, when does that happen? Pay sysp to increase your exdesc quota
 
   // TODO: Write hooks in customize physical for exdescs.
-  // TODO: Prevent writing an exdesc with the same keyword as one you already have to prevent DB collisions
-  // TODO: Editing flow. Do we allow changes of keywords, which are primary keys? (yes, just drop and re-add if needed)
+  //   TODO: Prevent writing an exdesc with the same keyword as one you already have to prevent DB collisions
+  //   TODO: Editing flow. Do we allow changes of keywords, which are primary keys? (yes, just drop and re-add if needed)
   // TODO: Add visibility filters for looking at someone with descs, listing them, etc: if covered, don't show
   // TODO STRETCH: Alter wear/remove to add reveal/hide for exdescs.
 
@@ -305,12 +305,15 @@ bool display_exdesc(struct char_data *viewer, struct char_data *vict, const char
   return FALSE;
 }
 
-#define EXDESCS_DEBUG(...) {                          \
-  if (viewer && IS_SENATOR(viewer)) {                 \
-    send_to_char(viewer, __VA_ARGS__);                \
-    send_to_char(viewer, "\r\n"); /*force a newline*/ \
-  }                                                   \
-}                                                     \
+// #define EXDESCS_DEBUG(...) {                          \
+//   if (viewer && IS_SENATOR(viewer)) {                 \
+//     send_to_char(viewer, __VA_ARGS__);                \
+//     send_to_char(viewer, "\r\n"); /*force a newline*/ \
+//   }                                                   \
+// }
+
+#define EXDESCS_DEBUG(...)
+
 // Given an arg in the format of 'hands' or 'exdesc', drop the first word and process the subsequent for exdesc viewing.
 bool look_at_exdescs(struct char_data *viewer, struct char_data *vict, char *keyword) {
   EXDESCS_DEBUG("Entering look_at_exdescs(%s, %s, '%s')", GET_CHAR_NAME(viewer), GET_CHAR_NAME(vict), keyword);
@@ -341,6 +344,98 @@ bool look_at_exdescs(struct char_data *viewer, struct char_data *vict, char *key
   list_exdescs(viewer, vict);
   return TRUE;
 }
+
+/*
+ * Code for exdesc editing.
+ */
+#define CH d->character
+
+void pc_exdesc_edit_disp_main_menu(struct descriptor_data *d) {
+  // If they have no exdescs, tell them so, then offer to create or quit/qws.
+  if (GET_CHAR_EXDESCS(CH).empty()) {
+    send_to_char(CH, "You have no extra descriptions set at the moment, but have %d slots available."
+                     " Extra descriptions are optional flair that you can add to your character's look description if desired.\r\n",
+                     GET_CHAR_MAX_EXDESCS(CH));
+  } else {
+    list_exdescs(CH, CH);
+    send_to_char(CH, "^cE^n) Edit an existing exdesc.\r\n");
+  }
+
+  send_to_char(CH, "^cC^n) Create a new exdesc.\r\n");
+  send_to_char(CH, "^cQ^n) Quit and save any changes.\r\n"); 
+  send_to_char(CH, "^cX^n) Exit without saving.\r\n");
+
+  d->edit_mode = PC_EXDESC_EDIT_MAIN_MENU;
+}
+
+void pc_exdesc_edit_disp_creation_menu(struct descriptor_data *d) {
+  send_to_char(CH, "You've entered the incomplete creation menu. Please disconnect and reconnect.\r\n");
+  // TODO: Implement.
+  d->edit_mode = PC_EXDESC_EDIT_CREATION_MENU;
+}
+
+void pc_exdesc_edit_disp_edit_menu(struct descriptor_data *d) {
+  send_to_char(CH, "You've entered the incomplete editing menu. Please disconnect and reconnect.\r\n");
+  // TODO: Implement.
+  d->edit_mode = PC_EXDESC_EDIT_EDIT_MENU;
+}
+
+void pc_exdesc_edit_quit(struct descriptor_data *d, bool save_changes) {
+  send_to_char(CH, "Not yet implemented. Leaking changes to stack.");
+
+  if (save_changes) {
+    // TODO: Overwrite existing descs.
+    // TODO: Save changes to disk (maybe just drop old and write new)
+    // TODO: Null editing pointer w/o deleting it.
+  } else {
+    // TODO: Delete editing pointer contents from memory.
+  }
+
+  // TODO: Restore player to playing state, give them a success message.
+}
+
+void pc_exdesc_edit_parse_edit_menu(struct descriptor_data *d, const char *arg) {
+  switch (*arg) {
+    case 'c':
+    case 'C':
+      pc_exdesc_edit_disp_creation_menu(d);
+      break;
+    case 'e':
+    case 'E':
+      pc_exdesc_edit_disp_edit_menu(d);
+      break;
+    case 'q':
+    case 'Q':
+      pc_exdesc_edit_quit(d, TRUE);
+      break;
+    case 'x':
+    case 'X':
+      pc_exdesc_edit_quit(d, FALSE);
+      break;
+    default:
+      send_to_char(CH, "That's not a choice. Please select from ^CC^create^n, ^CE^cdit^n, ^CQ^cuit and save^n, and ^ce^CX^cit without saving^n.\r\n");
+      return;
+  }
+}
+
+void pc_exdesc_edit_parse(struct descriptor_data *d, const char *arg) {
+  switch (d->edit_mode) {
+    case PC_EXDESC_EDIT_EDIT_MENU:
+      pc_exdesc_edit_parse_edit_menu(d, arg);
+      break;
+  }
+}
+
+void pc_exdesc_edit_initialize(struct descriptor_data *d) {
+  // TODO: Sanity checks like NPC etc
+
+  // TODO: Set up editing construct (clone from existing exdescs)
+
+  // Send them to the main menu.
+  pc_exdesc_edit_disp_main_menu(d);
+}
+
+#undef CH
 
 /*
  * Code for handling database-related things.

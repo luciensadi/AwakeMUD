@@ -3579,6 +3579,13 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
   else
     strlcpy(name_buf, GET_CHAR_NAME(ch), sizeof(name_buf) - 1);
 
+  // If it's a REPLY command, add in last-told info.
+  if (CMD_IS(argument, "reply") && GET_LAST_TELL(ch)) {
+    const char *plr_name = get_player_name(GET_LAST_TELL(ch));
+    snprintf(ENDOF(name_buf), sizeof(name_buf) - strlen(name_buf), " (to %s)", plr_name);
+    delete [] plr_name;
+  }
+
   // Write the command to the buffer.
   char cmd_buf[MAX_INPUT_LENGTH * 3];
   snprintf(cmd_buf, sizeof(cmd_buf), "COMMANDLOG: %s @ %s: %s", name_buf, location_buf, argument);
