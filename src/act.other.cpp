@@ -4960,10 +4960,10 @@ ACMD(do_syspoints) {
       send_to_char(ch, " - You %s^n purchased the ability to see ^WROLLS^n output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
       send_to_char(ch, " - You %s^n purchased the ability to see ^WVNUMS^n in your prompt.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS) ? "^ghave" : "^yhave not yet");
 
-      if (GET_CHAR_MAX_EXDESCS(ch) <= 0) {
-        send_to_char(" - You ^yhave not yet^n purchased any ^WEXDESC^n slots.\r\n", ch);
+      if (GET_CHAR_MAX_EXDESCS(ch) <= 2) {
+        send_to_char(" - You ^yhave not yet^n purchased any ^WEXDESC^n slots beyond the default 2.\r\n", ch);
       } else {
-        send_to_char(ch, " - You have purchased ^g%d^n ^WEXDESC^n slots.\r\n", GET_CHAR_MAX_EXDESCS(ch));
+        send_to_char(ch, " - You have purchased ^g%d^n ^WEXDESC^n slots for a total of ^g%d^n.\r\n", GET_CHAR_MAX_EXDESCS(ch) - 2, GET_CHAR_MAX_EXDESCS(ch));
       }
       return;
     }
