@@ -2780,7 +2780,6 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
       if (d->edit_mob) {
         Mem->DeleteCh(d->edit_mob);
-        DELETE_AND_NULL(d->edit_mob->player_specials);
       }
 
       d->edit_mob = NULL;

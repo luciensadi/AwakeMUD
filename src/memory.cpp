@@ -152,6 +152,10 @@ void memoryClass::DeleteCh(struct char_data *ch)
   }
 #endif
 
+  if (ch->player_specials != &dummy_mob) {
+    DELETE_IF_EXTANT(ch->player_specials);
+  }
+
   free_char(ch);
   delete ch;
   // Ch->Push(ch);
