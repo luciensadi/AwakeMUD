@@ -250,6 +250,9 @@ bool can_see_exdesc(struct char_data *viewer, struct char_data *vict, PCExDesc *
   if (!vict->player_specials)
     return FALSE;
 
+  if (IS_SENATOR(viewer))
+    return TRUE;
+
   Bitfield comparison_field;
   comparison_field.SetAll(*(exdesc->get_wear_slots()));
   comparison_field.RemoveAll(GET_CHAR_COVERED_WEARLOCS(vict));
@@ -297,7 +300,7 @@ void list_exdescs(struct char_data *viewer, struct char_data *vict, bool list_is
   }
 }
 
-// Given a target and a specified keyword, search for that keyword first exactly, then as an abbreviation. Returns desc ptr if found, NULL otherwise.
+// Given a target and a specified keyword, search for that keyword first exactly, then as an abbreviation. Returns desc ptr if found, NULL otherwise. Does NOT do visibility checks.
 class PCExDesc *find_exdesc_by_keyword(struct char_data *target, const char *keyword, bool allow_fuzzy_match) {
   // Look for an exact match first.
   for (auto &exdesc : GET_CHAR_EXDESCS(target)) {
@@ -333,9 +336,9 @@ bool delete_exdesc_by_keyword(struct char_data *target, const char *keyword) {
 
 // Search vict's exdescs for the specified keyword. If found, display it and return TRUE. Return FALSE otherwise.
 bool display_exdesc(struct char_data *viewer, struct char_data *vict, const char *keyword) {
-  class PCExDesc *exdesc;;
+  class PCExDesc *exdesc;
 
-  if ((exdesc = find_exdesc_by_keyword(vict, keyword))) {
+  if ((exdesc = find_exdesc_by_keyword(vict, keyword)) && can_see_exdesc(viewer, vict, exdesc)) {
     send_to_char(viewer, "%s^n\r\n", exdesc->get_desc());
     return TRUE;
   }

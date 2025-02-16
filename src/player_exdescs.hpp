@@ -31,7 +31,11 @@ public:
   // This is only invoked when creating a new desc during editing. Leaves most fields unchanged.
   PCExDesc(idnum_t pc_idnum) :
     pc_idnum(pc_idnum)
-  {}
+  {
+    keyword = str_dup("keyword");
+    name = str_dup("An unfinished extra description hovers about them.");
+    desc = str_dup("It hasn't been written yet.");
+  }
 
   // Clones an exdesc. Used for editing an existing desc where you want to be able to abort.
   PCExDesc(PCExDesc *original) {
