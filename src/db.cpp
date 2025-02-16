@@ -240,7 +240,7 @@ void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
 void set_elemental_races();
-void initialize_and_alphabetize_room_flags();
+void initialize_and_alphabetize_flag_maps();
 
 /* external vars */
 extern int no_specials;
@@ -729,7 +729,7 @@ void DBInit()
   log("Booting world.");
   boot_world();
   initialize_traffic_msgs();
-  initialize_and_alphabetize_room_flags();
+  initialize_and_alphabetize_flag_maps();
 
   log("Loading social messages.");
   boot_social_messages();
@@ -5796,6 +5796,8 @@ void clear_char(struct char_data * ch)
   GET_WAS_IN(ch) = NULL;
   if (ch->points.max_mental < 1000)
     ch->points.max_mental = 1000;
+  if (ch->points.max_physical < 1000)
+    ch->points.max_physical = 1000;
   ch->player.time.logon = time(0);
 
 #ifdef USE_DEBUG_CANARIES
@@ -7797,7 +7799,7 @@ void initialize_and_alphabetize_room_flags() {
 
 std::map<std::string, int> item_extra_flag_map = {};
 void initialize_and_alphabetize_item_extra_flags() {
-  for (int idx = 0; idx < ROOM_MAX; idx++) {
+  for (int idx = 0; idx < MAX_ITEM_EXTRA; idx++) {
     switch(idx) {
       case 4:
       case 5:
@@ -7811,7 +7813,7 @@ void initialize_and_alphabetize_item_extra_flags() {
 
 std::map<std::string, int> mob_flag_map = {};
 void initialize_and_alphabetize_mob_flags() {
-  for (int idx = 0; idx < ROOM_MAX; idx++) {
+  for (int idx = 0; idx < MOB_MAX; idx++) {
     switch(idx) {
       case 4:
       case 17:
@@ -7823,4 +7825,29 @@ void initialize_and_alphabetize_mob_flags() {
     }
     mob_flag_map[std::string(action_bits[idx])] = idx;
   }
+}
+
+std::map<std::string, int> wear_flag_map_for_exdescs = {};
+void initialize_and_alphabetize_wear_flags_for_exdescs() {
+  for (int idx = 0; idx < ITEM_WEAR_MAX; idx++) {
+    switch(idx) {
+      case ITEM_WEAR_TAKE:
+      case ITEM_WEAR_BODY:
+      case ITEM_WEAR_SHIELD:
+      case ITEM_WEAR_ABOUT:
+      case ITEM_WEAR_WIELD:
+      case ITEM_WEAR_HOLD:
+      case ITEM_WEAR_SOCK:
+      case ITEM_WEAR_LAPEL:
+        continue;
+    }
+    wear_flag_map_for_exdescs[std::string(wear_bits_for_pc_exdescs[idx])] = idx;
+  }
+}
+
+void initialize_and_alphabetize_flag_maps() {
+  initialize_and_alphabetize_room_flags();
+  initialize_and_alphabetize_item_extra_flags();
+  initialize_and_alphabetize_mob_flags();
+  initialize_and_alphabetize_wear_flags_for_exdescs();
 }

@@ -942,6 +942,7 @@ const char *connected_types[] =
     "Creating Art",
     "Account Editing",
     "Faction Editing",
+    "Exdesc Editing",
     "\n"
   };
 
@@ -1143,6 +1144,40 @@ const char *wear_bits[] =
     "LAPEL",
     "\n"
   };
+
+  /* ITEM_WEAR_ (wear bitvector) */
+const char *wear_bits_for_pc_exdescs[] =
+{
+  "<invalid/take>",
+  "fingers",
+  "neck",
+  "<invalid/body>",
+  "head",
+  "legs",
+  "feet",
+  "hands",
+  "arms",
+  "<invalid/shield>",
+  "<invalid/about>",
+  "waist",
+  "wrists",
+  "<invalid/wield>",
+  "<invalid/hold>",
+  "eyes",
+  "ears",
+  "torso",
+  "back",
+  "ankles",
+  "<invalid/socks>",
+  "belly",
+  "underarms",
+  "face",
+  "thighs",
+  "pelvis",
+  "chest",
+  "<invalid/lapel>",
+  "\n"
+};
 
 /* ITEM_x (extra bits) */
 const char *extra_bits[] =

@@ -43,6 +43,7 @@
 #include "channels.hpp"
 #include "vehicles.hpp"
 #include "dblist.hpp"
+#include "player_exdescs.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -2751,6 +2752,9 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_ACUSTOMIZE:
     cedit_parse(d, arg);
     break;
+  case CON_PC_EXDESC_EDIT:
+    pc_exdesc_edit_parse(d, arg);
+    break;
   case CON_VEHCUST:
     vehcust_parse(d, arg);
     break;
@@ -3538,8 +3542,8 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     "hail", "push",
     "radio", "phone",
     "drive", "speed",
-    "stand", "sit",
-    "nod", "list", "info",
+    "stand", "sit", "rest",
+    "nod", "list", "info", "recap",
     "open", "close", "receive", "buy", "sell",
     "wear", "remove", "draw", "holster",
     "kill", "hit", "shoot", "kick",
@@ -3580,15 +3584,28 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     strlcpy(name_buf, GET_CHAR_NAME(ch), sizeof(name_buf) - 1);
 
   // If it's a REPLY command, add in last-told info.
-  if (CMD_IS(argument, "reply") && GET_LAST_TELL(ch)) {
-    const char *plr_name = get_player_name(GET_LAST_TELL(ch));
-    snprintf(ENDOF(name_buf), sizeof(name_buf) - strlen(name_buf), " (to %s)", plr_name);
-    delete [] plr_name;
+  char tell_buf[250] = { '\0' };
+  // todo: turn this into a regex comparison against '^\s?re?p?l?y?\s'
+  if (GET_LAST_TELL(ch) > 0 && *argument == 'r'
+      && (argument[1] == ' '
+          || (argument[1] == 'e' && (argument[2] == ' '
+                                     || (argument[2] == 'p' && (argument[3] == ' ' || argument[3] == 'l'))))))
+  {
+    for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next) {
+      struct char_data *tch = desc->original ? desc->original : desc->character;
+   
+      if (tch && !IS_NPC(tch) && GET_IDNUM(tch) == GET_LAST_TELL(ch)) {
+        snprintf(tell_buf, sizeof(tell_buf), "(to %s) ", GET_CHAR_NAME(tch));
+        break;
+      }
+    }
+    if (!*tell_buf)
+      snprintf(tell_buf, sizeof(tell_buf), "(to %ld) ", GET_LAST_TELL(ch));
   }
 
   // Write the command to the buffer.
   char cmd_buf[MAX_INPUT_LENGTH * 3];
-  snprintf(cmd_buf, sizeof(cmd_buf), "COMMANDLOG: %s @ %s: %s", name_buf, location_buf, argument);
+  snprintf(cmd_buf, sizeof(cmd_buf), "COMMANDLOG: %s @ %s: %s%s", name_buf, location_buf, tell_buf, argument);
 
   // TODO: Save to a file based on the PC's name.
   log(cmd_buf);

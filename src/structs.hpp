@@ -1139,6 +1139,7 @@ struct descriptor_data
   ApartmentRoom *edit_apartment_room;
   ApartmentRoom *edit_apartment_room_original;
   Faction *edit_faction;
+  PCExDesc *edit_exdesc;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   Playergroup *edit_pgroup; /* playergroups */

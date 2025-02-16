@@ -8,9 +8,17 @@
 
 #define GET_CHAR_COVERED_WEARLOCS(ch) ((ch)->player_specials->covered_wearlocs)
 
-#define PC_EXDESC_EDIT_MAIN_MENU     0
-#define PC_EXDESC_EDIT_CREATION_MENU 1
-#define PC_EXDESC_EDIT_EDIT_MENU     2
+#define PC_EXDESC_EDIT_MAIN_MENU       0
+#define PC_EXDESC_EDIT_EDIT_MENU       1
+#define PC_EXDESC_EDIT_DELETE_MENU     2
+#define PC_EXDESC_EDIT_OLC_MENU        3
+#define PC_EXDESC_EDIT_OLC_WEAR_MENU   4
+#define PC_EXDESC_EDIT_OLC_SET_KEYWORD 5
+#define PC_EXDESC_EDIT_OLC_SET_NAME    6
+#define PC_EXDESC_EDIT_OLC_SET_DESC    7
+
+#define PC_EXDESC_EDIT_OLC_FROM_CREATE 1
+#define PC_EXDESC_EDIT_OLC_FROM_EDIT   2
 
 class PCExDesc {
   idnum_t pc_idnum = 0;
@@ -20,7 +28,7 @@ class PCExDesc {
   Bitfield wear_slots;
   PCExDesc *editing_clone_of = NULL;
 public:
-  // This is only invoked when creating a new desc during editing. Leave most fields blank.
+  // This is only invoked when creating a new desc during editing. Leaves most fields unchanged.
   PCExDesc(idnum_t pc_idnum) :
     pc_idnum(pc_idnum)
   {}
@@ -49,6 +57,7 @@ public:
     delete [] keyword;
     delete [] name;
     delete [] desc;
+    editing_clone_of = NULL;
   }
 
   // Getters / setters
@@ -64,13 +73,15 @@ public:
   const char *get_desc() { return desc; }
   void set_desc(const char *new_desc) { delete [] desc; desc = str_dup(new_desc); }
 
-  Bitfield get_wear_slots() { return wear_slots; }
+  Bitfield *get_wear_slots() { return &wear_slots; }
   void set_wear_slots(const char *new_string) { wear_slots.FromString(new_string); }
-  
 
-  // Saving happens here. Requires pc_idnum and keyword to be set. Invoke during editing.
+  void overwrite_editing_clone();
+  
+  // Saving happens here. Requires pc_idnum and keyword to be set. Invoke when saving after editing.
   void save_to_db();
-  // Call this to delete this entry. Requires pc_idnum and keyword to be set. Invoke during editing when char chooses to delete.
+
+  // Delete this specific exdesc.
   void delete_from_db();
 
   // Is this in the specified wearslot?
@@ -84,5 +95,11 @@ void syspoints_purchase_exdescs(struct char_data *ch, char *buf, bool is_confirm
 void set_exdesc_max(struct char_data *ch, int amount, bool save_to_db);
 
 void load_exdescs_from_db(struct char_data *ch);
+void delete_all_exdescs_from_db(struct char_data *ch);
+void write_all_exdescs_to_db(struct char_data *ch);
 
-void pc_exdesc_edit_initialize(struct descriptor_data *d);
+void pc_exdesc_edit_disp_main_menu(struct descriptor_data *d);
+void _pc_exdesc_edit_olc_menu(struct descriptor_data *d);
+void clone_exdesc_vector_to_edit_mob_for_editing(struct descriptor_data *d);
+void overwrite_pc_exdescs_with_edit_mob_exdescs_and_then_save_to_db(struct descriptor_data *d);
+void pc_exdesc_edit_parse(struct descriptor_data *d, const char *arg);

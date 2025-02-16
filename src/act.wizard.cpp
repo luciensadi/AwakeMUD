@@ -340,10 +340,16 @@ ACMD(do_copyover)
   snprintf(buf, sizeof(buf), "Copyover initiated by %s", GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
-  log("COPYOVERLOG: Shifting flying folks to a runway.");
-  struct room_data *boneyard = &world[real_room(65505)];
-  struct room_data *airborne = &world[real_room(RM_AIRBORNE)];
-  if (boneyard && airborne) {
+  rnum_t airborne_rnum = real_room(RM_AIRBORNE);
+  rnum_t boneyard_rnum = real_room(65505);
+
+  if (boneyard_rnum < 0 || airborne_rnum < 0) {
+    log("COPYOVERLOG: Skipping flying folks, you have no airborne room and/or boneyard.");
+  } else {
+    log("COPYOVERLOG: Shifting flying folks to a runway.");
+    struct room_data *boneyard = &world[boneyard_rnum];
+    struct room_data *airborne = &world[airborne_rnum];
+
     for (struct veh_data *aircraft = airborne->vehicles, *next_veh; aircraft; aircraft = next_veh) {
       next_veh = aircraft->next_veh;
       mudlog_vfprintf(aircraft->people, LOG_SYSLOG, "Transferring '%s' to Boneyard for copyover.", GET_VEH_NAME(aircraft));

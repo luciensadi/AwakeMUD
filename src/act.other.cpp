@@ -2607,6 +2607,9 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
 
         d->edit_mob->in_room = error_suppressor;
       }
+
+      if (IS_SENATOR(CH))
+        send_to_char(CH, "A) Optional Extra Descriptions (^c%d^n/^c%d^n set)\r\n", GET_CHAR_EXDESCS(d->edit_mob).size(), GET_CHAR_MAX_EXDESCS(CH));
     }
   }
   if (mode)
@@ -2632,7 +2635,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     case 'y':
     case 'Y':
       d->edit_mob = Mem->GetCh();
-      d->edit_mob->player_specials = &dummy_mob;
+      d->edit_mob->player_specials = new player_special_data;
 
       // Copy over lifestyle-impacting information.
       GET_PRONOUNS(d->edit_mob) = GET_PRONOUNS(CH);
@@ -2652,6 +2655,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         d->edit_mob->char_specials.arrive = str_dup(CH->char_specials.arrive);
         d->edit_mob->char_specials.leave = str_dup(CH->char_specials.leave);
         set_lifestyle_string(d->edit_mob, get_lifestyle_string(CH));
+        clone_exdesc_vector_to_edit_mob_for_editing(d);
       } else if (STATE(d) == CON_PCUSTOMIZE) {
         d->edit_mob->player.physical_text.keywords =
           str_dup(CH->player.matrix_text.keywords);
@@ -2738,6 +2742,8 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
         set_lifestyle_string(CH, get_lifestyle_string(d->edit_mob));
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", lifestyle_string='%s'", prepare_quotes(buf3, get_lifestyle_string(CH), sizeof(buf3) / sizeof(buf3[0])));
+
+        overwrite_pc_exdescs_with_edit_mob_exdescs_and_then_save_to_db(d);
       } else if (STATE(d) == CON_PCUSTOMIZE) {
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.keywords);
         CH->player.matrix_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
@@ -2772,8 +2778,10 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", Astral_LookDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.look_desc, sizeof(buf3) / sizeof(buf3[0])));
       }
 
-      if (d->edit_mob)
+      if (d->edit_mob) {
         Mem->DeleteCh(d->edit_mob);
+        DELETE_AND_NULL(d->edit_mob->player_specials);
+      }
 
       d->edit_mob = NULL;
       d->edit_mode = 0;
@@ -2889,6 +2897,20 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       break;
     case '9':
       cedit_lifestyle_menu(d);
+      break;
+    case 'a':
+    case 'A':
+      if (IS_SENATOR(CH)) {
+        if (GET_CHAR_MAX_EXDESCS(d->original ? d->original : d->character) <= 0) {
+          send_to_char(d->character, "You don't have the ability to set exdescs. You'll need to purchase them first, see HELP SYSPOINTS.\r\n");
+          return;
+        }
+        send_to_char("\r\nExtra descriptions are optional flair that you can add to your character's look description if desired.\r\n", CH);
+        pc_exdesc_edit_disp_main_menu(d);
+        STATE(d) = CON_PC_EXDESC_EDIT;
+      }
+      else
+        cedit_disp_menu(d, 0);
       break;
     default:
       cedit_disp_menu(d, 0);

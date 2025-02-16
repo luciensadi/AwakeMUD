@@ -74,6 +74,7 @@
 #include "moderation.hpp"
 #include "newhouse.hpp"
 #include "factions.hpp"
+#include "player_exdescs.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -2375,8 +2376,6 @@ void free_editing_structs(descriptor_data *d, int state)
     DELETE_AND_NULL_ARRAY(d->edit_zon);
   }
 
-  DELETE_IF_EXTANT(d->edit_cmd);
-
   if (d->edit_veh) {
     Mem->DeleteVehicle(d->edit_veh);
     d->edit_veh = NULL;
@@ -2390,17 +2389,13 @@ void free_editing_structs(descriptor_data *d, int state)
     d->edit_icon = NULL;
   }
 
-  if (d->edit_faction) {
-    delete d->edit_faction;
-    d->edit_faction = NULL;
-  }
-
-#define DELETE_EDITING_INFO(field) { if ((field)) { delete (field); (field) = NULL; }}
-  DELETE_EDITING_INFO(d->edit_pgroup);
-  DELETE_EDITING_INFO(d->edit_complex);
-  DELETE_EDITING_INFO(d->edit_apartment);
-  DELETE_EDITING_INFO(d->edit_apartment_room);
-#undef DELETE_EDITING_INFO
+  DELETE_IF_EXTANT(d->edit_cmd);
+  DELETE_IF_EXTANT(d->edit_faction);
+  DELETE_IF_EXTANT(d->edit_pgroup);
+  DELETE_IF_EXTANT(d->edit_complex);
+  DELETE_IF_EXTANT(d->edit_apartment);
+  DELETE_IF_EXTANT(d->edit_apartment_room);
+  DELETE_IF_EXTANT(d->edit_exdesc);
 }
 
 void close_socket(struct descriptor_data *d)

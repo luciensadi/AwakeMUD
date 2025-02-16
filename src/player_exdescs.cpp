@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <map>
+#include <vector>
 
 #include "structs.hpp"
 #include "utils.hpp"
@@ -6,6 +8,8 @@
 #include "handler.hpp"
 #include "newdb.hpp"
 #include "constants.hpp"
+#include "olc.hpp"
+#include "moderation.hpp"
 #include "player_exdescs.hpp"
 
 /* 
@@ -20,9 +24,6 @@
   To answer:
     We want folks to pay syspoints for exdesc usage, when does that happen? Pay sysp to increase your exdesc quota
 
-  // TODO: Write hooks in customize physical for exdescs.
-  //   TODO: Prevent writing an exdesc with the same keyword as one you already have to prevent DB collisions
-  //   TODO: Editing flow. Do we allow changes of keywords, which are primary keys? (yes, just drop and re-add if needed)
   // TODO: Add visibility filters for looking at someone with descs, listing them, etc: if covered, don't show
   // TODO STRETCH: Alter wear/remove to add reveal/hide for exdescs.
 
@@ -40,10 +41,14 @@
 #define SYSP_EXDESC_MAX_PURCHASE_GETS_YOU_X_SLOTS 5
 
 extern MYSQL *mysql;
+extern std::map<std::string, int> wear_flag_map_for_exdescs;
+
+extern void cedit_disp_menu(struct descriptor_data *d, int mode);
 
 // Prototypes.
-void list_exdescs(struct char_data *viewer, struct char_data *vict);
-class PCExDesc *find_exdesc_by_keyword(struct char_data *ch, const char *keyword);
+void list_exdescs(struct char_data *viewer, struct char_data *vict, bool list_is_for_editing=FALSE);
+class PCExDesc *find_exdesc_by_keyword(struct char_data *ch, const char *keyword, bool allow_fuzzy_match=TRUE);
+bool delete_exdesc_by_keyword(struct char_data *ch, const char *keyword);
 void save_pc_exdesc_max(struct char_data *ch);
 
 /*
@@ -95,11 +100,11 @@ ACMD(do_exdesc) {
     send_to_char(ch, "%s\r\n", exdesc->get_name());
     send_to_char(ch, "%s\r\n", exdesc->get_desc());
 
-    if (strcmp(exdesc->get_wear_slots().ToString(), "0") != 0) {
+    if (strcmp(exdesc->get_wear_slots()->ToString(), "0") != 0) {
       char bitprintbuf[MAX_STRING_LENGTH];
-      exdesc->get_wear_slots().PrintBits(bitprintbuf, MAX_STRING_LENGTH, wear_bits, NUM_WEARS);
+      exdesc->get_wear_slots()->PrintBits(bitprintbuf, MAX_STRING_LENGTH, wear_bits, NUM_WEARS);
       send_to_char(ch, "It is visible on the following locations (bitstring %s):\r\n  ^c%s^n\r\n",
-                   exdesc->get_wear_slots().ToString(),
+                   exdesc->get_wear_slots()->ToString(),
                    bitprintbuf);
     } else {
       send_to_char("It has ^yno locations^n (bitstring 0).\r\n", ch);
@@ -226,6 +231,11 @@ void set_exdesc_max(struct char_data *ch, int amount, bool save_to_db) {
     return;
   }
 
+  if (amount < 2) {
+    // Silently make it 2.
+    amount = 2;
+  }
+
   GET_CHAR_MAX_EXDESCS(ch) = amount;
 
   if (save_to_db) {
@@ -241,17 +251,18 @@ bool can_see_exdesc(struct char_data *viewer, struct char_data *vict, PCExDesc *
     return FALSE;
 
   Bitfield comparison_field;
-  comparison_field.SetAll(exdesc->get_wear_slots());
+  comparison_field.SetAll(*(exdesc->get_wear_slots()));
   comparison_field.RemoveAll(GET_CHAR_COVERED_WEARLOCS(vict));
   return comparison_field.HasAnythingSetAtAll();
 }
 
-void list_exdescs(struct char_data *viewer, struct char_data *vict) {
-  bool printed_header = FALSE;
+void list_exdescs(struct char_data *viewer, struct char_data *vict, bool list_is_for_editing) {
+  bool printed_header = list_is_for_editing;
 
   for (auto &exdesc : GET_CHAR_EXDESCS(vict)) {
     bool can_see = can_see_exdesc(viewer, vict, exdesc);
-    if (can_see || access_level(viewer, LVL_BUILDER)) {
+    bool can_ever_see = strcmp(exdesc->get_wear_slots()->ToString(), "0");
+    if (list_is_for_editing || can_see || access_level(viewer, LVL_BUILDER)) {
       if (!printed_header) {
         if (vict == viewer) {
           send_to_char("You have the following extra descriptions:\r\n", viewer);
@@ -260,7 +271,11 @@ void list_exdescs(struct char_data *viewer, struct char_data *vict) {
         }
         printed_header = TRUE;
       }
-      send_to_char(viewer, "%s^n (^W%s^n)%s\r\n", exdesc->get_name(), exdesc->get_keyword(), !can_see ? " (concealed; staff view only)" : "");
+      if (list_is_for_editing) {
+        send_to_char(viewer, "^W%s^n: %s^n%s\r\n", exdesc->get_keyword(), exdesc->get_name(), !can_see ? (can_ever_see ? " (concealed by clothing)" : " ^y(no wearslot set)^n") : "");
+      } else {
+        send_to_char(viewer, " %s^n (^W%s^n)%s\r\n", exdesc->get_name(), exdesc->get_keyword(), !can_see ? (can_ever_see ? " (concealed by clothing)" : " ^y(no wearslot set)^n") : "");
+      }
     }
   }
 
@@ -274,18 +289,20 @@ void list_exdescs(struct char_data *viewer, struct char_data *vict) {
 }
 
 // Given a target and a specified keyword, search for that keyword first exactly, then as an abbreviation. Returns desc ptr if found, NULL otherwise.
-class PCExDesc *find_exdesc_by_keyword(struct char_data *ch, const char *keyword) {
+class PCExDesc *find_exdesc_by_keyword(struct char_data *target, const char *keyword, bool allow_fuzzy_match) {
   // Look for an exact match first.
-  for (auto &exdesc : GET_CHAR_EXDESCS(ch)) {
+  for (auto &exdesc : GET_CHAR_EXDESCS(target)) {
     if (!str_cmp(keyword, exdesc->get_keyword())) {
       return exdesc;
     }
   }
 
   // Failed to find an exact match. Look for a fuzzy match by abbreviation.
-  for (auto &exdesc : GET_CHAR_EXDESCS(ch)) {
-    if (is_abbrev(keyword, exdesc->get_keyword())) {
-      return exdesc;
+  if (allow_fuzzy_match) {
+    for (auto &exdesc : GET_CHAR_EXDESCS(target)) {
+      if (is_abbrev(keyword, exdesc->get_keyword())) {
+        return exdesc;
+      }
     }
   }
 
@@ -293,12 +310,24 @@ class PCExDesc *find_exdesc_by_keyword(struct char_data *ch, const char *keyword
   return NULL;
 }
 
+// Given a target and a specified keyword, search for that keyword exactly. If found, delete it and return TRUE, otherwise FALSE.
+bool delete_exdesc_by_keyword(struct char_data *target, const char *keyword) {
+  auto it = std::remove_if(GET_CHAR_EXDESCS(target).begin(), GET_CHAR_EXDESCS(target).end(), 
+    [keyword](class PCExDesc * exdesc) {
+      return !str_cmp(keyword, exdesc->get_keyword());
+    }
+  );
+  auto r = GET_CHAR_EXDESCS(target).end() - it;
+  GET_CHAR_EXDESCS(target).erase(it, GET_CHAR_EXDESCS(target).end());
+  return r;
+}
+
 // Search vict's exdescs for the specified keyword. If found, display it and return TRUE. Return FALSE otherwise.
 bool display_exdesc(struct char_data *viewer, struct char_data *vict, const char *keyword) {
   class PCExDesc *exdesc;;
 
   if ((exdesc = find_exdesc_by_keyword(vict, keyword))) {
-    send_to_char(viewer, "%s^n:\r\n%s^n\r\n", exdesc->get_name(), exdesc->get_desc());
+    send_to_char(viewer, "%s^n\r\n", exdesc->get_desc());
     return TRUE;
   }
 
@@ -351,88 +380,316 @@ bool look_at_exdescs(struct char_data *viewer, struct char_data *vict, char *key
 #define CH d->character
 
 void pc_exdesc_edit_disp_main_menu(struct descriptor_data *d) {
+  CLS(CH);
+
   // If they have no exdescs, tell them so, then offer to create or quit/qws.
-  if (GET_CHAR_EXDESCS(CH).empty()) {
-    send_to_char(CH, "You have no extra descriptions set at the moment, but have %d slots available."
-                     " Extra descriptions are optional flair that you can add to your character's look description if desired.\r\n",
-                     GET_CHAR_MAX_EXDESCS(CH));
+  if (GET_CHAR_EXDESCS(d->edit_mob).empty()) {
+    send_to_char(CH, "You have no extra descriptions set at the moment, but have ^c%d^n slots available.\r\n", GET_CHAR_MAX_EXDESCS(CH));
   } else {
-    list_exdescs(CH, CH);
-    send_to_char(CH, "^cE^n) Edit an existing exdesc.\r\n");
+    list_exdescs(CH, d->edit_mob);
   }
 
-  send_to_char(CH, "^cC^n) Create a new exdesc.\r\n");
-  send_to_char(CH, "^cQ^n) Quit and save any changes.\r\n"); 
-  send_to_char(CH, "^cX^n) Exit without saving.\r\n");
+  if (GET_CHAR_EXDESCS(d->edit_mob).size() < (unsigned long) GET_CHAR_MAX_EXDESCS(CH)) {
+    send_to_char(CH, "\r\n^cC^n) Create a new exdesc\r\n");
+  }
+  
+  if (!GET_CHAR_EXDESCS(d->edit_mob).empty()) {
+    send_to_char(CH, "^cE^n) Edit an exdesc\r\n");
+    send_to_char(CH, "^cD^n) Delete an exdesc\r\n");
+  }
+
+  send_to_char(CH, "^cQ^n) Return to Customize Menu\r\n");
 
   d->edit_mode = PC_EXDESC_EDIT_MAIN_MENU;
 }
 
-void pc_exdesc_edit_disp_creation_menu(struct descriptor_data *d) {
-  send_to_char(CH, "You've entered the incomplete creation menu. Please disconnect and reconnect.\r\n");
-  // TODO: Implement.
-  d->edit_mode = PC_EXDESC_EDIT_CREATION_MENU;
+void _pc_exdesc_edit_olc_menu(struct descriptor_data *d) {
+  CLS(CH);
+  
+  // Render the exdesc's wearslots.
+  char exdesc_wearslot_string[10000] = { '\0' };
+  if (!strcmp(d->edit_exdesc->get_wear_slots()->ToString(), "0")) {
+    strlcpy(exdesc_wearslot_string, "^y<nothing set, exdesc is always hidden>^n", sizeof(exdesc_wearslot_string));
+  } else {
+    d->edit_exdesc->get_wear_slots()->PrintBits(exdesc_wearslot_string, sizeof(exdesc_wearslot_string), wear_bits, NUM_WEARS);
+  }
+
+  // Print the menu.
+  send_to_char(CH, "1) Keyword: ^W%s^n\r\n", d->edit_exdesc->get_keyword() ? d->edit_exdesc->get_keyword() : "<not set>");
+  send_to_char(CH, "2) Title:   %s^n\r\n", d->edit_exdesc->get_name() ? d->edit_exdesc->get_name() : "<not set>");
+  send_to_char(CH, "3) Desc:%s%s^n\r\n", 
+                   d->edit_exdesc->get_desc() ? "\r\n" : "    <not set>",
+                   d->edit_exdesc->get_desc() ? d->edit_exdesc->get_desc() : "");
+  send_to_char(CH, "4) Visible if any of these are uncovered: ^c%s\r\n", exdesc_wearslot_string);
+  send_to_char(CH, "\r\n");
+  send_to_char(CH, "q) Save and quit\r\n");
+  send_to_char(CH, "x) Exit without saving\r\n");
+
+  d->edit_mode = PC_EXDESC_EDIT_OLC_MENU;
 }
 
 void pc_exdesc_edit_disp_edit_menu(struct descriptor_data *d) {
-  send_to_char(CH, "You've entered the incomplete editing menu. Please disconnect and reconnect.\r\n");
-  // TODO: Implement.
+  CLS(CH);
+  
+  // List exdescs with an index, ask which one they want to edit.
+  list_exdescs(CH, d->edit_mob, TRUE);
+
+  send_to_char("\r\nEnter the keyword you'd like to edit, or 'q' to abort: ", CH);
   d->edit_mode = PC_EXDESC_EDIT_EDIT_MENU;
+  d->edit_number2 = PC_EXDESC_EDIT_OLC_FROM_EDIT;
 }
 
-void pc_exdesc_edit_quit(struct descriptor_data *d, bool save_changes) {
-  send_to_char(CH, "Not yet implemented. Leaking changes to stack.");
+void pc_exdesc_edit_disp_delete_menu(struct descriptor_data *d) {
+  CLS(CH);
+  
+  // List exdescs with an index, ask which one they want to delete.
+  list_exdescs(CH, d->edit_mob, TRUE);
 
-  if (save_changes) {
-    // TODO: Overwrite existing descs.
-    // TODO: Save changes to disk (maybe just drop old and write new)
-    // TODO: Null editing pointer w/o deleting it.
-  } else {
-    // TODO: Delete editing pointer contents from memory.
-  }
-
-  // TODO: Restore player to playing state, give them a success message.
+  send_to_char("\r\nEnter the keyword you'd like to delete, or 'q' to abort: ", CH);
+  d->edit_mode = PC_EXDESC_EDIT_DELETE_MENU;
 }
 
-void pc_exdesc_edit_parse_edit_menu(struct descriptor_data *d, const char *arg) {
+#define EXDESC_EDIT_SYNTAX_WITH_EXISTING "That's not a choice. Please select from ^CC^create^n, ^CE^cdit^n, ^CD^celete^n, and ^CQ^cuit and save^n.\r\n"
+#define EXDESC_EDIT_SYNTAX_NO_EXISTING "That's not a choice. Please select from ^CC^create^n or ^CQ^cuit^n.\r\n"
+void pc_exdesc_edit_parse_main_menu(struct descriptor_data *d, const char *arg) {
   switch (*arg) {
     case 'c':
     case 'C':
-      pc_exdesc_edit_disp_creation_menu(d);
+      if (GET_CHAR_EXDESCS(d->edit_mob).size() < (unsigned long) GET_CHAR_MAX_EXDESCS(CH)) {
+        send_to_char("OK, here's your new exdesc to edit:\r\n", CH);
+        d->edit_exdesc = new PCExDesc(GET_IDNUM(CH));
+        d->edit_number2 = PC_EXDESC_EDIT_OLC_FROM_CREATE;
+        _pc_exdesc_edit_olc_menu(d);
+      } else {
+        // TODO STRETCH: Offer to auto-buy more exdescs with syspoints.
+        send_to_char(CH, "You can only have %d exdescs. Please edit or delete an existing one.\r\n", GET_CHAR_MAX_EXDESCS(CH));
+      }
       break;
     case 'e':
     case 'E':
+      if (GET_CHAR_EXDESCS(d->edit_mob).empty()) {
+        send_to_char(EXDESC_EDIT_SYNTAX_NO_EXISTING, CH);
+        return;
+      }
       pc_exdesc_edit_disp_edit_menu(d);
+      break;
+    case 'd':
+    case 'D':
+      if (GET_CHAR_EXDESCS(d->edit_mob).empty()) {
+        send_to_char(EXDESC_EDIT_SYNTAX_NO_EXISTING, CH);
+        return;
+      }
+      pc_exdesc_edit_disp_delete_menu(d);
       break;
     case 'q':
     case 'Q':
-      pc_exdesc_edit_quit(d, TRUE);
-      break;
-    case 'x':
-    case 'X':
-      pc_exdesc_edit_quit(d, FALSE);
+      STATE(d) = CON_FCUSTOMIZE;
+      cedit_disp_menu(d, 0);
       break;
     default:
-      send_to_char(CH, "That's not a choice. Please select from ^CC^create^n, ^CE^cdit^n, ^CQ^cuit and save^n, and ^ce^CX^cit without saving^n.\r\n");
+      if (GET_CHAR_EXDESCS(d->edit_mob).empty()) {
+        send_to_char(EXDESC_EDIT_SYNTAX_NO_EXISTING, CH);
+      } else {
+        send_to_char(EXDESC_EDIT_SYNTAX_WITH_EXISTING, CH);
+      }
       return;
   }
 }
 
-void pc_exdesc_edit_parse(struct descriptor_data *d, const char *arg) {
-  switch (d->edit_mode) {
-    case PC_EXDESC_EDIT_EDIT_MENU:
-      pc_exdesc_edit_parse_edit_menu(d, arg);
+void _pc_exdesc_edit_wear_menu(struct descriptor_data *d) {
+  int counter = 1;
+
+  CLS(CH);
+  send_to_char("Extra descriptions can be put on the following locations:\r\n", CH);
+
+  for (auto itr : wear_flag_map_for_exdescs) {
+    send_to_char(CH, "%2d) ^c%-9s^n\r\n", counter++, itr.first.c_str());
+  }
+
+  char exdesc_wear_bits[1000];
+  d->edit_exdesc->get_wear_slots()->PrintBits(exdesc_wear_bits, sizeof(exdesc_wear_bits), wear_bits, ITEM_WEAR_MAX);
+  if (IS_SENATOR(CH)) {
+    send_to_char(CH, " - staff debug: wear bits renders as '%s'\r\n", d->edit_exdesc->get_wear_slots()->ToString());
+  }
+  send_to_char(CH, "This desc is visible on: ^c%s^n\r\nSelect a wear location to toggle, or enter 'q' to quit:", exdesc_wear_bits);
+
+  d->edit_mode = PC_EXDESC_EDIT_OLC_WEAR_MENU;
+}
+
+void pc_exdesc_edit_parse_olc_menu(struct descriptor_data *d, const char *arg) {
+  switch (*arg) {
+    case '1':  // Edit keyword.
+      send_to_char("Enter a new keyword for this exdesc: ", CH);
+      d->edit_mode = PC_EXDESC_EDIT_OLC_SET_KEYWORD;
+      break;
+    case '2':  // Edit name.
+      send_to_char("Good exdesc names are full sentences with capitalization and punctuation, like 'An inky dragon tattoo is frozen in a roar across his back.'\r\nEnter a new name for this exdesc: ", CH);
+      d->edit_mode = PC_EXDESC_EDIT_OLC_SET_NAME;
+      break;
+    case '3':  // Edit desc.
+      d->edit_mode = PC_EXDESC_EDIT_OLC_SET_DESC;
+      DELETE_D_STR_IF_EXTANT(d);
+      INITIALIZE_NEW_D_STR(d);
+      d->max_str = MAX_MESSAGE_LENGTH;
+      d->mail_to = 0;
+      send_to_char("Enter a new description for this exdesc:\r\n", CH);
+      break;
+    case '4':  // Edit wearslots.
+      _pc_exdesc_edit_wear_menu(d);
+      break;
+    case 'q':
+    case 'Q': // Save and quit.
+      {
+        // If edit_number2 is FROM_EDIT, overwrite existing in our edit vector.
+        if (d->edit_number2 == PC_EXDESC_EDIT_OLC_FROM_EDIT) {
+          d->edit_exdesc->overwrite_editing_clone();
+          delete d->edit_exdesc;
+        }
+        // If edit_number2 is FROM_CREATE, append this entry to our edit vector.
+        if (d->edit_number2 == PC_EXDESC_EDIT_OLC_FROM_CREATE) {
+          GET_CHAR_EXDESCS(d->edit_mob).push_back(d->edit_exdesc);
+        }
+        
+        d->edit_exdesc = NULL;
+        pc_exdesc_edit_disp_main_menu(d);
+      }
+      break;
+    case 'x':
+    case 'X': // Exit without saving.
+      {
+        send_to_char(CH, "OK, discarding changes.\r\n");
+        delete d->edit_exdesc;
+        d->edit_exdesc = NULL;
+        pc_exdesc_edit_disp_main_menu(d);
+      }
+      break;
+    default:
+      send_to_char("That's not an option. Select from one of the items on the menu (e.g. ^W1^n for keyword, ^Wq^n to save and quit): ", CH);
       break;
   }
 }
 
-void pc_exdesc_edit_initialize(struct descriptor_data *d) {
-  // TODO: Sanity checks like NPC etc
+void pc_exdesc_edit_parse(struct descriptor_data *d, const char *arg) {
+  PCExDesc *exdesc = NULL;
+  int number;
 
-  // TODO: Set up editing construct (clone from existing exdescs)
+  switch (d->edit_mode) {
+    case PC_EXDESC_EDIT_MAIN_MENU:
+      pc_exdesc_edit_parse_main_menu(d, arg);
+      break;
+    case PC_EXDESC_EDIT_DELETE_MENU:
+      {
+        if (!str_cmp(arg, "q")) {
+          pc_exdesc_edit_disp_main_menu(d);
+          return;
+        }
 
-  // Send them to the main menu.
-  pc_exdesc_edit_disp_main_menu(d);
+        if (delete_exdesc_by_keyword(d->edit_mob, arg)) {
+          send_to_char(CH, "OK.\r\n");
+          pc_exdesc_edit_disp_delete_menu(d);
+        } else {
+          send_to_char(CH, "The keyword '%s' doesn't match any of your existing exdescs. Please type the full keyword you want to delete, or 'q' to abort.\r\n", arg);
+        }
+      }
+      break;
+    case PC_EXDESC_EDIT_EDIT_MENU:
+      {
+        if (!str_cmp(arg, "q")) {
+          pc_exdesc_edit_disp_main_menu(d);
+          return;
+        }
+
+        // Find the keyword they've entered. Don't accept abbreviations. If it doesn't exist, re-show the menu and exit.
+        if (!(exdesc = find_exdesc_by_keyword(d->edit_mob, arg, FALSE))) {
+          send_to_char(CH, "The keyword '%s' doesn't match any of your existing exdescs. Please type the full keyword you want to edit, or 'q' to abort.\r\n", arg);
+        } else {
+          d->edit_exdesc = new PCExDesc(exdesc);
+          _pc_exdesc_edit_olc_menu(d);
+        }
+      }
+      break;
+    case PC_EXDESC_EDIT_OLC_MENU:
+      pc_exdesc_edit_parse_olc_menu(d, arg);
+      break;
+    case PC_EXDESC_EDIT_OLC_WEAR_MENU:
+      {
+        number = 0;
+
+        int counter = 1;
+        int entry = atoi(arg);
+
+        // They entered 0 or a non-number, go back to main OLC menu.
+        if (entry == 0) {
+          _pc_exdesc_edit_olc_menu(d);
+          return;
+        }
+
+        for (auto itr : wear_flag_map_for_exdescs) {
+          if (entry == counter++) {
+            number = itr.second;
+            break;
+          }
+        }
+
+        if ((number < 0) || (number > ITEM_WEAR_MAX)) {
+          send_to_char("That's not a valid choice. Select an index number from the menu, or enter ^Wq^n to quit this menu.\r\n", d->character);
+        }
+
+        d->edit_exdesc->get_wear_slots()->ToggleBit(number);
+        _pc_exdesc_edit_wear_menu(d);
+      }
+      break;
+    case PC_EXDESC_EDIT_OLC_SET_KEYWORD:
+      {
+        if (!str_cmp(arg, "q")) {
+          send_to_char("OK, leaving it unchanged.\r\n", CH);
+          _pc_exdesc_edit_olc_menu(d);
+          return;
+        }
+
+        for (size_t idx = 0; idx < strlen(arg); idx++) {
+          if (arg[idx] && !isalpha(arg[idx]) && arg[idx] != '_') {
+            send_to_char(CH, "Sorry, keywords can only contain letters and underscores ('%c' is invalid). Try again: ", arg[idx]);
+            return;
+          }
+        }
+
+        if (check_for_banned_content(arg, CH)) {
+          _pc_exdesc_edit_olc_menu(d);
+          return;
+        }
+
+        // If the keyword already exists in the vector, disallow. Exception: If it's case-insensitively the same as what it already is, don't check for this.
+        if (str_cmp(d->edit_exdesc->get_keyword(), arg) && find_exdesc_by_keyword(d->edit_mob, arg, FALSE)) {
+          send_to_char(CH, "You already have an exdesc with the keyword '%s', so you'll need to pick another.\r\n", arg);
+          _pc_exdesc_edit_olc_menu(d);
+          return;
+        }
+
+        // Set it.
+        d->edit_exdesc->set_keyword(arg);
+        _pc_exdesc_edit_olc_menu(d);
+      }
+      break;
+    case PC_EXDESC_EDIT_OLC_SET_NAME:
+      {
+        if (!str_cmp(arg, "q")) {
+          send_to_char("OK, leaving it unchanged.\r\n", CH);
+          _pc_exdesc_edit_olc_menu(d);
+          return;
+        }
+
+        if (!check_for_banned_content(arg, CH)) {
+          d->edit_exdesc->set_name(arg);
+        }
+        _pc_exdesc_edit_olc_menu(d);
+      }
+      break;
+    case PC_EXDESC_EDIT_OLC_SET_DESC:
+      // You should never get here. This is handled in modify.cpp.
+      send_to_char(CH, "error: got to set_desc in parse");
+      break;
+  }
 }
 
 #undef CH
@@ -450,8 +707,7 @@ void PCExDesc::save_to_db() {
 
   snprintf(query_buf, sizeof(query_buf),
            "INSERT INTO pfiles_exdescs (`idnum`, `keyword`, `name`, `desc`, `wearslots`)" /* continues to next line*/
-           "\n VALUES (%ld, '%s', '%s', '%s', '%s')" /* continues to next line*/
-           "\n ON DUPLICATE KEY UPDATE;",
+           "\n VALUES (%ld, '%s', '%s', '%s', '%s');",
            pc_idnum,
            prepare_quotes(keyword_buf, keyword, sizeof(keyword_buf)),
            prepare_quotes(name_buf, name, sizeof(name_buf)),
@@ -498,8 +754,68 @@ void load_exdescs_from_db(struct char_data *ch) {
   mysql_free_result(res);
 }
 
+void delete_all_exdescs_from_db(struct char_data *ch) {
+  char query_buf[1000];
+  snprintf(query_buf, sizeof(query_buf), "DELETE FROM pfiles_exdescs WHERE `idnum`=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, query_buf);
+}
+
+void write_all_exdescs_to_db(struct char_data *ch) {
+  for (auto &exdesc : GET_CHAR_EXDESCS(ch)) {
+    exdesc->save_to_db();
+  }
+}
+
 void save_pc_exdesc_max(struct char_data *ch) {
   char query_buf[1000];
   snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET `exdesc_max`=%d' WHERE `idnum`=%ld", GET_CHAR_MAX_EXDESCS(ch), GET_IDNUM(ch));
   mysql_wrapper(mysql, query_buf);
+}
+
+void clone_exdesc_vector_to_edit_mob_for_editing(struct descriptor_data *d) {
+  for (auto &exdesc : GET_CHAR_EXDESCS(d->original ? d->original : d->character)) {
+    GET_CHAR_EXDESCS(d->edit_mob).push_back(new PCExDesc(exdesc));
+  }
+  assert(GET_CHAR_EXDESCS(d->edit_mob).size() == GET_CHAR_EXDESCS(d->original ? d->original : d->character).size());
+  
+  if (IS_SENATOR(d->character))
+    send_to_char(d->character, " debug: You have ld exdescs set out of %ld.\r\n", GET_CHAR_EXDESCS(d->edit_mob).size(), GET_CHAR_MAX_EXDESCS(d->character));
+}
+
+void overwrite_pc_exdescs_with_edit_mob_exdescs_and_then_save_to_db(struct descriptor_data *d) {
+  struct char_data *ch = d->original ? d->original : d->character;
+
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Called overwrite_pc_exdescs on descriptor with no character");
+    return;
+  }
+
+  for (auto it = GET_CHAR_EXDESCS(ch).begin(); it != GET_CHAR_EXDESCS(ch).end(); ++it) {
+    delete *it;
+  }
+  GET_CHAR_EXDESCS(ch).clear();
+
+  for (auto &exdesc : GET_CHAR_EXDESCS(d->edit_mob)) {
+    GET_CHAR_EXDESCS(ch).push_back(new PCExDesc(exdesc));
+  }
+
+  // Clear out PC exdescs in DB and save the new ones.
+  delete_all_exdescs_from_db(ch);
+  write_all_exdescs_to_db(ch);
+}
+
+/*
+ * Code for implementing methods from the class.
+ */
+
+void PCExDesc::overwrite_editing_clone() {
+  if (!editing_clone_of) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: overwite_editing_clone() called on PCExDesc with no editing clone!");
+    return;
+  }
+
+  editing_clone_of->set_keyword(keyword);
+  editing_clone_of->set_name(name);
+  editing_clone_of->set_desc(desc);
+  editing_clone_of->set_wear_slots(wear_slots.ToString());
 }
