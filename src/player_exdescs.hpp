@@ -8,6 +8,10 @@
 
 #define GET_CHAR_COVERED_WEARLOCS(ch) ((ch)->player_specials->covered_wearlocs)
 
+#define MAX_EXDESC_KEYWORD_LENGTH  99
+#define MAX_EXDESC_NAME_LENGTH     199
+#define MAX_EXDESC_DESC_LENGTH     65535
+
 #define PC_EXDESC_EDIT_MAIN_MENU       0
 #define PC_EXDESC_EDIT_EDIT_MENU       1
 #define PC_EXDESC_EDIT_DELETE_MENU     2

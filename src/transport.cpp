@@ -152,6 +152,7 @@ struct dest_data seattle_taxi_destinations[] =
     { "banshee", "", "The Banshee", 25368, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "paine", "snohomish", "Paine Field-Snohomish Airport", 39233, TAXI_DEST_TYPE_TRANSPORTATION, TRUE },
     { "villas", "lucianos", "Villa de Lucianos", 98501, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
+    { "anchor", "insurance", "Anchor Insurance", 32635, TAXI_DEST_TYPE_OTHER, TRUE },
 #endif
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
@@ -201,6 +202,7 @@ struct dest_data caribbean_taxi_destinations[] =
     { "diamond", "estate", "Diamond Estate", 62259, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
     { "victoria", "waltham", "Waltham and Victoria", 62233, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
     { "sauteurs", "", "Sauteurs", 62113, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
+    { "marketing", "agency", "Victoria Marketing Agency", 62267, TAXI_DEST_TYPE_OTHER, TRUE },
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
 
@@ -246,6 +248,7 @@ struct dest_data caribbean_taxi_destinations[] =
     { "bayview", "apartments", "Bayview Apartments", 98011, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE},
     { "docwagon", "wagon", "DocWagon", 98010, TAXI_DEST_TYPE_HOSPITALS, TRUE}, 
     { "cart", "crash", "Crash Cart", 100945, TAXI_DEST_TYPE_HOSPITALS, TRUE},
+    { "prosperity", "estate", "Prosperity Real Estate", 98016, TAXI_DEST_TYPE_OTHER, TRUE },
     { "\n", "", "", 0, 0, 0 } // this MUST be last, or the game will crash, you have been warned
   };
 

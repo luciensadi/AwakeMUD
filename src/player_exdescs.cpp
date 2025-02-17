@@ -38,7 +38,7 @@
 */
 
 #define SYSP_EXDESC_MAX_PURCHASE_COST 10
-#define SYSP_EXDESC_MAX_PURCHASE_GETS_YOU_X_SLOTS 5
+#define SYSP_EXDESC_MAX_PURCHASE_GETS_YOU_X_SLOTS 1
 
 extern MYSQL *mysql;
 extern std::map<std::string, int> wear_flag_map_for_exdescs;
@@ -656,6 +656,11 @@ void pc_exdesc_edit_parse(struct descriptor_data *d, const char *arg) {
           return;
         }
 
+        if (strlen(arg) > MAX_EXDESC_KEYWORD_LENGTH) {
+          send_to_char(CH, "Sorry, keywords must be %ld characters or shorter, and that was %ld. Try again: ", MAX_EXDESC_KEYWORD_LENGTH, strlen(arg));
+          return;
+        }
+
         for (size_t idx = 0; idx < strlen(arg); idx++) {
           if (arg[idx] && !isalpha(arg[idx]) && arg[idx] != '_') {
             send_to_char(CH, "Sorry, keywords can only contain letters and underscores ('%c' is invalid). Try again: ", arg[idx]);
@@ -682,6 +687,11 @@ void pc_exdesc_edit_parse(struct descriptor_data *d, const char *arg) {
       break;
     case PC_EXDESC_EDIT_OLC_SET_NAME:
       {
+        if (strlen(arg) > MAX_EXDESC_NAME_LENGTH) {
+          send_to_char(CH, "Sorry, names must be %ld characters or shorter, and that was %ld. Try again: ", MAX_EXDESC_NAME_LENGTH, strlen(arg));
+          return;
+        }
+
         if (!str_cmp(arg, "q")) {
           send_to_char("OK, leaving it unchanged.\r\n", CH);
           _pc_exdesc_edit_olc_menu(d);
