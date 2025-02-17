@@ -246,11 +246,11 @@ void set_exdesc_max(struct char_data *ch, int amount, bool save_to_db) {
 /*
  * Code for display of exdescs.
  */
-bool can_see_exdesc(struct char_data *viewer, struct char_data *vict, PCExDesc *exdesc) {
+bool can_see_exdesc(struct char_data *viewer, struct char_data *vict, PCExDesc *exdesc, bool without_staff_override=FALSE) {
   if (!vict->player_specials)
     return FALSE;
 
-  if (IS_SENATOR(viewer))
+  if (IS_SENATOR(viewer) && !without_staff_override)
     return TRUE;
 
   Bitfield comparison_field;
@@ -272,7 +272,7 @@ void list_exdescs(struct char_data *viewer, struct char_data *vict, bool list_is
   bool printed_header = list_is_for_editing;
 
   for (auto &exdesc : GET_CHAR_EXDESCS(vict)) {
-    bool can_see = can_see_exdesc(viewer, vict, exdesc);
+    bool can_see = can_see_exdesc(viewer, vict, exdesc, TRUE);
     bool can_ever_see = strcmp(exdesc->get_wear_slots()->ToString(), "0");
     if (list_is_for_editing || can_see || access_level(viewer, LVL_BUILDER)) {
       if (!printed_header) {
