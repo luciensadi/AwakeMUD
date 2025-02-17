@@ -1043,9 +1043,13 @@ bool follower_can_receive_reward(struct char_data *follower, struct char_data *l
 void reward(struct char_data *ch, struct char_data *johnson)
 {
   if (vnum_from_non_connected_zone(quest_table[GET_QUEST(ch)].vnum)) {
+#ifdef IS_BUILDPORT
+    send_to_char(ch, "This quest's zone is not connected, so no rewards will be assigned for it if it's deployed to main.\r\n");
+#else
     send_to_char(ch, "Quest reward suppressed due to this zone not being marked as connected to the game world.\r\n");
     end_quest(ch, TRUE);
     return;
+#endif
   }
 
   struct obj_data *obj;
@@ -1232,10 +1236,16 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   for (int quest_idx = 0; quest_idx <= top_of_questt; quest_idx++) {
     if (quest_table[quest_idx].johnson == GET_MOB_VNUM(mob)) {
       if (!allow_disconnected && vnum_from_non_connected_zone(quest_table[quest_idx].vnum)) {
+#ifdef IS_BUILDPORT
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "[Quest %ld would be skipped due to non-connected status, but allowing since this is buildport.]\r\n", quest_table[quest_idx].vnum);
+        }
+#else
         if (access_level(ch, LVL_BUILDER)) {
           send_to_char(ch, "[Skipping quest %ld: vnum from non-connected zone.]\r\n", quest_table[quest_idx].vnum);
         }
         continue;
+#endif
       }
 
       if (rep_too_high(ch, quest_idx)) {
@@ -3907,6 +3917,9 @@ unsigned int get_johnson_overall_max_rep(struct char_data *johnson) {
   unsigned int max_rep = 0;
 
   bool johnson_is_from_disconnected_zone = vnum_from_non_connected_zone(GET_MOB_VNUM(johnson));
+#ifdef IS_BUILDPORT
+  johnson_is_from_disconnected_zone = TRUE;
+#endif
 
   for (int i = 0; i <= top_of_questt; i++) {
     if (quest_table[i].johnson == GET_MOB_VNUM(johnson)
@@ -3924,6 +3937,9 @@ unsigned int get_johnson_overall_min_rep(struct char_data *johnson) {
   unsigned int min_rep = UINT_MAX;
 
   bool johnson_is_from_disconnected_zone = vnum_from_non_connected_zone(GET_MOB_VNUM(johnson));
+  #ifdef IS_BUILDPORT
+    johnson_is_from_disconnected_zone = TRUE;
+  #endif
 
   for (int i = 0; i <= top_of_questt; i++) {
     if (quest_table[i].johnson == GET_MOB_VNUM(johnson)
