@@ -777,7 +777,7 @@ void write_all_exdescs_to_db(struct char_data *ch) {
 
 void save_pc_exdesc_max(struct char_data *ch) {
   char query_buf[1000];
-  snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET `exdesc_max`=%d' WHERE `idnum`=%ld", GET_CHAR_MAX_EXDESCS(ch), GET_IDNUM(ch));
+  snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET `exdesc_max`=%d WHERE `idnum`=%ld;", GET_CHAR_MAX_EXDESCS(ch), GET_IDNUM(ch));
   mysql_wrapper(mysql, query_buf);
 }
 
