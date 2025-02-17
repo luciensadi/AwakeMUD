@@ -268,7 +268,7 @@ ACMD(do_hcontrol)
   half_chop(argument, arg1, arg2, sizeof(arg2));
 
   if (!str_cmp(arg1, "destroy")) {
-    if (GET_LEVEL(ch) >= LVL_EXECUTIVE) {
+    if (GET_LEVEL(ch) >= LVL_ADMIN) {
       hcontrol_destroy_house(ch, arg2);
     } else {
       send_to_char("Sorry, you can't do that at your level.\r\n", ch);
@@ -279,6 +279,7 @@ ACMD(do_hcontrol)
   if (is_abbrev(arg1, "show")) {
     // With no argument, we default to the standard behavior.
     if (!*arg2) {
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s listing all houses.", GET_CHAR_NAME(ch));
       hcontrol_list_houses(ch);
       return;
     }
@@ -286,12 +287,14 @@ ACMD(do_hcontrol)
     // Check to see if they've specified a vnum or '.'.
     vnum_t parsed_vnum = (*arg2 == '.' ? GET_ROOM_VNUM(get_ch_in_room(ch)) : atol(arg2));
     if (parsed_vnum > 0) { 
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s listing house at %ld.", GET_CHAR_NAME(ch), parsed_vnum);
       hcontrol_display_house_by_number(ch, parsed_vnum);
       return;
     }
 
     // Otherwise, it's assumed to be a character name. Look up their houses and also houses where they're a guest.
     if ((idnum = get_player_id(arg2)) > 0) {
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s listing all houses related to '%s' (%ld).", GET_CHAR_NAME(ch), arg2, idnum);
       hcontrol_display_house_with_owner_or_guest(ch, capitalize(arg2), idnum);
     } else {
       send_to_char(ch, "There is no player named '%s'.\r\n", arg2);

@@ -535,7 +535,7 @@ struct command_info cmd_info[] =
     { "afk"        , POS_DEAD    , do_afk      , 0, 0, ALLOWS_IDLE_REWARD },
     { "ammo"       , POS_LYING   , do_ammo     , 0, 0, ALLOWS_IDLE_REWARD },
     { "assense"    , POS_LYING   , do_assense  , 0, 0, BLOCKS_IDLE_REWARD },
-    { "at"         , POS_DEAD    , do_at       , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
+    { "at"         , POS_DEAD    , do_at       , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
     { "attach"     , POS_RESTING , do_attach   , 0, 0, BLOCKS_IDLE_REWARD },
 #ifdef SELFADVANCE
     // Allows running an unattended test port where anyone can bump themselves up to level 9.
@@ -994,7 +994,7 @@ struct command_info cmd_info[] =
     { "uptime"     , POS_DEAD    , do_date     , 0, SCMD_UPTIME, ALLOWS_IDLE_REWARD },
     { "use"        , POS_LYING   , do_use      , 1, SCMD_USE, BLOCKS_IDLE_REWARD },
     { "usenerps"   , POS_LYING   , do_usenerps , 1, 0, BLOCKS_IDLE_REWARD },
-    { "users"      , POS_DEAD    , do_users    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "users"      , POS_DEAD    , do_users    , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
 
     { "valset"     , POS_DEAD    , do_valset   , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
     { "vclone"     , POS_DEAD    , do_vclone   , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },

@@ -4658,6 +4658,8 @@ SPECIAL(quest_debug_scanner)
         return TRUE;
       }
 
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s using tricorder-enhanced DIAGNOSE to view quest info on NPC %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(to));
+
       snprintf(buf, sizeof(buf), "NPC %s's quest-related information:\r\n", GET_CHAR_NAME(to));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Overall max rep: %d, overall min rep: %d\r\n",
               get_johnson_overall_max_rep(to), get_johnson_overall_min_rep(to));
@@ -4677,6 +4679,7 @@ SPECIAL(quest_debug_scanner)
       return TRUE;
     }
 
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s using tricorder-enhanced DIAGNOSE to view quest info on PC %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(to));
     snprintf(buf, sizeof(buf), "Player %s's quest-related information:\r\n", GET_CHAR_NAME(to));
     int real_mob = real_mobile(quest_table[GET_QUEST(to)].johnson);
     if (GET_QUEST(to)) {
@@ -4727,6 +4730,8 @@ SPECIAL(quest_debug_scanner)
       return TRUE;
     }
 
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s using tricorder-enhanced CLEANSE to wipe quest history for %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(to));
+
     for (int i = 0; i < QUEST_TIMER; i++) {
       GET_LQUEST(to, i) = 0;
       GET_CQUEST(to, i) = 0;
@@ -4738,6 +4743,7 @@ SPECIAL(quest_debug_scanner)
 
   // WHERE debugger.
   if (CMD_IS("where")) {
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s using tricorder-enhanced WHERE to view all PC locations.", GET_CHAR_NAME(ch));
     send_to_char("^RUsing extended WHERE due to you holding a diagnostic scanner.^n\r\n", ch);
 
     struct room_data *room;
@@ -4757,7 +4763,7 @@ SPECIAL(quest_debug_scanner)
         if (IS_NPC(tch))
           continue;
 
-        send_to_char(ch, "%-20s - in %s at [%6ld] %s^n\r\n", GET_CHAR_NAME(tch), GET_VEH_NAME(veh), room ? GET_ROOM_VNUM(room) : -1, room ? GET_ROOM_NAME(room) : "nowhere");
+        send_to_char(ch, "%-20s - in %s^n at [%6ld] %s^n\r\n", GET_CHAR_NAME(tch), GET_VEH_NAME(veh), room ? GET_ROOM_VNUM(room) : -1, room ? GET_ROOM_NAME(room) : "nowhere");
       }
     }
 

@@ -6109,6 +6109,8 @@ ACMD(do_users)
 
   std::unordered_map< std::string, std::vector<std::string> > host_map = {};
 
+  mudlog_vfprintf(ch, LOG_WIZLOG, "%s looking up user list with args '%s'", GET_CHAR_NAME(ch), argument);
+
   strlcpy(buf, argument, sizeof(buf));
   while (*buf) {
     half_chop(buf, arg, buf1, sizeof(buf1));
@@ -6458,6 +6460,7 @@ void perform_immort_where(struct char_data * ch, char *arg)
 
   if (!*arg)
   {
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s queried locations of all players.", GET_CHAR_NAME(ch));
     strlcpy(buf, "Players\r\n-------\r\n", sizeof(buf));
     for (d = descriptor_list; d; d = d->next)
       if (!d->connected) {
@@ -6490,6 +6493,8 @@ void perform_immort_where(struct char_data * ch, char *arg)
     page_string(ch->desc, buf, 1);
     return;
   }
+
+  mudlog_vfprintf(ch, LOG_WIZLOG, "%s queried locations of anything with keyword '%s'.", GET_CHAR_NAME(ch), arg);
 
   // Location version of the command (where <keyword>)
   *buf = '\0';
@@ -7327,6 +7332,10 @@ ACMD(do_status)
       targ = get_char_vis(ch, argument);
     if (!targ)
       targ = ch;
+
+    if (targ != ch) {
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s viewing status/affects for %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(targ));
+    }
   }
 
   char aff_buf[10000] = { '\0' };
