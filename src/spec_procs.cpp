@@ -7849,9 +7849,7 @@ SPECIAL(oppressive_atmosphere) {
   if (CMD_IS("west") || CMD_IS("w")) {
     snprintf(ENDOF(check_failure_message), sizeof(check_failure_message) - strlen(check_failure_message), " - [%6s^n] You must have at least ^c%d^n TKE to enter.\r\n",
              (you_shall_not_pass |= (GET_TKE(ch) < OA_TKE_REQUIREMENT)) ? "^RFAIL" : "^g OK ",
-             OA_TKE_REQUIREMENT);
-
-    
+             OA_TKE_REQUIREMENT);    
 
     // Evaluate their stats. You must be at racial maximum in all stats to proceed.
     {
@@ -7874,14 +7872,15 @@ SPECIAL(oppressive_atmosphere) {
                " - [%s^n] You must have trained all stats except Charisma to their racial maximums.\r\n",
                !stats_ok ? "^RFAIL" : "^g OK ");
     }
-    
 
     // You must have at least one combat skill at 8.
     {
       bool has_combat_skill = GET_SKILL(ch, SKILL_SORCERY) >= OA_COMBAT_SKILL_REQ;
       for (int weap_idx = WEAP_EDGED; !has_combat_skill && weap_idx < MAX_WEAP; weap_idx++) {
-        if (GET_SKILL(ch, kosher_weapon_values[weap_idx].skill) >= OA_COMBAT_SKILL_REQ)
+        if (GET_SKILL(ch, kosher_weapon_values[weap_idx].skill) >= OA_COMBAT_SKILL_REQ) {
           has_combat_skill = TRUE;
+          break;
+        }
       }
       if (!has_combat_skill) {
         you_shall_not_pass = TRUE;
@@ -7904,11 +7903,41 @@ SPECIAL(oppressive_atmosphere) {
   return FALSE;
 }
 
+SPECIAL(cas_gatekeeper)
+{
+  NO_DRAG_BULLSHIT;
+
+  struct char_data *bouncer = (char_data *) me;
+  struct obj_data *obj;
+
+  if (!AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING))
+    return(FALSE);
+
+  if (CMD_IS("east")) {
+    bool has_101267 = FALSE;
+    bool has_101268 = FALSE;
+    for (obj = ch->carrying; obj; obj = obj->next_content) {
+      has_101267 |= (GET_OBJ_VNUM(obj) == 101267);
+      has_101268 |= (GET_OBJ_VNUM(obj) == 101268);
+    }
+
+    if ((has_101267 && has_101268) || IS_NPC(ch) || access_level(ch, LVL_ADMIN))
+      perform_move(ch, EAST, LEADER, NULL);
+    else
+      do_say(bouncer, "Not today, chummer.", 0, 0);
+    return(TRUE);
+  }
+
+  return(FALSE);
+}
+
 #define GATEKEEPER_A_CODEWORD "the game is more fun if you don't try to look things up like this"
 #define GATEKEEPER_B_CODEWORD "the game is more fun if you don't try to look things up like this"
 #define GATEKEEPER_C_CODEWORD "the game is more fun if you don't try to look things up like this"
 SPECIAL(grenada_gatekeeper)
 {
+  NO_DRAG_BULLSHIT;
+
   struct char_data *mob = (struct char_data *) me;
   if (!AWAKE(mob))
     return FALSE;

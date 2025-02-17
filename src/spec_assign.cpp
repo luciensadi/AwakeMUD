@@ -654,9 +654,10 @@ void assign_mobiles(void)
   ASSIGNMOB(31135, graffiti_cleaner);
   ASSIGNMOB(6902, soulbound_unbinder);
 
-
+  SPECIAL(cas_gatekeeper);
   SPECIAL(grenada_gatekeeper);
 
+  ASSIGNMOB(101259, cas_gatekeeper);
   ASSIGNMOB(101310, grenada_gatekeeper);
   ASSIGNMOB(101311, grenada_gatekeeper);
   ASSIGNMOB(101312, grenada_gatekeeper);
