@@ -1099,7 +1099,7 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
   ic_stats_total = MAX(MIN(max_exp_gain, ic_stats_total), 1);
 
   // Suppress rewards for unlinked zones.
-  if (vnum_from_non_connected_zone(targ->vnum)) {
+  if (vnum_from_non_approved_zone(targ->vnum) && !IS_SENATOR(icon->decker->ch)) {
 #ifndef IS_BUILDPORT
     mudlog_vfprintf(icon->decker->ch, LOG_SYSLOG, "BUILD ERROR: %s encountered IC '%s' (%ld) from a non-connected zone!",
                     GET_CHAR_NAME(icon->decker->ch),

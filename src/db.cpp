@@ -2745,31 +2745,46 @@ void load_zones(File &fl)
   Z.name = str_dup(buf);
 
   fl.GetLine(buf, 256, FALSE);
-  // Attempt to read background count from the line.
-  if (sscanf(buf, " %d %d %d %d %d %d %d %d %d %d",
+  // Attempt to read our new dual-mode locks from the line.
+  if (sscanf(buf, " %d %d %d %d %d %d %d %d %d %d %d",
              &Z.top, &Z.lifespan, &Z.reset_mode,
-             &Z.security, &Z.connected, &Z.jurisdiction, &Z.is_pghq, &Z.locked_to_non_editors,
-             &Z.default_aura_type, &Z.default_aura_force) < 10)
+             &Z.security, &Z.editing_restricted_to_admin, &Z.approved, &Z.jurisdiction, &Z.is_pghq, &Z.locked_to_non_editors,
+             &Z.default_aura_type, &Z.default_aura_force) < 11)
   {
-    // Attempt to read the locked flag from the line.
-    if (sscanf(buf, " %d %d %d %d %d %d %d %d",
+    // Attempt to read background count from the line.
+    if (sscanf(buf, " %d %d %d %d %d %d %d %d %d %d",
               &Z.top, &Z.lifespan, &Z.reset_mode,
-              &Z.security, &Z.connected, &Z.jurisdiction, &Z.is_pghq, &Z.locked_to_non_editors) < 8)
+              &Z.security, &Z.old_connected_value, &Z.jurisdiction, &Z.is_pghq, &Z.locked_to_non_editors,
+              &Z.default_aura_type, &Z.default_aura_force) < 10)
     {
-      // Attempt to read the new PGHQ flag from the line.
-      if (sscanf(buf, " %d %d %d %d %d %d %d",
+      // Attempt to read the locked flag from the line.
+      if (sscanf(buf, " %d %d %d %d %d %d %d %d",
                 &Z.top, &Z.lifespan, &Z.reset_mode,
-                &Z.security, &Z.connected, &Z.jurisdiction, &Z.is_pghq) < 7)
+                &Z.security, &Z.old_connected_value, &Z.jurisdiction, &Z.is_pghq, &Z.locked_to_non_editors) < 8)
       {
-        // Fallback: Instead, read out the old format. Assume we'll save PGHQ data later.
-        if (sscanf(buf, " %d %d %d %d %d %d",
+        // Attempt to read the new PGHQ flag from the line.
+        if (sscanf(buf, " %d %d %d %d %d %d %d",
                   &Z.top, &Z.lifespan, &Z.reset_mode,
-                  &Z.security, &Z.connected, &Z.jurisdiction) < 5) {
-          fprintf(stderr, "FATAL ERROR: Format error in 6-constant line of %s: Expected six numbers like ' # # # # # #'.", fl.Filename());
-          exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
+                  &Z.security, &Z.old_connected_value, &Z.jurisdiction, &Z.is_pghq) < 7)
+        {
+          // Fallback: Instead, read out the old format. Assume we'll save PGHQ data later.
+          if (sscanf(buf, " %d %d %d %d %d %d",
+                    &Z.top, &Z.lifespan, &Z.reset_mode,
+                    &Z.security, &Z.old_connected_value, &Z.jurisdiction) < 5) {
+            fprintf(stderr, "FATAL ERROR: Format error in 6-constant line of %s: Expected six numbers like ' # # # # # #'.", fl.Filename());
+            exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
+          }
+          // Failed to read this, so assume it's 0.
+          Z.is_pghq = 0;
         }
+        // Failed to read this, so assume it's 0.
+        Z.locked_to_non_editors = 0;
       }
+      // Failed to read this, so assume it's 0 for both.
+      Z.default_aura_type = Z.default_aura_force = 0;
     }
+    // Since we read into the old connected value, clone it out to the new dual-mode locks.
+    Z.approved = Z.editing_restricted_to_admin = Z.old_connected_value;
   }
 
   fl.GetLine(buf, 256, FALSE);
@@ -2867,8 +2882,13 @@ int vnum_mobile_karma(char *searchname, struct char_data * ch)
       }
       if ( i != 10000 && karma > i )
         continue;
-      if (vnum_from_non_connected_zone(MOB_VNUM_RNUM(nr)))
+      if (vnum_from_non_approved_zone(MOB_VNUM_RNUM(nr))) {
+#ifdef IS_BUILDPORT
+        send_to_char(ch, "Allowing non-approved karma calc since we're on the buildport. This would be skipped otherwise.");
+#else
         continue;
+#endif
+      }
       ++found;
       snprintf(buf, sizeof(buf), "[%5ld] %4.2f (%4.2f) %4dx %6.2f %s\r\n",
               MOB_VNUM_RNUM(nr),
@@ -2906,8 +2926,13 @@ int vnum_mobile_bonuskarma(char *searchname, struct char_data * ch)
       }
       if ( i != 10000 && GET_KARMA(&mob_proto[nr]) > i )
         continue;
-      if (vnum_from_non_connected_zone(MOB_VNUM_RNUM(nr)))
+      if (vnum_from_non_approved_zone(MOB_VNUM_RNUM(nr))) {
+#ifdef IS_BUILDPORT
+        send_to_char(ch, "Allowing non-connected karma calc since we're on the buildport. This would be skipped otherwise.");
+#else
         continue;
+#endif
+      }
       karma = calc_karma(NULL, &mob_proto[nr]);
       ++found;
       snprintf(buf, sizeof(buf), "[%5ld] %4.2f (%4.2f)%4dx %6.2f %s\r\n",
@@ -2948,7 +2973,13 @@ int vnum_mobile_nuyen(char *searchname, struct char_data * ch)
       }
       if ( i != 1000*1000*1000 && nuyen > i )
         continue;
-      if (vnum_from_non_connected_zone(MOB_VNUM_RNUM(nr)))
+      if (vnum_from_non_approved_zone(MOB_VNUM_RNUM(nr))) {
+#ifdef IS_BUILDPORT
+        send_to_char(ch, "Allowing non-approved nuyen calc since we're on the buildport. This would be skipped otherwise.");
+#else
+        continue;
+#endif
+      }
         continue;
       karma = calc_karma(NULL, &mob_proto[nr]);
       ++found;
@@ -3506,7 +3537,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
             continue;
           if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
             continue;
-          if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+          if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
             continue;
 
           ++found;
@@ -3549,7 +3580,7 @@ int vnum_object_weapons_broken(char *searchname, struct char_data * ch)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] %s '%s^n'  %s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(GET_OBJ_VNUM(&obj_proto[nr])) ? " " : "*",
+              vnum_from_non_approved_zone(GET_OBJ_VNUM(&obj_proto[nr])) ? " " : "*",
               GET_OBJ_NAME(&obj_proto[nr]),
               bad_attack_type ? "(bad attack type)" : "");
     }
@@ -3578,7 +3609,7 @@ int vnum_object_weapons_fa_pro(char *searchname, struct char_data * ch)
         continue;
       if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
         continue;
-      if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+      if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
         continue;
       if (!WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA))
         continue;
@@ -3632,7 +3663,7 @@ int vnum_object_weapons_by_type(char *searchname, struct char_data * ch)
             continue;
           if (IS_OBJ_STAT(weapon, ITEM_EXTRA_STAFF_ONLY))
             continue;
-          if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+          if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
             continue;
 
           found++;
@@ -3772,7 +3803,7 @@ int vnum_object_magazines(char *searchname, struct char_data * ch)
           continue;
         if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
           continue;
-        if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+        if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
           continue;
 
         ++found;
@@ -3809,7 +3840,7 @@ int vnum_object_foci(char *searchname, struct char_data * ch)
         if ((power == 10 ? GET_FOCUS_FORCE(&obj_proto[nr]) < power : GET_FOCUS_FORCE(&obj_proto[nr]) != power))
           continue;
 
-        if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+        if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
           continue;
 
         int count = ObjList.CountObj(nr);
@@ -3849,7 +3880,7 @@ int vnum_object_type(int type, struct char_data * ch)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %s %s^n%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+              vnum_from_non_approved_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
               obj_proto[nr].text.name,
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
     }
@@ -3868,7 +3899,7 @@ int vnum_object_affectloc(int type, struct char_data * ch)
     {
       if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
         continue;
-      if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+      if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
         continue;
 
       for (int i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -3904,7 +3935,7 @@ int vnum_object_affects(struct char_data *ch) {
   for (nr = 0; nr <= top_of_objt; nr++) {
     if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
       continue;
-    if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+    if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
       continue;
 
     // If it can't be used in the first place, skip it.
@@ -3967,7 +3998,7 @@ int vnum_object_poison(struct char_data * ch)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %s %s^n  poison rating: %d\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+              vnum_from_non_approved_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
               obj_proto[nr].text.name,
               GET_FOUNTAIN_POISON_RATING(&obj_proto[nr]));
     }
@@ -3976,7 +4007,7 @@ int vnum_object_poison(struct char_data * ch)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] %s %s^n  poison rating: %d\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+              vnum_from_non_approved_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
               obj_proto[nr].text.name,
               GET_DRINKCON_POISON_RATING(&obj_proto[nr]));
     }
@@ -4013,7 +4044,7 @@ int vnum_object_weaponfocus(char *searchname, struct char_data * ch)
             continue;
           if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
             continue;
-          if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
+          if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
             continue;
 
           ++found;
@@ -4120,7 +4151,7 @@ int vnum_object(char *searchname, struct char_data * ch)
       snprintf(buf, sizeof(buf), "%3d. [%5ld -%2d] %s %s%s\r\n", ++found,
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+              vnum_from_non_approved_zone(OBJ_VNUM_RNUM(nr)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
               obj_proto[nr].text.name,
               obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
       send_to_char(buf, ch);
@@ -4133,12 +4164,12 @@ int vnum_room_samename(struct char_data *ch) {
   int found = 0;
   std::unordered_map<std::string, std::vector<vnum_t>> seen_names = {};
 
-  send_to_char(ch, "Looking for connected rooms that share the same name...\r\n");
+  send_to_char(ch, "Looking for edit-locked rooms that share the same name...\r\n");
 
   for (rnum_t nr = 0; nr <= top_of_world; nr++) {
     struct room_data *room = &world[nr];
 
-    if (vnum_from_non_connected_zone(GET_ROOM_VNUM(room)))
+    if (!vnum_from_editing_restricted_zone(GET_ROOM_VNUM(room)))
       continue;
 
     std::string string_name = GET_ROOM_NAME(room);

@@ -68,8 +68,8 @@ extern class memoryClass *Mem;
     return;                                                                                                                                    \
   }                                                                                                                                            \
                                                                                                                                                \
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].connected) {                              \
-    send_to_char(ch, "Sorry, zone %d is marked as connected to the game world, so you can't edit it.\r\n", zone_table[(real_zonenum)].number); \
+  if (!(access_level(ch, LVL_ADMIN) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].editing_restricted_to_admin) {                \
+    send_to_char(ch, "Sorry, zone %d closed for editing.\r\n", zone_table[(real_zonenum)].number);                                             \
     return;                                                                                                                                    \
   }                                                                                                                                            \
 }
@@ -1969,8 +1969,8 @@ ACMD(do_zswitch)
       return;
     }
 
-    if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].connected) {
-      send_to_char(ch, "Sorry, zone %d is marked as connected to the game world, so you can't edit it.\r\n", zone_table[(real_zonenum)].number);
+    if (!(access_level(ch, LVL_ADMIN) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].editing_restricted_to_admin) {
+      send_to_char(ch, "Sorry, zone %d is closed for editing.\r\n", zone_table[(real_zonenum)].number);
       return;
     }
   }

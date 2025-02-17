@@ -2028,20 +2028,44 @@ struct obj_data *get_obj_in_list_num(int num, struct obj_data * list)
   return NULL;
 }
 
-int vnum_from_non_connected_zone(int vnum)
+bool vnum_from_non_approved_zone(vnum_t vnum)
 {
-  int counter;
-  if (vnum == -1)  // obj made using create_obj, like mail and corpses
-    return 0;
+  // -1 means it was made with create_obj, like mail and corpses. Treat as always connected.
+  if (vnum == -1)
+    return FALSE;
+
+  // Invalid vnums are always treated as non-connected.
   else if (vnum < 0 || vnum > (zone_table[top_of_zone_table].top))
-    return 1;
+    return TRUE;
 
-  for (counter = 0; counter <= top_of_zone_table; counter++)
-    if (!(zone_table[counter].connected) && vnum >= (zone_table[counter].number * 100) &&
-        vnum <= zone_table[counter].top)
-      return 1;
+  for (int zone_idx = 0; zone_idx <= top_of_zone_table; zone_idx++) {
+    if (!zone_table[zone_idx].approved)
+      continue;
 
-  return 0;
+    if (vnum >= (zone_table[zone_idx].number * 100) && vnum <= zone_table[zone_idx].top)
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+bool vnum_from_editing_restricted_zone(vnum_t vnum)
+{
+  // -1 means it was made with create_obj, like mail and corpses. Treat as always connected.
+  if (vnum == -1)
+    return FALSE;
+
+  // Invalid vnums are always treated as non-connected.
+  else if (vnum < 0 || vnum > (zone_table[top_of_zone_table].top))
+    return TRUE;
+
+  for (int zone_idx = 0; zone_idx <= top_of_zone_table; zone_idx++) {
+    if (vnum >= (zone_table[zone_idx].number * 100) && vnum <= zone_table[zone_idx].top) {
+      return (zone_table[zone_idx].approved || zone_table[zone_idx].editing_restricted_to_admin);
+    }
+  }
+
+  return FALSE;
 }
 
 /* search a room for a char, and return a pointer if found..  */

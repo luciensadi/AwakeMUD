@@ -4330,10 +4330,11 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed, struc
   int i, color = 0;
 
   if (!ch_can_bypass_edit_lock(ch, &zone_table[zone])) {
-    snprintf(bufptr, buf_size - strlen(bufptr), "%4d %-30.30s^n %s (<redacted>) Age: ???; Res: ??? (?); Top: %6d; Sec: ??\r\n",
+    snprintf(bufptr, buf_size - strlen(bufptr), "%4d %-30.30s^n %s%s (<redacted>) Age: ???; Res: ??? (?); Top: %6d; Sec: ??\r\n",
              zone_table[zone].number,
              "<redacted>",
-             zone_table[zone].connected ? "* " : "  ",
+             zone_table[zone].editing_restricted_to_admin ? "L" : " ",
+             zone_table[zone].approved ? "A" : " ",
              zone_table[zone].top);
     return;
   }
@@ -4380,8 +4381,9 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed, struc
       else if (zone_table[zone].security >= 7)
         sec_color = "^y";
 
-      snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s (%-3.3s) Age: %3d; Res: %3d (%1d); Top: ^c%6d^n; Sec: %s%2d^n\r\n",
-            zone_table[zone].connected ? "* " : "  ",
+      snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s%s (%-3.3s) Age: %3d; Res: %3d (%1d); Top: ^c%6d^n; Sec: %s%2d^n\r\n",
+            zone_table[zone].editing_restricted_to_admin ? "L" : " ",
+            zone_table[zone].approved ? "A" : " ",
             jurisdictions[zone_table[zone].jurisdiction],
             zone_table[zone].age, zone_table[zone].lifespan,
             zone_table[zone].reset_mode, zone_table[zone].top,
@@ -4408,13 +4410,15 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed, struc
     snprintf(bufptr, buf_size, "Zone %d (%d): %s^n\r\n"
             "Age: %d, Commands: %d, Reset: %d (%d), Top: %d\r\n"
             "Rooms: %d, Mobiles: %d, Objects: %d, Shops: %d, Vehicles: %d\r\n"
-            "Security: %d, Status: %s^n\r\nJurisdiction: %s^n, Editors: <not implemented>",
+            "Security: %d, Status: %s%s^n\r\nJurisdiction: %s^n, Editors: <not implemented>",
             zone_table[zone].number, zone, zone_table[zone].name,
             zone_table[zone].age, zone_table[zone].num_cmds,
             zone_table[zone].lifespan, zone_table[zone].reset_mode,
             zone_table[zone].top, rooms, mobs, objs, shops, vehs,
             zone_table[zone].security,
-            zone_table[zone].connected ? "Connected" : "In Progress", jurisdictions[zone_table[zone].jurisdiction]);
+            zone_table[zone].editing_restricted_to_admin ? "Editing Locked" : "",
+            zone_table[zone].approved ? ", Approved and Connected" : " ",
+            jurisdictions[zone_table[zone].jurisdiction]);
 /* FIXCHE   for (i = 0; i < NUM_ZONE_EDITOR_IDS; i++) {
       const char *name = playerDB.GetNameV(zone_table[zone].editor_ids[i]);
 
@@ -4680,7 +4684,7 @@ ACMD(do_show)
       if (ROOM_FLAGGED(&world[i], ROOM_DEATH))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s %s\r\n", ++j,
                 world[i].number,
-                vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                vnum_from_non_approved_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                 world[i].name);
     send_to_char(buf, ch);
     break;
@@ -4691,7 +4695,7 @@ ACMD(do_show)
     for (i = 0, j = 0; i <= zone_table[real_zone(GOD_ROOMS_ZONE)].top; i++)
       if (world[i].zone == GOD_ROOMS_ZONE && i > 1 && !(i >= 8 && i <= 12))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d: [%8ld] %s %s\r\n", j++, world[i].number,
-                vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                vnum_from_non_approved_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                 world[i].name);
     send_to_char(buf, ch);
     break;
@@ -4862,7 +4866,7 @@ ACMD(do_show)
       if (!room_has_any_exits(&world[i])) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s^n\r\n", ++j,
                 world[i].number,
-                vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                vnum_from_non_approved_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                 world[i].name);
       }
     }
@@ -4877,7 +4881,7 @@ ACMD(do_show)
           if (!room_has_any_exits(world[i].dir_option[dir]->to_room)) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%6ld] %s %s^n: %s^n\r\n", ++j,
                     world[i].number,
-                    vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                    vnum_from_non_approved_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                     world[i].name,
                     dirs[dir]);
             break;
@@ -4907,7 +4911,7 @@ ACMD(do_show)
       if (ROOM_FLAGGED(&world[i], ROOM_STORAGE))
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%4d: [%8ld] %s %s^n\r\n", ++j,
                 world[i].number,
-                vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                vnum_from_non_approved_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                 world[i].name);
     send_to_char(buf, ch);
     break;
@@ -4919,7 +4923,7 @@ ACMD(do_show)
         if (world[i].dir_option[k] && world[i].dir_option[k]->hidden > ANOMALOUS_HIDDEN_RATING_THRESHOLD) {
           send_to_char(ch, "%4d: [%8ld] %s %s^n: %s exit has hidden rating %d > %d\r\n", ++j,
                   world[i].number,
-                  vnum_from_non_connected_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                  vnum_from_non_approved_zone(world[i].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                   world[i].name,
                   dirs[k],
                   world[i].dir_option[k]->hidden,
@@ -4935,7 +4939,7 @@ ACMD(do_show)
       printed = FALSE;
 
       // Skip non-connected areas or known staff areas.
-      if (vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[i]))
+      if (vnum_from_non_approved_zone(GET_MOB_VNUM(&mob_proto[i]))
           || GET_MOB_VNUM(&mob_proto[i]) < 100
           || (GET_MOB_VNUM(&mob_proto[i]) >= 1000 && GET_MOB_VNUM(&mob_proto[i]) <= 1099)
           || (GET_MOB_VNUM(&mob_proto[i]) >= 10000 && GET_MOB_VNUM(&mob_proto[i]) <= 10099))
@@ -4948,7 +4952,7 @@ ACMD(do_show)
 
       snprintf(buf, sizeof(buf), "%4d: [%8ld] %s %s^n", ++j,
                GET_MOB_VNUM(&mob_proto[i]),
-               vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[i])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+               vnum_from_non_approved_zone(GET_MOB_VNUM(&mob_proto[i])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                GET_CHAR_NAME(&mob_proto[i]));
 
       // Flag mobs with crazy stats
@@ -5012,7 +5016,7 @@ ACMD(do_show)
             if (ROOM_FLAGGED(&world[k], i) && ch_can_bypass_edit_lock(ch, &world[k]))
               send_to_char(ch, "%4d: [%8ld] %s %s\r\n", ++j,
                            world[k].number,
-                           vnum_from_non_connected_zone(world[k].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                           vnum_from_non_approved_zone(world[k].number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                            world[k].name);
           return;
         }
@@ -5033,7 +5037,7 @@ ACMD(do_show)
         send_to_char(ch, "%4d) [%8ld] %s %s^n\r\n",
                      j++,
                      GET_OBJ_VNUM(&obj_proto[i]),
-                     vnum_from_non_connected_zone(GET_OBJ_VNUM(&obj_proto[i])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                     vnum_from_non_approved_zone(GET_OBJ_VNUM(&obj_proto[i])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                      GET_OBJ_NAME(&obj_proto[i]));
       }
     }
@@ -5149,14 +5153,14 @@ ACMD(do_show)
     }
     break;
   case 31:
-    send_to_char("The following non-key items are used as keys for at least one door in a connected zone:\r\n", ch);
+    send_to_char("The following non-key items are used as keys for at least one door in an approved zone:\r\n", ch);
     {
       std::unordered_map<vnum_t, bool> seen_items = {};
 
       for (int idx = 0; idx < top_of_world; idx++) {
         struct room_data *room = &world[idx];
 
-        if (vnum_from_non_connected_zone(GET_ROOM_VNUM(room)))
+        if (vnum_from_non_approved_zone(GET_ROOM_VNUM(room)))
           continue;
         
         for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
@@ -5194,7 +5198,7 @@ ACMD(do_show)
       if (!ch_can_bypass_edit_lock(ch, &zone_table[idx]))
         continue;
 
-      if (zone_table[idx].connected
+      if (zone_table[idx].editing_restricted_to_admin
           && zone_table[idx].num_cmds > 0
           && (zone_table[idx].lifespan > 20 || zone_table[idx].reset_mode == ZONE_RESET_NEVER))
       {
@@ -5209,7 +5213,7 @@ ACMD(do_show)
     send_to_char("The following killable, connected NPCs have magic 12 or higher:\r\n", ch);
     for (rnum_t mob_idx = 0; mob_idx < top_of_mobt; mob_idx++) {
       struct char_data *mob = &mob_proto[mob_idx];
-      if (GET_MAG(mob) / 100 < 12 || vnum_from_non_connected_zone(GET_MOB_VNUM(mob)) || MOB_FLAGGED(mob, MOB_NOKILL))
+      if (GET_MAG(mob) / 100 < 12 || vnum_from_editing_restricted_zone(GET_MOB_VNUM(mob)) || MOB_FLAGGED(mob, MOB_NOKILL))
         continue;
       if (!ch_can_bypass_edit_lock(ch, mob))
         continue;
@@ -5242,7 +5246,7 @@ ACMD(do_show)
             if (IS_OBJ_STAT(&obj_proto[k], i) && ch_can_bypass_edit_lock(ch, &obj_proto[k]))
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%6d: [%8ld] %s %s\r\n", ++j,
                        GET_OBJ_VNUM(&obj_proto[k]),
-                       vnum_from_non_connected_zone(GET_OBJ_VNUM(&obj_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                       !vnum_from_non_approved_zone(GET_OBJ_VNUM(&obj_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                        GET_OBJ_NAME(&obj_proto[k]));
           page_string(ch->desc, buf, 1);
           return;
@@ -5264,14 +5268,14 @@ ACMD(do_show)
             if (GET_OBJ_AFFECT(&obj_proto[k]).IsSet(i) && ch_can_bypass_edit_lock(ch, &obj_proto[k]))
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%6d: [%8ld] %s %s\r\n", ++j,
                        GET_OBJ_VNUM(&obj_proto[k]),
-                       vnum_from_non_connected_zone(GET_OBJ_VNUM(&obj_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                       vnum_from_non_approved_zone(GET_OBJ_VNUM(&obj_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                        GET_OBJ_NAME(&obj_proto[k]));
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nMobs with affflag %s set:\r\n", affected_bits[i]);
           for (k = 0, j = 0; k <= top_of_mobt; k++)
             if (AFF_FLAGGED(&mob_proto[k], i) && ch_can_bypass_edit_lock(ch, &mob_proto[k]))
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%6d: [%8ld] %s %s\r\n", ++j,
                        GET_MOB_VNUM(&mob_proto[k]),
-                       vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                       vnum_from_non_approved_zone(GET_MOB_VNUM(&mob_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                        GET_CHAR_NAME(&mob_proto[k]));
           page_string(ch->desc, buf, 1);
           return;
@@ -5293,7 +5297,7 @@ ACMD(do_show)
             if (MOB_FLAGGED(&mob_proto[k], i) && ch_can_bypass_edit_lock(ch, &mob_proto[k]))
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%6d: [%8ld] %s %s\r\n", ++j,
                        GET_MOB_VNUM(&mob_proto[k]),
-                       vnum_from_non_connected_zone(GET_MOB_VNUM(&mob_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+                       vnum_from_non_approved_zone(GET_MOB_VNUM(&mob_proto[k])) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
                        GET_CHAR_NAME(&mob_proto[k]));
           page_string(ch->desc, buf, 1);
           return;
@@ -5312,7 +5316,7 @@ ACMD(do_show)
 
       for (i = 0; i <= top_of_zone_table; i++) {
         // Skip anything that's not marked as completed.
-        if (!zone_table[i].connected) {
+        if (!zone_table[i].approved) {
           continue;
         }
 
@@ -7354,7 +7358,7 @@ ACMD(do_slist)
 
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s %s (%ld)\r\n", ++found,
             shop_table[nr].vnum,
-            vnum_from_non_connected_zone(shop_table[nr].keeper) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+            vnum_from_non_approved_zone(shop_table[nr].keeper) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
             (real_mob = real_mobile(shop_table[nr].keeper)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]),
             shop_table[nr].keeper);
   }
@@ -8032,7 +8036,7 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
 
     snprintf(buf, sizeof(buf), "^c[%8ld]^n %s %s^n:\r\n",
              room->number,
-             vnum_from_non_connected_zone(room->number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+             vnum_from_non_approved_zone(room->number) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
              room->name);
 
     // Check its strings.
@@ -8327,7 +8331,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
 
     snprintf(buf, sizeof(buf), "^c[%8ld]^n %s %s^n:\r\n",
              GET_MOB_VNUM(mob),
-             vnum_from_non_connected_zone(GET_MOB_VNUM(mob)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+             vnum_from_non_approved_zone(GET_MOB_VNUM(mob)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
              GET_CHAR_NAME(mob));
 
     // Flag mobs with crazy stats
@@ -8508,7 +8512,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
               rnum_t obj_rnum = real_object(vnum);
 
               snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - is equipped with %sexternal non-canon-zone item %ld (%s).\r\n", // *immature giggle*
-                       vnum_from_non_connected_zone(vnum) ? "^ynon-connected^n " : "",
+                       vnum_from_non_approved_zone(vnum) ? "^ynon-approved^n " : "",
                        vnum,
                        obj_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[obj_rnum]) : "(does not exist)");
             }
@@ -8566,7 +8570,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
 
     snprintf(buf, sizeof(buf), "^c[%8ld]^n %s %s^n:\r\n",
              GET_OBJ_VNUM(obj),
-             vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(connected)" : "*"),
+             vnum_from_non_approved_zone(GET_OBJ_VNUM(obj)) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
              GET_OBJ_NAME(obj));
 
     // Flag objects with odd typing
@@ -9566,7 +9570,7 @@ int audit_zone_commands_(struct char_data *ch, int zone_num, bool verbose) {
 #define AUDIT_ALL_ZONES(func_suffix)                           \
 if (!str_cmp(arg1, #func_suffix)) {                            \
   for (zonenum = 0; zonenum <= top_of_zone_table; zonenum++) { \
-    if (!zone_table[zonenum].connected                         \
+    if (!zone_table[zonenum].approved                          \
         || zone_table[zonenum].number == 0                     \
         || zone_table[zonenum].number == 10                    \
         || zone_table[zonenum].number == 100)                  \
@@ -9721,7 +9725,7 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
             && EXIT2(room, dir)->to_room
             && (seen_zone = get_zone_from_vnum(GET_ROOM_VNUM(EXIT2(room, dir)->to_room)))
             && seen_zone != &zone_table[zone_rnum]
-            && seen_zone->connected)
+            && seen_zone->approved)
         {
           // We know this room is connected. Add all its exits etc to our map.
           reward_value += spider_connected_rooms_for_reward_func(room, connected_rooms, connected_hosts, connected_ics);
@@ -10177,7 +10181,7 @@ int _check_for_zone_error(vnum_t vnum, int zone_num, char *buf, size_t buf_len, 
     snprintf(ENDOF(buf), buf_len - strlen(buf), "  - %s %ld from %sexternal zone.\r\n",
              error_type,
              vnum,
-             vnum_from_non_connected_zone(vnum) ? "^ynon-connected^n " : ""
+             vnum_from_non_approved_zone(vnum) ? "^ynon-approved^n " : ""
             );
     return 1;
   }

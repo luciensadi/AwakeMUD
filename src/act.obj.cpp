@@ -766,7 +766,7 @@ void get_check_money(struct char_data * ch, struct obj_data * obj, struct obj_da
 
   // Find the zone it belongs to.
   for (zone = 0; zone <= top_of_zone_table; zone++)
-    if (!zone_table[zone].connected && GET_OBJ_VNUM(obj) >= (zone_table[zone].number * 100) &&
+    if (!zone_table[zone].approved && GET_OBJ_VNUM(obj) >= (zone_table[zone].number * 100) &&
         GET_OBJ_VNUM(obj) <= zone_table[zone].top)
       break;
 

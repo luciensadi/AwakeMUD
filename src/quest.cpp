@@ -1042,11 +1042,11 @@ bool follower_can_receive_reward(struct char_data *follower, struct char_data *l
 
 void reward(struct char_data *ch, struct char_data *johnson)
 {
-  if (vnum_from_non_connected_zone(quest_table[GET_QUEST(ch)].vnum)) {
+  if (vnum_from_non_approved_zone(quest_table[GET_QUEST(ch)].vnum)) {
 #ifdef IS_BUILDPORT
-    send_to_char(ch, "This quest's zone is not connected, so no rewards will be assigned for it if it's deployed to main.\r\n");
+    send_to_char(ch, "This quest's zone is not approved, so no rewards will be assigned for it if it's deployed to main.\r\n");
 #else
-    send_to_char(ch, "Quest reward suppressed due to this zone not being marked as connected to the game world.\r\n");
+    send_to_char(ch, "Quest reward suppressed due to this zone not being marked as approved for use in the game world.\r\n");
     end_quest(ch, TRUE);
     return;
 #endif
@@ -1205,7 +1205,7 @@ bool compareRep(const quest_entry &a, const quest_entry &b)
 int new_quest(struct char_data *mob, struct char_data *ch)
 {
   int num = 0;
-  bool allow_disconnected = vnum_from_non_connected_zone(GET_MOB_VNUM(mob));
+  bool allow_disconnected = vnum_from_non_approved_zone(GET_MOB_VNUM(mob));
 
   quest_entry temp_entry;
   std::vector<quest_entry> qlist;
@@ -1235,7 +1235,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
   bool skipped_from_missing_prereq = FALSE;
   for (int quest_idx = 0; quest_idx <= top_of_questt; quest_idx++) {
     if (quest_table[quest_idx].johnson == GET_MOB_VNUM(mob)) {
-      if (!allow_disconnected && vnum_from_non_connected_zone(quest_table[quest_idx].vnum)) {
+      if (!allow_disconnected && vnum_from_non_approved_zone(quest_table[quest_idx].vnum)) {
 #ifdef IS_BUILDPORT
         if (access_level(ch, LVL_BUILDER)) {
           send_to_char(ch, "[Quest %ld would be skipped due to non-connected status, but allowing since this is buildport.]\r\n", quest_table[quest_idx].vnum);
@@ -2966,7 +2966,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     case 'y':
     case 'Y':
 #ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
-      if (!vnum_from_non_connected_zone(d->edit_number)) {
+      if (!vnum_from_non_approved_zone(d->edit_number)) {
 #else
       {
 #endif
@@ -3916,7 +3916,7 @@ ACMD(do_endrun) {
 unsigned int get_johnson_overall_max_rep(struct char_data *johnson) {
   unsigned int max_rep = 0;
 
-  bool johnson_is_from_disconnected_zone = vnum_from_non_connected_zone(GET_MOB_VNUM(johnson));
+  bool johnson_is_from_disconnected_zone = vnum_from_non_approved_zone(GET_MOB_VNUM(johnson));
 #ifdef IS_BUILDPORT
   johnson_is_from_disconnected_zone = TRUE;
 #endif
@@ -3924,7 +3924,7 @@ unsigned int get_johnson_overall_max_rep(struct char_data *johnson) {
   for (int i = 0; i <= top_of_questt; i++) {
     if (quest_table[i].johnson == GET_MOB_VNUM(johnson)
         && (johnson_is_from_disconnected_zone
-            || !vnum_from_non_connected_zone(quest_table[i].vnum)))
+            || !vnum_from_non_approved_zone(quest_table[i].vnum)))
     {
       max_rep = MAX(max_rep, quest_table[i].max_rep);
     }
@@ -3936,7 +3936,7 @@ unsigned int get_johnson_overall_max_rep(struct char_data *johnson) {
 unsigned int get_johnson_overall_min_rep(struct char_data *johnson) {
   unsigned int min_rep = UINT_MAX;
 
-  bool johnson_is_from_disconnected_zone = vnum_from_non_connected_zone(GET_MOB_VNUM(johnson));
+  bool johnson_is_from_disconnected_zone = vnum_from_non_approved_zone(GET_MOB_VNUM(johnson));
   #ifdef IS_BUILDPORT
     johnson_is_from_disconnected_zone = TRUE;
   #endif
@@ -3944,7 +3944,7 @@ unsigned int get_johnson_overall_min_rep(struct char_data *johnson) {
   for (int i = 0; i <= top_of_questt; i++) {
     if (quest_table[i].johnson == GET_MOB_VNUM(johnson)
         && (johnson_is_from_disconnected_zone
-            || !vnum_from_non_connected_zone(quest_table[i].vnum)))
+            || !vnum_from_non_approved_zone(quest_table[i].vnum)))
     {
       min_rep = MIN(min_rep, quest_table[i].min_rep);
     }

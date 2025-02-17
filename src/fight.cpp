@@ -723,9 +723,16 @@ void make_corpse(struct char_data * ch)
   /* transfer nuyen & credstick */
   if (IS_NPC(ch))
   {
-    if (MOB_FLAGGED(ch, MOB_NO_NUYEN_LOOT_DROPS) || vnum_from_non_connected_zone(GET_MOB_VNUM(ch))) {
+    if (MOB_FLAGGED(ch, MOB_NO_NUYEN_LOOT_DROPS)) {
       nuyen = 0;
       credits = 0;
+    } else if (vnum_from_non_approved_zone(GET_MOB_VNUM(ch))) {
+#ifdef IS_BUILDPORT
+      // Generate cash on the buildport.
+#else
+      nuyen = 0;
+      credits = 0;
+#endif
     } else {
       if (AFF_FLAGGED(ch, AFF_CHEATLOG_MARK)) {
         // Someone has given us money, so we return the exact and full amount.
@@ -1228,7 +1235,7 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
   base = (ch ? MIN(max_exp_gain, base) : base);
   base = MAX(base, 1);
 
-  if (!IS_SENATOR(ch) && vnum_from_non_connected_zone(GET_MOB_VNUM(vict)))
+  if (!IS_SENATOR(ch) && vnum_from_non_approved_zone(GET_MOB_VNUM(vict)))
     base = 0;
 
 
@@ -2972,7 +2979,7 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bo
             && IS_SENATOR(ch->master)
             && !access_level(ch->master, LVL_ADMIN)))
         && IS_NPC(victim)
-        && !vnum_from_non_connected_zone(GET_MOB_VNUM(victim)))
+        && !vnum_from_non_approved_zone(GET_MOB_VNUM(victim)))
     {
       return false;
     }

@@ -149,7 +149,9 @@ struct zone_data
   int age;                 /* current age of this zone (minutes) */
   int top;                 /* upper limit for rooms in this zone */
   int security;            /* security rating for node */
-  int connected;           /* zone is connected */
+  int editing_restricted_to_admin;  /* Zone cannot be edited by anyone below level 9. */
+  int approved;            /* Has passed audit and is approved for player use. */
+  int old_connected_value = -1;
 
   int reset_mode;          /* conditions for reset (see below)   */
   int number;              /* virtual number of this zone        */

@@ -49,7 +49,7 @@
 #define NUM_TAXI_DEST_TYPES                       11
 
 // Define to collapse validation logic for destinations. Input is an integer index in the destination list.
-#define DEST_IS_VALID(destination, dest_list) ((dest_list)[(destination)].enabled && !vnum_from_non_connected_zone((dest_list)[(destination)].vnum))
+#define DEST_IS_VALID(destination, dest_list) ((dest_list)[(destination)].enabled && !vnum_from_non_approved_zone((dest_list)[(destination)].vnum))
 
 bool room_is_a_taxicab(vnum_t vnum);
 
