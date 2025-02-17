@@ -2039,13 +2039,12 @@ bool vnum_from_non_approved_zone(vnum_t vnum)
     return TRUE;
 
   for (int zone_idx = 0; zone_idx <= top_of_zone_table; zone_idx++) {
-    if (!zone_table[zone_idx].approved)
-      continue;
-
     if (vnum >= (zone_table[zone_idx].number * 100) && vnum <= zone_table[zone_idx].top)
-      return TRUE;
+      return !zone_table[zone_idx].approved;
   }
 
+  // We should never get here.
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got to 'unreachable' end of vnum_from_non_approved_zone(%ld).", vnum);
   return FALSE;
 }
 
@@ -2065,6 +2064,8 @@ bool vnum_from_editing_restricted_zone(vnum_t vnum)
     }
   }
 
+  // We should never get here.
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got to 'unreachable' end of vnum_from_editing_restricted_zone(%ld).", vnum);
   return FALSE;
 }
 
