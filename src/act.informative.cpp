@@ -6460,7 +6460,9 @@ void perform_immort_where(struct char_data * ch, char *arg)
 
   if (!*arg)
   {
+#ifndef IS_BUILDPORT
     mudlog_vfprintf(ch, LOG_WIZLOG, "%s queried locations of all players.", GET_CHAR_NAME(ch));
+#endif
     strlcpy(buf, "Players\r\n-------\r\n", sizeof(buf));
     for (d = descriptor_list; d; d = d->next)
       if (!d->connected) {
@@ -6494,7 +6496,9 @@ void perform_immort_where(struct char_data * ch, char *arg)
     return;
   }
 
+#ifndef IS_BUILDPORT
   mudlog_vfprintf(ch, LOG_WIZLOG, "%s queried locations of anything with keyword '%s'.", GET_CHAR_NAME(ch), arg);
+#endif
 
   // Location version of the command (where <keyword>)
   *buf = '\0';

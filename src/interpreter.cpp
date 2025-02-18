@@ -1313,6 +1313,7 @@ struct command_info mtx_info[] =
     { "disconnect", 0, do_logoff, 0, 1, BLOCKS_IDLE_REWARD },
     { "download", 0, do_download, 0, 0, BLOCKS_IDLE_REWARD },
     { "evade", 0, do_evade, 0, 0, BLOCKS_IDLE_REWARD },
+    { "echo", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { "emote", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { ":", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { "exit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
