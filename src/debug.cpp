@@ -7,6 +7,10 @@
 #include <string.h>
 #include <mysql/mysql.h>
 #include <vector>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
+#include <iterator>
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -67,6 +71,14 @@ void verify_data(struct char_data *ch, const char *line, int cmd, int subcmd, co
   else {
 
   }
+}
+
+std::string join(std::vector<std::string> const &strings, std::string delim)
+{
+    std::stringstream ss;
+    std::copy(strings.begin(), strings.end(),
+        std::ostream_iterator<std::string>(ss, delim.c_str()));
+    return ss.str();
 }
 
 void do_pgroup_debug(struct char_data *ch, char *argument) {
@@ -181,6 +193,20 @@ ACMD(do_debug) {
   if (!str_cmp(arg1, "pointers")) {
     send_to_char(ch, "OK, validating every pointer we can think of.\r\n");
     verify_every_pointer_we_can_think_of();
+    return;
+  }
+
+  if (!str_cmp(arg1, "writeaptexclusionquery")) {
+    std::vector<std::string> vnum_vec = {};
+    for (auto &complex : global_apartment_complexes) {
+      for (auto &apartment : complex->get_apartments()) {
+        for (auto &room : apartment->get_rooms()) {
+          vnum_vec.push_back(std::string(vnum_to_string(room->get_vnum())));
+        }
+      }
+    }
+    std::string str = join(vnum_vec, "|");
+    send_to_char(ch, "(%s)", str.c_str());
     return;
   }
 

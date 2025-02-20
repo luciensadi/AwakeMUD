@@ -102,6 +102,12 @@ void houseedit_list_complexes(struct char_data *ch, char *arg) {
     if (arg && *arg && !is_abbrev(arg, complex->get_name()))
       continue;
 
+#ifndef IS_BUILDPORT
+    // We put 'zzz' in front of unused complexes. Skip them on live.
+    if (strlen(complex->get_name()) > 3 && complex->get_name()[0] == complex->get_name()[1] == complex->get_name()[2] == 'z')
+      continue;
+#endif
+
     send_to_char(ch, formatting_string,
                  complex->get_name(),
                  complex->get_landlord_vnum(),

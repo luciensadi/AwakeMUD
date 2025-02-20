@@ -1926,11 +1926,22 @@ ACMD(do_eject)
                       "%s is loaded with special ammo that isn't ready for players to collect yet.", CAP(GET_OBJ_NAME(weapon)));
 
   // Strip out the ammo and put it in your bullet pants, then destroy the mag.
+  int had_rounds = GET_MAGAZINE_AMMO_COUNT(magazine);
   update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
   obj_from_obj(magazine);
   extract_obj(magazine);
-  act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
-  act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+  if (GET_WEAPON_MAX_AMMO(weapon) == 1 && GET_WEAPON_FIREMODE(weapon) == MODE_SS) {
+    if (GET_MAGAZINE_AMMO_COUNT(magazine) == 1) {
+      act("$n locks back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+      act("You lock back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+    } else {
+      act("$n locks back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+      act("You lock back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+    }
+  } else {
+    act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+    act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+  }
 
   // Ejecting a magazine costs a simple action.
   GET_INIT_ROLL(ch) -= 5;
