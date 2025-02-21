@@ -596,10 +596,6 @@ ACMD(do_dig)
       world[room].dir_option[dir]->exit_info = 0;
       world[room].dir_option[dir]->to_room_vnum = in_room->number;
     }
-
-    write_world_to_disk(zone_table[zone1].number);
-    if (zone1 != zone2 && subcmd != SCMD_ONEWAY)
-      write_world_to_disk(zone_table[zone2].number);
   } else {
     // Delete the reverse exit, if it exists.
     if (in_room->dir_option[dir]->to_room && in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]]) {
@@ -615,6 +611,11 @@ ACMD(do_dig)
     delete in_room->dir_option[dir];
     in_room->dir_option[dir] = NULL;
   }
+
+  write_world_to_disk(zone_table[zone1].number);
+  if (zone1 != zone2 && subcmd != SCMD_ONEWAY)
+    write_world_to_disk(zone_table[zone2].number);
+
   send_to_char("Done.\r\n", ch);
 }
 
