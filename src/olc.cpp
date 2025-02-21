@@ -599,6 +599,7 @@ ACMD(do_dig)
   } else {
     // Delete the reverse exit, if it exists.
     if (in_room->dir_option[dir]->to_room && in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]]) {
+      zone2 = get_zone_index_number_from_vnum(GET_ROOM_VNUM(in_room->dir_option[dir]->to_room));
       DELETE_IF_EXTANT(in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]]->keyword);
       DELETE_IF_EXTANT(in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]]->general_description);
       delete in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]];
