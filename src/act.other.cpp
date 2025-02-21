@@ -1931,7 +1931,7 @@ ACMD(do_eject)
   obj_from_obj(magazine);
   extract_obj(magazine);
   if (GET_WEAPON_MAX_AMMO(weapon) == 1 && GET_WEAPON_FIREMODE(weapon) == MODE_SS) {
-    if (GET_MAGAZINE_AMMO_COUNT(magazine) == 1) {
+    if (GET_MAGAZINE_AMMO_COUNT(magazine) > 0) {
       act("$n locks back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
       act("You lock back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
     } else {

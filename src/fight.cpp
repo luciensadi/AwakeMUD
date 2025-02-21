@@ -726,14 +726,15 @@ void make_corpse(struct char_data * ch)
     if (MOB_FLAGGED(ch, MOB_NO_NUYEN_LOOT_DROPS)) {
       nuyen = 0;
       credits = 0;
-    } else if (vnum_from_non_approved_zone(GET_MOB_VNUM(ch))) {
-#ifdef IS_BUILDPORT
-      // Generate cash on the buildport.
-#else
+    } 
+#ifndef IS_BUILDPORT
+    // Refuse to generate rewards from unapproved zones on the main port.
+    else if (vnum_from_non_approved_zone(GET_MOB_VNUM(ch))) {
       nuyen = 0;
       credits = 0;
+    }
 #endif
-    } else {
+    else {
       if (AFF_FLAGGED(ch, AFF_CHEATLOG_MARK)) {
         // Someone has given us money, so we return the exact and full amount.
         nuyen = GET_NUYEN(ch);

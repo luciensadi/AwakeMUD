@@ -54,6 +54,8 @@ extern void hedit_disp_data_menu(struct descriptor_data *d);
 extern void icedit_disp_menu(struct descriptor_data *d);
 extern void redit_parse(struct descriptor_data * d, const char *arg);
 
+bool ch_can_stat_or_clone_from_zone(struct char_data *ch, struct zone_data *zon, bool is_for_cloning);
+
 // mem class
 extern class memoryClass *Mem;
 
@@ -2340,6 +2342,55 @@ ACMD(do_icedit)
     d->edit_mode = ICEDIT_CONFIRM_EDIT;
     return;
   }
+}
+
+bool ch_can_stat_or_clone_from_zone(struct char_data *ch, struct zone_data *zon, bool is_for_cloning) {
+  if (!zon) {
+    mudlog("wat.png", NULL, LOG_SYSLOG, TRUE);
+    send_to_char("An error occurred. Contact Lucien.\r\n", ch);
+    return FALSE;
+  }
+
+  // Admin+ can stat everything.
+  if (access_level(ch, LVL_ADMIN))
+    return TRUE;
+
+  switch (zon->number) {
+    case 128: // canon mobs
+    case 801: // canon melee weapons
+    case 802: // canon ranged weapons
+    case 807: // canon clothing/armor
+      // These are always YES for statting and cloning.
+      return TRUE;
+    case 800:
+    case 804:
+    case 805:
+    case 850:
+    case 852:
+    case 854:
+    case 856:
+    case 858:
+    case 859:
+    case 860:
+      // These are not OK for cloning, but can be statted.
+      if (is_for_cloning) {
+        send_to_char(ch, "Sorry, you can't clone things from here. You're allowed to reference them in shops, weapon attachments, etc if desired. You can also VSTAT them for info.\r\n");
+        return FALSE;
+      }
+      return TRUE;
+  }
+
+  // If it's not a globally OK zone, you must be an editor on it.
+  for (int editor_idx = 0; editor_idx < NUM_ZONE_EDITOR_IDS; editor_idx++) {
+    if (zon->editor_ids[editor_idx] > 0 && zon->editor_ids[editor_idx] == GET_IDNUM(ch))
+      return TRUE;
+  }
+
+  // If you've gotten here, it's not allowed.
+  send_to_char(ch, "Sorry, you can only %s %s, and zones you're an editor of.\r\n",
+               is_for_cloning ? "clone from" : "vstat vnums in",
+               is_for_cloning ? "zones 128, 801, 802, 807" : "canon/template zones (128; 800-860)");
+  return FALSE;
 }
 
 // asdf todo:

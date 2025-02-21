@@ -8245,3 +8245,19 @@ bool restore_to_full_health_if_still_in_chargen(struct char_data *victim) {
 
   return TRUE;
 }
+
+char *format_for_logging__returns_new(const char *input) {
+  size_t result_sz = strlen(input) + 2;
+  char *result = new char[result_sz];
+  memset(result, 0, result_sz);
+
+  for (size_t read_idx = 0, write_idx = 0; read_idx < strlen(input); read_idx++) {
+    if (input[read_idx] == '\r' || input[read_idx] == '\n') {
+      result[write_idx++] = ' ';
+    } else {
+      result[write_idx++] = input[read_idx];
+    }
+  }
+
+  return result;
+}

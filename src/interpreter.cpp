@@ -3636,7 +3636,10 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("ww", "west");
   COMMAND_ALIAS("ws", "southwest");
   COMMAND_ALIAS("wn", "northwest");
+  COMMAND_ALIAS("bw", "northwest");
+  COMMAND_ALIAS("mw", "northwest");
   COMMAND_ALIAS("en", "northeast");
+  COMMAND_ALIAS("nr", "northeast");
   COMMAND_ALIAS("es", "southeast");
   COMMAND_ALIAS("sse", "southeast");
   COMMAND_ALIAS("ssw", "southwest");
@@ -3673,6 +3676,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("lost", "list");
   COMMAND_ALIAS("listr", "list");
   COMMAND_ALIAS("lit", "list");
+  COMMAND_ALIAS("llist", "list");
   COMMAND_ALIAS("slel", "sell");
   COMMAND_ALIAS("ivn", "inventory");
   COMMAND_ALIAS("inc", "inventory");
@@ -3715,11 +3719,12 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("drove", "drive");
   COMMAND_ALIAS("ener", "enter");
   COMMAND_ALIAS("satnd", "stand");
-  COMMAND_ALIAS("levae", "leave");
   COMMAND_ALIAS("waer", "wear");
   COMMAND_ALIAS("porbe", "probe");
+  COMMAND_ALIAS("levae", "leave");
   COMMAND_ALIAS("lave", "leave");
   COMMAND_ALIAS("eave", "leave");
+  COMMAND_ALIAS("keave", "leave");
   COMMAND_ALIAS("relaod", "reload");
   COMMAND_ALIAS("relod", "reload");
   COMMAND_ALIAS("scpre", "score");
@@ -3789,6 +3794,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unwear", "remove");
   COMMAND_ALIAS("unequip", "remove");
   COMMAND_ALIAS("remvoe", "remove");
+  COMMAND_ALIAS("unhold", "remove");
 
   // Door-unlocking and manipulation commands.
   COMMAND_ALIAS("pick", "bypass");
@@ -3844,6 +3850,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("stow", "holster");
   COMMAND_ALIAS("unconceal", "reveal");
   COMMAND_ALIAS("snipe", "shoot");
+  COMMAND_ALIAS("penalty", "penalties");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
@@ -3874,6 +3881,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("csan", "scan");
   COMMAND_ALIAS("scam", "scan");
   COMMAND_ALIAS("scasn", "scan");
+  COMMAND_ALIAS("san", "scan");
 
   COMMAND_ALIAS("sya", "say");
 
