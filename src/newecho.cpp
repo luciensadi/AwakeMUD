@@ -732,7 +732,7 @@ ACMD(do_new_echo) {
   FAILURE_CASE(!*argument, "Yes... but what?\r\n");
 
   // If they trigger automod with this, bail out.
-  if (check_for_banned_content(buf2, ch)) {
+  if (check_for_banned_content(argument, ch)) {
     NEW_ECHO_DEBUG("Bailed out: Banned content.");
     return;
   }
