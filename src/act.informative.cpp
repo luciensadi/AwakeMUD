@@ -979,16 +979,8 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
       send_to_char("", ch);
     }
 
-    if (CHAR_HAS_EXDESCS(i) && used_keyword && *used_keyword && viewer_can_see_at_least_one_exdesc_on_vict(ch, i)) {
-      char uppercase[strlen(used_keyword) + 1];
-      for (size_t idx = 0; idx < strlen(used_keyword); idx++) { uppercase[idx] = toupper(used_keyword[idx]); }
-      uppercase[strlen(used_keyword)] = '\0';
-
-      send_to_char(ch, "%s %s extra descriptions set. Use ^WLOOK %s EXDESCS^n for more.\r\n",
-                   CAP(HSSH(i)),
-                   HASHAVE(i),
-                   uppercase);
-    }
+    if (used_keyword && *used_keyword)
+      send_exdescs_on_look(ch, i, used_keyword);
 
     if (i != ch && GET_HEIGHT(i) > 0 && GET_WEIGHT(i) > 0) {
       if ((GET_HEIGHT(i) % 10) < 5)

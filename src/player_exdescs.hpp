@@ -113,3 +113,4 @@ void overwrite_pc_exdescs_with_edit_mob_exdescs_and_then_save_to_db(struct descr
 void pc_exdesc_edit_parse(struct descriptor_data *d, const char *arg);
 
 bool viewer_can_see_at_least_one_exdesc_on_vict(struct char_data *viewer, struct char_data *victim);
+void send_exdescs_on_look(struct char_data *viewer, struct char_data *vict, const char *used_keyword);

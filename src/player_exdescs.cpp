@@ -300,6 +300,29 @@ void list_exdescs(struct char_data *viewer, struct char_data *vict, bool list_is
   }
 }
 
+void send_exdescs_on_look(struct char_data *viewer, struct char_data *vict, const char *used_keyword) {
+  if (!CHAR_HAS_EXDESCS(vict))
+    return;
+  
+  if (!viewer_can_see_at_least_one_exdesc_on_vict(viewer, vict))
+    return;
+  
+  char uppercase[strlen(used_keyword) + 1];
+  for (size_t idx = 0; idx < strlen(used_keyword); idx++) { uppercase[idx] = toupper(used_keyword[idx]); }
+  uppercase[strlen(used_keyword)] = '\0';
+
+  // Too many exdescs to append to list.
+  if (GET_CHAR_EXDESCS(vict).size() >= 10) {
+    send_to_char(viewer, "%s %s extra descriptions set. Use ^WLOOK %s EXDESCS^n for more.\r\n",
+                CAP(HSSH(vict)),
+                HASHAVE(vict),
+                uppercase);
+  } else {
+    list_exdescs(viewer, vict, FALSE);
+    send_to_char(viewer, "Use ^WLOOK %s <keyword>^n to see more.\r\n", uppercase);
+  }
+}
+
 // Given a target and a specified keyword, search for that keyword first exactly, then as an abbreviation. Returns desc ptr if found, NULL otherwise. Does NOT do visibility checks.
 class PCExDesc *find_exdesc_by_keyword(struct char_data *target, const char *keyword, bool allow_fuzzy_match) {
   // Look for an exact match first.
