@@ -38,6 +38,8 @@
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
 #include "mysql_config.hpp"
 
+char buf4[MAX_STRING_LENGTH];
+
 extern void kill_ems(char *);
 extern void init_char_sql(struct char_data *ch, const char *origin);
 static const char *const INDEX_FILENAME = "etc/pfiles/index";
@@ -1512,14 +1514,15 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       break;
   while (obj && i < NUM_WEARS) {
     if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) || GET_OBJ_VNUM(obj) == OBJ_BLANK_MAGAZINE) {
-      strlcpy(buf, "INSERT INTO pfiles_worn (idnum, Vnum, Cost, Restring, Photo, ", sizeof(buf));
+      strlcpy(buf, "INSERT INTO pfiles_worn (idnum, Vnum, Cost, Restring, Photo, graffiti, ", sizeof(buf));
       for (int x = 0; x < NUM_OBJ_VALUES; x++)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Value%d, ", x);
       strlcat(buf, "Inside, Position, Timer, ExtraFlags, Attempt, Cond, posi, obj_idnum) VALUES (", sizeof(buf));
 
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d, '%s', '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
                           obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
-                          obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
+                          obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "",
+                          obj->graffiti ? prepare_quotes(buf4, obj->graffiti, sizeof(buf4) / sizeof(buf4[0])) : "");
       for (int x = 0; x < NUM_OBJ_VALUES; x++)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d, %d, %d, '%s', %d, %d, %d, %lu);",
@@ -1557,17 +1560,18 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   level = posi = 0;
   for (obj = player->carrying; obj;) {
     if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
-      strlcpy(buf, "INSERT INTO pfiles_inv (idnum, Vnum, Cost, Restring, Photo, ", sizeof(buf));
+      strlcpy(buf, "INSERT INTO pfiles_inv (idnum, Vnum, Cost, Restring, Photo, graffiti, ", sizeof(buf));
       for (int x = 0; x < NUM_OBJ_VALUES; x++)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Value%d, ", x);
       strlcat(buf, "Inside, Timer, ExtraFlags, Attempt, Cond, posi, obj_idnum) VALUES (", sizeof(buf));
 
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d, '%s', '%s'",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %ld, %d, '%s', '%s', '%s'",
                GET_IDNUM(player),
                GET_OBJ_VNUM(obj),
                GET_OBJ_COST(obj),
                obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
-               obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
+               obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "",
+               obj->graffiti ? prepare_quotes(buf4, obj->graffiti, sizeof(buf4) / sizeof(buf4[0])) : "");
 
       for (int x = 0; x < NUM_OBJ_VALUES; x++)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
@@ -2927,7 +2931,7 @@ void save_bioware_to_db(struct char_data *player) {
     strlcpy(buf, "INSERT INTO pfiles_bioware (idnum, Vnum, Cost, ", sizeof(buf));
     for (int i = 0; i < NUM_OBJ_VALUES; i++)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Value%d, ", i);
-    strlcat(buf, "Restring, obj_idnum) VALUES (", sizeof(buf));
+    strlcat(buf, "Restring, graffiti, obj_idnum) VALUES (", sizeof(buf));
 
     int q = 0;
     for (struct obj_data *obj = player->bioware; obj; obj = obj->next_content) {
@@ -2939,7 +2943,8 @@ void save_bioware_to_db(struct char_data *player) {
         for (int x = 0; x < NUM_OBJ_VALUES; x++)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
 
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", '%s'", obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", '%s', '%s'", obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
+                                                                        obj->graffiti ? prepare_quotes(buf4, obj->graffiti, sizeof(buf4) / sizeof(buf4[0])) : "");
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", %lu", GET_OBJ_IDNUM(obj));
         q = 1;;
       }
@@ -2962,14 +2967,15 @@ void save_cyberware_to_db(struct char_data *player) {
         As such, we write each cyberware entry on its own now instead of batching them together. */
 
     for (struct obj_data *obj = player->cyberware; obj;) {
-      strlcpy(cyberware_query_str, "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, Photo, ", sizeof(cyberware_query_str));
+      strlcpy(cyberware_query_str, "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, Photo, graffiti, ", sizeof(cyberware_query_str));
       for (int x = 0; x < NUM_OBJ_VALUES; x++)
         snprintf(ENDOF(cyberware_query_str), sizeof(cyberware_query_str) - strlen(cyberware_query_str), "Value%d, ", x);
 
       snprintf(ENDOF(cyberware_query_str), sizeof(cyberware_query_str) - strlen(cyberware_query_str), "Level, posi, obj_idnum) VALUES "
-               "(%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
+               "(%ld, %ld, %d, '%s', '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
                obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
-               obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
+               obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "",
+               obj->graffiti ? prepare_quotes(buf4, obj->graffiti, sizeof(buf4) / sizeof(buf4[0])) : "");
 
       // Obj val 2 for cyberware is grade, so I'm not sure what this code used to do, but now it probably chokes on things.
       // Maybe it was related to skillsoft chips or photos or something?
