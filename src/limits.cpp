@@ -54,6 +54,7 @@ extern int get_paydata_market_maximum(int host_color);
 extern int get_paydata_market_minimum(int host_color);
 extern void save_shop_orders();
 extern bool docwagon(struct char_data *ch);
+extern struct time_info_data time_info;
 
 void mental_gain(struct char_data * ch)
 {
@@ -1238,6 +1239,11 @@ void point_update(void)
             LAST_HEAL(i)++;
           if (GET_EQ(i, WEAR_PATCH) && GET_OBJ_TYPE(GET_EQ(i, WEAR_PATCH)) == ITEM_PATCH && --GET_PATCH_TICKS_LEFT(GET_EQ(i, WEAR_PATCH)) <= 0)
             remove_patch(i);
+        }
+
+        // Clear their assense records on every MUD day.
+        if (time_info.hours == 0) {
+          i->assense_recency.clear();
         }
       }
 

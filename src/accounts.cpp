@@ -7,7 +7,8 @@
       (NODELETE is still set on a per-character basis.)
   - Characters belonging to a given account can't multiplay with other characters from that account.
   - Staff can edit accounts or close/ban them if enforcement is needed.
-  - STRETCH: Preferences can be set at the account level and overridden at the character level.
+  - Ignores are set at the account level unless specifically overridden at the character level.
+  - STRETCH: Preferences are set at the account level and overridden at the character level.
 
   CREATING AN ACCOUNT:
   - Any character not already in an account can ACCOUNT CREATE <accountname>. If it already exists, denied, otherwise specify password.
@@ -29,6 +30,9 @@
   - A password
   - Syspoints
   - STRETCH: Preferences array that newly-created characters inherit, and that existing ones can default back to
+
+  DB CHANGE:
+  - Ignores include an ACCOUNT field, which characters translate into once the account is set for them.
 */
 
 #include "awake.hpp"

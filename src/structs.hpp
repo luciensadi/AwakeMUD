@@ -980,6 +980,7 @@ struct char_data
   // See invis_resistance_tests.cpp for details.
   std::unordered_map<idnum_t, bool> *pc_invis_resistance_test_results = {};
   std::unordered_map<idnum_t, bool> *mob_invis_resistance_test_results = {};
+  std::unordered_map<idnum_t, int> assense_recency = {};
 
   // Another unordered map to track who we've sent docwagon alerts to.
   std::unordered_map<idnum_t, bool> sent_docwagon_messages_to = {};
