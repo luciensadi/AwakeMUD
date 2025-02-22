@@ -15,6 +15,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "moderation.hpp"
+#include "pets.hpp"
 
 #define PERSONA ch->persona
 #define DECKER PERSONA->decker
@@ -3770,8 +3771,12 @@ ACMD(do_create)
     create_art(ch);
   }
 
+  else if (is_abbrev(buf1, "pets")) {
+    create_pet(ch);
+  }
+
   else {
-    send_to_char("You can only create programs, parts, decks, ammunition, spells, and art.\r\n", ch);
+    send_to_char("You can only create programs, parts, decks, ammunition, spells, art, and pets.\r\n", ch);
     return;
   }
 }

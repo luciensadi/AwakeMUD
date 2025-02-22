@@ -943,6 +943,7 @@ const char *connected_types[] =
     "Account Editing",
     "Faction Editing",
     "Exdesc Editing",
+    "Creating a Pet",
     "\n"
   };
 
@@ -1108,6 +1109,7 @@ const char *item_types[] =
     "Destroyable",
     "Loaded Decoration",
     "Art",
+    "Custom Pet",
     "\n"
   };
 
@@ -3443,7 +3445,8 @@ const char *obj_load_reasons[] {
   "BULLETPANTS_RELOAD",
   "BULLETPANTS_MAKE_BOX",
   "FIND_OBJ_SHOP",
-  "SHOP_RECEIVE"
+  "SHOP_RECEIVE",
+  "CREATE_PET"
 };
 
 int bone_lacing_power_lookup[] = {

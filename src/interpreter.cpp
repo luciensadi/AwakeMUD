@@ -44,6 +44,7 @@
 #include "vehicles.hpp"
 #include "dblist.hpp"
 #include "player_exdescs.hpp"
+#include "pets.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -2746,6 +2747,9 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_ART_CREATE:
     art_edit_parse(d, arg);
+    break;
+  case CON_PET_CREATE:
+    create_pet_parse(d, arg);
     break;
   case CON_FCUSTOMIZE:
   case CON_BCUSTOMIZE:

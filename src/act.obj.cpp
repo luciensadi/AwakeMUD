@@ -48,6 +48,7 @@ extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
 extern int calculate_vehicle_weight(struct veh_data *veh);
+extern void die(struct char_data * ch, idnum_t cause_of_death_idnum);
 
 extern SPECIAL(fence);
 extern SPECIAL(hacker);
@@ -123,6 +124,7 @@ bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *cont)
 {
   FAILURE_CASE(obj == ch->char_specials.programming, "You can't put something you are working on inside something.");
+  FAILURE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PET, "%s refuses to go inside anything.", CAP(GET_OBJ_NAME(obj)));
 
   if (cont->in_room || cont->in_veh) {
     FAILURE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
@@ -1926,6 +1928,11 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   FALSE_CASE_PRINTF(mode != SCMD_JUNK && IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch), "You can't %s %s, but you can always JUNK it.", sname, decapitalize_a_an(obj));
   FALSE_CASE_PRINTF(mode != SCMD_JUNK && obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
                     "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", decapitalize_a_an(obj));
+
+  FALSE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PET && (ch->in_veh || !in_room->apartment), 
+                    mode == SCMD_DROP ? "%s will only deign to be set down in an apartment." : "%s just gives you a LOOK.", 
+                    CAP(GET_OBJ_NAME(obj)));
+  
   FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the KEEP command on %s before you can %s it.", decapitalize_a_an(obj), sname);
   FALSE_CASE_PRINTF(obj == ch->char_specials.programming, "You can't %s something you are working on.", sname);
   FALSE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch),
@@ -2443,6 +2450,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
 {
   FALSE_CASE_PRINTF(IS_ASTRAL(vict), "Astral beings can't touch %s.", decapitalize_a_an(obj));
   FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch), "You can't let go of %s! You can JUNK it if you want to get rid of it.", decapitalize_a_an(obj));
+  FALSE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PET, "%s would be so sad... :(", CAP(GET_OBJ_NAME(obj)));
   FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the ^WKEEP^n command on %s before you can give it away.",
                     decapitalize_a_an(obj));
   
@@ -2970,6 +2978,13 @@ ACMD(do_eat)
   }
 #endif
 
+  if (GET_OBJ_TYPE(food) == ITEM_PET) {
+    send_to_char(ch, "^RA sudden, crushing sense of disapproval hammers into you from all sides! You barely have time to scream before imploding into a tasty ball that %s promptly monches up. Turnabout is fair play?\r\n", GET_OBJ_NAME(food));
+    act("$n raises $p to $s mouth, then suddenly gives a piercing scream before imploding under Lucien's disapproval!", FALSE, ch, food, 0, TO_ROOM);
+    die(ch, GET_IDNUM(ch));
+    return;
+  }
+
   if (subcmd == SCMD_EAT) {
     act("You eat $p.", FALSE, ch, food, 0, TO_CHAR);
     act("$n eats $p.", TRUE, ch, food, 0, TO_ROOM);
@@ -3199,8 +3214,8 @@ void wear_message(struct char_data * ch, struct obj_data * obj, int where)
                                {"$n wields $p.",
                                 "You wield $p."},
 
-                               {"$n grabs $p.",
-                                "You grab $p."},
+                               {"$n holds $p.",
+                                "You hold $p."},
 
                                {"$n straps $p around $s arm as a shield.",
                                 "You start to use $p as a shield."},
@@ -3869,6 +3884,7 @@ void perform_remove(struct char_data * ch, int pos)
     return;
   }
 
+  int was_worn_on = obj->worn_on;
   int previous_armor_penalty = get_armor_penalty_grade(ch);
 
   obj_to_char(unequip_char(ch, pos, TRUE), ch);
@@ -3909,8 +3925,13 @@ void perform_remove(struct char_data * ch, int pos)
     }
   }
 
-  act("You stop using $p.", FALSE, ch, obj, 0, TO_CHAR);
-  act("$n stops using $p.", TRUE, ch, obj, 0, TO_ROOM);
+  if (was_worn_on == WEAR_HOLD) {
+    act("You stop holding $p up.", FALSE, ch, obj, 0, TO_CHAR);
+    act("$n stops holding $p up.", TRUE, ch, obj, 0, TO_ROOM);
+  } else {
+    act("You stop using $p.", FALSE, ch, obj, 0, TO_CHAR);
+    act("$n stops using $p.", TRUE, ch, obj, 0, TO_ROOM);
+  }
 
   if (previous_armor_penalty && !get_armor_penalty_grade(ch))
     send_to_char("You can move freely again.\r\n", ch);

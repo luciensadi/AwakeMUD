@@ -6,8 +6,11 @@ An unnamed object sits here.~
 LookDesc:$
 You see an uncreative object.~
 Type:	Other
+ExtraFlags:	101000001111
+Material:	paper
 [POINTS]
 	Weight:	0.01
+	Barrier:	2
 BREAK
 #1
 Keywords:	formula spell blank
@@ -242,34 +245,19 @@ Material:	computers
 	Barrier:	4
 BREAK
 #13
-Keywords:	Root's pager
-Name:	a Sleek Black Pager
+Keywords:	carried vehicle
+Name:	a carried vehicle
 RoomDesc:$
-A sleek black pager sits here.~
+You should never see this. Alert staff!~
 LookDesc:$
-It looks pretty much like a normal alphanumeric pager. 
+You're carrying a vehicle. Impressive! 
 ~
 Type:	Other
-WearFlags:	100000000001
-ExtraFlags:	100000000000000000000000000
-Material:	adv. plastics
+WearFlags:	1
+ExtraFlags:	100000000000000001000001000
+Material:	metal
 [POINTS]
-	Barrier:	1
-[AFFECT 0]
-	Location:	Combat Pool
-	Modifier:	100
-[AFFECT 1]
-	Location:	Init Dice
-	Modifier:	100
-[AFFECT 2]
-	Location:	Ballistic
-	Modifier:	100
-[AFFECT 3]
-	Location:	Impact
-	Modifier:	100
-[AFFECT 4]
-	Location:	Combat Pool
-	Modifier:	100
+	Barrier:	32
 BREAK
 #14
 Keywords:	unix plain english second edition book
@@ -351,7 +339,7 @@ A computer terminal is set up on the desk here.~
 LookDesc:$
 It's a standard computer terminal, though modified to fit FJ's needs ;) 
 ~
-Type:	UNDEFINED
+Type:	Other
 ExtraFlags:	101000001000
 Material:	paper
 [POINTS]
@@ -459,7 +447,7 @@ BREAK
 Keywords:	terminal dumb console computer shadowland access portal
 Name:	a dumb terminal
 RoomDesc:$
-An old-style dumb terminal rigged for Shadowland access sits on the table.~
+An old-style dumb terminal rigged for Shadowland access sits on a table.~
 LookDesc:$
 A cursor blinks idly.  The terminal is not connected to the mainframe. There
 is a problem here and it needs to be reported to an immortal. 
@@ -702,6 +690,7 @@ LookDesc:$
 Perfect for summoning an elevator. Why don't you ^WPUSH^n it? 
 ~
 Type:	Other
+ExtraFlags:	100000001100
 Material:	metal
 [POINTS]
 	Barrier:	32
@@ -715,20 +704,20 @@ LookDesc:$
 You shouldn't be able to look at this. Please alert staff. 
 ~
 Type:	Other
+ExtraFlags:	100000001100
 Material:	metal
 [POINTS]
 	Barrier:	32
 BREAK
 #43
-Keywords:	corpse
-Name:	corpse
+Keywords:	reserved
+Name:	a ^Rreserved^n object for PC corpses
 RoomDesc:$
-corpse~
+Report this to staff if you see it.~
 LookDesc:$
-corpse 
+Used for PC corpses. DO NOT TOUCH. 
 ~
 Type:	Container
-WearFlags:	1
 ExtraFlags:	10000000000
 Material:	metal
 [POINTS]
@@ -753,7 +742,7 @@ Material:	plastic
 [POINTS]
 	Weight:	0.10
 	Barrier:	4
-	Cost:	1000
+	Cost:	5000
 [VALUES]
 	Val0:	10
 BREAK
@@ -765,12 +754,12 @@ A liquid crystal display that floats in the middle of the room, viewable from bo
 LookDesc:$
 You shouldn't see this description.  There is a bug.  Report it. 
 ~
-Type:	UNDEFINED
+Type:	Other
 Material:	paper
 [POINTS]
-	Weight:	2147483648.00
+	Weight:	1000.00
 	Barrier:	1
-	Cost:	2147483647
+	Cost:	1
 BREAK
 #66
 Keywords:	An X-Box hooked up with Linux
@@ -780,11 +769,35 @@ A Gray box hooked to a monitor is here~
 LookDesc:$
 An X-Box hooked up with Linux 
 ~
-Type:	UNDEFINED
+Type:	Other
 WearFlags:	1
 Material:	paper
 [POINTS]
 	Barrier:	1
+BREAK
+#67
+Keywords:	cross angelic cooker encoder
+Name:	a Cross Angelic
+RoomDesc:$
+A small black chip encoder is here.~
+LookDesc:$
+This small black box is featureless except for a small slot for the optical
+chip to be inserted and a small LED. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+Material:	electronics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	12000
+	AvailTN:	10
+	AvailDay:	7.00
+	StreetIndex:	3.00
+[VALUES]
+	Val0:	4
+	Val1:	7
+SourceBook:	matrix page 168
 BREAK
 #81
 Keywords:	blue light saber
@@ -827,8 +840,8 @@ Material:	paper
 	Val0:	25000
 BREAK
 #83
-Keywords:	shopcontainer container
-Name:	a generic shopcontainer
+Keywords:	shopcontainer container packaged-up packaged cyberware bioware
+Name:	a generic shop container
 RoomDesc:$
 A bundle of goods from a shop has been set aside here.~
 LookDesc:$
@@ -1151,6 +1164,7 @@ Material:	organic
 [POINTS]
 	Weight:	2.00
 	Barrier:	4
+	Cost:	1000
 [VALUES]
 	Val0:	4
 BREAK
@@ -1189,7 +1203,7 @@ BREAK
 Keywords:	neophyte guild housing card
 Name:	a Neophyte Guild housing subsidy card
 RoomDesc:$
-A small card bearing the logo of the Neophyte Guild lays here.~
+A small card bearing the logo of the Neophyte Guild lies here.~
 LookDesc:$
 This card, bought from the Neophyte Guild, gives you subsidies on your
 housing. 
@@ -1211,7 +1225,7 @@ LookDesc:$
 It's just paint. 
 ~
 Type:	Other
-ExtraFlags:	100000000000000000000000000
+ExtraFlags:	100000000000000000000000100
 Material:	concrete
 [POINTS]
 	Barrier:	32
@@ -1287,7 +1301,7 @@ ExtraFlags:	100000000000000000000000000
 Material:	metal
 [POINTS]
 	Weight:	1.00
-	Barrier:	32
+	Barrier:	4
 BREAK
 #125
 Keywords:	art creative work
@@ -1333,13 +1347,29 @@ structure of a magazine that best fits the selected weapon.
 ~
 Type:	Gun Magazine
 WearFlags:	1
-ExtraFlags:	100000000000000000000000100
+ExtraFlags:	100000000000000000000000000
 Material:	metal
 [POINTS]
 	Weight:	0.05
 	Barrier:	4
 [VALUES]
 	Val1:	22
+BREAK
+#128
+Keywords:	pet
+Name:	a custom pet
+RoomDesc:$
+A custom pet has been abandoned here, poor thing.~
+LookDesc:$
+It's a custom pet  with no description. It could have been anything. 
+~
+Type:	Custom Pet
+WearFlags:	100000000000001
+ExtraFlags:	1000001000
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
 BREAK
 #140
 Keywords:	customized cc10 ares sniper rifle
@@ -1368,7 +1398,7 @@ Material:	metal
 	Val4:	12
 	Val5:	16
 	Val6:	16
-	Val7:	367
+	Val7:	80411
 	Val8:	-1
 	Val9:	670
 	Val10:	2
@@ -1407,15 +1437,6 @@ Material:	organic
 [VALUES]
 	Val0:	30
 	Val3:	5
-[AFFECT 0]
-	Location:	Charisma
-	Modifier:	1
-[AFFECT 1]
-	Location:	Weight
-	Modifier:	1
-[AFFECT 2]
-	Location:	Target Numbers
-	Modifier:	1
 BREAK
 #180
 Keywords:	keyn j'raye jraye spirit blade
@@ -1445,33 +1466,6 @@ Material:	electronics
 	Val8:	-1
 	Val9:	-1
 BREAK
-#187
-Keywords:	mini nuclear automatic railgun
-Name:	a mini nuclear automatic railgun
-RoomDesc:$
-a automatic railgun is lying here.~
-LookDesc:$
-This is one of the worlds most powerfulest guns in the world. It is nuclear
-powered so there is no changing the battery. This SMRG is still in its
-prototype stage. 
-~
-Type:	Weapon
-WearFlags:	1
-ExtraFlags:	10000000
-AffFlags:	1000000100000000000000
-Material:	metal
-[POINTS]
-	Weight:	5.00
-	Barrier:	32
-[VALUES]
-	Val0:	50
-	Val1:	4
-	Val2:	4
-	Val3:	10
-	Val4:	15
-	Val5:	50
-	Val6:	50
-BREAK
 #190
 Keywords:	Mobile Combat Armor
 Name:	Andra Predator Mobile Combat Armor
@@ -1498,6 +1492,25 @@ Material:	metal
 	Val6:	10
 	Val7:	-4
 BREAK
+#195
+Keywords:	lapel pin enameled glossy cerulean
+Name:	a lapel pin enameled in glossy ^ccerulean^n
+RoomDesc:$
+A lapel pin has been set aside here.~
+LookDesc:$
+Although understated in shape, this round lapel pin has been painstakingly
+enameled in a glossy cerulean that practically glows in the light. A cryptic
+set of characters are etched into the back: ^cCE '25 <3^n 
+~
+Type:	Worn
+WearFlags:	1000000000000000000000000001
+ExtraFlags:	1000001001
+Material:	metal
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	1
+BREAK
 #196
 Keywords:	sharpened candy cane bayonet
 Name:	a sharpened ^Rc^Wa^Rn^Wd^Ry ^Wc^Ra^Wn^Re^n
@@ -1512,10 +1525,12 @@ allowing it to be used as a bayonet if so desired.
 ~
 Type:	Gun Accessory
 WearFlags:	1
-ExtraFlags:	1000001000
+ExtraFlags:	1000001001
 Material:	metal
 [POINTS]
+	Weight:	0.01
 	Barrier:	32
+	Cost:	10
 [VALUES]
 	Val0:	2
 	Val1:	10
@@ -1537,6 +1552,7 @@ Material:	fabric
 [POINTS]
 	Weight:	0.01
 	Barrier:	4
+	Cost:	1
 [VALUES]
 	Val0:	10
 	Val4:	10

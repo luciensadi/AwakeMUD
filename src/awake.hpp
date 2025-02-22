@@ -1312,7 +1312,8 @@ enum {
 #define ITEM_DESTROYABLE        47
 #define ITEM_LOADED_DECORATION  48
 #define ITEM_CREATIVE_EFFORT    49
-#define NUM_ITEMS               50
+#define ITEM_PET                50
+#define NUM_ITEMS               51
 // Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
 #define PATCH_ANTIDOTE          0
@@ -2276,7 +2277,8 @@ enum {
 #define CON_ACCOUNT_PARSE       53
 #define CON_FACTION_EDIT        54
 #define CON_PC_EXDESC_EDIT      55
-#define CON_MAX                 55
+#define CON_PET_CREATE          56
+#define CON_MAX                 56
 #define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
@@ -2812,7 +2814,8 @@ enum {
 #define OBJ_CUSTOM_ART                     125
 #define OBJ_HOLIDAY_GIFT                   126
 #define OBJ_BLANK_MAGAZINE                 127
-#define TOP_OF_TEMPLATE_ITEMS              127
+#define OBJ_CUSTOM_PET                     128
+#define TOP_OF_TEMPLATE_ITEMS              128
 
 #define OBJ_DOCWAGON_PAPER_GOWN            16201
 #define OBJ_ANTI_DRUG_CHEMS                44
@@ -3230,6 +3233,7 @@ enum {
 #define OBJ_LOAD_REASON_BULLETPANTS_MAKE_BOX     56
 #define OBJ_LOAD_REASON_FIND_OBJ_SHOP            57
 #define OBJ_LOAD_REASON_SHOP_RECEIVE             58
+#define OBJ_LOAD_REASON_CREATE_PET               59
 
 #define IDNUM_FOR_MOB_ALERT_STATE  -1
 

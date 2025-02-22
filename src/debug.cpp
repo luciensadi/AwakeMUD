@@ -167,6 +167,7 @@ struct eti_test_values_struct {
 extern long payout_slots_testable(long bet);
 extern void load_saved_veh(bool purge_existing);
 extern void save_vehicles(bool);
+extern void debug_pet_menu(struct char_data *ch);
 
 extern bf::path global_vehicles_dir;
 
@@ -193,6 +194,11 @@ ACMD(do_debug) {
   if (!str_cmp(arg1, "pointers")) {
     send_to_char(ch, "OK, validating every pointer we can think of.\r\n");
     verify_every_pointer_we_can_think_of();
+    return;
+  }
+
+  if (!str_cmp(arg1, "pets")) {
+    debug_pet_menu(ch);
     return;
   }
 

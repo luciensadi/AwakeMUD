@@ -25,6 +25,7 @@
 #include "redit.hpp"
 #include "newmail.hpp"
 #include "metrics.hpp"
+#include "pets.hpp"
 
 // extern vars
 extern class helpList Help;
@@ -252,6 +253,7 @@ void objList::UpdateCounters(void)
   time_t timestamp_now = time(0);
 
   bool trideo_plays = (trideo_ticks++ % TRIDEO_TICK_DELAY == 0);
+  bool pet_will_act = (trideo_ticks % 15 == 0); // Every 30 IRL minutes.
 
   if (trideo_plays) {
     // Select the trideo broadcast message we'll be using this tick.
@@ -271,6 +273,14 @@ void objList::UpdateCounters(void)
     // Precondition: The object being examined must exist.
     if (!OBJ) {
       mudlog("SYSERR: UpdateCounters encountered a non-existent object.", NULL, LOG_SYSLOG, TRUE);
+      continue;
+    }
+
+    // This is the only thing a pet object can do, so get it out of the way.
+    if (GET_OBJ_TYPE(OBJ) == ITEM_PET) {
+      if (pet_will_act) {
+        pet_acts(OBJ);
+      }
       continue;
     }
 
@@ -297,7 +307,7 @@ void objList::UpdateCounters(void)
         act(buf, TRUE, 0, OBJ, 0, TO_ROOM);
         continue;
       }
-    } 
+    }
     
     // Decay evaluate programs. This only fires when they're completed, as non-finished software is ITEM_DESIGN instead.
     if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_PROGRAM_TYPE(OBJ) == SOFT_EVALUATE) {
@@ -426,6 +436,7 @@ void objList::UpdateCounters(void)
              || GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY // No cookers, computers, etc.
              // || GET_OBJ_TYPE(OBJ) == ITEM_CUSTOM_DECK // No custom decks (only matters if !OBJ->contains condition is removed)
              || GET_OBJ_TYPE(OBJ) == ITEM_MAGIC_TOOL
+             || GET_OBJ_TYPE(OBJ) == ITEM_PET
              || (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(OBJ) > TYPE_KIT) // No workshops or facilities.
              // || GET_OBJ_TYPE(OBJ) == ITEM_SHOPCONTAINER // No shopcontainers (only matters if !OBJ->contains condition is removed)
              || (GET_OBJ_TYPE(OBJ) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(OBJ) > 0) // No bonded normal foci.
