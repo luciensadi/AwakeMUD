@@ -3039,6 +3039,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
   char *buf;
   struct char_data *vict;
   static char lbuf[MAX_STRING_LENGTH];
+  static char possessive_buf[1000];
   char temp_buf[MAX_STRING_LENGTH];
   buf = lbuf;
   vict = (struct char_data *) vict_obj;
@@ -3152,6 +3153,50 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           break;
         case 'P':
           i = CHECK_NULL(vict_obj, OBJS((struct obj_data *) vict_obj, to));
+          break;
+        case 'q':
+          if (to == ch && !skip_you_stanzas)
+            i = "your";
+          else if (!IS_NPC(ch) && (IS_SENATOR(to) || IS_SENATOR(ch))) {
+            snprintf(possessive_buf, sizeof(possessive_buf), "%s's", GET_CHAR_NAME(ch));
+            i = possessive_buf;
+          }
+          else if (CAN_SEE(to, ch)) {
+            if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+              struct veh_data *veh;
+              RIG_VEH(ch, veh);
+              snprintf(possessive_buf, sizeof(possessive_buf), "%s's", GET_VEH_NAME(veh));
+              i = possessive_buf;
+            } else {
+              snprintf(possessive_buf, sizeof(possessive_buf), "%s's", make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf)));
+              i = possessive_buf;
+            }
+          }
+          else
+            i = "someone's";
+          break;
+        case 'Q':
+          if (!vict)
+            i = "someone's";
+          else if (to == vict && !skip_you_stanzas)
+            i = "your";
+          else if (!IS_NPC(vict) && (IS_SENATOR(to) || IS_SENATOR(vict))) {
+            snprintf(possessive_buf, sizeof(possessive_buf), "%s's", GET_CHAR_NAME(ch));
+            i = possessive_buf;
+          }
+          else if (CAN_SEE(to, vict)) {
+            if (AFF_FLAGGED(vict, AFF_RIG) || PLR_FLAGGED(vict, PLR_REMOTE)) {
+              struct veh_data *veh;
+              RIG_VEH(vict, veh);
+              snprintf(possessive_buf, sizeof(possessive_buf), "%s's", GET_VEH_NAME(veh));
+              i = possessive_buf;
+            } else {
+              snprintf(possessive_buf, sizeof(possessive_buf), "%s's", make_desc(to, vict, temp_buf, TRUE, TRUE, sizeof(temp_buf)));
+              i = possessive_buf;
+            }
+          }
+          else
+            i = "someone's";
           break;
         case 's':
           if (to == ch && !skip_you_stanzas)

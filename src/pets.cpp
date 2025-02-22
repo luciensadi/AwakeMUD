@@ -24,48 +24,96 @@
 #include "olc.hpp"
 #include "db.hpp"
 #include "handler.hpp"
+#include "utils.hpp"
 #include "pets.hpp"
 
 #define CH d->character
 #define PET d->edit_obj
 
+struct char_data *dummy_mob_for_pet_pronouns = new struct char_data;
+
 std::unordered_map<idnum_t, class PetEchoSet> pet_echo_sets = {
   {1, {0, TRUE, "Cat, Lazy", "", "", {
         "$p pads over to a warm spot and sprawls out contentedly.",
         "$p streeeetches.",
-        "A low, rumbling purr comes from $p."
+        "A low, rumbling purr comes from $p.",
+        "$p stretches lazily before jumping onto something to explore.",
+        "$p flops down on somethng soft."
       }}},
   {2, {0, TRUE, "Cat, Playful", "", "", {
         "$p bounds past, chasing a toy.",
         "$p gets distracted by a bird and starts chattering back at it.",
-        "$p bats curiously at a dangling bit of something."
+        "$p bats curiously at a dangling bit of something.",
+        "$p gently swats at floating dust specks in the light.",
+        "$p prowls around the room, inspecting every nook and cranny."
       }}},
   {3, {0, TRUE, "Cat, Cuddly", "", "", {
         "$p wanders over, seeking a lap.",
         "$p purrs quietly, just happy to be included.",
-        "$p strolls by, giving you a soft head-bonk as it goes."
+        "$p strolls by, giving $n a soft head-bonk as $E goes.",
+        "$p purrs contentedly as $E curls up beside $n.",
+        "$p pushes $S face up under $q hand, demanding pets."
+      }}},
+  {4, {0, TRUE, "Cat, Friendly", "", "", {
+        "$p rubs against $q legs, seeking attention.",
+        "$p gives a happy chirrup, pleased to have someone around to cadge petting from.",
+        "$p softly meows, wanting to be picked up and petted.",
+        "$p rolls over, inviting a belly rub.",
+        "$p playfully swats at $q hand, eager for a game."
+      }}},
+  {5, {0, TRUE, "Cat, Curious", "", "", {
+        "$p pokes $S head into an open container, investigating what's inside.",
+        "$p leaps up onto a shelf, sniffing around the books and objects.",
+        "$p taps at a lightswitch with its paw, trying to figure out how it works.",
+        "$p paws at a closed cupboard, trying to get inside.",
+        "$p wanders around, meowing at random things."
       }}},
 
-  {4, {0, TRUE, "Dog, Lazy", "", "", {
+  {101, {0, TRUE, "Dog, Lazy", "", "", {
         "$p pads over to a warm spot and sprawls out contentedly.",
         "$p streeeetches.",
-        "There's a quiet thumping as $p's tail starts to wag."
+        "There's a quiet thumping as $p's tail starts to wag.",
+        "$p rolls over lazily, exposing $S belly.",
+        "$p startles at something, then yawns and lays back down."
       }}},
-  {5, {0, TRUE, "Dog, Playful", "", "", {
+  {102, {0, TRUE, "Dog, Playful", "", "", {
         "$p bounds past, chasing a toy.",
         "$p romps around happily.",
-        "$p gets into something it probably shouldn't."
+        "$p gets into something $E probably shouldn't.",
+        "$p drops a ball in $q lap, demanding playtime.",
+        "$p rolls over and wriggles, happy to have someone around."
       }}},
-  {6, {0, TRUE, "Dog, Cuddly", "", "", {
+  {103, {0, TRUE, "Dog, Cuddly", "", "", {
         "$p wanders over, seeking someone to flop against.",
-        "$p huffs and rolls over to rest its head against the nearest person.",
-        "$p wags its tail as it looks at you."
+        "$p huffs and rolls over to rest $S head against $q leg.",
+        "$p wags $S tail as it looks at $n.",
+        "$p finds an opportune time to start licking $n.",
+        "$p gives $n a pleading look-- time for more petting?"
+      }}},
+  {104, {0, TRUE, "Dog, Friendly", "", "", {
+        "$p wags $S tail happily.",
+        "$p nudges your hand, asking for a pet.",
+        "$p leaps excitedly at the sound of a doorbell somewhere nearby.",
+        "$p trots over, offering $n $S favorite squeaky toy.",
+        "$p follows $n around, hoping for a treat."
+      }}},
+  {105, {0, TRUE, "Dog, Curious", "", "", {
+        "$p sniffs every corner, investigating a new scent in the air.",
+        "$p tilts $R head, studying an unfamiliar object on the floor.",
+        "$p finds a new spot to stick $R nose in and investigate.",
+        "$p watches $n closely, eager to see what's going on.",
+        "$p tilts $R head inquisitively.",
+        "$p wags happily."
       }}},
 
-  {7, {0, TRUE, "Sleepy Pet", "", "", {
-        "$p rolls over in its sleep.",
+  {200, {0, TRUE, "Sleepy Pet", "", "", {
+        "$p rolls over in $S sleep.",
         "$p yawns widely before settling back in for another nap.",
-        "$p twitches as it dreams."
+        "$p twitches as $E dreams.",
+        "$p nestles into a blanket, curling up for warmth.",
+        "$p stretches lazily, then relaxes back into a deep, restful slumber.",
+        "$p curls up in a sunny spot, content to nap the day away.",
+        "$p does a biiiiig stretch."
       }}},
 };
 
@@ -74,6 +122,9 @@ void alphabetize_pet_echoes_by_name() {
   for (auto &it : pet_echo_sets) {
     pet_echo_sets_by_name[it.second.get_name()] = it.first;
   }
+
+  // Also set up the dummy mob for pet pronouns.
+  MOB_FLAGS(dummy_mob_for_pet_pronouns).SetBits(MOB_ISNPC, MOB_INANIMATE, MOB_NOKILL, MOB_SENTINEL, ENDBIT);
 }
 
 PetEchoSet *get_pet_echo_set(idnum_t idnum) {
@@ -90,17 +141,19 @@ void pet_acts(struct obj_data *pet) {
     return;
 
   class PetEchoSet *selected_echo_set = get_pet_echo_set(GET_PET_ECHO_SET_IDNUM(pet));
+  GET_PRONOUNS(dummy_mob_for_pet_pronouns) = GET_PET_PRONOUN_SET(pet);
 
   if (!selected_echo_set) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Hit pet_acts(%s) with pet that had echo_set %d.", GET_PET_ECHO_SET_IDNUM(pet));
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Hit pet_acts(%s) with pet that had invalid echo_set %d.", GET_PET_ECHO_SET_IDNUM(pet));
     return;
   }
 
-  act(selected_echo_set->get_random_echo_message(), FALSE, NULL, pet, NULL, TO_ROOM);
+  act(selected_echo_set->get_random_echo_message(), FALSE, pet->in_room->people, pet, dummy_mob_for_pet_pronouns, TO_NOTVICT);
 }
 
 void create_pet_main_menu(struct descriptor_data *d) {
   class PetEchoSet *selected_echo_set = get_pet_echo_set(GET_PET_ECHO_SET_IDNUM(PET));
+  GET_PRONOUNS(dummy_mob_for_pet_pronouns) = GET_PET_PRONOUN_SET(PET);
 
   CLS(CH);
   send_to_char(CH, "Welcome to pet creation. ^WNo ASCII art, please.^n\r\n");
@@ -117,10 +170,11 @@ void create_pet_main_menu(struct descriptor_data *d) {
     send_to_char(CH, "  - Echoes: \r\n");
     for (auto message : selected_echo_set->get_environmental_messages()) {
       send_to_char("      ", CH);
-      act(message, FALSE, CH, PET, 0, TO_CHAR | TO_SLEEP);
+      act(message, FALSE, CH, PET, dummy_mob_for_pet_pronouns, TO_CHAR | TO_SLEEP);
     }
   }
-
+  send_to_char(CH, "5) ^cPronouns: ^n%s/%s^n\r\n", HSSH(dummy_mob_for_pet_pronouns), HMHR(dummy_mob_for_pet_pronouns));
+  send_to_char("\r\n", CH);
   send_to_char(CH, "q) ^cSave and Quit^n\r\n");
   send_to_char(CH, "x) ^cDiscard and Exit^n (refunds ^c%d^n syspoints)\r\n", CUSTOM_PET_SYSPOINT_COST);
   send_to_char(CH, "Enter Option: ");
@@ -169,6 +223,16 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
             d->edit_mode = PET_EDIT_FLAVOR_MESSAGES;
           }
           break;
+        case '5':
+          {
+            for (int idx = 0; idx < NUM_PRONOUNS; idx++) {
+              GET_PRONOUNS(dummy_mob_for_pet_pronouns) = idx;
+              send_to_char(CH, "^c%d^n) %s/%s\r\n", idx, HSSH(dummy_mob_for_pet_pronouns), HMHR(dummy_mob_for_pet_pronouns));
+            }
+            send_to_char(CH, "\r\nSelect the pronouns you'd like to see in your pet's flavor messages: ");
+            d->edit_mode = PET_EDIT_PRONOUNS;
+          }
+          break;
         case 'q':
         case 'Q':
           {
@@ -195,6 +259,9 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
             STATE(d) = CON_PLAYING;
             send_to_char(CH, "OK, discarded changes and refunded you %d syspoints.\r\n", CUSTOM_PET_SYSPOINT_COST);
           }
+          break;
+        default:
+          send_to_char("That's not a valid option. Pick a number from 1-5, or enter Q to save or X to discard changes: ", CH);
           break;
       }
       break;
@@ -254,6 +321,19 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
         }
 
         send_to_char(CH, "%d doesn't correspond to a flavor message set. Select a valid one, or enter 0 to cancel: ", number);
+      }
+      break;
+    case PET_EDIT_PRONOUNS:
+      {
+        int number = atoi(arg);
+        if (number < 0 || number >= NUM_PRONOUNS) {
+          send_to_char(CH, "Sorry, %d isn't a valid option. Try again: ", number);
+          return;
+        }
+
+        GET_PET_PRONOUN_SET(PET) = number;
+        create_pet_main_menu(d);
+        return;
       }
       break;
   }
