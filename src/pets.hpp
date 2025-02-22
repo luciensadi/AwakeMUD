@@ -46,6 +46,8 @@ public:
   const char *get_leave() { return leave; }
   void set_leave(const char *replacement);
 
+  bool is_usable_by(idnum_t idnum) { return public_use_ok || idnum == author_idnum; }
+
   std::vector<const char *> get_environmental_messages() { return environmental_messages; }
 
   const char *get_random_echo_message() {

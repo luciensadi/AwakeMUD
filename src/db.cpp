@@ -7876,7 +7876,10 @@ void initialize_and_alphabetize_wear_flags_for_exdescs() {
   }
 }
 
+extern void alphabetize_pet_echoes_by_name();
+
 void initialize_and_alphabetize_flag_maps() {
+  alphabetize_pet_echoes_by_name();
   initialize_and_alphabetize_room_flags();
   initialize_and_alphabetize_item_extra_flags();
   initialize_and_alphabetize_mob_flags();

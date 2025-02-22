@@ -16,6 +16,9 @@
   - you can edit your echoes for X sysp
 */
 
+#include <map>
+#include <unordered_map>
+
 #include "awake.hpp"
 #include "structs.hpp"
 #include "olc.hpp"
@@ -27,16 +30,51 @@
 #define PET d->edit_obj
 
 std::unordered_map<idnum_t, class PetEchoSet> pet_echo_sets = {
-  {1, {0, TRUE, "Lazy Cat", "", "", {"$p pads over to a warm spot and sprawls out contentedly.", "$p streeeetches.", "A low, rumbling purr comes from $p."}}},
-  {2, {0, TRUE, "Playful Cat", "", "", {"$p bounds past, chasing a toy.", "$p gets distracted by a bird and starts chattering back at it.", "$p bats curiously at a dangling bit of something."}}},
-  {3, {0, TRUE, "Cuddly Cat", "", "", {"$p wanders over, seeking a lap.", "$p purrs quietly, just happy to be included.", "$p strolls by, giving you a soft head-bonk as it goes."}}},
+  {1, {0, TRUE, "Cat, Lazy", "", "", {
+        "$p pads over to a warm spot and sprawls out contentedly.",
+        "$p streeeetches.",
+        "A low, rumbling purr comes from $p."
+      }}},
+  {2, {0, TRUE, "Cat, Playful", "", "", {
+        "$p bounds past, chasing a toy.",
+        "$p gets distracted by a bird and starts chattering back at it.",
+        "$p bats curiously at a dangling bit of something."
+      }}},
+  {3, {0, TRUE, "Cat, Cuddly", "", "", {
+        "$p wanders over, seeking a lap.",
+        "$p purrs quietly, just happy to be included.",
+        "$p strolls by, giving you a soft head-bonk as it goes."
+      }}},
 
-  {100, {0, TRUE, "Lazy Dog", "", "", {"$p pads over to a warm spot and sprawls out contentedly.", "$p streeeetches.", "There's a quiet thumping as $p's tail starts to wag."}}},
-  {101, {0, TRUE, "Playful Dog", "", "", {"$p bounds past, chasing a toy.", "$p romps around happily.", "$p gets into something it probably shouldn't."}}},
-  {102, {0, TRUE, "Cuddly Dog", "", "", {"$p wanders over, seeking a lap.", "$p purrs quietly, just happy to be included.", "$p strolls by, giving you a soft head-bonk as it goes."}}},
+  {4, {0, TRUE, "Dog, Lazy", "", "", {
+        "$p pads over to a warm spot and sprawls out contentedly.",
+        "$p streeeetches.",
+        "There's a quiet thumping as $p's tail starts to wag."
+      }}},
+  {5, {0, TRUE, "Dog, Playful", "", "", {
+        "$p bounds past, chasing a toy.",
+        "$p romps around happily.",
+        "$p gets into something it probably shouldn't."
+      }}},
+  {6, {0, TRUE, "Dog, Cuddly", "", "", {
+        "$p wanders over, seeking someone to flop against.",
+        "$p huffs and rolls over to rest its head against the nearest person.",
+        "$p wags its tail as it looks at you."
+      }}},
 
-  {200, {0, TRUE, "Sleepy Pet", "", "", {"$p rolls over in its sleep.", "$p yawns widely before settling back in for another nap.", "$p twitches as it dreams."}}},
+  {7, {0, TRUE, "Sleepy Pet", "", "", {
+        "$p rolls over in its sleep.",
+        "$p yawns widely before settling back in for another nap.",
+        "$p twitches as it dreams."
+      }}},
 };
+
+std::map<std::string, idnum_t> pet_echo_sets_by_name = {};
+void alphabetize_pet_echoes_by_name() {
+  for (auto &it : pet_echo_sets) {
+    pet_echo_sets_by_name[it.second.get_name()] = it.first;
+  }
+}
 
 PetEchoSet *get_pet_echo_set(idnum_t idnum) {
   std::unordered_map<idnum_t, class PetEchoSet>::iterator found;
@@ -120,10 +158,15 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
         case '4':
           {
             send_to_char(CH, "The following flavor message sets are available:\r\n");
-            for (auto &it : pet_echo_sets) {
-              send_to_char(CH, "%3d) %s\r\n", it.first, it.second.get_name());
+            int idx = 1;
+            for (auto &it : pet_echo_sets_by_name) {
+              if (!pet_echo_sets.at(it.second).is_usable_by(GET_IDNUM_EVEN_IF_PROJECTING(CH)))
+                continue;
+              
+              send_to_char(CH, "%2d) %s\r\n", idx++, it.first.c_str());
             }
-            // d->edit_mode = PET_EDIT_FLAVOR_MESSAGES;
+            send_to_char(CH, "\r\nSelect a number, or enter 0 to abort: ");
+            d->edit_mode = PET_EDIT_FLAVOR_MESSAGES;
           }
           break;
         case 'q':
@@ -190,12 +233,35 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
         create_pet_main_menu(d);
       }
       break;
+    case PET_EDIT_FLAVOR_MESSAGES:
+      {
+        int number = atoi(arg);
+        if (number <= 0) {
+          create_pet_main_menu(d);
+          return;
+        }
+
+        int idx = 1;
+        for (auto &it : pet_echo_sets_by_name) {
+          if (!pet_echo_sets.at(it.second).is_usable_by(GET_IDNUM_EVEN_IF_PROJECTING(CH)))
+            continue;
+
+          if (idx++ == number) {
+            GET_PET_ECHO_SET_IDNUM(PET) = it.second;
+            create_pet_main_menu(d);
+            return;
+          }
+        }
+
+        send_to_char(CH, "%d doesn't correspond to a flavor message set. Select a valid one, or enter 0 to cancel: ", number);
+      }
+      break;
   }
 }
 
 void create_pet(struct char_data *ch) {
   FAILURE_CASE(PLR_FLAGGED(ch, PLR_BLACKLIST), "You can't do that while blacklisted.");
-  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < CUSTOM_PET_SYSPOINT_COST, "It will cost you %d syspoints to create a custom pet.", CUSTOM_PET_SYSPOINT_COST);
+  FAILURE_CASE_PRINTF(GET_SYSTEM_POINTS(ch) < CUSTOM_PET_SYSPOINT_COST, "It will cost you %d syspoints to create a custom pet.", CUSTOM_PET_SYSPOINT_COST);
   GET_SYSTEM_POINTS(ch) -= CUSTOM_PET_SYSPOINT_COST;
   send_to_char(ch, "\r\nYou spend %d syspoints, which will be refunded if you 'X' out.\r\n\r\n", CUSTOM_PET_SYSPOINT_COST);
   // If someone disconnects during editing, they'll lose the points and will need to ask staff for a refund.
