@@ -354,11 +354,21 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         // NPCs don't take the penalty because their weapon selection is at the mercy of the builders.
         if (!IS_NPC(att->ch)) {
           att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
+
+          // 1-round single-shot snipers get an extra +1.
+          if (GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1) {
+            att->ranged->modifiers[COMBAT_MOD_DISTANCE] += 1;
+          }
         }
       }
       // However, using it at a distance gives a bonus due to it being a long-distance weapon.
       else {
         att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 2;
+
+        // 1-round single-shot snipers get an extra -1.
+        if (GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1) {
+          att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 1;
+        }
       }
     }
 
