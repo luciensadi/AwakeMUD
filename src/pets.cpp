@@ -260,7 +260,8 @@ void alphabetize_pet_echoes_by_name() {
   }
 
   // Also set up the dummy mob for pet pronouns.
-  MOB_FLAGS(dummy_mob_for_pet_pronouns).SetBits(MOB_ISNPC, MOB_INANIMATE, MOB_NOKILL, MOB_SENTINEL, ENDBIT);
+  MOB_FLAGS(dummy_mob_for_pet_pronouns).SetBits(MOB_ISNPC, MOB_INANIMATE, MOB_NOKILL, MOB_SENTINEL, MOB_TOTALINVIS, ENDBIT);
+  char_to_room(dummy_mob_for_pet_pronouns, &world[0]);
 }
 
 PetEchoSet *get_pet_echo_set(idnum_t idnum) {
