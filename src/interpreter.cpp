@@ -3729,6 +3729,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("lave", "leave");
   COMMAND_ALIAS("eave", "leave");
   COMMAND_ALIAS("keave", "leave");
+  COMMAND_ALIAS("leace", "leave");
   COMMAND_ALIAS("relaod", "reload");
   COMMAND_ALIAS("relod", "reload");
   COMMAND_ALIAS("scpre", "score");
@@ -3737,6 +3738,15 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("ear", "eat");
   COMMAND_ALIAS("holser", "holster");
   COMMAND_ALIAS("pugh", "push");
+  COMMAND_ALIAS("oush", "push");
+  COMMAND_ALIAS("emtoe", "emote");
+  COMMAND_ALIAS("kust", "customize");
+  COMMAND_ALIAS("daig", "diagnose");
+  COMMAND_ALIAS("oc", "ooc");
+  COMMAND_ALIAS("lleave", "leave");
+  COMMAND_ALIAS("leavee", "leave");
+  COMMAND_ALIAS("jov", "job");
+  COMMAND_ALIAS("eeq", "equipment");
 
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
@@ -3771,6 +3781,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("summon", "conjure");
   COMMAND_ALIAS("smash", "destroy");
   COMMAND_ALIAS("crypt", "radio");
+  COMMAND_ALIAS("deploy", "unpack");
+  COMMAND_ALIAS("undeploy", "pack");
 
   // Toggles.
   COMMAND_ALIAS("settings", "toggle");
@@ -3855,6 +3867,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unconceal", "reveal");
   COMMAND_ALIAS("snipe", "shoot");
   COMMAND_ALIAS("penalty", "penalties");
+  COMMAND_ALIAS("whois", "finger");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
