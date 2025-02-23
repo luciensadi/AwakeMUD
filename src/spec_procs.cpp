@@ -4228,15 +4228,17 @@ int gen_receptionist(struct char_data * ch, struct char_data * recep,
 
   if (mode == RENT_FACTOR)
   {
-    act("$n gives you a key and shows you to your room.", FALSE, recep, 0, ch, TO_VICT);
+    act("$n enters you into the system; you'll load here going forward.", FALSE, recep, 0, ch, TO_VICT);
     snprintf(buf, sizeof(buf), "%s has rented at %ld", GET_CHAR_NAME(ch), ch->in_room->number);
     mudlog(buf, ch, LOG_CONNLOG, TRUE);
     act("$n helps $N into $S room.", FALSE, recep, 0, ch, TO_NOTVICT);
   }
 
+  /*
   if (ch->desc && !IS_SENATOR(ch))
     STATE(ch->desc) = CON_QMENU;
   extract_char(ch);
+  */
 
   return TRUE;
 }
