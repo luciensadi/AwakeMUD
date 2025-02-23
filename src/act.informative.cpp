@@ -6102,7 +6102,9 @@ ACMD(do_users)
 
   std::unordered_map< std::string, std::vector<std::string> > host_map = {};
 
+#ifndef IS_BUILDPORT
   mudlog_vfprintf(ch, LOG_WIZLOG, "%s looking up user list with args '%s'", GET_CHAR_NAME(ch), argument);
+#endif
 
   strlcpy(buf, argument, sizeof(buf));
   while (*buf) {
