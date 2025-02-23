@@ -6080,6 +6080,7 @@ ACMD(do_who)
   if (subcmd) {
     convert_and_write_string_to_file(buf2, "text/wholist");
     write_gsgp_file(num_can_see, "text/gsgp");
+    MSSPSetPlayers(num_can_see);
   } else send_to_char(buf2, ch);
 }
 
