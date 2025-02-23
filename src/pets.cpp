@@ -582,7 +582,7 @@ void create_pet(struct char_data *ch) {
 
   send_to_char(ch, "You are entering pet creation, which allows you to create custom pets that live in your apartment.\r\n"
                    "Please note that these ^Wpets are for RP flavor only^n; they do not provide any mechanical benefits.\r\n"
-                   "Please also remember that ^Wpets should be animals^n (not people, robots, spirits, etc).\r\n\r\n");
+                   "Please also remember that ^Wpets should be normal animals^n (not people, robots, spirits, paracritters / awakened animals, etc).\r\n\r\n");
 
   ch->desc->edit_obj = read_object(OBJ_CUSTOM_PET, VIRTUAL, OBJ_LOAD_REASON_CREATE_PET);
   GET_PET_OWNER_IDNUM(ch->desc->edit_obj) = GET_IDNUM_EVEN_IF_PROJECTING(ch);
