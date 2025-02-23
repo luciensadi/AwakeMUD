@@ -25,6 +25,7 @@
 #include "db.hpp"
 #include "handler.hpp"
 #include "utils.hpp"
+#include "moderation.hpp"
 #include "pets.hpp"
 
 #define CH d->character
@@ -502,6 +503,10 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
           create_pet_main_menu(d);
           return;
         }
+
+        // Messages sent in function.
+        if (check_for_banned_content(arg, CH))
+          return;
 
         if (d->edit_mode == PET_EDIT_NAME) {
           DELETE_ARRAY_IF_EXTANT(PET->restring);
