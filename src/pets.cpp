@@ -250,7 +250,47 @@ std::unordered_map<idnum_t, class PetEchoSet> pet_echo_sets = {
         "$p closely inspects a strange little scuba diver and its treasure chest.",
         "$p nibbles on some food that's been sprinkled on the surface of the water.",
         "$p pokes its head out of one the brightly coloured plastic shells in $S tank."
-      }}}
+      }}},
+  
+  {604, {0, TRUE, "Guinea Pig", "", "", {
+        "$p lets out a series of excited squeaks, hoping for a treat from $q hands.",
+        "$p puffs up and chatters, clearly in a talkative mood.",
+        "$p scurries around in quick, excited bursts before freezing as if in deep thought.",
+        "$p gently noses at $q fingers, curious and affectionate.",
+        "$p releases a happy wheek and begins popcorning around with delight."
+      }}},
+
+  {605, {0, TRUE, "Turtle", "", "", {
+        "$p slowly blinks at $q presence, seeming to contemplate the mysteries of the universe.",
+        "$p stretches $S neck out lazily before retreating back into $S shell with a content sigh.",
+        "$p watches $n closely, as if judging $m for some unknown reason.",
+        "$p methodically explores the enclosure, every slow step a grand adventure.",
+        "$p nibbles at some invisible snack, looking entirely unbothered by the world."      
+      }}},
+
+  {606, {0, TRUE, "Chinchilla", "", "", {
+        "$p suddenly darts across the room in a blur of fur and energy.",
+        "$p flops onto $S side and starts rolling, enjoying a nice, imaginary dust bath.",
+        "$p sniffs at $q hand before gently nibbling, testing if it's edible.",
+        "$p chitters happily and leaps onto the nearest high surface, defying gravity.",
+        "$p wiggles $S cute, little nose and watches $n with big, curious eyes."
+      }}},
+
+  {607, {0, TRUE, "Hedgehog", "", "", {
+        "$p makes a soft snuffling sound, searching for something interesting to likely nibble on.",
+        "$p curls into a tight, spiky ball, only to peek out a moment later to check if the coast is clear. Of what? Who knows.",
+        "$p gently bumps $q hand with $S nose before retreating in adorable suspicion.",
+        "$p waddles around the room, looking both determined and confused at the same time.",
+        "$p lets out a tiny huff before deciding to resume $S noble quest of doing absolutely nothing but be adorable."
+      }}},
+
+  {608, {0, TRUE, "Lizard", "", "", {
+        "$p flicks $S tongue out, tasting the air around $n.",
+        "$p basks under the heat lamp, looking utterly regal and important.",
+        "$p tilts $S head at $n, blinking slowly as if pondering deep philosophical questions.",
+        "$p climbs onto a nearby artificial rock ledge of $S enclosure, clearly the ruler of this particular domain.",
+        "$p freezes mid-step, staring dramatically at something only $E can see."
+      }}},
 };
 
 void set_up_pet_dummy_mob() {
