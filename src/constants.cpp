@@ -1275,8 +1275,7 @@ const char *apply_types[] =
 
 struct program_data programs[] =
   {
-    {"None", 0
-    },
+    {"None", 0 },
     {"Bod", 3 },
     {"Evasion", 3 },
     {"Masking", 2 },

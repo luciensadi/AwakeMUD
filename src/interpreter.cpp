@@ -168,6 +168,7 @@ ACMD_DECLARE(do_cpool);
 ACMD_DECLARE(do_crack);
 ACMD_DECLARE(do_crash_mud);
 ACMD_DECLARE(do_create);
+ACMD_DECLARE(do_meditate);
 ACMD_DECLARE(do_credits);
 ACMD_DECLARE(do_customize);
 ACMD_DECLARE(do_cyberware);
@@ -765,6 +766,7 @@ struct command_info cmd_info[] =
     { "mount"      , POS_RESTING , do_mount    , 0, 0, BLOCKS_IDLE_REWARD },
     { "makenerps"  , POS_SLEEPING, do_makenerps, LVL_FIXER, 0, BLOCKS_IDLE_REWARD },
     { "mask"       , POS_RESTING , do_masking  , 0, 0, BLOCKS_IDLE_REWARD },
+    { "meditate"   , POS_LYING   , do_meditate , 0, 0, BLOCKS_IDLE_REWARD },
     { "mute"       , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCH, ALLOWS_IDLE_REWARD },
     { "muteooc"    , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCHOOC, ALLOWS_IDLE_REWARD },
     { "mutetells"  , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCHTELLS, ALLOWS_IDLE_REWARD },

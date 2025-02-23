@@ -597,7 +597,7 @@ enum {
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
 // - Check for anywhere I've missed in this comment
-#define BR_TASK_AFF_FLAGS AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD, AFF_RITUALCAST, AFF_CIRCLE, AFF_LODGE
+#define BR_TASK_AFF_FLAGS AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD, AFF_RITUALCAST, AFF_CIRCLE, AFF_LODGE, AFF_COMPLEX_FORM_PROGRAM
 
 
 /* room-related defines */
@@ -2779,6 +2779,7 @@ enum {
 #define OBJ_CYB_SMARTLINK_II               302
 #define OBJ_CYB_DERMAL_SHEATHING_I         322
 #define OBJ_CYB_ARMORED_OBV_ARMS_II        572
+#define OBJ_CYB_ASIST_CONVERTER            85025
 #endif
 
 #define OBJ_CYB_EYE_PACKAGE_LL_TH_FC_ALPHA 566

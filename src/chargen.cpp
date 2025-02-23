@@ -623,6 +623,11 @@ int nuyen_vals[5] = { 1000000, 400000, 90000, 20000, 5000 };
 int force_vals[5] = { 25, 25, 25, 25, 25 };
 int resource_table[2][8] = {{ 500, 5000, 20000, 90000, 200000, 400000, 650000, 1000000 }, { -5, 0, 5, 10, 15, 20, 25, 30 }};
 int magic_cost[4] = { 0, 30, 25, 25 };
+vnum_t otaku_cyberware[2] = {
+  OBJ_CYB_DATAJACK,  
+  OBJ_CYB_ASIST_CONVERTER
+};
+#define OTAKU_CYBERWARE_NUM 2
 
 #define CCR_MAGIC_NONE     0
 #define CCR_MAGIC_FULL     1
@@ -1115,20 +1120,33 @@ static void start_game(descriptor_data *d, const char *origin)
 
   // Otaku get some starting gear, so assign that here
   if (d->ccr.is_otaku) {
-    // add asist
-    obj_data *temp_obj = read_object(CYB_ASIST, VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE);
-    int esscost = GET_CYBERWARE_ESSENCE_COST(temp_obj);
-    if (IS_GHOUL(CH) || IS_DRAKE(CH))
-      esscost *= 2;
-    GET_REAL_ESS(CH) -= esscost;
-    obj_to_cyberware(temp_obj, d->character);
-    // add jack
-    temp_obj = read_object(CYB_DATAJACK, VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE);
-    esscost = GET_CYBERWARE_ESSENCE_COST(temp_obj);
-    if (IS_GHOUL(CH) || IS_DRAKE(CH))
-      esscost *= 2;
-    GET_REAL_ESS(CH) -= esscost;
-    obj_to_cyberware(temp_obj, d->character);
+    // Equip cyberware (deduct essence and modify stats as appropriate)
+    obj_data *temp_obj;
+    for (int cyb = 0; cyb < OTAKU_CYBERWARE_NUM; cyb++) {
+      if (otaku_cyberware[cyb]) {
+        if (!(temp_obj = read_object(otaku_cyberware[cyb], VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
+          snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberware item %ld specified for otaku class %s.",
+                  otaku_cyberware[cyb]);
+          mudlog(buf, CH, LOG_SYSLOG, TRUE);
+          continue;
+        }
+
+        int esscost = GET_CYBERWARE_ESSENCE_COST(temp_obj);
+
+        if (IS_GHOUL(CH) || IS_DRAKE(CH))
+          esscost *= 2;
+
+        if (GET_TRADITION(CH) != TRAD_MUNDANE) {
+          if (GET_TOTEM(CH) == TOTEM_EAGLE)
+            esscost *= 2;
+          magic_loss(CH, esscost, TRUE);
+        }
+
+        GET_REAL_ESS(CH) -= esscost;
+
+        obj_to_cyberware(temp_obj, CH);
+      }
+    }
   }
 
   init_char_sql(d->character, "start_game()");

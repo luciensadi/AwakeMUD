@@ -1,5 +1,6 @@
 #include "structs.hpp"
 #include "awake.hpp"
+#include "utils.hpp"
 #include "db.hpp"
 #include "comm.hpp"
 #include "interpreter.hpp"
@@ -21,26 +22,26 @@
 
 extern int get_program_skill(char_data *ch, obj_data *prog, int target);
 
-#define COMPLEX_FORM_TYPES 23
+#define COMPLEX_FORM_TYPES 17
 
 int complex_form_programs[COMPLEX_FORM_TYPES] = {
-  6, // Attack
-  7, // Slow
-  8, // Medic
-  11, // Compressor
-  13, // Decrypt
-  15, // Relocate
-  16, // Sleaze
-  20, // Track
-  21, // Armor
-  22, // Camo
-  23, // Crash
-  24, // Defuse
-  25, // Evaluate
-  26, // Validate
-  27, // Swerve
-  30, // Cloak
-  31, // Lock-On
+  SOFT_ATTACK,
+  SOFT_SLOW,
+  SOFT_MEDIC,
+  SOFT_COMPRESSOR,
+  SOFT_DECRYPT,
+  SOFT_RELOCATE,
+  SOFT_SLEAZE,
+  SOFT_TRACK,
+  SOFT_ARMOR,
+  SOFT_CAMO,
+  SOFT_CRASH,
+  SOFT_DEFUSE,
+  SOFT_EVALUATE,
+  SOFT_VALIDATE,
+  SOFT_SWERVE,
+  SOFT_CLOAK,
+  SOFT_LOCKON
 };
 
 void cfedit_disp_menu(struct descriptor_data *d)
@@ -72,26 +73,32 @@ void cfedit_disp_program_menu(struct descriptor_data *d)
   strncpy(buf, "", sizeof(buf) - 1);
 
   bool screenreader_mode = PRF_FLAGGED(d->character, PRF_SCREENREADER);
-  for (int counter = 1; counter < COMPLEX_FORM_TYPES; counter++)
+  for (int counter = 0; counter < COMPLEX_FORM_TYPES; counter++)
   {
+    program_data* prog_data = &programs[complex_form_programs[counter]];
     if (screenreader_mode)
-      send_to_char(d->character, "%d) %s\r\n", counter, programs[complex_form_programs[counter]].name);
+      send_to_char(d->character, "%d) %s\r\n", counter + 1, prog_data->name);
     else {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%2d) %-22s%s",
-              counter % 3 == 1 ? "  " : "",
-              counter,
-              programs[complex_form_programs[counter]].name,
-              counter % 3 == 0 ? "\r\n" : "");
+              (counter + 1) % 3 == 1 ? "  " : "",
+              counter + 1,
+              prog_data->name,
+              (counter + 1) % 3 == 0 ? "\r\n" : "");
     }
   }
   if (!screenreader_mode)
-    send_to_char(d->character, "%s\r\nSelect program type: ", buf);
+    send_to_char(d->character, "%s\r\nSelect program type:\r\n", buf);
   d->edit_mode = CFEDIT_TYPE;
 }
 
 void cfedit_parse(struct descriptor_data *d, const char *arg)
 {
-  int number = atoi(arg);
+  int target, success, intelligence;
+  struct obj_data *asist;
+  struct char_data *ch = CH;
+  FAILURE_CASE(!(asist = find_cyberware(ch, CYB_ASIST)), "You don't have an asist converter.");
+
+  int option_n = atoi(arg);
   switch(d->edit_mode)
   {
   case CFEDIT_MENU:
@@ -128,19 +135,29 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
         return;
       }
 
-      send_to_char(CH, "Design saved!\r\n");
-      if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
-        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)];
-      } else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_RESPONSE) {
-        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * (GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_RATING(d->edit_obj));
+      send_to_char(CH, "Complex form saved as %s!\r\n", d->edit_obj->restring);
+
+      target = GET_DESIGN_RATING(d->edit_obj);
+      intelligence = GET_REAL_INT(CH);
+      success = success_test(intelligence, target);
+      if (success <= 0) {
+        GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj) = number(1, 6) + number(1, 6);
+        GET_DESIGN_ORIGINAL_TICKS_LEFT(d->edit_obj) = (GET_DESIGN_SIZE(d->edit_obj) * 60) / number(1, 3);
+        GET_DESIGN_PROGRAMMING_FAILED(d->edit_obj) = 1;
       } else {
-        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * programs[GET_DESIGN_PROGRAM(d->edit_obj)].multiplier;
+        if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
+          GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)];
+        } else {
+          GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * programs[GET_DESIGN_PROGRAM(d->edit_obj)].multiplier;
+        }
+        
+        GET_DESIGN_SIZE(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj);
+        GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj) *= 20;
+        GET_DESIGN_ORIGINAL_TICKS_LEFT(d->edit_obj) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj);
+        GET_DESIGN_CREATOR_IDNUM(d->edit_obj) = GET_IDNUM(CH);
       }
-      GET_DESIGN_SIZE(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj);
-      GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj)  *= 20;
-      GET_DESIGN_ORIGINAL_TICKS_LEFT(d->edit_obj) = GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj);
-      GET_DESIGN_CREATOR_IDNUM(d->edit_obj) = GET_IDNUM(CH);
-      obj_to_char(d->edit_obj, CH);
+
+      obj_to_obj(d->edit_obj, asist);
       STATE(d) = CON_PLAYING;
       d->edit_obj = NULL;
       break;
@@ -150,11 +167,11 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case CFEDIT_RATING:
-    if (number > GET_SKILL(CH, SKILL_COMPUTER)) {
+    if (option_n > GET_SKILL(CH, SKILL_COMPUTER)) {
       send_to_char(CH, "You can't create a program of a higher rating than your computer skill.\r\n"
                    "Enter Rating: ");
     } else {
-      GET_DESIGN_RATING(d->edit_obj) = number;
+      GET_DESIGN_RATING(d->edit_obj) = option_n;
       cfedit_disp_menu(d);
     }
     break;
@@ -167,6 +184,7 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
       cfedit_disp_menu(d);
       return;
     }
+
     if (length_with_no_color >= LINE_LENGTH) {
       send_to_char(CH, "That name is too long, please shorten it. The maximum length after color code removal is %d characters.\r\n", LINE_LENGTH - 1);
       cfedit_disp_menu(d);
@@ -179,24 +197,34 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
       return;
     }
 
+    // Check to see if we've already got a complex form with the same name.
+    struct obj_data *form;
+    for (form = asist->contains; form; form = form->next_content) {
+      if ((isname(arg, form->text.keywords) || isname(arg, get_string_after_color_code_removal(form->restring, ch))) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) {
+        send_to_char(CH, "You already have a form with the name '%s', choose a new unique name.\r\n", arg);
+        cfedit_disp_menu(d);
+        return;
+      }
+    }
+
     DELETE_ARRAY_IF_EXTANT(d->edit_obj->restring);
     d->edit_obj->restring = str_dup(arg);
     cfedit_disp_menu(d);
     break;
   }
   case CFEDIT_WOUND:
-    if (number < LIGHT || number > DEADLY)
+    if (option_n < LIGHT || option_n > DEADLY)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = number;
+      GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = option_n;
       cfedit_disp_menu(d);
     }
     break;
   case CFEDIT_TYPE:
-    if (number < 1 || number >= COMPLEX_FORM_TYPES)
+    if (option_n < 1 || option_n >= COMPLEX_FORM_TYPES)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      GET_DESIGN_PROGRAM(d->edit_obj) = complex_form_programs[number];
+      GET_DESIGN_PROGRAM(d->edit_obj) = complex_form_programs[option_n - 1];
       GET_DESIGN_RATING(d->edit_obj) = 1;
 
       if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
@@ -221,7 +249,9 @@ void create_complex_form(struct char_data *ch)
 
 ACMD(do_meditate)
 {
-  struct obj_data *comp, *prog;
+  struct obj_data *asist, *form;
+  FAILURE_CASE(!(asist = find_cyberware(ch, CYB_ASIST)), "You don't have an asist converter.");
+
   if (!*argument) {
     if (AFF_FLAGGED(ch, AFF_COMPLEX_FORM_PROGRAM)) {
       AFF_FLAGS(ch).RemoveBit(AFF_COMPLEX_FORM_PROGRAM);
@@ -229,6 +259,16 @@ ACMD(do_meditate)
       ch->char_specials.programming = NULL;
     } else
       send_to_char(ch, "Meditate On What?\r\n");
+    return;
+  }
+
+  skip_spaces(&argument);
+  for (form = asist->contains; form; form = form->next_content) {
+    if ((isname(argument, form->text.keywords) || isname(argument, get_string_after_color_code_removal(form->restring, ch))) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) 
+      break;
+  }
+  if (!form) {
+    send_to_char(ch, "The complex design isn't in your brain.\r\n");
     return;
   }
 
@@ -241,32 +281,13 @@ ACMD(do_meditate)
     send_to_char(TOOBUSY, ch);
     return;
   }
-  else if (ch->in_veh && (ch->vfront || !ch->in_veh->flags.IsSet(VFLAG_WORKSHOP))) {
-    send_to_char("You can't do that in here.\r\n", ch);
+
+  if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) <= 0) {
+    send_to_char(ch, "There's nothing more you can do with your %s complex form.", form->restring);
+    return;
   }
 
-  if (!GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog)) {
-    if (access_level(ch, LVL_ADMIN)) {
-      send_to_char(ch, "You use your admin powers to greatly accelerate the development time for %s.\r\n", prog->restring);
-      GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 1;
-      GET_OBJ_TIMER(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
-    } else {
-      send_to_char(ch, "You begin to meditate on %s.\r\n", prog->restring);
-      int target = GET_DESIGN_RATING(prog);
-      int skill = get_skill(ch, SKILL_COMPUTER, target);
-      int success = success_test(skill, target);
-      
-      if (success > 0) {
-        GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 60 * (GET_DESIGN_SIZE(prog) / success);
-        GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
-      } else {
-        GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = number(1, 6) + number(1, 6);
-        GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) = (GET_DESIGN_SIZE(prog) * 60) / number(1, 3);
-        GET_DESIGN_PROGRAMMING_FAILED(prog) = 1;
-      }
-    }
-  } else
-    send_to_char(ch, "You continue to work on %s.\r\n", prog->restring);
+  send_to_char(ch, "You continue to work on %s.\r\n", form->restring);
   AFF_FLAGS(ch).SetBit(AFF_COMPLEX_FORM_PROGRAM);
-  GET_BUILDING(ch) = prog;
+  GET_BUILDING(ch) = form;
 }

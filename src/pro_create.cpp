@@ -719,12 +719,14 @@ void update_buildrepair(void)
             extract_obj(PROG);
           } else {
             send_to_char(desc->character, "You successfully learn %s.\r\n", GET_OBJ_NAME(PROG));
-            GET_OBJ_TIMER(PROG) = 0;
+            GET_PROGRAM_TYPE(PROG) = GET_DESIGN_PROGRAM(PROG);
+            GET_PROGRAM_RATING(PROG) = GET_DESIGN_RATING(PROG);
+            GET_PROGRAM_SIZE(PROG) = GET_DESIGN_SIZE(PROG);
+            GET_PROGRAM_ATTACK_DAMAGE(PROG) = GET_DESIGN_PROGRAM_WOUND_LEVEL(PROG);
           }
+          PROG = NULL;
+          AFF_FLAGS(desc->character).RemoveBit(AFF_COMPLEX_FORM_PROGRAM);
         }
-        PROG = NULL;
-        AFF_FLAGS(desc->character).RemoveBit(AFF_COMPLEX_FORM_PROGRAM);
-        CH->char_specials.timer = 0;
       } else if (AFF_FLAGGED(CH, AFF_RITUALCAST)) {
         if (handle_ritualcast_tick(CH, PROG)) {
           // Successful completion means the prog was extracted in the function.
