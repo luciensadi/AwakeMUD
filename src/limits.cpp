@@ -66,7 +66,7 @@ void mental_gain(struct char_data * ch)
   }
 
   // Can't regenerate? Skip.
-  if (IS_NPC(ch) && GET_DEFAULT_POS(ch) <= POS_STUNNED) {
+  if (IS_NPC(ch) && GET_DEFAULT_POS(ch) == POS_STUNNED) {
     return;
   }
 
