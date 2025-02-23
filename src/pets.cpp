@@ -30,7 +30,7 @@
 #define CH d->character
 #define PET d->edit_obj
 
-struct char_data *dummy_mob_for_pet_pronouns = new struct char_data;
+struct char_data *dummy_mob_for_pet_pronouns = NULL;
 
 std::unordered_map<idnum_t, class PetEchoSet> pet_echo_sets = {
   {1, {0, TRUE, "Cat, Lazy", "", "", {
@@ -254,14 +254,11 @@ std::unordered_map<idnum_t, class PetEchoSet> pet_echo_sets = {
 };
 
 void set_up_pet_dummy_mob() {
+  dummy_mob_for_pet_pronouns = read_mobile(3, VIRTUAL);
+
   MOB_FLAGS(dummy_mob_for_pet_pronouns).SetBits(MOB_ISNPC, MOB_INANIMATE, MOB_NOKILL, MOB_SENTINEL, MOB_TOTALINVIS, ENDBIT);
-  dummy_mob_for_pet_pronouns->player.physical_text.keywords = str_dup("dummy mob");
-  dummy_mob_for_pet_pronouns->player.physical_text.name = str_dup("the pet dummy mob");
-  dummy_mob_for_pet_pronouns->player.physical_text.room_desc = str_dup("The pet dummy mob stands here.\n");
-  dummy_mob_for_pet_pronouns->player.physical_text.look_desc = str_dup("He looks pretty unfinished.\n");
-  dummy_mob_for_pet_pronouns->char_specials.arrive = str_dup("arrives from");
-  dummy_mob_for_pet_pronouns->char_specials.leave = str_dup("leaves");
-  char_to_room(dummy_mob_for_pet_pronouns, &world[0]);
+
+  char_to_room(dummy_mob_for_pet_pronouns, &world[1]);
 }
 
 std::map<std::string, idnum_t> pet_echo_sets_by_name = {};
