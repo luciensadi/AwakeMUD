@@ -242,6 +242,7 @@ void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_
 
 // this function runs through the list and checks the timers of each
 // object, extracting them if their timers hit 0
+unsigned long global_pet_act_tick = 0;
 void objList::UpdateCounters(void)
 {
   PERF_PROF_SCOPE(updatecounters_, __func__);
@@ -253,7 +254,7 @@ void objList::UpdateCounters(void)
   time_t timestamp_now = time(0);
 
   bool trideo_plays = (trideo_ticks++ % TRIDEO_TICK_DELAY == 0);
-  bool pet_will_act = (trideo_ticks % 15 == 0); // Every 30 IRL minutes.
+  int pet_act_tick = (global_pet_act_tick++) % 10;
 
   if (trideo_plays) {
     // Select the trideo broadcast message we'll be using this tick.
@@ -278,9 +279,7 @@ void objList::UpdateCounters(void)
 
     // This is the only thing a pet object can do, so get it out of the way.
     if (GET_OBJ_TYPE(OBJ) == ITEM_PET) {
-      if (pet_will_act) {
-        pet_acts(OBJ);
-      }
+      pet_acts(OBJ, pet_act_tick);
       continue;
     }
 

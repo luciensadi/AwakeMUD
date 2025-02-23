@@ -3281,8 +3281,26 @@ bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct ob
     type &= ~TO_REMOTE;
 
   // Nobody unique to send to? Fail.
-  if (!to || !SENDOK(to) || to == ch)
+  if (!to || !SENDOK(to))
     return FALSE;
+
+  // Type precondition failure check
+  switch (type) {
+    case TO_NOTVICT:
+      if (vict_obj && to == vict_obj) {
+        return FALSE;
+      }
+      break;
+    case TO_VICT:
+      if (vict_obj && to != vict_obj) {
+        return FALSE;
+      }
+      break;
+    default:
+      if (ch == to)
+        return FALSE;
+      break;
+  }
 
   // Can't see them and it's an action-based message? Fail.
   if (hide_invisible && ch && !CAN_SEE(to, ch))

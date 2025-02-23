@@ -8,6 +8,11 @@
 #define GET_PET_OWNER_IDNUM(pet)    (GET_OBJ_VAL((pet), 0))
 #define GET_PET_ECHO_SET_IDNUM(pet) (GET_OBJ_VAL((pet), 1))
 #define GET_PET_PRONOUN_SET(pet)    (GET_OBJ_VAL((pet), 2))
+#define GET_PET_WANDER_MODE(pet)    (GET_OBJ_VAL((pet), 3))
+
+#define PET_WANDER_MODE_NOTSET   0
+#define PET_WANDER_MODE_WANDERS  1
+#define PET_WANDER_MODE_SENTINEL 2
 
 #define PET_EDIT_MAIN            0
 #define PET_EDIT_NAME            1
@@ -15,6 +20,7 @@
 #define PET_EDIT_ROOMDESC        3
 #define PET_EDIT_FLAVOR_MESSAGES 4
 #define PET_EDIT_PRONOUNS        5
+#define PET_EDIT_WANDER          6
 
 class PetEchoSet {
   idnum_t author_idnum;
@@ -62,6 +68,6 @@ public:
 void create_pet(struct char_data *ch);
 void create_pet_main_menu(struct descriptor_data *d);
 void create_pet_parse(struct descriptor_data *d, const char *arg);
-void pet_acts(struct obj_data *pet);
+void pet_acts(struct obj_data *pet, int pet_act_tick);
 
 #endif // __PETS_H

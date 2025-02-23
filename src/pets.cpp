@@ -256,9 +256,22 @@ std::unordered_map<idnum_t, class PetEchoSet> pet_echo_sets = {
 void set_up_pet_dummy_mob() {
   dummy_mob_for_pet_pronouns = read_mobile(3, VIRTUAL);
 
-  MOB_FLAGS(dummy_mob_for_pet_pronouns).SetBits(MOB_ISNPC, MOB_INANIMATE, MOB_NOKILL, MOB_SENTINEL, MOB_TOTALINVIS, ENDBIT);
+  MOB_FLAGS(dummy_mob_for_pet_pronouns).SetBits(MOB_ISNPC, MOB_INANIMATE, MOB_NOKILL, MOB_SENTINEL, ENDBIT);
 
   char_to_room(dummy_mob_for_pet_pronouns, &world[1]);
+
+  // Remove it from the mobile list, it will never act.
+  for (struct char_data *ch = character_list, *prev_ch = NULL; ch; ch = ch->next_in_character_list) {
+    if (ch == dummy_mob_for_pet_pronouns) {
+      if (prev_ch == NULL) {
+        character_list = ch->next_in_character_list;
+      } else {
+        prev_ch->next_in_character_list = ch->next_in_character_list;
+        ch->next_in_character_list = NULL;
+      }
+      break;
+    }
+  }
 }
 
 std::map<std::string, idnum_t> pet_echo_sets_by_name = {};
@@ -277,9 +290,14 @@ PetEchoSet *get_pet_echo_set(idnum_t idnum) {
   return NULL;
 }
 
-void pet_acts(struct obj_data *pet) {
+void pet_acts(struct obj_data *pet, int pet_act_filter) {
   if (!pet->in_room || !pet->in_room->people || !pet->in_room->apartment)
     return;
+
+#ifndef IS_BUILDPORT
+  if ((GET_OBJ_IDNUM(pet) % 10) != pet_act_filter)
+    return;
+#endif
 
   class PetEchoSet *selected_echo_set = get_pet_echo_set(GET_PET_ECHO_SET_IDNUM(pet));
   GET_PRONOUNS(dummy_mob_for_pet_pronouns) = GET_PET_PRONOUN_SET(pet);
@@ -315,6 +333,9 @@ void create_pet_main_menu(struct descriptor_data *d) {
     }
   }
   send_to_char(CH, "5) ^cPronouns: ^n%s/%s^n\r\n", HSSH(dummy_mob_for_pet_pronouns), HMHR(dummy_mob_for_pet_pronouns));
+  send_to_char(CH, "6) ^cWanders:  ^n%s\r\n",
+               GET_PET_WANDER_MODE(PET) == PET_WANDER_MODE_NOTSET ? "<not set>" : 
+                 (GET_PET_WANDER_MODE(PET) == PET_WANDER_MODE_WANDERS ? "Yes, between apartment rooms" : "No, stays in the room you drop it in"));
   send_to_char("\r\n", CH);
   send_to_char(CH, "q) ^cSave and Quit^n\r\n");
   send_to_char(CH, "x) ^cDiscard and Exit^n (refunds ^c%d^n syspoints)\r\n", CUSTOM_PET_SYSPOINT_COST);
@@ -374,10 +395,24 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
             d->edit_mode = PET_EDIT_PRONOUNS;
           }
           break;
+        case '6':
+          {
+#ifdef PETS_MOVE_AROUND
+            send_to_char(CH, "Enter 1 if this pet can roam around in apartments, or 2 if it should stay where you set it down: ");
+#else
+            send_to_char(CH, "Pet wandering will be implemented in a future patch, but please set this value correctly. Enter 1 if this pet can roam around in apartments, or 2 if it should stay where you set it down: ");
+#endif
+            d->edit_mode = PET_EDIT_WANDER;
+          }
         case 'q':
         case 'Q':
           {
-            if (!PET->graffiti || !PET->restring || !str_cmp(GET_OBJ_NAME(PET), "a custom pet") || GET_PET_ECHO_SET_IDNUM(PET) == 0) {
+            if (!PET->graffiti
+                || !PET->restring
+                || !str_cmp(GET_OBJ_NAME(PET), "a custom pet")
+                || GET_PET_ECHO_SET_IDNUM(PET) == 0
+                || GET_PET_WANDER_MODE(PET) == PET_WANDER_MODE_NOTSET)
+            {
               send_to_char("Please finish editing your pet. It's not editable once saved.\r\n", CH);
               return;
             }
@@ -473,6 +508,19 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
         }
 
         GET_PET_PRONOUN_SET(PET) = number;
+        create_pet_main_menu(d);
+        return;
+      }
+      break;
+    case PET_EDIT_WANDER:
+      {
+        int number = atoi(arg);
+        if (number < 1 || number > 2) {
+          send_to_char(CH, "Sorry, %d isn't a valid option. Try again: ", number);
+          return;
+        }
+
+        GET_PET_WANDER_MODE(PET) = number;
         create_pet_main_menu(d);
         return;
       }
