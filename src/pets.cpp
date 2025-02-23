@@ -120,7 +120,7 @@ std::unordered_map<idnum_t, class PetEchoSet> pet_echo_sets = {
         "$p bounces and zooms around the room!",
         "$p suddenly flops to $S side, eyeing $n.",
         "$p attempts to break $S highjump record!",
-        "Thump. Thump. $p wants more attention from $n.",
+        "Thump. Thump. Sounds like $p wants more attention from $n.",
         "$p munches on some alfalfa, resting for a moment."
       }}},
   
