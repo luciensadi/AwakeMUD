@@ -115,6 +115,142 @@ std::unordered_map<idnum_t, class PetEchoSet> pet_echo_sets = {
         "$p curls up in a sunny spot, content to nap the day away.",
         "$p does a biiiiig stretch."
       }}},
+
+  {301, {0, TRUE, "Bunny, Bouncy", "", "", {
+        "$p bounces and zooms around the room!",
+        "$p suddenly flops to $S side, eyeing $n.",
+        "$p attempts to break $S highjump record!",
+        "Thump. Thump. $p wants more attention from $n.",
+        "$p munches on some alfalfa, resting for a moment."
+      }}},
+  
+  {401, {0, TRUE, "Bird, Sleepy", "", "", {
+        "$p puffs up $S feathers to keep $Mself warm during $S nap.",
+        "$p opens $S beak wide and gives a mighty little yawn.",
+        "$p finds $Melf a high perch to snooze securely upon.",
+        "$p tucks $S head underneath a wing as $E settles in for a good nap.",
+        "$p slowly tilts forward before correcting $Mself as $E begins to nod off."
+      }}},
+  
+  {402, {0, TRUE, "Bird, Lazy", "", "", {
+        "$p keeps one eye open as $E settles in for a half-nap.",
+        "$p lazily stretches $S wings and gives a single half-hearted flap.",
+        "$p tucks $S beak into $S plumage as $E debates a quick nap.",
+        "$p makes a few soft, quiet chirps to $Mself as $E relaxes.",
+        "$p slowly stretches out $S wings before carefully refolding them."
+      }}},
+  
+  {403, {0, TRUE, "Bird, Playful", "", "", {
+        "$p zips around and darts back and forth as $E plays a game of tag with $n.",
+        "$p gets the happy feet and loudly tippy taps about.",
+        "$p bounces around in place on $S perch as $E watches $n.",
+        "$p splashes around a little in $S water dish in amusement.",
+        "$p dances around as $E bobs $S head to an unknown rhythm."
+      }}},
+
+  {404, {0, TRUE, "Bird, Cuddly", "", "", {
+        "$p hops in nice and close to begin preening $n.",
+        "$p begins to rub $S head against $n for attention.",
+        "$p perches upon $n and fluffs $S feathers up to show off.",
+        "$p brings $S favourite toy to show it off to $n.",
+        "$p affectionately nuzzles $n with $S beak and head."
+      }}},
+  
+  {405, {0, TRUE, "Bird, Friendly", "", "", {
+        "$p hops towards $n in playful pursuit.",
+        "$p begins to nonchalantly shadow $n to keep close to $m.",
+        "$p bounces and hops around as $E circles $n playfully.",
+        "$p flicks and waves $S tail feathers at $n in a friendly gesture.",
+        "$p serenades $n with a cute song and dance."
+      }}},
+  
+  {406, {0, TRUE, "Bird, Curious", "", "", {
+        "$p tilts $S head as $E intently inspects $n for a while.",
+        "$p pecks and taps $S beak on some random object that's caught $S interest.",
+        "$p curiously investigates $S reflection in the surface of a random appliance.",
+        "$p goes on an unsanctioned adventure through a random container $E found.",
+        "$p bobs and flicks $S head as $E curiously investigates something that caught $S eye."
+      }}},
+  
+  {407, {0, TRUE, "Bird, Angry", "", "", {
+        "$p stares at $n with the intensity of a thousand suns, silently judging.",
+        "$p nibbles a random piece of mail into a bunch of shredded ribbons.",
+        "$p stretches $S wings out as $E hops along like an angry little dinosaur.",
+        "$p randomly decides that $E needs something more than $n, and $E's willing to fight for it.",
+        "$p waits until it's nice and quiet before $E loudly reminds you that $E is, indeed, a bird."
+      }}},
+    
+  {501, {0, TRUE, "Snake, Sleepy", "", "", {
+        "$p curls up in a tight bundle of coils as $E snoozes away.",
+        "$p sleepily slithers along in search of a cozy niche to nap in.",
+        "$p stretches $S body out as $E settles in and relaxes.",
+        "$p investigates a nice and cool surface for $E to slumber upon.",
+        "$p finds a nice warm spot to enjoy a post-snack nap."
+      }}},
+
+  {502, {0, TRUE, "Snake, Lazy", "", "", {
+        "$p sprawls out and takes up as much room as possible while $E relaxes.",
+        "$p leisurely readjusts $S resting arrangement in an unhurried manner.",
+        "$p slowly flicks $S tongue, leaving it partially extended as $E relaxes.",
+        "$p half-coils $Mself into a loose bundle to get cozy.",
+        "$p occasionally gives a slow and unworried half-flick of $S tongue."
+      }}},
+
+  {503, {0, TRUE, "Snake, Playful", "", "", {
+        "$p gives a soft, nonaggressive hiss in a playful manner.",
+        "$p slithers along in playful patterns and loops.",
+        "$p gives a few curled tongue flicks as $E playfully investigates $n.",
+        "$p slowly chases after $S own tail, never quite catching it.",
+        "$p has officially created a heavily fortified castle out of a pile of old laundry."
+      }}},
+
+  {504, {0, TRUE, "Snake, Cuddly", "", "", {
+        "$p slithers along past $n and leaves $S tail half-coiled against $m.",
+        "$p rapidly flicks $S tongue as $E inspects $n with great interest.",
+        "$p gently nuzzles and rubs $S head up against $n for attention.",
+        "$p slithers over to $n and curls up nearby to keep $m company.",
+        "$p slithers $S way up nice and close to $n for warmth and comfort."
+      }}},
+
+  {505, {0, TRUE, "Snake, Friendly", "", "", {
+        "$p slithers over and around $n in a clearly unconcerned manner.",
+        "$p nuzzles and licks $n with a few little flicks of $S tongue.",
+        "$p decides that $n is the most comfortable piece of furniture around here.",
+        "$p curiously investigates $n up close in a calm, non-threatening manner.",  
+        "$p approaches $n in a slow and calm manner, showing off just how comfortable $E is."
+      }}},
+
+  {506, {0, TRUE, "Snake, Curious", "", "", {
+        "$p rapidly flicks $S tongue as $E inspects $n with great interest.",
+        "$p sets off on an adventure to investigate a newly arrived furnishing.",
+        "$p gives a few curled tongue flicks as $E playfully investigates $n.",
+        "$p investigates a misplaced piece of clothing someone forgot to put away.",
+        "$p slithers along on $S grand adventure, inspecting anything and everything $E can along the way."
+      }}},
+
+  {601, {0, TRUE, "Ferret", "", "", {
+        "$p excitedly hops around from side to side with an adorable war dance.",
+        "$p stalks and pounces upon one of $S toys before rolling around with it.",
+        "$p clumsily leaps around and bounces off a piece of furniture.",
+        "$p thoroughly investigates and crawls around inside of a piece of clothing that was left unattended.",
+        "$p abruptly and swiftly slinks off, leaving behind the sneaking suspicion $E's stolen something."
+      }}},
+
+  {602, {0, TRUE, "Hamster", "", "", {
+        "$p pops $S cedar-shaving-covered head up and looks around, confused.",
+        "$p helps $Mself to the contents of $S sipper water bottle.", 
+        "$p bumbles around with $S fluffy cheeks comically filled with who knows what.",
+        "$p can be heard going full turbo mode on $S running wheel.",
+        "$p busily nibbles on a sunflower seed held in $S front paws."
+      }}},
+
+  {603, {0, TRUE, "Fish", "", "", {
+        "$p slowly swims back and forth around in $S tank.",
+        "$p swiftly darts across the length of $S tank in the blink of an eye.",
+        "$p closely inspects a strange little scuba diver and its treasure chest.",
+        "$p nibbles on some food that's been sprinkled on the surface of the water.",
+        "$p pokes its head out of one the brightly coloured plastic shells in $S tank."
+      }}}
 };
 
 std::map<std::string, idnum_t> pet_echo_sets_by_name = {};

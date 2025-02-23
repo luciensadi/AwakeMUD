@@ -31,6 +31,7 @@
 #include "quest.hpp"
 #include "redit.hpp"
 #include "vehicles.hpp"
+#include "pets.hpp"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -754,6 +755,10 @@ bool can_take_obj_from_anywhere(struct char_data * ch, struct obj_data * obj)
 
   // If it's quest-protected and you're not the questor...
   FALSE_CASE_PRINTF(ch_is_blocked_by_quest_protections(ch, obj, FALSE, TRUE), "%s is someone else's quest item.", CAP(GET_OBJ_NAME(obj)));
+
+  // It's a pet and you're not the owner or staff.
+  FALSE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PET && GET_PET_OWNER_IDNUM(obj) > 0 && GET_IDNUM(ch) != GET_PET_OWNER_IDNUM(obj) && !IS_SENATOR(ch),
+                    "%s refuses to be picked up.", CAP(GET_OBJ_NAME(obj)));
 
   return 1;
 }

@@ -7491,6 +7491,7 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY && GET_ACCESSORY_TYPE(obj) != ACCESS_SMARTGOGGLE, "Sorry, gun attachments can't be restrung.");
   FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_MOD || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO, "Sorry, vehicle mods and ammo containers can't be restrung.");
   FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_CLIMBING && GET_OBJ_VAL(obj, 1) == CLIMBING_TYPE_WATER_WINGS, "No amount of cosmetic changes could hide the garishness of water wings.");
+  FALSE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PET, "%s gives you an offended look and refuses to cooperate.", CAP(GET_OBJ_NAME(obj)));
   FALSE_CASE(GET_OBJ_VNUM(obj) == OBJ_EYEBALL_KEY, "You're pretty sure that trying to alter the eyeball would ruin it.");
   FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_VEHCONTAINER, "Sorry, vehicle containers can't be restrung.");
   FALSE_CASE(obj_is_a_vehicle_title(obj), "Vehicle titles are consumable, so they can't be restrung.");
