@@ -241,6 +241,7 @@ void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
 void set_elemental_races();
 void initialize_and_alphabetize_flag_maps();
+void set_up_pet_dummy_mob();
 
 /* external vars */
 extern int no_specials;
@@ -730,6 +731,7 @@ void DBInit()
   boot_world();
   initialize_traffic_msgs();
   initialize_and_alphabetize_flag_maps();
+  set_up_pet_dummy_mob();
 
   log("Loading social messages.");
   boot_social_messages();

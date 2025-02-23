@@ -253,15 +253,22 @@ std::unordered_map<idnum_t, class PetEchoSet> pet_echo_sets = {
       }}}
 };
 
+void set_up_pet_dummy_mob() {
+  MOB_FLAGS(dummy_mob_for_pet_pronouns).SetBits(MOB_ISNPC, MOB_INANIMATE, MOB_NOKILL, MOB_SENTINEL, MOB_TOTALINVIS, ENDBIT);
+  dummy_mob_for_pet_pronouns->player.physical_text.keywords = str_dup("dummy mob");
+  dummy_mob_for_pet_pronouns->player.physical_text.name = str_dup("the pet dummy mob");
+  dummy_mob_for_pet_pronouns->player.physical_text.room_desc = str_dup("The pet dummy mob stands here.\n");
+  dummy_mob_for_pet_pronouns->player.physical_text.look_desc = str_dup("He looks pretty unfinished.\n");
+  dummy_mob_for_pet_pronouns->char_specials.arrive = str_dup("arrives from");
+  dummy_mob_for_pet_pronouns->char_specials.leave = str_dup("leaves");
+  char_to_room(dummy_mob_for_pet_pronouns, &world[0]);
+}
+
 std::map<std::string, idnum_t> pet_echo_sets_by_name = {};
 void alphabetize_pet_echoes_by_name() {
   for (auto &it : pet_echo_sets) {
     pet_echo_sets_by_name[it.second.get_name()] = it.first;
   }
-
-  // Also set up the dummy mob for pet pronouns.
-  MOB_FLAGS(dummy_mob_for_pet_pronouns).SetBits(MOB_ISNPC, MOB_INANIMATE, MOB_NOKILL, MOB_SENTINEL, MOB_TOTALINVIS, ENDBIT);
-  char_to_room(dummy_mob_for_pet_pronouns, &world[0]);
 }
 
 PetEchoSet *get_pet_echo_set(idnum_t idnum) {
