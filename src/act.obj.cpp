@@ -757,8 +757,19 @@ bool can_take_obj_from_anywhere(struct char_data * ch, struct obj_data * obj)
   FALSE_CASE_PRINTF(ch_is_blocked_by_quest_protections(ch, obj, FALSE, TRUE), "%s is someone else's quest item.", CAP(GET_OBJ_NAME(obj)));
 
   // It's a pet and you're not the owner or staff.
-  FALSE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PET && GET_PET_OWNER_IDNUM(obj) > 0 && GET_IDNUM(ch) != GET_PET_OWNER_IDNUM(obj) && !IS_SENATOR(ch),
-                    "%s refuses to be picked up.", CAP(GET_OBJ_NAME(obj)));
+  if (GET_OBJ_TYPE(obj) == ITEM_PET) {
+    if (GET_PET_OWNER_IDNUM(obj) > 0 && GET_IDNUM(ch) != GET_PET_OWNER_IDNUM(obj)) {
+      if (IS_SENATOR(ch)) {
+        // Staff can pick it up.
+        send_to_char(ch, "You bypass the owner permissions with your staff powers.\r\n");
+      } else if (obj->in_room && obj->in_room->apartment && obj->in_room->apartment->has_owner_privs(ch)) {
+        // Apartment owner can pick it up.
+      } else {
+        // Otherwise, only the creator can pick it up.
+        send_to_char(ch, "%s refuses to be picked up.\r\n", CAP(GET_OBJ_NAME(obj)));
+      }
+    }
+  }
 
   return 1;
 }
