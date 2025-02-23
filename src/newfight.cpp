@@ -365,8 +365,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       else {
         att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 2;
 
-        // 1-round single-shot snipers get an extra -1.
-        if (GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1) {
+        // 1-round single-shot snipers get an extra -1, but only if prone.
+        if (GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1 && AFF_FLAGGED(att->ch, AFF_PRONE)) {
           att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 1;
         }
       }
