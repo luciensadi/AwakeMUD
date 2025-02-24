@@ -1125,7 +1125,7 @@ static void start_game(descriptor_data *d, const char *origin)
     for (int cyb = 0; cyb < OTAKU_CYBERWARE_NUM; cyb++) {
       if (otaku_cyberware[cyb]) {
         if (!(temp_obj = read_object(otaku_cyberware[cyb], VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
-          snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberware item %ld specified for otaku class %s.",
+          snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberware item %ld specified for otaku class.",
                   otaku_cyberware[cyb]);
           mudlog(buf, CH, LOG_SYSLOG, TRUE);
           continue;
