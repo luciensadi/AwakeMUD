@@ -348,7 +348,9 @@ void pet_acts(struct obj_data *pet, int pet_act_filter) {
     return;
   }
 
-  act(selected_echo_set->get_random_echo_message(), FALSE, pet->in_room->people, pet, dummy_mob_for_pet_pronouns, TO_NOTVICT);
+  const char *random_echo_message = selected_echo_set->get_random_echo_message();
+  act(random_echo_message, FALSE, pet->in_room->people, pet, dummy_mob_for_pet_pronouns, TO_ROOM);
+  act(random_echo_message, FALSE, pet->in_room->people, pet, dummy_mob_for_pet_pronouns, TO_CHAR);
 }
 
 void create_pet_main_menu(struct descriptor_data *d) {

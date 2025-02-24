@@ -1612,6 +1612,15 @@ char    *crypt(const char *key, const char *salt);
 
 #define CHARS_IN_SAME_LOCATION(first, second) ((first)->in_room ? (first)->in_room == (second)->in_room : (first)->in_veh == (second)->in_veh)
 
+/**
+ * Calculates the attribute maximum for <ch>.
+ * 
+ * @param ch The char_data to check 
+ * @param attr The numeric identifier for the type of attribute to check
+ * @return The integer maximum that character's <attr> can be.
+ */
+int get_attr_max(struct char_data *ch, int attr);
+
 // Nuyen tracking functions.
 void gain_nuyen(struct char_data *ch, long amount, int category);
 void lose_nuyen(struct char_data *ch, long amount, int category);

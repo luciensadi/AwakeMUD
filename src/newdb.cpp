@@ -494,11 +494,11 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   if (GET_LEVEL(ch) <= 1) {
     for (int i = 0; i <= WIL; i++) {
       bool exceeding_limits = FALSE;
-      if (i == BOD && (GET_REAL_BOD(ch)) > racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][i]) {
+      if (i == BOD && (GET_REAL_BOD(ch)) > get_attr_max(ch, i)) {
         exceeding_limits = TRUE;
       }
 
-      else if (GET_REAL_ATT(ch, i) > racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][i]) {
+      else if (GET_REAL_ATT(ch, i) > get_attr_max(ch, i)) {
         exceeding_limits = TRUE;
       }
 
@@ -507,10 +507,10 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
                  GET_CHAR_NAME(ch),
                  attributes[i],
                  GET_REAL_ATT(ch, i),
-                 racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][i]);
+                 get_attr_max(ch, i));
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
 
-        GET_REAL_ATT(ch, i) = racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][i];
+        GET_REAL_ATT(ch, i) = get_attr_max(ch, i);
       }
     }
   }
