@@ -1340,8 +1340,9 @@ enum {
 #define ITEM_DESTROYABLE        47
 #define ITEM_LOADED_DECORATION  48
 #define ITEM_CREATIVE_EFFORT    49
-#define ITEM_COMPLEX_FORM       50       /* otaku complex form               */
-#define NUM_ITEMS               51
+#define ITEM_PET                50
+#define ITEM_COMPLEX_FORM       51       /* otaku complex form               */
+#define NUM_ITEMS               52
 // Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
 #define PATCH_ANTIDOTE          0
@@ -2842,8 +2843,9 @@ enum {
 #define OBJ_CUSTOM_ART                     125
 #define OBJ_HOLIDAY_GIFT                   126
 #define OBJ_BLANK_MAGAZINE                 127
-#define OBJ_BLANK_COMPLEX_FORM             128
-#define TOP_OF_TEMPLATE_ITEMS              128
+#define OBJ_CUSTOM_PET                     128
+#define OBJ_BLANK_COMPLEX_FORM             129
+#define TOP_OF_TEMPLATE_ITEMS              129
 
 #define OBJ_DOCWAGON_PAPER_GOWN            16201
 #define OBJ_ANTI_DRUG_CHEMS                44
@@ -3262,8 +3264,9 @@ enum {
 #define OBJ_LOAD_REASON_BULLETPANTS_MAKE_BOX     56
 #define OBJ_LOAD_REASON_FIND_OBJ_SHOP            57
 #define OBJ_LOAD_REASON_SHOP_RECEIVE             58
-#define OBJ_LOAD_REASON_OTAKU_BS                 59
-#define OBJ_LOAD_REASON_CREATE_COMPLEX_FORM      60
+#define OBJ_LOAD_REASON_CREATE_PET               59
+#define OBJ_LOAD_REASON_OTAKU_BS                 60
+#define OBJ_LOAD_REASON_CREATE_COMPLEX_FORM      61
 
 #define IDNUM_FOR_MOB_ALERT_STATE  -1
 
