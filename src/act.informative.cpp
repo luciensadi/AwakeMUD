@@ -5157,7 +5157,7 @@ ACMD(do_score)
     }
 
     static char grade_string[50];
-    if (GET_TRADITION(ch) != TRAD_MUNDANE)
+    if (GET_TRADITION(ch) != TRAD_MUNDANE || IS_OTAKU(ch))
       snprintf(grade_string, sizeof(grade_string), "^nGrade: ^w[^W%2d^w]", GET_GRADE(ch));
     else
       strlcpy(grade_string, "", sizeof(grade_string));
