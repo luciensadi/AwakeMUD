@@ -505,6 +505,12 @@ void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
   if (targ->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
     // This is an otaku persona! MPCP damage works slightly different on otaku.
     GET_CYBERDECK_MPCP(targ->decker->deck)--; // Damage the virtual deck.
+    
+    // MPCP damage always occurs to decker physical
+    while (success >= 2 && GET_PHYSICAL(targ->decker->ch) > 0) {
+      success -= 2;
+      damage(targ->decker->ch, targ->decker->ch, 1, TYPE_BLACKIC, PHYSICAL);
+    }
     return;
   }
   
