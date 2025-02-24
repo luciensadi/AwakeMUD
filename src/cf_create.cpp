@@ -247,47 +247,86 @@ void create_complex_form(struct char_data *ch)
   cfedit_disp_menu(ch->desc);
 }
 
-ACMD(do_meditate)
+ACMD(do_forms)
 {
   struct obj_data *asist, *form;
   FAILURE_CASE(!(asist = find_cyberware(ch, CYB_ASIST)), "You don't have an asist converter.");
 
-  if (!*argument) {
-    if (AFF_FLAGGED(ch, AFF_COMPLEX_FORM_PROGRAM)) {
-      AFF_FLAGS(ch).RemoveBit(AFF_COMPLEX_FORM_PROGRAM);
-      send_to_char(ch, "You stop working on %s.\r\n", ch->char_specials.programming->restring);
-      ch->char_specials.programming = NULL;
-    } else
-      send_to_char(ch, "Meditate On What?\r\n");
+  char func[100];
+  char *param = one_argument(argument, func);
+
+  if (is_abbrev(func, "list") || strlen(func) <= 0) {
+    strncpy(buf2, "", sizeof(buf2) - 1);
+    for (form = asist->contains; form; form = form->next_content) {
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " [%10s] %10s^n:^N %s R%d\r\n",
+        GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) <= 0 ? "^G  COMPLETE^n" : "^RINPROGRESS^n",
+        form->restring,
+        programs[GET_DESIGN_PROGRAM(form)].name,
+        GET_DESIGN_RATING(form)
+      );
+      if (GET_DESIGN_PROGRAM(form) == SOFT_ATTACK)
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "  Wound: %s\r\n", GET_WOUND_NAME(GET_DESIGN_PROGRAM_WOUND_LEVEL(form)));
+    }
+    send_to_char(ch, "Complex Forms:\r\n%s", buf2);
     return;
   }
 
-  skip_spaces(&argument);
-  for (form = asist->contains; form; form = form->next_content) {
-    if ((isname(argument, form->text.keywords) || isname(argument, get_string_after_color_code_removal(form->restring, ch))) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) 
-      break;
-  }
-  if (!form) {
-    send_to_char(ch, "The complex design isn't in your brain.\r\n");
+  if (is_abbrev(func, "forget")) {
+    skip_spaces(&param);
+    for (form = asist->contains; form; form = form->next_content) {
+      if ((isname(param, form->text.keywords) || isname(param, get_string_after_color_code_removal(form->restring, ch))) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) 
+        break;
+    }
+    if (!form) {
+      send_to_char(ch, "The complex design isn't in your brain.\r\n");
+      return;
+    }
+    send_to_char(ch, "You forget %s.\r\n", form->restring);
+    extract_obj(form);
     return;
   }
 
-  if (GET_POS(ch) > POS_SITTING) {
-    GET_POS(ch) = POS_SITTING;
-    send_to_char(ch, "You find a place to sit and focus.\r\n");
-  }
+  if (is_abbrev(func, "learn")) {
+    if (!*param) {
+      if (AFF_FLAGGED(ch, AFF_COMPLEX_FORM_PROGRAM)) {
+        AFF_FLAGS(ch).RemoveBit(AFF_COMPLEX_FORM_PROGRAM);
+        send_to_char(ch, "You stop working on %s.\r\n", ch->char_specials.programming->restring);
+        ch->char_specials.programming = NULL;
+      } else
+        send_to_char(ch, "Meditate On What?\r\n");
+      return;
+    }
 
-  if (IS_WORKING(ch)) {
-    send_to_char(TOOBUSY, ch);
+    skip_spaces(&param);
+    for (form = asist->contains; form; form = form->next_content) {
+      if ((isname(param, form->text.keywords) || isname(param, get_string_after_color_code_removal(form->restring, ch))) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) 
+        break;
+    }
+    if (!form) {
+      send_to_char(ch, "The complex design isn't in your brain.\r\n");
+      return;
+    }
+
+    if (GET_POS(ch) > POS_SITTING) {
+      GET_POS(ch) = POS_SITTING;
+      send_to_char(ch, "You find a place to sit and focus.\r\n");
+    }
+
+    if (IS_WORKING(ch)) {
+      send_to_char(TOOBUSY, ch);
+      return;
+    }
+
+    if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) <= 0) {
+      send_to_char(ch, "There's nothing more you can do with your %s complex form.", form->restring);
+      return;
+    }
+
+    send_to_char(ch, "You continue to work on %s.\r\n", form->restring);
+    AFF_FLAGS(ch).SetBit(AFF_COMPLEX_FORM_PROGRAM);
+    GET_BUILDING(ch) = form;
     return;
   }
 
-  if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) <= 0) {
-    send_to_char(ch, "There's nothing more you can do with your %s complex form.", form->restring);
-    return;
-  }
-
-  send_to_char(ch, "You continue to work on %s.\r\n", form->restring);
-  AFF_FLAGS(ch).SetBit(AFF_COMPLEX_FORM_PROGRAM);
-  GET_BUILDING(ch) = form;
+  send_to_char(ch, "Valid syntaxes: 'forms'/'forms list', 'forms learn <form>', 'forms forget <form>'.\r\n");
 }

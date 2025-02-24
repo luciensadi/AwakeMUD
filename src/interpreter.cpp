@@ -168,7 +168,7 @@ ACMD_DECLARE(do_cpool);
 ACMD_DECLARE(do_crack);
 ACMD_DECLARE(do_crash_mud);
 ACMD_DECLARE(do_create);
-ACMD_DECLARE(do_meditate);
+ACMD_DECLARE(do_forms);
 ACMD_DECLARE(do_credits);
 ACMD_DECLARE(do_customize);
 ACMD_DECLARE(do_cyberware);
@@ -660,6 +660,7 @@ struct command_info cmd_info[] =
     { "force"      , POS_SLEEPING, do_force    , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
     { "forceget"   , POS_SLEEPING, do_forceget , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "forceput"   , POS_SLEEPING, do_forceput , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
+    { "forms"      , POS_LYING   , do_forms    , 0, 0, BLOCKS_IDLE_REWARD },
     { "forget"     , POS_DEAD    , do_forget   , 0, 0, BLOCKS_IDLE_REWARD },
     { "fill"       , POS_SITTING , do_pour     , 0, SCMD_FILL, BLOCKS_IDLE_REWARD },
     { "finger"     , POS_DEAD    , do_last     , 0, SCMD_FINGER, ALLOWS_IDLE_REWARD },
@@ -766,7 +767,6 @@ struct command_info cmd_info[] =
     { "mount"      , POS_RESTING , do_mount    , 0, 0, BLOCKS_IDLE_REWARD },
     { "makenerps"  , POS_SLEEPING, do_makenerps, LVL_FIXER, 0, BLOCKS_IDLE_REWARD },
     { "mask"       , POS_RESTING , do_masking  , 0, 0, BLOCKS_IDLE_REWARD },
-    { "meditate"   , POS_LYING   , do_meditate , 0, 0, BLOCKS_IDLE_REWARD },
     { "mute"       , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCH, ALLOWS_IDLE_REWARD },
     { "muteooc"    , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCHOOC, ALLOWS_IDLE_REWARD },
     { "mutetells"  , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_SQUELCHTELLS, ALLOWS_IDLE_REWARD },
