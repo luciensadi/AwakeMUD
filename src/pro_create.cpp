@@ -656,7 +656,7 @@ void update_buildrepair(void)
                 send_to_char(desc->character, "A distant, powerful matrix entity is disappointed in you. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
                 break;
               case 8:
-                send_to_char(desc->character, "You tried to forge %s into an incredible program that would have pierced open the walls of flowing code. You're pretty sure you misplaces a parentheses somewhere so it all turned into gibberish about broccoli.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You tried to forge %s into an incredible program that would have pierced open the walls of flowing code. You're pretty sure you misplaced a parenthesis somewhere so it all turned into gibberish about broccoli.\r\n", GET_OBJ_NAME(PROG));
                 break;
               case 9:
                 send_to_char(desc->character, "You tried to program %s only to realize many hours in you were coding on one of the spare half-assembled things you had littered around your current workspace, accomplishing nothing.\r\n", GET_OBJ_NAME(PROG));

@@ -36,6 +36,8 @@
 #include "moderation.hpp"
 #include "vehicles.hpp"
 #include "factions.hpp"
+#include "player_exdescs.hpp"
+#include "pets.hpp"
 
 #define DO_FORMAT_INDENT   1
 #define DONT_FORMAT_INDENT 0
@@ -269,6 +271,9 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (STATE(d) == CON_ART_CREATE && d->edit_mode == ART_EDIT_DESC) {
       REPLACE_STRING(d->edit_obj->photo);
       create_art_main_menu(d);
+    } else if (STATE(d) == CON_PET_CREATE && d->edit_mode == PET_EDIT_DESC) {
+      REPLACE_STRING(d->edit_obj->photo);
+      create_pet_main_menu(d);
     } else if (STATE(d) == CON_VEHCUST) {
       REPLACE_STRING(d->edit_veh->restring_long);
       vehcust_menu(d);
@@ -430,6 +435,17 @@ void string_add(struct descriptor_data *d, char *str)
         REPLACE_STRING(d->edit_room->dir_option[d->edit_number2]->general_description);
         redit_disp_exit_menu(d);
         break;
+      }
+    } else if (STATE(d) == CON_PC_EXDESC_EDIT) {
+      switch(d->edit_mode) {
+        case PC_EXDESC_EDIT_OLC_SET_DESC:
+          if ((d->str) && !detected_abort) {
+            format_string(d, DONT_FORMAT_INDENT);
+            d->edit_exdesc->set_desc(*d->str);
+            DELETE_D_STR_IF_EXTANT(d);
+          }
+          _pc_exdesc_edit_olc_menu(d);
+          break;
       }
     } else if (STATE(d) == CON_QEDIT) {
       switch (d->edit_mode) {

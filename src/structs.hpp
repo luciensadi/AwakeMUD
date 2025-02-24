@@ -740,11 +740,14 @@ struct player_special_data
   ubyte perm_bod;
   struct room_data *watching;
   int wherelist_checks;
+  sh_int max_exdescs;
+
+  Bitfield covered_wearlocs;
 
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL),
       mob_complete(NULL), mental_loss(0), physical_loss(0),
-      perm_bod(0), watching(NULL), wherelist_checks(0)
+      perm_bod(0), watching(NULL), wherelist_checks(0), max_exdescs(0)
   {
     ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
     ZERO_OUT_ARRAY(completed_quest, QUEST_TIMER);
@@ -753,6 +756,8 @@ struct player_special_data
     for (int i = 0; i < NUM_DRUGS; i++) {
       ZERO_OUT_ARRAY(drugs[i], NUM_DRUG_PLAYER_SPECIAL_FIELDS);
     }
+
+    covered_wearlocs.FromString("0");
   }
 }
 ;
@@ -978,6 +983,7 @@ struct char_data
   // See invis_resistance_tests.cpp for details.
   std::unordered_map<idnum_t, bool> *pc_invis_resistance_test_results = {};
   std::unordered_map<idnum_t, bool> *mob_invis_resistance_test_results = {};
+  std::unordered_map<idnum_t, int> assense_recency = {};
 
   // Another unordered map to track who we've sent docwagon alerts to.
   std::unordered_map<idnum_t, bool> sent_docwagon_messages_to = {};
@@ -1138,6 +1144,7 @@ struct descriptor_data
   ApartmentRoom *edit_apartment_room;
   ApartmentRoom *edit_apartment_room_original;
   Faction *edit_faction;
+  PCExDesc *edit_exdesc;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   Playergroup *edit_pgroup; /* playergroups */
@@ -1272,6 +1279,7 @@ struct skill_data {
   sh_int group;
   bool reflex_recorder_compatible;
   bool no_defaulting_allowed;
+  bool is_nerps;
 };
 
 struct part_data {

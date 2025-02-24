@@ -2927,7 +2927,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
     case 'y':
     case 'Y':
 #ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
-      if (!vnum_from_non_connected_zone(d->edit_number)) {
+      if (!vnum_from_non_approved_zone(d->edit_number)) {
 #else
       {
 #endif
@@ -3018,11 +3018,11 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = SHEDIT_TYPE;
       break;
     case '3':
-      send_to_char(CH, "Enter multiplier for buy command: ");
+      send_to_char(CH, "Enter multiplier for buy command (1.0 or higher): ");
       d->edit_mode = SHEDIT_PROFIT_BUY;
       break;
     case '4':
-      send_to_char(CH, "Enter multiplier for sell command: ");
+      send_to_char(CH, "Enter multiplier for sell command (should be 0.1 unless you have special approval): ");
       d->edit_mode = SHEDIT_PROFIT_SELL;
       break;
     case '5':
@@ -3714,9 +3714,9 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
   }
 
   // Item is not from a connected zone.
-  if (vnum_from_non_connected_zone(GET_OBJ_VNUM(obj))) {
+  if (vnum_from_non_approved_zone(GET_OBJ_VNUM(obj))) {
     char oopsbuf[1000];
-    snprintf(oopsbuf, sizeof(oopsbuf), "BUILD ERROR: Somehow %s got %s^n (%ld) which is from a non-connected zone.",
+    snprintf(oopsbuf, sizeof(oopsbuf), "BUILD ERROR: Somehow %s got %s^n (%ld) which is from a non-approved zone.",
              GET_CHAR_NAME(ch),
              GET_OBJ_NAME(obj),
              GET_OBJ_VNUM(obj));

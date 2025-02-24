@@ -7,6 +7,10 @@
 #include <string.h>
 #include <mysql/mysql.h>
 #include <vector>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
+#include <iterator>
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -67,6 +71,14 @@ void verify_data(struct char_data *ch, const char *line, int cmd, int subcmd, co
   else {
 
   }
+}
+
+std::string join(std::vector<std::string> const &strings, std::string delim)
+{
+    std::stringstream ss;
+    std::copy(strings.begin(), strings.end(),
+        std::ostream_iterator<std::string>(ss, delim.c_str()));
+    return ss.str();
 }
 
 void do_pgroup_debug(struct char_data *ch, char *argument) {
@@ -155,6 +167,7 @@ struct eti_test_values_struct {
 extern long payout_slots_testable(long bet);
 extern void load_saved_veh(bool purge_existing);
 extern void save_vehicles(bool);
+extern void debug_pet_menu(struct char_data *ch);
 
 extern bf::path global_vehicles_dir;
 
@@ -181,6 +194,25 @@ ACMD(do_debug) {
   if (!str_cmp(arg1, "pointers")) {
     send_to_char(ch, "OK, validating every pointer we can think of.\r\n");
     verify_every_pointer_we_can_think_of();
+    return;
+  }
+
+  if (!str_cmp(arg1, "pets")) {
+    debug_pet_menu(ch);
+    return;
+  }
+
+  if (!str_cmp(arg1, "writeaptexclusionquery")) {
+    std::vector<std::string> vnum_vec = {};
+    for (auto &complex : global_apartment_complexes) {
+      for (auto &apartment : complex->get_apartments()) {
+        for (auto &room : apartment->get_rooms()) {
+          vnum_vec.push_back(std::string(vnum_to_string(room->get_vnum())));
+        }
+      }
+    }
+    std::string str = join(vnum_vec, "|");
+    send_to_char(ch, "(%s)", str.c_str());
     return;
   }
 
@@ -810,7 +842,35 @@ ACMD(do_debug) {
     return;
   }
 
-  if (!str_cmp(arg1, "unfuckdrinks") && access_level(ch, LVL_PRESIDENT) && !drinks_are_unfucked) {
+  if (!str_cmp(arg1, "traffic") && access_level(ch, LVL_PRESIDENT)) {
+    send_to_char(ch, "OK, generating a pile of traffic messages to look for leaks and edge cases. You'll see a subset of generated strings.\r\n");
+
+    extern const char *generate_dynamic_traffic_message__returns_new();
+    extern void regenerate_traffic_msgs();
+    extern const char *current_traffic_msg[];
+
+    for (int idx = 0; idx < 10000; idx++) {
+      const char *generated = generate_dynamic_traffic_message__returns_new();
+      if (idx % 1000 == 0) {
+        send_to_char(generated, ch);
+      }
+      delete [] generated;
+    }
+
+    send_to_char(ch, "Done. Now regenerating traffic messages repeatedly...\r\n");
+
+    for (int idx = 0; idx < 10000; idx++) {
+      regenerate_traffic_msgs();
+      if (idx % 100 == 0) {
+        send_to_char(current_traffic_msg[0], ch);
+      }
+    }
+
+    send_to_char(ch, "Done.\r\n");
+    return;
+  }
+
+  if (FALSE && !str_cmp(arg1, "unfuckdrinks") && access_level(ch, LVL_PRESIDENT) && !drinks_are_unfucked) {
     drinks_are_unfucked = TRUE;
     char buf[500];
 

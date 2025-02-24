@@ -31,6 +31,7 @@
 #include "config.hpp"
 #include "deck_build.hpp"
 #include "vehicles.hpp"
+#include "player_exdescs.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
@@ -599,12 +600,15 @@ void affect_total(struct char_data * ch)
   GET_CONTROL(ch) = 0;
 
   // These should also be set before other effects (like drugs) are applied
-  GET_MAX_MENTAL(ch) = 1000;
-  GET_MAX_PHYSICAL(ch) = 1000;
+  if (!IS_NPC(ch)) {
+    GET_MAX_MENTAL(ch) = 1000;
+    GET_MAX_PHYSICAL(ch) = 1000;
+    GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
+    GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
+  }
+
   GET_TARGET_MOD(ch) = 0;
   GET_CONCENTRATION_TARGET_MOD(ch) = 0;
-  GET_MAX_MENTAL(ch) -= GET_MENTAL_LOSS(ch) * 100;
-  GET_MAX_PHYSICAL(ch) -= GET_PHYSICAL_LOSS(ch) * 100;
 
   // Set reach, depending on race. Stripped out the 'you only get it at X height' thing since it's not canon and a newbie trap.
   if ((GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_GIANT ||
@@ -770,10 +774,10 @@ void affect_total(struct char_data * ch)
                     cyber->obj_flags.bitvector, TRUE);
     }
   }
+
+  // has_trigger is -1 when trigger doesn't exist, or else 0-3 depending on setting
   if (has_wired && has_trigger) {
-    if (has_trigger == -1)
-      has_trigger = 3;
-    has_wired = MIN(has_wired, has_trigger);
+    has_wired = MIN(has_wired, (has_trigger == -1 ? 3 : has_trigger));
     GET_INIT_DICE(ch) += has_wired;
     GET_REA(ch) += has_wired * 2;
   }
@@ -1112,14 +1116,18 @@ void affect_total(struct char_data * ch)
 
   if (REAL_SKILL(ch, SKILL_COMPUTER) > 0)
   {
+    // a VCR applies a -rating hacking pool, unless disabled via reflex trigger (Matrix, pg 28)
+    // assume trigger is attached to VCR and that a rigger will always disable their VCR when decking
+    if (has_rig && (has_trigger == -1)) {
+      GET_HACKING(ch) -= has_rig;
+    }
+
     int mpcp = 0;
     if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->persona) {
       GET_HACKING(ch) += (int)((GET_INT(ch) + ch->persona->decker->mpcp) / 3);
-      // a VCR applies a 1 TN penalty to decking and -rating hacking pool, unless disabled via reflex trigger (Matrix, pg 28)
-      // assume trigger is attached to VCR and that a rigger will always disable their VCR when decking
-      if (has_rig && !has_trigger) {
+      // when in the matrix, a VCR also applies a 1 TN penalty, unless disabled via reflex trigger (Matrix, pg 28)
+      if (has_rig && (has_trigger == -1)) {
         GET_TARGET_MOD(ch) += 1;
-        GET_HACKING(ch) -= has_rig;
       }
     } else {
       for (struct obj_data *deck = ch->carrying; deck; deck = deck->next_content)
@@ -1875,6 +1883,12 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool reca
   if (recalc) {
     affect_total(ch);
   }
+
+  // Equipping is easy, just shadow it all.
+  if (ch->player_specials) {
+    GET_CHAR_COVERED_WEARLOCS(ch).SetAll(obj->obj_flags.wear_flags);
+  }
+  
   calc_weight(ch);
   return TRUE;
 }
@@ -1935,6 +1949,18 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
   if (recalc) {
     affect_total(ch);
   }
+
+  // Unequipping sucks. We have to essentially clear the shadowed bits, then re-apply everything else.
+  if (ch->player_specials) {
+    GET_CHAR_COVERED_WEARLOCS(ch).Clear();
+
+    for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+      if (GET_EQ(ch, wear_idx)) {
+        GET_CHAR_COVERED_WEARLOCS(ch).SetAll(GET_EQ(ch, wear_idx)->obj_flags.wear_flags);
+      }
+    }
+  }
+
   calc_weight(ch);
   return (obj);
 }
@@ -2002,20 +2028,45 @@ struct obj_data *get_obj_in_list_num(int num, struct obj_data * list)
   return NULL;
 }
 
-int vnum_from_non_connected_zone(int vnum)
+bool vnum_from_non_approved_zone(vnum_t vnum)
 {
-  int counter;
-  if (vnum == -1)  // obj made using create_obj, like mail and corpses
-    return 0;
+  // -1 means it was made with create_obj, like mail and corpses. Treat as always connected.
+  if (vnum == -1)
+    return FALSE;
+
+  // Invalid vnums are always treated as non-connected.
   else if (vnum < 0 || vnum > (zone_table[top_of_zone_table].top))
-    return 1;
+    return TRUE;
 
-  for (counter = 0; counter <= top_of_zone_table; counter++)
-    if (!(zone_table[counter].connected) && vnum >= (zone_table[counter].number * 100) &&
-        vnum <= zone_table[counter].top)
-      return 1;
+  for (int zone_idx = 0; zone_idx <= top_of_zone_table; zone_idx++) {
+    if (vnum >= (zone_table[zone_idx].number * 100) && vnum <= zone_table[zone_idx].top)
+      return !zone_table[zone_idx].approved;
+  }
 
-  return 0;
+  // We should never get here.
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got to 'unreachable' end of vnum_from_non_approved_zone(%ld).", vnum);
+  return FALSE;
+}
+
+bool vnum_from_editing_restricted_zone(vnum_t vnum)
+{
+  // -1 means it was made with create_obj, like mail and corpses. Treat as always connected.
+  if (vnum == -1)
+    return FALSE;
+
+  // Invalid vnums are always treated as non-connected.
+  else if (vnum < 0 || vnum > (zone_table[top_of_zone_table].top))
+    return TRUE;
+
+  for (int zone_idx = 0; zone_idx <= top_of_zone_table; zone_idx++) {
+    if (vnum >= (zone_table[zone_idx].number * 100) && vnum <= zone_table[zone_idx].top) {
+      return (zone_table[zone_idx].approved || zone_table[zone_idx].editing_restricted_to_admin);
+    }
+  }
+
+  // We should never get here.
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got to 'unreachable' end of vnum_from_editing_restricted_zone(%ld).", vnum);
+  return FALSE;
 }
 
 /* search a room for a char, and return a pointer if found..  */

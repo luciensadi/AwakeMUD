@@ -18,6 +18,8 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <algorithm>
+#include <vector>
 
 #include "memory.hpp"
 #include "structs.hpp"
@@ -28,6 +30,7 @@
 #include "ignore_system.hpp"
 #include "invis_resistance_tests.hpp"
 #include "dblist.hpp"
+#include "player_exdescs.hpp"
 
 memoryClass::memoryClass()
 {}
@@ -137,11 +140,21 @@ void memoryClass::DeleteCh(struct char_data *ch)
   purge_invis_invis_resistance_records(ch);
   remove_ch_from_pc_invis_resistance_records(ch);
 
+  // Clean up their exdescs.
+  for (auto it = GET_CHAR_EXDESCS(ch).begin(); it != GET_CHAR_EXDESCS(ch).end(); ++it) {
+    delete *it;
+  }
+  GET_CHAR_EXDESCS(ch).clear();
+
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   if (GET_IDNUM(ch) > 0) {
     ObjList.CheckForDeletedCharacterFuckery(ch, GET_CHAR_NAME(ch), GET_IDNUM(ch));
   }
 #endif
+
+  if (ch->player_specials != &dummy_mob) {
+    DELETE_IF_EXTANT(ch->player_specials);
+  }
 
   free_char(ch);
   delete ch;

@@ -280,7 +280,7 @@ int _get_raw_faction_rep(struct char_data *ch, idnum_t faction_id) {
 
     if (!faction) {
       // Faction didn't even exist.
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got call to _get_raw_faction_rep() with invalid faction!");
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got call to _get_raw_faction_rep() with invalid faction %d!", faction_id);
       return 0;
     } else {
       // Use the default faction rep value.

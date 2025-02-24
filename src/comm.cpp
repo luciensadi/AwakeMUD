@@ -74,6 +74,7 @@
 #include "moderation.hpp"
 #include "newhouse.hpp"
 #include "factions.hpp"
+#include "player_exdescs.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -1460,7 +1461,10 @@ int make_prompt(struct descriptor_data * d)
                 snprintf(str, sizeof(str), "%d", GET_HACKING(d->character));
               break;
             case 'H':
-              snprintf(str, sizeof(str), "%d%cM", (time_info.hours % 12 == 0 ? 12 : time_info.hours % 12), (time_info.hours >= 12 ? 'P' : 'A'));
+              snprintf(str, sizeof(str), "%s%d%cM", 
+                       (time_info.hours % 12 == 0 || time_info.hours >= 10 ? "" : " "),  // Pad it out to always be 2 characters.
+                       (time_info.hours % 12 == 0 ? 12 : time_info.hours % 12),
+                       (time_info.hours >= 12 ? 'P' : 'A'));
               break;
             case 'i':       // impact
               snprintf(str, sizeof(str), "%d", GET_IMPACT(d->character));
@@ -2372,8 +2376,6 @@ void free_editing_structs(descriptor_data *d, int state)
     DELETE_AND_NULL_ARRAY(d->edit_zon);
   }
 
-  DELETE_IF_EXTANT(d->edit_cmd);
-
   if (d->edit_veh) {
     Mem->DeleteVehicle(d->edit_veh);
     d->edit_veh = NULL;
@@ -2387,17 +2389,13 @@ void free_editing_structs(descriptor_data *d, int state)
     d->edit_icon = NULL;
   }
 
-  if (d->edit_faction) {
-    delete d->edit_faction;
-    d->edit_faction = NULL;
-  }
-
-#define DELETE_EDITING_INFO(field) { if ((field)) { delete (field); (field) = NULL; }}
-  DELETE_EDITING_INFO(d->edit_pgroup);
-  DELETE_EDITING_INFO(d->edit_complex);
-  DELETE_EDITING_INFO(d->edit_apartment);
-  DELETE_EDITING_INFO(d->edit_apartment_room);
-#undef DELETE_EDITING_INFO
+  DELETE_IF_EXTANT(d->edit_cmd);
+  DELETE_IF_EXTANT(d->edit_faction);
+  DELETE_IF_EXTANT(d->edit_pgroup);
+  DELETE_IF_EXTANT(d->edit_complex);
+  DELETE_IF_EXTANT(d->edit_apartment);
+  DELETE_IF_EXTANT(d->edit_apartment_room);
+  DELETE_IF_EXTANT(d->edit_exdesc);
 }
 
 void close_socket(struct descriptor_data *d)
@@ -2629,6 +2627,9 @@ void shutdown(int code)
 {
   circle_shutdown = true;
   exit_code = code;
+
+  log("Received SHUTDOWN command: Clearing alarm handler.");
+  signal(SIGALRM, SIG_IGN);
 }
 
 /* ******************************************************************
@@ -2893,7 +2894,7 @@ void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool
   }
 }
 
-void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...)
+void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, bool is_ignorable_spam, ...)
 {
   struct char_data *i;
 
@@ -2916,7 +2917,7 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
   }
 }
 
-void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig)
+void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig, bool is_ignorable_spam)
 {
   struct char_data *i;
 
@@ -2931,15 +2932,15 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
   {
     for (i = veh->people; i; i = i->next_in_veh)
       if (i != ch && i != cha && i->desc) {
-        if (!(!torig && AFF_FLAGGED(i, AFF_RIG)))
+        if (!(is_ignorable_spam && PRF_FLAGGED(i, PRF_NOTRAFFIC)) && !(!torig && AFF_FLAGGED(i, AFF_RIG)))
           SEND_TO_Q(messg, i->desc);
       }
-    if (torig && veh->rigger && veh->rigger->desc)
+    if (torig && veh->rigger && veh->rigger->desc && !(is_ignorable_spam && PRF_FLAGGED(veh->rigger, PRF_NOTRAFFIC)))
       SEND_TO_Q(messg, veh->rigger->desc);
   }
 }
 
-void send_to_room(const char *messg, struct room_data *room, struct veh_data *exclude_veh)
+void send_to_room(const char *messg, struct room_data *room, struct veh_data *exclude_veh, bool is_ignorable_spam)
 {
   struct char_data *i;
   struct veh_data *v;
@@ -2947,7 +2948,7 @@ void send_to_room(const char *messg, struct room_data *room, struct veh_data *ex
   if (messg && room) {
     for (i = room->people; i; i = i->next_in_room) {
       if (i->desc)
-        if (!(PLR_FLAGGED(i, PLR_REMOTE) || PLR_FLAGGED(i, PLR_MATRIX)) && AWAKE(i))
+        if (!(is_ignorable_spam && PRF_FLAGGED(i, PRF_NOTRAFFIC)) && !(PLR_FLAGGED(i, PLR_REMOTE) || PLR_FLAGGED(i, PLR_MATRIX)) && AWAKE(i))
           SEND_TO_Q(messg, i->desc);
 
       if (i == i->next_in_room) {
@@ -3038,6 +3039,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
   char *buf;
   struct char_data *vict;
   static char lbuf[MAX_STRING_LENGTH];
+  static char possessive_buf[1000];
   char temp_buf[MAX_STRING_LENGTH];
   buf = lbuf;
   vict = (struct char_data *) vict_obj;
@@ -3152,6 +3154,50 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'P':
           i = CHECK_NULL(vict_obj, OBJS((struct obj_data *) vict_obj, to));
           break;
+        case 'q':
+          if (to == ch && !skip_you_stanzas)
+            i = "your";
+          else if (!IS_NPC(ch) && (IS_SENATOR(to) || IS_SENATOR(ch))) {
+            snprintf(possessive_buf, sizeof(possessive_buf), "%s's", GET_CHAR_NAME(ch));
+            i = possessive_buf;
+          }
+          else if (CAN_SEE(to, ch)) {
+            if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
+              struct veh_data *veh;
+              RIG_VEH(ch, veh);
+              snprintf(possessive_buf, sizeof(possessive_buf), "%s's", GET_VEH_NAME(veh));
+              i = possessive_buf;
+            } else {
+              snprintf(possessive_buf, sizeof(possessive_buf), "%s's", make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf)));
+              i = possessive_buf;
+            }
+          }
+          else
+            i = "someone's";
+          break;
+        case 'Q':
+          if (!vict)
+            i = "someone's";
+          else if (to == vict && !skip_you_stanzas)
+            i = "your";
+          else if (!IS_NPC(vict) && (IS_SENATOR(to) || IS_SENATOR(vict))) {
+            snprintf(possessive_buf, sizeof(possessive_buf), "%s's", GET_CHAR_NAME(ch));
+            i = possessive_buf;
+          }
+          else if (CAN_SEE(to, vict)) {
+            if (AFF_FLAGGED(vict, AFF_RIG) || PLR_FLAGGED(vict, PLR_REMOTE)) {
+              struct veh_data *veh;
+              RIG_VEH(vict, veh);
+              snprintf(possessive_buf, sizeof(possessive_buf), "%s's", GET_VEH_NAME(veh));
+              i = possessive_buf;
+            } else {
+              snprintf(possessive_buf, sizeof(possessive_buf), "%s's", make_desc(to, vict, temp_buf, TRUE, TRUE, sizeof(temp_buf)));
+              i = possessive_buf;
+            }
+          }
+          else
+            i = "someone's";
+          break;
         case 's':
           if (to == ch && !skip_you_stanzas)
             i = "your";
@@ -3235,8 +3281,26 @@ bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct ob
     type &= ~TO_REMOTE;
 
   // Nobody unique to send to? Fail.
-  if (!to || !SENDOK(to) || to == ch)
+  if (!to || !SENDOK(to))
     return FALSE;
+
+  // Type precondition failure check
+  switch (type) {
+    case TO_NOTVICT:
+      if (vict_obj && to == vict_obj) {
+        return FALSE;
+      }
+      break;
+    case TO_VICT:
+      if (vict_obj && to != vict_obj) {
+        return FALSE;
+      }
+      break;
+    default:
+      if (ch == to)
+        return FALSE;
+      break;
+  }
 
   // Can't see them and it's an action-based message? Fail.
   if (hide_invisible && ch && !CAN_SEE(to, ch))

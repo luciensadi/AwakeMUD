@@ -3559,7 +3559,6 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(char_specials.hunting);
   REPLICATE(char_specials.programming);
   REPLICATE(char_specials.defined_position);
-  REPLICATE(char_specials.position);
   REPLICATE(char_specials.subscribe);
   REPLICATE(char_specials.rigging);
   REPLICATE(char_specials.mindlink);
@@ -3572,9 +3571,7 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(mob_specials.spare1);
   REPLICATE(mob_specials.spare2);
   REPLICATE(points.mental);
-  REPLICATE(points.max_mental);
   REPLICATE(points.physical);
-  REPLICATE(points.max_physical);
   REPLICATE(points.init_roll);
   REPLICATE(points.sustained[0]);
   REPLICATE(points.sustained[1]);
@@ -3587,6 +3584,14 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(points.reach[1]);
   REPLICATE(points.extras[0]);
   REPLICATE(points.extras[1]);
+
+  if (GET_POS(clone) != GET_POS(original)) {
+    // Copy over important positions (fighting, stunned, morted)
+    if (GET_POS(original) == POS_FIGHTING || GET_POS(original) == POS_STUNNED || GET_POS(original) == POS_MORTALLYW) {
+      GET_POS(clone) = GET_POS(original);
+    }
+    // Otherwise, assume the medited version is right
+  }
 
   REPLICATE(vfront);
 
@@ -8296,4 +8301,20 @@ bool restore_to_full_health_if_still_in_chargen(struct char_data *victim) {
   mudlog_vfprintf(victim, LOG_CHEATLOG, "Restoring %s to full health (stunned/morted in chargen).", GET_CHAR_NAME(victim));
 
   return TRUE;
+}
+
+char *format_for_logging__returns_new(const char *input) {
+  size_t result_sz = strlen(input) + 2;
+  char *result = new char[result_sz];
+  memset(result, 0, result_sz);
+
+  for (size_t read_idx = 0, write_idx = 0; read_idx < strlen(input); read_idx++) {
+    if (input[read_idx] == '\r' || input[read_idx] == '\n') {
+      result[write_idx++] = ' ';
+    } else {
+      result[write_idx++] = input[read_idx];
+    }
+  }
+
+  return result;
 }

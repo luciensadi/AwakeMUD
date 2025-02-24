@@ -2195,7 +2195,7 @@ SPECIAL(jeff) {
       act("$n looks at $N suspiciously.", FALSE, jeff, 0, ch, TO_NOTVICT);
       act("You look at $N suspiciously.", FALSE, jeff, 0, ch, TO_CHAR);
       act("$n looks at you suspiciously.", FALSE, jeff, 0, ch, TO_VICT);
-      if (jeff->in_room->number != 2326) {
+      if (GET_ROOM_VNUM(jeff->in_room) != 2326) {
         do_say(jeff, "Where the frag am I?", 0, 0);
       } else {
         if (IS_SET(EXIT(jeff, EAST)->exit_info, EX_CLOSED)) {
@@ -2210,7 +2210,7 @@ SPECIAL(jeff) {
       return TRUE;
     }
   } else if (CMD_IS("east")) {
-    if (perform_move(ch, EAST, LEADER, NULL) && jeff->in_room->number == 2326) {
+    if (perform_move(ch, EAST, LEADER, NULL) && GET_ROOM_VNUM(jeff->in_room) == 2326) {
       if (!IS_SET(EXIT(jeff, EAST)->exit_info, EX_CLOSED))
         do_gen_door(jeff, "roadblock", 0, SCMD_CLOSE);
     }
@@ -2221,8 +2221,25 @@ SPECIAL(jeff) {
     if (!strcasecmp("roadblock", args))
       do_say(jeff, "Slot off, it's 10 creds to pass chummer.", 0, 0);
     return TRUE;
-  } else if (number(0, 50) == 11)
-    do_say(jeff, "10 creds to pass through the roadblock chummer.", 0, 0);
+  } else {
+    switch (number(0, 500)) {
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+      case 10:
+        do_say(jeff, "10 creds to pass through the roadblock chummer.", 0, 0);
+        break;
+      case 11:
+        do_say(jeff, "Gaslight, gatekeep, guyboss.", 0, 0);
+        break;
+    }
+  }
 
   return FALSE;
 }
@@ -3075,6 +3092,8 @@ SPECIAL(fixer)
     return TRUE;
   } else if (CMD_IS("list")) {
     bool found = FALSE;
+    char formatstr[MAX_STRING_LENGTH] = { '\0' };
+
     for (obj = fixer->carrying; obj; obj = obj->next_content)
       if (GET_OBJ_TIMER(obj) == GET_IDNUM(ch)) {
         if (!found) {
@@ -3099,10 +3118,12 @@ SPECIAL(fixer)
           }
         }
 
+        snprintf(formatstr, sizeof(formatstr), "%%-%ds^n  Status: ", 59 + count_color_codes_in_string(GET_OBJ_NAME(obj)));
+        send_to_char(ch, formatstr, GET_OBJ_NAME(obj));
         if (hour > 0) {
-          send_to_char(ch, "%-59s Status: %d hour%s\r\n", obj->text.name, hour, hour == 1 ? "" : "s");
+          send_to_char(ch, "%d hour%s\r\n", hour, hour == 1 ? "" : "s");
         } else {
-          send_to_char(ch, "%-59s Status: Ready\r\n", obj->text.name);
+          send_to_char("^gReady^n\r\n", ch);
         }
       }
     if (!found) {
@@ -4248,15 +4269,17 @@ int gen_receptionist(struct char_data * ch, struct char_data * recep,
 
   if (mode == RENT_FACTOR)
   {
-    act("$n gives you a key and shows you to your room.", FALSE, recep, 0, ch, TO_VICT);
+    act("$n enters you into the system; you'll load here going forward.", FALSE, recep, 0, ch, TO_VICT);
     snprintf(buf, sizeof(buf), "%s has rented at %ld", GET_CHAR_NAME(ch), ch->in_room->number);
     mudlog(buf, ch, LOG_CONNLOG, TRUE);
     act("$n helps $N into $S room.", FALSE, recep, 0, ch, TO_NOTVICT);
   }
 
+  /*
   if (ch->desc && !IS_SENATOR(ch))
     STATE(ch->desc) = CON_QMENU;
   extract_char(ch);
+  */
 
   return TRUE;
 }
@@ -4678,6 +4701,8 @@ SPECIAL(quest_debug_scanner)
         return TRUE;
       }
 
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s using tricorder-enhanced DIAGNOSE to view quest info on NPC %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(to));
+
       snprintf(buf, sizeof(buf), "NPC %s's quest-related information:\r\n", GET_CHAR_NAME(to));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Overall max rep: %d, overall min rep: %d\r\n",
               get_johnson_overall_max_rep(to), get_johnson_overall_min_rep(to));
@@ -4697,6 +4722,7 @@ SPECIAL(quest_debug_scanner)
       return TRUE;
     }
 
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s using tricorder-enhanced DIAGNOSE to view quest info on PC %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(to));
     snprintf(buf, sizeof(buf), "Player %s's quest-related information:\r\n", GET_CHAR_NAME(to));
     int real_mob = real_mobile(quest_table[GET_QUEST(to)].johnson);
     if (GET_QUEST(to)) {
@@ -4747,6 +4773,8 @@ SPECIAL(quest_debug_scanner)
       return TRUE;
     }
 
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s using tricorder-enhanced CLEANSE to wipe quest history for %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(to));
+
     for (int i = 0; i < QUEST_TIMER; i++) {
       GET_LQUEST(to, i) = 0;
       GET_CQUEST(to, i) = 0;
@@ -4758,6 +4786,7 @@ SPECIAL(quest_debug_scanner)
 
   // WHERE debugger.
   if (CMD_IS("where")) {
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s using tricorder-enhanced WHERE to view all PC locations.", GET_CHAR_NAME(ch));
     send_to_char("^RUsing extended WHERE due to you holding a diagnostic scanner.^n\r\n", ch);
 
     struct room_data *room;
@@ -4777,7 +4806,7 @@ SPECIAL(quest_debug_scanner)
         if (IS_NPC(tch))
           continue;
 
-        send_to_char(ch, "%-20s - in %s at [%6ld] %s^n\r\n", GET_CHAR_NAME(tch), GET_VEH_NAME(veh), room ? GET_ROOM_VNUM(room) : -1, room ? GET_ROOM_NAME(room) : "nowhere");
+        send_to_char(ch, "%-20s - in %s^n at [%6ld] %s^n\r\n", GET_CHAR_NAME(tch), GET_VEH_NAME(veh), room ? GET_ROOM_VNUM(room) : -1, room ? GET_ROOM_NAME(room) : "nowhere");
       }
     }
 
@@ -7869,9 +7898,7 @@ SPECIAL(oppressive_atmosphere) {
   if (CMD_IS("west") || CMD_IS("w")) {
     snprintf(ENDOF(check_failure_message), sizeof(check_failure_message) - strlen(check_failure_message), " - [%6s^n] You must have at least ^c%d^n TKE to enter.\r\n",
              (you_shall_not_pass |= (GET_TKE(ch) < OA_TKE_REQUIREMENT)) ? "^RFAIL" : "^g OK ",
-             OA_TKE_REQUIREMENT);
-
-    
+             OA_TKE_REQUIREMENT);    
 
     // Evaluate their stats. You must be at racial maximum in all stats to proceed.
     {
@@ -7894,14 +7921,15 @@ SPECIAL(oppressive_atmosphere) {
                " - [%s^n] You must have trained all stats except Charisma to their racial maximums.\r\n",
                !stats_ok ? "^RFAIL" : "^g OK ");
     }
-    
 
     // You must have at least one combat skill at 8.
     {
       bool has_combat_skill = GET_SKILL(ch, SKILL_SORCERY) >= OA_COMBAT_SKILL_REQ;
       for (int weap_idx = WEAP_EDGED; !has_combat_skill && weap_idx < MAX_WEAP; weap_idx++) {
-        if (GET_SKILL(ch, kosher_weapon_values[weap_idx].skill) >= OA_COMBAT_SKILL_REQ)
+        if (GET_SKILL(ch, kosher_weapon_values[weap_idx].skill) >= OA_COMBAT_SKILL_REQ) {
           has_combat_skill = TRUE;
+          break;
+        }
       }
       if (!has_combat_skill) {
         you_shall_not_pass = TRUE;
@@ -7921,6 +7949,126 @@ SPECIAL(oppressive_atmosphere) {
   }
 
   // Clear to proceed.
+  return FALSE;
+}
+
+SPECIAL(cas_gatekeeper)
+{
+  NO_DRAG_BULLSHIT;
+
+  struct char_data *bouncer = (char_data *) me;
+  struct obj_data *obj;
+
+  if (!AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING))
+    return(FALSE);
+
+  if (CMD_IS("east")) {
+    bool has_101267 = FALSE;
+    bool has_101268 = FALSE;
+    for (obj = ch->carrying; obj; obj = obj->next_content) {
+      has_101267 |= (GET_OBJ_VNUM(obj) == 101267);
+      has_101268 |= (GET_OBJ_VNUM(obj) == 101268);
+    }
+
+    if ((has_101267 && has_101268) || IS_NPC(ch) || access_level(ch, LVL_ADMIN))
+      perform_move(ch, EAST, LEADER, NULL);
+    else
+      do_say(bouncer, "Not today, chummer.", 0, 0);
+    return(TRUE);
+  }
+
+  return(FALSE);
+}
+
+#define GATEKEEPER_A_CODEWORD "the game is more fun if you don't try to look things up like this"
+#define GATEKEEPER_B_CODEWORD "the game is more fun if you don't try to look things up like this"
+#define GATEKEEPER_C_CODEWORD "the game is more fun if you don't try to look things up like this"
+SPECIAL(grenada_gatekeeper)
+{
+  NO_DRAG_BULLSHIT;
+
+  struct char_data *mob = (struct char_data *) me;
+  if (!AWAKE(mob))
+    return FALSE;
+
+  switch (GET_MOB_VNUM(mob)) {
+    case 101310:
+      if (CMD_IS("north") && !IS_SENATOR(ch)) {
+        act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
+        return TRUE;
+      }
+      break;
+    case 101311:
+      if (CMD_IS("west") && !IS_SENATOR(ch)) {
+        act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
+        return TRUE;
+      }
+      break;
+    case 101312:
+      if (CMD_IS("east") && !IS_SENATOR(ch)) {
+        act("$N shakes $S head at you and gestures you back with a \"Sorry, that's for employees only.\"", FALSE, ch, 0, mob, TO_CHAR);
+        return TRUE;
+      }
+      break;
+    default:
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got mob vnum %ld to grenada_gatekeeper spec!", GET_MOB_VNUM(mob));
+      return FALSE;
+  }
+
+  if ((CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto")) && !IS_ASTRAL(ch) && *argument) {
+    skip_spaces(&argument);
+
+    if (CMD_IS("sayto")) {
+      char sayto_target[MAX_INPUT_LENGTH];
+      one_argument(argument, sayto_target);
+      // Eventually we should verify the sayto target, but for now, we skip it. This block just serves to allow the next to identify the blue-eyes string.
+    }
+
+    // Switch based on the mob's vnum.
+    bool said_passphrase = FALSE;
+    vnum_t to_room_vnum;
+
+    switch (GET_MOB_VNUM(mob)) {
+      case 101310:
+        said_passphrase = str_str(argument, GATEKEEPER_A_CODEWORD);
+        to_room_vnum = 101302;
+        break;
+      case 101311:
+        said_passphrase = str_str(argument, GATEKEEPER_B_CODEWORD);
+        to_room_vnum = 101311;
+        break;
+      case 101312:
+        said_passphrase = str_str(argument, GATEKEEPER_C_CODEWORD);
+        to_room_vnum = 101321;
+        break;
+      default:
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got mob vnum %ld to grenada_gatekeeper spec!", GET_MOB_VNUM(mob));
+        return FALSE;
+    }
+
+    if (said_passphrase) {
+      act("$N glances around, then ushers you towards the sliding door.", FALSE, ch, NULL, mob, TO_CHAR);
+      act("$N glances around, then ushers $n towards the sliding door.", TRUE, ch, NULL, mob, TO_NOTVICT);
+      act("You glance around, then usher $N towards the sliding door.", FALSE, ch, NULL, mob, TO_VICT);
+
+      rnum_t to_room = real_room(to_room_vnum);
+      if (to_room < 0) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Missing room %ld for gatekeeper_a proc. Sending to Dante's.", to_room_vnum);
+        to_room = real_room(RM_ENTRANCE_TO_DANTES);
+      }
+
+      char_from_room(ch);
+      char_to_room(ch, &world[to_room]);
+
+      act("$n is ushered in.", FALSE, ch, NULL, mob, TO_ROOM);
+
+      if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+        look_at_room(ch, 0, 0);
+      }
+      return TRUE;
+    }
+  }
+
   return FALSE;
 }
 

@@ -54,6 +54,7 @@ extern int get_paydata_market_maximum(int host_color);
 extern int get_paydata_market_minimum(int host_color);
 extern void save_shop_orders();
 extern bool docwagon(struct char_data *ch);
+extern struct time_info_data time_info;
 
 void mental_gain(struct char_data * ch)
 {
@@ -61,6 +62,11 @@ void mental_gain(struct char_data * ch)
 
   // Not injured? Skip.
   if (GET_MENTAL(ch) == GET_MAX_MENTAL(ch)) {
+    return;
+  }
+
+  // Can't regenerate? Skip.
+  if (IS_NPC(ch) && GET_DEFAULT_POS(ch) <= POS_STUNNED) {
     return;
   }
 
@@ -161,6 +167,11 @@ void physical_gain(struct char_data * ch)
 {
   // Not injured? Skip.
   if (GET_PHYSICAL(ch) == GET_MAX_PHYSICAL(ch)) {
+    return;
+  }
+
+  // Can't regenerate? Skip.
+  if (IS_NPC(ch) && GET_DEFAULT_POS(ch) == POS_MORTALLYW) {
     return;
   }
 
@@ -660,32 +671,44 @@ bool check_bioware(struct char_data *ch)
     return FALSE;
   }
 
-  struct obj_data *bio;
+  struct obj_data *bio = NULL, *platelets = NULL;
+  int synthacardium = 0;
   for (bio = ch->bioware; bio; bio = bio->next_content) {
-    if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY)
-    {
-      if (--GET_BIOWARE_PLATELETFACTORY_DATA(bio) < 1) {
-        GET_BIOWARE_PLATELETFACTORY_DATA(bio) = 12;
-        if (success_test(GET_REAL_BOD(ch), 3 + GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio)) < 1) {
-          send_to_char("Your blood seems to erupt.\r\n", ch);
-          act("$n collapses to the floor, twitching.", TRUE, ch, 0, 0, TO_ROOM);
-          if (damage(ch, ch, 10, TYPE_BIOWARE, PHYSICAL))
-            return TRUE;
-        } else {
-          send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
-        }
-        GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio)++;
-      }
-      if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 4)
-        send_to_char("You kinda feel like you should be taking some aspirin.\r\n", ch);
-      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 3)
-        send_to_char("You could definitely go for some aspirin right now.\r\n", ch);
-      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) <= 2)
-        send_to_char("You really feel like you need to take some aspirin.\r\n", ch);
-      else if (GET_BIOWARE_PLATELETFACTORY_DATA(bio) == 1)
-        send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
-      break;
+    // Find the 'ware we care about
+    if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY) {
+      platelets = bio;
+    } else if (GET_BIOWARE_TYPE(bio) == BIO_SYNTHACARDIUM) {
+      synthacardium = GET_BIOWARE_RATING(bio);
     }
+
+    if (platelets && synthacardium)
+      break;
+  }
+
+  if (platelets) {
+    // Embolism
+    if (--GET_BIOWARE_PLATELETFACTORY_DATA(platelets) < 1) {
+      GET_BIOWARE_PLATELETFACTORY_DATA(platelets) = 12;
+      if (success_test(GET_REAL_BOD(ch) + synthacardium, 3 + GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(platelets)) < 1) {
+        send_to_char("Your blood seems to erupt.\r\n", ch);
+        act("$n collapses to the floor, twitching.", TRUE, ch, 0, 0, TO_ROOM);
+        if (damage(ch, ch, 10, TYPE_BIOWARE, PHYSICAL))
+          return TRUE;
+      } else {
+        send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
+      }
+      GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(platelets)++;
+    }
+
+    // Warning messages start 4 mud hours out
+    if (GET_BIOWARE_PLATELETFACTORY_DATA(platelets) == 4)
+      send_to_char("You kinda feel like you should be taking some aspirin.\r\n", ch);
+    else if (GET_BIOWARE_PLATELETFACTORY_DATA(platelets) == 3)
+      send_to_char("You could definitely go for some aspirin right now.\r\n", ch);
+    else if (GET_BIOWARE_PLATELETFACTORY_DATA(platelets) == 2)
+      send_to_char("You really feel like you need to take some aspirin.\r\n", ch);
+    else if (GET_BIOWARE_PLATELETFACTORY_DATA(platelets) == 1)
+      send_to_char("Your heart strains, and you have a feeling of impending doom. Your need for blood thinners is dire!\r\n", ch);
   }
   return FALSE;
 }
@@ -1216,6 +1239,11 @@ void point_update(void)
             LAST_HEAL(i)++;
           if (GET_EQ(i, WEAR_PATCH) && GET_OBJ_TYPE(GET_EQ(i, WEAR_PATCH)) == ITEM_PATCH && --GET_PATCH_TICKS_LEFT(GET_EQ(i, WEAR_PATCH)) <= 0)
             remove_patch(i);
+        }
+
+        // Clear their assense records on every MUD day.
+        if (time_info.hours == 0) {
+          i->assense_recency.clear();
         }
       }
 

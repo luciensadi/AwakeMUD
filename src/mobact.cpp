@@ -1799,8 +1799,7 @@ void mobile_activity(void)
 
       if (weapon_skill_dice <= 0) {
         #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
-        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: %s (%ld) is wielding %s %s, but has no weapon skill in %s!",
-                 GET_CHAR_NAME(ch),
+        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Mob #%ld is wielding %s %s, but has no weapon skill in %s!",
                  GET_MOB_VNUM(ch),
                  AN(weapon_types[indexed_attack_type]),
                  weapon_types[indexed_attack_type],
@@ -1812,8 +1811,7 @@ void mobile_activity(void)
         switch_weapons(ch, WEAR_WIELD);
       } else if (IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))) && melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
         #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
-        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob %s (%ld) is wielding %s %s%s, but has no melee skill in %s!",
-                 GET_CHAR_NAME(ch),
+        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob #%ld is wielding %s %s%s, but has no melee skill in %s!",
                  GET_MOB_VNUM(ch),
                  AN(weapon_types[indexed_attack_type]),
                  weapon_types[indexed_attack_type],

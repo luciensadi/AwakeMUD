@@ -354,16 +354,28 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         // NPCs don't take the penalty because their weapon selection is at the mercy of the builders.
         if (!IS_NPC(att->ch)) {
           att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
+
+          // 1-round single-shot snipers get an extra +1.
+          if (GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1) {
+            att->ranged->modifiers[COMBAT_MOD_DISTANCE] += 1;
+          }
         }
       }
       // However, using it at a distance gives a bonus due to it being a long-distance weapon.
       else {
         att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 2;
+
+        // 1-round single-shot snipers get an extra -1, but only if prone.
+        if (GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1 && AFF_FLAGGED(att->ch, AFF_PRONE)) {
+          att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 1;
+        }
       }
     }
 
     // Setup: If your attacker is closing the distance (running), take a penalty per Core p112.
-    if (!def->is_paralyzed_or_insensate) {
+    // We can't avoid setting AFF_APPROACH in set_fighting for surprised targets since it also
+    // indicates not-in-melee-range, so make an exception since they're probably not moving yet.
+    if (!def->is_paralyzed_or_insensate && !def->is_surprised) {
       if (AFF_FLAGGED(def->ch, AFF_APPROACH))
         att->ranged->modifiers[COMBAT_MOD_DEFENDER_MOVING] += 2;
       else if (!def->ranged_combat_mode && def->ch->in_room == att->ch->in_room && !IS_JACKED_IN(def->ch))

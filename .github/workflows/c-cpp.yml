@@ -20,7 +20,7 @@ jobs:
 
     # Install dependencies.
     - name: Install Boost filesystem and libcurl4
-      run: sudo apt install -y libboost-filesystem-dev libcurl4-openssl-dev 
+      run: sudo apt install -y libboost-filesystem-dev libcurl4-openssl-dev libnsl-dev
 
     # Populate our config file with dummy values.
     - name: Write mysql_config.cpp

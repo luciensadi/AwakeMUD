@@ -600,8 +600,8 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
           send_to_char(CH, "%ld is not part of any zone.\r\n", vnum);
         } else if (!can_edit_zone(CH, real_zonenum)) {
           send_to_char(CH, "Sorry, you don't have access to edit zone %d.\r\n", zone_table[(real_zonenum)].number);
-        } else if (zone_table[(real_zonenum)].connected && !(access_level(CH, LVL_EXECUTIVE) || PLR_FLAGGED(CH, PLR_EDCON))) {
-          send_to_char(CH, "Sorry, zone %d is marked as connected to the game world, so you can't edit it.\r\n", zone_table[(real_zonenum)].number);
+        } else if (zone_table[(real_zonenum)].editing_restricted_to_admin && !(access_level(CH, LVL_ADMIN) || PLR_FLAGGED(CH, PLR_EDCON))) {
+          send_to_char(CH, "Sorry, zone %d is locked to editing.\r\n", zone_table[(real_zonenum)].number);
         }
         // They have edit permissions, so we can go ahead and add it.
         else {

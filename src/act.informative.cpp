@@ -979,16 +979,8 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
       send_to_char("", ch);
     }
 
-    if (CHAR_HAS_EXDESCS(i) && used_keyword && *used_keyword) {
-      char uppercase[strlen(used_keyword) + 1];
-      for (size_t idx = 0; idx < strlen(used_keyword); idx++) { uppercase[idx] = toupper(used_keyword[idx]); }
-      uppercase[strlen(used_keyword)] = '\0';
-
-      send_to_char(ch, "%s %s extra descriptions set. Use ^WLOOK %s EXDESCS^n for more.\r\n",
-                   CAP(HSSH(i)),
-                   HASHAVE(i),
-                   uppercase);
-    }
+    if (used_keyword && *used_keyword)
+      send_exdescs_on_look(ch, i, used_keyword);
 
     if (i != ch && GET_HEIGHT(i) > 0 && GET_WEIGHT(i) > 0) {
       if ((GET_HEIGHT(i) % 10) < 5)
@@ -1434,7 +1426,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           }
         }
         if (MOB_HAS_SPEC(i, johnson)) {
-          if (get_johnson_overall_max_rep(i) >= GET_REP(ch)) {
+          unsigned int max_rep = get_johnson_overall_max_rep(i);
+          if (max_rep >= GET_REP(ch) || max_rep >= 10000) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
                      HSSH(i),
                      already_printed ? " also" : "",
@@ -2503,13 +2496,13 @@ void _send_obj_contents_info_to_char(struct obj_data *obj, struct char_data *ch,
   send_to_char(GET_OBJ_NAME(obj), ch);
   switch (bits) {
     case FIND_OBJ_INV:
-      send_to_char(" (carried): ", ch);
+      send_to_char(" (carried): \r\n", ch);
       break;
     case FIND_OBJ_ROOM:
-      send_to_char(" (here): ", ch);
+      send_to_char(" (here): \r\n", ch);
       break;
     case FIND_OBJ_EQUIP:
-      send_to_char(" (used): ", ch);
+      send_to_char(" (used): \r\n", ch);
       break;
   }
   if (obj->contains) {
@@ -2677,7 +2670,7 @@ char *find_exdesc(char *word, struct extra_descr_data * list)
  * matches the target.  First, see if there is another char in the room
  * with the name.  Then check local objs for exdescs.
  */
-void look_at_target(struct char_data * ch, char *arg)
+void look_at_target(struct char_data * ch, char *arg, char *extra_args)
 {
   int bits, found = 0, j;
   struct room_data *was_in = ch->in_room;
@@ -2730,12 +2723,8 @@ void look_at_target(struct char_data * ch, char *arg)
   /* Is the target a character? */
   if (found_char != NULL)
   {
-#ifdef PLAYER_EXDESCS
     // If this isn't an exdesc invocation, look at the character.
-    if (!look_at_exdescs(ch, found_char, arg)) {
-#else
-    {
-#endif
+    if (!look_at_exdescs(ch, found_char, extra_args)) {
       look_at_char(found_char, ch, arg);
     }
     /*
@@ -2751,12 +2740,8 @@ void look_at_target(struct char_data * ch, char *arg)
   {
     found_char = get_char_veh(ch, arg, ch->in_veh);
     if (found_char) {
-#ifdef PLAYER_EXDESCS
       // If this isn't an exdesc invocation, look at the character.
       if (!look_at_exdescs(ch, found_char, arg)) {
-#else
-      {
-#endif
         look_at_char(found_char, ch, arg);
       }
       /*
@@ -2845,7 +2830,6 @@ ACMD_CONST(do_look) {
 
 ACMD(do_look)
 {
-  static char arg2[MAX_INPUT_LENGTH];
   int look_type;
 
   if (!ch->desc)
@@ -2856,28 +2840,31 @@ ACMD(do_look)
   else if (!LIGHT_OK(ch)) {
     send_to_char("It is pitch black...\r\n", ch);
   } else {
-    half_chop(argument, arg, arg2, sizeof(arg2));
+    char *remainder = any_one_arg(argument, arg);
+    skip_spaces(&remainder);
 
     if (subcmd == SCMD_READ) {
       if (!*arg)
         send_to_char("Read what?\r\n", ch);
-      else
-        look_at_target(ch, arg);
+      else {
+        skip_spaces(&remainder);
+        look_at_target(ch, arg, remainder);
+      }
       return;
     }
     if (!*arg)                  /* "look" alone, without an argument at all */
       look_at_room(ch, 1, subcmd == SCMD_QUICKLOOK);
     else if (is_abbrev(arg, "in"))
-      look_in_obj(ch, arg2, FALSE);
+      look_in_obj(ch, remainder, FALSE);
     /* did the char type 'look <direction>?' */
     else if ((look_type = search_block(arg, lookdirs, FALSE)) >= 0 || (look_type = search_block(arg, fulllookdirs, FALSE)) >= 0)
       look_in_direction(ch, convert_look[look_type]);
     else if (is_abbrev(arg, "at"))
-      do_examine(ch, arg2, 0, SCMD_EXAMINE);
+      do_examine(ch, remainder, 0, SCMD_EXAMINE);
     else
-      do_examine(ch, arg, 0, SCMD_EXAMINE);
+      do_examine(ch, argument, 0, SCMD_EXAMINE);
     /* else if (is_abbrev(arg, "at"))
-      look_at_target(ch, arg2);
+      look_at_target(ch, remainder); // todo split remainder again to get token
     else
       look_at_target(ch, arg);
       */
@@ -4105,14 +4092,17 @@ ACMD(do_examine)
   struct char_data *tmp_char;
   struct obj_data *tmp_object;
   struct veh_data *found_veh = NULL;
-  one_argument(argument, arg);
+  
+  char *remainder = any_one_arg(argument, arg);
 
   if (!*arg) {
     send_to_char("Examine what?\r\n", ch);
     return;
   }
-  if (subcmd == SCMD_EXAMINE)
-    look_at_target(ch, arg);
+  if (subcmd == SCMD_EXAMINE) {
+    skip_spaces(&remainder);
+    look_at_target(ch, arg, remainder);
+  }
 
   if (!ch->in_veh || (ch->in_veh && !ch->vfront))
     found_veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
@@ -5990,11 +5980,11 @@ ACMD(do_who)
       }
 
       if (GET_TKE(tch) <= NEWBIE_KARMA_THRESHOLD && !IS_SENATOR(tch) && !IS_PRESTIGE_CH(tch)) {
-        strlcat(buf1, " ^y(Newbie)^n", sizeof(buf1));
+        strlcat(buf1, GET_TITLE(tch) ? " ^y(Newbie)^n" : "^y(Newbie)^n", sizeof(buf1));
       }
 
       if (AFF_FLAGS(tch).AreAnySet(BR_TASK_AFF_FLAGS, ENDBIT))
-        strlcat(buf1, " (B/R)", sizeof(buf1));
+        strlcat(buf1, GET_TITLE(tch) ? " (B/R)" : "(B/R)", sizeof(buf1));
       if (PRF_FLAGGED(tch, PRF_AFK))
         strlcat(buf1, " (AFK)", sizeof(buf1));
       if (PLR_FLAGGED(tch, PLR_RPE) && (level > LVL_MORTAL || PLR_FLAGGED(ch, PLR_RPE)))
@@ -6093,6 +6083,7 @@ ACMD(do_who)
   if (subcmd) {
     convert_and_write_string_to_file(buf2, "text/wholist");
     write_gsgp_file(num_can_see, "text/gsgp");
+    MSSPSetPlayers(num_can_see);
   } else send_to_char(buf2, ch);
 }
 
@@ -6113,6 +6104,10 @@ ACMD(do_users)
   host_search[0] = name_search[0] = '\0';
 
   std::unordered_map< std::string, std::vector<std::string> > host_map = {};
+
+#ifndef IS_BUILDPORT
+  mudlog_vfprintf(ch, LOG_WIZLOG, "%s looking up user list with args '%s'", GET_CHAR_NAME(ch), argument);
+#endif
 
   strlcpy(buf, argument, sizeof(buf));
   while (*buf) {
@@ -6463,6 +6458,9 @@ void perform_immort_where(struct char_data * ch, char *arg)
 
   if (!*arg)
   {
+#ifndef IS_BUILDPORT
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s queried locations of all players.", GET_CHAR_NAME(ch));
+#endif
     strlcpy(buf, "Players\r\n-------\r\n", sizeof(buf));
     for (d = descriptor_list; d; d = d->next)
       if (!d->connected) {
@@ -6495,6 +6493,10 @@ void perform_immort_where(struct char_data * ch, char *arg)
     page_string(ch->desc, buf, 1);
     return;
   }
+
+#ifndef IS_BUILDPORT
+  mudlog_vfprintf(ch, LOG_WIZLOG, "%s queried locations of anything with keyword '%s'.", GET_CHAR_NAME(ch), arg);
+#endif
 
   // Location version of the command (where <keyword>)
   *buf = '\0';
@@ -7332,6 +7334,10 @@ ACMD(do_status)
       targ = get_char_vis(ch, argument);
     if (!targ)
       targ = ch;
+
+    if (targ != ch) {
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s viewing status/affects for %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(targ));
+    }
   }
 
   char aff_buf[10000] = { '\0' };

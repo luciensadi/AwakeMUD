@@ -72,7 +72,7 @@ void write_zone_to_disk(int vnum)
   // write it out!
   fprintf(fp, "#%d\n", vnum);
   fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, ZONE.name));
-  fprintf(fp, "%d %d %d %d %d %d %d %d %d %d\n", ZONE.top, ZONE.lifespan, ZONE.reset_mode, ZONE.security, ZONE.connected, ZONE.jurisdiction, ZONE.is_pghq, ZONE.locked_to_non_editors, ZONE.default_aura_type, ZONE.default_aura_force);
+  fprintf(fp, "%d %d %d %d %d %d %d %d %d %d %d\n", ZONE.top, ZONE.lifespan, ZONE.reset_mode, ZONE.security, ZONE.editing_restricted_to_admin, ZONE.approved, ZONE.jurisdiction, ZONE.is_pghq, ZONE.locked_to_non_editors, ZONE.default_aura_type, ZONE.default_aura_force);
   fprintf(fp, "%d %d %d %d %d\n", ZONE.editor_ids[0], ZONE.editor_ids[1],
           ZONE.editor_ids[2], ZONE.editor_ids[3], ZONE.editor_ids[4]);
   for (i = 0; i < ZONE.num_cmds; ++i) {
@@ -210,6 +210,31 @@ void zedit_disp_state_menu(struct descriptor_data *d)
                "^G0^Y) ^WQuit\r\n^wEnter a selection: ", CH);
 }
 
+const char *render_zone_editor_ids(struct zone_data *zon, char *string_to_write_to, size_t str_sz) {
+  string_to_write_to[0] = '\0';
+
+  for (int i = 0; i <= 4; i++) {
+    if (zon->editor_ids[i] > 0) {
+      const char *plr_name = get_player_name(zon->editor_ids[i]);
+
+      if (plr_name) {
+        snprintf(ENDOF(string_to_write_to), str_sz - strlen(string_to_write_to), "%s^c%s ^n(^c%d^n)",
+                 *string_to_write_to ? ", ": "",
+                 plr_name,
+                 zon->editor_ids[i]);
+      }
+
+      delete [] plr_name;
+    }
+  }
+
+  if (!*string_to_write_to) {
+    strlcpy(string_to_write_to, "nobody", str_sz);
+  }
+
+  return string_to_write_to;
+}
+
 void zedit_disp_data_menu(struct descriptor_data *d)
 {
   CLS(CH);
@@ -221,28 +246,11 @@ void zedit_disp_data_menu(struct descriptor_data *d)
   send_to_char(CH, "^G5^Y) ^WSecurity level (1-%d): ^c%d^n\r\n", MAX_ZONE_SECURITY_RATING, ZON->security );
   send_to_char(CH, "^G6^Y) ^WJurisdiction: ^c%s^n\r\n", jurisdictions[ZON->jurisdiction]);
   if (access_level(CH, LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS)) {
-    send_to_char("^G7^Y) ^WEditors: ", CH);
-    bool printed_something = FALSE;
-    for (int i = 0; i <= 4; i++) {
-      if (ZON->editor_ids[i] > 0) {
-        const char *plr_name = get_player_name(ZON->editor_ids[i]);
-        if (plr_name && str_cmp(plr_name, CHARACTER_DELETED_NAME_FOR_SQL)) {
-          send_to_char(CH, "%s^c%s ^n(^c%ld^n)", printed_something ? ", ": "", plr_name, ZON->editor_ids[i]);
-          printed_something = TRUE;
-        } else {
-          ZON->editor_ids[i] = 0;
-        }
-        delete [] plr_name;
-      }
-    }
-    if (!printed_something) {
-      send_to_char("^cNobody.^n\r\n", CH);
-    } else {
-      send_to_char("\r\n", CH);
-    }
+    send_to_char(CH, "^G7^Y) ^WEditors: %s\r\n", render_zone_editor_ids(ZON, buf, sizeof(buf)));
   }
   if (access_level(CH, LVL_FOR_SETTING_ZONE_CONNECTED_STATUS)) {
-    send_to_char(CH, "^G8^Y) ^WConnected: ^c%d^n\r\n", ZON->connected);
+    send_to_char(CH, "^G8^Y) ^WEditing Restricted to 9+: ^c%s^n\r\n", ZON->editing_restricted_to_admin ? "yes" : "no");
+    send_to_char(CH, "^GA^Y) ^WApproved for Player Use: ^c%s^n\r\n", ZON->approved ? "yes" : "no");
   }
   send_to_char(CH, "^G9^Y) ^WIs PGHQ: ^c%s^n\r\n", ZON->is_pghq ? "yes" : "no");
   send_to_char(CH, "^GD^Y) ^WDefault Background Count: ^c");
@@ -783,8 +791,17 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
         send_to_char("That's not a valid choice.\r\n", CH);
         return;
       }
-      send_to_char("Zone is connected (1 - yes, 0 - no): ", CH);
-      d->edit_mode = ZEDIT_CONNECTED;
+      send_to_char("Zone is restricted to editors level 9 or higher (1 - yes, 0 - no): ", CH);
+      d->edit_mode = ZEDIT_RESTRICTED_EDIT;
+      break;
+    case 'a':
+    case 'A':
+      if (!access_level(CH, LVL_FOR_SETTING_ZONE_CONNECTED_STATUS)) {
+        send_to_char("That's not a valid choice.\r\n", CH);
+        return;
+      }
+      send_to_char("Zone is approved for player use (1 - yes, 0 - no): ", CH);
+      d->edit_mode = ZEDIT_APPROVED;
       break;
     case '9':
       send_to_char("Zone is a PGHQ (1 - yes, 0 - no): ", CH);
@@ -1274,18 +1291,32 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       zedit_disp_data_menu(d);
     }
     break;
-  case ZEDIT_CONNECTED:
+  case ZEDIT_APPROVED:
     number = atoi(arg);
     if (number != 0 && number != 1) {
-      send_to_char("Value must be 0 or 1!  Zone is connected: ", CH);
+      send_to_char(CH, "Value must be 0 or 1!  Zone is approved: ", CH);
       return;
     }
 
-    snprintf(buf, sizeof(buf), "%s set zone %d to connected %d (was %d)",
-            GET_CHAR_NAME( CH ), ZON->number, number, ZON->connected );
-    mudlog(buf, CH, LOG_WIZLOG, TRUE);
+    if (ZON->approved != number) {
+      mudlog_vfprintf(CH, LOG_WIZLOG, "%s marked zone %d as %s.", GET_CHAR_NAME(CH), ZON->number, number ? "approved for players" : "unapproved");
+      ZON->approved = number;
+    }
 
-    ZON->connected = number;
+    zedit_disp_data_menu(d);
+    break;
+  case ZEDIT_RESTRICTED_EDIT:
+    number = atoi(arg);
+    if (number != 0 && number != 1) {
+      send_to_char(CH, "Value must be 0 or 1!  Zone is restricted to only being edited by staff level 9+: ", CH);
+      return;
+    }
+
+    if (ZON->editing_restricted_to_admin != number) {
+      mudlog_vfprintf(CH, LOG_WIZLOG, "%s marked zone %d as %s.", GET_CHAR_NAME(CH), ZON->number, number ? "edit-restricted (9+ only)" : "open to editing");
+      ZON->editing_restricted_to_admin = number;
+    }
+
     zedit_disp_data_menu(d);
     break;
   case ZEDIT_TOP_OF_ZONE:

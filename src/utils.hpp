@@ -192,6 +192,7 @@ struct room_data *get_jurisdiction_docwagon_room(int jurisdiction);
 struct room_data *get_jurisdiction_garage_room(int jurisdiction);
 void   set_dropped_by_info(struct obj_data *obj, struct char_data *ch);
 bool   restore_to_full_health_if_still_in_chargen(struct char_data *victim);
+char * format_for_logging__returns_new(const char *input);
 
 // RCD subscription functions.
 bool   add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller, bool ignore_veh_sub_marker, bool mute_duplication_alarm=FALSE);
@@ -749,6 +750,12 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_EQ(ch, i)         ((ch)->equipment[i])
 
 #define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS) || ((skill) == SKILL_MANDARIN || (skill) == SKILL_HAITIAN_CREOLE))
+#define SKILL_IS_DECKING(skill) ((skill) == SKILL_CYBERTERM_DESIGN || (skill) == SKILL_COMPUTER || (skill) == SKILL_BR_COMPUTER || (skill) == SKILL_BR_ELECTRONICS || ((skill) >= SKILL_PROGRAM_COMBAT && (skill) <= SKILL_PROGRAM_CYBERTERM) || (skill) == SKILL_DATA_BROKERAGE)
+#define SKILL_IS_MAGICAL(skill) ((skill) == SKILL_SPELLDESIGN || (skills[skill].requires_magic && !(skills[skill].is_nerps)))
+#define SKILL_IS_VEHICLE_RELATED(skill) ((skill) == SKILL_PILOT_BIKE || ((skill) >= SKILL_PILOT_CAR && (skill) <= SKILL_BR_TRUCK) || ((skill) >= SKILL_PILOT_ROTORCRAFT && (skill) <= SKILL_PILOT_VECTORTHRUST) || ((skill) >= SKILL_BR_FIXEDWING && (skill) <= SKILL_PILOT_WALKER))
+#define SKILL_IS_NERPS(skill) (skills[skill].is_nerps)
+#define SKILL_IS_SOCIAL(skill) ((skill) == SKILL_NEGOTIATION || ((skill) >= SKILL_CORPORATE_ETIQUETTE && (skill) <= SKILL_ELF_ETIQUETTE))
+#define SKILL_IS_COMBAT(skill) (!skills[skill].is_nerps && (((skill) != SKILL_CENTERING && (skill) != SKILL_SPELLDESIGN && (skill) >= SKILL_ARMED_COMBAT && (skill) <= SKILL_ORALSTRIKE) || ((skill) >= SKILL_OFFHAND_EDGED && (skill) <= SKILL_OFFHAND_WHIP) || (skill) == SKILL_GUNNERY))
 
 #define GET_SKILL_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_SKILLS])
 #define GET_ADEPT_POWER_DIRTY_BIT(ch)   ((ch)->char_specials.dirty_bits[DIRTY_BIT_POWERS])

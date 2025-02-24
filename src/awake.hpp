@@ -373,7 +373,7 @@ enum {
 #define MOB_SENTINEL             1  /* Mob should not move                    */
 #define MOB_SCAVENGER            2  /* Mob picks up stuff on the ground       */
 #define MOB_ISNPC                3  /* (R) Automatically set on all Mobs      */
-// unused, must remove, was aware  4
+// unused, must remove, was aware  4, also touch db.cpp mob_flag_map
 #define MOB_AGGRESSIVE           5  /* Mob hits players in the room           */
 #define MOB_STAY_ZONE            6  /* Mob shouldn't wander out of zone       */
 #define MOB_WIMPY                7  /* Mob flees if severely injured          */
@@ -386,19 +386,19 @@ enum {
 #define MOB_DUAL_NATURE          14 /* mob is dual-natured                    */
 #define MOB_IMMEXPLODE           15 /* mob is immune to explosions            */
 #define MOB_AGGR_TROLL           16 /* auto attack troll PC's                 */
-// unused, must remove, was noblind  17
+// unused, must remove, was noblind  17, also touch db.cpp mob_flag_map
 #define MOB_ASTRAL               18 /* Mob is solely in the astral plane      */
 #define MOB_GUARD                19 /* mob carries out security               */
 #define MOB_AGGR_HUMAN           20 /* auto attack human PC's                 */
 #define MOB_SNIPER               21 /* mob searches area for PCs              */
-// unused, must remove, was private  22
-// unused, must remove, was track    23
+// unused, must remove, was private  22, also touch db.cpp mob_flag_map
+// unused, must remove, was track    23, also touch db.cpp mob_flag_map
 #define MOB_FLAMEAURA            24
 #define MOB_SPIRITGUARD          25
 #define MOB_STUDY                26 /* Saeder Krupp*/
 #define MOB_AIDSORCERY           27
-// unused, must remove, was aztech   28
-// unused, must remove, was renraku  29
+// unused, must remove, was aztech   28, also touch db.cpp mob_flag_map
+// unused, must remove, was renraku  29, also touch db.cpp mob_flag_map
 #define MOB_NOKILL               30 /* Unkillable mob */
 #define MOB_TOTALINVIS           31 // can only be seen by staff
 #define MOB_INANIMATE            32 // no flesh or blood
@@ -426,8 +426,8 @@ enum {
 #define PRF_PKER                               11 /* is able to pk/be pked        */
 #define PRF_HIRED                              12 /* Participating in a prun */
 #define PRF_AFK                                13 /* Afk   */
-#define PRF_SUPPRESS_STAFF_RADIO               14 /* EMPTY SPACE, FILL ME! */
-#define PRF_UNUSED2_PLS_REPLACE                15 /* EMPTY SPACE, FILL ME!        15 */
+#define PRF_SUPPRESS_STAFF_RADIO               14 /* Ignore staff radio. */
+#define PRF_NOTRAFFIC                          15 /* Ignore traffic messages. */
 #define PRF_NOHASSLE                           16 /* Aggr mobs won't attack  */
 #define PRF_ROOMFLAGS                          17 /* Can see room flags (ROOM_x) */
 #define PRF_HOLYLIGHT                          18 /* Can see in dark   */
@@ -631,18 +631,18 @@ enum {
 #define ROOM_INDOORS                    3   /* Indoors                   */
 #define ROOM_PEACEFUL                   4   /* Violence not allowed      */
 #define ROOM_SOUNDPROOF                 5   /* Shouts, gossip blocked    */
-// UNUSED SLOT         was notrack, you need to clear it
+// UNUSED SLOT         was notrack, you need to clear it, also touch db.cpp room_flag_map
 #define ROOM_NOMAGIC                    7   /* Magic not allowed         */
 #define ROOM_TUNNEL                     8   /* room for only 1 pers      */
 #define ROOM_ARENA                      9   /* Can't teleport in         */
 #define ROOM_STREETLIGHTS               10  /* Room has a streetlight    */
-// UNUSED SLOT         was house, you need to clear it
+// UNUSED SLOT         was house, you need to clear it, also touch db.cpp room_flag_map
 #define ROOM_NO_DROP                    12  /* You can't drop things here. */
-// UNUSED SLOT         was (unused), need to clear it
-// UNUSED SLOT         ok, no clear necessary
+// UNUSED SLOT         was (unused), need to clear it, also touch db.cpp room_flag_map
+// UNUSED SLOT         ok, no clear necessary, also touch db.cpp room_flag_map
 #define ROOM_BFS_MARK                   15  /* (R) breadth-first srch mrk */
 #define ROOM_LOW_LIGHT                  16  /* Sets room light level to lowlight levels on boot */
-// UNUSED SLOT         was !used
+// UNUSED SLOT         was !used, also touch db.cpp room_flag_map
 #define ROOM_NO_RADIO                   18  /* Radio is sketchy and phones dont work */
 #define ROOM_NOBIKE                     19  // Room blocks bikes from passing through it.
 #define ROOM_FREEWAY                    20  /* Room cannot be walked across. */
@@ -651,8 +651,8 @@ enum {
 #define ROOM_GARAGE                     23  // Room stores cars.
 #define ROOM_STAFF_ONLY                 24  // Room does not allow mortals to walk into it.
 #define ROOM_NOQUIT                     25  // Room does not allow quitting in it.
-// UNUSED SLOT         ok, no clear necessary
-// UNUSED SLOT         ok, no clear necessary
+// UNUSED SLOT         ok, no clear necessary, also touch db.cpp room_flag_map
+// UNUSED SLOT         ok, no clear necessary, also touch db.cpp room_flag_map
 #define ROOM_NOGRID                     28 // Room blocks gridguide.
 #define ROOM_STORAGE                    29 // Room stores items dropped in it.
 #define ROOM_NO_TRAFFIC                 30 // Prevents display of traffic atmospheric messages.
@@ -971,7 +971,7 @@ enum {
 #define SKILL_AURA_READING           55
 #define SKILL_STEALTH                56
 // unused
-#define SKILL_TRACK                  58
+// unused
 #define SKILL_UNUSED_WAS_CLIMBING    59
 #define SKILL_PILOT_BIKE             60
 #define SKILL_UNUSED_WAS_PILOT_FIXED_WING   61
@@ -1395,8 +1395,8 @@ enum {
 #define ITEM_EXTRA_HUM                1     /* Item is humming              */
 #define ITEM_EXTRA_NORENT             2     /* Item cannot be rented        */
 #define ITEM_EXTRA_NODONATE           3     /* Item cannot be donated       */
-// unused, must remove, was !invis    4
-// unused, must remove, was invisible 5
+// unused, must remove, was !invis    4, also touch db.cpp item_extra_flag_map
+// unused, must remove, was invisible 5, also touch db.cpp item_extra_flag_map
 #define ITEM_EXTRA_MAGIC              6     /* Item is magical              */
 #define ITEM_EXTRA_NODROP             7     /* Item is cursed: can't drop   */
 #define ITEM_EXTRA_FORMFIT            8     /* Item is blessed              */
@@ -1405,7 +1405,7 @@ enum {
 #define ITEM_EXTRA_STAFF_ONLY         11    /* Only a god may use this item */
 #define ITEM_EXTRA_TWOHANDS           12    /* weapon takes 2 hands to use */
 #define ITEM_EXTRA_COMPBURST          13    /* Weapon requires complex action to use burst fire */
-// unused, must remove, was volatile  14
+// unused, must remove, was volatile  14, also touch db.cpp item_extra_flag_map
 #define ITEM_EXTRA_WIZLOAD            15    /* item was loaded by an immortal */
 #define ITEM_EXTRA_NOTROLL            16
 #define ITEM_EXTRA_NOELF              17
@@ -1413,7 +1413,7 @@ enum {
 #define ITEM_EXTRA_NOORK              19
 #define ITEM_EXTRA_NOHUMAN            20
 #define ITEM_EXTRA_SNIPER             21
-// #define ITEM_EXTRA_IMMLOAD            22  not currently used, BUT reserved since many items have this set.
+// #define ITEM_EXTRA_IMMLOAD            22  not currently used, BUT reserved since many items have this set., also touch db.cpp item_extra_flag_map
 #define ITEM_EXTRA_NERPS              23    /* Item does not actually have any coded effect. */
 #define ITEM_EXTRA_BLOCKS_ARMOR       24    // Can't wear other armors with this.
 #define ITEM_EXTRA_HARDENED_ARMOR     25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
@@ -2307,9 +2307,11 @@ enum {
 #define CON_ART_CREATE          52
 #define CON_ACCOUNT_PARSE       53
 #define CON_FACTION_EDIT        54
-#define CON_CF_CREATE           55
-#define CON_SUBMERSION          56
-#define CON_MAX                 56
+#define CON_PC_EXDESC_EDIT      55
+#define CON_PET_CREATE          56
+#define CON_CF_CREATE           57
+#define CON_SUBMERSION          58
+#define CON_MAX                 58
 #define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
@@ -2621,6 +2623,7 @@ enum {
 #define OBJ_SEATTLE_TAXI_SIGN              600
 #define OBJ_PORTLAND_TAXI_SIGN             699
 #define OBJ_CARIBBEAN_TAXI_SIGN            610
+#define OBJ_CAS_TAXI_SIGN                  101600
 #define OBJ_SPECIAL_PC_CORPSE              43
 #define OBJ_COLT_M23                       838
 #define OBJ_NICAMI_SCOPE                   28702
@@ -2751,10 +2754,12 @@ enum {
 #define OBJ_TRANSYS_SCRIBE                 1141
 #define OBJ_TRANSYS_RIFFLE                 1140
 #define OBJ_RENRAKU_BYPASS                 6109
-#define OBJ_FOXFIRE_KITSUNE                1966
+#define OBJ_FOXFIRE_KITSUNE_ANALYZE        1966
+#define OBJ_FOXFIRE_KITSUNE_DECRYPT        1967
 #define OBJ_TRANSYS_ARMOR                  1139
 #define OBJ_MATRIX_SWORD                   387
 #define OBJ_NOVATECH_R5_SLEAZE             1160
+#define OBJ_NOVATECH_R5_ARMOR              1162
 
 #ifdef USE_PRIVATE_CE_WORLD
 #define OBJ_CYB_CERAMIC_BONE_LACING        85066

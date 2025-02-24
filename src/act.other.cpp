@@ -15,6 +15,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <algorithm>
 
 #include "structs.hpp"
 #include "utils.hpp"
@@ -761,10 +762,10 @@ ACMD(do_use)
     if (do_drug_take(ch, obj))
       return;
   } else if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == anticoagulant) {
-    for (struct obj_data *cyber = ch->bioware; cyber; cyber = cyber->next_content) {
-      if (GET_OBJ_VAL(cyber, 0) == BIO_PLATELETFACTORY) {
-        GET_OBJ_VAL(cyber, 5) = 36;
-        GET_OBJ_VAL(cyber, 6) = 0;
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+      if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY) {
+        GET_BIOWARE_PLATELETFACTORY_DATA(bio) = 36;
+        GET_BIOWARE_PLATELETFACTORY_DIFFICULTY(bio) = 0;
         break;
       }
     }
@@ -1161,8 +1162,8 @@ const char *tog_messages[][2] = {
                              "You will now display your playergroup affiliation in the wholist.\r\n"},
                             {"You will no longer receive the keepalive pulses from the MUD.\r\n",
                              "You will now receive keepalive pulses from the MUD.\r\n"},
-                            {"Screenreader mode disabled. Your TOGGLE NOCOLOR, TOGGLE NOPROMPT, and TOGGLE NOPSEUDOLANGUAGE settings have not been altered.\r\n",
-                             "Screenreader mode enabled. Extraneous text will be reduced. Color, prompts, and pseudolanguage strings have been disabled for you, you may TOGGLE NOCOLOR, TOGGLE NOPROMPT, and TOGGLE NOPSEUDOLANGUAGE respectively to restore them.\r\n"},
+                            {"Screenreader mode disabled. Your TOGGLE NOCOLOR, TOGGLE NOPROMPT, TOGGLE NOPSEUDOLANGUAGE, and TOGGLE NOTRAFFIC settings have not been altered.\r\n",
+                             "Screenreader mode enabled. Extraneous text will be reduced. Color, prompts, pseudolanguage strings, and traffic ambiance messages have been disabled for you, you may TOGGLE NOCOLOR, TOGGLE NOPROMPT, TOGGLE NOPSEUDOLANGUAGE, and TOGGLE NOTRAFFIC respectively to restore them.\r\n"},
                             {"You will now receive ANSI color codes again.\r\n",
                              "You will no longer receive ANSI color codes.\r\n"},
                             {"You will now receive prompts.\r\n",
@@ -1206,7 +1207,9 @@ const char *tog_messages[][2] = {
                             {"You will now see your prompt displayed when you change it.\r\n",
                              "OK, your prompt will no longer display when you change it.\r\n"},
                             {"You will now participate in combat again.\r\n",
-                             "OK, you will no longer be able to initiate combat or fight back.\r\n"}
+                             "OK, you will no longer be able to initiate combat or fight back.\r\n"},
+                            {"You will now see ambiance messages and environmental echoes about traffic.\r\n",
+                             "You will no longer see ambiance messages and environmental echoes about traffic.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1226,9 +1229,9 @@ ACMD(do_toggle)
       int printed = 0;
     for (int i = 0; i < PRF_MAX; i++) {
       // Skip the unused holes in our preferences.
-      if (i == PRF_UNUSED2_PLS_REPLACE) {
+/*    if (i == PRF_UNUSED2_PLS_REPLACE) {
         continue;
-      }
+      }*/
 
       // Skip the things that morts should not see.
       if (!IS_SENATOR(ch) && preference_bits_v2[i].staff_only) {
@@ -1409,6 +1412,7 @@ ACMD(do_toggle)
         PRF_FLAGS(ch).SetBit(PRF_NOCOLOR);
         PRF_FLAGS(ch).SetBit(PRF_NOPROMPT);
         PRF_FLAGS(ch).SetBit(PRF_NOPSEUDOLANGUAGE);
+        PRF_FLAGS(ch).SetBit(PRF_NOTRAFFIC);
       }
       mode = 29;
     } else if (is_abbrev(argument, "nocolors") || is_abbrev(argument, "colors") || is_abbrev(argument, "colours")) {
@@ -1493,6 +1497,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "passive combat")) {
       result = PRF_TOG_CHK(ch, PRF_PASSIVE_IN_COMBAT);
       mode = 51;
+    } else if (is_abbrev(argument, "traffic") || is_abbrev(argument, "notraffic") || is_abbrev(argument, "no traffic")) {
+      result = PRF_TOG_CHK(ch, PRF_NOTRAFFIC);
+      mode = 52;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -1522,57 +1529,109 @@ ACMD(do_slowns)
     send_to_char("Nameserver_is_slow changed to NO; IP addresses will now be resolved.\r\n", ch);
 }
 
+#define _SKILL_MODE_GENERAL 0
+#define _SKILL_MODE_COMBAT 1
+#define _SKILL_MODE_SOCIAL 2
+#define _SKILL_MODE_VEHICLE_RELATED 3
+#define _SKILL_MODE_DECKING 4
+#define _SKILL_MODE_MAGICAL 5
+#define _SKILL_MODE_LANGUAGES 6
+#define _SKILL_MODE_NERPS 7
+#define _NUM_SKILL_MODES 8
+
+const char *_skill_modes[] = {
+  "general skills",
+  "combat skills",
+  "social skills",
+  "vehicle-related skills",
+  "decking skills",
+  "magical skills",
+  "languages",
+  "non-implemented (NERP) skills"
+};
+
+void _send_alphabetized_skills_to_ch(struct char_data *ch, const char *arg, int mode) {
+  std::vector<std::string> vec;
+
+  // Pull all their skills into a vector. This function catgeorizes them for better display.
+  for (int i = MIN_SKILLS; i < MAX_SKILLS; i++) {
+    switch (mode) {
+      case _SKILL_MODE_GENERAL:
+        if (SKILL_IS_LANGUAGE(i) || SKILL_IS_VEHICLE_RELATED(i) || SKILL_IS_DECKING(i) || SKILL_IS_MAGICAL(i) || SKILL_IS_NERPS(i) || SKILL_IS_COMBAT(i) || SKILL_IS_SOCIAL(i))
+          continue;
+        break;
+      case _SKILL_MODE_VEHICLE_RELATED:
+        if (!SKILL_IS_VEHICLE_RELATED(i))
+          continue;
+        break;
+      case _SKILL_MODE_COMBAT:
+        if (!SKILL_IS_COMBAT(i))
+          continue;
+        break;
+      case _SKILL_MODE_DECKING:
+        if (!SKILL_IS_DECKING(i))
+          continue;
+        break;
+      case _SKILL_MODE_MAGICAL:
+        if (!SKILL_IS_MAGICAL(i))
+          continue;
+        break;
+      case _SKILL_MODE_LANGUAGES:
+        if (!SKILL_IS_LANGUAGE(i))
+          continue;
+        break;
+      case _SKILL_MODE_NERPS:
+        if (!SKILL_IS_NERPS(i))
+          continue;
+        break;
+      case _SKILL_MODE_SOCIAL:
+        if (!SKILL_IS_SOCIAL(i))
+          continue;
+        break;
+    }
+
+    if (*arg && !is_abbrev(arg, skills[i].name))
+      continue;
+
+    if ((GET_SKILL(ch, i)) > 0) {
+      snprintf(buf2, sizeof(buf2), "%-40s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
+      vec.push_back(std::string(buf2));
+    }
+  }
+
+  // Only print if they have skills in this category.
+  if (!vec.empty()) {
+    std::sort(vec.begin(), vec.end());
+
+    if (*arg) {
+      send_to_char(ch, "%sYou know the following ^c%s^n that start with '%s':\r\n", mode ? "\r\n" : "", _skill_modes[mode], arg);
+    } else {
+      send_to_char(ch, "%sYou know the following ^c%s^n:\r\n", mode ? "\r\n" : "", _skill_modes[mode]);
+    }
+
+    for (auto str : vec) {
+      send_to_char(str.c_str(), ch);
+    }
+  }
+}
+
 /* Assumes that *argument does start with first letter of chopped string */
 ACMD(do_skills)
 {
-  int i;
-  bool mode_all = FALSE;
-
   one_argument(argument, arg);
 
-  if (!*arg) {
-    snprintf(buf, sizeof(buf), "You know the following %s:\r\n", subcmd == SCMD_SKILLS ? "skills" : "abilities");
-    mode_all = TRUE;
-  } else {
-    snprintf(buf, sizeof(buf), "You know the following %s that start with '%s':\r\n", subcmd == SCMD_SKILLS ? "skills" : "abilities", arg);
-    mode_all = FALSE;
-  }
-
   if (subcmd == SCMD_SKILLS) {
-    // Append skills.
-    for (i = MIN_SKILLS; i < MAX_SKILLS; i++) {
-      if (SKILL_IS_LANGUAGE(i))
-        continue;
-
-      if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
-        continue;
-
-      if ((GET_SKILL(ch, i)) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-40s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
-        strlcat(buf, buf2, sizeof(buf));
-      }
+    // Send skills from each mode.
+    for (int mode_idx = 0; mode_idx < _NUM_SKILL_MODES; mode_idx++) {
+      _send_alphabetized_skills_to_ch(ch, arg, mode_idx);
     }
-
-    // Append languages.
-    if (!*arg)
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n\r\nYou know the following languages:\r\n");
-    else
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n\r\nYou know the following languages that start with '%s':\r\n", arg);
-
-    for (i = SKILL_ENGLISH; i < MAX_SKILLS; i++) {
-      if (!SKILL_IS_LANGUAGE(i))
-        continue;
-
-      if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
-        continue;
-
-      if ((GET_SKILL(ch, i)) > 0) {
-        snprintf(buf2, sizeof(buf2), "%-40s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
-        strlcat(buf, buf2, sizeof(buf));
-      }
-    }
-    send_to_char(buf, ch);
   } else if (subcmd == SCMD_ABILITIES) {
+    if (*arg) {
+      send_to_char(ch, "You know the following abilities that start with '%s':\r\n", arg);
+    } else {
+      send_to_char(ch, "You know the following abilities:\r\n");
+    }
+    
     render_targets_abilities_to_viewer(ch, ch);
   } else {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown subcmd %d to do_skills!", subcmd);
@@ -1867,11 +1926,23 @@ ACMD(do_eject)
                       "%s is loaded with special ammo that isn't ready for players to collect yet.", CAP(GET_OBJ_NAME(weapon)));
 
   // Strip out the ammo and put it in your bullet pants, then destroy the mag.
+  int had_rounds = GET_MAGAZINE_AMMO_COUNT(magazine);
   update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), GET_MAGAZINE_AMMO_COUNT(magazine));
   obj_from_obj(magazine);
   extract_obj(magazine);
-  act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
-  act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+  magazine = NULL;
+  if (GET_WEAPON_MAX_AMMO(weapon) == 1 && GET_WEAPON_FIREMODE(weapon) == MODE_SS) {
+    if (had_rounds > 0) {
+      act("$n locks back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+      act("You lock back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+    } else {
+      act("$n locks back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+      act("You lock back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+    }
+  } else {
+    act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+    act("You eject and pocket a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+  }
 
   // Ejecting a magazine costs a simple action.
   GET_INIT_ROLL(ch) -= 5;
@@ -2548,6 +2619,8 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
 
         d->edit_mob->in_room = error_suppressor;
       }
+
+      send_to_char(CH, "A) Optional Extra Descriptions (^c%d^n/^c%d^n set)\r\n", GET_CHAR_EXDESCS(d->edit_mob).size(), GET_CHAR_MAX_EXDESCS(CH));
     }
   }
   if (mode)
@@ -2573,7 +2646,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     case 'y':
     case 'Y':
       d->edit_mob = Mem->GetCh();
-      d->edit_mob->player_specials = &dummy_mob;
+      d->edit_mob->player_specials = new player_special_data;
 
       // Copy over lifestyle-impacting information.
       GET_PRONOUNS(d->edit_mob) = GET_PRONOUNS(CH);
@@ -2593,6 +2666,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         d->edit_mob->char_specials.arrive = str_dup(CH->char_specials.arrive);
         d->edit_mob->char_specials.leave = str_dup(CH->char_specials.leave);
         set_lifestyle_string(d->edit_mob, get_lifestyle_string(CH));
+        clone_exdesc_vector_to_edit_mob_for_editing(d);
       } else if (STATE(d) == CON_PCUSTOMIZE) {
         d->edit_mob->player.physical_text.keywords =
           str_dup(CH->player.matrix_text.keywords);
@@ -2679,6 +2753,8 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
         set_lifestyle_string(CH, get_lifestyle_string(d->edit_mob));
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", lifestyle_string='%s'", prepare_quotes(buf3, get_lifestyle_string(CH), sizeof(buf3) / sizeof(buf3[0])));
+
+        overwrite_pc_exdescs_with_edit_mob_exdescs_and_then_save_to_db(d);
       } else if (STATE(d) == CON_PCUSTOMIZE) {
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.keywords);
         CH->player.matrix_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
@@ -2713,8 +2789,9 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), ", Astral_LookDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.look_desc, sizeof(buf3) / sizeof(buf3[0])));
       }
 
-      if (d->edit_mob)
+      if (d->edit_mob) {
         Mem->DeleteCh(d->edit_mob);
+      }
 
       d->edit_mob = NULL;
       d->edit_mode = 0;
@@ -2830,6 +2907,18 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       break;
     case '9':
       cedit_lifestyle_menu(d);
+      break;
+    case 'a':
+    case 'A':
+      {
+        if (GET_CHAR_MAX_EXDESCS(d->original ? d->original : d->character) <= 0) {
+          send_to_char(d->character, "You don't have the ability to set exdescs. You'll need to purchase them first, see HELP SYSPOINTS.\r\n");
+          return;
+        }
+        send_to_char("\r\nExtra descriptions are optional flair that you can add to your character's look description if desired.\r\n", CH);
+        pc_exdesc_edit_disp_main_menu(d);
+        STATE(d) = CON_PC_EXDESC_EDIT;
+      }
       break;
     default:
       cedit_disp_menu(d, 0);
@@ -3401,6 +3490,8 @@ ACMD(do_assense)
   struct char_data *vict;
   struct obj_data *obj;
   struct remem *mem;
+  std::unordered_map<idnum_t, int>::const_iterator assense_recency_entry;
+
   if (!*argument) {
     send_to_char(ch, "Who's aura do you wish to assense?\r\n");
     return;
@@ -3413,7 +3504,21 @@ ACMD(do_assense)
     send_to_char(ch, "You don't see them here.\r\n");
     return;
   }
+
   int skill = GET_INT(ch), target = 4;
+
+  // Check to see if we've hit our max tries. If we haven't, multiply the existing tries by 2 and add that to TN.
+  if (!IS_SENATOR(ch) && (assense_recency_entry = vict->assense_recency.find(GET_IDNUM(ch))) != vict->assense_recency.end() && assense_recency_entry->second > 0) {
+    FAILURE_CASE(assense_recency_entry->second >= GET_INT(ch), "You've assensed them too recently. Try again later.");
+
+    send_to_char("You squint harder, trying to see more than you already have...\r\n", ch);
+    target += assense_recency_entry->second * 2;
+
+    vict->assense_recency[GET_IDNUM(ch)] += 1;
+  } else {
+    vict->assense_recency[GET_IDNUM(ch)] = 1;
+  }
+
   if (GET_BACKGROUND_AURA(ch->in_room) == AURA_POWERSITE)
     skill += GET_BACKGROUND_COUNT(ch->in_room);
   else target += GET_BACKGROUND_COUNT(ch->in_room);
@@ -4723,7 +4828,7 @@ ACMD(do_cleanup)
   generic_find(argument, FIND_OBJ_ROOM, ch, &tmp_char, &target_obj);
 
   if (!target_obj) {
-    send_to_char(ch, "You don't see anything called '%s' here.\r\n", argument);
+    send_to_char(ch, "You don't see any graffiti called '%s' here.\r\n", argument);
     return;
   }
 
@@ -4751,15 +4856,23 @@ ACMD(do_cleanup)
     }
 
     // Decrement contents.
-    if ((--GET_DRINKCON_AMOUNT(cleaner)) <= 0) {
+    if ((GET_DRINKCON_AMOUNT(cleaner) -= 2) <= 0) {
       send_to_char(ch, "You spray the last of the cleaner from %s over the graffiti.\r\n", decapitalize_a_an(GET_OBJ_NAME(cleaner)));
     }
   }
 
-  send_to_char(ch, "You spend a few moments scrubbing away at %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
-  act("$n spends a few moments scrubbing away at $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
+  if (GET_OBJ_QUEST_CHAR_ID(target_obj)) {
+    send_to_char(ch, "You spend a few moments scrubbing away at %s. Community service, good for you!\r\n", GET_OBJ_NAME(target_obj));
+    act("$n spends a few moments scrubbing away at $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
 
-  WAIT_STATE(ch, 3 RL_SEC);
+    WAIT_STATE(ch, 1 RL_SEC);
+  } else {
+    send_to_char(ch, "You spend a few minutes scrubbing away at %s. It must have really offended you.\r\n", GET_OBJ_NAME(target_obj));
+    send_to_char(ch, "(OOC: Please remember to only clean up offensive or harmful graffiti!)\r\n");
+    act("$n spends a few minutes scrubbing away at $p.", TRUE, ch, target_obj, NULL, TO_ROOM);
+
+    WAIT_STATE(ch, 6 RL_SEC);
+  }
 
   // Log it, but only if it's player-generated content.
   if (GET_OBJ_VNUM(target_obj) == OBJ_DYNAMIC_GRAFFITI) {
@@ -4855,16 +4968,19 @@ ACMD(do_syspoints) {
   // Morts can only view their own system points.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
     if (!*argument) {
-      send_to_char(ch, "You have %d system point%s. See ^WHELP SYSPOINTS^n for how to use them.\r\n",
+      send_to_char(ch, "You have ^c%d^n system point%s. See ^WHELP SYSPOINTS^n for how to use them.\r\n",
                     GET_SYSTEM_POINTS(ch),
                     GET_SYSTEM_POINTS(ch) == 1 ? "" : "s"
                   );
-      send_to_char(ch, " - You %s^n purchased NODELETE.\r\n", PLR_FLAGGED(ch, PLR_NODELETE) ? "^ghave" : "^yhave not yet");
-      send_to_char(ch, " - You %s^n purchased the ability to see ROLLS output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
-      send_to_char(ch, " - You %s^n purchased the ability to see VNUMS in your prompt.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS) ? "^ghave" : "^yhave not yet");
-#ifdef PLAYER_EXDESCS
-      send_to_char(ch, " - You have purchased %d EXDESC slots.\r\n", get_purchased_exdesc_max(ch));
-#endif
+      send_to_char(ch, " - You %s^n purchased ^WNODELETE^n.\r\n", PLR_FLAGGED(ch, PLR_NODELETE) ? "^ghave" : "^yhave not yet");
+      send_to_char(ch, " - You %s^n purchased the ability to see ^WROLLS^n output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
+      send_to_char(ch, " - You %s^n purchased the ability to see ^WVNUMS^n in your prompt.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS) ? "^ghave" : "^yhave not yet");
+
+      if (GET_CHAR_MAX_EXDESCS(ch) <= 2) {
+        send_to_char(" - You ^yhave not yet^n purchased any ^WEXDESC^n slots beyond the default 2.\r\n", ch);
+      } else {
+        send_to_char(ch, " - You have purchased ^g%d^n ^WEXDESC^n slots for a total of ^g%d^n.\r\n", GET_CHAR_MAX_EXDESCS(ch) - 2, GET_CHAR_MAX_EXDESCS(ch));
+      }
       return;
     }
 
@@ -5093,14 +5209,19 @@ ACMD(do_syspoints) {
       mudlog_vfprintf(ch, LOG_GRIDLOG, "%s traded %d nuyen for one syspoint (now has %d)", GET_CHAR_NAME(ch), SYSP_NUYEN_PURCHASE_COST, GET_SYSTEM_POINTS(ch));
       playerDB.SaveChar(ch);
 
+      send_to_char(ch, "You trade %d nuyen for a syspoint, bringing your syspoint total to %d.\r\n",
+                   SYSP_NUYEN_PURCHASE_COST,
+                   GET_SYSTEM_POINTS(ch));
+
       return;
     }
 
     if (is_abbrev(arg, "analyze")) {
 #define ANALYZE_COST 2
       FAILURE_CASE_PRINTF(!*buf,
-                          "This will spend %d syspoints to tell you the min-max rep range and number of jobs available from a given Johnson.\r\nSyntax: SYSPOINTS ANALYZE <target Johnson>\r\n",
-                          ANALYZE_COST);
+                          "This will spend %d syspoint%s to tell you the min-max rep range and number of jobs available from a given Johnson.\r\nSyntax: SYSPOINTS ANALYZE <target Johnson>\r\n",
+                          ANALYZE_COST,
+                          ANALYZE_COST == 1 ? "" : "s");
 
       struct char_data *to = ch->in_veh ? get_char_veh(ch, buf, ch->in_veh) : to = get_char_room_vis(ch, buf);
 
@@ -5111,7 +5232,7 @@ ACMD(do_syspoints) {
         send_to_char(ch, "You spend %d syspoint%s.\r\n", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
         GET_SYSTEM_POINTS(ch) -= ANALYZE_COST;
       } else {
-        send_to_char(ch, "You can't afford that: SYSPOINTS ANALYZE costs %d syspoint%s.", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
+        send_to_char(ch, "You can't afford that: SYSPOINTS ANALYZE costs %d syspoint%s.\r\n", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
         return;
       }
 
@@ -5130,12 +5251,10 @@ ACMD(do_syspoints) {
 #undef ANALYZE_COST
     }
 
-#ifdef PLAYER_EXDESCS
     if (is_abbrev(arg, "exdescs") || is_abbrev(arg, "extra descriptions")) {
-      syspoints_purchase_exdescs(ch);
+      syspoints_purchase_exdescs(ch, buf, FALSE);
       return;
     }
-#endif
 
     send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
     return;

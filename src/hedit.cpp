@@ -17,7 +17,6 @@
 
 #define HOST d->edit_host
 #define NUM_OF_HOST_TYPES 6
-extern int vnum_from_non_connected_zone(int vnum);
 extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
 
 #define HT matrix[realcounter]
@@ -236,7 +235,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     case 'y':
     case 'Y': {
 #ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
-        if (!vnum_from_non_connected_zone(d->edit_number)) {
+        if (!vnum_from_non_approved_zone(d->edit_number)) {
 #else
         {
 #endif

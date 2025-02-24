@@ -349,12 +349,13 @@ extern bool is_olc_available(struct char_data *ch);
 #define ZEDIT_CONFIRM_INSERT_CMD        22
 #define ZEDIT_SECURITY                  23
 #define ZEDIT_ID_LIST                   24
-#define ZEDIT_CONNECTED                 25
 #define ZEDIT_JURISDICTIONS             26
 #define ZEDIT_PGHQ                      27
 #define ZEDIT_ARG4                      28
 #define ZEDIT_AURA_TYPE                 29
 #define ZEDIT_AURA_FORCE                30
+#define ZEDIT_RESTRICTED_EDIT           31
+#define ZEDIT_APPROVED                  32
 
 #define CEDIT_CONFIRM_EDIT        0
 #define CEDIT_MAIN_MENU           1

@@ -14,6 +14,8 @@
 #define LAST_PORTLAND_CAB     660
 #define FIRST_CARIBBEAN_CAB   640
 #define LAST_CARIBBEAN_CAB    649
+#define FIRST_CAS_CAB         101601
+#define LAST_CAS_CAB          101610
 
 #define ROOM_VNUM_IS_CAB(room) (((room) >= FIRST_SEATTLE_CAB && (room) <= LAST_SEATTLE_CAB) || ((room) >= FIRST_PORTLAND_CAB && (room) <= LAST_PORTLAND_CAB) || ((room) >= FIRST_CARIBBEAN_CAB && (room) <= LAST_CARIBBEAN_CAB))
 
@@ -47,7 +49,7 @@
 #define NUM_TAXI_DEST_TYPES                       11
 
 // Define to collapse validation logic for destinations. Input is an integer index in the destination list.
-#define DEST_IS_VALID(destination, dest_list) ((dest_list)[(destination)].enabled && !vnum_from_non_connected_zone((dest_list)[(destination)].vnum))
+#define DEST_IS_VALID(destination, dest_list) ((dest_list)[(destination)].enabled && !vnum_from_non_approved_zone((dest_list)[(destination)].vnum))
 
 bool room_is_a_taxicab(vnum_t vnum);
 

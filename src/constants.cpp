@@ -685,7 +685,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "On Quest"             , FALSE, FALSE },
   { "AFK"                  , FALSE, TRUE  },
   { "Suppress Staff Radio" , TRUE , TRUE  },
-  { "UNUSED-15"            , FALSE, TRUE  },
+  { "No Traffic"           , FALSE, TRUE  },
   { "No Hassle"            , TRUE , TRUE  },
   { "Roomflags"            , TRUE , TRUE  },
   { "Holylight"            , TRUE , TRUE  },
@@ -763,7 +763,7 @@ const char *preference_bits[] =
     "QUEST",
     "AFK",
     "STAFF_RADSUPPRESS",
-    "UNUSED-15",
+    "NOTRAFFIC",
     "NOHASSLE",
     "ROOMFLAGS",
     "HOLYLIGHT",
@@ -945,6 +945,8 @@ const char *connected_types[] =
     "Creating Art",
     "Account Editing",
     "Faction Editing",
+    "Exdesc Editing",
+    "Creating a Pet",
     "Creating Complex Form",
     "Increasing Submersion",
     "\n"
@@ -1112,7 +1114,8 @@ const char *item_types[] =
     "Destroyable",
     "Loaded Decoration",
     "Art",
-    "Complex Form",
+    "Custom Pet",
+    "Complex Form", 
     "\n"
   };
 
@@ -1149,6 +1152,40 @@ const char *wear_bits[] =
     "LAPEL",
     "\n"
   };
+
+  /* ITEM_WEAR_ (wear bitvector) */
+const char *wear_bits_for_pc_exdescs[] =
+{
+  "<invalid/take>",
+  "fingers",
+  "neck",
+  "<invalid/body>",
+  "head",
+  "legs",
+  "feet",
+  "hands",
+  "arms",
+  "<invalid/shield>",
+  "<invalid/about>",
+  "waist",
+  "wrists",
+  "<invalid/wield>",
+  "<invalid/hold>",
+  "eyes",
+  "ears",
+  "torso",
+  "back",
+  "ankles",
+  "<invalid/socks>",
+  "belly",
+  "underarms",
+  "face",
+  "thighs",
+  "pelvis",
+  "chest",
+  "<invalid/lapel>",
+  "\n"
+};
 
 /* ITEM_x (extra bits) */
 const char *extra_bits[] =
@@ -1723,11 +1760,11 @@ struct skill_data skills[] =
     {"Data Brokerage",                          INT, SKILL_TYPE_KNOWLEDGE, FALSE, FALSE,     99,  FALSE,  FALSE },
     {"Aura Reading",                            INT, SKILL_TYPE_ACTIVE,    TRUE , FALSE,     99,  FALSE,  TRUE  },
     {"Stealth",                                 QUI, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  TRUE ,  FALSE },
-    {"Steal",                                   QUI, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE },
-    {"Track",                                   INT, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE },
+    {"UNUSED - was Steal",                      QUI, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE },
+    {"UNUSED - was Track",                      INT, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE },
     {"Climbing",                                BOD, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE },
     {"Driving Motorcycles",                     REA, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  TRUE ,  FALSE },
-    {"zzzzzzzzzzzzzz",                          REA, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE }, // unused skill
+    {"UNUSED - unknown",                        REA, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE },
     {"Driving Cars",                            REA, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     10,  TRUE ,  FALSE },
     {"Driving Trucks",                          REA, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  TRUE ,  FALSE },
     {"Repairing Motorcycles",                   INT, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE },
@@ -3435,7 +3472,8 @@ const char *obj_load_reasons[] {
   "BULLETPANTS_RELOAD",
   "BULLETPANTS_MAKE_BOX",
   "FIND_OBJ_SHOP",
-  "SHOP_RECEIVE"
+  "SHOP_RECEIVE",
+  "CREATE_PET"
 };
 
 int bone_lacing_power_lookup[] = {

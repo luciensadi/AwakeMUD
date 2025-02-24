@@ -87,13 +87,17 @@ int can_move(struct char_data *ch, int dir, int extra)
       send_to_char("You step cautiously across the ice sheet, keeping yourself from falling.\r\n", ch);
     }
   }
-  // Builders are restricted to their zone.
-  if (builder_cant_go_there(ch, EXIT(ch, dir)->to_room)) {
-    send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
-    return 0;
+
+  // Prevent PCs from doing wonky things.
+  if (ch->desc) {
+    // Builders are restricted to their zone.
+    if (builder_cant_go_there(ch, EXIT(ch, dir)->to_room)) {
+      send_to_char("Sorry, as a first-level builder you're only able to move to rooms you have edit access for.\r\n", ch);
+      return 0;
+    }
+    // Everyone is restricted from edit-locked zones that aren't connected.
+    FALSE_CASE(!ch_can_bypass_edit_lock(ch, EXIT(ch, dir)->to_room), "Sorry, that zone is locked.");
   }
-  // Everyone is restricted from edit-locked zones that aren't connected.
-  FALSE_CASE(!ch_can_bypass_edit_lock(ch, EXIT(ch, dir)->to_room), "Sorry, that zone is locked.");
 
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_FREEWAY) && !IS_PROJECT(ch)) {
     if (GET_LEVEL(ch) > 1) {
@@ -122,6 +126,7 @@ int can_move(struct char_data *ch, int dir, int extra)
     send_to_char("That's private property -- no trespassing!\r\n", ch);
     return 0;
   }
+  
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch)) {
     int num_occupants = 0;
     for (struct char_data *in_room_ptr = EXIT(ch, dir)->to_room->people; in_room_ptr && num_occupants < 2; in_room_ptr = in_room_ptr->next_in_room) {
@@ -137,6 +142,7 @@ int can_move(struct char_data *ch, int dir, int extra)
       }
     }
   }
+
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && !IS_ASTRAL(ch)) {
     if (access_level(ch, LVL_BUILDER)) {
       send_to_char("You use your staff powers to bypass the cramped-space restriction.\r\n", ch);
@@ -824,7 +830,7 @@ void move_vehicle(struct char_data *ch, int dir)
   struct room_data *was_in = NULL;
   struct veh_data *veh;
   struct veh_follow *v, *nextv;
-  extern void crash_test(struct char_data *);
+  extern void crash_test(struct char_data *, bool no_driver);
   char empty_argument = '\0';
 
   RIG_VEH(ch, veh);
@@ -992,7 +998,7 @@ void move_vehicle(struct char_data *ch, int dir)
     }
     if ((get_speed(v->follower) > 80 && SECT(v->follower->in_room) == SPIRIT_CITY) || v->follower->in_room->icesheet[0] || SECT(v->follower->in_room) == SPIRIT_HEARTH)
     {
-      crash_test(pilot);
+      crash_test(pilot, FALSE);
       chkdmg(v->follower);
     }
   }
@@ -1013,7 +1019,7 @@ void move_vehicle(struct char_data *ch, int dir)
 
   if ((get_speed(veh) > 80 && SECT(veh->in_room) == SPIRIT_CITY) || veh->in_room->icesheet[0])
   {
-    crash_test(ch);
+    crash_test(ch, FALSE);
     chkdmg(veh);
     if (!veh->people)
       load_vehicle_brain(veh);
@@ -1696,7 +1702,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to enter the destroyed vehicle.\r\n", ch);
     } else {
-      send_to_char("It's too damaged to enter.\r\n", ch);
+      send_to_char(ch, "%s is too damaged to enter.\r\n", CAP(GET_VEH_NAME_NOFORMAT(found_veh)));
       return;
     }
   }
@@ -1706,14 +1712,15 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to match its speed as you board.\r\n", ch);
     } else if (IS_ASTRAL(ch)) {
-      send_to_char("You mentally latch on to the speeding vehicle and draw yourself towards it.\r\n", ch);
+      send_to_char(ch, "You mentally latch on to %s and draw yourself towards it.\r\n", GET_VEH_NAME(found_veh));
     }
     else {
-      send_to_char("It's moving too fast for you to board!\r\n", ch);
+      send_to_char(ch, "%s is moving too fast for you to board!\r\n", CAP(GET_VEH_NAME_NOFORMAT(found_veh)));
       return;
     }
   }
 
+#ifdef USE_OLD_VEHICLE_LOCKING_SYSTEM
   // Locked? Can't (unless admin)
   if ((found_veh->type != VEH_BIKE && found_veh->type != VEH_MOTORBOAT) && found_veh->locked) {
     if (access_level(ch, LVL_ADMIN)) {
@@ -1728,6 +1735,37 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       return;
     }
   }
+#else
+  // You can only enter PC-owned vehicles if you're the owner, the owner is in control, or you're staff.
+  if (found_veh->owner > 0 || found_veh->locked) {
+    bool is_staff = access_level(ch, LVL_CONSPIRATOR);
+    bool is_owner = GET_IDNUM_EVEN_IF_PROJECTING(ch) == found_veh->owner;
+    bool is_following_owner = (ch->master && GET_IDNUM(ch->master) == found_veh->owner && AFF_FLAGGED(ch, AFF_GROUP)); // todo: make this grouped with (owner can follow you)
+    bool owner_is_remote_rigging = found_veh->rigger && GET_IDNUM(found_veh->rigger);
+    bool owner_is_driving = FALSE;
+
+    for (struct char_data *occupant = found_veh->people; occupant; occupant = occupant->next_in_veh) {
+      if (GET_IDNUM(occupant) > 0 && GET_IDNUM(occupant) == found_veh->owner) {
+        owner_is_driving = AFF_FLAGGED(occupant, AFF_PILOT) || AFF_FLAGGED(occupant, AFF_RIG);
+        break;
+      }
+    }
+
+    if (!is_owner && !is_following_owner && (found_veh->locked || (!owner_is_remote_rigging && !owner_is_driving))) {
+      if (is_staff) {
+        send_to_char("You staff-override the fact that the owner isn't explicitly letting you in.\r\n", ch);
+      } else {
+        // This error message kinda sucks to write.
+        if (!ch->master || GET_IDNUM(ch->master) != found_veh->owner) {
+          send_to_char(ch, "You need to be following the owner to enter %s.\r\n", GET_VEH_NAME(found_veh));
+        } else if (!AFF_FLAGGED(ch, AFF_GROUP)) {
+          send_to_char(ch, "The owner needs to group you before you can enter %s.\r\n", GET_VEH_NAME(found_veh));
+        }
+        return;
+      }
+    }
+  }
+#endif
 
   if (inveh && (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
 

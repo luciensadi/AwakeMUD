@@ -43,6 +43,8 @@
 #include "channels.hpp"
 #include "vehicles.hpp"
 #include "dblist.hpp"
+#include "player_exdescs.hpp"
+#include "pets.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -118,6 +120,7 @@ extern void enable_xterm_256(descriptor_t *apDescriptor);
 ACMD_DECLARE(do_olcon);
 ACMD_DECLARE(do_abilityset);
 ACMD_DECLARE(do_accept);
+ACMD_DECLARE(do_account);
 ACMD_DECLARE(do_action);
 ACMD_DECLARE(do_activate);
 ACMD_DECLARE(do_advance);
@@ -208,6 +211,7 @@ ACMD_DECLARE(do_enter);
 ACMD_DECLARE(do_endrun);
 ACMD_DECLARE(do_equipment);
 ACMD_DECLARE(do_examine);
+ACMD_DECLARE(do_exdesc);
 ACMD_DECLARE(do_exit);
 ACMD_DECLARE(do_exits);
 ACMD_DECLARE(do_factions);
@@ -516,6 +520,9 @@ struct command_info cmd_info[] =
     { "activate"   , POS_LYING   , do_activate , 0, 0, BLOCKS_IDLE_REWARD },
     { "aecho"      , POS_SLEEPING, do_new_echo , LVL_ARCHITECT, SCMD_AECHO, BLOCKS_IDLE_REWARD },
     { "accept"     , POS_LYING   , do_accept   , 0, 0, BLOCKS_IDLE_REWARD },
+#ifdef IS_BUILDPORT
+    { "account"    , POS_DEAD    , do_account  , 0, 0, ALLOWS_IDLE_REWARD },
+#endif
 
 #ifdef DIES_IRAE
     /* The power point for Karma rule was specifically included for players who do not use the advanced magic (initiation) rules.
@@ -532,7 +539,7 @@ struct command_info cmd_info[] =
     { "afk"        , POS_DEAD    , do_afk      , 0, 0, ALLOWS_IDLE_REWARD },
     { "ammo"       , POS_LYING   , do_ammo     , 0, 0, ALLOWS_IDLE_REWARD },
     { "assense"    , POS_LYING   , do_assense  , 0, 0, BLOCKS_IDLE_REWARD },
-    { "at"         , POS_DEAD    , do_at       , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
+    { "at"         , POS_DEAD    , do_at       , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
     { "attach"     , POS_RESTING , do_attach   , 0, 0, BLOCKS_IDLE_REWARD },
 #ifdef SELFADVANCE
     // Allows running an unattended test port where anyone can bump themselves up to level 9.
@@ -609,7 +616,11 @@ struct command_info cmd_info[] =
     { "date"       , POS_DEAD    , do_date     , 0, SCMD_DATE, ALLOWS_IDLE_REWARD },
     { "dc"         , POS_DEAD    , do_dc       , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
     { "deactivate" , POS_LYING   , do_deactivate, 0, 0, BLOCKS_IDLE_REWARD },
+#ifdef IS_BUILDPORT
+    { "debug"      , POS_DEAD    , do_debug    , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
+#else
     { "debug"      , POS_DEAD    , do_debug    , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
+#endif
     { "decline"    , POS_LYING   , do_decline  , 0, 0, BLOCKS_IDLE_REWARD },
     { "decompress" , POS_LYING   , do_compact  , 0, 1, BLOCKS_IDLE_REWARD },
     { "decorate"   , POS_DEAD    , do_decorate , 0, 0, ALLOWS_IDLE_REWARD },
@@ -654,6 +665,7 @@ struct command_info cmd_info[] =
     { "examine"    , POS_RESTING , do_examine  , 0, SCMD_EXAMINE, ALLOWS_IDLE_REWARD },
     { "exclaim"    , POS_LYING   , do_exclaim  , 0, 0, BLOCKS_IDLE_REWARD },
     { "extend"     , POS_SITTING , do_retract  , 0, 0, BLOCKS_IDLE_REWARD },
+    { "exdescs"    , POS_RESTING , do_exdesc   , LVL_CONSPIRATOR, SCMD_EXAMINE, ALLOWS_IDLE_REWARD },
 
     // TODO: Make this a rigging and matrix command too
     { "factions"   , POS_MORTALLYW, do_factions, LVL_PRESIDENT, 0, ALLOWS_IDLE_REWARD },
@@ -987,7 +999,7 @@ struct command_info cmd_info[] =
     { "uptime"     , POS_DEAD    , do_date     , 0, SCMD_UPTIME, ALLOWS_IDLE_REWARD },
     { "use"        , POS_LYING   , do_use      , 1, SCMD_USE, BLOCKS_IDLE_REWARD },
     { "usenerps"   , POS_LYING   , do_usenerps , 1, 0, BLOCKS_IDLE_REWARD },
-    { "users"      , POS_DEAD    , do_users    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "users"      , POS_DEAD    , do_users    , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
 
     { "valset"     , POS_DEAD    , do_valset   , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
     { "vclone"     , POS_DEAD    , do_vclone   , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
@@ -1306,6 +1318,7 @@ struct command_info mtx_info[] =
     { "disconnect", 0, do_logoff, 0, 1, BLOCKS_IDLE_REWARD },
     { "download", 0, do_download, 0, 0, BLOCKS_IDLE_REWARD },
     { "evade", 0, do_evade, 0, 0, BLOCKS_IDLE_REWARD },
+    { "echo", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { "emote", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { ":", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { "exit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
@@ -2742,11 +2755,17 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_ART_CREATE:
     art_edit_parse(d, arg);
     break;
+  case CON_PET_CREATE:
+    create_pet_parse(d, arg);
+    break;
   case CON_FCUSTOMIZE:
   case CON_BCUSTOMIZE:
   case CON_PCUSTOMIZE:
   case CON_ACUSTOMIZE:
     cedit_parse(d, arg);
+    break;
+  case CON_PC_EXDESC_EDIT:
+    pc_exdesc_edit_parse(d, arg);
     break;
   case CON_VEHCUST:
     vehcust_parse(d, arg);
@@ -3535,8 +3554,8 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     "hail", "push",
     "radio", "phone",
     "drive", "speed",
-    "stand", "sit",
-    "nod", "list", "info",
+    "stand", "sit", "rest",
+    "nod", "list", "info", "recap",
     "open", "close", "receive", "buy", "sell",
     "wear", "remove", "draw", "holster",
     "kill", "hit", "shoot", "kick",
@@ -3576,9 +3595,29 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
   else
     strlcpy(name_buf, GET_CHAR_NAME(ch), sizeof(name_buf) - 1);
 
+  // If it's a REPLY command, add in last-told info.
+  char tell_buf[250] = { '\0' };
+  // todo: turn this into a regex comparison against '^\s?re?p?l?y?\s'
+  if (GET_LAST_TELL(ch) > 0 && *argument == 'r'
+      && (argument[1] == ' '
+          || (argument[1] == 'e' && (argument[2] == ' '
+                                     || (argument[2] == 'p' && (argument[3] == ' ' || argument[3] == 'l'))))))
+  {
+    for (struct descriptor_data *desc = descriptor_list; desc; desc = desc->next) {
+      struct char_data *tch = desc->original ? desc->original : desc->character;
+   
+      if (tch && !IS_NPC(tch) && GET_IDNUM(tch) == GET_LAST_TELL(ch)) {
+        snprintf(tell_buf, sizeof(tell_buf), "(to %s) ", GET_CHAR_NAME(tch));
+        break;
+      }
+    }
+    if (!*tell_buf)
+      snprintf(tell_buf, sizeof(tell_buf), "(to %ld) ", GET_LAST_TELL(ch));
+  }
+
   // Write the command to the buffer.
   char cmd_buf[MAX_INPUT_LENGTH * 3];
-  snprintf(cmd_buf, sizeof(cmd_buf), "COMMANDLOG: %s @ %s: %s", name_buf, location_buf, argument);
+  snprintf(cmd_buf, sizeof(cmd_buf), "COMMANDLOG: %s @ %s: %s%s", name_buf, location_buf, tell_buf, argument);
 
   // TODO: Save to a file based on the PC's name.
   log(cmd_buf);
@@ -3608,7 +3647,10 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("ww", "west");
   COMMAND_ALIAS("ws", "southwest");
   COMMAND_ALIAS("wn", "northwest");
+  COMMAND_ALIAS("bw", "northwest");
+  COMMAND_ALIAS("mw", "northwest");
   COMMAND_ALIAS("en", "northeast");
+  COMMAND_ALIAS("nr", "northeast");
   COMMAND_ALIAS("es", "southeast");
   COMMAND_ALIAS("sse", "southeast");
   COMMAND_ALIAS("ssw", "southwest");
@@ -3645,6 +3687,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("lost", "list");
   COMMAND_ALIAS("listr", "list");
   COMMAND_ALIAS("lit", "list");
+  COMMAND_ALIAS("llist", "list");
   COMMAND_ALIAS("slel", "sell");
   COMMAND_ALIAS("ivn", "inventory");
   COMMAND_ALIAS("inc", "inventory");
@@ -3687,11 +3730,13 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("drove", "drive");
   COMMAND_ALIAS("ener", "enter");
   COMMAND_ALIAS("satnd", "stand");
-  COMMAND_ALIAS("levae", "leave");
   COMMAND_ALIAS("waer", "wear");
   COMMAND_ALIAS("porbe", "probe");
+  COMMAND_ALIAS("levae", "leave");
   COMMAND_ALIAS("lave", "leave");
   COMMAND_ALIAS("eave", "leave");
+  COMMAND_ALIAS("keave", "leave");
+  COMMAND_ALIAS("leace", "leave");
   COMMAND_ALIAS("relaod", "reload");
   COMMAND_ALIAS("relod", "reload");
   COMMAND_ALIAS("scpre", "score");
@@ -3700,6 +3745,15 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("ear", "eat");
   COMMAND_ALIAS("holser", "holster");
   COMMAND_ALIAS("pugh", "push");
+  COMMAND_ALIAS("oush", "push");
+  COMMAND_ALIAS("emtoe", "emote");
+  COMMAND_ALIAS("kust", "customize");
+  COMMAND_ALIAS("daig", "diagnose");
+  COMMAND_ALIAS("oc", "ooc");
+  COMMAND_ALIAS("lleave", "leave");
+  COMMAND_ALIAS("leavee", "leave");
+  COMMAND_ALIAS("jov", "job");
+  COMMAND_ALIAS("eeq", "equipment");
 
   COMMAND_ALIAS("but", "put");
   COMMAND_ALIAS("out", "put");
@@ -3734,6 +3788,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("summon", "conjure");
   COMMAND_ALIAS("smash", "destroy");
   COMMAND_ALIAS("crypt", "radio");
+  COMMAND_ALIAS("deploy", "unpack");
+  COMMAND_ALIAS("undeploy", "pack");
 
   // Toggles.
   COMMAND_ALIAS("settings", "toggle");
@@ -3761,6 +3817,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("unwear", "remove");
   COMMAND_ALIAS("unequip", "remove");
   COMMAND_ALIAS("remvoe", "remove");
+  COMMAND_ALIAS("unhold", "remove");
 
   // Door-unlocking and manipulation commands.
   COMMAND_ALIAS("pick", "bypass");
@@ -3816,6 +3873,8 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("stow", "holster");
   COMMAND_ALIAS("unconceal", "reveal");
   COMMAND_ALIAS("snipe", "shoot");
+  COMMAND_ALIAS("penalty", "penalties");
+  COMMAND_ALIAS("whois", "finger");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
@@ -3846,6 +3905,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("csan", "scan");
   COMMAND_ALIAS("scam", "scan");
   COMMAND_ALIAS("scasn", "scan");
+  COMMAND_ALIAS("san", "scan");
 
   COMMAND_ALIAS("sya", "say");
 

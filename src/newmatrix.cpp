@@ -15,6 +15,7 @@
 #include "config.hpp"
 #include "ignore_system.hpp"
 #include "moderation.hpp"
+#include "pets.hpp"
 
 #define PERSONA ch->persona
 #define PERSONA_CONDITION ch->persona->type == ICON_LIVING_PERSONA ? GET_MENTAL(ch) : ch->persona->condition
@@ -1146,7 +1147,7 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
   ic_stats_total = MAX(MIN(max_exp_gain, ic_stats_total), 1);
 
   // Suppress rewards for unlinked zones.
-  if (vnum_from_non_connected_zone(targ->vnum)) {
+  if (vnum_from_non_approved_zone(targ->vnum) && !IS_SENATOR(icon->decker->ch)) {
 #ifndef IS_BUILDPORT
     mudlog_vfprintf(icon->decker->ch, LOG_SYSLOG, "BUILD ERROR: %s encountered IC '%s' (%ld) from a non-connected zone!",
                     GET_CHAR_NAME(icon->decker->ch),
@@ -3855,8 +3856,12 @@ ACMD(do_create)
     create_art(ch);
   }
 
+  else if (is_abbrev(buf1, "pets")) {
+    create_pet(ch);
+  }
+
   else {
-    send_to_char("You can only create programs, parts, decks, ammunition, spells, complex forms, and art.\r\n", ch);
+    send_to_char("You can only create programs, parts, decks, ammunition, spells, complex forms, art, and pets.\r\n", ch);
     return;
   }
 }

@@ -54,6 +54,8 @@ extern void hedit_disp_data_menu(struct descriptor_data *d);
 extern void icedit_disp_menu(struct descriptor_data *d);
 extern void redit_parse(struct descriptor_data * d, const char *arg);
 
+bool ch_can_stat_or_clone_from_zone(struct char_data *ch, struct zone_data *zon, bool is_for_cloning);
+
 // mem class
 extern class memoryClass *Mem;
 
@@ -68,8 +70,8 @@ extern class memoryClass *Mem;
     return;                                                                                                                                    \
   }                                                                                                                                            \
                                                                                                                                                \
-  if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].connected) {                              \
-    send_to_char(ch, "Sorry, zone %d is marked as connected to the game world, so you can't edit it.\r\n", zone_table[(real_zonenum)].number); \
+  if (!(access_level(ch, LVL_ADMIN) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].editing_restricted_to_admin) {                \
+    send_to_char(ch, "Sorry, zone %d closed for editing.\r\n", zone_table[(real_zonenum)].number);                                             \
     return;                                                                                                                                    \
   }                                                                                                                                            \
 }
@@ -594,13 +596,10 @@ ACMD(do_dig)
       world[room].dir_option[dir]->exit_info = 0;
       world[room].dir_option[dir]->to_room_vnum = in_room->number;
     }
-
-    write_world_to_disk(zone_table[zone1].number);
-    if (zone1 != zone2 && subcmd != SCMD_ONEWAY)
-      write_world_to_disk(zone_table[zone2].number);
   } else {
     // Delete the reverse exit, if it exists.
     if (in_room->dir_option[dir]->to_room && in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]]) {
+      zone2 = get_zone_index_number_from_vnum(GET_ROOM_VNUM(in_room->dir_option[dir]->to_room));
       DELETE_IF_EXTANT(in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]]->keyword);
       DELETE_IF_EXTANT(in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]]->general_description);
       delete in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]];
@@ -613,6 +612,11 @@ ACMD(do_dig)
     delete in_room->dir_option[dir];
     in_room->dir_option[dir] = NULL;
   }
+
+  write_world_to_disk(zone_table[zone1].number);
+  if (zone1 != zone2 && subcmd != SCMD_ONEWAY)
+    write_world_to_disk(zone_table[zone2].number);
+
   send_to_char("Done.\r\n", ch);
 }
 
@@ -1925,8 +1929,8 @@ ACMD(do_shedit)
     d->edit_shop = new shop_data;
     memset((char *) d->edit_shop, 0, sizeof(struct shop_data));
     d->edit_shop->vnum = d->edit_number;
-    d->edit_shop->profit_buy = 1.0;
-    d->edit_shop->profit_sell = 1.0;
+    d->edit_shop->profit_buy = 1.1;
+    d->edit_shop->profit_sell = 0.1;
     d->edit_shop->buytypes = 0;
     d->edit_shop->no_such_itemk = str_dup("Sorry, we don't have that.");
     d->edit_shop->no_such_itemp = str_dup("You don't seem to have that.");
@@ -1969,8 +1973,8 @@ ACMD(do_zswitch)
       return;
     }
 
-    if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].connected) {
-      send_to_char(ch, "Sorry, zone %d is marked as connected to the game world, so you can't edit it.\r\n", zone_table[(real_zonenum)].number);
+    if (!(access_level(ch, LVL_ADMIN) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].editing_restricted_to_admin) {
+      send_to_char(ch, "Sorry, zone %d is closed for editing.\r\n", zone_table[(real_zonenum)].number);
       return;
     }
   }
@@ -2340,6 +2344,55 @@ ACMD(do_icedit)
     d->edit_mode = ICEDIT_CONFIRM_EDIT;
     return;
   }
+}
+
+bool ch_can_stat_or_clone_from_zone(struct char_data *ch, struct zone_data *zon, bool is_for_cloning) {
+  if (!zon) {
+    mudlog("wat.png", NULL, LOG_SYSLOG, TRUE);
+    send_to_char("An error occurred. Contact Lucien.\r\n", ch);
+    return FALSE;
+  }
+
+  // Admin+ can stat everything.
+  if (access_level(ch, LVL_ADMIN))
+    return TRUE;
+
+  switch (zon->number) {
+    case 128: // canon mobs
+    case 801: // canon melee weapons
+    case 802: // canon ranged weapons
+    case 807: // canon clothing/armor
+      // These are always YES for statting and cloning.
+      return TRUE;
+    case 800:
+    case 804:
+    case 805:
+    case 850:
+    case 852:
+    case 854:
+    case 856:
+    case 858:
+    case 859:
+    case 860:
+      // These are not OK for cloning, but can be statted.
+      if (is_for_cloning) {
+        send_to_char(ch, "Sorry, you can't clone things from here. You're allowed to reference them in shops, weapon attachments, etc if desired. You can also VSTAT them for info.\r\n");
+        return FALSE;
+      }
+      return TRUE;
+  }
+
+  // If it's not a globally OK zone, you must be an editor on it.
+  for (int editor_idx = 0; editor_idx < NUM_ZONE_EDITOR_IDS; editor_idx++) {
+    if (zon->editor_ids[editor_idx] > 0 && zon->editor_ids[editor_idx] == GET_IDNUM(ch))
+      return TRUE;
+  }
+
+  // If you've gotten here, it's not allowed.
+  send_to_char(ch, "Sorry, you can only %s %s, and zones you're an editor of.\r\n",
+               is_for_cloning ? "clone from" : "vstat vnums in",
+               is_for_cloning ? "zones 128, 801, 802, 807" : "canon/template zones (128; 800-860)");
+  return FALSE;
 }
 
 // asdf todo:
