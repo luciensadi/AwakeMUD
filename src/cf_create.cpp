@@ -22,12 +22,11 @@
 
 extern int get_program_skill(char_data *ch, obj_data *prog, int target);
 
-#define COMPLEX_FORM_TYPES 17
+#define COMPLEX_FORM_TYPES 16
 
 int complex_form_programs[COMPLEX_FORM_TYPES] = {
   SOFT_ATTACK,
   SOFT_SLOW,
-  SOFT_MEDIC,
   SOFT_COMPRESSOR,
   SOFT_DECRYPT,
   SOFT_RELOCATE,

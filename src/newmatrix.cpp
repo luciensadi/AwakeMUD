@@ -17,6 +17,7 @@
 #include "moderation.hpp"
 
 #define PERSONA ch->persona
+#define PERSONA_CONDITION ch->persona->type == ICON_LIVING_PERSONA ? GET_MENTAL(ch) : ch->persona->condition
 #define DECKER PERSONA->decker
 struct ic_info dummy_ic;
 
@@ -483,6 +484,16 @@ bool has_spotted(struct matrix_icon *icon, struct matrix_icon *targ)
     if (seen->idnum == targ->idnum || targ->decker) // You auto-see deckers now.
       return TRUE;
   return FALSE;
+}
+
+void do_damage_persona(struct matrix_icon *targ, int dmg)
+{
+  if (targ->type == ICON_LIVING_PERSONA) {
+    // It's an otaku! They get to suffer MENTAL DAMAGE!
+    damage(targ->decker->ch, targ->decker->ch, dmg, TYPE_TASER, MENTAL);
+    return;
+  }
+  targ->condition -= dmg;
 }
 
 void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
@@ -1154,7 +1165,7 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
 }
 
 const char *get_plaintext_matrix_score_health(struct char_data *ch) {
-  snprintf(buf2, sizeof(buf2), "Persona Condition: %d\r\n", PERSONA->condition);
+  snprintf(buf2, sizeof(buf2), "Persona Condition: %d\r\n", PERSONA_CONDITION);
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Your Physical Condition: %d / %d\r\n", (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100));
   return buf2;
 }
@@ -1247,7 +1258,7 @@ ACMD(do_matrix_score)
             "               ^cDeck Status:^n\r\n"
             "  Hardening:^g%3d^n       MPCP:^g%3d^n\r\n"
             "   IO Speed:^g%4d^n      Response Increase:^g%3d^n\r\n",
-            PERSONA->condition, (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100),
+            PERSONA_CONDITION, (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100),
             detect, MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch), GET_MAX_HACKING(ch),
             GET_CYBERDECK_USED_STORAGE(DECKER->deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->deck), GET_CYBERDECK_FREE_STORAGE(DECKER->deck),
             DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
@@ -2398,8 +2409,8 @@ ACMD(do_download)
           if (!dam)
             send_to_icon(PERSONA, "The %s explodes, but fails to cause damage to you.\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
           else {
-            PERSONA->condition -= dam;
-            if (PERSONA->condition < 1) {
+            do_damage_persona(PERSONA, dam);
+            if (PERSONA_CONDITION < 1) {
               send_to_icon(PERSONA, "The %s explodes, ripping your icon into junk logic\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
               dumpshock(PERSONA);
               return;
