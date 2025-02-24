@@ -5852,7 +5852,7 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
   obj_to_obj(make_new_finished_part(PART_ASIST_HOT, mpcp), new_deck);
   obj_to_obj(make_new_finished_part(PART_RAS_OVERRIDE, mpcp), new_deck);
 
-  GET_CYBERDECK_MPCP(new_deck) = mpcp;
+  GET_CYBERDECK_MPCP(new_deck) = MIN(12, mpcp);
   GET_CYBERDECK_HARDENING(new_deck) = MIN(GET_REAL_WIL(ch), GET_REAL_WIL(ch) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD));
   GET_CYBERDECK_ACTIVE_MEMORY(new_deck) = 999999;
   GET_CYBERDECK_TOTAL_STORAGE(new_deck) = 0;
