@@ -1907,7 +1907,7 @@ ACMD(do_connect)
 {
   struct char_data *temp;
   struct matrix_icon *icon = NULL;
-  struct obj_data *cyber, *cyberdeck = NULL, *jack;
+  struct obj_data *cyber, *cyberdeck = NULL, *jack, *proxy_deck = NULL;
   rnum_t host;
 
   if (!ch->in_room || !ch->in_room->matrix || (host = real_host(ch->in_room->matrix)) < 1) {
@@ -1958,6 +1958,26 @@ ACMD(do_connect)
   for (int i = 0; !cyberdeck && i < NUM_WEARS; i++)
     if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
       cyberdeck = GET_EQ(ch, i);
+
+  if (!IS_SENATOR(ch) && *argument) {
+    // as non-staff you can add 'with cyberdeck' or 'cyberdeck' as an otaku to chain through a deck.
+    if (is_abbrev(argument, "with cyberdeck") || is_abbrev(argument, "cyberdeck")) {
+      if (!cyberdeck) {
+        send_to_char(ch, "With *what* cyberdeck?\r\n");
+        return;
+      }
+      if (!IS_OTAKU(ch)) {
+        send_to_char(ch, "You're already connecting with a cyberdeck. How else would you use the matrix?");
+        return;
+      }
+
+      // Extra secret squirrel access codes
+      proxy_deck = cyberdeck; 
+      extern struct obj_data *make_otaku_deck(struct char_data *ch);
+      cyberdeck = make_otaku_deck(ch);
+    }
+  }
+
   if (!cyberdeck) {
     if (access_level(ch, LVL_ADMIN)) {
       // Create a !RENT staff-only deck from whole cloth.
@@ -2008,7 +2028,7 @@ ACMD(do_connect)
 
   if (GET_POS(ch) != POS_SITTING) {
     GET_POS(ch) = POS_SITTING;
-    if (IS_OTAKU(ch)) send_to_char(ch, "You find a place to sit down and commune with the matrix.\r\n");
+    if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) send_to_char(ch, "You find a place to sit down and commune with the matrix.\r\n");
     else send_to_char(ch, "You find a place to sit and work with your deck.\r\n");
   }
 
@@ -2069,6 +2089,7 @@ ACMD(do_connect)
   DECKER->mxp = real_room(ch->in_room->number) * DECKER->phone->number / MAX(DECKER->phone->rtg, 1);
   PERSONA->idnum = GET_IDNUM(ch);
   DECKER->deck = cyberdeck;
+  DECKER->proxy_deck = proxy_deck;
   DECKER->mpcp = GET_OBJ_VAL(cyberdeck, 0);
   DECKER->hardening = GET_OBJ_VAL(cyberdeck, 1);
   DECKER->active = GET_OBJ_VAL(cyberdeck, 2);
@@ -2215,14 +2236,14 @@ ACMD(do_connect)
     if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
       if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
         snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to %s.",
-          cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
+          !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
       } else {
         snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into %s.",
-          cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
+          !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
       }
     } else {
       snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides %s cable into $s eye datajack.",
-        cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
+        !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
     }
   } else {
     snprintf(buf, sizeof(buf), "$n plugs the leads of $s 'trode net into $s cyberdeck.");
@@ -2385,11 +2406,14 @@ ACMD(do_download)
     return;
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  struct obj_data *soft = NULL;
+  struct obj_data *soft = NULL, *target_deck = DECKER->deck;
+  
+  // This line lets otaku use proxy decks to download files.
+  if (IS_OTAKU(DECKER->ch) && DECKER->proxy_deck) target_deck = DECKER->proxy_deck;
   skip_spaces(&argument);
   // TODO: This might cause conflicts if multiple deckers have paydata on the host.
   if ((soft = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) == PERSONA->idnum) {
-    if (GET_CYBERDECK_FREE_STORAGE(DECKER->deck) < GET_DECK_ACCESSORY_FILE_SIZE(soft)) {
+    if (GET_CYBERDECK_FREE_STORAGE(target_deck) < GET_DECK_ACCESSORY_FILE_SIZE(soft)) {
       send_to_icon(PERSONA, "You don't have enough storage memory to download that file.\r\n");
       return;
     } else {
@@ -3142,9 +3166,12 @@ void matrix_update()
           } else {
             GET_DECK_ACCESSORY_FILE_REMAINING(file) -= persona->decker->io;
             // TODO BUG: What if you're out of space? It silently fails to download and just eternally decrements? Might even hit 0 and have 8 still set.
+            struct obj_data *target_deck = persona->decker->deck;
+            // Otaku code for proxy decks; allow downloading to proxy decks
+            if (IS_OTAKU(persona->decker->ch) && persona->decker->proxy_deck) target_deck = persona->decker->proxy_deck;
             if (GET_DECK_ACCESSORY_FILE_REMAINING(file) <= 0) {
               // Out of space? Inform them, reset the file, bail.
-              if (GET_OBJ_VAL(persona->decker->deck, 3) - GET_OBJ_VAL(persona->decker->deck, 5) < GET_DECK_ACCESSORY_FILE_SIZE(file)) {
+              if (GET_OBJ_VAL(target_deck, 3) - GET_OBJ_VAL(target_deck, 5) < GET_DECK_ACCESSORY_FILE_SIZE(file)) {
                 send_to_icon(persona, "%s^n failed to download-- your deck is out of space.\r\n", CAP(GET_OBJ_NAME(file)));
                 GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
                 GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
@@ -3152,9 +3179,9 @@ void matrix_update()
               }
 
               obj_from_host(file);
-              obj_to_obj(file, persona->decker->deck);
+              obj_to_obj(file, target_deck);
               send_to_icon(persona, "%s^n has finished downloading to your deck.\r\n", CAP(GET_OBJ_NAME(file)));
-              GET_OBJ_VAL(persona->decker->deck, 5) += GET_DECK_ACCESSORY_FILE_SIZE(file);
+              GET_OBJ_VAL(target_deck, 5) += GET_DECK_ACCESSORY_FILE_SIZE(file);
               GET_DECK_ACCESSORY_FILE_FOUND_BY(file) = 0;
               GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
               GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
