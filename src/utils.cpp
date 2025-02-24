@@ -5855,7 +5855,7 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
 
   GET_CYBERDECK_MPCP(new_deck) = MIN(12, mpcp);
   GET_CYBERDECK_HARDENING(new_deck) = MIN(GET_REAL_WIL(ch), GET_REAL_WIL(ch) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD));
-  GET_CYBERDECK_ACTIVE_MEMORY(new_deck) = 999999;
+  GET_CYBERDECK_ACTIVE_MEMORY(new_deck) = 0; // Otaku do not have active memory.
   GET_CYBERDECK_TOTAL_STORAGE(new_deck) = 0;
   GET_CYBERDECK_RESPONSE_INCREASE(new_deck) = MIN(mpcp * 1.5, GET_REAL_REA(ch) + GET_ECHO(ch, ECHO_IMPROVED_REA));
   GET_CYBERDECK_IO_RATING(new_deck) = MIN(GET_REAL_INT(ch) * 200, (GET_REAL_INT(ch) * 100) + (GET_ECHO(ch, ECHO_IMPROVED_IO) * 100));
@@ -5867,10 +5867,10 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
 
   for (struct obj_data *form = asist->contains; form; form = form->next_content) {
     if (GET_OBJ_TYPE(form) != ITEM_COMPLEX_FORM) continue;
-    if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) > 0) continue; // The complex form is in progress.
+    if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) > 0) continue; // The complex form is in unfinished.
     struct obj_data *active = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_OTAKU_RESONANCE);
     GET_PROGRAM_TYPE(active) = GET_PROGRAM_TYPE(form);
-    GET_PROGRAM_SIZE(active) = 1;
+    GET_PROGRAM_SIZE(active) = 0; // Complex forms don't take up memory.
     GET_PROGRAM_ATTACK_DAMAGE(active) = GET_PROGRAM_ATTACK_DAMAGE(form);
     GET_PROGRAM_IS_DEFAULTED(active) = TRUE;
     GET_OBJ_TIMER(active) = 1;

@@ -2725,15 +2725,30 @@ ACMD(do_decrypt)
 }
 
 void send_active_program_list(struct char_data *ch) {
+  if (DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
+    // We're an otaku using a living persona; we don't have active memory.
+    for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
+      send_to_icon(PERSONA, "%25s, Complex Form, Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
+    return;
+  }
   send_to_icon(PERSONA, "Active Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(DECKER->deck, 2), DECKER->active);
   for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
     send_to_icon(PERSONA, "%25s Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
 }
 
 void send_storage_program_list(struct char_data *ch) {
-  send_to_icon(PERSONA, "\r\nStorage Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(DECKER->deck, 3),
-               GET_OBJ_VAL(DECKER->deck, 3) - GET_OBJ_VAL(DECKER->deck, 5));
-  for (struct obj_data *soft = DECKER->deck->contains; soft; soft = soft->next_content)
+  obj_data *deck = DECKER->deck;
+  if (DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
+    // We're an otaku using a living persona; we don't have storage memory.
+    if (DECKER->proxy_deck) deck = DECKER->proxy_deck;
+    else {
+      send_to_icon(PERSONA, "\r\nNo Available Storage Memory\r\n");
+      return;
+    }
+  }
+  send_to_icon(PERSONA, "\r\nStorage Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(deck, 3),
+               GET_OBJ_VAL(deck, 3) - GET_OBJ_VAL(deck, 5));
+  for (struct obj_data *soft = deck->contains; soft; soft = soft->next_content)
     if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) > SOFT_SENSOR))
       send_to_icon(PERSONA, "%-30s^n Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
     else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE)
