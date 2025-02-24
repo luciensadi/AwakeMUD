@@ -5837,7 +5837,16 @@ struct obj_data *make_new_finished_program(int part_type, int mpcp, int rating=0
 }
 
 struct obj_data *make_otaku_deck(struct char_data *ch) {
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_FUCKUPLOG, "Tried to create an otaku deck, but provided invalid character.");
+    return NULL;
+  }
   struct obj_data *asist = find_cyberware(ch, CYB_ASIST);
+  if (!asist) {
+    mudlog_vfprintf(ch, LOG_FUCKUPLOG, "Tried to create an otaku deck, but otaku somehow didn't have an asist interface.");
+    return NULL;
+  }
+
   struct obj_data *new_deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL, OBJ_LOAD_REASON_OTAKU_RESONANCE);
 
   // Add parts.
