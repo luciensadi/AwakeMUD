@@ -5118,7 +5118,7 @@ ACMD(do_show)
   case 29:
     send_to_char("The following shopkeepers have intelligence above their racial maximums:\r\n", ch);
     for (struct char_data *mob = character_list; mob; mob = mob->next_in_character_list) {
-      int max_allowed = (GET_RACE(mob) <= RACE_UNDEFINED ? 6 : racial_limits[(int) GET_RACE(mob)][RACIAL_LIMITS_NORMAL][INT]);
+      int max_allowed = (GET_RACE(mob) <= RACE_UNDEFINED ? 6 : get_attr_max(mob, INT));
       if (MOB_HAS_SPEC(mob, shop_keeper) && GET_REAL_INT(mob) > max_allowed) {
         // Only show it on shops that negotiate.
         bool shop_negotiates = FALSE;

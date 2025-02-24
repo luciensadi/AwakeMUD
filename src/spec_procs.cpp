@@ -340,15 +340,15 @@ int train_ability_cost(struct char_data *ch, int abil, int level, bool untrain) 
 
   switch (abil) {
     case ADEPT_IMPROVED_BOD:
-      if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][BOD])
+      if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) + (untrain ? -1 : 0) >= get_attr_max(ch, BOD))
         cost *= 2;
       break;
     case ADEPT_IMPROVED_QUI:
-      if (GET_REAL_QUI(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][QUI])
+      if (GET_REAL_QUI(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI) + (untrain ? -1 : 0) >= get_attr_max(ch, QUI))
         cost *= 2;
       break;
     case ADEPT_IMPROVED_STR:
-      if (GET_REAL_STR(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR) + (untrain ? -1 : 0) >= racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][STR])
+      if (GET_REAL_STR(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR) + (untrain ? -1 : 0) >= get_attr_max(ch, STR))
         cost *= 2;
       break;
   }
@@ -785,8 +785,9 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
   }
 
   // Scope maximums based on teacher type.
-  if (type == NEWBIE)
+  if (type == NEWBIE) {
     max = NEWBIE_SKILL;
+  }
   else if (type == AMATEUR)
     max = NORMAL_MAX_SKILL;
   else if (type == ADVANCED)
@@ -941,8 +942,7 @@ SPECIAL(teacher)
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
           }
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %s\r\n", skills[teachers[ind].s[i]].name);
-        }
-        else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1])
+        } else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1])
         {
           // Add conditional messaging.
           if (!found_a_skill_already) {
@@ -1082,9 +1082,9 @@ int calculate_training_raw_cost(struct char_data *ch, int attribute) {
 bool attribute_below_maximums(struct char_data *ch, int attribute) {
   // Special case: Bod can have permanent loss.
   if (attribute == BOD)
-    return GET_REAL_BOD(ch) < racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][BOD];
+    return GET_REAL_BOD(ch) < get_attr_max(ch, BOD);
 
-  return GET_REAL_ATT(ch, attribute) < racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][attribute];
+  return GET_REAL_ATT(ch, attribute) < get_attr_max(ch, attribute);
 }
 
 void send_training_list_to_char(struct char_data *ch, int ind) {
@@ -7869,7 +7869,7 @@ SPECIAL(oppressive_atmosphere) {
           continue;
 
         // Turn folks away who are under spec.
-        if (GET_REAL_ATT(ch, stat_idx) < racial_limits[(int)GET_RACE(ch)][RACIAL_LIMITS_NORMAL][stat_idx]) {
+        if (GET_REAL_ATT(ch, stat_idx) < get_attr_max(ch, stat_idx)) {
           stats_ok = FALSE;
           you_shall_not_pass = TRUE;
           break;

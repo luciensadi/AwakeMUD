@@ -875,7 +875,7 @@ void affect_total(struct char_data * ch)
     GET_ATT(ch, att) = MAX(1, GET_ATT(ch, att));
 
     // Set the cap to the higher of existing cap or racial maximum (only impacts dragons)
-    int per_att_cap = MAX(cap, racial_limits[(int) GET_RACE(ch)][RACIAL_LIMITS_NORMAL][att]);
+    int per_att_cap = MAX(cap, get_attr_max(ch, att));
 
     // Apply the soft cap to anything exceeding it.
     if (GET_ATT(ch, att) > per_att_cap)

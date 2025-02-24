@@ -545,12 +545,12 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_DESC_LEVEL(d)  ((d)->original ? GET_LEVEL((d)->original) : ((d)->character ? GET_LEVEL((d)->character) : 0))
 
 #define GET_RACE(ch)          ((ch)->player.race)
-#define GET_TRADITION(ch)       ((ch)->player.tradition)
-#define GET_ASPECT(ch)    ((ch)->player.aspect)
-#define GET_LASTROOM(ch)          ((ch)->player.last_room)
+#define GET_TRADITION(ch)     ((ch)->player.tradition)
+#define GET_ASPECT(ch)        ((ch)->player.aspect)
+#define GET_LASTROOM(ch)      ((ch)->player.last_room)
 #define GET_HEIGHT(ch)        ((ch)->player.height)
 #define GET_WEIGHT(ch)        ((ch)->player.weight)
-#define GET_PRONOUNS(ch)           ((ch)->player.pronouns)
+#define GET_PRONOUNS(ch)      ((ch)->player.pronouns)
 
 #define GET_ATT(ch, i)        ((ch)->aff_abils.attributes[(i)])
 #define GET_REAL_ATT(ch, i)   ((ch)->real_abils.attributes[(i)])
@@ -1604,6 +1604,15 @@ char    *crypt(const char *key, const char *salt);
 #define FOR_ITEMS_AROUND_CH(ch, item_ptr) for ((item_ptr) = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; (item_ptr); (item_ptr) = (item_ptr)->next_content)
 
 #define CHARS_IN_SAME_LOCATION(first, second) ((first)->in_room ? (first)->in_room == (second)->in_room : (first)->in_veh == (second)->in_veh)
+
+/**
+ * Calculates the attribute maximum for <ch>.
+ * 
+ * @param ch The char_data to check 
+ * @param attr The numeric identifier for the type of attribute to check
+ * @return The integer maximum that character's <attr> can be.
+ */
+int get_attr_max(struct char_data *ch, int attr);
 
 // Nuyen tracking functions.
 void gain_nuyen(struct char_data *ch, long amount, int category);
