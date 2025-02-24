@@ -2102,7 +2102,7 @@ int get_attr_max(struct char_data *ch, int attr) {
         break;
     }
   }
-  
+
   return MAX(1, racial_max);
 }
 
@@ -5875,6 +5875,8 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
     GET_OBJ_TIMER(active) = 1;
 
     GET_PROGRAM_RATING(active) = GET_PROGRAM_RATING(form);
+    // Cyberadepts get +1 to Complex Forms
+    if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) GET_PROGRAM_RATING(active) += 1;
 
     active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_BS);
     active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
