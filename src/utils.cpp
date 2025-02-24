@@ -2088,6 +2088,7 @@ int get_num_of_cyber_replacements(struct char_data *ch) {
 int get_attr_max(struct char_data *ch, int attr) {
   int racial_max = racial_limits[(int) GET_RACE(ch)][RACIAL_LIMITS_NORMAL][attr];
 
+  // Otaku attributes are modified. Matrix 3; pg.136
   if (IS_OTAKU(ch)) {
     switch (attr) {
       case BOD:
