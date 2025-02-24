@@ -5810,10 +5810,8 @@ struct obj_data *make_new_finished_program(int part_type, int mpcp, int rating=0
 }
 
 struct obj_data *make_otaku_deck(struct char_data *ch) {
-  struct obj_data *asist, *new_deck;
-  FAILURE_CASE(!(asist = find_cyberware(ch, CYB_ASIST)), "You don't have an asist converter.");
-
-  *new_deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL, OBJ_LOAD_REASON_OTAKU_BS);
+  struct obj_data *asist = find_cyberware(ch, CYB_ASIST);
+  struct obj_data *new_deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL, OBJ_LOAD_REASON_OTAKU_BS);
 
   // Add parts.
   int mpcp = (GET_REAL_INT(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3; // adding 2 always ensures a round up

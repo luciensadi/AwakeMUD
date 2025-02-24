@@ -487,28 +487,34 @@ bool has_spotted(struct matrix_icon *icon, struct matrix_icon *targ)
 
 void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
 {
-  if (success >= 2 && targ->decker->deck)
-  {
-    if (targ->decker->ch && PLR_FLAGGED(targ->decker->ch, PLR_NEWBIE)) {
-      send_to_icon(targ, "(OOC message: Be careful with these enemies; your deck would have taken permanent damage if you weren't a newbie!)");
-      return;
-    }
-    snprintf(buf, sizeof(buf), "%s^n uses the opportunity to fry your MPCP!\r\n", CAP(icon->name));
-    send_to_icon(targ, buf);
-    while (success >= 2 && targ->decker->mpcp > 0) {
-      success -= 2;
-      targ->decker->mpcp--;
-      GET_CYBERDECK_MPCP(targ->decker->deck)--;
-    }
-    // Damage the MPCP chip, if any.
-    for (struct obj_data *part = targ->decker->deck->contains; part; part = part->next_content) {
-      if (GET_OBJ_TYPE(part) == ITEM_PART && GET_PART_TYPE(part) == PART_MPCP) {
-        GET_PART_RATING(part) = GET_CYBERDECK_MPCP(targ->decker->deck);
-        GET_PART_TARGET_MPCP(part) = GET_CYBERDECK_MPCP(targ->decker->deck);
-        break;
-      }
-    }
+  if (success < 2) return;
+  if (!targ->decker->deck) return;
+
+  if (targ->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+    // This is an otaku persona! MPCP damage works slightly different on otaku.
+    GET_CYBERDECK_MPCP(targ->decker->deck)--; // Damage the virtual deck.
+    return;
   }
+  
+  if (targ->decker->ch && PLR_FLAGGED(targ->decker->ch, PLR_NEWBIE)) {
+    send_to_icon(targ, "(OOC message: Be careful with these enemies; your deck would have taken permanent damage if you weren't a newbie!)");
+    return;
+  }
+  snprintf(buf, sizeof(buf), "%s^n uses the opportunity to fry your MPCP!\r\n", CAP(icon->name));
+  send_to_icon(targ, buf);
+  while (success >= 2 && targ->decker->mpcp > 0) {
+    success -= 2;
+    targ->decker->mpcp--;
+    GET_CYBERDECK_MPCP(targ->decker->deck)--;
+  }
+  // Damage the MPCP chip, if any.
+  for (struct obj_data *part = targ->decker->deck->contains; part; part = part->next_content) {
+    if (GET_OBJ_TYPE(part) == ITEM_PART && GET_PART_TYPE(part) == PART_MPCP) {
+      GET_PART_RATING(part) = GET_CYBERDECK_MPCP(targ->decker->deck);
+      GET_PART_TARGET_MPCP(part) = GET_CYBERDECK_MPCP(targ->decker->deck);
+      break;
+    }
+  }  
 }
 
 ACMD(do_fry_self) {
