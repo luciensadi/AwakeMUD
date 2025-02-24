@@ -3507,16 +3507,18 @@ ACMD(do_assense)
 
   int skill = GET_INT(ch), target = 4;
 
-  // Check to see if we've hit our max tries. If we haven't, multiply the existing tries by 2 and add that to TN.
-  if (!IS_SENATOR(ch) && (assense_recency_entry = vict->assense_recency.find(GET_IDNUM(ch))) != vict->assense_recency.end() && assense_recency_entry->second > 0) {
-    FAILURE_CASE(assense_recency_entry->second >= GET_INT(ch), "You've assensed them too recently. Try again later.");
+  if (vict) {
+    // Check to see if we've hit our max tries. If we haven't, multiply the existing tries by 2 and add that to TN.
+    if (!IS_SENATOR(ch) && (assense_recency_entry = vict->assense_recency.find(GET_IDNUM(ch))) != vict->assense_recency.end() && assense_recency_entry->second > 0) {
+      FAILURE_CASE(assense_recency_entry->second >= GET_INT(ch), "You've assensed them too recently. Try again later.");
 
-    send_to_char("You squint harder, trying to see more than you already have...\r\n", ch);
-    target += assense_recency_entry->second * 2;
+      send_to_char("You squint harder, trying to see more than you already have...\r\n", ch);
+      target += assense_recency_entry->second * 2;
 
-    vict->assense_recency[GET_IDNUM(ch)] += 1;
-  } else {
-    vict->assense_recency[GET_IDNUM(ch)] = 1;
+      vict->assense_recency[GET_IDNUM(ch)] += 1;
+    } else {
+      vict->assense_recency[GET_IDNUM(ch)] = 1;
+    }
   }
 
   if (GET_BACKGROUND_AURA(ch->in_room) == AURA_POWERSITE)
