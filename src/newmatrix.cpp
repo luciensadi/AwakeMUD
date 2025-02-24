@@ -502,7 +502,7 @@ void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
   if (success < 2) return;
   if (!targ->decker->deck) return;
 
-  if (targ->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+  if (targ->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
     // This is an otaku persona! MPCP damage works slightly different on otaku.
     GET_CYBERDECK_MPCP(targ->decker->deck)--; // Damage the virtual deck.
     
@@ -1852,7 +1852,7 @@ ACMD(do_logoff)
         temp->persona->decker->hitcher = NULL;
       }
      // Clear the deck if this is an otaku
-    if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+    if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
       extract_obj(PERSONA->decker->deck);
     }
     return;
@@ -1892,7 +1892,7 @@ ACMD(do_logoff)
   PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
 
   // Clear the deck if this is an otaku
-  if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+  if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
     extract_obj(PERSONA->decker->deck);
   }
 
@@ -2028,7 +2028,7 @@ ACMD(do_connect)
 
   if (GET_POS(ch) != POS_SITTING) {
     GET_POS(ch) = POS_SITTING;
-    if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) send_to_char(ch, "You find a place to sit down and commune with the matrix.\r\n");
+    if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) send_to_char(ch, "You find a place to sit down and commune with the matrix.\r\n");
     else send_to_char(ch, "You find a place to sit and work with your deck.\r\n");
   }
 
@@ -2047,7 +2047,7 @@ ACMD(do_connect)
   else
     icon->long_desc = str_dup("A nondescript persona stands idly here.\r\n");
   // If this is an Otaku GhostDeck, then this is a living persona
-  if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+  if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
     icon->type = ICON_LIVING_PERSONA;
   }
 
@@ -2117,7 +2117,7 @@ ACMD(do_connect)
   DECKER->io = MAX(1, (int)(DECKER->io / 10));
 
   if (GET_OBJ_VNUM(cyberdeck) != OBJ_CUSTOM_CYBERDECK_SHELL 
-    && !cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+    && !cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
     DECKER->asist[1] = 0;
     DECKER->asist[0] = 0;
     GET_MAX_HACKING(ch) = 0;
@@ -2143,7 +2143,7 @@ ACMD(do_connect)
         }
       }
       if (GET_OBJ_VAL(soft, 4)) {
-        if (GET_OBJ_VAL(soft, 2) > DECKER->active && !soft->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS)) {
+        if (GET_OBJ_VAL(soft, 2) > DECKER->active && !soft->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
           send_to_char(ch, "%s^n would exceed your deck's active memory, so it failed to load.\r\n", GET_OBJ_NAME(soft));
           continue;
         }
@@ -2236,14 +2236,14 @@ ACMD(do_connect)
     if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
       if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
         snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to %s.",
-          !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
+          !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
       } else {
         snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into %s.",
-          !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
+          !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
       }
     } else {
       snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides %s cable into $s eye datajack.",
-        !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS) ? "the jackpoint" : "$s cyberdeck");
+        !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
     }
   } else {
     snprintf(buf, sizeof(buf), "$n plugs the leads of $s 'trode net into $s cyberdeck.");
@@ -2301,7 +2301,7 @@ ACMD(do_load)
 
       if (subcmd == SCMD_UPLOAD) {
         if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR || GET_PROGRAM_TYPE(soft) == SOFT_EVALUATE 
-        || soft->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_BS))) {
+        || soft->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE))) {
           send_to_icon(PERSONA, "You can't upload %s^n.\r\n", GET_OBJ_NAME(soft));
           return;
         }

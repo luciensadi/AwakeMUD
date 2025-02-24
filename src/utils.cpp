@@ -5837,7 +5837,7 @@ struct obj_data *make_new_finished_program(int part_type, int mpcp, int rating=0
 
 struct obj_data *make_otaku_deck(struct char_data *ch) {
   struct obj_data *asist = find_cyberware(ch, CYB_ASIST);
-  struct obj_data *new_deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL, OBJ_LOAD_REASON_OTAKU_BS);
+  struct obj_data *new_deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL, OBJ_LOAD_REASON_OTAKU_RESONANCE);
 
   // Add parts.
   int mpcp = (GET_REAL_INT(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3; // adding 2 always ensures a round up
@@ -5862,12 +5862,12 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
 
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_CONCEALED_IN_EQ);
-  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_BS);
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_RESONANCE);
 
   for (struct obj_data *form = asist->contains; form; form = form->next_content) {
     if (GET_OBJ_TYPE(form) != ITEM_COMPLEX_FORM) continue;
     if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) > 0) continue; // The complex form is in progress.
-    struct obj_data *active = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_OTAKU_BS);
+    struct obj_data *active = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_OTAKU_RESONANCE);
     GET_PROGRAM_TYPE(active) = GET_PROGRAM_TYPE(form);
     GET_PROGRAM_SIZE(active) = 1;
     GET_PROGRAM_ATTACK_DAMAGE(active) = GET_PROGRAM_ATTACK_DAMAGE(form);
@@ -5878,7 +5878,7 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
     // Cyberadepts get +1 to Complex Forms
     if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) GET_PROGRAM_RATING(active) += 1;
 
-    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_BS);
+    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_RESONANCE);
     active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
 
     char restring[500];

@@ -1226,7 +1226,7 @@ const char *extra_bits[] =
     "CHEATLOG_MARK",
     "CONCEALED_IN_EQ",
     "TRODE_NET",
-    "OTAKU_BS",
+    "OTAKU_RESONANCE",
     MAX_FLAG_MARKER
   };
 

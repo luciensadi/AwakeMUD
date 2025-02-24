@@ -1427,7 +1427,7 @@ enum {
 #define ITEM_EXTRA_CHEATLOG_MARK      33
 #define ITEM_EXTRA_CONCEALED_IN_EQ    34    // Doesn't show up when someone looks at you.
 #define ITEM_EXTRA_TRODE_NET          35
-#define ITEM_EXTRA_OTAKU_BS           36    // This is related to Otaku nonsense
+#define ITEM_EXTRA_OTAKU_RESONANCE    36    // This is related to Otaku nonsense
 #define MAX_ITEM_EXTRA                37
 
 /* Ammo types */
@@ -3270,7 +3270,7 @@ enum {
 #define OBJ_LOAD_REASON_FIND_OBJ_SHOP            57
 #define OBJ_LOAD_REASON_SHOP_RECEIVE             58
 #define OBJ_LOAD_REASON_CREATE_PET               59
-#define OBJ_LOAD_REASON_OTAKU_BS                 60
+#define OBJ_LOAD_REASON_OTAKU_RESONANCE          60
 #define OBJ_LOAD_REASON_CREATE_COMPLEX_FORM      61
 
 #define IDNUM_FOR_MOB_ALERT_STATE  -1
