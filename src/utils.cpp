@@ -2087,6 +2087,22 @@ int get_num_of_cyber_replacements(struct char_data *ch) {
 
 int get_attr_max(struct char_data *ch, int attr) {
   int racial_max = racial_limits[(int) GET_RACE(ch)][RACIAL_LIMITS_NORMAL][attr];
+
+  if (IS_OTAKU(ch)) {
+    switch (attr) {
+      case BOD:
+      case QUI:
+      case STR:
+        racial_max -= 1;
+        break;
+      case WIL:
+      case CHA:
+      case INT:
+        racial_max += 1;
+        break;
+    }
+  }
+  
   return MAX(1, racial_max);
 }
 
