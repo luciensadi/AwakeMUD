@@ -6970,7 +6970,7 @@ SPECIAL(nerpcorpolis_lobby) {
     char_to_room(ch, &world[real_room(RM_NERPCORPOLIS_RECEPTIONIST)]);
 
     send_to_char("You are ushered into the leasing office.\r\n", ch);
-    act("$n is ushered into the leasing office.", FALSE, ch, 0, 0, TO_ROOM);
+    act("$N is ushered into the leasing office.", FALSE, 0, 0, ch, TO_NOTVICT);
 
     // If not screenreader, look.
     if (!PRF_FLAGGED(ch, PRF_SCREENREADER))
@@ -8019,7 +8019,7 @@ SPECIAL(grenada_gatekeeper)
       char_from_room(ch);
       char_to_room(ch, &world[to_room]);
 
-      act("$n is ushered in.", FALSE, ch, NULL, mob, TO_ROOM);
+      act("$N is ushered in.", FALSE, NULL, NULL, ch, TO_NOTVICT);
 
       if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
         look_at_room(ch, 0, 0);
