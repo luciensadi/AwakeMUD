@@ -2620,13 +2620,7 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
         d->edit_mob->in_room = error_suppressor;
       }
 
-#ifdef IS_BUILDPORT
-      if (TRUE) {
-#else
-      if (IS_SENATOR(CH)) {
-#endif
-        send_to_char(CH, "A) Optional Extra Descriptions (^c%d^n/^c%d^n set)\r\n", GET_CHAR_EXDESCS(d->edit_mob).size(), GET_CHAR_MAX_EXDESCS(CH));
-      }
+      send_to_char(CH, "A) Optional Extra Descriptions (^c%d^n/^c%d^n set)\r\n", GET_CHAR_EXDESCS(d->edit_mob).size(), GET_CHAR_MAX_EXDESCS(CH));
     }
   }
   if (mode)
