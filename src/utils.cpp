@@ -2085,6 +2085,11 @@ int get_num_of_cyber_replacements(struct char_data *ch) {
   return total;
 }
 
+int get_attr_max(struct char_data *ch, int attr) {
+  int racial_max = racial_limits[(int) GET_RACE(ch)][RACIAL_LIMITS_NORMAL][attr];
+  return MAX(1, racial_max);
+}
+
 #define INCOMPATIBLE_BIO(biotype, message) { if (GET_BIOWARE_TYPE(bio1) == biotype) { send_to_char(ch, "%s\r\n", message); return FALSE; } }
 bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch)
 {
