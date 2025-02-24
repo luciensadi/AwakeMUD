@@ -3284,6 +3284,7 @@ bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct ob
   if (!to || !SENDOK(to))
     return FALSE;
 
+#ifdef USE_NEW_ACT_TO_TARGET_LOGIC
   // Type precondition failure check
   switch (type) {
     case TO_NOTVICT:
@@ -3301,6 +3302,10 @@ bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct ob
         return FALSE;
       break;
   }
+#else
+  if (ch == to)
+    return FALSE;
+#endif
 
   // Can't see them and it's an action-based message? Fail.
   if (hide_invisible && ch && !CAN_SEE(to, ch))
