@@ -2910,11 +2910,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       break;
     case 'a':
     case 'A':
-#ifdef IS_BUILDPORT
-      if (TRUE) {
-#else
-      if (IS_SENATOR(CH)) {
-#endif
+      {
         if (GET_CHAR_MAX_EXDESCS(d->original ? d->original : d->character) <= 0) {
           send_to_char(d->character, "You don't have the ability to set exdescs. You'll need to purchase them first, see HELP SYSPOINTS.\r\n");
           return;
@@ -2923,8 +2919,6 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         pc_exdesc_edit_disp_main_menu(d);
         STATE(d) = CON_PC_EXDESC_EDIT;
       }
-      else
-        cedit_disp_menu(d, 0);
       break;
     default:
       cedit_disp_menu(d, 0);
