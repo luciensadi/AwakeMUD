@@ -944,6 +944,7 @@ struct command_info cmd_info[] =
     { "stop"       , POS_LYING   , do_stop     , 0, 0, BLOCKS_IDLE_REWARD },
     { "stuck"      , POS_LYING   , do_stuck    , 0, 0, BLOCKS_IDLE_REWARD },
     { "subscribe"  , POS_SITTING , do_subscribe, 0, 0, BLOCKS_IDLE_REWARD },
+    { "submerse"   , POS_DEAD    , do_submerse , 0, SCMD_INITIATE, BLOCKS_IDLE_REWARD },
     { "subpoint"   , POS_DEAD    , do_subpoint , LVL_ARCHITECT, 0, BLOCKS_IDLE_REWARD },
     { "survey"     , POS_LYING   , do_survey   , 0, 0, ALLOWS_IDLE_REWARD },
     { "switch"     , POS_SITTING , do_switch   , 0, 0, BLOCKS_IDLE_REWARD },
