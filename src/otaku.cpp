@@ -132,9 +132,9 @@ void disp_echo_menu(struct descriptor_data *d)
   CLS(CH);
   for (int i = 1; i < ECHO_MAX; i++) {
     if (PRF_FLAGGED(CH, PRF_SCREENREADER)) {
-      send_to_char(CH, "%d) %s%s^n\r\n", i, echoes[i], can_select_echo(CH, i) ? " (can learn)" : " (cannot learn)");
+      send_to_char(CH, "%d) %s%s^n\r\n", i, echoes[i].name, can_select_echo(CH, i) ? " (can learn)" : " (cannot learn)");
     } else {
-      send_to_char(CH, "%d) %s%s^n\r\n", i, can_select_echo(CH, i) ? "" : "^r", echoes[i]);
+      send_to_char(CH, "%d) %s%s^n\r\n", i, can_select_echo(CH, i) ? "" : "^r", echoes[i].name);
     }
   }
 
