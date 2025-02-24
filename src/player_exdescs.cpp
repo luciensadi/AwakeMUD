@@ -256,6 +256,20 @@ bool can_see_exdesc(struct char_data *viewer, struct char_data *vict, PCExDesc *
   Bitfield comparison_field;
   comparison_field.SetAll(*(exdesc->get_wear_slots()));
   comparison_field.RemoveAll(GET_CHAR_COVERED_WEARLOCS(vict));
+
+  // Additional filter-downs
+  if (comparison_field.IsSet(ITEM_WEAR_UNDERWEAR)) {
+    if (GET_CHAR_COVERED_WEARLOCS(vict).AreAnySet(ITEM_WEAR_UNDER, ITEM_WEAR_LEGS, ITEM_WEAR_BODY, ITEM_WEAR_ABOUT, ENDBIT)) {
+      comparison_field.RemoveBit(ITEM_WEAR_UNDERWEAR);
+    }
+  }
+
+  if (comparison_field.IsSet(ITEM_WEAR_CHEST)) {
+    if (GET_CHAR_COVERED_WEARLOCS(vict).AreAnySet(ITEM_WEAR_UNDER, ITEM_WEAR_BODY, ITEM_WEAR_ABOUT, ENDBIT)) {
+      comparison_field.RemoveBit(ITEM_WEAR_CHEST);
+    }
+  }
+
   return comparison_field.HasAnythingSetAtAll();
 }
 
@@ -421,7 +435,7 @@ void pc_exdesc_edit_disp_main_menu(struct descriptor_data *d) {
   if (GET_CHAR_EXDESCS(d->edit_mob).empty()) {
     send_to_char(CH, "You have no extra descriptions set at the moment, but have ^c%d^n slots available.\r\n", GET_CHAR_MAX_EXDESCS(CH));
   } else {
-    list_exdescs(CH, d->edit_mob);
+    list_exdescs(CH, d->edit_mob, TRUE);
   }
 
   if (GET_CHAR_EXDESCS(d->edit_mob).size() < (unsigned long) GET_CHAR_MAX_EXDESCS(CH)) {
