@@ -117,6 +117,7 @@ CREATE TABLE `pfiles_chargendata` (
   `archetypal` tinyint(2) unsigned default '0',
   `archetype` tinyint(2) unsigned default '0',
   `prestige_alt` bigint unsigned default '0' not null,
+  `channel_points` tinyint(2) unsigned default '0',
   PRIMARY KEY (`idnum`)
 );
 

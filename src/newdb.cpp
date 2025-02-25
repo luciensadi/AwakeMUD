@@ -563,7 +563,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
       GET_ARCHETYPAL_MODE(ch) = (bool) atoi(row[5]);
       GET_ARCHETYPAL_TYPE(ch) = atoi(row[6]);
       GET_PRESTIGE_ALT_ID(ch) = atol(row[7]);
-      
+      GET_CHANNEL_POINTS(ch) = atoi(row[9]);
     }
     mysql_free_result(res);
   }

@@ -684,6 +684,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_DOMAIN(ch)          ((ch)->points.domain)
 #define GET_ATT_POINTS(ch)      ((ch)->player_specials->saved.att_points)
 #define GET_SKILL_POINTS(ch)    ((ch)->player_specials->saved.skill_points)
+#define GET_CHANNEL_POINTS(ch)  ((ch)->player_specials->saved.channel_points)
 #define GET_FORCE_POINTS(ch)    ((ch)->player_specials->saved.force_points)
 #define GET_RESTRING_POINTS(ch) ((ch)->player_specials->saved.restring_points)
 #define GET_ARCHETYPAL_TYPE(ch) ((ch)->player_specials->saved.archetype)

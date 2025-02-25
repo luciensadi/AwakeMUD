@@ -858,7 +858,7 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
 SPECIAL(teacher)
 {
   struct char_data *master = (struct char_data *) me;
-  int i, ind, max, skill_num, channel_points;
+  int i, ind, max, skill_num;
 
   if (!(CMD_IS("practice")))
     return FALSE;
@@ -909,13 +909,6 @@ SPECIAL(teacher)
     return TRUE;
   }
 
-  if (IS_OTAKU(ch)) {
-    // Otaku get free skill points to spend on JUST channels based on the avg of these stats, round up
-    channel_points = (GET_REAL_INT(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3;
-    channel_points -= GET_SKILL(ch, SKILL_CHANNEL_ACCESS) + GET_SKILL(ch, SKILL_CHANNEL_CONTROL)
-      + GET_SKILL(ch, SKILL_CHANNEL_FILES) + GET_SKILL(ch, SKILL_CHANNEL_INDEX) + GET_SKILL(ch, SKILL_CHANNEL_SLAVE);
-  }
-
   if (!*argument) {
     bool found_a_skill_already = FALSE;
     bool channel_skills_found = FALSE;
@@ -948,8 +941,8 @@ SPECIAL(teacher)
         if ((max = get_max_skill_for_char(ch, teachers[ind].s[i], teachers[ind].type)) < 0)
           return FALSE;
 
-        if (skills[teachers[ind].s[i]].requires_resonance && channel_points > 0 && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-          // Channel skills are a bit unique for otaku
+        if (skills[teachers[ind].s[i]].requires_resonance && GET_CHANNEL_POINTS(ch) > 0) {
+          // Channel skills are a bit unique for otaku in cg.
           if (!found_a_skill_already) {
             found_a_skill_already = TRUE;
             snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
@@ -984,9 +977,9 @@ SPECIAL(teacher)
       return TRUE;
     }
 
-    if (channel_skills_found && channel_points > 0)
+    if (channel_skills_found && GET_CHANNEL_POINTS(ch) > 0)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %d channel point%s to use specifically for otaku skills, and %d skill point%s.\r\n",
-              channel_points, channel_points > 1 ? "s" : "",
+              GET_CHANNEL_POINTS(ch), GET_CHANNEL_POINTS(ch) > 1 ? "s" : "",
               GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
     else if (GET_SKILL_POINTS(ch) > 0)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %d point%s to use for skills.\r\n",
@@ -1078,24 +1071,34 @@ SPECIAL(teacher)
     }
     lose_nuyen(ch, skill_nuyen_cost, NUYEN_OUTFLOW_SKILL_TRAINING);
   }
-  if (PLR_FLAGGED(ch, PLR_NEWBIE) && skills[skill_num].requires_resonance && channel_points > 0) {
-    // Check this wouldn't put us above our newbie limits.
-    if (REAL_SKILL(ch, skill_num) + 1 > 3) {
-      // Check we don't have any other channel skills at the same value.
-      for (int ci=154; i < 159;i++) {
-        if (REAL_SKILL(ch, ci) == REAL_SKILL(ch, skill_num) + 1) {
-          // Break.
-          send_to_char(ch, "When buying channel skills with freebies you can only have one channel skill at %d, and %s is already at that value.",
-            REAL_SKILL(ch, skill_num) + 1, skills[ci].name);
-          return FALSE;
+  if (skills[skill_num].requires_resonance) {
+    // otaku resonance skills are either bought with channel points or by karma, not skill points.
+    if (GET_CHANNEL_POINTS(ch) > 0) {
+        // Channel points exist only in CharGen. 
+      if (REAL_SKILL(ch, skill_num) + 1 <= 3) {
+        // We can have as many skills below or at 3 as we want with channel points
+        GET_CHANNEL_POINTS(ch)--;
+      } else {
+        // Since we're raising this skill above 3 we have to check we don't bypass the spread of 6, 5, 4, 3, 3.
+        // which is the limit for otaku skills in chargen.
+        for (int ci=154; i < 159;i++) {
+          if (REAL_SKILL(ch, ci) == REAL_SKILL(ch, skill_num) + 1) {
+            send_to_char(ch, "When buying channel skills with freebies you can only have one channel skill at %d, and %s is already at that value.",
+              REAL_SKILL(ch, skill_num) + 1, skills[ci].name);
+              return FALSE;
+          }
         }
+        GET_CHANNEL_POINTS(ch)--;
       }
-    }
-    // No points to detect; it's all calculated on the fly. Leave blank.
-  } else if (GET_SKILL_POINTS(ch) > 0)
-    GET_SKILL_POINTS(ch)--;
-  else
-    GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
+    } 
+    else
+      GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
+  } else {
+    if (GET_SKILL_POINTS(ch) > 0)
+      GET_SKILL_POINTS(ch)--;
+    else
+      GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
+  }
 
   send_to_char(teachers[ind].msg, ch);
   set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) + 1, TRUE);
@@ -1192,6 +1195,10 @@ void train_attribute(struct char_data *ch, struct char_data *trainer, int ind, i
 
   // Apply the change.
   GET_REAL_ATT(ch, attr) += 1;
+
+  // Update channel points if in chargen
+  if (trainers[ind].is_newbie && IS_OTAKU(ch))
+    GET_CHANNEL_POINTS(ch) = (GET_REAL_INT(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3;
 
   // Update character's calculated values.
   affect_total(ch);
@@ -5585,7 +5592,10 @@ SPECIAL(chargen_unpractice_skill)
     }
 
     // Success. Lower the skill by one point.
-    GET_SKILL_POINTS(ch)++;
+    if (skills[skill_num].requires_resonance)
+      GET_CHANNEL_POINTS(ch)++;
+    else
+      GET_SKILL_POINTS(ch)++;
     set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) - 1, FALSE);
 
     if (GET_SKILL(ch, skill_num) == 0) {

@@ -692,6 +692,7 @@ struct player_special_data_saved
   ubyte totemspirit;
   ush_int att_points;              /* attrib points for when you first create */
   ush_int skill_points;            /* starting skill points                   */
+  ush_int channel_points;          /* starting channel skill points for otaku */
   unsigned char force_points;
   unsigned char restring_points;
   int zonenum;
@@ -715,7 +716,7 @@ struct player_special_data_saved
     last_in(0), last_veh(NOTHING), bad_pws(0), automod_counter(0), totem(0), totemspirit(0),
     att_points(0), skill_points(0), force_points(0), restring_points(0), zonenum(0),
     archetype(0), archetypal(FALSE), prestige_alt_id(0), system_points(0), 
-    best_lifestyle(LIFESTYLE_SQUATTER), lifestyle_string(NULL)
+    best_lifestyle(LIFESTYLE_SQUATTER), lifestyle_string(NULL), channel_points(0)
   {
     ZERO_OUT_ARRAY(conditions, 3);
   }
