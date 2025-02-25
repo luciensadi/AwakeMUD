@@ -5507,6 +5507,12 @@ SPECIAL(chargen_untrain_attribute)
     return TRUE;
   }
 
+  if (IS_OTAKU(ch) && GET_CHANNEL_POINTS(ch) < ((GET_REAL_INT(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3)) {
+    // Otaku channel skills have been spent.
+    send_to_char("You cannot untrain attributes while you have channel skills allocated.\r\n", ch);
+    return TRUE;
+  }
+
   if (is_abbrev(argument, "body")) {
     untrain_attribute(ch, BOD, "You determinedly chow down on junk food for a week and decrease your Body to %d.\r\n");
     return TRUE;
@@ -5683,6 +5689,12 @@ SPECIAL(chargen_skill_annex) {
     if (GET_SKILL_POINTS(ch) > 0) {
       send_to_char(ch, "You still have %d skill point%s to spend! You should finish ^WPRACTICE^n-ing your skills before you proceed.\r\n",
                    GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
+      return TRUE;
+    }
+
+    if (GET_CHANNEL_POINTS(ch) > 0) {
+      send_to_char(ch, "You still have %d channel skill point%s to spend! You should finish ^WPRACTICE^n-ing your otaku skills before you proceed.\r\n",
+                   GET_CHANNEL_POINTS(ch), GET_CHANNEL_POINTS(ch) > 1 ? "s" : "");
       return TRUE;
     }
   }
