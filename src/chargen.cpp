@@ -106,17 +106,22 @@ void display_prestige_race_menu(struct descriptor_data *d) {
 
   snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), 
             "\r\n"
+            "\r\n^c--- Otakus take SIGNIFICANT penalties! Choose for RP flavor only. ---^n"
+            "\r\n B) Otaku [Human]    (%4d sysp, 30 build points / slot A)"
+            "\r\n C) Otaku [Dwarf]    (%4d sysp, 35 build points / slot A)"
+            "\r\n D) Otaku [Elf]      (%4d sysp, 40 build points / slot A)"
+            "\r\n E) Otaku [Ork]      (%4d sysp, 35 build points / slot A)"
+            "\r\n F) Otaku [Troll]    (%4d sysp, 40 build points / slot A)",
+            PRESTIGE_CLASS_OTAKU_COST, PRESTIGE_CLASS_OTAKU_COST, PRESTIGE_CLASS_OTAKU_COST, PRESTIGE_CLASS_OTAKU_COST, PRESTIGE_CLASS_OTAKU_COST);
+
+  snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), 
+            "\r\n"
             "\r\n^c--- Dragons can't use 'ware, but have high stat caps. ---^n"
-            "\r\n B) Western Dragon    (%4d sysp, 30 build points / slot B)"
-            "\r\n C) Eastern Dragon    (%4d sysp, 30 build points / slot B)"
-            "\r\n D) Feathered Serpent (%4d sysp, 30 build points / slot B)"
-            "\r\n"
-            "\r\nThe following classes are available (Toggle only one):"
-            "\r\n"
-            "\r\n--- Otaku are a magic variant of Deckers. ---"
-            "\r\n O) Otaku [%s]        (%4d sys, 30 build points / slot A)",
-            PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST,
-            d->ccr.is_otaku ? "^g ON^n" : "^rOFF^n", PRESTIGE_CLASS_OTAKU_COST);
+            "\r\n G) Western Dragon    (%4d sysp, 30 build points / slot B)"
+            "\r\n H) Eastern Dragon    (%4d sysp, 30 build points / slot B)"
+            "\r\n I) Feathered Serpent (%4d sysp, 30 build points / slot B)"
+            "\r\n",
+            PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST, PRESTIGE_RACE_DRAGON_COST);
 
   strlcat(msg_buf, 
             "\r\n"
@@ -833,25 +838,29 @@ int parse_prestige_race(struct descriptor_data *d, const char *arg)
   case '0':
     return RACE_DRAKE_ORK;
   case 'a':
-  case 'A':
     return RACE_DRAKE_TROLL;
   case 'b':
-  case 'B':
-    return RACE_WESTERN_DRAGON;
+    d->ccr.is_otaku = TRUE;
+    return RACE_HUMAN;
   case 'c':
-  case 'C':
-    return RACE_EASTERN_DRAGON;
+    d->ccr.is_otaku = TRUE;
+    return RACE_DWARF;
   case 'd':
-  case 'D':
+    d->ccr.is_otaku = TRUE;
+    return RACE_ELF;
+  case 'e':
+    d->ccr.is_otaku = TRUE;
+    return RACE_ORK;
+  case 'f':
+    d->ccr.is_otaku = TRUE;
+    return RACE_TROLL;
+  case 'g':
+    return RACE_WESTERN_DRAGON;
+  case 'h':
+    return RACE_EASTERN_DRAGON;
+  case 'i':
     return RACE_FEATHERED_SERPENT;
-  case 'o':
-  case 'O':
-    d->ccr.is_otaku = !d->ccr.is_otaku;
-    ccr_race_menu(d);
-    return RETURN_HELP;
-  case 'X':
   case 'x':
-  case 'Q':
   case 'q':
   case '*':
     ccr_race_menu(d);
@@ -1018,7 +1027,7 @@ void priority_menu(struct descriptor_data *d)
     switch (d->ccr.pr[i]) {
     case PR_NONE:
       snprintf(buf3, sizeof(buf3), "%s?           %-2d           %-2d        %d nuyen / %d\r\n",
-               buf2, attrib_vals[i], skill_vals[i], nuyen_vals[i], force_vals[i]);
+               buf2, attrib_vals[i], skill_vals[i], cg_nuyen(d, i), force_vals[i]);
       strlcpy(buf2, buf3, sizeof(buf2));
       break;
     case PR_RACE:
@@ -1594,6 +1603,15 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case RACE_GHOUL_TROLL:
         d->ccr.prestige_cost = PRESTIGE_RACE_GHOUL_COST;
         break;
+      case RACE_HUMAN:
+      case RACE_DWARF:
+      case RACE_ELF:
+      case RACE_ORK:
+      case RACE_TROLL:
+        // If you're here reading this and wondering why normal races are on the prestige race list
+        // it's because bitMuse decided to hijack/reuse these values for otaku.
+        d->ccr.prestige_cost = PRESTIGE_CLASS_OTAKU_COST;
+        break;
       case RACE_EASTERN_DRAGON:
       case RACE_WESTERN_DRAGON:
       case RACE_FEATHERED_SERPENT:
@@ -1605,9 +1623,6 @@ void create_parse(struct descriptor_data *d, const char *arg)
         d->ccr.prestige_race = 0;
         return;
     }
-
-    // TODO: disabled for testing
-    // if (d->ccr.is_otaku) d->ccr.prestige_cost += PRESTIGE_CLASS_OTAKU_COST;
 
     SEND_TO_Q("Enter the name of the character to deduct syspoints from: ", d);
     d->ccr.mode = CCR_PRESTIGE_PAYMENT_GET_NAME;
