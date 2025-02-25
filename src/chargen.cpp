@@ -2153,7 +2153,6 @@ void create_parse(struct descriptor_data *d, const char *arg)
             "\r\n" \
             "\r\nEnter C to select Cyberadept, or T to select Technoshaman: "
     if (isalpha(*arg) && isalpha(*(arg+1))) {
-      snprintf(buf, sizeof(buf), "\r\nARG: '%s'\r\n", arg);
       SEND_TO_Q(buf, d);
       SEND_TO_Q(PATH_HELP_STRING, d);
     } else {
@@ -2182,7 +2181,6 @@ void create_parse(struct descriptor_data *d, const char *arg)
             "\r\n" \
             "\r\nEnter H to select Hermetic, S to select Shamanic, or A to select Somatic Adept: "
     if (isalpha(*arg) && isalpha(*(arg+1))) {
-      snprintf(buf, sizeof(buf), "\r\nARG: '%s'\r\n", arg);
       SEND_TO_Q(buf, d);
       SEND_TO_Q(TRADITION_HELP_STRING, d);
     } else {
