@@ -1225,7 +1225,7 @@ ACMD(do_matrix_score)
             DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
             DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_CYBERDECK_IO_RATING(DECKER->deck) : 0, DECKER->response);
   }
-  
+
   if (HAS_HITCHER_JACK(DECKER->deck)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    Hitcher: %s\r\n", DECKER->hitcher ? "^gconnected^n" : "^rdisconnected^n");
   }
