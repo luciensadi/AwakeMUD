@@ -1225,7 +1225,7 @@ ACMD(do_matrix_score)
             DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
             DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_CYBERDECK_IO_RATING(DECKER->deck) : 0, DECKER->response);
   }
-  
+
   if (HAS_HITCHER_JACK(DECKER->deck)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    Hitcher: %s\r\n", DECKER->hitcher ? "^gconnected^n" : "^rdisconnected^n");
   }
@@ -1799,11 +1799,21 @@ ACMD(do_logoff)
   if (!PERSONA) {
     send_to_char(ch, "You yank the plug out and return to the real world.\r\n");
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-    for (struct char_data *temp = ch->in_room->people; temp; temp = temp->next_in_room)
-      if (PLR_FLAGGED(temp, PLR_MATRIX)) {
-        send_to_char("Your hitcher has disconnected.\r\n", ch);
-        temp->persona->decker->hitcher = NULL;
-      }
+    
+    // Message our driver
+    for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room) {
+        if (targ == ch
+            || !PLR_FLAGGED(targ, PLR_MATRIX)
+            || !targ->persona
+            || !targ->persona->decker
+            || targ->persona->decker->hitcher != ch
+          ) {
+          continue;
+        }
+        // We found our hitcher
+        send_to_char("Your hitcher has disconnected.\r\n", targ);
+        targ->persona->decker->hitcher = NULL;
+    }
     return;
   }
   if (subcmd) {
