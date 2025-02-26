@@ -1877,10 +1877,14 @@ ACMD(do_connect)
                 return;
               }
             }
+#ifdef ALLOW_HITCHING
             act("You slip your jack into $n's hitcher port.", FALSE, temp, 0, ch, TO_VICT);
             send_to_char("Someone has connected to your hitcher port.\r\n", temp);
             PLR_FLAGS(ch).SetBit(PLR_MATRIX);
             temp->persona->decker->hitcher = ch;
+#else
+            send_to_char(ch, "Sorry, the hitching system is disabled right now.\r\n");
+#endif
             return;
           }
         }
@@ -2811,7 +2815,9 @@ void process_upload(struct matrix_icon *persona)
 {
   // Note: We only upload one file at a time. Find the first valid one and process it, then stop.
   if (persona && persona->decker && persona->decker->deck) {
-    for (struct obj_data *soft = persona->decker->deck->contains; soft; soft = soft->next_content) {
+    for (struct obj_data *soft = persona->decker->deck->contains, *next_obj; soft; soft = next_obj) {
+      next_obj = soft->next_content;
+
       // Sanity check: Only upload deck accessories.
       if (GET_OBJ_TYPE(soft) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
         continue;
