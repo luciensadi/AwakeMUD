@@ -1225,6 +1225,10 @@ ACMD(do_matrix_score)
             DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
             DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_CYBERDECK_IO_RATING(DECKER->deck) : 0, DECKER->response);
   }
+  
+  if (HAS_HITCHER_JACK(DECKER->deck)) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    Hitcher: %s\r\n", DECKER->hitcher ? "^gconnected^n" : "^rdisconnected^n");
+  }
 
   if (HAS_HITCHER_JACK(DECKER->deck)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    Hitcher: %s\r\n", DECKER->hitcher ? "^gconnected^n" : "^rdisconnected^n");
@@ -1857,13 +1861,6 @@ ACMD(do_logoff)
     do_look(ch, emptybuf, 0, 0);
   }
 }
-
-#define HAS_HITCHER_JACK(deck) ([](struct obj_data *d) { \
-    for (struct obj_data *hitch = (d)->contains; hitch; hitch = hitch->next_content) \
-        if (GET_OBJ_TYPE(hitch) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(hitch, 0) == 1 && GET_OBJ_VAL(hitch, 1) == 3) \
-            return true; \
-    return false; \
-})(deck)
 
 ACMD(do_connect)
 {
