@@ -1858,6 +1858,13 @@ ACMD(do_logoff)
   }
 }
 
+#define HAS_HITCHER_JACK(deck) ([](struct obj_data *d) { \
+    for (struct obj_data *hitch = (d)->contains; hitch; hitch = hitch->next_content) \
+        if (GET_OBJ_TYPE(hitch) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(hitch, 0) == 1 && GET_OBJ_VAL(hitch, 1) == 3) \
+            return true; \
+    return false; \
+})(deck)
+
 ACMD(do_connect)
 {
   struct char_data *temp;
