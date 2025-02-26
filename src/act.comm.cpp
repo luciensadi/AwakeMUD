@@ -109,7 +109,7 @@ ACMD(do_say)
           ) {
           continue;
         }
-        if (!IS_IGNORING(targ, is_blocking_ic_interaction_from, ch)) // Gag check for ignored characters
+        if (!IS_IGNORING(targ, is_blocking_ic_interaction_from, ch)) {// Gag check for ignored characters
           // We found our hitcher
           snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", capitalize(arg_known_size));
           send_to_char(buf, targ);
