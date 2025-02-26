@@ -1799,7 +1799,7 @@ ACMD(do_logoff)
   if (!PERSONA) {
     send_to_char(ch, "You yank the plug out and return to the real world.\r\n");
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-    
+
     // Message our driver
     for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room) {
         if (targ == ch
@@ -1885,7 +1885,6 @@ ACMD(do_connect)
     skip_spaces(&argument);
     
     temp = get_char_room_vis(ch, argument);
-    if (IS_IGNORING(temp, is_blocking_ic_interaction_from, ch)) temp = NULL;
     if (!temp) {
       send_to_char(ch, "You don't see anyone named '%s' here.\r\n", argument);
       return;
@@ -1897,7 +1896,8 @@ ACMD(do_connect)
         || !temp->persona
         || !temp->persona->decker
         || !temp->persona->decker->deck
-        || !HAS_HITCHER_JACK(temp->persona->decker->deck)) {
+        || !HAS_HITCHER_JACK(temp->persona->decker->deck)
+        || IS_IGNORING(temp, is_blocking_ic_interaction_from, ch)) {
       send_to_char(ch, "It doesn't look like you can hitch a ride with %s.", argument);
       return;
     } else if (temp->persona->decker->hitcher) {
