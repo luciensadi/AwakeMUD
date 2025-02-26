@@ -23,6 +23,13 @@ struct ic_info dummy_ic;
 
 #define ICON_IS_IC(icon) (!(icon)->decker)
 
+#define HAS_HITCHER_JACK(deck) ([](struct obj_data *d) { \
+    for (struct obj_data *hitch = (d)->contains; hitch; hitch = hitch->next_content) \
+        if (GET_OBJ_TYPE(hitch) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(hitch, 0) == 1 && GET_OBJ_VAL(hitch, 1) == 3) \
+            return true; \
+    return false; \
+})(deck)
+
 extern void order_list(struct matrix_icon *start);
 extern void create_program(struct char_data *ch);
 extern void create_part(struct char_data *ch);
@@ -1219,6 +1226,10 @@ ACMD(do_matrix_score)
             DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_CYBERDECK_IO_RATING(DECKER->deck) : 0, DECKER->response);
   }
 
+  if (HAS_HITCHER_JACK(DECKER->deck)) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    Hitcher: %s\r\n", DECKER->hitcher ? "^gconnected^n" : "^rdisconnected^n");
+  }
+
   if (DECKER->io < GET_CYBERDECK_IO_RATING(DECKER->deck)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^yYour I/O rating is restricted to %d by your jackpoint.^n\r\n", DECKER->io * 10);
   }
@@ -1477,11 +1488,6 @@ void show_icon_to_persona(struct matrix_icon *ch, struct matrix_icon *icon) {
 
 ACMD(do_matrix_look)
 {
-  if (!PERSONA) {
-    send_to_char(ch, "You can't do that while hitching.\r\n");
-    return;
-  }
-
   // Did they supply a target? Look at that instead.
   if (argument && *argument) {
     one_argument(argument, arg);
@@ -1793,11 +1799,21 @@ ACMD(do_logoff)
   if (!PERSONA) {
     send_to_char(ch, "You yank the plug out and return to the real world.\r\n");
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-    for (struct char_data *temp = ch->in_room->people; temp; temp = temp->next_in_room)
-      if (PLR_FLAGGED(temp, PLR_MATRIX)) {
-        send_to_char("Your hitcher has disconnected.\r\n", ch);
-        temp->persona->decker->hitcher = NULL;
-      }
+
+    // Message our driver
+    for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room) {
+        if (targ == ch
+            || !PLR_FLAGGED(targ, PLR_MATRIX)
+            || !targ->persona
+            || !targ->persona->decker
+            || targ->persona->decker->hitcher != ch
+          ) {
+          continue;
+        }
+        // We found our hitcher
+        send_to_char("Your hitcher has disconnected.\r\n", targ);
+        targ->persona->decker->hitcher = NULL;
+    }
     return;
   }
   if (subcmd) {
@@ -1864,36 +1880,41 @@ ACMD(do_connect)
   if (!(jack = get_datajack(ch, FALSE)))
     return;
 
-  for (temp = ch->in_room->people; temp; temp = temp->next_in_room)
-    if (PLR_FLAGGED(temp, PLR_MATRIX) && !IS_IGNORING(temp, is_blocking_ic_interaction_from, ch)) {
-      if (temp->persona && temp->persona->decker->deck) {
-        for (struct obj_data *hitch = temp->persona->decker->deck->contains; hitch; hitch = hitch->next_content) {
-          if (GET_OBJ_TYPE(hitch) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(hitch, 0) == 1 &&
-              GET_OBJ_VAL(hitch, 1) == 3)
-          {
-            for (struct char_data *temp2 = ch->in_room->people; temp2; temp2 = temp2->next_in_room) {
-              if (temp2 != temp && PLR_FLAGGED(temp2, PLR_MATRIX)) {
-                act("The hitcher jack on $n's deck is already in use.", FALSE, temp, 0, ch, TO_VICT);
-                return;
-              }
-            }
-#ifdef ALLOW_HITCHING
-            act("You slip your jack into $n's hitcher port.", FALSE, temp, 0, ch, TO_VICT);
-            send_to_char("Someone has connected to your hitcher port.\r\n", temp);
-            PLR_FLAGS(ch).SetBit(PLR_MATRIX);
-            temp->persona->decker->hitcher = ch;
-#else
-            send_to_char(ch, "Sorry, the hitching system is disabled right now.\r\n");
-#endif
-            return;
-          }
-        }
-      }
+  // hitcher code, new syntax is connect <dude>
+  if (*argument && !PLR_FLAGGED(ch, PLR_MATRIX)) {
+    skip_spaces(&argument);
+    
+    temp = get_char_room_vis(ch, argument);
+    if (!temp) {
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", argument);
+      return;
+    } else if (temp == ch) {
+      send_to_char(ch, "Are you trying to divide by zero? You can't connect to yourself.\r\n");
+      return;
+    } else if (
+        !PLR_FLAGGED(temp, PLR_MATRIX)
+        || !temp->persona
+        || !temp->persona->decker
+        || !temp->persona->decker->deck
+        || !HAS_HITCHER_JACK(temp->persona->decker->deck)
+        || IS_IGNORING(temp, is_blocking_ic_interaction_from, ch)) {
+      send_to_char(ch, "It doesn't look like you can hitch a ride with %s.", argument);
+      return;
+    } else if (temp->persona->decker->hitcher) {
+      send_to_char(ch, "The hitcher jack on %s's deck is already in use.", argument);
+      return;
+    }
+
+    act("You slip your jack into $n's hitcher port.", FALSE, temp, 0, ch, TO_VICT);
+    send_to_char("Someone has connected to your hitcher port.\r\n", temp);
+    PLR_FLAGS(ch).SetBit(PLR_MATRIX);
+    temp->persona->decker->hitcher = ch;
+    return;
+  }
 #ifdef JACKPOINTS_ARE_ONE_PERSON_ONLY
       send_to_char("The jackpoint is already in use.\r\n", ch);
       return;
 #endif
-    }
 
   for (cyber = ch->carrying; !cyberdeck && cyber; cyber = cyber->next_content)
     if ((GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK) && (IS_SENATOR(ch) || !IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY)))
