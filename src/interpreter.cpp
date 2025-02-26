@@ -1625,13 +1625,8 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     return;
   }
 
-  if (PLR_FLAGGED(ch, PLR_MATRIX) && !ch->persona) {
-    mudlog("SYSERR: PLR_MATRIX-flagged character did not have a persona! Removing matrix flag.", ch, LOG_SYSLOG, TRUE);
-    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-  }
-
   /* otherwise, find the command */
-  if (PLR_FLAGGED(ch, PLR_MATRIX))
+  if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->persona)
   {
     for (length = strlen(arg), cmd = 0; *mtx_info[cmd].command != '\n'; cmd++)
       if (!strncmp(mtx_info[cmd].command, arg, length))

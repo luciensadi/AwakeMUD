@@ -1477,11 +1477,6 @@ void show_icon_to_persona(struct matrix_icon *ch, struct matrix_icon *icon) {
 
 ACMD(do_matrix_look)
 {
-  if (!PERSONA) {
-    send_to_char(ch, "You can't do that while hitching.\r\n");
-    return;
-  }
-
   // Did they supply a target? Look at that instead.
   if (argument && *argument) {
     one_argument(argument, arg);
