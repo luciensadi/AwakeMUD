@@ -69,6 +69,7 @@ struct command_info
 
 #ifndef __INTERPRETER_CC__
 extern struct command_info cmd_info[];
+extern struct command_info mtx_htr_info[];
 extern struct command_info mtx_info[];
 extern struct command_info rig_info[];
 #endif
