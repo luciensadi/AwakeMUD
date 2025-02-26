@@ -13,25 +13,9 @@ good luck.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60501
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60501
@@ -52,25 +36,9 @@ to clear your path. Feel free to try this with the door to the east!
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60502
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	Keywords:	door
@@ -85,9 +53,6 @@ EAST^n to enter here."
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60500
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60502
@@ -108,31 +73,12 @@ to the north.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60503
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60501
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60503
@@ -146,31 +92,12 @@ continue.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	60502
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60504
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60504
@@ -188,31 +115,12 @@ newly-rediscovered practice of magic.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	60505
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60503
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60505
@@ -229,31 +137,12 @@ directions to allocate attribute points.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60504
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60506
@@ -273,79 +162,36 @@ survival.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60505
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	60507
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	60508
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	60509
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60513
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	60512
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60511
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	60510
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60628
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60593
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60507
@@ -362,31 +208,12 @@ to fight with cybernetically-installed weapons such as hand razors and spurs.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southwest]
 	ToVnum:	60506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60626
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60508
@@ -402,31 +229,12 @@ is best to keep firearms concealed unless you actually need to use them.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	60506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60627
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60509
@@ -441,25 +249,9 @@ operation of vehicles and drones.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northwest]
 	ToVnum:	60506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60510
@@ -477,25 +269,9 @@ items aura.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	60506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60511
@@ -510,31 +286,15 @@ Skills to help with Programming are to the WEST.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60692
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60591
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60512
@@ -550,31 +310,12 @@ failed dice roll based on your language skill.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	60506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	60592
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60513
@@ -590,31 +331,12 @@ system. Proceed SOUTH to continue.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60514
@@ -630,43 +352,18 @@ head SOUTH to learn more about their profession.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60513
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	60520
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60518
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60515
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60515
@@ -686,31 +383,12 @@ are great. Continue WEST to learn more.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60516
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60516
@@ -731,31 +409,12 @@ formidable with a legion of machines backing them up.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60515
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60517
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60517
@@ -772,75 +431,41 @@ makes it hard for beneficial spells to bind with your body.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60611
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	60516
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60610
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	60614
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60613
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	60612
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60615
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	datajack~~~~~~~~~~~~~~~~~~
+	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
 	Desc:$
-A DATAJACK is necessary for a decker or a rigger to interface their mind with
-a machine. 
+Wired Reflexes, while costly to the user's essence, enhance their REACTION and
+INITIATIVE, allowing them to attack more often than an un-augmented person.
+Wired Reflexes are known to cause some people to be extra jumpy. 
 ~
 [EXTRADESC 1]
-	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
+	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
 	Desc:$
-The SMARTLINK system allows the user to use a smartlink accessorized firearm,
-granting them greater accuracy in ranged combat. If the weapon is outfitted
-with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
-feature is automatically used. 
+The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
+be able to mentally control a vehicle. An explanation of RIGGING is provided
+later in the guild. 
 ~
 [EXTRADESC 2]
 	Keywords:	spurs razors retractable~~~~~~~~~~~~~~~~~~
@@ -851,18 +476,18 @@ automatically used when the character enters unarmed combat, and success is
 based on the CYBERIMPLANT COMBAT skill. 
 ~
 [EXTRADESC 3]
-	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
+	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
 	Desc:$
-The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
-be able to mentally control a vehicle. An explanation of RIGGING is provided
-later in the guild. 
+The SMARTLINK system allows the user to use a smartlink accessorized firearm,
+granting them greater accuracy in ranged combat. If the weapon is outfitted
+with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
+feature is automatically used. 
 ~
 [EXTRADESC 4]
-	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
+	Keywords:	datajack~~~~~~~~~~~~~~~~~~
 	Desc:$
-Wired Reflexes, while costly to the user's essence, enhance their REACTION and
-INITIATIVE, allowing them to attack more often than an un-augmented person.
-Wired Reflexes are known to cause some people to be extra jumpy. 
+A DATAJACK is necessary for a decker or a rigger to interface their mind with
+a machine. 
 ~
 BREAK
 #60518
@@ -877,31 +502,12 @@ bioware, which should be avoided as they cause random ability loss.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60607
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60519
@@ -916,31 +522,12 @@ learn to advance that ability another level.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60606
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60525
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60520
@@ -957,31 +544,12 @@ astral projection, which will be explained later in the tutorial.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60523
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60521
@@ -998,31 +566,12 @@ perception.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60524
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60623
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60522
@@ -1043,31 +592,12 @@ gain you whatever services remained to the elemental's summoner.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60594
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60524
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60523
@@ -1086,31 +616,12 @@ result in the loss of magic abilities by the Shaman.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60624
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60520
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60524
@@ -1131,31 +642,12 @@ have a harder time doing things that require concentration.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60522
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60521
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60525
@@ -1169,31 +661,12 @@ the archetypes.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60526
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60526
@@ -1219,31 +692,12 @@ CREDSTICK".
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60527
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60525
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60527
@@ -1267,31 +721,12 @@ be accomplished with RADIO OFF.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60528
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60526
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60528
@@ -1306,31 +741,12 @@ NORTH to learn about channels.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60540
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60527
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60529
@@ -1357,31 +773,12 @@ initiated, this is explained later.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60608
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60540
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60530
@@ -1396,20 +793,7 @@ open.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	doors shaft
 	Desc:$
@@ -1417,15 +801,12 @@ A pair of elevator doors allows access to the liftway.
 ~
 	ToVnum:	60621
 	Flags:	1
-	Material:	brick
-	Barrier:	4
+	Material:	metal
+	Barrier:	8
 	KeyVnum:	998
 	LockRating:	8
 [EXIT south]
 	ToVnum:	60608
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60531
@@ -1439,20 +820,7 @@ elevator.
 ~
 Flags:	11000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	Keywords:	doors shaft
 	Desc:$
@@ -1485,20 +853,7 @@ Awake has to offer.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	Keywords:	doors shaft
 	Desc:$
@@ -1506,15 +861,12 @@ A pair of elevator doors allows access to the liftway.
 ~
 	ToVnum:	60622
 	Flags:	1
-	Material:	brick
-	Barrier:	4
+	Material:	metal
+	Barrier:	8
 	KeyVnum:	998
 	LockRating:	8
 [EXIT south]
 	ToVnum:	60533
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60533
@@ -1529,55 +881,24 @@ worlds, and will tell you the important commands that are necessary.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60532
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	60535
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60538
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60534
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60537
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60536
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60534
@@ -1598,31 +919,12 @@ be undertaken while in the astral plane, these are explained to the WEST.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60533
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60609
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60535
@@ -1643,25 +945,9 @@ LOGON, ANALYZE, DOWNLOAD, SOFTWARE and RUN for more information.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	60533
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60536
@@ -1688,25 +974,9 @@ UPGRADE, UNINSTALL, ATTACH, TARGET, and REPAIR.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT up]
 	ToVnum:	60533
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60537
@@ -1732,25 +1002,9 @@ HAIL when you're out on the street to flag down a cab.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60533
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60538
@@ -1762,31 +1016,12 @@ equipment.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60533
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60539
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60539
@@ -1803,31 +1038,12 @@ NORTH to learn about the types of equipment in 2060.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60538
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60540
@@ -1845,31 +1061,12 @@ side of a closed door.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60529
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60528
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60541
@@ -1893,73 +1090,33 @@ listed is MUD time.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60549
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	60545
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	60546
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	60547
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60539
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	60544
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60543
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	60542
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60590
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60542
@@ -1984,31 +1141,12 @@ Peacemaker
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	60541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60548
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60543
@@ -2023,25 +1161,9 @@ Sword
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60544
@@ -2053,25 +1175,9 @@ where you wear it.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	60541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60545
@@ -2082,25 +1188,9 @@ metroplex might need. Type LIST to see what's available.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southwest]
 	ToVnum:	60541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60546
@@ -2113,37 +1203,15 @@ various electronic devices are stored in storage lockers.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	60541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60587
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60588
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60547
@@ -2155,25 +1223,9 @@ environment.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northwest]
 	ToVnum:	60541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60548
@@ -2192,25 +1244,9 @@ for firing in burst fire mode.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60542
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60549
@@ -2226,31 +1262,12 @@ character generation only.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	60541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60550
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60550
@@ -2269,31 +1286,12 @@ be able to hurt you. Continue SOUTH to learn more about combat.
 ~
 Flags:	1000000000000000000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	60551
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60549
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60551
@@ -2319,31 +1317,12 @@ to cast it.
 ~
 Flags:	1000000000000000000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60550
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60552
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60552
@@ -2364,37 +1343,15 @@ combat.
 ~
 Flags:	1000000000000000000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60551
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60554
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60553
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60553
@@ -2405,25 +1362,9 @@ Go back east before you get shot!
 ~
 Flags:	1000000000000000000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60552
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60554
@@ -2453,31 +1394,12 @@ only as good as its user.
 ~
 Flags:	1000000000000000000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60552
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60555
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60555
@@ -2490,31 +1412,12 @@ Shadowrun Universe. Head DOWN to start.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60554
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60556
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60556
@@ -2530,31 +1433,12 @@ and we are dead serious about this. Continue NORTH.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60557
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60555
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60557
@@ -2565,31 +1449,12 @@ continue north.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60558
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60556
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60558
@@ -2602,31 +1467,12 @@ an arse.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60559
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60557
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60559
@@ -2641,31 +1487,12 @@ Deckers. For more detail, type HELP CUSTOMIZE and HELP DESCRIPTION.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60560
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60558
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60560
@@ -2677,31 +1504,12 @@ trigger if you attack police officers or try and raid corporate installations
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	60561
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60559
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60561
@@ -2712,31 +1520,12 @@ Once you're done reading, head SOUTH.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60560
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60562
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60562
@@ -2753,25 +1542,9 @@ by them during my stay here.^n"
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60561
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60563
@@ -2783,61 +1556,27 @@ Maybe you should talk to them.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60585
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	60566
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	60573
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60569
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	60570
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60564
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	60565
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60564
@@ -2852,31 +1591,12 @@ all when you go through the guild for the second time.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60500
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60565
@@ -2889,25 +1609,9 @@ exit the game, you must RENT.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	60563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60566
@@ -2918,31 +1622,12 @@ connection in the Matrix that serves at a database for all Shadowrunners.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60567
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southwest]
 	ToVnum:	60563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60567
@@ -2955,31 +1640,12 @@ assistance.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60568
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60566
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60568
@@ -2991,25 +1657,9 @@ day.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	60567
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60569
@@ -3020,25 +1670,9 @@ flashlights, and rations.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60570
@@ -3052,37 +1686,15 @@ various things of all types, donated by the community for the less fortunate.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	60563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	60572
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60571
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60571
@@ -3096,25 +1708,9 @@ various things of all types, donated by the community for the less fortunate.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60570
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60572
@@ -3128,25 +1724,9 @@ various things of all types, donated by the community for the less fortunate.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	60570
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60573
@@ -3166,37 +1746,15 @@ MOBS respond and interact with you.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60575
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60574
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60574
@@ -3209,25 +1767,9 @@ booth, maybe you should ask him for work.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60573
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60575
@@ -3247,32 +1789,15 @@ means there are plenty of job opportunities for characters.
 ~
 Flags:	11100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	60573
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	Keywords:	door trapdoor hatch
 	ToVnum:	60576
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60576
@@ -3285,38 +1810,18 @@ illuminated, and incredibly large, vicious rats scamper throughout the area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60577
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60583
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	Keywords:	door trapdoor hatch
 	ToVnum:	60575
 	Flags:	1
 	Material:	wood
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60577
@@ -3329,31 +1834,12 @@ illuminated, and incredibly large, vicious rats scamper throughout the area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60578
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60576
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60578
@@ -3366,31 +1852,12 @@ illuminated, and incredibly large, vicious rats scamper throughout the area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60579
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60577
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60579
@@ -3403,31 +1870,12 @@ illuminated, and incredibly large, vicious rats scamper throughout the area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	60580
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60578
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60580
@@ -3440,37 +1888,15 @@ illuminated, and incredibly large, vicious rats scamper throughout the area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60579
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60581
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60584
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60581
@@ -3483,31 +1909,12 @@ illuminated, and incredibly large, vicious rats scamper throughout the area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60580
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60582
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60582
@@ -3520,31 +1927,12 @@ illuminated, and incredibly large, vicious rats scamper throughout the area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60581
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60583
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60583
@@ -3557,31 +1945,12 @@ illuminated, and incredibly large, vicious rats scamper throughout the area.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60576
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	60582
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60584
@@ -3602,24 +1971,10 @@ Trace:	0
 RTG:	1100
 JackID:	2064897
 Address:	The basement of Ricky's Eatery
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
 	Light:	4
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60580
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60585
@@ -3636,37 +1991,15 @@ HAIL a cab outside, get inside, and tell the driver where you want to go.
 ~
 Flags:	11100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	32679
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	60586
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60563
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60586
@@ -3681,31 +2014,12 @@ GUILD, THEY ARE ON THE OUTSIDE FOR GOOD.  YOU HAVE BEEN WARNED.^N
 ~
 Flags:	110000000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	32680
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60585
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60587
@@ -3718,25 +2032,9 @@ authenticity seals are missing....
 ~
 Flags:	1000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60546
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60588
@@ -3752,31 +2050,12 @@ more professional man, perhaps the higher-quality chips can be had over there.
 ~
 Flags:	1000000000000001000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60589
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60546
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60589
@@ -3789,25 +2068,9 @@ SOFTWARE for your CYBERDECK as well as some high-end PERSONA chips.
 ~
 Flags:	1000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	60588
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60590
@@ -3820,25 +2083,9 @@ otherwise it will cost you karma depending on the type, and force of the FOCI.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT up]
 	ToVnum:	60541
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60591
@@ -3851,25 +2098,9 @@ phase of program creation.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60511
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60592
@@ -3883,25 +2114,9 @@ you with better prices in shops, and better rewards from johnsons.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	60512
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60593
@@ -3913,25 +2128,9 @@ at least a couple of ranks in.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT up]
 	ToVnum:	60506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60594
@@ -3949,31 +2148,12 @@ magic loss.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60595
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60522
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60595
@@ -3994,31 +2174,12 @@ elemental.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60596
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60594
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60596
@@ -4039,31 +2200,12 @@ astral plane.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60597
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60595
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60597
@@ -4080,31 +2222,12 @@ previous owner and makes it usable by you.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60598
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60596
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60598
@@ -4119,61 +2242,27 @@ categories. Go DOWN to continue with the tutorial.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60600
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
 	ToVnum:	60601
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	60602
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	60603
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60604
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60597
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60525
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60599
@@ -4184,25 +2273,9 @@ head down the stairs below.
 ~
 Flags:	10011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60565
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60600
@@ -4216,25 +2289,9 @@ targets. Combat spells are represented by the Fire element.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	60598
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60601
@@ -4247,25 +2304,9 @@ and increasing stats. Health spells have no elemental representative.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southwest]
 	ToVnum:	60598
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60602
@@ -4279,25 +2320,9 @@ Air Element.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	60598
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60603
@@ -4312,25 +2337,9 @@ represented by the Water Elemental.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northwest]
 	ToVnum:	60598
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60604
@@ -4344,25 +2353,9 @@ amounts of mana. Manipulation spells are represented by the Earth Element.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60598
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60605
@@ -4372,20 +2365,7 @@ You are in an unfinished room.
 ~
 Flags:	11000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 BREAK
 #60606
 Name:	Purchasing Power Points
@@ -4399,31 +2379,12 @@ awakened characters.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60607
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60519
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60607
@@ -4443,31 +2404,12 @@ using the PERCEIVE command.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60518
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60606
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60608
@@ -4489,31 +2431,12 @@ however.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60530
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60529
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60609
@@ -4538,31 +2461,12 @@ stay projected due to essence loss you will have to resume again later.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60534
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60533
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60610
@@ -4574,31 +2478,12 @@ explanatory cyberware listed here.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60517
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60633
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60611
@@ -4615,31 +2500,12 @@ sight without projecting or perceiving.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	60517
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60629
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60612
@@ -4652,31 +2518,12 @@ enforcement and corporate guards, so watch out.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT southeast]
 	ToVnum:	60517
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60630
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60613
@@ -4689,31 +2536,12 @@ found on most items here.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60517
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60631
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60614
@@ -4726,31 +2554,12 @@ people don't like dealing with someone packed full of machines.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT northeast]
 	ToVnum:	60517
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60632
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60615
@@ -4769,55 +2578,24 @@ kick in.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60618
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	60617
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60619
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60616
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
 	ToVnum:	60517
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
 	ToVnum:	60525
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60616
@@ -4831,25 +2609,9 @@ greater freedom of movement.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60615
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60617
@@ -4865,25 +2627,9 @@ receive the normal cultured bonuses as they are already factored in.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	ToVnum:	60615
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60618
@@ -4899,25 +2645,9 @@ stay healthy.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	ToVnum:	60615
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60619
@@ -4929,25 +2659,9 @@ accomplish.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60615
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60620
@@ -4962,20 +2676,7 @@ remember to ^WOPEN DOOR WEST^n first.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT west]
 	Keywords:	door
 	Desc:$
@@ -4997,25 +2698,15 @@ Alternatively, if you're here in person: hop out before the car hits you!
 ~
 Flags:	10000000001010000000000000011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
+X:	2
+Y:	2
+Z:	5.00
 [POINTS]
-	SpecIdx:	0
 	Rating:	6
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
-	ToVnum:	60622
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	ToVnum:	0
+	Material:	paper
+	Barrier:	0
 	KeyVnum:	0
 BREAK
 #60622
@@ -5027,20 +2718,11 @@ Alternatively, if you're here in person: hop out before the car hits you!
 ~
 Flags:	10000000001010000000000000011100
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	0.00
-RoomType:	0
+X:	2
+Y:	2
+Z:	5.00
 [POINTS]
-	SpecIdx:	0
 	Rating:	6
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT south]
 	Keywords:	doors shaft
 	Desc:$
@@ -5048,15 +2730,14 @@ A pair of elevator doors allows access to the liftway.
 ~
 	ToVnum:	60532
 	Flags:	1
-	Material:	brick
-	Barrier:	4
+	Material:	metal
+	Barrier:	8
 	KeyVnum:	998
 	LockRating:	8
 [EXIT up]
-	ToVnum:	60621
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	ToVnum:	0
+	Material:	paper
+	Barrier:	0
 	KeyVnum:	0
 BREAK
 #60623
@@ -5073,31 +2754,12 @@ astral projection, which will be explained later in the tutorial.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60521
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60514
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60624
@@ -5118,31 +2780,12 @@ have a harder time doing things that require concentration.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60625
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60523
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60625
@@ -5163,31 +2806,12 @@ services remained to the spirit's summoner.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
 	ToVnum:	60594
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60624
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60626
@@ -5204,25 +2828,12 @@ able to use throwing knives or shuriken.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
 X:	0
 Y:	0
 Z:	5.00
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60507
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60627
@@ -5237,25 +2848,9 @@ types of ammunition and the process for creating it.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60508
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60628
@@ -5268,25 +2863,9 @@ useful in roleplay scenarios and have no in-game coded effects.^n
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60506
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60629
@@ -5303,25 +2882,9 @@ treated as natural vision.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60611
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60630
@@ -5336,25 +2899,9 @@ mind when running the shadows.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60612
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60631
@@ -5366,25 +2913,9 @@ be found for each type of ware accordingly.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60613
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60632
@@ -5398,25 +2929,9 @@ made out of chrome tends to make people flighty.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60614
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 BREAK
 #60633
@@ -5430,25 +2945,24 @@ listed here.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	2.50
-RoomType:	0
 [POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60610
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60692
+Name:	Otaku Channels Training
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000000000000011000
+SecType:	Inside
+X:	0
+Y:	0
+Z:	0.00
+[POINTS]
+[EXIT north]
+	ToVnum:	60511
 	KeyVnum:	0
 BREAK
 END
