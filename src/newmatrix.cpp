@@ -1974,10 +1974,10 @@ bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, obj
         || !temp->persona->decker->deck
         || !HAS_HITCHER_JACK(temp->persona->decker->deck)
         || IS_IGNORING(temp, is_blocking_ic_interaction_from, ch)) {
-      send_to_char(ch, "It doesn't look like you can hitch a ride with %s.", argument);
+      send_to_char(ch, "It doesn't look like you can hitch a ride with %s.\r\n", argument);
       return TRUE;
     } else if (temp->persona->decker->hitcher) {
-      send_to_char(ch, "The hitcher jack on %s's deck is already in use.", argument);
+      send_to_char(ch, "The hitcher jack on %s's deck is already in use.\r\n", argument);
       return TRUE;
     }
 
