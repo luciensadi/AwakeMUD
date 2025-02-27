@@ -60,6 +60,27 @@ void make_seen(struct matrix_icon *icon, int idnum)
   icon->decker->seen = seen;
 }
 
+void clear_hitcher(struct char_data *ch, bool shouldNotify)
+{
+    // Safety check: ensure ch is valid and actually hitched to someone
+    if (!ch || !ch->hitched_to) {
+        return;
+    }
+
+    // Notify the hitcher if requested
+    if (shouldNotify) {
+        send_to_char("Your hitcher has disconnected.\r\n", ch->hitched_to);
+    }
+
+    // Clear references
+    if (ch->hitched_to->persona && ch->hitched_to->persona->decker)
+      ch->hitched_to->persona->decker->hitcher = NULL; // Super safety check. Clear functions should always be safe.
+    ch->hitched_to = NULL;
+
+    // Remove matrix flag
+    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+}
+
 struct obj_data * spawn_paydata(struct matrix_icon *icon) {
   struct obj_data *obj = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, OBJ_LOAD_REASON_SPAWN_PAYDATA);
   GET_DECK_ACCESSORY_TYPE(obj) = TYPE_FILE;
@@ -1798,22 +1819,7 @@ ACMD(do_logoff)
 {
   if (!PERSONA) {
     send_to_char(ch, "You yank the plug out and return to the real world.\r\n");
-    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-
-    // Message our driver
-    for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room) {
-        if (targ == ch
-            || !PLR_FLAGGED(targ, PLR_MATRIX)
-            || !targ->persona
-            || !targ->persona->decker
-            || targ->persona->decker->hitcher != ch
-          ) {
-          continue;
-        }
-        // We found our hitcher
-        send_to_char("Your hitcher has disconnected.\r\n", targ);
-        targ->persona->decker->hitcher = NULL;
-    }
+    clear_hitcher(ch, TRUE);
     return;
   }
   if (subcmd) {
@@ -1909,6 +1915,7 @@ ACMD(do_connect)
     send_to_char("Someone has connected to your hitcher port.\r\n", temp);
     PLR_FLAGS(ch).SetBit(PLR_MATRIX);
     temp->persona->decker->hitcher = ch;
+    ch->hitched_to = temp;
     return;
   }
 #ifdef JACKPOINTS_ARE_ONE_PERSON_ONLY

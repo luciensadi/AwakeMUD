@@ -264,4 +264,16 @@ extern bool has_spotted(struct matrix_icon *icons, struct matrix_icon *targ);
 
 bool display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck);
 
+/**
+ * @brief Notifies characters in the same room as `ch` about their hitcher disconnecting.
+ *
+ * This function checks if the character `ch` has a hitcher. If `shouldNotify` is true,
+ * it sends a message to the hitcher about the disconnection. It then clears out the
+ * relevant hitcher references and any associated flags.
+ *
+ * @param ch           The character whose hitcher status is being checked.
+ * @param shouldNotify If true, sends a message to the affected character(s).
+ */
+void clear_hitcher(struct char_data *ch, bool shouldNotify);
+
 #endif

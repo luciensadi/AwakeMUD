@@ -944,6 +944,7 @@ struct char_data
   struct mob_special_data mob_specials;        /* NPC specials           */
   struct veh_data *in_veh;
   bool vfront;
+  struct char_data *hitched_to;         /* When using hitching, this is who we're connected to */
   struct matrix_icon *persona;
 
   struct spell_queue *squeue;
@@ -1013,7 +1014,7 @@ struct char_data
       next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
       pgroup_invitations(NULL), congregation_bonus_pool(0), last_loop_rand(0), pc_invis_resistance_test_results(NULL),
       mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(NULL), precast_spells(NULL),
-      is_carrying_vehicle(FALSE)
+      is_carrying_vehicle(FALSE), hitched_to(NULL)
   {
     ZERO_OUT_ARRAY(equipment, NUM_WEARS);
 
