@@ -110,6 +110,7 @@ ACMD(do_say)
       snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", capitalize(arg_known_size));
       send_to_char(buf, ch);
       store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
+    }
     return;
   }
 
