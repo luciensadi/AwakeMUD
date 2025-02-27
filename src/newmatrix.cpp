@@ -1873,7 +1873,7 @@ ACMD(do_logoff)
     }
     
     // Clear the deck if this is an otaku
-    if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
+    if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE))
       extract_obj(PERSONA->decker->deck);
     return;
   }
@@ -1923,10 +1923,100 @@ ACMD(do_logoff)
   }
 }
 
+/**
+ * @brief Parses the connect command's arguments and modifies the caller's variables
+ *
+ * @param cyberdeck A reference to a pointer to cyberdeck, which could be modified
+ *                   to point to a new object.
+ * @param proxy_deck proxy decks are part of the otaku nonsense
+ * @param host For senators, host allows connecting directly to a host
+ *
+ * @returns whether or not the connect function should return early.
+ */
+bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, obj_data *&proxy_deck, rnum_t *host) {
+  struct char_data *temp;
+  vnum_t host_vnum;
+
+  // Easy guard check; is there even an argument?
+  skip_spaces(&argument);
+  if (!*argument) return FALSE;
+
+  char targ[100];
+  char *arg_remaining = one_argument(argument, targ);
+
+  if (IS_SENATOR(ch)) {
+    host_vnum = atoi(argument);
+  }
+
+  if (!PLR_FLAGGED(ch, PLR_MATRIX) && host_vnum <= 0) {
+    if (IS_OTAKU(ch) && (is_abbrev(argument, "with cyberdeck") || is_abbrev(targ, "cyberdeck"))) {
+      // Otaku can use 'proxy decks' which allow them to access the storage of an external deck
+      // This check here is for their special connect parsing
+      if (!cyberdeck) { // There's no cyberdeck they have
+        send_to_char(ch, "With *what* cyberdeck?\r\n");
+        return TRUE;
+      }
+
+      // Extra secret squirrel access codes
+      proxy_deck = cyberdeck; 
+      extern struct obj_data *make_otaku_deck(struct char_data *ch);
+      cyberdeck = make_otaku_deck(ch);
+      return FALSE;
+    }
+
+    // This is the hitcher code.
+    temp = get_char_room_vis(ch, argument);
+    if (!temp) {
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", argument);
+      return TRUE;
+    } else if (temp == ch) {
+      send_to_char(ch, "Are you trying to divide by zero? You can't connect to yourself.\r\n");
+      return TRUE;
+    } else if (
+        !PLR_FLAGGED(temp, PLR_MATRIX)
+        || !temp->persona
+        || !temp->persona->decker
+        || !temp->persona->decker->deck
+        || !HAS_HITCHER_JACK(temp->persona->decker->deck)
+        || IS_IGNORING(temp, is_blocking_ic_interaction_from, ch)) {
+      send_to_char(ch, "It doesn't look like you can hitch a ride with %s.", argument);
+      return TRUE;
+    } else if (temp->persona->decker->hitcher) {
+      send_to_char(ch, "The hitcher jack on %s's deck is already in use.", argument);
+      return TRUE;
+    }
+
+    act("You slip your jack into $n's hitcher port.", FALSE, temp, 0, ch, TO_VICT);
+    send_to_char("Someone has connected to your hitcher port.\r\n", temp);
+    PLR_FLAGS(ch).SetBit(PLR_MATRIX);
+    temp->persona->decker->hitcher = ch;
+    return FALSE;
+  }
+
+  if (IS_SENATOR(ch)) {
+    if (host_vnum <= 0) {
+      send_to_char("Invalid syntax! Either CONNECT with no arguments, or CONNECT <vnum> to connect directly to that host.\r\n", ch);
+      return TRUE;
+    }
+
+    rnum_t host_rnum = real_host(host_vnum);
+    if (host_rnum < 0) {
+      send_to_char(ch, "%s is not a valid host.\r\n", argument);
+      return TRUE;
+    }
+
+    send_to_char(ch, "You override your jackpoint to connect to host %ld.\r\n", host_vnum);
+    *host = host_rnum;
+  }
+
+  return FALSE;
+}
+
 ACMD(do_connect)
 {
   struct char_data *temp;
   struct matrix_icon *icon = NULL;
+  
   struct obj_data *cyber, *cyberdeck = NULL, *jack, *proxy_deck = NULL;
   rnum_t host;
 
@@ -1945,37 +2035,10 @@ ACMD(do_connect)
   if (!(jack = get_datajack(ch, FALSE)))
     return;
 
-  // hitcher code, new syntax is connect <dude>
-  if (*argument && !PLR_FLAGGED(ch, PLR_MATRIX)) {
-    skip_spaces(&argument);
-    
-    temp = get_char_room_vis(ch, argument);
-    if (!temp) {
-      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", argument);
+  // Command argument parsing
+  if (parse_connect_args(ch, argument, cyberdeck, proxy_deck, &host))
       return;
-    } else if (temp == ch) {
-      send_to_char(ch, "Are you trying to divide by zero? You can't connect to yourself.\r\n");
-      return;
-    } else if (
-        !PLR_FLAGGED(temp, PLR_MATRIX)
-        || !temp->persona
-        || !temp->persona->decker
-        || !temp->persona->decker->deck
-        || !HAS_HITCHER_JACK(temp->persona->decker->deck)
-        || IS_IGNORING(temp, is_blocking_ic_interaction_from, ch)) {
-      send_to_char(ch, "It doesn't look like you can hitch a ride with %s.", argument);
-      return;
-    } else if (temp->persona->decker->hitcher) {
-      send_to_char(ch, "The hitcher jack on %s's deck is already in use.", argument);
-      return;
-    }
 
-    act("You slip your jack into $n's hitcher port.", FALSE, temp, 0, ch, TO_VICT);
-    send_to_char("Someone has connected to your hitcher port.\r\n", temp);
-    PLR_FLAGS(ch).SetBit(PLR_MATRIX);
-    temp->persona->decker->hitcher = ch;
-    return;
-  }
 #ifdef JACKPOINTS_ARE_ONE_PERSON_ONLY
       send_to_char("The jackpoint is already in use.\r\n", ch);
       return;
@@ -1987,25 +2050,6 @@ ACMD(do_connect)
   for (int i = 0; !cyberdeck && i < NUM_WEARS; i++)
     if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
       cyberdeck = GET_EQ(ch, i);
-
-  if (!IS_SENATOR(ch) && *argument) {
-    // as non-staff you can add 'with cyberdeck' or 'cyberdeck' as an otaku to chain through a deck.
-    if (is_abbrev(argument, "with cyberdeck") || is_abbrev(argument, "cyberdeck")) {
-      if (!cyberdeck) {
-        send_to_char(ch, "With *what* cyberdeck?\r\n");
-        return;
-      }
-      if (!IS_OTAKU(ch)) {
-        send_to_char(ch, "You're already connecting with a cyberdeck. How else would you use the matrix?");
-        return;
-      }
-
-      // Extra secret squirrel access codes
-      proxy_deck = cyberdeck; 
-      extern struct obj_data *make_otaku_deck(struct char_data *ch);
-      cyberdeck = make_otaku_deck(ch);
-    }
-  }
 
   if (!cyberdeck) {
     if (access_level(ch, LVL_ADMIN)) {
@@ -2026,28 +2070,6 @@ ACMD(do_connect)
   if (GET_CYBERDECK_MPCP(cyberdeck) == 0) {
     send_to_char("You cannot connect to the matrix with fried MPCP chips!\r\n", ch);
     return;
-  }
-
-  if (IS_SENATOR(ch)) {
-    // As staff, you can also connect to specific host vnums from any jackpoint.
-    if (*argument) {
-      skip_spaces(&argument);
-
-      vnum_t host_vnum = atoi(argument);
-      if (host_vnum <= 0) {
-        send_to_char("Invalid syntax! Either CONNECT with no arguments, or CONNECT <vnum> to connect directly to that host.\r\n", ch);
-        return;
-      }
-
-      rnum_t host_rnum = real_host(host_vnum);
-      if (host_rnum < 0) {
-        send_to_char(ch, "%s is not a valid host.\r\n", argument);
-        return;
-      }
-
-      send_to_char(ch, "You override your jackpoint to connect to host %ld.\r\n", host_vnum);
-      host = host_rnum;
-    }
   }
 
   if (matrix[host].alert > 2) {
