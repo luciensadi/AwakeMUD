@@ -2435,8 +2435,8 @@ void extract_icon(struct matrix_icon * icon)
 
   if (icon->decker) {
     if (icon->decker->hitcher) {
-      CLEAR_HITCHER(icon->decker->hitcher, FALSE);
       send_to_char(icon->decker->hitcher, "You return to your senses.\r\n");
+      CLEAR_HITCHER(icon->decker->hitcher, FALSE);      
     }
     struct obj_data *temp;
     for (struct obj_data *obj = icon->decker->software; obj; obj = temp) {
