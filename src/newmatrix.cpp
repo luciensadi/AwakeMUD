@@ -60,6 +60,27 @@ void make_seen(struct matrix_icon *icon, int idnum)
   icon->decker->seen = seen;
 }
 
+void clear_hitcher(struct char_data *ch, bool shouldNotify)
+{
+    // Safety check: ensure ch is valid and actually hitched to someone
+    if (!ch || !ch->hitched_to) {
+        return;
+    }
+
+    // Notify the hitcher if requested
+    if (shouldNotify) {
+        send_to_char("Your hitcher has disconnected.\r\n", ch->hitched_to);
+    }
+
+    // Clear references
+    // Make sure ch->hitched_to->persona and ch->hitched_to->persona->decker are valid in your code
+    ch->hitched_to->persona->decker->hitcher = nullptr;
+    ch->hitched_to = nullptr;
+
+    // Remove matrix flag
+    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+}
+
 struct obj_data * spawn_paydata(struct matrix_icon *icon) {
   struct obj_data *obj = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, OBJ_LOAD_REASON_SPAWN_PAYDATA);
   GET_DECK_ACCESSORY_TYPE(obj) = TYPE_FILE;
@@ -1798,7 +1819,7 @@ ACMD(do_logoff)
 {
   if (!PERSONA) {
     send_to_char(ch, "You yank the plug out and return to the real world.\r\n");
-    CLEAR_HITCHER(ch, TRUE);
+    clear_hitcher(ch, TRUE);
     return;
   }
   if (subcmd) {
@@ -1894,6 +1915,7 @@ ACMD(do_connect)
     send_to_char("Someone has connected to your hitcher port.\r\n", temp);
     PLR_FLAGS(ch).SetBit(PLR_MATRIX);
     temp->persona->decker->hitcher = ch;
+    ch->hitched_to = temp;
     return;
   }
 #ifdef JACKPOINTS_ARE_ONE_PERSON_ONLY

@@ -944,6 +944,7 @@ struct char_data
   struct mob_special_data mob_specials;        /* NPC specials           */
   struct veh_data *in_veh;
   bool vfront;
+  struct char_data *hitched_to;         /* When using hitching, this is who we're connected to */
   struct matrix_icon *persona;
 
   struct spell_queue *squeue;

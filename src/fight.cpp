@@ -985,7 +985,7 @@ void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
         ch->persona = NULL;
         PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
       } else if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->in_room) {
-        CLEAR_HITCHER(ch, TRUE);
+        clear_hitcher(ch, TRUE);
       }
 
       char_from_room(ch);
@@ -2375,7 +2375,7 @@ void docwagon_retrieve(struct char_data *ch) {
     ch->persona = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
   } else if (PLR_FLAGGED(ch, PLR_MATRIX)) {
-    CLEAR_HITCHER(ch, TRUE);
+    clear_hitcher(ch, TRUE);
   }
   docwagon_message(ch);
   // death_penalty(ch);  /* Penalty for deadly wounds */
