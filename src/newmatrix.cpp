@@ -270,8 +270,8 @@ bool tarbaby(struct obj_data *prog, struct char_data *ch, struct matrix_icon *ic
     REMOVE_FROM_LIST(prog, DECKER->software, next_content);
     // Otaku complex forms cannot be destroyed from memory, so no problem there.
     if (ic->ic.type == IC_TARPIT 
-      && success_test(target, DECKER->mpcp + DECKER->hardening) > 0 
-      && !DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE))
+      && !DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)
+      && success_test(target, DECKER->mpcp + DECKER->hardening) > 0)
       for (struct obj_data *copy = DECKER->deck->contains; copy; copy = copy->next_content) {
         if (!strcmp(GET_OBJ_NAME(copy), GET_OBJ_NAME(prog))) {
           send_to_icon(PERSONA, "It destroys all copies in storage memory as well!\r\n");
