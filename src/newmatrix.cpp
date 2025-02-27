@@ -1871,6 +1871,7 @@ ACMD(do_logoff)
         send_to_char("Your hitcher has disconnected.\r\n", targ);
         targ->persona->decker->hitcher = NULL;
     }
+    return;
   }
   if (subcmd) {
     WAIT_STATE(ch, (int) (3 RL_SEC));
