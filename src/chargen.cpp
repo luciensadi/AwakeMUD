@@ -472,7 +472,6 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
       if (!(temp_obj = read_object(archetypes[i]->cyberware[cyb], VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid cyberware item %ld specified for archetype %s.",
                  archetypes[i]->cyberware[cyb], archetypes[i]->name);
-        mudlog(buf, CH, LOG_SYSLOG, TRUE);
         continue;
       }
 
@@ -950,7 +949,7 @@ int parse_assign(struct descriptor_data *d, const char *arg)
     lowest_kosher_magic_slot--;
 
   // Except for otaku who are always mundane lol
-  if (*arg == 2 && d->ccr.is_otaku && d->ccr.temp <= 1) {
+  if (*arg == 2 && d->ccr.is_otaku) {
     snprintf(buf2, sizeof(buf2), "Magic cannot be assigned on Otaku characters, they are always mundane.");
     SEND_TO_Q(buf2, d);
     return 0;
@@ -1136,7 +1135,6 @@ static void start_game(descriptor_data *d, const char *origin)
         if (!(temp_obj = read_object(otaku_cyberware[cyb], VIRTUAL, OBJ_LOAD_REASON_ARCHETYPE))) {
           mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: Invalid cyberware item %ld specified for otaku class.",
             otaku_cyberware[cyb]);
-          mudlog(buf, CH, LOG_SYSLOG, TRUE);
           continue;
         }
 
@@ -2147,9 +2145,9 @@ void create_parse(struct descriptor_data *d, const char *arg)
     break;
 
   case CCR_OTAKU_PATH:
-  #define PATH_HELP_STRING "\r\nCyberadepts express their connection to the matrix in a formulaic and rational way. Their complex forms are more potent." \
+  #define PATH_HELP_STRING "\r\nCyberadepts express their connection to the matrix in a formulaic and rational way. Their complex forms (programs) are more potent and gain a +1 to effectiveness." \
             "\r\n" \
-            "\r\nTechnoshamans commune with the matrix in a more magical way. The natural way in which they interact with the matrix makes it easier to channel and command." \
+            "\r\nTechnoshamans commune with the matrix in a more magical way. The natural way in which they interact with the matrix makes it easier to channel and command. When doing any operational test they gain a +1 bonus." \
             "\r\n" \
             "\r\nEnter C to select Cyberadept, or T to select Technoshaman: "
     if (isalpha(*arg) && isalpha(*(arg+1))) {

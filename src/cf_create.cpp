@@ -46,7 +46,7 @@ int complex_form_programs[COMPLEX_FORM_TYPES] = {
 void cfedit_disp_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  send_to_char(CH, "1) Name: ^c%s^n\r\n", FORM->restring);
+  send_to_char(CH, "1) Name: ^c%s^n\r\n", GET_OBJ_NAME(FORM));
   send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[GET_DESIGN_PROGRAM(FORM)].name);
   send_to_char(CH, "3) Rating: ^c%d^n\r\n", GET_DESIGN_RATING(FORM));
 

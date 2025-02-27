@@ -5838,12 +5838,12 @@ struct obj_data *make_new_finished_program(int part_type, int mpcp, int rating=0
 
 struct obj_data *make_otaku_deck(struct char_data *ch) {
   if (!ch) {
-    mudlog_vfprintf(ch, LOG_FUCKUPLOG, "Tried to create an otaku deck, but provided invalid character.");
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Tried to create an otaku deck, but provided invalid character.");
     return NULL;
   }
   struct obj_data *asist = find_cyberware(ch, CYB_ASIST);
   if (!asist) {
-    mudlog_vfprintf(ch, LOG_FUCKUPLOG, "Tried to create an otaku deck, but otaku somehow didn't have an asist interface.");
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Tried to create an otaku deck, but otaku somehow didn't have an asist interface.");
     return NULL;
   }
 
