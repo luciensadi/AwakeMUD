@@ -1298,6 +1298,52 @@ ACMD_DECLARE(do_talk);
 ACMD_DECLARE(do_trace);
 ACMD_DECLARE(do_fry_self);
 
+struct command_info mtx_htr_info[] =
+  {
+    { "RESERVED", 0, 0, 0, 0
+    , BLOCKS_IDLE_REWARD },
+    { "afk", 0, do_afk, 0, 0, ALLOWS_IDLE_REWARD },
+    { "disconnect", 0, do_logoff, 0, 1, BLOCKS_IDLE_REWARD },
+    { "logoff", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
+    { "emote", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
+    { ":", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
+    { "exit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
+    { "help", 0, do_help, 0, 0, BLOCKS_IDLE_REWARD },
+    { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, BLOCKS_IDLE_REWARD },
+    { "idea", 0, do_gen_write, 0, SCMD_IDEA, BLOCKS_IDLE_REWARD },
+    { "index", 0, do_index, 0, 0, BLOCKS_IDLE_REWARD },
+    { "jobs", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
+    { "look", 0, do_look, 0, 0, BLOCKS_IDLE_REWARD },
+    { "say", 0, do_say, 0, 0, BLOCKS_IDLE_REWARD },
+    { "'", 0, do_say, 0, 0, BLOCKS_IDLE_REWARD },
+    { "ooc", 0, do_gen_comm, 0, SCMD_OOC, BLOCKS_IDLE_REWARD },
+    { "quit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
+    { "praise", 0, do_gen_write, 0, SCMD_PRAISE, BLOCKS_IDLE_REWARD },
+    { "reply", 0, do_reply, 0, 0 , BLOCKS_IDLE_REWARD },
+    { "tell", 0, do_tell, 0, 0 , BLOCKS_IDLE_REWARD },
+    { "skills", 0, do_skills   , 0, 0, BLOCKS_IDLE_REWARD },
+    { "score", 0, do_score, 0, 0, BLOCKS_IDLE_REWARD },
+    { "typo", 0, do_gen_write, 0, SCMD_TYPO, BLOCKS_IDLE_REWARD },
+    { "who", 0, do_who, 0, 0, BLOCKS_IDLE_REWARD },
+    { "wtell", 0, do_wiztell, LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+
+        // Channel history commands.
+    { "history"    , 0, do_message_history, 0, 0, ALLOWS_IDLE_REWARD },
+    { "hts"        , 0, do_switched_message_history, 0, COMM_CHANNEL_HIRED, ALLOWS_IDLE_REWARD },
+    { "questions"  , 0, do_switched_message_history, 0, COMM_CHANNEL_QUESTIONS, ALLOWS_IDLE_REWARD },
+    { "oocs"       , 0, do_switched_message_history, 0, COMM_CHANNEL_OOC, ALLOWS_IDLE_REWARD },
+    { "osays"      , 0, do_switched_message_history, 0, COMM_CHANNEL_OSAYS, ALLOWS_IDLE_REWARD },
+    { "pages"      , 0, do_switched_message_history, LVL_ARCHITECT, COMM_CHANNEL_PAGES, ALLOWS_IDLE_REWARD },
+    { "rts"        , 0, do_switched_message_history, 0, COMM_CHANNEL_RPE, ALLOWS_IDLE_REWARD },
+    { "says"       , 0, do_switched_message_history, 0, COMM_CHANNEL_SAYS, ALLOWS_IDLE_REWARD },
+    { "shouts"     , 0, do_switched_message_history, 0, COMM_CHANNEL_SHOUTS, ALLOWS_IDLE_REWARD },
+    { "tells"      , 0, do_switched_message_history, 0, COMM_CHANNEL_TELLS, ALLOWS_IDLE_REWARD },
+    { "wtells"     , 0, do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS, ALLOWS_IDLE_REWARD },
+    { "wts"        , 0, do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS, ALLOWS_IDLE_REWARD },
+
+    { "\n", 0, 0, 0, 0, FALSE  }
+  };
+
 struct command_info mtx_info[] =
   {
     { "RESERVED", 0, 0, 0, 0
@@ -1552,12 +1598,75 @@ void nonsensical_reply(struct char_data *ch, const char *arg, const char *mode)
   }
 }
 
+ACMD_DECLARE(quit_the_matrix_first);
+bool matrix_interpreter(struct char_data * ch, char *argument, char *line, command_info *scmd_list) {
+  int cmd, length;
+
+  for (length = strlen(arg), cmd = 0; *scmd_list[cmd].command != '\n'; cmd++)
+    if (!strncmp(scmd_list[cmd].command, arg, length))
+      if ((scmd_list[cmd].minimum_level < LVL_BUILDER) || access_level(ch, scmd_list[cmd].minimum_level))
+        break;
+
+  // If they have failed to enter a valid Matrix command, and we were unable to fix a typo in their command:
+  if (*scmd_list[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, scmd_list)) == -1) {
+    // If the command exists outside of the Matrix, let them know that it's not an option here.
+    for (length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
+      if (!strncmp(cmd_info[cmd].command, arg, length))
+        if ((cmd_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, cmd_info[cmd].minimum_level))
+          break;
+
+    // Nothing was found? Give them the "wat" and bail.
+    if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
+      // Attempt to send it as a custom channel message. If that doesn't work, nonsensical reply.
+      if (!send_command_as_custom_channel_message(ch, arg)) {
+        nonsensical_reply(ch, arg, "matrix");
+      }
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+      verify_every_pointer_we_can_think_of();
+#endif
+      return TRUE;
+    }
+
+    if (ch->desc)
+      ch->desc->invalid_command_counter = 0;
+
+    // Their command was valid in external context. Inform them.
+    quit_the_matrix_first(ch, line, 0, 0);
+  }
+  else {
+    // Sanity check: Level restriction.
+    if ((scmd_list[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, scmd_list[cmd].minimum_level)) {
+      send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only matrix command %s!", GET_CHAR_NAME(ch), scmd_list[cmd].command);
+#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+      verify_every_pointer_we_can_think_of();
+#endif
+      return TRUE;
+    }
+
+    if (ch->persona && ch->persona->decker->hitcher) {
+      send_to_char(ch->persona->decker->hitcher, "^y<OUTGOING> %s^n\r\n", argument);
+    }
+    verify_data(ch, line, cmd, scmd_list[cmd].subcmd, "pre-matrix");
+    if (!special(ch, cmd, line)) {
+      ((scmd_list[cmd].command_pointer) (ch, line, cmd, scmd_list[cmd].subcmd));
+      verify_data(ch, line, cmd, scmd_list[cmd].subcmd, "matrix");
+    } else {
+      verify_data(ch, line, cmd, scmd_list[cmd].subcmd, "matrix special");
+    }
+    return TRUE;
+  }
+  #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
+  verify_every_pointer_we_can_think_of();
+  #endif
+  return FALSE;
+}
+
 /*
  * This is the actual command interpreter called from game_loop() in comm.c
  * It makes sure you are the proper level and position to execute the command,
  * then calls the appropriate function.
  */
-ACMD_DECLARE(quit_the_matrix_first);
 ACMD_DECLARE(stop_rigging_first);
 void command_interpreter(struct char_data * ch, char *argument, const char *tcname)
 {
@@ -1630,70 +1739,15 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     return;
   }
 
-  if (PLR_FLAGGED(ch, PLR_MATRIX) && !ch->persona) {
-    mudlog("SYSERR: PLR_MATRIX-flagged character did not have a persona! Removing matrix flag.", ch, LOG_SYSLOG, TRUE);
-    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-  }
-
   /* otherwise, find the command */
-  if (PLR_FLAGGED(ch, PLR_MATRIX))
-  {
-    for (length = strlen(arg), cmd = 0; *mtx_info[cmd].command != '\n'; cmd++)
-      if (!strncmp(mtx_info[cmd].command, arg, length))
-        if ((mtx_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, mtx_info[cmd].minimum_level))
-          break;
-
-    // If they have failed to enter a valid Matrix command, and we were unable to fix a typo in their command:
-    if (*mtx_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, mtx_info)) == -1) {
-      // If the command exists outside of the Matrix, let them know that it's not an option here.
-      for (length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
-        if (!strncmp(cmd_info[cmd].command, arg, length))
-          if ((cmd_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, cmd_info[cmd].minimum_level))
-            break;
-
-      // Nothing was found? Give them the "wat" and bail.
-      if (*cmd_info[cmd].command == '\n' && (cmd = fix_common_command_fuckups(arg, cmd_info)) == -1) {
-        // Attempt to send it as a custom channel message. If that doesn't work, nonsensical reply.
-        if (!send_command_as_custom_channel_message(ch, arg)) {
-          nonsensical_reply(ch, arg, "matrix");
-        }
-#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
-        verify_every_pointer_we_can_think_of();
-#endif
-        return;
-      }
-
-      if (ch->desc)
-        ch->desc->invalid_command_counter = 0;
-
-      // Their command was valid in external context. Inform them.
-      quit_the_matrix_first(ch, line, 0, 0);
+  if (PLR_FLAGGED(ch, PLR_MATRIX)) {
+    if (!ch->persona) {
+      // This block exists for the hitcher-exclusive matrix commandset.
+      if (matrix_interpreter(ch, argument, line, mtx_htr_info)) return;
+    } else {
+      // This is the proper command code for matrix/deckers
+      if (matrix_interpreter(ch, argument, line, mtx_info)) return;
     }
-    else {
-      // Sanity check: Level restriction.
-      if ((mtx_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, mtx_info[cmd].minimum_level)) {
-        send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
-        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only matrix command %s!", GET_CHAR_NAME(ch), mtx_info[cmd].command);
-#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
-        verify_every_pointer_we_can_think_of();
-#endif
-        return;
-      }
-
-      if (ch->persona->decker->hitcher) {
-        send_to_char(ch->persona->decker->hitcher, "^y<OUTGOING> %s^n\r\n", argument);
-      }
-      verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "pre-matrix");
-      if (!special(ch, cmd, line)) {
-        ((*mtx_info[cmd].command_pointer) (ch, line, cmd, mtx_info[cmd].subcmd));
-        verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "matrix");
-      } else {
-        verify_data(ch, line, cmd, mtx_info[cmd].subcmd, "matrix special");
-      }
-    }
-#ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
-    verify_every_pointer_we_can_think_of();
-#endif
   } else if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))
   {
     for (length = strlen(arg), cmd = 0; *rig_info[cmd].command != '\n'; cmd++)

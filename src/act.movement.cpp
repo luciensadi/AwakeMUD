@@ -1042,6 +1042,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   }
 
   FALSE_CASE(GET_POS(ch) < POS_FIGHTING || (AFF_FLAGGED(ch, AFF_PRONE) && !IS_NPC(ch)), "Maybe you should get on your feet first?");
+  FALSE_CASE(PLR_FLAGGED(ch, PLR_MATRIX), "It will be difficult to do that while tethered to the matrix."); // This is for hitchers, primarily
 
   if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
@@ -2236,7 +2237,7 @@ ACMD(do_leave)
   }
 
   // Movement restriction: Must be standing and not fighting.
-  FAILURE_CASE(GET_POS(ch) < POS_STANDING, "Maybe you should get on your feet first?");
+  FAILURE_CASE(GET_POS(ch) < POS_FIGHTING, "Maybe you should get on your feet first?");
   FAILURE_CASE(FIGHTING(ch) || FIGHTING_VEH(ch), "You'll have to FLEE if you want to escape from combat!");
 
   // Leaving an elevator shaft is handled in the button panel's spec proc code. See transport.cpp.
