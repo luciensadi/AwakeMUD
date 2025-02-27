@@ -1741,7 +1741,10 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   if (found_veh->owner > 0 || found_veh->locked) {
     bool is_staff = access_level(ch, LVL_CONSPIRATOR);
     bool is_owner = GET_IDNUM_EVEN_IF_PROJECTING(ch) == found_veh->owner;
-    bool is_following_owner = (ch->master && GET_IDNUM(ch->master) == found_veh->owner && AFF_FLAGGED(ch, AFF_GROUP)); // todo: make this grouped with (owner can follow you)
+    bool is_following_owner = (ch->master && GET_IDNUM(ch->master) == found_veh->owner);
+#ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
+    is_following_owner &= AFF_FLAGGED(ch, AFF_GROUP);   // todo: make this grouped with (owner can follow you)
+#endif
     bool owner_is_remote_rigging = found_veh->rigger && GET_IDNUM(found_veh->rigger);
     bool owner_is_driving = FALSE;
 
@@ -1759,9 +1762,12 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
         // This error message kinda sucks to write.
         if (!ch->master || GET_IDNUM(ch->master) != found_veh->owner) {
           send_to_char(ch, "You need to be following the owner to enter %s.\r\n", GET_VEH_NAME(found_veh));
-        } else if (!AFF_FLAGGED(ch, AFF_GROUP)) {
+        }
+#ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
+        else if (!AFF_FLAGGED(ch, AFF_GROUP)) {
           send_to_char(ch, "The owner needs to group you before you can enter %s.\r\n", GET_VEH_NAME(found_veh));
         }
+#endif
         return;
       }
     }

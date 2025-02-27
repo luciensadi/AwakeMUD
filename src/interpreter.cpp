@@ -1299,6 +1299,7 @@ struct command_info mtx_htr_info[] =
     , BLOCKS_IDLE_REWARD },
     { "afk", 0, do_afk, 0, 0, ALLOWS_IDLE_REWARD },
     { "disconnect", 0, do_logoff, 0, 1, BLOCKS_IDLE_REWARD },
+    { "look", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD }, // shadows 'l' so people reflexively looking don't get DC'd from hitch session
     { "logoff", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
     { "emote", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { ":", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
