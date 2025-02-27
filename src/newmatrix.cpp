@@ -73,9 +73,9 @@ void clear_hitcher(struct char_data *ch, bool shouldNotify)
     }
 
     // Clear references
-    // Make sure ch->hitched_to->persona and ch->hitched_to->persona->decker are valid in your code
-    ch->hitched_to->persona->decker->hitcher = nullptr;
-    ch->hitched_to = nullptr;
+    if (ch->hitched_to->persona && ch->hitched_to->persona->decker)
+      ch->hitched_to->persona->decker->hitcher = NULL; // Super safety check. Clear functions should always be safe.
+    ch->hitched_to = NULL;
 
     // Remove matrix flag
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
