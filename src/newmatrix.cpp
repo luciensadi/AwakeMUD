@@ -2302,18 +2302,19 @@ ACMD(do_connect)
 
 ACMD(do_load)
 {
-  if (!PERSONA) {
-    send_to_char(ch, "You can't do that while hitching.\r\n");
-    return;
-  }
+  obj_data *deck = DECKER->deck;
+  if (IS_OTAKU(DECKER->ch)) deck = DECKER->proxy_deck;
+
   if (!DECKER->deck) {
     send_to_char(ch, "You need a deck to %s from!\r\n", subcmd == SCMD_UNLOAD ? "unload" : "upload");
     return;
   }
+
   if (!*argument) {
     send_to_char(ch, "What do you want to %s?\r\n", subcmd == SCMD_UNLOAD ? "unload" : "upload");
     return;
   }
+
   skip_spaces(&argument);
   if (subcmd == SCMD_UNLOAD) {
     if (PERSONA->type == ICON_LIVING_PERSONA) {
@@ -2337,6 +2338,7 @@ ACMD(do_load)
     }
   } else {
     // What is with the absolute fascination with non-bracketed if/for/else/etc statements in this codebase? This was enormously hard to read. - LS
+    // lol, so true - bitMuse
     for (struct obj_data *soft = DECKER->deck->contains; soft; soft = soft->next_content) {
       // Look for a name match.
       if (!keyword_appears_in_obj(argument, soft))
