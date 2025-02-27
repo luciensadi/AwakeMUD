@@ -48,6 +48,35 @@
 #define MTX_ALERT_ACTIVE            2
 #define MTX_ALERT_SHUTDOWN          3
 
+/**
+ * @brief Notifies characters in the same room as `ch` about their hitcher disconnecting.
+ *
+ * This macro iterates over all characters in the same room as `ch` and checks if they
+ * have `ch` as their hitcher. If `shouldNotify` is true, it sends a message to them
+ * informing about the disconnection. The hitcher reference is then cleared.
+ *
+ * @param ch The character whose hitcher status is being checked.
+ * @param shouldNotify If true, sends a message to affected characters.
+ */
+#define CLEAR_HITCHER(ch, shouldNotify) do { \
+    for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room) { \
+        if (targ == ch \
+            || !PLR_FLAGGED(targ, PLR_MATRIX) \
+            || !targ->persona \
+            || !targ->persona->decker \
+            || targ->persona->decker->hitcher != ch) { \
+            continue; \
+        } \
+        /* We found our hitcher */ \
+        if (shouldNotify) { \
+            send_to_char("Your hitcher has disconnected.\r\n", targ); \
+        } \
+        targ->persona->decker->hitcher = NULL; \
+    } \
+    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX); \
+} while (0)
+
+
 extern const char *acifs_strings[];
 
 struct host_data {

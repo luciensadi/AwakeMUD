@@ -2435,9 +2435,8 @@ void extract_icon(struct matrix_icon * icon)
 
   if (icon->decker) {
     if (icon->decker->hitcher) {
-      PLR_FLAGS(icon->decker->hitcher).RemoveBit(PLR_MATRIX);
+      CLEAR_HITCHER(icon->decker->hitcher, FALSE);
       send_to_char(icon->decker->hitcher, "You return to your senses.\r\n");
-      icon->decker->hitcher = NULL;
     }
     struct obj_data *temp;
     for (struct obj_data *obj = icon->decker->software; obj; obj = temp) {
@@ -2950,9 +2949,7 @@ void extract_char(struct char_data * ch, bool do_save)
     ch->persona = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
   } else if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->in_room) {
-    for (struct char_data *temp = ch->in_room->people; temp; temp = temp->next_in_room)
-      if (PLR_FLAGGED(temp, PLR_MATRIX))
-        temp->persona->decker->hitcher = NULL;
+    CLEAR_HITCHER(ch, TRUE);
   }
 
   /* end astral tracking */

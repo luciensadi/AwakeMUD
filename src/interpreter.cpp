@@ -2671,10 +2671,7 @@ int perform_dupe_check(struct descriptor_data *d)
       d->character->persona = NULL;
       PLR_FLAGS(d->character).RemoveBit(PLR_MATRIX);
     } else if (PLR_FLAGGED(d->character, PLR_MATRIX)) {
-      for (struct char_data *temp = d->character->in_room->people; temp; temp = temp->next_in_room)
-        if (PLR_FLAGGED(temp, PLR_MATRIX))
-          temp->persona->decker->hitcher = NULL;
-      PLR_FLAGS(d->character).RemoveBit(PLR_MATRIX);
+      CLEAR_HITCHER(d->character, TRUE);
     }
     // now delete all the editing struct
     if (d->edit_obj)

@@ -1802,22 +1802,7 @@ ACMD(do_logoff)
 {
   if (!PERSONA) {
     send_to_char(ch, "You yank the plug out and return to the real world.\r\n");
-    PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-
-    // Message our driver
-    for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room) {
-        if (targ == ch
-            || !PLR_FLAGGED(targ, PLR_MATRIX)
-            || !targ->persona
-            || !targ->persona->decker
-            || targ->persona->decker->hitcher != ch
-          ) {
-          continue;
-        }
-        // We found our hitcher
-        send_to_char("Your hitcher has disconnected.\r\n", targ);
-        targ->persona->decker->hitcher = NULL;
-    }
+    CLEAR_HITCHER(ch, TRUE);
     return;
   }
   if (subcmd) {

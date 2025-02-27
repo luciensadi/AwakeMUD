@@ -985,11 +985,7 @@ void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
         ch->persona = NULL;
         PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
       } else if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->in_room) {
-        if (access_level(ch, LVL_PRESIDENT))
-          send_to_char(ch, "^YPLR_MATRIX set, but not in mtx.\r\n");
-        for (struct char_data *temp = get_ch_in_room(ch)->people; temp; temp = temp->next_in_room)
-          if (PLR_FLAGGED(temp, PLR_MATRIX))
-            temp->persona->decker->hitcher = NULL;
+        CLEAR_HITCHER(ch, TRUE);
       }
 
       char_from_room(ch);
@@ -2379,9 +2375,7 @@ void docwagon_retrieve(struct char_data *ch) {
     ch->persona = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
   } else if (PLR_FLAGGED(ch, PLR_MATRIX)) {
-    for (struct char_data *temp = room->people; temp; temp = temp->next_in_room)
-      if (PLR_FLAGGED(temp, PLR_MATRIX))
-        temp->persona->decker->hitcher = NULL;
+    CLEAR_HITCHER(ch, TRUE);
   }
   docwagon_message(ch);
   // death_penalty(ch);  /* Penalty for deadly wounds */
