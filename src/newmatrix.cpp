@@ -1230,10 +1230,6 @@ ACMD(do_matrix_score)
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    Hitcher: %s\r\n", DECKER->hitcher ? "^gconnected^n" : "^rdisconnected^n");
   }
 
-  if (HAS_HITCHER_JACK(DECKER->deck)) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    Hitcher: %s\r\n", DECKER->hitcher ? "^gconnected^n" : "^rdisconnected^n");
-  }
-
   if (DECKER->io < GET_CYBERDECK_IO_RATING(DECKER->deck)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^yYour I/O rating is restricted to %d by your jackpoint.^n\r\n", DECKER->io * 10);
   }
