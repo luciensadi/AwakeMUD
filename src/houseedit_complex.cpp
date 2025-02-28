@@ -104,7 +104,7 @@ void houseedit_list_complexes(struct char_data *ch, char *arg) {
 
 #ifndef IS_BUILDPORT
     // We put 'zzz' in front of unused complexes. Skip them on live.
-    if (strlen(complex->get_name()) > 3 && complex->get_name()[0] == complex->get_name()[1] == complex->get_name()[2] == 'z')
+    if (strlen(complex->get_name()) > 3 && complex->get_name()[0] == 'z' && complex->get_name()[1] == 'z' && complex->get_name()[2] == 'z')
       continue;
 #endif
 
