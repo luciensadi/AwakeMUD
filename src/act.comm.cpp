@@ -99,28 +99,17 @@ ACMD(do_say)
           }
         }
       }
-    } else {
-      for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room) {
-        if (targ == ch
-            || !PLR_FLAGGED(targ, PLR_MATRIX)
-            || !targ->persona
-            || !targ->persona->decker
-            || targ->persona->decker->hitcher != ch
-          ) {
-          continue;
-        }
-        if (!IS_IGNORING(targ, is_blocking_ic_interaction_from, ch)) {// Gag check for ignored characters
-          // We found our hitcher
-          snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", capitalize(arg_known_size));
-          send_to_char(buf, targ);
-          store_message_to_history(targ->desc, COMM_CHANNEL_SAYS, buf);
-        }
-
-        // Send and store.
-        snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", capitalize(arg_known_size));
-        send_to_char(buf, ch);
-        store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
+    } else if (ch->hitched_to) {
+      if (!IS_IGNORING(ch->hitched_to, is_blocking_ic_interaction_from, ch)) {// Gag check for ignored characters
+        snprintf(buf, sizeof(buf), "Your hitcher says, \"%s^n\"\r\n", capitalize(arg_known_size));
+        send_to_char(buf, ch->hitched_to);
+        store_message_to_history(ch->hitched_to->desc, COMM_CHANNEL_SAYS, buf);
       }
+
+      // Send and store.
+      snprintf(buf, sizeof(buf), "You send, down the line, \"%s^n\"\r\n", capitalize(arg_known_size));
+      send_to_char(buf, ch);
+      store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
     }
     return;
   }

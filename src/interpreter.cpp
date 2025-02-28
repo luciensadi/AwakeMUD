@@ -1304,6 +1304,7 @@ struct command_info mtx_htr_info[] =
     , BLOCKS_IDLE_REWARD },
     { "afk", 0, do_afk, 0, 0, ALLOWS_IDLE_REWARD },
     { "disconnect", 0, do_logoff, 0, 1, BLOCKS_IDLE_REWARD },
+    { "look", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD }, // shadows 'l' so people reflexively looking don't get DC'd from hitch session
     { "logoff", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
     { "emote", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { ":", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
@@ -2675,10 +2676,7 @@ int perform_dupe_check(struct descriptor_data *d)
       d->character->persona = NULL;
       PLR_FLAGS(d->character).RemoveBit(PLR_MATRIX);
     } else if (PLR_FLAGGED(d->character, PLR_MATRIX)) {
-      for (struct char_data *temp = d->character->in_room->people; temp; temp = temp->next_in_room)
-        if (PLR_FLAGGED(temp, PLR_MATRIX))
-          temp->persona->decker->hitcher = NULL;
-      PLR_FLAGS(d->character).RemoveBit(PLR_MATRIX);
+      clear_hitcher(d->character, TRUE);
     }
     // now delete all the editing struct
     if (d->edit_obj)

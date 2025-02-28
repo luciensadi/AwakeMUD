@@ -948,6 +948,7 @@ struct char_data
   struct mob_special_data mob_specials;        /* NPC specials           */
   struct veh_data *in_veh;
   bool vfront;
+  struct char_data *hitched_to;         /* When using hitching, this is who we're connected to */
   struct matrix_icon *persona;
 
   struct spell_queue *squeue;
@@ -1011,10 +1012,10 @@ struct char_data
 #endif
 
   char_data() :
-      nr(0), unique_id(0), in_room(NULL), was_in_room(NULL), load_origin(0), load_time(time(0)), player_specials(NULL), in_veh(NULL), vfront(FALSE),
-      persona(NULL), squeue(NULL), sustained(NULL), ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL),
-      bioware(NULL), next_in_room(NULL), next_in_character_list(NULL), next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL),
-      next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
+      nr(0), unique_id(0), in_room(NULL), was_in_room(NULL), load_origin(0), load_time(time(0)), player_specials(NULL), in_veh(NULL),
+      vfront(FALSE), hitched_to(NULL), persona(NULL), squeue(NULL), sustained(NULL), ssust(NULL), carrying(NULL), desc(NULL),
+      cyberware(NULL), bioware(NULL), next_in_room(NULL), next_in_character_list(NULL), next_fighting(NULL), next_in_zone(NULL),
+      next_in_veh(NULL), next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
       pgroup_invitations(NULL), congregation_bonus_pool(0), last_loop_rand(0), pc_invis_resistance_test_results(NULL),
       mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(NULL), precast_spells(NULL),
       is_carrying_vehicle(FALSE)

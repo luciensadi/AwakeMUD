@@ -499,8 +499,10 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
       houseedit_display_apartment_edit_menu(d);
       break;
     case HOUSEEDIT_APARTMENT_LIFESTYLE:
-      if (parsed_int != -1 && (parsed_int < COMPLEX->get_lifestyle() || parsed_int >= NUM_LIFESTYLES)) {
-        send_to_char(CH, "That's not a valid lifestyle. Enter a lifestyle number between %d and %d, or -1 to use the complex's lifestyle: ", COMPLEX->get_lifestyle(), NUM_LIFESTYLES - 1);
+// #define LOWEST_ACCEPTABLE_LIFESTYLE COMPLEX->get_lifestyle()
+#define LOWEST_ACCEPTABLE_LIFESTYLE LIFESTYLE_STREETS
+      if (parsed_int != -1 && (parsed_int < LOWEST_ACCEPTABLE_LIFESTYLE || parsed_int >= NUM_LIFESTYLES)) {
+        send_to_char(CH, "That's not a valid lifestyle. Enter a lifestyle number between %d and %d, or -1 to use the complex's lifestyle: ", LOWEST_ACCEPTABLE_LIFESTYLE, NUM_LIFESTYLES - 1);
         return;
       }
 
