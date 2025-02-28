@@ -614,6 +614,7 @@ void boot_world(void)
   require_that_field_exists_in_table("Value14", "pfiles_inv", "SQL/Migrations/obj_idnums_and_vals.sql");
   require_that_sql_table_exists("pfiles_factions", "SQL/Migrations/add_factions.sql");
   require_that_sql_table_exists("pfiles_exdescs", "SQL/Migrations/add_exdescs.sql");
+  require_that_field_exists_in_table("otaku_path", "pfiles", "SQL/Migrations/add_otaku.sql");
 
   {
     const char *object_tables[4] = {

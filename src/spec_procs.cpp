@@ -787,6 +787,7 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
   // Scope maximums based on teacher type.
   if (type == NEWBIE) {
     max = NEWBIE_SKILL;
+    if (skill == SKILL_COMPUTER && IS_OTAKU(ch)) max = 8; // Otakus can start with computers 8
   }
   else if (type == AMATEUR)
     max = NORMAL_MAX_SKILL;
@@ -910,6 +911,7 @@ SPECIAL(teacher)
 
   if (!*argument) {
     bool found_a_skill_already = FALSE;
+    bool channel_skills_found = FALSE;
     for (int i = 0; i < NUM_TEACHER_SKILLS; i++) {
       if (teachers[ind].s[i] > 0) {
         // Mundanes can't learn magic skills, with the exception of dragons/ghouls who can learn aura reading.
@@ -918,6 +920,10 @@ SPECIAL(teacher)
         {
           continue;
         }
+
+        // Non-otaku cannot learn otaku channel skills.
+        if (skills[teachers[ind].s[i]].requires_resonance && !IS_OTAKU(ch))
+          continue;
 
         // Adepts can't learn externally-focused skills.
         if (GET_TRADITION(ch) == TRAD_ADEPT && (teachers[ind].s[i] == SKILL_CONJURING
@@ -935,7 +941,16 @@ SPECIAL(teacher)
         if ((max = get_max_skill_for_char(ch, teachers[ind].s[i], teachers[ind].type)) < 0)
           return FALSE;
 
-        if (GET_SKILL_POINTS(ch) > 0) {
+        if (skills[teachers[ind].s[i]].requires_resonance && GET_CHANNEL_POINTS(ch) > 0) {
+          // Channel skills are a bit unique for otaku in cg.
+          if (!found_a_skill_already) {
+            found_a_skill_already = TRUE;
+            snprintf(buf, sizeof(buf), "%s can teach you the following:\r\n", GET_NAME(master));
+          }
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  %-24s (1 channel point)\r\n",
+                   skills[teachers[ind].s[i]].name);
+          channel_skills_found = TRUE;
+        } else if (GET_SKILL_POINTS(ch) > 0) {
           // Add conditional messaging.
           if (!found_a_skill_already) {
             found_a_skill_already = TRUE;
@@ -962,7 +977,11 @@ SPECIAL(teacher)
       return TRUE;
     }
 
-    if (GET_SKILL_POINTS(ch) > 0)
+    if (channel_skills_found && GET_CHANNEL_POINTS(ch) > 0)
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %d channel point%s to use specifically for otaku skills, and %d skill point%s.\r\n",
+              GET_CHANNEL_POINTS(ch), GET_CHANNEL_POINTS(ch) > 1 ? "s" : "",
+              GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
+    else if (GET_SKILL_POINTS(ch) > 0)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nYou have %d point%s to use for skills.\r\n",
               GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
     else
@@ -1052,10 +1071,34 @@ SPECIAL(teacher)
     }
     lose_nuyen(ch, skill_nuyen_cost, NUYEN_OUTFLOW_SKILL_TRAINING);
   }
-  if (GET_SKILL_POINTS(ch) > 0)
-    GET_SKILL_POINTS(ch)--;
-  else
-    GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
+  if (skills[skill_num].requires_resonance) {
+    // otaku resonance skills are either bought with channel points or by karma, not skill points.
+    if (GET_CHANNEL_POINTS(ch) > 0) {
+        // Channel points exist only in CharGen. 
+      if (REAL_SKILL(ch, skill_num) + 1 <= 3) {
+        // We can have as many skills below or at 3 as we want with channel points
+        GET_CHANNEL_POINTS(ch)--;
+      } else {
+        // Since we're raising this skill above 3 we have to check we don't bypass the spread of 6, 5, 4, 3, 3.
+        // which is the limit for otaku skills in chargen.
+        for (int ci=154; i < 159;i++) {
+          if (REAL_SKILL(ch, ci) == REAL_SKILL(ch, skill_num) + 1) {
+            send_to_char(ch, "When buying channel skills with freebies you can only have one channel skill at %d, and %s is already at that value.",
+              REAL_SKILL(ch, skill_num) + 1, skills[ci].name);
+              return FALSE;
+          }
+        }
+        GET_CHANNEL_POINTS(ch)--;
+      }
+    } 
+    else
+      GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
+  } else {
+    if (GET_SKILL_POINTS(ch) > 0)
+      GET_SKILL_POINTS(ch)--;
+    else
+      GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
+  }
 
   send_to_char(teachers[ind].msg, ch);
   set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) + 1, TRUE);
@@ -1152,6 +1195,10 @@ void train_attribute(struct char_data *ch, struct char_data *trainer, int ind, i
 
   // Apply the change.
   GET_REAL_ATT(ch, attr) += 1;
+
+  // Update channel points if in chargen
+  if (trainers[ind].is_newbie && IS_OTAKU(ch))
+    GET_CHANNEL_POINTS(ch) = (GET_REAL_INT(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3;
 
   // Update character's calculated values.
   affect_total(ch);
@@ -5460,6 +5507,12 @@ SPECIAL(chargen_untrain_attribute)
     return TRUE;
   }
 
+  if (IS_OTAKU(ch) && GET_CHANNEL_POINTS(ch) < ((GET_REAL_INT(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3)) {
+    // Otaku channel skills have been spent.
+    send_to_char("You cannot untrain attributes while you have channel skills allocated.\r\n", ch);
+    return TRUE;
+  }
+
   if (is_abbrev(argument, "body")) {
     untrain_attribute(ch, BOD, "You determinedly chow down on junk food for a week and decrease your Body to %d.\r\n");
     return TRUE;
@@ -5545,7 +5598,10 @@ SPECIAL(chargen_unpractice_skill)
     }
 
     // Success. Lower the skill by one point.
-    GET_SKILL_POINTS(ch)++;
+    if (skills[skill_num].requires_resonance)
+      GET_CHANNEL_POINTS(ch)++;
+    else
+      GET_SKILL_POINTS(ch)++;
     set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) - 1, FALSE);
 
     if (GET_SKILL(ch, skill_num) == 0) {
@@ -5633,6 +5689,12 @@ SPECIAL(chargen_skill_annex) {
     if (GET_SKILL_POINTS(ch) > 0) {
       send_to_char(ch, "You still have %d skill point%s to spend! You should finish ^WPRACTICE^n-ing your skills before you proceed.\r\n",
                    GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
+      return TRUE;
+    }
+
+    if (GET_CHANNEL_POINTS(ch) > 0) {
+      send_to_char(ch, "You still have %d channel skill point%s to spend! You should finish ^WPRACTICE^n-ing your otaku skills before you proceed.\r\n",
+                   GET_CHANNEL_POINTS(ch), GET_CHANNEL_POINTS(ch) > 1 ? "s" : "");
       return TRUE;
     }
   }

@@ -79,6 +79,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg);
 void hedit_parse(struct descriptor_data *d, const char *arg);
 void icedit_parse(struct descriptor_data *d, const char *arg);
 void pedit_parse(struct descriptor_data *d, const char *arg);
+void cfedit_parse(struct descriptor_data *d, const char *arg);
 void dbuild_parse(struct descriptor_data *d, const char *arg);
 void pbuild_parse(struct descriptor_data *d, const char *arg);
 void spedit_parse(struct descriptor_data *d, const char *arg);
@@ -170,6 +171,7 @@ ACMD_DECLARE(do_cpool);
 ACMD_DECLARE(do_crack);
 ACMD_DECLARE(do_crash_mud);
 ACMD_DECLARE(do_create);
+ACMD_DECLARE(do_forms);
 ACMD_DECLARE(do_credits);
 ACMD_DECLARE(do_customize);
 ACMD_DECLARE(do_cyberware);
@@ -250,6 +252,7 @@ ACMD_DECLARE(do_iload);
 ACMD_DECLARE(do_imagelink);
 ACMD_DECLARE(do_info);
 ACMD_DECLARE(do_initiate);
+ACMD_DECLARE(do_submerse);
 ACMD_DECLARE(do_insult);
 ACMD_DECLARE(do_inventory);
 ACMD_DECLARE(do_invis);
@@ -669,6 +672,7 @@ struct command_info cmd_info[] =
     { "force"      , POS_SLEEPING, do_force    , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
     { "forceget"   , POS_SLEEPING, do_forceget , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "forceput"   , POS_SLEEPING, do_forceput , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
+    { "forms"      , POS_LYING   , do_forms    , 0, 0, BLOCKS_IDLE_REWARD },
     { "forget"     , POS_DEAD    , do_forget   , 0, 0, BLOCKS_IDLE_REWARD },
     { "fill"       , POS_SITTING , do_pour     , 0, SCMD_FILL, BLOCKS_IDLE_REWARD },
     { "finger"     , POS_DEAD    , do_last     , 0, SCMD_FINGER, ALLOWS_IDLE_REWARD },
@@ -940,6 +944,7 @@ struct command_info cmd_info[] =
     { "stop"       , POS_LYING   , do_stop     , 0, 0, BLOCKS_IDLE_REWARD },
     { "stuck"      , POS_LYING   , do_stuck    , 0, 0, BLOCKS_IDLE_REWARD },
     { "subscribe"  , POS_SITTING , do_subscribe, 0, 0, BLOCKS_IDLE_REWARD },
+    { "submerse"   , POS_DEAD    , do_submerse , 0, SCMD_INITIATE, BLOCKS_IDLE_REWARD },
     { "subpoint"   , POS_DEAD    , do_subpoint , LVL_ARCHITECT, 0, BLOCKS_IDLE_REWARD },
     { "survey"     , POS_LYING   , do_survey   , 0, 0, ALLOWS_IDLE_REWARD },
     { "switch"     , POS_SITTING , do_switch   , 0, 0, BLOCKS_IDLE_REWARD },
@@ -2790,6 +2795,9 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_PRO_CREATE:
     pedit_parse(d, arg);
+    break;
+  case CON_CF_CREATE:
+    cfedit_parse(d, arg);
     break;
   case CON_PART_CREATE:
     pbuild_parse(d, arg);

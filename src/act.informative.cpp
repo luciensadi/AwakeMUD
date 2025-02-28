@@ -1642,6 +1642,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " is here, working on a cyberdeck.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_SPELLDESIGN))
     strlcat(buf, " is here, working on a spell design.", sizeof(buf));
+  else if (AFF_FLAGGED(i, AFF_COMPLEX_FORM_PROGRAM))
+    strlcat(buf, " is here, meditating on a complex form.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_CONJURE))
     strlcat(buf, " is here, performing a conjuring ritual.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_LODGE))
@@ -5139,12 +5141,13 @@ ACMD(do_score)
         strlcat(mage_string, "Physical Adept", sizeof(mage_string));
         break;
       default:
-        strlcat(mage_string, "Mundane", sizeof(mage_string));
+        if (IS_OTAKU(ch)) strlcat(mage_string, "Otaku", sizeof(mage_string));
+        else strlcat(mage_string, "Mundane", sizeof(mage_string));
         break;
     }
 
     static char grade_string[50];
-    if (GET_TRADITION(ch) != TRAD_MUNDANE)
+    if (GET_TRADITION(ch) != TRAD_MUNDANE || IS_OTAKU(ch))
       snprintf(grade_string, sizeof(grade_string), "^nGrade: ^w[^W%2d^w]", GET_GRADE(ch));
     else
       strlcpy(grade_string, "", sizeof(grade_string));

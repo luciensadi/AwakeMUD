@@ -86,6 +86,12 @@
 
 /* char and mob related defines */
 
+/* otaku paths */
+
+#define OTAKU_PATH_NORMIE     0
+#define OTAKU_PATH_CYBERADEPT 1
+#define OTAKU_PATH_TECHNOSHAM 2
+
 /* magical traditions */
 
 #define TRAD_HERMETIC   0
@@ -355,7 +361,8 @@ enum {
 #define PLR_IS_TEMPORARILY_LOADED            52
 #define PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL 53
 #define PLR_OLD_MAN_YELLS_AT_CLOUDS          54
-#define PLR_MAX                              55
+#define PLR_SUBMERSION                       55
+#define PLR_MAX                              56
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 
@@ -584,12 +591,13 @@ enum {
 #define AFF_VOICE_MODULATOR                         54
 #define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER        55
 #define AFF_CHEATLOG_MARK                           56
-#define AFF_MAX                                     57
+#define AFF_COMPLEX_FORM_PROGRAM                    57
+#define AFF_MAX                                     58
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
 // - Check for anywhere I've missed in this comment
-#define BR_TASK_AFF_FLAGS AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD, AFF_RITUALCAST, AFF_CIRCLE, AFF_LODGE
+#define BR_TASK_AFF_FLAGS AFF_DESIGN, AFF_PROGRAM, AFF_PART_DESIGN, AFF_PART_BUILD, AFF_SPELLDESIGN, AFF_AMMOBUILD, AFF_RITUALCAST, AFF_CIRCLE, AFF_LODGE, AFF_COMPLEX_FORM_PROGRAM
 
 
 /* room-related defines */
@@ -806,6 +814,20 @@ enum {
 #define MASK_INIT    (1 << 1)
 #define MASK_DUAL    (1 << 2)
 #define MASK_COMPLETE    (1 << 3)
+
+#define ECHO_UNDEFINED     0
+#define ECHO_IMPROVED_IO   1
+#define ECHO_IMPROVED_HARD 2
+#define ECHO_IMPROVED_MPCP 3
+#define ECHO_PERSONA_BOD   4
+#define ECHO_PERSONA_EVAS  5
+#define ECHO_PERSONA_MASK  6
+#define ECHO_PERSONA_SENS  7
+#define ECHO_IMPROVED_REA  8
+#define ECHO_GHOSTING      9
+#define ECHO_NEUROFILTER   10
+#define ECHO_OVERCLOCK     11
+#define ECHO_MAX           12
 
 #define AURA_VIOLENCE      0
 #define AURA_TORTURE       1
@@ -1048,8 +1070,14 @@ enum {
 #define SKILL_PILOT_WALKER              151
 #define SKILL_MANDARIN                  152
 #define SKILL_HAITIAN_CREOLE            153
+// otaku-specific skills
+#define SKILL_CHANNEL_ACCESS            154
+#define SKILL_CHANNEL_CONTROL           155
+#define SKILL_CHANNEL_INDEX             156
+#define SKILL_CHANNEL_FILES             157
+#define SKILL_CHANNEL_SLAVE             158
 
-#define MAX_SKILLS                      154
+#define MAX_SKILLS                      159
 // Adding a pilot skill? Update utils.cpp's pilot_skills[].
 
 // Skill type definitions.
@@ -1313,7 +1341,8 @@ enum {
 #define ITEM_LOADED_DECORATION  48
 #define ITEM_CREATIVE_EFFORT    49
 #define ITEM_PET                50
-#define NUM_ITEMS               51
+#define ITEM_COMPLEX_FORM       51       /* otaku complex form               */
+#define NUM_ITEMS               52
 // Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
 #define PATCH_ANTIDOTE          0
@@ -1398,7 +1427,8 @@ enum {
 #define ITEM_EXTRA_CHEATLOG_MARK      33
 #define ITEM_EXTRA_CONCEALED_IN_EQ    34    // Doesn't show up when someone looks at you.
 #define ITEM_EXTRA_TRODE_NET          35
-#define MAX_ITEM_EXTRA                36
+#define ITEM_EXTRA_OTAKU_RESONANCE    36    // This is related to Otaku nonsense
+#define MAX_ITEM_EXTRA                37
 
 /* Ammo types */
 #define AMMO_NORMAL     0
@@ -2051,6 +2081,7 @@ enum {
 #define SCMD_AUTHORIZE    10
 #define SCMD_SQUELCHTELLS 11
 #define SCMD_MUTE_NEWBIE  12
+#define SCMD_SUBMERSE     13
 
 /* do_say */
 #define SCMD_SAY        0
@@ -2278,7 +2309,9 @@ enum {
 #define CON_FACTION_EDIT        54
 #define CON_PC_EXDESC_EDIT      55
 #define CON_PET_CREATE          56
-#define CON_MAX                 56
+#define CON_CF_CREATE           57
+#define CON_SUBMERSION          58
+#define CON_MAX                 58
 #define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
@@ -2752,6 +2785,7 @@ enum {
 #define OBJ_CYB_SMARTLINK_II               302
 #define OBJ_CYB_DERMAL_SHEATHING_I         322
 #define OBJ_CYB_ARMORED_OBV_ARMS_II        572
+#define OBJ_CYB_ASIST_CONVERTER            85025
 #endif
 
 #define OBJ_CYB_EYE_PACKAGE_LL_TH_FC_ALPHA 566
@@ -2815,7 +2849,8 @@ enum {
 #define OBJ_HOLIDAY_GIFT                   126
 #define OBJ_BLANK_MAGAZINE                 127
 #define OBJ_CUSTOM_PET                     128
-#define TOP_OF_TEMPLATE_ITEMS              128
+#define OBJ_BLANK_COMPLEX_FORM             129
+#define TOP_OF_TEMPLATE_ITEMS              129
 
 #define OBJ_DOCWAGON_PAPER_GOWN            16201
 #define OBJ_ANTI_DRUG_CHEMS                44
@@ -3094,7 +3129,8 @@ enum {
 #define DIRTY_BIT_MEMORY      5
 #define DIRTY_BIT_DRUG        6
 #define DIRTY_BIT_ALIAS       7
-#define NUM_DIRTY_BITS        8
+#define DIRTY_BIT_ECHOES      8
+#define NUM_DIRTY_BITS        9
 
 
 #define SMARTLINK_II_MODIFIER 3
@@ -3234,6 +3270,8 @@ enum {
 #define OBJ_LOAD_REASON_FIND_OBJ_SHOP            57
 #define OBJ_LOAD_REASON_SHOP_RECEIVE             58
 #define OBJ_LOAD_REASON_CREATE_PET               59
+#define OBJ_LOAD_REASON_OTAKU_RESONANCE          60
+#define OBJ_LOAD_REASON_CREATE_COMPLEX_FORM      61
 
 #define IDNUM_FOR_MOB_ALERT_STATE  -1
 

@@ -83,6 +83,7 @@ CREATE TABLE `pfiles` (
   `multiplier` smallint(5) unsigned default 100,
   `lifestyle_string` varchar(200) default 'The metallic scent of the Neophyte Guild clings to $m.',
   `exdesc_max` smallint(5) unsigned default 0,
+  `otaku_path` tinyint(2) default 0,
   PRIMARY KEY (`idnum`),
   KEY (`name`)
 );
@@ -116,6 +117,7 @@ CREATE TABLE `pfiles_chargendata` (
   `archetypal` tinyint(2) unsigned default '0',
   `archetype` tinyint(2) unsigned default '0',
   `prestige_alt` bigint unsigned default '0' not null,
+  `channel_points` tinyint(2) unsigned default '0',
   PRIMARY KEY (`idnum`)
 );
 

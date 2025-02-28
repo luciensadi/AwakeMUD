@@ -467,6 +467,7 @@ struct char_player_data
   ush_int weight;              /* PC / NPC's weight                    */
   ush_int height;              /* PC / NPC's height                    */
   byte race;                 /* PC / NPC's race                      */
+  byte otaku_path;            /* PC / NPC's otaku status                       */
   byte tradition;            /* PC / NPC's tradition                       */
   ubyte aspect;
   char *host;   /* player host    */
@@ -475,7 +476,7 @@ struct char_player_data
       char_name(NULL), background(NULL), title(NULL), pretitle(NULL), whotitle(NULL),
       prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL), email(NULL),
       multiplier(0), salvation_ticks(5), pronouns(PRONOUNS_NEUTRAL), level(0), last_room(NOWHERE),
-      weight(0), height(0), race(0), tradition(TRAD_MUNDANE), aspect(0), host(NULL)
+      weight(0), height(0), race(0), otaku_path(OTAKU_PATH_NORMIE), tradition(TRAD_MUNDANE), aspect(0), host(NULL)
   {
     memset(passwd, 0, sizeof(passwd));
   }
@@ -586,6 +587,7 @@ struct char_special_data_saved
   byte skills[MAX_SKILLS+1][3];   /* array of skills plus skill 0. Slot 0 is unaltered, */
   byte powers[ADEPT_NUMPOWER+1][2];
   unsigned char metamagic[META_MAX+1];
+  unsigned char echoes[ECHO_MAX+1];
   ush_int centeringskill;
   ush_int boosted[3][2];           /* str/qui/bod timeleft/amount		*/
   ubyte masking;
@@ -603,6 +605,7 @@ struct char_special_data_saved
     }
 
     ZERO_OUT_ARRAY(metamagic, META_MAX + 1);
+    ZERO_OUT_ARRAY(echoes, ECHO_MAX + 1);
 
     for (int i = 0; i < 3; i++) {
       ZERO_OUT_ARRAY(boosted[i], 2);
@@ -689,6 +692,7 @@ struct player_special_data_saved
   ubyte totemspirit;
   ush_int att_points;              /* attrib points for when you first create */
   ush_int skill_points;            /* starting skill points                   */
+  ush_int channel_points;          /* starting channel skill points for otaku */
   unsigned char force_points;
   unsigned char restring_points;
   int zonenum;
@@ -712,7 +716,7 @@ struct player_special_data_saved
     last_in(0), last_veh(NOTHING), bad_pws(0), automod_counter(0), totem(0), totemspirit(0),
     att_points(0), skill_points(0), force_points(0), restring_points(0), zonenum(0),
     archetype(0), archetypal(FALSE), prestige_alt_id(0), system_points(0), 
-    best_lifestyle(LIFESTYLE_SQUATTER), lifestyle_string(NULL)
+    best_lifestyle(LIFESTYLE_SQUATTER), lifestyle_string(NULL), channel_points(0)
   {
     ZERO_OUT_ARRAY(conditions, 3);
   }
@@ -1065,6 +1069,7 @@ struct ccreate_t
   sh_int prestige_race;
   idnum_t prestige_bagholder;
   int prestige_cost;
+  bool is_otaku;
 };
 
 struct descriptor_data
@@ -1272,6 +1277,7 @@ struct skill_data {
   sh_int attribute;
   bool is_knowledge_skill;
   bool requires_magic;
+  bool requires_resonance;
   sh_int group;
   bool reflex_recorder_compatible;
   bool no_defaulting_allowed;
