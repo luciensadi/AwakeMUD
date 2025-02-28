@@ -2516,6 +2516,7 @@ void close_socket(struct descriptor_data *d)
         d->character->persona = NULL;
         PLR_FLAGS(d->character).RemoveBit(PLR_MATRIX);
       }
+      clear_hitcher(d->character, TRUE);
       free_editing_structs(d, STATE(d));
       d->character->desc = NULL;
     } else {
