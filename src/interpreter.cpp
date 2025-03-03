@@ -3929,6 +3929,11 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("penalty", "penalties");
   COMMAND_ALIAS("whois", "finger");
 
+  // Some otaku conveniences because human language is weird
+  COMMAND_ALIAS("form", "forms");
+  COMMAND_ALIAS("submerge", "submerse");
+  COMMAND_ALIAS("complex", "forms");
+
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");
   COMMAND_ALIAS("effects", "affects");
