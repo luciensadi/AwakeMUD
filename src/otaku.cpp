@@ -91,22 +91,19 @@ ACMD(do_submerse)
 
   skip_spaces(&argument);
 
-  if (subcmd == SCMD_SUBMERSE && submersion_cost(ch, FALSE)) {
-    // Enforce grade restrictions. We can't do this init_cost since it's used elsewhere.
-    if ((GET_GRADE(ch) + 1) > SUBMERSION_CAP) {
-      send_to_char("Congratulations, you've reached the submersion cap! You're not able to advance further.\r\n", ch);
-      return;
-    }
-
-    // Check to see that they can afford it. This sends its own message.
-    if (!submersion_cost(ch, FALSE)) {
-      return;
-    }
-    STATE(ch->desc) = CON_SUBMERSION;
-    PLR_FLAGS(ch).SetBit(PLR_SUBMERSION);
-    disp_submersion_menu(ch->desc);
+  // Enforce grade restrictions. We can't do this init_cost since it's used elsewhere.
+  if ((GET_GRADE(ch) + 1) > SUBMERSION_CAP) {
+    send_to_char("Congratulations, you've reached the submersion cap! You're not able to advance further.\r\n", ch);
     return;
   }
+
+  // Check to see that they can afford it. This sends its own message.
+  if (!submersion_cost(ch, FALSE)) {
+    return;
+  }
+  STATE(ch->desc) = CON_SUBMERSION;
+  PLR_FLAGS(ch).SetBit(PLR_SUBMERSION);
+  disp_submersion_menu(ch->desc);
 }
 
 bool can_select_echo(struct char_data *ch, int i)
