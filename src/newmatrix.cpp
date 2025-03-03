@@ -1943,15 +1943,15 @@ bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, obj
   skip_spaces(&argument);
   if (!*argument) return FALSE;
 
-  char targ[100];
-  char *arg_remaining = one_argument(argument, targ);
+  char targ[MAX_INPUT_LENGTH];
+  one_argument(argument, targ);
 
   if (IS_SENATOR(ch)) {
     host_vnum = atoi(argument);
   }
 
   if (!PLR_FLAGGED(ch, PLR_MATRIX) && host_vnum <= 0) {
-    if (IS_OTAKU(ch) && (is_abbrev(argument, "with cyberdeck") || is_abbrev(targ, "cyberdeck"))) {
+    if (IS_OTAKU(ch) && ((is_abbrev(argument, "with") && is_abbrev(targ, "cyberdeck")) || is_abbrev(argument, "cyberdeck"))) {
       // Otaku can use 'proxy decks' which allow them to access the storage of an external deck
       // This check here is for their special connect parsing
       if (!cyberdeck) { // There's no cyberdeck they have
@@ -2017,7 +2017,6 @@ bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, obj
 
 ACMD(do_connect)
 {
-  struct char_data *temp;
   struct matrix_icon *icon = NULL;
   
   struct obj_data *cyber, *cyberdeck = NULL, *jack, *proxy_deck = NULL;
@@ -2311,9 +2310,10 @@ ACMD(do_connect)
 ACMD(do_load)
 {
   obj_data *deck = DECKER->deck;
-  if (IS_OTAKU(DECKER->ch)) deck = DECKER->proxy_deck;
+  if (IS_OTAKU(DECKER->ch))
+    deck = DECKER->proxy_deck;
 
-  if (!DECKER->deck) {
+  if (!deck) {
     send_to_char(ch, "You need a deck to %s from!\r\n", subcmd == SCMD_UNLOAD ? "unload" : "upload");
     return;
   }
@@ -2347,7 +2347,7 @@ ACMD(do_load)
   } else {
     // What is with the absolute fascination with non-bracketed if/for/else/etc statements in this codebase? This was enormously hard to read. - LS
     // lol, so true - bitMuse
-    for (struct obj_data *soft = DECKER->deck->contains; soft; soft = soft->next_content) {
+    for (struct obj_data *soft = deck->contains; soft; soft = soft->next_content) {
       // Look for a name match.
       if (!keyword_appears_in_obj(argument, soft))
         continue;

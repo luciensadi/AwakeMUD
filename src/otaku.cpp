@@ -144,8 +144,7 @@ void disp_echo_menu(struct descriptor_data *d)
 
 void submersion_parse(struct descriptor_data *d, char *arg)
 {
-  struct obj_data *obj = NULL;
-  int number, i;
+  int number;
   switch (d->edit_mode)
   {
     case SUBMERSION_MAIN:
