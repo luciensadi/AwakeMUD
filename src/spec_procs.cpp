@@ -5687,7 +5687,7 @@ SPECIAL(chargen_skill_annex) {
       for (int csi=SKILL_CHANNEL_ACCESS; csi <= SKILL_CHANNEL_SLAVE;csi++) {
         if (csi == ci) continue; // skip checking the parent skill against itself.
         if (REAL_SKILL(ch, csi) == REAL_SKILL(ch, ci)) {
-          send_to_char(ch, "You cannot have more than one channel skill at %d for otaku at character generation. Please reduce the value of %s.",
+          send_to_char(ch, "You cannot have more than one channel skill at %d for otaku at character generation. Please reduce the value of %s.\r\n",
             REAL_SKILL(ch, ci), skills[ci].name);
         }
       }
