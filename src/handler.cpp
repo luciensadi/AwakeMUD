@@ -2442,6 +2442,11 @@ void extract_icon(struct matrix_icon * icon)
       temp2 = seen->next;
       delete seen;
     }
+    // Clear the deck if this is an otaku
+    if (icon->decker->deck && icon->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
+      extract_obj(icon->decker->deck);
+    }
+    
     DELETE_AND_NULL(icon->decker);
   } else {
     ic_index[icon->rnum].number--;

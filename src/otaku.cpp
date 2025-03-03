@@ -21,6 +21,116 @@
 
 extern struct otaku_echo echoes[];
 
+int get_otaku_int(struct char_data *ch) {
+  int int_stat = GET_REAL_INT(ch);
+  struct obj_data *booster = find_bioware(ch, BIO_CEREBRALBOOSTER);
+  if (booster)
+    int_stat += GET_BIOWARE_RATING(booster);
+  return int_stat;
+}
+
+int get_otaku_qui(struct char_data *ch) {
+  int qui_stat = GET_REAL_QUI(ch);
+  struct obj_data *move_by_wire = find_cyberware(ch, CYB_MOVEBYWIRE);
+  if (move_by_wire)
+    qui_stat += GET_CYBERWARE_RATING(move_by_wire);
+  struct obj_data *suprathyroid = find_bioware(ch, BIO_SUPRATHYROIDGLAND);
+  if (suprathyroid)
+    qui_stat += 1;
+  return qui_stat;
+}
+
+int get_otaku_rea(struct char_data *ch) {
+  int rea_stat = (get_otaku_int(ch) + get_otaku_qui(ch)) / 2;
+  struct obj_data *boosted_reflexes = find_cyberware(ch, CYB_BOOSTEDREFLEXES);
+  if (boosted_reflexes)
+    rea_stat += MAX(0, GET_CYBERWARE_RATING(boosted_reflexes) - 1);
+  struct obj_data *move_by_wire = find_cyberware(ch, CYB_MOVEBYWIRE);
+  if (move_by_wire)
+    rea_stat += GET_CYBERWARE_RATING(move_by_wire) * 2;
+  struct obj_data *reaction_enhancer = find_cyberware(ch, CYB_REACTIONENHANCE);
+  if (reaction_enhancer) 
+    rea_stat += GET_CYBERWARE_RATING(reaction_enhancer);
+  struct obj_data *wired_reflexes = find_cyberware(ch, CYB_WIREDREFLEXES);
+  if (wired_reflexes)
+    rea_stat += GET_CYBERWARE_RATING(wired_reflexes) * 2;
+  struct obj_data *suprathyroid = find_bioware(ch, BIO_SUPRATHYROIDGLAND);
+  if (suprathyroid)
+    rea_stat += 1;
+  return rea_stat;
+}
+
+extern struct obj_data *make_new_finished_part(int part_type, int mpcp, int rating=0);
+struct obj_data *make_otaku_deck(struct char_data *ch) {
+  GET_REAL_REA(ch);
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Tried to create an otaku deck, but provided invalid character.");
+    return NULL;
+  }
+  struct obj_data *asist = find_cyberware(ch, CYB_ASIST);
+  if (!asist) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Tried to create an otaku deck, but otaku somehow didn't have an asist interface.");
+    return NULL;
+  }
+
+  struct obj_data *new_deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL, OBJ_LOAD_REASON_OTAKU_RESONANCE);
+
+  // Add parts.
+  int mpcp = (get_otaku_int(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3; // adding 2 always ensures a round up
+  if (GET_ECHO(ch, ECHO_IMPROVED_MPCP)) {
+    mpcp = MIN(get_otaku_int(ch) * 2, mpcp + GET_ECHO(ch, ECHO_IMPROVED_MPCP));
+  }
+
+  obj_to_obj(make_new_finished_part(PART_MPCP, mpcp, mpcp), new_deck);
+  obj_to_obj(make_new_finished_part(PART_BOD, mpcp, GET_REAL_WIL(ch)), new_deck);
+  obj_to_obj(make_new_finished_part(PART_EVASION, mpcp, get_otaku_int(ch)), new_deck);
+  obj_to_obj(make_new_finished_part(PART_SENSOR, mpcp, get_otaku_int(ch)), new_deck);
+  obj_to_obj(make_new_finished_part(PART_MASKING, mpcp, (GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 1) / 2), new_deck);
+  obj_to_obj(make_new_finished_part(PART_ASIST_HOT, mpcp), new_deck);
+  obj_to_obj(make_new_finished_part(PART_RAS_OVERRIDE, mpcp), new_deck);
+
+  GET_CYBERDECK_MPCP(new_deck) = MIN(12, mpcp);
+  GET_CYBERDECK_HARDENING(new_deck) = MIN(GET_REAL_WIL(ch), GET_REAL_WIL(ch) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD));
+  GET_CYBERDECK_ACTIVE_MEMORY(new_deck) = 0; // Otaku do not have active memory.
+  GET_CYBERDECK_TOTAL_STORAGE(new_deck) = 0;
+  GET_CYBERDECK_RESPONSE_INCREASE(new_deck) = MIN(mpcp * 1.5, get_otaku_rea(ch) + GET_ECHO(ch, ECHO_IMPROVED_REA));
+  GET_CYBERDECK_IO_RATING(new_deck) = MIN(get_otaku_int(ch) * 200, (get_otaku_int(ch) * 100) + (GET_ECHO(ch, ECHO_IMPROVED_IO) * 100));
+  GET_CYBERDECK_IS_INCOMPLETE(new_deck) = FALSE;
+
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_CONCEALED_IN_EQ);
+  new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_RESONANCE);
+
+  for (struct obj_data *form = asist->contains; form; form = form->next_content) {
+    if (GET_OBJ_TYPE(form) != ITEM_COMPLEX_FORM) continue;
+    if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) > 0) continue; // The complex form is in unfinished.
+    struct obj_data *active = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_OTAKU_RESONANCE);
+    GET_PROGRAM_TYPE(active) = GET_PROGRAM_TYPE(form);
+    GET_PROGRAM_SIZE(active) = 0; // Complex forms don't take up memory.
+    GET_PROGRAM_ATTACK_DAMAGE(active) = GET_PROGRAM_ATTACK_DAMAGE(form);
+    GET_PROGRAM_IS_DEFAULTED(active) = TRUE;
+    GET_OBJ_TIMER(active) = 1;
+
+    GET_PROGRAM_RATING(active) = GET_PROGRAM_RATING(form);
+    // Cyberadepts get +1 to Complex Forms
+    if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) GET_PROGRAM_RATING(active) += 1;
+
+    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_RESONANCE);
+    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+
+    char restring[500];
+    snprintf(restring, sizeof(restring), "a rating-%d %s complex form", GET_PROGRAM_RATING(form), programs[GET_PROGRAM_TYPE(form)].name);
+    active->restring = str_dup(restring);
+    obj_to_obj(active, new_deck);
+  }
+
+  char restring[500];
+  snprintf(restring, sizeof(restring), "a living persona cyberdeck");
+  new_deck->restring = str_dup(restring);
+
+  return new_deck;
+}
+
 long calculate_sub_nuyen_cost(int desired_grade) {
   if (desired_grade >= 6)
     return 825000;
@@ -91,31 +201,34 @@ ACMD(do_submerse)
 
   skip_spaces(&argument);
 
-  if (subcmd == SCMD_SUBMERSE && submersion_cost(ch, FALSE)) {
-    // Enforce grade restrictions. We can't do this init_cost since it's used elsewhere.
-    if ((GET_GRADE(ch) + 1) > SUBMERSION_CAP) {
-      send_to_char("Congratulations, you've reached the submersion cap! You're not able to advance further.\r\n", ch);
-      return;
-    }
-
-    // Check to see that they can afford it. This sends its own message.
-    if (!submersion_cost(ch, FALSE)) {
-      return;
-    }
-    STATE(ch->desc) = CON_SUBMERSION;
-    PLR_FLAGS(ch).SetBit(PLR_SUBMERSION);
-    disp_submersion_menu(ch->desc);
+  // Enforce grade restrictions. We can't do this init_cost since it's used elsewhere.
+  if ((GET_GRADE(ch) + 1) > SUBMERSION_CAP) {
+    send_to_char("Congratulations, you've reached the submersion cap! You're not able to advance further.\r\n", ch);
     return;
   }
+
+  // Check to see that they can afford it. This sends its own message.
+  if (!submersion_cost(ch, FALSE)) {
+    return;
+  }
+  STATE(ch->desc) = CON_SUBMERSION;
+  PLR_FLAGS(ch).SetBit(PLR_SUBMERSION);
+  disp_submersion_menu(ch->desc);
+}
+
+int get_free_echoes(struct char_data *ch)
+{
+  int available_echoes = GET_GRADE(ch);
+  for (int i = 1; i < ECHO_MAX; i++) {
+    available_echoes -= GET_ECHO(ch, i);
+  }
+  return available_echoes;
 }
 
 bool can_select_echo(struct char_data *ch, int i)
 {
   // Count our grades vs selected echos so we can't learn more than we have grades
-  int available_echoes = GET_GRADE(ch);
-  for (int i = 1; i < ECHO_MAX; i++) {
-    available_echoes -= GET_ECHO(ch, i);
-  }
+  int available_echoes = get_free_echoes(ch);
   if (available_echoes <= 0)
     return FALSE;
   // incremental echoes can be selected an arbitrary number of times
@@ -138,7 +251,7 @@ void disp_echo_menu(struct descriptor_data *d)
     }
   }
 
-  send_to_char("q) Quit \r\nSelect echo to learn: ", CH);
+  send_to_char(CH, "q) Quit \r\nYou have ^w%d^n echoes available to allocate. Select echo to learn: ", get_free_echoes(CH));
   d->edit_mode = SUBMERSION_ECHO;
 }
 
@@ -151,7 +264,6 @@ void submersion_parse(struct descriptor_data *d, char *arg)
       switch (*arg)
       {
         case '1':
-          submersion_cost(CH, FALSE);
           send_to_char("Are you sure you want to increase your submersion? Type 'y' to continue, anything else to abort.\r\n", CH);
           d->edit_mode = SUBMERSION_CONFIRM;
           break;
@@ -160,7 +272,7 @@ void submersion_parse(struct descriptor_data *d, char *arg)
           break;
         case '3':
           STATE(d) = CON_PLAYING;
-          PLR_FLAGS(CH).RemoveBit(PLR_INITIATE);
+          PLR_FLAGS(CH).RemoveBit(PLR_SUBMERSION);
           send_to_char("Submersion cancelled.\r\n", CH);
           break;
         default:
@@ -170,6 +282,11 @@ void submersion_parse(struct descriptor_data *d, char *arg)
       break;
     case SUBMERSION_CONFIRM:
       if (*arg == 'y') {
+        if (!submersion_cost(CH, TRUE)) { // Actually spends the points for submersion
+          STATE(d) = CON_PLAYING;
+          PLR_FLAGS(CH).RemoveBit(PLR_SUBMERSION);
+          return;
+        }
         GET_GRADE(CH)++;
         send_to_char(CH, "You feel yourself grow closer to the resonance, opening new echoes for you to learn.\r\n");
         STATE(d) = CON_PLAYING;
@@ -181,7 +298,11 @@ void submersion_parse(struct descriptor_data *d, char *arg)
     case SUBMERSION_ECHO:
       // learning a new echo here
       number = atoi(arg);
-      if (number >= ECHO_MAX) 
+      if (*arg == 'q') {
+        send_to_char("Returning to main menu.", CH);
+        d->edit_mode = SUBMERSION_MAIN;
+      }
+      else if (number >= ECHO_MAX) 
         send_to_char("Invalid Response. Select another echo to unlock: ", CH);
       else if (!can_select_echo(CH, number))
         send_to_char("You aren't able to learn that echo at this time. Select another echo to learn: ", CH);

@@ -18,7 +18,7 @@
 #include "pets.hpp"
 
 #define PERSONA ch->persona
-#define PERSONA_CONDITION ch->persona->type == ICON_LIVING_PERSONA ? GET_MENTAL(ch) : ch->persona->condition
+#define PERSONA_CONDITION ch->persona->type == ICON_LIVING_PERSONA ? (100 * GET_MENTAL(ch)) / MAX(1, GET_MAX_MENTAL(ch)) : ch->persona->condition
 #define DECKER PERSONA->decker
 struct ic_info dummy_ic;
 
@@ -1908,20 +1908,33 @@ ACMD(do_logoff)
   snprintf(buf, sizeof(buf), "%s^n depixelates and vanishes from the host.\r\n", CAP(PERSONA->name));
   send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
 
-  // Clear the deck if this is an otaku
-  if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
-    extract_obj(PERSONA->decker->deck);
-
   // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
   extract_icon(PERSONA);
   PERSONA = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-  }
 
   // Make 'em look if they're not screenreaders.
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
     char emptybuf[10] = { '\0' };
     do_look(ch, emptybuf, 0, 0);
+  }
+}
+
+extern struct obj_data *make_otaku_deck(struct char_data *ch);
+void find_cyberdeck(char_data *ch, obj_data *&cyberdeck, obj_data *&proxy_deck)
+{
+  struct obj_data *cyber = NULL;
+
+  for (cyber = ch->carrying; !cyberdeck && cyber; cyber = cyber->next_content)
+    if ((GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK) && (IS_SENATOR(ch) || !IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY)))
+      cyberdeck = cyber;
+  for (int i = 0; !cyberdeck && i < NUM_WEARS; i++)
+    if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
+      cyberdeck = GET_EQ(ch, i);
+
+  if (IS_OTAKU(ch)) {
+    proxy_deck = cyberdeck;
+    cyberdeck = make_otaku_deck(ch);
   }
 }
 
@@ -1937,7 +1950,7 @@ ACMD(do_logoff)
  */
 bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, obj_data *&proxy_deck, rnum_t *host) {
   struct char_data *temp;
-  vnum_t host_vnum;
+  vnum_t host_vnum = 0;
 
   // Easy guard check; is there even an argument?
   skip_spaces(&argument);
@@ -1951,21 +1964,6 @@ bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, obj
   }
 
   if (!PLR_FLAGGED(ch, PLR_MATRIX) && host_vnum <= 0) {
-    if (IS_OTAKU(ch) && ((is_abbrev(argument, "with") && is_abbrev(targ, "cyberdeck")) || is_abbrev(argument, "cyberdeck"))) {
-      // Otaku can use 'proxy decks' which allow them to access the storage of an external deck
-      // This check here is for their special connect parsing
-      if (!cyberdeck) { // There's no cyberdeck they have
-        send_to_char(ch, "With *what* cyberdeck?\r\n");
-        return TRUE;
-      }
-
-      // Extra secret squirrel access codes
-      proxy_deck = cyberdeck; 
-      extern struct obj_data *make_otaku_deck(struct char_data *ch);
-      cyberdeck = make_otaku_deck(ch);
-      return FALSE;
-    }
-
     // This is the hitcher code.
     temp = get_char_room_vis(ch, argument);
     if (!temp) {
@@ -2019,7 +2017,7 @@ ACMD(do_connect)
 {
   struct matrix_icon *icon = NULL;
   
-  struct obj_data *cyber, *cyberdeck = NULL, *jack, *proxy_deck = NULL;
+  struct obj_data *cyberdeck = NULL, *jack, *proxy_deck = NULL;
   rnum_t host;
 
   if (!ch->in_room || !ch->in_room->matrix || (host = real_host(ch->in_room->matrix)) < 1) {
@@ -2037,6 +2035,9 @@ ACMD(do_connect)
   if (!(jack = get_datajack(ch, FALSE)))
     return;
 
+  // Locate the appropriate cyberdeck objects for the player.
+  find_cyberdeck(ch, cyberdeck, proxy_deck);
+
   // Command argument parsing
   if (parse_connect_args(ch, argument, cyberdeck, proxy_deck, &host))
       return;
@@ -2046,13 +2047,6 @@ ACMD(do_connect)
       return;
 #endif
 
-  for (cyber = ch->carrying; !cyberdeck && cyber; cyber = cyber->next_content)
-    if ((GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK) && (IS_SENATOR(ch) || !IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY)))
-      cyberdeck = cyber;
-  for (int i = 0; !cyberdeck && i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
-      cyberdeck = GET_EQ(ch, i);
-
   if (!cyberdeck) {
     if (access_level(ch, LVL_ADMIN)) {
       // Create a !RENT staff-only deck from whole cloth.
@@ -2060,9 +2054,6 @@ ACMD(do_connect)
       cyberdeck = make_staff_deck_target_mpcp(12);
       obj_to_char(cyberdeck, ch);
       send_to_char(ch, "You pull a deck out of thin air to connect with.\r\n");
-    } else if (IS_OTAKU(ch)) {
-      extern struct obj_data *make_otaku_deck(struct char_data *ch);
-      cyberdeck = make_otaku_deck(ch);
     } else {
       send_to_char(ch, "I don't recommend trying to do that without a cyberdeck.\r\n");
       return;
@@ -2116,6 +2107,7 @@ ACMD(do_connect)
       if (GET_OBJ_TYPE(parts) == ITEM_PART && (GET_OBJ_VAL(parts, 0) == PART_ASIST_HOT || GET_OBJ_VAL(parts, 0) == PART_ASIST_COLD))
         break;
     if (!parts) {
+      struct obj_data* cyber = NULL;
       for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
         if (GET_OBJ_VAL(cyber, 0) == CYB_ASIST)
           break;
@@ -2302,7 +2294,10 @@ ACMD(do_connect)
     snprintf(buf, sizeof(buf), "$n plugs the leads of $s 'trode net into $s cyberdeck.");
   }
   act(buf, FALSE, ch, 0, 0, TO_ROOM);
-  act("You jack into the matrix.", FALSE, ch, 0, 0, TO_CHAR);
+  if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) 
+    act("You jack into the matrix to commune with the resonance.", FALSE, ch, 0, 0, TO_CHAR);
+  else 
+    send_to_char(ch, "You jack into the matrix with your %s.", GET_OBJ_NAME(cyberdeck));
   PLR_FLAGS(ch).SetBit(PLR_MATRIX);
   do_matrix_look(ch, NULL, 0, 0);
 }

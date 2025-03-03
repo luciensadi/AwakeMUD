@@ -89,6 +89,7 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg);
 void free_shop(struct shop_data *shop);
 void free_quest(struct quest_data *quest);
 void init_parse(struct descriptor_data *d, char *arg);
+void submersion_parse(struct descriptor_data *d, char *arg);
 void vehcust_parse(struct descriptor_data *d, char *arg);
 void pocketsec_parse(struct descriptor_data *d, char *arg);
 void faction_edit_parse(struct descriptor_data *d, const char *arg);
@@ -1420,6 +1421,7 @@ struct command_info mtx_info[] =
     { "who", 0, do_who, 0, 0, BLOCKS_IDLE_REWARD },
     { "write", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },
     { "wtell", 0, do_wiztell, LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "memory", 0, do_memory   , 0, 0, ALLOWS_IDLE_REWARD },
 
     // Channel history commands.
     { "history"    , 0, do_message_history, 0, 0, ALLOWS_IDLE_REWARD },
@@ -2826,6 +2828,9 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_INITIATE:
     init_parse(d, arg);
     break;
+  case CON_SUBMERSION:
+    submersion_parse(d, arg);
+    break;
   case CON_CCREATE:
     create_parse(d, arg);
     break;
@@ -3928,6 +3933,11 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("snipe", "shoot");
   COMMAND_ALIAS("penalty", "penalties");
   COMMAND_ALIAS("whois", "finger");
+
+  // Some otaku conveniences because human language is weird
+  COMMAND_ALIAS("form", "forms");
+  COMMAND_ALIAS("submerge", "submerse");
+  COMMAND_ALIAS("complex", "forms");
 
   // Alternate spellings.
   COMMAND_ALIAS("customise", "customize");

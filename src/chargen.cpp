@@ -1082,7 +1082,7 @@ void init_char_sql(struct char_data *ch, const char *call_origin)
   char buf2[MAX_STRING_LENGTH];
   snprintf(buf, sizeof(buf), "INSERT INTO pfiles (`idnum`, `name`, `password`, `race`, `gender`, `Rank`, `Voice`,"\
                "`Physical_Keywords`, `Physical_Name`, `Whotitle`, `Height`, `Weight`, `Host`,"\
-               "`Tradition`, `Otaku_Path`, `Born`, `Background`, `Physical_LookDesc`, `Matrix_LookDesc`, `Astral_LookDesc`, `LastD`, `multiplier`) VALUES ('%ld', '%s', '%s', %d, '%d',"\
+               "`Tradition`, `otaku_path`, `Born`, `Background`, `Physical_LookDesc`, `Matrix_LookDesc`, `Astral_LookDesc`, `LastD`, `multiplier`) VALUES ('%ld', '%s', '%s', %d, '%d',"\
                "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%d', '%ld', '%s', '%s', '%s', '%s', %ld, 100);", GET_IDNUM(ch),
                GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_PRONOUNS(ch), MAX(1, GET_LEVEL(ch)),
                prepare_quotes(buf2, ch->player.physical_text.room_desc, sizeof(buf2) / sizeof(buf2[0])), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
@@ -1484,6 +1484,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         GET_ATT_POINTS(CH) = d->ccr.pr[PO_ATTR]/2;
 
         if (d->ccr.is_otaku) {
+          set_attributes(CH, 0);
           d->ccr.mode = CCR_OTAKU_PATH;
           SEND_TO_Q("\r\nFollow the [c]yberadept, or [t]echnoshaman path?  Enter '?' for help. ", d);
         } else if (d->ccr.pr[PO_MAGIC] > CCR_MAGIC_NONE) {
