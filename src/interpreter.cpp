@@ -1420,6 +1420,7 @@ struct command_info mtx_info[] =
     { "who", 0, do_who, 0, 0, BLOCKS_IDLE_REWARD },
     { "write", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },
     { "wtell", 0, do_wiztell, LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "memory", 0, do_memory   , 0, 0, ALLOWS_IDLE_REWARD },
 
     // Channel history commands.
     { "history"    , 0, do_message_history, 0, 0, ALLOWS_IDLE_REWARD },
