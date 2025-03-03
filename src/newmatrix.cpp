@@ -1908,15 +1908,10 @@ ACMD(do_logoff)
   snprintf(buf, sizeof(buf), "%s^n depixelates and vanishes from the host.\r\n", CAP(PERSONA->name));
   send_to_host(PERSONA->in_host, buf, PERSONA, FALSE);
 
-  // Clear the deck if this is an otaku
-  if (PERSONA->decker && PERSONA->decker->deck && PERSONA->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
-    extract_obj(PERSONA->decker->deck);
-
   // Cleanup of uploads, downloads, etc is handled in icon_from_host, which is called in extract_icon.
   extract_icon(PERSONA);
   PERSONA = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-  }
 
   // Make 'em look if they're not screenreaders.
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
