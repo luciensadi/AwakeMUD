@@ -2299,7 +2299,10 @@ ACMD(do_connect)
     snprintf(buf, sizeof(buf), "$n plugs the leads of $s 'trode net into $s cyberdeck.");
   }
   act(buf, FALSE, ch, 0, 0, TO_ROOM);
-  act("You jack into the matrix.", FALSE, ch, 0, 0, TO_CHAR);
+  if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) 
+    act("You jack into the matrix to commune with the resonance.", FALSE, ch, 0, 0, TO_CHAR);
+  else 
+    send_to_char(ch, "You jack into the matrix with your %s.", GET_OBJ_NAME(cyberdeck));
   PLR_FLAGS(ch).SetBit(PLR_MATRIX);
   do_matrix_look(ch, NULL, 0, 0);
 }
