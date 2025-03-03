@@ -5587,14 +5587,14 @@ SPECIAL(chargen_unpractice_skill)
     if (skills[skill_num].requires_resonance) {
       int spent_points = 0;
       int max_channel_points = (GET_REAL_INT(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3;
-       for (int ci=SKILL_CHANNEL_ACCESS; ci <= SKILL_CHANNEL_SLAVE;ci++) {
+      for (int ci=SKILL_CHANNEL_ACCESS; ci <= SKILL_CHANNEL_SLAVE;ci++) {
         spent_points += REAL_SKILL(ch, ci);
-       }
-       if (spent_points <= max_channel_points) {
+      }
+      if (spent_points <= max_channel_points) {
         GET_CHANNEL_POINTS(ch)++;
-       } else {
+      } else {
         GET_SKILL_POINTS(ch)++;
-       }
+      }
     }
     else
       GET_SKILL_POINTS(ch)++;
