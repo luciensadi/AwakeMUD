@@ -5689,6 +5689,7 @@ SPECIAL(chargen_skill_annex) {
         if (REAL_SKILL(ch, csi) == REAL_SKILL(ch, ci)) {
           send_to_char(ch, "You cannot have more than one channel skill at %d for otaku at character generation. Please reduce the value of %s.\r\n",
             REAL_SKILL(ch, ci), skills[ci].name);
+          return TRUE;
         }
       }
     }
