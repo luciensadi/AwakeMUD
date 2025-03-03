@@ -1886,7 +1886,7 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool reca
 
   // Equipping is easy, just shadow it all.
   if (ch->player_specials) {
-    GET_CHAR_COVERED_WEARLOCS(ch).SetAll(obj->obj_flags.wear_flags);
+    GET_CHAR_COVERED_WEARLOCS(ch).SetBit(obj->worn_on);
   }
   
   calc_weight(ch);
@@ -1906,6 +1906,11 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
   if (!GET_EQ(ch, pos)) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Trying to remove non-existent item from %s at %d", GET_CHAR_NAME(ch), pos);
     return NULL;
+  }
+
+  // Remove the bit that this is worn on from our covered_wearlocs set.
+  if (ch->player_specials) {
+    GET_CHAR_COVERED_WEARLOCS(ch).RemoveBit(GET_EQ(ch, pos)->worn_on);
   }
 
   obj = GET_EQ(ch, pos);
@@ -1948,17 +1953,6 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
   }
   if (recalc) {
     affect_total(ch);
-  }
-
-  // Unequipping sucks. We have to essentially clear the shadowed bits, then re-apply everything else.
-  if (ch->player_specials) {
-    GET_CHAR_COVERED_WEARLOCS(ch).Clear();
-
-    for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
-      if (GET_EQ(ch, wear_idx)) {
-        GET_CHAR_COVERED_WEARLOCS(ch).SetAll(GET_EQ(ch, wear_idx)->obj_flags.wear_flags);
-      }
-    }
   }
 
   calc_weight(ch);

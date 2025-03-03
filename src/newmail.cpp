@@ -74,8 +74,10 @@ void raw_store_mail(long to, long from_id, const char *from_name, const char *me
   // Log it.
   if (from_id > 0) {
     const char *formatted = format_for_logging__returns_new(message_pointer);
-    mudlog_vfprintf(NULL, LOG_MAILLOG, "MAIL: '%s' (%ld) wrote to %ld: '^n%s^g'", from_name, from_id, to, formatted);
+    const char *to_name = get_player_name(to);
+    mudlog_vfprintf(NULL, LOG_MAILLOG, "MAIL: '%s' (%ld) wrote to '%s' %ld: '^n%s^g'", from_name, from_id, to_name, to, formatted);
     delete [] formatted;
+    delete [] to_name;
   }
 
   // Notify pocket secretaries of online characters.
