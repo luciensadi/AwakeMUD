@@ -18,7 +18,7 @@
 #include "pets.hpp"
 
 #define PERSONA ch->persona
-#define PERSONA_CONDITION ch->persona->type == ICON_LIVING_PERSONA ? GET_MENTAL(ch) : ch->persona->condition
+#define PERSONA_CONDITION ch->persona->type == ICON_LIVING_PERSONA ? (100 * GET_MENTAL(ch)) / MAX(1, GET_MAX_MENTAL(ch)) : ch->persona->condition
 #define DECKER PERSONA->decker
 struct ic_info dummy_ic;
 
