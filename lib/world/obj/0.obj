@@ -1371,6 +1371,19 @@ Material:	metal
 	Weight:	1.00
 	Barrier:	32
 BREAK
+#129
+Keywords:	blank complex form
+Name:	a blank complex form
+RoomDesc:$
+A blank complex form has been dropped here.~
+LookDesc:$
+A complex form that's yet to be designed by an otaku's mind.~
+Type:	Complex Form
+WearFlags:	1
+Material:	metal
+[POINTS]
+	Barrier:	1
+BREAK
 #140
 Keywords:	customized cc10 ares sniper rifle
 Name:	a Customized Ares CC-10 Sniper Rifle

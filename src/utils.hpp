@@ -427,6 +427,8 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define IS_PRESTIGE_RACE(race) (RACE_IS_DRAGON(race) || RACE_IS_DRAKE(race) || RACE_IS_GHOUL(race) || race == RACE_DRYAD)
 #define IS_PRESTIGE_CH(ch) (IS_PRESTIGE_RACE(GET_RACE(ch)))
 
+#define IS_OTAKU(ch) (GET_OTAKU_PATH(ch) > 0)
+
 #define GET_RACIAL_STARTING_ESSENCE_FOR_RACE(race)  (RACE_IS_GHOUL(race) ? 500 : (RACE_IS_DRAGON(race) ? 700 : 600))
 
 // ONLY for use on non-Bitfield bitvectors:
@@ -545,6 +547,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_DESC_LEVEL(d)  ((d)->original ? GET_LEVEL((d)->original) : ((d)->character ? GET_LEVEL((d)->character) : 0))
 
 #define GET_RACE(ch)          ((ch)->player.race)
+#define GET_OTAKU_PATH(ch)    ((ch)->player.otaku_path)
 #define GET_TRADITION(ch)     ((ch)->player.tradition)
 #define GET_ASPECT(ch)        ((ch)->player.aspect)
 #define GET_LASTROOM(ch)      ((ch)->player.last_room)
@@ -681,6 +684,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_DOMAIN(ch)          ((ch)->points.domain)
 #define GET_ATT_POINTS(ch)      ((ch)->player_specials->saved.att_points)
 #define GET_SKILL_POINTS(ch)    ((ch)->player_specials->saved.skill_points)
+#define GET_CHANNEL_POINTS(ch)  ((ch)->player_specials->saved.channel_points)
 #define GET_FORCE_POINTS(ch)    ((ch)->player_specials->saved.force_points)
 #define GET_RESTRING_POINTS(ch) ((ch)->player_specials->saved.restring_points)
 #define GET_ARCHETYPAL_TYPE(ch) ((ch)->player_specials->saved.archetype)
@@ -737,6 +741,9 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_METAMAGIC(ch, i)    ((ch)->char_specials.saved.metamagic[i] != 0 ? (ch)->char_specials.saved.metamagic[i] : 0)
 #define SET_METAMAGIC(ch, i, amt)    {(ch)->char_specials.saved.metamagic[i] = amt; GET_METAMAGIC_DIRTY_BIT(ch) = TRUE;}
 
+#define GET_ECHO(ch, i)         ((ch)->char_specials.saved.echoes[i] != 0 ? (ch)->char_specials.saved.echoes[i] : 0)
+#define SET_ECHO(ch, i, amt)    {(ch)->char_specials.saved.echoes[i] = amt; GET_ECHOES_DIRTY_BIT(ch) = TRUE;} 
+
 #define GET_MASKING(ch)    ((ch)->char_specials.saved.masking)
 #define GET_CENTERINGSKILL(ch)  ((ch)->char_specials.saved.centeringskill)
 #define GET_PP(ch)    ((ch)->char_specials.saved.powerpoints)
@@ -756,6 +763,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_SPELLS_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_SPELLS])
 #define GET_METAMAGIC_DIRTY_BIT(ch)     ((ch)->char_specials.dirty_bits[DIRTY_BIT_METAMAGIC])
 #define GET_ELEMENTALS_DIRTY_BIT(ch)    ((ch)->char_specials.dirty_bits[DIRTY_BIT_ELEMENTALS])
+#define GET_ECHOES_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_ECHOES])
 #define GET_MEMORY_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_MEMORY])
 #define GET_ALIAS_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_ALIAS])
 
