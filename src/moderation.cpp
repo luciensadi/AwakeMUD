@@ -24,7 +24,7 @@ void automod_entry::compile() {
   char pattern[1000];
   compiled_regex = new regex_t;
 
-  snprintf(pattern, sizeof(pattern), ".*%s%s%s.*", REGEX_SEP_START, stringified_regex, REGEX_SEP_END);
+  snprintf(pattern, sizeof(pattern), "%s%s%s", REGEX_SEP_START, stringified_regex, REGEX_SEP_END);
 
   // log_vfprintf("Compiling regex pattern '%s' (base pattern '%s')...", pattern, base_pattern);
 
