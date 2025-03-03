@@ -106,13 +106,19 @@ ACMD(do_submerse)
   disp_submersion_menu(ch->desc);
 }
 
-bool can_select_echo(struct char_data *ch, int i)
+int get_free_echoes(struct char_data *ch)
 {
-  // Count our grades vs selected echos so we can't learn more than we have grades
   int available_echoes = GET_GRADE(ch);
   for (int i = 1; i < ECHO_MAX; i++) {
     available_echoes -= GET_ECHO(ch, i);
   }
+  return available_echoes;
+}
+
+bool can_select_echo(struct char_data *ch, int i)
+{
+  // Count our grades vs selected echos so we can't learn more than we have grades
+  int available_echoes = get_free_echoes(ch);
   if (available_echoes <= 0)
     return FALSE;
   // incremental echoes can be selected an arbitrary number of times
@@ -135,7 +141,7 @@ void disp_echo_menu(struct descriptor_data *d)
     }
   }
 
-  send_to_char("q) Quit \r\nSelect echo to learn: ", CH);
+  send_to_char(CH, "q) Quit \r\nYou have ^w%d^n echoes available to allocate. Select echo to learn: ", get_free_echoes(CH));
   d->edit_mode = SUBMERSION_ECHO;
 }
 
@@ -148,7 +154,6 @@ void submersion_parse(struct descriptor_data *d, char *arg)
       switch (*arg)
       {
         case '1':
-          submersion_cost(CH, FALSE);
           send_to_char("Are you sure you want to increase your submersion? Type 'y' to continue, anything else to abort.\r\n", CH);
           d->edit_mode = SUBMERSION_CONFIRM;
           break;
@@ -157,7 +162,7 @@ void submersion_parse(struct descriptor_data *d, char *arg)
           break;
         case '3':
           STATE(d) = CON_PLAYING;
-          PLR_FLAGS(CH).RemoveBit(PLR_INITIATE);
+          PLR_FLAGS(CH).RemoveBit(PLR_SUBMERSION);
           send_to_char("Submersion cancelled.\r\n", CH);
           break;
         default:
@@ -167,6 +172,11 @@ void submersion_parse(struct descriptor_data *d, char *arg)
       break;
     case SUBMERSION_CONFIRM:
       if (*arg == 'y') {
+        if (!submersion_cost(CH, TRUE)) { // Actually spends the points for submersion
+          STATE(d) = CON_PLAYING;
+          PLR_FLAGS(CH).RemoveBit(PLR_SUBMERSION);
+          return;
+        }
         GET_GRADE(CH)++;
         send_to_char(CH, "You feel yourself grow closer to the resonance, opening new echoes for you to learn.\r\n");
         STATE(d) = CON_PLAYING;
@@ -178,7 +188,11 @@ void submersion_parse(struct descriptor_data *d, char *arg)
     case SUBMERSION_ECHO:
       // learning a new echo here
       number = atoi(arg);
-      if (number >= ECHO_MAX) 
+      if (*arg == 'q') {
+        send_to_char("Returning to main menu.", CH);
+        d->edit_mode = SUBMERSION_MAIN;
+      }
+      else if (number >= ECHO_MAX) 
         send_to_char("Invalid Response. Select another echo to unlock: ", CH);
       else if (!can_select_echo(CH, number))
         send_to_char("You aren't able to learn that echo at this time. Select another echo to learn: ", CH);
