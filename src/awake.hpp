@@ -2773,6 +2773,7 @@ enum {
 #define OBJ_CYB_SMARTLINK_II               85118
 #define OBJ_CYB_DERMAL_SHEATHING_I         85075
 #define OBJ_CYB_ARMORED_OBV_ARMS_II        6562
+#define OBJ_CYB_ASIST_CONVERTER            85025
 #else
 #define OBJ_CYB_CERAMIC_BONE_LACING        463
 #define OBJ_CYB_KEVLAR_BONE_LACING         462

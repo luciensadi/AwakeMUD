@@ -714,9 +714,9 @@ struct player_special_data_saved
   player_special_data_saved() :
     wimp_level(0), freeze_level(0), invis_level(0), incog_level(0), load_room(NOWHERE),
     last_in(0), last_veh(NOTHING), bad_pws(0), automod_counter(0), totem(0), totemspirit(0),
-    att_points(0), skill_points(0), force_points(0), restring_points(0), zonenum(0),
+    att_points(0), skill_points(0), channel_points(0), force_points(0), restring_points(0), zonenum(0),
     archetype(0), archetypal(FALSE), prestige_alt_id(0), system_points(0), 
-    best_lifestyle(LIFESTYLE_SQUATTER), lifestyle_string(NULL), channel_points(0)
+    best_lifestyle(LIFESTYLE_SQUATTER), lifestyle_string(NULL)
   {
     ZERO_OUT_ARRAY(conditions, 3);
   }
