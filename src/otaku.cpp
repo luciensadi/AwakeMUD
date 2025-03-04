@@ -189,6 +189,15 @@ bool submersion_cost(struct char_data *ch, bool spend)
   return TRUE;
 }
 
+int get_free_echoes(struct char_data *ch)
+{
+  int available_echoes = GET_GRADE(ch);
+  for (int i = 1; i < ECHO_MAX; i++) {
+    available_echoes -= GET_ECHO(ch, i);
+  }
+  return available_echoes;
+}
+
 void disp_submersion_menu(struct descriptor_data *d)
 {
   CLS(CH);
@@ -209,15 +218,6 @@ ACMD(do_submerse)
   STATE(ch->desc) = CON_SUBMERSION;
   PLR_FLAGS(ch).SetBit(PLR_SUBMERSION);
   disp_submersion_menu(ch->desc);
-}
-
-int get_free_echoes(struct char_data *ch)
-{
-  int available_echoes = GET_GRADE(ch);
-  for (int i = 1; i < ECHO_MAX; i++) {
-    available_echoes -= GET_ECHO(ch, i);
-  }
-  return available_echoes;
 }
 
 bool can_select_echo(struct char_data *ch, int i)

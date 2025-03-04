@@ -381,6 +381,21 @@ bool dumpshock(struct matrix_icon *icon)
   return FALSE;
 }
 
+int get_detection_factor(struct char_data *ch)
+{
+  int detect = 0;
+  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
+    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE)
+      detect = GET_PROGRAM_RATING(soft);
+  detect += DECKER->masking + 1; // +1 because we round up
+  detect = detect / 2;
+  detect -= DECKER->res_det;
+  if  (PERSONA->type == ICON_LIVING_PERSONA) {
+    detect -= 1 + GET_ECHO(ch, ECHO_GHOSTING); // Otaku always get +1 DF
+  }
+  return detect;
+}
+
 int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier)
 {
   int detect = 0;
@@ -440,21 +455,13 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   target += modify_target_rbuf_raw(ch, rollbuf, sizeof(rollbuf), 8, FALSE) + DECKER->res_test + (DECKER->ras ? 0 : 4);
 
   for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
-    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE)
-      detect = GET_PROGRAM_RATING(soft);
-    else if (!prog && GET_PROGRAM_TYPE(soft) == software) {
+    if (!prog && GET_PROGRAM_TYPE(soft) == software) {
       target -= GET_PROGRAM_RATING(soft);
       buf_mod(rollbuf, sizeof(rollbuf), "soft", -GET_PROGRAM_RATING(soft));
       prog = soft;
     }
   }
-
-  detect += DECKER->masking + 1; // +1 because we round up
-  detect = detect / 2;
-  detect -= DECKER->res_det;
-  if  (PERSONA->type == ICON_LIVING_PERSONA) {
-    detect -= 1 + GET_ECHO(ch, ECHO_GHOSTING); // Otaku always get +1 DF
-  }
+  detect = get_detection_factor(ch);
 
   int tally = MAX(0, success_test(HOST.security, detect));
   target = MAX(target, 2);
@@ -1239,12 +1246,7 @@ ACMD(do_matrix_score)
   }
 
   // Calculate detection TN (for others to notice this decker).
-  int detect = 0;
-  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
-    if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
-      detect = GET_OBJ_VAL(soft, 1);
-  detect += DECKER->masking + 1; // +1 because we round up
-  detect /= 2;
+  int detect = get_detection_factor(ch);
 
   if (*argument) {
     skip_spaces(&argument);
@@ -3770,11 +3772,7 @@ ACMD(do_restrict)
   }
 #endif
 
-  for (struct obj_data *soft = targ->decker->software; soft; soft = soft->next_content)
-    if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
-      detect = GET_OBJ_VAL(soft, 1);
-  detect += targ->decker->masking + 1; // +1 because we round up
-  detect /= 2;
+  detect = get_detection_factor(ch);
 
   if (is_abbrev(buf, "detection")) {
     success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_VALIDATE, detect);
