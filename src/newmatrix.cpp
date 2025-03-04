@@ -18,7 +18,7 @@
 #include "pets.hpp"
 
 #define PERSONA ch->persona
-#define PERSONA_CONDITION ch->persona->type == ICON_LIVING_PERSONA ? (100 * GET_MENTAL(ch)) / MAX(1, GET_MAX_MENTAL(ch)) : ch->persona->condition
+#define PERSONA_CONDITION ch->persona->condition
 #define DECKER PERSONA->decker
 struct ic_info dummy_ic;
 
@@ -1287,8 +1287,17 @@ ACMD(do_matrix_score)
     strlcat(buf, get_plaintext_matrix_score_deck(ch), sizeof(buf));
     strlcat(buf, get_plaintext_matrix_score_memory(ch), sizeof(buf));
   } else {
+    if (ch->persona->type == ICON_LIVING_PERSONA) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+              "     Mental:^B%3d(%2d)^n       Physical:^R%3d(%2d)^n\r\n",
+              (int)(GET_MENTAL(ch) / 100), (int)(GET_MAX_MENTAL(ch) / 100), 
+              (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100));
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+              "  Condition:^B%3d^n           Physical:^R%3d(%2d)^n\r\n",
+              PERSONA_CONDITION, (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100));
+    }
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), 
-            "  Condition:^B%3d^n           Physical:^R%3d(%2d)^n\r\n"
             "  Detection:^r%3d^n       Hacking Pool:^g%3d/%3d (%2d)^n\r\n"
             "    Storage:^g%4d^n/%4d (^c%d^n MP free)\r\n"
             "            ^cPersona Programs:^n\r\n"
@@ -1297,7 +1306,6 @@ ACMD(do_matrix_score)
             "               ^cDeck Status:^n\r\n"
             "  Hardening:^g%3d^n       MPCP:^g%3d^n\r\n"
             "   IO Speed:^g%4d^n      Response Increase:^g%3d^n\r\n",
-            PERSONA_CONDITION, (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100),
             detect, MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch), GET_MAX_HACKING(ch),
             GET_CYBERDECK_USED_STORAGE(DECKER->deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->deck), GET_CYBERDECK_FREE_STORAGE(DECKER->deck),
             DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
