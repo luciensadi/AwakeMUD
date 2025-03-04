@@ -866,7 +866,10 @@ void affect_total(struct char_data * ch)
   apply_drug_modifiers_to_ch(ch);
 
   // Part of the otaku simulation; modifies otaku attributes depending on drugs, cyber, etc.
-  if (ch->persona && ch->persona->type == ICON_LIVING_PERSONA) {
+  if (ch->persona 
+    && ch->persona->type == ICON_LIVING_PERSONA
+    && ch->persona->decker
+    && ch->persona->decker->deck) {
     update_otaku_deck(ch, ch->persona->decker->deck);
   }
 
