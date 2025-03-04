@@ -1305,7 +1305,10 @@ ACMD(do_matrix_score)
     return;
   }
 
-  snprintf(buf, sizeof(buf), "You are connected to the matrix.\r\n");
+  if (ch->persona->type == ICON_LIVING_PERSONA)
+    snprintf(buf, sizeof(buf), "You are communing directly with the matrix using your living persona.\r\n");
+  else
+    snprintf(buf, sizeof(buf), "You are connected to the matrix with %s.\r\n", GET_OBJ_NAME(DECKER->deck));
 
   if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
     strlcat(buf, get_plaintext_matrix_score_health(ch), sizeof(buf));
