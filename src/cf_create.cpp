@@ -9,6 +9,7 @@
 #include "screen.hpp"
 #include "constants.hpp"
 #include "olc.hpp"
+#include "otaku.hpp"
 #include "newmagic.hpp"
 
 #define CH d->character
@@ -168,6 +169,9 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
   case CFEDIT_RATING:
     if (option_n > GET_SKILL(CH, SKILL_COMPUTER)) {
       send_to_char(CH, "You can't create a program of a higher rating than your computer skill.\r\n"
+                   "Enter Rating: ");
+    } else if (option_n > GET_OTAKU_MPCP(CH)) {
+      send_to_char(CH, "You can't create a program of a higher rating than your living persona's MPCP rating.\r\n"
                    "Enter Rating: ");
     } else {
       GET_DESIGN_RATING(d->edit_obj) = option_n;

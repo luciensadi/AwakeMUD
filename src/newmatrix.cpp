@@ -16,11 +16,14 @@
 #include "ignore_system.hpp"
 #include "moderation.hpp"
 #include "pets.hpp"
+#include "otaku.hpp"
 
 #define PERSONA ch->persona
-#define PERSONA_CONDITION ch->persona->type == ICON_LIVING_PERSONA ? (100 * GET_MENTAL(ch)) / MAX(1, GET_MAX_MENTAL(ch)) : ch->persona->condition
+#define PERSONA_CONDITION ch->persona->condition
 #define DECKER PERSONA->decker
 struct ic_info dummy_ic;
+
+extern struct otaku_echo echoes[];
 
 #define ICON_IS_IC(icon) (!(icon)->decker)
 
@@ -317,6 +320,8 @@ bool tarbaby(struct obj_data *prog, struct char_data *ch, struct matrix_icon *ic
 
 bool dumpshock(struct matrix_icon *icon)
 {
+  if (!icon) return FALSE;
+
   if (icon->decker && icon->decker->ch)
   {
     send_to_char(icon->decker->ch, "You are dumped from the matrix!\r\n");
@@ -373,12 +378,33 @@ bool dumpshock(struct matrix_icon *icon)
     extract_icon(icon);
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
 
+    // No reason to double-damage
+    if (!PLR_FLAGGED(ch, PLR_MATRIX))
+      return FALSE;
+    // If they're stunned or dead, there's no reason to take dumpshock damage.
+    if (GET_POS(ch) <= POS_STUNNED)
+      return FALSE; 
     if (damage(ch, ch, dam, TYPE_DUMPSHOCK, MENTAL))
       return TRUE;
   } else {
     extract_icon(icon);
   }
   return FALSE;
+}
+
+int get_detection_factor(struct char_data *ch)
+{
+  int detect = 0;
+  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
+    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE)
+      detect = GET_PROGRAM_RATING(soft);
+  detect += DECKER->masking + 1; // +1 because we round up
+  detect = detect / 2;
+  detect -= DECKER->res_det;
+  if  (PERSONA->type == ICON_LIVING_PERSONA) {
+    detect -= 1 + GET_ECHO(ch, ECHO_GHOSTING); // Otaku always get +1 DF
+  }
+  return detect;
 }
 
 int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier)
@@ -440,21 +466,15 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   target += modify_target_rbuf_raw(ch, rollbuf, sizeof(rollbuf), 8, FALSE) + DECKER->res_test + (DECKER->ras ? 0 : 4);
 
   for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
-    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE)
-      detect = GET_PROGRAM_RATING(soft);
-    else if (!prog && GET_PROGRAM_TYPE(soft) == software) {
+    if (prog) break;
+    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE) break;
+    if (GET_PROGRAM_TYPE(soft) == software) {
       target -= GET_PROGRAM_RATING(soft);
       buf_mod(rollbuf, sizeof(rollbuf), "soft", -GET_PROGRAM_RATING(soft));
       prog = soft;
     }
   }
-
-  detect += DECKER->masking + 1; // +1 because we round up
-  detect = detect / 2;
-  detect -= DECKER->res_det;
-  if  (PERSONA->type == ICON_LIVING_PERSONA) {
-    detect -= 1 + GET_ECHO(ch, ECHO_GHOSTING); // Otaku always get +1 DF
-  }
+  detect = get_detection_factor(ch);
 
   int tally = MAX(0, success_test(HOST.security, detect));
   target = MAX(target, 2);
@@ -519,14 +539,20 @@ bool has_spotted(struct matrix_icon *icon, struct matrix_icon *targ)
   return FALSE;
 }
 
-void do_damage_persona(struct matrix_icon *targ, int dmg)
+bool do_damage_persona(struct matrix_icon *targ, int dmg)
 {
   if (targ->type == ICON_LIVING_PERSONA) {
+    struct char_data *ch = targ->decker->ch;
     // It's an otaku! They get to suffer MENTAL DAMAGE!
-    damage(targ->decker->ch, targ->decker->ch, dmg, TYPE_TASER, MENTAL);
-    return;
+    // targ->condition seems to be 1-10 scale, while ch mental wounds seems to be 1-100. Multiply by ten.
+    if (damage(targ->decker->ch, targ->decker->ch, dmg, TYPE_BLACKIC, MENTAL))
+      return TRUE;
+    if (GET_POS(ch) <= POS_STUNNED)
+      return TRUE;
+    return FALSE;
   }
   targ->condition -= dmg;
+  return targ->condition < 1;
 }
 
 void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
@@ -935,7 +961,6 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       return;
     }
   }
-  targ->condition -= dam;
   switch(dam)
   {
   case 0:
@@ -961,7 +986,14 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     send_to_icon(icon, "You obliterate %s^n.\r\n", decapitalize_a_an(targ->name));
     break;
   }
-  if (dam > 0 && targ->decker)
+  struct char_data *ch = targ->decker ? targ->decker->ch : NULL;
+  if (do_damage_persona(targ, dam) && ch && GET_POS(ch) <= POS_STUNNED) {
+    // If do_damage_persona returns true then the icon condition monitor is overloaded,
+    // or it's an otaku that has fainted/died from brain bleeding.
+    // If it's the latter we check if they're uncon/dead, and then return early.
+    return;
+  }
+  if (dam > 0 && ch)
   {
     if (ICON_IS_IC(icon) && icon->ic.type >= IC_LETHAL_BLACK) {
       int resist = 0;
@@ -990,7 +1022,6 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       dam = convert_damage(stage(success, dam));
       send_to_icon(targ, "You smell something burning.\r\n");
 
-      struct char_data *ch = targ->decker->ch;
       if (damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL)) {
         // Oh shit, they died. Guess they don't take MPCP damage, since their struct is zeroed out now.
         return;
@@ -1239,12 +1270,7 @@ ACMD(do_matrix_score)
   }
 
   // Calculate detection TN (for others to notice this decker).
-  int detect = 0;
-  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
-    if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
-      detect = GET_OBJ_VAL(soft, 1);
-  detect += DECKER->masking + 1; // +1 because we round up
-  detect /= 2;
+  int detect = get_detection_factor(ch);
 
   if (*argument) {
     skip_spaces(&argument);
@@ -1287,8 +1313,17 @@ ACMD(do_matrix_score)
     strlcat(buf, get_plaintext_matrix_score_deck(ch), sizeof(buf));
     strlcat(buf, get_plaintext_matrix_score_memory(ch), sizeof(buf));
   } else {
+    if (ch->persona->type == ICON_LIVING_PERSONA) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+              "     Mental:^B%3d(%2d)^n       Physical:^R%3d(%2d)^n\r\n",
+              (int)(GET_MENTAL(ch) / 100), (int)(GET_MAX_MENTAL(ch) / 100), 
+              (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100));
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+              "  Condition:^B%3d^n           Physical:^R%3d(%2d)^n\r\n",
+              PERSONA_CONDITION, (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100));
+    }
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), 
-            "  Condition:^B%3d^n           Physical:^R%3d(%2d)^n\r\n"
             "  Detection:^r%3d^n       Hacking Pool:^g%3d/%3d (%2d)^n\r\n"
             "    Storage:^g%4d^n/%4d (^c%d^n MP free)\r\n"
             "            ^cPersona Programs:^n\r\n"
@@ -1297,7 +1332,6 @@ ACMD(do_matrix_score)
             "               ^cDeck Status:^n\r\n"
             "  Hardening:^g%3d^n       MPCP:^g%3d^n\r\n"
             "   IO Speed:^g%4d^n      Response Increase:^g%3d^n\r\n",
-            PERSONA_CONDITION, (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100),
             detect, MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch), GET_MAX_HACKING(ch),
             GET_CYBERDECK_USED_STORAGE(DECKER->deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->deck), GET_CYBERDECK_FREE_STORAGE(DECKER->deck),
             DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
@@ -1310,6 +1344,26 @@ ACMD(do_matrix_score)
 
   if (DECKER->io < GET_CYBERDECK_IO_RATING(DECKER->deck)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^yYour I/O rating is restricted to %d by your jackpoint.^n\r\n", DECKER->io * 10);
+  }
+
+  if (ch->persona->type == ICON_LIVING_PERSONA) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "     Echoes: ");
+    int echoes_found = 0;
+    for (int ci=ECHO_UNDEFINED + 1; ci <= ECHO_MAX;ci++) {
+      if (!GET_ECHO(ch, ci)) continue;
+      echoes_found++;
+      if (echoes[ci].incremental)
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s (%d)",
+          echoes_found > 0 ? ", " : "",
+          echoes[ci].name,
+          GET_ECHO(ch, ci));
+      else
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s",
+          echoes_found > 0 ? ", " : "",
+          echoes[ci].name);
+    }
+    if (echoes_found > 0) snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
+    else snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " None\r\n");
   }
 
   strlcat(buf, "\r\n(Switches available: ^WSCORE HEALTH^n, ^WSTATS^n, ^WDECK^n, ^WMEMORY^n.)\r\n", sizeof(buf));
@@ -2491,7 +2545,9 @@ ACMD(do_download)
           if (!dam)
             send_to_icon(PERSONA, "The %s explodes, but fails to cause damage to you.\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
           else {
-            do_damage_persona(PERSONA, dam);
+            if (do_damage_persona(PERSONA, dam) && ch && GET_POS(ch) <= POS_STUNNED) {
+              return;
+            }
             if (PERSONA_CONDITION < 1) {
               send_to_icon(PERSONA, "The %s explodes, ripping your icon into junk logic\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
               dumpshock(PERSONA);
@@ -3766,11 +3822,7 @@ ACMD(do_restrict)
   }
 #endif
 
-  for (struct obj_data *soft = targ->decker->software; soft; soft = soft->next_content)
-    if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
-      detect = GET_OBJ_VAL(soft, 1);
-  detect += targ->decker->masking + 1; // +1 because we round up
-  detect /= 2;
+  detect = get_detection_factor(ch);
 
   if (is_abbrev(buf, "detection")) {
     success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_VALIDATE, detect);
