@@ -3041,7 +3041,7 @@ void process_upload(struct matrix_icon *persona)
           // Make it seen by them.
           GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) = GET_IDNUM(persona->decker->ch);
           // Remove it from their deck's used storage.
-          GET_CYBERDECK_USED_STORAGE(persona->decker->deck) -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
+          GET_CYBERDECK_USED_STORAGE(deck) -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
           GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
           GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
 
