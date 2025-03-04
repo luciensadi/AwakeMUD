@@ -320,6 +320,8 @@ bool tarbaby(struct obj_data *prog, struct char_data *ch, struct matrix_icon *ic
 
 bool dumpshock(struct matrix_icon *icon)
 {
+  if (!icon) return FALSE;
+
   if (icon->decker && icon->decker->ch)
   {
     send_to_char(icon->decker->ch, "You are dumped from the matrix!\r\n");
@@ -376,6 +378,12 @@ bool dumpshock(struct matrix_icon *icon)
     extract_icon(icon);
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
 
+    // No reason to double-damage
+    if (!PLR_FLAGGED(ch, PLR_MATRIX))
+      return FALSE;
+    // If they're stunned or dead, there's no reason to take dumpshock damage.
+    if (GET_POS(ch) <= POS_STUNNED)
+      return FALSE; 
     if (damage(ch, ch, dam, TYPE_DUMPSHOCK, MENTAL))
       return TRUE;
   } else {
@@ -529,14 +537,20 @@ bool has_spotted(struct matrix_icon *icon, struct matrix_icon *targ)
   return FALSE;
 }
 
-void do_damage_persona(struct matrix_icon *targ, int dmg)
+bool do_damage_persona(struct matrix_icon *targ, int dmg)
 {
   if (targ->type == ICON_LIVING_PERSONA) {
+    struct char_data *ch = targ->decker->ch;
     // It's an otaku! They get to suffer MENTAL DAMAGE!
-    damage(targ->decker->ch, targ->decker->ch, dmg, TYPE_TASER, MENTAL);
-    return;
+    // targ->condition seems to be 1-10 scale, while ch mental wounds seems to be 1-100. Multiply by ten.
+    if (damage(targ->decker->ch, targ->decker->ch, dmg, TYPE_BLACKIC, MENTAL))
+      return TRUE;
+    if (GET_POS(ch) <= POS_STUNNED)
+      return TRUE;
+    return FALSE;
   }
   targ->condition -= dmg;
+  return targ->condition < 1;
 }
 
 void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
@@ -945,7 +959,6 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       return;
     }
   }
-  targ->condition -= dam;
   switch(dam)
   {
   case 0:
@@ -971,7 +984,14 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     send_to_icon(icon, "You obliterate %s^n.\r\n", decapitalize_a_an(targ->name));
     break;
   }
-  if (dam > 0 && targ->decker)
+  struct char_data *ch = targ->decker ? targ->decker->ch : NULL;
+  if (do_damage_persona(targ, dam) && ch && GET_POS(ch) <= POS_STUNNED) {
+    // If do_damage_persona returns true then the icon condition monitor is overloaded,
+    // or it's an otaku that has fainted/died from brain bleeding.
+    // If it's the latter we check if they're uncon/dead, and then return early.
+    return;
+  }
+  if (dam > 0 && ch)
   {
     if (ICON_IS_IC(icon) && icon->ic.type >= IC_LETHAL_BLACK) {
       int resist = 0;
@@ -1000,7 +1020,6 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       dam = convert_damage(stage(success, dam));
       send_to_icon(targ, "You smell something burning.\r\n");
 
-      struct char_data *ch = targ->decker->ch;
       if (damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL)) {
         // Oh shit, they died. Guess they don't take MPCP damage, since their struct is zeroed out now.
         return;
@@ -2524,7 +2543,9 @@ ACMD(do_download)
           if (!dam)
             send_to_icon(PERSONA, "The %s explodes, but fails to cause damage to you.\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
           else {
-            do_damage_persona(PERSONA, dam);
+            if (do_damage_persona(PERSONA, dam) && ch && GET_POS(ch) <= POS_STUNNED) {
+              return;
+            }
             if (PERSONA_CONDITION < 1) {
               send_to_icon(PERSONA, "The %s explodes, ripping your icon into junk logic\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
               dumpshock(PERSONA);
