@@ -6,9 +6,12 @@ struct otaku_echo {
   bool incremental;
 };
 
+int     get_otaku_wil(struct char_data *ch);
 int     get_otaku_int(struct char_data *ch);
 int     get_otaku_qui(struct char_data *ch);
 int     get_otaku_rea(struct char_data *ch);
+
+void    update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck);
 
 #define SUBMERSION_MAIN	             0
 #define SUBMERSION_ECHO	             1

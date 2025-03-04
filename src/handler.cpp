@@ -32,6 +32,7 @@
 #include "deck_build.hpp"
 #include "vehicles.hpp"
 #include "player_exdescs.hpp"
+#include "otaku.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
@@ -863,6 +864,11 @@ void affect_total(struct char_data * ch)
   rigger_init_dice -= GET_INIT_DICE(ch);
 
   apply_drug_modifiers_to_ch(ch);
+
+  // Part of the otaku simulation; modifies otaku attributes depending on drugs, cyber, etc.
+  if (ch->persona && ch->persona->type == ICON_LIVING_PERSONA) {
+    update_otaku_deck(ch, ch->persona->decker->deck);
+  }
 
   rigger_rea += GET_REA(ch);
   rigger_init_dice += GET_INIT_DICE(ch);

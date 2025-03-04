@@ -18,30 +18,76 @@
 #include "playerdoc.hpp"
 #include "newhouse.hpp"
 #include "quest.hpp"
+#include "newmatrix.hpp"
 
 extern struct otaku_echo echoes[];
 
+int get_otaku_wil(struct char_data *ch) {
+  int wil_stat = GET_REAL_WIL(ch);
+
+  /* Handling Drugs */
+  int detox_force = affected_by_spell(ch, SPELL_DETOX);
+  if (GET_DRUG_STAGE(ch, DRUG_KAMIKAZE) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_KAMIKAZE, detox_force))
+    wil_stat++;
+  if (GET_DRUG_STAGE(ch, DRUG_NITRO) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_NITRO, detox_force))
+    wil_stat += 2;
+  if (GET_DRUG_STAGE(ch, DRUG_ZEN) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_ZEN, detox_force))
+    wil_stat += 2;
+  
+  if (GET_DRUG_STAGE(ch, DRUG_KAMIKAZE) == DRUG_STAGE_COMEDOWN && !IS_DRUG_DETOX(DRUG_KAMIKAZE, detox_force))
+    wil_stat--;
+  if (GET_DRUG_STAGE(ch, DRUG_NOVACOKE) == DRUG_STAGE_COMEDOWN && !IS_DRUG_DETOX(DRUG_NOVACOKE, detox_force))
+    wil_stat /= 2;
+
+  return wil_stat;
+}
+
 int get_otaku_int(struct char_data *ch) {
   int int_stat = GET_REAL_INT(ch);
+
+  /* Handling Cyberware/Bioware */
   struct obj_data *booster = find_bioware(ch, BIO_CEREBRALBOOSTER);
   if (booster)
     int_stat += GET_BIOWARE_RATING(booster);
+
+  /* Handling Drugs */
+  int detox_force = affected_by_spell(ch, SPELL_DETOX);
+  if (GET_DRUG_STAGE(ch, DRUG_PSYCHE) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_PSYCHE, detox_force))
+    int_stat += 2;
+
   return int_stat;
 }
 
 int get_otaku_qui(struct char_data *ch) {
   int qui_stat = GET_REAL_QUI(ch);
+
+  /* Handling Cyberware/Bioware */
   struct obj_data *move_by_wire = find_cyberware(ch, CYB_MOVEBYWIRE);
   if (move_by_wire)
     qui_stat += GET_CYBERWARE_RATING(move_by_wire);
   struct obj_data *suprathyroid = find_bioware(ch, BIO_SUPRATHYROIDGLAND);
   if (suprathyroid)
     qui_stat += 1;
+
+  /* Handling Drugs */
+  int detox_force = affected_by_spell(ch, SPELL_DETOX);
+  if (GET_DRUG_STAGE(ch, DRUG_JAZZ) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_JAZZ, detox_force))
+    qui_stat += 2;
+  if (GET_DRUG_STAGE(ch, DRUG_KAMIKAZE) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_KAMIKAZE, detox_force))
+    qui_stat++;
+
+  if (GET_DRUG_STAGE(ch, DRUG_JAZZ) == DRUG_STAGE_COMEDOWN && !IS_DRUG_DETOX(DRUG_JAZZ, detox_force))
+    qui_stat--;
+  if (GET_DRUG_STAGE(ch, DRUG_KAMIKAZE) == DRUG_STAGE_COMEDOWN && !IS_DRUG_DETOX(DRUG_KAMIKAZE, detox_force))
+    qui_stat--;
+
   return qui_stat;
 }
 
 int get_otaku_rea(struct char_data *ch) {
   int rea_stat = (get_otaku_int(ch) + get_otaku_qui(ch)) / 2;
+
+  /* Handling Cyberware/Bioware */
   struct obj_data *boosted_reflexes = find_cyberware(ch, CYB_BOOSTEDREFLEXES);
   if (boosted_reflexes)
     rea_stat += MAX(0, GET_CYBERWARE_RATING(boosted_reflexes) - 1);
@@ -57,6 +103,18 @@ int get_otaku_rea(struct char_data *ch) {
   struct obj_data *suprathyroid = find_bioware(ch, BIO_SUPRATHYROIDGLAND);
   if (suprathyroid)
     rea_stat += 1;
+
+  int detox_force = affected_by_spell(ch, SPELL_DETOX);
+  /* Handling Drugs */
+  if (GET_DRUG_STAGE(ch, DRUG_BLISS) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_BLISS, detox_force))
+    rea_stat -= 1;
+  if (GET_DRUG_STAGE(ch, DRUG_NOVACOKE) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_NOVACOKE, detox_force))
+    rea_stat += 1;
+  if (GET_DRUG_STAGE(ch, DRUG_ZEN) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_ZEN, detox_force))
+    rea_stat -= 2;
+  if (GET_DRUG_STAGE(ch, DRUG_CRAM) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_CRAM, detox_force))
+    rea_stat += 1;
+
   return rea_stat;
 }
 
@@ -78,20 +136,16 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
   // Add parts.
   int mpcp = GET_OTAKU_MPCP(ch);
 
+  // Real values are assigned in update_otaku_deck()
   obj_to_obj(make_new_finished_part(PART_MPCP, mpcp, mpcp), new_deck);
-  obj_to_obj(make_new_finished_part(PART_BOD, mpcp, GET_REAL_WIL(ch)), new_deck);
-  obj_to_obj(make_new_finished_part(PART_EVASION, mpcp, get_otaku_int(ch)), new_deck);
-  obj_to_obj(make_new_finished_part(PART_SENSOR, mpcp, get_otaku_int(ch)), new_deck);
-  obj_to_obj(make_new_finished_part(PART_MASKING, mpcp, (GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 1) / 2), new_deck);
+  obj_to_obj(make_new_finished_part(PART_BOD, mpcp, 1), new_deck);
+  obj_to_obj(make_new_finished_part(PART_EVASION, mpcp, 1), new_deck);
+  obj_to_obj(make_new_finished_part(PART_SENSOR, mpcp, 1), new_deck);
+  obj_to_obj(make_new_finished_part(PART_MASKING, mpcp, 1), new_deck);
   obj_to_obj(make_new_finished_part(PART_ASIST_HOT, mpcp), new_deck);
   obj_to_obj(make_new_finished_part(PART_RAS_OVERRIDE, mpcp), new_deck);
 
-  GET_CYBERDECK_MPCP(new_deck) = MIN(12, mpcp);
-  GET_CYBERDECK_HARDENING(new_deck) = MIN(GET_REAL_WIL(ch), GET_REAL_WIL(ch) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD));
-  GET_CYBERDECK_ACTIVE_MEMORY(new_deck) = 0; // Otaku do not have active memory.
-  GET_CYBERDECK_TOTAL_STORAGE(new_deck) = 0;
-  GET_CYBERDECK_RESPONSE_INCREASE(new_deck) = MIN(mpcp * 1.5, get_otaku_rea(ch) + GET_ECHO(ch, ECHO_IMPROVED_REA));
-  GET_CYBERDECK_IO_RATING(new_deck) = MIN(get_otaku_int(ch) * 200, (get_otaku_int(ch) * 100) + (GET_ECHO(ch, ECHO_IMPROVED_IO) * 100));
+  update_otaku_deck(ch, new_deck);
   GET_CYBERDECK_IS_INCOMPLETE(new_deck) = FALSE;
 
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
@@ -127,6 +181,54 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
   new_deck->restring = str_dup(restring);
 
   return new_deck;
+}
+
+void update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck) {
+  int mpcp = GET_OTAKU_MPCP(ch);
+
+  GET_CYBERDECK_MPCP(cyberdeck) = MIN(12, mpcp);
+  GET_CYBERDECK_HARDENING(cyberdeck) = MIN(get_otaku_wil(ch), get_otaku_wil(ch) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD));
+  GET_CYBERDECK_ACTIVE_MEMORY(cyberdeck) = 0; // Otaku do not have active memory.
+  GET_CYBERDECK_TOTAL_STORAGE(cyberdeck) = 0;
+  GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck) = MIN(mpcp * 1.5, get_otaku_rea(ch) + GET_ECHO(ch, ECHO_IMPROVED_REA));
+  GET_CYBERDECK_IO_RATING(cyberdeck) = MIN(get_otaku_int(ch) * 200, (get_otaku_int(ch) * 100) + (GET_ECHO(ch, ECHO_IMPROVED_IO) * 100));
+
+  if (ch->persona->type == ICON_LIVING_PERSONA) {
+    ch->persona->decker->mpcp = mpcp;
+    ch->persona->decker->hardening = GET_CYBERDECK_HARDENING(cyberdeck);
+    ch->persona->decker->response = GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck);
+    ch->persona->decker->io = GET_CYBERDECK_IO_RATING(cyberdeck);
+  }
+
+  for (struct obj_data *part = cyberdeck->contains; part; part = part->next_content) {
+    if (GET_OBJ_TYPE(part) != ITEM_PART) continue;
+    GET_PART_TARGET_MPCP(part) = mpcp;
+    switch (GET_OBJ_VAL(part, 0)) {
+      case PART_MPCP:
+        GET_PART_RATING(part) = mpcp;
+        break;
+      case PART_BOD:
+        GET_PART_RATING(part) = get_otaku_wil(ch);
+        if (ch->persona->type == ICON_LIVING_PERSONA) 
+          ch->persona->decker->bod = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_BOD));
+        break;
+      case PART_EVASION:
+        GET_PART_RATING(part) = get_otaku_int(ch);
+        if (ch->persona->type == ICON_LIVING_PERSONA) 
+          ch->persona->decker->evasion = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_EVAS));
+        break;
+      case PART_SENSOR:
+        GET_PART_RATING(part) = get_otaku_int(ch);
+        if (ch->persona->type == ICON_LIVING_PERSONA) 
+          ch->persona->decker->sensor = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_SENS));
+        break;
+      case PART_MASKING:
+        GET_PART_RATING(part) = (get_otaku_wil(ch) + GET_REAL_CHA(ch) + 1) / 2;
+        if (ch->persona->type == ICON_LIVING_PERSONA) 
+          ch->persona->decker->masking = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_MASK));
+        break;
+    }
+  }
 }
 
 long calculate_sub_nuyen_cost(int desired_grade) {
