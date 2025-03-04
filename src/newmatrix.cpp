@@ -1235,7 +1235,10 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
 }
 
 const char *get_plaintext_matrix_score_health(struct char_data *ch) {
-  snprintf(buf2, sizeof(buf2), "Persona Condition: %d\r\n", PERSONA_CONDITION);
+  if (ch->persona->type == ICON_LIVING_PERSONA)
+    snprintf(buf2, sizeof(buf2), "Your Mental Condition: %d / %d\r\n", PERSONA_CONDITION, (int)(GET_MENTAL(ch) / 100), (int)(GET_MAX_MENTAL(ch) / 100));
+  else
+    snprintf(buf2, sizeof(buf2), "Persona Condition: %d\r\n", PERSONA_CONDITION);
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Your Physical Condition: %d / %d\r\n", (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100));
   return buf2;
 }
@@ -1246,6 +1249,25 @@ const char *get_plaintext_matrix_score_stats(struct char_data *ch, int detect) {
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Max %d hacking dice usable per action.\r\n", GET_MAX_HACKING(ch));
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Persona Programs:\r\nBod: %d\r\nEvasion: %d\r\nMasking: %d\r\nSensors: %d\r\n",
           DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor);
+  if (ch->persona->type == ICON_LIVING_PERSONA) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Your Submersion Echoes: ");
+    int echoes_found = 0;
+    for (int ci=ECHO_UNDEFINED + 1; ci <= ECHO_MAX;ci++) {
+      if (!GET_ECHO(ch, ci)) continue;
+      echoes_found++;
+      if (echoes[ci].incremental)
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s (%d)",
+          echoes_found > 0 ? ", " : "",
+          echoes[ci].name,
+          GET_ECHO(ch, ci));
+      else
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s",
+          echoes_found > 0 ? ", " : "",
+          echoes[ci].name);
+    }
+    if (echoes_found > 0) snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
+    else snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " None\r\n");
+  }
   return buf2;
 }
 
@@ -1256,6 +1278,13 @@ const char *get_plaintext_matrix_score_deck(struct char_data *ch) {
 }
 
 const char *get_plaintext_matrix_score_memory(struct char_data *ch) {
+  if (DECKER->proxy_deck) {
+    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s Storage Memory: %d free of %d total\r\n",
+          GET_OBJ_NAME(DECKER->proxy_deck),
+          GET_CYBERDECK_FREE_STORAGE(DECKER->proxy_deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->proxy_deck));
+  }
+  if (ch->persona->type == ICON_LIVING_PERSONA) return buf2;
+
   snprintf(buf2, sizeof(buf2), "Active Memory: %d free of %d total\r\n", DECKER->active, GET_CYBERDECK_ACTIVE_MEMORY(DECKER->deck));
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Storage Memory: %d free of %d total\r\n",
           GET_CYBERDECK_FREE_STORAGE(DECKER->deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->deck));
