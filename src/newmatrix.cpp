@@ -1236,7 +1236,7 @@ void gain_matrix_karma(struct matrix_icon *icon, struct matrix_icon *targ) {
 
 const char *get_plaintext_matrix_score_health(struct char_data *ch) {
   if (ch->persona->type == ICON_LIVING_PERSONA)
-    snprintf(buf2, sizeof(buf2), "Your Mental Condition: %d / %d\r\n", PERSONA_CONDITION, (int)(GET_MENTAL(ch) / 100), (int)(GET_MAX_MENTAL(ch) / 100));
+    snprintf(buf2, sizeof(buf2), "Your Mental Condition: %d / %d\r\n", (int)(GET_MENTAL(ch) / 100), (int)(GET_MAX_MENTAL(ch) / 100));
   else
     snprintf(buf2, sizeof(buf2), "Persona Condition: %d\r\n", PERSONA_CONDITION);
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Your Physical Condition: %d / %d\r\n", (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100));
