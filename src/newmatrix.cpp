@@ -2983,7 +2983,11 @@ void process_upload(struct matrix_icon *persona)
 {
   // Note: We only upload one file at a time. Find the first valid one and process it, then stop.
   if (persona && persona->decker && persona->decker->deck) {
-    for (struct obj_data *soft = persona->decker->deck->contains, *next_obj; soft; soft = next_obj) {
+    obj_data *deck = persona->decker->deck;
+    if (persona->decker->proxy_deck)
+      deck = persona->decker->proxy_deck;
+
+    for (struct obj_data *soft = deck->contains, *next_obj; soft; soft = next_obj) {
       next_obj = soft->next_content;
 
       // Sanity check: Only upload deck accessories.
