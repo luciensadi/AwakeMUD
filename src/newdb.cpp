@@ -61,6 +61,7 @@ void save_adept_powers_to_db(struct char_data *player);
 void save_spells_to_db(struct char_data *player);
 void save_metamagic_to_db(struct char_data *player);
 void save_elementals_to_db(struct char_data *player);
+void save_echoes_to_db(struct char_data *player);
 void save_pc_memory_to_db(struct char_data *player);
 void save_drug_data_to_db(struct char_data *player);
 void save_skills_to_db(struct char_data *player);
@@ -484,6 +485,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   const char *lifestyle_string = str_dup(row[82]);
   set_exdesc_max(ch, atoi(row[83]), FALSE);
   GET_OTAKU_PATH(ch) = atoi(row[84]);
+  GET_GRADE(ch) = atoi(row[85]);
   mysql_free_result(res);
 
   // Update lifestyle information.
@@ -568,6 +570,17 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     mysql_free_result(res);
   }
 
+  if (IS_OTAKU(ch) && GET_GRADE(ch) > 0) {
+    // Otaku echoes loading
+    snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_echoes WHERE idnum=%ld;", GET_IDNUM(ch));
+    mysql_wrapper(mysql, buf);
+    res = mysql_use_result(mysql);
+    while ((row = mysql_fetch_row(res))) {
+      SET_ECHO(ch, atoi(row[1]), atoi(row[2]));
+    }
+    mysql_free_result(res);
+  }
+
   if (GET_TRADITION(ch) != TRAD_MUNDANE) {
     snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_magic WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
@@ -598,6 +611,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
       mysql_free_result(res);
     }
     if (GET_GRADE(ch) > 0) {
+      // Metamagic loading
       snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_metamagic WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
       res = mysql_use_result(mysql);
@@ -1468,6 +1482,15 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     SAVE_IF_DIRTY_BIT_SET(GET_SPELLS_DIRTY_BIT, save_spells_to_db);
     SAVE_IF_DIRTY_BIT_SET(GET_METAMAGIC_DIRTY_BIT, save_metamagic_to_db);
     SAVE_IF_DIRTY_BIT_SET(GET_ELEMENTALS_DIRTY_BIT, save_elementals_to_db);
+  }
+
+  /* Save otaku info. */
+  if (IS_OTAKU(player)) {
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET submersion_grade=%d WHERE idnum=%ld;", GET_GRADE(player), GET_IDNUM(player));
+    mysql_wrapper(mysql, buf);
+
+    /* Save various otaku-related things. */
+    SAVE_IF_DIRTY_BIT_SET(GET_ECHOES_DIRTY_BIT, save_echoes_to_db);
   }
 
   /* Save data for quests the player has run. */
@@ -2790,6 +2813,27 @@ void save_spells_to_db(struct char_data *player) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, '%s', %d, %d, %d, %d", GET_IDNUM(player), temp->name, temp->type, temp->subtype, temp->force, spells[temp->type].category);
       q = 1;
     }
+    if (q) {
+      strcat(buf, ");");
+      mysql_wrapper(mysql, buf);
+    }
+  }
+}
+
+/* Save echoes. */
+void save_echoes_to_db(struct char_data *player) {
+  if (GET_GRADE(player) > 0) {
+    snprintf(buf, sizeof(buf), "DELETE FROM pfiles_echoes WHERE idnum=%ld", GET_IDNUM(player));
+    mysql_wrapper(mysql, buf);
+    strcpy(buf, "INSERT INTO pfiles_echoes (idnum, echonum, `rank`) VALUES (");
+    int q = 0;
+    for (int i = ECHO_UNDEFINED; i < ECHO_MAX; i++)
+      if (GET_ECHO(player, i)) {
+        if (q)
+          strcat(buf, "), (");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%ld, %d, %d", GET_IDNUM(player), i, GET_ECHO(player, i));
+        q = 1;
+     }
     if (q) {
       strcat(buf, ");");
       mysql_wrapper(mysql, buf);

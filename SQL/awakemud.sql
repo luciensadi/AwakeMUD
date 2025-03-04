@@ -177,6 +177,13 @@ CREATE TABLE `pfiles_metamagic` (
   KEY(`idnum`)
 );
 
+CREATE TABLE `pfiles_echoes` (
+  `idnum` mediumint(5) unsigned default '0',
+  `echonum` smallint(3) unsigned default '0',
+  `rank` smallint(3) unsigned default '0',
+  KEY(`idnum`)
+);
+
 CREATE TABLE `pfiles_quests` (
   `idnum` mediumint(5) unsigned default '0',
   `number` smallint(3) unsigned default '0',
