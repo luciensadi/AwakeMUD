@@ -16,11 +16,14 @@
 #include "ignore_system.hpp"
 #include "moderation.hpp"
 #include "pets.hpp"
+#include "otaku.hpp"
 
 #define PERSONA ch->persona
 #define PERSONA_CONDITION ch->persona->condition
 #define DECKER PERSONA->decker
 struct ic_info dummy_ic;
+
+extern struct otaku_echo echoes[];
 
 #define ICON_IS_IC(icon) (!(icon)->decker)
 
@@ -1320,6 +1323,26 @@ ACMD(do_matrix_score)
 
   if (DECKER->io < GET_CYBERDECK_IO_RATING(DECKER->deck)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^yYour I/O rating is restricted to %d by your jackpoint.^n\r\n", DECKER->io * 10);
+  }
+
+  if (ch->persona->type == ICON_LIVING_PERSONA) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "     Echoes: ");
+    int echoes_found = 0;
+    for (int ci=ECHO_UNDEFINED + 1; ci <= ECHO_MAX;ci++) {
+      if (!GET_ECHO(ch, ci)) continue;
+      echoes_found++;
+      if (echoes[ci].incremental)
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s (%d)",
+          echoes_found > 0 ? ", " : "",
+          echoes[ci].name,
+          GET_ECHO(ch, ci));
+      else
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s",
+          echoes_found > 0 ? ", " : "",
+          echoes[ci].name);
+    }
+    if (echoes_found > 0) snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
+    else snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " None\r\n");
   }
 
   strlcat(buf, "\r\n(Switches available: ^WSCORE HEALTH^n, ^WSTATS^n, ^WDECK^n, ^WMEMORY^n.)\r\n", sizeof(buf));
