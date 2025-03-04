@@ -2983,7 +2983,11 @@ void process_upload(struct matrix_icon *persona)
 {
   // Note: We only upload one file at a time. Find the first valid one and process it, then stop.
   if (persona && persona->decker && persona->decker->deck) {
-    for (struct obj_data *soft = persona->decker->deck->contains, *next_obj; soft; soft = next_obj) {
+    obj_data *deck = persona->decker->deck;
+    if (persona->decker->proxy_deck)
+      deck = persona->decker->proxy_deck;
+
+    for (struct obj_data *soft = deck->contains, *next_obj; soft; soft = next_obj) {
       next_obj = soft->next_content;
 
       // Sanity check: Only upload deck accessories.
@@ -3037,7 +3041,7 @@ void process_upload(struct matrix_icon *persona)
           // Make it seen by them.
           GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) = GET_IDNUM(persona->decker->ch);
           // Remove it from their deck's used storage.
-          GET_CYBERDECK_USED_STORAGE(persona->decker->deck) -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
+          GET_CYBERDECK_USED_STORAGE(deck) -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
           GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
           GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
 
