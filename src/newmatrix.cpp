@@ -1324,26 +1324,26 @@ ACMD(do_matrix_score)
               PERSONA_CONDITION, (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100));
     }
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), 
-            "  Detection:^r%3d^n       Hacking Pool:^g%3d/%3d (%2d)^n\r\n"
-            "    Storage:^g%4d^n/%4d (^c%d^n MP free)\r\n"
+            "  Detection:^r%3d^n       Hacking Pool:^g%3d/%3d (%2d)^n\r\n",
+            detect, MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch), GET_MAX_HACKING(ch));
+    if (ch->persona->type != ICON_LIVING_PERSONA) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), 
+            "    Storage:^g%4d^n/%4d (^c%d^n MP free)\r\n",
+            GET_CYBERDECK_USED_STORAGE(DECKER->deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->deck), GET_CYBERDECK_FREE_STORAGE(DECKER->deck));
+    }
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
             "            ^cPersona Programs:^n\r\n"
             "        Bod:^B%3d^n       Evasion:^B%3d^n\r\n"
             "    Masking:^B%3d^n       Sensors:^B%3d^n\r\n"
             "               ^cDeck Status:^n\r\n"
             "  Hardening:^g%3d^n       MPCP:^g%3d^n\r\n"
             "   IO Speed:^g%4d^n      Response Increase:^g%3d^n\r\n",
-            detect, MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch), GET_MAX_HACKING(ch),
-            GET_CYBERDECK_USED_STORAGE(DECKER->deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->deck), GET_CYBERDECK_FREE_STORAGE(DECKER->deck),
             DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
             DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_CYBERDECK_IO_RATING(DECKER->deck) : 0, DECKER->response);
   }
 
   if (HAS_HITCHER_JACK(DECKER->deck)) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    Hitcher: %s\r\n", DECKER->hitcher ? "^gconnected^n" : "^rdisconnected^n");
-  }
-
-  if (DECKER->io < GET_CYBERDECK_IO_RATING(DECKER->deck)) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^yYour I/O rating is restricted to %d by your jackpoint.^n\r\n", DECKER->io * 10);
   }
 
   if (ch->persona->type == ICON_LIVING_PERSONA) {
@@ -1364,6 +1364,18 @@ ACMD(do_matrix_score)
     }
     if (echoes_found > 0) snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
     else snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " None\r\n");
+  }
+
+  if (DECKER->proxy_deck) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+      "%*s^c%s:^n\r\n"
+      "    Storage:^g%4d^n/%4d (^c%d^n MP free)\r\n"  ,
+      (50 - (int)strlen(GET_OBJ_NAME(DECKER->proxy_deck))) / 2, "", GET_OBJ_NAME(DECKER->proxy_deck),
+      GET_CYBERDECK_USED_STORAGE(DECKER->proxy_deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->proxy_deck), GET_CYBERDECK_FREE_STORAGE(DECKER->proxy_deck));
+  }
+
+  if (DECKER->io < GET_CYBERDECK_IO_RATING(DECKER->deck)) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^yYour I/O rating is restricted to %d by your jackpoint.^n\r\n", DECKER->io * 10);
   }
 
   strlcat(buf, "\r\n(Switches available: ^WSCORE HEALTH^n, ^WSTATS^n, ^WDECK^n, ^WMEMORY^n.)\r\n", sizeof(buf));
