@@ -402,7 +402,7 @@ int get_detection_factor(struct char_data *ch)
   detect = detect / 2;
   detect -= DECKER->res_det;
   if  (PERSONA->type == ICON_LIVING_PERSONA) {
-    detect -= 1 + GET_ECHO(ch, ECHO_GHOSTING); // Otaku always get +1 DF
+    detect += 1 + GET_ECHO(ch, ECHO_GHOSTING); // Otaku always get +1 DF
   }
   return detect;
 }
