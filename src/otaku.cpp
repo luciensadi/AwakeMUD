@@ -187,11 +187,13 @@ void update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck) {
   int mpcp = GET_OTAKU_MPCP(ch);
 
   GET_CYBERDECK_MPCP(cyberdeck) = MIN(12, mpcp);
-  GET_CYBERDECK_HARDENING(cyberdeck) = MIN(get_otaku_wil(ch), get_otaku_wil(ch) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD));
+  GET_CYBERDECK_HARDENING(cyberdeck) = get_otaku_wil(ch) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD);
+  GET_CYBERDECK_HARDENING(cyberdeck) = MIN(get_otaku_wil(ch), GET_CYBERDECK_HARDENING(cyberdeck));
   GET_CYBERDECK_ACTIVE_MEMORY(cyberdeck) = 0; // Otaku do not have active memory.
   GET_CYBERDECK_TOTAL_STORAGE(cyberdeck) = 0;
-  GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck) = MIN(mpcp * 1.5, get_otaku_rea(ch) + GET_ECHO(ch, ECHO_IMPROVED_REA));
-  GET_CYBERDECK_IO_RATING(cyberdeck) = MIN(get_otaku_int(ch) * 200, (get_otaku_int(ch) * 100) + (GET_ECHO(ch, ECHO_IMPROVED_IO) * 100));
+  GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck) = get_otaku_rea(ch) + GET_ECHO(ch, ECHO_IMPROVED_REA);
+  GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck) = MIN(mpcp * 1.5, GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck));
+  GET_CYBERDECK_IO_RATING(cyberdeck) = (get_otaku_int(ch) * 100) + (GET_ECHO(ch, ECHO_IMPROVED_IO) * 100);
 
   if (ch->persona->type == ICON_LIVING_PERSONA) {
     ch->persona->decker->mpcp = mpcp;
