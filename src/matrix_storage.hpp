@@ -4,7 +4,7 @@
 #include <atomic>
 
 // Global atomic integer to ensure unique IDs
-std::atomic<int>    matrix_file_id_counter{1};
+extern std::atomic<long>    matrix_file_id_counter;
 
 matrix_file*        create_matrix_file(obj_data *storage, int load_origin);
 const char*         keyword_appears_in_file(const char *keyword, struct matrix_file *file, bool search_name=1, bool search_desc=0);

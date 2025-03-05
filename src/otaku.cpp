@@ -160,7 +160,7 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
     struct matrix_file *active = create_matrix_file(new_deck, OBJ_LOAD_REASON_OTAKU_RESONANCE);
     active->file_type = GET_PROGRAM_TYPE(form);
     active->attack_damage = GET_PROGRAM_ATTACK_DAMAGE(form);
-    active->is_defaulted = TRUE;
+    active->is_default = TRUE;
     // GET_OBJ_TIMER(active) = 1;
 
     active->rating = GET_PROGRAM_RATING(form);

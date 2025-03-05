@@ -1457,12 +1457,11 @@ struct matrix_file {
   // SQL fields
   rnum_t idnum;                                  /* Stored in database identifier */
   char* name;                                    /* The user-friendly text for this file */
-  idnum_t storage_idnum;                   /* What storage medium is holding this file */
   int file_type;
   int rating;
   int size;                                      /* File size in megapulses */
   int attack_damage;                             /* File's attack damage if damaging program */
-  int is_defaulted;
+  int is_default;                                /* Whether or not to load the program by default */
   int evaluate_last_decay_time;
   int evaluation_creation_time;
   idnum_t creator_idnum;
@@ -1474,8 +1473,6 @@ struct matrix_file {
   bool design_completed;                         /* This is set to true when a design grows into an adult program */
   int design_successes;                          /* When this is negative it was a failure */
 
-  int is_cooked;
-
   // Non-SQL fields
   struct obj_data *in_obj;                       /* In what object NULL when none    */
   struct matrix_file *next_file;                 /* For 'files' lists             */
@@ -1486,9 +1483,9 @@ struct matrix_file {
   char load_origin;                              /* Identifies what loaded this. */
 
   matrix_file() : 
-      idnum(0), name(0), storage_idnum(0), file_type(0), rating(0), size(0),
-      attack_damage(0), is_defaulted(0), evaluate_last_decay_time(0), evaluation_creation_time(0),
-      is_cooked(0), in_obj(NULL), next_file(NULL), in_host(NULL), load_origin(0)
+      idnum(0), name(0), file_type(0), rating(0), size(0),
+      attack_damage(0), is_default(0), evaluate_last_decay_time(0), evaluation_creation_time(0),
+      in_obj(NULL), next_file(NULL), in_host(NULL), load_origin(0)
   {
 
   }

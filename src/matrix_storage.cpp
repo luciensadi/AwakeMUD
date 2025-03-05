@@ -12,6 +12,7 @@
 #include "handler.hpp"
 
 // Function to get a unique ID
+std::atomic<long> matrix_file_id_counter{1};
 int _next_matrix_id() {
     return matrix_file_id_counter.fetch_add(1, std::memory_order_relaxed);
 }

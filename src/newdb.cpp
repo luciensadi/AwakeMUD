@@ -368,7 +368,6 @@ bool load_obj_programs(obj_data *obj)
     file = new matrix_file();  // Dynamically allocate memory for the new struct
 
     file->name = strdup(MATRIX_FILE_NAME); // Duplicate the string to avoid issues
-    file->storage_idnum = atol(MATRIX_FILE_STORAGE);
     file->rating = atoi(MATRIX_FILE_RATING);
     file->file_type = atoi(MATRIX_FILE_TYPE);
     file->size = atoi(MATRIX_FILE_SIZE);
@@ -1461,6 +1460,41 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
 
+  /* Matrix files are persisted in a separate table. Save that data. */
+  snprintf(buf, sizeof(buf), ""); // Clear buffer
+  for (temp = player->carrying; temp; temp = next_obj) {
+    next_obj = temp->next_content;
+    // We always clear out entries since this is a one-to-many table
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "DELETE FROM `matrix_files` WHERE in_obj_idnum=%ld; ", temp->idnum);
+    if (!temp->files) continue;
+    for (struct matrix_file *file = temp->files; file; file = file->next_file) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "INSERT INTO `matrix_files` (idnum, in_obj_idnum, name, "\
+      "file_type, rating, size, attack_damage, is_default, evaluate_last_decay_time, evaluation_creation_time, "\
+      "creator_idnum, designing_ticks_left, designing_original_ticks_left, programming_ticks_left, "\
+      "design_completed, design_successes) "\
+      "VALUES (%ld, %ld, '%s', %d, %d, %d, %d, %d, %d, %s, %ld, %d, %d, %d, %d, %d); ",
+      file->idnum, 
+      temp->idnum, 
+      prepare_quotes(buf1, file->name, sizeof(buf1) / sizeof(char)),
+      file->file_type,
+      file->rating,
+      file->size,
+      file->attack_damage,
+      file->is_default,
+      file->evaluate_last_decay_time,
+      file->evaluation_creation_time,
+      file->creator_idnum,
+      file->designing_ticks_left,
+      file->designing_original_ticks_left,
+      file->programming_ticks_left,
+      file->design_completed,
+      file->design_successes);
+    }
+  }
+  if (strlen(buf)) {
+    mysql_wrapper(mysql, buf);
+  }
+
   if (is_temp_load)
     PLR_FLAGS(player).SetBit(PLR_IS_TEMPORARILY_LOADED);
 
@@ -2520,6 +2554,14 @@ void idle_delete()
   log(buf);
 }
 
+
+void init_matrix_data_file_index() {
+  mysql_wrapper(mysql, "SELECT MAX(idnum) AS largest_id FROM matrix_files;");
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  matrix_file_id_counter = atol(row[0]) + 1;
+  mysql_free_result(res);
+}
 
 void verify_db_password_column_size() {
   // show columns in pfiles like 'password';

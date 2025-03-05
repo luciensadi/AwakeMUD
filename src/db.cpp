@@ -239,6 +239,7 @@ void boot_shop_orders(void);
 void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
+extern void init_matrix_data_file_index();
 void set_elemental_races();
 void initialize_and_alphabetize_flag_maps();
 void set_up_pet_dummy_mob();
@@ -577,6 +578,9 @@ void boot_world(void)
 
   log("Verifying DB compatibility with extended-length passwords.");
   verify_db_password_column_size();
+
+  log("Initializing matrix data file store index.");
+  init_matrix_data_file_index();
 
   // Search terms below because it always takes me forever to ctrl-f this block -LS
   // ensure table, ensure row, ensure field, database, limits, restrictions
