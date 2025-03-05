@@ -567,7 +567,8 @@ ACMD(do_cook) {
       }
 
       struct obj_data *chip = read_object(OBJ_BLANK_BURNER_CHIP, VIRTUAL, OBJ_LOAD_REASON_COOK_PROGRAM);
-      chip->restring = str_dup(design->name);
+      snprintf(buf, sizeof(buf), "a '%s' burner chip", design->name);
+      chip->restring = str_dup(buf);
       GET_OBJ_VAL(chip, 0) = design->file_type;
       GET_OBJ_VAL(chip, 1) = design->rating;
       GET_OBJ_VAL(chip, 2) = design->size;
