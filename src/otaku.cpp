@@ -25,6 +25,11 @@ extern struct otaku_echo echoes[];
 int get_otaku_wil(struct char_data *ch) {
   int wil_stat = GET_REAL_WIL(ch);
 
+  /* Handling Cyberware/Bioware */
+  struct obj_data *pain_editor = find_bioware(ch, BIO_PAINEDITOR);
+  if (pain_editor && GET_BIOWARE_RATING(pain_editor))
+    wil_stat++;
+
   /* Handling Drugs */
   int detox_force = affected_by_spell(ch, SPELL_DETOX);
   if (GET_DRUG_STAGE(ch, DRUG_KAMIKAZE) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_KAMIKAZE, detox_force))
@@ -49,6 +54,10 @@ int get_otaku_int(struct char_data *ch) {
   struct obj_data *booster = find_bioware(ch, BIO_CEREBRALBOOSTER);
   if (booster)
     int_stat += GET_BIOWARE_RATING(booster);
+
+  struct obj_data *pain_editor = find_bioware(ch, BIO_PAINEDITOR);
+  if (pain_editor && GET_BIOWARE_RATING(pain_editor))
+    int_stat--;
 
   /* Handling Drugs */
   int detox_force = affected_by_spell(ch, SPELL_DETOX);
@@ -120,7 +129,6 @@ int get_otaku_rea(struct char_data *ch) {
 
 extern struct obj_data *make_new_finished_part(int part_type, int mpcp, int rating=0);
 struct obj_data *make_otaku_deck(struct char_data *ch) {
-  GET_REAL_REA(ch);
   if (!ch) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "Tried to create an otaku deck, but provided invalid character.");
     return NULL;
@@ -199,16 +207,16 @@ void _update_living_persona(struct char_data *ch, struct obj_data *cyberdeck, in
         GET_PART_RATING(part) = mpcp;
         break;
       case PART_BOD:
-        ch->persona->decker->bod = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_BOD));
+        ch->persona->decker->bod = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_BOD));
         break;
       case PART_EVASION:
-        ch->persona->decker->evasion = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_EVAS));
+        ch->persona->decker->evasion = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_EVAS));
         break;
       case PART_SENSOR:
-        ch->persona->decker->sensor = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_SENS));
+        ch->persona->decker->sensor = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_SENS));
         break;
       case PART_MASKING:
-        ch->persona->decker->masking = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_MASK));
+        ch->persona->decker->masking = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_MASK));
         break;
     }
   }
@@ -218,7 +226,7 @@ void update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck) {
   int mpcp = GET_OTAKU_MPCP(ch);
 
   GET_CYBERDECK_MPCP(cyberdeck) = MIN(12, mpcp);
-  GET_CYBERDECK_HARDENING(cyberdeck) = get_otaku_wil(ch) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD);
+  GET_CYBERDECK_HARDENING(cyberdeck) = (get_otaku_wil(ch) + 1) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD);
   GET_CYBERDECK_HARDENING(cyberdeck) = MIN(get_otaku_wil(ch), GET_CYBERDECK_HARDENING(cyberdeck));
   GET_CYBERDECK_ACTIVE_MEMORY(cyberdeck) = 0; // Otaku do not have active memory.
   GET_CYBERDECK_TOTAL_STORAGE(cyberdeck) = 0;

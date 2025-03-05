@@ -1005,8 +1005,10 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
     diag_char_to_char(i, ch);
     if (SEES_ASTRAL(ch)) {
       bool dual = TRUE, init = TRUE;
-      if (GET_GRADE(i)) {
-        int targ = MAX(1, GET_GRADE(ch) - GET_GRADE(i));
+      int grade = GET_GRADE(i);
+      if (IS_OTAKU(i) && !PLR_FLAGGED(i, PLR_MATRIX)) grade = 0; // Otaku only show auras while decking, NERPs
+      if (grade) {
+        int targ = MAX(1, GET_GRADE(ch) - grade);
         if (GET_METAMAGIC(i, META_MASKING)) {
           if (!GET_GRADE(ch) || success_test(GET_MAG(ch) / 100, GET_MAG(i) / 100) < targ) {
             if (IS_SET(GET_MASKING(i), MASK_INIT) || IS_SET(GET_MASKING(i), MASK_COMPLETE))
@@ -1015,17 +1017,18 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
               dual = FALSE;
           }
         }
+
         if (init) {
           snprintf(buf, sizeof(buf), "%s aura is ", CAP(HSHR(i)));
-          if (GET_GRADE(i) > 20)
+          if (grade > 20)
             strlcat(buf, "^Wblindingly bright^n.", sizeof(buf));
-          else if (GET_GRADE(i) > 16)
+          else if (grade > 16)
             strlcat(buf, "^Wbrilliant^n.", sizeof(buf));
-          else if (GET_GRADE(i) > 12)
+          else if (grade > 12)
             strlcat(buf, "^Wbright^n.", sizeof(buf));
-          else if (GET_GRADE(i) > 8)
+          else if (grade > 8)
             strlcat(buf, "^Wa strong glow^n.", sizeof(buf));
-          else if (GET_GRADE(i) > 4)
+          else if (grade > 4)
             strlcat(buf, "^Wglowing^n.", sizeof(buf));
           else strlcat(buf, "^Wa lambent glow^n.", sizeof(buf));
           strlcat(buf, "\r\n", sizeof(buf));
