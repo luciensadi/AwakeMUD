@@ -122,15 +122,15 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
 
       send_to_char(CH, "Design saved!\r\n");
       if (d->edit_matrix_file->file_type == SOFT_ATTACK) {
-        d->edit_matrix_file->designing_ticks_left = d->edit_matrix_file->rating * attack_multiplier[d->edit_matrix_file->attack_damage];
+        d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating * attack_multiplier[d->edit_matrix_file->attack_damage];
       } else if (d->edit_matrix_file->file_type == SOFT_RESPONSE) {
-        d->edit_matrix_file->designing_ticks_left = d->edit_matrix_file->rating ^ 3;
+        d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating ^ 3;
       } else {
-        d->edit_matrix_file->designing_ticks_left = d->edit_matrix_file->rating * programs[d->edit_matrix_file->file_type].multiplier;
+        d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating * programs[d->edit_matrix_file->file_type].multiplier;
       }
-      d->edit_matrix_file->size = d->edit_matrix_file->rating * d->edit_matrix_file->designing_ticks_left;
-      d->edit_matrix_file->designing_ticks_left  *= 20;
-      d->edit_matrix_file->designing_original_ticks_left = d->edit_matrix_file->designing_ticks_left ;
+      d->edit_matrix_file->size = d->edit_matrix_file->rating * d->edit_matrix_file->work_ticks_left;
+      d->edit_matrix_file->work_ticks_left  *= 20;
+      d->edit_matrix_file->work_original_ticks_left = d->edit_matrix_file->work_ticks_left ;
       d->edit_matrix_file->creator_idnum = GET_IDNUM(CH);
       STATE(d) = CON_PLAYING;
       d->edit_matrix_file = NULL;
@@ -250,10 +250,10 @@ void create_program(struct char_data *ch)
   pedit_disp_menu(ch->desc);
 }
 
-int get_program_skill(char_data *ch, obj_data *prog, int target)
+int get_program_skill(char_data *ch, matrix_file *prog, int target)
 {
   int skill = 0;
-  switch (GET_DESIGN_PROGRAM(prog)) {
+  switch (prog->file_type) {
   case SOFT_BOD:
   case SOFT_EVASION:
   case SOFT_MASKING:
@@ -303,7 +303,7 @@ int get_program_skill(char_data *ch, obj_data *prog, int target)
     skill = get_skill(ch, SKILL_PROGRAM_OPERATIONAL, target);
     break;
   default:
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown SOFT_X %d to do_design's switch statement!", GET_DESIGN_PROGRAM(prog));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown SOFT_X %d to do_design's switch statement!", prog->file_type);
     skill = 0;
     break;
   }
@@ -314,9 +314,12 @@ ACMD(do_design)
 {
   ACMD_DECLARE(do_program);
 
-  struct obj_data *comp, *prog;
+  struct obj_data *comp, *proj;
   if (!*argument) {
-    if (AFF_FLAGS(ch).AreAnySet(AFF_DESIGN, AFF_PROGRAM, AFF_SPELLDESIGN, ENDBIT)) {
+    if (AFF_FLAGS(ch).AreAnySet(AFF_DESIGN, AFF_PROGRAM, ENDBIT)) {
+      send_to_char(ch, "You stop working on %s.\r\n", GET_PROGRAMMING(ch)->name);
+      STOP_WORKING(ch);
+    } else if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLDESIGN, ENDBIT)) {
       send_to_char(ch, "You stop working on %s.\r\n", GET_OBJ_NAME(GET_BUILDING(ch)));
       STOP_WORKING(ch);
     } else
@@ -333,68 +336,69 @@ ACMD(do_design)
   }
 
   skip_spaces(&argument);
-  prog = get_obj_in_list_vis(ch, argument, ch->carrying);
-  if (prog) {
-    if (GET_OBJ_TYPE(prog) == ITEM_PART) {
-      part_design(ch, prog);
+  proj = get_obj_in_list_vis(ch, argument, ch->carrying);
+  if (proj) {
+    if (GET_OBJ_TYPE(proj) == ITEM_PART) {
+      part_design(ch, proj);
       return;
-    } else if (GET_OBJ_TYPE(prog) == ITEM_SPELL_FORMULA) {
-      spell_design(ch, prog);
+    } else if (GET_OBJ_TYPE(proj) == ITEM_SPELL_FORMULA) {
+      spell_design(ch, proj);
       return;
     }
   }
   if (!(comp = can_program(ch)))
     return;
-
-  for (prog = comp->contains; prog; prog = prog->next_content) {
-    if (GET_OBJ_TYPE(prog) != ITEM_DESIGN)
-      continue;
-
-    if (isname(argument, prog->text.keywords) || isname(argument, get_string_after_color_code_removal(prog->restring, ch)))
-      break;
-  }
-
+  skip_spaces(&argument);
+  struct matrix_file *prog;
+  prog = get_matrix_file_in_list_vis(ch, argument, comp->files);
   if (!prog) {
     send_to_char(ch, "The program design isn't on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(comp)));
     return;
   }
-  if (GET_DESIGN_COMPLETED(prog) || GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog)) {
-    send_to_char(ch, "There's no more design work to be done on %s, so you decide to try programming it instead.\r\n", GET_OBJ_NAME(prog));
+
+  if (prog->work_phase == WORK_PHASE_COMPLETE) {
+    send_to_char(ch, "Not much point in programming or designing something that's already complete.");
+    return;
+  } else if (prog->work_phase >= WORK_PHASE_DESIGN && prog->work_successes) {
+    send_to_char(ch, "There's no more design work to be done on %s, so you decide to try programming it instead.\r\n", prog->name);
     do_program(ch, argument, 0, 0);
     return;
   }
-  if (GET_DESIGN_CREATOR_IDNUM(prog) && GET_DESIGN_CREATOR_IDNUM(prog) != GET_IDNUM(ch)) {
-    send_to_char(ch, "Someone else has already started on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(prog)));
-    return;
-  }
+
+  // if (GET_DESIGN_CREATOR_IDNUM(prog) && GET_DESIGN_CREATOR_IDNUM(prog) != GET_IDNUM(ch)) {
+  //   send_to_char(ch, "Someone else has already started on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(prog)));
+  //   return;
+  // }
   int skill = 0, target = 4;
-  if (GET_DESIGN_RATING(prog) < 5)
+  if (prog->rating < 5)
     target--;
-  else if (GET_DESIGN_RATING(prog) > 9)
+  else if (prog->rating > 9)
     target++;
   skill = get_program_skill(ch, prog, target);
   if (!skill) {
     send_to_char(ch, "You have no idea how to go about creating a program design for that.\r\n");
     return;
   }
-  if (GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) == GET_DESIGN_DESIGNING_TICKS_LEFT(prog)) {
+
+  prog->work_phase = WORK_PHASE_DESIGN;
+  if (prog->work_original_ticks_left == prog->work_ticks_left) {
     if (get_and_deduct_one_crafting_token_from_char(ch)) {
       send_to_char("A crafting token fuzzes into digital static, greatly accelerating the design time.\r\n", ch);
-      GET_DESIGN_SUCCESSES(prog) = 10;
-      GET_DESIGN_DESIGNING_TICKS_LEFT(prog) = 1;
+      prog->work_successes = 10;
+      prog->work_ticks_left = 1;
     }
     else if (access_level(ch, LVL_ADMIN)) {
-      send_to_char(ch, "You use your admin powers to greatly accelerate the design time of %s.\r\n", prog->restring);
-      GET_DESIGN_SUCCESSES(prog) = 10;
-      GET_DESIGN_DESIGNING_TICKS_LEFT(prog) = 1;
+      send_to_char(ch, "You use your admin powers to greatly accelerate the design time of %s.\r\n", prog->name);
+      prog->work_successes = 10;
+      prog->work_ticks_left = 1;
     } else {
-      send_to_char(ch, "You begin designing %s.\r\n", prog->restring);
-      GET_DESIGN_SUCCESSES(prog) = success_test(skill, target);
+      send_to_char(ch, "You begin designing %s.\r\n", prog->name);
+      prog->work_successes = success_test(skill, target);
     }
   } else
-    send_to_char(ch, "You continue to design %s.\r\n", prog->restring);
+    send_to_char(ch, "You continue to design %s.\r\n", prog->name);
   AFF_FLAGS(ch).SetBit(AFF_DESIGN);
-  GET_BUILDING(ch) = prog;
+  GET_PROGRAMMING(ch) = prog;
 }
 
 ACMD(do_program)
@@ -427,20 +431,20 @@ ACMD(do_program)
     send_to_char(ch, "The program design isn't on that computer.\r\n");
     return;
   }
-  if (prog->creator_idnum && prog->creator_idnum != GET_IDNUM(ch)) {
-    send_to_char(ch, "Someone else has already started on this program.\r\n");
-    return;
-  }
-  if (!prog->designing_ticks_left) {
+  // if (prog->creator_idnum && prog->creator_idnum != GET_IDNUM(ch)) {
+  //   send_to_char(ch, "Someone else has already started on this program.\r\n");
+  //   return;
+  // }
+  if (!prog->work_ticks_left) {
     if (get_and_deduct_one_crafting_token_from_char(ch)) {
       send_to_char("A crafting token fuzzes into digital static, greatly accelerating the development time.\r\n", ch);
-      prog->designing_ticks_left = 1;
-      prog->timer = prog->designing_ticks_left;
+      prog->work_ticks_left = 1;
+      prog->timer = prog->work_ticks_left;
     }
     else if (access_level(ch, LVL_ADMIN)) {
       send_to_char(ch, "You use your admin powers to greatly accelerate the development time for %s.\r\n", prog->name);
-      prog->designing_ticks_left = 1;
-      prog->timer = prog->designing_ticks_left;
+      prog->work_ticks_left = 1;
+      prog->timer = prog->work_ticks_left;
     } else {
       send_to_char(ch, "You begin to program %s.\r\n", prog->name);
       int target = prog->rating;
@@ -449,12 +453,12 @@ ACMD(do_program)
         target -= 2;
       }
 
-      if (!prog->design_completed) {
+      if (!prog->work_successes) {
         send_to_char("You haven't taken the time to design this program, so it's a little harder to conceptualize.\r\n", ch);
         target += 2;
       }
       else
-        target -= prog->design_successes;
+        target -= prog->work_successes;
 
       int skill = get_skill(ch, SKILL_COMPUTER, target);
       int success = success_test(skill, target);
@@ -464,12 +468,12 @@ ACMD(do_program)
           break;
         }
       if (success > 0) {
-        prog->designing_ticks_left = 60 * (prog->size / success);
-        prog->designing_original_ticks_left = prog->designing_ticks_left;
+        prog->work_ticks_left = 60 * (prog->size / success);
+        prog->work_original_ticks_left = prog->work_ticks_left;
       } else {
-        prog->designing_ticks_left = number(1, 6) + number(1, 6);
-        prog->designing_ticks_left = (prog->rating * 60) / number(1, 3);
-        prog->design_successes = -1;
+        prog->work_ticks_left = number(1, 6) + number(1, 6);
+        prog->work_ticks_left = (prog->rating * 60) / number(1, 3);
+        prog->work_successes = -1;
       }
     }
   } else
@@ -587,15 +591,14 @@ void update_buildrepair(void)
         CH->char_specials.timer = 0;
         STOP_WORKING(CH);
       } else if (AFF_FLAGGED(desc->character, AFF_DESIGN)) {
-        if (--GET_DESIGN_DESIGNING_TICKS_LEFT(PROG) < 1) {
-          send_to_char(desc->character, "You complete the design plan for %s.\r\n", GET_OBJ_NAME(PROG));
-          GET_DESIGN_COMPLETED(PROG) = 1;
-          PROG = NULL;
+        if (--GET_PROGRAMMING(CH)->work_ticks_left < 1) {
+          send_to_char(desc->character, "You complete the design plan for %s.\r\n", GET_PROGRAMMING(CH)->name);
+          GET_PROGRAMMING(CH) = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_DESIGN);
         }
       } else if (AFF_FLAGGED(desc->character, AFF_PROGRAM)) {
-        if (--GET_PROGRAMMING(CH)->designing_ticks_left < 1) {
-          if (GET_PROGRAMMING(CH)->design_successes < 0) {
+        if (--GET_PROGRAMMING(CH)->work_ticks_left < 1) {
+          if (GET_PROGRAMMING(CH)->work_successes < 0) {
             switch(number(1,10)) {
               case 1:
                 send_to_char(desc->character, "It was about that time that you noticed you had typed up all of your code on the microwave keypad. You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
@@ -633,7 +636,7 @@ void update_buildrepair(void)
           else {
             send_to_char(desc->character, "You complete programming %s.\r\n", GET_PROGRAMMING(CH)->name);
             // We can just change the existing design file into a finished program, rather than dupe it.
-            GET_PROGRAMMING(CH)->design_completed = TRUE;
+            GET_PROGRAMMING(CH)->work_phase = WORK_PHASE_COMPLETE;
           }
           GET_PROGRAMMING(CH) = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);

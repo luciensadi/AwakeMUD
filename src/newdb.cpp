@@ -1469,9 +1469,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     if (!temp->files) continue;
     for (struct matrix_file *file = temp->files; file; file = file->next_file) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "INSERT INTO `matrix_files` (idnum, in_obj_idnum, name, "\
-      "file_type, rating, size, attack_damage, is_default, evaluate_last_decay_time, evaluation_creation_time, "\
-      "creator_idnum, designing_ticks_left, designing_original_ticks_left, programming_ticks_left, "\
-      "design_completed, design_successes) "\
+      "file_type, rating, size, attack_damage, is_default, last_decay_time, creation_time, "\
+      "creator_idnum, work_ticks_left, work_original_ticks_left, "\
+      "work_phase, work_successes) "\
       "VALUES (%ld, %ld, '%s', %d, %d, %d, %d, %d, %d, %s, %ld, %d, %d, %d, %d, %d); ",
       file->idnum, 
       temp->idnum, 
@@ -1481,14 +1481,13 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       file->size,
       file->attack_damage,
       file->is_default,
-      file->evaluate_last_decay_time,
-      file->evaluation_creation_time,
+      file->last_decay_time,
+      file->creation_time,
       file->creator_idnum,
-      file->designing_ticks_left,
-      file->designing_original_ticks_left,
-      file->programming_ticks_left,
-      file->design_completed,
-      file->design_successes);
+      file->work_ticks_left,
+      file->work_original_ticks_left,
+      file->work_phase,
+      file->work_successes);
     }
   }
   if (strlen(buf)) {

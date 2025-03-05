@@ -1452,6 +1452,11 @@ struct kosher_weapon_values_struct {
 };
 
 
+#define WORK_PHASE_NONE      0
+#define WORK_PHASE_DESIGN    1
+#define WORK_PHASE_PROGRAM   2
+#define WORK_PHASE_COMPLETE  3
+
 /* ================== Memory Structure for Matrix Files ================== */
 struct matrix_file {
   // SQL fields
@@ -1462,30 +1467,40 @@ struct matrix_file {
   int size;                                      /* File size in megapulses */
   int attack_damage;                             /* File's attack damage if damaging program */
   int is_default;                                /* Whether or not to load the program by default */
-  int evaluate_last_decay_time;
-  int evaluation_creation_time;
   idnum_t creator_idnum;
+  int creation_time;                             /* When was this file created? */
 
-  // SQL Design Fields (used for designing programs)
-  int designing_ticks_left;
-  int designing_original_ticks_left;
-  int programming_ticks_left;
-  bool design_completed;                         /* This is set to true when a design grows into an adult program */
-  int design_successes;                          /* When this is negative it was a failure */
+  // If you're reading this in the future trying to figure out what the frag is going on here
+  // This is a read forward system, with the following flow:
+  // PHASE: NONE (no ticks, no successes)
+  //   => DESIGN (no successes): Ready to design
+  //   => DESIGN (pos/neg successes): Design complete
+  //     => PROGRAM (pos/neg successes): Programming complete
+  //       => COMPLETE
+  // The 'ready to design' phase is when design has a non-zero work_successes value.
+  int work_phase;                                /* As a matrix file moves between phases, this changes */
+  int work_ticks_left;
+  int work_original_ticks_left;
+  int work_successes;  
+
+  int last_decay_time;                        
 
   // Non-SQL fields
   struct obj_data *in_obj;                       /* In what object NULL when none    */
   struct matrix_file *next_file;                 /* For 'files' lists             */
   struct host_data *in_host;
+  bool work_failed;                              /* Whether or not the work on this file failed */
   int timer; 
   
   // Debug fields
   char load_origin;                              /* Identifies what loaded this. */
 
   matrix_file() : 
-      idnum(0), name(0), file_type(0), rating(0), size(0),
-      attack_damage(0), is_default(0), evaluate_last_decay_time(0), evaluation_creation_time(0),
-      in_obj(NULL), next_file(NULL), in_host(NULL), load_origin(0)
+      idnum(0), name(0), file_type(0), rating(0), size(0), attack_damage(0),
+      is_default(0), creator_idnum(0), creation_time(0), work_phase(0),
+      work_ticks_left(0), work_original_ticks_left(0), work_successes(0), last_decay_time(0),
+
+      in_obj(NULL), next_file(NULL), in_host(NULL), work_failed(FALSE), timer(0), load_origin(0)
   {
 
   }

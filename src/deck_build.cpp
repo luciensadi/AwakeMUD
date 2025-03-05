@@ -526,7 +526,7 @@ ACMD(do_cook) {
     }
     if (!design)
         send_to_char(ch, "You don't see %s installed on any computers here.\r\n", argument);
-    else if (!design->design_completed)
+    else if (design->work_phase < WORK_PHASE_PROGRAM)
         send_to_char(ch, "You must finish programming %s first.\r\n", design->name);
     else if (design->timer)
         send_to_char("This chip has already been encoded.\r\n", ch);
@@ -1108,7 +1108,7 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_PROGRAM)) {
-    amount_left   = GET_PROGRAMMING(ch)->designing_ticks_left;
+    amount_left   = GET_PROGRAMMING(ch)->work_ticks_left;
     amount_needed = GET_PROGRAMMING(ch)->timer;
     send_to_char(ch, "You are about %2.2f%% of the way through programming %s.\r\n",
            (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_PROGRAMMING(ch)->name);
