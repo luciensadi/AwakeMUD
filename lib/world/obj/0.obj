@@ -1384,6 +1384,19 @@ Material:	metal
 [POINTS]
 	Barrier:	1
 BREAK
+#130
+Keywords:	blank burner chip
+Name:	a blank burner chip
+RoomDesc:$
+A blank burner chip has been dropped here.~
+LookDesc:$
+A single use optical chip ready to receive a program. It can be ^WINSTALL^ned into a computer to upload its contents.~
+Type:	Burner Chip
+WearFlags:	1
+Material:	metal
+[POINTS]
+	Barrier:	1
+BREAK
 #140
 Keywords:	customized cc10 ares sniper rifle
 Name:	a Customized Ares CC-10 Sniper Rifle
