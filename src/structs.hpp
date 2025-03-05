@@ -1471,7 +1471,7 @@ struct matrix_file {
   int designing_ticks_left;
   int designing_original_ticks_left;
   int programming_ticks_left;
-  bool design_completed;
+  bool design_completed;                         /* This is set to true when a design grows into an adult program */
   int design_successes;                          /* When this is negative it was a failure */
 
   int is_cooked;

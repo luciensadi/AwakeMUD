@@ -595,7 +595,7 @@ void update_buildrepair(void)
         }
       } else if (AFF_FLAGGED(desc->character, AFF_PROGRAM)) {
         if (--GET_PROGRAMMING(CH)->designing_ticks_left < 1) {
-          if (GET_PROGRAMMING(CH)->design_successes < 0){
+          if (GET_PROGRAMMING(CH)->design_successes < 0) {
             switch(number(1,10)) {
               case 1:
                 send_to_char(desc->character, "It was about that time that you noticed you had typed up all of your code on the microwave keypad. You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
@@ -627,17 +627,14 @@ void update_buildrepair(void)
               default:
                 send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
               }
+              // Delete the design file as it's no longer needed.
+              extract_matrix_file(GET_PROGRAMMING(CH));
             }
           else {
             send_to_char(desc->character, "You complete programming %s.\r\n", GET_PROGRAMMING(CH)->name);
-            struct matrix_file *newp = create_matrix_file(GET_PROGRAMMING(CH)->in_obj, OBJ_LOAD_REASON_COMPLETED_PROGRAMMING);
-            newp->name = str_dup(GET_PROGRAMMING(CH)->name);
-            newp->file_type = GET_PROGRAMMING(CH)->file_type;
-            newp->rating = GET_PROGRAMMING(CH)->rating;
-            newp->size = GET_PROGRAMMING(CH)->size;
-            newp->attack_damage = GET_PROGRAMMING(CH)->attack_damage;
+            // We can just change the existing design file into a finished program, rather than dupe it.
+            GET_PROGRAMMING(CH)->design_completed = TRUE;
           }
-          extract_matrix_file(GET_PROGRAMMING(CH));
           GET_PROGRAMMING(CH) = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);
           CH->char_specials.timer = 0;
