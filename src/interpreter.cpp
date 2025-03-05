@@ -158,6 +158,7 @@ ACMD_DECLARE(do_chipload);
 ACMD_DECLARE(do_cleanup);
 ACMD_DECLARE(do_cleanse);
 ACMD_DECLARE(do_closecombat);
+ACMD_DECLARE(do_cook);
 ACMD_DECLARE(do_commands);
 ACMD_DECLARE(do_compact);
 ACMD_DECLARE(do_conceal_reveal);
@@ -581,6 +582,7 @@ struct command_info cmd_info[] =
     { "close"      , POS_SITTING , do_gen_door , 0, SCMD_CLOSE, BLOCKS_IDLE_REWARD },
     { "closecombat", POS_LYING   , do_closecombat, 0, 0, BLOCKS_IDLE_REWARD },
     { "cls"        , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, ALLOWS_IDLE_REWARD },
+    { "cook"       , POS_LYING   , do_cook     , 0, 0, BLOCKS_IDLE_REWARD },
     { "conceal"    , POS_LYING   , do_conceal_reveal, 0, SCMD_CONCEAL, ALLOWS_IDLE_REWARD },
     { "consider"   , POS_LYING   , do_consider , 0, 0, BLOCKS_IDLE_REWARD },
     { "consent"    , POS_MORTALLYW, do_consent , 0, 0, ALLOWS_IDLE_REWARD },
