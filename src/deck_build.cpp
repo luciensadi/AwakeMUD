@@ -520,7 +520,7 @@ ACMD(do_cook) {
     }
     struct obj_data *comp;
     FOR_ITEMS_AROUND_CH(ch, comp) {
-      if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == TYPE_COMPUTER && comp->contains)
+      if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == TYPE_COMPUTER && comp->files)
         if ((design = get_matrix_file_in_list_vis(ch, argument, comp->files)))
           break;
     }

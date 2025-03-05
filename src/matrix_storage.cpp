@@ -64,7 +64,7 @@ matrix_file* create_matrix_file(obj_data *storage, int load_origin) {
   return new_file;
 }
 
-// #define CHECK_KEYWORD(target_string, context) {if ((target_string) && isname(keyword, get_string_after_color_code_removal((target_string), NULL))) { return (context); }}
+#define CHECK_KEYWORD(target_string, context) {if ((target_string) && isname(keyword, get_string_after_color_code_removal((target_string), NULL))) { return (context); }}
 const char * keyword_appears_in_file(const char *keyword, struct matrix_file *file, bool search_name, bool search_desc) {
   if (!keyword || !*keyword) {
     return NULL;
@@ -76,12 +76,12 @@ const char * keyword_appears_in_file(const char *keyword, struct matrix_file *fi
   }
 
   if (search_name) {
-    // CHECK_KEYWORD(file->text.name, "name");
+    CHECK_KEYWORD(file->name, "name");
   }
 
-  if (search_desc) {
-    // CHECK_KEYWORD(file->text.look_desc, "look desc");
-  }
+  // if (search_desc) {
+  //   CHECK_KEYWORD(file->text.look_desc, "look desc");
+  // }
 
   return NULL;
 }
