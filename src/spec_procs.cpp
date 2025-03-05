@@ -5680,6 +5680,12 @@ SPECIAL(chargen_skill_annex) {
       return TRUE;
     }
 
+    if (IS_OTAKU(ch) && GET_SKILL(ch, SKILL_COMPUTER) < 6) {
+      send_to_char(ch, "Otakus must have at least a rating 6 in Computers, but your proficiency is only %d. You should ^WPRACTICE^n your Computers before proceeding.\r\n",
+        GET_SKILL(ch, SKILL_COMPUTER));
+      return TRUE;
+    }
+
     // Block specific to chargen otaku
     // Otaku channel skills are limited to 6, 5, 4, 3, 3 max.
     for (int ci=SKILL_CHANNEL_ACCESS; ci <= SKILL_CHANNEL_SLAVE;ci++) {
