@@ -33,6 +33,7 @@
 #include "vehicles.hpp"
 #include "player_exdescs.hpp"
 #include "otaku.hpp"
+#include "matrix_storage.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
@@ -1362,9 +1363,9 @@ void icon_to_host(struct matrix_icon *icon, vnum_t to_host)
       for (struct matrix_icon *icon2 = matrix[to_host].icons; icon2; icon2 = icon2->next_in_host)
         if (icon2->decker) {
           int target = icon->decker->masking;
-          for (struct obj_data *soft = icon->decker->software; soft; soft = soft->next_content)
-            if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
-              target += GET_OBJ_VAL(soft, 1);
+          for (struct matrix_file *soft = icon->decker->software; soft; soft = soft->next_file)
+            if (soft->file_type == SOFT_SLEAZE)
+              target += soft->rating;
           if (success_test(icon2->decker->sensor, target) > 0) {
             make_seen(icon2, icon->idnum);
             send_to_icon(icon2, "%s enters the host.\r\n", icon->name);
@@ -2441,10 +2442,10 @@ void extract_icon(struct matrix_icon * icon)
       send_to_char(icon->decker->hitcher, "You return to your senses.\r\n");
       clear_hitcher(icon->decker->hitcher, FALSE);      
     }
-    struct obj_data *temp;
-    for (struct obj_data *obj = icon->decker->software; obj; obj = temp) {
-      temp = obj->next_content;
-      extract_obj(obj);
+    struct matrix_file *temp;
+    for (struct matrix_file *obj = icon->decker->software; obj; obj = temp) {
+      temp = obj->next_file;
+      extract_matrix_file(obj);
     }
     struct seen_data *temp2;
     for (struct seen_data *seen = icon->decker->seen; seen; seen = temp2) {

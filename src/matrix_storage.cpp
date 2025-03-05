@@ -142,7 +142,7 @@ void file_from_obj(struct matrix_file * obj)
 }
 
 /* Extract an object from the world */
-void extract_file(struct matrix_file *file)
+void extract_matrix_file(struct matrix_file *file)
 {
   bool set = FALSE;
   // if (file->in_host) {

@@ -207,7 +207,7 @@ struct deck_info {
 #endif
 
   struct char_data *hitcher;
-  struct obj_data *software;
+  struct matrix_file *software;
   struct obj_data *deck;
   struct obj_data *proxy_deck;
   struct seen_data *seen;
