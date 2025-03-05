@@ -129,7 +129,6 @@ int get_otaku_rea(struct char_data *ch) {
 
 extern struct obj_data *make_new_finished_part(int part_type, int mpcp, int rating=0);
 struct obj_data *make_otaku_deck(struct char_data *ch) {
-  GET_REAL_REA(ch);
   if (!ch) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "Tried to create an otaku deck, but provided invalid character.");
     return NULL;
