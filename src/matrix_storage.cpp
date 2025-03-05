@@ -191,20 +191,7 @@ bool program_can_be_copied(struct matrix_file *prog) {
   return TRUE;
 }
 
-ACMD(do_memory) {
-  std::vector<struct obj_data*> devices = get_storage_devices(ch, FALSE);
-  if (!devices.size()) {
-    send_to_char(ch, "You don't have any devices on you capable of file storage.");
-    return;
-  }
-
-  struct matrix_file *test = new_program(devices[0], 0);
-  test->size = 14;
-  test->name = "sample program";
-  test->rating = 2;
-
-  snprintf(buf, sizeof(buf), "You start checking the files across your various devices:\r\n");
-
+void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
   for(const obj_data* device : devices)  {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^c%s^n\r\n",
              capitalize(GET_OBJ_NAME(device)));
@@ -221,4 +208,39 @@ ACMD(do_memory) {
           GET_CYBERDECK_FREE_STORAGE(device), GET_CYBERDECK_TOTAL_STORAGE(device));
   }
   send_to_char(buf, ch);
+}
+
+ACMD(do_memory) {
+  struct obj_data* cyber;
+  skip_spaces(&argument);
+  snprintf(buf, sizeof(buf), ""); // clear buffer
+
+  if (is_abbrev(argument, "headware memory")) {
+    cyber = find_cyberware(ch, CYB_MEMORY);
+    if (!cyber) {
+      send_to_char(ch, "You don't appear to have any headware memory installed.\r\n");
+      return;
+    }
+
+    return print_memory(ch, {cyber});
+  }
+
+  std::vector<struct obj_data*> devices = get_storage_devices(ch, TRUE);
+  if (!devices.size()) {
+    send_to_char(ch, "You don't have any devices on you capable of file storage.\r\n");
+    return;
+  }
+
+  if (strlen(argument)) {
+    for(obj_data* device : devices)  {
+      if (keyword_appears_in_obj(argument, device)) {
+        return print_memory(ch, {device});
+      }
+    }
+    send_to_char(ch, "You don't have %s '%s' in your inventory.\r\n", AN(argument), argument);
+    return;
+  }
+
+  snprintf(buf, sizeof(buf), "You start checking the files across your various devices:\r\n");
+  return print_memory(ch, devices);
 }
