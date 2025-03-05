@@ -399,11 +399,13 @@ ACMD(do_design)
 
 ACMD(do_program)
 {
-  struct obj_data *comp, *prog;
+  struct obj_data *comp = NULL;
+  struct matrix_file *prog = NULL;
+
   if (!*argument) {
     if (AFF_FLAGGED(ch, AFF_PROGRAM)) {
       AFF_FLAGS(ch).RemoveBit(AFF_PROGRAM);
-      send_to_char(ch, "You stop working on %s.\r\n", ch->char_specials.programming->restring);
+      send_to_char(ch, "You stop working on %s.\r\n", ch->char_specials.programming->name);
       ch->char_specials.programming = NULL;
     } else
       send_to_char(ch, "Program What?\r\n");
@@ -420,41 +422,39 @@ ACMD(do_program)
   if (!(comp = can_program(ch)))
     return;
   skip_spaces(&argument);
-  for (prog = comp->contains; prog; prog = prog->next_content)
-    if ((isname(argument, prog->text.keywords) || isname(argument, get_string_after_color_code_removal(prog->restring, ch))) && GET_OBJ_TYPE(prog) == ITEM_DESIGN)
-      break;
+  prog = get_matrix_file_in_list_vis(ch, argument, comp->files);
   if (!prog) {
     send_to_char(ch, "The program design isn't on that computer.\r\n");
     return;
   }
-  if (GET_DESIGN_CREATOR_IDNUM(prog) && GET_DESIGN_CREATOR_IDNUM(prog) != GET_IDNUM(ch)) {
+  if (prog->creator_idnum && prog->creator_idnum != GET_IDNUM(ch)) {
     send_to_char(ch, "Someone else has already started on this program.\r\n");
     return;
   }
-  if (!GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog)) {
+  if (!prog->designing_ticks_left) {
     if (get_and_deduct_one_crafting_token_from_char(ch)) {
       send_to_char("A crafting token fuzzes into digital static, greatly accelerating the development time.\r\n", ch);
-      GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 1;
-      GET_OBJ_TIMER(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
+      prog->designing_ticks_left = 1;
+      prog->timer = prog->designing_ticks_left;
     }
     else if (access_level(ch, LVL_ADMIN)) {
-      send_to_char(ch, "You use your admin powers to greatly accelerate the development time for %s.\r\n", prog->restring);
-      GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 1;
-      GET_OBJ_TIMER(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
+      send_to_char(ch, "You use your admin powers to greatly accelerate the development time for %s.\r\n", prog->name);
+      prog->designing_ticks_left = 1;
+      prog->timer = prog->designing_ticks_left;
     } else {
-      send_to_char(ch, "You begin to program %s.\r\n", prog->restring);
-      int target = GET_DESIGN_RATING(prog);
-      if (GET_DECK_ACCESSORY_COMPUTER_ACTIVE_MEMORY(comp) >= GET_DESIGN_SIZE(prog) * 2) {
+      send_to_char(ch, "You begin to program %s.\r\n", prog->name);
+      int target = prog->rating;
+      if (GET_DECK_ACCESSORY_COMPUTER_ACTIVE_MEMORY(comp) >= prog->rating * 2) {
         send_to_char(ch, "The abundance of active memory on %s makes the work easier.\r\n", decapitalize_a_an(GET_OBJ_NAME(comp)));
         target -= 2;
       }
 
-      if (!GET_DESIGN_COMPLETED(prog)) {
+      if (!prog->design_completed) {
         send_to_char("You haven't taken the time to design this program, so it's a little harder to conceptualize.\r\n", ch);
         target += 2;
       }
       else
-        target -= GET_DESIGN_SUCCESSES(prog);
+        target -= prog->design_successes;
 
       int skill = get_skill(ch, SKILL_COMPUTER, target);
       int success = success_test(skill, target);
@@ -464,18 +464,18 @@ ACMD(do_program)
           break;
         }
       if (success > 0) {
-        GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 60 * (GET_DESIGN_SIZE(prog) / success);
-        GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
+        prog->designing_ticks_left = 60 * (prog->size / success);
+        prog->designing_original_ticks_left = prog->designing_ticks_left;
       } else {
-        GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = number(1, 6) + number(1, 6);
-        GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) = (GET_DESIGN_SIZE(prog) * 60) / number(1, 3);
-        GET_DESIGN_PROGRAMMING_FAILED(prog) = 1;
+        prog->designing_ticks_left = number(1, 6) + number(1, 6);
+        prog->designing_ticks_left = (prog->rating * 60) / number(1, 3);
+        prog->design_successes = -1;
       }
     }
   } else
-    send_to_char(ch, "You continue to work on %s.\r\n", prog->restring);
+    send_to_char(ch, "You continue to work on %s.\r\n", prog->name);
   AFF_FLAGS(ch).SetBit(AFF_PROGRAM);
-  GET_BUILDING(ch) = prog;
+  GET_PROGRAMMING(ch) = prog;
 }
 
 #undef CH
@@ -594,54 +594,51 @@ void update_buildrepair(void)
           AFF_FLAGS(desc->character).RemoveBit(AFF_DESIGN);
         }
       } else if (AFF_FLAGGED(desc->character, AFF_PROGRAM)) {
-        if (--GET_DESIGN_PROGRAMMING_TICKS_LEFT(PROG) < 1) {
-          if (GET_DESIGN_PROGRAMMING_FAILED(PROG)){
+        if (--GET_PROGRAMMING(CH)->designing_ticks_left < 1) {
+          if (GET_PROGRAMMING(CH)->design_successes < 0){
             switch(number(1,10)) {
               case 1:
-                send_to_char(desc->character, "It was about that time that you noticed you had typed up all of your code on the microwave keypad. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "It was about that time that you noticed you had typed up all of your code on the microwave keypad. You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 2:
-                send_to_char(desc->character, "There was a series of articles related to what you were doing, but you somehow ended up on a page about crabs. Why always crabs?!? You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "There was a series of articles related to what you were doing, but you somehow ended up on a page about crabs. Why always crabs?!? You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 3:
-                send_to_char(desc->character, "You became distracted and lost hours of your life to a Penumbrawalk mud. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You became distracted and lost hours of your life to a Penumbrawalk mud. You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 4:
-                send_to_char(desc->character, "You've finally done it! You've made an electric drum kit out of tin foil and pen parts! Programming %s failed though.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You've finally done it! You've made an electric drum kit out of tin foil and pen parts! Programming %s failed though.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 5:
-                send_to_char(desc->character, "You've been banned from the ShadowBoards. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You've been banned from the ShadowBoards. You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 6:
-                send_to_char(desc->character, "You have finished a spell formula for Stunbolt... wait, what the hell?! You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You have finished a spell formula for Stunbolt... wait, what the hell?! You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 7:
-                send_to_char(desc->character, "A distant, powerful matrix entity is disappointed in you. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "A distant, powerful matrix entity is disappointed in you. You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 8:
-                send_to_char(desc->character, "You tried to forge %s into an incredible program that would have pierced open the walls of flowing code. You're pretty sure you misplaced a parenthesis somewhere so it all turned into gibberish about broccoli.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You tried to forge %s into an incredible program that would have pierced open the walls of flowing code. You're pretty sure you misplaced a parenthesis somewhere so it all turned into gibberish about broccoli.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 9:
-                send_to_char(desc->character, "You tried to program %s only to realize many hours in you were coding on one of the spare half-assembled things you had littered around your current workspace, accomplishing nothing.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You tried to program %s only to realize many hours in you were coding on one of the spare half-assembled things you had littered around your current workspace, accomplishing nothing.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               default:
-                send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
               }
             }
           else {
-            send_to_char(desc->character, "You complete programming %s.\r\n", GET_OBJ_NAME(PROG));
-            struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_COMPLETED_PROGRAMMING);
-            newp->restring = str_dup(GET_OBJ_NAME(PROG));
-            GET_PROGRAM_TYPE(newp) = GET_DESIGN_PROGRAM(PROG);
-            GET_PROGRAM_RATING(newp) = GET_DESIGN_RATING(PROG);
-            GET_PROGRAM_SIZE(newp) = GET_DESIGN_SIZE(PROG);
-            GET_PROGRAM_ATTACK_DAMAGE(newp) = GET_DESIGN_PROGRAM_WOUND_LEVEL(PROG);
-            obj_to_obj(newp, PROG->in_obj);
-            GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(PROG->in_obj) += GET_PROGRAM_SIZE(newp);
+            send_to_char(desc->character, "You complete programming %s.\r\n", GET_PROGRAMMING(CH)->name);
+            struct matrix_file *newp = create_matrix_file(GET_PROGRAMMING(CH)->in_obj, OBJ_LOAD_REASON_COMPLETED_PROGRAMMING);
+            newp->name = str_dup(GET_PROGRAMMING(CH)->name);
+            newp->file_type = GET_PROGRAMMING(CH)->file_type;
+            newp->rating = GET_PROGRAMMING(CH)->rating;
+            newp->size = GET_PROGRAMMING(CH)->size;
+            newp->attack_damage = GET_PROGRAMMING(CH)->attack_damage;
           }
-          GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(PROG->in_obj) -= GET_DESIGN_SIZE(PROG) + (GET_DESIGN_SIZE(PROG) / 10);
-          extract_obj(PROG);
-          PROG = NULL;
+          extract_matrix_file(GET_PROGRAMMING(CH));
+          GET_PROGRAMMING(CH) = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);
           CH->char_specials.timer = 0;
         }

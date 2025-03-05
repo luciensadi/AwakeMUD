@@ -810,10 +810,11 @@ bool _mob_is_alert(struct char_data *npc);
 #define IS_RIGGING(ch)        (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
 #define IS_JACKED_IN(ch)      (IS_RIGGING(ch) || PLR_FLAGGED(ch, PLR_MATRIX) || PLR_FLAGGED(ch, PLR_REMOTE))
 #define CAN_SEE_IN_DARK(ch)   (SEES_ASTRAL(ch) || CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT))
-#define GET_BUILDING(ch)  ((ch)->char_specials.programming)
+#define GET_BUILDING(ch)      ((ch)->char_specials.building)
+#define GET_PROGRAMMING(ch)   ((ch)->char_specials.programming)
 #define IS_WORKING(ch)        ((AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, AFF_PILOT, AFF_RIG, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT)))
 #define STOP_WORKING(ch)      {AFF_FLAGS((ch)).RemoveBits(BR_TASK_AFF_FLAGS, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT); \
-                               GET_BUILDING((ch)) = NULL;}
+                               GET_BUILDING((ch)) = NULL; GET_PROGRAMMING((ch)) = NULL; }
 #define STOP_DRIVING(ch)      {AFF_FLAGS((ch)).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);}
 
 #define GET_TOTEM(ch)                              (ch->player_specials->saved.totem)

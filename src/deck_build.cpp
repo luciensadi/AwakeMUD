@@ -617,7 +617,7 @@ void part_design(struct char_data *ch, struct obj_data *part) {
         else {
             send_to_char(ch, "You continue to design %s.\r\n", GET_OBJ_NAME(part));
             AFF_FLAGS(ch).SetBit(AFF_PART_DESIGN);
-            ch->char_specials.programming = part;
+            GET_BUILDING(ch) = part;
         }
     } else {
         int target = GET_PART_TARGET_MPCP(part)/2, skill = get_skill(ch, SKILL_CYBERTERM_DESIGN, target);
@@ -644,7 +644,7 @@ void part_design(struct char_data *ch, struct obj_data *part) {
         }
         send_to_char(ch, "You begin to design %s.\r\n", GET_OBJ_NAME(part));
         AFF_FLAGS(ch).SetBit(AFF_PART_DESIGN);
-        ch->char_specials.programming = part;
+        GET_BUILDING(ch) = part;
     }
 }
 
@@ -807,7 +807,7 @@ ACMD(do_build) {
   if (GET_PART_BUILD_TICKS_REMAINING(obj) > 0) {
     send_to_char(ch, "You continue work on building %s.\r\n", GET_OBJ_NAME(obj));
     set_cyberdeck_part_pointer(obj, deck);
-    ch->char_specials.programming = obj;
+    GET_BUILDING(ch) = obj;
     AFF_FLAGS(ch).SetBit(AFF_PART_BUILD);
     return;
   }
@@ -1051,7 +1051,7 @@ ACMD(do_build) {
     GET_PART_BUILD_SUCCESSES_ROLLED(obj) = 1;
   }
   send_to_char(ch, "You start building %s.\r\n", GET_OBJ_NAME(obj));
-  ch->char_specials.programming = obj;
+  GET_BUILDING(ch) = obj;
   set_cyberdeck_part_pointer(obj, deck);
   AFF_FLAGS(ch).SetBit(AFF_PART_BUILD);
   if (!GET_CYBERDECK_MPCP(deck))
@@ -1156,10 +1156,10 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_SPELLDESIGN)) {
-    int timeleft = GET_SPELLFORMULA_TIME_LEFT(ch->char_specials.programming);
-    if (GET_OBJ_TIMER(ch->char_specials.programming) == SPELL_DESIGN_FAILED_CODE)
+    int timeleft = GET_SPELLFORMULA_TIME_LEFT(ch->char_specials.building);
+    if (GET_OBJ_TIMER(GET_BUILDING(ch)) == SPELL_DESIGN_FAILED_CODE)
       timeleft *= 2;
-    send_to_char(ch, "You are about %d%% done designing %s.\r\n", (int)(((float)timeleft / (float)GET_SPELLFORMULA_INITIAL_TIME(ch->char_specials.programming)) *-100 + 100), GET_OBJ_NAME(ch->char_specials.programming));
+    send_to_char(ch, "You are about %d%% done designing %s.\r\n", (int)(((float)timeleft / (float)GET_SPELLFORMULA_INITIAL_TIME(GET_BUILDING(ch))) *-100 + 100), GET_OBJ_NAME(GET_BUILDING(ch)));
     return;
   }
 

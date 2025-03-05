@@ -112,7 +112,7 @@ int wear_bitvectors[] = {
 
 void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *cont)
 {
-  FAILURE_CASE(obj == ch->char_specials.programming, "You can't put something you are working on inside something.");
+  FAILURE_CASE(obj == GET_BUILDING(ch), "You can't put something you are working on inside something.");
   FAILURE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PET, "%s refuses to go inside anything.", CAP(GET_OBJ_NAME(obj)));
 
   if (cont->in_room || cont->in_veh) {
@@ -916,7 +916,7 @@ bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
             if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
               send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
               return FALSE;
-            } else if (vict == ch && vict->char_specials.programming == obj) {
+            } else if (vict == ch && vict->char_specials.building == obj) {
               send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
               STOP_WORKING(ch);
               break;
@@ -927,7 +927,7 @@ bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
             if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
               send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
               return FALSE;
-            } else if (vict == ch && vict->char_specials.programming == obj) {
+            } else if (vict == ch && vict->char_specials.building == obj) {
               send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
               STOP_WORKING(ch);
               break;
@@ -1895,7 +1895,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
                     CAP(GET_OBJ_NAME(obj)));
   
   FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the KEEP command on %s before you can %s it.", decapitalize_a_an(obj), sname);
-  FALSE_CASE_PRINTF(obj == ch->char_specials.programming, "You can't %s something you are working on.", sname);
+  FALSE_CASE_PRINTF(obj == ch->char_specials.building, "You can't %s something you are working on.", sname);
   FALSE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch),
                     "Action blocked: %s contains at least one kept item. Pull it out and UNKEEP it.", decapitalize_a_an(obj));
 
@@ -2431,7 +2431,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     act("$E can't carry that much weight.", FALSE, ch, 0, vict, TO_CHAR);
     return 0;
   }
-  if (obj == ch->char_specials.programming)
+  if (obj == ch->char_specials.building)
   {
     send_to_char(ch, "You cannot give away something you are working on.\r\n");
     return 0;

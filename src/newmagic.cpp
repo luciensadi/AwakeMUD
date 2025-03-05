@@ -3855,7 +3855,7 @@ ACMD(do_bond)
       send_to_char(ch, "You restart the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
       act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
       AFF_FLAGS(ch).SetBit(AFF_BONDING);
-      ch->char_specials.programming = obj;
+      GET_BUILDING(ch) = obj;
       return;
     }
 
@@ -3881,7 +3881,7 @@ ACMD(do_bond)
     send_to_char(ch, "You begin the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
     act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
     AFF_FLAGS(ch).SetBit(AFF_BONDING);
-    ch->char_specials.programming = obj;
+    GET_BUILDING(ch) = obj;
     return;
   }
 
@@ -3918,7 +3918,7 @@ ACMD(do_bond)
         send_to_char(ch, "You restart the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
         act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
         AFF_FLAGS(ch).SetBit(AFF_BONDING);
-        ch->char_specials.programming = obj;
+        GET_BUILDING(ch) = obj;
       } else
         send_to_char(ch, "You have already bonded %s.\r\n", GET_OBJ_NAME(obj));
     } else {
@@ -4023,7 +4023,7 @@ ACMD(do_bond)
       send_to_char(ch, "You begin the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
       act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
       AFF_FLAGS(ch).SetBit(AFF_BONDING);
-      ch->char_specials.programming = obj;
+      GET_BUILDING(ch) = obj;
       return;
     }
   } else
@@ -4321,7 +4321,7 @@ ACMD(do_conjure)
     }
     // Max tracking for PROGRESS command.
     ch->char_specials.conjure[3] = ch->char_specials.conjure[2];
-    ch->char_specials.programming = obj;
+    GET_BUILDING(ch) = obj;
     send_to_char(ch, "You begin to conjure a %s elemental.\r\n", elements[spirit].name);
   } else {
     if (GET_NUM_SPIRITS(ch)) {

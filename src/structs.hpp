@@ -619,7 +619,8 @@ struct char_special_data
   struct veh_data *fight_veh;
   struct char_data *fighting;  /* Opponent                             */
   struct char_data *hunting;   /* Char hunted by this char             */
-  struct obj_data *programming; /* Program char is currently designing/programming */
+  struct obj_data *building;
+  struct matrix_file *programming; /* Program char is currently designing/programming */
   int conjure[4];
   int num_spirits;
   idnum_t idnum;
@@ -1456,7 +1457,7 @@ struct matrix_file {
   // SQL fields
   rnum_t idnum;                                  /* Stored in database identifier */
   char* name;                                    /* The user-friendly text for this file */
-  unsigned long storage_idnum;                   /* What storage medium is holding this file */
+  idnum_t storage_idnum;                   /* What storage medium is holding this file */
   int file_type;
   int rating;
   int size;                                      /* File size in megapulses */
@@ -1464,13 +1465,14 @@ struct matrix_file {
   int is_defaulted;
   int evaluate_last_decay_time;
   int evaluation_creation_time;
-  unsigned long creator_idnum;
+  idnum_t creator_idnum;
 
   // SQL Design Fields (used for designing programs)
   int designing_ticks_left;
   int designing_original_ticks_left;
   int programming_ticks_left;
   bool design_completed;
+  int design_successes;                          /* When this is negative it was a failure */
 
   int is_cooked;
 
