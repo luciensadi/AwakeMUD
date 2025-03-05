@@ -138,11 +138,11 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char(CH, "Complex form saved as %s!\r\n", d->edit_obj->restring);
 
       target = GET_DESIGN_RATING(d->edit_obj);
-      intelligence = GET_REAL_INT(CH);
+      intelligence = GET_INT(CH);
       success = success_test(intelligence, target);
       if (success <= 0) {
         GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj) = number(1, 6) + number(1, 6);
-        GET_DESIGN_ORIGINAL_TICKS_LEFT(d->edit_obj) = (GET_DESIGN_SIZE(d->edit_obj) * 60) / number(1, 3);
+        GET_OBJ_TIMER(d->edit_obj) = GET_DESIGN_ORIGINAL_TICKS_LEFT(d->edit_obj) = (GET_DESIGN_SIZE(d->edit_obj) * 60) / number(1, 3);
         GET_DESIGN_PROGRAMMING_FAILED(d->edit_obj) = 1;
       } else {
         if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
