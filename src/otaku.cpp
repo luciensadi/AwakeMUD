@@ -183,6 +183,37 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
   return new_deck;
 }
 
+void _update_living_persona(struct char_data *ch, struct obj_data *cyberdeck, int mpcp) {
+  if (!ch->persona || !ch->persona->decker) return;
+  if (ch->persona->type != ICON_LIVING_PERSONA) return;
+
+  ch->persona->decker->mpcp = mpcp;
+  ch->persona->decker->hardening = GET_CYBERDECK_HARDENING(cyberdeck);
+  ch->persona->decker->response = GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck);
+  ch->persona->decker->io = GET_CYBERDECK_IO_RATING(cyberdeck);
+
+  for (struct obj_data *part = cyberdeck->contains; part; part = part->next_content) {
+    if (GET_OBJ_TYPE(part) != ITEM_PART) continue;
+    switch (GET_OBJ_VAL(part, 0)) {
+      case PART_MPCP:
+        GET_PART_RATING(part) = mpcp;
+        break;
+      case PART_BOD:
+        ch->persona->decker->bod = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_BOD));
+        break;
+      case PART_EVASION:
+        ch->persona->decker->evasion = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_EVAS));
+        break;
+      case PART_SENSOR:
+        ch->persona->decker->sensor = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_SENS));
+        break;
+      case PART_MASKING:
+        ch->persona->decker->masking = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_MASK));
+        break;
+    }
+  }
+}
+
 void update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck) {
   int mpcp = GET_OTAKU_MPCP(ch);
 
@@ -195,13 +226,6 @@ void update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck) {
   GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck) = MIN(mpcp * 1.5, GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck));
   GET_CYBERDECK_IO_RATING(cyberdeck) = (get_otaku_int(ch) * 100) + (GET_ECHO(ch, ECHO_IMPROVED_IO) * 100);
 
-  if (ch->persona->type == ICON_LIVING_PERSONA) {
-    ch->persona->decker->mpcp = mpcp;
-    ch->persona->decker->hardening = GET_CYBERDECK_HARDENING(cyberdeck);
-    ch->persona->decker->response = GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck);
-    ch->persona->decker->io = GET_CYBERDECK_IO_RATING(cyberdeck);
-  }
-
   for (struct obj_data *part = cyberdeck->contains; part; part = part->next_content) {
     if (GET_OBJ_TYPE(part) != ITEM_PART) continue;
     GET_PART_TARGET_MPCP(part) = mpcp;
@@ -211,26 +235,20 @@ void update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck) {
         break;
       case PART_BOD:
         GET_PART_RATING(part) = get_otaku_wil(ch);
-        if (ch->persona->type == ICON_LIVING_PERSONA) 
-          ch->persona->decker->bod = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_BOD));
         break;
       case PART_EVASION:
         GET_PART_RATING(part) = get_otaku_int(ch);
-        if (ch->persona->type == ICON_LIVING_PERSONA) 
-          ch->persona->decker->evasion = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_EVAS));
         break;
       case PART_SENSOR:
         GET_PART_RATING(part) = get_otaku_int(ch);
-        if (ch->persona->type == ICON_LIVING_PERSONA) 
-          ch->persona->decker->sensor = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_SENS));
         break;
       case PART_MASKING:
         GET_PART_RATING(part) = (get_otaku_wil(ch) + GET_REAL_CHA(ch) + 1) / 2;
-        if (ch->persona->type == ICON_LIVING_PERSONA) 
-          ch->persona->decker->masking = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_MASK));
         break;
     }
   }
+
+  _update_living_persona(ch, cyberdeck, mpcp);
 }
 
 long calculate_sub_nuyen_cost(int desired_grade) {
