@@ -1107,10 +1107,10 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_PROGRAM)) {
-    amount_left   = GET_OBJ_VAL(GET_BUILDING(ch), 5);
-    amount_needed = GET_OBJ_TIMER(GET_BUILDING(ch));
+    amount_left   = GET_PROGRAMMING(ch)->designing_ticks_left;
+    amount_needed = GET_PROGRAMMING(ch)->timer;
     send_to_char(ch, "You are about %2.2f%% of the way through programming %s.\r\n",
-           (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
+           (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_PROGRAMMING(ch)->name);
     return;
   }
 
