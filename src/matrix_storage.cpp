@@ -9,6 +9,7 @@
 #include "interpreter.hpp"
 #include "newmatrix.hpp"
 #include "db.hpp"
+#include "handler.hpp"
 
 std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool only_relevant = FALSE) {
   struct obj_data* cyber;
@@ -85,30 +86,29 @@ const char * keyword_appears_in_file(const char *keyword, struct matrix_file *fi
   return NULL;
 }
 
-// struct matrix_file *get_file_in_list_vis(struct char_data * ch, const char *name, struct matrix_file * list)
-// {
-//   struct matrix_file *i;
-//   int j = 0, number;
-//   char tmpname[MAX_INPUT_LENGTH];
-//   char *tmp = tmpname;
-//   bool staff_bit = IS_SENATOR(ch);
+struct matrix_file *get_matrix_file_in_list_vis(struct char_data * ch, const char *name, struct matrix_file * list)
+{
+  struct matrix_file *i;
+  int j = 0, number;
+  char tmpname[MAX_INPUT_LENGTH];
+  char *tmp = tmpname;
+  bool staff_bit = IS_SENATOR(ch);
 
-//   // No list, no worries.
-//   if (!list)
-//     return NULL;
+  if (!list)
+    return NULL;
+  strlcpy(tmp, name, sizeof(tmpname));
 
-//   strlcpy(tmp, name, sizeof(tmpname));
-//   if (!(number = get_number(&tmp, sizeof(tmpname))))
-//     return NULL;
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
+    return NULL;
 
-//   for (i = list; i && (j <= number); i = i->next_file) {    
-//     if (keyword_appears_in_file(tmp, i)) {
-//       if (++j == number)
-//         return i;
-//     }
-//   }
-//   return NULL;
-// }
+  for (i = list; i && (j <= number); i = i->next_file) {    
+    if (keyword_appears_in_file(tmp, i)) {
+      if (++j == number)
+        return i;
+    }
+  }
+  return NULL;
+}
 
 /* Remove a file from a Matrix host. */
 // void file_from_host(struct matrix_file *file) {

@@ -119,7 +119,6 @@ bool    spell_is_nerp(int spell_num);
 char    get_final_character_from_string(const char *str);
 bool    builder_cant_go_there(struct char_data *ch, struct room_data *room);
 bool    get_and_deduct_one_crafting_token_from_char(struct char_data *ch);
-bool    program_can_be_copied(struct obj_data *prog);
 struct  obj_data *get_obj_proto_for_vnum(vnum_t vnum);
 int     get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason);
 char *  get_string_after_color_code_removal(const char *str, struct char_data *ch);

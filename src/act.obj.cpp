@@ -1910,12 +1910,12 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     bool action_blocked = FALSE;
     struct room_data *target_room = get_ch_in_room(ch);
 
-    if ((action_blocked |= obj_is_apartment_only_drop_item(obj, target_room))) {
-      act("Action blocked: $p can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
-    }
-    else if ((action_blocked |= obj_contains_apartment_only_drop_items(obj, target_room))) {
-      act("Action blocked: $p contains at least one item that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
-    }
+    // if ((action_blocked |= obj_is_apartment_only_drop_item(obj, target_room))) {
+    //   act("Action blocked: $p can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
+    // }
+    // else if ((action_blocked |= obj_contains_apartment_only_drop_items(obj, target_room))) {
+    //   act("Action blocked: $p contains at least one item that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
+    // }
 
     if (action_blocked) {   
       if (IS_SENATOR(ch)) {

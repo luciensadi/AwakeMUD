@@ -1478,7 +1478,8 @@ struct matrix_file {
   struct obj_data *in_obj;                       /* In what object NULL when none    */
   struct matrix_file *next_file;                 /* For 'files' lists             */
   struct host_data *in_host;
-
+  int timer; 
+  
   // Debug fields
   char load_origin;                              /* Identifies what loaded this. */
 
