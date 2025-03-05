@@ -110,18 +110,6 @@ int wear_bitvectors[] = {
                           ITEM_WEAR_CHEST,
                           ITEM_WEAR_LAPEL };
 
-bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
-{
-  struct obj_data *temp;
-
-  for (temp = cyberdeck->contains; temp; temp = temp->next_content)
-    if ((GET_OBJ_TYPE(temp) == ITEM_PROGRAM && GET_OBJ_TYPE(program) == ITEM_PROGRAM && GET_OBJ_VAL(temp, 0) == GET_OBJ_VAL(program, 0)) ||
-        (GET_OBJ_TYPE(temp) == ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(program) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(temp, 1) == GET_OBJ_VAL(program, 1)))
-      return TRUE;
-
-  return FALSE;
-}
-
 void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *cont)
 {
   FAILURE_CASE(obj == ch->char_specials.programming, "You can't put something you are working on inside something.");
@@ -314,48 +302,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
 {
   int space_required = 0;
 
-  if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)
-  {
-    if (GET_DECK_ACCESSORY_TYPE(cont) != TYPE_COMPUTER) {
-      send_to_char(ch, "You can't install anything into %s^n.\r\n", GET_OBJ_NAME(cont));
-      return;
-    }
-
-    if (cont->carried_by) {
-      send_to_char(ch, "%s won't work while carried, you'll have to drop it.\r\n", capitalize(GET_OBJ_NAME(cont)));
-      return;
-    }
-
-    if (GET_OBJ_TYPE(obj) != ITEM_DESIGN && GET_OBJ_TYPE(obj) != ITEM_PROGRAM && !(GET_OBJ_TYPE(obj) == ITEM_PROGRAM && GET_OBJ_TIMER(obj))) {
-      send_to_char(ch, "You can't install %s onto a personal computer; you can only install uncooked programs and designs.\r\n", GET_OBJ_NAME(obj));
-      return;
-    }
-
-    if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-      space_required = GET_PROGRAM_SIZE(obj);
-    } else {
-      space_required = (int) GET_DESIGN_SIZE(obj) * 1.1;
-    }
-    int free_space = GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(cont) - GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(cont);
-
-    if (free_space < space_required) {
-      send_to_char(ch, "%s doesn't seem to fit on %s-- it takes %d megapulses, but there are only %d available.\r\n",
-                   capitalize(GET_OBJ_NAME(obj)),
-                   decapitalize_a_an(GET_OBJ_NAME(cont)),
-                   space_required,
-                   free_space
-                  );
-      return;
-    }
-
-    GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(cont) += space_required;
-
-    obj_from_char(obj);
-    obj_to_obj(obj, cont);
-    send_to_char(ch, "You install %s^n onto %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
-    act("$n installs $p on $P.", TRUE, ch, obj, cont, TO_ROOM);
-    return;
-  } else if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY)
+  if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY)
   {
     switch (GET_DECK_ACCESSORY_TYPE(obj)) {
       case TYPE_FILE:
@@ -410,8 +357,6 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     send_to_char(ch, "You'll have to cook %s before you can install it.\r\n", GET_OBJ_NAME(obj));
   else if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
     display_cyberdeck_issues(ch, cont);
-  else if (search_cyberdeck(cont, obj))
-    act("You already have a similar program installed in $P.", FALSE, ch, obj, cont, TO_CHAR);
   else
   {
     // Persona programs don't take up storage memory in store-bought decks

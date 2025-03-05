@@ -19,6 +19,7 @@
 #include "newhouse.hpp"
 #include "quest.hpp"
 #include "newmatrix.hpp"
+#include "matrix_storage.hpp"
 
 extern struct otaku_echo echoes[];
 
@@ -156,24 +157,22 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
     if (GET_OBJ_TYPE(form) != ITEM_COMPLEX_FORM) continue;
     if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) > 0) continue; // The complex form is in unfinished.
     if (GET_PROGRAM_RATING(form) > mpcp) continue; // Can't load complex forms greater than mpcp rating.
-    struct obj_data *active = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_OTAKU_RESONANCE);
-    GET_PROGRAM_TYPE(active) = GET_PROGRAM_TYPE(form);
-    GET_PROGRAM_SIZE(active) = 0; // Complex forms don't take up memory.
-    GET_PROGRAM_ATTACK_DAMAGE(active) = GET_PROGRAM_ATTACK_DAMAGE(form);
-    GET_PROGRAM_IS_DEFAULTED(active) = TRUE;
-    GET_OBJ_TIMER(active) = 1;
+    struct matrix_file *active = new_program(new_deck, OBJ_LOAD_REASON_OTAKU_RESONANCE);
+    active->file_type = GET_PROGRAM_TYPE(form);
+    active->attack_damage = GET_PROGRAM_ATTACK_DAMAGE(form);
+    active->is_defaulted = TRUE;
+    // GET_OBJ_TIMER(active) = 1;
 
-    GET_PROGRAM_RATING(active) = GET_PROGRAM_RATING(form);
+    active->rating = GET_PROGRAM_RATING(form);
     // Cyberadepts get +1 to Complex Forms
-    if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) GET_PROGRAM_RATING(active) += 1;
+    if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) active->rating += 1;
 
-    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_RESONANCE);
-    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+    // active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_RESONANCE);
+    // active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
 
     char restring[500];
     snprintf(restring, sizeof(restring), "a rating-%d %s complex form", GET_PROGRAM_RATING(form), programs[GET_PROGRAM_TYPE(form)].name);
-    active->restring = str_dup(restring);
-    obj_to_obj(active, new_deck);
+    active->name = str_dup(restring);
   }
 
   char restring[500];

@@ -45,6 +45,7 @@
 #include "dblist.hpp"
 #include "player_exdescs.hpp"
 #include "pets.hpp"
+#include "matrix_storage.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -165,8 +166,6 @@ ACMD_DECLARE(do_conjure);
 ACMD_DECLARE(do_consider);
 ACMD_DECLARE(do_contest);
 ACMD_DECLARE(do_control);
-ACMD_DECLARE(do_copy);
-ACMD_DECLARE(do_cook);
 ACMD_DECLARE(do_costtime);
 ACMD_DECLARE(do_cpool);
 ACMD_DECLARE(do_crack);
@@ -184,7 +183,6 @@ ACMD_DECLARE(do_deactivate);
 ACMD_DECLARE(do_decline);
 ACMD_DECLARE(do_decorate);
 ACMD_DECLARE(do_default);
-ACMD_DECLARE(do_delete);
 ACMD_DECLARE(do_describe);
 ACMD_DECLARE(do_destroy);
 ACMD_DECLARE(do_destring);
@@ -196,7 +194,6 @@ ACMD_DECLARE(do_discord);
 ACMD_DECLARE(do_dispell);
 ACMD_DECLARE(do_display);
 ACMD_DECLARE(do_domain);
-ACMD_DECLARE(do_download_headware);
 ACMD_DECLARE(do_drag);
 ACMD_DECLARE(do_drink);
 ACMD_DECLARE(do_drive);
@@ -409,7 +406,6 @@ ACMD_DECLARE(do_ungroup);
 ACMD_DECLARE(do_unpack);
 ACMD_DECLARE(do_unsupported_command);
 ACMD_DECLARE(do_upgrade);
-ACMD_DECLARE(do_upload_headware);
 ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_usenerps);
 ACMD_DECLARE(do_users);
@@ -485,7 +481,6 @@ ACMD_DECLARE(do_hedit);
 ACMD_DECLARE(do_icedit);
 ACMD_DECLARE(do_connect);
 ACMD_DECLARE(do_hlist);
-ACMD_DECLARE(do_software);
 ACMD_DECLARE(do_design);
 ACMD_DECLARE(do_invitations);
 ACMD_DECLARE(do_debug);
@@ -597,11 +592,9 @@ struct command_info cmd_info[] =
     { "combine"    , POS_RESTING , do_put      , 0, 0, BLOCKS_IDLE_REWARD },
     { "comegetme"  , POS_DEAD    , do_dw_retrieve, 0, 0, BLOCKS_IDLE_REWARD },
     { "complete"   , POS_LYING   , do_recap    , 0, 0, BLOCKS_IDLE_REWARD },
-    { "copy"       , POS_SITTING , do_copy     , 0, 0, BLOCKS_IDLE_REWARD },
     { "copyover"   , POS_DEAD    , do_copyover , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
     { "commands"   , POS_DEAD    , do_commands , 0, SCMD_COMMANDS, ALLOWS_IDLE_REWARD },
     { "compress"   , POS_LYING   , do_compact  , 0, 0, BLOCKS_IDLE_REWARD },
-    { "cook"       , POS_SITTING , do_cook     , 0, 0, BLOCKS_IDLE_REWARD },
     { "costtime"   , POS_DEAD    , do_costtime , 0, 0, ALLOWS_IDLE_REWARD },
     { "coredump"   , POS_DEAD    , do_coredump , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "count"      , POS_DEAD    , do_count, 0, 0, ALLOWS_IDLE_REWARD },
@@ -626,7 +619,6 @@ struct command_info cmd_info[] =
     { "decompress" , POS_LYING   , do_compact  , 0, 1, BLOCKS_IDLE_REWARD },
     { "decorate"   , POS_DEAD    , do_decorate , 0, 0, ALLOWS_IDLE_REWARD },
     { "deduct"     , POS_DEAD    , do_deduct   , LVL_FIXER, 0, BLOCKS_IDLE_REWARD },
-    { "delete"     , POS_SLEEPING, do_delete   , 0, 0, BLOCKS_IDLE_REWARD },
     { "default"    , POS_RESTING , do_default  , 0, 0, BLOCKS_IDLE_REWARD },
     { "describe"   , POS_LYING   , do_describe , 0, 0, ALLOWS_IDLE_REWARD },
 //  { "dennis"     , POS_SITTING, do_move     , 0, SCMD_DOWN, BLOCKS_IDLE_REWARD },
@@ -642,7 +634,6 @@ struct command_info cmd_info[] =
     { "discord"    , POS_DEAD    , do_discord  , 0, 0, ALLOWS_IDLE_REWARD },
     { "docwagon"   , POS_LYING   , do_docwagon , 0, 0, BLOCKS_IDLE_REWARD },
     { "domain"     , POS_LYING   , do_domain   , 0, 0, BLOCKS_IDLE_REWARD },
-    { "download"   , POS_RESTING , do_download_headware, 0, 0, BLOCKS_IDLE_REWARD },
     { "donate"     , POS_RESTING , do_drop     , 0, SCMD_DONATE, BLOCKS_IDLE_REWARD },
     { "drag"       , POS_STANDING, do_drag     , 0, 0, BLOCKS_IDLE_REWARD },
     { "drink"      , POS_RESTING , do_drink    , 0, SCMD_DRINK, BLOCKS_IDLE_REWARD },
@@ -767,13 +758,13 @@ struct command_info cmd_info[] =
     { "man"        , POS_SITTING , do_man      , 0, 0, BLOCKS_IDLE_REWARD },
     { "manifest"   , POS_RESTING , do_manifest , 0, 0, BLOCKS_IDLE_REWARD },
     { "map"        , POS_DEAD    , do_map      , 0, 0, BLOCKS_IDLE_REWARD },
-    { "memory"     , POS_SLEEPING, do_memory   , 0, 0, ALLOWS_IDLE_REWARD },
     { "metamagic"  , POS_DEAD    , do_metamagic, 0, 0, ALLOWS_IDLE_REWARD },
     { "metrics"    , POS_DEAD    , do_metrics  , LVL_PRESIDENT, 0, ALLOWS_IDLE_REWARD },
     { "mclone"     , POS_DEAD    , do_mclone   , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "mdelete"    , POS_DEAD    , do_mdelete  , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "medit"      , POS_DEAD    , do_medit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "mlist"      , POS_DEAD    , do_mlist    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "memory"     , POS_DEAD    , do_memory   , 0,           0, BLOCKS_IDLE_REWARD },
     { "mobs"       , POS_LYING   , do_mobs     , 0, 0, BLOCKS_IDLE_REWARD },
     { "mode"       , POS_LYING   , do_mode     , 0, 0, ALLOWS_IDLE_REWARD },
     { "motd"       , POS_DEAD    , do_gen_ps   , 0, SCMD_MOTD, ALLOWS_IDLE_REWARD },
@@ -931,7 +922,6 @@ struct command_info cmd_info[] =
     { "sneak"      , POS_SITTING, do_sneak    , 1, 0, BLOCKS_IDLE_REWARD },
     { "snoop"      , POS_DEAD    , do_snoop    , LVL_CONSPIRATOR, 0, BLOCKS_IDLE_REWARD },
     { "socials"    , POS_DEAD    , do_commands , 0, SCMD_SOCIALS, ALLOWS_IDLE_REWARD },
-    { "software"   , POS_LYING   , do_software , 0, 0, ALLOWS_IDLE_REWARD },
     { "spool"      , POS_DEAD    , do_spool    , 0, 0, ALLOWS_IDLE_REWARD },
     { "speed"      , POS_RESTING , do_speed    , 0, 0, BLOCKS_IDLE_REWARD },
     { "spells"     , POS_SLEEPING, do_spells   , 0, 0, ALLOWS_IDLE_REWARD },
@@ -997,7 +987,6 @@ struct command_info cmd_info[] =
     { "unlearn"    , POS_DEAD    , do_forget   , 0, 0, BLOCKS_IDLE_REWARD },
     { "unfollow"   , POS_LYING   , do_unfollow , 0, 0, BLOCKS_IDLE_REWARD },
     { "upgrade"    , POS_SITTING , do_upgrade  , 0 , 0, BLOCKS_IDLE_REWARD },
-    { "upload"     , POS_RESTING , do_upload_headware, 0, 0, BLOCKS_IDLE_REWARD },
     { "uptime"     , POS_DEAD    , do_date     , 0, SCMD_UPTIME, ALLOWS_IDLE_REWARD },
     { "use"        , POS_LYING   , do_use      , 1, SCMD_USE, BLOCKS_IDLE_REWARD },
     { "usenerps"   , POS_LYING   , do_usenerps , 1, 0, BLOCKS_IDLE_REWARD },
@@ -1277,10 +1266,7 @@ ACMD_DECLARE(do_asist);
 ACMD_DECLARE(do_comcall);
 ACMD_DECLARE(do_control);
 ACMD_DECLARE(do_crash);
-ACMD_DECLARE(do_decrypt);
-ACMD_DECLARE(do_download);
 ACMD_DECLARE(do_evade);
-ACMD_DECLARE(do_load);
 ACMD_DECLARE(do_locate);
 ACMD_DECLARE(do_logoff);
 ACMD_DECLARE(do_logon);
@@ -1362,10 +1348,7 @@ struct command_info mtx_info[] =
     { "connect", 0, do_logon, 0, 0, BLOCKS_IDLE_REWARD },
     { "commands", 0, do_commands, 0, SCMD_COMMANDS, BLOCKS_IDLE_REWARD },
     { "crash", 0, do_crash, 0, 0, BLOCKS_IDLE_REWARD },
-    { "decrypt", 0, do_decrypt, 0, 0, BLOCKS_IDLE_REWARD },
-    { "disarm", 0, do_decrypt, 0, 1, BLOCKS_IDLE_REWARD },
     { "disconnect", 0, do_logoff, 0, 1, BLOCKS_IDLE_REWARD },
-    { "download", 0, do_download, 0, 0, BLOCKS_IDLE_REWARD },
     { "evade", 0, do_evade, 0, 0, BLOCKS_IDLE_REWARD },
     { "echo", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { "emote", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
@@ -1379,7 +1362,6 @@ struct command_info mtx_info[] =
     { "jobs", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
     { "look", 0, do_matrix_look, 0, 0, BLOCKS_IDLE_REWARD },
     { "list", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },
-    { "load", 0, do_load, 0, SCMD_SWAP, BLOCKS_IDLE_REWARD },
     { "locate", 0, do_locate, 0, 0, BLOCKS_IDLE_REWARD },
     { "logoff", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
     { "logout", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
@@ -1413,15 +1395,11 @@ struct command_info mtx_info[] =
     { "toggle", 0, do_toggle, 0, 0 , BLOCKS_IDLE_REWARD },
     { "trace", 0, do_trace, 0, 0, BLOCKS_IDLE_REWARD },
     { "typo", 0, do_gen_write, 0, SCMD_TYPO, BLOCKS_IDLE_REWARD },
-    { "unload", 0, do_load, 0, SCMD_UNLOAD, BLOCKS_IDLE_REWARD },
-    { "upload", 0, do_load, 0, SCMD_UPLOAD, BLOCKS_IDLE_REWARD },
     { "question", 0, do_gen_comm, 0, SCMD_QUESTION, BLOCKS_IDLE_REWARD },
     { "recap", 0, do_recap, 0, 0 , BLOCKS_IDLE_REWARD },
-    { "software", 0, do_software, 0, 0, BLOCKS_IDLE_REWARD },
     { "who", 0, do_who, 0, 0, BLOCKS_IDLE_REWARD },
     { "write", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },
     { "wtell", 0, do_wiztell, LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
-    { "memory", 0, do_memory   , 0, 0, ALLOWS_IDLE_REWARD },
 
     // Channel history commands.
     { "history"    , 0, do_message_history, 0, 0, ALLOWS_IDLE_REWARD },
