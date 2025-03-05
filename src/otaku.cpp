@@ -25,6 +25,11 @@ extern struct otaku_echo echoes[];
 int get_otaku_wil(struct char_data *ch) {
   int wil_stat = GET_REAL_WIL(ch);
 
+  /* Handling Cyberware/Bioware */
+  struct obj_data *pain_editor = find_bioware(ch, BIO_PAINEDITOR);
+  if (pain_editor && GET_BIOWARE_RATING(pain_editor))
+    wil_stat++;
+
   /* Handling Drugs */
   int detox_force = affected_by_spell(ch, SPELL_DETOX);
   if (GET_DRUG_STAGE(ch, DRUG_KAMIKAZE) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_KAMIKAZE, detox_force))
@@ -49,6 +54,10 @@ int get_otaku_int(struct char_data *ch) {
   struct obj_data *booster = find_bioware(ch, BIO_CEREBRALBOOSTER);
   if (booster)
     int_stat += GET_BIOWARE_RATING(booster);
+
+  struct obj_data *pain_editor = find_bioware(ch, BIO_PAINEDITOR);
+  if (pain_editor && GET_BIOWARE_RATING(pain_editor))
+    int_stat--;
 
   /* Handling Drugs */
   int detox_force = affected_by_spell(ch, SPELL_DETOX);
