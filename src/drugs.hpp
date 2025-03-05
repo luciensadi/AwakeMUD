@@ -29,6 +29,8 @@ void    clear_all_drug_data_for_char(struct char_data *ch);
 
 #define GET_DRUG_LAST_FIX(ch, i)                   (ch->player_specials->drug_last_fix[i])
 
+#define IS_DRUG_DETOX(i, detox)                    (detox && detox >= drug_types[i].power)
+
 #define MIN_DRUG                     1
 #define DRUG_ACTH                    1
 #define DRUG_HYPER                   2

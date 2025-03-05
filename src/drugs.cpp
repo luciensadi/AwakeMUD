@@ -408,7 +408,7 @@ void apply_drug_modifiers_to_ch(struct char_data *ch) {
   int detox_force = affected_by_spell(ch, SPELL_DETOX);
 
   for (int drug_id = MIN_DRUG; drug_id < NUM_DRUGS; drug_id++) {
-    if (detox_force && detox_force >= drug_types[drug_id].power) {
+    if (IS_DRUG_DETOX(drug_id, detox_force)) {
       continue;
     }
 
