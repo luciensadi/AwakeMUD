@@ -208,16 +208,16 @@ void _update_living_persona(struct char_data *ch, struct obj_data *cyberdeck, in
         GET_PART_RATING(part) = mpcp;
         break;
       case PART_BOD:
-        ch->persona->decker->bod = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_BOD));
+        ch->persona->decker->bod = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_BOD));
         break;
       case PART_EVASION:
-        ch->persona->decker->evasion = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_EVAS));
+        ch->persona->decker->evasion = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_EVAS));
         break;
       case PART_SENSOR:
-        ch->persona->decker->sensor = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_SENS));
+        ch->persona->decker->sensor = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_SENS));
         break;
       case PART_MASKING:
-        ch->persona->decker->masking = MIN(mpcp*1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_MASK));
+        ch->persona->decker->masking = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_MASK));
         break;
     }
   }
@@ -227,7 +227,7 @@ void update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck) {
   int mpcp = GET_OTAKU_MPCP(ch);
 
   GET_CYBERDECK_MPCP(cyberdeck) = MIN(12, mpcp);
-  GET_CYBERDECK_HARDENING(cyberdeck) = get_otaku_wil(ch) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD);
+  GET_CYBERDECK_HARDENING(cyberdeck) = (get_otaku_wil(ch) + 1) / 2 + GET_ECHO(ch, ECHO_IMPROVED_HARD);
   GET_CYBERDECK_HARDENING(cyberdeck) = MIN(get_otaku_wil(ch), GET_CYBERDECK_HARDENING(cyberdeck));
   GET_CYBERDECK_ACTIVE_MEMORY(cyberdeck) = 0; // Otaku do not have active memory.
   GET_CYBERDECK_TOTAL_STORAGE(cyberdeck) = 0;
