@@ -12,7 +12,9 @@
 
 #define MAX_CUSTOM_MPCP_RATING 12
 
-#define FILE_PROTECTION_SCRAMBLED 1
+#define FILE_PROTECTION_SCRAMBLED   1
+#define FILE_PROTECTION_DATABOMB    2
+#define FILE_PROTECTION_PAVLOV      3
 
 #define ICON_MATRIX         0  // This is just a normal persona or icon
 #define ICON_LIVING_PERSONA 1  // Weird otaku BS living persona
@@ -88,12 +90,14 @@ struct host_data {
   struct matrix_icon *fighting;
   struct exit_data *exit;
   struct entrance_data *entrance;
-  struct obj_data *file;
+  struct matrix_file *files;
+  struct obj_data *contents;
+
   host_data():
     name(NULL), keywords(NULL), desc(NULL), shutdown_start(NULL), shutdown_stop(NULL),
     type(0), reset(0), undiscovered_paydata(0), ic_bound_paydata(0), alert(0), pass(0),
     shutdown(0), shutdown_success(0), shutdown_mpcp(0), trigger(NULL),
-    icons(NULL), fighting(NULL), exit(NULL), entrance(NULL), file(NULL)
+    icons(NULL), fighting(NULL), exit(NULL), entrance(NULL), files(NULL), contents(NULL)
   {
 #ifdef USE_DEBUG_CANARIES
     canary = CANARY_VALUE;
@@ -207,7 +211,7 @@ struct deck_info {
 #endif
 
   struct char_data *hitcher;
-  struct obj_data *software;
+  struct matrix_file *software;
   struct obj_data *deck;
   struct obj_data *proxy_deck;
   struct seen_data *seen;

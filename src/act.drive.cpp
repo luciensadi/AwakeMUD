@@ -19,6 +19,7 @@
 #include "ignore_system.hpp"
 #include "zoomies.hpp"
 #include "vehicles.hpp"
+#include "matrix_storage.hpp"
 
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
@@ -2361,7 +2362,7 @@ ACMD(do_transfer)
     send_to_char("Transfer what to who?\r\n", ch);
   else if (ch->in_veh)
     send_to_char("You can't transfer ownership while you're inside a vehicle.\r\n", ch);
-  else if (!(veh = get_veh_list(buf, ch->in_room->vehicles, ch)))
+  else if (!(veh = get_veh_list(buf, ch->in_room->vehicles, ch))) 
     send_to_char("You don't see that vehicle here.\r\n", ch);
   else if (veh->owner != GET_IDNUM(ch))
     send_to_char("You can't transfer ownership of a vehicle you don't own.\r\n", ch);

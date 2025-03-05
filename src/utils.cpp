@@ -6527,6 +6527,48 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *o
   return TRUE;
 }
 
+bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct matrix_file *file, bool requires_ch_to_be_in_same_room_as_questor, bool send_messages) {
+  struct char_data *questor;
+  
+  // Not quest-protected.
+  if (!file->quest_id)
+    return FALSE;
+
+  // Character is the questor, so won't be blocked.
+  if (file->quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
+    return FALSE;
+
+  // Are you grouped with the questor?
+  if ((questor = ch_is_grouped_with_idnum(ch, file->quest_id))) {
+    // If you're grouped with them but aren't in the same room for a location-locked quest, you're blocked.
+    if (requires_ch_to_be_in_same_room_as_questor && !chars_are_in_same_location(ch, questor)) {
+      if (send_messages) {
+        send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(questor));
+      }
+
+      if (access_level(ch, LVL_VICEPRES)) {
+        if (send_messages) {
+          send_to_char(ch, "...but you bypass the location restriction on %s.\r\n", file->name);
+        }
+        return FALSE;
+      }
+      return TRUE;
+    }
+    // Otherwise, you're okay.
+    return FALSE;
+  }
+
+  // Staff bypass.
+  if (access_level(ch, LVL_VICEPRES)) {
+    if (send_messages) {
+      send_to_char(ch, "You bypass the quest flag on %s.\r\n", file->name);
+    }
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
 bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim) {
   // Not quest-protected.
   if (!victim->mob_specials.quest_id)

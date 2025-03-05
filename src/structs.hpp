@@ -140,6 +140,7 @@ struct obj_data
   text_data text;
   struct extra_descr_data *ex_description; /* extra descriptions     */
   char *restring;
+  char *matrix_restring;
   char *photo;
   char *graffiti;
 
@@ -172,9 +173,9 @@ struct obj_data
 #endif
   obj_data() :
       item_number(0), in_room(NULL), in_veh(NULL), vfront(FALSE), load_origin(0), load_time(0), pc_load_origin(0), pc_load_idnum(0),
-      ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
+      ex_description(NULL), restring(NULL), matrix_restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
       worn_by(NULL), worn_on(0), in_obj(NULL), contains(NULL), next_content(NULL),
-      in_host(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL), 
+      in_host(NULL), files(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL), 
       dropped_by_host(NULL), dropped_by_char(0), idnum(0)
   {
     #ifdef USE_DEBUG_CANARIES
@@ -619,7 +620,8 @@ struct char_special_data
   struct veh_data *fight_veh;
   struct char_data *fighting;  /* Opponent                             */
   struct char_data *hunting;   /* Char hunted by this char             */
-  struct obj_data *programming; /* Program char is currently designing/programming */
+  struct obj_data *building;
+  struct matrix_file *programming; /* Program char is currently designing/programming */
   int conjure[4];
   int num_spirits;
   idnum_t idnum;
@@ -1129,6 +1131,7 @@ struct descriptor_data
   int edit_zone;                /* which zone object is part of      */
   int iedit_limit_edits;        /* Used in iedit to let you cut out of g-menus early. */
   void **misc_data;             /* misc data, usually for extra data crap */
+  struct matrix_file *edit_matrix_file; /* edit target for pedit */
   struct obj_data *edit_obj;    /* iedit */
   struct room_data *edit_room;  /* redit */
   struct char_data *edit_mob;   /* medit */
@@ -1450,33 +1453,95 @@ struct kosher_weapon_values_struct {
 };
 
 
+#define WORK_PHASE_NONE          0
+#define WORK_PHASE_READY         1
+#define WORK_PHASE_IN_PROGRESS   2
+#define WORK_PHASE_COMPLETE      3
+
+#define MATRIX_FILE_DATA             0
+#define MATRIX_FILE_DESIGN           1
+#define MATRIX_FILE_SOURCE_CODE      2 // Represents an uncooked program
+#define MATRIX_FILE_PROGRAM          3
+#define MATRIX_FILE_FIRMWARE         4
+#define MATRIX_FILE_PAYDATA          5
+#define MATRIX_FILE_SKILLSOFT        6
+#define MATRIX_FILE_PHOTO            7
+#define MATRIX_FILE_POCSEC_NOTE      8
+#define MATRIX_FILE_POCSEC_PHONENUM  9
+#define MATRIX_FILE_POCSEC_MAIL      10
+
+
 /* ================== Memory Structure for Matrix Files ================== */
 struct matrix_file {
   // SQL fields
   rnum_t idnum;                                  /* Stored in database identifier */
   char* name;                                    /* The user-friendly text for this file */
-  unsigned long storage_idnum;                   /* What storage medium is holding this file */
   int file_type;
+  int program_type;                              /* If this is a file_type PROGRAM, this will be the type of program it is */
   int rating;
-  int size;                                      /* File size in megapulses */
-  int attack_damage;                             /* File's attack damage if damaging program */
-  int is_defaulted;
-  int evaluate_last_decay_time;
-  int evaluation_creation_time;
-  int is_cooked;
+  int size;                                      /* File size in megapulses. This is the value used when adjusting storage values */
+  int original_size;                             /* A variable that can be used for various overloads/alternating sizes on files */
+  int compression_factor;                        /* If a file is compressed, the factor goes here */
+  int wound_category;                            /* File's attack damage if damaging program */
+  int is_default;                                /* Whether or not to load the program by default */
+  idnum_t creator_idnum;
+  long creation_time;                            /* When was this file created? */
+  char *content;                                 /* Free form field for having text content; used for photos */
+
+  long last_decay_time;     
+  int quest_id; 
+  struct obj_data *in_obj;                       /* In what object NULL when none    */       
+
+  // Fields used by skillsofts
+  int skill;      
+  rnum_t linked;                                 /* If this is non-zero, it's the idnum of the ch */
+
+  // Fields used by paydata
+  rnum_t from_host_vnum;                         /* If this file came from a host, which host?  */
+  int from_host_color;
 
   // Non-SQL fields
-  struct obj_data *in_obj;                       /* In what object NULL when none    */
   struct matrix_file *next_file;                 /* For 'files' lists             */
   struct host_data *in_host;
 
+  // Non-SQL stateful vars for other nonsense
+  idnum_t found_by;
+  idnum_t file_worker;
+  struct obj_data *transferring_to;
+  struct host_data *transferring_to_host;
+  int transfer_remaining;
+  int file_protection;
+  int resonant;                                  /* Is this a resonant file for otaku? */
+
+  // Non-SQL fields used for keeping track of B/R
+  int work_phase;                               
+  int work_ticks_left;
+  int work_original_ticks_left;
+  int work_successes;  
+  
   // Debug fields
   char load_origin;                              /* Identifies what loaded this. */
+  unsigned long loaded_with_obj_idnum;
 
+  // Operation non-SQL fields
+  bool dirty_bit;                                /* Set to TRUE when you change a field so it will be saved */
+
+  /* Adding a field? Make sure to adjust dbnew for SQL and clone_matrix_file in matrix_storage */
   matrix_file() : 
-      idnum(0), name(0), storage_idnum(0), file_type(0), rating(0), size(0),
-      attack_damage(0), is_defaulted(0), evaluate_last_decay_time(0), evaluation_creation_time(0),
-      is_cooked(0), in_obj(NULL), next_file(NULL), in_host(NULL), load_origin(0)
+      idnum(0), name(0), file_type(0), program_type(0), rating(0), size(0), original_size(0),
+      compression_factor(0), wound_category(0), is_default(0), creator_idnum(0), content(0),
+
+      last_decay_time(0), quest_id(0), in_obj(0), skill(0), linked(0), from_host_vnum(0),
+      from_host_color(0),
+
+      next_file(0), in_host(0),
+
+      found_by(0), file_worker(0), transferring_to(0), transferring_to_host(0), transfer_remaining(0),
+      file_protection(0), resonant(0),
+
+      work_phase(0), work_ticks_left(0), work_original_ticks_left(0), work_successes(0),
+
+      load_origin(0), loaded_with_obj_idnum(0), dirty_bit (0)
   {
 
   }

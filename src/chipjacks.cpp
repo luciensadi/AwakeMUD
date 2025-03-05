@@ -5,6 +5,7 @@
 #include "newdb.hpp"
 #include "db.hpp"
 #include "chipjacks.hpp"
+#include "matrix_storage.hpp"
 
 ACMD_DECLARE(do_reload);
 
@@ -88,7 +89,7 @@ void initialize_chipjack_and_memory_for_character(struct char_data *ch) {
   if (chipjack) {
     // Apply contained 'softs, constrained by skillwire rating if it's an active skill.
     for (struct obj_data *chip = chipjack->contains; chip; chip = chip->next_content) {
-      set_skill_from_chip(ch, chip, FALSE, skillwire_rating);
+      set_skill_from_chip(ch, chip->files, FALSE, skillwire_rating);
     }
   }
 
@@ -101,7 +102,7 @@ void initialize_chipjack_and_memory_for_character(struct char_data *ch) {
       if (GET_OBJ_TYPE(chip) == ITEM_CHIP) {          
         // Load in any linked skills.
         if (GET_CHIP_LINKED(chip))
-          set_skill_from_chip(ch, chip, FALSE, skillwire_rating);
+          set_skill_from_chip(ch, chip->files, FALSE, skillwire_rating);
         
         GET_CYBERWARE_MEMORY_USED(memory) += GET_CHIP_SIZE(chip) - GET_CHIP_COMPRESSION_FACTOR(chip);
       }
@@ -113,14 +114,14 @@ void initialize_chipjack_and_memory_for_character(struct char_data *ch) {
   }
 }
 
-void set_skill_from_chip(struct char_data *ch, struct obj_data *chip, bool send_message, int skillwire_rating) {
-  if (!ch || !chip) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid parameters to set_skill_from_chip(%s, %s, %s, %d): null item!", GET_CHAR_NAME(ch), GET_OBJ_NAME(chip), send_message ? "TRUE" : "FALSE", skillwire_rating);
+void set_skill_from_chip(struct char_data *ch, struct matrix_file *skillsoft_file, bool send_message, int skillwire_rating) {
+  if (!ch || !skillsoft_file) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid parameters to set_skill_from_chip(%s, %s, %s, %d): null item!", GET_CHAR_NAME(ch), skillsoft_file->name, send_message ? "TRUE" : "FALSE", skillwire_rating);
     return;
   }
 
-  if (GET_OBJ_TYPE(chip) != ITEM_CHIP) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid parameters to set_skill_from_chip(%s, %s, %s, %d): bad chip!", GET_CHAR_NAME(ch), GET_OBJ_NAME(chip), send_message ? "TRUE" : "FALSE", skillwire_rating);
+  if (skillsoft_file->file_type != MATRIX_FILE_SKILLSOFT) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid parameters to set_skill_from_chip(%s, %s, %s, %d): bad chip!", GET_CHAR_NAME(ch), skillsoft_file->name, send_message ? "TRUE" : "FALSE", skillwire_rating);
     return;
   }
 
@@ -129,38 +130,40 @@ void set_skill_from_chip(struct char_data *ch, struct obj_data *chip, bool send_
     skillwire_rating = (skillwires ? GET_CYBERWARE_RATING(skillwires) : 0);
   }
 
-  int chip_rating = GET_CHIP_RATING(chip);
+  int chip_rating = skillsoft_file->rating;
 
   // HOUSERULE: If chip rating exceeds skillwires rating, chip is capped to skillwires instead of deactivated.
-  if (!skills[GET_CHIP_SKILL(chip)].is_knowledge_skill) {
+  if (!skills[skillsoft_file->skill].is_knowledge_skill) {
     chip_rating = MIN(chip_rating, skillwire_rating);
   }
 
-  GET_CHIPJACKED_SKILL(ch, GET_CHIP_SKILL(chip)) = chip_rating;
+  GET_CHIPJACKED_SKILL(ch, skillsoft_file->skill) = chip_rating;
+  skillsoft_file->linked = ch->unique_id;
   if (send_message) {
     send_to_char(ch, "You gain a sudden understanding of %s%s.\r\n",
-                  skills[GET_CHIP_SKILL(chip)].name,
-                  chip_rating != GET_CHIP_RATING(chip) ? ", although it's limited by your skillwires." : "");
+                  skills[skillsoft_file->skill].name,
+                  chip_rating != skillsoft_file->rating ? ", although it's limited by your skillwires." : "");
   }
 }
 
-void deactivate_single_skillsoft(struct obj_data *chip, struct char_data *victim, bool send_message) {
-  if (!victim || !chip) {
-    mudlog_vfprintf(victim, LOG_SYSLOG, "SYSERR: Invalid parameters to deactivate_single_skillsoft(%s, %s, %s): null item!", GET_OBJ_NAME(chip), GET_CHAR_NAME(victim), send_message ? "TRUE" : "FALSE");
+void deactivate_single_skillsoft(struct matrix_file *skillsoft_file, struct char_data *victim, bool send_message) {
+  if (!victim || !skillsoft_file) {
+    mudlog_vfprintf(victim, LOG_SYSLOG, "SYSERR: Invalid parameters to deactivate_single_skillsoft(%s, %s, %s): null item!", skillsoft_file->name, GET_CHAR_NAME(victim), send_message ? "TRUE" : "FALSE");
     return;
   }
 
-  if (GET_OBJ_TYPE(chip) != ITEM_CHIP) {
-    mudlog_vfprintf(victim, LOG_SYSLOG, "SYSERR: Invalid parameters to deactivate_single_skillsoft(%s, %s, %s): bad chip!", GET_OBJ_NAME(chip), GET_CHAR_NAME(victim), send_message ? "TRUE" : "FALSE");
+  if (skillsoft_file->file_type != MATRIX_FILE_SKILLSOFT) {
+    mudlog_vfprintf(victim, LOG_SYSLOG, "SYSERR: Invalid parameters to deactivate_single_skillsoft(%s, %s, %s): bad chip!", skillsoft_file->name, GET_CHAR_NAME(victim), send_message ? "TRUE" : "FALSE");
     return;
   }
 
-  if (GET_CHIPJACKED_SKILL(victim, GET_CHIP_SKILL(chip))) {
-    GET_CHIPJACKED_SKILL(victim, GET_CHIP_SKILL(chip)) = 0;
+  if (GET_CHIPJACKED_SKILL(victim, skillsoft_file->skill)) {
+    GET_CHIPJACKED_SKILL(victim, skillsoft_file->skill) = 0;
+    skillsoft_file->linked = 0;
     if (send_message) {
       send_to_char(victim, "Your %sSoft-linked knowledge of %s fades away.\r\n",
-                    skills[GET_CHIP_SKILL(chip)].is_knowledge_skill ? "Know" : "Active",
-                    skills[GET_CHIP_SKILL(chip)].name);
+                    skills[skillsoft_file->skill].is_knowledge_skill ? "Know" : "Active",
+                    skills[skillsoft_file->skill].name);
     }
   }
 }
@@ -178,7 +181,7 @@ void deactivate_skillsofts_in_headware_memory(struct obj_data *mem, struct char_
 
   for (struct obj_data *chip = mem->contains; chip; chip = chip->next_content) {
     if (GET_CHIP_LINKED(chip)) {
-      deactivate_single_skillsoft(chip, victim, send_message);
+      deactivate_single_skillsoft(chip->files, victim, send_message);
     }
   }
 }
@@ -214,7 +217,7 @@ ACMD(do_jack)
     obj_to_char(chip, ch);
     
     send_to_char(ch, "You remove %s from your chipjack.\r\n", decapitalize_a_an(chip));
-    deactivate_single_skillsoft(chip, ch, TRUE);
+    deactivate_single_skillsoft(chip->files, ch, TRUE);
     act("$n removes a chip from their chipjack.", TRUE, ch, 0, 0, TO_ROOM);
     return;
   }
@@ -239,7 +242,7 @@ ACMD(do_jack)
   else if (GET_OBJ_TYPE(chip) != ITEM_CHIP)
     send_to_char(ch, "But that isn't a chip.\r\n");
   else {
-    set_skill_from_chip(ch, chip, TRUE, 0);
+    set_skill_from_chip(ch, chip->files, TRUE, 0);
     send_to_char(ch, "You slip %s into your chipjack.\r\n", GET_OBJ_NAME(chip));
     obj_from_char(chip);
     obj_to_obj(chip, chipjack);
@@ -295,34 +298,34 @@ ACMD(do_link)
   FAILURE_CASE_PRINTF(!*argument, "Which chip do you wish to %slink?\r\n", subcmd ? "un" : "");
   
   struct obj_data *link = find_cyberware(ch, CYB_KNOWSOFTLINK);
-  struct obj_data *memory = find_cyberware(ch, CYB_MEMORY);
   struct obj_data *skillwires = find_cyberware(ch, CYB_SKILLWIRE);
 
-  FAILURE_CASE(!memory, "You need to have headware memory to link a skillsoft from.");
-  FAILURE_CASE(!memory->contains, "Your headware memory is empty.");
   FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting? That would be a neat trick.");
 
-  int x = atoi(argument);
-  struct obj_data *obj = memory->contains;
-  for (; obj; obj = obj->next_content)
-    if (!--x)
+  std::vector<struct obj_data*> memory = get_internal_storage_devices(ch);
+  FAILURE_CASE(memory.size() <= 0, "You don't have any internal storage mediums connected to your nervous system.");
+
+  struct matrix_file *skillsoft = NULL;
+  for (obj_data *device : memory) {
+    if ((skillsoft = get_matrix_file_in_list_vis(ch, argument, device->files)))
       break;
+  }
   
-  FAILURE_CASE(!obj, "You don't have that many files in your memory.");
-  FAILURE_CASE_PRINTF(GET_OBJ_TYPE(obj) != ITEM_CHIP, "%s is not a skillsoft.", CAP(GET_OBJ_NAME(obj)));
-  FAILURE_CASE(skills[GET_CHIP_SKILL(obj)].is_knowledge_skill && !link, "You need a knowsoft link to link knowsofts from headware memory.");
-  FAILURE_CASE(!skills[GET_CHIP_SKILL(obj)].is_knowledge_skill && !skillwires, "You need skillwires to link activesofts from headware memory.");
-  FAILURE_CASE(GET_CHIP_COMPRESSION_FACTOR(obj), "You must decompress this skillsoft before you link it.");
-  FAILURE_CASE_PRINTF((GET_CHIP_LINKED(obj) && !subcmd) || (!GET_CHIP_LINKED(obj) && subcmd), "That program is already %slinked.\r\n", subcmd ? "un" : "");
+  FAILURE_CASE_PRINTF(!skillsoft, "You don't have a file named '%s' in your internal storage media.", argument);
+  FAILURE_CASE_PRINTF(skillsoft->file_type != MATRIX_FILE_SKILLSOFT, "%s is not a skillsoft file.", skillsoft->name);
+  FAILURE_CASE(skills[skillsoft->skill].is_knowledge_skill && !link, "You need a knowsoft link to link knowsofts from headware memory.");
+  FAILURE_CASE(!skills[skillsoft->skill].is_knowledge_skill && !skillwires, "You need skillwires to link activesofts from headware memory.");
+  FAILURE_CASE(skillsoft->compression_factor, "You must decompress this skillsoft before you link it.");
+  FAILURE_CASE_PRINTF((skillsoft->linked && !subcmd) || (!skillsoft->linked && subcmd), "That program is already %slinked.\r\n", subcmd ? "un" : "");
 
   if (subcmd) {
-    GET_CHIP_LINKED(obj) = 0;
-    send_to_char(ch, "You unlink %s.\r\n", GET_OBJ_NAME(obj));
-    deactivate_single_skillsoft(obj, ch, TRUE);
+    skillsoft->linked = FALSE;
+    send_to_char(ch, "You unlink %s.\r\n", skillsoft->name);
+    deactivate_single_skillsoft(skillsoft, ch, TRUE);
   } else {
-    GET_CHIP_LINKED(obj) = 1;
-    send_to_char(ch, "You link %s to your %s.\r\n", GET_OBJ_NAME(obj), skills[GET_CHIP_SKILL(obj)].is_knowledge_skill ? "knowsoft link" : "skillwires");
-    set_skill_from_chip(ch, obj, TRUE, skillwires ? GET_CYBERWARE_RATING(skillwires) : 0);
+    skillsoft->linked = TRUE;
+    send_to_char(ch, "You link %s to your %s.\r\n", skillsoft->name, skills[skillsoft->skill].is_knowledge_skill ? "knowsoft link" : "skillwires");
+    set_skill_from_chip(ch, skillsoft, TRUE, skillwires ? GET_CYBERWARE_RATING(skillwires) : 0);
   }
 }
 
