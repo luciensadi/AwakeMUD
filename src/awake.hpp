@@ -1349,7 +1349,8 @@ enum {
 #define ITEM_CREATIVE_EFFORT    49
 #define ITEM_PET                50
 #define ITEM_COMPLEX_FORM       51       /* otaku complex form               */
-#define NUM_ITEMS               52
+#define ITEM_SOURCE_CODE        52
+#define NUM_ITEMS               53
 // Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
 #define PATCH_ANTIDOTE          0
@@ -1461,9 +1462,13 @@ enum {
 
 #define TYPE_FILE            0
 #define TYPE_UPGRADE         1
-#define TYPE_COMPUTER       2
-#define TYPE_PARTS       3
-#define TYPE_COOKER       4
+#define TYPE_COMPUTER        2
+#define TYPE_PARTS           3
+#define TYPE_COOKER          4
+#define TYPE_FIRMWARE        5
+#define TYPE_MATRIX_FILE     6
+#define TYPE_PHOTO           7
+#define TYPE_PAYDATA         8
 
 #define DUPGRADE_REPLACEMENT_MPCP  0
 #define DUPGRADE_ACTIVE_MEMORY     1

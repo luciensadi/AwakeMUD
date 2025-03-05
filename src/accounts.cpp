@@ -48,13 +48,13 @@
 
 ACMD(do_account) {
   char command[MAX_STRING_LENGTH] = { 0 };
-  char mode[MAX_STRING_LENGTH] = { 0 };
+  // char mode[MAX_STRING_LENGTH] = { 0 };
 
   FAILURE_CASE(IS_NPC(ch), "You can't be projecting or puppeting while accessing your account.");
   FAILURE_CASE(!*arg, access_level(ch, STAFF_LEVEL_REQUIRED_FOR_ELEVATED_ACTIONS) ? ACCOUNTS_STAFF_ONLY_USAGE_STRING : ACCOUNTS_NON_STAFF_USAGE_STRING);
 
   // Split out what we have.
-  char *remainder = any_one_arg(argument, command);
+  // char *remainder = any_one_arg(argument, command);
 
   // Ensure there's something populated in command.
   FAILURE_CASE(!*command, access_level(ch, STAFF_LEVEL_REQUIRED_FOR_ELEVATED_ACTIONS) ? ACCOUNTS_STAFF_ONLY_USAGE_STRING : ACCOUNTS_NON_STAFF_USAGE_STRING);
@@ -74,7 +74,7 @@ ACMD(do_account) {
 
   // TODO: RENAME <newname> [confirm]: Changes your auto-generated account's name. Only usable once.
   if (is_abbrev(command, "rename")) {
-    char *mode_remainder = any_one_arg(remainder, mode);
+    // char *mode_remainder = any_one_arg(remainder, mode);
     // TODO: You must be in an account.
     // TODO: Your account name must match your character's name.
     // TODO: New name must pass obscenity filter.

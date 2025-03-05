@@ -195,11 +195,12 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
     }
 
     if (!best_form) continue; // We don't have this form
-    struct matrix_file *active = new_program(new_deck, OBJ_LOAD_REASON_OTAKU_RESONANCE);
-    active->file_type = GET_COMPLEX_FORM_PROGRAM(best_form);
+    struct matrix_file *active = create_matrix_file(new_deck, OBJ_LOAD_REASON_OTAKU_RESONANCE);
+    active->program_type = GET_COMPLEX_FORM_PROGRAM(best_form);
     active->size = 0; // Complex forms don't take up memory.
-    active->attack_damage = GET_COMPLEX_FORM_WOUND_LEVEL(best_form);
-    active->is_defaulted = TRUE;
+    active->wound_category = GET_COMPLEX_FORM_WOUND_LEVEL(best_form);
+    active->is_default = TRUE;
+    active->resonant = TRUE;
 
     active->rating = GET_COMPLEX_FORM_RATING(best_form);
 

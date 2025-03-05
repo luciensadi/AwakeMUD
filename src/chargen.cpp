@@ -20,6 +20,7 @@
 #include "bullet_pants.hpp"
 #include "security.hpp"
 #include "metrics.hpp"
+#include "matrix_storage.hpp"
 
 #define CH d->character
 
@@ -423,11 +424,14 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
             break;
         }
 
-        // Install it to the deck.
-        obj_to_obj(program, temp_obj);
+        if (GET_OBJ_TYPE(program) == ITEM_PROGRAM ||  GET_OBJ_TYPE(program) == ITEM_DESIGN) {
+          // Install it to the deck.
+          obj_to_matrix_file(program, temp_obj);
+          extract_obj(program);
+          continue;
+        }
 
-        // Take up space on the deck.
-        GET_CYBERDECK_USED_STORAGE(temp_obj) += GET_DECK_ACCESSORY_FILE_SIZE(program);
+        obj_to_obj(program, temp_obj);
       } else {
         snprintf(buf, sizeof(buf), "SYSERR: Invalid software %ld specified for archetype %s.",
                  archetypes[i]->software[j], archetypes[i]->name);

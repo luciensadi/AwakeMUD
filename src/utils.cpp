@@ -2283,10 +2283,6 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
           }
           break;
       }
-    if (GET_CYBERWARE_TYPE(cyber1) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(cyber1), EYE_DATAJACK) && GET_CYBERWARE_TYPE(cyber2) == CYB_DATAJACK) {
-      send_to_char("You already have a datajack installed.\r\n", ch);
-      return FALSE;
-    }
     if (GET_CYBERWARE_TYPE(cyber2) == CYB_EYES && GET_CYBERWARE_TYPE(cyber1) == CYB_EYES)
       for (int bit = EYE_CAMERA; bit <= EYE_ULTRASOUND; bit *= 2) {
         if (IS_SET(GET_CYBERWARE_FLAGS(cyber2), bit) && IS_SET(GET_CYBERWARE_FLAGS(cyber1), bit)) {
@@ -6520,6 +6516,48 @@ bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *o
   if (access_level(ch, LVL_VICEPRES)) {
     if (send_messages) {
       send_to_char(ch, "You bypass the quest flag on %s.\r\n", GET_OBJ_NAME(obj));
+    }
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+bool ch_is_blocked_by_quest_protections(struct char_data *ch, struct matrix_file *file, bool requires_ch_to_be_in_same_room_as_questor, bool send_messages) {
+  struct char_data *questor;
+  
+  // Not quest-protected.
+  if (!file->quest_id)
+    return FALSE;
+
+  // Character is the questor, so won't be blocked.
+  if (file->quest_id == GET_IDNUM_EVEN_IF_PROJECTING(ch))
+    return FALSE;
+
+  // Are you grouped with the questor?
+  if ((questor = ch_is_grouped_with_idnum(ch, file->quest_id))) {
+    // If you're grouped with them but aren't in the same room for a location-locked quest, you're blocked.
+    if (requires_ch_to_be_in_same_room_as_questor && !chars_are_in_same_location(ch, questor)) {
+      if (send_messages) {
+        send_to_char(ch, "%s must be present as well in order to complete this objective.\r\n", GET_CHAR_NAME(questor));
+      }
+
+      if (access_level(ch, LVL_VICEPRES)) {
+        if (send_messages) {
+          send_to_char(ch, "...but you bypass the location restriction on %s.\r\n", file->name);
+        }
+        return FALSE;
+      }
+      return TRUE;
+    }
+    // Otherwise, you're okay.
+    return FALSE;
+  }
+
+  // Staff bypass.
+  if (access_level(ch, LVL_VICEPRES)) {
+    if (send_messages) {
+      send_to_char(ch, "You bypass the quest flag on %s.\r\n", file->name);
     }
     return FALSE;
   }

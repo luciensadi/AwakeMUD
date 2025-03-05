@@ -56,8 +56,6 @@ void    obj_to_room(struct obj_data *object, struct room_data *room);
 void    obj_from_room(struct obj_data *object);
 void    obj_to_obj(struct obj_data *obj, struct obj_data *obj_to);
 void    obj_from_obj(struct obj_data *obj);
-void    obj_to_host(struct obj_data *obj, struct host_data *host);
-void    obj_from_host(struct obj_data *obj);
 
 void obj_from_cyberware(struct obj_data *cyber, bool recalc = TRUE);
 void obj_from_bioware(struct obj_data *bio, bool recalc = TRUE);

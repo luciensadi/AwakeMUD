@@ -30,6 +30,7 @@
 #include "pocketsec.hpp"
 #include "vehicles.hpp"
 #include "factions.hpp"
+#include "matrix_storage.hpp"
 
 /*   external vars  */
 ACMD_DECLARE(do_goto);
@@ -2902,7 +2903,7 @@ SPECIAL(fence)
       return(TRUE);
     }
     if (!(GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY
-          && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE
+          && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PAYDATA
           && GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj))) {
       act("You say, \"I only buy datafiles, chummer.\"\n", FALSE, fence, 0, 0, TO_CHAR);
       act("$n says, \"I only buy datafiles, chummer.\"\n", FALSE, fence, 0, ch, TO_VICT);
@@ -4529,53 +4530,44 @@ SPECIAL(desktop)
 
   struct obj_data *obj = (struct obj_data *) me;
   float completion_percentage;
-  bool found_suite = FALSE;
 
   if (!CMD_IS("list") || (!obj->in_veh && !obj->in_room))
     return FALSE;
 
   send_to_char(ch, "%s (^g%d^n/^r%d^n)", GET_OBJ_NAME(obj),
-               GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(obj) - GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(obj),
-               GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(obj));
-  if (obj->contains) {
+               get_device_free_memory(obj),
+               get_device_total_memory(obj));
+  if (obj->files) {
     send_to_char(ch, " contains:\r\n");
-    for (struct obj_data *soft = obj->contains; soft; soft = soft->next_content) {
+    for (struct matrix_file *soft = obj->files; soft; soft = soft->next_file) {
       char paddingnumberstr[10], formatstr[512];
 
-      snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 40 + count_color_codes_in_string(GET_OBJ_NAME(soft)));
+      snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 40 + count_color_codes_in_string(soft->name));
       snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s %dMp ");
       send_to_char(ch, formatstr,
-                   GET_OBJ_NAME(soft),
-                   GET_OBJ_TYPE(soft) == ITEM_DESIGN ? GET_DESIGN_SIZE(soft) : GET_PROGRAM_SIZE(soft));
+                   soft->name,
+                   soft->size);
 
-      if (GET_OBJ_TYPE(soft) == ITEM_DESIGN) {
-        send_to_char(ch, "(^c%dMp^n taken) ", GET_DESIGN_SIZE(soft) + GET_DESIGN_SIZE(soft) / 10);
+      if (soft->file_type == MATRIX_FILE_DESIGN) {
+        send_to_char(ch, "(^c%dMp^n taken) ", soft->size + soft->size / 10);
 
-        if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(soft)) {
-          completion_percentage = (float) (GET_DESIGN_ORIGINAL_TICKS_LEFT(soft) - GET_DESIGN_PROGRAMMING_TICKS_LEFT(soft)) / MAX(1, GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) * 100;
-          send_to_char(ch, "(^CProgramming, ^c%2.2f%%^n complete)", completion_percentage);
-        } else if (GET_DESIGN_COMPLETED(soft)) {
-          send_to_char("(^cProgrammable^n)", ch);
-        } else if (GET_DESIGN_DESIGNING_TICKS_LEFT(soft) == GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) {
-          send_to_char("(^gDesignable^n)", ch);
-        } else {
-          completion_percentage = (float) (GET_DESIGN_ORIGINAL_TICKS_LEFT(soft) - GET_DESIGN_DESIGNING_TICKS_LEFT(soft)) / MAX(1, GET_DESIGN_ORIGINAL_TICKS_LEFT(soft)) * 100;
+        if (soft->work_ticks_left) {
+          completion_percentage = (float) (soft->work_original_ticks_left - soft->work_ticks_left) / MAX(1, soft->work_original_ticks_left) * 100;
           send_to_char(ch, "(^GDesigning, ^c%2.2f%%^n complete)", completion_percentage);
+        } else if (soft->work_phase == WORK_PHASE_COMPLETE) {
+          send_to_char("(^cProgrammable^n)", ch);
+        } else if (soft->work_phase < WORK_PHASE_COMPLETE) {
+          send_to_char("(^gDesignable^n)", ch);
         }
-        send_to_char(ch, " Rating ^c%d^n\r\n", GET_DESIGN_RATING(soft));
-      } else {
-        send_to_char(ch, "(^c%dMp^n taken) (^BCompleted^n) Rating ^c%d^n",
-                     GET_PROGRAM_SIZE(soft),
-                     GET_PROGRAM_RATING(soft));
-
-        if (GET_PROGRAM_TYPE(soft) == SOFT_SUITE) {
-          if (found_suite) {
-            send_to_char(" [^roverridden by above suite^n]", ch);
-          }
-          found_suite = TRUE;
+        send_to_char(ch, " Rating ^c%d^n\r\n", soft->rating);
+      } else if (soft->file_type == MATRIX_FILE_SOURCE_CODE) { 
+        if (soft->work_ticks_left) {
+          completion_percentage = (float) (soft->work_original_ticks_left - soft->work_ticks_left) / MAX(1, soft->work_original_ticks_left) * 100;
+          send_to_char(ch, "(^CProgramming, ^c%2.2f%%^n complete)", completion_percentage);
+        } else if (soft->work_phase == WORK_PHASE_COMPLETE) {
+          send_to_char("(^cCookable^n)", ch);
         }
-
-        send_to_char("\r\n", ch);
+        send_to_char(ch, " Rating ^c%d^n\r\n", soft->rating);
       }
     }
   } else
