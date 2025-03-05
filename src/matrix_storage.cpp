@@ -11,6 +11,11 @@
 #include "db.hpp"
 #include "handler.hpp"
 
+// Function to get a unique ID
+int _next_matrix_id() {
+    return matrix_file_id_counter.fetch_add(1, std::memory_order_relaxed);
+}
+
 std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool only_relevant = FALSE) {
   struct obj_data* cyber;
   std::vector<struct obj_data*> found_list = {};
@@ -55,6 +60,7 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
 
 matrix_file* create_matrix_file(obj_data *storage, int load_origin) {
   struct matrix_file *new_file = new matrix_file();
+  new_file->idnum = _next_matrix_id();
   new_file->load_origin = load_origin;
   new_file->in_obj = storage;
 
