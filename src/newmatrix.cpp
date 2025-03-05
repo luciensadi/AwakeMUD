@@ -2290,7 +2290,9 @@ ACMD(do_connect)
           send_to_char(ch, "%s^n would exceed your deck's active memory, so it failed to load.\r\n", GET_OBJ_NAME(soft));
           continue;
         }
-        if (GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
+        // OTAKU living persona don't need to check this, as all programs are complex forms
+        // and we already checked that when we created the deck.
+        if (PERSONA->type != ICON_LIVING_PERSONA && GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
           send_to_char(ch, "%s^n is too advanced for your deck's MPCP rating, so it failed to load.\r\n", GET_OBJ_NAME(soft));
           continue;
         }
