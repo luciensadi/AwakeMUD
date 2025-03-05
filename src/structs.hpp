@@ -1129,6 +1129,7 @@ struct descriptor_data
   int edit_zone;                /* which zone object is part of      */
   int iedit_limit_edits;        /* Used in iedit to let you cut out of g-menus early. */
   void **misc_data;             /* misc data, usually for extra data crap */
+  struct matrix_file *edit_matrix_file; /* edit target for pedit */
   struct obj_data *edit_obj;    /* iedit */
   struct room_data *edit_room;  /* redit */
   struct char_data *edit_mob;   /* medit */
@@ -1463,6 +1464,14 @@ struct matrix_file {
   int is_defaulted;
   int evaluate_last_decay_time;
   int evaluation_creation_time;
+  unsigned long creator_idnum;
+
+  // SQL Design Fields (used for designing programs)
+  int designing_ticks_left;
+  int designing_original_ticks_left;
+  int programming_ticks_left;
+  bool design_completed;
+
   int is_cooked;
 
   // Non-SQL fields

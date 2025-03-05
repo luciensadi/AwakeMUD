@@ -18,6 +18,7 @@
 #include "deck_build.hpp"
 #include "ritualcast.hpp"
 #include "metrics.hpp"
+#include "matrix_storage.hpp"
 
 #define CH d->character
 #define PEDIT_MENU 0
@@ -36,19 +37,19 @@ extern bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
 void pedit_disp_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  send_to_char(CH, "1) Name: ^c%s^n\r\n", d->edit_obj->restring);
-  send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[GET_DESIGN_PROGRAM(d->edit_obj)].name);
-  send_to_char(CH, "3) Rating: ^c%d^n\r\n", GET_DESIGN_RATING(d->edit_obj));
+  send_to_char(CH, "1) Name: ^c%s^n\r\n", d->edit_matrix_file->name);
+  send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[d->edit_matrix_file->file_type].name);
+  send_to_char(CH, "3) Rating: ^c%d^n\r\n", d->edit_matrix_file->rating);
 
   // Minimum program size is rating^2.
-  int program_size = GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_RATING(d->edit_obj);
-  if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
+  int program_size = d->edit_matrix_file->rating ^ 2;
+  if (d->edit_matrix_file->file_type == SOFT_ATTACK) {
     // Attack programs multiply size by a factor determined by wound level.
-    program_size *= attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)];
-    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)));
+    program_size *= attack_multiplier[d->edit_matrix_file->attack_damage];
+    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(d->edit_matrix_file->attack_damage));
   } else {
     // Others multiply by a set multiplier based on software type.
-    program_size *= programs[GET_DESIGN_PROGRAM(d->edit_obj)].multiplier;
+    program_size *= programs[d->edit_matrix_file->file_type].multiplier;
   }
   send_to_char(CH, "\r\nInitial Design Size: ^c%d^n\r\n", (int) (program_size * 1.1));
   send_to_char(CH, "Completed Size: ^c%d^n\r\n\r\n", program_size);
@@ -95,7 +96,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       pedit_disp_program_menu(d);
       break;
     case '3':
-      if (!GET_DESIGN_PROGRAM(d->edit_obj))
+      if (!d->edit_matrix_file->file_type)
         send_to_char("Choose a program type first!\r\n", CH);
       else {
         send_to_char("Enter Rating: ", CH);
@@ -103,7 +104,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       }
       break;
     case '4':
-      if (GET_DESIGN_PROGRAM(d->edit_obj) != SOFT_ATTACK)
+      if (d->edit_matrix_file->file_type != SOFT_ATTACK)
         send_to_char(CH, "Invalid option!\r\n");
       else {
         CLS(CH);
@@ -113,27 +114,26 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
     case 'Q':
-      if (!GET_DESIGN_PROGRAM(d->edit_obj) || !GET_DESIGN_RATING(d->edit_obj)) {
+      if (!d->edit_matrix_file->file_type || !d->edit_matrix_file->rating) {
         send_to_char("You must specify a program type and/or rating first.\r\n", CH);
         pedit_disp_menu(d);
         return;
       }
 
       send_to_char(CH, "Design saved!\r\n");
-      if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
-        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)];
-      } else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_RESPONSE) {
-        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * (GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_RATING(d->edit_obj));
+      if (d->edit_matrix_file->file_type == SOFT_ATTACK) {
+        d->edit_matrix_file->designing_ticks_left = d->edit_matrix_file->rating * attack_multiplier[d->edit_matrix_file->attack_damage];
+      } else if (d->edit_matrix_file->file_type == SOFT_RESPONSE) {
+        d->edit_matrix_file->designing_ticks_left = d->edit_matrix_file->rating ^ 3;
       } else {
-        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * programs[GET_DESIGN_PROGRAM(d->edit_obj)].multiplier;
+        d->edit_matrix_file->designing_ticks_left = d->edit_matrix_file->rating * programs[d->edit_matrix_file->file_type].multiplier;
       }
-      GET_DESIGN_SIZE(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj);
-      GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj)  *= 20;
-      GET_DESIGN_ORIGINAL_TICKS_LEFT(d->edit_obj) = GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj);
-      GET_DESIGN_CREATOR_IDNUM(d->edit_obj) = GET_IDNUM(CH);
-      obj_to_char(d->edit_obj, CH);
+      d->edit_matrix_file->size = d->edit_matrix_file->rating * d->edit_matrix_file->designing_ticks_left;
+      d->edit_matrix_file->designing_ticks_left  *= 20;
+      d->edit_matrix_file->designing_original_ticks_left = d->edit_matrix_file->designing_ticks_left ;
+      d->edit_matrix_file->creator_idnum = GET_IDNUM(CH);
       STATE(d) = CON_PLAYING;
-      d->edit_obj = NULL;
+      d->edit_matrix_file = NULL;
       break;
     default:
       send_to_char(CH, "Invalid option!\r\n");
@@ -141,19 +141,19 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case PEDIT_RATING:
-    if (GET_DESIGN_PROGRAM(d->edit_obj) <= SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER) * 1.5)
+    if (d->edit_matrix_file->file_type <= SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER) * 1.5)
       send_to_char(CH, "You can't create a persona program of a higher rating than your computer skill times one and a half.\r\n"
                    "Enter Rating: ");
-    else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_EVALUATE && number > GET_SKILL(CH, SKILL_DATA_BROKERAGE))
+    else if (d->edit_matrix_file->file_type == SOFT_EVALUATE && number > GET_SKILL(CH, SKILL_DATA_BROKERAGE))
       send_to_char(CH, "You can't create an evaluate program of a higher rating than your data brokerage skill.\r\n"
                    "Enter Rating: ");
-    else if (GET_DESIGN_PROGRAM(d->edit_obj) > SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER))
+    else if (d->edit_matrix_file->file_type > SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER))
       send_to_char(CH, "You can't create a program of a higher rating than your computer skill.\r\n"
                    "Enter Rating: ");
-    else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_RESPONSE && number > 3)
+    else if (d->edit_matrix_file->file_type == SOFT_RESPONSE && number > 3)
       send_to_char("You can't create a response increase of a rating higher than 3.\r\nEnter Rating: ", CH);
     else {
-      GET_DESIGN_RATING(d->edit_obj) = number;
+      d->edit_matrix_file->rating = number;
       pedit_disp_menu(d);
     }
     break;
@@ -178,8 +178,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       return;
     }
 
-    DELETE_ARRAY_IF_EXTANT(d->edit_obj->restring);
-    d->edit_obj->restring = str_dup(arg);
+    d->edit_matrix_file->name = str_dup(arg);
     pedit_disp_menu(d);
     break;
   }
@@ -187,7 +186,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     if (number < LIGHT || number > DEADLY)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = number;
+      d->edit_matrix_file->attack_damage = number;
       pedit_disp_menu(d);
     }
     break;
@@ -195,27 +194,18 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 1 || number >= NUM_PROGRAMS)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      GET_DESIGN_PROGRAM(d->edit_obj) = number;
-      GET_DESIGN_RATING(d->edit_obj) = 1;
+      d->edit_matrix_file->file_type = number;
+      d->edit_matrix_file->rating = 1;
 
-      if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
+      if (d->edit_matrix_file->file_type == SOFT_ATTACK) {
         // Default to Deadly damage.
-        GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = DEADLY;
+        d->edit_matrix_file->attack_damage = DEADLY;
       }
 
       pedit_disp_menu(d);
     }
     break;
   }
-}
-
-void create_program(struct char_data *ch)
-{
-  struct obj_data *design = read_object(OBJ_BLANK_PROGRAM_DESIGN, VIRTUAL, OBJ_LOAD_REASON_CREATE_PROGRAM);
-  STATE(ch->desc) = CON_PRO_CREATE;
-  design->restring = str_dup("a blank program");
-  ch->desc->edit_obj = design;
-  pedit_disp_menu(ch->desc);
 }
 
 struct obj_data *can_program(struct char_data *ch)
@@ -245,6 +235,19 @@ struct obj_data *can_program(struct char_data *ch)
     return comp;
   }
   return NULL;
+}
+
+void create_program(struct char_data *ch)
+{
+  obj_data *deck = can_program(ch);
+  if (!deck)
+    return;
+
+  struct matrix_file *design = create_matrix_file(deck, OBJ_LOAD_REASON_CREATE_PROGRAM);
+  STATE(ch->desc) = CON_PRO_CREATE;
+  design->name = str_dup("a blank program");
+  ch->desc->edit_matrix_file = design;
+  pedit_disp_menu(ch->desc);
 }
 
 int get_program_skill(char_data *ch, obj_data *prog, int target)

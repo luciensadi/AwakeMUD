@@ -41,6 +41,10 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
   for (int i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
       found_list.push_back(GET_EQ(ch, i));
+  // Decking accessories / computers
+  for (cyber = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; cyber; cyber = cyber->next_content)
+    if (GET_OBJ_TYPE(cyber) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cyber) == TYPE_COMPUTER)
+      found_list.push_back(cyber);  
 
   // Deduplicating any repeat pointers.
   std::unordered_set<obj_data*> unique_set(found_list.begin(), found_list.end());
@@ -48,7 +52,7 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
   return found_list;
 }
 
-matrix_file* new_program(obj_data *storage, int load_origin) {
+matrix_file* create_matrix_file(obj_data *storage, int load_origin) {
   struct matrix_file *new_file = new matrix_file();
   new_file->load_origin = load_origin;
   new_file->in_obj = storage;
@@ -199,7 +203,7 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    There are no files on this device.\r\n");
     } else {
       for (struct matrix_file *file = device->files; file; file = file->next_file) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    [ ^g%4d^nmp ] %s\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    [^g%4d^nmp] %s\r\n",
               file->size,
               file->name);
       }
