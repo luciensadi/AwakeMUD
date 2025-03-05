@@ -4728,31 +4728,6 @@ bool get_and_deduct_one_crafting_token_from_char(struct char_data *ch) {
   return FALSE;
 }
 
-// States whether a program can be copied or not.
-bool program_can_be_copied(struct obj_data *prog) {
-  if (!prog || GET_OBJ_TYPE(prog) != ITEM_PROGRAM)
-    return FALSE;
-
-  switch (GET_PROGRAM_TYPE(prog)) {
-    case SOFT_ASIST_COLD:
-    case SOFT_ASIST_HOT:
-    case SOFT_HARDENING:
-    case SOFT_ICCM:
-    case SOFT_ICON:
-    case SOFT_MPCP:
-    case SOFT_REALITY:
-    case SOFT_RESPONSE:
-    case SOFT_BOD:
-    case SOFT_SENSOR:
-    case SOFT_MASKING:
-    case SOFT_EVASION:
-    case SOFT_SUITE:
-      return FALSE;
-  }
-
-  return TRUE;
-}
-
 struct obj_data *get_obj_proto_for_vnum(vnum_t vnum) {
   if (vnum <= 0)
     return NULL;

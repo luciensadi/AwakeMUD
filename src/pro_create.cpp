@@ -478,46 +478,6 @@ ACMD(do_program)
   GET_BUILDING(ch) = prog;
 }
 
-ACMD(do_copy)
-{
-  struct obj_data *comp, *prog;
-
-  FAILURE_CASE(!*argument, "What program do you want to copy?");
-
-  if (!(comp = can_program(ch)))
-    return;
-
-  skip_spaces(&argument);
-
-  for (prog = comp->contains; prog; prog = prog->next_content) {
-    if (GET_OBJ_TYPE(prog) != ITEM_PROGRAM)
-      continue;
-
-    if (isname(argument, prog->text.keywords) || isname(argument, get_string_after_color_code_removal(prog->restring, ch)))
-      break;
-  }
-
-
-  FAILURE_CASE(!prog, "The program isn't on that computer.");
-  FAILURE_CASE(GET_OBJ_TIMER(prog), "You can't copy from an optical chip.");
-  FAILURE_CASE(GET_PROGRAM_SIZE(prog) > GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(comp) - GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(comp), "There isn't enough space on there to copy that.");
-  FAILURE_CASE(!program_can_be_copied(prog), "You can't copy this program.");
-
-  GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(comp) += GET_PROGRAM_SIZE(prog);
-
-  // Create the new program.
-  struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_COPY_PROGRAM);
-  newp->restring = str_dup(GET_OBJ_NAME(prog));
-  GET_PROGRAM_TYPE(newp) = GET_PROGRAM_TYPE(prog);
-  GET_PROGRAM_RATING(newp) = GET_PROGRAM_RATING(prog);
-  GET_PROGRAM_SIZE(newp) = GET_PROGRAM_SIZE(prog);
-  GET_PROGRAM_ATTACK_DAMAGE(newp) = GET_PROGRAM_ATTACK_DAMAGE(prog);
-
-  // Load it into the computer.
-  obj_to_obj(newp, comp);
-  send_to_char(ch, "You copy %s.\r\n", GET_OBJ_NAME(prog));
-}
-
 #undef CH
 #define CH desc->character
 #define PROG GET_BUILDING(CH)

@@ -33,6 +33,7 @@
 #include "vehicles.hpp"
 #include "newmail.hpp"
 #include "player_exdescs.hpp"
+#include "matrix_storage.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -344,6 +345,41 @@ void advance_level(struct char_data * ch)
   snprintf(buf, sizeof(buf), "%s [%s] advanced to %s.",
           GET_CHAR_NAME(ch), ch->desc && *ch->desc->host ? ch->desc->host : "<no host>", status_ratings[(int)GET_LEVEL(ch)]);
   mudlog(buf, ch, LOG_MISCLOG, TRUE);
+}
+
+bool load_obj_programs(obj_data *obj)
+{
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
+  struct matrix_file *file;
+
+  #define MATRIX_FILE_IDNUM row[0]
+  #define MATRIX_FILE_NAME row[1]
+  #define MATRIX_FILE_STORAGE row[2]
+  #define MATRIX_FILE_RATING row[3]
+  #define MATRIX_FILE_TYPE row[4]
+  #define MATRIX_FILE_SIZE row[5]
+
+  snprintf(buf, sizeof(buf), "SELECT * FROM matrix_files WHERE storage_idnum=%ld;", obj->idnum);
+  mysql_wrapper(mysql, buf);
+  res = mysql_use_result(mysql);
+  while ((row = mysql_fetch_row(res))) {
+    file = new matrix_file();  // Dynamically allocate memory for the new struct
+
+    file->name = strdup(MATRIX_FILE_NAME); // Duplicate the string to avoid issues
+    file->storage_idnum = atol(MATRIX_FILE_STORAGE);
+    file->rating = atoi(MATRIX_FILE_RATING);
+    file->file_type = atoi(MATRIX_FILE_TYPE);
+    file->size = atoi(MATRIX_FILE_SIZE);
+    file->idnum = atol(MATRIX_FILE_IDNUM);
+
+    file->in_obj = obj;
+    file->next_file = obj->files;
+    obj->files = file;
+  }
+
+  return TRUE;
 }
 
 bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
@@ -1042,6 +1078,8 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
         GET_OBJ_IDNUM(obj) = strtoul(PFILES_INV_OBJ_IDNUM, NULL, 0);
 
         auto_repair_obj(obj, GET_IDNUM(ch));
+
+        load_obj_programs(obj);
 
         // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
         // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
@@ -2597,10 +2635,6 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
                 GET_PART_BUILDER_IDNUM(obj) = 0;
                 break;
             }
-          }
-          // Personas don't take up storage in store-bought decks (personas are not programs in custom decks)
-          if ((GET_OBJ_TYPE(installed) == ITEM_PROGRAM) && !((GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(installed) <= SOFT_SENSOR))) {
-            GET_CYBERDECK_USED_STORAGE(obj) += GET_PROGRAM_SIZE(installed);
           }
         }
         if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {

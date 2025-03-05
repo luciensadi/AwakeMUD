@@ -499,112 +499,112 @@ void create_deck(struct char_data *ch) {
 
 }
 
-ACMD(do_cook) {
-    struct obj_data *chip = NULL, *cooker;
-    skip_spaces(&argument);
-    if (!*argument) {
-        send_to_char(ch, "What chip do you wish to burn?\r\n");
-        return;
-    }
-    if (ch->in_veh) {
-      if (ch->vfront) {
-        send_to_char("There's not enough space up here-- try switching to the rear of the vehicle.\r\n", ch);
-        return;
-      } else if (!ch->in_veh->flags.IsSet(VFLAG_WORKSHOP)) {
-        send_to_char("This vehicle doesn't have any power outlets for you to use.\r\n", ch);
-        return;
-      }
-    }
-    struct obj_data *comp;
-    FOR_ITEMS_AROUND_CH(ch, comp) {
-      if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == TYPE_COMPUTER && comp->contains)
-        if ((chip = get_obj_in_list_vis(ch, argument, comp->contains)))
-          break;
-    }
-    if (!chip)
-        send_to_char(ch, "You don't see %s installed on any computers here.\r\n", argument);
-    else if (GET_OBJ_TYPE(chip) != ITEM_PROGRAM)
-        send_to_char(ch, "You must finish programming %s first.\r\n", GET_OBJ_NAME(chip));
-    else if (GET_OBJ_TIMER(chip))
-        send_to_char("This chip has already been encoded.\r\n", ch);
-    else if (GET_OBJ_VAL(chip, 0) == SOFT_SUITE)
-      send_to_char("Programming suites don't need to be cooked-- just leave them installed on the computer to get their benefits.\r\n", ch);
-    else {
-      FOR_ITEMS_AROUND_CH(ch, cooker) {
-          if (GET_OBJ_TYPE(cooker) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cooker, 0) == TYPE_COOKER && !cooker->contains)
-              break;
-      }
-      if (!cooker) {
-          send_to_char(ch, "There isn't a free chip encoder here.\r\n");
-          return;
-      }
-      int cost = GET_OBJ_VAL(chip, 2) / 2, paid = 0;
-      struct obj_data *obj;
-      FOR_ITEMS_AROUND_CH(ch, obj) {
-          if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
-              GET_OBJ_COST(obj) -= cost;
-              if (!GET_OBJ_COST(obj))
-                  extract_obj(obj);
-              paid = 1;
-              break;
-          }
-      }
-      if (!paid)
-          for (struct obj_data *obj = ch->carrying;obj; obj = obj->next_content)
-              if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
-                  GET_OBJ_COST(obj) -= cost;
-                  if (!GET_OBJ_COST(obj))
-                      extract_obj(obj);
-                  paid = 1;
-                  break;
-              }
-      if (!paid) {
-          send_to_char(ch, "You need at least %d nuyen worth of optical chips to encode %s.\r\n", cost, GET_OBJ_NAME(chip));
-          return;
-      }
+// ACMD(do_cook) {
+//     struct obj_data *chip = NULL, *cooker;
+//     skip_spaces(&argument);
+//     if (!*argument) {
+//         send_to_char(ch, "What chip do you wish to burn?\r\n");
+//         return;
+//     }
+//     if (ch->in_veh) {
+//       if (ch->vfront) {
+//         send_to_char("There's not enough space up here-- try switching to the rear of the vehicle.\r\n", ch);
+//         return;
+//       } else if (!ch->in_veh->flags.IsSet(VFLAG_WORKSHOP)) {
+//         send_to_char("This vehicle doesn't have any power outlets for you to use.\r\n", ch);
+//         return;
+//       }
+//     }
+//     struct obj_data *comp;
+//     FOR_ITEMS_AROUND_CH(ch, comp) {
+//       if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == TYPE_COMPUTER && comp->contains)
+//         if ((chip = get_obj_in_list_vis(ch, argument, comp->contains)))
+//           break;
+//     }
+//     if (!chip)
+//         send_to_char(ch, "You don't see %s installed on any computers here.\r\n", argument);
+//     else if (GET_OBJ_TYPE(chip) != ITEM_PROGRAM)
+//         send_to_char(ch, "You must finish programming %s first.\r\n", GET_OBJ_NAME(chip));
+//     else if (GET_OBJ_TIMER(chip))
+//         send_to_char("This chip has already been encoded.\r\n", ch);
+//     else if (GET_OBJ_VAL(chip, 0) == SOFT_SUITE)
+//       send_to_char("Programming suites don't need to be cooked-- just leave them installed on the computer to get their benefits.\r\n", ch);
+//     else {
+//       FOR_ITEMS_AROUND_CH(ch, cooker) {
+//           if (GET_OBJ_TYPE(cooker) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cooker, 0) == TYPE_COOKER && !cooker->contains)
+//               break;
+//       }
+//       if (!cooker) {
+//           send_to_char(ch, "There isn't a free chip encoder here.\r\n");
+//           return;
+//       }
+//       int cost = GET_OBJ_VAL(chip, 2) / 2, paid = 0;
+//       struct obj_data *obj;
+//       FOR_ITEMS_AROUND_CH(ch, obj) {
+//           if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
+//               GET_OBJ_COST(obj) -= cost;
+//               if (!GET_OBJ_COST(obj))
+//                   extract_obj(obj);
+//               paid = 1;
+//               break;
+//           }
+//       }
+//       if (!paid)
+//           for (struct obj_data *obj = ch->carrying;obj; obj = obj->next_content)
+//               if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
+//                   GET_OBJ_COST(obj) -= cost;
+//                   if (!GET_OBJ_COST(obj))
+//                       extract_obj(obj);
+//                   paid = 1;
+//                   break;
+//               }
+//       if (!paid) {
+//           send_to_char(ch, "You need at least %d nuyen worth of optical chips to encode %s.\r\n", cost, GET_OBJ_NAME(chip));
+//           return;
+//       }
 
-      /* Instead of removing the software from the machine, we copy it instead if it's a cookable copyable thing. */
-      if (program_can_be_copied(chip)) {
-        struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_COOK_PROGRAM);
-        newp->restring = str_dup(GET_OBJ_NAME(chip));
-        GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(chip, 0);
-        GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(chip, 1);
-        GET_OBJ_VAL(newp, 2) = GET_OBJ_VAL(chip, 2);
-        GET_OBJ_VAL(newp, 3) = GET_OBJ_VAL(chip, 3);
-        chip = newp;
-        send_to_char("You save a copy to disk before sending it to your cooker.\r\n", ch);
-      } else {
-        // Can't be copied? OK, use the old behavior of removing the item.
-        GET_OBJ_VAL(chip->in_obj, 3) -= GET_OBJ_VAL(chip, 2);
-        obj_from_obj(chip);
-        send_to_char(ch, "%s is too bespoke to be useful for a different deck, so you send it to your cooker without copying it first.\r\n", capitalize(GET_OBJ_NAME(chip)));
-      }
+//       /* Instead of removing the software from the machine, we copy it instead if it's a cookable copyable thing. */
+//       if (program_can_be_copied(chip)) {
+//         struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_COOK_PROGRAM);
+//         newp->restring = str_dup(GET_OBJ_NAME(chip));
+//         GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(chip, 0);
+//         GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(chip, 1);
+//         GET_OBJ_VAL(newp, 2) = GET_OBJ_VAL(chip, 2);
+//         GET_OBJ_VAL(newp, 3) = GET_OBJ_VAL(chip, 3);
+//         chip = newp;
+//         send_to_char("You save a copy to disk before sending it to your cooker.\r\n", ch);
+//       } else {
+//         // Can't be copied? OK, use the old behavior of removing the item.
+//         GET_OBJ_VAL(chip->in_obj, 3) -= GET_OBJ_VAL(chip, 2);
+//         obj_from_obj(chip);
+//         send_to_char(ch, "%s is too bespoke to be useful for a different deck, so you send it to your cooker without copying it first.\r\n", capitalize(GET_OBJ_NAME(chip)));
+//       }
 
-      obj_to_obj(chip, cooker);
+//       obj_to_obj(chip, cooker);
 
-      int target = 4;
-      int skill = get_skill(ch, SKILL_BR_COMPUTER, target) + MIN(GET_SKILL(ch, SKILL_BR_COMPUTER), GET_DECK_ACCESSORY_COOKER_RATING(cooker));
-      int success = success_test(skill, target);
-      if (success < 1) {
-          success = srdice() + srdice();
-          GET_OBJ_TIMER(chip) = -1;
-      }
-      GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker) = (GET_OBJ_VAL(chip, 1) * 24) / success;
-      if (get_and_deduct_one_crafting_token_from_char(ch)) {
-        send_to_char("A crafting token fuzzes into digital static, greatly accelerating the cooking time.\r\n", ch);
-        GET_OBJ_TIMER(chip) = 0;
-        GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker) = 1;
-      }
-      else if (access_level(ch, LVL_ADMIN)) {
-        send_to_char("You use your admin powers to greatly accelerate the cooking time.\r\n", ch);
-        GET_OBJ_TIMER(chip) = 0;
-        GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker) = 1;
-      }
-      GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(cooker) = GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker);
-      act("The light on $p turns orange as it starts to cook the chip.", TRUE, ch, cooker, 0, TO_ROOM);
-      act("The light on $p turns orange as it starts to cook the chip.", TRUE, ch, cooker, 0, TO_CHAR);
-    }
-}
+//       int target = 4;
+//       int skill = get_skill(ch, SKILL_BR_COMPUTER, target) + MIN(GET_SKILL(ch, SKILL_BR_COMPUTER), GET_DECK_ACCESSORY_COOKER_RATING(cooker));
+//       int success = success_test(skill, target);
+//       if (success < 1) {
+//           success = srdice() + srdice();
+//           GET_OBJ_TIMER(chip) = -1;
+//       }
+//       GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker) = (GET_OBJ_VAL(chip, 1) * 24) / success;
+//       if (get_and_deduct_one_crafting_token_from_char(ch)) {
+//         send_to_char("A crafting token fuzzes into digital static, greatly accelerating the cooking time.\r\n", ch);
+//         GET_OBJ_TIMER(chip) = 0;
+//         GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker) = 1;
+//       }
+//       else if (access_level(ch, LVL_ADMIN)) {
+//         send_to_char("You use your admin powers to greatly accelerate the cooking time.\r\n", ch);
+//         GET_OBJ_TIMER(chip) = 0;
+//         GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker) = 1;
+//       }
+//       GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(cooker) = GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(cooker);
+//       act("The light on $p turns orange as it starts to cook the chip.", TRUE, ch, cooker, 0, TO_ROOM);
+//       act("The light on $p turns orange as it starts to cook the chip.", TRUE, ch, cooker, 0, TO_CHAR);
+//     }
+// }
 
 void part_design(struct char_data *ch, struct obj_data *part) {
 

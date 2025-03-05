@@ -19,6 +19,7 @@
 #include "newhouse.hpp"
 #include "quest.hpp"
 #include "newmatrix.hpp"
+#include "matrix_storage.hpp"
 
 extern struct otaku_echo echoes[];
 
@@ -194,23 +195,18 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
     }
 
     if (!best_form) continue; // We don't have this form
-    struct obj_data *active = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_OTAKU_RESONANCE);
-    GET_PROGRAM_TYPE(active) = GET_COMPLEX_FORM_PROGRAM(best_form);
-    GET_PROGRAM_SIZE(active) = 0; // Complex forms don't take up memory.
-    GET_PROGRAM_ATTACK_DAMAGE(active) = GET_COMPLEX_FORM_WOUND_LEVEL(best_form);
-    GET_PROGRAM_IS_DEFAULTED(active) = TRUE;
-    GET_OBJ_TIMER(active) = 1;
+    struct matrix_file *active = new_program(new_deck, OBJ_LOAD_REASON_OTAKU_RESONANCE);
+    active->file_type = GET_COMPLEX_FORM_PROGRAM(best_form);
+    active->size = 0; // Complex forms don't take up memory.
+    active->attack_damage = GET_COMPLEX_FORM_WOUND_LEVEL(best_form);
+    active->is_defaulted = TRUE;
 
-    GET_PROGRAM_RATING(active) = GET_COMPLEX_FORM_RATING(best_form);
+    active->rating = GET_COMPLEX_FORM_RATING(best_form);
 
     // Cyberadepts get +1 to Complex Forms
-    if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) GET_PROGRAM_RATING(active) += 1;
+    if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) active->rating += 1;
 
-    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_RESONANCE);
-    active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
-
-    active->restring = str_dup(GET_OBJ_NAME(best_form));
-    obj_to_obj(active, new_deck);
+    active->name = str_dup(GET_OBJ_NAME(best_form));
   }
 
   char restring[500];

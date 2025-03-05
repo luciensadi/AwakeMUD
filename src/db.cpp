@@ -4856,33 +4856,6 @@ void reset_zone(int zone, int reboot)
           last_cmd = 0;
       }
       break;
-    case 'H':                 /* loads a Matrix file into a host */
-      // Count the existing items in this host
-      {
-        // Log annoyingly if this is a bitshifted snowflake key.
-        if (GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]) == OBJ_SNOWFLAKE_KEY && matrix[ZCMD.arg3].vnum != HOST_SNOWFLAKE_KEY_LOCATION) {
-          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Bitshift happened! The snowflake key is attempting to load in inappropriate host %ld. Redirecting to proper host.", matrix[ZCMD.arg3].vnum);
-          rnum_t actual_snowhost_rnum = real_host(HOST_SNOWFLAKE_KEY_LOCATION);
-          if (actual_snowhost_rnum >= 0)
-            ZCMD.arg3 = actual_snowhost_rnum;
-          else
-            mudlog("SYSERR: Never mind, proper host doesn't exist, guess we'll just gargle donkey balls today", NULL, LOG_SYSLOG, TRUE);
-        }
-
-        int already_there = 0;
-        for (struct obj_data *contents = matrix[ZCMD.arg3].file; contents; contents = contents->next_content) {
-          if (GET_OBJ_VNUM(contents) == GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]))
-            already_there++;
-        }
-
-        if ((already_there < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-            (ZCMD.arg2 == 0 && reboot)) {
-          obj_to_host(read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD), &matrix[ZCMD.arg3]);
-          last_cmd = 1;
-        } else
-          last_cmd = 0;
-      }
-      break;
     case 'O':                 /* read an object */
       {
         bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
