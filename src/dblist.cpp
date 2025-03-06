@@ -443,6 +443,20 @@ void objList::UpdateCounters(void)
             )
         )
     {
+      // Don't steal food and drinks from bar scenes
+      bool do_delete = TRUE;
+      if ((GET_OBJ_TYPE(OBJ) == ITEM_FOOD || GET_OBJ_TYPE(OBJ) == ITEM_DRINKCON) && OBJ->in_room->people) {
+        for (struct char_data *tmp_ch = OBJ->in_room->people; tmp_ch; tmp_ch = tmp_ch->next_in_room) {
+          if (!IS_NPC(tmp_ch)) {
+            do_delete = FALSE;
+            break;
+          }
+        }
+      }
+      if (!do_delete) {
+        continue;
+      }
+
       const char *representation = generate_new_loggable_representation(OBJ);
 #ifndef EXPIRE_STRAY_ITEMS
       mudlog_vfprintf(NULL, LOG_MISCLOG, "Item %s @ %s (%ld) WOULD HAVE been cleaned up by expiration logic.", representation, GET_ROOM_NAME(OBJ->in_room), GET_ROOM_VNUM(OBJ->in_room));

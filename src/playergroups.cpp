@@ -258,20 +258,20 @@ struct pgroup_cmd_struct {
 } pgroup_commands[] = {                                     /* !founded   founded   pocsec    while-dis secret    cmd_disabled */
   { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE   , TRUE    , FALSE   , FALSE   , FALSE   , FALSE   , "Used to abdicate leadership of a group. The highest-ranked person in the group besides the leader will be chosen as the interim leader (a coin flip breaks ties)." },
   { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Shows the balance of the group's accounts." },
-  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "tbd" },
+  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "Buy something on behalf of the group (e.g. a vehicle)." },
   { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "Contest for leadership of the group. This goes to a vote, with each voter's rank in the group determining how many votes they have." },
   { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Creates a group and puts you into an edit menu for it." },
   { "demote"     , PRIV_ADMINISTRATOR , do_pgroup_demote      , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Demote someone who is below your level." },
   { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE   , TRUE    , FALSE   , FALSE   , FALSE   , FALSE   , "Donate money to the group. It is wired from your account to the group's." },
-  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "tbd" },
+//{ "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "Allows you to build the draft version of your PGHQ." },   <- this one needs SIGNIFICANT design work and discussion
   { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Disband the group. All resources are lost." },
   { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Edit the group using the same menu as when it was founded." },
   { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE    , FALSE   , TRUE    , FALSE   , FALSE   , FALSE   , "You should not see this message." },
   { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Grant a privilege you have to another member. Use ^WPGROUP PRIVILEGES FULL^n to see your privs and their effects." },
   { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , FALSE   , "The help system. ^WPGROUP HELP^n for general info, ^WPGROUP HELP [command]^n for command-specific info." },
   { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Send an invite to someone. This enables them to join your group for the next seven days." },
-  { "invitations", PRIV_RECRUITER     , do_pgroup_invitations , TRUE    , TRUE    , TRUE    , FALSE   , TRUE    , TRUE    , "tbd" },
-  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "tbd" },
+  { "invitations", PRIV_RECRUITER     , do_pgroup_invitations , TRUE    , TRUE    , TRUE    , FALSE   , TRUE    , TRUE    , "See and edit the existing invitations that have been sent out." },
+  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "Allows you to lease an apartment on the group's behalf. Lease cannot be prepaid; instead, cost is auto-deducted from the group's bank account each month." },
   { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Show the group's logs. You can change the number of days shown with ^WPGROUP LOGS [number of days]^n. Note that if the group is secret, you won't get the full logs without being a Co-Conspirator." },
   { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , FALSE   , "Leave a note in the logs. Spamming or abusing this command will incur staff displeasure." },
   { "outcast"    , PRIV_ADMINISTRATOR , do_pgroup_outcast     , TRUE    , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Eject someone from the group." },
@@ -281,12 +281,12 @@ struct pgroup_cmd_struct {
   { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE   , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Revoke someone's granted privileges. Use ^WPGROUP PRIVILEGES FULL^n to see your privs and their effects." },
   { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE    , TRUE    , TRUE    , FALSE   , TRUE    , FALSE   , "Show the current membership. If the group is secret, this also requires the Co-Conspirator privilege." },
   { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE    , TRUE    , TRUE    , TRUE    , FALSE   , FALSE   , "Show an overview of the group." },
-  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "tbd" },
-  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "tbd" },
+//{ "syspoints"  , PRIV_NONE          , do_pgroup_syspoints   , FALSE   , TRUE    , FALSE   , FALSE   , FALSE   , TRUE    , "Allows viewing and donating syspoints." },
+  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "Transfer ownership of a group-owned asset (vehicle, etc) to another PC." },
+  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE   , TRUE    , TRUE    , FALSE   , FALSE   , TRUE    , "Cast your vote on any referendum before the group." },
   { "wire"       , PRIV_TREASURER     , do_pgroup_wire        , FALSE   , TRUE    , FALSE   , FALSE   , FALSE   , FALSE   , "Wire nuyen from the group's treasury to a player. You must provide a reason for the transfer." },
   { "\n"         , 0                  , 0                     , FALSE   , TRUE    , FALSE   , FALSE   , FALSE   , FALSE   , "" } // This must be last.
 };                                                          /* !founded founded pocsec disabld secret */
-
 
 /* Main Playergroup Command */
 ACMD(do_pgroup) {

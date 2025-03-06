@@ -4141,6 +4141,10 @@ ACMD(do_zreset)
 
 ACMD(do_wiztitle)
 {
+#ifdef IS_BUILDPORT
+  send_to_char("Titles are disabled on the buildport.\r\n", ch);
+  return;
+#else
   if (IS_NPC(ch))
     send_to_char("Your title is fine... go away.\r\n", ch);
   else if (PLR_FLAGGED(ch, PLR_NOTITLE))
@@ -4177,6 +4181,7 @@ ACMD(do_wiztitle)
       mysql_wrapper(mysql, buf);
     }
   }
+#endif
 }
 
 /*
@@ -5910,6 +5915,9 @@ ACMD(do_set)
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_INVSTART);
     break;
   case 2:
+#ifdef IS_BUILDPORT
+    FAILURE_CASE(!access_level(ch, LVL_ADMIN), "Titles are disabled on the buildport.");
+#endif
     set_title(vict, val_arg);
     snprintf(buf, sizeof(buf), "%s's title is now: %s", GET_NAME(vict), GET_TITLE(vict));
     break;
@@ -6258,9 +6266,15 @@ ACMD(do_set)
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NOSTAT);
     break;
   case 51:
+#ifdef IS_BUILDPORT
+    FAILURE_CASE(!access_level(ch, LVL_ADMIN), "Titles are disabled on the buildport.");
+#endif
     set_pretitle(vict, val_arg);
     break;
   case 52:
+#ifdef IS_BUILDPORT
+    FAILURE_CASE(!access_level(ch, LVL_ADMIN), "Titles are disabled on the buildport.");
+#endif
     if (strstr((const char *)val_arg, "^")) {
       send_to_char("Whotitles can't contain the ^^ character.\r\n", ch);
       SET_CLEANUP(false);

@@ -360,6 +360,10 @@ ACMD(do_title)
   skip_spaces(&argument);
   delete_doubledollar(argument);
 
+#ifdef IS_BUILDPORT
+  send_to_char("Titles are disabled on the buildport.\r\n", ch);
+  return;
+#else
   if (IS_NPC(ch))
     send_to_char("Your title is fine... go away.\r\n", ch);
   else if (PLR_FLAGGED(ch, PLR_NOTITLE))
@@ -378,6 +382,7 @@ ACMD(do_title)
     snprintf(buf, sizeof(buf), "UPDATE pfiles SET Title='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_TITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
   }
+#endif
 }
 
 int perform_group(struct char_data *ch, struct char_data *vict)
