@@ -354,29 +354,55 @@ bool load_obj_programs(obj_data *obj)
 
   struct matrix_file *file;
 
-  #define MATRIX_FILE_IDNUM row[0]
-  #define MATRIX_FILE_NAME row[1]
-  #define MATRIX_FILE_STORAGE row[2]
-  #define MATRIX_FILE_RATING row[3]
-  #define MATRIX_FILE_TYPE row[4]
-  #define MATRIX_FILE_SIZE row[5]
+  #define MATRIX_FILE_IDNUM               row[0]
+  #define MATRIX_FILE_NAME                row[1]
+  #define MATRIX_FILE_TYPE                row[2]
+  #define MATRIX_FILE_RATING              row[3]
+  #define MATRIX_FILE_SIZE                row[4]
+  #define MATRIX_FILE_ATTACK_DAMAGE       row[5]
+  #define MATRIX_FILE_IS_DEFAULT          row[6]
+  #define MATRIX_FILE_CREATION_TIME       row[7]
+  #define MATRIX_FILE_WORK_PHASE          row[8]
+  #define MATRIX_FILE_TICKS_LEFT          row[9]
+  #define MATRIX_FILE_ORIGINAL_TICKS_LEFT row[10]
+  #define MATRIX_FILE_WORK_SUCCESSES      row[11]
+  #define MATRIX_FILE_LAST_DECAY_TIME     row[12]
+  #define MATRIX_FILE_CREATOR_IDNUM       row[13]
+  #define MATRIX_FILE_IN_OBJ_IDNUM        row[14]
 
-  snprintf(buf, sizeof(buf), "SELECT * FROM matrix_files WHERE storage_idnum=%ld;", obj->idnum);
+  snprintf(buf, sizeof(buf), "SELECT * FROM matrix_files WHERE in_obj_idnum=%ld;", obj->idnum);
   mysql_wrapper(mysql, buf);
-  res = mysql_use_result(mysql);
+   if (!(res = mysql_use_result(mysql))) {
+    mysql_free_result(res);
+    return FALSE;
+  }
   while ((row = mysql_fetch_row(res))) {
     file = new matrix_file();  // Dynamically allocate memory for the new struct
 
-    file->name = strdup(MATRIX_FILE_NAME); // Duplicate the string to avoid issues
-    file->rating = atoi(MATRIX_FILE_RATING);
-    file->file_type = atoi(MATRIX_FILE_TYPE);
-    file->size = atoi(MATRIX_FILE_SIZE);
     file->idnum = atol(MATRIX_FILE_IDNUM);
+    file->name = strdup(MATRIX_FILE_NAME); 
+    file->file_type = atoi(MATRIX_FILE_TYPE);
+    file->rating = atoi(MATRIX_FILE_RATING);
+    file->size = atoi(MATRIX_FILE_SIZE);
+    file->attack_damage = atoi(MATRIX_FILE_ATTACK_DAMAGE);
+    file->is_default = atoi(MATRIX_FILE_IS_DEFAULT);
+    file->creation_time = atol(MATRIX_FILE_CREATION_TIME);
+    
+    file->work_phase = atoi(MATRIX_FILE_WORK_PHASE);
+    file->work_ticks_left = atoi(MATRIX_FILE_TICKS_LEFT);
+    file->work_original_ticks_left = atoi(MATRIX_FILE_ORIGINAL_TICKS_LEFT);
+    file->work_successes = atoi(MATRIX_FILE_WORK_SUCCESSES);
+    
+    file->last_decay_time = atol(MATRIX_FILE_LAST_DECAY_TIME);
+    file->creator_idnum = atol(MATRIX_FILE_CREATOR_IDNUM);
 
     file->in_obj = obj;
     file->next_file = obj->files;
     obj->files = file;
   }
+
+   // **FREE THE RESULT SET BEFORE RETURNING**
+  mysql_free_result(res);
 
   return TRUE;
 }
@@ -1078,8 +1104,6 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
 
         auto_repair_obj(obj, GET_IDNUM(ch));
 
-        load_obj_programs(obj);
-
         // Since we're now reading rows from the db in reverse order, in order to fix the stupid reordering on
         // every binary execution, the previous algorithm did not work, as it relied on getting the container obj
         // first and place subsequent objects in it. Since we're now getting it last, and more importantly we get
@@ -1129,6 +1153,8 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
       mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
     mysql_free_result(res);
+
+    load_obj_programs(obj);
   }
 
   // Load bullet pants.
@@ -1461,14 +1487,16 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   mysql_wrapper(mysql, buf);
 
   /* Matrix files are persisted in a separate table. Save that data. */
-  snprintf(buf, sizeof(buf), ""); // Clear buffer
   for (temp = player->carrying; temp; temp = next_obj) {
     next_obj = temp->next_content;
     // We always clear out entries since this is a one-to-many table
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "DELETE FROM `matrix_files` WHERE in_obj_idnum=%ld; ", temp->idnum);
+    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE in_obj_idnum=%ld; ", temp->idnum);
+    mysql_wrapper(mysql, buf);
+    snprintf(buf, sizeof(buf), ""); // Clear buffer
+
     if (!temp->files) continue;
     for (struct matrix_file *file = temp->files; file; file = file->next_file) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "INSERT INTO `matrix_files` (idnum, in_obj_idnum, name, "\
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "INSERT INTO matrix_files (idnum, in_obj_idnum, name, "\
       "file_type, rating, size, attack_damage, is_default, last_decay_time, creation_time, "\
       "creator_idnum, work_ticks_left, work_original_ticks_left, "\
       "work_phase, work_successes) "\

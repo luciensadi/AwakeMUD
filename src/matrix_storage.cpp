@@ -10,6 +10,7 @@
 #include "newmatrix.hpp"
 #include "db.hpp"
 #include "handler.hpp"
+#include "constants.hpp"
 
 // Function to get a unique ID
 std::atomic<long> matrix_file_id_counter{1};
@@ -210,17 +211,18 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    There are no files on this device.\r\n");
     } else {
       for (struct matrix_file *file = device->files; file; file = file->next_file) {
-        char* tag;
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    [^g%4d^nmp] %-30s", file->size, file->name);
         if (file->file_type) {
-          if (file->work_phase < WORK_PHASE_PROGRAM)
-            tag = "(design)";
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " R%-2d %-16s", file->rating, programs[file->file_type].name);
+
+          if (file->work_failed == WORK_PHASE_NONE)
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(concept)^n");
+          else if (file->work_phase < WORK_PHASE_PROGRAM)
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(design)^n");
           else
-            tag = "(program)";
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(program)^n");
         }
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    [^g%4d^nmp] %-30s %s\r\n",
-              file->size,
-              file->name,
-              tag ? tag : "");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
       }
     }
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Storage Memory: %d free of %d total\r\n\r\n",
