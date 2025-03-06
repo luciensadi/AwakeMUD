@@ -281,7 +281,7 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
     } else {
       for (struct matrix_file *file = device->files; file; file = file->next_file) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    [^g%4d^nmp] %-30s", file->size, file->name);
-        if (file->file_type == MATRIX_FILE_PROGRAM) {
+        if (file->file_type == MATRIX_FILE_PROGRAM || file->file_type == MATRIX_FILE_DESIGN) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " R%-2d %-16s", file->rating, programs[file->program_type].name);
 
           if (file->file_type == MATRIX_FILE_DESIGN && file->work_phase <= WORK_PHASE_READY)
