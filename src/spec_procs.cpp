@@ -5680,22 +5680,31 @@ SPECIAL(chargen_skill_annex) {
       return TRUE;
     }
 
-    if (IS_OTAKU(ch) && GET_SKILL(ch, SKILL_COMPUTER) < 6) {
-      send_to_char(ch, "Otakus must have at least a rating 6 in Computers, but your proficiency is only %d. You should ^WPRACTICE^n your Computers before proceeding.\r\n",
-        GET_SKILL(ch, SKILL_COMPUTER));
-      return TRUE;
-    }
+    if (IS_OTAKU(ch)) {
+      if (GET_SKILL(ch, SKILL_COMPUTER) < 6) {
+        send_to_char(ch, "Otakus must have at least a rating 6 in Computers, but your proficiency is only %d. You should ^WPRACTICE^n your Computers before proceeding.\r\n",
+          GET_SKILL(ch, SKILL_COMPUTER));
+        return TRUE;
+      }
 
-    // Block specific to chargen otaku
-    // Otaku channel skills are limited to 6, 5, 4, 3, 3 max.
-    for (int ci=SKILL_CHANNEL_ACCESS; ci <= SKILL_CHANNEL_SLAVE;ci++) {
-      if (REAL_SKILL(ch, ci) <= 3) continue;
-      for (int csi=SKILL_CHANNEL_ACCESS; csi <= SKILL_CHANNEL_SLAVE;csi++) {
-        if (csi == ci) continue; // skip checking the parent skill against itself.
-        if (REAL_SKILL(ch, csi) == REAL_SKILL(ch, ci)) {
-          send_to_char(ch, "You cannot have more than one channel skill at %d for otaku at character generation. Please reduce the value of %s.\r\n",
-            REAL_SKILL(ch, ci), skills[ci].name);
-          return TRUE;
+      for (int i = SKILL_CORPORATE_ETIQUETTE; i <= SKILL_ELF_ETIQUETTE; i++) {
+        if (GET_SKILL(ch, i) > 4) {
+          send_to_char(ch, "Socially maladjusted decker children cannot have an etiquette skill higher than 4. You should ^WUNPRACTICE^n your %s before proceeding.\r\n", skills[i].name);
+          return;
+        }
+      }
+
+      // Block specific to chargen otaku
+      // Otaku channel skills are limited to 6, 5, 4, 3, 3 max.
+      for (int ci=SKILL_CHANNEL_ACCESS; ci <= SKILL_CHANNEL_SLAVE;ci++) {
+        if (REAL_SKILL(ch, ci) <= 3) continue;
+        for (int csi=SKILL_CHANNEL_ACCESS; csi <= SKILL_CHANNEL_SLAVE;csi++) {
+          if (csi == ci) continue; // skip checking the parent skill against itself.
+          if (REAL_SKILL(ch, csi) == REAL_SKILL(ch, ci)) {
+            send_to_char(ch, "You cannot have more than one channel skill at %d for otaku at character generation. Please reduce the value of %s.\r\n",
+              REAL_SKILL(ch, ci), skills[ci].name);
+            return TRUE;
+          }
         }
       }
     }
