@@ -785,7 +785,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       return;
     skill = soft->rating + MIN(GET_MAX_HACKING(icon->decker->ch), GET_REM_HACKING(icon->decker->ch));
     GET_REM_HACKING(icon->decker->ch) -= skill - soft->rating;
-    dam = soft->attack_damage;
+    dam = soft->wound_category;
     power = soft->rating;
   } else
   {

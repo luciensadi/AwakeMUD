@@ -572,7 +572,7 @@ ACMD(do_cook) {
       GET_OBJ_VAL(chip, 0) = design->file_type;
       GET_OBJ_VAL(chip, 1) = design->rating;
       GET_OBJ_VAL(chip, 2) = design->size;
-      GET_OBJ_VAL(chip, 3) = design->attack_damage;
+      GET_OBJ_VAL(chip, 3) = design->wound_category;
       /* Instead of removing the software from the machine, we copy it instead if it's a cookable copyable thing. */
       if (program_can_be_copied(design)) {
         send_to_char("You save a copy to disk before sending it to your cooker.\r\n", ch);

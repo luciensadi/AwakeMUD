@@ -45,8 +45,8 @@ void pedit_disp_menu(struct descriptor_data *d)
   int program_size = d->edit_matrix_file->rating ^ 2;
   if (d->edit_matrix_file->file_type == SOFT_ATTACK) {
     // Attack programs multiply size by a factor determined by wound level.
-    program_size *= attack_multiplier[d->edit_matrix_file->attack_damage];
-    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(d->edit_matrix_file->attack_damage));
+    program_size *= attack_multiplier[d->edit_matrix_file->wound_category];
+    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(d->edit_matrix_file->wound_category));
   } else {
     // Others multiply by a set multiplier based on software type.
     program_size *= programs[d->edit_matrix_file->file_type].multiplier;
@@ -122,7 +122,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
 
       send_to_char(CH, "Design saved!\r\n");
       if (d->edit_matrix_file->file_type == SOFT_ATTACK) {
-        d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating * attack_multiplier[d->edit_matrix_file->attack_damage];
+        d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating * attack_multiplier[d->edit_matrix_file->wound_category];
       } else if (d->edit_matrix_file->file_type == SOFT_RESPONSE) {
         d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating ^ 3;
       } else {
@@ -186,7 +186,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     if (number < LIGHT || number > DEADLY)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      d->edit_matrix_file->attack_damage = number;
+      d->edit_matrix_file->wound_category = number;
       pedit_disp_menu(d);
     }
     break;
@@ -199,7 +199,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
 
       if (d->edit_matrix_file->file_type == SOFT_ATTACK) {
         // Default to Deadly damage.
-        d->edit_matrix_file->attack_damage = DEADLY;
+        d->edit_matrix_file->wound_category = DEADLY;
       }
 
       pedit_disp_menu(d);

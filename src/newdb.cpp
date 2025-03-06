@@ -383,7 +383,7 @@ bool load_obj_programs(obj_data *obj)
     file->file_type = atoi(MATRIX_FILE_TYPE);
     file->rating = atoi(MATRIX_FILE_RATING);
     file->size = atoi(MATRIX_FILE_SIZE);
-    file->attack_damage = atoi(MATRIX_FILE_ATTACK_DAMAGE);
+    file->wound_category = atoi(MATRIX_FILE_ATTACK_DAMAGE);
     file->is_default = atoi(MATRIX_FILE_IS_DEFAULT);
     file->creation_time = atol(MATRIX_FILE_CREATION_TIME);
     
@@ -1168,7 +1168,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
         obj = NULL;
       }
     }
-    
+
     if (obj) load_obj_programs(obj);
   }
 
@@ -1522,7 +1522,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       file->file_type,
       file->rating,
       file->size,
-      file->attack_damage,
+      file->wound_category,
       file->is_default,
       file->last_decay_time,
       file->creation_time,

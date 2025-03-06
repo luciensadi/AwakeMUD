@@ -75,7 +75,7 @@ matrix_file* create_matrix_file(obj_data *storage, int load_origin) {
 matrix_file* obj_to_matrix_file(obj_data *prog) {
   struct matrix_file *new_file = create_matrix_file(prog->in_obj, prog->load_origin);
 
-  new_file->attack_damage = GET_PROGRAM_ATTACK_DAMAGE(prog);
+  new_file->wound_category = GET_PROGRAM_ATTACK_DAMAGE(prog);
   new_file->name = strdup(prog->restring);
   new_file->rating = GET_PROGRAM_RATING(prog);
   new_file->file_type = GET_PROGRAM_TYPE(prog);
