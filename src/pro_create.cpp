@@ -153,7 +153,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_RESPONSE && number > 3)
       send_to_char("You can't create a response increase of a rating higher than 3.\r\nEnter Rating: ", CH);
     else if (number <= 0)
-      send_to_char(CH, "You can't create a program less than 0, you silly bastard.\r\n"
+      send_to_char(CH, "You can't create a program with a rating less than 0..\r\n"
                    "Enter Rating: ");
     else {
       GET_DESIGN_RATING(d->edit_obj) = number;

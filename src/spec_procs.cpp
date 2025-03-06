@@ -5681,18 +5681,21 @@ SPECIAL(chargen_skill_annex) {
     }
 
     if (IS_OTAKU(ch)) {
+      bool is_error = FALSE;
       if (GET_SKILL(ch, SKILL_COMPUTER) < 6) {
         send_to_char(ch, "Otakus must have at least a rating 6 in Computers, but your proficiency is only %d. You should ^WPRACTICE^n your Computers before proceeding.\r\n",
           GET_SKILL(ch, SKILL_COMPUTER));
-        return TRUE;
+        is_error = TRUE;
       }
 
       for (int i = SKILL_CORPORATE_ETIQUETTE; i <= SKILL_ELF_ETIQUETTE; i++) {
         if (GET_SKILL(ch, i) > 4) {
-          send_to_char(ch, "Socially maladjusted decker children cannot have an etiquette skill higher than 4. You should ^WUNPRACTICE^n your %s before proceeding.\r\n", skills[i].name);
-          return TRUE;
+          send_to_char(ch, "Otaku cannot have an etiquette skill higher than 4. You should ^WUNPRACTICE^n your %s before proceeding.\r\n", skills[i].name);
+          is_error = TRUE;
         }
       }
+
+      if (is_error) return is_error;
 
       // Block specific to chargen otaku
       // Otaku channel skills are limited to 6, 5, 4, 3, 3 max.
