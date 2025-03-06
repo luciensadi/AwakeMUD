@@ -127,25 +127,17 @@ matrix_file* obj_to_matrix_file(obj_data *prog) {
 }
 
 obj_data* matrix_file_to_obj(matrix_file *file) {
-  struct obj_data *chip;
+  struct obj_data *chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
+  GET_DECK_ACCESSORY_TYPE(chip) = TYPE_FILE;
   if (file->file_type == MATRIX_FILE_PROGRAM) {
-    chip = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, file->load_origin);
-    snprintf(buf, sizeof(buf), "a R%d %s optical chip", file->rating, capitalize(programs[file->program_type].name));
+    snprintf(buf, sizeof(buf), "a R%d %s '%s' optical chip", file->rating, capitalize(programs[file->program_type].name), file->name);
   } else if (file->file_type == MATRIX_FILE_DESIGN) {
-    chip = read_object(OBJ_BLANK_PROGRAM_DESIGN, VIRTUAL, file->load_origin);
-    snprintf(buf, sizeof(buf), "a R%d %s optical chip", file->rating, capitalize(programs[file->program_type].name));
+    snprintf(buf, sizeof(buf), "a R%d %s '%s' optical chip", file->rating, capitalize(programs[file->program_type].name), file->name);
   } else {
-    chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
-    GET_DECK_ACCESSORY_TYPE(chip) = TYPE_FILE;
     snprintf(buf, sizeof(buf), "a %s optical chip", file->name);
   }
   
   chip->restring = str_dup(buf);
-  GET_OBJ_VAL(chip, 0) = file->program_type;
-  GET_OBJ_VAL(chip, 1) = file->rating;
-  GET_OBJ_VAL(chip, 2) = file->size;
-  GET_OBJ_VAL(chip, 3) = file->wound_category;
-
   file_from_obj(file); // derefs from list
 
   // We hide the file on the chip because .. it makes things easier.
