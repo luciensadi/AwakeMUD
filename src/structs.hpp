@@ -1452,10 +1452,14 @@ struct kosher_weapon_values_struct {
 };
 
 
-#define WORK_PHASE_NONE      0
-#define WORK_PHASE_DESIGN    1
-#define WORK_PHASE_PROGRAM   2
-#define WORK_PHASE_COMPLETE  3
+#define WORK_PHASE_NONE          0
+#define WORK_PHASE_READY         1
+#define WORK_PHASE_IN_PROGRESS   2
+#define WORK_PHASE_COMPLETE      3
+
+#define MATRIX_FILE_DATA     0
+#define MATRIX_FILE_PROGRAM  1
+#define MATRIX_FILE_DESIGN   2
 
 /* ================== Memory Structure for Matrix Files ================== */
 struct matrix_file {
@@ -1463,27 +1467,20 @@ struct matrix_file {
   rnum_t idnum;                                  /* Stored in database identifier */
   char* name;                                    /* The user-friendly text for this file */
   int file_type;
+  int program_type;                              /* If this is a file_type PROGRAM, this will be the type of program it is */
   int rating;
   int size;                                      /* File size in megapulses */
   int wound_category;                            /* File's attack damage if damaging program */
   int is_default;                                /* Whether or not to load the program by default */
   idnum_t creator_idnum;
-  int creation_time;                             /* When was this file created? */
+  long creation_time;                            /* When was this file created? */
 
-  // If you're reading this in the future trying to figure out what the frag is going on here
-  // This is a read forward system, with the following flow:
-  // PHASE: NONE (no ticks, no successes)
-  //   => DESIGN (no successes): Ready to design
-  //   => DESIGN (pos/neg successes): Design complete
-  //     => PROGRAM (pos/neg successes): Programming complete
-  //       => COMPLETE
-  // The 'ready to design' phase is when design has a non-zero work_successes value.
   int work_phase;                                /* As a matrix file moves between phases, this changes */
   int work_ticks_left;
   int work_original_ticks_left;
   int work_successes;  
 
-  int last_decay_time;                        
+  long last_decay_time;                        
 
   // Non-SQL fields
   struct obj_data *in_obj;                       /* In what object NULL when none    */
@@ -1496,7 +1493,7 @@ struct matrix_file {
   char load_origin;                              /* Identifies what loaded this. */
 
   matrix_file() : 
-      idnum(0), name(0), file_type(0), rating(0), size(0), wound_category(0),
+      idnum(0), name(0), program_type(0), rating(0), size(0), wound_category(0),
       is_default(0), creator_idnum(0), creation_time(0), work_phase(0),
       work_ticks_left(0), work_original_ticks_left(0), work_successes(0), last_decay_time(0),
 

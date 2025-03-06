@@ -380,7 +380,7 @@ bool load_obj_programs(obj_data *obj)
 
     file->idnum = atol(MATRIX_FILE_IDNUM);
     file->name = strdup(MATRIX_FILE_NAME); 
-    file->file_type = atoi(MATRIX_FILE_TYPE);
+    file->program_type = atoi(MATRIX_FILE_TYPE);
     file->rating = atoi(MATRIX_FILE_RATING);
     file->size = atoi(MATRIX_FILE_SIZE);
     file->wound_category = atoi(MATRIX_FILE_ATTACK_DAMAGE);
@@ -1519,7 +1519,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       file->idnum, 
       GET_OBJ_VNUM(temp),
       prepare_quotes(buf1, file->name, sizeof(buf1) / sizeof(char)),
-      file->file_type,
+      file->program_type,
       file->rating,
       file->size,
       file->wound_category,

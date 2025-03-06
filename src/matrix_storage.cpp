@@ -72,20 +72,30 @@ matrix_file* create_matrix_file(obj_data *storage, int load_origin) {
   return new_file;
 }
 
-matrix_file* obj_to_matrix_file(obj_data *prog) {
-  struct matrix_file *new_file = create_matrix_file(prog->in_obj, prog->load_origin);
+matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
+  struct matrix_file *new_file = create_matrix_file(device, prog->load_origin);
 
   new_file->wound_category = GET_PROGRAM_ATTACK_DAMAGE(prog);
   new_file->name = strdup(prog->restring);
   new_file->rating = GET_PROGRAM_RATING(prog);
-  new_file->file_type = GET_PROGRAM_TYPE(prog);
   new_file->work_ticks_left = GET_OBJ_VAL(prog, 4);
   new_file->is_default = GET_PROGRAM_IS_DEFAULTED(prog);
   new_file->work_original_ticks_left = GET_OBJ_TIMER(prog);
-  new_file->work_phase = GET_DESIGN_COMPLETED(prog) ? WORK_PHASE_DESIGN : WORK_PHASE_NONE;
   new_file->work_successes = GET_DESIGN_SUCCESSES(prog);
+
+  if (GET_OBJ_TYPE(prog) == ITEM_PROGRAM) {
+    new_file->file_type = MATRIX_FILE_PROGRAM;
+    new_file->program_type = GET_PROGRAM_TYPE(prog);
+  } else if (GET_OBJ_TYPE(prog) == ITEM_DESIGN) {
+    new_file->file_type = MATRIX_FILE_DESIGN;
+    new_file->program_type = GET_PROGRAM_TYPE(prog);
+  }
   
   return new_file;
+}
+
+matrix_file* obj_to_matrix_file(obj_data *prog) {
+  return obj_to_matrix_file(prog, prog->in_obj);
 }
 
 #define CHECK_KEYWORD(target_string, context) {if ((target_string) && isname(keyword, get_string_after_color_code_removal((target_string), NULL))) { return (context); }}
@@ -199,7 +209,7 @@ bool program_can_be_copied(struct matrix_file *prog) {
   if (!prog)
     return FALSE;
 
-  switch (prog->file_type) {
+  switch (prog->program_type) {
     case SOFT_ASIST_COLD:
     case SOFT_ASIST_HOT:
     case SOFT_HARDENING:
@@ -228,14 +238,14 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
     } else {
       for (struct matrix_file *file = device->files; file; file = file->next_file) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    [^g%4d^nmp] %-30s", file->size, file->name);
-        if (file->file_type) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " R%-2d %-16s", file->rating, programs[file->file_type].name);
+        if (file->file_type == MATRIX_FILE_PROGRAM) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " R%-2d %-16s", file->rating, programs[file->program_type].name);
 
-          if (file->work_failed == WORK_PHASE_NONE)
+          if (file->file_type == MATRIX_FILE_DESIGN && file->work_phase < WORK_PHASE_IN_PROGRESS)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(concept)^n");
-          else if (file->work_phase < WORK_PHASE_PROGRAM)
+          else if (file->file_type == MATRIX_FILE_DESIGN)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(design)^n");
-          else
+          else if (file->file_type == MATRIX_FILE_PROGRAM)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(program)^n");
         }
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");

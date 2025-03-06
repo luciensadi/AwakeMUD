@@ -1364,7 +1364,7 @@ void icon_to_host(struct matrix_icon *icon, vnum_t to_host)
         if (icon2->decker) {
           int target = icon->decker->masking;
           for (struct matrix_file *soft = icon->decker->software; soft; soft = soft->next_file)
-            if (soft->file_type == SOFT_SLEAZE)
+            if (soft->program_type == SOFT_SLEAZE)
               target += soft->rating;
           if (success_test(icon2->decker->sensor, target) > 0) {
             make_seen(icon2, icon->idnum);

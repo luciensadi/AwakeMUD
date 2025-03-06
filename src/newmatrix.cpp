@@ -397,7 +397,7 @@ int get_detection_factor(struct char_data *ch)
 {
   int detect = 0;
   for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file)
-    if (soft->file_type == SOFT_SLEAZE)
+    if (soft->program_type == SOFT_SLEAZE)
       detect = soft->rating;
   detect += DECKER->masking + 1; // +1 because we round up
   detect = detect / 2;
@@ -468,8 +468,8 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
 
   for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file) {
     if (prog) break;
-    if (soft->file_type == SOFT_SLEAZE) break;
-    if (soft->file_type == software) {
+    if (soft->program_type == SOFT_SLEAZE) break;
+    if (soft->program_type == software) {
       target -=  soft->rating;
       buf_mod(rollbuf, sizeof(rollbuf), "soft", -soft->rating);
       prog = soft;
@@ -627,7 +627,7 @@ int maneuver_test(struct matrix_icon *icon)
   if (icon->decker)
   {
     for (struct matrix_file *soft = icon->decker->software; soft; soft = soft->next_file)
-      if (soft->file_type == SOFT_CLOAK)
+      if (soft->program_type == SOFT_CLOAK)
         icon_target -= soft->rating;
     targ_target += icon_skill = icon->decker->evasion;
   } else
@@ -635,7 +635,7 @@ int maneuver_test(struct matrix_icon *icon)
   if (icon->fighting->decker)
   {
     for (struct matrix_file *soft = icon->fighting->decker->software; soft; soft = soft->next_file)
-      if (soft->file_type == SOFT_LOCKON)
+      if (soft->program_type == SOFT_LOCKON)
         targ_target -= soft->rating;
     icon_target += targ_skill = icon->fighting->decker->sensor;
   } else
@@ -779,7 +779,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   if (icon->decker)
   {
     for (soft = icon->decker->software; soft; soft = soft->next_file)
-      if (soft->file_type == SOFT_ATTACK)
+      if (soft->program_type == SOFT_ATTACK)
         break;
     if (!soft)
       return;
@@ -882,7 +882,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       power -= targ->decker->hardening;
     else
       for (soft = targ->decker->software; soft; soft = soft->next_file)
-        if (soft->file_type == SOFT_ARMOR) {
+        if (soft->program_type == SOFT_ARMOR) {
           power -= soft->rating;
           break;
         }
@@ -935,7 +935,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (success > 0) {
         icon->ic.subtype = 10;
         for (struct matrix_file *soft = targ->decker->software; soft; soft = soft->next_file)
-          if (soft->file_type == SOFT_CAMO) {
+          if (soft->program_type == SOFT_CAMO) {
             icon->ic.subtype += soft->rating;
             break;
           }
@@ -1540,7 +1540,7 @@ ACMD(do_locate)
         if (icon->decker && icon != PERSONA) {
           int targ = icon->decker->masking;
           for (struct matrix_file *soft = icon->decker->software; soft; soft = soft->next_file)
-            if (soft->file_type == SOFT_SLEAZE)
+            if (soft->program_type == SOFT_SLEAZE)
               targ += soft->rating;
           if (sensor >= targ) {
             make_seen(PERSONA, icon->idnum);
@@ -2580,7 +2580,7 @@ ACMD(do_download)
         {
           int power = GET_DECK_ACCESSORY_FILE_RATING(soft);
           for (struct matrix_file *prog = DECKER->software; prog; prog = prog->next_file)
-            if (prog->file_type == SOFT_ARMOR) {
+            if (prog->program_type == SOFT_ARMOR) {
               power -= prog->rating;
               break;
             }
@@ -2634,7 +2634,7 @@ ACMD(do_run)
       break;
   if (soft) {
     WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-    switch (soft->file_type) {
+    switch (soft->program_type) {
       case SOFT_ATTACK:
         {
           struct matrix_icon *icon;
@@ -3529,12 +3529,12 @@ ACMD(do_matrix_scan)
       struct matrix_file *soft;
       int target = ic->decker->masking;
       for (soft = ic->decker->software; soft; soft = soft->next_file)
-        if (soft->file_type == SOFT_SLEAZE) {
+        if (soft->program_type == SOFT_SLEAZE) {
           target += soft->rating;
           break;
         }
       for (soft = DECKER->software; soft; soft = soft->next_file)
-        if (soft->file_type == SOFT_SCANNER) {
+        if (soft->program_type == SOFT_SCANNER) {
           target -= soft->rating;
           break;
         }

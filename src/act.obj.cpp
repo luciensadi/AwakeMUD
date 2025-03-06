@@ -32,6 +32,7 @@
 #include "redit.hpp"
 #include "vehicles.hpp"
 #include "pets.hpp"
+#include "matrix_storage.hpp"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -310,8 +311,8 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
           act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
           return;
         }
-        obj_from_char(obj);
-        obj_to_obj(obj, cont);
+        obj_to_matrix_file(obj, cont);
+        extract_obj(obj);
         GET_OBJ_VAL(cont, 5) += GET_DECK_ACCESSORY_FILE_SIZE(obj);
         act("You upload $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
         return;
@@ -370,8 +371,8 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     if (GET_CYBERDECK_USED_STORAGE(cont) + space_required > GET_CYBERDECK_TOTAL_STORAGE(cont)) {
       act("$p^n takes up too much memory to be installed into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
     } else {
-      obj_from_char(obj);
-      obj_to_obj(obj, cont);
+      obj_to_matrix_file(obj, cont);
+      extract_obj(obj);
       act("You install $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
       GET_CYBERDECK_USED_STORAGE(cont) += space_required;
     }
@@ -621,12 +622,6 @@ ACMD(do_put)
       // You can only install programs, parts, and designs.
       if (GET_OBJ_TYPE(obj) != ITEM_PROGRAM && GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(obj) != ITEM_DESIGN) {
         send_to_char(ch, "You can't install %s^n into a cyberdeck.\r\n", GET_OBJ_NAME(obj));
-        return;
-      }
-
-      // You can only install program designs into computers.
-      if (GET_OBJ_TYPE(obj) == ITEM_DESIGN && GET_OBJ_TYPE(cont) != ITEM_DECK_ACCESSORY) {
-        send_to_char("Program designs are just conceptual outlines and can't be installed into cyberdecks.\r\n", ch);
         return;
       }
 

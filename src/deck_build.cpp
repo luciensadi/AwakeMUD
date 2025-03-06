@@ -526,11 +526,11 @@ ACMD(do_cook) {
     }
     if (!design)
         send_to_char(ch, "You don't see %s installed on any computers here.\r\n", argument);
-    else if (design->work_phase < WORK_PHASE_PROGRAM)
+    else if (design->file_type != MATRIX_FILE_PROGRAM)
         send_to_char(ch, "You must finish programming %s first.\r\n", design->name);
     else if (design->timer)
         send_to_char("This chip has already been encoded.\r\n", ch);
-    else if (design->file_type == SOFT_SUITE)
+    else if (design->program_type == SOFT_SUITE)
       send_to_char("Programming suites don't need to be cooked-- just leave them installed on the computer to get their benefits.\r\n", ch);
     else {
       FOR_ITEMS_AROUND_CH(ch, cooker) {
@@ -569,7 +569,7 @@ ACMD(do_cook) {
       struct obj_data *chip = read_object(OBJ_BLANK_BURNER_CHIP, VIRTUAL, OBJ_LOAD_REASON_COOK_PROGRAM);
       snprintf(buf, sizeof(buf), "a '%s' burner chip", design->name);
       chip->restring = str_dup(buf);
-      GET_OBJ_VAL(chip, 0) = design->file_type;
+      GET_OBJ_VAL(chip, 0) = design->program_type;
       GET_OBJ_VAL(chip, 1) = design->rating;
       GET_OBJ_VAL(chip, 2) = design->size;
       GET_OBJ_VAL(chip, 3) = design->wound_category;

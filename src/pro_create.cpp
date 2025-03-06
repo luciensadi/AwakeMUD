@@ -38,18 +38,18 @@ void pedit_disp_menu(struct descriptor_data *d)
 {
   CLS(CH);
   send_to_char(CH, "1) Name: ^c%s^n\r\n", d->edit_matrix_file->name);
-  send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[d->edit_matrix_file->file_type].name);
+  send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[d->edit_matrix_file->program_type].name);
   send_to_char(CH, "3) Rating: ^c%d^n\r\n", d->edit_matrix_file->rating);
 
   // Minimum program size is rating^2.
   int program_size = d->edit_matrix_file->rating ^ 2;
-  if (d->edit_matrix_file->file_type == SOFT_ATTACK) {
+  if (d->edit_matrix_file->program_type == SOFT_ATTACK) {
     // Attack programs multiply size by a factor determined by wound level.
     program_size *= attack_multiplier[d->edit_matrix_file->wound_category];
     send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(d->edit_matrix_file->wound_category));
   } else {
     // Others multiply by a set multiplier based on software type.
-    program_size *= programs[d->edit_matrix_file->file_type].multiplier;
+    program_size *= programs[d->edit_matrix_file->program_type].multiplier;
   }
   send_to_char(CH, "\r\nInitial Design Size: ^c%d^n\r\n", (int) (program_size * 1.1));
   send_to_char(CH, "Completed Size: ^c%d^n\r\n\r\n", program_size);
@@ -96,7 +96,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       pedit_disp_program_menu(d);
       break;
     case '3':
-      if (!d->edit_matrix_file->file_type)
+      if (!d->edit_matrix_file->program_type)
         send_to_char("Choose a program type first!\r\n", CH);
       else {
         send_to_char("Enter Rating: ", CH);
@@ -104,7 +104,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       }
       break;
     case '4':
-      if (d->edit_matrix_file->file_type != SOFT_ATTACK)
+      if (d->edit_matrix_file->program_type != SOFT_ATTACK)
         send_to_char(CH, "Invalid option!\r\n");
       else {
         CLS(CH);
@@ -114,19 +114,19 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
     case 'Q':
-      if (!d->edit_matrix_file->file_type || !d->edit_matrix_file->rating) {
+      if (!d->edit_matrix_file->program_type || !d->edit_matrix_file->rating) {
         send_to_char("You must specify a program type and/or rating first.\r\n", CH);
         pedit_disp_menu(d);
         return;
       }
 
       send_to_char(CH, "Design saved!\r\n");
-      if (d->edit_matrix_file->file_type == SOFT_ATTACK) {
+      if (d->edit_matrix_file->program_type == SOFT_ATTACK) {
         d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating * attack_multiplier[d->edit_matrix_file->wound_category];
-      } else if (d->edit_matrix_file->file_type == SOFT_RESPONSE) {
+      } else if (d->edit_matrix_file->program_type == SOFT_RESPONSE) {
         d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating ^ 3;
       } else {
-        d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating * programs[d->edit_matrix_file->file_type].multiplier;
+        d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating * programs[d->edit_matrix_file->program_type].multiplier;
       }
       d->edit_matrix_file->size = d->edit_matrix_file->rating * d->edit_matrix_file->work_ticks_left;
       d->edit_matrix_file->work_ticks_left  *= 20;
@@ -141,16 +141,16 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case PEDIT_RATING:
-    if (d->edit_matrix_file->file_type <= SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER) * 1.5)
+    if (d->edit_matrix_file->program_type <= SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER) * 1.5)
       send_to_char(CH, "You can't create a persona program of a higher rating than your computer skill times one and a half.\r\n"
                    "Enter Rating: ");
-    else if (d->edit_matrix_file->file_type == SOFT_EVALUATE && number > GET_SKILL(CH, SKILL_DATA_BROKERAGE))
+    else if (d->edit_matrix_file->program_type == SOFT_EVALUATE && number > GET_SKILL(CH, SKILL_DATA_BROKERAGE))
       send_to_char(CH, "You can't create an evaluate program of a higher rating than your data brokerage skill.\r\n"
                    "Enter Rating: ");
-    else if (d->edit_matrix_file->file_type > SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER))
+    else if (d->edit_matrix_file->program_type > SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER))
       send_to_char(CH, "You can't create a program of a higher rating than your computer skill.\r\n"
                    "Enter Rating: ");
-    else if (d->edit_matrix_file->file_type == SOFT_RESPONSE && number > 3)
+    else if (d->edit_matrix_file->program_type == SOFT_RESPONSE && number > 3)
       send_to_char("You can't create a response increase of a rating higher than 3.\r\nEnter Rating: ", CH);
     else {
       d->edit_matrix_file->rating = number;
@@ -194,10 +194,10 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 1 || number >= NUM_PROGRAMS)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      d->edit_matrix_file->file_type = number;
+      d->edit_matrix_file->program_type = number;
       d->edit_matrix_file->rating = 1;
 
-      if (d->edit_matrix_file->file_type == SOFT_ATTACK) {
+      if (d->edit_matrix_file->program_type == SOFT_ATTACK) {
         // Default to Deadly damage.
         d->edit_matrix_file->wound_category = DEADLY;
       }
@@ -253,7 +253,7 @@ void create_program(struct char_data *ch)
 int get_program_skill(char_data *ch, matrix_file *prog, int target)
 {
   int skill = 0;
-  switch (prog->file_type) {
+  switch (prog->program_type) {
   case SOFT_BOD:
   case SOFT_EVASION:
   case SOFT_MASKING:
@@ -303,7 +303,7 @@ int get_program_skill(char_data *ch, matrix_file *prog, int target)
     skill = get_skill(ch, SKILL_PROGRAM_OPERATIONAL, target);
     break;
   default:
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown SOFT_X %d to do_design's switch statement!", prog->file_type);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown SOFT_X %d to do_design's switch statement!", prog->program_type);
     skill = 0;
     break;
   }
@@ -356,19 +356,15 @@ ACMD(do_design)
     return;
   }
 
-  if (prog->work_phase == WORK_PHASE_COMPLETE) {
+  if (prog->file_type != MATRIX_FILE_DESIGN || (prog->file_type == MATRIX_FILE_PROGRAM && prog->work_phase == WORK_PHASE_COMPLETE)) {
     send_to_char(ch, "Not much point in programming or designing something that's already complete.");
     return;
-  } else if (prog->work_phase >= WORK_PHASE_DESIGN && prog->work_successes) {
+  } else if (prog->file_type == MATRIX_FILE_DESIGN && prog->work_phase == WORK_PHASE_COMPLETE) {
     send_to_char(ch, "There's no more design work to be done on %s, so you decide to try programming it instead.\r\n", prog->name);
     do_program(ch, argument, 0, 0);
     return;
   }
 
-  // if (GET_DESIGN_CREATOR_IDNUM(prog) && GET_DESIGN_CREATOR_IDNUM(prog) != GET_IDNUM(ch)) {
-  //   send_to_char(ch, "Someone else has already started on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(prog)));
-  //   return;
-  // }
   int skill = 0, target = 4;
   if (prog->rating < 5)
     target--;
@@ -380,7 +376,7 @@ ACMD(do_design)
     return;
   }
 
-  prog->work_phase = WORK_PHASE_DESIGN;
+  prog->work_phase = WORK_PHASE_IN_PROGRESS;
   if (prog->work_original_ticks_left == prog->work_ticks_left) {
     if (get_and_deduct_one_crafting_token_from_char(ch)) {
       send_to_char("A crafting token fuzzes into digital static, greatly accelerating the design time.\r\n", ch);
@@ -431,10 +427,6 @@ ACMD(do_program)
     send_to_char(ch, "The program design isn't on that computer.\r\n");
     return;
   }
-  // if (prog->creator_idnum && prog->creator_idnum != GET_IDNUM(ch)) {
-  //   send_to_char(ch, "Someone else has already started on this program.\r\n");
-  //   return;
-  // }
   if (!prog->work_ticks_left) {
     if (get_and_deduct_one_crafting_token_from_char(ch)) {
       send_to_char("A crafting token fuzzes into digital static, greatly accelerating the development time.\r\n", ch);
@@ -453,13 +445,13 @@ ACMD(do_program)
         target -= 2;
       }
 
-      if (!prog->work_successes) {
+      if (prog->file_type != MATRIX_FILE_DESIGN || prog->work_phase != WORK_PHASE_COMPLETE) {
         send_to_char("You haven't taken the time to design this program, so it's a little harder to conceptualize.\r\n", ch);
         target += 2;
       }
       else
         target -= prog->work_successes;
-
+      
       int skill = get_skill(ch, SKILL_COMPUTER, target);
       int success = success_test(skill, target);
       for (struct obj_data *suite = comp->contains; suite; suite = suite->next_content)
@@ -593,6 +585,7 @@ void update_buildrepair(void)
       } else if (AFF_FLAGGED(desc->character, AFF_DESIGN)) {
         if (--GET_PROGRAMMING(CH)->work_ticks_left < 1) {
           send_to_char(desc->character, "You complete the design plan for %s.\r\n", GET_PROGRAMMING(CH)->name);
+          GET_PROGRAMMING(CH)->work_phase = WORK_PHASE_COMPLETE;
           GET_PROGRAMMING(CH) = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_DESIGN);
         }
@@ -637,6 +630,7 @@ void update_buildrepair(void)
             send_to_char(desc->character, "You complete programming %s.\r\n", GET_PROGRAMMING(CH)->name);
             // We can just change the existing design file into a finished program, rather than dupe it.
             GET_PROGRAMMING(CH)->work_phase = WORK_PHASE_COMPLETE;
+            GET_PROGRAMMING(CH)->file_type = MATRIX_FILE_PROGRAM;
           }
           GET_PROGRAMMING(CH) = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);
