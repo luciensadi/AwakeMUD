@@ -72,6 +72,22 @@ matrix_file* create_matrix_file(obj_data *storage, int load_origin) {
   return new_file;
 }
 
+matrix_file* obj_to_matrix_file(obj_data *prog) {
+  struct matrix_file *new_file = create_matrix_file(prog->in_obj, prog->load_origin);
+
+  new_file->attack_damage = GET_PROGRAM_ATTACK_DAMAGE(prog);
+  new_file->name = strdup(prog->restring);
+  new_file->rating = GET_PROGRAM_RATING(prog);
+  new_file->file_type = GET_PROGRAM_TYPE(prog);
+  new_file->work_ticks_left = GET_OBJ_VAL(prog, 4);
+  new_file->is_default = GET_PROGRAM_IS_DEFAULTED(prog);
+  new_file->work_original_ticks_left = GET_OBJ_TIMER(prog);
+  new_file->work_phase = GET_DESIGN_COMPLETED(prog) ? WORK_PHASE_DESIGN : WORK_PHASE_NONE;
+  new_file->work_successes = GET_DESIGN_SUCCESSES(prog);
+  
+  return new_file;
+}
+
 #define CHECK_KEYWORD(target_string, context) {if ((target_string) && isname(keyword, get_string_after_color_code_removal((target_string), NULL))) { return (context); }}
 const char * keyword_appears_in_file(const char *keyword, struct matrix_file *file, bool search_name, bool search_desc) {
   if (!keyword || !*keyword) {

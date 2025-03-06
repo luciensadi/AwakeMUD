@@ -1153,7 +1153,23 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     }
     mysql_free_result(res);
 
-    load_obj_programs(obj);
+    /* MIGRATION STEP: For When we have a program if it's contained in a device it needs to be converted into a memory struct */
+    if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM || GET_OBJ_TYPE(obj) == ITEM_DESIGN) {
+      // Check if it's in a device
+      if (obj->in_obj && (
+        GET_OBJ_TYPE(obj->in_obj) == ITEM_CYBERDECK 
+        || GET_OBJ_TYPE(obj->in_obj) == ITEM_CUSTOM_DECK
+        || (GET_OBJ_TYPE(obj->in_obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj->in_obj) == TYPE_COMPUTER)
+      )) {
+        // Do the conversion, this will also move the file onto the device.
+        obj_to_matrix_file(obj);
+        // Delete the obj, no longer needed
+        extract_obj(obj);
+        obj = NULL;
+      }
+    }
+    
+    if (obj) load_obj_programs(obj);
   }
 
   // Load bullet pants.
