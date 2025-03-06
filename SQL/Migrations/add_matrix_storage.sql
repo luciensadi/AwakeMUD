@@ -17,6 +17,6 @@ CREATE TABLE `matrix_files` (
   `last_decay_time` mediumint(5) unsigned default '0',
 
   `creator_idnum` mediumint(5) unsigned default '0',
-  `in_obj_idnum` mediumint(5) unsigned default '0',
+  `in_obj_vnum` mediumint(5) unsigned default '0',
   KEY(`idnum`)
 );

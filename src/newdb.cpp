@@ -368,9 +368,8 @@ bool load_obj_programs(obj_data *obj)
   #define MATRIX_FILE_WORK_SUCCESSES      row[11]
   #define MATRIX_FILE_LAST_DECAY_TIME     row[12]
   #define MATRIX_FILE_CREATOR_IDNUM       row[13]
-  #define MATRIX_FILE_IN_OBJ_IDNUM        row[14]
 
-  snprintf(buf, sizeof(buf), "SELECT * FROM matrix_files WHERE in_obj_idnum=%ld;", obj->idnum);
+  snprintf(buf, sizeof(buf), "SELECT * FROM matrix_files WHERE in_obj_vnum=%ld;", GET_OBJ_VNUM(obj));
   mysql_wrapper(mysql, buf);
    if (!(res = mysql_use_result(mysql))) {
     mysql_free_result(res);
@@ -1490,19 +1489,19 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   for (temp = player->carrying; temp; temp = next_obj) {
     next_obj = temp->next_content;
     // We always clear out entries since this is a one-to-many table
-    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE in_obj_idnum=%ld; ", temp->idnum);
+    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE in_obj_vnum=%ld; ", GET_OBJ_VNUM(temp));
     mysql_wrapper(mysql, buf);
     snprintf(buf, sizeof(buf), ""); // Clear buffer
 
     if (!temp->files) continue;
     for (struct matrix_file *file = temp->files; file; file = file->next_file) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "INSERT INTO matrix_files (idnum, in_obj_idnum, name, "\
-      "file_type, rating, size, attack_damage, is_default, last_decay_time, creation_time, "\
+      snprintf(buf, sizeof(buf), "INSERT INTO matrix_files (idnum, in_obj_vnum, "\
+      "name, file_type, rating, size, attack_damage, is_default, last_decay_time, creation_time, "\
       "creator_idnum, work_ticks_left, work_original_ticks_left, "\
       "work_phase, work_successes) "\
-      "VALUES (%ld, %ld, '%s', %d, %d, %d, %d, %d, %d, %s, %ld, %d, %d, %d, %d, %d); ",
+      "VALUES (%ld, %ld, '%s', %d, %d, %d, %d, %d, %ld, %ld, %ld, %d, %d, %d, %d); ",
       file->idnum, 
-      temp->idnum, 
+      GET_OBJ_VNUM(temp),
       prepare_quotes(buf1, file->name, sizeof(buf1) / sizeof(char)),
       file->file_type,
       file->rating,
@@ -1516,10 +1515,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       file->work_original_ticks_left,
       file->work_phase,
       file->work_successes);
+
+      mysql_wrapper(mysql, buf);
     }
-  }
-  if (strlen(buf)) {
-    mysql_wrapper(mysql, buf);
   }
 
   if (is_temp_load)
