@@ -202,7 +202,20 @@ struct matrix_file *get_matrix_file_in_list_vis(struct char_data * ch, const cha
 }
 
 bool perform_get_matrix_file_from_device(struct char_data *ch, struct matrix_file *file, struct obj_data *device, int mode) {
-  return FALSE;
+  if (IS_WORKING(ch)) {
+    send_to_char(TOOBUSY, ch);
+    return FALSE;
+  } 
+
+  snprintf(buf, sizeof(buf), "$n saves %s from $p %s and ejects the file on an optical chip.", file->name, GET_OBJ_NAME(device));
+  act(buf, TRUE, ch, device, 0, TO_ROOM);
+  snprintf(buf, sizeof(buf), "You save %s from %s and eject the file onto an optical chip.", file->name, GET_OBJ_NAME(device));
+  act(buf, FALSE, ch, device, 0, TO_CHAR);
+
+  struct obj_data *chip = matrix_file_to_obj(file);
+  obj_to_char(chip, ch);
+
+  return TRUE;
 }
 
 /* Remove a file from a Matrix host. */
@@ -284,7 +297,7 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
         if (file->file_type == MATRIX_FILE_PROGRAM || file->file_type == MATRIX_FILE_DESIGN) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " R%-2d %-16s", file->rating, programs[file->program_type].name);
 
-          if (file->file_type == MATRIX_FILE_DESIGN && file->work_phase <= WORK_PHASE_READY)
+          if (file->file_type == MATRIX_FILE_DESIGN && file->work_phase < WORK_PHASE_READY)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(concept)^n");
           else if (file->file_type == MATRIX_FILE_DESIGN)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(design)^n");
