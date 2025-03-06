@@ -1633,6 +1633,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
   case CCR_PRESTIGE_PAYMENT_GET_NAME:
     if (!str_cmp(arg, "abort")) {
       d->ccr.prestige_race = d->ccr.prestige_bagholder = 0;
+      d->ccr.is_otaku = FALSE;
       display_prestige_race_menu(d);
       return;
     }
