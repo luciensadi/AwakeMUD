@@ -1387,6 +1387,8 @@ void create_parse(struct descriptor_data *d, const char *arg)
       send_to_char(CH, "You cannot have less than 0 points of skill. Enter desired number of skill points (^c%d^n available):",d->ccr.points);
     else if (i > d->ccr.points)
       send_to_char(CH, "You do not have enough points for that. Enter desired number of skill points (^c%d^n available):", d->ccr.points);
+    else if (d->ccr.is_otaku && i < 6)
+      send_to_char(CH, "You cannot have less than 6 points of skill as an Otaku. Enter desired number of skill points (^c%d^n available):", d->ccr.points);
     else {
       d->ccr.points -= d->ccr.pr[PO_SKILL] = i;
       points_menu(d);
