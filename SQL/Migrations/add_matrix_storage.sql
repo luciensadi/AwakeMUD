@@ -1,7 +1,22 @@
 
 CREATE TABLE `matrix_files` (
-  `idnum` mediumint(5) unsigned default '0',
+  `idnum` mediumint(5) unsigned,
   `name` varchar(256) default '',
-  `storage_idnum` mediumint(5) unsigned default '0',
+  `file_type` tinyint(2) default '0',
+  `rating` tinyint(2) default '0',
+  `size` int(8) default '0',
+  `attack_damage` tinyint(2) default '0',
+  `is_default` tinyint(2) default '0',
+  `creation_time` mediumint(5) unsigned default '0',
+
+  `work_phase` tinyint(2) default '0',
+  `work_ticks_left` tinyint(2) default '0',
+  `work_original_ticks_left` tinyint(2) default '0',
+  `work_successes` tinyint(2) default '0',
+
+  `last_decay_time` mediumint(5) unsigned default '0',
+
+  `creator_idnum` mediumint(5) unsigned default '0',
+  `in_obj_idnum` mediumint(5) unsigned default '0',
   KEY(`idnum`)
 );

@@ -210,9 +210,17 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    There are no files on this device.\r\n");
     } else {
       for (struct matrix_file *file = device->files; file; file = file->next_file) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    [^g%4d^nmp] %s\r\n",
+        char* tag;
+        if (file->file_type) {
+          if (file->work_phase < WORK_PHASE_PROGRAM)
+            tag = "(design)";
+          else
+            tag = "(program)";
+        }
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    [^g%4d^nmp] %-30s %s\r\n",
               file->size,
-              file->name);
+              file->name,
+              tag ? tag : "");
       }
     }
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Storage Memory: %d free of %d total\r\n\r\n",

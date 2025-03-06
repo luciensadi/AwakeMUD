@@ -2555,7 +2555,7 @@ void idle_delete()
 
 
 void init_matrix_data_file_index() {
-  mysql_wrapper(mysql, "SELECT MAX(idnum) AS largest_id FROM matrix_files;");
+  mysql_wrapper(mysql, "SELECT COALESCE(MAX(idnum), 1)  FROM matrix_files;");
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
   matrix_file_id_counter = atol(row[0]) + 1;

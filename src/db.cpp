@@ -579,9 +579,6 @@ void boot_world(void)
   log("Verifying DB compatibility with extended-length passwords.");
   verify_db_password_column_size();
 
-  log("Initializing matrix data file store index.");
-  init_matrix_data_file_index();
-
   // Search terms below because it always takes me forever to ctrl-f this block -LS
   // ensure table, ensure row, ensure field, database, limits, restrictions
   log("Verifying that DB has expected migrations. Note that not all migrations are checked here.");
@@ -620,6 +617,7 @@ void boot_world(void)
   require_that_sql_table_exists("pfiles_exdescs", "SQL/Migrations/add_exdescs.sql");
   require_that_field_exists_in_table("otaku_path", "pfiles", "SQL/Migrations/add_otaku.sql");
   require_that_sql_table_exists("pfiles_echoes", "SQL/Migrations/add_otaku_echoes.sql");
+  require_that_sql_table_exists("matrix_files", "SQL/Migrations/add_matrix_storage.sql");
 
   {
     const char *object_tables[4] = {
@@ -633,6 +631,9 @@ void boot_world(void)
     for (int idx = 0; idx < 4; idx++)
       require_that_field_exists_in_table(valbuf, object_tables[idx], "(meta check: no specific file)");
   }
+
+  log("Initializing matrix data file store index.");
+  init_matrix_data_file_index();
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
