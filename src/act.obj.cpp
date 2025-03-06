@@ -307,10 +307,10 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
   {
     if (obj->files) {
       // NEW system, if there's a file pointer we can just upload it right in
-      // if (GET_OBJ_VAL(cont, 5) + obj->files->size > GET_OBJ_VAL(cont, 3)) { // TODO: Rewrite memory storage check
-      //   act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
-      //   return;
-      // }
+      if (!can_file_fit(obj->files, cont)) {
+        act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
+        return;
+      }
       GET_OBJ_VAL(cont, 5) += GET_DECK_ACCESSORY_FILE_SIZE(obj);
       snprintf(buf, sizeof(buf), "You slot your optical chip containing %s into %s.", obj->files->name, GET_OBJ_NAME(cont));
       act(buf, FALSE, ch, obj, cont, TO_CHAR);

@@ -18,6 +18,56 @@ int _next_matrix_id() {
     return matrix_file_id_counter.fetch_add(1, std::memory_order_relaxed);
 }
 
+int adjust_device_memory(struct obj_data *device, int change) {
+  switch (GET_OBJ_TYPE(device)) {
+    case ITEM_DECK_ACCESSORY:
+      return GET_OBJ_VAL(device, 2) - change;
+      break;
+    case ITEM_CUSTOM_DECK:
+    case ITEM_CYBERDECK:
+      return GET_OBJ_VAL(device, 3) - change;
+      break;
+  }
+  
+  return 0;
+}
+
+int get_device_total_memory(struct obj_data *device) {
+  switch (GET_OBJ_TYPE(device)) {
+    case ITEM_DECK_ACCESSORY:
+      return GET_OBJ_VAL(device, 2);
+      break;
+    case ITEM_CUSTOM_DECK:
+    case ITEM_CYBERDECK:
+      return GET_OBJ_VAL(device, 3);
+      break;
+  }
+  return 0;
+}
+
+int get_device_used_memory(struct obj_data *device) {
+  switch (GET_OBJ_TYPE(device)) {
+    case ITEM_DECK_ACCESSORY:
+      return GET_OBJ_VAL(device, 3);
+      break;
+    case ITEM_CUSTOM_DECK:
+    case ITEM_CYBERDECK:
+      return GET_OBJ_VAL(device, 5);
+      break;
+  }
+  return 0;
+}
+
+bool can_file_fit(struct matrix_file *file, struct obj_data *device) {
+  if (!file->size) return TRUE;
+  
+  int total_memory = get_device_total_memory(device);
+  int used_memory = get_device_used_memory(device);
+
+  if (file->size + used_memory > total_memory) return FALSE;
+  return TRUE;
+}
+
 std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool only_relevant = FALSE) {
   struct obj_data* cyber;
   std::vector<struct obj_data*> found_list = {};
@@ -278,7 +328,7 @@ bool program_can_be_copied(struct matrix_file *prog) {
 }
 
 void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
-  for(const obj_data* device : devices)  {
+  for(obj_data* device : devices)  {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  ^c%s^n\r\n",
              capitalize(GET_OBJ_NAME(device)));
     if (!device->files) {
@@ -299,8 +349,10 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
       }
     }
+    int used_memory = get_device_used_memory(device);
+    int total_memory = get_device_total_memory(device);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Storage Memory: %d free of %d total\r\n\r\n",
-          GET_CYBERDECK_FREE_STORAGE(device), GET_CYBERDECK_TOTAL_STORAGE(device));
+          total_memory - used_memory, total_memory);
   }
   send_to_char(buf, ch);
 }

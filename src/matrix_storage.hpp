@@ -16,5 +16,6 @@ void                extract_matrix_file(struct matrix_file *file);
 bool                program_can_be_copied(struct matrix_file *prog);
 bool                perform_get_matrix_file_from_device(struct char_data *ch, struct matrix_file *file,
                         struct obj_data *device, int mode);
+bool                can_file_fit(struct matrix_file *file, struct obj_data *device);
 
 #endif
