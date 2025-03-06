@@ -1493,7 +1493,7 @@ struct matrix_file {
   char load_origin;                              /* Identifies what loaded this. */
 
   matrix_file() : 
-      idnum(0), name(0), program_type(0), rating(0), size(0), wound_category(0),
+      idnum(0), name(0), file_type(0), program_type(0), rating(0), size(0), wound_category(0),
       is_default(0), creator_idnum(0), creation_time(0), work_phase(0),
       work_ticks_left(0), work_original_ticks_left(0), work_successes(0), last_decay_time(0),
 

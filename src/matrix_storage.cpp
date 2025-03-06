@@ -65,6 +65,7 @@ matrix_file* create_matrix_file(obj_data *storage, int load_origin) {
   new_file->idnum = _next_matrix_id();
   new_file->load_origin = load_origin;
   new_file->in_obj = storage;
+  new_file->creation_time = time(0);
 
   new_file->next_file = storage->files;
   storage->files = new_file;
@@ -283,7 +284,7 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
         if (file->file_type == MATRIX_FILE_PROGRAM) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " R%-2d %-16s", file->rating, programs[file->program_type].name);
 
-          if (file->file_type == MATRIX_FILE_DESIGN && file->work_phase < WORK_PHASE_IN_PROGRESS)
+          if (file->file_type == MATRIX_FILE_DESIGN && file->work_phase <= WORK_PHASE_READY)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(concept)^n");
           else if (file->file_type == MATRIX_FILE_DESIGN)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(design)^n");

@@ -1516,7 +1516,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       "name, file_type, program_type, rating, size, attack_damage, is_default, last_decay_time, "\
       "creation_time, creator_idnum, work_ticks_left, work_original_ticks_left, "\
       "work_phase, work_successes) "\
-      "VALUES (%ld, %ld, '%s', %d, %d, %d, %d, %d, %ld, %ld, %ld, %d, %d, %d, %d); ",
+      "VALUES (%ld, %ld, '%s', %d, %d, %d, %d, %d, %d, %ld, %ld, %ld, %d, %d, %d, %d); ",
       file->idnum, 
       GET_OBJ_VNUM(temp),
       prepare_quotes(buf1, file->name, sizeof(buf1) / sizeof(char)),

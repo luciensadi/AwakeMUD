@@ -132,6 +132,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_matrix_file->work_ticks_left  *= 20;
       d->edit_matrix_file->work_original_ticks_left = d->edit_matrix_file->work_ticks_left ;
       d->edit_matrix_file->creator_idnum = GET_IDNUM(CH);
+      d->edit_matrix_file->work_phase = WORK_PHASE_READY;
       STATE(d) = CON_PLAYING;
       d->edit_matrix_file = NULL;
       break;
