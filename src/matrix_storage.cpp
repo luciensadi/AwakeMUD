@@ -72,7 +72,34 @@ matrix_file* create_matrix_file(obj_data *storage, int load_origin) {
   return new_file;
 }
 
+/* remove a matrix file from an object */
+void file_from_obj(struct matrix_file * obj)
+{
+  struct matrix_file *temp;
+  struct obj_data *obj_from;
+
+  if (obj->in_obj == NULL)
+  {
+    log("error (handler.c): trying to illegally extract obj from obj");
+    return;
+  }
+  obj_from = obj->in_obj;
+  REMOVE_FROM_LIST(obj, obj_from->files, next_file);
+
+  obj->in_obj = NULL;
+  obj->next_file = NULL;
+}
+
 matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
+  if (prog->files) {
+    // Sometimes I hide files on objects as a convenient way of saving memory
+    struct matrix_file *file = prog->files;
+    file_from_obj(prog->files);
+
+    file->next_file = device->files;
+    device->files = file;
+    return file;
+  }
   struct matrix_file *new_file = create_matrix_file(device, prog->load_origin);
 
   new_file->wound_category = GET_PROGRAM_ATTACK_DAMAGE(prog);
@@ -96,6 +123,35 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
 
 matrix_file* obj_to_matrix_file(obj_data *prog) {
   return obj_to_matrix_file(prog, prog->in_obj);
+}
+
+obj_data* matrix_file_to_obj(matrix_file *file) {
+  struct obj_data *chip;
+  if (file->file_type == MATRIX_FILE_PROGRAM) {
+    chip = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, file->load_origin);
+    snprintf(buf, sizeof(buf), "a R%d %s optical chip", file->rating, capitalize(programs[file->program_type].name));
+  } else if (file->file_type == MATRIX_FILE_DESIGN) {
+    chip = read_object(OBJ_BLANK_PROGRAM_DESIGN, VIRTUAL, file->load_origin);
+    snprintf(buf, sizeof(buf), "a R%d %s optical chip", file->rating, capitalize(programs[file->program_type].name));
+  } else {
+    chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
+    GET_DECK_ACCESSORY_TYPE(chip) = TYPE_FILE;
+    snprintf(buf, sizeof(buf), "a %s optical chip", file->name);
+  }
+  
+  chip->restring = str_dup(buf);
+  GET_OBJ_VAL(chip, 0) = file->program_type;
+  GET_OBJ_VAL(chip, 1) = file->rating;
+  GET_OBJ_VAL(chip, 2) = file->size;
+  GET_OBJ_VAL(chip, 3) = file->wound_category;
+
+  file_from_obj(file); // derefs from list
+
+  // We hide the file on the chip because .. it makes things easier.
+  file->in_obj = chip;
+  chip->files = file; 
+
+  return chip;
 }
 
 #define CHECK_KEYWORD(target_string, context) {if ((target_string) && isname(keyword, get_string_after_color_code_removal((target_string), NULL))) { return (context); }}
@@ -144,6 +200,10 @@ struct matrix_file *get_matrix_file_in_list_vis(struct char_data * ch, const cha
   return NULL;
 }
 
+bool perform_get_matrix_file_from_device(struct char_data *ch, struct matrix_file *file, struct obj_data *device, int mode) {
+  return FALSE;
+}
+
 /* Remove a file from a Matrix host. */
 // void file_from_host(struct matrix_file *file) {
 //   if (!file) {
@@ -161,25 +221,7 @@ struct matrix_file *get_matrix_file_in_list_vis(struct char_data * ch, const cha
 //   file->in_host = NULL;
 // }
 
-/* remove an object from an object */
-void file_from_obj(struct matrix_file * obj)
-{
-  struct matrix_file *temp;
-  struct obj_data *obj_from;
-
-  if (obj->in_obj == NULL)
-  {
-    log("error (handler.c): trying to illegally extract obj from obj");
-    return;
-  }
-  obj_from = obj->in_obj;
-  REMOVE_FROM_LIST(obj, obj_from->files, next_file);
-
-  obj->in_obj = NULL;
-  obj->next_file = NULL;
-}
-
-/* Extract an object from the world */
+/* Extract a matrix file from the world */
 void extract_matrix_file(struct matrix_file *file)
 {
   bool set = FALSE;

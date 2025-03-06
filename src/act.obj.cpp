@@ -940,20 +940,12 @@ bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           return FALSE;
         }
 
-        // Subtract program size from storage, but a persona program on a store-bought deck doesn't use storage
-        if (((GET_OBJ_TYPE(obj) == ITEM_PROGRAM) && !((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR)))
-            || (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE)) {
-          GET_CYBERDECK_USED_STORAGE(cont) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
-        }
-
         if (GET_OBJ_TYPE(obj) == ITEM_PART) {
           if (GET_OBJ_VAL(obj, 0) == PART_STORAGE) {
-            for (struct obj_data *k = cont->contains; k; k = k->next_content)
-              if ((GET_OBJ_TYPE(k) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(k) == TYPE_FILE) ||
-                  GET_OBJ_TYPE(k) == ITEM_PROGRAM) {
-                send_to_char(ch, "You cannot uninstall %s while you have files installed.\r\n", GET_OBJ_NAME(obj));
-                return FALSE;
-              }
+            if (cont->files) {
+              send_to_char(ch, "You cannot uninstall %s while you have files installed.\r\n", GET_OBJ_NAME(obj));
+              return FALSE;
+            }
             GET_CYBERDECK_USED_STORAGE(cont) = GET_CYBERDECK_TOTAL_STORAGE(cont) = 0;
           }
           switch(GET_OBJ_VAL(obj, 0)) {
@@ -1037,9 +1029,21 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
                         char *arg, int mode, bool confirmed=FALSE)
 {
   struct obj_data *obj, *next_obj;
+  struct matrix_file *file;
   int obj_dotmode, found = 0;
 
   obj_dotmode = find_all_dots(arg, sizeof(arg));
+
+  if (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK 
+    || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK
+    || (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cont) == TYPE_COMPUTER)
+    ) {
+    // We're getting something from a deck; we give priority to checking if it's a program.
+    if (file = get_matrix_file_in_list_vis(ch, arg, cont->files)) {
+      perform_get_matrix_file_from_device(ch, file, cont, mode);
+      return;
+    }
+  }
 
   if (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK) {
     FAILURE_CASE(obj_dotmode == FIND_ALL || obj_dotmode == FIND_ALLDOT, "You can't uninstall more than one program at a time.");

@@ -566,13 +566,7 @@ ACMD(do_cook) {
           return;
       }
 
-      struct obj_data *chip = read_object(OBJ_BLANK_BURNER_CHIP, VIRTUAL, OBJ_LOAD_REASON_COOK_PROGRAM);
-      snprintf(buf, sizeof(buf), "a '%s' burner chip", design->name);
-      chip->restring = str_dup(buf);
-      GET_OBJ_VAL(chip, 0) = design->program_type;
-      GET_OBJ_VAL(chip, 1) = design->rating;
-      GET_OBJ_VAL(chip, 2) = design->size;
-      GET_OBJ_VAL(chip, 3) = design->wound_category;
+      struct obj_data *chip = matrix_file_to_obj(design);
       /* Instead of removing the software from the machine, we copy it instead if it's a cookable copyable thing. */
       if (program_can_be_copied(design)) {
         send_to_char("You save a copy to disk before sending it to your cooker.\r\n", ch);
