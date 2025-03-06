@@ -948,13 +948,6 @@ int parse_assign(struct descriptor_data *d, const char *arg)
   if (d->ccr.pr[lowest_kosher_magic_slot] == PR_RACE)
     lowest_kosher_magic_slot--;
 
-  // Except for otaku who are always mundane lol
-  if (*arg == 2 && d->ccr.is_otaku) {
-    snprintf(buf2, sizeof(buf2), "Magic cannot be assigned on Otaku characters, they are always mundane.");
-    SEND_TO_Q(buf2, d);
-    return 0;
-  }
-
   if (*arg == '2' && (d->ccr.temp > 1 && d->ccr.temp != lowest_kosher_magic_slot)) {
     char kosher_slot = 'A' + lowest_kosher_magic_slot;
     snprintf(buf2, sizeof(buf2), "Magic can only fit in slots A, B, or %c for %s characters.",
@@ -962,6 +955,13 @@ int parse_assign(struct descriptor_data *d, const char *arg)
             pc_race_types[(int)GET_RACE(d->character)]);
     SEND_TO_Q(buf2, d);
     return 0;
+  }
+
+  if (d->ccr.is_otaku && *arg == '2') {
+    if (d->ccr.temp < 3) {
+      send_to_char(d->character, "Magic can only fit in slots D, or E for Otaku characters.\r\n");
+      return FALSE;
+    }
   }
 
   switch (*arg)
@@ -1066,7 +1066,7 @@ void priority_menu(struct descriptor_data *d)
     case PR_RESOURCE:
       snprintf(buf3, sizeof(buf3), "%sResources   -            -         %d nuyen / %d\r\n",
                buf2,
-               MIN(nuyen_vals[i], d->ccr.is_otaku ? 5000 : nuyen_vals[0]),
+               cg_nuyen(d, i),
                force_vals[i]);
       strlcpy(buf2, buf3, sizeof(buf2));
       break;

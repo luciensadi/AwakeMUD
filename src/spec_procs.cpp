@@ -5690,7 +5690,7 @@ SPECIAL(chargen_skill_annex) {
       for (int i = SKILL_CORPORATE_ETIQUETTE; i <= SKILL_ELF_ETIQUETTE; i++) {
         if (GET_SKILL(ch, i) > 4) {
           send_to_char(ch, "Socially maladjusted decker children cannot have an etiquette skill higher than 4. You should ^WUNPRACTICE^n your %s before proceeding.\r\n", skills[i].name);
-          return;
+          return TRUE;
         }
       }
 
