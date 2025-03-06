@@ -948,13 +948,6 @@ int parse_assign(struct descriptor_data *d, const char *arg)
   if (d->ccr.pr[lowest_kosher_magic_slot] == PR_RACE)
     lowest_kosher_magic_slot--;
 
-  // Except for otaku who are always mundane lol
-  if (*arg == 2 && d->ccr.is_otaku) {
-    snprintf(buf2, sizeof(buf2), "Magic cannot be assigned on Otaku characters, they are always mundane.");
-    SEND_TO_Q(buf2, d);
-    return 0;
-  }
-
   if (*arg == '2' && (d->ccr.temp > 1 && d->ccr.temp != lowest_kosher_magic_slot)) {
     char kosher_slot = 'A' + lowest_kosher_magic_slot;
     snprintf(buf2, sizeof(buf2), "Magic can only fit in slots A, B, or %c for %s characters.",
@@ -962,6 +955,13 @@ int parse_assign(struct descriptor_data *d, const char *arg)
             pc_race_types[(int)GET_RACE(d->character)]);
     SEND_TO_Q(buf2, d);
     return 0;
+  }
+
+  if (d->ccr.is_otaku && *arg == '2') {
+    if (d->ccr.temp < 3) {
+      send_to_char(d->character, "Magic can only fit in slots D, or E for Otaku characters.\r\n");
+      return FALSE;
+    }
   }
 
   switch (*arg)
@@ -1066,7 +1066,7 @@ void priority_menu(struct descriptor_data *d)
     case PR_RESOURCE:
       snprintf(buf3, sizeof(buf3), "%sResources   -            -         %d nuyen / %d\r\n",
                buf2,
-               MIN(nuyen_vals[i], d->ccr.is_otaku ? 5000 : nuyen_vals[0]),
+               cg_nuyen(d, i),
                force_vals[i]);
       strlcpy(buf2, buf3, sizeof(buf2));
       break;
@@ -1126,8 +1126,12 @@ static void start_game(descriptor_data *d, const char *origin)
     GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
   }
 
-  // Otaku get some starting gear, so assign that here
+  // Otaku get some starting gear and skills, so assign that here
   if (d->ccr.is_otaku) {
+    // Assign starting computers to be helpful
+    GET_SKILL_POINTS(d->character) -= 6;
+    set_character_skill(d->character, SKILL_COMPUTER, 6, FALSE);
+
     // Equip cyberware (deduct essence and modify stats as appropriate)
     obj_data *temp_obj;
     for (int cyb = 0; cyb < OTAKU_CYBERWARE_NUM; cyb++) {
@@ -1383,6 +1387,8 @@ void create_parse(struct descriptor_data *d, const char *arg)
       send_to_char(CH, "You cannot have less than 0 points of skill. Enter desired number of skill points (^c%d^n available):",d->ccr.points);
     else if (i > d->ccr.points)
       send_to_char(CH, "You do not have enough points for that. Enter desired number of skill points (^c%d^n available):", d->ccr.points);
+    else if (d->ccr.is_otaku && i < 6)
+      send_to_char(CH, "You cannot have less than 6 points of skill as an Otaku. Enter desired number of skill points (^c%d^n available):", d->ccr.points);
     else {
       d->ccr.points -= d->ccr.pr[PO_SKILL] = i;
       points_menu(d);
@@ -1629,6 +1635,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
   case CCR_PRESTIGE_PAYMENT_GET_NAME:
     if (!str_cmp(arg, "abort")) {
       d->ccr.prestige_race = d->ccr.prestige_bagholder = 0;
+      d->ccr.is_otaku = FALSE;
       display_prestige_race_menu(d);
       return;
     }
