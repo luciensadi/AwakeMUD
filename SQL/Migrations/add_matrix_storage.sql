@@ -3,6 +3,7 @@ CREATE TABLE `matrix_files` (
   `idnum` mediumint(5) unsigned,
   `name` varchar(256) default '',
   `file_type` tinyint(2) default '0',
+  `program_type` tinyint(2) default '0',
   `rating` tinyint(2) default '0',
   `size` int(8) default '0',
   `attack_damage` tinyint(2) default '0',

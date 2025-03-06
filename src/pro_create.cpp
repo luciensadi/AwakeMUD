@@ -246,6 +246,7 @@ void create_program(struct char_data *ch)
   struct matrix_file *design = create_matrix_file(deck, OBJ_LOAD_REASON_CREATE_PROGRAM);
   STATE(ch->desc) = CON_PRO_CREATE;
   design->name = str_dup("a blank program");
+  design->file_type = MATRIX_FILE_DESIGN;
   ch->desc->edit_matrix_file = design;
   pedit_disp_menu(ch->desc);
 }
