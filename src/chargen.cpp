@@ -1126,8 +1126,12 @@ static void start_game(descriptor_data *d, const char *origin)
     GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
   }
 
-  // Otaku get some starting gear, so assign that here
+  // Otaku get some starting gear and skills, so assign that here
   if (d->ccr.is_otaku) {
+    // Assign starting computers to be helpful
+    GET_SKILL_POINTS(d->character) -= 6;
+    set_character_skill(d->character, SKILL_COMPUTER, 6, FALSE);
+
     // Equip cyberware (deduct essence and modify stats as appropriate)
     obj_data *temp_obj;
     for (int cyb = 0; cyb < OTAKU_CYBERWARE_NUM; cyb++) {
