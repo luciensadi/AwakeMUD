@@ -391,6 +391,30 @@ CREATE TABLE `pfiles_factions` (
   PRIMARY KEY (`idnum`, `faction`)
 );
 
+CREATE TABLE `matrix_files` (
+  `idnum` mediumint(5) unsigned,
+  `name` varchar(256) default '',
+  `content` TEXT default '',
+  `file_type` tinyint(2) default '0',
+  `program_type` tinyint(2) default '0',
+  `rating` tinyint(2) default '0',
+  `size` int(8) default '0',
+  `attack_damage` tinyint(2) default '0',
+  `is_default` tinyint(2) default '0',
+  `creation_time` mediumint(5) unsigned default '0',
+
+  `work_phase` tinyint(2) default '0',
+  `work_ticks_left` tinyint(2) default '0',
+  `work_original_ticks_left` tinyint(2) default '0',
+  `work_successes` tinyint(2) default '0',
+
+  `last_decay_time` mediumint(5) unsigned default '0',
+
+  `creator_idnum` mediumint(5) unsigned default '0',
+  `in_obj_vnum` mediumint(5) unsigned default '0',
+  KEY(`idnum`)
+);
+
 INSERT INTO `help_category` VALUES (0,'Combat'),(2,'General'),(1,'Magic'),(3,'Maps'),(4,'Matrix'),(5,'Rigging');
 
 CREATE TABLE `help_topic` (

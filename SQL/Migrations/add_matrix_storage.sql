@@ -1,7 +1,7 @@
-
 CREATE TABLE `matrix_files` (
   `idnum` mediumint(5) unsigned,
   `name` varchar(256) default '',
+  `content` TEXT default '',
   `file_type` tinyint(2) default '0',
   `program_type` tinyint(2) default '0',
   `rating` tinyint(2) default '0',

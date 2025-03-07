@@ -356,19 +356,20 @@ bool load_obj_programs(obj_data *obj)
 
   #define MATRIX_FILE_IDNUM               row[0]
   #define MATRIX_FILE_NAME                row[1]
-  #define MATRIX_FILE_TYPE                row[2]
-  #define MATRIX_PROGRAM_TYPE             row[3]
-  #define MATRIX_FILE_RATING              row[4]
-  #define MATRIX_FILE_SIZE                row[5]
-  #define MATRIX_FILE_ATTACK_DAMAGE       row[6]
-  #define MATRIX_FILE_IS_DEFAULT          row[7]
-  #define MATRIX_FILE_CREATION_TIME       row[8]
-  #define MATRIX_FILE_WORK_PHASE          row[9]
-  #define MATRIX_FILE_TICKS_LEFT          row[10]
-  #define MATRIX_FILE_ORIGINAL_TICKS_LEFT row[11]
-  #define MATRIX_FILE_WORK_SUCCESSES      row[12]
-  #define MATRIX_FILE_LAST_DECAY_TIME     row[13]
-  #define MATRIX_FILE_CREATOR_IDNUM       row[14]
+  #define MATRIX_FILE_CONTENT             row[2]
+  #define MATRIX_FILE_TYPE                row[3]
+  #define MATRIX_PROGRAM_TYPE             row[4]
+  #define MATRIX_FILE_RATING              row[5]
+  #define MATRIX_FILE_SIZE                row[6]
+  #define MATRIX_FILE_ATTACK_DAMAGE       row[7]
+  #define MATRIX_FILE_IS_DEFAULT          row[8]
+  #define MATRIX_FILE_CREATION_TIME       row[9]
+  #define MATRIX_FILE_WORK_PHASE          row[10]
+  #define MATRIX_FILE_TICKS_LEFT          row[11]
+  #define MATRIX_FILE_ORIGINAL_TICKS_LEFT row[12]
+  #define MATRIX_FILE_WORK_SUCCESSES      row[13]
+  #define MATRIX_FILE_LAST_DECAY_TIME     row[14]
+  #define MATRIX_FILE_CREATOR_IDNUM       row[15]
 
   snprintf(buf, sizeof(buf), "SELECT * FROM matrix_files WHERE in_obj_vnum=%ld;", GET_OBJ_VNUM(obj));
   mysql_wrapper(mysql, buf);
@@ -1514,13 +1515,14 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     if (!temp->files) continue;
     for (struct matrix_file *file = temp->files; file; file = file->next_file) {
       snprintf(buf, sizeof(buf), "INSERT INTO matrix_files (idnum, in_obj_vnum, "\
-      "name, file_type, program_type, rating, size, attack_damage, is_default, last_decay_time, "\
+      "name, content, file_type, program_type, rating, size, attack_damage, is_default, last_decay_time, "\
       "creation_time, creator_idnum, work_ticks_left, work_original_ticks_left, "\
       "work_phase, work_successes) "\
-      "VALUES (%ld, %ld, '%s', %d, %d, %d, %d, %d, %d, %ld, %ld, %ld, %d, %d, %d, %d); ",
+      "VALUES (%ld, %ld, '%s', '%s' %d, %d, %d, %d, %d, %d, %ld, %ld, %ld, %d, %d, %d, %d); ",
       file->idnum, 
       GET_OBJ_VNUM(temp),
       prepare_quotes(buf1, file->name, sizeof(buf1) / sizeof(char)),
+      prepare_quotes(buf1, file->content, sizeof(buf1) / sizeof(char)),
       file->file_type,
       file->program_type,
       file->rating,
