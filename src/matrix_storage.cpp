@@ -227,6 +227,7 @@ matrix_file* obj_to_matrix_file(obj_data *prog) {
 obj_data* matrix_file_to_obj(matrix_file *file) {
   struct obj_data *chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
   GET_DECK_ACCESSORY_TYPE(chip) = TYPE_FILE;
+  
   if (file->file_type == MATRIX_FILE_PROGRAM) {
     snprintf(buf, sizeof(buf), "a R%d %s '%s' program chip", file->rating, capitalize(programs[file->program_type].name), file->name);
   } else if (file->file_type == MATRIX_FILE_SOURCE_CODE) {
@@ -234,7 +235,7 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
   } else if (file->file_type == MATRIX_FILE_DESIGN) {
     snprintf(buf, sizeof(buf), "a R%d %s '%s' design chip", file->rating, capitalize(programs[file->program_type].name), file->name);
   } else {
-    snprintf(buf, sizeof(buf), "a %s optical chip", file->name);
+    snprintf(buf, sizeof(buf), "a '%s' optical chip", file->name);
   }
   
   chip->restring = str_dup(buf);
@@ -243,6 +244,7 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
 
   // We hide the file on the chip because .. it makes things easier.
   file->in_obj = chip;
+  file->next_file = chip->files;
   chip->files = file; 
 
   return chip;
@@ -387,20 +389,17 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
     } else {
       for (struct matrix_file *file = device->files; file; file = file->next_file) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    [^g%4d^nmp] %-30s", file->size, file->name);
-        if (file->file_type == MATRIX_FILE_PROGRAM || file->file_type == MATRIX_FILE_DESIGN) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " R%-2d %-16s", file->rating, programs[file->program_type].name);
+        if (file->file_type == MATRIX_FILE_PROGRAM || file->file_type == MATRIX_FILE_DESIGN || file->file_type == MATRIX_FILE_SOURCE_CODE) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " R%-2d %-18s", file->rating, programs[file->program_type].name);
 
-          if (file->file_type == MATRIX_FILE_DESIGN && file->work_phase < WORK_PHASE_READY)
+          if (file->file_type == MATRIX_FILE_DESIGN && file->work_phase <= WORK_PHASE_READY)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(concept)^n");
           else if (file->file_type == MATRIX_FILE_DESIGN)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(design)^n");
           else if (file->file_type == MATRIX_FILE_SOURCE_CODE)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(source)^n");
           else if (file->file_type == MATRIX_FILE_PROGRAM)
-            if (file->program_type == SOFT_SUITE)
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(suite)^n");
-            else
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(program)^n");
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(program)^n");
         }
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
       }

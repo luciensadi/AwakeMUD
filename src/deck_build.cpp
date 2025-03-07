@@ -566,14 +566,16 @@ ACMD(do_cook) {
       }
 
       struct matrix_file *prog = clone_matrix_file(design);
-      prog->program_type = MATRIX_FILE_PROGRAM;
+      prog->file_type = MATRIX_FILE_PROGRAM;
+      prog->load_origin = OBJ_LOAD_REASON_COOK_PROGRAM;
 
       struct obj_data *chip = matrix_file_to_obj(prog);
+      chip->load_origin = OBJ_LOAD_REASON_COOK_PROGRAM;
+
       /* Instead of removing the software from the machine, we copy it instead if it's a cookable copyable thing. */
       if (program_can_be_copied(design)) {
         send_to_char("You save a copy to disk before sending it to your cooker.\r\n", ch);
       } else {
-        // Can't be copied? OK, use the old behavior of removing the item.
         send_to_char(ch, "%s is too bespoke to be useful for a different deck, so you send it to your cooker without copying it first.\r\n", capitalize(design->name));
         extract_matrix_file(design);
       }

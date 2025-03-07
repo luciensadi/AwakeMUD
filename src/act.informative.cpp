@@ -4291,14 +4291,14 @@ ACMD(do_examine)
     else if (GET_OBJ_TYPE(tmp_object) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(tmp_object, 0) == TYPE_COOKER) {
       if (!tmp_object->contains)
         strncpy(buf, "The small LED is currently off.\r\n", sizeof(buf));
-      else if (GET_OBJ_VAL(tmp_object, 9))
+      else if (GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(tmp_object))
         snprintf(buf, sizeof(buf), "The small LED is currently orange, indicating activity. The progress meter for cooking %s is at %d%%.\r\n",
                  GET_OBJ_NAME(tmp_object->contains),
                  (int)(((float)(GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(tmp_object) - GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(tmp_object)) / GET_DECK_ACCESSORY_COOKER_ORIGINAL_TIME(tmp_object)) * 100));
       else if (GET_OBJ_TIMER(tmp_object->contains) == -1)
-        strncpy(buf, "The small LED is currently flashed red, indicating a failed encode.\r\n", sizeof(buf));
+        strncpy(buf, "The small LED is currently flashed ^rred^n, indicating a failed encode.\r\n", sizeof(buf));
       else
-        strncpy(buf, "The small LED is currently green, indicating a successful encode.\r\n", sizeof(buf));
+        strncpy(buf, "The small LED is currently ^ggreen^n, indicating a successful encode.\r\n", sizeof(buf));
       send_to_char(buf, ch);
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_PROGRAM && (GET_OBJ_VAL(tmp_object, 0) >= SOFT_ASIST_COLD || GET_OBJ_VAL(tmp_object, 0) < SOFT_SENSOR)) {
       if (GET_OBJ_TIMER(tmp_object) < 0)
