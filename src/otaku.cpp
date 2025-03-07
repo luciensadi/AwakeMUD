@@ -166,8 +166,7 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
     // Cyberadepts get +1 to Complex Forms
     if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) active->rating += 1;
 
-    // active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_RESONANCE);
-    // active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
+    active->resonant = TRUE;
 
     char restring[500];
     snprintf(restring, sizeof(restring), "a rating-%d %s complex form", GET_PROGRAM_RATING(form), programs[GET_PROGRAM_TYPE(form)].name);

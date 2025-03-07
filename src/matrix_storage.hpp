@@ -6,15 +6,111 @@
 // Global atomic integer to ensure unique IDs
 extern std::atomic<long>    matrix_file_id_counter;
 
-// High level functions; the ones you probably want to use when messing with this system
+/******************************************************************************************************
+ * High level functions; the ones you probably want to use when messing with this system
+ * 
+ * All of these functions adjust memory, perform high level functions like validating skillsofts,
+ * and so on. Very important stuff.
+ */
+
+/**
+ * @brief Deletes a matrix file from all locations where it is stored.
+ *
+ * If the matrix file is linked to a character, it will deactivate skillsoft functionality
+ * before removing the file from the host or device storage.
+ * Finally, it extracts and fully removes the file from the system.
+ *
+ * @param file The matrix file to be deleted.
+ */
 void                delete_matrix_file(struct matrix_file file);
+
+/**
+ * @brief Creates a copy of a matrix file and places it in a specified device.
+ *
+ * This function clones the given matrix file and assigns the copy to the specified device.
+ * If `to_device` is valid, the copied file is linked to it, updating its file list accordingly.
+ *
+ * @param file The matrix file to be copied.
+ * @param to_device The target device where the copied file should be stored.
+ * @return A pointer to the newly created copy of the matrix file.
+ */
 matrix_file*        copy_matrix_file_to(struct matrix_file *file, obj_data* to_device);
+
+/**
+ * @brief Moves a matrix file from its current location to a specified device.
+ *
+ * The function removes the file from its current host or device before placing it in the
+ * new device. It adjusts memory allocations accordingly when transferring the file.
+ *
+ * @param file The matrix file to be moved.
+ * @param to_device The target device where the file will be stored.
+ */
 void                move_matrix_file_to(struct matrix_file *file, obj_data* to_device);
+
+/**
+ * @brief Moves a matrix file from its current location to a specified host.
+ *
+ * The function removes the file from its current host or device before placing it in the
+ * new host. It ensures proper memory adjustments when transferring the file between locations.
+ *
+ * @param file The matrix file to be moved.
+ * @param to_host The target host where the file will be stored.
+ */
 void                move_matrix_file_to(struct matrix_file *file, host_data* to_host);
 
-// Low level functions, a lot of these shouldn't be necessary but are exposed for advanced functionality.
+/******************************************************************************************************
+ * Low level functions, a lot of these shouldn't be necessary but are exposed for advanced functionality.
+ * 
+ * Using these functions is not recommended unless you're also prepared to do all the functions,
+ * and assume nothing about their functionality. No handholding.
+ */
+
+/**
+ * @brief Calculates the available free memory on a given device.
+ *
+ * This function computes the free memory by subtracting the used memory from the total memory.
+ *
+ * @param device The device whose free memory is being calculated.
+ * @return The amount of free memory available on the device.
+ */
 int                 get_device_free_memory(struct obj_data *device);
+
+/**
+ * @brief Retrieves the amount of memory currently used on a given device.
+ *
+ * This function determines how much memory is in use based on the device type.
+ * - For `ITEM_DECK_ACCESSORY`, the used memory is stored in `GET_OBJ_VAL(device, 3)`.
+ * - For `ITEM_CUSTOM_DECK` and `ITEM_CYBERDECK`, the used memory is stored in `GET_OBJ_VAL(device, 5)`.
+ *
+ * @param device The device whose used memory is being queried.
+ * @return The amount of memory currently in use, or 0 if the device type is unrecognized.
+ */
+int                 get_device_used_memory(struct obj_data *device);
+
+/**
+ * @brief Retrieves the total memory capacity of a given device.
+ *
+ * This function determines the total memory available on the device based on its type.
+ * - For `ITEM_DECK_ACCESSORY`, the total memory is stored in `GET_OBJ_VAL(device, 2)`.
+ * - For `ITEM_CUSTOM_DECK` and `ITEM_CYBERDECK`, the total memory is stored in `GET_OBJ_VAL(device, 3)`.
+ *
+ * @param device The device whose total memory is being queried.
+ * @return The total memory available on the device, or 0 if the device type is unrecognized.
+ */
+int                 get_device_total_memory(struct obj_data *device);
+
+/**
+ * @brief Creates a new matrix file and optionally stores it in a specified device.
+ *
+ * This function initializes a new matrix file, assigning it a unique ID and setting its creation time.
+ * If a storage device is provided, the file is added to its list of stored files.
+ *
+ * @param storage The device where the new matrix file should be stored. If NULL, the file is created without storage.
+ * @param load_origin The origin identifier for the file's creation.
+ * @return A pointer to the newly created matrix file.
+ */
 matrix_file*        create_matrix_file(obj_data *storage, int load_origin);
+
 /**
  * @brief Converts an object into a matrix file.
  *
@@ -34,6 +130,7 @@ matrix_file*        create_matrix_file(obj_data *storage, int load_origin);
  */
 matrix_file*        obj_to_matrix_file(obj_data *prog, obj_data *device);
 matrix_file*        obj_to_matrix_file(obj_data *prog);
+
 /**
  * @brief Creates a duplicate of a matrix file.
  *
@@ -50,6 +147,7 @@ matrix_file*        obj_to_matrix_file(obj_data *prog);
  *          likely result in undefined behavior.
  */
 matrix_file*        clone_matrix_file(struct matrix_file *source);
+
 /**
  * @brief Converts a matrix file into an object.
  *
@@ -63,7 +161,20 @@ matrix_file*        clone_matrix_file(struct matrix_file *source);
  *       If the file was previously associated with another object, it is removed.
  */
 obj_data*           matrix_file_to_obj(matrix_file *file);
+
+/**
+ * @brief Finds an internal storage device for a character, optionally checking for available free space.
+ *
+ * This function retrieves a list of internal storage devices available to the given character and returns
+ * the first device that meets the specified free space requirement. If `free_space` is 0, it simply returns
+ * the first available storage device.
+ *
+ * @param ch The character whose internal storage devices are being searched.
+ * @param free_space The minimum amount of free memory required. If 0, the first available device is returned.
+ * @return A pointer to the first storage device that meets the criteria, or NULL if no suitable device is found.
+ */
 obj_data*           find_internal_storage(struct char_data *ch, int free_space=0);
+
 /**
  * @brief Determines if a keyword appears in a matrix file's name or content.
  *
@@ -83,6 +194,7 @@ obj_data*           find_internal_storage(struct char_data *ch, int free_space=0
  * @warning Logs a system error if a NULL file is received.
  */
 const char*         keyword_appears_in_file(const char *keyword, struct matrix_file *file, bool search_name=1, bool search_desc=0);
+
 /**
  * @brief Searches for a visible matrix file in a given list by name.
  *
@@ -101,7 +213,7 @@ const char*         keyword_appears_in_file(const char *keyword, struct matrix_f
  *       or the number is invalid, the function returns `NULL`.
  */
 struct matrix_file* get_matrix_file_in_list_vis(struct char_data *ch, const char *name, struct matrix_file *list);
-obj_data*           find_obj_in_vector_vis(struct char_data * ch, const char *name, std::vector<obj_data *> &list);
+
 /**
  * @brief Extracts a matrix file from the world.
  *
@@ -119,7 +231,7 @@ obj_data*           find_obj_in_vector_vis(struct char_data * ch, const char *na
  *          pointer verification is performed, which may impact performance.
  */
 void                extract_matrix_file(struct matrix_file *file);
-bool                handle_matrix_file_transfer(struct char_data *ch, char *argument);
+
 /**
  * @brief Determines if a program can be copied.
  *
@@ -133,8 +245,6 @@ bool                handle_matrix_file_transfer(struct char_data *ch, char *argu
  *       are explicitly restricted from being copied.
  */
 bool                program_can_be_copied(struct matrix_file *prog);
-bool                perform_get_matrix_file_from_device(struct char_data *ch, struct matrix_file *file,
-                        struct obj_data *device, int mode);
 /**
  * @brief Determines if a matrix file can fit on a given device.
  *
@@ -179,5 +289,10 @@ std::vector<struct obj_data*>      get_internal_storage_devices(struct char_data
  * @note The function ensures that storage devices are deduplicated before returning the list.
  */
 std::vector<struct obj_data*>      get_storage_devices(struct char_data *ch, bool only_relevant = FALSE);
+
+obj_data*           find_obj_in_vector_vis(struct char_data * ch, const char *name, std::vector<obj_data *> &list);
+bool                perform_get_matrix_file_from_device(struct char_data *ch, struct matrix_file *file,
+                        struct obj_data *device, int mode);
+bool                handle_matrix_file_transfer(struct char_data *ch, char *argument);
 
 #endif

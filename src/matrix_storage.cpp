@@ -488,7 +488,7 @@ ACMD(do_memory) {
 matrix_file* copy_matrix_file_to(struct matrix_file *file, obj_data* to_device) {
   struct matrix_file *copy = clone_matrix_file(file);
 
-  if (!to_device) {
+  if (to_device) {
     copy->in_obj = to_device;
     copy->next_file = to_device->files;
     to_device->files = file;

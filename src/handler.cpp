@@ -2696,6 +2696,10 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
     set = TRUE;
   }
 
+  /* Don't forget to get rid of the all the files attached to the object. */
+  while (obj->files)
+    extract_matrix_file(obj->files);
+
   /* Get rid of the contents of the object, as well. ITEM_PART contains its cyberdeck, so don't extract that. */
   if (GET_OBJ_TYPE(obj) != ITEM_PART) {
     while (obj->contains)
