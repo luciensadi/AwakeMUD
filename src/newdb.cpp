@@ -1268,6 +1268,23 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   if (IS_NPC(player))
     return false;
 
+  // Check all their stuff over. If it's ALL empty, this is a bugged character and should not be saved.
+  {
+    bool has_any_item = player->cyberware || player->bioware || player->carrying;
+    
+    for (int wear_idx = 0; !has_any_item && wear_idx < NUM_WEARS; wear_idx++) {
+      if (GET_EQ(player, wear_idx)) {
+        has_any_item = TRUE;
+        break;
+      }
+    }
+
+    if (!has_any_item) {
+      mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Got completely nude character to save_char(). Refusing to save them under the assumption that this is a stripped char from that untraced bug that sometimes destroys gear.\r\n");
+      return false;
+    }
+  }
+
   MYSQL_RES *res;
   MYSQL_ROW row;
   snprintf(buf, sizeof(buf), "SELECT `idnum` FROM pfiles WHERE `idnum`=%ld;", GET_IDNUM(player));
