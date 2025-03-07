@@ -58,6 +58,13 @@ int get_device_used_memory(struct obj_data *device) {
   return 0;
 }
 
+int get_device_free_memory(struct obj_data *device) {
+  int total_memory = get_device_total_memory(device);
+  int used_memory = get_device_used_memory(device);
+
+  return total_memory - used_memory;
+}
+
 bool can_file_fit(struct matrix_file *file, struct obj_data *device) {
   if (!file->size) return TRUE;
   
@@ -68,7 +75,7 @@ bool can_file_fit(struct matrix_file *file, struct obj_data *device) {
   return TRUE;
 }
 
-std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool only_relevant = FALSE) {
+std::vector<struct obj_data*> get_internal_storage_devices(struct char_data *ch) {
   struct obj_data* cyber;
   std::vector<struct obj_data*> found_list = {};
 
@@ -76,6 +83,13 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
   if (cyber) {
     found_list.push_back(cyber);
   }
+
+  return found_list;
+}
+
+std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool only_relevant = FALSE) {
+  struct obj_data* cyber;
+  std::vector<struct obj_data*> found_list = get_internal_storage_devices(ch);
 
   if (only_relevant && AFF_FLAGGED(ch, PLR_MATRIX)) {
     /* When someone is decking, the only thing that matters is their headware memory and deck. */
@@ -86,11 +100,6 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
         found_list.push_back(ch->persona->decker->proxy_deck);
     }
     return found_list;
-  }
-
-  cyber = find_cyberware(ch, CYB_CRANIALCYBER);
-  if (cyber) {
-    found_list.push_back(cyber);
   }
 
   for (cyber = ch->carrying; cyber; cyber = cyber->next_content)
@@ -108,6 +117,23 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
   std::unordered_set<obj_data*> unique_set(found_list.begin(), found_list.end());
   found_list.assign(unique_set.begin(), unique_set.end());
   return found_list;
+}
+
+obj_data* find_internal_storage(struct char_data *ch, int free_space) {
+  std::vector<obj_data *> list = get_internal_storage_devices(ch);
+
+  if (list.size() <= 0) return NULL;
+
+  for(obj_data* i : list)  {
+    if (!free_space) return i;
+
+    int total_memory = get_device_total_memory(i);
+    int used_memory = get_device_used_memory(i);
+    int free_memory = total_memory - used_memory;
+    if (free_memory >= free_space) return i;
+  }
+
+  return NULL;
 }
 
 obj_data* find_obj_in_vector_vis(struct char_data * ch, const char *name, std::vector<obj_data *> &list) {

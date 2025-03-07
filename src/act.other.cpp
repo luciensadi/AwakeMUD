@@ -42,6 +42,7 @@
 #include "moderation.hpp"
 #include "chipjacks.hpp"
 #include "player_exdescs.hpp"
+#include "matrix_storage.hpp"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -3114,11 +3115,9 @@ ACMD(do_photo)
     for (temp = ch->cyberware; temp; temp = temp->next_content)
       if (GET_CYBERWARE_TYPE(temp) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(temp), EYE_CAMERA))
         camera = temp;
-      else if (GET_CYBERWARE_TYPE(temp) == CYB_MEMORY)
-        mem = temp;
+    mem = find_internal_storage(ch, 1);
     if (camera) {
-      FAILURE_CASE(!mem, "You need headware memory to take a picture with an eye camera.");
-      FAILURE_CASE(GET_CYBERWARE_MEMORY_FREE(mem) < 1, "You don't have enough headware memory to take a photo now.");
+      FAILURE_CASE(!mem, "You need headware memory with available space to take a picture with an eye camera.");
     }
   }
   
@@ -4160,13 +4159,12 @@ ACMD(do_imagelink)
     return;
   }
   struct obj_data *memory = NULL, *link = NULL;
+  memory = find_internal_storage(ch);
   for (struct obj_data *obj = ch->cyberware; obj && !(memory && link); obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY)
-      memory = obj;
-    else if (GET_OBJ_VAL(obj, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(obj, 3), EYE_IMAGELINK))
+    if (GET_OBJ_VAL(obj, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(obj, 3), EYE_IMAGELINK))
       link = obj;
   if (!memory || !link) {
-    send_to_char("You need headware memory and an image link to do this.\r\n", ch);
+    send_to_char("You need headware memory with free space and an image link to do this.\r\n", ch);
     return;
   }
   int x = atoi(argument);
