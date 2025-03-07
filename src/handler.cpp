@@ -1405,35 +1405,35 @@ void icon_from_host(struct matrix_icon *icon)
 
   // Unlink any files that have been claimed by this icon.
   if (icon->idnum) {
-    for (struct obj_data *soft = matrix[icon->in_host].file, *next_file; soft; soft = next_file) {
-      next_file = soft->next_content;
+    for (struct matrix_file *soft = matrix[icon->in_host].files, *next_file; soft; soft = next_file) {
+      next_file = soft->next_file;
 
-      if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
-        // Stop in-progress downloads.
-        if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) == icon->idnum) {
-          GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) = 0;
-          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
-        }
+      // Stop in-progress downloads.
+      if (soft->file_worker == icon->idnum) {
+        soft->file_worker = 0;
+        soft->transfer_remaining = 0;
+        soft->transferring_to = NULL;
+      }
 
-        // Unlock found items so others can find them.
-        if (GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) == icon->idnum) {
-          GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) = 0;
-          GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) = 0;
-          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
+      // Unlock found items so others can find them.
+      if (soft->found_by == icon->idnum) {
+        soft->found_by = 0;
+        soft->file_worker = 0;
+        soft->transfer_remaining = 0;
+        soft->transferring_to = NULL;
 
-          // If it's paydata, we extract it entirely, then potentially put it back in the paydata queue to be rediscovered.
-          if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY
-              && GET_DECK_ACCESSORY_TYPE(soft) == TYPE_FILE
-              && GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft) == matrix[icon->in_host].vnum)
-          {
-            // 66% chance of being rediscoverable.
-            if (number(0, 2)) {
-              matrix[icon->in_host].undiscovered_paydata++;
-            }
-
-            extract_obj(soft);
-            continue;
+        // If it's paydata, we extract it entirely, then potentially put it back in the paydata queue to be rediscovered.
+        if (soft->file_type == MATRIX_FILE_PAYDATA
+            && soft->in_host
+            && soft->in_host->vnum == matrix[icon->in_host].vnum)
+        {
+          // 66% chance of being rediscoverable.
+          if (number(0, 2)) {
+            matrix[icon->in_host].undiscovered_paydata++;
           }
+
+          extract_matrix_file(soft);
+          continue;
         }
       }
     }
@@ -2230,39 +2230,6 @@ void obj_from_room(struct obj_data * object)
   GET_OBJ_EXPIRATION_TIMESTAMP(object) = 0;
 }
 
-/* Put an object in a Matrix host. */
-void obj_to_host(struct obj_data *obj, struct host_data *host) {
-  if (!host) {
-    mudlog("SYSERR: Null host given to obj_to_host!", NULL, LOG_SYSLOG, TRUE);
-    return;
-  }
-
-  // Check our object-related preconditions. All error logging is done there.
-  if (!check_obj_to_x_preconditions(obj, NULL))
-    return;
-
-  obj->in_host = host;
-  obj->next_content = host->file;
-  host->file = obj;
-}
-
-/* Remove an object from a Matrix host. */
-void obj_from_host(struct obj_data *obj) {
-  if (!obj) {
-    mudlog("SYSERR: Null obj given to obj_from_host!", NULL, LOG_SYSLOG, TRUE);
-    return;
-  }
-
-  if (!obj->in_host) {
-    mudlog("SYSERR: Non-hosted obj given to obj_from_host!", NULL, LOG_SYSLOG, TRUE);
-    return;
-  }
-
-  struct obj_data *temp;
-  REMOVE_FROM_LIST(obj, obj->in_host->file, next_content);
-  obj->in_host = NULL;
-}
-
 /* put an object in an object (quaint)  */
 void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
 {
@@ -2712,13 +2679,6 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
     obj_from_room(obj);
     if (set)
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_room)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
-    set = TRUE;
-  }
-
-  if (obj->in_host) {
-    obj_from_host(obj);
-    if (set)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_host)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     set = TRUE;
   }
 

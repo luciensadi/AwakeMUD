@@ -2463,10 +2463,6 @@ int special(struct char_data * ch, int cmd, char *arg)
   struct obj_data *i;
   if (ch->persona)
   {
-    for (i = matrix[ch->persona->in_host].file; i; i = i->next_content)
-      if (GET_OBJ_SPEC(i) != NULL)
-        if (GET_OBJ_SPEC(i) (ch, i, cmd, arg))
-          return 1;
     return 0;
   }
 

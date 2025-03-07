@@ -1054,7 +1054,7 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
     || (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cont) == TYPE_COMPUTER)
     ) {
     // We're getting something from a deck; we give priority to checking if it's a program.
-    if (file = get_matrix_file_in_list_vis(ch, arg, cont->files)) {
+    if ((file = get_matrix_file_in_list_vis(ch, arg, cont->files))) {
       perform_get_matrix_file_from_device(ch, file, cont, mode);
       return;
     }

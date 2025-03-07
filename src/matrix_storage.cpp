@@ -87,7 +87,7 @@ std::vector<struct obj_data*> get_internal_storage_devices(struct char_data *ch)
   return found_list;
 }
 
-std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool only_relevant = FALSE) {
+std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool only_relevant) {
   struct obj_data* cyber;
   std::vector<struct obj_data*> found_list = get_internal_storage_devices(ch);
 
@@ -140,7 +140,6 @@ obj_data* find_obj_in_vector_vis(struct char_data * ch, const char *name, std::v
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
-  bool staff_bit = IS_SENATOR(ch);
 
   // No list, no worries.
   if (list.size() <= 0)
@@ -186,6 +185,7 @@ matrix_file* clone_matrix_file(struct matrix_file *source) {
   copy->wound_category = source->wound_category;
   copy->is_default = source->is_default;
   copy->creator_idnum = source->creator_idnum;
+  if (source->content) copy->content = strdup(source->content);
 
   copy->work_phase = source->work_phase;
   copy->work_ticks_left = source->work_ticks_left;
@@ -212,6 +212,24 @@ void file_from_obj(struct matrix_file * obj)
   REMOVE_FROM_LIST(obj, obj_from->files, next_file);
 
   obj->in_obj = NULL;
+  obj->next_file = NULL;
+}
+
+/* remove a matrix file from an object */
+void file_from_host(struct matrix_file * obj)
+{
+  struct matrix_file *temp;
+  struct host_data *host_from;
+
+  if (obj->in_host == NULL)
+  {
+    log("error (handler.c): trying to illegally extract obj from obj");
+    return;
+  }
+  host_from = obj->in_host;
+  REMOVE_FROM_LIST(obj, host_from->files, next_file);
+
+  obj->in_host = NULL;
   obj->next_file = NULL;
 }
 
@@ -339,33 +357,16 @@ bool perform_get_matrix_file_from_device(struct char_data *ch, struct matrix_fil
   return TRUE;
 }
 
-/* Remove a file from a Matrix host. */
-// void file_from_host(struct matrix_file *file) {
-//   if (!file) {
-//     mudlog("SYSERR: Null obj given to obj_from_host!", NULL, LOG_SYSLOG, TRUE);
-//     return;
-//   }
-
-//   if (!file->in_host) {
-//     mudlog("SYSERR: Non-hosted obj given to obj_from_host!", NULL, LOG_SYSLOG, TRUE);
-//     return;
-//   }
-
-//   struct matrix_file *temp;
-//   REMOVE_FROM_LIST(file, file->in_host->file, next_file);
-//   file->in_host = NULL;
-// }
-
 /* Extract a matrix file from the world */
 void extract_matrix_file(struct matrix_file *file)
 {
   bool set = FALSE;
-  // if (file->in_host) {
-  //   file_from_host(file);
-  //   if (set)
-  //     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_host)", file->name, file->idnum);
-  //   set = TRUE;
-  // }
+  if (file->in_host) {
+    file_from_host(file);
+    if (set)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_host)", file->name, file->idnum);
+    set = TRUE;
+  }
 
   if (file->in_obj) {
     file_from_obj(file);
@@ -473,6 +474,32 @@ ACMD(do_memory) {
   return print_memory(ch, devices);
 }
 
+matrix_file* copy_matrix_file_to(struct matrix_file *file, obj_data* to_device) {
+  return NULL;
+}
+
+void move_matrix_file_to(struct matrix_file *file, host_data* to_host) {
+    if (file->in_host)
+    file_from_host(file);
+  if (file->in_obj)
+    file_from_obj(file);
+
+    file->in_host = to_host;
+    file->next_file = to_host->files;
+    to_host->files = file;
+}
+
+void move_matrix_file_to(struct matrix_file *file, obj_data* to_device) {
+  if (file->in_host)
+    file_from_host(file);
+  if (file->in_obj)
+    file_from_obj(file);
+  
+  file->in_obj = to_device;
+  file->next_file = to_device->files;
+  to_device->files = file; 
+}
+
 ACMD(do_delete) {
   // TODO
 }
@@ -513,7 +540,7 @@ bool handle_matrix_file_transfer(struct char_data *ch, char *argument) {
   }
 
   for(obj_data* device : search_devices)  {
-    if (file = get_matrix_file_in_list_vis(ch, *remainder ? buf2 : buf1, device->files))
+    if ((file = get_matrix_file_in_list_vis(ch, *remainder ? buf2 : buf1, device->files)))
       break;
   }
 

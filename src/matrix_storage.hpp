@@ -6,6 +6,12 @@
 // Global atomic integer to ensure unique IDs
 extern std::atomic<long>    matrix_file_id_counter;
 
+// High level functions; the ones you probably want to use when messing with this system
+matrix_file*        copy_matrix_file_to(struct matrix_file *file, obj_data* to_device);
+void                move_matrix_file_to(struct matrix_file *file, obj_data* to_device);
+void                move_matrix_file_to(struct matrix_file *file, host_data* to_host);
+
+// Low level functions, a lot of these shouldn't be necessary but are exposed for advanced functionality.
 int                 get_device_free_memory(struct obj_data *device);
 matrix_file*        create_matrix_file(obj_data *storage, int load_origin);
 matrix_file*        obj_to_matrix_file(obj_data *prog, obj_data *device);
@@ -23,5 +29,6 @@ bool                perform_get_matrix_file_from_device(struct char_data *ch, st
 bool                can_file_fit(struct matrix_file *file, struct obj_data *device);
 
 std::vector<struct obj_data*>      get_internal_storage_devices(struct char_data *ch);
+std::vector<struct obj_data*>      get_storage_devices(struct char_data *ch, bool only_relevant = FALSE);
 
 #endif
