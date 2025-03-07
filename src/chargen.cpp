@@ -1544,7 +1544,10 @@ void create_parse(struct descriptor_data *d, const char *arg)
         d->ccr.pr[5] = -1;
 
         // Otaku hardcode removing points
-        if (d->ccr.is_otaku) d->ccr.points -= 30;
+        if (d->ccr.is_otaku) {
+          d->ccr.points -= 30;
+          d->ccr.points -= d->ccr.pr[PO_SKILL] = 6;
+        }
 
         points_menu(d);
         break;
