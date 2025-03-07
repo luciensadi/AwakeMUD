@@ -197,6 +197,21 @@ ACMD(do_debug) {
     return;
   }
 
+  if (!str_cmp(arg1, "idledelete")) {
+    idnum_t idnum = atol(rest_of_argument);
+    FAILURE_CASE_PRINTF(idnum <= 1, "You must enter an IDNUM > 1 to do this; you entered %d.", idnum);
+    FAILURE_CASE_PRINTF(get_player_rank(idnum) == LVL_PRESIDENT, "You can't delete game owners with this command. Demote them first.");
+
+    const char *name = get_player_name(idnum);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Invoked idledelete on %ld (%s)", idnum, name);
+
+    DeleteChar(idnum);
+    send_to_char(ch, "OK, deleted %s.\r\n", name);
+
+    delete [] name;
+    return;
+  }
+
   if (!str_cmp(arg1, "pets")) {
     debug_pet_menu(ch);
     return;
