@@ -241,6 +241,7 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
   if (prog->files) {
     // Sometimes I hide files on objects as a convenient way of saving memory
     struct matrix_file *file = prog->files;
+    
     file_from_obj(prog->files);
 
     if (device) {
@@ -250,10 +251,12 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
     }
     return file;
   }
+
   struct matrix_file *new_file = create_matrix_file(device, prog->load_origin);
 
   new_file->wound_category = GET_PROGRAM_ATTACK_DAMAGE(prog);
-  new_file->name = strdup(prog->restring);
+  if (prog->restring) new_file->name = strdup(prog->restring);
+  else new_file->name = strdup(prog->text.name);
   new_file->rating = GET_PROGRAM_RATING(prog);
   new_file->work_ticks_left = GET_OBJ_VAL(prog, 4);
   new_file->is_default = GET_PROGRAM_IS_DEFAULTED(prog);
@@ -270,6 +273,10 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
     // Skillsoft/knowsoft chip
     new_file->file_type = MATRIX_FILE_SKILLSOFT;
     new_file->skill = GET_CHIP_SKILL(prog);
+  }
+
+  if (device) {
+    adjust_device_memory(device, new_file->size * -1);
   }
   
   return new_file;

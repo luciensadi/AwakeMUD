@@ -174,7 +174,7 @@ struct obj_data
       item_number(0), in_room(NULL), in_veh(NULL), vfront(FALSE), load_origin(0), load_time(0), pc_load_origin(0), pc_load_idnum(0),
       ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
       worn_by(NULL), worn_on(0), in_obj(NULL), contains(NULL), next_content(NULL),
-      in_host(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL), 
+      in_host(NULL), files(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL), 
       dropped_by_host(NULL), dropped_by_char(0), idnum(0)
   {
     #ifdef USE_DEBUG_CANARIES
@@ -1508,8 +1508,6 @@ struct matrix_file {
   int work_ticks_left;
   int work_original_ticks_left;
   int work_successes;  
-
-
   
   // Debug fields
   char load_origin;                              /* Identifies what loaded this. */

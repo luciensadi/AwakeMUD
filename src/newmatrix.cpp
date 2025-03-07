@@ -3072,7 +3072,7 @@ void process_upload(struct matrix_icon *persona)
 {
   if (!persona || !persona->decker) return;
   for (obj_data *device : get_storage_devices(persona->decker->ch, TRUE)) {
-    for (struct matrix_file *file = device->files, *next_file; file; file = next_file) {
+    for (struct matrix_file *file = device->files; file; file = file->next_file) {
       if (!file->transferring_to && !file->transferring_to_host) continue;
 
       if (file->transfer_remaining > 0) {

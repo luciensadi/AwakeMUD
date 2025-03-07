@@ -2158,9 +2158,6 @@ void parse_object(File &fl, long nr)
           GET_OBJ_COST(obj) = GET_CHIP_SIZE(obj) * 150;
           GET_OBJ_AVAILTN(obj) = 5;
         }
-
-        // Part of the migration process; this pre-encodes skillsofts into their own file.
-        obj_to_matrix_file(obj, obj);
         break;
       case ITEM_DRUG:
         if (GET_OBJ_DRUG_DOSES(obj) <= 0)
@@ -2222,9 +2219,6 @@ void parse_object(File &fl, long nr)
           GET_OBJ_AVAILDAY(obj) = 30;
         }
         GET_OBJ_WEIGHT(obj) = 0.02;
-
-        // Part of the migration process; this pre-encodes programs into their own file.
-        obj_to_matrix_file(obj, obj);
         break;
       case ITEM_SPELL_FORMULA:
         GET_OBJ_AVAILTN(obj) = GET_OBJ_VAL(obj, 0);
@@ -4476,6 +4470,12 @@ struct obj_data *read_object(int nr, int type, int load_origin, int pc_load_orig
     GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 0);
   } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
     handle_weapon_attachments(obj);
+
+  if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM
+      || GET_OBJ_TYPE(obj) == ITEM_DESIGN
+      || GET_OBJ_TYPE(obj) == ITEM_CHIP) {
+    obj_to_matrix_file(obj, obj);
+  }
 
   return obj;
 }
