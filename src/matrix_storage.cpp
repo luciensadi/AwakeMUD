@@ -239,8 +239,11 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
     struct matrix_file *file = prog->files;
     file_from_obj(prog->files);
 
-    file->next_file = device->files;
-    device->files = file;
+    if (device) {
+      file->next_file = device->files;
+      device->files = file;
+      adjust_device_memory(device, file->size * -1);
+    }
     return file;
   }
   struct matrix_file *new_file = create_matrix_file(device, prog->load_origin);
@@ -309,9 +312,9 @@ const char * keyword_appears_in_file(const char *keyword, struct matrix_file *fi
     CHECK_KEYWORD(file->name, "name");
   }
 
-  // if (search_desc) {
-  //   CHECK_KEYWORD(file->text.look_desc, "look desc");
-  // }
+  if (search_desc) {
+    CHECK_KEYWORD(file->content, "content");
+  }
 
   return NULL;
 }
@@ -369,6 +372,7 @@ void extract_matrix_file(struct matrix_file *file)
   }
 
   if (file->in_obj) {
+    adjust_device_memory(file->in_obj, file->size);
     file_from_obj(file);
     if (set)
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_obj)", file->name, file->idnum);
@@ -487,25 +491,35 @@ matrix_file* copy_matrix_file_to(struct matrix_file *file, obj_data* to_device) 
 }
 
 void move_matrix_file_to(struct matrix_file *file, host_data* to_host) {
-    if (file->in_host)
+  if (file->in_host) {
     file_from_host(file);
-  if (file->in_obj)
-    file_from_obj(file);
+  }
+
+  if (file->in_obj) {
+    adjust_device_memory(file->in_obj, file->size);
+    file_from_obj(file);    
+  }
 
     file->in_host = to_host;
     file->next_file = to_host->files;
     to_host->files = file;
+    adjust_device_memory(file->in_obj, file->size * -1);
 }
 
 void move_matrix_file_to(struct matrix_file *file, obj_data* to_device) {
-  if (file->in_host)
+  if (file->in_host) {
     file_from_host(file);
-  if (file->in_obj)
+  }
+
+  if (file->in_obj) {
+    adjust_device_memory(file->in_obj, file->size);
     file_from_obj(file);
+  }
   
   file->in_obj = to_device;
   file->next_file = to_device->files;
   to_device->files = file; 
+  adjust_device_memory(file->in_obj, file->size * -1);
 }
 
 ACMD(do_delete) {
@@ -569,9 +583,6 @@ bool handle_matrix_file_transfer(struct char_data *ch, char *argument) {
     act(buf, FALSE, ch, source_deck, target_deck, TO_CHAR);
   }
 
-  file_from_obj(file); 
-  file->in_obj = target_deck;
-  file->next_file = target_deck->files;
-  target_deck->files = file; 
+  move_matrix_file_to(file, target_deck);
   return TRUE;
 } 
