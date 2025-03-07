@@ -1457,9 +1457,11 @@ struct kosher_weapon_values_struct {
 #define WORK_PHASE_IN_PROGRESS   2
 #define WORK_PHASE_COMPLETE      3
 
-#define MATRIX_FILE_DATA     0
-#define MATRIX_FILE_PROGRAM  1
-#define MATRIX_FILE_DESIGN   2
+#define MATRIX_FILE_DATA          0
+#define MATRIX_FILE_DESIGN        1
+#define MATRIX_FILE_SOURCE_CODE   2 // Represents an uncooked program
+#define MATRIX_FILE_PROGRAM       3
+
 
 /* ================== Memory Structure for Matrix Files ================== */
 struct matrix_file {

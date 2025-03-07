@@ -632,7 +632,9 @@ void update_buildrepair(void)
             send_to_char(desc->character, "You complete programming %s.\r\n", GET_PROGRAMMING(CH)->name);
             // We can just change the existing design file into a finished program, rather than dupe it.
             GET_PROGRAMMING(CH)->work_phase = WORK_PHASE_COMPLETE;
-            GET_PROGRAMMING(CH)->file_type = MATRIX_FILE_PROGRAM;
+            GET_PROGRAMMING(CH)->file_type = MATRIX_FILE_SOURCE_CODE;
+            if (GET_PROGRAMMING(CH)->program_type == SOFT_SUITE)
+              GET_PROGRAMMING(CH)->file_type = MATRIX_FILE_PROGRAM; // Programming suites can just be programs
           }
           GET_PROGRAMMING(CH) = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);

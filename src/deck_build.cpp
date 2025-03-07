@@ -526,12 +526,11 @@ ACMD(do_cook) {
     }
     if (!design)
         send_to_char(ch, "You don't see %s installed on any computers here.\r\n", argument);
-    else if (design->file_type != MATRIX_FILE_PROGRAM)
-        send_to_char(ch, "You must finish programming %s first.\r\n", design->name);
+    else if (design->file_type != MATRIX_FILE_SOURCE_CODE)
+        send_to_char(ch, "You cannot cook %s. It's only possible to cook (compile) programs that are source code.", design->name);
+        // send_to_char(ch, "You must finish programming %s first.\r\n", design->name);
     else if (design->timer)
         send_to_char("This chip has already been encoded.\r\n", ch);
-    else if (design->program_type == SOFT_SUITE)
-      send_to_char("Programming suites don't need to be cooked-- just leave them installed on the computer to get their benefits.\r\n", ch);
     else {
       FOR_ITEMS_AROUND_CH(ch, cooker) {
           if (GET_OBJ_TYPE(cooker) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cooker, 0) == TYPE_COOKER && !cooker->contains)
@@ -566,7 +565,10 @@ ACMD(do_cook) {
           return;
       }
 
-      struct obj_data *chip = matrix_file_to_obj(design);
+      struct matrix_file *prog = clone_matrix_file(design);
+      prog->program_type = MATRIX_FILE_PROGRAM;
+      
+      struct obj_data *chip = matrix_file_to_obj(prog);
       /* Instead of removing the software from the machine, we copy it instead if it's a cookable copyable thing. */
       if (program_can_be_copied(design)) {
         send_to_char("You save a copy to disk before sending it to your cooker.\r\n", ch);

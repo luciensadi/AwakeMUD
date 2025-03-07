@@ -138,13 +138,37 @@ matrix_file* create_matrix_file(obj_data *storage, int load_origin) {
   struct matrix_file *new_file = new matrix_file();
   new_file->idnum = _next_matrix_id();
   new_file->load_origin = load_origin;
-  new_file->in_obj = storage;
   new_file->creation_time = time(0);
 
-  new_file->next_file = storage->files;
-  storage->files = new_file;
+  if (storage) {
+    new_file->in_obj = storage;
+    new_file->next_file = storage->files;
+    storage->files = new_file;
+  }
 
   return new_file;
+}
+
+matrix_file* clone_matrix_file(struct matrix_file *source) {
+  struct matrix_file *copy = create_matrix_file(NULL, source->load_origin);
+
+  copy->name = strdup(source->name);
+  copy->file_type = source->file_type;
+  copy->program_type = source->program_type;
+  copy->rating = source->rating;
+  copy->size = source->size;
+  copy->wound_category = source->wound_category;
+  copy->is_default = source->is_default;
+  copy->creator_idnum = source->creator_idnum;
+
+  copy->work_phase = source->work_phase;
+  copy->work_ticks_left = source->work_ticks_left;
+  copy->work_original_ticks_left = source->work_original_ticks_left;
+  copy->work_successes = source->work_successes;
+  
+  copy->last_decay_time = source->last_decay_time;
+
+  return copy;
 }
 
 /* remove a matrix file from an object */
@@ -204,15 +228,18 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
   struct obj_data *chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
   GET_DECK_ACCESSORY_TYPE(chip) = TYPE_FILE;
   if (file->file_type == MATRIX_FILE_PROGRAM) {
-    snprintf(buf, sizeof(buf), "a R%d %s '%s' optical chip", file->rating, capitalize(programs[file->program_type].name), file->name);
+    snprintf(buf, sizeof(buf), "a R%d %s '%s' program chip", file->rating, capitalize(programs[file->program_type].name), file->name);
+  } else if (file->file_type == MATRIX_FILE_SOURCE_CODE) {
+    snprintf(buf, sizeof(buf), "a R%d %s '%s' source chip", file->rating, capitalize(programs[file->program_type].name), file->name);
   } else if (file->file_type == MATRIX_FILE_DESIGN) {
-    snprintf(buf, sizeof(buf), "a R%d %s '%s' optical chip", file->rating, capitalize(programs[file->program_type].name), file->name);
+    snprintf(buf, sizeof(buf), "a R%d %s '%s' design chip", file->rating, capitalize(programs[file->program_type].name), file->name);
   } else {
     snprintf(buf, sizeof(buf), "a %s optical chip", file->name);
   }
   
   chip->restring = str_dup(buf);
-  file_from_obj(file); // derefs from list
+  if (file->in_obj)
+    file_from_obj(file); // derefs from list
 
   // We hide the file on the chip because .. it makes things easier.
   file->in_obj = chip;
@@ -367,8 +394,13 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(concept)^n");
           else if (file->file_type == MATRIX_FILE_DESIGN)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(design)^n");
+          else if (file->file_type == MATRIX_FILE_SOURCE_CODE)
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(source)^n");
           else if (file->file_type == MATRIX_FILE_PROGRAM)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(program)^n");
+            if (file->program_type == SOFT_SUITE)
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(suite)^n");
+            else
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " ^y(program)^n");
         }
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
       }

@@ -9,6 +9,7 @@ extern std::atomic<long>    matrix_file_id_counter;
 matrix_file*        create_matrix_file(obj_data *storage, int load_origin);
 matrix_file*        obj_to_matrix_file(obj_data *prog, obj_data *device);
 matrix_file*        obj_to_matrix_file(obj_data *prog);
+matrix_file*        clone_matrix_file(struct matrix_file *source);
 obj_data*           matrix_file_to_obj(matrix_file *file);
 const char*         keyword_appears_in_file(const char *keyword, struct matrix_file *file, bool search_name=1, bool search_desc=0);
 struct matrix_file* get_matrix_file_in_list_vis(struct char_data *ch, const char *name, struct matrix_file *list);
