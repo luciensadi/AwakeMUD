@@ -1502,6 +1502,7 @@ struct matrix_file {
   struct host_data *transferring_to_host;
   int transfer_remaining;
   int file_protection;
+  int resonant;                                  /* Is this a resonant file for otaku? */
 
   
   // Debug fields

@@ -382,6 +382,7 @@ bool load_obj_programs(obj_data *obj)
 
     file->idnum = atol(MATRIX_FILE_IDNUM);
     file->name = strdup(MATRIX_FILE_NAME); 
+    file->content = strdup(MATRIX_FILE_CONTENT);
     file->file_type = atoi(MATRIX_FILE_TYPE);
     file->program_type = atoi(MATRIX_PROGRAM_TYPE);
     file->rating = atoi(MATRIX_FILE_RATING);

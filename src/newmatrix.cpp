@@ -2259,46 +2259,44 @@ ACMD(do_connect)
     GET_MAX_HACKING(ch) = 0;
     DECKER->response = 0;
   }
-  for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content) {
-    if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
-      GET_OBJ_VAL(soft, 8) = GET_OBJ_VAL(soft, 9) = 0;
-      if (GET_OBJ_VNUM(soft) != OBJ_BLANK_PROGRAM) {
-        switch (GET_OBJ_VAL(soft, 0)) {
-        case SOFT_BOD:
-          DECKER->bod = GET_OBJ_VAL(soft, 1);
-          break;
-        case SOFT_SENSOR:
-          DECKER->sensor = GET_OBJ_VAL(soft, 1);
-          break;
-        case SOFT_MASKING:
-          DECKER->masking = GET_OBJ_VAL(soft, 1);
-          break;
-        case SOFT_EVASION:
-          DECKER->evasion = GET_OBJ_VAL(soft, 1);
-          break;
-        }
-      }
-      if (GET_OBJ_VAL(soft, 4)) {
-        if (GET_OBJ_VAL(soft, 2) > DECKER->active && !soft->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
-          send_to_char(ch, "%s^n would exceed your deck's active memory, so it failed to load.\r\n", GET_OBJ_NAME(soft));
-          continue;
-        }
-        if (GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
-          send_to_char(ch, "%s^n is too advanced for your deck's MPCP rating, so it failed to load.\r\n", GET_OBJ_NAME(soft));
-          continue;
-        }
-        struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL, OBJ_LOAD_REASON_MTX_CONNECT);
-        if (soft->restring)
-          active->restring = str_dup(soft->restring);
-        for (int x = 0; x < 10; x++)
-          GET_OBJ_VAL(active, x) = GET_OBJ_VAL(soft, x);
-        DECKER->active -= GET_OBJ_VAL(active, 2);
-        // if (DECKER->software)
-        //   active->next_file = DECKER->software;
-        // DECKER->software = active;
-      }
+  for (struct matrix_file *soft = cyberdeck->files; soft; soft = soft->next_file) {
+    if (soft->file_type != MATRIX_FILE_PROGRAM) continue;
 
-    } else if (GET_OBJ_TYPE(soft) == ITEM_PART) {
+    // Handle persona programs
+    switch(soft->program_type) {
+      case SOFT_BOD:
+        DECKER->bod = soft->rating;
+        continue;
+      case SOFT_SENSOR:
+        DECKER->sensor = soft->rating;
+        continue;
+      case SOFT_MASKING:
+        DECKER->masking = soft->rating;
+        continue;
+      case SOFT_EVASION:
+        DECKER->evasion = soft->rating;
+        continue;
+    }
+
+    // Handle all other programs
+    if (soft->size > DECKER->active && !soft->resonant) {
+      send_to_char(ch, "%s^n would exceed your deck's active memory, so it failed to load.\r\n", soft->name);
+      continue;
+    }
+
+    if (soft->rating > DECKER->mpcp) {
+      send_to_char(ch, "%s^n is too advanced for your deck's MPCP rating, so it failed to load.\r\n", soft->name);
+      continue;
+    }
+
+    struct matrix_file *active = copy_matrix_file_to(soft, NULL);
+    DECKER->active -= active->size;
+    active->next_file = DECKER->software;
+    DECKER->software = active;
+  }
+  
+  for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content) {
+    if (GET_OBJ_TYPE(soft) == ITEM_PART) {
       switch (GET_OBJ_VAL(soft, 0)) {
       case PART_BOD:
         DECKER->bod = GET_OBJ_VAL(soft, 1);
