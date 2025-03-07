@@ -28,7 +28,7 @@ int adjust_device_memory(struct obj_data *device, int change) {
       return GET_OBJ_VAL(device, 3) - change;
       break;
   }
-  
+
   return 0;
 }
 
@@ -391,3 +391,60 @@ ACMD(do_memory) {
   snprintf(buf, sizeof(buf), "You start checking the files across your various devices:\r\n");
   return print_memory(ch, devices);
 }
+
+ACMD(do_delete) {
+  // TODO
+}
+
+bool handle_matrix_file_transfer(struct char_data *ch, char *argument) {
+  // possible syntaxes:
+  //   transfer somefile myawesomedeck
+  //   transfer desktop somefile myawesomedeck
+  const char* remainder = two_arguments(argument, buf1, buf2);
+  struct obj_data *target_deck, *source_deck;
+  struct matrix_file *file;
+
+  std::vector<struct obj_data*> devices = {};
+
+  if (*remainder) {
+    // If we have *remainder, it means the user did the 3 arg version of transfer, so we can be sure
+    // they were doing the decker version, and thus can report errors.
+    if (!(target_deck = get_obj_in_list_vis(ch, remainder, ch->carrying))
+      && !(target_deck = get_obj_in_list_vis(ch, remainder, ch->in_room->contents))) {
+      // Unable to find the deck we want to transfer to. :(
+      send_to_char(ch, "I don't see any matrix file storage device named %s near you.", remainder);
+      return TRUE; // True because we abort early. 
+    }
+
+    if (!(source_deck = get_obj_in_list_vis(ch, buf1, ch->carrying))
+      && !(source_deck = get_obj_in_list_vis(ch, buf1, ch->carrying))) {
+      send_to_char(ch, "I don't see any matrix file storage device named %s near you.", buf1);
+      return TRUE; // True because we abort early. 
+    }
+
+    devices = {source_deck};
+  } else {
+    if (!(target_deck = get_obj_in_list_vis(ch, remainder, ch->carrying))
+      && !(target_deck = get_obj_in_list_vis(ch, remainder, ch->in_room->contents))) {
+      return FALSE;
+    }
+    devices = get_storage_devices(ch, FALSE);
+  }
+
+  for(obj_data* device : devices)  {
+    if (file = get_matrix_file_in_list_vis(ch, *remainder ? buf2 : buf1, device->files))
+      break;
+  }
+
+  if (!file)
+    return FALSE;
+
+  snprintf(buf, sizeof(buf), "You connect a cable between %s and %s, making quick work of transferring %s to %s.",
+    GET_OBJ_NAME(source_deck), GET_OBJ_NAME(target_deck), file->name, GET_OBJ_NAME(target_deck));
+  act(buf, FALSE, ch, source_deck, target_deck, TO_CHAR);
+
+  file_from_obj(file); 
+  file->in_obj = target_deck;
+  file->next_file = target_deck->files;
+  target_deck->files = file; 
+} 

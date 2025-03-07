@@ -2360,6 +2360,31 @@ char *two_arguments(char *argument, char *first_arg, char *second_arg)
   return one_argument(one_argument(argument, first_arg), second_arg);   /* :-) */
 }
 
+/*
+ * Counts the number of probable arguments in an input by checking how many space-delimited
+ * words are present in the argument.
+*/
+int count_arguments(char *input) {
+    if (!input || *input == '\0') return 0; // Handle empty input
+    
+    int count = 0;
+    bool inWord = false;
+    
+    while (*input) {
+        if (*input != ' ') {
+            if (!inWord) {
+                count++; // Start of a new argument
+                inWord = true;
+            }
+        } else {
+            inWord = false; // Reset when encountering space
+        }
+        input++;
+    }
+    
+    return count;
+}
+
 
 /*
  * determine if a given string is an abbreviation of another
