@@ -33,6 +33,7 @@
 #include "vehicles.hpp"
 #include "newmail.hpp"
 #include "player_exdescs.hpp"
+#include "matrix_storage.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -344,6 +345,68 @@ void advance_level(struct char_data * ch)
   snprintf(buf, sizeof(buf), "%s [%s] advanced to %s.",
           GET_CHAR_NAME(ch), ch->desc && *ch->desc->host ? ch->desc->host : "<no host>", status_ratings[(int)GET_LEVEL(ch)]);
   mudlog(buf, ch, LOG_MISCLOG, TRUE);
+}
+
+bool load_obj_programs(obj_data *obj)
+{
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
+  struct matrix_file *file;
+
+  #define MATRIX_FILE_IDNUM               row[0]
+  #define MATRIX_FILE_NAME                row[1]
+  #define MATRIX_FILE_CONTENT             row[2]
+  #define MATRIX_FILE_TYPE                row[3]
+  #define MATRIX_PROGRAM_TYPE             row[4]
+  #define MATRIX_FILE_RATING              row[5]
+  #define MATRIX_FILE_SIZE                row[6]
+  #define MATRIX_FILE_ATTACK_DAMAGE       row[7]
+  #define MATRIX_FILE_IS_DEFAULT          row[8]
+  #define MATRIX_FILE_CREATION_TIME       row[9]
+  #define MATRIX_FILE_WORK_PHASE          row[10]
+  #define MATRIX_FILE_TICKS_LEFT          row[11]
+  #define MATRIX_FILE_ORIGINAL_TICKS_LEFT row[12]
+  #define MATRIX_FILE_WORK_SUCCESSES      row[13]
+  #define MATRIX_FILE_LAST_DECAY_TIME     row[14]
+  #define MATRIX_FILE_CREATOR_IDNUM       row[15]
+
+  snprintf(buf, sizeof(buf), "SELECT * FROM matrix_files WHERE in_obj_vnum=%ld;", GET_OBJ_VNUM(obj));
+  mysql_wrapper(mysql, buf);
+   if (!(res = mysql_use_result(mysql))) {
+    mysql_free_result(res);
+    return FALSE;
+  }
+  while ((row = mysql_fetch_row(res))) {
+    file = new matrix_file();  // Dynamically allocate memory for the new struct
+
+    file->idnum = atol(MATRIX_FILE_IDNUM);
+    file->name = strdup(MATRIX_FILE_NAME); 
+    file->file_type = atoi(MATRIX_FILE_TYPE);
+    file->program_type = atoi(MATRIX_PROGRAM_TYPE);
+    file->rating = atoi(MATRIX_FILE_RATING);
+    file->size = atoi(MATRIX_FILE_SIZE);
+    file->wound_category = atoi(MATRIX_FILE_ATTACK_DAMAGE);
+    file->is_default = atoi(MATRIX_FILE_IS_DEFAULT);
+    file->creation_time = atol(MATRIX_FILE_CREATION_TIME);
+    
+    file->work_phase = atoi(MATRIX_FILE_WORK_PHASE);
+    file->work_ticks_left = atoi(MATRIX_FILE_TICKS_LEFT);
+    file->work_original_ticks_left = atoi(MATRIX_FILE_ORIGINAL_TICKS_LEFT);
+    file->work_successes = atoi(MATRIX_FILE_WORK_SUCCESSES);
+    
+    file->last_decay_time = atol(MATRIX_FILE_LAST_DECAY_TIME);
+    file->creator_idnum = atol(MATRIX_FILE_CREATOR_IDNUM);
+
+    file->in_obj = obj;
+    file->next_file = obj->files;
+    obj->files = file;
+  }
+
+   // **FREE THE RESULT SET BEFORE RETURNING**
+  mysql_free_result(res);
+
+  return TRUE;
 }
 
 bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
@@ -1092,6 +1155,24 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
       mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
     mysql_free_result(res);
+
+    /* MIGRATION STEP: For When we have a program if it's contained in a device it needs to be converted into a memory struct */
+    if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM || GET_OBJ_TYPE(obj) == ITEM_DESIGN) {
+      // Check if it's in a device
+      if (obj->in_obj && (
+        GET_OBJ_TYPE(obj->in_obj) == ITEM_CYBERDECK 
+        || GET_OBJ_TYPE(obj->in_obj) == ITEM_CUSTOM_DECK
+        || (GET_OBJ_TYPE(obj->in_obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj->in_obj) == TYPE_COMPUTER)
+      )) {
+        // Do the conversion, this will also move the file onto the device.
+        obj_to_matrix_file(obj);
+        // Delete the obj, no longer needed
+        extract_obj(obj);
+        obj = NULL;
+      }
+    }
+
+    if (obj) load_obj_programs(obj);
   }
 
   // Load bullet pants.
@@ -1422,6 +1503,43 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                prepare_quotes(buf3, get_lifestyle_string(player), sizeof(buf3) / sizeof(char)),
                GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
+
+  /* Matrix files are persisted in a separate table. Save that data. */
+  for (temp = player->carrying; temp; temp = next_obj) {
+    next_obj = temp->next_content;
+    // We always clear out entries since this is a one-to-many table
+    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE in_obj_vnum=%ld; ", GET_OBJ_VNUM(temp));
+    mysql_wrapper(mysql, buf);
+    snprintf(buf, sizeof(buf), ""); // Clear buffer
+
+    if (!temp->files) continue;
+    for (struct matrix_file *file = temp->files; file; file = file->next_file) {
+      snprintf(buf, sizeof(buf), "INSERT INTO matrix_files (idnum, in_obj_vnum, "\
+      "name, content, file_type, program_type, rating, size, attack_damage, is_default, last_decay_time, "\
+      "creation_time, creator_idnum, work_ticks_left, work_original_ticks_left, "\
+      "work_phase, work_successes) "\
+      "VALUES (%ld, %ld, '%s', '%s' %d, %d, %d, %d, %d, %d, %ld, %ld, %ld, %d, %d, %d, %d); ",
+      file->idnum, 
+      GET_OBJ_VNUM(temp),
+      prepare_quotes(buf1, file->name, sizeof(buf1) / sizeof(char)),
+      prepare_quotes(buf1, file->content, sizeof(buf1) / sizeof(char)),
+      file->file_type,
+      file->program_type,
+      file->rating,
+      file->size,
+      file->wound_category,
+      file->is_default,
+      file->last_decay_time,
+      file->creation_time,
+      file->creator_idnum,
+      file->work_ticks_left,
+      file->work_original_ticks_left,
+      file->work_phase,
+      file->work_successes);
+
+      mysql_wrapper(mysql, buf);
+    }
+  }
 
   if (is_temp_load)
     PLR_FLAGS(player).SetBit(PLR_IS_TEMPORARILY_LOADED);
@@ -2483,6 +2601,14 @@ void idle_delete()
 }
 
 
+void init_matrix_data_file_index() {
+  mysql_wrapper(mysql, "SELECT COALESCE(MAX(idnum), 1)  FROM matrix_files;");
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  matrix_file_id_counter = atol(row[0]) + 1;
+  mysql_free_result(res);
+}
+
 void verify_db_password_column_size() {
   // show columns in pfiles like 'password';
   mysql_wrapper(mysql, "SHOW COLUMNS IN `pfiles` LIKE 'password';");
@@ -2579,10 +2705,6 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
                 GET_PART_BUILDER_IDNUM(obj) = 0;
                 break;
             }
-          }
-          // Personas don't take up storage in store-bought decks (personas are not programs in custom decks)
-          if ((GET_OBJ_TYPE(installed) == ITEM_PROGRAM) && !((GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(installed) <= SOFT_SENSOR))) {
-            GET_CYBERDECK_USED_STORAGE(obj) += GET_PROGRAM_SIZE(installed);
           }
         }
         if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {

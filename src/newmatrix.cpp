@@ -17,6 +17,7 @@
 #include "moderation.hpp"
 #include "pets.hpp"
 #include "otaku.hpp"
+#include "matrix_storage.hpp"
 
 #define PERSONA ch->persona
 #define PERSONA_CONDITION ch->persona->condition
@@ -86,16 +87,12 @@ void clear_hitcher(struct char_data *ch, bool shouldNotify)
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
 }
 
-struct obj_data * spawn_paydata(struct matrix_icon *icon) {
-  struct obj_data *obj = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, OBJ_LOAD_REASON_SPAWN_PAYDATA);
-  GET_DECK_ACCESSORY_TYPE(obj) = TYPE_FILE;
-  GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj) = time(0);
-  GET_DECK_ACCESSORY_FILE_SIZE(obj) = (number(1, 6) + number(1, 6)) * MAX(5, (20 - (5 * matrix[icon->in_host].color)));
-  GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj) = matrix[icon->in_host].vnum;
-  GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj) = matrix[icon->in_host].color;
-  GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = icon->idnum;
-  snprintf(buf, sizeof(buf), "Paydata %s - %dMp", matrix[icon->in_host].name, GET_DECK_ACCESSORY_FILE_SIZE(obj));
-  obj->restring = str_dup(buf);
+struct matrix_file * spawn_paydata(struct matrix_icon *icon) {
+  struct matrix_file *paydata = create_matrix_file(NULL, OBJ_LOAD_REASON_SPAWN_PAYDATA);
+  paydata->size = (number(1, 6) + number(1, 6)) * MAX(5, (20 - (5 * matrix[icon->in_host].color)));
+  paydata->found_by = icon->idnum;
+  snprintf(buf, sizeof(buf), "Paydata %s - %dMp", matrix[icon->in_host].name, paydata->size);
+  paydata->name = str_dup(buf);
   int defense[5][6] = {{ 0, 0, 0, 1, 1, 1 },
                        { 0, 0, 1, 1, 2, 2 },
                        { 0, 1, 1, 2, 2, 3 },
@@ -127,30 +124,30 @@ struct obj_data * spawn_paydata(struct matrix_icon *icon) {
       rate[3] = 12;
     }
     if (matrix[icon->in_host].security < 5)
-      GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[0];
+      paydata->rating = rate[0];
     else if (matrix[icon->in_host].security < 8)
-      GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[1];
+      paydata->rating = rate[1];
     else if (matrix[icon->in_host].security < 11)
-      GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[2];
+      paydata->rating = rate[2];
     else
-      GET_DECK_ACCESSORY_FILE_RATING(obj) = rate[3];
+      paydata->rating = rate[3];
     switch (def) {
     case 1:
-      GET_DECK_ACCESSORY_FILE_PROTECTION(obj) = FILE_PROTECTION_SCRAMBLED;
+      paydata->file_protection = FILE_PROTECTION_SCRAMBLED;
       break;
     case 2:
     case 3:
       // Bomb rating.
       if (number(1, 6) > 4)
-        GET_DECK_ACCESSORY_FILE_PROTECTION(obj) = 4;
+        paydata->file_protection = 4;
       else
-        GET_DECK_ACCESSORY_FILE_PROTECTION(obj) = 2;
+        paydata->file_protection = FILE_PROTECTION_DATABOMB;
       break;
     }
   }
-  obj_to_host(obj, &matrix[icon->in_host]);
 
-  return obj;
+  move_matrix_file_to(paydata, &matrix[icon->in_host]);
+  return paydata;
 }
 
 // Spawns an IC to the host. Returns TRUE on successful spawn, FALSE otherwise.
@@ -285,33 +282,33 @@ void check_trigger(rnum_t host, struct char_data *ch)
   DECKER->last_trigger = DECKER->tally;
 }
 
-bool tarbaby(struct obj_data *prog, struct char_data *ch, struct matrix_icon *ic)
+bool tarbaby(struct matrix_file *prog, struct char_data *ch, struct matrix_icon *ic)
 {
   int target = ic->ic.rating;
   if (matrix[ic->in_host].shutdown)
     target -= 2;
   
-  int suc = success_test(GET_OBJ_VAL(prog, 1), target);
-  suc -= success_test(target, GET_OBJ_VAL(prog, 1));
+  int suc = success_test(prog->rating, target);
+  suc -= success_test(target, prog->rating);
   if (suc < 0)
   {
-    struct obj_data *temp;
-    send_to_icon(PERSONA, "%s^n crashes your %s^n!\r\n", CAP(ic->name), GET_OBJ_NAME(prog));
-    DECKER->active += GET_OBJ_VAL(prog, 2);
-    REMOVE_FROM_LIST(prog, DECKER->software, next_content);
+    struct matrix_file *temp;
+    send_to_icon(PERSONA, "%s^n crashes your %s^n!\r\n", CAP(ic->name), prog->name);
+    DECKER->active += prog->size;
+    REMOVE_FROM_LIST(prog, DECKER->software, next_file);
     // Otaku complex forms cannot be destroyed from memory, so no problem there.
     if (ic->ic.type == IC_TARPIT 
       && !DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)
       && success_test(target, DECKER->mpcp + DECKER->hardening) > 0)
       for (struct obj_data *copy = DECKER->deck->contains; copy; copy = copy->next_content) {
-        if (!strcmp(GET_OBJ_NAME(copy), GET_OBJ_NAME(prog))) {
+        if (!strcmp(GET_OBJ_NAME(copy), prog->name)) {
           send_to_icon(PERSONA, "It destroys all copies in storage memory as well!\r\n");
           GET_OBJ_VAL(DECKER->deck, 5) -= GET_OBJ_VAL(copy, 2);
           extract_obj(copy);
           break;
         }
       }
-    extract_obj(prog);
+    extract_matrix_file(prog);
     extract_icon(ic);
     return TRUE;
   }
@@ -336,14 +333,12 @@ bool dumpshock(struct matrix_icon *icon)
     }
 
     // Clean out downloads involving them.
-    for (struct obj_data *file = matrix[icon->in_host].file; file; file = file->next_content) {
-      if (GET_OBJ_TYPE(file) == ITEM_DECK_ACCESSORY
-          && GET_DECK_ACCESSORY_FILE_REMAINING(file)
-          && find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file)) == icon)
-      {
-        GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
-        GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
-      }
+    for (struct matrix_file *file = matrix[icon->in_host].files; file; file = file->next_file) {
+      if (file->file_worker != icon->idnum) continue;
+      file->transferring_to = NULL;
+      file->found_by = 0;
+      file->file_worker = 0;
+      file->transfer_remaining = 0;
     }
 
     int resist = -success_test(GET_WIL(icon->decker->ch), matrix[icon->in_host].security - (GET_ECHO(icon->decker->ch, ECHO_NEUROFILTER) * 2));
@@ -395,9 +390,9 @@ bool dumpshock(struct matrix_icon *icon)
 int get_detection_factor(struct char_data *ch)
 {
   int detect = 0;
-  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
-    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE)
-      detect = GET_PROGRAM_RATING(soft);
+  for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file)
+    if (soft->program_type == SOFT_SLEAZE)
+      detect = soft->rating;
   detect += DECKER->masking + 1; // +1 because we round up
   detect = detect / 2;
   detect -= DECKER->res_det;
@@ -410,7 +405,7 @@ int get_detection_factor(struct char_data *ch)
 int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier)
 {
   int detect = 0;
-  struct obj_data *prog = NULL;
+  struct matrix_file *prog = NULL;
 
   char rollbuf[5000];
 
@@ -465,12 +460,12 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   strlcat(rollbuf, ". Modifiers: ", sizeof(rollbuf));
   target += modify_target_rbuf_raw(ch, rollbuf, sizeof(rollbuf), 8, FALSE) + DECKER->res_test + (DECKER->ras ? 0 : 4);
 
-  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
+  for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file) {
     if (prog) break;
-    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE) break;
-    if (GET_PROGRAM_TYPE(soft) == software) {
-      target -= GET_PROGRAM_RATING(soft);
-      buf_mod(rollbuf, sizeof(rollbuf), "soft", -GET_PROGRAM_RATING(soft));
+    if (soft->program_type == SOFT_SLEAZE) break;
+    if (soft->program_type == software) {
+      target -=  soft->rating;
+      buf_mod(rollbuf, sizeof(rollbuf), "soft", -soft->rating);
       prog = soft;
     }
   }
@@ -625,17 +620,17 @@ int maneuver_test(struct matrix_icon *icon)
   int icon_target = 0, icon_skill, targ_target = 0, targ_skill;
   if (icon->decker)
   {
-    for (struct obj_data *soft = icon->decker->software; soft; soft = soft->next_content)
-      if (GET_OBJ_VAL(soft, 0) == SOFT_CLOAK)
-        icon_target -= GET_OBJ_VAL(soft, 1);
+    for (struct matrix_file *soft = icon->decker->software; soft; soft = soft->next_file)
+      if (soft->program_type == SOFT_CLOAK)
+        icon_target -= soft->rating;
     targ_target += icon_skill = icon->decker->evasion;
   } else
     targ_target += icon_skill = matrix[icon->in_host].security;
   if (icon->fighting->decker)
   {
-    for (struct obj_data *soft = icon->fighting->decker->software; soft; soft = soft->next_content)
-      if (GET_OBJ_VAL(soft, 0) == SOFT_LOCKON)
-        targ_target -= GET_OBJ_VAL(soft, 1);
+    for (struct matrix_file *soft = icon->fighting->decker->software; soft; soft = soft->next_file)
+      if (soft->program_type == SOFT_LOCKON)
+        targ_target -= soft->rating;
     icon_target += targ_skill = icon->fighting->decker->sensor;
   } else
     icon_target += targ_skill = matrix[icon->in_host].security;
@@ -721,7 +716,7 @@ ACMD(do_matrix_position)
 
 void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 {
-  struct obj_data *soft = NULL;
+  struct matrix_file *soft = NULL;
   int target = 0, skill, bod = 0, dam = 0, power, success;
   int iconrating = icon->ic.rating;
   if (!targ)
@@ -777,15 +772,15 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   icon->position = 0;
   if (icon->decker)
   {
-    for (soft = icon->decker->software; soft; soft = soft->next_content)
-      if (GET_OBJ_VAL(soft, 0) == SOFT_ATTACK)
+    for (soft = icon->decker->software; soft; soft = soft->next_file)
+      if (soft->program_type == SOFT_ATTACK)
         break;
     if (!soft)
       return;
-    skill = GET_OBJ_VAL(soft, 1) + MIN(GET_MAX_HACKING(icon->decker->ch), GET_REM_HACKING(icon->decker->ch));
-    GET_REM_HACKING(icon->decker->ch) -= skill - GET_OBJ_VAL(soft, 1);
-    dam = GET_OBJ_VAL(soft, 3);
-    power = GET_OBJ_VAL(soft, 1);
+    skill = soft->rating + MIN(GET_MAX_HACKING(icon->decker->ch), GET_REM_HACKING(icon->decker->ch));
+    GET_REM_HACKING(icon->decker->ch) -= skill - soft->rating;
+    dam = soft->wound_category;
+    power = soft->rating;
   } else
   {
     skill = matrix[icon->in_host].security;
@@ -880,9 +875,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     if (icon->ic.type >= IC_LETHAL_BLACK)
       power -= targ->decker->hardening;
     else
-      for (soft = targ->decker->software; soft; soft = soft->next_content)
-        if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR) {
-          power -= GET_OBJ_VAL(soft, 1);
+      for (soft = targ->decker->software; soft; soft = soft->next_file)
+        if (soft->program_type == SOFT_ARMOR) {
+          power -= soft->rating;
           break;
         }
     bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
@@ -933,9 +928,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       success -= success_test(targ->decker->evasion, iconrating);
       if (success > 0) {
         icon->ic.subtype = 10;
-        for (struct obj_data *soft = targ->decker->software; soft; soft = soft->next_content)
-          if (GET_OBJ_VAL(soft, 1) == SOFT_CAMO) {
-            icon->ic.subtype += GET_OBJ_VAL(soft, 1);
+        for (struct matrix_file *soft = targ->decker->software; soft; soft = soft->next_file)
+          if (soft->program_type == SOFT_CAMO) {
+            icon->ic.subtype += soft->rating;
             break;
           }
         icon->ic.subtype += targ->decker->ch->in_room->trace;
@@ -1102,8 +1097,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (matrix[icon->in_host].ic_bound_paydata > 0) {
         if (!(number(0, MAX(0, matrix[icon->in_host].color - HOST_COLOR_ORANGE)))) {
           matrix[icon->in_host].ic_bound_paydata--;
-          struct obj_data *paydata = spawn_paydata(icon);
-          send_to_icon(icon, "A mote labeled '%s^n' drifts away from your kill.\r\n", GET_OBJ_NAME(paydata));
+          struct matrix_file *paydata = spawn_paydata(icon);
+          send_to_icon(icon, "A mote labeled '%s^n' drifts away from your kill.\r\n", paydata->name);
         } else  {
           send_to_icon(icon, "The paydata you thought your kill was guarding turns out to have been junk.\r\n");
         }
@@ -1485,23 +1480,14 @@ ACMD(do_locate)
       send_to_icon(PERSONA, "You fumble your attempt to locate files.\r\n");
     else {
       if (PERSONA) {
-        for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj && success > 0; obj = obj->next_content) {
-          // Skip over anything that's not a file or program.
-          if (GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(obj) != ITEM_PROGRAM)
-            continue;
-
-          // Skip anything that you can't touch for quest reasons.
-          if (ch_is_blocked_by_quest_protections(ch, obj, FALSE, TRUE))
-            continue;
-
+        for (struct matrix_file *file = matrix[PERSONA->in_host].files; file && success > 0; file = file->next_file) {
           // If it has been found by someone else:
-          if (GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) != PERSONA->idnum) {
-            // You can only overwrite claims for quest objects that you're grouped with the questor for. No quest? Skip.
-            if (!GET_OBJ_QUEST_CHAR_ID(obj))
-              continue;
-              
+          if (file->found_by != PERSONA->idnum) {
+             // You can only overwrite claims for quest objects that you're grouped with the questor for. No quest? Skip.
+            if (!file->quest_id) continue;
+
             // Skip it if you're not grouped with the person whose quest it is.
-            if (!ch_is_grouped_with_idnum(ch, GET_OBJ_QUEST_CHAR_ID(obj)))
+            if (!ch_is_grouped_with_idnum(ch, file->quest_id))
               continue;
 
             // Otherwise, you can still potentially find it.
@@ -1509,11 +1495,11 @@ ACMD(do_locate)
           }
 
           // Skip anything without a keyword match.
-          if (!keyword_appears_in_obj(arg, obj))
+          if (!keyword_appears_in_file(arg, file))
             continue;
          
           // Found a match!
-          GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = PERSONA->idnum;
+          file->found_by = PERSONA->idnum;
           success--;
           i++;
         }
@@ -1538,9 +1524,9 @@ ACMD(do_locate)
       for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
         if (icon->decker && icon != PERSONA) {
           int targ = icon->decker->masking;
-          for (struct obj_data *soft = icon->decker->software; soft; soft = soft->next_content)
-            if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
-              targ += GET_OBJ_VAL(soft, 1);
+          for (struct matrix_file *soft = icon->decker->software; soft; soft = soft->next_file)
+            if (soft->program_type == SOFT_SLEAZE)
+              targ += soft->rating;
           if (sensor >= targ) {
             make_seen(PERSONA, icon->idnum);
             i++;
@@ -1721,23 +1707,23 @@ ACMD(do_matrix_look)
     if (has_spotted(PERSONA, icon))
       send_to_icon(PERSONA, "^Y%s^n\r\n", icon->look_desc);
 
-  for (struct obj_data *obj = matrix[PERSONA->in_host].file; obj; obj = obj->next_content) {
-    if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_PROGRAM) && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum)
+  for (struct matrix_file *file = matrix[PERSONA->in_host].files; file; file = file->next_file) {
+    if (file->found_by == PERSONA->idnum)
     {
-      if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(obj)) {
-        int percent_complete = (int) (100 * ((float) GET_DECK_ACCESSORY_FILE_SIZE(obj) - GET_DECK_ACCESSORY_FILE_REMAINING(obj)) / MAX(1, GET_DECK_ACCESSORY_FILE_SIZE(obj)));
+      if (file->transferring_to) {
+        int percent_complete = (int) (100 * ((float) file->size - file->transfer_remaining) / MAX(1, file->size));
         send_to_icon(PERSONA, "^yA file named %s^y floats here (Downloading - %d%%).^n\r\n",
-                     GET_OBJ_NAME(obj), percent_complete);
+                     file->name, percent_complete);
       } else {
         send_to_icon(PERSONA, "^yA file named %s^y floats here.%s^n\r\n", 
-                     GET_OBJ_NAME(obj),
-                     GET_OBJ_QUEST_CHAR_ID(obj) ? (ch_is_grouped_with_idnum(ch, GET_OBJ_QUEST_CHAR_ID(obj)) ? " ^Y(Quest)" : " ^m(Protected)") : "");
+                     file->name,
+                     file->quest_id ? (ch_is_grouped_with_idnum(ch, file->quest_id) ? " ^Y(Quest)" : " ^m(Protected)") : "");
       }
     }
 
-    if (obj == obj->next_content) {
+    if (file == file->next_file) {
       mudlog("SYSERR: Infinite loop detected in Matrix object listing. Discarding subsequent objects.", NULL, LOG_SYSLOG, TRUE);
-      obj->next_content = NULL;
+      file->next_file = NULL;
       break;
     }
   }
@@ -1856,20 +1842,27 @@ ACMD(do_analyze)
     } else send_to_icon(PERSONA, "Your program fails to run.\r\n");
     return;
   } else {
-    struct obj_data *obj = NULL;
-    if ((obj = get_obj_in_list_vis(ch, arg, matrix[PERSONA->in_host].file)) && GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum) {
+    struct matrix_file *file = NULL;
+    if ((file = get_matrix_file_in_list_vis(ch, arg, matrix[PERSONA->in_host].files)) && file->found_by == PERSONA->idnum) {
       int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0);
       if (success > 0) {
         send_to_icon(PERSONA, "You analyze the file:\r\n");
-        if (GET_OBJ_VAL(obj, 3)) {
-          send_to_icon(PERSONA, "Paydata %dMp\r\n", GET_OBJ_VAL(obj, 2));
-          if (GET_OBJ_VAL(obj, 5)) {
-            send_to_icon(PERSONA, "Protected by: %s-%d\r\n", GET_OBJ_VAL(obj, 5) == 1 ? "Scramble" :
-                         GET_OBJ_VAL(obj, 5) == 2 ? "Data Bomb" : "Pavlov", GET_OBJ_VAL(obj, 6));
+        if (file->file_type == MATRIX_FILE_PAYDATA) {
+          send_to_icon(PERSONA, "Paydata %dMp\r\n", file->size);
+          switch(file->file_protection) {
+            case FILE_PROTECTION_SCRAMBLED:
+              send_to_icon(PERSONA, "Protected by: Scramble-%d\r\n", file->rating);
+                break;
+            case FILE_PROTECTION_DATABOMB:
+              send_to_icon(PERSONA, "Protected by: Data Bomb-%d\r\n", file->rating);
+                break;
+            case FILE_PROTECTION_PAVLOV:
+              send_to_icon(PERSONA, "Protected by: Pavlov-%d\r\n", file->rating);
+                break;
           }
         } else {
-          send_to_icon(PERSONA, "%s^n - %dMp\r\n", GET_OBJ_NAME(obj), GET_OBJ_VAL(obj, 2));
-          send_to_icon(PERSONA, obj->photo ? obj->photo : obj->text.look_desc);
+          send_to_icon(PERSONA, "%s^n - %dMp\r\n", file->name, file->size);
+          if (file->content) send_to_icon(PERSONA, file->content);
         }
       } else
         send_to_icon(PERSONA, "You fail to get any useful information out of your request.\r\n");
@@ -2302,9 +2295,9 @@ ACMD(do_connect)
         for (int x = 0; x < 10; x++)
           GET_OBJ_VAL(active, x) = GET_OBJ_VAL(soft, x);
         DECKER->active -= GET_OBJ_VAL(active, 2);
-        if (DECKER->software)
-          active->next_content = DECKER->software;
-        DECKER->software = active;
+        // if (DECKER->software)
+        //   active->next_file = DECKER->software;
+        // DECKER->software = active;
       }
 
     } else if (GET_OBJ_TYPE(soft) == ITEM_PART) {
@@ -2424,17 +2417,17 @@ ACMD(do_load)
       send_to_icon(PERSONA, "You don't have active memory to erase things from.\r\n");
       return;
     }
-    struct obj_data *temp = NULL;
-    for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
-      if (keyword_appears_in_obj(argument, soft)) {
-        send_to_icon(PERSONA, "You erase %s^n from active memory.\r\n", GET_OBJ_NAME(soft));
+    struct matrix_file *temp = NULL;
+    for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file) {
+      if (keyword_appears_in_file(argument, soft)) {
+        send_to_icon(PERSONA, "You erase %s^n from active memory.\r\n", soft->name);
         if (temp)
-          temp->next_content = soft->next_content;
+          temp->next_file = soft->next_file;
         else
-          DECKER->software = soft->next_content;
-        soft->next_content = NULL;
-        DECKER->active += GET_OBJ_VAL(soft, 2);
-        extract_obj(soft);
+          DECKER->software = soft->next_file;
+        soft->next_file = NULL;
+        DECKER->active += soft->size;
+        extract_matrix_file(soft);
         return;
       }
       temp = soft;
@@ -2557,61 +2550,61 @@ ACMD(do_download)
     return;
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  struct obj_data *soft = NULL, *target_deck = DECKER->deck;
+  struct matrix_file *soft = NULL;
+  struct obj_data *target_deck = DECKER->deck;
   
   // This line lets otaku use proxy decks to download files.
   if (IS_OTAKU(DECKER->ch) && DECKER->proxy_deck) target_deck = DECKER->proxy_deck;
   skip_spaces(&argument);
   // TODO: This might cause conflicts if multiple deckers have paydata on the host.
-  if ((soft = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) == PERSONA->idnum) {
-    if (GET_CYBERDECK_FREE_STORAGE(target_deck) < GET_DECK_ACCESSORY_FILE_SIZE(soft)) {
+  if ((soft = get_matrix_file_in_list_vis(ch, argument, matrix[PERSONA->in_host].files)) && soft->found_by == PERSONA->idnum) {
+    if (GET_CYBERDECK_FREE_STORAGE(target_deck) < soft->size) {
       send_to_icon(PERSONA, "You don't have enough storage memory to download that file.\r\n");
       return;
     } else {
       int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_READ, 0);
-      if (GET_OBJ_VAL(soft, 5) == 4)
-        success -= GET_OBJ_VAL(soft, 6);
+      if (soft->file_protection == 4)
+        success -= soft->rating;
       if (success > 0) {
-        if (GET_DECK_ACCESSORY_FILE_PROTECTION(soft) == FILE_PROTECTION_SCRAMBLED
-            && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
+        if (soft->file_protection == FILE_PROTECTION_SCRAMBLED)
         {
-          send_to_icon(PERSONA, "A Scramble IC blocks your attempts to download %s^n. You'll have to decrypt it first!\r\n", GET_OBJ_NAME(soft));
-        } else if (GET_OBJ_VAL(soft, 5) > FILE_PROTECTION_SCRAMBLED // file bomb
-                   && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
+          send_to_icon(PERSONA, "A Scramble IC blocks your attempts to download %s^n. You'll have to decrypt it first!\r\n", soft->name);
+        } else if (soft->file_protection == FILE_PROTECTION_DATABOMB|| soft->file_protection == FILE_PROTECTION_PAVLOV)
         {
-          int power = GET_DECK_ACCESSORY_FILE_RATING(soft);
-          for (struct obj_data *prog = DECKER->software; prog; prog = prog->next_content)
-            if (GET_OBJ_VAL(prog, 0) == SOFT_ARMOR) {
-              power -= GET_OBJ_VAL(prog, 1);
+          int power = soft->rating;
+          for (struct matrix_file *prog = DECKER->software; prog; prog = prog->next_file)
+            if (prog->program_type == SOFT_ARMOR) {
+              power -= prog->rating;
               break;
             }
           success = -success_test(DECKER->bod + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch)), power);
           GET_REM_HACKING(ch) = MAX(0, GET_REM_HACKING(ch) - GET_MAX_HACKING(ch));
-          int dam = convert_damage(stage(success, GET_OBJ_VAL(soft, 5) == 2 ? DEADLY : MODERATE));
+          int dam = convert_damage(stage(success, soft->file_protection == FILE_PROTECTION_DATABOMB ? DEADLY : MODERATE));
           if (!dam)
-            send_to_icon(PERSONA, "The %s explodes, but fails to cause damage to you.\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
+            send_to_icon(PERSONA, "The %s explodes, but fails to cause damage to you.\r\n", soft->file_protection == FILE_PROTECTION_DATABOMB ? "Data Bomb" : "Pavlov");
           else {
             if (do_damage_persona(PERSONA, dam) && ch && GET_POS(ch) <= POS_STUNNED) {
               return;
             }
             if (PERSONA_CONDITION < 1) {
-              send_to_icon(PERSONA, "The %s explodes, ripping your icon into junk logic\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
+              send_to_icon(PERSONA, "The %s explodes, ripping your icon into junk logic\r\n", soft->file_protection == FILE_PROTECTION_DATABOMB ? "Data Bomb" : "Pavlov");
               dumpshock(PERSONA);
               return;
             } else
-              send_to_icon(PERSONA, "The %s explodes, damaging your icon.\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
+              send_to_icon(PERSONA, "The %s explodes, damaging your icon.\r\n", soft->file_protection == FILE_PROTECTION_DATABOMB ? "Data Bomb" : "Pavlov");
           }
-          if (GET_DECK_ACCESSORY_FILE_PROTECTION(soft) == 2) { // TODO magic number
-            GET_DECK_ACCESSORY_FILE_PROTECTION(soft) = 0;
+          if (soft->file_protection == FILE_PROTECTION_DATABOMB) { 
+            soft->file_protection = 0;
             if (PERSONA) {
-              DECKER->tally += GET_DECK_ACCESSORY_FILE_RATING(soft);
+              DECKER->tally += soft->rating;
               check_trigger(PERSONA->in_host, ch);
             }
           }
         } else {
-          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_SIZE(soft);
-          GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) = PERSONA->idnum;
-          send_to_icon(PERSONA, "You begin to download %s^n.\r\n", GET_OBJ_NAME(soft));
+          soft->transfer_remaining = soft->size;
+          soft->transferring_to = target_deck;
+          soft->file_worker = PERSONA->idnum;
+          send_to_icon(PERSONA, "You begin to download %s to your %s.\r\n", soft->name, GET_OBJ_NAME(target_deck));
         }
       } else
         send_to_icon(PERSONA, "The file fails to download.\r\n");
@@ -2627,15 +2620,15 @@ ACMD(do_run)
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
   }
-  struct obj_data *soft;
+  struct matrix_file *soft;
   struct matrix_icon *temp;
   two_arguments(argument, buf, arg);
-  for (soft = DECKER->software; soft; soft = soft->next_content)
-    if (keyword_appears_in_obj(buf, soft))
+  for (soft = DECKER->software; soft; soft = soft->next_file)
+    if (keyword_appears_in_file(buf, soft))
       break;
   if (soft) {
     WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-    switch (GET_PROGRAM_TYPE(soft)) {
+    switch (soft->program_type) {
       case SOFT_ATTACK:
         {
           struct matrix_icon *icon;
@@ -2666,7 +2659,7 @@ ACMD(do_run)
           }
 #endif
 
-          send_to_icon(PERSONA, "You start running %s^n against %s^n.\r\n", GET_OBJ_NAME(soft), decapitalize_a_an(icon->name));
+          send_to_icon(PERSONA, "You start running %s^n against %s^n.\r\n", soft->name, decapitalize_a_an(icon->name));
           if (!PERSONA->fighting) {
             PERSONA->next_fighting = matrix[icon->in_host].fighting;
             matrix[icon->in_host].fighting = PERSONA;
@@ -2698,7 +2691,7 @@ ACMD(do_run)
       case SOFT_MEDIC:
         if (PERSONA->condition == 10) {
           send_to_icon(PERSONA, "You're already at optimal condition.\r\n");
-        } else if (GET_OBJ_VAL(soft, 1) <= 0) {
+        } else if (soft->rating <= 0) {
           send_to_icon(PERSONA, "That program is no longer usable!\r\n");
         } else {
           for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = temp) {
@@ -2721,9 +2714,9 @@ ACMD(do_run)
           else if (PERSONA->condition < 9)
             targ = 4;
 
-          int skill = GET_OBJ_VAL(soft, 1) + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
+          int skill = soft->rating + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
           int success = success_test(skill, targ);
-          GET_REM_HACKING(ch) -= skill - GET_OBJ_VAL(soft, 1);
+          GET_REM_HACKING(ch) -= skill - soft->rating;
 
           if (success < 1)
             send_to_icon(PERSONA, "It fails to execute.\r\n");
@@ -2732,11 +2725,11 @@ ACMD(do_run)
             send_to_icon(PERSONA, "It repairs your icon.\r\n");
           }
           PERSONA->initiative -= 10;
-          GET_OBJ_VAL(soft, 1)--;
+          soft->rating--;
         }
         return;
     default:
-      send_to_icon(PERSONA, "You don't need to manually run %s^n.\r\n", GET_OBJ_NAME(soft));
+      send_to_icon(PERSONA, "You don't need to manually run %s^n.\r\n", soft->name);
       break;
     }
   }
@@ -2782,23 +2775,22 @@ ACMD(do_decrypt)
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   {
-    struct obj_data *obj = NULL;
-    if ((obj = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_OBJ_VAL(obj, 7) == PERSONA->idnum) {
-      if (!GET_OBJ_VAL(obj, 5) || (GET_OBJ_VAL(obj, 5) == 1 && subcmd) || (GET_OBJ_VAL(obj, 5) > 1 && !subcmd) ||
-          GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
+    struct matrix_file *file = NULL;
+    if ((file = get_matrix_file_in_list_vis(ch, argument, matrix[PERSONA->in_host].files)) && file->found_by == PERSONA->idnum) {
+      if (!file->file_protection || (file->file_protection == FILE_PROTECTION_SCRAMBLED && subcmd) || (file->file_protection > 1 && !subcmd)) {
         send_to_icon(PERSONA, "There is no need to %s that file.\r\n", subcmd ? "disarm" : "decrypt");
         return;
       }
       int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, subcmd ? SOFT_DEFUSE : SOFT_DECRYPT, 0);
       if (success > 0) {
         send_to_icon(PERSONA, "You successfully %s the file.\r\n", subcmd ? "disarm" : "decrypt");
-        GET_OBJ_VAL(obj, 5) = 0;
+        file->file_protection = 0;
       } else if (PERSONA) {
         send_to_icon(PERSONA, "You fail to %s the IC protecting that file.\r\n", subcmd ? "disarm" : "decrypt");
-        if (GET_OBJ_VAL(obj, 5) == 1)
-          if (success_test(GET_OBJ_VAL(obj, 6), GET_SKILL(ch, SKILL_COMPUTER)) > 0) {
+        if (file->file_protection == FILE_PROTECTION_SCRAMBLED)
+          if (success_test(file->rating, GET_SKILL(ch, SKILL_COMPUTER)) > 0) {
             send_to_icon(PERSONA, "The Scramble IC destroys the file!\r\n");
-            extract_obj(obj);
+            extract_matrix_file(file);
           }
       }
       return;
@@ -2835,17 +2827,16 @@ ACMD(do_decrypt)
           matrix[PERSONA->in_host].ic_bound_paydata = 0;
 
           // Remove the already-found data.
-          struct obj_data *current, *next;
-          for (current = matrix[PERSONA->in_host].file; current; current = next) {
-            next = current->next_content;
+          struct matrix_file *current, *next;
+          for (current = matrix[PERSONA->in_host].files; current; current = next) {
+            next = current->next_file;
 
             // Skip non-paydata.
-            if (GET_OBJ_TYPE(current) != ITEM_DECK_ACCESSORY || GET_DECK_ACCESSORY_TYPE(current) != TYPE_FILE || GET_DECK_ACCESSORY_FILE_HOST_VNUM(current) != matrix[PERSONA->in_host].vnum)
+            if (current->file_type != MATRIX_FILE_PAYDATA)
               continue;
 
             // The file is paydata-- delete it.
-            obj_from_host(current);
-            extract_obj(current);
+            extract_matrix_file(current);
           }
         }
       }
@@ -2880,13 +2871,13 @@ ACMD(do_decrypt)
 void send_active_program_list(struct char_data *ch) {
   if (DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
     // We're an otaku using a living persona; we don't have active memory.
-    for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
-      send_to_icon(PERSONA, "%25s, Complex Form, Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
+    for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file)
+      send_to_icon(PERSONA, "%25s, Complex Form, Rating: %2d\r\n", soft->name, soft->rating);
     return;
   }
   send_to_icon(PERSONA, "Active Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(DECKER->deck, 2), DECKER->active);
-  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
-    send_to_icon(PERSONA, "%25s Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
+  for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file)
+    send_to_icon(PERSONA, "%25s Rating: %2d\r\n", soft->name, soft->rating);
 }
 
 void send_storage_program_list(struct char_data *ch) {
@@ -3083,69 +3074,50 @@ ACMD(do_software)
 
 void process_upload(struct matrix_icon *persona)
 {
-  // Note: We only upload one file at a time. Find the first valid one and process it, then stop.
-  if (persona && persona->decker && persona->decker->deck) {
-    obj_data *deck = persona->decker->deck;
-    if (persona->decker->proxy_deck)
-      deck = persona->decker->proxy_deck;
+  if (!persona || !persona->decker) return;
+  for (obj_data *device : get_storage_devices(persona->decker->ch, TRUE)) {
+    for (struct matrix_file *file = device->files, *next_file; file; file = next_file) {
+      if (!file->transferring_to && !file->transferring_to_host) continue;
 
-    for (struct obj_data *soft = deck->contains, *next_obj; soft; soft = next_obj) {
-      next_obj = soft->next_content;
-
-      // Sanity check: Only upload deck accessories.
-      if (GET_OBJ_TYPE(soft) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
-        continue;
-
-      if (GET_DECK_ACCESSORY_FILE_REMAINING(soft) > 0)
-      {
+      if (file->transfer_remaining > 0) {
         // Require that we're on the same host as we started the upload on.
-        if (GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) == 1 && GET_OBJ_ATTEMPT(soft) != matrix[persona->in_host].vnum) {
-          send_to_icon(persona, "Your connection to the host was interrupted, so %s^n fails to upload.\r\n", GET_OBJ_NAME(soft));
-          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
-          return;
+        if (file->transferring_to_host && persona->in_host != file->transferring_to_host->vnum) {
+          send_to_icon(persona, "Your connection to the host was interrupted, so %s^n fails to upload.\r\n",
+            file->name);
+          file->transfer_remaining = 0;
+          file->transferring_to_host = NULL;
+          file->file_worker = 0;
+          continue;
         }
 
-        GET_DECK_ACCESSORY_FILE_REMAINING(soft) -= persona->decker->io;
-        if (GET_DECK_ACCESSORY_FILE_REMAINING(soft) <= 0) {
-          // Easy finish: Uploading to active memory.
-          if (!GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft)) {
-            send_to_icon(persona, "%s^n has finished uploading to active memory.\r\n", CAP(GET_OBJ_NAME(soft)));
-            struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL, OBJ_LOAD_REASON_MTX_FINISHED_UPLOAD);
-            if (soft->restring)
-              active->restring = str_dup(soft->restring);
-            for (int x = 0; x < 10; x++)
-              GET_OBJ_VAL(active, x) = GET_OBJ_VAL(soft, x);
-            active->next_content = persona->decker->software;
-            persona->decker->software = active;
-            GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
-            return;
-          }
+        // Progress the download.
+        file->transfer_remaining = MAX(0, file->transfer_remaining - persona->decker->io);
+      }
 
-          // We're uploading to a host.
+      if(file->transfer_remaining <= 0) {
+        if (file->transferring_to_host) {
+          // We just completed an upload to a host.
           struct char_data *questor = NULL;
 
-          // Quest object?
-          if (GET_OBJ_QUEST_CHAR_ID(soft) && GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft)) {
+          if (file->quest_id) {
             // You must be grouped with the questor for the upload to complete.
-            if (!(questor = ch_is_grouped_with_idnum(persona->decker->ch, GET_OBJ_QUEST_CHAR_ID(soft))) || GET_QUEST(questor) < 0) {
-              send_to_icon(persona, "%s^n failed to upload to the host: You're not grouped with the questor.\r\n", CAP(GET_OBJ_NAME(soft)));
-              GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
-              return;
+            if (!(questor = ch_is_grouped_with_idnum(persona->decker->ch, file->quest_id)) || GET_QUEST(questor) < 0) {
+              send_to_icon(persona, "%s^n failed to upload to the host: You're not grouped with the questor.\r\n", CAP(file->name));
+              file->transfer_remaining = 0;
+              file->transferring_to_host = NULL;
+              file->file_worker = 0;
+              continue;
             }
           }
 
           // Send the success message.
-          send_to_icon(persona, "%s^n has finished uploading to the host.\r\n", CAP(GET_OBJ_NAME(soft)));
+          send_to_icon(persona, "%s^n has finished uploading to the host.\r\n", CAP(file->name));
 
           // Move it onto the host.
-          obj_from_obj(soft);
-          obj_to_host(soft, &matrix[persona->in_host]);
+          move_matrix_file_to(file, &matrix[persona->in_host]);
+
           // Make it seen by them.
-          GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) = GET_IDNUM(persona->decker->ch);
-          // Remove it from their deck's used storage.
-          GET_CYBERDECK_USED_STORAGE(deck) -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
-          GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
-          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
+          file->found_by = GET_IDNUM(persona->decker->ch);
 
           if (questor) {
             log_vfprintf("Questor found for upload.");
@@ -3154,7 +3126,7 @@ void process_upload(struct matrix_icon *persona)
               if (quest_table[GET_QUEST(questor)].obj[i].objective != QOO_UPLOAD)
                 continue;
 
-              if (GET_OBJ_VNUM(soft) != quest_table[GET_QUEST(questor)].obj[i].vnum)
+              if (file->idnum != quest_table[GET_QUEST(questor)].obj[i].vnum)
                 continue;
 
               if (matrix[persona->in_host].vnum == quest_table[GET_QUEST(questor)].obj[i].o_data) {
@@ -3180,9 +3152,21 @@ void process_upload(struct matrix_icon *persona)
               mudlog(buf, questor, LOG_SYSLOG, TRUE);
             }
           }
-          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
+
+          file->transfer_remaining = 0;
+          file->transferring_to_host = NULL;
+          file->file_worker = 0;
+        } else if (file->transferring_to) {
+          send_to_icon(persona, "%s^n has finished uploading to active memory.\r\n", file->name);
+          file->transfer_remaining = 0;
+          file->transferring_to = NULL;
+          file->file_worker = 0;
+
+          struct matrix_file *active = clone_matrix_file(file);
+          active->next_file = persona->decker->software;
+          persona->decker->software = active;
+          continue;
         }
-        break;
       }
     }
   }
@@ -3258,16 +3242,16 @@ void matrix_update()
         HOST.shutdown_mpcp = 0;
         HOST.shutdown_success = 0;
       } else if (!--HOST.shutdown) {
-        struct obj_data *nextfile = NULL;
+        struct matrix_file *nextfile = NULL;
         HOST.shutdown_mpcp = 0;
         HOST.shutdown_success = 0;
         HOST.alert = 3;
         while (HOST.icons)
           dumpshock(HOST.icons);
-        if (HOST.file)
-          for (struct obj_data *obj = HOST.file; nextfile; obj = nextfile) {
-            nextfile = obj->next_content;
-            extract_obj(obj);
+        if (HOST.files)
+          for (struct matrix_file *obj = HOST.files; nextfile; obj = nextfile) {
+            nextfile = obj->next_file;
+            extract_matrix_file(obj);
           }
         HOST.reset = srdice() + srdice();
         continue;
@@ -3310,55 +3294,33 @@ void matrix_update()
               }
               break;
             }
-      struct obj_data *next;
-      for (struct obj_data *file = HOST.file; file; file = next) {
-        next = file->next_content;
-        if (next == file) {
-          mudlog("SYSERR: Infinite loop detected in Matrix file handling! Attempting to break out.\r\n", NULL, LOG_SYSLOG, TRUE);
-          file->next_content = NULL;
-          next = NULL;
-        }
-        if (GET_OBJ_TYPE(file) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file) != ITEM_PROGRAM) {
-          // We allow for things like Shadowlands terminals in Matrix hosts, so just skip.
-          continue;
-        }
-        if (file->next_content && (GET_OBJ_TYPE(file->next_content) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(file->next_content) != ITEM_PROGRAM)) {
-          snprintf(buf, sizeof(buf), "SYSERR: Found non-file, non-program object '%s' (%ld) in Matrix file->next_content for host %ld (%s)! Striking that link, object will be orphaned if not located elsewhere.",
-                   GET_OBJ_NAME(file->next_content),
-                   GET_OBJ_VNUM(file->next_content),
-                   HOST.vnum,
-                   HOST.name
-                 );
-          mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-          file->next_content = next = NULL;
-        }
-        if (GET_DECK_ACCESSORY_FILE_REMAINING(file)) {
-          struct matrix_icon *persona = find_icon_by_id(GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file));
+      matrix_file *next;
+      for (matrix_file *file = HOST.files; file; file = next) {
+        next = file->next_file;
+        if (file->transfer_remaining) {
+          struct matrix_icon *persona = find_icon_by_id(file->file_worker);
           if (!persona || persona->in_host != rnum) {
-            GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
-            GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
+            file->file_worker = 0;
+            file->transfer_remaining = 0;
+            file->transferring_to = NULL;
           } else {
-            GET_DECK_ACCESSORY_FILE_REMAINING(file) -= persona->decker->io;
-            // TODO BUG: What if you're out of space? It silently fails to download and just eternally decrements? Might even hit 0 and have 8 still set.
-            struct obj_data *target_deck = persona->decker->deck;
-            // Otaku code for proxy decks; allow downloading to proxy decks
-            if (IS_OTAKU(persona->decker->ch) && persona->decker->proxy_deck) target_deck = persona->decker->proxy_deck;
-            if (GET_DECK_ACCESSORY_FILE_REMAINING(file) <= 0) {
+            file->transfer_remaining -= persona->decker->io;
+            if (file->transfer_remaining <= 0) {
               // Out of space? Inform them, reset the file, bail.
-              if (GET_OBJ_VAL(target_deck, 3) - GET_OBJ_VAL(target_deck, 5) < GET_DECK_ACCESSORY_FILE_SIZE(file)) {
-                send_to_icon(persona, "%s^n failed to download-- your deck is out of space.\r\n", CAP(GET_OBJ_NAME(file)));
-                GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
-                GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
+              if (!can_file_fit(file, file->transferring_to)) {
+                send_to_icon(persona, "%s^n failed to download-- %s is out of space.\r\n", CAP(file->name), CAP(GET_OBJ_NAME(file->transferring_to)));
+                file->file_worker = 0;
+                file->transfer_remaining = 0;
+                file->transferring_to = NULL;
                 return;
               }
 
-              obj_from_host(file);
-              obj_to_obj(file, target_deck);
-              send_to_icon(persona, "%s^n has finished downloading to your deck.\r\n", CAP(GET_OBJ_NAME(file)));
-              GET_OBJ_VAL(target_deck, 5) += GET_DECK_ACCESSORY_FILE_SIZE(file);
-              GET_DECK_ACCESSORY_FILE_FOUND_BY(file) = 0;
-              GET_DECK_ACCESSORY_FILE_REMAINING(file) = 0;
-              GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(file) = 0;
+              move_matrix_file_to(file, file->transferring_to);
+              send_to_icon(persona, "%s^n has finished downloading to %s.\r\n", CAP(file->name), CAP(GET_OBJ_NAME(file->transferring_to)));
+              file->found_by = 0;
+              file->file_worker = 0;
+              file->transfer_remaining = 0;
+              file->transferring_to = NULL;
             }
           }
         }
@@ -3529,16 +3491,16 @@ ACMD(do_matrix_scan)
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = ic->next_in_host)
     if (ic->decker && has_spotted(PERSONA, ic) && keyword_appears_in_icon(argument, ic, TRUE, FALSE)) {
-      struct obj_data *obj;
+      struct matrix_file *soft;
       int target = ic->decker->masking;
-      for (obj = ic->decker->software; obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == SOFT_SLEAZE) {
-          target += GET_OBJ_VAL(obj, 1);
+      for (soft = ic->decker->software; soft; soft = soft->next_file)
+        if (soft->program_type == SOFT_SLEAZE) {
+          target += soft->rating;
           break;
         }
-      for (obj = DECKER->software; obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == SOFT_SCANNER) {
-          target -= GET_OBJ_VAL(obj, 1);
+      for (soft = DECKER->software; soft; soft = soft->next_file)
+        if (soft->program_type == SOFT_SCANNER) {
+          target -= soft->rating;
           break;
         }
       int skill = get_skill(ch, SKILL_COMPUTER, target) + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));

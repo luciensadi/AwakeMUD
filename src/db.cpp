@@ -239,6 +239,7 @@ void boot_shop_orders(void);
 void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
+extern void init_matrix_data_file_index();
 void set_elemental_races();
 void initialize_and_alphabetize_flag_maps();
 void set_up_pet_dummy_mob();
@@ -616,6 +617,7 @@ void boot_world(void)
   require_that_sql_table_exists("pfiles_exdescs", "SQL/Migrations/add_exdescs.sql");
   require_that_field_exists_in_table("otaku_path", "pfiles", "SQL/Migrations/add_otaku.sql");
   require_that_sql_table_exists("pfiles_echoes", "SQL/Migrations/add_otaku_echoes.sql");
+  require_that_sql_table_exists("matrix_files", "SQL/Migrations/add_matrix_storage.sql");
 
   {
     const char *object_tables[4] = {
@@ -629,6 +631,9 @@ void boot_world(void)
     for (int idx = 0; idx < 4; idx++)
       require_that_field_exists_in_table(valbuf, object_tables[idx], "(meta check: no specific file)");
   }
+
+  log("Initializing matrix data file store index.");
+  init_matrix_data_file_index();
 
   log("Calculating lexicon data.");
   populate_lexicon_size_table();
@@ -4847,33 +4852,6 @@ void reset_zone(int zone, int reboot)
           veh_to_room(veh, &world[ZCMD.arg3]);
           snprintf(buf, sizeof(buf), "%s has arrived.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
           send_to_room(buf, veh->in_room);
-          last_cmd = 1;
-        } else
-          last_cmd = 0;
-      }
-      break;
-    case 'H':                 /* loads a Matrix file into a host */
-      // Count the existing items in this host
-      {
-        // Log annoyingly if this is a bitshifted snowflake key.
-        if (GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]) == OBJ_SNOWFLAKE_KEY && matrix[ZCMD.arg3].vnum != HOST_SNOWFLAKE_KEY_LOCATION) {
-          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Bitshift happened! The snowflake key is attempting to load in inappropriate host %ld. Redirecting to proper host.", matrix[ZCMD.arg3].vnum);
-          rnum_t actual_snowhost_rnum = real_host(HOST_SNOWFLAKE_KEY_LOCATION);
-          if (actual_snowhost_rnum >= 0)
-            ZCMD.arg3 = actual_snowhost_rnum;
-          else
-            mudlog("SYSERR: Never mind, proper host doesn't exist, guess we'll just gargle donkey balls today", NULL, LOG_SYSLOG, TRUE);
-        }
-
-        int already_there = 0;
-        for (struct obj_data *contents = matrix[ZCMD.arg3].file; contents; contents = contents->next_content) {
-          if (GET_OBJ_VNUM(contents) == GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]))
-            already_there++;
-        }
-
-        if ((already_there < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-            (ZCMD.arg2 == 0 && reboot)) {
-          obj_to_host(read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD), &matrix[ZCMD.arg3]);
           last_cmd = 1;
         } else
           last_cmd = 0;

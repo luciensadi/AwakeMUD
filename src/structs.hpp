@@ -153,6 +153,7 @@ struct obj_data
   struct obj_data *contains;      /* Contains objects                 */
   struct obj_data *next_content;  /* For 'contains' lists             */
   struct host_data *in_host;      /* For tracking if the object is in a Matrix host. */
+  struct matrix_file *files;      /* All the matrix files stored on obj */
 
   struct obj_data *cyberdeck_part_pointer;
 
@@ -618,7 +619,8 @@ struct char_special_data
   struct veh_data *fight_veh;
   struct char_data *fighting;  /* Opponent                             */
   struct char_data *hunting;   /* Char hunted by this char             */
-  struct obj_data *programming; /* Program char is currently designing/programming */
+  struct obj_data *building;
+  struct matrix_file *programming; /* Program char is currently designing/programming */
   int conjure[4];
   int num_spirits;
   idnum_t idnum;
@@ -1128,6 +1130,7 @@ struct descriptor_data
   int edit_zone;                /* which zone object is part of      */
   int iedit_limit_edits;        /* Used in iedit to let you cut out of g-menus early. */
   void **misc_data;             /* misc data, usually for extra data crap */
+  struct matrix_file *edit_matrix_file; /* edit target for pedit */
   struct obj_data *edit_obj;    /* iedit */
   struct room_data *edit_room;  /* redit */
   struct char_data *edit_mob;   /* medit */
@@ -1446,6 +1449,81 @@ struct kosher_weapon_values_struct {
     // Melee
     int str_bonus;
     int reach;
+};
+
+
+#define WORK_PHASE_NONE          0
+#define WORK_PHASE_READY         1
+#define WORK_PHASE_IN_PROGRESS   2
+#define WORK_PHASE_COMPLETE      3
+
+#define MATRIX_FILE_DATA          0
+#define MATRIX_FILE_DESIGN        1
+#define MATRIX_FILE_SOURCE_CODE   2 // Represents an uncooked program
+#define MATRIX_FILE_PROGRAM       3
+#define MATRIX_FILE_PAYDATA       4
+
+
+/* ================== Memory Structure for Matrix Files ================== */
+struct matrix_file {
+  // SQL fields
+  rnum_t idnum;                                  /* Stored in database identifier */
+  char* name;                                    /* The user-friendly text for this file */
+  int file_type;
+  int program_type;                              /* If this is a file_type PROGRAM, this will be the type of program it is */
+  int rating;
+  int size;                                      /* File size in megapulses */
+  int wound_category;                            /* File's attack damage if damaging program */
+  int is_default;                                /* Whether or not to load the program by default */
+  idnum_t creator_idnum;
+  long creation_time;                            /* When was this file created? */
+  char *content;                                 /* Free form field for having text content; used for photos */
+
+  int work_phase;                                /* As a matrix file moves between phases, this changes */
+  int work_ticks_left;
+  int work_original_ticks_left;
+  int work_successes;  
+
+  long last_decay_time;     
+  int quest_id; 
+
+  struct obj_data *in_obj;                       /* In what object NULL when none    */                  
+
+  // Non-SQL fields
+  struct matrix_file *next_file;                 /* For 'files' lists             */
+  struct host_data *in_host;
+  bool work_failed;                              /* Whether or not the work on this file failed */
+  int timer; 
+
+  // Non-SQL stateful vars for other nonsense
+  idnum_t found_by;
+  idnum_t file_worker;
+  struct obj_data *transferring_to;
+  struct host_data *transferring_to_host;
+  int transfer_remaining;
+  int file_protection;
+
+  
+  // Debug fields
+  char load_origin;                              /* Identifies what loaded this. */
+
+  matrix_file() : 
+      idnum(0), name(0), file_type(0), program_type(0), rating(0), size(0), wound_category(0),
+      is_default(0), creator_idnum(0), creation_time(0), content(0), work_phase(0),
+      work_ticks_left(0), work_original_ticks_left(0), work_successes(0), last_decay_time(0),
+      quest_id(0),
+
+      in_obj(NULL), 
+      
+      next_file(NULL), in_host(NULL), work_failed(FALSE), timer(0), 
+
+      found_by(0), file_worker(0), transferring_to(NULL), transferring_to_host(NULL), transfer_remaining(0), 
+      file_protection(0),
+
+      load_origin(0)
+  {
+
+  }
 };
 
 #endif

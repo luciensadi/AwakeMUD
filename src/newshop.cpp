@@ -292,7 +292,7 @@ bool uninstall_ware_from_target_character(struct obj_data *obj, struct char_data
     return FALSE;
   }
 
-  if (GET_CYBERWARE_TYPE(obj) == CYB_MEMORY && obj->contains) {
+  if (GET_CYBERWARE_TYPE(obj) == CYB_MEMORY && (obj->contains || obj->files)) {
     send_to_char("You can't uninstall headware memory with data in it.\r\n", remover);
     return FALSE;
   }
@@ -1538,7 +1538,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       return;
     }
 
-    if (GET_CYBERWARE_TYPE(obj) == CYB_MEMORY && obj->contains) {
+    if (GET_CYBERWARE_TYPE(obj) == CYB_MEMORY && (obj->contains || obj->files)) {
       send_to_char("You can't uninstall headware memory with data in it.\r\n", ch);
       return;
     }
@@ -3526,7 +3526,7 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
     return;
   }
 
-  if (GET_CYBERWARE_TYPE(obj) == CYB_MEMORY && obj->contains) {
+  if (GET_CYBERWARE_TYPE(obj) == CYB_MEMORY && (obj->contains || obj->files)) {
     send_to_char("You can't uninstall headware memory with data in it.\r\n", ch);
     return;
   }

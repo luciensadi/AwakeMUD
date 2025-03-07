@@ -326,29 +326,6 @@ ACMD(do_link)
   }
 }
 
-ACMD(do_memory)
-{
-  struct obj_data *memory = find_cyberware(ch, CYB_MEMORY);
-
-  FAILURE_CASE(!memory, "You have no headware memory.");
-  FAILURE_CASE_PRINTF(!memory->contains, "Your headware memory is empty and has %d MP available for storage.", GET_CYBERWARE_MEMORY_MAX(memory));
-
-  send_to_char(ch, "Headware Memory Contents (%d/%d):\r\n", GET_CYBERWARE_MEMORY_FREE(memory), GET_CYBERWARE_MEMORY_MAX(memory));
-  
-  int i = 0;
-  for (struct obj_data *obj = memory->contains; obj; obj = obj->next_content) {
-    i++;
-    send_to_char(ch, "  %d) %s%-40s^n (%d MP) %s%s\r\n",
-                  i,
-                  GET_CHIP_COMPRESSION_FACTOR(obj) ? "^r" : "",
-                  GET_OBJ_NAME(obj),
-                  GET_CHIP_SIZE(obj) - GET_CHIP_COMPRESSION_FACTOR(obj),
-                  GET_CHIP_LINKED(obj) ? "^Y<LINKED>^N" : "",
-                  GET_CHIP_COMPRESSION_FACTOR(obj) ? "^y<COMPRESSED>^N" : ""
-                );
-  }
-}
-
 ACMD(do_compact)
 {
   struct obj_data *mem = find_cyberware(ch, CYB_MEMORY);
