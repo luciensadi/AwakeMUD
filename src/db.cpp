@@ -72,6 +72,7 @@ namespace bf = boost::filesystem;
 #include "zoomies.hpp"
 #include "redit.hpp"
 #include "vehicles.hpp"
+#include "matrix_storage.hpp"
 
 ACMD_DECLARE(do_reload);
 
@@ -4852,6 +4853,47 @@ void reset_zone(int zone, int reboot)
           veh_to_room(veh, &world[ZCMD.arg3]);
           snprintf(buf, sizeof(buf), "%s has arrived.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
           send_to_room(buf, veh->in_room);
+          last_cmd = 1;
+        } else
+          last_cmd = 0;
+      }
+      break;
+    case 'H':
+      // Count the existing items in this host
+      {
+        // Log annoyingly if this is a bitshifted snowflake key.
+        if (GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]) == OBJ_SNOWFLAKE_KEY && matrix[ZCMD.arg3].vnum != HOST_SNOWFLAKE_KEY_LOCATION) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Bitshift happened! The snowflake key is attempting to load in inappropriate host %ld. Redirecting to proper host.", matrix[ZCMD.arg3].vnum);
+          rnum_t actual_snowhost_rnum = real_host(HOST_SNOWFLAKE_KEY_LOCATION);
+          if (actual_snowhost_rnum >= 0)
+            ZCMD.arg3 = actual_snowhost_rnum;
+          else
+            mudlog("SYSERR: Never mind, proper host doesn't exist, guess we'll just gargle donkey balls today", NULL, LOG_SYSLOG, TRUE);
+        }
+
+        int already_there = 0;
+        for (struct obj_data *contents = matrix[ZCMD.arg3].contents; contents; contents = contents->next_content) {
+          if (GET_OBJ_VNUM(contents) == GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]))
+            already_there++;
+        }
+
+        if ((already_there < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
+            (ZCMD.arg2 == 0 && reboot)) {
+          struct obj_data *new_obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
+          struct host_data *to_host = &matrix[ZCMD.arg3];
+          if (GET_OBJ_TYPE(new_obj) == ITEM_PROGRAM
+            || GET_OBJ_TYPE(new_obj) == ITEM_DESIGN
+            ) {
+            struct matrix_file *file = obj_to_matrix_file(new_obj, NULL);
+            file->in_host = to_host;
+            file->next_file = to_host->files;
+            to_host->files = file;
+            extract_obj(new_obj);
+          } else {
+            new_obj->in_host = to_host;
+            new_obj->next_content = to_host->contents;
+            to_host->contents = new_obj;
+          }
           last_cmd = 1;
         } else
           last_cmd = 0;
