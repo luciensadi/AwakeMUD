@@ -110,6 +110,30 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
   return found_list;
 }
 
+obj_data* find_obj_in_vector_vis(struct char_data * ch, const char *name, std::vector<obj_data *> &list) {
+  int j = 0, number;
+  char tmpname[MAX_INPUT_LENGTH];
+  char *tmp = tmpname;
+  bool staff_bit = IS_SENATOR(ch);
+
+  // No list, no worries.
+  if (list.size() <= 0)
+    return NULL;
+
+  strlcpy(tmp, name, sizeof(tmpname));
+  if (!(number = get_number(&tmp, sizeof(tmpname))))
+    return NULL;
+
+  for(obj_data* i : list)  {
+    if (keyword_appears_in_obj(tmp, i)) {
+      if (++j == number)
+        return i;
+    }
+  }
+
+  return NULL;
+}
+
 matrix_file* create_matrix_file(obj_data *storage, int load_origin) {
   struct matrix_file *new_file = new matrix_file();
   new_file->idnum = _next_matrix_id();
@@ -401,50 +425,61 @@ bool handle_matrix_file_transfer(struct char_data *ch, char *argument) {
   //   transfer somefile myawesomedeck
   //   transfer desktop somefile myawesomedeck
   const char* remainder = two_arguments(argument, buf1, buf2);
-  struct obj_data *target_deck, *source_deck;
-  struct matrix_file *file;
+  obj_data *target_deck = NULL, *source_deck = NULL;
+  matrix_file *file = NULL;
+  send_to_char(ch, "buf1: %s, buf2: %s, remainder: %s\r\n", buf1, buf2, remainder);
 
-  std::vector<struct obj_data*> devices = {};
+  std::vector<struct obj_data*> all_devices = get_storage_devices(ch, FALSE);
+  std::vector<struct obj_data*> search_devices = {};
 
   if (*remainder) {
     // If we have *remainder, it means the user did the 3 arg version of transfer, so we can be sure
     // they were doing the decker version, and thus can report errors.
-    if (!(target_deck = get_obj_in_list_vis(ch, remainder, ch->carrying))
-      && !(target_deck = get_obj_in_list_vis(ch, remainder, ch->in_room->contents))) {
+    if (!(target_deck = find_obj_in_vector_vis(ch, remainder, all_devices))) {
       // Unable to find the deck we want to transfer to. :(
       send_to_char(ch, "I don't see any matrix file storage device named %s near you.", remainder);
       return TRUE; // True because we abort early. 
     }
 
-    if (!(source_deck = get_obj_in_list_vis(ch, buf1, ch->carrying))
-      && !(source_deck = get_obj_in_list_vis(ch, buf1, ch->carrying))) {
+    if (!(source_deck = find_obj_in_vector_vis(ch, buf1, all_devices))) {
       send_to_char(ch, "I don't see any matrix file storage device named %s near you.", buf1);
       return TRUE; // True because we abort early. 
     }
 
-    devices = {source_deck};
+    search_devices = {source_deck};
   } else {
-    if (!(target_deck = get_obj_in_list_vis(ch, remainder, ch->carrying))
-      && !(target_deck = get_obj_in_list_vis(ch, remainder, ch->in_room->contents))) {
+    if (!(target_deck = find_obj_in_vector_vis(ch, buf2, all_devices))) {
       return FALSE;
     }
-    devices = get_storage_devices(ch, FALSE);
+
+    search_devices = all_devices;
   }
 
-  for(obj_data* device : devices)  {
+  for(obj_data* device : search_devices)  {
     if (file = get_matrix_file_in_list_vis(ch, *remainder ? buf2 : buf1, device->files))
       break;
   }
 
+  send_to_char(ch, "file: %s\r\n", file->name);
+
   if (!file)
     return FALSE;
 
-  snprintf(buf, sizeof(buf), "You connect a cable between %s and %s, making quick work of transferring %s to %s.",
-    GET_OBJ_NAME(source_deck), GET_OBJ_NAME(target_deck), file->name, GET_OBJ_NAME(target_deck));
-  act(buf, FALSE, ch, source_deck, target_deck, TO_CHAR);
+  source_deck = file->in_obj;
+  send_to_char(ch, "source deck: %s\r\n", GET_OBJ_NAME(source_deck));
+
+  if (AFF_FLAGGED(ch, PLR_MATRIX) && ch->persona) {
+    send_to_icon(ch->persona, "You transfer %s from %s to %s.",
+      file->name, GET_OBJ_NAME(source_deck), GET_OBJ_NAME(target_deck));
+  } else {
+    snprintf(buf, sizeof(buf), "You connect a cable between %s and %s, making quick work of transferring %s to %s.",
+      GET_OBJ_NAME(source_deck), GET_OBJ_NAME(target_deck), file->name, GET_OBJ_NAME(target_deck));
+    act(buf, FALSE, ch, source_deck, target_deck, TO_CHAR);
+  }
 
   file_from_obj(file); 
   file->in_obj = target_deck;
   file->next_file = target_deck->files;
   target_deck->files = file; 
+  return TRUE;
 } 
