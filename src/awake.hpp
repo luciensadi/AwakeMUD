@@ -1342,8 +1342,7 @@ enum {
 #define ITEM_CREATIVE_EFFORT    49
 #define ITEM_PET                50
 #define ITEM_COMPLEX_FORM       51       /* otaku complex form               */
-#define ITEM_SINGLE_USE_CHIP    52       /* single use chips burn a program once and then go away */
-#define NUM_ITEMS               53
+#define NUM_ITEMS               52
 // Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
 #define PATCH_ANTIDOTE          0
@@ -2852,8 +2851,7 @@ enum {
 #define OBJ_BLANK_MAGAZINE                 127
 #define OBJ_CUSTOM_PET                     128
 #define OBJ_BLANK_COMPLEX_FORM             129
-#define OBJ_BLANK_BURNER_CHIP              130
-#define TOP_OF_TEMPLATE_ITEMS              130
+#define TOP_OF_TEMPLATE_ITEMS              129
 
 #define OBJ_DOCWAGON_PAPER_GOWN            16201
 #define OBJ_ANTI_DRUG_CHEMS                44
