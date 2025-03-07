@@ -11,6 +11,7 @@
 #include "db.hpp"
 #include "handler.hpp"
 #include "constants.hpp"
+#include "chipjacks.hpp"
 
 // Function to get a unique ID
 std::atomic<long> matrix_file_id_counter{1};
@@ -186,6 +187,9 @@ matrix_file* clone_matrix_file(struct matrix_file *source) {
   copy->is_default = source->is_default;
   copy->creator_idnum = source->creator_idnum;
   if (source->content) copy->content = strdup(source->content);
+  copy->skill = source->skill;
+  copy->linked = source->linked;
+  copy->compression_factor = source->compression_factor;
 
   copy->work_phase = source->work_phase;
   copy->work_ticks_left = source->work_ticks_left;
@@ -262,6 +266,10 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
   } else if (GET_OBJ_TYPE(prog) == ITEM_DESIGN) {
     new_file->file_type = MATRIX_FILE_DESIGN;
     new_file->program_type = GET_PROGRAM_TYPE(prog);
+  } else if (GET_OBJ_TYPE(prog) == ITEM_CHIP) {
+    // Skillsoft/knowsoft chip
+    new_file->file_type = MATRIX_FILE_SKILLSOFT;
+    new_file->skill = GET_CHIP_SKILL(prog);
   }
   
   return new_file;
@@ -325,7 +333,6 @@ struct matrix_file *get_matrix_file_in_list_vis(struct char_data * ch, const cha
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
-  bool staff_bit = IS_SENATOR(ch);
 
   if (!list)
     return NULL;
@@ -488,6 +495,26 @@ matrix_file* copy_matrix_file_to(struct matrix_file *file, obj_data* to_device) 
   }
 
   return copy;
+}
+
+void delete_matrix_file(struct matrix_file *file) {
+  if(file->linked) {
+    for (char_data *i = character_list; i; i = i->next_in_character_list) {
+      if (i->unique_id != file->linked) continue;
+      deactivate_single_skillsoft(file, i, TRUE);
+    }
+  }
+
+  if (file->in_host) {
+    file_from_host(file);
+  }
+
+  if (file->in_obj) {
+    adjust_device_memory(file->in_obj, file->size);
+    file_from_obj(file);
+  }
+
+  extract_matrix_file(file);
 }
 
 void move_matrix_file_to(struct matrix_file *file, host_data* to_host) {

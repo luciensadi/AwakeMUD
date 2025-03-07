@@ -1462,6 +1462,7 @@ struct kosher_weapon_values_struct {
 #define MATRIX_FILE_SOURCE_CODE   2 // Represents an uncooked program
 #define MATRIX_FILE_PROGRAM       3
 #define MATRIX_FILE_PAYDATA       4
+#define MATRIX_FILE_SKILLSOFT     5
 
 
 /* ================== Memory Structure for Matrix Files ================== */
@@ -1472,28 +1473,26 @@ struct matrix_file {
   int file_type;
   int program_type;                              /* If this is a file_type PROGRAM, this will be the type of program it is */
   int rating;
-  int size;                                      /* File size in megapulses */
+  int size;                                      /* File size in megapulses. This is the value used when adjusting storage values */
+  int original_size;                             /* A variable that can be used for various overloads/alternating sizes on files */
+  int compression_factor;                        /* If a file is compressed, the factor goes here */
   int wound_category;                            /* File's attack damage if damaging program */
   int is_default;                                /* Whether or not to load the program by default */
   idnum_t creator_idnum;
   long creation_time;                            /* When was this file created? */
   char *content;                                 /* Free form field for having text content; used for photos */
 
-  int work_phase;                                /* As a matrix file moves between phases, this changes */
-  int work_ticks_left;
-  int work_original_ticks_left;
-  int work_successes;  
-
   long last_decay_time;     
   int quest_id; 
+  struct obj_data *in_obj;                       /* In what object NULL when none    */       
 
-  struct obj_data *in_obj;                       /* In what object NULL when none    */                  
+  // Fields used by skillsofts
+  int skill;      
+  rnum_t linked;                                 /* If this is non-zero, it's the idnum of the ch */
 
   // Non-SQL fields
   struct matrix_file *next_file;                 /* For 'files' lists             */
   struct host_data *in_host;
-  bool work_failed;                              /* Whether or not the work on this file failed */
-  int timer; 
 
   // Non-SQL stateful vars for other nonsense
   idnum_t found_by;
@@ -1504,22 +1503,29 @@ struct matrix_file {
   int file_protection;
   int resonant;                                  /* Is this a resonant file for otaku? */
 
+  // Non-SQL fields used for keeping track of B/R
+  int work_phase;                               
+  int work_ticks_left;
+  int work_original_ticks_left;
+  int work_successes;  
+
+
   
   // Debug fields
   char load_origin;                              /* Identifies what loaded this. */
 
   matrix_file() : 
-      idnum(0), name(0), file_type(0), program_type(0), rating(0), size(0), wound_category(0),
-      is_default(0), creator_idnum(0), creation_time(0), content(0), work_phase(0),
-      work_ticks_left(0), work_original_ticks_left(0), work_successes(0), last_decay_time(0),
-      quest_id(0),
+      idnum(0), name(0), file_type(0), program_type(0), rating(0), size(0), original_size(0),
+      compression_factor(0), wound_category(0), is_default(0), creator_idnum(0), content(0),
 
-      in_obj(NULL), 
-      
-      next_file(NULL), in_host(NULL), work_failed(FALSE), timer(0), 
+      last_decay_time(0), quest_id(0), in_obj(0), skill(0), linked(0),
 
-      found_by(0), file_worker(0), transferring_to(NULL), transferring_to_host(NULL), transfer_remaining(0), 
-      file_protection(0),
+      next_file(0), in_host(0),
+
+      found_by(0), file_worker(0), transferring_to(0), transferring_to_host(0), transfer_remaining(0),
+      file_protection(0), resonant(0),
+
+      work_phase(0), work_ticks_left(0), work_original_ticks_left(0), work_successes(0),
 
       load_origin(0)
   {

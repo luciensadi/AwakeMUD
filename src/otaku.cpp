@@ -161,7 +161,6 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
     active->program_type = GET_PROGRAM_TYPE(form);
     active->wound_category = GET_PROGRAM_ATTACK_DAMAGE(form);
     active->is_default = TRUE;
-    active->timer = 1;
 
     active->rating = GET_PROGRAM_RATING(form);
     // Cyberadepts get +1 to Complex Forms

@@ -3437,7 +3437,7 @@ void fix_character_essence_after_expert_driver_change(struct char_data *ch) {
   while ((ware = find_cyberware(ch, CYB_CHIPJACK))) {
     for (struct obj_data *chip = ware->contains, *next_obj; chip; chip = next_obj) {
       next_obj = chip->next_content;
-      deactivate_single_skillsoft(chip, ch, FALSE);
+      deactivate_single_skillsoft(chip->files, ch, FALSE);
       obj_from_obj(chip);
       obj_to_char(chip, ch);
     }

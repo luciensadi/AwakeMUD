@@ -4510,7 +4510,6 @@ SPECIAL(desktop)
 
   struct obj_data *obj = (struct obj_data *) me;
   float completion_percentage;
-  bool found_suite = FALSE;
 
   if (!CMD_IS("list") || (!obj->in_veh && !obj->in_room))
     return FALSE;

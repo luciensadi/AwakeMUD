@@ -7,6 +7,7 @@
 extern std::atomic<long>    matrix_file_id_counter;
 
 // High level functions; the ones you probably want to use when messing with this system
+void                delete_matrix_file(struct matrix_file file);
 matrix_file*        copy_matrix_file_to(struct matrix_file *file, obj_data* to_device);
 void                move_matrix_file_to(struct matrix_file *file, obj_data* to_device);
 void                move_matrix_file_to(struct matrix_file *file, host_data* to_host);
@@ -21,6 +22,7 @@ obj_data*           matrix_file_to_obj(matrix_file *file);
 obj_data*           find_internal_storage(struct char_data *ch, int free_space=0);
 const char*         keyword_appears_in_file(const char *keyword, struct matrix_file *file, bool search_name=1, bool search_desc=0);
 struct matrix_file* get_matrix_file_in_list_vis(struct char_data *ch, const char *name, struct matrix_file *list);
+obj_data*           find_obj_in_vector_vis(struct char_data * ch, const char *name, std::vector<obj_data *> &list);
 void                extract_matrix_file(struct matrix_file *file);
 bool                handle_matrix_file_transfer(struct char_data *ch, char *argument);
 bool                program_can_be_copied(struct matrix_file *prog);

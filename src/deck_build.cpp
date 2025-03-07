@@ -528,8 +528,7 @@ ACMD(do_cook) {
         send_to_char(ch, "You don't see %s installed on any computers here.\r\n", argument);
     else if (design->file_type != MATRIX_FILE_SOURCE_CODE)
         send_to_char(ch, "You cannot cook %s. It's only possible to cook (compile) programs that are source code.", design->name);
-        // send_to_char(ch, "You must finish programming %s first.\r\n", design->name);
-    else if (design->timer)
+    else if (design->work_original_ticks_left)
         send_to_char("This chip has already been encoded.\r\n", ch);
     else {
       FOR_ITEMS_AROUND_CH(ch, cooker) {
@@ -1107,7 +1106,7 @@ ACMD(do_progress)
 
   if (AFF_FLAGS(ch).IsSet(AFF_PROGRAM)) {
     amount_left   = GET_PROGRAMMING(ch)->work_ticks_left;
-    amount_needed = GET_PROGRAMMING(ch)->timer;
+    amount_needed = GET_PROGRAMMING(ch)->work_original_ticks_left;
     send_to_char(ch, "You are about %2.2f%% of the way through programming %s.\r\n",
            (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_PROGRAMMING(ch)->name);
     return;
@@ -1131,7 +1130,7 @@ ACMD(do_progress)
 
   if (AFF_FLAGS(ch).IsSet(AFF_DESIGN)) {
     amount_left = GET_PROGRAMMING(ch)->work_ticks_left;
-    amount_needed = GET_PROGRAMMING(ch)->timer;
+    amount_needed = GET_PROGRAMMING(ch)->work_original_ticks_left;
     send_to_char(ch, "You are about %2.2f%% of the way through designing %s.\r\n",
            (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_PROGRAMMING(ch)->name);
     return;

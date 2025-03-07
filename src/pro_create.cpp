@@ -433,12 +433,12 @@ ACMD(do_program)
     if (get_and_deduct_one_crafting_token_from_char(ch)) {
       send_to_char("A crafting token fuzzes into digital static, greatly accelerating the development time.\r\n", ch);
       prog->work_ticks_left = 1;
-      prog->timer = prog->work_ticks_left;
+      prog->work_original_ticks_left = prog->work_ticks_left;
     }
     else if (access_level(ch, LVL_ADMIN)) {
       send_to_char(ch, "You use your admin powers to greatly accelerate the development time for %s.\r\n", prog->name);
       prog->work_ticks_left = 1;
-      prog->timer = prog->work_ticks_left;
+      prog->work_original_ticks_left = prog->work_ticks_left;
     } else {
       send_to_char(ch, "You begin to program %s.\r\n", prog->name);
       int target = prog->rating;
