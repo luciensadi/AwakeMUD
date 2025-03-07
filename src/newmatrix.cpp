@@ -17,6 +17,7 @@
 #include "moderation.hpp"
 #include "pets.hpp"
 #include "otaku.hpp"
+#include "matrix_storage.hpp"
 
 #define PERSONA ch->persona
 #define PERSONA_CONDITION ch->persona->condition
@@ -285,33 +286,33 @@ void check_trigger(rnum_t host, struct char_data *ch)
   DECKER->last_trigger = DECKER->tally;
 }
 
-bool tarbaby(struct obj_data *prog, struct char_data *ch, struct matrix_icon *ic)
+bool tarbaby(struct matrix_file *prog, struct char_data *ch, struct matrix_icon *ic)
 {
   int target = ic->ic.rating;
   if (matrix[ic->in_host].shutdown)
     target -= 2;
   
-  int suc = success_test(GET_OBJ_VAL(prog, 1), target);
-  suc -= success_test(target, GET_OBJ_VAL(prog, 1));
+  int suc = success_test(prog->rating, target);
+  suc -= success_test(target, prog->rating);
   if (suc < 0)
   {
-    struct obj_data *temp;
-    send_to_icon(PERSONA, "%s^n crashes your %s^n!\r\n", CAP(ic->name), GET_OBJ_NAME(prog));
-    DECKER->active += GET_OBJ_VAL(prog, 2);
-    REMOVE_FROM_LIST(prog, DECKER->software, next_content);
+    struct matrix_file *temp;
+    send_to_icon(PERSONA, "%s^n crashes your %s^n!\r\n", CAP(ic->name), prog->name);
+    DECKER->active += prog->size;
+    REMOVE_FROM_LIST(prog, DECKER->software, next_file);
     // Otaku complex forms cannot be destroyed from memory, so no problem there.
     if (ic->ic.type == IC_TARPIT 
       && !DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)
       && success_test(target, DECKER->mpcp + DECKER->hardening) > 0)
       for (struct obj_data *copy = DECKER->deck->contains; copy; copy = copy->next_content) {
-        if (!strcmp(GET_OBJ_NAME(copy), GET_OBJ_NAME(prog))) {
+        if (!strcmp(GET_OBJ_NAME(copy), prog->name)) {
           send_to_icon(PERSONA, "It destroys all copies in storage memory as well!\r\n");
           GET_OBJ_VAL(DECKER->deck, 5) -= GET_OBJ_VAL(copy, 2);
           extract_obj(copy);
           break;
         }
       }
-    extract_obj(prog);
+    extract_matrix_file(prog);
     extract_icon(ic);
     return TRUE;
   }
@@ -395,9 +396,9 @@ bool dumpshock(struct matrix_icon *icon)
 int get_detection_factor(struct char_data *ch)
 {
   int detect = 0;
-  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
-    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE)
-      detect = GET_PROGRAM_RATING(soft);
+  for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file)
+    if (soft->file_type == SOFT_SLEAZE)
+      detect = soft->rating;
   detect += DECKER->masking + 1; // +1 because we round up
   detect = detect / 2;
   detect -= DECKER->res_det;
@@ -410,7 +411,7 @@ int get_detection_factor(struct char_data *ch)
 int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier)
 {
   int detect = 0;
-  struct obj_data *prog = NULL;
+  struct matrix_file *prog = NULL;
 
   char rollbuf[5000];
 
@@ -465,12 +466,12 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   strlcat(rollbuf, ". Modifiers: ", sizeof(rollbuf));
   target += modify_target_rbuf_raw(ch, rollbuf, sizeof(rollbuf), 8, FALSE) + DECKER->res_test + (DECKER->ras ? 0 : 4);
 
-  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
+  for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file) {
     if (prog) break;
-    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE) break;
-    if (GET_PROGRAM_TYPE(soft) == software) {
-      target -= GET_PROGRAM_RATING(soft);
-      buf_mod(rollbuf, sizeof(rollbuf), "soft", -GET_PROGRAM_RATING(soft));
+    if (soft->file_type == SOFT_SLEAZE) break;
+    if (soft->file_type == software) {
+      target -=  soft->rating;
+      buf_mod(rollbuf, sizeof(rollbuf), "soft", -soft->rating);
       prog = soft;
     }
   }
@@ -544,7 +545,6 @@ bool do_damage_persona(struct matrix_icon *targ, int dmg)
   if (targ->type == ICON_LIVING_PERSONA) {
     struct char_data *ch = targ->decker->ch;
     // It's an otaku! They get to suffer MENTAL DAMAGE!
-    // targ->condition seems to be 1-10 scale, while ch mental wounds seems to be 1-100. Multiply by ten.
     if (damage(targ->decker->ch, targ->decker->ch, dmg, TYPE_BLACKIC, MENTAL))
       return TRUE;
     if (GET_POS(ch) <= POS_STUNNED)
@@ -625,17 +625,17 @@ int maneuver_test(struct matrix_icon *icon)
   int icon_target = 0, icon_skill, targ_target = 0, targ_skill;
   if (icon->decker)
   {
-    for (struct obj_data *soft = icon->decker->software; soft; soft = soft->next_content)
-      if (GET_OBJ_VAL(soft, 0) == SOFT_CLOAK)
-        icon_target -= GET_OBJ_VAL(soft, 1);
+    for (struct matrix_file *soft = icon->decker->software; soft; soft = soft->next_file)
+      if (soft->file_type == SOFT_CLOAK)
+        icon_target -= soft->rating;
     targ_target += icon_skill = icon->decker->evasion;
   } else
     targ_target += icon_skill = matrix[icon->in_host].security;
   if (icon->fighting->decker)
   {
-    for (struct obj_data *soft = icon->fighting->decker->software; soft; soft = soft->next_content)
-      if (GET_OBJ_VAL(soft, 0) == SOFT_LOCKON)
-        targ_target -= GET_OBJ_VAL(soft, 1);
+    for (struct matrix_file *soft = icon->fighting->decker->software; soft; soft = soft->next_file)
+      if (soft->file_type == SOFT_LOCKON)
+        targ_target -= soft->rating;
     icon_target += targ_skill = icon->fighting->decker->sensor;
   } else
     icon_target += targ_skill = matrix[icon->in_host].security;
@@ -721,7 +721,7 @@ ACMD(do_matrix_position)
 
 void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 {
-  struct obj_data *soft = NULL;
+  struct matrix_file *soft = NULL;
   int target = 0, skill, bod = 0, dam = 0, power, success;
   int iconrating = icon->ic.rating;
   if (!targ)
@@ -777,15 +777,15 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   icon->position = 0;
   if (icon->decker)
   {
-    for (soft = icon->decker->software; soft; soft = soft->next_content)
-      if (GET_OBJ_VAL(soft, 0) == SOFT_ATTACK)
+    for (soft = icon->decker->software; soft; soft = soft->next_file)
+      if (soft->file_type == SOFT_ATTACK)
         break;
     if (!soft)
       return;
-    skill = GET_OBJ_VAL(soft, 1) + MIN(GET_MAX_HACKING(icon->decker->ch), GET_REM_HACKING(icon->decker->ch));
-    GET_REM_HACKING(icon->decker->ch) -= skill - GET_OBJ_VAL(soft, 1);
-    dam = GET_OBJ_VAL(soft, 3);
-    power = GET_OBJ_VAL(soft, 1);
+    skill = soft->rating + MIN(GET_MAX_HACKING(icon->decker->ch), GET_REM_HACKING(icon->decker->ch));
+    GET_REM_HACKING(icon->decker->ch) -= skill - soft->rating;
+    dam = soft->attack_damage;
+    power = soft->rating;
   } else
   {
     skill = matrix[icon->in_host].security;
@@ -819,7 +819,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (!targ->decker->deck)
         return;
       extern const char *crippler[4];
-      send_to_icon(targ, "%s^n takes a shot at your %s^n program!\r\n", CAP(icon->name), crippler[icon->ic.subtype]);
+      if (targ->type == ICON_LIVING_PERSONA) 
+        send_to_icon(targ, "%s^n takes a shot at your living persona's %s^n attribute!\r\n", CAP(icon->name), crippler[icon->ic.subtype]);
+      else
+        send_to_icon(targ, "%s^n takes a shot at your %s^n program!\r\n", CAP(icon->name), crippler[icon->ic.subtype]);
       switch (icon->ic.subtype) {
       case 0:
         bod = targ->decker->bod;
@@ -834,10 +837,25 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         bod = targ->decker->masking;
         break;
       }
+      if (targ->type == ICON_LIVING_PERSONA)
+        bod += targ->decker->hardening; // Otaku get to add their hardening to this check.
       success = success_test(matrix[targ->in_host].security, bod);
       int resist = success_test(bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch)), iconrating);
       GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
       success -= resist;
+      if (targ->type == ICON_LIVING_PERSONA) {
+        int damage_total = success / 2;
+        if (!damage_total) {
+          return send_to_icon(targ, "It fails to damage your living persona.\r\n");
+        }
+        damage_total = convert_damage(stage((2 - success_test(GET_WIL(targ) + GET_WILL_POOL(targ), MIN(matrix[icon->in_host].color + 1, DEADLY))), damage_total));
+        if (!damage_total) {
+          return send_to_icon(targ, "You power through it and nullify the damage.\r\n");
+        }
+        send_to_icon(targ, "It tears into your living persona!\r\n");
+        do_damage_persona(targ, damage_total);
+        return;
+      }
       if (success >= 2) {
         send_to_icon(targ, "It tears into the program!\r\n");
         while (success >= 2) {
@@ -880,9 +898,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     if (icon->ic.type >= IC_LETHAL_BLACK)
       power -= targ->decker->hardening;
     else
-      for (soft = targ->decker->software; soft; soft = soft->next_content)
-        if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR) {
-          power -= GET_OBJ_VAL(soft, 1);
+      for (soft = targ->decker->software; soft; soft = soft->next_file)
+        if (soft->file_type == SOFT_ARMOR) {
+          power -= soft->rating;
           break;
         }
     bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
@@ -933,9 +951,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       success -= success_test(targ->decker->evasion, iconrating);
       if (success > 0) {
         icon->ic.subtype = 10;
-        for (struct obj_data *soft = targ->decker->software; soft; soft = soft->next_content)
-          if (GET_OBJ_VAL(soft, 1) == SOFT_CAMO) {
-            icon->ic.subtype += GET_OBJ_VAL(soft, 1);
+        for (struct matrix_file *soft = targ->decker->software; soft; soft = soft->next_file)
+          if (soft->file_type == SOFT_CAMO) {
+            icon->ic.subtype += soft->rating;
             break;
           }
         icon->ic.subtype += targ->decker->ch->in_room->trace;
@@ -1538,9 +1556,9 @@ ACMD(do_locate)
       for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
         if (icon->decker && icon != PERSONA) {
           int targ = icon->decker->masking;
-          for (struct obj_data *soft = icon->decker->software; soft; soft = soft->next_content)
-            if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
-              targ += GET_OBJ_VAL(soft, 1);
+          for (struct matrix_file *soft = icon->decker->software; soft; soft = soft->next_file)
+            if (soft->file_type == SOFT_SLEAZE)
+              targ += soft->rating;
           if (sensor >= targ) {
             make_seen(PERSONA, icon->idnum);
             i++;
@@ -2290,9 +2308,7 @@ ACMD(do_connect)
           send_to_char(ch, "%s^n would exceed your deck's active memory, so it failed to load.\r\n", GET_OBJ_NAME(soft));
           continue;
         }
-        // OTAKU living persona don't need to check this, as all programs are complex forms
-        // and we already checked that when we created the deck.
-        if (PERSONA->type != ICON_LIVING_PERSONA && GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
+        if (GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
           send_to_char(ch, "%s^n is too advanced for your deck's MPCP rating, so it failed to load.\r\n", GET_OBJ_NAME(soft));
           continue;
         }
@@ -2302,9 +2318,9 @@ ACMD(do_connect)
         for (int x = 0; x < 10; x++)
           GET_OBJ_VAL(active, x) = GET_OBJ_VAL(soft, x);
         DECKER->active -= GET_OBJ_VAL(active, 2);
-        if (DECKER->software)
-          active->next_content = DECKER->software;
-        DECKER->software = active;
+        // if (DECKER->software)
+        //   active->next_file = DECKER->software;
+        // DECKER->software = active;
       }
 
     } else if (GET_OBJ_TYPE(soft) == ITEM_PART) {
@@ -2424,17 +2440,17 @@ ACMD(do_load)
       send_to_icon(PERSONA, "You don't have active memory to erase things from.\r\n");
       return;
     }
-    struct obj_data *temp = NULL;
-    for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
-      if (keyword_appears_in_obj(argument, soft)) {
-        send_to_icon(PERSONA, "You erase %s^n from active memory.\r\n", GET_OBJ_NAME(soft));
+    struct matrix_file *temp = NULL;
+    for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file) {
+      if (keyword_appears_in_file(argument, soft)) {
+        send_to_icon(PERSONA, "You erase %s^n from active memory.\r\n", soft->name);
         if (temp)
-          temp->next_content = soft->next_content;
+          temp->next_file = soft->next_file;
         else
-          DECKER->software = soft->next_content;
-        soft->next_content = NULL;
-        DECKER->active += GET_OBJ_VAL(soft, 2);
-        extract_obj(soft);
+          DECKER->software = soft->next_file;
+        soft->next_file = NULL;
+        DECKER->active += soft->size;
+        extract_matrix_file(soft);
         return;
       }
       temp = soft;
@@ -2580,9 +2596,9 @@ ACMD(do_download)
                    && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
         {
           int power = GET_DECK_ACCESSORY_FILE_RATING(soft);
-          for (struct obj_data *prog = DECKER->software; prog; prog = prog->next_content)
-            if (GET_OBJ_VAL(prog, 0) == SOFT_ARMOR) {
-              power -= GET_OBJ_VAL(prog, 1);
+          for (struct matrix_file *prog = DECKER->software; prog; prog = prog->next_file)
+            if (prog->file_type == SOFT_ARMOR) {
+              power -= prog->rating;
               break;
             }
           success = -success_test(DECKER->bod + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch)), power);
@@ -2627,15 +2643,15 @@ ACMD(do_run)
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
   }
-  struct obj_data *soft;
+  struct matrix_file *soft;
   struct matrix_icon *temp;
   two_arguments(argument, buf, arg);
-  for (soft = DECKER->software; soft; soft = soft->next_content)
-    if (keyword_appears_in_obj(buf, soft))
+  for (soft = DECKER->software; soft; soft = soft->next_file)
+    if (keyword_appears_in_file(buf, soft))
       break;
   if (soft) {
     WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-    switch (GET_PROGRAM_TYPE(soft)) {
+    switch (soft->file_type) {
       case SOFT_ATTACK:
         {
           struct matrix_icon *icon;
@@ -2666,7 +2682,7 @@ ACMD(do_run)
           }
 #endif
 
-          send_to_icon(PERSONA, "You start running %s^n against %s^n.\r\n", GET_OBJ_NAME(soft), decapitalize_a_an(icon->name));
+          send_to_icon(PERSONA, "You start running %s^n against %s^n.\r\n", soft->name, decapitalize_a_an(icon->name));
           if (!PERSONA->fighting) {
             PERSONA->next_fighting = matrix[icon->in_host].fighting;
             matrix[icon->in_host].fighting = PERSONA;
@@ -2698,7 +2714,7 @@ ACMD(do_run)
       case SOFT_MEDIC:
         if (PERSONA->condition == 10) {
           send_to_icon(PERSONA, "You're already at optimal condition.\r\n");
-        } else if (GET_OBJ_VAL(soft, 1) <= 0) {
+        } else if (soft->rating <= 0) {
           send_to_icon(PERSONA, "That program is no longer usable!\r\n");
         } else {
           for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = temp) {
@@ -2721,9 +2737,9 @@ ACMD(do_run)
           else if (PERSONA->condition < 9)
             targ = 4;
 
-          int skill = GET_OBJ_VAL(soft, 1) + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
+          int skill = soft->rating + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
           int success = success_test(skill, targ);
-          GET_REM_HACKING(ch) -= skill - GET_OBJ_VAL(soft, 1);
+          GET_REM_HACKING(ch) -= skill - soft->rating;
 
           if (success < 1)
             send_to_icon(PERSONA, "It fails to execute.\r\n");
@@ -2732,11 +2748,11 @@ ACMD(do_run)
             send_to_icon(PERSONA, "It repairs your icon.\r\n");
           }
           PERSONA->initiative -= 10;
-          GET_OBJ_VAL(soft, 1)--;
+          soft->rating--;
         }
         return;
     default:
-      send_to_icon(PERSONA, "You don't need to manually run %s^n.\r\n", GET_OBJ_NAME(soft));
+      send_to_icon(PERSONA, "You don't need to manually run %s^n.\r\n", soft->name);
       break;
     }
   }
@@ -2880,13 +2896,13 @@ ACMD(do_decrypt)
 void send_active_program_list(struct char_data *ch) {
   if (DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
     // We're an otaku using a living persona; we don't have active memory.
-    for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
-      send_to_icon(PERSONA, "%25s, Complex Form, Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
+    for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file)
+      send_to_icon(PERSONA, "%25s, Complex Form, Rating: %2d\r\n", soft->name, soft->rating);
     return;
   }
   send_to_icon(PERSONA, "Active Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(DECKER->deck, 2), DECKER->active);
-  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
-    send_to_icon(PERSONA, "%25s Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
+  for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file)
+    send_to_icon(PERSONA, "%25s Rating: %2d\r\n", soft->name, soft->rating);
 }
 
 void send_storage_program_list(struct char_data *ch) {
@@ -3115,8 +3131,6 @@ void process_upload(struct matrix_icon *persona)
               active->restring = str_dup(soft->restring);
             for (int x = 0; x < 10; x++)
               GET_OBJ_VAL(active, x) = GET_OBJ_VAL(soft, x);
-            active->next_content = persona->decker->software;
-            persona->decker->software = active;
             GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 0;
             return;
           }
@@ -3529,16 +3543,16 @@ ACMD(do_matrix_scan)
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
   for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = ic->next_in_host)
     if (ic->decker && has_spotted(PERSONA, ic) && keyword_appears_in_icon(argument, ic, TRUE, FALSE)) {
-      struct obj_data *obj;
+      struct matrix_file *soft;
       int target = ic->decker->masking;
-      for (obj = ic->decker->software; obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == SOFT_SLEAZE) {
-          target += GET_OBJ_VAL(obj, 1);
+      for (soft = ic->decker->software; soft; soft = soft->next_file)
+        if (soft->file_type == SOFT_SLEAZE) {
+          target += soft->rating;
           break;
         }
-      for (obj = DECKER->software; obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == SOFT_SCANNER) {
-          target -= GET_OBJ_VAL(obj, 1);
+      for (soft = DECKER->software; soft; soft = soft->next_file)
+        if (soft->file_type == SOFT_SCANNER) {
+          target -= soft->rating;
           break;
         }
       int skill = get_skill(ch, SKILL_COMPUTER, target) + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
