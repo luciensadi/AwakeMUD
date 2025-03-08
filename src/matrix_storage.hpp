@@ -99,6 +99,8 @@ int                 get_device_used_memory(struct obj_data *device);
  */
 int                 get_device_total_memory(struct obj_data *device);
 
+
+int        adjust_device_memory(struct obj_data *device, int change);
 /**
  * @brief Creates a new matrix file and optionally stores it in a specified device.
  *

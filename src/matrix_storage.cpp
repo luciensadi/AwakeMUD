@@ -21,13 +21,13 @@ int _next_matrix_id() {
 
 int adjust_device_memory(struct obj_data *device, int change) {
   switch (GET_OBJ_TYPE(device)) {
+    case ITEM_CYBERWARE:
+      return GET_OBJ_VAL(device, 5) -= change;
     case ITEM_DECK_ACCESSORY:
-      return GET_OBJ_VAL(device, 2) - change;
-      break;
+      return GET_OBJ_VAL(device, 3) -= change;
     case ITEM_CUSTOM_DECK:
     case ITEM_CYBERDECK:
-      return GET_OBJ_VAL(device, 3) - change;
-      break;
+      return GET_OBJ_VAL(device, 5) -= change;
   }
 
   return 0;
@@ -35,26 +35,26 @@ int adjust_device_memory(struct obj_data *device, int change) {
 
 int get_device_total_memory(struct obj_data *device) {
   switch (GET_OBJ_TYPE(device)) {
+    case ITEM_CYBERWARE:
+      return GET_OBJ_VAL(device, 3);
     case ITEM_DECK_ACCESSORY:
       return GET_OBJ_VAL(device, 2);
-      break;
     case ITEM_CUSTOM_DECK:
     case ITEM_CYBERDECK:
       return GET_OBJ_VAL(device, 3);
-      break;
   }
   return 0;
 }
 
 int get_device_used_memory(struct obj_data *device) {
   switch (GET_OBJ_TYPE(device)) {
+    case ITEM_CYBERWARE:
+      return GET_OBJ_VAL(device, 5);
     case ITEM_DECK_ACCESSORY:
       return GET_OBJ_VAL(device, 3);
-      break;
     case ITEM_CUSTOM_DECK:
     case ITEM_CYBERDECK:
       return GET_OBJ_VAL(device, 5);
-      break;
   }
   return 0;
 }
@@ -238,41 +238,46 @@ void file_from_host(struct matrix_file * obj)
 }
 
 matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
-  if (prog->files) {
-    // Sometimes I hide files on objects as a convenient way of saving memory
-    struct matrix_file *file = prog->files;
-    
-    file_from_obj(prog->files);
-
-    if (device) {
-      file->next_file = device->files;
-      device->files = file;
-      adjust_device_memory(device, file->size * -1);
-    }
-    return file;
-  }
-
   struct matrix_file *new_file = create_matrix_file(device, prog->load_origin);
 
   new_file->wound_category = GET_PROGRAM_ATTACK_DAMAGE(prog);
   if (prog->restring) new_file->name = strdup(prog->restring);
   else new_file->name = strdup(prog->text.name);
-  new_file->rating = GET_PROGRAM_RATING(prog);
   new_file->work_ticks_left = GET_OBJ_VAL(prog, 4);
-  new_file->is_default = GET_PROGRAM_IS_DEFAULTED(prog);
-  new_file->work_original_ticks_left = GET_OBJ_TIMER(prog);
-  new_file->work_successes = GET_DESIGN_SUCCESSES(prog);
-
-  if (GET_OBJ_TYPE(prog) == ITEM_PROGRAM) {
-    new_file->file_type = MATRIX_FILE_PROGRAM;
-    new_file->program_type = GET_PROGRAM_TYPE(prog);
-  } else if (GET_OBJ_TYPE(prog) == ITEM_DESIGN) {
-    new_file->file_type = MATRIX_FILE_DESIGN;
-    new_file->program_type = GET_PROGRAM_TYPE(prog);
-  } else if (GET_OBJ_TYPE(prog) == ITEM_CHIP) {
-    // Skillsoft/knowsoft chip
-    new_file->file_type = MATRIX_FILE_SKILLSOFT;
-    new_file->skill = GET_CHIP_SKILL(prog);
+  
+  switch(GET_OBJ_TYPE(prog)) {
+    case ITEM_PROGRAM:
+      new_file->file_type = MATRIX_FILE_PROGRAM;
+      new_file->program_type = GET_PROGRAM_TYPE(prog);
+      new_file->size = GET_PROGRAM_SIZE(prog);
+      new_file->rating = GET_PROGRAM_RATING(prog);
+      new_file->is_default = GET_PROGRAM_IS_DEFAULTED(prog);
+      break;
+    case ITEM_SOURCE_CODE:
+      new_file->file_type = MATRIX_FILE_PROGRAM;
+      new_file->program_type = GET_PROGRAM_TYPE(prog);
+      new_file->size = GET_DESIGN_SIZE(prog);
+      new_file->rating = GET_PROGRAM_RATING(prog);
+      new_file->is_default = FALSE;
+      break;
+    case ITEM_DESIGN:
+      new_file->file_type = MATRIX_FILE_DESIGN;
+      new_file->program_type = GET_PROGRAM_TYPE(prog);
+      new_file->size = GET_DESIGN_SIZE(prog);
+      new_file->original_size = GET_PROGRAM_SIZE(prog);
+      new_file->rating = GET_DESIGN_RATING(prog);
+      new_file->work_successes = GET_DESIGN_SUCCESSES(prog);
+      new_file->work_original_ticks_left = GET_OBJ_TIMER(prog);
+      if (new_file->work_successes)
+        new_file->work_phase = WORK_PHASE_COMPLETE;
+      break;
+    case ITEM_CHIP:
+      // Skillsoft/knowsoft chip
+      new_file->file_type = MATRIX_FILE_SKILLSOFT;
+      new_file->skill = GET_CHIP_SKILL(prog);
+      new_file->size = GET_CHIP_SIZE(prog);
+      new_file->rating = GET_CHIP_RATING(prog);
+      break;
   }
 
   if (device) {
@@ -287,27 +292,60 @@ matrix_file* obj_to_matrix_file(obj_data *prog) {
 }
 
 obj_data* matrix_file_to_obj(matrix_file *file) {
-  struct obj_data *chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
-  GET_DECK_ACCESSORY_TYPE(chip) = TYPE_FILE;
+  struct obj_data *chip = NULL;
   
-  if (file->file_type == MATRIX_FILE_PROGRAM) {
-    snprintf(buf, sizeof(buf), "a R%d %s '%s' program chip", file->rating, capitalize(programs[file->program_type].name), file->name);
-  } else if (file->file_type == MATRIX_FILE_SOURCE_CODE) {
-    snprintf(buf, sizeof(buf), "a R%d %s '%s' source chip", file->rating, capitalize(programs[file->program_type].name), file->name);
-  } else if (file->file_type == MATRIX_FILE_DESIGN) {
-    snprintf(buf, sizeof(buf), "a R%d %s '%s' design chip", file->rating, capitalize(programs[file->program_type].name), file->name);
-  } else {
-    snprintf(buf, sizeof(buf), "a '%s' optical chip", file->name);
+  
+  switch(file->file_type) {
+    case MATRIX_FILE_PROGRAM:
+      chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
+      GET_PROGRAM_SIZE(chip) = file->size;
+      GET_PROGRAM_ATTACK_DAMAGE(chip) = file->wound_category;
+      GET_PROGRAM_EVALUATE_CREATION_TIME(chip) = file->creation_time;
+      GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(chip) = file->last_decay_time;
+      GET_PROGRAM_RATING(chip) = file->rating;
+      GET_PROGRAM_TYPE(chip) = file->program_type;
+
+      snprintf(buf, sizeof(buf), "a R%d %s '%s' program chip", file->rating, capitalize(programs[file->program_type].name), file->name);
+      break;
+    case MATRIX_FILE_SOURCE_CODE:
+      chip = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, file->load_origin);
+      GET_OBJ_TYPE(chip) = ITEM_SOURCE_CODE;
+      GET_PROGRAM_SIZE(chip) = file->original_size;
+      GET_DESIGN_SIZE(chip) = file->size;
+      GET_DESIGN_PROGRAM_WOUND_LEVEL(chip) = file->wound_category;
+      GET_DESIGN_RATING(chip) = file->rating;
+
+      snprintf(buf, sizeof(buf), "a R%d %s '%s' source chip", file->rating, capitalize(programs[file->program_type].name), file->name);
+      break;
+    case MATRIX_FILE_DESIGN:
+      chip = read_object(OBJ_BLANK_PROGRAM_DESIGN, VIRTUAL, file->load_origin);
+      GET_PROGRAM_SIZE(chip) = file->original_size;
+      GET_DESIGN_SIZE(chip) = file->size;
+      GET_DESIGN_PROGRAM_WOUND_LEVEL(chip) = file->wound_category;
+      GET_DESIGN_RATING(chip) = file->rating;
+      GET_DESIGN_SUCCESSES(chip) = file->work_successes;
+
+      snprintf(buf, sizeof(buf), "a R%d %s '%s' design chip", file->rating, capitalize(programs[file->program_type].name), file->name);
+      break;
+    case MATRIX_FILE_SKILLSOFT:
+      chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
+      GET_CHIP_SKILL(chip) = file->skill;
+      GET_CHIP_SIZE(chip) = file->size;
+      GET_CHIP_COMPRESSION_FACTOR(chip) = file->compression_factor;
+      GET_CHIP_RATING(chip) = file->rating;
+
+      snprintf(buf, sizeof(buf), "a R%d %s chip", file->rating, skills[file->skill].name);      
+    default:
+      chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
+      GET_DECK_ACCESSORY_TYPE(chip) = TYPE_FILE;
+
+      snprintf(buf, sizeof(buf), "a '%s' optical chip", file->name);
+      break;
   }
   
   chip->restring = str_dup(buf);
   if (file->in_obj)
     file_from_obj(file); // derefs from list
-
-  // We hide the file on the chip because .. it makes things easier.
-  file->in_obj = chip;
-  file->next_file = chip->files;
-  chip->files = file; 
 
   return chip;
 }

@@ -303,47 +303,56 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
 {
   int space_required = 0;
 
-  if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY 
-    || GET_OBJ_TYPE(obj) == ITEM_PROGRAM)
-  {
-    if (obj->files) {
-      // NEW system, if there's a file pointer we can just upload it right in
-      if (!can_file_fit(obj->files, cont)) {
+  switch(GET_OBJ_TYPE(obj)) {
+    case ITEM_PROGRAM:
+      space_required = GET_PROGRAM_SIZE(obj);
+      break;
+    case ITEM_CHIP:
+      space_required = GET_CHIP_SIZE(obj);
+      break;
+    case ITEM_DESIGN:
+      space_required = GET_DESIGN_SIZE(obj);
+      break;
+  }
+
+  switch(GET_OBJ_TYPE(obj)) {
+    case ITEM_PROGRAM:
+    case ITEM_CHIP:
+    case ITEM_DESIGN:
+      if (get_device_free_memory(cont) < space_required) {
         act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
         return;
       }
-      snprintf(buf, sizeof(buf), "You slot your optical chip containing %s into %s.", obj->files->name, GET_OBJ_NAME(cont));
+
+      snprintf(buf, sizeof(buf), "You slot %s into %s.", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
       act(buf, FALSE, ch, obj, cont, TO_CHAR);
 
       obj_to_matrix_file(obj, cont);
       extract_obj(obj);
       return;
-    }
-
-    switch (GET_DECK_ACCESSORY_TYPE(obj)) {
-      case TYPE_FILE:
-        if (GET_OBJ_VAL(cont, 5) + GET_DECK_ACCESSORY_FILE_SIZE(obj) > GET_OBJ_VAL(cont, 3)) {
-          act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
+    case ITEM_DECK_ACCESSORY:
+      switch (GET_DECK_ACCESSORY_TYPE(obj)) {
+        case TYPE_FILE:
+          if (GET_OBJ_VAL(cont, 5) + GET_DECK_ACCESSORY_FILE_SIZE(obj) > GET_OBJ_VAL(cont, 3)) {
+            act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
+            return;
+          }
+          obj_to_matrix_file(obj, cont);
+          extract_obj(obj);
+          act("You upload $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
           return;
-        }
-        obj_to_matrix_file(obj, cont);
-        extract_obj(obj);
-        GET_OBJ_VAL(cont, 5) += GET_DECK_ACCESSORY_FILE_SIZE(obj);
-        act("You upload $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
-        return;
-      case TYPE_UPGRADE:
-        if (GET_OBJ_VAL(obj, 1) != 3) {
-          send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+        case TYPE_UPGRADE:
+          if (GET_OBJ_VAL(obj, 1) != 3) {
+            send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+            return;
+          }
+          obj_from_char(obj);
+          obj_to_obj(obj, cont);
+          act("You fit $p^n into a FUP in $P^n.", FALSE, ch, obj, cont, TO_CHAR);
           return;
-        }
-        obj_from_char(obj);
-        obj_to_obj(obj, cont);
-        act("You fit $p^n into a FUP in $P^n.", FALSE, ch, obj, cont, TO_CHAR);
-        return;
-      default:
-        send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
-        return;
-    }
+      }
+      send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+      return;
   }
 
   // Prevent installing persona firmware into a store-bought deck.
@@ -374,25 +383,6 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     send_to_char(ch, "You'll have to cook %s before you can install it.\r\n", GET_OBJ_NAME(obj));
   else if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
     display_cyberdeck_issues(ch, cont);
-  else
-  {
-    // Persona programs don't take up storage memory in store-bought decks
-    if ((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR)) {
-      space_required = 0;
-    } else {
-      space_required = GET_PROGRAM_SIZE(obj);
-    }
-
-    // Check to make sure there's room
-    if (GET_CYBERDECK_USED_STORAGE(cont) + space_required > GET_CYBERDECK_TOTAL_STORAGE(cont)) {
-      act("$p^n takes up too much memory to be installed into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
-    } else {
-      obj_to_matrix_file(obj, cont);
-      extract_obj(obj);
-      act("You install $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
-      GET_CYBERDECK_USED_STORAGE(cont) += space_required;
-    }
-  }
 }
 
 /* The following put modes are supported by the code below:

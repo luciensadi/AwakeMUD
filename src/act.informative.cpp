@@ -52,6 +52,7 @@
 #include "vehicles.hpp"
 #include "moderation.hpp"
 #include "player_exdescs.hpp"
+#include "matrix_storage.hpp"
 
 const char *CCHAR;
 
@@ -3841,7 +3842,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
         case TYPE_COMPUTER:
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This computer has ^c%d^n units of active memory and ^c%d^n units of storage memory.",
                    GET_DECK_ACCESSORY_COMPUTER_ACTIVE_MEMORY(j),
-                   GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(j));
+                   get_device_total_memory(j));
           break;
         case TYPE_PARTS:
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "This pack of parts contains ^c%d^n units of ^c%s^n.",

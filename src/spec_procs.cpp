@@ -30,6 +30,7 @@
 #include "pocketsec.hpp"
 #include "vehicles.hpp"
 #include "factions.hpp"
+#include "matrix_storage.hpp"
 
 /*   external vars  */
 ACMD_DECLARE(do_goto);
@@ -4515,8 +4516,8 @@ SPECIAL(desktop)
     return FALSE;
 
   send_to_char(ch, "%s (^g%d^n/^r%d^n)", GET_OBJ_NAME(obj),
-               GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(obj) - GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(obj),
-               GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(obj));
+               get_device_free_memory(obj),
+               get_device_total_memory(obj));
   if (obj->files) {
     send_to_char(ch, " contains:\r\n");
     for (struct matrix_file *soft = obj->files; soft; soft = soft->next_file) {
