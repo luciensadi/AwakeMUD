@@ -26,22 +26,16 @@ extern int get_program_skill(char_data *ch, obj_data *prog, int target);
 #define COMPLEX_FORM_TYPES 16
 
 int complex_form_programs[COMPLEX_FORM_TYPES] = {
-  SOFT_ATTACK,
-  SOFT_SLOW,
-  SOFT_COMPRESSOR,
-  SOFT_DECRYPT,
-  SOFT_RELOCATE,
-  SOFT_SLEAZE,
-  SOFT_TRACK,
   SOFT_ARMOR,
-  SOFT_CAMO,
-  SOFT_CRASH,
-  SOFT_DEFUSE,
-  SOFT_EVALUATE,
-  SOFT_VALIDATE,
-  SOFT_SWERVE,
+  SOFT_ATTACK,
+  SOFT_BATTLETEC,
   SOFT_CLOAK,
-  SOFT_LOCKON
+  SOFT_COMMLINK,
+  SOFT_COMPRESSOR,
+  SOFT_LOCKON,
+  SOFT_SLEAZE,
+  SOFT_SLOW,  
+  SOFT_TRACK
 };
 
 void cfedit_disp_menu(struct descriptor_data *d)
