@@ -243,7 +243,23 @@ void file_from_host(struct matrix_file * obj)
 }
 
 matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
-  struct matrix_file *new_file = create_matrix_file(device, prog->load_origin);
+  struct matrix_file *new_file;
+
+  if (GET_OBJ_TYPE(prog) == ITEM_MATRIX_FILE) {
+    // Special handling for matrix files. These already contain our matrix file.
+    new_file = prog->files;
+    if (device) {
+      adjust_device_memory(device, prog->files->size * -1);
+    } else {
+      prog->files = new_file->next_file;
+      new_file->in_obj = NULL;
+      new_file->next_file = NULL;
+    }
+
+    return new_file;
+  }
+
+  new_file = create_matrix_file(device, prog->load_origin);
 
   new_file->wound_category = GET_PROGRAM_ATTACK_DAMAGE(prog);
   if (prog->restring) new_file->name = strdup(prog->restring);
@@ -343,13 +359,16 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
     default:
       chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
       GET_DECK_ACCESSORY_TYPE(chip) = TYPE_FILE;
+      GET_OBJ_TYPE(chip) = ITEM_MATRIX_FILE;
+      GET_CHIP_SIZE(chip) = file->size;
 
+      move_matrix_file_to(file, chip);
       snprintf(buf, sizeof(buf), "a '%s' optical chip", file->name);
       break;
   }
   
   chip->restring = str_dup(buf);
-  if (file->in_obj)
+  if (file->in_obj && file->in_obj != chip)
     file_from_obj(file); // derefs from list
 
   return chip;

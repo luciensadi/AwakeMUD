@@ -1343,7 +1343,8 @@ enum {
 #define ITEM_PET                50
 #define ITEM_COMPLEX_FORM       51       /* otaku complex form               */
 #define ITEM_SOURCE_CODE        52
-#define NUM_ITEMS               53
+#define ITEM_MATRIX_FILE        53       /* Optical chips with ->files */
+#define NUM_ITEMS               54
 // Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
 #define PATCH_ANTIDOTE          0

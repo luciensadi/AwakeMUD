@@ -1117,6 +1117,7 @@ const char *item_types[] =
     "Custom Pet",
     "Complex Form", 
     "Source Code",
+    "Matrix Data",
     "\n"
   };
 
