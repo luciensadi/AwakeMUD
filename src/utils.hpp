@@ -212,6 +212,7 @@ void    find_or_load_ch_cleanup(struct char_data *ch);
 bool obj_is_apartment_only_drop_item(struct obj_data *obj, struct room_data *target_room);
 bool obj_contains_apartment_only_drop_items(struct obj_data *obj, struct room_data *target_room);
 
+bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct matrix_file *file, bool requires_ch_to_be_in_same_room_as_questor, bool send_messages);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor, bool send_messages);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);
 

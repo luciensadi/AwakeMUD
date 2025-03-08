@@ -141,6 +141,7 @@ obj_data* find_obj_in_vector_vis(struct char_data * ch, const char *name, std::v
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
+  bool staff_bit = IS_SENATOR(ch);
 
   // No list, no worries.
   if (list.size() <= 0)
@@ -151,6 +152,10 @@ obj_data* find_obj_in_vector_vis(struct char_data * ch, const char *name, std::v
     return NULL;
 
   for(obj_data* i : list)  {
+    // Invisible to you: Blocked by quest protections.
+    if (!staff_bit && ch_is_blocked_by_quest_protections(ch, i, FALSE, FALSE))
+      continue;
+
     if (keyword_appears_in_obj(tmp, i)) {
       if (++j == number)
         return i;
@@ -378,6 +383,7 @@ struct matrix_file *get_matrix_file_in_list_vis(struct char_data * ch, const cha
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
+  bool staff_bit = IS_SENATOR(ch);
 
   if (!list)
     return NULL;
@@ -387,6 +393,10 @@ struct matrix_file *get_matrix_file_in_list_vis(struct char_data * ch, const cha
     return NULL;
 
   for (i = list; i && (j <= number); i = i->next_file) {    
+    // Invisible to you: Blocked by quest protections.
+    if (!staff_bit && ch_is_blocked_by_quest_protections(ch, i, FALSE, FALSE))
+      continue;
+
     if (keyword_appears_in_file(tmp, i)) {
       if (++j == number)
         return i;
