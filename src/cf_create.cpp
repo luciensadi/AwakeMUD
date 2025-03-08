@@ -221,7 +221,7 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case CFEDIT_TYPE:
-    if (option_n < 1 || option_n >= COMPLEX_FORM_TYPES)
+    if (option_n < 1 || option_n > COMPLEX_FORM_TYPES)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
       GET_DESIGN_PROGRAM(d->edit_obj) = complex_form_programs[option_n - 1];
