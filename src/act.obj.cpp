@@ -303,7 +303,8 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
 {
   int space_required = 0;
 
-  if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY)
+  if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY 
+    || GET_OBJ_TYPE(obj) == ITEM_PROGRAM)
   {
     if (obj->files) {
       // NEW system, if there's a file pointer we can just upload it right in
@@ -311,7 +312,6 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
         act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
         return;
       }
-      GET_OBJ_VAL(cont, 5) += GET_DECK_ACCESSORY_FILE_SIZE(obj);
       snprintf(buf, sizeof(buf), "You slot your optical chip containing %s into %s.", obj->files->name, GET_OBJ_NAME(cont));
       act(buf, FALSE, ch, obj, cont, TO_CHAR);
 
@@ -345,6 +345,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
         return;
     }
   }
+
   // Prevent installing persona firmware into a store-bought deck.
   if (GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM) {
     switch (GET_PROGRAM_TYPE(obj)) {

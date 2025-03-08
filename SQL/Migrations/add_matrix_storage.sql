@@ -24,5 +24,6 @@ CREATE TABLE `matrix_files` (
 
   `creator_idnum` mediumint(5) unsigned default '0',
   `in_obj_vnum` mediumint(5) unsigned default '0',
+  `in_obj_idnum` mediumint(5) unsigned default '0',
   KEY(`idnum`)
 );
