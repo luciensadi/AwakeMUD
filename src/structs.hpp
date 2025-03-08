@@ -1465,6 +1465,7 @@ struct kosher_weapon_values_struct {
 #define MATRIX_FILE_FIRMWARE      4
 #define MATRIX_FILE_PAYDATA       5
 #define MATRIX_FILE_SKILLSOFT     6
+#define MATRIX_FILE_PHOTO         7
 
 
 /* ================== Memory Structure for Matrix Files ================== */

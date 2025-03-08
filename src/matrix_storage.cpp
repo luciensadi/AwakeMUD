@@ -270,6 +270,12 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
   
   switch(GET_OBJ_TYPE(prog)) {
     case ITEM_DECK_ACCESSORY:
+      if (GET_DECK_ACCESSORY_TYPE(prog) == TYPE_PHOTO) {
+        new_file->content = str_dup(prog->photo);
+        new_file->file_type = MATRIX_FILE_PHOTO;
+        new_file->size = 1;
+        break;
+      }
       new_file->file_type = MATRIX_FILE_PROGRAM;
       new_file->program_type = GET_DECK_ACCESSORY_FILE_TYPE(prog);
       new_file->size = GET_DECK_ACCESSORY_FILE_SIZE(prog);
@@ -398,6 +404,12 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
       
       snprintf(buf, sizeof(buf), "a R%d %s firmware", file->rating, programs[file->program_type].name);   
       break;   
+    case MATRIX_FILE_PHOTO:
+      chip = read_object(OBJ_BLANK_PHOTO, VIRTUAL, file->load_origin);
+      chip->photo = str_dup(file->content);
+      chip->restring = str_dup(file->name);
+      
+      break;
     default:
       chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
       GET_DECK_ACCESSORY_TYPE(chip) = TYPE_MATRIX_FILE;

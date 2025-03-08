@@ -1460,6 +1460,7 @@ enum {
 #define TYPE_COOKER          4
 #define TYPE_FIRMWARE        5
 #define TYPE_MATRIX_FILE     6
+#define TYPE_PHOTO           7
 
 #define DUPGRADE_REPLACEMENT_MPCP  0
 #define DUPGRADE_ACTIVE_MEMORY     1

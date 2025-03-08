@@ -3335,6 +3335,7 @@ ACMD(do_photo)
       ch->in_room = NULL;
   }
   photo = read_object(OBJ_BLANK_PHOTO, VIRTUAL, OBJ_LOAD_REASON_PHOTO);
+  GET_DECK_ACCESSORY_TYPE(photo) = TYPE_PHOTO;
   if (!mem)
     act("$n takes a photo with $p.", TRUE, ch, camera, NULL, TO_ROOM);
   send_to_char(ch, "You take a photo.\r\n");
@@ -3343,8 +3344,7 @@ ACMD(do_photo)
     buf2[300] = '\0';
   photo->restring = str_dup(buf2);
   if (mem) {
-    obj_to_obj(photo, mem);
-    GET_OBJ_VAL(mem, 5) += 1;
+    struct matrix_file* file = obj_to_matrix_file(photo, mem);
   } else obj_to_char(photo, ch);
 }
 
