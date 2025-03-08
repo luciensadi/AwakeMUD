@@ -679,10 +679,6 @@ void objList::CheckForDeletedCharacterFuckery(struct char_data *ch, const char *
         continue;
       }
     }
-
-    if (GET_OBJ_VNUM(OBJ) == 10025) {
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "CFDCF debug: Found pocsec carried by %s", GET_CHAR_NAME(owner));
-    }
   }
 
   if (!found_something) {
