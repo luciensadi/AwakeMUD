@@ -120,7 +120,7 @@ char* generate_paydata_name(int security, int size) {
       for (word_level adj : adjectives) {
         if (adj.min_security > security) continue;
         if (adj.max_security <= security) continue;
-        snprintf(buf, sizeof(buf), "%s ", str_dup(adj.words[std::rand() % adj.words.size()]));
+        snprintf(buf, sizeof(buf), "%s ", str_dup(adj.words[std::rand() % (adj.words.size() - 1)]));
         break;
       }      
     }
@@ -128,7 +128,7 @@ char* generate_paydata_name(int security, int size) {
     for (word_level sub : subjects) {
       if (sub.min_security > security) continue;
       if (sub.max_security <= security) continue;
-      snprintf(buf, sizeof(buf), "%s", str_dup(sub.words[std::rand() % sub.words.size()]));
+      snprintf(buf, sizeof(buf), "%s", str_dup(sub.words[std::rand() % (sub.words.size() - 1)]));
       break;
     }      
 
@@ -136,7 +136,7 @@ char* generate_paydata_name(int security, int size) {
       for (word_level det : details) {
         if (det.min_security > security) continue;
         if (det.max_security <= security) continue;
-        snprintf(buf, sizeof(buf), " - %s", str_dup(det.words[std::rand() % det.words.size()]));
+        snprintf(buf, sizeof(buf), " - %s", str_dup(det.words[std::rand() % (det.words.size() - 1)]));
         break;
       }    
     }
