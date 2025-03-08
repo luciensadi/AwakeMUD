@@ -445,6 +445,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   GET_LAST_TELL(ch) = NOBODY;
   MYSQL_RES *res;
   MYSQL_ROW row;
+  std::vector<obj_data *> loaded = {};
 
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles WHERE Name='%s';", prepare_quotes(buf3, name, sizeof(buf3) / sizeof(buf3[0])));
   mysql_wrapper(mysql, buf);
@@ -823,6 +824,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(PFILES_CYBERWARE_VNUM);
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
+        loaded.push_back(obj);
         GET_OBJ_COST(obj) = atoi(PFILES_CYBERWARE_COST);
         if (*PFILES_CYBERWARE_RESTRING)
           obj->restring = str_dup(PFILES_CYBERWARE_RESTRING);
@@ -955,6 +957,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(PFILES_WORN_VNUM);
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
+        loaded.push_back(obj);
         GET_OBJ_COST(obj) = atoi(PFILES_WORN_COST);
         if (*PFILES_WORN_RESTRING)
           obj->restring = str_dup(PFILES_WORN_RESTRING);
@@ -1069,7 +1072,6 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     mysql_wrapper(mysql, buf);
     snprintf(buf3, sizeof(buf3), "pfiles_inv load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
     res = mysql_use_result(mysql);
-    std::vector<obj_data *> loaded = {};
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(PFILES_INV_VNUM);
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
@@ -1184,26 +1186,6 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
       mudlog(buf2, NULL, LOG_SYSLOG, TRUE);
     }
     mysql_free_result(res);
-
-    for (obj_data *obj : loaded) {
-      /* MIGRATION STEP: For When we have a program if it's contained in a device it needs to be converted into a memory struct */
-      if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM || GET_OBJ_TYPE(obj) == ITEM_DESIGN) {
-        // Check if it's in a device
-        if (obj->in_obj && (
-          GET_OBJ_TYPE(obj->in_obj) == ITEM_CYBERDECK 
-          || GET_OBJ_TYPE(obj->in_obj) == ITEM_CUSTOM_DECK
-          || (GET_OBJ_TYPE(obj->in_obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj->in_obj) == TYPE_COMPUTER)
-        )) {
-          // Do the conversion, this will also move the file onto the device.
-          obj_to_matrix_file(obj);
-          // Delete the obj, no longer needed
-          extract_obj(obj);
-          obj = NULL;
-        }
-      }
-
-      if (obj) load_obj_programs(obj);
-    }
   }
 
   // Load bullet pants.
@@ -1250,6 +1232,26 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
 
   // Load their exdescs.
   load_exdescs_from_db(ch);
+
+  for (obj_data *obj : loaded) {
+    /* MIGRATION STEP: For When we have a program if it's contained in a device it needs to be converted into a memory struct */
+    if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM || GET_OBJ_TYPE(obj) == ITEM_DESIGN) {
+      // Check if it's in a device
+      if (obj->in_obj && (
+        GET_OBJ_TYPE(obj->in_obj) == ITEM_CYBERDECK 
+        || GET_OBJ_TYPE(obj->in_obj) == ITEM_CUSTOM_DECK
+        || (GET_OBJ_TYPE(obj->in_obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj->in_obj) == TYPE_COMPUTER)
+      )) {
+        // Do the conversion, this will also move the file onto the device.
+        obj_to_matrix_file(obj);
+        // Delete the obj, no longer needed
+        extract_obj(obj);
+        obj = NULL;
+      }
+    }
+
+    if (obj) load_obj_programs(obj);
+  }
 
   STOP_WORKING(ch);
   AFF_FLAGS(ch).RemoveBits(AFF_MANNING, AFF_RIG, AFF_PILOT, AFF_BANISH, AFF_FEAR, AFF_STABILIZE, AFF_SPELLINVIS, AFF_SPELLIMPINVIS, AFF_DETOX, AFF_RESISTPAIN, AFF_TRACKING, AFF_TRACKED, AFF_PRONE, ENDBIT);

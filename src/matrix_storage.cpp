@@ -663,7 +663,6 @@ void move_matrix_file_to(struct matrix_file *file, host_data* to_host) {
     file->in_host = to_host;
     file->next_file = to_host->files;
     to_host->files = file;
-    adjust_device_memory(file->in_obj, file->size * -1);
 }
 
 void move_matrix_file_to(struct matrix_file *file, obj_data* to_device) {

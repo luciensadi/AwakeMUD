@@ -2260,7 +2260,7 @@ ACMD(do_connect)
     DECKER->response = 0;
   }
   for (struct matrix_file *soft = cyberdeck->files; soft; soft = soft->next_file) {
-    if (soft->file_type != MATRIX_FILE_PROGRAM) continue;
+    if (soft->file_type != MATRIX_FILE_FIRMWARE) continue;
 
     // Handle persona programs
     switch(soft->program_type) {

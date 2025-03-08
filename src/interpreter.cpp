@@ -182,6 +182,7 @@ ACMD_DECLARE(do_date);
 ACMD_DECLARE(do_dc);
 ACMD_DECLARE(do_deactivate);
 ACMD_DECLARE(do_decline);
+ACMD_DECLARE(do_decrypt);
 ACMD_DECLARE(do_decorate);
 ACMD_DECLARE(do_default);
 ACMD_DECLARE(do_describe);
@@ -195,6 +196,7 @@ ACMD_DECLARE(do_discord);
 ACMD_DECLARE(do_dispell);
 ACMD_DECLARE(do_display);
 ACMD_DECLARE(do_domain);
+ACMD_DECLARE(do_download);
 ACMD_DECLARE(do_drag);
 ACMD_DECLARE(do_drink);
 ACMD_DECLARE(do_drive);
@@ -408,6 +410,7 @@ ACMD_DECLARE(do_ungroup);
 ACMD_DECLARE(do_unpack);
 ACMD_DECLARE(do_unsupported_command);
 ACMD_DECLARE(do_upgrade);
+// ACMD_DECLARE(do_upload);
 ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_usenerps);
 ACMD_DECLARE(do_users);
@@ -1352,7 +1355,9 @@ struct command_info mtx_info[] =
     { "connect", 0, do_logon, 0, 0, BLOCKS_IDLE_REWARD },
     { "commands", 0, do_commands, 0, SCMD_COMMANDS, BLOCKS_IDLE_REWARD },
     { "crash", 0, do_crash, 0, 0, BLOCKS_IDLE_REWARD },
+    { "decrypt", 0, do_decrypt, 0, 1, BLOCKS_IDLE_REWARD },
     { "disconnect", 0, do_logoff, 0, 1, BLOCKS_IDLE_REWARD },
+    { "download", 0, do_download, 0, 1, BLOCKS_IDLE_REWARD },
     { "evade", 0, do_evade, 0, 0, BLOCKS_IDLE_REWARD },
     { "echo", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { "emote", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
@@ -1401,6 +1406,7 @@ struct command_info mtx_info[] =
     { "toggle", 0, do_toggle, 0, 0 , BLOCKS_IDLE_REWARD },
     { "trace", 0, do_trace, 0, 0, BLOCKS_IDLE_REWARD },
     { "typo", 0, do_gen_write, 0, SCMD_TYPO, BLOCKS_IDLE_REWARD },
+    // { "upload", 0, do_upload, 0, 0, BLOCKS_IDLE_REWARD },
     { "question", 0, do_gen_comm, 0, SCMD_QUESTION, BLOCKS_IDLE_REWARD },
     { "recap", 0, do_recap, 0, 0 , BLOCKS_IDLE_REWARD },
     { "who", 0, do_who, 0, 0, BLOCKS_IDLE_REWARD },
