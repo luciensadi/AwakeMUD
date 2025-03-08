@@ -1755,7 +1755,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       }
     }
 
-    if (!is_owner && !is_following_owner && (found_veh->locked || (!owner_is_remote_rigging && !owner_is_driving))) {
+    if (ch->desc && !is_owner && !is_following_owner && (found_veh->locked || (!owner_is_remote_rigging && !owner_is_driving))) {
       if (is_staff) {
         send_to_char("You staff-override the fact that the owner isn't explicitly letting you in.\r\n", ch);
       } else {
