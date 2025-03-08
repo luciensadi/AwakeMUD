@@ -2360,14 +2360,10 @@ ACMD(do_transfer)
 
   if (!*buf || !*buf2)
     send_to_char("Transfer what to who?\r\n", ch);
-  else if (!(veh = get_veh_list(buf, ch->in_room->vehicles, ch))) {
-    // Overload, if we don't see a vehicle we can cascade to see if the user wants to do a file transfer
-    if (handle_matrix_file_transfer(ch, argument)) {
-      return;
-    }
-    send_to_char("You don't see that vehicle here.\r\n", ch);
-  } else if (ch->in_veh)
+  else if (ch->in_veh)
     send_to_char("You can't transfer ownership while you're inside a vehicle.\r\n", ch);
+  else if (!(veh = get_veh_list(buf, ch->in_room->vehicles, ch))) 
+    send_to_char("You don't see that vehicle here.\r\n", ch);
   else if (veh->owner != GET_IDNUM(ch))
     send_to_char("You can't transfer ownership of a vehicle you don't own.\r\n", ch);
   else if (!(targ = get_char_room_vis(ch, buf2)))

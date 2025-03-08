@@ -505,6 +505,9 @@ bool program_can_be_copied(struct matrix_file *prog) {
       return FALSE;
   }
 
+  if (prog->quest_id) 
+    return FALSE;
+
   return TRUE;
 }
 
@@ -645,67 +648,238 @@ void move_matrix_file_to(struct matrix_file *file, obj_data* to_device) {
   adjust_device_memory(file->in_obj, file->size * -1);
 }
 
-ACMD(do_delete) {
-  // TODO
+void print_file_help(struct char_data *ch) {
+  send_to_char(ch, "Do what with your files?\r\n"
+    "   file copy <file> <to device>\r\n"
+    "   file copy <from device> <file> <to device>\r\n"
+    "   file move <file> <to device>\r\n"
+    "   file move <from device> <file> <to device>\r\n"
+    "   file delete <file>\r\n"
+    "   file delete <from device> <file>\r\n"
+    "   file rename <file> <new name>\r\n"
+    "   file rename <from device> <file> <new name>\r\n");
 }
 
-bool handle_matrix_file_transfer(struct char_data *ch, char *argument) {
-  // possible syntaxes:
-  //   transfer somefile myawesomedeck
-  //   transfer desktop somefile myawesomedeck
-  const char* remainder = two_arguments(argument, buf1, buf2);
-  obj_data *target_deck = NULL, *source_deck = NULL;
-  matrix_file *file = NULL;
-  send_to_char(ch, "buf1: %s, buf2: %s, remainder: %s\r\n", buf1, buf2, remainder);
+ACMD(do_file) {
+  skip_spaces(&argument);
+  if (!*argument) {
+    print_file_help(ch);
+    return;
+  }
 
-  std::vector<struct obj_data*> all_devices = get_storage_devices(ch, FALSE);
-  std::vector<struct obj_data*> search_devices = {};
+  std::vector<struct obj_data*> all_devices = get_storage_devices(ch, TRUE);
 
-  if (*remainder) {
-    // If we have *remainder, it means the user did the 3 arg version of transfer, so we can be sure
-    // they were doing the decker version, and thus can report errors.
-    if (!(target_deck = find_obj_in_vector_vis(ch, remainder, all_devices))) {
-      // Unable to find the deck we want to transfer to. :(
-      send_to_char(ch, "I don't see any matrix file storage device named %s near you.", remainder);
-      return TRUE; // True because we abort early. 
+  char *file_switch, *remainder, *first_arg = NULL, *second_arg = NULL, *third_arg = NULL;
+  struct obj_data *from_device = NULL, *to_device = NULL;
+  struct matrix_file *file = NULL;
+  remainder = one_argument(argument, file_switch);
+  if (*remainder) second_arg = one_argument(remainder, first_arg);
+  if (*second_arg) third_arg = one_argument(second_arg, second_arg);
+
+  if (is_abbrev(file_switch, "copy") || !strcmp(file_switch, "cp")) {
+    if (!*first_arg) {
+      send_to_char(ch, "Invalid syntax. You can ^WFILE COPY <file> <to device>^n or you can ^WFILE COPY <from device> <file> <to device>^n.\r\n");
+      return;
     }
 
-    if (!(source_deck = find_obj_in_vector_vis(ch, buf1, all_devices))) {
-      send_to_char(ch, "I don't see any matrix file storage device named %s near you.", buf1);
-      return TRUE; // True because we abort early. 
+    if (!*third_arg && !*second_arg) {
+      send_to_char(ch, "But where would you like to copy '%s' to?\r\n", first_arg);
+      return;
     }
 
-    search_devices = {source_deck};
+    
+    if (*third_arg) { // FILE COPY <from device> <file> <to device> syntax
+      if (!(to_device = find_obj_in_vector_vis(ch, third_arg, all_devices))) {
+        send_to_char(ch, "You don't see any device named '%s' that you could copy files to.\r\n", third_arg);
+        return;
+      } else if (!(from_device = find_obj_in_vector_vis(ch, first_arg, all_devices))) {
+        send_to_char(ch, "You don't see any device named '%s' that you could copy files from.\r\n", first_arg);
+        return;
+      }
+
+      if (!(file = get_matrix_file_in_list_vis(ch, second_arg, from_device->files))) {
+        send_to_char(ch, "You search but don't see any file named '%s' on %s.\r\n", second_arg, GET_OBJ_NAME(from_device));
+        return;
+      }
+    } else if (!*third_arg) { // FILE COPY <file> <to device> syntax
+      if (!(to_device = find_obj_in_vector_vis(ch, third_arg, all_devices))) {
+        send_to_char(ch, "You don't see any device named '%s' that you could copy files to.\r\n", third_arg);
+        return;
+      }
+
+      for (obj_data *device : all_devices) {
+        if ((file = get_matrix_file_in_list_vis(ch, first_arg, device->files))) {
+          from_device = device;
+          break;
+        }
+      }
+
+      if (!file || !from_device) {
+         send_to_char(ch, "You search but don't see any file named '%s' on any of your devices.\r\n", first_arg);
+         return;
+      }
+    }
+
+    // If we made it this far then we have all our variables properly set.
+    if (!program_can_be_copied(file)) {
+      send_to_char(ch, "You try to copy %s from %s, but the copy-protection stops you.\r\n", file->name, GET_OBJ_NAME(from_device));
+      return;
+    }
+
+    if (can_file_fit(file, to_device)) {
+      send_to_char(ch, "There isn't enough space on %s, you need ^c%d^nmp but only ^c%d^n is available.\r\n",
+        GET_OBJ_NAME(to_device), file->size, get_device_free_memory(to_device));
+      return;
+    }
+
+    if (to_device == from_device) {
+      send_to_char(ch, "You can't copy a file to and from the same device!\r\n");
+      return;
+    }
+
+    if (AFF_FLAGGED(ch, PLR_MATRIX) && ch->persona) {
+      send_to_icon(ch->persona, "You copy %s from %s to %s.\r\n",
+        file->name, GET_OBJ_NAME(from_device), GET_OBJ_NAME(to_device));
+    } else {
+      snprintf(buf, sizeof(buf), "You connect a cable between %s and %s, making quick work of copying %s to %s.\r\n",
+        GET_OBJ_NAME(from_device), GET_OBJ_NAME(to_device), file->name, GET_OBJ_NAME(to_device));
+      act(buf, FALSE, ch, from_device, to_device, TO_CHAR);
+    }
+
+    copy_matrix_file_to(file, to_device);
+  } else if (is_abbrev(file_switch, "move") || !strcmp(file_switch, "mv")) {
+    if (!*first_arg) {
+      send_to_char(ch, "Invalid syntax. You can ^WFILE MOVE <file> <to device>^n or you can ^WFILE MOVE <from device> <file> <to device>^n.\r\n");
+      return;
+    }
+
+    if (!*third_arg && !*second_arg) {
+      send_to_char(ch, "But where would you like to move '%s' to?\r\n", first_arg);
+      return;
+    }
+
+    
+    if (*third_arg) { // FILE MOVE <from device> <file> <to device> syntax
+      if (!(to_device = find_obj_in_vector_vis(ch, third_arg, all_devices))) {
+        send_to_char(ch, "You don't see any device named '%s' that you could move files to.\r\n", third_arg);
+        return;
+      } else if (!(from_device = find_obj_in_vector_vis(ch, first_arg, all_devices))) {
+        send_to_char(ch, "You don't see any device named '%s' that you could move files from.\r\n", first_arg);
+        return;
+      }
+
+      if (!(file = get_matrix_file_in_list_vis(ch, second_arg, from_device->files))) {
+        send_to_char(ch, "You search but don't see any file named '%s' on %s.\r\n", second_arg, GET_OBJ_NAME(from_device));
+        return;
+      }
+    } else if (!*third_arg) { // FILE MOVE <file> <to device> syntax
+      if (!(to_device = find_obj_in_vector_vis(ch, third_arg, all_devices))) {
+        send_to_char(ch, "You don't see any device named '%s' that you could move files to.\r\n", third_arg);
+        return;
+      }
+
+      for (obj_data *device : all_devices) {
+        if ((file = get_matrix_file_in_list_vis(ch, first_arg, device->files))) {
+          from_device = device;
+          break;
+        }
+      }
+
+      if (!file || !from_device) {
+         send_to_char(ch, "You search but don't see any file named '%s' on any of your devices.\r\n", first_arg);
+         return;
+      }
+    }
+
+    if (can_file_fit(file, to_device)) {
+      send_to_char(ch, "There isn't enough space on %s, you need ^c%d^nmp but only ^c%d^n is available.\r\n",
+        GET_OBJ_NAME(to_device), file->size, get_device_free_memory(to_device));
+      return;
+    }
+
+    if (to_device == from_device) {
+      send_to_char(ch, "You can't move a file to and from the same device!\r\n");
+      return;
+    }
+
+    if (AFF_FLAGGED(ch, PLR_MATRIX) && ch->persona) {
+      send_to_icon(ch->persona, "You transfer %s from %s to %s.\r\n",
+        file->name, GET_OBJ_NAME(from_device), GET_OBJ_NAME(to_device));
+    } else {
+      snprintf(buf, sizeof(buf), "You connect a cable between %s and %s, making quick work of transferring %s to %s.\r\n",
+        GET_OBJ_NAME(from_device), GET_OBJ_NAME(to_device), file->name, GET_OBJ_NAME(to_device));
+      act(buf, FALSE, ch, from_device, to_device, TO_CHAR);
+    }
+
+    move_matrix_file_to(file, to_device);
+  } else if (is_abbrev(file_switch, "delete")) {
+    if (*second_arg) {
+      // If we have a second arg we have a target device to delete from.
+      if (!(from_device = find_obj_in_vector_vis(ch, first_arg, all_devices))) {
+        send_to_char(ch, "I don't see any matrix file storage device named %s near you.\r\n", first_arg);
+        return;
+      }
+
+      if (!(file = get_matrix_file_in_list_vis(ch, second_arg, from_device->files))) {
+        send_to_char(ch, "You search but don't see any file named '%s' on %s.\r\n", second_arg, GET_OBJ_NAME(from_device));
+        return;
+      }
+    } else {
+      for (obj_data *device : all_devices) {
+        if ((file = get_matrix_file_in_list_vis(ch, first_arg, device->files))) {
+          from_device = device;
+          break;
+        }
+      }
+
+      if (!file || !from_device) {
+        send_to_char(ch, "You search but don't see any file named '%s' on any of your devices.\r\n", first_arg);
+        return;
+      }
+    }
+
+    if (file->quest_id) {
+      send_to_char(ch, "That file seems too important to delete.\r\n");
+      return;
+    }
+
+    if (file->transferring_to || file->transferring_to_host) {
+      send_to_char(ch, "You cannot delete a file that is actively being transferred.\r\n");
+      return;
+    }
+
+    send_to_char(ch, "You successfully delete file ^W%s^n from %s.\r\n", file->name, GET_OBJ_NAME(from_device));
+    delete_matrix_file(file);
+  } else if (is_abbrev(file_switch, "rename")) {
+    if (*third_arg) {
+      // If we have a third arg we have a target device to rename from.
+      if (!(from_device = find_obj_in_vector_vis(ch, first_arg, all_devices))) {
+        send_to_char(ch, "I don't see any matrix file storage device named %s near you.\r\n", first_arg);
+        return;
+      }
+
+      if (!(file = get_matrix_file_in_list_vis(ch, second_arg, from_device->files))) {
+        send_to_char(ch, "You search but don't see any file named '%s' on %s.\r\n", second_arg, GET_OBJ_NAME(from_device));
+        return;
+      }
+    } else {
+      for (obj_data *device : all_devices) {
+        if ((file = get_matrix_file_in_list_vis(ch, first_arg, device->files))) {
+          from_device = device;
+          break;
+        }
+      }
+
+      if (!file || !from_device) {
+        send_to_char(ch, "You search but don't see any file named '%s' on any of your devices.\r\n", first_arg);
+        return;
+      }
+    }
+
+    // We're clear to rename
+    send_to_char(ch, "You successfully rename %s to ^W%s^n.\r\n", file->name, third_arg);
+    file->name = strdup(third_arg);
   } else {
-    if (!(target_deck = find_obj_in_vector_vis(ch, buf2, all_devices))) {
-      return FALSE;
-    }
-
-    search_devices = all_devices;
+    print_file_help(ch);
   }
-
-  for(obj_data* device : search_devices)  {
-    if ((file = get_matrix_file_in_list_vis(ch, *remainder ? buf2 : buf1, device->files)))
-      break;
-  }
-
-  send_to_char(ch, "file: %s\r\n", file->name);
-
-  if (!file)
-    return FALSE;
-
-  source_deck = file->in_obj;
-  send_to_char(ch, "source deck: %s\r\n", GET_OBJ_NAME(source_deck));
-
-  if (AFF_FLAGGED(ch, PLR_MATRIX) && ch->persona) {
-    send_to_icon(ch->persona, "You transfer %s from %s to %s.",
-      file->name, GET_OBJ_NAME(source_deck), GET_OBJ_NAME(target_deck));
-  } else {
-    snprintf(buf, sizeof(buf), "You connect a cable between %s and %s, making quick work of transferring %s to %s.",
-      GET_OBJ_NAME(source_deck), GET_OBJ_NAME(target_deck), file->name, GET_OBJ_NAME(target_deck));
-    act(buf, FALSE, ch, source_deck, target_deck, TO_CHAR);
-  }
-
-  move_matrix_file_to(file, target_deck);
-  return TRUE;
-} 
+}

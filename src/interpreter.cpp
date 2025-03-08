@@ -214,6 +214,7 @@ ACMD_DECLARE(do_exdesc);
 ACMD_DECLARE(do_exit);
 ACMD_DECLARE(do_exits);
 ACMD_DECLARE(do_factions);
+ACMD_DECLARE(do_file);
 ACMD_DECLARE(do_flee);
 ACMD_DECLARE(do_flip);
 ACMD_DECLARE(do_flyto);
@@ -668,6 +669,7 @@ struct command_info cmd_info[] =
     { "forceput"   , POS_SLEEPING, do_forceput , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "forms"      , POS_LYING   , do_forms    , 0, 0, BLOCKS_IDLE_REWARD },
     { "forget"     , POS_DEAD    , do_forget   , 0, 0, BLOCKS_IDLE_REWARD },
+    { "file"       , POS_DEAD    , do_file     , 0, 0, BLOCKS_IDLE_REWARD },
     { "fill"       , POS_SITTING , do_pour     , 0, SCMD_FILL, BLOCKS_IDLE_REWARD },
     { "finger"     , POS_DEAD    , do_last     , 0, SCMD_FINGER, ALLOWS_IDLE_REWARD },
     { "fix"        , POS_SITTING , do_repair   , 0, 0, BLOCKS_IDLE_REWARD },
@@ -765,8 +767,8 @@ struct command_info cmd_info[] =
     { "mclone"     , POS_DEAD    , do_mclone   , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "mdelete"    , POS_DEAD    , do_mdelete  , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "medit"      , POS_DEAD    , do_medit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
-    { "mlist"      , POS_DEAD    , do_mlist    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "memory"     , POS_DEAD    , do_memory   , 0,           0, BLOCKS_IDLE_REWARD },
+    { "mlist"      , POS_DEAD    , do_mlist    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "mobs"       , POS_LYING   , do_mobs     , 0, 0, BLOCKS_IDLE_REWARD },
     { "mode"       , POS_LYING   , do_mode     , 0, 0, ALLOWS_IDLE_REWARD },
     { "motd"       , POS_DEAD    , do_gen_ps   , 0, SCMD_MOTD, ALLOWS_IDLE_REWARD },
@@ -1356,6 +1358,7 @@ struct command_info mtx_info[] =
     { "emote", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { ":", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { "exit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
+    { "file", 0, do_file, 0, 0, BLOCKS_IDLE_REWARD },
     { "hangup", 0, do_comcall, 0, SCMD_HANGUP, BLOCKS_IDLE_REWARD },
     { "help", 0, do_help, 0, 0, BLOCKS_IDLE_REWARD },
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, BLOCKS_IDLE_REWARD },
