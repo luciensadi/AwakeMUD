@@ -533,6 +533,14 @@ bool program_can_be_copied(struct matrix_file *prog) {
 
   if (prog->quest_id) 
     return FALSE;
+  
+  // Programs are compiled for one system; cannot be copied
+  if (prog->file_type == MATRIX_FILE_PROGRAM)
+    return FALSE;
+
+  // Loses its value if copied
+  if (prog->file_type == MATRIX_FILE_PAYDATA)
+    return FALSE;
 
   return TRUE;
 }
@@ -748,7 +756,8 @@ ACMD(do_file) {
     }
 
     // If we made it this far then we have all our variables properly set.
-    if (!program_can_be_copied(file)) {
+    if (!program_can_be_copied(file) 
+      || file->file_type == MATRIX_FILE_PROGRAM ) {
       send_to_char(ch, "You try to copy %s from %s, but the copy-protection stops you.\r\n", file->name, GET_OBJ_NAME(from_device));
       return;
     }
@@ -914,8 +923,8 @@ ACMD(do_file) {
     }
 
     // We're clear to rename
-    send_to_char(ch, "You successfully rename %s to ^W%s^n.\r\n", file->name, third_arg ? third_arg : second_arg);
-    file->name = strdup(third_arg ? third_arg : second_arg);
+    send_to_char(ch, "You successfully rename %s to ^W%s^n.\r\n", file->name, *third_arg ? third_arg : second_arg);
+    file->name = strdup(*third_arg ? third_arg : second_arg);
   } else {
     print_file_help(ch);
   }
