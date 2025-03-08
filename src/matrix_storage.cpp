@@ -856,6 +856,11 @@ ACMD(do_file) {
       return;
     }
 
+    if (file->file_type == MATRIX_FILE_FIRMWARE) {
+      send_to_char(ch, "The operating system prevents you from deleting device firmware.\r\n");
+      return;
+    }
+
     send_to_char(ch, "You successfully delete file ^W%s^n from %s.\r\n", file->name, GET_OBJ_NAME(from_device));
     delete_matrix_file(file);
   } else if (is_abbrev(file_switch, "rename")) {
