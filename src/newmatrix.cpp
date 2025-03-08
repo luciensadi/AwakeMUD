@@ -87,12 +87,70 @@ void clear_hitcher(struct char_data *ch, bool shouldNotify)
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
 }
 
+struct word_level {
+  int min_security;
+  int max_security;
+  std::vector<const char*> words;
+  word_level(int a, int b, std::vector<const char*> c) : min_security(a), max_security(b), words(c) { } 
+};
+
+const word_level adjectives[] = {
+  {0, 4, { "public", "unclassified", "open", "generic", "draft", "preliminary" }},
+  {5, 7, { "confidential", "restricted", "internal", "classified" }},
+  {8, 10, { "sensitive", "top secret", "forensic", "proprietary" }},
+  {10, 99, { "blacklisted", "wetwork directive", "omega-level", "deadly" }}
+};
+
+const word_level subjects[] = {
+  {0, 4, { "office memos", "routine logs", "basic records", "casual reports", "reports", "files", "logs", "records" }},
+  {5, 7, { "financial records", "contractor dossiers", "research notes", "surveillance logs", "personnel files", "briefings", "summaries", "case files", "studies" }},
+  {8, 10, { "incident reports", "breach logs", "market analysis", "corporate agreements", "legal briefings", "private correspondence", "internal audits", "compliance reviews", "strategic outlines", "operational plans" }},
+  {10, 99, { "R&D logs", "espionage reports", "communications archives", "cybernetic blueprints", "black ops directives", "encryption keys", "core intelligence" }}
+};
+
+const word_level details[] = {
+  {0, 4, { "ver. a12", "backup archive", "non-critical", "dated cache", "outdated" }},
+  {5, 7, { "time-sensitive", "pending review", "recovered segment", "audit trail" }},
+  {8, 10, { "corrupted data", "incriminating evidence", "access level 5", "govt. oversight" }},
+  {10, 99, { "catastrophic exploit", "lethal payload", "redacted", "classified" }}
+};
+
+char* generate_paydata_name(int security, int size) {
+    if ((rand() % 2 == 0)) {
+      for (word_level adj : adjectives) {
+        if (adj.min_security > security) continue;
+        if (adj.max_security <= security) continue;
+        snprintf(buf, sizeof(buf), "%s ", str_dup(adj.words[std::rand() % adj.words.size()]));
+        break;
+      }      
+    }
+
+    for (word_level sub : subjects) {
+      if (sub.min_security > security) continue;
+      if (sub.max_security <= security) continue;
+      snprintf(buf, sizeof(buf), "%s", str_dup(sub.words[std::rand() % sub.words.size()]));
+      break;
+    }      
+
+    if ((rand() % 3 == 0)) {
+      for (word_level det : details) {
+        if (det.min_security > security) continue;
+        if (det.max_security <= security) continue;
+        snprintf(buf, sizeof(buf), " - %s", str_dup(det.words[std::rand() % det.words.size()]));
+        break;
+      }    
+    }
+
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " - ^g%d^n^yMp^n", size);
+
+    return capitalize(buf);
+}
+
 struct matrix_file * spawn_paydata(struct matrix_icon *icon) {
   struct matrix_file *paydata = create_matrix_file(NULL, OBJ_LOAD_REASON_SPAWN_PAYDATA);
   paydata->size = (number(1, 6) + number(1, 6)) * MAX(5, (20 - (5 * matrix[icon->in_host].color)));
   paydata->found_by = icon->idnum;
-  snprintf(buf, sizeof(buf), "Paydata %s - %dMp", matrix[icon->in_host].name, paydata->size);
-  paydata->name = str_dup(buf);
+  paydata->name = str_dup(generate_paydata_name(matrix[icon->in_host].security, paydata->size));
   int defense[5][6] = {{ 0, 0, 0, 1, 1, 1 },
                        { 0, 0, 1, 1, 2, 2 },
                        { 0, 1, 1, 2, 2, 3 },
