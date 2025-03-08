@@ -22,7 +22,7 @@ extern std::atomic<long>    matrix_file_id_counter;
  *
  * @param file The matrix file to be deleted.
  */
-void                delete_matrix_file(struct matrix_file file);
+void                delete_matrix_file(struct matrix_file *file);
 
 /**
  * @brief Creates a copy of a matrix file and places it in a specified device.

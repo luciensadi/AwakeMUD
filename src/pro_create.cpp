@@ -86,6 +86,7 @@ void pedit_disp_program_menu(struct descriptor_data *d)
 void pedit_parse(struct descriptor_data *d, const char *arg)
 {
   int number = atoi(arg);
+  int program_size = 0;
   switch(d->edit_mode)
   {
   case PEDIT_MENU:
@@ -124,13 +125,13 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
 
       send_to_char(CH, "Design saved!\r\n");
       // Minimum program size is rating^2.
-      int program_size = d->edit_matrix_file->rating ^ 2;
+      program_size = d->edit_matrix_file->rating ^ 2;
       if (d->edit_matrix_file->program_type == SOFT_ATTACK) {
         // Attack programs multiply size by a factor determined by wound level.
         program_size *= attack_multiplier[d->edit_matrix_file->wound_category];
       } else if (d->edit_matrix_file->program_type == SOFT_RESPONSE) {
         program_size = d->edit_matrix_file->rating ^ 3;
-      }else {
+      } else {
         // Others multiply by a set multiplier based on software type.
         program_size *= programs[d->edit_matrix_file->program_type].multiplier;
       }

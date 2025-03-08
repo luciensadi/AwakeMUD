@@ -528,8 +528,6 @@ ACMD(do_cook) {
         send_to_char(ch, "You don't see %s installed on any computers here.\r\n", argument);
     else if (design->file_type != MATRIX_FILE_SOURCE_CODE)
         send_to_char(ch, "You cannot cook %s. It's only possible to cook (compile) programs that are source code.", design->name);
-    else if (design->work_original_ticks_left)
-        send_to_char("This chip has already been encoded.\r\n", ch);
     else {
       FOR_ITEMS_AROUND_CH(ch, cooker) {
           if (GET_OBJ_TYPE(cooker) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cooker, 0) == TYPE_COOKER && !cooker->contains)
@@ -565,8 +563,27 @@ ACMD(do_cook) {
       }
 
       struct matrix_file *prog = clone_matrix_file(design);
-      prog->file_type = MATRIX_FILE_PROGRAM;
       prog->load_origin = OBJ_LOAD_REASON_COOK_PROGRAM;
+
+      switch (prog->program_type) {
+        case SOFT_BOD:
+        case SOFT_SENSOR:
+        case SOFT_MASKING:
+        case SOFT_EVASION:
+        case SOFT_ASIST_COLD:
+        case SOFT_ASIST_HOT:
+        case SOFT_HARDENING:
+        case SOFT_ICCM:
+        case SOFT_ICON:
+        case SOFT_MPCP:
+        case SOFT_REALITY:
+        case SOFT_RESPONSE:
+          prog->file_type = MATRIX_FILE_FIRMWARE;
+          break;
+        default:
+          prog->file_type = MATRIX_FILE_PROGRAM;
+          break;
+      }
 
       struct obj_data *chip = matrix_file_to_obj(prog);
       chip->load_origin = OBJ_LOAD_REASON_COOK_PROGRAM;
@@ -576,7 +593,7 @@ ACMD(do_cook) {
         send_to_char("You save a copy to disk before sending it to your cooker.\r\n", ch);
       } else {
         send_to_char(ch, "%s is too bespoke to be useful for a different deck, so you send it to your cooker without copying it first.\r\n", capitalize(design->name));
-        extract_matrix_file(design);
+        delete_matrix_file(design);
       }
 
       obj_to_obj(chip, cooker);

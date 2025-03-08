@@ -313,9 +313,22 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     case ITEM_DESIGN:
       space_required = GET_DESIGN_SIZE(obj);
       break;
+    case ITEM_MATRIX_FILE:
+      space_required = obj->files->size;
+      break;
+    case ITEM_MATRIX_FIRMWARE:
+      space_required = GET_PROGRAM_SIZE(obj);
+      break;
   }
 
   switch(GET_OBJ_TYPE(obj)) {
+    case ITEM_MATRIX_FIRMWARE:
+      if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
+        send_to_char(ch, "%s^n is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", CAP(GET_OBJ_NAME(obj)));
+      } else {
+        send_to_char(ch, "%s^n is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n", CAP(GET_OBJ_NAME(obj)));
+      }
+      return;
     case ITEM_PROGRAM:
     case ITEM_CHIP:
     case ITEM_DESIGN:
@@ -354,35 +367,9 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
       send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
       return;
   }
-
-  // Prevent installing persona firmware into a store-bought deck.
-  if (GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM) {
-    switch (GET_PROGRAM_TYPE(obj)) {
-      case SOFT_BOD:
-      case SOFT_SENSOR:
-      case SOFT_MASKING:
-      case SOFT_EVASION:
-      case SOFT_ASIST_COLD:
-      case SOFT_ASIST_HOT:
-      case SOFT_HARDENING:
-      case SOFT_ICCM:
-      case SOFT_ICON:
-      case SOFT_MPCP:
-      case SOFT_REALITY:
-      case SOFT_RESPONSE:
-        if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
-          send_to_char(ch, "%s^n is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", CAP(GET_OBJ_NAME(obj)));
-        } else {
-          send_to_char(ch, "%s^n is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n", CAP(GET_OBJ_NAME(obj)));
-        }
-        return;
-    }
-  }
-
-  if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM)
-    send_to_char(ch, "You'll have to cook %s before you can install it.\r\n", GET_OBJ_NAME(obj));
-  else if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
-    display_cyberdeck_issues(ch, cont);
+  
+  // if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
+  //   display_cyberdeck_issues(ch, cont);
 }
 
 /* The following put modes are supported by the code below:

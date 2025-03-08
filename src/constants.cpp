@@ -1118,6 +1118,7 @@ const char *item_types[] =
     "Complex Form", 
     "Source Code",
     "Matrix Data",
+    "Firmware",
     "\n"
   };
 

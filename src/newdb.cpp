@@ -379,7 +379,13 @@ bool load_obj_programs(obj_data *obj)
   #define SQL_MATRIX_FILE_LAST_DECAY_TIME     row[18]
   #define SQL_MATRIX_FILE_CREATOR_IDNUM       row[19]
 
-  snprintf(buf, sizeof(buf), "SELECT * FROM matrix_files WHERE in_obj_vnum=%ld AND in_obj_idnum=%ld;", GET_OBJ_VNUM(obj), obj->idnum);
+  snprintf(buf, sizeof(buf), 
+    "SELECT idnum, name, file_type, program_type, rating, size, original_size, "
+    "compression_factor, wound_category, is_default, creation_time, content, skill, "
+    "linked, work_phase, work_ticks_left, work_original_ticks_left, work_successes, "
+    "last_decay_time, creator_idnum "
+    "FROM matrix_files WHERE in_obj_vnum=%ld AND in_obj_idnum=%ld;", GET_OBJ_VNUM(obj), GET_OBJ_IDNUM(obj));
+  log_vfprintf(buf, buf3);
   mysql_wrapper(mysql, buf);
    if (!(res = mysql_use_result(mysql))) {
     mysql_free_result(res);
@@ -1523,7 +1529,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   for (temp = player->carrying; temp; temp = next_obj) {
     next_obj = temp->next_content;
     // We always clear out entries since this is a one-to-many table
-    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE in_obj_vnum=%ld AND in_obj_idnum=%ld; ", GET_OBJ_VNUM(temp), temp->idnum);
+    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE in_obj_vnum=%ld AND in_obj_idnum=%ld; ", GET_OBJ_VNUM(temp), GET_OBJ_IDNUM(temp));
     mysql_wrapper(mysql, buf);
     snprintf(buf, sizeof(buf), ""); // Clear buffer
 
@@ -1536,7 +1542,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       "VALUES (%ld, %ld, %ld, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %ld, %ld,'%s', %ld, %d, %ld, %d, %d, %d, %d); ",
       file->idnum, 
       GET_OBJ_VNUM(temp),
-      temp->idnum,
+      GET_OBJ_IDNUM(temp),
       prepare_quotes(buf1, file->name, sizeof(buf1) / sizeof(char)),
       file->file_type,
       file->program_type,
@@ -1548,7 +1554,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       file->is_default,
       file->last_decay_time,
       file->creation_time,
-      prepare_quotes(buf1, file->content, sizeof(buf1) / sizeof(char)),
+      prepare_quotes(buf2, file->content, sizeof(buf2) / sizeof(char)),
       file->creator_idnum,
       file->skill,
       file->linked,
@@ -1556,6 +1562,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       file->work_original_ticks_left,
       file->work_phase,
       file->work_successes);
+      mudlog_vfprintf(NULL, LOG_SYSLOG, buf);
 
       mysql_wrapper(mysql, buf);
     }
@@ -2674,8 +2681,6 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
   }
 
   ENSURE_OBJ_HAS_IDNUM(obj);
-
-  int old_storage;
   int rnum = real_object(GET_OBJ_VNUM(obj));
 
   if (rnum < 0) {
@@ -2707,38 +2712,6 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
         int prior_data;
         FORCE_PROTO_VALUE("drug", GET_OBJ_DRUG_TYPE(obj), GET_OBJ_DRUG_TYPE(&obj_proto[rnum]));
         CLAMP_VALUE("drug", GET_OBJ_DRUG_DOSES(obj), 1, MAX_DRUG_DOSE_COUNT, "doses");
-      }
-      break;
-    case ITEM_CYBERDECK:
-    case ITEM_CUSTOM_DECK:
-      {
-        // Rectify the memory.
-        old_storage = GET_CYBERDECK_USED_STORAGE(obj);
-        GET_CYBERDECK_USED_STORAGE(obj) = 0;
-        for (struct obj_data *installed = obj->contains; installed; installed = installed->next_content) {
-          if (GET_OBJ_TYPE(installed) == ITEM_DECK_ACCESSORY) {
-            switch (GET_DECK_ACCESSORY_TYPE(installed)) {
-              case TYPE_FILE:
-                GET_CYBERDECK_USED_STORAGE(obj) += GET_DECK_ACCESSORY_FILE_SIZE(installed);
-                break;
-              case TYPE_UPGRADE:
-                GET_PART_BUILDER_IDNUM(obj) = 0;
-                break;
-            }
-          }
-        }
-        if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {
-          snprintf(buf, sizeof(buf), "INFO: System self-healed mismatching cyberdeck used storage for %s (was %d, should have been %d)",
-                  GET_OBJ_NAME(obj),
-                  old_storage,
-                  GET_CYBERDECK_USED_STORAGE(obj)
-          );
-          mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);
-        }
-        if (GET_CYBERDECK_USED_STORAGE(obj) > GET_CYBERDECK_TOTAL_STORAGE(obj)) {
-          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: After self-heal, deck %s owned by %ld is overloaded on programs! Setting to 0 free space, this will cause problems.", GET_OBJ_NAME(obj), owner);
-          GET_CYBERDECK_USED_STORAGE(obj) = GET_CYBERDECK_TOTAL_STORAGE(obj);
-        }
       }
       break;
     case ITEM_FOCUS:
