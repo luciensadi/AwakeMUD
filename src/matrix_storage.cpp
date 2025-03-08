@@ -263,7 +263,8 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
   new_file = create_matrix_file(device, prog->load_origin);
 
   new_file->wound_category = GET_PROGRAM_ATTACK_DAMAGE(prog);
-  if (prog->restring) new_file->name = strdup(prog->restring);
+  if (*prog->matrix_restring) new_file->name = strdup(prog->matrix_restring);
+  else if (*prog->restring) new_file->name = strdup(prog->restring);
   else new_file->name = strdup(prog->text.name);
   new_file->work_ticks_left = GET_OBJ_VAL(prog, 4);
   
@@ -332,7 +333,7 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
       GET_PROGRAM_RATING(chip) = file->rating;
       GET_PROGRAM_TYPE(chip) = file->program_type;
       
-      // snprintf(buf, sizeof(buf), "a R%d %s '%s' program chip", file->rating, capitalize(programs[file->program_type].name), file->name);
+      snprintf(buf, sizeof(buf), "a R%d %s '%s' program chip", file->rating, capitalize(programs[file->program_type].name), file->name);
       break;
     case MATRIX_FILE_SOURCE_CODE:
       chip = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, file->load_origin);
@@ -342,7 +343,7 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
       GET_DESIGN_PROGRAM_WOUND_LEVEL(chip) = file->wound_category;
       GET_DESIGN_RATING(chip) = file->rating;
 
-      // snprintf(buf, sizeof(buf), "a R%d %s '%s' source chip", file->rating, capitalize(programs[file->program_type].name), file->name);
+      snprintf(buf, sizeof(buf), "a R%d %s '%s' source chip", file->rating, capitalize(programs[file->program_type].name), file->name);
       break;
     case MATRIX_FILE_DESIGN:
       chip = read_object(OBJ_BLANK_PROGRAM_DESIGN, VIRTUAL, file->load_origin);
@@ -352,7 +353,7 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
       GET_DESIGN_RATING(chip) = file->rating;
       GET_DESIGN_SUCCESSES(chip) = file->work_successes;
 
-      // snprintf(buf, sizeof(buf), "a R%d %s '%s' design chip", file->rating, capitalize(programs[file->program_type].name), file->name);
+      snprintf(buf, sizeof(buf), "a R%d %s '%s' design chip", file->rating, capitalize(programs[file->program_type].name), file->name);
       break;
     case MATRIX_FILE_SKILLSOFT:
       chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
@@ -361,7 +362,7 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
       GET_CHIP_COMPRESSION_FACTOR(chip) = file->compression_factor;
       GET_CHIP_RATING(chip) = file->rating;
 
-      // snprintf(buf, sizeof(buf), "a R%d %s chip", file->rating, skills[file->skill].name);    
+      snprintf(buf, sizeof(buf), "a R%d %s chip", file->rating, skills[file->skill].name);    
       break;
     case MATRIX_FILE_FIRMWARE:
       chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
@@ -370,7 +371,7 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
       GET_PROGRAM_SIZE(chip) = file->size;
       GET_DECK_ACCESSORY_FILE_TYPE(chip) = file->program_type;
       
-      // snprintf(buf, sizeof(buf), "a R%d %s firmware", file->rating, programs[file->program_type].name);   
+      snprintf(buf, sizeof(buf), "a R%d %s firmware", file->rating, programs[file->program_type].name);   
       break;   
     default:
       chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
@@ -378,11 +379,11 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
       GET_CHIP_SIZE(chip) = file->size;
 
       move_matrix_file_to(file, chip);
-      // snprintf(buf, sizeof(buf), "a '%s' optical chip", file->name);
+      snprintf(buf, sizeof(buf), "a '%s' optical chip", file->name);
       break;
   }
   
-  // chip->restring = str_dup(buf);
+  chip->matrix_restring = str_dup(file->name); // Preserve the matrix filename if we reinstall
   chip->restring = str_dup(file->name); // It would be cooler to use the other one but can't figure out where to store the string
   if (file->in_obj && file->in_obj != chip)
     file_from_obj(file); // derefs from list
