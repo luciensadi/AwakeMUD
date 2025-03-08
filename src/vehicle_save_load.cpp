@@ -130,7 +130,8 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
 
   // Previously, ownerless vehicles were saved, allowing them to disgorge contents on next load. This is bad for the economy. Instead, we just drop them.
   if (veh->owner > 0 && !does_player_exist(veh->owner)) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "Vehicle '%s' no longer has a valid owner (was %ld). Locking it and refusing to save it.", GET_VEH_NAME(veh), veh->owner);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Vehicle '%s' @ %ld no longer has a valid owner (was %ld). Locking it and refusing to save it.",
+                    GET_VEH_NAME(veh), GET_ROOM_VNUM(get_veh_in_room(veh)), veh->owner);
     // Auto-lock the doors to prevent cheese.
     veh->locked = TRUE;
     // Clear the owner. This vehicle will be DQ'd in should_save_this_vehicle() henceforth.
