@@ -47,6 +47,8 @@ void pedit_disp_menu(struct descriptor_data *d)
     // Attack programs multiply size by a factor determined by wound level.
     program_size *= attack_multiplier[d->edit_matrix_file->wound_category];
     send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(d->edit_matrix_file->wound_category));
+  } else if (d->edit_matrix_file->program_type == SOFT_RESPONSE) {
+      program_size = d->edit_matrix_file->rating ^ 3;
   } else {
     // Others multiply by a set multiplier based on software type.
     program_size *= programs[d->edit_matrix_file->program_type].multiplier;
@@ -121,18 +123,27 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       }
 
       send_to_char(CH, "Design saved!\r\n");
+      // Minimum program size is rating^2.
+      int program_size = d->edit_matrix_file->rating ^ 2;
       if (d->edit_matrix_file->program_type == SOFT_ATTACK) {
-        d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating * attack_multiplier[d->edit_matrix_file->wound_category];
+        // Attack programs multiply size by a factor determined by wound level.
+        program_size *= attack_multiplier[d->edit_matrix_file->wound_category];
       } else if (d->edit_matrix_file->program_type == SOFT_RESPONSE) {
-        d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating ^ 3;
-      } else {
-        d->edit_matrix_file->work_ticks_left = d->edit_matrix_file->rating * programs[d->edit_matrix_file->program_type].multiplier;
+        program_size = d->edit_matrix_file->rating ^ 3;
+      }else {
+        // Others multiply by a set multiplier based on software type.
+        program_size *= programs[d->edit_matrix_file->program_type].multiplier;
       }
-      d->edit_matrix_file->size = d->edit_matrix_file->rating * d->edit_matrix_file->work_ticks_left;
+      
+      d->edit_matrix_file->work_ticks_left = program_size;
+      d->edit_matrix_file->size = program_size * 1.1;
+      d->edit_matrix_file->original_size = program_size;
       d->edit_matrix_file->work_ticks_left  *= 20;
       d->edit_matrix_file->work_original_ticks_left = d->edit_matrix_file->work_ticks_left ;
       d->edit_matrix_file->creator_idnum = GET_IDNUM(CH);
       d->edit_matrix_file->work_phase = WORK_PHASE_READY;
+      adjust_device_memory(d->edit_matrix_file->in_obj, d->edit_matrix_file->size * -1);
+
       STATE(d) = CON_PLAYING;
       d->edit_matrix_file = NULL;
       break;
@@ -632,6 +643,9 @@ void update_buildrepair(void)
             send_to_char(desc->character, "You complete programming %s.\r\n", GET_PROGRAMMING(CH)->name);
             // We can just change the existing design file into a finished program, rather than dupe it.
             GET_PROGRAMMING(CH)->work_phase = WORK_PHASE_COMPLETE;
+            adjust_device_memory(GET_PROGRAMMING(CH)->in_obj, GET_PROGRAMMING(CH)->size - GET_PROGRAMMING(CH)->original_size);
+            GET_PROGRAMMING(CH)->size = GET_PROGRAMMING(CH)->original_size;
+            GET_PROGRAMMING(CH)->original_size = 0;
             GET_PROGRAMMING(CH)->file_type = MATRIX_FILE_SOURCE_CODE;
             if (GET_PROGRAMMING(CH)->program_type == SOFT_SUITE)
               GET_PROGRAMMING(CH)->file_type = MATRIX_FILE_PROGRAM; // Programming suites can just be programs
