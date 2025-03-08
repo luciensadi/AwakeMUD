@@ -7054,6 +7054,15 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     act(buf2, FALSE, ch, NULL, NULL, TO_CHAR);
     snprintf(buf, sizeof(buf), "A %s ricochets off of your ride.\r\n", ammo_type);
     send_to_veh(buf, veh, 0, FALSE);
+
+    // Mobs stop hitting and flee instead if they can't damage you.
+    if (!ch->desc && !MOB_FLAGGED(ch, MOB_SENTINEL)) {
+      stop_fighting(ch);
+#ifdef MOBS_FLEE_IF_THEY_CANT_DAMAGE_VEHICLE
+      char tmp_buf[50] = {0};
+      do_flee(ch, tmp_buf, 0, 0);
+#endif
+    }
     return FALSE;
   } else {
     // For AV rounds, this was subtracted before the armor check.
