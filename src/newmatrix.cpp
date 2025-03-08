@@ -819,7 +819,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (!targ->decker->deck)
         return;
       extern const char *crippler[4];
-      send_to_icon(targ, "%s^n takes a shot at your %s^n program!\r\n", CAP(icon->name), crippler[icon->ic.subtype]);
+      if (targ->type == ICON_LIVING_PERSONA) 
+        send_to_icon(targ, "%s^n takes a shot at your living persona's %s^n attribute!\r\n", CAP(icon->name), crippler[icon->ic.subtype]);
+      else
+        send_to_icon(targ, "%s^n takes a shot at your %s^n program!\r\n", CAP(icon->name), crippler[icon->ic.subtype]);
       switch (icon->ic.subtype) {
       case 0:
         bod = targ->decker->bod;
@@ -834,10 +837,25 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         bod = targ->decker->masking;
         break;
       }
+      if (targ->type == ICON_LIVING_PERSONA)
+        bod += targ->decker->hardening; // Otaku get to add their hardening to this check.
       success = success_test(matrix[targ->in_host].security, bod);
       int resist = success_test(bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch)), iconrating);
       GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
       success -= resist;
+      if (targ->type == ICON_LIVING_PERSONA) {
+        int damage_total = success / 2;
+        if (damage_total <= 0) {
+          return send_to_icon(targ, "It fails to damage your living persona.\r\n");
+        }
+        damage_total = convert_damage(stage((2 - success_test(GET_BOD(targ->decker->ch) + GET_BODY_POOL(targ->decker->ch), MIN(matrix[icon->in_host].color + 1, DEADLY))), damage_total));
+        if (damage_total <= 0) {
+          return send_to_icon(targ, "You power through it and nullify the damage.\r\n");
+        }
+        send_to_icon(targ, "It tears into your living persona!\r\n");
+        do_damage_persona(targ, damage_total);
+        return;
+      }
       if (success >= 2) {
         send_to_icon(targ, "It tears into the program!\r\n");
         while (success >= 2) {
