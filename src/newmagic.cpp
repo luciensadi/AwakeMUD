@@ -6894,9 +6894,13 @@ ACMD(do_think)
 
   // We don't show communication mindlinks to privileged folks.
   snprintf(buf, sizeof(buf), "^rYou hear $v^r in your mind say, \"%s^r\"^n", formatted_think_string);
-  if (!IS_IGNORING(ch->char_specials.mindlink, is_blocking_mindlinks_from, ch))
+  if (!IS_IGNORING(ch->char_specials.mindlink, is_blocking_mindlinks_from, ch)) {
     act(buf, FALSE, ch, 0, ch->char_specials.mindlink, TO_VICT);
+    store_message_to_history(ch->char_specials.mindlink->desc, COMM_CHANNEL_SAYS, buf);
+  }
+
   send_to_char(ch, "You think across your mindlink^n, \"%s^n\"\r\n", formatted_think_string);
+  store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, buf);
 }
 
 int get_spell_affected_successes(struct char_data * ch, int type)
