@@ -1345,6 +1345,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)         (GET_OBJ_VAL((accessory), 8))
 #define GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(accessory) (GET_OBJ_VAL((accessory), 8))
 #define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)            (GET_OBJ_VAL((accessory), 9))
+#define GET_DECK_ACCESSORY_FILE_TYPE(accessory)                 (GET_OBJ_VAL((accessory), 10))
 
 // ITEM_DECK_ACCESSORY TYPE_COOKER convenience defines
 #define GET_DECK_ACCESSORY_COOKER_RATING(accessory)          (GET_OBJ_VAL((accessory), 1))

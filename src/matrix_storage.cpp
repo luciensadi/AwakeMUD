@@ -246,7 +246,7 @@ void file_from_host(struct matrix_file * obj)
 matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
   struct matrix_file *new_file;
 
-  if (GET_OBJ_TYPE(prog) == ITEM_MATRIX_FILE) {
+  if (GET_OBJ_TYPE(prog) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(prog) == TYPE_MATRIX_FILE) {
     // Special handling for matrix files. These already contain our matrix file.
     new_file = prog->files;
     if (device) {
@@ -268,11 +268,11 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
   new_file->work_ticks_left = GET_OBJ_VAL(prog, 4);
   
   switch(GET_OBJ_TYPE(prog)) {
-    case ITEM_MATRIX_FIRMWARE:
+    case ITEM_DECK_ACCESSORY:
       new_file->file_type = MATRIX_FILE_PROGRAM;
-      new_file->program_type = GET_PROGRAM_TYPE(prog);
-      new_file->size = GET_PROGRAM_SIZE(prog);
-      new_file->rating = GET_PROGRAM_RATING(prog);
+      new_file->program_type = GET_DECK_ACCESSORY_FILE_TYPE(prog);
+      new_file->size = GET_DECK_ACCESSORY_FILE_SIZE(prog);
+      new_file->rating = GET_DECK_ACCESSORY_FILE_RATING(prog);
       break;
     case ITEM_PROGRAM:
       new_file->file_type = MATRIX_FILE_PROGRAM;
@@ -322,7 +322,6 @@ matrix_file* obj_to_matrix_file(obj_data *prog) {
 obj_data* matrix_file_to_obj(matrix_file *file) {
   struct obj_data *chip = NULL;
   
-  
   switch(file->file_type) {
     case MATRIX_FILE_PROGRAM:
       chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
@@ -365,18 +364,17 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
       // snprintf(buf, sizeof(buf), "a R%d %s chip", file->rating, skills[file->skill].name);    
       break;
     case MATRIX_FILE_FIRMWARE:
-      chip = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, file->load_origin);
+      chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
+      GET_DECK_ACCESSORY_TYPE(chip) = TYPE_FIRMWARE;
+      GET_DECK_ACCESSORY_FILE_RATING(chip) = file->rating;
       GET_PROGRAM_SIZE(chip) = file->size;
-      GET_PROGRAM_RATING(chip) = file->rating;
-      GET_PROGRAM_TYPE(chip) = file->program_type;
-      GET_OBJ_TYPE(chip) = ITEM_MATRIX_FIRMWARE;
-
+      GET_DECK_ACCESSORY_FILE_TYPE(chip) = file->program_type;
+      
       // snprintf(buf, sizeof(buf), "a R%d %s firmware", file->rating, programs[file->program_type].name);   
       break;   
     default:
       chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
-      GET_DECK_ACCESSORY_TYPE(chip) = TYPE_FILE;
-      GET_OBJ_TYPE(chip) = ITEM_MATRIX_FILE;
+      GET_DECK_ACCESSORY_TYPE(chip) = TYPE_MATRIX_FILE;
       GET_CHIP_SIZE(chip) = file->size;
 
       move_matrix_file_to(file, chip);

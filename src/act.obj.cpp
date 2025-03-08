@@ -313,22 +313,9 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     case ITEM_DESIGN:
       space_required = GET_DESIGN_SIZE(obj);
       break;
-    case ITEM_MATRIX_FILE:
-      space_required = obj->files->size;
-      break;
-    case ITEM_MATRIX_FIRMWARE:
-      space_required = GET_PROGRAM_SIZE(obj);
-      break;
   }
 
   switch(GET_OBJ_TYPE(obj)) {
-    case ITEM_MATRIX_FIRMWARE:
-      if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
-        send_to_char(ch, "%s^n is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", CAP(GET_OBJ_NAME(obj)));
-      } else {
-        send_to_char(ch, "%s^n is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n", CAP(GET_OBJ_NAME(obj)));
-      }
-      return;
     case ITEM_PROGRAM:
     case ITEM_CHIP:
     case ITEM_DESIGN:
@@ -344,15 +331,23 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
       extract_obj(obj);
       return;
     case ITEM_DECK_ACCESSORY:
+      space_required = GET_DECK_ACCESSORY_FILE_SIZE(obj);
       switch (GET_DECK_ACCESSORY_TYPE(obj)) {
         case TYPE_FILE:
-          if (GET_OBJ_VAL(cont, 5) + GET_DECK_ACCESSORY_FILE_SIZE(obj) > GET_OBJ_VAL(cont, 3)) {
+          if (GET_OBJ_VAL(cont, 5) + space_required  > GET_OBJ_VAL(cont, 3)) {
             act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
             return;
           }
           obj_to_matrix_file(obj, cont);
           extract_obj(obj);
           act("You upload $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
+          return;
+        case TYPE_FIRMWARE:
+          if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
+            send_to_char(ch, "%s^n is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", CAP(GET_OBJ_NAME(obj)));
+          } else {
+            send_to_char(ch, "%s^n is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n", CAP(GET_OBJ_NAME(obj)));
+          }
           return;
         case TYPE_UPGRADE:
           if (GET_OBJ_VAL(obj, 1) != 3) {
@@ -365,6 +360,9 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
           return;
       }
       send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+      return;
+    default:
+      send_to_char(ch, "You can't install %s^n into a cyberdeck.\r\n", GET_OBJ_NAME(obj));
       return;
   }
   
@@ -609,12 +607,6 @@ ACMD(do_put)
       // Better messaging for parts.
       if (GET_OBJ_TYPE(obj) == ITEM_PART) {
         send_to_char(ch, "Parts aren't plug-and-play; you'll have to BUILD %s^n into your deck instead.\r\n", GET_OBJ_NAME(obj));
-        return;
-      }
-
-      // You can only install programs, parts, and designs.
-      if (GET_OBJ_TYPE(obj) != ITEM_PROGRAM && GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(obj) != ITEM_DESIGN) {
-        send_to_char(ch, "You can't install %s^n into a cyberdeck.\r\n", GET_OBJ_NAME(obj));
         return;
       }
 

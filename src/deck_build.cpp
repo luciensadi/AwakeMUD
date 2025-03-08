@@ -864,12 +864,11 @@ ACMD(do_build) {
     // Find requisite software.
     if (parts[GET_PART_TYPE(obj)].software) {
       for (soft = ch->carrying; soft; soft = soft->next_content) {
-        if (GET_PROGRAM_TYPE(soft) == parts[GET_PART_TYPE(obj)].software
-            && GET_OBJ_TIMER(soft) == 1
-            && GET_PROGRAM_RATING(soft) == required_rating)
-        {
-          break;
-        }
+        if (GET_OBJ_TYPE(soft) != ITEM_DECK_ACCESSORY) continue;
+        if (GET_DECK_ACCESSORY_TYPE(soft) != TYPE_FIRMWARE) continue;
+        if (GET_DECK_ACCESSORY_FILE_TYPE(soft) != parts[GET_PART_TYPE(obj)].software) continue;
+        if (GET_DECK_ACCESSORY_FILE_RATING(soft) != required_rating) continue;
+        break;
       }
 
       if (!soft) {
