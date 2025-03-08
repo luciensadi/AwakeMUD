@@ -167,6 +167,7 @@ ACMD_DECLARE(do_conjure);
 ACMD_DECLARE(do_consider);
 ACMD_DECLARE(do_contest);
 ACMD_DECLARE(do_control);
+ACMD_DECLARE(do_cook);
 ACMD_DECLARE(do_costtime);
 ACMD_DECLARE(do_cpool);
 ACMD_DECLARE(do_crack);
@@ -410,7 +411,6 @@ ACMD_DECLARE(do_ungroup);
 ACMD_DECLARE(do_unpack);
 ACMD_DECLARE(do_unsupported_command);
 ACMD_DECLARE(do_upgrade);
-// ACMD_DECLARE(do_upload);
 ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_usenerps);
 ACMD_DECLARE(do_users);
@@ -476,6 +476,7 @@ ACMD_DECLARE(do_incognito);
 ACMD_DECLARE(do_chase);
 ACMD_DECLARE(do_phone);
 ACMD_DECLARE(do_phonelist);
+ACMD_DECLARE(do_programs);
 ACMD_DECLARE(do_mount);
 ACMD_DECLARE(do_man);
 ACMD_DECLARE(do_target);
@@ -586,7 +587,6 @@ struct command_info cmd_info[] =
     { "close"      , POS_SITTING , do_gen_door , 0, SCMD_CLOSE, BLOCKS_IDLE_REWARD },
     { "closecombat", POS_LYING   , do_closecombat, 0, 0, BLOCKS_IDLE_REWARD },
     { "cls"        , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, ALLOWS_IDLE_REWARD },
-    { "cook"       , POS_LYING   , do_cook     , 0, 0, BLOCKS_IDLE_REWARD },
     { "conceal"    , POS_LYING   , do_conceal_reveal, 0, SCMD_CONCEAL, ALLOWS_IDLE_REWARD },
     { "consider"   , POS_LYING   , do_consider , 0, 0, BLOCKS_IDLE_REWARD },
     { "consent"    , POS_MORTALLYW, do_consent , 0, 0, ALLOWS_IDLE_REWARD },
@@ -601,6 +601,7 @@ struct command_info cmd_info[] =
     { "copyover"   , POS_DEAD    , do_copyover , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
     { "commands"   , POS_DEAD    , do_commands , 0, SCMD_COMMANDS, ALLOWS_IDLE_REWARD },
     { "compress"   , POS_LYING   , do_compact  , 0, 0, BLOCKS_IDLE_REWARD },
+    { "cook"       , POS_SITTING , do_cook     , 0, 0, BLOCKS_IDLE_REWARD },
     { "costtime"   , POS_DEAD    , do_costtime , 0, 0, ALLOWS_IDLE_REWARD },
     { "coredump"   , POS_DEAD    , do_coredump , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "count"      , POS_DEAD    , do_count, 0, 0, ALLOWS_IDLE_REWARD },
@@ -1274,6 +1275,7 @@ ACMD_DECLARE(do_comcall);
 ACMD_DECLARE(do_control);
 ACMD_DECLARE(do_crash);
 ACMD_DECLARE(do_evade);
+ACMD_DECLARE(do_load);
 ACMD_DECLARE(do_locate);
 ACMD_DECLARE(do_logoff);
 ACMD_DECLARE(do_logon);
@@ -1355,7 +1357,8 @@ struct command_info mtx_info[] =
     { "connect", 0, do_logon, 0, 0, BLOCKS_IDLE_REWARD },
     { "commands", 0, do_commands, 0, SCMD_COMMANDS, BLOCKS_IDLE_REWARD },
     { "crash", 0, do_crash, 0, 0, BLOCKS_IDLE_REWARD },
-    { "decrypt", 0, do_decrypt, 0, 1, BLOCKS_IDLE_REWARD },
+    { "decrypt", 0, do_decrypt, 0, 0, BLOCKS_IDLE_REWARD },
+    { "disarm", 0, do_decrypt, 0, 1, BLOCKS_IDLE_REWARD },
     { "disconnect", 0, do_logoff, 0, 1, BLOCKS_IDLE_REWARD },
     { "download", 0, do_download, 0, 1, BLOCKS_IDLE_REWARD },
     { "evade", 0, do_evade, 0, 0, BLOCKS_IDLE_REWARD },
@@ -1372,6 +1375,7 @@ struct command_info mtx_info[] =
     { "jobs", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
     { "look", 0, do_matrix_look, 0, 0, BLOCKS_IDLE_REWARD },
     { "list", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },
+    { "load", 0, do_load, 0, SCMD_SWAP, BLOCKS_IDLE_REWARD },
     { "locate", 0, do_locate, 0, 0, BLOCKS_IDLE_REWARD },
     { "logoff", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
     { "logout", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
@@ -1406,7 +1410,8 @@ struct command_info mtx_info[] =
     { "toggle", 0, do_toggle, 0, 0 , BLOCKS_IDLE_REWARD },
     { "trace", 0, do_trace, 0, 0, BLOCKS_IDLE_REWARD },
     { "typo", 0, do_gen_write, 0, SCMD_TYPO, BLOCKS_IDLE_REWARD },
-    // { "upload", 0, do_upload, 0, 0, BLOCKS_IDLE_REWARD },
+    { "unload", 0, do_load, 0, SCMD_UNLOAD, BLOCKS_IDLE_REWARD },
+    { "upload", 0, do_load, 0, SCMD_UPLOAD, BLOCKS_IDLE_REWARD },
     { "question", 0, do_gen_comm, 0, SCMD_QUESTION, BLOCKS_IDLE_REWARD },
     { "recap", 0, do_recap, 0, 0 , BLOCKS_IDLE_REWARD },
     { "who", 0, do_who, 0, 0, BLOCKS_IDLE_REWARD },
@@ -2371,32 +2376,6 @@ char *two_arguments(char *argument, char *first_arg, char *second_arg)
 }
 
 /*
- * Counts the number of probable arguments in an input by checking how many space-delimited
- * words are present in the argument.
-*/
-int count_arguments(char *input) {
-    if (!input || *input == '\0') return 0; // Handle empty input
-    
-    int count = 0;
-    bool inWord = false;
-    
-    while (*input) {
-        if (*input != ' ') {
-            if (!inWord) {
-                count++; // Start of a new argument
-                inWord = true;
-            }
-        } else {
-            inWord = false; // Reset when encountering space
-        }
-        input++;
-    }
-    
-    return count;
-}
-
-
-/*
  * determine if a given string is an abbreviation of another
  * (now works symmetrically -- JE 7/25/94)
  *
@@ -2473,6 +2452,10 @@ int special(struct char_data * ch, int cmd, char *arg)
   struct obj_data *i;
   if (ch->persona)
   {
+    for (i = matrix[ch->persona->in_host].contents; i; i = i->next_content)
+      if (GET_OBJ_SPEC(i) != NULL)
+        if (GET_OBJ_SPEC(i) (ch, i, cmd, arg))
+          return 1;
     return 0;
   }
 

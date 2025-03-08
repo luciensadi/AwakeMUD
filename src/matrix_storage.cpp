@@ -408,7 +408,8 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
       chip = read_object(OBJ_BLANK_PHOTO, VIRTUAL, file->load_origin);
       chip->photo = str_dup(file->content);
       chip->restring = str_dup(file->name);
-      
+
+      snprintf(buf, sizeof(buf), "%s", file->name);
       break;
     default:
       chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
@@ -421,7 +422,7 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
   }
   
   chip->matrix_restring = str_dup(file->name); // Preserve the matrix filename if we reinstall
-  chip->restring = str_dup(file->name); // It would be cooler to use the other one but can't figure out where to store the string
+  chip->restring = str_dup(buf); 
   if (file->in_obj && file->in_obj != chip)
     file_from_obj(file); // derefs from list
 
@@ -585,8 +586,10 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
     }
     int used_memory = get_device_used_memory(device);
     int total_memory = get_device_total_memory(device);
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Storage Memory: %d free of %d total\r\n\r\n",
-          total_memory - used_memory, total_memory);
+    float percentage_remaining = ((float)used_memory / (float)total_memory) * 100; 
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Storage Memory: ^%s%d^nMp free of ^c%d^nMp total (%.02f%%)\r\n\r\n",
+          percentage_remaining < 25 ? "r" : "g",
+          total_memory - used_memory, total_memory, percentage_remaining);
   }
   send_to_char(buf, ch);
 }
