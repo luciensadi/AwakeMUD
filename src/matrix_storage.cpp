@@ -263,8 +263,8 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
   new_file = create_matrix_file(device, prog->load_origin);
 
   new_file->wound_category = GET_PROGRAM_ATTACK_DAMAGE(prog);
-  if (*prog->matrix_restring) new_file->name = strdup(prog->matrix_restring);
-  else if (*prog->restring) new_file->name = strdup(prog->restring);
+  if (prog->matrix_restring) new_file->name = strdup(prog->matrix_restring);
+  else if (prog->restring) new_file->name = strdup(prog->restring);
   else new_file->name = strdup(prog->text.name);
   new_file->work_ticks_left = GET_OBJ_VAL(prog, 4);
   
@@ -276,6 +276,12 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
       new_file->rating = GET_DECK_ACCESSORY_FILE_RATING(prog);
       break;
     case ITEM_PROGRAM:
+      // Programs are a bit different, if they don't have restrings,
+      // we just make one to compensate for store-bought programs
+      if (!prog->matrix_restring) {
+        snprintf(buf, sizeof(buf), "%s:r%d", programs[GET_PROGRAM_TYPE(prog)].name, GET_PROGRAM_RATING(prog));
+        new_file->name = str_dup(buf);
+      }
       new_file->file_type = MATRIX_FILE_PROGRAM;
       new_file->program_type = GET_PROGRAM_TYPE(prog);
       new_file->size = GET_PROGRAM_SIZE(prog);
