@@ -1065,9 +1065,11 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     mysql_wrapper(mysql, buf);
     snprintf(buf3, sizeof(buf3), "pfiles_inv load for %s (%ld)", GET_CHAR_NAME(ch), GET_IDNUM(ch));
     res = mysql_use_result(mysql);
+    std::vector<obj_data *> loaded = {};
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(PFILES_INV_VNUM);
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
+        loaded.push_back(obj);
         GET_OBJ_COST(obj) = atoi(PFILES_INV_COST);
         if (*PFILES_INV_RESTRING)
           obj->restring = str_dup(PFILES_INV_RESTRING);
@@ -1177,23 +1179,25 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     }
     mysql_free_result(res);
 
-    /* MIGRATION STEP: For When we have a program if it's contained in a device it needs to be converted into a memory struct */
-    if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM || GET_OBJ_TYPE(obj) == ITEM_DESIGN) {
-      // Check if it's in a device
-      if (obj->in_obj && (
-        GET_OBJ_TYPE(obj->in_obj) == ITEM_CYBERDECK 
-        || GET_OBJ_TYPE(obj->in_obj) == ITEM_CUSTOM_DECK
-        || (GET_OBJ_TYPE(obj->in_obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj->in_obj) == TYPE_COMPUTER)
-      )) {
-        // Do the conversion, this will also move the file onto the device.
-        obj_to_matrix_file(obj);
-        // Delete the obj, no longer needed
-        extract_obj(obj);
-        obj = NULL;
+    for (obj_data *obj : loaded) {
+      /* MIGRATION STEP: For When we have a program if it's contained in a device it needs to be converted into a memory struct */
+      if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM || GET_OBJ_TYPE(obj) == ITEM_DESIGN) {
+        // Check if it's in a device
+        if (obj->in_obj && (
+          GET_OBJ_TYPE(obj->in_obj) == ITEM_CYBERDECK 
+          || GET_OBJ_TYPE(obj->in_obj) == ITEM_CUSTOM_DECK
+          || (GET_OBJ_TYPE(obj->in_obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj->in_obj) == TYPE_COMPUTER)
+        )) {
+          // Do the conversion, this will also move the file onto the device.
+          obj_to_matrix_file(obj);
+          // Delete the obj, no longer needed
+          extract_obj(obj);
+          obj = NULL;
+        }
       }
-    }
 
-    if (obj) load_obj_programs(obj);
+      if (obj) load_obj_programs(obj);
+    }
   }
 
   // Load bullet pants.

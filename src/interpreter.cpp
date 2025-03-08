@@ -1369,6 +1369,7 @@ struct command_info mtx_info[] =
     { "logout", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
     { "logon", 0, do_logon, 0, 0, BLOCKS_IDLE_REWARD },
     { "max", 0, do_matrix_max, 0, 0, BLOCKS_IDLE_REWARD },
+    { "memory", 0, do_memory, 0, 0, BLOCKS_IDLE_REWARD },
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, BLOCKS_IDLE_REWARD },
     { "parry", 0, do_parry, 0, 0, BLOCKS_IDLE_REWARD },
     { "phone", 0, do_comcall, 0, 0, BLOCKS_IDLE_REWARD },
