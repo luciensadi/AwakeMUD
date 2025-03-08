@@ -282,7 +282,26 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
         snprintf(buf, sizeof(buf), "%s:r%d", programs[GET_PROGRAM_TYPE(prog)].name, GET_PROGRAM_RATING(prog));
         new_file->name = str_dup(buf);
       }
-      new_file->file_type = MATRIX_FILE_PROGRAM;
+      // We help store software shuffle into the right type
+      switch (GET_PROGRAM_TYPE(prog)) {
+        case SOFT_BOD:
+        case SOFT_SENSOR:
+        case SOFT_MASKING:
+        case SOFT_EVASION:
+        case SOFT_ASIST_COLD:
+        case SOFT_ASIST_HOT:
+        case SOFT_HARDENING:
+        case SOFT_ICCM:
+        case SOFT_ICON:
+        case SOFT_MPCP:
+        case SOFT_REALITY:
+        case SOFT_RESPONSE:
+          new_file->file_type = MATRIX_FILE_FIRMWARE;
+          break;
+        default:
+          new_file->file_type = MATRIX_FILE_PROGRAM;
+          break;
+      }
       new_file->program_type = GET_PROGRAM_TYPE(prog);
       new_file->size = GET_PROGRAM_SIZE(prog);
       new_file->rating = GET_PROGRAM_RATING(prog);
@@ -315,7 +334,7 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
       break;
   }
 
-  if (device) {
+  if (device && new_file->file_type != MATRIX_FILE_FIRMWARE) {
     adjust_device_memory(device, new_file->size * -1);
   }
   
@@ -527,7 +546,7 @@ void print_memory(struct char_data *ch, std::vector<struct obj_data*> devices) {
     } else {
       for (struct matrix_file *file = device->files; file; file = file->next_file) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "    [^g%4d^nmp] %-30s", file->size, file->name);
-        if (file->file_type == MATRIX_FILE_PROGRAM || file->file_type == MATRIX_FILE_DESIGN || file->file_type == MATRIX_FILE_SOURCE_CODE) {
+        if (file->program_type) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " R%-2d %-18s", file->rating, programs[file->program_type].name);
 
           if (file->file_type == MATRIX_FILE_DESIGN && file->work_phase <= WORK_PHASE_READY)
@@ -810,6 +829,11 @@ ACMD(do_file) {
       return;
     }
 
+    if (file->file_type == MATRIX_FILE_FIRMWARE) {
+      send_to_char(ch, "The operating system prevents you from moving device firmware.\r\n");
+      return;
+    }
+
     if (AFF_FLAGGED(ch, PLR_MATRIX) && ch->persona) {
       send_to_icon(ch->persona, "You transfer %s from %s to %s.\r\n",
         file->name, GET_OBJ_NAME(from_device), GET_OBJ_NAME(to_device));
@@ -890,8 +914,8 @@ ACMD(do_file) {
     }
 
     // We're clear to rename
-    send_to_char(ch, "You successfully rename %s to ^W%s^n.\r\n", file->name, third_arg);
-    file->name = strdup(third_arg);
+    send_to_char(ch, "You successfully rename %s to ^W%s^n.\r\n", file->name, third_arg ? third_arg : second_arg);
+    file->name = strdup(third_arg ? third_arg : second_arg);
   } else {
     print_file_help(ch);
   }
