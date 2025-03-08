@@ -787,8 +787,24 @@ int get_max_skill_for_char(struct char_data *ch, int skill, int type) {
   // Scope maximums based on teacher type.
   if (type == NEWBIE) {
     max = NEWBIE_SKILL;
-    if (skill == SKILL_COMPUTER && IS_OTAKU(ch)) max = 8; // Otakus can start with computers 8
+
+    // Otaku can start with Computers 8 and Eti 4 as maximums.
+    if (IS_OTAKU(ch)) {
+      switch (skill) {
+        case SKILL_COMPUTER:
+          max = 8;
+          break;
+        case SKILL_CORPORATE_ETIQUETTE:
+        case SKILL_TRIBAL_ETIQUETTE:
+        case SKILL_MEDIA_ETIQUETTE:
+        case SKILL_STREET_ETIQUETTE:
+        case SKILL_ELF_ETIQUETTE:
+          max = 4;
+          break;
+      }
+    }
   }
+
   else if (type == AMATEUR)
     max = NORMAL_MAX_SKILL;
   else if (type == ADVANCED)
