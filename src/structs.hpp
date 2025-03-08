@@ -140,6 +140,7 @@ struct obj_data
   text_data text;
   struct extra_descr_data *ex_description; /* extra descriptions     */
   char *restring;
+  char *matrix_restring;
   char *photo;
   char *graffiti;
 
@@ -172,7 +173,7 @@ struct obj_data
 #endif
   obj_data() :
       item_number(0), in_room(NULL), in_veh(NULL), vfront(FALSE), load_origin(0), load_time(0), pc_load_origin(0), pc_load_idnum(0),
-      ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
+      ex_description(NULL), restring(NULL), matrix_restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
       worn_by(NULL), worn_on(0), in_obj(NULL), contains(NULL), next_content(NULL),
       in_host(NULL), files(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL), 
       dropped_by_host(NULL), dropped_by_char(0), idnum(0)

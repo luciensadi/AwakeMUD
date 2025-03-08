@@ -27,3 +27,13 @@ CREATE TABLE `matrix_files` (
   `in_obj_idnum` bigint(5) unsigned default '0',
   KEY(`idnum`)
 );
+
+ALTER TABLE `pfiles_inv`
+    ADD `Matrix_Restring` varchar(256)
+    DEFAULT 0 
+    AFTER `obj_idnum`;
+
+ALTER TABLE `pfiles_worn`
+    ADD `Matrix_Restring` varchar(256)
+    DEFAULT 0 
+    AFTER `obj_idnum`;

@@ -941,6 +941,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     #define PFILES_WORN_POSI row[11 + NUM_OBJ_VALUES]
     #define PFILES_WORN_GRAFFITI row[12 + NUM_OBJ_VALUES]
     #define PFILES_WORN_OBJ_IDNUM row[13 + NUM_OBJ_VALUES]
+    #define PFILES_WORN_MATRIX_RESTRING row[14 + NUM_OBJ_VALUES]
 
     struct obj_data *obj = NULL;
     long vnum;
@@ -989,6 +990,8 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
           obj->graffiti = str_dup(PFILES_WORN_GRAFFITI);
 
         GET_OBJ_IDNUM(obj) = strtoul(PFILES_WORN_OBJ_IDNUM, NULL, 0);
+        if (*PFILES_WORN_MATRIX_RESTRING)
+          obj->matrix_restring = str_dup(PFILES_WORN_MATRIX_RESTRING);
 
         auto_repair_obj(obj, GET_IDNUM(ch));
 
@@ -1055,6 +1058,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     #define PFILES_INV_POSI row[10 + NUM_OBJ_VALUES]
     #define PFILES_INV_GRAFFITI row[11 + NUM_OBJ_VALUES]
     #define PFILES_INV_OBJ_IDNUM row[12 + NUM_OBJ_VALUES]
+    #define PFILES_INV_MATRIX_RESTRING row[13 + NUM_OBJ_VALUES]
 
     struct obj_data *obj = NULL;
     vnum_t vnum = 0;
@@ -1126,6 +1130,8 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
           obj->graffiti = str_dup(PFILES_INV_GRAFFITI);
 
         GET_OBJ_IDNUM(obj) = strtoul(PFILES_INV_OBJ_IDNUM, NULL, 0);
+        if (*PFILES_INV_MATRIX_RESTRING)
+          obj->matrix_restring = str_dup(PFILES_INV_MATRIX_RESTRING);
 
         auto_repair_obj(obj, GET_IDNUM(ch));
 

@@ -175,6 +175,7 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
       temp->data->obj_flags.condition = old.obj_flags.condition;
 
       temp->data->restring = old.restring;
+      temp->data->matrix_restring = old.matrix_restring;
       temp->data->photo = old.photo;
       temp->data->graffiti = old.graffiti;
 
@@ -229,6 +230,7 @@ void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_
       temp->data->next_content = old.next_content;
       temp->data->obj_flags.condition = old.obj_flags.condition;
       temp->data->restring = old.restring;
+      temp->data->matrix_restring = old.matrix_restring;
       temp->data->photo = old.photo;
       temp->data->graffiti = old.graffiti;
       temp->data->idnum = old.idnum;

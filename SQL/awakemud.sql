@@ -293,6 +293,7 @@ CREATE TABLE `pfiles_inv` (
   `posi` smallint(1) unsigned default '0',
   `graffiti` varchar(256),
   `obj_idnum` bigint(5) unsigned default '0',
+  `Matrix_Restring` varchar(256),
   KEY(`idnum`)
 );
 
@@ -329,6 +330,7 @@ CREATE TABLE `pfiles_worn` (
   `posi` smallint(1) unsigned default '0',
   `graffiti` varchar(256),
   `obj_idnum` bigint(5) unsigned default '0',
+  `Matrix_Restring` varchar(256),
   KEY(`idnum`)
 );
 
