@@ -676,7 +676,8 @@ ACMD(do_file) {
 
   std::vector<struct obj_data*> all_devices = get_storage_devices(ch, TRUE);
 
-  char *file_switch, *remainder, *first_arg = NULL, *second_arg = NULL, *third_arg = NULL;
+  char first_arg[256];
+  char *file_switch, *remainder, *second_arg = NULL, *third_arg = NULL;
   struct obj_data *from_device = NULL, *to_device = NULL;
   struct matrix_file *file = NULL;
   remainder = one_argument(argument, file_switch);
@@ -709,8 +710,8 @@ ACMD(do_file) {
         return;
       }
     } else if (!*third_arg) { // FILE COPY <file> <to device> syntax
-      if (!(to_device = find_obj_in_vector_vis(ch, third_arg, all_devices))) {
-        send_to_char(ch, "You don't see any device named '%s' that you could copy files to.\r\n", third_arg);
+      if (!(to_device = find_obj_in_vector_vis(ch, second_arg, all_devices))) {
+        send_to_char(ch, "You don't see any device named '%s' that you could copy files to.\r\n", second_arg);
         return;
       }
 
@@ -780,8 +781,8 @@ ACMD(do_file) {
         return;
       }
     } else if (!*third_arg) { // FILE MOVE <file> <to device> syntax
-      if (!(to_device = find_obj_in_vector_vis(ch, third_arg, all_devices))) {
-        send_to_char(ch, "You don't see any device named '%s' that you could move files to.\r\n", third_arg);
+      if (!(to_device = find_obj_in_vector_vis(ch, second_arg, all_devices))) {
+        send_to_char(ch, "You don't see any device named '%s' that you could move files to.\r\n", second_arg);
         return;
       }
 
