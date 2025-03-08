@@ -50,7 +50,7 @@ extern int get_cyberware_install_cost(struct obj_data *ware);
 extern void save_bullet_pants(struct char_data *ch);
 extern void load_bullet_pants(struct char_data *ch);
 extern void handle_weapon_attachments(struct obj_data *obj);
-extern int get_deprecated_cybereye_essence_cost(struct obj_data *obj);
+extern int get_deprecated_cybereye_essence_cost(struct char_data *ch, struct obj_data *obj);
 extern void price_cyber(struct obj_data *obj);
 extern int get_skill_price(struct char_data *ch, int i);
 extern int get_max_skill_for_char(struct char_data *ch, int skill, int type);
@@ -2753,7 +2753,7 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
       FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_GRADE(obj), GET_CYBERWARE_GRADE(&obj_proto[rnum]));
 
       if (GET_CYBERWARE_TYPE(obj) != CYB_CUSTOM_NERPS) {
-        FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_ESSENCE_COST(obj), GET_CYBERWARE_ESSENCE_COST(&obj_proto[rnum]));
+        FORCE_PROTO_VALUE("cyberware", GET_CYBERWARE_SETTABLE_ESSENCE_COST(obj), GET_CYBERWARE_ESSENCE_COST_RO(&obj_proto[rnum]));
       } else {
         GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_WIZLOAD);
         GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_NERPS);
@@ -3093,7 +3093,7 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
         GET_CYBERWARE_GRADE(&fake_cyber) = GET_CYBERWARE_GRADE(obj);
         price_cyber(&fake_cyber);
 
-        old_essence_cost = get_deprecated_cybereye_essence_cost(obj);
+        old_essence_cost = get_deprecated_cybereye_essence_cost(ch, obj);
         new_essence_cost = fake_cyber.obj_flags.value[4];
         essence_delta = old_essence_cost - new_essence_cost;
         total_essence_delta += essence_delta;
@@ -3136,8 +3136,8 @@ void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
         price_cyber(obj);
 
         // Calculate the old values and delta.
-        old_essence_cost = get_deprecated_cybereye_essence_cost(obj);
-        new_essence_cost = GET_CYBERWARE_ESSENCE_COST(obj);
+        old_essence_cost = get_deprecated_cybereye_essence_cost(ch, obj);
+        new_essence_cost = calculate_ware_essence_or_index_cost(ch, obj);
         essence_delta = old_essence_cost - new_essence_cost;
 
         // If there are changes to make, write a log entry so we can trace things later.
@@ -3223,11 +3223,7 @@ void uninstall_and_refund_ware(struct char_data *ch, struct obj_data *ware, char
     return;
 
   // We refund their essence / index as well.
-  int essence_cost = (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE ? GET_CYBERWARE_ESSENCE_COST(ware) : GET_BIOWARE_ESSENCE_COST(ware));
-  if (GET_TRADITION(ch) == TRAD_SHAMANIC && GET_TOTEM(ch) == TOTEM_EAGLE)
-    essence_cost *= 2;
-  if (IS_GHOUL(ch) || IS_DRAKE(ch))
-    essence_cost *= 2;
+  int essence_cost = calculate_ware_essence_or_index_cost(ch, ware);
 
   // And of course, magic.
   int magic_refund_amount = 0;

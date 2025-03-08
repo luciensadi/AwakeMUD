@@ -549,7 +549,7 @@ void apply_vision_bits_from_implant(struct char_data *ch, struct obj_data *impla
       }
 
       // All implants grant normal vision as a matter of course-- but only if they're not zero-essence cosmetics.
-      if (GET_CYBERWARE_ESSENCE_COST(implant) > 0) {
+      if (GET_CYBERWARE_ESSENCE_COST_RO(implant) > 0) {
         set_vision_bit(ch, VISION_NORMAL, VISION_BIT_FROM_IMPLANTS);
       }
 

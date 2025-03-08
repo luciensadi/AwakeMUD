@@ -3460,11 +3460,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       if (GET_BIOWARE_RATING(j) > 0) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s%s^n that uses ^c%.2f^n index when installed.",
                 GET_BIOWARE_RATING(j), GET_BIOWARE_IS_CULTURED(j) ? "cultured " : "",
-                decap_bio_types[GET_BIOWARE_TYPE(j)], ((float) GET_BIOWARE_ESSENCE_COST(j) / 100));
+                decap_bio_types[GET_BIOWARE_TYPE(j)], ((float) calculate_ware_essence_or_index_cost(ch, j) / 100));
       } else {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s%s^n that uses ^c%.2f^n index when installed.",
                 GET_BIOWARE_IS_CULTURED(j) ? "cultured " : "",
-                decap_bio_types[GET_BIOWARE_TYPE(j)], ((float) GET_BIOWARE_ESSENCE_COST(j) / 100));
+                decap_bio_types[GET_BIOWARE_TYPE(j)], ((float) calculate_ware_essence_or_index_cost(ch, j) / 100));
       }
       break;
     case ITEM_CYBERWARE:
@@ -3608,7 +3608,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
               decap_cyber_grades[GET_CYBERWARE_GRADE(j)],
               flag_parse,
               decap_cyber_types[GET_CYBERWARE_TYPE(j)],
-              ((float) GET_CYBERWARE_ESSENCE_COST(j) / 100));
+              ((float) calculate_ware_essence_or_index_cost(ch, j) / 100));
       
       switch (GET_CYBERWARE_TYPE(j)) {
         case CYB_HANDRAZOR:
@@ -5265,17 +5265,17 @@ ACMD(do_cyberware)
   for (obj = ch->cyberware; obj != NULL; obj = obj->next_content) {
     if (GET_CYBERWARE_TYPE(obj) == CYB_FINGERTIP) {
       if (obj->contains && GET_OBJ_TYPE(obj->contains) == ITEM_WEAPON && GET_HOLSTER_READY_STATUS(obj) ) {
-        snprintf(buf, sizeof(buf), "%-32s ^Y(W) (R)^n Essence: ^c%0.2f^n\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
+        snprintf(buf, sizeof(buf), "%-32s ^Y(W) (R)^n Essence: ^c%0.2f^n\r\n", GET_OBJ_NAME(obj), ((float)calculate_ware_essence_or_index_cost(ch, obj) / 100));
         send_to_char(buf, ch);
         continue;
       }
       else if (obj->contains && GET_OBJ_TYPE(obj->contains) == ITEM_WEAPON && !GET_HOLSTER_READY_STATUS(obj)) {
-        snprintf(buf, sizeof(buf), "%-36s ^Y(W)^n Essence: ^c%0.2f^n\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
+        snprintf(buf, sizeof(buf), "%-36s ^Y(W)^n Essence: ^c%0.2f^n\r\n", GET_OBJ_NAME(obj), ((float)calculate_ware_essence_or_index_cost(ch, obj) / 100));
         send_to_char(buf, ch);
         continue;
       }
       else if (obj->contains) {
-        snprintf(buf, sizeof(buf), "%-36s ^Y(F)^n Essence: ^c%0.2f^n\r\n", GET_OBJ_NAME(obj), ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1));
+        snprintf(buf, sizeof(buf), "%-36s ^Y(F)^n Essence: ^c%0.2f^n\r\n", GET_OBJ_NAME(obj), ((float)calculate_ware_essence_or_index_cost(ch, obj) / 100));
         send_to_char(buf, ch);
         continue;
       }
@@ -5300,7 +5300,7 @@ ACMD(do_cyberware)
 
     snprintf(buf, sizeof(buf), "%-40s Essence: ^c%0.2f^n%s\r\n",
              GET_OBJ_NAME(obj),
-             ((float)GET_CYBERWARE_ESSENCE_COST(obj) / 100) * ((IS_GHOUL(ch) || IS_DRAKE(ch)) ? 2 : 1),
+             (float)calculate_ware_essence_or_index_cost(ch, obj) / 100,
              retraction_string
            );
     send_to_char(buf, ch);
@@ -5323,12 +5323,12 @@ ACMD(do_bioware)
                    GET_OBJ_NAME(obj),
                    GET_BIOWARE_PUMP_ADRENALINE(obj) *2,
                    GET_BIOWARE_RATING(obj),
-                   ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100) * (IS_DRAKE(ch) ? 2 : 1));
+                   ((float)calculate_ware_essence_or_index_cost(ch, obj) / 100));
     } else {
       send_to_char(ch, "%-40s Rating: %-2d     Bioware Index: %0.2f\r\n",
                    GET_OBJ_NAME(obj),
                    GET_BIOWARE_RATING(obj),
-                   ((float)GET_BIOWARE_ESSENCE_COST(obj) / 100) * (IS_DRAKE(ch) ? 2 : 1));
+                   ((float)calculate_ware_essence_or_index_cost(ch, obj) / 100));
     }
   }
 }

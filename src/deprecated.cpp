@@ -1,11 +1,11 @@
-#include <math.h>
+#include <cmath>
 
 #include "awake.hpp"
 #include "structs.hpp"
 #include "utils.hpp"
 
 /* Given a cybereye package, calculate what its essence cost would have been under the old system. */
-int get_deprecated_cybereye_essence_cost(struct obj_data *obj) {
+int get_deprecated_cybereye_essence_cost(struct char_data *ch, struct obj_data *obj) {
   if (!obj || GET_OBJ_TYPE(obj) != ITEM_CYBERWARE || GET_CYBERWARE_TYPE(obj) != CYB_EYES) {
     mudlog("SYSERR: Non-cybereyes supplied to get_deprecated_cybereye_essence_cost().", NULL, LOG_SYSLOG, TRUE);
     return 0;
@@ -89,15 +89,22 @@ int get_deprecated_cybereye_essence_cost(struct obj_data *obj) {
 
   switch (GET_OBJ_VAL(obj, 2)) {
     case GRADE_ALPHA:
-      essence_cost = (int) round(essence_cost * .8);
+      essence_cost = (int) std::round(essence_cost * .8);
       break;
     case GRADE_BETA:
-      essence_cost = (int) round(essence_cost * .6);
+      essence_cost = (int) std::round(essence_cost * .6);
       break;
     case GRADE_DELTA:
-      essence_cost = (int) round(essence_cost * .5);
+      essence_cost = (int) std::round(essence_cost * .5);
       break;
   }
+
+  // Accommodate for Eagle and Drake/Ghoul status.
+  if (IS_GHOUL(ch) || IS_DRAKE(ch))
+    essence_cost *= 2;
+  
+  if (GET_TRADITION(ch) == TRAD_SHAMANIC && GET_TOTEM(ch) == TOTEM_EAGLE)
+    essence_cost *= 2;
 
   return essence_cost;
 }

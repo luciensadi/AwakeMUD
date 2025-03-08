@@ -10133,7 +10133,7 @@ ACMD(do_makenerps) {
 
   if (is_abbrev(buf, "cyberware")) {
     ware = read_object(OBJ_CUSTOM_NERPS_CYBERWARE, VIRTUAL, OBJ_LOAD_REASON_WIZLOAD);
-    GET_CYBERWARE_ESSENCE_COST(ware) = (int) (essence_cost * 100);
+    GET_CYBERWARE_SETTABLE_ESSENCE_COST(ware) = (int) (essence_cost * 100);
 
     if (is_visible)
       SET_BIT(GET_CYBERWARE_FLAGS(ware), NERPS_WARE_VISIBLE);

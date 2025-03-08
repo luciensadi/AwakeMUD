@@ -193,6 +193,7 @@ struct room_data *get_jurisdiction_garage_room(int jurisdiction);
 void   set_dropped_by_info(struct obj_data *obj, struct char_data *ch);
 bool   restore_to_full_health_if_still_in_chargen(struct char_data *victim);
 char * format_for_logging__returns_new(const char *input);
+int    calculate_ware_essence_or_index_cost(struct char_data *ch, struct obj_data *ware);
 
 // RCD subscription functions.
 bool   add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller, bool ignore_veh_sub_marker, bool mute_duplication_alarm=FALSE);
@@ -1245,7 +1246,8 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERWARE_FLAGS(cyberware)            (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
 #define GET_CYBERWARE_LACING_TYPE(cyberware)      (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
 #define GET_CYBERWARE_MEMORY_MAX(cyberware)       (GET_OBJ_VAL((cyberware), 3))
-#define GET_CYBERWARE_ESSENCE_COST(cyberware)     (GET_OBJ_VAL((cyberware), 4))
+#define GET_CYBERWARE_SETTABLE_ESSENCE_COST(cyberware)     (GET_OBJ_VAL((cyberware), 4))
+#define GET_CYBERWARE_ESSENCE_COST_RO(cyberware)     (1 ? GET_OBJ_VAL((cyberware), 4) : 0)
 #define GET_CYBERWARE_RADIO_MAX_CRYPT(cyberware)  (GET_OBJ_VAL((cyberware), 5))
 #define GET_CYBERWARE_MEMORY_USED(cyberware)      (GET_OBJ_VAL((cyberware), 5))
 #define GET_CYBERWARE_RADIO_FREQ(cyberware)       (GET_OBJ_VAL((cyberware), 6)) // Settable by player

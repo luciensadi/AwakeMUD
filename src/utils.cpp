@@ -8283,3 +8283,37 @@ char *format_for_logging__returns_new(const char *input) {
 
   return result;
 }
+
+int calculate_ware_essence_or_index_cost(struct char_data *ch, struct obj_data *ware) {
+  if (!ware || !ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid parameter to calculate_ware_essence_or_index_cost(%s, %s)!", GET_CHAR_NAME(ch), GET_OBJ_NAME(ware));
+    return 99999;
+  }
+
+  if (GET_OBJ_TYPE(ware) == ITEM_CYBERWARE) {
+    int esscost = GET_CYBERWARE_ESSENCE_COST_RO(ware);
+
+    // Ghouls and drakes have doubled cyberware essence costs.
+    if (IS_GHOUL(ch) || IS_DRAKE(ch))
+      esscost *= 2;
+
+    // Eagle Shamans have doubled essence costs.
+    if (GET_TRADITION(ch) == TRAD_SHAMANIC && GET_TOTEM(ch) == TOTEM_EAGLE)
+      esscost *= 2;
+
+    return esscost;
+  }
+  
+  else if (GET_OBJ_TYPE(ware) == ITEM_BIOWARE) {
+    int indexcost = GET_BIOWARE_ESSENCE_COST(ware);
+
+    // Ghouls and drakes have doubled bioware index costs.
+    if (IS_GHOUL(ch) || IS_DRAKE(ch))
+      indexcost *= 2;
+    
+    return indexcost;
+  }
+  
+  mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got non-ware item to calculate_ware_essence_or_index_cost(%s, %s)!", GET_CHAR_NAME(ch), GET_OBJ_NAME(ware));
+  return 99999;
+}

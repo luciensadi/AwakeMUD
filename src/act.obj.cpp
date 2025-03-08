@@ -4953,7 +4953,7 @@ ACMD(do_break)
 
       send_to_char("You bite down hard on the tooth compartment, breaking it open.\r\n", ch);
       obj_from_cyberware(obj);
-      GET_ESSHOLE(ch) += GET_CYBERWARE_ESSENCE_COST(obj);
+      GET_ESSHOLE(ch) += calculate_ware_essence_or_index_cost(ch, obj);
       obj_from_obj(contents);
       extract_obj(obj);
       if (do_drug_take(ch, contents))

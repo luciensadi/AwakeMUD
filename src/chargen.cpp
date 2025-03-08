@@ -475,14 +475,9 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
         continue;
       }
 
-      int esscost = GET_CYBERWARE_ESSENCE_COST(temp_obj);
-
-      if (IS_GHOUL(CH) || IS_DRAKE(CH))
-        esscost *= 2;
+      int esscost = calculate_ware_essence_or_index_cost(CH, temp_obj);
 
       if (GET_TRADITION(CH) != TRAD_MUNDANE) {
-        if (GET_TOTEM(CH) == TOTEM_EAGLE)
-          esscost *= 2;
         magic_loss(CH, esscost, TRUE);
       }
 
@@ -502,10 +497,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
         continue;
       }
 
-      int esscost = GET_BIOWARE_ESSENCE_COST(temp_obj);
-
-      if (IS_DRAKE(CH))
-        esscost *= 2;
+      int esscost = calculate_ware_essence_or_index_cost(CH, temp_obj);
 
       GET_INDEX(CH) += esscost;
       if (GET_TRADITION(CH) != TRAD_MUNDANE) {
@@ -1142,14 +1134,9 @@ static void start_game(descriptor_data *d, const char *origin)
           continue;
         }
 
-        int esscost = GET_CYBERWARE_ESSENCE_COST(temp_obj);
-
-        if (IS_GHOUL(CH) || IS_DRAKE(CH))
-          esscost *= 2;
+        int esscost = calculate_ware_essence_or_index_cost(CH, temp_obj);
 
         if (GET_TRADITION(CH) != TRAD_MUNDANE) {
-          if (GET_TOTEM(CH) == TOTEM_EAGLE)
-            esscost *= 2;
           magic_loss(CH, esscost, TRUE);
         }
 
