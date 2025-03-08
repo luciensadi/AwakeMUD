@@ -6712,7 +6712,7 @@ void chkdmg(struct veh_data * veh)
       const char *repr = generate_new_loggable_representation(obj);
 
       nextobj = obj->next_content;
-      switch(number(0, 2)) {
+      switch(number(0, 1)) {
         case 0:
           // Item stays in vehicle, no-op.
           break;
