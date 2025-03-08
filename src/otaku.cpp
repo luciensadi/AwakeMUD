@@ -27,7 +27,7 @@ int get_otaku_wil(struct char_data *ch) {
 
   /* Handling Cyberware/Bioware */
   struct obj_data *pain_editor = find_bioware(ch, BIO_PAINEDITOR);
-  if (pain_editor && GET_BIOWARE_RATING(pain_editor))
+  if (pain_editor && GET_BIOWARE_IS_ACTIVATED(pain_editor))
     wil_stat++;
 
   /* Handling Drugs */
@@ -56,7 +56,7 @@ int get_otaku_int(struct char_data *ch) {
     int_stat += GET_BIOWARE_RATING(booster);
 
   struct obj_data *pain_editor = find_bioware(ch, BIO_PAINEDITOR);
-  if (pain_editor && GET_BIOWARE_RATING(pain_editor))
+  if (pain_editor && GET_BIOWARE_IS_ACTIVATED(pain_editor))
     int_stat--;
 
   /* Handling Drugs */
