@@ -837,8 +837,6 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         bod = targ->decker->masking;
         break;
       }
-      if (targ->type == ICON_LIVING_PERSONA)
-        bod += targ->decker->hardening; // Otaku get to add their hardening to this check.
       success = success_test(matrix[targ->in_host].security, bod);
       int resist = success_test(bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch)), iconrating);
       GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
