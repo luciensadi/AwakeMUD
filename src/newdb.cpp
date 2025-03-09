@@ -11,6 +11,7 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
+#include <unordered_set>
 #include <mysql/mysql.h>
 
 #include "structs.hpp"
@@ -266,6 +267,19 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool incl
   *temp = '\0';
   dest[size_of_dest - 1] = '\0';
   return dest;
+}
+
+// Recursive function to build a unique set of obj_data pointers
+void build_unique_obj_set(obj_data* obj, std::unordered_set<obj_data*>& unique_objs) {
+    if (!obj || unique_objs.count(obj)) return; // Base case: null or already visited
+
+    unique_objs.insert(obj); // Add to the set
+
+    // Traverse next_content (linked list)
+    build_unique_obj_set(obj->next_content, unique_objs);
+
+    // Traverse contains (nested objects)
+    build_unique_obj_set(obj->contains, unique_objs);
 }
 
 /* Some initializations for characters, including initial skills */
@@ -1545,9 +1559,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
   /* Matrix files are persisted in a separate table. Save that data. */
   #define MATRIX_FILE_SQL_COLUMNS 24 /* THIS HAS TO BE EQUAL TO THE COLUMSN INSERTED */
-  for (temp = player->carrying; temp; temp = next_obj) {
-    next_obj = temp->next_content;
+  std::unordered_set<obj_data*> player_inventory = {};
+  build_unique_obj_set(player->carrying, player_inventory);
 
+  for (obj_data* obj : player_inventory) {
     int file_count = 0;
     snprintf(buf, sizeof(buf),
       "INSERT INTO matrix_files ( "
@@ -1560,15 +1575,15 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       " VALUES "
       );
 
-    if (!temp->files) continue;
-    for (struct matrix_file *file = temp->files; file; file = file->next_file) {
+    if (!obj->files) continue;
+    for (struct matrix_file *file = obj->files; file; file = file->next_file) {
       if ((file->loaded_with_obj_idnum == GET_OBJ_IDNUM(file->in_obj)) && !file->dirty_bit) continue;
 
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
         "(%ld, %ld, %ld, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %ld, %ld, '%s', %ld, %d, %ld, %ld, %d, %d, %d, %d, %d),",
         file->idnum, 
-        GET_OBJ_VNUM(temp),
-        GET_OBJ_IDNUM(temp),
+        GET_OBJ_VNUM(obj),
+        GET_OBJ_IDNUM(obj),
         prepare_quotes(buf1, file->name, sizeof(buf1) / sizeof(char)),
         file->file_type,
         file->program_type,
