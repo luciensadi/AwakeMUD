@@ -719,6 +719,29 @@ ACMD(do_matrix_position)
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
 }
 
+bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *targ, int &success)
+{
+  struct obj_data *soft = NULL;
+  for (soft = targ->decker->software; soft; soft = soft->next_content) {
+    if (GET_PROGRAM_TYPE(soft) == SOFT_SHIELD) {
+      int shield_test = success_test(GET_PROGRAM_RATING(soft), 
+        ICON_IS_IC(icon) ? matrix[icon->in_host].security : GET_SKILL(icon->decker->ch, SKILL_COMPUTER));
+
+      if (shield_test > 0) {
+        success -= shield_test;
+        send_to_icon(targ, "You raise your shield program and deflect some of the attack.\r\n");
+      }
+      GET_PROGRAM_RATING(soft)--;
+      if (GET_PROGRAM_RATING(soft) <= 0) {
+        send_to_icon(targ, "Your shield program crashes as the rating is depleted.\r\n");
+        extract_obj(soft);
+      }
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
 void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 {
   struct obj_data *soft = NULL;
@@ -838,6 +861,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         break;
       }
       success = success_test(matrix[targ->in_host].security, bod);
+      if (try_execute_shield_program(icon, targ, success) && success <= 0) {
+        return;
+      }
       int resist = success_test(bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch)), iconrating);
       GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
       success -= resist;
@@ -933,22 +959,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     return;
   }
 
-  for (soft = targ->decker->software; soft; soft = soft->next_content)
-    if (GET_PROGRAM_TYPE(soft) == SOFT_SHIELD) {
-      int shield_test = success_test(GET_PROGRAM_RATING(soft), 
-        ICON_IS_IC(icon) ? matrix[icon->in_host].security : GET_SKILL(icon->decker->ch, SKILL_COMPUTER));
-
-      if (shield_test > 0) {
-        success -= shield_test;
-        send_to_icon(targ, "You raise your shield program and deflect some of the attack.\r\n");
-      }
-      GET_PROGRAM_RATING(soft)--;
-      if (GET_PROGRAM_RATING(soft) <= 0) {
-        send_to_icon(targ, "Your shield program crashes as the rating is depleted.\r\n");
-        extract_obj(soft);
-      }
-      break;
-    }
+  if (try_execute_shield_program(icon, targ, success) && success <= 0) {
+    return;
+  }
 
   success -= success_test(bod, power);
   dam = convert_damage(stage(success, dam));
