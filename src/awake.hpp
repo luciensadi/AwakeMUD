@@ -1741,7 +1741,7 @@ enum {
 #define SOFT_REALITY            37
 #define SOFT_RESPONSE           38
 #define SOFT_SHIELD             39
-#define NUM_PROGRAMS            39
+#define NUM_PROGRAMS            40
 
 #define PART_ACTIVE    1
 #define PART_STORAGE    2
