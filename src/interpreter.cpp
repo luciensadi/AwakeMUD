@@ -1387,6 +1387,7 @@ struct command_info mtx_info[] =
     { "phone", 0, do_comcall, 0, 0, BLOCKS_IDLE_REWARD },
     { "position", 0, do_matrix_position, 0, 0, BLOCKS_IDLE_REWARD },
     { "praise", 0, do_gen_write, 0, SCMD_PRAISE, BLOCKS_IDLE_REWARD },
+    { "programs", 0, do_programs, 0, 0 , BLOCKS_IDLE_REWARD },
     { "prompt", 0, do_display, 0, 0 , BLOCKS_IDLE_REWARD },
     { "quit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
     { "read", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },

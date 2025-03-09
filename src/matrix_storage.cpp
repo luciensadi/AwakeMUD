@@ -280,6 +280,8 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
       new_file->program_type = GET_DECK_ACCESSORY_FILE_TYPE(prog);
       new_file->size = GET_DECK_ACCESSORY_FILE_SIZE(prog);
       new_file->rating = GET_DECK_ACCESSORY_FILE_RATING(prog);
+      new_file->from_host_vnum = GET_DECK_ACCESSORY_FILE_HOST_VNUM(prog);
+      new_file->from_host_color = GET_DECK_ACCESSORY_FILE_HOST_COLOR(prog);
       break;
     case ITEM_PROGRAM:
       // Programs are a bit different, if they don't have restrings,
@@ -399,8 +401,9 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
       chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
       GET_DECK_ACCESSORY_TYPE(chip) = TYPE_FIRMWARE;
       GET_DECK_ACCESSORY_FILE_RATING(chip) = file->rating;
-      GET_PROGRAM_SIZE(chip) = file->size;
+      GET_DECK_ACCESSORY_FILE_SIZE(chip) = file->size;
       GET_DECK_ACCESSORY_FILE_TYPE(chip) = file->program_type;
+      GET_DECK_ACCESSORY_FILE_CREATION_TIME(chip) = file->creation_time;
       
       snprintf(buf, sizeof(buf), "a R%d %s firmware", file->rating, programs[file->program_type].name);   
       break;   
@@ -410,6 +413,15 @@ obj_data* matrix_file_to_obj(matrix_file *file) {
       chip->restring = str_dup(file->name);
 
       snprintf(buf, sizeof(buf), "%s", file->name);
+      break;
+    case MATRIX_FILE_PAYDATA:
+      chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);
+
+      GET_DECK_ACCESSORY_FILE_HOST_VNUM(chip) = file->from_host_vnum;
+      GET_DECK_ACCESSORY_TYPE(chip) = TYPE_PAYDATA;
+      GET_DECK_ACCESSORY_FILE_CREATION_TIME(chip) = file->creation_time;
+      GET_DECK_ACCESSORY_FILE_SIZE(chip) = file->size;
+      GET_DECK_ACCESSORY_FILE_HOST_COLOR(chip) = file->from_host_color;
       break;
     default:
       chip = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, file->load_origin);

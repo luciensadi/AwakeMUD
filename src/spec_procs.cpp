@@ -2887,7 +2887,7 @@ SPECIAL(fence)
       return(TRUE);
     }
     if (!(GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY
-          && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE
+          && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_PAYDATA
           && GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj))) {
       act("You say, \"I only buy datafiles, chummer.\"\n", FALSE, fence, 0, 0, TO_CHAR);
       act("$n says, \"I only buy datafiles, chummer.\"\n", FALSE, fence, 0, ch, TO_VICT);

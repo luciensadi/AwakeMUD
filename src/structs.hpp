@@ -1493,6 +1493,10 @@ struct matrix_file {
   int skill;      
   rnum_t linked;                                 /* If this is non-zero, it's the idnum of the ch */
 
+  // Fields used by paydata
+  rnum_t from_host_vnum;                         /* If this file came from a host, which host?  */
+  int from_host_color;
+
   // Non-SQL fields
   struct matrix_file *next_file;                 /* For 'files' lists             */
   struct host_data *in_host;
@@ -1519,7 +1523,8 @@ struct matrix_file {
       idnum(0), name(0), file_type(0), program_type(0), rating(0), size(0), original_size(0),
       compression_factor(0), wound_category(0), is_default(0), creator_idnum(0), content(0),
 
-      last_decay_time(0), quest_id(0), in_obj(0), skill(0), linked(0),
+      last_decay_time(0), quest_id(0), in_obj(0), skill(0), linked(0), from_host_vnum(0),
+      from_host_color(0),
 
       next_file(0), in_host(0),
 

@@ -151,6 +151,9 @@ struct matrix_file * spawn_paydata(struct matrix_icon *icon) {
   paydata->size = (number(1, 6) + number(1, 6)) * MAX(5, (20 - (5 * matrix[icon->in_host].color)));
   paydata->found_by = icon->idnum;
   paydata->name = str_dup(generate_paydata_name(matrix[icon->in_host].security, paydata->size));
+  paydata->from_host_vnum = icon->in_host;
+  paydata->from_host_color = matrix[icon->in_host].color;
+
   int defense[5][6] = {{ 0, 0, 0, 1, 1, 1 },
                        { 0, 0, 1, 1, 2, 2 },
                        { 0, 1, 1, 2, 2, 3 },
@@ -1344,6 +1347,65 @@ const char *get_plaintext_matrix_score_memory(struct char_data *ch) {
   return buf2;
 }
 
+ACMD(do_programs)
+{
+  if (!DECKER->software) {
+    send_to_icon(PERSONA, "You check your active memory and don't see anything loaded.\r\n\r\n");
+    get_plaintext_matrix_score_memory(ch);
+    return;
+  }
+
+  send_to_icon(PERSONA, "You pull up a console and check your active memory:\r\n");
+  for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file) {
+    char paddingnumberstr[10], formatstr[512];
+
+    snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 40 + count_color_codes_in_string(soft->name));
+    snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s ^c%3d^nMp ");
+    send_to_icon(PERSONA, formatstr,
+                  soft->name,
+                  soft->size);
+    send_to_icon(PERSONA, "( R%-2d", soft->rating);
+    if (soft->program_type == SOFT_ATTACK) {
+      switch (soft->wound_category) {
+        case 1:
+          send_to_icon(PERSONA, ", ^c%s^n )\r\n", GET_WOUND_NAME(soft->wound_category));
+          break;
+        case 2:
+          send_to_icon(PERSONA, ", ^g%s^n )\r\n", GET_WOUND_NAME(soft->wound_category));
+          break;
+        case 3:
+          send_to_icon(PERSONA, ", ^y%s^n )\r\n", GET_WOUND_NAME(soft->wound_category));
+          break;
+        case 4:
+          send_to_icon(PERSONA, ", ^r%s^n )\r\n", GET_WOUND_NAME(soft->wound_category));
+          break;
+      }
+    } else {
+      send_to_icon(PERSONA, " )\r\n");
+    }
+  }
+
+  std::vector<obj_data *> devices = get_storage_devices(ch);
+  for (obj_data *device: devices) {
+    for (struct matrix_file *soft = device->files; soft; soft = soft->next_file) {
+      if (!soft->transfer_remaining) continue;
+      if (soft->transferring_to != DECKER->deck) continue;
+      char paddingnumberstr[10], formatstr[512];
+
+      snprintf(paddingnumberstr, sizeof(paddingnumberstr), "%d", 40 + count_color_codes_in_string(soft->name));
+      snprintf(formatstr, sizeof(formatstr), "%s%s%s", "%-", paddingnumberstr, "s ^c%3d^nMp ");
+      send_to_icon(PERSONA, formatstr,
+                    soft->name,
+                    soft->size);
+      float completion_percentage = (float) (soft->size - soft->transfer_remaining) / MAX(1, soft->size) * 100;
+      send_to_icon(PERSONA, "( R%-2d, ^GLoading^n ^c%2.2f%%^n complete )\r\n", soft->rating, completion_percentage);
+    }
+  }
+
+  send_to_icon(PERSONA, "\r\n");
+  get_plaintext_matrix_score_memory(ch);
+}
+
 ACMD(do_matrix_score)
 {
   if (!PERSONA) {
@@ -2451,113 +2513,92 @@ ACMD(do_connect)
 
 ACMD(do_load)
 {
-  obj_data *deck = DECKER->deck;
-  if (IS_OTAKU(DECKER->ch))
-    deck = DECKER->proxy_deck;
-
-  if (!deck) {
-    send_to_char(ch, "You need a deck to %s from!\r\n", subcmd == SCMD_UNLOAD ? "unload" : "upload");
-    return;
-  }
-
   if (!*argument) {
     send_to_char(ch, "What do you want to %s?\r\n", subcmd == SCMD_UNLOAD ? "unload" : "upload");
     return;
   }
 
   skip_spaces(&argument);
+  struct matrix_file *file = NULL;
+
+  // We handle unload first because it's simple and easy
   if (subcmd == SCMD_UNLOAD) {
     if (PERSONA->type == ICON_LIVING_PERSONA) {
       send_to_icon(PERSONA, "You don't have active memory to erase things from.\r\n");
       return;
     }
-    struct matrix_file *temp = NULL;
-    for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file) {
-      if (keyword_appears_in_file(argument, soft)) {
-        send_to_icon(PERSONA, "You erase %s^n from active memory.\r\n", soft->name);
-        if (temp)
-          temp->next_file = soft->next_file;
-        else
-          DECKER->software = soft->next_file;
-        soft->next_file = NULL;
-        DECKER->active += soft->size;
-        extract_matrix_file(soft);
-        return;
-      }
-      temp = soft;
-    }
-  } else {
-    // What is with the absolute fascination with non-bracketed if/for/else/etc statements in this codebase? This was enormously hard to read. - LS
-    // lol, so true - bitMuse
-    for (struct obj_data *soft = deck->contains; soft; soft = soft->next_content) {
-      // Look for a name match.
-      if (!keyword_appears_in_obj(argument, soft))
-        continue;
 
-      if (GET_OBJ_TYPE(soft) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
-        continue;
-
-      if (subcmd == SCMD_UPLOAD) {
-        if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR || GET_PROGRAM_TYPE(soft) == SOFT_EVALUATE 
-        || soft->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE))) {
-          send_to_icon(PERSONA, "You can't upload %s^n.\r\n", GET_OBJ_NAME(soft));
-          return;
-        }
-
-        if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY) {
-          if (GET_DECK_ACCESSORY_TYPE(soft) != TYPE_FILE) {
-            send_to_icon(PERSONA, "You can't upload %s^n.\r\n", GET_OBJ_NAME(soft));
-            return;
-          }
-
-          if (GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft)) {
-            send_to_icon(PERSONA, "Action aborted: Re-uploading paydata like %s^n would be a great way to get caught with it!\r\n", GET_OBJ_NAME(soft));
-            return;
-          }
-        }
-      } else {
-        if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY) {
-          send_to_icon(PERSONA, "You can't upload %s^n to your icon.\r\n", GET_OBJ_NAME(soft));
-          return;
-        }
-      }
-
-      if (subcmd == SCMD_SWAP && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR)) {
-        send_to_icon(PERSONA, "Persona programs are loaded at time of connection.\r\n");
-      } else if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 2) > DECKER->active) {
-        send_to_icon(PERSONA, "You don't have enough active memory to load that program.\r\n");
-      } else if (subcmd == SCMD_SWAP && GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
-        send_to_icon(PERSONA, "Your deck is not powerful enough to run that program.\r\n");
-      } else {
-        int success = 1;
-        if (subcmd == SCMD_UPLOAD) {
-          if (GET_OBJ_VAL(soft, 8)) {
-            send_to_char(ch, "%s^n is already being uploaded.\r\n", GET_OBJ_NAME(soft));
-            return;
-          }
-
-          success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_READ, 0);
-        }
-        if (success > 0) {
-          // TODO: This is accurately transcribed, but feels like a bug.
-          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_SIZE(soft);
-          if (subcmd == SCMD_UPLOAD) {
-            GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(soft) = 1;
-            GET_OBJ_ATTEMPT(soft) = matrix[PERSONA->in_host].vnum;
-          } else
-            DECKER->active -= GET_DECK_ACCESSORY_FILE_SIZE(soft);
-          send_to_icon(PERSONA, "You begin to upload %s^n to %s.\r\n", GET_OBJ_NAME(soft), (subcmd ? "the host" : "your icon"));
-          if (IS_SENATOR(ch)) {
-            send_to_icon(PERSONA, "(Upload will take %d ticks.)", GET_DECK_ACCESSORY_FILE_REMAINING(soft));
-          }
-        } else
-          send_to_icon(PERSONA, "Your commands fail to execute.\r\n");
-      }
+    if (!(file = get_matrix_file_in_list_vis(ch, argument, DECKER->software))) {
+      send_to_char(ch, "You search but don't see any file named '%s' loaded in your active memory.\r\n", argument);
       return;
     }
+
+
+    send_to_icon(PERSONA, "You erase %s^n from active memory.\r\n", file->name);
+    DECKER->active += file->size;
+    delete_matrix_file(file);
+    return;
   }
 
-  send_to_icon(PERSONA, "You don't have that file.\r\n");
+  std::vector<obj_data *> devices = get_storage_devices(ch, TRUE);
+  for (obj_data *device : devices) {
+    if ((file = get_matrix_file_in_list_vis(ch, argument, device->files)))
+      break;
+  }
+
+  if (!file) {
+    send_to_char(ch, "You search but don't see any file named '%s' in your storage devices.\r\n", argument);
+    return;
+  }
+
+  switch (subcmd) {
+    case SCMD_SWAP:
+      if (file->file_type == MATRIX_FILE_FIRMWARE) {
+        send_to_icon(PERSONA, "Persona programs are loaded at time of connection.\r\n");
+        return;
+      } else if (file->size > DECKER->active) {
+        send_to_icon(PERSONA, "You don't have enough active memory to load that program.\r\n");
+        return;
+      } else if (file->rating > DECKER->mpcp) {
+        send_to_icon(PERSONA, "Your deck is not powerful enough to run that program.\r\n");
+        return;
+      }
+
+      // Slight nerf, programs cannot be loaded twice
+      for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file) {
+        if (soft->file_type != MATRIX_FILE_PROGRAM) continue;
+        if (soft->program_type != file->program_type) continue;
+
+        send_to_icon(PERSONA, "You aren't able to load a second %s program. ^WUNLOAD^n %s if you want to load another version.\r\n",
+          programs[soft->program_type].name, soft->name);
+        return;
+      }
+
+      file->file_worker = PERSONA->idnum;
+      file->transfer_remaining = file->size;
+      file->transferring_to = DECKER->deck;
+      send_to_icon(PERSONA, "You begin to load %s into your deck's active memory.\r\n", file->name);
+      if (IS_SENATOR(ch)) {
+        send_to_icon(PERSONA, "(Upload will take %d ticks.)\r\n", file->transfer_remaining);
+      }
+      break;
+    case SCMD_UPLOAD:
+      if (file->file_type == MATRIX_FILE_PAYDATA) {
+        send_to_icon(PERSONA, "Action aborted: Re-uploading paydata like %s^n would be a great way to get caught with it!\r\n", file->name);
+        return;
+      } else if (!program_can_be_copied(file)) {
+        send_to_icon(PERSONA, "You try to upload %s, but the copy-protection prevents you.\r\n", file->name);
+      }
+
+      file->file_worker = PERSONA->idnum;
+      file->transfer_remaining = file->size;
+      file->transferring_to_host = &matrix[PERSONA->in_host];
+      send_to_icon(PERSONA, "You begin to upload %s to the hose.\r\n", file->name);
+      if (IS_SENATOR(ch)) {
+        send_to_icon(PERSONA, "(Upload will take %d ticks.)\r\n", file->transfer_remaining);
+      }
+      break;
+  }
 }
 
 ACMD(do_redirect)
@@ -3211,10 +3252,15 @@ void process_upload(struct matrix_icon *persona)
           file->transferring_to_host = NULL;
           file->file_worker = 0;
         } else if (file->transferring_to) {
-          send_to_icon(persona, "%s^n has finished uploading to active memory.\r\n", file->name);
           file->transfer_remaining = 0;
           file->transferring_to = NULL;
           file->file_worker = 0;
+          if (file->size > persona->decker->active) {
+            send_to_icon(persona, "%s crashes and fails to load due to insufficient active memory.\r\n", file->name);
+            continue;
+          }
+
+          send_to_icon(persona, "%s has finished uploading to active memory.\r\n", file->name);
 
           struct matrix_file *active = clone_matrix_file(file);
           active->next_file = persona->decker->software;
