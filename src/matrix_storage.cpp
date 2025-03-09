@@ -228,8 +228,8 @@ void file_from_obj(struct matrix_file * obj, bool do_sql_delete = TRUE)
   
   REMOVE_FROM_LIST(obj, obj_from->files, next_file);
   if (do_sql_delete) {
-    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE in_obj_vnum=%ld AND in_obj_idnum=%ld; ", 
-      GET_OBJ_VNUM(obj_from), GET_OBJ_IDNUM(obj_from));
+    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE idnum=%ld; ", 
+      obj->idnum);
     mysql_wrapper(mysql, buf);
     obj->dirty_bit = TRUE;
   }
@@ -680,8 +680,8 @@ void delete_matrix_file(struct matrix_file *file) {
   }
 
   if (file->in_obj) {
-    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE in_obj_vnum=%ld AND in_obj_idnum=%ld; ", 
-      GET_OBJ_VNUM(file->in_obj), GET_OBJ_IDNUM(file->in_obj));
+    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE idnum=%ld; ", 
+      file->idnum);
     mysql_wrapper(mysql, buf);
 
     adjust_device_memory(file->in_obj, file->size);

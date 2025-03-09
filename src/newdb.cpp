@@ -423,6 +423,7 @@ bool load_obj_programs(obj_data *obj)
 
     file->from_host_vnum = atol(SQL_MATRIX_FILE_FROM_HOST_VNUM);
     file->from_host_color = atoi(SQL_MATRIX_FILE_FROM_HOST_COLOR);
+    file->loaded_with_obj_idnum = GET_OBJ_IDNUM(obj);
 
     file->in_obj = obj;
     file->next_file = obj->files;
@@ -1561,7 +1562,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
     if (!temp->files) continue;
     for (struct matrix_file *file = temp->files; file; file = file->next_file) {
-      if (!file->dirty_bit) continue;
+      if ((file->loaded_with_obj_idnum == GET_OBJ_IDNUM(file->in_obj)) && !file->dirty_bit) continue;
 
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
         "(%ld, %ld, %ld, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %ld, %ld, '%s', %ld, %d, %ld, %ld, %d, %d, %d, %d, %d),",
@@ -1591,6 +1592,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
         file->work_successes);
       file_count++;
       file->dirty_bit = FALSE;
+      file->loaded_with_obj_idnum = GET_OBJ_IDNUM(file->in_obj);
     }
 
     if (file_count <= 0) continue; // Nothing to do

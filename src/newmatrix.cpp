@@ -95,59 +95,59 @@ struct word_level {
 };
 
 const word_level adjectives[] = {
-  {0, 4, { "public", "unclassified", "open", "generic", "draft", "preliminary" }},
+  {-99, 4, { "public", "unclassified", "open", "generic", "draft", "preliminary" }},
   {5, 7, { "confidential", "restricted", "internal", "classified" }},
   {8, 10, { "sensitive", "top secret", "forensic", "proprietary" }},
   {10, 99, { "blacklisted", "wetwork directive", "omega-level", "deadly" }}
 };
 
 const word_level subjects[] = {
-  {0, 4, { "office memos", "routine logs", "basic records", "casual reports", "reports", "files", "logs", "records" }},
+  {-99, 4, { "office memos", "routine logs", "basic records", "casual reports", "reports", "files", "logs", "records" }},
   {5, 7, { "financial records", "contractor dossiers", "research notes", "surveillance logs", "personnel files", "briefings", "summaries", "case files", "studies" }},
   {8, 10, { "incident reports", "breach logs", "market analysis", "corporate agreements", "legal briefings", "private correspondence", "internal audits", "compliance reviews", "strategic outlines", "operational plans" }},
   {10, 99, { "R&D logs", "espionage reports", "communications archives", "cybernetic blueprints", "black ops directives", "encryption keys", "core intelligence" }}
 };
 
 const word_level details[] = {
-  {0, 4, { "ver. a12", "backup archive", "non-critical", "dated cache", "outdated" }},
+  {-99, 4, { "ver. a12", "backup archive", "non-critical", "dated cache", "outdated" }},
   {5, 7, { "time-sensitive", "pending review", "recovered segment", "audit trail" }},
   {8, 10, { "corrupted data", "incriminating evidence", "access level 5", "govt. oversight" }},
   {10, 99, { "catastrophic exploit", "lethal payload", "redacted", "classified" }}
 };
 
 char* generate_paydata_name(int security, int size) {
-    if ((rand() % 2 == 0)) {
-      for (word_level adj : adjectives) {
-        if (adj.min_security > security) continue;
-        if (adj.max_security <= security) continue;
-        snprintf(buf, sizeof(buf), "%s ", str_dup(adj.words[std::rand() % (adj.words.size() - 1)]));
-        break;
-      }      
-    }
-
-    for (word_level sub : subjects) {
-      if (sub.min_security > security) continue;
-      if (sub.max_security <= security) continue;
-      snprintf(buf, sizeof(buf), "%s", str_dup(sub.words[std::rand() % (sub.words.size() - 1)]));
+  snprintf(buf, sizeof(buf), "");
+  if ((rand() % 2 == 0)) {
+    for (word_level adj : adjectives) {
+      if (security < adj.min_security) continue;
+      if (security > adj.max_security) continue;
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s ", str_dup(adj.words[rand() % adj.words.size()]));
       break;
     }      
+  }
 
-    if ((rand() % 3 == 0)) {
-      for (word_level det : details) {
-        if (det.min_security > security) continue;
-        if (det.max_security <= security) continue;
-        snprintf(buf, sizeof(buf), " - %s", str_dup(det.words[std::rand() % (det.words.size() - 1)]));
-        break;
-      }    
-    }
+  for (word_level sub : subjects) {
+    if (security < sub.min_security) continue;
+    if (security > sub.max_security) continue;
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", str_dup(sub.words[rand() % sub.words.size()]));
+    break;
+  }      
 
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " - ^g%d^n^yMp^n", size);
+  if ((rand() % 3 == 0)) {
+    for (word_level det : details) {
+      if (security < det.min_security) continue;
+      if (security > det.max_security) continue;
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " - %s", str_dup(det.words[rand() % det.words.size()]));
+      break;
+    }    
+  }
 
-    return capitalize(buf);
+  return capitalize(buf);
 }
 
 struct matrix_file * spawn_paydata(struct matrix_icon *icon) {
   struct matrix_file *paydata = create_matrix_file(NULL, OBJ_LOAD_REASON_SPAWN_PAYDATA);
+  paydata->file_type = MATRIX_FILE_PAYDATA;
   paydata->size = (number(1, 6) + number(1, 6)) * MAX(5, (20 - (5 * matrix[icon->in_host].color)));
   paydata->found_by = icon->idnum;
   paydata->name = str_dup(generate_paydata_name(matrix[icon->in_host].security, paydata->size));
@@ -1834,6 +1834,11 @@ ACMD(do_matrix_look)
         int percent_complete = (int) (100 * ((float) file->size - file->transfer_remaining) / MAX(1, file->size));
         send_to_icon(PERSONA, "^yA file named %s^y floats here (Downloading - %d%%).^n\r\n",
                      file->name, percent_complete);
+      } else if (file->file_type == MATRIX_FILE_PAYDATA) {
+        send_to_icon(PERSONA, "^yA paydata file named %s - ^g%d^n^yMp floats here.%s^n\r\n", 
+                     file->name,
+                     file->size,
+                     file->quest_id ? (ch_is_grouped_with_idnum(ch, file->quest_id) ? " ^Y(Quest)" : " ^m(Protected)") : "");
       } else {
         send_to_icon(PERSONA, "^yA file named %s^y floats here.%s^n\r\n", 
                      file->name,
@@ -2700,7 +2705,7 @@ ACMD(do_download)
           soft->transferring_to = target_deck;
           soft->file_worker = PERSONA->idnum;
           soft->dirty_bit = TRUE;
-          send_to_icon(PERSONA, "You begin to download %s to your %s.\r\n", soft->name, GET_OBJ_NAME(target_deck));
+          send_to_icon(PERSONA, "You begin to download %s to %s.\r\n", soft->name, GET_OBJ_NAME(target_deck));
         }
       } else
         send_to_icon(PERSONA, "The file fails to download.\r\n");
@@ -3404,25 +3409,36 @@ void matrix_update()
             file->file_worker = 0;
             file->transfer_remaining = 0;
             file->transferring_to = NULL;
-          } else {
-            file->transfer_remaining -= persona->decker->io;
-            if (file->transfer_remaining <= 0) {
-              // Out of space? Inform them, reset the file, bail.
-              if (!can_file_fit(file, file->transferring_to)) {
-                send_to_icon(persona, "%s^n failed to download-- %s is out of space.\r\n", CAP(file->name), CAP(GET_OBJ_NAME(file->transferring_to)));
-                file->file_worker = 0;
-                file->transfer_remaining = 0;
-                file->transferring_to = NULL;
-                return;
-              }
+            continue;
+          }
 
-              move_matrix_file_to(file, file->transferring_to);
-              send_to_icon(persona, "%s^n has finished downloading to %s.\r\n", CAP(file->name), CAP(GET_OBJ_NAME(file->transferring_to)));
-              file->found_by = 0;
+          if (!file->transferring_to) {
+            send_to_icon(persona, "%s^n has failed to download due to not having a download target. Please notify staff this is a bug.\r\n", CAP(file->name));
+            file->file_worker = 0;
+            file->transfer_remaining = 0;
+            file->transferring_to = NULL;
+            continue;
+          }
+
+          file->transfer_remaining -= persona->decker->io;
+          if (file->transfer_remaining <= 0) {
+            // Out of space? Inform them, reset the file, bail.
+            if (!can_file_fit(file, file->transferring_to)) {
+              send_to_icon(persona, "%s^n failed to download-- %s is out of space.\r\n", CAP(file->name), CAP(GET_OBJ_NAME(file->transferring_to)));
               file->file_worker = 0;
               file->transfer_remaining = 0;
               file->transferring_to = NULL;
+              continue;
             }
+
+            send_to_icon(persona, "%s^n has finished downloading to %s.\r\n", 
+              file->name, GET_OBJ_NAME(file->transferring_to));
+            move_matrix_file_to(file, file->transferring_to);
+            file->found_by = 0;
+            file->file_worker = 0;
+            file->transfer_remaining = 0;
+            file->transferring_to = NULL;
+            
           }
         }
       }

@@ -1518,6 +1518,7 @@ struct matrix_file {
   
   // Debug fields
   char load_origin;                              /* Identifies what loaded this. */
+  unsigned long loaded_with_obj_idnum;
 
   // Operation non-SQL fields
   bool dirty_bit;                                /* Set to TRUE when you change a field so it will be saved */
@@ -1537,7 +1538,7 @@ struct matrix_file {
 
       work_phase(0), work_ticks_left(0), work_original_ticks_left(0), work_successes(0),
 
-      load_origin(0), dirty_bit (0)
+      load_origin(0), loaded_with_obj_idnum(0), dirty_bit (0)
   {
 
   }
