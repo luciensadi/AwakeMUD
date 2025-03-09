@@ -1468,6 +1468,7 @@ struct kosher_weapon_values_struct {
 #define MATRIX_FILE_PHOTO            7
 #define MATRIX_FILE_POCSEC_NOTE      8
 #define MATRIX_FILE_POCSEC_PHONENUM  9
+#define MATRIX_FILE_POCSEC_MAIL      10
 
 
 /* ================== Memory Structure for Matrix Files ================== */

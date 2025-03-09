@@ -1272,7 +1272,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
       }
     }
 
-    if (GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER && obj->in_obj) {
+    if (GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER && obj->in_obj && obj->in_obj->restring) {
       // If we've gotten this far, it's a phone number or note in a notebook
       // convert it to a matrix file
       if (!strncmp(obj->in_obj->restring, "Notes", strlen(obj->in_obj->restring))) {
@@ -1285,6 +1285,13 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
       } else if (!strncmp(obj->in_obj->restring, "Phoneboook", strlen(obj->in_obj->restring))) {
         file = create_matrix_file(obj->in_obj, OBJ_LOAD_REASON_POCSEC_PHONEADD);
         file->file_type = MATRIX_FILE_POCSEC_PHONENUM;
+        file->name = str_dup(obj->restring);
+        file->content = str_dup(obj->photo);
+        file->dirty_bit = TRUE;
+        extract_obj(obj);
+      } else if (!strncmp(obj->in_obj->restring, "Mail", strlen(obj->in_obj->restring))) {
+        file = create_matrix_file(obj->in_obj, OBJ_LOAD_REASON_MAIL_RECEIVE);
+        file->file_type = MATRIX_FILE_POCSEC_MAIL;
         file->name = str_dup(obj->restring);
         file->content = str_dup(obj->photo);
         file->dirty_bit = TRUE;

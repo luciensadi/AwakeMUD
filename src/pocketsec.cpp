@@ -45,6 +45,10 @@
 #define POCSEC_FOLDER_PHONEBOOK "Phonebook"
 #define POCSEC_FOLDER_FILES     "Files"
 
+#define GET_POCSEC_MAIL_KEPT(file) (file->file_protection)
+#define GET_POCSEC_MAIL_READ(file) (file->rating)
+#define GET_POCSEC_MAIL_EXPIRY(file) (file->work_ticks_left)
+
 extern bool is_approved_multibox_host(const char *host);
 
 ACMD_DECLARE(do_phone);
@@ -190,7 +194,8 @@ void pocketsec_menu(struct descriptor_data *d)
 
 void pocketsec_mailmenu(struct descriptor_data *d)
 {
-  struct obj_data *mail = NULL, *folder = SEC->contains;
+  struct obj_data *folder = SEC->contains;
+  struct matrix_file *mail = NULL;
   char sender[150];
   int i = 0;
 
@@ -204,33 +209,34 @@ void pocketsec_mailmenu(struct descriptor_data *d)
   }
 
   while (amount_of_mail_waiting(CH) > 0) {
-    mail = read_object(OBJ_PIECE_OF_MAIL, VIRTUAL, OBJ_LOAD_REASON_MAIL_RECEIVE);
-    mail->photo = str_dup(get_and_delete_one_message(CH, sender));
+    mail = create_matrix_file(folder, OBJ_LOAD_REASON_MAIL_RECEIVE);
+    mail->file_type = MATRIX_FILE_POCSEC_MAIL;
+    mail->content = str_dup(get_and_delete_one_message(CH, sender));
 
     if (*sender)
-      mail->restring = str_dup(CAP(sender));
-    else mail->restring = str_dup("Alert");
+      mail->name = str_dup(CAP(sender));
+    else mail->name = str_dup("Alert");
 
-    if (mail->photo == NULL)
-      mail->photo = str_dup("Mail system error - please report.  Error #11.\r\n");
+    if (mail->content == NULL)
+      mail->content = str_dup("Mail system error - please report.  Error #11.\r\n");
 
-    obj_to_obj(mail, folder);
+    mail->dirty_bit = TRUE;
   }
   CLS(CH);
   send_to_char(CH, "^LShadowland Mail Network^n\r\n");
   int expiry_ticks, days, hours, minutes;
-  for (mail = folder->contains; mail; mail = mail->next_content) {
+  for (mail = folder->files; mail; mail = mail->next_file) {
     i++;
 
     // Compose our status string.
     snprintf(buf, sizeof(buf), " %2d > %s%s^n",
                   i,
-                  !GET_OBJ_VAL(mail, 0) ? "(unread) ^R" : "",
-                  GET_OBJ_NAME(mail)
+                  !GET_POCSEC_MAIL_READ(mail) ? "(unread) ^R" : "",
+                  mail->name
                 );
 
-    if (GET_OBJ_TIMER(mail) >= 0) {
-      expiry_ticks = MAIL_EXPIRATION_TICKS - GET_OBJ_TIMER(mail);
+    if (GET_POCSEC_MAIL_EXPIRY(mail) >= 0) {
+      expiry_ticks = MAIL_EXPIRATION_TICKS - GET_POCSEC_MAIL_EXPIRY(mail);
       minutes = expiry_ticks % 60;
       hours = expiry_ticks % (60 * 24);
       days = expiry_ticks / (60 * 24);
@@ -257,8 +263,6 @@ void pocketsec_bankmenu(struct descriptor_data *d)
   d->edit_mode = SEC_BANKMENU;
 }
 
-#define GET_POCSEC_MAIL_KEPT(file) (file->file_protection)
-#define GET_POCSEC_MAIL_READ(file) (file->rating)
 void pocketsec_parse(struct descriptor_data *d, char *arg)
 {
   struct obj_data *folder = NULL;
@@ -600,10 +604,13 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
             i--;
           if (file) {
             if (d->edit_mode == SEC_KEEPMAIL) {
-              if (GET_POCSEC_MAIL_KEPT(file) == -1)
+              if (GET_POCSEC_MAIL_KEPT(file) == -1) {
                 GET_POCSEC_MAIL_KEPT(file) = 0;
-              else
+                file->dirty_bit = TRUE;
+              } else {
                 GET_POCSEC_MAIL_KEPT(file) = -1;
+                file->dirty_bit = TRUE;
+              }
             } else {
               if (GET_POCSEC_MAIL_KEPT(file) < 0)
                 send_to_char(d->character, "%s has been marked as 'keep' and can't be deleted.\r\n", file->name);
