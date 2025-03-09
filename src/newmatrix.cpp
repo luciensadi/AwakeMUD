@@ -895,7 +895,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     send_to_icon(targ, "%s^n runs an attack program against you.\r\n", CAP(icon->name));
     if (icon->ic.type >= IC_LETHAL_BLACK)
       power -= targ->decker->hardening;
-    else
+    else 
       for (soft = targ->decker->software; soft; soft = soft->next_content)
         if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR) {
           power -= GET_OBJ_VAL(soft, 1);
@@ -932,6 +932,24 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       cascade(icon);
     return;
   }
+
+  for (soft = targ->decker->software; soft; soft = soft->next_content)
+    if (GET_PROGRAM_TYPE(soft) == SOFT_SHIELD) {
+      int shield_test = success_test(GET_PROGRAM_RATING(soft), 
+        ICON_IS_IC(icon) ? matrix[icon->in_host].security : GET_SKILL(icon->decker->ch, SKILL_COMPUTER));
+
+      if (shield_test > 0) {
+        success -= shield_test;
+        send_to_icon(targ, "You raise your shield program and deflect some of the attack.\r\n");
+      }
+      GET_PROGRAM_RATING(soft)--;
+      if (GET_PROGRAM_RATING(soft) <= 0) {
+        send_to_icon(targ, "Your shield program crashes as the rating is depleted.\r\n");
+        extract_obj(soft);
+      }
+      break;
+    }
+
   success -= success_test(bod, power);
   dam = convert_damage(stage(success, dam));
   if (ICON_IS_IC(icon)) {

@@ -1350,7 +1350,8 @@ struct program_data programs[] =
     {"Icon Chip", 2 },
     {"MPCP", 8 },
     {"Reality Filter", 10 },
-    {"Response Increase", 1 }
+    {"Response Increase", 1 },
+    {"Shield", 4}
   };
 
 int attack_multiplier[] = { 0, 2, 3, 4, 5 };
