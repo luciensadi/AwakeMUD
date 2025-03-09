@@ -143,6 +143,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_matrix_file->work_original_ticks_left = d->edit_matrix_file->work_ticks_left ;
       d->edit_matrix_file->creator_idnum = GET_IDNUM(CH);
       d->edit_matrix_file->work_phase = WORK_PHASE_READY;
+      d->edit_matrix_file->dirty_bit = TRUE;
       adjust_device_memory(d->edit_matrix_file->in_obj, d->edit_matrix_file->size * -1);
 
       STATE(d) = CON_PLAYING;
@@ -391,6 +392,7 @@ ACMD(do_design)
   }
 
   prog->work_phase = WORK_PHASE_IN_PROGRESS;
+  prog->dirty_bit = TRUE;
   if (prog->work_original_ticks_left == prog->work_ticks_left) {
     if (get_and_deduct_one_crafting_token_from_char(ch)) {
       send_to_char("A crafting token fuzzes into digital static, greatly accelerating the design time.\r\n", ch);
@@ -441,6 +443,7 @@ ACMD(do_program)
     send_to_char(ch, "The program design isn't on that computer.\r\n");
     return;
   }
+  prog->dirty_bit = TRUE;
   if (!prog->work_ticks_left) {
     if (get_and_deduct_one_crafting_token_from_char(ch)) {
       send_to_char("A crafting token fuzzes into digital static, greatly accelerating the development time.\r\n", ch);
@@ -597,6 +600,7 @@ void update_buildrepair(void)
         CH->char_specials.timer = 0;
         STOP_WORKING(CH);
       } else if (AFF_FLAGGED(desc->character, AFF_DESIGN)) {
+        GET_PROGRAMMING(CH)->dirty_bit = TRUE;
         if (--GET_PROGRAMMING(CH)->work_ticks_left < 1) {
           send_to_char(desc->character, "You complete the design plan for %s.\r\n", GET_PROGRAMMING(CH)->name);
           GET_PROGRAMMING(CH)->work_phase = WORK_PHASE_COMPLETE;
@@ -604,6 +608,7 @@ void update_buildrepair(void)
           AFF_FLAGS(desc->character).RemoveBit(AFF_DESIGN);
         }
       } else if (AFF_FLAGGED(desc->character, AFF_PROGRAM)) {
+        GET_PROGRAMMING(CH)->dirty_bit = TRUE;
         if (--GET_PROGRAMMING(CH)->work_ticks_left < 1) {
           if (GET_PROGRAMMING(CH)->work_successes < 0) {
             switch(number(1,10)) {
@@ -894,5 +899,4 @@ void update_buildrepair(void)
       }
     }
   }
-
 }

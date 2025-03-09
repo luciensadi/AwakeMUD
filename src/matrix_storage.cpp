@@ -178,6 +178,7 @@ matrix_file* create_matrix_file(obj_data *storage, int load_origin) {
     storage->files = new_file;
   }
 
+  new_file->dirty_bit = TRUE;
   return new_file;
 }
 
@@ -203,12 +204,14 @@ matrix_file* clone_matrix_file(struct matrix_file *source) {
   copy->work_successes = source->work_successes;
   
   copy->last_decay_time = source->last_decay_time;
+  copy->dirty_bit = TRUE;
 
   return copy;
 }
 
 /* remove a matrix file from an object */
-void file_from_obj(struct matrix_file * obj)
+/* NOTE, THIS WILL ALSO DELETE THE SQL ENTRY */
+void file_from_obj(struct matrix_file * obj, bool do_sql_delete = TRUE)
 {
   struct matrix_file *temp;
   struct obj_data *obj_from;
@@ -219,7 +222,14 @@ void file_from_obj(struct matrix_file * obj)
     return;
   }
   obj_from = obj->in_obj;
+  
   REMOVE_FROM_LIST(obj, obj_from->files, next_file);
+  if (do_sql_delete) {
+    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE in_obj_vnum=%ld AND in_obj_idnum=%ld; ", 
+      GET_OBJ_VNUM(obj_from), GET_OBJ_IDNUM(obj_from));
+    mysql_wrapper(mysql, buf);
+    obj->dirty_bit = TRUE;
+  }
 
   obj->in_obj = NULL;
   obj->next_file = NULL;
@@ -263,6 +273,7 @@ matrix_file* obj_to_matrix_file(obj_data *prog, obj_data *device) {
   new_file = create_matrix_file(device, prog->load_origin);
 
   new_file->wound_category = GET_PROGRAM_ATTACK_DAMAGE(prog);
+  new_file->dirty_bit = TRUE;
   if (prog->matrix_restring) new_file->name = strdup(prog->matrix_restring);
   else if (prog->restring) new_file->name = strdup(prog->restring);
   else new_file->name = strdup(prog->text.name);
@@ -521,7 +532,7 @@ void extract_matrix_file(struct matrix_file *file)
 
   if (file->in_obj) {
     adjust_device_memory(file->in_obj, file->size);
-    file_from_obj(file);
+    file_from_obj(file, FALSE);
     if (set)
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_obj)", file->name, file->idnum);
     set = TRUE;
@@ -687,9 +698,10 @@ void move_matrix_file_to(struct matrix_file *file, host_data* to_host) {
     file_from_obj(file);    
   }
 
-    file->in_host = to_host;
-    file->next_file = to_host->files;
-    to_host->files = file;
+  file->dirty_bit = TRUE;
+  file->in_host = to_host;
+  file->next_file = to_host->files;
+  to_host->files = file;
 }
 
 void move_matrix_file_to(struct matrix_file *file, obj_data* to_device) {
@@ -702,6 +714,7 @@ void move_matrix_file_to(struct matrix_file *file, obj_data* to_device) {
     file_from_obj(file);
   }
   
+  file->dirty_bit = TRUE;
   file->in_obj = to_device;
   file->next_file = to_device->files;
   to_device->files = file; 
@@ -730,7 +743,7 @@ ACMD(do_file) {
   std::vector<struct obj_data*> all_devices = get_storage_devices(ch, TRUE);
 
   char first_arg[256];
-  char *file_switch, *remainder, *second_arg = NULL, *third_arg = NULL;
+  char *file_switch = NULL, *remainder = NULL, *second_arg = NULL, *third_arg = NULL;
   struct obj_data *from_device = NULL, *to_device = NULL;
   struct matrix_file *file = NULL;
   remainder = one_argument(argument, file_switch);
@@ -950,6 +963,7 @@ ACMD(do_file) {
     // We're clear to rename
     send_to_char(ch, "You successfully rename %s to ^W%s^n.\r\n", file->name, *third_arg ? third_arg : second_arg);
     file->name = strdup(*third_arg ? third_arg : second_arg);
+    file->dirty_bit = TRUE;
   } else {
     print_file_help(ch);
   }

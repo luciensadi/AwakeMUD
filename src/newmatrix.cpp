@@ -2699,6 +2699,7 @@ ACMD(do_download)
           soft->transfer_remaining = soft->size;
           soft->transferring_to = target_deck;
           soft->file_worker = PERSONA->idnum;
+          soft->dirty_bit = TRUE;
           send_to_icon(PERSONA, "You begin to download %s to your %s.\r\n", soft->name, GET_OBJ_NAME(target_deck));
         }
       } else

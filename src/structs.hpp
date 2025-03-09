@@ -1519,6 +1519,10 @@ struct matrix_file {
   // Debug fields
   char load_origin;                              /* Identifies what loaded this. */
 
+  // Operation non-SQL fields
+  bool dirty_bit;                                /* Set to TRUE when you change a field so it will be saved */
+
+  /* Adding a field? Make sure to adjust dbnew for SQL and clone_matrix_file in matrix_storage */
   matrix_file() : 
       idnum(0), name(0), file_type(0), program_type(0), rating(0), size(0), original_size(0),
       compression_factor(0), wound_category(0), is_default(0), creator_idnum(0), content(0),
@@ -1533,7 +1537,7 @@ struct matrix_file {
 
       work_phase(0), work_ticks_left(0), work_original_ticks_left(0), work_successes(0),
 
-      load_origin(0)
+      load_origin(0), dirty_bit (0)
   {
 
   }

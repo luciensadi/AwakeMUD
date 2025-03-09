@@ -378,12 +378,14 @@ bool load_obj_programs(obj_data *obj)
   #define SQL_MATRIX_FILE_WORK_SUCCESSES      row[17]
   #define SQL_MATRIX_FILE_LAST_DECAY_TIME     row[18]
   #define SQL_MATRIX_FILE_CREATOR_IDNUM       row[19]
+  #define SQL_MATRIX_FILE_FROM_HOST_VNUM      row[20]
+  #define SQL_MATRIX_FILE_FROM_HOST_COLOR     row[21]
 
   snprintf(buf, sizeof(buf), 
     "SELECT idnum, name, file_type, program_type, rating, size, original_size, "
     "compression_factor, wound_category, is_default, creation_time, content, skill, "
     "linked, work_phase, work_ticks_left, work_original_ticks_left, work_successes, "
-    "last_decay_time, creator_idnum "
+    "last_decay_time, creator_idnum, from_host_vnum, from_host_color "
     "FROM matrix_files WHERE in_obj_vnum=%ld AND in_obj_idnum=%ld;", GET_OBJ_VNUM(obj), GET_OBJ_IDNUM(obj));
   log_vfprintf(buf, buf3);
   mysql_wrapper(mysql, buf);
@@ -418,6 +420,9 @@ bool load_obj_programs(obj_data *obj)
     
     file->last_decay_time = atol(SQL_MATRIX_FILE_LAST_DECAY_TIME);
     file->creator_idnum = atol(SQL_MATRIX_FILE_CREATOR_IDNUM);
+
+    file->from_host_vnum = atol(SQL_MATRIX_FILE_FROM_HOST_VNUM);
+    file->from_host_color = atoi(SQL_MATRIX_FILE_FROM_HOST_COLOR);
 
     file->in_obj = obj;
     file->next_file = obj->files;
@@ -1538,46 +1543,89 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   mysql_wrapper(mysql, buf);
 
   /* Matrix files are persisted in a separate table. Save that data. */
+  #define MATRIX_FILE_SQL_COLUMNS 24 /* THIS HAS TO BE EQUAL TO THE COLUMSN INSERTED */
   for (temp = player->carrying; temp; temp = next_obj) {
     next_obj = temp->next_content;
-    // We always clear out entries since this is a one-to-many table
-    snprintf(buf, sizeof(buf), "DELETE FROM matrix_files WHERE in_obj_vnum=%ld AND in_obj_idnum=%ld; ", GET_OBJ_VNUM(temp), GET_OBJ_IDNUM(temp));
-    mysql_wrapper(mysql, buf);
-    snprintf(buf, sizeof(buf), ""); // Clear buffer
+
+    int file_count = 0;
+    snprintf(buf, sizeof(buf),
+      "INSERT INTO matrix_files ( "
+      " idnum, in_obj_vnum, in_obj_idnum, name, file_type, program_type, rating, size,  "
+      " original_size, compression_factor, wound_category, is_default, last_decay_time, "
+      " creation_time, content, creator_idnum, skill, linked, from_host_vnum,           "
+      " from_host_color, work_ticks_left, work_original_ticks_left, work_phase,         "
+      " work_successes "
+      ")"
+      " VALUES "
+      );
 
     if (!temp->files) continue;
     for (struct matrix_file *file = temp->files; file; file = file->next_file) {
-      snprintf(buf, sizeof(buf), "INSERT INTO matrix_files (idnum, in_obj_vnum, in_obj_idnum, "\
-      "name, file_type, program_type, rating, size, original_size, compression_factor, "\
-      "wound_category, is_default, last_decay_time, creation_time, content, creator_idnum, "\
-      "skill, linked, work_ticks_left, work_original_ticks_left, work_phase, work_successes) "\
-      "VALUES (%ld, %ld, %ld, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %ld, %ld,'%s', %ld, %d, %ld, %d, %d, %d, %d); ",
-      file->idnum, 
-      GET_OBJ_VNUM(temp),
-      GET_OBJ_IDNUM(temp),
-      prepare_quotes(buf1, file->name, sizeof(buf1) / sizeof(char)),
-      file->file_type,
-      file->program_type,
-      file->rating,
-      file->size,
-      file->original_size,
-      file->compression_factor,
-      file->wound_category,
-      file->is_default,
-      file->last_decay_time,
-      file->creation_time,
-      prepare_quotes(buf2, file->content, sizeof(buf2) / sizeof(char)),
-      file->creator_idnum,
-      file->skill,
-      file->linked,
-      file->work_ticks_left,
-      file->work_original_ticks_left,
-      file->work_phase,
-      file->work_successes);
-      mudlog_vfprintf(NULL, LOG_SYSLOG, buf);
+      if (!file->dirty_bit) continue;
 
-      mysql_wrapper(mysql, buf);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+        "(%ld, %ld, %ld, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %ld, %ld, '%s', %ld, %d, %ld, %ld, %d, %d, %d, %d, %d),",
+        file->idnum, 
+        GET_OBJ_VNUM(temp),
+        GET_OBJ_IDNUM(temp),
+        prepare_quotes(buf1, file->name, sizeof(buf1) / sizeof(char)),
+        file->file_type,
+        file->program_type,
+        file->rating,
+        file->size,
+        file->original_size,
+        file->compression_factor,
+        file->wound_category,
+        file->is_default,
+        file->last_decay_time,
+        file->creation_time,
+        prepare_quotes(buf2, file->content, sizeof(buf2) / sizeof(char)),
+        file->creator_idnum,
+        file->skill,
+        file->linked,
+        file->from_host_vnum,
+        file->from_host_color,
+        file->work_ticks_left,
+        file->work_original_ticks_left,
+        file->work_phase,
+        file->work_successes);
+      file_count++;
+      file->dirty_bit = FALSE;
     }
+
+    if (file_count <= 0) continue; // Nothing to do
+    // First we're going to eliminate the last comma since we did a multi-insert
+    buf[strlen(buf) - 1] = ' ';
+    // Then we append the update statement
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+      "ON DUPLICATE KEY UPDATE"
+      "  idnum = VALUES(idnum), "
+      "  in_obj_vnum = VALUES(in_obj_vnum), "
+      "  in_obj_idnum name = VALUES(in_obj_idnum name), "
+      "  file_type = VALUES(file_type), "
+      "  program_type = VALUES(program_type), "
+      "  rating = VALUES(rating), "
+      "  size = VALUES(size), "
+      "  original_size = VALUES(original_size), "
+      "  compression_factor = VALUES(compression_factor), "
+      "  wound_category = VALUES(wound_category), "
+      "  is_default = VALUES(is_default), "
+      "  last_decay_time = VALUES(last_decay_time), "
+      "  creation_time = VALUES(creation_time), "
+      "  content = VALUES(content), "
+      "  creator_idnum = VALUES(creator_idnum), "
+      "  skill = VALUES(skill), "
+      "  linked = VALUES(linked), "
+      "  from_host_vnum = VALUES(from_host_vnum), "
+      "  from_host_color = VALUES(from_host_color), "
+      "  work_ticks_left = VALUES(work_ticks_left), "
+      "  work_original_ticks_left = VALUES(work_original_ticks_left), "
+      "  work_phase = VALUES(work_phase), "
+      "  work_successes = VALUES(work_successes); "
+    );
+
+    mudlog_vfprintf(NULL, LOG_SYSLOG, buf);
+    mysql_wrapper(mysql, buf);
   }
 
   if (is_temp_load)

@@ -3344,7 +3344,7 @@ ACMD(do_photo)
     buf2[300] = '\0';
   photo->restring = str_dup(buf2);
   if (mem) {
-    struct matrix_file* file = obj_to_matrix_file(photo, mem);
+    obj_to_matrix_file(photo, mem);
   } else obj_to_char(photo, ch);
 }
 
