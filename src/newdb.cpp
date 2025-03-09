@@ -1281,12 +1281,14 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
         file->name = str_dup(obj->restring);
         file->content = str_dup(obj->photo);
         file->dirty_bit = TRUE;
+        extract_obj(obj);
       } else if (!strncmp(obj->in_obj->restring, "Phoneboook", strlen(obj->in_obj->restring))) {
         file = create_matrix_file(obj->in_obj, OBJ_LOAD_REASON_POCSEC_PHONEADD);
         file->file_type = MATRIX_FILE_POCSEC_PHONENUM;
         file->name = str_dup(obj->restring);
         file->content = str_dup(obj->photo);
         file->dirty_bit = TRUE;
+        extract_obj(obj);
       }
     }
 
