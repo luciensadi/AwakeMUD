@@ -12,6 +12,7 @@
 #include "newdb.hpp"
 #include "memory.hpp"
 #include "config.hpp"
+#include "matrix_storage.hpp"
 
 #define CH d->character
 #define SEC d->edit_obj
@@ -117,7 +118,8 @@ void wire_nuyen(struct char_data *ch, int amount, idnum_t character_id, const ch
 
 void pocketsec_phonemenu(struct descriptor_data *d)
 {
-  struct obj_data *data = NULL, *folder = SEC->contains;
+  struct obj_data *folder = SEC->contains;
+  struct matrix_file *data = NULL;
   int i = 0;
   for (; folder; folder = folder->next_content)
     if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
@@ -129,9 +131,9 @@ void pocketsec_phonemenu(struct descriptor_data *d)
     generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
   } else {
     send_to_char(CH, "^LYour Phonebook^n\r\n");
-    for (data = folder->contains; data; data = data->next_content) {
+    for (data = folder->files; data; data = data->next_file) {
       i++;
-      send_to_char(CH, " %2d > %-20s - %s\r\n", i, GET_OBJ_NAME(data), GET_OBJ_DESC(data));
+      send_to_char(CH, " %2d > %-20s - %s\r\n", i, data->name, data->content);
     }
   }
   send_to_char("\r\n[^cC^n]^call^n     [^cA^n]^cdd Name^n     [^cD^n]^celete Name^n     [^cB^n]^cack^n\r\n", CH);
@@ -140,7 +142,8 @@ void pocketsec_phonemenu(struct descriptor_data *d)
 
 void pocketsec_notemenu(struct descriptor_data *d)
 {
-  struct obj_data *data = NULL, *folder = SEC->contains;
+  struct obj_data *folder = SEC->contains;
+  struct matrix_file *data = NULL;
   int i = 0;
   for (; folder; folder = folder->next_content)
     if (!strcmp(folder->restring, POCSEC_FOLDER_NOTES))
@@ -152,9 +155,9 @@ void pocketsec_notemenu(struct descriptor_data *d)
   }
   CLS(CH);
   send_to_char(CH, "^LNotes^n\r\n");
-  for (data = folder->contains; data; data = data->next_content) {
+  for (data = folder->files; data; data = data->next_file) {
     i++;
-    send_to_char(CH, " %2d > %s\r\n", i, GET_OBJ_NAME(data));
+    send_to_char(CH, " %2d > %s\r\n", i, data->name);
   }
   send_to_char("\r\n[^cR^n]^cead^n     [^cA^n]^cdd Note^n     [^cD^n]^celete Note^n     [^cB^n]^cack^n\r\n", CH);
   d->edit_mode = SEC_NOTEMENU;
@@ -254,9 +257,12 @@ void pocketsec_bankmenu(struct descriptor_data *d)
   d->edit_mode = SEC_BANKMENU;
 }
 
+#define GET_POCSEC_MAIL_KEPT(file) (file->file_protection)
+#define GET_POCSEC_MAIL_READ(file) (file->rating)
 void pocketsec_parse(struct descriptor_data *d, char *arg)
 {
-  struct obj_data *folder = NULL, *file = NULL;
+  struct obj_data *folder = NULL;
+  struct matrix_file *file = NULL;
   int i;
   long x;
   const char *name;
@@ -327,13 +333,14 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       }
 
       i = atoi(arg);
-      for (file = folder->contains; file && i > 1; file = file->next_content)
+      for (file = folder->files; file && i > 1; file = file->next_file)
         i--;
       if (file) {
         STATE(d) = CON_PLAYING;
         act("$n looks up from $s $p.", TRUE, CH, SEC, 0, TO_ROOM);
         d->edit_obj = NULL;
-        do_phone(CH, GET_OBJ_DESC(file), 0, SCMD_RING);
+        d->edit_matrix_file = NULL;
+        do_phone(CH, file->content, 0, SCMD_RING);
       } else {
         pocketsec_phonemenu(d);
         send_to_char("That entry does not exist.\r\n", CH);
@@ -349,9 +356,10 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
       }
 
-      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL, OBJ_LOAD_REASON_POCSEC_PHONEADD);
-      obj_to_obj(file, folder);
-      file->restring = str_dup(arg);
+      file = create_matrix_file(folder, OBJ_LOAD_REASON_POCSEC_PHONEADD);
+      file->file_type = MATRIX_FILE_POCSEC_PHONENUM;
+      file->name = str_dup(arg);
+      file->dirty_bit = TRUE;
       send_to_char("Enter Number: ", CH);
       d->edit_mode = SEC_PHONEADD2;
       break;
@@ -363,7 +371,8 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
       }
-      folder->contains->photo = str_dup(arg);
+      folder->files->content = str_dup(arg);
+      folder->files->dirty_bit = TRUE;
       pocketsec_phonemenu(d);
       break;
     case SEC_PHONEDEL:
@@ -377,18 +386,17 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       }
 
       if (arg && *arg == '*') {
-        struct obj_data *next;
-        for (file = folder->contains; file; file = next) {
-          next = file->next_content;
-          extract_obj(file);
+        struct matrix_file *next;
+        for (file = folder->files; file; file = next) {
+          next = file->next_file;
+          delete_matrix_file(file);
         }
-        folder->contains = NULL;
       } else {
         i = atoi(arg);
-        for (file = folder->contains; file && i > 1; file = file->next_content)
+        for (file = folder->files; file && i > 1; file = file->next_file)
           i--;
         if (file)
-          extract_obj(file);
+          delete_matrix_file(file);
       }
       pocketsec_phonemenu(d);
       break;
@@ -423,11 +431,11 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       }
 
       i = atoi(arg);
-      for (file = folder->contains; file && i > 1; file = file->next_content)
+      for (file = folder->files; file && i > 1; file = file->next_file)
         i--;
       if (file) {
-        send_to_char(file->photo, CH);
-        GET_OBJ_VAL(file, 0) = 1;
+        send_to_char(file->content, CH);
+        GET_POCSEC_MAIL_READ(file) = 1; 
         d->edit_mode = SEC_NOTEREAD2;
         send_to_char("Press [^cENTER^n] to continue.\r\n", CH);
       }
@@ -449,9 +457,10 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_NOTES);
       }
 
-      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL, OBJ_LOAD_REASON_POCSEC_NOTEADD);
-      obj_to_obj(file, folder);
-      file->restring = str_dup(arg);
+      file = create_matrix_file(folder, OBJ_LOAD_REASON_POCSEC_NOTEADD);
+      file->file_type = MATRIX_FILE_POCSEC_NOTE;
+      file->name = str_dup(arg);
+      file->dirty_bit = TRUE;
       send_to_char("Write note body. Use @ on a new line to finish.\r\n", CH);
       d->str = new (char *);
       *(d->str) = NULL;
@@ -470,18 +479,17 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       }
 
       if (arg && *arg == '*') {
-        struct obj_data *next;
-        for (file = folder->contains; file; file = next) {
-          next = file->next_content;
-          extract_obj(file);
+        struct matrix_file *next;
+        for (file = folder->files; file; file = next) {
+          next = file->next_file;
+          delete_matrix_file(file);
         }
-        folder->contains = NULL;
       } else {
         i = atoi(arg);
-        for (file = folder->contains; file && i > 1; file = file->next_content)
+        for (file = folder->files; file && i > 1; file = file->next_file)
           i--;
         if (file)
-          extract_obj(file);
+          delete_matrix_file(file);
       }
 
       pocketsec_notemenu(d);
@@ -574,33 +582,33 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
 
       if (arg) {
         if (d->edit_mode != SEC_KEEPMAIL && *arg == '*') {
-          struct obj_data *next, *kept = NULL;
-          for (file = folder->contains; file; file = next) {
-            next = file->next_content;
+          struct matrix_file *next, *kept = NULL;
+          for (file = folder->files; file; file = next) {
+            next = file->next_file;
             // Only extract mail that has not been kept.
-            if (GET_OBJ_TIMER(file) >= 0)
-              extract_obj(file);
+            if (GET_POCSEC_MAIL_KEPT(file) >= 0)
+              delete_matrix_file(file);
             else {
-              file->next_content = kept;
+              file->next_file = kept;
               kept = file;
             }
           }
-          folder->contains = kept;
+          folder->files = kept;
         } else {
           i = atoi(arg);
-          for (file = folder->contains; file && i > 1; file = file->next_content)
+          for (file = folder->files; file && i > 1; file = file->next_file)
             i--;
           if (file) {
             if (d->edit_mode == SEC_KEEPMAIL) {
-              if (GET_OBJ_TIMER(file) == -1)
-                GET_OBJ_TIMER(file) = 0;
+              if (GET_POCSEC_MAIL_KEPT(file) == -1)
+                GET_POCSEC_MAIL_KEPT(file) = 0;
               else
-                GET_OBJ_TIMER(file) = -1;
+                GET_POCSEC_MAIL_KEPT(file) = -1;
             } else {
-              if (GET_OBJ_TIMER(file) < 0)
-                send_to_char(d->character, "%s has been marked as 'keep' and can't be deleted.\r\n", GET_OBJ_NAME(file));
+              if (GET_POCSEC_MAIL_KEPT(file) < 0)
+                send_to_char(d->character, "%s has been marked as 'keep' and can't be deleted.\r\n", file->name);
               else
-                extract_obj(file);
+                delete_matrix_file(file);
             }
           }
         }
@@ -633,11 +641,11 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       }
 
       i = atoi(arg);
-      for (file = folder->contains; file && i > 1; file = file->next_content)
+      for (file = folder->files; file && i > 1; file = file->next_file)
         i--;
       if (file) {
-        send_to_char(file->photo, CH);
-        GET_OBJ_VAL(file, 0) = 1;
+        send_to_char(file->content, CH);
+        GET_POCSEC_MAIL_READ(file) = 1;
         d->edit_mode = SEC_READMAIL2;
         send_to_char("Press [^cENTER^n] to continue.\r\n", CH);
       }

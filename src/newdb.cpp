@@ -1253,6 +1253,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   // Load their exdescs.
   load_exdescs_from_db(ch);
 
+  struct matrix_file *file = NULL;
   for (obj_data *obj : loaded) {
     /* MIGRATION STEP: For When we have a program if it's contained in a device it needs to be converted into a memory struct */
     if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM || GET_OBJ_TYPE(obj) == ITEM_DESIGN) {
@@ -1267,6 +1268,25 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
         // Delete the obj, no longer needed
         extract_obj(obj);
         obj = NULL;
+        continue;
+      }
+    }
+
+    if (GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER && obj->in_obj) {
+      // If we've gotten this far, it's a phone number or note in a notebook
+      // convert it to a matrix file
+      if (!strncmp(obj->in_obj->restring, "Notes", strlen(obj->in_obj->restring))) {
+        file = create_matrix_file(obj->in_obj, OBJ_LOAD_REASON_POCSEC_NOTEADD);
+        file->file_type = MATRIX_FILE_POCSEC_NOTE;
+        file->name = str_dup(obj->restring);
+        file->content = str_dup(obj->photo);
+        file->dirty_bit = TRUE;
+      } else if (!strncmp(obj->in_obj->restring, "Phoneboook", strlen(obj->in_obj->restring))) {
+        file = create_matrix_file(obj->in_obj, OBJ_LOAD_REASON_POCSEC_PHONEADD);
+        file->file_type = MATRIX_FILE_POCSEC_PHONENUM;
+        file->name = str_dup(obj->restring);
+        file->content = str_dup(obj->photo);
+        file->dirty_bit = TRUE;
       }
     }
 
