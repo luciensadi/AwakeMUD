@@ -202,6 +202,9 @@ matrix_file* clone_matrix_file(struct matrix_file *source) {
   copy->work_ticks_left = source->work_ticks_left;
   copy->work_original_ticks_left = source->work_original_ticks_left;
   copy->work_successes = source->work_successes;
+
+  copy->from_host_color = source->from_host_color;
+  copy->from_host_vnum = source->from_host_vnum;
   
   copy->last_decay_time = source->last_decay_time;
   copy->dirty_bit = TRUE;
@@ -743,7 +746,7 @@ ACMD(do_file) {
   std::vector<struct obj_data*> all_devices = get_storage_devices(ch, TRUE);
 
   char first_arg[256];
-  char *file_switch = NULL, *remainder = NULL, *second_arg = NULL, *third_arg = NULL;
+  char *file_switch, *remainder, *second_arg = NULL, *third_arg = NULL;
   struct obj_data *from_device = NULL, *to_device = NULL;
   struct matrix_file *file = NULL;
   remainder = one_argument(argument, file_switch);
