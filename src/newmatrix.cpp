@@ -721,7 +721,7 @@ ACMD(do_matrix_position)
 
 bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *targ, int &success)
 {
-  struct obj_data *soft = NULL;
+  struct obj_data *soft = NULL, *temp = NULL;
   for (soft = targ->decker->software; soft; soft = soft->next_content) {
     if (GET_PROGRAM_TYPE(soft) == SOFT_SHIELD) {
       int shield_test = success_test(GET_PROGRAM_RATING(soft), 
@@ -734,6 +734,7 @@ bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *ta
       GET_PROGRAM_RATING(soft)--;
       if (GET_PROGRAM_RATING(soft) <= 0) {
         send_to_icon(targ, "Your shield program crashes as the rating is depleted.\r\n");
+        REMOVE_FROM_LIST(soft, targ->decker->software, next_content);
         extract_obj(soft);
       }
       return TRUE;
@@ -2442,7 +2443,7 @@ ACMD(do_connect)
   }
   act(buf, FALSE, ch, 0, 0, TO_ROOM);
   if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) 
-    act("You jack into the matrix to commune with the resonance.\r\n", FALSE, ch, 0, 0, TO_CHAR);
+    act("You jack into the matrix to commune with the resonance.", FALSE, ch, 0, 0, TO_CHAR);
   else 
     send_to_char(ch, "You jack into the matrix with your %s.\r\n", GET_OBJ_NAME(cyberdeck));
   PLR_FLAGS(ch).SetBit(PLR_MATRIX);

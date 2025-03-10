@@ -23,7 +23,7 @@
 
 extern int get_program_skill(char_data *ch, obj_data *prog, int target);
 
-#define COMPLEX_FORM_TYPES 16
+#define COMPLEX_FORM_TYPES 11
 
 int complex_form_programs[COMPLEX_FORM_TYPES] = {
   SOFT_ARMOR,
