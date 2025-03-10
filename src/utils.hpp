@@ -295,7 +295,7 @@ void    reverse_obj_list(struct obj_data **obj);
 void    mental_gain(struct char_data *ch);
 void    physical_gain(struct char_data *ch);
 void    advance_level(struct char_data *ch);
-void    set_title(struct char_data *ch, const char *title);
+void    set_title(struct char_data *ch, const char *title, bool save_to_db);
 void    set_pretitle(struct char_data *ch, const char *title);
 void    set_whotitle(struct char_data *ch, const char *title);
 int     gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool multiplier);

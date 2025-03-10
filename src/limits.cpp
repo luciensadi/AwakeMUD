@@ -285,10 +285,19 @@ char* get_new_kosherized_title(const char *title, unsigned short max_length) {
   return mutable_title;
 }
 
-void set_title(struct char_data * ch, const char *title)
+void set_title(struct char_data * ch, const char *title, bool save_to_db)
 {
   DELETE_ARRAY_IF_EXTANT(GET_TITLE(ch));
   GET_TITLE(ch) = get_new_kosherized_title(title, MAX_TITLE_LENGTH);
+
+  if (save_to_db) {
+    char query_buf[MAX_INPUT_LENGTH];
+    char prepare_quotes_buf[MAX_INPUT_LENGTH];
+    snprintf(query_buf, sizeof(query_buf),
+            "UPDATE pfiles SET Title='%s' WHERE idnum=%ld;",
+            prepare_quotes(prepare_quotes_buf, GET_TITLE(ch), sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])), GET_IDNUM(ch));
+    mysql_wrapper(mysql, query_buf);
+  }
 }
 
 

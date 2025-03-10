@@ -5918,7 +5918,7 @@ ACMD(do_set)
 #ifdef IS_BUILDPORT
     FAILURE_CASE(!access_level(ch, LVL_ADMIN), "Titles are disabled on the buildport.");
 #endif
-    set_title(vict, val_arg);
+    set_title(vict, val_arg, TRUE);
     snprintf(buf, sizeof(buf), "%s's title is now: %s", GET_NAME(vict), GET_TITLE(vict));
     break;
   case 3:
