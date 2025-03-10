@@ -2428,18 +2428,18 @@ ACMD(do_connect)
   if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
     if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
       if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
-        snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to %s.\r\n",
+        snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to %s.",
           !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
       } else {
-        snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into %s.\r\n",
+        snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into %s.",
           !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
       }
     } else {
-      snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides %s cable into $s eye datajack.\r\n",
+      snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides %s cable into $s eye datajack.",
         !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
     }
   } else {
-    snprintf(buf, sizeof(buf), "$n plugs the leads of $s 'trode net into $s cyberdeck.\r\n");
+    snprintf(buf, sizeof(buf), "$n plugs the leads of $s 'trode net into $s cyberdeck.");
   }
   act(buf, FALSE, ch, 0, 0, TO_ROOM);
   if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) 
