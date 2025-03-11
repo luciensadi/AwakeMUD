@@ -719,6 +719,30 @@ ACMD(do_matrix_position)
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
 }
 
+bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *targ, int &success)
+{
+  struct obj_data *soft = NULL, *temp = NULL;
+  for (soft = targ->decker->software; soft; soft = soft->next_content) {
+    if (GET_PROGRAM_TYPE(soft) == SOFT_SHIELD) {
+      int shield_test = success_test(GET_PROGRAM_RATING(soft), 
+        ICON_IS_IC(icon) ? matrix[icon->in_host].security : GET_SKILL(icon->decker->ch, SKILL_COMPUTER));
+
+      if (shield_test > 0) {
+        success -= shield_test;
+        send_to_icon(targ, "You raise your shield program and deflect some of the attack.\r\n");
+      }
+      GET_PROGRAM_RATING(soft)--;
+      if (GET_PROGRAM_RATING(soft) <= 0) {
+        send_to_icon(targ, "Your shield program crashes as the rating is depleted.\r\n");
+        REMOVE_FROM_LIST(soft, targ->decker->software, next_content);
+        extract_obj(soft);
+      }
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
 void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 {
   struct obj_data *soft = NULL;
@@ -837,9 +861,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         bod = targ->decker->masking;
         break;
       }
-      if (targ->type == ICON_LIVING_PERSONA)
-        bod += targ->decker->hardening; // Otaku get to add their hardening to this check.
       success = success_test(matrix[targ->in_host].security, bod);
+      if (try_execute_shield_program(icon, targ, success) && success <= 0) {
+        return;
+      }
       int resist = success_test(bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch)), iconrating);
       GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
       success -= resist;
@@ -897,7 +922,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     send_to_icon(targ, "%s^n runs an attack program against you.\r\n", CAP(icon->name));
     if (icon->ic.type >= IC_LETHAL_BLACK)
       power -= targ->decker->hardening;
-    else
+    else 
       for (soft = targ->decker->software; soft; soft = soft->next_content)
         if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR) {
           power -= GET_OBJ_VAL(soft, 1);
@@ -934,6 +959,11 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       cascade(icon);
     return;
   }
+
+  if (try_execute_shield_program(icon, targ, success) && success <= 0) {
+    return;
+  }
+
   success -= success_test(bod, power);
   dam = convert_damage(stage(success, dam));
   if (ICON_IS_IC(icon)) {
@@ -2415,7 +2445,7 @@ ACMD(do_connect)
   if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) 
     act("You jack into the matrix to commune with the resonance.", FALSE, ch, 0, 0, TO_CHAR);
   else 
-    send_to_char(ch, "You jack into the matrix with your %s.", GET_OBJ_NAME(cyberdeck));
+    send_to_char(ch, "You jack into the matrix with your %s.\r\n", GET_OBJ_NAME(cyberdeck));
   PLR_FLAGS(ch).SetBit(PLR_MATRIX);
   do_matrix_look(ch, NULL, 0, 0);
 }

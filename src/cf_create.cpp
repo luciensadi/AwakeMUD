@@ -23,25 +23,20 @@
 
 extern int get_program_skill(char_data *ch, obj_data *prog, int target);
 
-#define COMPLEX_FORM_TYPES 16
+#define COMPLEX_FORM_TYPES 11
 
 int complex_form_programs[COMPLEX_FORM_TYPES] = {
-  SOFT_ATTACK,
-  SOFT_SLOW,
-  SOFT_COMPRESSOR,
-  SOFT_DECRYPT,
-  SOFT_RELOCATE,
-  SOFT_SLEAZE,
-  SOFT_TRACK,
   SOFT_ARMOR,
-  SOFT_CAMO,
-  SOFT_CRASH,
-  SOFT_DEFUSE,
-  SOFT_EVALUATE,
-  SOFT_VALIDATE,
-  SOFT_SWERVE,
+  SOFT_ATTACK,
+  SOFT_BATTLETEC,
   SOFT_CLOAK,
-  SOFT_LOCKON
+  SOFT_COMMLINK,
+  SOFT_COMPRESSOR,
+  SOFT_LOCKON,
+  SOFT_SLEAZE,
+  SOFT_SLOW,  
+  SOFT_TRACK,
+  SOFT_SHIELD
 };
 
 void cfedit_disp_menu(struct descriptor_data *d)
@@ -227,7 +222,7 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case CFEDIT_TYPE:
-    if (option_n < 1 || option_n >= COMPLEX_FORM_TYPES)
+    if (option_n < 1 || option_n > COMPLEX_FORM_TYPES)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
       GET_DESIGN_PROGRAM(d->edit_obj) = complex_form_programs[option_n - 1];
