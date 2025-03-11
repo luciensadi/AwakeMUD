@@ -33,6 +33,7 @@
 #include "vehicles.hpp"
 #include "player_exdescs.hpp"
 #include "otaku.hpp"
+#include "phone.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
@@ -2388,36 +2389,7 @@ void extract_icon(struct matrix_icon * icon)
   struct matrix_icon *temp;
 
   // Clean up phone entries.
-  for (struct phone_data *k = phone_list; k; k = k->next) {
-    if (k->persona == icon)
-    {
-      struct phone_data *temp;
-      if (k->dest) {
-        if (k->dest->persona)
-          send_to_icon(k->dest->persona, "The call is terminated from the other end.\r\n");
-        else if (k->dest->phone) {
-          if (k->dest->connected) {
-            if (k->dest->phone->carried_by)
-              send_to_char("The phone is hung up from the other side.\r\n", k->dest->phone->carried_by);
-          } else {
-            if (k->dest->phone->carried_by)
-              send_to_char("Your phone stops ringing.\r\n", k->dest->phone->carried_by);
-            else if (k->dest->phone->in_obj && k->dest->phone->in_obj->carried_by)
-              send_to_char("Your phone stops ringing.\r\n", k->dest->phone->in_obj->carried_by);
-            else {
-              snprintf(buf, sizeof(buf), "%s stops ringing.\r\n", k->dest->phone->text.name);
-              act(buf, FALSE, 0, k->dest->phone, 0, TO_ROOM);
-            }
-          }
-        }
-        k->dest->connected = FALSE;
-        k->dest->dest = NULL;
-      }
-      REMOVE_FROM_LIST(k, phone_list, next);
-      delete k;
-      break;
-    }
-  }
+  extract_phone_number(k->persona);
 
   // Clean up host data.
   if (icon->in_host) {
@@ -2671,41 +2643,7 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
     set = TRUE;
   }
 
-  if (GET_OBJ_TYPE(obj) == ITEM_PHONE ||
-      (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE))
-  {
-    for (phone = phone_list; phone; phone = phone->next) {
-      if (phone->phone == obj) {
-        if (phone->dest) {
-          phone->dest->dest = NULL;
-          phone->dest->connected = FALSE;
-          if (phone->dest->persona)
-            send_to_icon(phone->dest->persona, "The connection is closed from the other side.\r\n");
-          else {
-            if (phone->dest->phone->carried_by) {
-              if (phone->dest->connected) {
-                if (phone->dest->phone->carried_by)
-                  send_to_char("The phone is hung up from the other side.\r\n", phone->dest->phone->carried_by);
-              } else {
-                if (phone->dest->phone->carried_by)
-                  send_to_char("Your phone stops ringing.\r\n", phone->dest->phone->carried_by);
-                else if (phone->dest->phone->in_obj && phone->dest->phone->in_obj->carried_by)
-                  send_to_char("Your phone stops ringing.\r\n", phone->dest->phone->in_obj->carried_by);
-                else {
-                  snprintf(buf, sizeof(buf), "%s stops ringing.\r\n", phone->dest->phone->text.name);
-                  act(buf, FALSE, 0, phone->dest->phone, 0, TO_ROOM);
-                }
-              }
-            }
-
-          }
-        }
-        REMOVE_FROM_LIST(phone, phone_list, next);
-        delete phone;
-        break;
-      }
-    }
-  }
+  extract_phone_number(obj);
 
   if (obj->in_room || obj->in_veh != NULL) {
     obj_from_room(obj);

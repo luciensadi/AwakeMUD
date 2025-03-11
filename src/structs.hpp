@@ -1258,17 +1258,31 @@ struct remem
   {}
 };
 
+#define PHONE_STATUS_OFFLINE     1 /* The phone is unavailable */
+#define PHONE_STATUS_ONLINE      2 /* The phone is available */
+#define PHONE_STATUS_RINGING     3 /* A phone being called is ringing */
+#define PHONE_STATUS_BUSY        4 /* Busy usually just means a calling phone is ringing a victim phone */
+#define PHONE_STATUS_IN_CALL     5 /* The phone is actively connected to a call */
+
 struct phone_data
 {
-  int number;
-  bool connected;
-  vnum_t rtg;
-  struct phone_data *dest;
-  struct obj_data *phone;
-  struct matrix_icon *persona;
-  struct phone_data *next;
+  char* number;                          /* The registered phone number in the system, always ###-#### */
+  int status;                           
+  vnum_t origin_rtg;                     /* Phone numbers are provided by RTG (Matrix) carriers, this is the matrix[hostnum] of one */
+  
+  struct obj_data *device;               /* Device refers to the device this number is allocated to */ 
+  struct matrix_icon *persona;             /* If this is allocated to a persona, that link is here */
+  long allocated_on;                     /* The creation time; when this phone number was allocated to a device */
+  int load_origin;                       /* The LOAD_REASON that this phone data has been created or allocated */
+
+  char* caller_id_name;                  /* This is the legal name of the person this number was IC allocated to */
+
+  // struct matrix_icon *persona;           /* If this is a matrix number, this will not be NULL. */
+  struct phone_data *next;               /* Phone data in a list used this to point to the next data; mostly unused */
+  struct phone_data *connected_to;       /* During an active call, this will point to the phone this is connected to */ 
   phone_data() :
-      number(0), connected(0), rtg(1102), dest(NULL), phone(NULL), persona(NULL), next(NULL)
+      number(0), status(1), origin_rtg(1102), device(NULL), persona(NULL), allocated_on(time(0)), load_origin(0), caller_id_name(0),
+      next(NULL), connected_to(NULL)
   {}
 };
 

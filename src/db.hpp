@@ -233,7 +233,6 @@ extern struct veh_data *veh_proto;
 extern int      top_of_veht;
 extern struct index_data *veh_index;
 extern struct veh_data *veh_list;
-extern struct phone_data *phone_list;
 
 extern struct host_data *matrix;
 extern int top_of_matrix;
