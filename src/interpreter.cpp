@@ -3599,31 +3599,43 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     return;
 
   // Discard directional commands and other high-noise things that can't affect other players.
-  const char *discard_commands[] = {
+  const char *directional_and_purely_informational_commands[] = {
     "north", "south", "east", "west", "up", "down",
     "northeast", "ne",
     "southeast", "se",
     "southwest", "sw",
     "northwest", "nw",
-    "enter", "leave",
     "score", "equipment", "inventory", "status", "affects",
-    "look", "scan", "search", "who", "probe",
-    "alias", "help",
+    "look", "scan", "probe", "alias", "help",
+    "progress", "time",
+    "skills", "powers", "spells",
+    "list", "info", "recap",
+    "\n" // this MUST be last
+  };
+  const char *discard_commands[] = {
+    "search",
+    "enter", "leave",
     "hail", "push",
     "radio", "phone",
     "drive", "speed",
-    "stand", "sit", "rest",
-    "nod", "list", "info", "recap",
+    "stand", "sit", "rest", "nod",
     "open", "close", "receive", "buy", "sell",
     "wear", "remove", "draw", "holster",
     "kill", "hit", "shoot", "kick",
-    "progress", "time",
-    "skills", "powers", "spells",
-    "\n"
+    "\n" // this MUST be last
   };
-  for (int i = 0; *discard_commands[i] != '\n'; i++)
-    if (str_str(discard_commands[i], argument))
+
+  // Skip any commands that are of very low interest to us.
+  for (int i = 0; *directional_and_purely_informational_commands[i] != '\n'; i++)
+    if (str_str(directional_and_purely_informational_commands[i], argument))
       return;
+
+  // If they haven't earned additional scrutiny, skip common spammy commands as well.
+  if (!PLR_FLAGGED(ch, PLR_ADDITIONAL_SCRUTINY)) {
+    for (int i = 0; *discard_commands[i] != '\n'; i++)
+      if (str_str(discard_commands[i], argument))
+        return;
+  }
 
   // Extract location.
   char location_buf[500];

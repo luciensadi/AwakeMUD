@@ -705,7 +705,7 @@ void pc_exdesc_edit_parse(struct descriptor_data *d, const char *arg) {
           }
         }
 
-        if (check_for_banned_content(arg, CH)) {
+        if (check_for_banned_content(arg, CH, MODERATION_MODE_DESCRIPTIONS)) {
           _pc_exdesc_edit_olc_menu(d);
           return;
         }
@@ -735,7 +735,7 @@ void pc_exdesc_edit_parse(struct descriptor_data *d, const char *arg) {
           return;
         }
 
-        if (!check_for_banned_content(arg, CH)) {
+        if (!check_for_banned_content(arg, CH, MODERATION_MODE_DESCRIPTIONS)) {
           d->edit_exdesc->set_name(arg);
         }
         _pc_exdesc_edit_olc_menu(d);

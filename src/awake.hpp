@@ -362,7 +362,8 @@ enum {
 #define PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL 53
 #define PLR_OLD_MAN_YELLS_AT_CLOUDS          54
 #define PLR_SUBMERSION                       55
-#define PLR_MAX                              56
+#define PLR_ADDITIONAL_SCRUTINY              56
+#define PLR_MAX                              57
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 

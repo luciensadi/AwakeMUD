@@ -5781,7 +5781,8 @@ ACMD(do_set)
                { "sitehidden",  LVL_PRESIDENT, PC, BINARY },
                { "lifestyle",  LVL_PRESIDENT, PC, MISC },
                { "highestindex", LVL_ADMIN, BOTH, NUMBER },
-               { "strikes", LVL_FIXER, PC, NUMBER }, // 89
+               { "strikes", LVL_FIXER, PC, NUMBER },
+               { "scrutiny", LVL_ADMIN, PC, NUMBER }, // 90
                { "\n", 0, BOTH, MISC }
              };
 
@@ -6503,6 +6504,10 @@ ACMD(do_set)
       GET_SETTABLE_AUTOMOD_COUNTER(vict) = value;
       mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s's auto-moderator strikes from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), old_val, value);
     }
+    break;
+  case 90: /* suspicious flag */
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_ADDITIONAL_SCRUTINY);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s's staff-scrutiny flag setting to %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_ADDITIONAL_SCRUTINY) ? "TRUE" : "FALSE");
     break;
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");
@@ -7511,7 +7516,7 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   FALSE_CASE(obj_is_a_vehicle_title(obj), "Vehicle titles are consumable, so they can't be restrung.");
 
   // Ensure we don't contain any forbidden phrases. Error messages are shown in-function.
-  if (check_for_banned_content(buf, ch)) {
+  if (check_for_banned_content(buf, ch, MODERATION_MODE_DESCRIPTIONS)) {
     return FALSE;
   }
 

@@ -260,7 +260,7 @@ void string_add(struct descriptor_data *d, char *str)
 #define REPLACE_STRING_WITH_INDENTED_FORMATTING(target) (REPLACE_STRING_FORMAT_SPECIFIED(target, DO_FORMAT_INDENT))
 
 
-    if (d->character && d->str && *(d->str) && check_for_banned_content(*(d->str), d->character)) {
+    if (d->character && d->str && *(d->str) && check_for_banned_content(*(d->str), d->character, MODERATION_MODE_DESCRIPTIONS)) {
       *(*(d->str)) = '\0';
       return;
     }

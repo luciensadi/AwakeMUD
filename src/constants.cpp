@@ -617,6 +617,7 @@ const char *player_bits[] =
     "CDEX_DONE",
     "CLOUD_HATER",
     "SUBMERSION",
+    "STAFF_SCRUTINY",
     "\n"
   };
 
