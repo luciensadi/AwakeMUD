@@ -240,6 +240,7 @@ void boot_shop_orders(void);
 void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
+extern void verify_matrix_data_file_storage();
 extern void init_matrix_data_file_index();
 void set_elemental_races();
 void initialize_and_alphabetize_flag_maps();
@@ -632,6 +633,9 @@ void boot_world(void)
     for (int idx = 0; idx < 4; idx++)
       require_that_field_exists_in_table(valbuf, object_tables[idx], "(meta check: no specific file)");
   }
+
+  log("Wiping unused matrix data file rows.");
+  verify_matrix_data_file_storage();
 
   log("Initializing matrix data file store index.");
   init_matrix_data_file_index();

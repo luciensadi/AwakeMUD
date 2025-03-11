@@ -2743,6 +2743,18 @@ void init_matrix_data_file_index() {
   mysql_free_result(res);
 }
 
+void verify_matrix_data_file_storage() {
+  // This query exists to wipe out all invalid matrix data file storage rows
+  // by validating they're contained in valid OBJs.
+  mysql_wrapper(mysql, 
+    "DELETE FROM matrix_files AS mf "
+    "   LEFT JOIN pfiles_inv AS pi ON mf.in_obj_vnum = pi.vnum AND mf.in_obj_idnum = pi.obj_idnum "
+    "   LEFT JOIN pfiles_cyberware AS pc ON mf.in_obj_vnum = pc.vnum AND mf.in_obj_idnum = pc.obj_idnum "
+    "   LEFT JOIN pfiles_worn AS pw ON mf.in_obj_vnum = pw.vnum AND mf.in_obj_idnum = pw.obj_idnum "
+    "WHERE pi.vnum IS NULL AND pc.vnum IS NULL AND pw.vnum IS NULL; "
+  );
+}
+
 void verify_db_password_column_size() {
   // show columns in pfiles like 'password';
   mysql_wrapper(mysql, "SHOW COLUMNS IN `pfiles` LIKE 'password';");
