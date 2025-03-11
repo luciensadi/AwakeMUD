@@ -722,6 +722,8 @@ ACMD(do_matrix_position)
 bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *targ, int &success)
 {
   struct obj_data *soft = NULL, *temp = NULL;
+  if (!targ || !targ->decker) return FALSE; // IC don't have shields
+
   for (soft = targ->decker->software; soft; soft = soft->next_content) {
     if (GET_PROGRAM_TYPE(soft) == SOFT_SHIELD) {
       int shield_test = success_test(GET_PROGRAM_RATING(soft), 
@@ -3868,8 +3870,12 @@ ACMD(do_comcall)
                 send_to_char("You feel your phone ring.\r\n", tch);
             }
           } else {
-            snprintf(buf, sizeof(buf), "%s^n rings.", GET_OBJ_NAME(k->phone));
-            send_to_room(buf, k->phone->in_room);
+              snprintf(buf, sizeof(buf), "%s^n rings.", GET_OBJ_NAME(k->phone));
+            if (k->phone->in_veh) {
+              send_to_veh(buf, k->phone->in_veh, ch, TRUE);
+            } else {
+              send_to_room(buf, k->phone->in_room);
+            }
           }
         }
         send_to_icon(PERSONA, "It begins to ring.\r\n");
