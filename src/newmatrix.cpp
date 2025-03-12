@@ -2931,14 +2931,14 @@ void send_active_program_list(struct char_data *ch) {
   if (DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
     // We're an otaku using a living persona; we don't have active memory.
     for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
-      snprintf(buf, sizeof(buf), "%25s, Complex Form, %s-%-2d", 
+      snprintf(buf, sizeof(buf), "%25s, Complex Form, %s-R^c%d^n", 
         GET_OBJ_NAME(soft),
         programs[GET_COMPLEX_FORM_PROGRAM(soft)].name,
         GET_COMPLEX_FORM_RATING(soft)
       );
 
       if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%d)", GET_COMPLEX_FORM_RATING(soft) + 1);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (^g%d^n)", GET_COMPLEX_FORM_RATING(soft) + 1);
       }
 
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
