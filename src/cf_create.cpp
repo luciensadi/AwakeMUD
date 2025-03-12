@@ -271,7 +271,7 @@ ACMD(do_forms)
   }
 
   if (is_abbrev(func, "forget")) {
-    if (PLR_FLAGGED(ch, AFF_COMPLEX_FORM_PROGRAM)) {
+    if (AFF_FLAGGED(ch, AFF_COMPLEX_FORM_PROGRAM)) {
       send_to_char(ch, "You can't forget a complex form while focusing on learning a form.\r\n");
       return;
     }

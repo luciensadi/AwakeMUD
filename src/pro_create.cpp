@@ -685,7 +685,7 @@ void update_buildrepair(void)
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);
           CH->char_specials.timer = 0;
         }
-      } else if (AFF_FLAGGED(CH, AFF_COMPLEX_FORM_PROGRAM)) {
+      } else if (AFF_FLAGGED(desc->character, AFF_COMPLEX_FORM_PROGRAM)) {
         if (--GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(PROG) < 1) {
           if (GET_COMPLEX_FORM_LEARNING_FAILED(PROG)) {
             switch(number(1,10)) {
