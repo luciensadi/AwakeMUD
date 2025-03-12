@@ -41,6 +41,10 @@ int complex_form_programs[COMPLEX_FORM_TYPES] = {
   SOFT_SHIELD
 };
 
+float complex_form_karma_cost(struct char_data *ch, struct obj_data *form) {
+  return GET_COMPLEX_FORM_RATING(form) * COMPLEX_FORM_KARMA_COST;
+}
+
 void cfedit_disp_menu(struct descriptor_data *d)
 {
   CLS(CH);
@@ -58,7 +62,8 @@ void cfedit_disp_menu(struct descriptor_data *d)
     // Others multiply by a set multiplier based on software type.
     program_size *= programs[GET_COMPLEX_FORM_PROGRAM(FORM)].multiplier;
   }
-  send_to_char(CH, "Effective Size: ^c%d^n\r\n\r\n", program_size);
+  send_to_char(CH, "Effective Size: ^c%d^n\r\n", program_size);
+  send_to_char(CH, "    Karma Cost: ^c%.2f^n\r\n\r\n", complex_form_karma_cost(CH, FORM));
   send_to_char(CH, "q) Quit and save\r\nEnter your choice: ");
   d->edit_mode = CFEDIT_MENU;
 }
@@ -248,10 +253,6 @@ void create_complex_form(struct char_data *ch)
   design->restring = str_dup("a blank complex form");
   ch->desc->edit_obj = design;
   cfedit_disp_menu(ch->desc);
-}
-
-float complex_form_karma_cost(struct char_data *ch, struct obj_data *form) {
-  return GET_COMPLEX_FORM_RATING(form) * COMPLEX_FORM_KARMA_COST;
 }
 
 ACMD(do_forms)
