@@ -248,6 +248,10 @@ ACMD(do_forms)
   char *param = one_argument(argument, func);
 
   if (is_abbrev(func, "list") || strlen(func) <= 0) {
+    if (!asist->contains) {
+      send_to_char(ch, "You haven't learned or designed any complex forms yet. Maybe you should ^wCREATE^n a new complex form.\r\n");
+      return;
+    }
     strncpy(buf2, "", sizeof(buf2) - 1);
     for (form = asist->contains; form; form = form->next_content) {
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " [%10s] %10s^n:^N %s R%d",
