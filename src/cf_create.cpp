@@ -47,7 +47,7 @@ void cfedit_disp_menu(struct descriptor_data *d)
     program_size *= programs[GET_COMPLEX_FORM_PROGRAM(FORM)].multiplier;
   }
   send_to_char(CH, "Effective Size: ^c%d^n\r\n", program_size);
-  send_to_char(CH, "    Karma Cost: ^c%.2f^n\r\n\r\n", complex_form_karma_cost(CH, FORM));
+  send_to_char(CH, "    Karma Cost: ^c%.2f^n\r\n\r\n", (float)complex_form_karma_cost(CH, FORM) / 100);
   send_to_char(CH, "q) Quit and save\r\nEnter your choice: ");
   d->edit_mode = CFEDIT_MENU;
 }
