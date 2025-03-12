@@ -267,6 +267,10 @@ ACMD(do_forms)
   }
 
   if (is_abbrev(func, "forget")) {
+    if (PLR_FLAGGED(ch, AFF_COMPLEX_FORM_PROGRAM)) {
+      send_to_char(ch, "You can't forget a complex form while focusing on learning a form.\r\n");
+      return;
+    }
     skip_spaces(&param);
     for (form = asist->contains; form; form = form->next_content) {
       if ((isname(param, form->text.keywords) || isname(param, get_string_after_color_code_removal(form->restring, ch))) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) 
