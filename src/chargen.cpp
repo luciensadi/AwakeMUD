@@ -642,7 +642,7 @@ const char *gnome_magic_table[4] = { "None", "Full Shaman", "Aspected Shaman", "
 
 int cg_nuyen(struct descriptor_data *d, int x)
 {
-  int starting_nuyen = resource_table[0][x];
+  int starting_nuyen = nuyen_vals[x];
   if (d->ccr.is_otaku)
     return MIN(5000, starting_nuyen);
   return starting_nuyen;
