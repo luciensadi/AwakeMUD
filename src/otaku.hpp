@@ -4,6 +4,7 @@
 struct otaku_echo {
   const char *name;
   bool incremental;
+  bool nerps;
 };
 
 int     get_otaku_wil(struct char_data *ch);

@@ -2864,18 +2864,23 @@ const char *metamagic[] = {
 };
 
 struct otaku_echo echoes[] = {
-  {"UNDEF", FALSE},
-  {"Improved I/O Speed", TRUE},
-  {"Improved Hardening", TRUE},
-  {"Improved MPCP", TRUE},
-  {"Improved Persona Bod", TRUE},
-  {"Improved Persona Evasion", TRUE},
-  {"Improved Persona Masking", TRUE},
-  {"Improved Persona Sensor", TRUE},
-  {"Improved Reaction", TRUE},
-  {"Ghosting", FALSE},
-  {"Neurofilter", FALSE},
-  {"Overclock", FALSE}
+  {"UNDEF",                      FALSE, FALSE},
+  {"Improved I/O Speed",         TRUE , FALSE},
+  {"Improved Hardening",         TRUE , FALSE},
+  {"Improved MPCP",              TRUE , FALSE},
+  {"Improved Persona Bod",       TRUE , FALSE},
+  {"Improved Persona Evasion",   TRUE , FALSE},
+  {"Improved Persona Masking",   TRUE , FALSE},
+  {"Improved Persona Sensor",    TRUE , FALSE},
+  {"Improved Reaction",          TRUE , FALSE},
+  {"Ghosting",                   FALSE, FALSE},
+  {"Neurofilter",                FALSE, FALSE},
+  {"Overclock",                  FALSE, FALSE},
+  {"Daemon Summoning",           FALSE, TRUE },
+  {"Info Sortilage",             FALSE, TRUE },
+  {"Resonance Link",             TRUE , TRUE },
+  {"Switch",                     FALSE, TRUE },
+  {"Traceroute",                 FALSE, TRUE }
 };
 
 const char *legality_codes[][2] = {
