@@ -22,6 +22,20 @@
 
 extern struct otaku_echo echoes[];
 
+int complex_form_programs[COMPLEX_FORM_TYPES] = {
+  SOFT_ARMOR,
+  SOFT_ATTACK,
+  SOFT_BATTLETEC,
+  SOFT_CLOAK,
+  SOFT_COMMLINK,
+  SOFT_COMPRESSOR,
+  SOFT_LOCKON,
+  SOFT_SLEAZE,
+  SOFT_SLOW,  
+  SOFT_TRACK,
+  SOFT_SHIELD
+};
+
 int get_otaku_wil(struct char_data *ch) {
   int wil_stat = GET_REAL_WIL(ch);
 
@@ -159,19 +173,33 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_CONCEALED_IN_EQ);
   new_deck->obj_flags.extra_flags.SetBit(ITEM_EXTRA_OTAKU_RESONANCE);
+  
+  // Enumerating by counter is wasteful but will ensure we only lead one of each type of complex form
+  for (int counter = 0; counter < COMPLEX_FORM_TYPES; counter++) {
+    struct obj_data *best_form = NULL;
+    // This for loop checks to see if we have a complex form for the counter
+    // then it also checks if it's the BEST form we have
+    for (struct obj_data *form = asist->contains; form; form = form->next_content) {
+      if (GET_OBJ_TYPE(form) != ITEM_COMPLEX_FORM) continue;
+      if (GET_COMPLEX_FORM_PROGRAM(form) != complex_form_programs[counter]) continue; // Not the correct program
+      if (GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(form) > 0) continue; // The complex form is in unfinished.
+      if (GET_COMPLEX_FORM_RATING(form) > mpcp) continue; // Can't load complex forms greater than mpcp rating.
 
-  for (struct obj_data *form = asist->contains; form; form = form->next_content) {
-    if (GET_OBJ_TYPE(form) != ITEM_COMPLEX_FORM) continue;
-    if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) > 0) continue; // The complex form is in unfinished.
-    if (GET_PROGRAM_RATING(form) > mpcp) continue; // Can't load complex forms greater than mpcp rating.
+      if (best_form && GET_COMPLEX_FORM_RATING(form) < GET_COMPLEX_FORM_RATING(best_form))
+        continue;
+      best_form = form;
+    }
+
+    if (!best_form) continue; // We don't have this form
     struct obj_data *active = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_OTAKU_RESONANCE);
-    GET_PROGRAM_TYPE(active) = GET_PROGRAM_TYPE(form);
+    GET_PROGRAM_TYPE(active) = GET_COMPLEX_FORM_PROGRAM(best_form);
     GET_PROGRAM_SIZE(active) = 0; // Complex forms don't take up memory.
-    GET_PROGRAM_ATTACK_DAMAGE(active) = GET_PROGRAM_ATTACK_DAMAGE(form);
+    GET_PROGRAM_ATTACK_DAMAGE(active) = GET_COMPLEX_FORM_WOUND_LEVEL(best_form);
     GET_PROGRAM_IS_DEFAULTED(active) = TRUE;
     GET_OBJ_TIMER(active) = 1;
 
-    GET_PROGRAM_RATING(active) = GET_PROGRAM_RATING(form);
+    GET_PROGRAM_RATING(active) = GET_COMPLEX_FORM_RATING(best_form);
+
     // Cyberadepts get +1 to Complex Forms
     if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) GET_PROGRAM_RATING(active) += 1;
 
@@ -179,7 +207,7 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
     active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
 
     char restring[500];
-    snprintf(restring, sizeof(restring), "a rating-%d %s complex form", GET_PROGRAM_RATING(form), programs[GET_PROGRAM_TYPE(form)].name);
+    snprintf(restring, sizeof(restring), "%s ^y(complex form)^n", GET_OBJ_NAME(best_form));
     active->restring = str_dup(restring);
     obj_to_obj(active, new_deck);
   }

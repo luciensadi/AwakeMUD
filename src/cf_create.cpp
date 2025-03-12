@@ -25,22 +25,6 @@
 
 extern int get_program_skill(char_data *ch, obj_data *prog, int target);
 
-#define COMPLEX_FORM_TYPES 11
-
-int complex_form_programs[COMPLEX_FORM_TYPES] = {
-  SOFT_ARMOR,
-  SOFT_ATTACK,
-  SOFT_BATTLETEC,
-  SOFT_CLOAK,
-  SOFT_COMMLINK,
-  SOFT_COMPRESSOR,
-  SOFT_LOCKON,
-  SOFT_SLEAZE,
-  SOFT_SLOW,  
-  SOFT_TRACK,
-  SOFT_SHIELD
-};
-
 float complex_form_karma_cost(struct char_data *ch, struct obj_data *form) {
   return GET_COMPLEX_FORM_RATING(form) * COMPLEX_FORM_KARMA_COST;
 }

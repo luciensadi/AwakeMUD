@@ -17,6 +17,10 @@ void    update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck);
 #define SUBMERSION_ECHO	             1
 #define SUBMERSION_CONFIRM           2
 
+#define COMPLEX_FORM_TYPES 11
+
+extern int complex_form_programs[COMPLEX_FORM_TYPES];
+
 #define GET_OTAKU_MPCP(ch)           \
   (({ \
     int mpcp = (get_otaku_int(ch) + GET_REAL_WIL(ch) + GET_REAL_CHA(ch) + 2) / 3; \
