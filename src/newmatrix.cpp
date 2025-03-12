@@ -4061,6 +4061,9 @@ ACMD(do_create)
     if (!IS_OTAKU(ch)) {
       send_to_char("Everyone knows that otaku aren't real, chummer.\r\n", ch);
       return;
+    } else if (!GET_SKILL(ch, SKILL_COMPUTER)) {
+      send_to_char("You must learn computer skills to create complex forms.\r\n", ch);
+      return;
     }
     create_complex_form(ch);
   }
