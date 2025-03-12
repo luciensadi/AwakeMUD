@@ -640,9 +640,9 @@ vnum_t otaku_cyberware[2] = {
 const char *magic_table[4] = { "None", "Full Magician", "Aspected Magician", "Adept" };
 const char *gnome_magic_table[4] = { "None", "Full Shaman", "Aspected Shaman", "ERROR" };
 
-int cg_nuyen(struct descriptor_data *d, int x)
+int cg_nuyen(struct descriptor_data *d, int x, bool is_points)
 {
-  int starting_nuyen = nuyen_vals[x];
+  int starting_nuyen = is_points ? resource_table[0][x] : nuyen_vals[x];
   if (d->ccr.is_otaku)
     return MIN(5000, starting_nuyen);
   return starting_nuyen;
@@ -1026,7 +1026,7 @@ void priority_menu(struct descriptor_data *d)
     switch (d->ccr.pr[i]) {
     case PR_NONE:
       snprintf(buf3, sizeof(buf3), "%s?           %-2d           %-2d        %d nuyen / %d\r\n",
-               buf2, attrib_vals[i], skill_vals[i], cg_nuyen(d, i), force_vals[i]);
+               buf2, attrib_vals[i], skill_vals[i], cg_nuyen(d, i, FALSE), force_vals[i]);
       strlcpy(buf2, buf3, sizeof(buf2));
       break;
     case PR_RACE:
@@ -1066,7 +1066,7 @@ void priority_menu(struct descriptor_data *d)
     case PR_RESOURCE:
       snprintf(buf3, sizeof(buf3), "%sResources   -            -         %d nuyen / %d\r\n",
                buf2,
-               cg_nuyen(d, i),
+               cg_nuyen(d, i, FALSE),
                force_vals[i]);
       strlcpy(buf2, buf3, sizeof(buf2));
       break;
@@ -1313,7 +1313,7 @@ void points_menu(struct descriptor_data *d)
                "     Class     : ^c%15s^n (^c%3d^n Points)\r\n"
                "  Points Remaining: ^c%d^n\r\n"
                "Choose an area to change points on(p to continue): ", d->ccr.pr[PO_ATTR]/2, d->ccr.pr[PO_ATTR],
-               d->ccr.pr[PO_SKILL], d->ccr.pr[PO_SKILL], cg_nuyen(d, d->ccr.pr[PO_RESOURCES]),
+               d->ccr.pr[PO_SKILL], d->ccr.pr[PO_SKILL], cg_nuyen(d, d->ccr.pr[PO_RESOURCES], TRUE),
                resource_table[1][d->ccr.pr[PO_RESOURCES]], magic_table_ptr[d->ccr.pr[PO_MAGIC]],
                magic_cost[d->ccr.pr[PO_MAGIC]], pc_race_types[(int)GET_RACE(d->character)], d->ccr.pr[PO_RACE], 
                d->ccr.is_otaku ? "Otaku" : "None", d->ccr.is_otaku ? 30 : 0, d->ccr.points);
@@ -1442,7 +1442,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         d->ccr.points += resource_table[1][d->ccr.pr[PO_RESOURCES]];
         snprintf(buf, sizeof(buf), " ");
         for (int x = 0; x < 8; x++)
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %8d nuyen   (%2d points)\r\n ", x+1, cg_nuyen(d, x), resource_table[1][x]);
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d) %8d nuyen   (%2d points)\r\n ", x+1, cg_nuyen(d, x, TRUE), resource_table[1][x]);
         if (d->ccr.is_otaku)
           send_to_char(CH, "^wNOTE:^n Otaku are always limited to 5000 nuyen on start.\r\n ");
         SEND_TO_Q(buf, d);
@@ -1485,7 +1485,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
           break;
         }
 
-        GET_NUYEN_RAW(CH) = cg_nuyen(d, d->ccr.pr[PO_RESOURCES]);
+        GET_NUYEN_RAW(CH) = cg_nuyen(d, d->ccr.pr[PO_RESOURCES], TRUE);
         GET_SKILL_POINTS(CH) = d->ccr.pr[PO_SKILL];
         GET_ATT_POINTS(CH) = d->ccr.pr[PO_ATTR]/2;
 
