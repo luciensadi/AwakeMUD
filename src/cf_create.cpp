@@ -15,7 +15,7 @@
 #define CH d->character
 #define FORM d->edit_obj
 
-#define COMPLEX_FORM_KARMA_COST .10
+#define COMPLEX_FORM_KARMA_COST 100
 
 #define CFEDIT_MENU 0
 #define CFEDIT_TYPE 1
@@ -26,7 +26,7 @@
 extern int get_program_skill(char_data *ch, obj_data *prog, int target);
 
 float complex_form_karma_cost(struct char_data *ch, struct obj_data *form) {
-  return GET_COMPLEX_FORM_RATING(form) * COMPLEX_FORM_KARMA_COST;
+  return COMPLEX_FORM_KARMA_COST;
 }
 
 void cfedit_disp_menu(struct descriptor_data *d)
@@ -304,18 +304,18 @@ ACMD(do_forms)
     }
 
     if (!GET_COMPLEX_FORM_KARMA_PAID(form)) {
-      float karma_cost = complex_form_karma_cost(ch, form);
+      long karma_cost = complex_form_karma_cost(ch, form);
       if (PLR_FLAGGED(ch, PLR_NEWBIE)) {
-        send_to_char(ch, "Learning this form would have cost ^c%.2f^n karma, but as a newbie that cost will be waived.\r\n", karma_cost);
+        send_to_char(ch, "Learning this form would have cost ^c%.2f^n karma, but as a newbie that cost will be waived.\r\n", (float)karma_cost / 100);
         GET_COMPLEX_FORM_KARMA_PAID(form) = TRUE;
       } else if (GET_KARMA(ch) < karma_cost) {
-        send_to_char(ch, "Learning this complex form costs ^c%.2f^n, but you do not have sufficient karma.\r\n", karma_cost);
+        send_to_char(ch, "Learning this complex form costs ^c%.2f^n, but you do not have sufficient karma.\r\n", (float)karma_cost / 100);
         return;
       }
 
       GET_KARMA(ch) -= karma_cost;
       GET_COMPLEX_FORM_KARMA_PAID(form) = TRUE;
-      send_to_char(ch, "Learning this complex form cost ^c%.2f^n, you have ^g%.2f^n karma remaining.\r\n", karma_cost, GET_KARMA(ch));
+      send_to_char(ch, "Learning this complex form cost ^c%.2f^n, you have ^g%.2f^n karma remaining.\r\n", (float)karma_cost / 100, (float)GET_KARMA(ch) / 100);
     }
 
     if (GET_POS(ch) > POS_SITTING) {
