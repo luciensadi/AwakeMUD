@@ -363,7 +363,7 @@ void disp_submersion_menu(struct descriptor_data *d)
                " 1) Increase submersion grade (%s)\r\n"
                " 2) Learn a new echo (%d echoes available)\r\n"
                " 3) Return to reality\r\n"
-               "Enter submersion option: ",
+               "Enter submersion option: \r\r\r\n",
                submersion_cost(CH, FALSE) ? "^gavailable^n" : "^runavailable^n",
                get_free_echoes(CH));
   d->edit_mode = SUBMERSION_MAIN;

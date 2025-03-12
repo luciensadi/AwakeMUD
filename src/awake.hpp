@@ -827,7 +827,12 @@ enum {
 #define ECHO_GHOSTING      9
 #define ECHO_NEUROFILTER   10
 #define ECHO_OVERCLOCK     11
-#define ECHO_MAX           12
+#define ECHO_DAEMON_SUM    12
+#define ECHO_INFO_SORT     13
+#define ECHO_RES_LINK      14
+#define ECHO_SWITCH        15
+#define ECHO_TRACERT       16
+#define ECHO_MAX           17
 
 #define AURA_VIOLENCE      0
 #define AURA_TORTURE       1
