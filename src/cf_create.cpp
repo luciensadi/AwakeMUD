@@ -311,11 +311,11 @@ ACMD(do_forms)
       } else if (GET_KARMA(ch) < karma_cost) {
         send_to_char(ch, "Learning this complex form costs ^c%.2f^n, but you do not have sufficient karma.\r\n", (float)karma_cost / 100);
         return;
+      } else {
+        GET_KARMA(ch) -= karma_cost;
+        GET_COMPLEX_FORM_KARMA_PAID(form) = TRUE;
+        send_to_char(ch, "Learning this complex form cost ^c%.2f^n, you have ^g%.2f^n karma remaining.\r\n", (float)karma_cost / 100, (float)GET_KARMA(ch) / 100);
       }
-
-      GET_KARMA(ch) -= karma_cost;
-      GET_COMPLEX_FORM_KARMA_PAID(form) = TRUE;
-      send_to_char(ch, "Learning this complex form cost ^c%.2f^n, you have ^g%.2f^n karma remaining.\r\n", (float)karma_cost / 100, (float)GET_KARMA(ch) / 100);
     }
 
     if (GET_POS(ch) > POS_SITTING) {
