@@ -207,8 +207,7 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
     active->obj_flags.extra_flags.SetBit(ITEM_EXTRA_NOSELL);
 
     char restring[500];
-    snprintf(restring, sizeof(restring), "%s ^y(complex form)^n", GET_OBJ_NAME(best_form));
-    active->restring = str_dup(restring);
+    active->restring = str_dup(GET_OBJ_NAME(best_form));
     obj_to_obj(active, new_deck);
   }
 
