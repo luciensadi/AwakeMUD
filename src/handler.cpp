@@ -2389,7 +2389,7 @@ void extract_icon(struct matrix_icon * icon)
   struct matrix_icon *temp;
 
   // Clean up phone entries.
-  extract_phone_number(k->persona);
+  extract_phone_number(icon);
 
   // Clean up host data.
   if (icon->in_host) {
@@ -2597,7 +2597,6 @@ void extract_veh(struct veh_data * veh)
 /* Extract an object from the world */
 void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
 {
-  struct phone_data *phone, *temp;
   bool set = FALSE;
 
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !dont_warn_on_kept_items) {

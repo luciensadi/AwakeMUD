@@ -34,7 +34,6 @@ bool vnum_from_editing_restricted_zone(vnum_t vnum);
 struct remem *safe_found_mem(struct char_data *rememberer, struct char_data *ch);
 struct remem *unsafe_found_mem(struct remem *mem, struct char_data *ch);
 int recog(struct char_data *ch, struct char_data *i, const char *name);
-void phone_check();
 int find_skill_num(char *name);
 int find_spell_num(char *name);
 int find_ability_num(char *name);

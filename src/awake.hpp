@@ -2208,10 +2208,10 @@ enum {
 #define SCMD_UNSUB 1
 
 /* do_phone */
-#define SCMD_RING 1
-#define SCMD_HANGUP 2
-#define SCMD_TALK 3
-#define SCMD_ANSWER 4
+#define SCMD_RING     1
+#define SCMD_HANGUP   2
+#define SCMD_TALK     3
+#define SCMD_ANSWER   4
 
 /* do_man */
 #define SCMD_UNMAN 1

@@ -1269,7 +1269,8 @@ struct phone_data
   char* number;                          /* The registered phone number in the system, always ###-#### */
   int status;                           
   vnum_t origin_rtg;                     /* Phone numbers are provided by RTG (Matrix) carriers, this is the matrix[hostnum] of one */
-  
+  bool silent;                           /* Whether or not the phone number is on silent mode */
+
   struct obj_data *device;               /* Device refers to the device this number is allocated to */ 
   struct matrix_icon *persona;             /* If this is allocated to a persona, that link is here */
   long allocated_on;                     /* The creation time; when this phone number was allocated to a device */
@@ -1278,11 +1279,11 @@ struct phone_data
   char* caller_id_name;                  /* This is the legal name of the person this number was IC allocated to */
 
   // struct matrix_icon *persona;           /* If this is a matrix number, this will not be NULL. */
-  struct phone_data *next;               /* Phone data in a list used this to point to the next data; mostly unused */
+  // struct phone_data *next;               /* Phone data in a list used this to point to the next data; mostly unused */
   struct phone_data *connected_to;       /* During an active call, this will point to the phone this is connected to */ 
   phone_data() :
-      number(0), status(1), origin_rtg(1102), device(NULL), persona(NULL), allocated_on(time(0)), load_origin(0), caller_id_name(0),
-      next(NULL), connected_to(NULL)
+      number(0), status(1), origin_rtg(1102), silent(FALSE), device(NULL), persona(NULL), allocated_on(time(0)), 
+      load_origin(0), caller_id_name(0), connected_to(NULL)
   {}
 };
 

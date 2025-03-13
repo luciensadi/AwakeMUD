@@ -1201,13 +1201,6 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_ITEM_MONEY_CREDSTICK_OWNER_ID(money)     (GET_OBJ_VAL((money), 4))
 #define GET_ITEM_MONEY_CREDSTICK_LOCKCODE(money)     (GET_OBJ_VAL((money), 5))
 
-// ITEM_PHONE convenience defines
-#define GET_ITEM_PHONE_NUMBER_PART_ONE(phone)     (GET_OBJ_VAL((phone), 0))
-#define GET_ITEM_PHONE_NUMBER_PART_TWO(phone)     (GET_OBJ_VAL((phone), 1))
-#define GET_ITEM_PHONE_SWITCHED_ON(phone)         (GET_OBJ_VAL((phone), 2))
-#define GET_ITEM_PHONE_RINGER_ON(phone)           (GET_OBJ_VAL((phone), 3))
-
-
 // ITEM_BIOWARE convenience defines
 #define GET_BIOWARE_TYPE(bioware)                    (GET_OBJ_VAL((bioware), 0))
 #define GET_BIOWARE_RATING(bioware)                  (GET_OBJ_VAL((bioware), 1))

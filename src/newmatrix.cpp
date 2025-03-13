@@ -2245,8 +2245,6 @@ ACMD(do_connect)
   }
   DECKER->ch = ch;
   DECKER->phone = create_phone_number(DECKER->deck, OBJ_LOAD_REASON_CREATE_DECK);
-  DECKER->phone->next = phone_list;
-  phone_list = DECKER->phone;
   DECKER->phone->persona = PERSONA;
   DECKER->phone->origin_rtg = ch->in_room->rtg;
   std::hash<std::string> hasher;
@@ -3536,6 +3534,7 @@ ACMD(do_crash)
   } else
     send_to_icon(PERSONA, "Your program fails to run.\r\n");
 }
+
 ACMD(do_matrix_scan)
 {
   skip_spaces(&argument);
@@ -3629,6 +3628,7 @@ ACMD(do_matrix_scan)
     }
   send_to_icon(PERSONA, "You don't see anything named '%s' here.", argument);
 }
+
 ACMD(do_abort)
 {
   if (!PERSONA) {
@@ -3656,182 +3656,27 @@ ACMD(do_abort)
 
 ACMD(do_talk)
 {
-  // If they trigger automod with this, bail out.
-  if (check_for_banned_content(argument, ch))
-    return;
-
-  skip_spaces(&argument);
-  if (!PERSONA)
-    send_to_char(ch, "You can't do that while hitching.\r\n");
-  else if (!DECKER->phone->connected_to)
-    send_to_icon(PERSONA, "You don't have a call connected.\r\n");
-  else if (!DECKER->phone->status == PHONE_STATUS_BUSY)
-    send_to_icon(PERSONA, "They haven't answered yet.\r\n");
-  else if (!*argument)
-    send_to_icon(PERSONA, "Say what?\r\n");
-  else {
-    struct char_data *tch = NULL;
-    bool tch_is_matrix = FALSE;
-
-    snprintf(buf, sizeof(buf), "^Y$v on the other end of the line says, \"%s\"", argument);
-    snprintf(buf2, sizeof(buf2), "^YYou say, \"%s\"\r\n", argument);
-    send_to_phone(DECKER->phone, buf2);
-    send_to_other_phone(DECKER->phone, buf);
-  }
-}
-
-ACMD(do_comcall)
-{
-  struct char_data *tch;
   skip_spaces(&argument);
   if (!PERSONA) {
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
   }
 
-  if (!DECKER->phone) {
-    send_to_char("You don't have a phone available.\r\n", ch);
-    return;
-  }
-
-  if (!subcmd) {
-    send_to_char(ch, "Your commlink phone number is %08d.\r\n", DECKER->phone->number);
-
-    if (DECKER->phone->connected_to) {
-      if (DECKER->phone->connected_to->status == PHONE_STATUS_IN_CALL && DECKER->phone->status == PHONE_STATUS_IN_CALL)
-        send_to_char(ch, "Connected to: %d\r\n", DECKER->phone->connected_to->number);
-      else if (!DECKER->phone->connected_to->status == PHONE_STATUS_RINGING)
-        send_to_char(ch, "Calling: %s\r\n", DECKER->phone->connected_to->number);
-      else
-        send_to_char(ch, "Incoming call from: %s\r\n", DECKER->phone->connected_to->number);
-    }
-    return;
-  }
-
-  if (subcmd == SCMD_ANSWER) {
-    if (!DECKER->phone->connected_to) {
-      send_to_icon(PERSONA, "There are no incoming connections currently.\r\n");
-      return;
-    }
-
-    if (DECKER->phone->connected_to && DECKER->phone->status == PHONE_STATUS_IN_CALL) {
-      send_to_icon(PERSONA, "You're already connected to a call.\r\n");
-      return;
-    }
-
-    if (DECKER->phone->connected_to && DECKER->phone->status == PHONE_STATUS_BUSY) {
-      send_to_icon(PERSONA, "How are you going to answer when you're calling someone?\r\n");
-      return;
-    }
-
-    send_to_other_phone(DECKER->phone, "The call is answered.\r\n");
-    send_to_phone(DECKER->phone, "You establish a connection.\r\n");
-
-    DECKER->phone->status = PHONE_STATUS_IN_CALL;
-    DECKER->phone->connected_to->status = PHONE_STATUS_IN_CALL;
-  } else if (subcmd == SCMD_HANGUP) {
-    if (!DECKER->phone->connected_to) {
-      send_to_icon(PERSONA, "But you don't have a direct connection established.\r\n");
-      return;
-    }
-
-    // You don't actually need to be in a call (IE: IN_CALL) to hangup
-    if (DECKER->phone->connected_to->persona)
-      send_to_other_phone(DECKER->phone, "The flashing phone icon fades from view.\r\n");
-    else {
-      if (DECKER->phone->connected_to->status == PHONE_STATUS_IN_CALL)
-          send_to_other_phone(DECKER->phone, "The phone is hung up from the other side.\r\n");
-        else
-          send_to_other_phone(DECKER->phone, "Your phone stops ringing.\r\n");
-    }
-    DECKER->phone->status = PHONE_STATUS_ONLINE;
-    DECKER->phone->connected_to->connected_to = NULL;
-    DECKER->phone->connected_to->status = PHONE_STATUS_ONLINE;
-    DECKER->phone->connected_to = NULL;
-    send_to_icon(PERSONA, "You terminate the connection.\r\n");
-  } else if (subcmd == SCMD_RING) {
-    if (DECKER->phone->connected_to) {
-      send_to_icon(PERSONA, "You already have a call connected.\r\n");
-      return;
-    }
-
-    any_one_arg(argument, arg);
-    if (!*arg)
-      send_to_icon(PERSONA, "Ring what number?");
-    else if (!is_phone_number_valid_format(arg))
-      send_to_icon(PERSONA, "That's not a valid number.\r\n");
-    else if (matrix[PERSONA->in_host].type != HOST_RTG)
-      send_to_icon(PERSONA, "You can only perform that action on an RTG.\r\n");
-    else {
-      struct phone_data *k;
-      if (!resolve_phone_number(arg, k)) {
-        send_to_icon(PERSONA, "It would appear the commcode you have tried to reach is invalid.\r\n");
-        return;
-      }
-
-      if (k->status == PHONE_STATUS_OFFLINE) {
-        send_to_icon(PERSONA, "The commcode you've tried to reach is not available at this time.\r\n");
-        return;
-      }
-
-      int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_COMMLINK, 0);
-      if (success > 0) {
-        if (k->status == PHONE_STATUS_BUSY || k->status == PHONE_STATUS_IN_CALL || k->status == PHONE_STATUS_RINGING) {
-          send_to_icon(PERSONA, "The commcode you've tried to reach is busy.\r\n");
-          return;
-        }
-        DECKER->phone->connected_to = k;
-        DECKER->phone->status = PHONE_STATUS_BUSY;
-        k->connected_to = DECKER->phone;
-
-        if (k->persona)
-          send_to_other_phone(DECKER->phone, "A small telephone symbol blinks in the top left of your view.\r\n");
-        else {
-          if (!try_get_phone_character(k, tch)) {
-            // We couldn't get a phone character, so just ring the room.
-            if (GET_OBJ_VAL(k->device, 3)) {
-              // Silence mode so just return
-              return;
-            }
-            
-            snprintf(buf, sizeof(buf), "%s^n rings.", GET_OBJ_NAME(k->device));
-            if (k->device->in_veh) {
-              send_to_veh(buf, k->device->in_veh, NULL, TRUE);
-              return;
-            }
-            
-            send_to_room(buf, k->device->in_room);
-            return;
-          }
-
-          if (GET_POS(tch) == POS_SLEEPING) {
-            if (success_test(GET_WIL(tch), 4)) {
-              GET_POS(tch) = POS_RESTING;
-              send_to_char("You are woken by your phone ringing.\r\n", tch);
-            } else if (!GET_OBJ_VAL(k->device, 3)) {
-              act("$n's phone rings.", FALSE, tch, 0, 0, TO_ROOM);
-              return;
-            } else
-              return;
-          }
-          if (!GET_OBJ_VAL(k->device, 3)) {
-            send_to_char("Your phone rings.\r\n", tch);
-            act("$n's phone rings.", FALSE, tch, NULL, NULL, TO_ROOM);
-          } else {
-            if (GET_OBJ_TYPE(k->device) == ITEM_CYBERWARE || success_test(GET_INT(tch), 4))
-              send_to_char("You feel your phone ring.\r\n", tch);
-          }
-        }
-
-        send_to_icon(PERSONA, "It begins to ring.\r\n");
-      } else
-        send_to_icon(PERSONA, "You can't seem to connect.\r\n");
-    }
-  }
+  do_phone_talk(ch, DECKER->phone, argument);
 }
+
+ACMD(do_comcall)
+{
+  if (!PERSONA) {
+    send_to_char(ch, "You can't do that while hitching.\r\n");
+    return;
+  }
+
+  handle_phone_command(ch, subcmd, argument);
+}
+
 ACMD(do_tap)
 {}
-
 
 ACMD(do_restrict)
 {

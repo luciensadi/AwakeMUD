@@ -186,6 +186,7 @@ char *policies = NULL;          /* policies page                 */
 struct time_info_data time_info;/* the infomation about the time    */
 struct weather_data weather_info;       /* the infomation about the weather */
 struct player_special_data dummy_mob;   /* dummy spec area for mobs      */
+struct phone_data *phone_list = NULL;
 int market[5] = { 5000, 5000, 5000, 5000, 5000 };
 
 MYSQL *mysql;

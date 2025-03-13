@@ -474,7 +474,6 @@ ACMD_DECLARE(do_speed);
 ACMD_DECLARE(do_incognito);
 ACMD_DECLARE(do_chase);
 ACMD_DECLARE(do_phone);
-ACMD_DECLARE(do_phonelist);
 ACMD_DECLARE(do_mount);
 ACMD_DECLARE(do_man);
 ACMD_DECLARE(do_target);
@@ -817,7 +816,6 @@ struct command_info cmd_info[] =
     { "pgroup"     , POS_LYING   , do_pgroup   , 0, 0, BLOCKS_IDLE_REWARD },
     { "pgset"      , POS_MORTALLYW, do_pgset   , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
     { "phone"      , POS_LYING   , do_phone    , 0, 0, ALLOWS_IDLE_REWARD },
-    { "phonelist"  , POS_DEAD    , do_phonelist, LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "photo"      , POS_RESTING , do_photo    , 0, 0, BLOCKS_IDLE_REWARD },
     { "pockets"    , POS_RESTING , do_pockets  , 0, 0, ALLOWS_IDLE_REWARD },
     { "pop"        , POS_SITTING , do_pop      , 0, 0, BLOCKS_IDLE_REWARD },

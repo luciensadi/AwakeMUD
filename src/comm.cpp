@@ -75,6 +75,7 @@
 #include "newhouse.hpp"
 #include "factions.hpp"
 #include "player_exdescs.hpp"
+#include "phone.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -950,7 +951,7 @@ void game_loop(int mother_desc)
 
     if (!(pulse % PULSE_ZONE)) {
       zone_update();
-      phone_check();
+      phones_update();
       process_autonav();
       process_vehicle_decay();
     }
