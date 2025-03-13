@@ -1696,7 +1696,8 @@ enum {
 #define BIO_PHENOTYPIC_STR       31
 // End of auto-cultured items.
 #define BIO_BIOSCULPTING         32
-#define NUM_BIOWARE              33
+#define BIO_MEDIALCORTEX         33
+#define NUM_BIOWARE              34
 
 #define BIOWARE_STANDARD 0
 #define BIOWARE_CULTURED 1
@@ -2800,7 +2801,6 @@ enum {
 #define OBJ_BIO_ENHANCED_ARTICULATION      85803
 #define OBJ_BIO_TRAUMA_DAMPER              85940
 #define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    85939
-#define OBJ_BIO_CEREBRAL_BOOSTER_II        85927
 #define OBJ_BIO_CATS_EYES                  85802
 #define OBJ_BIO_METABOLIC_ARRESTER         85804
 #define OBJ_BIO_PAIN_EDITOR                85937
@@ -2813,7 +2813,6 @@ enum {
 #define OBJ_BIO_ENHANCED_ARTICULATION      415
 #define OBJ_BIO_TRAUMA_DAMPER              60611
 #define OBJ_BIO_SYNAPTIC_ACCELERATOR_II    414
-#define OBJ_BIO_CEREBRAL_BOOSTER_II        411
 #define OBJ_BIO_CATS_EYES                  1461
 #define OBJ_BIO_METABOLIC_ARRESTER         60605
 #define OBJ_BIO_PAIN_EDITOR                412

@@ -2690,4 +2690,66 @@ Material:	metal
 	Location:	Strength
 	Modifier:	2
 BREAK
+#593
+Keywords:	medial cortex bridge mct
+Name:	a medial cortex bridge I
+RoomDesc:$
+A strange brain-looking thang is here.~
+LookDesc:$
+Medial cortex bridge, rating 1.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	1
+	Val2:	6
+	Val4:	40
+[AFFECT 0]
+	Location:	Willpower
+	Modifier:	1
+BREAK
+#594
+Keywords:	medial cortex bridge mct
+Name:	a medial cortex bridge II
+RoomDesc:$
+A brainish-looking creature stares you in the face.~
+LookDesc:$
+Medial cortex bridge, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	110000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	2
+	Val2:	6
+	Val4:	80
+[AFFECT 0]
+	Location:	Willpower
+	Modifier:	2
+BREAK
 END

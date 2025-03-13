@@ -30,6 +30,10 @@ int get_otaku_wil(struct char_data *ch) {
   if (pain_editor && GET_BIOWARE_IS_ACTIVATED(pain_editor))
     wil_stat++;
 
+  struct obj_data *mct_bridge = find_bioware(ch, BIO_MEDIALCORTEX);
+  if (mct_bridge)
+    wil_stat += GET_BIOWARE_RATING(mct_bridge);
+
   /* Handling Drugs */
   int detox_force = affected_by_spell(ch, SPELL_DETOX);
   if (GET_DRUG_STAGE(ch, DRUG_KAMIKAZE) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_KAMIKAZE, detox_force))

@@ -7649,6 +7649,14 @@ void price_bio(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 14;
       break;
+    case BIO_MEDIALCORTEX:
+      if (GET_BIOWARE_RATING(obj) == 1)
+        GET_OBJ_COST(obj) = 50000;
+      else GET_OBJ_COST(obj) = 110000;
+      GET_BIOWARE_ESSENCE_COST(obj) = GET_BIOWARE_RATING(obj) * 40;
+      GET_OBJ_AVAILTN(obj) = 6;
+      GET_OBJ_AVAILDAY(obj) = 14;
+      break;
     case BIO_DAMAGECOMPENSATOR:
       if (GET_BIOWARE_RATING(obj) < 3) {
         GET_OBJ_COST(obj) = GET_BIOWARE_RATING(obj) * 25000;
@@ -7743,7 +7751,11 @@ void price_bio(struct obj_data *obj)
   }
 
   // Check for cultured. Don't modify the prices of things that are cultured by default (brainware, etc)
-  if ((GET_BIOWARE_TYPE(obj) < BIO_CEREBRALBOOSTER || GET_BIOWARE_TYPE(obj) >= BIO_BIOSCULPTING) && GET_SETTABLE_BIOWARE_IS_CULTURED(obj)) {
+  if (
+      (GET_BIOWARE_TYPE(obj) < BIO_CEREBRALBOOSTER || GET_BIOWARE_TYPE(obj) >= BIO_BIOSCULPTING) 
+      && GET_SETTABLE_BIOWARE_IS_CULTURED(obj)
+      && GET_BIOWARE_TYPE(obj) != BIO_MEDIALCORTEX
+    ) {
     GET_OBJ_COST(obj) *= 4;
     GET_BIOWARE_ESSENCE_COST(obj) = (int) round(GET_BIOWARE_ESSENCE_COST(obj) * .75);
     GET_OBJ_AVAILTN(obj) += 2;
