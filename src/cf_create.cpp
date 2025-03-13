@@ -123,7 +123,7 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
 
       send_to_char(CH, "Complex form saved as %s!\r\n", d->edit_obj->restring);
 
-      target = GET_COMPLEX_FORM_RATING(d->edit_obj);
+      target = MAX(2, GET_COMPLEX_FORM_RATING(d->edit_obj) - (GET_WIL(CH) / 2));
       intelligence = GET_INT(CH);
       success = success_test(intelligence, target);
       // Minimum program size is rating^2.
