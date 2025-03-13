@@ -316,8 +316,8 @@ ACMD(do_forms)
 
     if (!GET_COMPLEX_FORM_KARMA_PAID(form)) {
       long karma_cost = complex_form_karma_cost(ch, form);
-      if (PLR_FLAGGED(ch, PLR_NEWBIE)) {
-        send_to_char(ch, "Learning this form would have cost ^c%.2f^n karma, but as a newbie that cost will be waived.\r\n", (float)karma_cost / 100);
+      if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_COMPLEX_FORM_RATING(form) <= 6) {
+        send_to_char(ch, "Learning this form would have cost ^c%.2f^n karma, but as a newbie making a form at or under rating 6 that cost will be waived.\r\n", (float)karma_cost / 100);
         GET_COMPLEX_FORM_KARMA_PAID(form) = TRUE;
       } else if (GET_KARMA(ch) < karma_cost) {
         send_to_char(ch, "Learning this complex form costs ^c%.2f^n, but you do not have sufficient karma.\r\n", (float)karma_cost / 100);
