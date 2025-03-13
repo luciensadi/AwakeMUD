@@ -353,7 +353,7 @@ void copyover_recover()
     }
 
     /* create a new descriptor */
-    CREATE(d, struct descriptor_data, 1);
+    d = new descriptor_data;
     memset ((char *) d, 0, sizeof (struct descriptor_data));
     init_descriptor (d,desc); /* set up various stuff */
 
@@ -2568,7 +2568,7 @@ void close_socket(struct descriptor_data *d)
   // Clean up message history lists.
   delete_message_history(d);
 
-  free(d);
+  delete d;
 }
 
 void check_idle_passwords(void)

@@ -351,12 +351,13 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 
 #define AN(string) (strchr("aeiouAEIOU", *string) ? "an" : "a")
 
-
+/*
 #define CREATE(result, type, number)  do {\
  if ((number) * sizeof(type) <= 0) \
   log_vfprintf("SYSERR: Zero bytes or less requested at %s:%d.", __FILE__, __LINE__); \
  if (!((result) = (type *) calloc ((number), sizeof(type)))) \
   { perror("SYSERR: malloc failure"); exit(ERROR_MALLOC_FAILED_IN_CREATE_MACRO); } } while(0)
+*/
 
 /*
  * the source previously used the same code in many places to remove an item
