@@ -4610,9 +4610,9 @@ void reset_zone(int zone, int reboot)
 {
   SPECIAL(fixer);
   int cmd_no, last_cmd = 0, found = 0, no_mob = 0, temp_qty = 0;
-  static int i;
+  static int i = 0;
   struct char_data *mob = NULL;
-  struct obj_data *obj, *obj_to, *check;
+  struct obj_data *obj = NULL, *obj_to = NULL, *check = NULL;
   struct veh_data *veh = NULL;
 
   for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
