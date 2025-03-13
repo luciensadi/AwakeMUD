@@ -685,9 +685,9 @@ void update_buildrepair(void)
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);
           CH->char_specials.timer = 0;
         }
-      } else if (AFF_FLAGGED(CH, AFF_COMPLEX_FORM_PROGRAM)) {
-        if (--GET_DESIGN_PROGRAMMING_TICKS_LEFT(PROG) < 1) {
-          if (GET_DESIGN_PROGRAMMING_FAILED(PROG)) {
+      } else if (AFF_FLAGGED(desc->character, AFF_COMPLEX_FORM_PROGRAM)) {
+        if (--GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(PROG) < 1) {
+          if (GET_COMPLEX_FORM_LEARNING_FAILED(PROG)) {
             switch(number(1,10)) {
               case 1:
                 send_to_char(desc->character, "You have finished a spell formula for Stunbolt... wait, what the hell?! You realise learning %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
@@ -722,10 +722,7 @@ void update_buildrepair(void)
             extract_obj(PROG);
           } else {
             send_to_char(desc->character, "You successfully learn %s.\r\n", GET_OBJ_NAME(PROG));
-            GET_PROGRAM_TYPE(PROG) = GET_DESIGN_PROGRAM(PROG);
-            GET_PROGRAM_RATING(PROG) = GET_DESIGN_RATING(PROG);
-            GET_PROGRAM_SIZE(PROG) = GET_DESIGN_SIZE(PROG);
-            GET_PROGRAM_ATTACK_DAMAGE(PROG) = GET_DESIGN_PROGRAM_WOUND_LEVEL(PROG);
+            GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(PROG) = 0;            
           }
           PROG = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_COMPLEX_FORM_PROGRAM);
