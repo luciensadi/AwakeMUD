@@ -79,7 +79,7 @@ void cfedit_disp_program_menu(struct descriptor_data *d)
 
 void cfedit_parse(struct descriptor_data *d, const char *arg)
 {
-  int target, success, intelligence;
+  int target, success, intelligence, program_size;
   struct obj_data *asist;
   struct char_data *ch = CH;
   FAILURE_CASE(!(asist = find_cyberware(ch, CYB_ASIST)), "You don't have an asist converter.");
@@ -127,7 +127,7 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
       intelligence = GET_INT(CH);
       success = success_test(intelligence, target);
       // Minimum program size is rating^2.
-      int program_size = GET_COMPLEX_FORM_RATING(FORM) * GET_COMPLEX_FORM_RATING(FORM);
+      program_size = GET_COMPLEX_FORM_RATING(FORM) * GET_COMPLEX_FORM_RATING(FORM);
       if (GET_COMPLEX_FORM_PROGRAM(FORM) == SOFT_ATTACK) {
         // Attack programs multiply size by a factor determined by wound level.
         program_size *= attack_multiplier[GET_COMPLEX_FORM_WOUND_LEVEL(FORM)];
