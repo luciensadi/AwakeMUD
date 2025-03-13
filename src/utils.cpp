@@ -779,12 +779,10 @@ char *str_dup(const char *source)
   if (!source)
     return NULL;
 
-  char *New = new char[strlen(source) + 2];
+  size_t newlen = strlen(source) + 2;
+  char *New = new char[newlen];
 
-  // This shouldn't be needed, but just in case.
-  // memset(New, 0, sizeof(char) * (strlen(source) + 1));
-
-  strncpy(New, source, strlen(source) + 1);
+  strlcpy(New, source, newlen);
   return New;
 }
 

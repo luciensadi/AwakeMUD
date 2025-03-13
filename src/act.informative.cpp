@@ -6564,7 +6564,7 @@ ACMD(do_consider)
 
     // Pick out the victim's cyberware, if any. TODO: Player cyberware.
     bool victim_uses_cyber_implants = FALSE, ch_uses_cyber_implants = FALSE;
-    int vict_unarmed_dangerliciousness_boost = 0, ch_unarmed_dangerliciousness_boost;
+    int vict_unarmed_dangerliciousness_boost = 0, ch_unarmed_dangerliciousness_boost = 0;
     for (struct obj_data *obj = victim->cyberware; obj; obj = obj->next_content) {
       if (!GET_CYBERWARE_IS_DISABLED(obj)) {
         switch (GET_CYBERWARE_TYPE(obj)) {

@@ -2743,8 +2743,8 @@ void nanny(struct descriptor_data * d, char *arg)
   extern vnum_t frozen_start_room;
   extern vnum_t newbie_start_room;
   extern int max_bad_pws;
-  vnum_t load_room_vnum;
-  rnum_t load_room_rnum;
+  vnum_t load_room_vnum = RM_ENTRANCE_TO_DANTES;
+  rnum_t load_room_rnum = 0;
   bool dirty_password = FALSE;
 
   int parse_class(struct descriptor_data *d, char *arg);

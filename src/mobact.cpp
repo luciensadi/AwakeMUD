@@ -642,20 +642,18 @@ void mobact_change_firemode(struct char_data *ch) {
 bool mobact_evaluate_spec_proc(struct char_data *ch) {
   char empty = '\0';
   if (mob_index[GET_MOB_RNUM(ch)].func == NULL && mob_index[GET_MOB_RNUM(ch)].sfunc == NULL) {
-    log_vfprintf("%s (#%d): Attempting to call non-existing mob func",
+    log_vfprintf("%s (#%d): Attempting to call non-existing mob func, removing spec bit",
                  GET_NAME(ch), GET_MOB_VNUM(ch));
 
     MOB_FLAGS(ch).RemoveBit(MOB_SPEC);
   }
 
-  else if ((mob_index[GET_MOB_RNUM(ch)].func) (ch, ch, 0, &empty)) {
+  else if (mob_index[GET_MOB_RNUM(ch)].func != NULL && (mob_index[GET_MOB_RNUM(ch)].func) (ch, ch, 0, &empty)) {
     return true;
   }
 
-  else if (mob_index[GET_MOB_RNUM(ch)].sfunc != NULL) {
-    if ((mob_index[GET_MOB_RNUM(ch)].sfunc) (ch, ch, 0, &empty)) {
-      return true;
-    }
+  else if (mob_index[GET_MOB_RNUM(ch)].sfunc != NULL && (mob_index[GET_MOB_RNUM(ch)].sfunc) (ch, ch, 0, &empty)) {
+    return true;
   }
 
   return false;

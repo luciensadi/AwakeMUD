@@ -7664,7 +7664,7 @@ ACMD(do_incognito)
   if (GET_INCOG_LEV(ch) == 0)
     send_to_char("You are no longer incognito on the wholist.\r\n", ch);
   else
-    send_to_char(ch, "Your wholist incognito is level %d.\r\n", i);
+    send_to_char(ch, "Your wholist incognito is level %d.\r\n", GET_INCOG_LEV(ch));
 }
 
 ACMD(do_zone) {
