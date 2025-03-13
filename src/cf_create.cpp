@@ -126,19 +126,22 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
       target = GET_COMPLEX_FORM_RATING(d->edit_obj);
       intelligence = GET_INT(CH);
       success = success_test(intelligence, target);
+      // Minimum program size is rating^2.
+      int program_size = GET_COMPLEX_FORM_RATING(FORM) * GET_COMPLEX_FORM_RATING(FORM);
+      if (GET_COMPLEX_FORM_PROGRAM(FORM) == SOFT_ATTACK) {
+        // Attack programs multiply size by a factor determined by wound level.
+        program_size *= attack_multiplier[GET_COMPLEX_FORM_WOUND_LEVEL(FORM)];
+      } else {
+        // Others multiply by a set multiplier based on software type.
+        program_size *= programs[GET_COMPLEX_FORM_PROGRAM(FORM)].multiplier;
+      }
       if (success <= 0) {
         GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj) = number(1, 6) + number(1, 6);
         GET_COMPLEX_FORM_ORIGINAL_TICKS_LEFT(d->edit_obj) = (GET_COMPLEX_FORM_SIZE(d->edit_obj) * 60) / number(1, 3);
         GET_COMPLEX_FORM_LEARNING_FAILED(d->edit_obj) = 1;
-      } else {
-        if (GET_COMPLEX_FORM_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
-          GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj) = GET_COMPLEX_FORM_RATING(d->edit_obj) * attack_multiplier[GET_COMPLEX_FORM_WOUND_LEVEL(d->edit_obj)];
-        } else {
-          GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj) = GET_COMPLEX_FORM_RATING(d->edit_obj) * programs[GET_COMPLEX_FORM_PROGRAM(d->edit_obj)].multiplier;
-        }
-        
-        GET_COMPLEX_FORM_SIZE(d->edit_obj) = GET_COMPLEX_FORM_RATING(d->edit_obj) * GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj);
-        GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj) *= 20;
+      } else {        
+        GET_COMPLEX_FORM_SIZE(d->edit_obj) = program_size;
+        GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj) = (program_size / success) * 60;
         GET_COMPLEX_FORM_ORIGINAL_TICKS_LEFT(d->edit_obj) = GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj);
         GET_COMPLEX_FORM_CREATOR_IDNUM(d->edit_obj) = GET_IDNUM(CH);
       }
