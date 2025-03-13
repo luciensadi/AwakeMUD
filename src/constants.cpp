@@ -2468,7 +2468,8 @@ const char *totem_types[] =
     "Great Mother",
     "Moon Maiden",
     "Trickster",
-    "Father Tree"
+    "Father Tree",
+    "Dragon"
   };
 
 const char *spell_category[6] =
