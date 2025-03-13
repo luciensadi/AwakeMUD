@@ -549,6 +549,10 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         else if (type == ILLUSION)
           skill -= 1;
         break;
+      case TOTEM_DRAGON:
+        if (type == DETECTION || type == MANIPULATION)
+          skill += 2;
+        break;
     }
   } else if (action == CONJURING)
   {
@@ -721,6 +725,10 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
     case TOTEM_WILDHUNTSMAN:
       if (type == SPIRIT_STORM)
         skill += 2;
+      break;
+    case TOTEM_DRAGON:
+      if (type == SPIRIT_MOUNTAIN)
+        skill += 1;
       break;
     }
   }
