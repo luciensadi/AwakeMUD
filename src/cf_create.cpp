@@ -15,6 +15,8 @@
 #define CH d->character
 #define FORM d->edit_obj
 
+#define COMPLEX_FORM_KARMA_COST 100
+
 #define CFEDIT_MENU 0
 #define CFEDIT_TYPE 1
 #define CFEDIT_NAME 2
@@ -23,45 +25,29 @@
 
 extern int get_program_skill(char_data *ch, obj_data *prog, int target);
 
-#define COMPLEX_FORM_TYPES 16
-
-int complex_form_programs[COMPLEX_FORM_TYPES] = {
-  SOFT_ATTACK,
-  SOFT_SLOW,
-  SOFT_COMPRESSOR,
-  SOFT_DECRYPT,
-  SOFT_RELOCATE,
-  SOFT_SLEAZE,
-  SOFT_TRACK,
-  SOFT_ARMOR,
-  SOFT_CAMO,
-  SOFT_CRASH,
-  SOFT_DEFUSE,
-  SOFT_EVALUATE,
-  SOFT_VALIDATE,
-  SOFT_SWERVE,
-  SOFT_CLOAK,
-  SOFT_LOCKON
-};
+float complex_form_karma_cost(struct char_data *ch, struct obj_data *form) {
+  return COMPLEX_FORM_KARMA_COST;
+}
 
 void cfedit_disp_menu(struct descriptor_data *d)
 {
   CLS(CH);
   send_to_char(CH, "1) Name: ^c%s^n\r\n", GET_OBJ_NAME(FORM));
-  send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[GET_DESIGN_PROGRAM(FORM)].name);
-  send_to_char(CH, "3) Rating: ^c%d^n\r\n", GET_DESIGN_RATING(FORM));
+  send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[GET_COMPLEX_FORM_PROGRAM(FORM)].name);
+  send_to_char(CH, "3) Rating: ^c%d^n\r\n", GET_COMPLEX_FORM_RATING(FORM));
 
   // Minimum program size is rating^2.
-  int program_size = GET_DESIGN_RATING(FORM) * GET_DESIGN_RATING(FORM);
-  if (GET_DESIGN_PROGRAM(FORM) == SOFT_ATTACK) {
+  int program_size = GET_COMPLEX_FORM_RATING(FORM) * GET_COMPLEX_FORM_RATING(FORM);
+  if (GET_COMPLEX_FORM_PROGRAM(FORM) == SOFT_ATTACK) {
     // Attack programs multiply size by a factor determined by wound level.
-    program_size *= attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(FORM)];
-    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(GET_DESIGN_PROGRAM_WOUND_LEVEL(FORM)));
+    program_size *= attack_multiplier[GET_COMPLEX_FORM_WOUND_LEVEL(FORM)];
+    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(GET_COMPLEX_FORM_WOUND_LEVEL(FORM)));
   } else {
     // Others multiply by a set multiplier based on software type.
-    program_size *= programs[GET_DESIGN_PROGRAM(FORM)].multiplier;
+    program_size *= programs[GET_COMPLEX_FORM_PROGRAM(FORM)].multiplier;
   }
-  send_to_char(CH, "Effective Size: ^c%d^n\r\n\r\n", program_size);
+  send_to_char(CH, "Effective Size: ^c%d^n\r\n", program_size);
+  send_to_char(CH, "    Karma Cost: ^c%.2f^n\r\n\r\n", (float)complex_form_karma_cost(CH, FORM) / 100);
   send_to_char(CH, "q) Quit and save\r\nEnter your choice: ");
   d->edit_mode = CFEDIT_MENU;
 }
@@ -93,7 +79,7 @@ void cfedit_disp_program_menu(struct descriptor_data *d)
 
 void cfedit_parse(struct descriptor_data *d, const char *arg)
 {
-  int target, success, intelligence;
+  int target, success, intelligence, program_size;
   struct obj_data *asist;
   struct char_data *ch = CH;
   FAILURE_CASE(!(asist = find_cyberware(ch, CYB_ASIST)), "You don't have an asist converter.");
@@ -111,7 +97,7 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
       cfedit_disp_program_menu(d);
       break;
     case '3':
-      if (!GET_DESIGN_PROGRAM(d->edit_obj))
+      if (!GET_COMPLEX_FORM_PROGRAM(d->edit_obj))
         send_to_char("Choose a program type first!\r\n", CH);
       else {
         send_to_char("Enter Rating: ", CH);
@@ -119,7 +105,7 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
       }
       break;
     case '4':
-      if (GET_DESIGN_PROGRAM(d->edit_obj) != SOFT_ATTACK)
+      if (GET_COMPLEX_FORM_PROGRAM(d->edit_obj) != SOFT_ATTACK)
         send_to_char(CH, "Invalid option!\r\n");
       else {
         CLS(CH);
@@ -129,7 +115,7 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
     case 'Q':
-      if (!GET_DESIGN_PROGRAM(d->edit_obj) || !GET_DESIGN_RATING(d->edit_obj)) {
+      if (!GET_COMPLEX_FORM_PROGRAM(d->edit_obj) || !GET_COMPLEX_FORM_RATING(d->edit_obj)) {
         send_to_char("You must specify a program type and/or rating first.\r\n", CH);
         cfedit_disp_menu(d);
         return;
@@ -137,24 +123,27 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
 
       send_to_char(CH, "Complex form saved as %s!\r\n", d->edit_obj->restring);
 
-      target = GET_DESIGN_RATING(d->edit_obj);
+      target = MAX(2, GET_COMPLEX_FORM_RATING(d->edit_obj) - (GET_WIL(CH) / 2));
       intelligence = GET_INT(CH);
       success = success_test(intelligence, target);
-      if (success <= 0) {
-        GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj) = number(1, 6) + number(1, 6);
-        GET_OBJ_TIMER(d->edit_obj) = GET_DESIGN_ORIGINAL_TICKS_LEFT(d->edit_obj) = (GET_DESIGN_SIZE(d->edit_obj) * 60) / number(1, 3);
-        GET_DESIGN_PROGRAMMING_FAILED(d->edit_obj) = 1;
+      // Minimum program size is rating^2.
+      program_size = GET_COMPLEX_FORM_RATING(FORM) * GET_COMPLEX_FORM_RATING(FORM);
+      if (GET_COMPLEX_FORM_PROGRAM(FORM) == SOFT_ATTACK) {
+        // Attack programs multiply size by a factor determined by wound level.
+        program_size *= attack_multiplier[GET_COMPLEX_FORM_WOUND_LEVEL(FORM)];
       } else {
-        if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
-          GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)];
-        } else {
-          GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * programs[GET_DESIGN_PROGRAM(d->edit_obj)].multiplier;
-        }
-        
-        GET_DESIGN_SIZE(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj);
-        GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj) *= 20;
-        GET_DESIGN_ORIGINAL_TICKS_LEFT(d->edit_obj) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(d->edit_obj);
-        GET_DESIGN_CREATOR_IDNUM(d->edit_obj) = GET_IDNUM(CH);
+        // Others multiply by a set multiplier based on software type.
+        program_size *= programs[GET_COMPLEX_FORM_PROGRAM(FORM)].multiplier;
+      }
+      if (success <= 0) {
+        GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj) = number(1, 6) + number(1, 6);
+        GET_COMPLEX_FORM_ORIGINAL_TICKS_LEFT(d->edit_obj) = (GET_COMPLEX_FORM_SIZE(d->edit_obj) * 60) / number(1, 3);
+        GET_COMPLEX_FORM_LEARNING_FAILED(d->edit_obj) = 1;
+      } else {        
+        GET_COMPLEX_FORM_SIZE(d->edit_obj) = program_size;
+        GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj) = (program_size / success) * 60;
+        GET_COMPLEX_FORM_ORIGINAL_TICKS_LEFT(d->edit_obj) = GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj);
+        GET_COMPLEX_FORM_CREATOR_IDNUM(d->edit_obj) = GET_IDNUM(CH);
       }
 
       obj_to_obj(d->edit_obj, asist);
@@ -177,7 +166,7 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char(CH, "You can't create a complex form with a rating less than 0.\r\n"
                    "Enter Rating: ");
     } else {
-      GET_DESIGN_RATING(d->edit_obj) = option_n;
+      GET_COMPLEX_FORM_RATING(d->edit_obj) = option_n;
       cfedit_disp_menu(d);
     }
     break;
@@ -222,20 +211,20 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
     if (option_n < LIGHT || option_n > DEADLY)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = option_n;
+      GET_COMPLEX_FORM_WOUND_LEVEL(d->edit_obj) = option_n;
       cfedit_disp_menu(d);
     }
     break;
   case CFEDIT_TYPE:
-    if (option_n < 1 || option_n >= COMPLEX_FORM_TYPES)
+    if (option_n < 1 || option_n > COMPLEX_FORM_TYPES)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      GET_DESIGN_PROGRAM(d->edit_obj) = complex_form_programs[option_n - 1];
-      GET_DESIGN_RATING(d->edit_obj) = 1;
+      GET_COMPLEX_FORM_PROGRAM(d->edit_obj) = complex_form_programs[option_n - 1];
+      GET_COMPLEX_FORM_RATING(d->edit_obj) = 1;
 
-      if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
+      if (GET_COMPLEX_FORM_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
         // Default to Deadly damage.
-        GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = DEADLY;
+        GET_COMPLEX_FORM_WOUND_LEVEL(d->edit_obj) = DEADLY;
       }
 
       cfedit_disp_menu(d);
@@ -262,22 +251,33 @@ ACMD(do_forms)
   char *param = one_argument(argument, func);
 
   if (is_abbrev(func, "list") || strlen(func) <= 0) {
+    if (!asist->contains) {
+      send_to_char(ch, "You haven't learned or designed any complex forms yet. Maybe you should ^wCREATE^n a new complex form.\r\n");
+      return;
+    }
     strncpy(buf2, "", sizeof(buf2) - 1);
     for (form = asist->contains; form; form = form->next_content) {
-      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " [%10s] %10s^n:^N %s R%d\r\n",
-        GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) <= 0 ? "^G  COMPLETE^n" : "^RINPROGRESS^n",
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " [%10s] %10s^n:^N %s R%d",
+        GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(form) <= 0 ? "^G   LEARNED^n" : "^   LEARNING^n",
         form->restring,
-        programs[GET_DESIGN_PROGRAM(form)].name,
-        GET_DESIGN_RATING(form)
+        programs[GET_COMPLEX_FORM_PROGRAM(form)].name,
+        GET_COMPLEX_FORM_RATING(form)
       );
-      if (GET_DESIGN_PROGRAM(form) == SOFT_ATTACK)
-        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "  Wound: %s\r\n", GET_WOUND_NAME(GET_DESIGN_PROGRAM_WOUND_LEVEL(form)));
+      if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT)
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " (^c%d^n)", GET_COMPLEX_FORM_RATING(form) + 1);
+      snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "\r\n");
+      if (GET_COMPLEX_FORM_PROGRAM(form) == SOFT_ATTACK)
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "  Wound: %s\r\n", GET_WOUND_NAME(GET_COMPLEX_FORM_WOUND_LEVEL(form)));
     }
     send_to_char(ch, "Complex Forms:\r\n%s", buf2);
     return;
   }
 
   if (is_abbrev(func, "forget")) {
+    if (AFF_FLAGGED(ch, AFF_COMPLEX_FORM_PROGRAM)) {
+      send_to_char(ch, "You can't forget a complex form while focusing on learning a form.\r\n");
+      return;
+    }
     skip_spaces(&param);
     for (form = asist->contains; form; form = form->next_content) {
       if ((isname(param, form->text.keywords) || isname(param, get_string_after_color_code_removal(form->restring, ch))) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) 
@@ -308,9 +308,25 @@ ACMD(do_forms)
       if ((isname(param, form->text.keywords) || isname(param, get_string_after_color_code_removal(form->restring, ch))) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) 
         break;
     }
+
     if (!form) {
       send_to_char(ch, "The complex design isn't in your brain.\r\n");
       return;
+    }
+
+    if (!GET_COMPLEX_FORM_KARMA_PAID(form)) {
+      long karma_cost = complex_form_karma_cost(ch, form);
+      if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_COMPLEX_FORM_RATING(form) <= 6) {
+        send_to_char(ch, "Learning this form would have cost ^c%.2f^n karma, but as a newbie making a form at or under rating 6 that cost will be waived.\r\n", (float)karma_cost / 100);
+        GET_COMPLEX_FORM_KARMA_PAID(form) = TRUE;
+      } else if (GET_KARMA(ch) < karma_cost) {
+        send_to_char(ch, "Learning this complex form costs ^c%.2f^n, but you do not have sufficient karma.\r\n", (float)karma_cost / 100);
+        return;
+      } else {
+        GET_KARMA(ch) -= karma_cost;
+        GET_COMPLEX_FORM_KARMA_PAID(form) = TRUE;
+        send_to_char(ch, "Learning this complex form cost ^c%.2f^n, you have ^g%.2f^n karma remaining.\r\n", (float)karma_cost / 100, (float)GET_KARMA(ch) / 100);
+      }
     }
 
     if (GET_POS(ch) > POS_SITTING) {
@@ -323,7 +339,7 @@ ACMD(do_forms)
       return;
     }
 
-    if (GET_DESIGN_PROGRAMMING_TICKS_LEFT(form) <= 0) {
+    if (GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(form) <= 0) {
       send_to_char(ch, "There's nothing more you can do with your %s complex form.", form->restring);
       return;
     }

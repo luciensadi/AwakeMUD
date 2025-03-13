@@ -719,6 +719,32 @@ ACMD(do_matrix_position)
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
 }
 
+bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *targ, int &success)
+{
+  struct obj_data *soft = NULL, *temp = NULL;
+  if (!targ || !targ->decker) return FALSE; // IC don't have shields
+
+  for (soft = targ->decker->software; soft; soft = soft->next_content) {
+    if (GET_PROGRAM_TYPE(soft) == SOFT_SHIELD) {
+      int shield_test = success_test(GET_PROGRAM_RATING(soft), 
+        ICON_IS_IC(icon) ? matrix[icon->in_host].security : GET_SKILL(icon->decker->ch, SKILL_COMPUTER));
+
+      if (shield_test > 0) {
+        success -= shield_test;
+        send_to_icon(targ, "You raise your shield program and deflect some of the attack.\r\n");
+      }
+      GET_PROGRAM_RATING(soft)--;
+      if (GET_PROGRAM_RATING(soft) <= 0) {
+        send_to_icon(targ, "Your shield program crashes as the rating is depleted.\r\n");
+        REMOVE_FROM_LIST(soft, targ->decker->software, next_content);
+        extract_obj(soft);
+      }
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
 void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 {
   struct obj_data *soft = NULL;
@@ -837,9 +863,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         bod = targ->decker->masking;
         break;
       }
-      if (targ->type == ICON_LIVING_PERSONA)
-        bod += targ->decker->hardening; // Otaku get to add their hardening to this check.
       success = success_test(matrix[targ->in_host].security, bod);
+      if (try_execute_shield_program(icon, targ, success) && success <= 0) {
+        return;
+      }
       int resist = success_test(bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch)), iconrating);
       GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
       success -= resist;
@@ -897,7 +924,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     send_to_icon(targ, "%s^n runs an attack program against you.\r\n", CAP(icon->name));
     if (icon->ic.type >= IC_LETHAL_BLACK)
       power -= targ->decker->hardening;
-    else
+    else 
       for (soft = targ->decker->software; soft; soft = soft->next_content)
         if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR) {
           power -= GET_OBJ_VAL(soft, 1);
@@ -934,6 +961,11 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       cascade(icon);
     return;
   }
+
+  if (try_execute_shield_program(icon, targ, success) && success <= 0) {
+    return;
+  }
+
   success -= success_test(bod, power);
   dam = convert_damage(stage(success, dam));
   if (ICON_IS_IC(icon)) {
@@ -2415,7 +2447,7 @@ ACMD(do_connect)
   if (cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) 
     act("You jack into the matrix to commune with the resonance.", FALSE, ch, 0, 0, TO_CHAR);
   else 
-    send_to_char(ch, "You jack into the matrix with your %s.", GET_OBJ_NAME(cyberdeck));
+    send_to_char(ch, "You jack into the matrix with your %s.\r\n", GET_OBJ_NAME(cyberdeck));
   PLR_FLAGS(ch).SetBit(PLR_MATRIX);
   do_matrix_look(ch, NULL, 0, 0);
 }
@@ -2898,8 +2930,20 @@ ACMD(do_decrypt)
 void send_active_program_list(struct char_data *ch) {
   if (DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
     // We're an otaku using a living persona; we don't have active memory.
-    for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
-      send_to_icon(PERSONA, "%25s, Complex Form, Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
+    for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
+      snprintf(buf, sizeof(buf), "%25s, Complex Form, %s-R^c%d^n", 
+        GET_OBJ_NAME(soft),
+        programs[GET_COMPLEX_FORM_PROGRAM(soft)].name,
+        GET_COMPLEX_FORM_RATING(soft)
+      );
+
+      if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (^g%d^n)", GET_COMPLEX_FORM_RATING(soft) + 1);
+      }
+
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
+      send_to_icon(PERSONA, buf);
+    }
     return;
   }
   send_to_icon(PERSONA, "Active Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(DECKER->deck, 2), DECKER->active);
@@ -3838,8 +3882,12 @@ ACMD(do_comcall)
                 send_to_char("You feel your phone ring.\r\n", tch);
             }
           } else {
-            snprintf(buf, sizeof(buf), "%s^n rings.", GET_OBJ_NAME(k->phone));
-            send_to_room(buf, k->phone->in_room);
+              snprintf(buf, sizeof(buf), "%s^n rings.", GET_OBJ_NAME(k->phone));
+            if (k->phone->in_veh) {
+              send_to_veh(buf, k->phone->in_veh, ch, TRUE);
+            } else {
+              send_to_room(buf, k->phone->in_room);
+            }
           }
         }
         send_to_icon(PERSONA, "It begins to ring.\r\n");
@@ -4024,6 +4072,9 @@ ACMD(do_create)
   {
     if (!IS_OTAKU(ch)) {
       send_to_char("Everyone knows that otaku aren't real, chummer.\r\n", ch);
+      return;
+    } else if (!GET_SKILL(ch, SKILL_COMPUTER)) {
+      send_to_char("You must learn computer skills to create complex forms.\r\n", ch);
       return;
     }
     create_complex_form(ch);
