@@ -106,40 +106,53 @@ void mental_gain(struct char_data * ch)
   } else {
     // For PCs, we have to calculate.
 
-    // Augmentations
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
-        switch (GET_BIOWARE_RATING(bio)) {
-          case 1:
-            gain *= 1.1;
-            break;
-          case 2:
-            gain *= 1.4;
-            break;
-          case 3:
-            gain *= 2;
-            break;
-        }
-        break;
-      }
-    }
+    // Regen bonuses
+    {
+      float regen_mult = 1;
 
-    // Adept rapid healing increases recovery by +50% per rank
-    if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-      gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+      // Augmentations
+      for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+        if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+          switch (GET_BIOWARE_RATING(bio)) {
+            case 1:
+              regen_mult += 0.1;
+              break;
+            case 2:
+              regen_mult += 0.4;
+              break;
+            case 3:
+              regen_mult += 1;
+              break;
+          }
+          break;
+        }
+      }
+
+      // Adept rapid healing increases recovery by +50% per rank
+      if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+        regen_mult += GET_POWER(ch, ADEPT_HEALING) / 2;
+
+      gain *= regen_mult;
+    }
 
     // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
     gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
 
     // Room related bonuses
-    if (find_workshop(ch, TYPE_MEDICAL))
-      gain *= 1.5;
+    {
+      float room_mult = 1;
 
-    if (char_is_in_social_room(ch))
-      gain *= 2;
+      if (find_workshop(ch, TYPE_MEDICAL))
+        room_mult += 0.5;
 
-    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
-      gain *= 1.5;
+      if (char_is_in_social_room(ch))
+        room_mult += 1;
+
+      if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+        room_mult += 0.5;
+    
+      gain *= room_mult;
+    }
 
     // Penalties happen last, to avoid the possibility of truncating to zero too early
     if (PLR_FLAGS(ch).IsSet(PLR_ENABLED_DRUGS)) {
@@ -215,40 +228,53 @@ void physical_gain(struct char_data * ch)
   } else {
     // PCs have more checks.
 
-    // Augmentations
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
-        switch (GET_BIOWARE_RATING(bio)) {
-          case 1:
-            gain *= 1.1;
-            break;
-          case 2:
-            gain *= 1.4;
-            break;
-          case 3:
-            gain *= 2;
-            break;
-        }
-        break;
-      }
-    }
+    // Regen bonuses
+    {
+      float regen_mult = 1;
 
-    // Adept rapid healing increases recovery by +50% per rank
-    if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
-      gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
+      // Augmentations
+      for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+        if (GET_BIOWARE_TYPE(bio) == BIO_SYMBIOTES) {
+          switch (GET_BIOWARE_RATING(bio)) {
+            case 1:
+              regen_mult += 0.1;
+              break;
+            case 2:
+              regen_mult += 0.4;
+              break;
+            case 3:
+              regen_mult += 1;
+              break;
+          }
+          break;
+        }
+      }
+
+      // Adept rapid healing increases recovery by +50% per rank
+      if (GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_HEALING) > 0)
+        regen_mult += GET_POWER(ch, ADEPT_HEALING) / 2;
+
+      gain *= regen_mult;
+    }
 
     // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
     gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
       
     // Room related bonuses
-    if (find_workshop(ch, TYPE_MEDICAL))
-      gain *= 1.8;
+    {
+      float room_mult = 1;
 
-    if (char_is_in_social_room(ch))
-      gain *= 2;
+      if (find_workshop(ch, TYPE_MEDICAL))
+        room_mult += 0.8;
 
-    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
-      gain *= 1.8;
+      if (char_is_in_social_room(ch))
+        room_mult += 1;
+
+      if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+        room_mult += 0.8;
+    
+      gain *= room_mult;
+    }
 
     // Penalties happen last, to avoid the possibility of truncating to zero too early
     if (PLR_FLAGS(ch).IsSet(PLR_ENABLED_DRUGS)) {
