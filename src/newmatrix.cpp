@@ -966,12 +966,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     return;
   }
 
-  // Block and resist
+  // Block!
   if (try_execute_shield_program(icon, targ, success) && success <= 0) {
-    return;
-  }
-  success -= success_test(bod, power);
-  if (success <= 0) {
     return;
   }
 
@@ -1021,6 +1017,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   } // else { implementations of slow, etc, would go here }
 
   // Results of damaging attacks
+  if (success -= success_test(bod, power) <= 0) {
+    return;
+  }
   icondam = convert_damage(stage(success, dam));
   switch(icondam)
   {
