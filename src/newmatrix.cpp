@@ -346,7 +346,7 @@ bool dumpshock(struct matrix_icon *icon)
       }
     }
 
-    int resist = -success_test(GET_WIL(icon->decker->ch), matrix[icon->in_host].security - (GET_ECHO(icon->decker->ch, ECHO_NEUROFILTER) * 2));
+    int resist = -success_test(GET_WIL(icon->decker->ch), matrix[icon->in_host].security);
     int dam = convert_damage(stage(resist, MIN(matrix[icon->in_host].color + 1, DEADLY)));
 
     struct obj_data *jack = get_datajack(icon->decker->ch, FALSE);
@@ -1068,7 +1068,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       else
         resist = GET_WIL(targ->decker->ch);
 
-      int wil_test_result = success_test(GET_WIL(targ->decker->ch), power - (GET_ECHO(targ->decker->ch, ECHO_NEUROFILTER) * 2));
+      int wil_test_result = success_test(GET_WIL(targ->decker->ch), power);
       int bod_test_result = success_test(GET_BOD(targ->decker->ch), power);
       success -= targ->decker->iccm ? MAX(wil_test_result, bod_test_result) : success_test(resist, power);
       int meatdam = convert_damage(stage(success, dam));
@@ -1108,7 +1108,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         power = 5;
         break;
       }
-      if (success_test(GET_WIL(targ->decker->ch), power - (GET_ECHO(targ->decker->ch, ECHO_NEUROFILTER) * 2)) < 1) {
+      if (success_test(GET_WIL(targ->decker->ch), power) < 1) {
         send_to_icon(targ, "Your interface overloads.\r\n");
         if (damage(targ->decker->ch, targ->decker->ch, 1, TYPE_TASER, MENTAL)) {
           return;
