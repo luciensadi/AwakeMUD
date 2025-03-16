@@ -347,7 +347,7 @@ bool dumpshock(struct matrix_icon *icon)
     }
 
     int resist = -success_test(GET_WIL(icon->decker->ch), matrix[icon->in_host].security - (GET_ECHO(icon->decker->ch, ECHO_NEUROFILTER) * 2));
-    int dam = convert_damage(stage(resist, matrix[icon->in_host].color));
+    int dam = convert_damage(stage(resist, MIN(matrix[icon->in_host].color + 1, DEADLY)));
 
     struct obj_data *jack = get_datajack(icon->decker->ch, FALSE);
 
