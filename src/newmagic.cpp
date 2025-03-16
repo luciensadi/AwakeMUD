@@ -216,7 +216,7 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
   delete sust;
 
   // Handle heal.
-  if (spell_is_heal) {
+  if (spell_is_heal && other) {
     AFF_FLAGS(other).RemoveBit(AFF_HEALED);
     update_pos(other, TRUE);
     if (GET_POS(other) == POS_MORTALLYW) {
