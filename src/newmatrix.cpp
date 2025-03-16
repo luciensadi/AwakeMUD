@@ -444,6 +444,16 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
         break;
     }
     target -= channel_rating;
+  } else {
+    // ... or by the appropriate decker utility program
+    for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
+      if (GET_PROGRAM_TYPE(soft) == software) {
+        target -= GET_PROGRAM_RATING(soft);
+        buf_mod(rollbuf, sizeof(rollbuf), "soft", -GET_PROGRAM_RATING(soft));
+        prog = soft;  // for tarbaby/tarpit
+        break;
+      }
+    }
   }
   snprintf(rollbuf, sizeof(rollbuf), "System test against %s with software %s: Starting TN %d", acifs_strings[type], programs[software].name, target);
 
@@ -465,15 +475,6 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   strlcat(rollbuf, ". Modifiers: ", sizeof(rollbuf));
   target += modify_target_rbuf_raw(ch, rollbuf, sizeof(rollbuf), 8, FALSE) + DECKER->res_test + (DECKER->ras ? 0 : 4);
 
-  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
-    if (prog) break;
-    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE) break;
-    if (GET_PROGRAM_TYPE(soft) == software) {
-      target -= GET_PROGRAM_RATING(soft);
-      buf_mod(rollbuf, sizeof(rollbuf), "soft", -GET_PROGRAM_RATING(soft));
-      prog = soft;
-    }
-  }
   detect = get_detection_factor(ch);
 
   int tally = MAX(0, success_test(HOST.security, detect));
