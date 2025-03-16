@@ -489,7 +489,7 @@ void string_add(struct descriptor_data *d, char *str)
         REPLACE_STRING(file->photo);
       }
       pocketsec_notemenu(d);
-    } else if (PLR_FLAGGED(d->character, PLR_MAILING)) {
+    } else if (d->character && PLR_FLAGGED(d->character, PLR_MAILING)) {
         if (!detected_abort) {
         store_mail(d->mail_to, d->character, *d->str);
         d->mail_to = 0;

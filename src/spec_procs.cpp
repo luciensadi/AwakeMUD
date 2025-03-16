@@ -4421,7 +4421,10 @@ SPECIAL(chargen_points_check) {
 
 SPECIAL(auth_room)
 {
-  if (ch && (CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto") || CMD_IS("\"")) && !IS_ASTRAL(ch)) {
+  if (!ch)
+    return FALSE;
+
+  if ((CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto") || CMD_IS("\"")) && !IS_ASTRAL(ch)) {
     /*
     skip_spaces(&argument);
     if (   !str_cmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument)

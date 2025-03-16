@@ -2992,6 +2992,14 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
   static char voice_buf[500];
   struct remem *mem = NULL;
 
+  if (!speaker || !listener) {
+    mudlog_vfprintf(speaker, LOG_SYSLOG, "SYSERR: Got call to get_voice_perceived_by(%s, %s, %s) with invalid parameter(s).",
+                    GET_CHAR_NAME(speaker),
+                    GET_CHAR_NAME(listener),
+                    invis_staff_should_be_identified ? "TRUE" : "FALSE");
+    return ACTNULL;
+  }
+
   if (IS_NPC(speaker))
     return GET_NAME(speaker);
   else {
@@ -3071,7 +3079,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'e':
           if (to == ch && !skip_you_stanzas)
             i = "you";
-          else if (CAN_SEE(to, ch))
+          else if (ch && CAN_SEE(to, ch))
             i = HSSH(ch);
           else
             i = "it";
@@ -3080,7 +3088,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           if (vict_obj) {
             if (to == vict && !skip_you_stanzas)
               i = "you";
-            else if (CAN_SEE(to, vict))
+            else if (vict && CAN_SEE(to, vict))
               i = HSSH(vict);
             else
               i = "it";
@@ -3092,7 +3100,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'm':
           if (to == ch && !skip_you_stanzas)
             i = "you";
-          else if (CAN_SEE(to, ch))
+          else if (ch && CAN_SEE(to, ch))
             i = HMHR(ch);
           else
             i = "them";
@@ -3102,7 +3110,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             i = "someone";
           else if (to == vict && !skip_you_stanzas)
             i = "you";
-          else if (CAN_SEE(to, vict))
+          else if (vict && CAN_SEE(to, vict))
             i = HMHR(vict);
           else
             i = "them";
@@ -3110,9 +3118,9 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'n':
           if (to == ch && !skip_you_stanzas)
             i = "you";
-          else if (!IS_NPC(ch) && (IS_SENATOR(to) || IS_SENATOR(ch)))
+          else if (ch && !IS_NPC(ch) && (IS_SENATOR(to) || IS_SENATOR(ch)))
             i = GET_CHAR_NAME(ch);
-          else if (CAN_SEE(to, ch)) {
+          else if (ch && CAN_SEE(to, ch)) {
             if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
               struct veh_data *veh;
               RIG_VEH(ch, veh);
@@ -3129,9 +3137,9 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             i = "someone";
           else if (to == vict && !skip_you_stanzas)
             i = "you";
-          else if (!IS_NPC(vict) && (IS_SENATOR(to) || IS_SENATOR(vict)))
+          else if (vict && !IS_NPC(vict) && (IS_SENATOR(to) || IS_SENATOR(vict)))
             i = GET_CHAR_NAME(vict);
-          else if (CAN_SEE(to, vict)) {
+          else if (vict && CAN_SEE(to, vict)) {
             if (AFF_FLAGGED(vict, AFF_RIG) || PLR_FLAGGED(vict, PLR_REMOTE)) {
               struct veh_data *veh;
               RIG_VEH(vict, veh);
@@ -3158,11 +3166,11 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 'q':
           if (to == ch && !skip_you_stanzas)
             i = "your";
-          else if (!IS_NPC(ch) && (IS_SENATOR(to) || IS_SENATOR(ch))) {
+          else if (ch && !IS_NPC(ch) && (IS_SENATOR(to) || IS_SENATOR(ch))) {
             snprintf(possessive_buf, sizeof(possessive_buf), "%s's", GET_CHAR_NAME(ch));
             i = possessive_buf;
           }
-          else if (CAN_SEE(to, ch)) {
+          else if (ch && CAN_SEE(to, ch)) {
             if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
               struct veh_data *veh;
               RIG_VEH(ch, veh);
@@ -3181,11 +3189,11 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             i = "someone's";
           else if (to == vict && !skip_you_stanzas)
             i = "your";
-          else if (!IS_NPC(vict) && (IS_SENATOR(to) || IS_SENATOR(vict))) {
+          else if (vict && !IS_NPC(vict) && (IS_SENATOR(to) || IS_SENATOR(vict))) {
             snprintf(possessive_buf, sizeof(possessive_buf), "%s's", GET_CHAR_NAME(ch));
             i = possessive_buf;
           }
-          else if (CAN_SEE(to, vict)) {
+          else if (vict && CAN_SEE(to, vict)) {
             if (AFF_FLAGGED(vict, AFF_RIG) || PLR_FLAGGED(vict, PLR_REMOTE)) {
               struct veh_data *veh;
               RIG_VEH(vict, veh);
@@ -3202,7 +3210,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
         case 's':
           if (to == ch && !skip_you_stanzas)
             i = "your";
-          else if (CAN_SEE(to, ch))
+          else if (ch && CAN_SEE(to, ch))
             i = HSHR(ch);
           else
             i = "their";
@@ -3212,7 +3220,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             i = "someone's";
           else if (to == vict && !skip_you_stanzas)
             i = "your";
-          else if (CAN_SEE(to, vict))
+          else if (vict && CAN_SEE(to, vict))
             i = HSHR(vict);
           else
             i = "their";
@@ -3221,7 +3229,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           i = CHECK_NULL(vict_obj, (char *) vict_obj);
           break;
         case 'v': /* Just voice */
-          i = get_voice_perceived_by(ch, to, FALSE);
+          i = CHECK_NULL(ch, get_voice_perceived_by(ch, to, FALSE));
           break;
         case 'z': /* Desc if visible, voice if not */
           // You always know if it's you.
@@ -3229,27 +3237,31 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             i = "you";
           }
 
-          // Staff ignore visibility checks.
-          else if (IS_SENATOR(to)) {
-            if (!IS_NPC(ch)) {
-              i = GET_CHAR_NAME(ch);
-            } else {
+          else if (ch) {
+            // Staff ignore visibility checks.
+            if (IS_SENATOR(to)) {
+              if (!IS_NPC(ch)) {
+                i = GET_CHAR_NAME(ch);
+              } else {
+                i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
+              }
+            }
+
+            // If they're visible, it's simple.
+            else if (CAN_SEE(to, ch))
               i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
-            }
-          }
 
-          // If they're visible, it's simple.
-          else if (CAN_SEE(to, ch))
-            i = make_desc(to, ch, temp_buf, TRUE, TRUE, sizeof(temp_buf));
-
-          // If we've gotten here, the speaker is an invisible player or staff member.
-          else {
-            // Since $z is only used for speech, and since NPCs can't be remembered, we display their name when NPCs speak.
-            if (IS_NPC(ch))
-              i = GET_NAME(ch);
+            // If we've gotten here, the speaker is an invisible player or staff member.
             else {
-              i = get_voice_perceived_by(ch, to, TRUE);
+              // Since $z is only used for speech, and since NPCs can't be remembered, we display their name when NPCs speak.
+              if (IS_NPC(ch))
+                i = GET_NAME(ch);
+              else {
+                i = get_voice_perceived_by(ch, to, TRUE);
+              }
             }
+          } else {
+            i = ACTNULL;
           }
           break;
         case '$':
