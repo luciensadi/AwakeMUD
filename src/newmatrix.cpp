@@ -875,10 +875,6 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         if (damage_total <= 0) {
           return send_to_icon(targ, "It fails to damage your living persona.\r\n");
         }
-        damage_total = convert_damage(stage((2 - success_test(GET_BOD(targ->decker->ch) + GET_BODY_POOL(targ->decker->ch), MIN(matrix[icon->in_host].color + 1, DEADLY))), damage_total));
-        if (damage_total <= 0) {
-          return send_to_icon(targ, "You power through it and nullify the damage.\r\n");
-        }
         send_to_icon(targ, "It tears into your living persona!\r\n");
         do_damage_persona(targ, damage_total);
         return;
