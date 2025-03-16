@@ -396,8 +396,10 @@ int get_detection_factor(struct char_data *ch)
 {
   int detect = 0;
   for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
-    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE)
+    if (GET_PROGRAM_TYPE(soft) == SOFT_SLEAZE) {
       detect = GET_PROGRAM_RATING(soft);
+      break;
+    }
   detect += DECKER->masking + 1; // +1 because we round up
   detect = detect / 2;
   detect -= DECKER->res_det;
