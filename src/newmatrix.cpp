@@ -881,8 +881,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         send_to_icon(targ, "It tears into your living persona!\r\n");
         do_damage_persona(targ, damage_total);
         return;
-      }
-      if (success >= 2) {
+      } else if (success >= 2) {
         send_to_icon(targ, "It tears into the program!\r\n");
         while (success >= 2) {
           success -= 2;
