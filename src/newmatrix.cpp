@@ -751,7 +751,7 @@ bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *ta
 void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 {
   struct obj_data *soft = NULL;
-  int target = 0, skill, bod = 0, dam = 0, power, success;
+  int target = 0, skill, bod = 0, dam = 0, icondam = 0, power, success;
   int iconrating = icon->ic.rating;
   if (!targ)
     return;
@@ -767,6 +767,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   if (targ->decker && !has_spotted(targ, icon))
     make_seen(targ, icon->idnum);
 
+  // Determine attack TNs
   switch (matrix[icon->in_host].color)
   {
   case HOST_COLOR_BLUE:
@@ -804,6 +805,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   target -= icon->position;
   targ->parry = 0;
   icon->position = 0;
+
+  // Determine skill dice, damage level, and power
   if (icon->decker)
   {
     for (soft = icon->decker->software; soft; soft = soft->next_content)
@@ -827,23 +830,14 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       skill += targ->decker->scout;
       targ->decker->scout = 0;
     }
-    power = iconrating;
-    if (icon->ic.type == IC_LETHAL_BLACK || icon->ic.type == IC_NON_LETHAL_BLACK) {
-      if (matrix[icon->in_host].color == HOST_COLOR_BLUE || matrix[icon->in_host].color == HOST_COLOR_GREEN)
-        dam = MODERATE;
-      else if (matrix[icon->in_host].color >= HOST_COLOR_ORANGE) {
-        if (matrix[icon->in_host].color == HOST_COLOR_BLACK)
-          power += 2;
-        dam = SERIOUS;
-      }
-    } else {
-      dam = MIN(matrix[icon->in_host].color + 1, DEADLY);
-      if (matrix[icon->in_host].color == HOST_COLOR_BLACK)
-        power += 2;
-    }
+    power = iconrating + (matrix[icon->in_host].color == HOST_COLOR_BLACK ? 2 : 0);
+    dam = ic_dmg_by_color[matrix[icon->in_host].color];
   }
+
+  // Rules for specific IC/decker combinations
   if (targ->decker)
   {
+    // Crippler/ripper IC vs decker
     if (ICON_IS_IC(icon) && (icon->ic.type == IC_CRIPPLER || icon->ic.type == IC_RIPPER)) {
       if (!targ->decker->deck)
         return;
@@ -873,30 +867,36 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       int resist = success_test(bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch)), iconrating);
       GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
       success -= resist;
+
+      // Results of crippler/ripper IC vs decker
       if (targ->type == ICON_LIVING_PERSONA) {
-        int damage_total = success / 2;
-        if (damage_total <= 0) {
+        if (success <= 0) {
           return send_to_icon(targ, "It fails to damage your living persona.\r\n");
         }
-        send_to_icon(targ, "It tears into your living persona!\r\n");
-        do_damage_persona(targ, damage_total);
+        // Houserule: handle like Killer IC instead of Bioware Stress
+        // Hacking pool was already used to resist with the targeted attribute, so only bod here
+        success -= success_test(targ->decker->bod, power);
+        if (icondam <= 0) {
+          return send_to_icon(targ, "You power through it and nullify the damage.\r\n");
+        } else {
+          icondam = convert_damage(stage(success, dam));
+          send_to_icon(targ, "It tears into your living persona!\r\n");
+          do_damage_persona(targ, icondam);
+        }
         return;
       } else if (success >= 2) {
         send_to_icon(targ, "It tears into the program!\r\n");
-        while (success >= 2) {
-          success -= 2;
-          bod--;
+        bod -= success / 2;
+        if (icon->ic.type == IC_CRIPPLER) {
+          bod = MAX(bod, 1);
+        } else if (bod <= 0) {
+          bod = 0;
+          success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening);
+          fry_mpcp(icon, targ, success);
         }
       } else {
-        send_to_icon(targ, "It fails to cause any damage.\r\n");
+        send_to_icon(targ, "It failed to cause any damage.\r\n");
         return;
-      }
-      if (icon->ic.type == IC_CRIPPLER) {
-        bod = MAX(bod, 1);
-      } else if (bod <= 0) {
-        bod = 0;
-        success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening);
-        fry_mpcp(icon, targ, success);
       }
       // Damage was done to the attribute, so reduce the attribute
       switch (icon->ic.subtype) {
@@ -918,7 +918,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       return;
     }
 
-    // Not a crippler/ripper, so do a normal attack
+    // Non-crippler/ripper IC vs decker
     send_to_icon(targ, "%s^n runs an attack program against you.\r\n", CAP(icon->name));
     if (icon->ic.type >= IC_LETHAL_BLACK)
       power -= targ->decker->hardening;
@@ -932,8 +932,14 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
     if (!targ->decker->ras)
       power += 4;
+
+    if (icon->ic.type == IC_TRACE)
+      target += targ->decker->redirect;
+
+    // NOTE: results are below (look for "Attack results" comment)
+
   } else
-  {
+  { // Decker vs IC
     bod = matrix[targ->in_host].security;
     if (targ->ic.options.IsSet(IC_EX_DEFENSE))
       bod += targ->ic.expert;
@@ -948,8 +954,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     if (!icon->decker->ras)
       target += 4;
   }
-  if (ICON_IS_IC(icon) && icon->ic.type == IC_TRACE)
-    target += targ->decker->redirect;
+
+  // Attack!
   success = success_test(skill, target);
   if (success <= 0)
   {
@@ -960,12 +966,16 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     return;
   }
 
+  // Block and resist
   if (try_execute_shield_program(icon, targ, success) && success <= 0) {
     return;
   }
-
   success -= success_test(bod, power);
-  dam = convert_damage(stage(success, dam));
+  if (success <= 0) {
+    return;
+  }
+
+  // Results of non-damaging attacks
   if (ICON_IS_IC(icon)) {
     if (icon->ic.type == IC_SCOUT)
     {
@@ -1008,8 +1018,11 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         send_to_icon(targ, "You manage to avoid %s^n's attack.\r\n", decapitalize_a_an(icon->name));
       return;
     }
-  }
-  switch(dam)
+  } // else { implementations of slow, etc, would go here }
+
+  // Results of damaging attacks
+  icondam = convert_damage(stage(success, dam));
+  switch(icondam)
   {
   case 0:
     send_to_icon(targ, "%s^n's attack reflects off you harmlessly!\r\n", CAP(icon->name));
@@ -1035,30 +1048,21 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     break;
   }
   struct char_data *ch = targ->decker ? targ->decker->ch : NULL;
-  if (do_damage_persona(targ, dam) && ch && GET_POS(ch) <= POS_STUNNED) {
+  if (do_damage_persona(targ, icondam) && ch && GET_POS(ch) <= POS_STUNNED) {
     // If do_damage_persona returns true then the icon condition monitor is overloaded,
     // or it's an otaku that has fainted/died from brain bleeding.
     // If it's the latter we check if they're uncon/dead, and then return early.
     return;
   }
-  if (dam > 0 && ch)
+
+  if (icondam > 0 && ch)
   {
+    // Black IC deal damage to the decker as well as their icon
     if (ICON_IS_IC(icon) && icon->ic.type >= IC_LETHAL_BLACK) {
       int resist = 0;
       bool lethal = icon->ic.type == IC_LETHAL_BLACK ? TRUE : FALSE;
       if (!targ->decker->asist[0] && lethal)
         lethal = FALSE;
-      switch (matrix[icon->in_host].color) {
-      case 0:
-      case 1:
-        dam = MODERATE;
-        break;
-      case 2:
-      case 3:
-      case 4:
-        dam = SERIOUS;
-        break;
-      }
       if (lethal)
         resist = GET_BOD(targ->decker->ch);
       else
@@ -1067,10 +1071,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       int wil_test_result = success_test(GET_WIL(targ->decker->ch), power - (GET_ECHO(targ->decker->ch, ECHO_NEUROFILTER) * 2));
       int bod_test_result = success_test(GET_BOD(targ->decker->ch), power);
       success -= targ->decker->iccm ? MAX(wil_test_result, bod_test_result) : success_test(resist, power);
-      dam = convert_damage(stage(success, dam));
+      int meatdam = convert_damage(stage(success, dam));
       send_to_icon(targ, "You smell something burning.\r\n");
 
-      if (damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL)) {
+      if (damage(targ->decker->ch, targ->decker->ch, meatdam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL)) {
         // Oh shit, they died. Guess they don't take MPCP damage, since their struct is zeroed out now.
         return;
       }
@@ -1092,6 +1096,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         }
       }
     } else {
+      // Simsense overload, SR3 pg 226
       switch(dam) {
       case 1:
         power = 2;
@@ -1111,6 +1116,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       }
     }
   }
+
+  // Process icon destruction
   if (targ->condition < 1)
   {
     if (targ->decker) {
