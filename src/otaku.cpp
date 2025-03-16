@@ -166,6 +166,9 @@ struct obj_data *make_otaku_deck(struct char_data *ch) {
   obj_to_obj(make_new_finished_part(PART_MASKING, mpcp, 1), new_deck);
   obj_to_obj(make_new_finished_part(PART_ASIST_HOT, mpcp), new_deck);
   obj_to_obj(make_new_finished_part(PART_RAS_OVERRIDE, mpcp), new_deck);
+  if (GET_ECHO(ch, ECHO_NEUROFILTER)) {
+    obj_to_obj(make_new_finished_part(PART_ICCM, mpcp), new_deck);
+  }
 
   update_otaku_deck(ch, new_deck);
   GET_CYBERDECK_IS_INCOMPLETE(new_deck) = FALSE;
