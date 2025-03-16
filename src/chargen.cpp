@@ -1863,6 +1863,17 @@ void create_parse(struct descriptor_data *d, const char *arg)
           GET_ATT_POINTS(CH) -= 4 - i;
         }
         break;
+      case TOTEM_DRAGON:
+        i = GET_REAL_INT(CH);
+        if (i < 6) {
+          if (GET_ATT_POINTS(CH) < (6 - i)) {
+            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
+            return;
+          }
+          GET_REAL_INT(CH) = 6;
+          GET_ATT_POINTS(CH) -= 6 - i;
+        }
+        break;
     }
     if (GET_TOTEM(CH) == TOTEM_WOLF || GET_TOTEM(CH) == TOTEM_SNAKE || GET_TOTEM(CH) == TOTEM_GATOR || GET_TOTEM(CH) == TOTEM_FOX ||
         GET_TOTEM(CH) == TOTEM_FISH || GET_TOTEM(CH) == TOTEM_TURTLE || GET_TOTEM(CH) == TOTEM_GECKO ||
