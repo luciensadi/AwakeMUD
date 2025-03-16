@@ -443,7 +443,7 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
         channel_rating += GET_SKILL(ch, SKILL_CHANNEL_SLAVE);
         break;
     }
-    target = MAX(2, target - channel_rating);
+    target -= channel_rating;
   }
   snprintf(rollbuf, sizeof(rollbuf), "System test against %s with software %s: Starting TN %d", acifs_strings[type], programs[software].name, target);
 
