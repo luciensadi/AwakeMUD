@@ -2132,6 +2132,15 @@ const char *ic_option_long[] =
     "Trap  "
   };
 
+int ic_dmg_by_color[] =
+  {
+    LIGHT,    // Blue
+    MODERATE, // Green
+    SERIOUS,  // Orange
+    SERIOUS,  // Red
+    SERIOUS,  // Black, also +2 power
+  };
+
 // Weight and cost are PER ROUND now.
 struct ammo_data ammo_type[] =
   {

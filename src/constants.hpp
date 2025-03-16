@@ -79,6 +79,7 @@ extern const char *alerts[3];
 extern const char *ic_type[];
 extern const char *ic_option[];
 extern const char *ic_option_long[];
+extern int ic_dmg_by_color[];
 extern struct ammo_data ammo_type[];
 extern struct part_data parts[];
 extern struct program_data programs[];
