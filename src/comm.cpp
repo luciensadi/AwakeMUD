@@ -2116,8 +2116,6 @@ int process_input(struct descriptor_data *t) {
     if (space_left <= 0) {
       if (t->character) {
         log_vfprintf("process_input: about to close connection: input overflow from %s (%ld)", GET_CHAR_NAME(t->character), GET_IDNUM(t->character));
-        extract_char(t->character);
-        t->character = NULL;
       }
       return -1;
     }
@@ -2134,8 +2132,6 @@ int process_input(struct descriptor_data *t) {
           char errbuf[1000];
           snprintf(errbuf, sizeof(errbuf), "process_input: about to lose connection from %s (%ld)", GET_CHAR_NAME(t->character), GET_IDNUM(t->character));
           perror(errbuf);
-          extract_char(t->character);
-          t->character = NULL;
         } else {
           perror("process_input: about to lose connection");
         }

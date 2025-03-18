@@ -365,9 +365,10 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
   mysql_wrapper(mysql, query_buf);
 
   if (!(res = mysql_use_result(mysql))) {
-    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
-                 "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+    log_vfprintf("ERROR: You need to run a migration to add the %s table. "
+                 "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p %s < %s`.",
                  table_name,
+                 mysql_db,
                  migration_path_from_root_directory);
     exit(ERROR_DB_TABLE_REQUIRED);
   }
@@ -378,9 +379,10 @@ void require_that_sql_table_exists(const char *table_name, const char *migration
   mysql_free_result(res);
 
   if (!have_table) {
-    log_vfprintf("ERROR: You need to run the %s migration from the SQL directory. "
-                 "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+    log_vfprintf("ERROR: You need to run a migration to add the %s table. "
+                 "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p %s < %s`.",
                  table_name,
+                 mysql_db,
                  migration_path_from_root_directory);
     exit(ERROR_DB_TABLE_REQUIRED);
   }
@@ -397,9 +399,11 @@ void require_that_field_meets_constraints(const char *field_name, const char *ta
   char query_buf[1000];
 
   snprintf(migration_string, sizeof(migration_string),
-           "ERROR: You need to run the %s migration from the SQL directory. "
-           "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p AwakeMUD < %s`.",
+           "ERROR: You need to run a migration to add or modify %s.%s. "
+           "Probable syntax from your AwakeMUD directory: `mysql -u YOUR_USERNAME -p %s < %s`.",
            table_name,
+           field_name,
+           mysql_db,
            migration_path_from_root_directory);
 
   snprintf(query_buf, sizeof(query_buf), "SHOW COLUMNS FROM %s LIKE '%s';",
