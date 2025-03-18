@@ -502,10 +502,10 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
     target -= channel_rating;
   } else {
     // ... or by the appropriate decker utility program
-    for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
-      if (GET_PROGRAM_TYPE(soft) == software) {
-        target -= GET_PROGRAM_RATING(soft);
-        buf_mod(rollbuf, sizeof(rollbuf), "soft", -GET_PROGRAM_RATING(soft));
+    for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file) {
+      if (soft->program_type == software) {
+        target -= soft->rating;
+        buf_mod(rollbuf, sizeof(rollbuf), "soft", -soft->rating);
         prog = soft;  // for tarbaby/tarpit
         break;
       }
@@ -777,23 +777,23 @@ ACMD(do_matrix_position)
 
 bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *targ, int &success)
 {
-  struct obj_data *soft = NULL, *temp = NULL;
+  struct matrix_file *soft = NULL, *temp = NULL;
   if (!targ || !targ->decker) return FALSE; // IC don't have shields
 
-  for (soft = targ->decker->software; soft; soft = soft->next_content) {
-    if (GET_PROGRAM_TYPE(soft) == SOFT_SHIELD) {
-      int shield_test = success_test(GET_PROGRAM_RATING(soft), 
+  for (soft = targ->decker->software; soft; soft = soft->next_file) {
+    if (soft->program_type == SOFT_SHIELD) {
+      int shield_test = success_test(soft->rating, 
         ICON_IS_IC(icon) ? matrix[icon->in_host].security : GET_SKILL(icon->decker->ch, SKILL_COMPUTER));
 
       if (shield_test > 0) {
         success -= shield_test;
         send_to_icon(targ, "You raise your shield program and deflect some of the attack.\r\n");
       }
-      GET_PROGRAM_RATING(soft)--;
-      if (GET_PROGRAM_RATING(soft) <= 0) {
+      soft->rating--;
+      if (soft->rating <= 0) {
         send_to_icon(targ, "Your shield program crashes as the rating is depleted.\r\n");
-        REMOVE_FROM_LIST(soft, targ->decker->software, next_content);
-        extract_obj(soft);
+        REMOVE_FROM_LIST(soft, targ->decker->software, next_file);
+        extract_matrix_file(soft);
       }
       return TRUE;
     }
