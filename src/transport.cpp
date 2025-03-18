@@ -959,16 +959,16 @@ SPECIAL(taxi)
         // Are we in gridguide mode?
         if (GET_SPARE2(driver) < 0) {
           if (destination_list == portland_taxi_destinations)
-            snprintf(say, sizeof(say), "%s?  Sure, that will be %d nuyen.",
+            snprintf(say, sizeof(say), "Heading to %s, yes? That will be %d nuyen.",
                      get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
           else if (destination_list == caribbean_taxi_destinations)
-            snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
+            snprintf(say, sizeof(say), "Goin' %s? Sure, %d nuyen. Sound good?",
                      get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
           else if (destination_list == cas_taxi_destinations)
-            snprintf(say, sizeof(say), "%s?  Fee will be %d nuyen, say YES to accept charges.",
+            snprintf(say, sizeof(say), "Destination: %s? Fee will be %d nuyen, say YES to accept charges.",
                     get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
           else
-            snprintf(say, sizeof(say), "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
+            snprintf(say, sizeof(say), "To %s? Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
                      get_string_after_color_code_removal(GET_ROOM_NAME(&world[real_room(-GET_SPARE2(driver))]), ch), (int)GET_SPARE1(driver));
 
           do_say(driver, say, 0, 0);
