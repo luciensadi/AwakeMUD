@@ -3017,18 +3017,32 @@ void send_active_program_list(struct char_data *ch) {
 }
 
 void send_storage_program_list(struct char_data *ch) {
-  obj_data *deck = DECKER->deck;
-  if (DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
+  std::vector<struct obj_data*> devices = get_storage_devices(ch, TRUE);
+  bool found_devices = FALSE;
+  for (struct obj_data* device : devices) {
+    if (device->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
+      continue;
+    }
+    found_devices = TRUE;
+    send_to_icon(PERSONA, "\r\n^c%s^n:\r\n", CAP(GET_OBJ_NAME(device)));
+    for (struct matrix_file *soft = device->files; soft; soft = soft->next_file) {
+      if (soft->program_type == MATRIX_FILE_PROGRAM)
+        send_to_icon(PERSONA, "  %-30s^n Rating: %2d ^y(program)^n\r\n", soft->name, soft->rating);
+      else if (soft->program_type == MATRIX_FILE_DESIGN)
+        send_to_icon(PERSONA, "  %-30s^n Rating: %2d ^y(design)^n\r\n", soft->name, soft->rating);
+      else if (soft->program_type == MATRIX_FILE_SOURCE_CODE)
+        send_to_icon(PERSONA, "  %-30s^n Rating: %2d ^y(source)^n\r\n", soft->name, soft->rating);
+      else
+        send_to_icon(PERSONA, "%s^n\r\n", soft->name);
+    }
+    send_to_icon(PERSONA, "Storage Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", get_device_total_memory(device),
+               get_device_free_memory(device));
+  }
+
+  if (!found_devices) {
     send_to_icon(PERSONA, "\r\nNo Available Storage Memory\r\n");
     return;
   }
-  send_to_icon(PERSONA, "\r\nStorage Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(deck, 3),
-               GET_OBJ_VAL(deck, 3) - GET_OBJ_VAL(deck, 5));
-  for (struct obj_data *soft = deck->contains; soft; soft = soft->next_content)
-    if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && (GET_PROGRAM_TYPE(soft) > SOFT_SENSOR))
-      send_to_icon(PERSONA, "%-30s^n Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
-    else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE)
-      send_to_icon(PERSONA, "%s^n\r\n", GET_OBJ_NAME(soft));
 }
 
 ACMD(quit_the_matrix_first) {
