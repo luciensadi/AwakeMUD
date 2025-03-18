@@ -92,28 +92,51 @@ std::vector<struct obj_data*> get_internal_storage_devices(struct char_data *ch)
 std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool only_relevant) {
   struct obj_data* cyber;
   std::vector<struct obj_data*> found_list = get_internal_storage_devices(ch);
+  int max_cyberdecks = 0;
+
+  if (only_relevant) {
+    for (struct obj_data *check = ch->cyberware; check != NULL; check = check->next_content) {
+      if (GET_CYBERWARE_TYPE(check) == CYB_DATAJACK || (GET_CYBERWARE_TYPE(check) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(check), EYE_DATAJACK))) {
+        max_cyberdecks++;
+      }
+    }
+  } else {
+    max_cyberdecks = 99; // Arbitrary maximum, sorry for magic number
+  }
 
   if (only_relevant && AFF_FLAGGED(ch, PLR_MATRIX)) {
-    /* When someone is decking, the only thing that matters is their headware memory and deck. */
     if (ch->persona && ch->persona->decker) {
       if (ch->persona->decker->deck && !ch->persona->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE))
         found_list.push_back(ch->persona->decker->deck);
-      if (ch->persona->decker->proxy_deck)
-        found_list.push_back(ch->persona->decker->proxy_deck);
     }
-    return found_list;
+    max_cyberdecks--; // Always make sure the cyberdeck of the decker is included.
   }
 
-  for (cyber = ch->carrying; cyber; cyber = cyber->next_content)
-    if ((GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK) && (IS_SENATOR(ch) || !IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY)))
+  for (cyber = ch->carrying; cyber; cyber = cyber->next_content) {
+    if (max_cyberdecks <= 0) break;
+    if (std::find(found_list.begin(), found_list.end(), cyber) != found_list.end()) continue; // If we contain this set, continue
+    if ((GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK) && (IS_SENATOR(ch) || !IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY))) {
       found_list.push_back(cyber);
-  for (int i = 0; i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
+      max_cyberdecks--;
+    }
+  }
+
+  for (int i = 0; i < NUM_WEARS; i++) {
+    if (max_cyberdecks <= 0) break;
+    if (std::find(found_list.begin(), found_list.end(), GET_EQ(ch, i)) != found_list.end()) continue; // If we contain this set, continue
+    if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK)) {
       found_list.push_back(GET_EQ(ch, i));
-  // Decking accessories / computers
-  for (cyber = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; cyber; cyber = cyber->next_content)
-    if (GET_OBJ_TYPE(cyber) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cyber) == TYPE_COMPUTER)
-      found_list.push_back(cyber);  
+      max_cyberdecks--;
+    }
+  }
+
+  if (only_relevant && !AFF_FLAGGED(ch, PLR_MATRIX)) {
+    // Decking accessories / computers
+    // These cannot be accessed while in the matrix
+    for (cyber = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; cyber; cyber = cyber->next_content)
+      if (GET_OBJ_TYPE(cyber) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cyber) == TYPE_COMPUTER)
+        found_list.push_back(cyber);  
+  }
 
   // Deduplicating any repeat pointers.
   std::unordered_set<obj_data*> unique_set(found_list.begin(), found_list.end());
