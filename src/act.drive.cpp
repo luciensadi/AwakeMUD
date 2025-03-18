@@ -2321,22 +2321,10 @@ ACMD(do_push)
       send_to_char("You don't see that vehicle here.\r\n", ch);
       return;
     }
-    int mult;
-    switch (veh->type) {
-      case VEH_DRONE:
-        mult = 100;
-        break;
-      case VEH_TRUCK:
-        mult = 1500;
-        break;
-      default:
-        mult = 500;
-        break;
-    }
 
     FAILURE_CASE(found_veh == veh, "You can't push it into itself.");
     FAILURE_CASE(!found_veh->seating[0] && !(repair_vehicle_seating(found_veh) && found_veh->seating[0]), "There's nowhere to push it into.");
-    FAILURE_CASE(found_veh->load - found_veh->usedload < veh->body * mult, "There is not enough room in there for that.");
+    FAILURE_CASE(found_veh->load - found_veh->usedload < calculate_vehicle_entry_load(veh), "There is not enough room in there for that.");
     FAILURE_CASE(found_veh->locked, "You can't push it into a locked vehicle.");
     FAILURE_CASE(veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED, "The wheels seem to be locked.");
     FAILURE_CASE(found_veh->damage >= VEH_DAM_THRESHOLD_DESTROYED, "You can't push anything into a destroyed vehicle.");
