@@ -498,16 +498,21 @@ void recalculate_vehicle_usedload(struct veh_data *veh) {
 
 int calculate_vehicle_entry_load(struct veh_data *veh) {
   int mult;
-  switch (veh->type) {
-    case VEH_DRONE:
-      mult = 100;
-      break;
-    case VEH_TRUCK:
-      mult = 1500;
-      break;
-    default:
-      mult = 500;
-      break;
+
+  if (veh_is_aircraft(veh)) {
+    mult = 400;
+  } else {
+    switch (veh->type) {
+      case VEH_DRONE:
+        mult = 100;
+        break;
+      case VEH_TRUCK:
+        mult = 1500;
+        break;
+      default:
+        mult = 500;
+        break;
+    }
   }
 
   return veh->body * mult;
