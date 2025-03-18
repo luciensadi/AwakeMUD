@@ -1775,13 +1775,15 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
 #endif
 
   if (inveh && (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
+    int required_load = calculate_vehicle_entry_load(inveh);
+    int available_load = found_veh->load - found_veh->usedload;
 
     if (inveh->in_veh)
       send_to_char("You are already inside a vehicle.\r\n", ch);
     else if (inveh == found_veh)
       send_to_char("It'll take a smarter mind than yours to figure out how to park your vehicle inside itself.\r\n", ch);
-    else if (found_veh->load - found_veh->usedload < calculate_vehicle_entry_load(inveh))
-      send_to_char("There is not enough room in there for that.\r\n", ch);
+    else if (available_load < required_load)
+      send_to_char(ch, "There is not enough room in there for that-- only %d load units are free, and you need %d.\r\n", available_load, required_load);
     else {
       strlcpy(buf3, GET_VEH_NAME(inveh), sizeof(buf3));
       snprintf(buf, sizeof(buf), "%s drives into the back of %s.", buf3, GET_VEH_NAME(found_veh));
