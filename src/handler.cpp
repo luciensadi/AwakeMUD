@@ -2770,7 +2770,7 @@ void extract_char(struct char_data * ch, bool do_save)
   ACMD_CONST(do_return);
 
   if (ch->desc || GET_IDNUM(ch) > 0) {
-    log_vfprintf("Extracting PC %s (%ld).", GET_CHAR_NAME(ch), GET_IDNUM(ch));
+    log_vfprintf("Extracting PC %s (%ld), DB save flag %s.", GET_CHAR_NAME(ch), GET_IDNUM(ch), do_save ? "TRUE" : "FALSE");
   }
 
   if (ch->in_room)

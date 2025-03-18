@@ -2117,6 +2117,7 @@ int process_input(struct descriptor_data *t) {
       if (t->character) {
         log_vfprintf("process_input: about to close connection: input overflow from %s (%ld)", GET_CHAR_NAME(t->character), GET_IDNUM(t->character));
         extract_char(t->character);
+        t->character = NULL;
       }
       return -1;
     }
@@ -2134,6 +2135,7 @@ int process_input(struct descriptor_data *t) {
           snprintf(errbuf, sizeof(errbuf), "process_input: about to lose connection from %s (%ld)", GET_CHAR_NAME(t->character), GET_IDNUM(t->character));
           perror(errbuf);
           extract_char(t->character);
+          t->character = NULL;
         } else {
           perror("process_input: about to lose connection");
         }
@@ -2520,10 +2522,10 @@ void close_socket(struct descriptor_data *d)
       free_editing_structs(d, STATE(d));
       d->character->desc = NULL;
     } else {
-      snprintf(buf, sizeof(buf), "Cleaning up data structures from %s's disconnection (state %d).",
-              GET_CHAR_NAME(d->character) ? GET_CHAR_NAME(d->character) : "<null>",
-              d->connected);
-      mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+      mudlog_vfprintf(d->character, LOG_SYSLOG, "Cleaning up data structures from %s's disconnection (state %d aka '%s').",
+                      GET_CHAR_NAME(d->character) ? GET_CHAR_NAME(d->character) : "<null>",
+                      d->connected,
+                      d->connected >= 0 && d->connected <= CON_MAX ? connected_types[d->connected] : "OUT OF RANGE");
       // we do this because objects can be given to characters in chargen
       for (int i = 0; i < NUM_WEARS; i++)
         if (GET_EQ(d->character, i))
