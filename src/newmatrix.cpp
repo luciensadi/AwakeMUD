@@ -1385,11 +1385,6 @@ const char *get_plaintext_matrix_score_deck(struct char_data *ch) {
 }
 
 const char *get_plaintext_matrix_score_memory(struct char_data *ch) {
-  if (DECKER->proxy_deck) {
-    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s Storage Memory: %d free of %d total\r\n",
-          GET_OBJ_NAME(DECKER->proxy_deck),
-          GET_CYBERDECK_FREE_STORAGE(DECKER->proxy_deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->proxy_deck));
-  }
   if (ch->persona->type == ICON_LIVING_PERSONA) return buf2;
 
   snprintf(buf2, sizeof(buf2), "Active Memory: %d free of %d total\r\n", DECKER->active, GET_CYBERDECK_ACTIVE_MEMORY(DECKER->deck));
@@ -1562,14 +1557,6 @@ ACMD(do_matrix_score)
     }
     if (echoes_found > 0) snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
     else snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " None\r\n");
-  }
-
-  if (DECKER->proxy_deck) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-      "%*s^c%s:^n\r\n"
-      "    Storage:^g%4d^n/%4d (^c%d^n MP free)\r\n"  ,
-      (50 - (int)strlen(GET_OBJ_NAME(DECKER->proxy_deck))) / 2, "", GET_OBJ_NAME(DECKER->proxy_deck),
-      GET_CYBERDECK_USED_STORAGE(DECKER->proxy_deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->proxy_deck), GET_CYBERDECK_FREE_STORAGE(DECKER->proxy_deck));
   }
 
   if (DECKER->io < GET_CYBERDECK_IO_RATING(DECKER->deck)) {
@@ -2188,9 +2175,13 @@ ACMD(do_logoff)
 }
 
 extern struct obj_data *make_otaku_deck(struct char_data *ch);
-void find_cyberdeck(char_data *ch, obj_data *&cyberdeck, obj_data *&proxy_deck)
+void find_cyberdeck(char_data *ch, obj_data *&cyberdeck)
 {
   struct obj_data *cyber = NULL;
+
+  if (IS_OTAKU(ch)) {
+    cyberdeck = make_otaku_deck(ch);
+  }
 
   for (cyber = ch->carrying; !cyberdeck && cyber; cyber = cyber->next_content)
     if ((GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK) && (IS_SENATOR(ch) || !IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY)))
@@ -2198,11 +2189,6 @@ void find_cyberdeck(char_data *ch, obj_data *&cyberdeck, obj_data *&proxy_deck)
   for (int i = 0; !cyberdeck && i < NUM_WEARS; i++)
     if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK))
       cyberdeck = GET_EQ(ch, i);
-
-  if (IS_OTAKU(ch)) {
-    proxy_deck = cyberdeck;
-    cyberdeck = make_otaku_deck(ch);
-  }
 }
 
 /**
@@ -2210,12 +2196,11 @@ void find_cyberdeck(char_data *ch, obj_data *&cyberdeck, obj_data *&proxy_deck)
  *
  * @param cyberdeck A reference to a pointer to cyberdeck, which could be modified
  *                   to point to a new object.
- * @param proxy_deck proxy decks are part of the otaku nonsense
  * @param host For senators, host allows connecting directly to a host
  *
  * @returns whether or not the connect function should return early.
  */
-bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, obj_data *&proxy_deck, rnum_t *host) {
+bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, rnum_t *host) {
   struct char_data *temp;
   vnum_t host_vnum = 0;
 
@@ -2284,7 +2269,7 @@ ACMD(do_connect)
 {
   struct matrix_icon *icon = NULL;
   
-  struct obj_data *cyberdeck = NULL, *jack, *proxy_deck = NULL;
+  struct obj_data *cyberdeck = NULL, *jack;
   rnum_t host;
 
   if (!ch->in_room || !ch->in_room->matrix || (host = real_host(ch->in_room->matrix)) < 1) {
@@ -2303,10 +2288,10 @@ ACMD(do_connect)
     return;
 
   // Locate the appropriate cyberdeck objects for the player.
-  find_cyberdeck(ch, cyberdeck, proxy_deck);
+  find_cyberdeck(ch, cyberdeck);
 
   // Command argument parsing
-  if (parse_connect_args(ch, argument, cyberdeck, proxy_deck, &host))
+  if (parse_connect_args(ch, argument, cyberdeck, &host))
       return;
 
 #ifdef JACKPOINTS_ARE_ONE_PERSON_ONLY
@@ -2401,7 +2386,6 @@ ACMD(do_connect)
   DECKER->mxp = real_room(ch->in_room->number) * DECKER->phone->number / MAX(DECKER->phone->rtg, 1);
   PERSONA->idnum = GET_IDNUM(ch);
   DECKER->deck = cyberdeck;
-  DECKER->proxy_deck = proxy_deck;
   DECKER->mpcp = GET_OBJ_VAL(cyberdeck, 0);
   DECKER->hardening = GET_OBJ_VAL(cyberdeck, 1);
   DECKER->active = GET_OBJ_VAL(cyberdeck, 2);
@@ -2548,14 +2532,14 @@ ACMD(do_connect)
     if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
       if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
         snprintf(buf, sizeof(buf), "$n places $s hand over $s induction pad as $e connects to %s.",
-          !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
+          cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
       } else {
         snprintf(buf, sizeof(buf), "$n slides one end of the cable into $s datajack and the other into %s.",
-          !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
+          cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
       }
     } else {
       snprintf(buf, sizeof(buf), "$n's eye opens up as $e slides %s cable into $s eye datajack.",
-        !proxy_deck && cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
+        cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE) ? "the jackpoint" : "$s cyberdeck");
     }
   } else {
     snprintf(buf, sizeof(buf), "$n plugs the leads of $s 'trode net into $s cyberdeck.");
@@ -2706,8 +2690,6 @@ ACMD(do_download)
   struct matrix_file *soft = NULL;
   struct obj_data *target_deck = DECKER->deck;
   
-  // This line lets otaku use proxy decks to download files.
-  if (IS_OTAKU(DECKER->ch) && DECKER->proxy_deck) target_deck = DECKER->proxy_deck;
   skip_spaces(&argument);
   // TODO: This might cause conflicts if multiple deckers have paydata on the host.
   if ((soft = get_matrix_file_in_list_vis(ch, argument, matrix[PERSONA->in_host].files)) && soft->found_by == PERSONA->idnum) {
@@ -3037,12 +3019,8 @@ void send_active_program_list(struct char_data *ch) {
 void send_storage_program_list(struct char_data *ch) {
   obj_data *deck = DECKER->deck;
   if (DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
-    // We're an otaku using a living persona; we don't have storage memory.
-    if (DECKER->proxy_deck) deck = DECKER->proxy_deck;
-    else {
-      send_to_icon(PERSONA, "\r\nNo Available Storage Memory\r\n");
-      return;
-    }
+    send_to_icon(PERSONA, "\r\nNo Available Storage Memory\r\n");
+    return;
   }
   send_to_icon(PERSONA, "\r\nStorage Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(deck, 3),
                GET_OBJ_VAL(deck, 3) - GET_OBJ_VAL(deck, 5));
