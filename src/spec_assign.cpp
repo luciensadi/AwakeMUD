@@ -202,6 +202,18 @@ struct teach_data teachers[] = {
     "Steve roughly throws you a text book and tells you to read it, you feel like you've learned something.\r\n", NEWBIE},
   // End newbie teachers.
 
+#ifdef USE_PRIVATE_CE_WORLD
+  // Skill-8 otaku teacher
+  { 5003, {  SKILL_CHANNEL_ACCESS, SKILL_CHANNEL_CONTROL, SKILL_CHANNEL_INDEX, SKILL_CHANNEL_FILES, SKILL_CHANNEL_SLAVE,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After hours of study and practice, you feel like you've learned something.\r\n", AMATEUR },
+
+  // Skill-12 otaku teacher
+  { 792, {  SKILL_CHANNEL_ACCESS, SKILL_CHANNEL_CONTROL, SKILL_CHANNEL_INDEX, SKILL_CHANNEL_FILES, SKILL_CHANNEL_SLAVE,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After hours of study and practice, you feel like you've learned something.\r\n", ADVANCED },
+#endif
+
    { 30700, { SKILL_ARABIC, SKILL_CANTONESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
      SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
      SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, 
