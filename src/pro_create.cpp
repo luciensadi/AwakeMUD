@@ -294,6 +294,7 @@ int get_program_skill(char_data *ch, matrix_file *prog, int target)
   case SOFT_LOCKON:
   case SOFT_MEDIC:
   case SOFT_ARMOR:
+  case SOFT_SHIELD:
     skill = get_skill(ch, SKILL_PROGRAM_DEFENSIVE, target);
     break;
   case SOFT_BATTLETEC:
