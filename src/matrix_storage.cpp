@@ -114,7 +114,7 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
 
   for (cyber = ch->carrying; cyber; cyber = cyber->next_content) {
     if (max_cyberdecks <= 0) break;
-    if (std::find(found_list.begin(), found_list.end(), cyber) != found_list.end()) continue; // If we contain this set, continue
+    if (find(found_list.begin(), found_list.end(), cyber) != found_list.end()) continue; // If we contain this set, continue
     if ((GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK) && (IS_SENATOR(ch) || !IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY))) {
       found_list.push_back(cyber);
       max_cyberdecks--;
@@ -123,7 +123,7 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
 
   for (int i = 0; i < NUM_WEARS; i++) {
     if (max_cyberdecks <= 0) break;
-    if (std::find(found_list.begin(), found_list.end(), GET_EQ(ch, i)) != found_list.end()) continue; // If we contain this set, continue
+    if (find(found_list.begin(), found_list.end(), GET_EQ(ch, i)) != found_list.end()) continue; // If we contain this set, continue
     if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK)) {
       found_list.push_back(GET_EQ(ch, i));
       max_cyberdecks--;
