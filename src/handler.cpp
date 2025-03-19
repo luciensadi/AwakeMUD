@@ -33,6 +33,7 @@
 #include "vehicles.hpp"
 #include "player_exdescs.hpp"
 #include "otaku.hpp"
+#include "gmcp.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);

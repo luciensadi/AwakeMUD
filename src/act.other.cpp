@@ -42,6 +42,7 @@
 #include "moderation.hpp"
 #include "chipjacks.hpp"
 #include "player_exdescs.hpp"
+#include "gmcp.hpp"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -2368,8 +2369,7 @@ ACMD(do_treat)
   // Treater gets a wait state.
   WAIT_STATE(ch, 2 RL_SEC);
 
-  // Update State
-  SendGMCPCharStatus(vict);
+  SendGMCPCharStatus(vict); // Update State
 }
 
 ACMD(do_astral)

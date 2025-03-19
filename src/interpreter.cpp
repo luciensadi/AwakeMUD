@@ -45,6 +45,7 @@
 #include "dblist.hpp"
 #include "player_exdescs.hpp"
 #include "pets.hpp"
+#include "gmcp.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -3236,8 +3237,6 @@ void nanny(struct descriptor_data * d, char *arg)
           GET_PHYSICAL(d->character) = (int)(GET_MAX_PHYSICAL(d->character) * .4);
           GET_MENTAL(d->character) = (int)(GET_MAX_MENTAL(d->character) * .4);
         }
-        // Update State
-        SendGMCPCharStatus(d->character);
 
         {
           // Check if they're naked.
@@ -3428,6 +3427,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
       // GMCP Protocl injection
       SendGMCPCoreSupports ( d );
+      SendGMCPCharInfo ( d->character );
 
       if (!str_cmp(GET_EMAIL(d->character), "not set")) {
         send_to_char("\r\n^YNotice:^n This character hasn't been registered yet! Please see ^WHELP REGISTER^n for information.^n\r\n\r\n", d->character);
