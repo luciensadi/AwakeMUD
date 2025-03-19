@@ -320,6 +320,7 @@ protocol_t *ProtocolCreate( void )
   pProtocol->bMSP = FALSE;
   pProtocol->bMXP = FALSE;
   pProtocol->bMCCP = FALSE;
+  pProtocol->bGMCP = FALSE;
   pProtocol->b256Support = eUNKNOWN;
   pProtocol->ScreenWidth = 0;
   pProtocol->ScreenHeight = 0;
@@ -490,6 +491,13 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
         Write( apDescriptor, "\n" );
         snprintf( MXPBuffer, sizeof(MXPBuffer), "MXP version %s detected and enabled.\r\n",
           pProtocol->pMXPVersion );
+        InfoMessage( apDescriptor, MXPBuffer );
+      }
+
+      if ( pProtocol->bGMCP )
+      {
+        Write( apDescriptor, "\n" );
+        snprintf( MXPBuffer, sizeof(MXPBuffer), "GMCP is detected and enabled.\r\n");
         InfoMessage( apDescriptor, MXPBuffer );
       }
     }
@@ -1150,6 +1158,8 @@ const char *CopyoverGet( descriptor_t *apDescriptor )
       *pBuffer++ = 'A';
     if ( pProtocol->bMSP )
       *pBuffer++ = 'S';
+    if ( pProtocol->bGMCP )
+      *pBuffer++ = 'G';
     if ( pProtocol->pVariables[eMSDP_MXP] && pProtocol->pVariables[eMSDP_MXP]->ValueInt )
       *pBuffer++ = 'X';
     if ( pProtocol->bMCCP )
@@ -1199,6 +1209,9 @@ void CopyoverSet( descriptor_t *apDescriptor, const char *apData )
           break;
         case 'S':
           pProtocol->bMSP = TRUE;
+          break;
+        case 'G':
+          pProtocol->bGMCP = TRUE;
           break;
         case 'X':
           pProtocol->bMXP = TRUE;
@@ -1818,6 +1831,7 @@ static void Negotiate( descriptor_t *apDescriptor )
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MSP, TRUE, TRUE);
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MXP, TRUE, TRUE);
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MCCP, TRUE, TRUE);
+    ConfirmNegotiation(apDescriptor, eNEGOTIATED_GMCP, TRUE, TRUE);
     
     Write(apDescriptor, (char[]) { (char)IAC, (char)DO, TELOPT_NEW_ENVIRON, '\0' });
   }
@@ -2031,7 +2045,7 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
       break;
 
     case (char)TELOPT_GMCP:
-      if ( aCmd == (char)DO )
+      if ( aCmd == (char)DO || aCmd == (char)WILL )
       {
         ConfirmNegotiation(apDescriptor, eNEGOTIATED_GMCP, TRUE, TRUE);
         pProtocol->bGMCP = TRUE;
@@ -2040,12 +2054,6 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
       {
         ConfirmNegotiation(apDescriptor, eNEGOTIATED_GMCP, FALSE, pProtocol->bGMCP);
         pProtocol->bGMCP = FALSE;
-      }
-      else if ( aCmd == (char)WILL )
-      {
-        /* Invalid negotiation, send a rejection */
-        log("Received invalid IAC WILL MSP from client, denying.");
-        SendNegotiationSequence( apDescriptor, (char)DONT, (char)aProtocol );
       }
       break;
 
