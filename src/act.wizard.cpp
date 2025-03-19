@@ -5782,7 +5782,7 @@ ACMD(do_set)
                { "lifestyle",  LVL_PRESIDENT, PC, MISC },
                { "highestindex", LVL_ADMIN, BOTH, NUMBER },
                { "strikes", LVL_FIXER, PC, NUMBER },
-               { "scrutiny", LVL_ADMIN, PC, NUMBER }, // 90
+               { "scrutiny", LVL_ADMIN, PC, BINARY }, // 90
                { "\n", 0, BOTH, MISC }
              };
 

@@ -767,6 +767,11 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   if (targ->decker && !has_spotted(targ, icon))
     make_seen(targ, icon->idnum);
 
+#ifdef IS_BUILDPORT
+  if (icon->decker)
+    send_to_char(icon->decker->ch, "entering matrix_fight(%s, %s)\r\n", GET_CHAR_NAME(icon->decker->ch), targ->name);
+#endif
+
   // Determine attack TNs
   switch (matrix[icon->in_host].color)
   {
@@ -812,8 +817,13 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     for (soft = icon->decker->software; soft; soft = soft->next_content)
       if (GET_OBJ_VAL(soft, 0) == SOFT_ATTACK)
         break;
-    if (!soft)
+    if (!soft) {
+#ifdef IS_BUILDPORT
+  if (icon->decker)
+    send_to_icon(icon, "matrix_fight(): failed to find attack soft, bailing out\r\n");
+#endif
       return;
+    }
     skill = GET_OBJ_VAL(soft, 1) + MIN(GET_MAX_HACKING(icon->decker->ch), GET_REM_HACKING(icon->decker->ch));
     GET_REM_HACKING(icon->decker->ch) -= skill - GET_OBJ_VAL(soft, 1);
     dam = GET_OBJ_VAL(soft, 3);
@@ -968,6 +978,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 
   // Block!
   if (try_execute_shield_program(icon, targ, success) && success <= 0) {
+#ifdef IS_BUILDPORT
+    if (icon->decker)
+      send_to_icon(icon, "matrix_fight(): shield program failed, bailing out\r\n");
+#endif
     return;
   }
 
@@ -1017,9 +1031,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   } // else { implementations of slow, etc, would go here }
 
   // Results of damaging attacks
-  if (success -= success_test(bod, power) <= 0) {
-    return;
-  }
+  success -= success_test(bod, power);
   icondam = convert_damage(stage(success, dam));
   switch(icondam)
   {
