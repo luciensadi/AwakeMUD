@@ -2301,7 +2301,7 @@ void _do_the_scoots(struct room_data *room, int exit_dir) {
     for (struct char_data *ch = room->people, *next_ch; ch; ch = next_ch) {
       next_ch = ch->next_in_room;
 
-      if (!ch->desc || CH_IN_COMBAT(ch))
+      if (!ch->desc || CH_IN_COMBAT(ch) || PRF_FLAGGED(ch, PRF_AFK) || ch->desc->idle_ticks >= 10)
         continue;
 
       // Skip anyone we've already processed.
