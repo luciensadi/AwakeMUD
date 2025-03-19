@@ -33,6 +33,7 @@
 #include "vehicles.hpp"
 #include "player_exdescs.hpp"
 #include "otaku.hpp"
+#include "matrix_storage.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
@@ -1362,9 +1363,9 @@ void icon_to_host(struct matrix_icon *icon, vnum_t to_host)
       for (struct matrix_icon *icon2 = matrix[to_host].icons; icon2; icon2 = icon2->next_in_host)
         if (icon2->decker) {
           int target = icon->decker->masking;
-          for (struct obj_data *soft = icon->decker->software; soft; soft = soft->next_content)
-            if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
-              target += GET_OBJ_VAL(soft, 1);
+          for (struct matrix_file *soft = icon->decker->software; soft; soft = soft->next_file)
+            if (soft->program_type == SOFT_SLEAZE)
+              target += soft->rating;
           if (success_test(icon2->decker->sensor, target) > 0) {
             make_seen(icon2, icon->idnum);
             send_to_icon(icon2, "%s enters the host.\r\n", icon->name);
@@ -1404,35 +1405,35 @@ void icon_from_host(struct matrix_icon *icon)
 
   // Unlink any files that have been claimed by this icon.
   if (icon->idnum) {
-    for (struct obj_data *soft = matrix[icon->in_host].file, *next_file; soft; soft = next_file) {
-      next_file = soft->next_content;
+    for (struct matrix_file *soft = matrix[icon->in_host].files, *next_file; soft; soft = next_file) {
+      next_file = soft->next_file;
 
-      if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
-        // Stop in-progress downloads.
-        if (GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) == icon->idnum) {
-          GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) = 0;
-          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
-        }
+      // Stop in-progress downloads.
+      if (soft->file_worker == icon->idnum) {
+        soft->file_worker = 0;
+        soft->transfer_remaining = 0;
+        soft->transferring_to = NULL;
+      }
 
-        // Unlock found items so others can find them.
-        if (GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) == icon->idnum) {
-          GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) = 0;
-          GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(soft) = 0;
-          GET_DECK_ACCESSORY_FILE_REMAINING(soft) = 0;
+      // Unlock found items so others can find them.
+      if (soft->found_by == icon->idnum) {
+        soft->found_by = 0;
+        soft->file_worker = 0;
+        soft->transfer_remaining = 0;
+        soft->transferring_to = NULL;
 
-          // If it's paydata, we extract it entirely, then potentially put it back in the paydata queue to be rediscovered.
-          if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY
-              && GET_DECK_ACCESSORY_TYPE(soft) == TYPE_FILE
-              && GET_DECK_ACCESSORY_FILE_HOST_VNUM(soft) == matrix[icon->in_host].vnum)
-          {
-            // 66% chance of being rediscoverable.
-            if (number(0, 2)) {
-              matrix[icon->in_host].undiscovered_paydata++;
-            }
-
-            extract_obj(soft);
-            continue;
+        // If it's paydata, we extract it entirely, then potentially put it back in the paydata queue to be rediscovered.
+        if (soft->file_type == MATRIX_FILE_PAYDATA
+            && soft->in_host
+            && soft->in_host->vnum == matrix[icon->in_host].vnum)
+        {
+          // 66% chance of being rediscoverable.
+          if (number(0, 2)) {
+            matrix[icon->in_host].undiscovered_paydata++;
           }
+
+          extract_matrix_file(soft);
+          continue;
         }
       }
     }
@@ -2229,39 +2230,6 @@ void obj_from_room(struct obj_data * object)
   GET_OBJ_EXPIRATION_TIMESTAMP(object) = 0;
 }
 
-/* Put an object in a Matrix host. */
-void obj_to_host(struct obj_data *obj, struct host_data *host) {
-  if (!host) {
-    mudlog("SYSERR: Null host given to obj_to_host!", NULL, LOG_SYSLOG, TRUE);
-    return;
-  }
-
-  // Check our object-related preconditions. All error logging is done there.
-  if (!check_obj_to_x_preconditions(obj, NULL))
-    return;
-
-  obj->in_host = host;
-  obj->next_content = host->file;
-  host->file = obj;
-}
-
-/* Remove an object from a Matrix host. */
-void obj_from_host(struct obj_data *obj) {
-  if (!obj) {
-    mudlog("SYSERR: Null obj given to obj_from_host!", NULL, LOG_SYSLOG, TRUE);
-    return;
-  }
-
-  if (!obj->in_host) {
-    mudlog("SYSERR: Non-hosted obj given to obj_from_host!", NULL, LOG_SYSLOG, TRUE);
-    return;
-  }
-
-  struct obj_data *temp;
-  REMOVE_FROM_LIST(obj, obj->in_host->file, next_content);
-  obj->in_host = NULL;
-}
-
 /* put an object in an object (quaint)  */
 void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
 {
@@ -2441,10 +2409,10 @@ void extract_icon(struct matrix_icon * icon)
       send_to_char(icon->decker->hitcher, "You return to your senses.\r\n");
       clear_hitcher(icon->decker->hitcher, FALSE);      
     }
-    struct obj_data *temp;
-    for (struct obj_data *obj = icon->decker->software; obj; obj = temp) {
-      temp = obj->next_content;
-      extract_obj(obj);
+    struct matrix_file *temp;
+    for (struct matrix_file *obj = icon->decker->software; obj; obj = temp) {
+      temp = obj->next_file;
+      extract_matrix_file(obj);
     }
     struct seen_data *temp2;
     for (struct seen_data *seen = icon->decker->seen; seen; seen = temp2) {
@@ -2714,13 +2682,6 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
     set = TRUE;
   }
 
-  if (obj->in_host) {
-    obj_from_host(obj);
-    if (set)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_host)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
-    set = TRUE;
-  }
-
   if (obj->carried_by) {
     obj_from_char(obj);
     if (set)
@@ -2734,6 +2695,10 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: More than one list pointer set when extracting '%s' (%ld)! (in_obj)", GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     set = TRUE;
   }
+
+  /* Don't forget to get rid of the all the files attached to the object. */
+  while (obj->files)
+    extract_matrix_file(obj->files);
 
   /* Get rid of the contents of the object, as well. ITEM_PART contains its cyberdeck, so don't extract that. */
   if (GET_OBJ_TYPE(obj) != ITEM_PART) {

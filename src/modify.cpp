@@ -480,13 +480,16 @@ void string_add(struct descriptor_data *d, char *str)
       }
     } else if (STATE(d) == CON_POCKETSEC && d->edit_mode == 19) {
       if (!detected_abort) {
-        struct obj_data *file = NULL;
-        for (file = d->edit_obj->contains; file; file = file->next_content)
-          if (!strcmp(file->restring, "Notes")) {
-            file = file->contains;
+        struct matrix_file *file = NULL;
+        struct obj_data *folder = NULL;
+        for (folder = d->edit_obj->contains; folder; folder = folder->next_content)
+          if (!strcmp(folder->restring, "Notes"))
             break;
-          }
-        REPLACE_STRING(file->photo);
+
+        if (folder && folder->files) {
+          REPLACE_STRING(folder->files->content);
+          folder->files->dirty_bit = TRUE;
+        }
       }
       pocketsec_notemenu(d);
     } else if (d->character && PLR_FLAGGED(d->character, PLR_MAILING)) {

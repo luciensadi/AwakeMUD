@@ -296,8 +296,8 @@ ACMD(do_forms)
     if (!*param) {
       if (AFF_FLAGGED(ch, AFF_COMPLEX_FORM_PROGRAM)) {
         AFF_FLAGS(ch).RemoveBit(AFF_COMPLEX_FORM_PROGRAM);
-        send_to_char(ch, "You stop working on %s.\r\n", ch->char_specials.programming->restring);
-        ch->char_specials.programming = NULL;
+        send_to_char(ch, "You stop working on %s.\r\n", GET_BUILDING(ch)->restring);
+        GET_BUILDING(ch) = NULL;
       } else
         send_to_char(ch, "Meditate On What?\r\n");
       return;

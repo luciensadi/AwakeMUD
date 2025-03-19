@@ -1117,6 +1117,7 @@ const char *item_types[] =
     "Art",
     "Custom Pet",
     "Complex Form", 
+    "Source Code",
     "\n"
   };
 
