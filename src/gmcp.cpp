@@ -37,80 +37,6 @@ static void Write( descriptor_t *apDescriptor, const char *apData )
   }
 }
 
-void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const json &payload) {
-  if (!strncmp(module, "Core.Supports.Get", sizeof(module)))
-    SendGMCPCoreSupports(apDescriptor);
-  else if (!strncmp(module, "Room.Info.Get", sizeof(module)))
-    if (!apDescriptor->character)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: No Valid Character");
-    else if (!apDescriptor->character->in_room)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: Not in Room");
-    else
-      SendGMCPRoomInfo(apDescriptor->character, apDescriptor->character->in_room);
-  else if (!strncmp(module, "Room.Exits.Get", sizeof(module)))
-    if (!apDescriptor->character)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Exits.Get Call: No Valid Character");
-    else
-      SendGMCPExitsInfo(apDescriptor->character);
-  else if (!strncmp(module, "Char.Status.Get", sizeof(module)))
-    if (!apDescriptor->character)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Status.Get Call: No Valid Character");
-    else
-      SendGMCPCharStatus(apDescriptor->character);
-  else if (!strncmp(module, "Char.Info.Get", sizeof(module)))
-    if (!apDescriptor->character)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Info.Get Call: No Valid Character");
-    else
-      SendGMCPCharInfo(apDescriptor->character);
-  else if (!strncmp(module, "Char.Pools.Get", sizeof(module)))
-    if (!apDescriptor->character)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Pools.Get Call: No Valid Character");
-    else
-      SendGMCPCharPools(apDescriptor->character);
-  else
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "Received Unhandled GMCP Module Call [%s]: %s", module, payload.dump().c_str());
-}
-
-void ParseGMCP( descriptor_t *apDescriptor, const char *apData )
-{
-  // GMCP messages are typically of the form:
-  //   Module.Name {"key": "value", ...}
-  //
-  // First, find the first whitespace which separates the module name from the JSON payload.
-  const char *space = strchr(apData, ' ');
-  if (!space) {
-      // If no space is found, treat the entire message as a module name with an empty payload.
-      ExecuteGMCPMessage(apDescriptor, apData, NULL);
-      return;
-  }
-
-  // Extract the module name.
-  size_t module_len = space - apData;
-  char module[MAX_GMCP_SIZE];
-  if (module_len >= MAX_GMCP_SIZE) {
-      module_len = MAX_GMCP_SIZE - 1;
-  }
-  memcpy(module, apData, module_len);
-  module[module_len] = '\0';
-
-  // Skip any additional whitespace to locate the start of the JSON payload.
-  while (*space && isspace(*space)) {
-      space++;
-  }
-
-  // Use nlohmann::json to parse the JSON payload.
-  json payload;
-  try {
-    payload = json::parse(space);
-  } catch (const json::parse_error &ex) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "There was a JSON error when attempted to parse %s.", module);
-    payload = NULL;
-  }
-
-  // Dispatch the GMCP message.
-  ExecuteGMCPMessage(apDescriptor, module, payload);
-}
-
 /******************************************************************************
  GMCP functions.
  ******************************************************************************/
@@ -237,7 +163,7 @@ void SendGMCPCharStatus( struct char_data * ch )
   j["mental"] = GET_MENTAL(ch);
   j["physical_max"] = GET_MAX_PHYSICAL(ch);
   j["mental_max"] = GET_MAX_MENTAL(ch);
-  
+
   // Dump the json to a string and send it.
   std::string payload = j.dump();
   SendGMCP(ch->desc, "Char.Status", payload.c_str());
@@ -256,4 +182,79 @@ void SendGMCPCharPools( struct char_data * ch )
   // Dump the json to a string and send it.
   std::string payload = j.dump();
   SendGMCP(ch->desc, "Char.Pools", payload.c_str());
+}
+
+
+void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const json &payload) {
+  if (!strncmp(module, "Core.Supports.Get", strlen(module)))
+    SendGMCPCoreSupports(apDescriptor);
+  else if (!strncmp(module, "Room.Info.Get", strlen(module)))
+    if (!apDescriptor->character)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: No Valid Character");
+    else if (!apDescriptor->character->in_room)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: Not in Room");
+    else
+      SendGMCPRoomInfo(apDescriptor->character, apDescriptor->character->in_room);
+  else if (!strncmp(module, "Room.Exits.Get", strlen(module)))
+    if (!apDescriptor->character)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Exits.Get Call: No Valid Character");
+    else
+      SendGMCPExitsInfo(apDescriptor->character);
+  else if (!strncmp(module, "Char.Status.Get", strlen(module)))
+    if (!apDescriptor->character)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Status.Get Call: No Valid Character");
+    else
+      SendGMCPCharStatus(apDescriptor->character);
+  else if (!strncmp(module, "Char.Info.Get", strlen(module)))
+    if (!apDescriptor->character)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Info.Get Call: No Valid Character");
+    else
+      SendGMCPCharInfo(apDescriptor->character);
+  else if (!strncmp(module, "Char.Pools.Get", strlen(module)))
+    if (!apDescriptor->character)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Pools.Get Call: No Valid Character");
+    else
+      SendGMCPCharPools(apDescriptor->character);
+  else
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Received Unhandled GMCP Module Call [%s]: %s", module, payload.dump().c_str());
+}
+
+void ParseGMCP( descriptor_t *apDescriptor, const char *apData )
+{
+  // GMCP messages are typically of the form:
+  //   Module.Name {"key": "value", ...}
+  //
+  // First, find the first whitespace which separates the module name from the JSON payload.
+  const char *space = strchr(apData, ' ');
+  if (!space) {
+      // If no space is found, treat the entire message as a module name with an empty payload.
+      ExecuteGMCPMessage(apDescriptor, apData, NULL);
+      return;
+  }
+
+  // Extract the module name.
+  size_t module_len = space - apData;
+  char module[MAX_GMCP_SIZE];
+  if (module_len >= MAX_GMCP_SIZE) {
+      module_len = MAX_GMCP_SIZE - 1;
+  }
+  memcpy(module, apData, module_len);
+  module[module_len] = '\0';
+
+  // Skip any additional whitespace to locate the start of the JSON payload.
+  while (*space && isspace(*space)) {
+      space++;
+  }
+
+  // Use nlohmann::json to parse the JSON payload.
+  json payload;
+  try {
+    payload = json::parse(space);
+  } catch (const json::parse_error &ex) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "There was a JSON error when attempted to parse %s.", module);
+    payload = NULL;
+  }
+
+  // Dispatch the GMCP message.
+  ExecuteGMCPMessage(apDescriptor, module, payload);
 }
