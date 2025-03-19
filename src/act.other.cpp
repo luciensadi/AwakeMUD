@@ -2367,6 +2367,9 @@ ACMD(do_treat)
 
   // Treater gets a wait state.
   WAIT_STATE(ch, 2 RL_SEC);
+
+  // Update State
+  SendGMCPCharStatus(vict);
 }
 
 ACMD(do_astral)

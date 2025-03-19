@@ -3236,6 +3236,8 @@ void nanny(struct descriptor_data * d, char *arg)
           GET_PHYSICAL(d->character) = (int)(GET_MAX_PHYSICAL(d->character) * .4);
           GET_MENTAL(d->character) = (int)(GET_MAX_MENTAL(d->character) * .4);
         }
+        // Update State
+        SendGMCPCharStatus(d->character);
 
         {
           // Check if they're naked.

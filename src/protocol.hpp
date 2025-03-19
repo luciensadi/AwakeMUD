@@ -549,6 +549,7 @@ void SoundSend( descriptor_t *apDescriptor, const char *apTrigger );
 void SendGMCP( descriptor_t *apDescriptor, const char *module, const char *apData );
 void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room );
 void SendGMCPCoreSupports ( descriptor_t *apDescriptor );
+void SendGMCPCharStatus( struct char_data * ch );
 
 /******************************************************************************
  Colour functions.

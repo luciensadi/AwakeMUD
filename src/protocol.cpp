@@ -2511,6 +2511,9 @@ void SendGMCPCoreSupports ( descriptor_t *apDescriptor )
   j["Room"].push_back("Info");
   j["Room"].push_back("Exits");
 
+  j["Char"] = json::array();
+  j["Char"].push_back("Status");
+
   // Dump the json to a string and send it.
   std::string payload = j.dump();
   SendGMCP(apDescriptor, "Core.Supports", payload.c_str());
@@ -2587,6 +2590,26 @@ void SendGMCP( descriptor_t *apDescriptor, const char *module, const char *apDat
   snprintf(buf, sizeof(buf), "%c%c%c%s %s%c%c", IAC, SB, TELOPT_GMCP, module, apData, IAC, SE);
 
   Write(apDescriptor, buf);
+}
+
+void SendGMCPCharStatus( struct char_data * ch )
+{
+  if (!ch || !ch->desc || !ch->desc->pProtocol->bGMCP) return;
+  json j;
+
+  j["physical"] = GET_PHYSICAL(ch);
+  j["mental"] = GET_MENTAL(ch);
+  j["physical_max"] = GET_MAX_PHYSICAL(ch);
+  j["mental_max"] = GET_MAX_MENTAL(ch);
+  j["karma"] = GET_KARMA(ch);
+  j["pools"] = {"body", GET_BODY_POOL(ch), "magic", GET_MAGIC_POOL(ch), "combat", GET_COMBAT_POOL(ch), "hacking", GET_HACKING(ch)};
+  j["task_pools"] = json::object();
+  for (int x = 0; x < 7; x++)
+    j["task_pools"][attributes[x]] = GET_TASK_POOL(ch, x);  
+
+  // Dump the json to a string and send it.
+  std::string payload = j.dump();
+  SendGMCP(ch->desc, "Char.Status", payload.c_str());
 }
 
 /******************************************************************************

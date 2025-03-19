@@ -368,6 +368,8 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
 
         // Finally, apply it to character, capping at their max physical. No negative cap is applied.
         GET_PHYSICAL(ch) = MIN(GET_MAX_PHYSICAL(ch), GET_PHYSICAL(ch) + mod);
+        // Update State
+        SendGMCPCharStatus(ch);
       break;
     case SPELL_STABILIZE:
       if (mod == 1)
