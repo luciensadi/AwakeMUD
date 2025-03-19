@@ -38,7 +38,37 @@ static void Write( descriptor_t *apDescriptor, const char *apData )
 }
 
 void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const json &payload) {
-  mudlog_vfprintf(NULL, LOG_SYSLOG, "Received Unhandled GMCP Module Call [%s]: %s", module, payload.dump().c_str());
+  if (!strncmp(module, "Core.Supports.Get", sizeof(module)))
+    SendGMCPCoreSupports(apDescriptor);
+  else if (!strncmp(module, "Room.Info.Get", sizeof(module)))
+    if (!apDescriptor->character)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: No Valid Character");
+    else if (!apDescriptor->character->in_room)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: Not in Room");
+    else
+      SendGMCPRoomInfo(apDescriptor->character, apDescriptor->character->in_room);
+  else if (!strncmp(module, "Room.Exits.Get", sizeof(module)))
+    if (!apDescriptor->character)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Exits.Get Call: No Valid Character");
+    else
+      SendGMCPExitsInfo(apDescriptor->character);
+  else if (!strncmp(module, "Char.Status.Get", sizeof(module)))
+    if (!apDescriptor->character)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Status.Get Call: No Valid Character");
+    else
+      SendGMCPCharStatus(apDescriptor->character);
+  else if (!strncmp(module, "Char.Info.Get", sizeof(module)))
+    if (!apDescriptor->character)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Info.Get Call: No Valid Character");
+    else
+      SendGMCPCharInfo(apDescriptor->character);
+  else if (!strncmp(module, "Char.Pools.Get", sizeof(module)))
+    if (!apDescriptor->character)
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Pools.Get Call: No Valid Character");
+    else
+      SendGMCPCharPools(apDescriptor->character);
+  else
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Received Unhandled GMCP Module Call [%s]: %s", module, payload.dump().c_str());
 }
 
 void ParseGMCP( descriptor_t *apDescriptor, const char *apData )
