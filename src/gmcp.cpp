@@ -174,10 +174,34 @@ void SendGMCPCharPools( struct char_data * ch )
   if (!ch || !ch->desc || !ch->desc->pProtocol->bGMCP) return;
   json j;
 
-  j["pools"] = {"body", GET_BODY_POOL(ch), "magic", GET_MAGIC_POOL(ch), "combat", GET_COMBAT_POOL(ch), "hacking", GET_HACKING(ch)};
+  j["pools"] = json::object();
+  j["pools"]["combat"] = json::object();
+  j["pools"]["combat"]["body"] = GET_BODY_POOL(ch);
+  j["pools"]["combat"]["dodge"] = GET_DODGE(ch);
+  j["pools"]["combat"]["offense"] = GET_OFFENSE(ch);
+  j["pools"]["combat"]["max"] = GET_COMBAT_POOL(ch)
+
   j["task_pools"] = json::object();
-  for (int x = 0; x < 7; x++)
+  for (int x = 0; x < 7; x++) {
     j["task_pools"][attributes[x]] = GET_TASK_POOL(ch, x);  
+  }
+
+  if (GET_ASTRAL(ch) > 0)
+    j["pools"]["astral"] = GET_ASTRAL(ch);
+  if (GET_HACKING(ch) > 0)
+    j["pools"]["hacking"] = GET_HACKING(ch);
+  if (GET_MAGIC_POOL(ch) > 0) {
+    j["pools"]["magic"] = json::object();
+    j["pools"]["magic"]["spell"] = GET_MAGIC_POOL(ch);
+    j["pools"]["magic"]["casting"] = GET_CASTING(ch);
+    j["pools"]["magic"]["drain"] = GET_DRAIN(ch);
+    j["pools"]["magic"]["defense"] = GET_SDEFENSE(ch);
+    if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
+      j["pools"]["magic"]["reflecting"] = GET_REFLECT(ch);
+  }
+
+  if (GET_CONTROL(ch) > 0)
+    j["pools"]["control"] = GET_CONTROL(ch);
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
