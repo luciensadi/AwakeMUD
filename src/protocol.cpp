@@ -32,6 +32,7 @@
 #include "protocol.hpp"
 #include "config.hpp"
 #include "db.hpp"
+#include "gmcp.hpp"
 
 /******************************************************************************
  The following section is for Diku/Merc derivatives.  Replace as needed.
@@ -2200,6 +2201,13 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
 
   switch ( aCmd )
   {
+    case (char)TELOPT_GMCP:
+      PROTO_DEBUG_MSG("Entering PerformSubnegotiation's TELOPT_GMCP case.");
+      if ( pProtocol->bMSDP )
+      {
+        ParseGMCP( apDescriptor, apData );
+      }
+      break;
     case (char)TELOPT_NEW_ENVIRON:
       {
         PROTO_DEBUG_MSG("Entering PerformSubnegotiation's TELOPT_NEW_ENVIRON case.");

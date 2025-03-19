@@ -37,6 +37,50 @@ static void Write( descriptor_t *apDescriptor, const char *apData )
   }
 }
 
+void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const json &payload) {
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "Received Unhandled GMCP Module Call [%s]: %s", module, payload.dump().c_str());
+}
+
+void ParseGMCP( descriptor_t *apDescriptor, const char *apData )
+{
+  // GMCP messages are typically of the form:
+  //   Module.Name {"key": "value", ...}
+  //
+  // First, find the first whitespace which separates the module name from the JSON payload.
+  const char *space = strchr(apData, ' ');
+  if (!space) {
+      // If no space is found, treat the entire message as a module name with an empty payload.
+      ExecuteGMCPMessage(apDescriptor, apData, NULL);
+      return;
+  }
+
+  // Extract the module name.
+  size_t module_len = space - apData;
+  char module[MAX_GMCP_SIZE];
+  if (module_len >= MAX_GMCP_SIZE) {
+      module_len = MAX_GMCP_SIZE - 1;
+  }
+  memcpy(module, apData, module_len);
+  module[module_len] = '\0';
+
+  // Skip any additional whitespace to locate the start of the JSON payload.
+  while (*space && isspace(*space)) {
+      space++;
+  }
+
+  // Use nlohmann::json to parse the JSON payload.
+  json payload;
+  try {
+    payload = json::parse(space);
+  } catch (const json::parse_error &ex) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "There was a JSON error when attempted to parse %s.", module);
+    payload = NULL;
+  }
+
+  // Dispatch the GMCP message.
+  ExecuteGMCPMessage(apDescriptor, module, payload);
+}
+
 /******************************************************************************
  GMCP functions.
  ******************************************************************************/
