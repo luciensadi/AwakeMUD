@@ -31,6 +31,10 @@
 #include "comm.hpp"
 #include "protocol.hpp"
 #include "config.hpp"
+#include "nlohmann/json.hpp"
+#include "db.hpp"
+
+using nlohmann::json;
 
 /******************************************************************************
  The following section is for Diku/Merc derivatives.  Replace as needed.
@@ -2029,6 +2033,25 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
       }
       break;
 
+    case (char)TELOPT_GMCP:
+      if ( aCmd == (char)DO )
+      {
+        ConfirmNegotiation(apDescriptor, eNEGOTIATED_GMCP, TRUE, TRUE);
+        pProtocol->bGMCP = TRUE;
+      }
+      else if ( aCmd == (char)DONT )
+      {
+        ConfirmNegotiation(apDescriptor, eNEGOTIATED_GMCP, FALSE, pProtocol->bGMCP);
+        pProtocol->bGMCP = FALSE;
+      }
+      else if ( aCmd == (char)WILL )
+      {
+        /* Invalid negotiation, send a rejection */
+        log("Received invalid IAC WILL MSP from client, denying.");
+        SendNegotiationSequence( apDescriptor, (char)DONT, (char)aProtocol );
+      }
+      break;
+
     case (char)TELOPT_MSP:
       if ( aCmd == (char)DO )
       {
@@ -2454,6 +2477,9 @@ static bool ConfirmNegotiation( descriptor_t *apDescriptor, negotiated_t aProtoc
           case eNEGOTIATED_MXP2:
             SendNegotiationSequence( apDescriptor, (char)(abWillDo ? WILL : WONT), TELOPT_MXP );
             break;
+          case eNEGOTIATED_GMCP:
+            SendNegotiationSequence( apDescriptor, (char)(abWillDo ? DO : WONT), TELOPT_GMCP );
+            break;
           case eNEGOTIATED_MCCP:
 #ifdef USING_MCCP
             SendNegotiationSequence( apDescriptor, (char)(abWillDo ? WILL : WONT), TELOPT_MCCP );
@@ -2468,6 +2494,99 @@ static bool ConfirmNegotiation( descriptor_t *apDescriptor, negotiated_t aProtoc
   }
 
   return bResult;
+}
+
+/******************************************************************************
+ GMCP functions.
+ ******************************************************************************/
+void SendGMCPCoreSupports ( descriptor_t *apDescriptor )
+{
+  if (!apDescriptor || !apDescriptor->pProtocol->bGMCP) return;
+  json j;
+
+  j["Core"] = json::array();
+  j["Core"].push_back("Supports");
+
+  j["Room"] = json::array();
+  j["Room"].push_back("Info");
+  j["Room"].push_back("Exits");
+
+  // Dump the json to a string and send it.
+  std::string payload = j.dump();
+  SendGMCP(apDescriptor, "Core.Supports", payload.c_str());
+}
+
+void SendGMCPExitsInfo( struct char_data *ch ) 
+{
+  if (!ch || !ch->desc || !ch->desc->pProtocol->bGMCP) return;
+  struct veh_data *veh = NULL;
+
+  json j;
+  j["exits"] = json::array();
+
+  for (int door = 0; door < NUM_OF_DIRS; door++)
+    if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
+      if (ch->in_veh || ch->char_specials.rigging) {
+        RIG_VEH(ch, veh);
+        if (!ROOM_FLAGGED(EXIT(veh, door)->to_room, ROOM_ROAD) &&
+            !ROOM_FLAGGED(EXIT(veh, door)->to_room, ROOM_GARAGE) &&
+            !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
+          j["exits"].push_back({"direction", exitdirs[door], "state", "INACCESSIBLE"});
+        else if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED | EX_HIDDEN))
+          j["exits"].push_back({"direction", exitdirs[door], "state", "OPEN"});
+      } else {
+        if (!IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) || GET_LEVEL(ch) > LVL_MORTAL) {
+          if (IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED))
+            j["exits"].push_back({"direction", exitdirs[door], "state", "LOCKED"});
+          else if (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
+            j["exits"].push_back({"direction", exitdirs[door], "state", "CLOSED"});
+          else
+            j["exits"].push_back({"direction", exitdirs[door], "state", "OPEN"});
+        }
+      }
+    }
+
+  // Dump the json to a string and send it.
+  std::string payload = j.dump();
+  SendGMCP(ch->desc, "Room.Exits", payload.c_str());
+}
+
+void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room ) 
+{
+  if (!ch || !ch->desc || !ch->desc->pProtocol->bGMCP) return;
+  json j;
+
+  j["room_vnum"] = GET_ROOM_VNUM(room);
+  j["room_name"] = GET_ROOM_NAME(room);
+  j["zone_number"] = room->zone;
+  // Only add coordinates if they are valid.
+  if (room->x && room->y && room->z) {
+    j["coords"] = { {"x", room->x}, {"y", room->y}, {"z", room->z} };
+  }
+
+  // Add room description if it exists; any quotes will be automatically escaped.
+  if (*room->description) {
+    j["room_description"] = room->description;
+  }
+
+  if (room->latitude) j["latitude"] = room->latitude;
+  if (room->longitude) j["longitude"] = room->longitude;
+  
+  // Dump the json to a string and send it.
+  std::string payload = j.dump();
+  SendGMCP(ch->desc, "Room.Info", payload.c_str());
+
+  SendGMCPExitsInfo(ch);
+}
+
+void SendGMCP( descriptor_t *apDescriptor, const char *module, const char *apData )
+{
+  if (!apDescriptor->pProtocol->bGMCP) return;
+  char buf[MAX_STRING_LENGTH];
+  // Build the GMCP message: IAC SB GMCP [module] [json] IAC SE
+  snprintf(buf, sizeof(buf), "%c%c%c%s %s%c%c", IAC, SB, TELOPT_GMCP, module, apData, IAC, SE);
+
+  Write(apDescriptor, buf);
 }
 
 /******************************************************************************
