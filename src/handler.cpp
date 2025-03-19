@@ -1491,8 +1491,6 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   _char_with_spell_to_room(ch, SPELL_SHADOW, ch->in_room->shadow);
   _char_with_spell_to_room(ch, SPELL_LIGHT, ch->in_room->light);
   _char_with_spell_to_room(ch, SPELL_POLTERGEIST, ch->in_room->poltergeist);
-  
-  SendGMCPRoomInfo(ch, ch->in_room);
 }
 
 // Checks obj_to_x preconditions for common errors. Overwrites buf3. Returns TRUE for kosher, FALSE otherwise.
