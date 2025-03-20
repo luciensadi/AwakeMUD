@@ -910,23 +910,27 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         send_to_icon(targ, "It failed to cause any damage.\r\n");
         return;
       }
-      // Damage was done to the attribute, so reduce the attribute
-      switch (icon->ic.subtype) {
-      case 0:
-        targ->decker->bod = bod;
-        break;
-      case 1:
-        targ->decker->evasion = bod;
-        break;
-      case 2:
-        targ->decker->sensor = bod;
-        break;
-      case 3:
-        targ->decker->masking = bod;
-        break;
+      
+      // Only damage attributes to non-otaku personae
+      if (targ->type != ICON_LIVING_PERSONA) {
+        // Damage was done to the attribute, so reduce the attribute
+        switch (icon->ic.subtype) {
+          case 0:
+            targ->decker->bod = bod;
+            break;
+          case 1:
+            targ->decker->evasion = bod;
+            break;
+          case 2:
+            targ->decker->sensor = bod;
+            break;
+          case 3:
+            targ->decker->masking = bod;
+            break;
+        }
+        if (targ->decker->mpcp == 0)
+          dumpshock(targ);
       }
-      if (targ->decker->mpcp == 0)
-        dumpshock(targ);
       return;
     }
 
