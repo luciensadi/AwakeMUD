@@ -595,14 +595,18 @@ bool has_spotted(struct matrix_icon *icon, struct matrix_icon *targ)
   return FALSE;
 }
 
+// Assume that the target character has been deleted from memory if this returns TRUE.
 bool do_damage_persona(struct matrix_icon *targ, int dmg)
 {
   if (targ->type == ICON_LIVING_PERSONA) {
     struct char_data *ch = targ->decker->ch;
     // It's an otaku! They get to suffer MENTAL DAMAGE!
     // targ->condition seems to be 1-10 scale, while ch mental wounds seems to be 1-100. Multiply by ten.
+
+    // damage() returns TRUE if the target has been deleted from memory, so when this function returns true, we must bail out of everything immediately.
     if (damage(targ->decker->ch, targ->decker->ch, dmg, TYPE_BLACKIC, MENTAL))
       return TRUE;
+
     if (GET_POS(ch) <= POS_STUNNED)
       return TRUE;
     return FALSE;
@@ -944,7 +948,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         } else {
           icondam = convert_damage(stage(success, dam));
           send_to_icon(targ, "It tears into your living persona!\r\n");
-          do_damage_persona(targ, icondam);
+          if (do_damage_persona(targ, icondam))
+            return;
         }
         return;
       } else if (success >= 2) {
@@ -1112,10 +1117,11 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     break;
   }
   struct char_data *ch = targ->decker ? targ->decker->ch : NULL;
-  if (do_damage_persona(targ, icondam) && ch && GET_POS(ch) <= POS_STUNNED) {
+  if (do_damage_persona(targ, icondam)) {
     // If do_damage_persona returns true then the icon condition monitor is overloaded,
     // or it's an otaku that has fainted/died from brain bleeding.
-    // If it's the latter we check if they're uncon/dead, and then return early.
+    // ~~If it's the latter we check if they're uncon/dead, and then return early.~~
+    // We can't tell which, and damage() returning true means the character was extracted, so we assume the targ has been extracted and bail.
     return;
   }
 
@@ -2730,7 +2736,7 @@ ACMD(do_download)
           if (!dam)
             send_to_icon(PERSONA, "The %s explodes, but fails to cause damage to you.\r\n", soft->file_protection == FILE_PROTECTION_DATABOMB ? "Data Bomb" : "Pavlov");
           else {
-            if (do_damage_persona(PERSONA, dam) && ch && GET_POS(ch) <= POS_STUNNED) {
+            if (do_damage_persona(PERSONA, dam)) {
               return;
             }
             if (PERSONA_CONDITION < 1) {
