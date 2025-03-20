@@ -81,35 +81,41 @@ void SendGMCPCharInfo( struct char_data * ch )
   SendGMCP(ch->desc, "Char.Info", payload.c_str());
 }
 
+json SerializeRoomExits( struct room_data *room )
+{
+  json j;
+  
+  for (int door = 0; door < NUM_OF_DIRS; door++) {
+    if (!room->dir_option[door]) continue;
+    if (!room->dir_option[door]->to_room) continue;
+    if (room->dir_option[door]->to_room == &world[0]) continue;
+    if (IS_SET(room->dir_option[door]->exit_info, EX_HIDDEN)) continue;
+    
+    json exit = json::object();
+    exit["direction"] = exitdirs[door];
+    if (IS_SET(room->dir_option[door]->exit_info, EX_LOCKED)) {
+      exit["state"] = "LOCKED";
+    } else if (IS_SET(room->dir_option[door]->exit_info, EX_CLOSED)) {
+      exit["state"] = "CLOSED";
+    } else {
+      exit["state"] = "OPEN";
+    }
+
+    j.push_back(exit);
+  }
+
+  return j;
+}
+
 void SendGMCPExitsInfo( struct char_data *ch ) 
 {
   if (!ch || !ch->desc || !ch->desc->pProtocol->bGMCP) return;
-  struct veh_data *veh = NULL;
+  if (!ch->in_room) return;
 
   json j;
-  j["exits"] = json::array();
-
-  for (int door = 0; door < NUM_OF_DIRS; door++)
-    if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
-      if (ch->in_veh || ch->char_specials.rigging) {
-        RIG_VEH(ch, veh);
-        if (!ROOM_FLAGGED(EXIT(veh, door)->to_room, ROOM_ROAD) &&
-            !ROOM_FLAGGED(EXIT(veh, door)->to_room, ROOM_GARAGE) &&
-            !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
-          j["exits"].push_back({"direction", exitdirs[door], "state", "INACCESSIBLE"});
-        else if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED | EX_HIDDEN))
-          j["exits"].push_back({"direction", exitdirs[door], "state", "OPEN"});
-      } else {
-        if (!IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) || GET_LEVEL(ch) > LVL_MORTAL) {
-          if (IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED))
-            j["exits"].push_back({"direction", exitdirs[door], "state", "LOCKED"});
-          else if (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
-            j["exits"].push_back({"direction", exitdirs[door], "state", "CLOSED"});
-          else
-            j["exits"].push_back({"direction", exitdirs[door], "state", "OPEN"});
-        }
-      }
-    }
+  j["exits"] = SerializeRoomExits(ch->in_room);
+  j["room_vnum"] = GET_ROOM_VNUM(ch->in_room);
+  j["room_name"] = GET_ROOM_NAME(ch->in_room);
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
@@ -121,9 +127,10 @@ void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room )
   if (!ch || !ch->desc || !ch->desc->pProtocol->bGMCP) return;
   json j;
 
-  j["room_vnum"] = GET_ROOM_VNUM(room);
-  j["room_name"] = GET_ROOM_NAME(room);
+  j["vnum"] = GET_ROOM_VNUM(room);
+  j["name"] = GET_ROOM_NAME(room);
   j["zone_number"] = room->zone;
+  j["exits"] = SerializeRoomExits(room);
   // Only add coordinates if they are valid.
   if (room->x && room->y && room->z) {
     j["coords"] = { {"x", room->x}, {"y", room->y}, {"z", room->z} };
@@ -131,7 +138,7 @@ void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room )
 
   // Add room description if it exists; any quotes will be automatically escaped.
   if (*room->description) {
-    j["room_description"] = room->description;
+    j["description"] = room->description;
   }
 
   if (room->latitude) j["latitude"] = room->latitude;
@@ -140,8 +147,6 @@ void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room )
   // Dump the json to a string and send it.
   std::string payload = j.dump();
   SendGMCP(ch->desc, "Room.Info", payload.c_str());
-
-  SendGMCPExitsInfo(ch);
 }
 
 void SendGMCP( descriptor_t *apDescriptor, const char *module, const char *apData )
@@ -179,7 +184,7 @@ void SendGMCPCharPools( struct char_data * ch )
   j["pools"]["combat"]["body"] = GET_BODY_POOL(ch);
   j["pools"]["combat"]["dodge"] = GET_DODGE(ch);
   j["pools"]["combat"]["offense"] = GET_OFFENSE(ch);
-  j["pools"]["combat"]["max"] = GET_COMBAT_POOL(ch)
+  j["pools"]["combat"]["max"] = GET_COMBAT_POOL(ch);
 
   j["task_pools"] = json::object();
   for (int x = 0; x < 7; x++) {
