@@ -421,4 +421,14 @@ extern bool is_olc_available(struct char_data *ch);
 #define FACTION_EDIT_DEFAULT_STATUS         3
 #define FACTION_EDIT_EDITORS                4
 
+#define CLONE_EMOTE_VECTOR(from, into) {         \
+  if ((from) && !((from)->empty())) {            \
+    (into) = new emote_vector_t;                 \
+    for (size_t i = 0; i < (from)->size(); i++)  \
+      (into)->push_back(str_dup((from)->at(i))); \
+  } else {                                       \
+    (into) = NULL;                               \
+  }                                              \
+}
+
 #endif
