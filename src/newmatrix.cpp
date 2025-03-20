@@ -946,9 +946,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           power -= GET_OBJ_VAL(soft, 1);
           break;
         }
-        
-    bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
-    GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
+
     if (!targ->decker->ras)
       power += 4;
 
@@ -1039,8 +1037,29 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     }
   } // else { implementations of slow, etc, would go here }
 
-  // Results of damaging attacks
-  success -= success_test(bod, power);
+  if (targ->type == ICON_LIVING_PERSONA && ICON_IS_IC(icon) && icon->ic.type >= IC_LETHAL_BLACK) {
+    // For black IC we'll be be doing our ICCM checks up front
+    // since we bypass doing a (separate) damage pass from the condition monitor of the persona
+    // and instead directly attack the otaku
+    int resist = 0;
+    bool lethal = icon->ic.type == IC_LETHAL_BLACK ? TRUE : FALSE;
+    if (!targ->decker->asist[0] && lethal)
+      lethal = FALSE;
+    if (lethal)
+      resist = GET_BOD(targ->decker->ch);
+    else
+      resist = GET_WIL(targ->decker->ch);
+
+    int wil_test_result = success_test(GET_WIL(targ->decker->ch), power);
+    int bod_test_result = success_test(GET_BOD(targ->decker->ch), power);
+    success -= targ->decker->iccm ? MAX(wil_test_result, bod_test_result) : success_test(resist, power);
+  } else {
+    bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
+    GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
+    success -= success_test(bod, power);
+  }
+  
+  // Results of damaging attacks  
   icondam = convert_damage(stage(success, dam));
   if (icondam <= 0) {
     send_to_icon(targ, "%s^n's attack reflects off you harmlessly!\r\n", CAP(icon->name));
@@ -1060,6 +1079,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     send_to_icon(targ, "%s^n's attack completely obliterates you!\r\n", CAP(icon->name));
     send_to_icon(icon, "You obliterate %s^n.\r\n", decapitalize_a_an(targ->name));
   }
+
   struct char_data *ch = targ->decker ? targ->decker->ch : NULL;
   if (do_damage_persona(targ, icondam) || (ch && GET_POS(ch) <= POS_STUNNED)) {
     // If do_damage_persona returns true then the icon condition monitor is overloaded,
@@ -1072,7 +1092,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   if (icondam > 0 && ch)
   {
     // Black IC deal damage to the decker as well as their icon
-    if (ICON_IS_IC(icon) && icon->ic.type >= IC_LETHAL_BLACK) {
+    // Living persona don't take a second round of black IC damage, it was already done above
+    if (ICON_IS_IC(icon) && icon->ic.type >= IC_LETHAL_BLACK && targ->type != ICON_LIVING_PERSONA) {
       int resist = 0;
       bool lethal = icon->ic.type == IC_LETHAL_BLACK ? TRUE : FALSE;
       if (!targ->decker->asist[0] && lethal)
