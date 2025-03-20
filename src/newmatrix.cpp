@@ -599,7 +599,6 @@ bool has_spotted(struct matrix_icon *icon, struct matrix_icon *targ)
 bool do_damage_persona(struct matrix_icon *targ, int dmg)
 {
   if (targ->type == ICON_LIVING_PERSONA) {
-    struct char_data *ch = targ->decker->ch;
     // It's an otaku! They get to suffer MENTAL DAMAGE!
     // targ->condition seems to be 1-10 scale, while ch mental wounds seems to be 1-100. Multiply by ten.
 
@@ -607,12 +606,10 @@ bool do_damage_persona(struct matrix_icon *targ, int dmg)
     if (damage(targ->decker->ch, targ->decker->ch, dmg, TYPE_BLACKIC, MENTAL))
       return TRUE;
 
-    if (GET_POS(ch) <= POS_STUNNED)
-      return TRUE;
     return FALSE;
   }
   targ->condition -= dmg;
-  return targ->condition < 1;
+  return FALSE;
 }
 
 void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
@@ -1117,7 +1114,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     break;
   }
   struct char_data *ch = targ->decker ? targ->decker->ch : NULL;
-  if (do_damage_persona(targ, icondam)) {
+  if (do_damage_persona(targ, icondam) || (ch && GET_POS(ch) <= POS_STUNNED)) {
     // If do_damage_persona returns true then the icon condition monitor is overloaded,
     // or it's an otaku that has fainted/died from brain bleeding.
     // ~~If it's the latter we check if they're uncon/dead, and then return early.~~
@@ -2736,7 +2733,7 @@ ACMD(do_download)
           if (!dam)
             send_to_icon(PERSONA, "The %s explodes, but fails to cause damage to you.\r\n", soft->file_protection == FILE_PROTECTION_DATABOMB ? "Data Bomb" : "Pavlov");
           else {
-            if (do_damage_persona(PERSONA, dam)) {
+            if (do_damage_persona(PERSONA, dam) || (ch && GET_POS(ch) <= POS_STUNNED)) {
               return;
             }
             if (PERSONA_CONDITION < 1) {
