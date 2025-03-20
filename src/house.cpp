@@ -351,7 +351,7 @@ void Storage_save(const char *file_name, struct room_data *room) {
     }
 
     prototype = &obj_proto[real_obj];
-    if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) && (!obj->restring && GET_OBJ_TYPE(obj) != ITEM_FOOD && GET_OBJ_TYPE(obj) != ITEM_DRINKCON)) {
+    if (!OBJ_SHOULD_NOT_SAVE_IN_APTS_AND_VEHS(obj)) {
       obj_string_buf << "\t\tVnum:\t" << GET_OBJ_VNUM(obj) << "\n";
       obj_string_buf << "\t\tInside:\t" << level << "\n";
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE) {
@@ -390,7 +390,7 @@ void Storage_save(const char *file_name, struct room_data *room) {
       obj_strings.push_back(obj_string_buf.str());
       obj_string_buf.str(std::string());
 
-      if (obj->contains && !IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) && GET_OBJ_TYPE(obj) != ITEM_PART) {
+      if (obj->contains && !OBJ_SHOULD_NOT_SAVE_IN_APTS_AND_VEHS(obj) && GET_OBJ_TYPE(obj) != ITEM_PART) {
         obj = obj->contains;
         level++;
 
