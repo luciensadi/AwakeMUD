@@ -819,8 +819,8 @@ bool _mob_is_alert(struct char_data *npc);
                                GET_BUILDING((ch)) = NULL;}
 #define STOP_DRIVING(ch)      {AFF_FLAGS((ch)).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);}
 
-#define GET_TOTEM(ch)                              (ch->player_specials->saved.totem)
-#define GET_TOTEMSPIRIT(ch)                        (ch->player_specials->saved.totemspirit)
+#define GET_TOTEM(ch)                              ((ch && ch->desc && ch->desc->original) ? ch->desc->original->player_specials->saved.totem : ch->player_specials->saved.totem)
+#define GET_TOTEMSPIRIT(ch)                        ((ch && ch->desc && ch->desc->original) ? ch->desc->original->player_specials->saved.totemspirit : ch->player_specials->saved.totemspirit)
 
 #define GET_MENTAL_LOSS(ch)                        (ch->player_specials->mental_loss)
 #define GET_PHYSICAL_LOSS(ch)                      (ch->player_specials->physical_loss)
