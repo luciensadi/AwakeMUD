@@ -709,6 +709,7 @@ struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_v
       for (struct obj_data *active = ch->persona->decker->software; active; active = active->next_content) {
         if (GET_PROGRAM_TYPE(active) != SOFT_RADIO) continue;
         if (must_be_on && GET_PART_RADIO_FREQ(active) == 0) continue;
+        if (GET_PROGRAM_RATING(active) > GET_PART_RATING(soft)) continue;
         
         *is_matrix = TRUE;
         return soft;
@@ -797,6 +798,7 @@ ACMD(do_radio)
     // find their program rating
     for (struct obj_data *active = ch->persona->decker->software; active; active = active->next_content) {
       if (GET_PROGRAM_TYPE(active) != SOFT_RADIO) continue;
+      if (GET_PROGRAM_RATING(active) > GET_PART_RATING(radio)) continue;
       max_crypt = GET_PROGRAM_RATING(active);
     }
   } else if (cyberware) {
@@ -1054,6 +1056,7 @@ ACMD(do_broadcast)
             // find their program rating
             for (struct obj_data *active = d->character->persona->decker->software; active; active = active->next_content) {
               if (GET_PROGRAM_TYPE(active) != SOFT_RADIO) continue;
+              if (GET_PROGRAM_RATING(active) > GET_PART_RATING(radio)) continue;
               decrypt = GET_PROGRAM_RATING(active);
             }
           } else if (cyberware) {
