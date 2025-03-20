@@ -1093,11 +1093,11 @@ ACMD(do_gen_write)
 
     // We reward typos instantly-- they're quick to verify and don't have grey area.
     send_to_char("Thanks! You've earned +1 system points for your contribution.\r\n", ch);
-    if (GET_SYSTEM_POINTS((ch->desc && ch->desc->original) ? ch->desc->original : ch) < 10) {
+    if (GET_SYSTEM_POINTS(ch) < 10) {
       send_to_char("(See ^WHELP SYSPOINTS^n to see what you can do with them.)\r\n", ch);
     }
 
-    GET_SYSTEM_POINTS((ch->desc && ch->desc->original) ? ch->desc->original : ch)++;
+    GET_SYSTEM_POINTS(ch)++;
   } else {
     // All other commands need manual system point awarding from staff. Rationales:
     // - IDEAS: Auto-awarding the idea command would incentivize frivolous ideas that aren't actionable.
