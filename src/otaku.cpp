@@ -31,7 +31,6 @@ int complex_form_programs[COMPLEX_FORM_TYPES] = {
   SOFT_LOCKON,
   SOFT_SLEAZE,
   SOFT_SLOW,  
-  SOFT_TRACK,
   SOFT_SHIELD
 };
 
