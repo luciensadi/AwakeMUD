@@ -18,7 +18,7 @@ void    update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck);
 #define SUBMERSION_ECHO	             1
 #define SUBMERSION_CONFIRM           2
 
-#define COMPLEX_FORM_TYPES 11
+#define COMPLEX_FORM_TYPES 12
 
 extern int complex_form_programs[COMPLEX_FORM_TYPES];
 

@@ -718,6 +718,20 @@ struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_v
   }
 
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
+    // Otaku are the only exception here; they can use cyber radios while in the matrix
+    // As long as they have the radio complex form up
+    if (IS_OTAKU(ch)) {
+      for (struct obj_data *active = ch->persona->decker->software; active; active = active->next_content) {
+        if (GET_PROGRAM_TYPE(active) != SOFT_RADIO) continue;
+        // Found the complex form, search cyberwware
+        for (obj = ch->cyberware; obj; obj = obj->next_content)
+          if (GET_CYBERWARE_TYPE(obj) == CYB_RADIO && (must_be_on ? GET_CYBERWARE_FLAGS(obj) != 0 : TRUE)) {
+            *is_cyberware = TRUE;
+            return obj;
+          }
+      }
+    }
+    
     return NULL;
   }
 

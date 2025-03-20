@@ -33,7 +33,8 @@ int complex_form_programs[COMPLEX_FORM_TYPES] = {
   SOFT_SLEAZE,
   SOFT_SLOW,  
   SOFT_TRACK,
-  SOFT_SHIELD
+  SOFT_SHIELD,
+  SOFT_RADIO
 };
 
 int get_otaku_wil(struct char_data *ch) {
