@@ -1666,6 +1666,9 @@ struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
 
 #define SB_CODE_OBJ_CANT_BE_SOULBOUND -2
 
+// IN APARTMENTS AND VEHICLES, we don't save things that are !RENT, or are non-restrung food or drink.
+#define OBJ_SHOULD_NOT_SAVE_IN_APTS_AND_VEHS(obj)  (IS_OBJ_STAT((obj), ITEM_EXTRA_NORENT) || (!(obj)->restring && (GET_OBJ_TYPE((obj)) == ITEM_FOOD || GET_OBJ_TYPE((obj)) == ITEM_DRINKCON)))
+
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
 extern void verify_every_pointer_we_can_think_of();
 #endif
