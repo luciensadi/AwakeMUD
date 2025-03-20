@@ -940,9 +940,10 @@ ACMD(do_gen_write)
 
   FAILURE_CASE(subcmd == SCMD_TYPO && (str_str(argument, "chernobyl") || str_str(argument, "chornobyl")), "Thanks for the report, but we use the Ukrainian spelling of Chornobyl here.");
 
-  snprintf(buf, sizeof(buf), "%s %s: %s", (ch->desc->original ? GET_CHAR_NAME(ch->desc->original) : GET_CHAR_NAME(ch)),
-          cmd_name, argument);
-  mudlog(buf, ch, LOG_MISCLOG, FALSE);
+  mudlog_vfprintf(ch, LOG_MISCLOG, "%s %s: %s",
+                  (ch->desc->original ? GET_CHAR_NAME(ch->desc->original) : GET_CHAR_NAME(ch)),
+                  cmd_name,
+                  argument);
 
   if (stat(filename, &fbuf) < 0) {
     perror("Error statting file");
@@ -1093,11 +1094,11 @@ ACMD(do_gen_write)
 
     // We reward typos instantly-- they're quick to verify and don't have grey area.
     send_to_char("Thanks! You've earned +1 system points for your contribution.\r\n", ch);
-    if (GET_SYSTEM_POINTS(ch) < 10) {
+    if (GET_SYSTEM_POINTS((ch->desc && ch->desc->original) ? ch->desc->original : ch) < 10) {
       send_to_char("(See ^WHELP SYSPOINTS^n to see what you can do with them.)\r\n", ch);
     }
 
-    GET_SYSTEM_POINTS(ch)++;
+    GET_SYSTEM_POINTS((ch->desc && ch->desc->original) ? ch->desc->original : ch)++;
   } else {
     // All other commands need manual system point awarding from staff. Rationales:
     // - IDEAS: Auto-awarding the idea command would incentivize frivolous ideas that aren't actionable.
