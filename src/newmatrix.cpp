@@ -1042,10 +1042,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     // since we bypass doing a (separate) damage pass from the condition monitor of the persona
     // and instead directly attack the otaku
     int resist = 0;
-    bool lethal = icon->ic.type == IC_LETHAL_BLACK ? TRUE : FALSE;
-    if (!targ->decker->asist[0] && lethal)
-      lethal = FALSE;
-    if (lethal)
+    if (icon->ic.type == IC_LETHAL_BLACK)
       resist = GET_BOD(targ->decker->ch);
     else
       resist = GET_WIL(targ->decker->ch);
@@ -1058,7 +1055,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
     success -= success_test(bod, power);
   }
-  
+
   // Results of damaging attacks  
   icondam = convert_damage(stage(success, dam));
   if (icondam <= 0) {
