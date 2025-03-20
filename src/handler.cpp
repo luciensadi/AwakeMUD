@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <vector>
+#include <unordered_map>
 
 #include "structs.hpp"
 #include "awake.hpp"
@@ -56,6 +57,8 @@ void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_spell_t 
 void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_t *room_spell_tracker);
 
 struct obj_data *find_obj(struct char_data *ch, char *name, int num);
+
+extern std::unordered_map<idnum_t, int> global_graffiti_count;
 
 char *fname(char *namelist)
 {
@@ -2646,6 +2649,18 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
     DELETE_ARRAY_IF_EXTANT(owner);
     mudlog(buf, NULL, LOG_CHEATLOG, TRUE);
     mudlog(buf, NULL, LOG_PURGELOG, TRUE);
+  }
+
+  if (GET_OBJ_TYPE(obj) == ITEM_GRAFFITI && GET_GRAFFITI_SPRAYED_BY(obj) > 0) {
+    auto it = global_graffiti_count.find(GET_GRAFFITI_SPRAYED_BY(obj));
+    if (it != global_graffiti_count.end() ) {
+      it->second--;
+      if (it->second < 0) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Idnum %d has a negative graffiti total in the global list.", GET_GRAFFITI_SPRAYED_BY(obj));
+      }
+    } else {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Destroying graffiti with idnum %d who has no tracking in the global list.", GET_GRAFFITI_SPRAYED_BY(obj));
+    }
   }
 
   // Iterate through all cyberdeck parts and designs in the game, making sure none point to this.
