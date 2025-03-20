@@ -2953,11 +2953,14 @@ void send_active_program_list(struct char_data *ch) {
       snprintf(buf, sizeof(buf), "%25s, Complex Form, %s-R^c%d^n", 
         GET_OBJ_NAME(soft),
         programs[GET_COMPLEX_FORM_PROGRAM(soft)].name,
-        GET_COMPLEX_FORM_RATING(soft)
+        GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT ? GET_COMPLEX_FORM_RATING(soft) - 1 : GET_COMPLEX_FORM_RATING(soft)
       );
 
+      // This cyberadept weirdness is because by the time we're in the matrix it's already received +1,
+      // so we go down 1 to get real values
+      // See above where it's -1'd.
       if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (^g%d^n)", GET_COMPLEX_FORM_RATING(soft) + 1);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (^g%d^n)", GET_COMPLEX_FORM_RATING(soft));
       }
 
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
