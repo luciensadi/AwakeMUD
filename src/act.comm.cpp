@@ -690,155 +690,7 @@ ACMD(do_page)
   }
 }
 
-ACMD(do_radio)
-{
-  struct obj_data *obj, *radio = NULL;
-  char one[MAX_INPUT_LENGTH], two[MAX_INPUT_LENGTH];
-  int i;
-  bool cyberware = FALSE, vehicle = FALSE;
-
-  if (ch->in_veh && (radio = GET_MOD(ch->in_veh, MOD_RADIO)))
-    vehicle = 1;
-
-  for (obj = ch->carrying; !radio && obj; obj = obj->next_content)
-    if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
-      radio = obj;
-
-  for (i = 0; !radio && i < NUM_WEARS; i++)
-    if (GET_EQ(ch, i)) {
-      if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_RADIO)
-        radio = GET_EQ(ch, i);
-      else if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WORN && GET_EQ(ch, i)->contains)
-        for (struct obj_data *obj2 = GET_EQ(ch, i)->contains; obj2; obj2 = obj2->next_content)
-          if (GET_OBJ_TYPE(obj2) == ITEM_RADIO)
-            radio = obj2;
-    }
-  for (obj = ch->cyberware; !radio && obj; obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_RADIO) {
-      radio = obj;
-      cyberware = 1;
-    }
-
-  if (ch->in_room)
-    for (obj = ch->in_room->contents; obj && !radio; obj = obj->next_content)
-      if (GET_OBJ_TYPE(obj) == ITEM_RADIO)
-        radio = obj;
-
-  if (!radio) {
-    send_to_char("You don't have a radio.\r\n", ch);
-    return;
-  }
-  any_one_arg(any_one_arg(argument, one), two);
-
-  int *freq;
-  if (cyberware) {
-    freq = &GET_CYBERWARE_RADIO_FREQ(radio);
-  } else if (vehicle) {
-    freq = &GET_VEHICLE_MOD_RADIO_FREQ(radio);
-  } else {
-    freq = &GET_RADIO_CENTERED_FREQUENCY(radio);
-  }
-
-#ifdef ENABLE_RADIO_CRYPT
-  int *crypt_rating;
-  int max_crypt = 0;
-
-  if (cyberware) {
-    crypt_rating = &GET_CYBERWARE_RADIO_CRYPT(radio);
-    max_crypt = GET_CYBERWARE_RADIO_MAX_CRYPT(radio);
-  } else if (vehicle) {
-    crypt_rating = &GET_VEHICLE_MOD_RADIO_CRYPT(radio);
-    max_crypt = GET_VEHICLE_MOD_RADIO_MAX_CRYPT(radio);
-  } else {
-    crypt_rating = &GET_RADIO_CURRENT_CRYPT(radio);
-    max_crypt = GET_RADIO_MAX_CRYPT(radio);
-  }
-#endif
-
-  if (!*one) {
-    act("$p:", FALSE, ch, radio, 0, TO_CHAR);
-    if (*freq == -1)
-      send_to_char("  Mode: scan\r\n", ch);
-    else if (!*freq)
-      send_to_char("  Mode: off\r\n", ch);
-    else
-      send_to_char(ch, "  Mode: center @ %d MHz\r\n", *freq);
-
-#ifdef ENABLE_RADIO_CRYPT
-    if (*crypt_rating)
-      send_to_char(ch, "  Crypt (max %d): on (level %d)\r\n", max_crypt, *crypt_rating);
-    else
-      send_to_char(ch, "  Crypt (max %d): off\r\n", max_crypt);
-    return;
-#endif
-  } else if (!str_cmp(one, "off")) {
-    act("You turn $p off.", FALSE, ch, radio, 0, TO_CHAR);
-    *freq = 0;
-  } else if (!str_cmp(one, "scan")) {
-    act("You set $p to scanning mode.", FALSE, ch, radio, 0, TO_CHAR);
-    *freq = -1;
-    WAIT_STATE(ch, 16); /* Takes time to switch it */
-  } else if (!str_cmp(one, "center")) {
-    i = atoi(two);
-    if (i > MAX_RADIO_FREQUENCY) {
-      snprintf(buf, sizeof(buf), "$p cannot center a frequency higher than %d MHz.", MAX_RADIO_FREQUENCY);
-      act(buf, FALSE, ch, radio, 0, TO_CHAR);
-    }
-    else if (i < MIN_RADIO_FREQUENCY) {
-      snprintf(buf, sizeof(buf), "$p cannot center a frequency lower than %d MHz.", MIN_RADIO_FREQUENCY);
-      act(buf, FALSE, ch, radio, 0, TO_CHAR);
-    }
-    else {
-      snprintf(buf, sizeof(buf), "$p is now centered at %d MHz.", i);
-      act(buf, FALSE, ch, radio, 0, TO_CHAR);
-      *freq = i;
-      WAIT_STATE(ch, 16); /* Takes time to adjust */
-    }
-  } else if (!str_cmp(one, "crypt")) {
-#ifdef ENABLE_RADIO_CRYPT
-    if ((i = atoi(two))) {
-      if (i > max_crypt) {
-        snprintf(buf, sizeof(buf), "$p's max crypt rating is %d.", max_crypt);
-        act(buf, FALSE, ch, radio, 0, TO_CHAR);
-      }
-      else if (i < 0) {
-        send_to_char(ch, "A negative crypt rating?\r\n");
-        return;
-      }
-      else {
-        send_to_char(ch, "Crypt mode enabled at rating %d.\r\n", i);
-        *crypt_rating = i;
-      }
-    }
-    else {
-      if (!*crypt_rating)
-        act("$p's crypt mode is already disabled.", FALSE, ch, radio, 0, TO_CHAR);
-      else {
-        send_to_char("Crypt mode disabled.\r\n", ch);
-        *crypt_rating = 0;
-      }
-    }
-#else
-    send_to_char(ch, "Your broadcasts are encrypted by default with secure Shadowlands protocols. There's no need to configure them anymore.");
-#endif // radio crypt
-  } else if (!str_cmp(one, "mode")) {
-    if (*freq == -1)
-      send_to_char(ch, "Your radio is currently scanning all frequencies. You can change the mode with ^WRADIO CENTER <frequency>, or turn it off with ^WRADIO OFF^n^n.\r\n");
-    else if (!*freq)
-      send_to_char(ch, "Your radio is currently off. You can turn it on with ^WRADIO CENTER <frequency>^n or ^WRADIO SCAN^n.\r\n");
-    else
-      send_to_char(ch, "Your radio is currently centered at %d MHz. You can change the mode with ^WRADIO SCAN^n, or turn it off with ^WRADIO OFF^n.\r\n",
-                   *freq);
-  } else {
-#ifdef ENABLE_RADIO_CRYPT
-    send_to_char("Valid commands are ^WRADIO OFF^n, ^WRADIO SCAN^n, ^WRADIO CENTER <frequency>^n, ^WRADIO CRYPT <level>^n, and ^WRADIO MODE^n. See ^WHELP RADIO^n for more.\r\n", ch);
-#else
-    send_to_char("Valid commands are ^WRADIO OFF^n, ^WRADIO SCAN^n, ^WRADIO CENTER <frequency>^n, and ^WRADIO MODE^n. See ^WHELP RADIO^n for more.\r\n", ch);
-#endif
-  }
-}
-
-struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_vehicular, bool must_be_on=FALSE) {
+struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_vehicular, bool *is_matrix, bool must_be_on=FALSE) {
   struct obj_data *obj;
 
   if (!ch)
@@ -846,6 +698,27 @@ struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_v
 
   *is_cyberware = FALSE;
   *is_vehicular = FALSE;
+  *is_matrix = FALSE;
+
+  // If you're a decker, we can just check you have a radio installed in your deck
+  if (ch->persona && ch->persona->decker && ch->persona->decker->deck) {
+    for (struct obj_data *soft = ch->persona->decker->deck->contains; soft; soft = soft->next_content) {
+      if (GET_OBJ_TYPE(soft) != ITEM_PART || GET_PART_TYPE(soft) != PART_RADIO) continue;
+
+      // Now check they have the program installed
+      for (struct obj_data *active = ch->persona->decker->software; active; active = active->next_content) {
+        if (GET_PROGRAM_TYPE(active) != SOFT_RADIO) continue;
+        if (must_be_on && GET_PART_RADIO_FREQ(active) == 0) continue;
+        
+        *is_matrix = TRUE;
+        return soft;
+      }
+    }
+  }
+
+  if (PLR_FLAGGED(ch, PLR_MATRIX)) {
+    return NULL;
+  }
 
   // If you've got a vehicle radio installed, we use that.
   if (ch->in_veh && GET_MOD(ch->in_veh, MOD_RADIO)) {
@@ -886,6 +759,141 @@ struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_v
   return NULL;
 }
 
+ACMD(do_radio)
+{
+  struct obj_data *obj, *radio = NULL;
+  char one[MAX_INPUT_LENGTH], two[MAX_INPUT_LENGTH];
+  int i;
+  bool cyberware = FALSE, vehicle = FALSE, matrix = FALSE;
+
+  radio = find_radio(ch, &cyberware, &vehicle, &matrix);
+  if (PLR_FLAGGED(ch, PLR_MATRIX) && !matrix) {
+    send_to_char("You can't access the radio frequencies without a radio link.\r\n", ch);
+    return;
+  }
+
+  if (!radio) {
+    send_to_char("You don't have a radio.\r\n", ch);
+    return;
+  }
+  any_one_arg(any_one_arg(argument, one), two);
+
+  int *freq;
+  if (matrix) {
+    freq = &GET_PART_RADIO_FREQ(radio);
+  } else if (cyberware) {
+    freq = &GET_CYBERWARE_RADIO_FREQ(radio);
+  } else if (vehicle) {
+    freq = &GET_VEHICLE_MOD_RADIO_FREQ(radio);
+  } else {
+    freq = &GET_RADIO_CENTERED_FREQUENCY(radio);
+  }
+
+#ifdef ENABLE_RADIO_CRYPT
+  int *crypt_rating;
+  int max_crypt = 0;
+  if (matrix) {
+    crypt_rating = &GET_PART_RADIO_CRYPT(radio);
+    // find their program rating
+    for (struct obj_data *active = ch->persona->decker->software; active; active = active->next_content) {
+      if (GET_PROGRAM_TYPE(active) != SOFT_RADIO) continue;
+      max_crypt = GET_PROGRAM_RATING(active);
+    }
+  } else if (cyberware) {
+    crypt_rating = &GET_CYBERWARE_RADIO_CRYPT(radio);
+    max_crypt = GET_CYBERWARE_RADIO_MAX_CRYPT(radio);
+  } else if (vehicle) {
+    crypt_rating = &GET_VEHICLE_MOD_RADIO_CRYPT(radio);
+    max_crypt = GET_VEHICLE_MOD_RADIO_MAX_CRYPT(radio);
+  } else {
+    crypt_rating = &GET_RADIO_CURRENT_CRYPT(radio);
+    max_crypt = GET_RADIO_MAX_CRYPT(radio);
+  }
+#endif
+
+  if (!*one) {
+    act("$p:", FALSE, ch, radio, 0, TO_CHAR);
+    if (*freq == -1)
+      send_to_char("  Mode: scan\r\n", ch);
+    else if (!*freq)
+      send_to_char("  Mode: off\r\n", ch);
+    else
+      send_to_char(ch, "  Mode: center @ %d MHz\r\n", *freq);
+
+#ifdef ENABLE_RADIO_CRYPT
+    if (*crypt_rating)
+      send_to_char(ch, "  Crypt (max %d): on (level %d)\r\n", max_crypt, *crypt_rating);
+    else
+      send_to_char(ch, "  Crypt (max %d): off\r\n", max_crypt);
+    return;
+#endif
+  } else if (!str_cmp(one, "off")) {
+    act("You turn $p off.", FALSE, ch, radio, ch, ch->persona ? TO_DECK : TO_CHAR);
+    *freq = 0;
+  } else if (!str_cmp(one, "scan")) {
+    act("You set $p to scanning mode.", FALSE, ch, radio, ch, ch->persona ? TO_DECK : TO_CHAR);
+    *freq = -1;
+    WAIT_STATE(ch, 16); /* Takes time to switch it */
+  } else if (!str_cmp(one, "center")) {
+    i = atoi(two);
+    if (i > MAX_RADIO_FREQUENCY) {
+      snprintf(buf, sizeof(buf), "$p cannot center a frequency higher than %d MHz.", MAX_RADIO_FREQUENCY);
+      act(buf, FALSE, ch, radio, ch, ch->persona ? TO_DECK : TO_CHAR);
+    }
+    else if (i < MIN_RADIO_FREQUENCY) {
+      snprintf(buf, sizeof(buf), "$p cannot center a frequency lower than %d MHz.", MIN_RADIO_FREQUENCY);
+      act(buf, FALSE, ch, radio, ch, ch->persona ? TO_DECK : TO_CHAR);
+    }
+    else {
+      snprintf(buf, sizeof(buf), "$p is now centered at %d MHz.", i);
+      act(buf, FALSE, ch, radio, ch, ch->persona ? TO_DECK : TO_CHAR);
+      *freq = i;
+      WAIT_STATE(ch, 16); /* Takes time to adjust */
+    }
+  } else if (!str_cmp(one, "crypt")) {
+#ifdef ENABLE_RADIO_CRYPT
+    if ((i = atoi(two))) {
+      if (i > max_crypt) {
+        snprintf(buf, sizeof(buf), "$p's max crypt rating is %d.", max_crypt);
+        act(buf, FALSE, ch, radio, ch, ch->persona ? TO_DECK : TO_CHAR);
+      }
+      else if (i < 0) {
+        send_to_char(ch, "A negative crypt rating?\r\n");
+        return;
+      }
+      else {
+        send_to_char(ch, "Crypt mode enabled at rating %d.\r\n", i);
+        *crypt_rating = i;
+      }
+    }
+    else {
+      if (!*crypt_rating)
+        act("$p's crypt mode is already disabled.", FALSE, ch, radio, ch, ch->persona ? TO_DECK : TO_CHAR);
+      else {
+        send_to_char("Crypt mode disabled.\r\n", ch);
+        *crypt_rating = 0;
+      }
+    }
+#else
+    send_to_char(ch, "Your broadcasts are encrypted by default with secure Shadowlands protocols. There's no need to configure them anymore.");
+#endif // radio crypt
+  } else if (!str_cmp(one, "mode")) {
+    if (*freq == -1)
+      send_to_char(ch, "Your radio is currently scanning all frequencies. You can change the mode with ^WRADIO CENTER <frequency>, or turn it off with ^WRADIO OFF^n^n.\r\n");
+    else if (!*freq)
+      send_to_char(ch, "Your radio is currently off. You can turn it on with ^WRADIO CENTER <frequency>^n or ^WRADIO SCAN^n.\r\n");
+    else
+      send_to_char(ch, "Your radio is currently centered at %d MHz. You can change the mode with ^WRADIO SCAN^n, or turn it off with ^WRADIO OFF^n.\r\n",
+                   *freq);
+  } else {
+#ifdef ENABLE_RADIO_CRYPT
+    send_to_char("Valid commands are ^WRADIO OFF^n, ^WRADIO SCAN^n, ^WRADIO CENTER <frequency>^n, ^WRADIO CRYPT <level>^n, and ^WRADIO MODE^n. See ^WHELP RADIO^n for more.\r\n", ch);
+#else
+    send_to_char("Valid commands are ^WRADIO OFF^n, ^WRADIO SCAN^n, ^WRADIO CENTER <frequency>^n, and ^WRADIO MODE^n. See ^WHELP RADIO^n for more.\r\n", ch);
+#endif
+  }
+}
+
 ACMD(do_broadcast)
 {
   // If they trigger automod with this, bail out.
@@ -898,7 +906,7 @@ ACMD(do_broadcast)
   struct descriptor_data *d;
   int frequency, crypt_lvl, receiver_freq, receiver_freq_range, decrypt;
   char voice[16] = "$v";
-  bool cyberware = FALSE, vehicle = FALSE;
+  bool cyberware = FALSE, vehicle = FALSE, matrix = FALSE;
 
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     send_to_char("You must be Authorized to do that. Until then, you can use the ^WQUESTION^n channel if you need help.\r\n", ch);
@@ -915,7 +923,11 @@ ACMD(do_broadcast)
     return;
   }
 
-  radio = find_radio(ch, &cyberware, &vehicle);
+  radio = find_radio(ch, &cyberware, &vehicle, &matrix);
+  if (PLR_FLAGGED(ch, PLR_MATRIX) && !matrix) {
+    send_to_char("You can't access the radio frequencies without a radio link.\r\n", ch);
+    return;
+  }
 
   if (IS_NPC(ch) || IS_SENATOR(ch)) {
     argument = any_one_arg(argument, arg);
@@ -934,7 +946,10 @@ ACMD(do_broadcast)
     return;
   } else {
     // Player character with radio
-    if (cyberware) {
+    if (matrix) {
+      frequency = GET_PART_RADIO_FREQ(radio);
+      crypt_lvl = GET_PART_RADIO_CRYPT(radio);
+    } else if (cyberware) {
       frequency = GET_CYBERWARE_RADIO_FREQ(radio);
       crypt_lvl = GET_CYBERWARE_RADIO_CRYPT(radio);
     } else if (vehicle) {
@@ -946,11 +961,11 @@ ACMD(do_broadcast)
     }
     
     if (!frequency) {
-      act("$p must be on in order to broadcast.", FALSE, ch, radio, 0, TO_CHAR);
+      act("$p must be on in order to broadcast.", FALSE, ch, radio, ch, ch->persona ? TO_DECK : TO_CHAR);
       return;
     }
     if (frequency == -1) {
-      act("$p can't broadcast while scanning.", FALSE, ch, radio, 0, TO_CHAR);
+      act("$p can't broadcast while scanning.", FALSE, ch, radio, ch, ch->persona ? TO_DECK : TO_CHAR);
       return;
     }
   }
@@ -1000,7 +1015,8 @@ ACMD(do_broadcast)
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else
-    store_message_to_history(ch->desc, COMM_CHANNEL_RADIO, act(untouched_message, FALSE, ch, 0, 0, TO_CHAR));
+    store_message_to_history(ch->desc, COMM_CHANNEL_RADIO, act(untouched_message, FALSE, ch, 0, ch,
+      ch->persona && ch->persona->decker && ch->persona->decker->deck ? TO_DECK : TO_CHAR));
 
   char radlog_string[MAX_STRING_LENGTH];
   snprintf(radlog_string, sizeof(radlog_string), "%s (%d MHz, crypt %d, in %s): %s^N",
@@ -1022,7 +1038,7 @@ ACMD(do_broadcast)
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_BFS_MARK))
       {
         if (!IS_NPC(d->character) && (!access_level(d->character, LVL_FIXER) || PRF_FLAGGED(d->character, PRF_SUPPRESS_STAFF_RADIO))) {
-          if (!(radio = find_radio(d->character, &cyberware, &vehicle, TRUE)))
+          if (!(radio = find_radio(d->character, &cyberware, &vehicle, &matrix, TRUE)))
             continue;
 
           /*
@@ -1031,7 +1047,16 @@ ACMD(do_broadcast)
           else
             to_room = 1;
           */
-          if (cyberware) {
+          if (matrix && d->character->persona && d->character->persona->decker) {
+            receiver_freq = GET_PART_RADIO_FREQ(radio);
+            receiver_freq_range = GET_PART_RATING(radio);
+            decrypt = 0;
+            // find their program rating
+            for (struct obj_data *active = d->character->persona->decker->software; active; active = active->next_content) {
+              if (GET_PROGRAM_TYPE(active) != SOFT_RADIO) continue;
+              decrypt = GET_PROGRAM_RATING(active);
+            }
+          } else if (cyberware) {
             receiver_freq = GET_CYBERWARE_RADIO_FREQ(radio);
             receiver_freq_range = GET_CYBERWARE_RATING(radio);
             decrypt = GET_CYBERWARE_RADIO_MAX_CRYPT(radio);
@@ -1128,10 +1153,12 @@ ACMD(do_broadcast)
           else
             strlcat(radio_string, "^n", sizeof(radio_string));
 
-          store_message_to_history(d, COMM_CHANNEL_RADIO, act(radio_string, FALSE, ch, 0, d->character, TO_VICT));
+          store_message_to_history(d, COMM_CHANNEL_RADIO, act(radio_string, FALSE, ch, 0, d->character, 
+            d->character->persona && d->character->persona->decker && d->character->persona->decker->deck ? TO_DECK : TO_VICT));
 
         } else if (access_level(d->character, LVL_FIXER) && !PRF_FLAGGED(d->character, PRF_NORADIO)) {
-          store_message_to_history(d, COMM_CHANNEL_RADIO, act(untouched_message, FALSE, ch, 0, d->character, TO_VICT));
+          store_message_to_history(d, COMM_CHANNEL_RADIO, act(untouched_message, FALSE, ch, 0, d->character,
+            d->character->persona && d->character->persona->decker && d->character->persona->decker->deck ? TO_DECK : TO_VICT));
         }
       }
     }

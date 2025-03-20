@@ -1356,6 +1356,7 @@ struct command_info mtx_info[] =
     { "analyze", 0, do_analyze, 0, 0, BLOCKS_IDLE_REWARD },
     { "answer", 0, do_comcall, 0, SCMD_ANSWER, BLOCKS_IDLE_REWARD },
     { "asist", 0, do_asist, 0, 0, BLOCKS_IDLE_REWARD },
+    { "broadcast", 0, do_broadcast, 0, 0, BLOCKS_IDLE_REWARD },
     { "bug", 0, do_gen_write, 0, SCMD_BUG, BLOCKS_IDLE_REWARD },
     { "call", 0, do_comcall, 0, SCMD_RING, BLOCKS_IDLE_REWARD },
   //{ "control", 0, do_control, 0, 0, BLOCKS_IDLE_REWARD },     // This is a rigging command?
@@ -1392,6 +1393,7 @@ struct command_info mtx_info[] =
     { "praise", 0, do_gen_write, 0, SCMD_PRAISE, BLOCKS_IDLE_REWARD },
     { "prompt", 0, do_display, 0, 0 , BLOCKS_IDLE_REWARD },
     { "quit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
+    { "radio", 0, do_radio, 0, 0, ALLOWS_IDLE_REWARD },
     { "read", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },
     { "recap", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
     { "redirect", 0, do_redirect, 0, 0, BLOCKS_IDLE_REWARD },
