@@ -910,7 +910,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         send_to_icon(targ, "It failed to cause any damage.\r\n");
         return;
       }
-      
+
       // Only damage attributes to non-otaku personae
       if (targ->type != ICON_LIVING_PERSONA) {
         // Damage was done to the attribute, so reduce the attribute
@@ -931,6 +931,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         if (targ->decker->mpcp == 0)
           dumpshock(targ);
       }
+
+      // Do not proceed further; ripper do not do attacks beyond this
       return;
     }
 
@@ -944,6 +946,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           power -= GET_OBJ_VAL(soft, 1);
           break;
         }
+        
     bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
     GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
     if (!targ->decker->ras)
@@ -1039,30 +1042,23 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   // Results of damaging attacks
   success -= success_test(bod, power);
   icondam = convert_damage(stage(success, dam));
-  switch(icondam)
-  {
-  case 0:
+  if (icondam <= 0) {
     send_to_icon(targ, "%s^n's attack reflects off you harmlessly!\r\n", CAP(icon->name));
     send_to_icon(icon, "%s^n manages to block your attack.\r\n", CAP(targ->name));
     if (!icon->decker && icon->ic.options.IsSet(IC_CASCADE))
       cascade(icon);
-    break;
-  case 1:
+  } else if (icondam <= 1) {
     send_to_icon(targ, "%s^n's attack skims off you.\r\n", CAP(icon->name));
     send_to_icon(icon, "Your attack skims off of %s^n.\r\n", decapitalize_a_an(targ->name));
-    break;
-  case 3:
+  } else if (icondam <= 3) {
     send_to_icon(targ, "%s^n's attack sends parts of you flying.\r\n", CAP(icon->name));
     send_to_icon(icon, "Parts fly off of %s^n from your attack.\r\n", decapitalize_a_an(targ->name));
-    break;
-  case 6:
+  } else if (icondam <= 6) {
     send_to_icon(targ, "%s^n's attack leaves you reeling.\r\n", CAP(icon->name));
     send_to_icon(icon, "Your attack leaves %s^n reeling.\r\n", decapitalize_a_an(targ->name));
-    break;
-  default:
+  } else {
     send_to_icon(targ, "%s^n's attack completely obliterates you!\r\n", CAP(icon->name));
     send_to_icon(icon, "You obliterate %s^n.\r\n", decapitalize_a_an(targ->name));
-    break;
   }
   struct char_data *ch = targ->decker ? targ->decker->ch : NULL;
   if (do_damage_persona(targ, icondam) || (ch && GET_POS(ch) <= POS_STUNNED)) {
