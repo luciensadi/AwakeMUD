@@ -351,7 +351,7 @@ void Storage_save(const char *file_name, struct room_data *room) {
     }
 
     prototype = &obj_proto[real_obj];
-    if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
+    if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) && (!obj->restring && GET_OBJ_TYPE(obj) != ITEM_FOOD && GET_OBJ_TYPE(obj) != ITEM_DRINKCON)) {
       obj_string_buf << "\t\tVnum:\t" << GET_OBJ_VNUM(obj) << "\n";
       obj_string_buf << "\t\tInside:\t" << level << "\n";
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE) {

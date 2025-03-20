@@ -264,7 +264,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
   std::vector<std::string> obj_strings;
   std::stringstream obj_string_buf;
   for (obj = veh->contents;obj;) {
-    if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
+    if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT) && (!obj->restring && GET_OBJ_TYPE(obj) != ITEM_FOOD && GET_OBJ_TYPE(obj) != ITEM_DRINKCON)) {
       obj_string_buf << "\t\tVnum:\t" << GET_OBJ_VNUM(obj) << "\n";
       obj_string_buf << "\t\tInside:\t" << level << "\n";
 
