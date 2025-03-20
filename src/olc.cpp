@@ -1762,6 +1762,7 @@ ACMD(do_qedit)
     for (i = 0; i < qst->num_mobs; i++)
       qst->mob[i] = quest_table[rnum].mob[i];
 
+    // Clone strings.
     if (quest_table[rnum].intro)
       qst->intro = str_dup(quest_table[rnum].intro);
     if (quest_table[rnum].decline)
@@ -1779,14 +1780,7 @@ ACMD(do_qedit)
     if (quest_table[rnum].e_string)
       qst->e_string = str_dup(quest_table[rnum].e_string);
 
-#define CLONE_EMOTE_VECTOR(from, into) {         \
-  if ((from) && !((from)->empty())) {            \
-    (into) = new emote_vector_t;                 \
-    for (size_t i = 0; i < (from)->size(); i++)  \
-      (into)->push_back(str_dup((from)->at(i))); \
-  }                                              \
-}
-
+    // Clone emotes.
     if (quest_table[rnum].intro_emote)
       qst->intro_emote = str_dup(quest_table[rnum].intro_emote);
     if (quest_table[rnum].decline_emote)

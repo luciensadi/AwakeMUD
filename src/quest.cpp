@@ -2134,7 +2134,8 @@ void boot_one_quest(struct quest_data *quest)
   quest_table[quest_nr].decline_emote = str_dup(quest->decline_emote);
   quest_table[quest_nr].quit_emote = str_dup(quest->quit_emote);
   quest_table[quest_nr].finish_emote = str_dup(quest->finish_emote);
-  quest_table[quest_nr].info_emotes = quest->info_emotes;
+  CLONE_EMOTE_VECTOR(quest->info_emotes, quest_table[quest_nr].info_emotes);
+
   quest_table[quest_nr].done = str_dup(quest->done);
   quest_table[quest_nr].s_string = str_dup(quest->s_string);
   quest_table[quest_nr].e_string = str_dup(quest->e_string);
