@@ -3519,7 +3519,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   switch (GET_POS(victim))
   {
     case POS_MORTALLYW:
-      stop_driving(ch, TRUE);
+      stop_driving(victim, TRUE);
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
         act("$n is critically damaged, and will fail soon, if not aided.",
             TRUE, victim, 0, 0, TO_ROOM);
@@ -3543,7 +3543,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       }
       break;
     case POS_STUNNED:
-      stop_driving(ch, TRUE);
+      stop_driving(victim, TRUE);
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
         act("$n is rebooting from heavy damage.",
             TRUE, victim, 0, 0, TO_ROOM);
@@ -3557,7 +3557,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       }
       break;
     case POS_DEAD:
-      stop_driving(ch, TRUE);
+      stop_driving(victim, TRUE);
       if (IS_NPC(victim)) {
         if (MOB_FLAGGED(victim, MOB_INANIMATE)) {
           act("$n terminally fails in a shower of sparks!", FALSE, victim, 0, 0, TO_ROOM);
