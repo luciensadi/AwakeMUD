@@ -224,9 +224,7 @@ void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room )
   j["exits"] = SerializeRoomExits(room);
 
   // Only add coordinates if they are valid.
-  if (room->x && room->y && room->z) {
-    j["coords"] = { {"x", room->x}, {"y", room->y}, {"z", room->z} };
-  }
+  j["coords"] = { {"x", room->x}, {"y", room->y}, {"z", room->z} };
 
   // Add room description if it exists; any quotes will be automatically escaped.
   if (*room->description) {
