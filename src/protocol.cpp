@@ -2203,7 +2203,7 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
   {
     case (char)TELOPT_GMCP:
       PROTO_DEBUG_MSG("Entering PerformSubnegotiation's TELOPT_GMCP case.");
-      if ( pProtocol->bMSDP )
+      if ( pProtocol->bGMCP )
       {
         ParseGMCP( apDescriptor, apData );
       }

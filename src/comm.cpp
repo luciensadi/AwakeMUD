@@ -939,7 +939,11 @@ void game_loop(int mother_desc)
       // Send GMCP Vitals
       for (d = descriptor_list; d; d = next_d) {
         next_d = d->next;
-        SendGMCPCharVitals(d->character);
+        if (!d->prompt_mode) continue;
+        if (!d->character) continue;
+
+        if (d->character->in_room)
+          SendGMCPCharVitals(d->character);
       }
     }
 

@@ -27,14 +27,7 @@ using nlohmann::json;
 static void Write( descriptor_t *apDescriptor, const char *apData )
 {
   if ( apDescriptor != NULL ) {
-   if ( apDescriptor->pProtocol->WriteOOB > 0 ) {
-    apDescriptor->pProtocol->WriteOOB = 2;
-   }
-   // Append our output to the player's output buffer.
-   write_to_output( apData, apDescriptor );
-
-   // Writing directly to the descriptor can break control sequences mid-stream, causing display problems.
-  //  write_to_descriptor( apDescriptor->descriptor, apData );
+   write_to_descriptor( apDescriptor->descriptor, apData );
   }
 }
 
@@ -233,9 +226,9 @@ void SendGMCP( descriptor_t *apDescriptor, const char *module, const char *apDat
 {
   if (!apDescriptor->pProtocol->bGMCP) return;
   char buf[MAX_STRING_LENGTH];
-  
+
   // Build the GMCP message: IAC SB GMCP [module] [json] IAC SE
-  snprintf(buf, sizeof(buf), "%c%c%c%s %s%c%c ", IAC, SB, TELOPT_GMCP, module, apData, IAC, SE);
+  snprintf(buf, sizeof(buf), "%c%c%c%s %s%c%c", IAC, SB, TELOPT_GMCP, module, apData, IAC, SE);
 
   Write(apDescriptor, buf);
 }
