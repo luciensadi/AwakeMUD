@@ -44,6 +44,7 @@
 #include "memory.hpp"
 #include "newhouse.hpp"
 #include "house.hpp"
+#include "gmcp.hpp"
 
 extern class objList ObjList;
 extern int modify_target(struct char_data *ch);
@@ -373,6 +374,8 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
     GET_KARMA(ch) += gain;
 
     GET_TKE(ch) += (int)(GET_KARMA(ch) / 100) - old;
+
+    SendGMCPCharInfo(ch);
 
     if (rep)
       GET_REP(ch) += (int)(GET_KARMA(ch) / 100) - old;
