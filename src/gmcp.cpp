@@ -147,6 +147,15 @@ void SendGMCPCharInfo( struct char_data * ch )
   if (!ch || !ch->desc || !ch->desc->pProtocol->bGMCP) return;
   json j;
   
+  j["name"] = GET_CHAR_NAME(ch);
+  j["height"] = ((float)GET_HEIGHT(ch) / 100);
+  j["weight"] = GET_WEIGHT(ch);
+  j["karma"] = GET_KARMA(ch);
+  j["tke"] = GET_TKE(ch);
+  j["rep"] = GET_REP(ch);
+  j["noto"] = GET_NOT(ch);
+  j["metatype"] = GET_RACE(ch);
+  j["pronouns"] = ch->player.pronouns;
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();

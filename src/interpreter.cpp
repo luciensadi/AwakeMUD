@@ -2731,6 +2731,12 @@ int perform_dupe_check(struct descriptor_data *d)
   // KaVir's protocol snippet.
   MXPSendTag( d, "<VERSION>" );
 
+  // Additional gmcp hooks
+  SendGMCPCoreSupports(d);
+  SendGMCPCharInfo(d->character);
+  SendGMCPCharStatus(d->character);
+  SendGMCPCharPools ( d->character );
+
   return 1;
 }
 
@@ -3428,6 +3434,8 @@ void nanny(struct descriptor_data * d, char *arg)
       // GMCP Protocl injection
       SendGMCPCoreSupports ( d );
       SendGMCPCharInfo ( d->character );
+      SendGMCPCharStatus ( d->character );
+      SendGMCPCharPools ( d->character );
 
       if (!str_cmp(GET_EMAIL(d->character), "not set")) {
         send_to_char("\r\n^YNotice:^n This character hasn't been registered yet! Please see ^WHELP REGISTER^n for information.^n\r\n\r\n", d->character);

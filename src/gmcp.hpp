@@ -15,6 +15,7 @@ void SendGMCPCoreSupports ( descriptor_t *apDescriptor );
 void SendGMCPCharStatus( struct char_data * ch );
 void SendGMCPMatrixInfo ( struct char_data *ch );
 void SendGMCPMatrixDeck ( struct char_data *ch );
+void SendGMCPCharPools( struct char_data * ch );
 
 void ParseGMCP( descriptor_t *apDescriptor, const char *apData );
 #endif
