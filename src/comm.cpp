@@ -942,8 +942,10 @@ void game_loop(int mother_desc)
         if (!d->prompt_mode) continue;
         if (!d->character) continue;
 
-        if (d->character->in_room)
+        if (d->character->in_room) {
           SendGMCPCharVitals(d->character);
+          SendGMCPCharPools(d->character);
+        }
       }
     }
 
