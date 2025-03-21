@@ -317,7 +317,7 @@ void do_start(struct char_data * ch, bool wipe_skills)
     }
   }
 
-  SendGMCPCharStatus(ch); 
+  SendGMCPCharVitals(ch); 
 
   // For morts, this just saves them and prints a message about their new level.
   advance_level(ch);

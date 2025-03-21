@@ -34,7 +34,7 @@ static void Write( descriptor_t *apDescriptor, const char *apData )
    write_to_output( apData, apDescriptor );
 
    // Writing directly to the descriptor can break control sequences mid-stream, causing display problems.
-   // write_to_descriptor( apDescriptor->descriptor, apData );
+  //  write_to_descriptor( apDescriptor->descriptor, apData );
   }
 }
 
@@ -54,7 +54,7 @@ void SendGMCPCoreSupports ( descriptor_t *apDescriptor )
   j["Room"].push_back("Exits");
 
   j["Char"] = json::array();
-  j["Char"].push_back("Status");
+  j["Char"].push_back("Vitals");
   j["Char"].push_back("Info");
   j["Char"].push_back("Pools");
 
@@ -150,7 +150,6 @@ void SendGMCPCharInfo( struct char_data * ch )
   j["name"] = GET_CHAR_NAME(ch);
   j["height"] = ((float)GET_HEIGHT(ch) / 100);
   j["weight"] = GET_WEIGHT(ch);
-  j["karma"] = GET_KARMA(ch);
   j["tke"] = GET_TKE(ch);
   j["rep"] = GET_REP(ch);
   j["noto"] = GET_NOT(ch);
@@ -234,13 +233,14 @@ void SendGMCP( descriptor_t *apDescriptor, const char *module, const char *apDat
 {
   if (!apDescriptor->pProtocol->bGMCP) return;
   char buf[MAX_STRING_LENGTH];
+  
   // Build the GMCP message: IAC SB GMCP [module] [json] IAC SE
-  snprintf(buf, sizeof(buf), "%c%c%c%s %s%c%c", IAC, SB, TELOPT_GMCP, module, apData, IAC, SE);
+  snprintf(buf, sizeof(buf), "%c%c%c%s %s%c%c ", IAC, SB, TELOPT_GMCP, module, apData, IAC, SE);
 
   Write(apDescriptor, buf);
 }
 
-void SendGMCPCharStatus( struct char_data * ch )
+void SendGMCPCharVitals( struct char_data * ch )
 {
   if (!ch || !ch->desc || !ch->desc->pProtocol->bGMCP) return;
   json j;
@@ -249,10 +249,36 @@ void SendGMCPCharStatus( struct char_data * ch )
   j["mental"] = GET_MENTAL(ch);
   j["physical_max"] = GET_MAX_PHYSICAL(ch);
   j["mental_max"] = GET_MAX_MENTAL(ch);
+  j["karma"] = GET_KARMA(ch);
+  j["nuyen"] = GET_NUYEN(ch);
+  j["carrying_weight"] = IS_CARRYING_W(ch);
+  j["max_carry_weight"] = CAN_CARRY_W(ch);
+  j["armor"] = json::object();
+  j["armor"]["ballistic"] = GET_BALLISTIC(ch);
+  j["armor"]["impact"] = GET_IMPACT(ch);
+  if (get_ch_domain_str(ch, TRUE)) 
+    j["domain"] = get_ch_domain_str(ch, TRUE);
+
+  // Current Ammo Handler
+  if (GET_EQ(ch, WEAR_WIELD) &&
+      IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)))
+    if (GET_EQ(ch, WEAR_WIELD)->contains) {
+      j["ammo"] = MIN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 5), GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD)->contains, 9));
+    } else
+      j["ammo"] = 0;
+    else
+      j["ammo"] = 0;
+
+  // Max ammo handler
+  if (GET_EQ(ch, WEAR_WIELD) &&
+      IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)))
+    j["max_ammo"] =  GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 5);
+  else
+    j["max_ammo"] = 0;
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
-  SendGMCP(ch->desc, "Char.Status", payload.c_str());
+  SendGMCP(ch->desc, "Char.Vitals", payload.c_str());
 }
 
 void SendGMCPCharPools( struct char_data * ch )
@@ -310,11 +336,11 @@ void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const js
       mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Exits.Get Call: No Valid Character");
     else
       SendGMCPExitsInfo(apDescriptor->character);
-  else if (!strncmp(module, "Char.Status.Get", strlen(module)))
+  else if (!strncmp(module, "Char.Vitals.Get", strlen(module)))
     if (!apDescriptor->character)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Status.Get Call: No Valid Character");
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Vitals.Get Call: No Valid Character");
     else
-      SendGMCPCharStatus(apDescriptor->character);
+      SendGMCPCharVitals(apDescriptor->character);
   else if (!strncmp(module, "Char.Info.Get", strlen(module)))
     if (!apDescriptor->character)
       mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Info.Get Call: No Valid Character");

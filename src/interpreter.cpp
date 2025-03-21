@@ -2734,7 +2734,7 @@ int perform_dupe_check(struct descriptor_data *d)
   // Additional gmcp hooks
   SendGMCPCoreSupports(d);
   SendGMCPCharInfo(d->character);
-  SendGMCPCharStatus(d->character);
+  SendGMCPCharVitals(d->character);
   SendGMCPCharPools ( d->character );
 
   return 1;
@@ -3434,7 +3434,7 @@ void nanny(struct descriptor_data * d, char *arg)
       // GMCP Protocl injection
       SendGMCPCoreSupports ( d );
       SendGMCPCharInfo ( d->character );
-      SendGMCPCharStatus ( d->character );
+      SendGMCPCharVitals ( d->character );
       SendGMCPCharPools ( d->character );
 
       if (!str_cmp(GET_EMAIL(d->character), "not set")) {
