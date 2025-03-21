@@ -1716,9 +1716,9 @@ enum {
 #define SOFT_ATTACK             5
 #define SOFT_SLOW               6
 #define SOFT_MEDIC              7
-#define SOFT_SNOOPER    8
-#define SOFT_BATTLETEC    9
-#define SOFT_COMPRESSOR    10
+#define SOFT_SNOOPER            8
+#define SOFT_BATTLETEC          9
+#define SOFT_COMPRESSOR         10
 #define SOFT_ANALYZE            11
 #define SOFT_DECRYPT            12
 #define SOFT_DECEPTION          13
@@ -1748,7 +1748,8 @@ enum {
 #define SOFT_REALITY            37
 #define SOFT_RESPONSE           38
 #define SOFT_SHIELD             39
-#define NUM_PROGRAMS            40
+#define SOFT_RADIO              40
+#define NUM_PROGRAMS            41
 
 #define PART_ACTIVE    1
 #define PART_STORAGE    2

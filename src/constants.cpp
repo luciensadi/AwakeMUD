@@ -1352,7 +1352,8 @@ struct program_data programs[] =
     {"MPCP", 8 },
     {"Reality Filter", 10 },
     {"Response Increase", 1 },
-    {"Shield", 4}
+    {"Shield", 4},
+    {"Radio Link", 1}
   };
 
 int attack_multiplier[] = { 0, 2, 3, 4, 5 };
@@ -1386,7 +1387,6 @@ struct part_data parts[] =
     { "Radio Interface", TYPE_KIT, 0, 0 },
     { "Satellite Interface", TYPE_WORKSHOP, 0, 2 },
     { "Signal Amplifier", TYPE_KIT, 0, -1 },
-
   };
 const char *log_types[] =
   {
