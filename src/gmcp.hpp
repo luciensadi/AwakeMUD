@@ -13,6 +13,8 @@ void SendGMCPCharInfo( struct char_data * ch );
 void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room );
 void SendGMCPCoreSupports ( descriptor_t *apDescriptor );
 void SendGMCPCharStatus( struct char_data * ch );
+void SendGMCPMatrixInfo ( struct char_data *ch );
+void SendGMCPMatrixDeck ( struct char_data *ch );
 
 void ParseGMCP( descriptor_t *apDescriptor, const char *apData );
 #endif

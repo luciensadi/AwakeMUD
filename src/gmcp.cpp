@@ -20,6 +20,7 @@
 #include "nlohmann/json.hpp"
 #include "db.hpp"
 #include "protocol.hpp"
+#include "newmatrix.hpp"
 
 using nlohmann::json;
 
@@ -57,24 +58,95 @@ void SendGMCPCoreSupports ( descriptor_t *apDescriptor )
   j["Char"].push_back("Info");
   j["Char"].push_back("Pools");
 
+  j["Matrix"] = json::array();
+  j["Matrix"].push_back("Info");
+  j["Matrix"].push_back("Deck");
+
   // Dump the json to a string and send it.
   std::string payload = j.dump();
   SendGMCP(apDescriptor, "Core.Supports", payload.c_str());
+}
+
+void SendGMCPMatrixInfo ( struct char_data *ch )
+{
+  if (!ch->desc || !ch->desc->pProtocol->bGMCP) return;
+  struct matrix_icon *persona = ch->persona;
+
+  json j;
+
+  if (!persona || !persona->in_host || !persona->decker) {
+    std::string payload = j.dump();
+    SendGMCP(ch->desc, "Matrix.Info", payload.c_str());
+    return;
+  }
+
+  struct host_data *cur_host = &matrix[persona->in_host];
+  j["name"] = cur_host->name;
+  j["vnum"] = cur_host->vnum;
+  j["color"] = cur_host->color;
+  j["icons"] = json::array();
+  for (struct matrix_icon *icon = cur_host->icons; icon; icon = icon->next_in_host) {
+    if (!has_spotted(persona, icon)) continue;
+    j["icons"].push_back(icon->name);
+  }
+
+  // Dump the json to a string and send it.
+  std::string payload = j.dump();
+  SendGMCP(ch->desc, "Matrix.Info", payload.c_str());
+}
+
+void SendGMCPMatrixDeck ( struct char_data *ch )
+{
+  if (!ch->desc || !ch->desc->pProtocol->bGMCP) return;
+  struct matrix_icon *persona = ch->persona;
+
+  json j;
+
+  if (!persona || !persona->in_host || !persona->decker) {
+    std::string payload = j.dump();
+    SendGMCP(ch->desc, "Matrix.Deck", payload.c_str());
+    return;
+  }
+
+  struct obj_data *deck = persona->decker->deck;
+  j["deck"] = json::object();
+  j["persona"] = json::object();
+
+  // Deck info
+  j["deck"]["name"] = GET_OBJ_NAME(deck);
+  j["deck"]["mpcp"] = persona->decker->mpcp;
+  j["deck"]["bod"] = persona->decker->bod;
+  j["deck"]["masking"] = persona->decker->masking;
+  j["deck"]["evasion"] = persona->decker->evasion;
+  j["deck"]["sensor"] = persona->decker->sensor;
+  j["deck"]["io"] = persona->decker->io;
+
+  // Active programs
+  j["deck"]["programs"] = json::array();
+  for (struct obj_data *soft = persona->decker->software; soft; soft = soft->next_content) {
+    json jsoft;
+
+    jsoft["name"] = GET_OBJ_NAME(soft);
+    jsoft["rating"] = GET_PROGRAM_RATING(soft);
+    jsoft["type"] = GET_PROGRAM_TYPE(soft);
+
+    j["deck"]["programs"].push_back(jsoft);
+  }
+  
+  // Persona info
+  j["persona"]["name"] = persona->name;
+  j["persona"]["condition"] = persona->condition;
+
+  // Dump the json to a string and send it.
+  std::string payload = j.dump();
+  SendGMCP(ch->desc, "Matrix.Deck", payload.c_str());
 }
 
 void SendGMCPCharInfo( struct char_data * ch )
 {
   if (!ch || !ch->desc || !ch->desc->pProtocol->bGMCP) return;
   json j;
-  j["name"] = GET_CHAR_NAME(ch);
-  j["height"] = ((float)GET_HEIGHT(ch) / 100);
-  j["weight"] = GET_WEIGHT(ch);
-  j["karma"] = GET_KARMA(ch);
-  j["tke"] = GET_TKE(ch);
-  j["rep"] = GET_REP(ch);
-  j["noto"] = GET_NOT(ch);
-  j["metatype"] = GET_RACE(ch);
-  j["pronouns"] = ch->player.pronouns;
+  
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
