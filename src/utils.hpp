@@ -1406,17 +1406,6 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_DESIGN_COMPLETED(prog)                          (GET_OBJ_VAL((prog), 10))
 #define GET_DESIGN_ORIGINAL_TICKS_LEFT(prog)                (GET_OBJ_TIMER((prog)))
 
-// ITEM_COMPLEX_FORM convenience defines
-#define GET_COMPLEX_FORM_PROGRAM(prog)                      (GET_OBJ_VAL((prog), 0))
-#define GET_COMPLEX_FORM_RATING(prog)                       (GET_OBJ_VAL((prog), 1))
-#define GET_COMPLEX_FORM_WOUND_LEVEL(prog)                  (GET_OBJ_VAL((prog), 2))
-#define GET_COMPLEX_FORM_KARMA_PAID(prog)                   (GET_OBJ_VAL((prog), 3))
-#define GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(prog)          (GET_OBJ_VAL((prog), 4))
-#define GET_COMPLEX_FORM_ORIGINAL_TICKS_LEFT(prog)          (GET_OBJ_VAL((prog), 5)) /* Using this instead of timer because timer isn't persisted */
-#define GET_COMPLEX_FORM_SIZE(prog)                         (GET_OBJ_VAL((prog), 6))
-#define GET_COMPLEX_FORM_LEARNING_FAILED(prog)              (GET_OBJ_VAL((prog), 7))
-#define GET_COMPLEX_FORM_CREATOR_IDNUM(prog)                (GET_OBJ_VAL((prog), 9))
-
 // ITEM_GUN_AMMO convenience defines
 #define GET_AMMOBOX_QUANTITY(box)                           (GET_OBJ_VAL((box), 0))
 #define GET_AMMOBOX_WEAPON(box)                             (GET_OBJ_VAL((box), 1))
@@ -1442,6 +1431,19 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_CREATIVE_EFFORT convenience defines
 #define GET_ART_AUTHOR_IDNUM(obj)                           (GET_OBJ_VAL((obj), 0))
+
+// ITEM_COMPLEX_FORM convenience defines
+#define GET_COMPLEX_FORM_PROGRAM(prog)                      (GET_OBJ_VAL((prog), 0))
+#define GET_COMPLEX_FORM_RATING(prog)                       (GET_OBJ_VAL((prog), 1))
+#define GET_COMPLEX_FORM_WOUND_LEVEL(prog)                  (GET_OBJ_VAL((prog), 2))
+#define GET_COMPLEX_FORM_KARMA_PAID(prog)                   (GET_OBJ_VAL((prog), 3))
+#define GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(prog)          (GET_OBJ_VAL((prog), 4))
+#define GET_COMPLEX_FORM_ORIGINAL_TICKS_LEFT(prog)          (GET_OBJ_VAL((prog), 5)) /* Using this instead of timer because timer isn't persisted */
+#define GET_COMPLEX_FORM_SIZE(prog)                         (GET_OBJ_VAL((prog), 6))
+#define GET_COMPLEX_FORM_LEARNING_FAILED(prog)              (GET_OBJ_VAL((prog), 7))
+#define GET_COMPLEX_FORM_CREATOR_IDNUM(prog)                (GET_OBJ_VAL((prog), 9))
+
+// ITEM_DRONEWAR_RELATED convenience defines are in dronewar_base.hpp
 
 
 /* Misc utils ************************************************************/
