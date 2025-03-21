@@ -75,6 +75,7 @@ void SendGMCPMatrixInfo ( struct char_data *ch )
 
   struct host_data *cur_host = &matrix[persona->in_host];
   j["name"] = cur_host->name;
+  j["description"] = cur_host->desc;
   j["vnum"] = cur_host->vnum;
   j["color"] = cur_host->color;
   j["icons"] = json::array();
@@ -146,8 +147,9 @@ void SendGMCPCharInfo( struct char_data * ch )
   j["tke"] = GET_TKE(ch);
   j["rep"] = GET_REP(ch);
   j["noto"] = GET_NOT(ch);
-  j["metatype"] = GET_RACE(ch);
-  j["pronouns"] = ch->player.pronouns;
+  j["metatype"] = pc_race_types_for_wholist[GET_RACE(ch)];
+  j["pronouns"] = genders[ch->player.pronouns];
+  j["syspoints"] = GET_SYSTEM_POINTS(ch);
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
@@ -202,8 +204,25 @@ void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room )
 
   j["vnum"] = GET_ROOM_VNUM(room);
   j["name"] = GET_ROOM_NAME(room);
-  j["zone_number"] = room->zone;
+
+  // Zone info
+  struct zone_data *z = &zone_table[room->zone];
+  j["zone"] = json::object();
+  j["zone"]["number"] = z->number;
+  j["zone"]["name"] = z->name;
+
+  // Flags
+  j["flags"] = json::array();
+  if (ROOM_FLAGGED(room, ROOM_GARAGE)) j["flags"].push_back("garage");
+  if (ROOM_FLAGGED(room, ROOM_STORAGE) && !ROOM_FLAGGED(room, ROOM_CORPSE_SAVE_HACK)) j["flags"].push_back("storage");
+  if (ROOM_FLAGGED(room, ROOM_STERILE)) j["flags"].push_back("sterile");
+  if (ROOM_FLAGGED(room, ROOM_PEACEFUL)) j["flags"].push_back("peaceful");
+  if ((room->matrix && real_host(room->matrix) >= 1)) j["flags"].push_back("jackpoint");
+  if (ROOM_FLAGGED(room, ROOM_ENCOURAGE_CONGREGATION)) j["flags"].push_back("socialization bonus");
+
+  
   j["exits"] = SerializeRoomExits(room);
+
   // Only add coordinates if they are valid.
   if (room->x && room->y && room->z) {
     j["coords"] = { {"x", room->x}, {"y", room->y}, {"z", room->z} };
@@ -213,9 +232,6 @@ void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room )
   if (*room->description) {
     j["description"] = room->description;
   }
-
-  if (room->latitude) j["latitude"] = room->latitude;
-  if (room->longitude) j["longitude"] = room->longitude;
   
   // Dump the json to a string and send it.
   std::string payload = j.dump();
