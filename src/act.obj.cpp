@@ -1869,7 +1869,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 
   struct room_data *in_room = get_ch_in_room(ch);
 
-  FALSE_CASE(ROOM_FLAGGED(in_room, ROOM_NO_DROP), "The game's administration requests that you do not drop anything here.");
+  FALSE_CASE(mode == SCMD_DROP && ROOM_FLAGGED(in_room, ROOM_NO_DROP), "The game's administration requests that you do not drop anything here.");
   FALSE_CASE_PRINTF(mode != SCMD_JUNK && IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch), "You can't %s %s, but you can always JUNK it.", sname, decapitalize_a_an(obj));
   FALSE_CASE_PRINTF(mode != SCMD_JUNK && obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
                     "Action blocked: %s contains at least one no-drop item. You can JUNK that item if you want.", decapitalize_a_an(obj));
