@@ -515,7 +515,7 @@ ACMD(do_spec_comm)
   }
 
   // If they trigger automod with this, bail out.
-  if (check_for_banned_content(argument, ch))
+  if (check_for_banned_content(buf2, ch))
     return;
 
   half_chop(argument, buf, buf2, sizeof(buf2));
