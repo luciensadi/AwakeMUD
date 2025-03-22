@@ -2343,73 +2343,83 @@ void parse_object(File &fl, long nr)
         obj->text.look_desc = str_dup("A hefty box of ammunition, banded in metal and secured with flip-down hasps for transportation and storage.");
         break;
       case ITEM_WEAPON:
-        // Attempt to automatically rectify broken weapons.
-        bool is_melee = FALSE;
-        if (GET_WEAPON_ATTACK_TYPE(obj) > MAX_WEAP)
-          switch (GET_WEAPON_SKILL(obj)) {
-            case SKILL_EDGED_WEAPONS:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_EDGED;
-              is_melee = TRUE;
-              break;
-            case SKILL_POLE_ARMS:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_POLEARM;
-              is_melee = TRUE;
-              break;
-            case SKILL_WHIPS_FLAILS:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_WHIP;
-              is_melee = TRUE;
-              break;
-            case SKILL_CLUBS:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_CLUB;
-              is_melee = TRUE;
-              break;
-            case SKILL_UNARMED_COMBAT:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_GLOVE;
-              is_melee = TRUE;
-              break;
-            case SKILL_PISTOLS:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_HEAVY_PISTOL;
-              break;
-            case SKILL_RIFLES:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_SPORT_RIFLE;
-              break;
-            case SKILL_SHOTGUNS:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_SHOTGUN;
-              break;
-            case SKILL_ASSAULT_RIFLES:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_ASSAULT_RIFLE;
-              break;
-            case SKILL_SMG:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_SMG;
-              break;
-            case SKILL_GRENADE_LAUNCHERS:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_GREN_LAUNCHER;
-              break;
-            case SKILL_MISSILE_LAUNCHERS:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_MISS_LAUNCHER;
-              break;
-            case SKILL_TASERS:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_TASER;
-              break;
-            case SKILL_MACHINE_GUNS:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_LMG;
-              break;
-            case SKILL_ASSAULT_CANNON:
-              GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_CANNON;
-              break;
+        {
+          // Attempt to automatically rectify broken weapons.
+          bool is_melee = FALSE;
+          if (GET_WEAPON_ATTACK_TYPE(obj) > MAX_WEAP)
+            switch (GET_WEAPON_SKILL(obj)) {
+              case SKILL_EDGED_WEAPONS:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_EDGED;
+                is_melee = TRUE;
+                break;
+              case SKILL_POLE_ARMS:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_POLEARM;
+                is_melee = TRUE;
+                break;
+              case SKILL_WHIPS_FLAILS:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_WHIP;
+                is_melee = TRUE;
+                break;
+              case SKILL_CLUBS:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_CLUB;
+                is_melee = TRUE;
+                break;
+              case SKILL_UNARMED_COMBAT:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_GLOVE;
+                is_melee = TRUE;
+                break;
+              case SKILL_PISTOLS:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_HEAVY_PISTOL;
+                break;
+              case SKILL_RIFLES:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_SPORT_RIFLE;
+                break;
+              case SKILL_SHOTGUNS:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_SHOTGUN;
+                break;
+              case SKILL_ASSAULT_RIFLES:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_ASSAULT_RIFLE;
+                break;
+              case SKILL_SMG:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_SMG;
+                break;
+              case SKILL_GRENADE_LAUNCHERS:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_GREN_LAUNCHER;
+                break;
+              case SKILL_MISSILE_LAUNCHERS:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_MISS_LAUNCHER;
+                break;
+              case SKILL_TASERS:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_TASER;
+                break;
+              case SKILL_MACHINE_GUNS:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_LMG;
+                break;
+              case SKILL_ASSAULT_CANNON:
+                GET_WEAPON_ATTACK_TYPE_SETTABLE(obj) = WEAP_CANNON;
+                break;
+            }
+
+          if (GET_WEAPON_SKILL(obj) > 100) {
+            log_vfprintf("WARNING: get_weapon_skill for %s is %d. Prior logic would have made it %d.",
+                        GET_OBJ_NAME(obj),
+                        GET_WEAPON_SKILL(obj),
+                        GET_WEAPON_SKILL(obj) - 100);
+            // GET_WEAPON_SKILL(obj) -= 100;
           }
 
-        if (GET_WEAPON_SKILL(obj) > 100) {
-          log_vfprintf("WARNING: get_weapon_skill for %s is %d. Prior logic would have made it %d.",
-                       GET_OBJ_NAME(obj),
-                       GET_WEAPON_SKILL(obj),
-                       GET_WEAPON_SKILL(obj) - 100);
-          // GET_WEAPON_SKILL(obj) -= 100;
+          if (is_melee)
+            GET_WEAPON_REACH(obj) = MAX(0, GET_WEAPON_REACH(obj));
         }
-
-        if (is_melee)
-          GET_WEAPON_REACH(obj) = MAX(0, GET_WEAPON_REACH(obj));
-
+        break;
+      case ITEM_DECK_ACCESSORY:
+        // Fix laptops.
+        if (GET_DECK_ACCESSORY_TYPE(obj) == TYPE_COMPUTER) {
+          if (GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(obj) > 0) {
+            GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(obj) = 0;
+            GET_DECK_ACCESSORY_COMPUTER_IS_LAPTOP(obj) = 1;
+          }
+        }
         break;
     }
   } // End per-type modifications.
