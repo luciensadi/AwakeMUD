@@ -817,7 +817,7 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
       send_to_char("Storage: ", CH);
       break;
     case ITEM_DECK_ACCESSORY:
-      switch (GET_OBJ_VAL(OBJ, 0)) {
+      switch (GET_DECK_ACCESSORY_TYPE(OBJ)) {
         case TYPE_FILE:
           iedit_disp_menu(d);
           break;
@@ -828,7 +828,10 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
             iedit_disp_menu(d);
           break;
         case TYPE_COMPUTER:
-          send_to_char("Is this a laptop? (1 yes, 0 no): ", CH);
+          // Skipping this field while doing nothing? Re-increment our counter.
+          if (d->iedit_limit_edits)
+            d->iedit_limit_edits++;
+          iedit_disp_val5_menu(d);
           break;
         default:
           iedit_disp_menu(d);
@@ -904,6 +907,9 @@ void iedit_disp_val5_menu(struct descriptor_data * d)
         return;
       }
       iedit_disp_mod_vehicle_type_menu(d);
+      break;
+    case TYPE_COMPUTER:
+      send_to_char("Is this a laptop? (1 yes, 0 no): ", CH);
       break;
     default:
       iedit_disp_menu(d);
@@ -2519,12 +2525,6 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_DECK_ACCESSORY:
-          if (GET_DECK_ACCESSORY_TYPE(OBJ) == TYPE_COMPUTER) {
-            if (number != 0 && number != 1) {
-              send_to_char("Invalid choice! Must be either 1 (yes it's a laptop) or 0 (no it's not): ", CH);
-              return;
-            }
-          }
           if (number < 1 || number > 15) {
             send_to_char("MPCP value must be between 1 and 15!\r\nMPCP to enhance: ", CH);
             return;
@@ -2737,6 +2737,14 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           TOGGLE_BIT(GET_VEHICLE_MOD_DESIGNED_FOR_FLAGS(OBJ), 1 << (number - 1));
           iedit_disp_mod_vehicle_type_menu(d);
           return;
+        case ITEM_DECK_ACCESSORY:
+          if (GET_DECK_ACCESSORY_TYPE(OBJ) == TYPE_COMPUTER) {
+            if (number != 0 && number != 1) {
+              send_to_char("Invalid choice! Must be either 1 (yes it's a laptop) or 0 (no it's not): ", CH);
+              return;
+            }
+          }
+          break;
         default:
           break;
       }
