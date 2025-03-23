@@ -273,7 +273,7 @@ void file_from_host(struct matrix_file * obj)
 
   if (obj->in_host == NULL)
   {
-    log_vfprintf("error (matrix_storage.cpp): trying to illegally extract file (%d: %s) from host", obj->idnum, obj->name);
+    log_vfprintf("error (matrix_storage.cpp): trying to illegally extract file (%ld: %s) from host", obj->idnum, obj->name);
     return;
   }
   host_from = obj->in_host;
