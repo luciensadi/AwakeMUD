@@ -348,7 +348,7 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
           } else {
             send_to_char(ch, "%s^n is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n", CAP(GET_OBJ_NAME(obj)));
           }
-          return;
+          break;
         case TYPE_UPGRADE:
           if (GET_OBJ_VAL(obj, 1) != 3) {
             send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
@@ -357,17 +357,17 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
           obj_from_char(obj);
           obj_to_obj(obj, cont);
           act("You fit $p^n into a FUP in $P^n.", FALSE, ch, obj, cont, TO_CHAR);
-          return;
+          break;
       }
       send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
-      return;
+      break;
     default:
       send_to_char(ch, "You can't install %s^n into a cyberdeck.\r\n", GET_OBJ_NAME(obj));
-      return;
+      break;
   }
-  
-  // if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
-  //   display_cyberdeck_issues(ch, cont);
+
+  if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
+    display_cyberdeck_issues(ch, cont);
 }
 
 /* The following put modes are supported by the code below:

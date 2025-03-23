@@ -32,10 +32,8 @@ CREATE TABLE `matrix_files` (
 
 ALTER TABLE `pfiles_inv`
     ADD `Matrix_Restring` varchar(256)
-    DEFAULT 0 
     AFTER `obj_idnum`;
 
 ALTER TABLE `pfiles_worn`
     ADD `Matrix_Restring` varchar(256)
-    DEFAULT 0 
     AFTER `obj_idnum`;

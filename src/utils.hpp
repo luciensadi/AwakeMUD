@@ -1356,6 +1356,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_DECK_ACCESSORY TYPE_COMPUTER convenience defines
 #define GET_DECK_ACCESSORY_COMPUTER_ACTIVE_MEMORY(accessory) (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(accessory)    (GET_OBJ_VAL((accessory), 2))
 #define GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(accessory)   (GET_OBJ_VAL((accessory), 3))
 #define GET_DECK_ACCESSORY_COMPUTER_IS_LAPTOP(accessory)     (GET_OBJ_VAL((accessory), 4))
 

@@ -90,7 +90,6 @@ std::vector<struct obj_data*> get_internal_storage_devices(struct char_data *ch)
 }
 
 std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool only_relevant) {
-  struct obj_data* cyber;
   std::vector<struct obj_data*> found_list = get_internal_storage_devices(ch);
   int max_cyberdecks = 0;
 
@@ -112,10 +111,11 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
     max_cyberdecks--; // Always make sure the cyberdeck of the decker is included.
   }
 
-  for (cyber = ch->carrying; cyber; cyber = cyber->next_content) {
+  for (struct obj_data *cyber = ch->carrying; cyber; cyber = cyber->next_content) {
     if (max_cyberdecks <= 0) break;
     if (find(found_list.begin(), found_list.end(), cyber) != found_list.end()) continue; // If we contain this set, continue
-    if ((GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK) && (IS_SENATOR(ch) || !IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY))) {
+    if (IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY) && !IS_SENATOR(ch)) continue;
+    if ((GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK)) {
       found_list.push_back(cyber);
       max_cyberdecks--;
     }
@@ -124,6 +124,7 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
   for (int i = 0; i < NUM_WEARS; i++) {
     if (max_cyberdecks <= 0) break;
     if (find(found_list.begin(), found_list.end(), GET_EQ(ch, i)) != found_list.end()) continue; // If we contain this set, continue
+    if (IS_OBJ_STAT(GET_EQ(ch, i), ITEM_EXTRA_STAFF_ONLY) && !IS_SENATOR(ch)) continue;
     if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CUSTOM_DECK)) {
       found_list.push_back(GET_EQ(ch, i));
       max_cyberdecks--;
@@ -133,9 +134,11 @@ std::vector<struct obj_data*> get_storage_devices(struct char_data *ch, bool onl
   if (only_relevant && !AFF_FLAGGED(ch, PLR_MATRIX)) {
     // Decking accessories / computers
     // These cannot be accessed while in the matrix
-    for (cyber = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; cyber; cyber = cyber->next_content)
+    for (struct obj_data *cyber = (ch)->in_room ? (ch)->in_room->contents : (ch)->in_veh->contents; cyber; cyber = cyber->next_content) {
+      if (IS_OBJ_STAT(cyber, ITEM_EXTRA_STAFF_ONLY) && !IS_SENATOR(ch)) continue;
       if (GET_OBJ_TYPE(cyber) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cyber) == TYPE_COMPUTER)
         found_list.push_back(cyber);  
+    }
   }
 
   // Deduplicating any repeat pointers.
@@ -244,7 +247,7 @@ void file_from_obj(struct matrix_file * obj, bool do_sql_delete = TRUE)
 
   if (obj->in_obj == NULL)
   {
-    log("error (handler.c): trying to illegally extract obj from obj");
+    log("error (matrix_storage.cpp): trying to illegally extract file from obj");
     return;
   }
   obj_from = obj->in_obj;
@@ -269,7 +272,7 @@ void file_from_host(struct matrix_file * obj)
 
   if (obj->in_host == NULL)
   {
-    log("error (handler.c): trying to illegally extract obj from obj");
+    log_vfprintf("error (matrix_storage.cpp): trying to illegally extract file (%d: %s) from host", obj->idnum, obj->name);
     return;
   }
   host_from = obj->in_host;
