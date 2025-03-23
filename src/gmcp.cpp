@@ -168,6 +168,7 @@ json SerializeRoomExits( struct room_data *room )
     
     json exit = json::object();
     exit["direction"] = exitdirs[door];
+    exit["to"] = room->dir_option[door]->to_room_vnum;
     if (IS_SET(room->dir_option[door]->exit_info, EX_LOCKED)) {
       exit["state"] = "LOCKED";
     } else if (IS_SET(room->dir_option[door]->exit_info, EX_CLOSED)) {
