@@ -30,6 +30,7 @@
 #include "newmatrix.hpp"
 #include "config.hpp"
 #include "bullet_pants.hpp"
+#include "matrix_storage.hpp"
 
 extern bool memory(struct char_data *ch, struct char_data *vict);
 extern class objList ObjList;
@@ -226,6 +227,7 @@ bool attempt_quit_job(struct char_data *ch, struct char_data *johnson) {
 void load_quest_targets(struct char_data *johnson, struct char_data *ch)
 {
   struct obj_data *obj;
+  struct matrix_file *file;
   struct char_data *mob;
   int i, j, room = -1, pos, num = GET_QUEST(ch), rnum = -1;
 
@@ -380,12 +382,10 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         break;
       case QOL_HOST:
         if ((room = real_host(quest_table[num].obj[i].l_data)) > -1) {
-          obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_HOST);
-          GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
-          obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
-          GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = GET_IDNUM(ch);
-          GET_DECK_ACCESSORY_FILE_REMAINING(obj) = 1;
-          obj_to_host(obj, &matrix[room]);
+          file = create_matrix_file(NULL, OBJ_LOAD_REASON_QUEST_HOST);
+          file->quest_id = GET_IDNUM(ch);
+          file->found_by = GET_IDNUM(ch);
+          move_matrix_file_to(file, &matrix[room]);
         }
         obj = NULL;
         break;
