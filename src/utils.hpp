@@ -758,6 +758,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define SKILL_IS_NERPS(skill) (skills[skill].is_nerps)
 #define SKILL_IS_SOCIAL(skill) ((skill) == SKILL_NEGOTIATION || ((skill) >= SKILL_CORPORATE_ETIQUETTE && (skill) <= SKILL_ELF_ETIQUETTE))
 #define SKILL_IS_COMBAT(skill) (!skills[skill].is_nerps && (((skill) != SKILL_CENTERING && (skill) != SKILL_SPELLDESIGN && (skill) >= SKILL_ARMED_COMBAT && (skill) <= SKILL_ORALSTRIKE) || ((skill) >= SKILL_OFFHAND_EDGED && (skill) <= SKILL_OFFHAND_WHIP) || (skill) == SKILL_GUNNERY))
+#define SKILL_IS_OTAKU(skill) (skills[skill].requires_resonance)
 
 #define GET_SKILL_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_SKILLS])
 #define GET_ADEPT_POWER_DIRTY_BIT(ch)   ((ch)->char_specials.dirty_bits[DIRTY_BIT_POWERS])
