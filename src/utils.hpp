@@ -751,7 +751,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define BOOST(ch)               ((ch)->char_specials.saved.boosted)
 #define GET_EQ(ch, i)         ((ch)->equipment[i])
 
-#define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS) || ((skill) == SKILL_MANDARIN || (skill) == SKILL_HAITIAN_CREOLE))
+#define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS) || ((skill) == SKILL_MANDARIN || (skill) == SKILL_HAITIAN_CREOLE || (skill) == SKILL_HAWAIIAN || (skill) == SKILL_GREEK))
 #define SKILL_IS_DECKING(skill) ((skill) == SKILL_CYBERTERM_DESIGN || (skill) == SKILL_COMPUTER || (skill) == SKILL_BR_COMPUTER || (skill) == SKILL_BR_ELECTRONICS || ((skill) >= SKILL_PROGRAM_COMBAT && (skill) <= SKILL_PROGRAM_CYBERTERM) || (skill) == SKILL_DATA_BROKERAGE)
 #define SKILL_IS_MAGICAL(skill) ((skill) == SKILL_SPELLDESIGN || (skills[skill].requires_magic && !(skills[skill].is_nerps)))
 #define SKILL_IS_VEHICLE_RELATED(skill) ((skill) == SKILL_PILOT_BIKE || ((skill) >= SKILL_PILOT_CAR && (skill) <= SKILL_BR_TRUCK) || ((skill) >= SKILL_PILOT_ROTORCRAFT && (skill) <= SKILL_PILOT_VECTORTHRUST) || ((skill) >= SKILL_BR_FIXEDWING && (skill) <= SKILL_PILOT_WALKER))

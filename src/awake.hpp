@@ -977,8 +977,8 @@ enum {
 #define SKILL_DATA_BROKERAGE         54
 #define SKILL_AURA_READING           55
 #define SKILL_STEALTH                56
-// unused
-// unused
+#define SKILL_HAWAIIAN               57
+#define SKILL_GREEK                  58
 #define SKILL_UNUSED_WAS_CLIMBING    59
 #define SKILL_PILOT_BIKE             60
 #define SKILL_UNUSED_WAS_PILOT_FIXED_WING   61
