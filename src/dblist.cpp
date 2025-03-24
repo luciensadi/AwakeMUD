@@ -426,6 +426,7 @@ void objList::UpdateCounters(void)
     // Time out things that have been abandoned outside of storage etc rooms (qualifier checked when setting timeout)
     // TODO: Maybe put it in a vector of expiring objects rather than making this check be part of every item?
     if (OBJ->in_room
+        && !OBJ->in_room->people
         && (GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) > 0 && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) <= timestamp_now)
         && !OBJ->contains // it's just a headache trying to figure out what to skip over with this
         && !GET_OBJ_QUEST_CHAR_ID(OBJ)
@@ -436,6 +437,7 @@ void objList::UpdateCounters(void)
              // || GET_OBJ_TYPE(OBJ) == ITEM_CUSTOM_DECK // No custom decks (only matters if !OBJ->contains condition is removed)
              || GET_OBJ_TYPE(OBJ) == ITEM_MAGIC_TOOL
              || GET_OBJ_TYPE(OBJ) == ITEM_PET
+             || (GET_OBJ_TYPE(OBJ) == ITEM_GUN_AMMO && GET_AMMOBOX_QUANTITY(OBJ) > 0)
              || (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(OBJ) > TYPE_KIT) // No workshops or facilities.
              // || GET_OBJ_TYPE(OBJ) == ITEM_SHOPCONTAINER // No shopcontainers (only matters if !OBJ->contains condition is removed)
              || (GET_OBJ_TYPE(OBJ) == ITEM_FOCUS && GET_FOCUS_BONDED_TO(OBJ) > 0) // No bonded normal foci.

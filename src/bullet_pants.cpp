@@ -815,10 +815,24 @@ bool ammobox_to_bulletpants(struct char_data *ch, struct obj_data *ammobox) {
   if (GET_AMMOBOX_QUANTITY(ammobox) == 0 && (!ammobox->restring || strcmp(ammobox->restring, get_ammobox_default_restring(ammobox)) == 0)) {
     send_to_char(ch, "You take %d %s from %s and secrete them about your person, then junk the empty box.\r\n",
                  quantity, get_ammo_representation(weapontype, ammotype, quantity, ch), GET_OBJ_NAME(ammobox));
+    if (GET_OBJ_EXTRA(ammobox).IsSet(ITEM_EXTRA_CHEATLOG_MARK)) {
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "Pocket tracking: Put all %d %s in pockets from %s (IQ %d, TTC %d, OTTC %d).",
+                      quantity, get_ammo_representation(weapontype, ammotype, quantity, ch), GET_OBJ_NAME(ammobox),
+                      GET_AMMOBOX_INTENDED_QUANTITY(ammobox),
+                      GET_AMMOBOX_TIME_TO_COMPLETION(ammobox),
+                      GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(ammobox));
+    }
     extract_obj(ammobox);
   } else {
     send_to_char(ch, "You take %d %s from %s and secrete them about your person.\r\n",
                  quantity, get_ammo_representation(weapontype, ammotype, quantity, ch), GET_OBJ_NAME(ammobox));
+    if (GET_OBJ_EXTRA(ammobox).IsSet(ITEM_EXTRA_CHEATLOG_MARK)) {
+      mudlog_vfprintf(ch, LOG_CHEATLOG, "Pocket tracking: Put partial %d %s in pockets from %s (IQ %d, TTC %d, OTTC %d).",
+                      quantity, get_ammo_representation(weapontype, ammotype, quantity, ch), GET_OBJ_NAME(ammobox),
+                      GET_AMMOBOX_INTENDED_QUANTITY(ammobox),
+                      GET_AMMOBOX_TIME_TO_COMPLETION(ammobox),
+                      GET_AMMOBOX_ORIGINAL_TIME_TO_COMPLETION(ammobox));
+    }
   }
 
   return TRUE;

@@ -104,6 +104,8 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
       OBJ->restring = str_dup(buf);
       GET_AMMOBOX_CREATOR(OBJ) = GET_IDNUM(CH);
       obj_to_char(OBJ, CH);
+      if (PLR_FLAGGED(CH, PLR_ADDITIONAL_SCRUTINY))
+        GET_OBJ_EXTRA(OBJ).SetBit(ITEM_EXTRA_CHEATLOG_MARK);
       STATE(d) = CON_PLAYING;
       OBJ = NULL;
       break;

@@ -658,13 +658,12 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_COND(ch, i)         ((ch)->player_specials->saved.conditions[(i)])
 #define GET_LOADROOM(ch)        ((ch)->player_specials->saved.load_room)
 #define GET_LAST_IN(ch)         ((ch)->player_specials->saved.last_in)
-#define GET_PRACTICES(ch)       ((ch)->player_specials->saved.spells_to_learn)
 #define GET_INVIS_LEV(ch)       ((ch)->player_specials->saved.invis_level)
 #define GET_INCOG_LEV(ch)       ((ch)->player_specials->saved.incog_level)
 #define GET_WIMP_LEV(ch)        ((ch)->player_specials->saved.wimp_level)
 #define GET_FREEZE_LEV(ch)      ((ch)->player_specials->saved.freeze_level)
 #define GET_BAD_PWS(ch)         ((ch)->player_specials->saved.bad_pws)
-#define GET_SYSTEM_POINTS(ch)   ((ch)->player_specials->saved.system_points)
+#define GET_SYSTEM_POINTS(ch)   ((ch && ch->desc && ch->desc->original) ? ch->desc->original->player_specials->saved.system_points : ch->player_specials->saved.system_points)
 #define GET_WATCH(ch)           ((ch)->player_specials->watching)
 #define GET_ASTRAL(ch)          ((ch)->aff_abils.astral_pool)
 #define GET_DODGE(ch)           ((ch)->aff_abils.defense_pool)
@@ -759,6 +758,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define SKILL_IS_NERPS(skill) (skills[skill].is_nerps)
 #define SKILL_IS_SOCIAL(skill) ((skill) == SKILL_NEGOTIATION || ((skill) >= SKILL_CORPORATE_ETIQUETTE && (skill) <= SKILL_ELF_ETIQUETTE))
 #define SKILL_IS_COMBAT(skill) (!skills[skill].is_nerps && (((skill) != SKILL_CENTERING && (skill) != SKILL_SPELLDESIGN && (skill) >= SKILL_ARMED_COMBAT && (skill) <= SKILL_ORALSTRIKE) || ((skill) >= SKILL_OFFHAND_EDGED && (skill) <= SKILL_OFFHAND_WHIP) || (skill) == SKILL_GUNNERY))
+#define SKILL_IS_OTAKU(skill) (skills[skill].requires_resonance)
 
 #define GET_SKILL_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_SKILLS])
 #define GET_ADEPT_POWER_DIRTY_BIT(ch)   ((ch)->char_specials.dirty_bits[DIRTY_BIT_POWERS])
@@ -819,8 +819,8 @@ bool _mob_is_alert(struct char_data *npc);
                                GET_BUILDING((ch)) = NULL;}
 #define STOP_DRIVING(ch)      {AFF_FLAGS((ch)).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);}
 
-#define GET_TOTEM(ch)                              (ch->player_specials->saved.totem)
-#define GET_TOTEMSPIRIT(ch)                        (ch->player_specials->saved.totemspirit)
+#define GET_TOTEM(ch)                              ((ch && ch->desc && ch->desc->original) ? ch->desc->original->player_specials->saved.totem : ch->player_specials->saved.totem)
+#define GET_TOTEMSPIRIT(ch)                        ((ch && ch->desc && ch->desc->original) ? ch->desc->original->player_specials->saved.totemspirit : ch->player_specials->saved.totemspirit)
 
 #define GET_MENTAL_LOSS(ch)                        (ch->player_specials->mental_loss)
 #define GET_PHYSICAL_LOSS(ch)                      (ch->player_specials->physical_loss)
@@ -1408,17 +1408,6 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_DESIGN_COMPLETED(prog)                          (GET_OBJ_VAL((prog), 10))
 #define GET_DESIGN_ORIGINAL_TICKS_LEFT(prog)                (GET_OBJ_TIMER((prog)))
 
-// ITEM_COMPLEX_FORM convenience defines
-#define GET_COMPLEX_FORM_PROGRAM(prog)                      (GET_OBJ_VAL((prog), 0))
-#define GET_COMPLEX_FORM_RATING(prog)                       (GET_OBJ_VAL((prog), 1))
-#define GET_COMPLEX_FORM_WOUND_LEVEL(prog)                  (GET_OBJ_VAL((prog), 2))
-#define GET_COMPLEX_FORM_KARMA_PAID(prog)                   (GET_OBJ_VAL((prog), 3))
-#define GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(prog)          (GET_OBJ_VAL((prog), 4))
-#define GET_COMPLEX_FORM_ORIGINAL_TICKS_LEFT(prog)          (GET_OBJ_VAL((prog), 5)) /* Using this instead of timer because timer isn't persisted */
-#define GET_COMPLEX_FORM_SIZE(prog)                         (GET_OBJ_VAL((prog), 6))
-#define GET_COMPLEX_FORM_LEARNING_FAILED(prog)              (GET_OBJ_VAL((prog), 7))
-#define GET_COMPLEX_FORM_CREATOR_IDNUM(prog)                (GET_OBJ_VAL((prog), 9))
-
 // ITEM_GUN_AMMO convenience defines
 #define GET_AMMOBOX_QUANTITY(box)                           (GET_OBJ_VAL((box), 0))
 #define GET_AMMOBOX_WEAPON(box)                             (GET_OBJ_VAL((box), 1))
@@ -1444,6 +1433,19 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_CREATIVE_EFFORT convenience defines
 #define GET_ART_AUTHOR_IDNUM(obj)                           (GET_OBJ_VAL((obj), 0))
+
+// ITEM_COMPLEX_FORM convenience defines
+#define GET_COMPLEX_FORM_PROGRAM(prog)                      (GET_OBJ_VAL((prog), 0))
+#define GET_COMPLEX_FORM_RATING(prog)                       (GET_OBJ_VAL((prog), 1))
+#define GET_COMPLEX_FORM_WOUND_LEVEL(prog)                  (GET_OBJ_VAL((prog), 2))
+#define GET_COMPLEX_FORM_KARMA_PAID(prog)                   (GET_OBJ_VAL((prog), 3))
+#define GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(prog)          (GET_OBJ_VAL((prog), 4))
+#define GET_COMPLEX_FORM_ORIGINAL_TICKS_LEFT(prog)          (GET_OBJ_VAL((prog), 5)) /* Using this instead of timer because timer isn't persisted */
+#define GET_COMPLEX_FORM_SIZE(prog)                         (GET_OBJ_VAL((prog), 6))
+#define GET_COMPLEX_FORM_LEARNING_FAILED(prog)              (GET_OBJ_VAL((prog), 7))
+#define GET_COMPLEX_FORM_CREATOR_IDNUM(prog)                (GET_OBJ_VAL((prog), 9))
+
+// ITEM_DRONEWAR_RELATED convenience defines are in dronewar_base.hpp
 
 
 /* Misc utils ************************************************************/
@@ -1667,6 +1669,9 @@ struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
 #define ENSURE_OBJ_HAS_IDNUM(obj) if (!GET_OBJ_IDNUM(obj)) { RANDOMLY_GENERATE_OBJ_IDNUM(obj) }
 
 #define SB_CODE_OBJ_CANT_BE_SOULBOUND -2
+
+// IN APARTMENTS AND VEHICLES, we don't save things that are !RENT, or are non-restrung food or drink.
+#define OBJ_SHOULD_NOT_SAVE_IN_APTS_AND_VEHS(obj)  (IS_OBJ_STAT((obj), ITEM_EXTRA_NORENT) || (!(obj)->restring && (GET_OBJ_TYPE((obj)) == ITEM_FOOD || GET_OBJ_TYPE((obj)) == ITEM_DRINKCON)))
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
 extern void verify_every_pointer_we_can_think_of();
