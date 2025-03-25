@@ -773,7 +773,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   if (targ->decker && !has_spotted(targ, icon))
     make_seen(targ, icon->idnum);
 
-#ifdef IS_BUILDPORT
+#ifdef MTX_DEBUG
   if (icon->decker)
     send_to_char(icon->decker->ch, "entering matrix_fight(%s, %s)\r\n", GET_CHAR_NAME(icon->decker->ch), targ->name);
 #endif
@@ -824,7 +824,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (GET_OBJ_VAL(soft, 0) == SOFT_ATTACK)
         break;
     if (!soft) {
-#ifdef IS_BUILDPORT
+#ifdef MTX_DEBUG
   if (icon->decker)
     send_to_icon(icon, "matrix_fight(): failed to find attack soft, bailing out\r\n");
 #endif
@@ -842,7 +842,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     else if (icon->ic.options.IsSet(IC_EX_DEFENSE))
       skill -= icon->ic.expert;
     skill += icon->ic.cascade;
-    if (targ->decker->scout) {
+    if (targ->decker && targ->decker->scout) {
       skill += targ->decker->scout;
       targ->decker->scout = 0;
     }
@@ -990,7 +990,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 
   // Block!
   if (try_execute_shield_program(icon, targ, success) && success <= 0) {
-#ifdef IS_BUILDPORT
+#ifdef MTX_DEBUG
     if (icon->decker)
       send_to_icon(icon, "matrix_fight(): shield program failed, bailing out\r\n");
 #endif
@@ -1055,9 +1055,11 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     int wil_test_result = success_test(GET_WIL(targ->decker->ch), power);
     int bod_test_result = success_test(GET_BOD(targ->decker->ch), power);
     success -= targ->decker->iccm ? MAX(wil_test_result, bod_test_result) : success_test(resist, power);
-  } else {
+  } else if (targ->decker && targ->decker->ch) {
     bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
     GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
+    success -= success_test(bod, power);
+  } else {
     success -= success_test(bod, power);
   }
 
@@ -1101,17 +1103,17 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (!targ->decker->asist[0] && lethal)
         lethal = FALSE;
       if (lethal)
-        resist = GET_BOD(targ->decker->ch);
+        resist = GET_BOD(ch);
       else
-        resist = GET_WIL(targ->decker->ch);
+        resist = GET_WIL(ch);
 
-      int wil_test_result = success_test(GET_WIL(targ->decker->ch), power);
-      int bod_test_result = success_test(GET_BOD(targ->decker->ch), power);
+      int wil_test_result = success_test(GET_WIL(ch), power);
+      int bod_test_result = success_test(GET_BOD(ch), power);
       success -= targ->decker->iccm ? MAX(wil_test_result, bod_test_result) : success_test(resist, power);
       int meatdam = convert_damage(stage(success, dam));
       send_to_icon(targ, "You smell something burning.\r\n");
 
-      if (damage(targ->decker->ch, targ->decker->ch, meatdam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL)) {
+      if (damage(ch, ch, meatdam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL)) {
         // Oh shit, they died. Guess they don't take MPCP damage, since their struct is zeroed out now.
         return;
       }
@@ -1120,12 +1122,12 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         return;
       }
       if (targ && targ->decker) {
-        if (targ->decker->ch && !AWAKE(targ->decker->ch)) {
+        if (ch && !AWAKE(ch)) {
           success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
           fry_mpcp(icon, targ, success);
           dumpshock(targ);
           return;
-        } else if (!targ->decker->ch) {
+        } else if (!ch) {
           success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
           fry_mpcp(icon, targ, success);
           extract_icon(targ);
@@ -1145,9 +1147,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         power = 5;
         break;
       }
-      if (success_test(GET_WIL(targ->decker->ch), power) < 1) {
+      if (success_test(GET_WIL(ch), power) < 1) {
         send_to_icon(targ, "Your interface overloads.\r\n");
-        if (damage(targ->decker->ch, targ->decker->ch, 1, TYPE_TASER, MENTAL)) {
+        if (damage(ch, ch, 1, TYPE_TASER, MENTAL)) {
           return;
         }
       }
@@ -1191,7 +1193,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         icon_to_host(trap, icon->in_host);
       }
 
-      if (matrix[icon->in_host].ic_bound_paydata > 0) {
+      if (ICON_IS_IC(targ) && matrix[icon->in_host].ic_bound_paydata > 0) {
         if (!(number(0, MAX(0, matrix[icon->in_host].color - HOST_COLOR_ORANGE)))) {
           matrix[icon->in_host].ic_bound_paydata--;
           struct obj_data *paydata = spawn_paydata(icon);
