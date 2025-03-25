@@ -1489,7 +1489,7 @@ int make_prompt(struct descriptor_data * d)
             case 'm':       // current mental
             case '*':       // current mental, but subtracted from 10 to give damage boxes taken instead
               physical = (int)(GET_MENTAL(ch) / 100);
-              if (IS_JACKED_IN(ch)) {
+              if (IS_JACKED_IN(ch) && !IS_OTAKU(ch)) {
                 physical = 10;
               } else {
                 for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
@@ -1519,7 +1519,7 @@ int make_prompt(struct descriptor_data * d)
             case '&':       // current physical, but subtracted from 10 to give damage boxes taken instead
               physical = (int)(GET_PHYSICAL(ch) / 100);
 
-              if (IS_JACKED_IN(ch)) {
+              if (IS_JACKED_IN(ch) && !IS_OTAKU(ch)) {
                 physical = 10;
               } else {
                 for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {

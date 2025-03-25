@@ -1541,7 +1541,8 @@ ACMD(do_slowns)
 #define _SKILL_MODE_MAGICAL 5
 #define _SKILL_MODE_LANGUAGES 6
 #define _SKILL_MODE_NERPS 7
-#define _NUM_SKILL_MODES 8
+#define _SKILL_MODE_OTAKU 8
+#define _NUM_SKILL_MODES 9
 
 const char *_skill_modes[] = {
   "general skills",
@@ -1551,7 +1552,8 @@ const char *_skill_modes[] = {
   "decking skills",
   "magical skills",
   "languages",
-  "non-implemented (NERP) skills"
+  "non-implemented (NERP) skills",
+  "otaku skills"
 };
 
 void _send_alphabetized_skills_to_ch(struct char_data *ch, const char *arg, int mode) {
@@ -1561,7 +1563,7 @@ void _send_alphabetized_skills_to_ch(struct char_data *ch, const char *arg, int 
   for (int i = MIN_SKILLS; i < MAX_SKILLS; i++) {
     switch (mode) {
       case _SKILL_MODE_GENERAL:
-        if (SKILL_IS_LANGUAGE(i) || SKILL_IS_VEHICLE_RELATED(i) || SKILL_IS_DECKING(i) || SKILL_IS_MAGICAL(i) || SKILL_IS_NERPS(i) || SKILL_IS_COMBAT(i) || SKILL_IS_SOCIAL(i))
+        if (SKILL_IS_LANGUAGE(i) || SKILL_IS_VEHICLE_RELATED(i) || SKILL_IS_DECKING(i) || SKILL_IS_MAGICAL(i) || SKILL_IS_NERPS(i) || SKILL_IS_COMBAT(i) || SKILL_IS_SOCIAL(i) || SKILL_IS_OTAKU(i))
           continue;
         break;
       case _SKILL_MODE_VEHICLE_RELATED:
@@ -1590,6 +1592,10 @@ void _send_alphabetized_skills_to_ch(struct char_data *ch, const char *arg, int 
         break;
       case _SKILL_MODE_SOCIAL:
         if (!SKILL_IS_SOCIAL(i))
+          continue;
+        break;
+      case _SKILL_MODE_OTAKU:
+        if (!SKILL_IS_OTAKU(i))
           continue;
         break;
     }
