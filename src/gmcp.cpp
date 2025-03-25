@@ -146,8 +146,8 @@ void SendGMCPCharInfo( struct char_data * ch )
   j["tke"] = GET_TKE(ch);
   j["rep"] = GET_REP(ch);
   j["noto"] = GET_NOT(ch);
-  j["metatype"] = pc_race_types_for_wholist[GET_RACE(ch)];
-  j["pronouns"] = genders[ch->player.pronouns];
+  j["metatype"] = pc_race_types_for_wholist[(int) GET_RACE(ch)];
+  j["pronouns"] = genders[(int) ch->player.pronouns];
   j["syspoints"] = GET_SYSTEM_POINTS(ch);
 
   // Dump the json to a string and send it.
