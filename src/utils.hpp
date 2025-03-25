@@ -1050,7 +1050,9 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_PART_CHIP_COST(part)               (GET_OBJ_VAL((part), 9))
 #define GET_PART_INITIAL_BUILD_TICKS(part)     (GET_OBJ_VAL((part), 10))
 #define GET_PART_RADIO_FREQ(part)              (GET_OBJ_VAL((part), 11)) // Settable by player
-#define GET_PART_RADIO_CRYPT(part)             (GET_OBJ_VAL((part), 12)) // Settable by player
+#ifdef ENABLE_RADIO_CRYPT
+  #define GET_PART_RADIO_CRYPT(part)             (GET_OBJ_VAL((part), 12)) // Settable by player
+#endif
 #define GET_PART_BUILD_SUCCESSES_ROLLED(part)  (GET_OBJ_TIMER((part)))
 
 // ITEM_WEAPON convenience defines

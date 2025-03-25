@@ -782,9 +782,14 @@ ACMD(do_radio)
   bool cyberware = FALSE, vehicle = FALSE, matrix = FALSE;
 
   radio = find_radio(ch, &cyberware, &vehicle, &matrix);
-  if (PLR_FLAGGED(ch, PLR_MATRIX) && !matrix) {
-    send_to_char("You can't access the radio frequencies without a radio link.\r\n", ch);
-    return;
+  if (PLR_FLAGGED(ch, PLR_MATRIX) && !matrix && !IS_OTAKU(ch)) {
+    if (IS_OTAKU(ch) && !cyberware) {
+      send_to_char("You can't access the radio frequencies without a radio complex form, and a cyber radio.\r\n", ch);
+      return;
+    } else if (!matrix) {
+      send_to_char("You can't access the radio frequencies without a radio link.\r\n", ch);
+      return;
+    }
   }
 
   if (!radio) {
@@ -964,7 +969,9 @@ ACMD(do_broadcast)
     // Player character with radio
     if (matrix) {
       frequency = GET_PART_RADIO_FREQ(radio);
-      crypt_lvl = GET_PART_RADIO_CRYPT(radio);
+      #ifdef ENABLE_RADIO_CRYPT
+        crypt_lvl = GET_PART_RADIO_CRYPT(radio);
+      #endif
     } else if (cyberware) {
       frequency = GET_CYBERWARE_RADIO_FREQ(radio);
       crypt_lvl = GET_CYBERWARE_RADIO_CRYPT(radio);
@@ -1171,11 +1178,11 @@ ACMD(do_broadcast)
             strlcat(radio_string, "^n", sizeof(radio_string));
 
           store_message_to_history(d, COMM_CHANNEL_RADIO, act(radio_string, FALSE, ch, 0, d->character, 
-            d->character->persona && d->character->persona->decker && d->character->persona->decker->deck ? TO_DECK : TO_VICT));
+            d->character->persona ? TO_DECK : TO_VICT));
 
         } else if (access_level(d->character, LVL_FIXER) && !PRF_FLAGGED(d->character, PRF_NORADIO)) {
           store_message_to_history(d, COMM_CHANNEL_RADIO, act(untouched_message, FALSE, ch, 0, d->character,
-            d->character->persona && d->character->persona->decker && d->character->persona->decker->deck ? TO_DECK : TO_VICT));
+            d->character->persona ? TO_DECK : TO_VICT));
         }
       }
     }
