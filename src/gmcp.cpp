@@ -77,7 +77,6 @@ void SendGMCPMatrixInfo ( struct char_data *ch )
   j["name"] = cur_host->name;
   j["description"] = cur_host->desc;
   j["vnum"] = cur_host->vnum;
-  j["color"] = cur_host->color;
   j["icons"] = json::array();
   for (struct matrix_icon *icon = cur_host->icons; icon; icon = icon->next_in_host) {
     if (!has_spotted(persona, icon)) continue;
@@ -206,11 +205,11 @@ void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room )
   j["vnum"] = GET_ROOM_VNUM(room);
   j["name"] = GET_ROOM_NAME(room);
 
-  // Zone info
-  struct zone_data *z = &zone_table[room->zone];
-  j["zone"] = json::object();
-  j["zone"]["number"] = z->number;
-  j["zone"]["name"] = z->name;
+  // Zone info: Not necessary maybe
+  // struct zone_data *z = &zone_table[room->zone];
+  // j["zone"] = json::object();
+  // j["zone"]["number"] = z->number;
+  // j["zone"]["name"] = z->name;
 
   // Flags
   j["flags"] = json::array();
@@ -334,33 +333,33 @@ void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const js
     SendGMCPCoreSupports(apDescriptor);
   else if (!strncmp(module, "Room.Info.Get", strlen(module)))
     if (!apDescriptor->character)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: No Valid Character");
+      mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: No Valid Character");
     else if (!apDescriptor->character->in_room)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: Not in Room");
+      mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: Not in Room");
     else
       SendGMCPRoomInfo(apDescriptor->character, apDescriptor->character->in_room);
   else if (!strncmp(module, "Room.Exits.Get", strlen(module)))
     if (!apDescriptor->character)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Room.Exits.Get Call: No Valid Character");
+      mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Unable to Handle GMCP Room.Exits.Get Call: No Valid Character");
     else
       SendGMCPExitsInfo(apDescriptor->character);
   else if (!strncmp(module, "Char.Vitals.Get", strlen(module)))
     if (!apDescriptor->character)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Vitals.Get Call: No Valid Character");
+      mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Unable to Handle GMCP Char.Vitals.Get Call: No Valid Character");
     else
       SendGMCPCharVitals(apDescriptor->character);
   else if (!strncmp(module, "Char.Info.Get", strlen(module)))
     if (!apDescriptor->character)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Info.Get Call: No Valid Character");
+      mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Unable to Handle GMCP Char.Info.Get Call: No Valid Character");
     else
       SendGMCPCharInfo(apDescriptor->character);
   else if (!strncmp(module, "Char.Pools.Get", strlen(module)))
     if (!apDescriptor->character)
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Unable to Handle GMCP Char.Pools.Get Call: No Valid Character");
+      mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Unable to Handle GMCP Char.Pools.Get Call: No Valid Character");
     else
       SendGMCPCharPools(apDescriptor->character);
   else
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "Received Unhandled GMCP Module Call [%s]: %s", module, payload.dump().c_str());
+    mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Received Unhandled GMCP Module Call [%s]: %s", module, payload.dump().c_str());
 }
 
 void ParseGMCP( descriptor_t *apDescriptor, const char *apData )
