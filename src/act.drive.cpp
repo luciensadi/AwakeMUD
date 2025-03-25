@@ -1849,6 +1849,9 @@ ACMD(do_gridguide)
           destination_list = portland_taxi_destinations;
           location_string = " or the Portland gridguide system";
           break;
+        case JURISDICTION_CAS:
+          destination_list = cas_taxi_destinations;
+          location_string = " or the CAS gridguide system";
         default:
           destination_list = NULL;
           break;
