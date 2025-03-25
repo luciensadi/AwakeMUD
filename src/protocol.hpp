@@ -83,6 +83,7 @@ typedef struct descriptor_data descriptor_t;
 #define TELOPT_MXP                     ((const unsigned char) 91)
 #define TELOPT_ATCP                    ((const unsigned char) 200)
 #define TELOPT_GA                      ((const unsigned char) 249)
+#define TELOPT_GMCP                    ((const unsigned char) 201)
 
 #define MSDP_VAR                       1
 #define MSDP_VAL                       2
@@ -116,6 +117,7 @@ typedef enum
    eNEGOTIATED_MXP,
    eNEGOTIATED_MXP2,
    eNEGOTIATED_MCCP,
+   eNEGOTIATED_GMCP,
 
    eNEGOTIATED_MAX             /* This must always be last */
 } negotiated_t;
@@ -256,6 +258,7 @@ typedef struct
    bool    bMSP;             /* The client supports MSP */
    bool    bMXP;             /* The client supports MXP */
    bool    bMCCP;            /* The client supports MCCP */
+   bool    bGMCP;            /* The client supports GMCP */
    bool    do_coerce_ansi_capable_colors_to_ansi; /* Set to true if the user wants default colors like ^g to be client-customizable. */
    support_t b256Support;      /* The client supports XTerm 256 colors */
    int       ScreenWidth;      /* The client's screen width */

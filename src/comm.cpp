@@ -75,6 +75,7 @@
 #include "newhouse.hpp"
 #include "factions.hpp"
 #include "player_exdescs.hpp"
+#include "gmcp.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -939,6 +940,18 @@ void game_loop(int mother_desc)
       }
     }
 
+    {
+      // Send GMCP Vitals
+      for (d = descriptor_list; d; d = next_d) {
+        next_d = d->next;
+        if (!d->prompt_mode) continue;
+        if (!d->character) continue;
+
+        SendGMCPCharVitals(d->character);
+        SendGMCPCharPools(d->character);
+      }
+    }
+
     /* handle heartbeat stuff */
     /* Note: pulse now changes every 0.10 seconds  */
 
@@ -1364,6 +1377,7 @@ int make_prompt(struct descriptor_data * d)
       prompt = GET_PROMPT(d->character);
       ch = d->character;
     }
+    
     if (!prompt || !*prompt)
       data = "> ";
     else if (!strchr(prompt, '@')) {

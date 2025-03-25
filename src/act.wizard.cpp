@@ -56,6 +56,7 @@
 #include "moderation.hpp"
 #include "vehicles.hpp"
 #include "olc.hpp"
+#include "gmcp.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -3312,6 +3313,9 @@ void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct
 
   // Persist results.
   playerDB.SaveChar(vict);
+
+  // Send game update
+  SendGMCPCharInfo(vict);
 }
 
 void staff_induced_karma_alteration_for_offline_char(struct char_data *ch, const char *name, int karma_times_100, const char *reason, bool add_karma) {

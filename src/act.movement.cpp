@@ -29,6 +29,7 @@
 #include "quest.hpp"
 #include "zoomies.hpp"
 #include "elevators.hpp"
+#include "gmcp.hpp"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -1202,6 +1203,8 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       perform_move(k->follower, dir, CHECK_SPECIAL, NULL);
     }
   }
+
+  SendGMCPRoomInfo(ch, ch->in_room);
   return 1;
 }
 

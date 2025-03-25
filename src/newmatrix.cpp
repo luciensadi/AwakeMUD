@@ -17,6 +17,7 @@
 #include "moderation.hpp"
 #include "pets.hpp"
 #include "otaku.hpp"
+#include "gmcp.hpp"
 
 #ifdef TEMPORARY_COMPILATION_GUARD
 extern void create_secret_container(struct char_data *ch);
@@ -382,6 +383,8 @@ bool dumpshock(struct matrix_icon *icon)
     struct char_data *ch = icon->decker->ch;
     extract_icon(icon);
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+    SendGMCPMatrixInfo(ch);
+    SendGMCPMatrixDeck(ch);
 
     // No reason to double-damage
     if (!PLR_FLAGGED(ch, PLR_MATRIX))
@@ -2054,6 +2057,7 @@ ACMD(do_logon)
         send_to_icon(PERSONA, "You connect to %s^n.\r\n", matrix[target_host].name);
         icon_to_host(PERSONA, target_host);
       }
+      SendGMCPMatrixInfo(ch);
       do_matrix_look(ch, NULL, 0, 0);
       return;
     } else {
@@ -2104,6 +2108,8 @@ ACMD(do_logoff)
   extract_icon(PERSONA);
   PERSONA = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+  SendGMCPMatrixInfo(ch);
+  SendGMCPMatrixDeck(ch);
 
   // Make 'em look if they're not screenreaders.
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
@@ -2493,6 +2499,8 @@ ACMD(do_connect)
   else 
     send_to_char(ch, "You jack into the matrix with your %s.\r\n", GET_OBJ_NAME(cyberdeck));
   PLR_FLAGS(ch).SetBit(PLR_MATRIX);
+  SendGMCPMatrixDeck(ch);
+  SendGMCPMatrixInfo(ch);
   do_matrix_look(ch, NULL, 0, 0);
 }
 

@@ -33,6 +33,7 @@
 #include "vehicles.hpp"
 #include "newmail.hpp"
 #include "player_exdescs.hpp"
+#include "gmcp.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -315,6 +316,8 @@ void do_start(struct char_data * ch, bool wipe_skills)
         set_character_skill(ch, i, 0, FALSE);
     }
   }
+
+  SendGMCPCharVitals(ch); 
 
   // For morts, this just saves them and prints a message about their new level.
   advance_level(ch);
