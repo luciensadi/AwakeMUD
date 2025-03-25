@@ -18,6 +18,11 @@
 #include "pets.hpp"
 #include "otaku.hpp"
 
+#ifdef TEMPORARY_COMPILATION_GUARD
+extern void create_secret_container(struct char_data *ch);
+extern void create_secret_contents(struct char_data *ch);
+#endif
+
 #define PERSONA ch->persona
 #define PERSONA_CONDITION ch->persona->condition
 #define DECKER PERSONA->decker
@@ -4150,6 +4155,16 @@ ACMD(do_create)
   else if (is_abbrev(buf1, "pets")) {
     create_pet(ch);
   }
+
+#ifdef TEMPORARY_COMPILATION_GUARD
+  else if (is_abbrev(buf1, "secret_container")) {
+    create_secret_container(ch);
+  }
+
+  else if (is_abbrev(buf1, "secret_contents")) {
+    create_secret_contents(ch);
+  }
+#endif
 
   else {
     send_to_char("You can only create programs, parts, decks, ammunition, spells, complex forms, art, and pets.\r\n", ch);
