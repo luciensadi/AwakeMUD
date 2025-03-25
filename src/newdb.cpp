@@ -2471,7 +2471,7 @@ void idle_delete()
   char buf[MAX_STRING_LENGTH];
 
   MYSQL *mysqlextra = mysql_init(NULL);
-  if (!mysql_real_connect(mysqlextra, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
+  if (!mysql_real_connect(mysqlextra, mysql_host, mysql_user, mysql_password, mysql_db, GAME_MYSQL_PORT, NULL, 0)) {
     log("IDLEDELETE- Could not open extra socket, aborting");
     return;
   }

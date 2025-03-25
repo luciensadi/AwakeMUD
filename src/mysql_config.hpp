@@ -6,4 +6,6 @@ extern const char *mysql_password;
 extern const char *mysql_user;
 extern const char *mysql_db;
 
+#define GAME_MYSQL_PORT 0
+
 #endif
