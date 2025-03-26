@@ -507,7 +507,7 @@ ACMD(do_put)
     FAILURE_CASE_PRINTF(!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)), "You aren't carrying %s %s.", AN(arg1), arg1);
 
     // You can always fit Cram and Psyche in a compartment. We only evaluate the logic in this block if it's neither of these things.
-    if (GET_OBJ_TYPE(obj) != ITEM_DRUG || GET_OBJ_DRUG_TYPE(obj) != DRUG_CRAM || GET_OBJ_DRUG_TYPE(obj) != DRUG_PSYCHE) {
+    if (GET_OBJ_TYPE(obj) != ITEM_DRUG || (GET_OBJ_DRUG_TYPE(obj) != DRUG_CRAM && GET_OBJ_DRUG_TYPE(obj) != DRUG_PSYCHE)) {
       // Breakables can only take Cram/Psyche.
       FAILURE_CASE(GET_CYBERWARE_FLAGS(cont), "You can only put the drugs Cram and Psyche in breakable tooth compartments.");
 
