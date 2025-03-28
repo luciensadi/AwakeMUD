@@ -244,8 +244,8 @@ struct obj_data *can_program(struct char_data *ch)
     if (!comp) {
       send_to_char(ch, "There is no computer here for you to use.\r\n");
       // A computer isn't used to design a complex form, but we use a different command for that
-      if (IS_OTAKU(ch))
-        send_to_char(ch, "Did you mean \"forms learn <form>\"?\r\n");
+      if (IS_OTAKU(ch) && PRF_FLAGGED(ch, PRF_SEE_TIPS))
+        send_to_char(ch, "[OOC: For complex forms, try \"forms learn <form>\".]\r\n");
       return NULL;
     }
     return comp;
@@ -362,8 +362,8 @@ ACMD(do_design)
   if (!prog) {
     send_to_char(ch, "The program design isn't on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(comp)));
     // A computer isn't used to design a complex form, but we use a different command
-    if (IS_OTAKU(ch))
-      send_to_char(ch, "Did you mean \"forms learn <form>\"?\r\n");
+    if (IS_OTAKU(ch) && PRF_FLAGGED(ch, PRF_SEE_TIPS))
+      send_to_char(ch, "[OOC: For complex forms, try \"forms learn <form>\".]\r\n");
     return;
   }
   if (GET_DESIGN_COMPLETED(prog) || GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog)) {
