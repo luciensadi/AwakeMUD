@@ -2918,8 +2918,8 @@ ACMD(do_decrypt)
     // If there's nothing to decrypt, there's nothing to succeed at.
     if (!matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED]) {
       send_to_icon(PERSONA, "The local %s subsystem doesn't seem to be encrypted.\r\n", mtx_subsystem_names[mode]);
-      if (mode == ACIFS_ACCESS && PRF_FLAGGED(ch, PRF_SEE_TIPS))
-        send_to_icon(PERSONA, "[OOC: To decrypt a remote host's SAN, try \"decrypt <host>\".]\r\n");
+      if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && (mode == ACIFS_ACCESS))
+        send_to_icon(PERSONA, "[OOC: To decrypt a remote host's SAN, try ^WDECRYPT <HOST>^n.]\r\n");
       return;
     }
 
