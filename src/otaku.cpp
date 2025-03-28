@@ -240,7 +240,6 @@ void _update_living_persona(struct char_data *ch, struct obj_data *cyberdeck, in
   ch->persona->decker->mpcp = mpcp;
   ch->persona->decker->hardening = GET_CYBERDECK_HARDENING(cyberdeck);
   ch->persona->decker->response = GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck);
-  ch->persona->decker->io = GET_CYBERDECK_IO_RATING(cyberdeck);
 
   for (struct obj_data *part = cyberdeck->contains; part; part = part->next_content) {
     if (GET_OBJ_TYPE(part) != ITEM_PART) continue;
