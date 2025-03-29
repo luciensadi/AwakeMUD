@@ -1437,17 +1437,17 @@ int make_prompt(struct descriptor_data * d)
             case 'D':
               snprintf(str, sizeof(str), "%d", GET_BODY_POOL(d->character));
               break;
-            case 'e':
+            case 'e':       // persona active memory
               if (ch->persona)
                 snprintf(str, sizeof(str), "%d", ch->persona->decker->active);
               else
-                snprintf(str, sizeof(str), "0");
+                snprintf(str, sizeof(str), "NA");
               break;
             case 'E':
               if (ch->persona && ch->persona->decker->deck)
-                snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 2));
+                snprintf(str, sizeof(str), "%d", GET_CYBERDECK_ACTIVE_MEMORY(ch->persona->decker->deck));
               else
-                snprintf(str, sizeof(str), "0");
+                snprintf(str, sizeof(str), "NA");
               break;
             case 'f':
               snprintf(str, sizeof(str), "%d", GET_CASTING(d->character));
@@ -1559,17 +1559,23 @@ int make_prompt(struct descriptor_data * d)
                 strlcpy(str, get_ch_domain_str(ch, TRUE), sizeof(str));
               }
               break;
-            case 'r':
+            case 'r':       // persona storage memory
               if (ch->persona && ch->persona->decker->deck)
-                snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 3) - GET_OBJ_VAL(ch->persona->decker->deck, 5));
+                if (ch->persona->type == ICON_LIVING_PERSONA && ch->persona->decker->proxy_deck)
+                  snprintf(str, sizeof(str), "%d", GET_CYBERDECK_FREE_STORAGE(ch->persona->decker->proxy_deck));
+                else
+                  snprintf(str, sizeof(str), "%d", GET_CYBERDECK_FREE_STORAGE(ch->persona->decker->deck));
               else
-                snprintf(str, sizeof(str), "0");
+                snprintf(str, sizeof(str), "NA");
               break;
             case 'R':
               if (ch->persona && ch->persona->decker && ch->persona->decker->deck)
-                snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 3));
+                if (ch->persona->type == ICON_LIVING_PERSONA && ch->persona->decker->proxy_deck)
+                  snprintf(str, sizeof(str), "%d", GET_CYBERDECK_TOTAL_STORAGE(ch->persona->decker->proxy_deck));
+                else
+                  snprintf(str, sizeof(str), "%d", GET_CYBERDECK_TOTAL_STORAGE(ch->persona->decker->deck));
               else
-                snprintf(str, sizeof(str), "0");
+                snprintf(str, sizeof(str), "NA");
               break;
             case 's':       // current ammo
               if (GET_EQ(d->character, WEAR_HOLD) &&

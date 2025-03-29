@@ -240,7 +240,6 @@ void _update_living_persona(struct char_data *ch, struct obj_data *cyberdeck, in
   ch->persona->decker->mpcp = mpcp;
   ch->persona->decker->hardening = GET_CYBERDECK_HARDENING(cyberdeck);
   ch->persona->decker->response = GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck);
-  ch->persona->decker->io = GET_CYBERDECK_IO_RATING(cyberdeck);
 
   for (struct obj_data *part = cyberdeck->contains; part; part = part->next_content) {
     if (GET_OBJ_TYPE(part) != ITEM_PART) continue;
@@ -272,6 +271,7 @@ void update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck) {
   GET_CYBERDECK_HARDENING(cyberdeck) = MIN(get_otaku_wil(ch), GET_CYBERDECK_HARDENING(cyberdeck));
   GET_CYBERDECK_ACTIVE_MEMORY(cyberdeck) = 0; // Otaku do not have active memory.
   GET_CYBERDECK_TOTAL_STORAGE(cyberdeck) = 0;
+  // Otaku don't have response increase, so use this for matrix reaction instead
   GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck) = get_otaku_rea(ch) + GET_ECHO(ch, ECHO_IMPROVED_REA);
   GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck) = MIN(mpcp * 1.5, GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck));
   GET_CYBERDECK_IO_RATING(cyberdeck) = (get_otaku_int(ch) * 100) + (GET_ECHO(ch, ECHO_IMPROVED_IO) * 100);
