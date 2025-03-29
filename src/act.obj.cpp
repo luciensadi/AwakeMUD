@@ -32,6 +32,7 @@
 #include "redit.hpp"
 #include "vehicles.hpp"
 #include "pets.hpp"
+#include "matrix_storage.hpp"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -110,21 +111,9 @@ int wear_bitvectors[] = {
                           ITEM_WEAR_CHEST,
                           ITEM_WEAR_LAPEL };
 
-bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
-{
-  struct obj_data *temp;
-
-  for (temp = cyberdeck->contains; temp; temp = temp->next_content)
-    if ((GET_OBJ_TYPE(temp) == ITEM_PROGRAM && GET_OBJ_TYPE(program) == ITEM_PROGRAM && GET_OBJ_VAL(temp, 0) == GET_OBJ_VAL(program, 0)) ||
-        (GET_OBJ_TYPE(temp) == ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(program) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(temp, 1) == GET_OBJ_VAL(program, 1)))
-      return TRUE;
-
-  return FALSE;
-}
-
 void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *cont)
 {
-  FAILURE_CASE(obj == ch->char_specials.programming, "You can't put something you are working on inside something.");
+  FAILURE_CASE(obj == GET_BUILDING(ch), "You can't put something you are working on inside something.");
   FAILURE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PET, "%s refuses to go inside anything.", CAP(GET_OBJ_NAME(obj)));
 
   if (cont->in_room || cont->in_veh) {
@@ -314,123 +303,71 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
 {
   int space_required = 0;
 
-  if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)
-  {
-    if (GET_DECK_ACCESSORY_TYPE(cont) != TYPE_COMPUTER) {
-      send_to_char(ch, "You can't install anything into %s^n.\r\n", GET_OBJ_NAME(cont));
-      return;
-    }
-
-    if (cont->carried_by) {
-      send_to_char(ch, "%s won't work while carried, you'll have to drop it.\r\n", capitalize(GET_OBJ_NAME(cont)));
-      return;
-    }
-
-    if (GET_OBJ_TYPE(obj) != ITEM_DESIGN && GET_OBJ_TYPE(obj) != ITEM_PROGRAM && !(GET_OBJ_TYPE(obj) == ITEM_PROGRAM && GET_OBJ_TIMER(obj))) {
-      send_to_char(ch, "You can't install %s onto a personal computer; you can only install uncooked programs and designs.\r\n", GET_OBJ_NAME(obj));
-      return;
-    }
-
-    if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
+  switch(GET_OBJ_TYPE(obj)) {
+    case ITEM_PROGRAM:
       space_required = GET_PROGRAM_SIZE(obj);
-    } else {
-      space_required = (int) GET_DESIGN_SIZE(obj) * 1.1;
-    }
-    int free_space = GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(cont) - GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(cont);
+      break;
+    case ITEM_CHIP:
+      space_required = GET_CHIP_SIZE(obj);
+      break;
+    case ITEM_DESIGN:
+      space_required = GET_DESIGN_SIZE(obj);
+      break;
+  }
 
-    if (free_space < space_required) {
-      send_to_char(ch, "%s doesn't seem to fit on %s-- it takes %d megapulses, but there are only %d available.\r\n",
-                   capitalize(GET_OBJ_NAME(obj)),
-                   decapitalize_a_an(GET_OBJ_NAME(cont)),
-                   space_required,
-                   free_space
-                  );
+  switch(GET_OBJ_TYPE(obj)) {
+    case ITEM_PROGRAM:
+    case ITEM_CHIP:
+    case ITEM_DESIGN:
+      if (get_device_free_memory(cont) < space_required) {
+        act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
+        return;
+      }
+
+      snprintf(buf, sizeof(buf), "You slot %s into %s.", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+      act(buf, FALSE, ch, obj, cont, TO_CHAR);
+
+      obj_to_matrix_file(obj, cont);
+      extract_obj(obj);
       return;
-    }
-
-    GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(cont) += space_required;
-
-    obj_from_char(obj);
-    obj_to_obj(obj, cont);
-    send_to_char(ch, "You install %s^n onto %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
-    act("$n installs $p on $P.", TRUE, ch, obj, cont, TO_ROOM);
-    return;
-  } else if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY)
-  {
-    switch (GET_DECK_ACCESSORY_TYPE(obj)) {
-      case TYPE_FILE:
-        if (GET_OBJ_VAL(cont, 5) + GET_DECK_ACCESSORY_FILE_SIZE(obj) > GET_OBJ_VAL(cont, 3)) {
-          act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
+    case ITEM_DECK_ACCESSORY:
+      space_required = GET_DECK_ACCESSORY_FILE_SIZE(obj);
+      switch (GET_DECK_ACCESSORY_TYPE(obj)) {
+        case TYPE_FILE:
+          if (GET_OBJ_VAL(cont, 5) + space_required  > GET_OBJ_VAL(cont, 3)) {
+            act("$p^n takes up too much memory to be uploaded into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
+            return;
+          }
+          obj_to_matrix_file(obj, cont);
+          extract_obj(obj);
+          act("You upload $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
           return;
-        }
-        obj_from_char(obj);
-        obj_to_obj(obj, cont);
-        GET_OBJ_VAL(cont, 5) += GET_DECK_ACCESSORY_FILE_SIZE(obj);
-        act("You upload $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
-        return;
-      case TYPE_UPGRADE:
-        if (GET_OBJ_VAL(obj, 1) != 3) {
-          send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
-          return;
-        }
-        obj_from_char(obj);
-        obj_to_obj(obj, cont);
-        act("You fit $p^n into a FUP in $P^n.", FALSE, ch, obj, cont, TO_CHAR);
-        return;
-      default:
-        send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
-        return;
-    }
-  }
-  // Prevent installing persona firmware into a store-bought deck.
-  if (GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM) {
-    switch (GET_PROGRAM_TYPE(obj)) {
-      case SOFT_BOD:
-      case SOFT_SENSOR:
-      case SOFT_MASKING:
-      case SOFT_EVASION:
-      case SOFT_ASIST_COLD:
-      case SOFT_ASIST_HOT:
-      case SOFT_HARDENING:
-      case SOFT_ICCM:
-      case SOFT_ICON:
-      case SOFT_MPCP:
-      case SOFT_REALITY:
-      case SOFT_RESPONSE:
-        if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
-          send_to_char(ch, "%s^n is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", CAP(GET_OBJ_NAME(obj)));
-        } else {
-          send_to_char(ch, "%s^n is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n", CAP(GET_OBJ_NAME(obj)));
-        }
-        return;
-    }
+        case TYPE_FIRMWARE:
+          if (GET_OBJ_VNUM(cont) == OBJ_CUSTOM_CYBERDECK_SHELL) {
+            send_to_char(ch, "%s^n is firmware, you'll have to BUILD it into the deck along with the matching chip.\r\n", CAP(GET_OBJ_NAME(obj)));
+          } else {
+            send_to_char(ch, "%s^n is firmware for a custom cyberdeck persona chip. It's not compatible with store-bought decks.\r\n", CAP(GET_OBJ_NAME(obj)));
+          }
+          break;
+        case TYPE_UPGRADE:
+          if (GET_OBJ_VAL(obj, 1) != 3) {
+            send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+            return;
+          }
+          obj_from_char(obj);
+          obj_to_obj(obj, cont);
+          act("You fit $p^n into a FUP in $P^n.", FALSE, ch, obj, cont, TO_CHAR);
+          break;
+      }
+      send_to_char(ch, "You can't seem to fit %s^n into %s^n.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
+      break;
+    default:
+      send_to_char(ch, "You can't install %s^n into a cyberdeck.\r\n", GET_OBJ_NAME(obj));
+      break;
   }
 
-  if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM)
-    send_to_char(ch, "You'll have to cook %s before you can install it.\r\n", GET_OBJ_NAME(obj));
-  else if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
+  if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
     display_cyberdeck_issues(ch, cont);
-  else if (search_cyberdeck(cont, obj))
-    act("You already have a similar program installed in $P.", FALSE, ch, obj, cont, TO_CHAR);
-  else
-  {
-    // Persona programs don't take up storage memory in store-bought decks
-    if ((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR)) {
-      space_required = 0;
-    } else {
-      space_required = GET_PROGRAM_SIZE(obj);
-    }
-
-    // Check to make sure there's room
-    if (GET_CYBERDECK_USED_STORAGE(cont) + space_required > GET_CYBERDECK_TOTAL_STORAGE(cont)) {
-      act("$p^n takes up too much memory to be installed into $P^n.", FALSE, ch, obj, cont, TO_CHAR);
-    } else {
-      obj_from_char(obj);
-      obj_to_obj(obj, cont);
-      act("You install $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
-      GET_CYBERDECK_USED_STORAGE(cont) += space_required;
-    }
-  }
 }
 
 /* The following put modes are supported by the code below:
@@ -670,18 +607,6 @@ ACMD(do_put)
       // Better messaging for parts.
       if (GET_OBJ_TYPE(obj) == ITEM_PART) {
         send_to_char(ch, "Parts aren't plug-and-play; you'll have to BUILD %s^n into your deck instead.\r\n", GET_OBJ_NAME(obj));
-        return;
-      }
-
-      // You can only install programs, parts, and designs.
-      if (GET_OBJ_TYPE(obj) != ITEM_PROGRAM && GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(obj) != ITEM_DESIGN) {
-        send_to_char(ch, "You can't install %s^n into a cyberdeck.\r\n", GET_OBJ_NAME(obj));
-        return;
-      }
-
-      // You can only install program designs into computers.
-      if (GET_OBJ_TYPE(obj) == ITEM_DESIGN && GET_OBJ_TYPE(cont) != ITEM_DECK_ACCESSORY) {
-        send_to_char("Program designs are just conceptual outlines and can't be installed into cyberdecks.\r\n", ch);
         return;
       }
 
@@ -971,7 +896,7 @@ bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
             if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
               send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
               return FALSE;
-            } else if (vict == ch && vict->char_specials.programming == obj) {
+            } else if (vict == ch && vict->char_specials.building == obj) {
               send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
               STOP_WORKING(ch);
               break;
@@ -982,7 +907,7 @@ bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
             if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
               send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
               return FALSE;
-            } else if (vict == ch && vict->char_specials.programming == obj) {
+            } else if (vict == ch && vict->char_specials.building == obj) {
               send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
               STOP_WORKING(ch);
               break;
@@ -1000,20 +925,12 @@ bool perform_get_from_container(struct char_data * ch, struct obj_data * obj,
           return FALSE;
         }
 
-        // Subtract program size from storage, but a persona program on a store-bought deck doesn't use storage
-        if (((GET_OBJ_TYPE(obj) == ITEM_PROGRAM) && !((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR)))
-            || (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE)) {
-          GET_CYBERDECK_USED_STORAGE(cont) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
-        }
-
         if (GET_OBJ_TYPE(obj) == ITEM_PART) {
           if (GET_OBJ_VAL(obj, 0) == PART_STORAGE) {
-            for (struct obj_data *k = cont->contains; k; k = k->next_content)
-              if ((GET_OBJ_TYPE(k) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(k) == TYPE_FILE) ||
-                  GET_OBJ_TYPE(k) == ITEM_PROGRAM) {
-                send_to_char(ch, "You cannot uninstall %s while you have files installed.\r\n", GET_OBJ_NAME(obj));
-                return FALSE;
-              }
+            if (cont->files) {
+              send_to_char(ch, "You cannot uninstall %s while you have files installed.\r\n", GET_OBJ_NAME(obj));
+              return FALSE;
+            }
             GET_CYBERDECK_USED_STORAGE(cont) = GET_CYBERDECK_TOTAL_STORAGE(cont) = 0;
           }
           switch(GET_OBJ_VAL(obj, 0)) {
@@ -1097,9 +1014,21 @@ void get_from_container(struct char_data * ch, struct obj_data * cont,
                         char *arg, int mode, bool confirmed=FALSE)
 {
   struct obj_data *obj, *next_obj;
+  struct matrix_file *file;
   int obj_dotmode, found = 0;
 
   obj_dotmode = find_all_dots(arg, sizeof(arg));
+
+  if (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK 
+    || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK
+    || (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cont) == TYPE_COMPUTER)
+    ) {
+    // We're getting something from a deck; we give priority to checking if it's a program.
+    if ((file = get_matrix_file_in_list_vis(ch, arg, cont->files))) {
+      perform_get_matrix_file_from_device(ch, file, cont, mode);
+      return;
+    }
+  }
 
   if (GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK) {
     FAILURE_CASE(obj_dotmode == FIND_ALL || obj_dotmode == FIND_ALLDOT, "You can't uninstall more than one program at a time.");
@@ -1950,7 +1879,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
                     CAP(GET_OBJ_NAME(obj)));
   
   FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch), "You'll have to use the KEEP command on %s before you can %s it.", decapitalize_a_an(obj), sname);
-  FALSE_CASE_PRINTF(obj == ch->char_specials.programming, "You can't %s something you are working on.", sname);
+  FALSE_CASE_PRINTF(obj == ch->char_specials.building, "You can't %s something you are working on.", sname);
   FALSE_CASE_PRINTF(obj_contains_items_with_flag(obj, ITEM_EXTRA_KEPT) && !IS_SENATOR(ch),
                     "Action blocked: %s contains at least one kept item. Pull it out and UNKEEP it.", decapitalize_a_an(obj));
 
@@ -1965,12 +1894,12 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
     bool action_blocked = FALSE;
     struct room_data *target_room = get_ch_in_room(ch);
 
-    if ((action_blocked |= obj_is_apartment_only_drop_item(obj, target_room))) {
-      act("Action blocked: $p can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
-    }
-    else if ((action_blocked |= obj_contains_apartment_only_drop_items(obj, target_room))) {
-      act("Action blocked: $p contains at least one item that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
-    }
+    // if ((action_blocked |= obj_is_apartment_only_drop_item(obj, target_room))) {
+    //   act("Action blocked: $p can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
+    // }
+    // else if ((action_blocked |= obj_contains_apartment_only_drop_items(obj, target_room))) {
+    //   act("Action blocked: $p contains at least one item that can only be dropped in apartments and vehicles.", FALSE, ch, obj, 0, TO_CHAR);
+    // }
 
     if (action_blocked) {   
       if (IS_SENATOR(ch)) {
@@ -2486,7 +2415,7 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
     act("$E can't carry that much weight.", FALSE, ch, 0, vict, TO_CHAR);
     return 0;
   }
-  if (obj == ch->char_specials.programming)
+  if (obj == ch->char_specials.building)
   {
     send_to_char(ch, "You cannot give away something you are working on.\r\n");
     return 0;

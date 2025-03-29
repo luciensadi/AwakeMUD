@@ -18,6 +18,7 @@
 #include "deck_build.hpp"
 #include "ritualcast.hpp"
 #include "metrics.hpp"
+#include "matrix_storage.hpp"
 
 #define CH d->character
 #define PEDIT_MENU 0
@@ -36,19 +37,21 @@ extern bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
 void pedit_disp_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  send_to_char(CH, "1) Name: ^c%s^n\r\n", d->edit_obj->restring);
-  send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[GET_DESIGN_PROGRAM(d->edit_obj)].name);
-  send_to_char(CH, "3) Rating: ^c%d^n\r\n", GET_DESIGN_RATING(d->edit_obj));
+  send_to_char(CH, "1) Name: ^c%s^n\r\n", d->edit_matrix_file->name);
+  send_to_char(CH, "2) Type: ^c%s^n\r\n", programs[d->edit_matrix_file->program_type].name);
+  send_to_char(CH, "3) Rating: ^c%d^n\r\n", d->edit_matrix_file->rating);
 
   // Minimum program size is rating^2.
-  int program_size = GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_RATING(d->edit_obj);
-  if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
+  int program_size = d->edit_matrix_file->rating ^ 2;
+  if (d->edit_matrix_file->program_type == SOFT_ATTACK) {
     // Attack programs multiply size by a factor determined by wound level.
-    program_size *= attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)];
-    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)));
+    program_size *= attack_multiplier[d->edit_matrix_file->wound_category];
+    send_to_char(CH, "4) Damage: ^c%s^n\r\n", GET_WOUND_NAME(d->edit_matrix_file->wound_category));
+  } else if (d->edit_matrix_file->program_type == SOFT_RESPONSE) {
+      program_size = d->edit_matrix_file->rating ^ 3;
   } else {
     // Others multiply by a set multiplier based on software type.
-    program_size *= programs[GET_DESIGN_PROGRAM(d->edit_obj)].multiplier;
+    program_size *= programs[d->edit_matrix_file->program_type].multiplier;
   }
   send_to_char(CH, "\r\nInitial Design Size: ^c%d^n\r\n", (int) (program_size * 1.1));
   send_to_char(CH, "Completed Size: ^c%d^n\r\n\r\n", program_size);
@@ -83,6 +86,7 @@ void pedit_disp_program_menu(struct descriptor_data *d)
 void pedit_parse(struct descriptor_data *d, const char *arg)
 {
   int number = atoi(arg);
+  int program_size = 0;
   switch(d->edit_mode)
   {
   case PEDIT_MENU:
@@ -95,7 +99,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       pedit_disp_program_menu(d);
       break;
     case '3':
-      if (!GET_DESIGN_PROGRAM(d->edit_obj))
+      if (!d->edit_matrix_file->program_type)
         send_to_char("Choose a program type first!\r\n", CH);
       else {
         send_to_char("Enter Rating: ", CH);
@@ -103,7 +107,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       }
       break;
     case '4':
-      if (GET_DESIGN_PROGRAM(d->edit_obj) != SOFT_ATTACK)
+      if (d->edit_matrix_file->program_type != SOFT_ATTACK)
         send_to_char(CH, "Invalid option!\r\n");
       else {
         CLS(CH);
@@ -113,27 +117,37 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
     case 'Q':
-      if (!GET_DESIGN_PROGRAM(d->edit_obj) || !GET_DESIGN_RATING(d->edit_obj)) {
+      if (!d->edit_matrix_file->program_type || !d->edit_matrix_file->rating) {
         send_to_char("You must specify a program type and/or rating first.\r\n", CH);
         pedit_disp_menu(d);
         return;
       }
 
       send_to_char(CH, "Design saved!\r\n");
-      if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
-        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * attack_multiplier[GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj)];
-      } else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_RESPONSE) {
-        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * (GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_RATING(d->edit_obj));
+      // Minimum program size is rating^2.
+      program_size = d->edit_matrix_file->rating ^ 2;
+      if (d->edit_matrix_file->program_type == SOFT_ATTACK) {
+        // Attack programs multiply size by a factor determined by wound level.
+        program_size *= attack_multiplier[d->edit_matrix_file->wound_category];
+      } else if (d->edit_matrix_file->program_type == SOFT_RESPONSE) {
+        program_size = d->edit_matrix_file->rating ^ 3;
       } else {
-        GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * programs[GET_DESIGN_PROGRAM(d->edit_obj)].multiplier;
+        // Others multiply by a set multiplier based on software type.
+        program_size *= programs[d->edit_matrix_file->program_type].multiplier;
       }
-      GET_DESIGN_SIZE(d->edit_obj) = GET_DESIGN_RATING(d->edit_obj) * GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj);
-      GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj)  *= 20;
-      GET_DESIGN_ORIGINAL_TICKS_LEFT(d->edit_obj) = GET_DESIGN_DESIGNING_TICKS_LEFT(d->edit_obj);
-      GET_DESIGN_CREATOR_IDNUM(d->edit_obj) = GET_IDNUM(CH);
-      obj_to_char(d->edit_obj, CH);
+      
+      d->edit_matrix_file->work_ticks_left = program_size;
+      d->edit_matrix_file->size = program_size * 1.1;
+      d->edit_matrix_file->original_size = program_size;
+      d->edit_matrix_file->work_ticks_left  *= 20;
+      d->edit_matrix_file->work_original_ticks_left = d->edit_matrix_file->work_ticks_left ;
+      d->edit_matrix_file->creator_idnum = GET_IDNUM(CH);
+      d->edit_matrix_file->work_phase = WORK_PHASE_READY;
+      d->edit_matrix_file->dirty_bit = TRUE;
+      adjust_device_memory(d->edit_matrix_file->in_obj, d->edit_matrix_file->size * -1);
+
       STATE(d) = CON_PLAYING;
-      d->edit_obj = NULL;
+      d->edit_matrix_file = NULL;
       break;
     default:
       send_to_char(CH, "Invalid option!\r\n");
@@ -141,22 +155,22 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case PEDIT_RATING:
-    if (GET_DESIGN_PROGRAM(d->edit_obj) <= SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER) * 1.5)
+    if (d->edit_matrix_file->program_type <= SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER) * 1.5)
       send_to_char(CH, "You can't create a persona program of a higher rating than your computer skill times one and a half.\r\n"
                    "Enter Rating: ");
-    else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_EVALUATE && number > GET_SKILL(CH, SKILL_DATA_BROKERAGE))
+    else if (d->edit_matrix_file->program_type == SOFT_EVALUATE && number > GET_SKILL(CH, SKILL_DATA_BROKERAGE))
       send_to_char(CH, "You can't create an evaluate program of a higher rating than your data brokerage skill.\r\n"
                    "Enter Rating: ");
-    else if (GET_DESIGN_PROGRAM(d->edit_obj) > SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER))
+    else if (d->edit_matrix_file->program_type > SOFT_SENSOR && number > GET_SKILL(CH, SKILL_COMPUTER))
       send_to_char(CH, "You can't create a program of a higher rating than your computer skill.\r\n"
                    "Enter Rating: ");
-    else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_RESPONSE && number > 3)
+    else if (d->edit_matrix_file->program_type == SOFT_RESPONSE && number > 3)
       send_to_char("You can't create a response increase of a rating higher than 3.\r\nEnter Rating: ", CH);
     else if (number <= 0)
       send_to_char(CH, "You can't create a program with a rating less than 0..\r\n"
                    "Enter Rating: ");
     else {
-      GET_DESIGN_RATING(d->edit_obj) = number;
+      d->edit_matrix_file->rating = number;
       pedit_disp_menu(d);
     }
     break;
@@ -181,8 +195,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       return;
     }
 
-    DELETE_ARRAY_IF_EXTANT(d->edit_obj->restring);
-    d->edit_obj->restring = str_dup(arg);
+    d->edit_matrix_file->name = str_dup(arg);
     pedit_disp_menu(d);
     break;
   }
@@ -190,7 +203,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     if (number < LIGHT || number > DEADLY)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = number;
+      d->edit_matrix_file->wound_category = number;
       pedit_disp_menu(d);
     }
     break;
@@ -198,27 +211,18 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 1 || number >= NUM_PROGRAMS)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
     else {
-      GET_DESIGN_PROGRAM(d->edit_obj) = number;
-      GET_DESIGN_RATING(d->edit_obj) = 1;
+      d->edit_matrix_file->program_type = number;
+      d->edit_matrix_file->rating = 1;
 
-      if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
+      if (d->edit_matrix_file->program_type == SOFT_ATTACK) {
         // Default to Deadly damage.
-        GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = DEADLY;
+        d->edit_matrix_file->wound_category = DEADLY;
       }
 
       pedit_disp_menu(d);
     }
     break;
   }
-}
-
-void create_program(struct char_data *ch)
-{
-  struct obj_data *design = read_object(OBJ_BLANK_PROGRAM_DESIGN, VIRTUAL, OBJ_LOAD_REASON_CREATE_PROGRAM);
-  STATE(ch->desc) = CON_PRO_CREATE;
-  design->restring = str_dup("a blank program");
-  ch->desc->edit_obj = design;
-  pedit_disp_menu(ch->desc);
 }
 
 struct obj_data *can_program(struct char_data *ch)
@@ -250,10 +254,24 @@ struct obj_data *can_program(struct char_data *ch)
   return NULL;
 }
 
-int get_program_skill(char_data *ch, obj_data *prog, int target)
+void create_program(struct char_data *ch)
+{
+  obj_data *deck = can_program(ch);
+  if (!deck)
+    return;
+
+  struct matrix_file *design = create_matrix_file(deck, OBJ_LOAD_REASON_CREATE_PROGRAM);
+  STATE(ch->desc) = CON_PRO_CREATE;
+  design->name = str_dup("a blank program");
+  design->file_type = MATRIX_FILE_DESIGN;
+  ch->desc->edit_matrix_file = design;
+  pedit_disp_menu(ch->desc);
+}
+
+int get_program_skill(char_data *ch, matrix_file *prog, int target)
 {
   int skill = 0;
-  switch (GET_DESIGN_PROGRAM(prog)) {
+  switch (prog->program_type) {
   case SOFT_BOD:
   case SOFT_EVASION:
   case SOFT_MASKING:
@@ -305,7 +323,7 @@ int get_program_skill(char_data *ch, obj_data *prog, int target)
     skill = get_skill(ch, SKILL_PROGRAM_OPERATIONAL, target);
     break;
   default:
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown SOFT_X %d to do_design's switch statement!", GET_DESIGN_PROGRAM(prog));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unknown SOFT_X %d to do_design's switch statement!", prog->program_type);
     skill = 0;
     break;
   }
@@ -316,9 +334,12 @@ ACMD(do_design)
 {
   ACMD_DECLARE(do_program);
 
-  struct obj_data *comp, *prog;
+  struct obj_data *comp, *proj;
   if (!*argument) {
-    if (AFF_FLAGS(ch).AreAnySet(AFF_DESIGN, AFF_PROGRAM, AFF_SPELLDESIGN, ENDBIT)) {
+    if (AFF_FLAGS(ch).AreAnySet(AFF_DESIGN, AFF_PROGRAM, ENDBIT)) {
+      send_to_char(ch, "You stop working on %s.\r\n", GET_PROGRAMMING(ch)->name);
+      STOP_WORKING(ch);
+    } else if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLDESIGN, ENDBIT)) {
       send_to_char(ch, "You stop working on %s.\r\n", GET_OBJ_NAME(GET_BUILDING(ch)));
       STOP_WORKING(ch);
     } else
@@ -335,77 +356,77 @@ ACMD(do_design)
   }
 
   skip_spaces(&argument);
-  prog = get_obj_in_list_vis(ch, argument, ch->carrying);
-  if (prog) {
-    if (GET_OBJ_TYPE(prog) == ITEM_PART) {
-      part_design(ch, prog);
+  proj = get_obj_in_list_vis(ch, argument, ch->carrying);
+  if (proj) {
+    if (GET_OBJ_TYPE(proj) == ITEM_PART) {
+      part_design(ch, proj);
       return;
-    } else if (GET_OBJ_TYPE(prog) == ITEM_SPELL_FORMULA) {
-      spell_design(ch, prog);
+    } else if (GET_OBJ_TYPE(proj) == ITEM_SPELL_FORMULA) {
+      spell_design(ch, proj);
       return;
     }
   }
   if (!(comp = can_program(ch)))
     return;
-
-  for (prog = comp->contains; prog; prog = prog->next_content) {
-    if (GET_OBJ_TYPE(prog) != ITEM_DESIGN)
-      continue;
-
-    if (isname(argument, prog->text.keywords) || isname(argument, get_string_after_color_code_removal(prog->restring, ch)))
-      break;
-  }
-
+  skip_spaces(&argument);
+  struct matrix_file *prog;
+  prog = get_matrix_file_in_list_vis(ch, argument, comp->files);
   if (!prog) {
     send_to_char(ch, "The program design isn't on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(comp)));
     return;
   }
-  if (GET_DESIGN_COMPLETED(prog) || GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog)) {
-    send_to_char(ch, "There's no more design work to be done on %s, so you decide to try programming it instead.\r\n", GET_OBJ_NAME(prog));
+
+  if (prog->file_type != MATRIX_FILE_DESIGN || (prog->file_type == MATRIX_FILE_PROGRAM && prog->work_phase == WORK_PHASE_COMPLETE)) {
+    send_to_char(ch, "Not much point in programming or designing something that's already complete.");
+    return;
+  } else if (prog->file_type == MATRIX_FILE_DESIGN && prog->work_phase == WORK_PHASE_COMPLETE) {
+    send_to_char(ch, "There's no more design work to be done on %s, so you decide to try programming it instead.\r\n", prog->name);
     do_program(ch, argument, 0, 0);
     return;
   }
-  if (GET_DESIGN_CREATOR_IDNUM(prog) && GET_DESIGN_CREATOR_IDNUM(prog) != GET_IDNUM(ch)) {
-    send_to_char(ch, "Someone else has already started on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(prog)));
-    return;
-  }
+
   int skill = 0, target = 4;
-  if (GET_DESIGN_RATING(prog) < 5)
+  if (prog->rating < 5)
     target--;
-  else if (GET_DESIGN_RATING(prog) > 9)
+  else if (prog->rating > 9)
     target++;
   skill = get_program_skill(ch, prog, target);
   if (!skill) {
     send_to_char(ch, "You have no idea how to go about creating a program design for that.\r\n");
     return;
   }
-  if (GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) == GET_DESIGN_DESIGNING_TICKS_LEFT(prog)) {
+
+  prog->work_phase = WORK_PHASE_IN_PROGRESS;
+  prog->dirty_bit = TRUE;
+  if (prog->work_original_ticks_left == prog->work_ticks_left) {
     if (get_and_deduct_one_crafting_token_from_char(ch)) {
       send_to_char("A crafting token fuzzes into digital static, greatly accelerating the design time.\r\n", ch);
-      GET_DESIGN_SUCCESSES(prog) = 10;
-      GET_DESIGN_DESIGNING_TICKS_LEFT(prog) = 1;
+      prog->work_successes = 10;
+      prog->work_ticks_left = 1;
     }
     else if (access_level(ch, LVL_ADMIN)) {
-      send_to_char(ch, "You use your admin powers to greatly accelerate the design time of %s.\r\n", prog->restring);
-      GET_DESIGN_SUCCESSES(prog) = 10;
-      GET_DESIGN_DESIGNING_TICKS_LEFT(prog) = 1;
+      send_to_char(ch, "You use your admin powers to greatly accelerate the design time of %s.\r\n", prog->name);
+      prog->work_successes = 10;
+      prog->work_ticks_left = 1;
     } else {
-      send_to_char(ch, "You begin designing %s.\r\n", prog->restring);
-      GET_DESIGN_SUCCESSES(prog) = success_test(skill, target);
+      send_to_char(ch, "You begin designing %s.\r\n", prog->name);
+      prog->work_successes = success_test(skill, target);
     }
   } else
-    send_to_char(ch, "You continue to design %s.\r\n", prog->restring);
+    send_to_char(ch, "You continue to design %s.\r\n", prog->name);
   AFF_FLAGS(ch).SetBit(AFF_DESIGN);
-  GET_BUILDING(ch) = prog;
+  GET_PROGRAMMING(ch) = prog;
 }
 
 ACMD(do_program)
 {
-  struct obj_data *comp, *prog;
+  struct obj_data *comp = NULL;
+  struct matrix_file *prog = NULL;
+
   if (!*argument) {
     if (AFF_FLAGGED(ch, AFF_PROGRAM)) {
       AFF_FLAGS(ch).RemoveBit(AFF_PROGRAM);
-      send_to_char(ch, "You stop working on %s.\r\n", ch->char_specials.programming->restring);
+      send_to_char(ch, "You stop working on %s.\r\n", ch->char_specials.programming->name);
       ch->char_specials.programming = NULL;
     } else
       send_to_char(ch, "Program What?\r\n");
@@ -422,42 +443,37 @@ ACMD(do_program)
   if (!(comp = can_program(ch)))
     return;
   skip_spaces(&argument);
-  for (prog = comp->contains; prog; prog = prog->next_content)
-    if ((isname(argument, prog->text.keywords) || isname(argument, get_string_after_color_code_removal(prog->restring, ch))) && GET_OBJ_TYPE(prog) == ITEM_DESIGN)
-      break;
+  prog = get_matrix_file_in_list_vis(ch, argument, comp->files);
   if (!prog) {
     send_to_char(ch, "The program design isn't on that computer.\r\n");
     return;
   }
-  if (GET_DESIGN_CREATOR_IDNUM(prog) && GET_DESIGN_CREATOR_IDNUM(prog) != GET_IDNUM(ch)) {
-    send_to_char(ch, "Someone else has already started on this program.\r\n");
-    return;
-  }
-  if (!GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog)) {
+  prog->dirty_bit = TRUE;
+  if (!prog->work_ticks_left) {
     if (get_and_deduct_one_crafting_token_from_char(ch)) {
       send_to_char("A crafting token fuzzes into digital static, greatly accelerating the development time.\r\n", ch);
-      GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 1;
-      GET_OBJ_TIMER(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
+      prog->work_ticks_left = 1;
+      prog->work_original_ticks_left = prog->work_ticks_left;
     }
     else if (access_level(ch, LVL_ADMIN)) {
-      send_to_char(ch, "You use your admin powers to greatly accelerate the development time for %s.\r\n", prog->restring);
-      GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 1;
-      GET_OBJ_TIMER(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
+      send_to_char(ch, "You use your admin powers to greatly accelerate the development time for %s.\r\n", prog->name);
+      prog->work_ticks_left = 1;
+      prog->work_original_ticks_left = prog->work_ticks_left;
     } else {
-      send_to_char(ch, "You begin to program %s.\r\n", prog->restring);
-      int target = GET_DESIGN_RATING(prog);
-      if (GET_DECK_ACCESSORY_COMPUTER_ACTIVE_MEMORY(comp) >= GET_DESIGN_SIZE(prog) * 2) {
+      send_to_char(ch, "You begin to program %s.\r\n", prog->name);
+      int target = prog->rating;
+      if (GET_DECK_ACCESSORY_COMPUTER_ACTIVE_MEMORY(comp) >= prog->rating * 2) {
         send_to_char(ch, "The abundance of active memory on %s makes the work easier.\r\n", decapitalize_a_an(GET_OBJ_NAME(comp)));
         target -= 2;
       }
 
-      if (!GET_DESIGN_COMPLETED(prog)) {
+      if (prog->file_type != MATRIX_FILE_DESIGN || prog->work_phase != WORK_PHASE_COMPLETE) {
         send_to_char("You haven't taken the time to design this program, so it's a little harder to conceptualize.\r\n", ch);
         target += 2;
       }
       else
-        target -= GET_DESIGN_SUCCESSES(prog);
-
+        target -= prog->work_successes;
+      
       int skill = get_skill(ch, SKILL_COMPUTER, target);
       int success = success_test(skill, target);
       for (struct obj_data *suite = comp->contains; suite; suite = suite->next_content)
@@ -466,58 +482,18 @@ ACMD(do_program)
           break;
         }
       if (success > 0) {
-        GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 60 * (GET_DESIGN_SIZE(prog) / success);
-        GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
+        prog->work_ticks_left = 60 * (prog->size / success);
+        prog->work_original_ticks_left = prog->work_ticks_left;
       } else {
-        GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = number(1, 6) + number(1, 6);
-        GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) = (GET_DESIGN_SIZE(prog) * 60) / number(1, 3);
-        GET_DESIGN_PROGRAMMING_FAILED(prog) = 1;
+        prog->work_ticks_left = number(1, 6) + number(1, 6);
+        prog->work_ticks_left = (prog->rating * 60) / number(1, 3);
+        prog->work_successes = -1;
       }
     }
   } else
-    send_to_char(ch, "You continue to work on %s.\r\n", prog->restring);
+    send_to_char(ch, "You continue to work on %s.\r\n", prog->name);
   AFF_FLAGS(ch).SetBit(AFF_PROGRAM);
-  GET_BUILDING(ch) = prog;
-}
-
-ACMD(do_copy)
-{
-  struct obj_data *comp, *prog;
-
-  FAILURE_CASE(!*argument, "What program do you want to copy?");
-
-  if (!(comp = can_program(ch)))
-    return;
-
-  skip_spaces(&argument);
-
-  for (prog = comp->contains; prog; prog = prog->next_content) {
-    if (GET_OBJ_TYPE(prog) != ITEM_PROGRAM)
-      continue;
-
-    if (isname(argument, prog->text.keywords) || isname(argument, get_string_after_color_code_removal(prog->restring, ch)))
-      break;
-  }
-
-
-  FAILURE_CASE(!prog, "The program isn't on that computer.");
-  FAILURE_CASE(GET_OBJ_TIMER(prog), "You can't copy from an optical chip.");
-  FAILURE_CASE(GET_PROGRAM_SIZE(prog) > GET_DECK_ACCESSORY_COMPUTER_MAX_MEMORY(comp) - GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(comp), "There isn't enough space on there to copy that.");
-  FAILURE_CASE(!program_can_be_copied(prog), "You can't copy this program.");
-
-  GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(comp) += GET_PROGRAM_SIZE(prog);
-
-  // Create the new program.
-  struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_COPY_PROGRAM);
-  newp->restring = str_dup(GET_OBJ_NAME(prog));
-  GET_PROGRAM_TYPE(newp) = GET_PROGRAM_TYPE(prog);
-  GET_PROGRAM_RATING(newp) = GET_PROGRAM_RATING(prog);
-  GET_PROGRAM_SIZE(newp) = GET_PROGRAM_SIZE(prog);
-  GET_PROGRAM_ATTACK_DAMAGE(newp) = GET_PROGRAM_ATTACK_DAMAGE(prog);
-
-  // Load it into the computer.
-  obj_to_obj(newp, comp);
-  send_to_char(ch, "You copy %s.\r\n", GET_OBJ_NAME(prog));
+  GET_PROGRAMMING(ch) = prog;
 }
 
 #undef CH
@@ -629,61 +605,63 @@ void update_buildrepair(void)
         CH->char_specials.timer = 0;
         STOP_WORKING(CH);
       } else if (AFF_FLAGGED(desc->character, AFF_DESIGN)) {
-        if (--GET_DESIGN_DESIGNING_TICKS_LEFT(PROG) < 1) {
-          send_to_char(desc->character, "You complete the design plan for %s.\r\n", GET_OBJ_NAME(PROG));
-          GET_DESIGN_COMPLETED(PROG) = 1;
-          PROG = NULL;
+        GET_PROGRAMMING(CH)->dirty_bit = TRUE;
+        if (--GET_PROGRAMMING(CH)->work_ticks_left < 1) {
+          send_to_char(desc->character, "You complete the design plan for %s.\r\n", GET_PROGRAMMING(CH)->name);
+          GET_PROGRAMMING(CH)->work_phase = WORK_PHASE_COMPLETE;
+          GET_PROGRAMMING(CH) = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_DESIGN);
         }
       } else if (AFF_FLAGGED(desc->character, AFF_PROGRAM)) {
-        if (--GET_DESIGN_PROGRAMMING_TICKS_LEFT(PROG) < 1) {
-          if (GET_DESIGN_PROGRAMMING_FAILED(PROG)){
+        GET_PROGRAMMING(CH)->dirty_bit = TRUE;
+        if (--GET_PROGRAMMING(CH)->work_ticks_left < 1) {
+          if (GET_PROGRAMMING(CH)->work_successes < 0) {
             switch(number(1,10)) {
               case 1:
-                send_to_char(desc->character, "It was about that time that you noticed you had typed up all of your code on the microwave keypad. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "It was about that time that you noticed you had typed up all of your code on the microwave keypad. You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 2:
-                send_to_char(desc->character, "There was a series of articles related to what you were doing, but you somehow ended up on a page about crabs. Why always crabs?!? You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "There was a series of articles related to what you were doing, but you somehow ended up on a page about crabs. Why always crabs?!? You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 3:
-                send_to_char(desc->character, "You became distracted and lost hours of your life to a Penumbrawalk mud. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You became distracted and lost hours of your life to a Penumbrawalk mud. You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 4:
-                send_to_char(desc->character, "You've finally done it! You've made an electric drum kit out of tin foil and pen parts! Programming %s failed though.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You've finally done it! You've made an electric drum kit out of tin foil and pen parts! Programming %s failed though.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 5:
-                send_to_char(desc->character, "You've been banned from the ShadowBoards. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You've been banned from the ShadowBoards. You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 6:
-                send_to_char(desc->character, "You have finished a spell formula for Stunbolt... wait, what the hell?! You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You have finished a spell formula for Stunbolt... wait, what the hell?! You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 7:
-                send_to_char(desc->character, "A distant, powerful matrix entity is disappointed in you. You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "A distant, powerful matrix entity is disappointed in you. You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 8:
-                send_to_char(desc->character, "You tried to forge %s into an incredible program that would have pierced open the walls of flowing code. You're pretty sure you misplaced a parenthesis somewhere so it all turned into gibberish about broccoli.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You tried to forge %s into an incredible program that would have pierced open the walls of flowing code. You're pretty sure you misplaced a parenthesis somewhere so it all turned into gibberish about broccoli.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               case 9:
-                send_to_char(desc->character, "You tried to program %s only to realize many hours in you were coding on one of the spare half-assembled things you had littered around your current workspace, accomplishing nothing.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You tried to program %s only to realize many hours in you were coding on one of the spare half-assembled things you had littered around your current workspace, accomplishing nothing.\r\n", GET_PROGRAMMING(CH)->name);
                 break;
               default:
-                send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_OBJ_NAME(PROG));
+                send_to_char(desc->character, "You realise programming %s is a lost cause.\r\n", GET_PROGRAMMING(CH)->name);
               }
+              // Delete the design file as it's no longer needed.
+              extract_matrix_file(GET_PROGRAMMING(CH));
             }
           else {
-            send_to_char(desc->character, "You complete programming %s.\r\n", GET_OBJ_NAME(PROG));
-            struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_COMPLETED_PROGRAMMING);
-            newp->restring = str_dup(GET_OBJ_NAME(PROG));
-            GET_PROGRAM_TYPE(newp) = GET_DESIGN_PROGRAM(PROG);
-            GET_PROGRAM_RATING(newp) = GET_DESIGN_RATING(PROG);
-            GET_PROGRAM_SIZE(newp) = GET_DESIGN_SIZE(PROG);
-            GET_PROGRAM_ATTACK_DAMAGE(newp) = GET_DESIGN_PROGRAM_WOUND_LEVEL(PROG);
-            obj_to_obj(newp, PROG->in_obj);
-            GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(PROG->in_obj) += GET_PROGRAM_SIZE(newp);
+            send_to_char(desc->character, "You complete programming %s.\r\n", GET_PROGRAMMING(CH)->name);
+            // We can just change the existing design file into a finished program, rather than dupe it.
+            GET_PROGRAMMING(CH)->work_phase = WORK_PHASE_COMPLETE;
+            adjust_device_memory(GET_PROGRAMMING(CH)->in_obj, GET_PROGRAMMING(CH)->size - GET_PROGRAMMING(CH)->original_size);
+            GET_PROGRAMMING(CH)->size = GET_PROGRAMMING(CH)->original_size;
+            GET_PROGRAMMING(CH)->original_size = 0;
+            GET_PROGRAMMING(CH)->file_type = MATRIX_FILE_SOURCE_CODE;
+            if (GET_PROGRAMMING(CH)->program_type == SOFT_SUITE)
+              GET_PROGRAMMING(CH)->file_type = MATRIX_FILE_PROGRAM; // Programming suites can just be programs
           }
-          GET_DECK_ACCESSORY_COMPUTER_USED_MEMORY(PROG->in_obj) -= GET_DESIGN_SIZE(PROG) + (GET_DESIGN_SIZE(PROG) / 10);
-          extract_obj(PROG);
-          PROG = NULL;
+          GET_PROGRAMMING(CH) = NULL;
           AFF_FLAGS(desc->character).RemoveBit(AFF_PROGRAM);
           CH->char_specials.timer = 0;
         }
@@ -923,5 +901,4 @@ void update_buildrepair(void)
       }
     }
   }
-
 }

@@ -42,6 +42,7 @@
 #include "moderation.hpp"
 #include "chipjacks.hpp"
 #include "player_exdescs.hpp"
+#include "matrix_storage.hpp"
 #include "gmcp.hpp"
 
 #ifdef GITHUB_INTEGRATION
@@ -3127,11 +3128,9 @@ ACMD(do_photo)
     for (temp = ch->cyberware; temp; temp = temp->next_content)
       if (GET_CYBERWARE_TYPE(temp) == CYB_EYES && IS_SET(GET_CYBERWARE_FLAGS(temp), EYE_CAMERA))
         camera = temp;
-      else if (GET_CYBERWARE_TYPE(temp) == CYB_MEMORY)
-        mem = temp;
+    mem = find_internal_storage(ch, 1);
     if (camera) {
-      FAILURE_CASE(!mem, "You need headware memory to take a picture with an eye camera.");
-      FAILURE_CASE(GET_CYBERWARE_MEMORY_FREE(mem) < 1, "You don't have enough headware memory to take a photo now.");
+      FAILURE_CASE(!mem, "You need headware memory with available space to take a picture with an eye camera.");
     }
   }
   
@@ -3349,6 +3348,7 @@ ACMD(do_photo)
       ch->in_room = NULL;
   }
   photo = read_object(OBJ_BLANK_PHOTO, VIRTUAL, OBJ_LOAD_REASON_PHOTO);
+  GET_DECK_ACCESSORY_TYPE(photo) = TYPE_PHOTO;
   if (!mem)
     act("$n takes a photo with $p.", TRUE, ch, camera, NULL, TO_ROOM);
   send_to_char(ch, "You take a photo.\r\n");
@@ -3357,8 +3357,7 @@ ACMD(do_photo)
     buf2[300] = '\0';
   photo->restring = str_dup(buf2);
   if (mem) {
-    obj_to_obj(photo, mem);
-    GET_OBJ_VAL(mem, 5) += 1;
+    obj_to_matrix_file(photo, mem);
   } else obj_to_char(photo, ch);
 }
 
@@ -4165,105 +4164,6 @@ struct obj_data *find_cyberdeck(struct char_data *ch)
   return NULL;
 }
 
-ACMD(do_download_headware)
-{
-  struct obj_data *deck, *jack, *memory;
-  skip_spaces(&argument);
-  FAILURE_CASE(!*argument, "Which file number do you wish to transfer out of headware memory?");
-
-  for (memory = ch->cyberware; memory; memory = memory->next_content) {
-    if (GET_CYBERWARE_TYPE(memory) == CYB_MEMORY) {
-      break;
-    }
-  }
-  FAILURE_CASE(!memory, "You have no headware memory.");
-
-  // Error message sent in function.
-  if (!(jack = get_datajack(ch, FALSE))) {
-    return;
-  }
-  FAILURE_CASE(!(deck = find_cyberdeck(ch)), "You need to have a working cyberdeck to transfer data out of headware memory.");
-
-  int x = atoi(argument);
-  FAILURE_CASE(x <= 0, "You must provide a positive file index number.")
-  struct obj_data *obj = memory->contains;
-  for (; obj; obj = obj->next_content) {
-    if (!--x)
-      break;
-  }
-
-  FAILURE_CASE(!obj, "You don't have that many files in your memory.");
-  FAILURE_CASE((GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY) || (GET_DECK_ACCESSORY_TYPE(obj) != TYPE_FILE), "You can only download photos and data.");
-
-  obj_from_obj(obj);
-  GET_CYBERWARE_MEMORY_USED(memory) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
-  obj_to_char(obj, ch);
-  send_to_char(ch, "You transfer %s through %s into your hands.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(deck));
-}
-
-ACMD(do_upload_headware)
-{
-  struct obj_data *deck, *jack, *memory, *obj;
-  skip_spaces(&argument);
-  FAILURE_CASE(!*argument, "Which file do you wish to transfer into headware memory?");
-
-  for (memory = ch->cyberware; memory; memory = memory->next_content) {
-    if (GET_CYBERWARE_TYPE(memory) == CYB_MEMORY) {
-      break;
-    }
-  }
-  FAILURE_CASE(!memory, "You have no headware memory.");
-
-  // Error message sent in function.
-  if (!(jack = get_datajack(ch, FALSE))) {
-    return;
-  }
-
-  FAILURE_CASE(!(deck = find_cyberdeck(ch)), "You need to have a working cyberdeck to transfer data into headware memory.");
-
-  obj = get_obj_in_list_vis(ch, argument, ch->carrying);
-  FAILURE_CASE(!obj, "You aren't carrying that file.");
-  FAILURE_CASE((GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY) || (GET_DECK_ACCESSORY_TYPE(obj) != TYPE_FILE), "You can only upload photos and data.");
-  FAILURE_CASE_PRINTF(GET_DECK_ACCESSORY_FILE_SIZE(obj) > GET_CYBERWARE_MEMORY_FREE(memory),
-                      "The file size (%d Mp) exceeds your free headware memory (%d Mp).",
-                      GET_DECK_ACCESSORY_FILE_SIZE(obj), GET_CYBERWARE_MEMORY_FREE(memory));
-
-  obj_from_char(obj);
-  GET_CYBERWARE_MEMORY_USED(memory) += GET_DECK_ACCESSORY_FILE_SIZE(obj);
-  obj_to_obj(obj, memory);
-  send_to_char(ch, "You transfer %s through %s into your headware memory.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(deck));
-}
-
-ACMD(do_delete)
-{
-  struct obj_data *memory = ch->cyberware;
-  for (; memory; memory = memory->next_content)
-    if (GET_CYBERWARE_TYPE(memory) == CYB_MEMORY)
-      break;
-  
-  FAILURE_CASE(!memory, "You have no headware memory.");
-  FAILURE_CASE(!memory->contains, "Your headware memory is empty.");
-
-  int x = atoi(argument);
-  FAILURE_CASE(x <= 0, "You must select a chip index of 1 or higher.");
-
-  struct obj_data *obj = memory->contains;
-  for (; obj; obj = obj->next_content)
-    if (!--x)
-      break;
-  
-  FAILURE_CASE(!obj, "You don't have that many files in your memory.");
-
-  send_to_char(ch, "You %sdelete %s from your headware memory.\r\n", GET_CHIP_LINKED(obj) ? "unlink and " : "", GET_OBJ_NAME(obj));
-  if (GET_CHIP_LINKED(obj)) {
-    deactivate_single_skillsoft(obj, ch, TRUE);
-  }
-  obj_from_obj(obj);
-  GET_CYBERWARE_MEMORY_USED(memory) -= GET_CHIP_SIZE(obj) - GET_CHIP_COMPRESSION_FACTOR(obj);
-  extract_obj(obj);
-  return;
-}
-
 ACMD(do_imagelink)
 {
   skip_spaces(&argument);
@@ -4272,13 +4172,12 @@ ACMD(do_imagelink)
     return;
   }
   struct obj_data *memory = NULL, *link = NULL;
+  memory = find_internal_storage(ch);
   for (struct obj_data *obj = ch->cyberware; obj && !(memory && link); obj = obj->next_content)
-    if (GET_OBJ_VAL(obj, 0) == CYB_MEMORY)
-      memory = obj;
-    else if (GET_OBJ_VAL(obj, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(obj, 3), EYE_IMAGELINK))
+    if (GET_OBJ_VAL(obj, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(obj, 3), EYE_IMAGELINK))
       link = obj;
   if (!memory || !link) {
-    send_to_char("You need headware memory and an image link to do this.\r\n", ch);
+    send_to_char("You need headware memory with free space and an image link to do this.\r\n", ch);
     return;
   }
   int x = atoi(argument);

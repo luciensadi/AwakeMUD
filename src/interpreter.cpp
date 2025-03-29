@@ -45,6 +45,7 @@
 #include "dblist.hpp"
 #include "player_exdescs.hpp"
 #include "pets.hpp"
+#include "matrix_storage.hpp"
 #include "gmcp.hpp"
 
 #if defined(__CYGWIN__)
@@ -158,6 +159,7 @@ ACMD_DECLARE(do_chipload);
 ACMD_DECLARE(do_cleanup);
 ACMD_DECLARE(do_cleanse);
 ACMD_DECLARE(do_closecombat);
+ACMD_DECLARE(do_cook);
 ACMD_DECLARE(do_commands);
 ACMD_DECLARE(do_compact);
 ACMD_DECLARE(do_conceal_reveal);
@@ -166,7 +168,6 @@ ACMD_DECLARE(do_conjure);
 ACMD_DECLARE(do_consider);
 ACMD_DECLARE(do_contest);
 ACMD_DECLARE(do_control);
-ACMD_DECLARE(do_copy);
 ACMD_DECLARE(do_cook);
 ACMD_DECLARE(do_costtime);
 ACMD_DECLARE(do_cpool);
@@ -183,9 +184,9 @@ ACMD_DECLARE(do_date);
 ACMD_DECLARE(do_dc);
 ACMD_DECLARE(do_deactivate);
 ACMD_DECLARE(do_decline);
+ACMD_DECLARE(do_decrypt);
 ACMD_DECLARE(do_decorate);
 ACMD_DECLARE(do_default);
-ACMD_DECLARE(do_delete);
 ACMD_DECLARE(do_describe);
 ACMD_DECLARE(do_destroy);
 ACMD_DECLARE(do_destring);
@@ -197,7 +198,7 @@ ACMD_DECLARE(do_discord);
 ACMD_DECLARE(do_dispell);
 ACMD_DECLARE(do_display);
 ACMD_DECLARE(do_domain);
-ACMD_DECLARE(do_download_headware);
+ACMD_DECLARE(do_download);
 ACMD_DECLARE(do_drag);
 ACMD_DECLARE(do_drink);
 ACMD_DECLARE(do_drive);
@@ -217,6 +218,7 @@ ACMD_DECLARE(do_exdesc);
 ACMD_DECLARE(do_exit);
 ACMD_DECLARE(do_exits);
 ACMD_DECLARE(do_factions);
+ACMD_DECLARE(do_file);
 ACMD_DECLARE(do_flee);
 ACMD_DECLARE(do_flip);
 ACMD_DECLARE(do_flyto);
@@ -410,7 +412,6 @@ ACMD_DECLARE(do_ungroup);
 ACMD_DECLARE(do_unpack);
 ACMD_DECLARE(do_unsupported_command);
 ACMD_DECLARE(do_upgrade);
-ACMD_DECLARE(do_upload_headware);
 ACMD_DECLARE(do_use);
 ACMD_DECLARE(do_usenerps);
 ACMD_DECLARE(do_users);
@@ -476,6 +477,7 @@ ACMD_DECLARE(do_incognito);
 ACMD_DECLARE(do_chase);
 ACMD_DECLARE(do_phone);
 ACMD_DECLARE(do_phonelist);
+ACMD_DECLARE(do_programs);
 ACMD_DECLARE(do_mount);
 ACMD_DECLARE(do_man);
 ACMD_DECLARE(do_target);
@@ -486,7 +488,6 @@ ACMD_DECLARE(do_hedit);
 ACMD_DECLARE(do_icedit);
 ACMD_DECLARE(do_connect);
 ACMD_DECLARE(do_hlist);
-ACMD_DECLARE(do_software);
 ACMD_DECLARE(do_design);
 ACMD_DECLARE(do_invitations);
 ACMD_DECLARE(do_debug);
@@ -598,7 +599,6 @@ struct command_info cmd_info[] =
     { "combine"    , POS_RESTING , do_put      , 0, 0, BLOCKS_IDLE_REWARD },
     { "comegetme"  , POS_DEAD    , do_dw_retrieve, 0, 0, BLOCKS_IDLE_REWARD },
     { "complete"   , POS_LYING   , do_recap    , 0, 0, BLOCKS_IDLE_REWARD },
-    { "copy"       , POS_SITTING , do_copy     , 0, 0, BLOCKS_IDLE_REWARD },
     { "copyover"   , POS_DEAD    , do_copyover , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
     { "commands"   , POS_DEAD    , do_commands , 0, SCMD_COMMANDS, ALLOWS_IDLE_REWARD },
     { "compress"   , POS_LYING   , do_compact  , 0, 0, BLOCKS_IDLE_REWARD },
@@ -627,7 +627,6 @@ struct command_info cmd_info[] =
     { "decompress" , POS_LYING   , do_compact  , 0, 1, BLOCKS_IDLE_REWARD },
     { "decorate"   , POS_DEAD    , do_decorate , 0, 0, ALLOWS_IDLE_REWARD },
     { "deduct"     , POS_DEAD    , do_deduct   , LVL_FIXER, 0, BLOCKS_IDLE_REWARD },
-    { "delete"     , POS_SLEEPING, do_delete   , 0, 0, BLOCKS_IDLE_REWARD },
     { "default"    , POS_RESTING , do_default  , 0, 0, BLOCKS_IDLE_REWARD },
     { "describe"   , POS_LYING   , do_describe , 0, 0, ALLOWS_IDLE_REWARD },
 //  { "dennis"     , POS_SITTING, do_move     , 0, SCMD_DOWN, BLOCKS_IDLE_REWARD },
@@ -643,7 +642,6 @@ struct command_info cmd_info[] =
     { "discord"    , POS_DEAD    , do_discord  , 0, 0, ALLOWS_IDLE_REWARD },
     { "docwagon"   , POS_LYING   , do_docwagon , 0, 0, BLOCKS_IDLE_REWARD },
     { "domain"     , POS_LYING   , do_domain   , 0, 0, BLOCKS_IDLE_REWARD },
-    { "download"   , POS_RESTING , do_download_headware, 0, 0, BLOCKS_IDLE_REWARD },
     { "donate"     , POS_RESTING , do_drop     , 0, SCMD_DONATE, BLOCKS_IDLE_REWARD },
     { "drag"       , POS_STANDING, do_drag     , 0, 0, BLOCKS_IDLE_REWARD },
     { "drink"      , POS_RESTING , do_drink    , 0, SCMD_DRINK, BLOCKS_IDLE_REWARD },
@@ -676,6 +674,7 @@ struct command_info cmd_info[] =
     { "forceput"   , POS_SLEEPING, do_forceput , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "forms"      , POS_LYING   , do_forms    , 0, 0, BLOCKS_IDLE_REWARD },
     { "forget"     , POS_DEAD    , do_forget   , 0, 0, BLOCKS_IDLE_REWARD },
+    { "file"       , POS_DEAD    , do_file     , 0, 0, BLOCKS_IDLE_REWARD },
     { "fill"       , POS_SITTING , do_pour     , 0, SCMD_FILL, BLOCKS_IDLE_REWARD },
     { "finger"     , POS_DEAD    , do_last     , 0, SCMD_FINGER, ALLOWS_IDLE_REWARD },
     { "fix"        , POS_SITTING , do_repair   , 0, 0, BLOCKS_IDLE_REWARD },
@@ -768,12 +767,12 @@ struct command_info cmd_info[] =
     { "man"        , POS_SITTING , do_man      , 0, 0, BLOCKS_IDLE_REWARD },
     { "manifest"   , POS_RESTING , do_manifest , 0, 0, BLOCKS_IDLE_REWARD },
     { "map"        , POS_DEAD    , do_map      , 0, 0, BLOCKS_IDLE_REWARD },
-    { "memory"     , POS_SLEEPING, do_memory   , 0, 0, ALLOWS_IDLE_REWARD },
     { "metamagic"  , POS_DEAD    , do_metamagic, 0, 0, ALLOWS_IDLE_REWARD },
     { "metrics"    , POS_DEAD    , do_metrics  , LVL_PRESIDENT, 0, ALLOWS_IDLE_REWARD },
     { "mclone"     , POS_DEAD    , do_mclone   , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "mdelete"    , POS_DEAD    , do_mdelete  , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "medit"      , POS_DEAD    , do_medit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "memory"     , POS_DEAD    , do_memory   , 0,           0, BLOCKS_IDLE_REWARD },
     { "mlist"      , POS_DEAD    , do_mlist    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "mobs"       , POS_LYING   , do_mobs     , 0, 0, BLOCKS_IDLE_REWARD },
     { "mode"       , POS_LYING   , do_mode     , 0, 0, ALLOWS_IDLE_REWARD },
@@ -932,7 +931,6 @@ struct command_info cmd_info[] =
     { "sneak"      , POS_SITTING, do_sneak    , 1, 0, BLOCKS_IDLE_REWARD },
     { "snoop"      , POS_DEAD    , do_snoop    , LVL_CONSPIRATOR, 0, BLOCKS_IDLE_REWARD },
     { "socials"    , POS_DEAD    , do_commands , 0, SCMD_SOCIALS, ALLOWS_IDLE_REWARD },
-    { "software"   , POS_LYING   , do_software , 0, 0, ALLOWS_IDLE_REWARD },
     { "spool"      , POS_DEAD    , do_spool    , 0, 0, ALLOWS_IDLE_REWARD },
     { "speed"      , POS_RESTING , do_speed    , 0, 0, BLOCKS_IDLE_REWARD },
     { "spells"     , POS_SLEEPING, do_spells   , 0, 0, ALLOWS_IDLE_REWARD },
@@ -998,7 +996,6 @@ struct command_info cmd_info[] =
     { "unlearn"    , POS_DEAD    , do_forget   , 0, 0, BLOCKS_IDLE_REWARD },
     { "unfollow"   , POS_LYING   , do_unfollow , 0, 0, BLOCKS_IDLE_REWARD },
     { "upgrade"    , POS_SITTING , do_upgrade  , 0 , 0, BLOCKS_IDLE_REWARD },
-    { "upload"     , POS_RESTING , do_upload_headware, 0, 0, BLOCKS_IDLE_REWARD },
     { "uptime"     , POS_DEAD    , do_date     , 0, SCMD_UPTIME, ALLOWS_IDLE_REWARD },
     { "use"        , POS_LYING   , do_use      , 1, SCMD_USE, BLOCKS_IDLE_REWARD },
     { "usenerps"   , POS_LYING   , do_usenerps , 1, 0, BLOCKS_IDLE_REWARD },
@@ -1278,8 +1275,6 @@ ACMD_DECLARE(do_asist);
 ACMD_DECLARE(do_comcall);
 ACMD_DECLARE(do_control);
 ACMD_DECLARE(do_crash);
-ACMD_DECLARE(do_decrypt);
-ACMD_DECLARE(do_download);
 ACMD_DECLARE(do_evade);
 ACMD_DECLARE(do_load);
 ACMD_DECLARE(do_locate);
@@ -1367,12 +1362,13 @@ struct command_info mtx_info[] =
     { "decrypt", 0, do_decrypt, 0, 0, BLOCKS_IDLE_REWARD },
     { "disarm", 0, do_decrypt, 0, 1, BLOCKS_IDLE_REWARD },
     { "disconnect", 0, do_logoff, 0, 1, BLOCKS_IDLE_REWARD },
-    { "download", 0, do_download, 0, 0, BLOCKS_IDLE_REWARD },
+    { "download", 0, do_download, 0, 1, BLOCKS_IDLE_REWARD },
     { "evade", 0, do_evade, 0, 0, BLOCKS_IDLE_REWARD },
     { "echo", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { "emote", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { ":", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { "exit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
+    { "file", 0, do_file, 0, 0, BLOCKS_IDLE_REWARD },
     { "hangup", 0, do_comcall, 0, SCMD_HANGUP, BLOCKS_IDLE_REWARD },
     { "help", 0, do_help, 0, 0, BLOCKS_IDLE_REWARD },
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, BLOCKS_IDLE_REWARD },
@@ -1387,11 +1383,13 @@ struct command_info mtx_info[] =
     { "logout", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
     { "logon", 0, do_logon, 0, 0, BLOCKS_IDLE_REWARD },
     { "max", 0, do_matrix_max, 0, 0, BLOCKS_IDLE_REWARD },
+    { "memory", 0, do_memory, 0, 0, BLOCKS_IDLE_REWARD },
     { "ooc", 0, do_gen_comm, 0, SCMD_OOC, BLOCKS_IDLE_REWARD },
     { "parry", 0, do_parry, 0, 0, BLOCKS_IDLE_REWARD },
     { "phone", 0, do_comcall, 0, 0, BLOCKS_IDLE_REWARD },
     { "position", 0, do_matrix_position, 0, 0, BLOCKS_IDLE_REWARD },
     { "praise", 0, do_gen_write, 0, SCMD_PRAISE, BLOCKS_IDLE_REWARD },
+    { "programs", 0, do_programs, 0, 0 , BLOCKS_IDLE_REWARD },
     { "prompt", 0, do_display, 0, 0 , BLOCKS_IDLE_REWARD },
     { "quit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
     { "radio", 0, do_radio, 0, 0, ALLOWS_IDLE_REWARD },
@@ -1420,11 +1418,9 @@ struct command_info mtx_info[] =
     { "upload", 0, do_load, 0, SCMD_UPLOAD, BLOCKS_IDLE_REWARD },
     { "question", 0, do_gen_comm, 0, SCMD_QUESTION, BLOCKS_IDLE_REWARD },
     { "recap", 0, do_recap, 0, 0 , BLOCKS_IDLE_REWARD },
-    { "software", 0, do_software, 0, 0, BLOCKS_IDLE_REWARD },
     { "who", 0, do_who, 0, 0, BLOCKS_IDLE_REWARD },
     { "write", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },
     { "wtell", 0, do_wiztell, LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
-    { "memory", 0, do_memory   , 0, 0, ALLOWS_IDLE_REWARD },
 
     // Channel history commands.
     { "history"    , 0, do_message_history, 0, 0, ALLOWS_IDLE_REWARD },
@@ -2383,7 +2379,6 @@ char *two_arguments(char *argument, char *first_arg, char *second_arg)
   return one_argument(one_argument(argument, first_arg), second_arg);   /* :-) */
 }
 
-
 /*
  * determine if a given string is an abbreviation of another
  * (now works symmetrically -- JE 7/25/94)
@@ -2461,7 +2456,7 @@ int special(struct char_data * ch, int cmd, char *arg)
   struct obj_data *i;
   if (ch->persona)
   {
-    for (i = matrix[ch->persona->in_host].file; i; i = i->next_content)
+    for (i = matrix[ch->persona->in_host].contents; i; i = i->next_content)
       if (GET_OBJ_SPEC(i) != NULL)
         if (GET_OBJ_SPEC(i) (ch, i, cmd, arg))
           return 1;

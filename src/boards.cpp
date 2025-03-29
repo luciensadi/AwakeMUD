@@ -95,7 +95,7 @@ static int find_board(struct char_data * ch, struct obj_data **terminal)
   bool wrote_something = FALSE;
 
   if (ch->persona) {
-    obj = matrix[ch->persona->in_host].file;
+    obj = matrix[ch->persona->in_host].contents;
   } else {
     obj = ch->in_room->contents;
   }

@@ -15,6 +15,7 @@
 #include "newmagic.hpp"
 #include "newmatrix.hpp"
 #include "bullet_pants.hpp"
+#include "matrix_storage.hpp"
 
 #define CH d->character
 #define PART d->edit_obj
@@ -499,7 +500,9 @@ void create_deck(struct char_data *ch) {
 }
 
 ACMD(do_cook) {
-    struct obj_data *chip = NULL, *cooker;
+    struct matrix_file *design = NULL;
+    struct obj_data *cooker = NULL;
+
     skip_spaces(&argument);
     if (!*argument) {
         send_to_char(ch, "What chip do you wish to burn?\r\n");
@@ -516,18 +519,14 @@ ACMD(do_cook) {
     }
     struct obj_data *comp;
     FOR_ITEMS_AROUND_CH(ch, comp) {
-      if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == TYPE_COMPUTER && comp->contains)
-        if ((chip = get_obj_in_list_vis(ch, argument, comp->contains)))
+      if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == TYPE_COMPUTER && comp->files)
+        if ((design = get_matrix_file_in_list_vis(ch, argument, comp->files)))
           break;
     }
-    if (!chip)
+    if (!design)
         send_to_char(ch, "You don't see %s installed on any computers here.\r\n", argument);
-    else if (GET_OBJ_TYPE(chip) != ITEM_PROGRAM)
-        send_to_char(ch, "You must finish programming %s first.\r\n", GET_OBJ_NAME(chip));
-    else if (GET_OBJ_TIMER(chip))
-        send_to_char("This chip has already been encoded.\r\n", ch);
-    else if (GET_OBJ_VAL(chip, 0) == SOFT_SUITE)
-      send_to_char("Programming suites don't need to be cooked-- just leave them installed on the computer to get their benefits.\r\n", ch);
+    else if (design->file_type != MATRIX_FILE_SOURCE_CODE)
+        send_to_char(ch, "You cannot cook %s. It's only possible to cook (compile) programs that are source code.", design->name);
     else {
       FOR_ITEMS_AROUND_CH(ch, cooker) {
           if (GET_OBJ_TYPE(cooker) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cooker, 0) == TYPE_COOKER && !cooker->contains)
@@ -537,7 +536,7 @@ ACMD(do_cook) {
           send_to_char(ch, "There isn't a free chip encoder here.\r\n");
           return;
       }
-      int cost = GET_OBJ_VAL(chip, 2) / 2, paid = 0;
+      int cost = design->size / 2, paid = 0;
       struct obj_data *obj;
       FOR_ITEMS_AROUND_CH(ch, obj) {
           if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
@@ -558,25 +557,42 @@ ACMD(do_cook) {
                   break;
               }
       if (!paid) {
-          send_to_char(ch, "You need at least %d nuyen worth of optical chips to encode %s.\r\n", cost, GET_OBJ_NAME(chip));
+          send_to_char(ch, "You need at least %d nuyen worth of optical chips to encode %s.\r\n", cost, design->name);
           return;
       }
 
+      struct matrix_file *prog = clone_matrix_file(design);
+      prog->load_origin = OBJ_LOAD_REASON_COOK_PROGRAM;
+
+      switch (prog->program_type) {
+        case SOFT_BOD:
+        case SOFT_SENSOR:
+        case SOFT_MASKING:
+        case SOFT_EVASION:
+        case SOFT_ASIST_COLD:
+        case SOFT_ASIST_HOT:
+        case SOFT_HARDENING:
+        case SOFT_ICCM:
+        case SOFT_ICON:
+        case SOFT_MPCP:
+        case SOFT_REALITY:
+        case SOFT_RESPONSE:
+          prog->file_type = MATRIX_FILE_FIRMWARE;
+          break;
+        default:
+          prog->file_type = MATRIX_FILE_PROGRAM;
+          break;
+      }
+
+      struct obj_data *chip = matrix_file_to_obj(prog);
+      chip->load_origin = OBJ_LOAD_REASON_COOK_PROGRAM;
+
       /* Instead of removing the software from the machine, we copy it instead if it's a cookable copyable thing. */
-      if (program_can_be_copied(chip)) {
-        struct obj_data *newp = read_object(OBJ_BLANK_PROGRAM, VIRTUAL, OBJ_LOAD_REASON_COOK_PROGRAM);
-        newp->restring = str_dup(GET_OBJ_NAME(chip));
-        GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(chip, 0);
-        GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(chip, 1);
-        GET_OBJ_VAL(newp, 2) = GET_OBJ_VAL(chip, 2);
-        GET_OBJ_VAL(newp, 3) = GET_OBJ_VAL(chip, 3);
-        chip = newp;
+      if (program_can_be_copied(design)) {
         send_to_char("You save a copy to disk before sending it to your cooker.\r\n", ch);
       } else {
-        // Can't be copied? OK, use the old behavior of removing the item.
-        GET_OBJ_VAL(chip->in_obj, 3) -= GET_OBJ_VAL(chip, 2);
-        obj_from_obj(chip);
-        send_to_char(ch, "%s is too bespoke to be useful for a different deck, so you send it to your cooker without copying it first.\r\n", capitalize(GET_OBJ_NAME(chip)));
+        send_to_char(ch, "%s is too bespoke to be useful for a different deck, so you send it to your cooker without copying it first.\r\n", capitalize(design->name));
+        delete_matrix_file(design);
       }
 
       obj_to_obj(chip, cooker);
@@ -615,7 +631,7 @@ void part_design(struct char_data *ch, struct obj_data *part) {
         else {
             send_to_char(ch, "You continue to design %s.\r\n", GET_OBJ_NAME(part));
             AFF_FLAGS(ch).SetBit(AFF_PART_DESIGN);
-            ch->char_specials.programming = part;
+            GET_BUILDING(ch) = part;
         }
     } else {
         int target = GET_PART_TARGET_MPCP(part)/2, skill = get_skill(ch, SKILL_CYBERTERM_DESIGN, target);
@@ -642,7 +658,7 @@ void part_design(struct char_data *ch, struct obj_data *part) {
         }
         send_to_char(ch, "You begin to design %s.\r\n", GET_OBJ_NAME(part));
         AFF_FLAGS(ch).SetBit(AFF_PART_DESIGN);
-        ch->char_specials.programming = part;
+        GET_BUILDING(ch) = part;
     }
 }
 
@@ -805,7 +821,7 @@ ACMD(do_build) {
   if (GET_PART_BUILD_TICKS_REMAINING(obj) > 0) {
     send_to_char(ch, "You continue work on building %s.\r\n", GET_OBJ_NAME(obj));
     set_cyberdeck_part_pointer(obj, deck);
-    ch->char_specials.programming = obj;
+    GET_BUILDING(ch) = obj;
     AFF_FLAGS(ch).SetBit(AFF_PART_BUILD);
     return;
   }
@@ -847,12 +863,11 @@ ACMD(do_build) {
     // Find requisite software.
     if (parts[GET_PART_TYPE(obj)].software) {
       for (soft = ch->carrying; soft; soft = soft->next_content) {
-        if (GET_PROGRAM_TYPE(soft) == parts[GET_PART_TYPE(obj)].software
-            && GET_OBJ_TIMER(soft) == 1
-            && GET_PROGRAM_RATING(soft) == required_rating)
-        {
-          break;
-        }
+        if (GET_OBJ_TYPE(soft) != ITEM_DECK_ACCESSORY) continue;
+        if (GET_DECK_ACCESSORY_TYPE(soft) != TYPE_FIRMWARE) continue;
+        if (GET_DECK_ACCESSORY_FILE_TYPE(soft) != parts[GET_PART_TYPE(obj)].software) continue;
+        if (GET_DECK_ACCESSORY_FILE_RATING(soft) != required_rating) continue;
+        break;
       }
 
       if (!soft) {
@@ -1049,7 +1064,7 @@ ACMD(do_build) {
     GET_PART_BUILD_SUCCESSES_ROLLED(obj) = 1;
   }
   send_to_char(ch, "You start building %s.\r\n", GET_OBJ_NAME(obj));
-  ch->char_specials.programming = obj;
+  GET_BUILDING(ch) = obj;
   set_cyberdeck_part_pointer(obj, deck);
   AFF_FLAGS(ch).SetBit(AFF_PART_BUILD);
   if (!GET_CYBERDECK_MPCP(deck))
@@ -1105,10 +1120,10 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_PROGRAM)) {
-    amount_left   = GET_OBJ_VAL(GET_BUILDING(ch), 5);
-    amount_needed = GET_OBJ_TIMER(GET_BUILDING(ch));
+    amount_left   = GET_PROGRAMMING(ch)->work_ticks_left;
+    amount_needed = GET_PROGRAMMING(ch)->work_original_ticks_left;
     send_to_char(ch, "You are about %2.2f%% of the way through programming %s.\r\n",
-           (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
+           (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_PROGRAMMING(ch)->name);
     return;
   }
 
@@ -1129,10 +1144,10 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_DESIGN)) {
-    amount_left = GET_DESIGN_DESIGNING_TICKS_LEFT(GET_BUILDING(ch));
-    amount_needed = GET_OBJ_TIMER(GET_BUILDING(ch));
+    amount_left = GET_PROGRAMMING(ch)->work_ticks_left;
+    amount_needed = GET_PROGRAMMING(ch)->work_original_ticks_left;
     send_to_char(ch, "You are about %2.2f%% of the way through designing %s.\r\n",
-           (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
+           (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_PROGRAMMING(ch)->name);
     return;
   }
 
@@ -1154,10 +1169,10 @@ ACMD(do_progress)
   }
 
   if (AFF_FLAGS(ch).IsSet(AFF_SPELLDESIGN)) {
-    int timeleft = GET_SPELLFORMULA_TIME_LEFT(ch->char_specials.programming);
-    if (GET_OBJ_TIMER(ch->char_specials.programming) == SPELL_DESIGN_FAILED_CODE)
+    int timeleft = GET_SPELLFORMULA_TIME_LEFT(ch->char_specials.building);
+    if (GET_OBJ_TIMER(GET_BUILDING(ch)) == SPELL_DESIGN_FAILED_CODE)
       timeleft *= 2;
-    send_to_char(ch, "You are about %d%% done designing %s.\r\n", (int)(((float)timeleft / (float)GET_SPELLFORMULA_INITIAL_TIME(ch->char_specials.programming)) *-100 + 100), GET_OBJ_NAME(ch->char_specials.programming));
+    send_to_char(ch, "You are about %d%% done designing %s.\r\n", (int)(((float)timeleft / (float)GET_SPELLFORMULA_INITIAL_TIME(GET_BUILDING(ch))) *-100 + 100), GET_OBJ_NAME(GET_BUILDING(ch)));
     return;
   }
 

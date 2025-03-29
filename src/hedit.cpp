@@ -14,6 +14,7 @@
 #include "newmatrix.hpp"
 #include "memory.hpp"
 #include "handler.hpp"
+#include "matrix_storage.hpp"
 
 #define HOST d->edit_host
 #define NUM_OF_HOST_TYPES 6
@@ -247,7 +248,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
         if (host_num > 0) {
           d->edit_host->icons = matrix[host_num].icons;
           d->edit_host->alert = matrix[host_num].alert;
-          d->edit_host->file = matrix[host_num].file;
+          d->edit_host->files = matrix[host_num].files;
           free_host(matrix + host_num);
           matrix[host_num] = *d->edit_host;
         } else {
@@ -268,7 +269,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
                 }
 
                 // Update object backlinks (they work on direct pointers)
-                for (struct obj_data *soft = matrix[counter2].file; soft; soft = soft->next_content) {
+                for (struct matrix_file *soft = matrix[counter2].files; soft; soft = soft->next_file) {
                   soft->in_host = &(matrix[counter2]);
                 }
               }

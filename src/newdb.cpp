@@ -11,6 +11,7 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
+#include <unordered_set>
 #include <mysql/mysql.h>
 
 #include "structs.hpp"
@@ -33,6 +34,7 @@
 #include "vehicles.hpp"
 #include "newmail.hpp"
 #include "player_exdescs.hpp"
+#include "matrix_storage.hpp"
 #include "gmcp.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
@@ -268,6 +270,19 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool incl
   return dest;
 }
 
+// Recursive function to build a unique set of obj_data pointers
+void build_unique_obj_set(obj_data* obj, std::unordered_set<obj_data*>& unique_objs) {
+    if (!obj || unique_objs.count(obj)) return; // Base case: null or already visited
+
+    unique_objs.insert(obj); // Add to the set
+
+    // Traverse next_content (linked list)
+    build_unique_obj_set(obj->next_content, unique_objs);
+
+    // Traverse contains (nested objects)
+    build_unique_obj_set(obj->contains, unique_objs);
+}
+
 /* Some initializations for characters, including initial skills */
 void do_start(struct char_data * ch, bool wipe_skills)
 {
@@ -349,6 +364,95 @@ void advance_level(struct char_data * ch)
   mudlog(buf, ch, LOG_MISCLOG, TRUE);
 }
 
+bool load_obj_programs(obj_data *obj)
+{
+  // SQL always takes precedence over OBJs, so clear existing progs
+  while(obj->files)
+    extract_matrix_file(obj->files);
+
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
+  struct matrix_file *file;
+
+  #define SQL_MATRIX_FILE_IDNUM               row[0]
+  #define SQL_MATRIX_FILE_NAME                row[1]
+  #define SQL_MATRIX_FILE_FILE_TYPE           row[2]
+  #define SQL_MATRIX_FILE_PROGRAM_TYPE        row[3]
+  #define SQL_MATRIX_FILE_RATING              row[4]
+  #define SQL_MATRIX_FILE_SIZE                row[5]
+  #define SQL_MATRIX_FILE_ORIGINAL_SIZE       row[6]
+  #define SQL_MATRIX_FILE_COMPRESSION_FACTOR  row[7]
+  #define SQL_MATRIX_FILE_WOUND_CATEGORY      row[8]
+  #define SQL_MATRIX_FILE_IS_DEFAULT          row[9]
+  #define SQL_MATRIX_FILE_CREATION_TIME       row[10]
+  #define SQL_MATRIX_FILE_CONTENT             row[11]
+  #define SQL_MATRIX_FILE_SKILL               row[12]
+  #define SQL_MATRIX_FILE_LINKED              row[13]
+  #define SQL_MATRIX_FILE_WORK_PHASE          row[14]
+  #define SQL_MATRIX_FILE_TICKS_LEFT          row[15]
+  #define SQL_MATRIX_FILE_ORIGINAL_TICKS_LEFT row[16]
+  #define SQL_MATRIX_FILE_WORK_SUCCESSES      row[17]
+  #define SQL_MATRIX_FILE_LAST_DECAY_TIME     row[18]
+  #define SQL_MATRIX_FILE_CREATOR_IDNUM       row[19]
+  #define SQL_MATRIX_FILE_FROM_HOST_VNUM      row[20]
+  #define SQL_MATRIX_FILE_FROM_HOST_COLOR     row[21]
+
+  snprintf(buf, sizeof(buf), 
+    "SELECT idnum, name, file_type, program_type, rating, size, original_size, "
+    "compression_factor, wound_category, is_default, creation_time, content, skill, "
+    "linked, work_phase, work_ticks_left, work_original_ticks_left, work_successes, "
+    "last_decay_time, creator_idnum, from_host_vnum, from_host_color "
+    "FROM matrix_files WHERE in_obj_vnum=%ld AND in_obj_idnum=%ld;", GET_OBJ_VNUM(obj), GET_OBJ_IDNUM(obj));
+  log_vfprintf(buf, buf3);
+  mysql_wrapper(mysql, buf);
+   if (!(res = mysql_use_result(mysql))) {
+    mysql_free_result(res);
+    return FALSE;
+  }
+
+  while ((row = mysql_fetch_row(res))) {
+    file = new matrix_file();  // Dynamically allocate memory for the new struct
+
+    file->idnum = atol(SQL_MATRIX_FILE_IDNUM);
+    file->name = strdup(SQL_MATRIX_FILE_NAME); 
+    file->file_type = atoi(SQL_MATRIX_FILE_FILE_TYPE);
+    file->program_type = atoi(SQL_MATRIX_FILE_PROGRAM_TYPE);
+    file->rating = atoi(SQL_MATRIX_FILE_RATING);
+    file->size = atoi(SQL_MATRIX_FILE_SIZE);
+    file->original_size = atoi(SQL_MATRIX_FILE_ORIGINAL_SIZE);
+    file->compression_factor = atoi(SQL_MATRIX_FILE_COMPRESSION_FACTOR);
+    file->wound_category = atoi(SQL_MATRIX_FILE_WOUND_CATEGORY);
+    file->is_default = atoi(SQL_MATRIX_FILE_IS_DEFAULT);
+    file->creation_time = atol(SQL_MATRIX_FILE_CREATION_TIME);
+    file->content = strdup(SQL_MATRIX_FILE_CONTENT);
+
+    file->skill = atoi(SQL_MATRIX_FILE_SKILL);
+    file->linked = atol(SQL_MATRIX_FILE_LINKED);
+    
+    file->work_phase = atoi(SQL_MATRIX_FILE_WORK_PHASE);
+    file->work_ticks_left = atoi(SQL_MATRIX_FILE_TICKS_LEFT);
+    file->work_original_ticks_left = atoi(SQL_MATRIX_FILE_ORIGINAL_TICKS_LEFT);
+    file->work_successes = atoi(SQL_MATRIX_FILE_WORK_SUCCESSES);
+    
+    file->last_decay_time = atol(SQL_MATRIX_FILE_LAST_DECAY_TIME);
+    file->creator_idnum = atol(SQL_MATRIX_FILE_CREATOR_IDNUM);
+
+    file->from_host_vnum = atol(SQL_MATRIX_FILE_FROM_HOST_VNUM);
+    file->from_host_color = atoi(SQL_MATRIX_FILE_FROM_HOST_COLOR);
+    file->loaded_with_obj_idnum = GET_OBJ_IDNUM(obj);
+
+    file->in_obj = obj;
+    file->next_file = obj->files;
+    obj->files = file;
+  }
+
+   // **FREE THE RESULT SET BEFORE RETURNING**
+  mysql_free_result(res);
+
+  return TRUE;
+}
+
 bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
 {
   init_char(ch);
@@ -364,6 +468,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   GET_LAST_TELL(ch) = NOBODY;
   MYSQL_RES *res;
   MYSQL_ROW row;
+  std::vector<obj_data *> loaded = {};
 
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles WHERE Name='%s';", prepare_quotes(buf3, name, sizeof(buf3) / sizeof(buf3[0])));
   mysql_wrapper(mysql, buf);
@@ -742,6 +847,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(PFILES_CYBERWARE_VNUM);
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
+        loaded.push_back(obj);
         GET_OBJ_COST(obj) = atoi(PFILES_CYBERWARE_COST);
         if (*PFILES_CYBERWARE_RESTRING)
           obj->restring = str_dup(PFILES_CYBERWARE_RESTRING);
@@ -860,6 +966,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     #define PFILES_WORN_POSI row[11 + NUM_OBJ_VALUES]
     #define PFILES_WORN_GRAFFITI row[12 + NUM_OBJ_VALUES]
     #define PFILES_WORN_OBJ_IDNUM row[13 + NUM_OBJ_VALUES]
+    #define PFILES_WORN_MATRIX_RESTRING row[14 + NUM_OBJ_VALUES]
 
     struct obj_data *obj = NULL;
     long vnum;
@@ -873,6 +980,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(PFILES_WORN_VNUM);
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
+        loaded.push_back(obj);
         GET_OBJ_COST(obj) = atoi(PFILES_WORN_COST);
         if (*PFILES_WORN_RESTRING)
           obj->restring = str_dup(PFILES_WORN_RESTRING);
@@ -908,6 +1016,8 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
           obj->graffiti = str_dup(PFILES_WORN_GRAFFITI);
 
         GET_OBJ_IDNUM(obj) = strtoul(PFILES_WORN_OBJ_IDNUM, NULL, 0);
+        if (*PFILES_WORN_MATRIX_RESTRING)
+          obj->matrix_restring = str_dup(PFILES_WORN_MATRIX_RESTRING);
 
         auto_repair_obj(obj, GET_IDNUM(ch));
 
@@ -974,6 +1084,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     #define PFILES_INV_POSI row[10 + NUM_OBJ_VALUES]
     #define PFILES_INV_GRAFFITI row[11 + NUM_OBJ_VALUES]
     #define PFILES_INV_OBJ_IDNUM row[12 + NUM_OBJ_VALUES]
+    #define PFILES_INV_MATRIX_RESTRING row[13 + NUM_OBJ_VALUES]
 
     struct obj_data *obj = NULL;
     vnum_t vnum = 0;
@@ -987,6 +1098,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     while ((row = mysql_fetch_row(res))) {
       vnum = atol(PFILES_INV_VNUM);
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
+        loaded.push_back(obj);
         GET_OBJ_COST(obj) = atoi(PFILES_INV_COST);
         if (*PFILES_INV_RESTRING)
           obj->restring = str_dup(PFILES_INV_RESTRING);
@@ -1043,6 +1155,8 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
           obj->graffiti = str_dup(PFILES_INV_GRAFFITI);
 
         GET_OBJ_IDNUM(obj) = strtoul(PFILES_INV_OBJ_IDNUM, NULL, 0);
+        if (*PFILES_INV_MATRIX_RESTRING)
+          obj->matrix_restring = str_dup(PFILES_INV_MATRIX_RESTRING);
 
         auto_repair_obj(obj, GET_IDNUM(ch));
 
@@ -1141,6 +1255,55 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
 
   // Load their exdescs.
   load_exdescs_from_db(ch);
+
+  struct matrix_file *file = NULL;
+  for (obj_data *obj : loaded) {
+    /* MIGRATION STEP: For When we have a program if it's contained in a device it needs to be converted into a memory struct */
+    if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM || GET_OBJ_TYPE(obj) == ITEM_DESIGN) {
+      // Check if it's in a device
+      if (obj->in_obj && (
+        GET_OBJ_TYPE(obj->in_obj) == ITEM_CYBERDECK 
+        || GET_OBJ_TYPE(obj->in_obj) == ITEM_CUSTOM_DECK
+        || (GET_OBJ_TYPE(obj->in_obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj->in_obj) == TYPE_COMPUTER)
+      )) {
+        // Do the conversion, this will also move the file onto the device.
+        obj_to_matrix_file(obj);
+        // Delete the obj, no longer needed
+        extract_obj(obj);
+        obj = NULL;
+        continue;
+      }
+    }
+
+    if (GET_OBJ_VNUM(obj) == OBJ_POCKET_SECRETARY_FOLDER && obj->in_obj && obj->in_obj->restring) {
+      // If we've gotten this far, it's a phone number or note in a notebook
+      // convert it to a matrix file
+      if (!strncmp(obj->in_obj->restring, "Notes", strlen(obj->in_obj->restring))) {
+        file = create_matrix_file(obj->in_obj, OBJ_LOAD_REASON_POCSEC_NOTEADD);
+        file->file_type = MATRIX_FILE_POCSEC_NOTE;
+        file->name = str_dup(obj->restring);
+        file->content = str_dup(obj->photo);
+        file->dirty_bit = TRUE;
+        extract_obj(obj);
+      } else if (!strncmp(obj->in_obj->restring, "Phoneboook", strlen(obj->in_obj->restring))) {
+        file = create_matrix_file(obj->in_obj, OBJ_LOAD_REASON_POCSEC_PHONEADD);
+        file->file_type = MATRIX_FILE_POCSEC_PHONENUM;
+        file->name = str_dup(obj->restring);
+        file->content = str_dup(obj->photo);
+        file->dirty_bit = TRUE;
+        extract_obj(obj);
+      } else if (!strncmp(obj->in_obj->restring, "Mail", strlen(obj->in_obj->restring))) {
+        file = create_matrix_file(obj->in_obj, OBJ_LOAD_REASON_MAIL_RECEIVE);
+        file->file_type = MATRIX_FILE_POCSEC_MAIL;
+        file->name = str_dup(obj->restring);
+        file->content = str_dup(obj->photo);
+        file->dirty_bit = TRUE;
+        extract_obj(obj);
+      }
+    }
+
+    if (obj) load_obj_programs(obj);
+  }
 
   STOP_WORKING(ch);
   AFF_FLAGS(ch).RemoveBits(AFF_MANNING, AFF_RIG, AFF_PILOT, AFF_BANISH, AFF_FEAR, AFF_STABILIZE, AFF_SPELLINVIS, AFF_SPELLIMPINVIS, AFF_DETOX, AFF_RESISTPAIN, AFF_TRACKING, AFF_TRACKED, AFF_PRONE, ENDBIT);
@@ -1443,6 +1606,95 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                prepare_quotes(buf3, get_lifestyle_string(player), sizeof(buf3) / sizeof(char)),
                GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
+
+  /* Matrix files are persisted in a separate table. Save that data. */
+  #define MATRIX_FILE_SQL_COLUMNS 24 /* THIS HAS TO BE EQUAL TO THE COLUMSN INSERTED */
+  std::unordered_set<obj_data*> player_inventory = {};
+  build_unique_obj_set(player->carrying, player_inventory);
+
+  for (obj_data* obj : player_inventory) {
+    int file_count = 0;
+    snprintf(buf, sizeof(buf),
+      "INSERT INTO matrix_files ( "
+      " idnum, in_obj_vnum, in_obj_idnum, name, file_type, program_type, rating, size,  "
+      " original_size, compression_factor, wound_category, is_default, last_decay_time, "
+      " creation_time, content, creator_idnum, skill, linked, from_host_vnum,           "
+      " from_host_color, work_ticks_left, work_original_ticks_left, work_phase,         "
+      " work_successes "
+      ")"
+      " VALUES "
+      );
+
+    if (!obj->files) continue;
+    for (struct matrix_file *file = obj->files; file; file = file->next_file) {
+      if ((file->loaded_with_obj_idnum == GET_OBJ_IDNUM(file->in_obj)) && !file->dirty_bit) continue;
+
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+        "(%ld, %ld, %ld, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %ld, %ld, '%s', %ld, %d, %ld, %ld, %d, %d, %d, %d, %d),",
+        file->idnum, 
+        GET_OBJ_VNUM(obj),
+        GET_OBJ_IDNUM(obj),
+        prepare_quotes(buf1, file->name, sizeof(buf1) / sizeof(char)),
+        file->file_type,
+        file->program_type,
+        file->rating,
+        file->size,
+        file->original_size,
+        file->compression_factor,
+        file->wound_category,
+        file->is_default,
+        file->last_decay_time,
+        file->creation_time,
+        prepare_quotes(buf2, file->content, sizeof(buf2) / sizeof(char)),
+        file->creator_idnum,
+        file->skill,
+        file->linked,
+        file->from_host_vnum,
+        file->from_host_color,
+        file->work_ticks_left,
+        file->work_original_ticks_left,
+        file->work_phase,
+        file->work_successes);
+      file_count++;
+      file->dirty_bit = FALSE;
+      file->loaded_with_obj_idnum = GET_OBJ_IDNUM(file->in_obj);
+    }
+
+    if (file_count <= 0) continue; // Nothing to do
+    // First we're going to eliminate the last comma since we did a multi-insert
+    buf[strlen(buf) - 1] = ' ';
+    // Then we append the update statement
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+      "ON DUPLICATE KEY UPDATE"
+      "  idnum = VALUES(idnum), "
+      "  in_obj_vnum = VALUES(in_obj_vnum), "
+      "  in_obj_idnum = VALUES(in_obj_idnum), "
+      "  name = VALUES(name), "
+      "  file_type = VALUES(file_type), "
+      "  program_type = VALUES(program_type), "
+      "  rating = VALUES(rating), "
+      "  size = VALUES(size), "
+      "  original_size = VALUES(original_size), "
+      "  compression_factor = VALUES(compression_factor), "
+      "  wound_category = VALUES(wound_category), "
+      "  is_default = VALUES(is_default), "
+      "  last_decay_time = VALUES(last_decay_time), "
+      "  creation_time = VALUES(creation_time), "
+      "  content = VALUES(content), "
+      "  creator_idnum = VALUES(creator_idnum), "
+      "  skill = VALUES(skill), "
+      "  linked = VALUES(linked), "
+      "  from_host_vnum = VALUES(from_host_vnum), "
+      "  from_host_color = VALUES(from_host_color), "
+      "  work_ticks_left = VALUES(work_ticks_left), "
+      "  work_original_ticks_left = VALUES(work_original_ticks_left), "
+      "  work_phase = VALUES(work_phase), "
+      "  work_successes = VALUES(work_successes); "
+    );
+
+    mudlog_vfprintf(NULL, LOG_SYSLOG, buf);
+    mysql_wrapper(mysql, buf);
+  }
 
   if (is_temp_load)
     PLR_FLAGS(player).SetBit(PLR_IS_TEMPORARILY_LOADED);
@@ -2504,6 +2756,26 @@ void idle_delete()
 }
 
 
+void init_matrix_data_file_index() {
+  mysql_wrapper(mysql, "SELECT COALESCE(MAX(idnum), 1)  FROM matrix_files;");
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  matrix_file_id_counter = atol(row[0]) + 1;
+  mysql_free_result(res);
+}
+
+void verify_matrix_data_file_storage() {
+  // This query exists to wipe out all invalid matrix data file storage rows
+  // by validating they're contained in valid OBJs.
+  mysql_wrapper(mysql, 
+    "DELETE FROM matrix_files AS mf "
+    "   LEFT JOIN pfiles_inv AS pi ON mf.in_obj_vnum = pi.vnum AND mf.in_obj_idnum = pi.obj_idnum "
+    "   LEFT JOIN pfiles_cyberware AS pc ON mf.in_obj_vnum = pc.vnum AND mf.in_obj_idnum = pc.obj_idnum "
+    "   LEFT JOIN pfiles_worn AS pw ON mf.in_obj_vnum = pw.vnum AND mf.in_obj_idnum = pw.obj_idnum "
+    "WHERE pi.vnum IS NULL AND pc.vnum IS NULL AND pw.vnum IS NULL; "
+  );
+}
+
 void verify_db_password_column_size() {
   // show columns in pfiles like 'password';
   mysql_wrapper(mysql, "SHOW COLUMNS IN `pfiles` LIKE 'password';");
@@ -2549,8 +2821,6 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
   }
 
   ENSURE_OBJ_HAS_IDNUM(obj);
-
-  int old_storage;
   int rnum = real_object(GET_OBJ_VNUM(obj));
 
   if (rnum < 0) {
@@ -2582,42 +2852,6 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
         int prior_data;
         FORCE_PROTO_VALUE("drug", GET_OBJ_DRUG_TYPE(obj), GET_OBJ_DRUG_TYPE(&obj_proto[rnum]));
         CLAMP_VALUE("drug", GET_OBJ_DRUG_DOSES(obj), 1, MAX_DRUG_DOSE_COUNT, "doses");
-      }
-      break;
-    case ITEM_CYBERDECK:
-    case ITEM_CUSTOM_DECK:
-      {
-        // Rectify the memory.
-        old_storage = GET_CYBERDECK_USED_STORAGE(obj);
-        GET_CYBERDECK_USED_STORAGE(obj) = 0;
-        for (struct obj_data *installed = obj->contains; installed; installed = installed->next_content) {
-          if (GET_OBJ_TYPE(installed) == ITEM_DECK_ACCESSORY) {
-            switch (GET_DECK_ACCESSORY_TYPE(installed)) {
-              case TYPE_FILE:
-                GET_CYBERDECK_USED_STORAGE(obj) += GET_DECK_ACCESSORY_FILE_SIZE(installed);
-                break;
-              case TYPE_UPGRADE:
-                GET_PART_BUILDER_IDNUM(obj) = 0;
-                break;
-            }
-          }
-          // Personas don't take up storage in store-bought decks (personas are not programs in custom decks)
-          if ((GET_OBJ_TYPE(installed) == ITEM_PROGRAM) && !((GET_OBJ_TYPE(obj) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(installed) <= SOFT_SENSOR))) {
-            GET_CYBERDECK_USED_STORAGE(obj) += GET_PROGRAM_SIZE(installed);
-          }
-        }
-        if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {
-          snprintf(buf, sizeof(buf), "INFO: System self-healed mismatching cyberdeck used storage for %s (was %d, should have been %d)",
-                  GET_OBJ_NAME(obj),
-                  old_storage,
-                  GET_CYBERDECK_USED_STORAGE(obj)
-          );
-          mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);
-        }
-        if (GET_CYBERDECK_USED_STORAGE(obj) > GET_CYBERDECK_TOTAL_STORAGE(obj)) {
-          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: After self-heal, deck %s owned by %ld is overloaded on programs! Setting to 0 free space, this will cause problems.", GET_OBJ_NAME(obj), owner);
-          GET_CYBERDECK_USED_STORAGE(obj) = GET_CYBERDECK_TOTAL_STORAGE(obj);
-        }
       }
       break;
     case ITEM_FOCUS:
@@ -3331,7 +3565,7 @@ void fix_character_essence_after_expert_driver_change(struct char_data *ch) {
   while ((ware = find_cyberware(ch, CYB_CHIPJACK))) {
     for (struct obj_data *chip = ware->contains, *next_obj; chip; chip = next_obj) {
       next_obj = chip->next_content;
-      deactivate_single_skillsoft(chip, ch, FALSE);
+      deactivate_single_skillsoft(chip->files, ch, FALSE);
       obj_from_obj(chip);
       obj_to_char(chip, ch);
     }

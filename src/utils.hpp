@@ -119,7 +119,6 @@ bool    spell_is_nerp(int spell_num);
 char    get_final_character_from_string(const char *str);
 bool    builder_cant_go_there(struct char_data *ch, struct room_data *room);
 bool    get_and_deduct_one_crafting_token_from_char(struct char_data *ch);
-bool    program_can_be_copied(struct obj_data *prog);
 struct  obj_data *get_obj_proto_for_vnum(vnum_t vnum);
 int     get_string_length_after_color_code_removal(const char *str, struct char_data *ch_to_notify_of_failure_reason);
 char *  get_string_after_color_code_removal(const char *str, struct char_data *ch);
@@ -214,6 +213,7 @@ void    find_or_load_ch_cleanup(struct char_data *ch);
 bool obj_is_apartment_only_drop_item(struct obj_data *obj, struct room_data *target_room);
 bool obj_contains_apartment_only_drop_items(struct obj_data *obj, struct room_data *target_room);
 
+bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct matrix_file *file, bool requires_ch_to_be_in_same_room_as_questor, bool send_messages);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct obj_data *obj, bool requires_ch_to_be_in_same_room_as_questor, bool send_messages);
 bool    ch_is_blocked_by_quest_protections(struct char_data *ch, struct char_data *victim);
 
@@ -813,10 +813,11 @@ bool _mob_is_alert(struct char_data *npc);
 #define IS_RIGGING(ch)        (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
 #define IS_JACKED_IN(ch)      (IS_RIGGING(ch) || PLR_FLAGGED(ch, PLR_MATRIX) || PLR_FLAGGED(ch, PLR_REMOTE))
 #define CAN_SEE_IN_DARK(ch)   (SEES_ASTRAL(ch) || CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT))
-#define GET_BUILDING(ch)  ((ch)->char_specials.programming)
+#define GET_BUILDING(ch)      ((ch)->char_specials.building)
+#define GET_PROGRAMMING(ch)   ((ch)->char_specials.programming)
 #define IS_WORKING(ch)        ((AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, AFF_PILOT, AFF_RIG, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT)))
 #define STOP_WORKING(ch)      {AFF_FLAGS((ch)).RemoveBits(BR_TASK_AFF_FLAGS, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT); \
-                               GET_BUILDING((ch)) = NULL;}
+                               GET_BUILDING((ch)) = NULL; GET_PROGRAMMING((ch)) = NULL; }
 #define STOP_DRIVING(ch)      {AFF_FLAGS((ch)).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);}
 
 #define GET_TOTEM(ch)                              ((ch && ch->desc && ch->desc->original) ? ch->desc->original->player_specials->saved.totem : ch->player_specials->saved.totem)
@@ -1351,6 +1352,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)         (GET_OBJ_VAL((accessory), 8))
 #define GET_DECK_ACCESSORY_FILE_IS_UPLOADING_TO_HOST(accessory) (GET_OBJ_VAL((accessory), 8))
 #define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)            (GET_OBJ_VAL((accessory), 9))
+#define GET_DECK_ACCESSORY_FILE_TYPE(accessory)                 (GET_OBJ_VAL((accessory), 10))
 
 // ITEM_DECK_ACCESSORY TYPE_COOKER convenience defines
 #define GET_DECK_ACCESSORY_COOKER_RATING(accessory)          (GET_OBJ_VAL((accessory), 1))

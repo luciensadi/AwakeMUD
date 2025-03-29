@@ -1118,6 +1118,7 @@ const char *item_types[] =
     "Custom Pet",
     "Complex Form",
     "Dronewar Component",
+    "Source Code",
     "\n"
   };
 
