@@ -337,7 +337,12 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       }
 
       i = atoi(arg);
-      for (file = folder->files; file && i > 1; file = file->next_file)
+      if (i <= 0) {
+        pocketsec_phonemenu(d);
+        send_to_char("That entry does not exist.\r\n", CH);
+      }
+
+      for (file = folder->contains; file && i > 1; file = file->next_content)
         i--;
       if (file) {
         STATE(d) = CON_PLAYING;

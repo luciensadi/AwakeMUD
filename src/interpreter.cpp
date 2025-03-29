@@ -46,6 +46,7 @@
 #include "player_exdescs.hpp"
 #include "pets.hpp"
 #include "matrix_storage.hpp"
+#include "gmcp.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -1351,6 +1352,7 @@ struct command_info mtx_info[] =
     { "analyze", 0, do_analyze, 0, 0, BLOCKS_IDLE_REWARD },
     { "answer", 0, do_comcall, 0, SCMD_ANSWER, BLOCKS_IDLE_REWARD },
     { "asist", 0, do_asist, 0, 0, BLOCKS_IDLE_REWARD },
+    { "broadcast", 0, do_broadcast, 0, 0, BLOCKS_IDLE_REWARD },
     { "bug", 0, do_gen_write, 0, SCMD_BUG, BLOCKS_IDLE_REWARD },
     { "call", 0, do_comcall, 0, SCMD_RING, BLOCKS_IDLE_REWARD },
   //{ "control", 0, do_control, 0, 0, BLOCKS_IDLE_REWARD },     // This is a rigging command?
@@ -1390,6 +1392,7 @@ struct command_info mtx_info[] =
     { "programs", 0, do_programs, 0, 0 , BLOCKS_IDLE_REWARD },
     { "prompt", 0, do_display, 0, 0 , BLOCKS_IDLE_REWARD },
     { "quit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
+    { "radio", 0, do_radio, 0, 0, ALLOWS_IDLE_REWARD },
     { "read", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD },
     { "recap", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
     { "redirect", 0, do_redirect, 0, 0, BLOCKS_IDLE_REWARD },
@@ -2725,6 +2728,12 @@ int perform_dupe_check(struct descriptor_data *d)
   // KaVir's protocol snippet.
   MXPSendTag( d, "<VERSION>" );
 
+  // Additional gmcp hooks
+  SendGMCPCoreSupports(d);
+  SendGMCPCharInfo(d->character);
+  SendGMCPCharVitals(d->character);
+  SendGMCPCharPools ( d->character );
+
   return 1;
 }
 
@@ -3418,6 +3427,12 @@ void nanny(struct descriptor_data * d, char *arg)
 
       // KaVir's protocol snippet.
       MXPSendTag( d, "<VERSION>" );
+
+      // GMCP Protocl injection
+      SendGMCPCoreSupports ( d );
+      SendGMCPCharInfo ( d->character );
+      SendGMCPCharVitals ( d->character );
+      SendGMCPCharPools ( d->character );
 
       if (!str_cmp(GET_EMAIL(d->character), "not set")) {
         send_to_char("\r\n^YNotice:^n This character hasn't been registered yet! Please see ^WHELP REGISTER^n for information.^n\r\n\r\n", d->character);

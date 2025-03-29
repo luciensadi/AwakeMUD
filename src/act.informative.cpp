@@ -5786,7 +5786,7 @@ ACMD_CONST(do_who) {
   do_who(ch, not_const, cmd, subcmd);
 }
 
-bool characterNameCompareFunction(struct char_data *a, struct char_data *b) {return a < b;}
+bool characterNameCompareFunction(struct char_data *a, struct char_data *b) {return *(GET_CHAR_NAME(a)) < *(GET_CHAR_NAME(b));}
 
 ACMD(do_quickwho)
 {

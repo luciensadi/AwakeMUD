@@ -35,6 +35,7 @@
 #include "player_exdescs.hpp"
 #include "otaku.hpp"
 #include "matrix_storage.hpp"
+#include "gmcp.hpp"
 
 /* external functions */
 extern void stop_fighting(struct char_data * ch);
@@ -372,6 +373,8 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
 
         // Finally, apply it to character, capping at their max physical. No negative cap is applied.
         GET_PHYSICAL(ch) = MIN(GET_MAX_PHYSICAL(ch), GET_PHYSICAL(ch) + mod);
+        // Update State
+        SendGMCPCharVitals(ch);
       break;
     case SPELL_STABILIZE:
       if (mod == 1)

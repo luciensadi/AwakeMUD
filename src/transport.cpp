@@ -251,6 +251,8 @@ struct dest_data caribbean_taxi_destinations[] =
     { "\n", "", "", 0, 0, 0 } // this MUST be last, or the game will crash, you have been warned
   };
 
+// Adding a new taxi destination list? Add it to DO_GRID and transport.hpp.
+
 struct taxi_dest_type taxi_dest_type_info[] = {
   { "^yAreas of Town", "^Y" },
   { "^cCorporate Parks", "^C" },

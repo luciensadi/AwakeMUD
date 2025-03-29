@@ -44,7 +44,6 @@ bool part_is_nerps(int part_type) {
     case PART_CELLULAR:
     case PART_LASER:
     case PART_MICROWAVE:
-    case PART_RADIO:
     case PART_SATELLITE:
     case PART_SIGNAL_AMP:
       return TRUE;

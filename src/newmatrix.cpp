@@ -18,6 +18,12 @@
 #include "pets.hpp"
 #include "otaku.hpp"
 #include "matrix_storage.hpp"
+#include "gmcp.hpp"
+
+#ifdef TEMPORARY_COMPILATION_GUARD
+extern void create_secret_container(struct char_data *ch);
+extern void create_secret_contents(struct char_data *ch);
+#endif
 
 #define PERSONA ch->persona
 #define PERSONA_CONDITION ch->persona->condition
@@ -433,6 +439,8 @@ bool dumpshock(struct matrix_icon *icon)
     struct char_data *ch = icon->decker->ch;
     extract_icon(icon);
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+    SendGMCPMatrixInfo(ch);
+    SendGMCPMatrixDeck(ch);
 
     // No reason to double-damage
     if (!PLR_FLAGGED(ch, PLR_MATRIX))
@@ -821,7 +829,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   if (targ->decker && !has_spotted(targ, icon))
     make_seen(targ, icon->idnum);
 
-#ifdef IS_BUILDPORT
+#ifdef MTX_DEBUG
   if (icon->decker)
     send_to_char(icon->decker->ch, "entering matrix_fight(%s, %s)\r\n", GET_CHAR_NAME(icon->decker->ch), targ->name);
 #endif
@@ -872,7 +880,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (soft->program_type == SOFT_ATTACK)
         break;
     if (!soft) {
-#ifdef IS_BUILDPORT
+#ifdef MTX_DEBUG
   if (icon->decker)
     send_to_icon(icon, "matrix_fight(): failed to find attack soft, bailing out\r\n");
 #endif
@@ -890,7 +898,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     else if (icon->ic.options.IsSet(IC_EX_DEFENSE))
       skill -= icon->ic.expert;
     skill += icon->ic.cascade;
-    if (targ->decker->scout) {
+    if (targ->decker && targ->decker->scout) {
       skill += targ->decker->scout;
       targ->decker->scout = 0;
     }
@@ -963,23 +971,29 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         send_to_icon(targ, "It failed to cause any damage.\r\n");
         return;
       }
-      // Damage was done to the attribute, so reduce the attribute
-      switch (icon->ic.subtype) {
-      case 0:
-        targ->decker->bod = bod;
-        break;
-      case 1:
-        targ->decker->evasion = bod;
-        break;
-      case 2:
-        targ->decker->sensor = bod;
-        break;
-      case 3:
-        targ->decker->masking = bod;
-        break;
+
+      // Only damage attributes to non-otaku personae
+      if (targ->type != ICON_LIVING_PERSONA) {
+        // Damage was done to the attribute, so reduce the attribute
+        switch (icon->ic.subtype) {
+          case 0:
+            targ->decker->bod = bod;
+            break;
+          case 1:
+            targ->decker->evasion = bod;
+            break;
+          case 2:
+            targ->decker->sensor = bod;
+            break;
+          case 3:
+            targ->decker->masking = bod;
+            break;
+        }
+        if (targ->decker->mpcp == 0)
+          dumpshock(targ);
       }
-      if (targ->decker->mpcp == 0)
-        dumpshock(targ);
+
+      // Do not proceed further; ripper do not do attacks beyond this
       return;
     }
 
@@ -993,8 +1007,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           power -= soft->rating;
           break;
         }
-    bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
-    GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
+
     if (!targ->decker->ras)
       power += 4;
 
@@ -1033,7 +1046,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 
   // Block!
   if (try_execute_shield_program(icon, targ, success) && success <= 0) {
-#ifdef IS_BUILDPORT
+#ifdef MTX_DEBUG
     if (icon->decker)
       send_to_icon(icon, "matrix_fight(): shield program failed, bailing out\r\n");
 #endif
@@ -1085,34 +1098,48 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     }
   } // else { implementations of slow, etc, would go here }
 
-  // Results of damaging attacks
-  success -= success_test(bod, power);
+  if (targ->type == ICON_LIVING_PERSONA && ICON_IS_IC(icon) && icon->ic.type >= IC_LETHAL_BLACK) {
+    // For black IC we'll be be doing our ICCM checks up front
+    // since we bypass doing a (separate) damage pass from the condition monitor of the persona
+    // and instead directly attack the otaku
+    int resist = 0;
+    if (icon->ic.type == IC_LETHAL_BLACK)
+      resist = GET_BOD(targ->decker->ch);
+    else
+      resist = GET_WIL(targ->decker->ch);
+
+    int wil_test_result = success_test(GET_WIL(targ->decker->ch), power);
+    int bod_test_result = success_test(GET_BOD(targ->decker->ch), power);
+    success -= targ->decker->iccm ? MAX(wil_test_result, bod_test_result) : success_test(resist, power);
+  } else if (targ->decker && targ->decker->ch) {
+    bod = targ->decker->bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch));
+    GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
+    success -= success_test(bod, power);
+  } else {
+    success -= success_test(bod, power);
+  }
+
+  // Results of damaging attacks  
   icondam = convert_damage(stage(success, dam));
-  switch(icondam)
-  {
-  case 0:
+  if (icondam <= 0) {
     send_to_icon(targ, "%s^n's attack reflects off you harmlessly!\r\n", CAP(icon->name));
     send_to_icon(icon, "%s^n manages to block your attack.\r\n", CAP(targ->name));
     if (!icon->decker && icon->ic.options.IsSet(IC_CASCADE))
       cascade(icon);
-    break;
-  case 1:
+  } else if (icondam <= 1) {
     send_to_icon(targ, "%s^n's attack skims off you.\r\n", CAP(icon->name));
     send_to_icon(icon, "Your attack skims off of %s^n.\r\n", decapitalize_a_an(targ->name));
-    break;
-  case 3:
+  } else if (icondam <= 3) {
     send_to_icon(targ, "%s^n's attack sends parts of you flying.\r\n", CAP(icon->name));
     send_to_icon(icon, "Parts fly off of %s^n from your attack.\r\n", decapitalize_a_an(targ->name));
-    break;
-  case 6:
+  } else if (icondam <= 6) {
     send_to_icon(targ, "%s^n's attack leaves you reeling.\r\n", CAP(icon->name));
     send_to_icon(icon, "Your attack leaves %s^n reeling.\r\n", decapitalize_a_an(targ->name));
-    break;
-  default:
+  } else {
     send_to_icon(targ, "%s^n's attack completely obliterates you!\r\n", CAP(icon->name));
     send_to_icon(icon, "You obliterate %s^n.\r\n", decapitalize_a_an(targ->name));
-    break;
   }
+
   struct char_data *ch = targ->decker ? targ->decker->ch : NULL;
   if (do_damage_persona(targ, icondam) || (ch && GET_POS(ch) <= POS_STUNNED)) {
     // If do_damage_persona returns true then the icon condition monitor is overloaded,
@@ -1125,23 +1152,24 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   if (icondam > 0 && ch)
   {
     // Black IC deal damage to the decker as well as their icon
-    if (ICON_IS_IC(icon) && icon->ic.type >= IC_LETHAL_BLACK) {
+    // Living persona don't take a second round of black IC damage, it was already done above
+    if (ICON_IS_IC(icon) && icon->ic.type >= IC_LETHAL_BLACK && targ->type != ICON_LIVING_PERSONA) {
       int resist = 0;
       bool lethal = icon->ic.type == IC_LETHAL_BLACK ? TRUE : FALSE;
       if (!targ->decker->asist[0] && lethal)
         lethal = FALSE;
       if (lethal)
-        resist = GET_BOD(targ->decker->ch);
+        resist = GET_BOD(ch);
       else
-        resist = GET_WIL(targ->decker->ch);
+        resist = GET_WIL(ch);
 
-      int wil_test_result = success_test(GET_WIL(targ->decker->ch), power);
-      int bod_test_result = success_test(GET_BOD(targ->decker->ch), power);
+      int wil_test_result = success_test(GET_WIL(ch), power);
+      int bod_test_result = success_test(GET_BOD(ch), power);
       success -= targ->decker->iccm ? MAX(wil_test_result, bod_test_result) : success_test(resist, power);
       int meatdam = convert_damage(stage(success, dam));
       send_to_icon(targ, "You smell something burning.\r\n");
 
-      if (damage(targ->decker->ch, targ->decker->ch, meatdam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL)) {
+      if (damage(ch, ch, meatdam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL)) {
         // Oh shit, they died. Guess they don't take MPCP damage, since their struct is zeroed out now.
         return;
       }
@@ -1150,12 +1178,12 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         return;
       }
       if (targ && targ->decker) {
-        if (targ->decker->ch && !AWAKE(targ->decker->ch)) {
+        if (ch && !AWAKE(ch)) {
           success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
           fry_mpcp(icon, targ, success);
           dumpshock(targ);
           return;
-        } else if (!targ->decker->ch) {
+        } else if (!ch) {
           success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
           fry_mpcp(icon, targ, success);
           extract_icon(targ);
@@ -1175,9 +1203,9 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         power = 5;
         break;
       }
-      if (success_test(GET_WIL(targ->decker->ch), power) < 1) {
+      if (success_test(GET_WIL(ch), power) < 1) {
         send_to_icon(targ, "Your interface overloads.\r\n");
-        if (damage(targ->decker->ch, targ->decker->ch, 1, TYPE_TASER, MENTAL)) {
+        if (damage(ch, ch, 1, TYPE_TASER, MENTAL)) {
           return;
         }
       }
@@ -1221,7 +1249,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         icon_to_host(trap, icon->in_host);
       }
 
-      if (matrix[icon->in_host].ic_bound_paydata > 0) {
+      if (ICON_IS_IC(targ) && matrix[icon->in_host].ic_bound_paydata > 0) {
         if (!(number(0, MAX(0, matrix[icon->in_host].color - HOST_COLOR_ORANGE)))) {
           matrix[icon->in_host].ic_bound_paydata--;
           struct matrix_file *paydata = spawn_paydata(icon);
@@ -2131,6 +2159,7 @@ ACMD(do_logon)
         send_to_icon(PERSONA, "You connect to %s^n.\r\n", matrix[target_host].name);
         icon_to_host(PERSONA, target_host);
       }
+      SendGMCPMatrixInfo(ch);
       do_matrix_look(ch, NULL, 0, 0);
       return;
     } else {
@@ -2181,6 +2210,8 @@ ACMD(do_logoff)
   extract_icon(PERSONA);
   PERSONA = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+  SendGMCPMatrixInfo(ch);
+  SendGMCPMatrixDeck(ch);
 
   // Make 'em look if they're not screenreaders.
   if (!PRF_FLAGGED(ch, PRF_SCREENREADER)) {
@@ -2565,6 +2596,8 @@ ACMD(do_connect)
   else 
     send_to_char(ch, "You jack into the matrix with your %s.\r\n", GET_OBJ_NAME(cyberdeck));
   PLR_FLAGS(ch).SetBit(PLR_MATRIX);
+  SendGMCPMatrixDeck(ch);
+  SendGMCPMatrixInfo(ch);
   do_matrix_look(ch, NULL, 0, 0);
 }
 
@@ -3022,8 +3055,23 @@ ACMD(do_decrypt)
 void send_active_program_list(struct char_data *ch) {
   if (DECKER->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
     // We're an otaku using a living persona; we don't have active memory.
-    for (struct matrix_file *soft = DECKER->software; soft; soft = soft->next_file)
-      send_to_icon(PERSONA, "%25s, Complex Form, %s-R^c%d^n\r\n", soft->name, programs[soft->program_type].name, soft->rating);
+    for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content) {
+      snprintf(buf, sizeof(buf), "%25s, Complex Form, %s-R^c%d^n\r\n", 
+        GET_OBJ_NAME(soft),
+        programs[GET_COMPLEX_FORM_PROGRAM(soft)].name,
+        GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT ? GET_COMPLEX_FORM_RATING(soft) - 1 : GET_COMPLEX_FORM_RATING(soft)
+      );
+
+      // This cyberadept weirdness is because by the time we're in the matrix it's already received +1,
+      // so we go down 1 to get real values
+      // See above where it's -1'd.
+      if (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (^g%d^n)", GET_COMPLEX_FORM_RATING(soft));
+      }
+
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
+      send_to_icon(PERSONA, buf);
+    }
     return;
   }
   send_to_icon(PERSONA, "Active Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(DECKER->deck, 2), DECKER->active);
@@ -4208,6 +4256,16 @@ ACMD(do_create)
   else if (is_abbrev(buf1, "pets")) {
     create_pet(ch);
   }
+
+#ifdef TEMPORARY_COMPILATION_GUARD
+  else if (is_abbrev(buf1, "secret_container")) {
+    create_secret_container(ch);
+  }
+
+  else if (is_abbrev(buf1, "secret_contents")) {
+    create_secret_contents(ch);
+  }
+#endif
 
   else {
     send_to_char("You can only create programs, parts, decks, ammunition, spells, complex forms, art, and pets.\r\n", ch);

@@ -31,6 +31,8 @@
 #include "comm.hpp"
 #include "protocol.hpp"
 #include "config.hpp"
+#include "db.hpp"
+#include "gmcp.hpp"
 
 /******************************************************************************
  The following section is for Diku/Merc derivatives.  Replace as needed.
@@ -319,6 +321,7 @@ protocol_t *ProtocolCreate( void )
   pProtocol->bMSP = FALSE;
   pProtocol->bMXP = FALSE;
   pProtocol->bMCCP = FALSE;
+  pProtocol->bGMCP = FALSE;
   pProtocol->b256Support = eUNKNOWN;
   pProtocol->ScreenWidth = 0;
   pProtocol->ScreenHeight = 0;
@@ -489,6 +492,13 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
         Write( apDescriptor, "\n" );
         snprintf( MXPBuffer, sizeof(MXPBuffer), "MXP version %s detected and enabled.\r\n",
           pProtocol->pMXPVersion );
+        InfoMessage( apDescriptor, MXPBuffer );
+      }
+
+      if ( pProtocol->bGMCP )
+      {
+        Write( apDescriptor, "\n" );
+        snprintf( MXPBuffer, sizeof(MXPBuffer), "GMCP is detected and enabled.\r\n");
         InfoMessage( apDescriptor, MXPBuffer );
       }
     }
@@ -1149,6 +1159,8 @@ const char *CopyoverGet( descriptor_t *apDescriptor )
       *pBuffer++ = 'A';
     if ( pProtocol->bMSP )
       *pBuffer++ = 'S';
+    if ( pProtocol->bGMCP )
+      *pBuffer++ = 'G';
     if ( pProtocol->pVariables[eMSDP_MXP] && pProtocol->pVariables[eMSDP_MXP]->ValueInt )
       *pBuffer++ = 'X';
     if ( pProtocol->bMCCP )
@@ -1198,6 +1210,9 @@ void CopyoverSet( descriptor_t *apDescriptor, const char *apData )
           break;
         case 'S':
           pProtocol->bMSP = TRUE;
+          break;
+        case 'G':
+          pProtocol->bGMCP = TRUE;
           break;
         case 'X':
           pProtocol->bMXP = TRUE;
@@ -1817,6 +1832,7 @@ static void Negotiate( descriptor_t *apDescriptor )
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MSP, TRUE, TRUE);
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MXP, TRUE, TRUE);
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MCCP, TRUE, TRUE);
+    ConfirmNegotiation(apDescriptor, eNEGOTIATED_GMCP, TRUE, TRUE);
     
     Write(apDescriptor, (char[]) { (char)IAC, (char)DO, TELOPT_NEW_ENVIRON, '\0' });
   }
@@ -2029,6 +2045,19 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
       }
       break;
 
+    case (char)TELOPT_GMCP:
+      if ( aCmd == (char)DO || aCmd == (char)WILL )
+      {
+        ConfirmNegotiation(apDescriptor, eNEGOTIATED_GMCP, TRUE, TRUE);
+        pProtocol->bGMCP = TRUE;
+      }
+      else if ( aCmd == (char)DONT )
+      {
+        ConfirmNegotiation(apDescriptor, eNEGOTIATED_GMCP, FALSE, pProtocol->bGMCP);
+        pProtocol->bGMCP = FALSE;
+      }
+      break;
+
     case (char)TELOPT_MSP:
       if ( aCmd == (char)DO )
       {
@@ -2172,6 +2201,13 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
 
   switch ( aCmd )
   {
+    case (char)TELOPT_GMCP:
+      PROTO_DEBUG_MSG("Entering PerformSubnegotiation's TELOPT_GMCP case.");
+      if ( pProtocol->bGMCP )
+      {
+        ParseGMCP( apDescriptor, apData );
+      }
+      break;
     case (char)TELOPT_NEW_ENVIRON:
       {
         PROTO_DEBUG_MSG("Entering PerformSubnegotiation's TELOPT_NEW_ENVIRON case.");
@@ -2453,6 +2489,9 @@ static bool ConfirmNegotiation( descriptor_t *apDescriptor, negotiated_t aProtoc
             break;
           case eNEGOTIATED_MXP2:
             SendNegotiationSequence( apDescriptor, (char)(abWillDo ? WILL : WONT), TELOPT_MXP );
+            break;
+          case eNEGOTIATED_GMCP:
+            SendNegotiationSequence( apDescriptor, (char)(abWillDo ? DO : WONT), TELOPT_GMCP );
             break;
           case eNEGOTIATED_MCCP:
 #ifdef USING_MCCP

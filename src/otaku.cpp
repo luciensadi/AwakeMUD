@@ -28,14 +28,27 @@ int complex_form_programs[COMPLEX_FORM_TYPES] = {
   SOFT_ATTACK,
   SOFT_BATTLETEC,
   SOFT_CLOAK,
-  SOFT_COMMLINK,
   SOFT_COMPRESSOR,
   SOFT_LOCKON,
   SOFT_SLEAZE,
   SOFT_SLOW,  
   SOFT_TRACK,
-  SOFT_SHIELD
+  SOFT_SHIELD,
+  SOFT_RADIO
 };
+
+int get_otaku_cha(struct char_data *ch) {
+  int cha_stat = GET_REAL_CHA(ch);
+
+  /* Handling Drugs */
+  int detox_force = affected_by_spell(ch, SPELL_DETOX);
+  if (GET_DRUG_STAGE(ch, DRUG_NOVACOKE) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_NOVACOKE, detox_force))
+    cha_stat++;
+  if (GET_DRUG_STAGE(ch, DRUG_NOVACOKE) == DRUG_STAGE_COMEDOWN && !IS_DRUG_DETOX(DRUG_NOVACOKE, detox_force))
+    cha_stat = 1;
+
+  return cha_stat;
+}
 
 int get_otaku_wil(struct char_data *ch) {
   int wil_stat = GET_REAL_WIL(ch);
@@ -52,7 +65,7 @@ int get_otaku_wil(struct char_data *ch) {
   if (GET_DRUG_STAGE(ch, DRUG_NITRO) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_NITRO, detox_force))
     wil_stat += 2;
   if (GET_DRUG_STAGE(ch, DRUG_ZEN) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_ZEN, detox_force))
-    wil_stat += 2;
+    wil_stat++;
   
   if (GET_DRUG_STAGE(ch, DRUG_KAMIKAZE) == DRUG_STAGE_COMEDOWN && !IS_DRUG_DETOX(DRUG_KAMIKAZE, detox_force))
     wil_stat--;
@@ -277,7 +290,7 @@ void update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck) {
         GET_PART_RATING(part) = get_otaku_int(ch);
         break;
       case PART_MASKING:
-        GET_PART_RATING(part) = (get_otaku_wil(ch) + GET_REAL_CHA(ch) + 1) / 2;
+        GET_PART_RATING(part) = (get_otaku_wil(ch) + get_otaku_cha(ch) + 1) / 2;
         break;
     }
   }

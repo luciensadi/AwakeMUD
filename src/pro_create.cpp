@@ -302,6 +302,7 @@ int get_program_skill(char_data *ch, matrix_file *prog, int target)
   case SOFT_SLEAZE:
   case SOFT_TRACK:
   case SOFT_SUITE:
+  case SOFT_RADIO:
     skill = get_skill(ch, SKILL_PROGRAM_SPECIAL, target);
     break;
   case SOFT_CAMO:

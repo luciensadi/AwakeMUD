@@ -38,6 +38,10 @@ class ApartmentComplex;
 class Apartment;
 class ApartmentRoom;
 class PCExDesc;
+#ifdef TEMPORARY_COMPILATION_GUARD
+class MinigameContainer;
+class MinigameModule;
+#endif
 
 /***********************************************************************
  * Structures                                                          *
@@ -1151,9 +1155,12 @@ struct descriptor_data
   ApartmentRoom *edit_apartment_room_original;
   Faction *edit_faction;
   PCExDesc *edit_exdesc;
-  // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
-
   Playergroup *edit_pgroup; /* playergroups */
+  #ifdef TEMPORARY_COMPILATION_GUARD
+  MinigameModule *edit_minigame_module;
+  MinigameContainer *edit_minigame_container;
+  #endif
+  // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   int canary;
   protocol_t *pProtocol;
@@ -1170,7 +1177,11 @@ struct descriptor_data
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
       edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
-      edit_apartment_room_original(NULL), edit_faction(NULL), edit_pgroup(NULL), canary(CANARY_VALUE), pProtocol(NULL)
+      edit_apartment_room_original(NULL), edit_faction(NULL), edit_pgroup(NULL),
+#ifdef TEMPORARY_COMPILATION_GUARD
+      edit_minigame_module(NULL), edit_minigame_container(NULL),
+#endif
+      canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)

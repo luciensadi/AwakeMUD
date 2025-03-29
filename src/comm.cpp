@@ -75,6 +75,7 @@
 #include "newhouse.hpp"
 #include "factions.hpp"
 #include "player_exdescs.hpp"
+#include "gmcp.hpp"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -92,6 +93,11 @@ extern char help[];
 
 #ifdef USE_PRIVATE_CE_WORLD
 extern void do_secret_ticks(int pulse);
+#endif
+
+#ifdef TEMPORARY_COMPILATION_GUARD
+#include "minigame_container.hpp"
+#include "minigame_module.hpp"
 #endif
 
 bool _GLOBALLY_BAN_OPENVPN_CONNETIONS_ = FALSE;
@@ -934,6 +940,18 @@ void game_loop(int mother_desc)
       }
     }
 
+    {
+      // Send GMCP Vitals
+      for (d = descriptor_list; d; d = next_d) {
+        next_d = d->next;
+        if (!d->prompt_mode) continue;
+        if (!d->character) continue;
+
+        SendGMCPCharVitals(d->character);
+        SendGMCPCharPools(d->character);
+      }
+    }
+
     /* handle heartbeat stuff */
     /* Note: pulse now changes every 0.10 seconds  */
 
@@ -1359,6 +1377,7 @@ int make_prompt(struct descriptor_data * d)
       prompt = GET_PROMPT(d->character);
       ch = d->character;
     }
+    
     if (!prompt || !*prompt)
       data = "> ";
     else if (!strchr(prompt, '@')) {
@@ -1484,7 +1503,7 @@ int make_prompt(struct descriptor_data * d)
             case 'm':       // current mental
             case '*':       // current mental, but subtracted from 10 to give damage boxes taken instead
               physical = (int)(GET_MENTAL(ch) / 100);
-              if (IS_JACKED_IN(ch)) {
+              if (IS_JACKED_IN(ch) && !IS_OTAKU(ch)) {
                 physical = 10;
               } else {
                 for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
@@ -1514,7 +1533,7 @@ int make_prompt(struct descriptor_data * d)
             case '&':       // current physical, but subtracted from 10 to give damage boxes taken instead
               physical = (int)(GET_PHYSICAL(ch) / 100);
 
-              if (IS_JACKED_IN(ch)) {
+              if (IS_JACKED_IN(ch) && !IS_OTAKU(ch)) {
                 physical = 10;
               } else {
                 for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
@@ -2394,6 +2413,11 @@ void free_editing_structs(descriptor_data *d, int state)
   DELETE_IF_EXTANT(d->edit_apartment);
   DELETE_IF_EXTANT(d->edit_apartment_room);
   DELETE_IF_EXTANT(d->edit_exdesc);
+
+#ifdef TEMPORARY_COMPILATION_GUARD
+  DELETE_IF_EXTANT(d->edit_minigame_module); 
+  DELETE_IF_EXTANT(d->edit_minigame_container);
+#endif
 }
 
 void close_socket(struct descriptor_data *d)

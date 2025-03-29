@@ -31,6 +31,8 @@ int get_lexicon_number_for_language(int language_skill) {
     case SKILL_IROQUOIS       : return LEXICON_IROQUOIS;
     case SKILL_MANDARIN       : return LEXICON_MANDARIN;
     case SKILL_HAITIAN_CREOLE : return LEXICON_HAITIAN_CREOLE;
+    case SKILL_HAWAIIAN       : return LEXICON_HAWAIIAN;
+    case SKILL_GREEK          : return LEXICON_GREEK;
 
     default:
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Failed to find lexicon for skill %d! Using the English lexicon.", language_skill);
@@ -62,7 +64,9 @@ const char **lexicons[] = {
   lexicon_hebrew,
   lexicon_iroquois,
   lexicon_mandarin,
-  lexicon_haitian_creole
+  lexicon_haitian_creole,
+  lexicon_hawaiian,
+  lexicon_greek
 };
 
 void populate_lexicon_size_table() {
@@ -244,5 +248,15 @@ const char *lexicon_mandarin[] = {
 
 const char *lexicon_haitian_creole[] = {
   "byen", "venu", "byenvini", "belantre", "sak", "pase", "ki", "jan", "ou", "ye", "ap", "boule", "sa", "fe", "lon", "temps", "nou", "pa", "we", "rele", "non", "soti", "m'soti", "bonjou", "maten", "apre", "midi", "bon", "bonswa", "bonn", "nui", "et", "rev", "orevwa", "babay", "demen", "ta", "chans", "ochan", "sante", "one", "respe", "yon", "jounen", "apeti", "vwayaj", "konprann", "es'ke", "mwen", "wi", "petet", "souple", "pale", "dousma", "ecri'l", "tanpri", "angle", "kreyol", "wi", "ayisyen", "kijan", "eskize", "konbyen", "dezole", "padon", "mesi", "ampil", "merite", "padekwa", "kote", "ryen", "twalet", "danse", "vle", "sonje", "renmen", "tale", "zan", "vou", "anrepo'm", "te'm", "anmwe", "dife", "polis", "jwaye", "nowel", "ane", "pak", "fet", "erez", "felisitasyon", "yon", "bato", "flote", "dlo", "avek", "poisson", "vache", "poulet", "coq", "escargot", "chien", "chiot", "chat", "chaton", "grenouille", "l'oiseau", "chevre", "dinde", "lapin", "l'ours", "renard", "chouette", "laveur", "rat", "l'ecureuil", "loup", "l'errant", "buffle", "dauphin", "aigle", "allumeur", "souris", "l'hibou", "raton", "corbeau", "requin", "serpent", "blaireau", "chauve", "sanglier", "guepard", "oie", "cheval", "chacal", "lezard", "singe", "l'outre", "perroquet", "putois", "araignee", "tortue", "baleine", "seductrice", "sirene", "chene", "courant", "vent", "adversaire", "createur", "fou", "filou", "cerfs", "couleur", "noir", "noire", "blanc", "blanche", "rouge", "jaune", "bleu", "bleue", "vert", "verte", "janvier", "fevrier", "mars", "avril", "mai", "juin", "aout", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche", "deux", "trois", "quatre", "cinq", "sommes", "etes", "sont", "serai", "seras", "faire", "fais", "fait", "fis", "dire", "dis", "disons", "dites", "dirai", "direz", "aller", "vais", "va", "allons", "allez", "vont", "j'irai", "ira", "iront"
+  , "\n"
+};
+
+const char *lexicon_hawaiian[] = {
+  "ae", "ahupua'a", "aina", "akamai", "akua", "ala", "ali'i", "aloha", "a'ole", "au'au", "aumakua", "halau", "hale", "hana", "heiau", "hele", "ho'olaule'a", "ho'ike", "hoku","holoholo", "honu", "hula", "hulihuli", "i'a", "imu", "kahako", "kahu", "kai", "kala", "kalo", "kamali'i", "kane", "kanikapila", "kapa", "kapu", "koa", "kokua", "kolohe", "komo", "kuleana", "kumu", "kupuna", "lanai", "lani", "laulima", "lei", "limu", "lo'i", "lokahi", "lu'au", "ma'ema'e", "mahalo", "maika'i", "makana", "makua", "malama", "malihini", "mana'o", "manapua", "manini", "mano", "manu", "manauahi", "mele", "mano", "moana", "moku", "mo'o", "nalu", "nani", "niu", "nui", "ohana", "okina", "olelo", "oli", "ono", "opala", "opu", "pahohoe", "pake", "pali", "paniolo", "pau", "pilikia", "pohaku", "poi", "poke", "pomaika'i", "pu", "pua'a", "pule", "pupu", "u'i", "wa'a", "wahine", "wai", "wikiwiki", "ekhai", "elua", "ekolu", "eha", "elima", "eono", "ehiku", "ewalu", "eiwa", "umi", "lapule", "po'akahi", "po'alua", "po'akolu", "po'aha", "po'alima", "po'aono", "lanuali", "pepeluali", "malaki", "apelila", "mei", "lune", "lulai", "aukake", "kepakemapa", "okakopa", "nowemapa", "kekemapa"
+  , "\n"
+};
+
+const char *lexicon_greek[] = {
+  "evdomada", "etos", "simera", "avrio", "av", "ama", "epidi", "yati", "alla", "omos", "ostoso", "oste", "otan", "afu", "prin", "molis", "ospu", "ite", "leme", "ta", "stis", "exi", "ke", "tetarto", "hthes", "pira", "adia", "imeroloyio", "simiosa", "tin", "epetio", "defterolepto", "ehun", "apomini", "peninda", "ohto", "sto", "ora", "lparhun", "exinda", "se", "lepto", "roloi", "xipnitíri", "mia", "boro", "hrisimopio", "kano", "piyeno", "pidixo", "na", "apo", "brosta", "koritsi", "irthe", "erhome", "yelao", "zevgari", "yelase", "astio", "kamariera", "ftiahni", "domatio", "tou", "xenodohiu", "turistes", "iliovasilema", "makria", "stathmos", "edo", "poli", "mikro", "kanun", "kalo", "su", "lne", "omorfi", "aschimo", "prosopon", "diskola", "anglika", "efkolos", "kakos", "andras", "borite", "kondinos", "pite", "hero", "ya", "kalimera", "kalispera", "kalinikta", "ohi", "nostimo", "adio", "maios", "luludia", "vathmi", "miden", "dio", "tria", "tesera", "pende", "exi", "epta", "okto", "enea", "deka", "kafes", "bira", "tsai", "krasi", "nero", "ligo", "kreas", "hirino", "guruni", "kotopulo", "arni", "psari", "podi", "kefala", "heri", "daktilo", "soma", "plati", "mayiras", "asteron", "tesaron", "yatros", "daskala", "politis", "yamas", "ygeia", "eviva", "malakas", "yassas", "yassou", "chronia", "efcharisto", "parakalo", "signomi"
   , "\n"
 };

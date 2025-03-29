@@ -30,6 +30,7 @@
 #include "redit.hpp"
 #include "factions.hpp"
 #include "metrics.hpp"
+#include "gmcp.hpp"
 
 int initiative_until_global_reroll = 0;
 
@@ -270,6 +271,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
       if (GET_BIOWARE_TYPE(bio) == BIO_PAINEDITOR && GET_BIOWARE_IS_ACTIVATED(bio)) {
         // Ensure they're not trapped in mort status by an active pain editor.
         GET_POS(victim) = MAX(POS_LYING, GET_POS(victim));
+        SendGMCPCharVitals(victim); 
         return FALSE;
       }
     }
@@ -281,6 +283,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
 
   // Are they doing fine?
   else if ((GET_PHYSICAL(victim) >= 100) && (GET_POS(victim) > POS_STUNNED)) {
+    SendGMCPCharVitals(victim); 
     return FALSE;
   }
 
@@ -291,6 +294,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
     }
 
     GET_POS(victim) = victim->in_veh ? POS_SITTING : POS_STANDING;
+    SendGMCPCharVitals(victim); 
     return FALSE;
   }
 
@@ -319,6 +323,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
   GET_INIT_ROLL(victim) = 0;
 
   if (restore_to_full_health_if_still_in_chargen(victim)) {
+    SendGMCPCharVitals(victim); 
     return FALSE;
   }
 
@@ -353,6 +358,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
     }
   }
 
+  SendGMCPCharVitals(victim); 
   return FALSE;
 }
 #undef MAKE_MORTALLY_WOUNDED
@@ -3519,7 +3525,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   switch (GET_POS(victim))
   {
     case POS_MORTALLYW:
-      stop_driving(ch, TRUE);
+      stop_driving(victim, TRUE);
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
         act("$n is critically damaged, and will fail soon, if not aided.",
             TRUE, victim, 0, 0, TO_ROOM);
@@ -3543,7 +3549,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       }
       break;
     case POS_STUNNED:
-      stop_driving(ch, TRUE);
+      stop_driving(victim, TRUE);
       if (IS_NPC(victim) && MOB_FLAGGED(victim, MOB_INANIMATE)) {
         act("$n is rebooting from heavy damage.",
             TRUE, victim, 0, 0, TO_ROOM);
@@ -3557,7 +3563,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       }
       break;
     case POS_DEAD:
-      stop_driving(ch, TRUE);
+      stop_driving(victim, TRUE);
       if (IS_NPC(victim)) {
         if (MOB_FLAGGED(victim, MOB_INANIMATE)) {
           act("$n terminally fails in a shower of sparks!", FALSE, victim, 0, 0, TO_ROOM);

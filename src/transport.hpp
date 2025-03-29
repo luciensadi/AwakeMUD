@@ -89,5 +89,6 @@ struct elevator_data
 extern struct dest_data seattle_taxi_destinations[];
 extern struct dest_data portland_taxi_destinations[];
 extern struct dest_data caribbean_taxi_destinations[];
+extern struct dest_data cas_taxi_destinations[];
 
 #endif

@@ -751,13 +751,14 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define BOOST(ch)               ((ch)->char_specials.saved.boosted)
 #define GET_EQ(ch, i)         ((ch)->equipment[i])
 
-#define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS) || ((skill) == SKILL_MANDARIN || (skill) == SKILL_HAITIAN_CREOLE))
+#define SKILL_IS_LANGUAGE(skill) (((skill) >= SKILL_ENGLISH && (skill) <= SKILL_FRENCH) || ((skill) >= SKILL_HEBREW && (skill) <= SKILL_IROQUOIS) || ((skill) == SKILL_MANDARIN || (skill) == SKILL_HAITIAN_CREOLE || (skill) == SKILL_HAWAIIAN || (skill) == SKILL_GREEK))
 #define SKILL_IS_DECKING(skill) ((skill) == SKILL_CYBERTERM_DESIGN || (skill) == SKILL_COMPUTER || (skill) == SKILL_BR_COMPUTER || (skill) == SKILL_BR_ELECTRONICS || ((skill) >= SKILL_PROGRAM_COMBAT && (skill) <= SKILL_PROGRAM_CYBERTERM) || (skill) == SKILL_DATA_BROKERAGE)
 #define SKILL_IS_MAGICAL(skill) ((skill) == SKILL_SPELLDESIGN || (skills[skill].requires_magic && !(skills[skill].is_nerps)))
 #define SKILL_IS_VEHICLE_RELATED(skill) ((skill) == SKILL_PILOT_BIKE || ((skill) >= SKILL_PILOT_CAR && (skill) <= SKILL_BR_TRUCK) || ((skill) >= SKILL_PILOT_ROTORCRAFT && (skill) <= SKILL_PILOT_VECTORTHRUST) || ((skill) >= SKILL_BR_FIXEDWING && (skill) <= SKILL_PILOT_WALKER))
 #define SKILL_IS_NERPS(skill) (skills[skill].is_nerps)
 #define SKILL_IS_SOCIAL(skill) ((skill) == SKILL_NEGOTIATION || ((skill) >= SKILL_CORPORATE_ETIQUETTE && (skill) <= SKILL_ELF_ETIQUETTE))
 #define SKILL_IS_COMBAT(skill) (!skills[skill].is_nerps && (((skill) != SKILL_CENTERING && (skill) != SKILL_SPELLDESIGN && (skill) >= SKILL_ARMED_COMBAT && (skill) <= SKILL_ORALSTRIKE) || ((skill) >= SKILL_OFFHAND_EDGED && (skill) <= SKILL_OFFHAND_WHIP) || (skill) == SKILL_GUNNERY))
+#define SKILL_IS_OTAKU(skill) (skills[skill].requires_resonance)
 
 #define GET_SKILL_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_SKILLS])
 #define GET_ADEPT_POWER_DIRTY_BIT(ch)   ((ch)->char_specials.dirty_bits[DIRTY_BIT_POWERS])
@@ -1049,6 +1050,10 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GET_PART_PART_COST(part)               (GET_OBJ_VAL((part), 8))
 #define GET_PART_CHIP_COST(part)               (GET_OBJ_VAL((part), 9))
 #define GET_PART_INITIAL_BUILD_TICKS(part)     (GET_OBJ_VAL((part), 10))
+#define GET_PART_RADIO_FREQ(part)              (GET_OBJ_VAL((part), 11)) // Settable by player
+#ifdef ENABLE_RADIO_CRYPT
+  #define GET_PART_RADIO_CRYPT(part)             (GET_OBJ_VAL((part), 12)) // Settable by player
+#endif
 #define GET_PART_BUILD_SUCCESSES_ROLLED(part)  (GET_OBJ_TIMER((part)))
 
 // ITEM_WEAPON convenience defines

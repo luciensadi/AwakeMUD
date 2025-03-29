@@ -1354,7 +1354,8 @@ struct program_data programs[] =
     {"MPCP", 8 },
     {"Reality Filter", 10 },
     {"Response Increase", 1 },
-    {"Shield", 4}
+    {"Shield", 4},
+    {"Radio Link", 1}
   };
 
 int attack_multiplier[] = { 0, 2, 3, 4, 5 };
@@ -1388,7 +1389,6 @@ struct part_data parts[] =
     { "Radio Interface", TYPE_KIT, 0, 0 },
     { "Satellite Interface", TYPE_WORKSHOP, 0, 2 },
     { "Signal Amplifier", TYPE_KIT, 0, -1 },
-
   };
 const char *log_types[] =
   {
@@ -1764,8 +1764,8 @@ struct skill_data skills[] =
     {"Data Brokerage",                          INT, SKILL_TYPE_KNOWLEDGE, FALSE, FALSE,     99,  FALSE,  FALSE, FALSE },
     {"Aura Reading",                            INT, SKILL_TYPE_ACTIVE,    TRUE , FALSE,     99,  FALSE,  TRUE , FALSE },
     {"Stealth",                                 QUI, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  TRUE ,  FALSE, FALSE },
-    {"UNUSED - was Steal",                      QUI, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE, TRUE  },
-    {"UNUSED - was Track",                      INT, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE, TRUE  },
+    {"Hawaiian",                                INT, SKILL_TYPE_KNOWLEDGE, FALSE, FALSE,     99,  FALSE,  FALSE, FALSE },
+    {"Greek",                                   INT, SKILL_TYPE_KNOWLEDGE, FALSE, FALSE,     99,  FALSE,  FALSE, FALSE },
     {"Climbing",                                BOD, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE, FALSE },
     {"Driving Motorcycles",                     REA, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  TRUE ,  FALSE, FALSE },
     {"UNUSED - unknown",                        REA, SKILL_TYPE_ACTIVE,    FALSE, FALSE,     99,  FALSE,  FALSE, TRUE  },

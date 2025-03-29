@@ -25,7 +25,9 @@
 #define LEXICON_IROQUOIS        21
 #define LEXICON_MANDARIN        22
 #define LEXICON_HAITIAN_CREOLE  23
-#define NUM_LEXICONS            24
+#define LEXICON_HAWAIIAN        24
+#define LEXICON_GREEK           25
+#define NUM_LEXICONS            26
 
 #define NUM_LEXICON_WORDS_BEFORE_REPEAT 5
 
@@ -54,6 +56,8 @@ extern const char *lexicon_hebrew[];
 extern const char *lexicon_iroquois[];
 extern const char *lexicon_mandarin[];
 extern const char *lexicon_haitian_creole[];
+extern const char *lexicon_hawaiian[];
+extern const char *lexicon_greek[];
 
 extern void populate_lexicon_size_table();
 extern const char *get_random_word_from_lexicon(int language_skill);
