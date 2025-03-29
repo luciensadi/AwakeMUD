@@ -5144,8 +5144,15 @@ ACMD(do_score)
         strlcat(mage_string, "Physical Adept", sizeof(mage_string));
         break;
       default:
-        if (IS_OTAKU(ch)) strlcat(mage_string, "Otaku", sizeof(mage_string));
-        else strlcat(mage_string, "Mundane", sizeof(mage_string));
+        if (IS_OTAKU(ch)) {
+          if (GET_OTAKU_PATH(ch) == OTAKU_PATH_NORMIE) {
+            strlcat(mage_string, "Otaku path missing, contact staff", sizeof(mage_string));
+          } else {
+            strlcat(mage_string, (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) ? "Cyberadept Otaku" : "Technoshaman Otaku", sizeof(mage_string));
+          }
+        } else {
+          strlcat(mage_string, "Mundane", sizeof(mage_string));
+        }
         break;
     }
 
