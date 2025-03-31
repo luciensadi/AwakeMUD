@@ -3152,6 +3152,37 @@ int vnum_mobile_affflag(int i, struct char_data * ch)
   return (found);
 }
 
+int vnum_mobile_attribute(char *attrname, struct char_data *ch) {
+  int found = 0;
+
+  // Identify the flag.
+  int attr = search_block(attrname, attributes, FALSE);
+
+  if (attr >= NUM_ATTRIBUTES || attr < 0) {
+    send_to_char(ch, "'%s' is not a valid attribute. Choices are:\r\n", attributes);
+    for (attr = 0; attr < NUM_ATTRIBUTES; attr++) {
+      send_to_char(ch, "%s%s%s", attr == 0 ? "" : ", ", attributes[attr], attr == NUM_ATTRIBUTES - 1 ? "\r\n" : "");
+    }
+    return 0;
+  }
+
+  send_to_char(ch, "Mobs sorted by %s:\r\n", attributes[attr]);
+
+  for (int current = 50; current > 0; current--) {
+    for (rnum_t nr = 0; nr <= top_of_mobt; nr++) {
+      if (GET_ATT(&mob_proto[nr], attr) == current || (current == 50 && GET_ATT(&mob_proto[nr], attr) > current)) {
+        send_to_char(ch, "[%5ld] %s^n: %d\r\n",
+                     MOB_VNUM_RNUM(nr),
+                     mob_proto[nr].player.physical_text.name,
+                     GET_ATT(&mob_proto[nr], attr));
+        found++;
+      }
+    }
+  }
+  
+  return (found);
+}
+
 int vnum_vehicles_by_attribute(int vaff_idx, struct char_data *ch) {
   send_to_char(ch, "Displaying all vehicle prototypes sorted by %s (descending):\r\n", veh_aff[vaff_idx]);
 
@@ -3508,6 +3539,8 @@ int vnum_mobile(char *searchname, struct char_data * ch)
     return vnum_mobile_valuedeath(searchname,ch);
   if (!strcmp(arg1,"affflag"))
     return vnum_mobile_affflag(atoi(arg2),ch);
+  if (!strcmp(arg1,"attribute"))
+    return vnum_mobile_attribute(searchname,ch);
   for (nr = 0; nr <= top_of_mobt; nr++)
   {
     bool is_keyword = isname(searchname, get_string_after_color_code_removal(mob_proto[nr].player.physical_text.keywords, NULL));
