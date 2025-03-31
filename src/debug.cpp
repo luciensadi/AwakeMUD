@@ -197,6 +197,14 @@ ACMD(do_debug) {
     return;
   }
 
+#ifdef TEMPORARY_COMPILATION_GUARD
+  if (!str_cmp(arg1, "minigame")) {
+    extern void minigame_debug(struct char_data *ch, char *rest_of_argument);
+    minigame_debug(ch, rest_of_argument);
+    return;
+  }
+#endif
+
   if (!str_cmp(arg1, "idledelete")) {
     idnum_t idnum = atol(rest_of_argument);
     FAILURE_CASE_PRINTF(idnum <= 1, "You must enter an IDNUM > 1 to do this; you entered %d.", idnum);
