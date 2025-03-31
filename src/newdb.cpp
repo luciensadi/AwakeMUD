@@ -1282,7 +1282,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       }
     }
 
-    if (!has_any_item) {
+    if (!has_any_item && !PLR_FLAGGED(player, PLR_JUST_DIED)) {
       // Friendly notice: If you're reading this and going "oh hey, I could use this to drop all my stuff and quit to dupe my gear!" etc, that's code abuse and will result in a purge and ban. As you can see, it's logged ;)
       mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Got completely nude character to save_char(). Refusing to save them under the assumption that this is a stripped char from that untraced bug that sometimes destroys gear.\r\n");
       return false;
