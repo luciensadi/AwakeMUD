@@ -774,7 +774,7 @@ struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_v
 
 ACMD(do_radio)
 {
-  struct obj_data *obj, *radio = NULL;
+  struct obj_data *radio = NULL;
   char one[MAX_INPUT_LENGTH], two[MAX_INPUT_LENGTH];
   int i;
   bool cyberware = FALSE, vehicle = FALSE, matrix = FALSE;
