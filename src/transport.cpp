@@ -239,6 +239,7 @@ struct dest_data caribbean_taxi_destinations[] =
     { "guns", "big", "Big Bore Guns & Ammo", 98048, TAXI_DEST_TYPE_SHOPPING, TRUE}, 
     { "phil's", "garage", "Phil's Garage", 98079, TAXI_DEST_TYPE_SHOPPING, TRUE}, 
     { "fausto's", "surf", "Fausto's Surf Shop", 100933, TAXI_DEST_TYPE_SHOPPING, TRUE}, 
+    { "prosperity", "estate", "Prosperity Real Estate", 98016, TAXI_DEST_TYPE_OTHER, TRUE },
     { "pro", "", "The Pro Shop", 100957, TAXI_DEST_TYPE_SHOPPING, TRUE}, 
     { "carlos'", "cars", "Carlos' Used Cars", 100201, TAXI_DEST_TYPE_SHOPPING, TRUE},
     { "taxidermy", "stevenson's", "Irwin Stevenson's Taxidermy & Hunting", 100256, TAXI_DEST_TYPE_SHOPPING, TRUE},
@@ -247,7 +248,6 @@ struct dest_data caribbean_taxi_destinations[] =
     { "bayview", "apartments", "Bayview Apartments", 98011, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE},
     { "docwagon", "wagon", "DocWagon", 98010, TAXI_DEST_TYPE_HOSPITALS, TRUE}, 
     { "cart", "crash", "Crash Cart", 100945, TAXI_DEST_TYPE_HOSPITALS, TRUE},
-    { "prosperity", "estate", "Prosperity Real Estate", 98016, TAXI_DEST_TYPE_OTHER, TRUE },
     { "\n", "", "", 0, 0, 0 } // this MUST be last, or the game will crash, you have been warned
   };
 
