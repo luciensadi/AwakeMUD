@@ -3403,6 +3403,21 @@ void remove_db_tag(idnum_t idnum, const char *tag_name) {
   mysql_wrapper(mysql, query_buf);
 }
 
+void save_all_pcs() {
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+    if (d->character && !IS_NPC(d->character)) {
+      log_vfprintf("Saving %s (%ld).", GET_CHAR_NAME(d->character), GET_IDNUM(d->character));
+      save_char(d->character, GET_LOADROOM(d->character));
+    }
+
+    if (d->original && !IS_NPC(d->original)) {
+      log_vfprintf("Saving %s (%ld).", GET_CHAR_NAME(d->original), GET_IDNUM(d->original));
+      save_char(d->original, GET_LOADROOM(d->original));
+    }
+  }
+  log("Finished saving all PCs.");
+}
+
 void recalculate_character_magic_rating(struct char_data *ch) {
   if (GET_SETTABLE_REAL_MAG(ch) <= 0)
     return;

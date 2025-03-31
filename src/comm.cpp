@@ -197,6 +197,7 @@ extern int calculate_distance_between_rooms(vnum_t start_room_vnum, vnum_t targe
 void set_descriptor_canaries(struct descriptor_data *newd);
 extern void process_flying_vehicles();
 extern void cleanup_policy_tree();
+extern void save_all_pcs();
 
 extern void save_all_apartments_and_storage_rooms();
 
@@ -490,6 +491,12 @@ void init_game(int port)
   // Since game_loop() is an infinite loop until shutdown is triggered, this is only reached when the game is ready to close.
   log("Saving all apartments and storage rooms.");
   save_all_apartments_and_storage_rooms();
+
+  log("Saving all vehicles.");
+  save_vehicles(FALSE);
+
+  log("Saving all PCs.");
+  save_all_pcs();
 
   log("Closing all sockets.");
   while (descriptor_list)
