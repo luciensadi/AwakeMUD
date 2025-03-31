@@ -96,7 +96,16 @@ int get_part_maximum_rating(struct obj_data *part) {
     case PART_SATELLITE:
       return mpcp;
     case PART_ASIST_HOT:
+    case PART_ASIST_COLD:
     case PART_RAS_OVERRIDE:
+    case PART_ICCM:
+    case PART_PORTS:
+    case PART_REALITY_FILTER:
+    case PART_MATRIX_INTERFACE:
+    case PART_MASER:
+    case PART_LASER:
+    case PART_MICROWAVE:
+    case PART_SIGNAL_AMP:
       return 0;
   }
 
