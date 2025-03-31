@@ -1326,8 +1326,10 @@ void keepalive(struct descriptor_data *d) {
     (char) 0
   };
 
-  if (write_to_descriptor(d->descriptor, keepalive) < 0) {
-    mudlog("SYSERR: Failed to write keepalive data to descriptor.", d->character, LOG_SYSLOG, TRUE);
+  int status_code;
+
+  if ((status_code = write_to_descriptor(d->descriptor, keepalive)) < 0) {
+    mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: Failed to write keepalive data to descriptor (status code %d).", status_code);
   }
 }
 
