@@ -1080,6 +1080,8 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
           break;
         case LOG_PGROUPLOG:
           check_log = PRF_PGROUPLOG;
+          if (!access_level(tch, LVL_VICEPRES))
+            continue;
           break;
         case LOG_HELPLOG:
           check_log = PRF_HELPLOG;
@@ -1101,6 +1103,8 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
           break;
         case LOG_MAILLOG:
           check_log = PRF_MAILLOG;
+          if (!access_level(tch, LVL_VICEPRES))
+            continue;
           break;
         default:
           char errbuf[500];
