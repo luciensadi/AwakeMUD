@@ -2293,7 +2293,7 @@ ACMD(do_push)
     else if (ch->in_veh->cspeed > SPEED_IDLE)
       send_to_char("You are moving too fast to do that.\r\n", ch);
     else if (!(veh = get_veh_list(argument, ch->in_veh->carriedvehs, ch)))
-      send_to_char("That vehicle isn't in here.\r\n", ch);
+      send_to_char(ch, "You don't see a vehicle named '%s' to push %s into.\r\n", argument, GET_VEH_NAME(veh));
     else {
       strlcpy(buf3, GET_VEH_NAME(veh), sizeof(buf3));
       send_to_char(ch, "You push %s out of the back.\r\n", buf3);
@@ -2320,16 +2320,15 @@ ACMD(do_push)
       send_to_char("Push what?\r\n", ch);
       return;
     }
-    if (!(veh = get_veh_list(buf, ch->in_room->vehicles, ch)) || !(found_veh = get_veh_list(buf1, ch->in_room->vehicles, ch))) {
-      send_to_char("You don't see that vehicle here.\r\n", ch);
-      return;
-    }
 
-    FAILURE_CASE(found_veh == veh, "You can't push it into itself.");
-    FAILURE_CASE(!found_veh->seating[0] && !(repair_vehicle_seating(found_veh) && found_veh->seating[0]), "There's nowhere to push it into.");
-    FAILURE_CASE(found_veh->load - found_veh->usedload < calculate_vehicle_entry_load(veh), "There is not enough room in there for that.");
+    FAILURE_CASE_PRINTF(!(veh = get_veh_list(buf, ch->in_room->vehicles, ch)), "You don't see a vehicle named '%s' here.", buf);
+    FAILURE_CASE_PRINTF(!(found_veh = get_veh_list(buf1, ch->in_room->vehicles, ch)), "You don't see a vehicle named '%s' to push %s into.", buf1, GET_VEH_NAME(veh));
+
+    FAILURE_CASE_PRINTF(found_veh == veh, "You can't push %s into itself.", GET_VEH_NAME(veh));
+    FAILURE_CASE_PRINTF(!found_veh->seating[0] && !(repair_vehicle_seating(found_veh) && found_veh->seating[0]), "There's not enough seating for you in %s.", GET_VEH_NAME(found_veh));
+    FAILURE_CASE_PRINTF(found_veh->load - found_veh->usedload < calculate_vehicle_entry_load(veh), "There is not enough room in %s for that.", GET_VEH_NAME(found_veh));
     FAILURE_CASE(found_veh->locked, "You can't push it into a locked vehicle.");
-    FAILURE_CASE(veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED, "The wheels seem to be locked.");
+    FAILURE_CASE_PRINTF(veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED, "The wheels on %s seem to be locked.", GET_VEH_NAME(veh));
     FAILURE_CASE(found_veh->damage >= VEH_DAM_THRESHOLD_DESTROYED, "You can't push anything into a destroyed vehicle.");
 
     strlcpy(buf2, GET_VEH_NAME(veh), sizeof(buf2));
