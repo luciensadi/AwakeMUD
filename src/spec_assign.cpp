@@ -659,6 +659,12 @@ void assign_mobiles(void)
   SPECIAL(marksmanship_trainer);
   SPECIAL(receptionist_95902);
   SPECIAL(graffiti_cleaner);
+
+  // CAS
+  ASSIGNMOB(102050, receptionist);
+  ASSIGNMOB(102053, receptionist);
+  ASSIGNMOB(102068, receptionist);
+  ASSIGNMOB(102067, fence);
   
 
   ASSIGNMOB(22870, marksmanship_first);
@@ -834,6 +840,9 @@ void assign_mobiles(void)
   #ifdef USE_PRIVATE_CE_WORLD
   // Airport painter.
   ASSIGNMOB(65501, painter);
+
+  // CAS
+  ASSIGNMOB(102046, fixer);
 
   // Secret area fixer.
   ASSIGNMOB(33802, fixer);

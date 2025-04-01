@@ -4174,6 +4174,12 @@ int find_hotel_room(int room)
       return 39288;
     case 62820:
       return 62820;
+    case 102053:
+      return 102073;
+    case 102069:
+      return 102074;
+    case 102050:
+      return 102048;
   }
   return room;
 }
