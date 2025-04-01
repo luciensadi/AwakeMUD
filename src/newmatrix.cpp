@@ -95,6 +95,7 @@ void clear_hitcher(struct char_data *ch, bool shouldNotify)
 void unload_active_program(struct matrix_icon *persona, struct obj_data *soft)
 {
   if (!persona || !soft) return;
+  struct obj_data *temp = NULL;
   persona->decker->active -= GET_PROGRAM_SIZE(soft);
   REMOVE_FROM_LIST(soft, persona->decker->software, next_content);
   extract_obj(soft);
@@ -741,7 +742,7 @@ ACMD(do_matrix_position)
 
 bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *targ, int &success)
 {
-  struct obj_data *soft = NULL, *temp = NULL;
+  struct obj_data *soft = NULL;
   if (!targ || !targ->decker) return FALSE; // IC don't have shields
 
   for (soft = targ->decker->software; soft; soft = soft->next_content) {
