@@ -1668,6 +1668,37 @@ bool matrix_interpreter(struct char_data * ch, char *argument, char *line, comma
   return FALSE;
 }
 
+char *condense_repeated_characters(char *argument) {
+  char last_seen_char = 1;
+  int last_seen_count = 0;
+
+  if (!argument || !*argument)
+    return argument;
+
+  char *reader = argument;
+  char *writer = argument;
+
+  while (true) {
+    if (*reader == last_seen_char) {
+      if (++last_seen_count > 3) {
+        reader++;
+        continue;
+      } else {
+        *writer++ = *reader;
+      }
+    } else {
+      *writer++ = *reader;
+      last_seen_char = *reader;
+      last_seen_count = 1;
+    }
+
+    if (*(reader++) == '\0')
+      break;
+  }
+
+  return argument;
+}
+
 /*
  * This is the actual command interpreter called from game_loop() in comm.c
  * It makes sure you are the proper level and position to execute the command,
@@ -1697,6 +1728,11 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
   // They entered something? KaVir's protocol snippet says to clear their WriteOOB.
   if (ch->desc)
     ch->desc->pProtocol->WriteOOB = 0;
+
+  // Strip out massively repeated characters.
+  send_to_char(ch, "debug: argument was '%s'\r\n", argument);
+  argument = condense_repeated_characters(argument);
+  send_to_char(ch, "debug: argument is now '%s'\r\n", argument);
 
 #ifdef LOG_COMMANDS
   log_command(ch, argument, tcname);
@@ -3624,7 +3660,7 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
     "look", "scan", "probe", "alias", "help",
     "progress", "time",
     "skills", "powers", "spells",
-    "list", "info", "recap",
+    "list", "info", "recap", "balance",
     "\n" // this MUST be last
   };
   const char *discard_commands[] = {
@@ -3646,7 +3682,7 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
       return;
 
   // If they haven't earned additional scrutiny, skip common spammy commands as well.
-  if (!PLR_FLAGGED(ch, PLR_ADDITIONAL_SCRUTINY)) {
+  if (GET_LEVEL(ch) <= LVL_MORTAL && !PLR_FLAGGED(ch, PLR_ADDITIONAL_SCRUTINY)) {
     for (int i = 0; *discard_commands[i] != '\n'; i++)
       if (str_str(discard_commands[i], argument))
         return;

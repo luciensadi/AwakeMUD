@@ -877,13 +877,13 @@ void game_loop(int mother_desc)
           d->wait = 1;
           d->prompt_mode = 1;
 
-          if (d->str)                     /* writing boards, mail, etc.   */
+          if (d->str) {                    /* writing boards, mail, etc.   */
             string_add(d, comm);
-          else if (d->showstr_point)      /* reading something w/ pager   */
+          } else if (d->showstr_point) {     /* reading something w/ pager   */
             show_string(d, comm);
-          else if (d->connected != CON_PLAYING)   /* in menus, etc.       */
+          } else if (d->connected != CON_PLAYING) {  /* in menus, etc.       */
             nanny(d, comm);
-          else {                          /* else: we're playing normally */
+          } else {                          /* else: we're playing normally */
             if (aliased) /* to prevent recursive aliases */
               d->prompt_mode = 0;
             else {
