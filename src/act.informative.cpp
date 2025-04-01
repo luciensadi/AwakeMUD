@@ -1572,7 +1572,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     bool dual = TRUE;
     if (IS_ASTRAL(i))
       strlcat(buf, " (astral)", sizeof(buf));
-    if (GET_GRADE(i)) {
+    if (GET_GRADE(i) && !IS_OTAKU(i)) {
       bool init = TRUE;
       if (GET_METAMAGIC(i, META_MASKING)) {
         if (IS_SET(GET_MASKING(i), MASK_INIT) || IS_SET(GET_MASKING(i), MASK_COMPLETE))
