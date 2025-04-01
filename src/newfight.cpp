@@ -128,6 +128,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A crackling shot of energy erupts from $n's Dominator and slams into $N, disabling $M!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A crackling shot of energy erupts from $n's Dominator and slams into you! Your vision fades as your muscles lock up.", FALSE, att->ch, 0, def->ch, TO_VICT);
         GET_MENTAL(def->ch) = -10;
+        mudlog_vfprintf(att->ch, LOG_WIZLOG, "%s used a Dominator to stun %s.", GET_CHAR_NAME(att->ch), GET_CHAR_NAME(def->ch));
         update_pos(def->ch);
         return FALSE;
       case WEAP_HEAVY_PISTOL:
@@ -135,6 +136,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A ball of coherent light leaps from your Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_CHAR);
         act("A ball of coherent light leaps from $n's Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A ball of coherent light leaps from $n's Dominator, tearing into you! A horrible rending sensation tears through you as your vision fades.", FALSE, att->ch, 0, def->ch, TO_VICT);
+        mudlog_vfprintf(att->ch, LOG_WIZLOG, "%s used a Dominator to kill %s.", GET_CHAR_NAME(att->ch), GET_CHAR_NAME(def->ch));
         die(def->ch, GET_IDNUM(att->ch));
         return TRUE;
       case WEAP_CANNON:
@@ -142,6 +144,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A roaring column of force explodes from your Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_CHAR);
         act("A roaring column of force explodes from $n's Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A roaring column of force explodes from $n's Dominator, erasing you from existence!", FALSE, att->ch, 0, def->ch, TO_VICT);
+        mudlog_vfprintf(att->ch, LOG_WIZLOG, "%s used a Dominator to erase %s.", GET_CHAR_NAME(att->ch), GET_CHAR_NAME(def->ch));
         die(def->ch, GET_IDNUM(att->ch));
         if (def->ch->desc) {
           STATE(def->ch->desc) = CON_CLOSE;
