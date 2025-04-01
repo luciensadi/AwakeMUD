@@ -7271,7 +7271,7 @@ ACMD(do_hlist)
     if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(matrix[nr].vnum)))
       continue;
 
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s: %s-%d (%s)\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s^n: %s-%d^n (%s^n)\r\n",
              ++found,
              matrix[nr].vnum,
              matrix[nr].name,
