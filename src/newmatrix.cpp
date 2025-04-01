@@ -92,6 +92,14 @@ void clear_hitcher(struct char_data *ch, bool shouldNotify)
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
 }
 
+void unload_active_program(struct matrix_icon *persona, struct obj_data *soft)
+{
+  if (!persona || !soft) return;
+  persona->decker->active -= GET_PROGRAM_SIZE(soft);
+  REMOVE_FROM_LIST(soft, persona->decker->software, next_content);
+  extract_obj(soft);
+}
+
 struct obj_data * spawn_paydata(struct matrix_icon *icon) {
   struct obj_data *obj = read_object(OBJ_BLANK_OPTICAL_CHIP, VIRTUAL, OBJ_LOAD_REASON_SPAWN_PAYDATA);
   GET_DECK_ACCESSORY_TYPE(obj) = TYPE_FILE;
@@ -748,8 +756,7 @@ bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *ta
       GET_PROGRAM_RATING(soft)--;
       if (GET_PROGRAM_RATING(soft) <= 0) {
         send_to_icon(targ, "Your shield program crashes as the rating is depleted.\r\n");
-        REMOVE_FROM_LIST(soft, targ->decker->software, next_content);
-        extract_obj(soft);
+        unload_active_program(icon, soft);
       }
       return TRUE;
     }
