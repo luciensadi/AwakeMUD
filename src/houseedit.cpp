@@ -24,7 +24,7 @@ void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *su
 #define HED_IMPORT FALSE
 
 ACMD(do_houseedit) {
-  char mode[100], func[100];
+  char mode[MAX_INPUT_LENGTH], func[MAX_INPUT_LENGTH];
   char *mode_remainder = one_argument(argument, mode);
   char *func_remainder = one_argument(mode_remainder, func);
 
