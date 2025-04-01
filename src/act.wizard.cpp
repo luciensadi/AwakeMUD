@@ -7271,8 +7271,14 @@ ACMD(do_hlist)
     if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(matrix[nr].vnum)))
       continue;
 
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s\r\n", ++found,
-            matrix[nr].vnum, matrix[nr].name);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s: %s-%d (%s)\r\n",
+             ++found,
+             matrix[nr].vnum,
+             matrix[nr].name,
+             host_color[matrix[nr].color],
+             matrix[nr].security,
+             intrusion[matrix[nr].intrusion]
+            );
   }
 
   if (!found)
