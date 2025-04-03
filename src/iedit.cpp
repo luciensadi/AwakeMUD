@@ -992,7 +992,7 @@ void iedit_disp_val7_menu(struct descriptor_data * d)
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WEAPON:
-      if (!IS_GUN(GET_OBJ_VAL(d->edit_obj, 3)))
+      if (!WEAPON_IS_GUN(d->edit_obj))
         send_to_char("Reach: ", CH);
       else {
         // Skipping this field while doing nothing? Re-increment our counter.
@@ -1039,7 +1039,7 @@ void iedit_disp_val8_menu(struct descriptor_data * d)
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WEAPON:
-      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
+      if (WEAPON_IS_GUN(OBJ)) {
         if (GET_WEAPON_ATTACH_TOP_VNUM(OBJ) >= -1)
           send_to_char("Enter vnum of object to attach on top: ", CH);
         else {
@@ -1080,7 +1080,7 @@ void iedit_disp_val9_menu(struct descriptor_data * d)
       send_to_char("Armored clothing set (0 for no set): ", CH);
       break;
     case ITEM_WEAPON:
-      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
+      if (WEAPON_IS_GUN(OBJ)) {
         if (GET_WEAPON_ATTACH_BARREL_VNUM(OBJ) >= -1)
           send_to_char("Enter vnum of object to attach on barrel: ", CH);
         else {
@@ -2813,7 +2813,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (IS_GUN(GET_WEAPON_ATTACK_TYPE(OBJ))) {
+          if (WEAPON_IS_GUN(OBJ)) {
             if (number != -1) {
               struct obj_data *accessory = read_object(number, VIRTUAL, OBJ_LOAD_REASON_EDITING_EPHEMERAL_LOOKUP);
               if (!accessory) {
