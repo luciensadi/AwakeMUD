@@ -145,6 +145,10 @@ struct ranged_combat_data {
 
       // Get a pointer to the magazine.
       magazine = weapon->contains;
+      if (!access_level(ch, LVL_BUILDER) && GET_MAGAZINE_AMMO_TYPE(magazine) == AMMO_AV) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: PC %s had AV ammo in newfight struct init. Changing to APDS.", GET_CHAR_NAME(ch));
+        GET_MAGAZINE_AMMO_TYPE(magazine) = AMMO_APDS;
+      }
 
       // Determine the initial burst value of the weapon.
       if (WEAPON_IS_BF(weapon))

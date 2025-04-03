@@ -8248,8 +8248,9 @@ void zero_out_magazine_counts(struct obj_data *obj, int max_ammo_remaining = 0) 
     return;
   }
 
-  if ((GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) && (GET_MAGAZINE_AMMO_COUNT(obj) > max_ammo_remaining))
-    GET_MAGAZINE_AMMO_COUNT(obj) = max_ammo_remaining;
+  if ((GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) && (GET_MAGAZINE_AMMO_COUNT(obj) > max_ammo_remaining)) {
+    GET_MAGAZINE_AMMO_COUNT(obj) = (GET_MAGAZINE_AMMO_TYPE(obj) == AMMO_AV ? 0 : max_ammo_remaining);
+  }
 
   for (struct obj_data *contained = obj->contains; contained; contained = contained->next_content) {
     zero_out_magazine_counts(contained, max_ammo_remaining);
