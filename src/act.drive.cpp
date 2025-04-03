@@ -1348,7 +1348,7 @@ ACMD(do_speed)
     DELETE_AND_NULL_ARRAY(GET_VEH_DEFPOS(veh));
   }
 
-  FAILURE_CASE(veh_can_traverse_air(veh) && i > 2, "Sorry, you can't accelerate aircraft faster than cruising speed.");
+  FAILURE_CASE(GET_VEH_VNUM(veh) != 8913 && veh_can_traverse_air(veh) && i > 2, "Sorry, you can't accelerate aircraft faster than cruising speed.");
 
   if (veh->hood) {
     send_to_char("You can't move with the hood up.\r\n", ch);
