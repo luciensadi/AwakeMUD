@@ -7167,10 +7167,19 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     return FALSE;
   }
 #ifdef IS_BUILDPORT
-  int resist_skill = get_pilot_skill_for_veh(veh);
-  int ch_skill = driver ? GET_SKILL(driver, resist_skill) : 0;
-  int veh_soak_dice = veh->body + (driver ? MIN(GET_CONTROL(driver), ch_skill) : 0);
-  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nresist dice %d (skill %s=%d + veh->body=%d); ", veh_soak_dice, skills[resist_skill].name, ch_skill, veh->body);
+  int dummy_tn = 4;
+  int ch_skill = driver ? veh_skill(driver, veh, &dummy_tn, FALSE) : 0;
+  int veh_soak_dice = veh->body;
+  if (driver) {
+    if (GET_CONTROL(driver) > ch_skill) {
+      veh_soak_dice += ch_skill;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nresist dice %d (control pool capped by skill=%d + veh->body=%d); ", veh_soak_dice, ch_skill, veh->body);
+    } else {
+      veh_soak_dice += GET_CONTROL(driver);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nresist dice %d (control pool %d + veh->body=%d); ", veh_soak_dice, GET_CONTROL(driver), veh->body);
+    }
+  }
+  
 #else
   int veh_soak_dice = veh->body;
   snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nresist dice %d (veh->body=%d); ", veh_soak_dice, veh->body);

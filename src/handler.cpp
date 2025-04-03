@@ -3641,7 +3641,7 @@ int find_all_dots(char *arg, size_t arg_size)
 }
 
 #define DEFAULT_TO(skill_name) {if (!dice) {dice = GET_SKILL(ch, (skill_name)); defaulting = TRUE;}}
-int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn)
+int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn, bool include_control_pool)
 {
   int dice = 0;
 
@@ -3727,7 +3727,7 @@ int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn)
     }
   }
 
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
+  if (include_control_pool && (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)))
     dice += GET_CONTROL(ch);
 
   return dice;
