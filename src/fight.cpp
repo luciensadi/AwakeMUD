@@ -78,6 +78,7 @@ bool damage_without_message(struct char_data *ch, struct char_data *victim, int 
 bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message);
 void docwagon_retrieve(struct char_data *ch);
 void zero_out_magazine_counts(struct obj_data *obj, int max_ammo_remaining = 0);
+int get_vehicle_damage_modifier(struct veh_data *veh);
 
 SPECIAL(weapon_dominator);
 SPECIAL(pocket_sec);
@@ -7061,10 +7062,12 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
   } else {
     power -= (int) (veh->armor / 2);
     armor_target = (int) (veh->armor / 2);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "AV: power->%d (after removing 1/2 vehicle armor from it). ", power);
   }
 
   if (power <= armor_target || !damage_total)
   {
+    act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
     snprintf(buf, sizeof(buf), "$n's %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
     snprintf(buf2, sizeof(buf2), "Your attack ricochets off of %s.", GET_VEH_NAME(veh));
     act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
@@ -7184,14 +7187,14 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
   int veh_soak_dice = veh->body;
   snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nresist dice %d (veh->body=%d); ", veh_soak_dice, veh->body);
 #endif
-  int resist_tn = power + get_vehicle_modifier(veh);
+  int resist_tn = power + get_vehicle_damage_modifier(veh);
   attack_resist = success_test(veh_soak_dice, resist_tn);
   attack_success -= attack_resist;
   snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "resist vs TN %d, got %d successes so %d net for attacker. ", resist_tn, attack_resist, attack_success);
 
   int staged_damage = stage(attack_success, damage_total);
   damage_total = convert_damage(staged_damage);
-  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Dmg staged to %d. ", damage_total);
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Dmg staged to %s (%d boxes). ", GET_WOUND_NAME(staged_damage), damage_total);
   act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   if (damage_total < LIGHT)

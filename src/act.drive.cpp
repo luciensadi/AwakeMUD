@@ -2451,6 +2451,29 @@ ACMD(do_vehicle_osay) {
   send_to_char(ch, "You say ^mOOCly^n, \"%s^n\".\r\n", capitalize(argument));
 }
 
+int get_vehicle_damage_modifier(struct veh_data *veh) {
+  switch (veh->damage)
+  {
+  case 0:
+    return 0;
+  case VEH_DAM_THRESHOLD_LIGHT:
+  case 2:
+    return 1;
+  case VEH_DAM_THRESHOLD_MODERATE:
+  case 4:
+  case 5:
+    return 2;
+  case VEH_DAM_THRESHOLD_SEVERE:
+  case 7:
+  case 8:
+  case 9:
+    return 3;
+  case 10:
+    return 10;
+  }
+  return 99;
+}
+
 int get_vehicle_modifier(struct veh_data *veh, bool include_weather)
 {
   struct char_data *ch;
@@ -2484,24 +2507,8 @@ int get_vehicle_modifier(struct veh_data *veh, bool include_weather)
     }
   }
   // Damaged? TN goes up.
-  switch (veh->damage)
-  {
-  case VEH_DAM_THRESHOLD_LIGHT:
-  case 2:
-    mod += 1;
-    break;
-  case VEH_DAM_THRESHOLD_MODERATE:
-  case 4:
-  case 5:
-    mod += 2;
-    break;
-  case VEH_DAM_THRESHOLD_SEVERE:
-  case 7:
-  case 8:
-  case 9:
-    mod += 3;
-    break;
-  }
+  mod += get_vehicle_damage_modifier(veh);
+
   // Weather makes it harder to drive too.
   if (include_weather && weather_info.sky >= SKY_RAINING)
     mod++;
