@@ -7005,6 +7005,18 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
 
     damage_total = GET_WEAPON_DAMAGE_CODE(wielded);
 
+    if (WEAPON_IS_GUN(wielded)) {
+      power = GET_WEAPON_POWER(wielded);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "before armor: %d%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
+      // AV does not halve, and we model this by doubling it.
+      if (wielded->contains && GET_MAGAZINE_AMMO_TYPE(wielded->contains) == AMMO_AV) {
+        using_av = TRUE;
+      }
+    } else {
+      power = GET_STR(ch) + GET_WEAPON_STR_BONUS(wielded);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "melee: %d%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
+    }
+
     // Deduct burstfire ammo. Note that one has already been deducted in has_ammo. This DOESN'T modify power here, that's below.
     if (wielded->contains && GET_OBJ_TYPE(wielded->contains) == ITEM_GUN_MAGAZINE) {
       if (WEAPON_IS_FA(wielded)) {
@@ -7025,18 +7037,28 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
           GET_MAGAZINE_AMMO_COUNT(wielded->contains) = 0;
         }
       }
-    }
 
-    if (WEAPON_IS_GUN(wielded)) {
-      power = GET_WEAPON_POWER(wielded);
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "before armor: %d%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
-      // AV does not halve, and we model this by doubling it.
-      if (wielded->contains && GET_MAGAZINE_AMMO_TYPE(wielded->contains) == AMMO_AV) {
-        using_av = TRUE;
+      // Apply effects of ammo.
+      switch (GET_MAGAZINE_AMMO_TYPE(wielded->contains)) {
+        // AV is handled elsewhere.
+        case AMMO_EX:
+          power++;
+          // fall through
+        case AMMO_EXPLOSIVE:
+          power++;
+          break;
+        case AMMO_FLECHETTE:
+          // Houserule: Flechette vs vehicle /= 2.
+          power /= 2;
+          break;
+        case AMMO_HARMLESS:
+          power = 0;
+          break;
+        case AMMO_GEL:
+          // Gel rounds are -2 power.
+          power -= 2;
+          break;
       }
-    } else {
-      power = GET_STR(ch) + GET_WEAPON_STR_BONUS(wielded);
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "melee: %d%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
     }
   } else
   {
