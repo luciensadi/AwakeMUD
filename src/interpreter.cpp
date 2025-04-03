@@ -1680,7 +1680,8 @@ char *condense_repeated_characters(char *argument) {
 
   while (true) {
     if (*reader == last_seen_char) {
-      if (++last_seen_count > 3) {
+      // Skip anything that's been repeated more than 3 times, unless it's a digit.
+      if (++last_seen_count > 3 && !isdigit(*reader)) {
         reader++;
         continue;
       } else {
