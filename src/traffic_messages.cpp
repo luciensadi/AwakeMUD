@@ -370,7 +370,7 @@ const char *traffic_messages[] = {
   "A swarm of flies bumps into you, buzzing in your ears.\r\n", // 50
   "A stray cat darts across your field of vision.\r\n",
   "The sound of a couple arguing comes from a nearby window.\r\n",
-  "A firetruck blazes through with sirens blaring, heading to someone unknown destination.\r\n",
+  "A firetruck blazes through with sirens blaring, heading to some unknown destination.\r\n",
   "An overworked garbage truck comes through collecting refuse.\r\n",
   "A group of gangers drive by slowly in a vintage muscle car.\r\n", // 55
   "Two opposing motorcycle gangs fly by at breakneck speed, their battle sending stray rounds cracking off the pavement.\r\n",
