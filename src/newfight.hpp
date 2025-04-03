@@ -393,8 +393,7 @@ struct combat_data
 
     ranged_combat_mode = (weap
                           && GET_OBJ_TYPE(weap) == ITEM_WEAPON
-                          && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
-                          && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON));
+                          && WEAPON_IS_GUN(weapon));
 
     cyber = new struct cyberware_data(ch);
     ranged = new struct ranged_combat_data(ch, weapon, ranged_combat_mode);

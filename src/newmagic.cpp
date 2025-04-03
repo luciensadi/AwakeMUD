@@ -3821,7 +3821,7 @@ ACMD(do_bond)
   }
 
   else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
-           && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
+           && !WEAPON_IS_GUN(obj)
            && GET_WEAPON_FOCUS_RATING(obj) > 0)
   {
     if (GET_TRADITION(ch) == TRAD_MUNDANE) {

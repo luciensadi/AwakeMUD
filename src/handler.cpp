@@ -1006,7 +1006,7 @@ void affect_total(struct char_data * ch)
   // Apply gyromount penalties, but only if you're wielding a gun.
   // TODO: Ideally, this would only apply if you have uncompensated recoil, but that's a looot of code.
   struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
-  if (wielded && GET_OBJ_TYPE(wielded) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded))) {
+  if (wielded && GET_OBJ_TYPE(wielded) == ITEM_WEAPON && WEAPON_IS_GUN(wielded)) {
     bool added_gyro_penalty = FALSE;
     for (i = 0; !added_gyro_penalty && i < NUM_WEARS; i++) {
       if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO) {
@@ -1192,7 +1192,7 @@ void affect_total(struct char_data * ch)
   struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
   if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
     // Melee weapons grant reach according to their set stat.
-    if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+    if (!WEAPON_IS_GUN(weapon)) {
       if (GET_WEAPON_REACH(weapon) > 0)
         GET_REACH(ch) += GET_WEAPON_REACH(weapon);
     }

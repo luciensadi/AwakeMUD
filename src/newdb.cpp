@@ -2649,7 +2649,7 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner) {
         FORCE_PROTO_VALUE("weapon", GET_WEAPON_ATTACK_TYPE_SETTABLE(obj), GET_WEAPON_ATTACK_TYPE_SETTABLE(&obj_proto[rnum]));
         FORCE_PROTO_VALUE("weapon", GET_WEAPON_SKILL(obj), GET_WEAPON_SKILL(&obj_proto[rnum]));
 
-        if (IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
+        if (WEAPON_IS_GUN(obj)) {
           FORCE_PROTO_VALUE("weapon", GET_WEAPON_MAX_AMMO(obj), GET_WEAPON_MAX_AMMO(&obj_proto[rnum]));
           FORCE_PROTO_VALUE("weapon", GET_WEAPON_POSSIBLE_FIREMODES(obj), GET_WEAPON_POSSIBLE_FIREMODES(&obj_proto[rnum]));
           FORCE_PROTO_VALUE("weapon", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj), GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[rnum]));

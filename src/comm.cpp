@@ -1406,7 +1406,7 @@ int make_prompt(struct descriptor_data * d)
             case 'A':
               if (GET_EQ(d->character, WEAR_WIELD)) {
 
-                if (IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
+                if (WEAPON_IS_GUN(GET_EQ(d->character, WEAR_WIELD)))
                   switch (GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 11)) {
                     case MODE_SS:
                       snprintf(str, sizeof(str), "SS");
@@ -1465,8 +1465,7 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", GET_DRAIN(d->character));
               break;
             case 'g':       // current ammo
-              if (GET_EQ(d->character, WEAR_WIELD) &&
-                  IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
+              if (GET_EQ(d->character, WEAR_WIELD) && WEAPON_IS_GUN(GET_EQ(d->character, WEAR_WIELD)))
                 if (GET_EQ(d->character, WEAR_WIELD)->contains) {
                   snprintf(str, sizeof(str), "%d", MIN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 5),
                                          GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD)->contains, 9)));
@@ -1476,8 +1475,7 @@ int make_prompt(struct descriptor_data * d)
                   snprintf(str, sizeof(str), "0");
               break;
             case 'G':       // max ammo
-              if (GET_EQ(d->character, WEAR_WIELD) &&
-                  IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
+              if (GET_EQ(d->character, WEAR_WIELD) && WEAPON_IS_GUN(GET_EQ(d->character, WEAR_WIELD)))
                 snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 5));
               else
                 snprintf(str, sizeof(str), "0");
@@ -1581,8 +1579,7 @@ int make_prompt(struct descriptor_data * d)
                 snprintf(str, sizeof(str), "0");
               break;
             case 's':       // current ammo
-              if (GET_EQ(d->character, WEAR_HOLD) &&
-                  IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 3)))
+              if (GET_EQ(d->character, WEAR_HOLD) && WEAPON_IS_GUN(GET_EQ(d->character, WEAR_HOLD)))
                 if (GET_EQ(d->character, WEAR_HOLD)->contains) {
                   snprintf(str, sizeof(str), "%d", MIN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 5),
                                          GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD)->contains, 9)));
@@ -1592,8 +1589,7 @@ int make_prompt(struct descriptor_data * d)
                   snprintf(str, sizeof(str), "0");
               break;
             case 'S':       // max ammo
-              if (GET_EQ(d->character, WEAR_HOLD) &&
-                  IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 3)))
+              if (GET_EQ(d->character, WEAR_HOLD) && WEAPON_IS_GUN(GET_EQ(d->character, WEAR_HOLD)))
                 snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 5));
               else
                 snprintf(str, sizeof(str), "0");

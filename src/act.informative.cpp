@@ -2976,7 +2976,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       break;
     case ITEM_WEAPON:
       // Ranged weapons first.
-      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(j))) {
+      if (WEAPON_IS_GUN(j)) {
         int burst_count = 0;
 
         // Line 1: "It is a 3-round pistol that uses the Pistols skill to fire. Its base damage code is 2L."
@@ -4235,8 +4235,7 @@ ACMD(do_examine)
         look_in_obj(ch, tmp_object, TRUE, 0);
         send_to_char("\r\n", ch);
       }
-    } else if ((GET_OBJ_TYPE(tmp_object) == ITEM_WEAPON) &&
-               (IS_GUN(GET_OBJ_VAL(tmp_object, 3)))) {
+    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_WEAPON && WEAPON_IS_GUN(tmp_object)) {
       for (i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; ++i)
         if (GET_OBJ_VAL(tmp_object, i) >= 0) {
           send_to_char(ch, "There is %s attached to the %s of it.\r\n",

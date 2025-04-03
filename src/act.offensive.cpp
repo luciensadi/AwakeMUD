@@ -498,9 +498,7 @@ ACMD(do_shoot)
   for (i = WEAR_WIELD; i <= WEAR_HOLD; i++)
     if ((weapon = GET_EQ(ch, i)) &&
         (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON ||
-         (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
-                                                  || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GREN_LAUNCHER
-                                                  || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_MISS_LAUNCHER))))
+         (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && (WEAPON_IS_GUN(weapon)))))
       if (find_weapon_range(ch, weapon) > range)
         pos = i;
 
@@ -968,7 +966,7 @@ ACMD(do_mode)
     return;
   }
 
-  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !WEAPON_IS_GUN(weapon)) {
     send_to_char(ch, "%s isn't a firearm.\r\n", CAP(GET_OBJ_NAME(weapon)));
     return;
   }

@@ -1214,7 +1214,7 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
   if (weapon) {
     base += GET_WEAPON_POWER(weapon) * GET_WEAPON_DAMAGE_CODE(weapon);
 
-    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+    if (WEAPON_IS_GUN(weapon)) {
       int rnum = real_mobile(GET_MOB_VNUM(vict));
       for (int index = 0; index < NUM_AMMOTYPES; index++) {
         if (GET_BULLETPANTS_AMMO_AMOUNT(&mob_proto[rnum], GET_WEAPON_ATTACK_TYPE(weapon), npc_ammo_usage_preferences[index]) > 0) {
@@ -2875,8 +2875,7 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
 }
 
 #define IS_RANGED(eq)   (GET_OBJ_TYPE(eq) == ITEM_FIREWEAPON || \
-(GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-(IS_GUN(GET_OBJ_VAL(eq, 3)))))
+(GET_OBJ_TYPE(eq) == ITEM_WEAPON && WEAPON_IS_GUN(eq)))
 
 #define RANGE_OK(ch) ((GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON && \
 IS_RANGED(GET_EQ(ch, WEAR_WIELD))) || (GET_EQ(ch, WEAR_HOLD) && \
@@ -3787,7 +3786,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
   } // End fireweapon code.
 
   // Check for guns. We can get here either with wielded or mounted guns.
-  if (GET_OBJ_TYPE(wielded) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded)))
+  if (GET_OBJ_TYPE(wielded) == ITEM_WEAPON && WEAPON_IS_GUN(wielded))
   {
     // First, check if they're manning a turret-- if they are, special handling is required.
     if (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch))  {
@@ -5639,7 +5638,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
 
     act("$n aims $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
     act("You aim $p at $N and fire!", FALSE, ch, weapon, vict, TO_CHAR);
-    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+    if (WEAPON_IS_GUN(weapon)) {
       if (has_ammo_no_deduct(ch, weapon)) {
         if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
           GET_DODGE(vict) = GET_COMBAT_POOL(vict);
@@ -5798,7 +5797,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       snprintf(buf, sizeof(buf), "You aim $p at the %s and fire!",
               fname(EXIT2(nextroom, dir)->keyword));
       act(buf, FALSE, ch, weapon, vict, TO_CHAR);
-      if (IS_GUN(GET_OBJ_VAL(weapon, 3)))
+      if (WEAPON_IS_GUN(weapon))
         if (!has_ammo(ch, weapon))
           return;
     }
@@ -6446,7 +6445,7 @@ void perform_violence(void)
       if (GET_EQ(ch, WEAR_WIELD)
           && GET_EQ(ch, WEAR_HOLD)
           && FIGHTING(ch)
-          && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD)))
+          && WEAPON_IS_GUN(GET_EQ(ch, WEAR_HOLD))
           && GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_HOLD)) != WEAP_TASER)
       {
         target_died = hit(ch,
@@ -6960,7 +6959,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     wielded = GET_EQ(ch, WEAR_WIELD);
   }
 
-  if (get_speed(veh) > 10 && !AFF_FLAGGED(ch, AFF_COUNTER_ATT) && ((!wielded || !IS_GUN(GET_OBJ_VAL(wielded, 3)))))
+  if (get_speed(veh) > 10 && !AFF_FLAGGED(ch, AFF_COUNTER_ATT) && ((!wielded || !WEAPON_IS_GUN(wielded))))
   {
     return vram(veh, ch, NULL);
   }
@@ -7028,7 +7027,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
       }
     }
 
-    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded))) {
+    if (WEAPON_IS_GUN(wielded)) {
       power = GET_WEAPON_POWER(wielded);
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "before armor: %d%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
       // AV does not halve, and we model this by doubling it.
@@ -7103,7 +7102,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "after armor subtract: power->%d. ", power);
   }
 
-  if (wielded && IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded))) {
+  if (wielded && WEAPON_IS_GUN(wielded)) {
     if (burst > 0) {
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "After armor: BF/FA: %d%s becomes ", power, GET_SHORT_WOUND_NAME(damage_total));
       power += burst;
@@ -7194,7 +7193,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
   int dummy_tn = 4;
   int ch_skill = driver ? veh_skill(driver, veh, &dummy_tn, FALSE) : 0;
   int veh_soak_dice = veh->body;
-  if (driver) {
+  if (driver && (AFF_FLAGGED(driver, AFF_RIG) || PLR_FLAGGED(driver, PLR_REMOTE))) {
     if (GET_CONTROL(driver) > ch_skill) {
       veh_soak_dice += ch_skill;
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nresist dice %d (control pool capped by skill=%d + veh->body=%d); ", veh_soak_dice, ch_skill, veh->body);

@@ -3143,7 +3143,7 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
   }
 
   // You can only attach things to guns.
-  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !WEAPON_IS_GUN(weapon)) {
     if (ch) {
       send_to_char(ch, "%s is not a gun.\r\n", CAP(GET_OBJ_NAME(weapon)));
     } else {
@@ -3359,7 +3359,7 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
     return NULL;
   }
 
-  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !WEAPON_IS_GUN(weapon)) {
     if (ch) {
       send_to_char("You can only unattach accessories from weapons.\r\n", ch);
     } else {
@@ -4640,10 +4640,7 @@ int get_armor_penalty_grade(struct char_data *ch) {
 }
 
 void handle_weapon_attachments(struct obj_data *obj) {
-  if (GET_OBJ_TYPE(obj) != ITEM_WEAPON)
-    return;
-
-  if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)))
+  if (GET_OBJ_TYPE(obj) != ITEM_WEAPON || !WEAPON_IS_GUN(obj))
     return;
 
   int real_obj;
@@ -4850,7 +4847,7 @@ bool item_should_be_treated_as_melee_weapon(struct obj_data *obj) {
     return FALSE;
 
   // It's a gun that has a magazine in it.
-  if (IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) && obj->contains)
+  if (WEAPON_IS_GUN(obj) && obj->contains)
     return FALSE;
 
   // It's a gun that has no magazine (it was EJECTed), or it's not a gun.
@@ -4867,7 +4864,7 @@ bool item_should_be_treated_as_ranged_weapon(struct obj_data *obj) {
     return FALSE;
 
   // It's not a gun, or it doesn't have a magazine.
-  if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) || !obj->contains)
+  if (!WEAPON_IS_GUN(obj) || !obj->contains)
     return FALSE;
 
   // It's a gun that has a magazine in it.

@@ -48,7 +48,7 @@ void remove_riot_shield_bonuses(struct combat_data *wearer, struct combat_data *
 
 #define IS_RANGED(eq)   (GET_OBJ_TYPE(eq) == ITEM_FIREWEAPON || \
 (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-(IS_GUN(GET_OBJ_VAL(eq, 3)))))
+(WEAPON_IS_GUN(eq))))
 
 #define HAS_IMMUNITY_TO_NORMAL_WEAPONS(ch) (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch))
 
@@ -1278,7 +1278,7 @@ bool hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
 
 bool does_weapon_have_bayonet(struct obj_data *weapon) {
   // Precondition: Weapon must exist, must be a weapon-class item, and must be a gun.
-  if (!(weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))))
+  if (!(weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_GUN(weapon)))
     return FALSE;
 
   struct obj_data *attach_proto = get_obj_proto_for_vnum(GET_WEAPON_ATTACH_UNDER_VNUM(weapon));

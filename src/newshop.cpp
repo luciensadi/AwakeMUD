@@ -2000,7 +2000,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   switch (GET_OBJ_TYPE(obj))
   {
   case ITEM_WEAPON:
-    if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
+    if (WEAPON_IS_GUN(obj)) {
       if (GET_OBJ_VAL(obj, 0) < 3)
         strlcat(buf, " a weak", sizeof(buf));
       else if (GET_OBJ_VAL(obj, 0) < 6)

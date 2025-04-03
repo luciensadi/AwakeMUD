@@ -262,7 +262,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
               equip_char(mob, obj, pos);
 
               // Could be a weapon-- make sure it's loaded if it is.
-              if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
+              if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_GUN(obj)) {
                 // If it's carried by an NPC, make sure it's loaded.
                 if (GET_WEAPON_MAX_AMMO(obj) > 0) {
                   // Reload from their ammo.

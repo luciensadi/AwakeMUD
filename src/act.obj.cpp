@@ -3331,10 +3331,10 @@ int can_wield_both(struct char_data *ch, struct obj_data *one, struct obj_data *
     return TRUE;
   if (GET_OBJ_TYPE(one) != ITEM_WEAPON || GET_OBJ_TYPE(two) != ITEM_WEAPON)
     return TRUE;
-  if ((IS_GUN(GET_OBJ_VAL(one, 3)) && !IS_GUN(GET_OBJ_VAL(two, 3))) ||
-      (IS_GUN(GET_OBJ_VAL(two, 3)) && !IS_GUN(GET_OBJ_VAL(one, 3))))
+  if ((WEAPON_IS_GUN(one) && !WEAPON_IS_GUN(two)) ||
+      (WEAPON_IS_GUN(two) && !WEAPON_IS_GUN(one)))
     return FALSE;
-  else if (!IS_GUN(GET_OBJ_VAL(one, 3)) && !IS_GUN(GET_OBJ_VAL(two, 3)))
+  else if (!WEAPON_IS_GUN(one) && !WEAPON_IS_GUN(two))
     return FALSE;
   else if (IS_OBJ_STAT(one, ITEM_EXTRA_TWOHANDS) || IS_OBJ_STAT(two, ITEM_EXTRA_TWOHANDS))
     return FALSE;
@@ -3836,7 +3836,7 @@ ACMD(do_wield)
     if (!CAN_WEAR(obj, ITEM_WEAR_WIELD))
       send_to_char(ch, "You can't wield %s.\r\n", GET_OBJ_NAME(obj));
     else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
-             && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
+             && !WEAPON_IS_GUN(obj)
              && GET_WEAPON_FOCUS_BONDED_BY(obj) == GET_IDNUM(ch)
              && GET_MAG(ch) * 2 < GET_WEAPON_FOCUS_RATING(obj))
     {
@@ -4445,7 +4445,7 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
 
   // Refuse to let someone draw a weapon focus that they can't use.
   if (GET_OBJ_TYPE(contents) == ITEM_WEAPON
-          && !IS_GUN(GET_WEAPON_ATTACK_TYPE(contents))
+          && !WEAPON_IS_GUN(contents)
           && GET_WEAPON_FOCUS_RATING(contents) > 0
           && GET_WEAPON_FOCUS_BONDED_BY(contents) == GET_IDNUM(ch))
   {
@@ -4610,20 +4610,20 @@ bool holster_can_fit(struct obj_data *holster, struct obj_data *weapon) {
   switch (GET_HOLSTER_TYPE(holster)) {
     case HOLSTER_TYPE_SMALL_GUNS:
       // Handle standard small guns.
-      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) && small_weapon)
+      if (WEAPON_IS_GUN(weapon) && small_weapon)
         return TRUE;
 
       // Check for ranged tasers.
       return (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_TASER && GET_WEAPON_SKILL(weapon) == SKILL_TASERS);
     case HOLSTER_TYPE_MELEE_WEAPONS:
       // Handle standard melee weapons.
-      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
+      if (!WEAPON_IS_GUN(weapon))
         return TRUE;
 
       // Check for melee tasers.
       return (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_TASER && GET_WEAPON_SKILL(weapon) != SKILL_TASERS);
     case HOLSTER_TYPE_LARGE_GUNS:
-      return IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) && !small_weapon;
+      return WEAPON_IS_GUN(weapon) && !small_weapon;
   }
 
   return FALSE;
@@ -4714,7 +4714,7 @@ ACMD(do_holster)
 
 
   FAILURE_CASE_PRINTF(!cont, "You don't have any empty %s that will fit %s.", 
-                      !IS_GUN(GET_OBJ_VAL(obj, 3)) ? "sheaths" : "holsters", decapitalize_a_an(GET_OBJ_NAME(obj)));
+                      !WEAPON_IS_GUN(obj) ? "sheaths" : "holsters", decapitalize_a_an(GET_OBJ_NAME(obj)));
   
   FAILURE_CASE_PRINTF(cont == obj, "You can't put %s inside itself.", decapitalize_a_an(GET_OBJ_NAME(obj)));
 

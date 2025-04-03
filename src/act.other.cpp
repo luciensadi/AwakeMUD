@@ -1867,7 +1867,7 @@ ACMD(do_reload)
     }
 
   if (GET_OBJ_TYPE(gun) != ITEM_WEAPON
-      || !IS_GUN(GET_WEAPON_ATTACK_TYPE(gun))
+      || !WEAPON_IS_GUN(gun)
       || GET_WEAPON_MAX_AMMO(gun) <= 0)
   {
     send_to_char(ch, "%s is not a reloadable weapon!\r\n", capitalize(GET_OBJ_NAME(gun)));
@@ -1909,7 +1909,7 @@ ACMD(do_reload)
 ACMD(do_eject)
 {
   struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
-  if (!weapon || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+  if (!weapon || !WEAPON_IS_GUN(weapon)) {
     send_to_char("You're not wielding a firearm.\r\n", ch);
     return;
   }
@@ -2029,7 +2029,7 @@ ACMD(do_attach)
       send_to_char("The mount is locked.\r\n", ch);
       return;
     }
-    if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(item))) {
+    if (!WEAPON_IS_GUN(item)) {
       send_to_char(ch, "%s isn't a gun, there'd be no point in attaching it to a mount.\r\n", capitalize(GET_OBJ_NAME(item)));
       return;
     }
@@ -3953,7 +3953,7 @@ ACMD(do_assense)
         if (mem)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", and is seems to have been built by %s", mem->mem);
       }
-    } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) && GET_WEAPON_FOCUS_RATING(obj) > 0) {
+    } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && !WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_RATING(obj) > 0) {
       strlcat(buf, "a weapon focus", sizeof(buf));
       if (success >= 5) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It is of force %d", GET_WEAPON_FOCUS_RATING(obj));
@@ -4754,7 +4754,7 @@ ACMD(do_ammo) {
 
   bool sent_a_message = FALSE;
 
-  if (primary && IS_GUN(GET_WEAPON_ATTACK_TYPE(primary))) {
+  if (primary && WEAPON_IS_GUN(primary)) {
     if (primary->contains) {
       send_to_char(ch, "Primary: %d / %d %s.\r\n",
                    MIN(GET_WEAPON_MAX_AMMO(primary), GET_MAGAZINE_AMMO_COUNT(primary->contains)),
@@ -4772,7 +4772,7 @@ ACMD(do_ammo) {
     sent_a_message = TRUE;
   }
 
-  if (secondary && IS_GUN(GET_WEAPON_ATTACK_TYPE(secondary))) {
+  if (secondary && WEAPON_IS_GUN(secondary)) {
     if (secondary->contains) {
       send_to_char(ch, "Secondary: %d / %d %s.\r\n",
                    MIN(GET_WEAPON_MAX_AMMO(secondary), GET_OBJ_VAL(secondary->contains, 9)),
@@ -5286,7 +5286,7 @@ bool is_reloadable_weapon(struct obj_data *weapon, int ammotype) {
     return FALSE;
 
   // It must be a gun. Bows etc can choke on it.
-  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !WEAPON_IS_GUN(weapon))
     return FALSE;
 
   // It must take ammo.

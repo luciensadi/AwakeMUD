@@ -267,21 +267,16 @@ void SendGMCPCharVitals( struct char_data * ch )
     j["domain"] = get_ch_domain_str(ch, TRUE);
 
   // Current Ammo Handler
-  if (GET_EQ(ch, WEAR_WIELD) &&
-      IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)))
+  if (GET_EQ(ch, WEAR_WIELD) && WEAPON_IS_GUN(GET_EQ(ch, WEAR_WIELD))) {
     if (GET_EQ(ch, WEAR_WIELD)->contains) {
       j["ammo"] = MIN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 5), GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD)->contains, 9));
-    } else
+    } else {
       j["ammo"] = 0;
-    else
-      j["ammo"] = 0;
-
-  // Max ammo handler
-  if (GET_EQ(ch, WEAR_WIELD) &&
-      IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)))
+    }
     j["max_ammo"] =  GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 5);
-  else
+  } else {
     j["max_ammo"] = 0;
+  }
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();

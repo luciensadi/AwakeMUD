@@ -891,7 +891,13 @@ float get_proto_weight(struct obj_data *obj);
 #define CAN_WEAR(obj, part) ((obj)->obj_flags.wear_flags.IsSet((part)))
 
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
+
+#ifdef IS_BUILDPORT
+#define IS_GUN(type) ((((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GRENADE)))
+#else
 #define IS_GUN(type) ((((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GREN_LAUNCHER)) || (type) == WEAP_REVOLVER)
+#endif
+
 #define WEAPON_IS_GUN(weapon) ((weapon) && IS_GUN(GET_WEAPON_ATTACK_TYPE((weapon))) && (GET_WEAPON_SKILL((weapon)) >= SKILL_PISTOLS && GET_WEAPON_SKILL((weapon)) <= SKILL_ASSAULT_CANNON))
 
 #define IS_MONOWHIP(obj) (GET_OBJ_RNUM((obj)) >= 0 && obj_index[GET_OBJ_RNUM((obj))].wfunc == monowhip)
@@ -1083,7 +1089,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GUN_IS_CYBER_GYRO_MOUNTABLE(gun)         (GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_MMG && GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_HMG && GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_CANNON)
 #define GUN_IS_HEAVY_WEAPON(gun)                 (GET_WEAPON_SKILL((gun)) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL((gun)) <= SKILL_ARTILLERY)
 
-#define WEAPON_IS_FOCUS(obj)                     (GET_OBJ_TYPE((obj)) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE((obj))) && GET_WEAPON_FOCUS_RATING((obj)) > 0)
+#define WEAPON_IS_FOCUS(obj)                     (GET_OBJ_TYPE((obj)) == ITEM_WEAPON && !WEAPON_IS_GUN((obj)) && GET_WEAPON_FOCUS_RATING((obj)) > 0)
 bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 
 #define WEAPON_CAN_USE_FIREMODE(weapon, mode)    (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << (mode)))

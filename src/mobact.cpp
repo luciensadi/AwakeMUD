@@ -471,7 +471,7 @@ void mobact_change_firemode(struct char_data *ch) {
   int proning_desire = 0;
 
   // Precheck: Weapon must exist and must be a gun.
-  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !WEAPON_IS_GUN(weapon)) {
     // Melee fighters never want to be prone, so they'll stand up from that.
     if (AFF_FLAGGED(ch, AFF_PRONE)) {
 #ifdef MOBACT_DEBUG
@@ -1057,7 +1057,7 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
       }
       act(buf, TRUE, mob, NULL, pc, TO_VICT);
     } else {
-      if (GET_EQ(mob, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(mob, WEAR_WIELD)) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(mob, WEAR_WIELD)))) {
+      if (GET_EQ(mob, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(mob, WEAR_WIELD)) == ITEM_WEAPON && WEAPON_IS_GUN(GET_EQ(mob, WEAR_WIELD))) {
         send_to_char("^yThe glint of a scope aiming your way catches your eye!^n\r\n", pc);
       } else {
         switch(number(0, 2)) {
@@ -1765,7 +1765,7 @@ void mobile_activity(void)
 
       // Carried weapons.
       for (struct obj_data *weapon = ch->carrying; weapon; weapon = weapon->next_content) {
-        if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) && GET_WEAPON_MAX_AMMO(weapon) > 0) {
+        if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_GUN(weapon) && GET_WEAPON_MAX_AMMO(weapon) > 0) {
           ensure_mob_has_ammo_for_weapon(ch, weapon);
         }
       }
@@ -1774,7 +1774,7 @@ void mobile_activity(void)
       for (int index = 0; index < NUM_WEARS; index++) {
         if (GET_EQ(ch, index)
             && GET_OBJ_TYPE(GET_EQ(ch, index)) == ITEM_WEAPON
-            && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, index)))
+            && WEAPON_IS_GUN(GET_EQ(ch, index))
             && GET_WEAPON_MAX_AMMO(GET_EQ(ch, index)) > 0)
         {
           ensure_mob_has_ammo_for_weapon(ch, GET_EQ(ch, index));
@@ -1807,7 +1807,7 @@ void mobile_activity(void)
         #endif
 
         switch_weapons(ch, WEAR_WIELD);
-      } else if (IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))) && melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
+      } else if (WEAPON_IS_GUN(GET_EQ(ch, WEAR_WIELD)) && melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
         #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
         snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob #%ld is wielding %s %s%s, but has no melee skill in %s!",
                  GET_MOB_VNUM(ch),
@@ -2134,7 +2134,7 @@ void switch_weapons(struct char_data *mob, int pos)
 
     // Classify our weapons by ammo usage and type. Only allow weapons we can actually use, though.
     if (GET_OBJ_TYPE(i) == ITEM_WEAPON && (GET_SKILL(mob, GET_WEAPON_SKILL(i)) > 0 || GET_SKILL(mob, return_general(GET_WEAPON_SKILL(i))) > 0)) {
-      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(i))) {
+      if (WEAPON_IS_GUN(i)) {
         // Check for an unlimited-ammo weapon.
         if (GET_WEAPON_MAX_AMMO(i) == -1) {
           // TODO: Check if it's a better weapon.
