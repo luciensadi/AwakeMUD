@@ -7103,7 +7103,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "after armor subtract: power->%d. ", power);
   }
 
-  if (IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded))) {
+  if (wielded && IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded))) {
     if (burst > 0) {
       snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "After armor: BF/FA: %d%s becomes ", power, GET_SHORT_WOUND_NAME(damage_total));
       power += burst;
