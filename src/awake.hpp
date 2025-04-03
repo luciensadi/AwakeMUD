@@ -1404,7 +1404,7 @@ enum {
 #define ITEM_EXTRA_NORENT             2     /* Item cannot be rented        */
 #define ITEM_EXTRA_NODONATE           3     /* Item cannot be donated       */
 // unused, must remove, was !invis    4, also touch db.cpp item_extra_flag_map
-// unused, must remove, was invisible 5, also touch db.cpp item_extra_flag_map
+#define ITEM_EXTRA_SHEER              5
 #define ITEM_EXTRA_MAGIC              6     /* Item is magical              */
 #define ITEM_EXTRA_NODROP             7     /* Item is cursed: can't drop   */
 #define ITEM_EXTRA_FORMFIT            8     /* Item is blessed              */

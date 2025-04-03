@@ -7884,7 +7884,6 @@ void initialize_and_alphabetize_item_extra_flags() {
   for (int idx = 0; idx < MAX_ITEM_EXTRA; idx++) {
     switch(idx) {
       case 4:
-      case 5:
       case 14:
       case 22:
         continue;
