@@ -508,6 +508,15 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
     combat_list = ch;
   }
 
+  {
+    struct obj_data *weap = GET_EQ(ch, WEAR_WIELD);
+    if (weap && GET_OBJ_TYPE(weap) == ITEM_WEAPON && WEAPON_IS_GUN(weap) && weap->contains) {
+      if (GET_MAGAZINE_AMMO_TYPE(weap->contains) == AMMO_AV) {
+        send_to_veh("Your threat indicators light up as hostile AV munitions come online.", vict, NULL, TRUE);
+      }
+    }
+  }
+
   FIGHTING_VEH(ch) = vict;
   GET_POS(ch) = POS_FIGHTING;
 
@@ -7007,14 +7016,12 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
 
     if (WEAPON_IS_GUN(wielded)) {
       power = GET_WEAPON_POWER(wielded);
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "before armor: %d%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
       // AV does not halve, and we model this by doubling it.
       if (wielded->contains && GET_MAGAZINE_AMMO_TYPE(wielded->contains) == AMMO_AV) {
         using_av = TRUE;
       }
     } else {
       power = GET_STR(ch) + GET_WEAPON_STR_BONUS(wielded);
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "melee: %d%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
     }
 
     // Deduct burstfire ammo. Note that one has already been deducted in has_ammo. This DOESN'T modify power here, that's below.
@@ -7085,6 +7092,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
       damage_total = MODERATE;
   }
 
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "before armor: %d%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
   int armor_target;
   if (!using_av) {
     power = (int)(power / 2);
