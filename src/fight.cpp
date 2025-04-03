@@ -6930,6 +6930,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
   char ammo_type[20];
   static struct obj_data *wielded = NULL;
   static int base_target, power, damage_total;
+  char rbuf[10000] = {0};
 
   int attack_success = 0, attack_resist=0, skill_total = 1;
   int recoil=0, burst=0, recoil_comp=0, newskill, modtarget = 0;
@@ -7056,6 +7057,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     power = (int)(power / 2);
     damage_total--;
     armor_target = veh->armor;
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "non-AV: power->%d, code->%d. ", power, damage_total);
   } else {
     power -= (int) (veh->armor / 2);
     armor_target = (int) (veh->armor / 2);
@@ -7083,6 +7085,7 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     // For AV rounds, this was subtracted before the armor check.
     if (!using_av)
       power -= veh->armor;
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "after armor subtract: power->%d. ", power);
   }
 
   if (wielded)
@@ -7100,37 +7103,54 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
       modtarget += 2;
     else if (get_speed(veh) >= 200)
       modtarget += 3;
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "movement target mod=%d; ", modtarget);
   }
-  if (wielded)
-    modtarget -= check_smartlink(ch, wielded);
-  if (wielded && IS_OBJ_STAT(wielded, ITEM_EXTRA_SNIPER) && ch->in_room == veh->in_room)
+  if (wielded) {
+    int smartlink_target = check_smartlink(ch, wielded);
+    if (smartlink_target) {
+      modtarget -= smartlink_target;
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "smartlink target mod=%d; ", smartlink_target); 
+    }
+  }
+  if (wielded && IS_OBJ_STAT(wielded, ITEM_EXTRA_SNIPER) && ch->in_room == veh->in_room) {
     modtarget += SAME_ROOM_SNIPER_RIFLE_PENALTY;
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "sniper sameroom target mod=%d; ", SAME_ROOM_SNIPER_RIFLE_PENALTY); 
+  }
 
-  if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
+  if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) {
     modtarget++;
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "dualwield target mod=%d; ", 1); 
+  }
 
   if (AFF_FLAGGED(ch, AFF_MANNING) || IS_RIGGING(ch))
   {
     skill_total = get_skill(ch, SKILL_GUNNERY, base_target);
-  } else if (wielded && GET_SKILL(ch, GET_OBJ_VAL(wielded, 4)) < 1)
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "skill gunnery=%d; ", skill_total); 
+  } else if (wielded && GET_SKILL(ch, GET_WEAPON_SKILL(wielded)) < 1)
   {
-    newskill = return_general(GET_OBJ_VAL(wielded, 4));
+    newskill = return_general(GET_WEAPON_SKILL(wielded));
     skill_total = get_skill(ch, newskill, base_target);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "skill %s=%d; ", skills[newskill].name, skill_total);
   } else if (!wielded)
   {
-    if (GET_SKILL(ch, SKILL_UNARMED_COMBAT) < 1) {
-      newskill = SKILL_UNARMED_COMBAT;
-      skill_total = get_skill(ch, newskill, base_target);
-    } else
-      skill_total = get_skill(ch, SKILL_UNARMED_COMBAT, base_target);
-  } else
-    skill_total = get_skill(ch, GET_OBJ_VAL(wielded, 4), base_target);
+    newskill = SKILL_UNARMED_COMBAT;
+    skill_total = get_skill(ch, newskill, base_target);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "skill %s=%d; ", skills[newskill].name, skill_total);
+  } else {
+    newskill = GET_WEAPON_SKILL(wielded);
+    skill_total = get_skill(ch, newskill, base_target);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "skill %s=%d; ", skills[newskill].name, skill_total);
+  }
 
-  base_target = 4 + modtarget + recoil + modify_target(ch);
+  int modify_target_tn = modify_target(ch);
+  base_target = 4 + modtarget + recoil + modify_target_tn;
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "base_target=4+%d+%d(rec)+%d; ", modtarget, recoil, modify_target_tn);
 
   attack_success = success_test(skill_total, base_target);
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "rolled successes=%d; ", attack_success);
   if (attack_success < 1)
   {
+    act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
     if (wielded) {
       snprintf(buf, sizeof(buf), "$n fires his $o at %s, but misses.", GET_VEH_NAME(veh));
       snprintf(buf1, sizeof(buf1), "You fire your $o at %s, but miss.", GET_VEH_NAME(veh));
@@ -7147,16 +7167,23 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     return FALSE;
   }
 #ifdef IS_BUILDPORT
-  int ch_skill = driver ? GET_SKILL(driver, get_pilot_skill_for_veh(veh)) : 0;
+  int resist_skill = get_pilot_skill_for_veh(veh);
+  int ch_skill = driver ? GET_SKILL(driver, resist_skill) : 0;
   int veh_soak_dice = veh->body + (driver ? MIN(GET_CONTROL(driver), ch_skill) : 0);
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nresist dice %d (skill %s=%d + veh->body=%d); ", veh_soak_dice, skills[resist_skill].name, ch_skill, veh->body);
 #else
   int veh_soak_dice = veh->body;
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nresist dice %d (veh->body=%d); ", veh_soak_dice, veh->body);
 #endif
-  attack_resist = success_test(veh_soak_dice, power + get_vehicle_modifier(veh));
+  int resist_tn = power + get_vehicle_modifier(veh);
+  attack_resist = success_test(veh_soak_dice, resist_tn);
   attack_success -= attack_resist;
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "resist vs TN %d, got %d successes so %d net for attacker. ", resist_tn, attack_resist, attack_success);
 
   int staged_damage = stage(attack_success, damage_total);
   damage_total = convert_damage(staged_damage);
+  snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Dmg staged to %d. ", damage_total);
+  act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
   if (damage_total < LIGHT)
   {
