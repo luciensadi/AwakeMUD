@@ -7004,30 +7004,41 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
         break;
     }
 
-    // Deduct burstfire ammo. Note that one has already been deducted in has_ammo.
-    if (WEAPON_IS_BF(wielded) && wielded->contains && GET_OBJ_TYPE(wielded->contains) == ITEM_GUN_MAGAZINE) {
-      if (GET_MAGAZINE_AMMO_COUNT(wielded->contains) >= 2) {
+    damage_total = GET_WEAPON_DAMAGE_CODE(wielded);
+
+    // Deduct burstfire ammo. Note that one has already been deducted in has_ammo. This DOESN'T modify power here, that's below.
+    if (wielded->contains && GET_OBJ_TYPE(wielded->contains) == ITEM_GUN_MAGAZINE) {
+      if (WEAPON_IS_FA(wielded)) {
+        burst = GET_WEAPON_FULL_AUTO_COUNT(wielded);
+      } else if (WEAPON_IS_BF(wielded)) {
         burst = 3;
-        GET_MAGAZINE_AMMO_COUNT(wielded->contains) -= 2;
-        AMMOTRACK(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(wielded->contains), GET_MAGAZINE_AMMO_TYPE(wielded->contains), AMMOTRACK_COMBAT, -2);
-      } else if (GET_MAGAZINE_AMMO_COUNT(wielded->contains) == 1) {
-        burst = 2;
-        GET_MAGAZINE_AMMO_COUNT(wielded->contains)--;
-        AMMOTRACK(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(wielded->contains), GET_MAGAZINE_AMMO_TYPE(wielded->contains), AMMOTRACK_COMBAT, -1);
       } else {
         burst = 0;
+      }
+
+      if (burst) {
+        if (GET_MAGAZINE_AMMO_COUNT(wielded->contains) >= burst - 1) {
+          AMMOTRACK(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(wielded->contains), GET_MAGAZINE_AMMO_TYPE(wielded->contains), AMMOTRACK_COMBAT, burst - 1);
+          GET_MAGAZINE_AMMO_COUNT(wielded->contains) -= burst - 1;
+        } else {
+          burst = GET_MAGAZINE_AMMO_COUNT(wielded->contains) + 1;
+          AMMOTRACK(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(wielded->contains), GET_MAGAZINE_AMMO_TYPE(wielded->contains), AMMOTRACK_COMBAT, GET_MAGAZINE_AMMO_COUNT(wielded->contains));
+          GET_MAGAZINE_AMMO_COUNT(wielded->contains) = 0;
+        }
       }
     }
 
     if (IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded))) {
-      power = GET_WEAPON_POWER(wielded) + burst;
+      power = GET_WEAPON_POWER(wielded);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "before armor: %d%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
       // AV does not halve, and we model this by doubling it.
       if (wielded->contains && GET_MAGAZINE_AMMO_TYPE(wielded->contains) == AMMO_AV) {
         using_av = TRUE;
       }
-    } else
+    } else {
       power = GET_STR(ch) + GET_WEAPON_STR_BONUS(wielded);
-    damage_total = GET_WEAPON_DAMAGE_CODE(wielded);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "melee: %d%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
+    }
   } else
   {
     power = GET_STR(ch);
@@ -7058,14 +7069,14 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     power = (int)(power / 2);
     damage_total--;
     armor_target = veh->armor;
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "non-AV: power->%d, code->%d. ", power, damage_total);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "non-AV ammo: power->%d, code->%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
   } else {
     power -= (int) (veh->armor / 2);
     armor_target = (int) (veh->armor / 2);
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "AV: power->%d (after removing 1/2 vehicle armor from it). ", power);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "AV ammo: power->%d (after removing 1/2 vehicle armor from it). ", power);
   }
 
-  if (power <= armor_target || !damage_total)
+  if (power <= armor_target || damage_total <= 0)
   {
     act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
     snprintf(buf, sizeof(buf), "$n's %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
@@ -7086,9 +7097,19 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     return FALSE;
   } else {
     // For AV rounds, this was subtracted before the armor check.
-    if (!using_av)
+    if (!using_av) {
       power -= veh->armor;
+    }
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "after armor subtract: power->%d. ", power);
+  }
+
+  if (IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded))) {
+    if (burst > 0) {
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "After armor: BF/FA: %d%s becomes ", power, GET_SHORT_WOUND_NAME(damage_total));
+      power += burst;
+      damage_total += (int)(burst / 3);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "%d%s. ", power, GET_SHORT_WOUND_NAME(damage_total));
+    }
   }
 
   if (wielded)
