@@ -512,7 +512,7 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
     struct obj_data *weap = GET_EQ(ch, WEAR_WIELD);
     if (weap && GET_OBJ_TYPE(weap) == ITEM_WEAPON && WEAPON_IS_GUN(weap) && weap->contains) {
       if (GET_MAGAZINE_AMMO_TYPE(weap->contains) == AMMO_AV) {
-        send_to_veh("Your threat indicators light up as hostile AV munitions come online.", vict, NULL, TRUE);
+        send_to_veh("^rYour threat indicators light up as hostile AV munitions come online.^n", vict, NULL, TRUE);
       }
     }
   }
@@ -1652,7 +1652,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
         IS_SET(EXIT(victim, dir[i])->exit_info, EX_CLOSED))
       door += 2;
 
-  switch(GET_OBJ_VAL(weapon, 3))
+  switch(GET_WEAPON_ATTACK_TYPE(weapon))
   {
     case WEAP_SHOTGUN:
       snprintf(ammo_type, sizeof(ammo_type), "horde of pellets");
@@ -7010,6 +7010,9 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
       default:
         snprintf(ammo_type, sizeof(ammo_type), "bullet");
         break;
+    }
+    if (WEAPON_IS_GUN(wielded) && wielded->contains && GET_MAGAZINE_AMMO_TYPE(wielded->contains) == AMMO_AV) {
+      strlcpy(ammo_type, "anti-vehicle munition", sizeof(ammo_type));
     }
 
     damage_total = GET_WEAPON_DAMAGE_CODE(wielded);

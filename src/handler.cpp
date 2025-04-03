@@ -1901,7 +1901,7 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool reca
 
   // Equipping is easy, just shadow it all.
   if (ch->player_specials) {
-    GET_CHAR_COVERED_WEARLOCS(ch).SetBit(obj->worn_on);
+    GET_CHAR_COVERED_WEARLOCS(ch).SetBit(worn_on_to_wearloc[obj->worn_on]);
   }
   
   calc_weight(ch);
@@ -1925,7 +1925,7 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
 
   // Remove the bit that this is worn on from our covered_wearlocs set.
   if (ch->player_specials) {
-    GET_CHAR_COVERED_WEARLOCS(ch).RemoveBit(GET_EQ(ch, pos)->worn_on);
+    GET_CHAR_COVERED_WEARLOCS(ch).RemoveBit(worn_on_to_wearloc[GET_EQ(ch, pos)->worn_on]);
   }
 
   obj = GET_EQ(ch, pos);
