@@ -7217,27 +7217,27 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
   snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Dmg staged to %s (%d boxes). ", GET_WOUND_NAME(staged_damage), damage_total);
   act(rbuf, FALSE, ch, 0, 0, TO_ROLLS);
 
-  if (damage_total < LIGHT)
+  if (staged_damage < LIGHT)
   {
     snprintf(buf, sizeof(buf), "$n's %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
     snprintf(buf1, sizeof(buf1), "Your attack ricochets off of %s.", GET_VEH_NAME(veh));
     snprintf(buf2, sizeof(buf2), "A %s ricochets off of your ride.\r\n", ammo_type);
-  } else if (damage_total == LIGHT)
+  } else if (staged_damage == LIGHT)
   {
     snprintf(buf, sizeof(buf), "$n's %s causes extensive damage to %s paintwork.", ammo_type, GET_VEH_NAME(veh));
     snprintf(buf1, sizeof(buf1), "Your attack causes extensive damage to %s paintwork.", GET_VEH_NAME(veh));
     snprintf(buf2, sizeof(buf2), "A %s scratches your paintjob.\r\n", ammo_type);
-  } else if (damage_total == MODERATE)
+  } else if (staged_damage == MODERATE)
   {
     snprintf(buf, sizeof(buf), "$n's %s leaves %s riddled with holes.", ammo_type, GET_VEH_NAME(veh));
     snprintf(buf1, sizeof(buf1), "Your attack leave %s riddled with holes.", GET_VEH_NAME(veh));
     snprintf(buf2, sizeof(buf2), "A %s leaves your ride full of holes.\r\n", ammo_type);
-  } else if (damage_total == SERIOUS)
+  } else if (staged_damage == SERIOUS)
   {
     snprintf(buf, sizeof(buf), "$n's %s obliterates %s.", ammo_type, GET_VEH_NAME(veh));
     snprintf(buf1, sizeof(buf1), "You obliterate %s with your attack.", GET_VEH_NAME(veh));
     snprintf(buf2, sizeof(buf2), "A %s obliterates your ride.\r\n", ammo_type);
-  } else if (damage_total >= DEADLY)
+  } else if (staged_damage >= DEADLY)
   {
     snprintf(buf, sizeof(buf), "$n's %s completely destroys %s.", ammo_type, GET_VEH_NAME(veh));
     snprintf(buf1, sizeof(buf1), "Your attack completely destroys %s.", GET_VEH_NAME(veh));
