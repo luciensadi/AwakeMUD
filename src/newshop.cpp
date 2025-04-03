@@ -714,7 +714,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "displays, \"%s\"", shop_table[shop_nr].not_enough_nuyen);
       do_new_echo(keeper, buf, cmd_echo, 0);
     } else {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].not_enough_nuyen);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].not_enough_nuyen);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     }
     return FALSE;
