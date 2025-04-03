@@ -6963,6 +6963,14 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     return vram(veh, ch, NULL);
   }
 
+  struct char_data *driver = veh->rigger;
+  if (!driver) {
+    for (driver = veh->people; driver; driver = driver->next_in_veh) {
+      if (AFF_FLAGGED(driver, AFF_PILOT) || AFF_FLAGGED(driver, AFF_RIG))
+        break;
+    }
+  }
+
   if (wielded) {
     // Ensure it has ammo.
     if (!has_ammo(ch, wielded)) {
@@ -7138,7 +7146,13 @@ bool vcombat(struct char_data * ch, struct veh_data * veh)
     weapon_scatter(ch, ch, wielded);
     return FALSE;
   }
-  attack_resist = success_test(veh->body, power + get_vehicle_modifier(veh));
+#ifdef IS_BUILDPORT
+  int ch_skill = driver ? GET_SKILL(driver, get_pilot_skill_for_veh(veh)) : 0;
+  int veh_soak_dice = veh->body + (driver ? MIN(GET_CONTROL(driver), ch_skill) : 0);
+#else
+  int veh_soak_dice = veh->body;
+#endif
+  attack_resist = success_test(veh_soak_dice, power + get_vehicle_modifier(veh));
   attack_success -= attack_resist;
 
   int staged_damage = stage(attack_success, damage_total);
