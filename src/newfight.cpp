@@ -1515,7 +1515,7 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
     int prior_tn = att->melee->tn;
     att->melee->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
     if (att->melee->tn != prior_tn) {
-      snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", att->melee->tn);
+      snprintf(rbuf, rbuf_len, "TN modified in get_skill() to %d.", att->melee->tn);
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
   }

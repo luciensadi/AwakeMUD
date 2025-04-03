@@ -1254,6 +1254,11 @@ struct time_info_data mud_time_passed(time_t t2, time_t t1)
 
 bool access_level(struct char_data *ch, int level)
 {
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL character to access_level(%s, %d)", GET_CHAR_NAME(ch), level);
+    return false;
+  }
+  
   ch = ch->desc && ch->desc->original ? ch->desc->original : ch;
 
   return (!IS_NPC(ch)
