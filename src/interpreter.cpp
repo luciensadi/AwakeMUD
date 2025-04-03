@@ -1731,9 +1731,7 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     ch->desc->pProtocol->WriteOOB = 0;
 
   // Strip out massively repeated characters.
-  send_to_char(ch, "debug: argument was '%s'\r\n", argument);
   argument = condense_repeated_characters(argument);
-  send_to_char(ch, "debug: argument is now '%s'\r\n", argument);
 
 #ifdef LOG_COMMANDS
   log_command(ch, argument, tcname);
@@ -2218,7 +2216,7 @@ int search_block(const char *arg, const char **list, bool exact)
   if (!strcmp(arg, "!"))
     return -1;
 
-  char mutable_arg[strlen(arg) + 1];
+  char mutable_arg[MAX_INPUT_LENGTH + 1];
   strlcpy(mutable_arg, arg, sizeof(mutable_arg));
 
   /* Make into lower case, and get length of string */
@@ -3267,9 +3265,8 @@ void nanny(struct descriptor_data * d, char *arg)
           STATE(d) = CON_CLOSE;
           return;
         }
-        size_t char_name_sz = strlen(GET_CHAR_NAME(d->character))+1;
-        char char_name[char_name_sz];
-        strlcpy(char_name, GET_CHAR_NAME(d->character), char_name_sz);
+        char char_name[MAX_INPUT_LENGTH + 1];
+        strlcpy(char_name, GET_CHAR_NAME(d->character), sizeof(char_name));
         extract_char(d->character, FALSE);
 
         d->character = playerDB.LoadChar(char_name, false, PC_LOAD_REASON_MAIN_MENU_1);
