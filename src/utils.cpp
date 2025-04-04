@@ -24,6 +24,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <mysql/mysql.h>
+#include <regex>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
@@ -4462,6 +4463,12 @@ char get_final_character_from_string(const char *str) {
       return str[i];
 
   return 0;
+}
+
+const char *remove_final_punctuation(const char *str) {
+  static char replacement_buf[MAX_INPUT_LENGTH + 1] = {0};
+  strlcpy(replacement_buf, std::regex_replace(std::string(str), std::regex("\\.[^nN]?$"), "").c_str(), sizeof(replacement_buf));
+  return replacement_buf;
 }
 
 bool CAN_SEE(struct char_data *subj, struct char_data *obj) {

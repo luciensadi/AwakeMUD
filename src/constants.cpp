@@ -1010,7 +1010,7 @@ int worn_on_to_wearloc[] = {
   ITEM_WEAR_FACE,
   ITEM_WEAR_NECK,
   ITEM_WEAR_NECK,
-  ITEM_WEAR_TAKE, // over shoulder
+  ITEM_WEAR_BACK,
   ITEM_WEAR_ABOUT,
   ITEM_WEAR_BODY,
   ITEM_WEAR_UNDER,

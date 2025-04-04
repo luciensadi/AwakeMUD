@@ -3624,7 +3624,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where, bool 
     obj_from_obj(obj);
   else
     obj_from_char(obj);
-  equip_char(ch, obj, where);
+  equip_char(ch, obj, where, true, true);
 
   if (print_messages) {
     switch (get_armor_penalty_grade(ch)) {
@@ -3903,8 +3903,6 @@ void perform_remove(struct char_data * ch, int pos)
   int was_worn_on = obj->worn_on;
   int previous_armor_penalty = get_armor_penalty_grade(ch);
 
-  obj_to_char(unequip_char(ch, pos, TRUE), ch);
-
   // Gyros take a bit to get out of.
   if (GET_OBJ_TYPE(obj) == ITEM_GYRO) {
     FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting?? That would be a neat trick.");
@@ -3948,6 +3946,8 @@ void perform_remove(struct char_data * ch, int pos)
     act("You stop using $p.", FALSE, ch, obj, 0, TO_CHAR);
     act("$n stops using $p.", TRUE, ch, obj, 0, TO_ROOM);
   }
+
+  obj_to_char(unequip_char(ch, pos, true, true, true), ch);
 
   if (previous_armor_penalty && !get_armor_penalty_grade(ch))
     send_to_char("You can move freely again.\r\n", ch);
@@ -4243,7 +4243,7 @@ ACMD(do_activate)
       do_wear(ch, tmp_arg, 0, 0);
     } else if (worn) {
       send_to_char(ch, "%s hasn't been bonded yet, so you need to ^WREMOVE^n it and ^WBOND^n it, then ^WWEAR^n it again. Trying that now...\r\n", CAP(GET_OBJ_NAME(obj)));
-      obj_to_char(unequip_char(ch, obj->worn_on, FALSE, TRUE), ch);
+      obj_to_char(unequip_char(ch, obj->worn_on, FALSE, TRUE, true), ch);
       do_bond(ch, tmp_arg, 0, 0);
       do_wear(ch, tmp_arg, 0, 0);
     } else {

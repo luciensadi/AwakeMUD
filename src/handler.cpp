@@ -50,6 +50,7 @@ extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern void end_quest(struct char_data *ch, bool succeeded);
 extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
 extern void calc_weight(struct char_data *);
+extern void exdesc_conceal_reveal(struct char_data *vict, int wearloc, bool check_for_reveal);
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch);
 int get_skill_dice_in_use_for_weapons(struct char_data *ch);
@@ -1835,7 +1836,7 @@ void obj_from_cyberware(struct obj_data * cyber, bool recalc)
   }
 }
 
-bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool recalc)
+bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool recalc, bool print_hide_message)
 {
   int j;
 
@@ -1900,15 +1901,19 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool reca
   }
 
   // Equipping is easy, just shadow it all.
-  if (ch->player_specials && !IS_OBJ_STAT(GET_EQ(ch, pos), ITEM_EXTRA_SHEER)) {
-    GET_CHAR_COVERED_WEARLOCS(ch).SetBit(worn_on_to_wearloc[obj->worn_on]);
+  if (ch->player_specials && !IS_OBJ_STAT(obj, ITEM_EXTRA_SHEER)) {
+    int wearloc = worn_on_to_wearloc[obj->worn_on];
+    if (print_hide_message && wearloc != ITEM_WEAR_WIELD) {
+      exdesc_conceal_reveal(ch, wearloc, false);
+    }
+    GET_CHAR_COVERED_WEARLOCS(ch).SetBit(wearloc);
   }
   
   calc_weight(ch);
   return TRUE;
 }
 
-struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool recalc)
+struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool recalc, bool print_reveal_message)
 {
   int j;
   struct obj_data *obj;
@@ -1925,7 +1930,11 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
 
   // Remove the bit that this is worn on from our covered_wearlocs set.
   if (ch->player_specials && !IS_OBJ_STAT(GET_EQ(ch, pos), ITEM_EXTRA_SHEER)) {
-    GET_CHAR_COVERED_WEARLOCS(ch).RemoveBit(worn_on_to_wearloc[GET_EQ(ch, pos)->worn_on]);
+    int wearloc = worn_on_to_wearloc[GET_EQ(ch, pos)->worn_on];
+    if (print_reveal_message && wearloc != ITEM_WEAR_WIELD) {
+      exdesc_conceal_reveal(ch, wearloc, true);
+    }
+    GET_CHAR_COVERED_WEARLOCS(ch).RemoveBit(wearloc);
   }
 
   obj = GET_EQ(ch, pos);
