@@ -24,9 +24,6 @@
   To answer:
     We want folks to pay syspoints for exdesc usage, when does that happen? Pay sysp to increase your exdesc quota
 
-  // TODO: Add visibility filters for looking at someone with descs, listing them, etc: if covered, don't show
-  // TODO STRETCH: Alter wear/remove to add reveal/hide for exdescs.
-
 
   table: pfiles_exdescs
   idnum
@@ -381,7 +378,6 @@ void exdesc_conceal_reveal(struct char_data *vict, int wearloc, bool check_for_r
       strlcpy(exdesc_buf, check_for_reveal ? "This reveals" : "This conceals", sizeof(exdesc_buf));
     }
 
-    // todo the multi slot isn't working right, something with more than one still shows/hides when just one is toggled. Also, update instructions for exdesc customization to show that it should be a noun/name instead of a description or sentence. "A tattoo frozen across his back" is fine, "a tattoo is frozen" is wrong.
     snprintf(ENDOF(exdesc_buf), sizeof(exdesc_buf) - strlen(exdesc_buf), " %s^n", decapitalize_a_an(remove_final_punctuation(exdesc->get_name())));
   }
   strlcat(exdesc_buf, ".", sizeof(exdesc_buf));
@@ -686,7 +682,7 @@ void pc_exdesc_edit_parse_olc_menu(struct descriptor_data *d, const char *arg) {
       d->edit_mode = PC_EXDESC_EDIT_OLC_SET_KEYWORD;
       break;
     case '2':  // Edit name.
-      send_to_char("Good exdesc names are full sentences with capitalization and punctuation, like 'An inky dragon tattoo is frozen in a roar across his back.'\r\nEnter a new name for this exdesc: ", CH);
+      send_to_char("Good exdesc names are tense-less names with capitalization and punctuation, like 'An inky dragon tattoo frozen in a roar across his back.'\r\nEnter a new name for this exdesc: ", CH);
       d->edit_mode = PC_EXDESC_EDIT_OLC_SET_NAME;
       break;
     case '3':  // Edit desc.
