@@ -310,6 +310,7 @@ std::vector<PCExDesc *> exdescs_with_visibility_changed_by_wearloc(struct char_d
 
     int num_already_set = comparison_field.GetNumSet();
 
+    /*
     send_to_char(vict, "DEBUG: Comparing '%s's wearlocs of %s to your already-covered wearlocs of %s yields %s (%d set).\r\n",
                  exdesc->get_keyword(),
                  exdesc->get_wear_slots()->ToString(),
@@ -317,6 +318,7 @@ std::vector<PCExDesc *> exdescs_with_visibility_changed_by_wearloc(struct char_d
                  comparison_field.ToString(),
                  num_already_set
                 );
+    */
 
     // Check for something that's being revealed.
     if (check_for_reveal) {
