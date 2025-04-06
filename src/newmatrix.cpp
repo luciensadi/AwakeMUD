@@ -339,9 +339,11 @@ bool dumpshock(struct matrix_icon *icon)
 {
   if (!icon) return FALSE;
 
-  if (icon->decker && icon->decker->ch)
+  struct char_data *ch = icon->decker->ch;
+
+  if (icon->decker && ch)
   {
-    send_to_char(icon->decker->ch, "You are dumped from the matrix!\r\n");
+    send_to_char(ch, "You are dumped from the matrix!\r\n");
     snprintf(buf, sizeof(buf), "%s^n depixelates and vanishes from the host.\r\n", CAP(icon->name));
     send_to_host(icon->in_host, buf, icon, FALSE);
 
@@ -363,10 +365,10 @@ bool dumpshock(struct matrix_icon *icon)
       }
     }
 
-    int resist = -success_test(GET_WIL(icon->decker->ch), matrix[icon->in_host].security);
+    int resist = -success_test(GET_WIL(ch), matrix[icon->in_host].security);
     int dam = convert_damage(stage(resist, MIN(matrix[icon->in_host].color + 1, DEADLY)));
 
-    struct obj_data *jack = get_datajack(icon->decker->ch, FALSE);
+    struct obj_data *jack = get_datajack(ch, FALSE);
 
     if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
       if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
@@ -384,22 +386,17 @@ bool dumpshock(struct matrix_icon *icon)
       // Trode net.
       snprintf(buf, sizeof(buf), "$n suddenly jerks forward and rips the 'trode net off of $s head!");
     }
-    act(buf, FALSE, icon->decker->ch, NULL, NULL, TO_ROOM);
+    act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
     icon->decker->PERSONA = NULL;
-    PLR_FLAGS(icon->decker->ch).RemoveBit(PLR_MATRIX);
     if (icon->decker->deck && GET_OBJ_VAL(icon->decker->deck, 0) == 0) {
-      act("Smoke emerges from $n's $p.", FALSE, icon->decker->ch, icon->decker->deck, NULL, TO_ROOM);
-      act("Smoke emerges from $p.", FALSE, icon->decker->ch, icon->decker->deck, NULL, TO_CHAR);
+      act("Smoke emerges from $n's $p.", FALSE, ch, icon->decker->deck, NULL, TO_ROOM);
+      act("Smoke emerges from $p.", FALSE, ch, icon->decker->deck, NULL, TO_CHAR);
     }
-    struct char_data *ch = icon->decker->ch;
     extract_icon(icon);
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
     SendGMCPMatrixInfo(ch);
     SendGMCPMatrixDeck(ch);
 
-    // No reason to double-damage
-    if (!PLR_FLAGGED(ch, PLR_MATRIX))
-      return FALSE;
     // If they're stunned or dead, there's no reason to take dumpshock damage.
     if (GET_POS(ch) <= POS_STUNNED)
       return FALSE; 
