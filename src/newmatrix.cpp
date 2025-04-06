@@ -444,6 +444,8 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
   }
 
   int target = HOST.stats[type][MTX_STAT_RATING];
+  snprintf(rollbuf, sizeof(rollbuf), "System test against %s with software %s: Starting TN %d", acifs_strings[type], programs[software].name, target);
+
   if (PERSONA->type == ICON_LIVING_PERSONA) {
     // We lower the TN by the channel rating
     int channel_rating = GET_OTAKU_PATH(ch) == OTAKU_PATH_TECHNOSHAM ? 1 : 0;
@@ -476,13 +478,12 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
       }
     }
   }
-  snprintf(rollbuf, sizeof(rollbuf), "System test against %s with software %s: Starting TN %d", acifs_strings[type], programs[software].name, target);
 
   int skill = get_skill(ch, SKILL_COMPUTER, target) + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch));
   GET_REM_HACKING(ch) -= skill - get_skill(ch, SKILL_COMPUTER, detect);
   detect = 0;
 
-  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", after get_skill %d, plus called modifier %d is %d", target, modifier, target + modifier);
+  snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", after get_skill %d", target);
 
   if (modifier) {
     target += modifier;
