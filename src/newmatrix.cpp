@@ -251,19 +251,21 @@ void roll_matrix_init(struct matrix_icon *icon)
   int init_dice = 1;
   if (icon->decker && icon->decker->ch)
   {
-    // Matrix pg 18 & 24, available bonuses are response increase, reality filter, and hot asist
-    init_dice += GET_INIT_DICE(icon->decker->ch) + icon->decker->response + (icon->decker->reality ? 1 : 0) + (icon->decker->asist[0] ? 1 : 0);
-
     if (icon->type == ICON_LIVING_PERSONA) {
-      init_dice = MIN(5, init_dice + GET_ECHO(icon->decker->ch, ECHO_OVERCLOCK));
+      // Matrix pg 138 & 145, 4 dice with a possible +1 from overclock
+      init_dice = 4 + (GET_ECHO(icon->decker->ch, ECHO_OVERCLOCK) ? 1 : 0);
+      // This is the living persona's matrix reaction, not response increase
+      icon->initiative = icon->decker->response;
+    } else {
+      // Matrix pg 18 & 24, available bonuses are response increase, reality filter, and hot asist
+      init_dice += icon->decker->response + (icon->decker->reality ? 1 : 0) + (icon->decker->asist[0] ? 1 : 0);
+      icon->initiative = GET_REA(icon->decker->ch) + (icon->decker->response * 2) + (icon->decker->reality ? 2 : 0) + (icon->decker->asist[0] ? 2 : 0);
     }
 
     // Apply Matrix 'trode net cap (max init dice 2d6)
     if (GET_EQ(icon->decker->ch, WEAR_HEAD) && IS_OBJ_STAT(GET_EQ(icon->decker->ch, WEAR_HEAD), ITEM_EXTRA_TRODE_NET)) {
       init_dice = MIN(init_dice, 2);
     }
-
-    icon->initiative = GET_REA(icon->decker->ch) + (icon->decker->response * 2) + (icon->decker->reality ? 2 : 0) + (icon->decker->asist[0] ? 2 : 0);
   } else
   {
     icon->initiative = icon->ic.rating;
@@ -564,12 +566,12 @@ bool do_damage_persona(struct matrix_icon *targ, int dmg)
 {
   if (targ->type == ICON_LIVING_PERSONA) {
     // It's an otaku! They get to suffer MENTAL DAMAGE!
-    // targ->condition seems to be 1-10 scale, while ch mental wounds seems to be 1-100. Multiply by ten.
-
     // damage() returns TRUE if the target has been deleted from memory, so when this function returns true, we must bail out of everything immediately.
     if (damage(targ->decker->ch, targ->decker->ch, dmg, TYPE_BLACKIC, MENTAL))
       return TRUE;
 
+    // targ->condition is 0-10 scale, while ch mental wounds is 0-100.
+    targ->condition = GET_MENTAL(targ->decker->ch) / 10;
     return FALSE;
   }
   targ->condition -= dmg;
@@ -1474,9 +1476,11 @@ ACMD(do_matrix_score)
             "    Masking:^B%3d^n       Sensors:^B%3d^n\r\n"
             "               ^cDeck Status:^n\r\n"
             "  Hardening:^g%3d^n       MPCP:^g%3d^n\r\n"
-            "   IO Speed:^g%4d^n      Response Increase:^g%3d^n\r\n",
+            "   IO Speed:^g%4d^n      %s:^g%3d^n\r\n",
             DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
-            DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_CYBERDECK_IO_RATING(DECKER->deck) : 0, DECKER->response);
+            DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_CYBERDECK_IO_RATING(DECKER->deck) : 0,
+            (ch->persona->type == ICON_LIVING_PERSONA) ? "Matrix Reaction" : "Response Increase",
+            DECKER->response);
   }
 
   if (HAS_HITCHER_JACK(DECKER->deck)) {
@@ -2925,7 +2929,9 @@ ACMD(do_decrypt)
 
     // If there's nothing to decrypt, there's nothing to succeed at.
     if (!matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED]) {
-      send_to_icon(PERSONA, "The %s subsystem doesn't seem to be encrypted.\r\n", mtx_subsystem_names[mode]);
+      send_to_icon(PERSONA, "The local %s subsystem doesn't seem to be encrypted.\r\n", mtx_subsystem_names[mode]);
+      if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && (mode == ACIFS_ACCESS))
+        send_to_icon(PERSONA, "[OOC: To decrypt a remote host's SAN, try ^WDECRYPT <HOST>^n.]\r\n");
       return;
     }
 
