@@ -96,7 +96,7 @@ void unload_active_program(struct matrix_icon *persona, struct obj_data *soft)
 {
   if (!persona || !soft) return;
   struct obj_data *temp = NULL;
-  persona->decker->active -= GET_PROGRAM_SIZE(soft);
+  persona->decker->active += GET_PROGRAM_SIZE(soft);
   REMOVE_FROM_LIST(soft, persona->decker->software, next_content);
   extract_obj(soft);
 }
