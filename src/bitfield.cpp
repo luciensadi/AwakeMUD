@@ -56,11 +56,20 @@ Bitfield::Bitfield()
 {
   Clear();
 }
-
+/*
 Bitfield::Bitfield(dword offset)
 {
   Clear();
   SetBit(offset);
+}
+*/
+
+Bitfield::Bitfield(unsigned long long from) {
+  Clear();
+  for (size_t i = 0; i < sizeof(from) * 8; i++) {
+    if (from & (1ULL << i))
+      SetBit(i);
+  }
 }
 
 // ______________________________

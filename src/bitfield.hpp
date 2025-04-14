@@ -23,7 +23,8 @@ class Bitfield
 
 public:
   Bitfield();
-  Bitfield(dword offset);
+//  Bitfield(dword offset);
+  Bitfield(unsigned long long from);
 
   // testing funcs
   //
