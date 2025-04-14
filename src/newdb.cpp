@@ -1396,7 +1396,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
                "Inveh=%ld, `rank`=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
-               "multiplier=%d, lifestyle_string='%s' WHERE idnum=%ld;",
+               "multiplier=%d, lifestyle_string='%s', nodelete=%d WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(),
                PLR_FLAGS(player).ToString(),
                PRF_FLAGS(player).ToString(),
@@ -1443,6 +1443,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                prepare_quotes(buf2, GET_CHAR_COLOR_HIGHLIGHT(player), sizeof(buf2) / sizeof(char)),
                GET_CHAR_MULTIPLIER(player),
                prepare_quotes(buf3, get_lifestyle_string(player), sizeof(buf3) / sizeof(char)),
+               PLR_FLAGGED(player, PLR_NODELETE) ? 1 : 0,
                GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
 
@@ -2297,27 +2298,30 @@ void DeleteChar(long idx)
     "pfiles_chargendata      ", // 5
     "pfiles_cyberware        ",
     "pfiles_drugs            ",
-    "pfiles_ignore           ", // 8. IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
+    "pfiles_echoes           ",
+    "pfiles_exdescs          ",
+    "pfiles_ignore           ", // 10. IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_INDEX
+    "pfiles_ignore_v2        ", // 11. IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
     "pfiles_immortdata       ",
-    "pfiles_inv              ", // 10
+    "pfiles_inv              ",
     "pfiles_magic            ",
-    "pfiles_mail             ",
-    "pfiles_memory           ", // 13. IF YOU CHANGE THIS, CHANGE PFILES_MEMORY_INDEX
+    "pfiles_mail             ", // 15
+    "pfiles_memory           ", // 16. IF YOU CHANGE THIS, CHANGE PFILES_MEMORY_INDEX
     "pfiles_metamagic        ",
-    "pfiles_quests           ", // 15
-    "pfiles_skills           ",
+    "pfiles_named_tags       ",
+    // pfiles_playergroups handled as a special case below
+    "pfiles_quests           ",
+    "pfiles_skills           ", // 20
     "pfiles_spells           ",
     "pfiles_spirits          ",
     "pfiles_worn             ",
-    "pfiles_ignore_v2        ",  // 20. IF YOU CHANGE THIS, CHANGE PFILES_IGNORE_V2_INDEX
-    "playergroup_invitations ",
-    "pfiles_exdescs          "
+    "playergroup_invitations "  // 24
   };
-  #define NUM_SQL_TABLE_NAMES     23
+  #define NUM_SQL_TABLE_NAMES     25
   #define PFILES_INDEX            0
-  #define PFILES_IGNORE_INDEX     8
-  #define PFILES_MEMORY_INDEX     13
-  #define PFILES_IGNORE_V2_INDEX  20
+  #define PFILES_IGNORE_INDEX     10
+  #define PFILES_IGNORE_V2_INDEX  11
+  #define PFILES_MEMORY_INDEX     16
 
   // Figure out the filename for this character.
   const char *name = get_player_name(idx);
@@ -2412,7 +2416,7 @@ void DeleteChar(long idx)
     if ((row = mysql_fetch_row(res))) {
       mysql_free_result(res);
       char *cname = get_player_name(idx);
-      snprintf(buf, sizeof(buf), "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", idx, cname);
+      snprintf(buf, sizeof(buf), "INSERT INTO pgroup_logs (idnum, message, redacted) VALUES (%ld, \"%s has left the group. (Reason: deletion)\", 0)", idx, cname);
       delete [] cname;
       mysql_wrapper(mysql, buf);
       snprintf(buf, sizeof(buf), "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);
@@ -2467,6 +2471,9 @@ bool pc_active_in_last_30_days(idnum_t owner_id) {
   return (row != NULL);
 }
 
+// Defining this for now until I have a chance to fix the nodelete logic. Currently, it sets a bit, but checks for a boolean. Need to run a migration on existing DB to apply that boolean value on everyone with the bit set.
+#define IDLEDELETE_DRYRUN
+
 void idle_delete()
 {
   int deleted = 0;
@@ -2477,25 +2484,26 @@ void idle_delete()
     log("IDLEDELETE- Could not open extra socket, aborting");
     return;
   }
-  snprintf(buf, sizeof(buf), "SELECT `idnum`, `lastd`, `tke`, `race`, `rank` FROM pfiles WHERE lastd <= %ld AND nodelete = 0 AND name != '%s' ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50), CHARACTER_DELETED_NAME_FOR_SQL);
+  snprintf(buf, sizeof(buf), "SELECT `idnum`, `lastd`, `tke`, `race`, `rank` FROM pfiles WHERE lastd <= %ld AND nodelete=0 AND name != '%s' ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50), CHARACTER_DELETED_NAME_FOR_SQL);
   mysql_wrapper(mysqlextra, buf);
   MYSQL_RES *res;
   MYSQL_ROW row;
 
   if ((res = mysql_use_result(mysqlextra))) {
     while ((row = mysql_fetch_row(res))) {
-#ifndef IDLEDELETE_DRYRUN
       int tke = atoi(row[2]);
       time_t lastd = atoi(row[1]);
       int race = atoi(row[3]);
       int rank = atoi(row[4]);
       if (get_idledelete_days_left(lastd, tke, race, rank) < 0) {
+#ifndef IDLEDELETE_DRYRUN
+        // TODO: Pull their PLR bitstring and validate that their nodelete bit is set to off.
         DeleteChar(atol(row[0]));
         deleted++;
-      }
 #else
-      log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
+        log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
 #endif
+      }
     }
     mysql_free_result(res);
   }
