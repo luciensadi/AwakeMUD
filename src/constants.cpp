@@ -1046,6 +1046,38 @@ int worn_on_to_wearloc[] = {
   ITEM_WEAR_LAPEL
 };
 
+// Which ITEM_WEAR bits shadow this one?
+Bitfield wearloc_shadowing_locations[ITEM_WEAR_MAX] = {
+  0,
+  (1ULL << ITEM_WEAR_HANDS), // finger
+  0, // neck
+  (1ULL << ITEM_WEAR_BODY | 1ULL << ITEM_WEAR_ABOUT), // body
+  0, // head
+  0, // legs
+  0, // feet
+  0, // hands
+  0, // arms
+  0, // shield
+  0, // about
+  0, // waist
+  0, // wrist
+  0, // wield
+  0, // hold
+  (1ULL << ITEM_WEAR_HEAD), // eyes
+  (1ULL << ITEM_WEAR_HEAD), // ear
+  (1ULL << ITEM_WEAR_BODY | 1ULL << ITEM_WEAR_ABOUT), // Under
+  (1ULL << ITEM_WEAR_UNDER | 1ULL << ITEM_WEAR_BODY | 1ULL << ITEM_WEAR_ABOUT), // Back
+  (1ULL << ITEM_WEAR_SOCK | 1ULL << ITEM_WEAR_FEET), // Ankle
+  (1ULL << ITEM_WEAR_FEET), // Sock
+  (1ULL << ITEM_WEAR_UNDER | 1ULL << ITEM_WEAR_BODY | 1ULL << ITEM_WEAR_ABOUT), // belly
+  0, // arm
+  (1ULL << ITEM_WEAR_HEAD), // face
+  (1ULL << ITEM_WEAR_LEGS), // thigh
+  (1ULL << ITEM_WEAR_LEGS | 1ULL << ITEM_WEAR_UNDER | 1ULL << ITEM_WEAR_BODY | 1ULL << ITEM_WEAR_ABOUT), // underwear
+  (1ULL << ITEM_WEAR_UNDER | 1ULL << ITEM_WEAR_BODY | 1ULL << ITEM_WEAR_ABOUT), // chest
+  0 // lapel
+};
+
 
 const char *hands[] =
   {

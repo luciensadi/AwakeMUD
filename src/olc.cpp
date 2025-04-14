@@ -1925,7 +1925,7 @@ ACMD(do_shedit)
     d->edit_shop->vnum = d->edit_number;
     d->edit_shop->profit_buy = 1.1;
     d->edit_shop->profit_sell = 0.1;
-    d->edit_shop->buytypes = 0;
+    d->edit_shop->buytypes.Clear();
     d->edit_shop->no_such_itemk = str_dup("Sorry, we don't have that.");
     d->edit_shop->no_such_itemp = str_dup("You don't seem to have that.");
     d->edit_shop->not_enough_nuyen = str_dup("You don't have enough nuyen!");

@@ -197,6 +197,24 @@ ACMD(do_debug) {
     return;
   }
 
+  if (!str_cmp(arg1, "bitfield")) {
+    send_to_char(ch, "OK, checking bitfield consistency.\r\n");
+
+    unsigned long long test_number = (1 << ITEM_WEAR_LAPEL) | (1 << ITEM_WEAR_ABOUT) | (1 << ITEM_WEAR_ANKLE) | (1 << ITEM_WEAR_FACE) | (1 << ITEM_WEAR_TAKE) | (1 << ITEM_WEAR_WRIST);
+
+    Bitfield correct_one;
+    correct_one.SetBits(ITEM_WEAR_LAPEL, ITEM_WEAR_ABOUT, ITEM_WEAR_ANKLE, ITEM_WEAR_FACE, ITEM_WEAR_TAKE, ITEM_WEAR_WRIST, ENDBIT);
+
+    Bitfield test_value(test_number);
+
+    if (correct_one != test_value) {
+      send_to_char(ch, "Did NOT match. Correct is %s, test is %s. Test number prints as %ld\r\n", correct_one.ToString(), test_value.ToString(), test_number);
+    } else {
+      send_to_char("Yay, matched.\r\n", ch);
+    }
+    return;
+  }
+
 #ifdef TEMPORARY_COMPILATION_GUARD
   if (!str_cmp(arg1, "minigame")) {
     extern void minigame_debug(struct char_data *ch, char *rest_of_argument);
