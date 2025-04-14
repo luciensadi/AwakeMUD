@@ -1471,7 +1471,7 @@ SPECIAL(johnson)
 
   bool need_to_speak = FALSE;
   bool need_to_act = FALSE;
-  bool is_sayto = CMD_IS("sayto") || CMD_IS("\"");
+  bool is_sayto = CMD_IS("sayto") || CMD_IS("\"") || CMD_IS("ask") || CMD_IS("whisper");
 
   // If there's an astral state mismatch, bail out.
   if ((IS_ASTRAL(johnson) && !SEES_ASTRAL(ch)) || (IS_ASTRAL(ch) && !SEES_ASTRAL(johnson))) {
@@ -1496,7 +1496,7 @@ SPECIAL(johnson)
     // They really are talking to us.
   }
 
-  if (CMD_IS("say") || CMD_IS("'") || is_sayto) {
+  if (CMD_IS("say") || CMD_IS("'") || is_sayto || CMD_IS("exclaim")) {
     if (str_str(argument, "quit"))
       comm = CMD_JOB_QUIT;
     else if (str_str(argument, "collect") || str_str(argument, "complete") || str_str(argument, "done") || str_str(argument, "finish") || str_str(argument, "pay"))
