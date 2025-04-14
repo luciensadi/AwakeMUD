@@ -84,7 +84,7 @@ CREATE TABLE `pfiles` (
   `lifestyle_string` varchar(200) default 'The metallic scent of the Neophyte Guild clings to $m.',
   `exdesc_max` smallint(5) unsigned default 0,
   `otaku_path` tinyint(2) default 0,
-  `submersion_grade` smallint(3),
+  `submersion_grade` smallint(3) default 0,
   PRIMARY KEY (`idnum`),
   KEY (`name`)
 );
