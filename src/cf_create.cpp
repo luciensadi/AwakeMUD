@@ -195,7 +195,7 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
     // Check to see if we've already got a complex form with the same name.
     struct obj_data *form;
     for (form = asist->contains; form; form = form->next_content) {
-      if ((isname(arg, form->text.keywords) || isname(arg, get_string_after_color_code_removal(form->restring, ch))) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) {
+      if (keyword_appears_in_obj(arg, form) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) {
         send_to_char(CH, "You already have a form with the name '%s', choose a new unique name.\r\n", arg);
         cfedit_disp_menu(d);
         return;
@@ -251,10 +251,8 @@ ACMD(do_forms)
   char *param = one_argument(argument, func);
 
   if (is_abbrev(func, "list") || strlen(func) <= 0) {
-    if (!asist->contains) {
-      send_to_char(ch, "You haven't learned or designed any complex forms yet. Maybe you should ^wCREATE^n a new complex form.\r\n");
-      return;
-    }
+    FAILURE_CASE(!asist->contains, "You haven't learned or designed any complex forms yet. Maybe you should ^wCREATE^n a new complex form.");
+
     strncpy(buf2, "", sizeof(buf2) - 1);
     for (form = asist->contains; form; form = form->next_content) {
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " [%10s] %10s^n:^N %s R%d",
@@ -274,13 +272,11 @@ ACMD(do_forms)
   }
 
   if (is_abbrev(func, "forget")) {
-    if (AFF_FLAGGED(ch, AFF_COMPLEX_FORM_PROGRAM)) {
-      send_to_char(ch, "You can't forget a complex form while focusing on learning a form.\r\n");
-      return;
-    }
+    FAILURE_CASE(AFF_FLAGGED(ch, AFF_COMPLEX_FORM_PROGRAM), "You can't forget a complex form while focusing on learning a form.");
+
     skip_spaces(&param);
     for (form = asist->contains; form; form = form->next_content) {
-      if ((isname(param, form->text.keywords) || isname(param, get_string_after_color_code_removal(form->restring, ch))) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) 
+      if (keyword_appears_in_obj(param, form) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) 
         break;
     }
     if (!form) {
@@ -305,7 +301,7 @@ ACMD(do_forms)
 
     skip_spaces(&param);
     for (form = asist->contains; form; form = form->next_content) {
-      if ((isname(param, form->text.keywords) || isname(param, get_string_after_color_code_removal(form->restring, ch))) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) 
+      if (keyword_appears_in_obj(param, form) && GET_OBJ_TYPE(form) == ITEM_COMPLEX_FORM) 
         break;
     }
 
