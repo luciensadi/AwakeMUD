@@ -255,6 +255,7 @@ void _update_living_persona(struct char_data *ch, struct obj_data *cyberdeck, in
   ch->persona->decker->hardening = GET_CYBERDECK_HARDENING(cyberdeck);
   ch->persona->decker->response = GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck);
 
+  // HOUSERULE: cap otaku persona ratings to 1x MPCP
   for (struct obj_data *part = cyberdeck->contains; part; part = part->next_content) {
     if (GET_OBJ_TYPE(part) != ITEM_PART) continue;
     switch (GET_OBJ_VAL(part, 0)) {
@@ -262,16 +263,16 @@ void _update_living_persona(struct char_data *ch, struct obj_data *cyberdeck, in
         GET_PART_RATING(part) = mpcp;
         break;
       case PART_BOD:
-        ch->persona->decker->bod = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_BOD));
+        ch->persona->decker->bod = MIN(mpcp, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_BOD));
         break;
       case PART_EVASION:
-        ch->persona->decker->evasion = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_EVAS));
+        ch->persona->decker->evasion = MIN(mpcp, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_EVAS));
         break;
       case PART_SENSOR:
-        ch->persona->decker->sensor = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_SENS));
+        ch->persona->decker->sensor = MIN(mpcp, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_SENS));
         break;
       case PART_MASKING:
-        ch->persona->decker->masking = MIN(mpcp * 1.5, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_MASK));
+        ch->persona->decker->masking = MIN(mpcp, GET_PART_RATING(part) + GET_ECHO(ch, ECHO_PERSONA_MASK));
         break;
     }
   }
