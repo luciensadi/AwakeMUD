@@ -75,17 +75,28 @@ void clear_hitcher(struct char_data *ch, bool shouldNotify)
 {
     // Safety check: ensure ch is valid and actually hitched to someone
     if (!ch || !ch->hitched_to) {
-        return;
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: clear_hitcher(%s, %s) called with invalid parameters! (hitched_to = %s)",
+                      GET_CHAR_NAME(ch),
+                      shouldNotify ? "TRUE" : "FALSE",
+                      ch && ch->hitched_to ? GET_CHAR_NAME(ch->hitched_to) : "NULL");
+      return;
     }
 
     // Notify the hitcher if requested
     if (shouldNotify) {
-        send_to_char("Your hitcher has disconnected.\r\n", ch->hitched_to);
+      send_to_char("Your hitcher has disconnected.\r\n", ch->hitched_to);
     }
 
     // Clear references
-    if (ch->hitched_to->persona && ch->hitched_to->persona->decker)
+    if (ch->hitched_to->persona && ch->hitched_to->persona->decker) {
       ch->hitched_to->persona->decker->hitcher = NULL; // Super safety check. Clear functions should always be safe.
+    } else {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: clear_hitcher(%s, %s) called with hitched_to=%s, and they don't have a %s pointer.",
+                      GET_CHAR_NAME(ch),
+                      shouldNotify ? "TRUE" : "FALSE",
+                      GET_CHAR_NAME(ch->hitched_to),
+                      ch->hitched_to->persona ? "persona->decker" : "persona");
+    }
     ch->hitched_to = NULL;
 
     // Remove matrix flag
@@ -2083,7 +2094,7 @@ ACMD(do_logon)
 ACMD(do_logoff)
 {
   if (!PERSONA) {
-    send_to_char(ch, "You yank the plug out and return to the real world.\r\n");
+    send_to_char(ch, "You yank the plug out of the hitcher jack and return to the real world.\r\n");
     clear_hitcher(ch, TRUE);
     return;
   }
@@ -2176,25 +2187,17 @@ bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, obj
   if (!PLR_FLAGGED(ch, PLR_MATRIX) && host_vnum <= 0) {
     // This is the hitcher code.
     temp = get_char_room_vis(ch, argument);
-    if (!temp) {
-      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", argument);
-      return TRUE;
-    } else if (temp == ch) {
-      send_to_char(ch, "Are you trying to divide by zero? You can't connect to yourself.\r\n");
-      return TRUE;
-    } else if (
-        !PLR_FLAGGED(temp, PLR_MATRIX)
-        || !temp->persona
-        || !temp->persona->decker
-        || !temp->persona->decker->deck
-        || !HAS_HITCHER_JACK(temp->persona->decker->deck)
-        || IS_IGNORING(temp, is_blocking_ic_interaction_from, ch)) {
-      send_to_char(ch, "It doesn't look like you can hitch a ride with %s.\r\n", argument);
-      return TRUE;
-    } else if (temp->persona->decker->hitcher) {
-      send_to_char(ch, "The hitcher jack on %s's deck is already in use.\r\n", argument);
-      return TRUE;
-    }
+    
+    TRUE_CASE_PRINTF(!temp, "You don't see anyone named '%s' here.", argument);
+    TRUE_CASE_PRINTF(temp == ch, "Are you trying to divide by zero? You can't connect to yourself.");
+    TRUE_CASE_PRINTF(!PLR_FLAGGED(temp, PLR_MATRIX)
+                     || !temp->persona
+                     || !temp->persona->decker
+                     || !temp->persona->decker->deck
+                     || !HAS_HITCHER_JACK(temp->persona->decker->deck)
+                     || IS_IGNORING(temp, is_blocking_ic_interaction_from, ch),
+                     "It doesn't look like you can hitch a ride with %s.\r\n", argument);
+    TRUE_CASE_PRINTF(temp->persona->decker->hitcher, "The hitcher jack on %s's deck is already in use.", argument);
 
     act("You slip your jack into $n's hitcher port.", FALSE, temp, 0, ch, TO_VICT);
     send_to_char("Someone has connected to your hitcher port.\r\n", temp);
@@ -4119,76 +4122,49 @@ ACMD(do_reveal)
 
 ACMD(do_create)
 {
-  if (CH_IN_COMBAT(ch)) {
-    send_to_char("You can't create things while fighting!\r\n", ch);
-    return;
-  }
-  if (IS_NPC(ch)) {
-    send_to_char("Sure...you do that.\r\n", ch);
-    return;
-  }
-  if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
-    send_to_char("Your arms are already full!\r\n", ch);
-    return;
-  }
-  if (IS_WORKING(ch)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
+  FAILURE_CASE(CH_IN_COMBAT(ch), "You can't create things while fighting!");
+  FAILURE_CASE(IS_NPC(ch), "NPCs and projections can't create things.");
+  FAILURE_CASE(IS_CARRYING_N(ch) >= CAN_CARRY_N(ch), "Your arms are already full!");
+  FAILURE_CASE(IS_WORKING(ch), "You're too busy.");
+
   argument = any_one_arg(argument, buf1);
 
-  if (is_abbrev(buf1, "complex form"))
-  {
-    if (!IS_OTAKU(ch)) {
-      send_to_char("Everyone knows that otaku aren't real, chummer.\r\n", ch);
-      return;
-    } else if (!GET_SKILL(ch, SKILL_COMPUTER)) {
-      send_to_char("You must learn computer skills to create complex forms.\r\n", ch);
-      return;
-    }
+  if (is_abbrev(buf1, "complex form")) {
+    FAILURE_CASE(!IS_OTAKU(ch), "Everyone knows that otaku aren't real, chummer.");
+    FAILURE_CASE(!GET_SKILL(ch, SKILL_COMPUTER), "You must learn computer skills to create complex forms.");
     create_complex_form(ch);
   }
 
   else if (is_abbrev(buf1, "program")) {
-    if (!GET_SKILL(ch, SKILL_COMPUTER)) {
-      send_to_char("You must learn computer skills to create programs.\r\n", ch);
-      return;
-    }
+    FAILURE_CASE(!GET_SKILL(ch, SKILL_COMPUTER), "You must learn computer skills to create programs.");
     create_program(ch);
   }
 
   else if (is_abbrev(buf1, "part")) {
-    if (!GET_SKILL(ch, SKILL_BR_COMPUTER)) {
-      send_to_char("You must learn computer B/R skills to create parts.\r\n", ch);
-      return;
-    }
+    FAILURE_CASE(!GET_SKILL(ch, SKILL_BR_COMPUTER), "You must learn computer B/R skills to create parts.");
     create_part(ch);
   }
 
-  else if (is_abbrev(buf1, "deck") || is_abbrev(buf1, "cyberdeck"))
+  else if (is_abbrev(buf1, "deck") || is_abbrev(buf1, "cyberdeck")) {
     create_deck(ch);
+  }
 
-  else if (is_abbrev(buf1, "ammo") || is_abbrev(buf1, "ammunition"))
+  else if (is_abbrev(buf1, "ammo") || is_abbrev(buf1, "ammunition")) {
     create_ammo(ch);
+  }
 
   else if (is_abbrev(buf1, "spell")) {
-    if (!(GET_SKILL(ch, SKILL_SPELLDESIGN) || GET_SKILL(ch, SKILL_SORCERY))) {
-      send_to_char("You must learn Spell Design or Sorcery to create a spell.\r\n", ch);
-      return;
-    }
+    FAILURE_CASE(!(GET_SKILL(ch, SKILL_SPELLDESIGN) || GET_SKILL(ch, SKILL_SORCERY)), "You must learn Spell Design or Sorcery to create a spell.");
 
     struct obj_data *library = ch->in_room ? ch->in_room->contents : ch->in_veh->contents;
     for (;library; library = library->next_content)
       if (GET_OBJ_TYPE(library) == ITEM_MAGIC_TOOL &&
-          ((GET_TRADITION(ch) == TRAD_SHAMANIC
-            && GET_OBJ_VAL(library, 0) == TYPE_LODGE && GET_OBJ_VAL(library, 3) == GET_IDNUM(ch)) ||
-           (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_OBJ_VAL(library, 0) == TYPE_LIBRARY_SPELL)))
+          ((GET_TRADITION(ch) == TRAD_SHAMANIC && GET_MAGIC_TOOL_TYPE(library) == TYPE_LODGE && GET_MAGIC_TOOL_OWNER(library) == GET_IDNUM(ch))
+           || (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_MAGIC_TOOL_TYPE(library) == TYPE_LIBRARY_SPELL)))
         break;
-    if (!library) {
-      send_to_char(ch, "You don't have the right tools here to create a spell. You'll need to %s.\r\n",
-                   GET_TRADITION(ch) == TRAD_SHAMANIC ? "build a lodge" : "get a library");
-      return;
-    }
+    
+    FAILURE_CASE_PRINTF(!library, "You don't have the right tools here to create a spell. You'll need to %s.", GET_TRADITION(ch) == TRAD_SHAMANIC ? "build a lodge" : "get a library");
+    
     ch->desc->edit_number2 = GET_OBJ_VAL(library, 1);
     create_spell(ch);
   }
@@ -4215,6 +4191,9 @@ ACMD(do_create)
     send_to_char("You can only create programs, parts, decks, ammunition, spells, complex forms, art, and pets.\r\n", ch);
     return;
   }
+
+  // Update their GMCP status to reflect their new icon.
+  update_gmcp_discord_info(ch->desc);
 }
 
 ACMD(do_matrix_max)
