@@ -2184,6 +2184,9 @@ bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, obj
 
   if (!PLR_FLAGGED(ch, PLR_MATRIX) && host_vnum <= 0) {
     // This is the hitcher code.
+#ifndef ENABLE_HITCHING
+    send_to_char("Sorry, the hitching system is disabled at the moment.\r\n", ch);
+#else
     temp = get_char_room_vis(ch, argument);
     
     TRUE_CASE_PRINTF(!temp, "You don't see anyone named '%s' here.", argument);
@@ -2202,6 +2205,7 @@ bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, obj
     PLR_FLAGS(ch).SetBit(PLR_MATRIX);
     temp->persona->decker->hitcher = ch;
     ch->hitched_to = temp;
+#endif
     return FALSE;
   }
 
