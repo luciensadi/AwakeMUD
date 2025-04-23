@@ -432,7 +432,7 @@ ACMD(do_copyover)
       GET_NUYEN_RAW(och) += MAX_CAB_FARE;
     }
 
-    fprintf (fp, "%d %s %s %s\n", d->descriptor, GET_CHAR_NAME(och), d->host, CopyoverGet(d));
+    fprintf (fp, "%d\t%s\t%s\t%s\t%s\n", d->descriptor, GET_CHAR_NAME(och), d->host, CopyoverGet(d), CopyoverGetJSON(d));
     GET_LAST_IN(och) = get_ch_in_room(och)->number;
     if (!GET_LAST_IN(och) || GET_LAST_IN(och) == NOWHERE) {
       // Fuck it, send them to Grog's.
@@ -1719,8 +1719,15 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     }
     if (access_level(ch, LVL_VICEPRES)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n", GET_EMAIL(k));
-      if (ch->desc && ch->desc->pProtocol && ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID] && ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; Current Client: ^c%s^n\r\n", ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString);
+      if (ch->desc && ch->desc->pProtocol) {
+        if (ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID] && ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString) {
+          extern const char *get_descriptor_fingerprint(struct descriptor_data *d);
+
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; Current Client: ^c%s v%s^n; Fingerprint ^c%s^n\r\n",
+                   ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString,
+                   ch->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString ? ch->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString : "NULL",
+                   get_descriptor_fingerprint(ch->desc));
+        }
       }
     }
     if (access_level(ch, LVL_FIXER)) {

@@ -2297,9 +2297,9 @@ enum {
 #define CON_ZEDIT               32
 #define CON_HEDIT               33
 #define CON_ICEDIT              34
-#define CON_PRO_CREATE          35
+#define CON_PRO_CREATE          35 // Program creation for deckbuilding
 #define CON_DECK_CREATE         36
-#define CON_SPE_CREATE          37
+// UNUSED 37
 #define CON_INITIATE            38
 #define CON_DECORATE            39
 #define CON_POCKETSEC           40
@@ -2325,6 +2325,7 @@ enum {
 #define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
+// And gmcp.cpp's generate_discord_state().
 
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD     0

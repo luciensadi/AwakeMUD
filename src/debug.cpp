@@ -169,7 +169,17 @@ extern void load_saved_veh(bool purge_existing);
 extern void save_vehicles(bool);
 extern void debug_pet_menu(struct char_data *ch);
 
+extern void SendGMCPDiscordInfo ( descriptor_t *apDescriptor );
+extern void SendGMCPDiscordStatus ( descriptor_t *apDescriptor );
+extern void SendCustomGMCPDiscordStatus ( descriptor_t *apDescriptor, const char *smallimage, const char *smallimagetext, const char *details, const char *state);
+
 extern bf::path global_vehicles_dir;
+
+// Discord debug vars.
+char _discord_state[200] = {0};
+char _discord_details[200] = {0};
+char _discord_smallimage[100] = {0};
+char _discord_smallimagetext[200] = {0};
 
 bool drinks_are_unfucked = TRUE;
 ACMD(do_debug) {
@@ -222,6 +232,52 @@ ACMD(do_debug) {
     return;
   }
 #endif
+
+  if (!str_cmp(arg1, "discord")) {
+    rest_of_argument = any_one_arg(rest_of_argument, arg2);
+
+    if (!str_cmp(arg2, "state")) {
+      strlcpy(_discord_state, rest_of_argument, sizeof(_discord_state));
+      send_to_char(ch, "OK, will send discord state '%s' on next DEBUG DISCORD SEND.", _discord_state);
+      return;
+    }
+
+    if (!str_cmp(arg2, "details")) {
+      strlcpy(_discord_details, rest_of_argument, sizeof(_discord_details));
+      send_to_char(ch, "OK, will send discord details '%s' on next DEBUG DISCORD SEND.", _discord_details);
+      return;
+    }
+
+    if (!str_cmp(arg2, "smallimagetext")) {
+      strlcpy(_discord_smallimagetext, rest_of_argument, sizeof(_discord_smallimagetext));
+      send_to_char(ch, "OK, will send discord smallimagetext '%s' on next DEBUG DISCORD SEND.", _discord_smallimagetext);
+      return;
+    }
+
+    if (!str_cmp(arg2, "smallimage")) {
+      strlcpy(_discord_smallimage, rest_of_argument, sizeof(_discord_smallimage));
+      send_to_char(ch, "OK, will send discord smallimage '%s' on next DEBUG DISCORD SEND.", _discord_smallimage);
+      return;
+    }
+
+    if (!*_discord_state) {
+      strlcpy(_discord_state, "state string", sizeof(_discord_state));
+    }
+    if (!*_discord_details) {
+      strlcpy(_discord_details, "details string", sizeof(_discord_details));
+    }
+    if (!*_discord_smallimage) {
+      strlcpy(_discord_smallimage, "steering-wheel", sizeof(_discord_smallimage));
+    }
+    if (!*_discord_smallimagetext) {
+      strlcpy(_discord_smallimagetext, "Cruising the Shadows", sizeof(_discord_smallimagetext));
+    }
+
+    send_to_char(ch, "OK, sending discord info state='%s', details='%s', smallimage='%s', smallimagetext='%s'\r\n", _discord_state, _discord_details, _discord_smallimage, _discord_smallimagetext);
+    SendGMCPDiscordInfo(ch->desc);
+    SendCustomGMCPDiscordStatus(ch->desc, _discord_smallimage, _discord_smallimagetext, _discord_details, _discord_state);
+    return;
+  }
 
   if (!str_cmp(arg1, "idledelete")) {
     idnum_t idnum = atol(rest_of_argument);

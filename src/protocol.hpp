@@ -10,6 +10,9 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
+#include "nlohmann/json.hpp"
+using nlohmann::json;
+
 /******************************************************************************
  Set your MUD_NAME, and change descriptor_t if necessary.
  ******************************************************************************/
@@ -268,6 +271,7 @@ typedef struct
 #ifdef USE_DEBUG_CANARIES
    int       canary;
 #endif
+   json    new_environ_info;
    MSDP_t  **pVariables;       /* The MSDP variables */
 } protocol_t;
 
@@ -411,6 +415,10 @@ const char *CopyoverGet( descriptor_t *apDescriptor );
  * the player file, as then you can grep to collect client usage stats.
  */
 void CopyoverSet( descriptor_t *apDescriptor, const char *apData );
+
+
+const char *CopyoverGetJSON( descriptor_t *apDescriptor );
+void CopyoverSetJSON( descriptor_t *apDescriptor, const char *serialized_json );
 
 /******************************************************************************
  MSDP functions.

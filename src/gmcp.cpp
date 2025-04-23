@@ -21,8 +21,14 @@
 #include "db.hpp"
 #include "protocol.hpp"
 #include "newmatrix.hpp"
+#include "quest.hpp"
+#include "zoomies.hpp"
 
 using nlohmann::json;
+
+#define DISCORD_BUFFER_SIZE 200
+
+void generate_discord_details(descriptor_t *apDescriptor, char *smallimage, char *smallimagetext, char *details, char *state);
 
 static void Write( descriptor_t *apDescriptor, const char *apData )
 {
@@ -55,9 +61,105 @@ void SendGMCPCoreSupports ( descriptor_t *apDescriptor )
   j["Matrix"].push_back("Info");
   j["Matrix"].push_back("Deck");
 
+  j["External"] = json::array();
+  j["External"].push_back("Discord");
+
   // Dump the json to a string and send it.
   std::string payload = j.dump();
   SendGMCP(apDescriptor, "Core.Supports", payload.c_str());
+}
+
+void RegisterGMCPDiscordHello( descriptor_t *apDescriptor, const json &payload )
+{
+  // Log their Discord username for the character. Later on we'll associate this in a more permanent manner.
+  auto user_it = payload.find("user");
+  // auto private_it = payload.find("private");
+  if (user_it != payload.end()) {
+    if (apDescriptor->character) {
+      mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Got Discord.Hello from %s for %s.", user_it->get<std::string>().c_str(), GET_CHAR_NAME(apDescriptor->character));
+    } else {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Got Discord.Hello from %s before login, so unable to associate with a character.", user_it->get<std::string>().c_str());
+    }
+  }
+
+  log_vfprintf("Got GMCP Discord HELLO from %s: %s", GET_CHAR_NAME(apDescriptor->character), payload.dump().c_str());
+}
+
+void SendGMCPDiscordInfo ( descriptor_t *apDescriptor)
+{
+  json j;
+
+  j["inviteurl"] = DISCORD_SERVER_URL;
+  j["applicationid"] = DISCORD_APP_ID;
+  
+  // Dump the json to a string and send it.
+  std::string send_payload = j.dump();
+  SendGMCP(apDescriptor, "External.Discord.Info", send_payload.c_str());
+
+  log_vfprintf("Sending GMCP Discord INFO to %s: %s", GET_CHAR_NAME(apDescriptor->character), send_payload.c_str());
+}
+
+// { smallimage: ["iconname", "iconname2", "iconname3"], smallimagetext: "Icon hover text", details: "Details String", state: "State String", partysize: 0, partymax: 10, game: "Achaea", starttime: "timestamp for start" }
+void SendGMCPDiscordStatus ( descriptor_t *apDescriptor )
+{
+  json j;
+
+  char details[DISCORD_BUFFER_SIZE] = {0};
+  char state[DISCORD_BUFFER_SIZE] = {0};
+  char smallimagetext[DISCORD_BUFFER_SIZE] = {0};
+  char smallimage[DISCORD_BUFFER_SIZE] = {0};
+
+  // Set smallimage, smallimagetext, details, and state values here.
+  generate_discord_details(apDescriptor, smallimage, smallimagetext, details, state);
+
+  j["smallimage"] = json::array({
+    // FYI, icons are: foreground color #02CFB9, shadow color #00AC99 blur 11, stroke color #8DD4CD width 8. Background is black to #3B0769 in a vertical-down gradient.
+    smallimage
+  });
+
+  j["smallimagetext"] = smallimagetext;
+
+  j["largeimage"] = json::array({
+    // FYI, icons are color #0072FF on #000000
+    "awcevile-skyline02" // "seattle_synthwave" //"space_needle2" // largeimage
+  });
+  j["largeimagetext"] = "awakemud.com";
+
+  j["details"] = details;
+  j["state"] = state;
+  // j["partysize"] = 0;
+  // j["partymax"] = 0;
+  j["game"] = "AwakeMUD CE";
+  // j["starttime"] = apDescriptor->login_time;
+
+  // Dump the json to a string and send it.
+  std::string payload = j.dump();
+  SendGMCP(apDescriptor, "External.Discord.Status", payload.c_str());
+
+  log_vfprintf("Sending GMCP Discord status to %s: %s", GET_CHAR_NAME(apDescriptor->character), payload.c_str());
+}
+
+void SendCustomGMCPDiscordStatus ( descriptor_t *apDescriptor, const char *smallimage, const char *smallimagetext, const char *details, const char *state)
+{
+  json j;
+
+  j["smallimage"] = json::array({
+    smallimage
+  });
+
+  j["smallimagetext"] = smallimagetext; // todo
+  j["details"] = details;
+  j["state"] = state;
+  j["partysize"] = 0;
+  j["partymax"] = 0;
+  j["game"] = "AwakeMUD CE";
+  j["starttime"] = apDescriptor->login_time;
+
+  // Dump the json to a string and send it.
+  std::string payload = j.dump();
+  SendGMCP(apDescriptor, "External.Discord.Status", payload.c_str());
+
+  log_vfprintf("Sending GMCP Discord status to %s: %s", GET_CHAR_NAME(apDescriptor->character), payload.c_str());
 }
 
 void SendGMCPMatrixInfo ( struct char_data *ch )
@@ -324,6 +426,7 @@ void SendGMCPCharPools( struct char_data * ch )
 
 
 void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const json &payload) {
+  log_vfprintf("GMCP module %s, payload %s", module, payload.dump().c_str());
   if (!strncmp(module, "Core.Supports.Get", strlen(module)))
     SendGMCPCoreSupports(apDescriptor);
   else if (!strncmp(module, "Room.Info.Get", strlen(module)))
@@ -353,6 +456,14 @@ void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const js
       mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Unable to Handle GMCP Char.Pools.Get Call: No Valid Character");
     else
       SendGMCPCharPools(apDescriptor->character);
+  else if (!strncmp(module, "External.Discord.Hello", strlen(module))) {
+    RegisterGMCPDiscordHello(apDescriptor, payload);
+    SendGMCPDiscordInfo(apDescriptor);
+    SendGMCPDiscordStatus(apDescriptor);
+  }
+  else if (!strncmp(module, "External.Discord.Get", strlen(module))) {
+    SendGMCPDiscordStatus(apDescriptor);
+  }
   else
     mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Received Unhandled GMCP Module Call [%s]: %s", module, payload.dump().c_str());
 }
@@ -395,4 +506,207 @@ void ParseGMCP( descriptor_t *apDescriptor, const char *apData )
 
   // Dispatch the GMCP message.
   ExecuteGMCPMessage(apDescriptor, module, payload);
+}
+
+/////// Helper functions.
+
+const char *generate_discord_quest_string(idnum_t quest_rnum) {
+  static char result[100] = {0};
+
+  strlcpy(result, "Running the Shadows", sizeof(result));
+
+  if (quest_rnum <= 0) {
+    return result;
+  }
+
+  switch (quest_table[quest_rnum].vnum) {
+    // TODO: If it's a cool quest, put a special string for it.
+    default:
+      break;
+  }
+
+  // Get the Johnson for the quest.
+  rnum_t johnson_rnum = real_mobile(quest_table[quest_rnum].johnson);
+  if (johnson_rnum <= 0) {
+    return result;
+  }
+
+  snprintf(result, sizeof(result), "Working for %s", GET_CHAR_NAME(&mob_proto[johnson_rnum]));
+  return result;
+}
+
+// Generates the second of three lines under "Playing AwakeMUD CE"
+#define SET_DETAILS(msg) strlcpy(details, msg, DISCORD_BUFFER_SIZE);
+#define SET_STATE(msg) strlcpy(state, msg, DISCORD_BUFFER_SIZE);
+#define SET_SMALLIMAGE(msg) strlcpy(smallimage, msg, DISCORD_BUFFER_SIZE);
+#define SET_SMALLIMAGETEXT(msg) strlcpy(smallimagetext, msg, DISCORD_BUFFER_SIZE);
+void generate_discord_details(descriptor_t *apDescriptor, char *smallimage, char *smallimagetext, char *details, char *state) {
+  struct char_data *ch = apDescriptor->character;
+
+  // They haven't connected yet.
+  if (!ch) {
+    // No icon etc.
+    SET_DETAILS("In Menus");
+    return;
+  }
+
+  // If you've gotten here, they're connected. Choose a details string to return.
+  // First, the editing state image text switch.
+  switch (STATE(apDescriptor)) {
+    case CON_VEDIT:
+      SET_SMALLIMAGETEXT("Building Vehicles");
+      break;
+    case CON_IEDIT:
+      SET_SMALLIMAGETEXT("Forming Objects");
+      break;
+    case CON_REDIT:
+      SET_SMALLIMAGETEXT("Painting the Game World");
+      break;
+    case CON_MEDIT:
+      SET_SMALLIMAGETEXT("Molding Mobs");
+      break;
+    case CON_QEDIT:
+      SET_SMALLIMAGETEXT("Instructing Johnsons");
+      break;
+    case CON_SHEDIT:
+      SET_SMALLIMAGETEXT("Stocking Shops");
+      break;
+    case CON_ZEDIT:
+      SET_SMALLIMAGETEXT("Customizing Zones");
+      break;
+    case CON_HEDIT:
+      SET_SMALLIMAGETEXT("Coding Matrix Hosts");
+      break;
+    case CON_ICEDIT:
+      SET_SMALLIMAGETEXT("Writing ICs");
+      break;
+    case CON_HELPEDIT:
+      SET_SMALLIMAGETEXT("Scribing Helpfiles");
+      break;
+    case CON_HOUSEEDIT_COMPLEX:
+      SET_SMALLIMAGETEXT("Building Apartment Complex");
+      break;
+    case CON_HOUSEEDIT_APARTMENT:
+      SET_SMALLIMAGETEXT("Renovating Apartments");
+      break;
+    case CON_FACTION_EDIT:
+      SET_SMALLIMAGETEXT("Negotiating with Factions");
+      break;
+  }
+
+  //
+  switch (STATE(apDescriptor)) {
+    case CON_PART_CREATE:
+    case CON_DECK_CREATE:
+    case CON_PRO_CREATE:
+      SET_SMALLIMAGE("circuitry-darker");
+      SET_SMALLIMAGETEXT("Hack the Planet!");
+      SET_DETAILS("Building a Cyberdeck");
+      return;
+    case CON_SPELL_CREATE:
+      SET_SMALLIMAGE("book-aura-darker");
+      SET_SMALLIMAGETEXT("'I cast... MAGIC MISSILE!'");
+      if (GET_TRADITION(ch) == TRAD_SHAMANIC) {
+        char totem_string[100];
+        snprintf(totem_string, sizeof(totem_string), "Communing with %s", totem_types[GET_TOTEM(ch)]);
+        SET_DETAILS(totem_string);
+      } else {
+        SET_DETAILS("Designing Spells");
+      }
+      return;
+    case CON_VEDIT:
+    case CON_IEDIT:
+    case CON_REDIT:
+    case CON_MEDIT:
+    case CON_QEDIT:
+    case CON_SHEDIT:
+    case CON_ZEDIT:
+    case CON_HEDIT:
+    case CON_ICEDIT:
+    case CON_HELPEDIT:
+    case CON_HOUSEEDIT_COMPLEX:
+    case CON_HOUSEEDIT_APARTMENT:
+    case CON_FACTION_EDIT:
+      // smallimagetext set above
+      SET_SMALLIMAGE("spanner");
+      SET_DETAILS("Contributing <3");
+      return;
+    case CON_DECORATE:
+    case CON_DECORATE_VEH:
+      SET_DETAILS("Decorating");
+      return;
+    
+    // These cases don't return and instead just break. This lets you override them with later logic.
+    case CON_PLAYING:
+      SET_DETAILS("Vibing");
+      break;
+    default:
+      SET_DETAILS("In Menus");
+      break;
+  }
+  // Playing 3x3 Control Point
+  
+  struct room_data *in_room = get_ch_in_room(ch);
+
+  // Add in some other action states.
+  if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+    SET_SMALLIMAGE("steering-wheel-darker");
+    SET_SMALLIMAGETEXT("Jacked In");
+    SET_DETAILS("Direct Neural Driving");
+    return;
+  }
+
+  if (AFF_FLAGGED(ch, AFF_PILOT)) {
+    SET_SMALLIMAGE("steering-wheel-darker");
+    SET_SMALLIMAGETEXT("Behind the Wheel");
+    SET_DETAILS("Cruising the Sprawl");
+    return;
+  }
+
+  if (GET_ROOM_VNUM(in_room) == RM_AIRBORNE) {
+    SET_SMALLIMAGE("airplane-darker");
+    SET_SMALLIMAGETEXT("'There are free peanuts, right?'");
+    SET_DETAILS("Flying the Unfriendly Skies");
+    return;
+  }
+
+  if (IS_WATER(in_room)) {
+    if (ch->in_veh) {
+      SET_SMALLIMAGE("sinking-ship");
+      SET_SMALLIMAGETEXT("Hopefully not like this.");
+      SET_DETAILS("Out for a Sail");
+    } else {
+      SET_SMALLIMAGE("swimfins");
+      SET_SMALLIMAGETEXT("Swim hard, avoid the RIP-tide!");
+      SET_DETAILS("Fighting the Current");
+    }
+    return;
+  }
+
+  if (PLR_FLAGGED(ch, PLR_MATRIX)) {
+    SET_SMALLIMAGE("cpu-shot-darker");
+    SET_SMALLIMAGETEXT("Jacked In");
+    SET_DETAILS("Hacking the Matrix");
+    return;
+  }
+
+  // Being on a job is probably the most common state, so we put it last.
+  if (GET_QUEST(ch)) {
+    SET_SMALLIMAGE("briefcase-darker");
+    SET_SMALLIMAGETEXT("");
+    SET_DETAILS(generate_discord_quest_string(GET_QUEST(ch)));
+    return;
+  }
+}
+#undef SET_DETAILS
+#undef SET_STATE
+#undef SET_SI
+#undef SET_SIT
+
+void update_gmcp_discord_info(struct descriptor_data *desc) {
+#ifdef USE_DISCORD_RICH_PRESENCE
+  if (desc && desc->pProtocol && desc->pProtocol->bGMCP) {
+    SendGMCPDiscordStatus(desc);
+  }
+#endif
 }

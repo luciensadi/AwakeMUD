@@ -129,7 +129,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define WIZLOCK_MSG "Sorry, the game is currently locked. While you wait for it to open, feel free to join our Discord at https://discord.gg/q5VCMkv!"
 
 // Discord server URL. Comment out if you don't have one.
-#define DISCORD_SERVER_URL "https://discord.gg/q5VCMkv"
+#define DISCORD_SERVER_URL "https://discord.gg/bKBpvNj"
+// Discord Rich Presence app ID.
+#define DISCORD_APP_ID "1356080315952660623"
 
 // Credsticks should generate every 1:X kills, and have X * kill's credits. Setting this too high will cause things like wageslaves having silver credsticks, so be cautious.
 #define CREDSTICK_RARITY_FACTOR                                10

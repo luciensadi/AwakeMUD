@@ -95,6 +95,7 @@ void vehcust_parse(struct descriptor_data *d, char *arg);
 void pocketsec_parse(struct descriptor_data *d, char *arg);
 void faction_edit_parse(struct descriptor_data *d, const char *arg);
 int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info);
+const char *get_descriptor_fingerprint(struct descriptor_data *d);
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
 extern void verify_every_pointer_we_can_think_of();
@@ -2707,7 +2708,7 @@ int perform_dupe_check(struct descriptor_data *d)
     snprintf(buf, sizeof(buf), "%s has re-logged in ... disconnecting old socket.",
             GET_CHAR_NAME(d->character));
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
-    log_vfprintf("[CONNLOG: %s reconnecting from %s]", GET_CHAR_NAME(d->character), d->host);
+    log_vfprintf("[CONNLOG: %s reconnecting from %s with fingerprint %s and JSON '''%s''']", GET_CHAR_NAME(d->character), d->host, get_descriptor_fingerprint(d), d->pProtocol ? d->pProtocol->new_environ_info.dump().c_str() : "{}");
     if (d->character->persona)
     {
       snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", d->character->persona->name);
@@ -3134,12 +3135,12 @@ void nanny(struct descriptor_data * d, char *arg)
                 GET_CHAR_NAME(d->character));
       else
         snprintf(buf, sizeof(buf), "%s has connected.",
-                GET_CHAR_NAME(d->character));
+                 GET_CHAR_NAME(d->character));
       DELETE_ARRAY_IF_EXTANT(d->character->player.host);
       d->character->player.host = str_dup(d->host);
       playerDB.SaveChar(d->character);
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
-      log_vfprintf("[CONNLOG: %s connecting from %s]", GET_CHAR_NAME(d->character), d->host);
+      log_vfprintf("[CONNLOG: %s connecting from %s with fingerprint %s and JSON '''%s''']", GET_CHAR_NAME(d->character), d->host, get_descriptor_fingerprint(d), d->pProtocol ? d->pProtocol->new_environ_info.dump().c_str() : "{}");
       if (load_result) {
         snprintf(buf, sizeof(buf), "\r\n\r\n"
                 "%s%d LOGIN FAILURE%s SINCE LAST SUCCESSFUL LOGIN.%s\r\n",
@@ -3663,10 +3664,9 @@ void log_command(struct char_data *ch, const char *argument, const char *tcname)
   };
   const char *discard_commands[] = {
     "search",
-    "enter", "leave",
     "hail", "push",
     "radio", "phone",
-    "drive", "speed",
+    "drive", "speed", "rig",
     "stand", "sit", "rest", "nod",
     "open", "close", "receive", "buy", "sell",
     "wear", "remove", "draw", "holster",

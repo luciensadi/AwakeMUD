@@ -325,10 +325,11 @@ void copyover_recover()
   struct descriptor_data *d;
   FILE *fp;
   char host[1024];
-  char copyover_get[1024];
+  char copyover_get[10000];
+  char descriptor_json[10000] = {0};
   bool fOld;
   char name[MAX_NAME_LENGTH + 1];
-  int desc;
+  int desc = -1;
 
   log ("COPYOVERLOG: Copyover recovery initiated.");
 
@@ -344,13 +345,39 @@ void copyover_recover()
 
   unlink (COPYOVER_FILE); // In case something crashes - doesn't prevent reading
 
+#ifdef USE_OLD_COPYOVER_LOGIC
   for (;;) {
     fOld = TRUE;
     fscanf (fp, "%d %20s %1023s %1023s\n", &desc, name, host, copyover_get);
     if (desc == -1)
       break;
+#else
+  char line_buf[99999];
+  while (get_line(fp, line_buf, sizeof(line_buf))) {
+    fOld = TRUE;
 
-    log_vfprintf("COPYOVERLOG: Restoring %s (%s)...", name, host);
+    int retval;
+    // Try with the new style using tab separation.
+    if ((retval = sscanf(line_buf, "%d\t%20s\t%1023s\t%1023s\t%9999s", &desc, name, host, copyover_get, descriptor_json)) < 4) {
+      // That failed-- try with the old style using space separation and no JSON.
+      if ((retval = sscanf(line_buf, "%d %20s %1023s %1023s", &desc, name, host, copyover_get)) < 4) {
+        if (desc == -1) {
+          // -1 signals end of file in the old style. Just stop parsing.
+          break;
+        }
+
+        fprintf(stderr, "COPYOVER ERROR: Format error, '''%s''': Only successfully parsed %d values. This connection will be discarded.\n", line_buf, retval);
+        if (desc != -1) {
+          write_to_descriptor (desc, "\n\rWhoops, something went wrong! Our apologies, but we're unable to restore your connection. Please reconnect and log in normally.\n\r");
+          close (desc); /* nope */
+        }
+        continue;
+      }
+      // If we got here, we successfully scanned out data with the old method.
+    }
+#endif
+
+    log_vfprintf("COPYOVERLOG: Restoring desc %d ('%s' @ '%s') (serialized protocol data '%s', JSON %s)...", desc, name, host, copyover_get, *descriptor_json ? "YES" : "NO");
 
     /* Write something, and check if it goes error-free */
     if (write_to_descriptor (desc, "\n\rJust kidding. Restoring from copyover...\n\r") < 0) {
@@ -371,6 +398,9 @@ void copyover_recover()
     // Restore KaVir protocol data.
     CopyoverSet(d, copyover_get);
 
+    // Restore JSON data.
+    CopyoverSetJSON(d, descriptor_json);
+
     d->connected = CON_CLOSE;
 
     /* Now, find the pfile */
@@ -379,10 +409,14 @@ void copyover_recover()
       d->character->desc = d;
       if (!PLR_FLAGGED(d->character, PLR_DELETED))
         PLR_FLAGS(d->character).RemoveBits(PLR_WRITING, PLR_MAILING, ENDBIT);
-      else
+      else {
         fOld = FALSE;
-    } else
+        log_vfprintf("COPYOVERLOG:  - Playerfile for '%s' (%s) was found but marked as deleted. Discarding their connection.", name, host);
+      }
+    } else {
       fOld = FALSE;
+      log_vfprintf("COPYOVERLOG:  - Playerfile for '%s' (%s) was not found??", name, host);
+    }
 
     if (!fOld) /* Player file not found?! */
     {
@@ -963,6 +997,17 @@ void game_loop(int mother_desc)
     /* Note: pulse now changes every 0.10 seconds  */
 
     pulse++;
+
+#ifdef IS_BUILDPORT
+    // DEBUG. YOU SHOULD REMOVE THIS.
+    if (!(pulse % 10)) {
+      // Send GMCP Vitals
+      for (d = descriptor_list; d; d = next_d) {
+        next_d = d->next;
+        update_gmcp_discord_info(d);
+      }
+    }
+#endif
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
     // Every RL second.

@@ -1135,6 +1135,20 @@ void ProtocolNoEcho( descriptor_t *apDescriptor, bool abOn )
  Copyover save/load functions.
  ******************************************************************************/
 
+ 
+const char *CopyoverGetJSON( descriptor_t *apDescriptor )
+{
+  static char output[10000] = {0};
+
+  protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
+
+  if (pProtocol) {
+    strlcpy(output, pProtocol->new_environ_info.dump().c_str(), sizeof(output));
+  }
+
+  return output;
+}
+
 const char *CopyoverGet( descriptor_t *apDescriptor )
 {
   static char Buffer[64];
@@ -1180,6 +1194,15 @@ const char *CopyoverGet( descriptor_t *apDescriptor )
   *pBuffer = '\0';
 
   return Buffer;
+}
+
+void CopyoverSetJSON( descriptor_t *apDescriptor, const char *serialized_json )
+{
+  protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
+
+  if (pProtocol && *serialized_json == '{') {
+    pProtocol->new_environ_info = json::parse(std::string(serialized_json));
+  }
 }
 
 void CopyoverSet( descriptor_t *apDescriptor, const char *apData )
@@ -2080,9 +2103,10 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
     case (char)TELOPT_NEW_ENVIRON:
       if ( aCmd == (char)WILL )
       {
-        PROTO_DEBUG_MSG("Received IAC WILL NEW-ENVIRON from client, requesting IPADDRESS.");
+        PROTO_DEBUG_MSG("Received IAC WILL NEW-ENVIRON from client, requesting all available info.");
         // IAC SB NEW-ENVIRON SEND VAR "IPADDRESS" IAC SE
-        Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, NEW_ENV_USERVAR, 'I', 'P', 'A', 'D', 'D', 'R', 'E', 'S', 'S', (char)IAC, (char)SE, 0 });
+        // Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, NEW_ENV_USERVAR, 'I', 'P', 'A', 'D', 'D', 'R', 'E', 'S', 'S', (char)IAC, (char)SE, 0 });
+        Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, (char)IAC, (char)SE, 0 });
       }
       else if ( aCmd == (char)WONT )
       {
@@ -2210,35 +2234,89 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
       break;
     case (char)TELOPT_NEW_ENVIRON:
       {
+        // Note: Mudlet doesn't implement IPADDRESS by design (https://github.com/Mudlet/Mudlet/blob/development/src/ctelnet.cpp#L1153)
         PROTO_DEBUG_MSG("Entering PerformSubnegotiation's TELOPT_NEW_ENVIRON case.");
-        // We care about the very specific response message of (IAC SB NEW-ENVIRON IS VAR "IPADDRESS" VAL "the ip" IAC SE).
-        // We receive it to this switch case as (IS VAR "IPADDRESS" VAL "the ip").
-        size_t required_min_len = 3 /* telnet flags */ + 9 /* strlen("IPADDRESS") */ + 7 /* strlen of absolute smallest IP, 1.1.1.1 */;
-        if (aSize >= required_min_len) {
-          if (apData[0] == (char)NEW_ENV_IS && (apData[1] == (char)NEW_ENV_VAR || apData[1] == (char)NEW_ENV_USERVAR)) {
-            // Require that they've sent (IS VAR "IPADDRESS" VAL)
-            char expected_input[] = { 'I', 'P', 'A', 'D', 'D', 'R', 'E', 'S', 'S', (char)NEW_ENV_VALUE, '\0' };
-            if (!strncmp(apData, expected_input, strlen(expected_input))) {
-              // Capture the value.
-              char ipAddr[1000];
-              memset(ipAddr, 0, sizeof(ipAddr));
-              for (size_t idx = 12; idx < sizeof(ipAddr) - 1 && apData[idx] && apData[idx] != (char)IAC; idx++)
-                ipAddr[idx - 12] = apData[idx];
-              // Print it to logs.
-              PROTO_DEBUG_MSG("Received IP of '%s' from TELOPT_NEW_ENVIRON.", ipAddr);
-            } else {
-              // Copy it out and ensure it's zero-terminated.
-              char writable[1000];
-              memset(writable, 0, sizeof(writable));
-              for (size_t idx = 2; idx < sizeof(writable) - 1 && apData[idx]; idx++)
-                writable[idx - 2] = apData[idx];
-              PROTO_DEBUG_MSG("- Bailing out: Does not continue with 'IPADDRESS' VAL, instead is '%s'", writable);
-            }
+        
+        // Write their string to a debug buffer so we can log it.
+        char contents_as_str[10000] = { '\0' };
+        for (size_t idx = 0; idx < aSize && idx < sizeof(contents_as_str) - 1; idx++) {
+          if (apData[idx] >= 33 && apData[idx] <= 126) {
+            contents_as_str[idx] = apData[idx];
           } else {
-            PROTO_DEBUG_MSG("- Bailing out: Does not start with IS (VAR|USERVAR), instead is %d %d", (int) apData[0], (int) apData[1]);
+            switch (apData[idx]) {
+              case NEW_ENV_VAR:
+                contents_as_str[idx] = '$';
+                break;
+              case NEW_ENV_USERVAR:
+                contents_as_str[idx] = '%';
+                break;
+              case IAC:
+                contents_as_str[idx] = '!';
+                break;
+              default:
+                contents_as_str[idx] = '?';
+                break;
+            }
           }
+        }
+
+        /* NEW-ENVIRON sends an arbitrarily long list of values. We'll receive SB NEW-ENVIRON IS, followed by an arbitrary number of these blocks: (VAR|USERVAR) "variable" [VAL "value"]
+        Note that 'VAL <value>' may be omitted. For example, Mudlet refuses to provide IPADDRESS values, so it'll send back SB NEW-ENVIRON IS USERVAR "IPADDRESS" IAC SE.
+        */
+
+        // Minimum size requirement must be met. Arbitrarily chosen.
+        if (aSize < 8) {
+          PROTO_DEBUG_MSG("- Bailing out: Size %d is less than required. Content was '%s'.", aSize, contents_as_str);
+        } else if (apData[0] != (char)NEW_ENV_IS) {
+          PROTO_DEBUG_MSG("- Bailing out: Content '%s' did not start with IS.", aSize, contents_as_str);
         } else {
-          PROTO_DEBUG_MSG("- Bailing out: Size %d is less than required.", aSize);
+          // We're in the body of the arbitrary set of variables. Select them out.
+          PROTO_DEBUG_MSG("- Parsing content '%s'.", contents_as_str);
+          char key_buffer[aSize + 1];
+          char val_buffer[aSize + 1];
+
+          for (size_t idx = 1; idx < aSize; idx++) {
+            // All of the keys we're looking for start with either NEW_ENV_VAR or NEW_ENV_USERVAR.
+            if (apData[idx] == (char)NEW_ENV_VAR || apData[idx] == (char)NEW_ENV_USERVAR) {
+              PROTO_DEBUG_MSG("-- Found %s, reading out key to key_buffer.", apData[idx] == (char)NEW_ENV_VAR ? "VAR" : "USERVAR");
+              memset(key_buffer, 0, sizeof(key_buffer));
+
+              for (size_t key_idx = idx + 1; key_idx < aSize; key_idx++) {
+                // Key ends at VAL.
+                if (apData[key_idx] == NEW_ENV_VALUE) {
+                  PROTO_DEBUG_MSG("-- Key is %s. Parsing value next.", key_buffer);
+                  memset(val_buffer, 0, sizeof(val_buffer));
+
+                  // Time to parse out the value string.
+                  for (size_t val_idx = key_idx + 1; val_idx < aSize; val_idx++) {
+                    // Value ends either at the end of the string or at the next VAR/USERVAR.
+                    if (apData[val_idx] == (char)NEW_ENV_VAR || apData[val_idx] == (char)NEW_ENV_USERVAR) {
+                      PROTO_DEBUG_MSG("-- Hit %s while reading value %s. Bailing.", apData[val_idx] == (char)NEW_ENV_VAR ? "VAR" : "USERVAR", val_buffer);
+                      idx = val_idx - 1;
+                      break;
+                    } else {
+                      val_buffer[val_idx - (key_idx + 1)] = apData[val_idx];
+                    }
+                  }
+
+                  PROTO_DEBUG_MSG("-- Value %s. Writing to protocol JSON.", val_buffer);
+                  apDescriptor->pProtocol->new_environ_info[(const char *) key_buffer] = (const char *) val_buffer;
+                  break;
+                }
+                // Key was given without a value. Backtrack one and break out of this sub-loop.
+                else if (apData[key_idx] == (char)NEW_ENV_VAR || apData[key_idx] == (char)NEW_ENV_USERVAR) {
+                  PROTO_DEBUG_MSG("-- Hit %s while reading key %s. Bailing.", apData[key_idx] == (char)NEW_ENV_VAR ? "VAR" : "USERVAR", key_buffer);
+                  idx = key_idx - 1;
+                  break;
+                }
+                else {
+                  key_buffer[key_idx - (idx + 1)] = apData[key_idx];
+                }
+              }
+            }
+          }
+          
+          PROTO_DEBUG_MSG("- After parsing, the resulting JSON dict is '%s'.", apDescriptor->pProtocol->new_environ_info.dump().c_str());
         }
       }
       break;
@@ -2921,7 +2999,7 @@ static void SendMSSP( descriptor_t *apDescriptor )
 */
     /* Protocols */
     { "ANSI",          "1", NULL },
-    { "GMCP",          "0", NULL },
+    { "GMCP",          "1", NULL },
 #ifdef USING_MCCP
     { "MCCP",          "1", NULL },
 #else

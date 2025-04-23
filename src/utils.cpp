@@ -26,6 +26,8 @@
 #include <mysql/mysql.h>
 #include <regex>
 
+#include "md5.hpp"
+
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
 #define random() rand()
@@ -1360,14 +1362,14 @@ void add_follower(struct char_data * ch, struct char_data * leader)
  *
  * Returns the number of lines advanced in the file.
  */
-int get_line(FILE * fl, char *buf)
+int get_line(FILE * fl, char *buf, size_t buf_sz)
 {
-  char temp[256];
+  char temp[buf_sz];
   int lines = 0;
 
   do {
     lines++;
-    fgets(temp, 256, fl);
+    fgets(temp, buf_sz, fl);
     if (*temp)
       temp[strlen(temp) - 1] = '\0';
   } while (!feof(fl) && (*temp == '*' || !*temp));
@@ -8328,4 +8330,43 @@ int calculate_ware_essence_or_index_cost(struct char_data *ch, struct obj_data *
   
   mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got non-ware item to calculate_ware_essence_or_index_cost(%s, %s)!", GET_CHAR_NAME(ch), GET_OBJ_NAME(ware));
   return 99999;
+}
+
+const char *md5_hash_from_string(const char *input_str) {
+  // Calculate the digest.
+  uint8_t digest[16];
+  md5String(input_str, digest);
+
+  // Prepare string for storage.
+  static char md5string[33];
+  memset(md5string, 0, sizeof(md5string));
+
+  // Stringify.
+  for(size_t i = 0; i < sizeof(digest); ++i) {
+    char temp[4] = {0};
+    snprintf(temp, sizeof(temp), "%02x", (unsigned int)digest[i]);
+    strlcat(md5string, temp, sizeof(md5string));
+  }
+
+  return md5string;
+}
+
+const char *get_descriptor_fingerprint(struct descriptor_data *d) {
+  char result[1000] = {0};
+
+  if (!d || !d->pProtocol)
+    return "";
+
+  // Host data is explicitly not included.
+
+  // Add NEW-ENVIRON data from our new JSON.
+  if (!d->pProtocol->new_environ_info.empty()) {
+    strlcat(result, md5_hash_from_string(get_string_after_color_code_removal(d->pProtocol->new_environ_info.dump(2, ' ', true).c_str(), NULL)), sizeof(result));
+  }
+
+  // Add data from KaVir's protocol snippet.
+  strlcat(result, CopyoverGet(d), sizeof(result));
+
+  // Finally, hash the result and return that.
+  return md5_hash_from_string(result);
 }

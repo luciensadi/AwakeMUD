@@ -1067,6 +1067,7 @@ ACMD (do_iedit)
 #else
 
     iedit_disp_menu(d);
+    update_gmcp_discord_info(d);
 #endif
 
     return;
@@ -1087,6 +1088,7 @@ ACMD (do_iedit)
     d->edit_obj->obj_flags.condition = d->edit_obj->obj_flags.barrier = 1;
 
     d->edit_mode = IEDIT_CONFIRM_EDIT;
+    update_gmcp_discord_info(d);
 
     return;
   }

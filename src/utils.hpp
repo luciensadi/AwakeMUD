@@ -49,7 +49,7 @@ int     dice(int number, int size);
 void    sprintbit(long vektor, const char *names[], char *result, size_t result_size);
 void    sprinttype(int type, const char *names[], char *result, size_t result_size);
 void    sprint_obj_mods(struct obj_data *obj, char *result, size_t result_size);
-int     get_line(FILE *fl, char *buf);
+int     get_line(FILE *fl, char *buf, size_t buf_sz=256);
 struct  time_info_data age(struct char_data *ch);
 int     convert_damage(int damage);
 int     srdice(void);
@@ -194,6 +194,9 @@ void   set_dropped_by_info(struct obj_data *obj, struct char_data *ch);
 bool   restore_to_full_health_if_still_in_chargen(struct char_data *victim);
 char * format_for_logging__returns_new(const char *input);
 int    calculate_ware_essence_or_index_cost(struct char_data *ch, struct obj_data *ware);
+
+// GMCP / Discord update method. Does nothing if GMCP isn't turned on.
+void update_gmcp_discord_info(struct descriptor_data *desc);
 
 // RCD subscription functions.
 bool   add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller, bool ignore_veh_sub_marker, bool mute_duplication_alarm=FALSE);
