@@ -89,7 +89,7 @@ int get_otaku_int(struct char_data *ch) {
   /* Handling Drugs */
   int detox_force = affected_by_spell(ch, SPELL_DETOX);
   if (GET_DRUG_STAGE(ch, DRUG_PSYCHE) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_PSYCHE, detox_force))
-    int_stat += 2;
+    int_stat++;
 
   return int_stat;
 }
