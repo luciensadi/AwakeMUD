@@ -1300,7 +1300,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
           }
         }
 
-        if (!prereq_found) {
+        if (!prereq_found && !rep_too_high(ch, quest_table[quest_idx].prerequisite_quest)) {
           if (access_level(ch, LVL_BUILDER)) {
             send_to_char(ch, "[Skipping quest %ld: You need to have done prerequisite quest %lu first.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].prerequisite_quest);
           }
