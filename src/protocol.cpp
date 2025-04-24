@@ -2268,7 +2268,7 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
         if (aSize < 8) {
           PROTO_DEBUG_MSG("- Bailing out: Size %d is less than required. Content was '%s'.", aSize, contents_as_str);
         } else if (apData[0] != (char)NEW_ENV_IS) {
-          PROTO_DEBUG_MSG("- Bailing out: Content '%s' did not start with IS.", aSize, contents_as_str);
+          PROTO_DEBUG_MSG("- Bailing out: Content '%s' did not start with IS.", contents_as_str);
         } else {
           // We're in the body of the arbitrary set of variables. Select them out.
           PROTO_DEBUG_MSG("- Parsing content '%s'.", contents_as_str);
