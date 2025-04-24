@@ -2284,6 +2284,9 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
               for (size_t key_idx = idx + 1; key_idx < aSize; key_idx++) {
                 // Key ends at VAL.
                 if (apData[key_idx] == NEW_ENV_VALUE) {
+                  // Transform the key by removing any whitespace characters.
+                  for (size_t san_idx = 0; san_idx < strlen(key_buffer); san_idx++) { if (isspace(key_buffer[san_idx])) { key_buffer[san_idx] = '_'; } }
+
                   PROTO_DEBUG_MSG("-- Key is %s. Parsing value next.", key_buffer);
                   memset(val_buffer, 0, sizeof(val_buffer));
 
@@ -2298,6 +2301,9 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
                       val_buffer[val_idx - (key_idx + 1)] = apData[val_idx];
                     }
                   }
+
+                  // Transform the value by removing any whitespace characters.
+                  for (size_t san_idx = 0; san_idx < strlen(val_buffer); san_idx++) { if (isspace(val_buffer[san_idx])) { val_buffer[san_idx] = '_'; } }
 
                   PROTO_DEBUG_MSG("-- Value %s. Writing to protocol JSON.", val_buffer);
                   apDescriptor->pProtocol->new_environ_info[(const char *) key_buffer] = (const char *) val_buffer;
