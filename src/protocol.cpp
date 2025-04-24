@@ -2962,23 +2962,23 @@ static void SendMSSP( descriptor_t *apDescriptor )
     /* Generic */
     { "CRAWL DELAY",      "-1", NULL },
 
-    { "HOSTNAME",        "awakemud.com", NULL },
-    { "PORT",          "4000", NULL },
+    { "HOSTNAME",        "play.awakemud.com", NULL },
+    { "PORT",            "4000", NULL },
     { "CODEBASE",        *awakemud_version, NULL },
-    { "CONTACT",        STAFF_CONTACT_EMAIL, NULL },
-    { "CREATED",        "2016", NULL },
+    { "CONTACT",         STAFF_CONTACT_EMAIL, NULL },
+    { "CREATED",         "2016", NULL },
 //    { "ICON",          "" },
 //    { "IP",            "" },
     { "LANGUAGE",        "English", NULL },
     { "LOCATION",        "USA", NULL },
-    { "MINIMUM AGE",      "13", NULL }, // COPPA compliance-- we do not service those under 13.
-    { "WEBSITE",        "https://awakemud.com", NULL },
+    { "MINIMUM AGE",     "18", NULL }, // COPPA compliance-- we do not service those under 13.
+    { "WEBSITE",         "https://awakemud.com", NULL },
     /* Categorisation */
 
-    { "FAMILY",         "Custom", NULL },
-    { "GENRE",          "Science Fiction", NULL },
+    { "FAMILY",          "Custom", NULL },
+    { "GENRE",           "Science Fiction", NULL },
     { "GAMEPLAY",        "Player versus Environment", NULL },
-    { "STATUS",         "Open Beta", NULL },
+    { "STATUS",          "Open Beta", NULL },
     { "GAMESYSTEM",      "Shadowrun 3rd Edition", NULL },
 //    { "INTERMUD",        "Gossip", NULL },
     { "SUBGENRE",        "Cyberpunk", NULL },
@@ -3043,21 +3043,23 @@ static void SendMSSP( descriptor_t *apDescriptor )
     { "PLAYER CLANS",     "1", NULL },
     { "PLAYER CRAFTING",   "1", NULL },
     { "PLAYER GUILDS",    "1", NULL },
+    { "EQUIPMENT SYSTEM",  "1", NULL },
+    { "MULTIPLAYING",      "1", NULL },
+    { "PLAYERKILLING",     "0", NULL },
+    { "QUEST SYSTEM",      "1", NULL },
+    { "ROLEPLAYING",       "1", NULL },
+    { "WORLD ORIGINALITY", "1", NULL },
     /*
-    { "EQUIPMENT SYSTEM",  "" },
-    { "MULTIPLAYING",     "" },
-    { "PLAYERKILLING",    "" },
-    { "QUEST SYSTEM",     "" },
-    { "ROLEPLAYING",      "" },
     { "TRAINING SYSTEM",   "" },
-    { "WORLD ORIGINALITY",  "" },
     */
     /* Protocols */
-/*
+    /*
     { "ATCP",          "1" },
-    { "SSL",           "0" },
     { "ZMP",           "0" },
-*/
+    */
+    { "SSL",           "4002", NULL },
+    { "TLS",           "4002", NULL },
+
     { NULL, NULL, NULL } /* This must always be last. */
   };
 
