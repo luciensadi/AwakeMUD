@@ -1719,14 +1719,20 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     }
     if (access_level(ch, LVL_VICEPRES)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n", GET_EMAIL(k));
-      if (ch->desc && ch->desc->pProtocol) {
-        if (ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID] && ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString) {
+      if (k->desc && k->desc->pProtocol) {
+        if (k->desc->pProtocol->pVariables[eMSDP_CLIENT_ID] && k->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString) {
           extern const char *get_descriptor_fingerprint(struct descriptor_data *d);
 
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; Current Client: ^c%s v%s^n; Fingerprint ^c%s^n\r\n",
-                   ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString,
-                   ch->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString ? ch->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString : "NULL",
-                   get_descriptor_fingerprint(ch->desc));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; Current Client: ^c%s v%s^n",
+                   k->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString,
+                   k->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString ? k->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString : "NULL");
+          
+          if (k->desc->pProtocol->new_environ_info.find("IPADDRESS") != k->desc->pProtocol->new_environ_info.end()) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (reported IP %s)", k->desc->pProtocol->new_environ_info["IPADDRESS"].get<std::string>().c_str());
+          }
+          
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; Fingerprint ^c%s^n\r\n",
+                   get_descriptor_fingerprint(k->desc));
         }
       }
     }
