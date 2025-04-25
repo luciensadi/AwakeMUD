@@ -466,7 +466,7 @@ ACMD(do_kill)
       act("$n brutally slays $N!", FALSE, ch, 0, vict, TO_NOTVICT);
       if (!IS_NPC(vict)) {
         snprintf(buf2, sizeof(buf2), "%s raw killed by %s. {%s (%ld)}", GET_CHAR_NAME(vict),
-                GET_NAME(ch), vict->in_room->name,
+                GET_CHAR_NAME(ch), GET_ROOM_NAME(vict->in_room),
                 vict->in_room->number);
 
         mudlog(buf2, vict, LOG_DEATHLOG, TRUE);

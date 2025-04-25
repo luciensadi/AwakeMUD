@@ -923,7 +923,7 @@ void log_death_trap(struct char_data * ch)
   char buf[150];
 
   snprintf(buf, sizeof(buf), "%s hit DeathTrap #%ld (%s)", GET_CHAR_NAME(ch),
-          ch->in_room->number, ch->in_room->name);
+           GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room));
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 }
 

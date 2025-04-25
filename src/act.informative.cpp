@@ -1789,7 +1789,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
       if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
         snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s%s%s%s\r\n", dirs[door],
                  EXIT(ch, door)->to_room->number,
-                 replace_neutral_color_codes(EXIT(ch, door)->to_room->name, autom ? "^c" : "^n"),
+                 replace_neutral_color_codes(GET_ROOM_NAME(EXIT(ch, door)->to_room), autom ? "^c" : "^n"),
                  IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED) ? " (locked)" : ((IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) ? " (closed)" : ""),
                  IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) ? " (hidden)" : "",
                  (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch, FALSE)) ? " (impassible)" : "",
@@ -1818,7 +1818,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
             else
               snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "A closed %s", *(fname(EXIT(ch, door)->keyword)) ? fname(EXIT(ch, door)->keyword) : "door");
           } else {
-            strlcat(buf2, replace_neutral_color_codes(EXIT(ch, door)->to_room->name, autom ? "^c" : "^n"), sizeof(buf2));
+            strlcat(buf2, replace_neutral_color_codes(GET_ROOM_NAME(EXIT(ch, door)->to_room), autom ? "^c" : "^n"), sizeof(buf2));
             if (IS_WATER(EXIT(ch, door)->to_room))
               strlcat(buf2, " (flooded)", sizeof(buf2));
           }
@@ -2192,7 +2192,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
         default:
           send_to_char("^RA horrific quantity of astral energy tears at your senses.^n\r\n", ch);
           snprintf(buf, sizeof(buf), "SYSERR: '%s' (%ld) has powersite background count %d, which is greater than displayable max of 5.",
-                  ch->in_room->name, ch->in_room->number, GET_BACKGROUND_COUNT(ch->in_room));
+                   GET_ROOM_NAME(ch->in_room), ch->in_room->number, GET_BACKGROUND_COUNT(ch->in_room));
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
           break;
       }

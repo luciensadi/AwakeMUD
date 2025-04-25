@@ -3929,7 +3929,7 @@ SPECIAL(circulation_fan) {
       // Deathlog Addendum
       snprintf(buf, sizeof(buf),"%s got chopped up into tiny bits. {%s (%ld)}",
               GET_CHAR_NAME(ch),
-              ch->in_room->name, ch->in_room->number );
+              GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room) );
       mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 
       die(ch, 0);
