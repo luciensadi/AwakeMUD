@@ -229,7 +229,19 @@ ACMD(do_debug) {
 
           obj_to_obj(entry, folder);
         }
-        break;
+      }
+
+      if (!str_cmp(folder->restring, "Mail")) {
+        for (int idx = 0; idx < 3; idx++) {
+          struct obj_data *entry = read_object(OBJ_PIECE_OF_MAIL, VIRTUAL, OBJ_LOAD_REASON_POCSEC_PHONEADD);
+
+          snprintf(buf3, sizeof(buf3), "mail from your mother");
+          entry->restring = str_dup(buf3);
+          snprintf(buf3, sizeof(buf3), "go to bed");
+          entry->photo = str_dup(buf3);
+
+          obj_to_obj(entry, folder);
+        }
       }
     }
 

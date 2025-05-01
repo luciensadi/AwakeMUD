@@ -2316,9 +2316,10 @@ void DeleteChar(long idx)
     "pfiles_spells           ",
     "pfiles_spirits          ",
     "pfiles_worn             ",
-    "playergroup_invitations "  // 24
+    "playergroup_invitations ",
+    "pocsec_phonebook        "  // 25
   };
-  #define NUM_SQL_TABLE_NAMES     25
+  #define NUM_SQL_TABLE_NAMES     26
   #define PFILES_INDEX            0
   #define PFILES_IGNORE_INDEX     10
   #define PFILES_IGNORE_V2_INDEX  11

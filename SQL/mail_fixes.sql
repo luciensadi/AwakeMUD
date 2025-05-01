@@ -5,6 +5,9 @@ CREATE TABLE `pfiles_mail` (
   `recipient` mediumint(5) unsigned default '0' NOT NULL,
   `timestamp` timestamp NOT NULL,
   `text` text NOT NULL,
+  `is_received` tinyint(1) default 0;
+  `is_read` tinyint(1) default 0;
+  `is_protected` tinyint(1) default 0;
   PRIMARY KEY (`idnum`),
   KEY (`recipient`)
 );

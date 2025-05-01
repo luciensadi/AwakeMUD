@@ -5060,7 +5060,7 @@ bool npc_is_protected_by_spec(struct char_data *npc) {
   return (CHECK_FUNC_AND_SFUNC_FOR(npc, shop_keeper)
           || CHECK_FUNC_AND_SFUNC_FOR(npc, johnson)
           || CHECK_FUNC_AND_SFUNC_FOR(npc, landlord_spec)
-          || CHECK_FUNC_AND_SFUNC_FOR(npc, postmaster)
+//          || CHECK_FUNC_AND_SFUNC_FOR(npc, postmaster)
           || CHECK_FUNC_AND_SFUNC_FOR(npc, teacher)
           || CHECK_FUNC_AND_SFUNC_FOR(npc, metamagic_teacher)
           || CHECK_FUNC_AND_SFUNC_FOR(npc, trainer)

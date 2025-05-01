@@ -561,7 +561,7 @@ void assign_mobiles(void)
 {
   int i;
 
-  SPECIAL(postmaster);
+//  SPECIAL(postmaster);
   SPECIAL(generic_guard);
   SPECIAL(receptionist);
   SPECIAL(cryogenicist);
@@ -722,17 +722,17 @@ void assign_mobiles(void)
 
   /* Immortal HQ */
   ASSIGNMOB(1002, janitor);
-  ASSIGNMOB(1005, postmaster);
+//  ASSIGNMOB(1005, postmaster);
 
   ASSIGNMOB(1151, terell_davis);
   /* SWU */
-  ASSIGNMOB(60526, postmaster);
+//  ASSIGNMOB(60526, postmaster);
 
   /* Various Tacoma */
   ASSIGNMOB(1823, aegnor);
   ASSIGNMOB(1832, fixer);
   ASSIGNMOB(1833, purple_haze_bartender);
-  ASSIGNMOB(1900, postmaster);
+//  ASSIGNMOB(1900, postmaster);
   ASSIGNMOB(1902, receptionist);
   ASSIGNMOB(1916, generic_guard);
 
@@ -770,7 +770,7 @@ void assign_mobiles(void)
   ASSIGNMOB(4019, takehero_tsuyama);
 
   /* Various - zone 116 */
-  ASSIGNMOB(4100, postmaster);
+//  ASSIGNMOB(4100, postmaster);
 
   /*BioHyde Complex*/
   ASSIGNMOB(4202, bio_secretary);
@@ -787,7 +787,7 @@ void assign_mobiles(void)
   ASSIGNMOB(5101, janitor);
 
   /* Neophytic Guild */
-  ASSIGNMOB(8010, postmaster);
+//  ASSIGNMOB(8010, postmaster);
   ASSIGNMOB(60523, receptionist);
 
   /* Council Island */
@@ -809,7 +809,7 @@ void assign_mobiles(void)
 
   /* Portland */
   ASSIGNMOB(14605, receptionist);
-  ASSIGNMOB(1102, postmaster);
+//  ASSIGNMOB(1102, postmaster);
 
   /* Mitsuhama */
   ASSIGNMOB(17112, yukiya_dahoto);
