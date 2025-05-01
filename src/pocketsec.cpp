@@ -1,3 +1,5 @@
+#include <mysql/mysql.h>
+
 #include "structs.hpp"
 #include "awake.hpp"
 #include "db.hpp"
@@ -45,6 +47,8 @@
 #define POCSEC_FOLDER_FILES     "Files"
 
 extern bool is_approved_multibox_host(const char *host);
+
+void migrate_pocket_secretary_contents(struct obj_data *obj, idnum_t owner);
 
 ACMD_DECLARE(do_phone);
 
@@ -117,23 +121,48 @@ void wire_nuyen(struct char_data *ch, int amount, idnum_t character_id, const ch
 
 void pocketsec_phonemenu(struct descriptor_data *d)
 {
-  struct obj_data *data = NULL, *folder = SEC->contains;
-  int i = 0;
-  for (; folder; folder = folder->next_content)
-    if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
-      break;
-  CLS(CH);
-  if (!folder) {
-    send_to_char("Your phonebook is empty.\r\n", CH);
-    mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
-    generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
-  } else {
-    send_to_char(CH, "^LYour Phonebook^n\r\n");
-    for (data = folder->contains; data; data = data->next_content) {
-      i++;
-      send_to_char(CH, " %2d > %-20s - %s\r\n", i, GET_OBJ_NAME(data), GET_OBJ_DESC(data));
+  if (!d) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: null d to pocsec_phonemenu");
+    return;
+  }
+  
+  struct char_data *ch = d->original ? d->original : d->character;
+
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: no character to pocsec_phonemenu");
+    return;
+  }
+
+  {
+    char query_buf[500] = {0};
+    snprintf(query_buf, sizeof(query_buf), "SELECT phonenum, note FROM pocsec_phonebook WHERE idnum=%ld ORDER BY note DESC;", GET_IDNUM(ch));
+    if (mysql_wrapper(mysql, query_buf)) {
+      send_to_char(ch, "Sorry, your phonebook isn't working right now.\r\n");
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: failed to query phonebook for %s", GET_CHAR_NAME(ch));
+      return;
     }
   }
+
+  bool first_run = TRUE;
+  {
+    MYSQL_RES *res = mysql_use_result(mysql);
+    MYSQL_ROW row;
+    int idx = 0;
+    while ((row = mysql_fetch_row(res))) {
+      if (first_run) {
+        send_to_char("^LYour Phonebook^n\r\n", ch);
+        first_run = FALSE;
+      }
+
+      send_to_char(CH, " %2d > %-20s - %s\r\n", idx++, row[0], row[1]);
+    }
+    mysql_free_result(res);
+  }
+  
+  if (first_run) {
+    send_to_char("Your phonebook is empty.\r\n", CH);
+  }
+
   send_to_char("\r\n[^cC^n]^call^n     [^cA^n]^cdd Name^n     [^cD^n]^celete Name^n     [^cB^n]^cack^n\r\n", CH);
   d->edit_mode = SEC_PHONEMENU;
 }
@@ -168,6 +197,9 @@ void pocketsec_menu(struct descriptor_data *d)
     send_to_char("This pocket secretary has not been initialized yet. Initialize? [Y/N]\r\n", CH);
     d->edit_mode = SEC_INIT;
   } else {
+    // Make sure it's been converted to DB format.
+    migrate_pocket_secretary_contents(SEC, GET_IDNUM(CH));
+
     send_to_char(CH, "^cMain Menu^n\r\n"
                  "   [^c1^n]^c%sMail%s^n\r\n"
                  "   [^c2^n] ^cNotes^n\r\n"
@@ -317,84 +349,139 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       }
       break;
     case SEC_PHONECALL:
-      for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
-          break;
+      {
+        char query_buf[MAX_INPUT_LENGTH + 500] = {0};
+        MYSQL_RES *res;
+        MYSQL_ROW row;
 
-      if (!folder) {
-        mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
-        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
-      }
+        int offset = atoi(arg);
+        if (offset < 0) {
+          pocketsec_phonemenu(d);
+          send_to_char("That entry does not exist.\r\n", CH);
+          return;
+        }
+        
+        snprintf(query_buf, sizeof(query_buf), "SELECT phonenum FROM pocsec_phonebook WHERE idnum=%ld ORDER BY note DESC LIMIT 1 OFFSET %d;", GET_IDNUM(CH), offset);
+        if (mysql_wrapper(mysql, query_buf)) {
+          send_to_char(d->character, "Sorry, your phonebook isn't working right now.\r\n");
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to query phonebook for %s", GET_CHAR_NAME(d->character));
+          pocketsec_phonemenu(d);
+          return;
+        }
 
-      i = atoi(arg);
-      if (i <= 0) {
-        pocketsec_phonemenu(d);
-        send_to_char("That entry does not exist.\r\n", CH);
-      }
+        if (!(res = mysql_use_result(mysql))) {
+          send_to_char(CH, "Sorry, your phonebook isn't working right now.\r\n");
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to select phone index entry for %s", GET_CHAR_NAME(d->character));
+          pocketsec_phonemenu(d);
+          return;
+        }
 
-      for (file = folder->contains; file && i > 1; file = file->next_content)
-        i--;
-      if (file) {
+        if (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
+          send_to_char(CH, "That entry does not exist.\r\n");
+          pocketsec_phonemenu(d);
+          mysql_free_result(res);
+          return;
+        }
+
+        strlcpy(buf3, row[0], sizeof(buf3));
+        mysql_free_result(res);
+
         STATE(d) = CON_PLAYING;
         act("$n looks up from $s $p.", TRUE, CH, SEC, 0, TO_ROOM);
+        send_to_char(CH, "\r\n");
         d->edit_obj = NULL;
-        do_phone(CH, GET_OBJ_DESC(file), 0, SCMD_RING);
-      } else {
-        pocketsec_phonemenu(d);
-        send_to_char("That entry does not exist.\r\n", CH);
+        do_phone(CH, buf3, 0, SCMD_RING);
       }
       break;
     case SEC_PHONEADD1:
-      for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
-          break;
+      {
+        d->edit_obj_secondary = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL, OBJ_LOAD_REASON_POCSEC_PHONEADD);
 
-      if (!folder) {
-        mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
-        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
+        // Ensure they're not trying something fucky.
+        if (strlen(arg) >= 199 || str_cmp(arg, prepare_quotes(buf3, arg, sizeof(buf3)))) {
+          send_to_char(CH, "Sorry, %s is not a valid phonebook record name (it can't be too long or contain quotes). Try again: ", arg);
+          return;
+        }
+
+        d->edit_obj_secondary->restring = str_dup(arg);
+        send_to_char("Enter Number: ", CH);
+        d->edit_mode = SEC_PHONEADD2;
       }
-
-      file = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL, OBJ_LOAD_REASON_POCSEC_PHONEADD);
-      obj_to_obj(file, folder);
-      file->restring = str_dup(arg);
-      send_to_char("Enter Number: ", CH);
-      d->edit_mode = SEC_PHONEADD2;
       break;
     case SEC_PHONEADD2:
-      for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
-          break;
-      if (!folder) {
-        mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
-        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
+      {
+        // Ensure they're not trying something fucky.
+        int phonenum = atoi(arg);
+        if (phonenum < 10000000 || phonenum > 99999999) {
+          send_to_char(CH, "Sorry, %s is not a valid phone number. Try again: ", arg);
+          return;
+        }
+
+        char query_buf[MAX_INPUT_LENGTH + 500] = {0};        
+        snprintf(query_buf, sizeof(query_buf), "INSERT INTO pocsec_phonebook (idnum, phonenum, note) VALUES (%ld, %d, '%s')", GET_IDNUM(CH), phonenum, prepare_quotes(buf3, d->edit_obj_secondary->restring, sizeof(buf3)));
+        if (mysql_wrapper(mysql, query_buf)) {
+          send_to_char(d->character, "Sorry, your phonebook isn't working right now.\r\n");
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to query phonebook for %s", GET_CHAR_NAME(d->character));
+        }
+
+        extract_obj(d->edit_obj_secondary);
+        d->edit_obj_secondary = NULL;
+        pocketsec_phonemenu(d);
       }
-      folder->contains->photo = str_dup(arg);
-      pocketsec_phonemenu(d);
       break;
     case SEC_PHONEDEL:
-      for (folder = SEC->contains; folder; folder = folder->next_content)
-        if (!strcmp(folder->restring, POCSEC_FOLDER_PHONEBOOK))
-          break;
-
-      if (!folder) {
-        mudlog("Prevented missing-phonebook crash. This player has lost their contacts list.", d->character, LOG_SYSLOG, TRUE);
-        folder = generate_pocket_secretary_folder(SEC, POCSEC_FOLDER_PHONEBOOK);
-      }
-
       if (arg && *arg) {
         if (*arg == '*') {
-          struct obj_data *next;
-          for (file = folder->contains; file; file = next) {
-            next = file->next_content;
-            extract_obj(file);
+          char query_buf[MAX_INPUT_LENGTH + 500] = {0};        
+          snprintf(query_buf, sizeof(query_buf), "DELETE FROM pocsec_phonebook WHERE idnum=%ld;", GET_IDNUM(CH));
+          if (mysql_wrapper(mysql, query_buf)) {
+            send_to_char(d->character, "Sorry, your phonebook isn't working right now.\r\n");
+            mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to query phonebook for %s", GET_CHAR_NAME(d->character));
           }
-          folder->contains = NULL;
         } else {
-          i = atoi(arg);
-          for (file = folder->contains; file && i > 1; file = file->next_content)
-            i--;
-          if (file)
-            extract_obj(file);
+          char query_buf[500] = {0};
+          MYSQL_RES *res;
+          MYSQL_ROW row;
+
+          int offset = atoi(arg);
+          if (offset < 0) {
+            send_to_char(CH, "That entry does not exist.\r\n");
+            pocketsec_phonemenu(d);
+            return;
+          }
+
+          snprintf(query_buf, sizeof(query_buf), "SELECT record_id FROM pocsec_phonebook WHERE idnum=%ld ORDER BY note DESC LIMIT 1 OFFSET %d;", GET_IDNUM(CH), offset);
+          if (mysql_wrapper(mysql, query_buf)) {
+            send_to_char(CH, "Sorry, your phonebook isn't working right now.\r\n");
+            mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: failed to query phonebook for %s", GET_CHAR_NAME(d->character));
+            pocketsec_phonemenu(d);
+            return;
+          }
+
+          if (!(res = mysql_use_result(mysql))) {
+            send_to_char(CH, "Sorry, your phonebook isn't working right now.\r\n");
+            mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: failed to select phone index entry for %s", GET_CHAR_NAME(d->character));
+            pocketsec_phonemenu(d);
+            return;
+          }
+
+          if (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
+            send_to_char(CH, "That entry does not exist.\r\n");
+            pocketsec_phonemenu(d);
+            mysql_free_result(res);
+            return;
+          }
+
+          // Entry exists, delete it.
+          snprintf(query_buf, sizeof(query_buf), "DELETE FROM pocsec_phonebook WHERE record_id=%s;", row[0]);
+          mysql_free_result(res);
+
+          if (mysql_wrapper(mysql, query_buf)) {
+            send_to_char(d->character, "Sorry, your phonebook isn't working right now.\r\n");
+            mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to delete phonebook record for %s", GET_CHAR_NAME(d->character));
+            pocketsec_phonemenu(d);
+            return;
+          }
         }
       }
       pocketsec_phonemenu(d);
@@ -668,5 +755,33 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         d->edit_obj = NULL;
       }
       break;
+  }
+}
+
+SPECIAL(pocket_sec);
+void migrate_pocket_secretary_contents(struct obj_data *obj, idnum_t owner) {
+  char query_buf[MAX_INPUT_LENGTH + 500] = {0};
+  if (GET_OBJ_SPEC(obj) == pocket_sec) {
+    for (struct obj_data *folder = obj->contains; folder; folder = folder->next_content) {
+      if (!str_cmp(folder->restring, "Phonebook")) {
+        while (folder->contains) {
+          struct obj_data *contents = folder->contains;
+
+          char pq_note[MAX_INPUT_LENGTH + 500] = {0};
+
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "Note: Migrating phonebook entry '%s'@'%s' to database for %ld.", contents->restring, contents->photo, owner);
+
+          snprintf(query_buf, sizeof(query_buf), "INSERT INTO pocsec_phonebook (idnum, phonenum, note) VALUES (%ld, %d, '%s')",
+                   owner,
+                   atoi(contents->photo),
+                   prepare_quotes(pq_note, contents->restring, sizeof(pq_note)));
+          
+          mysql_query(mysql, query_buf);
+
+          obj_from_obj(contents);
+          extract_obj(contents);
+        }
+      }
+    }
   }
 }

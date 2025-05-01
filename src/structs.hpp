@@ -1133,6 +1133,7 @@ struct descriptor_data
   int iedit_limit_edits;        /* Used in iedit to let you cut out of g-menus early. */
   void **misc_data;             /* misc data, usually for extra data crap */
   struct obj_data *edit_obj;    /* iedit */
+  struct obj_data *edit_obj_secondary;    /* iedit */
   struct room_data *edit_room;  /* redit */
   struct char_data *edit_mob;   /* medit */
   struct quest_data *edit_quest;/* qedit */

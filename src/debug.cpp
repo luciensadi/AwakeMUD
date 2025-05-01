@@ -207,6 +207,36 @@ ACMD(do_debug) {
     return;
   }
 
+  if (!str_cmp(arg1, "makesecs")) {
+    extern void initialize_pocket_secretary(struct obj_data *sec);
+
+    send_to_char(ch, "*suggestive eyebrow wriggling*\r\n");
+    struct obj_data *eggplant_emoji = read_object(39865, VIRTUAL, OBJ_LOAD_REASON_STAFF_DECK);
+    
+    initialize_pocket_secretary(eggplant_emoji);
+
+    for (struct obj_data *folder = eggplant_emoji->contains; folder; folder = folder->next_content) {
+      if (!str_cmp(folder->restring, "Phonebook")) {
+        for (int idx = 0; idx < 3; idx++) {
+          struct obj_data *entry = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL, OBJ_LOAD_REASON_POCSEC_PHONEADD);
+
+          int rand_num = number(10000000, 99999999);
+
+          snprintf(buf3, sizeof(buf3), "restring-%d", rand_num);
+          entry->restring = str_dup(buf3);
+          snprintf(buf3, sizeof(buf3), "%d", rand_num);
+          entry->photo = str_dup(buf3);
+
+          obj_to_obj(entry, folder);
+        }
+        break;
+      }
+    }
+
+    obj_to_char(eggplant_emoji, ch);
+    return;
+  }
+
   if (!str_cmp(arg1, "bitfield")) {
     send_to_char(ch, "OK, checking bitfield consistency.\r\n");
 

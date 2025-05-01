@@ -76,6 +76,7 @@ void save_player_faction_info(struct char_data *player);
 void load_player_faction_info(struct char_data *player);
 
 SPECIAL(weapon_dominator);
+SPECIAL(pocket_sec);
 
 // ____________________________________________________________________________
 //

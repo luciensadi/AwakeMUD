@@ -10054,6 +10054,8 @@ ACMD(do_forceput) {
     return;
   }
 
+  FAILURE_CASE_PRINTF(obj == cont, "You can't put %s inside itself.", GET_OBJ_NAME(obj));
+
   send_to_char(ch, "Bypassing all restrictions and calculations, you forcibly put %s in %s. Hope you know what you're doing!\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
   obj_from_char(obj);
   obj_to_obj(obj, cont);
