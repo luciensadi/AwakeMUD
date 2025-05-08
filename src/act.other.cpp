@@ -1942,13 +1942,21 @@ ACMD(do_eject)
   obj_from_obj(magazine);
   extract_obj(magazine);
   magazine = NULL;
-  if (GET_WEAPON_MAX_AMMO(weapon) == 1 && GET_WEAPON_FIREMODE(weapon) == MODE_SS) {
-    if (had_rounds > 0) {
-      act("$n locks back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
-      act("You lock back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+  if (GET_WEAPON_MAX_AMMO(weapon) == 1) {
+    if (GET_WEAPON_FIREMODE(weapon) == MODE_SS && GET_WEAPON_SKILL(weapon) == SKILL_RIFLES) {
+      if (had_rounds > 0) {
+        act("$n locks back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+        act("You lock back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+      } else {
+        act("$n locks back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+        act("You lock back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+      }
+    } else if (GET_WEAPON_SKILL(weapon) == SKILL_SHOTGUNS || GET_WEAPON_SKILL(weapon) == SKILL_ASSAULT_CANNON) {
+      act("$n ejects and pockets a shell from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+      act("You eject and pocket a shell from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
     } else {
-      act("$n locks back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
-      act("You lock back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+      act("$n ejects and pockets a round from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+      act("You eject and pocket a round from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
     }
   } else {
     act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
