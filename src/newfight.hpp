@@ -372,6 +372,8 @@ struct combat_data
   int dodge_pool;
   int body_pool;
 
+  bool using_gyro;
+
   combat_data(struct char_data *character, struct obj_data *weap) :
     ch(NULL),
     veh(NULL),
@@ -409,6 +411,9 @@ struct combat_data
 
     // Figure out if they're unable to move at all (paralyzed, asleep, jacked in, etc)
     is_paralyzed_or_insensate = !AWAKE(ch) || GET_QUI(ch) <= 0;
+
+    // Check if they're using a gyromount.
+    using_gyro = (ranged->gyro || cyber->cyberarm_gyromount);
   }
 
   ~combat_data() {

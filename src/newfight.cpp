@@ -35,6 +35,7 @@ extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attackt
 extern int get_weapon_damage_type(struct obj_data* weapon);
 extern bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 extern bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
+extern bool weapon_has_usable_bipod_or_tripod(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount=FALSE);
 
 void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_data *def, int net_reach);
 
@@ -358,8 +359,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         if (!IS_NPC(att->ch)) {
           att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
 
-          // 1-round single-shot snipers get an extra +1.
-          if (GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1) {
+          // Specific 1-round single-shot snipers get an extra +1.
+          if (GET_OBJ_VNUM(att->weapon) == 33600 && GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1) {
             att->ranged->modifiers[COMBAT_MOD_DISTANCE] += 1;
           }
         }
@@ -368,8 +369,13 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       else {
         att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 2;
 
-        // 1-round single-shot snipers get an extra -1, but only if prone.
-        if (GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1 && AFF_FLAGGED(att->ch, AFF_PRONE)) {
+        // Specific 1-round single-shot snipers get an extra -1, but only if proned with a bipod or tripod.
+        if (GET_OBJ_VNUM(att->weapon) == 33600
+            && GET_WEAPON_FIREMODE(att->weapon) == MODE_SS
+            && GET_WEAPON_MAX_AMMO(att->weapon) == 1
+            && AFF_FLAGGED(att->ch, AFF_PRONE)
+            && weapon_has_usable_bipod_or_tripod(att->ch, att->weapon, att->using_gyro))
+        {
           att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 1;
         }
       }

@@ -3921,6 +3921,30 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
   return 0;
 }
 
+bool weapon_has_usable_bipod_or_tripod(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount=FALSE) {
+  // Can't use bipods/tripods if you're controlling a vehicle weapon.
+  bool can_use_bipods_and_tripods = !is_using_gyromount && !IS_RIGGING(ch) && !AFF_FLAGGED(ch, AFF_MANNING);
+
+  if (!gun || GET_OBJ_TYPE(gun) != ITEM_WEAPON || !WEAPON_IS_GUN(gun))
+    return false;
+
+  struct obj_data *obj;
+  rnum_t rnum;
+
+  if (GET_WEAPON_ATTACH_LOC(gun, ACCESS_LOCATION_UNDER) > 0
+        && (rnum = real_object(GET_WEAPON_ATTACH_LOC(gun, ACCESS_LOCATION_UNDER))) > -1
+        && (obj = &obj_proto[rnum])
+        && GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY)
+  {
+    if (can_use_bipods_and_tripods && AFF_FLAGGED(ch, AFF_PRONE)) {
+      if (GET_ACCESSORY_TYPE(obj) == ACCESS_BIPOD || GET_ACCESSORY_TYPE(obj) == ACCESS_TRIPOD)
+        return true;
+    }
+  }
+
+  return false;
+}
+
 // TODO: Remove the default and populate this properly.
 int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount=FALSE)
 {
