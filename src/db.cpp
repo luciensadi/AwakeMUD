@@ -91,6 +91,7 @@ extern void load_apartment_complexes();
 extern void parse_factions();
 extern void initialize_policy_tree();
 extern void initialize_traffic_msgs();
+extern void migrate_pocket_secretaries_in_database();
 
 extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
@@ -789,6 +790,9 @@ void DBInit()
     write_zone_to_disk(zone_table[i].number);
     // log("Written.");
   }
+
+  log("Migrating pocket secretaries in database.");
+  migrate_pocket_secretaries_in_database();
 
   log("Booting houses.");
   load_apartment_complexes();
@@ -3689,6 +3693,54 @@ int vnum_object_weapons_fa_pro(char *searchname, struct char_data * ch)
   return (found);
 }
 
+int vnum_object_weapons_singleshot(char *searchname, struct char_data * ch)
+{
+  char buf[MAX_STRING_LENGTH*8];
+  extern const char *wound_arr[];
+  int nr, found = 0;
+  buf[0] = '\0';
+
+  for(int power = 21; power >= 0; power-- ) {
+    for (nr = 0; nr <= top_of_objt; nr++) {
+      if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
+        continue;
+      if (!WEAPON_IS_GUN(&obj_proto[nr]))
+        continue;
+      if (GET_WEAPON_POWER(&obj_proto[nr]) < power && power != 0)
+        continue;
+      if (GET_WEAPON_POWER(&obj_proto[nr]) > power && power != 21)
+        continue;
+      if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
+        continue;
+      if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
+        continue;
+      if (GET_WEAPON_MAX_AMMO(&obj_proto[nr]) != 1)
+        continue;
+      if (GET_WEAPON_POSSIBLE_FIREMODES(&obj_proto[nr]) != (1 << MODE_SS))
+        continue;
+
+      ++found;
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n round, modes:^c%s%s%s%s^n%s)%s\r\n",
+              OBJ_VNUM_RNUM(nr),
+              ObjList.CountObj(nr),
+              GET_WEAPON_POWER(&obj_proto[nr]),
+              wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
+              GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]),
+              obj_proto[nr].text.name,
+              weapon_types[GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
+              GET_WEAPON_MAX_AMMO(&obj_proto[nr]),
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) ? " BF" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA) ? " FA" : "",
+              CAN_WEAR(&obj_proto[nr], ITEM_WEAR_WIELD) ? ", ^yWieldable^n" : "",
+              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+    }
+  }
+  page_string(ch->desc, buf, 1);
+  return (found);
+}
+
 int vnum_object_weapons_by_type(char *searchname, struct char_data * ch)
 {
   char buf[MAX_STRING_LENGTH*8];
@@ -4167,6 +4219,8 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_weapons_broken(searchname,ch);
   if (!strcmp(searchname,"faweaponslist"))
     return vnum_object_weapons_fa_pro(searchname,ch);
+  if (!strcmp(searchname,"ssweaponslist"))
+    return vnum_object_weapons_singleshot(searchname,ch);
   if (!strcmp(searchname,"weaponsbytype"))
     return vnum_object_weapons_by_type(searchname,ch);
   if (!strcmp(searchname,"armorslist"))

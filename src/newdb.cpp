@@ -3442,3 +3442,8 @@ void recalculate_character_magic_rating(struct char_data *ch) {
 
   // remove any mag loss from bio hole
 }
+
+// Call this to convert pfiles_inv and pfiles_worn pocket secretary files to DB entries.
+void migrate_pocket_secretaries_in_database() {
+  // todo
+}
