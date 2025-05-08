@@ -8843,7 +8843,17 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
 
         // Notify on ANY recoil comp, erroneous or not
         if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^c%d^n integral recoil comp^n.\r\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
+          switch (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj)) {
+            case 1:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^c%d^n integral recoil comp^n.\r\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
+              break;
+            case 2:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^Y%d^n integral recoil comp^n.\r\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
+              break;
+            default:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^R%d^n integral recoil comp^n.\r\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
+              break;
+          }
           
           issues++;
         }
