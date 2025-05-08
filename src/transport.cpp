@@ -1293,6 +1293,13 @@ SPECIAL(taxi)
       GET_SPARE2(driver) = destination_list[GET_SPARE2(driver)].vnum;
     GET_ACTIVE(driver) = ACT_DRIVING;
 
+    // Log it.
+#ifndef IS_BUILDPORT
+    if (IS_SENATOR(ch)) {
+      mudlog_vfprintf(ch, LOG_WIZLOG, "Staffer taking cab to game world location %ld (%s).", GET_SPARE2(driver), destination_list[GET_SPARE2(driver)].str);
+    }
+#endif
+
     raw_taxi_leaves(real_room(GET_ROOM_VNUM(ch->in_room)));
   } else if (comm == CMD_TAXI_NO && memory(driver, ch) && GET_ACTIVE(driver) == ACT_AWAIT_YESNO) {
     if (destination_list == portland_taxi_destinations)
