@@ -240,7 +240,7 @@ void pocketsec_mailmenu(struct descriptor_data *d)
         first_run = FALSE;
       }
 
-      send_to_char(CH, " %2d > %s^n%s^n%s\r\n", 
+      send_to_char(CH, " %2d > %s%s^n%s\r\n", 
                    idx++,
                    *(row[1]) == '0' ? "(unread) ^R" : "",
                    row[0],
