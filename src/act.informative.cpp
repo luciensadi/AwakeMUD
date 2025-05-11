@@ -792,6 +792,7 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
 
   make_desc(ch, i, buf, TRUE, FALSE, sizeof(buf));
   CAP(buf);
+  strlcat(buf, "^n", sizeof(buf));
 
   if (IS_NPC(i) && MOB_FLAGGED(i, MOB_INANIMATE)) {
     if (phys >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && phys >= 0 &&
