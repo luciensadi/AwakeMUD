@@ -666,17 +666,11 @@ ACMD(do_build) {
       send_to_char(ch, "What do you want to build?\r\n");
     return;
   }
-  if (GET_POS(ch) > POS_SITTING) {
-    do_sit(ch, NULL, 0, 0);
-    if (GET_POS(ch) > POS_SITTING) {
-      send_to_char(ch, "You have to be sitting to do that.\r\n");
-      return;
-    }
-  }
-  if (IS_WORKING(ch)) {
-      send_to_char(TOOBUSY, ch);
-      return;
-  }
+
+  FAILURE_CASE(IS_WORKING(ch), TOOBUSY);
+  FAILURE_CASE(ch->in_veh && ch->vfront, "You'll need to switch to the back first.");
+  FAILURE_CASE(!check_if_sitting_and_force_sit_command_if_not(ch), "You have to be sitting to do that.");
+
   half_chop(argument, arg1, buf, sizeof(buf));
   half_chop(buf, arg2, arg3, sizeof(arg3));
   if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
