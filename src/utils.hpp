@@ -194,6 +194,7 @@ void   set_dropped_by_info(struct obj_data *obj, struct char_data *ch);
 bool   restore_to_full_health_if_still_in_chargen(struct char_data *victim);
 char * format_for_logging__returns_new(const char *input);
 int    calculate_ware_essence_or_index_cost(struct char_data *ch, struct obj_data *ware);
+bool   check_if_sitting_and_force_sit_command_if_not(struct char_data *ch);
 
 // GMCP / Discord update method. Does nothing if GMCP isn't turned on.
 void update_gmcp_discord_info(struct descriptor_data *desc);
@@ -1635,6 +1636,21 @@ char    *crypt(const char *key, const char *salt);
     send_to_char(ch, __VA_ARGS__);                \
     send_to_char(ch, "\r\n"); /*force a newline*/ \
     return TRUE;                                  \
+  }                                               \
+}                                                 \
+
+#define NULL_CASE(condition, message) {    \
+  if ((condition)) {                       \
+    send_to_char(ch, "%s\r\n", (message)); \
+    return NULL;                           \
+  }                                        \
+}                                          \
+
+#define NULL_CASE_PRINTF(condition, ...) {        \
+  if ((condition)) {                              \
+    send_to_char(ch, __VA_ARGS__);                \
+    send_to_char(ch, "\r\n"); /*force a newline*/ \
+    return NULL;                                  \
   }                                               \
 }                                                 \
 
