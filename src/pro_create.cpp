@@ -328,14 +328,15 @@ ACMD(do_design)
       send_to_char(ch, "Design what?\r\n");
     return;
   }
+
+  FAILURE_CASE(IS_WORKING(ch), TOOBUSY);
+
   if (GET_POS(ch) > POS_SITTING) {
     GET_POS(ch) = POS_SITTING;
     send_to_char(ch, "You find a place to sit and work with your materials.\r\n");
   }
-  if (IS_WORKING(ch)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
+
+  FAILURE_CASE(ch->in_veh && ch->vfront, "You'll need to hop in the back first.");
 
   skip_spaces(&argument);
   prog = get_obj_in_list_vis(ch, argument, ch->carrying);
