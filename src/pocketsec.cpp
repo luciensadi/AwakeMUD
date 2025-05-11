@@ -821,7 +821,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
 
 SPECIAL(pocket_sec);
 void migrate_pocket_secretary_contents(struct obj_data *obj, idnum_t owner) {
-  char query_buf[MAX_INPUT_LENGTH + 500] = {0};
+  char query_buf[MAX_STRING_LENGTH + 500] = {0};
   if (GET_OBJ_SPEC(obj) == pocket_sec) {
     for (struct obj_data *folder = obj->contains; folder; folder = folder->next_content) {
       // Migrate phonebook.
@@ -829,7 +829,7 @@ void migrate_pocket_secretary_contents(struct obj_data *obj, idnum_t owner) {
         while (folder->contains) {
           struct obj_data *contents = folder->contains;
 
-          char pq_note[MAX_INPUT_LENGTH + 500] = {0};
+          char pq_note[MAX_STRING_LENGTH] = {0};
 
           mudlog_vfprintf(NULL, LOG_SYSLOG, "Note: Migrating phonebook entry '%s'@'%s' to database for %ld.", contents->restring, contents->photo, owner);
 
@@ -850,8 +850,8 @@ void migrate_pocket_secretary_contents(struct obj_data *obj, idnum_t owner) {
         while (folder->contains) {
           struct obj_data *contents = folder->contains;
           
-          char pq_restring[MAX_INPUT_LENGTH + 500] = {0};
-          char pq_photo[MAX_INPUT_LENGTH + 500] = {0};
+          char pq_restring[MAX_STRING_LENGTH] = {0};
+          char pq_photo[MAX_STRING_LENGTH] = {0};
 
           mudlog_vfprintf(NULL, LOG_SYSLOG, "Note: Migrating mailpiece from '%s' to database for %ld.", contents->restring, owner);
 
