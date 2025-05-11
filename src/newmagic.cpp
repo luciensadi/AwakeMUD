@@ -3288,6 +3288,11 @@ bool mob_magic(struct char_data *ch)
     return FALSE;
   }
 
+  // Prevent casting in heavily polluted rooms.
+  if (ch->in_room && GET_BACKGROUND_COUNT(ch->in_room) >= 4) {
+    return FALSE;
+  }
+
   char buf[MAX_STRING_LENGTH], rbuf[5000];
   int spell = 0, sub = 0, force, magic = GET_MAG(ch) / 100;
   int wound_level = number(MIN_MOB_COMBAT_MAGIC_WOUND, MAX_MOB_COMBAT_MAGIC_WOUND);
