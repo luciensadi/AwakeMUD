@@ -121,6 +121,11 @@ void wire_nuyen(struct char_data *ch, int amount, idnum_t character_id, const ch
 
 void pocketsec_phonemenu(struct descriptor_data *d)
 {
+  bool first_run = TRUE;
+  char query_buf[500] = {0};
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
   if (!d) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: null d to pocsec_phonemenu");
     return;
@@ -133,31 +138,30 @@ void pocketsec_phonemenu(struct descriptor_data *d)
     return;
   }
 
-  {
-    char query_buf[500] = {0};
-    snprintf(query_buf, sizeof(query_buf), "SELECT phonenum, note FROM pocsec_phonebook WHERE idnum=%ld ORDER BY note DESC;", GET_IDNUM(ch));
-    if (mysql_wrapper(mysql, query_buf)) {
-      send_to_char(ch, "Sorry, your phonebook isn't working right now.\r\n");
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: failed to query phonebook for %s", GET_CHAR_NAME(ch));
-      return;
-    }
+  snprintf(query_buf, sizeof(query_buf), "SELECT phonenum, note FROM pocsec_phonebook WHERE idnum=%ld ORDER BY note DESC;", GET_IDNUM(ch));
+  if (mysql_wrapper(mysql, query_buf)) {
+    send_to_char(ch, "Sorry, your phonebook isn't working right now.\r\n");
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: failed to query phonebook for %s", GET_CHAR_NAME(ch));
+    return;
   }
-
-  bool first_run = TRUE;
-  {
-    MYSQL_RES *res = mysql_use_result(mysql);
-    MYSQL_ROW row;
-    int idx = 0;
-    while ((row = mysql_fetch_row(res))) {
-      if (first_run) {
-        send_to_char("^LYour Phonebook^n\r\n", ch);
-        first_run = FALSE;
-      }
-
-      send_to_char(CH, " %2d > %-20s - %s\r\n", idx++, row[0], row[1]);
-    }
-    mysql_free_result(res);
+  
+  
+  if (!(res = mysql_use_result(mysql))) {
+    send_to_char(ch, "Sorry, your phonebook isn't working right now.\r\n");
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: failed to use_result when querying phonebook for %s", GET_CHAR_NAME(ch));
+    return;
   }
+  
+  int idx = 0;
+  while ((row = mysql_fetch_row(res))) {
+    if (first_run) {
+      send_to_char("^LYour Phonebook^n\r\n", ch);
+      first_run = FALSE;
+    }
+
+    send_to_char(CH, " %2d > %-20s - %s\r\n", idx++, row[0], row[1]);
+  }
+  mysql_free_result(res);
   
   if (first_run) {
     send_to_char("Your phonebook is empty.\r\n", CH);
@@ -219,36 +223,39 @@ void pocketsec_menu(struct descriptor_data *d)
 
 void pocketsec_mailmenu(struct descriptor_data *d)
 {
-  {
-    char query_buf[500] = {0};
-    snprintf(query_buf, sizeof(query_buf), "SELECT sender_name, is_read, is_protected FROM pfiles_mail WHERE recipient=%ld ORDER BY idnum DESC;", GET_IDNUM(CH));
-    if (mysql_wrapper(mysql, query_buf)) {
-      send_to_char(CH, "Sorry, your mail isn't working right now.\r\n");
-      mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: failed to query mail for %s", GET_CHAR_NAME(CH));
-      return;
-    }
-  }
-
+  char query_buf[500] = {0};
   bool first_run = TRUE;
-  {
-    MYSQL_RES *res = mysql_use_result(mysql);
-    MYSQL_ROW row;
-    int idx = 0;
-    while ((row = mysql_fetch_row(res))) {
-      if (first_run) {
-        send_to_char(CH, "^LShadowland Mail Network^n\r\n");
-        first_run = FALSE;
-      }
+  MYSQL_RES *res;
+  MYSQL_ROW row;
 
-      send_to_char(CH, " %2d > %s%s^n%s\r\n", 
-                   idx++,
-                   *(row[1]) == '0' ? "(unread) ^R" : "",
-                   row[0],
-                   *(row[2]) == '1' ? " (kept)" : ""
-                  );
-    }
-    mysql_free_result(res);
+  snprintf(query_buf, sizeof(query_buf), "SELECT sender_name, is_read, is_protected FROM pfiles_mail WHERE recipient=%ld ORDER BY idnum DESC;", GET_IDNUM(CH));
+  if (mysql_wrapper(mysql, query_buf)) {
+    send_to_char(CH, "Sorry, your mail isn't working right now.\r\n");
+    mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: failed to query mail for %s", GET_CHAR_NAME(CH));
+    return;
   }
+
+  if (!(res = mysql_use_result(mysql))) {
+    send_to_char(CH, "Sorry, your mail isn't working right now.\r\n");
+    mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: failed to use_result when querying mail for %s", GET_CHAR_NAME(CH));
+    return;
+  }
+  
+  int idx = 0;
+  while ((row = mysql_fetch_row(res))) {
+    if (first_run) {
+      send_to_char(CH, "^LShadowland Mail Network^n\r\n");
+      first_run = FALSE;
+    }
+
+    send_to_char(CH, " %2d > %s%s^n%s\r\n", 
+                  idx++,
+                  *(row[1]) == '0' ? "(unread) ^R" : "",
+                  row[0],
+                  *(row[2]) == '1' ? " (kept)" : ""
+                );
+  }
+  mysql_free_result(res);
   
   if (first_run) {
     send_to_char("You haven't received any mail.\r\n", CH);
@@ -407,7 +414,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         snprintf(query_buf, sizeof(query_buf), "INSERT INTO pocsec_phonebook (idnum, phonenum, note) VALUES (%ld, %d, '%s')", GET_IDNUM(CH), phonenum, prepare_quotes(buf3, d->edit_obj_secondary->restring, sizeof(buf3)));
         if (mysql_wrapper(mysql, query_buf)) {
           send_to_char(d->character, "Sorry, your phonebook isn't working right now.\r\n");
-          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to query phonebook for %s", GET_CHAR_NAME(d->character));
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to insert into phonebook for %s", GET_CHAR_NAME(d->character));
         }
 
         extract_obj(d->edit_obj_secondary);
@@ -422,7 +429,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           snprintf(query_buf, sizeof(query_buf), "DELETE FROM pocsec_phonebook WHERE idnum=%ld;", GET_IDNUM(CH));
           if (mysql_wrapper(mysql, query_buf)) {
             send_to_char(d->character, "Sorry, your phonebook isn't working right now.\r\n");
-            mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to query phonebook for %s", GET_CHAR_NAME(d->character));
+            mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to delete from phonebook for %s", GET_CHAR_NAME(d->character));
           }
         } else {
           char query_buf[500] = {0};
@@ -691,6 +698,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
             if (*(row[1]) == '1') {
               send_to_char(d->character, "That mailpiece has been marked as 'kept' and can't be deleted.\r\n");
               pocketsec_mailmenu(d);
+              mysql_free_result(res);
               return;
             }
   
