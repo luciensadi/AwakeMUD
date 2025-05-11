@@ -456,6 +456,7 @@ void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const js
       mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Unable to Handle GMCP Char.Pools.Get Call: No Valid Character");
     else
       SendGMCPCharPools(apDescriptor->character);
+#ifdef USE_DISCORD_RICH_PRESENCE
   else if (!strncmp(module, "External.Discord.Hello", strlen(module))) {
     RegisterGMCPDiscordHello(apDescriptor, payload);
     SendGMCPDiscordInfo(apDescriptor);
@@ -464,6 +465,7 @@ void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const js
   else if (!strncmp(module, "External.Discord.Get", strlen(module))) {
     SendGMCPDiscordStatus(apDescriptor);
   }
+#endif
   else
     mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Received Unhandled GMCP Module Call [%s]: %s", module, payload.dump().c_str());
 }
