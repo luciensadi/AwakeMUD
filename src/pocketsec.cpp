@@ -855,10 +855,13 @@ void migrate_pocket_secretary_contents(struct obj_data *obj, idnum_t owner) {
 
           mudlog_vfprintf(NULL, LOG_SYSLOG, "Note: Migrating mailpiece from '%s' to database for %ld.", contents->restring, owner);
 
-          snprintf(query_buf, sizeof(query_buf), "INSERT INTO pfiles_mail (sender_name, recipient, text, is_received) VALUES ('%s', %ld, '%s', 1)",
+          snprintf(query_buf, sizeof(query_buf), "INSERT INTO pfiles_mail (sender_name, recipient, text, is_received, is_read, is_protected) VALUES ('%s', %ld, '%s', 1, %d, %d)",
                    prepare_quotes(pq_restring, contents->restring, sizeof(pq_restring)),
                    owner,
-                   prepare_quotes(pq_photo, contents->photo, sizeof(pq_photo)));
+                   prepare_quotes(pq_photo, contents->photo, sizeof(pq_photo)),
+                   GET_OBJ_VAL(contents, 0) ? 1 : 0,
+                   GET_OBJ_TIMER(contents) < 0 ? 1 : 0
+                  );
           
           mysql_query(mysql, query_buf);
 
