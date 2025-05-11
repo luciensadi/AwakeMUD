@@ -864,6 +864,7 @@ struct veh_data
   int damage;
   sh_int cspeed;
   int veh_destruction_timer;
+  int players_in_veh;
 
   struct veh_follow *followers;
   struct veh_data *following;
@@ -912,7 +913,7 @@ struct veh_data
   veh_data() :
       in_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
       long_description(NULL), restring_long(NULL), decorate_front(NULL), decorate_rear(NULL),
-      inside_description(NULL), rear_description(NULL), veh_destruction_timer(0), 
+      inside_description(NULL), rear_description(NULL), veh_destruction_timer(0), players_in_veh(0),
       followers(NULL), following(NULL), followch(NULL), mount(NULL), sub(FALSE), sub_rank(0),
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL), defined_position(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),

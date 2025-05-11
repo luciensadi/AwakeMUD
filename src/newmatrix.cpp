@@ -75,10 +75,11 @@ void clear_hitcher(struct char_data *ch, bool shouldNotify)
 {
     // Safety check: ensure ch is valid and actually hitched to someone
     if (!ch || !ch->hitched_to) {
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: clear_hitcher(%s, %s) called with invalid parameters! (hitched_to = %s)",
-                      GET_CHAR_NAME(ch),
-                      shouldNotify ? "TRUE" : "FALSE",
-                      ch && ch->hitched_to ? GET_CHAR_NAME(ch->hitched_to) : "NULL");
+      if (!ch)
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: clear_hitcher(%s, %s) called with invalid parameters! (hitched_to = %s)",
+                        GET_CHAR_NAME(ch),
+                        shouldNotify ? "TRUE" : "FALSE",
+                        ch && ch->hitched_to ? GET_CHAR_NAME(ch->hitched_to) : "NULL");
       return;
     }
 

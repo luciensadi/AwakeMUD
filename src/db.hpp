@@ -12,6 +12,7 @@
 #define _db_h_
 
 #include <stdio.h>
+#include <limits>
 #include "bitfield.hpp"
 
 // Versioning for flat file formats. Gonna start adding these as it will make updating formats a lot
@@ -163,6 +164,10 @@ struct zone_data
 
   int default_aura_type = 0;
   int default_aura_force = 0;
+
+  time_t last_player_action = std::numeric_limits<time_t>::max();
+  int players_in_zone = 0;
+  time_t offloaded_at = 0;
 
   struct reset_com *cmd;   /* command table for reset            */
 
