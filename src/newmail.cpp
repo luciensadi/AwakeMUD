@@ -247,30 +247,30 @@ void postmaster_send_mail(struct char_data * ch, struct char_data *mailman, int 
     return;
   }
 
-  /* Check to ensure that the addressee exists. 
+  // Check to ensure that the addressee exists. 
   if ((recipient = get_player_id(buf)) < 0) {
     act("$n tells you, 'No one by that name is registered here!'", FALSE, mailman, 0, ch, TO_VICT);
     return;
   }
 
-  /* Put the character in edit mode and inform the room. 
+  // Put the character in edit mode and inform the room. 
   act("$n starts to write some mail.", TRUE, ch, 0, 0, TO_ROOM);
   snprintf(buf, sizeof(buf), "$n tells you, 'Write your message, use @ on a new line when done.'");
   act(buf, FALSE, mailman, 0, ch, TO_VICT);
   PLR_FLAGS(ch).SetBits(PLR_MAILING, PLR_WRITING, ENDBIT);
 
-  /* Set up their temporary mail data. 
+  // Set up their temporary mail data. 
   ch->desc->mail_to = recipient;
   ch->desc->max_str = MAX_MAIL_SIZE;
   ch->desc->str = new (char *);
 
-  /* Ensure the setup completed properly. This will only fail if we're out of memory. 
+  // Ensure the setup completed properly. This will only fail if we're out of memory. 
   if (!ch->desc->str) {
     mudlog("New failure!", NULL, LOG_SYSLOG, TRUE);
     exit(ERROR_UNABLE_TO_CREATE_STR_IN_MAIL);
   }
 
-  /* Set the first character of their mail string to 0. 
+  // Set the first character of their mail string to 0. 
   *(ch->desc->str) = NULL;
 }
 
