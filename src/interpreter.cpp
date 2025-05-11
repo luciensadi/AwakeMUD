@@ -2667,8 +2667,7 @@ int perform_dupe_check(struct descriptor_data *d)
     }
 
     /* we've found a duplicate - blow him away, dumping his eq in limbo. */
-    if (ch->in_room)
-      char_from_room(ch);
+    char_from_room(ch);
     char_to_room(ch, &world[1]);
     extract_char(ch);
   }
