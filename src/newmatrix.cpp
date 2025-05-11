@@ -1399,9 +1399,10 @@ const char *get_plaintext_matrix_score_deck(struct char_data *ch) {
 
 const char *get_plaintext_matrix_score_memory(struct char_data *ch) {
   if (DECKER->proxy_deck) {
-    snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s Storage Memory: %d free of %d total\r\n",
-          GET_OBJ_NAME(DECKER->proxy_deck),
-          GET_CYBERDECK_FREE_STORAGE(DECKER->proxy_deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->proxy_deck));
+    snprintf(buf2, sizeof(buf2), "%s Storage Memory: %d free of %d total\r\n",
+             GET_OBJ_NAME(DECKER->proxy_deck),
+             GET_CYBERDECK_FREE_STORAGE(DECKER->proxy_deck),
+             GET_CYBERDECK_TOTAL_STORAGE(DECKER->proxy_deck));
   }
   if (ch->persona->type == ICON_LIVING_PERSONA) return buf2;
 
