@@ -375,12 +375,12 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
 
     GET_TKE(ch) += (int)(GET_KARMA(ch) / 100) - old;
 
-    SendGMCPCharInfo(ch);
-
     if (rep)
       GET_REP(ch) += (int)(GET_KARMA(ch) / 100) - old;
     else
       GET_NOT(ch) += (int)(GET_KARMA(ch) / 100) - old;
+
+    SendGMCPCharInfo(ch);
   }
 
   return gain;
