@@ -313,6 +313,7 @@ void check_trigger(rnum_t host, struct char_data *ch)
   DECKER->last_trigger = DECKER->tally;
 }
 
+// Returns TRUE on extraction. Make sure you abort anything referencing the program or IC after this call.
 bool tarbaby(struct obj_data *prog, struct char_data *ch, struct matrix_icon *ic)
 {
   int target = ic->ic.rating;
@@ -436,7 +437,7 @@ int get_detection_factor(struct char_data *ch)
   return detect;
 }
 
-int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier)
+int system_test(rnum_t host, struct char_data *ch, int type, int software, int modifier, bool *tarbabied, bool *decker_extracted)
 {
   int detect = 0;
   struct obj_data *prog = NULL;
@@ -539,9 +540,11 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
       if (ic->ic.type == IC_PROBE || ic->ic.type == IC_SCOUT)
         tally += MAX(0, success_test(target, detect));
       else if (prog && (ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 0) {
-        // Here's hoping this didn't extract the program they used...
-        if (tarbaby(prog, ch, ic))
+        // Tarbaby ate something. Here's hoping this didn't extract the program they used...
+        if (tarbaby(prog, ch, ic)) {
+          *tarbabied = true;
           return success;
+        }
       }
     }
   }
@@ -551,6 +554,7 @@ int system_test(rnum_t host, struct char_data *ch, int type, int software, int m
     // House rule: we don't shut down the host per Matrix pg112,
     // Instead we just kill the problematic connection.
     send_to_icon(PERSONA, "The sirens and lights seem to turn towards you!\r\n");
+    *decker_extracted = true;
     dumpshock(PERSONA);
     send_to_char(ch, "^y(OOC note: Your security tally hit 80+, so the host disconnected you.)^n\r\n");
     return -1;
@@ -1535,6 +1539,7 @@ ACMD(do_matrix_score)
 
 ACMD(do_locate)
 {
+  bool tarbabied = false, decker_extracted = false;
   if (!PERSONA) {
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
@@ -1543,7 +1548,10 @@ ACMD(do_locate)
   two_arguments(argument, buf, arg);
   int success, i = 0;
   if (is_abbrev(buf, "hosts")) {
-    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_BROWSE, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_BROWSE, 0, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+
     int x = 0;
     char *name = arg;
     while (*name) {
@@ -1569,7 +1577,10 @@ ACMD(do_locate)
     }
     return;
   } else if (is_abbrev(buf, "ics")) {
-    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_ANALYZE, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_ANALYZE, 0, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+
     if (success > 0) {
       for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
         if (ICON_IS_IC(icon)) {
@@ -1598,7 +1609,10 @@ ACMD(do_locate)
       send_to_icon(PERSONA, "Your search returns %d useless matches. Try a longer search string.\r\n", number(1000, 30000));
       return;
     }
-    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_BROWSE, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_BROWSE, 0, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+
     if (success <= 0)
       send_to_icon(PERSONA, "You fumble your attempt to locate files.\r\n");
     else {
@@ -1644,7 +1658,10 @@ ACMD(do_locate)
     }
     return;
   } else if (is_abbrev(buf, "deckers")) {
-    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_SCANNER, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_SCANNER, 0, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+
     if (success > 0) {
       int sensor = 0;
       for (int r = DECKER->sensor;r > 0; r--) {
@@ -1677,8 +1694,11 @@ ACMD(do_locate)
       // We use in_host here because system_test can result in you getting booted from the Matrix.
       rnum_t in_host = PERSONA->in_host;
 
-      success = system_test(in_host, ch, ACIFS_INDEX, SOFT_EVALUATE, 0);
-      if (success <= 0) {
+      success = system_test(in_host, ch, ACIFS_INDEX, SOFT_EVALUATE, 0, &tarbabied, &decker_extracted);
+      if (decker_extracted)
+        return;
+
+      if (success <= 0 || PERSONA->in_host != in_host) {
         send_to_icon(PERSONA, "You fumble your attempt to locate paydata.\r\n");
 
         matrix[in_host].undiscovered_paydata = MAX(matrix[in_host].undiscovered_paydata - 1, 0);
@@ -1863,6 +1883,7 @@ ACMD(do_matrix_look)
 
 ACMD(do_analyze)
 {
+  bool tarbabied = false, decker_extracted = false;
   if (!PERSONA) {
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
@@ -1875,7 +1896,10 @@ ACMD(do_analyze)
   int success;
   one_argument(argument, arg);
   if (is_abbrev(arg, "host")) {
-    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+
     if (success > 0) {
       snprintf(buf, sizeof(buf), "You analyze the ^W%s^n host.\r\n", host_type[matrix[PERSONA->in_host].type]);
       send_to_icon(PERSONA, buf);
@@ -1941,7 +1965,10 @@ ACMD(do_analyze)
       send_to_icon(PERSONA, "Your program fails to run.\r\n");
     return;
   } else if (is_abbrev(arg, "security")) {
-    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0);
+    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+
     if (success > 0) {
       send_to_icon(PERSONA, "You analyze the security of the host.\r\n");
       snprintf(buf, sizeof(buf), "%s-%d Tally: %d Alert: %s\r\n", host_color[matrix[PERSONA->in_host].color],
@@ -1963,7 +1990,10 @@ ACMD(do_analyze)
       mode = ACIFS_FILES;
     else if (is_abbrev(arg, "slave"))
       mode = ACIFS_SLAVE;
-    int success = system_test(PERSONA->in_host, ch, mode, SOFT_ANALYZE, 0);
+    int success = system_test(PERSONA->in_host, ch, mode, SOFT_ANALYZE, 0, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+
     if (success > 0) {
       if (matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED] || matrix[PERSONA->in_host].stats[mode][MTX_STAT_TRAPDOOR]) {
         if (matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED])
@@ -1976,7 +2006,10 @@ ACMD(do_analyze)
   } else {
     struct obj_data *obj = NULL;
     if ((obj = get_obj_in_list_vis(ch, arg, matrix[PERSONA->in_host].file)) && GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) == PERSONA->idnum) {
-      int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0);
+      int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0, &tarbabied, &decker_extracted);
+      if (decker_extracted)
+        return;
+
       if (success > 0) {
         send_to_icon(PERSONA, "You analyze the file:\r\n");
         if (GET_OBJ_VAL(obj, 3)) {
@@ -1995,8 +2028,11 @@ ACMD(do_analyze)
     }
     for (struct matrix_icon *ic = matrix[PERSONA->in_host].icons; ic; ic = ic->next_in_host)
       if (has_spotted(PERSONA, ic) && keyword_appears_in_icon(arg, ic, TRUE, FALSE)) {
-        int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0);
-        if (success > 0 ) {
+        int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_ANALYZE, 0, &tarbabied, &decker_extracted);
+        if (decker_extracted)
+          return;
+
+        if (success > 0 && !tarbabied) {
           show_icon_to_persona(PERSONA, ic);
           if (ICON_IS_IC(ic)) {
             send_to_icon(PERSONA, "%s^n is a %s-%d\r\n", CAP(ic->name), ic_type[ic->ic.type],
@@ -2018,6 +2054,8 @@ ACMD(do_analyze)
 
 ACMD(do_logon)
 {
+  bool tarbabied = false, decker_extracted = false;
+
   if (!PERSONA) {
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
@@ -2060,7 +2098,10 @@ ACMD(do_logon)
   }
 
   if (target_host > 0 && matrix[target_host].alert <= 2) {
-    int success = system_test(target_host, ch, subsystem, SOFT_DECEPTION, 0);
+    int success = system_test(target_host, ch, subsystem, SOFT_DECEPTION, 0, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+
     if (success > 0) {
       if (matrix[target_host].type == HOST_RTG && matrix[PERSONA->in_host].type == HOST_RTG)
         DECKER->tally = 0;
@@ -2091,6 +2132,8 @@ ACMD(do_logon)
 
 ACMD(do_logoff)
 {
+  bool tarbabied = false, decker_extracted = false;;
+
   if (!PERSONA) {
     send_to_char(ch, "You yank the plug out of the hitcher jack and return to the real world.\r\n");
     clear_hitcher(ch, TRUE);
@@ -2113,7 +2156,10 @@ ACMD(do_logoff)
         send_to_icon(PERSONA, "You can't log off gracefully while fighting a black IC!\r\n");
         return;
       }
-    int success = system_test(PERSONA->in_host, ch, ACIFS_ACCESS, SOFT_DECEPTION, 0);
+    int success = system_test(PERSONA->in_host, ch, ACIFS_ACCESS, SOFT_DECEPTION, 0, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+      
     if (success <= 0) {
       WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
       send_to_icon(PERSONA, "The matrix host's automated procedures detect and block your logoff attempt.\r\n");
@@ -2168,7 +2214,6 @@ void find_cyberdeck(char_data *ch, obj_data *&cyberdeck, obj_data *&proxy_deck)
  * @returns whether or not the connect function should return early.
  */
 bool parse_connect_args(char_data *ch, char *argument, obj_data *&cyberdeck, obj_data *&proxy_deck, rnum_t *host) {
-  struct char_data *temp;
   vnum_t host_vnum = 0;
 
   // Easy guard check; is there even an argument?
@@ -2523,6 +2568,8 @@ ACMD(do_connect)
 
 ACMD(do_load)
 {
+  bool tarbabied = false, decker_extracted = false;
+
   obj_data *deck = DECKER->deck;
   if (IS_OTAKU(DECKER->ch))
     deck = DECKER->proxy_deck;
@@ -2608,9 +2655,13 @@ ACMD(do_load)
             return;
           }
 
-          success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_READ, 0);
+          success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_READ, 0, &tarbabied, &decker_extracted);
+          if (decker_extracted)
+            return;
+            
         }
-        if (success > 0) {
+        // Abort on tarbaby since it may have eaten the soft.
+        if (success > 0 && !tarbabied) {
           // TODO: This is accurately transcribed, but feels like a bug.
           GET_DECK_ACCESSORY_FILE_REMAINING(soft) = GET_DECK_ACCESSORY_FILE_SIZE(soft);
           if (subcmd == SCMD_UPLOAD) {
@@ -2634,6 +2685,8 @@ ACMD(do_load)
 
 ACMD(do_redirect)
 {
+  bool tarbabied = false, decker_extracted = false;
+
   if (!PERSONA) {
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
@@ -2643,7 +2696,10 @@ ACMD(do_redirect)
     return;
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_CAMO, 0);
+  int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_CAMO, 0, &tarbabied, &decker_extracted);
+  if (decker_extracted)
+    return;
+    
   if (success > 0) {
     for (int x = 0; x < DECKER->redirect; x++)
       if (DECKER->redirectedon[x] == PERSONA->in_host) {
@@ -2663,6 +2719,8 @@ ACMD(do_redirect)
 
 ACMD(do_download)
 {
+  bool tarbabied = false, decker_extracted = false;
+
   if (!PERSONA) {
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
@@ -2680,6 +2738,7 @@ ACMD(do_download)
   
   // This line lets otaku use proxy decks to download files.
   if (IS_OTAKU(DECKER->ch) && DECKER->proxy_deck) target_deck = DECKER->proxy_deck;
+
   skip_spaces(&argument);
   // TODO: This might cause conflicts if multiple deckers have paydata on the host.
   if ((soft = get_obj_in_list_vis(ch, argument, matrix[PERSONA->in_host].file)) && GET_DECK_ACCESSORY_FILE_FOUND_BY(soft) == PERSONA->idnum) {
@@ -2687,7 +2746,10 @@ ACMD(do_download)
       send_to_icon(PERSONA, "You don't have enough storage memory to download that file.\r\n");
       return;
     } else {
-      int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_READ, 0);
+      int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_READ, 0, &tarbabied, &decker_extracted);
+      if (decker_extracted)
+        return;
+        
       if (GET_OBJ_VAL(soft, 5) == 4)
         success -= GET_OBJ_VAL(soft, 6);
       if (success > 0) {
@@ -2808,8 +2870,10 @@ ACMD(do_run)
             if ((ic->ic.type == IC_TARBABY || ic->ic.type == IC_TARPIT) && ic->ic.subtype == 1) {
               send_to_icon(PERSONA, "%s^n's surface ripples and yawns open, reaching towards you!\r\n", CAP(ic->name));
               // We return after tarbaby succeeds, as it might delete the program we're using.
-              if (tarbaby(soft, ch, ic))
+              if (tarbaby(soft, ch, ic)) {
+                send_to_icon(PERSONA, "You break off your attack to regroup.\r\n");
                 return;
+              }
             }
           }
         }
@@ -2863,13 +2927,17 @@ ACMD(do_run)
     send_to_icon(PERSONA, "You don't seem to have that program loaded.\r\n");
 }
 
-void _decrypt_host_access(struct char_data *ch, rnum_t host_rnum) {
+// Returns TRUE on decker extraction, FALSE otherwise.
+bool _decrypt_host_access(struct char_data *ch, rnum_t host_rnum) {
+  bool tarbabied = false, decker_extracted = false;
   int inhost = PERSONA->in_host;
 
   icon_from_host(PERSONA);
   icon_to_host(PERSONA, host_rnum);
 
-  int success = system_test(PERSONA->in_host, ch, ACIFS_ACCESS, SOFT_DECRYPT, 0);
+  int success = system_test(PERSONA->in_host, ch, ACIFS_ACCESS, SOFT_DECRYPT, 0, &tarbabied, &decker_extracted);
+  if (decker_extracted)
+    return true;
 
   if (success > 0) {
     if (matrix[host_rnum].stats[ACIFS_ACCESS][MTX_STAT_ENCRYPTED]) {
@@ -2886,10 +2954,14 @@ void _decrypt_host_access(struct char_data *ch, rnum_t host_rnum) {
     icon_from_host(PERSONA);
     icon_to_host(PERSONA, inhost);
   }
+
+  return false;
 }
 
 ACMD(do_decrypt)
 {
+  bool tarbabied = false, decker_extracted = false;
+
   if (!PERSONA) {
     send_to_char("You can't do that while hitching.\r\n", ch);
     return;
@@ -2908,7 +2980,10 @@ ACMD(do_decrypt)
         send_to_icon(PERSONA, "There is no need to %s that file.\r\n", subcmd ? "disarm" : "decrypt");
         return;
       }
-      int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, subcmd ? SOFT_DEFUSE : SOFT_DECRYPT, 0);
+      int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, subcmd ? SOFT_DEFUSE : SOFT_DECRYPT, 0, &tarbabied, &decker_extracted);
+      if (decker_extracted)
+        return;
+      
       if (success > 0) {
         send_to_icon(PERSONA, "You successfully %s the file.\r\n", subcmd ? "disarm" : "decrypt");
         GET_OBJ_VAL(obj, 5) = 0;
@@ -2940,7 +3015,10 @@ ACMD(do_decrypt)
       return;
     }
 
-    int success = system_test(PERSONA->in_host, ch, mode, SOFT_DECRYPT, 0 );
+    int success = system_test(PERSONA->in_host, ch, mode, SOFT_DECRYPT, 0, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+    
     if (success > 0) {
       matrix[PERSONA->in_host].stats[mode][MTX_STAT_ENCRYPTED] = 0;
       send_to_icon(PERSONA, "You successfully decrypt the %s subsystem.\r\n", mtx_subsystem_names[mode]);
@@ -2979,7 +3057,8 @@ ACMD(do_decrypt)
     if (parent_rnum < 0 || !(matrix[parent_rnum].type == HOST_LTG || matrix[parent_rnum].type == HOST_PLTG)) {
       send_to_char("This host isn't connected to an LTG.\r\n", ch);
     } else {
-      _decrypt_host_access(ch, parent_rnum);
+      if (_decrypt_host_access(ch, parent_rnum))
+        return;
     }
     return;
   }
@@ -2991,7 +3070,8 @@ ACMD(do_decrypt)
       continue;
 
     if (isname(argument, exit->addresses)) {
-      _decrypt_host_access(ch, host_rnum);
+      if (_decrypt_host_access(ch, host_rnum))
+        return;
       return;
     }
   }
@@ -3628,6 +3708,7 @@ void matrix_violence()
 
 ACMD(do_crash)
 {
+  bool tarbabied = false, decker_extracted = false;
   if (!PERSONA) {
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
@@ -3637,7 +3718,10 @@ ACMD(do_crash)
     return;
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_CRASH, 0);
+  int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_CRASH, 0, &tarbabied, &decker_extracted);
+  if (decker_extracted)
+    return;
+  
   if (success > 0) {
     matrix[PERSONA->in_host].shutdown_success = success;
     matrix[PERSONA->in_host].shutdown_mpcp = DECKER->mpcp;
@@ -3746,6 +3830,8 @@ ACMD(do_matrix_scan)
 }
 ACMD(do_abort)
 {
+  bool tarbabied = false, decker_extracted = false;
+  rnum_t in_host;
   if (!PERSONA) {
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
@@ -3755,16 +3841,20 @@ ACMD(do_abort)
     return;
   }
   WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-  int success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_SWERVE, 0);
+  in_host = PERSONA->in_host;
+  int success = system_test(in_host, ch, ACIFS_CONTROL, SOFT_SWERVE, 0, &tarbabied, &decker_extracted);
+  if (decker_extracted)
+    return;
+  
   success /= 2;
-  if (success > matrix[PERSONA->in_host].shutdown_success) {
-    send_to_host(PERSONA->in_host, matrix[PERSONA->in_host].shutdown_stop, NULL, FALSE);
-    matrix[PERSONA->in_host].shutdown = 0;
-    matrix[PERSONA->in_host].shutdown_success = 0;
-    matrix[PERSONA->in_host].shutdown_mpcp = 0;
+  if (success > matrix[in_host].shutdown_success) {
+    send_to_host(in_host, matrix[in_host].shutdown_stop, NULL, FALSE);
+    matrix[in_host].shutdown = 0;
+    matrix[in_host].shutdown_success = 0;
+    matrix[in_host].shutdown_mpcp = 0;
   } else if (success > 0) {
     send_to_icon(PERSONA, "You manage to prolong the shutdown.\r\n");
-    matrix[PERSONA->in_host].shutdown += success;
+    matrix[in_host].shutdown += success;
   } else
     send_to_icon(PERSONA, "You fail to prolong the shutdown.\r\n");
 }
@@ -3815,6 +3905,7 @@ ACMD(do_talk)
 
 ACMD(do_comcall)
 {
+  bool tarbabied = false, decker_extracted = false;
   struct char_data *tch;
   skip_spaces(&argument);
   if (!PERSONA) {
@@ -3917,7 +4008,10 @@ ACMD(do_comcall)
         send_to_icon(PERSONA, "You can't seem to find that commcode.\r\n");
         return;
       }
-      int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_COMMLINK, 0);
+      int success = system_test(PERSONA->in_host, ch, ACIFS_FILES, SOFT_COMMLINK, 0, &tarbabied, &decker_extracted);
+      if (decker_extracted || tarbabied)
+        return;
+      
       if (success > 0) {
         if (k->dest) {
           send_to_icon(PERSONA, "That line is already busy.\r\n");
@@ -3976,6 +4070,7 @@ ACMD(do_tap)
 
 ACMD(do_restrict)
 {
+  bool tarbabied = false, decker_extracted = false;
   struct matrix_icon *targ;
   if (!PERSONA) {
     send_to_char(ch, "You can't do that while hitching.\r\n");
@@ -4011,7 +4106,10 @@ ACMD(do_restrict)
   detect = get_detection_factor(ch);
 
   if (is_abbrev(buf, "detection")) {
-    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_VALIDATE, detect);
+    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_VALIDATE, detect, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+    
     if (success > 0) {
       targ->decker->res_det += success;
       send_to_icon(PERSONA, "You successfully restrict their detection factor.\r\n");
@@ -4019,7 +4117,10 @@ ACMD(do_restrict)
       send_to_icon(PERSONA, "You fail to restrict their detection factor.\r\n");
     }
   } else if (is_abbrev(buf, "tests")) {
-    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_VALIDATE, detect);
+    success = system_test(PERSONA->in_host, ch, ACIFS_CONTROL, SOFT_VALIDATE, detect, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+    
     if (success > 0) {
       targ->decker->res_test += success;
       send_to_icon(PERSONA, "You successfully restrict their system tests.\r\n");
@@ -4032,6 +4133,7 @@ ACMD(do_restrict)
 
 ACMD(do_trace)
 {
+  bool tarbabied = false, decker_extracted = false;
   long addr;
   if (!PERSONA)
     send_to_char(ch, "You can't do that while hitching.\r\n");
@@ -4043,7 +4145,10 @@ ACMD(do_trace)
     send_to_icon(PERSONA, "You can only perform this action on an LTG.\r\n");
   else {
     WAIT_STATE(ch, (int) (DECKING_WAIT_STATE_TIME));
-    int success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_BROWSE, 0);
+    int success = system_test(PERSONA->in_host, ch, ACIFS_INDEX, SOFT_BROWSE, 0, &tarbabied, &decker_extracted);
+    if (decker_extracted)
+      return;
+    
     if (success > 0) {
       for (struct matrix_icon *icon = icon_list; icon; icon = icon->next) {
         if (icon->decker && icon->decker->mxp == addr) {
