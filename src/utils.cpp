@@ -2571,9 +2571,12 @@ struct obj_data *find_workshop(struct char_data * ch, int type)
   // If they're in a valid room, return the room's workshop field for MAXIMUM EFFICIENCY.
   if (ch->in_room)
     return ch->in_room->best_workshop[type];
-
-  // If we've gotten here, they must be in a vehicle. Iterate through and find the best candidate.
+  
+  // Iterate through vehicle's contents and find the best candidate.
   for (struct obj_data *o = ch->in_veh->contents; o; o = o->next_content) {
+    if (o->vfront != ch->vfront)
+      continue;
+
     if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(o) == type) {
       if (GET_WORKSHOP_GRADE(o) == TYPE_FACILITY) {
         // Jackpot! Facilities are the best option, so we can terminate early and return this item.
@@ -8369,4 +8372,17 @@ const char *get_descriptor_fingerprint(struct descriptor_data *d) {
 
   // Finally, hash the result and return that.
   return md5_hash_from_string(result);
+}
+
+ACMD_DECLARE(do_sit);
+bool check_if_sitting_and_force_sit_command_if_not(struct char_data *ch) {
+  if (GET_POS(ch) > POS_SITTING) {
+    do_sit(ch, NULL, 0, 0);
+    if (GET_POS(ch) > POS_SITTING) {
+      send_to_char(ch, "You have to be sitting to do that.\r\n");
+      return false;
+    }
+  }
+
+  return true;
 }
