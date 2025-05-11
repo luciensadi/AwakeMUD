@@ -49,57 +49,55 @@ extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attackt
 extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
 extern int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount);
+extern bool would_become_killer(struct char_data * ch, struct char_data * vict);
 
 
 ACMD(do_assist)
 {
   struct char_data *helpee, *opponent;
 
-  if (CH_IN_COMBAT(ch)) {
-    send_to_char("You're already fighting!  How can you assist someone else?\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(CH_IN_COMBAT(ch), "You're already fighting!  How can you assist someone else?");
+
   one_argument(argument, arg);
 
   FAILURE_CASE(PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT), "You can't do that while in passive combat mode. ^WTOGGLE PASSIVE^n to disable it.");
 
-  if (!*arg)
-    send_to_char("Whom do you wish to assist?\r\n", ch);
-  else if (!(helpee = get_char_room_vis(ch, arg)))
-    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
-  else if (helpee == ch)
-    send_to_char("You can't help yourself any more than this!\r\n", ch);
-  else {
-    for (opponent = ch->in_room->people; opponent && (FIGHTING(opponent) != helpee);
-         opponent = opponent->next_in_room)
-      ;
+  FAILURE_CASE(!*arg, "Syntax: ASSIST <target>");
+  FAILURE_CASE_PRINTF(!(helpee = get_char_room_vis(ch, arg)), "You don't see anyone named '%s' here.", arg);
+  FAILURE_CASE_PRINTF(helpee == ch, "You attempt to assist yourself by picking yourself up by your bootstraps. HNNNGH--");
 
-    if (!opponent)
-      opponent = FIGHTING(helpee);
-    if (!opponent)
-      act("But nobody is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
-    else if (!CAN_SEE(ch, opponent))
-      act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
-    else {
-      if (IS_IGNORING(opponent, is_blocking_ic_interaction_from, ch)) {
-        act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
-        log_attempt_to_bypass_ic_ignore(ch, opponent, "do_assist");
-        return;
-      }
-
-      if (IS_IGNORING(ch, is_blocking_ic_interaction_from, opponent)) {
-        send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
-        return;
-      }
-      send_to_char("You join the fight!\r\n", ch);
-      act("$N assists you!", FALSE, helpee, 0, ch, TO_CHAR);
-      act("$n assists $N.", FALSE, ch, 0, helpee, TO_NOTVICT);
-      // here we add the chars to the respective lists
-      set_fighting(ch, opponent);
-      if (!FIGHTING(opponent) && AWAKE(opponent))
-        set_fighting(opponent, ch);
-    }
+  // Iterate through people in the room, skipping over anyone who's not attacking your helpee.
+  for (opponent = ch->in_room->people; opponent; opponent = opponent->next_in_room) {
+    if (FIGHTING(opponent) == helpee)
+      break;
   }
+
+  if (!opponent && !(opponent = FIGHTING(helpee))) {
+    act("But nobody is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
+    return;
+  }
+
+  if (!CAN_SEE(ch, opponent)) {
+    act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
+    return;
+  }
+  
+  if (IS_IGNORING(opponent, is_blocking_ic_interaction_from, ch)) {
+    act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
+    log_attempt_to_bypass_ic_ignore(ch, opponent, "do_assist");
+    return;
+  }
+
+  FAILURE_CASE(IS_IGNORING(ch, is_blocking_ic_interaction_from, opponent), "You can't attack someone you've blocked IC interaction with.");
+  FAILURE_CASE_PRINTF(would_become_killer(ch, opponent), "You can't assist %s against other players.", CAP(arg));
+
+  send_to_char("You join the fight!\r\n", ch);
+  act("$N assists you!", FALSE, helpee, 0, ch, TO_CHAR);
+  act("$n assists $N.", FALSE, ch, 0, helpee, TO_NOTVICT);
+  // here we add the chars to the respective lists
+  set_fighting(ch, opponent);
+  if (!FIGHTING(opponent) && AWAKE(opponent))
+    set_fighting(opponent, ch);
 }
 
 int messageless_find_door(struct char_data *ch, char *type, char *dir, const char *cmdname)
