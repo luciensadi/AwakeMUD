@@ -405,7 +405,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       {
         // Ensure they're not trying something fucky.
         int phonenum = atoi(arg);
-        if (phonenum < 10000000 || phonenum > 99999999) {
+        if (phonenum <= 0 || (phonenum < 10000000 && strlen(arg) < 8) || phonenum > 99999999) {
           send_to_char(CH, "Sorry, %s is not a valid phone number. Try again: ", arg);
           return;
         }
