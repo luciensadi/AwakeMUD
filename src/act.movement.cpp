@@ -1691,6 +1691,63 @@ ACMD(do_gen_door)
   return;
 }
 
+bool ch_is_in_follow_cluster_with_pc_with_idnum(struct char_data *ch, idnum_t idnum) {
+  // Grouping check. Enable this if people abuse the privilege.
+#ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
+  if (!AFF_FLAGGED(ch, AFF_GROUP)) {
+    return FALSE;
+  }
+#endif
+
+  // Followers (both projected and not)
+  for (struct follow_type *f = ch->followers; f; f = f->next) {
+#ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
+    if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
+      continue;
+    }
+#endif
+
+    // Check the follower across projection gaps.
+    if (GET_IDNUM_EVEN_IF_PROJECTING(f->follower) == idnum) {
+      return TRUE;
+    }
+  }
+
+  // Master (both projected and not)
+  if (ch->master) {
+#ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
+    if (!AFF_FLAGGED(ch->master, AFF_GROUP)) {
+      return FALSE;
+    }
+#endif
+
+    // Check the master across projection gaps.
+    if (GET_IDNUM_EVEN_IF_PROJECTING(ch->master) == idnum) {
+      return TRUE;
+    }
+
+    // Followers (both projected and not)
+    for (struct follow_type *f = ch->master->followers; f; f = f->next) {
+      if (f->follower == ch)
+        continue;
+      
+  #ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
+      if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
+        continue;
+      }
+  #endif
+  
+      // Check the follower across projection gaps.
+      if (GET_IDNUM_EVEN_IF_PROJECTING(f->follower) == idnum) {
+        return TRUE;
+      }
+    }
+  }
+
+  // Not in a cluster / group with that idnum.
+  return FALSE;
+}
+
 void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *argument, bool drag)
 {
   struct veh_data *inveh = NULL;
@@ -1743,12 +1800,9 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   // You can only enter PC-owned vehicles if you're the owner, the owner is in control, or you're staff.
   if (found_veh->owner > 0 || found_veh->locked) {
     bool is_staff = access_level(ch, LVL_CONSPIRATOR);
-    bool is_owner = GET_IDNUM_EVEN_IF_PROJECTING(ch) == found_veh->owner;
-    bool is_following_owner = (ch->master && GET_IDNUM(ch->master) == found_veh->owner);
-#ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
-    is_following_owner &= AFF_FLAGGED(ch, AFF_GROUP);   // todo: make this grouped with (owner can follow you)
-#endif
-    bool owner_is_remote_rigging = found_veh->rigger && GET_IDNUM(found_veh->rigger);
+    bool is_owner = (GET_IDNUM_EVEN_IF_PROJECTING(ch) == found_veh->owner);
+    bool is_in_group_with_owner = found_veh->owner > 0 && ch_is_in_follow_cluster_with_pc_with_idnum(ch, found_veh->owner);
+    bool owner_is_remote_rigging = found_veh->rigger && (GET_IDNUM(found_veh->rigger) == found_veh->owner);
     bool owner_is_driving = FALSE;
 
     for (struct char_data *occupant = found_veh->people; occupant; occupant = occupant->next_in_veh) {
@@ -1758,13 +1812,15 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       }
     }
 
-    if (ch->desc && !is_owner && !is_following_owner && (found_veh->locked || (!owner_is_remote_rigging && !owner_is_driving))) {
+    if (ch->desc && !is_owner && !is_in_group_with_owner && (found_veh->locked || (!owner_is_remote_rigging && !owner_is_driving))) {
       if (is_staff) {
         send_to_char("You staff-override the fact that the owner isn't explicitly letting you in.\r\n", ch);
       } else {
+        // Check to see if you're grouped with the owner.
+        
         // This error message kinda sucks to write.
         if (!ch->master || GET_IDNUM(ch->master) != found_veh->owner) {
-          send_to_char(ch, "You need to be following the owner to enter %s.\r\n", GET_VEH_NAME(found_veh));
+          send_to_char(ch, "You need to be following or grouped with the owner to enter %s.\r\n", GET_VEH_NAME(found_veh));
         }
 #ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
         else if (!AFF_FLAGGED(ch, AFF_GROUP)) {
