@@ -128,19 +128,21 @@ int amount_of_mail_waiting(struct char_data *ch) {
   // Grab the character's mail count from DB.
   snprintf(mail_query_buf, sizeof(mail_query_buf), "SELECT COUNT(*) FROM pfiles_mail WHERE recipient = %ld AND is_received = 0;", GET_IDNUM(ch));
   if (mysql_wrapper(mysql, mail_query_buf)) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to fetch amount of mail waiting for %s.", GET_CHAR_NAME(ch));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to fetch amount of mail waiting for %s (query error).", GET_CHAR_NAME(ch));
     send_to_char(ch, "Oops, the mail system is broken! Please contact staff.\r\n");
     return 0;
   }
 
   if (!(res = mysql_use_result(mysql))) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to fetch amount of mail waiting for %s.", GET_CHAR_NAME(ch));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to fetch amount of mail waiting for %s (use_result error).", GET_CHAR_NAME(ch));
     send_to_char(ch, "Oops, the mail system is broken! Please contact staff.\r\n");
     return 0;
   }
 
   /* On failure, bail out. */
   if (!(row = mysql_fetch_row(res))) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to fetch amount of mail waiting for %s (fetch_row error).", GET_CHAR_NAME(ch));
+    send_to_char(ch, "Oops, the mail system is broken! Please contact staff.\r\n");
     mysql_free_result(res);
     return 0;
   }
