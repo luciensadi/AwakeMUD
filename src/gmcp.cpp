@@ -502,7 +502,7 @@ void ParseGMCP( descriptor_t *apDescriptor, const char *apData )
   try {
     payload = json::parse(space);
   } catch (const json::parse_error &ex) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "There was a JSON error when attempted to parse %s.", module);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "There was a JSON error when attempting to parse GMCP message '%s' from %s.", module, GET_CHAR_NAME(apDescriptor->character));
     payload = NULL;
   }
 
