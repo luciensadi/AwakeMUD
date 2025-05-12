@@ -106,7 +106,20 @@ void clear_hitcher(struct char_data *ch, bool shouldNotify)
 
 void unload_active_program(struct matrix_icon *persona, struct obj_data *soft)
 {
-  if (!persona || !soft) return;
+  if (!persona || !soft) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: unload_active_program(%s, %s) called with invalid parameters!",
+                    persona ? "persona" : "NULL",
+                    soft ? "soft" : "NULL");
+    return;
+  }
+
+  if (!persona->decker) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: unload_active_program() called with persona '%s' that doesn't have a decker! Is this an IC?",
+                    persona->name);
+    return;
+  }
+
+
   struct obj_data *temp = NULL;
   persona->decker->active += GET_PROGRAM_SIZE(soft);
   REMOVE_FROM_LIST(soft, persona->decker->software, next_content);
@@ -769,7 +782,7 @@ bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *ta
   for (soft = targ->decker->software; soft; soft = soft->next_content) {
     if (GET_PROGRAM_TYPE(soft) == SOFT_SHIELD) {
       int shield_test = success_test(GET_PROGRAM_RATING(soft), 
-        ICON_IS_IC(icon) ? matrix[icon->in_host].security : GET_SKILL(icon->decker->ch, SKILL_COMPUTER));
+                                     ICON_IS_IC(icon) ? matrix[icon->in_host].security : GET_SKILL(icon->decker->ch, SKILL_COMPUTER));
 
       if (shield_test > 0) {
         success -= shield_test;
@@ -778,7 +791,7 @@ bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *ta
       GET_PROGRAM_RATING(soft)--;
       if (GET_PROGRAM_RATING(soft) <= 0) {
         send_to_icon(targ, "Your shield program crashes as the rating is depleted.\r\n");
-        unload_active_program(icon, soft);
+        unload_active_program(targ, soft);
       }
       return TRUE;
     }
