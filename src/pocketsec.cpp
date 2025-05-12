@@ -827,54 +827,78 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
   }
 }
 
+char * write_phonebook_entry_migration_query(struct obj_data *entry, idnum_t owner, char *dest_buf, size_t dest_buf_sz) {
+  char pq_note[MAX_STRING_LENGTH] = {0};
+
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "Note: New-migrating phonebook entry '%s'@'%s' to database for %ld.", entry->restring, entry->photo, owner);
+
+  // Remove any dashes.
+  char without_dashes[MAX_INPUT_LENGTH + 5] = {0};
+  char *write_ptr = without_dashes;
+  for (const char *read_ptr = entry->photo; *read_ptr; read_ptr++) {
+    if (isdigit(*read_ptr))
+      *write_ptr++ = *read_ptr;
+  }
+  *write_ptr = '\0';
+
+  snprintf(dest_buf, dest_buf_sz, "INSERT INTO pocsec_phonebook (idnum, phonenum, note) VALUES (%ld, %d, '%s')",
+           owner,
+           atoi(without_dashes),
+           prepare_quotes(pq_note, entry->restring, sizeof(pq_note)));
+
+  return dest_buf;
+}
+
+void test_phonebook_entry_migration_query_generation() {
+  struct obj_data dummy_obj;
+  dummy_obj.restring = str_dup("tester");
+  dummy_obj.photo = str_dup("0545-2849");
+
+  assert(!str_cmp(
+    write_phonebook_entry_migration_query(&dummy_obj, 123, buf3, sizeof(buf3)),
+    "INSERT INTO pocsec_phonebook (idnum, phonenum, note) VALUES (123, 5452849, 'tester')"
+  ));
+
+  delete [] dummy_obj.restring;
+  delete [] dummy_obj.photo;
+}
+
+char * write_mail_entry_migration_query(struct obj_data *entry, idnum_t owner, char *dest_buf, size_t dest_buf_sz) {
+  char pq_restring[MAX_STRING_LENGTH] = {0};
+  char pq_photo[MAX_STRING_LENGTH] = {0};
+
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "Note: Migrating mailpiece from '%s' to database for %ld.", entry->restring, owner);
+
+  snprintf(dest_buf, dest_buf_sz, "INSERT INTO pfiles_mail (sender_name, recipient, text, is_received, is_read, is_protected) VALUES ('%s', %ld, '%s', 1, %d, %d)",
+           prepare_quotes(pq_restring, entry->restring, sizeof(pq_restring)),
+           owner,
+           prepare_quotes(pq_photo, entry->photo, sizeof(pq_photo)),
+           GET_OBJ_VAL(entry, 0) ? 1 : 0,
+           GET_OBJ_TIMER(entry) < 0 ? 1 : 0
+          );
+  
+  return dest_buf;
+}
+
 SPECIAL(pocket_sec);
 void migrate_pocket_secretary_contents(struct obj_data *obj, idnum_t owner) {
-  char query_buf[MAX_STRING_LENGTH + 500] = {0};
   if (GET_OBJ_SPEC(obj) == pocket_sec) {
     for (struct obj_data *folder = obj->contains; folder; folder = folder->next_content) {
       // Migrate phonebook.
       if (!str_cmp(folder->restring, POCSEC_FOLDER_PHONEBOOK)) {
         while (folder->contains) {
-          struct obj_data *contents = folder->contains;
-
-          char pq_note[MAX_STRING_LENGTH] = {0};
-
-          mudlog_vfprintf(NULL, LOG_SYSLOG, "Note: Migrating phonebook entry '%s'@'%s' to database for %ld.", contents->restring, contents->photo, owner);
-
-          snprintf(query_buf, sizeof(query_buf), "INSERT INTO pocsec_phonebook (idnum, phonenum, note) VALUES (%ld, %d, '%s')",
-                   owner,
-                   atoi(contents->photo),
-                   prepare_quotes(pq_note, contents->restring, sizeof(pq_note)));
-          
-          mysql_query(mysql, query_buf);
-
-          obj_from_obj(contents);
-          extract_obj(contents);
+          mysql_query(mysql, write_phonebook_entry_migration_query(folder->contains, owner, buf3, sizeof(buf3)));
+          obj_from_obj(folder->contains);
+          extract_obj(folder->contains);
         }
       }
 
       // Migrate mail.
       if (!str_cmp(folder->restring, POCSEC_FOLDER_MAIL)) {
         while (folder->contains) {
-          struct obj_data *contents = folder->contains;
-          
-          char pq_restring[MAX_STRING_LENGTH] = {0};
-          char pq_photo[MAX_STRING_LENGTH] = {0};
-
-          mudlog_vfprintf(NULL, LOG_SYSLOG, "Note: Migrating mailpiece from '%s' to database for %ld.", contents->restring, owner);
-
-          snprintf(query_buf, sizeof(query_buf), "INSERT INTO pfiles_mail (sender_name, recipient, text, is_received, is_read, is_protected) VALUES ('%s', %ld, '%s', 1, %d, %d)",
-                   prepare_quotes(pq_restring, contents->restring, sizeof(pq_restring)),
-                   owner,
-                   prepare_quotes(pq_photo, contents->photo, sizeof(pq_photo)),
-                   GET_OBJ_VAL(contents, 0) ? 1 : 0,
-                   GET_OBJ_TIMER(contents) < 0 ? 1 : 0
-                  );
-          
-          mysql_query(mysql, query_buf);
-
-          obj_from_obj(contents);
-          extract_obj(contents);
+          mysql_query(mysql, write_mail_entry_migration_query(folder->contains, owner, buf3, sizeof(buf3)));
+          obj_from_obj(folder->contains);
+          extract_obj(folder->contains);
         }
       }
 
