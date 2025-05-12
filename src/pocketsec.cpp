@@ -285,6 +285,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
   int i;
   long x;
   const char *name;
+  log_vfprintf("COMMANDLOG: %s in pocketsec_parse w/ edit_mode %d: %s", GET_CHAR_NAME(d->character), d->edit_mode, arg);
 
   switch (d->edit_mode) {
     case SEC_MENU:
@@ -369,7 +370,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           return;
         }
 
-        if (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
+        if (!(row = mysql_fetch_row(res))) {
           send_to_char(CH, "That entry does not exist.\r\n");
           pocketsec_phonemenu(d);
           mysql_free_result(res);
@@ -458,7 +459,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
             return;
           }
 
-          if (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
+          if (!(row = mysql_fetch_row(res))) {
             send_to_char(CH, "That entry does not exist.\r\n");
             pocketsec_phonemenu(d);
             mysql_free_result(res);
@@ -687,7 +688,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
             return;
           }
 
-          if (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
+          if (!(row = mysql_fetch_row(res))) {
             send_to_char(CH, "That mailpiece does not exist.\r\n");
             pocketsec_mailmenu(d);
             mysql_free_result(res);
@@ -770,7 +771,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           return;
         }
 
-        if (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql)) {
+        if (!(row = mysql_fetch_row(res))) {
           send_to_char(CH, "That mailpiece does not exist.\r\n");
           pocketsec_mailmenu(d);
           mysql_free_result(res);
