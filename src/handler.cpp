@@ -51,6 +51,11 @@ extern void end_quest(struct char_data *ch, bool succeeded);
 extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
 extern void calc_weight(struct char_data *);
 extern void exdesc_conceal_reveal(struct char_data *vict, int wearloc, bool check_for_reveal);
+#ifdef TEMPORARY_COMPILATION_GUARD
+extern void stop_rigging(struct char_data *ch, bool send_message);
+extern void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin);
+extern void modify_players_in_veh(struct veh_data *veh, int amount, const char *origin);
+#endif
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch);
 int get_skill_dice_in_use_for_weapons(struct char_data *ch);
@@ -1247,6 +1252,14 @@ void veh_from_room(struct veh_data * veh)
     log("SYSERR: veh->in_room and veh->in_veh are both null; did you call veh_from_room twice?");
     return;
   }
+
+#ifdef TEMPORARY_COMPILATION_GUARD
+  // Remove them from the zone's player counter.
+  if (veh->players_in_veh && get_veh_in_room(veh)) {
+    modify_players_in_zone(get_veh_in_room(veh)->zone, -(veh->players_in_veh), "veh_from_room");
+  }
+#endif
+
   if (veh->in_veh) {
     REMOVE_FROM_LIST(veh, veh->in_veh->carriedvehs, next_veh);
     veh->in_veh->usedload -= calculate_vehicle_entry_load(veh);
@@ -1288,6 +1301,12 @@ void char_from_room(struct char_data * ch)
     if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && ch->in_room->peaceful > 0)
       ch->in_room->peaceful--;
 
+#ifdef TEMPORARY_COMPILATION_GUARD
+    if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
+      modify_players_in_zone(ch->in_room->zone, -1, "char_from_room (in_room stanza)");
+    }
+#endif
+
     // Remove them from the room.
     REMOVE_FROM_LIST(ch, ch->in_room->people, next_in_room);
     ch->in_room = NULL;
@@ -1299,7 +1318,16 @@ void char_from_room(struct char_data * ch)
   }
 
   if (ch->in_veh) {
-    // Character is in a vehicle. Remove them from it.
+  #ifdef TEMPORARY_COMPILATION_GUARD
+    // Character is in a vehicle. Remove them from it AND from the zone's counter (they'll be added back in with their next to_room)
+    if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
+      modify_players_in_veh(ch->in_veh, -1, "char_from_room (in_veh stanza)");
+      if (get_veh_in_room(ch->in_veh)) {
+        modify_players_in_zone(get_veh_in_room(ch->in_veh)->number, -1, "char_from_room (in_veh stanza)");
+      }
+    }
+  #endif
+
     REMOVE_FROM_LIST(ch, ch->in_veh->people, next_in_veh);
     stop_manning_weapon_mounts(ch, TRUE);
     ch->in_veh->seating[ch->vfront]++;
@@ -1325,23 +1353,39 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
     ch->in_veh = veh;
     veh->seating[ch->vfront]--;
     GET_POS(ch) = POS_SITTING;
+
+#ifdef TEMPORARY_COMPILATION_GUARD
+    if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
+      modify_players_in_veh(ch->in_veh, +1, "char_to_veh");
+      if (get_veh_in_room(ch->in_veh)) {
+        modify_players_in_zone(get_veh_in_room(ch->in_veh)->number, +1, "char_to_veh");
+      }
+    }
+#endif
   }
 }
 
 void veh_to_room(struct veh_data * veh, struct room_data *room)
 {
-  if (!veh || !room)
+  if (!veh || !room) {
     mudlog("SYSLOG: Illegal value(s) passed to veh_to_room", NULL, LOG_SYSLOG, TRUE);
-  else
-  {
-    if (veh->in_veh || veh->in_room)
-      veh_from_room(veh);
-
-    veh->next_veh = room->vehicles;
-    room->vehicles = veh;
-    veh->in_room = room;
-    recalculate_room_light(room);
+    return;
   }
+
+  if (veh->in_veh || veh->in_room)
+    veh_from_room(veh);
+
+  veh->next_veh = room->vehicles;
+  room->vehicles = veh;
+  veh->in_room = room;
+  recalculate_room_light(room);
+
+#ifdef TEMPORARY_COMPILATION_GUARD
+  // Add them to the zone's player counter.
+  if (veh->players_in_veh) {
+    modify_players_in_zone(veh->in_room->zone, +veh->players_in_veh, "veh_to_room");
+  }
+#endif
 }
 
 void veh_to_veh(struct veh_data *veh, struct veh_data *dest)
@@ -1453,8 +1497,7 @@ void icon_from_host(struct matrix_icon *icon)
 /* place a character in a room */
 void char_to_room(struct char_data * ch, struct room_data *room)
 {
-  if (!ch || !room)
-  {
+  if (!ch || !room) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Illegal value(s) passed to char_to_room(%s, %s).", 
                     ch ? GET_CHAR_NAME(ch) : "NULL",
                     room ? GET_ROOM_NAME(room) : "NULL");
@@ -1467,6 +1510,12 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   // Warn on exceeding privileges, but don't fail.
   if (builder_cant_go_there(ch, room)) {
     mudlog_vfprintf(ch, LOG_WIZLOG, "Warning: Builder %s exceeding allowed bounds. Make sure their loadroom etc is set properly.", GET_CHAR_NAME(ch));
+  }
+
+  // Warn on call to char_to_room when ch is already in a room or vehicle.
+  if (ch->in_veh || ch->in_room) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Out of order call-- char_to_room() called before removal from existing room. Removing them from existing room.");
+    char_from_room(ch);
   }
 
   ch->next_in_room = room->people;
@@ -1495,6 +1544,12 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   _char_with_spell_to_room(ch, SPELL_SHADOW, ch->in_room->shadow);
   _char_with_spell_to_room(ch, SPELL_LIGHT, ch->in_room->light);
   _char_with_spell_to_room(ch, SPELL_POLTERGEIST, ch->in_room->poltergeist);
+
+#ifdef TEMPORARY_COMPILATION_GUARD
+  if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
+    modify_players_in_zone(ch->in_room->zone, +1, "char_to_room");
+  }
+#endif
 }
 
 // Checks obj_to_x preconditions for common errors. Overwrites buf3. Returns TRUE for kosher, FALSE otherwise.
@@ -2400,6 +2455,11 @@ void obj_from_obj(struct obj_data * obj)
 
 void extract_icon(struct matrix_icon * icon)
 {
+  if (!icon) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL icon to extract_icon()!");
+    return;
+  }
+
   struct matrix_icon *temp;
 
   // Clean up phone entries.
@@ -2486,6 +2546,11 @@ void extract_icon(struct matrix_icon * icon)
 
 void extract_veh(struct veh_data * veh)
 {
+  if (!veh) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL veh to extract_veh()!");
+    return;
+  }
+
   if (veh->in_room == NULL && veh->in_veh == NULL) {
     if (veh->carriedvehs || veh->people) {
       strncpy(buf, "SYSERR: extract_veh called on vehicle-with-contents without containing room or veh! The game will likely now shit itself and die; GLHF.", sizeof(buf));
@@ -2640,6 +2705,11 @@ void extract_veh(struct veh_data * veh)
 /* Extract an object from the world */
 void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
 {
+  if (!obj) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL object to extract_obj()!");
+    return;
+  }
+
   struct phone_data *phone, *temp;
   bool set = FALSE;
 
@@ -2784,6 +2854,11 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
 /* Extract a ch completely from the world, and leave his stuff behind */
 void extract_char(struct char_data * ch, bool do_save)
 {
+  if (!ch) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL char to extract_ch()!");
+    return;
+  }
+
   struct char_data *k, *temp;
   struct descriptor_data *t_desc;
   struct obj_data *obj, *next;
@@ -2998,14 +3073,17 @@ void extract_char(struct char_data * ch, bool do_save)
       }
 
   /* end rigging */
-  if (PLR_FLAGGED(ch, PLR_REMOTE))
-  {
+  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+#ifdef TEMPORARY_COMPILATION_GUARD
+    stop_rigging(ch, false);
+#else
     ch->char_specials.rigging->rigger = NULL;
     ch->char_specials.rigging->cspeed = SPEED_OFF;
     stop_chase(ch->char_specials.rigging);
     send_to_veh("You slow to a halt.\r\n", ch->char_specials.rigging, NULL, 0);
     ch->char_specials.rigging = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
+#endif
   }
 
   // Clean up playergroup info.
@@ -3035,7 +3113,7 @@ void extract_char(struct char_data * ch, bool do_save)
     PLR_FLAGS(ch).RemoveBits(PLR_MATRIX, PLR_PROJECT, PLR_SWITCHED,
                              PLR_WRITING, PLR_MAILING, PLR_EDITING,
                              PLR_SPELL_CREATE, PLR_PROJECT, PLR_CUSTOMIZE,
-                             PLR_REMOTE, ENDBIT);
+                             PLR_REMOTE, ENDBIT); // note: this plr_remote removal is a sanity check and is covered by above stop_rigging call
 
     /* restore them to their room, because corpses love rooms */
     ch->in_room = in_room;

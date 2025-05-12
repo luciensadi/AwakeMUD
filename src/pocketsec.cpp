@@ -827,7 +827,12 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
   }
 }
 
-char * write_phonebook_entry_migration_query(struct obj_data *entry, idnum_t owner, char *dest_buf, size_t dest_buf_sz) {
+const char * write_phonebook_entry_migration_query(struct obj_data *entry, idnum_t owner, char *dest_buf, size_t dest_buf_sz) {
+  if (!entry) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got NULL entry to write_phonebook_entry_migration_query()!");
+    return "";
+  }
+
   char pq_note[MAX_STRING_LENGTH] = {0};
 
   mudlog_vfprintf(NULL, LOG_SYSLOG, "Note: New-migrating phonebook entry '%s'@'%s' to database for %ld.", entry->restring, entry->photo, owner);
@@ -863,7 +868,12 @@ void test_phonebook_entry_migration_query_generation() {
   delete [] dummy_obj.photo;
 }
 
-char * write_mail_entry_migration_query(struct obj_data *entry, idnum_t owner, char *dest_buf, size_t dest_buf_sz) {
+const char * write_mail_entry_migration_query(struct obj_data *entry, idnum_t owner, char *dest_buf, size_t dest_buf_sz) {
+  if (!entry) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got NULL entry to write_mail_entry_migration_query()!");
+    return "";
+  }
+
   char pq_restring[MAX_STRING_LENGTH] = {0};
   char pq_photo[MAX_STRING_LENGTH] = {0};
 
@@ -887,18 +897,20 @@ void migrate_pocket_secretary_contents(struct obj_data *obj, idnum_t owner) {
       // Migrate phonebook.
       if (!str_cmp(folder->restring, POCSEC_FOLDER_PHONEBOOK)) {
         while (folder->contains) {
-          mysql_query(mysql, write_phonebook_entry_migration_query(folder->contains, owner, buf3, sizeof(buf3)));
-          obj_from_obj(folder->contains);
-          extract_obj(folder->contains);
+          struct obj_data *contents = folder->contains;
+          mysql_query(mysql, write_phonebook_entry_migration_query(contents, owner, buf3, sizeof(buf3)));
+          obj_from_obj(contents);
+          extract_obj(contents);
         }
       }
 
       // Migrate mail.
       if (!str_cmp(folder->restring, POCSEC_FOLDER_MAIL)) {
         while (folder->contains) {
-          mysql_query(mysql, write_mail_entry_migration_query(folder->contains, owner, buf3, sizeof(buf3)));
-          obj_from_obj(folder->contains);
-          extract_obj(folder->contains);
+          struct obj_data *contents = folder->contains;
+          mysql_query(mysql, write_mail_entry_migration_query(contents, owner, buf3, sizeof(buf3)));
+          obj_from_obj(contents);
+          extract_obj(contents);
         }
       }
 
