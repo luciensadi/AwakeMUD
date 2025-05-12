@@ -866,7 +866,7 @@ int str_cmp(const char *one, const char *two)
 char *str_str( const char *string, const char *keyword )
 {
   int i;
-  char temp1[MAX_INPUT_LENGTH], temp2[MAX_INPUT_LENGTH];
+  char temp1[strlen(string) + 5], temp2[strlen(keyword) + 5];
 
   for ( i = 0; *(string + i); i++ ) {
     temp1[i] = LOWER(*(string + i));
