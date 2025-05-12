@@ -2789,7 +2789,7 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
 
 void store_message_to_history(struct descriptor_data *d, int channel, const char *message) {
   // We use our very own message buffer to ensure we'll never overwrite whatever buffer the caller is using.
-  static char log_message[MAX_INPUT_LENGTH];
+  static char log_message[MAX_INPUT_LENGTH * 2];
 
   // Precondition: No screwy pointers. Removed warning since we can be passed NPC descriptors (which we ignore).
   if (d == NULL || !message || !*message) {
@@ -4471,7 +4471,7 @@ char get_final_character_from_string(const char *str) {
 }
 
 const char *remove_final_punctuation(const char *str) {
-  static char replacement_buf[MAX_INPUT_LENGTH + 1] = {0};
+  static char replacement_buf[MAX_INPUT_LENGTH * 2] = {0};
   strlcpy(replacement_buf, std::regex_replace(std::string(str), std::regex("\\.[^nN]?$"), "").c_str(), sizeof(replacement_buf));
   return replacement_buf;
 }
