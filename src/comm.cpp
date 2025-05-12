@@ -2587,8 +2587,7 @@ void close_socket(struct descriptor_data *d)
       }
       playerDB.SaveChar(d->character);
       act("^L[OOC]: $n has lost $s link.^n", TRUE, d->character, 0, 0, TO_ROOM);
-      snprintf(buf, sizeof(buf), "Closing link to: %s. (%s)", GET_CHAR_NAME(d->character), connected_types[d->connected]);
-      mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+      mudlog_vfprintf(d->character, LOG_CONNLOG, "Closing link to: %s. (%s)", GET_CHAR_NAME(d->character), connected_types[d->connected]);
       if (d->character->persona) {
         extract_icon(d->character->persona);
         d->character->persona = NULL;
