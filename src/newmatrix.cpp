@@ -580,8 +580,13 @@ bool do_damage_persona(struct matrix_icon *targ, int dmg)
 {
   if (targ->type == ICON_LIVING_PERSONA) {
     // It's an otaku! They get to suffer MENTAL DAMAGE!
+    struct char_data *character_reference = targ->decker->ch;
     // damage() returns TRUE if the target has been deleted from memory, so when this function returns true, we must bail out of everything immediately.
     if (damage(targ->decker->ch, targ->decker->ch, dmg, TYPE_BLACKIC, MENTAL))
+      return TRUE;
+
+    // If we've gotten here, their character wasn't extracted from damage, but they could have been knocked unconscious and de-matrix'd that way.
+    if (GET_MENTAL(character_reference) <= 0 || GET_POS(character_reference) <= POS_STUNNED || !PLR_FLAGGED(character_reference, PLR_MATRIX))
       return TRUE;
 
     // targ->condition is 0-10 scale, while ch mental wounds is 0-100.
