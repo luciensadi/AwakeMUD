@@ -17,9 +17,6 @@
 // Ensure we have enough space for the query cruft plus a fully-quoted mail.
 char mail_query_buf[300 + (MAX_MAIL_SIZE * 2 + 1)];
 
-MYSQL_RES *res;
-MYSQL_ROW row;
-
 // For pocket secretary notifications.
 SPECIAL(pocket_sec);
 
@@ -118,6 +115,9 @@ void raw_store_mail(long to, long from_id, const char *from_name, const char *me
 }
 
 int amount_of_mail_waiting(struct char_data *ch) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
   int amount = 0;
 
   if (!ch || IS_NPC(ch)) {
