@@ -49,6 +49,7 @@
 extern bool is_approved_multibox_host(const char *host);
 
 void migrate_pocket_secretary_contents(struct obj_data *obj, idnum_t owner);
+const char *kosherize_phone_number(const char *number, char *dest_buf, size_t dest_buf_sz);
 
 ACMD_DECLARE(do_phone);
 
@@ -152,14 +153,18 @@ void pocketsec_phonemenu(struct descriptor_data *d)
     return;
   }
   
-  int idx = 0;
+  int idx = 1;
   while ((row = mysql_fetch_row(res))) {
     if (first_run) {
       send_to_char("^LYour Phonebook^n\r\n", ch);
       first_run = FALSE;
     }
 
-    send_to_char(CH, " %2d > %-20s - %s\r\n", idx++, row[0], row[1]);
+    int phonenum = atoi(row[0]);
+    int first_part = phonenum / 10000;
+    int second_part = phonenum % 10000;
+
+    send_to_char(CH, " %2d > %04d-%04d - %s\r\n", idx++, first_part, second_part, row[1]);
   }
   mysql_free_result(res);
   
@@ -326,7 +331,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
     case SEC_PHONEMENU:
       switch (LOWER(*arg)) {
         case 'c':
-          send_to_char("Call which entry?\r\n", CH);
+          send_to_char("Call which entry index?\r\n", CH);
           d->edit_mode = SEC_PHONECALL;
           break;
         case 'a':
@@ -334,7 +339,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           d->edit_mode = SEC_PHONEADD1;
           break;
         case 'd':
-          send_to_char("Delete which entry? ('*' for all)\r\n", CH);
+          send_to_char("Delete which entry index? ('*' for all)\r\n", CH);
           d->edit_mode = SEC_PHONEDEL;
           break;
         case 'b':
@@ -349,11 +354,13 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         MYSQL_ROW row;
 
         int offset = atoi(arg);
-        if (offset < 0) {
+        if (offset <= 0) {
           pocketsec_phonemenu(d);
-          send_to_char("That entry does not exist.\r\n", CH);
+          send_to_char("Please select an index number from the column on the left.\r\n", CH);
           return;
         }
+        // Subtract 1 from the offset since we displayed it as +1 on their end.
+        offset--;
         
         snprintf(query_buf, sizeof(query_buf), "SELECT phonenum FROM pocsec_phonebook WHERE idnum=%ld ORDER BY note DESC LIMIT 1 OFFSET %d;", GET_IDNUM(CH), offset);
         if (mysql_wrapper(mysql, query_buf)) {
@@ -404,20 +411,24 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       break;
     case SEC_PHONEADD2:
       {
+        int phonenum;
+        const char *kosherized = kosherize_phone_number(arg, buf3, sizeof(buf3));
+
         // Ensure they're not trying something fucky.
-        int phonenum = atoi(arg);
-        if (phonenum <= 0 || (phonenum < 10000000 && strlen(arg) < 8) || phonenum > 99999999) {
+        if (!kosherized) {
+          // Using this if/else construct so we can use the same cleanup logic at the end.
+          send_to_char(CH, "Something went wrong. Contact staff.\r\n");
+        } else if ((phonenum = atoi(kosherized)) <= 0 || (phonenum < 10000000 && strlen(arg) < 8) || phonenum > 99999999) {
           send_to_char(CH, "Sorry, %s is not a valid phone number. Try again: ", arg);
-          return;
+        } else {
+          char query_buf[MAX_INPUT_LENGTH + 500] = {0}; 
+          snprintf(query_buf, sizeof(query_buf), "INSERT INTO pocsec_phonebook (idnum, phonenum, note) VALUES (%ld, %d, '%s')", GET_IDNUM(CH), phonenum, prepare_quotes(buf3, d->edit_obj_secondary->restring, sizeof(buf3)));
+          if (mysql_wrapper(mysql, query_buf)) {
+            send_to_char(d->character, "Sorry, your phonebook isn't working right now.\r\n");
+            mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to insert into phonebook for %s", GET_CHAR_NAME(d->character));
+          }
         }
-
-        char query_buf[MAX_INPUT_LENGTH + 500] = {0};        
-        snprintf(query_buf, sizeof(query_buf), "INSERT INTO pocsec_phonebook (idnum, phonenum, note) VALUES (%ld, %d, '%s')", GET_IDNUM(CH), phonenum, prepare_quotes(buf3, d->edit_obj_secondary->restring, sizeof(buf3)));
-        if (mysql_wrapper(mysql, query_buf)) {
-          send_to_char(d->character, "Sorry, your phonebook isn't working right now.\r\n");
-          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to insert into phonebook for %s", GET_CHAR_NAME(d->character));
-        }
-
+        
         extract_obj(d->edit_obj_secondary);
         d->edit_obj_secondary = NULL;
         pocketsec_phonemenu(d);
@@ -438,11 +449,13 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           MYSQL_ROW row;
 
           int offset = atoi(arg);
-          if (offset < 0) {
-            send_to_char(CH, "That entry does not exist.\r\n");
+          if (offset <= 0) {
             pocketsec_phonemenu(d);
+            send_to_char("Please select an index number from the column on the left.\r\n", CH);
             return;
           }
+          // Subtract 1 from the offset since we displayed it as +1 on their end.
+          offset--;
 
           snprintf(query_buf, sizeof(query_buf), "SELECT record_id FROM pocsec_phonebook WHERE idnum=%ld ORDER BY note DESC LIMIT 1 OFFSET %d;", GET_IDNUM(CH), offset);
           if (mysql_wrapper(mysql, query_buf)) {
@@ -828,24 +841,37 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
   }
 }
 
-const char * write_phonebook_entry_migration_query(struct obj_data *entry, idnum_t owner, char *dest_buf, size_t dest_buf_sz) {
-  if (!entry) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got NULL entry to write_phonebook_entry_migration_query()!");
-    return "";
+// dest_buf MUST be longer than number.
+const char *kosherize_phone_number(const char *number, char *dest_buf, size_t dest_buf_sz) {
+  if (strlen(number) >= dest_buf_sz) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got too-long number parameter to kosherize_phone_number().");
+    strlcpy(dest_buf, "ERROR CONTACT STAFF", sizeof(dest_buf));
+    return NULL;
   }
 
-  char pq_note[MAX_STRING_LENGTH] = {0};
-
-  mudlog_vfprintf(NULL, LOG_SYSLOG, "Note: New-migrating phonebook entry '%s'@'%s' to database for %ld.", entry->restring, entry->photo, owner);
-
   // Remove any dashes.
-  char without_dashes[MAX_INPUT_LENGTH + 5] = {0};
-  char *write_ptr = without_dashes;
-  for (const char *read_ptr = entry->photo; *read_ptr; read_ptr++) {
+  char *write_ptr = dest_buf;
+  for (const char *read_ptr = number; *read_ptr; read_ptr++) {
     if (isdigit(*read_ptr))
       *write_ptr++ = *read_ptr;
   }
   *write_ptr = '\0';
+  return dest_buf;
+}
+
+const char * write_phonebook_entry_migration_query(struct obj_data *entry, idnum_t owner, char *dest_buf, size_t dest_buf_sz) {
+  char pq_note[MAX_STRING_LENGTH] = {0};
+  char without_dashes[MAX_INPUT_LENGTH + 5] = {0};
+
+  if (!entry) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got NULL entry to write_phonebook_entry_migration_query()!");
+    return NULL;
+  }
+
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "Note: New-migrating phonebook entry '%s'@'%s' to database for %ld.", entry->restring, entry->photo, owner);
+
+  if (!kosherize_phone_number(entry->photo, without_dashes, sizeof(without_dashes)))
+    return NULL;
 
   snprintf(dest_buf, dest_buf_sz, "INSERT INTO pocsec_phonebook (idnum, phonenum, note) VALUES (%ld, %d, '%s')",
            owner,
@@ -872,7 +898,7 @@ void test_phonebook_entry_migration_query_generation() {
 const char * write_mail_entry_migration_query(struct obj_data *entry, idnum_t owner, char *dest_buf, size_t dest_buf_sz) {
   if (!entry) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got NULL entry to write_mail_entry_migration_query()!");
-    return "";
+    return NULL;
   }
 
   char pq_restring[MAX_STRING_LENGTH] = {0};
@@ -893,13 +919,16 @@ const char * write_mail_entry_migration_query(struct obj_data *entry, idnum_t ow
 
 SPECIAL(pocket_sec);
 void migrate_pocket_secretary_contents(struct obj_data *obj, idnum_t owner) {
+  const char *query;
+
   if (GET_OBJ_SPEC(obj) == pocket_sec) {
     for (struct obj_data *folder = obj->contains; folder; folder = folder->next_content) {
       // Migrate phonebook.
       if (!str_cmp(folder->restring, POCSEC_FOLDER_PHONEBOOK)) {
         while (folder->contains) {
           struct obj_data *contents = folder->contains;
-          mysql_query(mysql, write_phonebook_entry_migration_query(contents, owner, buf3, sizeof(buf3)));
+          if (!(query = write_phonebook_entry_migration_query(contents, owner, buf3, sizeof(buf3)))) break;
+          mysql_query(mysql, query);
           obj_from_obj(contents);
           extract_obj(contents);
         }
@@ -909,7 +938,8 @@ void migrate_pocket_secretary_contents(struct obj_data *obj, idnum_t owner) {
       if (!str_cmp(folder->restring, POCSEC_FOLDER_MAIL)) {
         while (folder->contains) {
           struct obj_data *contents = folder->contains;
-          mysql_query(mysql, write_mail_entry_migration_query(contents, owner, buf3, sizeof(buf3)));
+          if (!(query = write_mail_entry_migration_query(contents, owner, buf3, sizeof(buf3)))) break;
+          mysql_query(mysql, query);
           obj_from_obj(contents);
           extract_obj(contents);
         }
